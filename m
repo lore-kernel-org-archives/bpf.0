@@ -1,254 +1,122 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF9BA3128B2;
-	Thu, 23 Apr 2026 16:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8752E3A5E9F
+	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 16:16:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776960990; cv=none; b=SvE9KNLLLr02059Rftx5Po7HY8BHQcY1PqWpOlyic8dgEyujfuyjZpvwaMDgS2aSBOVK8VKkR6XZz0c4DtDMdkCOXl5kvYwWTLzUjVhR6vyTNQIbL5uOVoQeSXw0jGSp5TgaJutSwtcXEhg1CFYfwJkRbylr/PlHXKLbPQ/leSQ=
+	t=1776961015; cv=none; b=G6EQ4P4g7TNsvFd+wch1t03pjv5q/4Qw80wAl2igISID7zbuyYnIS2eb3DUhrdL/AbWwmLVrV2PsNBlAM6QXePZltqxG8OActBNXtBb5TvZTWvxliiOkUtx0IsnQxk86lmRBDXpfaJriFS5QjAhd9colQm9/EUr00GHlwVTtG6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776960990; c=relaxed/simple;
-	bh=3QLlUUA45jvg2Bo/2NlwgsNjoebfzweDDS8HuHR8aFs=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=KqAIUi6l4fg5ZzhQd1i1/70u45HwdqKDN6+vB44cJ3WwE41fEfSjMas+XZgXrrcBP8XE/XFwzyEUld1BHejiCNPy8c3AUZeh4KzVkdB/l8tabQFXm0qvejvU4reFJAKiHfj5Y+YCfhoFyKnskc2CAQHThvHO99ui5u9wcDR38zs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=meGuQuMn; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1776961015; c=relaxed/simple;
+	bh=88/HKxe5n2sk+e6u/XPQ5msZDmz/z5JJvEKI5BhwyrE=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=L5tUy65XdYtKvsYdASogjbqlD7GTz63LRsOGTMB0gCtAVipp/P6TcgCIouPj3Rn3HJnl3evlQR5XfLGGn40K3xRXucjBWCXYc5P7nMGiDORYHIlGOoowC6CdcA/cun9kOxEExSmbBvsqK8EtgCC7FYf3YiLJW4bxodxTnp3tW5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A3cwZkmh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="meGuQuMn"
-Received: by linux.microsoft.com (Postfix, from userid 1204)
-	id 031FE20B7165; Thu, 23 Apr 2026 09:16:29 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 031FE20B7165
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1776960989;
-	bh=nS3ZXhBI9YIGEoe/pnr3KjJMA28TZVBjHOa6JEa/7po=;
-	h=Date:From:To:Subject:From;
-	b=meGuQuMnAY7ojg9GpAPQzjAe6kRgB2d95O4fUTQqfo8yNM8OcwE+kYyycypMacuhe
-	 kGSCNe309udZ9Li78zyD/Syg2XYBIk4hVbeHx1uw56BbRHcqSqYc6JUaTZHmQS3jux
-	 GAptQp/khgZIu7bnnCQH+NHYkz3xwW1Lc0IhWPuA=
-Date: Thu, 23 Apr 2026 09:16:28 -0700
-From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-To: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	leon@kernel.org, longli@microsoft.com, kotaranov@microsoft.com,
-	horms@kernel.org, shradhagupta@linux.microsoft.com,
-	ssengar@linux.microsoft.com, ernis@linux.microsoft.com,
-	shirazsaleem@microsoft.com, linux-hyperv@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org, stephen@networkplumber.org,
-	jacob.e.keller@intel.com, dipayanroy@microsoft.com,
-	leitao@debian.org, kees@kernel.org, john.fastabend@gmail.com,
-	hawk@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-	ast@kernel.org, sdf@fomichev.me, yury.norov@gmail.com
-Subject: [PATCH net] net: mana: hardening: Validate SHM offset from BAR0
- register to prevent crash due to alignment fault
-Message-ID: <aepF3NwyANeklkfD@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A3cwZkmh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAE8DC2BCAF;
+	Thu, 23 Apr 2026 16:16:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776961015;
+	bh=88/HKxe5n2sk+e6u/XPQ5msZDmz/z5JJvEKI5BhwyrE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=A3cwZkmhaZTDPa9yRJzZ5rr1v6+skk2b8QR4wHQJ8ADezf7NT2pftFJujgbn0x9Me
+	 ZkaXJr+dikzOxH7ynb+8cyWgU/lOA87S7iXoYBtIdQd8U71K9orujw/L2mkFUIpAJX
+	 UiyFOqDrjVghSfR0ni6Ou5rItjHaFglAteMx9EINJCWccp+IM2M1xM1RExqtIyNsNL
+	 SDQ3Owd6bBBLaI1lJi7VCBklOggccua9c1Vb3WMdjeHgkruYlqRZVWWqNzqb5OHpb7
+	 Xos0EaqX65OpHB1EPy7T+pVr3Geoj+7JWAtToQw3LEpvdyiyCbzXd5pOFWWohmPzIj
+	 zYvoM0BBzMHSA==
+Content-Type: multipart/mixed; boundary="===============5377167032193769205=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-Id: <0f38092aac45453cb84f7e822a09057bfd3b5b0a2d3aae3c2f7bd20214a3e4aa@mail.kernel.org>
+In-Reply-To: <20260423152239.4140627-2-utilityemal77@gmail.com>
+References: <20260423152239.4140627-2-utilityemal77@gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Implement dtor for struct file BTF ID
+From: bot+bpf-ci@kernel.org
+To: utilityemal77@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,bpf@vger.kernel.org,mic@digikod.net,utilityemal77@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 23 Apr 2026 16:16:54 +0000 (UTC)
 
-During Function Level Reset recovery, the MANA driver reads
-hardware BAR0 registers that may temporarily contain garbage values.
-The SHM (Shared Memory) offset read from GDMA_REG_SHM_OFFSET is used
-to compute gc->shm_base, which is later dereferenced via readl() in
-mana_smc_poll_register(). If the hardware returns an unaligned or
-out-of-range value, the driver must not blindly use it, as this would
-propagate the hardware error into a kernel crash.
+--===============5377167032193769205==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-The following crash was observed on an arm64 Hyper-V guest running
-kernel 6.17.0-3013-azure during VF reset recovery triggered by HWC
-timeout.
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index baa12b24bb64..4739e2bf0f31 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
 
-[13291.785274] Unable to handle kernel paging request at virtual address ffff8000a200001b
-[13291.785311] Mem abort info:
-[13291.785332]   ESR = 0x0000000096000021
-[13291.785343]   EC = 0x25: DABT (current EL), IL = 32 bits
-[13291.785355]   SET = 0, FnV = 0
-[13291.785363]   EA = 0, S1PTW = 0
-[13291.785372]   FSC = 0x21: alignment fault
-[13291.785382] Data abort info:
-[13291.785391]   ISV = 0, ISS = 0x00000021, ISS2 = 0x00000000
-[13291.785404]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-[13291.785412]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-[13291.785421] swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000014df3a1000
-[13291.785432] [ffff8000a200001b] pgd=1000000100438403, p4d=1000000100438403, pud=1000000100439403, pmd=0068000fc2000711
-[13291.785703] Internal error: Oops: 0000000096000021 [#1]  SMP
-[13291.830975] Modules linked in: tls qrtr mana_ib ib_uverbs ib_core xt_owner xt_tcpudp xt_conntrack nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 nft_compat nf_tables cfg80211 8021q garp mrp stp llc binfmt_misc joydev serio_raw nls_iso8859_1 hid_generic aes_ce_blk aes_ce_cipher polyval_ce ghash_ce sm4_ce_gcm sm4_ce_ccm sm4_ce sm4_ce_cipher hid_hyperv sm4 sm3_ce sha3_ce hv_netvsc hid vmgenid hyperv_keyboard hyperv_drm sch_fq_codel nvme_fabrics efi_pstore dm_multipath nfnetlink vsock_loopback vmw_vsock_virtio_transport_common hv_sock vmw_vsock_vmci_transport vmw_vmci vsock dmi_sysfs ip_tables x_tables autofs4
-[13291.862630] CPU: 122 UID: 0 PID: 61796 Comm: kworker/122:2 Tainted: G        W           6.17.0-3013-azure #13-Ubuntu VOLUNTARY
-[13291.869902] Tainted: [W]=WARN
-[13291.871901] Hardware name: Microsoft Corporation Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.1 01/08/2026
-[13291.878086] Workqueue: events mana_serv_func
-[13291.880718] pstate: 62400005 (nZCv daif +PAN -UAO +TCO -DIT -SSBS BTYPE=--)
-[13291.884835] pc : mana_smc_poll_register+0x48/0xb0
-[13291.887902] lr : mana_smc_setup_hwc+0x70/0x1c0
-[13291.890493] sp : ffff8000ab79bbb0
-[13291.892364] x29: ffff8000ab79bbb0 x28: ffff00410c8b5900 x27: ffff00410d630680
-[13291.896252] x26: ffff004171f9fd80 x25: 000000016ed55000 x24: 000000017f37e000
-[13291.899990] x23: 0000000000000000 x22: 000000016ed55000 x21: 0000000000000000
-[13291.904497] x20: ffff8000a200001b x19: 0000000000004e20 x18: ffff8000a6183050
-[13291.908308] x17: 0000000000000000 x16: 0000000000000000 x15: 000000000000000a
-[13291.912542] x14: 0000000000000004 x13: 0000000000000000 x12: 0000000000000000
-[13291.916298] x11: 0000000000000000 x10: 0000000000000001 x9 : ffffc45006af1bd8
-[13291.920945] x8 : ffff000151129000 x7 : 0000000000000000 x6 : 0000000000000000
-[13291.925293] x5 : 000000015f214000 x4 : 000000017217a000 x3 : 000000016ed50000
-[13291.930436] x2 : 000000016ed55000 x1 : 0000000000000000 x0 : ffff8000a1ffffff
-[13291.934342] Call trace:
-[13291.935736]  mana_smc_poll_register+0x48/0xb0 (P)
-[13291.938611]  mana_smc_setup_hwc+0x70/0x1c0
-[13291.941113]  mana_hwc_create_channel+0x1a0/0x3a0
-[13291.944283]  mana_gd_setup+0x16c/0x398
-[13291.946584]  mana_gd_resume+0x24/0x70
-[13291.948917]  mana_do_service+0x13c/0x1d0
-[13291.951583]  mana_serv_func+0x34/0x68
-[13291.953732]  process_one_work+0x168/0x3d0
-[13291.956745]  worker_thread+0x2ac/0x480
-[13291.959104]  kthread+0xf8/0x110
-[13291.961026]  ret_from_fork+0x10/0x20
-[13291.963560] Code: d2807d00 9417c551 71000673 54000220 (b9400281)
-[13291.967299] ---[ end trace 0000000000000000 ]---
+[ ... ]
 
-Disassembly of mana_smc_poll_register() around the crash site:
+> @@ -2752,6 +2753,13 @@ __bpf_kfunc void bpf_task_release_dtor(void *p)
+>  }
+>  CFI_NOSEAL(bpf_task_release_dtor);
+>
+> +__bpf_kfunc void bpf_file_release_dtor(void *file)
+> +{
+> +	fput((struct file *)file);
+> +}
+> +
+> +CFI_NOSEAL(bpf_file_release_dtor);
+> +
 
-Disassembly of section .text:
+Is bpf_file_release_dtor() safe to call from NMI context? BPF programs
+can delete map elements from NMI context (for example, in
+BPF_PROG_TYPE_PERF_EVENT programs), which will synchronously invoke this
+destructor.
 
-00000000000047c8 <mana_smc_poll_register>:
-    47c8: d503201f        nop
-    47cc: d503201f        nop
-    47d0: d503233f        paciasp
-    47d4: f800865e        str     x30, [x18], #8
-    47d8: a9bd7bfd        stp     x29, x30, [sp, #-48]!
-    47dc: 910003fd        mov     x29, sp
-    47e0: a90153f3        stp     x19, x20, [sp, #16]
-    47e4: 91007014        add     x20, x0, #0x1c
-    47e8: 5289c413        mov     w19, #0x4e20
-    47ec: f90013f5        str     x21, [sp, #32]
-    47f0: 12001c35        and     w21, w1, #0xff
-    47f4: 14000008        b       4814 <mana_smc_poll_register+0x4c>
-    47f8: 36f801e1  tbz  w1, #31, 4834 <mana_smc_poll_register+0x6c>
-    47fc: 52800042        mov     w2, #0x2
-    4800: d280fa01        mov     x1, #0x7d0
-    4804: d2807d00        mov     x0, #0x3e8
-    4808: 94000000        bl      0 <usleep_range_state>
-    480c: 71000673        subs    w19, w19, #0x1
-    4810: 54000200        b.eq    4850 <mana_smc_poll_register+0x88>
-    4814: b9400281      ldr   w1, [x20] <-- **** CRASHED HERE *****
-    4818: d50331bf        dmb     oshld
-    481c: 2a0103e2        mov     w2, w1
-    4820: ca020042        eor     x2, x2, x2
-    4824: b5000002        cbnz    x2, 4824 <mana_smc_poll_register+0x5c>
-    4828: 710002bf        cmp     w21, #0x0
-    482c: 3a411820        ccmn    w1, #0x1, #0x0, ne
-    4830: 54fffe41        b.ne    47f8 <mana_smc_poll_register+0x30>
-    4834: f85f8e5e        ldr     x30, [x18, #-8]!
-    4838: 52800000        mov     w0, #0x0
-    483c: a94153f3        ldp     x19, x20, [sp, #16]
-    4840: f94013f5        ldr     x21, [sp, #32]
-    4844: f84307fd        ldr     x29, [sp], #48
-    4848: d50323bf        autiasp
-    484c: d65f03c0        ret
-    4850: f85f8e5e        ldr     x30, [x18, #-8]!
-    4854: 12800da0        mov     w0, #0xffffff92
-    4858: a94153f3        ldp     x19, x20, [sp, #16]
-    485c: f94013f5        ldr     x21, [sp, #32]
-    4860: f84307fd        ldr     x29, [sp], #48
-    4864: d50323bf        autiasp
-    4868: d65f03c0        ret
+When fput() is called in an interrupt context, it adds the file to the
+delayed_fput_list and calls schedule_delayed_work():
 
-From the crash signature x20 = ffff8000a200001b, this address
-ends in 0x1b which is not 4-byte aligned, so the 'ldr w1, [x20]'
-instruction (readl) triggers the arm64 alignment fault (FSC = 0x21).
+kernel/bpf/helpers.c:bpf_file_release_dtor() {
+    fput((struct file *)file);
+}
 
-The root cause is in mana_gd_init_vf_regs(), which computes:
+fs/file_table.c:fput() {
+    ...
+    if (!atomic_long_dec_and_test(&file->f_count))
+        return;
+    ...
+    if (likely(!in_interrupt() && !(task->flags & PF_KTHREAD))) {
+        ...
+    } else {
+        fput_many(file, 1);
+    }
+}
 
-  gc->shm_base = gc->bar0_va + mana_gd_r64(gc, GDMA_REG_SHM_OFFSET);
+fs/file_table.c:fput_many() {
+    ...
+    if (llist_add_batch(&head, &tail, &delayed_fput_list))
+        schedule_delayed_work(&delayed_fput_work, 1);
+}
 
-without validating the offset read from hardware. If the register
-returns a garbage value that is neither within bar 0 bounds nor aligned
-to the 4-byte granularity, thus causing the alignment fault.
+However, schedule_delayed_work() is not NMI-safe, as it attempts to
+acquire spinlocks such as the workqueue pool lock and timer_base->lock.
+If the NMI interrupted a context that already held one of these locks,
+won't this result in a hard deadlock?
 
-Harden the register validation in both mana_gd_init_vf_regs() and
-mana_gd_init_pf_regs() by checking the SHM offset for bounds and
-4-byte alignment before use. Return -EPROTO on invalid values, which
-the existing recovery path in mana_serv_reset() already handles by
-falling through to PCI device rescan, giving the hardware another
-chance to present valid register values.
+Would it be better to defer releasing the struct file using an NMI-safe
+mechanism, similar to how other BPF destructors handle this?
 
-Fixes: 9bf66036d686 ("net: mana: Handle hardware recovery events when probing the device")
-Signed-off-by: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+This issue was raised by sashiko-bot in v1:
+https://lore.kernel.org/bpf/20260421010536.17FB1C19425@smtp.kernel.org/
+
+The author acknowledged this as a real bug with a reproducible deadlock,
+but v2 still uses the same fput() call without any NMI-safe deferral
+mechanism.
+
+[ ... ]
+
+
 ---
- .../net/ethernet/microsoft/mana/gdma_main.c   | 32 +++++++++++++++++--
- 1 file changed, 29 insertions(+), 3 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-index 098fbda0d128..75efbeebae0e 100644
---- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
-+++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-@@ -45,6 +45,7 @@ static int mana_gd_init_pf_regs(struct pci_dev *pdev)
- 	struct gdma_context *gc = pci_get_drvdata(pdev);
- 	void __iomem *sriov_base_va;
- 	u64 sriov_base_off;
-+	u64 sriov_shm_off;
- 
- 	gc->db_page_size = mana_gd_r32(gc, GDMA_PF_REG_DB_PAGE_SIZE) & 0xFFFF;
- 
-@@ -73,10 +74,25 @@ static int mana_gd_init_pf_regs(struct pci_dev *pdev)
- 	gc->phys_db_page_base = gc->bar0_pa + gc->db_page_off;
- 
- 	sriov_base_off = mana_gd_r64(gc, GDMA_SRIOV_REG_CFG_BASE_OFF);
-+	if (sriov_base_off >= gc->bar0_size ||
-+	    !IS_ALIGNED(sriov_base_off, sizeof(u32))) {
-+		dev_err(gc->dev,
-+			"SRIOV base offset 0x%llx out of range or unaligned (BAR0 size 0x%llx)\n",
-+			sriov_base_off, (u64)gc->bar0_size);
-+		return -EPROTO;
-+	}
- 
- 	sriov_base_va = gc->bar0_va + sriov_base_off;
--	gc->shm_base = sriov_base_va +
--			mana_gd_r64(gc, sriov_base_off + GDMA_PF_REG_SHM_OFF);
-+
-+	sriov_shm_off = mana_gd_r64(gc, sriov_base_off + GDMA_PF_REG_SHM_OFF);
-+	if (sriov_base_off + sriov_shm_off >= gc->bar0_size ||
-+	    !IS_ALIGNED(sriov_shm_off, sizeof(u32))) {
-+		dev_err(gc->dev,
-+			"SRIOV SHM offset 0x%llx out of range or unaligned (BAR0 size 0x%llx)\n",
-+			sriov_shm_off, (u64)gc->bar0_size);
-+		return -EPROTO;
-+	}
-+	gc->shm_base = sriov_base_va + sriov_shm_off;
- 
- 	return 0;
- }
-@@ -84,6 +100,7 @@ static int mana_gd_init_pf_regs(struct pci_dev *pdev)
- static int mana_gd_init_vf_regs(struct pci_dev *pdev)
- {
- 	struct gdma_context *gc = pci_get_drvdata(pdev);
-+	u64 shm_off;
- 
- 	gc->db_page_size = mana_gd_r32(gc, GDMA_REG_DB_PAGE_SIZE) & 0xFFFF;
- 
-@@ -111,7 +128,16 @@ static int mana_gd_init_vf_regs(struct pci_dev *pdev)
- 	gc->db_page_base = gc->bar0_va + gc->db_page_off;
- 	gc->phys_db_page_base = gc->bar0_pa + gc->db_page_off;
- 
--	gc->shm_base = gc->bar0_va + mana_gd_r64(gc, GDMA_REG_SHM_OFFSET);
-+	shm_off = mana_gd_r64(gc, GDMA_REG_SHM_OFFSET);
-+	if (shm_off >= gc->bar0_size ||
-+	    !IS_ALIGNED(shm_off, sizeof(u32))) {
-+		dev_err(gc->dev,
-+			"SHM offset 0x%llx out of range or unaligned (BAR0 size 0x%llx)\n",
-+			shm_off, (u64)gc->bar0_size);
-+		return -EPROTO;
-+	}
-+
-+	gc->shm_base = gc->bar0_va + shm_off;
- 
- 	return 0;
- }
--- 
-2.43.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24844511587
+--===============5377167032193769205==--
