@@ -1,146 +1,268 @@
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB063D411A
-	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 06:57:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776927431; cv=pass; b=AhBAQW6F2xdBDGZKt/CPTHx8O+SaKGV5OpnpUEl2jIJTcX21VRz8KeUNLZc1K4ieX0ya8awjT4pFOYE0Y2O0ffooYFRoq8rMjnM6YkX09sR4Jcsnnh7aL7BeH0LUM+sRBX4IylyvybtOsLJKUPENOrUc7ptz8mVq/vBEjLZ3MeY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776927431; c=relaxed/simple;
-	bh=FaMQxyMbm/MvssklYFNdPl+DM+5+46erElji7HAPf4Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Gr/gH7kR2bV1B81RFu4rj9AaeS1TMJqiZo0UVj6f4gbi/jZ1T06CnguF0c/BJvGnCU/HJXGVPG7x6zkT/lBGANXloAVJ5MQ3i+f4L+speBSNo4F0i6O0dKLwnEkgu/Gdmd+Lp/24T5Q5K4Xv2hK/dUuQxefWqLH2uxv4MDR2Ots=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aDnxWOoK; arc=pass smtp.client-ip=209.85.160.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFF93D8127
+	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 07:00:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776927633; cv=none; b=m0Ynge9jRO2f/oT8UoMAsQYfPujIKBDusBcxz052Mz41bqfpkdvX3M5a9+gWklJaqEk7gozN7NuAEBV/PQggJRpLnwG8EHyYcSs8iXNu6ILhwlDixgqgSWaHndvSXjlSkuiBPztQljAWELoBhqnSN/lsVxgy9KYNKA+pey6iSqg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776927633; c=relaxed/simple;
+	bh=fr2Dy7vz+z+wrLdzDGn1rkWbs5VAwvGz8Yp7Etv4eYY=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=R1M6/E6bDick2T53Txrvm/vBJQAdetIhPRF0a3TwfOfxLq+i9xZwoTEFMhkqu1r/vXfZYu0Oyx4K8hYlu4ye1DRVLVs2+VFSpm3RdW9A7eLLZf7quUCBR2nD4xDI1B+tGHLIfii+tnjlBUbOrl7KqLaSuGSyZFCwKuda/JNRhcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VvfuSHdk; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aDnxWOoK"
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-40946982a78so2291813fac.2
-        for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 23:57:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776927428; cv=none;
-        d=google.com; s=arc-20240605;
-        b=FkGuhpjFtn4RtM2wA+LlI+z8Szow1hWgeoMThtSc5nH4Q1N8CMfXUH86JiG3nr+v1c
-         FOz+lBB8T2Wu0PmC65DZINQ/n+9ntzE4VlXCCDuMBEJP/D9tyaT3iAkQijhHHabmrrAd
-         JK7eEI1AgRcoLoky7wDtx5G7OxzLzkzxSEwgfi+MnhxWzWTvsAeN2F6OV3rlVRVzHTSE
-         Q5dhIsEp3AOSKRKyA6wCyEaaqySaiJG5aOx51SQ6XwRLiFMEvXW8yqQPFaM9ceCYRQOu
-         ZtOk8QkSpXtp1J3sHA1pckW4EojiZcm3r5NIZ729yahDBhABXFNPlrvLc2oV4w62tXFM
-         6VZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=QB81J+kn3zUKSpeQ5Shly/8f+kNoagaKHjIgpIqova8=;
-        fh=pk+fWVgPEQfJ5D2XByfoaahrorMttUQmzjKRN+PHiRQ=;
-        b=Lcnvf9fhXcDPZTbqTohD7cvLBNWYQUhDfRKsAEWLyhcuR+VqdEI3EjTYyAVlB2Z5I7
-         zkxfG/4txmdxhQ60mbwBpojeZnyg5wDQLWItnBYMxF5KCxU4To2GYYzwc2Q2OEJ7EF8j
-         icqaiXm90vOqz761N4LjyXRWWI76a+w631KOgZLjZowaOLcl23FfhKH4fJkhRz4k2fON
-         C62jlBFzm1jcNsciGqzxCTjh8ymQEYPvatnzowm/pCUTUKiRZUmGl+zXwfp1FpTL3R5A
-         5ZItXKj8toW/ksYXY8ESJllmo6JVKjOjIsGO44vFXKBVQ/bhzcB83lE1kprfPXH+mSWX
-         lD3A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VvfuSHdk"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2a8fba3f769so28334575ad.2
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 00:00:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776927428; x=1777532228; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QB81J+kn3zUKSpeQ5Shly/8f+kNoagaKHjIgpIqova8=;
-        b=aDnxWOoKVJAeiy+w1c9dhUM0ea2Ll9yoNW3Ap+jnC/MIoOsuLt3b2WFgqzbrWDO/E5
-         jEAaP3bcSBvc1/hBbhw//9L9NbVQWxsjrJVrdFIYCCBl+vofnHezjMS7y4g67VYqgfWN
-         FaFR2T46ZA/bYJiIeQqjEiS6055+H3bVD9GK8Ll3/bbOFClmVAPTi4MdqRdiGeChzmcj
-         m6TzeQn2AzoV9uOXQxW5QL3rORPC2a1YxwNlma69uckaqi7f2/okhQuhdHHCtsROpGNy
-         Qp0XnVg1KK+n3pTkFA1poNLu0kp8mF5DEL833cBCKX4kth1a81PG8+fveVeQoHTSEeEu
-         /eqA==
+        d=gmail.com; s=20251104; t=1776927630; x=1777532430; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/FDcYdMEVgX0UUwJJspOEqoP3UMTSsUAQZWMt+ZF0X8=;
+        b=VvfuSHdksmD1OjEEdy1tOW04uqyXDGiFZRvd1Pf4it2iDBT+UWB4IRaVYdSyovzJAk
+         SA9JwlqhqsimE15xo0KbYencbDintk2/OMCYHIEPanxyzU4NZGF5HUVE32/ftPT8ihkT
+         bFBh/t3KNtP+frpbmBByTu6cGTMvRwmcLpc6dBsF9FdNRigIdPuW30IXAq24UruwkAnd
+         gAK8WU+aErVJdbASMNAr4EbM/t3bZHJc0UqO0Y06ntf+kxZPjIXt92Yo4bFuBoJJax5g
+         digWTFF4w9OA7Apcx7/0ECWGXWMeUk/XopgbmznSBxCBnoydPaGCR9NzR9Jehxwxh3IA
+         ffnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776927428; x=1777532228;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=QB81J+kn3zUKSpeQ5Shly/8f+kNoagaKHjIgpIqova8=;
-        b=ZjAtm9L8skOUjmkXozhqdYBz0aIdfj779eNqtq2mZPESQZS8TAAXxGGgFgcomIH4oD
-         A9S8nc/R8JiwV0z8Obnq9mBPa93+FuuD2+zTqnVTu0IjtSZgdErPfDsFrDOUtUd/+kAM
-         RHtz/n8bf2vP8lwxzxJOf/rEeZ95HvJnR89Fn11NIor0YzJ0M/nEvS8gIJ/GYbIXHYwc
-         Hhind/HN5IT94uCWo0EWrf/Nli3a2jr3QjaSygZyb5+6yeRrBPUk/2Jbd9TFzya02UrZ
-         HlWQ/3xzaW/u4hGJPZa6gWpvg31BsP18F0sc+tPRlwC94qYDipHfrzSeauiTwHCDLNBW
-         yTAA==
-X-Forwarded-Encrypted: i=1; AFNElJ9goIfCqXeNZDFhE9H1ghmQQcAJrt1GRsZWb75GutDcM8o69UFd5VZiqLLNKEtOeMa/jkc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxwfs3+0Cz1hOOqDB3+uXCYJQPbuJkA/qFKrsmo7JyvfpQ4itlB
-	Q6Z9yvOELSXpd/cFoBp321DR2RuOeLQowHEgW6jCgKOW63ziWZpwjY8jYioa+mGvFpMAuOfaS4C
-	FzFOGayRiHo6Tu6imCyKHpihKaMqY8Xo=
-X-Gm-Gg: AeBDieuY8rP2GmInWIK6xMAKrhtz7jRXDXDg6VEUW9pT/LvP2QNR3abPXuuqmryNTAc
-	SPb2tK4fDWchFk+58CRhNMzbXh78a1Cj74ZUwSYHucK7WknOEs6z85dvKOc06z8sjQ6E/crAKrt
-	MLAe7X72y3rkB+S7qxggOKTUuD7rNlNerJa3erlwKBtvUGwbB6Fs7Pe8NzuWDHcYgpwhn+CPmQ8
-	qWMpJ5F0zi/YB7eapp8xZo/O6G8mc7pS/qCFmN/H2UDxayGnMdvP36FYcszC0uAk3nsnMudxcF1
-	p8PrCAsOc1y1/7Trn3Z125UIkb32mQ==
-X-Received: by 2002:a05:6871:c005:b0:42c:7f89:2916 with SMTP id
- 586e51a60fabf-42c7f892ceamr7133923fac.20.1776927428557; Wed, 22 Apr 2026
- 23:57:08 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776927630; x=1777532430;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/FDcYdMEVgX0UUwJJspOEqoP3UMTSsUAQZWMt+ZF0X8=;
+        b=B7i2HGzQD9xzJGdU3urNgoh2ud8zS/qRYIwQn+k1riuJxepAqJL9D75TSZ7Q8xiVhX
+         a1cBDwne7ADbPGb+VapepATmhcsW1KW+vXrS26PTTz03JZ0blx0o7L2xT8XBmAmn5gWa
+         UsVkvc06ab/T4OuiLtX61YzwrO1TUz4P0IH13FUdHfDtnK+PZoE+J8moo4R5AWGVtJ5n
+         C8WahX5UzBb8LHOPdqK1tww834Yp/HsZbndxPjjWK8UDlXjdggmP1DNNxWT2vf/+FB+s
+         PEhZdDGxXITakIGpRjEhGbx5BoQvYOtd3xeHH/IgZ2S+Jx7bilwuTolVO9VeWl0Z1Dhn
+         j9DQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8yIax4EaUQ0kmMrm/UXuqpUbH9OjX4uZ5dqSexCc/wUSAH0ql9/uh1jP9bSIEKIj3EQkA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRIxd3qcT7FfKV+FMA5cmiXrKJF+xe5EeoYvRPeKA8Q8racDqd
+	aPDEvRmXUnMXr4ePdioaDSbOj8cDFwbuUpaOxCmTZ0veKWvCXkHszJ2I
+X-Gm-Gg: AeBDieusT/tDpUwv19N7T7KHxVwE8B51QSL1cv9yUQQSv3NX4PH6eLTLtz+mwYHhq1l
+	URXk2WLZ36f9s0I0gVVIclbmC1KbRIsA0GWXKZjli10X13UMSuE78jlnBCJ1SJs0AYOIBzfVK5A
+	jdrXGEl8LaDXVaD7NHSAyY4lSdRGC6CHfUvP+xhtI2IYKVkye/jYXEnvlII7eEoTCzUJaGvm0iC
+	M+p7o5bOUpKyktMjjqArv6EyKf+138SyeVRu6tGn1lTXtuq7aJKL6F+pZxxqyGIS6fx74ExMq0z
+	vzsq6DZWFjZo053odXLuv2crrts6h6MMI7jwFfr2/NQBkvPkdHnJsN7U4r5sh+d2YNB0pW8nm1a
+	dps2ulx1IHUbDzGlPX8Kve8rdbzy+L4aTPRgUKea/mezda3K1cxcbl/eFFU+cafFRXY5ydkdpxZ
+	X4M+h0O2kUXc5+w1qcMleRwp7AQ7vAZ6+/g1fQ3rMRd8JNB9U=
+X-Received: by 2002:a17:902:da89:b0:2b0:ba14:fc55 with SMTP id d9443c01a7336-2b5f9fa70camr289653425ad.29.1776927629301;
+        Thu, 23 Apr 2026 00:00:29 -0700 (PDT)
+Received: from ?IPV6:2604:3d08:9582:1100::3781? ([2604:3d08:9582:1100::3781])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5faa2e5cesm220351645ad.25.2026.04.23.00.00.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Apr 2026 00:00:28 -0700 (PDT)
+Message-ID: <71da148c-d02c-41f4-80da-b90815ffc313@gmail.com>
+Date: Thu, 23 Apr 2026 00:00:25 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260422183757.15069-1-suchitkarunakaran@gmail.com> <CAADnVQ+=iEmyf-=T=V0oW2aK+dgx4S0CbAAPi4pSg=DnaHNFoA@mail.gmail.com>
-In-Reply-To: <CAADnVQ+=iEmyf-=T=V0oW2aK+dgx4S0CbAAPi4pSg=DnaHNFoA@mail.gmail.com>
-From: Suchit Karunakaran <suchitkarunakaran@gmail.com>
-Date: Thu, 23 Apr 2026 12:26:57 +0530
-X-Gm-Features: AQROBzCmP_tTpa9MPR2n3mcSyZk76MbSm-jGeLSvbrvMhcfw5ZdsgAHyHU-UZm4
-Message-ID: <CAO9wTFi8wrhP07YikinU283Z_JVyttNrzwwgdVWz=gUvuWjzGw@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: replace bpf_probe_read_kernel with direct access
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Indu Bhagat <ibhagatgnu@gmail.com>
+Subject: Re: [PATCH v13 00/18] unwind_deferred: Implement sframe handling
+To: Jens Remus <jremus@linux.ibm.com>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, x86@kernel.org, linux-mm@kvack.org,
+ Steven Rostedt <rostedt@kernel.org>, Jens Remus <jremus@linux.ibm.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Andrii Nakryiko <andrii@kernel.org>, "Jose E. Marchesi" <jemarch@gnu.org>,
+ Beau Belgrave <beaub@linux.microsoft.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
+ Carlos O'Donell <codonell@redhat.com>, Sam James <sam@gentoo.org>,
+ Dylan Hatch <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ David Hildenbrand <david@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Michal Hocko
+ <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ ibhagatgnu@gmail.com
+References: <20260127150554.2760964-1-jremus@linux.ibm.com>
+Content-Language: en-US
+In-Reply-To: <20260127150554.2760964-1-jremus@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, 23 Apr 2026 at 02:51, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Apr 22, 2026 at 11:38=E2=80=AFAM Suchit Karunakaran
-> <suchitkarunakaran@gmail.com> wrote:
-> >
-> > Use direct field access instead of bpf_probe_read_kernel() for
-> > nlk->groups[0] and inode->i_ino, and clean up related code.
-> >
-> > Removes obsolete FIXME comments and unused variable.
-> >
-> > Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
-> > ---
-> >  .../testing/selftests/bpf/progs/bpf_iter_netlink.c  | 13 ++-----------
-> >  1 file changed, 2 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c b/too=
-ls/testing/selftests/bpf/progs/bpf_iter_netlink.c
-> > index 00b2ceae81fb..5930bf8899d2 100644
-> > --- a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
-> > +++ b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
-> > @@ -17,7 +17,6 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
-> >         struct seq_file *seq =3D ctx->meta->seq;
-> >         struct netlink_sock *nlk =3D ctx->sk;
-> >         unsigned long group, ino;
-> > -       struct inode *inode;
-> >         struct socket *sk;
-> >         struct sock *s;
-> >
-> > @@ -35,10 +34,7 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
-> >         if (!nlk->groups)  {
-> >                 group =3D 0;
-> >         } else {
-> > -               /* FIXME: temporary use bpf_probe_read_kernel here, nee=
-ds
-> > -                * verifier support to do direct access.
-> > -                */
-> > -               bpf_probe_read_kernel(&group, sizeof(group), &nlk->grou=
-ps[0]);
->
-> Please stop sending patches to remove TODO and FIXME.
->
-> pw-bot: cr
 
-Sorry about that. I'll test it more rigorously next time and ensure
-the patch is sensible.
+On Tue, Jan 27, 2026 at 7:32 AM Jens Remus <jremus@linux.ibm.com> wrote:
+>
+> This is the implementation of parsing the SFrame V3 stack trace information
+> from an .sframe section in an ELF file.  It's a continuation of Josh's and
+> Steve's work that can be found here:
+>
+>    https://lore.kernel.org/all/cover.1737511963.git.jpoimboe@kernel.org/
+>    https://lore.kernel.org/all/20250827201548.448472904@kernel.org/
+>
+> Currently the only way to get a user space stack trace from a stack
+> walk (and not just copying large amount of user stack into the kernel
+> ring buffer) is to use frame pointers. This has a few issues. The biggest
+> one is that compiling frame pointers into every application and library
+> has been shown to cause performance overhead.
+>
+> Another issue is that the format of the frames may not always be consistent
+> between different compilers and some architectures (s390) has no defined
+> format to do a reliable stack walk. The only way to perform user space
+> profiling on these architectures is to copy the user stack into the kernel
+> buffer.
+>
+> SFrame [1] is now supported in binutils (x86-64, ARM64, and s390). There is
+> discussions going on about supporting SFrame in LLVM. SFrame acts more like
+> ORC, and lives in the ELF executable file as its own section. Like ORC it
+> has two tables where the first table is sorted by instruction pointers (IP)
+> and using the current IP and finding it's entry in the first table, it will
+> take you to the second table which will tell you where the return address
+> of the current function is located and then you can use that address to
+> look it up in the first table to find the return address of that function,
+> and so on. This performs a user space stack walk.
+>
+> Now because the .sframe section lives in the ELF file it needs to be faulted
+> into memory when it is used. This means that walking the user space stack
+> requires being in a faultable context. As profilers like perf request a stack
+> trace in interrupt or NMI context, it cannot do the walking when it is
+> requested. Instead it must be deferred until it is safe to fault in user
+> space. One place this is known to be safe is when the task is about to return
+> back to user space.
+>
+> This series makes the deferred unwind user code implement SFrame format V3
+> and enables it on x86-64.
+>
+> [1]: https://sourceware.org/binutils/wiki/sframe
+>
+>
+> This series applies on top of the tip perf/core branch:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git  perf/core
+>
+> The to be stack-traced user space programs (and libraries) need to be
+> built with the recent SFrame stack trace information format V3, as
+> generated by the upcoming binutils 2.46 with assembler option --gsframe.
+> It can be built from source from the binutils-2_46-branch branch:
+>
+>   git://sourceware.org/git/binutils-gdb.git  binutils-2_46-branch
+>
+> Namhyung Kim's related perf tools deferred callchain support can be used
+> for testing ("perf record --call-graph fp,defer" and "perf report/script").
+>
+>
+> Changes since v12 (see patch notes for details):
+> - Rebase on tip perf/core branch (d55c571e4333).
+> - Add support for SFrame V3, including its new flexible FDEs.  SFrame V2
+>   is not supported.
+>
+> Changes since v11 (see patch notes for details):
+> - Rebase on tip master branch (f8fdee44bf2f) with Namhyung Kim's
+>   perf/defer-callchain-v4 branch merged on top.
+> - Adjust to Peter's latest undwind user enhancements.
+> - Simplify logic by using an internal SFrame FDE representation, whose
+>   FDE function start address field is an address instead of a PC-relative
+>   offset (from FDE).
+> - Rename struct sframe_fre to sframe_fre_internal to align with
+>   struct sframe_fde_internal.
+> - Remove unused pt_regs from unwind_user_next_common() and its
+>   callers. (Peter)
+> - Simplify unwind_user_next_sframe(). (Peter)
+> - Fix a few checkpatch errors and warnings.
+> - Minor cleanups (e.g. move includes, fix indentation).
+>
+> Changes since v10:
+> - Support for SFrame V2 PC-relative FDE function start address.
+> - Support for SFrame V2 representing RA undefined as indication for
+>   outermost frames.
+>
+>
+> Patches 1, 4, 11, and 17 have been updated to exclusively support the
+> latest SFrame V3 stack trace information format, that is generated by
+> the upcoming binutils 2.46 release.  Old SFrame V2 sections get rejected
+> with dynamic debug message "bad/unsupported sframe header".
+>
+> Patches 7 and 8 add support to unwind user (sframe) for outermost frames.
+>
+> Patches 12-15 add support to unwind user (sframe) for the new SFrame V3
+> flexible FDEs.
+>
+> Patch 16 improves the performance of searching the SFrame FRE for an IP.
+>
+
+Thanks Jens for your work on this. Apart from some of those minor 
+renames you are already planning on doing (as you mentioned in the 
+meeting today), the SFrame related bits look OK to me.
+
+Reviewed-by: Indu Bhagat <ibhagatgnu@gmail.com>
+
+> Regards,
+> Jens
+>
+>
+> Jens Remus (7):
+>   unwind_user: Stop when reaching an outermost frame
+>   unwind_user/sframe: Add support for outermost frame indication
+>   unwind_user: Enable archs that pass RA in a register
+>   unwind_user: Flexible FP/RA recovery rules
+>   unwind_user: Flexible CFA recovery rules
+>   unwind_user/sframe: Add support for SFrame V3 flexible FDEs
+>   unwind_user/sframe: Separate reading of FRE from reading of FRE data
+>     words
+>
+> Josh Poimboeuf (11):
+>   unwind_user/sframe: Add support for reading .sframe headers
+>   unwind_user/sframe: Store .sframe section data in per-mm maple tree
+>   x86/uaccess: Add unsafe_copy_from_user() implementation
+>   unwind_user/sframe: Add support for reading .sframe contents
+>   unwind_user/sframe: Detect .sframe sections in executables
+>   unwind_user/sframe: Wire up unwind_user to sframe
+>   unwind_user/sframe: Remove .sframe section on detected corruption
+>   unwind_user/sframe: Show file name in debug output
+>   unwind_user/sframe: Add .sframe validation option
+>   unwind_user/sframe/x86: Enable sframe unwinding on x86
+>   unwind_user/sframe: Add prctl() interface for registering .sframe
+>     sections
+>
+>  MAINTAINERS                               |   1 +
+>  arch/Kconfig                              |  23 +
+>  arch/x86/Kconfig                          |   1 +
+>  arch/x86/include/asm/mmu.h                |   2 +-
+>  arch/x86/include/asm/uaccess.h            |  39 +-
+>  arch/x86/include/asm/unwind_user.h        |  69 +-
+>  arch/x86/include/asm/unwind_user_sframe.h |  12 +
+>  fs/binfmt_elf.c                           |  48 +-
+>  include/linux/mm_types.h                  |   3 +
+>  include/linux/sframe.h                    |  60 ++
+>  include/linux/unwind_user.h               |  18 +
+>  include/linux/unwind_user_types.h         |  46 +-
+>  include/uapi/linux/elf.h                  |   1 +
+>  include/uapi/linux/prctl.h                |   6 +-
+>  kernel/fork.c                             |  10 +
+>  kernel/sys.c                              |   9 +
+>  kernel/unwind/Makefile                    |   3 +-
+>  kernel/unwind/sframe.c                    | 840 ++++++++++++++++++++++
+>  kernel/unwind/sframe.h                    |  87 +++
+>  kernel/unwind/sframe_debug.h              |  68 ++
+>  kernel/unwind/user.c                      | 105 ++-
+>  mm/init-mm.c                              |   2 +
+>  22 files changed, 1414 insertions(+), 39 deletions(-)
+>  create mode 100644 arch/x86/include/asm/unwind_user_sframe.h
+>  create mode 100644 include/linux/sframe.h
+>  create mode 100644 kernel/unwind/sframe.c
+>  create mode 100644 kernel/unwind/sframe.h
+>  create mode 100644 kernel/unwind/sframe_debug.h
+>
+> --
+> 2.51.0
+>
+>
