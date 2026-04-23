@@ -1,77 +1,67 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2898337D137;
-	Thu, 23 Apr 2026 16:37:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA8F149C6F;
+	Thu, 23 Apr 2026 16:40:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776962251; cv=none; b=O3L75rAApkcx36MovBENvcEM6rWs/+DV2C2EBzKC0/4BW9uoHFqa3kxgH0y3jhP//qq/QONixNh/9AdkYOG1EYAFxlk2QyF+tC3zBYN+TWfk2Mqke3jpt/5wy38ZD6Nru0jBxTmGIHjMl7OWF87W/A2kb3nIAzQ9OFHwLbysqEk=
+	t=1776962454; cv=none; b=Ra7Cea8oONmFRZ9As9nLkb6Sy18ror5vm5xJlYgfV6ZAAOuuXkn/PJq1WQbJY1iwLYKf53cta78vio7px4ytQgJxJTIbjMo/N/NjtkLU/3f4a8oj/mUOCuKerXGaHfW+aLVma6vDJ6Q2skng81y0w22s/HQ5QVJMlQXVCZhXAPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776962251; c=relaxed/simple;
-	bh=tvZ308WD3VglOQ4pZ/aOKmGXAoRvJXyRkk4hEefUg4Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I63AayPzDMZjFpX9YvSPcjxesX+p7TgUdybJ5E7J22iuZX6tic7PUx6AU0lsMM6N3/Hg+UOf5V68YHGqLVeYFkMui9CPa3AmqhX51AHu1UL94ppzIDnFF+Erwn3hRDWtLN/uojmFSgdtthbRgrmqN/H/4c9U6kgbOkgGLjkr4Gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=FD44ZvXi; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	s=arc-20240116; t=1776962454; c=relaxed/simple;
+	bh=qtMqP2CIxPQrxZ1QJN0QPE2krKJvUp54gRPuBJevL2E=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=uyrMxMj7t9/YvG4tZox1Sq4SZxKtTunHMxIJQRZCbTJbOLDZohXCdwv/X//vjantYa/IJOLwrjS1OOyBCGkGuUzMtfRSqx3KlVuJfZ6cdL4DSZaAgp+4J/+CkAMjUVay/E589QH4aPpw9vcSzveQIjXusMxnQ+5xixM6l+T1fQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P4wTiW+Q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="FD44ZvXi"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=LkCXysjBxUfLMfJbaiV8vjoVUfydT3ARl3itfoUFp4Q=; b=FD44ZvXicW/rgxPLhXFwtborg8
-	/DrbMf4pt1scblPA+hI/VnepbMyiSR/+AGVCBzLQ7WmWVzv5kw/U5X/p9hDlbKYKbykshRiwd00SA
-	kwTlCK1y8S0yhWDTAp84wG8oTHDmQkSZRfcCgQ5wTb3KpMuIQMzxv3Nxth2joIpYeSA0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1wFx32-00HGkD-IN; Thu, 23 Apr 2026 18:37:04 +0200
-Date: Thu, 23 Apr 2026 18:37:04 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	leon@kernel.org, longli@microsoft.com, kotaranov@microsoft.com,
-	horms@kernel.org, shradhagupta@linux.microsoft.com,
-	ssengar@linux.microsoft.com, ernis@linux.microsoft.com,
-	shirazsaleem@microsoft.com, linux-hyperv@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org, stephen@networkplumber.org,
-	jacob.e.keller@intel.com, dipayanroy@microsoft.com,
-	leitao@debian.org, kees@kernel.org, john.fastabend@gmail.com,
-	hawk@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-	ast@kernel.org, sdf@fomichev.me, yury.norov@gmail.com
-Subject: Re: [PATCH net] net: mana: hardening: Validate SHM offset from BAR0
- register to prevent crash due to alignment fault
-Message-ID: <edccaafd-73f3-421d-a48e-a6cb704d39e6@lunn.ch>
-References: <aepF3NwyANeklkfD@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P4wTiW+Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29A98C2BCB3;
+	Thu, 23 Apr 2026 16:40:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776962454;
+	bh=qtMqP2CIxPQrxZ1QJN0QPE2krKJvUp54gRPuBJevL2E=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=P4wTiW+Q1bHA4mYeSdKWxjx7dnHRfgWVNoU7Ry5UvSTnG9bQx+3m1aAshmyKVHGBY
+	 6rJSRJn1Wg+ZylcNpRM8/dKZs4Z+1zSqMQwZgCz2pIaZ8UY5SGGxLJvR9MGRqf1egK
+	 zl1FXDPR4jOdCbftkaJhKCXXpbHH6TVNHB8cHMk/cGbRGr563iphi14zraO94o4P1e
+	 CMIRyesgjT+M+EeunlDSDkhWoRTc3Df5XV/4ZR2PTtWzYP3OLKwu35RJmTyabNXjI1
+	 vgh56siKIk0Z5WJduNWDXR1Np05dJTz2pDpf/p8qitMg6VrqMTjC1F0SSz8MAeRu8y
+	 QhSIf+M7vzSuA==
+Date: Thu, 23 Apr 2026 06:40:53 -1000
+Message-ID: <052cebe617ad5120619de62e3fbf180e@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Zhao Mengmeng <zhaomzhao@126.com>,
+ David Vernet <void@manifault.com>,
+ Andrea Righi <arighi@nvidia.com>,
+ Changwoo Min <changwoo@igalia.com>
+Cc: sched-ext@lists.linux.dev,
+ linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org,
+ Zhao Mengmeng <zhaomengmeng@kylinos.cn>,
+ Cheng-Yang Chou <yphbchou0911@gmail.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>
+Subject: Re: [PATCH] selftests/sched_ext: Include common.bpf.h to avoid build failure
+In-Reply-To: <20260423-b4-selftest-fix-v1-1-8c72287bde3d@kylinos.cn>
+References: <20260423-b4-selftest-fix-v1-1-8c72287bde3d@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aepF3NwyANeklkfD@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 
-> The root cause is in mana_gd_init_vf_regs(), which computes:
-> 
->   gc->shm_base = gc->bar0_va + mana_gd_r64(gc, GDMA_REG_SHM_OFFSET);
-> 
-> without validating the offset read from hardware. If the register
-> returns a garbage value that is neither within bar 0 bounds nor aligned
-> to the 4-byte granularity, thus causing the alignment fault.
+Hello,
 
-Is GDMA_REG_SHM_OFFSET special?
+On Thu, Apr 23, 2026 at 06:42:35PM +0800, Zhao Mengmeng wrote:
+> From: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
+>
+> In scx-cid patchsets, sched_ext selftest failed to build with following
+> error:
+...
+> Signed-off-by: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
+> Tested-by: Cheng-Yang Chou <yphbchou0911@gmail.com>
 
-What if GDMA_REG_DB_PAGE_SIZE or GDMA_REG_DB_PAGE_OFFSET have returned
-garbage? Are you going to die a horrible death as well?
+Applied to sched_ext/for-7.2.
 
-Isn't there a way you can poll the firmware to ask it if it is ready?
+Thanks.
 
-And what about the PF case. Can GDMA_PF_REG_SHM_OFF also be garbage?
-
-      Andrew
+--
+tejun
