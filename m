@@ -1,92 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8392C1EFF8D;
-	Thu, 23 Apr 2026 14:09:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776953395; cv=none; b=NKEoGQxC1ojIhaox+0oHAAgV4m+lR+qgLuwI2Sxzwwla7GnPUebo70fS0BAxNsYT4jrv0UckatPNmD7R335gpa0Ll4j5EGsh9PNy8yjZJdUHVFIYhZJqk1oO5yBTHQDdtxkl65vkOGneGHJ/ERwvat0WRiNnUuw1uRD4gg+roVU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776953395; c=relaxed/simple;
-	bh=qNN/9vm0awuoc9vA32M0kv6lNuf/pxkvv47j0diKyjU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZEYbYxlnXSZdUAnwi+od0LrcOuoC4Alc9c0qs2mA/pgT/8yFpFPsqcZCPwG0RoQFbukkVH1wb5DlYhD24HZZBCnIgak3UoFhCj8qO3FQsJrkGgqLz6WpL1rtEuh56KhrY6O9NwsUyM1DHpU+kujUkDeaozr4fbX8xO7rnRoeBW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SqO8grPX; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFBBD2F25F5
+	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 14:12:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.65
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776953528; cv=pass; b=su0aHbvy4WBjATknwiaXgnM9rTJIogqwWy67eeXXY5WKvaRwrPL4UvJRzGa2l5NckFUz1WZQDL4hWS8t7o/H78c4eJi5fLoB3Yya4RCQVa3JvdZ2rMaI0fKZ3NFMevKN+zNaobDyyaBlT1ShLY1kODLOurX2Kr3UQkiqsHZ3/mg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776953528; c=relaxed/simple;
+	bh=mcZsxQtgOIXZj8BC7xCkbL9RuKKHyBHlF1NCWv4C2oI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Q0AvAAIpkHa1/xUeI7Le5rpSqQxC/FPoNCC6CbGLqAH54Vp7UETWayNAvYMp89NOQMqvZqqsEgn9T4jFLvY+98DdYTuCPHCz+QUyHVde42lSP2k5abGv+R2W0vYoTibTxNGSn9lm4IdYHGxp1GCjCoeV4vHU6rZRjTRhqHdLzgc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WWSE6e5d; arc=pass smtp.client-ip=209.85.221.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SqO8grPX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 811DFC2BCAF;
-	Thu, 23 Apr 2026 14:09:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776953395;
-	bh=qNN/9vm0awuoc9vA32M0kv6lNuf/pxkvv47j0diKyjU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SqO8grPXMFvatY9ACmPhcS+h7QyuoWkh+tUVAXN9E3pLWNzDsDk1PX86yt1iM932I
-	 oEj7/u8Kj4Aa0GCflhDBsqxQN6o30wyHRjkXF5pPnQ8qIuS8yO6HOEyzRKBObb7zJZ
-	 z1jNeVR/zANhLDF8WyqoASkNfET6OAUTIFxSOgT1dXZFTXGZKhbq6YaniPz2aZem0b
-	 avv4MtKvnX7uG7uy+3D9muJzRO0VNwJew5A/P5Kyq/qmLQV2R8SL/GggUMcmEeGl2S
-	 lEBgLriM3VYQY0ondkRi/qvISiKP+FiFBzL+8WqtcaoaWzhlW0ADMXuJOLjLqS7WR6
-	 zBW9bmbsFZq5w==
-Date: Thu, 23 Apr 2026 17:09:50 +0300
-From: Leon Romanovsky <leon@kernel.org>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Paul Moore <paul@paul-moore.com>,
-	Roberto Sassu <roberto.sassu@huaweicloud.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Itay Avraham <itayavr@nvidia.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
-	Maher Sanalla <msanalla@nvidia.com>,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-Message-ID: <20260423140950.GE172828@unreal>
-References: <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
- <20260412090006.GA21470@unreal>
- <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
- <20260413164220.GP3694781@ziepe.ca>
- <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
- <20260413231920.GS3694781@ziepe.ca>
- <CAHC9VhTLamfe4C81ZNRVT=H32x+KLxSqH3o0eBfrHsWAgAqxCA@mail.gmail.com>
- <20260415134705.GG2577880@ziepe.ca>
- <CAHC9VhSECYihup=tURo_Qk__xUdYYPkHgnz5CWA0BrRAkvwbog@mail.gmail.com>
- <20260417191749.GK2577880@ziepe.ca>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WWSE6e5d"
+Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-43fe8bda8e9so3630690f8f.1
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 07:12:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776953525; cv=none;
+        d=google.com; s=arc-20240605;
+        b=NGQ5sZ73qTpY3iZqDwxbX1q0+u1n8tKcne8nWxhschMrBbI1DS5wXVzF0Qa+cg0kcp
+         D7+acbB4YRVLLyaRVkJdTxihYhDtyQ6G4daK2ETRTB/fPMAW53zBSiQIfrtWOm9rOPVq
+         2NBrWYkWVX5MFxVvRfaG5ZEBK9tlZ2UXQgdpRoo5d7MajKXTf0TZVPo/992fKsPZJ+l8
+         qW7U4Dw529KLinfaZ/jJWcRreveBI6t48HyDgrY0vMaJhRcWXdpEzWSQWSJIg1vDEpRD
+         TW0O1hB543gQRGL0bAFBV7bYGMfmSvuhZ2QAE5gV7ZnE10hvM9i7LDlPcTr9g+k5p7Ny
+         lwDQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=mcZsxQtgOIXZj8BC7xCkbL9RuKKHyBHlF1NCWv4C2oI=;
+        fh=Br5lLhY3MzgK0fWzj3HLWesy3NoJc+p3kv4TRnn1ZEA=;
+        b=eL5JX1blcGQ5Fn2oXd+NJeiKY5S+WrdDZ4bJJZFbO4rWbAxYOUOB8oRzTlO/mxnTKb
+         44tku/qYLhI95LjjnQJG99o3d72Hw9NlMe4aOKXnCtQv1meQ+PXtYPeTWwGwFay30yJo
+         DjIvWv4sGhmw1Vbf92POBQDmN4d+Yr6RxLfX6V5MJjQXl0jQIcU//vB+pTwz2SWZv1tA
+         7IWDZFfVvcvKxW5UPHJfZVLf53+YceoE1SM2LNcx5/OgfFEOI5QtHAlKritk40m7WzOk
+         S2nPfx6QTNCT2sNYCUCIt8MqPUJBJn3e3cH118d0gQY1UehomDk2zQrT4VKPQBOUHfP7
+         2/Fw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776953525; x=1777558325; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mcZsxQtgOIXZj8BC7xCkbL9RuKKHyBHlF1NCWv4C2oI=;
+        b=WWSE6e5dDxs3tmyydUSTKT2ixh6AOWaSR96dO4ePByuValRN+nJ6NrZNOZR4G+xlOv
+         yTLpGAtyAWGdAZrG757Nd914PXBDr8RvKjZWKmND1IKuidD6jtbe4y1BsRkdbfnoiHjc
+         7ZM8xRqKMK0L4xOWi/gq1ye4/kNEFxiVrMwInVnugOWk4grICoZrfxzKeRlb7v5I6V71
+         Uid175KF1STHnn9ItIRTy0aze66pd41q03y2FxioetqWyjP2pOMRKbFygkyfVrChRZ6P
+         2s1ukR6k55689OdTtNEk7wnAJdouH/JqjrnL47gw7nkopq93FUtBMYHsscuBvZDHqxr5
+         uSbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776953525; x=1777558325;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mcZsxQtgOIXZj8BC7xCkbL9RuKKHyBHlF1NCWv4C2oI=;
+        b=Igl7iKjXzrvZbnC0RrAA7bad3ikxBWeFqsSIfTDKYnrbbGEY2g2QF6V8i8i+tnuok1
+         f1BAmIVL/4FYPpoSoMs4ueCFsre1fwVNo8VJsLE5H7+ASK5OVs2ZZU/2+TVjOKbfWkIW
+         r85EXWKynM9w/cfTR2sJhoyN5EtwS8lf/cxx1vMgcH9BAR8UYR+Gu6IMiq0Bjq1D27Ll
+         X5kfX9UEeS4gvrXEtPV/1A+X6zuNz6aaS3TwbiXR4cxO+L3ZkD1uBgYRQnNQ7Y3Lk9dj
+         7+7xWSeJbkEypA+GwiOXEsztUGp0Pq/5cOQKYxQvJN202W25fU6V4wjaxFTVCEh/XD3h
+         N0xg==
+X-Forwarded-Encrypted: i=1; AFNElJ+1PY/Vht8SjfYpE+4ZdxJE4jv1/5gKsu324vjvmJrGtvgliAULYCzzOayqpqJDbk/aOaQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsuWEjB//lYW8tkCkUh1fMywSUGOuKye48NWm1pzl0VsfQcqu+
+	xs8xI0SO69YoqDnJ7yiPciCwWjG0QPrMBkvp5NNee9M2UOY68WMZUmtWUWwvrCD56LI4mgaLox+
+	pSLA0+zsaKVJhu42apz1aw2gVQ+HVPTc=
+X-Gm-Gg: AeBDievtJof/DY9PC3yYy5D2rmna6a0cl6atXf41KGqav+LU981eai6UyluuEFuWqnj
+	nM3Tmmo/JH7F0/aMXOgIA6jBgZzSGfZeRhr/q3B+UZcmmXtcXdoAC9e/T75J7o8oZVNHUJV+HM/
+	M/LcFBMIFQpVhz9WivRt8mmet1O1MtFjR1CIp10P0ZSGdC+wgcT13Y160m3N43QoneNTvbQRUWn
+	PhJKJDl0YV7lkVeGEYFne+4Fm657hRwNDWJbmSscXqfaKIOc2N7o1ouIVZHv7xxjN6L3szVTR87
+	f7VcBZGfAiw+m0V3FBzbZFmeCUaMkgo06DUsbh7ezPpGumpLVW4wdT9sgAivkSjGUmDg6wklTEe
+	+puVpnAE9JZvXyeum6KQwoRqbU/TaHqEwFfMEc3K4suAOOOKBdTR8pow7ATAaA5qCNkmO
+X-Received: by 2002:adf:f584:0:b0:43f:e16f:3cc3 with SMTP id
+ ffacd0b85a97d-43fe3dfd5efmr29033966f8f.22.1776953525176; Thu, 23 Apr 2026
+ 07:12:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260417191749.GK2577880@ziepe.ca>
+References: <20260421-sleepable_tracepoints-v11-0-d8ff138d6f05@meta.com>
+ <20260421-sleepable_tracepoints-v11-1-d8ff138d6f05@meta.com>
+ <20260423095650.GA3126523@noisy.programming.kicks-ass.net>
+ <b06ad9d8-681e-41a4-bfd4-fc86f021add9@gmail.com> <20260423100452.25275b6c@gandalf.local.home>
+In-Reply-To: <20260423100452.25275b6c@gandalf.local.home>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Thu, 23 Apr 2026 16:11:28 +0200
+X-Gm-Features: AQROBzAoWxP3-deKMvCVCj5FxMVh-sEf3kG8SuhLEOyQMK2OKMjxqB4C8jeSVQ0
+Message-ID: <CAP01T74UsUVp3W7J6S=aTzWCpSN9UfdCXxysnL3Yhc2PZR48qQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v11 1/6] bpf: Add sleepable support for raw
+ tracepoint programs
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
+	bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, 
+	kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
+	Mykyta Yatsenko <yatsenko@meta.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Apr 17, 2026 at 04:17:49PM -0300, Jason Gunthorpe wrote:
-> On Wed, Apr 15, 2026 at 05:40:04PM -0400, Paul Moore wrote:
+On Thu, 23 Apr 2026 at 16:04, Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Thu, 23 Apr 2026 13:39:24 +0100
+> Mykyta Yatsenko <mykyta.yatsenko5@gmail.com> wrote:
+>
+> > > Since you have a clear distinction between __BPF_DECLARE_TRACE() and
+> > > __BPF_DELARE_TRACE_SYSCALL(), would it not make more sense to have
+> > > different versions of __bpf_trace_run() instead of having a runtime
+> > > condition on ->sleepable ?
+> >
+> > Syscall tracepoint can be sleepable or non-sleepable, so the runtime
+>
+> I'm not sure what you mean by a "syscall tracepoint can be sleepable or
+> non-sleepable"? All syscall tracepoints are now allowed to sleep. When is it
+> non-sleepable?
+>
 
-<...>
+I think what he meant was that the BPF program attached to the syscall
+tracepoint can be sleepable or non-sleepable, support for the former
+is introduced by this set, so previously only programs that could not
+sleep could be attached to syscall tracepoints.
 
-> > Leon mentioned that different firmware revisions would have different
-> > parameters for a given opcode, and that one would need to inspect
-> > those parameters to properly filter the command.  Is that not true, or
-> > am I misreading or misunderstanding Leon's comments?
-> 
-> They are ABI stable, so there will be rules about future changes that
-> old software can follow to ignore or reject future things it doesn't
-> understand.
-
-It is wishful thinking and applicable only to mlx5 devices. No one
-promises that other devices follow same ABI rules.
-
-Thanks
+> -- Steve
+>
+> > dispatch on prog->sleepable is needed anyway. I'm not sure how to
+> > get access to bpf_prog in __BPF_DELARE_TRACE_SYSCALL(), that probably
+> > won't look very clean.
