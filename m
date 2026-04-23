@@ -1,86 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE27B378826
-	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 10:05:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0D0363C72;
+	Thu, 23 Apr 2026 10:43:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776938712; cv=none; b=hxNS5HS5Kfup4MSobeU5NxgEBN2L+0Sntjld73tYUfnukPWnACfOuJqB+OLUC5Wz30qGSnRxgQO5XvHRjvbbZFa79NkpIxNk7zcQUSOm53GjqFd2fqDYQa5V2rW8IySCVrZUUwyWNSm+Wh1VTzvwvmRxTAlKGAcNvmgQcaeBZ2E=
+	t=1776941019; cv=none; b=CoCClDxolnyzqW4dAaTZ1Ps0FR7N10UyOAMEdoGVoN2WOR/iNt4U8ItPHTI06hvst6x5gy5/nJzw5WnuyKRPKt2f35z1lEtFe4ERRYMwHoNI8lzqxftBnEz1xTYGhHhsWzh3P0VuoHHti0LYx7+3Nn6MGVG/0M9OQ5z8NdXgBqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776938712; c=relaxed/simple;
-	bh=i1zkuOfK2oa60zamft2ydH2wOZPL7jVwfZn3W8QrczY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=onwX8EvrhQU4hrmhEoV9CZSh+5c6c0kT/NcHLsmyGN2CRiow+aou4C+LDfa0uAFCAtQ0sIaN1ETTkqNgAQmCqlrj3ozaugEC/kW/3Qq5FQwS8JWgRxOVPYaqE243uq3n/++OxqzbXPcstFeacsHTpFplRahBwVcuRKpcZhxtM6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BI56fI0J; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776941019; c=relaxed/simple;
+	bh=jzVUNqteRf9qf1dW5be0tnfzsaUw53zh2mT3/paRV44=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=sUbeHdLRYqFKD1r8KD1tL+xzJtCrWdnK5Am5qqZD+ZNkKzMUg6d/Fisb0Y5ml7gn4Li3dxv2WQlzQ2BS2ulJSwvMgo4yUsL6BR6xqF3Z156TYq1tlKwbBeWx0WK1cZTx8xSMQZpbiXws3XCXkM25bh5nyaoIHdZyDghpirDeGuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=dttp9ri2; arc=none smtp.client-ip=220.197.31.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BI56fI0J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81E0BC2BCB5
-	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 10:05:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776938712;
-	bh=i1zkuOfK2oa60zamft2ydH2wOZPL7jVwfZn3W8QrczY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BI56fI0JWqhYIOV4jr6a4CGNeLHtGRYeaJtvSzU2IdPkmYCt4JhOzd+glu41b1gV6
-	 47LdApGPFXc7XbYOcGFNMW4iUtDmGUrdNPKPoWyMRT7B1KYeoiYasMK5YKQZpoq/F9
-	 TJraiW8L3CDESN8eTRx/u6f/PHkDo0N84gogsP9Kwpgc/swS0cizcTi2QHWpBKa+3c
-	 1FoUbCMw3k6MtUF8zlhAMPbAUp6qw5PXRHg0Sz5oFi1McglZMTu/6UUR0IRHzCcFNX
-	 2kaX0IV719INEInrVNAwoM5WwtX2arTflxZvSCMpOqQeuWdNDuvVTPAOoTSg1bD/Q6
-	 4ZsuiwHQXP4xA==
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ba51e69988aso843449566b.0
-        for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 03:05:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ8Wp2HS8zpUzN8CMSpvEvmiR/Iw7m0fwUw/oUrx1+5KLcDB3ClPbFvCEBZ323Jf8Ajvj+A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzn9EpaJoWq+QTg+RbakZbfUCi1rXhYa1f1n3sV344uhMt5sQI7
-	OvB3tAmo0MoDkuZ0LeUtlQ8oxmRMsa9OhFDmV66FbAgdLM3IV5s5i6g0cJWQiU1u0EIwpkx76/j
-	l+Z7qkpaCVpE31QqVOX/Di6N2koGTxlY=
-X-Received: by 2002:a17:907:9484:b0:bac:6b01:8925 with SMTP id
- a640c23a62f3a-bac6b018b2bmr96646266b.22.1776938711131; Thu, 23 Apr 2026
- 03:05:11 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="dttp9ri2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+	s=s110527; h=From:Date:Subject:MIME-Version:Content-Type:
+	Message-Id:To; bh=slO8TiWz2gHyNVQLPFdBYdiZuRPXdoAhGpTI9Ybjgow=;
+	b=dttp9ri2vFR0Yfw1sJdPBciqP/EyUnV7iklVMznFH6jwqfrrYmHUr5123ofOck
+	iZsFRjbb4VB14PePXvo6gJJnXuTMuaMyKtmQXXrVk2ZVXkx/H8VQqZ7hwblDW0sn
+	GtMYfykpMIAWkDedceC2qFT0+k1D363asEU6sj2gvKTTw=
+Received: from [127.0.1.1] (unknown [])
+	by gzsmtp4 (Coremail) with SMTP id PykvCgD3P9Oj9+lp5NpsDw--.53840S2;
+	Thu, 23 Apr 2026 18:42:44 +0800 (CST)
+From: Zhao Mengmeng <zhaomzhao@126.com>
+Date: Thu, 23 Apr 2026 18:42:35 +0800
+Subject: [PATCH] selftests/sched_ext: Include common.bpf.h to avoid build
+ failure
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260422232407.3862942-1-chenhengqi@outlook.com>
-In-Reply-To: <20260422232407.3862942-1-chenhengqi@outlook.com>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Thu, 23 Apr 2026 18:05:24 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6sL7xO4+rLpWphuBkwoChMDb-7RiFuFaWmK62QeXbD7Q@mail.gmail.com>
-X-Gm-Features: AQROBzAVHDkmi1gh8ADEhpZiygd4AOvh3N2wjkUzubnaYiehT2gnF4DtSTbc45U
-Message-ID: <CAAhV-H6sL7xO4+rLpWphuBkwoChMDb-7RiFuFaWmK62QeXbD7Q@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] bpf: fsession support for LoongArch
-To: Hengqi Chen <hengqi.chen@gmail.com>
-Cc: yangtiezhu@loongson.cn, vincent.mc.li@gmail.com, menglong8.dong@gmail.com, 
-	loongarch@lists.linux.dev, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260423-b4-selftest-fix-v1-1-8c72287bde3d@kylinos.cn>
+X-B4-Tracking: v=1; b=H4sIAJr36WkC/yXMUQqDMBCE4avIPrug0ap4FfFBk7FdKVayUQTx7
+ qbt4zcw/0kKL1Bqk5M8dlH5LBF5mpB9DcsTLC6aTGaqrDQFjyUr3lOABp7kYNfU1rmhypsHKL5
+ Wjzj/il3/t27jDBu+GbquGyZPMchzAAAA
+X-Change-ID: 20260423-b4-selftest-fix-d87cdda6185e
+To: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, 
+ Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>
+Cc: sched-ext@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ Zhao Mengmeng <zhaomengmeng@kylinos.cn>, 
+ Cheng-Yang Chou <yphbchou0911@gmail.com>
+X-Mailer: b4 0.15.2
+X-CM-TRANSID:PykvCgD3P9Oj9+lp5NpsDw--.53840S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uF1UXFyfJr4fAr4kKw48JFb_yoW8KF13pa
+	4kZr4vkr1IgryUJw18AF40q3ySqws3Jw409w4UGwnxAFn2qFWxXr42vF4fWwnIk39Y9r4a
+	y34IgayxWr10v3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07ULVysUUUUU=
+X-CM-SenderInfo: 52kd0zp2kd0qqrswhudrp/xtbBlwT7c2np96RdHQAA3I
 
-Applied with small modifications, hope it still works well.
+From: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
 
-Huacai
+In scx-cid patchsets, sched_ext selftest failed to build with following
+error:
 
-On Thu, Apr 23, 2026 at 7:24=E2=80=AFAM Hengqi Chen <hengqi.chen@gmail.com>=
- wrote:
->
-> From: Hengqi Chen <hengqi.chen@gmail.com>
->
-> This small set implements fsession support for LoongArch.
->
-> Patch 1 introduces a helper named emit_store_stack_imm64().
-> Patch 2 implements fsession support.
->
-> changelog:
-> v1->v2:
->   * rebase against latest loongarch-next branch
->   * drop patch 3, selftest is enabled by default
->   * add Reviewed-by tag
->
-> Hengqi Chen (2):
->   LoongArch: BPF: Introduce emit_store_stack_imm64() helper
->   LoongArch: BPF: Add fsession support for trampolines
->
->  arch/loongarch/net/bpf_jit.c | 99 ++++++++++++++++++++++++++++--------
->  1 file changed, 79 insertions(+), 20 deletions(-)
->
-> --
-> 2.43.5
+non_scx_kfunc_deny.bpf.c:17:6: error: conflicting types for 'scx_bpf_kick_cpu'
+17 | void scx_bpf_kick_cpu(s32 cpu, u64 flags) __ksym;
+|      ^
+tools/testing/selftests/sched_ext/build/include/vmlinux.h:136300:13: note: previous declaration is here
+136300 | extern void scx_bpf_kick_cpu(s32 cpu, u64 flags, const struct bpf_prog_aux *aux) __weak __ksym;
+|             ^
+non_scx_kfunc_deny.bpf.c:26:23: error: too few arguments to function call, expected 3, have 2
+26 |         scx_bpf_kick_cpu(0, 0);
+|         ~~~~~~~~~~~~~~~~     ^
+tools/testing/selftests/sched_ext/build/include/vmlinux.h:136300:13: note: 'scx_bpf_kick_cpu' declared here
+136300 | extern void scx_bpf_kick_cpu(s32 cpu, u64 flags, const struct bpf_prog_aux *aux) __weak __ksym;
+
+The root cause is on scx core part, but we can avoid this by including
+common.bpf.h and remove scx_bpf_kick_cpu() to make it more robust, just
+like the usage in other xx.bpf.c.
+
+Link: https://lore.kernel.org/sched-ext/20260421071945.3110084-1-tj@kernel.org/
+Signed-off-by: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
+Tested-by: Cheng-Yang Chou <yphbchou0911@gmail.com>
+---
+ tools/testing/selftests/sched_ext/non_scx_kfunc_deny.bpf.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/sched_ext/non_scx_kfunc_deny.bpf.c b/tools/testing/selftests/sched_ext/non_scx_kfunc_deny.bpf.c
+index 9f16d39255e7..0d6fcc8e5eb6 100644
+--- a/tools/testing/selftests/sched_ext/non_scx_kfunc_deny.bpf.c
++++ b/tools/testing/selftests/sched_ext/non_scx_kfunc_deny.bpf.c
+@@ -9,12 +9,7 @@
+  * Copyright (C) 2026 Cheng-Yang Chou <yphbchou0911@gmail.com>
+  */
+ 
+-#include <vmlinux.h>
+-#include <bpf/bpf_helpers.h>
+-#include <bpf/bpf_tracing.h>
+-
+-/* SCX kfunc from scx_kfunc_ids_any set */
+-void scx_bpf_kick_cpu(s32 cpu, u64 flags) __ksym;
++#include <scx/common.bpf.h>
+ 
+ SEC("struct_ops/ssthresh")
+ __u32 BPF_PROG(tcp_ca_ssthresh, struct sock *sk)
+
+---
+base-commit: eff158514a85c1b81966667a880dd8bcd29bbbd1
+change-id: 20260423-b4-selftest-fix-d87cdda6185e
+
+Best regards,
+--  
+Zhao Mengmeng <zhaomengmeng@kylinos.cn>
+
