@@ -1,54 +1,77 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7032823EA9B;
-	Thu, 23 Apr 2026 19:44:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7ED57DA66
+	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 20:24:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776973463; cv=none; b=YwxIZCen6s5EsaIgiu1/lEFpyHr07n8qNM/04ffCwxFcBQ5PlwcKxuczdVzWMfgZrxWIJ6mTHo182HKvTxV+L44oP/uH62KnDWQdsp2rxTvUoFl+MtlEc1VOU8VoSLJJJ45SSJpbWU7GNJo3YM/shQP8deA7iI04vOdhtyo9i5E=
+	t=1776975891; cv=none; b=NWrpYkJqHRRZTgIQPPLGC7ziQ3MVlgG80neG4UNyWnqYtvMoC4jFTdv6Eor99p1y+Ql5eIc1F+t4jYZMtLxHkhvgGS6DG2tOPvM+4e4hPR2Q+UBTWGfZYPG7CafuWJNGuWhAld7a5X2O7itp5knkeVNePoZpEebXMnEwzo/JB98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776973463; c=relaxed/simple;
-	bh=KIdTnfrWhCm/3mkmY5XjowjHj5ElWmemc028AWda6Q0=;
+	s=arc-20240116; t=1776975891; c=relaxed/simple;
+	bh=vfLhN0SiCdNis3D0NTZ/0Xow6yj5Dhc6DVDMRNJbmBE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TWPXJAT422fTTaCualCOdFclGIDxfZkboZrGvAUQtJ+KOtyy/wNDlrzQaW582NP93ttmUFXiHN20vbzes7Jc2e7QyUcQbwdp5LxRS2uD5gKk7VYb/bHYEKzr8ZB0v4M+FBFaNIt0gbbJtgCuD/CT7wo+RpUNWb8ejYgV3OgfS3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=tORt1L2A; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	 Content-Type:Content-Disposition:In-Reply-To; b=PTu/rhKhrmxkSem2pukVKuaA7BXnM5zo+m5YT2UezpHOYrDl1j/LD1jClltUzpdu2vRVZVYrW4kOOH1d3uVIFDzBbfgaR8arMpgTRjOtK5c+QjFxEToB7O1gln0xwBW1fVHLHl08DB+43KuFPWIUnTQAjAUsDqu/i5qAwzuxsLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qp8QooE0; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="tORt1L2A"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=RWJKOVoVRUNQb0LLzbgupq9gvwUJ+hzw26Jr6hGDu0U=; b=tORt1L2ASrxqUTjUb22wy+f77S
-	oKvaZdk1LgqqMCgZE0eRYQM/XdATVaA7NPKIacxjGSGbmCfuP4PftCe1JiP4yi2U22vHZ3fZZalEq
-	Ggz/wgjHto5ddWSk/gRv7FdmR1R0/Rw3OhlsaSGBnMXNjNtESdfD+cyTg1JZDj9uc3wc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1wFzy0-00HI3w-KA; Thu, 23 Apr 2026 21:44:04 +0200
-Date: Thu, 23 Apr 2026 21:44:04 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	leon@kernel.org, longli@microsoft.com, kotaranov@microsoft.com,
-	horms@kernel.org, shradhagupta@linux.microsoft.com,
-	ssengar@linux.microsoft.com, ernis@linux.microsoft.com,
-	shirazsaleem@microsoft.com, linux-hyperv@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org, stephen@networkplumber.org,
-	jacob.e.keller@intel.com, dipayanroy@microsoft.com,
-	leitao@debian.org, kees@kernel.org, john.fastabend@gmail.com,
-	hawk@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-	ast@kernel.org, sdf@fomichev.me, yury.norov@gmail.com
-Subject: Re: [PATCH net] net: mana: hardening: Validate SHM offset from BAR0
- register to prevent crash due to alignment fault
-Message-ID: <7c4dbe89-9b51-45d6-ae89-39d4183e66b1@lunn.ch>
-References: <aepF3NwyANeklkfD@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <edccaafd-73f3-421d-a48e-a6cb704d39e6@lunn.ch>
- <aepviNMszMBtiB/H@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qp8QooE0"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-674a44b84fcso9315285a12.1
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 13:24:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1776975888; x=1777580688; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gZKlv5YpmybmME/ZjFGzaeQ66aLr3fRG/13wKTeDpGM=;
+        b=Qp8QooE0PXn4tuCK3e/pYoRV72VBpUt77t+QpY9glRLaUEk1MX2F2LMgVW6RKu04r3
+         7d7SRz9UCbJGfGwsPrbKomNKxX4N/o3ViTstgUN3LwJul2gLD42doO5DnIhCybaUiy39
+         CIdykOWwe/ObAxlkCoxyilvfGKFrI9j+rBcS/T8felHEhuIoI2DjWtjrAUcwW0Q3vNcd
+         Xm/XmKGMkCywl0RAHJcuyIUsUSLDAI4xrLjmYtF3bDJsyaUfEbtdDrlb7Y5118iX5fmQ
+         Gm2VM+9IX4Wfq4Zx+JeCkniPs5J7qOmafeqF2bS6un+ebboWaQH8M/fyaNuPAsH5fWBS
+         QR5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776975888; x=1777580688;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gZKlv5YpmybmME/ZjFGzaeQ66aLr3fRG/13wKTeDpGM=;
+        b=aw++8hsJXaCmsrQdDrYS1QuzgDvXS3Z9U/sP5lOEZohyC80+aoCS8HU1aYIlUYnimo
+         iJ/wLkwvc4H4GUxMNQLhYG8dD1wDyJNv+eOKDRFfPEZdzMC4kKgTj8gXIY1iCnpQ0Q61
+         W7WWB1ltF1mnI2/0crSMu0wxLB4hhy5qLQ9sMCAhdi/Os7ZkGXrA1TB32aec5rqtM99c
+         pZGJYWthigxdTVVx/FmWlh076KvNqhgL6t94/oqfY+ZIlOrvJ8zwuJsqDqry1Xu/AFVY
+         gS6BoBWGEvkaikKnM7gUEhIDoFE4l4JXfVM/8MYX2cuKc2MM/ziQIXieIWInV8/rQvpz
+         rNcA==
+X-Forwarded-Encrypted: i=1; AFNElJ/7LPrRKlvO20zfUA5H+Z60JMmBYjsw83Msc7iJfq3+cVrFpkcxdOXZkGGCMjhENJiAzEw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPQtNo03nBt4GvmDgJLekDxW2docIse/eVhUDN/46Hx9TfLxjf
+	qE0KA/R2cr8lTte3BvI0kIs8UKh1tLzOsKLKwjmamNhKY1MGN149QY1w2TuCIVV79w==
+X-Gm-Gg: AeBDievJFBfa87zpk2+abUkJjYE3/bsgbOfFa0KUx2Tx7WLF/aUolS1OBsAyVXQVSiM
+	E+cfuOLJ3sQlH2FV+QAJO2RhvJp1jaA7CWa/ESRsrKtLX9jwo8shwh0aYk5DadXJ3q3VebD1uES
+	d4gQ8Ar0uNmC/+1uhqLtt6FKsV7lcke/P0Sex3cZCRYVRrMUN5yu2PBiYAA89Z8O/6SPH/wr1nT
+	sIxIcmR6Ke1ctRMSDsHZTbOwGFcckHj14HLBfxpTtTSDO47Q9yifq6A6W/cV3mK9qTLs3LU7Ujz
+	SBhM5uFb2ZbgiGY3GiyaLiXubB6fIFmswPBbyKW2o646A1kbrrVEIYW2SkTSPhba/Ptdc8F4q3v
+	jhU+ThKY9CVF0N+oftJ2LZMjwEjdq2SWmPET7Fw+KkmKAY4hcdY7pXEMpNPVMYhuNiOlJ1PP5Ip
+	av/i8wJQBGO2QhZQ9h+qMJU17+UvvfMzQct19TwJ2CpGsovejOe/v1e6c1RO2qufKXWsRAyOMyr
+	U7uYPHjwVgC
+X-Received: by 2002:a17:906:4fc5:b0:b97:9636:5aac with SMTP id a640c23a62f3a-ba418e8affemr1504646466b.13.1776975887170;
+        Thu, 23 Apr 2026 13:24:47 -0700 (PDT)
+Received: from google.com (57.35.34.34.bc.googleusercontent.com. [34.34.35.57])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ba45503c435sm695441266b.43.2026.04.23.13.24.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Apr 2026 13:24:46 -0700 (PDT)
+Date: Thu, 23 Apr 2026 20:24:43 +0000
+From: Matt Bobrowski <mattbobrowski@google.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
+	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+	eddyz87@gmail.com, song@kernel.org
+Subject: Re: [PATCH bpf-next v8 6/8] selftests/bpf: Add buddy allocator for
+ libarena
+Message-ID: <aeqACzTZKohGZnuo@google.com>
+References: <20260421165037.4736-1-emil@etsalapatis.com>
+ <20260421165037.4736-7-emil@etsalapatis.com>
+ <aenb_fGyhCxiNBPY@google.com>
+ <CAP01T75q0_9k2W46_ibNrbYeZwpQO-nO=ysqX1Do+CHd+rE8Hw@mail.gmail.com>
+ <DI0OO269VLZY.1M86OGAGEQTRU@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,44 +80,59 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aepviNMszMBtiB/H@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+In-Reply-To: <DI0OO269VLZY.1M86OGAGEQTRU@etsalapatis.com>
 
-On Thu, Apr 23, 2026 at 12:14:16PM -0700, Dipayaan Roy wrote:
-> On Thu, Apr 23, 2026 at 06:37:04PM +0200, Andrew Lunn wrote:
-> > > The root cause is in mana_gd_init_vf_regs(), which computes:
-> > > 
-> > >   gc->shm_base = gc->bar0_va + mana_gd_r64(gc, GDMA_REG_SHM_OFFSET);
-> > > 
-> > > without validating the offset read from hardware. If the register
-> > > returns a garbage value that is neither within bar 0 bounds nor aligned
-> > > to the 4-byte granularity, thus causing the alignment fault.
-> > 
-> > Is GDMA_REG_SHM_OFFSET special?
-> Hi Andrew,
-> GDMA_REG_SHM_OFFSET is not special. It was simply the only register
-> read that had no validation at all. The other two registers
-> (GDMA_REG_DB_PAGE_SIZE, GDMA_REG_DB_PAGE_OFFSET) already have checks
-> in place.
+On Thu, Apr 23, 2026 at 12:43:13PM -0400, Emil Tsalapatis wrote:
+> On Thu Apr 23, 2026 at 10:00 AM EDT, Kumar Kartikeya Dwivedi wrote:
+> > On Thu, 23 Apr 2026 at 10:44, Matt Bobrowski <mattbobrowski@google.com> wrote:
+> >>
+> >> On Tue, Apr 21, 2026 at 12:50:35PM -0400, Emil Tsalapatis wrote:
+> >> > Add a byte-oriented buddy allocator for libarena. The buddy
+> >> > allocator provides an alloc/free interface for small arena allocations
+> >> > ranging from 16 bytes to 512 KiB. Lower allocations values are rounded
+> >> > up to 16 bytes. The buddy allocator does not handle larger allocations
+> >> > that can instead use the existing bpf_arena_{alloc, free}_pages() kfunc.
+> >> >
+> >> > Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+> >>
+> >> The implementation of this BPF arena backed buddy allocator looks
+> >> rather solid. I noticed that we have a single global lock being used
+> >> here to synchronize metadata structure modifications. Have you thought
+> >> about how this might be a high contention point, particularly when
+> >> dealing with systems with incredibly high CPU core counts? Did you
+> >> consider possibly making use of localized per-CPU caches for the most
+> >> common/small allocation sizes or something like that? This is
+> >> something that definitely crossed my mind when I was initially
+> >> thinking about implementing something like this a while back. I
+> >> understand that this is an initial implementation, so it doesn't
+> >> necessarily carry all the bells and whistles, but I was curious to
+> >> know whether this had also crossed your mind and what your thoughts
+> >> were on it.
+> >
+> > Yes, both reentrancy protection and a per-CPU caches are things Emil
+> > is planning to work on next.
+> >
+> >>
+> >> [...]
+> 
+> Can confirm. This is basically just the first version of the allocator
+> just so we have some way to manage arena memory without hacks. The first
+> thing to optimize is adding per-CPU caches to avoid contention. I've
+> avoided adding them until now for two reasons:
+> 
+> 1) We don't really have arena workloads we can test optimizations
+> against. I am working on porting microbenchmarks from userspace
+> allocators so we can concretely see the effect of any features we add.
+> I'm also working on adding data structures to libarena, and since they
+> may do allocations/frees during regular operations we can use them for
+> benchmarking.
 
-I must be missing something:
+Both sound like relatively good ideas to me. Notably, this point has
+sparked another thing that I was kinda curious about. Do you envision
+libarena being hosted outside of the Linux kernel source tree at some
+point? TBH, I think it'd be quite nice if it was. I definitely
+envision something like libarena being a submodule within numerous
+other BPF-enabled projects.
 
-grep page_size *
-
-gdma_main.c:	gc->db_page_size = mana_gd_r32(gc, GDMA_PF_REG_DB_PAGE_SIZE) & 0xFFFF;
-gdma_main.c:	gc->db_page_size = mana_gd_r32(gc, GDMA_REG_DB_PAGE_SIZE) & 0xFFFF;
-gdma_main.c:	void __iomem *addr = gc->db_page_base + gc->db_page_size * db_index;
-
-So if GDMA_REG_DB_PAGE_SIZE returns garbage, it is at least masked,
-but it is still a random number.
-
-mana_gd_ring_doorbell() takes this random number, multiples by
-db_index, adds, gc->db_page_base and then does:
-
-writeq(e.as_uint64, addr);
-
-So you write to a random address. 
-
-I don't see any sanity checks here. Cannot you check that db_page_size
-is at least one of the expected page sizes?
-
-   Andrew
+Also, I kindly request that you CC me on any future revisions and
+changes to libarena.
