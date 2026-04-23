@@ -1,326 +1,147 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A47D3CBE72
-	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 03:35:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39BAD204C36
+	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 03:36:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776915316; cv=none; b=FpxScsEw0TrqNOrZmk1bcp7lw46Rzia64/pt0GAPH895qxoDMPrTU4Z+YlkZu2yV1vpoqtRWkatDl5N4TPc7d441bx0hPSbTA6k2cBR5xXar4Nrdh4JVHweUgmxHMlcplRDaeE0NZ3vIE6P+YEfOLdoIvVnH1I45n4ERQGRrntY=
+	t=1776915410; cv=none; b=CqEa9hxoMwyEs1v5g2tRox9bzz+6Yu3Oc+VYIU7QYactZlisA9TQfQX7ydM72yNCbymEMSCebsYO+vCHSqrDCWTmHiIVO1nyZOAH6t2Dya2UOsr0SJFgxjQUC06EXIoB3k4+lGpFl4+B1LXqLLSgwqpw/QTX+AU49kmUiU1Xr/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776915316; c=relaxed/simple;
-	bh=PaWuUoPPLFLvXanMsgerV2P2oAlE1Wq7d1siL0kSgio=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MG5ZaIn0LNQN8yqmrwCBIseE8HrBpSOE4J6xfCnRAXTaXUa9uRhLckYWsikCgOOAZM60TYZEqMHfiEsPR27nE01EWlpIElsLB4mT+G6bRf85hQikyxJKrpPXSt8H7Ar+gH3vWZ6ZTE509OeaRcuUN+Kv6BX5X0XPXTMh0HmpfBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id A069945844BC8; Wed, 22 Apr 2026 20:35:06 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
+	s=arc-20240116; t=1776915410; c=relaxed/simple;
+	bh=xkUp7YbxTslCh+0YyFCzAEuM4b/zsQTPJ3kO9vWkOHo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qyNnOBJ6Ft+2X4+W/tP/Xw3kmaOclhAZVFmgJ1VS98TSRQ0dr6oW00hE1CKq/T/2NH1ux3lO77XBiENyj1GgRI8KpExFW8hOiwVwX/R/talyNTSy6bNveK+WE2IABzi4WM/jR10MxBSsrOpPW19sVEkjPwssyBN1Y5O0M9UWCzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tFcgs4kI; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tFcgs4kI"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776915407;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=i33KsMWjfwLpg6r+eMQA9mWtVkf7dIqTm10rTuc1LBg=;
+	b=tFcgs4kIcbQxqzR9Gq5W9C2TW4PVw2HcNSVEVIEcxV4NFU8v7Hjl4eAR87RGczIrLcWjt/
+	wNne3SoMI/yaHN2aH/V7h1TA6cPFV67MEqgWTZJgMHKAn7BxGjtEM6ZNWCVCYpYT6RzZom
+	9Z8llhju4Yper4R9exlCrpmluRV0H+Y=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next v3 8/9] bpf: Introduce bpf register BPF_REG_PARAMS
-Date: Wed, 22 Apr 2026 20:35:06 -0700
-Message-ID: <20260423033506.2542005-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260423033425.2536883-1-yonghong.song@linux.dev>
-References: <20260423033425.2536883-1-yonghong.song@linux.dev>
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf 0/2] bpf: prevent offloaded programs from running on host via tcx/netkit
+Date: Thu, 23 Apr 2026 11:36:04 +0800
+Message-ID: <20260423033609.252464-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Introduce BPF_REG_PARAMS as a dedicated BPF register for stack
-argument accesses. It occupies the BPF register number 11 (R11),
-which is used as the base pointer for the stack argument area,
-keeping it separate from the R10-based (BPF_REG_FP) program stack.
+Yinhao reported a splat [1] when attaching a BPF program loaded with
+prog_ifindex (targeted at an offload-capable device such as netdevsim)
+to the software path via BPF_TCX_EGRESS. The program's bpf_func had
+already been replaced by bpf_prog_warn_on_exec() during offload compile,
+so the first packet that reaches tcx_run() trips the WARN:
 
-The kernel-internal hidden register BPF_REG_AX previously occupied
-slot 11 (MAX_BPF_REG). With BPF_REG_PARAMS taking that slot,
-BPF_REG_AX moves to slot 12 and MAX_BPF_EXT_REG increases
-accordingly.
+[   19.592982] ------------[ cut here ]------------
+[   19.594654] attempt to execute device eBPF program on the host!
+[   19.594659] WARNING: kernel/bpf/offload.c:420 at 0x0, CPU#0: poc/337
+[   19.599906] Modules linked in:
+[   19.600680] CPU: 0 UID: 0 PID: 337 Comm: poc Not tainted
+6.18.0-rc7-next-20251125 #10 PREEMPT(none)
+[   19.601659] Hardware name: QEMU Ubuntu 24.04 PC (i440FX + PIIX,
+1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+[   19.602684] RIP: 0010:bpf_prog_warn_on_exec+0xc/0x20
+[   19.603241] Code: 28 00 48 89 ef e8 74 44 2f 00 eb d7 66 90 90 90 90
+90 90 90 90 90 90 90 90 90 90 90 90 90 0f 1f 44 00 00 48 8d 3d a4 eb 95
+06 <67> 48 0f b9 3a 31 c0 e9 83 76 44 ff 0f 1f 84 00 00 00 00 00 90 90
+[   19.605093] RSP: 0018:ffff8881066e73d8 EFLAGS: 00010246
+[   19.605663] RAX: ffffffff81cbca70 RBX: ffff8881013c4210 RCX:
+0000000000000004
+[   19.606378] RDX: 1ffff11020278842 RSI: ffffc90000563060 RDI:
+ffffffff8861b620
+[   19.607107] RBP: ffff8881010d0640 R08: ffff8881013c4210 R09:
+ffff8881010d06b0
+[   19.607827] R10: ffff8881010d06c3 R11: ffffc90000563000 R12:
+ffffc90000563000
+[   19.608751] R13: ffff8881010d06b4 R14: ffff888115eb1a34 R15:
+dffffc0000000000
+[   19.609478] FS:  000000000294c380(0000) GS:ffff8881911e9000(0000)
+knlGS:0000000000000000
+[   19.610316] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   19.610943] CR2: 000057f6b9eb38c0 CR3: 00000001010ea000 CR4:
+0000000000750ef0
+[   19.611712] PKRU: 55555554
+[   19.612006] Call Trace:
+[   19.612281]  <TASK>
+[   19.612523]  __dev_queue_xmit+0x22cb/0x3530
+[   19.617607]  ip_finish_output2+0x621/0x1a60
+[   19.621371]  ip_output+0x170/0x2e0
+[   19.624586]  ip_send_skb+0x129/0x180
+[   19.624940]  udp_send_skb+0x65d/0x1300
+[   19.625316]  udp_sendmsg+0x13bf/0x2000
+[   19.629960]  __sys_sendto+0x396/0x470
+[   19.633720]  __x64_sys_sendto+0xdc/0x1b0
+[   19.635066]  do_syscall_64+0x76/0x10a0
+[   19.641701]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[   19.642240] RIP: 0033:0x4240d7
+[   19.642597] Code: 00 89 01 e9 c1 fe ff ff e8 f6 03 00 00 66 0f 1f 44
+00 00 f3 0f 1e fa 80 3d 8d 3f 09 00 00 41 89 ca 74 10 b8 2c 00 00 00 0f
+05 <48> 3d 00 f0 ff ff 77 69 c3 55 48 89 e5 53 48 83 ec 38 44 89 4d d0
+[   19.646088] RSP: 002b:00007fffcb9ecb68 EFLAGS: 00000202 ORIG_RAX:
+000000000000002c
+[   19.648938] RAX: ffffffffffffffda RBX: 0000000000000001 RCX:
+00000000004240d7
+[   19.652116] RDX: 0000000000000008 RSI: 00007fffcb9ecce0 RDI:
+0000000000000005
+[   19.653148] RBP: 00007fffcb9eccf0 R08: 00007fffcb9ecbb0 R09:
+0000000000000010
+[   19.653951] R10: 0000000000000000 R11: 0000000000000202 R12:
+00007fffcb9ece08
+[   19.654760] R13: 00007fffcb9ece18 R14: 00000000004b2868 R15:
+0000000000000001
+[   19.657462]  </TASK>
+[   19.657703] ---[ end trace 0000000000000000 ]---
 
-Acked-by: Puranjay Mohan <puranjay@kernel.org>
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- include/linux/filter.h                        |  5 +-
- kernel/bpf/core.c                             |  4 +-
- .../selftests/bpf/prog_tests/ctx_rewrite.c    | 14 ++--
- .../bpf/progs/verifier_bpf_fastcall.c         | 24 +++----
- .../selftests/bpf/progs/verifier_may_goto_1.c | 12 ++--
- .../selftests/bpf/progs/verifier_sdiv.c       | 64 +++++++++----------
- 6 files changed, 62 insertions(+), 61 deletions(-)
+The reason is that tcx and netkit never checked for offloaded programs
+on attach, unlike XDP which already rejects this in dev_xdp_attach().
+This series adds the same guard to both so offloaded programs can't be
+attached to the software path.
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 1ec6d5ba64cc..b77d0b06db6e 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -58,8 +58,9 @@ struct ctl_table_header;
- #define BPF_REG_H	BPF_REG_9	/* hlen, callee-saved */
-=20
- /* Kernel hidden auxiliary/helper register. */
--#define BPF_REG_AX		MAX_BPF_REG
--#define MAX_BPF_EXT_REG		(MAX_BPF_REG + 1)
-+#define BPF_REG_PARAMS		MAX_BPF_REG
-+#define BPF_REG_AX		(MAX_BPF_REG + 1)
-+#define MAX_BPF_EXT_REG		(MAX_BPF_REG + 2)
- #define MAX_BPF_JIT_REG		MAX_BPF_EXT_REG
-=20
- /* unused opcode to mark special call to bpf_tail_call() helper */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 8b018ff48875..ae10b9ca018d 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1299,8 +1299,8 @@ static int bpf_jit_blind_insn(const struct bpf_insn=
- *from,
- 	u32 imm_rnd =3D get_random_u32();
- 	s16 off;
-=20
--	BUILD_BUG_ON(BPF_REG_AX  + 1 !=3D MAX_BPF_JIT_REG);
--	BUILD_BUG_ON(MAX_BPF_REG + 1 !=3D MAX_BPF_JIT_REG);
-+	BUILD_BUG_ON(BPF_REG_PARAMS + 2 !=3D MAX_BPF_JIT_REG);
-+	BUILD_BUG_ON(BPF_REG_AX + 1 !=3D MAX_BPF_JIT_REG);
-=20
- 	/* Constraints on AX register:
- 	 *
-diff --git a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c b/tools=
-/testing/selftests/bpf/prog_tests/ctx_rewrite.c
-index 5064aeb8fe67..2c3124092b73 100644
---- a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
-@@ -69,19 +69,19 @@ static struct test_case test_cases[] =3D {
- #if defined(__x86_64__) || defined(__aarch64__)
- 	{
- 		N(SCHED_CLS, struct __sk_buff, tstamp),
--		.read  =3D "r11 =3D *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
--			 "if w11 & 0x4 goto pc+1;"
-+		.read  =3D "r12 =3D *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
-+			 "if w12 & 0x4 goto pc+1;"
- 			 "goto pc+4;"
--			 "if w11 & 0x3 goto pc+1;"
-+			 "if w12 & 0x3 goto pc+1;"
- 			 "goto pc+2;"
- 			 "$dst =3D 0;"
- 			 "goto pc+1;"
- 			 "$dst =3D *(u64 *)($ctx + sk_buff::tstamp);",
--		.write =3D "r11 =3D *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
--			 "if w11 & 0x4 goto pc+1;"
-+		.write =3D "r12 =3D *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
-+			 "if w12 & 0x4 goto pc+1;"
- 			 "goto pc+2;"
--			 "w11 &=3D -4;"
--			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) =3D r11;"
-+			 "w12 &=3D -4;"
-+			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) =3D r12;"
- 			 "*(u64 *)($ctx + sk_buff::tstamp) =3D $src;",
- 	},
- #endif
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c b/=
-tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-index fb4fa465d67c..0d9e167555b5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-@@ -630,13 +630,13 @@ __xlated("...")
- __xlated("4: r0 =3D &(void __percpu *)(r0)")
- __xlated("...")
- /* may_goto expansion starts */
--__xlated("6: r11 =3D *(u64 *)(r10 -24)")
--__xlated("7: if r11 =3D=3D 0x0 goto pc+6")
--__xlated("8: r11 -=3D 1")
--__xlated("9: if r11 !=3D 0x0 goto pc+2")
--__xlated("10: r11 =3D -24")
-+__xlated("6: r12 =3D *(u64 *)(r10 -24)")
-+__xlated("7: if r12 =3D=3D 0x0 goto pc+6")
-+__xlated("8: r12 -=3D 1")
-+__xlated("9: if r12 !=3D 0x0 goto pc+2")
-+__xlated("10: r12 =3D -24")
- __xlated("11: call unknown")
--__xlated("12: *(u64 *)(r10 -24) =3D r11")
-+__xlated("12: *(u64 *)(r10 -24) =3D r12")
- /* may_goto expansion ends */
- __xlated("13: *(u64 *)(r10 -8) =3D r1")
- __xlated("14: exit")
-@@ -668,13 +668,13 @@ __xlated("1: *(u64 *)(r10 -16) =3D")
- __xlated("2: r1 =3D 1")
- __xlated("3: call bpf_get_smp_processor_id")
- /* may_goto expansion starts */
--__xlated("4: r11 =3D *(u64 *)(r10 -24)")
--__xlated("5: if r11 =3D=3D 0x0 goto pc+6")
--__xlated("6: r11 -=3D 1")
--__xlated("7: if r11 !=3D 0x0 goto pc+2")
--__xlated("8: r11 =3D -24")
-+__xlated("4: r12 =3D *(u64 *)(r10 -24)")
-+__xlated("5: if r12 =3D=3D 0x0 goto pc+6")
-+__xlated("6: r12 -=3D 1")
-+__xlated("7: if r12 !=3D 0x0 goto pc+2")
-+__xlated("8: r12 =3D -24")
- __xlated("9: call unknown")
--__xlated("10: *(u64 *)(r10 -24) =3D r11")
-+__xlated("10: *(u64 *)(r10 -24) =3D r12")
- /* may_goto expansion ends */
- __xlated("11: *(u64 *)(r10 -8) =3D r1")
- __xlated("12: exit")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c b/to=
-ols/testing/selftests/bpf/progs/verifier_may_goto_1.c
-index 6d1edaef9213..4bdf4256a41e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-@@ -81,13 +81,13 @@ __arch_s390x
- __arch_arm64
- __xlated("0: *(u64 *)(r10 -16) =3D 65535")
- __xlated("1: *(u64 *)(r10 -8) =3D 0")
--__xlated("2: r11 =3D *(u64 *)(r10 -16)")
--__xlated("3: if r11 =3D=3D 0x0 goto pc+6")
--__xlated("4: r11 -=3D 1")
--__xlated("5: if r11 !=3D 0x0 goto pc+2")
--__xlated("6: r11 =3D -16")
-+__xlated("2: r12 =3D *(u64 *)(r10 -16)")
-+__xlated("3: if r12 =3D=3D 0x0 goto pc+6")
-+__xlated("4: r12 -=3D 1")
-+__xlated("5: if r12 !=3D 0x0 goto pc+2")
-+__xlated("6: r12 =3D -16")
- __xlated("7: call unknown")
--__xlated("8: *(u64 *)(r10 -16) =3D r11")
-+__xlated("8: *(u64 *)(r10 -16) =3D r12")
- __xlated("9: r0 =3D 1")
- __xlated("10: r0 =3D 2")
- __xlated("11: exit")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/te=
-sting/selftests/bpf/progs/verifier_sdiv.c
-index fd59d57e8e37..95f3239ce228 100644
---- a/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-@@ -778,10 +778,10 @@ __arch_x86_64
- __xlated("0: r2 =3D 0x8000000000000000")
- __xlated("2: r3 =3D -1")
- __xlated("3: r4 =3D r2")
--__xlated("4: r11 =3D r3")
--__xlated("5: r11 +=3D 1")
--__xlated("6: if r11 > 0x1 goto pc+4")
--__xlated("7: if r11 =3D=3D 0x0 goto pc+1")
-+__xlated("4: r12 =3D r3")
-+__xlated("5: r12 +=3D 1")
-+__xlated("6: if r12 > 0x1 goto pc+4")
-+__xlated("7: if r12 =3D=3D 0x0 goto pc+1")
- __xlated("8: r2 =3D 0")
- __xlated("9: r2 =3D -r2")
- __xlated("10: goto pc+1")
-@@ -812,10 +812,10 @@ __success __retval(-5)
- __arch_x86_64
- __xlated("0: r2 =3D 5")
- __xlated("1: r3 =3D -1")
--__xlated("2: r11 =3D r3")
--__xlated("3: r11 +=3D 1")
--__xlated("4: if r11 > 0x1 goto pc+4")
--__xlated("5: if r11 =3D=3D 0x0 goto pc+1")
-+__xlated("2: r12 =3D r3")
-+__xlated("3: r12 +=3D 1")
-+__xlated("4: if r12 > 0x1 goto pc+4")
-+__xlated("5: if r12 =3D=3D 0x0 goto pc+1")
- __xlated("6: r2 =3D 0")
- __xlated("7: r2 =3D -r2")
- __xlated("8: goto pc+1")
-@@ -890,10 +890,10 @@ __arch_x86_64
- __xlated("0: w2 =3D -2147483648")
- __xlated("1: w3 =3D -1")
- __xlated("2: w4 =3D w2")
--__xlated("3: r11 =3D r3")
--__xlated("4: w11 +=3D 1")
--__xlated("5: if w11 > 0x1 goto pc+4")
--__xlated("6: if w11 =3D=3D 0x0 goto pc+1")
-+__xlated("3: r12 =3D r3")
-+__xlated("4: w12 +=3D 1")
-+__xlated("5: if w12 > 0x1 goto pc+4")
-+__xlated("6: if w12 =3D=3D 0x0 goto pc+1")
- __xlated("7: w2 =3D 0")
- __xlated("8: w2 =3D -w2")
- __xlated("9: goto pc+1")
-@@ -925,10 +925,10 @@ __arch_x86_64
- __xlated("0: w2 =3D -5")
- __xlated("1: w3 =3D -1")
- __xlated("2: w4 =3D w2")
--__xlated("3: r11 =3D r3")
--__xlated("4: w11 +=3D 1")
--__xlated("5: if w11 > 0x1 goto pc+4")
--__xlated("6: if w11 =3D=3D 0x0 goto pc+1")
-+__xlated("3: r12 =3D r3")
-+__xlated("4: w12 +=3D 1")
-+__xlated("5: if w12 > 0x1 goto pc+4")
-+__xlated("6: if w12 =3D=3D 0x0 goto pc+1")
- __xlated("7: w2 =3D 0")
- __xlated("8: w2 =3D -w2")
- __xlated("9: goto pc+1")
-@@ -1004,10 +1004,10 @@ __arch_x86_64
- __xlated("0: r2 =3D 0x8000000000000000")
- __xlated("2: r3 =3D -1")
- __xlated("3: r4 =3D r2")
--__xlated("4: r11 =3D r3")
--__xlated("5: r11 +=3D 1")
--__xlated("6: if r11 > 0x1 goto pc+3")
--__xlated("7: if r11 =3D=3D 0x1 goto pc+3")
-+__xlated("4: r12 =3D r3")
-+__xlated("5: r12 +=3D 1")
-+__xlated("6: if r12 > 0x1 goto pc+3")
-+__xlated("7: if r12 =3D=3D 0x1 goto pc+3")
- __xlated("8: w2 =3D 0")
- __xlated("9: goto pc+1")
- __xlated("10: r2 s%=3D r3")
-@@ -1034,10 +1034,10 @@ __arch_x86_64
- __xlated("0: r2 =3D 5")
- __xlated("1: r3 =3D -1")
- __xlated("2: r4 =3D r2")
--__xlated("3: r11 =3D r3")
--__xlated("4: r11 +=3D 1")
--__xlated("5: if r11 > 0x1 goto pc+3")
--__xlated("6: if r11 =3D=3D 0x1 goto pc+3")
-+__xlated("3: r12 =3D r3")
-+__xlated("4: r12 +=3D 1")
-+__xlated("5: if r12 > 0x1 goto pc+3")
-+__xlated("6: if r12 =3D=3D 0x1 goto pc+3")
- __xlated("7: w2 =3D 0")
- __xlated("8: goto pc+1")
- __xlated("9: r2 s%=3D r3")
-@@ -1108,10 +1108,10 @@ __arch_x86_64
- __xlated("0: w2 =3D -2147483648")
- __xlated("1: w3 =3D -1")
- __xlated("2: w4 =3D w2")
--__xlated("3: r11 =3D r3")
--__xlated("4: w11 +=3D 1")
--__xlated("5: if w11 > 0x1 goto pc+3")
--__xlated("6: if w11 =3D=3D 0x1 goto pc+4")
-+__xlated("3: r12 =3D r3")
-+__xlated("4: w12 +=3D 1")
-+__xlated("5: if w12 > 0x1 goto pc+3")
-+__xlated("6: if w12 =3D=3D 0x1 goto pc+4")
- __xlated("7: w2 =3D 0")
- __xlated("8: goto pc+1")
- __xlated("9: w2 s%=3D w3")
-@@ -1140,10 +1140,10 @@ __arch_x86_64
- __xlated("0: w2 =3D -5")
- __xlated("1: w3 =3D -1")
- __xlated("2: w4 =3D w2")
--__xlated("3: r11 =3D r3")
--__xlated("4: w11 +=3D 1")
--__xlated("5: if w11 > 0x1 goto pc+3")
--__xlated("6: if w11 =3D=3D 0x1 goto pc+4")
-+__xlated("3: r12 =3D r3")
-+__xlated("4: w12 +=3D 1")
-+__xlated("5: if w12 > 0x1 goto pc+3")
-+__xlated("6: if w12 =3D=3D 0x1 goto pc+4")
- __xlated("7: w2 =3D 0")
- __xlated("8: goto pc+1")
- __xlated("9: w2 s%=3D w3")
---=20
-2.52.0
+[1]: https://lore.kernel.org/bpf/64d8e2b5-a214-4f3c-b9e8-bcedbcb2c602@hust.edu.cn/
+
+Jiayuan Chen (2):
+  bpf, tcx: reject offloaded programs on attach
+  bpf, netkit: reject offloaded programs on attach
+
+ drivers/net/netkit.c | 6 ++++++
+ kernel/bpf/tcx.c     | 6 ++++++
+ 2 files changed, 12 insertions(+)
+
+-- 
+2.43.0
 
