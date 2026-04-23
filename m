@@ -1,21 +1,21 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22E2263C7F
-	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 03:34:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43946263C7F
+	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 03:34:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776915285; cv=none; b=L9sR49gfkIb1BpWF5Momn4L+hVGwl56Q/3wmeAij5IxZoynnae/tSJvkyQIcOrvrwqCSfI1yzgsQ+HxgimLoOvi8scF51IYSR/KwwP3Dlt4GvVx0zh6fzZLfcnXYgRGoMMVa2cN0CVI4Yw/qr4F8ttnXv52L/7cLjrBg0yyf/ug=
+	t=1776915289; cv=none; b=qtLoCAqLcRFfDwbYG2pMS7B5ykk12QcBJF9WFeEGd4VN8Wg1cXI0kSocFQiHwai+0OtBA81JbEm7FenO7SAxf1dYjvlKGyYhbIOWneDl2F6GeSfzay7BkLlUHXU6NEu/96wfMJ1l1ZN2GWb1Lh7LoPS4jz1h1pb8p09fmm7So/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776915285; c=relaxed/simple;
-	bh=ohRR90Z7czEtjyDDx87srrDBVCleMg3d9DJq5eu6vWk=;
+	s=arc-20240116; t=1776915289; c=relaxed/simple;
+	bh=3CzPbmikq+HAEnn/2ovXyJYOExQlDP6pFZKJuxPK1mQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Dpffb4lEUsFYjNLDaugeGElnHsa+0ZYjdrFbm1Z86ywTJq7bQ8w4Mf8RlfpHn2GArhRm9ThGQBE1Z/7cm0XR8Usx9Wy0ElveeQusaVsMmSbt76z7dgoeegwBI0/6gJKgFb0UTj+Ou6Ku12qvRrItbdWh/c88vxpAUgRYooFOEgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+	 MIME-Version; b=TY6VvGKL37PSJzSsy/gMAHPQT128Bmz0M50UIQ9+8j0SeAEXfQ/t3x+8uCFS7scv7n/qWOn7wAWlXlT0s+d/OgHXUc3OEQwlK3sDGtMQ+SrOEU8NXZaDLAEymOsVTUCXIB/Qj/POycloDsk1gB1lijQKTvAQhEfV2po3b5zBeU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id D5D6A45844AC0; Wed, 22 Apr 2026 20:34:30 -0700 (PDT)
+	id F093045844AE0; Wed, 22 Apr 2026 20:34:35 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,11 +24,10 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next v3 1/9] bpf: Remove unused parameter from check_map_kptr_access()
-Date: Wed, 22 Apr 2026 20:34:30 -0700
-Message-ID: <20260423033430.2537615-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 2/9] bpf: Fix tail_call_reachable leak
+Date: Wed, 22 Apr 2026 20:34:35 -0700
+Message-ID: <20260423033435.2538013-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260423033425.2536883-1-yonghong.song@linux.dev>
 References: <20260423033425.2536883-1-yonghong.song@linux.dev>
@@ -40,41 +39,41 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The parameter 'regno' in check_map_kptr_access() is unused. Remove it.
+In check_max_stack_depth_subprog(), the local variable
+tail_call_reachable is set when entering a callee that has a tail
+call, but never reset when popping back to the parent. This causes
+the flag to leak across sibling subprogs in the DFS traversal.
 
-Acked-by: Puranjay Mohan <puranjay@kernel.org>
+This results in unnecessary JIT overhead: the JIT emits tail call
+counter preservation code for subprogs that can never be reached
+via a tail call path.
+
+Fix this by resetting tail_call_reachable to the parent's actual
+per-subprog flag when popping a frame. If the parent was already
+marked tail_call_reachable by a previous sibling's traversal, the
+local variable stays true. Otherwise it resets to false, so
+subsequent siblings start with a clean state.
+
 Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/verifier.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/bpf/verifier.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5b4806fdb648..6118743d87e6 100644
+index 6118743d87e6..26b6cdfd8613 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -4710,7 +4710,7 @@ static int mark_uptr_ld_reg(struct bpf_verifier_env=
- *env, u32 regno,
- 	return 0;
- }
+@@ -5490,6 +5490,9 @@ static int check_max_stack_depth_subprog(struct bpf=
+_verifier_env *env, int idx,
+ 	frame =3D dinfo[idx].frame;
+ 	i =3D dinfo[idx].ret_insn;
 =20
--static int check_map_kptr_access(struct bpf_verifier_env *env, u32 regno=
-,
-+static int check_map_kptr_access(struct bpf_verifier_env *env,
- 				 int value_regno, int insn_idx,
- 				 struct btf_field *kptr_field)
- {
-@@ -6357,7 +6357,7 @@ static int check_mem_access(struct bpf_verifier_env=
- *env, int insn_idx, u32 regn
- 			kptr_field =3D btf_record_find(reg->map_ptr->record,
- 						     off + reg->var_off.value, BPF_KPTR | BPF_UPTR);
- 		if (kptr_field) {
--			err =3D check_map_kptr_access(env, regno, value_regno, insn_idx, kptr=
-_field);
-+			err =3D check_map_kptr_access(env, value_regno, insn_idx, kptr_field)=
-;
- 		} else if (t =3D=3D BPF_READ && value_regno >=3D 0) {
- 			struct bpf_map *map =3D reg->map_ptr;
++	/* reset tail_call_reachable to the parent's actual state */
++	tail_call_reachable =3D subprog[idx].tail_call_reachable;
++
+ 	goto continue_func;
+ }
 =20
 --=20
 2.52.0
