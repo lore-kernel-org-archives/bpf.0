@@ -1,121 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC823ED109;
-	Thu, 23 Apr 2026 13:05:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8DCF3F0A95
+	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 13:13:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776949505; cv=none; b=R0+EhzZ8PuL++4lLnjp7QV14D52N3pWlVvQC1UDrj/1YKJlZJe3wMIjp7kldGJeXwPZb0MPZIID9z7AP/ZyK8P2B+a489vqp09mp6OxIKL2fV0q5semChhJ9g1MS0OjZJqvtBc/nzSMVkxnL0ycHDQuLDFNz6tvdhxJNdK7CNLk=
+	t=1776949984; cv=none; b=c5ybBQXZrCL40axdieKptl1bfoO9gxjW31lK08BK6t+jSzKw60fpmwr4P/DiOafHHgvRn9OAXRngHZcK6TO7Oi9pCRCIu9aIBM7CLsgoKWablxMuqLMJroIddhRJcCoy4vOYf8PDqZ7oIkiZMiDxrPZxg7XbBs9Wfc7OO5BPpec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776949505; c=relaxed/simple;
-	bh=E55xHuO9OgehKjmUEfHBkZfuIuBHCCdniSK9hhyNCMo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F7lacnkLrjcYdsEWNac99LT0eB+GKdsvjHybuwgkFWbGcn6ojGnsi00KS7SdQG/FJGMUBRW4bA2f5+1uu/405bdIdh2losE6w7eyIuKA02+3l9GcoODzAkB38m+EnOrojwLyGDKvCwTqtRX5bqdg4QCYS1L5IvHYxQPK2oaqFHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rc+djx9n; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776949984; c=relaxed/simple;
+	bh=OFPsVUKTkkJPaSLrVoEdb9zPLdAMuapXjHJIMHyQpqI=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=VQT72r14nwmKhKsJLPAPqQemZ3DsOm+9pD7LmhQt+mDrrffSzBYa/7Efy9jKJLEl/pUHEvdkob7QtwIMtM6WD4FRHWZCXj6ZQYnVIuynbeJdDNnvscsAwitHAZvIi8Pl2LERP9TEc2QTavnSrq/mszkPtt6TwbZtwwf0/QSDoWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ph4tBiup; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rc+djx9n"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5FD4C2BCAF;
-	Thu, 23 Apr 2026 13:05:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776949505;
-	bh=E55xHuO9OgehKjmUEfHBkZfuIuBHCCdniSK9hhyNCMo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Rc+djx9nbr5IRX86t+nJLDfBrlzvpg2kSMyJohpOCpqsr+QuHTCovBHxYGxwMMcM3
-	 FJ8qx4iQWd0LbVCLLbebwcz4dc/F/4FqskIie9hzUK5+3T0BXg8Qla6ab6n9ME35ag
-	 YJ8ODjrfFaIV27nuIB7YKmaM/M0Di342exgLj5/Y/lYQJ7zGGfkjp2KAq+IjaUESs5
-	 XvrkpyoHH7P+hjn86j7yFqg2RDdbmr89tjCNxA0V/OKH+e1eLUUTFJ35Xed/ybUo9v
-	 g1EXz8grM5ze6BlkikNtUYuUFVrdafawot4GgOLOiYaWxAXuhv2RzKUSP7emVZxTQK
-	 o2M3Ni3pNU6zQ==
-Date: Thu, 23 Apr 2026 16:05:01 +0300
-From: Leon Romanovsky <leon@kernel.org>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>,
-	Roberto Sassu <roberto.sassu@huaweicloud.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Itay Avraham <itayavr@nvidia.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
-	Maher Sanalla <msanalla@nvidia.com>,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-Message-ID: <20260423130501.GD172828@unreal>
-References: <20260409124553.GB720371@unreal>
- <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
- <20260412090006.GA21470@unreal>
- <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
- <20260413164220.GP3694781@ziepe.ca>
- <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
- <20260413231920.GS3694781@ziepe.ca>
- <CAHC9VhTLamfe4C81ZNRVT=H32x+KLxSqH3o0eBfrHsWAgAqxCA@mail.gmail.com>
- <20260415134705.GG2577880@ziepe.ca>
- <CAHC9VhSECYihup=tURo_Qk__xUdYYPkHgnz5CWA0BrRAkvwbog@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ph4tBiup"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-82f71437218so4379362b3a.2
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 06:13:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1776949981; x=1777554781; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9gKFsUpIcJrOZ7JV012cOGqmLlLh75Tdbz6kdKZGcdk=;
+        b=ph4tBiupjuLp6t/sTgxD1XKl1wEf5iYcYhvGnRrqD4t1vCR6kfvWJKwW8NFxZKOg5A
+         YWOgnN4RlxtFofD33JhSbYF+ttQQlRuC0XMpZF5aLlUIpjpG8cgAvch59hv0of20jvIU
+         lGCdY3mei3SBG69+W5naU3Spr8cC0ThfxUh5xA7NXp6jiyeWQOHVE/rWzePhgoi+wQXR
+         3THDivfKBAAirFeT+zGeHqmemtiLtP2IfFlQ8ra033+J9fdp2viVLgsXs2YyzZqQBK6x
+         oKacUrNjZJ86LwU2h6Ojh+7NfbOmriJzJ6KbnhXs04VSHsdDCtAu+IUWpGAzMajY5iAi
+         HTZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776949981; x=1777554781;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9gKFsUpIcJrOZ7JV012cOGqmLlLh75Tdbz6kdKZGcdk=;
+        b=QUtlFiR9YtYZNFW+0V5+qYYGDnP3hQPS3yRDvPwRc5/iEdQ0x7OmSLVrZR48wp/JWF
+         T1VpS3mmQr0pL7DR0Wh/WGT+7NAcySG4HfsApfoYZUx9qdlD20INEfGWaBhNlcRnpMpc
+         fDZLoJes487aJt9c2NlJdQ0iXw2uiUdHW5XmgX8IvrUhQjN1W8SeAseoYHgUrJIxAqyk
+         o2tzeq/AfTVA+F3iseJqiBL+cB5wIHkzpxHGvwY9ZIIXicy2UJW/0y73ojPw2PbmX2ik
+         VkM8f/2TKp1Z/uOks3VLzETXnbPGk/PS6qjaZL37dgwnrWIFWY8mHvUdkZ7wARTilBij
+         pwSg==
+X-Forwarded-Encrypted: i=1; AFNElJ+nHp9keeCBJkA1ItgZkF73CzLolUUu6HOlR3JLEPAaXTCieJF5l3c7F4XXxY434a8Gl8g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxp4kFIv8UqJJ77qtvE2wefwMRxqFiGMFg+VZdlHUWHdQ9UgKfR
+	fIPdG/QTc9GWbNdbLYRlBXyxebdeYEvOtc5gHWi11z9ziCuOc0osvCqF1cpfCGjQeJu97qy6KmD
+	yQTjClA==
+X-Received: from pfbiv33.prod.google.com ([2002:a05:6a00:66e1:b0:82f:1051:621])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:a883:b0:829:6f7d:3093
+ with SMTP id d2e1a72fcca58-82f8c9ece1emr28281470b3a.48.1776949980819; Thu, 23
+ Apr 2026 06:13:00 -0700 (PDT)
+Date: Thu, 23 Apr 2026 06:12:59 -0700
+In-Reply-To: <20260422-vmscape-bhb-v11-8-b18e0cf32af4@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhSECYihup=tURo_Qk__xUdYYPkHgnz5CWA0BrRAkvwbog@mail.gmail.com>
+Mime-Version: 1.0
+References: <20260422-vmscape-bhb-v11-0-b18e0cf32af4@linux.intel.com> <20260422-vmscape-bhb-v11-8-b18e0cf32af4@linux.intel.com>
+Message-ID: <aeoa2yM2gq8Llype@google.com>
+Subject: Re: [PATCH v11 08/12] kvm: Define EXPORT_STATIC_CALL_FOR_KVM()
+From: Sean Christopherson <seanjc@google.com>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, 
+	Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	David Laight <david.laight.linux@gmail.com>, Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, David Ahern <dsahern@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jason Baron <jbaron@akamai.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>, 
+	Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
+	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>, 
+	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Wed, Apr 15, 2026 at 05:40:04PM -0400, Paul Moore wrote:
-> On Wed, Apr 15, 2026 at 9:47 AM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> > On Tue, Apr 14, 2026 at 04:27:58PM -0400, Paul Moore wrote:
-> > > On Mon, Apr 13, 2026 at 7:19 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> > > > On Mon, Apr 13, 2026 at 06:36:06PM -0400, Paul Moore wrote:
-> > > > > On Mon, Apr 13, 2026 at 12:42 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> > > > > > On Sun, Apr 12, 2026 at 09:38:35PM -0400, Paul Moore wrote:
+Uber nit (don't bother with a new version), please capitalize KVM:
+
+On Wed, Apr 22, 2026, Pawan Gupta wrote:
+> EXPORT_SYMBOL_FOR_KVM() exists to export symbols to KVM modules. Static
+> calls need the same treatment when the core kernel defines a static_call
+> that KVM needs access to (e.g. from a VM-exit path).
 > 
-> ...
-
-<...>
-
-> > > > > so that only the firmware would need to parse the request.  If we
-> > > > > wanted to adopt a secmark-esque approach, one could develop a second
-> > > > > parsing mechanism that would be responsible for assigning a LSM label
-> > > > > to the request, and then pass the firmware request to the LSM, but I
-> > > > > do worry a bit about the added complexity associated with keeping the
-> > > > > parser sync'd with the driver/fw.
-> > > >
-> > > > In practice it would be like iptables, the parser would be entirely
-> > > > programmed by userspace and there is nothing to keep in sync.
-> > >
-> > > You've mentioned a few times now that the firmware/request will vary
-> > > across not only devices, but firmware revisions too,
-> >
-> > I never said firmware revisions, part of the requirement is strong ABI
-> > compatability in these packets.
+> Define EXPORT_STATIC_CALL_FOR_KVM() as the static_call analogue of
+> EXPORT_SYMBOL_FOR_KVM(). The same three-way logic applies:
 > 
-> That was my mistake; it was Leon.
+>   - KVM_SUB_MODULES defined: export to "kvm," plus all sub-modules
+>   - KVM=m, no sub-modules: export to "kvm" only
+>   - KVM built-in: no export needed (noop)
 > 
-> Leon mentioned that different firmware revisions would have different
-> parameters for a given opcode, and that one would need to inspect
-> those parameters to properly filter the command.  Is that not true, or
-> am I misreading or misunderstanding Leon's comments?
+>   As with EXPORT_SYMBOL_FOR_KVM(), allow architectures to override both
+>   macros (e.g. to suppress the export when kvm.ko itself will not be
+>   built despite CONFIG_KVM=m). Add the x86 no-op overrides in
+>   arch/x86/include/asm/kvm_types.h for that case. To keep the pair in
+>   sync, EXPORT_STATIC_CALL_FOR_KVM() is defined inside the
+>   EXPORT_SYMBOL_FOR_KVM #ifndef block; an arch that defines
+>   EXPORT_SYMBOL_FOR_KVM must also define EXPORT_STATIC_CALL_FOR_KVM or the
+>   build will fail with a compile-time error.
 > 
-> https://lore.kernel.org/all/20260310175759.GD12611@unreal
+> As with EXPORT_SYMBOL_FOR_KVM(), allow architectures to override
+> EXPORT_STATIC_CALL_FOR_KVM definition (e.g. to suppress the export when
+> kvm.ko itself will not be built despite CONFIG_KVM=m). Add the x86 no-op
+> override in arch/x86/include/asm/kvm_types.h for that case.
+> 
+> Architectures must also define EXPORT_STATIC_CALL_FOR_KVM when they define
+> EXPORT_SYMBOL_FOR_KVM.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> ---
 
-Right, I said that. The mlx5–FW interface is stable, but that does not
-mean it can never change. The contract is that any upstream driver
-release must continue to operate correctly with released firmware.
-
-To support this, there are cases where the driver and firmware
-negotiate during device initialization to determine whether a given
-feature is supported and specific maibox fields are valid.
-
-Thanks
+Acked-by: Sean Christopherson <seanjc@google.com>
