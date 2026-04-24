@@ -1,112 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394C4314D05
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 19:59:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948B8266581
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 20:02:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777060799; cv=none; b=gT/dG+dN8LCqZ84nr6be1gBJrmcUqOb9ukj6m3CMd9Ay8YE97JppKsuccU3IjbWnSCscuraz4zWPisV2Zzvu0bA08LRS47Ev3YiSYhJtGqdBIASdJ4tfEf6Gs52H+xU7893W+EqgSFkyvRGIlkMuTyuVFdMR+aSSETh8GvSQ1nA=
+	t=1777060946; cv=none; b=DxPw4ogfmMRpEtl9Ep01hQ/h5KHWldh2NKcLQGiI/ZtjC36R0j1qy+zsll9tH3qMH8Edkyv4Sn+/mp0WTjOjU17KmnqvRiunU+ZV7oAvqSE6TGc/wepLWtPM2+j2nkg34tcCrh0AfxQ3n4n+0pC5pwMZee6UxE9AwPv65/Bgw/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777060799; c=relaxed/simple;
-	bh=5TRmimcbL5n1eMj5CGuan6fEUknX6KY8PepSwVFCXdk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ChQGqwy61unA+EJnK+EvwKEVbQ2Bmtxx55bMiScfJvj5Vqd7bBt/xDu2oetXbHLtNPMsm07amTtR58enYUKyypjjODN2iJIG4pox/635I639WK/PWtaX4EvpMvv+X2s1MzqUr9vijdqc3m22XdWN7ZCcJdrD3CEYN/fvUHfeK1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uTkn1m8g; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777060946; c=relaxed/simple;
+	bh=vGrI+yWlz7FU9p33iqKuh+zUOn62MLk8NTdZsUbnW90=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=smUdPEmK9QxeIPBIkVXiAHtRk7H2sr92feau4zRbrkULNb+N8myyfvRTujszMkRib4ZqKaba4fpvcwgmBw5AAdNxbS7aGcGVQD2xCmFYhLqmVtoCFNoNk30AyFJZvYeCQwOa2CCC1bpJiT/pddhiZqWL7ISj3Z3ZGSoOdtZS36M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LyaIlvJO; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uTkn1m8g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AED4EC19425;
-	Fri, 24 Apr 2026 19:59:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777060798;
-	bh=5TRmimcbL5n1eMj5CGuan6fEUknX6KY8PepSwVFCXdk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=uTkn1m8gYzQTfFhgT4PqF3o1m4d7v2K+6o24mat9sV3XMC7ye1aLJX9ruBhgLdYzG
-	 RNkuOJxG7Rtt/t3JhCs6gB+Bf1LLD9d2eGBxl9cj3ew5ghqsTGTvO9JvubtIuddRmh
-	 dPxWGE/FNil8Oio2NXlO1yNeVqiXbAZmHe0j/B8SRwsjgofvY6KwLnaDugzQVDa98o
-	 8NEk18PSJSAisrCqFMYsvLm7a+VcqSp5HMP2GPmsNJnVQrc0DOdyWcHPoNQUL4QiFU
-	 6uPj57SxbDghwhGpgf160vxLce4s5qbinWuvQZTg6N797UlvOW0oK5oaetudPFfLdG
-	 If+ju/g31kbjw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: Implement dtor for struct file BTF
- ID
-Reply-To: sashiko@lists.linux.dev
-To: "Justin Suess" <utilityemal77@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260424192252.695240-2-utilityemal77@gmail.com>
-References: <20260424192252.695240-2-utilityemal77@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 24 Apr 2026 19:59:57 +0000
-Message-Id: <20260424195958.AED4EC19425@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LyaIlvJO"
+Message-ID: <635af96f-3a8e-4d39-9df5-8c66945bf9e5@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1777060932;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wNicmwiurmxIHeGmSS36Rf7vXFuO7MHXW0X7JPARuSM=;
+	b=LyaIlvJOT9BRKU8QUPYM2XkgMsocA6jHFL/ah9K0DC0MmyLGbvtxvUWiEAhCdfEuHOlEIc
+	lBt3EHpmfx+WacrDVMMmDOgEFicHQsb5ZgdMgTzS2H4VQC5zwDRsUc+gtezxAvjzFK+KHf
+	aG5m+OYpD5W9c7J/b7nc0o9I9xxVaaI=
+Date: Fri, 24 Apr 2026 13:01:52 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Add test for arena VMA
+ use-after-free on fork
+To: Emil Tsalapatis <emil@etsalapatis.com>, Weiming Shi
+ <bestswngs@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Barret Rhoden <brho@google.com>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, Xiang Mei <xmei5@asu.edu>
+References: <20260411112944.1455470-1-bestswngs@gmail.com>
+ <20260411112944.1455470-3-bestswngs@gmail.com>
+ <DHQI86CY1QDQ.16RMS5QSX99EC@etsalapatis.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <DHQI86CY1QDQ.16RMS5QSX99EC@etsalapatis.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Sashiko AI review found 1 potential issue(s):
-- [High] Calling `fput()` directly from `bpf_file_release_dtor` can lead to=
- a hard deadlock when invoked from NMI context.
---
+On 4/11/26 10:33 AM, Emil Tsalapatis wrote:
+> On Sat Apr 11, 2026 at 7:29 AM EDT, Weiming Shi wrote:
+>> Add a selftest that reproduces the arena VMA use-after-free fixed in
+>> the previous commit. The test creates an arena, mmaps it, allocates
+>> pages via BPF, forks, has the parent munmap the arena, then has the
+>> child call bpf_arena_free_pages. Without the fix this triggers a
+>> KASAN slab-use-after-free in zap_page_range_single.
+>>
+>> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+>> ---
+>>  .../selftests/bpf/prog_tests/arena_fork.c     | 86 +++++++++++++++++++
+>>  .../testing/selftests/bpf/progs/arena_fork.c  | 41 +++++++++
+>>  2 files changed, 127 insertions(+)
+>>  create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_fork.c
+>>  create mode 100644 tools/testing/selftests/bpf/progs/arena_fork.c
+>>
+> 
+> The test doesn't work for me as advertised. Does it fail for you under
+> vmtest without patch 1/2?
+> 
+> The test doesn't fail on base vmtest for me, even without the previous patch,
+> because KASAN isn't turned on for the CI. With KASAN the test triggers
+> the splat just fine. 
+> 
+> Should we maybe turn on KASAN and panic_on_warn by default on vmtest?
 
-commit 6368f91be1fd91bc9cb38d3498f35d279bad04c9
-Author: Justin Suess <utilityemal77@gmail.com>
+Hi Emil,
 
-bpf: Implement dtor for struct file BTF ID
+I just noticed this message. BPF CI has KASAN enabled by default
+(disabled only on s390x) for almost a year now [1].  Did the test fail
+locally for you, but not on CI?
 
-This commit implements a destructor for struct file, allowing it to be
-stored in a map as a referenced kptr. The destructor calls fput to
-release the reference.
+[1] https://github.com/kernel-patches/vmtest/commit/5db11d295888c3f048021a15c3a8a9875c8612c3
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 2bb60200c2665e..ee5ceb82e4f812 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-[ ... ]
-> @@ -2752,6 +2753,13 @@ __bpf_kfunc void bpf_task_release_dtor(void *p)
->  }
->  CFI_NOSEAL(bpf_task_release_dtor);
-> =20
-> +__bpf_kfunc void bpf_file_release_dtor(void *file)
-> +{
-> +	fput((struct file *)file);
-> +}
+> 
+>> [...]
+> 
 
-Can this cause a deadlock if the destructor is invoked from NMI context?
-
-If an NMI-context BPF program (such as a perf event tracing program)
-updates or deletes a map element containing a struct file kptr, the BPF
-framework will synchronously invoke this destructor to clean up the old
-kptr.
-
-When fput() drops the reference count to zero, it calls
-__fput_deferred(). Since in_interrupt() evaluates to true in NMI
-context, __fput_deferred() bypasses task_work_add() and instead calls
-schedule_delayed_work().
-
-This leads to the following call chain:
-
-bpf_file_release_dtor()
-   fput()
-      __fput_deferred()
-         schedule_delayed_work()
-            add_timer()
-
-The add_timer() function attempts to acquire the timer_base->lock raw
-spinlock. If the NMI interrupted a thread that was already holding this
-lock, the NMI handler will spin indefinitely waiting for it, resulting
-in a hard deadlock.
-
-Would it be safer to defer the fput() operation using an explicitly
-NMI-safe mechanism like irq_work_queue() to handle arbitrary BPF
-contexts?
-
-> +
-> +CFI_NOSEAL(bpf_file_release_dtor);
-> +
->  #ifdef CONFIG_CGROUPS
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260424192252.6952=
-40-1-utilityemal77@gmail.com?part=3D1
