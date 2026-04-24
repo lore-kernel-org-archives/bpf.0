@@ -1,21 +1,21 @@
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5992D780E
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 17:17:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EFF3E5566
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 17:17:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777051051; cv=none; b=lEVSyHgWgWoP1iNtC3Bn4j6IHrK8HE6ptfOdKVmVxFNok9XdERtR6w1qWlN8O1WzmtNZUcayUes5VCkYg+6DKT+R30MY0DI9ZtF2Df3poXn90bylHkVORMDhUf23jcx/Pm1BGfwltxkPP6S2SKd1vydYoRpfgr6ByRF3bHCa3Jc=
+	t=1777051056; cv=none; b=KlLoOPiomNn9wyOFQ0TR3mbGhDDC3Lj6843mWn2peAIbzEXFu6bQazRLpcyWQOiOcCctMZEc4+MOXSzBYqwfLfkdLby7/O0NxlnaobrpD0eSridXnSo/G4Nv4WsGEGOxF1Z3+Rz8yHDwTo//D1kiiXAhJKx8IqLQcBa5A1n+egM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777051051; c=relaxed/simple;
-	bh=wFbgDChgUZudvgN41qKmsuuCXv4uIuOFMXITfoMY/BA=;
+	s=arc-20240116; t=1777051056; c=relaxed/simple;
+	bh=pgCF7IThib/kklSCSsbylAdKG+DC8AzQLyG3QlKMxXo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CijP8REveHEJU99wWLvTnI3XEmMBiaWhUmXLR5+EJ9p6ZuHgoDZH88ahMicRxUqOCje2z0lp7RKmszOxEDvlaXXF5E2EIuKYGyvG3cXEgj4z5dJuzRDS81A1iDqyOmBcO9WWpoB2Tmhzm/OAEs6XUe1Oq+9brZE/sc6XOWudPcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
+	 MIME-Version; b=m5D+cIsnp9AAaWXO41uidoNRs6XMdD/AaD+UdWQesMbfWYH67WqNcCg/KRCQJYg3R3pQxldHfytDFC6LqhNU44/crGUIXU/zXO107iPTL5/Zhd/vbkgQHe9xGvFd9kbynkadMXux8tm4ymKO1Ab38dv1e9cKrJ8Uxxfx9C4Tr7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 1D6AB474A760F; Fri, 24 Apr 2026 10:17:24 -0700 (PDT)
+	id 38AEF474A762A; Fri, 24 Apr 2026 10:17:29 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -25,9 +25,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>,
 	Puranjay Mohan <puranjay@kernel.org>
-Subject: [PATCH bpf-next 17/18] bpf, arm64: Add JIT support for stack arguments
-Date: Fri, 24 Apr 2026 10:17:24 -0700
-Message-ID: <20260424171724.2058333-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 18/18] selftests/bpf: Enable stack argument tests for arm64
+Date: Fri, 24 Apr 2026 10:17:29 -0700
+Message-ID: <20260424171729.2058901-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260424171433.2034470-1-yonghong.song@linux.dev>
 References: <20260424171433.2034470-1-yonghong.song@linux.dev>
@@ -41,241 +41,95 @@ Content-Transfer-Encoding: quoted-printable
 
 From: Puranjay Mohan <puranjay@kernel.org>
 
-Implement stack argument passing for BPF-to-BPF and kfunc calls with
-more than 5 parameters on arm64, following the AAPCS64 calling
-convention.
-
-BPF R1-R5 already map to x0-x4. With BPF_REG_0 moved to x8 by the
-previous commit, x5-x7 are free for arguments 6-8. Arguments 9-12
-spill onto the stack at [SP+0], [SP+8], ... and the callee reads
-them from [FP+16], [FP+24], ... (above the saved FP/LR pair).
-
-BPF convention uses fixed offsets from BPF_REG_PARAMS (r11): off=3D-8 is
-always arg 6, off=3D-16 arg 7, etc. The verifier invalidates all outgoing
-stack arg slots after each call, so the compiler must re-store before
-every call. This means x5-x7 don't need to be saved on stack.
+Now that arm64 supports stack arguments, enable the existing stack_arg,
+stack_arg_kfunc and verifier_stack_arg tests for __TARGET_ARCH_arm64.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- arch/arm64/net/bpf_jit_comp.c | 87 +++++++++++++++++++++++++++++++++--
- 1 file changed, 83 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c | 3 ++-
+ tools/testing/selftests/bpf/progs/stack_arg.c                | 3 ++-
+ tools/testing/selftests/bpf/progs/stack_arg_kfunc.c          | 3 ++-
+ tools/testing/selftests/bpf/progs/stack_arg_precision.c      | 3 ++-
+ tools/testing/selftests/bpf/progs/verifier_stack_arg.c       | 3 ++-
+ 5 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
-c
-index 085e650662e3..7adf2b0f4610 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -86,6 +86,7 @@ struct jit_ctx {
- 	__le32 *image;
- 	__le32 *ro_image;
- 	u32 stack_size;
-+	u16 stack_arg_size;
- 	u64 user_vm_start;
- 	u64 arena_vm_start;
- 	bool fp_used;
-@@ -533,13 +534,19 @@ static int build_prologue(struct jit_ctx *ctx, bool=
- ebpf_from_cbpf)
- 	 *                        |     |
- 	 *                        +-----+ <=3D (BPF_FP - prog->aux->stack_depth=
-)
- 	 *                        |RSVD | padding
--	 * current A64_SP =3D>      +-----+ <=3D (BPF_FP - ctx->stack_size)
-+	 *                        +-----+ <=3D (BPF_FP - ctx->stack_size)
-+	 *                        |     |
-+	 *                        | ... | outgoing stack args (9+, if any)
-+	 *                        |     |
-+	 * current A64_SP =3D>      +-----+
- 	 *                        |     |
- 	 *                        | ... | Function call stack
- 	 *                        |     |
- 	 *                        +-----+
- 	 *                          low
- 	 *
-+	 * Stack args 6-8 are passed in x5-x7, args 9+ at [SP].
-+	 * Incoming args 9+ are at [FP + 16], [FP + 24], ...
- 	 */
+diff --git a/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c=
+ b/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
+index 296fddfe6804..8d38aafe66a2 100644
+--- a/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
++++ b/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
+@@ -4,7 +4,8 @@
+ #include <bpf/bpf_helpers.h>
+ #include "../test_kmods/bpf_testmod_kfunc.h"
 =20
- 	emit_kcfi(is_main_prog ? cfi_bpf_hash : cfi_bpf_subprog_hash, ctx);
-@@ -613,6 +620,9 @@ static int build_prologue(struct jit_ctx *ctx, bool e=
-bpf_from_cbpf)
- 	if (ctx->stack_size && !ctx->priv_sp_used)
- 		emit(A64_SUB_I(1, A64_SP, A64_SP, ctx->stack_size), ctx);
+-#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
++#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
++	defined(__BPF_FEATURE_STACK_ARGUMENT)
 =20
-+	if (ctx->stack_arg_size)
-+		emit(A64_SUB_I(1, A64_SP, A64_SP, ctx->stack_arg_size), ctx);
-+
- 	if (ctx->arena_vm_start)
- 		emit_a64_mov_i64(arena_vm_base, ctx->arena_vm_start, ctx);
-=20
-@@ -673,6 +683,9 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx)
- 	/* Update tail_call_cnt if the slot is populated. */
- 	emit(A64_STR64I(tcc, ptr, 0), ctx);
-=20
-+	if (ctx->stack_arg_size)
-+		emit(A64_ADD_I(1, A64_SP, A64_SP, ctx->stack_arg_size), ctx);
-+
- 	/* restore SP */
- 	if (ctx->stack_size && !ctx->priv_sp_used)
- 		emit(A64_ADD_I(1, A64_SP, A64_SP, ctx->stack_size), ctx);
-@@ -1034,6 +1047,9 @@ static void build_epilogue(struct jit_ctx *ctx, boo=
-l was_classic)
- 	const u8 r0 =3D bpf2a64[BPF_REG_0];
- 	const u8 ptr =3D bpf2a64[TCCNT_PTR];
-=20
-+	if (ctx->stack_arg_size)
-+		emit(A64_ADD_I(1, A64_SP, A64_SP, ctx->stack_arg_size), ctx);
-+
- 	/* We're done with BPF stack */
- 	if (ctx->stack_size && !ctx->priv_sp_used)
- 		emit(A64_ADD_I(1, A64_SP, A64_SP, ctx->stack_size), ctx);
-@@ -1191,6 +1207,41 @@ static int add_exception_handler(const struct bpf_=
-insn *insn,
- 	return 0;
- }
-=20
-+static const u8 stack_arg_reg[] =3D { A64_R(5), A64_R(6), A64_R(7) };
-+
-+#define NR_STACK_ARG_REGS	ARRAY_SIZE(stack_arg_reg)
-+
-+static void emit_stack_arg_load(u8 dst, s16 bpf_off, struct jit_ctx *ctx=
-)
-+{
-+	int idx =3D bpf_off / sizeof(u64) - 1;
-+
-+	if (idx < NR_STACK_ARG_REGS)
-+		emit(A64_MOV(1, dst, stack_arg_reg[idx]), ctx);
-+	else
-+		emit(A64_LDR64I(dst, A64_FP, (idx - NR_STACK_ARG_REGS) * sizeof(u64) +=
- 16), ctx);
-+}
-+
-+static void emit_stack_arg_store(u8 src_a64, s16 bpf_off, struct jit_ctx=
- *ctx)
-+{
-+	int idx =3D -bpf_off / sizeof(u64) - 1;
-+
-+	if (idx < NR_STACK_ARG_REGS)
-+		emit(A64_MOV(1, stack_arg_reg[idx], src_a64), ctx);
-+	else
-+		emit(A64_STR64I(src_a64, A64_SP, (idx - NR_STACK_ARG_REGS) * sizeof(u6=
-4)), ctx);
-+}
-+
-+static void emit_stack_arg_store_imm(s32 imm, s16 bpf_off, const u8 tmp,=
- struct jit_ctx *ctx)
-+{
-+	int idx =3D -bpf_off / sizeof(u64) - 1;
-+
-+	emit_a64_mov_i(1, tmp, imm, ctx);
-+	if (idx < NR_STACK_ARG_REGS)
-+		emit(A64_MOV(1, stack_arg_reg[idx], tmp), ctx);
-+	else
-+		emit(A64_STR64I(tmp, A64_SP, (idx - NR_STACK_ARG_REGS) * sizeof(u64)),=
- ctx);
-+}
-+
- /* JITs an eBPF instruction.
-  * Returns:
-  * 0  - successfully JITed an 8-byte eBPF instruction.
-@@ -1646,6 +1697,11 @@ static int build_insn(const struct bpf_verifier_en=
-v *env, const struct bpf_insn
- 	case BPF_LDX | BPF_MEM | BPF_H:
- 	case BPF_LDX | BPF_MEM | BPF_B:
- 	case BPF_LDX | BPF_MEM | BPF_DW:
-+		if (insn->src_reg =3D=3D BPF_REG_PARAMS) {
-+			emit_stack_arg_load(dst, off, ctx);
-+			break;
-+		}
-+		fallthrough;
- 	case BPF_LDX | BPF_PROBE_MEM | BPF_DW:
- 	case BPF_LDX | BPF_PROBE_MEM | BPF_W:
- 	case BPF_LDX | BPF_PROBE_MEM | BPF_H:
-@@ -1671,7 +1727,7 @@ static int build_insn(const struct bpf_verifier_env=
- *env, const struct bpf_insn
- 		}
- 		if (src =3D=3D fp) {
- 			src_adj =3D ctx->priv_sp_used ? priv_sp : A64_SP;
--			off_adj =3D off + ctx->stack_size;
-+			off_adj =3D off + ctx->stack_size + ctx->stack_arg_size;
- 		} else {
- 			src_adj =3D src;
- 			off_adj =3D off;
-@@ -1752,6 +1808,11 @@ static int build_insn(const struct bpf_verifier_en=
-v *env, const struct bpf_insn
- 	case BPF_ST | BPF_MEM | BPF_H:
- 	case BPF_ST | BPF_MEM | BPF_B:
- 	case BPF_ST | BPF_MEM | BPF_DW:
-+		if (insn->dst_reg =3D=3D BPF_REG_PARAMS) {
-+			emit_stack_arg_store_imm(imm, off, tmp, ctx);
-+			break;
-+		}
-+		fallthrough;
- 	case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
- 	case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
- 	case BPF_ST | BPF_PROBE_MEM32 | BPF_W:
-@@ -1762,7 +1823,7 @@ static int build_insn(const struct bpf_verifier_env=
- *env, const struct bpf_insn
- 		}
- 		if (dst =3D=3D fp) {
- 			dst_adj =3D ctx->priv_sp_used ? priv_sp : A64_SP;
--			off_adj =3D off + ctx->stack_size;
-+			off_adj =3D off + ctx->stack_size + ctx->stack_arg_size;
- 		} else {
- 			dst_adj =3D dst;
- 			off_adj =3D off;
-@@ -1814,6 +1875,11 @@ static int build_insn(const struct bpf_verifier_en=
-v *env, const struct bpf_insn
- 	case BPF_STX | BPF_MEM | BPF_H:
- 	case BPF_STX | BPF_MEM | BPF_B:
- 	case BPF_STX | BPF_MEM | BPF_DW:
-+		if (insn->dst_reg =3D=3D BPF_REG_PARAMS) {
-+			emit_stack_arg_store(src, off, ctx);
-+			break;
-+		}
-+		fallthrough;
- 	case BPF_STX | BPF_PROBE_MEM32 | BPF_B:
- 	case BPF_STX | BPF_PROBE_MEM32 | BPF_H:
- 	case BPF_STX | BPF_PROBE_MEM32 | BPF_W:
-@@ -1824,7 +1890,7 @@ static int build_insn(const struct bpf_verifier_env=
- *env, const struct bpf_insn
- 		}
- 		if (dst =3D=3D fp) {
- 			dst_adj =3D ctx->priv_sp_used ? priv_sp : A64_SP;
--			off_adj =3D off + ctx->stack_size;
-+			off_adj =3D off + ctx->stack_size + ctx->stack_arg_size;
- 		} else {
- 			dst_adj =3D dst;
- 			off_adj =3D off;
-@@ -2065,6 +2131,14 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_ve=
-rifier_env *env, struct bpf_pr
- 	ctx.user_vm_start =3D bpf_arena_get_user_vm_start(prog->aux->arena);
- 	ctx.arena_vm_start =3D bpf_arena_get_kern_vm_start(prog->aux->arena);
-=20
-+	if (prog->aux->stack_arg_depth > prog->aux->incoming_stack_arg_depth) {
-+		u16 outgoing =3D prog->aux->stack_arg_depth - prog->aux->incoming_stac=
-k_arg_depth;
-+		int nr_on_stack =3D outgoing / sizeof(u64) - NR_STACK_ARG_REGS;
-+
-+		if (nr_on_stack > 0)
-+			ctx.stack_arg_size =3D round_up(nr_on_stack * sizeof(u64), 16);
-+	}
-+
- 	if (priv_stack_ptr)
- 		ctx.priv_sp_used =3D true;
-=20
-@@ -2229,6 +2303,11 @@ bool bpf_jit_supports_kfunc_call(void)
- 	return true;
- }
-=20
-+bool bpf_jit_supports_stack_args(void)
-+{
-+	return true;
-+}
-+
- void *bpf_arch_text_copy(void *dst, void *src, size_t len)
+ long subprog_call_mem_kfunc(long a, long b, long c, long d, long e, long=
+ size)
  {
- 	if (!aarch64_insn_copy(dst, src, len))
+diff --git a/tools/testing/selftests/bpf/progs/stack_arg.c b/tools/testin=
+g/selftests/bpf/progs/stack_arg.c
+index ab6240b997c5..b5e9929a4d63 100644
+--- a/tools/testing/selftests/bpf/progs/stack_arg.c
++++ b/tools/testing/selftests/bpf/progs/stack_arg.c
+@@ -21,7 +21,8 @@ struct {
+=20
+ int timer_result;
+=20
+-#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
++#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
++	defined(__BPF_FEATURE_STACK_ARGUMENT)
+=20
+ const volatile bool has_stack_arg =3D true;
+=20
+diff --git a/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c b/tools/=
+testing/selftests/bpf/progs/stack_arg_kfunc.c
+index fa9def876ea5..da0d4f91d273 100644
+--- a/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
++++ b/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
+@@ -6,7 +6,8 @@
+ #include "bpf_kfuncs.h"
+ #include "../test_kmods/bpf_testmod_kfunc.h"
+=20
+-#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
++#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
++	defined(__BPF_FEATURE_STACK_ARGUMENT)
+=20
+ const volatile bool has_stack_arg =3D true;
+=20
+diff --git a/tools/testing/selftests/bpf/progs/stack_arg_precision.c b/to=
+ols/testing/selftests/bpf/progs/stack_arg_precision.c
+index 29b2f2aea931..460d1872a84c 100644
+--- a/tools/testing/selftests/bpf/progs/stack_arg_precision.c
++++ b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
+@@ -6,7 +6,8 @@
+ #include "../test_kmods/bpf_testmod_kfunc.h"
+ #include "bpf_misc.h"
+=20
+-#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
++#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
++	defined(__BPF_FEATURE_STACK_ARGUMENT)
+=20
+ /* Force kfunc extern BTF generation for inline asm call below.
+  * Uses its own SEC so it's not included as a .text subprog.
+diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/too=
+ls/testing/selftests/bpf/progs/verifier_stack_arg.c
+index 6b596ad63774..b412c311b757 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+@@ -12,7 +12,8 @@ struct {
+ 	__type(value, long long);
+ } map_hash_8b SEC(".maps");
+=20
+-#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
++#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
++	defined(__BPF_FEATURE_STACK_ARGUMENT)
+=20
+ __noinline __used
+ static int subprog_6args(int a, int b, int c, int d, int e, int f)
 --=20
 2.52.0
 
