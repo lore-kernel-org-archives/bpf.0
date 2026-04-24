@@ -1,108 +1,73 @@
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A7E388392
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 14:27:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCA23D88E1;
+	Fri, 24 Apr 2026 14:28:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777040865; cv=none; b=h/yPhKNyXO4ATrmWvzEO3DftHt0Jq+Sp+DfaBJElZmM2ImFVXlxPOI+CQASws6F3X8PeoZh711mdFzHarZyYR1aenyY55yYW1VcKUACm+jZbC6Cf4zyjNdTIxSBKkL1X7fjbqk+OCWqqDOsNjhv1I7eHbUAOx/v11Vdaa0FoDm4=
+	t=1777040927; cv=none; b=Jk+uHlDKMUR15xMO14CogOqAoxLWuyKR2hNIFzECzGwINtRPNeAlleeH3w2cBVhQkW07q5mFcoB8etxq/WSnTSrIST0tyjAJhGuiTVtQQrKItq9cEwyzPVQ0Fsl7hPNBzAgeS89CqQCNG8B4Hey98HRTkBk8Nd4utiQjs5ZuE4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777040865; c=relaxed/simple;
-	bh=yYfzSuomazcnN824aX8C1ftKuOaWl/43R/j2KUmohUY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=aHIXZp+JYHcTNuYSZgTR209Vvqak4YzAlMmlwipXKZTzEGi+yzkWJVUI5gftI3XbGwcTj9JExbLk0u0PNag6ogYRXFRcSchSw0aD3Gx0MWfgq3CtoiBIkjwIBQU3jDd7bNzsMPjgzPN0jFrGoMcXVO20KKNRvpUgMb8Fk4ekrnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m0R4kE0X; arc=none smtp.client-ip=209.85.210.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777040927; c=relaxed/simple;
+	bh=JOLAjUJZxkORvwjV4KMyJPPQMlPzeGI+Xzat5mLfNAY=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=G86wwzcCjRBq/fr7GEb6AQWs1NBDiXjB8p9Pn+EXBzk1s43VNQqIjlP8bBr71KW2GlDJpKlV+zdUDVUY4u5TC2t4CAohcWth7XDsogWJyY/8Zk3Qd2Bm+26WNn2n2Pp2IU0ogHIccoBcyCL4LnFQiYZV/XgA3Su6s07zx+Jbv1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=O/Y3cojL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m0R4kE0X"
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7dcdaf06498so2796187a34.2
-        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 07:27:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777040863; x=1777645663; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RjjH/tLqX6cBtTicu3yUxFefXzN4FEEjhrQgohNngo0=;
-        b=m0R4kE0XFGzz+SBN2Pv8Ni4hjYBPg1esDBzFO1zfDr3Bu7XcexhLuQzLODBZ+gR8F8
-         xlFcWmxPFqZ82YH0ELMJ97VBb4AR7IMwodbCxGDm6GhmdRHC0+tdYSxkUKLUhLLYznCV
-         I1CD5ThB5RAJI/KMDSjMFek2SIBQA0PcaEJXPvwmPrmlBoiOYJF+coeN2MyIMGcQqM9U
-         /E/M9Xu+jhCFVZ8mCKoNwerjlykc26TOTRDGjnQz+9IhZ5dkRXPm5qwsHEuJRfWS/QTe
-         FgRwKPKETu/eodq6K+XVU63UCo3jI5PzZ70ie3vHI2zFI0/cQcTmCcQxiq15zjc2Oo/6
-         Ci8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777040863; x=1777645663;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RjjH/tLqX6cBtTicu3yUxFefXzN4FEEjhrQgohNngo0=;
-        b=ZFN2ehMmWYP7ycW2mt49Wyw7FD7x3rWYGChSpL6VAoPQdOjfyMtFRIBD3/TB7PhxvW
-         wkt46OfErTPbCM7c/WPUPJtsXBwdfGqCca58GD45dZMD7D4YBLAT3ILMR44tuZpj5GGa
-         J8U7SDjMmCPsXxelVuvSRTPWdtCMB4hADaL2FSC3oB0RIj0DATQGHwZoA5cDtj5mQSGr
-         O4cztNM1yHwWNIzVMKGI5ryLyiTorcXBGzJH5Gqgr7QLYNF5IhPwGKngygmoveD5vO8h
-         A0V6CqDtTl5LjuYjql+LRsa6Ufz9inHI3Te/bwmJeU15KmpjYFVArs2cgsgdmHEodwrG
-         Z1Bw==
-X-Forwarded-Encrypted: i=1; AFNElJ/mCkiVVg/b75hzGlurMLDD9f27mqOQNkMtnaB6LyUCbQ3PPKWTn6bY2EqMNEZLDWlvuO4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdpEtIY8bJkV9tCSl5grNVsDlOVzh6U51VfU5Np0XvQ5tixSUA
-	O87G2sl4C6OJam3iB2x/RNVTDpzE2+06BhfxJ8k7jhaRRb2KAIuExO7d
-X-Gm-Gg: AeBDiet+fMJTND0AvK/WingnehSE8dR8x8E6G8RQOxC+tQOvrm2ho2jCdsfhMHZ24kV
-	a6OSkc/M+bnzhzuyrG2qpD0qTMuxWLoCfN48kO4thZTRqCOJkWgYhDU+jQGbpdqXespA92oKsEm
-	tBEv79/C8xqy+u1RyDDX/VS4dLN1Fbof5YZb0WM7b5zp1q2jzzffi5oZ79Z0UOP2ieSHuAZAP3v
-	6U/U/Lp9bAuZBOXQu8PGeq7LtS3SwizG1+ER7UD64AQkNzo2W/tbI421Z2FEjfEpeeKVZ1TkVWM
-	EjZDAcJnVvp0Vm0GmUw0/2EZAYoEURDbViKJGOcFaGSsfqPeyvS7vPnz47PTkROfYQZH18KbY+z
-	XbUgPK6+NwZ5dCIrE3/8acmOa9fON7g/X/rDzVITSXzcF9OYrlZ1hkHFMvbedN7Wi6Imx456etg
-	MCG8dq+E3f+ajdd5QekAKHfuwiFlCdV77+OUBjz35hHZNTCkSj9ncg+m6CMysqo74R+jWGQPvaL
-	p7tInfaZs4V2qjF5PF1V/MzY/Y+
-X-Received: by 2002:a05:6830:8288:b0:7d7:faef:fa0 with SMTP id 46e09a7af769-7dc94d9b166mr20671382a34.3.1777040863239;
-        Fri, 24 Apr 2026 07:27:43 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:71::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dcd5408b5asm10067461a34.11.2026.04.24.07.27.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Apr 2026 07:27:42 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="O/Y3cojL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C434C19425;
+	Fri, 24 Apr 2026 14:28:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1777040927;
+	bh=JOLAjUJZxkORvwjV4KMyJPPQMlPzeGI+Xzat5mLfNAY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=O/Y3cojLauCIDvWwjW8Rm82ldPv3YcF1tPNTv5blC/JP9MAXmk+S1E/ixk8QGUnSZ
+	 uNi6C8iJUYmCjyfO1nsdEVAGvuO8qVfAIFXa6DJd354zWaVct5od0w3QdENXrPAFNb
+	 ad9f0JF2uEcsiwTOBisrjCjaT8bU4mViiybAgp7U=
+Date: Fri, 24 Apr 2026 07:28:45 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+ bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
+ will@kernel.org, peterz@infradead.org, mark.rutland@arm.com,
+ harisokn@amazon.com, cl@gentwo.org, ast@kernel.org, rafael@kernel.org,
+ daniel.lezcano@linaro.org, memxor@gmail.com, zhenglifeng1@huawei.com,
+ xueshuai@linux.alibaba.com, rdunlap@infradead.org,
+ david.laight.linux@gmail.com, joao.m.martins@oracle.com,
+ boris.ostrovsky@oracle.com, konrad.wilk@oracle.com, ashok.bhat@arm.com
+Subject: Re: [PATCH v11 00/14] barrier: Add
+ smp_cond_load_{relaxed,acquire}_timeout()
+Message-Id: <20260424072845.5eba94c2d732204f143b8629@linux-foundation.org>
+In-Reply-To: <20260408122538.3610871-1-ankur.a.arora@oracle.com>
+References: <20260408122538.3610871-1-ankur.a.arora@oracle.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 24 Apr 2026 07:27:41 -0700
-Message-Id: <DI1GETNIDN91.BJPVEP02OODT@gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/4] bpf: replace min/max fields with struct
- cnum{32,64}
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, <bpf@vger.kernel.org>,
- <ast@kernel.org>
-Cc: <andrii@kernel.org>, <daniel@iogearbox.net>, <martin.lau@linux.dev>,
- <kernel-team@fb.com>, <yonghong.song@linux.dev>, <shung-hsi.yu@suse.com>,
- <paul.chaignon@gmail.com>, <harishankar.vishwanathan@gmail.com>
-X-Mailer: aerc
-References: <20260424-cnums-everywhere-rfc-v1-v2-0-57091924c9d7@gmail.com>
-In-Reply-To: <20260424-cnums-everywhere-rfc-v1-v2-0-57091924c9d7@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri Apr 24, 2026 at 1:17 AM PDT, Eduard Zingerman wrote:
-> This RFC replaces s64, u64, s32, u32 scalar range domains tracked by
-> verifier by a pair of circular numbers (cnums): one for 64-bit domain
-> and another for 32-bit domain. Each cnum represents a range as a
-> single arc on the circular number line, from which signed and unsigned
-> bounds are derived on demand. See also wrapped intervals
-> representation as in [1].
->
-> The use of such representation simplifies arithmetic and conditions
-> handling in verifier.c and allows to express 32 <-> 64 bit deductions
-> in a more mathematically rigorous way.
->
-> [1] https://jorgenavas.github.io/papers/ACM-TOPLAS-wrapped.pdf
->
-> Changelog
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D
-> RFCv1 -> v2:
-> - Dropped RFC tag.
-> - Dropped cnum{32,64}_mul(), too much complexity and no veristat
->   or selftests gains.
+On Wed,  8 Apr 2026 17:55:24 +0530 Ankur Arora <ankur.a.arora@oracle.com> wrote:
 
-Nice. Less complexity the better.
-I think it's also strong signal that _div(), _mod() versions are not
-needed either.
+> The core kernel often uses smp_cond_load_{relaxed,acquire}() to spin
+> on condition variables with architectural primitives used to avoid
+> hammering the relevant cachelines.
+> 
+> ...
+> 
+> Accordingly add two interfaces (with their generic and arm64 specific
+> implementations):
+> 
+>    smp_cond_load_relaxed_timeout(ptr, cond_expr, time_expr, timeout)
+>    smp_cond_load_acquire_timeout(ptr, cond_expr, time_expr, timeout)
+> 
+> Also add tif_need_resched_relaxed_wait() which wraps the polling
+> pattern and its scheduler specific details in poll_idle().
+> In addition add atomic_cond_read_*_timeout(),
+> atomic64_cond_read_*_timeout(), and atomic_long wrappers.
 
+AI review has been busy:
+	https://sashiko.dev/#/patchset/20260408122538.3610871-1-ankur.a.arora@oracle.com
