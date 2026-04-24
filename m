@@ -1,109 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920F417D6
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 09:00:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C731B87C9
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 09:12:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777021227; cv=none; b=hqXUREttDfepET5TR2qCf1GCK7PqXdtH+vhORvMTQA3T9RZmQzJoxz04buq3bs095EL6tNaxvxRO0/y+DgM8/9CpcZmfY/DNcC/e6pUnObhFegcqGfSg22C6YSKmBly88E2Zxjc+sl7c0eN3Ehc1CQrd2Dyd7SKCoJHWdkN3Gck=
+	t=1777021965; cv=none; b=as4zyGEAf4NaVJWFyHjJW2QVVQ2EWvMsTXTH1vXFdDsOK2sizONrfS3idhlgElxbq4k+FSMMs79tnZXSz6rnR0QKfU/6KBPzEU2PoNveX7rJlR/UGMvFKtW7CL9+bxJz9b/ngv4RZ+d+ZVRyuIzLXjouMO0IGFuFuBNBBqS9uq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777021227; c=relaxed/simple;
-	bh=GxajJgnO1HL5L+b4v5julf2nQejLhPG1TAyiXEuet1A=;
+	s=arc-20240116; t=1777021965; c=relaxed/simple;
+	bh=Z2FVXRnIbE7p/tyiKf6hDfKyvNxJBvoyDYvcJo4QjMg=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=seaPzMjCE0YSJlZNGX3kNfvDGMnY1N5bL2ROj54wJ5afcuXtE3MJjtMX7YOITP/f5diU4/5Td6S/5cxS79pM/feTUZYse76MyDV1Bzfomlq43qMVnkr1vogarsusucYzCq+hvKD0tw0tP7W3rhhn0b5ZNs94G7sfYhpXVuM5bK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PJLm6UtS; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=JKvbr1zLGfO4vAMD4kYopHZycExVDhNbBTVhLyz1d4fkq0rMEvTNAOucCTs+r2MNxDCUDFxZs5Qhf51O5YJZ9j01uPeuIWikDz1y7/RpMUddWJ00HgzNQoGuaLSJaEKxP7JzMgAnwXojpzqexTJSorMeHCV0LZBRQqQrPw19lyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lCB25Jdl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PJLm6UtS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18FEAC19425;
-	Fri, 24 Apr 2026 09:00:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lCB25Jdl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09E05C19425;
+	Fri, 24 Apr 2026 09:12:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777021227;
-	bh=GxajJgnO1HL5L+b4v5julf2nQejLhPG1TAyiXEuet1A=;
+	s=k20201202; t=1777021965;
+	bh=Z2FVXRnIbE7p/tyiKf6hDfKyvNxJBvoyDYvcJo4QjMg=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=PJLm6UtSheo649E493MZPxTGLItjxs9fWdDKphakODFzWneHUK793i6aZK/TkOQ2P
-	 AtDJd3EQndsB8Q+Y3qFaDtbmLwqXV6nhzduLUhol+Us5MSyDvYpZY8NSmyPabqdq8z
-	 4HhShdQrdeVIiDVhGm0Pk9guk9ZAr6zgKZi3ZBncTlcMK1biHMa4de9cr3TiP8sz4r
-	 XaK6HKKos/hAGiA/AuwQRncJNdfdAbgVilu2qQRqcDa6FQyBBdv5RDslTACRUQMZ/a
-	 eNDx5pucZ3XGN5jKlYbW1NE3/VVJ329yZWcNhzxGsTyuj67qM4kAbDydbb3CggmWHV
-	 jjH93IBGnJz8A==
-Content-Type: multipart/mixed; boundary="===============0689777932358392931=="
+	b=lCB25JdlgW5OsF8zVgwl2gu582//aSCzHG3Npntrla6j0UvlMC6xuurf0+cdTMT/l
+	 EoabOyB+r5o+NJVUBJwAev7zCGMdYFe9PU/sPKtmDD8fj8n6+yTMl8eEplDkhe3s7B
+	 2E7YZInrs2B6UkvnYqHdAzwerzaHGPa2Lc49pqE8+4PTua4X/3mFtMDnPIlnob9Gew
+	 063OlzHecBCw9CJV7dCsh1me6CezvS8LIE6wjO+7Pm+f6KWh04qK3uMBT+PV6Q9yqY
+	 1IPtdKxxDw60kMrMuhRQCU9wRPT7GCQ+x0FK5T/5aPSpMILirZ8R3JpwaND6TMGJrS
+	 ot2hh9JryN50w==
+Content-Type: multipart/mixed; boundary="===============0361180916456202118=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a42da1d14e01371ec3a05d5e1d43067428195d983703523e373497834bb70796@mail.kernel.org>
-In-Reply-To: <20260424-cnums-everywhere-rfc-v1-v2-1-57091924c9d7@gmail.com>
-References: <20260424-cnums-everywhere-rfc-v1-v2-1-57091924c9d7@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/4] bpf: representation and basic operations on circular numbers
+Message-Id: <6578efe1e2d2932d3c590871f0aa9d65e3bdada9d5234297c627b33506c7b1e2@mail.kernel.org>
+In-Reply-To: <20260424-cnums-everywhere-rfc-v1-v2-3-57091924c9d7@gmail.com>
+References: <20260424-cnums-everywhere-rfc-v1-v2-3-57091924c9d7@gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/4] bpf: replace min/max fields with struct cnum{32,64}
 From: bot+bpf-ci@kernel.org
 To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org
 Cc: andrii@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,shung-hsi.yu@suse.com,paul.chaignon@gmail.com,harishankar.vishwanathan@gmail.com,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 24 Apr 2026 09:00:27 +0000 (UTC)
+Date: Fri, 24 Apr 2026 09:12:45 +0000 (UTC)
 
---===============0689777932358392931==
-Content-Type: text/plain; charset="utf-8"
+--===============0361180916456202118==
+Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
 
-PiBkaWZmIC0tZ2l0IGEva2VybmVsL2JwZi9jbnVtLmMgYi9rZXJuZWwvYnBmL2NudW0uYwo+IG5l
-dyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMDAwLi44NjE0MmNiMmFlZTUKPiAt
-LS0gL2Rldi9udWxsCj4gKysrIGIva2VybmVsL2JwZi9jbnVtLmMKClsgLi4uIF0KCj4gQEAgLTAs
-MCArMSwxMjAgQEAKClsgLi4uIF0KCj4gKy8qCj4gKyAqIFN1cHBvc2UgJ2EnIGFuZCAnYicgYXJl
-IGxhaWQgb3V0IGFzIGZvbGxvd3M6Cj4gKyAqCj4gKyAqICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDY0LWJpdCBudW1iZXIgYXhpcyAtLS0+
-Cj4gKyAqCj4gKyAqIE4qMl4zMiAgICAgICAgICAgICAgICAgICAoTisxKSoyXjMyICAgICAgICAg
-ICAgICAgIChOKzIpKjJeMzIgICAgICAgICAgICAgICAgKE4rMykqMl4zMgo+ICsgKiB8fC0tLS0t
-LXwtLS18PT09PT18LS0tLS0tLXx8LS0tLS0tLS0tLXw9PT09PXwtLS0tLS0tfHwtLS0tLS0tLS0t
-fD09PT09fC0tLS18LS18fAo+ICsgKiAgICAgICAgIHwgICB8PCBiID58ICAgICAgICAgICAgICAg
-ICAgIHw8IGIgPnwgICAgICAgICAgICAgICAgICAgfDwgYiA+fCAgICB8Cj4gKyAqICAgICAgICAg
-fCAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICB8ICAgIHwKPiArICogICAgICAgICB8PC0tKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LSBhIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSstLS0+fAo+ICsgKiAgICAgICAgICAgICB8
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-fAo+ICsgKiAgICAgICAgICAgICB8PC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tIHQgLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0+fAo+ICsgKgo+ICsgKiBJbiBzdWNoIGEgY2FzZSBpdCBpcyBw
-b3NzaWJsZSB0byBpbmZlciBhIG1vcmUgdGlnaHQgcmVwcmVzZW50YXRpb24gdAo+ICsgKiBzdWNo
-IHRoYXQg4oiAIHYg4oiIIGEsICh1MzIpdiDiiIggYjogdiDiiIggdC4KClRoZSBjb21taXQgbWVz
-c2FnZSBkZXNjcmliZXMgdGhpcyBzcGVjaWZpY2F0aW9uIGFzICLiiIAgdiDiiIggYSwgKHUzMil2
-IOKIiCBiOgp2IOKIiCB0LiIgVGhpcyB0eXBvIHdhcyBpZGVudGlmaWVkIGJ5IHRoZSBDSSBib3Qg
-YW5kIHlvdSBhY2tub3dsZWRnZWQgaXQKaW4gdjEgcmV2aWV3LCBhbmQgdGhlIGNvZGUgY29tbWVu
-dCB3YXMgZml4ZWQgdG8gdXNlICIodTMyKXYiIGNvcnJlY3RseS4KSG93ZXZlciwgdGhlIGNvbW1p
-dCBtZXNzYWdlIHN0aWxsIHNob3dzICIodTMyKXYiIGluc3RlYWQgb2YgdGhlCmluY29ycmVjdCAi
-KHUzMilhIiBmcm9tIHYxLiBJcyB0aGlzIGluY29uc2lzdGVuY3kgaW50ZW50aW9uYWwsIG9yIHNo
-b3VsZAp0aGUgY29tbWl0IG1lc3NhZ2UgbWF0Y2ggdGhlIGNvcnJlY3RlZCBzcGVjaWZpY2F0aW9u
-PwoKTm90ZTogVGhlIENJIGJvdCBwb2ludGVkIG91dCB0aGF0ICIodTMyKWEg4oiIIGIiIGRvZXNu
-J3QgZGVwZW5kIG9uIHYsCm1ha2luZyB0aGUgcXVhbnRpZmllciB0cml2aWFsLiBZb3UgYWdyZWVk
-IGFuZCB0aGUgY29kZSB3YXMgZml4ZWQsIGJ1dCB0aGUKZGVzY3JpcHRpb24gaW4gdGhlIGNvbW1p
-dCBtZXNzYWdlIGFwcGVhcnMgdG8gYWxyZWFkeSBoYXZlIHRoZSBjb3JyZWN0CnZlcnNpb24uCgo+
-ICsgKi8KPiArc3RydWN0IGNudW02NCBjbnVtNjRfY251bTMyX2ludGVyc2VjdChzdHJ1Y3QgY251
-bTY0IGEsIHN0cnVjdCBjbnVtMzIgYikKClsgLi4uIF0KCj4gZGlmZiAtLWdpdCBhL2tlcm5lbC9i
-cGYvY251bV9kZWZzLmggYi9rZXJuZWwvYnBmL2NudW1fZGVmcy5oCj4gbmV3IGZpbGUgbW9kZSAx
-MDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwMDAuLjFhYTA1NTRiZjE5Zgo+IC0tLSAvZGV2L251bGwK
-PiArKysgYi9rZXJuZWwvYnBmL2NudW1fZGVmcy5oCgpbIC4uLiBdCgo+IEBAIC0wLDAgKzEsMjMz
-IEBACgpbIC4uLiBdCgo+ICsvKgo+ICsgKiBJZiB0aGVyZSBleGlzdHMgYSBjbnVtIHJlcHJlc2Vu
-dGluZyBhbiBpbnRlcnNlY3Rpb24gb2YgY251bXMgJ2EnIGFuZCAnYicsCj4gKyAqIHJldHVybnMg
-dGhpcyBpbnRlcnNlY3Rpb24gaW4gJ291dCcgYW5kIHJldHVybnMgdHJ1ZS4KPiArICogSWYgc3Vj
-aCBjbnVtIGRvZXMgbm90IGV4aXN0Ogo+ICsgKiAtIGlmIGludGVyc2VjdGlvbiBpcyBlbXB0eSwg
-cmV0dXJucyBmYWxzZS4KPiArICogLSBpZiBpbnRlcnNlY3Rpb24gcHJvZHVjZXMgdHdvIHJhbmdl
-cywgcmV0dXJucyBzbWFsbGVyIG9mCj4gKyAqICAgJ2EnIG9yICdiJyBpbiAnb3V0Jy4KPiArICov
-Cj4gK3N0cnVjdCBjbnVtX3QgRk4oaW50ZXJzZWN0KShzdHJ1Y3QgY251bV90IGEsIHN0cnVjdCBj
-bnVtX3QgYikKCkRvZXMgdGhpcyBjb21tZW50IG1hdGNoIHRoZSBhY3R1YWwgZnVuY3Rpb24gc2ln
-bmF0dXJlPyBUaGUgY29tbWVudApkZXNjcmliZXMgcmV0dXJuaW5nICJ0aGlzIGludGVyc2VjdGlv
-biBpbiAnb3V0JyBhbmQgcmV0dXJucyB0cnVlIiBhbmQKInJldHVybnMgZmFsc2UiIGZvciBlbXB0
-eSBpbnRlcnNlY3Rpb24sIHdoaWNoIHN1Z2dlc3RzIGFuIG91dHB1dCBwYXJhbWV0ZXIKJ291dCcg
-YW5kIGEgYm9vbCByZXR1cm4gdHlwZS4gSG93ZXZlciwgdGhlIGZ1bmN0aW9uIHNpZ25hdHVyZSBz
-aG93cwooc3RydWN0IGNudW1fdCBhLCBzdHJ1Y3QgY251bV90IGIpIHdpdGggbm8gJ291dCcgcGFy
-YW1ldGVyLCBhbmQgcmV0dXJucwpzdHJ1Y3QgY251bV90IGJ5IHZhbHVlLiBTaG91bGQgdGhlIGNv
-bW1lbnQgYmUgdXBkYXRlZCB0byBkZXNjcmliZSB0aGUKYWN0dWFsIHJldHVybiBjb252ZW50aW9u
-IHdoZXJlIHRoZSBpbnRlcnNlY3Rpb24gY251bSBpcyByZXR1cm5lZCBkaXJlY3RseSwKRU1QVFkg
-aXMgcmV0dXJuZWQgZm9yIGVtcHR5IGludGVyc2VjdGlvbiwgYW5kIHRoZSBzbWFsbGVyIHJhbmdl
-IGlzIHJldHVybmVkCndoZW4gdGhlIGludGVyc2VjdGlvbiBwcm9kdWNlcyB0d28gZGlzam9pbnQg
-YXJjcz8KCgotLS0KQUkgcmV2aWV3ZWQgeW91ciBwYXRjaC4gUGxlYXNlIGZpeCB0aGUgYnVnIG9y
-IGVtYWlsIHJlcGx5IHdoeSBpdCdzIG5vdCBhIGJ1Zy4KU2VlOiBodHRwczovL2dpdGh1Yi5jb20v
-a2VybmVsLXBhdGNoZXMvdm10ZXN0L2Jsb2IvbWFzdGVyL2NpL2NsYXVkZS9SRUFETUUubWQKCkNJ
-IHJ1biBzdW1tYXJ5OiBodHRwczovL2dpdGh1Yi5jb20va2VybmVsLXBhdGNoZXMvYnBmL2FjdGlv
-bnMvcnVucy8yNDg3OTk3ODUzNA==
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index b91d2789e7b9..34900247efba 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
---===============0689777932358392931==--
+[ ... ]
+
+> @@ -2031,340 +2029,17 @@ static void __update_reg_bounds(struct bpf_reg_state *reg)
+>  /* Uses signed min/max values to inform unsigned, and vice-versa */
+>  static void deduce_bounds_32_from_64(struct bpf_reg_state *reg)
+>  {
+> -	/* If upper 32 bits of u64/s64 range don't change, we can use lower 32
+> -	 * bits to improve our u32/s32 boundaries.
+
+[ ... ]
+
+> -	}
+> +	cnum32_intersect_with(&reg->r32, cnum32_from_cnum64(reg->r64));
+>  }
+
+The comment on the function still says "Uses signed min/max values to
+inform unsigned, and vice-versa" but the implementation is now just a
+single call to cnum32_intersect_with() that projects a 64-bit circular
+number onto the 32-bit subregister. With the cnum abstraction, signed
+and unsigned views are derived on-demand from a unified representation,
+so the cross-domain signed<->unsigned deduction described in the comment
+no longer happens. Should this comment be updated to describe the actual
+operation (e.g., "Project 64-bit range onto 32-bit subregister range")?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24879978534
+--===============0361180916456202118==--
