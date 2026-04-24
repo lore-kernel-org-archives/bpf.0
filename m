@@ -1,85 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C731B87C9
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 09:12:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B5D35AC16;
+	Fri, 24 Apr 2026 10:23:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777021965; cv=none; b=as4zyGEAf4NaVJWFyHjJW2QVVQ2EWvMsTXTH1vXFdDsOK2sizONrfS3idhlgElxbq4k+FSMMs79tnZXSz6rnR0QKfU/6KBPzEU2PoNveX7rJlR/UGMvFKtW7CL9+bxJz9b/ngv4RZ+d+ZVRyuIzLXjouMO0IGFuFuBNBBqS9uq8=
+	t=1777026185; cv=none; b=ig5KNE5ouPr/1wHDpsPGInmaEyOLNhDN6VhmOFPV8s54OLeDLJQFzEQclGcWHPF3HM3+qM1aSEYEPjxuZlokNoQ6JvyhwWde38xEOiRwm06FIf3w6mAf9jOTcSoZAhv2/ChoLRaGfOqknWlwJwPkISCHeRm5atD2CbAfwWuJuu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777021965; c=relaxed/simple;
-	bh=Z2FVXRnIbE7p/tyiKf6hDfKyvNxJBvoyDYvcJo4QjMg=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=JKvbr1zLGfO4vAMD4kYopHZycExVDhNbBTVhLyz1d4fkq0rMEvTNAOucCTs+r2MNxDCUDFxZs5Qhf51O5YJZ9j01uPeuIWikDz1y7/RpMUddWJ00HgzNQoGuaLSJaEKxP7JzMgAnwXojpzqexTJSorMeHCV0LZBRQqQrPw19lyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lCB25Jdl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777026185; c=relaxed/simple;
+	bh=/smHRgVH2uUcf0Bx7y3tGTkCASaVbYrlYycSncycJDk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=HbwXSg06ivDoBXb5yHWFsIW8c9TCdv9l9VDEu/J5Ih70VwrdpEdsS9IESw/UYTllNr5Do1qJZkw0t2gmNuA0PSp9f5oskrgjeKZjxqLB1BP1DFbASn4E6vC4CMp1CCPhOt5+sGxTgE53M/BHNbHHR62Z6LuDjApyUnp0DipJuCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=bKxbAZLs; arc=none smtp.client-ip=220.197.31.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lCB25Jdl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09E05C19425;
-	Fri, 24 Apr 2026 09:12:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777021965;
-	bh=Z2FVXRnIbE7p/tyiKf6hDfKyvNxJBvoyDYvcJo4QjMg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=lCB25JdlgW5OsF8zVgwl2gu582//aSCzHG3Npntrla6j0UvlMC6xuurf0+cdTMT/l
-	 EoabOyB+r5o+NJVUBJwAev7zCGMdYFe9PU/sPKtmDD8fj8n6+yTMl8eEplDkhe3s7B
-	 2E7YZInrs2B6UkvnYqHdAzwerzaHGPa2Lc49pqE8+4PTua4X/3mFtMDnPIlnob9Gew
-	 063OlzHecBCw9CJV7dCsh1me6CezvS8LIE6wjO+7Pm+f6KWh04qK3uMBT+PV6Q9yqY
-	 1IPtdKxxDw60kMrMuhRQCU9wRPT7GCQ+x0FK5T/5aPSpMILirZ8R3JpwaND6TMGJrS
-	 ot2hh9JryN50w==
-Content-Type: multipart/mixed; boundary="===============0361180916456202118=="
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="bKxbAZLs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+	s=s110527; h=From:Date:Subject:MIME-Version:Content-Type:
+	Message-Id:To; bh=qHrxNLSOcJ6r263jUyXsEigXpI69D7O6xkhPLCHj+K0=;
+	b=bKxbAZLsYFNt4fwi8XXXew0GkdnO5C3jtJa8iSo8pZXiKPGzrQRg1YAnm40g3j
+	GXTCtsVy0dNP4WkfjvnFFivZliCpRwSI4G8HOWPi4Imp11x1r0rVlDWZKvbd3QDQ
+	z/gGYgwvt55jrtED3UXn4dqhoCQu4WhnFu4rQE3YqKn+0=
+Received: from [127.0.1.1] (unknown [])
+	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wD3x7dwROtpjpPtAA--.18658S2;
+	Fri, 24 Apr 2026 18:22:41 +0800 (CST)
+From: Zhao Mengmeng <zhaomzhao@126.com>
+Date: Fri, 24 Apr 2026 18:22:35 +0800
+Subject: [PATCH] HID: bpf: Sync KF_SLEEPABLE flags in
+ hid_bpf_syscall_kfuncs set
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6578efe1e2d2932d3c590871f0aa9d65e3bdada9d5234297c627b33506c7b1e2@mail.kernel.org>
-In-Reply-To: <20260424-cnums-everywhere-rfc-v1-v2-3-57091924c9d7@gmail.com>
-References: <20260424-cnums-everywhere-rfc-v1-v2-3-57091924c9d7@gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/4] bpf: replace min/max fields with struct cnum{32,64}
-From: bot+bpf-ci@kernel.org
-To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org
-Cc: andrii@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,shung-hsi.yu@suse.com,paul.chaignon@gmail.com,harishankar.vishwanathan@gmail.com,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 24 Apr 2026 09:12:45 +0000 (UTC)
-
---===============0361180916456202118==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260424-btf-define-v1-1-0f52dffad5aa@kylinos.cn>
+X-B4-Tracking: v=1; b=H4sIAGpE62kC/yXMwQ5AMBCE4VeRPWvCRiq8ijhUDdahpEUk4t0Vx
+ 2+S+S8K8IJAdXKRxyFBFheRpwnZybgRSvpo4ox1VnChum1QPQZxUJpZV6UxsMgpHlYf9/OLNe3
+ vsHcz7PYW6L4fI/PV424AAAA=
+X-Change-ID: 20260424-btf-define-622697aaece1
+To: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, Zhao Mengmeng <zhaomengmeng@kylinos.cn>
+X-Mailer: b4 0.15.2
+X-CM-TRANSID:_____wD3x7dwROtpjpPtAA--.18658S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Kw43CryDAw48tw1rtry5Jwb_yoW8CFW3pa
+	n7trWUCF18tw4rJa17CF45KFy5u340vw43ury7Cay5uan0vF98Xw1IgFy8Zasxtry8Gr4U
+	Xr10ywsrZr12k37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UrKsbUUUUU=
+X-CM-SenderInfo: 52kd0zp2kd0qqrswhudrp/xtbBlhGC+WnrRHFYqQAA36
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index b91d2789e7b9..34900247efba 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+From: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
 
-[ ... ]
+Pahole intersects flags across BTF_ID_FLAGS() occurrences, so omitting
+KF_SLEEPABLE may drops the flags globally. sync this flags in
+hid_bpf_syscall_kfuncs set to enforce consistency and safety.
 
-> @@ -2031,340 +2029,17 @@ static void __update_reg_bounds(struct bpf_reg_state *reg)
->  /* Uses signed min/max values to inform unsigned, and vice-versa */
->  static void deduce_bounds_32_from_64(struct bpf_reg_state *reg)
->  {
-> -	/* If upper 32 bits of u64/s64 range don't change, we can use lower 32
-> -	 * bits to improve our u32/s32 boundaries.
+Link: https://lore.kernel.org/sched-ext/177693500312.275653.17323765149266875001.b4-reply@b4/
+Signed-off-by: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
+---
+ drivers/hid/bpf/hid_bpf_dispatch.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-[ ... ]
-
-> -	}
-> +	cnum32_intersect_with(&reg->r32, cnum32_from_cnum64(reg->r64));
->  }
-
-The comment on the function still says "Uses signed min/max values to
-inform unsigned, and vice-versa" but the implementation is now just a
-single call to cnum32_intersect_with() that projects a 64-bit circular
-number onto the 32-bit subregister. With the cnum abstraction, signed
-and unsigned views are derived on-demand from a unified representation,
-so the cross-domain signed<->unsigned deduction described in the comment
-no longer happens. Should this comment be updated to describe the actual
-operation (e.g., "Project 64-bit range onto 32-bit subregister range")?
-
+diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
+index 50c7b45c59e3..62db80ead86e 100644
+--- a/drivers/hid/bpf/hid_bpf_dispatch.c
++++ b/drivers/hid/bpf/hid_bpf_dispatch.c
+@@ -585,11 +585,11 @@ static const struct btf_kfunc_id_set hid_bpf_kfunc_set = {
+ 
+ /* for syscall HID-BPF */
+ BTF_KFUNCS_START(hid_bpf_syscall_kfunc_ids)
+-BTF_ID_FLAGS(func, hid_bpf_allocate_context, KF_ACQUIRE | KF_RET_NULL)
+-BTF_ID_FLAGS(func, hid_bpf_release_context, KF_RELEASE)
+-BTF_ID_FLAGS(func, hid_bpf_hw_request)
+-BTF_ID_FLAGS(func, hid_bpf_hw_output_report)
+-BTF_ID_FLAGS(func, hid_bpf_input_report)
++BTF_ID_FLAGS(func, hid_bpf_allocate_context, KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE)
++BTF_ID_FLAGS(func, hid_bpf_release_context, KF_RELEASE | KF_SLEEPABLE)
++BTF_ID_FLAGS(func, hid_bpf_hw_request, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, hid_bpf_hw_output_report, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, hid_bpf_input_report, KF_SLEEPABLE)
+ BTF_KFUNCS_END(hid_bpf_syscall_kfunc_ids)
+ 
+ static const struct btf_kfunc_id_set hid_bpf_syscall_kfunc_set = {
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+base-commit: a67bb21a5fc478443d6db490c7049e9aeeb92bd4
+change-id: 20260424-btf-define-622697aaece1
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24879978534
---===============0361180916456202118==--
+Best regards,
+--  
+Zhao Mengmeng <zhaomengmeng@kylinos.cn>
+
