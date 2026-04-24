@@ -1,220 +1,132 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A78333D501
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 20:45:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E3230B53C
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 20:45:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777063545; cv=none; b=ZJW3yVUiE4A0gMaBeuNP2AZbM76cFwrsaPnC5NuaxFW/V/l2y3HHi1ux7mP1WSJlkfqGlMrjdNe879+QifL0XV+LjaO4Pr3Un1VHTIkpN7QRlQ3ocJvQ3gDo+5Bl+IMKSXtbu0qcaFY0UAibVxMoJU5t7PEv1X6DymUazYL6RYg=
+	t=1777063546; cv=none; b=DtDWiHzowPIoXq5LyaKcrMNwyvZpWN6P3HfBMc8iQyeJCGSvw7BEObbidCIO5IL1KqVAKBuWIuwubcHxX9p2qAaVSNRrYq9P1iQUtzJF3YtbtkdirlBFLBEt93mYPZ5BORCWkfAlZau193uckRsTW0pC/OAdXkQPv916nMqDAjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777063545; c=relaxed/simple;
-	bh=BgfRE1EzM89l5kQIH4JznjmB50FqpjBWsAzeWprlsXU=;
+	s=arc-20240116; t=1777063546; c=relaxed/simple;
+	bh=8KrujyeuGHnZJ87Ec7xMmmBC03h74UsCsBdFeK8syFs=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=E9U9Zf84mHYzpjeGnD2VAtC9JNWWM1spwflu5E0T4lCoez9aLcxIxCPtBt4TJLzs+jzWnwc6HRD5ox9FYW7cHRpJTiQ9z/G22s/q5b0eJ3z7ODMMmWDl4g8+jePr+nWpSqpRocJJ5hA0dnYLPbZoFUbf5fD6cvUDKWTumS5nCyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y2lnw/Q7; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=mKd1R7x9Gmlsg72HK0BXdV/bmVUiQP8PFB9SumJS75BtdpcdGwyXu3Aji7ikwGkhRj1qVk1FMgN1K9epVP2vajzH7xaUHah+4HUPTvYJ1HH6JFnXFIw2flnd3jBVUs0c9UxXA3odCYGq8qs5Ap38K3PBxcoV/iFGDlcVe5edOuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H5gNVYZl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y2lnw/Q7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C0ACC19425;
-	Fri, 24 Apr 2026 20:45:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H5gNVYZl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16FA6C19425;
+	Fri, 24 Apr 2026 20:45:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777063544;
-	bh=BgfRE1EzM89l5kQIH4JznjmB50FqpjBWsAzeWprlsXU=;
+	s=k20201202; t=1777063546;
+	bh=8KrujyeuGHnZJ87Ec7xMmmBC03h74UsCsBdFeK8syFs=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=Y2lnw/Q7urN8RPvYCswYSqSSurW6WGYvbUpIB6QQJrgocqX0XJQV13xjzkgMbwPTy
-	 iKRtSZGPW4z0uWK6xQhbjIcKFYjhw5YhaIVujKvkdJERYaQoauMqRRlTyAIiyLQJhG
-	 rJQOTQ/7qiRW95eBEJkfjfo1dDConxozpfdvLDGxOauPLFgTfWp8slzoiMoUzVBxt9
-	 UNoiYeTqGg1APSXBoOg0I7YIHMoXLGc+xTRuCIQFaPRW/00PJ//YC1HERDL1L6ppy9
-	 GlvCfUDUrSSvhkC0wYGyFHyQ0HBt9hu25DKzSjEaMHtuV4dDA0G3mOGCh/0IQKJ7tO
-	 of5B4wmD5XDkg==
-Content-Type: multipart/mixed; boundary="===============7580031636570356645=="
+	b=H5gNVYZlZN2p8/dVz76kX+lWSgCr3l7ENQJYiWzqZX/7OGkUUvATzSGRn4g6PdDbi
+	 tnyIZYKQ8pkcp4f2NR5ZAYnKTzwE1EkDLf71jeCiPTVvzHh8/WZOdZU0510ITc0mdt
+	 B2cTSD5TclGDsH2CT5dRRdO6mT1wgbkeXl1wiw27wj68u80uxiAd7BUBsSirWvw/XB
+	 HDXZzOhvmrCUsEIUH59zD7KZH13XS24a2dht4+r5I7nljNj4GdWgWKye04FVSYhIGU
+	 Wf15sf0f8a1qCeeELQu+D05VLzMMOxhiapqkyft92/nVkPbJl342eYKuDm+XsHewWJ
+	 eVEKPxz11qAqQ==
+Content-Type: multipart/mixed; boundary="===============7764502755757521332=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <18e1b5a723d1f81938bb6d2676246a514df7929f58161bfec9db308c85230aa4@mail.kernel.org>
-In-Reply-To: <20260424-rhash-v3-2-d0fa0ce4379b@meta.com>
-References: <20260424-rhash-v3-2-d0fa0ce4379b@meta.com>
-Subject: Re: [PATCH bpf-next v3 02/10] rhashtable: Add rhashtable_walk_enter_from()
+Message-Id: <8168a9eb342bfdbe138aa31e7c07ea811e9ad4c413e15f5575a4874d2f4dca9e@mail.kernel.org>
+In-Reply-To: <20260424-rhash-v3-1-d0fa0ce4379b@meta.com>
+References: <20260424-rhash-v3-1-d0fa0ce4379b@meta.com>
+Subject: Re: [PATCH bpf-next v3 01/10] bpf: Implement resizable hashmap basic functions
 From: bot+bpf-ci@kernel.org
 To: mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,kafai@meta.com,kernel-team@meta.com,eddyz87@gmail.com,memxor@gmail.com,herbert@gondor.apana.org.au
-Cc: yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 24 Apr 2026 20:45:44 +0000 (UTC)
+Cc: yatsenko@meta.com,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 24 Apr 2026 20:45:46 +0000 (UTC)
 
---===============7580031636570356645==
+--===============7764502755757521332==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/lib/rhashtable.c b/lib/rhashtable.c
-> --- a/lib/rhashtable.c
-> +++ b/lib/rhashtable.c
-> @@ -693,6 +693,47 @@ void rhashtable_walk_enter(struct rhashtable *ht, struct rhashtable_iter *iter)
->  EXPORT_SYMBOL_GPL(rhashtable_walk_enter);
->
->  /**
-> + * rhashtable_walk_enter_from - Initialise a walk starting at a key's bucket
-> + * @ht:		Table to walk over
-> + * @iter:	Hash table iterator
-> + * @key:	Key whose bucket to start from
-> + * @params:	Hash table parameters
-> + *
-> + * Like rhashtable_walk_enter(), but positions the iterator at the bucket
-> + * containing @key.  If @key is not present in the main table, the iterator is
-> + * positioned at the beginning.
-> + *
-> + * Same constraints as rhashtable_walk_enter() apply.
-> + */
-> +void rhashtable_walk_enter_from(struct rhashtable *ht,
-> +				struct rhashtable_iter *iter,
-> +				const void *key,
-> +				const struct rhashtable_params params)
-> +				__must_hold(RCU)
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index 3dd9b4924ae4..a37bd2a7b30f 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+
+[ ... ]
+
+> +static int rhtab_map_check_btf(struct bpf_map *map, const struct btf *btf,
+> +			       const struct btf_type *key_type,
+> +			       const struct btf_type *value_type)
 > +{
-> +	struct bucket_table *tbl;
-> +	struct rhash_head *he;
+> +	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
 > +
-> +	rhashtable_walk_enter(ht, iter);
-> +
-> +	if (!key)
-> +		return;
-> +
-> +	tbl = iter->walker.tbl;
-> +	if (!tbl)
-> +		return;
-> +
-> +	he = __rhashtable_lookup_one(ht, tbl, key, params,
-> +				     RHT_LOOKUP_NORMAL);
-> +	if (!he)
-> +		return;
-
-What happens if the table is currently resizing and the key has already
-been moved to the future table?
-
-When __rhashtable_lookup_one() fails to find the key in the current
-table, the function returns early, leaving the iterator positioned at
-bucket 0.
-
-For stateless iterators like BPF's get_next_key, could this cause an
-infinite loop where it constantly resets to the beginning of the old
-table until the resize completes?
-
-The v2 implementation had code to check future_tbl when the key was not
-found in the main table, but this was removed in v3.
-
-Reference: https://lore.kernel.org/all/20260424201535.EA1BCC19425@smtp.kernel.org/
-
-> +
-> +	iter->slot = rht_key_hashfn(ht, tbl, key, params);
-> +	iter->p = he;
-
-Does this leave iter->list uninitialized for rhlist tables?
-
-rhashtable_walk_enter() does not initialize iter->list. When
-rhashtable_walk_start_check() is later called for an rhlist table, it
-validates the element using:
-
-lib/rhashtable.c:rhashtable_walk_start_check() {
-    ...
-} else if (iter->p && rhlist) {
-    ...
-    if (list == iter->list) {
-        iter->p = p;
-        iter->skip = skip;
-        goto found;
-    }
-    ...
-}
-
-Will this uninitialized read of iter->list cause the validation to fail
-and silently fall back to the beginning of the bucket?
-
-Reference: https://lore.kernel.org/all/20260424201535.EA1BCC19425@smtp.kernel.org/
-
+> +	return bpf_ma_set_dtor(map, &rhtab->ma, rhtab_mem_dtor);
 > +}
-> +EXPORT_SYMBOL_GPL(rhashtable_walk_enter_from);
 
-[ ... ]
+Does bpf_ma_set_dtor() exist at this commit?
 
-> diff --git a/lib/test_rhashtable.c b/lib/test_rhashtable.c
-> --- a/lib/test_rhashtable.c
-> +++ b/lib/test_rhashtable.c
+A git-wide search shows no definition or declaration of bpf_ma_set_dtor().
+The kernel provides bpf_mem_alloc_set_dtor() with a 4-argument signature
+(ma, dtor, dtor_ctx_free, ctx) in include/linux/bpf_mem_alloc.h:
 
-[ ... ]
+    int bpf_mem_alloc_set_dtor(struct bpf_mem_alloc *ma, dtor_fn dtor,
+                               dtor_ctx_fn dtor_ctx_free, void *ctx);
 
-> @@ -679,6 +680,133 @@
->  	return err;
->  }
->
-> +static int __init test_walk_enter_from(void)
+The existing htab_set_dtor() in kernel/bpf/hashtab.c builds a struct
+htab_btf_record context and calls bpf_mem_alloc_set_dtor() with all four
+arguments.
+
+The new rhtab_map_check_btf() attempts to call a not-yet-existing helper
+with a 3-argument signature. This breaks compilation with 'implicit
+declaration of function "bpf_ma_set_dtor"' (fatal with kernel's
+-Werror=implicit-function-declaration) or link failure with 'undefined
+reference to bpf_ma_set_dtor'.
+
+Looking at the later commit b3eef0fdafe1 ("bpf: Allow timers, workqueues
+and task_work in resizable hashtab"), it renames htab_set_dtor() to
+bpf_ma_set_dtor() and changes its signature to (map, ma, dtor), providing
+the missing symbol. That commit also wires up .map_check_btf =
+rhtab_map_check_btf in rhtab_map_ops.
+
+Can this commit be reordered or squashed to avoid the forward reference
+and maintain bisectability?
+
+> +static void rhtab_free_elem(void *ptr, void *arg)
 > +{
-> +	struct rhashtable ht;
-> +	struct test_obj objs[4];
-> +	struct rhashtable_iter iter;
-> +	struct test_obj *obj;
-> +	struct test_obj_val key = { };
-> +	int err, i, count;
-> +	int len_freq[4] = { 0, 0, 0, 0 };
+> +	struct bpf_rhtab *rhtab = arg;
+> +	struct rhtab_elem *elem = ptr;
 > +
-> +	err = rhashtable_init(&ht, &test_rht_params);
+> +	bpf_map_free_internal_structs(&rhtab->map, rhtab_elem_value(elem, rhtab->map.key_size));
+> +	bpf_mem_cache_free_rcu(&rhtab->ma, elem);
+> +}
+
+[ ... ]
+
+> +static int rhtab_delete_elem(struct bpf_rhtab *rhtab, struct rhtab_elem *elem)
+> +{
+> +	int err;
+> +
+> +	err = rhashtable_remove_fast(&rhtab->ht, &elem->node, rhtab->params);
 > +	if (err)
 > +		return err;
 > +
-> +	/* Insert 4 elements with keys 0, 2, 4, 6 */
-> +	for (i = 0; i < 4; i++) {
-> +		objs[i].value.id = i * 2;
-> +		objs[i].value.tid = 0;
-> +		err = rhashtable_insert_fast(&ht, &objs[i].node,
-> +					     test_rht_params);
-> +		if (err) {
-> +			pr_warn("walk_enter_from: insert %d failed: %d\n",
-> +				i, err);
-> +			goto out;
-> +		}
-> +	}
+> +	bpf_mem_cache_free_rcu(&rhtab->ma, elem);
+> +	return 0;
+> +}
 
-[ ... ]
+Does rhtab_delete_elem() handle special fields properly?
 
-> +	/* Test 3: verify walk_enter_from + walk_next can iterate remaining elements */
-> +	for (i = 0; i < 4; i++) {
-> +		key.id = i * 2;
-> +		count = 0;
-> +
-> +		scoped_guard(rcu) {
-> +			rhashtable_walk_enter_from(&ht, &iter, &key, test_rht_params);
-> +			rhashtable_walk_start(&iter);
-> +		}
-> +
-> +		/* Count the number of elements after this one */
-> +		do {
-> +			obj = rhashtable_walk_next(&iter);
-> +			count++;
-> +		} while (obj && (!IS_ERR(obj) || (PTR_ERR(obj) == -EAGAIN)));
-> +
-> +		rhashtable_walk_stop(&iter);
-> +		rhashtable_walk_exit(&iter);
-> +		if (count > 4) {
-> +			pr_warn("walk_enter_from: walked %d elements instead of max 4\n", count);
-> +			goto out;
+Looking at the v2 review thread
+(https://lore.kernel.org/bpf/DHSBDLRKCAQO.1IPJTSEMPESV7@etsalapatis.com/),
+Emil Tsalapatis and sashiko raised concerns that special fields are not
+handled properly during in-place updates. The v3 changelog claims this was
+addressed, but rhtab_delete_elem() does not call
+bpf_map_free_internal_structs() before freeing the element.
 
-Does this error path need to set the err variable?
-
-Right now it jumps to out and returns 0, which might cause the test
-suite to silently miss the failure. The err variable should be set to
--EINVAL before the goto.
-
-Reference: https://lore.kernel.org/all/20260424201535.EA1BCC19425@smtp.kernel.org/
-
-> +		}
-> +		/*
-> +		 * Collect the lengths of every walked path,
-> +		 * we should have each length walked one time
-> +		 */
-> +		len_freq[count - 1]++;
-> +	}
-
-[ ... ]
+This is inconsistent with rhtab_free_elem() which properly calls
+bpf_map_free_internal_structs(). Could this lead to resource leaks for
+maps with timers, workqueues, or other internal structures when elements
+are deleted via rhtab_map_delete_elem()?
 
 
 ---
@@ -222,4 +134,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24909591959
---===============7580031636570356645==--
+--===============7764502755757521332==--
