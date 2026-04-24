@@ -1,149 +1,193 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62AEC1AB6F1;
-	Fri, 24 Apr 2026 23:31:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424201096F
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 23:52:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777073521; cv=none; b=tgD52TOcbGV2Qkd9beb5dJNx9SD6kjIR5zW26V0hik1O08jHIR129YA7bNJYNGAxxsu/0EB1Ugxd+gMugiZEtja8OByv1A9K+OxfHkoC8yPy6WMG16GqIl/pHtjot5jSnbuRO51vyoIj1PLKHEK1gl8STlaMORH9LQOr57rGH/8=
+	t=1777074773; cv=none; b=Vin0QCgBTEfjYTbh4vmCIw3SA8c37E7dXMnJnb3/tI6b0YOl5Ko0stMrxT78579w1M0llntvnOnucUFyQ5lrPSxJI5oSNOtiQbYavUv/YAtjvoEvfCIN0sBBP++D7+XR3CuwdfMD6haLCxuv8kzXdNDNDgA3RAj1BG6hsMf/UTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777073521; c=relaxed/simple;
-	bh=HblVc0QZVcSH+BEhdYmIe+eu3V5O05SC87J/OgoXbNg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ouuxexNJObo7J5HoVlroFQxrcZu4UNdoJ/P5VDNQXts/Z2ux9VB7zBT7swLGetaeO0Rj36YopDCYGs3HaMSsCWLTCvAteGGwfvpkkXj7zDDdQGGrdIngA1tMnXnqbutdtT5tiL2+Zf07qkIzkf6MpjoCrTCsz7j7cskPWAQgN/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FWyOdMQC; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1777074773; c=relaxed/simple;
+	bh=QJ6YINPJxDE8ce/SSg+gEPEuZCMMootlW1RL0db12+E=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=SkEs0kZG503kcrqFzU6XDfOO+cVuvR+FEMaSR4Ow+wUfmbsahYJ8z4+w1q3oB9ku2W2cQbQzeknPJ3c75PQV/aFAlb08tNNfs95GcCWJoa5Zs0dcUoHQWcVNq2D6HpVN268+WA79F3wtVK6mmhbYvl+qi4eSDOinUzesnYhi49M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IenHmcKB; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FWyOdMQC"
-Message-ID: <d8fccecd-5418-46ff-8e9f-065d1dee6d98@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777073506;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zyUuyE7w6pvvtI2U755rVQDGqOG1TjZmAAoWkbcJ3pw=;
-	b=FWyOdMQChNJACKlHSUigRbF+UkaZINGXAnfgG0l27LLGRf/hYjHu/Lxkyy0R7Svov/3cgV
-	ca7lKrp+oJsiAffpgj9aIdrEaU8SwwAp8RbrsigFrfnx1EjvABSU63IFjcjHzxaGMsifyR
-	FfCrsxV2p8KUbJc33PxkbcHVFDmYG7c=
-Date: Fri, 24 Apr 2026 16:31:29 -0700
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IenHmcKB"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c798e905c29so3242059a12.3
+        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 16:52:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1777074770; x=1777679570; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=XnVmcqSWgBrIZOINeFfkUbMwryuHt4PzyHkF5OrKAp4=;
+        b=IenHmcKBm55oIXWcqHCofMdfnNkKQtFd8L5ctrIa1JcWbhwwR84MMehyDcu8HD+09t
+         aF+uqSC25up2kaL0BmhCB874PRjsaqmKa85Rh5Led/MpVAraUVEUmsOHAdbFb8Fm5ESK
+         iwMv042uE6vWmby9U27B0GHDpM4JnNWOzaqsFD3d4hhbi4gNCfbPkkfJ3Adz/7OiVxZ6
+         axc9Dy66Ys+aC6uEsOQW+gVzFsYvgdQbmjfkaocZPxmP4aDofxtMoHhzqhK3FiPB2obM
+         JBlvYWNV1bhondobioFcDMisOcYjNgB5J1XNkisioT8bnoXVo6uAO4DBWZs2vcR0pR3O
+         8K0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777074770; x=1777679570;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XnVmcqSWgBrIZOINeFfkUbMwryuHt4PzyHkF5OrKAp4=;
+        b=KWJepDnuUl1vPk9/R6kZfTclqvrlWbhRAyzm0u3Zl6P1dwgolMmdTz1ijgLoWRF//Z
+         VRN03y9ASJnNAQheV53g7lTn0e+e/zKREYYAasRvaBXoRteJgiCxleVeFadIAGD92OTd
+         Jy3GTEQ1xklhVSrFsI4ID1F07zHf9iKjxRfef0z3xc1dIafLgvpYGmDTGy7yVE5aV9TS
+         RoCD+YcYbC/8muPneupxjlQGiZvmFiz3OVwPxEZzst8Fr1EOPfLP07V4oXhqzA5hT8sN
+         p8yw6CWf+QpW3xUaIg6jq6gP/8u+hhy0dmsf0EnvFxu1uyBkjqDuu44jJ4DOmp4KKuRh
+         2MZA==
+X-Forwarded-Encrypted: i=1; AFNElJ+uJg0hwWmofTGcqOwO5kYEJ61U4FqEe7CFJQS2w18AKDLzcFmIWX64a2kO5nG5TU4DeJs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrNBfPjvrxYDVrsvElTEBnSCE0Vev3K0CZCcfSnUIa+v3Ef8Z4
+	CEb4ebZPivKL6RGhTpu6/VcS52Mwgrvd56sm7wL5W+a4bkdJzyIReXiO7s25/5XoszxCHcVyvsp
+	HN9MV6A==
+X-Received: from pfblu1.prod.google.com ([2002:a05:6a00:7481:b0:82f:24a1:2b5a])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:22c5:b0:82f:316:3206
+ with SMTP id d2e1a72fcca58-82f8c92997fmr35230164b3a.34.1777074770298; Fri, 24
+ Apr 2026 16:52:50 -0700 (PDT)
+Date: Fri, 24 Apr 2026 23:52:46 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH RFC bpf-next 1/8] kasan: expose generic kasan helpers
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Andrey Konovalov <andreyknvl@gmail.com>
-Cc: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
- Shuah Khan <shuah@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>,
- Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>, ebpf@linuxfoundation.org,
- Bastien Curutchet <bastien.curutchet@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Xu Kuohai <xukuohai@huawei.com>, bpf <bpf@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>,
- Network Development <netdev@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- kasan-dev <kasan-dev@googlegroups.com>, linux-mm <linux-mm@kvack.org>
-References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
- <20260413-kasan-v1-1-1a5831230821@bootlin.com>
- <CA+fCnZfubV6LgRjO3NQvhrG2Q5o0ftkFFupLWVYS50XDnmCaog@mail.gmail.com>
- <DHSWK17EZUDP.GIJ6BX2NFR6U@bootlin.com>
- <CAADnVQLJ=fJ7t1i2+_RYqU1gqYqiLP9Zrwo4vdZsgzjK_yzJTQ@mail.gmail.com>
- <CA+fCnZd31GzdpEqR8VhfK4JtUKyyRMgbBoAbeGACJgm7WvB6Vw@mail.gmail.com>
- <CAADnVQKv5y+gq=TnOAEXSqgBRpmHNjwqCfxpLaw5XkcbQ+23bg@mail.gmail.com>
- <CA+fCnZe-b0Qqbo5gGv3HN20twquQETDfYYkE1r9tPr9zUFbW9Q@mail.gmail.com>
- <CAADnVQKuptG_opA12O=Xb9_+cHf3f=ycAZdfUp17P2HBYQzdsg@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAADnVQKuptG_opA12O=Xb9_+cHf3f=ycAZdfUp17P2HBYQzdsg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.54.0.rc2.544.gc7ae2d5bb8-goog
+Message-ID: <20260424235247.1990272-1-kuniyu@google.com>
+Subject: [PATCH v1 bpf] bpf: Free reuseport cBPF prog after RCU grace period.
+From: Kuniyuki Iwashima <kuniyu@google.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Kuniyuki Iwashima <kuniyu@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, Eulgyu Kim <eulgyukim@snu.ac.kr>
+Content-Type: text/plain; charset="UTF-8"
 
-On 4/19/26 3:51 PM, Alexei Starovoitov wrote:
-> On Sun, Apr 19, 2026 at 2:49 PM Andrey Konovalov <andreyknvl@gmail.com> wrote:
->>
->> On Tue, Apr 14, 2026 at 5:58 PM Alexei Starovoitov
->> <alexei.starovoitov@gmail.com> wrote:
->>>
->>> I think we're talking past each other.
->>> We're not interested in KASAN_SW_TAGS or KASAN_HW_TAGS.
->>> We're not going to modify arm64 JIT at all.
->>>
->>> This is purely KASAN_GENRIC and only on x86-64.
->>> JIT will emit exactly what compilers emit for generic
->>> which is __asan_load/store. This is as stable ABI as it can get
->>> and we don't want to deviate from it.
->>
->> OK, I supposed that's fair. You did throw me off point with your
->> performance comment. But if you decide to add SW_TAGS support at some
->> point, I think this discussion needs to be revisited.
->>
->> But please add a comment saying that those functions are only exposed
->> for BPF JIT and they are not supposed to be used by other parts of the
->> kernel. And in case you do end up adding a new config option, guard
->> the public declarations by a corresponding ifdef.
-> 
-> I feel concerns of misuse are overblown.
-> Being in include/linux/kasan.h doesn't make them free-for-all
-> all of a sudden, but if you prefer we can just copy paste:
-> +void __asan_load1(void *p);
-> +void __asan_store1(void *p);
-> into bpf_jit_comp.c
-> 
->>> The goal here is to find bugs in the verifier.
->>> If something got past it, that shouldn't have,
->>> kasan generic on x86-64 is enough.
->>
->> FWIW, I suspect HW_TAGS KASAN already just works with JITed BPF code.
-> 
-> Ohh. Good point. Looks like modern arm64 cpus in public clouds
-> don't have that enabled, so one would need pixel phone to
-> catch verifier bugs via hw_tags.
+Eulgyu Kim reported the splat below with a repro. [0]
 
-This comment got me curious, and acckktually if we *really* want to,
-we can get some KASAN_HW_TAGS testing for BPF already.
+The repro sets up a UDP reuseport group with a cBPF prog and
+replaces it with a new one while another thread is sending
+a UDP packet to the group.
 
-The first option is emulation, since QEMU supports MTE [1], e.g.:
+The reuseport prog is freed by sk_reuseport_prog_free().
+bpf_prog_put() is called for "e"BPF prog to destruct through
+multiple stages while cBPF prog is freed immediately by
+bpf_release_orig_filter() and bpf_prog_free().
 
-    qemu-system-aarch64 -machine virt,mte=on ...
+If a reuseport prog is detached from the setsockopt() path
+(reuseport_attach_prog() or reuseport_detach_prog()),
+sk_reuseport_prog_free() is called without waiting for RCU
+readers to complete, resulting in various bugs.
 
-This is of course slow, because it runs in software, so it's
-infeasible to run this for every signle patch on BPF CI. But we could
-run it on schedule on the base branches or smth like that.
+Let's defer freeing the reuseport cBPF prog after one RCU
+grace period.
 
-[1] https://qemu-project.gitlab.io/qemu/system/arm/virt.html
+Note "e"BPF prog is safe as is unless the fast path starts
+to touch fields destroyed in bpf_prog_put_deferred() and
+__bpf_prog_put_noref().
 
-The second option is set up an AmpereOne machine on Oracle Cloud
-(assuming they are available, haven't checked), because apparently [2]
-those CPUs run with MTE.
+[0]:
+BUG: KASAN: vmalloc-out-of-bounds in reuseport_select_sock+0xedc/0x1220 net/core/sock_reuseport.c:596
+Read of size 4 at addr ffffc9000051e004 by task slowme/10208
+CPU: 6 UID: 1000 PID: 10208 Comm: slowme Not tainted 7.0.0-geb7ac95ff75e #32 PREEMPT(full)
+Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+Call Trace:
+ <IRQ>
+ dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
+ print_address_description mm/kasan/report.c:378 [inline]
+ print_report+0xca/0x240 mm/kasan/report.c:482
+ kasan_report+0x118/0x150 mm/kasan/report.c:595
+ reuseport_select_sock+0xedc/0x1220 net/core/sock_reuseport.c:596
+ udp4_lib_lookup2+0x3bc/0x950 net/ipv4/udp.c:495
+ __udp4_lib_lookup+0x768/0xe20 net/ipv4/udp.c:723
+ __udp4_lib_lookup_skb+0x297/0x390 net/ipv4/udp.c:752
+ __udp4_lib_rcv+0x1312/0x2620 net/ipv4/udp.c:2752
+ ip_protocol_deliver_rcu+0x282/0x440 net/ipv4/ip_input.c:207
+ ip_local_deliver_finish+0x3bb/0x6f0 net/ipv4/ip_input.c:241
+ NF_HOOK+0x30c/0x3a0 include/linux/netfilter.h:318
+ NF_HOOK+0x30c/0x3a0 include/linux/netfilter.h:318
+ __netif_receive_skb_one_core net/core/dev.c:6181 [inline]
+ __netif_receive_skb net/core/dev.c:6294 [inline]
+ process_backlog+0xaa4/0x1960 net/core/dev.c:6645
+ __napi_poll+0xae/0x340 net/core/dev.c:7709
+ napi_poll net/core/dev.c:7772 [inline]
+ net_rx_action+0x5d7/0xf50 net/core/dev.c:7929
+ handle_softirqs+0x22b/0x870 kernel/softirq.c:622
+ do_softirq+0x76/0xd0 kernel/softirq.c:523
+ </IRQ>
+ <TASK>
+ __local_bh_enable_ip+0xf8/0x130 kernel/softirq.c:450
+ local_bh_enable include/linux/bottom_half.h:33 [inline]
+ rcu_read_unlock_bh include/linux/rcupdate.h:924 [inline]
+ __dev_queue_xmit+0x1dd7/0x3710 net/core/dev.c:4890
+ neigh_output include/net/neighbour.h:556 [inline]
+ ip_finish_output2+0xca9/0x1070 net/ipv4/ip_output.c:237
+ NF_HOOK_COND include/linux/netfilter.h:307 [inline]
+ ip_output+0x29f/0x450 net/ipv4/ip_output.c:438
+ ip_send_skb+0x45/0xc0 net/ipv4/ip_output.c:1508
+ udp_send_skb+0xb04/0x1510 net/ipv4/udp.c:1195
+ udp_sendmsg+0x1a71/0x2350 net/ipv4/udp.c:1485
+ sock_sendmsg_nosec net/socket.c:727 [inline]
+ __sock_sendmsg net/socket.c:742 [inline]
+ __sys_sendto+0x554/0x680 net/socket.c:2206
+ __do_sys_sendto net/socket.c:2213 [inline]
+ __se_sys_sendto net/socket.c:2209 [inline]
+ __x64_sys_sendto+0xde/0x100 net/socket.c:2209
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0x160/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x415a2d
+Code: b3 66 2e 0f 1f 84 00 00 00 00 00 66 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f6bc31e41e8 EFLAGS: 00000212 ORIG_RAX: 000000000000002c
+RAX: ffffffffffffffda RBX: 00007f6bc31e4cdc RCX: 0000000000415a2d
+RDX: 0000000000000001 RSI: 00007f6bc31e421f RDI: 0000000000000003
+RBP: 00007f6bc31e4240 R08: 00007f6bc31e4220 R09: 0000000000000010
+R10: 0000000000000000 R11: 0000000000000212 R12: 00007f6bc31e46c0
+R13: ffffffffffffffb8 R14: 0000000000000000 R15: 00007ffc9b0d70b0
+ </TASK>
 
-It's a bunch of infra work and spending, but it is doable if it was
-a priority.
+Fixes: 538950a1b752 ("soreuseport: setsockopt SO_ATTACH_REUSEPORT_[CE]BPF")
+Reported-by: Eulgyu Kim <eulgyukim@snu.ac.kr>
+Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+---
+ net/core/filter.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
-[2] https://arxiv.org/abs/2511.17773
-
-
-> So we still need this x86-specific jit kasan.
-> I guess eventually it can be removed when hw_tags support is widespread.
+diff --git a/net/core/filter.c b/net/core/filter.c
+index bc96c18df4e0..dba4c9340bb7 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -1654,15 +1654,24 @@ int sk_reuseport_attach_bpf(u32 ufd, struct sock *sk)
+ 	return err;
+ }
+ 
+-void sk_reuseport_prog_free(struct bpf_prog *prog)
++static void sk_reuseport_prog_free_rcu(struct rcu_head *rcu)
++{
++	struct bpf_prog_aux *aux = container_of(rcu, struct bpf_prog_aux, rcu);
++	struct bpf_prog *prog = aux->prog;
++
++	bpf_release_orig_filter(prog);
++	bpf_prog_free(prog);
++}
++
++void sk_reuseport_prog_free(struct bpf_prog *prog, bool wait_rcu)
+ {
+ 	if (!prog)
+ 		return;
+ 
+-	if (prog->type == BPF_PROG_TYPE_SK_REUSEPORT)
+-		bpf_prog_put(prog);
++	if (bpf_prog_was_classic(prog))
++		call_rcu(&prog->aux->rcu, sk_reuseport_prog_free_rcu);
+ 	else
+-		bpf_prog_destroy(prog);
++		bpf_prog_put(prog);
+ }
+ 
+ static inline int __bpf_try_make_writable(struct sk_buff *skb,
+-- 
+2.54.0.rc2.544.gc7ae2d5bb8-goog
 
