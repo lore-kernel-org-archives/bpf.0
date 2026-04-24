@@ -1,60 +1,62 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 719552D3A86
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 08:18:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A467347C7
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 08:18:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777018682; cv=none; b=GoUu8BIVQ28gkCRUNScl7Igzc/hqzzjLCxo48yXF3dn9dZClutKZ8t2jP2ecIEcdA7As6XPYjsIQ8ZZvBr1c5ZjCQUBZeSivTsBY+wq8locugq8efKg7wNoQF/0oda2hpNt8eViwL3+qwhfi7I8cFAZOfldKn3bxING9iDQTGk0=
+	t=1777018684; cv=none; b=k2UsnB0dqK3L4CBfdLD3Of1qfAHiskrM5Yzmm/1rAPHQwP5ANkJcaAps4nPG47GJff0Uq7fQRJqMpyZcCVU0DtDXiqd81dB79l7YIPa+rsmXe//mnps+M1bhtTG+olcjNX9iVzIc3019OxfgrFDyVhjtB1WVcyRWmg48wyBOogM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777018682; c=relaxed/simple;
-	bh=expAHzdlUUJYwgQiH7coRcv89OJQMG0Nz9Wq6BvCKNo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IAVRxBNcrKPqJ6gVR6bGRptJwfdXX+CYUWqizIyxj2keq+omKthp25G9oZuGWF+hn0iKkyd5QxAN9HCpb8aK5gOiWU98czPe3HVatWjKf8q9vdaVwIOExXeVXL3L7Fv+pGYbR6jb0bM1zGn11d6/voybJl18ni83iRjwEboHJd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rdnYASIO; arc=none smtp.client-ip=209.85.210.178
+	s=arc-20240116; t=1777018684; c=relaxed/simple;
+	bh=KaUM+jnF3xp35I3Evuzh0v9cLhvk6CfdW8ALVRhXbrE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YoqgCGrcn993iWGSEW9nR/Xh++tFkCGuJFOihsyQBOurwRAPI3W3yTJR5qlg909Q2kLEyhs1Hm44cUy56DJp+uh88z9/TimmsaaP5oCFbL4Ybm+w/wo8te1UCDskkYd4eRkpVLPdBvppcxOONC76dNL44+JLq7Wv2yUz8ouujQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tKQSUPkX; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rdnYASIO"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-82f8bf96b46so3747438b3a.2
-        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 01:18:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tKQSUPkX"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-82d0b68837aso4825685b3a.2
+        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 01:18:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777018680; x=1777623480; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2HDvI/BuQCfSZTuB4ilorJkFNxenQtdnx2DZ/63M+Fw=;
-        b=rdnYASIOflmW24zt4vpgsH/7c24Z1+if91U31oovkEmUGEPfMiGdVuI2IrVuUYVWfx
-         Od45xAtdV8GgYtlkpB8TUU6f86hzYp7/o37IVBte9KAt0ghw9RF95bn1XwtyIav61byD
-         dk8ZF2qGJr6CmYxuQ5MeTjzDd18IOXZqhwVgSIkzVWS2A2S7PZZc3qG0r9U5Gw/iZoYA
-         9qcLfnllVcIGmSf1VHn5dScRogrkQyT1NXKEul/+wy+2kuG+6s51xiV29A8Xm10sKrML
-         IQn+3mk0zRvENYQwhPJpQ8TXAoMaT6Brt2UdTzA5ub8gMhwsA7bIiK/hY+lzc/TjWAZf
-         n2iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777018680; x=1777623480;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1777018682; x=1777623482; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2HDvI/BuQCfSZTuB4ilorJkFNxenQtdnx2DZ/63M+Fw=;
-        b=CQ4gHrlAgb60XoCXMOhUS/JvNd0twhqvn1OJsCITnrs2d5VZ2KrmyG5LcKQ3ja0Da2
-         0PpnZ8Kgdm1pe5jVBuN7z3WT1XGsSpntt92NCBdg9+YfTYY4P860Bou61O+mwVWD3NM1
-         szZDu/xZEReaTkFMgI2KinPMMj3MwhoNd6VEg7WenamT3RB3uZ4k00NRM6w5bwepKlTE
-         wZbtGQRZByy7GMLxfGfMn2oRKkAuiawB1+Iflu6r8wB/2hYAQNru/11x7xMI/BFejSHn
-         mE7Ggz+esIayyawLP8PanZ71aVzWrnByR3oEnc3Z2tY9qvOfjiSY4csdR8i2Sx8MaSiw
-         CbRA==
-X-Gm-Message-State: AOJu0YwNYBVWbCi41FVLsRrqGsTJF+p0TWVBpd16fQ+jMR23toaOUzHR
-	HzPkgOE8j2Y6Ah3tI/gnT0RDJtSCj1AmrW5tod9f91bEbdDGxHDJTaiuBi3pAA==
-X-Gm-Gg: AeBDietbkkustu6gsWYM63REg/jARLCsy6yo0xh695YAtalrrbG64DNG9HTdUa3A6z6
-	VaOJ10ilxRJQLXhYGVEqvVRPj0WM/NXOot2vpDR0/n2UOhMruprtMBJVsY4cbUQof0w9cSe7RId
-	ia1Pv09UbLRHrmiEzv5mC0388lX+uRvTu1KLLeeB/vQiMlF2Zbk0bkwxtxsuldcUbjUYpElbmfP
-	qFB/Wlo3IHq5MrvbMzwX+ftYOUF0ux4Yw4xRVb6FLJeyk1GRb0Cl7+ZTtxVMH9Yf7vxzYTt8f1R
-	J863lj0R1XJlQJxILO5k1RuezXodNAf401Fed6hYaoRLjnq2XnLjc38oIf+p3PeaTionchI4wqv
-	XbCnY6UTajXaOEucX9oKdXReoVNxmOACrebmGi27+Batvm3l9Ev+yIGU1B3cxKtoIHnL7VVXq0X
-	m4xkJJUsp5j1KZ1OoeOv7oAs+MmDP7898MVzYgVL/vWzbZxZb9Sm4LEjKPLsY=
-X-Received: by 2002:a05:6a00:2d1f:b0:82c:e19d:cabd with SMTP id d2e1a72fcca58-82f8c7ee387mr31948249b3a.10.1777018680411;
-        Fri, 24 Apr 2026 01:18:00 -0700 (PDT)
+        bh=IVWGuCtawxjZhwM3gfICiiPLDHlrysox1Ra5PDxKpTo=;
+        b=tKQSUPkXkRpmF27MjCLApSmhTEzYdciBB6+zLDqtdOgRSxLTOWH9vcMPa1efmLsqDa
+         32iv+VzKesHKjXhhq7tpHbNPgRLXafzX5rn7zkGdRrFNLN8V2q0qUMN5BSfCmMQgMTcj
+         CUMc663peobrZAs/p2sGRjqR+Sg2mTFpKrQOBzzlGGbwwZmFvR6TuZ7VII5aqTMejCwC
+         wYLilJ0bsoxlESkDS+iAabzs9E/Dx+LdkY6UfGOK2Hlr/bnBAWn2MwgL2Huv9UQdnXuD
+         aEf8EHW3Wi79q3KTRHFyZ8WlK23ciNFGBN+QNOYFwkwdK1EHvFYMApxoxqtv2RLoLeIL
+         5Q8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777018682; x=1777623482;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=IVWGuCtawxjZhwM3gfICiiPLDHlrysox1Ra5PDxKpTo=;
+        b=G9GWV+DoN72aXfED8jWt7ccpCYRFrDjr9zTAy1EnDXS4uJiJhqSPKiVgwAlVeAkQTA
+         Uj7oeY357oHjubjn2tjuKRfY7OJu7YdlrPBDtJnKW9hhjrM8KGSayxRpRRAFRJ21WiKU
+         33NuMYEpEZ0AXGAJdWjqnBw0XMEIPz+n0OXPeXuGESaGo85rcKzrlzxj/ZtySWmmYfB+
+         KDiaDLKVISM8F99mTPhkuKcsXhB5IKgXWmz38xa8WEwDaq7QiftAcMK8Facl6bInMDG2
+         UXCVZcNyYvyrcA6cevqZs/hfBYw1D7gy80GCD/nbk0C0+rFSZa1OKtFjI4YzsODZQ6k8
+         CiGw==
+X-Gm-Message-State: AOJu0Yw4rHv5YWozSyZBTvgQmtt4PFKbyiBkM6Qjs1H1XyjhKi+X6juf
+	dmhDaLxGr6287GPiKhvB2qWmpFP/eIi57W5L7lbJ/qfB3UsSe2Em8HrOrbWohw==
+X-Gm-Gg: AeBDietHKXvs6OLQzVEHzyuZLKQT+Y0xltU83w5JMe1AoInxQWLiXVlg+xUbfeeRf3N
+	/5NrDDfqEc1qqH+ee8sNw3c+b1wFFET+FWM/iG9MEOI0F2a1mBrpwngnzax5rTOv2cSvSoTB86g
+	cxIv29xp7P98AXWGM/e+l7JfNtQuLo6z2m1WyumQduNhBE5+gz1FPqdfkQV0CDthLlPa0KlLuva
+	UDAb8FarooI5Q80Oude+We4N7MODdQuqG74sjaRElgMJuJLhW/tkIntslO/4RKtCl4BSOHdapBH
+	8uobNx4qBxA8zekJEjRl+pz5Adf2xPDYA+Q2llkWBRq0ZbOQU+YyhjhPT0qFvRkutQ3xGsbSQSt
+	Xa7KSfHJowvLkrPdRzknyd3TWlYVfKKI9M8wtHGzG0RB5xZiQlo4bx6M7glXDRYO1JdIyxkX2Mf
+	mp3R19mfgjeQVKAyPtQlZzNPhXIP3x7yX9aSvzmZSFXc8wMx45IIlyk92Ow8RTzQWFsqJ/lg==
+X-Received: by 2002:a05:6a00:1acd:b0:82f:cfd2:6ca0 with SMTP id d2e1a72fcca58-82fcfd27015mr15492180b3a.40.1777018681421;
+        Fri, 24 Apr 2026 01:18:01 -0700 (PDT)
 Received: from honey-badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f8ec06cbfsm26604340b3a.58.2026.04.24.01.17.59
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f8ec06cbfsm26604340b3a.58.2026.04.24.01.18.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Apr 2026 01:17:59 -0700 (PDT)
+        Fri, 24 Apr 2026 01:18:00 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -67,212 +69,548 @@ Cc: andrii@kernel.org,
 	paul.chaignon@gmail.com,
 	harishankar.vishwanathan@gmail.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v2 0/4] bpf: replace min/max fields with struct cnum{32,64}
-Date: Fri, 24 Apr 2026 01:17:39 -0700
-Message-ID: <20260424-cnums-everywhere-rfc-v1-v2-0-57091924c9d7@gmail.com>
+Subject: [PATCH bpf-next v2 1/4] bpf: representation and basic operations on circular numbers
+Date: Fri, 24 Apr 2026 01:17:40 -0700
+Message-ID: <20260424-cnums-everywhere-rfc-v1-v2-1-57091924c9d7@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260424-cnums-everywhere-rfc-v1-v2-0-57091924c9d7@gmail.com>
+References: <20260424-cnums-everywhere-rfc-v1-v2-0-57091924c9d7@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Change-ID: 20260421-cnums-everywhere-rfc-v1-79ef787fd571
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 
-This RFC replaces s64, u64, s32, u32 scalar range domains tracked by
-verifier by a pair of circular numbers (cnums): one for 64-bit domain
-and another for 32-bit domain. Each cnum represents a range as a
-single arc on the circular number line, from which signed and unsigned
-bounds are derived on demand. See also wrapped intervals
-representation as in [1].
+This commit adds basic definitions for cnum32/cnum64.
+This is a unified numeric range representation for signed and unsigned
+domains. Inspired by an old post from Shung-Hsi Yu [1] and paper [2].
+Operations correctness is verified using cbmc model checker,
+tests source code can be found in a separate repo [3].
 
-The use of such representation simplifies arithmetic and conditions
-handling in verifier.c and allows to express 32 <-> 64 bit deductions
-in a more mathematically rigorous way.
+The cnum64_cnum32_intersect() function is notable, because it handled
+several cases verifier.c:deduce_bounds_64_from_32() does not.
+Given:
+- a is a 64-bit range
+- b is a 32-bit range
+- t is a refined 64-bit range, such that ∀ v ∈ a, (u32)v ∈ b: v ∈ t.
+cnum64_cnum32_intersect() makes the following deductions:
 
-[1] https://jorgenavas.github.io/papers/ACM-TOPLAS-wrapped.pdf
+(A): 'b' is a sub-range of the first or the last 32-bit
+     sub-range of 'a':
 
-Changelog
-=========
-RFCv1 -> v2:
-- Dropped RFC tag.
-- Dropped cnum{32,64}_mul(), too much complexity and no veristat
-  or selftests gains.
-- cnum32_from_cnum64() normalizes to CNUM32_EMPTY when input
-  cnum64.size >= U32_MAX, previously only checked for > U32_MAX
-  (bot+bpf-ci).
-- cnum32_from_cnum64() and cnum64_cnum32_intersect() now check for
-  empty inputs (sashiko).
-- In regs_refine_cond_op() case BPF_JSLT use cnum{32,64}_from_srange
-  constructors instead of unsigned variants (sashiko).
-- cnum{32,64}_intersect_with{,_urange,_srange}() helpers added
-  (Alexei)
+                                                         64-bit number axis --->
 
-[RFCv1] https://lore.kernel.org/bpf/0c47b0b7ea476647746806c46fded4353be885f7.camel@gmail.com/T/
+ N*2^32                   (N+1)*2^32                (N+2)*2^32                (N+3)*2^32
+ ||------|---|=====|-------||----------|=====|-------||----------|=====|----|--||
+         |   |< b >|                   |< b >|                   |< b >|    |
+         |   |                                                         |    |
+         |<--+--------------------------- a ---------------------------+--->|
+             |                                                         |
+             |<-------------------------- t -------------------------->|
 
-Patch set layout
-================
+(B) 'b' does not intersect with the first of the last 32-bit
+    sub-range of 'a':
 
-Patch #1 introduces the cnum (circular number) data type and basic
-operations: intersection, addition, multiplication, negation, 32-to-64
-and 64-to-32 projections.
+N*2^32                   (N+1)*2^32                (N+2)*2^32                (N+3)*2^32
+||--|=====|----|----------||--|=====|---------------||--|=====|------------|--||
+    |< b >|    |              |< b >|                   |< b >|            |
+               |              |                               |            |
+               |<-------------+--------- a -------------------|----------->|
+                              |                               |
+                              |<-------- t ------------------>|
 
-CBMC based proofs for these operations are available at [2].
-(The proofs lag behind the current patch set and need an update if
-this RFC moves further. Although, I don't expect any significant
-changes).
+(C) 'b' crosses 0/U32_MAX boundary:
 
-[2] https://github.com/eddyz87/cnum-verif
+N*2^32                   (N+1)*2^32                (N+2)*2^32                (N+3)*2^32
+||===|---------|------|===||===|----------------|===||===|---------|------|===||
+ |b >|         |      |< b||b >|                |< b||b >|         |      |< b|
+               |      |                                  |         |
+               |<-----+----------------- a --------------+-------->|
+                      |                                  |
+                      |<---------------- t ------------->|
 
-Patch #2 mechanically converts all direct accesses to bpf_reg_state's
-min/max fields to use accessor functions, preparing for the field
-replacement.
+Current implementation of deduce_bounds_64_from_32() only handles
+case (A).
 
-Patch #3 replaces the eight independent min/max fields in
-bpf_reg_state with two cnum fields. The signed and unsigned bounds are
-derived on demand from the cnum via the accessor functions.
-This eliminates the separate signed<->unsigned cross-deduction logic,
-simplifies reg_bounds_sync(), regs_refine_cond_op() and some
-arithmetic operations.
+[1] https://lore.kernel.org/all/ZTZxoDJJbX9mrQ9w@u94a/
+[2] https://jorgenavas.github.io/papers/ACM-TOPLAS-wrapped.pdf
+[3] https://github.com/eddyz87/cnum-verif/tree/master
 
-Patch #4 adds selftest cases for improved 32->64 range refinements
-enabled by cnum64_cnum32_intersect().
-
-Precision trade-offs
-====================
-
-A cnum represents a contiguous arc on the circular number line.
-Current master tracks four independent ranges (s64, u64, s32, u32)
-whose intersection could implicitly represent value sets that are
-two disjoint arcs on the circle - something a single cnum cannot.
-
-Cnums lose precision when a cross-domain conditional comparison
-(e.g., unsigned comparison on a register with a signed-derived range)
-produces an intersection that would be two disjoint arcs.
-The cnum must over-approximate by returning one of the input arcs.
-E.g. a pair of ranges u64:[1,U64_MAX] s:[-1,1] represents a set of two
-values: {-1,1}, this can only be approximated as a set of three values
-by cnum: {-1,0,1}.
-
-Cnums gain precision in arithmetic: when addition, subtraction or
-multiplication causes register value to cross both signed and unsigned
-min/max boundaries. Current master resets the register as unbound in
-such cases, while cnums preserve the exact wrapping arc.
-
-In practice precision loss turned out to matter only for a set of
-specifically crafted selftests from reg_bounds.c (see patch #3 for
-more details). On the other hand, precision gains are observable for a
-set real-life programs.
-
-Verification performance measurements
-=====================================
-
-Tested on 6683 programs across four corpora: Cilium (134 programs),
-selftests (4635), sched_ext (376), and Meta internal BPF corpus
-(1540). Program verification verdicts are identical across all four
-program sets - no program changes between success and failure.
-
-Instruction count comparison (cnum vs signed/unsigned pair):
-- 83 programs improve, 44 regress, 6596 unchanged
-- Total saved: ~290K insns, total added: 10K insns
-- Largest improvements:
-  -26% insns in a internal network firewall program;
-  -47% insns in rusty/wd40 sched_ext schedulers.
-- Largest regression: +24% insns in one Cilium program (5062 insns
-  added).
-
-Raw performance data is at the bottom of the email.
-
-Raw verification performance metrics
-====================================
-
-Filtered out by -f insns_pct>5 -f !insns<10000
-
-========= selftests: master vs cnums-everywhere-v2 =========
-
-File  Program  Insns (A)  Insns (B)  Insns (DIFF)
-----  -------  ---------  ---------  ------------
-
-Total progs: 4665
-total_insns diff min:  -15.71%
-total_insns diff max:   45.45%
- -20 .. -10  %: 3
-  -5 .. 0    %: 6
-   0 .. 5    %: 4654
-  45 .. 50   %: 2
-
-========= scx: master vs cnums-everywhere-v2 =========
-
-File             Program         Insns (A)  Insns (B)  Insns     (DIFF)
----------------  --------------  ---------  ---------  ----------------
-scx_rusty.bpf.o  rusty_enqueue       39842      22053  -17789 (-44.65%)
-scx_rusty.bpf.o  rusty_stopping      37738      19949  -17789 (-47.14%)
-scx_wd40.bpf.o   wd40_stopping       37729      19880  -17849 (-47.31%)
-
-Total progs: 376
-total_insns diff min:  -47.31%
-total_insns diff max:   19.61%
- -50 .. -40  %: 3
-  -5 .. 0    %: 5
-   0 .. 5    %: 366
-   5 .. 15   %: 1
-  15 .. 20   %: 1
-
-========= meta: master vs cnums-everywhere-v2 =========
-
-File                               Program     Insns (A)  Insns (B)  Insns     (DIFF)
----------------------------------  ----------  ---------  ---------  ----------------
-<meta-internal-firewall-program>   ...egress   222327     164648     -57679 (-25.94%)
-<meta-internal-firewall-program>   ..._tc_eg   222839     164772     -58067 (-26.06%)
-<meta-internal-firewall-program>   ...egress   222327     164648     -57679 (-25.94%)
-<meta-internal-firewall-program>   ..._tc_eg   222839     164772     -58067 (-26.06%)
-
-Total progs: 1540
-total_insns diff min:  -26.06%
-total_insns diff max:    6.69%
- -30 .. -20  %: 4
- -15 .. -5   %: 6
-  -5 .. 0    %: 36
-   0 .. 5    %: 1493
-   5 .. 10   %: 1
-
-========= cilium: master vs cnums-everywhere-v2 =========
-
-File        Program                          Insns (A)  Insns (B)  Insns    (DIFF)
-----------  -------------------------------  ---------  ---------  ---------------
-bpf_host.o  tail_handle_ipv4_cont_from_host      20962      26024  +5062 (+24.15%)
-bpf_host.o  tail_handle_ipv6_cont_from_host      17036      18672   +1636 (+9.60%)
-
-Total progs: 134
-total_insns diff min:   -3.32%
-total_insns diff max:   24.15%
-  -5 .. 0    %: 12
-   0 .. 5    %: 120
-   5 .. 15   %: 1
-  20 .. 25   %: 1
-
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
-Eduard Zingerman (4):
-      bpf: representation and basic operations on circular numbers
-      bpf: use accessor functions for bpf_reg_state min/max fields
-      bpf: replace min/max fields with struct cnum{32,64}
-      selftests/bpf: new cases handled by 32->64 range refinements
+ include/linux/cnum.h   |  80 +++++++++++++++++
+ kernel/bpf/Makefile    |   2 +-
+ kernel/bpf/cnum.c      | 120 +++++++++++++++++++++++++
+ kernel/bpf/cnum_defs.h | 233 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 434 insertions(+), 1 deletion(-)
 
- drivers/net/ethernet/netronome/nfp/bpf/verifier.c  |    8 +-
- include/linux/bpf_verifier.h                       |   71 +-
- include/linux/cnum.h                               |   80 ++
- kernel/bpf/Makefile                                |    2 +-
- kernel/bpf/cnum.c                                  |  120 ++
- kernel/bpf/cnum_defs.h                             |  233 ++++
- kernel/bpf/log.c                                   |   24 +-
- kernel/bpf/states.c                                |   16 +-
- kernel/bpf/verifier.c                              | 1405 ++++++--------------
- .../testing/selftests/bpf/prog_tests/reg_bounds.c  |   90 +-
- .../testing/selftests/bpf/progs/verifier_bounds.c  |   89 +-
- .../testing/selftests/bpf/progs/verifier_subreg.c  |    6 +-
- 12 files changed, 1059 insertions(+), 1085 deletions(-)
----
-base-commit: fd30cf86e1194ab067661a0ab3e0769a5600848b
-change-id: 20260421-cnums-everywhere-rfc-v1-79ef787fd571
+diff --git a/include/linux/cnum.h b/include/linux/cnum.h
+new file mode 100644
+index 000000000000..a7259b105b45
+--- /dev/null
++++ b/include/linux/cnum.h
+@@ -0,0 +1,80 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#ifndef _LINUX_CNUM_H
++#define _LINUX_CNUM_H
++
++#include <linux/types.h>
++
++/*
++ * cnum32: a circular number.
++ * A unified representation for signed and unsigned ranges.
++ *
++ * Assume that a 32-bit range is a circle, with 0 being in the 12 o'clock
++ * position, numbers placed sequentially in clockwise order and U32_MAX
++ * in the 11 o'clock position. Signed values map onto the same circle:
++ * S32_MAX sits at 5 o'clock, S32_MIN sits at 6 o'clock (opposite 0),
++ * negative values occupy the left half and positive values the right half.
++ *
++ * @cnum32 represents an arc on this circle drawn clockwise.
++ * @base corresponds to the first value of the range.
++ * @size corresponds to the number of integers in the range excluding @base.
++ * (The @base is excluded to avoid integer overflow when representing the full
++ *  0..U32_MAX range, which corresponds to 2^32, which can't be stored in u32).
++ *
++ * For example: {U32_MAX, 1} corresponds to signed range [-1, 0],
++ *              {S32_MAX, 1} corresponds to unsigned range [S32_MAX, S32_MIN].
++ */
++struct cnum32 {
++	u32 base;
++	u32 size;
++};
++
++#define CNUM32_UNBOUNDED ((struct cnum32){ .base = 0, .size = U32_MAX })
++#define CNUM32_EMPTY ((struct cnum32){ .base = U32_MAX, .size = U32_MAX })
++
++struct cnum32 cnum32_from_urange(u32 min, u32 max);
++struct cnum32 cnum32_from_srange(s32 min, s32 max);
++u32 cnum32_umin(struct cnum32 cnum);
++u32 cnum32_umax(struct cnum32 cnum);
++s32 cnum32_smin(struct cnum32 cnum);
++s32 cnum32_smax(struct cnum32 cnum);
++struct cnum32 cnum32_intersect(struct cnum32 a, struct cnum32 b);
++void cnum32_intersect_with(struct cnum32 *dst, struct cnum32 src);
++void cnum32_intersect_with_urange(struct cnum32 *dst, u32 min, u32 max);
++void cnum32_intersect_with_srange(struct cnum32 *dst, s32 min, s32 max);
++bool cnum32_contains(struct cnum32 cnum, u32 v);
++bool cnum32_is_const(struct cnum32 cnum);
++bool cnum32_is_empty(struct cnum32 cnum);
++struct cnum32 cnum32_add(struct cnum32 a, struct cnum32 b);
++struct cnum32 cnum32_negate(struct cnum32 a);
++
++/* Same as cnum32 but for 64-bit ranges */
++struct cnum64 {
++	u64 base;
++	u64 size;
++};
++
++#define CNUM64_UNBOUNDED ((struct cnum64){ .base = 0, .size = U64_MAX })
++#define CNUM64_EMPTY ((struct cnum64){ .base = U64_MAX, .size = U64_MAX })
++
++struct cnum64 cnum64_from_urange(u64 min, u64 max);
++struct cnum64 cnum64_from_srange(s64 min, s64 max);
++u64 cnum64_umin(struct cnum64 cnum);
++u64 cnum64_umax(struct cnum64 cnum);
++s64 cnum64_smin(struct cnum64 cnum);
++s64 cnum64_smax(struct cnum64 cnum);
++struct cnum64 cnum64_intersect(struct cnum64 a, struct cnum64 b);
++void cnum64_intersect_with(struct cnum64 *dst, struct cnum64 src);
++void cnum64_intersect_with_urange(struct cnum64 *dst, u64 min, u64 max);
++void cnum64_intersect_with_srange(struct cnum64 *dst, s64 min, s64 max);
++bool cnum64_contains(struct cnum64 cnum, u64 v);
++bool cnum64_is_const(struct cnum64 cnum);
++bool cnum64_is_empty(struct cnum64 cnum);
++struct cnum64 cnum64_add(struct cnum64 a, struct cnum64 b);
++struct cnum64 cnum64_negate(struct cnum64 a);
++
++struct cnum32 cnum32_from_cnum64(struct cnum64 cnum);
++struct cnum64 cnum64_cnum32_intersect(struct cnum64 a, struct cnum32 b);
++
++#endif /* _LINUX_CNUM_H */
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index 399007b67a92..4dc41bf5780c 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -6,7 +6,7 @@ cflags-nogcse-$(CONFIG_X86)$(CONFIG_CC_IS_GCC) := -fno-gcse
+ endif
+ CFLAGS_core.o += -Wno-override-init $(cflags-nogcse-yy)
+ 
+-obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o log.o token.o liveness.o const_fold.o
++obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o
+ obj-$(CONFIG_BPF_SYSCALL) += bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
+ obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
+ obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o bpf_insn_array.o
+diff --git a/kernel/bpf/cnum.c b/kernel/bpf/cnum.c
+new file mode 100644
+index 000000000000..86142cb2aee5
+--- /dev/null
++++ b/kernel/bpf/cnum.c
+@@ -0,0 +1,120 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include <linux/bits.h>
++
++#define T 32
++#include "cnum_defs.h"
++#undef T
++
++#define T 64
++#include "cnum_defs.h"
++#undef T
++
++struct cnum32 cnum32_from_cnum64(struct cnum64 cnum)
++{
++	if (cnum64_is_empty(cnum))
++		return CNUM32_EMPTY;
++
++	if (cnum.size >= U32_MAX)
++		return (struct cnum32){ .base = 0, .size = U32_MAX };
++	else
++		return (struct cnum32){ .base = (u32)cnum.base, .size = cnum.size };
++}
++
++/*
++ * Suppose 'a' and 'b' are laid out as follows:
++ *
++ *                                                          64-bit number axis --->
++ *
++ * N*2^32                   (N+1)*2^32                (N+2)*2^32                (N+3)*2^32
++ * ||------|---|=====|-------||----------|=====|-------||----------|=====|----|--||
++ *         |   |< b >|                   |< b >|                   |< b >|    |
++ *         |   |                                                         |    |
++ *         |<--+--------------------------- a ---------------------------+--->|
++ *             |                                                         |
++ *             |<-------------------------- t -------------------------->|
++ *
++ * In such a case it is possible to infer a more tight representation t
++ * such that ∀ v ∈ a, (u32)v ∈ b: v ∈ t.
++ */
++struct cnum64 cnum64_cnum32_intersect(struct cnum64 a, struct cnum32 b)
++{
++	/*
++	 * To simplify reasoning, rotate the circles so that [virtual] a1 starts
++	 * at u32 boundary, b1 represents b in this new frame of reference.
++	 */
++	struct cnum32 b1 = { b.base - (u32)a.base, b.size };
++	struct cnum64 t = a;
++	u64 d, b1_max;
++
++	if (cnum64_is_empty(a) || cnum32_is_empty(b))
++		return CNUM64_EMPTY;
++
++	if (cnum32_urange_overflow(b1)) {
++		b1_max = (u32)b1.base + (u32)b1.size; /* overflow here is fine and necessary */
++		if ((u32)a.size > b1_max && (u32)a.size < b1.base) {
++			/*
++			 * N*2^32                   (N+1)*2^32
++			 * ||=====|------------|=====||=====|---------|---|=====||
++			 *  |b1 ->|            |<- b1||b1 ->|         |   |<- b1|
++			 *  |<----------------- a1 ------------------>|
++			 *  |<-------------- t ------------>|<-- d -->| (after adjustment)
++			 *                                  ^
++			 *                                b1_max
++			 */
++			d = (u32)a.size - b1_max;
++			t.size -= d;
++		} else {
++			/*
++			 * No adjustments possible in the following cases:
++			 *
++			 * ||=====|------------|=====||===|=|-------------|=|===||
++			 *  |b1 ->|            |<- b1||b1 +>|             |<+ b1|
++			 *  |<----------------- a1 ------>|                 |
++			 *  |<----------------- (or) a1 ------------------->|
++			 */
++		}
++	} else {
++		if (t.size < b1.base)
++			/*
++			 * N*2^32                   (N+1)*2^32
++			 * ||----------|--|=======|--||------>
++			 *  |<-- a1 -->|  |<- b ->|
++			 */
++			return CNUM64_EMPTY;
++		/*
++		 * N*2^32                   (N+1)*2^32
++		 * ||-------------|========|-||-----| -------|========|-||
++		 *  |             |<- b1 ->|        |        |<- b1 ->|
++		 *  |<------------+ a1 ------------>|
++		 *                |<------ t ------>| (after adjustment)
++		 */
++		t.base += b1.base;
++		t.size -= b1.base;
++		b1_max = b1.base + b1.size;
++		d = 0;
++		if ((u32)a.size < b1.base)
++			/*
++			 * N*2^32                   (N+1)*2^32
++			 * ||-------------|========|-||------|-------|========|-||
++			 *  |             |<- b1 ->|         |       |<- b1 ->|
++			 *  |<------------+-- a1 --+-------->|
++			 *                |<- t  ->|<-- d -->| (after adjustment)
++			 */
++			d = (u32)a.size + (BIT_ULL(32) - b1_max);
++		else if ((u32)a.size >= b1_max)
++			/*
++			 * N*2^32                   (N+1)*2^32
++			 * ||--|========|------------||--|========|-------|-----||
++			 *  |  |<- b1 ->|                |<- b1 ->|       |
++			 *  |<-+------------------ a1 ------------+------>|
++			 *     |<-------------- t --------------->|<- d ->| (after adjustment)
++			 */
++			d = (u32)a.size - b1_max;
++		if (t.size < d)
++			return CNUM64_EMPTY;
++		t.size -= d;
++	}
++	return t;
++}
+diff --git a/kernel/bpf/cnum_defs.h b/kernel/bpf/cnum_defs.h
+new file mode 100644
+index 000000000000..1aa0554bf19f
+--- /dev/null
++++ b/kernel/bpf/cnum_defs.h
+@@ -0,0 +1,233 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#ifndef T
++#error "Define T (bit width: 32, 64) before including cnum_defs.h"
++#endif
++
++#include <linux/cnum.h>
++#include <linux/limits.h>
++#include <linux/minmax.h>
++#include <linux/compiler_types.h>
++
++#define cnum_t   __PASTE(cnum, T)
++#define ut       __PASTE(u, T)
++#define st       __PASTE(s, T)
++#define UT_MAX   __PASTE(__PASTE(U, T), _MAX)
++#define ST_MAX   __PASTE(__PASTE(S, T), _MAX)
++#define ST_MIN   __PASTE(__PASTE(S, T), _MIN)
++#define EMPTY    __PASTE(__PASTE(CNUM, T), _EMPTY)
++#define FN(name) __PASTE(__PASTE(cnum, T), __PASTE(_, name))
++
++struct cnum_t FN(from_urange)(ut min, ut max)
++{
++	return (struct cnum_t){ .base = min, .size = (ut)max - min };
++}
++
++struct cnum_t FN(from_srange)(st min, st max)
++{
++	ut size = (ut)max - (ut)min;
++	ut base = size == UT_MAX ? 0 : (ut)min;
++
++	return (struct cnum_t){ .base = base, .size = size };
++}
++
++/* True if this cnum represents two unsigned ranges. */
++static inline bool FN(urange_overflow)(struct cnum_t cnum)
++{
++	/* Same as cnum.base + cnum.size > UT_MAX but avoids overflow */
++	return cnum.size > UT_MAX - (ut)cnum.base;
++}
++
++/*
++ * cnum{T}_umin / cnum{T}_umax query an unsigned range represented by this cnum.
++ * If cnum represents a range crossing the UT_MAX/0 boundary, the unbound range
++ * [0..UT_MAX] is returned.
++ */
++ut FN(umin)(struct cnum_t cnum)
++{
++	return FN(urange_overflow)(cnum) ? 0 : cnum.base;
++}
++
++ut FN(umax)(struct cnum_t cnum)
++{
++	return FN(urange_overflow)(cnum) ? UT_MAX : cnum.base + cnum.size;
++}
++
++/* True if this cnum represents two signed ranges. */
++static inline bool FN(srange_overflow)(struct cnum_t cnum)
++{
++	return FN(contains)(cnum, (ut)ST_MAX) && FN(contains)(cnum, (ut)ST_MIN);
++}
++
++/*
++ * cnum{T}_smin / cnum{T}_smax query a signed range represented by this cnum.
++ * If cnum represents a range crossing the ST_MAX/ST_MIN boundary, the unbound range
++ * [ST_MIN..ST_MAX] is returned.
++ */
++st FN(smin)(struct cnum_t cnum)
++{
++	return FN(srange_overflow)(cnum)
++	       ? ST_MIN
++	       : min((st)cnum.base, (st)(cnum.base + cnum.size));
++}
++
++st FN(smax)(struct cnum_t cnum)
++{
++	return FN(srange_overflow)(cnum)
++	       ? ST_MAX
++	       : max((st)cnum.base, (st)(cnum.base + cnum.size));
++}
++
++/*
++ * If there exists a cnum representing an intersection of cnums 'a' and 'b',
++ * returns this intersection in 'out' and returns true.
++ * If such cnum does not exist:
++ * - if intersection is empty, returns false.
++ * - if intersection produces two ranges, returns smaller of
++ *   'a' or 'b' in 'out'.
++ */
++struct cnum_t FN(intersect)(struct cnum_t a, struct cnum_t b)
++{
++	struct cnum_t b1;
++	ut dbase;
++
++	if (FN(is_empty)(a) || FN(is_empty)(b))
++		return EMPTY;
++
++	if (a.base > b.base)
++		swap(a, b);
++
++	/*
++	 * Rotate frame of reference such that a.base is 0.
++	 * 'b1' is 'b' in this frame of reference.
++	 */
++	dbase = b.base - a.base;
++	b1 = (struct cnum_t){ dbase, b.size };
++	if (FN(urange_overflow)(b1)) {
++		if (b1.base <= a.size) {
++			/*
++			 * Rotated frame (a.base at origin):
++			 *
++			 * 0                                       UT_MAX
++			 * |--------------------------------------------|
++			 * [=== a ==========================]           |
++			 * [= b1 tail =]  [========= b1 main ==========>]
++			 *                 ^-- b1.base <= a.size
++			 *
++			 * 'a' and 'b' intersect in two disjoint arcs,
++			 * can't represent as single cnum, over-approximate
++			 * the result.
++			 */
++			return a.size <= b.size ? a : b;
++		} else {
++			/*
++			 * Rotated frame (a.base at origin):
++			 *
++			 * 0                                       UT_MAX
++			 * |--------------------------------------------|
++			 * [=== a =============]  |                     |
++			 * [= b1 tail =]          [======= b1 main ====>]
++			 *                         ^-- b1.base > a.size
++			 *
++			 * Only 'b' tail intersects 'a'.
++			 */
++			return (struct cnum_t) {
++				.base = a.base,
++				.size = min(a.size, (ut)(b1.base + b1.size)),
++			};
++		}
++	} else if (a.size >= b1.base) {
++		/*
++		 * Rotated frame (a.base at origin):
++		 *
++		 * 0                                             UT_MAX
++		 * |--------------------------------------------------|
++		 * [=== a ==================================]         |
++		 *                   [== b1 =====================]
++		 *
++		 * 0                                             UT_MAX
++		 * |--------------------------------------------------|
++		 * [=== a ==================================]         |
++		 *                   [== b1 ====]
++		 *                   ^-- b1.base <= a.size
++		 *                   |<-- a.size - dbase -->|
++		 *
++		 * 'a' and 'b' intersect as one cnum.
++		 */
++		return (struct cnum_t) {
++			.base = b.base,
++			.size = min((ut)(a.size - dbase), b.size),
++		};
++	} else {
++		return EMPTY;
++	}
++}
++
++void FN(intersect_with)(struct cnum_t *dst, struct cnum_t src)
++{
++	*dst = FN(intersect)(*dst, src);
++}
++
++void FN(intersect_with_urange)(struct cnum_t *dst, ut min, ut max)
++{
++	FN(intersect_with)(dst, FN(from_urange)(min, max));
++}
++
++void FN(intersect_with_srange)(struct cnum_t *dst, st min, st max)
++{
++	FN(intersect_with)(dst, FN(from_srange)(min, max));
++}
++
++static inline struct cnum_t FN(normalize)(struct cnum_t cnum)
++{
++	if (cnum.size == UT_MAX && cnum.base != 0 && cnum.base != (ut)ST_MAX)
++		cnum.base = 0;
++	return cnum;
++}
++
++struct cnum_t FN(add)(struct cnum_t a, struct cnum_t b)
++{
++	if (FN(is_empty)(a) || FN(is_empty)(b))
++		return EMPTY;
++	if (a.size > UT_MAX - b.size)
++		return (struct cnum_t){ 0, (ut)UT_MAX };
++	else
++		return FN(normalize)((struct cnum_t){ a.base + b.base, a.size + b.size });
++}
++
++struct cnum_t FN(negate)(struct cnum_t a)
++{
++	if (FN(is_empty)(a))
++		return EMPTY;
++	return FN(normalize)((struct cnum_t){ -((ut)a.base + a.size), a.size });
++}
++
++bool FN(is_empty)(struct cnum_t cnum)
++{
++	return cnum.base == EMPTY.base && cnum.size == EMPTY.size;
++}
++
++bool FN(contains)(struct cnum_t cnum, ut v)
++{
++	if (FN(is_empty)(cnum))
++		return false;
++	if (FN(urange_overflow)(cnum))
++		return v >= cnum.base || v <= (ut)cnum.base + cnum.size;
++	else
++		return v >= cnum.base && v <= (ut)cnum.base + cnum.size;
++}
++
++bool FN(is_const)(struct cnum_t cnum)
++{
++	return cnum.size == 0;
++}
++
++#undef EMPTY
++#undef cnum_t
++#undef ut
++#undef st
++#undef UT_MAX
++#undef ST_MAX
++#undef ST_MIN
++#undef FN
+
+-- 
+2.53.0
