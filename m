@@ -1,108 +1,153 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E04BE2D9EFB;
-	Fri, 24 Apr 2026 10:42:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8276F39DBC0
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 11:16:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777027378; cv=none; b=O1E1dt41GJzX3RFa2TIzNO3UFUa527rkM/HjCyYAfgUgFo/Zb0a1WQXl8xKqlQarcCyWVeOVJLDUng3G20xnj4OzbJhSAoCET7QSXZXNWFqJbW15hMYySI/FTphO83H5jR+Uv+MQEX50pLva+KQ2+Hw3W0MkvxcVMoUqFPVO9S0=
+	t=1777029390; cv=none; b=STceJfNXn1aIhKIQueuCOtPx+pcP6FLLBZm+ZAvhaLbmK+H0lvPeFzJFPJT6dvTKkKpXfpVwN5eYEBAvF3UivkH0S6IskcRElDQ8ddKlA8lh8uj0SwlJFgUnGVv7ZV5nm2Do7b+diPwGw2swYrxejwaqqmbnHj43rCyrt9bweZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777027378; c=relaxed/simple;
-	bh=J6qvBnUnGRiCjvCO3qjwKnrny5t6sSycWD3gPp2ZMVk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TYegv+a11gw+XODyDYWHKHDL0HQM+0Sd7U2wCAugzlWMYRug+g/qrWKg0yEPVpPoKHGJRX68tjwTlGjb4YczlCyUt9t7FaLDkWsUKsGlbdhjFMeYICok5TW+OojphBVcGyNWzCi8ZE//CKsV87hMjqoq95JPJqrMR4+mhrltQTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=skpCDb1F; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1777029390; c=relaxed/simple;
+	bh=knTFUy0OLTlm4ckeIx17ey9rRaKGTIdN0CcfLgbRoGQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=uyPQbL3g4dSUMhwwDqQTtsXbtelMunKYWeL+vvTFML4Jyuxx5g3F2w4jvNO2lLmSfnW3HIQkVaM7tES0HbDxpLZhld83Y6u5D5yJZfm3u09ei7fXoBCrrn4hgLtDgrjPC+gVX6oO62EKsCJFyBRqHkhkQFRqnKjqK27UVRMkfHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VpigTYTT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="skpCDb1F"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777027373;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5gmf5JLyBQRilWmxu/Ad4jSduwr5kfWqh68zcLQ0kQs=;
-	b=skpCDb1FaAOVr4mBDpYBEGhYX/Edi8xM8T45kPJxvYawq/JTXP9aqyipHWmbjlB//UYh1b
-	mZQFt9/IBgiB7SvtBLeBaqRXZryxVh5CvvqFkhSRWv3MgBHPfYneRQGjtp6/z287GYXvJv
-	wgDC6WJKu9IN568nCXRQ9zCQlu/993s=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Samiullah Khawaja <skhawaja@google.com>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	Krishna Kumar <krikku@gmail.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v2 3/3] bpf, xdp: reject offloaded programs on link update
-Date: Fri, 24 Apr 2026 18:41:42 +0800
-Message-ID: <20260424104201.217604-4-jiayuan.chen@linux.dev>
-In-Reply-To: <20260424104201.217604-1-jiayuan.chen@linux.dev>
-References: <20260424104201.217604-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VpigTYTT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA67EC19425;
+	Fri, 24 Apr 2026 11:16:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777029389;
+	bh=knTFUy0OLTlm4ckeIx17ey9rRaKGTIdN0CcfLgbRoGQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=VpigTYTTR7oY37WJRKyx7fUiiOEHprkmYDGvvN3JNzlw7aJoUVfb/wvRl/N/BXCuc
+	 rfZXvXbTEFgnn5NLYEdaOsjVkA1ZRfdRtPkOrBm2BzeD3jFWlag/7As5pkVVChhomZ
+	 ENk0khn+mtMTvqOwgVCpUH6RgG3oKZTHjNBiK2th/Wo/ZTJFgp3Ao4VkNLQlShvMsd
+	 o4TZEHXtmu8NXJt3r00fbhqPAXmQNPcBrYq6WKPIsyBwpB/dnySJmYB2l8h5w3LNRt
+	 FrgVRPWxJvBHta9EwDJJBe0E2XjY0cP9kgEToS3EPxUypQ0A4NXFyMo52RHPRPMAx/
+	 TNyCreni71EXw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] HID: bpf: Sync KF_SLEEPABLE flags in
+ hid_bpf_syscall_kfuncs set
+Reply-To: sashiko@lists.linux.dev
+To: "Zhao Mengmeng" <zhaomzhao@126.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260424-btf-define-v1-1-0f52dffad5aa@kylinos.cn>
+References: <20260424-btf-define-v1-1-0f52dffad5aa@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 24 Apr 2026 11:16:28 +0000
+Message-Id: <20260424111629.AA67EC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-Same class of bug as the tcx/netkit fixes: bpf_xdp_link_update() calls
-dev_xdp_install() directly and bypasses dev_xdp_attach(), so the offload
-check in dev_xdp_attach() is skipped. A user can create an XDP link in
-SKB or native mode with a regular program and then replace it via
-BPF_LINK_UPDATE with an offloaded program, whose bpf_func is
-bpf_prog_warn_on_exec(), tripping the WARN on the first packet.
+Sashiko AI review found 2 potential issue(s):
+- [Critical] ZERO_SIZE_PTR dereference in hid_bpf_hw_request() causes a ker=
+nel panic.
+- [High] Integer promotion bug in hid_bpf_hw_request() silently masks hardw=
+are failures.
+--
 
-Mirror the check from dev_xdp_attach(): reject when the link is not in
-HW mode and the new program is offloaded.
+commit 5998989ac7e53dfd091520e5a1a9f8e928c8cf45
+Author: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
+   =20
+    HID: bpf: Sync KF_SLEEPABLE flags in hid_bpf_syscall_kfuncs set
+   =20
+    This commit synchronizes the KF_SLEEPABLE flag for syscall HID-BPF func=
+tions
+    in the hid_bpf_syscall_kfuncs set. This prevents the flag from being
+    inadvertently dropped globally when pahole intersects flags across BTF =
+IDs.
+   =20
+    Link: https://lore.kernel.org/sched-ext/177693500312.275653.17323765149=
+266875001.b4-reply@b4/
 
-Fixes: 026a4c28e1db3 ("bpf, xdp: Implement LINK_UPDATE for BPF XDP link")
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- net/core/dev.c | 5 +++++
- 1 file changed, 5 insertions(+)
+> diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf=
+_dispatch.c
+> index 50c7b45c59e3fb..62db80ead86e51 100644
+> --- a/drivers/hid/bpf/hid_bpf_dispatch.c
+> +++ b/drivers/hid/bpf/hid_bpf_dispatch.c
+> @@ -585,11 +585,11 @@ static const struct btf_kfunc_id_set hid_bpf_kfunc_=
+set =3D {
+> =20
+>  /* for syscall HID-BPF */
+>  BTF_KFUNCS_START(hid_bpf_syscall_kfunc_ids)
+> -BTF_ID_FLAGS(func, hid_bpf_allocate_context, KF_ACQUIRE | KF_RET_NULL)
+> -BTF_ID_FLAGS(func, hid_bpf_release_context, KF_RELEASE)
+> -BTF_ID_FLAGS(func, hid_bpf_hw_request)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 831129f2a69b5..984d44b2a626d 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -10648,6 +10648,11 @@ static int bpf_xdp_link_update(struct bpf_link *link, struct bpf_prog *new_prog,
- 
- 	netdev_lock_ops(xdp_link->dev);
- 	mode = dev_xdp_mode(xdp_link->dev, xdp_link->flags);
-+	if (mode != XDP_MODE_HW && bpf_prog_is_offloaded(new_prog->aux)) {
-+		netdev_unlock_ops(xdp_link->dev);
-+		err = -EINVAL;
-+		goto out_unlock;
-+	}
- 	bpf_op = dev_xdp_bpf_op(xdp_link->dev, mode);
- 	err = dev_xdp_install(xdp_link->dev, mode, bpf_op, NULL,
- 			      xdp_link->flags, new_prog);
--- 
-2.43.0
+This isn't a bug in this commit, but since the BTF flags are being updated
+for hid_bpf_hw_request(), I noticed a potential issue in that function.
 
+Can a ZERO_SIZE_PTR dereference occur if a HID device has an empty report?
+
+When a BPF program invokes hid_bpf_hw_request() with buf__sz >=3D 1, and the
+device has no fields and no report ID, hid_report_len() can return 0:
+
+drivers/hid/bpf/hid_bpf_dispatch.c:__hid_bpf_hw_check_params() {
+	...
+	report_len =3D hid_report_len(report);
+
+	if (*buf__sz > report_len)
+		*buf__sz =3D report_len;
+	...
+}
+
+This clamps the size to 0. Back in hid_bpf_hw_request(), this 0 size
+is passed to kmemdup():
+
+drivers/hid/bpf/hid_bpf_dispatch.c:hid_bpf_hw_request() {
+	...
+	dma_data =3D kmemdup(buf, size, GFP_KERNEL);
+	if (!dma_data)
+		return -ENOMEM;
+
+	ret =3D hid_ops->hid_hw_raw_request(ctx->hid,
+					  dma_data[0],
+	...
+}
+
+For 0-byte allocations, the slab allocator returns ZERO_SIZE_PTR (0x10),
+not NULL. The !dma_data check will pass, and the function will dereference
+dma_data[0], potentially causing a panic.
+
+Additionally, can negative error codes from hid_hw_raw_request() be
+permanently masked?
+
+The variable ret is an int, while size is a size_t. When hid_hw_raw_request=
+()
+fails, it returns a negative error code (e.g., -EIO).
+
+drivers/hid/bpf/hid_bpf_dispatch.c:hid_bpf_hw_request() {
+	...
+	int ret;
+	size_t size =3D buf__sz;
+	...
+	ret =3D hid_ops->hid_hw_raw_request(...);
+=09
+	if (ret > size)
+		ret =3D size;
+	...
+}
+
+Due to C integer promotion rules, the signed int ret is cast to an unsigned
+size_t before comparison. Any negative error code is converted to a large
+positive integer, causing ret > size to evaluate to true. The function then
+executes the ret =3D size assignment, masking the hardware failure.
+
+> -BTF_ID_FLAGS(func, hid_bpf_hw_output_report)
+> -BTF_ID_FLAGS(func, hid_bpf_input_report)
+> +BTF_ID_FLAGS(func, hid_bpf_allocate_context, KF_ACQUIRE | KF_RET_NULL | =
+KF_SLEEPABLE)
+> +BTF_ID_FLAGS(func, hid_bpf_release_context, KF_RELEASE | KF_SLEEPABLE)
+> +BTF_ID_FLAGS(func, hid_bpf_hw_request, KF_SLEEPABLE)
+> +BTF_ID_FLAGS(func, hid_bpf_hw_output_report, KF_SLEEPABLE)
+> +BTF_ID_FLAGS(func, hid_bpf_input_report, KF_SLEEPABLE)
+>  BTF_KFUNCS_END(hid_bpf_syscall_kfunc_ids)
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260424-btf-define=
+-v1-1-0f52dffad5aa@kylinos.cn?part=3D1
