@@ -1,187 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581E434B693
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 20:15:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02E02773DA
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 20:16:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777061736; cv=none; b=IoXOE/ATTrAscf3CMkj+HZdTF2lM/5NuhsQ/XFdP/R3ao9W8BVrloVaU7Y4cPcIEKMd4BkzCQnJN05dVJveVgZR4Ia/Td0c1KApDXNbVFyiWQnJIPSbi6N+AR5q5MeoyUMIJyFCvnj/ydC/9dpQIOi2Fl6fnGdexNlnlncwrVGQ=
+	t=1777061811; cv=none; b=THWVUE7k7+7Iki05+LdYr/n7EdlX7Av2l+akRodvQRHruJPneBoX5t/AC0QTg89S5aG/uYcuOKaBG7oLhHXz3ABgYkUIFTQDW09iOt2AR2IvEHTux+yBnpPyMAm/fL8x7LoBxIY5H+jn44AO0MoARUpqXqmuMIWOA7GNpz2F0Xk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777061736; c=relaxed/simple;
-	bh=bbneQzRHxK03QeL4sOXKd6dTAwMPlUkAVo3DKccR4iY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=oW+Wuae1pDcagvE+qgGy0aZypyOtWqN0pWcoHJHJUgGJzo2y7cyYMo2iAi+lKosIfy08z73edxfa+8abxJi9cNlnph6lCjCN9UVSfyuQL0c/eM74BZzb9Y9fGwwRW2Dr93HSU9/2K10gapyDOEzpptab663pcBOh+/77jegairU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Si2tmRQM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777061811; c=relaxed/simple;
+	bh=0ATpinyhZLa/pz07NKPfrYEC8Ia8kxnpRpRKn3rb580=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=O81/ZVrUsyj95UB0UOqQhHh9dzAO1FeEy+OMu5cE0Ts/Hs/AtuCZOzUzD3Tb4AujFbRtOJY2QcSuCrgTvfjKmfQP81tC4++lx1rxg02MPro0vma+vdVMDe07lSfoplMZMBz/Z/Gk9fVGM3l/W01/KimhCLpXbEfVfBefCba1fR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=y+Dujubp; arc=none smtp.client-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Si2tmRQM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA1BCC19425;
-	Fri, 24 Apr 2026 20:15:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777061736;
-	bh=bbneQzRHxK03QeL4sOXKd6dTAwMPlUkAVo3DKccR4iY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Si2tmRQM2am7RB+PAFHcSS8Z9D0ROy81npottoKgwMiEljqWJYXmX7vwps6iyRnhe
-	 zNUfREerb+zMjLMqrls6BT6pYeHhQ+UkFoa0MCo83VTEXaroPo0H8TJmJNoNbEjE3H
-	 jrdCFOZtYm4yZiWBqi7TwyrsVFbGWDiq/qMPSRf8MYI5DELnkE4kJfDsc112eW1pgg
-	 vzi8fdQrg0ptAziMhdyrHxQQCmu9Ly+vFd5teV6xAHSXj26qb2VQK27y3Ai0UuiTkg
-	 uZJwEFbife6lslYznAhLMdi69rvpzMeQPPgXqr7Xn31prNM4586ftvsGdq21aSBFbw
-	 mncRqrc54PWdA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 02/10] rhashtable: Add
- rhashtable_walk_enter_from()
-Reply-To: sashiko@lists.linux.dev
-To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260424-rhash-v3-2-d0fa0ce4379b@meta.com>
-References: <20260424-rhash-v3-2-d0fa0ce4379b@meta.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 24 Apr 2026 20:15:35 +0000
-Message-Id: <20260424201535.EA1BCC19425@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="y+Dujubp"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2d868d014a5so8147598eec.1
+        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 13:16:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1777061808; x=1777666608; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AcW55QyV6ypNR4eKSM4ztqICyZlAQ9U3yzYxTyxBMPM=;
+        b=y+DujubpLwPQqoSbCuGGhEhcYiKlmnsZp0a+B0gyWvQOB12O/igklI8Q8JTKzCQKeT
+         hDw5tR4Zs971bl0aYvVVkO2kuj6tkwHgatba+Ez7POl6FB6qir43SiWBxzYLYxowxthi
+         Mr1ypFodz89NEA8Tft3yAw28CSlBQ5fG8B3QxG3yK3HOZxT5OD+u02v7RC8v7HUzvla6
+         o6zFkU48GO7Vajk8EV0ebUx4jm+Oidg9FzKtaGlt9pbDE+w1lbZSOlyQKMGtTQg45MG6
+         R0DC33gbpM7xmZWp+rFQz6AKxd+PE9uPxzwCuPdwrCKNBwN8hVRrxRiFd//h5wQvi8XR
+         Zbpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777061808; x=1777666608;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AcW55QyV6ypNR4eKSM4ztqICyZlAQ9U3yzYxTyxBMPM=;
+        b=dG7tgrZOucY1lncEovjZH+webv+4e102+WthBYBmtaqP87UpSKu09yVRVeVQUYAj21
+         QIJPylz0CvQJ9x26IjSv1vDBHOd+7jv0naY4ByfP+iFcapNtl7k5NMzag/gvBhcvknPm
+         yTPDW8Cv3faVrsBLvpIDdw+WcS4y5h3g8f5Md+vNXHStnpRM86kHTZYEfzeJtdjqoCwL
+         KIMcuZEbIjjw4svFO/h+7eddp5IFw9uf0Fl/MbXMGgkSouBWXETwpPJdG18hSU0FFau8
+         bU8xwJHmRoxCRCaxgvVnWBt02R2c4w26IJauloA8DihHl4IOdU8fyJxpIf2GoCAeM0KK
+         9EMA==
+X-Forwarded-Encrypted: i=1; AFNElJ+RnY8wPhTWXiQ8GN0cCu7lEXdQIueI6RQGTVxiQzvYvqcTq7yAEyu577HVJPM7FFFq0DI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxY8paqaYqE8ioI9pnDdWD0JLfMDP/BW/pQ3hVLUzZNcn78iwgt
+	OjAwNGks4F2Jvvu8RjlQoK5Id53UH/gi05HvGHe5oSbKSR2mTh9e6ES28N0EQnaV9y0=
+X-Gm-Gg: AeBDievalT+lNQOL+zLscqnPzuilnQ+p/w/7dfKc1kQnTyLM0FxTTjBg3ojWAtdJ63P
+	+XIDw1ubr/n30XVSwBcLoKbx5E5lwCIMRhipyquspi8qUGTcvwA+2w5JUKlxFl1O1sNhNT70Gtg
+	d8X5kSGnSVrTdxWHAzkwZrZAkSHlbh5/BRgo9YKu5L5nBFTs4p3syqChvDgxm02XWgZuRShaW3e
+	dA2R16+F+6M56wr1YmNvfAylKdU7Pvlb5PWE48W13AL63Eow0bDBShpKWs3h9V49VrP9gG8BJR3
+	JJpspcKqlMne42GW4o6ibUlxtxFPg0fXqWFMxiLH/tfSbAfK0htoKMlXRtxY2JvIfN0n3+3CWCh
+	/J6nO5kfb7vPDG8ugOOQ7FmJXlu6Jmz1Br3GHzgWCsylbCoPqJaJl/Ee0ox9iMy1oV7Txa8CLvG
+	co4/BXfYyyEKzQNA==
+X-Received: by 2002:a05:7301:fd81:b0:2be:80c4:2c8c with SMTP id 5a478bee46e88-2eada6d6576mr1907496eec.8.1777061807663;
+        Fri, 24 Apr 2026 13:16:47 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::9ef])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2e53ccce0f5sm33350443eec.17.2026.04.24.13.16.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Apr 2026 13:16:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 24 Apr 2026 16:16:44 -0400
+Message-Id: <DI1NU30EXXE8.1UYJFT5BV8H36@etsalapatis.com>
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>, "Weiming Shi" <bestswngs@gmail.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>
+Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>, "KP
+ Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao
+ Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Barret Rhoden"
+ <brho@google.com>, <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ "Xiang Mei" <xmei5@asu.edu>
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Add test for arena VMA
+ use-after-free on fork
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260411112944.1455470-1-bestswngs@gmail.com>
+ <20260411112944.1455470-3-bestswngs@gmail.com>
+ <DHQI86CY1QDQ.16RMS5QSX99EC@etsalapatis.com>
+ <635af96f-3a8e-4d39-9df5-8c66945bf9e5@linux.dev>
+In-Reply-To: <635af96f-3a8e-4d39-9df5-8c66945bf9e5@linux.dev>
 
-Sashiko AI review found 3 potential issue(s):
-- [High] `rhashtable_walk_enter_from()` ignores `future_tbl` during resizes=
-, causing stateless iterators to infinite loop.
-- [High] `rhashtable_walk_enter_from()` fails to initialize `iter->list` fo=
-r `rhltable`s, causing an uninitialized memory read and breaking iteration.
-- [Medium] In `test_walk_enter_from()`, an error path jumps to `out` withou=
-t setting the `err` variable, causing a silent test failure.
---
+On Fri Apr 24, 2026 at 4:01 PM EDT, Ihor Solodrai wrote:
+> On 4/11/26 10:33 AM, Emil Tsalapatis wrote:
+>> On Sat Apr 11, 2026 at 7:29 AM EDT, Weiming Shi wrote:
+>>> Add a selftest that reproduces the arena VMA use-after-free fixed in
+>>> the previous commit. The test creates an arena, mmaps it, allocates
+>>> pages via BPF, forks, has the parent munmap the arena, then has the
+>>> child call bpf_arena_free_pages. Without the fix this triggers a
+>>> KASAN slab-use-after-free in zap_page_range_single.
+>>>
+>>> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+>>> ---
+>>>  .../selftests/bpf/prog_tests/arena_fork.c     | 86 +++++++++++++++++++
+>>>  .../testing/selftests/bpf/progs/arena_fork.c  | 41 +++++++++
+>>>  2 files changed, 127 insertions(+)
+>>>  create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_fork.c
+>>>  create mode 100644 tools/testing/selftests/bpf/progs/arena_fork.c
+>>>
+>>=20
+>> The test doesn't work for me as advertised. Does it fail for you under
+>> vmtest without patch 1/2?
+>>=20
+>> The test doesn't fail on base vmtest for me, even without the previous p=
+atch,
+>> because KASAN isn't turned on for the CI. With KASAN the test triggers
+>> the splat just fine.=20
+>>=20
+>> Should we maybe turn on KASAN and panic_on_warn by default on vmtest?
+>
+> Hi Emil,
+>
+> I just noticed this message. BPF CI has KASAN enabled by default
+> (disabled only on s390x) for almost a year now [1].  Did the test fail
+> locally for you, but not on CI?
+>
+> [1] https://github.com/kernel-patches/vmtest/commit/5db11d295888c3f048021=
+a15c3a8a9875c8612c3
 
-commit 63530ac8c42e3a9716786a83ad797edaae556017
-Author: Mykyta Yatsenko <yatsenko@meta.com>
+Hi Ihor,
 
-rhashtable: Add rhashtable_walk_enter_from()
+My bad, I misspoke - I thought the CI was running the standard vmtest confi=
+g. Since
+we're running KASAN on the CI it's not an issue that the vmtest config
+doesn't have it on by default.
 
-This commit introduces rhashtable_walk_enter_from() to allow efficient
-iteration resume by positioning the walker at the bucket containing the
-given key. It also refactors the internal lookup functions and adds
-test cases.
+>
+>>=20
+>>> [...]
+>>=20
 
-> diff --git a/lib/rhashtable.c b/lib/rhashtable.c
-> --- a/lib/rhashtable.c
-> +++ b/lib/rhashtable.c
-
-[ ... ]
-
-> @@ -692,6 +692,47 @@ void rhashtable_walk_enter(struct rhashtable *ht, st=
-ruct rhashtable_iter *iter)
->  }
->  EXPORT_SYMBOL_GPL(rhashtable_walk_enter);
-> =20
-> +/**
-> + * rhashtable_walk_enter_from - Initialise a walk starting at a key's bu=
-cket
-[ ... ]
-> +void rhashtable_walk_enter_from(struct rhashtable *ht,
-> +				struct rhashtable_iter *iter,
-> +				const void *key,
-> +				const struct rhashtable_params params)
-> +				__must_hold(RCU)
-> +{
-> +	struct bucket_table *tbl;
-> +	struct rhash_head *he;
-> +
-> +	rhashtable_walk_enter(ht, iter);
-> +
-> +	if (!key)
-> +		return;
-> +
-> +	tbl =3D iter->walker.tbl;
-> +	if (!tbl)
-> +		return;
-> +
-> +	he =3D __rhashtable_lookup_one(ht, tbl, key, params,
-> +				     RHT_LOOKUP_NORMAL);
-> +	if (!he)
-> +		return;
-
-What happens if the table is currently resizing and the key has already been
-moved to the future table?
-
-If __rhashtable_lookup_one() fails to find the key in the current table, it
-leaves the iterator positioned at bucket 0.
-
-For stateless iterators like BPF's get_next_key, could this cause an
-infinite loop where it constantly resets to the beginning of the old table
-until the resize completes?
-
-> +
-> +	iter->slot =3D rht_key_hashfn(ht, tbl, key, params);
-> +	iter->p =3D he;
-
-Does this leave iter->list uninitialized for rhlist tables?
-
-rhashtable_walk_enter() does not initialize iter->list. When
-rhashtable_walk_start_check() is called for an rhlist table, it validates
-the element using:
-
-lib/rhashtable.c:rhashtable_walk_start_check() {
-    ...
-    } else if (iter->p && rhlist) {
-        ...
-                if (list =3D=3D iter->list) {
-                    iter->p =3D p;
-                    iter->skip =3D skip;
-                    goto found;
-                }
-    ...
-}
-
-Will this uninitialized read of iter->list cause the validation to fail
-and silently fall back to the beginning of the bucket?
-
-> +}
-> +EXPORT_SYMBOL_GPL(rhashtable_walk_enter_from);
-
-[ ... ]
-
-> diff --git a/lib/test_rhashtable.c b/lib/test_rhashtable.c
-> --- a/lib/test_rhashtable.c
-> +++ b/lib/test_rhashtable.c
-
-[ ... ]
-
-> @@ -679,6 +680,133 @@ static int threadfunc(void *data)
->  	return err;
->  }
-> =20
-> +static int __init test_walk_enter_from(void)
-> +{
-
-[ ... ]
-
-> +		/* Count the number of elements after this one */
-> +		do {
-> +			obj =3D rhashtable_walk_next(&iter);
-> +			count++;
-> +		} while (obj && (!IS_ERR(obj) || (PTR_ERR(obj) =3D=3D -EAGAIN)));
-> +
-> +		rhashtable_walk_stop(&iter);
-> +		rhashtable_walk_exit(&iter);
-> +		if (count > 4) {
-> +			pr_warn("walk_enter_from: walked %d elements instead of max 4\n", cou=
-nt);
-> +			goto out;
-> +		}
-
-Does this error path need to set the err variable?
-
-Right now it jumps to out and returns 0, which might cause the test suite
-to silently miss the failure.
-
-> +		/*
-> +		 * Collect the lengths of every walked path,
-> +		 * we should have each length walked one time
-> +		 */
-> +		len_freq[count - 1]++;
-> +	}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260424-rhash-v3-0=
--d0fa0ce4379b@meta.com?part=3D2
