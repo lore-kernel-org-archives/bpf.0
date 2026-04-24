@@ -1,180 +1,216 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3684835A938
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 23:19:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699FE1C5F27
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 23:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777072743; cv=none; b=LkoMGx8Puk1XnOMbmmptNt285k37PmDACoGB7tI4Ssd38+SCeNXBgBs/GWiz7BUh4attTgpyEnF34H9r7qIbBZHhGAtcdXf/k4kSaN7eGWoSk3rQ1zGPduBsdpkTjn9ZyrPT94kiaJZJsHJD4UeDzXSCNQKSyuYhT+4PJlozz2Y=
+	t=1777072849; cv=none; b=g1ZrbWnw1rXjc/Iih4H37fbAMtCqjhhES/yy+YQ6a2IwLGE6eGW1zcw31J9Uq0iOvdULvm+qka6WXL89Btk8JIQ9TV3TsQwPL0OBLf/PFPY/K8wOUgM6JnurcDhA4MhwsDR3wQ37KHIt5LsqnVj+B5Flc0sdxsSujGHsRZaN8wU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777072743; c=relaxed/simple;
-	bh=ZdbPOHovsxwmyuM1J5PjCAiEqYjwYOZZUtcY/EJqJr8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TxlQGruKZKVd+oNtrhVW+5oJI+7+TL3Kv4/0mw9IQvLibPlHA0wYT6qyN7BcOxk4f8icySTVTR8rfxYJoxA7daZn/MdLCPtvTK+UHRZ90aCFqAqmSgXfUgViYz299eknaGrd5Pm5L6N/GeSdPWqrbXDVuqy9WrTDkMeg3FsgVFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lAdngFjW; arc=none smtp.client-ip=95.215.58.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1777072849; c=relaxed/simple;
+	bh=dgFCF5P7v1dzu10VkbpiYjCRlLibMMbntJJJrYltWZE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GGrMPuisORZPv+i4PQ9+BONX8rh0vnDbL6o+HQU8SPkMH4nW2l5KlQDFTyGkoeVXIBWwoENzvw3B8a3ObJRmLAkz+A5XgNs7V8thret7Krd64o9KwX3HnHdysBLMcSrDij6uHJ49jpC8QjKiMwty5VQEeUosvaEooZtJfXgUaRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N3K5pFfW; arc=none smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lAdngFjW"
-Message-ID: <7dd64547-25a4-46de-a896-98fcec04468e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777072738;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=P3XVMe3dGeABivLaYIdooN1MvQa1CctnziG70XU09po=;
-	b=lAdngFjWpn+SFIEIgyjCn6oyJ7s6mP8JViggHzKVI1eQOG8r8fZE96FmVDJRHvA5PSglKz
-	UM1P3b5Y3bU4XRPVejznw6aBsaRiopshcyt4CJCQ3+MTz1tCmr61vtPiwmaHEKEmgNqEbm
-	tyMnnBKBDxXtgqkPNrAauQU71Wd0y8w=
-Date: Fri, 24 Apr 2026 16:18:29 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N3K5pFfW"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-7a43424f861so78598607b3.1
+        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 16:20:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777072847; x=1777677647; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=iCIji13baonMmgPO0ajNnq9HOSixeTXLQT62scUgHDU=;
+        b=N3K5pFfWKR/MyaZWLoFDLqanQy618byQkHr90UYeL8nwCjyrWm2r4QGttwwEfUP89U
+         4/Qi95+f0Ye2QOp8+zDVDDCBMXd+KLp4zJ1JyAKYHprdiyeYQ3/4Og5JFl2urMxi8H4l
+         lfzoMEouKi24fTe5IUNV32QbDJPW+CBbZO+S7Sy8Srh+T3PHcRHNiSNSDcsgAt6WJDGR
+         XIuWUrwyabQ+5oYFq60xWpysTSayMixOWyl+9JH6LIOZ4iT2N/7xl3lrZ5JqltiJ9KOc
+         e3CmhaB12WNRYBuX8zfQa+XZTZstVTcXcprEqwSPx7l0VMtgVNdZTv3yn9VnL/0PtugA
+         FXLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777072847; x=1777677647;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iCIji13baonMmgPO0ajNnq9HOSixeTXLQT62scUgHDU=;
+        b=M+YDtYnaBnFYg5CVu9mkoXA7UySSYSIHNm7uLFsf0mnt+HMQVI9TyrRXS7+qawAuXI
+         xtbHrBgvZGJa7YZ3H0jXEQ4WRmETe0S5+3VhmJaBjsr50JJ4kHChjjazhjCP6yAF/aBz
+         0SPwItQUsbMgy2yAju6x81bIrKkCs5rxBRwoTvalvIN9DlDBKaGX5OGGYXgxbW6PSL6U
+         slpW4MslsN3KuCjp7BedALhVu190E/ugyk8ZjTZhmRazxYl/I6dtFwLEhE8QB6BoBQWS
+         /N0ywjTr+/GjCi1vstIzZBakCNYd9/um6ogRCFRMzPx0hyVhz20CMkKGRJ27j/Y2Vy6k
+         qoaw==
+X-Forwarded-Encrypted: i=1; AFNElJ/yaL61iDYoO5YhcyW/M29Dy0b+weS6yv7EDhRC+UYOlxzOroXcIAvRSAfes7yWNHJvKWo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzn5Wz/Pu4AuXyyuORl+cMmdUljBEB76sv9HnTDTTVtgeQByXuH
+	Xcl1tXl9W7IfjAsKslhUnwj5qLSsiLuqSKdYoPzeIN/sPlL+LhsJ3NgRcC9sRA==
+X-Gm-Gg: AeBDievg26ImzzjmSubhbgu8VaXr7AFYFjj7CXaD7Sa8T4ZKCR/rHtTiipMepGK4d0f
+	tnIsvjva+CaUNnjKI/lxwPQBYmj1p4yN6+e5Imvbacu86WTu6BKqxkc8tn0NDOwSEeN6xgx/K21
+	wCi6iEcZbkKOfbY0LtCQVHIge+AJobNYSP5Pof1Lfh0k3DP8KCjGiaRjyvaUqm4RJ11pcsNGe0c
+	TCn7gU0oRjRlSn0C6RGzBned0YdcWnbfEl/ykdqJe245gHRV/6tYo2pLSS3/d3XjAj2Lk20GxH4
+	fnEQrAnCglNBySc7HcstAyig3Texgw0Q7BEi8cDFaxv/kOr6/Q4JWcaIMRmRlUIrAlLGG5JvdX4
+	ZmwvuWwuI2hhd8z4G1RVJkmj7wHNv/J/z36JdwwtIZMaiS/wQ5eemBxSY7NwcxPLemIdN/5jWxD
+	C95OQeJjzq/LM84ZeXZEun/iG3IJqC4txmE5wBgWcpiRvKk2KWzwEGa8wIaMspu+kFbFG4d2H3X
+	TBI6w==
+X-Received: by 2002:a05:690e:128a:b0:650:1cf8:f608 with SMTP id 956f58d0204a3-65310a62a92mr32055488d50.45.1777072847319;
+        Fri, 24 Apr 2026 16:20:47 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:cc96:e003:f6cc:4ed])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65314b5faf0sm11182555d50.5.2026.04.24.16.20.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Apr 2026 16:20:46 -0700 (PDT)
+Date: Fri, 24 Apr 2026 19:20:45 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: sashiko@lists.linux.dev, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Implement dtor for struct file BTF
+ ID
+Message-ID: <aev6zU2vj6wmaRMG@zenbox>
+References: <20260424192252.695240-2-utilityemal77@gmail.com>
+ <20260424195958.AED4EC19425@smtp.kernel.org>
+ <aevOssMWH_Vm9CPG@zenbox>
+ <CAADnVQKFtuX48V9Yy88GHGVbQyY30M3b3YBvZ2PmYt_-jbohpQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH RFC bpf-next 2/8] bpf: mark instructions accessing program
- stack
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
- <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Shuah Khan <shuah@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>,
- Alexander Potapenko <glider@google.com>,
- Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: ebpf@linuxfoundation.org,
- Bastien Curutchet <bastien.curutchet@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Xu Kuohai <xukuohai@huawei.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, kasan-dev@googlegroups.com,
- linux-mm@kvack.org
-References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
- <20260413-kasan-v1-2-1a5831230821@bootlin.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260413-kasan-v1-2-1a5831230821@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <CAADnVQKFtuX48V9Yy88GHGVbQyY30M3b3YBvZ2PmYt_-jbohpQ@mail.gmail.com>
 
-On 4/13/26 11:28 AM, Alexis LothorÃ© (eBPF Foundation) wrote:
-> In order to prepare to emit KASAN checks in JITed programs, JIT
-> compilers need to be aware about whether some load/store instructions
-> are targeting the bpf program stack, as those should not be monitored
-> (we already have guard pages for that, and it is difficult anyway to
-> correctly monitor any kind of data passed on stack).
+On Fri, Apr 24, 2026 at 03:05:47PM -0700, Alexei Starovoitov wrote:
+> On Fri, Apr 24, 2026 at 1:12 PM Justin Suess <utilityemal77@gmail.com> wrote:
+> >
+> > On Fri, Apr 24, 2026 at 07:59:57PM +0000, sashiko-bot@kernel.org wrote:
+> > > Sashiko AI review found 1 potential issue(s):
+> > > - [High] Calling `fput()` directly from `bpf_file_release_dtor` can lead to a hard deadlock when invoked from NMI context.
+> > > --
+> > >
+> > > commit 6368f91be1fd91bc9cb38d3498f35d279bad04c9
+> > > Author: Justin Suess <utilityemal77@gmail.com>
+> > >
+> > > bpf: Implement dtor for struct file BTF ID
+> > >
+> > > This commit implements a destructor for struct file, allowing it to be
+> > > stored in a map as a referenced kptr. The destructor calls fput to
+> > > release the reference.
+> > >
+> > > > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> > > > index 2bb60200c2665e..ee5ceb82e4f812 100644
+> > > > --- a/kernel/bpf/helpers.c
+> > > > +++ b/kernel/bpf/helpers.c
+> > > [ ... ]
+> > > > @@ -2752,6 +2753,13 @@ __bpf_kfunc void bpf_task_release_dtor(void *p)
+> > > >  }
+> > > >  CFI_NOSEAL(bpf_task_release_dtor);
+> > > >
+> > > > +__bpf_kfunc void bpf_file_release_dtor(void *file)
+> > > > +{
+> > > > +   fput((struct file *)file);
+> > > > +}
+> > >
+> > > Can this cause a deadlock if the destructor is invoked from NMI context?
+> > >
+> > > If an NMI-context BPF program (such as a perf event tracing program)
+> > > updates or deletes a map element containing a struct file kptr, the BPF
+> > > framework will synchronously invoke this destructor to clean up the old
+> > > kptr.
+> > >
+> > > When fput() drops the reference count to zero, it calls
+> > > __fput_deferred(). Since in_interrupt() evaluates to true in NMI
+> > > context, __fput_deferred() bypasses task_work_add() and instead calls
+> > > schedule_delayed_work().
+> > >
+> > > This leads to the following call chain:
+> > >
+> > > bpf_file_release_dtor()
+> > >    fput()
+> > >       __fput_deferred()
+> > >          schedule_delayed_work()
+> > >             add_timer()
+> > >
+> > > The add_timer() function attempts to acquire the timer_base->lock raw
+> > > spinlock. If the NMI interrupted a thread that was already holding this
+> > > lock, the NMI handler will spin indefinitely waiting for it, resulting
+> > > in a hard deadlock.
+> > >
+> > > Would it be safer to defer the fput() operation using an explicitly
+> > > NMI-safe mechanism like irq_work_queue() to handle arbitrary BPF
+> > > contexts?
+> > >
+> > For (human) reviewer context: The NMI stuff needs to be addressed separately. [1]
+> >
+> > I guess the AI isn't gonna understand but just doing irq_work wouldn't
+> > be right either as it would break operation ordering for maps and
+> > fixing it here wouldn't fix the other dtors broken in NMI.
+> > (cgroup/task_struct)
 > 
-> To support this need, make the BPF verifier mark the instructions that
-> access program stack:
-> - add a setter that allows the verifier to mark instructions accessing
->   the program stack
-> - add a getter that allows JIT compilers to check whether instructions
->   being JITed are accessing the stack
-> 
-> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> ---
->  include/linux/bpf.h          |  2 ++
->  include/linux/bpf_verifier.h |  2 ++
->  kernel/bpf/core.c            | 10 ++++++++++
->  kernel/bpf/verifier.c        |  7 +++++++
->  4 files changed, 21 insertions(+)
-> 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index b4b703c90ca9..774a0395c498 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1543,6 +1543,8 @@ void bpf_jit_uncharge_modmem(u32 size);
->  bool bpf_prog_has_trampoline(const struct bpf_prog *prog);
->  bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, const struct bpf_prog *prog,
->  				 int insn_idx);
-> +bool bpf_insn_accesses_stack(const struct bpf_verifier_env *env,
-> +			     const struct bpf_prog *prog, int insn_idx);
->  #else
->  static inline int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
->  					   struct bpf_trampoline *tr,
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index b148f816f25b..ab99ed4c4227 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -660,6 +660,8 @@ struct bpf_insn_aux_data {
->  	u16 const_reg_map_mask;
->  	u16 const_reg_subprog_mask;
->  	u32 const_reg_vals[10];
-> +	/* instruction accesses stack */
-> +	bool accesses_stack;
->  };
->  
->  #define MAX_USED_MAPS 64 /* max number of maps accessed by one eBPF program */
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 8b018ff48875..340abfdadbed 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -1582,6 +1582,16 @@ bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, const struc
->  	insn_idx += prog->aux->subprog_start;
->  	return env->insn_aux_data[insn_idx].indirect_target;
->  }
-> +
-> +bool bpf_insn_accesses_stack(const struct bpf_verifier_env *env,
-> +			     const struct bpf_prog *prog, int insn_idx)
-> +{
-> +	if (!env)
-> +		return false;
-> +	insn_idx += prog->aux->subprog_start;
-> +	return env->insn_aux_data[insn_idx].accesses_stack;
-> +}
-> +
->  #endif /* CONFIG_BPF_JIT */
->  
->  /* Base function for offset calculation. Needs to go into .text section,
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 1e36b9e91277..7bce4fb4e540 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3502,6 +3502,11 @@ static void mark_indirect_target(struct bpf_verifier_env *env, int idx)
->  	env->insn_aux_data[idx].indirect_target = true;
->  }
->  
-> +static void mark_insn_accesses_stack(struct bpf_verifier_env *env, int idx)
-> +{
-> +	env->insn_aux_data[idx].accesses_stack = true;
-> +}
-> +
->  #define LR_FRAMENO_BITS	3
->  #define LR_SPI_BITS	6
->  #define LR_ENTRY_BITS	(LR_SPI_BITS + LR_FRAMENO_BITS + 1)
-> @@ -6490,6 +6495,8 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
->  		else
->  			err = check_stack_write(env, regno, off, size,
->  						value_regno, insn_idx);
-> +
-> +		mark_insn_accesses_stack(env, insn_idx);
+> Will break operation ordering?
+> What do you mean?
+>
+Basically if we just did irq_work_queue for one map op and then we do it
+again for the same irq_work it will just fail because the queue has to
+be drained before we can schedule more work.
 
-I am not sure this can be done unconditionally here.
+So ordering can't be:
 
-It may be possible in different states to have different pointer
-types for the affected reg (PTR_TO_STACK in one execution path and say
-PTR_TO_MAP_VALUE in another). And if set uncoditionally,
-instrumentation may be skipped for legitimate targets.
+1. irq_work_queue
+2. irq_work_queue (again on same queue)
+3. hard interrupt ends
 
-Maybe reset by default in check_mem_access()?
+It has to be
 
->  	} else if (reg_is_pkt_pointer(reg)) {
->  		if (t == BPF_WRITE && !may_access_direct_pkt_data(env, NULL, t)) {
->  			verbose(env, "cannot write into packet\n");
-> 
+1. irq_work_queue (everything)
+2. hard interrupt ends.
 
+In the first ordering above, step 2 fails because the queue has a
+pending item.
+> I feel we should fix things first before being subject
+> to more of these bugs.
+> Why cannot we defer to irq_work the whole map element if in_nmi
+> and call all dtors there?
+irq_work won't work if there's pending work already. It will just return
+false and not allow you to queue anything until the task is over with.
+
+So it would work for one element, but we'd be stuck and need another
+free irq_work to free the next element.
+
+So we'd need an irq work, one for every element that we free.
+
+So either: 
+
+1. allocating memory for a new irq_work on the fly, which is an
+operation that can fail. So if we're under memory pressure the
+element never gets freed.
+
+2. preallocate an irq work for every element ahead of time.
+
+...
+
+I think the solution for this might be to just reject any kfunc or dtor
+that isn't explicitly marked NMI safe from any programs that may 
+run in NMI.
+
+With a kfunc flag that marks it as being nmi-safe. KF_NMI or
+similar. And extending the concept of kfunc flags to dtors to handle
+them in the verifier as well.
+
+My reasoning is:
+
+1. it's very easy to inadvertently introduce new kfuncs/dtors that would
+break under NMI. (there's two examples in upstream, task_struct and
+cgroup dtors).
+
+2. There's very few NMI contexts reachable from BPF. I only found three
+cases, tracepoints for irq_handler_entry irq_handler_exit and
+nmi_handler.
+
+3. If the user really needs to no nmi unsafe stuff, why can't we just have them
+call bpf_task_work_schedule_resume_impl which is designated for this
+purpose?
+
+Justin
+> should be a simple fix.
