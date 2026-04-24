@@ -1,350 +1,80 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722FC3FFD
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 00:04:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776989097; cv=pass; b=BghHyJvRSqPfOrzSmnDw5m3kEaJvgjy5HHj7os5CnSObwqr8zU9rajdizfaFi5JfIJgicub3bhzekC+LcqKcZmky7/FX+8yXBzUzz4Qy9F4iLJO11CaXSKH2nLvEj0c+sU5NLokZFq3vbjKvnmb9chqiH78EaGc94/RCwiMEq2A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776989097; c=relaxed/simple;
-	bh=hJsV6cT0vW7qV0qdk7JA9SVae9yh9D+KWEZQ1r3SdRw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g/PDS/YsZSSlovgM+3w8AD2keeLUCpGtgJq97Ig/M9VYUvTE/iOWDRv2EjWALLtlvmtd1TYSd7IMo/UXBhLN++VwmyjMg291xdvwVxDodEvwxdiO/ELyvC24hyhlIqxjRwA4uram6sr/dOF0baLoZXK73wqu8GiVJV7Y77UQ7EU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sHMb3+Jq; arc=pass smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B2017D6
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 00:42:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776991329; cv=none; b=GgQ26q/dHN0FjJx1uk1bB+tS+NtUXxk50dZe0vvoYBEJnYEKzHW1qPWuIU2+RtUQxMDgLBhRJKQyhfrFSRi36qScrO/MduKPDDSE4DJALalG6zSQehIL2BaL0H9zS0yiCCpfZRKNaAU+CAxJRTXfwf0Uc+H32n+vJAHPdNeskGc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776991329; c=relaxed/simple;
+	bh=HxasFVtwjC3AOAksdUMADU4qhgML9rAHGFKuZRPB1Mk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=loR/0HA6a9FtP7xz1YMGebdjkl8784EeGL3Jr17bHSLYC2JsiVXoOaAYn/quGS9N3S/NkrWGmQT4vS/zTIRKP/y26QGyGQxc0sxdVn+UFRaPkvshSltFJJcJGGFnFSB01xAvY+LmNth7c283JHF4i6W/XLYowTTpMrrkOt8Iupw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sZLSlA2s; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sHMb3+Jq"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2b788a98557so26885445ad.2
-        for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 17:04:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776989096; cv=none;
-        d=google.com; s=arc-20240605;
-        b=AwPln8tb+kjwGchJwmdYKH66Lrxvb/z7CHQ4YK/opsJgqnwJLf9QO+kVWKFcM6z9Iy
-         vdQ/FraTmPiIP57aYC05anhUNmbsuzBIQlPOVrHilECCF6NGCuYKwRz7bOVj7eGJBl4X
-         aoIdKDNahaiKurVz9Sj4/8/ob8y1fhBngAx/6pAVXYfAImHtNKDGzkByjQu3VbnpW9Dt
-         qEOFqF/J3suNu0qqqC202rJQDNM1P3KMufbLsVk+4addgj9q4QLoCgcBH6aYEVHk1BKC
-         H65swuwG2mEHpqtuELn3NAab6H+DMC6WsIFrscoZTpo87f4MZe6kMY2bzR7xIabfv1Zc
-         JTFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=MVkJEn3Mtic/kTmoQ1tOEAyWz1TWjYBFP0Bj1cv7eKU=;
-        fh=OKYdY1UR7tHyf5cbigdHRraj1lGtE0h6wkKKoIFg99Y=;
-        b=A8RADdtgkrrBHoTG0rk4VnScJ7lYyxTP/uBMPr7sAL+ZzHTOgVzB2qRx/EAJ/npCvh
-         TH9y9KznpHAvYqD0Dx72hxxlAZKbV/birf/t5sPvKrPSrGr1aAdXoF1WucsJ5StubRBx
-         qBjjV4YWkasMDGyjauyVJuZ6hwwNcapdaN1WTkhKQCxcKHR08DeDlbiha4pOLIXMEeeC
-         AkRW0f3V8bFM8Gs3gR4alys00tUECS/n/STkmUQgx3WTn2CCnio1WlRdiI5IX2E4Duly
-         QQteH0KX64STKKN7v7CeOkeKbCsGnGJgTzDfRIKIWeCKVJRrfnuSJ6twAc9SG+N/daI9
-         jG0g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776989096; x=1777593896; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MVkJEn3Mtic/kTmoQ1tOEAyWz1TWjYBFP0Bj1cv7eKU=;
-        b=sHMb3+JqSq2TZh/SmCB37vC1hPwFnoE8AAFvsyjyUr6t7Hh3cdEeaax7uh9k9W1VyN
-         5PkwbF7oubK6cC81RF4evi8WpaQtbST56d1evfQUsJ/NnpLWefDFYJ0+6920h/0Ge5/Z
-         pcI3NKjmSKySvL2joEvoF8/vo/bLMaKxYMo93WNsqNTMEXTRNJoDg3LXy4dfKqtWLMSi
-         nbL0m26JfSuPa1kINI2gS8yf8wQ53u/FJPWLSOqTA3XrBaZxILbNwYxT2mhulhObaFnf
-         IAjD1qvjRzDVzB8cJYkstzRRrNDvRtE6u2pQb+KEXTWCOrDqC0HyfnQt5m8V9VQmecFE
-         NWdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776989096; x=1777593896;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=MVkJEn3Mtic/kTmoQ1tOEAyWz1TWjYBFP0Bj1cv7eKU=;
-        b=X4pp73b8BhwePDms4ri5LJJumz+bKMN7G3bKsDzlHsqNI3qkia2mGsbLeQypBX7Yli
-         4hEEwewhr9GHWayrlUvfdpmS5ZcPwFzax+oobdpDCyfXeaNbHlWFtqpODWxCgLPmMprM
-         4NF/T89zLTkxATRc2i5arbvp0N8V8B6vfTJpUre4k0wSUM+exVjWtr7xay5tk+yP8WFq
-         FTx/O+Locn7aiSZ8xoiZye4LS4iY3yahYTh52K2KQPpDXp+W5kU5lacFbFDvyZVzYKPg
-         X46onipCHUbYz+FSmvaW1H9YAtrj0Hp3eBAMo37b8TJSBCRPm6eXqHQsBUMHRQHhzh1A
-         IvxA==
-X-Forwarded-Encrypted: i=1; AFNElJ89uvfeRMv3HHWf2AzqRxtkf/al3d36v3nrHLT4L4d+z6F06G1obzBzM4Xsm0f9RH2PjoI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+9NvM4ChCe83iwxMLmote0gg65zjXSuaabIB0v6SRaitC5V4s
-	Hlfgbmbko+CPTqwbREvAZ1SkhsrrlwS6CcMx6kvJdBCZKOfPnLCF7zl0V31D9qulBMs3Ozvw88S
-	iIEpb22Vn/ZVEPuLofyeXtqGMDv9WnoE=
-X-Gm-Gg: AeBDietVr3YEFAyspqeBBq967sz6Np53TSFBSiN7PD/KZjFYWmGSnEA0i+PdMz6EnPm
-	8VUAk1pDj9QwczzyUkJ4/N+xHTOKjPK1nIr8RFhsdSshBcNSbkV9pU44VKCl9KLD+PAo3ShUz1Z
-	8Vdi9/Uh72n3i8R7TfqDzeopGwrwcNawid3N7HLlbIC3ojUjoY3X0jvfjzt5Y43mR0wNIJg2uc3
-	e4IbxljnD1sG6jA8FwxZgr7aBSonvlDMm2Of6uHhoe1u+cJ625xlhFWHk01fR+IS6nj2HGbOrlw
-	JioKlRsulX+HTHKMxsQGOkH+ezDat08lqw==
-X-Received: by 2002:a17:903:1105:b0:2b7:ad1f:cc0c with SMTP id
- d9443c01a7336-2b7ad1fcd58mr48496375ad.30.1776989095819; Thu, 23 Apr 2026
- 17:04:55 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sZLSlA2s"
+Date: Thu, 23 Apr 2026 17:41:56 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776991324;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=potNxk/pM0MniWtXALjT6MlDua7BAZZZoXk/cZMfdQ4=;
+	b=sZLSlA2soQ8pThSVn3XG4aIICFiQLDgQm5dkRFbvhTfKjP0oKC87OMh/0x23uR8xA2u6ZG
+	PjD3GUkyivNoonqHC1KyHu6/wmt954V1AoZH+ghMKwgIaeU25fINHtVeWfEkLP2ccVbi3Q
+	eKAyX8XCGIH9z2hGaUegBhqiyHcVAL4=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: Weiming Shi <bestswngs@gmail.com>
+Cc: "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Amery Hung <ameryhung@gmail.com>, Leon Hwang <leon.hwang@linux.dev>, Kees Cook <kees@kernel.org>, 
+	Fushuai Wang <wangfushuai@baidu.com>, Menglong Dong <menglong8.dong@gmail.com>, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, Xiang Mei <xmei5@asu.edu>
+Subject: Re: [PATCH bpf v3] bpf: Fix NULL pointer dereference in
+ bpf_sk_storage_clone and diag paths
+Message-ID: <202642403529.Rc5t.martin.lau@linux.dev>
+References: <20260422065411.1007737-2-bestswngs@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260421221016.2967924-1-ameryhung@gmail.com> <20260421221016.2967924-5-ameryhung@gmail.com>
- <4de82d94-a975-4703-b45e-8932dfc28248@gmail.com> <CAMB2axO5TJwmYyvRheoZGH4ktRa0d8ig-UGK5E269iVoDH-zPw@mail.gmail.com>
-In-Reply-To: <CAMB2axO5TJwmYyvRheoZGH4ktRa0d8ig-UGK5E269iVoDH-zPw@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 23 Apr 2026 17:04:40 -0700
-X-Gm-Features: AQROBzB5Lyd9RPKGzNgDQY9m8WkZtzNam9RMcL4ErM8Z9IzqcJ9leXMeGhhQdDg
-Message-ID: <CAEf4BzYuaA0xDm9WXv0vnorOgzmzsD-Rf6R3w5kus5Uo37SBFg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/9] bpf: Refactor object relationship
- tracking and fix dynptr UAF bug
-To: Amery Hung <ameryhung@gmail.com>
-Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	alexei.starovoitov@gmail.com, andrii@kernel.org, daniel@iogearbox.net, 
-	eddyz87@gmail.com, memxor@gmail.com, martin.lau@kernel.org, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260422065411.1007737-2-bestswngs@gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Apr 23, 2026 at 11:44=E2=80=AFAM Amery Hung <ameryhung@gmail.com> w=
-rote:
->
-> On Thu, Apr 23, 2026 at 11:19=E2=80=AFAM Mykyta Yatsenko
-> <mykyta.yatsenko5@gmail.com> wrote:
-> >
-> >
-> >
-> > On 4/21/26 11:10 PM, Amery Hung wrote:
-> > > Refactor object relationship tracking in the verifier and fix a dynpt=
-r
-> > > use-after-free bug where file/skb dynptrs are not invalidated when th=
-e
-> > > parent referenced object is freed.
-> > >
-> > > Add parent_id to bpf_reg_state to precisely track child-parent
-> > > relationships. A child object's parent_id points to the parent object=
-'s
-> > > id. This replaces the PTR_TO_MEM-specific dynptr_id and does not
-> > > increase the size of bpf_reg_state on 64-bit machines as there is
-> > > existing padding.
-> > >
-> > > When calling dynptr constructors (i.e., process_dynptr_func() with
-> > > MEM_UNINIT argument), track the parent's id if the parent is a
-> > > referenced object. This only applies to file dynptr and skb dynptr,
-> > > so only pass parent reg->id to kfunc constructors.
-> > >
-> > > For release_reference(), invalidating an object now also invalidates
-> > > all descendants by traversing the object tree. This is done using
-> > > stack-based DFS to avoid recursive call chains of release_reference()=
- ->
-> > > unmark_stack_slots_dynptr() -> release_reference(). Referenced object=
-s
-> > > encountered during tree traversal cannot be indirectly released. They
-> > > require an explicit helper/kfunc call to release the acquired resourc=
-es.
-> > >
-> > > While the new design changes how object relationships are tracked in
-> > > the verifier, it does not change the verifier's behavior. Here is the
-> > > implication for dynptr, pointer casting, and owning/non-owning
-> > > references:
-> > >
-> > > Dynptr:
-> > >
-> > > When initializing a dynptr, referenced dynptrs acquire a reference fo=
-r
-> > > ref_obj_id. If the dynptr has a referenced parent, parent_id tracks t=
-he
-> > > parent's id. When cloning, ref_obj_id and parent_id are copied from t=
-he
-> > > original. Releasing a referenced dynptr via release_reference(ref_obj=
-_id)
-> > > invalidates all clones and derived slices. For non-referenced dynptrs=
-,
-> > > only the specific dynptr and its children are invalidated.
-> > >
-> > > Pointer casting:
-> > >
-> > > Referenced socket pointers and their casted counterparts share the sa=
-me
-> > > lifetime but have different nullness =E2=80=94 they have different id=
- but the
-> > > same ref_obj_id.
-> > >
-> > > Owning to non-owning reference conversion:
-> > >
-> > > After converting owning to non-owning by clearing ref_obj_id (e.g.,
-> > > object(id=3D1, ref_obj_id=3D1) -> object(id=3D1, ref_obj_id=3D0)), th=
-e
-> > > verifier only needs to release the reference state, so it calls
-> > > release_reference_nomark() instead of release_reference().
-> > >
-> > > Note that the error message "reference has not been acquired before" =
-in
-> > > the helper and kfunc release paths is removed. This message was alrea=
-dy
-> > > unreachable. The verifier only calls release_reference() after
-> > > confirming meta.ref_obj_id is valid, so the condition could never
-> > > trigger in practice (no selftest exercises it either). With the
-> > > refactor, release_reference() can now be called with non-acquired ids
-> > > and have different error conditions. Report directly in
-> > > release_reference() instead.
-> > >
-> > > Fixes: 870c28588afa ("bpf: net_sched: Add basic bpf qdisc kfuncs")
-> > > Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> > > ---
-> > >   include/linux/bpf_verifier.h |  22 ++-
-> > >   kernel/bpf/log.c             |   4 +-
-> > >   kernel/bpf/states.c          |   9 +-
-> > >   kernel/bpf/verifier.c        | 264 +++++++++++++++++---------------=
----
-> > >   4 files changed, 152 insertions(+), 147 deletions(-)
-> > >
+On Tue, Apr 21, 2026 at 11:54:12PM -0700, Weiming Shi wrote:
+> @@ -668,7 +670,11 @@ int bpf_sk_storage_diag_put(struct bpf_sk_storage_diag *diag,
+>  
+>  		diag_size += nla_value_size(diag->maps[i]->value_size);
 
-[...]
+This is the same issue pointed out as v1. diag_size is updated with
+a smap in diag->maps[i]...
 
-> > > @@ -673,82 +675,56 @@ static int mark_stack_slots_dynptr(struct bpf_v=
-erifier_env *env, struct bpf_reg_
-> > >       mark_dynptr_stack_regs(env, &state->stack[spi].spilled_ptr,
-> > >                              &state->stack[spi - 1].spilled_ptr, type=
-);
-> > >
-> > > -     if (dynptr_type_refcounted(type)) {
-> > > -             /* The id is used to track proper releasing */
-> > > -             int id;
-> > > -
-> > > -             if (clone_ref_obj_id)
-> > > -                     id =3D clone_ref_obj_id;
-> > > -             else
-> > > -                     id =3D acquire_reference(env, insn_idx);
-> > > -
-> > > -             if (id < 0)
-> > > -                     return id;
-> > > -
-> > > -             state->stack[spi].spilled_ptr.ref_obj_id =3D id;
-> > > -             state->stack[spi - 1].spilled_ptr.ref_obj_id =3D id;
+>  
+> -		if (nla_stgs && diag_get(sdata, skb))
+> +		smap = rcu_dereference(sdata->smap);
+> +		if (!smap)
+> +			continue;
 
-is id assigned somewhere else now? where?
+... and then nothing is stored in skb, so diag_size is incorrectly inflated.
 
-> > > +     if (dynptr->type =3D=3D BPF_DYNPTR_TYPE_INVALID) { /* dynptr co=
-nstructors */
-> > > +             if (dynptr_type_referenced(type)) {
-> > > +                     ref_obj_id =3D acquire_reference(env, insn_idx)=
-;
-> > > +                     if (ref_obj_id < 0)
-> > > +                             return ref_obj_id;
-> > > +             }
-> > > +     } else { /* bpf_dynptr_clone() */
-> > > +             ref_obj_id =3D dynptr->ref_obj_id;
-> > > +             parent_id =3D dynptr->parent_id;
-> > >       }
-> > >
-> > > +     state->stack[spi].spilled_ptr.ref_obj_id =3D ref_obj_id;
-> > > +     state->stack[spi - 1].spilled_ptr.ref_obj_id =3D ref_obj_id;
-> > > +     state->stack[spi].spilled_ptr.parent_id =3D parent_id;
-> > > +     state->stack[spi - 1].spilled_ptr.parent_id =3D parent_id;
-> > > +
-> > >       return 0;
-> > >   }
-> > >
+> +
+> +		if (nla_stgs && diag_get(smap, sdata, skb))
 
-[...]
+diag->maps[i] can be directly used here. I fixed it up before applying.
 
-> > > -/* The pointer with the specified id has released its reference to k=
-ernel
-> > > - * resources. Identify all copies of the same pointer and clear the =
-reference.
-> > > - *
-> > > - * This is the release function corresponding to acquire_reference()=
-. Idempotent.
-> > > - */
-> > > -static int release_reference(struct bpf_verifier_env *env, int ref_o=
-bj_id)
-> > > +static int idstack_push(struct bpf_idmap *idmap, u32 id)
-> > > +{
-> > > +     int i;
-> > > +
-> > > +     if (!id)
-> > > +             return 0;
-> > > +
-> > > +     for (i =3D 0; i < idmap->cnt; i++)
-> > > +             if (idmap->map[i].old =3D=3D id)
-> > > +                     return 0;
-> > > +
-> > > +     if (WARN_ON_ONCE(idmap->cnt >=3D BPF_ID_MAP_SIZE))
-> > > +             return -EFAULT;
-> >
-> > It feels like this check belongs above, maybe the first thing to do.
->
-> Shouldn't it allow the verification to continue when pushing an id
-> that already exists in the stack?
-
-yep
-
->
-> >
-> > > +
-> > > +     idmap->map[idmap->cnt++].old =3D id;
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int idstack_pop(struct bpf_idmap *idmap)
-> > >   {
-> > > +     if (!idmap->cnt)
-> > > +             return 0;
-> > > +
-> > > +     return idmap->map[--idmap->cnt].old;
-> > > +}
-> > > +
-> > > +/* Release id and objects referencing the id iteratively in a DFS ma=
-nner */
-> > > +static int release_reference(struct bpf_verifier_env *env, int id)
-> > > +{
-> > > +     u32 mask =3D (1 << STACK_SPILL) | (1 << STACK_DYNPTR);
-> > >       struct bpf_verifier_state *vstate =3D env->cur_state;
-> > > +     struct bpf_idmap *idstack =3D &env->idmap_scratch;
-> > > +     struct bpf_stack_state *stack;
-> > >       struct bpf_func_state *state;
-> > >       struct bpf_reg_state *reg;
-> > > -     int err;
-> > > +     int root_id =3D id, err;
-> > >
-> > > -     err =3D release_reference_nomark(vstate, ref_obj_id);
-> > > -     if (err)
-> > > -             return err;
-> > > +     idstack->cnt =3D 0;
-> > > +     idstack_push(idstack, id);
-> > >
-> > > -     bpf_for_each_reg_in_vstate(vstate, state, reg, ({
-> > > -             if (reg->ref_obj_id =3D=3D ref_obj_id)
-> > > -                     mark_reg_invalid(env, reg);
-> > > -     }));
-> > > +     if (find_reference_state(vstate, id))
-> > > +             WARN_ON_ONCE(release_reference_nomark(vstate, id));
-> > > +
-> > > +     while ((id =3D idstack_pop(idstack))) {
-> > > +             bpf_for_each_reg_in_vstate_mask(vstate, state, reg, sta=
-ck, mask, ({
-> > > +                     if (reg->id !=3D id && reg->parent_id !=3D id &=
-& reg->ref_obj_id !=3D id)
-> > > +                             continue;
-> > > +
-> > > +                     if (reg->ref_obj_id && id !=3D root_id) {
-> >
-> > Does this line check that the only ref_obj_id we should see is either
-> > 0 or root_id? can we rewrite it as
-> > if (reg->ref_obj_id && reg->ref_obj_id !=3D root_id)
-> >
-> > this is simpler, because id can also be reg->id/reg->parent_id, which i=
-s
-> > hard to reason what that means.
-> >
->
-> Looking at it again, I think my release_reference() is wrong. It first
-> calls release_reference_nomark() if the id is a ref_obj_id. This will
-> invalidate all registers with the same ref_obj_id without traversing
-> their children.
->
-
-hm, will it? from what I see, release_reference_nomark() doesn't do
-anything with registers/stack slots, just removes the reference from
-state->refs
-
-
-> I should remember the root_ref_obj_id instead of calling
-> release_reference_nomark(). Then, the check you mentioned should be:
->  if (reg->ref_obj_id && reg->ref_obj_id !=3D root_ref_obj_id)
->
-> I will write a selftest to confirm the issue and include it in the
-> next respin if this turns out to be a bug.
+>  			/* Continue to learn diag_size */
+>  			err = -EMSGSIZE;
+>  	}
+> -- 
+> 2.43.0
+> 
