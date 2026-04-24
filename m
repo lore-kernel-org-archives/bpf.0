@@ -1,38 +1,35 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A095C38B7D2
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 10:42:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A3B38B147
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 10:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777027353; cv=none; b=XmQkVHi3fGtzKTs5Xekuvt+I7gqguSqdBgLUAlgVcD6j/fILa+BMp0pHzLBvm5BXuN5FJbwYYdK6BUJ0HghJHw8z8DouUFTJN2J61LFh18mxDnPlyeUSf+ASVbL7ARt3qjmL7aFagZBOEvQGzyiNFU6dIsB0fMHCXxm3V4Rmps8=
+	t=1777027365; cv=none; b=dH1cOZ+Y6vC0xeBXTD4FHOJmkFeZOyQ5ZkQJ/O13wSDrogEKtKaxOyNRfG22I8Jzr/m+imK8PZhrWkbcFIkaSwc/gnbe9N1HIfPMxkq3mnJXPpHEFdGuhNEgn5QD6KZgwxThJWfOWSjsh0h6L6C5GJ/3YdTzFb6X3aWXtAAMemo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777027353; c=relaxed/simple;
-	bh=KYN5vQK9o4itUNm01aqvLz11z6UGNL1p5CAu4M7+vn0=;
+	s=arc-20240116; t=1777027365; c=relaxed/simple;
+	bh=wpabQn1ol/qItAAjOBPAvpNVjKrZhE/WdQTRvEr4a78=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gEeJ0ImNYyDMCFAxowZU+dcdApAeqSe8l91JKcdJcUQ8ABPL1nmvkzTyvP3SsESpaKaD+CvEChOcskshL2yqxu3/Gn58bI4U7EdTeKxMv2mLAZ9uTUlTy/bJve3csQRtGGTFdZVLOD3VnxXhbULJef5I0GU323tfD9fi0y05/pM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uvDVvc/A; arc=none smtp.client-ip=91.218.175.180
+	 MIME-Version; b=Tepdzr96ZFMIXHGQLK3wLcSlbZRhFzQ+ybXot+YtIaqoXDG67bvWF4fge6HNDcOGBex3Nq1ecBnZpTidTYsaF3iON+JC3Zga2Bcuu9dig7FAfVVItYbJOClwqUh+FwkBBB/oMzQKpQl6XcS50gXkCnrYUjaWcT4pqzTTJmTVR64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TJ2F6pv8; arc=none smtp.client-ip=91.218.175.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uvDVvc/A"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TJ2F6pv8"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777027349;
+	t=1777027361;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/a9gKZ5swoURq09zQknYGoxq1uz7/i9spgkhwJ2l2tQ=;
-	b=uvDVvc/A3ArsBiQ6LZAuJ35hbQrJfEwtrbrZr8Q94B3hiLudKd1nEAVKVtfF8TGMq+wZVM
-	+Ucx0nJ3s7Q8x/Gs38jO8ngmmiSsq81avcxF0phDu/uGKElmmE/0a+NW4kLQynFcneu4hk
-	9a8LI6WRj3YmFJc4I3YvEPQ3jKcEsDs=
+	bh=Jk7ozpk8BJdqj1K1xG4zup/ZZJh6Q5ZPNMKI0G/5YVU=;
+	b=TJ2F6pv8tfnL3d8biVvAVVopk33/6mK7bR+gtjdDvF0cBiNmG9u+ahJPTZn934Ig7jbqWE
+	An/JgFz9B4Mq6XI99mwkUdJs2KxvH9f17sMaz2lni0DvKZxZDnnyJoMq0gzvlePjsmVim1
+	TdVkc0i7rlyroI+gnDdGNGddffpa/TY=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Yinhao Hu <dddddd@hust.edu.cn>,
-	Kaiyan Mei <M202472210@hust.edu.cn>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Nikolay Aleksandrov <razor@blackwall.org>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -60,9 +57,9 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v2 1/3] bpf, tcx: reject offloaded programs on attach
-Date: Fri, 24 Apr 2026 18:41:40 +0800
-Message-ID: <20260424104201.217604-2-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf v2 2/3] bpf, netkit: reject offloaded programs on attach
+Date: Fri, 24 Apr 2026 18:41:41 +0800
+Message-ID: <20260424104201.217604-3-jiayuan.chen@linux.dev>
 In-Reply-To: <20260424104201.217604-1-jiayuan.chen@linux.dev>
 References: <20260424104201.217604-1-jiayuan.chen@linux.dev>
 Precedence: bulk
@@ -74,38 +71,26 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-An offloaded prog's bpf_func is replaced by bpf_prog_warn_on_exec(),
-since it's supposed to run on the NIC, not the host. But tcx doesn't
-check this and happily attaches it to the software path, so the first
-packet hits the WARN.
+Same issue as the tcx fix: netkit accepts SCHED_CLS programs but never
+checks if they were loaded for hardware offload. If someone loads a
+program with prog_ifindex pointing to an offload-capable device and then
+attaches it to a netkit peer, the bpf_func is bpf_prog_warn_on_exec()
+and the first packet triggers the WARN.
 
-XDP already guards this in dev_xdp_attach(); tcx just never got the
-same check. Add it to tcx_prog_attach(), tcx_link_attach() and also
-tcx_link_update() so the fix cannot be bypassed by loading a normal
-program and then swapping it out via BPF_LINK_UPDATE.
+Reject offloaded programs in netkit_prog_attach(), netkit_link_attach()
+and netkit_link_update().
 
-Use bpf_prog_is_offloaded() rather than bpf_prog_is_dev_bound() +
-bpf_offload_dev_match() (as XDP does): bpf_prog_dev_bound_init()
-already rejects BPF_F_XDP_DEV_BOUND_ONLY for BPF_PROG_TYPE_SCHED_CLS,
-so a dev-bound SCHED_CLS program is always offloaded. The simpler
-check is sufficient and also rejects attaching a program offloaded to
-device A onto device B.
-
-Fixes: e420bed025071 ("bpf: Add fd-based tcx multi-prog infra with link support")
-Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-Reported-by: Dongliang Mu <dzm91@hust.edu.cn>
-Closes: https://lore.kernel.org/bpf/64d8e2b5-a214-4f3c-b9e8-bcedbcb2c602@hust.edu.cn/
+Fixes: 35dfaad7188cd ("netkit, bpf: Add bpf programmable net device")
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- kernel/bpf/tcx.c | 9 +++++++++
+ drivers/net/netkit.c | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/kernel/bpf/tcx.c b/kernel/bpf/tcx.c
-index 02db0113b8e7c..1144627483d53 100644
---- a/kernel/bpf/tcx.c
-+++ b/kernel/bpf/tcx.c
-@@ -16,6 +16,9 @@ int tcx_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
+index 5c0e01396e064..dae4d7b24d80e 100644
+--- a/drivers/net/netkit.c
++++ b/drivers/net/netkit.c
+@@ -533,6 +533,9 @@ int netkit_prog_attach(const union bpf_attr *attr, struct bpf_prog *prog)
  	struct net_device *dev;
  	int ret;
  
@@ -113,9 +98,9 @@ index 02db0113b8e7c..1144627483d53 100644
 +		return -EINVAL;
 +
  	rtnl_lock();
- 	dev = __dev_get_by_index(net, attr->target_ifindex);
- 	if (!dev) {
-@@ -209,6 +212,9 @@ static int tcx_link_update(struct bpf_link *link, struct bpf_prog *nprog,
+ 	dev = netkit_dev_fetch(current->nsproxy->net_ns, attr->target_ifindex,
+ 			       attr->attach_type);
+@@ -683,6 +686,9 @@ static int netkit_link_update(struct bpf_link *link, struct bpf_prog *nprog,
  	struct net_device *dev;
  	int ret = 0;
  
@@ -123,18 +108,18 @@ index 02db0113b8e7c..1144627483d53 100644
 +		return -EINVAL;
 +
  	rtnl_lock();
- 	dev = tcx->dev;
+ 	dev = nkl->dev;
  	if (!dev) {
-@@ -315,6 +321,9 @@ int tcx_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
- 	struct tcx_link *tcx;
+@@ -788,6 +794,9 @@ int netkit_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+ 	struct net_device *dev;
  	int ret;
  
 +	if (bpf_prog_is_offloaded(prog->aux))
 +		return -EINVAL;
 +
  	rtnl_lock();
- 	dev = __dev_get_by_index(net, attr->link_create.target_ifindex);
- 	if (!dev) {
+ 	dev = netkit_dev_fetch(current->nsproxy->net_ns,
+ 			       attr->link_create.target_ifindex,
 -- 
 2.43.0
 
