@@ -1,63 +1,64 @@
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B9E43DA5D6
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 13:55:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC85E3D9035
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 13:57:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777038927; cv=none; b=CtN/MUhHnGJyLoWb4kkLR6uZSbF2vMOimop9WZ3m2krZKPmNqhzAmMu0JgcSPj8U0C2c2XnBIpAl09ssxDk3IZLPnYQ1UhBuVG+ZcXIoZKGwsjq4HZSHhRz7amIp4EK9mehNQsMjChXy7TjVLiPHSpiVSspwwBH26SEgWwj9OHo=
+	t=1777039032; cv=none; b=T9ya2FHtgTXncw/q3Kz4p9D6VjtRG7Pe1uwosLOz3s1BULdaykzDwTVDTxhS37237u5mWO538nhPI0yvXSFPDZG463PuLns4X2/QBEJj0EISw7jRQeYzdRwVVnIuve0lK2NEwcDPC/bJXbawJizeG/LguP4L51HtO9vUA37AKxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777038927; c=relaxed/simple;
-	bh=wgagBRLyH8qIXtovF5EORtrU1tolXN7HaHIjxp4hZQs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=XHjPvekDSDe4XIPCVoUMreSVE8dvoLGKYWrP2SBVPWAdv+6mFq2x5p/ouaToguDuvhIoUrFN4jddPB/EThA+EAVLzyLbLaAIf54pvaxx0sM/w1dKvX4FxdQCINh3DsMiEen3FL178BXJfy3UhlCpqehwWCC7teXIHO8WlcfTsBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HtZEhiRy; arc=none smtp.client-ip=209.85.160.45
+	s=arc-20240116; t=1777039032; c=relaxed/simple;
+	bh=YkV/gmu/iRF0QtidaJru1TGFWT+3DjghSB2koHn0JDo=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=InvixpZhpxDg+lfOL4fcDjbYKfVvzX4Ni3i32hZu8WavDK4VPlgxyMNlJF7/276EsMqGpxJfEtSEuo1t7huedn4dJnb4uZoJV1dvQB5VVQPDddyOkHy/WdOWE229uNwFX06xE2b3rKJnCHSgY2yLiiV3yWO3L/Ty1kT4slaColY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IW5umCQo; arc=none smtp.client-ip=209.85.210.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HtZEhiRy"
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-40ede943bf0so5059301fac.2
-        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 06:55:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IW5umCQo"
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7dcc9b506d9so4619934a34.1
+        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 06:57:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777038915; x=1777643715; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=gmail.com; s=20251104; t=1777039028; x=1777643828; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GQvhd5LemKsDut8MhDcz3CF4XZzc0FmAPAe5hBLKUsA=;
-        b=HtZEhiRyiCTXLPoJBaYOLq0gzp37SzJNBkBiGbL0SAophDvy/Bl0d2RFNhtvC88h3d
-         8ayEIlKwEyv2KCDUmr1RUVWdxQh5hLn2LJmPFoUXBtBRk1zWIDnuhou8CZjfPWtkm8wY
-         xKqJIuieyX0H3fTnSzxSEIan83L4L7RPqpWP8DL3O3goh+MKZ96BBjBIhVRHqeSV4eyv
-         xP2J2Rtk3/fAn/Uv/4J8gd+ffwslluSfCZ413o1Cs3baJcuyLwhXqm4Sk5wDMkfDks89
-         iu6rq9BWX5ItgXSGS63e+0OazMcqA4EUMzyG4zOw6lIhtcWh3vkjjsyeAl2Qwhgl7VdN
-         hBqw==
+        bh=J4lmyNqo07GvwFuIjU1VCEb9Ql2ZQ/Si0G3lWH77Zr8=;
+        b=IW5umCQoqLETi2iYdYdIhV8l5n/rEvRFo6Ou1Dw/d9co91mDhom5bx5teNAErLcps3
+         AfMBtNjrjws9oBcVBXd/+IH//OYGLe63sBQUbc3zZIsA3TB4CV+IXj0jHhD+Lf213TLt
+         RsVMDNE7+EVdvPd16ewRxrjVr6wEg9lXNkTGVOMClnHk+11Fq73BaWpzQAlIfJd0w9UE
+         YqYHGbUwqXXKz2h4ipD8huBUF6XDX2AYCMcki6d8j9hPMTMQcS1Jdp26yIxgvdlIw60r
+         ARQaqKTLZFxsyBFWxYPH41ah9qoj1fCXzZ5EhR0SezofxQR4gE1SuzAZbAh5jaYZkL+Q
+         pGHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777038915; x=1777643715;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=1e100.net; s=20251104; t=1777039028; x=1777643828;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GQvhd5LemKsDut8MhDcz3CF4XZzc0FmAPAe5hBLKUsA=;
-        b=m6I66VH90UFKW66cut3J86F36A4a1Lh+7d7qXYltE3imN2UjOLX2jjRiRMlRHKWLdv
-         C05C3CofMOXJKQi5giQeYph+ibm5RMXiKeYf2l7QxDD7lbkP8Se/ER04uVpkaEKcTK8X
-         rDWw2hzOQ4R/fu9T2tkM61RKAjoxY1KYLPs/Drb9t+f/1Kc9oiqAeDwzoFrym5tdmvE8
-         3G0x434qpVZtESnvxF8WxoNlwlfrvluteytB/5P6YpoKbUZ+gikD4KSn1SHD0yUNQc+d
-         ggRd+22192rCa2S/MqwzaQyiIOmBpZWcgSw2ocU59x70LO8/kzaXXvCvHyQBDBiMzIw3
-         DxYA==
-X-Gm-Message-State: AOJu0YwoMaWa2IUlfrP/wJ2EMNaufXHgAgIXHvfRMWX4qhzjzfX/GJrf
-	Vy8Kvo1LW1TF0JCd2MUUPK1wF/u1kMuLVFBr+Ls7YgtIpJ2u7BQAPmZh
-X-Gm-Gg: AeBDiet4a+hbzhybIOHbXNybxhPyl/SikVdGWgYO0/NA1mQQb+Jh/nTqrwD2cDa7z+A
-	cvFg7if6tJDx8RP19QpLQ1lL388neA7BLFF094hjN+M0x2YcFaLKSM6XF2X53GQzCND8GNO12Ua
-	CAWa21yOsDFQQN6h5rHo+ET0I9BN5WASX127rJTyh/3U+tbb31DDaDIgosU3ff8NUnvCpB6Ofs3
-	hJ4NS8OfHnZhHywc5NTycFkg+Dxl4cqR5c69onqNgdBG02eBvmsA3hJLiasSUJdfpTUC8s5iZ65
-	o1dd6AeuAJ+0mxvjGJPWm/Xvym9mU283KuFjJKgEuEQVzgQLsKSbVicJdGqtlIEgEYDRGSgwfXE
-	yo91fmRalywvfIkZWTU5FOc/EolxAEJyO6zk5mysUMXvZrp7MruOWwckl2x5M7vTSzOeomy9BNN
-	Ei6zJb2ZGbzIEdw/r5aB16GdJC0y0P4sHR82ij4MVbWOHHHsKp3W8IGR5EtPf2Laco8ynguMl0C
-	WuyivEDWDUyAYBcRJG+/f0cVl4R
-X-Received: by 2002:a05:6870:ac27:b0:42f:d9f8:ab33 with SMTP id 586e51a60fabf-42fd9f8e971mr5827984fac.28.1777038914827;
-        Fri, 24 Apr 2026 06:55:14 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:73::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-42b934a2e8esm21854589fac.10.2026.04.24.06.55.10
+        bh=J4lmyNqo07GvwFuIjU1VCEb9Ql2ZQ/Si0G3lWH77Zr8=;
+        b=m3Boqyq4JIMPy394uK42sACZ0R+vlq/lyiNxxA+HEvjXm5Sn+9tFXzhzHgQXcEK0ys
+         5HMNb/SV4hcbu2vxXw+tWIswAqJlK9jks0qRfYrRnpy5DI4wfosyZ6h0jWUY0dj3moum
+         Wza+umtzLdvyyRaVRN0YNp2erP+8aCkqovvSg4XfGuL2bgleq0aueFUg/7xYb/9tYzrk
+         1qFrJLZvsCUBiUX29daHk5qY/ILbL8lmTHF7JX8vZ9CCCCkWqup0Pd/+12Bybvhn83/h
+         iBI1cqmV41dIS4K4FhQ0wQaDQSRGahc3RXVjD20rbQUD2wrQe1wXZRoeSvk/hZVpGYv3
+         ReMw==
+X-Forwarded-Encrypted: i=1; AFNElJ8VIgmql+Ua7wu11ftlJO3utyPxksAdnNeNoojlmFdSV8nm2eVaYr9K4hR8VfoQTof69c0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yye4BSsXNFk7FJg7BcRsXIs8P+VoLKkRfBDHG0RkNPuRPow7MGz
+	tqNH1KqklUUdUN6uyl+03Lnwk/3ztn5s7C3W9T8RL4DX1/Fvvthp+kTW
+X-Gm-Gg: AeBDiesfpwEKVtPE1EY3ju9hwyhUGFXRqYIBT28BX5/CPsCeEW6zePquc/JAv6ff5fv
+	C2C9LjTfd3AeXmbO153UmGaJb0FP3pYPMHw2lL7qCQhpONfzH2LN3PsMzenGlAn+pCcFKfJFXpl
+	4PrkrECoSxjxr6hST9JpST3wTWpke4bY9Ks+yegGDTrYTXeDFw+F7iLzue8d6DZ95ALUVsZiOu3
+	b2w4kuE9XjoYpf7smAErTue2pTEoYMFA80ZiJLreqaZMt0xaQ/UMqDXu7iqq0DZxUspC8E4GJy7
+	mMq9srLEGFPSKwQ1nmWjQolExRjLb4x8g2EYzRHSDz7jPoDsvSgnEaLnZqm5lVB3MTiNnl7kSzi
+	zWRt9RHNKKqkQ66BRv5/2/fgP3vxzpyShb53Yac92QuW21LP17t2UCuUIYHI4UYlJw5Dl0pLSGF
+	IVFivQNgUg5TsRrG9X2jHzEo2+6kLV048CWE+nNZVE5rDNqg5zs4Gb3ttO3+Xwt/Ip1zPKY3ufh
+	ChnlKfdCzJP+z8ZdgXF7Nmitv2V
+X-Received: by 2002:a05:6830:439f:b0:7dc:da80:42be with SMTP id 46e09a7af769-7dcda80470bmr11350922a34.21.1777039028015;
+        Fri, 24 Apr 2026 06:57:08 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:40::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dc9759bfa3sm19510471a34.13.2026.04.24.06.57.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Apr 2026 06:55:11 -0700 (PDT)
+        Fri, 24 Apr 2026 06:57:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,63 +67,78 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 24 Apr 2026 06:55:09 -0700
-Message-Id: <DI1FPX3685EI.3QPD29NY965FO@gmail.com>
-To: "Amery Hung" <ameryhung@gmail.com>
-Cc: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <andrii@kernel.org>,
- <daniel@iogearbox.net>, <eddyz87@gmail.com>, <memxor@gmail.com>,
- <martin.lau@kernel.org>, <mykyta.yatsenko5@gmail.com>,
- <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next v3 0/9] Refactor verifier object relationship
- tracking
+Date: Fri, 24 Apr 2026 06:57:05 -0700
+Message-Id: <DI1FREJRMGWT.M8JZJADKO6WJ@gmail.com>
+Cc: "Yinhao Hu" <dddddd@hust.edu.cn>, "Kaiyan Mei" <M202472210@hust.edu.cn>,
+ "Dongliang Mu" <dzm91@hust.edu.cn>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Nikolay Aleksandrov" <razor@blackwall.org>,
+ "Andrew Lunn" <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Simon Horman"
+ <horms@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>, "Willem de
+ Bruijn" <willemb@google.com>, "Samiullah Khawaja" <skhawaja@google.com>,
+ "Hangbin Liu" <liuhangbin@gmail.com>, "Krishna Kumar" <krikku@gmail.com>,
+ "Kuniyuki Iwashima" <kuniyu@google.com>,
+ =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+ <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf v2 1/3] bpf, tcx: reject offloaded programs on
+ attach
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
 X-Mailer: aerc
-References: <20260421221016.2967924-1-ameryhung@gmail.com>
- <DI0Z4SJ0TXOA.2N0IY94AF254F@gmail.com>
- <CAMB2axMg=Y5q=9CEFs=8rHLQJipT-5rYkg3wp2BhWgDwVvOUQw@mail.gmail.com>
-In-Reply-To: <CAMB2axMg=Y5q=9CEFs=8rHLQJipT-5rYkg3wp2BhWgDwVvOUQw@mail.gmail.com>
+References: <20260424104201.217604-1-jiayuan.chen@linux.dev>
+ <20260424104201.217604-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20260424104201.217604-2-jiayuan.chen@linux.dev>
 
-On Thu Apr 23, 2026 at 10:44 PM PDT, Amery Hung wrote:
-> On Thu, Apr 23, 2026 at 5:55=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->>
->> On Tue Apr 21, 2026 at 3:10 PM PDT, Amery Hung wrote:
->> >
->> > (3) Referenced dynptr with referenced parent:
->> >
->> >                      file (1,1,0)
->> >                            ^ ^
->> >      bpf_dynptr_from_file  | +-------------------------------+
->> >                            |       bpf_dynptr_clone(A, C)    |
->> >              dynptr A (2,3,1)                  dynptr C (4,3,1)
->> >                          ^                                 ^
->> >                          |                                 |
->> >                          dynptr A and C have the same lifetime
->>
->> If I understand the proposal correctly above should be:
->>
->>                      file (1,0,0)
->>                            ^
->>      bpf_dynptr_from_file  +-------------------------------+
->>
->> ref_obj_id will be inited bpf_dynptr_clone() as 3 into A and C.
->> but original file->ref_obj_id will be zero.
->>
->> ?
+On Fri Apr 24, 2026 at 3:41 AM PDT, Jiayuan Chen wrote:
+> An offloaded prog's bpf_func is replaced by bpf_prog_warn_on_exec(),
+> since it's supposed to run on the NIC, not the host. But tcx doesn't
+> check this and happily attaches it to the software path, so the first
+> packet hits the WARN.
 >
-> This is the existing behavior. bpf_get_task_exe_file() is tagged with
-> (KF_ACQUIRE | KF_RET_NULL). Therefore, file will have id and
-> ref_obj_id both initialized to the same value. Here is the
-> corresponding verifier code:
+> XDP already guards this in dev_xdp_attach(); tcx just never got the
+> same check. Add it to tcx_prog_attach(), tcx_link_attach() and also
+> tcx_link_update() so the fix cannot be bypassed by loading a normal
+> program and then swapping it out via BPF_LINK_UPDATE.
 >
-> if (is_kfunc_acquire(&meta)) {
->         int id =3D acquire_reference(env, insn_idx);
+> Use bpf_prog_is_offloaded() rather than bpf_prog_is_dev_bound() +
+> bpf_offload_dev_match() (as XDP does): bpf_prog_dev_bound_init()
+> already rejects BPF_F_XDP_DEV_BOUND_ONLY for BPF_PROG_TYPE_SCHED_CLS,
+> so a dev-bound SCHED_CLS program is always offloaded. The simpler
+> check is sufficient and also rejects attaching a program offloaded to
+> device A onto device B.
 >
->         if (id < 0)
->                 return id;
->         if (is_kfunc_ret_null(&meta))
->                 regs[BPF_REG_0].id =3D id;
->         regs[BPF_REG_0].ref_obj_id =3D id;
+> Fixes: e420bed025071 ("bpf: Add fd-based tcx multi-prog infra with link s=
+upport")
+> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+> Reported-by: Dongliang Mu <dzm91@hust.edu.cn>
+> Closes: https://lore.kernel.org/bpf/64d8e2b5-a214-4f3c-b9e8-bcedbcb2c602@=
+hust.edu.cn/
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> ---
+>  kernel/bpf/tcx.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/kernel/bpf/tcx.c b/kernel/bpf/tcx.c
+> index 02db0113b8e7c..1144627483d53 100644
+> --- a/kernel/bpf/tcx.c
+> +++ b/kernel/bpf/tcx.c
+> @@ -16,6 +16,9 @@ int tcx_prog_attach(const union bpf_attr *attr, struct =
+bpf_prog *prog)
+>  	struct net_device *dev;
+>  	int ret;
+> =20
+> +	if (bpf_prog_is_offloaded(prog->aux))
+> +		return -EINVAL;
+> +
 
-ok, but the arrow should still point to first '1', since that's
-what parent_id inherits?
+instead of sprinkling the check everywhere do it at the source of the bug.
+
+pw-bot: cr
