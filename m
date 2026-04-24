@@ -1,142 +1,127 @@
-Received: from pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.34.181.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 551E83C3439;
-	Fri, 24 Apr 2026 14:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.34.181.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3893DBD70
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 14:19:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777040215; cv=none; b=JCDunvrpcUUNmuzWimxHkiD+7mYknHQl6qIBOiuWAaPmKeLDSYUFTIaTssE7OjRLHmP2wGd+E4aA8KEfR0c35xebkbxCTuYt7g4z7fDIeUa0zgSXKvgaU/tK0oyHffFr4zx/p6UiHKIfQ5WdcURU+GsAHlQUK+QebDrFcrNqn3E=
+	t=1777040366; cv=none; b=t5ONEEm6FJZEDEfoTlwNt1qHbAz/9n9IzBy0EZfuu2+yk7xlWphpyIIXtuJUq54b/co6d55qFwNUf50uoJi8Br/L+R++KRM4O3uVP1K77aIeLswVSi3jJp4snfkphwcwzIPbED8zpadmEvZIUelQT6VMDc4Y7ZoAaRe54NQtchU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777040215; c=relaxed/simple;
-	bh=2AQqwQ/V3YeN+sSc5aDTpnwZegrT6zJu/UnKOSH329Y=;
-	h=Subject:From:To:CC:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=NirYHAIVs0QbPjJ7p9c3Ekwt31+b9yc92N6OdTZbNXaPO/V64L3yafRtfd33m4u68kx2Py6pTvVsoLpXLoq4ifdi/dxY+laOf2Czyk1oqULHozjl/PuaclO2AMVlVqU8ZKWXC2NkN0DdnY7IZIrdRM5M20jpbWBUMX7RK1ZzsK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=OWLCs8/3; arc=none smtp.client-ip=52.34.181.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1777040366; c=relaxed/simple;
+	bh=sR29cvVWWj1zEvLPCnOluGKLlUo6GPJZv7ipVNXVONw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gopqhzNz1mtsFMJrBZ38wvtrihPJvVwy7I3L4p0CDsL0mEy/Dv3ULsnzHZOiHyQ9PNpHQMbx2Pre49jiTu1QK9DeO2IFA1jedhPNPftVhEQAfu92GzcCiWuuYcnmhctRyVdaRIcLJ3PzsmIK86rZxLfDNIzc30NwsyPPG6Zpb4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=igpKv7ta; arc=none smtp.client-ip=209.85.217.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="OWLCs8/3"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="igpKv7ta"
+Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-6055a0414d7so1998095137.2
+        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 07:19:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1777040214; x=1808576214;
-  h=from:to:cc:date:message-id:references:in-reply-to:
-   content-id:content-transfer-encoding:mime-version:subject;
-  bh=2AQqwQ/V3YeN+sSc5aDTpnwZegrT6zJu/UnKOSH329Y=;
-  b=OWLCs8/3EVfbW6N1KGSQASR59wpLfV0hfSDTtt0cnI8u21+priIh04sf
-   wwYqNErGHCYmVApqW7F+kOGrunAaposYzScn6o+ybgN1FyT19HCtyLRCW
-   PhRBHM/AoUssiZYH2exuUHlW+TukkfGfqwebWdwZetHgXt+4mbDUjzgXB
-   UdB2eNsbbvhBC8+So4pXg7XLPoHXR9LMLbYmy4TewalSGpLQmrz8TeajR
-   ZaTAKW/jRIUOFpZF5CDHRp1WPDOJ849q+gKXmYhJSBHzYMLM4x1XpyjtG
-   OhUuTCdbvyO3QeeM1Sq1Ae1lH6Se0cvhUZBLm0ZqMhJJ8G+Xb6gPXyHDK
-   w==;
-X-CSE-ConnectionGUID: g2tXSHC9T4u1ZyPhFZy82A==
-X-CSE-MsgGUID: +M25bqO3QTW5soUIw61HcQ==
-X-IronPort-AV: E=Sophos;i="6.23,196,1770595200"; 
-   d="scan'208";a="18113629"
-Subject: Re: [PATCH v11 00/14] barrier: Add smp_cond_load_{relaxed, acquire}_timeout()
-Thread-Topic: [PATCH v11 00/14] barrier: Add smp_cond_load_{relaxed, acquire}_timeout()
-Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
-  by internal-pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2026 14:16:53 +0000
-Received: from EX19MTAUWB001.ant.amazon.com [205.251.233.51:11239]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.41.10:2525] with esmtp (Farcaster)
- id fb967a1b-c42c-4869-b791-e23549861e76; Fri, 24 Apr 2026 14:16:53 +0000 (UTC)
-X-Farcaster-Flow-ID: fb967a1b-c42c-4869-b791-e23549861e76
-Received: from EX19D032UWA004.ant.amazon.com (10.13.139.56) by
- EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Fri, 24 Apr 2026 14:16:53 +0000
-Received: from EX19D032UWA003.ant.amazon.com (10.13.139.37) by
- EX19D032UWA004.ant.amazon.com (10.13.139.56) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Fri, 24 Apr 2026 14:16:53 +0000
-Received: from EX19D032UWA003.ant.amazon.com ([fe80::8e94:8f60:9531:c497]) by
- EX19D032UWA003.ant.amazon.com ([fe80::8e94:8f60:9531:c497%5]) with mapi id
- 15.02.2562.037; Fri, 24 Apr 2026 14:16:52 +0000
-From: "Okanovic, Haris" <harisokn@amazon.com>
-To: "ankur.a.arora@oracle.com" <ankur.a.arora@oracle.com>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>
-CC: "joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
-	"xueshuai@linux.alibaba.com" <xueshuai@linux.alibaba.com>,
-	"david.laight.linux@gmail.com" <david.laight.linux@gmail.com>,
-	"boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>, "memxor@gmail.com"
-	<memxor@gmail.com>, "ashok.bhat@arm.com" <ashok.bhat@arm.com>,
-	"zhenglifeng1@huawei.com" <zhenglifeng1@huawei.com>, "konrad.wilk@oracle.com"
-	<konrad.wilk@oracle.com>, "cl@gentwo.org" <cl@gentwo.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "ast@kernel.org"
-	<ast@kernel.org>, "rdunlap@infradead.org" <rdunlap@infradead.org>,
-	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>, "arnd@arndb.de"
-	<arnd@arndb.de>, "will@kernel.org" <will@kernel.org>, "mark.rutland@arm.com"
-	<mark.rutland@arm.com>, "peterz@infradead.org" <peterz@infradead.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "Okanovic, Haris"
-	<harisokn@amazon.com>, "rafael@kernel.org" <rafael@kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Thread-Index: AQHcx1Lc+RjIJDvKCE+BAEcv9rf8TbXs+zWAgAAlMoCAATrtgA==
-Date: Fri, 24 Apr 2026 14:16:52 +0000
-Message-ID: <7cd318985eebc0f068dcb77b07eab150d893b70d.camel@amazon.com>
-References: <20260408122538.3610871-1-ankur.a.arora@oracle.com>
-	 <20260423101631.84f26592d629eee46fbde6f8@linux-foundation.org>
-	 <87tst1fpb0.fsf@oracle.com>
-In-Reply-To: <87tst1fpb0.fsf@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <948A79D88771E846BD3132ACF440F1C9@amazon.com>
-Content-Transfer-Encoding: base64
+        d=ziepe.ca; s=google; t=1777040364; x=1777645164; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zV0Gq4Db+XurRwmLehRl8plU7HsCQBBchm2UxZdn8eA=;
+        b=igpKv7tavJsOoMZy48+l67X+sKqw4fGrLFlfTwBT8xEv50hjj/UwxHNUnf6A7XM62x
+         6SO9kz0XzK1vDDn1Fw1/WKyMSl4z+tC1/eqSsCRIpe2RiqDq2/uHMMKjUOH7fnKEYoV6
+         m4GWv5P5pMeL4gPkHQV4216zlJVaxS4kVcC3kwsVW/FfqTCKIaVt8hiEaaf9iO4v0gdB
+         YeTTXCdYGuPMDVBEYlVxdNnSGim+WPSH2z22x/JCLWF1KqQHsC2FqQnEEao6vrYN1GCO
+         +UtOJC3nva1hzI0OMrjCuvSu0Q9pxqVbXYH4JVx7vv1Ysw6H7gkDMjw7KhsYQ+vfetw1
+         spWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777040364; x=1777645164;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zV0Gq4Db+XurRwmLehRl8plU7HsCQBBchm2UxZdn8eA=;
+        b=sqV4heg1277z3XnSq3JCAsAE3g88oXtwZZGV8OpAqTeMZCUHL5nNl/X1oveg6q/yo8
+         h9IdgFN+TiWMhS3cndDZRvnA3ndt/beCNwLtS2sDrtxgkBTaEOvU4nbK/KFxG664BJ9/
+         HdoPRwQSqYBzsIyOirn6ZnV5DkQbNFZfwVLm91SQmUuoET3YuIKGoTWdiq9lCiXX0FLh
+         Phm/ZbcUUv8OaDHZv/gPujzQCe6hy+i04g3Y2A4oixbVXzGJyLLBMlSMbiRDuNs96QhV
+         uLa1rN/GFCE0+UF/ioUQABkMOG3rWjw9NLwLFwJWgs0+ceKAO1ZXjQfRhu7BTjhKTK2e
+         ihMA==
+X-Forwarded-Encrypted: i=1; AFNElJ9T8W0IN69fALcKGqVV/cgO8Jw2c20iz0i7euRiwY9f8yUdo05ykBP5r6PuG62KkwJb/ik=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrNYzXaFiGvovVBrNgCaFSseSENFvwm6KZgUSM95c754uGXZOh
+	9JYc8E2vwUqvs89Nn2uIGQbCgnai2uRQj5jYGT2Pm3/zMJC8fYwgQ8y+ILojR640iwc=
+X-Gm-Gg: AeBDietkm+a/snpi0HA9UnVtSv4LtPAqBDHE97WgG1Fh0Co796HhltPXi5i6RuQuLU/
+	/mV/WhDc7DE7/vOIiO2UnMnSDOkKsllJQv3zVxdvjrRCoJePhxHwQLUtdV+ynfc/0ydzIxyYWjO
+	VIr9wWiIfs66Tc8UAuJ/L1w025kc0JzovVrBa2Wt9LjJ0ibGmP4M+WswTJrtE9WBdrpEYKnGkhr
+	/bbl+o6z5/LLYR780LmgF/Q/URl0Czu25neu+Yct2y1Hdtt0oohfY/INyyKc8ygYJUSFxl4l2ik
+	F+B/NVX5CEFJhA40ThoUF49DB86UfL63F/8pbl2LYAdtx4DCLdWgVS0xH1ZVze+7LQyh8QV56Oo
+	hfwAoU1xI70LKjDgjpYrV7GA2sMHIVhPuJ7kFzgz4/BsNyvhijqLsewvG8KN1f3lIHj9DQqhw1B
+	/eezA/1XBcYjQez6hf27JHGw67n2SiO2cZFEjXHHf8UBfOajWXiX0HNy+PliL7uZge/YHLvTfwY
+	y6kJhCMGDJXLaXq
+X-Received: by 2002:a05:6102:6cd:b0:602:6784:3eef with SMTP id ada2fe7eead31-616f90e6f07mr16856701137.28.1777040363554;
+        Fri, 24 Apr 2026 07:19:23 -0700 (PDT)
+Received: from ziepe.ca (crbknf0213w-47-54-130-67.pppoe-dynamic.high-speed.nl.bellaliant.net. [47.54.130.67])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b02ac81a9dsm186723106d6.21.2026.04.24.07.19.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Apr 2026 07:19:22 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1wGHNK-00000002j9p-04Ph;
+	Fri, 24 Apr 2026 11:19:22 -0300
+Date: Fri, 24 Apr 2026 11:19:21 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Leon Romanovsky <leon@kernel.org>
+Cc: Paul Moore <paul@paul-moore.com>,
+	Roberto Sassu <roberto.sassu@huaweicloud.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Itay Avraham <itayavr@nvidia.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
+	Maher Sanalla <msanalla@nvidia.com>,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] Firmware LSM hook
+Message-ID: <20260424141921.GA3611611@ziepe.ca>
+References: <20260412090006.GA21470@unreal>
+ <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
+ <20260413164220.GP3694781@ziepe.ca>
+ <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
+ <20260413231920.GS3694781@ziepe.ca>
+ <CAHC9VhTLamfe4C81ZNRVT=H32x+KLxSqH3o0eBfrHsWAgAqxCA@mail.gmail.com>
+ <20260415134705.GG2577880@ziepe.ca>
+ <CAHC9VhSECYihup=tURo_Qk__xUdYYPkHgnz5CWA0BrRAkvwbog@mail.gmail.com>
+ <20260417191749.GK2577880@ziepe.ca>
+ <20260423140950.GE172828@unreal>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260423140950.GE172828@unreal>
 
-T24gVGh1LCAyMDI2LTA0LTIzIGF0IDEyOjI5IC0wNzAwLCBBbmt1ciBBcm9yYSB3cm90ZToNCj4g
-Q0FVVElPTjogVGhpcyBlbWFpbCBvcmlnaW5hdGVkIGZyb20gb3V0c2lkZSBvZiB0aGUgb3JnYW5p
-emF0aW9uLiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91
-IGNhbiBjb25maXJtIHRoZSBzZW5kZXIgYW5kIGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZS4NCj4g
-DQo+IA0KPiANCj4gQW5kcmV3IE1vcnRvbiA8YWtwbUBsaW51eC1mb3VuZGF0aW9uLm9yZz4gd3Jp
-dGVzOg0KPiANCj4gPiBPbiBXZWQsICA4IEFwciAyMDI2IDE3OjU1OjI0ICswNTMwIEFua3VyIEFy
-b3JhIDxhbmt1ci5hLmFyb3JhQG9yYWNsZS5jb20+IHdyb3RlOg0KPiA+IA0KPiA+ID4gVGhlIGNv
-cmUga2VybmVsIG9mdGVuIHVzZXMgc21wX2NvbmRfbG9hZF97cmVsYXhlZCxhY3F1aXJlfSgpIHRv
-IHNwaW4NCj4gPiA+IG9uIGNvbmRpdGlvbiB2YXJpYWJsZXMgd2l0aCBhcmNoaXRlY3R1cmFsIHBy
-aW1pdGl2ZXMgdXNlZCB0byBhdm9pZA0KPiA+ID4gaGFtbWVyaW5nIHRoZSByZWxldmFudCBjYWNo
-ZWxpbmVzLg0KPiA+ID4gDQo+ID4gPiAuLi4NCj4gPiA+IA0KPiA+ID4gQWNjb3JkaW5nbHkgYWRk
-IHR3byBpbnRlcmZhY2VzICh3aXRoIHRoZWlyIGdlbmVyaWMgYW5kIGFybTY0IHNwZWNpZmljDQo+
-ID4gPiBpbXBsZW1lbnRhdGlvbnMpOg0KPiA+ID4gDQo+ID4gPiAgICBzbXBfY29uZF9sb2FkX3Jl
-bGF4ZWRfdGltZW91dChwdHIsIGNvbmRfZXhwciwgdGltZV9leHByLCB0aW1lb3V0KQ0KPiA+ID4g
-ICAgc21wX2NvbmRfbG9hZF9hY3F1aXJlX3RpbWVvdXQocHRyLCBjb25kX2V4cHIsIHRpbWVfZXhw
-ciwgdGltZW91dCkNCj4gPiA+IA0KPiA+ID4gQWxzbyBhZGQgdGlmX25lZWRfcmVzY2hlZF9yZWxh
-eGVkX3dhaXQoKSB3aGljaCB3cmFwcyB0aGUgcG9sbGluZw0KPiA+ID4gcGF0dGVybiBhbmQgaXRz
-IHNjaGVkdWxlciBzcGVjaWZpYyBkZXRhaWxzIGluIHBvbGxfaWRsZSgpLg0KPiA+ID4gSW4gYWRk
-aXRpb24gYWRkIGF0b21pY19jb25kX3JlYWRfKl90aW1lb3V0KCksDQo+ID4gDQo+ID4gVGhhbmtz
-LCBJJ2xsIGFkZCB0aGlzIHRvIG1tLmdpdCdzIG1tLW5ldyBicmFuY2ggdG9kYXkuDQo+IA0KPiBH
-cmVhdC4gVGhhbmtzIQ0KPiANCj4gPiBUaGlzIGlzbid0IGFtIE1NIHBhdGNoc2V0LCBidXQgbW0t
-bmV3IGlzbid0IGluY2x1ZGVkIGluIGxpbnV4LW5leHQsIGFuZA0KPiA+IGxpbnV4LW5leHQgaXNu
-J3QgcHJlc2VudGx5IG9wZW4gZm9yIDcuMSBtYXRlcmlhbC4NCj4gPiANCj4gPiBBZnRlciAtcmMx
-IEknbGwgbW92ZSB0aGUgc2VyaWVzIGludG8gbW0uZ2l0J3MgbW0tbm9ubW0tdW5zdGFibGUgYnJh
-bmNoLA0KPiA+IHdoZXJlIGl0IHdpbGwgZ2V0IGxpbnV4LW5leHQgZXhwb3N1cmUuDQo+IA0KPiBB
-Y2sgdGhhdC4NCj4gDQo+ID4gSSBzZWUgdGhhdCBmdXJ0aGVyIHJldmlldy9jb21tZW50IGhhcyBi
-ZWVuIHJlcXVlc3RlZCAtIGhvcGVmdWxseSB0aGlzDQo+ID4gd2lsbCBoYXBwZW4gb3ZlciB0aGUg
-bmV4dCBjb3VwbGUgb2YgbW9udGhzLCBidXQgcGxlYXNlIGRvIGNvbnRpbnVlIHRvDQo+ID4gY2hh
-c2UgdGhpcyBkb3duIGlmIHlvdSBmZWVsIHRoZSBuZWVkLg0KPiANCj4gV2lsbCBkby4NCj4gDQo+
-ID4gPiBIYXJpcyBPa2Fub3ZpYyBhbHNvIHNhdyBpbXByb3ZlbWVudCBpbiByZWFsIHdvcmtsb2Fk
-cyBkdWUgdG8gdGhlDQo+ID4gPiBjcHVpZGxlIGNoYW5nZXM6ICJvYnNlcnZlZCA0LTYlIGltcHJv
-dmVtZW50cyBpbiBtZW1jYWhlZCwgY2Fzc2FuZHJhLA0KPiA+ID4gbXlzcWwsIGFuZCBwb3N0Z3Jl
-c3FsIHVuZGVyIGNlcnRhaW4gbG9hZHMuIE90aGVyIGFwcGxpY2F0aW9ucyBsaWtlbHkNCj4gPiA+
-IGJlbmVmaXQgdG9vLiIgWzEyXQ0KPiA+IA0KPiA+IFRob3NlIGFyZSBzaWduaWZpY2FudCBpbXBy
-b3ZlbWVudHMuICAgVGhyZWUgeWVhcnMgOigNCj4gDQo+IFBhcnQgb2YgdGhlIHJlYXNvbiB3YXMg
-dGhhdCB0aGUgYmFycmllciBpbnRlcmZhY2Ugd2FzIHBhcnQgb2YgYSBzZXJpZXMNCj4gZm9jdXNl
-ZCBvbiB2aXJ0dWFsaXphdGlvbiB2aWEgY3B1aWRsZS1oYWx0cG9sbC4gQXMgdGhhdCB3YXMgcmV2
-aWV3ZWQsDQo+IHRoZSB0YWxlIGNoYW5nZWQgaW4gdGhlIHRlbGxpbmcsIGFuZCBpdCBtYWRlIG1v
-cmUgc2Vuc2UgdG8gc2VwYXJhdGUNCj4gdGhlIHR3by4NCj4gDQo+IFdpbGwgc2VuZCBvdXQgdGhl
-IGNwdWlkbGUgY2hhbmdlcyBmb3IgcmV2aWV3IHdoaWNoIEhhcmlzIGlzIHJ1bm5pbmcNCj4gd2l0
-aC4NCg0KSXQgbmVlZHMgc29tZSBtaW5vciByZWZhY3RvcnMgZm9yIGxhdGVzdCBtYWludGFpbi4N
-Cg0KVGhpcyBpcyB3aGF0IEkgdGVzdGVkIGxhc3Qgd2VlazoNCmh0dHBzOi8vZ2l0aHViLmNvbS9o
-YXJpc29rYW5vdmljL2xpbnV4L3RyZWUvZGV2L2hhcmlzb2tuL2FybS1oYWx0cG9sbC0yMDI2LWFw
-cmlsLXRlc3QNCg0KPiANCj4gLS0NCj4gYW5rdXINCg0KUmVnYXJkcywNCkhhcmlzIE9rYW5vdmlj
-DQpBV1MgR3Jhdml0b24gU29mdHdhcmUNCg0K
+On Thu, Apr 23, 2026 at 05:09:50PM +0300, Leon Romanovsky wrote:
+
+> > > Leon mentioned that different firmware revisions would have different
+> > > parameters for a given opcode, and that one would need to inspect
+> > > those parameters to properly filter the command.  Is that not true, or
+> > > am I misreading or misunderstanding Leon's comments?
+> > 
+> > They are ABI stable, so there will be rules about future changes that
+> > old software can follow to ignore or reject future things it doesn't
+> > understand.
+> 
+> It is wishful thinking and applicable only to mlx5 devices. No one
+> promises that other devices follow same ABI rules.
+
+Well, I will definately kick them out of fwctl if they don't.
+
+Jason
