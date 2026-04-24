@@ -1,144 +1,130 @@
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.245.243.92])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC85E3D9035
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 13:57:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED8730DD1D;
+	Fri, 24 Apr 2026 14:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.245.243.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777039032; cv=none; b=T9ya2FHtgTXncw/q3Kz4p9D6VjtRG7Pe1uwosLOz3s1BULdaykzDwTVDTxhS37237u5mWO538nhPI0yvXSFPDZG463PuLns4X2/QBEJj0EISw7jRQeYzdRwVVnIuve0lK2NEwcDPC/bJXbawJizeG/LguP4L51HtO9vUA37AKxo=
+	t=1777039831; cv=none; b=np+zQGOF98jonkp2E5Sdei109AMeZKiYLoZfR65ZvUm3Za939NdliRXiyDA/NWYOb8T5xo+apEYjdlqaUxLALiWmrIcX6ARuBYGs9A0yiKMT8erKVDQ5jPcp6+kciTBIcHPyyz9mEJQtp2pNid/MJR0JLPaYwvBjjW8jx+myjZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777039032; c=relaxed/simple;
-	bh=YkV/gmu/iRF0QtidaJru1TGFWT+3DjghSB2koHn0JDo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=InvixpZhpxDg+lfOL4fcDjbYKfVvzX4Ni3i32hZu8WavDK4VPlgxyMNlJF7/276EsMqGpxJfEtSEuo1t7huedn4dJnb4uZoJV1dvQB5VVQPDddyOkHy/WdOWE229uNwFX06xE2b3rKJnCHSgY2yLiiV3yWO3L/Ty1kT4slaColY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IW5umCQo; arc=none smtp.client-ip=209.85.210.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777039831; c=relaxed/simple;
+	bh=qgh3lJ+CjSPZqoH8RyKa1iBeGdTFbSZMbm/9a72fgmI=;
+	h=Subject:From:To:CC:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=dLjBaW1AJBFa3WEufwFEhwgstHYCgE83lRwvThJRkI8j53P1HTQQa3jI4nBztJNeMaZ1Tfz9g0fPPZVNXT8SEziReibXBG8t3uZcnpTZTXprYFLJG75TjJv5w0JYnu7NxfF5q4ggjKEfOW/WNW63oCgunVwXvyZtmEXmMVirNwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=boDV7M1f; arc=none smtp.client-ip=44.245.243.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IW5umCQo"
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7dcc9b506d9so4619934a34.1
-        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 06:57:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="boDV7M1f"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777039028; x=1777643828; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J4lmyNqo07GvwFuIjU1VCEb9Ql2ZQ/Si0G3lWH77Zr8=;
-        b=IW5umCQoqLETi2iYdYdIhV8l5n/rEvRFo6Ou1Dw/d9co91mDhom5bx5teNAErLcps3
-         AfMBtNjrjws9oBcVBXd/+IH//OYGLe63sBQUbc3zZIsA3TB4CV+IXj0jHhD+Lf213TLt
-         RsVMDNE7+EVdvPd16ewRxrjVr6wEg9lXNkTGVOMClnHk+11Fq73BaWpzQAlIfJd0w9UE
-         YqYHGbUwqXXKz2h4ipD8huBUF6XDX2AYCMcki6d8j9hPMTMQcS1Jdp26yIxgvdlIw60r
-         ARQaqKTLZFxsyBFWxYPH41ah9qoj1fCXzZ5EhR0SezofxQR4gE1SuzAZbAh5jaYZkL+Q
-         pGHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777039028; x=1777643828;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J4lmyNqo07GvwFuIjU1VCEb9Ql2ZQ/Si0G3lWH77Zr8=;
-        b=m3Boqyq4JIMPy394uK42sACZ0R+vlq/lyiNxxA+HEvjXm5Sn+9tFXzhzHgQXcEK0ys
-         5HMNb/SV4hcbu2vxXw+tWIswAqJlK9jks0qRfYrRnpy5DI4wfosyZ6h0jWUY0dj3moum
-         Wza+umtzLdvyyRaVRN0YNp2erP+8aCkqovvSg4XfGuL2bgleq0aueFUg/7xYb/9tYzrk
-         1qFrJLZvsCUBiUX29daHk5qY/ILbL8lmTHF7JX8vZ9CCCCkWqup0Pd/+12Bybvhn83/h
-         iBI1cqmV41dIS4K4FhQ0wQaDQSRGahc3RXVjD20rbQUD2wrQe1wXZRoeSvk/hZVpGYv3
-         ReMw==
-X-Forwarded-Encrypted: i=1; AFNElJ8VIgmql+Ua7wu11ftlJO3utyPxksAdnNeNoojlmFdSV8nm2eVaYr9K4hR8VfoQTof69c0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yye4BSsXNFk7FJg7BcRsXIs8P+VoLKkRfBDHG0RkNPuRPow7MGz
-	tqNH1KqklUUdUN6uyl+03Lnwk/3ztn5s7C3W9T8RL4DX1/Fvvthp+kTW
-X-Gm-Gg: AeBDiesfpwEKVtPE1EY3ju9hwyhUGFXRqYIBT28BX5/CPsCeEW6zePquc/JAv6ff5fv
-	C2C9LjTfd3AeXmbO153UmGaJb0FP3pYPMHw2lL7qCQhpONfzH2LN3PsMzenGlAn+pCcFKfJFXpl
-	4PrkrECoSxjxr6hST9JpST3wTWpke4bY9Ks+yegGDTrYTXeDFw+F7iLzue8d6DZ95ALUVsZiOu3
-	b2w4kuE9XjoYpf7smAErTue2pTEoYMFA80ZiJLreqaZMt0xaQ/UMqDXu7iqq0DZxUspC8E4GJy7
-	mMq9srLEGFPSKwQ1nmWjQolExRjLb4x8g2EYzRHSDz7jPoDsvSgnEaLnZqm5lVB3MTiNnl7kSzi
-	zWRt9RHNKKqkQ66BRv5/2/fgP3vxzpyShb53Yac92QuW21LP17t2UCuUIYHI4UYlJw5Dl0pLSGF
-	IVFivQNgUg5TsRrG9X2jHzEo2+6kLV048CWE+nNZVE5rDNqg5zs4Gb3ttO3+Xwt/Ip1zPKY3ufh
-	ChnlKfdCzJP+z8ZdgXF7Nmitv2V
-X-Received: by 2002:a05:6830:439f:b0:7dc:da80:42be with SMTP id 46e09a7af769-7dcda80470bmr11350922a34.21.1777039028015;
-        Fri, 24 Apr 2026 06:57:08 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:40::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dc9759bfa3sm19510471a34.13.2026.04.24.06.57.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Apr 2026 06:57:07 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1777039830; x=1808575830;
+  h=from:to:cc:date:message-id:references:in-reply-to:
+   content-id:content-transfer-encoding:mime-version:subject;
+  bh=qgh3lJ+CjSPZqoH8RyKa1iBeGdTFbSZMbm/9a72fgmI=;
+  b=boDV7M1f0EO6qJ7HS2YyddjR2Eh07NOQqHmcjB73kq1nrCq13z7QolzA
+   s2M8u3+tq/W4huVIx/3g2IRbBWdQAldIZ4j7UPDhuh8/1XfInYhY61AnL
+   LSwyHBqRDPHhrKxBQ79Ra9otmVuTCMhZZi+AoE8umLv4s/WP/QpYSljbw
+   N/S8unXmKCXlPo3vL1L4VSQqInbTs2roedYizISoLSPZHnt/57mQKnrep
+   8blJ1HWGjOO5baDSFEu2SJTVlNQYhhKWRdY/YcWC6Y7kXSaQrEpM3IMLf
+   e6HAHmps7acsLFFo2NNnueZLmoVlGHPzCO5tsWCwXULgvWKlSaN1YULMn
+   w==;
+X-CSE-ConnectionGUID: 15NWk7qiQ2SUfTB3+sLZKw==
+X-CSE-MsgGUID: yfeYcnHuRXmiHRu96Pwy1w==
+X-IronPort-AV: E=Sophos;i="6.23,196,1770595200"; 
+   d="scan'208";a="17646447"
+Subject: Re: [PATCH v11 00/14] barrier: Add smp_cond_load_{relaxed, acquire}_timeout()
+Thread-Topic: [PATCH v11 00/14] barrier: Add smp_cond_load_{relaxed, acquire}_timeout()
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2026 14:10:30 +0000
+Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.48:14253]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.27.2:2525] with esmtp (Farcaster)
+ id ac603786-d141-4164-ac94-10c72085e656; Fri, 24 Apr 2026 14:10:29 +0000 (UTC)
+X-Farcaster-Flow-ID: ac603786-d141-4164-ac94-10c72085e656
+Received: from EX19D032UWA001.ant.amazon.com (10.13.139.62) by
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Fri, 24 Apr 2026 14:10:28 +0000
+Received: from EX19D032UWA003.ant.amazon.com (10.13.139.37) by
+ EX19D032UWA001.ant.amazon.com (10.13.139.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Fri, 24 Apr 2026 14:10:28 +0000
+Received: from EX19D032UWA003.ant.amazon.com ([fe80::8e94:8f60:9531:c497]) by
+ EX19D032UWA003.ant.amazon.com ([fe80::8e94:8f60:9531:c497%5]) with mapi id
+ 15.02.2562.037; Fri, 24 Apr 2026 14:10:28 +0000
+From: "Okanovic, Haris" <harisokn@amazon.com>
+To: "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"ankur.a.arora@oracle.com" <ankur.a.arora@oracle.com>
+CC: "joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
+	"xueshuai@linux.alibaba.com" <xueshuai@linux.alibaba.com>,
+	"david.laight.linux@gmail.com" <david.laight.linux@gmail.com>,
+	"boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>, "memxor@gmail.com"
+	<memxor@gmail.com>, "ashok.bhat@arm.com" <ashok.bhat@arm.com>,
+	"zhenglifeng1@huawei.com" <zhenglifeng1@huawei.com>, "konrad.wilk@oracle.com"
+	<konrad.wilk@oracle.com>, "cl@gentwo.org" <cl@gentwo.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "ast@kernel.org"
+	<ast@kernel.org>, "rdunlap@infradead.org" <rdunlap@infradead.org>,
+	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>, "arnd@arndb.de"
+	<arnd@arndb.de>, "will@kernel.org" <will@kernel.org>, "mark.rutland@arm.com"
+	<mark.rutland@arm.com>, "peterz@infradead.org" <peterz@infradead.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "Okanovic, Haris"
+	<harisokn@amazon.com>, "rafael@kernel.org" <rafael@kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Thread-Index: AQHcx1Lc+RjIJDvKCE+BAEcv9rf8TbXs+zWAgAFeVwA=
+Date: Fri, 24 Apr 2026 14:10:28 +0000
+Message-ID: <5e8ef9d2bd0b3356e37e6a982d04d2d993c8a88f.camel@amazon.com>
+References: <20260408122538.3610871-1-ankur.a.arora@oracle.com>
+	 <20260423101631.84f26592d629eee46fbde6f8@linux-foundation.org>
+In-Reply-To: <20260423101631.84f26592d629eee46fbde6f8@linux-foundation.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D1A45CAF790C394AA6EF3536E4EF9861@amazon.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 24 Apr 2026 06:57:05 -0700
-Message-Id: <DI1FREJRMGWT.M8JZJADKO6WJ@gmail.com>
-Cc: "Yinhao Hu" <dddddd@hust.edu.cn>, "Kaiyan Mei" <M202472210@hust.edu.cn>,
- "Dongliang Mu" <dzm91@hust.edu.cn>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Nikolay Aleksandrov" <razor@blackwall.org>,
- "Andrew Lunn" <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Alexei
- Starovoitov" <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Simon Horman"
- <horms@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>, "Willem de
- Bruijn" <willemb@google.com>, "Samiullah Khawaja" <skhawaja@google.com>,
- "Hangbin Liu" <liuhangbin@gmail.com>, "Krishna Kumar" <krikku@gmail.com>,
- "Kuniyuki Iwashima" <kuniyu@google.com>,
- =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf v2 1/3] bpf, tcx: reject offloaded programs on
- attach
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc
-References: <20260424104201.217604-1-jiayuan.chen@linux.dev>
- <20260424104201.217604-2-jiayuan.chen@linux.dev>
-In-Reply-To: <20260424104201.217604-2-jiayuan.chen@linux.dev>
+MIME-Version: 1.0
 
-On Fri Apr 24, 2026 at 3:41 AM PDT, Jiayuan Chen wrote:
-> An offloaded prog's bpf_func is replaced by bpf_prog_warn_on_exec(),
-> since it's supposed to run on the NIC, not the host. But tcx doesn't
-> check this and happily attaches it to the software path, so the first
-> packet hits the WARN.
->
-> XDP already guards this in dev_xdp_attach(); tcx just never got the
-> same check. Add it to tcx_prog_attach(), tcx_link_attach() and also
-> tcx_link_update() so the fix cannot be bypassed by loading a normal
-> program and then swapping it out via BPF_LINK_UPDATE.
->
-> Use bpf_prog_is_offloaded() rather than bpf_prog_is_dev_bound() +
-> bpf_offload_dev_match() (as XDP does): bpf_prog_dev_bound_init()
-> already rejects BPF_F_XDP_DEV_BOUND_ONLY for BPF_PROG_TYPE_SCHED_CLS,
-> so a dev-bound SCHED_CLS program is always offloaded. The simpler
-> check is sufficient and also rejects attaching a program offloaded to
-> device A onto device B.
->
-> Fixes: e420bed025071 ("bpf: Add fd-based tcx multi-prog infra with link s=
-upport")
-> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-> Reported-by: Dongliang Mu <dzm91@hust.edu.cn>
-> Closes: https://lore.kernel.org/bpf/64d8e2b5-a214-4f3c-b9e8-bcedbcb2c602@=
-hust.edu.cn/
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
->  kernel/bpf/tcx.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/kernel/bpf/tcx.c b/kernel/bpf/tcx.c
-> index 02db0113b8e7c..1144627483d53 100644
-> --- a/kernel/bpf/tcx.c
-> +++ b/kernel/bpf/tcx.c
-> @@ -16,6 +16,9 @@ int tcx_prog_attach(const union bpf_attr *attr, struct =
-bpf_prog *prog)
->  	struct net_device *dev;
->  	int ret;
-> =20
-> +	if (bpf_prog_is_offloaded(prog->aux))
-> +		return -EINVAL;
-> +
-
-instead of sprinkling the check everywhere do it at the source of the bug.
-
-pw-bot: cr
+T24gVGh1LCAyMDI2LTA0LTIzIGF0IDEwOjE2IC0wNzAwLCBBbmRyZXcgTW9ydG9uIHdyb3RlOg0K
+PiBDQVVUSU9OOiBUaGlzIGVtYWlsIG9yaWdpbmF0ZWQgZnJvbSBvdXRzaWRlIG9mIHRoZSBvcmdh
+bml6YXRpb24uIERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5
+b3UgY2FuIGNvbmZpcm0gdGhlIHNlbmRlciBhbmQga25vdyB0aGUgY29udGVudCBpcyBzYWZlLg0K
+PiANCj4gDQo+IA0KPiBPbiBXZWQsICA4IEFwciAyMDI2IDE3OjU1OjI0ICswNTMwIEFua3VyIEFy
+b3JhIDxhbmt1ci5hLmFyb3JhQG9yYWNsZS5jb20+IHdyb3RlOg0KPiANCj4gPiBUaGUgY29yZSBr
+ZXJuZWwgb2Z0ZW4gdXNlcyBzbXBfY29uZF9sb2FkX3tyZWxheGVkLGFjcXVpcmV9KCkgdG8gc3Bp
+bg0KPiA+IG9uIGNvbmRpdGlvbiB2YXJpYWJsZXMgd2l0aCBhcmNoaXRlY3R1cmFsIHByaW1pdGl2
+ZXMgdXNlZCB0byBhdm9pZA0KPiA+IGhhbW1lcmluZyB0aGUgcmVsZXZhbnQgY2FjaGVsaW5lcy4N
+Cj4gPiANCj4gPiAuLi4NCj4gPiANCj4gPiBBY2NvcmRpbmdseSBhZGQgdHdvIGludGVyZmFjZXMg
+KHdpdGggdGhlaXIgZ2VuZXJpYyBhbmQgYXJtNjQgc3BlY2lmaWMNCj4gPiBpbXBsZW1lbnRhdGlv
+bnMpOg0KPiA+IA0KPiA+ICAgIHNtcF9jb25kX2xvYWRfcmVsYXhlZF90aW1lb3V0KHB0ciwgY29u
+ZF9leHByLCB0aW1lX2V4cHIsIHRpbWVvdXQpDQo+ID4gICAgc21wX2NvbmRfbG9hZF9hY3F1aXJl
+X3RpbWVvdXQocHRyLCBjb25kX2V4cHIsIHRpbWVfZXhwciwgdGltZW91dCkNCj4gPiANCj4gPiBB
+bHNvIGFkZCB0aWZfbmVlZF9yZXNjaGVkX3JlbGF4ZWRfd2FpdCgpIHdoaWNoIHdyYXBzIHRoZSBw
+b2xsaW5nDQo+ID4gcGF0dGVybiBhbmQgaXRzIHNjaGVkdWxlciBzcGVjaWZpYyBkZXRhaWxzIGlu
+IHBvbGxfaWRsZSgpLg0KPiA+IEluIGFkZGl0aW9uIGFkZCBhdG9taWNfY29uZF9yZWFkXypfdGlt
+ZW91dCgpLA0KPiANCj4gVGhhbmtzLCBJJ2xsIGFkZCB0aGlzIHRvIG1tLmdpdCdzIG1tLW5ldyBi
+cmFuY2ggdG9kYXkuDQoNClRoYXQncyBncmVhdCBuZXdzISBUaGFua3MgZm9yIGp1bXBpbmcgaW4g
+dG8gbW92ZSB0aGlzIGZvcndhcmQuDQoNCj4gDQo+IFRoaXMgaXNuJ3QgYW0gTU0gcGF0Y2hzZXQs
+IGJ1dCBtbS1uZXcgaXNuJ3QgaW5jbHVkZWQgaW4gbGludXgtbmV4dCwgYW5kDQo+IGxpbnV4LW5l
+eHQgaXNuJ3QgcHJlc2VudGx5IG9wZW4gZm9yIDcuMSBtYXRlcmlhbC4NCj4gDQo+IEFmdGVyIC1y
+YzEgSSdsbCBtb3ZlIHRoZSBzZXJpZXMgaW50byBtbS5naXQncyBtbS1ub25tbS11bnN0YWJsZSBi
+cmFuY2gsDQo+IHdoZXJlIGl0IHdpbGwgZ2V0IGxpbnV4LW5leHQgZXhwb3N1cmUuDQo+IA0KPiBJ
+IHNlZSB0aGF0IGZ1cnRoZXIgcmV2aWV3L2NvbW1lbnQgaGFzIGJlZW4gcmVxdWVzdGVkIC0gaG9w
+ZWZ1bGx5IHRoaXMNCj4gd2lsbCBoYXBwZW4gb3ZlciB0aGUgbmV4dCBjb3VwbGUgb2YgbW9udGhz
+LCBidXQgcGxlYXNlIGRvIGNvbnRpbnVlIHRvDQo+IGNoYXNlIHRoaXMgZG93biBpZiB5b3UgZmVl
+bCB0aGUgbmVlZC4NCj4gDQo+ID4gSGFyaXMgT2thbm92aWMgYWxzbyBzYXcgaW1wcm92ZW1lbnQg
+aW4gcmVhbCB3b3JrbG9hZHMgZHVlIHRvIHRoZQ0KPiA+IGNwdWlkbGUgY2hhbmdlczogIm9ic2Vy
+dmVkIDQtNiUgaW1wcm92ZW1lbnRzIGluIG1lbWNhaGVkLCBjYXNzYW5kcmEsDQo+ID4gbXlzcWws
+IGFuZCBwb3N0Z3Jlc3FsIHVuZGVyIGNlcnRhaW4gbG9hZHMuIE90aGVyIGFwcGxpY2F0aW9ucyBs
+aWtlbHkNCj4gPiBiZW5lZml0IHRvby4iIFsxMl0NCj4gDQo+IFRob3NlIGFyZSBzaWduaWZpY2Fu
+dCBpbXByb3ZlbWVudHMuICAgVGhyZWUgeWVhcnMgOigNCg0KUmVnYXJkcywNCkhhcmlzIE9rYW5v
+dmljDQpBV1MgR3Jhdml0b24gU29mdHdhcmUNCg0K
