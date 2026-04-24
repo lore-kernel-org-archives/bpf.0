@@ -1,84 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C743EF669;
-	Fri, 24 Apr 2026 18:20:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22AFF3F6600
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 18:49:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777054849; cv=none; b=kHpA931SWz1JbnGWB2M5jDxPrtuavjlLLkho1KrscurP88zB381lU/MKRm6sW2oIO+8ULHkizoLYnIXUi9R1Hx94qOhPRY7UKxpfZXdc/SdGv65cNZWxNwDfMVj26z3wkDCCw5W4kdEyjdFLqFaC0OkyRVRwXNZKE3h60NyESxc=
+	t=1777056581; cv=none; b=FhzDAmrslzb8sRKobaWgRBwH3we6bwBRLK/IUOxI/aRkToGd1afzoFVi79bMlaZg90gywfUVQ6rodyWfIdW8qmFkOLXmoxVCnfrsxR6ZtopcWPG1gTPubBd8VtNsgMUn9KRWwa+GBgkPElJulz4FMuma8yw8UdwNdYSOc8UI1yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777054849; c=relaxed/simple;
-	bh=fPAbYszOYtL10ym6d9Nwm9WB5nSR2Kqggw78z0h+UpY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=HdzXL8XZcheyjt5i5jULA6L3ef+ZNTOrcoxhjU5zE8xHBcUy60QdC92hZcM/Zb+RQwGvipLjfYbiwgXPSP6Qzm5+xGgZ5j+4jXnWLkh2/mdvcswwpEDCanKLQaqjEJtTHeGkj9+FxPjBLTHdDOcNMK1ukzrqiULbUn+mzhjkdVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m3LJa+Mc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777056581; c=relaxed/simple;
+	bh=6IOZ5fpZbuwuN9Ze3ZwE4QuHE/XPBHxy1JSI0V89eYs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BHDpubKfxFsAned3Y1Av2ahKokP2Zjod5q4OmOvijKtBdTTzUTUb4vla44cyoya2+Kof1q53NWKePXSNobCGYthALjaa1chIbkj22Pv28ajlMShJv4ozYrkw6Cz37LtjRVuaCoB3B8hbhb/HBt1A7gacvlcBdCkim6cO6Wmxrfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mR77e+kg; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m3LJa+Mc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 745D5C19425;
-	Fri, 24 Apr 2026 18:20:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777054848;
-	bh=fPAbYszOYtL10ym6d9Nwm9WB5nSR2Kqggw78z0h+UpY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=m3LJa+McnhVi32mADpapuSEfTG9xZF/8YAWofxUOdSk8bGL1QCsaxeOx1sPkQHXeN
-	 MTMgN5BxhJ6OlIzvDGvKF2cjbWO956YbzpJKwWri6dBX5rA7re9R4y6cQ1xL+HyCle
-	 Cr//5iWk2yeWQwLQyjiEbqQd1XoKQHUpWROX/c8UesKumBSgNuLw5gr1WTxgdGi1pc
-	 +wRv64yOYhiuSFmfct4bLbiHISDZs5m92dKOK+9w+nlrTwEcvw1KaDs6jxbvg35vJ8
-	 ZpA0n2OhAlymEJHuM+AJb/3028JkXKQlDoarJHxNQsK9HrFoY7kRjOPak6KNhElviu
-	 GCtq20RZxUVTg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02CE938119C3;
-	Fri, 24 Apr 2026 18:20:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mR77e+kg"
+Date: Fri, 24 Apr 2026 11:49:20 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1777056568;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BSZgyp08bC/BsjWgJ2L5WaVTAHLbGzENzzPVS9GKMN4=;
+	b=mR77e+kgFV+3RQ1z3gkmr4d4Bpa0qyPIrOe6JnrjHLKcDyMgrNCpcqpgZRR8jSTQb+Lo8e
+	tbdEdPTcAX0lef4UKk8Xphf3tDJEY+Mxz97XOQxtLFo3LthWAPWLg+Ozo4fD5zCh7/9OXU
+	TXxdLhXqWVKwI/Pfen2rCS7HUy3ERj4=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, martin.lau@kernel.org, 
+	kernel-team@meta.com
+Subject: Re: [PATCH bpf v1 1/1] bpf: Fix sk_local_storage diag dumping
+ uninitialized special fields
+Message-ID: <2026424184430.ui0Q.martin.lau@linux.dev>
+References: <20260423222356.155387-1-ameryhung@gmail.com>
+ <8cc73c03-afb6-4b7d-97ea-e05d9cc56c2d@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/2] selftests/bpf: drop xdping tool
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177705480880.1650547.11751423238740714723.git-patchwork-notify@kernel.org>
-Date: Fri, 24 Apr 2026 18:20:08 +0000
-References: <20260422-xdping-v2-0-c0f8ccedcf91@bootlin.com>
-In-Reply-To: <20260422-xdping-v2-0-c0f8ccedcf91@bootlin.com>
-To: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29_=3Calexis=2Elothore=40bo?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org,
-	=?utf-8?q?otlin=2Ecom=3E?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
- davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, ebpf@linuxfoundation.org,
- bastien.curutchet@bootlin.com, thomas.petazzoni@bootlin.com,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org, alan.maguire@oracle.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8cc73c03-afb6-4b7d-97ea-e05d9cc56c2d@gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
-
-On Wed, 22 Apr 2026 18:20:23 +0200 you wrote:
-> Hello,
+On Fri, Apr 24, 2026 at 12:50:34AM +0100, Mykyta Yatsenko wrote:
+> > diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+> > index 14eb7812bda4..b50d26a542ed 100644
+> > --- a/net/core/bpf_sk_storage.c
+> > +++ b/net/core/bpf_sk_storage.c
+> > @@ -558,6 +558,7 @@ static int diag_get(struct bpf_local_storage_data *sdata, struct sk_buff *skb)
+> >   				      sdata->data, true);
+> >   	else
+> >   		copy_map_value(&smap->map, nla_data(nla_value), sdata->data);
+> > +	check_and_init_map_value(&smap->map, nla_data(nla_value));
 > 
-> this is the v2 of the small series dropping xdping tool. This removal is
-> part of the larger effort aiming to tidy the bpf selftests directory.
-> This new revision updates btf_dump test to make it use another bpf
-> program rather than xdping_kern so that we can drop it as well.
-> 
-> [...]
+> I think check_and_init_map_value() should be moved before the
+> copy_map_value(), because copy_map_value_locked() already uses
+> spin lock special field, which if uninitialized can deadlock?
 
-Here is the summary with links:
-  - [bpf-next,v2,1/2] selftests/bpf: make btf_dump use xdp_dummy rather than xdping_kern
-    https://git.kernel.org/bpf/bpf-next/c/d4a2eeb2ac78
-  - [bpf-next,v2,2/2] selftests/bpf: drop xdping tool
-    https://git.kernel.org/bpf/bpf-next/c/feb13b19f3fa
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+The src (sdata->data) lock is used instead of
+the dst (nla_data(nla_value)) lock, so it should be fine.
