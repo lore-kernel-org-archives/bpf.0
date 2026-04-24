@@ -1,176 +1,207 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A8E37D13C
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 22:06:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777068362; cv=pass; b=AbeALb2cpF5G79BQdysD7rg6q/OUDZmR1yWS+UxJgoQ3OUP4JcKLbWzIlQEr6zu+EevP2k+NxJFh2Dc6B+Gc5dWaU+Dc+Z5aACxoCJEJK/ctuat/a4xEYH0BPmjJHPbQsjPAnY5vFFB/kVS0gC1b/eegRgEDm/DLEpCPPfSif28=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777068362; c=relaxed/simple;
-	bh=7gQQ0WbS6BfDp0nY6MJb9pQfWgZ9lXQf8swLrQ9a/AM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UK0pSyNegqYGJguZXW2QQh3+FLi0YN54nX6NaLvOFoducLh0PS/bm6lK/Dl8pW+gxwDCt3T/2UjEHQDsZGXdMWvhyP7lOnARfw623+rgATWNhqxQzpGFC/9d6LXHLBvGhNU8B/sbRi2+vroZkftP9EHgEkyKNhMeL9ZEx6L6ncA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SGsTNVz0; arc=pass smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5698F33C18B
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 22:13:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777068794; cv=none; b=nd+meRpI7cn5+ANtI2Q8tYLRjmemtKheS2Bbphau9o2CbjsudKv+/dkmKGnG2BZZood7eDAMmjpR81DRR9wDlQ9bS0IUpscftW0RxnzV3PYyHfLEl3iOYnZg0cBloAlCEKIrXpXdTrywHvRo2xs8yRZAMRapvPoqF1/ZblM6Fvc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777068794; c=relaxed/simple;
+	bh=edkfnYqeyMC0Qt+W6n8ze5hGF7NTNhj3oyNEAcTDdxw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NlCV6GAuGTprAeaHaec4Ha1iLdOb4lzzFBK+XeOfrj8wXJ5XKXPAUNjThjOUNqsHyAsx2N17mXCs6jS5gv1jHHKBYzoicVLu9veAiyyaWL30/5GbFxYPBd/ArhB3Bww8o2kvXrm+zDbmXYJl7iFvgOd6w14Tu1IzUqO+ld2XhVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=H5m4vQCZ; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SGsTNVz0"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43eb05b1875so4878756f8f.3
-        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 15:06:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777068359; cv=none;
-        d=google.com; s=arc-20240605;
-        b=EesG1gE2JKNOIWe4FwEL4EMHbhWITzWyEUkiUNLzlzCJvKPCi0w3Y1A19ACZQ5vy7z
-         sxR3I89k9uGNDODOJ4GW9CzqD15cyxkrmiW0zjY8uNVD3ZBVcjfC+qbU/QihsJ6c7MMk
-         JJFS9R8vmxjOhatIaCjgclge8EPuYusmsZ/z3zG17oYtK1gOLJ4jBMzrv8tk8mnCZHNH
-         d0mMI9wNTIa6sy1WbMkAi4gg5gBDyjDob6EhDqf0uRwKzaJQpjxI+tXuawpsCybJVsst
-         sHDDX++LrpXGOE+qVCkSq9uBZLSiewPK3Ef2ervHgvMzIEO5Sc6fqJU4ty9iOEAlJkAS
-         B2ZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=r5RElcU3sJmtTmGQf615qTgHo6/2ahPDly8jUC64Wxs=;
-        fh=Sdrs/urj7R8ylXUh9Is2BRte1gjRuva1QRLqOZrr2Dc=;
-        b=Eld13iu7zX6OGtnJHpM6KQA/IXLmCwG3DMZvl7PD3Dk+Xs1G0RskrMlck+RVHnjQ6m
-         j+i+cP7vYndtrXnN9C9iztDdTymtEtfug0kYk6vTkvjx++TzsTENXg/aDsr7/cT6nkwl
-         RZJXaHAfG49cc9BXLWUXWlMnOkSOAS39TUocOfTVHm1qgQOi0EAygVItpjAtR/+gaI4h
-         wFlltZivatEzAS1S8cxzDu3zoVz9gAr63Rq/4vKkNZwm45a4LH4hAi5v89RimWkOtfER
-         R3gr22hWZVbCTQRLaZa1XjKSk88DLGq3wIK03cH1Qc7fCmslEjLk1BIilg2Qm+usYJBZ
-         Vgrw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="H5m4vQCZ"
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-506251815a3so70789031cf.0
+        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 15:13:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777068359; x=1777673159; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r5RElcU3sJmtTmGQf615qTgHo6/2ahPDly8jUC64Wxs=;
-        b=SGsTNVz0qbZXS+w0kyfxbxWZO4OmqQef1sOk+ssMviR0ZjzioAcGTRBvwxbWYDBE92
-         sMmSaxZzerfv5kkiDj68HBPLR2M/cMBjUt1IB6N7PAHKN8VpVwnckoHFt1bpWeZM7qJz
-         vOhFJmiUKHA6atz9jFeOAsgFpmQ7wqD17xvhMig4koAKdFvDiy6IVabITWkebv9hJgW/
-         3vVCVJkoSNpIpBKr5MfOvXYJBLsD0OP3WqX5oZvpnNoei19Lz86tjhc2duSSzRFyy+9B
-         RPwi0cMH98dCZB8l5tTNaaj2Nq1y1wYrwIAW2ubWzytHR5I3b+5QWb2HonMrOE1bp28f
-         pXEg==
+        d=ziepe.ca; s=google; t=1777068792; x=1777673592; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=p1Bt8LRPmWuCECk46OUK1KhCrmrzQEbzIWvPlDI3cp4=;
+        b=H5m4vQCZE27E+gDtn8BVCf5jLiPS6GNSYRuHd7oK/ryAnR76eU7gh4QWRI3SAXCvku
+         xwbAjZ3hIBI5GEUgbOSGuhXCViPpczYPF9VhNc2dh89l7qQROTD8YZ3pfblRmIXAApD+
+         LLNyElsdRzbz0O8P7asNE1yJaILYoWrFSeatd7+ExO8xnYjLQgg2muQOyOklYWskuFkU
+         cwfy9M7PKhf/GFqDNR2idR9iNUU//TC3BIEIHtpqSrhi/HtxH3xMTkMDNiCC7PJfnIaI
+         RfTF+U+c9gQck78mXjxg5cQFxiXkgiK0mPHrBDKGiKFmfg+/2VAfJKkgnb8JLTc01FjS
+         F9Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777068359; x=1777673159;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=r5RElcU3sJmtTmGQf615qTgHo6/2ahPDly8jUC64Wxs=;
-        b=MaccpdyXsnIC2nFVW0EqurwbOz3URoncqtpjrexFQKuDP+yh5G55bU3iq6NWazYrMg
-         QbIId+4RnlCR9ZyDNQfTxx662s22yI0wVDU+59lHmTNXJ7wWdteZnm8uyTU7wKCT6JVw
-         9FSbzVefmrZaTeH3XcGBeUYYNxG/uqz8MCmi2Su3toosIv8DY2EmPAb1ZtdfzXG8hV2A
-         +64s07UTt2CWZqRnjO+mtD++UjMh1ipKmFaGlsYj5/B+MB4dATbnU+M7ojTzQ5hfhUGS
-         N+vIB2Z4w7DbQidJEa+hUxVmqzLnrR/e/7c3xo3MqxIrCYfJYtfAQ+zQiaQTgG/d2Eln
-         9akg==
-X-Forwarded-Encrypted: i=1; AFNElJ+8xtqn9lRnnIO2QCLiTAGeiwa1/0PVxmc3RGVoZv9BNYCQFi1ZaccTscwA/3gbrkEI9Ls=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHiJHRokVMH5oy1RO5j7H5WaRiXjuufLtYQN+yEDbL3RwLhhhc
-	qp3MBEV0ZxU/XQrMVMBJKkdzWl6asviUS1xyWPgj9IDgCNcK7yMWhqbdG51CiB67F2B9FOeWoAy
-	0mFylYv6syVBjDcd3xgRX5Nn8hRRavEXErVC4
-X-Gm-Gg: AeBDiesOFK4aV2CtaTx4X8VQankJVj0kLWaGKS1ZyNzeCLaDPXcViyX37iTyP+CSQ4r
-	3y6aW96a23H/gsQa8PISTcCjmwoMhVAzo5e+lKxqyhCigZ3ZIF1ttqGKuKyGMHZIF2cx+k8bQR+
-	Sajt83zVe1gP7q7beMzJytRMmFyuxXn1ynUFsrio86hdJSZsRqpC0oj+6D/k2TySHRPcGZSpNsu
-	ejbNY3ckNP6Ub9H3zZTDVvxoUg5CFdTcdPC4zA3S7JLv+2ceN+GQX6uTdVH67F5K/KlUzBa+Pbi
-	PxfkkDSXV2eV6zM+nTyRDPtEPd0k03usCIYYJ0f4Caw32wAgc259N2YKGXh9I2x8gq1QKl/Ex0M
-	CiK/t2PrYGgZ9TETUsMT2NBE6C7STNezHOBhA
-X-Received: by 2002:a5d:64e3:0:b0:43e:aa88:f1a1 with SMTP id
- ffacd0b85a97d-43fe3dfd649mr52383468f8f.30.1777068359361; Fri, 24 Apr 2026
- 15:05:59 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1777068792; x=1777673592;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p1Bt8LRPmWuCECk46OUK1KhCrmrzQEbzIWvPlDI3cp4=;
+        b=XCBVKwpZe42IX3a+f2nW6/paVO/56SAPrlW7EPeyS+6ZiO/9odTd3E+dvaUPYaE7im
+         UYdIEuwLaZUBvmBZClJyj8kzUY/IzN+gX0TR9nQRA4Tq9xt6xOkFQ4FLxhkPyGFNNI9d
+         36bo6XYn+9od4y1OHpAwM6ciA/WDBF1B8mhUNrfZuFXgITCIVXn2q+jtVcJn+THjYcNw
+         M9ItjqLf+pAWy1FFeuSily241HTOXOkDB90WRUpdoF5Ouxyh1wtAaZq6U2vxKoK0EAUr
+         5fLLalv38iUkfulplo6WUFHAAFPd/GjijWq4rvMDoHlrV+o18vePFM7lmy89gkvqICef
+         YpkQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/HaPc2XR9kwVE9kECvEfiHTVcu8NLmhwgf8udGTflahlzZw1Z7ZQE7snr49REs0l9mv/E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGbcHjN8eL+joHGjDWNoNnD6663Vup7QnjGujyUzsk34ZLq67B
+	HxDfuN/FQ3lnxcWDfkkB2bjhGf8IAMOvBQpxDHuHuO1MxfGq3TgnSUCCVit3KW+yQ9Y=
+X-Gm-Gg: AeBDiesOoBzGSpms8r/JIcADyfODp5YMcGA2DB/k+s1Ma10ENQOXwqW3qxdZIJsvDzu
+	JxVh3iCPm8ccK1/wMkZ+ttuHA0aL1+OM1Q6GpKl/xk3Uk9abLxI8hABNL1o/HQ6FkDrSCvssX71
+	9hJHUEZiTTao80rTm/WkjjJpcZXmfLsuY3swcXY5OUbfeqM9QDdGFZUi3gyNFFqfvAIant9//SL
+	RcXiz2D7IdZb3YupiBN2P5ouIW46BUIQXXcXp6/6xQWCO0PhouY/gFffm2urOgEP7tAO9YsyQkT
+	h8CuZQxZ0P7AUdLjldbje0OSTER83CtOM1WJf1WuavWuD8dhNS6kjkKZJxo4Gcwz0o2npYKZfAa
+	1ZMULsbE700UKzMXaSDIIbj7w8g7qbGryIjE1R19IsMqqflA3Yd+hqK6cUnlMXa2QutwE5YopqT
+	RcFjGm7tAS0njcZzIF+5zlZI3Gq+bPIdc8EyQJP9B+QrWNfYvUxBIZQWjY2sexFLRW4x5RgONaz
+	7yoADxicfI0M+Kf
+X-Received: by 2002:ac8:7d15:0:b0:50f:b13e:b740 with SMTP id d75a77b69052e-50fb13eb934mr273244551cf.9.1777068792308;
+        Fri, 24 Apr 2026 15:13:12 -0700 (PDT)
+Received: from ziepe.ca (crbknf0213w-47-54-130-67.pppoe-dynamic.high-speed.nl.bellaliant.net. [47.54.130.67])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50fc42c7fabsm78174021cf.9.2026.04.24.15.13.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Apr 2026 15:13:11 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1wGOlq-00000004lHz-0nuV;
+	Fri, 24 Apr 2026 19:13:10 -0300
+Date: Fri, 24 Apr 2026 19:13:10 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Leon Romanovsky <leon@kernel.org>,
+	Roberto Sassu <roberto.sassu@huaweicloud.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Itay Avraham <itayavr@nvidia.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
+	Maher Sanalla <msanalla@nvidia.com>,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] Firmware LSM hook
+Message-ID: <20260424221310.GA804026@ziepe.ca>
+References: <20260413164220.GP3694781@ziepe.ca>
+ <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
+ <20260413231920.GS3694781@ziepe.ca>
+ <CAHC9VhTLamfe4C81ZNRVT=H32x+KLxSqH3o0eBfrHsWAgAqxCA@mail.gmail.com>
+ <20260415134705.GG2577880@ziepe.ca>
+ <CAHC9VhSECYihup=tURo_Qk__xUdYYPkHgnz5CWA0BrRAkvwbog@mail.gmail.com>
+ <20260417191749.GK2577880@ziepe.ca>
+ <CAHC9VhQbpS9XpO6dWu7gOiX=ppjtAxnNBOFe6s5wjEZNpMRjgw@mail.gmail.com>
+ <20260424143603.GB3611611@ziepe.ca>
+ <CAHC9VhR++21SD+v4Bb16SQmYHgJYZ0ytQ+BecGPNK+fEOe4G7g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260424192252.695240-2-utilityemal77@gmail.com>
- <20260424195958.AED4EC19425@smtp.kernel.org> <aevOssMWH_Vm9CPG@zenbox>
-In-Reply-To: <aevOssMWH_Vm9CPG@zenbox>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 24 Apr 2026 15:05:47 -0700
-X-Gm-Features: AQROBzArnv5I2cQAO8z3xS8tXYahE2_qJWz1N6nhxxHXWgkmwfxIdd0w8y8BVa8
-Message-ID: <CAADnVQKFtuX48V9Yy88GHGVbQyY30M3b3YBvZ2PmYt_-jbohpQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: Implement dtor for struct file BTF ID
-To: Justin Suess <utilityemal77@gmail.com>
-Cc: sashiko@lists.linux.dev, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhR++21SD+v4Bb16SQmYHgJYZ0ytQ+BecGPNK+fEOe4G7g@mail.gmail.com>
 
-On Fri, Apr 24, 2026 at 1:12=E2=80=AFPM Justin Suess <utilityemal77@gmail.c=
-om> wrote:
->
-> On Fri, Apr 24, 2026 at 07:59:57PM +0000, sashiko-bot@kernel.org wrote:
-> > Sashiko AI review found 1 potential issue(s):
-> > - [High] Calling `fput()` directly from `bpf_file_release_dtor` can lea=
-d to a hard deadlock when invoked from NMI context.
-> > --
+On Fri, Apr 24, 2026 at 04:59:30PM -0400, Paul Moore wrote:
 > >
-> > commit 6368f91be1fd91bc9cb38d3498f35d279bad04c9
-> > Author: Justin Suess <utilityemal77@gmail.com>
+> > > Most LSMs will want to know who is initiating the firmware request
+> > > (the subject), the requested operation/opcode (the action/verb), and
+> > > the target of the request (the object, which in this case is likely
+> > > the kernel or the device).
 > >
-> > bpf: Implement dtor for struct file BTF ID
+> > How is
+> >   system_u:object_r:httpd_packet_t:s0
 > >
-> > This commit implements a destructor for struct file, allowing it to be
-> > stored in a map as a referenced kptr. The destructor calls fput to
-> > release the reference.
+> > A kernel or device?
+> 
+> It's not.  It's one of two labels on a packet.  I've cautioned you
+> about leaning too heavily on the secmark comparison as it falls apart
+> in a number of places, this is one of those places.
+
+But I want to label a packet too, you keep going back to it not being
+the same thing and I keep repeating that all I want to do is put
+labels on FWCTL packets :(
+
+> > It is a label for packet contents. I also want a label for packet contents.
+> 
+> According to your explanations, my understanding is that you want a
+> fwctl RPC operation.  That is not the same as the secmark label
+> assigned by an iptables/nftables rule.
+
+I view fwctl as an opaque packet based messaging subsystem. It
+communicates a packet to a remote CPU and returns a response packet
+back to the userspace.
+
+Trying to have the kernel assign fixed meaning to the content of the
+packets inside the kernel is contrary to the entire design of fwctl.
+
+It is like demanding the netstack parse HTTP packets as a precondition
+to using LSM. It makes no sense.
+
+Any LSM integration requires a labeling system that is not hard wired
+into the built kernel. I don't much care what it is, so long as the
+classification and label space are defined by userspace.
+
+You say it is not like secmark, fine, but I see a perfect mirror in
+secmark...
+
+> > You can take that view, it is certainly one valid way to look at it.
 > >
-> > > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> > > index 2bb60200c2665e..ee5ceb82e4f812 100644
-> > > --- a/kernel/bpf/helpers.c
-> > > +++ b/kernel/bpf/helpers.c
-> > [ ... ]
-> > > @@ -2752,6 +2753,13 @@ __bpf_kfunc void bpf_task_release_dtor(void *p=
-)
-> > >  }
-> > >  CFI_NOSEAL(bpf_task_release_dtor);
+> > But it is completely impractical.
+> 
+> Elaborate on that, because from what I can tell that is the valid way
+> to look at it from a subject/verb/object perspective.
+
+We cannot have the kernel predefine verb labels.
+
+I'm completely fine with using verb if it can be dynamic and userspace
+can tell the kernel what the verbs labels are.
+
+This is the only reason I pointed at secmark, it shows a system that
+has both a user controller classifier and dynamic labels that are not
+fixed into the built kernel. ie it is flexible.
+
+> > > > The same way secmark cannot pre-identify all the XXX_packet_t's.
 > > >
-> > > +__bpf_kfunc void bpf_file_release_dtor(void *file)
-> > > +{
-> > > +   fput((struct file *)file);
-> > > +}
+> > > Once again, I think there is a disconnect or misunderstanding, on a
+> > > SELinux system using secmark all of the packet types, e.g.
+> > > "XXX_packet_t's", *are* pre-defined in the SELinux policy.
 > >
-> > Can this cause a deadlock if the destructor is invoked from NMI context=
-?
-> >
-> > If an NMI-context BPF program (such as a perf event tracing program)
-> > updates or deletes a map element containing a struct file kptr, the BPF
-> > framework will synchronously invoke this destructor to clean up the old
-> > kptr.
-> >
-> > When fput() drops the reference count to zero, it calls
-> > __fput_deferred(). Since in_interrupt() evaluates to true in NMI
-> > context, __fput_deferred() bypasses task_work_add() and instead calls
-> > schedule_delayed_work().
-> >
-> > This leads to the following call chain:
-> >
-> > bpf_file_release_dtor()
-> >    fput()
-> >       __fput_deferred()
-> >          schedule_delayed_work()
-> >             add_timer()
-> >
-> > The add_timer() function attempts to acquire the timer_base->lock raw
-> > spinlock. If the NMI interrupted a thread that was already holding this
-> > lock, the NMI handler will spin indefinitely waiting for it, resulting
-> > in a hard deadlock.
-> >
-> > Would it be safer to defer the fput() operation using an explicitly
-> > NMI-safe mechanism like irq_work_queue() to handle arbitrary BPF
-> > contexts?
-> >
-> For (human) reviewer context: The NMI stuff needs to be addressed separat=
-ely. [1]
+> > "Pre-defined" in a text files in user space controlled by the admin.
 >
-> I guess the AI isn't gonna understand but just doing irq_work wouldn't
-> be right either as it would break operation ordering for maps and
-> fixing it here wouldn't fix the other dtors broken in NMI.
-> (cgroup/task_struct)
+> That's not correct.  It's kinda like saying the NIC driver sources are
+> simply "text files in user space controlled by the admin".  
 
-Will break operation ordering?
-What do you mean?
+That's very pedantic. I mean to the point I wonder if we are even
+speaking the same language.
 
-I feel we should fix things first before being subject
-to more of these bugs.
-Why cannot we defer to irq_work the whole map element if in_nmi
-and call all dtors there?
-should be a simple fix.
+I said the labels are defined by userspace, you said no, and then
+explained that they are defined by userspace going through a bunch of
+steps:
+
+> The SELinux secmark labels are defined in the SELinux policy sources
+> which must be compiled and loaded into the kernel before they are
+> valid on a running system. Policy must be written not only to define
+> the secmark labels, but also to define the access control rules
+> which govern how those packets are handled by the system.  The
+> iptables/nftables command lines simply assign a secmark label to a
+> packet; that's important, but only a small part of the total
+> equation.
+
+I understand all of this, I am totally fine with it. A package will
+install, a distribution will provide, or admin will write these
+things, and do all the steps to load them into the kernel. I don't see
+any issue with that.
+
+Hardwiring things into the built kernel is a problem that must be
+avoided because end users only run the kernel provided by the
+distribution. "recompiling the driver" is not an option that is
+available.
+
+Jason
