@@ -1,262 +1,102 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55F6361651
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 23:10:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 084732D3EF2
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 23:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777072249; cv=none; b=Mg1BRlgEisjjCfx1DyG9If027IbSkTTSvNk2S8LUM30PoanBUecNzfveChw+rd9hAHBsLZJMkLs/C6oyYx9XzjAMQgvvNIEQVfWu/e9WAH+n6VHjYPS4mCQoyvKiujtG/ANNR0hBs88/pvcxFOXjHR9FWLtIkCx1ir+5wOQtqfI=
+	t=1777072535; cv=none; b=GsOs+JMIb6X4OLCcRw+trcR41Op5vzJGoHblpOBxOnAFW90rGM9xOe7p5t9BNm0AwSOooP1lyg0K6U5lO8PKlwA32Q4CCL6cunizK65XfLpNJ2o7PoaO4w6EvAsC81epCOM6DZviscKFPlwW5RxfXfbmYOD8ZmFwOWneihXO00M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777072249; c=relaxed/simple;
-	bh=VX1tYX9cRv+eO+feWH8A3dJq6HWUr6MsMOHqfw2gbSE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hbTSW6jRGucMPnR97Tvb0iGUD4ovfAalh+NMkPUZmVQS/yvA1IWh1XPM4Mvylbvk5JoNo159EfQF2k8YOLcilqQAm0uGhQxhgZHY5tIx92NZFbjDEorg9j+MBIt3/56XQ2ebIdVnBpqZR1IpZ+DMukZQryx6rF6GdlwxUCJM3V4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VXHbxxZf; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1777072535; c=relaxed/simple;
+	bh=yce3UbCJ7MPLxQ0yqhK4GCkeV7nHiQqh/m0w93e3+RU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=eoDd6PuQGUKrW4SxQxIVBfjfA4dmmnRhe657jtQKZrOebmNC8dZ5j/bug9FE2Y6ilMgNSKyrB9kJx4NsF+Ra4or5pf7l6j9sTJSD6jQD6d5k4rWdpvq8F0sxerQn8tU2Qzv/5E0cKZfae2oHztLCJJBIEerNaVklLM2c1Yw7tgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cEGSltvY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VXHbxxZf"
-Message-ID: <71fb19ff-6dde-43f4-a0e9-5c8cf2ba4ed4@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777072234;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZF2xo+im5ABqQb8juDoszdqEpMu6aUbnETaBqpZGMY0=;
-	b=VXHbxxZfy9OoLtXfzxZ8LCjQMjD/OkCiG8Davia89CJr1Bfd4TuZZXt6E5Iwkup+l0h+3v
-	cFjh3APLkpXSJQIKe7Yoo0ID2ftKfKivDSn005tkbrPGCE8tOLFAb99bTVlgqSaCzwUXKq
-	dS3LDHdZC3mJaN1fdjTfIxwCD2pD6Pc=
-Date: Fri, 24 Apr 2026 16:10:19 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cEGSltvY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84394C19425;
+	Fri, 24 Apr 2026 23:15:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777072534;
+	bh=yce3UbCJ7MPLxQ0yqhK4GCkeV7nHiQqh/m0w93e3+RU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=cEGSltvYsbKjFmSQ5d0Xpo0DXTP/M0pXHqBBH7ORpcqMoF3FWh2gHXjK5xM6maygf
+	 880KQ+e6bwUdSpTFg7/rG6e27KZbh85OESqOKN+4sMg3E4oVqVPvSPTn3F38Gg2PHl
+	 r+y41SEosAAGp4aBZ6B6tt/cgrSBI2c7MxnL8092k72hC4N7tsqx2NxuiT2KbdvZ5u
+	 1cT98qh0Uyrf6M3oboDXTu5ewds16NEEgebSXL3Ft5UeFFHr0YCUUURlk0Ij2Bl06W
+	 6km9o0nHXuIwqRerL5XonXQoSCV3Su3sCqDMCkakJPIiBnMi4MBSj3tCHKdP/4e6mV
+	 e/h0yLJKF/KGg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 1/4] bpf: representation and basic
+ operations on circular numbers
+Reply-To: sashiko@lists.linux.dev
+To: "Eduard Zingerman" <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260424-cnums-everywhere-rfc-v1-v3-1-ca434b39a486@gmail.com>
+References: <20260424-cnums-everywhere-rfc-v1-v3-1-ca434b39a486@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 24 Apr 2026 23:15:33 +0000
+Message-Id: <20260424231534.84394C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH RFC bpf-next 0/8] bpf: add support for KASAN checks in
- JITed programs
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
- <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Shuah Khan <shuah@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>,
- Alexander Potapenko <glider@google.com>,
- Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: ebpf@linuxfoundation.org,
- Bastien Curutchet <bastien.curutchet@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Xu Kuohai <xukuohai@huawei.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, kasan-dev@googlegroups.com,
- linux-mm@kvack.org
-References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-On 4/13/26 11:28 AM, Alexis LothorÃ© (eBPF Foundation) wrote:
-> Hello,
-> this series aims to bring basic support for KASAN checks to BPF JITed
-> programs. This follows the first RFC posted in [1].
+Sashiko AI review found 1 potential issue(s):
+- [Low] The `FN(normalize)` function incorrectly skips normalizing full cir=
+cular ranges if their base evaluates to `ST_MAX`.
+--
 
-Hi Alexis,
+commit addd9a35120cb1e8b327011ef0f97fa736918a87
+Author: Eduard Zingerman <eddyz87@gmail.com>
 
-Thank you for working on this, it's a real testing gap.
-I have a few comments, see below.
+bpf: representation and basic operations on circular numbers
 
-The series doesn't apply cleanly on bpf-next right now, but I was able
-to apply to a little older revision (eb5249b12507).
+This commit adds basic definitions for cnum32/cnum64, providing a unified
+numeric range representation for signed and unsigned domains. The operations
+correctness is verified using a cbmc model checker.
 
-> 
-> KASAN allows to spot memory management mistakes by reserving a fraction
-> of memory as "shadow memory" that will map to the rest of the memory and
-> allow its monitoring. Each memory-accessing instruction is then
-> instrumented at build time to call some ASAN check function, that will
-> analyze the corresponding bits in shadow memory, and if it detects the
-> access as invalid, trigger a detailed report. The goal of this series is
-> to replicate this mechanism for BPF programs when they are being JITed
-> into native instructions: that's then the (runtime) JIT compiler who is
-> in charge of inserting calls to the corresponding kasan checks, when a
-> program is being loaded into the kernel. This task involves:
-> - identifying at program load time the instructions performing memory
->   accesses
-> - identifying those accesses properties (size ? read or write ?) to
->   define the relevant kasan check function to call
-> - just before the identified instructions:
->   - perform the basic context saving (ie: saving registers)
->   - inserting a call to the relevant kasan check function 
->   - restore context
-> - whenever the instrumented program executes, if it performs an invalid
->   access, it triggers a kasan report identical to those instrumented on
->   kernel side at build time.
-> 
-> As discussed in [1], this series is based on some choices and
-> assumptions:
-> - it focuses on x86_64 for now, and so only on KASAN_GENERIC
+Link: https://lore.kernel.org/all/ZTZxoDJJbX9mrQ9w@u94a/
+Link: https://jorgenavas.github.io/papers/ACM-TOPLAS-wrapped.pdf
+Link: https://github.com/eddyz87/cnum-verif/tree/master
 
-I wonder if it's feasible to implement KASAN support on the verifier
-side in post-verification fixups. AI slop for illustration:
+> diff --git a/kernel/bpf/cnum_defs.h b/kernel/bpf/cnum_defs.h
+> new file mode 100644
+> index 00000000000000..3ebd8f723dbb53
+> --- /dev/null
+> +++ b/kernel/bpf/cnum_defs.h
 
-  ;; Original (1 BPF insn):
-  dst = *(u64 *)(src + off)           ; BPF_LDX | BPF_MEM | BPF_DW
+[ ... ]
 
-  ;; Rewrite (~7 BPF insns):
-  r_tmp1 = src                         ; BPF_MOV64_REG
-  r_tmp1 += off                        ; BPF_ALU64 | BPF_ADD | K   (full address)
-  r_tmp2 = r_tmp1                      ; copy
-  r_tmp2 >>= 3                         ; KASAN_SHADOW_SCALE_SHIFT
-  r_tmp2 += KASAN_SHADOW_OFFSET        ; shadow address
-  r_tmp3 = *(u8 *)(r_tmp2 + 0)         ; BPF_LDX | BPF_B   (load shadow byte)
-  if r_tmp3 != 0 goto +2               ; BPF_JNE | PC+2
-  dst = *(u64 *)(src + off)            ; original access (fast path)
-  goto +1                              ; skip slowpath
-  call __asan_report_load8             ; BPF kfunc
-  dst = *(u64 *)(src + off)            ; retry the access after report (non-fatal)
+> +static inline struct cnum_t FN(normalize)(struct cnum_t cnum)
+> +{
+> +	if (cnum.size =3D=3D UT_MAX && cnum.base !=3D 0 && cnum.base !=3D (ut)S=
+T_MAX)
 
-A sort of inline kasan directly in BPF.
+Should this condition be checking ST_MAX? It appears that this skips
+normalizing full circular ranges if their base evaluates to ST_MAX. This
+can leave the range denormalized as { ST_MAX, UT_MAX } instead of
+canonicalizing it to { 0, UT_MAX } (for example, when adding a constant
+ST_MAX to an UNBOUNDED range).
 
-There are plenty of issues with it: instruction limit, exposing asan
-API as kfuncs, etc. On the flip side we get cross-arch support out of
-the box with no or mininal JIT changes.
+Leaving the range denormalized breaks canonical representation guarantees
+and causes fast-path equality checks to fail, leading to unnecessary
+fallbacks to slower subset checks.
 
-Honestly I'm not excited about this approach, but curious if anyone
-thought about this, or maybe it was already discussed?
+If the intent was to check UT_MAX to protect the EMPTY representation
+({ UT_MAX, UT_MAX }), operations like add(UNBOUNDED, -1) legitimately
+produce { UT_MAX, UT_MAX } representing a full circle, which must be
+normalized to UNBOUNDED.
 
+Would it make sense to remove the exception entirely so that all full
+ranges are normalized safely?
 
-> - not all memory accessing BPF instructions are being instrumented:
->   - it focuses on STX/LDX instructions
->   - it discards instructions accessing BPF program stack (already
->     monitored by page guards)
->   - it discards possibly faulting instructions, like BPF_PROBE_MEM or
->     BPF_PROBE_ATOMIC insns
-> 
-> The series is marked and sent as RFC:
-> - to allow collecting feedback early and make sure that it goes into the
->   right direction
-> - because it depends on Xu's work to pass data between the verifier and
->   JIT compilers. This work is not merged yet, see [2]. I have been
->   tracking the various revisions he sent on the ML and based my local
->   branch on his work
-> - because tests brought by this series currently can't run on BPF CI:
->   they expect kasan multishot to be enabled, otherwise the first test
->   will make all other kasan-related tests fail.
+> +		cnum.base =3D 0;
+> +	return cnum;
+> +}
 
-AFAICT this can be trivially fixed on BPF CI side, we just need to set
-kasan_multi_shot for the VMs running the tests. I will do that, your
-next revision doesn't have to be and RFC.
-
-> - because some cases like atomic loads/stores are not instrumented yet
->   (and are still making me scratch my head)
-> - because it will hopefully provide a good basis to discuss the topic at
->   LSFMMBPF (see [3])
-
-Apparently, KASAN reporting routine takes a lock [1]:
-
-   __asan_load()
-     -> check_region_inline()
-        -> kasan_report()
-           -> start_report()
-             -> raw_spin_lock_irqsave(&report_lock, *flags);
-
-BPF programs can run in NMI context, and so it appears to be possible
-to get an unflagged (because of lockdep_off() in start_report)
-deadlock, if an NMI fires on a CPU already holding report_lock.
-Although I guess you'd need two KASAN bugs to happen
-simultaneously for that to occur?... A rare event, I would hope.
-
-It could be addressed with either in_nmi() check at runtime, or
-forbidding kasan for NMI-runnable BPF program types.
-
-That said, this may be a case of being overly defensive to appease the
-ai overlords.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/kasan/report.c?h=v7.0#n204
-
-> 
-> Despite this series not being ready for integration yet, anyone
-> interested in running it locally can perform the following steps to run
-> the JITed KASAN instrumentation selftests:
-> - rebasing locally this series on [2]
-> - building and running the corresponding kernel with kasan_multi_shot
->   enabled
-> - running `test_progs -a kasan`
-> 
-> And should get a variety of KASAN tests executed for BPF programs:
-> 
->   #162/1   kasan/bpf_kasan_uaf_read_1:OK
->   #162/2   kasan/bpf_kasan_uaf_read_2:OK
->   #162/3   kasan/bpf_kasan_uaf_read_4:OK
->   #162/4   kasan/bpf_kasan_uaf_read_8:OK
->   #162/5   kasan/bpf_kasan_uaf_write_1:OK
->   #162/6   kasan/bpf_kasan_uaf_write_2:OK
->   #162/7   kasan/bpf_kasan_uaf_write_4:OK
->   #162/8   kasan/bpf_kasan_uaf_write_8:OK
->   #162/9   kasan/bpf_kasan_oob_read_1:OK
->   #162/10  kasan/bpf_kasan_oob_read_2:OK
->   #162/11  kasan/bpf_kasan_oob_read_4:OK
->   #162/12  kasan/bpf_kasan_oob_read_8:OK
->   #162/13  kasan/bpf_kasan_oob_write_1:OK
->   #162/14  kasan/bpf_kasan_oob_write_2:OK
->   #162/15  kasan/bpf_kasan_oob_write_4:OK
->   #162/16  kasan/bpf_kasan_oob_write_8:OK
->   #162     kasan:OK
->   Summary: 1/16 PASSED, 0 SKIPPED, 0 FAILED
-> 
-> [1] https://lore.kernel.org/bpf/DG7UG112AVBC.JKYISDTAM30T@bootlin.com/
-> [2] https://lore.kernel.org/bpf/cover.1776062885.git.xukuohai@hotmail.com/
-> [3] https://lore.kernel.org/bpf/DGGNCXX79H8O.2P6K8L1QW1M8K@bootlin.com/
-> 
-> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> ---
-> Alexis Lothoré (eBPF Foundation) (8):
->       kasan: expose generic kasan helpers
->       bpf: mark instructions accessing program stack
->       bpf: add BPF_JIT_KASAN for KASAN instrumentation of JITed programs
->       bpf, x86: add helper to emit kasan checks in x86 JITed programs
->       bpf, x86: emit KASAN checks into x86 JITed programs
->       selftests/bpf: do not run verifier JIT tests when BPF_JIT_KASAN is enabled
->       bpf, x86: enable KASAN for JITed programs on x86
->       selftests/bpf: add tests to validate KASAN on JIT programs
-> 
->  arch/x86/Kconfig                                   |   1 +
->  arch/x86/net/bpf_jit_comp.c                        | 106 +++++++++++++
->  include/linux/bpf.h                                |   2 +
->  include/linux/bpf_verifier.h                       |   2 +
->  include/linux/kasan.h                              |  13 ++
->  kernel/bpf/Kconfig                                 |   9 ++
->  kernel/bpf/core.c                                  |  10 ++
->  kernel/bpf/verifier.c                              |   7 +
->  mm/kasan/kasan.h                                   |  10 --
->  tools/testing/selftests/bpf/prog_tests/kasan.c     | 165 +++++++++++++++++++++
->  tools/testing/selftests/bpf/progs/kasan.c          | 146 ++++++++++++++++++
->  .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  79 ++++++++++
->  tools/testing/selftests/bpf/test_loader.c          |   5 +
->  tools/testing/selftests/bpf/unpriv_helpers.c       |   5 +
->  tools/testing/selftests/bpf/unpriv_helpers.h       |   1 +
->  15 files changed, 551 insertions(+), 10 deletions(-)
-> ---
-> base-commit: 7990a071b32887a1a883952e8cf60134b6d6fea0
-> change-id: 20260126-kasan-fcd68f64cd7b
-> 
-> Best regards,
-> --  
-> Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> 
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260424-cnums-ever=
+ywhere-rfc-v1-v3-0-ca434b39a486@gmail.com?part=3D1
