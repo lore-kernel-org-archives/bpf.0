@@ -1,21 +1,21 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA61933FE0A
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 17:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F95340273
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 17:17:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777051038; cv=none; b=emPZoG9yY2VusC0kT1ZTNIhpVAgsTL1LT94v8bW0T1ZS/behPwlN6MIniqFr6pDjc8hZkuJ6EnOM1ewy8yky4qDIV85Fpg1xvY4VsTUMVDzYDNco0sQU/j6Ysl9jVU0r42BdxjFO5WuyYiAoA1xn4SVannPHgki5LHtiNTZOidg=
+	t=1777051043; cv=none; b=NLuvLdN3pAbHHxKoyAnBBHt001mh3MMB4eyO7+IMzcPGMwI4s1udC/TLigTXXEQNXIZyDsA+fynB6yxjwtFpYyJh3wqX8Hy6V9eZyy7vWWfGIhy3K/0+OTxzZGHqflIddV02GSxaMrzn/R1ZxsRQq0sApeivJaqc6YzTD+S2DQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777051038; c=relaxed/simple;
-	bh=RKRCVyUokDbOT+gG2JBTqaCZQaJIkEVcvIPac7QDbC4=;
+	s=arc-20240116; t=1777051043; c=relaxed/simple;
+	bh=zhHQt4Mkzs1JOYL46bSA3x31DTx1rbiyvrWlpn4jlHg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=knTnvijlhexQVBWyh3aWeqUEcG87Aw9uHMFzHv76tDBD1eLF9UPLn6kngPjVjvxfVrhGWNtbxq8UR4iDPTHcLPv3ffNZetmvM5eZLfE8yVULO8s0SndMgobp7TGVqUS42XYQngiDG6yhCZ9etZpABho2Ij6b7/WIM25uHD/xxlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+	 MIME-Version; b=eCpEqgT+FEAmeodHbGGffKUgFaKux/W0EaVpzqMq19A6p9ASUqU88bFjW1m9+rvGHsfk2923KYgCDaluq9YCH5luH6lWk01hK7h09Zc07M8WNfNF3TC0/yUwYBRherIcRpUwKphecwPMIwfsP8nMhXRnjj0AeIi/TpaU9PW/Zdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 9341D474A676C; Fri, 24 Apr 2026 10:17:03 -0700 (PDT)
+	id AD6A6474A67A5; Fri, 24 Apr 2026 10:17:08 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 13/18] selftests/bpf: Add verifier tests for stack argument validation
-Date: Fri, 24 Apr 2026 10:17:03 -0700
-Message-ID: <20260424171703.2054695-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 14/18] selftests/bpf: Add BTF fixup for __naked subprog parameter names
+Date: Fri, 24 Apr 2026 10:17:08 -0700
+Message-ID: <20260424171708.2055872-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260424171433.2034470-1-yonghong.song@linux.dev>
 References: <20260424171433.2034470-1-yonghong.song@linux.dev>
@@ -36,542 +36,223 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Add inline-asm based verifier tests that exercise stack argument
-validation logic directly.
+When __naked subprogs are used in verifier tests, clang drops
+parameter names from their BTF FUNC_PROTO entries. This prevents
+the verifier from resolving stack argument slots by name.
 
-Positive tests:
-  - subprog call with 6 arg's
-  - Two sequential calls to different subprogs (6-arg and 7-arg)
-  - Share a r11 store for both branches
+Add a __btf_func_path(path) annotation that points to a separate
+BTF file containing properly-named FUNC entries. The test_loader
+matches FUNC entries by name, detects anonymous parameters, and
+replaces the FUNC_PROTO with a new one that carries parameter
+names from the custom file while preserving the original type IDs.
 
-Negative tests =E2=80=94 verifier rejection:
-  - Read from uninitialized incoming stack arg slot
-  - Gap in outgoing slots: only r11-16 written, r11-8 missing
-  - Write at r11-80, exceeding max 7 stack args
-  - Missing store on one branch with a shared store
-  - First call has proper stack arguments and the second
-    call intends to inherit stack arguments but not working
-  - r11 load ordering issue
-
-Negative tests =E2=80=94 pointer/ref tracking:
-  - Pruning type mismatch: one branch stores PTR_TO_STACK, the
-    other stores a scalar, callee dereferences =E2=80=94 must not prune
-  - Release invalidation: bpf_sk_release invalidates a socket
-    pointer stored in a stack arg slot
-  - Packet pointer invalidation: bpf_skb_pull_data invalidates
-    a packet pointer stored in a stack arg slot
-  - Null propagation: PTR_TO_MAP_VALUE_OR_NULL stored in stack
-    arg slot, null branch attempts dereference via callee
+The custom BTF file also serves as btf_custom_path for kfunc
+resolution when no separate btf_custom_path is specified.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/verifier_stack_arg.c  | 456 ++++++++++++++++++
- 2 files changed, 458 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_stack_arg.=
-c
+ tools/testing/selftests/bpf/progs/bpf_misc.h |   1 +
+ tools/testing/selftests/bpf/test_loader.c    | 136 ++++++++++++++++++-
+ 2 files changed, 136 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
-sting/selftests/bpf/prog_tests/verifier.c
-index a96b25ebff23..aef21cf2987b 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -91,6 +91,7 @@
- #include "verifier_sockmap_mutate.skel.h"
- #include "verifier_spill_fill.skel.h"
- #include "verifier_spin_lock.skel.h"
-+#include "verifier_stack_arg.skel.h"
- #include "verifier_stack_ptr.skel.h"
- #include "verifier_store_release.skel.h"
- #include "verifier_subprog_precision.skel.h"
-@@ -238,6 +239,7 @@ void test_verifier_sock_addr(void)            { RUN(v=
-erifier_sock_addr); }
- void test_verifier_sockmap_mutate(void)       { RUN(verifier_sockmap_mut=
-ate); }
- void test_verifier_spill_fill(void)           { RUN(verifier_spill_fill)=
-; }
- void test_verifier_spin_lock(void)            { RUN(verifier_spin_lock);=
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing=
+/selftests/bpf/progs/bpf_misc.h
+index dcd78a3a9052..a9f58900a501 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -152,6 +152,7 @@
+ #define __auxiliary		__test_tag("test_auxiliary")
+ #define __auxiliary_unpriv	__test_tag("test_auxiliary_unpriv")
+ #define __btf_path(path)	__test_tag("test_btf_path=3D" path)
++#define __btf_func_path(path)	__test_tag("test_btf_func_path=3D" path)
+ #define __arch(arch)		__test_tag("test_arch=3D" arch)
+ #define __arch_x86_64		__arch("X86_64")
+ #define __arch_arm64		__arch("ARM64")
+diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/se=
+lftests/bpf/test_loader.c
+index c4c34cae6102..b9e21696b9ba 100644
+--- a/tools/testing/selftests/bpf/test_loader.c
++++ b/tools/testing/selftests/bpf/test_loader.c
+@@ -63,6 +63,7 @@ struct test_spec {
+ 	struct test_subspec priv;
+ 	struct test_subspec unpriv;
+ 	const char *btf_custom_path;
++	const char *btf_custom_func_path;
+ 	int log_level;
+ 	int prog_flags;
+ 	int mode_mask;
+@@ -590,6 +591,8 @@ static int parse_test_spec(struct test_loader *tester=
+,
+ 			jit_on_next_line =3D true;
+ 		} else if ((val =3D str_has_pfx(s, "test_btf_path=3D"))) {
+ 			spec->btf_custom_path =3D val;
++		} else if ((val =3D str_has_pfx(s, "test_btf_func_path=3D"))) {
++			spec->btf_custom_func_path =3D val;
+ 		} else if ((val =3D str_has_pfx(s, "test_caps_unpriv=3D"))) {
+ 			err =3D parse_caps(val, &spec->unpriv.caps, "test caps");
+ 			if (err)
+@@ -1138,6 +1141,123 @@ static int get_stream(int stream_id, int prog_fd,=
+ char *text, size_t text_sz)
+ 	return ret;
  }
-+void test_verifier_stack_arg(void)            { RUN(verifier_stack_arg);=
- }
- void test_verifier_stack_ptr(void)            { RUN(verifier_stack_ptr);=
- }
- void test_verifier_store_release(void)        { RUN(verifier_store_relea=
-se); }
- void test_verifier_subprog_precision(void)    { RUN(verifier_subprog_pre=
-cision); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/too=
-ls/testing/selftests/bpf/progs/verifier_stack_arg.c
-new file mode 100644
-index 000000000000..6b596ad63774
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-@@ -0,0 +1,456 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, long long);
-+	__type(value, long long);
-+} map_hash_8b SEC(".maps");
-+
-+#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
-+
-+__noinline __used
-+static int subprog_6args(int a, int b, int c, int d, int e, int f)
+=20
++/*
++ * Fix up the program's BTF using BTF from a separate file.
++ *
++ * For __naked subprogs, clang drops parameter names from BTF. Find FUNC
++ * entries with anonymous parameters and replace their FUNC_PROTO with t=
+he
++ * properly-named version from the custom file.
++ */
++static int fixup_btf_from_path(struct bpf_object *obj, const char *path)
 +{
-+	return a + b + c + d + e + f;
-+}
++	struct btf *prog_btf, *custom_btf;
++	__u32 i, j, cnt, custom_cnt;
++	int err =3D 0;
 +
-+__noinline __used
-+static int subprog_7args(int a, int b, int c, int d, int e, int f, int g=
-)
-+{
-+	return a + b + c + d + e + f + g;
-+}
++	prog_btf =3D bpf_object__btf(obj);
++	if (!prog_btf)
++		return 0;
 +
-+__noinline __used
-+static long subprog_deref_arg6(long a, long b, long c, long d, long e, l=
-ong *f)
-+{
-+	return *f;
-+}
++	custom_btf =3D btf__parse(path, NULL);
++	if (!ASSERT_OK_PTR(custom_btf, "parse_custom_btf"))
++		return -EINVAL;
 +
-+SEC("tc")
-+__description("stack_arg: subprog with 6 args")
-+__success
-+__naked void stack_arg_6args(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 8) =3D 6;"
-+		"call subprog_6args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
++	cnt =3D btf__type_cnt(prog_btf);
++	custom_cnt =3D btf__type_cnt(custom_btf);
 +
-+SEC("tc")
-+__description("stack_arg: two subprogs with >5 args")
-+__success
-+__naked void stack_arg_two_subprogs(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 8) =3D 10;"
-+		"call subprog_6args;"
-+		"r6 =3D r0;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 16) =3D 30;"
-+		"*(u64 *)(r11 - 8) =3D 20;"
-+		"call subprog_7args;"
-+		"r0 +=3D r6;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
++	/* Fix up FUNC entries with anonymous params.
++	 * Save all data from prog_btf BEFORE calling btf__add_*,
++	 * since those calls may reallocate the BTF data buffer
++	 * and invalidate any pointers obtained from btf__type_by_id.
++	 */
++	for (i =3D 1; i < cnt; i++) {
++		const struct btf_type *t =3D btf__type_by_id(prog_btf, i);
++		const struct btf_type *fp, *custom_t, *custom_fp;
++		const struct btf_param *params, *custom_params;
++		__u32 ret_type_id, vlen;
++		__u32 *prog_param_types =3D NULL;
++		const char *name;
++		int new_proto_id;
 +
-+SEC("tc")
-+__description("stack_arg: read from uninitialized stack arg slot")
-+__failure
-+__msg("invalid read from stack arg off 8 depth 0")
-+__naked void stack_arg_read_uninitialized(void)
-+{
-+	asm volatile (
-+		"r0 =3D *(u64 *)(r11 + 8);"
-+		"r0 =3D 0;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
++		if (!btf_is_func(t))
++			continue;
 +
-+SEC("tc")
-+__description("stack_arg: gap at offset -8, only wrote -16")
-+__failure
-+__msg("stack *(R11-8) not properly initialized")
-+__naked void stack_arg_gap_at_minus8(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 16) =3D 30;"
-+		"call subprog_7args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
++		fp =3D btf__type_by_id(prog_btf, t->type);
++		if (!fp || !btf_is_func_proto(fp) || btf_vlen(fp) =3D=3D 0)
++			continue;
 +
-+SEC("tc")
-+__description("stack_arg: pruning with different stack arg types")
-+__failure
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("invalid mem access 'scalar'")
-+__naked void stack_arg_pruning_type_mismatch(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"r6 =3D r0;"
-+		/* local =3D 0 on program stack */
-+		"r7 =3D 0;"
-+		"*(u64 *)(r10 - 8) =3D r7;"
-+		/* Branch based on random value */
-+		"if r6 s> 3 goto l0_%=3D;"
-+		/* Path 1: store stack pointer to outgoing arg6 */
-+		"r1 =3D r10;"
-+		"r1 +=3D -8;"
-+		"*(u64 *)(r11 - 8) =3D r1;"
-+		"goto l1_%=3D;"
-+	"l0_%=3D:"
-+		/* Path 2: store scalar to outgoing arg6 */
-+		"*(u64 *)(r11 - 8) =3D 42;"
-+	"l1_%=3D:"
-+		/* Call subprog that dereferences arg6 */
-+		"r1 =3D r6;"
-+		"r2 =3D 0;"
-+		"r3 =3D 0;"
-+		"r4 =3D 0;"
-+		"r5 =3D 0;"
-+		"call subprog_deref_arg6;"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
++		/* Check if any param is anonymous */
++		params =3D btf_params(fp);
++		if (params[0].name_off !=3D 0)
++			continue;
 +
-+SEC("tc")
-+__description("stack_arg: release_reference invalidates stack arg slot")
-+__failure
-+__msg("invalid mem access 'scalar'")
-+__naked void stack_arg_release_ref(void)
-+{
-+	asm volatile (
-+		"r6 =3D r1;"
-+		/* struct bpf_sock_tuple tuple =3D {} */
-+		"r2 =3D 0;"
-+		"*(u32 *)(r10 - 8) =3D r2;"
-+		"*(u64 *)(r10 - 16) =3D r2;"
-+		"*(u64 *)(r10 - 24) =3D r2;"
-+		"*(u64 *)(r10 - 32) =3D r2;"
-+		"*(u64 *)(r10 - 40) =3D r2;"
-+		"*(u64 *)(r10 - 48) =3D r2;"
-+		/* sk =3D bpf_sk_lookup_tcp(ctx, &tuple, sizeof(tuple), 0, 0) */
-+		"r1 =3D r6;"
-+		"r2 =3D r10;"
-+		"r2 +=3D -48;"
-+		"r3 =3D %[sizeof_bpf_sock_tuple];"
-+		"r4 =3D 0;"
-+		"r5 =3D 0;"
-+		"call %[bpf_sk_lookup_tcp];"
-+		/* r0 =3D sk (PTR_TO_SOCK_OR_NULL) */
-+		"if r0 =3D=3D 0 goto l0_%=3D;"
-+		/* Store sock ref to outgoing arg6 slot */
-+		"*(u64 *)(r11 - 8) =3D r0;"
-+		/* Release the reference =E2=80=94 invalidates the stack arg slot */
-+		"r1 =3D r0;"
-+		"call %[bpf_sk_release];"
-+		/* Call subprog that dereferences arg6 =E2=80=94 should fail */
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_deref_arg6;"
-+	"l0_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_sk_lookup_tcp),
-+		  __imm(bpf_sk_release),
-+		  __imm_const(sizeof_bpf_sock_tuple, sizeof(struct bpf_sock_tuple))
-+		: __clobber_all
-+	);
-+}
++		/* Find matching FUNC by name in custom BTF */
++		name =3D btf__name_by_offset(prog_btf, t->name_off);
++		if (!name)
++			continue;
 +
-+SEC("tc")
-+__description("stack_arg: pkt pointer in stack arg slot invalidated afte=
-r pull_data")
-+__failure
-+__msg("invalid mem access 'scalar'")
-+__naked void stack_arg_stale_pkt_ptr(void)
-+{
-+	asm volatile (
-+		"r6 =3D r1;"
-+		"r7 =3D *(u32 *)(r6 + %[__sk_buff_data]);"
-+		"r8 =3D *(u32 *)(r6 + %[__sk_buff_data_end]);"
-+		/* check pkt has at least 1 byte */
-+		"r0 =3D r7;"
-+		"r0 +=3D 8;"
-+		"if r0 > r8 goto l0_%=3D;"
-+		/* Store valid pkt pointer to outgoing arg6 slot */
-+		"*(u64 *)(r11 - 8) =3D r7;"
-+		/* bpf_skb_pull_data invalidates all pkt pointers */
-+		"r1 =3D r6;"
-+		"r2 =3D 0;"
-+		"call %[bpf_skb_pull_data];"
-+		/* Call subprog that dereferences arg6 =E2=80=94 should fail */
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_deref_arg6;"
-+	"l0_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_skb_pull_data),
-+		  __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
-+		  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end)=
-)
-+		: __clobber_all
-+	);
-+}
++		for (j =3D 1; j < custom_cnt; j++) {
++			const char *cname;
 +
-+SEC("tc")
-+__description("stack_arg: null propagation rejects deref on null branch"=
-)
-+__failure
-+__msg("invalid mem access 'scalar'")
-+__naked void stack_arg_null_propagation_fail(void)
-+{
-+	asm volatile (
-+		"r1 =3D 0;"
-+		"*(u64 *)(r10 - 8) =3D r1;"
-+		/* r0 =3D bpf_map_lookup_elem(&map_hash_8b, &key) */
-+		"r2 =3D r10;"
-+		"r2 +=3D -8;"
-+		"r1 =3D %[map_hash_8b] ll;"
-+		"call %[bpf_map_lookup_elem];"
-+		/* Store PTR_TO_MAP_VALUE_OR_NULL to outgoing arg6 slot */
-+		"*(u64 *)(r11 - 8) =3D r0;"
-+		/* null check on r0 */
-+		"if r0 !=3D 0 goto l0_%=3D;"
-+		/*
-+		 * On null branch, outgoing slot is SCALAR(0).
-+		 * Call subprog that dereferences arg6 =E2=80=94 should fail.
++			custom_t =3D btf__type_by_id(custom_btf, j);
++			if (!btf_is_func(custom_t))
++				continue;
++			cname =3D btf__name_by_offset(custom_btf, custom_t->name_off);
++			if (cname && strcmp(name, cname) =3D=3D 0)
++				break;
++		}
++		if (j >=3D custom_cnt)
++			continue;
++
++		custom_fp =3D btf__type_by_id(custom_btf, custom_t->type);
++		if (!custom_fp || !btf_is_func_proto(custom_fp))
++			continue;
++
++		vlen =3D btf_vlen(fp);
++		if (vlen !=3D btf_vlen(custom_fp))
++			continue;
++
++		/* Save data before btf__add_* calls invalidate pointers */
++		ret_type_id =3D fp->type;
++		prog_param_types =3D malloc(vlen * sizeof(*prog_param_types));
++		if (!prog_param_types) {
++			err =3D -ENOMEM;
++			break;
++		}
++		for (j =3D 0; j < vlen; j++)
++			prog_param_types[j] =3D params[j].type;
++
++		/* Add a new FUNC_PROTO: param names from custom, types from prog */
++		new_proto_id =3D btf__add_func_proto(prog_btf, ret_type_id);
++		if (new_proto_id < 0) {
++			err =3D new_proto_id;
++			free(prog_param_types);
++			break;
++		}
++
++		custom_params =3D btf_params(custom_fp);
++		for (j =3D 0; j < vlen; j++) {
++			const char *pname;
++
++			pname =3D btf__name_by_offset(custom_btf, custom_params[j].name_off);
++			err =3D btf__add_func_param(prog_btf, pname ?: "", prog_param_types[j=
+]);
++			if (err)
++				break;
++		}
++		free(prog_param_types);
++		if (err)
++			break;
++
++		/* Update the FUNC to point to the new FUNC_PROTO (re-fetch
++		 * since btf__add_* may have reallocated the data buffer).
 +		 */
-+		"r1 =3D 0;"
-+		"r2 =3D 0;"
-+		"r3 =3D 0;"
-+		"r4 =3D 0;"
-+		"r5 =3D 0;"
-+		"call subprog_deref_arg6;"
-+	"l0_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_map_lookup_elem),
-+		  __imm_addr(map_hash_8b)
-+		: __clobber_all
-+	);
++		((struct btf_type *)btf__type_by_id(prog_btf, i))->type =3D new_proto_=
+id;
++	}
++
++	btf__free(custom_btf);
++	return err;
 +}
 +
-+SEC("tc")
-+__description("stack_arg: missing store on one branch")
-+__failure
-+__msg("stack *(R11-8) not properly initialized")
-+__naked void stack_arg_missing_store_one_branch(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		/* Write arg7 (r11-16) before branch */
-+		"*(u64 *)(r11 - 16) =3D 20;"
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 > 0 goto l0_%=3D;"
-+		/* Path 1: write arg6 and call */
-+		"*(u64 *)(r11 - 8) =3D 10;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_7args;"
-+		"goto l1_%=3D;"
-+	"l0_%=3D:"
-+		/* Path 2: missing arg6 store, call should fail */
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_7args;"
-+	"l1_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
+ /* this function is forced noinline and has short generic name to look b=
+etter
+  * in test_progs output (in case of a failure)
+  */
+@@ -1194,13 +1314,27 @@ void run_subtest(struct test_loader *tester,
+ 		}
+ 	}
+=20
+-	/* Implicitly reset to NULL if next test case doesn't specify */
++	/* Implicitly reset to NULL if next test case doesn't specify.
++	 * btf_custom_func_path also serves as btf_custom_path for kfunc resolu=
+tion.
++	 */
+ 	open_opts->btf_custom_path =3D spec->btf_custom_path;
++	if (!open_opts->btf_custom_path)
++		open_opts->btf_custom_path =3D spec->btf_custom_func_path;
+=20
+ 	tobj =3D bpf_object__open_mem(obj_bytes, obj_byte_cnt, open_opts);
+ 	if (!ASSERT_OK_PTR(tobj, "obj_open_mem")) /* shouldn't happen */
+ 		goto subtest_cleanup;
+=20
++	/* Fix up __naked subprog BTF using a separate file with named params *=
+/
++	if (spec->btf_custom_func_path) {
++		err =3D fixup_btf_from_path(tobj, spec->btf_custom_func_path);
++		if (err) {
++			PRINT_FAIL("failed to fixup BTF from %s: %d\n",
++				   spec->btf_custom_func_path, err);
++			goto subtest_cleanup;
++		}
++	}
 +
-+SEC("tc")
-+__description("stack_arg: share a store for both branches")
-+__success __retval(0)
-+__naked void stack_arg_shared_store(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		/* Write arg7 (r11-16) before branch */
-+		"*(u64 *)(r11 - 16) =3D 20;"
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 > 0 goto l0_%=3D;"
-+		/* Path 1: write arg6 and call */
-+		"*(u64 *)(r11 - 8) =3D 10;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_7args;"
-+		"goto l1_%=3D;"
-+	"l0_%=3D:"
-+		/* Path 2: also write arg6 and call */
-+		"*(u64 *)(r11 - 8) =3D 30;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_7args;"
-+	"l1_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: write beyond max outgoing depth")
-+__failure
-+__msg("stack arg write offset -80 exceeds max 7 stack args")
-+__naked void stack_arg_write_beyond_max(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		/* Write to offset -80, way beyond any callee's needs */
-+		"*(u64 *)(r11 - 80) =3D 99;"
-+		"*(u64 *)(r11 - 16) =3D 20;"
-+		"*(u64 *)(r11 - 8) =3D 10;"
-+		"call subprog_7args;"
-+		"r0 =3D 0;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: sequential calls reuse slots")
-+__failure
-+__msg("stack *(R11-8) not properly initialized")
-+__naked void stack_arg_sequential_calls(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 8) =3D 6;"
-+		"*(u64 *)(r11 - 16) =3D 7;"
-+		"call subprog_7args;"
-+		"r6 =3D r0;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_7args;"
-+		"r0 +=3D r6;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: r11 load after r11 store")
-+__failure
-+__msg("r11 load must be before any r11 store or call insn")
-+__naked void stack_arg_load_after_store(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 8) =3D 6;"
-+		"r0 =3D *(u64 *)(r11 + 8);"
-+		"call subprog_6args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: r11 load after a call")
-+__failure
-+__msg("r11 load must be before any r11 store or call insn")
-+__naked void stack_arg_load_after_call(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"r0 =3D *(u64 *)(r11 + 8);"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
-+#else
-+
-+SEC("socket")
-+__description("stack_arg is not supported by compiler or jit, use a dumm=
-y test")
-+__success
-+int dummy_test(void)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
-+char _license[] SEC("license") =3D "GPL";
+ 	i =3D 0;
+ 	bpf_object__for_each_program(tprog_iter, tobj) {
+ 		spec_iter =3D &specs[i++];
 --=20
 2.52.0
 
