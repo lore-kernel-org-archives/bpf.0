@@ -1,159 +1,181 @@
-Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400B63DF00B
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 16:24:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10AF52C11E2
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 17:14:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777047864; cv=none; b=ILiDw2CZpJZyU2TqdFNEapONingWQl1s87A4GZ7Fd4TCLznSl5MbOesE3IAlbqypXTM+LsLhAVp2CgsOJ7dcKGyA1+NtT2SRKVkQGK5R0bDqEj5frxkc8W7FFyarysrklehnD5+B5LTX+LUK5g3Nzlt9FwOT8QlzVHF+aX4nS1k=
+	t=1777050888; cv=none; b=T1ABke2NQ5f6xzlpgx+8LtYsfg0Db+LBvFytn3bKqsb7/arWm4607pesavgyL9E6j2o+7684tVOTjNeTgEPIckveAYmMEPBDmfviMaQMeYuoeLBW+4M8hXv6cixfHxQ8HhvOf2AWJv0Cc1Qy3QxS9ERE8Qapw/AUOrxTyhURhUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777047864; c=relaxed/simple;
-	bh=rKnGZyadXRPn7+yUgtk6UZv9kH+5IP0bOXa8EOkSS0U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=I+IrSDwKx1CMdFR2jB+CcDg8/VCHNxHJ6i5v+rvXITyD0N8U4OmOJszbacfU3XsHfeDHiyFk6RVE9Mz5ALa58URblsmVyBnHazMz5unCXqWdiFd8T8w2EnTDQdWlxvGE6D6tmJIuYu1T4UX1inUb/QOYwVf/GzRkeG9GbPJdsys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b=K+S9Wv+L; arc=none smtp.client-ip=74.125.82.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b="K+S9Wv+L"
-Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-12dca45ca21so468291c88.1
-        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 09:24:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20251104.gappssmtp.com; s=20251104; t=1777047862; x=1777652662; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+6Od9QgYAcJsV8ihusavCJrmScuqDKBApgvlcBNX0xU=;
-        b=K+S9Wv+Lx4FumHi/iwwLlqeJdpw1H/kIa67Ay1IH9c7VEfD9bxGb5GuxgZFG3t7Id0
-         evelc8FXc/RrUozpk/zeh/xh/Iyai7lcZFpXCDee9MiXz5FsVAuKVBgx19sXIAnW4Ppu
-         7xJvG9VedojkNJv9FIerT5jXcPSaIGrNqHEQZBCdUjqJ9iwv5391yJRpj6UAaQnYw9JZ
-         nakVc6pI+56xRCFObv/yLpGfDu1KwP/hJroI1F7A+zg+m5Van15pmgTQb9m9JccOgaFz
-         E2cCUiFEb0Cna/QKzCEqkJXaYf3a16j0VKx36CAC2AWPQ8iSCrHg37alSbRwgHy4fEfw
-         101A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777047862; x=1777652662;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+6Od9QgYAcJsV8ihusavCJrmScuqDKBApgvlcBNX0xU=;
-        b=cIXZTAigy0v80GGYwoexqH4W/fmmzfdUHXlKBzeW13OD1+/F/8blmInPRVi6gRhDJY
-         PQJ6pX9ZdCL8bqYAdzgzya372OsV77noAEvC1AWb6m6uWyous7V/pyjEWCTTVUh8otzq
-         JmRn4nAhxyo8+mE8rwF53w18BoiKAmVUBCYKoX8egiBeolE1VGWyxO828l0TL9RsFD+0
-         FO8N2gJm77bKJnNW2YTDX4NokjXfIdcmm/pIhA4ou2edmv82DuEQ7+8bGoo+KEhSln3H
-         IFGMaJ0eIiLivqzb9L7m+U5R1Pnm5DWb4rMrHmXyXi+b9YVXKa4ZpTFOch5zInrJdMAm
-         r+JQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9YW9Cd/vFt6oDLqrsPP1Dx/t1En4+2KBruXEJ8vDq1+Ds0IOwPS9sEWN5YDW35jyNh/yU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpRXBBlhPM/aXn34V/IvsaZdlkibB+O4YVgwhfAQEmI6eTYEiF
-	kaKuMev8c1HBZNZKHu7bLWIw+aLnNWK2rCBGh05LGYTIL5V6QDZRh7rvQBVRNI6fef8=
-X-Gm-Gg: AeBDiesVc9CQXm7MOqBuMdBlxD3HwNFf7Jo5cOwpG6jCwFrc4cAWuiJcV+KoNXYiOhR
-	PA1SX06qjOo9/+k7KlU/PkjZUHAEVjXZWtu9StzQbmSUf6Snm4vxCsHfjvb8maylLJRIaYpCkC8
-	+/SRpT143QebU/pm+hDfBxNbCgktyfBRLGOqS8MeDReh5urNl9frpCmvdZnrroiQ5wv5hFQrJ57
-	wy4C55Zmzjy4h7g62b2xVXsVd9nJqTErIVYFodM4l+IppJVb9XbYNq3j3tT68HSxF0BYXuM9NQv
-	xqNuUE/8vZjuBuGGhKDY73I/RIZ3rNSgho0e9Q/qI0SWjVNr46WgeO7+NpOLddoLvGZy0jXM3ia
-	z1L+TdHXO298n8KU4H2XRqKjDVjL7kLC2lsela10AkaPNlTWI+v648ivPmpNnbPLnlfv//Hnqep
-	LRsznFsY/1Puc4Uijwp/OuwS5jKTyO3OB23rGc+0o6lz7eSs5V8lZUUj1w9bQozJjk5GS2VqBZA
-	xVO2zIONJIhoqgWUHNZ4g1dTXI4qzoOYFA=
-X-Received: by 2002:a05:7300:8607:b0:2d4:94cc:eebb with SMTP id 5a478bee46e88-2e477c9bc50mr17941859eec.13.1777047862086;
-        Fri, 24 Apr 2026 09:24:22 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1156:1:c8f:b917:4342:fa09? ([2620:10d:c090:500::1:eae7])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2e53d8aed43sm32348927eec.26.2026.04.24.09.24.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Apr 2026 09:24:21 -0700 (PDT)
-Message-ID: <fa0b5704-21ae-4011-be0c-97fab3a026c5@davidwei.uk>
-Date: Fri, 24 Apr 2026 09:24:18 -0700
+	s=arc-20240116; t=1777050888; c=relaxed/simple;
+	bh=9Z0pYyTxcWXJt96fEXC43JcK5ifuPuzmpLZbpKGAf/s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gBUX143W+YLNeQeOAwIppuYJ3FyhSeo79Dr9XsKXhFllpHYwhhPyJwlB/CzGaZOOSaCkRQy9lM+N6KX3GRN0BQT9wUiv3KweM5hMzZ7497MCMzckDjRwmXjbugZhaZ0//jMeGU7IeFnhMsnbQV+XVPcwLd9ekTu/CKjZTDDyiLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id BB5A9474A6401; Fri, 24 Apr 2026 10:14:33 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next 00/18] bpf: Support stack arguments for BPF functions and kfuncs
+Date: Fri, 24 Apr 2026 10:14:33 -0700
+Message-ID: <20260424171433.2034470-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 0/2] net: mana: add ethtool private flag for
- full-page RX buffers
-To: Dipayaan Roy <dipayanroy@linux.microsoft.com>,
- Jakub Kicinski <kuba@kernel.org>
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
- decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, pabeni@redhat.com, leon@kernel.org,
- longli@microsoft.com, kotaranov@microsoft.com, horms@kernel.org,
- shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
- ernis@linux.microsoft.com, shirazsaleem@microsoft.com,
- linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
- stephen@networkplumber.org, jacob.e.keller@intel.com, leitao@debian.org,
- kees@kernel.org, john.fastabend@gmail.com, hawk@kernel.org,
- bpf@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me,
- dipayanroy@microsoft.com
-References: <20260407200216.272659-1-dipayanroy@linux.microsoft.com>
- <20260409183509.0b24dea6@kernel.org> <20260412125917.4fa8fc8d@kernel.org>
- <ad5kuCZz+gR1TlSh@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <20260416083146.0bb94d2b@kernel.org>
- <aeoVC27mIzoKytqA@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-Content-Language: en-US
-From: David Wei <dw@davidwei.uk>
-In-Reply-To: <aeoVC27mIzoKytqA@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On 2026-04-23 05:48, Dipayaan Roy wrote:
-> On Thu, Apr 16, 2026 at 08:31:46AM -0700, Jakub Kicinski wrote:
->> On Tue, 14 Apr 2026 09:00:56 -0700 Dipayaan Roy wrote:
->>> I still see roughly a 5% overhead from the atomic refcount operation
->>> itself, but on that platform there is no throughput drop when using
->>> page fragments versus full-page mode.
->>
->> That seems to contradict your claim that it's a problem with a specific
->> platform.. Since we're in the merge window I asked David Wei to try to
->> experiment with disabling page fragmentation on the ARM64 platforms we
->> have at Meta. If it repros we should use the generic rx-buf-len
->> ringparam because more NICs may want to implement this strategy.
-> 
-> Hi Jakub,
-> 
-> Thanks. I think I was not precise enough in my previous reply.
-> 
-> What I meant is that the atomic refcount cost itself does not appear to
-> be unique to the affected platform. I see a similar ~5% overhead on
-> another ARM64 platformi (different vendor) as well. However, on that platform
-> there is no throughput delta between fragment mode and full-page mode; both reach
-> line rate.
-> 
-> On the affected platform, fragment mode shows an additional ~15%
-> throughput drop versus full-page mode. So the current data suggests that
-> the atomic overhead is common, but the throughput regression is not
-> explained by that overhead alone and likely depends on an additional
-> platform-specific factor.
-> 
-> Separately, the hardware team collected PCIe traces on the affected
-> platform and reported stalls in the fragment-mode case that are not seen
-> in full-page mode. They are still investigating the root cause, but
-> their current hypothesis is that this is related to that platform’s
-> PCIe/root-port microarchitecture rather than to page_pool refcounting
-> alone.
-> 
-> That said, I agree the right direction depends on whether this
-> reproduces on other ARM64 platforms. If David is able to reproduce the
-> same behavior, then using the generic rx-buf-len ringparam sounds like
-> the better direction.
-> 
-> Please let me know what David finds, and I can rework the patch
-> accordingly.
+Currently, bpf function calls and kfunc's are limited by 5 reg-level
+parameters. For function calls with more than 5 parameters,
+developers can use always inlining or pass a struct pointer
+after packing more parameters in that struct although it may have
+some inconvenience. But there is no workaround for kfunc if more
+than 5 parameters is needed.
 
-Hi Dipayaan. Can you please share more details on your testing setup?
+This patch set lifts the 5-argument limit by introducing stack-based
+argument passing for BPF functions and kfunc's, coordinated with
+compiler support in LLVM [1]. The compiler emits loads/stores through
+a new bpf register r11 (BPF_REG_PARAMS), to pass arguments beyond
+the 5th, keeping the stack arg area separate from the r10-based program
+stack. The current maximum number of arguments is capped at
+MAX_BPF_FUNC_ARGS (12), which is sufficient for the vast majority of
+use cases.
 
-* What are you using as the test client/server? iperf3 or something
-   else?
-* What do you mean specifically by "5% overhead from the atomic refcount
-   operation"? Some specific function?
-* What are you using to measure? perf?
-* How many queues, what is the napi softirq affinity?
-* How many NUMA nodes? Does the problem only appear when crossing?
+All kfunc/bpf-function arguments are caller saved, including stack
+arguments. For register arguments (r1-r5), the verifier already marks
+them as clobbered after each call. For stack arguments, the verifier
+invalidates all outgoing stack arg slots immediately after a call,
+requiring the compiler to re-store them before any subsequent call.
+This follows the native calling convention where all function
+parameters are caller saved.
 
-Thanks,
-David
+The x86_64 JIT translates r11-relative accesses to RBP-relative
+native instructions. Each function's stack allocation is extended
+by 'max_outgoing' bytes to hold the outgoing arg area below the
+callee-saved registers. This makes implementation easier as the r10
+can be reused for stack argument access. At both BPF-to-BPF and kfunc
+calls, outgoing args are pushed onto the expected calling convention
+locations directly. The incoming parameters can directly get the value
+from caller.
 
-> 
-> 
-> Regards
-> Dipayaan Roy
+To support kfunc stack arguments, before doing any stack arguments,
+existing codes are refactored/modified to use bpf_reg_state as much
+as possible instead of using regno, and to pass a non-negative argno,
+encoded to support both registers and stack arguments, as a single
+variable.
+
+Global subprogs and freplace progs with >5 args are not yet supported.
+Only x86_64 and arm64 are supported for now. Same selftests are tested
+by both x86_64 and arm64. Please see each individual patch for details.
+
+  [1] https://github.com/llvm/llvm-project/pull/189060
+
+Note:
+  - The patch set is on top of the following commit:
+    fd30cf86e1194 Merge branch 'bpf-prepare-to-support-stack-arguments'
+  - This patch set requires latest llvm23 compiler. It is possible that a=
+ build
+    failure may appear:
+      /home/yhs/work/bpf-next/scripts/mod/modpost.c:59:13: error: variabl=
+e 'extra_warn' set but not used [-Werror,-Wunused-but-set-global]
+             59 | static bool extra_warn;
+                |             ^
+          1 error generated.
+    In this case, the following hack can workaround the build issue:
+      --- a/Makefile
+      +++ b/Makefile
+      @@ -467,7 +467,7 @@ KERNELDOC       =3D $(srctree)/tools/docs/kerne=
+l-doc
+       export KERNELDOC
+
+       KBUILD_USERHOSTCFLAGS :=3D -Wall -Wmissing-prototypes -Wstrict-pro=
+totypes \
+      -                        -O2 -fomit-frame-pointer -std=3Dgnu11
+      +                        -O2 -fomit-frame-pointer -std=3Dgnu11 -Wno=
+-unused-but-set-global
+       KBUILD_USERCFLAGS  :=3D $(KBUILD_USERHOSTCFLAGS) $(USERCFLAGS)
+       KBUILD_USERLDFLAGS :=3D $(USERLDFLAGS)
+
+Puranjay Mohan (3):
+  bpf, arm64: Map BPF_REG_0 to x8 instead of x7
+  bpf, arm64: Add JIT support for stack arguments
+  selftests/bpf: Enable stack argument tests for arm64
+
+Yonghong Song (15):
+  bpf: Support stack arguments for bpf functions
+  bpf: Add precision marking and backtracking for stack argument slots
+  bpf: Refactor record_call_access() to extract per-arg logic
+  bpf: Extend liveness analysis to track stack argument slots
+  bpf: Reject stack arguments in non-JITed programs
+  bpf: Prepare architecture JIT support for stack arguments
+  bpf: Enable r11 based insns
+  bpf: Support stack arguments for kfunc calls
+  bpf: Reject stack arguments if tail call reachable
+  bpf,x86: Implement JIT support for stack arguments
+  selftests/bpf: Add tests for BPF function stack arguments
+  selftests/bpf: Add tests for stack argument validation
+  selftests/bpf: Add verifier tests for stack argument validation
+  selftests/bpf: Add BTF fixup for __naked subprog parameter names
+  selftests/bpf: Add precision backtracking test for stack arguments
+
+ arch/arm64/net/bpf_jit_comp.c                 |  91 +++-
+ arch/arm64/net/bpf_timed_may_goto.S           |   8 +-
+ arch/x86/net/bpf_jit_comp.c                   | 154 +++++-
+ include/linux/bpf.h                           |   2 +
+ include/linux/bpf_verifier.h                  |  42 +-
+ include/linux/filter.h                        |   1 +
+ kernel/bpf/backtrack.c                        |  61 ++-
+ kernel/bpf/btf.c                              |  20 +-
+ kernel/bpf/const_fold.c                       |  13 +-
+ kernel/bpf/core.c                             |   7 +-
+ kernel/bpf/fixups.c                           |  28 +-
+ kernel/bpf/liveness.c                         | 200 ++++++--
+ kernel/bpf/states.c                           |  31 ++
+ kernel/bpf/verifier.c                         | 347 +++++++++++--
+ .../selftests/bpf/prog_tests/stack_arg.c      | 139 ++++++
+ .../selftests/bpf/prog_tests/stack_arg_fail.c |  10 +
+ .../bpf/prog_tests/stack_arg_precision.c      |  10 +
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   1 +
+ .../bpf/progs/btf__stack_arg_precision.c      |  24 +
+ tools/testing/selftests/bpf/progs/stack_arg.c | 253 ++++++++++
+ .../selftests/bpf/progs/stack_arg_fail.c      | 114 +++++
+ .../selftests/bpf/progs/stack_arg_kfunc.c     | 164 +++++++
+ .../selftests/bpf/progs/stack_arg_precision.c | 122 +++++
+ .../selftests/bpf/progs/verifier_jit_inline.c |   2 +-
+ .../selftests/bpf/progs/verifier_ldsx.c       |   6 +-
+ .../bpf/progs/verifier_private_stack.c        |  10 +-
+ .../selftests/bpf/progs/verifier_stack_arg.c  | 457 ++++++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  72 +++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |  26 +
+ tools/testing/selftests/bpf/test_loader.c     | 136 +++++-
+ 31 files changed, 2448 insertions(+), 105 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/stack_arg.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/stack_arg_fail=
+.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/stack_arg_prec=
+ision.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__stack_arg_prec=
+ision.c
+ create mode 100644 tools/testing/selftests/bpf/progs/stack_arg.c
+ create mode 100644 tools/testing/selftests/bpf/progs/stack_arg_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/progs/stack_arg_precision=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_stack_arg.=
+c
+
+--=20
+2.52.0
+
