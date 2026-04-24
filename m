@@ -1,127 +1,108 @@
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3893DBD70
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 14:19:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A7E388392
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 14:27:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777040366; cv=none; b=t5ONEEm6FJZEDEfoTlwNt1qHbAz/9n9IzBy0EZfuu2+yk7xlWphpyIIXtuJUq54b/co6d55qFwNUf50uoJi8Br/L+R++KRM4O3uVP1K77aIeLswVSi3jJp4snfkphwcwzIPbED8zpadmEvZIUelQT6VMDc4Y7ZoAaRe54NQtchU=
+	t=1777040865; cv=none; b=h/yPhKNyXO4ATrmWvzEO3DftHt0Jq+Sp+DfaBJElZmM2ImFVXlxPOI+CQASws6F3X8PeoZh711mdFzHarZyYR1aenyY55yYW1VcKUACm+jZbC6Cf4zyjNdTIxSBKkL1X7fjbqk+OCWqqDOsNjhv1I7eHbUAOx/v11Vdaa0FoDm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777040366; c=relaxed/simple;
-	bh=sR29cvVWWj1zEvLPCnOluGKLlUo6GPJZv7ipVNXVONw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gopqhzNz1mtsFMJrBZ38wvtrihPJvVwy7I3L4p0CDsL0mEy/Dv3ULsnzHZOiHyQ9PNpHQMbx2Pre49jiTu1QK9DeO2IFA1jedhPNPftVhEQAfu92GzcCiWuuYcnmhctRyVdaRIcLJ3PzsmIK86rZxLfDNIzc30NwsyPPG6Zpb4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=igpKv7ta; arc=none smtp.client-ip=209.85.217.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	s=arc-20240116; t=1777040865; c=relaxed/simple;
+	bh=yYfzSuomazcnN824aX8C1ftKuOaWl/43R/j2KUmohUY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=aHIXZp+JYHcTNuYSZgTR209Vvqak4YzAlMmlwipXKZTzEGi+yzkWJVUI5gftI3XbGwcTj9JExbLk0u0PNag6ogYRXFRcSchSw0aD3Gx0MWfgq3CtoiBIkjwIBQU3jDd7bNzsMPjgzPN0jFrGoMcXVO20KKNRvpUgMb8Fk4ekrnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m0R4kE0X; arc=none smtp.client-ip=209.85.210.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="igpKv7ta"
-Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-6055a0414d7so1998095137.2
-        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 07:19:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m0R4kE0X"
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7dcdaf06498so2796187a34.2
+        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 07:27:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1777040364; x=1777645164; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zV0Gq4Db+XurRwmLehRl8plU7HsCQBBchm2UxZdn8eA=;
-        b=igpKv7tavJsOoMZy48+l67X+sKqw4fGrLFlfTwBT8xEv50hjj/UwxHNUnf6A7XM62x
-         6SO9kz0XzK1vDDn1Fw1/WKyMSl4z+tC1/eqSsCRIpe2RiqDq2/uHMMKjUOH7fnKEYoV6
-         m4GWv5P5pMeL4gPkHQV4216zlJVaxS4kVcC3kwsVW/FfqTCKIaVt8hiEaaf9iO4v0gdB
-         YeTTXCdYGuPMDVBEYlVxdNnSGim+WPSH2z22x/JCLWF1KqQHsC2FqQnEEao6vrYN1GCO
-         +UtOJC3nva1hzI0OMrjCuvSu0Q9pxqVbXYH4JVx7vv1Ysw6H7gkDMjw7KhsYQ+vfetw1
-         spWA==
+        d=gmail.com; s=20251104; t=1777040863; x=1777645663; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RjjH/tLqX6cBtTicu3yUxFefXzN4FEEjhrQgohNngo0=;
+        b=m0R4kE0XFGzz+SBN2Pv8Ni4hjYBPg1esDBzFO1zfDr3Bu7XcexhLuQzLODBZ+gR8F8
+         xlFcWmxPFqZ82YH0ELMJ97VBb4AR7IMwodbCxGDm6GhmdRHC0+tdYSxkUKLUhLLYznCV
+         I1CD5ThB5RAJI/KMDSjMFek2SIBQA0PcaEJXPvwmPrmlBoiOYJF+coeN2MyIMGcQqM9U
+         /E/M9Xu+jhCFVZ8mCKoNwerjlykc26TOTRDGjnQz+9IhZ5dkRXPm5qwsHEuJRfWS/QTe
+         FgRwKPKETu/eodq6K+XVU63UCo3jI5PzZ70ie3vHI2zFI0/cQcTmCcQxiq15zjc2Oo/6
+         Ci8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777040364; x=1777645164;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zV0Gq4Db+XurRwmLehRl8plU7HsCQBBchm2UxZdn8eA=;
-        b=sqV4heg1277z3XnSq3JCAsAE3g88oXtwZZGV8OpAqTeMZCUHL5nNl/X1oveg6q/yo8
-         h9IdgFN+TiWMhS3cndDZRvnA3ndt/beCNwLtS2sDrtxgkBTaEOvU4nbK/KFxG664BJ9/
-         HdoPRwQSqYBzsIyOirn6ZnV5DkQbNFZfwVLm91SQmUuoET3YuIKGoTWdiq9lCiXX0FLh
-         Phm/ZbcUUv8OaDHZv/gPujzQCe6hy+i04g3Y2A4oixbVXzGJyLLBMlSMbiRDuNs96QhV
-         uLa1rN/GFCE0+UF/ioUQABkMOG3rWjw9NLwLFwJWgs0+ceKAO1ZXjQfRhu7BTjhKTK2e
-         ihMA==
-X-Forwarded-Encrypted: i=1; AFNElJ9T8W0IN69fALcKGqVV/cgO8Jw2c20iz0i7euRiwY9f8yUdo05ykBP5r6PuG62KkwJb/ik=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrNYzXaFiGvovVBrNgCaFSseSENFvwm6KZgUSM95c754uGXZOh
-	9JYc8E2vwUqvs89Nn2uIGQbCgnai2uRQj5jYGT2Pm3/zMJC8fYwgQ8y+ILojR640iwc=
-X-Gm-Gg: AeBDietkm+a/snpi0HA9UnVtSv4LtPAqBDHE97WgG1Fh0Co796HhltPXi5i6RuQuLU/
-	/mV/WhDc7DE7/vOIiO2UnMnSDOkKsllJQv3zVxdvjrRCoJePhxHwQLUtdV+ynfc/0ydzIxyYWjO
-	VIr9wWiIfs66Tc8UAuJ/L1w025kc0JzovVrBa2Wt9LjJ0ibGmP4M+WswTJrtE9WBdrpEYKnGkhr
-	/bbl+o6z5/LLYR780LmgF/Q/URl0Czu25neu+Yct2y1Hdtt0oohfY/INyyKc8ygYJUSFxl4l2ik
-	F+B/NVX5CEFJhA40ThoUF49DB86UfL63F/8pbl2LYAdtx4DCLdWgVS0xH1ZVze+7LQyh8QV56Oo
-	hfwAoU1xI70LKjDgjpYrV7GA2sMHIVhPuJ7kFzgz4/BsNyvhijqLsewvG8KN1f3lIHj9DQqhw1B
-	/eezA/1XBcYjQez6hf27JHGw67n2SiO2cZFEjXHHf8UBfOajWXiX0HNy+PliL7uZge/YHLvTfwY
-	y6kJhCMGDJXLaXq
-X-Received: by 2002:a05:6102:6cd:b0:602:6784:3eef with SMTP id ada2fe7eead31-616f90e6f07mr16856701137.28.1777040363554;
-        Fri, 24 Apr 2026 07:19:23 -0700 (PDT)
-Received: from ziepe.ca (crbknf0213w-47-54-130-67.pppoe-dynamic.high-speed.nl.bellaliant.net. [47.54.130.67])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b02ac81a9dsm186723106d6.21.2026.04.24.07.19.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Apr 2026 07:19:22 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1wGHNK-00000002j9p-04Ph;
-	Fri, 24 Apr 2026 11:19:22 -0300
-Date: Fri, 24 Apr 2026 11:19:21 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Leon Romanovsky <leon@kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>,
-	Roberto Sassu <roberto.sassu@huaweicloud.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Itay Avraham <itayavr@nvidia.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
-	Maher Sanalla <msanalla@nvidia.com>,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-Message-ID: <20260424141921.GA3611611@ziepe.ca>
-References: <20260412090006.GA21470@unreal>
- <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
- <20260413164220.GP3694781@ziepe.ca>
- <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
- <20260413231920.GS3694781@ziepe.ca>
- <CAHC9VhTLamfe4C81ZNRVT=H32x+KLxSqH3o0eBfrHsWAgAqxCA@mail.gmail.com>
- <20260415134705.GG2577880@ziepe.ca>
- <CAHC9VhSECYihup=tURo_Qk__xUdYYPkHgnz5CWA0BrRAkvwbog@mail.gmail.com>
- <20260417191749.GK2577880@ziepe.ca>
- <20260423140950.GE172828@unreal>
+        d=1e100.net; s=20251104; t=1777040863; x=1777645663;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RjjH/tLqX6cBtTicu3yUxFefXzN4FEEjhrQgohNngo0=;
+        b=ZFN2ehMmWYP7ycW2mt49Wyw7FD7x3rWYGChSpL6VAoPQdOjfyMtFRIBD3/TB7PhxvW
+         wkt46OfErTPbCM7c/WPUPJtsXBwdfGqCca58GD45dZMD7D4YBLAT3ILMR44tuZpj5GGa
+         J8U7SDjMmCPsXxelVuvSRTPWdtCMB4hADaL2FSC3oB0RIj0DATQGHwZoA5cDtj5mQSGr
+         O4cztNM1yHwWNIzVMKGI5ryLyiTorcXBGzJH5Gqgr7QLYNF5IhPwGKngygmoveD5vO8h
+         A0V6CqDtTl5LjuYjql+LRsa6Ufz9inHI3Te/bwmJeU15KmpjYFVArs2cgsgdmHEodwrG
+         Z1Bw==
+X-Forwarded-Encrypted: i=1; AFNElJ/mCkiVVg/b75hzGlurMLDD9f27mqOQNkMtnaB6LyUCbQ3PPKWTn6bY2EqMNEZLDWlvuO4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdpEtIY8bJkV9tCSl5grNVsDlOVzh6U51VfU5Np0XvQ5tixSUA
+	O87G2sl4C6OJam3iB2x/RNVTDpzE2+06BhfxJ8k7jhaRRb2KAIuExO7d
+X-Gm-Gg: AeBDiet+fMJTND0AvK/WingnehSE8dR8x8E6G8RQOxC+tQOvrm2ho2jCdsfhMHZ24kV
+	a6OSkc/M+bnzhzuyrG2qpD0qTMuxWLoCfN48kO4thZTRqCOJkWgYhDU+jQGbpdqXespA92oKsEm
+	tBEv79/C8xqy+u1RyDDX/VS4dLN1Fbof5YZb0WM7b5zp1q2jzzffi5oZ79Z0UOP2ieSHuAZAP3v
+	6U/U/Lp9bAuZBOXQu8PGeq7LtS3SwizG1+ER7UD64AQkNzo2W/tbI421Z2FEjfEpeeKVZ1TkVWM
+	EjZDAcJnVvp0Vm0GmUw0/2EZAYoEURDbViKJGOcFaGSsfqPeyvS7vPnz47PTkROfYQZH18KbY+z
+	XbUgPK6+NwZ5dCIrE3/8acmOa9fON7g/X/rDzVITSXzcF9OYrlZ1hkHFMvbedN7Wi6Imx456etg
+	MCG8dq+E3f+ajdd5QekAKHfuwiFlCdV77+OUBjz35hHZNTCkSj9ncg+m6CMysqo74R+jWGQPvaL
+	p7tInfaZs4V2qjF5PF1V/MzY/Y+
+X-Received: by 2002:a05:6830:8288:b0:7d7:faef:fa0 with SMTP id 46e09a7af769-7dc94d9b166mr20671382a34.3.1777040863239;
+        Fri, 24 Apr 2026 07:27:43 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:71::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dcd5408b5asm10067461a34.11.2026.04.24.07.27.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Apr 2026 07:27:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260423140950.GE172828@unreal>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 24 Apr 2026 07:27:41 -0700
+Message-Id: <DI1GETNIDN91.BJPVEP02OODT@gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/4] bpf: replace min/max fields with struct
+ cnum{32,64}
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Eduard Zingerman" <eddyz87@gmail.com>, <bpf@vger.kernel.org>,
+ <ast@kernel.org>
+Cc: <andrii@kernel.org>, <daniel@iogearbox.net>, <martin.lau@linux.dev>,
+ <kernel-team@fb.com>, <yonghong.song@linux.dev>, <shung-hsi.yu@suse.com>,
+ <paul.chaignon@gmail.com>, <harishankar.vishwanathan@gmail.com>
+X-Mailer: aerc
+References: <20260424-cnums-everywhere-rfc-v1-v2-0-57091924c9d7@gmail.com>
+In-Reply-To: <20260424-cnums-everywhere-rfc-v1-v2-0-57091924c9d7@gmail.com>
 
-On Thu, Apr 23, 2026 at 05:09:50PM +0300, Leon Romanovsky wrote:
+On Fri Apr 24, 2026 at 1:17 AM PDT, Eduard Zingerman wrote:
+> This RFC replaces s64, u64, s32, u32 scalar range domains tracked by
+> verifier by a pair of circular numbers (cnums): one for 64-bit domain
+> and another for 32-bit domain. Each cnum represents a range as a
+> single arc on the circular number line, from which signed and unsigned
+> bounds are derived on demand. See also wrapped intervals
+> representation as in [1].
+>
+> The use of such representation simplifies arithmetic and conditions
+> handling in verifier.c and allows to express 32 <-> 64 bit deductions
+> in a more mathematically rigorous way.
+>
+> [1] https://jorgenavas.github.io/papers/ACM-TOPLAS-wrapped.pdf
+>
+> Changelog
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D
+> RFCv1 -> v2:
+> - Dropped RFC tag.
+> - Dropped cnum{32,64}_mul(), too much complexity and no veristat
+>   or selftests gains.
 
-> > > Leon mentioned that different firmware revisions would have different
-> > > parameters for a given opcode, and that one would need to inspect
-> > > those parameters to properly filter the command.  Is that not true, or
-> > > am I misreading or misunderstanding Leon's comments?
-> > 
-> > They are ABI stable, so there will be rules about future changes that
-> > old software can follow to ignore or reject future things it doesn't
-> > understand.
-> 
-> It is wishful thinking and applicable only to mlx5 devices. No one
-> promises that other devices follow same ABI rules.
+Nice. Less complexity the better.
+I think it's also strong signal that _div(), _mod() versions are not
+needed either.
 
-Well, I will definately kick them out of fwctl if they don't.
-
-Jason
