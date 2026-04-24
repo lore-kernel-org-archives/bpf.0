@@ -1,80 +1,105 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B2017D6
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 00:42:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940452030A
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 00:55:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776991329; cv=none; b=GgQ26q/dHN0FjJx1uk1bB+tS+NtUXxk50dZe0vvoYBEJnYEKzHW1qPWuIU2+RtUQxMDgLBhRJKQyhfrFSRi36qScrO/MduKPDDSE4DJALalG6zSQehIL2BaL0H9zS0yiCCpfZRKNaAU+CAxJRTXfwf0Uc+H32n+vJAHPdNeskGc=
+	t=1776992119; cv=none; b=GgF5nxQm4V+WGKJaFYS/xNt3t0JN6vZ2+jt/gZ3ukHm8ue9dnpqQ4YvxMYdJp7k5OnScNAhQ0Tmut6EH1kugl3j38xivk25Gz7B8/hCx+O0jqC9nlkGckoJJZyA+TjRRxkd7/CsPPmddTWluGhEtYBvlQcfovK6Cjgz+/7gCB50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776991329; c=relaxed/simple;
-	bh=HxasFVtwjC3AOAksdUMADU4qhgML9rAHGFKuZRPB1Mk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=loR/0HA6a9FtP7xz1YMGebdjkl8784EeGL3Jr17bHSLYC2JsiVXoOaAYn/quGS9N3S/NkrWGmQT4vS/zTIRKP/y26QGyGQxc0sxdVn+UFRaPkvshSltFJJcJGGFnFSB01xAvY+LmNth7c283JHF4i6W/XLYowTTpMrrkOt8Iupw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sZLSlA2s; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776992119; c=relaxed/simple;
+	bh=tsNf7Q4xUJvKzvuCYiNrQ69+xti15CioD1p4JUZoUbU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=pLVu2Ex2SToNkuZ39daArcDBT0I4fQVGhs0wsQijaSkuk+KZ8m4hcDoYnGLdf21qO7Oo2aEHE8ybQOWXYRVoFN6Iz8qKngVzwWhJKpRqvI793vPf4AY5ACkdN76OyjCcBvnqWVdKplFDYicQy4pcXEoKznmW1McVKuxyPSJ0iHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K52iS+Ah; arc=none smtp.client-ip=209.85.167.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sZLSlA2s"
-Date: Thu, 23 Apr 2026 17:41:56 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776991324;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=potNxk/pM0MniWtXALjT6MlDua7BAZZZoXk/cZMfdQ4=;
-	b=sZLSlA2soQ8pThSVn3XG4aIICFiQLDgQm5dkRFbvhTfKjP0oKC87OMh/0x23uR8xA2u6ZG
-	PjD3GUkyivNoonqHC1KyHu6/wmt954V1AoZH+ghMKwgIaeU25fINHtVeWfEkLP2ccVbi3Q
-	eKAyX8XCGIH9z2hGaUegBhqiyHcVAL4=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Weiming Shi <bestswngs@gmail.com>
-Cc: "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Amery Hung <ameryhung@gmail.com>, Leon Hwang <leon.hwang@linux.dev>, Kees Cook <kees@kernel.org>, 
-	Fushuai Wang <wangfushuai@baidu.com>, Menglong Dong <menglong8.dong@gmail.com>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, Xiang Mei <xmei5@asu.edu>
-Subject: Re: [PATCH bpf v3] bpf: Fix NULL pointer dereference in
- bpf_sk_storage_clone and diag paths
-Message-ID: <202642403529.Rc5t.martin.lau@linux.dev>
-References: <20260422065411.1007737-2-bestswngs@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K52iS+Ah"
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-479aa2dbea2so2646955b6e.0
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 17:55:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776992117; x=1777596917; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=daUKMSC47II9MVuGQH8hcn1P3eQ2BwvljBL8L7L5CYs=;
+        b=K52iS+AhNYyMP3Po3l0zCJd7pJFbOuLqmwqsTwpBVndczBQH3bkI3uW1tqQLLKRtQv
+         K9kL8XpqApV9dJogHt1pqAXlApw1BNAsFiSxY9lL0vopTnjBpoUnk1lmbr6R9UyIZXUM
+         EvydesIa8l0cSoSHC38QGK1XbAvkNKEUqZVhRKGaSO4RDchScUFhcZm+3xPqp/eEvPDf
+         JIuE6XsH+6FvHjWHiKF7yc+VwjlfFmOJUQYtOtB1Uy9rmoQYjG7+Mz657mPz7V52VpbD
+         cZ7nkT4QpF1kpWzQRoyYfJWxAFq7VLK8jKZKoCR3YL1BPqOU4Atmx/x0NLKHkao5mFyD
+         Kchw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776992117; x=1777596917;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=daUKMSC47II9MVuGQH8hcn1P3eQ2BwvljBL8L7L5CYs=;
+        b=J4nZjuH3VmUJv2wpQmT5ZPKTuFTFMg4M96dxcqsJT7TWN5ifiC8iCGG6qgLju3I8cu
+         kczpuXf5GWJVjkHPEQ1PzXoTY73HbGAUbD/J2Nz+at4e9svScUM6NaGvTHLk2jmLrAE7
+         JuzAMXUpgVEr5Kn53iG6epZszVctQhBmkW/ayPdEz/n5WvOQmHqnCqhwr1io3Eu8TU7E
+         O7AMM6w0dp6MMHqjQmtTupYbKC8gTJf5/8rkt3qMo+l9DTN3qDReLg6bbMJFjwM6pME1
+         pHfLvWRjCCUvktGiIqPGqgdbCN0EcqDCzeuR+kgFNiJMVM3O/U8qU8HuHIU5TW6mfbZs
+         OD5Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+Iv6rkkzDJuKoGlYI+TEIKHi4XVWJv0pN8kYThW44pzMK1ja74EZ0F/d7BvhVui0o+jAY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRZTA6iK+iY6rnNiixyG+dHQcP5/JNBwsioYWkToBfOZcqTmlA
+	xkA9sLk75NIJK4ISJ3F4/Sx2x3WSzCvvvVEZZuLZUJQ7tp6hxpuLSClX
+X-Gm-Gg: AeBDietf1xeu5xyOX0BfeSue7jp+rr3B7mPWjDFx2S3tQPlOu8G90UcxPzNLZp/3MB7
+	pAN45Bpl+NA+EwWSD7ySbx1OG14/wTa+Wb06vOo0QYQUORqxJ/S/TPbNuJCqp1iNQd6qaPnVFxt
+	SCphGsRoBzFZQNBV53AohOkPhNjCtSqjOcdWtqn3Q8T74XbI2MyMpqx9RDds9wluW0CcyXecDEh
+	75kXToqAUL0cVnQDVjxK3IvMUK9qnBPh1FSV2Cy/+WxYlZOv9tcYbgNr0kkdtlwJz3RCxMJ8ELo
+	T0X7DkGZEmSYgfnHgq4+WOLq+sXu2tj4RYVtH85IY8kgP9gcNqrgMVF1QxAaca/puZkspYOfBFz
+	m3SOkke2QF/wOJhiwSSumwrrZECl4NYLiE4bUYmlIEwacDL8o9/Mgl7RpUDgYqakKzqQxFPdjaD
+	HMdIHfkrRdPBUQbW8n4aHPsVesr5M5edznHSZ/fsnAzUKI6N8OKGj/XbXkBXLDDd5IrXf/SKznm
+	FnxmmyopSE1qQByhyMwKLPsSj4=
+X-Received: by 2002:a05:6808:181b:b0:467:462b:ab0 with SMTP id 5614622812f47-4799c91783bmr16986548b6e.2.1776992117516;
+        Thu, 23 Apr 2026 17:55:17 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:1::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-479a02097b6sm14515077b6e.14.2026.04.23.17.55.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Apr 2026 17:55:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260422065411.1007737-2-bestswngs@gmail.com>
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 23 Apr 2026 17:55:16 -0700
+Message-Id: <DI0Z4SJ0TXOA.2N0IY94AF254F@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Amery Hung" <ameryhung@gmail.com>, <bpf@vger.kernel.org>
+Cc: <netdev@vger.kernel.org>, <andrii@kernel.org>, <daniel@iogearbox.net>,
+ <eddyz87@gmail.com>, <memxor@gmail.com>, <martin.lau@kernel.org>,
+ <mykyta.yatsenko5@gmail.com>, <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v3 0/9] Refactor verifier object relationship
+ tracking
+X-Mailer: aerc
+References: <20260421221016.2967924-1-ameryhung@gmail.com>
+In-Reply-To: <20260421221016.2967924-1-ameryhung@gmail.com>
 
-On Tue, Apr 21, 2026 at 11:54:12PM -0700, Weiming Shi wrote:
-> @@ -668,7 +670,11 @@ int bpf_sk_storage_diag_put(struct bpf_sk_storage_diag *diag,
->  
->  		diag_size += nla_value_size(diag->maps[i]->value_size);
+On Tue Apr 21, 2026 at 3:10 PM PDT, Amery Hung wrote:
+>
+> (3) Referenced dynptr with referenced parent:
+>
+>                      file (1,1,0)
+>                            ^ ^
+>      bpf_dynptr_from_file  | +-------------------------------+
+>                            |       bpf_dynptr_clone(A, C)    |
+>              dynptr A (2,3,1)                  dynptr C (4,3,1)
+>                          ^                                 ^
+>                          |                                 |
+>                          dynptr A and C have the same lifetime
 
-This is the same issue pointed out as v1. diag_size is updated with
-a smap in diag->maps[i]...
+If I understand the proposal correctly above should be:
 
->  
-> -		if (nla_stgs && diag_get(sdata, skb))
-> +		smap = rcu_dereference(sdata->smap);
-> +		if (!smap)
-> +			continue;
+                     file (1,0,0)
+                           ^
+     bpf_dynptr_from_file  +-------------------------------+
 
-... and then nothing is stored in skb, so diag_size is incorrectly inflated.
+ref_obj_id will be inited bpf_dynptr_clone() as 3 into A and C.
+but original file->ref_obj_id will be zero.
 
-> +
-> +		if (nla_stgs && diag_get(smap, sdata, skb))
-
-diag->maps[i] can be directly used here. I fixed it up before applying.
-
->  			/* Continue to learn diag_size */
->  			err = -EMSGSIZE;
->  	}
-> -- 
-> 2.43.0
-> 
+?
