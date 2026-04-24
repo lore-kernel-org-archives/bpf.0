@@ -1,207 +1,100 @@
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5698F33C18B
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 22:13:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC8EA40DFD5
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 22:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777068794; cv=none; b=nd+meRpI7cn5+ANtI2Q8tYLRjmemtKheS2Bbphau9o2CbjsudKv+/dkmKGnG2BZZood7eDAMmjpR81DRR9wDlQ9bS0IUpscftW0RxnzV3PYyHfLEl3iOYnZg0cBloAlCEKIrXpXdTrywHvRo2xs8yRZAMRapvPoqF1/ZblM6Fvc=
+	t=1777069466; cv=none; b=rv+SBjh7A3jqMyhgxeXk/YUgos2ISR69dUmslV5y8WBXcax6G8Zg3Y9dEk5zXvg4l8SjFNWMLg9G0N24C76DHtNo/dt6GPfYPfyg4Fg8wdySeYGX+eYotwzk9Hxqhc/OdwGj5R6WbJFqiwzHgZ/ybE6dUrTmXhDNZgkYGFqfu7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777068794; c=relaxed/simple;
-	bh=edkfnYqeyMC0Qt+W6n8ze5hGF7NTNhj3oyNEAcTDdxw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NlCV6GAuGTprAeaHaec4Ha1iLdOb4lzzFBK+XeOfrj8wXJ5XKXPAUNjThjOUNqsHyAsx2N17mXCs6jS5gv1jHHKBYzoicVLu9veAiyyaWL30/5GbFxYPBd/ArhB3Bww8o2kvXrm+zDbmXYJl7iFvgOd6w14Tu1IzUqO+ld2XhVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=H5m4vQCZ; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	s=arc-20240116; t=1777069466; c=relaxed/simple;
+	bh=WzcPEgt2z4P410FoDjWUqv6zuEY6eLGFJwPIVF7EA6U=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=f7P+wj8F33SLiMhay2g6evi5nPdzFy+D2ED/iMsdP0o6CPzwBwagv73YforZI0iuqJQp4lJMk3aZK//qYGGZXvpRe6I8cvD48mJyCosGfskCmp+9WlXPvHqOeEgpaXVjUeA8AC2YMNJub5whI38XxzfD0se89JtT+n0fknIWO1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GXcXemRf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="H5m4vQCZ"
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-506251815a3so70789031cf.0
-        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 15:13:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1777068792; x=1777673592; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=p1Bt8LRPmWuCECk46OUK1KhCrmrzQEbzIWvPlDI3cp4=;
-        b=H5m4vQCZE27E+gDtn8BVCf5jLiPS6GNSYRuHd7oK/ryAnR76eU7gh4QWRI3SAXCvku
-         xwbAjZ3hIBI5GEUgbOSGuhXCViPpczYPF9VhNc2dh89l7qQROTD8YZ3pfblRmIXAApD+
-         LLNyElsdRzbz0O8P7asNE1yJaILYoWrFSeatd7+ExO8xnYjLQgg2muQOyOklYWskuFkU
-         cwfy9M7PKhf/GFqDNR2idR9iNUU//TC3BIEIHtpqSrhi/HtxH3xMTkMDNiCC7PJfnIaI
-         RfTF+U+c9gQck78mXjxg5cQFxiXkgiK0mPHrBDKGiKFmfg+/2VAfJKkgnb8JLTc01FjS
-         F9Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777068792; x=1777673592;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p1Bt8LRPmWuCECk46OUK1KhCrmrzQEbzIWvPlDI3cp4=;
-        b=XCBVKwpZe42IX3a+f2nW6/paVO/56SAPrlW7EPeyS+6ZiO/9odTd3E+dvaUPYaE7im
-         UYdIEuwLaZUBvmBZClJyj8kzUY/IzN+gX0TR9nQRA4Tq9xt6xOkFQ4FLxhkPyGFNNI9d
-         36bo6XYn+9od4y1OHpAwM6ciA/WDBF1B8mhUNrfZuFXgITCIVXn2q+jtVcJn+THjYcNw
-         M9ItjqLf+pAWy1FFeuSily241HTOXOkDB90WRUpdoF5Ouxyh1wtAaZq6U2vxKoK0EAUr
-         5fLLalv38iUkfulplo6WUFHAAFPd/GjijWq4rvMDoHlrV+o18vePFM7lmy89gkvqICef
-         YpkQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/HaPc2XR9kwVE9kECvEfiHTVcu8NLmhwgf8udGTflahlzZw1Z7ZQE7snr49REs0l9mv/E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGbcHjN8eL+joHGjDWNoNnD6663Vup7QnjGujyUzsk34ZLq67B
-	HxDfuN/FQ3lnxcWDfkkB2bjhGf8IAMOvBQpxDHuHuO1MxfGq3TgnSUCCVit3KW+yQ9Y=
-X-Gm-Gg: AeBDiesOoBzGSpms8r/JIcADyfODp5YMcGA2DB/k+s1Ma10ENQOXwqW3qxdZIJsvDzu
-	JxVh3iCPm8ccK1/wMkZ+ttuHA0aL1+OM1Q6GpKl/xk3Uk9abLxI8hABNL1o/HQ6FkDrSCvssX71
-	9hJHUEZiTTao80rTm/WkjjJpcZXmfLsuY3swcXY5OUbfeqM9QDdGFZUi3gyNFFqfvAIant9//SL
-	RcXiz2D7IdZb3YupiBN2P5ouIW46BUIQXXcXp6/6xQWCO0PhouY/gFffm2urOgEP7tAO9YsyQkT
-	h8CuZQxZ0P7AUdLjldbje0OSTER83CtOM1WJf1WuavWuD8dhNS6kjkKZJxo4Gcwz0o2npYKZfAa
-	1ZMULsbE700UKzMXaSDIIbj7w8g7qbGryIjE1R19IsMqqflA3Yd+hqK6cUnlMXa2QutwE5YopqT
-	RcFjGm7tAS0njcZzIF+5zlZI3Gq+bPIdc8EyQJP9B+QrWNfYvUxBIZQWjY2sexFLRW4x5RgONaz
-	7yoADxicfI0M+Kf
-X-Received: by 2002:ac8:7d15:0:b0:50f:b13e:b740 with SMTP id d75a77b69052e-50fb13eb934mr273244551cf.9.1777068792308;
-        Fri, 24 Apr 2026 15:13:12 -0700 (PDT)
-Received: from ziepe.ca (crbknf0213w-47-54-130-67.pppoe-dynamic.high-speed.nl.bellaliant.net. [47.54.130.67])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50fc42c7fabsm78174021cf.9.2026.04.24.15.13.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Apr 2026 15:13:11 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1wGOlq-00000004lHz-0nuV;
-	Fri, 24 Apr 2026 19:13:10 -0300
-Date: Fri, 24 Apr 2026 19:13:10 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Leon Romanovsky <leon@kernel.org>,
-	Roberto Sassu <roberto.sassu@huaweicloud.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Itay Avraham <itayavr@nvidia.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
-	Maher Sanalla <msanalla@nvidia.com>,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-Message-ID: <20260424221310.GA804026@ziepe.ca>
-References: <20260413164220.GP3694781@ziepe.ca>
- <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
- <20260413231920.GS3694781@ziepe.ca>
- <CAHC9VhTLamfe4C81ZNRVT=H32x+KLxSqH3o0eBfrHsWAgAqxCA@mail.gmail.com>
- <20260415134705.GG2577880@ziepe.ca>
- <CAHC9VhSECYihup=tURo_Qk__xUdYYPkHgnz5CWA0BrRAkvwbog@mail.gmail.com>
- <20260417191749.GK2577880@ziepe.ca>
- <CAHC9VhQbpS9XpO6dWu7gOiX=ppjtAxnNBOFe6s5wjEZNpMRjgw@mail.gmail.com>
- <20260424143603.GB3611611@ziepe.ca>
- <CAHC9VhR++21SD+v4Bb16SQmYHgJYZ0ytQ+BecGPNK+fEOe4G7g@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GXcXemRf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 710D2C19425;
+	Fri, 24 Apr 2026 22:24:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777069466;
+	bh=WzcPEgt2z4P410FoDjWUqv6zuEY6eLGFJwPIVF7EA6U=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=GXcXemRfQGhCL3V8mHmjDPQNfnYHHaXMuXoWyTxpXF5xEUi7IQHWI8tNHSsJ03hXX
+	 lr81HUyxkI98aHzvjzbMMflXjhwGj4TbE0pLQUjQd/qoThT9wwcnWuDlGS1dt6VU+s
+	 /EVhB6TqWoIfG35EUQvmcjxpzn0cC95CIdnqNd7T/Azx7rheTbdBdWby0MFDLuLcnc
+	 elXu+w3aKwePLGYFDuq76GiOFj2i7pTn0APLie49/pSZnYUDUWLVeMCxAfnp37CqXj
+	 fdDzIJAOfgbyeGPxGikPorThfa6d9LphnSL1gBgmiJC9B19Q5szXBkjv4cj8+BRLWl
+	 cO3ck49scppVg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v1 1/1] bpf: Fix sk_local_storage diag dumping
+ uninitialized special fields
+Reply-To: sashiko@lists.linux.dev
+To: "Amery Hung" <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260423222356.155387-1-ameryhung@gmail.com>
+References: <20260423222356.155387-1-ameryhung@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 24 Apr 2026 22:24:25 +0000
+Message-Id: <20260424222426.710D2C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhR++21SD+v4Bb16SQmYHgJYZ0ytQ+BecGPNK+fEOe4G7g@mail.gmail.com>
 
-On Fri, Apr 24, 2026 at 04:59:30PM -0400, Paul Moore wrote:
-> >
-> > > Most LSMs will want to know who is initiating the firmware request
-> > > (the subject), the requested operation/opcode (the action/verb), and
-> > > the target of the request (the object, which in this case is likely
-> > > the kernel or the device).
-> >
-> > How is
-> >   system_u:object_r:httpd_packet_t:s0
-> >
-> > A kernel or device?
-> 
-> It's not.  It's one of two labels on a packet.  I've cautioned you
-> about leaning too heavily on the secmark comparison as it falls apart
-> in a number of places, this is one of those places.
+Sashiko AI review found 1 potential issue(s):
+- [Critical] Calling `check_and_init_map_value()` on a netlink payload buff=
+er writes kernel pointers into the message, causing a KASLR bypass.
+--
 
-But I want to label a packet too, you keep going back to it not being
-the same thing and I keep repeating that all I want to do is put
-labels on FWCTL packets :(
+commit 3db95684928f56c741f1722b8018d7049c261634
+Author: Amery Hung <ameryhung@gmail.com>
 
-> > It is a label for packet contents. I also want a label for packet contents.
-> 
-> According to your explanations, my understanding is that you want a
-> fwctl RPC operation.  That is not the same as the secmark label
-> assigned by an iptables/nftables rule.
+bpf: Fix sk_local_storage diag dumping uninitialized special fields
 
-I view fwctl as an opaque packet based messaging subsystem. It
-communicates a packet to a remote CPU and returns a response packet
-back to the userspace.
+This commit attempts to prevent uninitialized memory from being leaked to
+userspace during socket diag dumps. It calls check_and_init_map_value() on
+the netlink payload buffer to initialize special map fields that are skipped
+by copy_map_value().
 
-Trying to have the kernel assign fixed meaning to the content of the
-packets inside the kernel is contrary to the entire design of fwctl.
+> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+> --- a/net/core/bpf_sk_storage.c
+> +++ b/net/core/bpf_sk_storage.c
+> @@ -558,6 +558,7 @@ static int diag_get(struct bpf_local_storage_data *sd=
+ata, struct sk_buff *skb)
+>  				      sdata->data, true);
+>  	else
+>  		copy_map_value(&smap->map, nla_data(nla_value), sdata->data);
+> +	check_and_init_map_value(&smap->map, nla_data(nla_value));
 
-It is like demanding the netstack parse HTTP packets as a precondition
-to using LSM. It makes no sense.
+Does calling check_and_init_map_value() directly on the netlink payload leak
+kernel pointers to userspace?
 
-Any LSM integration requires a labeling system that is not hard wired
-into the built kernel. I don't much care what it is, so long as the
-classification and label space are defined by userspace.
+The function check_and_init_map_value() calls bpf_obj_init() to initialize
+the special fields in the map value.
 
-You say it is not like secmark, fine, but I see a perfect mirror in
-secmark...
+For fields like BPF_LIST_HEAD and BPF_RB_NODE, bpf_obj_init() invokes
+initialization macros like INIT_LIST_HEAD() and RB_CLEAR_NODE().
 
-> > You can take that view, it is certainly one valid way to look at it.
-> >
-> > But it is completely impractical.
-> 
-> Elaborate on that, because from what I can tell that is the valid way
-> to look at it from a subject/verb/object perspective.
+INIT_LIST_HEAD() assigns self-referential pointers to the list structure:
 
-We cannot have the kernel predefine verb labels.
+static inline void INIT_LIST_HEAD(struct list_head *list)
+{
+        WRITE_ONCE(list->next, list);
+        WRITE_ONCE(list->prev, list);
+}
 
-I'm completely fine with using verb if it can be dynamic and userspace
-can tell the kernel what the verbs labels are.
+Because this initialization is performed directly on the allocated netlink
+payload inside the socket buffer, valid kernel heap addresses are written
+into the message instead of zeros. When this message is sent to userspace,
+it leaks the kernel addresses.
 
-This is the only reason I pointed at secmark, it shows a system that
-has both a user controller classifier and dynamic labels that are not
-fixed into the built kernel. ie it is flexible.
+> =20
+>  	nla_nest_end(skb, nla_stg);
+>  	return 0;
 
-> > > > The same way secmark cannot pre-identify all the XXX_packet_t's.
-> > >
-> > > Once again, I think there is a disconnect or misunderstanding, on a
-> > > SELinux system using secmark all of the packet types, e.g.
-> > > "XXX_packet_t's", *are* pre-defined in the SELinux policy.
-> >
-> > "Pre-defined" in a text files in user space controlled by the admin.
->
-> That's not correct.  It's kinda like saying the NIC driver sources are
-> simply "text files in user space controlled by the admin".  
-
-That's very pedantic. I mean to the point I wonder if we are even
-speaking the same language.
-
-I said the labels are defined by userspace, you said no, and then
-explained that they are defined by userspace going through a bunch of
-steps:
-
-> The SELinux secmark labels are defined in the SELinux policy sources
-> which must be compiled and loaded into the kernel before they are
-> valid on a running system. Policy must be written not only to define
-> the secmark labels, but also to define the access control rules
-> which govern how those packets are handled by the system.  The
-> iptables/nftables command lines simply assign a secmark label to a
-> packet; that's important, but only a small part of the total
-> equation.
-
-I understand all of this, I am totally fine with it. A package will
-install, a distribution will provide, or admin will write these
-things, and do all the steps to load them into the kernel. I don't see
-any issue with that.
-
-Hardwiring things into the built kernel is a problem that must be
-avoided because end users only run the kernel provided by the
-distribution. "recompiling the driver" is not an option that is
-available.
-
-Jason
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260423222356.1553=
+87-1-ameryhung@gmail.com?part=3D1
