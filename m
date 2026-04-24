@@ -1,63 +1,63 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3975E2DB7BA
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 05:38:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3112DB7BA
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 05:38:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777009117; cv=none; b=IyD4X+qUpQQWF2eROmHPRvgz3YaI0nmdET9agXpceC52yIzq8y6mpQnz74p3x0NarDsIYTTsr4TNGNSwfYrTWuIZTgBCrB9AX+EMvDduouu9VKJlm4JSeqXMCkdhy8PE6JTwkbqhdqeej1XIxEAbklj7GOZ698kKAxu9NIEWyhw=
+	t=1777009123; cv=none; b=Q47/oB6ricI2Sjctc4OAb2xBJucLL/IBKoSZUwpnpm2IMFwyAmKw25Oq1+ll8u5Y9pNJkKmjDo6JcqpGIn/hrKJWHDKvH3PPRhTVQlG2s81QOC+jHyJ30ARHtqbsNk3Vl2jM3hq2qa9J9SV3BiOqUrfScO9Fe32gnKwjKdqayXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777009117; c=relaxed/simple;
-	bh=TlmfMj0oSjpUNpbiocpFSZqid0mqlfXPvbNwh7NE30k=;
+	s=arc-20240116; t=1777009123; c=relaxed/simple;
+	bh=ZHcJ9yN10UQ1ZYtTyKaJpPQw8yGQuS+4FX46G62En70=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MXnVB2J9AQ9aW5NjQV+3UCrq24xsPLckYXLKflmXpbRZnra/dYtJrAyDGImPGFzD6uXMdAKNQ23TYf/EUDTNFzSoVqOPc8hazjTyd2wopgIpBpWRko7fBOVDbyXxdutu5ZcGot3nv61vHfPF+HQoI+np4qGrp9xuYRIiUKTg5vI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fJIHtcw3; arc=none smtp.client-ip=209.85.216.52
+	 MIME-Version; b=L5AQ6td0qCWuajWWpdUdnD9bIlN+rVOopKg4r3XMlv8mfZH0h1lcx7uV8ui7U7Aa3FnmauCeosWgmf4A5zW7ltDlhjytiZMt8Kw4hi+gtZoKHFMfc+CIgj0WF+pYnD608Frt9jUdrwV33Zu3MXp70sbk3oVCjAUj4PtClylegfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T76OSyCT; arc=none smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fJIHtcw3"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-35fc2b18363so8428800a91.0
-        for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 22:38:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T76OSyCT"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c7963df6f17so4969569a12.0
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 22:38:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777009115; x=1777613915; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777009120; x=1777613920; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WUXScEQ9v1TBc9CvHH+nPgE6m6kMqTjtcGXW0lXDNGM=;
-        b=fJIHtcw37zv9dIHr0VcJ44WP/PkSykznNZ93V7Z1bZgz9ueSzNW5BrbyDbOMt4bIwx
-         qLGA4Aa47sNgWjIISe0euyXExFu9v+JD5qs9wQ6erpycNvPzUmCXjRwPeD2FITQHDptO
-         FR+mmuXCakiH+4ZtGHIqFmNsIaei+Qn3oSlqXO3pYhD9kzPtNT/Ov9CAtyrlZCjr7YRH
-         jaQnydqBwTfcPQs3t8C124x7XHUC3owEkRKVqJabLvAwFZCb031Qq6is9XmSBtRC9mrG
-         5GpcMAzl6Ipx1uIZbMGHfGuKHWi6cgF/9+ywN0NQBwnxQp5qBNPFbUFqjx0yPv0i2MCX
-         dQgA==
+        bh=Oqds8RoH/84yfTSokzcPq2kMkpQyMQYgcBM/zS1eRPE=;
+        b=T76OSyCT/NaFFkl1n1qZ4KAOTWQkoyVsWQ6b3vbSaKz45AIGuNyRem+ssC0UE/vi+p
+         fjJW4vQ58vVkE9wiRMyAcQw/MMkg03cS4VvE74FTn1qvO65xAjEId2EvJm3aEjkH+2h5
+         V2lrqZ8NoxMIAH07lCiGotvQ8lEZXVOJ6cfAQUy8QpWKuCrRac836a67gxQPAD8pBhpZ
+         yRQtADUYFNQsT8WbOrdnReUp1E71vnQ2DqxYAdmLLkc7r2MC2Wfn3Sr/jckb0ihwP1bS
+         nJsM1kwFK1f0PrAUuGzQV77sWox5oP3MyjF7nSIhtesgg1Nhb/EVAxIrBWdr0rVJ/S/D
+         JXLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777009115; x=1777613915;
+        d=1e100.net; s=20251104; t=1777009120; x=1777613920;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=WUXScEQ9v1TBc9CvHH+nPgE6m6kMqTjtcGXW0lXDNGM=;
-        b=IWXdDKsfR07/T5vO5imIH0aqtxM/xiOh3b/FH1DkjsXyYe8v3fBjoSGAwJx5VEOZs/
-         NOFMgJv/8IZ6QD+7YeHjwQwEncq5SXG/BRlm2UkQcuuhaMQhohPy1qFngfFa+qfIzkAk
-         BvPMAummyooaaymHZQAP/ynGYb03gxTQJm/5pL3WST65LaDIaqJ8lHg1x+TB9wPhVswt
-         WR5CL/OJu3Y8x+bVDVla4eRQTbRzItGVtRdX2I/2AY+RvPGpQBkKHBQrHmoOzKzqfjDy
-         7HMEEAvgBGbkUqrv4Y8Q58OHdLHzteYxGDeChe4xfuPBj05fhR9bfnh3Rkh6McfEPZrp
-         VCdw==
-X-Gm-Message-State: AOJu0YwjXWMfjbB9JVo9hmHoUIesSs7UAK2iKRKmK0ieK2xl6ISDhE2J
-	+RFVx0/RKi9YlpBsfBOwDcyztjBhsm7iCaH1kikEOLPfmRbCXTeU9Vrc
-X-Gm-Gg: AeBDiev3Cr18zEmq5Fv1ZhSKfxsxvp4zwTTeoovuLcNp84p5MtMa+Qxfv5piNAwznY2
-	Tc+xO1LNa0V3992xFDqSDYguo9FeSjN/em9eefGFTW3zruZg6R/DJT8TVqIb/4t0BGDSkqioOAI
-	5lQgT/SLL5KAL9NVC1C6NG7RoEgDhB3uCsW5aHH4cKPVl1G+WS1svQRZuNQn66Insw7NSc7DACs
-	rRc9NghWHf6CbAcqgbx5dboIDY6syz60v01cUtsCmniEzWIBbLGIiCCxqLbNFUuwlYcwKQ5Sx8k
-	vhmddycdvTEzunlZZ95OVjAEOKNEhpPZF4F3gsxPyQ8ddMeHI/TswGpSWudFG2S77063rHR/XLe
-	XWeYJxVzLPgfbajJA1cgeO7bH8ge08XrZvpP9uG3Ga+aYLc4tjEGvwqCX2ylKvd15C+qzrlo/qT
-	cYWkLB2hwnSnvnJ9ShJoRmJEqdXeGr+9SGfvhNv4cf2v5dvsI9u00BrfC/eE53/cBfkvjt72sOy
-	OcVBqv6M5WOhOcU9TLbILMtkdWXFTzL0KPAA9YkEoUQQ0Gz8x4=
-X-Received: by 2002:a17:903:28cb:b0:2b4:59d4:9a with SMTP id d9443c01a7336-2b5f9e77d80mr229281675ad.2.1777009115600;
-        Thu, 23 Apr 2026 22:38:35 -0700 (PDT)
+        bh=Oqds8RoH/84yfTSokzcPq2kMkpQyMQYgcBM/zS1eRPE=;
+        b=mz4KnCczrRwdwZkIz7SufN5wa6oH+B+K2ivWZXPdZiZ4uWDSzwgFkshTZHMpK3KRbc
+         qjuUIdOqHjvDvwMDV/2h41GQ49vk64XQDCweKEdHLckkMKLr4ZzVsAaXJJKI27U0+/ZQ
+         3c8K88F3YIBVeuMGZZJEYc5x1V4xtf+pYTDxUzwMuMtqVvmJTGNbXChJUW7jFSGhwSFT
+         jPfS5rQXtNylvog474c2zypwp6DEtReqBaBRyLNkHQrFSbJEJQfvKryUg2T8vF0iSg2L
+         1yUv+wePg8hnB6I5LEKNogSVSAhseTJt/5nvJf1YuDinZYU9nPba3H2Sr17a/Fg8cVpJ
+         kqWw==
+X-Gm-Message-State: AOJu0YwWqtdLaxPNxNFlNb+FX0CtMMXD+NZhuvCuDi6thvg6lQCpHypD
+	NYJv5dCLYIO7A2dD7JJ0vG/O3THJMnvReNhVD1i0Sb0FJUcun49Sd/nS
+X-Gm-Gg: AeBDietrCxoQe/Dw8HslubPRAt0pi0RfqU3DFXmgNq2e08LHSPv3PLkKolpvY7/pHA/
+	9MixKzF2B0YQcs4ck9jdVLSR2nz/b1/s7zgoG/ggW7ZR7GQIrVkXhnUfwTaIv3WZt+1g23v964u
+	Vr4mP07ZeJ4C+23diWMuwR6i25K1QLibBjIYpbtKtNDVyVCipRYZLEDMKafp05Ad5UwWxij6WL1
+	rxvmxvcUyalDSZDhpDgLsY2IJ8ykhA45l1iBrwGtN5j9hCgx/CC4bkuBmC33hGyh1Oy54S6G231
+	wuP+w8X312rQEEUjrSBZxdDHHL20j1INO3IRg/2tJa3wtQqJ03licKjvICgbTq6euFhzmnnm1KX
+	kHVmxS52A9yukpEb148QQiS3ZMlZPdW51uYVMvMcgbMQaTP/XF9ET6DaXufbKGaKbRy0njJPmfM
+	rxzFfY+e6VOlFZUAcjyqZ6vRlG0Rv9bc4+IXXiOUsGlFf8yBQ/ZP0kH/mQr3vBDaXIKpStj78y6
+	SuUwnlAAHeoIa3S7UIhzHNTmGFz9ONekHQTAKAU
+X-Received: by 2002:a17:903:17cf:b0:2b0:52b7:e82 with SMTP id d9443c01a7336-2b5f9ed031amr305417545ad.16.1777009120528;
+        Thu, 23 Apr 2026 22:38:40 -0700 (PDT)
 Received: from KERNELXING-MB0.tencent.com ([43.132.141.25])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5fab405f3sm209444725ad.78.2026.04.23.22.38.30
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5fab405f3sm209444725ad.78.2026.04.23.22.38.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Apr 2026 22:38:34 -0700 (PDT)
+        Thu, 23 Apr 2026 22:38:39 -0700 (PDT)
 From: Jason Xing <kerneljasonxing@gmail.com>
 To: davem@davemloft.net,
 	edumazet@google.com,
@@ -76,9 +76,9 @@ To: davem@davemloft.net,
 Cc: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Jason Xing <kernelxing@tencent.com>
-Subject: [PATCH net v4 2/8] xsk: handle NULL dereference of the skb without frags issue
-Date: Fri, 24 Apr 2026 13:38:10 +0800
-Message-Id: <20260424053816.27965-3-kerneljasonxing@gmail.com>
+Subject: [PATCH net v4 3/8] xsk: fix use-after-free of xs->skb in xsk_build_skb() free_err path
+Date: Fri, 24 Apr 2026 13:38:11 +0800
+Message-Id: <20260424053816.27965-4-kerneljasonxing@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20260424053816.27965-1-kerneljasonxing@gmail.com>
 References: <20260424053816.27965-1-kerneljasonxing@gmail.com>
@@ -92,51 +92,49 @@ Content-Transfer-Encoding: 8bit
 
 From: Jason Xing <kernelxing@tencent.com>
 
-When a first descriptor (xs->skb == NULL) triggers -EOVERFLOW in
-xsk_build_skb_zerocopy (e.g., MAX_SKB_FRAGS exceeded), the free_err
-EOVERFLOW handler unconditionally dereferences xs->skb via
-xsk_inc_num_desc(xs->skb) and xsk_drop_skb(xs->skb), causing a NULL
-pointer dereference.
+When xsk_build_skb() processes multi-buffer packets in copy mode, the
+first descriptor stores data into the skb linear area without adding
+any frags, so nr_frags stays at 0. The caller then sets xs->skb = skb
+to accumulate subsequent descriptors.
 
-In this series, the skb is already freed by kfree_skb() inside
-xsk_build_skb_zerocopy for the first-descriptor case, so we only need
-to do the bookkeeping: cancel the one reserved CQ slot and account for
-the single invalid descriptor.
+If a continuation descriptor fails (e.g. alloc_page returns NULL with
+-EAGAIN), we jump to free_err where the condition:
 
-Guard the existing xsk_inc_num_desc/xsk_drop_skb calls with an
-xs->skb check (for the continuation case), and add an else branch
-for the first-descriptor case that manually cancels the CQ slot and
-increments invalid_descs by one.
+  if (skb && !skb_shinfo(skb)->nr_frags)
+      kfree_skb(skb);
 
-Fixes: cf24f5a5feea ("xsk: add support for AF_XDP multi-buffer on Tx path")
+evaluates to true because nr_frags is still 0 (the first descriptor
+used the linear area, not frags). This frees the skb while xs->skb
+still points to it, creating a dangling pointer. On the next transmit
+attempt or socket close, xs->skb is dereferenced, causing a
+use-after-free or double-free.
+
+Fix by using a !xs->skb check to handle first frag situation, ensuring
+we only free skbs that were freshly allocated in this call
+(xs->skb is NULL) and never free an in-progress multi-buffer skb that
+the caller still references.
+
+Closes: https://lore.kernel.org/all/20260415082654.21026-4-kerneljasonxing@gmail.com/
+Fixes: 6b9c129c2f93 ("xsk: remove @first_frag from xsk_build_skb()")
 Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 Signed-off-by: Jason Xing <kernelxing@tencent.com>
 ---
- net/xdp/xsk.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ net/xdp/xsk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 6149f6a79897..6521604f8d42 100644
+index 6521604f8d42..d23d1b14b8b4 100644
 --- a/net/xdp/xsk.c
 +++ b/net/xdp/xsk.c
-@@ -893,9 +893,14 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
+@@ -889,7 +889,7 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
+ 	return skb;
+ 
+ free_err:
+-	if (skb && !skb_shinfo(skb)->nr_frags)
++	if (skb && !xs->skb)
  		kfree_skb(skb);
  
  	if (err == -EOVERFLOW) {
--		/* Drop the packet */
--		xsk_inc_num_desc(xs->skb);
--		xsk_drop_skb(xs->skb);
-+		if (xs->skb) {
-+			/* Drop the packet */
-+			xsk_inc_num_desc(xs->skb);
-+			xsk_drop_skb(xs->skb);
-+		} else {
-+			xsk_cq_cancel_locked(xs->pool, 1);
-+			xs->tx->invalid_descs++;
-+		}
- 		xskq_cons_release(xs->tx);
- 	} else {
- 		/* Let application retry */
 -- 
 2.41.3
 
