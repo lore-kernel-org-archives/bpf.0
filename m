@@ -1,138 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7EF434404E
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 21:05:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777064737; cv=none; b=aJoq63QB3bRpqD/gPxuEC+s9/8g2GcfCOHC5DMmR38QMZzfysGXKk7gINXZtXEzlcrWNL0K2NjMxydD5/y552aIhmt3Off+RFN7lIbHKg63hhGqwzXmmMXgRpsb/QVDWJ+gC+PH2g1ljoXFV6zU5b0OS/KamS63XSPkBzmoTd7Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777064737; c=relaxed/simple;
-	bh=IkyzoOEdYPRGJEytdqcIvZFAjbCjtueEVnRmMOsPTM0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=QXcZhtK7Jnt0mm1t0C87ca46dawFkpZPSTAgeLdD+iFAlzTyRGrHUv533PBJxcXf9H8o0GMz1YKpcUQ3vyuAux/MhZVsQFlDdG5Nl9SfuuXlkgov0GJD9X4MANqgqgvNQxbd9CPQBHlLRfb5nWvmtkrgdU3Sxojf5f6B8owTUqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U7DjG3FK; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A8E37D13C
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 22:06:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777068362; cv=pass; b=AbeALb2cpF5G79BQdysD7rg6q/OUDZmR1yWS+UxJgoQ3OUP4JcKLbWzIlQEr6zu+EevP2k+NxJFh2Dc6B+Gc5dWaU+Dc+Z5aACxoCJEJK/ctuat/a4xEYH0BPmjJHPbQsjPAnY5vFFB/kVS0gC1b/eegRgEDm/DLEpCPPfSif28=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777068362; c=relaxed/simple;
+	bh=7gQQ0WbS6BfDp0nY6MJb9pQfWgZ9lXQf8swLrQ9a/AM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UK0pSyNegqYGJguZXW2QQh3+FLi0YN54nX6NaLvOFoducLh0PS/bm6lK/Dl8pW+gxwDCt3T/2UjEHQDsZGXdMWvhyP7lOnARfw623+rgATWNhqxQzpGFC/9d6LXHLBvGhNU8B/sbRi2+vroZkftP9EHgEkyKNhMeL9ZEx6L6ncA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SGsTNVz0; arc=pass smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U7DjG3FK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57D82C19425;
-	Fri, 24 Apr 2026 21:05:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777064737;
-	bh=IkyzoOEdYPRGJEytdqcIvZFAjbCjtueEVnRmMOsPTM0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=U7DjG3FKehP00e4k5pVg68HqLNhuxr6zOId55w0r89dbvzYCz0e3Mw2kt+fE4pE89
-	 Qk76vk3wZIRSAnnsxvwLphPwal814rKzB6s3CJ17BjljDcC55IWBRWDJj3HV+CbjSz
-	 PxoZEmH1K1/LMB6jNv+KSHSuRDUwZFOE3hjzNKe2nwNufG0h73qD+gG7COcqNkG6ru
-	 4Izqh69/Xv73NZVv9VsA3c/FYAaQbAMyFL6Ab9WnKWKJr7uY3xG2y+26NqA3cW0lsw
-	 E2y5M3j/9DLCq9WgbXOrESFApwVXoU31vBi442JULqZo7RzaKKvLL9ZkuENqv+8Etb
-	 plE9fcTtnASKg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 05/10] bpf: Allow timers, workqueues and
- task_work in resizable hashtab
-Reply-To: sashiko@lists.linux.dev
-To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260424-rhash-v3-5-d0fa0ce4379b@meta.com>
-References: <20260424-rhash-v3-5-d0fa0ce4379b@meta.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 24 Apr 2026 21:05:36 +0000
-Message-Id: <20260424210537.57D82C19425@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SGsTNVz0"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43eb05b1875so4878756f8f.3
+        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 15:06:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777068359; cv=none;
+        d=google.com; s=arc-20240605;
+        b=EesG1gE2JKNOIWe4FwEL4EMHbhWITzWyEUkiUNLzlzCJvKPCi0w3Y1A19ACZQ5vy7z
+         sxR3I89k9uGNDODOJ4GW9CzqD15cyxkrmiW0zjY8uNVD3ZBVcjfC+qbU/QihsJ6c7MMk
+         JJFS9R8vmxjOhatIaCjgclge8EPuYusmsZ/z3zG17oYtK1gOLJ4jBMzrv8tk8mnCZHNH
+         d0mMI9wNTIa6sy1WbMkAi4gg5gBDyjDob6EhDqf0uRwKzaJQpjxI+tXuawpsCybJVsst
+         sHDDX++LrpXGOE+qVCkSq9uBZLSiewPK3Ef2ervHgvMzIEO5Sc6fqJU4ty9iOEAlJkAS
+         B2ZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=r5RElcU3sJmtTmGQf615qTgHo6/2ahPDly8jUC64Wxs=;
+        fh=Sdrs/urj7R8ylXUh9Is2BRte1gjRuva1QRLqOZrr2Dc=;
+        b=Eld13iu7zX6OGtnJHpM6KQA/IXLmCwG3DMZvl7PD3Dk+Xs1G0RskrMlck+RVHnjQ6m
+         j+i+cP7vYndtrXnN9C9iztDdTymtEtfug0kYk6vTkvjx++TzsTENXg/aDsr7/cT6nkwl
+         RZJXaHAfG49cc9BXLWUXWlMnOkSOAS39TUocOfTVHm1qgQOi0EAygVItpjAtR/+gaI4h
+         wFlltZivatEzAS1S8cxzDu3zoVz9gAr63Rq/4vKkNZwm45a4LH4hAi5v89RimWkOtfER
+         R3gr22hWZVbCTQRLaZa1XjKSk88DLGq3wIK03cH1Qc7fCmslEjLk1BIilg2Qm+usYJBZ
+         Vgrw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777068359; x=1777673159; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r5RElcU3sJmtTmGQf615qTgHo6/2ahPDly8jUC64Wxs=;
+        b=SGsTNVz0qbZXS+w0kyfxbxWZO4OmqQef1sOk+ssMviR0ZjzioAcGTRBvwxbWYDBE92
+         sMmSaxZzerfv5kkiDj68HBPLR2M/cMBjUt1IB6N7PAHKN8VpVwnckoHFt1bpWeZM7qJz
+         vOhFJmiUKHA6atz9jFeOAsgFpmQ7wqD17xvhMig4koAKdFvDiy6IVabITWkebv9hJgW/
+         3vVCVJkoSNpIpBKr5MfOvXYJBLsD0OP3WqX5oZvpnNoei19Lz86tjhc2duSSzRFyy+9B
+         RPwi0cMH98dCZB8l5tTNaaj2Nq1y1wYrwIAW2ubWzytHR5I3b+5QWb2HonMrOE1bp28f
+         pXEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777068359; x=1777673159;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=r5RElcU3sJmtTmGQf615qTgHo6/2ahPDly8jUC64Wxs=;
+        b=MaccpdyXsnIC2nFVW0EqurwbOz3URoncqtpjrexFQKuDP+yh5G55bU3iq6NWazYrMg
+         QbIId+4RnlCR9ZyDNQfTxx662s22yI0wVDU+59lHmTNXJ7wWdteZnm8uyTU7wKCT6JVw
+         9FSbzVefmrZaTeH3XcGBeUYYNxG/uqz8MCmi2Su3toosIv8DY2EmPAb1ZtdfzXG8hV2A
+         +64s07UTt2CWZqRnjO+mtD++UjMh1ipKmFaGlsYj5/B+MB4dATbnU+M7ojTzQ5hfhUGS
+         N+vIB2Z4w7DbQidJEa+hUxVmqzLnrR/e/7c3xo3MqxIrCYfJYtfAQ+zQiaQTgG/d2Eln
+         9akg==
+X-Forwarded-Encrypted: i=1; AFNElJ+8xtqn9lRnnIO2QCLiTAGeiwa1/0PVxmc3RGVoZv9BNYCQFi1ZaccTscwA/3gbrkEI9Ls=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHiJHRokVMH5oy1RO5j7H5WaRiXjuufLtYQN+yEDbL3RwLhhhc
+	qp3MBEV0ZxU/XQrMVMBJKkdzWl6asviUS1xyWPgj9IDgCNcK7yMWhqbdG51CiB67F2B9FOeWoAy
+	0mFylYv6syVBjDcd3xgRX5Nn8hRRavEXErVC4
+X-Gm-Gg: AeBDiesOFK4aV2CtaTx4X8VQankJVj0kLWaGKS1ZyNzeCLaDPXcViyX37iTyP+CSQ4r
+	3y6aW96a23H/gsQa8PISTcCjmwoMhVAzo5e+lKxqyhCigZ3ZIF1ttqGKuKyGMHZIF2cx+k8bQR+
+	Sajt83zVe1gP7q7beMzJytRMmFyuxXn1ynUFsrio86hdJSZsRqpC0oj+6D/k2TySHRPcGZSpNsu
+	ejbNY3ckNP6Ub9H3zZTDVvxoUg5CFdTcdPC4zA3S7JLv+2ceN+GQX6uTdVH67F5K/KlUzBa+Pbi
+	PxfkkDSXV2eV6zM+nTyRDPtEPd0k03usCIYYJ0f4Caw32wAgc259N2YKGXh9I2x8gq1QKl/Ex0M
+	CiK/t2PrYGgZ9TETUsMT2NBE6C7STNezHOBhA
+X-Received: by 2002:a5d:64e3:0:b0:43e:aa88:f1a1 with SMTP id
+ ffacd0b85a97d-43fe3dfd649mr52383468f8f.30.1777068359361; Fri, 24 Apr 2026
+ 15:05:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260424192252.695240-2-utilityemal77@gmail.com>
+ <20260424195958.AED4EC19425@smtp.kernel.org> <aevOssMWH_Vm9CPG@zenbox>
+In-Reply-To: <aevOssMWH_Vm9CPG@zenbox>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 24 Apr 2026 15:05:47 -0700
+X-Gm-Features: AQROBzArnv5I2cQAO8z3xS8tXYahE2_qJWz1N6nhxxHXWgkmwfxIdd0w8y8BVa8
+Message-ID: <CAADnVQKFtuX48V9Yy88GHGVbQyY30M3b3YBvZ2PmYt_-jbohpQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Implement dtor for struct file BTF ID
+To: Justin Suess <utilityemal77@gmail.com>
+Cc: sashiko@lists.linux.dev, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Sashiko AI review found 2 potential issue(s):
-- [High] Unbounded iteration over the entire hash table inside a single RCU=
- read-side critical section in `rhtab_map_free_internal_structs`.
-- [High] Race condition in `rhtab_map_update_existing` allows concurrently =
-initialized special fields (timers, kptrs) to survive map updates.
---
+On Fri, Apr 24, 2026 at 1:12=E2=80=AFPM Justin Suess <utilityemal77@gmail.c=
+om> wrote:
+>
+> On Fri, Apr 24, 2026 at 07:59:57PM +0000, sashiko-bot@kernel.org wrote:
+> > Sashiko AI review found 1 potential issue(s):
+> > - [High] Calling `fput()` directly from `bpf_file_release_dtor` can lea=
+d to a hard deadlock when invoked from NMI context.
+> > --
+> >
+> > commit 6368f91be1fd91bc9cb38d3498f35d279bad04c9
+> > Author: Justin Suess <utilityemal77@gmail.com>
+> >
+> > bpf: Implement dtor for struct file BTF ID
+> >
+> > This commit implements a destructor for struct file, allowing it to be
+> > stored in a map as a referenced kptr. The destructor calls fput to
+> > release the reference.
+> >
+> > > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> > > index 2bb60200c2665e..ee5ceb82e4f812 100644
+> > > --- a/kernel/bpf/helpers.c
+> > > +++ b/kernel/bpf/helpers.c
+> > [ ... ]
+> > > @@ -2752,6 +2753,13 @@ __bpf_kfunc void bpf_task_release_dtor(void *p=
+)
+> > >  }
+> > >  CFI_NOSEAL(bpf_task_release_dtor);
+> > >
+> > > +__bpf_kfunc void bpf_file_release_dtor(void *file)
+> > > +{
+> > > +   fput((struct file *)file);
+> > > +}
+> >
+> > Can this cause a deadlock if the destructor is invoked from NMI context=
+?
+> >
+> > If an NMI-context BPF program (such as a perf event tracing program)
+> > updates or deletes a map element containing a struct file kptr, the BPF
+> > framework will synchronously invoke this destructor to clean up the old
+> > kptr.
+> >
+> > When fput() drops the reference count to zero, it calls
+> > __fput_deferred(). Since in_interrupt() evaluates to true in NMI
+> > context, __fput_deferred() bypasses task_work_add() and instead calls
+> > schedule_delayed_work().
+> >
+> > This leads to the following call chain:
+> >
+> > bpf_file_release_dtor()
+> >    fput()
+> >       __fput_deferred()
+> >          schedule_delayed_work()
+> >             add_timer()
+> >
+> > The add_timer() function attempts to acquire the timer_base->lock raw
+> > spinlock. If the NMI interrupted a thread that was already holding this
+> > lock, the NMI handler will spin indefinitely waiting for it, resulting
+> > in a hard deadlock.
+> >
+> > Would it be safer to defer the fput() operation using an explicitly
+> > NMI-safe mechanism like irq_work_queue() to handle arbitrary BPF
+> > contexts?
+> >
+> For (human) reviewer context: The NMI stuff needs to be addressed separat=
+ely. [1]
+>
+> I guess the AI isn't gonna understand but just doing irq_work wouldn't
+> be right either as it would break operation ordering for maps and
+> fixing it here wouldn't fix the other dtors broken in NMI.
+> (cgroup/task_struct)
 
-commit 1516bbfa3123276ce6abdd224ad40eb2ca633302
-Author: Mykyta Yatsenko <yatsenko@meta.com>
+Will break operation ordering?
+What do you mean?
 
-bpf: Allow timers, workqueues and task_work in resizable hashtab
-
-This commit allows resizable hashtab maps to support deferred callbacks by
-enabling timers, workqueues, and task_work field types. It also wires up
-bpf_obj_free_fields during element deletion and map teardown to properly
-clean up BTF record fields.
-
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index 000caa2c7f4cd9..ba03797b896020 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-[ ... ]
-> @@ -2945,11 +2944,15 @@ static int rhtab_map_lookup_and_delete_elem(struc=
-t bpf_map *map, void *key, void
->  static long rhtab_map_update_existing(struct bpf_map *map, struct rhtab_=
-elem *elem, void *value,
->  				      u64 map_flags)
->  {
-[ ... ]
-> +	/* Free special fields, and reuse memory similar to arraymap */
-> +	rhtab_check_and_free_fields(rhtab, elem);
-> +
->  	if (map_flags & BPF_F_LOCK)
->  		copy_map_value_locked(map, old_val, value, false);
->  	else
->  		copy_map_value(map, old_val, value);
-
-Does calling rhtab_check_and_free_fields() before copy_map_value()
-create a race condition with concurrent BPF programs?
-
-If a concurrent program acquires the spinlock and initializes a new
-timer or kptr right after rhtab_check_and_free_fields() finishes,
-would those newly initialized special fields survive the update?
-The subsequent copy_map_value() call intentionally skips special fields.
-
-Should rhtab_check_and_free_fields() be called after the copy completes
-to ensure no concurrent modifications survive the element update?
-
-[ ... ]
-> @@ -3033,6 +3037,25 @@ static struct rhtab_elem *rhtab_iter_next(struct r=
-hashtable_iter *iter)
-> =20
->  static void rhtab_map_free_internal_structs(struct bpf_map *map)
->  {
-> +	struct bpf_rhtab *rhtab =3D container_of(map, struct bpf_rhtab, map);
-> +	struct rhashtable_iter iter;
-> +	struct rhtab_elem *elem;
-> +
-> +	if (!bpf_map_has_internal_structs(map))
-> +		return;
-> +
-> +	/*
-> +	 * An element can be processed twice if rhashtable resized concurrently.
-> +	 * Special structs freeing handles duplicate cancel_and_free.
-> +	 */
-> +	rhashtable_walk_enter(&rhtab->ht, &iter);
-> +	rhashtable_walk_start(&iter);
-> +
-> +	for (elem =3D rhtab_iter_next(&iter); elem; elem =3D rhtab_iter_next(&i=
-ter))
-> +		bpf_map_free_internal_structs(map, rhtab_elem_value(elem, map->key_siz=
-e));
-> +
-> +	rhashtable_walk_stop(&iter);
-> +	rhashtable_walk_exit(&iter);
->  }
-
-Can this loop trigger RCU CPU stall warnings for large hash maps?
-
-The function rhashtable_walk_start() explicitly acquires the RCU read lock,
-meaning this entire iteration over potentially millions of elements occurs
-inside a single RCU read-side critical section.
-
-If the map contains many elements, looping without yielding could block
-RCU grace periods for an extended time.
-
-Would it be better to periodically drop the lock and yield, similar to
-how other map structures handle large iterations?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260424-rhash-v3-0=
--d0fa0ce4379b@meta.com?part=3D5
+I feel we should fix things first before being subject
+to more of these bugs.
+Why cannot we defer to irq_work the whole map element if in_nmi
+and call all dtors there?
+should be a simple fix.
