@@ -1,102 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 084732D3EF2
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 23:15:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3684835A938
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 23:19:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777072535; cv=none; b=GsOs+JMIb6X4OLCcRw+trcR41Op5vzJGoHblpOBxOnAFW90rGM9xOe7p5t9BNm0AwSOooP1lyg0K6U5lO8PKlwA32Q4CCL6cunizK65XfLpNJ2o7PoaO4w6EvAsC81epCOM6DZviscKFPlwW5RxfXfbmYOD8ZmFwOWneihXO00M=
+	t=1777072743; cv=none; b=LkoMGx8Puk1XnOMbmmptNt285k37PmDACoGB7tI4Ssd38+SCeNXBgBs/GWiz7BUh4attTgpyEnF34H9r7qIbBZHhGAtcdXf/k4kSaN7eGWoSk3rQ1zGPduBsdpkTjn9ZyrPT94kiaJZJsHJD4UeDzXSCNQKSyuYhT+4PJlozz2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777072535; c=relaxed/simple;
-	bh=yce3UbCJ7MPLxQ0yqhK4GCkeV7nHiQqh/m0w93e3+RU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=eoDd6PuQGUKrW4SxQxIVBfjfA4dmmnRhe657jtQKZrOebmNC8dZ5j/bug9FE2Y6ilMgNSKyrB9kJx4NsF+Ra4or5pf7l6j9sTJSD6jQD6d5k4rWdpvq8F0sxerQn8tU2Qzv/5E0cKZfae2oHztLCJJBIEerNaVklLM2c1Yw7tgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cEGSltvY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777072743; c=relaxed/simple;
+	bh=ZdbPOHovsxwmyuM1J5PjCAiEqYjwYOZZUtcY/EJqJr8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TxlQGruKZKVd+oNtrhVW+5oJI+7+TL3Kv4/0mw9IQvLibPlHA0wYT6qyN7BcOxk4f8icySTVTR8rfxYJoxA7daZn/MdLCPtvTK+UHRZ90aCFqAqmSgXfUgViYz299eknaGrd5Pm5L6N/GeSdPWqrbXDVuqy9WrTDkMeg3FsgVFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lAdngFjW; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cEGSltvY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84394C19425;
-	Fri, 24 Apr 2026 23:15:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777072534;
-	bh=yce3UbCJ7MPLxQ0yqhK4GCkeV7nHiQqh/m0w93e3+RU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=cEGSltvYsbKjFmSQ5d0Xpo0DXTP/M0pXHqBBH7ORpcqMoF3FWh2gHXjK5xM6maygf
-	 880KQ+e6bwUdSpTFg7/rG6e27KZbh85OESqOKN+4sMg3E4oVqVPvSPTn3F38Gg2PHl
-	 r+y41SEosAAGp4aBZ6B6tt/cgrSBI2c7MxnL8092k72hC4N7tsqx2NxuiT2KbdvZ5u
-	 1cT98qh0Uyrf6M3oboDXTu5ewds16NEEgebSXL3Ft5UeFFHr0YCUUURlk0Ij2Bl06W
-	 6km9o0nHXuIwqRerL5XonXQoSCV3Su3sCqDMCkakJPIiBnMi4MBSj3tCHKdP/4e6mV
-	 e/h0yLJKF/KGg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 1/4] bpf: representation and basic
- operations on circular numbers
-Reply-To: sashiko@lists.linux.dev
-To: "Eduard Zingerman" <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260424-cnums-everywhere-rfc-v1-v3-1-ca434b39a486@gmail.com>
-References: <20260424-cnums-everywhere-rfc-v1-v3-1-ca434b39a486@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 24 Apr 2026 23:15:33 +0000
-Message-Id: <20260424231534.84394C19425@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lAdngFjW"
+Message-ID: <7dd64547-25a4-46de-a896-98fcec04468e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1777072738;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=P3XVMe3dGeABivLaYIdooN1MvQa1CctnziG70XU09po=;
+	b=lAdngFjWpn+SFIEIgyjCn6oyJ7s6mP8JViggHzKVI1eQOG8r8fZE96FmVDJRHvA5PSglKz
+	UM1P3b5Y3bU4XRPVejznw6aBsaRiopshcyt4CJCQ3+MTz1tCmr61vtPiwmaHEKEmgNqEbm
+	tyMnnBKBDxXtgqkPNrAauQU71Wd0y8w=
+Date: Fri, 24 Apr 2026 16:18:29 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH RFC bpf-next 2/8] bpf: mark instructions accessing program
+ stack
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
+ <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Shuah Khan <shuah@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+ Alexander Potapenko <glider@google.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: ebpf@linuxfoundation.org,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Xu Kuohai <xukuohai@huawei.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, kasan-dev@googlegroups.com,
+ linux-mm@kvack.org
+References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
+ <20260413-kasan-v1-2-1a5831230821@bootlin.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260413-kasan-v1-2-1a5831230821@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Sashiko AI review found 1 potential issue(s):
-- [Low] The `FN(normalize)` function incorrectly skips normalizing full cir=
-cular ranges if their base evaluates to `ST_MAX`.
---
-
-commit addd9a35120cb1e8b327011ef0f97fa736918a87
-Author: Eduard Zingerman <eddyz87@gmail.com>
-
-bpf: representation and basic operations on circular numbers
-
-This commit adds basic definitions for cnum32/cnum64, providing a unified
-numeric range representation for signed and unsigned domains. The operations
-correctness is verified using a cbmc model checker.
-
-Link: https://lore.kernel.org/all/ZTZxoDJJbX9mrQ9w@u94a/
-Link: https://jorgenavas.github.io/papers/ACM-TOPLAS-wrapped.pdf
-Link: https://github.com/eddyz87/cnum-verif/tree/master
-
-> diff --git a/kernel/bpf/cnum_defs.h b/kernel/bpf/cnum_defs.h
-> new file mode 100644
-> index 00000000000000..3ebd8f723dbb53
-> --- /dev/null
-> +++ b/kernel/bpf/cnum_defs.h
-
-[ ... ]
-
-> +static inline struct cnum_t FN(normalize)(struct cnum_t cnum)
+On 4/13/26 11:28 AM, Alexis LothorÃ© (eBPF Foundation) wrote:
+> In order to prepare to emit KASAN checks in JITed programs, JIT
+> compilers need to be aware about whether some load/store instructions
+> are targeting the bpf program stack, as those should not be monitored
+> (we already have guard pages for that, and it is difficult anyway to
+> correctly monitor any kind of data passed on stack).
+> 
+> To support this need, make the BPF verifier mark the instructions that
+> access program stack:
+> - add a setter that allows the verifier to mark instructions accessing
+>   the program stack
+> - add a getter that allows JIT compilers to check whether instructions
+>   being JITed are accessing the stack
+> 
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+> ---
+>  include/linux/bpf.h          |  2 ++
+>  include/linux/bpf_verifier.h |  2 ++
+>  kernel/bpf/core.c            | 10 ++++++++++
+>  kernel/bpf/verifier.c        |  7 +++++++
+>  4 files changed, 21 insertions(+)
+> 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index b4b703c90ca9..774a0395c498 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1543,6 +1543,8 @@ void bpf_jit_uncharge_modmem(u32 size);
+>  bool bpf_prog_has_trampoline(const struct bpf_prog *prog);
+>  bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, const struct bpf_prog *prog,
+>  				 int insn_idx);
+> +bool bpf_insn_accesses_stack(const struct bpf_verifier_env *env,
+> +			     const struct bpf_prog *prog, int insn_idx);
+>  #else
+>  static inline int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
+>  					   struct bpf_trampoline *tr,
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index b148f816f25b..ab99ed4c4227 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -660,6 +660,8 @@ struct bpf_insn_aux_data {
+>  	u16 const_reg_map_mask;
+>  	u16 const_reg_subprog_mask;
+>  	u32 const_reg_vals[10];
+> +	/* instruction accesses stack */
+> +	bool accesses_stack;
+>  };
+>  
+>  #define MAX_USED_MAPS 64 /* max number of maps accessed by one eBPF program */
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 8b018ff48875..340abfdadbed 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -1582,6 +1582,16 @@ bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, const struc
+>  	insn_idx += prog->aux->subprog_start;
+>  	return env->insn_aux_data[insn_idx].indirect_target;
+>  }
+> +
+> +bool bpf_insn_accesses_stack(const struct bpf_verifier_env *env,
+> +			     const struct bpf_prog *prog, int insn_idx)
 > +{
-> +	if (cnum.size =3D=3D UT_MAX && cnum.base !=3D 0 && cnum.base !=3D (ut)S=
-T_MAX)
-
-Should this condition be checking ST_MAX? It appears that this skips
-normalizing full circular ranges if their base evaluates to ST_MAX. This
-can leave the range denormalized as { ST_MAX, UT_MAX } instead of
-canonicalizing it to { 0, UT_MAX } (for example, when adding a constant
-ST_MAX to an UNBOUNDED range).
-
-Leaving the range denormalized breaks canonical representation guarantees
-and causes fast-path equality checks to fail, leading to unnecessary
-fallbacks to slower subset checks.
-
-If the intent was to check UT_MAX to protect the EMPTY representation
-({ UT_MAX, UT_MAX }), operations like add(UNBOUNDED, -1) legitimately
-produce { UT_MAX, UT_MAX } representing a full circle, which must be
-normalized to UNBOUNDED.
-
-Would it make sense to remove the exception entirely so that all full
-ranges are normalized safely?
-
-> +		cnum.base =3D 0;
-> +	return cnum;
+> +	if (!env)
+> +		return false;
+> +	insn_idx += prog->aux->subprog_start;
+> +	return env->insn_aux_data[insn_idx].accesses_stack;
 > +}
+> +
+>  #endif /* CONFIG_BPF_JIT */
+>  
+>  /* Base function for offset calculation. Needs to go into .text section,
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 1e36b9e91277..7bce4fb4e540 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -3502,6 +3502,11 @@ static void mark_indirect_target(struct bpf_verifier_env *env, int idx)
+>  	env->insn_aux_data[idx].indirect_target = true;
+>  }
+>  
+> +static void mark_insn_accesses_stack(struct bpf_verifier_env *env, int idx)
+> +{
+> +	env->insn_aux_data[idx].accesses_stack = true;
+> +}
+> +
+>  #define LR_FRAMENO_BITS	3
+>  #define LR_SPI_BITS	6
+>  #define LR_ENTRY_BITS	(LR_SPI_BITS + LR_FRAMENO_BITS + 1)
+> @@ -6490,6 +6495,8 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
+>  		else
+>  			err = check_stack_write(env, regno, off, size,
+>  						value_regno, insn_idx);
+> +
+> +		mark_insn_accesses_stack(env, insn_idx);
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260424-cnums-ever=
-ywhere-rfc-v1-v3-0-ca434b39a486@gmail.com?part=3D1
+I am not sure this can be done unconditionally here.
+
+It may be possible in different states to have different pointer
+types for the affected reg (PTR_TO_STACK in one execution path and say
+PTR_TO_MAP_VALUE in another). And if set uncoditionally,
+instrumentation may be skipped for legitimate targets.
+
+Maybe reset by default in check_mem_access()?
+
+>  	} else if (reg_is_pkt_pointer(reg)) {
+>  		if (t == BPF_WRITE && !may_access_direct_pkt_data(env, NULL, t)) {
+>  			verbose(env, "cannot write into packet\n");
+> 
+
