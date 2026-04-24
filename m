@@ -1,223 +1,136 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B90236C0CB
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 20:28:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A08E284881
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 20:32:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777062539; cv=none; b=pYUcsubmRvfKZzMvJNh1EWelSVR2oTsrwhULmvtHz9f1u93agQwRMv3jtK3n1G2ZaUXbHDc/49eYyY0oN/BeELNM++3z0aJwFBcoquqZAjwtdiy5zldNz27JagB0GBkmNWRS/qUMCbj9qIRpxZcQ1X9NqgPM9hL3DJb78rbb11s=
+	t=1777062766; cv=none; b=cT2Q5zBE6ERQWIPsnz6+4Y5TUbWw4ObH7SURmvDDKvsAklqP9RzJw0ze+1hBwUZVu0z7sqLyc+U+lopYQ8SvA+nY5koJxKzvK8pgHEj17mOiXfbcY493BGoaqXVH6dz9DkasJh7yQZwwNbrW8sYYlBjtXsoKKBtR6Z25vAitQrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777062539; c=relaxed/simple;
-	bh=LeWtMza1NEtx8PNhrC2KM83q4wHE+oPHMMdyQ4+WNM4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=HUw/sIzdpwoCejk+1ClIamMgsyBXLhIXIVFI/1x/QS0y7GJOiyB8bGey0UR7NBnQBm91uts26vhuc7g+ehJikTUDvDIKsAZoqTtLOhXRv8ubCxc1xaCMoxm9oPD4Nyg2mtRVtSLLzqw6+UmDzM2Xu1AMJxFoo8x/AbHngmgQ70g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t+gDFNW8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777062766; c=relaxed/simple;
+	bh=p4AF3toD/3hAP2/DIcEurXPuR3putX++oIPOXAKDWiY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Z+qtIPrMIfclBgZCOPvU7yJu8SGwCC5FlNs0jUJifKmvXXhUMGhvL6/LD0g2yBYemoVAa9gV0hi3wGQCNwIPGSfgA426x9bzMw4gimpt0l6iTuvqRFCNqc1ZYgri5REJ5PBwNxlwSw4677rngVf0vk624/k9mj4PsTlbW/XimJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IqKgeyQE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t+gDFNW8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DD0FC19425;
-	Fri, 24 Apr 2026 20:28:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IqKgeyQE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABFE1C19425;
+	Fri, 24 Apr 2026 20:32:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777062538;
-	bh=LeWtMza1NEtx8PNhrC2KM83q4wHE+oPHMMdyQ4+WNM4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=t+gDFNW8ZSI8nGRS13rC5NC+AJsFv/yptJYiYxTIbDlMv+H4zPFPV5nOizxEcm8BT
-	 SG/sD2GLMhUdWtg+sNrCVEGrCF4UFdRwjPe/vmhuwAxF6Y/f3enrHxbYOJS6gmJNWx
-	 OIx7Q8Xnieu9yqVok5Pn/BbV/jojAQaR66Ze7GDvWOvNUEl93VzRqsWzjp2fnwacN5
-	 cH9LMdsYG2RSzs2cgBHC2t5guP8TrqBlBOITY6VQbTEfwofLX7h9UIa/XVJNZgZqo8
-	 W1y2tlcsD19QztPOOclfCR7GMnppr5bvcuAtmIBiSlANBIdwYafFhcOT1rlzDF8xSY
-	 WqD7UbDQojpyQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 04/10] bpf: Implement batch ops and
- iterators for resizable hashtab
-Reply-To: sashiko@lists.linux.dev
-To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260424-rhash-v3-4-d0fa0ce4379b@meta.com>
-References: <20260424-rhash-v3-4-d0fa0ce4379b@meta.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 24 Apr 2026 20:28:57 +0000
-Message-Id: <20260424202858.7DD0FC19425@smtp.kernel.org>
+	s=k20201202; t=1777062765;
+	bh=p4AF3toD/3hAP2/DIcEurXPuR3putX++oIPOXAKDWiY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=IqKgeyQEl/ITM9x1bn95xej+y91HxNwqygfH1WTucfFJ38j4MLQQme0d5M7k21Ohf
+	 jQtvX8xB/H2EZHFEj3QO8G1KAnUfekmOxae4o1BSm7B4/uE3o4Lun2kmDh0Cwm7PjN
+	 ObOqEZw8+WZXKgsZvrzF3kGPsd9Jp/ROrJ7AVVLm7mEKYXCv0/EiexpMew24O58WR3
+	 AH73jjN2+2JLPWYI1RBKVnFF3aBicrSnxkRLzJrAUhpxFP3jIAVwD8PkZ1ck4ikdFu
+	 E14deD/9/p/dJclE9DeEF1+16GXi6n5Y+BJo3fOgZPUq5obBif8PCqUEF6imnfCl8X
+	 kVebHNTkdYCgA==
+Content-Type: multipart/mixed; boundary="===============5593332662778327395=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <8102f81ce7492f7c827b2dfdfce0434e291b581a4e3df6fa765bb4f34795264a@mail.kernel.org>
+In-Reply-To: <20260424-rhash-v3-7-d0fa0ce4379b@meta.com>
+References: <20260424-rhash-v3-7-d0fa0ce4379b@meta.com>
+Subject: Re: [PATCH bpf-next v3 07/10] selftests/bpf: Add basic tests for resizable hash map
+From: bot+bpf-ci@kernel.org
+To: mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,kafai@meta.com,kernel-team@meta.com,eddyz87@gmail.com,memxor@gmail.com,herbert@gondor.apana.org.au
+Cc: yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 24 Apr 2026 20:32:45 +0000 (UTC)
 
-Sashiko AI review found 4 potential issue(s):
-- [High] Cursor invalidation in batch and seq_file iterators causes O(N^2) =
-complexity and infinite loops.
-- [High] Unbounded RCU read lock duration in batch operations allows user-t=
-riggered RCU stalls.
-- [High] Map iterators and seq_file dumps spuriously abort during normal ba=
-ckground resizes.
-- [High] Deadlock risk in `bpf_each_rhash_elem` due to acquiring `spin_lock=
-` from atomic contexts.
---
+--===============5593332662778327395==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 9f7ce51619eb27e8a4a65df12f862e12e34bc285
-Author: Mykyta Yatsenko <yatsenko@meta.com>
-
-bpf: Implement batch ops and iterators for resizable hashtab
-
-This commit adds batch operations for resizable hashtab maps, using
-rhashtable_walk_enter_from() to resume iteration. It also wires up
-seq_file BPF iterators and implements rhtab_map_mem_usage().
-
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index d37f3d548d3658..000caa2c7f4cd9 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-
-[ ... ]
-
-> @@ -3066,64 +3066,330 @@ static int rhtab_map_get_next_key(struct bpf_map=
- *map, void *key, void *next_key
-> +static long bpf_each_rhash_elem(struct bpf_map *map, bpf_callback_t call=
-back_fn,
-> +				void *callback_ctx, u64 flags)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/rhash.c b/tools/testing/selftests/bpf/prog_tests/rhash.c
+> new file mode 100644
+> index 000000000000..0f6eec4fe1fe
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/rhash.c
+> @@ -0,0 +1,64 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+> +#include <test_progs.h>
+> +#include <string.h>
+> +#include <stdio.h>
+> +#include "rhash.skel.h"
+> +#include <linux/bpf.h>
+> +#include <linux/perf_event.h>
+> +#include <sys/syscall.h>
+> +
+> +static void rhash_run(const char *prog_name)
 > +{
-
-[ ... ]
-
-> +	/*
-> +	 * The rhashtable walk API uses spin_lock in rhashtable_walk_start/stop,
-> +	 * which is not safe in NMI or soft/hard IRQ context.
-> +	 */
-> +	if (in_nmi() || in_hardirq() || in_softirq())
-> +		return -EOPNOTSUPP;
+> +	struct rhash *skel;
+> +	struct bpf_program *prog;
+> +	LIBBPF_OPTS(bpf_test_run_opts, opts);
+> +	int err;
 > +
-> +	rhashtable_walk_enter(&rhtab->ht, &iter);
-
-Does this adequately protect against deadlocks when called from kprobes or
-tracepoints in process context with preemption disabled?
-
-If a thread currently holding ht->lock (e.g., during map insertion) is
-interrupted by a kprobe that runs this BPF program, attempting to acquire
-the same spin_lock inside rhashtable_walk_enter() might cause a deadlock.
-
-> +	rhashtable_walk_start(&iter);
+> +	skel = rhash__open();
+> +	if (!ASSERT_OK_PTR(skel, "rhash__open"))
+> +		return;
 > +
-> +	while ((elem =3D rhashtable_walk_next(&iter))) {
-> +		/* rhashtable_walk_next returns -EAGAIN on resize, abort */
-> +		if (IS_ERR(elem)) {
-> +			num_elems =3D -EBUSY;
-> +			break;
-> +		}
-
-Is it expected to abort the entire iteration if a background map resize
-occurs?=20
-
-rhashtable_walk_next() returns -EAGAIN to indicate the table was resized and
-the iterator was rewound. Since resizable hashtabs automatically resize
-during normal workloads, returning -EBUSY here could cause
-bpf_for_each_map_elem() and bpftool map dumps to randomly fail.
-
-Should this handle -EAGAIN by retrying or continuing the walk instead?
-
-[ ... ]
-
-> +static int __rhtab_map_lookup_and_delete_batch(struct bpf_map *map,
-> +					       const union bpf_attr *attr,
-> +					       union bpf_attr __user *uattr,
-> +					       bool do_delete)
-> +{
-
-[ ... ]
-
-> +	/*
-> +	 * Use the last key from the previous batch as cursor.
-> +	 * enter_from positions at that key's bucket, walk_next
-> +	 * returns the successor in O(1).
-> +	 * First call (ubatch =3D=3D NULL): starts from bucket 0.
-> +	 */
-> +	if (ubatch) {
-> +		buf =3D kmalloc(key_size, GFP_USER | __GFP_NOWARN);
-> +		if (!buf) {
-> +			ret =3D -ENOMEM;
-> +			goto free;
-> +		}
-> +		if (copy_from_user(buf, ubatch, key_size)) {
-> +			ret =3D -EFAULT;
-> +			goto free;
-> +		}
-> +	}
+> +	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
+> +	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
+> +		goto cleanup;
+> +	bpf_program__set_autoload(prog, true);
 > +
-> +	scoped_guard(rcu) {
-> +		rhashtable_walk_enter_from(&rhtab->ht, &iter, buf, rhtab->params);
-> +		rhashtable_walk_start(&iter);
-> +	}
+> +	err = rhash__load(skel);
+> +	if (!ASSERT_OK(err, "skel_load"))
+> +		goto cleanup;
+> +
+> +	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
+> +	if (!ASSERT_OK(err, "prog run"))
+> +		goto cleanup;
+> +
+> +	if (!ASSERT_OK(skel->bss->err, "bss->err"))
+> +		goto cleanup;
 
-If the key stored in buf was already deleted, will this iteration restart
-from the beginning of the map?
+sashiko-bot@kernel.org raised a concern about the test framework potentially
+missing BPF program failures. Can the test pass incorrectly if a BPF program
+returns non-zero while skel->bss->err is zero?
 
-Looking at rhashtable_walk_enter_from(), if it fails to find the key, it
-leaves iter->slot at 0. Then rhashtable_walk_start() and walk_next() will
-start from bucket 0 instead of where the previous batch left off.
+Looking at test_rhash_update_delete() in progs/rhash.c:
 
-Since lookup_and_delete_batch deletes the elements returned in the previous
-batch, the cursor key will always be deleted. Could this cause the iterator
-to repeatedly scan over all emptied buckets, resulting in an expensive
-traversal?
+    err = bpf_map_delete_elem(&rhmap, &key);
+    if (err)
+        return 3;
 
-Similarly, for lookup_batch and seq_file dumps, if the cursor is
-concurrently deleted, could this trap userspace in an infinite loop of
-duplicate elements?
+    e = bpf_map_lookup_elem(&rhmap, &key);
+    if (e)
+        return 4;
+
+    err = 0;
+    return 0;
+
+If the final lookup finds an element when it shouldn't (e is not NULL), the
+BPF program exits early with return 4. However, the global err variable was
+just set to 0 by the successful bpf_map_delete_elem() call.
+
+Since rhash_run() only checks ASSERT_OK(skel->bss->err) and doesn't check
+opts.retval from bpf_prog_test_run_opts(), won't this allow the test to pass
+when it should fail?
+
+This issue appears in other subtests as well, where early return values like
+1, 2, 3, 4, and 5 can be returned while err remains 0.
+
+Reference: https://lore.kernel.org/bpf/20260424200255.D5C89C19425@smtp.kernel.org/
 
 > +
-> +	dst_key =3D keys;
-> +	dst_val =3D values;
-> +	total =3D 0;
-> +
-> +	while (total < max_count) {
-> +		elem =3D rhtab_iter_next(&iter);
-> +		if (!elem)
-> +			break;
-
-Can this loop cause RCU stalls or soft lockups if max_count is very large?=
-=20
-
-The max_count parameter is controlled by userspace. Since
-rhashtable_walk_start() acquires the RCU read-side critical section, this
-loop might iterate, copy memory, and process millions of elements without
-ever dropping the RCU lock or calling cond_resched().
-
-[ ... ]
-
-> +static void *bpf_rhash_map_seq_start(struct seq_file *seq, loff_t *pos)
-> +	__acquires(RCU)
-> +{
-
-[ ... ]
-
-> +	elem =3D rhashtable_walk_next(&info->iter);
-> +	/* rhashtable_walk_next returns -EAGAIN on resize, abort */
-> +	if (IS_ERR(elem))
-> +		return ERR_PTR(-EBUSY);
-
-Similar to bpf_each_rhash_elem, will returning -EBUSY here on normal hash
-table resizes cause userspace map dumps to fail spuriously?
-
-[ ... ]
-
-> +static void *bpf_rhash_map_seq_next(struct seq_file *seq, void *v, loff_=
-t *pos)
-> +{
-
-[ ... ]
-
-> +	elem =3D rhashtable_walk_next(&info->iter);
-> +	/* rhashtable_walk_next returns -EAGAIN on resize, abort */
-> +	if (IS_ERR(elem))
-> +		return ERR_PTR(-EBUSY);
-> +
-> +	return elem;
+> +cleanup:
+> +	rhash__destroy(skel);
 > +}
 
-Again, aborting on -EAGAIN here might interrupt the map dump when a resize
-happens in the background. Is there a way to handle -EAGAIN without failing
-the entire sequence?
+[ ... ]
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260424-rhash-v3-0=
--d0fa0ce4379b@meta.com?part=3D4
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24909591959
+--===============5593332662778327395==--
