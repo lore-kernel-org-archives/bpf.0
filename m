@@ -1,117 +1,144 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09773E717C
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 18:00:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9CD13358CA
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 18:00:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777053640; cv=none; b=fR5HEd8cvsioGUpzRn3j6cz6FTirY9k8U97Omu30EJrB6eoEFsk+dy5byST+TZZAvmgVgaVHc//HU3y4viXGApuuw8MXP6W9auBXzjIalL7anX+R/b4BwJEyz1ojHFN1VX7nRVyRG0EIks11K4QhQU5QD1qj5Fi8RsAX03x73CQ=
+	t=1777053642; cv=none; b=ooaK/2dYamlnRil0KScsZMFou1+NFtnxEAUCbNYRsb1xoLFqfhYp+H2HTV+fxtcZ6AGNSr9QWbg9ze/Mr9iPMc1xCqERx+TNpC7+IlAZGD2R09QvIjy9ARVvx/aQ1HubDqdjZJfhj/IQxX6CS0kXxisHvvpQYtfLr0OoWpkEbsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777053640; c=relaxed/simple;
-	bh=OiIMs6ikhWyoKP/sPVc7vWgwpMJlPsRVX+3Y9FIDuRQ=;
+	s=arc-20240116; t=1777053642; c=relaxed/simple;
+	bh=N5CdDVfuM45HjSLsE+Ombu6odieAez0sxQynWJNbaKY=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ZA7DzZChnbDp8j2d2eGLRiZfZA315tyxtiG1RCr+zDD8/1M3aakaki3DbZqSjTXGUSP+NvCnooJz12lA1anU4w7szjNoFo69hUEVgV0PQ5qoSMNu3uJQLwSeY1S8yJ2RxATbz2SH8n+eh9zIX/gsbaiLKP2ovo++Rvc0PrbUZeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A59khWSg; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=dKb5Rez2D1qqbFJRBkmXLQ5ZuDEVnOCzq+AyMTVi4/oceaVKZJMgVcS63vVdLcp7WnbBfhnfIcOee7MHEIHiNjVr/INlmzk6mU8SjcelQVV1fK7AOnhgmNlLh2o8vAsQy/OdrfHzEQ/Kn/Bfd8jrL/FNYh5nZV7p824/oISYXvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pgtot0Cf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A59khWSg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AB5DC19425;
-	Fri, 24 Apr 2026 18:00:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pgtot0Cf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3167DC19425;
+	Fri, 24 Apr 2026 18:00:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777053640;
-	bh=OiIMs6ikhWyoKP/sPVc7vWgwpMJlPsRVX+3Y9FIDuRQ=;
+	s=k20201202; t=1777053642;
+	bh=N5CdDVfuM45HjSLsE+Ombu6odieAez0sxQynWJNbaKY=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=A59khWSgk1Tg/eB6az1hUapb18oC0vaVRMwucISJ9gh4up5xekcbidOJEHL6cBBcE
-	 WaAxL688jlrMGr98YCnGYIzw+QaKtBIoMJKTJwydncgFJ00+l4eFbMQwK49FlQq679
-	 ZK/wjME6b5VMvJsPpKP8IREpNP++IgjuhGchxgDMUJc+yfo4uSAI62ZC9oC6V/aLAd
-	 8VihgVA2c0cOfvXIbNTRi87FW8BWkSiSUbNUgVMVtwSGlYh0OnRXiM56FbN9OngnhP
-	 GaT9F3edzO6iMs0XL73bJU2HkLWQn3RwMlBygG98yrCgMcxCOkHVAhH92gwAZGqqKg
-	 F0yyVaVp2R/Hg==
-Content-Type: multipart/mixed; boundary="===============8334193108733703911=="
+	b=pgtot0CfQhpoNCOHCzcBf9XaRbY5CxLHdicCfDXeogvgZipAa5UYPQmL6Ntu0OfiG
+	 Y8h6Kd3UVUHh626JYjbhk0st16B01YizsBi6CyVJNWBiYIAlrSfhXQWxSW6UFGbJEU
+	 +fCIFZADPmpL4t9puof21aQHjq3d70cM6V2/ZY0PrQ2kzQ5pDNNAwfPz5chH40weTy
+	 yHkILwEle+cViJ900ODDhEhvB+pTDoxTNcF91/dUjcBO7lPW+yjstT/wOavuGe8Ui6
+	 l8FRhNKkikcFc5uJsjNojy741xPM+cazozP+qkoNV0NveKEAZNVyVVM1dQB3lJQOdb
+	 yVxmQN0OzwjeA==
+Content-Type: multipart/mixed; boundary="===============1558836097723664395=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <623062b9f2f97ecc1146e935d3522ed7c42d32a5251111fae771ea8ad796ab98@mail.kernel.org>
-In-Reply-To: <20260424171514.2041929-1-yonghong.song@linux.dev>
-References: <20260424171514.2041929-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next 08/18] bpf: Support stack arguments for kfunc calls
+Message-Id: <e1b7281b2a52b18ae2a9f7d41091994eec0bba81e96e64adbe4c072d915acfc2@mail.kernel.org>
+In-Reply-To: <20260424171648.2043493-1-yonghong.song@linux.dev>
+References: <20260424171648.2043493-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next 10/18] bpf,x86: Implement JIT support for stack arguments
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,jose.marchesi@oracle.com,kernel-team@fb.com,martin.lau@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 24 Apr 2026 18:00:40 +0000 (UTC)
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,jose.marchesi@oracle.com,kernel-team@fb.com,martin.lau@kernel.org,puranjay@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 24 Apr 2026 18:00:42 +0000 (UTC)
 
---===============8334193108733703911==
+--===============1558836097723664395==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 6994536b4e04..43aeb04f488a 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index ea9e707e8abf..06f33fef1e8e 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
 
 [ ... ]
 
-> @@ -12304,7 +12314,10 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  					reg_arg_name(env, argno));
->  				return -EINVAL;
->  			}
-> -			ret = mark_chain_precision(env, regno);
-> +			if (regno >= 0)
-> +				ret = mark_chain_precision(env, regno);
-> +			else
-> +				ret = mark_stack_arg_precision(env, i);
->  			if (ret < 0)
->  				return ret;
->  			meta->arg_constant.found = true;
-
-[ ... ]
-
-> @@ -12329,7 +12342,10 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  			}
+> @@ -1664,16 +1692,45 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>  	int i, excnt = 0;
+>  	int ilen, proglen = 0;
+>  	u8 *ip, *prog = temp;
+> +	u16 stack_arg_depth, incoming_stack_arg_depth, outgoing_stack_arg_depth;
+> +	u16 outgoing_rsp;
+>  	u32 stack_depth;
+> +	int callee_saved_size;
+> +	s32 outgoing_arg_base;
+>  	int err;
 >
->  			meta->r0_size = reg->var_off.value;
-> -			ret = mark_chain_precision(env, regno);
-> +			if (regno >= 0)
-> +				ret = mark_chain_precision(env, regno);
-> +			else
-> +				ret = mark_stack_arg_precision(env, i);
->  			if (ret)
->  				return ret;
->  		}
+>  	stack_depth = bpf_prog->aux->stack_depth;
+> +	stack_arg_depth = bpf_prog->aux->stack_arg_depth;
+> +	incoming_stack_arg_depth = bpf_prog->aux->incoming_stack_arg_depth;
+> +	outgoing_stack_arg_depth = stack_arg_depth - incoming_stack_arg_depth;
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In the v6 review, Sashiko AI pointed out that setting reg->precise = true
-without calling mark_chain_precision() breaks data-flow backtracking. The
-concern was that if only the current state's flag is set, parent states and
-source registers that populated the stack argument won't be marked precise,
-potentially allowing incorrect state pruning when execution paths merge before
-the stack store.
+Can this underflow? All three variables are u16, so the subtraction
+wraps around modulo 65536.
 
-The author acknowledged this issue in the v6 discussion with "You are right.
-Let me think how to resolve this." However, the current v7 code still calls
-mark_stack_arg_precision() for stack arguments in check_kfunc_args().
+Looking at btf_prepare_func_args() in kernel/bpf/btf.c, it sets
+'sub->incoming_stack_arg_depth = (nargs - MAX_BPF_FUNC_REG_ARGS) *
+BPF_REG_SIZE' for any static subprog with more than 5 arguments. It does
+not initialize sub->stack_arg_depth.
 
-Does mark_stack_arg_precision() properly handle backtracking through parent
-states? Looking at the two locations where stack argument precision is tracked:
+The 'stack_arg_depth' field is only written by check_func_call() in
+kernel/bpf/verifier.c and check_kfunc_call(), which update the *caller's*
+subprog entry when the caller makes a call with more than 5 arguments.
 
-check_kfunc_args() for is_kfunc_arg_const_mem_size():
-    if (regno >= 0)
-        ret = mark_chain_precision(env, regno);
-    else
-        ret = mark_stack_arg_precision(env, i);
+Since env->subprog_info[] is zero-initialized (kvcalloc), leaf subprograms
+that receive stack arguments but never call other functions with stack
+arguments will have:
+  incoming_stack_arg_depth = (nargs - 5) * 8
+  stack_arg_depth = 0
 
-check_kfunc_args() for KF_ARG_PTR_TO_ALLOC_BTF_ID with is_ret_buf_sz:
-    if (regno >= 0)
-        ret = mark_chain_precision(env, regno);
-    else
-        ret = mark_stack_arg_precision(env, i);
+For example:
+  static int leaf(int a1, int a2, int a3, int a4, int a5, int a6, int a7)
+  {
+      return a1 + a7;  /* r11+16 load, then BPF_EXIT - no calls */
+  }
 
-Is mark_stack_arg_precision() correctly marking parent states and the source
-registers that stored values into the stack argument slots, or does it only
-mark the current state as the v6 review suggested?
+  /* some other subprog does: ret = leaf(1,2,3,4,5,6,7); */
 
+For 'leaf', the verifier sets:
+  incoming_stack_arg_depth = (7 - 5) * 8 = 16
+  stack_arg_depth = 0    (never updated, no calls made)
+
+When do_jit() computes:
+  outgoing_stack_arg_depth = 0 - 16 = 0xFFF0 (u16 underflow)
+
+Then at the new code below:
+
+> +	/*
+> +	 * Allocate outgoing stack arg area for args 7+ only.
+> +	 * Arg 6 goes into r9 register, not on stack.
+> +	 */
+> +	outgoing_rsp = outgoing_stack_arg_depth > 8 ?  outgoing_stack_arg_depth - 8 : 0;
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> +	emit_sub_rsp(&prog, outgoing_rsp);
+
+This emits 'sub rsp, 0xFFE8' (about 65 KB), which overflows the kernel
+stack (THREAD_SIZE is only 16 KB on x86_64). The epilogue then emits a
+matching 'add rsp, 0xFFE8', but the damage is already done at function
+entry.
+
+The commit message states "The verifier guarantees that neither
+tail_call_reachable nor priv_stack is set when stack args exist, so R9 is
+always available." It does not claim the verifier maintains
+'stack_arg_depth >= incoming_stack_arg_depth', and that invariant is not
+maintained for leaf subprograms.
+
+The sanity check in bpf_fixup_call_args() at kernel/bpf/fixups.c does not
+catch this because the same underflow happens there:
+  u16 outgoing = subprog->stack_arg_depth - subprog->incoming_stack_arg_depth;
+but since leaf subprograms have max_out_stack_arg_depth == 0, the
+comparison 'outgoing > max_out_stack_arg_depth' is false (0xFFF0 wraps
+around in the comparison).
+
+Should the JIT compute outgoing_stack_arg_depth safely to prevent the
+underflow? For example:
+  outgoing_stack_arg_depth = stack_arg_depth > incoming_stack_arg_depth ?
+                             stack_arg_depth - incoming_stack_arg_depth : 0;
+
+Or should the verifier ensure the invariant 'stack_arg_depth >=
+incoming_stack_arg_depth' after verification completes?
 
 
 ---
@@ -119,4 +146,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24902767240
---===============8334193108733703911==--
+--===============1558836097723664395==--
