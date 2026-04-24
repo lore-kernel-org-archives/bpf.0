@@ -1,92 +1,92 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7491040DFAD
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 00:04:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B68C940DFAD
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 00:04:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.174
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776989060; cv=pass; b=hkBg7pGo6CoELXgAN2X/6Vf2U0VFAJTJVVSZxEv6ZdO14MN3jmQtX5/mce4XKQh4vsqNgNrxkY7+Xybj+adoLBmP0ypd3U1SODAA/FzHJSp2lQjZCrXtE4clBAMr1E1UUHN6fPRtyKh27JhX7VqvzPPON1AjwML+m6kavRe99ok=
+	t=1776989066; cv=pass; b=RU+AO0atKs0dDKqd8mstuteg1w6GI3D0bNq1Vp/5jrzQQd0y7Xj8qKT5SInR8iFl7vd3cC3K8ww518Uixwgo50+9Z2gkSdCoOYciXK623QJUlwilQuzI4njws9UI1GHZYLw4qE5M2rOrnjDW9BSXZ38wLRBN4eM3X5OiysDDOUA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776989060; c=relaxed/simple;
-	bh=/0xK6tYxs6xHgM73UL+O+BarcRKEYLje82iXuY8DgkY=;
+	s=arc-20240116; t=1776989066; c=relaxed/simple;
+	bh=vTzzIgE2JS6IRMC6snTrIYVwAiDYQSSsSpWSe0DCrmA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TOb+N/MBi0sqK9ZtT7p3piahQWGbKGwTprIGZ02rWAd4Om1qt30+aWPXrdjQBgds7PLzz0YwBpuJ0nyLLrSEuPg6qhUvjw9Uc2Fn/lZdK3g9ac4u/2aBf7LluUFGp/G+HyK8+Si9PKl90Ko66t60tNvP7hIFN2AOQ22MPW8Rh5o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jQTd6Oay; arc=pass smtp.client-ip=209.85.216.41
+	 To:Cc:Content-Type; b=Y7F2IBApRtSkTg1Pw2ceSqtY/GbD/YSQfzwkRl//kdqxUbE28y7TYaA5c4lf+0XGUSFmBqR+cMZCGWdup1S8FtE/l1N5neAspD3bgbVzdFF06YeTsCGFf50ED0DyOKaZSSV+7jPG+qMGJFRqGHj2IlwEISXdcefljSkv2NjKH0c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TErWXGdo; arc=pass smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jQTd6Oay"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-362bb3260f1so2724381a91.2
-        for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 17:04:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776989059; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TErWXGdo"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ad9a9be502so45492595ad.0
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 17:04:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776989065; cv=none;
         d=google.com; s=arc-20240605;
-        b=MGX4ZnPpxCKq6g+Jvy0rXRElkCsSSeO9sDbjxxE2jNrVBmvPi7eaxRDI6TBmpV1B3z
-         G6zexs4a/jc5kkO+URWQSRSGkvii8u8FUFAn4Fi+pHQyZB17zBBKhJivj5HVVFtGIU2v
-         hMjNOePXneVN/3CkDUjxciTfZOsq/2+v6tfpJOs17Qt7vLv+Hb35PBaGx7GV3esMzQ19
-         uqgNN34HACKCw7APFyFOy5yXiGvd5nazpCxSicPJuan++oeHNuxqHVLKbDEQZFF3tEw2
-         CJye/o8H2dEHrb7RLNx/9bIxaTB43mcdMCWNN5fPxSwqkSnXvuyWgQOt1W/wOxMvxyJw
-         js4w==
+        b=PbieHCaUrhqsaFEkwPvlRDOqsSiOHQFxZeb/oXB4A45yEqIQz09VXl4VTUVklZ5oNy
+         SA13JWK/9LABAezk7t7+dZIMWDPqH0S9MQruvHe2RnwqdWGBnOc/L9978VaepCcfYhKP
+         wElwxn7PZkjnMbwLxjbtWC158P9FiHvqEztZR7IYmCji1wCb27qhsBnZSXUQmxyZ2Nkw
+         ECKZCfO96PBMdrnrHentyph5Lu/kT0S5Nof0W0VLxdiRkiD+StohIt3kNXT1dH+Wq9G7
+         SQvvKmLKkawMsNtGjA65nk8Kqq+NnS+a+yYOcLw5YMU9jxaMeGWyDw+E4CiVXKtKF8cm
+         V0AQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=/0xK6tYxs6xHgM73UL+O+BarcRKEYLje82iXuY8DgkY=;
+        bh=KTZwoGKCRXn3NUS7spmMnD55V+Zr0LB1j5fzzvDTNr4=;
         fh=zJ7odwitiZ4Go6vwe9A1wHagnO8NzvH3mQM+pdfOTPg=;
-        b=eGy0zvX0qQLFdPOAZj8zpw2LPyex2uVQ1gxkYInikS7P6eOZoP1RODf3G9EuD0bpVG
-         4+jTi0zHP2rjXof5JoYdcNLG9Pi6H5yjL5kFGNVZRtoTDvC3w9H8imyLBwr/gW+BrU8H
-         UlQwiXdk6DgIkMFUr0fdKnO/v6nkCT7Lfu6ocrudeNHYJVe24RueKMGmGvFpSsRKY3PF
-         S42yPvL/kdKTNof4X5taJhFU5pauNjfKebOO94ST7OOKqHw0aKzat/8GRMtqxr55RJa8
-         L/D2mvnc3rWNZGp4Z8wPujc5h8rD/Zrke7LrquB6xdjAKSSjOD1RKl38lUECP4ToxIpv
-         UvHQ==;
+        b=hYHiRXMurzIm7iHDlv+9es0PzISzbl7WwSgbkCMzdtcbr41VTuwo+MjjtRNAW+Edok
+         So5zbYCDelKDdL2sSDOSl9Fdhi6empspLJw8ED1DoKm+M/Cs0bDwxNNqquo0SHLOPLZT
+         FeSAVdXsywE/vegBhnHKGfkwS6iE1tgcpuhLO6NRhImfqo4yAYL9W7bjtP3vwq3bmMuC
+         MKxI4wxyXC/pHjhVh0r9qvsulCB/eLvkp9XZ1P+N5L/EVTGD15zx/syBMaWTG/PkkCLz
+         2QiRBx3L4IKX9W8I7Wj42Ee65SrSM7/ep+TWvWzQ3v1dD0i6GikM9wZtd2LFMiGI/Wvx
+         9j3A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776989059; x=1777593859; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776989065; x=1777593865; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/0xK6tYxs6xHgM73UL+O+BarcRKEYLje82iXuY8DgkY=;
-        b=jQTd6OaydKPjLazAEMVEqGPFYC8m9dw+0N2AiCuBoPoBbFHONF+4H8jPWCiNUJNv/8
-         KscQoSpBIRn19O6ALO7yBHb5XzE8zn3bPecFKVqAstWOAqjpLw9kiZMV7A+5z47zbPdb
-         cYnE1oWrxuR/QrjOV5Pn7Q5lXcKnExo9Wj24vptkZC7IKBCn9rVUoAMCVQS5MK4LOf60
-         IoEx/h4g47f2C9bj680pir8L4W9BcG4QA68q/6CHh16cckAPIR18i+ZWBkND+2QnlqDX
-         8qghM2my7gllhhLvYbpm2Bb1OlncXP+nnzQpaNVFDXfItQydSz+pId3XvDfeeGEUqzQm
-         8DMQ==
+        bh=KTZwoGKCRXn3NUS7spmMnD55V+Zr0LB1j5fzzvDTNr4=;
+        b=TErWXGdoy1oZ4eoTvshWpEZmUnr6hQF/8rxdzwEmBn020aOKP0gQLUNjC8zjmR+6XV
+         u4la2d5f3OuE7zQVwbPRDEERan2P+V1l/r8R92fn/iD3FroVuOYxqEhG04MFdp3H1+Mf
+         XGJ7dD+bOonV5B91mGCqmma/YgXQvLOgGvi3zNRpo1uHQmtmjLtlEOn0Qo+LAN3J0Vpq
+         Ycm2RHE4q8SdLv5UH65l/ulqRVvMDsinPH8JGMwXO6XBsxqeKzCJ4UcniBv6i0ZjBxAN
+         sGwzttqqaY/shgvQ8fRuBJnadgdRpnQY1gnq+V/YUHk8GFUKdoA8iWOfgzpX5R28BeHo
+         sepQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776989059; x=1777593859;
+        d=1e100.net; s=20251104; t=1776989065; x=1777593865;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=/0xK6tYxs6xHgM73UL+O+BarcRKEYLje82iXuY8DgkY=;
-        b=MCFRwWQGR8jtn97D6H8O3F5QntHf1q2pDKq2SDOmG/Ej1R06C2U/cPE9EjTo7wK8Zw
-         F6cZoo0E4INGf37ZqyVEZaQ2R1a/g73m5zBh4JZaWgWMObFOK+D14PTr5yUTk6aPJQAy
-         YCTxGsSHHGqF4Uv7+3g+N1ZE17wuXfjenFIW8Lf0Y6/1e6FGhUKozqVNHMmYz/ALiF69
-         Y2OR/YA7D+Cj1EjUR0At8wRZBDlflbxsr0iwnc/uwx7xidR4fWw5H6U2Ul1gweRtzyPp
-         uvVFMYXMWMdncV+TrBkRhXNt1aFlHYuJ+UqARHcvUbtCT3WsnRQ4O3woZ/Kl82Uoynwa
-         m2yQ==
-X-Gm-Message-State: AOJu0YxU1BmY540KmVJJqJVUQBsAW+z5bHfyE3MMr01K/u+VTz9IZNgk
-	/h6PoCOlrJWL2Bp4hAv+N3+JGH4E9A1/BDlK8pOwxZ/2hq6ITpGgZtAFunDluJd9nm/PSn7UR1F
-	OPpLIEbaNpvX8e+aNEOtAJqGXxME/IN0=
-X-Gm-Gg: AeBDieszBeLbeKnKIc+eKBee/2TjuTztDZ5UekWx/T9gAtrpSdwSJm1MybUzlECF4tJ
-	Mpks/zZu9OEItROKmuJrxjz6hWeECwQF1yjdxsT7wzZnt43hcvBvo0OSN2Ge7oU0Y4uuQlVjMFl
-	+3ebODWsPxaeQsUXixrHDDKBROwlKJmDXxuNFw0GfI1MGqBJJfXOK036dTFX7S9GA+bVF4cQV73
-	AK6tXn7oDIbAQQ8SgWI5JeO6TKv5o8RewCxrI4g74wq3JbdmKd6zTkh4V4unqMMnRAPCYyT1IeR
-	WPqJz0DXDbEuLla6iI3tA7NZmo9f7DnMiQ==
-X-Received: by 2002:a17:90b:524c:b0:354:a57c:65db with SMTP id
- 98e67ed59e1d1-3614047a5d4mr30952884a91.20.1776989058743; Thu, 23 Apr 2026
- 17:04:18 -0700 (PDT)
+        bh=KTZwoGKCRXn3NUS7spmMnD55V+Zr0LB1j5fzzvDTNr4=;
+        b=TK6rPaAJJ6VT3aaNHpieYc3Ww3JJgj5U5j8wXUhs6DYkg5AVhAJ3GMgegZEVakSKAU
+         X8+XavzmrIe+awvXu3qJ8yaW6hlfJd1uvp0fbtWgJNrivitJTqVrWi4xXo8ZSrcRNTg0
+         RM+iwkf++pbfpie/WKcjtPDMXUfmOHgYtrHlHsyN1dLRu/gLpUGS1qCl1aWBz1hC9CWo
+         t3rfhFXDpvDZOjc2+ixGqjFj0uAUoqhDyV2BWtZU347bCN4wph4+gnp78Y3SsTf2XyUM
+         gcvtS0poZUZ/486dqAwQ4iBsIMepWChr8RC4jke/jGQqQRMSGz15+Sj872pEI+BunsMp
+         XkvQ==
+X-Gm-Message-State: AOJu0YwKqUqzt/bee0sY59ynNawAG/qiS0X/s5/sDI91VqEbweCJedaH
+	FjtPeKt8xEFSmf0kYGjtk8lP4TovmAz/dxlomgOgZdhgPlvF8rTucv7UYCihiivrQrX+v1kuKE5
+	698AQCZ4z5yWM7Dza+Jy706y3ASjDnW4=
+X-Gm-Gg: AeBDieu00i0TfhJEMOnAgbOly3p6FeJfMmFT9/YqaK62E+TxxY9zDuSef79sKBR8STy
+	KI5MlC+8nVu5fgZomqgVbtZObnvGrdl6li97yvej2ACYBYzqb7E4FXM6jTfNf4dYSZhK7V3p/aM
+	rlP/IKvWXceMdmH2YnV6oARZnL5Mv5XC6KzIxfrxVXH3aAEL45hQRR+N80mlOwFzJmWxjYGWJTj
+	ZdO5GH1SEFvBHBuIqHfsuhNSUkx1m0z6n2fW1TPkU1B9Yo7mkyQSeAO20gRE//sXbOSq0glEMRt
+	yQY0wnbVc3FqalfBvnuoAL0FJqcFDrk3qg==
+X-Received: by 2002:a17:903:38c4:b0:2b4:5f69:715d with SMTP id
+ d9443c01a7336-2b5f9f36ea9mr350053565ad.25.1776989065079; Thu, 23 Apr 2026
+ 17:04:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260421221016.2967924-1-ameryhung@gmail.com>
-In-Reply-To: <20260421221016.2967924-1-ameryhung@gmail.com>
+References: <20260421221016.2967924-1-ameryhung@gmail.com> <20260421221016.2967924-2-ameryhung@gmail.com>
+In-Reply-To: <20260421221016.2967924-2-ameryhung@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 23 Apr 2026 17:04:03 -0700
-X-Gm-Features: AQROBzAzWb8jjj3asOdXVai0jSu2V1BCVstpKnZgbcFIf2Ptc1J8ZRzl2HlK34A
-Message-ID: <CAEf4BzZASC15LwVTTA+A7xkp94BQLZjxQa0GUnsXr8T9w-bAgQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/9] Refactor verifier object relationship tracking
+Date: Thu, 23 Apr 2026 17:04:09 -0700
+X-Gm-Features: AQROBzB8_Arenp3456-5JT05sOdeqNAovNdxghwId6kPXP5l_pUoFbmC8Km46ic
+Message-ID: <CAEf4BzZGg1EKwYFG6QKrkNbiE6RwWKew_Zz8mz9rjshKjWzcKA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/9] bpf: Unify dynptr handling in the verifier
 To: Amery Hung <ameryhung@gmail.com>
 Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
 	andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
@@ -97,23 +97,71 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Apr 21, 2026 at 3:10=E2=80=AFPM Amery Hung <ameryhung@gmail.com> wr=
 ote:
 >
-> Hi all,
+> Simplify dynptr checking for helper and kfunc by unifying it. Remember
+> the initialized dynptr (i.e.,g !(arg_type |=3D MEM_UNINIT)) pass to a
+> dynptr kfunc during process_dynptr_func() so that we can easily
+> retrieve the information for verification later. By saving it in
+> meta->dynptr, there is no need to call dynptr helpers such as
+> dynptr_id(), dynptr_ref_obj_id() and dynptr_type() in check_func_arg().
 >
-> This patchset cleans up dynptr handling, refactors object relationship
-> tracking in the verifier by introducing parent_id, and fixes dynptr
-> use-after-free bugs where file/skb dynptrs are not invalidated when
-> the parent referenced object is freed.
+> Remove and open code the helpers in process_dynptr_func() when
+> saving id, ref_obj_id, and type. It is okay to drop spi < 0 check as
+> is_dynptr_reg_valid_init() has made sure the dynptr is valid.
 >
+> Besides, since dynptr ref_obj_id information is now pass around in
+> meta->bpf_dynptr_desc, drop the check in helper_multiple_ref_obj_use.
 >
-> * Motivation *
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> ---
+>  include/linux/bpf_verifier.h |  12 ++-
+>  kernel/bpf/verifier.c        | 178 +++++++----------------------------
+>  2 files changed, 41 insertions(+), 149 deletions(-)
 >
 
-Very nice and approachable cover letter, thanks for improving it!
+[...]
 
-> In BPF qdisc programs, an skb can be freed through kfuncs. However,
-> since dynptr does not track the parent referenced object (e.g., skb),
-> the verifier does not invalidate the dynptr after the skb is freed,
-> resulting in use-after-free. The same issue also affects file dynptr.
+> @@ -7433,7 +7426,8 @@ static int process_kptr_func(struct bpf_verifier_en=
+v *env, int regno,
+>   * and checked dynamically during runtime.
+>   */
+>  static int process_dynptr_func(struct bpf_verifier_env *env, int regno, =
+int insn_idx,
+> -                              enum bpf_arg_type arg_type, int clone_ref_=
+obj_id)
+> +                              enum bpf_arg_type arg_type, int clone_ref_=
+obj_id,
+> +                              struct bpf_dynptr_desc *dynptr)
+>  {
+>         struct bpf_reg_state *reg =3D reg_state(env, regno);
+>         int err;
+> @@ -7499,6 +7493,20 @@ static int process_dynptr_func(struct bpf_verifier=
+_env *env, int regno, int insn
+>                 }
 >
+>                 err =3D mark_dynptr_read(env, reg);
+
+if mark_dynptr_read() fails, should we exit instead of proceeding to
+fill out dynptr info?.. even if mark_dynptr_read() cannot fail because
+of is_dynptr_reg_valid_init(), it still looks wrong and error-prone
+
+> +
+> +               if (dynptr) {
+> +                       struct bpf_func_state *state =3D bpf_func(env, re=
+g);
+> +                       int spi;
+> +
+> +                       if (reg->type !=3D CONST_PTR_TO_DYNPTR) {
+> +                               spi =3D dynptr_get_spi(env, reg);
+> +                               reg =3D &state->stack[spi].spilled_ptr;
+> +                       }
+> +
+> +                       dynptr->id =3D reg->id;
+> +                       dynptr->type =3D reg->dynptr.type;
+> +                       dynptr->ref_obj_id =3D reg->ref_obj_id;
+> +               }
+>         }
+>         return err;
+>  }
 
 [...]
