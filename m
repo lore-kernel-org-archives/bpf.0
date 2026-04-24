@@ -1,136 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A08E284881
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 20:32:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2099F3FADF2
+	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 20:40:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777062766; cv=none; b=cT2Q5zBE6ERQWIPsnz6+4Y5TUbWw4ObH7SURmvDDKvsAklqP9RzJw0ze+1hBwUZVu0z7sqLyc+U+lopYQ8SvA+nY5koJxKzvK8pgHEj17mOiXfbcY493BGoaqXVH6dz9DkasJh7yQZwwNbrW8sYYlBjtXsoKKBtR6Z25vAitQrc=
+	t=1777063213; cv=none; b=P2fPE86zIoVjh8TPQv60ZZlAQUsBV60JOqI0vIJ/tes7D3yVC8csEnYNjrE8Sp7pf7dBi2WIwoTIMulZyIoCjx5msn961I0N0Zo+Yv/RDgB5to9Mg8iqFkTItDAJR6P7n77EF2Yg/NU1MXYZUvLuIq297opGlkMLtwp2UoCnSTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777062766; c=relaxed/simple;
-	bh=p4AF3toD/3hAP2/DIcEurXPuR3putX++oIPOXAKDWiY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Z+qtIPrMIfclBgZCOPvU7yJu8SGwCC5FlNs0jUJifKmvXXhUMGhvL6/LD0g2yBYemoVAa9gV0hi3wGQCNwIPGSfgA426x9bzMw4gimpt0l6iTuvqRFCNqc1ZYgri5REJ5PBwNxlwSw4677rngVf0vk624/k9mj4PsTlbW/XimJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IqKgeyQE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777063213; c=relaxed/simple;
+	bh=hT284cGS7bob7LorULEs5qCokvTi1Es+yCme8G4VbJ0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=mGBk3M3/X9x1HU/p10LG4S/bUBNEjBpnntopJUszhienSL9MTQlbPxPMlfco0ajD4iUaK3jwwZU/ZqfdgJDvUdUNnZj9h1uWF1LTGcCrQrvtNYJTjZGKZ/rWhQICnWF89Vmswh6lXKqSeBd1vwPE1cFHcIfa+hImaj8HiiIJrc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kl3vwBvO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IqKgeyQE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABFE1C19425;
-	Fri, 24 Apr 2026 20:32:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kl3vwBvO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6C7BC19425;
+	Fri, 24 Apr 2026 20:40:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777062765;
-	bh=p4AF3toD/3hAP2/DIcEurXPuR3putX++oIPOXAKDWiY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=IqKgeyQEl/ITM9x1bn95xej+y91HxNwqygfH1WTucfFJ38j4MLQQme0d5M7k21Ohf
-	 jQtvX8xB/H2EZHFEj3QO8G1KAnUfekmOxae4o1BSm7B4/uE3o4Lun2kmDh0Cwm7PjN
-	 ObOqEZw8+WZXKgsZvrzF3kGPsd9Jp/ROrJ7AVVLm7mEKYXCv0/EiexpMew24O58WR3
-	 AH73jjN2+2JLPWYI1RBKVnFF3aBicrSnxkRLzJrAUhpxFP3jIAVwD8PkZ1ck4ikdFu
-	 E14deD/9/p/dJclE9DeEF1+16GXi6n5Y+BJo3fOgZPUq5obBif8PCqUEF6imnfCl8X
-	 kVebHNTkdYCgA==
-Content-Type: multipart/mixed; boundary="===============5593332662778327395=="
+	s=k20201202; t=1777063212;
+	bh=hT284cGS7bob7LorULEs5qCokvTi1Es+yCme8G4VbJ0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=Kl3vwBvOCI8DJgUSyc7fcjhcrNBMG6ajO+p3o7s2uEN96n8ZjwYfjx6NRw8YStr7C
+	 bpDnvwse4RBc/F6O/WmG52+EP2ZRcDz4NmtLo8dpRlOZo4TCK8LSAU80vwguTk33MR
+	 fVgasRJij9G1cKGa2CxUMzkhEN9NsVJjW/in4ISQqw/O2BB3x3+GTckZie4F95dkY9
+	 kpgBgfzqV2HEjOvtHl7uIZTQntjYZKLCxRhW7mWBSWYrG5mq3RJd3JQAv67RTkhy2a
+	 Y5FBAqBkolIKaPwFugWHTv8ZaAc6ijwnVbJQsLqp+MLLiq/cqp8hYWsESKp+PU0YF7
+	 Kxaq3yWK8+Mcg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 01/10] bpf: Implement resizable hashmap
+ basic functions
+Reply-To: sashiko@lists.linux.dev
+To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260424-rhash-v3-1-d0fa0ce4379b@meta.com>
+References: <20260424-rhash-v3-1-d0fa0ce4379b@meta.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 24 Apr 2026 20:40:11 +0000
+Message-Id: <20260424204011.E6C7BC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <8102f81ce7492f7c827b2dfdfce0434e291b581a4e3df6fa765bb4f34795264a@mail.kernel.org>
-In-Reply-To: <20260424-rhash-v3-7-d0fa0ce4379b@meta.com>
-References: <20260424-rhash-v3-7-d0fa0ce4379b@meta.com>
-Subject: Re: [PATCH bpf-next v3 07/10] selftests/bpf: Add basic tests for resizable hash map
-From: bot+bpf-ci@kernel.org
-To: mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,kafai@meta.com,kernel-team@meta.com,eddyz87@gmail.com,memxor@gmail.com,herbert@gondor.apana.org.au
-Cc: yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 24 Apr 2026 20:32:45 +0000 (UTC)
 
---===============5593332662778327395==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Sashiko AI review found 1 potential issue(s):
+- [Critical] Using rhashtable for BPF map updates/deletes is unsafe and wil=
+l lead to hard deadlocks from IRQ/NMI/softirq contexts.
+--
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/rhash.c b/tools/testing/selftests/bpf/prog_tests/rhash.c
-> new file mode 100644
-> index 000000000000..0f6eec4fe1fe
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/rhash.c
-> @@ -0,0 +1,64 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-> +#include <test_progs.h>
-> +#include <string.h>
-> +#include <stdio.h>
-> +#include "rhash.skel.h"
-> +#include <linux/bpf.h>
-> +#include <linux/perf_event.h>
-> +#include <sys/syscall.h>
-> +
-> +static void rhash_run(const char *prog_name)
-> +{
-> +	struct rhash *skel;
-> +	struct bpf_program *prog;
-> +	LIBBPF_OPTS(bpf_test_run_opts, opts);
-> +	int err;
-> +
-> +	skel = rhash__open();
-> +	if (!ASSERT_OK_PTR(skel, "rhash__open"))
-> +		return;
-> +
-> +	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
-> +	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
-> +		goto cleanup;
-> +	bpf_program__set_autoload(prog, true);
-> +
-> +	err = rhash__load(skel);
-> +	if (!ASSERT_OK(err, "skel_load"))
-> +		goto cleanup;
-> +
-> +	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
-> +	if (!ASSERT_OK(err, "prog run"))
-> +		goto cleanup;
-> +
-> +	if (!ASSERT_OK(skel->bss->err, "bss->err"))
-> +		goto cleanup;
+commit 47c235933705172d3a36c4339c754282500161f1
+Author: Mykyta Yatsenko <yatsenko@meta.com>
 
-sashiko-bot@kernel.org raised a concern about the test framework potentially
-missing BPF program failures. Can the test pass incorrectly if a BPF program
-returns non-zero while skel->bss->err is zero?
+bpf: Implement resizable hashmap basic functions
 
-Looking at test_rhash_update_delete() in progs/rhash.c:
+This commit adds a new BPF map type BPF_MAP_TYPE_RHASH backed by the kernel
+rhashtable implementation. It provides basic map operations like lookup,
+update, and delete using rhashtable APIs.
 
-    err = bpf_map_delete_elem(&rhmap, &key);
-    if (err)
-        return 3;
-
-    e = bpf_map_lookup_elem(&rhmap, &key);
-    if (e)
-        return 4;
-
-    err = 0;
-    return 0;
-
-If the final lookup finds an element when it shouldn't (e is not NULL), the
-BPF program exits early with return 4. However, the global err variable was
-just set to 0 by the successful bpf_map_delete_elem() call.
-
-Since rhash_run() only checks ASSERT_OK(skel->bss->err) and doesn't check
-opts.retval from bpf_prog_test_run_opts(), won't this allow the test to pass
-when it should fail?
-
-This issue appears in other subtests as well, where early return values like
-1, 2, 3, 4, and 5 can be returned while err remains 0.
-
-Reference: https://lore.kernel.org/bpf/20260424200255.D5C89C19425@smtp.kernel.org/
-
-> +
-> +cleanup:
-> +	rhash__destroy(skel);
-> +}
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index 3dd9b4924ae4fb..a37bd2a7b30f4b 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
 
 [ ... ]
 
+> +static int rhtab_delete_elem(struct bpf_rhtab *rhtab, struct rhtab_elem =
+*elem)
+> +{
+> +	int err;
+> +
+> +	err =3D rhashtable_remove_fast(&rhtab->ht, &elem->node, rhtab->params);
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Can this lead to a deadlock when used by non-sleepable BPF programs in
+interrupt or softirq contexts?
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24909591959
---===============5593332662778327395==--
+The verifier permits BPF_MAP_TYPE_RHASH to be used by non-sleepable BPF
+programs, such as those attached to XDP or TC, which execute in softirq
+context and do not check bpf_prog_active.
+
+Map operations like rhashtable_remove_fast() and
+rhashtable_lookup_get_insert_fast() internally use bit_spin_lock() for
+bucket-level synchronization. This locking mechanism disables preemption
+but leaves hardware and software interrupts enabled, unlike the
+raw_spin_lock_irqsave() approach used by the standard htab.
+
+If a syscall updates the map from process context and acquires the bucket
+lock, and is then preempted by a hardware interrupt that schedules a softirq
+on return, the softirq will execute the XDP or TC BPF program.
+
+If this BPF program attempts to access the same hash bucket, wouldn't it sp=
+in
+indefinitely waiting for the bit_spin_lock held by the interrupted process,
+causing a system deadlock?
+
+[ ... ]
+
+> +static long rhtab_map_update_elem(struct bpf_map *map, void *key, void *=
+value, u64 map_flags)
+> +{
+> +	struct bpf_rhtab *rhtab =3D container_of(map, struct bpf_rhtab, map);
+> +	struct rhtab_elem *elem, *tmp;
+
+[ ... ]
+
+> +	tmp =3D rhashtable_lookup_get_insert_fast(&rhtab->ht, &elem->node, rhta=
+b->params);
+
+Does the same deadlock mechanism apply here as well, given that
+rhashtable_lookup_get_insert_fast() also relies on bucket-level locks?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260424-rhash-v3-0=
+-d0fa0ce4379b@meta.com?part=3D1
