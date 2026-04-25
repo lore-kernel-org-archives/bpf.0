@@ -1,38 +1,35 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BEEF33F8D9
-	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 11:00:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D95282F35
+	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 11:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777114815; cv=none; b=aE8kNKs7T0q9cYW+8pezeIjZL1lib9OGeXMPmK1rkv0LhbSliY4zXFvhfEVXCpv/5wnFWGiQwpVB8aIbBCtrHNe9dLgG8WtqDZhHC1NhztZHtJQWrszaT97Js8oZt18Yfc3P0mS22THs4a+/xwuYOjpUbwwcE6fr5Y8IR6+tD8U=
+	t=1777114826; cv=none; b=sthfXWJUs/1XNKMbFvgOXj+2Evhat690s+Nl22BHKNyPiauuMS/kpYjaYKIEUAZcqg8WSWWgjIbhPZaQnUsdNJXhRd7uag5upflRdkpdcWRA+ElGPULmDXa/OVeYmRxeec962GCl0h2IS6M/tc3pTLjMlIzKBtWBGFDTF/hNK9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777114815; c=relaxed/simple;
-	bh=02Ul6939AS0EQ8q8OuYSELZ/DXt3EKcfFhLYsn/RYm4=;
+	s=arc-20240116; t=1777114826; c=relaxed/simple;
+	bh=w2LCY/0Y9pS66aRGDAL5zzSoVn8UqImz/5AFiWfll/Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Xoez6m9lFj1NvvItXULMX8LSUDiitm0Iumf/Ml3y01+zznw0qRxJwtRC0cWetEbxiHUnmyUhMW0Kvqys1ID+1VqNFoYdDcXQG221JeqLcAvgGNfI4D7lZ36C7qoddSHorsAzyMkE0gJ98UbKuZ0EU/Wr9uFv+KoYYsvwG4HueYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GJhx9bUl; arc=none smtp.client-ip=91.218.175.185
+	 MIME-Version; b=Bt0AZJYKdy0pQc8NNUYazDt182PXvN2DrT/niZ/pHPcZHrmAeo9HuBOJHW8Dl1o2+7BBe6aoK/SKIkCnf5q1E0v2m8NpUB/dMxhI6zo6UEIGlqMuYOH6vMEnGGqVv+mByK6BzbRna6UVSM0u8O6KRHoA9gAG9LSd/oSsBOOTr80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jkt9yDDz; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GJhx9bUl"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jkt9yDDz"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777114811;
+	t=1777114822;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=eeip7Q7ShmJCQllW+fBDrj9Sp1DOAvtjLpFx+gnLJKY=;
-	b=GJhx9bUlXmtZ06pyrcmeELFy7yib5jYEQRuCEnJA8onrIckrgm0VAVze+58iAd19CFRvm1
-	wXw38FiEyjdOdbCejye5qxTRfsFgdR0J93LI2SRH8SsRS5SBXB3PTHY8Da5AL+nv9zJ1L3
-	fxENjuYDOYScJxYeXDORM4gQrxUpyME=
+	bh=Dv1nqX9pl+QS83DIlKgQtMErP4cw097MHr3XQmGaLCM=;
+	b=jkt9yDDzRuFvPEQE6rfgQLgRqrZQ8AZz15R5qjw22Z8i/r0oBE5QEwMHOKyHuMFezVt08q
+	NiCYsBrUnk/MnhVDJ11US6bVMKbkAY0yO8DgNUdd7fbFFQTCfF97AyNnD4wSFENh4E1OYo
+	kXCf3M5W5pstolvisK77m39R5D+7uWk=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Yinhao Hu <dddddd@hust.edu.cn>,
-	Kaiyan Mei <M202472210@hust.edu.cn>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	John Fastabend <john.fastabend@gmail.com>,
@@ -57,9 +54,9 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Kuniyuki Iwashima <kuniyu@google.com>,
 	linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH bpf v3 1/2] bpf, tcx, netkit: reject offloaded programs
-Date: Sat, 25 Apr 2026 18:59:28 +0800
-Message-ID: <20260425105942.223757-2-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf v3 2/2] bpf, xdp: move offload check into dev_xdp_install()
+Date: Sat, 25 Apr 2026 18:59:29 +0800
+Message-ID: <20260425105942.223757-3-jiayuan.chen@linux.dev>
 In-Reply-To: <20260425105942.223757-1-jiayuan.chen@linux.dev>
 References: <20260425105942.223757-1-jiayuan.chen@linux.dev>
 Precedence: bulk
@@ -71,68 +68,50 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-An offloaded prog has its bpf_func replaced by bpf_prog_warn_on_exec()
-during bpf_prog_offload_compile(), since it is supposed to run on the
-NIC. Both current mprog users, tcx and netkit, dispatch programs via
-bpf_prog_run() on the host. Attaching an offloaded prog through any
-of their entry points (BPF_PROG_ATTACH, BPF_LINK_CREATE, BPF_LINK_UPDATE
-on tcx_*/netkit_*) ends up tripping the WARN on the first packet.
+bpf_xdp_link_update() calls dev_xdp_install() directly and bypasses
+dev_xdp_attach(), so the offload check that lived in dev_xdp_attach()
+does not apply. A user can create an XDP link in SKB or native mode
+with a regular program and then replace it via BPF_LINK_UPDATE with an
+offloaded program, whose bpf_func is bpf_prog_warn_on_exec(), tripping
+the WARN on the first packet.
 
-Ideally this validation would live in tcx and netkit, since "must not
-be offloaded" is a property of those subsystems' software dispatch,
-not of the generic multi-prog attachment layer. However, those two
-together have six attach call sites and putting the check in each of
-them duplicates the same logic. mprog happens to be the only chokepoint
-shared by all of them, so add the check there instead and scope it to
-BPF_PROG_TYPE_SCHED_CLS via a small helper, so a future mprog user that
-legitimately accepts offloaded programs is not affected.
+Move the check from dev_xdp_attach() into dev_xdp_install() so both
+the attach path and the link update path are covered by a single check
+at the actual install site.
 
-Use bpf_prog_is_offloaded() rather than bpf_prog_is_dev_bound() +
-bpf_offload_dev_match() (as XDP does): bpf_prog_dev_bound_init()
-already rejects BPF_F_XDP_DEV_BOUND_ONLY for BPF_PROG_TYPE_SCHED_CLS,
-so a dev-bound SCHED_CLS program is always offloaded. The simpler
-check is sufficient and also rejects attaching a program offloaded to
-device A onto device B.
-
-Fixes: 053c8e1f235dc ("bpf: Add generic attach/detach/query API for multi-progs")
-Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-Reported-by: Dongliang Mu <dzm91@hust.edu.cn>
-Closes: https://lore.kernel.org/bpf/64d8e2b5-a214-4f3c-b9e8-bcedbcb2c602@hust.edu.cn/
+Fixes: 026a4c28e1db3 ("bpf, xdp: Implement LINK_UPDATE for BPF XDP link")
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- kernel/bpf/mprog.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ net/core/dev.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/bpf/mprog.c b/kernel/bpf/mprog.c
-index 1394168062e85..0b50464ec902d 100644
---- a/kernel/bpf/mprog.c
-+++ b/kernel/bpf/mprog.c
-@@ -222,6 +222,14 @@ static int bpf_mprog_pos_after(struct bpf_mprog_entry *entry,
- 	return tuple->prog ? -ENOENT : bpf_mprog_total(entry);
- }
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 831129f2a69b5..e3958281e8d63 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -10330,6 +10330,11 @@ static int dev_xdp_install(struct net_device *dev, enum bpf_xdp_mode mode,
  
-+static int bpf_mprog_check_prog(const struct bpf_prog *prog)
-+{
-+	if (prog->type == BPF_PROG_TYPE_SCHED_CLS &&
-+	    bpf_prog_is_offloaded(prog->aux))
+ 	netdev_ops_assert_locked(dev);
+ 
++	if (prog && mode != XDP_MODE_HW && bpf_prog_is_offloaded(prog->aux)) {
++		NL_SET_ERR_MSG(extack, "Using offloaded program without HW_MODE flag is not supported");
 +		return -EINVAL;
-+	return 0;
-+}
++	}
 +
- int bpf_mprog_attach(struct bpf_mprog_entry *entry,
- 		     struct bpf_mprog_entry **entry_new,
- 		     struct bpf_prog *prog_new, struct bpf_link *link,
-@@ -237,6 +245,9 @@ int bpf_mprog_attach(struct bpf_mprog_entry *entry,
- 	};
- 	int ret, idx = -ERANGE, tidx;
- 
-+	ret = bpf_mprog_check_prog(prog_new);
-+	if (ret)
-+		return ret;
- 	if (revision && revision != bpf_mprog_revision(entry))
- 		return -ESTALE;
- 	if (bpf_mprog_exists(entry, prog_new))
+ 	if (dev->cfg->hds_config == ETHTOOL_TCP_DATA_SPLIT_ENABLED &&
+ 	    prog && !prog->aux->xdp_has_frags) {
+ 		NL_SET_ERR_MSG(extack, "unable to install XDP to device using tcp-data-split");
+@@ -10481,10 +10486,6 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
+ 			NL_SET_ERR_MSG(extack, "Native and generic XDP can't be active at the same time");
+ 			return -EEXIST;
+ 		}
+-		if (!offload && bpf_prog_is_offloaded(new_prog->aux)) {
+-			NL_SET_ERR_MSG(extack, "Using offloaded program without HW_MODE flag is not supported");
+-			return -EINVAL;
+-		}
+ 		if (bpf_prog_is_dev_bound(new_prog->aux) && !bpf_offload_dev_match(new_prog, dev)) {
+ 			NL_SET_ERR_MSG(extack, "Program bound to different device");
+ 			return -EINVAL;
 -- 
 2.43.0
 
