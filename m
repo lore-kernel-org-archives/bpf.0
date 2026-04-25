@@ -1,33 +1,38 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D812749E6
-	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 11:00:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BEEF33F8D9
+	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 11:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777114804; cv=none; b=psORF7Ngvcf1WnRCjbCs2QbAqgsYdiRVRMqWugt76dyvIh+UvVhRwule+dtDU4J37J0QU4O8jS5VePeHW1dS5WuY1R1XU+vRZXPwHFz6VBAgwcyfyMYTeXsRn6p+73nDIKVEGRgEmnheSMg5k/A8GXndamI0pTeNJiLjyK8dJFg=
+	t=1777114815; cv=none; b=aE8kNKs7T0q9cYW+8pezeIjZL1lib9OGeXMPmK1rkv0LhbSliY4zXFvhfEVXCpv/5wnFWGiQwpVB8aIbBCtrHNe9dLgG8WtqDZhHC1NhztZHtJQWrszaT97Js8oZt18Yfc3P0mS22THs4a+/xwuYOjpUbwwcE6fr5Y8IR6+tD8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777114804; c=relaxed/simple;
-	bh=pX3I+Lk6VVItQh4a/LYbVKNchsr6SttcOh8lFjhQlYk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=btLw5MNNqjUPT8GWWWS+18rOFSyT4lbFtyQlW1I0QAUPEou4IQwbXpnpqbriI7kuBS11D3HVbA6oy0FETx8RQ2bgKKDlnG5P5HqvkriZRQ1idGsDu215hilneH6JZ1b0r0yjRAr5y3i2jklAzofL9jd/HkRQkuwx76wW3Zpjhk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qf1/mXqR; arc=none smtp.client-ip=91.218.175.170
+	s=arc-20240116; t=1777114815; c=relaxed/simple;
+	bh=02Ul6939AS0EQ8q8OuYSELZ/DXt3EKcfFhLYsn/RYm4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Xoez6m9lFj1NvvItXULMX8LSUDiitm0Iumf/Ml3y01+zznw0qRxJwtRC0cWetEbxiHUnmyUhMW0Kvqys1ID+1VqNFoYdDcXQG221JeqLcAvgGNfI4D7lZ36C7qoddSHorsAzyMkE0gJ98UbKuZ0EU/Wr9uFv+KoYYsvwG4HueYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GJhx9bUl; arc=none smtp.client-ip=91.218.175.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qf1/mXqR"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GJhx9bUl"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777114799;
+	t=1777114811;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=7x1S8p2qzRXK85k0FNVBep0q+wwaaQ/VD9E9QJxBuok=;
-	b=qf1/mXqR68FazSOoznM/m6QYtuZFwuDkwZ8moly/aW166SBwpSxNrVwjxHRnX1BWxPPLv7
-	cTtm2LeCN+M1Z4YS1iRni0FQMdXgHUqxVqBi6JQ1u5U+mYxiT6uvmvmIgaFu6FDEiA+apf
-	MbvLA72ELlvUCp9qRmm9Xt/CVJe36QI=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eeip7Q7ShmJCQllW+fBDrj9Sp1DOAvtjLpFx+gnLJKY=;
+	b=GJhx9bUlXmtZ06pyrcmeELFy7yib5jYEQRuCEnJA8onrIckrgm0VAVze+58iAd19CFRvm1
+	wXw38FiEyjdOdbCejye5qxTRfsFgdR0J93LI2SRH8SsRS5SBXB3PTHY8Da5AL+nv9zJ1L3
+	fxENjuYDOYScJxYeXDORM4gQrxUpyME=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Yinhao Hu <dddddd@hust.edu.cn>,
+	Kaiyan Mei <M202472210@hust.edu.cn>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	John Fastabend <john.fastabend@gmail.com>,
@@ -52,9 +57,11 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Kuniyuki Iwashima <kuniyu@google.com>,
 	linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH bpf v3 0/2] bpf: prevent offloaded programs from running on host via tcx/netkit
-Date: Sat, 25 Apr 2026 18:59:27 +0800
-Message-ID: <20260425105942.223757-1-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf v3 1/2] bpf, tcx, netkit: reject offloaded programs
+Date: Sat, 25 Apr 2026 18:59:28 +0800
+Message-ID: <20260425105942.223757-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20260425105942.223757-1-jiayuan.chen@linux.dev>
+References: <20260425105942.223757-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -64,114 +71,68 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Yinhao reported a splat [1] when attaching a BPF program loaded with
-prog_ifindex (targeted at an offload-capable device such as netdevsim)
-to the software path via BPF_TCX_EGRESS. The program's bpf_func had
-already been replaced by bpf_prog_warn_on_exec() during offload compile,
-so the first packet that reaches tcx_run() trips the WARN:
+An offloaded prog has its bpf_func replaced by bpf_prog_warn_on_exec()
+during bpf_prog_offload_compile(), since it is supposed to run on the
+NIC. Both current mprog users, tcx and netkit, dispatch programs via
+bpf_prog_run() on the host. Attaching an offloaded prog through any
+of their entry points (BPF_PROG_ATTACH, BPF_LINK_CREATE, BPF_LINK_UPDATE
+on tcx_*/netkit_*) ends up tripping the WARN on the first packet.
 
-[   19.592982] ------------[ cut here ]------------
-[   19.594654] attempt to execute device eBPF program on the host!
-[   19.594659] WARNING: kernel/bpf/offload.c:420 at 0x0, CPU#0: poc/337
-[   19.599906] Modules linked in:
-[   19.600680] CPU: 0 UID: 0 PID: 337 Comm: poc Not tainted
-6.18.0-rc7-next-20251125 #10 PREEMPT(none)
-[   19.601659] Hardware name: QEMU Ubuntu 24.04 PC (i440FX + PIIX,
-1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-[   19.602684] RIP: 0010:bpf_prog_warn_on_exec+0xc/0x20
-[   19.603241] Code: 28 00 48 89 ef e8 74 44 2f 00 eb d7 66 90 90 90 90
-90 90 90 90 90 90 90 90 90 90 90 90 90 0f 1f 44 00 00 48 8d 3d a4 eb 95
-06 <67> 48 0f b9 3a 31 c0 e9 83 76 44 ff 0f 1f 84 00 00 00 00 00 90 90
-[   19.605093] RSP: 0018:ffff8881066e73d8 EFLAGS: 00010246
-[   19.605663] RAX: ffffffff81cbca70 RBX: ffff8881013c4210 RCX:
-0000000000000004
-[   19.606378] RDX: 1ffff11020278842 RSI: ffffc90000563060 RDI:
-ffffffff8861b620
-[   19.607107] RBP: ffff8881010d0640 R08: ffff8881013c4210 R09:
-ffff8881010d06b0
-[   19.607827] R10: ffff8881010d06c3 R11: ffffc90000563000 R12:
-ffffc90000563000
-[   19.608751] R13: ffff8881010d06b4 R14: ffff888115eb1a34 R15:
-dffffc0000000000
-[   19.609478] FS:  000000000294c380(0000) GS:ffff8881911e9000(0000)
-knlGS:0000000000000000
-[   19.610316] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   19.610943] CR2: 000057f6b9eb38c0 CR3: 00000001010ea000 CR4:
-0000000000750ef0
-[   19.611712] PKRU: 55555554
-[   19.612006] Call Trace:
-[   19.612281]  <TASK>
-[   19.612523]  __dev_queue_xmit+0x22cb/0x3530
-[   19.617607]  ip_finish_output2+0x621/0x1a60
-[   19.621371]  ip_output+0x170/0x2e0
-[   19.624586]  ip_send_skb+0x129/0x180
-[   19.624940]  udp_send_skb+0x65d/0x1300
-[   19.625316]  udp_sendmsg+0x13bf/0x2000
-[   19.629960]  __sys_sendto+0x396/0x470
-[   19.633720]  __x64_sys_sendto+0xdc/0x1b0
-[   19.635066]  do_syscall_64+0x76/0x10a0
-[   19.641701]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   19.642240] RIP: 0033:0x4240d7
-[   19.642597] Code: 00 89 01 e9 c1 fe ff ff e8 f6 03 00 00 66 0f 1f 44
-00 00 f3 0f 1e fa 80 3d 8d 3f 09 00 00 41 89 ca 74 10 b8 2c 00 00 00 0f
-05 <48> 3d 00 f0 ff ff 77 69 c3 55 48 89 e5 53 48 83 ec 38 44 89 4d d0
-[   19.646088] RSP: 002b:00007fffcb9ecb68 EFLAGS: 00000202 ORIG_RAX:
-000000000000002c
-[   19.648938] RAX: ffffffffffffffda RBX: 0000000000000001 RCX:
-00000000004240d7
-[   19.652116] RDX: 0000000000000008 RSI: 00007fffcb9ecce0 RDI:
-0000000000000005
-[   19.653148] RBP: 00007fffcb9eccf0 R08: 00007fffcb9ecbb0 R09:
-0000000000000010
-[   19.653951] R10: 0000000000000000 R11: 0000000000000202 R12:
-00007fffcb9ece08
-[   19.654760] R13: 00007fffcb9ece18 R14: 00000000004b2868 R15:
-0000000000000001
-[   19.657462]  </TASK>
-[   19.657703] ---[ end trace 0000000000000000 ]---
+Ideally this validation would live in tcx and netkit, since "must not
+be offloaded" is a property of those subsystems' software dispatch,
+not of the generic multi-prog attachment layer. However, those two
+together have six attach call sites and putting the check in each of
+them duplicates the same logic. mprog happens to be the only chokepoint
+shared by all of them, so add the check there instead and scope it to
+BPF_PROG_TYPE_SCHED_CLS via a small helper, so a future mprog user that
+legitimately accepts offloaded programs is not affected.
 
-The reason is that tcx, netkit and bpf_xdp_link_update() can install an
-offloaded program onto a software execution path without rejecting it.
-Rather than sprinkling the same check across every attach/update entry
-point, do it at the source:
+Use bpf_prog_is_offloaded() rather than bpf_prog_is_dev_bound() +
+bpf_offload_dev_match() (as XDP does): bpf_prog_dev_bound_init()
+already rejects BPF_F_XDP_DEV_BOUND_ONLY for BPF_PROG_TYPE_SCHED_CLS,
+so a dev-bound SCHED_CLS program is always offloaded. The simpler
+check is sufficient and also rejects attaching a program offloaded to
+device A onto device B.
 
-  - bpf_mprog_attach() is the single chokepoint for tcx/netkit (covers
-    all three of attach, link create and link update on both subsystems,
-    six call sites in total).
-  - dev_xdp_install() is the single chokepoint for XDP (covers both the
-    dev_xdp_attach() path and the bpf_xdp_link_update() path which
-    previously bypassed the check).
-
-This series adds/moves the check into those two functions so offloaded
-programs can no longer be attached to (or swapped into) the software
-path, regardless of which entry point is used.
-
-v2 -> v3:
-  - Alexei suggested converging the check rather than spreading it
-    across attach entry points. Consolidated into a single check at
-    bpf_mprog_attach() (covers all six tcx/netkit paths) and moved the
-    existing XDP check from dev_xdp_attach() into dev_xdp_install() so
-    the bpf_xdp_link_update() path is also covered. Three patches
-    collapse into two.
-v2: https://lore.kernel.org/bpf/20260424104201.217604-1-jiayuan.chen@linux.dev/
-
-v1 -> v2:
-  - tcx/netkit: also reject offloaded progs in the link update callback
-    (tcx_link_update/netkit_link_update), not just attach; pointed out
-    by the AI review on v1.
-  - Add patch 3/3 for the same hole in bpf_xdp_link_update().
-v1: https://lore.kernel.org/bpf/20260423033609.252464-1-jiayuan.chen@linux.dev/
-
-[1]: https://lore.kernel.org/bpf/64d8e2b5-a214-4f3c-b9e8-bcedbcb2c602@hust.edu.cn/
-
-Jiayuan Chen (2):
-  bpf, tcx, netkit: reject offloaded programs
-  bpf, xdp: move offload check into dev_xdp_install()
-
+Fixes: 053c8e1f235dc ("bpf: Add generic attach/detach/query API for multi-progs")
+Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+Reported-by: Dongliang Mu <dzm91@hust.edu.cn>
+Closes: https://lore.kernel.org/bpf/64d8e2b5-a214-4f3c-b9e8-bcedbcb2c602@hust.edu.cn/
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
  kernel/bpf/mprog.c | 11 +++++++++++
- net/core/dev.c     |  9 +++++----
- 2 files changed, 16 insertions(+), 4 deletions(-)
+ 1 file changed, 11 insertions(+)
 
+diff --git a/kernel/bpf/mprog.c b/kernel/bpf/mprog.c
+index 1394168062e85..0b50464ec902d 100644
+--- a/kernel/bpf/mprog.c
++++ b/kernel/bpf/mprog.c
+@@ -222,6 +222,14 @@ static int bpf_mprog_pos_after(struct bpf_mprog_entry *entry,
+ 	return tuple->prog ? -ENOENT : bpf_mprog_total(entry);
+ }
+ 
++static int bpf_mprog_check_prog(const struct bpf_prog *prog)
++{
++	if (prog->type == BPF_PROG_TYPE_SCHED_CLS &&
++	    bpf_prog_is_offloaded(prog->aux))
++		return -EINVAL;
++	return 0;
++}
++
+ int bpf_mprog_attach(struct bpf_mprog_entry *entry,
+ 		     struct bpf_mprog_entry **entry_new,
+ 		     struct bpf_prog *prog_new, struct bpf_link *link,
+@@ -237,6 +245,9 @@ int bpf_mprog_attach(struct bpf_mprog_entry *entry,
+ 	};
+ 	int ret, idx = -ERANGE, tidx;
+ 
++	ret = bpf_mprog_check_prog(prog_new);
++	if (ret)
++		return ret;
+ 	if (revision && revision != bpf_mprog_revision(entry))
+ 		return -ESTALE;
+ 	if (bpf_mprog_exists(entry, prog_new))
 -- 
 2.43.0
 
