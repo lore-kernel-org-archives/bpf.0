@@ -1,107 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28BD864
-	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 02:45:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D28C3370EC
+	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 02:55:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777085119; cv=none; b=kEx7OWme65dGXyzk4kNtcO8DkIE/SVmZsmiTlz/4fNtkh/azQDGOb6OUZ6oK8t6vXxJVGoQJdz7Ksj9egCWpi2yl0UaY1m1xb/ImqL8uB0YbFj4POMa43nCFo2Kx0NFQI8Z6Za8+4HUbBmnzwrTaq4QjifSYYclGE8Z08v8zVUA=
+	t=1777085756; cv=none; b=Ndw2nk1dIr5eq09LP12jSE3kCtuA+cXt1IZd0ECYxAE7ScZL1w1v7i2tx2/mL00EGZjldCfV3GGMS65blgwWAnqf1TPngBmWnylJFEg9Oo7ik4fY9JkVQMi18o4yWqgVCe+rDzntaWUeg2YDwiP1znorPsGjt/M/zhlv3T08DPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777085119; c=relaxed/simple;
-	bh=X/J0X5QF4dw73WN9ARIyEwFCHpeiXJv9ttiF33wSe78=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=sGtAJ5PW0a0WDwnn0btJhomM63R9k+aJcV+5RWn0TyA3UsVQUkdcZ3aeSRk8SUFjCiKJNtLqYJNiVdevK6yBxPOwwkU61W9zv4bDueOjEOMV8FcYE/mxyaOMTb6qYwtK6+y3ZCi4uwy+blhB/PIxRkB8Q0vRba7szQyDfnvufnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JsMWNpLk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777085756; c=relaxed/simple;
+	bh=UmV3xv7xVf2Zo2jFtRDOFkdl/3JCz++nNgKfRcYOJ5k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=En9RM5LB7FKir8ftiiF/hSToymlfjy6lxT5X9wjcF8fBkL6FwqDHM93BkQ6NkJ2eBS5t2MZJ2abHZrsQ4fKJML8aPXDbYQfbSbd986NStHreAI6msLeNgHv9ly0YWWVOBLoEnpoNx75ZuHHDg5ZFvPclDPSnOemGsHlCkg3N3E0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XMnNM1St; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JsMWNpLk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB59C19425;
-	Sat, 25 Apr 2026 02:45:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777085118;
-	bh=X/J0X5QF4dw73WN9ARIyEwFCHpeiXJv9ttiF33wSe78=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=JsMWNpLkg25TpdIuhLQJ4tnCxPMaAlKlQ4xBNdgbuarC9yL1rEl6INY0oR61l+0PN
-	 BW1M4JuTItyiy6b78hZKAScFv5lYKVMeb6DOCXaRi7n9xWJi5OJrePo2bB2MwJ9drF
-	 /S/e3XtuDPbj6JCbl0OYx1TEnthZfNhFK6GEZN34A0iLK7ROB3yn0mhD4D1jgQV/VM
-	 m9UFJR7ZQUR+yI3YJmSMtQKr7SLqo4qIvzr9IOMvZvwVlz+yY2XNEkqYx2o09hE8Ci
-	 eExR/JPtSHGRR4VtBpH7zN8BFFpAiIQuJpAzRwVF9GLu6tEXrCOzKDZws1Ne081z8g
-	 PagSl9Xz4SpnQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3 2/4] udp: Remove disconnected sockets from
- the 4-tuple hash
-Reply-To: sashiko@lists.linux.dev
-To: "Jordan Rife" <jrife@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260330215707.2374657-3-jrife@google.com>
-References: <20260330215707.2374657-3-jrife@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 25 Apr 2026 02:45:17 +0000
-Message-Id: <20260425024518.9DB59C19425@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XMnNM1St"
+Message-ID: <11e4c78b-dd7b-44f7-800f-cf64517f4a1d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1777085743;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wl0lrophzi3EeTmlvaWExT7+wFATN1EZSzwT4PC8Lwc=;
+	b=XMnNM1StXu64hqnkN6CLPsSarr1RFd7ibE923zPbneYwRMvO6ER9FwL7GJ9sGGMNNjaEQs
+	8NICDG8y8nAjz+cwzSzAv5lzuMV+/VdPbdqy3bOTI+Pvsbs/EHyMQ09Otra+31IP+Zp4v/
+	Phx//PeVCgBrdoSrr40GRug94lvrAXM=
+Date: Sat, 25 Apr 2026 10:55:28 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf] bpf, sockmap: reject overflowing copy + len in
+ bpf_msg_push_data()
+To: Weiming Shi <bestswngs@gmail.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Simon Horman <horms@kernel.org>, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, Xiang Mei <xmei5@asu.edu>,
+ Xinyu Ma <mmmxny@gmail.com>
+References: <20260424191602.1522411-3-bestswngs@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260424191602.1522411-3-bestswngs@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Sashiko AI review found 2 potential issue(s):
-- [High] Calling `udp_unhash4()` from process context with softirqs enabled=
- creates a deadlock vulnerability and lockdep warnings.
-- [High] Concurrent executions of `udp_unhash4()` lead to double-decrements=
- of hash bucket counters due to a TOCTOU race.
---
 
-commit e6257404c34b723d1c990d6c54298b3c3edfb986
-Author: Jordan Rife <jrife@google.com>
+On 4/25/26 3:16 AM, Weiming Shi wrote:
+> When the scatterlist ring is full or nearly full, bpf_msg_push_data()
+> enters a copy fallback path and computes copy + len for the page
+> allocation size. Since len comes from BPF with arg3_type = ARG_ANYTHING
+> and both are u32, a crafted len can wrap the sum to a small value,
+> causing an undersized allocation followed by an out-of-bounds memcpy.
+>
+>   BUG: unable to handle page fault for address: ffffed104089a402
+>   Oops: Oops: 0000 [#1] SMP KASAN NOPTI
+>   Call Trace:
+>    __asan_memcpy (mm/kasan/shadow.c:105)
+>    bpf_msg_push_data (net/core/filter.c:2852 net/core/filter.c:2788)
+>    bpf_prog_9ed8b5711920a7d7+0x2e/0x36
+>    sk_psock_msg_verdict (net/core/skmsg.c:934)
+>    tcp_bpf_sendmsg (net/ipv4/tcp_bpf.c:421 net/ipv4/tcp_bpf.c:584)
+>    __sys_sendto (net/socket.c:2206)
+>    do_syscall_64 (arch/x86/entry/syscall_64.c:94)
+>    entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:130)
+>
+> Add an overflow check before the allocation.
+>
+> Link: https://lore.kernel.org/all/20260424155913.A19FDC19425@smtp.kernel.org
+> Fixes: 6fff607e2f14 ("bpf: sk_msg program helper bpf_msg_push_data")
+> Tested-by: Xiang Mei <xmei5@asu.edu>
+> Tested-by: Xinyu Ma <mmmxny@gmail.com>
+> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
 
-udp: Remove disconnected sockets from the 4-tuple hash
 
-This commit updates udp_disconnect() and udp_abort() to always remove a
-disconnected socket from the 4-tuple hash. This is done by calling the newly
-introduced udp_disconnect_unhash4() function on disconnect or abort.
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> index 91918ff60728f..e3f7689513d9b 100644
-> --- a/net/ipv4/udp.c
-> +++ b/net/ipv4/udp.c
-> @@ -2235,10 +2235,20 @@ int __udp_disconnect(struct sock *sk, int flags)
->  }
->  EXPORT_SYMBOL(__udp_disconnect);
-> =20
-> +static int udp_disconnect_unhash4(struct sock *sk, int flags)
-> +{
-> +	struct udp_table *udptable =3D udp_get_table_prot(sk);
-> +
-> +	udp_unhash4(udptable, sk);
 
-Is it safe to call udp_unhash4() here with softirqs enabled?
-
-Looking at udp_unhash4(), it acquires hslot4->lock and hslot2->lock using
-spin_lock(). Because lock_sock() in udp_disconnect() doesn't disable bottom
-halves, an interrupt could occur while hslot4->lock is held.
-
-If a softirq executes a BPF program that calls bpf_sock_destroy() on a
-socket in the same bucket, it triggers udp_abort(). As udp_abort() skips
-lock_sock(sk) when in BPF context, it will call udp_unhash4() and attempt
-to acquire hslot4->lock again, resulting in a deadlock.
-
-Also, could this lead to double-decrements of hash bucket counters?
-
-Inside udp_unhash4(), the if (udp_hashed4(sk)) check is evaluated outside
-of any spinlocks. If another path unhashes the socket concurrently (such as
-udp_abort() from a BPF context bypassing lock_sock(sk)), both threads can
-evaluate udp_hashed4(sk) as true.
-
-Both threads will then serialize on spin_lock(&hslot4->lock). While
-hlist_nulls_del_init_rcu() handles already-unhashed nodes, both threads
-will unconditionally execute hslot4->count-- and udp_hash4_dec(hslot2),
-leading to corrupted hash table counts.
-
-> +	__udp_disconnect(sk, flags);
-> +
-> +	return 0;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260330215707.2374=
-657-1-jrife@google.com?part=3D2
