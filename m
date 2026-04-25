@@ -1,118 +1,153 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D20F27470
-	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 01:26:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B47F42048
+	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 01:40:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777080385; cv=none; b=iAf0t0nPLcq9SqSFjSp81kOwUWTpRzlQm/eGj4E4UQ8kMr7sbAEqM9KIeOfRhrZZCB+O8sCN6VnjtuNxQmMbV5t0mKwHM2Zjk9FHUH/0V7YR8HPh+Aw4LqTxGaS2lPuoqW/VfJGLwYx/D7STrkQ6HFZhcPmXHpdUDGmLcP0Rg8A=
+	t=1777081232; cv=none; b=tZlVgIsoIyJa2xB2+phLDCZgUd838rkHoasMQTmBzuArBl1hUlq9kuOpWtJtOD31w4QfOV7RSFAAwW9eJAkLnO6ca6ARDEdVwqy0mH7NKteFPSGTIZVLBr0Zbd0ABOmeYz3+BEU3dRwHCgHeyKug9V1R+XYx4xeTbQ2sjPuVZxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777080385; c=relaxed/simple;
-	bh=lL18ThBIngeuDVB4CLTRD1Lc0QmWS08mTNOMv5kHSEc=;
+	s=arc-20240116; t=1777081232; c=relaxed/simple;
+	bh=ySe/cgb21F6lTXYHNrj0wRvlJG87yBn5QC0rsiAeLPg=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=W05hG2QMstq0qoBIXeDgaG7jOvzeTSVB2jTWKPUR8g+noPhv/Opkn5zXUuRUZVxln/cVfyzCOXCzoUE+wNrfoa8EGAv9yRaHpJLd9pZRDN19gVIAupFbCVp4YpxUaNnOzrOBD29T27AUh59rnxqim7Y8Pn6sotmbP/LTg7fBmJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QdWsYT7N; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=BiOlNJBLBqlCB0rxg99TsiKOqPy1wfZkXSUrR7o8QrBCk/0cX6rvOB2LQatc1IXkFJvmCDN/EPrv9lTUrY0memtxvST59lKjxjaa0TKqK8gqHz1mm86HER6ymUhYtXx75thi/8NaDNaRhScCi3ADR88AXHfw0wtZGL9de4uyvgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nk2N3DV4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QdWsYT7N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC50C19425;
-	Sat, 25 Apr 2026 01:26:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nk2N3DV4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A058EC19425;
+	Sat, 25 Apr 2026 01:40:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777080385;
-	bh=lL18ThBIngeuDVB4CLTRD1Lc0QmWS08mTNOMv5kHSEc=;
+	s=k20201202; t=1777081231;
+	bh=ySe/cgb21F6lTXYHNrj0wRvlJG87yBn5QC0rsiAeLPg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=QdWsYT7NCpR0/i0NyrBBMAPMDtjF/pHChvJQ8wrFoN/63cTMyFOsX0anRiyWXDbo7
-	 wRImfImGiE8HDGmYXNsYUckOIModFtriOutFHkiUh4sZxQjg3/FEcLCcwikNAKIRd5
-	 QEab+YT8Xo62vR9Q2Dv0N3q+OZZKvGVh3xOmuc8KQ1e+2ljAuETze/FKPF89LF2jZS
-	 Y6eMj1+fPV1wL295Z6vLW1Nbi5qKHi72KKx6WUy2uPA0ExrDZTJmoADKmHA5xUZ87h
-	 kEUoqNXlORwAoU18aoa4CgxqBbW++gq5kidm3PcyM/r8YvUoA32ZK5VTv5Jcttt8TS
-	 1DdeTEB0Lzbdw==
+	b=nk2N3DV4g78V4KvXrrRe+hiYr3n8KAnAubjoqPzXwYxPiSOB4Lg0wOeyh1y+MFejM
+	 MhvKcBWddJabipUYIyDwNHemGUQBGuw8134BKMD2V5rz0xvHAt6keHmoeh2Szb9gep
+	 xUfzG+9ys+DY5orcK3bWqSLkYKdoo9Owh6Yc1zmPAn2p5V4BwsvJuBOg87J5H3xATL
+	 w8Ba04Lr9wyvBfU/woRVh5cQW4vcrMMRS0RluIUx1V3NeQAJbinzPRd6EEIgVStCE4
+	 XExVKxuUll4Zbz0lqu5dCb4MGjIdVRYk0ssJdMqVJY7WuVqiP8NKvnOe/X7gqJob9C
+	 5IVbcNm/p0eXg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v7 3/7] net: bcmgenet: add basic XDP support
- (PASS/DROP)
+Subject: Re: [PATCH v11 09/12] x86/vmscape: Use static_call() for predictor
+ flush
 Reply-To: sashiko@lists.linux.dev
-To: "Nicolai Buchwitz" <nb@tipi-net.de>
+To: "Pawan Gupta" <pawan.kumar.gupta@linux.intel.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260416054743.1289191-4-nb@tipi-net.de>
-References: <20260416054743.1289191-4-nb@tipi-net.de>
+In-Reply-To: <20260422-vmscape-bhb-v11-9-b18e0cf32af4@linux.intel.com>
+References: <20260422-vmscape-bhb-v11-9-b18e0cf32af4@linux.intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 25 Apr 2026 01:26:24 +0000
-Message-Id: <20260425012624.DBC50C19425@smtp.kernel.org>
+Date: Sat, 25 Apr 2026 01:40:30 +0000
+Message-Id: <20260425014031.A058EC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 1 potential issue(s):
-- [High] The driver incorrectly applies the original hardware checksum (`CH=
-ECKSUM_COMPLETE`) to the SKB after an XDP program has processed the packet.
+Sashiko AI review found 3 potential issue(s):
+- [High] Performance regressions in highly sensitive fast paths due to repl=
+aced zero-overhead checks.
+- [Low] Missing `<linux/static_call.h>` header inclusion in `arch/x86/inclu=
+de/asm/entry-common.h`.
+- [Low] Out-of-sync tools ABI header.
 --
 
-commit 5fcb56745df8a1527b5006d1089794e51dbc65ee
-Author: Nicolai Buchwitz <nb@tipi-net.de>
+commit e665a60c1a2370dfaa4dba80cd6f14bfe1c7e97b
+Author: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 
-net: bcmgenet: add basic XDP support (PASS/DROP)
+x86/vmscape: Use static_call() for predictor flush
 
-This commit adds basic XDP program attachment via ndo_bpf and executes
-XDP programs in the RX path. It handles XDP_PASS by building an SKB from
-the xdp_buff, and XDP_DROP by returning the page to the page_pool.
+This commit replaces the flag-based mitigation selector for VMSCAPE with a
+static_call to the mitigation function. This avoids adding multiple checks
+for different mitigation options at exit-to-userspace.
 
-> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net=
-/ethernet/broadcom/genet/bcmgenet.c
-> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cp=
+ufeatures.h
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+[ ... ]
+> @@ -503,7 +503,7 @@
+>  #define X86_FEATURE_TSA_SQ_NO		(21*32+11) /* AMD CPU not vulnerable to T=
+SA-SQ */
+>  #define X86_FEATURE_TSA_L1_NO		(21*32+12) /* AMD CPU not vulnerable to T=
+SA-L1 */
+>  #define X86_FEATURE_CLEAR_CPU_BUF_VM	(21*32+13) /* Clear CPU buffers usi=
+ng VERW before VMRUN */
+> -#define X86_FEATURE_IBPB_EXIT_TO_USER	(21*32+14) /* Use IBPB on exit-to-=
+userspace, see VMSCAPE bug */
+> +/* Free */
+>  #define X86_FEATURE_ABMC		(21*32+15) /* Assignable Bandwidth Monitoring =
+Counters */
+
+This isn't a bug, but freeing the feature flag here without updating
+tools/arch/x86/include/asm/cpufeatures.h might trigger ABI header sync
+warnings during tools builds. Is a follow-up planned for the tools header?
+
+> diff --git a/arch/x86/include/asm/entry-common.h b/arch/x86/include/asm/e=
+ntry-common.h
+> --- a/arch/x86/include/asm/entry-common.h
+> +++ b/arch/x86/include/asm/entry-common.h
+> @@ -4,6 +4,7 @@
+> =20
+>  #include <linux/randomize_kstack.h>
+>  #include <linux/user-return-notifier.h>
+> +#include <linux/static_call_types.h>
+
+Does this code need to include linux/static_call.h directly?
+
+Using static_call_cond below relies on the macro definition from
+linux/static_call.h. Depending on transitive includes might lead to
+implicit function declaration or macro expansion errors.
 
 [ ... ]
+> @@ -94,10 +95,8 @@ static inline void arch_exit_to_user_mode_prepare(stru=
+ct pt_regs *regs,
+>  	 */
+>  	choose_random_kstack_offset(rdtsc());
+> =20
+> -	/* Avoid unnecessary reads of 'x86_predictor_flush_exit_to_user' */
+> -	if (cpu_feature_enabled(X86_FEATURE_IBPB_EXIT_TO_USER) &&
+> -	    this_cpu_read(x86_predictor_flush_exit_to_user)) {
+> -		write_ibpb();
+> +	if (unlikely(this_cpu_read(x86_predictor_flush_exit_to_user))) {
+> +		static_call_cond(vmscape_predictor_flush)();
+>  		this_cpu_write(x86_predictor_flush_exit_to_user, false);
+>  	}
+>  }
 
-> @@ -2404,30 +2462,34 @@ static unsigned int bcmgenet_desc_rx(struct bcmge=
-net_rx_ring *ring,
+Does removing the alternative-patched cpu feature check introduce a
+performance regression here?
 
+By dropping the zero-overhead check, it appears an unconditional per-cpu
+memory read is now evaluated on every exit to userspace. This seems to
+reverse the explicitly documented optimization to avoid unnecessary reads.
+
+Could a static key or static branch be used to maintain the zero-overhead
+path when the mitigation is disabled?
+
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
 [ ... ]
-
-> +		/* Save rx_csum before XDP runs - an XDP program
-> +		 * could overwrite the RSB via bpf_xdp_adjust_head.
->  		 */
-> +		if (dev->features & NETIF_F_RXCSUM)
-> +			rx_csum =3D (__force __be16)(status->rx_csum & 0xffff);
+> @@ -11463,7 +11463,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  	 * set for the CPU that actually ran the guest, and not the CPU that it
+>  	 * may migrate to.
+>  	 */
+> -	if (cpu_feature_enabled(X86_FEATURE_IBPB_EXIT_TO_USER))
+> +	if (static_call_query(vmscape_predictor_flush))
+>  		this_cpu_write(x86_predictor_flush_exit_to_user, true);
 > =20
-> +		xdp_init_buff(&xdp, PAGE_SIZE, &ring->xdp_rxq);
-> +		xdp_prepare_buff(&xdp, page_address(rx_page),
-> +				 GENET_RX_HEADROOM, pkt_len, true);
-> =20
-> +		xdp_act =3D bcmgenet_run_xdp(ring, xdp_prog, &xdp, rx_page);
-> +		if (xdp_act !=3D XDP_PASS)
-> +			goto next;
-> =20
-> +		skb =3D bcmgenet_xdp_build_skb(ring, &xdp);
-> +		if (unlikely(!skb)) {
-> +			BCMGENET_STATS64_INC(stats, dropped);
-> +			page_pool_put_full_page(ring->page_pool,
-> +						rx_page, true);
-> +			goto next;
->  		}
-> =20
->  		/* Set up checksum offload */
->  		if (dev->features & NETIF_F_RXCSUM) {
->  			if (rx_csum) {
->  				skb->csum =3D (__force __wsum)ntohs(rx_csum);
->  				skb->ip_summed =3D CHECKSUM_COMPLETE;
+>  	/*
 
-Does this unconditionally apply the original hardware checksum to the SKB
-after the XDP program has executed?
+Will replacing the cpu feature check with static_call_query add overhead on
+the KVM VM-exit fast path?
 
-Since XDP programs can modify the packet payload before returning XDP_PASS,
-the original hardware sum might no longer be mathematically valid for the
-modified packet.
+Looking at linux/static_call.h, static_call_query reads a global function
+pointer.
 
-If a modified packet retains CHECKSUM_COMPLETE with the old checksum, could
-the network stack rely on it, fail validation, and erroneously drop the
-packet?
-
-Would it make sense to invalidate the hardware checksum (for example, by
-setting skb->ip_summed to CHECKSUM_NONE) if an XDP program is present and
-processes the packet?
+Would it be better to use a static key here to avoid the memory read when
+the mitigation is disabled?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416054743.1289=
-191-1-nb@tipi-net.de?part=3D3
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260422-vmscape-bh=
+b-v11-0-b18e0cf32af4@linux.intel.com?part=3D9
