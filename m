@@ -1,131 +1,159 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D675E35A393
-	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 17:21:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B62EEA8
+	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 18:00:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777137715; cv=none; b=BZHlyNfkqQYvGbL0vGbdnly/4JMEYytpvM23drL5/gYdGQHKQ6JBmMtpS0m9VEoENvCeBopzGIorGAF+jzyWSf1UadVPjSp+Hnp1q4hYkt5QaDduHAZA+fyX0iVT20IIFZQz8MhK22jJhh/Hzkatpi/w2KEUGRepWVPzV10axLo=
+	t=1777140003; cv=none; b=NRmaKaMuaSpTf2anyiNoln2vo9C5R1zj6ga5fDpQ/JUjPqx0OHaALY8r+59e7oqX6fKUHNNeUN+m3hQwtO7bv9bte7lmuDbV6WZYo/Y7RFBd8XLEKdb7uIX8tROzhZQP3iQUe0W2W/rnvJJ121hbp7RC1Vo/kUozNL2GgD9z/9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777137715; c=relaxed/simple;
-	bh=Tt2GTafJyrtQGNKbZrn0loJdG1oXtTGJV/1+jzNUpG0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WrLt4qDP+hsZV8Cb98Ot68oM5BNTVDv8+3AZPUAwpZmyBaQDXLWo6LIVP+X868PIAxj8IPx1/bJ47uHJE/mZRxOgWsDTKgm8wv6/xRfucnHRNNufPfA5XXrOEuFIuJxb6Qd4AVg6c0eLMHL6l4Sm7YohQhBIRpe0cuk2mc7Qo9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fivTLnEP; arc=none smtp.client-ip=209.85.216.44
+	s=arc-20240116; t=1777140003; c=relaxed/simple;
+	bh=CK9YYDsSVZGCgJah9TQvpjQXc/1mFwRV9PzA3lTyxVE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tXaVUJ7X+q3sK9NBbYC4ERb4CI9txEW2tq2NUgoveqkifqLwiD+z92egrveYAHi0FWnmkfjLLo93UfYlEkkQDyB8PwYBMN+HCEFAuFT3yHCNlgzK+g0XGXK9JxbiNrX0Tvxboovd+vcw8jLINkfGyyXDwFoFUMD5wkjMLcPLHbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eodqC1a5; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fivTLnEP"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3614826eca4so7961041a91.1
-        for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 10:21:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eodqC1a5"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-35fb166b0c6so4835812a91.0
+        for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 11:00:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777137713; x=1777742513; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gzbxk8L9uFRzgE2/BRv9/1H2pVTDOyEIt1GV7kkjRwA=;
-        b=fivTLnEPcwOLmfSnX1JzkWASqYBGIbDcIxlzzZqyIZDKhtE7/iknvylKCE7/RVcKte
-         ZdV4FtyjcMKZmvZmhcrW3TL/pmSecdnGTtN+1xaz98vQW/k6roiCm8TWwVZwfnGd+ljK
-         8yLHGGWu4/zB26+qMjA02K9Tq5X1Id/GYoUWsRsjVfSiAoiwxeGxLIAlDrwZQyECP6CU
-         jnfq+Yso61F01UdB4W4QfdaO1DaDq90vMi8amtKPw3zvEuZvxYzU8/cvR8YPQLqJ43Ws
-         VLuDKCfP7sQyCshZsgbHUYzLTCRHoCFrCtymtb9mQKgK3sIpg710VTwCyh6cyuPsS8p3
-         aqmQ==
+        d=gmail.com; s=20251104; t=1777140001; x=1777744801; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qFcDbOFyHJ3yOFFB2U6uoZi3zDlX/raHpEMdVEL47T0=;
+        b=eodqC1a5xSY4OQOtI1+tC7j6Hak8NtyEN5Q1FmzULRhs94K4UIRBhDAmqM4RfrX2oR
+         sE+hdQZgSpbeEK4VqNYJvXJNKDwMlk/KGwbjpIVBGEqGO3sqvNndJ1h/iGDss72ESTjr
+         7FWe3Xk0WjQyjWZN2S4l6yAEH17x2iQLaA2IGCJXdIe5oPSc7muDq6gAt7G61Jla3xkQ
+         pW7/0RQ/1+ypsIUYi2irOx4TRLQrK07pATGK/3V492UMWiDCEQOBS85xuPyFG9IhDGVr
+         21z/fa3uC3shqk0HRCPsjtwmaSSqe3SmbsG7ZPP5PMChw950Ccpn7ecvANVFV+tmYFO9
+         dnXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777137713; x=1777742513;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20251104; t=1777140001; x=1777744801;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gzbxk8L9uFRzgE2/BRv9/1H2pVTDOyEIt1GV7kkjRwA=;
-        b=XOuKI06GHKThszfAMgfFIt+16h3x6oh7BK6vyYpLq3l7Cqqz42GLgzcVq0em9hqC2T
-         k6++lNBEOKkNJFZxhL4B51se/mMRZ3def4mEurnMiVQ2H6GwN+Sja5sICgdSnMBhRlN+
-         vlwBcQ1Qvw1u3vSF5BTGd5BDeqDcpXXXojwGAmisN1Df4+JNTehbSy1EegmKpbZooW//
-         ywqUb6o5ocw2O4km/ABl9RAdFNAJgn3sJzVBxT3/YaT8RlWrQlRCnZ2rCwgisYSNjI+Y
-         iATW07Nz7HtBhnOHD7QbHRW6PxJc+K0J+BnURj75aR18l8JKiGy9pMkIkBDpbicIiJCP
-         F4Tg==
-X-Gm-Message-State: AOJu0YyRGPttIoZt0AhmwTFr5ZlCSghfOnes6KMAdr8wvWDYadevfY/N
-	ozENQxB+7rZqGZCIudtECX+ZDaUhG3G62i2p5j+Jr1oPpphe/16r+Ea2
-X-Gm-Gg: AeBDievLfz3d9gLpIjqJpVBK9Ez4jB6O+CU6Rwr1NShQXM+lfSYGecY0g8Agx1iqkWk
-	h+JlRWvz2rwVdMqFVHR70DWDNQfiQ/VQ/BAVdE/l2cBIX909I7uWOPmdCjcmrkrYs1aBPnVZX02
-	MTS540Z25dZfroD8Zkxaz+Qx3EzlUSb8jxRjqxLAmYlB6XW8AvLU3jhW8NpGwAFiaHJByCfgyiq
-	PXVY56zTKKbN9OUALFCw/AAeMJsOd7bL7yI1hA5Q/lvNUj6IMKd3BeIT8eKUJ6mXFAfdM5+pW0u
-	9+3vvpuw9pGGZAO8kjOx6yZwMQSCQoFQbTIhY4cv0Fu14wW6QbdPJWhsvCPQHTlWSruOYOOJhTF
-	6OPc/ce2vk9Fu8PmKz2bZUuXheWZGf4sRUSRJtReVYNIhFxgQV9t0Keh0gl/g9Ix+NnOJJgoQeZ
-	wHTdps8rDtbH1PQNAE6qo42SJSCPU6N0W8QaDjdunOJnJCF9jknDMyw3Q4O8/6XMk=
-X-Received: by 2002:a17:90a:e704:b0:35f:ccf6:69a5 with SMTP id 98e67ed59e1d1-36140478a16mr36994277a91.20.1777137713136;
-        Sat, 25 Apr 2026 10:21:53 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3614198f775sm32895374a91.16.2026.04.25.10.21.52
+        bh=qFcDbOFyHJ3yOFFB2U6uoZi3zDlX/raHpEMdVEL47T0=;
+        b=pURnHFYbzjPjA6CeYO3Xas31tUusHZN5WUT499jFu2wUF2l3/x1TsFNdc+zFJtMo4+
+         pN0xiCvt8C4ESV91+YnhSyd7KZyY+UTwNOj7YOC2wxd/f2oF6iLkipLuordHUieBRNYy
+         oYxIWt0CAxBDPeHPRK1zA4lQ2Gsyrpye1TaJxJXLQ51ae9/h8V4cqyyRUe8DizSdFPkI
+         5zgkZTr4JZhlT667LAtiej1XWz+7I4+j3MvvQ7j4b3BjVzB5Uf9ALoEKqX/svY0vRUA7
+         WzhrybprCV0URP7OlbIFleHrNfh9/2quDqDYliMWbLKaZF3FUUbx4E9QcgDA+bl5vwv0
+         fK2A==
+X-Forwarded-Encrypted: i=1; AFNElJ8WN7nErff8sW3d7FdkOsjbFcZ/6PFVZSosbdKG5TE5HRJtRj6RGZK/qDeiP/kD4WnE588=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzgz+mRm8wzuMYjQKBtkCy2godaO2LZxrU/2ARIV1WjjI9qbIC/
+	y72xkggyhx8XG521qIgOibmNAm1/NJwPaP84uozWB42d3WUp4OKmR52U
+X-Gm-Gg: AeBDiest0hXGXo+TYJVdviUgVEO4JtH7w1H6kwTiVugbN39QKZlPjyohgJjOJmUBfh0
+	TZXzmjzjVYNIghpMlVYGxEUTxKesAFj7xDnbyUqZ6ywa6Lakh+gLMPWYpYv29Ew0tNY6M1TDhDs
+	BjBsCmCD1XJ9pqR6UATCdZtYUJBcWP8eDbSEA2RNh1xByZwesN/YLd4ZYllwlH/M6iXVFYsfMia
+	YCt4h0/EBHOIySrQEqPlRHmiyTQN8jMZVkvhXzrBUa4bfg6U70GCoS7+PcgLfUg2wQ9tDk/ayX7
+	tbOxiSUyuplWC+e8txRrVw4UYI+SPoMwN2sqq/BvCFBQJPsqBI+gnS5W997dNhjg0HLmcGdWMox
+	EPlKVJ/8SLpVe41LWhxwzhF+H9HiL7qJsjdiJ9pZnMeCI08YLWePqjbaI4/FMSJ7457KQIECbkj
+	EEeTTj7GlUB84j37BOND2ZRwb5Djg2EJQ8BxQLRAJmJ0XkUKdhohLqrMyVYmhi2ETm6LXdeKN5
+X-Received: by 2002:a17:90b:384a:b0:35b:9e53:e2df with SMTP id 98e67ed59e1d1-361401beeaamr33976893a91.2.1777140001191;
+        Sat, 25 Apr 2026 11:00:01 -0700 (PDT)
+Received: from Air.local ([198.176.50.157])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5fab30f29sm258765765ad.68.2026.04.25.10.59.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Apr 2026 10:21:52 -0700 (PDT)
-Message-ID: <fd376f47b9512daf669a87b23573f614ec146385.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/4] bpf: replace min/max fields with struct
- cnum{32,64}
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, Andrii
- Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau	 <martin.lau@linux.dev>, Kernel Team <kernel-team@fb.com>,
- Yonghong Song	 <yonghong.song@linux.dev>, Shung-Hsi Yu
- <shung-hsi.yu@suse.com>, Paul Chaignon	 <paul.chaignon@gmail.com>,
- Harishankar Vishwanathan	 <harishankar.vishwanathan@gmail.com>
-Date: Sat, 25 Apr 2026 10:21:49 -0700
-In-Reply-To: <CAADnVQJa0x3ph51Eb_0UbO51B5OYfdfLoNdhMNt5nTD3LfpQ1Q@mail.gmail.com>
-References: <20260424-cnums-everywhere-rfc-v1-v3-0-ca434b39a486@gmail.com>
-	 <e0d8a24cbc3fd21cc361b93a3b25c9b412bc8c6a.camel@gmail.com>
-	 <eefc176f8803ab1da8bbb0cae03d35d8d3df661a.camel@gmail.com>
-	 <CAADnVQJa0x3ph51Eb_0UbO51B5OYfdfLoNdhMNt5nTD3LfpQ1Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+        Sat, 25 Apr 2026 11:00:00 -0700 (PDT)
+Date: Sun, 26 Apr 2026 01:59:51 +0800
+From: Weiming Shi <bestswngs@gmail.com>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Simon Horman <horms@kernel.org>, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, Xiang Mei <xmei5@asu.edu>, 
+	Xinyu Ma <mmmxny@gmail.com>
+Subject: Re: [PATCH bpf] bpf, sockmap: zero-initialize pages allocated in
+ bpf_msg_push_data
+Message-ID: <aey55I9gC0VtaN1p@Air.local>
+References: <20260424190310.1520555-2-bestswngs@gmail.com>
+ <c4a9412d-b6ad-4b80-9580-865575f4152c@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c4a9412d-b6ad-4b80-9580-865575f4152c@linux.dev>
 
-On Sat, 2026-04-25 at 08:20 -0700, Alexei Starovoitov wrote:
-> On Sat, Apr 25, 2026 at 4:48=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.c=
-om> wrote:
-> >=20
-> > On Sat, 2026-04-25 at 03:05 -0700, Eduard Zingerman wrote:
-> > > On Fri, 2026-04-24 at 15:52 -0700, Eduard Zingerman wrote:
-> > > > This RFC replaces s64, u64, s32, u32 scalar range domains tracked b=
-y
-> > > > verifier by a pair of circular numbers (cnums): one for 64-bit doma=
-in
-> > > > and another for 32-bit domain. Each cnum represents a range as a
-> > > > single arc on the circular number line, from which signed and unsig=
-ned
-> > > > bounds are derived on demand. See also wrapped intervals
-> > > > representation as in [1].
-> > > >=20
-> > > > The use of such representation simplifies arithmetic and conditions
-> > > > handling in verifier.c and allows to express 32 <-> 64 bit deductio=
-ns
-> > > > in a more mathematically rigorous way.
-> > > >=20
-> > > > [1] https://jorgenavas.github.io/papers/ACM-TOPLAS-wrapped.pdf
-> > >=20
-> > > Uh-oh. range_within() needs an update.
-> > >=20
-> > > [...]
-> >=20
-> > The fix is as in the attachment, the tests are still passing, but the
-> > stats had changed a bit. I'll send the fix formally later on Saturday.
->=20
-> +        if (FN(is_empty)(outer) || FN(is_empty(inner)))
-> +               return false;
->=20
-> too aggressive.
-> empty inner should return true, no?
-> If both are empty, is also 'return true' ?
+On 26-04-25 11:17, Jiayuan Chen wrote:
+> 
+> On 4/25/26 3:03 AM, Weiming Shi wrote:
+> > bpf_msg_push_data() allocates pages via alloc_pages() without
+> > __GFP_ZERO. In the non-copy path, the entire page of uninitialized
+> > heap content is added directly to the sk_msg scatterlist, which is
+> > then transmitted over TCP to userspace via tcp_bpf_push(). In the
+> > copy path, a gap of len bytes between the front and back memcpy
+> > regions is similarly left uninitialized.
+> > 
+> > This leads to a kernel heap information leak: stale page content
+> > including kernel pointers from the direct-map and vmemmap regions
+> > is transmitted to userspace, which can be used to defeat KASLR.
+> > 
+> > Add __GFP_ZERO to the alloc_pages() call to ensure the allocated
+> > page is always zeroed before it enters the scatterlist.
+> 
+> 
+> 
+> As the helper's own documentation says:
+> 
+>     If a program of type BPF_PROG_TYPE_SK_MSG is run on a msg it may
+>     want to insert metadata or options into the msg. This can later be
+>     read and used by any of the lower layer BPF hooks.
+> 
+> The inserted region is meant to be written by the BPF program — that's the
+> entire point of calling push.
+> 
+> If the program doesn't fill it,  the push has no purpose to begin with.
+> 
+> 
+> Isn't the uninitialized content a bug in the BPF program rather than
+> something the kernel helper should paper over?
+> 
 
-Actually, yes. The correct operation name should be 'is_subset',
-hence on empty 'inner' it should return true regardless of 'outer'.
+Hi, Thanks for the review.
 
-This wouldn't make any difference for states comparison (at-least at
-the moment), because of the simulate_both_branches_taken() logic that
-considers branches with empty registers dead. But still, having
-properties properly defined after mathematical operations will save
-some debugging time in the future.
+In my testing a process with only CAP_BPF + CAP_NET_ADMIN can receive
+kernel heap and vmalloc pointers through recv() from the uninitialized
+pushed region. The uninitialized memory contains critical kernel metadata
+such as direct-map and vmalloc pointers, which breaks KASLR.
+
+Kernels without CONFIG_INIT_ON_ALLOC_DEFAULT_ON (e.g. RHEL) are
+directly affected the leak is not masked by any mitigation.
+
+Thanks,
+Weiming Shi
+
+> 
+> > Link: https://lore.kernel.org/all/20260424155913.A19FDC19425@smtp.kernel.org
+> > Fixes: 6fff607e2f14 ("bpf: sk_msg program helper bpf_msg_push_data")
+> > Tested-by: Xiang Mei <xmei5@asu.edu>
+> > Tested-by: Xinyu Ma <mmmxny@gmail.com>
+> > Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+> > ---
+> >   net/core/filter.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/net/core/filter.c b/net/core/filter.c
+> > index bc96c18df4e0..ea02239892fd 100644
+> > --- a/net/core/filter.c
+> > +++ b/net/core/filter.c
+> > @@ -2820,7 +2820,7 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg, u32, start,
+> >   	if (!space || (space == 1 && start != offset))
+> >   		copy = msg->sg.data[i].length;
+> > -	page = alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP,
+> > +	page = alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP | __GFP_ZERO,
+> >   			   get_order(copy + len));
+> >   	if (unlikely(!page))
+> >   		return -ENOMEM;
