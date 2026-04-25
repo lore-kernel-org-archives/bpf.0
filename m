@@ -1,153 +1,265 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B47F42048
-	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 01:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02E85C613
+	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 01:59:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777081232; cv=none; b=tZlVgIsoIyJa2xB2+phLDCZgUd838rkHoasMQTmBzuArBl1hUlq9kuOpWtJtOD31w4QfOV7RSFAAwW9eJAkLnO6ca6ARDEdVwqy0mH7NKteFPSGTIZVLBr0Zbd0ABOmeYz3+BEU3dRwHCgHeyKug9V1R+XYx4xeTbQ2sjPuVZxc=
+	t=1777082343; cv=none; b=WHheYKM2x7jibsz22YSR6V1PCa9+xVa6C8bMCRnkz+TOOc8aUbjkcLCuw4MGLVhJ8JyRKy8NzrnYPhoVVlzgjocc1FviKkJhVTkErGASx/3jM2VfDqK13jwhjwr/oBFUgWduz4q2fDOM1awAFSGZrRvabbburuw6VWF7LoQHkQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777081232; c=relaxed/simple;
-	bh=ySe/cgb21F6lTXYHNrj0wRvlJG87yBn5QC0rsiAeLPg=;
+	s=arc-20240116; t=1777082343; c=relaxed/simple;
+	bh=GoUazX8xRY0dSUZ1wJWsZXrSTH5cbE28tHxVmCoMN9s=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=BiOlNJBLBqlCB0rxg99TsiKOqPy1wfZkXSUrR7o8QrBCk/0cX6rvOB2LQatc1IXkFJvmCDN/EPrv9lTUrY0memtxvST59lKjxjaa0TKqK8gqHz1mm86HER6ymUhYtXx75thi/8NaDNaRhScCi3ADR88AXHfw0wtZGL9de4uyvgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nk2N3DV4; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=NtRoUVFT/xq9/Sr5Kid1BAjhELDFKr5YTW5XW1uTyblCVvjbV5YBZB8FIyvI7N+FKqOveqCPCYi32FZNXQibNMHsIQ1OLhTF821TJcEk4wGU4XZ6jEb8dvj19vdqml6rA7vgPMDl2/r9/PpqMnkQ6lB2DCDeF6CcIQIYA6M5Ihs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=USvREqd9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nk2N3DV4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A058EC19425;
-	Sat, 25 Apr 2026 01:40:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="USvREqd9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD3A0C19425;
+	Sat, 25 Apr 2026 01:59:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777081231;
-	bh=ySe/cgb21F6lTXYHNrj0wRvlJG87yBn5QC0rsiAeLPg=;
+	s=k20201202; t=1777082342;
+	bh=GoUazX8xRY0dSUZ1wJWsZXrSTH5cbE28tHxVmCoMN9s=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=nk2N3DV4g78V4KvXrrRe+hiYr3n8KAnAubjoqPzXwYxPiSOB4Lg0wOeyh1y+MFejM
-	 MhvKcBWddJabipUYIyDwNHemGUQBGuw8134BKMD2V5rz0xvHAt6keHmoeh2Szb9gep
-	 xUfzG+9ys+DY5orcK3bWqSLkYKdoo9Owh6Yc1zmPAn2p5V4BwsvJuBOg87J5H3xATL
-	 w8Ba04Lr9wyvBfU/woRVh5cQW4vcrMMRS0RluIUx1V3NeQAJbinzPRd6EEIgVStCE4
-	 XExVKxuUll4Zbz0lqu5dCb4MGjIdVRYk0ssJdMqVJY7WuVqiP8NKvnOe/X7gqJob9C
-	 5IVbcNm/p0eXg==
+	b=USvREqd9lue07f2qW+5VdKZ0VB4KPGKltFvgh2xVdaVMY6IzXrv4AmAjexFHRK993
+	 8OW9HVsm4zpbNjKrEdiJcIIp5MQ34eTqSItpWzMIrWbCS2SNLz4lPSmWhA869UvY0J
+	 MTaR0YhLZ4vIi7C2b0nZKUqn+lVaAjVF3RC9iCZieydDb0xLK2eNQwTtgByFY3jT2q
+	 aUcGQ++60eQneqLMtbuyy5AenIN1uSfaoTg4o9kf4bvqk4uQxhU0GNM1NEtV8AeRsz
+	 vMxKEGA1a51e8hnsS1T+V6Ascgr0LP53wTr9dQyLUhKwW9cioHMqFiacEvrrxwQDTd
+	 wti7uzdOOaXPQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v11 09/12] x86/vmscape: Use static_call() for predictor
- flush
+Subject: Re: [PATCH 1/2] kallsyms: show function parameter info in oops/WARN
+ dumps
 Reply-To: sashiko@lists.linux.dev
-To: "Pawan Gupta" <pawan.kumar.gupta@linux.intel.com>
+To: "Sasha Levin" <sashal@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260422-vmscape-bhb-v11-9-b18e0cf32af4@linux.intel.com>
-References: <20260422-vmscape-bhb-v11-9-b18e0cf32af4@linux.intel.com>
+In-Reply-To: <20260323164858.1939248-2-sashal@kernel.org>
+References: <20260323164858.1939248-2-sashal@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 25 Apr 2026 01:40:30 +0000
-Message-Id: <20260425014031.A058EC19425@smtp.kernel.org>
+Date: Sat, 25 Apr 2026 01:59:02 +0000
+Message-Id: <20260425015902.BD3A0C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 3 potential issue(s):
-- [High] Performance regressions in highly sensitive fast paths due to repl=
-aced zero-overhead checks.
-- [Low] Missing `<linux/static_call.h>` header inclusion in `arch/x86/inclu=
-de/asm/entry-common.h`.
-- [Low] Out-of-sync tools ABI header.
+Sashiko AI review found 8 potential issue(s):
+- [High] Build Tool Infinite Loop / Hash Table Exhaustion
+- [Medium] Incorrect Parameter Attribution due to Missing Validation
+- [Medium] Missing Architecture Dependency in Kconfig
+- [Medium] Misleading Fault Address Highlighting for Non-Page-Fault Excepti=
+ons
+- [Medium] Conceptual Flaw: Statically Mapping Parameters to Clobbered Regi=
+sters
+- [Low] Build Error on x86_64 due to Incorrect pt_regs Fields
+- [Low] KUnit Test Module Linkage Failure
+- [Low] Unused Static Variable Causes Build Warning/Error
 --
 
-commit e665a60c1a2370dfaa4dba80cd6f14bfe1c7e97b
-Author: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+commit dc18a113b4058bc5d9640e6245bce2e390eeb331
+Author: Sasha Levin <sashal@kernel.org>
 
-x86/vmscape: Use static_call() for predictor flush
+kallsyms: show function parameter info in oops/WARN dumps
 
-This commit replaces the flag-based mitigation selector for VMSCAPE with a
-static_call to the mitigation function. This avoids adding multiple checks
-for different mitigation options at exit-to-userspace.
+This commit embeds DWARF-derived function parameter name and type
+information in the kernel image so that oops and WARN dumps display the
+crashing function's register-passed arguments. It adds a build tool to
+parse DWARF and stores it in .rodata, gated behind CONFIG_KALLSYMS_PARAMINF=
+O.
 
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cp=
-ufeatures.h
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-[ ... ]
-> @@ -503,7 +503,7 @@
->  #define X86_FEATURE_TSA_SQ_NO		(21*32+11) /* AMD CPU not vulnerable to T=
-SA-SQ */
->  #define X86_FEATURE_TSA_L1_NO		(21*32+12) /* AMD CPU not vulnerable to T=
-SA-L1 */
->  #define X86_FEATURE_CLEAR_CPU_BUF_VM	(21*32+13) /* Clear CPU buffers usi=
-ng VERW before VMRUN */
-> -#define X86_FEATURE_IBPB_EXIT_TO_USER	(21*32+14) /* Use IBPB on exit-to-=
-userspace, see VMSCAPE bug */
-> +/* Free */
->  #define X86_FEATURE_ABMC		(21*32+15) /* Assignable Bandwidth Monitoring =
-Counters */
-
-This isn't a bug, but freeing the feature flag here without updating
-tools/arch/x86/include/asm/cpufeatures.h might trigger ABI header sync
-warnings during tools builds. Is a follow-up planned for the tools header?
-
-> diff --git a/arch/x86/include/asm/entry-common.h b/arch/x86/include/asm/e=
-ntry-common.h
-> --- a/arch/x86/include/asm/entry-common.h
-> +++ b/arch/x86/include/asm/entry-common.h
-> @@ -4,6 +4,7 @@
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 3e3acfc37be7e..bc1b38458029d 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -2105,6 +2105,27 @@ config KALLSYMS_LINEINFO_MODULES
 > =20
->  #include <linux/randomize_kstack.h>
->  #include <linux/user-return-notifier.h>
-> +#include <linux/static_call_types.h>
+>  	  If unsure, say N.
+> =20
+> +config KALLSYMS_PARAMINFO
+> +	bool "Show function parameter info in oops/WARN dumps"
+> +	depends on KALLSYMS_LINEINFO
 
-Does this code need to include linux/static_call.h directly?
+Should this have an architecture dependency (e.g., depends on X86_64)?
 
-Using static_call_cond below relies on the macro definition from
-linux/static_call.h. Depending on transitive includes might lead to
-implicit function declaration or macro expansion errors.
+The feature appears to be heavily x86-64 specific, hardcoding x86-64
+registers and exclusively hooking into arch/x86/kernel/dumpstack.c. Enabling
+it on unsupported architectures could inflate the kernel image with unused
+tables.
 
 [ ... ]
-> @@ -94,10 +95,8 @@ static inline void arch_exit_to_user_mode_prepare(stru=
-ct pt_regs *regs,
->  	 */
->  	choose_random_kstack_offset(rdtsc());
-> =20
-> -	/* Avoid unnecessary reads of 'x86_predictor_flush_exit_to_user' */
-> -	if (cpu_feature_enabled(X86_FEATURE_IBPB_EXIT_TO_USER) &&
-> -	    this_cpu_read(x86_predictor_flush_exit_to_user)) {
-> -		write_ibpb();
-> +	if (unlikely(this_cpu_read(x86_predictor_flush_exit_to_user))) {
-> +		static_call_cond(vmscape_predictor_flush)();
->  		this_cpu_write(x86_predictor_flush_exit_to_user, false);
->  	}
+
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index e6f796d43dd70..af8de3d8e3ba3 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -501,6 +501,174 @@ bool kallsyms_lookup_lineinfo(unsigned long addr,
+>  	return lineinfo_search(&tbl, (unsigned int)raw_offset, file, line);
 >  }
-
-Does removing the alternative-patched cpu feature check introduce a
-performance regression here?
-
-By dropping the zero-overhead check, it appears an unconditional per-cpu
-memory read is now evaluated on every exit to userspace. This seems to
-reverse the explicitly documented optimization to avoid unnecessary reads.
-
-Could a static key or static branch be used to maintain the zero-overhead
-path when the mitigation is disabled?
-
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-[ ... ]
-> @@ -11463,7 +11463,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  	 * set for the CPU that actually ran the guest, and not the CPU that it
->  	 * may migrate to.
->  	 */
-> -	if (cpu_feature_enabled(X86_FEATURE_IBPB_EXIT_TO_USER))
-> +	if (static_call_query(vmscape_predictor_flush))
->  		this_cpu_write(x86_predictor_flush_exit_to_user, true);
 > =20
->  	/*
+> +#ifdef CONFIG_KALLSYMS_PARAMINFO
+> +
+> +#include <linux/ptrace.h>
+> +#ifdef CONFIG_X86
+> +#include <asm/special_insns.h>
+> +#endif
+> +
+> +#define MAX_PARAMINFO_PARAMS 6
+> +
+> +/*
+> + * x86-64 calling convention: arguments are passed in registers
+> + * RDI, RSI, RDX, RCX, R8, R9 (in that order).
+> + */
+> +#ifdef CONFIG_X86_64
+> +
+> +static const char * const paraminfo_reg_names[] =3D {
+> +	"RDI", "RSI", "RDX", "RCX", "R8", "R9"
+> +};
 
-Will replacing the cpu feature check with static_call_query add overhead on
-the KVM VM-exit fast path?
+Is this variable used anywhere? It doesn't seem to be referenced in the fil=
+e,
+which could trigger a -Wunused-variable compiler warning.
 
-Looking at linux/static_call.h, static_call_query reads a global function
-pointer.
+> +
+> +static unsigned long paraminfo_get_reg(const struct pt_regs *regs,
+> +				       unsigned int idx)
+> +{
+> +	switch (idx) {
+> +	case 0: return regs->di;
+> +	case 1: return regs->si;
+> +	case 2: return regs->dx;
 
-Would it be better to use a static key here to avoid the memory read when
-the mitigation is disabled?
+Will this cause a build error on x86_64? In the 64-bit kernel, the struct
+pt_regs defines these fields as rdi, rsi, rdx, etc. rather than di, si, dx.
+
+[ ... ]
+
+> +	func_idx =3D paraminfo_find_func(offset);
+> +	if (func_idx < 0)
+> +		return;
+> +
+> +	/*
+> +	 * Verify the IP is within a reasonable range of the function
+> +	 * start.  paraminfo_func_addrs[] contains function start offsets;
+> +	 * check that we're not too far past the start.  Use kallsyms to
+> +	 * verify we're in the right function.
+> +	 */
+> +	if (!kallsyms_lookup_size_offset(ip, &sym_size, &sym_offset))
+> +		return;
+
+Does this code verify that the matched paraminfo function actually aligns w=
+ith
+the faulting function?=20
+
+If the fault occurs in a function without parameters, func_idx will point t=
+o=20
+the closest preceding function with parameter data. Should there be a check=
+=20
+such as offset - sym_offset =3D=3D paraminfo_func_addrs[func_idx] to preven=
+t=20
+printing parameters of the preceding function?
+
+[ ... ]
+
+> +	/* Look up function name for the header */
+> +	if (lookup_symbol_name(ip - sym_offset, sym_name))
+> +		return;
+> +
+> +	/*
+> +	 * Read the fault address for highlighting.  On x86, CR2 holds
+> +	 * the page fault linear address.  On other architectures this
+> +	 * would need a different mechanism.
+> +	 */
+> +#ifdef CONFIG_X86
+> +	fault_addr =3D read_cr2();
+> +#else
+
+Can this produce misleading highlighting for non-page-fault exceptions?
+
+The x86 CPU updates the CR2 register during a Page Fault, but for other
+exceptions such as WARN() or General Protection Faults, CR2 retains the
+stale address from the last unrelated page fault.
+
+[ ... ]
+
+> +	for (i =3D 0; i < num_params; i++) {
+> +		u32 name_off, type_off;
+> +		const char *pname, *ptype;
+> +		unsigned long val;
+> +		bool is_fault_addr;
+> +
+> +		memcpy(&name_off, data, sizeof(u32));
+> +		data +=3D sizeof(u32);
+> +		memcpy(&type_off, data, sizeof(u32));
+> +		data +=3D sizeof(u32);
+> +
+> +		pname =3D paraminfo_strings + name_off;
+> +		ptype =3D paraminfo_strings + type_off;
+> +		val =3D paraminfo_get_reg(regs, i);
+
+Could these caller-saved registers contain clobbered values?
+
+Since exceptions typically occur mid-function, the compiler might have free=
+ly
+clobbered these registers to hold local variables or intermediate state,
+which could lead to garbage values being displayed instead of the original
+parameters.
+
+[ ... ]
+
+> diff --git a/lib/tests/paraminfo_kunit.c b/lib/tests/paraminfo_kunit.c
+> new file mode 100644
+> index 0000000000000..e09efc4ddeb0e
+> --- /dev/null
+> +++ b/lib/tests/paraminfo_kunit.c
+> @@ -0,0 +1,256 @@
+> +// SPDX-License-Identifier: GPL-2.0
+
+[ ... ]
+
+> +/*
+> + * These access the raw paraminfo tables to verify correctness.
+> + * The tables are defined in kernel/kallsyms_internal.h.
+> + */
+> +extern const u32 paraminfo_num_funcs;
+> +extern const u32 paraminfo_func_addrs[];
+> +extern const u32 paraminfo_func_offsets[];
+> +extern const u8  paraminfo_func_data[];
+> +extern const char paraminfo_strings[];
+
+Can this test be built as a loadable module?=20
+
+CONFIG_PARAMINFO_KUNIT_TEST is a tristate config, but the test directly=20
+references internal unexported tables. Building it as a module might fail=20
+with undefined symbol errors during the modpost stage.
+
+[ ... ]
+
+> diff --git a/scripts/gen_paraminfo.c b/scripts/gen_paraminfo.c
+> new file mode 100644
+> index 0000000000000..ea1d23f3ddd9a
+> --- /dev/null
+> +++ b/scripts/gen_paraminfo.c
+
+[ ... ]
+
+> +static unsigned int find_or_add_string(const char *s)
+> +{
+> +	unsigned int h =3D hash_str(s);
+> +
+> +	while (str_hash[h].str) {
+> +		if (!strcmp(str_hash[h].str, s))
+> +			return str_hash[h].idx;
+> +		h =3D (h + 1) & (STR_HASH_SIZE - 1);
+> +	}
+
+Could this loop permanently hang the kernel build process?
+
+The STR_HASH_SIZE is 16,384, but a typical kernel has around 58k functions.
+If the number of unique parameter names and types exceeds 16,384, the hash
+table will become completely full and this while loop will never find an=20
+empty slot.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260422-vmscape-bh=
-b-v11-0-b18e0cf32af4@linux.intel.com?part=3D9
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260323164858.1939=
+248-1-sashal@kernel.org?part=3D1
