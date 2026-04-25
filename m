@@ -1,113 +1,157 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110F94A0C
-	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 04:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4591509AB
+	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 04:31:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777090647; cv=none; b=pf0wWTmxCZVXW5FHsilxyQavOB+iaLghxybYwvav9ZpO4cQuFe8ai2ouM6RO036vY6FXhcgxJ0u+Wu9wdQusf71er40ifnrvNPtU47cfOGwb4Pmx0+xyWsZyI7OjhEOCnsNzJ/PG9ETh59L9ZB+aeCw6igA6TEImqXLzbFzbAyQ=
+	t=1777091506; cv=none; b=CzJWlZviJseBHbI1HTpjc/lM0AYJ2PTTIygQI46ayLPWzwkZiqbNeJk4T7UoWf6a41XlMd2gevHAdmZL+EZ0Dof5q58WkyMkEoQFqGUfDJ7jV08CQPc3wVSdWl9+PqSofVd577lbJmr05PQo6ZxzJocDoYH1/cOeAdVk/oUKmj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777090647; c=relaxed/simple;
-	bh=nr193FrpURgjXIdM8297kwLOb7KbkVJXeDPVpXaefdg=;
+	s=arc-20240116; t=1777091506; c=relaxed/simple;
+	bh=kLik9mOEuc+c03e5F3qTuQ2Iz9uDz2w90cibOlen4Zk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ZOkigKndQA9mK+MAyU13geyQ8fpy6f1BaMh/lrsVen7peN/uVvi92J2fvXHcCd1nmwUO3n9H2CbB8SzOK2/CrBMn0LUNpKuhq4EVXuq/ddgL1oBlxWJIqOAiJFCkxN9w43EX5xbNKBJ0IEth6XAn2U9C8iLbZJVckg9gZIlEjDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=myRSUgQV; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=Epif9sbCthE2iZOXqet10T+HOS48o+GAJwaCL8JG45ot2Lc3akBXCLQvyNWMEveWPfVjRqLFWy4jTpSD7DcNuYJ8BZSxiuJZpGDxnntjX4W2q3gkr3lLwMR3fws3Na2RxLbB9i5aFvKFzLwjRCbUdnKcYdpbqbzg77qVgDq2PR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R9novl/Q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="myRSUgQV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85FB3C2BCB2;
-	Sat, 25 Apr 2026 04:17:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R9novl/Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91098C2BCB2;
+	Sat, 25 Apr 2026 04:31:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777090646;
-	bh=nr193FrpURgjXIdM8297kwLOb7KbkVJXeDPVpXaefdg=;
+	s=k20201202; t=1777091505;
+	bh=kLik9mOEuc+c03e5F3qTuQ2Iz9uDz2w90cibOlen4Zk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=myRSUgQV1XvZ8zyH9WwzsDXV/tq+IgrGKtZ+SGNret0Rs6fLp09tjCSsz9MZLo2RY
-	 OelPqgoCqGBBTNRNSPEoSoDZAO5+/n7lB2iREkAQhhM5e9xdkUBUa5VfrXqwpzcRFQ
-	 GzC49Ths/H/GrYZ1XSvJ2EnFlrKDWvAGmG/fNSxlWTx/DIJqCnXWLwvo1wNBfLI1UW
-	 +E6EuCOCjck6DVyZSiz9W6xfGDExDJQCxHv1YateSmrZrRSAN2Gm2eJCkGf0tqRhbb
-	 d1Xikx05cH+KKCs2h8hHPj5KmddawbxqmKUYITFqfCZCSuUmtW9Yr0kCw3PPqY5yPf
-	 RSF9Tg83QNzcw==
+	b=R9novl/QJaj3WZe6pUTTSO2UxGoERUkpD2H3pJIv4zHH/V2SlFF+oBjy75OSwKPLF
+	 Fxu0jtbF6yrt/5saYs5oh3hBfZg/5W3Z5/5pbe1R1CXCvyrowd5Ib2x5Om4H31yJIA
+	 Ys8zVild9dDPabEc0LQkkI4W3KXaIUJ8kAITiJYoaWmFv9YTGvG9aONrzJcPNCxdoW
+	 +n4WXGkMXIkLf7qyGdRGYVjmKTlHtEfq8UFDXUpcG3nvMXEskFuzQZOmVaqfBL0RGi
+	 3QcoQeVScxI22ssy8H317b6reVyoZqoqk6j6nWyt9s42d42FWmMB1GT5n+Gb1lsOQF
+	 M43FVYuzl4xpA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v3 3/8] xsk: fix use-after-free of xs->skb in
- xsk_build_skb() free_err path
+Subject: Re: [PATCH net-next v3 4/4] selftests/bpf: Ensure dst addr/port are
+ preserved after socket abort
 Reply-To: sashiko@lists.linux.dev
-To: "Jason Xing" <kerneljasonxing@gmail.com>
+To: "Jordan Rife" <jrife@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260422033650.68457-4-kerneljasonxing@gmail.com>
-References: <20260422033650.68457-4-kerneljasonxing@gmail.com>
+In-Reply-To: <20260330215707.2374657-5-jrife@google.com>
+References: <20260330215707.2374657-5-jrife@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 25 Apr 2026 04:17:25 +0000
-Message-Id: <20260425041726.85FB3C2BCB2@smtp.kernel.org>
+Date: Sat, 25 Apr 2026 04:31:44 +0000
+Message-Id: <20260425043145.91098C2BCB2@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 2 potential issue(s):
-- [High] Incorrect completion address reporting to user-space and leaked de=
-scriptor on `-EOVERFLOW` in multi-buffer packets.
-- [High] Packet stream corruption when dropping oversized multi-buffer pack=
-ets.
+Sashiko AI review found 3 potential issue(s):
+- [High] The test silently passes if the socket abort mechanism fails or if=
+ the target socket is not found, rendering it ineffective.
+- [Medium] Uninitialized variable `out` is read and evaluated if `read()` r=
+eturns an error.
+- [Low] Passing a NULL pointer to the `%s` format specifier in `snprintf` c=
+auses undefined behavior.
 --
 
-commit 38322c7d2a85e9ef029404cbf4ae750b54520d27
-Author: Jason Xing <kerneljasonxing@gmail.com>
-xsk: fix use-after-free of xs->skb in xsk_build_skb() free_err path
+commit 8c3285f5a0be84b220c0ac15975fdc9d109ad136
+Author: Jordan Rife <jrife@google.com>
 
-This patch fixes a use-after-free in the xsk_build_skb() error path
-by ensuring that in-progress multi-buffer socket buffers are not
-freed if they are still referenced by the xdp_sock.
+selftests/bpf: Ensure dst addr/port are preserved after socket abort
 
-Link: https://lore.kernel.org/all/20260415082654.21026-4-kerneljasonxing@gm=
-ail.com/
+This commit adds a test to ensure that sock_release hooks see the original
+dst_ip4, dst_ip6, and dst_port values for connected UDP and TCP sockets
+following a socket abort.
 
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -969,7 +969,7 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock =
-*xs,
->  	return skb;
-> =20
->  free_err:
-> -	if (skb && !skb_shinfo(skb)->nr_frags)
-> +	if (skb && !xs->skb)
->  		kfree_skb(skb);
-> =20
->  	if (err =3D=3D -EOVERFLOW) {
+diff --git a/tools/testing/selftests/bpf/prog_tests/sock_destroy_release.c =
+b/tools/testing/selftests/bpf/prog_tests/sock_destroy_release.c
+new file mode 100644
+index 0000000000000..022031332b839
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/sock_destroy_release.c
+[ ... ]
+> +static void destroy(struct sock_destroy_release *skel, int fd, int sock_=
+type)
+> +{
+[ ... ]
+> +	/* Delete matching socket. */
+> +	nread =3D read(iter_fd, &out, sizeof(out));
+> +	ASSERT_GE(nread, 0, "nread");
+> +	if (nread)
+> +		ASSERT_EQ(out, cookie, "cookie matches");
 
-I noticed a couple of pre-existing regressions in this error path.
+If the iterator fails to find the target socket, read() returns 0. The test
+tolerates this because ASSERT_GE(0, 0) passes and if (nread) simply skips
+the ASSERT_EQ.
 
-Do the error handling paths for -EOVERFLOW leak the original descriptor
-address and submit an invalid address to user-space?
+Since the test then proceeds to call close(connect_fd), which performs a
+normal socket closure, won't the sock_release hook naturally see the intact
+dst_ip and dst_port values, causing the test to silently pass without the
+socket ever being aborted? Should this assert that nread =3D=3D sizeof(out)?
 
-When a continuation descriptor exceeds the fragment limit, the code
-jumps to the free_err label before the current descriptor address is
-stored in the xsk_addr array.
+Additionally, if read() fails and returns -1, the ASSERT_GE() macro logs a
+test failure but does not return early.
 
-However, the error path still increments the descriptor count:
+Because -1 evaluates to true in C, could this lead to executing
+ASSERT_EQ(out, cookie, ...) where out is an uninitialized stack variable?
 
-        if (xs->skb) {
-            /* Drop the packet */
-            xsk_inc_num_desc(xs->skb);
-            xsk_drop_skb(xs->skb);
-        }
+[ ... ]
+> +static void do_tests(struct sock_destroy_release *skel, int sock_type,
+> +		     int family, const char * const *bind_addrs,
+> +		     size_t bind_addrs_len, const int *bind_ports,
+> +		     size_t bind_ports_len)
+> +{
+> +	const char *protocol_name =3D sock_type =3D=3D SOCK_STREAM ? "tcp" : "u=
+dp";
+> +	const char *family_name =3D family =3D=3D AF_INET ? "ipv4" : "ipv6";
+> +	char name[256];
+> +
+> +	for (size_t i =3D 0; i < bind_addrs_len; i++) {
+> +		for (size_t j =3D 0; j < bind_ports_len; j++) {
+> +			snprintf(name, sizeof(name), "%s/%s/destroy/%s:%d",
+> +				 protocol_name, family_name, bind_addrs[i],
+> +				 bind_ports[j]);
 
-When xsk_destruct_skb() loops up to the new descriptor count, could it
-read past the initialized entries, find a zero address from the earlier
-kmem_cache_zalloc(), and submit address 0 to the completion queue instead
-of the actual dropped address?
+Looking at test_sock_destroy_release(), the bind4_addresses and
+bind6_addresses arrays contain NULL as their first element.
 
-Does dropping the socket buffer here cause packet stream corruption?
+Could passing a NULL pointer to the %s format specifier cause undefined
+behavior here?
 
-When a multi-buffer packet is dropped due to an -EOVERFLOW error,
-the partial packet is discarded and the socket buffer pointer is cleared.
+While some libc implementations like glibc gracefully handle this by
+outputting (null), others might crash or trigger sanitizer warnings.
+Would it be safer to explicitly guard the argument, such as checking for
+NULL and substituting it with a placeholder string?
 
-Because there is no state tracking to discard the remaining descriptors
-of the dropped packet, will the transmission loop process the next
-descriptor (which is just a continuation of the dropped packet) as the
-beginning of a completely new packet?
+diff --git a/tools/testing/selftests/bpf/progs/sock_destroy_release.c b/too=
+ls/testing/selftests/bpf/progs/sock_destroy_release.c
+new file mode 100644
+index 0000000000000..5389f79226f99
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/sock_destroy_release.c
+[ ... ]
+> +void maybe_abort(struct sock_common *sk, struct seq_file *seq)
+> +{
+> +	__u64 sock_cookie;
+> +
+> +	if (!sk)
+> +		return;
+> +
+> +	sock_cookie =3D bpf_get_socket_cookie(sk);
+> +	if (sock_cookie !=3D abort_cookie)
+> +		return;
+> +
+> +	bpf_sock_destroy(sk);
+> +	bpf_seq_write(seq, &sock_cookie, sizeof(sock_cookie));
+> +}
+
+Is it possible for bpf_sock_destroy() to fail and return an error code?
+
+If it does, the iterator will still return the cookie to userspace, which
+will receive it and incorrectly assume the socket was aborted.
+
+Would it make sense to only call bpf_seq_write() if bpf_sock_destroy()
+succeeds?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260422033650.6845=
-7-1-kerneljasonxing@gmail.com?part=3D3
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260330215707.2374=
+657-1-jrife@google.com?part=3D4
