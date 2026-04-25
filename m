@@ -1,157 +1,132 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4591509AB
-	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 04:31:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472581509AB
+	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 04:34:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777091506; cv=none; b=CzJWlZviJseBHbI1HTpjc/lM0AYJ2PTTIygQI46ayLPWzwkZiqbNeJk4T7UoWf6a41XlMd2gevHAdmZL+EZ0Dof5q58WkyMkEoQFqGUfDJ7jV08CQPc3wVSdWl9+PqSofVd577lbJmr05PQo6ZxzJocDoYH1/cOeAdVk/oUKmj4=
+	t=1777091649; cv=none; b=hCPrhc4xFwRjCWvFQG5c4MkR0WbUdhmKmSse80fmSgm8sf2FPKRg2R93954A4QcMD55xVDrYIT4xBFqWFyu7/+Zfy5wDKoT/T7W+DIbRb4i3blYuTVKmOIET15wkhD29phfXKGjz4nd8e3qFqlCGwWz4Yf5Z0iB87gur4HesygA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777091506; c=relaxed/simple;
-	bh=kLik9mOEuc+c03e5F3qTuQ2Iz9uDz2w90cibOlen4Zk=;
+	s=arc-20240116; t=1777091649; c=relaxed/simple;
+	bh=IDiNRPUBxLRK8UQoiAwIRm2k+khq0iO49YGEB43oLvk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Epif9sbCthE2iZOXqet10T+HOS48o+GAJwaCL8JG45ot2Lc3akBXCLQvyNWMEveWPfVjRqLFWy4jTpSD7DcNuYJ8BZSxiuJZpGDxnntjX4W2q3gkr3lLwMR3fws3Na2RxLbB9i5aFvKFzLwjRCbUdnKcYdpbqbzg77qVgDq2PR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R9novl/Q; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=QJiUKZwZ25qPuqR9Lmsr1hTjRoI04zFq/+fkGmvgfsJFWfrc4DF5KaATVnUmFqCv/hM56WoDOrlqdxlM6ZgtmSDI+nC4wwA119yV5L/SzNVN7jEfsQoIV230TFlhbdj0e9+7VK9Wn+elrFqErrKc4bhY14w+Ha41sEx8xQy+AJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uiv/5r3s; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R9novl/Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91098C2BCB2;
-	Sat, 25 Apr 2026 04:31:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uiv/5r3s"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B058AC2BCB3;
+	Sat, 25 Apr 2026 04:34:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777091505;
-	bh=kLik9mOEuc+c03e5F3qTuQ2Iz9uDz2w90cibOlen4Zk=;
+	s=k20201202; t=1777091648;
+	bh=IDiNRPUBxLRK8UQoiAwIRm2k+khq0iO49YGEB43oLvk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=R9novl/QJaj3WZe6pUTTSO2UxGoERUkpD2H3pJIv4zHH/V2SlFF+oBjy75OSwKPLF
-	 Fxu0jtbF6yrt/5saYs5oh3hBfZg/5W3Z5/5pbe1R1CXCvyrowd5Ib2x5Om4H31yJIA
-	 Ys8zVild9dDPabEc0LQkkI4W3KXaIUJ8kAITiJYoaWmFv9YTGvG9aONrzJcPNCxdoW
-	 +n4WXGkMXIkLf7qyGdRGYVjmKTlHtEfq8UFDXUpcG3nvMXEskFuzQZOmVaqfBL0RGi
-	 3QcoQeVScxI22ssy8H317b6reVyoZqoqk6j6nWyt9s42d42FWmMB1GT5n+Gb1lsOQF
-	 M43FVYuzl4xpA==
+	b=uiv/5r3snLJWKeSY/OHlFxbzRAhDIPW7wf1jonmZsM91EPuQi0POfpM8IE1PLOyIF
+	 rkaQr6tiLI0HB/Aw+nTEbPnrkAF7oI0V0TjlEHJLX5y1RYqATThXYGfJcw+z8UkBkO
+	 ZDPT63C/9NRRpenKf5xdV8UIZbwe00zuhi7bO8NKi7YPXCVp2+uF4k+LH9VPEzUe0x
+	 wo8gCpJqxq6RYSXf9Jz/6HJmbumAlIHYqWkE8mLCOAPwbshRa6vy5hezCux1yeob1H
+	 ewmuTBOnCDDrqGH6OT7RtBWYoGZtUHeqQ4cz1qMq9Ll4jpxLVS4sfcUWhcSCwSb12c
+	 IyxkYtWv2YV9A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3 4/4] selftests/bpf: Ensure dst addr/port are
- preserved after socket abort
+Subject: Re: Uninitialized Stack Variable / NULL Pointer Dereference in
+ __sys_socket_create via BPF LSM hooks
 Reply-To: sashiko@lists.linux.dev
-To: "Jordan Rife" <jrife@google.com>
+To: "Kuniyuki Iwashima" <kuniyu@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260330215707.2374657-5-jrife@google.com>
-References: <20260330215707.2374657-5-jrife@google.com>
+In-Reply-To: <20260421084806.1785541-1-kuniyu@google.com>
+References: <20260421084806.1785541-1-kuniyu@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 25 Apr 2026 04:31:44 +0000
-Message-Id: <20260425043145.91098C2BCB2@smtp.kernel.org>
+Date: Sat, 25 Apr 2026 04:34:08 +0000
+Message-Id: <20260425043408.B058AC2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 3 potential issue(s):
-- [High] The test silently passes if the socket abort mechanism fails or if=
- the target socket is not found, rendering it ineffective.
-- [Medium] Uninitialized variable `out` is read and evaluated if `read()` r=
-eturns an error.
-- [Low] Passing a NULL pointer to the `%s` format specifier in `snprintf` c=
-auses undefined behavior.
+Sashiko AI review found 1 potential issue(s):
+- [Critical] Incomplete fix for LSM cgroup return value bypass leaves other=
+ hooks vulnerable
 --
 
-commit 8c3285f5a0be84b220c0ac15975fdc9d109ad136
-Author: Jordan Rife <jrife@google.com>
+commit 9f0f3f7cd06f4ada568fc6000ce559112bec1c80
+Author: Quan Sun <2022090917019@std.uestc.edu.cn>
 
-selftests/bpf: Ensure dst addr/port are preserved after socket abort
+Uninitialized Stack Variable / NULL Pointer Dereference in __sys_socket_cre=
+ate via BPF LSM hooks
 
-This commit adds a test to ensure that sock_release hooks see the original
-dst_ip4, dst_ip6, and dst_port values for connected UDP and TCP sockets
-following a socket abort.
+This commit introduces a new bpf_lsm_set_retval helper to prevent
+bpf_lsm_socket_create from returning positive values and bypassing error
+checks. It restricts the return value for this specific hook to avoid an
+uninitialized stack variable dereference in __sys_socket_create.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_destroy_release.c =
-b/tools/testing/selftests/bpf/prog_tests/sock_destroy_release.c
-new file mode 100644
-index 0000000000000..022031332b839
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_destroy_release.c
+> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> index c5c925f002021..c4b9e9d4de922 100644
+> --- a/kernel/bpf/bpf_lsm.c
+> +++ b/kernel/bpf/bpf_lsm.c
 [ ... ]
-> +static void destroy(struct sock_destroy_release *skel, int fd, int sock_=
-type)
+> @@ -87,6 +87,13 @@ BTF_ID(func, bpf_lsm_socket_socketpair)
+>  #endif
+>  BTF_SET_END(bpf_lsm_unlocked_sockopt_hooks)
+> =20
+> +BTF_SET_START(bpf_lsm_negative_set_retval_hooks)
+> +#ifdef CONFIG_SECURITY_NETWORK
+> +BTF_ID(func, bpf_lsm_socket_create)
+> +#endif
+> +BTF_SET_END(bpf_lsm_negative_set_retval_hooks)
+> +
+
+Does this fix leave other cgroup LSM hooks vulnerable to the same class
+of bypasses?
+
+For example, if a program attaches to bpf_lsm_socket_post_create and calls
+bpf_set_retval(1), won't __sock_create() return 1 without initializing the
+out-parameter? This would cause __sys_socket_create() to bypass its error
+check and pass an uninitialized stack pointer to sock_map_fd(), triggering
+the exact memory corruption this patch intends to fix.
+
+Similarly, if a program returns 1 from bpf_lsm_socket_accept, do_accept()
+will return ERR_PTR(1). The caller __sys_accept4_file() checks for errors
+using IS_ERR(). Since IS_ERR only evaluates true for values >=3D -MAX_ERRNO,
+ERR_PTR(1) bypasses the check, and the invalid pointer is installed into
+the file descriptor table.
+
+>  #ifdef CONFIG_CGROUP_BPF
+>  void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
+>  			     bpf_func_t *bpf_func)
+[ ... ]
+> @@ -221,12 +228,37 @@ static const struct bpf_func_proto bpf_get_attach_c=
+ookie_proto =3D {
+>  	.arg1_type	=3D ARG_PTR_TO_CTX,
+>  };
+> =20
+> +BPF_CALL_1(bpf_lsm_set_retval, int, retval)
 > +{
-[ ... ]
-> +	/* Delete matching socket. */
-> +	nread =3D read(iter_fd, &out, sizeof(out));
-> +	ASSERT_GE(nread, 0, "nread");
-> +	if (nread)
-> +		ASSERT_EQ(out, cookie, "cookie matches");
-
-If the iterator fails to find the target socket, read() returns 0. The test
-tolerates this because ASSERT_GE(0, 0) passes and if (nread) simply skips
-the ASSERT_EQ.
-
-Since the test then proceeds to call close(connect_fd), which performs a
-normal socket closure, won't the sock_release hook naturally see the intact
-dst_ip and dst_port values, causing the test to silently pass without the
-socket ever being aborted? Should this assert that nread =3D=3D sizeof(out)?
-
-Additionally, if read() fails and returns -1, the ASSERT_GE() macro logs a
-test failure but does not return early.
-
-Because -1 evaluates to true in C, could this lead to executing
-ASSERT_EQ(out, cookie, ...) where out is an uninitialized stack variable?
-
-[ ... ]
-> +static void do_tests(struct sock_destroy_release *skel, int sock_type,
-> +		     int family, const char * const *bind_addrs,
-> +		     size_t bind_addrs_len, const int *bind_ports,
-> +		     size_t bind_ports_len)
-> +{
-> +	const char *protocol_name =3D sock_type =3D=3D SOCK_STREAM ? "tcp" : "u=
-dp";
-> +	const char *family_name =3D family =3D=3D AF_INET ? "ipv4" : "ipv6";
-> +	char name[256];
+> +	struct bpf_cg_run_ctx *ctx;
 > +
-> +	for (size_t i =3D 0; i < bind_addrs_len; i++) {
-> +		for (size_t j =3D 0; j < bind_ports_len; j++) {
-> +			snprintf(name, sizeof(name), "%s/%s/destroy/%s:%d",
-> +				 protocol_name, family_name, bind_addrs[i],
-> +				 bind_ports[j]);
+> +	if (retval > 0)
+> +		return -EINVAL;
 
-Looking at test_sock_destroy_release(), the bind4_addresses and
-bind6_addresses arrays contain NULL as their first element.
+Can a BPF program still bypass caller error checks by passing a large
+negative value?
 
-Could passing a NULL pointer to the %s format specifier cause undefined
-behavior here?
+Because this check only blocks values greater than 0, a program could call
+bpf_set_retval(-5000). Since -5000 is less than -MAX_ERRNO (-4095),
+ERR_PTR(-5000) also evaluates to false under IS_ERR(). This completely
+bypasses error checks in callers expecting standard error codes.
 
-While some libc implementations like glibc gracefully handle this by
-outputting (null), others might crash or trigger sanitizer warnings.
-Would it be safer to explicitly guard the argument, such as checking for
-NULL and substituting it with a placeholder string?
+Should bpf_set_retval for cgroup LSM programs globally validate the return
+value against the allowed range for the specific hook being called, rather
+than relying on a single-hook allowlist that only checks for positive value=
+s?
 
-diff --git a/tools/testing/selftests/bpf/progs/sock_destroy_release.c b/too=
-ls/testing/selftests/bpf/progs/sock_destroy_release.c
-new file mode 100644
-index 0000000000000..5389f79226f99
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/sock_destroy_release.c
-[ ... ]
-> +void maybe_abort(struct sock_common *sk, struct seq_file *seq)
-> +{
-> +	__u64 sock_cookie;
 > +
-> +	if (!sk)
-> +		return;
+> +	ctx =3D container_of(current->bpf_ctx, struct bpf_cg_run_ctx, run_ctx);
+> +	ctx->retval =3D retval;
 > +
-> +	sock_cookie =3D bpf_get_socket_cookie(sk);
-> +	if (sock_cookie !=3D abort_cookie)
-> +		return;
-> +
-> +	bpf_sock_destroy(sk);
-> +	bpf_seq_write(seq, &sock_cookie, sizeof(sock_cookie));
+> +	return 0;
 > +}
 
-Is it possible for bpf_sock_destroy() to fail and return an error code?
-
-If it does, the iterator will still return the cookie to userspace, which
-will receive it and incorrectly assume the socket was aborted.
-
-Would it make sense to only call bpf_seq_write() if bpf_sock_destroy()
-succeeds?
-
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260330215707.2374=
-657-1-jrife@google.com?part=3D4
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260421084806.1785=
+541-1-kuniyu@google.com?part=3D1
