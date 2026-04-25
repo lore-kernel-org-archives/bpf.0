@@ -1,116 +1,113 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAACD2BEFEF
-	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 03:17:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110F94A0C
+	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 04:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777087047; cv=none; b=SvhAhl4G6OlMjPLolomoE0hZspDzRyPDuFx4fL8+/RJLf2TzPDqkspHXaomSnlCXFPJm+HywGndpacGltdw7Itl5dcBCspGiO5mTf7f1wvZVR9YDTalivrN1PyAGCWYCg0aO7GZTiCR/Df6Tz7omK/SlMm+kk3nlLELMzWzTYLw=
+	t=1777090647; cv=none; b=pf0wWTmxCZVXW5FHsilxyQavOB+iaLghxybYwvav9ZpO4cQuFe8ai2ouM6RO036vY6FXhcgxJ0u+Wu9wdQusf71er40ifnrvNPtU47cfOGwb4Pmx0+xyWsZyI7OjhEOCnsNzJ/PG9ETh59L9ZB+aeCw6igA6TEImqXLzbFzbAyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777087047; c=relaxed/simple;
-	bh=P/jCRwI+vb3hmgLl3TD2Y/H7nGJHvOWxFGiCx+eUJTc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KgzvrHfVAjuSDTVnZPH0e0oE23Pe7GJWiGnD2mStr3Mz+G8BHBIKsF74xDKQ6Abq4K3lvG5Ukflz0e8OXetDu8i8tIf7ex/qYU2nvW3LAODZ7eZCjLsLlShpNeT3CrCFSFQu+Zz/sCYt/CPPtAs67CXl0Z5tOPLldAIxjSpRzik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xDopzlCF; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1777090647; c=relaxed/simple;
+	bh=nr193FrpURgjXIdM8297kwLOb7KbkVJXeDPVpXaefdg=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ZOkigKndQA9mK+MAyU13geyQ8fpy6f1BaMh/lrsVen7peN/uVvi92J2fvXHcCd1nmwUO3n9H2CbB8SzOK2/CrBMn0LUNpKuhq4EVXuq/ddgL1oBlxWJIqOAiJFCkxN9w43EX5xbNKBJ0IEth6XAn2U9C8iLbZJVckg9gZIlEjDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=myRSUgQV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xDopzlCF"
-Message-ID: <c4a9412d-b6ad-4b80-9580-865575f4152c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777087042;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QvFrmnSTSSnKofZYD+adzsXaKTvHU//GdzJAoINgsm4=;
-	b=xDopzlCFZJqDsrVe1A5POf9VnZxVWhEBxIvuyDA8pHtvOzoQFcKfl2DurcfgIzS3HWNEjT
-	u+v4eyupBGPg3VFEeltYj4teLoXabacwa96nSUyg406cILXaaXE9ofROuoqRCDd+SLhM1U
-	RBA2OEbSRGYJFOwhAXhaBiQqVU7W8QA=
-Date: Sat, 25 Apr 2026 11:17:03 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="myRSUgQV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85FB3C2BCB2;
+	Sat, 25 Apr 2026 04:17:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777090646;
+	bh=nr193FrpURgjXIdM8297kwLOb7KbkVJXeDPVpXaefdg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=myRSUgQV1XvZ8zyH9WwzsDXV/tq+IgrGKtZ+SGNret0Rs6fLp09tjCSsz9MZLo2RY
+	 OelPqgoCqGBBTNRNSPEoSoDZAO5+/n7lB2iREkAQhhM5e9xdkUBUa5VfrXqwpzcRFQ
+	 GzC49Ths/H/GrYZ1XSvJ2EnFlrKDWvAGmG/fNSxlWTx/DIJqCnXWLwvo1wNBfLI1UW
+	 +E6EuCOCjck6DVyZSiz9W6xfGDExDJQCxHv1YateSmrZrRSAN2Gm2eJCkGf0tqRhbb
+	 d1Xikx05cH+KKCs2h8hHPj5KmddawbxqmKUYITFqfCZCSuUmtW9Yr0kCw3PPqY5yPf
+	 RSF9Tg83QNzcw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net v3 3/8] xsk: fix use-after-free of xs->skb in
+ xsk_build_skb() free_err path
+Reply-To: sashiko@lists.linux.dev
+To: "Jason Xing" <kerneljasonxing@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260422033650.68457-4-kerneljasonxing@gmail.com>
+References: <20260422033650.68457-4-kerneljasonxing@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 25 Apr 2026 04:17:25 +0000
+Message-Id: <20260425041726.85FB3C2BCB2@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf] bpf, sockmap: zero-initialize pages allocated in
- bpf_msg_push_data
-To: Weiming Shi <bestswngs@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Simon Horman <horms@kernel.org>, bpf@vger.kernel.org,
- netdev@vger.kernel.org, Xiang Mei <xmei5@asu.edu>,
- Xinyu Ma <mmmxny@gmail.com>
-References: <20260424190310.1520555-2-bestswngs@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260424190310.1520555-2-bestswngs@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+Sashiko AI review found 2 potential issue(s):
+- [High] Incorrect completion address reporting to user-space and leaked de=
+scriptor on `-EOVERFLOW` in multi-buffer packets.
+- [High] Packet stream corruption when dropping oversized multi-buffer pack=
+ets.
+--
 
-On 4/25/26 3:03 AM, Weiming Shi wrote:
-> bpf_msg_push_data() allocates pages via alloc_pages() without
-> __GFP_ZERO. In the non-copy path, the entire page of uninitialized
-> heap content is added directly to the sk_msg scatterlist, which is
-> then transmitted over TCP to userspace via tcp_bpf_push(). In the
-> copy path, a gap of len bytes between the front and back memcpy
-> regions is similarly left uninitialized.
->
-> This leads to a kernel heap information leak: stale page content
-> including kernel pointers from the direct-map and vmemmap regions
-> is transmitted to userspace, which can be used to defeat KASLR.
->
-> Add __GFP_ZERO to the alloc_pages() call to ensure the allocated
-> page is always zeroed before it enters the scatterlist.
+commit 38322c7d2a85e9ef029404cbf4ae750b54520d27
+Author: Jason Xing <kerneljasonxing@gmail.com>
+xsk: fix use-after-free of xs->skb in xsk_build_skb() free_err path
 
+This patch fixes a use-after-free in the xsk_build_skb() error path
+by ensuring that in-progress multi-buffer socket buffers are not
+freed if they are still referenced by the xdp_sock.
 
+Link: https://lore.kernel.org/all/20260415082654.21026-4-kerneljasonxing@gm=
+ail.com/
 
-As the helper's own documentation says:
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -969,7 +969,7 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock =
+*xs,
+>  	return skb;
+> =20
+>  free_err:
+> -	if (skb && !skb_shinfo(skb)->nr_frags)
+> +	if (skb && !xs->skb)
+>  		kfree_skb(skb);
+> =20
+>  	if (err =3D=3D -EOVERFLOW) {
 
-     If a program of type BPF_PROG_TYPE_SK_MSG is run on a msg it may
-     want to insert metadata or options into the msg. This can later be
-     read and used by any of the lower layer BPF hooks.
+I noticed a couple of pre-existing regressions in this error path.
 
-The inserted region is meant to be written by the BPF program — that's 
-the entire point of calling push.
+Do the error handling paths for -EOVERFLOW leak the original descriptor
+address and submit an invalid address to user-space?
 
-If the program doesn't fill it,  the push has no purpose to begin with.
+When a continuation descriptor exceeds the fragment limit, the code
+jumps to the free_err label before the current descriptor address is
+stored in the xsk_addr array.
 
+However, the error path still increments the descriptor count:
 
-Isn't the uninitialized content a bug in the BPF program rather than 
-something the kernel helper should paper over?
+        if (xs->skb) {
+            /* Drop the packet */
+            xsk_inc_num_desc(xs->skb);
+            xsk_drop_skb(xs->skb);
+        }
 
+When xsk_destruct_skb() loops up to the new descriptor count, could it
+read past the initialized entries, find a zero address from the earlier
+kmem_cache_zalloc(), and submit address 0 to the completion queue instead
+of the actual dropped address?
 
-> Link: https://lore.kernel.org/all/20260424155913.A19FDC19425@smtp.kernel.org
-> Fixes: 6fff607e2f14 ("bpf: sk_msg program helper bpf_msg_push_data")
-> Tested-by: Xiang Mei <xmei5@asu.edu>
-> Tested-by: Xinyu Ma <mmmxny@gmail.com>
-> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
-> ---
->   net/core/filter.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index bc96c18df4e0..ea02239892fd 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -2820,7 +2820,7 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg, u32, start,
->   	if (!space || (space == 1 && start != offset))
->   		copy = msg->sg.data[i].length;
->   
-> -	page = alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP,
-> +	page = alloc_pages(__GFP_NOWARN | GFP_ATOMIC | __GFP_COMP | __GFP_ZERO,
->   			   get_order(copy + len));
->   	if (unlikely(!page))
->   		return -ENOMEM;
+Does dropping the socket buffer here cause packet stream corruption?
+
+When a multi-buffer packet is dropped due to an -EOVERFLOW error,
+the partial packet is discarded and the socket buffer pointer is cleared.
+
+Because there is no state tracking to discard the remaining descriptors
+of the dropped packet, will the transmission loop process the next
+descriptor (which is just a continuation of the dropped packet) as the
+beginning of a completely new packet?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260422033650.6845=
+7-1-kerneljasonxing@gmail.com?part=3D3
