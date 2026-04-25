@@ -1,162 +1,205 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64502D780C
-	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 21:36:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C3C35F603
+	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 22:48:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777152976; cv=none; b=oiwcPK9PV9zXWB4V2h22uvCG18628cSBuZENm+MsIzc1qk5+WYYpxPxro1L5nvu1K7PsyLyKaOiHigJKysWGZhDxd9DPny59VMyzK46CCAgv3OxtomA3vNa8KgT2gdz9KWmBn21DytCklkHPQ0QtgpPFjcmp7lj4xE7CsIPbJNs=
+	t=1777157322; cv=none; b=k2jJ0Y+FTHWMEnBwD/ZNq/ftiiMPnhP4Yt4JbXI/ozeynsCuW8+YUCpPCEPuk5nRuN3W0gs4AMIyluzfm6GgsZSiKQEEMHr7gOcB+ANo0MRYUUavn7qnFcTZJh15s4tbPzjIqynM5ZHD5JzKJI3QnV208D/7hd6iU2A729oDpis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777152976; c=relaxed/simple;
-	bh=Z0YzqWMlyuXEw5GI7qnAncDlHXyo54uD/vF5cUX9JJQ=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mBF1vFDUTwOMext6mpwY2OBgcPmFTbYvnmKoL70PAl5akeUUYe3T1CA1Asdj55UyJTdTJaR8Sl7NhlGBzmlWYZ6GRPzqEIwHeqQB8+D1PWYDaD40PdxxrcoPbHVMDvQYY1wIbB2LIEb/0FWDPDQN/qv/WLH35Us67NewzGqCcHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XDKw+5Us; arc=none smtp.client-ip=209.85.221.43
+	s=arc-20240116; t=1777157322; c=relaxed/simple;
+	bh=hIZXReb4G4Y1QNw7SJCa+2ofcrYjvDg3g4cAIclHq+I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=vD1sViJ9v32uEAGWGWZZ93Yo2Muz7qZ+ZKdX5etoLGRiJsaLPYbKahn/KsILhqBFJiXBmfG/5g3iBdADH6cgTQ/AtFDotqr0rjbSTgUw8tpbzQziz3xt80AvNqNCOBReLNishVJO64q63YKU5nIw0yC4J/YJJ1S8PJ1HJgTcNNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hxTm1onx; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XDKw+5Us"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-43d7badbd7dso4406468f8f.2
-        for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 14:36:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hxTm1onx"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-35da8d037a5so4314915a91.0
+        for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 15:48:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777152972; x=1777757772; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HPvvuHT4BIje6LaVEfoufdvGdTAK6IPqsxqsTPk9OFQ=;
-        b=XDKw+5UsGUM1q5N+tavwMff+RcGagMNeVLa5htTkpmDMNhR63EKoNKqxJBfnKoPeka
-         wnxDKjxrPItmWVjnHur5Zy8ZGWbw8GJIHuaFQbUWNPi7p4GK+tzbrwbxNt4Tr6/cagaI
-         qp0QugqSXYqKemmOlzqNpNxGVjZX0HSZPWWFDDztXHve/YKn1hLVfxkPRekmd2DZ+Xed
-         pPOqPc3vqBCQGmACYjNr80FnsfvUhLKd/OEyOE+jWOlBJZL0NCohXbp+SwUFCUH7Xa0d
-         LZFKqy9gMtTr/5GebtqNaKtH+p47thqQKktB3/Ix4j8xh/WsKDQZjD3/GLGchbxOVYFl
-         5Ung==
+        d=gmail.com; s=20251104; t=1777157320; x=1777762120; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MbNLpICn5pXNPm56ItIMCLxiIAqRFIdUx8iG0ETiP8w=;
+        b=hxTm1onxN81pVNS/p97fASrelDszXP0WBzV7tSXn8ovXFjsiTL2SoBaPrzuqYA0WcQ
+         IVR0R68eQnc0BQRY4sDkUskhEtEQQSTPhhO/L3nPvaeA2an9VJX08ciQmKPjRAmmSLyk
+         qLZwXRQX0jxCe0l6ltQS0dl8CzuNlPVA4y5ZMXaPy69GDYViM5vv5YBoqBDn6Zqojtzm
+         HaJBO8JyW6gGT/Z13LKyq5Jt7OB2KDWgB0f7GPk5iiDR7V1LqZfPJF6GtiS51UVnfDZB
+         A5mzGOccugkfYOPXE0PQBt3KzNYGIkP4joPQgSYRny0nFTKZFcbxii1aWQP6o3531Vo2
+         Lo9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777152972; x=1777757772;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HPvvuHT4BIje6LaVEfoufdvGdTAK6IPqsxqsTPk9OFQ=;
-        b=Z8UArYjWAEmqNOCrnXm1aTIl/xAeUMNaMRmjCKPOKkk2PuFijytUwm+33ztGBVIlmS
-         nOtjyQfhH7/SkS0b5dt1yYMlHopmvsbm91EUMrg6rwAmsaI4jfxlczeNf9QmU4FsLNNy
-         CEN9xENzhbP7OKUbmbVidWrAdrE+3/9N3vsjJFr0eEsT7CKb8tV0+s/2/yovei1fJZi5
-         BHrsVUQ6oi6OWEHGHC8/h0M9EXs+r/r9wvAD7OOzOkRR/MZ5bzhjuuyjCOeSOxg2H5DL
-         qyhR2plxyi4fNdMy59W1EfWTbZMSaF1KFPWmWsmH5heRa03GaeFNe1VtOlIqY3PVYFJu
-         6H3w==
-X-Gm-Message-State: AOJu0Yw50xlzpfLF+fAOyKYWrsbRvRIGLCkTtfwun7pGEh8kGS7xTOzs
-	Zde28H/sHX8VL4/Uph7N9PTmEGD3IDwlGQTHRu75kK1ODt0RX+MCMDsY6Qd33lBN
-X-Gm-Gg: AeBDiesFcvBBCbcXck2GtuRHlTOQ32rtztvScEEOsFrUpE4OBUwq/RfAnPSkwEtq9os
-	wx17LoU07RtESgvKC+dBLzzK3QWxhyD1v8LcZeVHkUKmwaEK85hDPn67RnkvDZT4HjdszbmETMY
-	Jk2JiPc8oiVkt6WNUr5NFo3LpUWah83iuOjKW8k58H2+/Ub8c5vmnRALGgx996NfnynRXXcfjBB
-	y8FF8DDVSmDc9n2WuZLPaEKMZsgRXaVa4zH3lBmdF7t09FxWwC2vimq2KbWrqpJUuQ8ztA3tWRh
-	Q8Qcljfa17a69IsZmnrTkgQ/vnKhJrIQSL55gstsD7kRX+0I0OW0DCZKmvLw9De0xnrKUvX4fh0
-	FQ4L7yi1EdCfnoLEIjDGkL35hGSOmK8O9vxf61XWanqz+jPp7eoOIZiZ3/PbcSuQPesGtQ1x/PV
-	sw8KbucbfLxzEeqiPaE8U/kA==
-X-Received: by 2002:a05:6000:2888:b0:439:c299:4d8f with SMTP id ffacd0b85a97d-43fe3dc61e3mr57210523f8f.17.1777152971619;
-        Sat, 25 Apr 2026 14:36:11 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4c221cdsm70515228f8f.0.2026.04.25.14.36.11
+        d=1e100.net; s=20251104; t=1777157320; x=1777762120;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MbNLpICn5pXNPm56ItIMCLxiIAqRFIdUx8iG0ETiP8w=;
+        b=Uzsa3vyNVq5JT6JkkwCpN+EZbhCQOPjDpxcVi3JBApcntcHKlbzmarVjn32bqluXcE
+         rjnVarOY7PEsZOtNWktQ4AGp5Hkrv227ieEYjTmeQOMJbRljiKGipAUen3eG7PIdRx1G
+         VXiAE6SX3NpN4CN1lHXV1FnEFTZwSOLyF+TWHwGqu2rTo7AAM8jll/19si6n85nQ6N6K
+         /7UVtnjCgwng3hV2KNZsuZcRQbeJl7+FOL/4lXpp6Sgu136bKr2yEQQRiRr6V+GGm5QY
+         3J/PYT66xrALl5HaZNQxFUcfiSswo9OtP2D1vv7GptZohnbxOZeceBkOaKN5RohgVdf0
+         ppVg==
+X-Gm-Message-State: AOJu0Yz57Vz6ySHZNYugIliwJ/wpjA9wNrpuTAmsN8upmjCrto7e0mof
+	0ZqjR6NRkvgPldP0TLPXSEUVml5qy/BTSBTVHtIpC+qxjF9JwDX314IRi/KyB6ww
+X-Gm-Gg: AeBDieu2IBnpUxEa1oh0pbiAw3WRITPcHiaZCs5zWT+abEs1pNylN7tLbxj9wpPUuHB
+	z8ccvy0JiG/pSupX632S2V02Xwqy1u2bYsVjCtZB9Ro1hrdsuLHaYrJthISh7jQMtjFu4lBFWOC
+	ZvN5Uu8fpvLGnKvFor7VZL24es6ITOE8S8v1g7uKzpFKdnUMt77d9wUO9DZglgI7S/9Iubba387
+	yoOVOAtlYPm2FQ+IjI/XY1/+9mm9tF2TeXm5Cm3NsEg8nG/Q6sM0E0akuAnVJCLZG8ct404QOHS
+	LEzWsUbfVi+rjn7Vh/nCiTAKOyNgeLB4xOa+5GOwcL3UGyqsttLej94qttILMCj5Tyw8zlDgvpN
+	hq/zdtoQ1agtN6ZtHkPvdGDsmFL+4LeSyqi0Vjmwzga82I33JLsjsjvywzgZAwHL1jUTtkz9Ph8
+	UHzpQc9Cqo8uGdmZRWfETe9iXQxUmCvv62K1abQyU8nixYTTXsg/Z9oK+oce1jG0ULKc690ZdZZ
+	HBQZQ==
+X-Received: by 2002:a17:90b:3950:b0:35f:b714:e516 with SMTP id 98e67ed59e1d1-361404659e2mr36890032a91.16.1777157319839;
+        Sat, 25 Apr 2026 15:48:39 -0700 (PDT)
+Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-361410a7a9fsm27323615a91.12.2026.04.25.15.48.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Apr 2026 14:36:11 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sat, 25 Apr 2026 23:36:09 +0200
-To: sashiko@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH bpf 1/2] bpf: Do not release trampoline image in case off
- unregister error
-Message-ID: <ae0zyVXs6pi4Ip1x@krava>
-References: <20260424153905.354922-1-jolsa@kernel.org>
- <20260424161232.1B14DC19425@smtp.kernel.org>
+        Sat, 25 Apr 2026 15:48:39 -0700 (PDT)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	andrii@kernel.org
+Cc: daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	kernel-team@fb.com,
+	yonghong.song@linux.dev,
+	eddyz87@gmail.com
+Subject: [PATCH bpf-next 0/2] bpf: range_within() must check cnum ranges instead of min/max pairs
+Date: Sat, 25 Apr 2026 15:48:22 -0700
+Message-ID: <20260425-cnum-range-within-v1-0-2fdca70cb09d@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260424161232.1B14DC19425@smtp.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20260425-cnum-range-within-4a755ba81e93
+Content-Transfer-Encoding: 8bit
 
-On Fri, Apr 24, 2026 at 04:12:31PM +0000, sashiko-bot@kernel.org wrote:
-> Sashiko AI review found 3 potential issue(s):
-> - [Critical] Use-After-Free of BPF programs due to leaked trampoline image
-> - [High] Permanent memory leak of trampoline executable image
-> - [High] Use-After-Free of ftrace_ops and bpf_trampoline
-> --
-> 
-> commit 3c4d55e24f28fa5f7f6dd937603366805532d1a4
-> Author: Jiri Olsa <jolsa@kernel.org>
-> 
-> bpf: Do not release trampoline image in case off unregister error
-> 
-> If unregister_fentry fails we still have trampoline image attached
-> to a function, so releasing it could trigger crash. Releasing the
-> trampoline image only when the unregister succeeds.
-> 
-> > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> > index f02254a21585fa..01082ecc5c4f5f 100644
-> > --- a/kernel/bpf/trampoline.c
-> > +++ b/kernel/bpf/trampoline.c
-> > @@ -618,8 +618,10 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
-> >  
-> >  	if (total == 0) {
-> >  		err = unregister_fentry(tr, orig_flags, tr->cur_image->image);
-> > -		bpf_tramp_image_put(tr->cur_image);
-> > -		tr->cur_image = NULL;
-> > +		if (!err) {
-> > +			bpf_tramp_image_put(tr->cur_image);
-> > +			tr->cur_image = NULL;
-> > +		}
-> 
-> If unregister_fentry() fails, the ftrace or fentry hook remains active because
-> the image isn't put. Does the teardown path, like bpf_tracing_link_release(),
-> still proceed to tear down the link and free the bpf_prog structures?
-> 
-> If the BPF programs are freed but the leaked JIT executable image is still
-> attached and active, could subsequent calls to the hooked kernel function
-> execute the trampoline image, dereference the hardcoded pointers, and execute
-> freed BPF programs?
-> 
-> When unregister_fentry() fails and bpf_tramp_image_put() is skipped, does the
-> error propagate up to the caller where bpf_trampoline_put() might eventually
-> free the parent struct bpf_trampoline?
-> 
-> If the parent trampoline is destroyed without freeing tr->cur_image, does this
-> leak the struct bpf_tramp_image and its associated JIT memory page?
-> 
-> Additionally, if unregister_fentry() fails for an ftrace-managed trampoline,
-> tr->fops appears to remain registered in the ftrace subsystem.
-> 
-> If the link teardown ignores the error and unconditionally calls
-> bpf_trampoline_put(tr), will direct_ops_free() free tr->fops and tr?
-> 
-> Could this leave the ftrace subsystem with dangling pointers in its internal
-> tracking structures, potentially causing a use-after-free regression during
-> subsequent ftrace operations?
+This is a follow-up for series [1].
+is_state_visited() should check cnum's subset relations using
+cnum-based operations, not min/max projections. See patch #1 for
+detailed explanation and patch #2 for an example of buggy program
+accepted by verifier w/o this fix.
 
-ah right, released bpf_prog and bpf_trampoline will cause crash later,
-maybe we could just inc bpf_prog ref and skip bpf_trampoline_put like
-below for the tracing link release
+Updated veristat performance numbers compared to master before [1]
+merge follow. Measurements done for the same set of selftests/
+sched_ext/meta/cilium programs as in [1].
 
-jirka
+Net increase:   98K insn 88 programs
+Net decrease: -282K insn 52 programs
 
+Raw stats filtered as -f insns_pct>1 -f !insns<10000:
+
+========= selftests: master vs experiment =========
+
+File  Program  Insns (A)  Insns (B)  Insns (DIFF)
+----  -------  ---------  ---------  ------------
+
+Total progs: 4665
+total_insns diff min:   -0.44%
+total_insns diff max:   52.94%
+total_insns abs max old: 837,487
+total_insns abs max new: 837,487
+  -5 .. 0    %: 8
+   0 .. 5    %: 4652
+   5 .. 15   %: 1
+  40 .. 50   %: 3
+  50 .. 55   %: 1
+
+========= scx: master vs experiment =========
+
+File               Program          Insns (A)  Insns (B)  Insns     (DIFF)
+-----------------  ---------------  ---------  ---------  ----------------
+scx_layered.bpf.o  layered_enqueue      13718      14402     +684 (+4.99%)
+scx_rusty.bpf.o    rusty_enqueue        39842      22053  -17789 (-44.65%)
+scx_rusty.bpf.o    rusty_stopping       37738      19949  -17789 (-47.14%)
+scx_wd40.bpf.o     wd40_stopping        37729      19880  -17849 (-47.31%)
+
+Total progs: 376
+total_insns diff min:  -47.31%
+total_insns diff max:   19.61%
+total_insns abs max old: 233,669
+total_insns abs max new: 233,696
+ -50 .. -40  %: 3
+  -5 .. 0    %: 3
+   0 .. 5    %: 367
+   5 .. 15   %: 2
+  15 .. 20   %: 1
+
+========= meta: master vs experiment =========
+
+File                                    Program              Insns (A)  Insns (B)  Insns     (DIFF)
+--------------------------------------  -------------------  ---------  ---------  ----------------
+<sandbox>                               test_file_open           88771     104160  +15389 (+17.34%)
+<profiler>                              on_perf_event            48056      54544   +6488 (+13.50%)
+<profiler>                              on_tracepoint_event      48059      54547   +6488 (+13.50%)
+<profiler>                              on_perf_event            48056      54544   +6488 (+13.50%)
+<profiler>                              on_tracepoint_event      48059      54547   +6488 (+13.50%)
+<profiler>                              on_alloc                 50445      56933   +6488 (+12.86%)
+<profiler>                              on_free                  50251      56739   +6488 (+12.91%)
+<profiler>                              on_perf_event            48056      54544   +6488 (+13.50%)
+<profiler>                              on_tracepoint_event      48059      54547   +6488 (+13.50%)
+<profiler>                              future_iter_resume       50114      56602   +6488 (+12.95%)
+<profiler>                              on_py_event              50042      56530   +6488 (+12.97%)
+scx_layered_bpf_skel_genskel-bpf.bpf.o  layered_enqueue          13287      13963     +676 (+5.09%)
+scx_layered_bpf_skel_genskel-bpf.bpf.o  layered_enqueue          13269      13945     +676 (+5.09%)
+scx_layered_bpf_skel_genskel-bpf.bpf.o  layered_enqueue          13269      13945     +676 (+5.09%)
+<firewall>                              ..._egress              222327     164648  -57679 (-25.94%)
+<firewall>                              ..._tc_eg               222839     164772  -58067 (-26.06%)
+<firewall>                              ..._egress              222327     164648  -57679 (-25.94%)
+<firewall>                              ..._tc_eg               222839     164772  -58067 (-26.06%)
+
+Total progs: 1540
+total_insns diff min:  -26.06%
+total_insns diff max:   37.25%
+total_insns abs max old: 666,036
+total_insns abs max new: 666,036
+ -30 .. -20  %: 4
+  -5 .. 0    %: 10
+   0 .. 5    %: 1494
+   5 .. 10   %: 10
+  10 .. 15   %: 13
+  15 .. 25   %: 5
+  35 .. 40   %: 4
+
+========= cilium: master vs experiment =========
+
+File             Program                            Insns (A)  Insns (B)  Insns    (DIFF)
+---------------  ---------------------------------  ---------  ---------  ---------------
+bpf_host.o       tail_handle_ipv4_cont_from_host        20962      26024  +5062 (+24.15%)
+bpf_host.o       tail_handle_ipv6_cont_from_host        17036      18672   +1636 (+9.60%)
+bpf_host.o       tail_nodeport_nat_ingress_ipv4         20080      19858    -222 (-1.11%)
+bpf_lxc.o        tail_nodeport_nat_ingress_ipv4         10697      10510    -187 (-1.75%)
+bpf_overlay.o    tail_handle_inter_cluster_revsnat      11099      10857    -242 (-2.18%)
+bpf_overlay.o    tail_nodeport_nat_ingress_ipv4         11951      11768    -183 (-1.53%)
+bpf_wireguard.o  tail_nodeport_nat_ingress_ipv4         11993      11811    -182 (-1.52%)
+
+Total progs: 134
+total_insns diff min:   -3.32%
+total_insns diff max:   24.15%
+total_insns abs max old: 152,012
+total_insns abs max new: 152,012
+  -5 .. 0    %: 12
+   0 .. 5    %: 120
+   5 .. 15   %: 1
+  20 .. 25   %: 1
+
+[1] https://lore.kernel.org/bpf/fd376f47b9512daf669a87b23573f614ec146385.camel@gmail.com/T/
 
 ---
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 3b1f0ba02f61..c609f15b146d 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3505,9 +3505,12 @@ static void bpf_tracing_link_release(struct bpf_link *link)
- 	struct bpf_tracing_link *tr_link =
- 		container_of(link, struct bpf_tracing_link, link.link);
- 
--	WARN_ON_ONCE(bpf_trampoline_unlink_prog(&tr_link->link,
-+	if (WARN_ON_ONCE(bpf_trampoline_unlink_prog(&tr_link->link,
- 						tr_link->trampoline,
--						tr_link->tgt_prog));
-+						tr_link->tgt_prog))) {
-+		bpf_prog_inc(tr_link->link.link.prog);
-+		return;
-+	}
- 
- 	bpf_trampoline_put(tr_link->trampoline);
- 
+Eduard Zingerman (2):
+      bpf: range_within() must check cnum ranges instead of min/max pairs
+      selftests/bpf: a test for proper cnums compare in is_state_visited()
+
+ include/linux/cnum.h                               |  2 ++
+ kernel/bpf/cnum_defs.h                             | 14 +++++++++++
+ kernel/bpf/states.c                                | 11 +++------
+ .../testing/selftests/bpf/progs/verifier_bounds.c  | 27 ++++++++++++++++++++++
+ 4 files changed, 46 insertions(+), 8 deletions(-)
+---
+base-commit: 6c60b2dd5a7889a583389e95e79689191206f86f
+change-id: 20260425-cnum-range-within-4a755ba81e93
