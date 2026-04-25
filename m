@@ -1,66 +1,67 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FE013016F2
-	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 20:41:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998912FDC28
+	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 20:51:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777149701; cv=none; b=bSgb75tGnV+EVc/G20jlofdqJ1a2naAOjgGi/EQM+7XtDLaHMChl7zdNv5CmWgpa72nJF1r4FdrQ3p2J8EpGNb4pS3xYCMIuhRbSH2PMmvtQLMd6btag36+6czjVOGsBGxBVBgkyF5jkXPLp98vl7Lk5UmsQWqbMwV0agHadkQM=
+	t=1777150263; cv=none; b=AdW9TVSxcOEOCgcnqOA5Mc2IFGdwwy+UMiv2W9a7kn0LarRcp3VKLnbYTrNg8dXMvCZ/hGUr/DF2bWdwyG4rIDJKxeqnDgIOISRZcNNCavXKFXLjDQptChu+4ocY+1khKGIes07m2c6gJ8p8t3al5XBpqpvcT9+rLh4OCkasHdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777149701; c=relaxed/simple;
-	bh=FXBxGvBl06ZlcKUDyZV2TZHtOpngPHeaJHwdnWkwd8I=;
+	s=arc-20240116; t=1777150263; c=relaxed/simple;
+	bh=hO+ENV1TXOC9rvyyuqbjLWCjhKEWpxKUtAR57alCKJg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mzr4ycGSX/Si6lHl79MgHssmuJhHxr2Wfud0CIY9RJjWeY2BPamDxevuzRiJeKZlcvStz3UXn9o/Ce/9YO2nujYaJiZxHfelORYN4H3lVKKxRRuqywMJOv2MFwkcQqtGG6prf8vpVYzaBLzfMSvSsdMCbQbJiNWOK36NuMXTMb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ug2lkP5w; arc=none smtp.client-ip=209.85.128.46
+	 In-Reply-To:Content-Type; b=VIkVH45AEB9ss2DbW4ex19CiLEVnhOCNXZ63p1c35glV5W4K3Mi628+kB61YP/gHj7h6kDrNQYoUtuB1w1/c4kR8t2/rds9Enec0et9zA4fSAONds4s+qJA8HnYHBSfJwMKyXHD8EYJtagQ0oBzyYWRk02lpq8h+oyfTudOHM5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bmDdXN58; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ug2lkP5w"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-488ad135063so81485055e9.0
-        for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 13:41:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bmDdXN58"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-44261378651so366513f8f.0
+        for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 13:51:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777149698; x=1777754498; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777150260; x=1777755060; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=LikAQzNP+mJgI6rYkKWWaPcezC8tu0NiBOArYumtAVw=;
-        b=Ug2lkP5wLKtjF6Xzg2RhFivtyYliFruAdaSn8Ee24RNAqZx0sZIQuFnUyCDY4CU8ON
-         v1OivV7q4UyL3x75IQbtyEy6YzXafjV4SfRqlYaNp4S9alK++LOlJS41raLNcZHQghHJ
-         q0xJVd8qioVC6JSc8FpdnTN5C9AFq9j2EPPG3ZEmbheTpPJWVQ0QEtrlQoKnyrPKvYKH
-         eKundjFXz0S6PeUL9QtyrcmcF+ikVskstMgMEzUoSAc2BcruNT3+Qp3OVGzZjR5IqmgR
-         RLcTab0fEViwJghfEKqlxF+VRI37hNX+pAOQK/LLfVsdV48cRdYQAlfIjBHH5gH37bQJ
-         5kCQ==
+        bh=/etTuQSLtnbJM4mInU0f/qWMYQlNqhNFLduxwI+Bf0Y=;
+        b=bmDdXN58ZvG4vAPHb5E90YoR/ko2IvibUAtRktexLUo+Ko6OQPKjT/7VMCFitk8MJu
+         odTB0Z/cVI5jktF8YRwkcwJcA1thTgSfkpw+cB1k3b2Td0MCCEOz03VZ8rnPKEnpzR/B
+         bb5oaFS6vCmxltM1Ten5yctBTasVayRkLxdHMRNuTXKZ2sBk6hetxMurnkEa+Rb5HBGv
+         wwVzYteXFk7XA6TiGkkU8G6Awzpy5ryrQSHcdPypBVkn0w7x665I8EaLuiI11Zc0g7zb
+         FL9k3vrMXVqGUDHBe8BS6UHMqPkwbmPPaY+aQkWw26/e1jH97PaogG78f/zmSA9Ny3v9
+         lVzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777149698; x=1777754498;
+        d=1e100.net; s=20251104; t=1777150260; x=1777755060;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LikAQzNP+mJgI6rYkKWWaPcezC8tu0NiBOArYumtAVw=;
-        b=brkYR1hK6fWLZheuvmW2+E/jU33krHCrKraiz1Wbbb5J/MtAdQiTZafmMKW41qZ57N
-         1FuKMOxv5Ths3cDgmld4y+0vT3q0L6VJLoJNMv7hvSwx7k+6xoWJjnu+tEs53MF5YA62
-         chD3ApWq30Q4NQ6df66Xcy/h2swX9+4+kWlTjdMw9itEULvLsjj0BIEtD3JTjt9Vs6Sp
-         g+qbgWV0JTfz9MKqaQI/jYuJHBX+sgbyXvygzmGPa9PCcm8qR7i4qpXeLeuvY3ufYa1R
-         C6ZnvYJSeLVPLGt1eggEf0kwaDnG6mJge6FVEVJY6ApDtt7vP3bW0x2BWBRZlmPDHiLU
-         PDGg==
-X-Gm-Message-State: AOJu0YyOjPIhjGcN6awtKfAZT+UKt6n/gwiC3b120+jDioB2+QFhSXxH
-	I3kx/2KanbgI6jW6jomee2ZdsZ7+dNjFhW8SBXIZqBV0rMfi2vW5vGgh
-X-Gm-Gg: AeBDiet1I0uQGedIuRR+XPul44K7HuwrMhROfs8YdMBDyv5N0OL3lQdFoCve6OlOfW2
-	/OmYTwfg7N9ydNp0TEFBlFNqYuW0j/ncDRcU65QOCuVZxtoRlvnjPmdWs+PdjcVsdr28GUZe4I1
-	HgywmwkjHpZFR8STeDZ5MIQZbg5O7tGt6H7o+BXxOVn1WWGAtnK1ivtpp4BRPjUJNHuJ8nBATE1
-	HLIivjfHX6xgiMfV51wpKDZOXs6TzzAErp/q5/438n8DhyPzeX51D0cq/7enm/fTkqV0iI7SEuL
-	MWsGC0BoGBbBnXoKyuQlHkBTKWTV/MYW9b4qFvTK/vglA9cL0vP8ymR+EURBFtoMJZ8qSAYM6fb
-	AKzONyXefJwwdDYtmIOsGKRNZmeaOTrMjb7y7MNzl35lbb8aEW9WPfeF61fy/i4Uo41EeAetmqd
-	1q40IYginFlYTT16cyTnzJKSM0wLdk4vgys6ZfCfDYEjfEmV6iYgx/4L28MpeC++rFNkPdEE/gq
-	k1RgCZzvExXee8Gv8b/eQ==
-X-Received: by 2002:a05:600c:8b38:b0:487:59c:2bb8 with SMTP id 5b1f17b1804b1-488fb7925dcmr521703365e9.27.1777149697632;
-        Sat, 25 Apr 2026 13:41:37 -0700 (PDT)
+        bh=/etTuQSLtnbJM4mInU0f/qWMYQlNqhNFLduxwI+Bf0Y=;
+        b=DndiDh2rS4z5I/99mGXM1yU4yXB9laef+P5YsNLyRqZoER29qaHrvs1lWryIZd0vbK
+         ZFpO0wALxVSZck4+zZf+z7QB9A99Uz5EFavB69v2Q+He31+3BBIA1aosKOVjAXiM045+
+         XXf8mTWZwuNQ8jddH3uLRTrY/Jfc1NM08Qaiqk5FAjeTtECfkSJjkz7+BMXRde0vqfzp
+         j+8keK/Jpb7cxyn5LUgzXsXFVYgkO50dzCxdG5aI6OgnJ9CbwJxtJvPARHIcGOVpPtNH
+         DzS0bJ9daRRInZdxH2qddVcQo65skZaElrYeThOI63ZjNNLnhwgjMKTP0HrU14tDtLzi
+         zFNg==
+X-Forwarded-Encrypted: i=1; AFNElJ83unFRpNoHXNcfgLO/CYD+5J6i7Rcw0NviV9c+B+E52LUneet0HflKQHZBRpLD5G3AEkE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7mlXtP3fUSHfgGskVVCkOvoFTrq+9QUCPkZ7E5Qy46RwtWEVP
+	IewhjeUDi6t7iJwz39YI3YjOUDJ2TD3w391k0PSsGg90DkWfDpn5zeNR
+X-Gm-Gg: AeBDievAxhAcHoaMqI6GnZXFw7zkVo089neTA0xSYA/lqJDYLtaLfMFrfW+aj5Y1hR/
+	xVWLDEF6PguFSPcjFVL4I81FNQJyxFIxfn3IN9YeIDJQZlr5eeOyPnOwpn7dtX9+fu6dwtFVoIa
+	BhauqElSxDlF+XKlXKDnhnmQmb+vuJzBkKXckvB6Y7QrOIhwQzmBn/OURUFheRGdzw9yrk/TTIZ
+	KVDCrNRl1v8S8LtfemWv3XtO2Nibh5qeoOJDx0H7hzPWqY6fXBLB21aJNO/trHwHpfgoyslWQqp
+	ZcVVjHvhtwfXaKarxLqljBc4+tovSgad2RCWQlxjR5VumTXYPvXKIgIqF8DX9Kkx/ZWxFpb/DG7
+	I87q199EJo1GY/58bRn4qKesKZ9UncBRpaObNhoOSPgAPFdboiRYtVA2mxr+mSXcIYtJzKly1Hv
+	5rQabWLjPfh3vwX+Ov36/e4Q9Na6gsSX5hRgVpS+ScRnjVmDjKfgD1TvrnIBViGlD0yg+OwJGqx
+	i9Zic/o/d4uL2hEn09C1w==
+X-Received: by 2002:a05:600c:4e0c:b0:489:1d7a:4537 with SMTP id 5b1f17b1804b1-4891d7a463emr375839205e9.3.1777150259767;
+        Sat, 25 Apr 2026 13:50:59 -0700 (PDT)
 Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4cb1176sm70465389f8f.3.2026.04.25.13.41.37
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a55dc9f58sm742194615e9.6.2026.04.25.13.50.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Apr 2026 13:41:37 -0700 (PDT)
-Message-ID: <c2db26e6-b6d2-4f5f-8b8c-0ad8a1e24865@gmail.com>
-Date: Sat, 25 Apr 2026 21:41:34 +0100
+        Sat, 25 Apr 2026 13:50:59 -0700 (PDT)
+Message-ID: <ec9b0035-f2a2-40b3-b29e-362f76c80e91@gmail.com>
+Date: Sat, 25 Apr 2026 21:50:58 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,36 +71,79 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH bpf-next v3 01/10] bpf: Implement resizable hashmap basic
  functions
-To: sashiko@lists.linux.dev
-Cc: bpf@vger.kernel.org
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
+ andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com,
+ kernel-team@meta.com, eddyz87@gmail.com, memxor@gmail.com,
+ herbert@gondor.apana.org.au
+Cc: yatsenko@meta.com, emil@etsalapatis.com, martin.lau@kernel.org,
+ yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
 References: <20260424-rhash-v3-1-d0fa0ce4379b@meta.com>
- <20260424204011.E6C7BC19425@smtp.kernel.org>
+ <8168a9eb342bfdbe138aa31e7c07ea811e9ad4c413e15f5575a4874d2f4dca9e@mail.kernel.org>
 Content-Language: en-US
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260424204011.E6C7BC19425@smtp.kernel.org>
+In-Reply-To: <8168a9eb342bfdbe138aa31e7c07ea811e9ad4c413e15f5575a4874d2f4dca9e@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 
-On 4/24/26 9:40 PM, sashiko-bot@kernel.org wrote:
-> Sashiko AI review found 1 potential issue(s):
-> - [Critical] Using rhashtable for BPF map updates/deletes is unsafe and will lead to hard deadlocks from IRQ/NMI/softirq contexts.
-> --
-> 
-> commit 47c235933705172d3a36c4339c754282500161f1
-> Author: Mykyta Yatsenko <yatsenko@meta.com>
-> 
-> bpf: Implement resizable hashmap basic functions
-> 
-> This commit adds a new BPF map type BPF_MAP_TYPE_RHASH backed by the kernel
-> rhashtable implementation. It provides basic map operations like lookup,
-> update, and delete using rhashtable APIs.
-> 
+On 4/24/26 9:45 PM, bot+bpf-ci@kernel.org wrote:
 >> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
->> index 3dd9b4924ae4fb..a37bd2a7b30f4b 100644
+>> index 3dd9b4924ae4..a37bd2a7b30f 100644
 >> --- a/kernel/bpf/hashtab.c
 >> +++ b/kernel/bpf/hashtab.c
+> 
+> [ ... ]
+> 
+>> +static int rhtab_map_check_btf(struct bpf_map *map, const struct btf *btf,
+>> +			       const struct btf_type *key_type,
+>> +			       const struct btf_type *value_type)
+>> +{
+>> +	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
+>> +
+>> +	return bpf_ma_set_dtor(map, &rhtab->ma, rhtab_mem_dtor);
+>> +}
+> 
+> Does bpf_ma_set_dtor() exist at this commit?
+> 
+> A git-wide search shows no definition or declaration of bpf_ma_set_dtor().
+> The kernel provides bpf_mem_alloc_set_dtor() with a 4-argument signature
+> (ma, dtor, dtor_ctx_free, ctx) in include/linux/bpf_mem_alloc.h:
+> 
+>     int bpf_mem_alloc_set_dtor(struct bpf_mem_alloc *ma, dtor_fn dtor,
+>                                dtor_ctx_fn dtor_ctx_free, void *ctx);
+> 
+> The existing htab_set_dtor() in kernel/bpf/hashtab.c builds a struct
+> htab_btf_record context and calls bpf_mem_alloc_set_dtor() with all four
+> arguments.
+> 
+> The new rhtab_map_check_btf() attempts to call a not-yet-existing helper
+> with a 3-argument signature. This breaks compilation with 'implicit
+> declaration of function "bpf_ma_set_dtor"' (fatal with kernel's
+> -Werror=implicit-function-declaration) or link failure with 'undefined
+> reference to bpf_ma_set_dtor'.
+> 
+> Looking at the later commit b3eef0fdafe1 ("bpf: Allow timers, workqueues
+> and task_work in resizable hashtab"), it renames htab_set_dtor() to
+> bpf_ma_set_dtor() and changes its signature to (map, ma, dtor), providing
+> the missing symbol. That commit also wires up .map_check_btf =
+> rhtab_map_check_btf in rhtab_map_ops.
+> 
+> Can this commit be reordered or squashed to avoid the forward reference
+> and maintain bisectability?
+
+this is right, this function should be added later, at the point of this
+commit special fields are not supported, so this is not needed anyway.
+
+> 
+>> +static void rhtab_free_elem(void *ptr, void *arg)
+>> +{
+>> +	struct bpf_rhtab *rhtab = arg;
+>> +	struct rhtab_elem *elem = ptr;
+>> +
+>> +	bpf_map_free_internal_structs(&rhtab->map, rhtab_elem_value(elem, rhtab->map.key_size));
+>> +	bpf_mem_cache_free_rcu(&rhtab->ma, elem);
+>> +}
 > 
 > [ ... ]
 > 
@@ -108,47 +152,34 @@ On 4/24/26 9:40 PM, sashiko-bot@kernel.org wrote:
 >> +	int err;
 >> +
 >> +	err = rhashtable_remove_fast(&rhtab->ht, &elem->node, rhtab->params);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	bpf_mem_cache_free_rcu(&rhtab->ma, elem);
+>> +	return 0;
+>> +}
 > 
-> Can this lead to a deadlock when used by non-sleepable BPF programs in
-> interrupt or softirq contexts?
+> Does rhtab_delete_elem() handle special fields properly?
 > 
-> The verifier permits BPF_MAP_TYPE_RHASH to be used by non-sleepable BPF
-> programs, such as those attached to XDP or TC, which execute in softirq
-> context and do not check bpf_prog_active.
+> Looking at the v2 review thread
+> (https://lore.kernel.org/bpf/DHSBDLRKCAQO.1IPJTSEMPESV7@etsalapatis.com/),
+> Emil Tsalapatis and sashiko raised concerns that special fields are not
+> handled properly during in-place updates. The v3 changelog claims this was
+> addressed, but rhtab_delete_elem() does not call
+> bpf_map_free_internal_structs() before freeing the element.
 > 
-> Map operations like rhashtable_remove_fast() and
-> rhashtable_lookup_get_insert_fast() internally use bit_spin_lock() for
-> bucket-level synchronization. This locking mechanism disables preemption
-> but leaves hardware and software interrupts enabled, unlike the
-> raw_spin_lock_irqsave() approach used by the standard htab.
+> This is inconsistent with rhtab_free_elem() which properly calls
+> bpf_map_free_internal_structs(). Could this lead to resource leaks for
+> maps with timers, workqueues, or other internal structures when elements
+> are deleted via rhtab_map_delete_elem()?
 > 
-> If a syscall updates the map from process context and acquires the bucket
-> lock, and is then preempted by a hardware interrupt that schedules a softirq
-> on return, the softirq will execute the XDP or TC BPF program.
-> 
-> If this BPF program attempts to access the same hash bucket, wouldn't it spin
-> indefinitely waiting for the bit_spin_lock held by the interrupted process,
-> causing a system deadlock?
-> 
+At this point special fields are not supported, the corresponding changes
+are introduced in commit 5.
 
-This is right, I forgot to add if (irqs_disabled()) return -EBUSY 
-pointed to in v1: 
-https://lore.kernel.org/all/CAADnVQKvp2tnQSWW4Kh3ofGLvaEYJ47kyZeNUscAH_DShw8XHw@mail.gmail.com/
-
-I'll add it in v4.
-
-> [ ... ]
 > 
->> +static long rhtab_map_update_elem(struct bpf_map *map, void *key, void *value, u64 map_flags)
->> +{
->> +	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
->> +	struct rhtab_elem *elem, *tmp;
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 > 
-> [ ... ]
-> 
->> +	tmp = rhashtable_lookup_get_insert_fast(&rhtab->ht, &elem->node, rhtab->params);
-> 
-> Does the same deadlock mechanism apply here as well, given that
-> rhashtable_lookup_get_insert_fast() also relies on bucket-level locks?
-> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24909591959
 
