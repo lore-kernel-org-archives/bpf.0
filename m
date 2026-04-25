@@ -1,147 +1,189 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3266C30F7E8
-	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 06:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62CCB1D61BC;
+	Sat, 25 Apr 2026 08:05:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777099850; cv=none; b=ZjqRFf2mqGvNmxShfhQg41qSip94G4GCi6HZOiVjXySR1INycfaQWsSzyAZ+AR0l1RQ2+ZPug4tV/HgpxRhD10QEUKzdzAe0BN9dGHVmxpVcF2IRiuaagrcHyPz/fj/sZxJ597x20D24tucZUBhhXeEqHJe22im93MF7vBg+FTM=
+	t=1777104344; cv=none; b=KJ+PWPJKTd8L7MoogHeooQ+9A7lRbkv8nA7d6woEZIrV1US7R9oLYu2TGuSsrwmCGUULYafQM7Gat/QPcSjhnVHIPdq07C6T618svQzbh4S8KTNOvYpQrE16xHgRVCTZ6iFgGm6Kf1SwSJ5IfM+IaEaAh+9Lo7f1I1KP3rXzJPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777099850; c=relaxed/simple;
-	bh=dh4l3YV+E7Y9m43EEPiSn+v6TQOInLaKcegOVNQbPJs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=rr+VSqvQdTDW5jBLM4SFKCISJ16BToRMxvKvG4Xqh80dFfU2egR7hP90d60qqSpJlLBTevCbe//T1Pcy0G6UW/noTuy02OIAGgdCfxFLCUjwtGU4PPpjp7Z4I7x8w6Ys1CUqxSfwzSOYtoCZI61MKOVNesue9iB9isD/5Ir4XU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BZ97hmbX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777104344; c=relaxed/simple;
+	bh=S0X0pN8srarPwBPkfnx0eU3gnbLxXj9lMASqd+jq/0o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mxlfrXwq8wuPQm2oq4PpeIH9eN12TsHZ2NUEywIGZXDmooywpjuH28o406J+6nhC3VCnU5JGpj363qXz8loIhag85YWs+lKLptp86TDgAUFvjuVquZQmwIfZkfyKX/85jybDlGP+WENZgUuMYuZ7FuGSTKVjICIds25w8jE7pNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=jIIc3NO6; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BZ97hmbX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEC63C2BCB0;
-	Sat, 25 Apr 2026 06:50:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777099849;
-	bh=dh4l3YV+E7Y9m43EEPiSn+v6TQOInLaKcegOVNQbPJs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=BZ97hmbXOh6G41uSoP31uHNOaRRJNApS+yKotuMtm2qD0P2VkSznhDTUeajGR29p3
-	 5kA4kpKySwFPZf0CA5CofAdGN5GigWk3PwNKDlNQBUhYU1X4YX4NyolDbq/9o+6jhj
-	 kk44vpScS+wIEqNE00/xUfjI4jMcw7740Wl1iN2h513RT95xaoy17A1AHQ9uMKzS0a
-	 /ExlHkA+ctX0YU3+kRgpkvQk7F/vyPoR9TsS/c3RQnRkzHKxXnZa3ukT3ADM7NWujn
-	 UvzfdBVzegx9OSrghBgokP3otmjrcgtUQxomgCyS0ssOWNmYaHKsJECq4iF3tgzrk9
-	 wKyujSRF3kO3Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC bpf-next 8/8] selftests/bpf: add tests to validate
- KASAN on JIT programs
-Reply-To: sashiko@lists.linux.dev
-To: =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?= <alexis.lothore@bootlin.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260413-kasan-v1-8-1a5831230821@bootlin.com>
-References: <20260413-kasan-v1-8-1a5831230821@bootlin.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 25 Apr 2026 06:50:49 +0000
-Message-Id: <20260425065049.BEC63C2BCB0@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="jIIc3NO6"
+Received: by linux.microsoft.com (Postfix, from userid 1204)
+	id 5E3E220B7165; Sat, 25 Apr 2026 01:05:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5E3E220B7165
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1777104343;
+	bh=IkB9waU1QRQIGvPZnWRyZzWRYRvNT5pe3n4MZbVXQhI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jIIc3NO6qYngtvOses01TkQFruO+Ii5pevg0TCcHPvJBRUFzaF5qs+ZJqneqEElZ0
+	 i0FcK/csMFPU/duYoCuPLHLjjHCpfAIMfQxc1eYOcwTZJy+pU+9lXwyU7WWNXh2LQH
+	 FBkTQVb5twwtc4+KfgD3Kb6VGmogh2WIWmI9yuNA=
+Date: Sat, 25 Apr 2026 01:05:43 -0700
+From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+To: David Wei <dw@davidwei.uk>, kuba@kernel.org
+Cc: Jakub Kicinski <kuba@kernel.org>, kys@microsoft.com,
+	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	pabeni@redhat.com, leon@kernel.org, longli@microsoft.com,
+	kotaranov@microsoft.com, horms@kernel.org,
+	shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
+	ernis@linux.microsoft.com, shirazsaleem@microsoft.com,
+	linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+	stephen@networkplumber.org, jacob.e.keller@intel.com,
+	leitao@debian.org, kees@kernel.org, john.fastabend@gmail.com,
+	hawk@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+	ast@kernel.org, sdf@fomichev.me, dipayanroy@microsoft.com
+Subject: Re: [PATCH net-next v6 0/2] net: mana: add ethtool private flag for
+ full-page RX buffers
+Message-ID: <aex119OtL8CEGXkb@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20260407200216.272659-1-dipayanroy@linux.microsoft.com>
+ <20260409183509.0b24dea6@kernel.org>
+ <20260412125917.4fa8fc8d@kernel.org>
+ <ad5kuCZz+gR1TlSh@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <20260416083146.0bb94d2b@kernel.org>
+ <aeoVC27mIzoKytqA@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <685d7bf9-062d-4bd2-8448-f7714bb05302@davidwei.uk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <685d7bf9-062d-4bd2-8448-f7714bb05302@davidwei.uk>
 
-Sashiko AI review found 4 potential issue(s):
-- [High] Missing `KF_RET_NULL` flag on UAF kfuncs allows unhandled NULL poi=
-nter dereference in kernel.
-- [High] Test fails on default single-shot KASAN or panics the kernel if `p=
-anic_on_warn` is enabled.
-- [Medium] `klog_buffer` is not null-terminated after `klogctl()`, leading =
-to out-of-bounds reads and stale data matching.
-- [Medium] Global kernel syslog ring buffer is permanently deleted by the t=
-est.
---
+On Fri, Apr 24, 2026 at 01:05:24PM -0700, David Wei wrote:
+> On 2026-04-23 05:48, Dipayaan Roy wrote:
+> > On Thu, Apr 16, 2026 at 08:31:46AM -0700, Jakub Kicinski wrote:
+> > > On Tue, 14 Apr 2026 09:00:56 -0700 Dipayaan Roy wrote:
+> > > > I still see roughly a 5% overhead from the atomic refcount operation
+> > > > itself, but on that platform there is no throughput drop when using
+> > > > page fragments versus full-page mode.
+> > > 
+> > > That seems to contradict your claim that it's a problem with a specific
+> > > platform.. Since we're in the merge window I asked David Wei to try to
+> > > experiment with disabling page fragmentation on the ARM64 platforms we
+> > > have at Meta. If it repros we should use the generic rx-buf-len
+> > > ringparam because more NICs may want to implement this strategy.
+> > 
+> > Hi Jakub,
+> > 
+> > Thanks. I think I was not precise enough in my previous reply.
+> > 
+> > What I meant is that the atomic refcount cost itself does not appear to
+> > be unique to the affected platform. I see a similar ~5% overhead on
+> > another ARM64 platformi (different vendor) as well. However, on that platform
+> > there is no throughput delta between fragment mode and full-page mode; both reach
+> > line rate.
+> > 
+> > On the affected platform, fragment mode shows an additional ~15%
+> > throughput drop versus full-page mode. So the current data suggests that
+> > the atomic overhead is common, but the throughput regression is not
+> > explained by that overhead alone and likely depends on an additional
+> > platform-specific factor.
+> > 
+> > Separately, the hardware team collected PCIe traces on the affected
+> > platform and reported stalls in the fragment-mode case that are not seen
+> > in full-page mode. They are still investigating the root cause, but
+> > their current hypothesis is that this is related to that platform’s
+> > PCIe/root-port microarchitecture rather than to page_pool refcounting
+> > alone.
+> > 
+> > That said, I agree the right direction depends on whether this
+> > reproduces on other ARM64 platforms. If David is able to reproduce the
+> > same behavior, then using the generic rx-buf-len ringparam sounds like
+> > the better direction.
+> > 
+> > Please let me know what David finds, and I can rework the patch
+> > accordingly.
+> 
+> I ran a test on Grace, 4 KB pages, 72 cores, 1 NUMA node.
+> 
+> Broadcom NIC, bnxt driver, 50 Gbps bandwidth. Hacked it up to either
+> give me 1 or 2 frags per page. No agg ring, no HDS, no HW GRO.
+> 
+> Use 1 combined queue only for the server. Affinitized its net rx softirq
+> to run on core 4.
+> 
+> Ran iperf3 server, taskset onto cpu cores 32-47. The iperf3 client is
+> running on a host w/ same hw in the same region. Using 32 queues, no
+> softirq affinities. The idea is to hammer page->pp_ref_count from
+> different cores.
+> 
+> * 1 frag/page  -> 32.3 Gbps
+> * 2 frags/page -> 36.0 Gbps
+> 
+> Comparing perf, for 2 frags/page the cost of skb_release_data() hitting
+> pp_ref_count goes up, as expected. Is this what you see? When you say
+> there's a +5% overhead, what function?
+> 
+> Overall tput is higher with multiple frags. That's to be expected w/
+> page pool.
 
-commit 9698a3d81fe93ffca4f2e04fcf453d8b53dfd91c
-Author: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.com>
+Hi David,
 
-selftests/bpf: add tests to validate KASAN on JIT programs
+Thanks for running this. Your results are consistent with mine.
 
-This commit adds a basic KASAN test runner that loads and runs BPF programs
-to trigger memory management bugs. The test captures kernel logs and ensures
-the expected KASAN splat is emitted.
+I have tested this on 2 ARM64 platforms from different vendors,
+running ntttcp and iperf3 using 4k as base page size.
+In my observation I see both platforms show a 5% overhead in
+napi_pp_put_page (~3.9%) and page_pool_alloc_frag_netmem (~1.9%)
+when running in fragment mode, both stalling on the LSE ldaddal
+atomic that maintains pp_ref_count.
+This seems to be same as your observation as well. However in my
+observation one of the platform shows 15% drop in throughput when
+in fragment mode vs page mode. The other platform I ran the test on
+infact performs slighty better in fragment mode than in full page
+mode (simillar observation as yours).
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/kasan.c b/tools/testi=
-ng/selftests/bpf/prog_tests/kasan.c
-> new file mode 100644
-> index 0000000000000..fd628aaa80057
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/kasan.c
-[ ... ]
-> +static int read_kernel_logs(char *buf, size_t max_len)
-> +{
-> +	return klogctl(SYSLOG_ACTION_READ_ALL, buf, max_len);
-> +}
+So the atomic refcount overhead appears to be common across ARM64
+platforms, but it does not cause a throughput regression.
+The throughput regression seems specific to one platform only for which
+we want to have the full page work around, also the HW team has
+identified PCIe stalls in fragment mode that are absent in full-page mode.
+Their investigation points to a suspected microarchitectural
+issue in the PCIe root port. IMO, there seems to be no issue with
+page_pool itself.
 
-Since klogctl() returns the number of bytes read but doesn't null-terminate
-the buffer, and klog_buffer is statically allocated and reused, could
-strstr() in kernel_logs_have_matching_kasan_report() read past the end of
-the buffer or match stale logs from previous runs?
+Given that:
+ - Grace shows fragments are faster (your data)
+ - A second ARM64 platform shows no regression (my data)
+ - Only the affected platform shows a throughput drop
+ - The HW team suspects this to a platform-specific PCIe issue,
+   also form our experiment data the drop in throughput seems to
+   be platform specific only.
 
-> +
-> +static int clear_kernel_logs(void)
-> +{
-> +	return klogctl(SYSLOG_ACTION_CLEAR, NULL, 0);
-> +}
+I believe this remains a platform-specific workaround rather than
+a generic issue. Would a private flag still be acceptable for this
+case?
 
-Does clearing the global syslog ring buffer with SYSLOG_ACTION_CLEAR break
-concurrent tests?
 
-This destroys all dmesg logs generated by other tests in the parallel BPF
-selftest framework.
+> 
+> There are some 200 Gbps NICs but they're mlx5 so I'd have to redo the
+> driver hack. Are you going to re-implement this change with rx-buf-len
+> instead of a private flag? If so, I won't spend more time running this
+> test.
+> 
+I can go either way depending on what Jakub prefers.
+Hi Jakub,
+with this new data from David, is it convincing enough for a mana driver
+specific private flag, which can be set from user space by a udev rule
+by detecting the underlying platform? If not then I will send the next
+version with the other rxbuflen approach. 
+> > 
+> > 
+> > Regards
+> > Dipayaan Roy
 
-Should the test read /dev/kmsg incrementally instead?
 
-[ ... ]
-> +static void run_test_with_type(struct kasan *skel, struct test_spec *tes=
-t,
-> +			       bool is_write)
-> +{
-> +	run_test_with_type_and_size(skel, test, is_write, 1);
-> +	run_test_with_type_and_size(skel, test, is_write, 2);
-> +	run_test_with_type_and_size(skel, test, is_write, 4);
-> +	run_test_with_type_and_size(skel, test, is_write, 8);
-> +}
-
-KASAN operates in single-shot mode by default. After the first subtest
-triggers a report, will subsequent reports be suppressed, causing the
-remaining subtests to fail?
-
-Also, since BPF CI runs with panic_on_warn=3D1, will the first KASAN splat
-invoke check_panic_on_warn() and immediately panic the CI runner?
-
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> index d876314a4d67e..01554bcbbbb0a 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-[ ... ]
-> +static void *kasan_uaf(void)
-> +{
-> +	void *p =3D kmalloc(64, GFP_ATOMIC);
-> +
-> +	if (!p)
-> +		return NULL;
-> +	memset(p, 0xAA, 64);
-> +	kfree(p);
-> +
-> +	return p;
-> +}
-[ ... ]
-> +BTF_ID_FLAGS(func, bpf_kfunc_kasan_uaf_1)
-> +BTF_ID_FLAGS(func, bpf_kfunc_kasan_uaf_2)
-> +BTF_ID_FLAGS(func, bpf_kfunc_kasan_uaf_4)
-> +BTF_ID_FLAGS(func, bpf_kfunc_kasan_uaf_8)
-
-Since kasan_uaf() can return NULL if kmalloc() fails under memory pressure,
-should these kfuncs be registered with the KF_RET_NULL flag?
-
-Without it, the BPF verifier won't enforce NULL checks in the BPF programs,
-which could lead to unhandled NULL pointer dereferences in kernel space.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260413-kasan-v1-0=
--1a5831230821@bootlin.com?part=3D8
+Thanks and Regards
+Dipayaan Roy
