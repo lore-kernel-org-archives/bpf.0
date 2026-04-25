@@ -1,193 +1,111 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424201096F
-	for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 23:52:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61C754723;
+	Sat, 25 Apr 2026 00:26:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777074773; cv=none; b=Vin0QCgBTEfjYTbh4vmCIw3SA8c37E7dXMnJnb3/tI6b0YOl5Ko0stMrxT78579w1M0llntvnOnucUFyQ5lrPSxJI5oSNOtiQbYavUv/YAtjvoEvfCIN0sBBP++D7+XR3CuwdfMD6haLCxuv8kzXdNDNDgA3RAj1BG6hsMf/UTA=
+	t=1777076800; cv=none; b=FZpde1ik5B1KKpW+9dxLSk/5AR1OnnEVnWvBTu9OgAORzqHLPY6knTzL3zeMXhSzBcXy+YTQTcbT7yeYVtIeyvhSEiAs/l0wXcDUN8Nsf2lBR+E8J261KZvpDQ4+drszcuip1euphWQx9J7j5U8H1zwYfeBHBjj2exYFDy19Y4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777074773; c=relaxed/simple;
-	bh=QJ6YINPJxDE8ce/SSg+gEPEuZCMMootlW1RL0db12+E=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=SkEs0kZG503kcrqFzU6XDfOO+cVuvR+FEMaSR4Ow+wUfmbsahYJ8z4+w1q3oB9ku2W2cQbQzeknPJ3c75PQV/aFAlb08tNNfs95GcCWJoa5Zs0dcUoHQWcVNq2D6HpVN268+WA79F3wtVK6mmhbYvl+qi4eSDOinUzesnYhi49M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IenHmcKB; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	s=arc-20240116; t=1777076800; c=relaxed/simple;
+	bh=T0yCUFyad0Iay4ATupQDxxCtSOQ0P0MgRLUHt6Rh4bk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=WZMR97uViWuK+UnmjGDdfCjIKpgPTzz/kZtLUVB7TueOl+KNSqd6yvXKakS704/I38dmZm2wrTlWFnLQocLo3WSAQAgoaDBauewm0CqSkdQbcMnG4fvn7j6gqhopHZq+mfS9NGlSz58SgXp7Ct5k5kRQlZvSsnz7ElZePmTa6o0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TFZ+9q6k; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IenHmcKB"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c798e905c29so3242059a12.3
-        for <bpf@vger.kernel.org>; Fri, 24 Apr 2026 16:52:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777074770; x=1777679570; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=XnVmcqSWgBrIZOINeFfkUbMwryuHt4PzyHkF5OrKAp4=;
-        b=IenHmcKBm55oIXWcqHCofMdfnNkKQtFd8L5ctrIa1JcWbhwwR84MMehyDcu8HD+09t
-         aF+uqSC25up2kaL0BmhCB874PRjsaqmKa85Rh5Led/MpVAraUVEUmsOHAdbFb8Fm5ESK
-         iwMv042uE6vWmby9U27B0GHDpM4JnNWOzaqsFD3d4hhbi4gNCfbPkkfJ3Adz/7OiVxZ6
-         axc9Dy66Ys+aC6uEsOQW+gVzFsYvgdQbmjfkaocZPxmP4aDofxtMoHhzqhK3FiPB2obM
-         JBlvYWNV1bhondobioFcDMisOcYjNgB5J1XNkisioT8bnoXVo6uAO4DBWZs2vcR0pR3O
-         8K0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777074770; x=1777679570;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XnVmcqSWgBrIZOINeFfkUbMwryuHt4PzyHkF5OrKAp4=;
-        b=KWJepDnuUl1vPk9/R6kZfTclqvrlWbhRAyzm0u3Zl6P1dwgolMmdTz1ijgLoWRF//Z
-         VRN03y9ASJnNAQheV53g7lTn0e+e/zKREYYAasRvaBXoRteJgiCxleVeFadIAGD92OTd
-         Jy3GTEQ1xklhVSrFsI4ID1F07zHf9iKjxRfef0z3xc1dIafLgvpYGmDTGy7yVE5aV9TS
-         RoCD+YcYbC/8muPneupxjlQGiZvmFiz3OVwPxEZzst8Fr1EOPfLP07V4oXhqzA5hT8sN
-         p8yw6CWf+QpW3xUaIg6jq6gP/8u+hhy0dmsf0EnvFxu1uyBkjqDuu44jJ4DOmp4KKuRh
-         2MZA==
-X-Forwarded-Encrypted: i=1; AFNElJ+uJg0hwWmofTGcqOwO5kYEJ61U4FqEe7CFJQS2w18AKDLzcFmIWX64a2kO5nG5TU4DeJs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrNBfPjvrxYDVrsvElTEBnSCE0Vev3K0CZCcfSnUIa+v3Ef8Z4
-	CEb4ebZPivKL6RGhTpu6/VcS52Mwgrvd56sm7wL5W+a4bkdJzyIReXiO7s25/5XoszxCHcVyvsp
-	HN9MV6A==
-X-Received: from pfblu1.prod.google.com ([2002:a05:6a00:7481:b0:82f:24a1:2b5a])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:22c5:b0:82f:316:3206
- with SMTP id d2e1a72fcca58-82f8c92997fmr35230164b3a.34.1777074770298; Fri, 24
- Apr 2026 16:52:50 -0700 (PDT)
-Date: Fri, 24 Apr 2026 23:52:46 +0000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TFZ+9q6k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34AD3C19425;
+	Sat, 25 Apr 2026 00:26:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777076800;
+	bh=T0yCUFyad0Iay4ATupQDxxCtSOQ0P0MgRLUHt6Rh4bk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=TFZ+9q6ku2Jbb4Uiqeu9COQuSbnBjobNC44s1qZIpj8OCga/Tbo8X06WSMIWqynyF
+	 zDsVtwp3aIpXX0BZ+o/1zxTlrwgNM/HRrBy1F0by5ngTS+uGD3QPjpbqoVAIvg+x6D
+	 RpYhm2GyWSn3WuRn2s7U5PqPaha+asre0SMOKVapLnLbJ8CxI9KMxpjowhYl1A3Rul
+	 jNNTpiyUMyUtcB4tb9APAqSuMGhIQs6auNvbOCiDzpVIuwUx1uQ6wcG7Nc8KEx+T2t
+	 /DCZPUzxz8sGyBcCzyITSIhb56AZA2AwAvNmV08qvijNok2FDZgBvK+8rBhuSPV9Ip
+	 1qO1PWk6+M6vA==
+Content-Type: multipart/mixed; boundary="===============5951464050820953645=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.54.0.rc2.544.gc7ae2d5bb8-goog
-Message-ID: <20260424235247.1990272-1-kuniyu@google.com>
-Subject: [PATCH v1 bpf] bpf: Free reuseport cBPF prog after RCU grace period.
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, Eulgyu Kim <eulgyukim@snu.ac.kr>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Message-Id: <407178e7c68a87a2a660badc2e4e8e8feae7b1767998649cb278ce4bde14371d@mail.kernel.org>
+In-Reply-To: <20260424235247.1990272-1-kuniyu@google.com>
+References: <20260424235247.1990272-1-kuniyu@google.com>
+Subject: Re: [PATCH v1 bpf] bpf: Free reuseport cBPF prog after RCU grace period.
+From: bot+bpf-ci@kernel.org
+To: kuniyu@google.com,martin.lau@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: kuniyu@google.com,kuni1840@gmail.com,bpf@vger.kernel.org,netdev@vger.kernel.org,eulgyukim@snu.ac.kr,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sat, 25 Apr 2026 00:26:40 +0000 (UTC)
 
-Eulgyu Kim reported the splat below with a repro. [0]
+--===============5951464050820953645==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-The repro sets up a UDP reuseport group with a cBPF prog and
-replaces it with a new one while another thread is sending
-a UDP packet to the group.
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index bc96c18df4e0..dba4c9340bb7 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -1654,15 +1654,24 @@ int sk_reuseport_attach_bpf(u32 ufd, struct sock *sk)
+>  	return err;
+>  }
+>
+> -void sk_reuseport_prog_free(struct bpf_prog *prog)
+> +static void sk_reuseport_prog_free_rcu(struct rcu_head *rcu)
+> +{
+> +	struct bpf_prog_aux *aux = container_of(rcu, struct bpf_prog_aux, rcu);
+> +	struct bpf_prog *prog = aux->prog;
+> +
+> +	bpf_release_orig_filter(prog);
+> +	bpf_prog_free(prog);
+> +}
+> +
+> +void sk_reuseport_prog_free(struct bpf_prog *prog, bool wait_rcu)
+>  {
 
-The reuseport prog is freed by sk_reuseport_prog_free().
-bpf_prog_put() is called for "e"BPF prog to destruct through
-multiple stages while cBPF prog is freed immediately by
-bpf_release_orig_filter() and bpf_prog_free().
+The function signature was changed to add a 'bool wait_rcu' parameter, but
+the header file declaration in include/linux/filter.h and all three call
+sites in net/core/sock_reuseport.c were not updated.
 
-If a reuseport prog is detached from the setsockopt() path
-(reuseport_attach_prog() or reuseport_detach_prog()),
-sk_reuseport_prog_free() is called without waiting for RCU
-readers to complete, resulting in various bugs.
+The three call sites are:
+- reuseport_attach_prog() calling sk_reuseport_prog_free(old_prog)
+- reuseport_free_rcu() calling sk_reuseport_prog_free(...)
+- reuseport_detach_prog() calling sk_reuseport_prog_free(old_prog)
 
-Let's defer freeing the reuseport cBPF prog after one RCU
-grace period.
+Will this compile? It looks like the callers will fail with 'too few
+arguments to function sk_reuseport_prog_free'.
 
-Note "e"BPF prog is safe as is unless the fast path starts
-to touch fields destroyed in bpf_prog_put_deferred() and
-__bpf_prog_put_noref().
+>  	if (!prog)
+>  		return;
+>
+> -	if (prog->type == BPF_PROG_TYPE_SK_REUSEPORT)
+> -		bpf_prog_put(prog);
+> +	if (bpf_prog_was_classic(prog))
+> +		call_rcu(&prog->aux->rcu, sk_reuseport_prog_free_rcu);
+>  	else
+> -		bpf_prog_destroy(prog);
+> +		bpf_prog_put(prog);
+>  }
 
-[0]:
-BUG: KASAN: vmalloc-out-of-bounds in reuseport_select_sock+0xedc/0x1220 net/core/sock_reuseport.c:596
-Read of size 4 at addr ffffc9000051e004 by task slowme/10208
-CPU: 6 UID: 1000 PID: 10208 Comm: slowme Not tainted 7.0.0-geb7ac95ff75e #32 PREEMPT(full)
-Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-Call Trace:
- <IRQ>
- dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
- print_address_description mm/kasan/report.c:378 [inline]
- print_report+0xca/0x240 mm/kasan/report.c:482
- kasan_report+0x118/0x150 mm/kasan/report.c:595
- reuseport_select_sock+0xedc/0x1220 net/core/sock_reuseport.c:596
- udp4_lib_lookup2+0x3bc/0x950 net/ipv4/udp.c:495
- __udp4_lib_lookup+0x768/0xe20 net/ipv4/udp.c:723
- __udp4_lib_lookup_skb+0x297/0x390 net/ipv4/udp.c:752
- __udp4_lib_rcv+0x1312/0x2620 net/ipv4/udp.c:2752
- ip_protocol_deliver_rcu+0x282/0x440 net/ipv4/ip_input.c:207
- ip_local_deliver_finish+0x3bb/0x6f0 net/ipv4/ip_input.c:241
- NF_HOOK+0x30c/0x3a0 include/linux/netfilter.h:318
- NF_HOOK+0x30c/0x3a0 include/linux/netfilter.h:318
- __netif_receive_skb_one_core net/core/dev.c:6181 [inline]
- __netif_receive_skb net/core/dev.c:6294 [inline]
- process_backlog+0xaa4/0x1960 net/core/dev.c:6645
- __napi_poll+0xae/0x340 net/core/dev.c:7709
- napi_poll net/core/dev.c:7772 [inline]
- net_rx_action+0x5d7/0xf50 net/core/dev.c:7929
- handle_softirqs+0x22b/0x870 kernel/softirq.c:622
- do_softirq+0x76/0xd0 kernel/softirq.c:523
- </IRQ>
- <TASK>
- __local_bh_enable_ip+0xf8/0x130 kernel/softirq.c:450
- local_bh_enable include/linux/bottom_half.h:33 [inline]
- rcu_read_unlock_bh include/linux/rcupdate.h:924 [inline]
- __dev_queue_xmit+0x1dd7/0x3710 net/core/dev.c:4890
- neigh_output include/net/neighbour.h:556 [inline]
- ip_finish_output2+0xca9/0x1070 net/ipv4/ip_output.c:237
- NF_HOOK_COND include/linux/netfilter.h:307 [inline]
- ip_output+0x29f/0x450 net/ipv4/ip_output.c:438
- ip_send_skb+0x45/0xc0 net/ipv4/ip_output.c:1508
- udp_send_skb+0xb04/0x1510 net/ipv4/udp.c:1195
- udp_sendmsg+0x1a71/0x2350 net/ipv4/udp.c:1485
- sock_sendmsg_nosec net/socket.c:727 [inline]
- __sock_sendmsg net/socket.c:742 [inline]
- __sys_sendto+0x554/0x680 net/socket.c:2206
- __do_sys_sendto net/socket.c:2213 [inline]
- __se_sys_sendto net/socket.c:2209 [inline]
- __x64_sys_sendto+0xde/0x100 net/socket.c:2209
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0x160/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x415a2d
-Code: b3 66 2e 0f 1f 84 00 00 00 00 00 66 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f6bc31e41e8 EFLAGS: 00000212 ORIG_RAX: 000000000000002c
-RAX: ffffffffffffffda RBX: 00007f6bc31e4cdc RCX: 0000000000415a2d
-RDX: 0000000000000001 RSI: 00007f6bc31e421f RDI: 0000000000000003
-RBP: 00007f6bc31e4240 R08: 00007f6bc31e4220 R09: 0000000000000010
-R10: 0000000000000000 R11: 0000000000000212 R12: 00007f6bc31e46c0
-R13: ffffffffffffffb8 R14: 0000000000000000 R15: 00007ffc9b0d70b0
- </TASK>
+The 'wait_rcu' parameter is never used in the function body. The decision
+to defer freeing via RCU is based entirely on bpf_prog_was_classic(prog).
 
-Fixes: 538950a1b752 ("soreuseport: setsockopt SO_ATTACH_REUSEPORT_[CE]BPF")
-Reported-by: Eulgyu Kim <eulgyukim@snu.ac.kr>
-Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+What is the purpose of the wait_rcu parameter? The commit message explains
+the goal is to defer freeing cBPF programs, but doesn't explain why a
+per-call toggle would be needed. With the parameter ignored, callers
+cannot control the behavior even if they wanted to.
+
+>
+>  static inline int __bpf_try_make_writable(struct sk_buff *skb,
+
 ---
- net/core/filter.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index bc96c18df4e0..dba4c9340bb7 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -1654,15 +1654,24 @@ int sk_reuseport_attach_bpf(u32 ufd, struct sock *sk)
- 	return err;
- }
- 
--void sk_reuseport_prog_free(struct bpf_prog *prog)
-+static void sk_reuseport_prog_free_rcu(struct rcu_head *rcu)
-+{
-+	struct bpf_prog_aux *aux = container_of(rcu, struct bpf_prog_aux, rcu);
-+	struct bpf_prog *prog = aux->prog;
-+
-+	bpf_release_orig_filter(prog);
-+	bpf_prog_free(prog);
-+}
-+
-+void sk_reuseport_prog_free(struct bpf_prog *prog, bool wait_rcu)
- {
- 	if (!prog)
- 		return;
- 
--	if (prog->type == BPF_PROG_TYPE_SK_REUSEPORT)
--		bpf_prog_put(prog);
-+	if (bpf_prog_was_classic(prog))
-+		call_rcu(&prog->aux->rcu, sk_reuseport_prog_free_rcu);
- 	else
--		bpf_prog_destroy(prog);
-+		bpf_prog_put(prog);
- }
- 
- static inline int __bpf_try_make_writable(struct sk_buff *skb,
--- 
-2.54.0.rc2.544.gc7ae2d5bb8-goog
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24917377520
+--===============5951464050820953645==--
