@@ -1,111 +1,147 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CF82BDC26
-	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 06:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3266C30F7E8
+	for <bpf@vger.kernel.org>; Sat, 25 Apr 2026 06:50:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777098804; cv=none; b=rpnfWIauOIOZC9Khe/J5zg8cR8Yqf17YULWUtxMv+vReoAUN4ZAr97j2pInk4QXr60679Ep32SMVAW+BYA6BwIbre+a228GqqXFp9FyPJkB1pRUU8d5EVqS2U7ZNxJBKP3hU1C4dijh2+HOaJnqM0jn5kBsw14SotsjDyCiy/ZE=
+	t=1777099850; cv=none; b=ZjqRFf2mqGvNmxShfhQg41qSip94G4GCi6HZOiVjXySR1INycfaQWsSzyAZ+AR0l1RQ2+ZPug4tV/HgpxRhD10QEUKzdzAe0BN9dGHVmxpVcF2IRiuaagrcHyPz/fj/sZxJ597x20D24tucZUBhhXeEqHJe22im93MF7vBg+FTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777098804; c=relaxed/simple;
-	bh=cKvbIX024p6VOSC4pNw75gWTgCVeSh4dqRaxtwn0axA=;
+	s=arc-20240116; t=1777099850; c=relaxed/simple;
+	bh=dh4l3YV+E7Y9m43EEPiSn+v6TQOInLaKcegOVNQbPJs=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=QJlH1Eh4hsMJ6bNZART7eLUUZE9xDhD5c1LQL27ti82XONBNomIVM3MujD/giL+lxm9ZKYm1XCg+g1UIXrRISrLQJXUgIpzLSb7An8iA6da/Jyt6Mn/SeHQmG7msfS70QovYJLwMR66IfQVtPx3DeucpDkIFM8S6QJtHNOK8VQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RPIjN0+G; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=rr+VSqvQdTDW5jBLM4SFKCISJ16BToRMxvKvG4Xqh80dFfU2egR7hP90d60qqSpJlLBTevCbe//T1Pcy0G6UW/noTuy02OIAGgdCfxFLCUjwtGU4PPpjp7Z4I7x8w6Ys1CUqxSfwzSOYtoCZI61MKOVNesue9iB9isD/5Ir4XU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BZ97hmbX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RPIjN0+G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 856BCC2BCB0;
-	Sat, 25 Apr 2026 06:33:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BZ97hmbX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEC63C2BCB0;
+	Sat, 25 Apr 2026 06:50:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777098803;
-	bh=cKvbIX024p6VOSC4pNw75gWTgCVeSh4dqRaxtwn0axA=;
+	s=k20201202; t=1777099849;
+	bh=dh4l3YV+E7Y9m43EEPiSn+v6TQOInLaKcegOVNQbPJs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=RPIjN0+Gd4kCJDPKjzGJDVYKFvZ99gpZqGEsMb/yjbUzYbAwbqZxcQzrurD7L5Aj5
-	 gxs2HUU9gmRR+3oXoR9OOKX/eriSW9umwzBuOJ8Qv2CKSM9v3ELGDXt6BTNBVvQeEC
-	 OM/HKfg4sfvxdEtWySq31jPvm8GVhu5pyFE9FwdXCKuBeY8/x6qfHso2bW1kaS8WcH
-	 N6buOzFSMm0ZTYpiE6MWsBRgxLcXSJYlXOHz7AbYBBnDI0IaFW5T1y9Cme2gtXBrPY
-	 TbMiDFrVGIgI2jPOwEvkg1lEooe47DGvc0lcxaaWVk/8Hc0wYFgCeCTG7olmM+OClj
-	 L5X2YZYhTMaaw==
+	b=BZ97hmbXOh6G41uSoP31uHNOaRRJNApS+yKotuMtm2qD0P2VkSznhDTUeajGR29p3
+	 5kA4kpKySwFPZf0CA5CofAdGN5GigWk3PwNKDlNQBUhYU1X4YX4NyolDbq/9o+6jhj
+	 kk44vpScS+wIEqNE00/xUfjI4jMcw7740Wl1iN2h513RT95xaoy17A1AHQ9uMKzS0a
+	 /ExlHkA+ctX0YU3+kRgpkvQk7F/vyPoR9TsS/c3RQnRkzHKxXnZa3ukT3ADM7NWujn
+	 UvzfdBVzegx9OSrghBgokP3otmjrcgtUQxomgCyS0ssOWNmYaHKsJECq4iF3tgzrk9
+	 wKyujSRF3kO3Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC bpf-next 7/8] bpf, x86: enable KASAN for JITed
- programs on x86
+Subject: Re: [PATCH RFC bpf-next 8/8] selftests/bpf: add tests to validate
+ KASAN on JIT programs
 Reply-To: sashiko@lists.linux.dev
 To: =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?= <alexis.lothore@bootlin.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260413-kasan-v1-7-1a5831230821@bootlin.com>
-References: <20260413-kasan-v1-7-1a5831230821@bootlin.com>
+In-Reply-To: <20260413-kasan-v1-8-1a5831230821@bootlin.com>
+References: <20260413-kasan-v1-8-1a5831230821@bootlin.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 25 Apr 2026 06:33:22 +0000
-Message-Id: <20260425063323.856BCC2BCB0@smtp.kernel.org>
+Date: Sat, 25 Apr 2026 06:50:49 +0000
+Message-Id: <20260425065049.BEC63C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 1 potential issue(s):
-- [High] The x86 JIT compiler misses KASAN instrumentation for BPF_ST (stor=
-e immediate to memory) and BPF_ATOMIC (atomic read-modify-write) instructio=
-ns.
+Sashiko AI review found 4 potential issue(s):
+- [High] Missing `KF_RET_NULL` flag on UAF kfuncs allows unhandled NULL poi=
+nter dereference in kernel.
+- [High] Test fails on default single-shot KASAN or panics the kernel if `p=
+anic_on_warn` is enabled.
+- [Medium] `klog_buffer` is not null-terminated after `klogctl()`, leading =
+to out-of-bounds reads and stale data matching.
+- [Medium] Global kernel syslog ring buffer is permanently deleted by the t=
+est.
 --
 
-commit b74234d98543fb8b6b97cccfe13819f42ebebe33
+commit 9698a3d81fe93ffca4f2e04fcf453d8b53dfd91c
 Author: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.com>
 
-bpf, x86: enable KASAN for JITed programs on x86
+selftests/bpf: add tests to validate KASAN on JIT programs
 
-Mark x86 as supporting KASAN checks in JITed programs so that the
-corresponding JIT compiler inserts checks on the translated
-instructions.
+This commit adds a basic KASAN test runner that loads and runs BPF programs
+to trigger memory management bugs. The test captures kernel logs and ensures
+the expected KASAN splat is emitted.
 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index f3f7cb01d69d0..cc140108b74c5 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -235,6 +235,7 @@ config X86
->  	select HAVE_SAMPLE_FTRACE_DIRECT	if X86_64
->  	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI	if X86_64
->  	select HAVE_EBPF_JIT
-> +	select HAVE_EBPF_JIT_KASAN		if X86_64
+> diff --git a/tools/testing/selftests/bpf/prog_tests/kasan.c b/tools/testi=
+ng/selftests/bpf/prog_tests/kasan.c
+> new file mode 100644
+> index 0000000000000..fd628aaa80057
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/kasan.c
+[ ... ]
+> +static int read_kernel_logs(char *buf, size_t max_len)
+> +{
+> +	return klogctl(SYSLOG_ACTION_READ_ALL, buf, max_len);
+> +}
 
-Is it safe to enable KASAN for eBPF JIT on x86 when some memory access
-instructions appear to be missing KASAN checks?
+Since klogctl() returns the number of bytes read but doesn't null-terminate
+the buffer, and klog_buffer is statically allocated and reused, could
+strstr() in kernel_logs_have_matching_kasan_report() read past the end of
+the buffer or match stale logs from previous runs?
 
-Looking at arch/x86/net/bpf_jit_comp.c, while BPF_LDX | BPF_MEM and
-BPF_STX | BPF_MEM correctly call emit_kasan_check(), BPF_ST | BPF_MEM
-and BPF_STX | BPF_ATOMIC directly emit x86 memory access instructions witho=
-ut
-instrumentation.
+> +
+> +static int clear_kernel_logs(void)
+> +{
+> +	return klogctl(SYSLOG_ACTION_CLEAR, NULL, 0);
+> +}
 
-For example, BPF_ST | BPF_MEM does not include the check:
+Does clearing the global syslog ring buffer with SYSLOG_ACTION_CLEAR break
+concurrent tests?
 
-arch/x86/net/bpf_jit_comp.c:do_jit() {
-    ...
-		case BPF_ST | BPF_MEM | BPF_W:
-			if (is_ereg(dst_reg))
-				EMIT2(0x41, 0xC7);
-			else
-				EMIT1(0xC7);
-			goto st;
-    ...
-}
+This destroys all dmesg logs generated by other tests in the parallel BPF
+selftest framework.
 
-Similarly, atomic operations are missing the check:
-
-arch/x86/net/bpf_jit_comp.c:do_jit() {
-    ...
-		case BPF_STX | BPF_ATOMIC | BPF_W:
-		case BPF_STX | BPF_ATOMIC | BPF_DW:
-			if (insn->imm =3D=3D (BPF_AND | BPF_FETCH) ||
-    ...
-}
-
-Could this allow an eBPF program to bypass KASAN memory safety validation
-by using immediate stores or atomic operations?
+Should the test read /dev/kmsg incrementally instead?
 
 [ ... ]
+> +static void run_test_with_type(struct kasan *skel, struct test_spec *tes=
+t,
+> +			       bool is_write)
+> +{
+> +	run_test_with_type_and_size(skel, test, is_write, 1);
+> +	run_test_with_type_and_size(skel, test, is_write, 2);
+> +	run_test_with_type_and_size(skel, test, is_write, 4);
+> +	run_test_with_type_and_size(skel, test, is_write, 8);
+> +}
+
+KASAN operates in single-shot mode by default. After the first subtest
+triggers a report, will subsequent reports be suppressed, causing the
+remaining subtests to fail?
+
+Also, since BPF CI runs with panic_on_warn=3D1, will the first KASAN splat
+invoke check_panic_on_warn() and immediately panic the CI runner?
+
+> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
+/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> index d876314a4d67e..01554bcbbbb0a 100644
+> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+[ ... ]
+> +static void *kasan_uaf(void)
+> +{
+> +	void *p =3D kmalloc(64, GFP_ATOMIC);
+> +
+> +	if (!p)
+> +		return NULL;
+> +	memset(p, 0xAA, 64);
+> +	kfree(p);
+> +
+> +	return p;
+> +}
+[ ... ]
+> +BTF_ID_FLAGS(func, bpf_kfunc_kasan_uaf_1)
+> +BTF_ID_FLAGS(func, bpf_kfunc_kasan_uaf_2)
+> +BTF_ID_FLAGS(func, bpf_kfunc_kasan_uaf_4)
+> +BTF_ID_FLAGS(func, bpf_kfunc_kasan_uaf_8)
+
+Since kasan_uaf() can return NULL if kmalloc() fails under memory pressure,
+should these kfuncs be registered with the KF_RET_NULL flag?
+
+Without it, the BPF verifier won't enforce NULL checks in the BPF programs,
+which could lead to unhandled NULL pointer dereferences in kernel space.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260413-kasan-v1-0=
--1a5831230821@bootlin.com?part=3D7
+-1a5831230821@bootlin.com?part=3D8
