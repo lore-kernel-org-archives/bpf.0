@@ -1,155 +1,280 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B70138F935
-	for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 19:58:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777233505; cv=pass; b=BRNQlAgy00iH59IRq0NC5vvMswY+AUsFXWlD6gwSImIxOpW0L/60lW2bYdDkPk9NC8CgnHBcGaEtdYJb528syHqYuxM7lzarSmQvscpODFIHxRZ0Io3nhoKBgU6F5wvkM009Ufit6+sNu/c0pOmMz7irNFLW1tEieU3FW8WLmnk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777233505; c=relaxed/simple;
-	bh=trIOiXPC3ZznAjLInheohem9eH7X2h+P2el58b9UVm8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kEMVYS2xdcdq9zsbwmwj9Pn8T4h2nOhcxsQ9n59TjDo9gJswS8kzcc7/ZMy/Lg5ixuLLRSIj56/JZOENhTJHrQT436Yna5Dl+peQU3QwIuwSgFxKiGDfNineKxmpEyL00EondRVrwwurdFXNsmiogCyC5Nyzz5gd7E++AGWi7Us=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d4MUK57z; arc=pass smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9FA375AA1
+	for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 20:12:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777234356; cv=none; b=IWBLjfNDy2SXfxWV/cpXfjERl7GqtkZjSib77sBrGmoCPW7iek6Qk1YadAxukuMqzVeDkFdA8TmjfsKAnMEjeiyRWHiR0oB9LA0iL+ZmWE5Lg/CcZi5XLjLVMtNIbcZqTYZ+RB03pd8AOGeW3oXnrEpJN13u7Stf6+LvJoXwCUE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777234356; c=relaxed/simple;
+	bh=Xuc6uC98UY+vzbsI3kSwB344PXVFlxBIepXFmeMf66k=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=dGIFC7R+tVcO3D14vVKJzfduRMalSNRHBFsNCeeZOUwEXpHwad2O47ICGodF5woXPzjLUVU8Q34iGokr/ZleAUqKruzM4n7xJhyQvQtQTME+k2P6WHkOGSlmFFGUjLAh4rZMvW8FjGrHpR8ufwqbj2OylZx4pKE23TIZtRpii24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oMEGABUo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d4MUK57z"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-48896199cbaso94328985e9.1
-        for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 12:58:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777233502; cv=none;
-        d=google.com; s=arc-20240605;
-        b=VX3q6YAAOatzhSTYi1xj+mvAuDAGfJl+tbB2Q+LRErOiCkwh0cmYUvetHbJ/vqqZjK
-         NIpfh2oWn3XND5B712tlaE0OKvNZnbNLzONqC9OVjTBA0Jty2ntUt4QqpChl2jVn9hXn
-         BeOADQGOVfyYRHyQx4sDUWeouBMlTW4nXXGdaBi0gPYGYv8IJ2Fh4pNxVAFe48xLI15x
-         R+hxHLl91XidZ64Rbf1MhaMbu0ChL6+UOorJdto2OArzBI85Y0q+V7PHgjq/P0hxK9f5
-         Tn8E8wJrPcb2WJYx4OOIwz7ZD89wAicolbyQfjIcBmcVEmOYlthdJPEaUjJLh9YnK1YT
-         i8Fg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=vZ7wzWQmLh+SZ6Kb2cKv58UWYCYxw7XUgx9m7326nc8=;
-        fh=e/qwgPU8A5U6UQRlqmfMZcUEh5e6lmrd+vl3ayBD87E=;
-        b=fla+5Og2TGb4N+4LPI8FjF4kdUO96tOa9tRBdIxG4fpXvbz0DFzUN37NKt61mYCJju
-         BKkPMLoHLnjL4leNYgJ+Rfkfb7fKvVP5ahQhCjxkPQ8nDqFQSI0vx5DNRpWs+0dlTNh6
-         f/ZXlaS5y7ExxPNexo/OCtCJnRujHLOf7iw55Rb2MLgVwxuJMHvF9s6+osZ6AVjN1uKo
-         XVfSP8ozlfglvgQA64URvm36eyiOi+8aFM74eRT0DTU1Q0lidcTdTqMJrneOttmukw+5
-         h6toy7XY4JPJpZXHmYd+5gN8yBgZyY2dwUxKPUuy5CLkOh86l+jjCGEn4Y7GaBGqcXZV
-         Bo4w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777233502; x=1777838302; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vZ7wzWQmLh+SZ6Kb2cKv58UWYCYxw7XUgx9m7326nc8=;
-        b=d4MUK57z1CZUI4qbwOqkG2ndUunCJyldF1MbrdRLcYL+98z/VCE8KIqCNhqyEa05ii
-         HmRnTB3XCBePZHoAfYOR6YqJPwBzz8rd/itK/KSbFHZ/Rv3z/Xd6nO1YtrFfGc/mErNO
-         dBUfGvWrYhEnonJUStQDIF6uPPvJHXmGNemz5+K4WRsI9mmn9o3+A2WdR34ZJGPgSFLl
-         +Q2C99G3NbwwpQVfVEp6BMGHzbZeX3DTMqoYsF7as2TedEgFs1++OcIS2qNUFrlM/0AJ
-         6cCB36MxI3wfC6aZkpAntTCyoWejaLaX7zVU3XU39XMwSsqpiDePugn3mH95fnPvQzoI
-         j2Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777233502; x=1777838302;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=vZ7wzWQmLh+SZ6Kb2cKv58UWYCYxw7XUgx9m7326nc8=;
-        b=J4lB5Z27j2ptf/icUu6bk4cXIXzUnL5UHUIYaS+5MIX9cw4nZSeuxEZ88tboB6NAvH
-         zygvHydec096L50W9KgIRkHiMRJTCMC774HHrGK/spVExkM42dzQZiuyKXA+6Jg17O2v
-         e0Mw25iLTM++etxDe5iWh8JFztv5W0SPcfhGuJpPsk+f2K36T9PDHBWMLIy8vmptAep0
-         v8rUuih+UWKmVw7D2NgAQqoY58X35uPv94RQarqy5TqzZW0vkk/+8u8uh7wM6Bs3Hab3
-         Pu+vLUlhxLaOl5yNmb1dkwMsAbk6DzP4yu5nig1hCn6ZnJgZe9/ifXpzAzadsfb8qHOZ
-         tR4w==
-X-Forwarded-Encrypted: i=1; AFNElJ8IkebvlcI7OTb4UKgkvZWyWYGzIYjgK4pQSPL7tksezvPrsmfcjUl0XbgiNJ8fN6Zppkc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHBq41x+toCEAirjUauMOLIDY8CK76132VPUC5pMIyxsHHBfmQ
-	W3LWcvkFu5pwvmW8h8on9BvW816KlgNalYbUFDKc/MGTVaHU3YrlQN/UnQZVDF2kpESEFKTotOz
-	OlGZoXqVSYGG+/sXgZcG4SpFvscdnp3U=
-X-Gm-Gg: AeBDietOzXV0+YXG2N2gPbypc28ocSknyREGskaWXC/To7Li2THVTWhCUydVYoaeeE4
-	oRV4TpH1Oa5OQd1wz273nwNNcbf9uY9/szOsCSXyIGo/F25QyHfXsOkZ6gxuZ07ttrcKfi9W4MQ
-	zKmz8+3UuGYcpRb8HQufiy3sWKmIcI7bSb8JT4SZpCpVzP2wTAlwc9BYtPOMdUHHrBtOqjB9ogU
-	3BcOXFYBpPTCv1OAC8cOg+qPBfh+p2iBNt8XmKlNlbYfYhMUTRgO2WJQZOxILG9w194Tv+iw9nG
-	hLqZIqt3A7Jbv8wzPNj5rrNEzQ4kdtge91Omj7ZA1I37hSPv0Z0jTuuQyemPo2WltUx+67W5fUo
-	VNJrO4XBJY0tf1jJ5zlK5UWTPYs2VXAgMP2Hw
-X-Received: by 2002:a05:600c:a416:b0:488:e7e4:8425 with SMTP id
- 5b1f17b1804b1-488fb787674mr456008145e9.23.1777233501582; Sun, 26 Apr 2026
- 12:58:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oMEGABUo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A8A7C2BCAF;
+	Sun, 26 Apr 2026 20:12:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777234356;
+	bh=Xuc6uC98UY+vzbsI3kSwB344PXVFlxBIepXFmeMf66k=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=oMEGABUowSP5Ta0GmELQrBInZDpiNko5l/9tELHkaMxZ068HvXwKa8ua/zHb101CC
+	 orztKhdSvkg7Rn6uzatRYZ1ForEOq43nb5jVAwEV0MF/I/S5ZV5QJaSP4dyGbVcV61
+	 NdGMwfvXWoPO9vFpojIGmUwTe2gAdGbqaq8qXubgkbAEtsZTCUazzVNn58fPgUsZ3w
+	 XLIQCuY1NcC35QWUM2zcZVS4cP44dN1utZq/HzC+eYMIiuQ1yfcwnNfSnInJLYpSHr
+	 J7Tn9wnfTCE1b09/a8hAOilKuhG8VIjI2lYyaRzEOg3yTApqIXzPJ35tGwR7PsZJu+
+	 5GOdunD9gTTDA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v9 4/8] selftests/bpf: Add arena ASAN runtime
+ to libarena
+Reply-To: sashiko@lists.linux.dev
+To: "Emil Tsalapatis" <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260426190338.4615-5-emil@etsalapatis.com>
+References: <20260426190338.4615-5-emil@etsalapatis.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 26 Apr 2026 20:12:35 +0000
+Message-Id: <20260426201236.7A8A7C2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260426172505.1947915-1-graypanda.inzag@gmail.com>
- <20260426181736.794BCC2BCAF@smtp.kernel.org> <DI3BT9LJCI1D.2TRRBC1BVKIP2@etsalapatis.com>
-In-Reply-To: <DI3BT9LJCI1D.2TRRBC1BVKIP2@etsalapatis.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 26 Apr 2026 12:58:09 -0700
-X-Gm-Features: AVHnY4KJ55lxN1RRoJMGc4pt8ZhF2zS5ST9s1upiCmj3EpzYMk1gFXRtaU6ML7E
-Message-ID: <CAADnVQJGCr9_iBH3wtCZy2rHYCQJ0Ca4Xz_y0tnF0+E7An9BXQ@mail.gmail.com>
-Subject: Re: [PATCH bpf v2] bpf: Fix off-by-one boundary validation in arena
- direct-value access
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: sashiko@lists.linux.dev, Junyoung Jang <graypanda.inzag@gmail.com>, 
-	bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Apr 26, 2026 at 12:16=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.=
-com> wrote:
->
-> On Sun Apr 26, 2026 at 2:17 PM EDT, sashiko-bot wrote:
-> > Sashiko AI review found 1 potential issue(s):
-> > - [Medium] Data race and bounds check bypass in arena_map_direct_value_=
-addr() due to lockless reads
-> > --
-> >
-> > commit a9b5d3016475abf10be02a320dc627c95b306d92
-> > Author: Junyoung Jang <graypanda.inzag@gmail.com>
-> >
-> > bpf: Fix off-by-one boundary validation in arena direct-value access
-> >
-> > This commit fixes an off-by-one error in the arena map boundary check
-> > where offsets exactly at the end of the mapping were incorrectly accept=
-ed.
-> >
-> >> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> >> index 802656c6fd3c..49a8f7b1beef 100644
-> >> --- a/kernel/bpf/arena.c
-> >> +++ b/kernel/bpf/arena.c
-> >> @@ -511,7 +511,7 @@ static int arena_map_direct_value_addr(const struc=
-t bpf_map *map, u64 *imm, u32
-> >>  {
-> >>      struct bpf_arena *arena =3D container_of(map, struct bpf_arena, m=
-ap);
-> >>
-> >> -    if ((u64)off > arena->user_vm_end - arena->user_vm_start)
-> >> +    if ((u64)off >=3D arena->user_vm_end - arena->user_vm_start)
-> >
-> > Could this evaluation be vulnerable to a data race?
-> >
-> > This function reads arena->user_vm_end and arena->user_vm_start without
-> > holding arena->lock or using READ_ONCE().
-> >
-> > Concurrently, a user-space process calling mmap() on the arena map FD
-> > can invoke arena_map_mmap(), which updates these fields under arena->lo=
-ck.
-> > Because user_vm_start is updated first, a concurrent reader here might
-> > observe the new user_vm_start (a high address) and the old user_vm_end
-> > (which might be 0).
-> >
-> > In that scenario, arena->user_vm_end - arena->user_vm_start would
-> > underflow to a large 64-bit value, which would allow arbitrary offsets
-> > to bypass this bounds check.
->
-> This seems like a valid concern, though it is unrelated to the fix here
-> which seems correct. Can you sent a followup patch using an arena lock
-> guard in map_direct_value_addr? I don't see any issues with taking the
-> lock since the method is only used at verification time.
+Sashiko AI review found 6 potential issue(s):
+- [Medium] Concurrent `asan_init` calls corrupt global ASAN state
+- [Medium] Early loop exit due to `can_loop` causes silent validation bypas=
+s and incomplete poisoning
+- [Medium] Missing bounds checking in `asan_poison` and `asan_unpoison` all=
+ows out-of-bounds writes
+- [Medium] Uninitialized ASAN state leads to silent memory corruption
+- [Low] Compilation error due to missing argument for `bpf_stream_print_sta=
+ck`
+- [Low] Compilation and linking errors due to missing ASAN functions and BT=
+F anchors
+--
 
-No. sashk is wrong here.
-In general I suggest to ignore sashk's medium and low suggestions.
-'critical' are often correct.
-'high' should be considered, but acting on them needs thought.
+commit 378c2bf4d6c7fb041761c5a5045f1680acbb2840
+Author: Emil Tsalapatis <emil@etsalapatis.com>
+
+selftests/bpf: Add arena ASAN runtime to libarena
+
+This commit adds an ASAN runtime to the arena library for BPF selftests.
+It implements LLVM sanitization hooks and provides manual poison/unpoison
+functions.
+
+> diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/asan.h=
+ b/tools/testing/selftests/bpf/libarena/include/libarena/asan.h
+> new file mode 100644
+> index 000000000000..eb9fc69d9eb0
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/libarena/include/libarena/asan.h
+[ ... ]
+> @@ -0,0 +1,103 @@
+[ ... ]
+> +/*
+> + * Force LLVM to emit BTF information for the stubs,
+> + * because the ASAN pass in LLVM by itself doesn't.
+> + */
+> +#define ASAN_LOAD_STORE_SIZE(size)		\
+> +	__asan_store##size,			\
+> +	__asan_store##size##_noabort,		\
+> +	__asan_load##size,			\
+> +	__asan_load##size##_noabort,		\
+> +	__asan_report_store##size,		\
+> +	__asan_report_store##size##_noabort,	\
+> +	__asan_report_load##size,		\
+> +	__asan_report_load##size##_noabort
+> +
+> +__attribute__((used))
+> +static void (*__asan_btf_anchors[])(intptr_t) =3D {
+> +	ASAN_LOAD_STORE_SIZE(1),
+> +	ASAN_LOAD_STORE_SIZE(2),
+> +	ASAN_LOAD_STORE_SIZE(4),
+> +	ASAN_LOAD_STORE_SIZE(8),
+> +};
+
+Does this array need to include variable-sized hooks (like __asan_storeN),
+global handlers, and memory intrinsics? Without these in the anchors list,
+the compiler might not emit BTF data for them, potentially causing BPF load
+failures if LLVM instruments variable-sized accesses.
+
+> diff --git a/tools/testing/selftests/bpf/libarena/src/asan.bpf.c b/tools/=
+testing/selftests/bpf/libarena/src/asan.bpf.c
+> new file mode 100644
+> index 000000000000..64c5b990086c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
+[ ... ]
+> @@ -0,0 +1,553 @@
+[ ... ]
+> +/*
+> + * BPF does not currently support the memset/memcpy/memcmp intrinsics.
+> + * For large sequential copies, or assignments of large data structures,
+> + * the frontend will generate an intrinsic that causes the BPF backend
+> + * to exit due to a missing implementation. Provide a simple implementat=
+ion
+> + * just for memset to use it for poisoning/unpoisoning the map.
+> + */
+> +__weak int asan_memset(s8a __arg_arena *dst, s8 val, size_t size)
+> +{
+> +	size_t i;
+> +
+> +	for (i =3D zero; i < size && can_loop; i++)
+> +		dst[i] =3D val;
+> +
+> +	return 0;
+> +}
+
+Is can_loop defined anywhere? This looks like it might cause an undeclared
+identifier compilation error.
+
+Also, if can_loop causes the loop to exit early due to instruction limits,
+does this result in incomplete poisoning? asan_memset would return 0, leavi=
+ng
+the rest of the shadow memory uninitialized.
+
+[ ... ]
+> +static __always_inline u64 first_nonzero_byte(u64 addr, size_t size)
+> +{
+> +	while (size && can_loop) {
+> +		if (unlikely(*(s8a *)addr))
+> +			return addr;
+> +		addr +=3D 1;
+> +		size -=3D 1;
+> +	}
+> +
+> +	return SHADOW_ALL_ZEROES;
+> +}
+
+Similarly, if can_loop terminates this loop early, could this falsely valid=
+ate
+the remaining memory and allow large out-of-bounds accesses to bypass ASAN
+validation?
+
+[ ... ]
+> +__weak int asan_report(s8a __arg_arena *addr, size_t sz, u32 flags)
+> +{
+> +	u32 reported =3D __sync_val_compare_and_swap(&asan_reported, false, tru=
+e);
+> +
+> +	/* Only report the first ASAN violation. */
+> +	if (reported && asan_report_once)
+> +		return 0;
+> +
+> +	asan_violated =3D (u64)addr;
+> +
+> +	arena_stderr("Memory violation for address %p (0x%lx) for %s of size %l=
+d\n",
+> +			addr, (u64)addr,
+> +			(flags & ASAN_WRITE) ? "write" : "read",
+> +			sz);
+> +	bpf_stream_print_stack(BPF_STDERR);
+
+Is this missing an argument? The kernel definition of this kfunc is
+bpf_stream_print_stack(int stream_id, struct bpf_prog_aux *aux). Compiling
+this with vmlinux.h could result in a compilation error.
+
+[ ... ]
+> +__hidden __noasan int asan_poison(void __arena *addr, s8 val, size_t siz=
+e)
+> +{
+> +	s8a *shadow;
+> +	size_t len;
+[ ... ]
+> +	shadow =3D mem_to_shadow(addr);
+> +	len =3D size >> ASAN_SHADOW_SHIFT;
+> +
+> +	asan_memset(shadow, val, len);
+> +
+> +	return 0;
+> +}
+
+Does this code verify that asan_init() has been called before executing?
+If __asan_shadow_memory_dynamic_address is 0, mem_to_shadow() could resolve
+to the beginning of the user arena, causing asan_memset() to overwrite valid
+application data.
+
+Additionally, is there a bounds check missing to ensure addr + size falls
+entirely within the valid user region? If size extends beyond the user
+boundaries, could this write past the shadow map and corrupt the arena's
+global variables?
+
+[ ... ]
+> +__hidden __noasan int asan_unpoison(void __arena *addr, size_t size)
+> +{
+> +	size_t partial =3D size & ASAN_GRANULE_MASK;
+> +	s8a *shadow;
+> +	size_t len;
+[ ... ]
+> +	shadow =3D mem_to_shadow(addr);
+> +	len =3D size >> ASAN_SHADOW_SHIFT;
+> +
+> +	asan_memset(shadow, 0, len);
+
+Does this unpoisoning function have the same uninitialized state and bounds
+checking concerns as asan_poison()?
+
+[ ... ]
+> +SEC("syscall")
+> +__weak __noasan int asan_init(struct asan_init_args *args)
+> +{
+> +	u64 globals_pages =3D args->arena_globals_pages;
+> +	u64 all_pages =3D args->arena_all_pages;
+> +	u64 shadow_map, shadow_pgoff;
+> +	u64 shadow_pages;
+> +
+> +	if (asan_inited)
+> +		return 0;
+[ ... ]
+> +	shadow_pgoff =3D all_pages - shadow_pages - globals_pages;
+> +	__asan_shadow_memory_dynamic_address =3D shadow_pgoff * __PAGE_SIZE;
+> +
+> +	/*
+> +	 * Allocate the last (1/ASAN_SHADOW_SCALE)th of an arena's pages for th=
+e map
+> +	 * We find the offset and size from the arena map.
+> +	 *
+> +	 * The allocated map pages are zeroed out, meaning all memory is marked=
+ as valid
+> +	 * even if it's not allocated already. This is expected: Since the actu=
+al memory
+> +	 * pages are not allocated, accesses to it will trigger page faults and=
+ will be
+> +	 * reported through BPF streams. Any pages allocated through bpf_arena_=
+alloc_pages
+> +	 * should be poisoned by the allocator right after the call succeeds.
+> +	 */
+> +	shadow_map =3D (u64)bpf_arena_alloc_pages(
+> +		&arena, (void __arena *)__asan_shadow_memory_dynamic_address,
+> +		shadow_pages, NUMA_NO_NODE, 0);
+> +	if (!shadow_map) {
+> +		arena_stderr("Could not allocate shadow map\n");
+> +
+> +		__asan_shadow_memory_dynamic_address =3D 0;
+> +
+> +		return -ENOMEM;
+> +	}
+> +
+> +	asan_inited =3D true;
+> +
+> +	return 0;
+> +}
+
+Can this code corrupt the global shadow memory base if invoked concurrently?
+
+If two threads bypass the lockless asan_inited check, thread 1 could
+successfully allocate memory and set asan_inited =3D true. Thread 2 might
+then fail its allocation (since the pages are already mapped) and execute
+the error path, setting __asan_shadow_memory_dynamic_address =3D 0.
+
+Would this permanently corrupt the global ASAN state for all subsequent che=
+cks
+in the arena?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260426190338.4615=
+-1-emil@etsalapatis.com?part=3D4
