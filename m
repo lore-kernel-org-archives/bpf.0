@@ -1,63 +1,61 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0D230BF4F
-	for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 19:02:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C07B3750AC
+	for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 19:03:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777230183; cv=none; b=lEvoo4KNYuchcEMiPFgVnrth8wmYcwU7CeQlfzzEvF3JE9cFWX/2ZzAW5IfvS8bWAS4C0PV5oCALW2gCrjSPDu/xHtG7YVnblAfnsBvOJNyaTrx5MFMqlqufijHnCGSEYaYCxBUFYkW15tWWuCw6r/nae6Re1Ocikdx2V8/MpQg=
+	t=1777230225; cv=none; b=jOUBI1dbTBCev59+XNPqEz/OkjWJl5EHfa3MgmBgWsWj3eyY+KBHkU7lNjvN1gmXek+ITWvhPUkhStVYi7ebClB6gUXkDO71WOooY6IdsOMbuqfQV4eCtO63RvtAjpPj34WSmwFO+khbOyZ8NxSBrm63j89mwPoY7kuzmEgb+Lg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777230183; c=relaxed/simple;
-	bh=rvZE22qDeM8oevHZFA44J5g0UiwyG4i85zHIITAx/zo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Bvf4ILoXDdRpGranzp/59nYAW2pZAhnVDHisxnyJWjnlfZcfp6+yF3InbXkfVfMwa/4n/gozzBePgi733lSBC14H+3Mqg2yz+4zoYri5hG8YN3FKzNp0FhPhoEdVvviWoubprPzkXRDcGwMTfg1BPUVQ7fzcjtXUm/biy6Bg+YE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=X12i8h1s; arc=none smtp.client-ip=209.85.214.171
+	s=arc-20240116; t=1777230225; c=relaxed/simple;
+	bh=1OdLl1p8VC7JIciLrqWAmD6o3bi1dNJg509424CvhhI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LFH5+SoV5wwhTDSUOlFkYZf2TcHvKw93xH4bL+ek/LXgr3MNJeCkTNcH4gU81q4oyCNKZyDROm+h3d2PHIQouKrKWjOfFR9aXyACaslNFY/X6ekbL6qe13IcRf2iov8cjPAv9OlhVVgPkWHg/LMX8/t/i2h4vUnsZtBA3xbbevE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=P8m6YkVv; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="X12i8h1s"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2b24fdac394so91765585ad.3
-        for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 12:02:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="P8m6YkVv"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2addb31945aso60330375ad.1
+        for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 12:03:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1777230177; x=1777834977; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YJI3KUCOPNicRJ86lwadoLHZMl+sgxOD75Zn2YCn40I=;
-        b=X12i8h1srHHHkyRZea+mZ6pnKEyjkBY26t47zX9JyLFAXOrNuDu85hyHs6SOy0tGpU
-         HMpEpDaJOwa1+vxVsoWb9eGnryv36a5uaTv+fmf5kxUTQfAekhO3M31f/T128nwFzp3c
-         vKI4hV59N22+TqQ/p6O2zvAjhTQYItz9WAk58HnTASwugp17V8cMELfCYsZn+GZbXbvV
-         0gDK81392yTFplMbKlicT1bhHaCrTswU73A1Iy5VtBHkIBZsQpj+BrmISr0JzLFxkGbS
-         n9B1CTOFy9R6CZSzlwI17XwF6lYD4t0JrxKRlLpOpgDixczRBkUOPLiIPdRxHmKRm2TC
-         RyYg==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1777230221; x=1777835021; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CjcoZRLiko4Hmx1ERKmB3pcEKAVC5GsgCnIFP5QzfEA=;
+        b=P8m6YkVvbu3dBECRYowwqDKPIa4QnkXtOd/RusYkVmDxkeLBVds8AaJEGkLEVMlrS7
+         CSfxjCsH/iJiCjjOYD4kSIz7rhDvDSfT+F1CUhQ83LWf2eNarY7dTtfanlmrf+oFpfYl
+         czK7S7A1CLzrvzplqE7yCxyulVvAr4pEG6zu2zOIcK8coFEoNp9ptA0UbG5q2ljx2mBQ
+         N0AjAWLgnPZILokgzUZRDWhqY0YSxFrRi6I5ZEp6ARddmidDP3mKw0iD61V+erU+tKYX
+         wBIIfpBka+uLYvV0Zv9uOC3ww+WHtaGPpexdwK3SMxUy7uoLyl1bF518u6dbQpg/wglj
+         B+rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777230177; x=1777834977;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=YJI3KUCOPNicRJ86lwadoLHZMl+sgxOD75Zn2YCn40I=;
-        b=WRQrjIJjz6cuwco+3EIVrqyu5DdiuAeB1iArEK2rDdnBEdWT/SQpYKFOTyg/tUUmG/
-         aGC6si0RNEYOZzkxpTeieEL1FOOlgFO90x+ddzkp0aFcLauaae/jdIS3is3Yf2uZKOQX
-         PTC8gnc3ei8TffLkLoK4XfhVNa7XT606Bi4YwmVhl+REQAbbfXzPiKw6bvJh4/QOKZe1
-         p+9GsHqfRc5XX+BawcspKKLPvu23HbuAqfBdkeZ2VBI3ktw+ptGrKxO4jJySI18JOwzG
-         Pr/g8/m6KBwlwj/lxgg+jQk5HAxSfBf0DqVkj+Xval5KdHVX45wRgV/mlPTT3uBjslbt
-         pfBw==
-X-Gm-Message-State: AOJu0YwRqatPsCqOfbdPEI9hgbC4NrN/+qWoBgEJsFhYkPK4JP27i32c
-	R0gN9MYEgtzluG3WIYtH7lt8VcNp3GuoRn0/zxSFMAu+8P/ACN3GxPUGz/fz/wPCidkshYP+8Zc
-	Xh6TH2BQ=
-X-Gm-Gg: AeBDievAx+woG3xZiNt1mgw3iupcon9JwVwadLjPoqDQy12NNvn/WrgGuc8C1jmrmrB
-	dEDZ1nmAqaykfAxsjj1Z6aeL88c59TXsQNE23fO0dKw057RVo5zIy8tc3lmaMQPL2A/qiuB0e+E
-	RBNHvbz0jnK1MCSG3UxapODDAceQp5D7gZdQ0wBVhCJp9gzi0kBBrSezqS8nsOtYgnICImon2fG
-	qhFcWtgAyLVyjMeXUR1qWGcq9/P6Z1WkUKst/JUHj7OuKEPj3F5QJaeHKxlo6GUjz+ScgrYnXFe
-	dOslNGOesZFpIBUVU/Fsrv7wlFu424fVEuomqsqh00HHInkQUtOWmOt3UMgNtDMQwXLY1Tp8pOL
-	FleSuJX5RYVvPjqVbd1I1kYbrM8KSa3/XebKs/1UqQ6q45uYIVC3KCUJVtR/8BPiBWCrgJpQBg8
-	/XRAVEFHc0Xl5ox2sNrEhC/do=
-X-Received: by 2002:a17:902:9696:b0:2b0:4fb6:85ce with SMTP id d9443c01a7336-2b5f9f7cec4mr290621085ad.21.1777230176836;
-        Sun, 26 Apr 2026 12:02:56 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1777230221; x=1777835021;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CjcoZRLiko4Hmx1ERKmB3pcEKAVC5GsgCnIFP5QzfEA=;
+        b=GC40ryq2sI1Tq5/G3/yv/NdVY4Z4PaKdc/Vz0N8uA9uKKHEW3JecYWyjhdBaiiS5Ks
+         ++7QlA2tpymyRHxO5uSKIKYKjGhix8dI626AZQDbv7epsUHJGU/Fosrc+UcFTufLVpxz
+         OgOELzUSdLP2/a6JsRDSuJH4GzizcW3uzXc9AOmmW1FvBBzYFBKAmX4U5XrDrvA+0B8U
+         +A37Y39ZrImAWKahX51yECz/n6cFuTXgYvFxgNvgQamE0Sy6XBsaYflHv/zvDaj6GNJL
+         nw3ZPvN3t0mcOPKGIXQqxZgPaKCGjBQq6JVmhWRUdrKAPGrHRrZU5T/bwV/lhTd+oNxM
+         IxiQ==
+X-Gm-Message-State: AOJu0YwH8vbAavU7AoZ8OfqBndijKauPnRxndZl0b4YVQXVUJoPJTX5b
+	zcVwLqPAGYj74EaYF+uSlNmulUHxEbg0b1ralog6mDRtOZwDlvQLj8NWYk7MxIf3HgjvOinhGTo
+	TSRUZgLY=
+X-Gm-Gg: AeBDieuLRx6jUDRCeD/oUeguDNh7JB1kC4cpYeoP26sY3bpSl+LVkhik3eQwH+eEaAF
+	RMWlMihOeXBe/3wcexiF/tsmnc10iO+kbSvPjsQ6j3VfTAi5gdVG2rXMh7heKrmzNW4kWDg0TKA
+	SJ2Hh09fO5hn7JDpBQEn7C668vOtX56J4VvA/EudU1aWQ/lkdUYJpvZ+hVxWwz1QTvuEjEycW4g
+	IOHzod067j1e8EPlz51a8f6/q4dJ92NXVndOLM/aaGefy3BaHqmh0P3qts07dV9FAlOz1gS/OyE
+	FNd4tnFV6U0flXUCr33E+tBBIU7b9Kr8Fpml7hdOmL3wGG5k65cFpcZBB/DxDaIrxVggkkoG3VN
+	nPyAbMmb/NTaUqqZIpZJu0Hf1SH/X+Ayxx0cNKcTvCk+MPxmIwo62caQiFenkr2cR93/RlrQKnF
+	xqFpB+H+cVjJyC
+X-Received: by 2002:a17:903:17cb:b0:2b2:67cd:9963 with SMTP id d9443c01a7336-2b5f9fd5c04mr404807355ad.38.1777230221096;
+        Sun, 26 Apr 2026 12:03:41 -0700 (PDT)
 Received: from krios ([2604:3d08:487d:cd00::2af6])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5fab0caf1sm298935875ad.42.2026.04.26.12.02.56
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b7a9efd0f2sm107449965ad.31.2026.04.26.12.03.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Apr 2026 12:02:56 -0700 (PDT)
+        Sun, 26 Apr 2026 12:03:40 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -66,14 +64,12 @@ Cc: ast@kernel.org,
 	daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	song@kernel.org,
-	mattbobfrowski@google.com,
+	mattbobrowski@google.com,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v9 3/8] selftests/bpf: Move arena-related headers into libarena
-Date: Sun, 26 Apr 2026 15:02:46 -0400
-Message-ID: <20260426190251.4456-4-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v9 0/8] Introduce arena library and runtime
+Date: Sun, 26 Apr 2026 15:03:30 -0400
+Message-ID: <20260426190338.4615-1-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260426190251.4456-1-emil@etsalapatis.com>
-References: <20260426190251.4456-1-emil@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,533 +78,205 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The BPF selftest headers include functionality that is
-specific to arenas and is required by libarena. Keep libarena
-self-contained by moving all functionality into its include/
-directory. Also add libarena/include to the standard include
-paths for the selftests to make the moved headers easy to
-access by existing selftests.
+Add a new subdirectory to tools/testing/selftests/bpf called libarena,
+along with programs useful for writing arena-based BPF code. This
+patchset adds the following:
 
-Some functionality is required by libarena but not strictly
-arena-related. We still move it to the libarena/include path,
-which is an upgrade from directly accessing them from the
-selftests/bpf directory using relative paths.
+1) libarena, a subdirectory where arena BPF code that is generally useful
+to BPF arena programs can be easily added and tested.
 
-A new bpf_may_goto.h file is split off of bpf_experimental.h.
-bpf_arena_spin_lock.h and bpf_arena_common.h are moved to
-libarena/include. bpf_atomic.h is also moved to libarena
-because it is necessary for arena spinlocks.
+2) An ASAN runtime for BPF arena programs. BPF arenas allow for accessing
+memory after it has been freed or if it is out of bounds, making it more
+difficult to triage bugs combined to regular BPF. Use LLVM's recently added
+support for address-space based sanitization to selectively sanitize just
+the arena accesses.
 
-For bpf_arena_spin_lock.h, mark the spinlock state array as __weak
-to define the spinlock state array in the header while also
-being compatible with multi-compilation unit programs. While
-we're at it, we remove unnecessary definitions from existing
-test programs.
+3) A buddy memory allocator that can be reused by BPF programs to handle
+memory allocation/deletion. The allocator uses the ASAN runtime to add
+address sanitization if requested.
+
+The patch includes testing for the new allocators and ASAN features that
+can be built from the top directory using "make libarena_test" and
+"make libarena_test_asan". The generated binaries reside in libarena/.
+The patch also adds test-progs-based selftests to the codebase for the
+libarena code, so the new tests are run by ./test_progs.
+
+The patchset has the following stucture:
+
+1-3: Create basic libarena scaffolding and refactor existing headers.
+
+4-5: Add the ASAN runtime and associated scaffolding.
+
+6-8: Add the new buddy memory allocator along with selftests.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
----
- tools/testing/selftests/bpf/Makefile          |  4 +-
- tools/testing/selftests/bpf/bpf_arena_alloc.h |  2 +-
- tools/testing/selftests/bpf/bpf_arena_list.h  |  2 +-
- .../selftests/bpf/bpf_arena_strsearch.h       |  2 +-
- .../testing/selftests/bpf/bpf_experimental.h  | 84 +------------------
- .../{ => libarena/include}/bpf_arena_common.h |  0
- .../include}/bpf_arena_spin_lock.h            | 11 ++-
- .../bpf/{ => libarena/include}/bpf_atomic.h   |  2 +-
- .../bpf/libarena/include/bpf_may_goto.h       | 84 +++++++++++++++++++
- .../bpf/libarena/include/libarena/common.h    |  4 +-
- .../bpf/prog_tests/arena_spin_lock.c          |  7 --
- .../selftests/bpf/progs/arena_atomics.c       |  2 +-
- .../selftests/bpf/progs/arena_spin_lock.c     |  2 +-
- .../bpf/progs/compute_live_registers.c        |  2 +-
- .../selftests/bpf/progs/lpm_trie_bench.c      |  2 +-
- tools/testing/selftests/bpf/progs/stream.c    |  2 +-
- .../selftests/bpf/progs/verifier_arena.c      |  2 +-
- .../bpf/progs/verifier_arena_globals1.c       |  2 +-
- .../bpf/progs/verifier_arena_globals2.c       |  2 +-
- .../bpf/progs/verifier_arena_large.c          |  2 +-
- .../selftests/bpf/progs/verifier_ldsx.c       |  2 +-
- 21 files changed, 112 insertions(+), 110 deletions(-)
+
+HISTORY
+=======
+
+v8->v9 (https://lore.kernel.org/bpf/20260421165037.4736-1-emil@etsalapatis.com)
+- Added Matt's Acked-by for Patch 1
+- Replaced open coded fls with __builtin based calculation (Matt)
+- Add comment explaining the reasoning behind the zero variable (Matt)
+- Remove the self-contained runner and present selftests as examples (Kumar).
+  The reasoning is that including selftests with the library is not
+  effective because the library will be sync'ed outside the tree
+  infrequently, so it would be ineffective in catching issues before
+  they land.
+- Adjust syscall API for clarity and forward compatibility (Matt)
+- Reset asan_validate state after failed check (Sashiko)
+- Fix printf format specifier (Sashiko)
+- Rename syscall to be generic arena_info (Matt)
+- Namespace libarena headers by moving them to their own directory
+- Rename selftest_helpers to libarena/userspace.h to reflect it is not
+  just for selftests.
+
+v7->v8 (https://lore.kernel.org/bpf/20260412174546.18684-1-emil@etsalapatis.com)
+- Duplicate READ_ONCE/WRITE_ONCE instead of moving it to
+  bpf_experimental.h to keep libarena self-contained (Kumar)
+- Add libarena_asan test to test_progs and conditionally compile it if
+  suppported (Kumar)
+- Add stderr parsing for buddy tests when run under test_progs (Kumar)
+- Move all arena-related headers into libarena and add its include/
+  subdirectory in the standard include path (Kumar)
+- Remove silent-by-default ASAN, add help message on test_libarena
+  explaining that -v emits the messages (Kumar)
+- Add run_prog_args as a libarena helper
+- Add explanation on the use of __weak for the spinlock qnodes
+
+v6->v7 (https://lore.kernel.org/bpf/20260412011857.3387-1-emil@etsalapatis.com)
+- Modify patch 1 to allow operations between PTR_TO_ARENA src_reg
+and dst_reg of any type. Adjust selftests accordingly (Alexei)
+- Remove unnecessary include in patch 5 (Song)
+- Removed unused definitions/assignments in patches 8/9, update patch
+  descriptions
+
+v5->v6 (https://lore.kernel.org/bpf/20260410163041.8063-1-emil@etsalapatis.com)
+- Fix subreg_def management for SCALAR += PTR_TO_ARENA operations (AI)
+- Add more selftests for the SCALAR += PTR_TO_ARENA patch (Sashiko)
+- Adjust fls() operation to be in line with the kernel version (Sashiko)
+- Address Sashiko selftests and debugging nits
+- Add ASAN loadN and storeN _noabort variants and associated BTF anchor
+- Remove unnecessary bit freeing of buddies during block splitting
+
+v4->v5 (https://lore.kernel.org/bpf/20260407045730.13359-1-emil@etsalapatis.com)
+Omitting various nits and fixups.
+- Properly adjust subreg_def for scalar += ptr_to_arena calls (Sashiko)
+- Remove extraneous definition from prog_tests/arena_spin_lock.c (Song)
+- Trim extraneous comments from ASAN and buddy (Alexei)
+- Remove asan_dummy call and replace with function pointer array (Alexei)
+- Remove usersapi.h header and merge it into common.h (Alexei)
+- Replace ASAN macros with function calls (Alexei)
+- Embed buddy lock into the struct and move the buddy allocator to __arena_global
+  (Alexei)
+- Add commenting for buddy allocator constants (Alexei)
+- Add default buddy allocator directly in common.bpf.c, so that the user does
+  not need to define it.
+- Expand test harnesses to dynamically find individual selftests. Now the
+  selftests also reports each test individually (e.g., 5 entries for the
+  buddy allocator instead of 1). This brings them to par with the rest of
+  the test_progs.
+
+v3->v4 (https://lore.kernel.org/bpf/20260403042720.18862-1-emil@etsalapatis.com)
+- Add Acks by Song to patches 1-4.
+- Expand the verifier's handling of scalar/arena operations to
+  include all 3-operand operations in Patch 1 (Alexei)
+- Add additional tests for arena/arena (allowed) and arena/pointer (not allowed)
+operations in Patch 2
+- Remove ASAN version of the library from default compilation since it requires
+LLVM 22 and up (CI)
+- Rework buddy allocator locking for clarity and add comments
+- Fix From: email to be consistent with SOB
+- Address (most) Sashiko comments
+
+v2->v3 (https://lore.kernel.org/bpf/20260127181610.86376-1-emil@etsalapatis.com)
+Nonexhaustive due to significant patch rework.
+- Do not duplicate WRITE_ONCE macro (Mykyta, Kumar)
+- Add SPDX headers (Alexei)
+- Remove bump/stack allocators (Alexei)
+- Integrate testing with test_progs (Kumar)
+- Add short description of ASAN algorithm at the top of the file (Alexei)
+
+v1->v2 (https://lore.kernel.org/bpf/20260122160131.2238331-1-etsal@meta.com/)
+
+- Added missing format string argument (AI)
+- Fix outdated selftests prog name check (AI)
+- Fixed stack allocation check for segment creation (AI)
+- Fix errors in non-ASAN bump allocator selftests (AI)
+- Propagate error value from individual selftests in selftest.c
+- Removed embedded metadata from bump allocator as it was needlessly
+  complicating its behavior
+
+
+
+Emil Tsalapatis (8):
+  selftests/bpf: Add ifdef guard for WRITE_ONCE macro in bpf_atomic.h
+  selftests/bpf: Add basic libarena scaffolding
+  selftests/bpf: Move arena-related headers into libarena
+  selftests/bpf: Add arena ASAN runtime to libarena
+  selftests/bpf: Add ASAN support for libarena selftests
+  selftests/bpf: Add buddy allocator for libarena
+  selftests/bpf: Add selftests for libarena buddy allocator
+  selftests/bpf: Reuse stderr parsing for libarena ASAN tests
+
+ tools/testing/selftests/bpf/Makefile          |  53 +-
+ tools/testing/selftests/bpf/bpf_arena_alloc.h |   2 +-
+ tools/testing/selftests/bpf/bpf_arena_list.h  |   2 +-
+ .../selftests/bpf/bpf_arena_strsearch.h       |   2 +-
+ .../testing/selftests/bpf/bpf_experimental.h  |  84 +-
+ tools/testing/selftests/bpf/default.profraw   | Bin 0 -> 160 bytes
+ tools/testing/selftests/bpf/libarena/Makefile |  94 ++
+ .../{ => libarena/include}/bpf_arena_common.h |   0
+ .../include}/bpf_arena_spin_lock.h            |  11 +-
+ .../bpf/{ => libarena/include}/bpf_atomic.h   |   4 +-
+ .../bpf/libarena/include/bpf_may_goto.h       |  84 ++
+ .../bpf/libarena/include/libarena/asan.h      | 103 ++
+ .../bpf/libarena/include/libarena/buddy.h     |  92 ++
+ .../bpf/libarena/include/libarena/common.h    |  94 ++
+ .../bpf/libarena/include/libarena/userspace.h | 132 +++
+ .../libarena/selftests/st_asan_buddy.bpf.c    | 258 +++++
+ .../bpf/libarena/selftests/st_asan_common.h   |  52 +
+ .../bpf/libarena/selftests/st_buddy.bpf.c     | 209 ++++
+ .../libarena/selftests/test_progs_compat.h    |  15 +
+ .../selftests/bpf/libarena/src/asan.bpf.c     | 553 +++++++++++
+ .../selftests/bpf/libarena/src/buddy.bpf.c    | 903 ++++++++++++++++++
+ .../selftests/bpf/libarena/src/common.bpf.c   |  52 +
+ .../bpf/prog_tests/arena_spin_lock.c          |   7 -
+ .../selftests/bpf/prog_tests/libarena.c       |  66 ++
+ .../selftests/bpf/prog_tests/libarena_asan.c  |  93 ++
+ .../selftests/bpf/progs/arena_atomics.c       |   2 +-
+ .../selftests/bpf/progs/arena_spin_lock.c     |   2 +-
+ .../bpf/progs/compute_live_registers.c        |   2 +-
+ .../selftests/bpf/progs/lpm_trie_bench.c      |   2 +-
+ tools/testing/selftests/bpf/progs/stream.c    |   2 +-
+ .../selftests/bpf/progs/verifier_arena.c      |   2 +-
+ .../bpf/progs/verifier_arena_globals1.c       |   2 +-
+ .../bpf/progs/verifier_arena_globals2.c       |   2 +-
+ .../bpf/progs/verifier_arena_large.c          |   2 +-
+ .../selftests/bpf/progs/verifier_ldsx.c       |   2 +-
+ tools/testing/selftests/bpf/test_loader.c     |  51 +-
+ tools/testing/selftests/bpf/test_progs.h      |   2 +
+ 37 files changed, 2917 insertions(+), 121 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/default.profraw
+ create mode 100644 tools/testing/selftests/bpf/libarena/Makefile
  rename tools/testing/selftests/bpf/{ => libarena/include}/bpf_arena_common.h (100%)
  rename tools/testing/selftests/bpf/{progs => libarena/include}/bpf_arena_spin_lock.h (98%)
- rename tools/testing/selftests/bpf/{ => libarena/include}/bpf_atomic.h (99%)
+ rename tools/testing/selftests/bpf/{ => libarena/include}/bpf_atomic.h (98%)
  create mode 100644 tools/testing/selftests/bpf/libarena/include/bpf_may_goto.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/asan.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/common.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/userspace.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_asan_common.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/test_progs_compat.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/asan.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/common.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/libarena.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/libarena_asan.c
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 5855064e7f9c..13959c449893 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -56,7 +56,8 @@ CFLAGS += -g $(OPT_FLAGS) -rdynamic -std=gnu11				\
- 	  -Wno-unused-but-set-variable					\
- 	  $(GENFLAGS) $(SAN_CFLAGS) $(LIBELF_CFLAGS)			\
- 	  -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)		\
--	  -I$(TOOLSINCDIR) -I$(TOOLSARCHINCDIR) -I$(APIDIR) -I$(OUTPUT)
-+	  -I$(TOOLSINCDIR) -I$(TOOLSARCHINCDIR) -I$(APIDIR) -I$(OUTPUT)	\
-+	  -I$(CURDIR)/libarena/include
- LDFLAGS += $(SAN_LDFLAGS)
- LDLIBS += $(LIBELF_LIBS) -lz -lrt -lpthread
- 
-@@ -447,6 +448,7 @@ endif
- CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
- BPF_CFLAGS = -g -Wall -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)	\
- 	     -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)			\
-+	     -I$(CURDIR)/libarena/include				\
- 	     -I$(abspath $(OUTPUT)/../usr/include)			\
- 	     -std=gnu11		 					\
- 	     -fno-strict-aliasing 					\
-diff --git a/tools/testing/selftests/bpf/bpf_arena_alloc.h b/tools/testing/selftests/bpf/bpf_arena_alloc.h
-index c27678299e0c..cda147fd9d25 100644
---- a/tools/testing/selftests/bpf/bpf_arena_alloc.h
-+++ b/tools/testing/selftests/bpf/bpf_arena_alloc.h
-@@ -1,7 +1,7 @@
- /* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
- /* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
- #pragma once
--#include "bpf_arena_common.h"
-+#include <bpf_arena_common.h>
- 
- #ifndef __round_mask
- #define __round_mask(x, y) ((__typeof__(x))((y)-1))
-diff --git a/tools/testing/selftests/bpf/bpf_arena_list.h b/tools/testing/selftests/bpf/bpf_arena_list.h
-index e16fa7d95fcf..1af2ffc27d9c 100644
---- a/tools/testing/selftests/bpf/bpf_arena_list.h
-+++ b/tools/testing/selftests/bpf/bpf_arena_list.h
-@@ -1,7 +1,7 @@
- /* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
- /* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
- #pragma once
--#include "bpf_arena_common.h"
-+#include <bpf_arena_common.h>
- 
- struct arena_list_node;
- 
-diff --git a/tools/testing/selftests/bpf/bpf_arena_strsearch.h b/tools/testing/selftests/bpf/bpf_arena_strsearch.h
-index c1b6eaa905bb..f0d575daef5a 100644
---- a/tools/testing/selftests/bpf/bpf_arena_strsearch.h
-+++ b/tools/testing/selftests/bpf/bpf_arena_strsearch.h
-@@ -1,7 +1,7 @@
- /* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
- /* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
- #pragma once
--#include "bpf_arena_common.h"
-+#include <bpf_arena_common.h>
- 
- __noinline int bpf_arena_strlen(const char __arena *s __arg_arena)
- {
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index 2234bd6bc9d3..d1db355e872b 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -5,6 +5,7 @@
- #include <bpf/bpf_tracing.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_core_read.h>
-+#include <bpf_may_goto.h>
- 
- #define __contains(name, node) __attribute__((btf_decl_tag("contains:" #name ":" #node)))
- 
-@@ -204,89 +205,6 @@ l_true:												\
-        })
- #endif
- 
--/*
-- * Note that cond_break can only be portably used in the body of a breakable
-- * construct, whereas can_loop can be used anywhere.
-- */
--#ifdef __BPF_FEATURE_MAY_GOTO
--#define can_loop					\
--	({ __label__ l_break, l_continue;		\
--	bool ret = true;				\
--	asm volatile goto("may_goto %l[l_break]"	\
--		      :::: l_break);			\
--	goto l_continue;				\
--	l_break: ret = false;				\
--	l_continue:;					\
--	ret;						\
--	})
--
--#define __cond_break(expr)				\
--	({ __label__ l_break, l_continue;		\
--	asm volatile goto("may_goto %l[l_break]"	\
--		      :::: l_break);			\
--	goto l_continue;				\
--	l_break: expr;					\
--	l_continue:;					\
--	})
--#else
--#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
--#define can_loop					\
--	({ __label__ l_break, l_continue;		\
--	bool ret = true;				\
--	asm volatile goto("1:.byte 0xe5;		\
--		      .byte 0;				\
--		      .long ((%l[l_break] - 1b - 8) / 8) & 0xffff;	\
--		      .short 0"				\
--		      :::: l_break);			\
--	goto l_continue;				\
--	l_break: ret = false;				\
--	l_continue:;					\
--	ret;						\
--	})
--
--#define __cond_break(expr)				\
--	({ __label__ l_break, l_continue;		\
--	asm volatile goto("1:.byte 0xe5;		\
--		      .byte 0;				\
--		      .long ((%l[l_break] - 1b - 8) / 8) & 0xffff;	\
--		      .short 0"				\
--		      :::: l_break);			\
--	goto l_continue;				\
--	l_break: expr;					\
--	l_continue:;					\
--	})
--#else
--#define can_loop					\
--	({ __label__ l_break, l_continue;		\
--	bool ret = true;				\
--	asm volatile goto("1:.byte 0xe5;		\
--		      .byte 0;				\
--		      .long (((%l[l_break] - 1b - 8) / 8) & 0xffff) << 16;	\
--		      .short 0"				\
--		      :::: l_break);			\
--	goto l_continue;				\
--	l_break: ret = false;				\
--	l_continue:;					\
--	ret;						\
--	})
--
--#define __cond_break(expr)				\
--	({ __label__ l_break, l_continue;		\
--	asm volatile goto("1:.byte 0xe5;		\
--		      .byte 0;				\
--		      .long (((%l[l_break] - 1b - 8) / 8) & 0xffff) << 16;	\
--		      .short 0"				\
--		      :::: l_break);			\
--	goto l_continue;				\
--	l_break: expr;					\
--	l_continue:;					\
--	})
--#endif
--#endif
--
--#define cond_break __cond_break(break)
--#define cond_break_label(label) __cond_break(goto label)
--
- #ifndef bpf_nop_mov
- #define bpf_nop_mov(var) \
- 	asm volatile("%[reg]=%[reg]"::[reg]"r"((short)var))
-diff --git a/tools/testing/selftests/bpf/bpf_arena_common.h b/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
-similarity index 100%
-rename from tools/testing/selftests/bpf/bpf_arena_common.h
-rename to tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
-diff --git a/tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h b/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
-similarity index 98%
-rename from tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h
-rename to tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
-index f90531cf3ee5..164638690a4d 100644
---- a/tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h
-+++ b/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
-@@ -5,7 +5,7 @@
- 
- #include <vmlinux.h>
- #include <bpf/bpf_helpers.h>
--#include "bpf_atomic.h"
-+#include <bpf_atomic.h>
- 
- #define arch_mcs_spin_lock_contended_label(l, label) smp_cond_load_acquire_label(l, VAL, label)
- #define arch_mcs_spin_unlock_contended(l) smp_store_release((l), 1)
-@@ -107,7 +107,12 @@ struct arena_qnode {
- #define _Q_LOCKED_VAL		(1U << _Q_LOCKED_OFFSET)
- #define _Q_PENDING_VAL		(1U << _Q_PENDING_OFFSET)
- 
--struct arena_qnode __arena qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
-+/*
-+ * The qnodes are marked __weak so we can define them in the header
-+ * while still ensuring all compilation units use the same struct
-+ * instance.
-+ */
-+struct arena_qnode __weak __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
- 
- static inline u32 encode_tail(int cpu, int idx)
- {
-@@ -240,7 +245,7 @@ static __always_inline int arena_spin_trylock(arena_spinlock_t __arena *lock)
- 	return likely(atomic_try_cmpxchg_acquire(&lock->val, &val, _Q_LOCKED_VAL));
- }
- 
--__noinline
-+__noinline __weak
- int arena_spin_lock_slowpath(arena_spinlock_t __arena __arg_arena *lock, u32 val)
- {
- 	struct arena_mcs_spinlock __arena *prev, *next, *node0, *node;
-diff --git a/tools/testing/selftests/bpf/bpf_atomic.h b/tools/testing/selftests/bpf/libarena/include/bpf_atomic.h
-similarity index 99%
-rename from tools/testing/selftests/bpf/bpf_atomic.h
-rename to tools/testing/selftests/bpf/libarena/include/bpf_atomic.h
-index d89a22d63c1c..b7b230431929 100644
---- a/tools/testing/selftests/bpf/bpf_atomic.h
-+++ b/tools/testing/selftests/bpf/libarena/include/bpf_atomic.h
-@@ -5,7 +5,7 @@
- 
- #include <vmlinux.h>
- #include <bpf/bpf_helpers.h>
--#include "bpf_experimental.h"
-+#include <bpf_may_goto.h>
- 
- extern bool CONFIG_X86_64 __kconfig __weak;
- 
-diff --git a/tools/testing/selftests/bpf/libarena/include/bpf_may_goto.h b/tools/testing/selftests/bpf/libarena/include/bpf_may_goto.h
-new file mode 100644
-index 000000000000..9ba90689d6ba
---- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/include/bpf_may_goto.h
-@@ -0,0 +1,84 @@
-+#pragma once
-+
-+/*
-+ * Note that cond_break can only be portably used in the body of a breakable
-+ * construct, whereas can_loop can be used anywhere.
-+ */
-+#ifdef __BPF_FEATURE_MAY_GOTO
-+#define can_loop					\
-+	({ __label__ l_break, l_continue;		\
-+	bool ret = true;				\
-+	asm volatile goto("may_goto %l[l_break]"	\
-+		      :::: l_break);			\
-+	goto l_continue;				\
-+	l_break: ret = false;				\
-+	l_continue:;					\
-+	ret;						\
-+	})
-+
-+#define __cond_break(expr)				\
-+	({ __label__ l_break, l_continue;		\
-+	asm volatile goto("may_goto %l[l_break]"	\
-+		      :::: l_break);			\
-+	goto l_continue;				\
-+	l_break: expr;					\
-+	l_continue:;					\
-+	})
-+#else
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+#define can_loop					\
-+	({ __label__ l_break, l_continue;		\
-+	bool ret = true;				\
-+	asm volatile goto("1:.byte 0xe5;		\
-+		      .byte 0;				\
-+		      .long ((%l[l_break] - 1b - 8) / 8) & 0xffff;	\
-+		      .short 0"				\
-+		      :::: l_break);			\
-+	goto l_continue;				\
-+	l_break: ret = false;				\
-+	l_continue:;					\
-+	ret;						\
-+	})
-+
-+#define __cond_break(expr)				\
-+	({ __label__ l_break, l_continue;		\
-+	asm volatile goto("1:.byte 0xe5;		\
-+		      .byte 0;				\
-+		      .long ((%l[l_break] - 1b - 8) / 8) & 0xffff;	\
-+		      .short 0"				\
-+		      :::: l_break);			\
-+	goto l_continue;				\
-+	l_break: expr;					\
-+	l_continue:;					\
-+	})
-+#else
-+#define can_loop					\
-+	({ __label__ l_break, l_continue;		\
-+	bool ret = true;				\
-+	asm volatile goto("1:.byte 0xe5;		\
-+		      .byte 0;				\
-+		      .long (((%l[l_break] - 1b - 8) / 8) & 0xffff) << 16;	\
-+		      .short 0"				\
-+		      :::: l_break);			\
-+	goto l_continue;				\
-+	l_break: ret = false;				\
-+	l_continue:;					\
-+	ret;						\
-+	})
-+
-+#define __cond_break(expr)				\
-+	({ __label__ l_break, l_continue;		\
-+	asm volatile goto("1:.byte 0xe5;		\
-+		      .byte 0;				\
-+		      .long (((%l[l_break] - 1b - 8) / 8) & 0xffff) << 16;	\
-+		      .short 0"				\
-+		      :::: l_break);			\
-+	goto l_continue;				\
-+	l_break: expr;					\
-+	l_continue:;					\
-+	})
-+#endif
-+#endif
-+
-+#define cond_break __cond_break(break)
-+#define cond_break_label(label) __cond_break(goto label)
-diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/common.h b/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-index 92b67b20ed15..d088f3e75798 100644
---- a/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-+++ b/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-@@ -6,8 +6,8 @@
- 
- #include <vmlinux.h>
- 
--#include "../../bpf_arena_common.h"
--#include "../../progs/bpf_arena_spin_lock.h"
-+#include <bpf_arena_common.h>
-+#include <bpf_arena_spin_lock.h>
- 
- #include <asm-generic/errno.h>
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c b/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
-index 693fd86fbde6..acb9d53b5973 100644
---- a/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
-@@ -5,13 +5,6 @@
- #include <sys/sysinfo.h>
- 
- struct __qspinlock { int val; };
--typedef struct __qspinlock arena_spinlock_t;
--
--struct arena_qnode {
--	unsigned long next;
--	int count;
--	int locked;
--};
- 
- #include "arena_spin_lock.skel.h"
- 
-diff --git a/tools/testing/selftests/bpf/progs/arena_atomics.c b/tools/testing/selftests/bpf/progs/arena_atomics.c
-index d1841aac94a2..2e7751a85399 100644
---- a/tools/testing/selftests/bpf/progs/arena_atomics.c
-+++ b/tools/testing/selftests/bpf/progs/arena_atomics.c
-@@ -5,7 +5,7 @@
- #include <bpf/bpf_tracing.h>
- #include <stdbool.h>
- #include <stdatomic.h>
--#include "bpf_arena_common.h"
-+#include <bpf_arena_common.h>
- #include "../../../include/linux/filter.h"
- #include "bpf_misc.h"
- 
-diff --git a/tools/testing/selftests/bpf/progs/arena_spin_lock.c b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-index 086b57a426cf..7236d92d382f 100644
---- a/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-+++ b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-@@ -4,7 +4,7 @@
- #include <bpf/bpf_tracing.h>
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
--#include "bpf_arena_spin_lock.h"
-+#include <bpf_arena_spin_lock.h>
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARENA);
-diff --git a/tools/testing/selftests/bpf/progs/compute_live_registers.c b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-index f05e120f3450..d055fc7b3b95 100644
---- a/tools/testing/selftests/bpf/progs/compute_live_registers.c
-+++ b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-@@ -3,7 +3,7 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- #include "../../../include/linux/filter.h"
--#include "bpf_arena_common.h"
-+#include <bpf_arena_common.h>
- #include "bpf_misc.h"
- 
- struct {
-diff --git a/tools/testing/selftests/bpf/progs/lpm_trie_bench.c b/tools/testing/selftests/bpf/progs/lpm_trie_bench.c
-index a0e6ebd5507a..2831cf4445e8 100644
---- a/tools/testing/selftests/bpf/progs/lpm_trie_bench.c
-+++ b/tools/testing/selftests/bpf/progs/lpm_trie_bench.c
-@@ -7,7 +7,7 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_core_read.h>
- #include "bpf_misc.h"
--#include "bpf_atomic.h"
-+#include <bpf_atomic.h>
- #include "progs/lpm_trie.h"
- 
- #define BPF_OBJ_NAME_LEN 16U
-diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/selftests/bpf/progs/stream.c
-index 6f999ba951a3..92ba1d72e0ec 100644
---- a/tools/testing/selftests/bpf/progs/stream.c
-+++ b/tools/testing/selftests/bpf/progs/stream.c
-@@ -5,7 +5,7 @@
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
- #include "bpf_experimental.h"
--#include "bpf_arena_common.h"
-+#include <bpf_arena_common.h>
- 
- struct arr_elem {
- 	struct bpf_res_spin_lock lock;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
-index 62e282f4448a..89d72c8d756a 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-@@ -8,7 +8,7 @@
- #include <bpf/bpf_tracing.h>
- #include "bpf_misc.h"
- #include "bpf_experimental.h"
--#include "bpf_arena_common.h"
-+#include <bpf_arena_common.h>
- 
- #define private(name) SEC(".bss." #name) __hidden __attribute__((aligned(8)))
- 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_globals1.c b/tools/testing/selftests/bpf/progs/verifier_arena_globals1.c
-index 83182ddbfb95..45d364b0bc85 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena_globals1.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena_globals1.c
-@@ -6,7 +6,7 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- #include "bpf_experimental.h"
--#include "bpf_arena_common.h"
-+#include <bpf_arena_common.h>
- #include "bpf_misc.h"
- 
- #define ARENA_PAGES (1UL<< (32 - __builtin_ffs(__PAGE_SIZE) + 1))
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_globals2.c b/tools/testing/selftests/bpf/progs/verifier_arena_globals2.c
-index e6bd7b61f9f1..b51594dbc005 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena_globals2.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena_globals2.c
-@@ -7,7 +7,7 @@
- #include <bpf/bpf_tracing.h>
- #include "bpf_misc.h"
- #include "bpf_experimental.h"
--#include "bpf_arena_common.h"
-+#include <bpf_arena_common.h>
- 
- #define ARENA_PAGES (32)
- 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_large.c b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
-index 5f7e7afee169..6ab8730d4878 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena_large.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
-@@ -7,7 +7,7 @@
- #include <bpf/bpf_tracing.h>
- #include "bpf_misc.h"
- #include "bpf_experimental.h"
--#include "bpf_arena_common.h"
-+#include <bpf_arena_common.h>
- 
- #define ARENA_SIZE (1ull << 32)
- 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-index c8494b682c31..1026524a1983 100644
---- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-@@ -3,7 +3,7 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
--#include "bpf_arena_common.h"
-+#include <bpf_arena_common.h>
- 
- #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
- 	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || \
 -- 
 2.53.0
 
