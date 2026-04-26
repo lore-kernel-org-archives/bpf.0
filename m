@@ -1,63 +1,62 @@
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59BE25B663
-	for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 18:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C034317B418
+	for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 18:58:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777228933; cv=none; b=mg1fE+D+ahjSQV9E+Bem3Z94s9hkpotnvwqBt3W6WzE3TCkNzK9IV4PPPChx/wMBDZxFNWMyPEK31uGHxaZuUJH2pL9siS5vkptyi7sYJlk0DF9bxhFRfN2J/96qezpW5edPpNVjFu/kCqw37Bc3KiJjxslpmZCAFkqAeLpOkOk=
+	t=1777229931; cv=none; b=FnQDqMRpIJMiV8rtpdXFRz0gCk1rVPRFCJqa6MJXtO3uQ0T9TrAgOgLZuX6oNzFNgga9FHC9QmaOqOYD7HypmnQHDe87nTejfQtsUKs+xW3HJjxfZw/g5FiOTEYqchb62N5Sh/1MVB7fvXj9qOs76VKkK3S8IpF6QhcK0gWW3DM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777228933; c=relaxed/simple;
-	bh=0SWFefRQp7XON6acs4hT+E7mX8XaxU7C/WHwtWtI5lk=;
+	s=arc-20240116; t=1777229931; c=relaxed/simple;
+	bh=E0fBEdH8THLNah2Dh244LEg3gxmMssF1sBD4hKOB8Vo=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=BMP2NnW9M0O8H7vizFzsYBKmV66T1wlOv8B7o6xmHXMFZOlU+WbT4rWKOcN4+k2Kldo8ZfBVaVcdbrPe2sZM+iafkC3AfWZhcvIJkBux3Y7QJ+6OolOVCI5d9tvSq0CJSC24FYR6f1q+KtoCbBOyNzvlTdeq6JinNXohPRp4ux8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fOEXM7cV; arc=none smtp.client-ip=209.85.210.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 References:In-Reply-To; b=r/ZBCzqiu20Tg6pJP78u1Obt4G5UW/ntWYbYo4Cc6KhkzXi3XeBxnGLGgn797xsQSdGxZHxL8Xl7i2OCjk9EkkgCO4hFtrQjHU5CHPfGX0jSbB7TDtEovDvPfcGWAztL7BDGNAxirk/HQuMLMKzCvW1ocvjibzpMw6g3Q79jS/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=L7wGE5L9; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fOEXM7cV"
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7d4be94eeacso9893776a34.2
-        for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 11:42:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="L7wGE5L9"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2b2589c26e3so89061475ad.1
+        for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 11:58:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777228931; x=1777833731; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1777229929; x=1777834729; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ktuf9HdbYnfuI6ARz16asO3pxbeGnkMlqXfFCrz8E0A=;
-        b=fOEXM7cViWSNaVP1t5anDF+F2wcxhHJC3AyEVVInKg9IUSJlKIHbwjsyGI4Wd+0vU4
-         9qQC6kZAUZFPdPj7Gx5kG7ayRvSCeAvXivCSxwLvDZP8OG3JsSrAwE6Ou/Ix95XNBQ1b
-         MwRcTxrqYK2JTVlwhV4c9dvPo1jM4X8XNCwnJBzkZjfO/jiKSIWInlkXd/jlhr3p+bza
-         x1yjnzsiEVk5QBrQk4+J7Pu6rkRfvM2etoxEIfVPyhjtvPPMLLhQEQ/VIkzwesT015uv
-         hOQ9Srr7hlEon6Kebd3GQX6ttGp5y96k4Kc91RqnqAL39HHUK3kQIkuoGMVUS3QReNYv
-         CV/A==
+        bh=UB6Hbopmj1bsEpilGJFpnKnIxbA9IIqkmL9MakC5PQE=;
+        b=L7wGE5L92DE38MXGYggOc2hM7QxXBY1VzTspyZa8ORfPL1k+iGG2rtuz/XGE0vfytJ
+         FupmvjEd7PJk9yGEQ+zMF6rpyQ2qxl586KmJbnDjDgvar2ud8SjK4LAKzcx/pu18jqIL
+         2Q/AQjdPTiR7neuGp1k/MGIP9GSPVh9ee5CM1gOmDGck6HwNuQO1EpFlXtxYzvOdMuCq
+         yO2HZ45mRsilsyuYNGQuUSBDHJuCnW6NK77VvneCXiDZ6YsOdPlleLvED8teF1TkH18F
+         Sr64oWx2DXfeMWZpnllZ8IbdBa3nyUrZUZPxzGTASwyLaK1n2ySQxfKK9Vi1pfFoNdPe
+         Gk2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777228931; x=1777833731;
+        d=1e100.net; s=20251104; t=1777229929; x=1777834729;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ktuf9HdbYnfuI6ARz16asO3pxbeGnkMlqXfFCrz8E0A=;
-        b=YOy8geGSUu3PwNTRlWI3qaM/pgI7EmaLasnnWJHmyG8avmQHm6CXju22aOpBoDXzNM
-         C04343WGbQEU8m1mkcCewWuBBkGQNRe+W26vzJXyZu1v0DTZHcUT0k8qiwJ2hyRLI3u7
-         9DJ8m3xEdUNM1nQojEUDqAXItuyQ8UfUnn1zEAy/N0FS/dkym1+PoCk8Cxirj36YDWIS
-         5OMt+2ASepfrWIeq4lpV6/Ax808qgKnSneHz3Xs+EzyomK7TBbIfPNNT8htnfddoOOfa
-         xMxfbz5EjIynC/pp1l/YTpeytW5mkSU8YrLU/ANL+H5MzjDz0JSwsRirAkw2bU+s1i8M
-         l8xQ==
-X-Gm-Message-State: AOJu0YzJlvIJuPHO5CLii5Fr2OdD7+EkKX1snfEPdpQmv3GaHhgcxMFn
-	Ea2rIgw4MOfNMfUS3e3D5Jfqff8pMt779fWI35IVRMCtKyOYXj0u7cqg
-X-Gm-Gg: AeBDieulmx0fzShvp5q1QIIzNKZ4isNuOQ1I3Qg+4dG/yW2u5+q/7cCCW6NjQz33DAX
-	A/SU4RrYiVUqDSOtj0iO059HiMQos59aETb/g1CZpEpt4xrkxmZWmEvHo2hPwpbjcxboKCtobJD
-	fm1NcmQd31eI/2foPVbibQmPsCibV+ERZUaus6b+smfge9MmkLcLMjFxybGEbEWWonHaAJ+cpj0
-	uDNr77WfjYgjpokE69D05BJJY90eEO5HCuTtH4hkh+FbzZQ1Jv0nWeAIBGWH9CQ0z4Z3+/o5Xtl
-	V2mpfAKVZKbYL6yjkNUOvtV5/cZEwWiCqiycZBXHruVG31XjcwankJdwnt9WveUuGmiVRU3nR3X
-	jtAB6uUSyMeaTkzUgMFbkoWZz4rWZHIYWIBqJJVdi5vgvuzlY1aXllSYnF2ILCORGQQ9xX0Egms
-	xURlJp7ZwsA9neO8Cwx5bWqXNED5DT2vwKn5Cxt0HmZLgfYzlsx7C2O4CIn+jieee1XRqmyobml
-	oCW3Her9MEoR78hPAqVXASCZHeUnog03IH3PA==
-X-Received: by 2002:a05:6830:67e8:b0:7dc:d7e8:cb30 with SMTP id 46e09a7af769-7dcd7e8d77emr15224062a34.26.1777228930809;
-        Sun, 26 Apr 2026 11:42:10 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:7::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dcdbef352bsm14589116a34.10.2026.04.26.11.42.09
+        bh=UB6Hbopmj1bsEpilGJFpnKnIxbA9IIqkmL9MakC5PQE=;
+        b=UJQwoewG5IDepSyh7stHP/e9rkBvw/savL17h/MH32n+lkXIAv98CF3Uik9overdEI
+         Vujwz8VbPSWve/ffthVK5tYYHXJUR5nEesYbiFmuq3uYkgHemtU4FyK0GesKnbDDm3ib
+         veg4uOM9zF0koAcPf/Opjs/uTd86psqwNGwO2/2Y8V0iCbj3GH/bagGTcRldUgvIQk3K
+         RJ0nMb5tkaIVXDSwE2u4UVmR24+vw7ZB7sbGZijzc+Ks453SP+bFIVcShG+92oGyXG+J
+         o28xxZh8Ie4d2yEJtIqyy3SqsSBYWDiJW/St/VePkpw+xKqAupJ8RJRZKJw/J3Uc0AtM
+         3WLg==
+X-Gm-Message-State: AOJu0YyUFAHY/Hjqyd9SZnyMKCnJ4LCJ1XM/rNgkfdusE10RnlR2cVmW
+	cdaSfPOi1aMPOVOqxZfbgxXT2bpEcmQGVKZvsnCWRy7JmctHAtETiC2gafXrcnXvi04=
+X-Gm-Gg: AeBDieuVqFAy5mnkkHbfI0x+56uYqCUhX5auO6QD6dYaBtalVWNoEs4gb31Z0p8EZIW
+	vgBF7kDi1z3MkWtL8Q3rNSQdAivhT2VgVsPD/I1Wv0MKpiJQbNPpGJFL9Wf9GMT6TkUo0cGpzPz
+	+Zhn1k6r+HZSXi5jIpJJk2norsMQ5nUTnpvxcSUP/3wIbuN2r/JQNJ4+AfQCot3zWrIfvW4WQs3
+	OJmfr4c/AcsI7kkvWkws/TYnk+V1Buq2lXXkZiUeMPkXTazM3doO4XVOygCoVaFYPodz20URkTw
+	iTQvmIFxnXs/WstFtvi9LD0kIZyqHcvDeGEF6R07+r2LMsL+Xkbjsw/v6Nn5J7DiLd4UztPxSKf
+	7jnrUamXHSEW2mzwSBWdYS1GRURvcK5UB59iUKD+/j89GbrqJgcwZgV+56SuQ2Mfkp1adtOm1j7
+	g4mC2FsCa8o8co5VI32A==
+X-Received: by 2002:a17:903:178e:b0:2b2:56bc:c6bc with SMTP id d9443c01a7336-2b5fa016e65mr447242805ad.40.1777229929094;
+        Sun, 26 Apr 2026 11:58:49 -0700 (PDT)
+Received: from localhost ([2604:3d08:487d:cd00::2af6])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5faa33486sm339723025ad.33.2026.04.26.11.58.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Apr 2026 11:42:10 -0700 (PDT)
+        Sun, 26 Apr 2026 11:58:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,70 +65,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sun, 26 Apr 2026 11:42:09 -0700
-Message-Id: <DI3B2QZ8TA16.V0ZDKK2KS7MB@gmail.com>
+Date: Sun, 26 Apr 2026 14:58:48 -0400
+Message-Id: <DI3BFHSQZ917.1Q6NYL1M4ZR67@etsalapatis.com>
 Cc: <bpf@vger.kernel.org>, <ast@kernel.org>, <andrii@kernel.org>,
  <memxor@gmail.com>, <daniel@iogearbox.net>, <eddyz87@gmail.com>,
  <song@kernel.org>
 Subject: Re: [PATCH bpf-next v8 2/8] selftests/bpf: Add basic libarena
  scaffolding
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Matt Bobrowski" <mattbobrowski@google.com>, "Emil Tsalapatis"
- <emil@etsalapatis.com>
-X-Mailer: aerc
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, "Matt Bobrowski"
+ <mattbobrowski@google.com>, "Emil Tsalapatis" <emil@etsalapatis.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
 References: <20260421165037.4736-1-emil@etsalapatis.com>
  <20260421165037.4736-3-emil@etsalapatis.com> <aenXSvDSN98azW_T@google.com>
-In-Reply-To: <aenXSvDSN98azW_T@google.com>
+ <DI3B2QZ8TA16.V0ZDKK2KS7MB@gmail.com>
+In-Reply-To: <DI3B2QZ8TA16.V0ZDKK2KS7MB@gmail.com>
 
-On Thu Apr 23, 2026 at 1:24 AM PDT, Matt Bobrowski wrote:
->> +
->> +int arena_fls(__u64 word)
->> +{
->> +	unsigned int num =3D 0;
->> +
->> +	if (!word)
->> +		return 0;
->> +
->> +	if (word & 0xffffffff00000000ULL) {
->> +		num +=3D 32;
->> +		word >>=3D 32;
->> +	}
->> +
->> +	if (word & 0xffff0000) {
->> +		num +=3D 16;
->> +		word >>=3D 16;
->> +	}
->> +
->> +	if (word & 0xff00) {
->> +		num +=3D 8;
->> +		word >>=3D 8;
->> +	}
->> +
->> +	if (word & 0xf0) {
->> +		num +=3D 4;
->> +		word >>=3D 4;
->> +	}
->> +
->> +	if (word & 0xc) {
->> +		num +=3D 2;
->> +		word >>=3D 2;
->> +	}
->> +
->> +	if (word & 0x2)
->> +		num +=3D 1;
->> +
->> +	return num + 1;
->> +}
+On Sun Apr 26, 2026 at 2:42 PM EDT, Alexei Starovoitov wrote:
+> On Thu Apr 23, 2026 at 1:24 AM PDT, Matt Bobrowski wrote:
+>>> +
+>>> +int arena_fls(__u64 word)
+>>> +{
+>>> +	unsigned int num =3D 0;
+>>> +
+>>> +	if (!word)
+>>> +		return 0;
+>>> +
+>>> +	if (word & 0xffffffff00000000ULL) {
+>>> +		num +=3D 32;
+>>> +		word >>=3D 32;
+>>> +	}
+>>> +
+>>> +	if (word & 0xffff0000) {
+>>> +		num +=3D 16;
+>>> +		word >>=3D 16;
+>>> +	}
+>>> +
+>>> +	if (word & 0xff00) {
+>>> +		num +=3D 8;
+>>> +		word >>=3D 8;
+>>> +	}
+>>> +
+>>> +	if (word & 0xf0) {
+>>> +		num +=3D 4;
+>>> +		word >>=3D 4;
+>>> +	}
+>>> +
+>>> +	if (word & 0xc) {
+>>> +		num +=3D 2;
+>>> +		word >>=3D 2;
+>>> +	}
+>>> +
+>>> +	if (word & 0x2)
+>>> +		num +=3D 1;
+>>> +
+>>> +	return num + 1;
+>>> +}
+>>
+>> What's your reason for not using something like __builtin_clzll()
+>> instead here, for example:
+>>
+>> int arena_fls(u64 word)
+>> {
+>> 	if (!word)
+>> 		return 0;
+>>
+>> 	return 64 - __builtin_clzll(word);
+>> }
 >
-> What's your reason for not using something like __builtin_clzll()
-> instead here, for example:
->
-> int arena_fls(u64 word)
-> {
-> 	if (!word)
-> 		return 0;
->
-> 	return 64 - __builtin_clzll(word);
-> }
+> Great suggestion. If it works, let's adopt __builtin_*
 
-Great suggestion. If it works, let's adopt __builtin_*
+Will do. Sending v9 right now.
+
