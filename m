@@ -1,62 +1,63 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417E838947C
-	for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 19:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD50F2848A0
+	for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 19:17:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777231012; cv=none; b=dHPDVP6lnY2SIz0crB5mXjdpW7h1APuusQRKNRUvYRHqBBCP436nsC4rLdtTi0fKxY/NPj0OBtmDpYPX+wAE+310VyiOcKMxuslH3tIeq7HTWKXKFlT3AjHZMC+DVrh7VGpIwvjzfhfCoYjcnVlVoSnJTs+wTQr8JklrTbL30Wg=
+	t=1777231031; cv=none; b=s4XPGPvxktBlZJRgT2TVGy8imAwY3hYcfqBSrDvaUG3RyIr0DUC12524R10HnOtnP3sqoSfvauHbYqw/yRQRk7u7Whvl91q+E7svmYNWypH+C2o904sJWHHc8V/twM7Nr3EkWNY4MKiGdzCIdN4NyibUrgKV/bJz77PTAlDW6iI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777231012; c=relaxed/simple;
-	bh=Xuf+R/+WB9hB+YYiyN7uL2aDPjof5JKU2nWhd5xO/0I=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=e6gUqWQJlhvPXZ+uKes9f3wdwXi8Y0yesxTG2Zthap+mRhrTUUK7SF/KR199PSgU6M8Wn2AL6Np+o48zSjzjLyeLWndBNOkj8gmg76BZAa7kO/F3gGICMIxqj0AXxtcjdcteY9D4J2b2PRx6p1ONhJMdX4/JTwKFzu6MMAYVO4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=UM84Mdk1; arc=none smtp.client-ip=209.85.214.173
+	s=arc-20240116; t=1777231031; c=relaxed/simple;
+	bh=hx4muqT329gvnq8emb2sJIUT4hEB8hYF9W8WijtuD5A=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=IkuKo+uC+c4qLJc5wWEp075JXSdFZnUbMFFVSMwci+tBrDmxHw3Fvqe7RxvrrTIhG9O06wTf+bMUk64M15m3qHM35oXuNFOUmjonOTLq7fdHFbVeYXGwvOX/Ptko1rLOgMgutJcGxY8oNB995JDNt2EAZhcDzS1kfPcXez3jWXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=RMMLJEf4; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="UM84Mdk1"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2b24fdac394so91818885ad.3
-        for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 12:16:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="RMMLJEf4"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2a871daa98fso62018235ad.1
+        for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 12:17:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1777231008; x=1777835808; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1777231029; x=1777835829; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PCNYJ9Lu7oG9Wvhqwh+98GrCVYIvA0xo+CmPm9Nb2RI=;
-        b=UM84Mdk1DPJ+OV6PofXJJWhp+p2iQWdNjdHaU/IYLOU4wr69WleDLfICdhjYXseEdY
-         xuBFFEd6JgugV41g9WlI3+NbjKFlyvmi2iS6wHPZi3i265l+JkVku+UBwXejI8qzCfIx
-         ol+6w+Ie1oPer/faWyJ4sei8qjhj8l51oKKgu/bmobr+F1D2NuVHsaASP+kFsipX1CYj
-         1OI9qoosxj28A2xU8uvuBTLVTaxmla3PbkTkFsLv6awqGuMaIq+Fb3Gn/imbY1RWupGH
-         hcKcy9kGuestLU4mn3QVrhjVG4KUjNMVdHea99WEKO9L6LxRs1WNHHhL+aqwSD4pNBwq
-         VY7Q==
+        bh=TSblK11nZsAuu6dBblEvTDaeDGn9LCh73TEkAHVfyjE=;
+        b=RMMLJEf4590MoUilHmvsjowveElP5vUUM7ThmkzaQNIPnFGb6xRRFUB7XIdrze1eqd
+         e3b8zBD+NYV4BavwzAGXfABrjopDPloRb55Ilp7Ovwcw4EaVoSCQX4YsK+qRO5J8Q48i
+         gXDEEW+pnp8ajEndqzlIwCVf+3HRgWiIk+wX5GvavmVeHySC2g4ugY7zt/wMkfAajOqF
+         imPS4GU/iHJApRfWVxFRjLeI2FasFVJQ1DpGjNuFCnhFgE7sT//RAoa4nftamOFz5UuS
+         Qhyxm7AQpPdazbnEGBCDXbX845AMievO/W40Wb8jymSan3rfxwFncrTgfyduo8Cfw9Je
+         SiKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777231008; x=1777835808;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=1e100.net; s=20251104; t=1777231029; x=1777835829;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=PCNYJ9Lu7oG9Wvhqwh+98GrCVYIvA0xo+CmPm9Nb2RI=;
-        b=d2ro2Rf3sWmyKxW+iFIurpQFA6YxNDSFUU3XVS+BodiXpS9AyS3LW8NhPoKkocicxb
-         ORV12tNLpyR9kteE/afP1nLVv+jjKuBZoiROPbR9eUimoaSHV/02hmB9Sd8TuqiXXXRZ
-         P3U2e3exUvMprURgxifDweiYWWe7s1H1BrRzKRt5gEPdrSLVhEjU/Op+tCJJvswnoY+V
-         s6dU9E7UdbwzJsGpxAoWJNYtrN4M+TXqgmWZdO3dyzzxCyVr4oU7rfwhlaFzK8EheX3a
-         r5DtxoOdJFrhvI2C/eY4jCzgdGKW6A3Kvk+N9GQxaEdnqX/goL7MFDRONgYvMJhhVD1m
-         ED2g==
-X-Gm-Message-State: AOJu0YyCr745wIAn4wocpFd0HBMYVJAg8fUsacGIiu5n/jgDhEP0RXXx
-	Wa/B9O22i1ZpxclBQT8oSaEKyb+a5fOrqpydJ2JX90e9xe6kTKGcZiDcJUSiIEQVy/w=
-X-Gm-Gg: AeBDievncrXWU9JYm6ibszN8U4qymYBAerfghZKgMYRWV1SVwZIkwwD2o+LCs8DK6He
-	hkOdeR8+gQ3VYWgpnhD0aLmfv9mg7sYa9GVk2XmM9D5P8U0DMc3LU57zksuL4x971XquPGSr3Dh
-	lfiZ0qJTGZ0SWW3nMwGyflXUtkdtuNyHLlL11B9V+wxr2kUKIwBhqskgzhvTOHKnXfFh0Cmn+ss
-	uAQZLBiB09/ux9EhDmCEdsvj6u7kOvbBblzL56yyaxdpN2UeGI49291LaLQ91RRBkz7pSFJaGwc
-	xopmTiipN1eMIRrNNBXUfp1/R1Rxogjik644yutuP1WODAaJ/Gf2QkeobJ1qdS3zLumDwS02ISW
-	4iE28A9hJJUiqy6pz6Onscq+U1WhiG9mnwvFdcSyw6lx2RpKvkos0jXab8QthcGbWqfKkARbxNm
-	05SnJu/LqnXSeKfM5iBw==
-X-Received: by 2002:a17:903:3c24:b0:2b7:a3bf:b2a0 with SMTP id d9443c01a7336-2b7a3bfb415mr169412405ad.5.1777231008213;
-        Sun, 26 Apr 2026 12:16:48 -0700 (PDT)
+        bh=TSblK11nZsAuu6dBblEvTDaeDGn9LCh73TEkAHVfyjE=;
+        b=ep8RTBL/QJeRpkbLGCYhvjqpFTLKiFvwIWzfNG17F6PP7g+Y1Y0xCYTOcGjbPnLGlJ
+         blTL4aeo4n4WV38h4pzbZaiIYyjWzTDMkFSRdVQfh8/0KvB1mFQ7u387X+SnDUUNz1qy
+         A352jP5Qw3sgi4so8I5vGp4g2RZs+j0gHvlXXu3uA/Khu+NKLiE3Lykj+kdCMVe46pWM
+         NVAB5f9JZtCwRBLPgm8Tt65yN3WXmkoBi9JVsp0wFiCTaJzi9+qCUdLYSd5wUfWjD9yu
+         AZzG9awWyJAJa8wwycD/ZP1vB8CYbyucFK0QywVR3xPcqsnvTRUbbviTgWIMZAWp5kaa
+         rLIg==
+X-Forwarded-Encrypted: i=1; AFNElJ+r9mkBhBZljPJfJZbuTfAqKytnAmVbIS7Wed7uguLCdTJ3vjbQ5TFf/EFpYEJAP1ZrgqE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVEyy4HR/wyHszopw4tAdTzYyQhJgbVb0jZ0WsoTx+HQJiEkmi
+	Rj7bSI0CUU/krzlOwVc9T4HSvOZyMOuwCYID1mtKO3XyORPZnpBtdehaIrNIegvW1zM=
+X-Gm-Gg: AeBDiev7HNhcTMbvRUmE6rJwjTanxzBTIBHsQjw7YgkZBSiht40w/Xj8m7yhFvF9Z8z
+	u5TPG8AbgQ/dO2LLrBIT8b1MO6Y+JbUFah9Kf1aa+YVDJJ2haUiEXMm8A9x3MpuLRWWKrdFmfHV
+	7PxM1qePl+A/Jxe9EiKktfbT5VILq3ykCwi1XBWfo2arG/N2XRNxCd/qsKZg9J6Wkuycp+enOtf
+	Et7Dh2hPFWMAs294iLDtgt2DDkD3STu7Romy4+17CcCvUsq2+3KMY1qMsQXP5u8yg0sGDyFrFn1
+	Oe6r8G1lIQgTOaJSbO7J/KAEFMTE/fsBKV3mwHiVoJXcphFuIMXzmU45yZ9gtY0UHBG/RdngoG4
+	c/a1tJgS/gj9XgUlfbIp+bXIHtjPt/x6ku+LC/o890EyvAsQ2pVZiYB8z+3xxvgBBy6DnmbJqmE
+	ImrtvYsm3myZ86vq7hpW5yP2CiODLo
+X-Received: by 2002:a17:903:2acb:b0:2b4:6398:6aa2 with SMTP id d9443c01a7336-2b5f9f3a802mr459892015ad.27.1777231029189;
+        Sun, 26 Apr 2026 12:17:09 -0700 (PDT)
 Received: from localhost ([2604:3d08:487d:cd00::2af6])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5fab3ad18sm296596405ad.71.2026.04.26.12.16.47
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5fab2114bsm270988425ad.60.2026.04.26.12.17.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Apr 2026 12:16:47 -0700 (PDT)
+        Sun, 26 Apr 2026 12:17:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -65,72 +66,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sun, 26 Apr 2026 15:16:47 -0400
-Message-Id: <DI3BT9LJCI1D.2TRRBC1BVKIP2@etsalapatis.com>
+Date: Sun, 26 Apr 2026 15:17:08 -0400
+Message-Id: <DI3BTJ61RUDC.8DB0IJ6YME4J@etsalapatis.com>
+To: "Junyoung Jang" <graypanda.inzag@gmail.com>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>
+Cc: <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
+ <jolsa@kernel.org>, <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <greg@kroah.com>, <security@kernel.org>
 Subject: Re: [PATCH bpf v2] bpf: Fix off-by-one boundary validation in arena
  direct-value access
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: <sashiko@lists.linux.dev>, "Junyoung Jang" <graypanda.inzag@gmail.com>
-Cc: <bpf@vger.kernel.org>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260426172505.1947915-1-graypanda.inzag@gmail.com>
- <20260426181736.794BCC2BCAF@smtp.kernel.org>
-In-Reply-To: <20260426181736.794BCC2BCAF@smtp.kernel.org>
+References: <2026042614-scowling-hankie-f84b@gregkh>
+ <20260426172505.1947915-1-graypanda.inzag@gmail.com>
+In-Reply-To: <20260426172505.1947915-1-graypanda.inzag@gmail.com>
 
-On Sun Apr 26, 2026 at 2:17 PM EDT, sashiko-bot wrote:
-> Sashiko AI review found 1 potential issue(s):
-> - [Medium] Data race and bounds check bypass in arena_map_direct_value_ad=
-dr() due to lockless reads
-> --
+On Sun Apr 26, 2026 at 1:25 PM EDT, Junyoung Jang wrote:
+> BPF_MAP_TYPE_ARENA accepts BPF_PSEUDO_MAP_VALUE offsets at exactly
+> the end of the arena mapping (off =3D=3D arena_size). The boundary check
+> in arena_map_direct_value_addr() uses `>` instead of `>=3D`, which
+> incorrectly allows a one-past-end pointer to be accepted.
 >
-> commit a9b5d3016475abf10be02a320dc627c95b306d92
-> Author: Junyoung Jang <graypanda.inzag@gmail.com>
+> Change the condition to `>=3D` to correctly reject offsets that fall
+> outside the valid arena user_vm range.
 >
-> bpf: Fix off-by-one boundary validation in arena direct-value access
->
-> This commit fixes an off-by-one error in the arena map boundary check
-> where offsets exactly at the end of the mapping were incorrectly accepted=
-.
->
->> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
->> index 802656c6fd3c..49a8f7b1beef 100644
->> --- a/kernel/bpf/arena.c
->> +++ b/kernel/bpf/arena.c
->> @@ -511,7 +511,7 @@ static int arena_map_direct_value_addr(const struct =
-bpf_map *map, u64 *imm, u32
->>  {
->>  	struct bpf_arena *arena =3D container_of(map, struct bpf_arena, map);
->> =20
->> -	if ((u64)off > arena->user_vm_end - arena->user_vm_start)
->> +	if ((u64)off >=3D arena->user_vm_end - arena->user_vm_start)
->
-> Could this evaluation be vulnerable to a data race?
->
-> This function reads arena->user_vm_end and arena->user_vm_start without
-> holding arena->lock or using READ_ONCE().
->
-> Concurrently, a user-space process calling mmap() on the arena map FD
-> can invoke arena_map_mmap(), which updates these fields under arena->lock=
-.
-> Because user_vm_start is updated first, a concurrent reader here might
-> observe the new user_vm_start (a high address) and the old user_vm_end
-> (which might be 0).
->
-> In that scenario, arena->user_vm_end - arena->user_vm_start would
-> underflow to a large 64-bit value, which would allow arbitrary offsets
-> to bypass this bounds check.
+> Fixes: 317460317a02 ("bpf: Introduce bpf_arena.")
+> Signed-off-by: Junyoung Jang <graypanda.inzag@gmail.com>
+> ---
 
-This seems like a valid concern, though it is unrelated to the fix here
-which seems correct. Can you sent a followup patch using an arena lock
-guard in map_direct_value_addr? I don't see any issues with taking the
-lock since the method is only used at verification time.
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
+>  kernel/bpf/arena.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Does this logic require synchronization or READ_ONCE() annotations to
-> ensure the verifier's boundary validation remains effective?
->
->>  		return -ERANGE;
->>  	*imm =3D (unsigned long)arena->user_vm_start;
->>  	return 0;
->>  }
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index 802656c6fd3c..49a8f7b1beef 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+> @@ -511,7 +511,7 @@ static int arena_map_direct_value_addr(const struct b=
+pf_map *map, u64 *imm, u32
+>  {
+>  	struct bpf_arena *arena =3D container_of(map, struct bpf_arena, map);
+> =20
+> -	if ((u64)off > arena->user_vm_end - arena->user_vm_start)
+> +	if ((u64)off >=3D arena->user_vm_end - arena->user_vm_start)
+>  		return -ERANGE;
+>  	*imm =3D (unsigned long)arena->user_vm_start;
+>  	return 0;
 
