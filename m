@@ -1,136 +1,118 @@
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C00358387
-	for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 13:42:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41AC15B998
+	for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 15:28:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777210949; cv=none; b=DfSKduH2GdF3fZRBzMCtPNNLj7nqkyzhwEgqs8wOn7jG+2IavfF1/mwPp7m4NOrc7zPH5cPqvvJKo+ETZhkfGm3DfCCMFnUfpKQWz6VdIvY70Hs/PfW9/kbOdEFINaP1VGc6ZudXBPuqTgN+nme7WFlXXviBnXtsPpgj4Io0hN0=
+	t=1777217300; cv=none; b=CBipbnthTbvlIg71fq9cwIR2eNqK1fo5RUyjROeOrj0ksWv0DJSa5N8CTHBMdEKbmAAdk3b6ILf/tLynhkdcB89HgN72RWdMFPprpk6ggmIknLI21qp4MjuTrWQ9o3Cl+94nyPtAO56RR2vK7iQZQyZaqD3+ZQVqMey/mUOpBOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777210949; c=relaxed/simple;
-	bh=FhdP40ZNedHqEmlY8s3OTQPdz7LoUhJhpTXV8+ccUeY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DLJrrwCs2BJsbInaMgZGBusILyeisuxgZa2UHbY11xW+ZaL/aAJ2UFKsTLxgXzJeLR34MXpqdylJb2UPQfnqh3282ZWMvwlG08RzJinuaRhALc38rPWhpSXLcA9CtQ8uWD85MFoNCT/r6SbXWf2kbkjn1GexvnFYSDuKLaiKiww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=NDVK9wCG; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	s=arc-20240116; t=1777217300; c=relaxed/simple;
+	bh=A8vXdI2Upm9V9ML8CX/Bg99AFMK81d2W9vmRIXl9HMY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=jlmLCwCP0na60zA4tRanRASFjoq2e6zqJAPCNuFhETlpEp3mbH8ucwJcCV/R0loR8GjvPQxzIqeOms/Jucv8RQwFxVj4gdvfKmsLfl6Y46HVdifx4V6QhyQyCdrULNk+K2uLes+HJuqevIyo+BTMVCQy5bjsL3QNR/j94BMsLXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JFKB0x86; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="NDVK9wCG"
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-50e5b55062fso65488111cf.2
-        for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 06:42:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JFKB0x86"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-82f431c0ab6so4285180b3a.0
+        for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 08:28:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1777210947; x=1777815747; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=etZa6+dwk3PB/o1Yn2oB8jvevYbsEL8oVxXn5echsWc=;
-        b=NDVK9wCGz9EYGOfwj4a+B7VlhjB+7bxntO+H2Mhsmfh7HADt2fuEn7Sm0iCM098dI0
-         GV6TunZ93LQSKNrxXPxmwg/MJ53dYV8drX54guno0onWf4crbuJa5LbgjWkTNH3Ok30S
-         fUtLQMo4W8G5W/1xI6OANVL5kO5J1dKBMTd4sOlO8L1Wn3DE/AnMcGVl81a5IG/xzFmB
-         Bsa8p6eX/cVEH26ggcREruOgMbp/xpfytVhND/VStxGcstiEUHvRwxPGvXeYsCf35G07
-         sZG+pt3Z2Y9kXqKaMdBDpoELBmE2BcxoVH/niuVgtAIMzjRtCAXMOIV2/qb1QTYJtE2C
-         fPfg==
+        d=gmail.com; s=20251104; t=1777217299; x=1777822099; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4wA1Xx3qksBxo7ueLQH/Gb7GNuuDUoxQZdXt216j2Ys=;
+        b=JFKB0x86NzFDRlu0pU1b4e8b1WiWMgzvZatbu3UPyOj1tdYpHBNomd3IFBH6RzzdiL
+         6F1c+pbIcA3YmBQHWO4ZDrVHVyd0c30kDmhwuxzgXKB96G/BPWJo2uVZ6qB4V9BsDG98
+         /N7KNH8yvopVIUXnCeHovuvDrfCit6UbpohHRpSx8WfWEUiE/MT3X3bEWfkvW9ALdHWg
+         pKapazwQs7N7+QuWjjuNRBJrxM2fk2i9zYewLLrxaLs3IVWpG7goRnTTzRIzvEfdrnMD
+         ocGGs4Hv8ov+iP11BgzBrzKROBMvA58q9+wnbXcKzy9I1F4fNAWkHRYzq05q1YDyn7dS
+         He2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777210947; x=1777815747;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=etZa6+dwk3PB/o1Yn2oB8jvevYbsEL8oVxXn5echsWc=;
-        b=SHyer1UbrukMv64xn5Xk5kchieI27OyFZBOfLUxPcyPpSDdd4+p7RCLN/rhp8AZFP1
-         4V1QtjsJ0ReD/gpEYuO4RthcRejCpJSUfRR8TL4neodfJ3Mdzs2fx8LfewL2oYDrsLDC
-         0jl4R4k82rFjpmsjcBu89g8d2Yj0grZEq9edE9HyigF/MQ3hEkF3VQqhCCCaanhu+BZx
-         xP5GAAJf2TP3Y/pmC1a6pnqJIRHxbTaOlRuWUdm5ZtfMkJkYKCpLvMNGRgTaRcDo0DFE
-         rY+zIYitj+rghIOlBhM3jCGM2FF/XecpUyeOkHMY6S/UYwT3OqX9N6HjUbBGCZXEFOUP
-         hv8Q==
-X-Forwarded-Encrypted: i=1; AFNElJ9+ceZV7VFbS2Us1K+FeBw6DL8Is6w25WjAZzs0LdoBcp8h1GUIk+mqhO3Ax79oaySCjmg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVQ5iu7ubyF2kdUgO2GVYoN/PFueeplOZzR+FqlSKAI14dMKkH
-	D7r6irHdm+U1rJryEtMmR+PjCO2ScW0+MysUlRsovlPsEevBgSZukMW0zvwLSsugxtk=
-X-Gm-Gg: AeBDiev3oQDQ7fnO3skE83pRQxBz2IHm5dxG57pln9fBLGNgNXvDTGwS0cUDlLc13+w
-	Yl4KQk3AsE6hRzZxeS5wizkW/KiHaLRUE1HJr66UTcTo1JWB9mng605enDn6/MhME64FP0XQuZK
-	N6QKZcHRw6C8/DfsKLIWu/JKTtCvtFnT2R8On5MGu1b174Clje30ArEobcuyn0LydClmVRQNVrB
-	/hreJiHqs1k5EE8AU9qRMfrC5mUpNLs81cX2ncS5nU7jUVsQI+usH+Yw8jMDl4+emghjKmD8akY
-	ts+z0XgHhSkkakmCgySQ9VTaPViCOiWyrV3BavC94bpOIwXjoFvwb9U68aRnj/ta0qHvuN9/8ED
-	Z3Eryp4Fxim67SS+esnB2fbBjjdVQ80/3C7DWreDInHdRXNeOdLCtWcnHDCXQ/AHeCUyQTRz96f
-	yCoBwY7l9tnFVgZ9+PH8rmqesnqw1hyXz9jy4es83qSAanDQQLVoUldmWyChK5yc3wPnDrPt3Z2
-	jTaNcQYHaAtR+Ow
-X-Received: by 2002:ac8:7d14:0:b0:50e:df54:c36d with SMTP id d75a77b69052e-50edf54c741mr408613341cf.18.1777210947033;
-        Sun, 26 Apr 2026 06:42:27 -0700 (PDT)
-Received: from ziepe.ca (crbknf0213w-47-54-130-67.pppoe-dynamic.high-speed.nl.bellaliant.net. [47.54.130.67])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50e392c859asm305729281cf.1.2026.04.26.06.42.25
+        d=1e100.net; s=20251104; t=1777217299; x=1777822099;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=4wA1Xx3qksBxo7ueLQH/Gb7GNuuDUoxQZdXt216j2Ys=;
+        b=I84o/LlQbGg/7mA7Uk3DYG2vTjVdRi6g0qc085IjwCy3krtVBfkupeRwOVFiglZcjt
+         LfbmVOso+onWvgzrMxrKwcUia3u+Ciqy51klGkHcxO9yZ5pSLglDt0YKsyFlBb5aJDxn
+         51xRMBzd4DQFcVjMT5SWGzGqz58d7QkPo/PMryzHFe24cXlpCsEdMQKwYBbWcU80Z8TB
+         f5DiKon7jPnu9R0yZU0BKV5E70TyP6bwgDM5VyH1RXx/llBrFiq9MCRNhS+7LUZvKK5A
+         vi7Z95vWM5dbX4eRh0s3jGZJYj3o6oEM2jDjijh7QPDdm78QcBdLAY1stAgZz/w2ftJA
+         bWZA==
+X-Forwarded-Encrypted: i=1; AFNElJ+iV9ChcICbM9dtTV59StkMwr9UqzaQbxZfuKvISExQ+Vy25ZRbvpIBMBvxUhzLErGsEFQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLCV7YMX4Cfs5j+DWQGrFM2d7pq+Qmaho96zFNvBwDXRXQ+f70
+	C1H3zLBkdpodf3dF90q98+yU+FDDysxyXKWzt7phpBRd5bPw784mloE/
+X-Gm-Gg: AeBDies/sARBaVaz6UyFIsIODIzf8DsSl+XEtgeb2816KF+7TtQ8/asUtIP7BPAwr1x
+	jv+zbzv0VIojulKnxZzXwgXmatOx7gaJEZXQMANDJ1cmM5sqtX1JRxxAoSHxz6u/L6QJxvh7BIa
+	cmzbU8U9zmxJU+NF+fD7NCDxs5wa0W3A8uD6o1roCS7QD9shsc+6mZtZOa0W9Tonp8jtBkb/Fxh
+	nmq853HlQh5iPY6CoE+LmPrzG4djSBN08xbDIxcordQGutjSi+p8ioHQGCIzeeK9A0xZsyu0SiA
+	1dj+OzRQWpzxx7/z47mzJvf/Q1K+qdkERErrdU6twdb+DI6GMM/vwTEaq2pz51Aji72Q+X1vsVv
+	Oqvm2v1lbdto0ILf+G8dLHXoUpQyfuHY8hTcYyEc9GNrHLMzbzK8oLZimEIaFswb9htN8bQQKA1
+	cdIioOWKjLO1xnf96a0Vc3K0BBAIohO/9h/m5CmFDlneUYOQTQRjO+pK4=
+X-Received: by 2002:a05:6a00:179b:b0:829:809e:8977 with SMTP id d2e1a72fcca58-82f8c99883fmr41384675b3a.49.1777217299140;
+        Sun, 26 Apr 2026 08:28:19 -0700 (PDT)
+Received: from localhost.localdomain ([121.169.163.47])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f8e9d35acsm30155686b3a.15.2026.04.26.08.28.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Apr 2026 06:42:26 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1wGzke-0000000EqhS-4C2t;
-	Sun, 26 Apr 2026 10:42:25 -0300
-Date: Sun, 26 Apr 2026 10:42:24 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Leon Romanovsky <leon@kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>,
-	Roberto Sassu <roberto.sassu@huaweicloud.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Itay Avraham <itayavr@nvidia.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
-	Maher Sanalla <msanalla@nvidia.com>,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-Message-ID: <20260426134224.GC3501894@ziepe.ca>
-References: <20260413164220.GP3694781@ziepe.ca>
- <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
- <20260413231920.GS3694781@ziepe.ca>
- <CAHC9VhTLamfe4C81ZNRVT=H32x+KLxSqH3o0eBfrHsWAgAqxCA@mail.gmail.com>
- <20260415134705.GG2577880@ziepe.ca>
- <CAHC9VhSECYihup=tURo_Qk__xUdYYPkHgnz5CWA0BrRAkvwbog@mail.gmail.com>
- <20260417191749.GK2577880@ziepe.ca>
- <20260423140950.GE172828@unreal>
- <20260424141921.GA3611611@ziepe.ca>
- <20260426103957.GH172828@unreal>
+        Sun, 26 Apr 2026 08:28:18 -0700 (PDT)
+From: Junyoung Jang <graypanda.inzag@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Cc: martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	greg@kroah.com,
+	security@kernel.org,
+	Junyoung Jang <graypanda.inzag@gmail.com>
+Subject: [PATCH bpf] bpf: Fix off-by-one boundary validation in arena direct-value access
+Date: Mon, 27 Apr 2026 00:27:59 +0900
+Message-ID: <20260426152759.1932675-1-graypanda.inzag@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <2026042614-scowling-hankie-f84b@gregkh>
+References: <2026042614-scowling-hankie-f84b@gregkh>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260426103957.GH172828@unreal>
+Content-Transfer-Encoding: 8bit
 
-On Sun, Apr 26, 2026 at 01:39:57PM +0300, Leon Romanovsky wrote:
-> On Fri, Apr 24, 2026 at 11:19:21AM -0300, Jason Gunthorpe wrote:
-> > On Thu, Apr 23, 2026 at 05:09:50PM +0300, Leon Romanovsky wrote:
-> > 
-> > > > > Leon mentioned that different firmware revisions would have different
-> > > > > parameters for a given opcode, and that one would need to inspect
-> > > > > those parameters to properly filter the command.  Is that not true, or
-> > > > > am I misreading or misunderstanding Leon's comments?
-> > > > 
-> > > > They are ABI stable, so there will be rules about future changes that
-> > > > old software can follow to ignore or reject future things it doesn't
-> > > > understand.
-> > > 
-> > > It is wishful thinking and applicable only to mlx5 devices. No one
-> > > promises that other devices follow same ABI rules.
-> > 
-> > Well, I will definately kick them out of fwctl if they don't.
-> 
-> It is easy to say but harder to follow. The kernel includes many devices that
-> exist only in specific hyperscale environments, where the update cycle is
-> tightly controlled. They easily can break FW backward compatibility.
+BPF_MAP_TYPE_ARENA accepts BPF_PSEUDO_MAP_VALUE offsets at exactly
+the end of the arena mapping (off == arena_size). The boundary check
+in arena_map_direct_value_addr() uses `>` instead of `>=`, which
+incorrectly allows a one-past-end pointer to be accepted.
 
-Well Linus's rule applies here, if it doesn't bother anyone it didn't
-break..
+Change the condition to `>=` to correctly reject offsets that fall
+outside the valid arena user_vm range.
 
-Jason
+Signed-off-by: Junyoung Jang <graypanda.inzag@gmail.com>
+---
+ kernel/bpf/arena.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index 802656c6fd3c..49a8f7b1beef 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -511,7 +511,7 @@ static int arena_map_direct_value_addr(const struct bpf_map *map, u64 *imm, u32
+ {
+ 	struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
+ 
+-	if ((u64)off > arena->user_vm_end - arena->user_vm_start)
++	if ((u64)off >= arena->user_vm_end - arena->user_vm_start)
+ 		return -ERANGE;
+ 	*imm = (unsigned long)arena->user_vm_start;
+ 	return 0;
+-- 
+2.43.0
+
