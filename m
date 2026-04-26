@@ -1,63 +1,63 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E15A377023
-	for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 19:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8857F3783C0
+	for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 19:03:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777230232; cv=none; b=V0FttE6sYZsmr44eSswOXeuKzeq3cxKlfmoKdvwtMdg++FX5b9TG3VFBjd5CHcwqcMgHdrMD/aYC6gnSyv7wEHfgPbsZ9dDmtLyZRhWcd8B677wb45r7UhaDReuyDgZECEulxEblNDiuRHKIgjm4pALlkc8vWQ03VE80m2MPOlM=
+	t=1777230233; cv=none; b=XNvQIbToR568Ty5VCuSw/d2pRXc9+9kN9GFf+7Xj8NEhKZkcqFDTpFukEqTbaY1fpKlzOkv93Ua+l8/rS/NzJYIJ7DVgqoocu+zj+OvuJkt/zBKefP3eACwioe1Ak2S1SgUDNZfZDJDQHKoElWHs4FGRvc1KsckfW9q929jsnLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777230232; c=relaxed/simple;
-	bh=QC/gqXrOXsfJHgUxn0epAXOp6PvpNm7EHiAkqYNkgGg=;
+	s=arc-20240116; t=1777230233; c=relaxed/simple;
+	bh=FJuL0NQkXpYBXCfG6T9GBrfcSSbSG3AOa7vUTsNnBNE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mtKZuITZipuAOUBJd77/arKA4oPSc2n2iJB21+CDCL2MclQx7BugBPy1XTsUkHifbWcgB4DgzPjK8kubzGn6uIoE96UT0kqZrNcBoBZtM0jdRa7I1iyItn2JUQ+/pMt06rzKPNXxbe/LdeR/pDONwH1JTTu7qk4fPuU4ag0cgTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=yaOFJev1; arc=none smtp.client-ip=209.85.214.182
+	 MIME-Version; b=aqapd2WFxFkhiXSj5mrbLQel7NN8n5aZ/p31A1Mz/TFJQLJGMjdxEZqoi6uYaEQAgSmca3CwLKlwJPdLFqQnuvJvxP4D+EAvHQ2sUjzYKhBxOAuhQESmpSz8QHZssy7wSWJzJgdLYCGrDxlNOeaD6XM9+Br3xjXT11LyYdKo/AM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=dD2PrJ0a; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="yaOFJev1"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2b2503753efso98803675ad.0
-        for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 12:03:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="dD2PrJ0a"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-35fc0d7c310so6116801a91.1
+        for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 12:03:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1777230225; x=1777835025; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1777230229; x=1777835029; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=X4tIfHKWfGnfL5voZ31hYj2jbuzE7wpaSUGv99QDuXQ=;
-        b=yaOFJev1O9ghhEqweFZBbtl4wS66gi7LvvdluDaagWHk07sD+J9nFb//2c3DQg6s4O
-         BN23MkNKbKvnePYCf8HHMgcAfzs7a6MNJv6P4aj3QZRzS1eRX/SJa1SLDT/qKfYIC3+b
-         zmAmXxA9kt2LhjTbD7/ZqVSCyEfbV6UjkUrfVo16zLdm6g+N2XiUtkX54DBrX7IsK5ZN
-         f0SMqH9Q15NB3OozGrxjmNzrhql3kveIWA4KNjiwNCP+t2geQWuihwsuJVik9TauXuQh
-         naaXi9upQVa2O1XpBd4BtQkkHp0CsoKxbjwgfM/7McCmeWAiXoSwt+YpSoC2msODlDTd
-         QlnA==
+        bh=sTbiquxLoW0qbAbsBWXnBqZupGUFJaw3xlHxqa54jVQ=;
+        b=dD2PrJ0adXDwECFnTg+xlvoSU3fdcIJi2pue8WtMhvlYRaQvizxUBFMPl8XrtMdXro
+         2Wskcue1d4JQ4kKsCw34mBm9ceekSzQM/OS6/8n02KyOjfndQrqTvauSZ+pZ+mySLKqz
+         tdzyUzDRa+b4S00jXPIeZie/lLtRbUdq2KZO1EwA58JfHHN9f8SREeK3VkB/PRA1zXB4
+         Zc/kWllLysmBC4Uqsu9gq/imYdcKTrMTUir86ujN62TxZyTwPBwdaMhjFpt+N97WgJYf
+         yUYWnQh5evsJx2hJMNq/K9dwHAGjkKiLWltcp+VlmnrDFUgBteiDD4KRPXtcz0i2xH5b
+         wj9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777230225; x=1777835025;
+        d=1e100.net; s=20251104; t=1777230229; x=1777835029;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=X4tIfHKWfGnfL5voZ31hYj2jbuzE7wpaSUGv99QDuXQ=;
-        b=rKAsgXBsCeWRkrGaGwO+Fb8bMfC7X6R7m2f/WhBBHpfI0WvmmMcwY729bsN4GMeygv
-         m7eeARawcY4kxFTRrUgnOAv6KfFMOJbq5mXtqIX9fza2Q31AMnfxSkvEu6f7R2PSMbvi
-         Vufr56speJsk5ryF1k6AWIVVYPDoeoKUAixtg91pzXc92eFXscpelCPJAGSNmBNT/t0e
-         W8zUmT8BerW+kOtT4nHL68s8kmNPxhfDRtgIfaZdHbAbaCfJ/IBj/4p2yd2A6F2avHW3
-         hGneefamS+B8HVw8Lus4UkRpW4Ea2lP+i5SX8+sRNIuoQIG+aJr2J9Pr3p7Vtgwkdwr1
-         je9w==
-X-Gm-Message-State: AOJu0Yxd4VuRec4ncgSmKLlTl+YKCs6LmGI1Nj7dhhRx4fTjMLPImHwa
-	ujFq7HzEje2KHir+ZPm07By7DCuVawYKTsWUQz8OuGFDatUGQOzaZK79FcD8mRvi/A7wQ37Bmdu
-	VYg6xo6M=
-X-Gm-Gg: AeBDietzlUuOiVvqn/ORt3yliFACJTT+aN8x6Ia2h26c8HGlWpnn1//cLJA1fF/SVoZ
-	N4szxblvGqrrcbWPa6l780IbXXlJH8xs8jMOGowI8YOpKzQD6I3aoCtF9Zt/uiFkFlUgcPAPNmB
-	lCaw+M/clbmPxUwAmje0kGNTkM9nRIU72kTm0LjvLyob5J4MRGKkMwDlfjkdGNgg67Upg6FijD3
-	/+GMfeaAn9aFumXL/BwMA8WQfYCdltMJs4XfTUAm29goojtGIXCTbECx0YVWjEk6bPlGvlEr6D9
-	B6SGrqIVTo+khyW9tYl9C7x4TQLAM218lUHcxymeYrhQVlxgIRyn43s8vnudaf28WyYf3FNCwsc
-	PGv2y0XC6SyGN3bYEjEJ6TxR8g82ho1XUSTq3lTh4ohwn6/pfQiV7ZfjimznWZUzgWZyP9eLi6N
-	SKgDZQMUVvmfgXZ2Qp+y56DRA=
-X-Received: by 2002:a17:903:1d2:b0:2b2:41a9:8e10 with SMTP id d9443c01a7336-2b5f9f4e110mr451973865ad.23.1777230225214;
-        Sun, 26 Apr 2026 12:03:45 -0700 (PDT)
+        bh=sTbiquxLoW0qbAbsBWXnBqZupGUFJaw3xlHxqa54jVQ=;
+        b=lHSfP9XlsPHFdKm78P0iojBBISqAoFEgTJvnTX6MEEdqV234EqijlCRlCUCPRu18GS
+         /Tdd2/n7BSbsGuaPyoC2zRl3utnGEEapnF4Pp4ELdKJKx7g1z7xG5SNXm8aS6xSP52sF
+         x3qusdUAuEYKwwiYOGccFlNl240UPiCC6mqug/WJXoCG//9EaZz7x8I3ooJ1thbdsrZz
+         azJnHFDqhiyzkx4uHM8HwpbANboe1LnYW1gHst1PAlgRvcyprM6hBN0x0AFKjOOpYWpm
+         TqbGySsjSqxgM7JVvA67DxfhBWMjLSe3N7dxbgx9pKCSS1h6FnPDwfi19HNTqlPXty4c
+         7e1Q==
+X-Gm-Message-State: AOJu0YyP1SaPEs3ERXTLAtBeELsxRMym0QFM8wMXQIT6mnvuHXmfDOcO
+	Glygfl3CuFRMnp6JVFMLJJjf/AtF8DDiy/Ky7/oob2JRRY2t5cTfI+3+hY6rQsMGdCaQ0kCSso1
+	263hOU4Q=
+X-Gm-Gg: AeBDievxkNWkqjdjMZjWz/jfCQSemB+ECwQK9z5PEfmNercADWcrd8m01jmv0EXw3vq
+	P7uPfEpd/0a7EyiB7AbaA21cTnbFr9xZZx1BYNAzpU7oKS6B2re2ZyRmBuwO3FTXPhNe0zlSP+W
+	Xb7sn4k3AwiukJEYZMHoVQzshPxVhQs5QcGfkNeq9bVP7qBVSt6uoCTad/RQri1V1EcjbopTrfZ
+	UcUtaRq9cq1iJWjynRobpPxJ0YJnRFNitCoHxC4LzNk7VO0OlLZn+NueDAoyl2AXNsnZ0ZX5d7+
+	7HhQtBwBDow16QIS5i5PD4rdo/YqlBdU+fVqVGrqfh7rsKhzXMNCv+pORuHyjyrxSb8iu7VJEMy
+	b1FD7XuFsjidJfYm32YBumCROMyxZG1zc9GaLxp3vvmA/zTjPy2mgxxIm/M0uYJLd7zANAQ0ELE
+	Qr5JTye20x2OHQptkgZF0nR2s=
+X-Received: by 2002:a17:90b:1804:b0:359:83d3:27d3 with SMTP id 98e67ed59e1d1-361403c326fmr43068492a91.2.1777230228898;
+        Sun, 26 Apr 2026 12:03:48 -0700 (PDT)
 Received: from krios ([2604:3d08:487d:cd00::2af6])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b7a9efd0f2sm107449965ad.31.2026.04.26.12.03.44
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b7a9efd0f2sm107449965ad.31.2026.04.26.12.03.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Apr 2026 12:03:44 -0700 (PDT)
+        Sun, 26 Apr 2026 12:03:48 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -68,9 +68,9 @@ Cc: ast@kernel.org,
 	song@kernel.org,
 	mattbobrowski@google.com,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v9 4/8] selftests/bpf: Add arena ASAN runtime to libarena
-Date: Sun, 26 Apr 2026 15:03:34 -0400
-Message-ID: <20260426190338.4615-5-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v9 8/8] selftests/bpf: Reuse stderr parsing for libarena ASAN tests
+Date: Sun, 26 Apr 2026 15:03:38 -0400
+Message-ID: <20260426190338.4615-9-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260426190338.4615-1-emil@etsalapatis.com>
 References: <20260426190338.4615-1-emil@etsalapatis.com>
@@ -82,703 +82,198 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add an address sanitizer (ASAN) runtime to the arena library. The
-ASAN runtime implements the functions injected into BPF binaries
-by LLVM sanitization when ASAN is enabled during compilation.
+Add code to directly test the output of libarena ASAN tests.
+The code reuses testing infrastructure originally for BPF streams
+to verify that ASAN emits call stacks when the selftests trigger
+a memory error.
 
-The runtime also includes functions called explicitly by memory
-allocation code to mark memory as poisoned/unpoisoned to ASAN.
-This code is a no-op when sanitization is turned off.
+Since stderr() testing uses logic from test_progs, it is only
+available on the test_progs-based selftest runner. The standalone
+runner still uses internal ASAN state to verify access errors are
+triaged as expected.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- .../bpf/libarena/include/libarena/asan.h      | 103 ++++
- .../bpf/libarena/include/libarena/common.h    |   1 +
- .../selftests/bpf/libarena/src/asan.bpf.c     | 553 ++++++++++++++++++
- 3 files changed, 657 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/asan.h
- create mode 100644 tools/testing/selftests/bpf/libarena/src/asan.bpf.c
+ .../libarena/selftests/st_asan_buddy.bpf.c    | 18 +++++++
+ .../libarena/selftests/test_progs_compat.h    | 15 ++++++
+ .../selftests/bpf/prog_tests/libarena_asan.c  |  2 +
+ tools/testing/selftests/bpf/test_loader.c     | 51 ++++++++++++++-----
+ tools/testing/selftests/bpf/test_progs.h      |  2 +
+ 5 files changed, 76 insertions(+), 12 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/test_progs_compat.h
 
-diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/asan.h b/tools/testing/selftests/bpf/libarena/include/libarena/asan.h
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
+index 9dd2980b5d6c..97acd50ffa5c 100644
+--- a/tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
++++ b/tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
+@@ -5,6 +5,9 @@
+ #include <libarena/asan.h>
+ #include <libarena/buddy.h>
+ 
++/* Required for parsing the ASAN call stacks. */
++#include "test_progs_compat.h"
++
+ extern buddy_t buddy;
+ 
+ #ifdef BPF_ARENA_ASAN
+@@ -141,6 +144,11 @@ static __always_inline int asan_test_buddy_blob_single(void)
+ }
+ 
+ SEC("syscall")
++__stderr("Memory violation for address {{.*}} for write of size 1")
++__stderr("CPU: {{[0-9]+}} UID: 0 PID: {{[0-9]+}} Comm: {{.*}}")
++__stderr("Call trace:\n"
++"{{([a-zA-Z_][a-zA-Z0-9_]*\\+0x[0-9a-fA-F]+/0x[0-9a-fA-F]+\n"
++"|[ \t]+[^\n]+\n)*}}")
+ __weak int asan_test_buddy_oob(void)
+ {
+ 	size_t sizes[] = {
+@@ -174,6 +182,11 @@ __weak int asan_test_buddy_oob(void)
+ }
+ 
+ SEC("syscall")
++__stderr("Memory violation for address {{.*}} for write of size 1")
++__stderr("CPU: {{[0-9]+}} UID: 0 PID: {{[0-9]+}} Comm: {{.*}}")
++__stderr("Call trace:\n"
++"{{([a-zA-Z_][a-zA-Z0-9_]*\\+0x[0-9a-fA-F]+/0x[0-9a-fA-F]+\n"
++"|[ \t]+[^\n]+\n)*}}")
+ __weak int asan_test_buddy_uaf(void)
+ {
+ 	size_t sizes[] = { 16, 32, 64, 128, 256, 512, 1024, 16384 };
+@@ -205,6 +218,11 @@ __weak int asan_test_buddy_uaf(void)
+ }
+ 
+ SEC("syscall")
++__stderr("Memory violation for address {{.*}} for write of size 1")
++__stderr("CPU: {{[0-9]+}} UID: 0 PID: {{[0-9]+}} Comm: {{.*}}")
++__stderr("Call trace:\n"
++"{{([a-zA-Z_][a-zA-Z0-9_]*\\+0x[0-9a-fA-F]+/0x[0-9a-fA-F]+\n"
++"|[ \t]+[^\n]+\n)*}}")
+ __weak int asan_test_buddy_blob(void)
+ {
+ 	const int iters = 10;
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_progs_compat.h b/tools/testing/selftests/bpf/libarena/selftests/test_progs_compat.h
 new file mode 100644
-index 000000000000..eb9fc69d9eb0
+index 000000000000..9d431376c42f
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/include/libarena/asan.h
-@@ -0,0 +1,103 @@
++++ b/tools/testing/selftests/bpf/libarena/selftests/test_progs_compat.h
+@@ -0,0 +1,15 @@
 +// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
 +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 +#pragma once
 +
-+struct asan_init_args {
-+	u64 arena_all_pages;
-+	u64 arena_globals_pages;
-+};
-+
-+int asan_init(struct asan_init_args *args);
-+
-+extern volatile u64 __asan_shadow_memory_dynamic_address;
-+extern volatile u32 asan_reported;
-+extern volatile bool asan_inited;
-+extern volatile bool asan_report_once;
-+
 +#ifdef __BPF__
 +
-+#define ASAN_SHADOW_SHIFT 3
-+#define ASAN_SHADOW_SCALE (1ULL << ASAN_SHADOW_SHIFT)
-+#define ASAN_GRANULE_MASK ((1ULL << ASAN_SHADOW_SHIFT) - 1)
-+#define ASAN_GRANULE(addr) ((s8)((u32)(u64)((addr)) & ASAN_GRANULE_MASK))
++/* Selftests use these tags for compatibility with test_progs. */
++#define __test_tag(tag)		__attribute__((btf_decl_tag("comment:" XSTR(__COUNTER__) ":" tag)))
++#define __stderr(msg)		__test_tag("test_expect_stderr=" msg)
++#define __stderr_unpriv(msg)	__test_tag("test_expect_stderr_unpriv=" msg)
 +
-+#define __noasan __attribute__((no_sanitize("address")))
++#define XSTR(s) STR(s)
++#define STR(s) #s
 +
-+#ifdef BPF_ARENA_ASAN
-+
-+typedef s8 __arena s8a;
-+
-+static inline
-+s8a *mem_to_shadow(void __arena __arg_arena *addr)
-+{
-+	return (s8a *)(((u32)(u64)addr >> ASAN_SHADOW_SHIFT) +
-+			__asan_shadow_memory_dynamic_address);
-+}
-+
-+__weak __noasan
-+bool asan_ready(void)
-+{
-+	return __asan_shadow_memory_dynamic_address;
-+}
-+
-+int asan_poison(void __arena *addr, s8 val, size_t size);
-+int asan_unpoison(void __arena *addr, size_t size);
-+bool asan_shadow_set(void __arena *addr);
-+
-+/*
-+ * Dummy calls to ensure the ASAN runtime's BTF information is present
-+ * in every object file when compiling the runtime and local BPF code
-+ * separately. The runtime calls are injected into the LLVM IR file
-+ */
-+#define DECLARE_ASAN_LOAD_STORE_SIZE(size)				\
-+	void __asan_store##size(intptr_t addr);				\
-+	void __asan_store##size##_noabort(intptr_t addr);	\
-+	void __asan_load##size(intptr_t addr);				\
-+	void __asan_load##size##_noabort(intptr_t addr);	\
-+	void __asan_report_store##size(intptr_t addr);			\
-+	void __asan_report_store##size##_noabort(intptr_t addr);		\
-+	void __asan_report_load##size(intptr_t addr);			\
-+	void __asan_report_load##size##_noabort(intptr_t addr);
-+
-+DECLARE_ASAN_LOAD_STORE_SIZE(1);
-+DECLARE_ASAN_LOAD_STORE_SIZE(2);
-+DECLARE_ASAN_LOAD_STORE_SIZE(4);
-+DECLARE_ASAN_LOAD_STORE_SIZE(8);
-+
-+void __asan_storeN(intptr_t addr, ssize_t size);
-+void __asan_storeN_noabort(intptr_t addr, ssize_t size);
-+void __asan_loadN(intptr_t addr, ssize_t size);
-+void __asan_loadN_noabort(intptr_t addr, ssize_t size);
-+
-+/*
-+ * Force LLVM to emit BTF information for the stubs,
-+ * because the ASAN pass in LLVM by itself doesn't.
-+ */
-+#define ASAN_LOAD_STORE_SIZE(size)		\
-+	__asan_store##size,			\
-+	__asan_store##size##_noabort,		\
-+	__asan_load##size,			\
-+	__asan_load##size##_noabort,		\
-+	__asan_report_store##size,		\
-+	__asan_report_store##size##_noabort,	\
-+	__asan_report_load##size,		\
-+	__asan_report_load##size##_noabort
-+
-+__attribute__((used))
-+static void (*__asan_btf_anchors[])(intptr_t) = {
-+	ASAN_LOAD_STORE_SIZE(1),
-+	ASAN_LOAD_STORE_SIZE(2),
-+	ASAN_LOAD_STORE_SIZE(4),
-+	ASAN_LOAD_STORE_SIZE(8),
-+};
-+
-+#else /* BPF_ARENA_ASAN */
-+
-+static inline int asan_poison(void __arena *addr, s8 val, size_t size) { return 0; }
-+static inline int asan_unpoison(void __arena *addr, size_t size) { return 0; }
-+static inline bool asan_shadow_set(void __arena *addr) { return 0; }
-+__weak bool asan_ready(void) { return true; }
-+
-+#endif /* BPF_ARENA_ASAN */
-+
-+#endif /* __BPF__ */
-diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/common.h b/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-index d088f3e75798..21eb18bf4533 100644
---- a/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-+++ b/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-@@ -44,6 +44,7 @@ struct {
-  * the opaque volatile variable 0 instead of the constant 0.
-  */
- extern const volatile u32 zero;
-+extern volatile u64 asan_violated;
++#endif
+diff --git a/tools/testing/selftests/bpf/prog_tests/libarena_asan.c b/tools/testing/selftests/bpf/prog_tests/libarena_asan.c
+index b4fba10cdfbf..d59d9dd12ef2 100644
+--- a/tools/testing/selftests/bpf/prog_tests/libarena_asan.c
++++ b/tools/testing/selftests/bpf/prog_tests/libarena_asan.c
+@@ -25,6 +25,8 @@ static void run_libarena_asan_test(struct libarena_asan *skel,
  
- int arena_fls(__u64 word);
+ 	ret = libarena_run_prog(bpf_program__fd(prog));
+ 	ASSERT_OK(ret, name);
++
++	verify_test_stderr(skel->obj, prog);
+ }
  
-diff --git a/tools/testing/selftests/bpf/libarena/src/asan.bpf.c b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
-new file mode 100644
-index 000000000000..64c5b990086c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
-@@ -0,0 +1,553 @@
-+// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <libarena/common.h>
-+#include <libarena/asan.h>
-+
-+
-+enum {
-+	/*
-+	 * Is the access checked by check_region_inline
-+	 * a read or a write?
-+	 */
-+	ASAN_READ		= 0x0U,
-+	ASAN_WRITE		= 0x1U,
-+};
-+
-+/*
-+ * Address sanitizer (ASAN) for arena-based BPF programs, inspired
-+ * by KASAN.
-+ *
-+ * The API
-+ * -------
-+ *
-+ * The implementation includes two kinds of components: Implementation
-+ * of ASAN hooks injected by LLVM into the program, and API calls that
-+ * allocators use to mark memory as valid or invalid. The full list is:
-+ *
-+ * LLVM stubs:
-+ *
-+ * void __asan_{load, store}<size>(intptr_t addr)
-+ *	Checks whether an access is valid. All variations covered
-+ *	by check_region_inline().
-+ *
-+ * void __asan_{store, load}((intptr_t addr, ssize_t size)
-+ *
-+ * void __asan_report_{load, store}<size>(intptr_t addr)
-+ *	Report an access violation for the program. Used when LLVM
-+ *	uses direct code generation for shadow map checks.
-+ *
-+ * void *__asan_memcpy(void *d, const void *s, size_t n)
-+ * void *__asan_memmove(void *d, const void *s, size_t n)
-+ * void *__asan_memset(void *p, int c, size_t n)
-+ *	Hooks for ASAN instrumentation of the LLVM mem* builtins.
-+ *	Currently unimplemented just like the builtins themselves.
-+ *
-+ * API methods:
-+ *
-+ * asan_init()
-+ *	Initialize the ASAN map for the arena.
-+ *
-+ * asan_poison()
-+ *	Mark a region of memory as poisoned. Accessing poisoned memory
-+ *	causes asan_report() to fire. Invoked during free().
-+ *
-+ * asan_unpoison()
-+ *	Mark a region as unpoisoned after alloc().
-+ *
-+ * asan_shadow_set()
-+ *	Check a byte's validity directly.
-+ *
-+ * The Algorithm In Brief
-+ * ----------------------
-+ * Each group of 8 bytes is mapped to a "granule" in the shadow map. This
-+ * granule is the size of the byte and describes which bytes are valid.
-+ * Possible values are:
-+ *
-+ * 0: All bytes are valid. Makes checks in the middle of an allocated region
-+ * (most of them) fast.
-+ * (0, 7]: How many consecutive bytes are valid, starting from the lowest one.
-+ * The tradeoff is that we can't poison individual bytes in the middle of a
-+ * valid region.
-+ * [0x80, 0xff]: Special poison values, can be used to denote specific error
-+ * modes (e.g., recently freed vs uninitialized memory).
-+ *
-+ * The mapping between a memory location and its shadow is:
-+ * shadow_addr = shadow_base + (addr >> 3). We retain the 8:1 data:shadow
-+ * ratio of existing ASAN implementations as a compromise between tracking
-+ * granularity and space usage/scan overhead.
-+ */
-+
-+#ifdef BPF_ARENA_ASAN
-+
-+#pragma clang attribute push(__attribute__((no_sanitize("address"))), \
-+			     apply_to = function)
-+
-+#define SHADOW_ALL_ZEROES ((u64)-1)
-+
-+/*
-+ * Canary variable for ASAN violations. Set to the offending address.
-+ */
-+volatile u64 asan_violated = 0;
-+
-+/*
-+ * Shadow map occupancy map.
-+ */
-+volatile u64 __asan_shadow_memory_dynamic_address;
-+
-+volatile u32 asan_reported = false;
-+volatile bool asan_inited = false;
-+
-+/*
-+ * Set during program load.
-+ */
-+volatile bool asan_report_once = false;
-+
-+/*
-+ * BPF does not currently support the memset/memcpy/memcmp intrinsics.
-+ * For large sequential copies, or assignments of large data structures,
-+ * the frontend will generate an intrinsic that causes the BPF backend
-+ * to exit due to a missing implementation. Provide a simple implementation
-+ * just for memset to use it for poisoning/unpoisoning the map.
-+ */
-+__weak int asan_memset(s8a __arg_arena *dst, s8 val, size_t size)
+ static void run_test(void)
+diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
+index c4c34cae6102..ee637809a1d4 100644
+--- a/tools/testing/selftests/bpf/test_loader.c
++++ b/tools/testing/selftests/bpf/test_loader.c
+@@ -93,7 +93,7 @@ void test_loader_fini(struct test_loader *tester)
+ 	free(tester->log_buf);
+ }
+ 
+-static void free_msgs(struct expected_msgs *msgs)
++void free_msgs(struct expected_msgs *msgs)
+ {
+ 	int i;
+ 
+@@ -789,6 +789,43 @@ static void emit_stderr(const char *stderr, bool force)
+ 	fprintf(stdout, "STDERR:\n=============\n%s=============\n", stderr);
+ }
+ 
++static void verify_stderr(int prog_fd, struct expected_msgs *msgs)
 +{
-+	size_t i;
++	LIBBPF_OPTS(bpf_prog_stream_read_opts, ropts);
++	char *buf;
++	int ret;
 +
-+	for (i = zero; i < size && can_loop; i++)
-+		dst[i] = val;
++	if (!msgs->cnt)
++		return;
 +
-+	return 0;
-+}
++	buf = malloc(TEST_LOADER_LOG_BUF_SZ);
++	if (!ASSERT_OK_PTR(buf, "malloc"))
++		return;
 +
-+/* Validate a 1-byte access, always within a single byte. */
-+static __always_inline bool memory_is_poisoned_1(s8a *addr)
-+{
-+	s8 shadow_value = *(s8a *)mem_to_shadow(addr);
-+
-+	/* Byte is 0, access is valid. */
-+	if (likely(!shadow_value))
-+		return false;
-+
-+	/*
-+	 * Byte is non-zero. Access is valid if granule offset in [0, shadow_value),
-+	 * so the memory is poisoned if shadow_value is negative or smaller than
-+	 * the granule's value.
-+	 */
-+
-+	return ASAN_GRANULE(addr) >= shadow_value;
-+}
-+
-+/* Validate a 2- 4-, 8-byte access, shadow spans up to 2 bytes. */
-+static __always_inline bool memory_is_poisoned_2_4_8(s8a *addr, u64 size)
-+{
-+	u64 end = (u64)addr + size - 1;
-+
-+	/*
-+	 * Region fully within a single byte (addition didn't
-+	 * overflow above ASAN_GRANULE).
-+	 */
-+	if (likely(ASAN_GRANULE(end) >= size - 1))
-+		return memory_is_poisoned_1((s8a *)end);
-+
-+	/*
-+	 * Otherwise first byte must be fully unpoisoned, and second byte
-+	 * must be unpoisoned up to the end of the accessed region.
-+	 */
-+
-+	return *(s8a *)mem_to_shadow(addr) || memory_is_poisoned_1((s8a *)end);
-+}
-+
-+__weak bool asan_shadow_set(void __arena __arg_arena *addr)
-+{
-+	return memory_is_poisoned_1(addr);
-+}
-+
-+static __always_inline u64 first_nonzero_byte(u64 addr, size_t size)
-+{
-+	while (size && can_loop) {
-+		if (unlikely(*(s8a *)addr))
-+			return addr;
-+		addr += 1;
-+		size -= 1;
++	ret = bpf_prog_stream_read(prog_fd, 2, buf, TEST_LOADER_LOG_BUF_SZ - 1,
++				    &ropts);
++	if (ret > 0) {
++		buf[ret] = '\0';
++		emit_stderr(buf, false);
++		validate_msgs(buf, msgs, emit_stderr);
++	} else {
++		ASSERT_GT(ret, 0, "stderr stream read");
 +	}
 +
-+	return SHADOW_ALL_ZEROES;
++	free(buf);
 +}
 +
-+static __always_inline bool memory_is_poisoned_n(s8a *addr, u64 size)
++void verify_test_stderr(struct bpf_object *obj, struct bpf_program *prog)
 +{
-+	u64 ret;
-+	u64 start;
-+	u64 end;
++	struct test_spec spec = {};
 +
-+	/* Size of [start, end] is end - start + 1. */
-+	start = (u64)mem_to_shadow(addr);
-+	end = (u64)mem_to_shadow(addr + size - 1);
++	if (parse_test_spec(NULL, obj, prog, &spec))
++		return;
 +
-+	ret = first_nonzero_byte(start, (end - start) + 1);
-+	if (likely(ret == SHADOW_ALL_ZEROES))
-+		return false;
-+
-+	return unlikely(ret != end || ASAN_GRANULE(addr + size - 1) >= *(s8a *)end);
++	verify_stderr(bpf_program__fd(prog), &spec.priv.stderr);
++	free_test_spec(&spec);
 +}
 +
-+__weak int asan_report(s8a __arg_arena *addr, size_t sz, u32 flags)
-+{
-+	u32 reported = __sync_val_compare_and_swap(&asan_reported, false, true);
-+
-+	/* Only report the first ASAN violation. */
-+	if (reported && asan_report_once)
-+		return 0;
-+
-+	asan_violated = (u64)addr;
-+
-+	arena_stderr("Memory violation for address %p (0x%lx) for %s of size %ld\n",
-+			addr, (u64)addr,
-+			(flags & ASAN_WRITE) ? "write" : "read",
-+			sz);
-+	bpf_stream_print_stack(BPF_STDERR);
-+
-+	return 0;
-+}
-+
-+static __always_inline bool check_asan_args(s8a *addr, size_t size,
-+					    bool *result)
-+{
-+	bool valid = true;
-+
-+	/* Size 0 accesses are valid even if the address is invalid. */
-+	if (unlikely(size == 0))
-+		goto confirmed_valid;
-+
-+	/*
-+	 * Wraparound is possible for values close to the the edge of the
-+	 * 4GiB boundary of the arena (last valid address is 1UL << 32 - 1).
-+	 *
-+	 *
-+	 * The wraparound detection below works for small sizes. check_asan_args is
-+	 * always called from the builtin ASAN checks, so 1 <= size <= 64. Even
-+	 * for storeN/loadN that we do not expect to encounter the intrinsics will
-+	 * not have a large enough size that:
-+	 *
-+	 * - addr + size  > MAX_U32
-+	 * - (u32)(addr + size) > (u32) addr
-+	 *
-+	 * which would defeat wraparound detection.
-+	 */
-+	if (unlikely((u32)(u64)(addr + size) < (u32)(u64)addr))
-+		goto confirmed_invalid;
-+
-+	return false;
-+
-+confirmed_invalid:
-+	valid = false;
-+
-+	/* FALLTHROUGH */
-+confirmed_valid:
-+	*result = valid;
-+
-+	return true;
-+}
-+
-+static __always_inline bool check_region_inline(intptr_t ptr, size_t size,
-+						u32 flags)
-+{
-+	s8a *addr = (s8a *)(u64)ptr;
-+	bool is_poisoned, is_valid;
-+
-+	if (check_asan_args(addr, size, &is_valid)) {
-+		if (!is_valid)
-+			asan_report(addr, size, flags);
-+		return is_valid;
-+	}
-+
-+	switch (size) {
-+	case 1:
-+		is_poisoned = memory_is_poisoned_1(addr);
-+		break;
-+	case 2:
-+	case 4:
-+	case 8:
-+		is_poisoned = memory_is_poisoned_2_4_8(addr, size);
-+		break;
-+	default:
-+		is_poisoned = memory_is_poisoned_n(addr, size);
-+	}
-+
-+	if (is_poisoned) {
-+		asan_report(addr, size, flags);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+/*
-+ * __alias is not supported for BPF so define *__noabort() variants as wrappers.
-+ */
-+#define DEFINE_ASAN_LOAD_STORE(size)                                  \
-+	__hidden void __asan_store##size(intptr_t addr)                  \
-+	{                                                             \
-+		check_region_inline(addr, size, ASAN_WRITE);          \
-+	}                                                             \
-+	__hidden void __asan_store##size##_noabort(intptr_t addr)        \
-+	{                                                             \
-+		check_region_inline(addr, size, ASAN_WRITE);          \
-+	}                                                             \
-+	__hidden void __asan_load##size(intptr_t addr)                   \
-+	{                                                             \
-+		check_region_inline(addr, size, ASAN_READ);           \
-+	}                                                             \
-+	__hidden void __asan_load##size##_noabort(intptr_t addr)         \
-+	{                                                             \
-+		check_region_inline(addr, size, ASAN_READ);           \
-+	}                                                             \
-+	__hidden void __asan_report_store##size(intptr_t addr)           \
-+	{                                                             \
-+		asan_report((s8a *)addr, size, ASAN_WRITE);           \
-+	}                                                             \
-+	__hidden void __asan_report_store##size##_noabort(intptr_t addr) \
-+	{                                                             \
-+		asan_report((s8a *)addr, size, ASAN_WRITE);           \
-+	}                                                             \
-+	__hidden void __asan_report_load##size(intptr_t addr)            \
-+	{                                                             \
-+		asan_report((s8a *)addr, size, ASAN_READ);            \
-+	}                                                             \
-+	__hidden void __asan_report_load##size##_noabort(intptr_t addr)  \
-+	{                                                             \
-+		asan_report((s8a *)addr, size, ASAN_READ);            \
-+	}
-+
-+DEFINE_ASAN_LOAD_STORE(1);
-+DEFINE_ASAN_LOAD_STORE(2);
-+DEFINE_ASAN_LOAD_STORE(4);
-+DEFINE_ASAN_LOAD_STORE(8);
-+
-+void __asan_storeN(intptr_t addr, ssize_t size)
-+{
-+	check_region_inline(addr, size, ASAN_WRITE);
-+}
-+
-+void __asan_storeN_noabort(intptr_t addr, ssize_t size)
-+{
-+	check_region_inline(addr, size, ASAN_WRITE);
-+}
-+
-+void __asan_loadN(intptr_t addr, ssize_t size)
-+{
-+	check_region_inline(addr, size, ASAN_READ);
-+}
-+
-+void __asan_loadN_noabort(intptr_t addr, ssize_t size)
-+{
-+	check_region_inline(addr, size, ASAN_READ);
-+}
-+
-+/*
-+ * We currently do not sanitize globals.
-+ */
-+void __asan_register_globals(intptr_t globals, size_t n)
-+{
-+}
-+
-+void __asan_unregister_globals(intptr_t globals, size_t n)
-+{
-+}
-+
-+/*
-+ * We do not currently have memcpy/memmove/memset intrinsics
-+ * in LLVM. Do not implement sanitization.
-+ */
-+void *__asan_memcpy(void *d, const void *s, size_t n)
-+{
-+	arena_stderr("ASAN: Unexpected %s call", __func__);
-+	return NULL;
-+}
-+
-+void *__asan_memmove(void *d, const void *s, size_t n)
-+{
-+	arena_stderr("ASAN: Unexpected %s call", __func__);
-+	return NULL;
-+}
-+
-+void *__asan_memset(void *p, int c, size_t n)
-+{
-+	arena_stderr("ASAN: Unexpected %s call", __func__);
-+	return NULL;
-+}
-+
-+/*
-+ * Poisoning code, used when we add more freed memory to the allocator by:
-+ * 	a) pulling memory from the arena segment using bpf_arena_alloc_pages()
-+ * 	b) freeing memory from application code
-+ */
-+__hidden __noasan int asan_poison(void __arena *addr, s8 val, size_t size)
-+{
-+	s8a *shadow;
-+	size_t len;
-+
-+	/*
-+	 * Poisoning from a non-granule address makes no sense: We can only allocate
-+	 * memory to the application that has a granule-aligned starting address,
-+	 * and bpf_arena_alloc_pages returns page-aligned memory. A non-aligned
-+	 * addr then implies we're freeing a different address than the one we
-+	 * allocated.
-+	 */
-+	if (unlikely((u64)addr & ASAN_GRANULE_MASK))
-+		return -EINVAL;
-+
-+	/*
-+	 * We cannot free an unaligned region because it'd be possible that we
-+	 * cannot describe the resulting poisoning state of the granule in
-+	 * the ASAN encoding.
-+	 *
-+	 * Every granule represents a region of memory that looks like the
-+	 * following (P for poisoned bytes, C for clear):
-+	 *
-+	 * <Clear>  <Poisoned>
-+	 * [ C C C ... P P ]
-+	 *
-+	 * The value of the granule's shadow map is the number of clear bytes in
-+	 * it. We cannot represent granules with the following state:
-+	 *
-+	 * [ P P ... C C ... P P ]
-+	 *
-+	 * That would be possible if we could free unaligned regions, so prevent that.
-+	 */
-+	if (unlikely(size & ASAN_GRANULE_MASK))
-+		return -EINVAL;
-+
-+	shadow = mem_to_shadow(addr);
-+	len = size >> ASAN_SHADOW_SHIFT;
-+
-+	asan_memset(shadow, val, len);
-+
-+	return 0;
-+}
-+
-+/*
-+ * Unpoisoning code for marking memory as valid during allocation calls.
-+ *
-+ * Very similar to asan_poison, except we need to round up instead of
-+ * down, then partially poison the last granule if necessary.
-+ *
-+ * Partial poisoning is useful for keeping the padding poisoned. Allocations
-+ * are granule-aligned, so we we're reserving granule-aligned sizes for the
-+ * allocation. However, we want to still treat accesses to the padding as
-+ * invalid. Partial poisoning takes care of that. Freeing and poisoning the
-+ * memory is still done in granule-aligned sizes and repoisons the already
-+ * poisoned padding.
-+ */
-+__hidden __noasan int asan_unpoison(void __arena *addr, size_t size)
-+{
-+	size_t partial = size & ASAN_GRANULE_MASK;
-+	s8a *shadow;
-+	size_t len;
-+
-+	/*
-+	 * We cannot allocate in the middle of the granule. The ASAN shadow
-+	 * map encoding only describes regions of memory where every granule
-+	 * follows this format (P for poisoned, C for clear):
-+	 *
-+	 * <Clear>  <Poisoned>
-+	 * [ C C C ... P P ]
-+	 *
-+	 * This is so we can use a single number in [0, ASAN_SHADOW_SCALE)
-+	 * to represent the poison state of the granule.
-+	 */
-+	if (unlikely((u64)addr & ASAN_GRANULE_MASK))
-+		return -EINVAL;
-+
-+	shadow = mem_to_shadow(addr);
-+	len = size >> ASAN_SHADOW_SHIFT;
-+
-+	asan_memset(shadow, 0, len);
-+
-+	/*
-+	 * If we are allocating a non-granule aligned region, we need to adjust
-+	 * the last byte of the shadow map to list how many bytes in the granule
-+	 * are unpoisoned. If the region is aligned, then the memset call above
-+	 * was enough.
-+	 */
-+	if (partial)
-+		shadow[len] = partial;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Initialize ASAN state when necessary. Triggered from userspace before
-+ * allocator startup.
-+ */
-+SEC("syscall")
-+__weak __noasan int asan_init(struct asan_init_args *args)
-+{
-+	u64 globals_pages = args->arena_globals_pages;
-+	u64 all_pages = args->arena_all_pages;
-+	u64 shadow_map, shadow_pgoff;
-+	u64 shadow_pages;
-+
-+	if (asan_inited)
-+		return 0;
-+
-+	/*
-+	 * Round up the shadow map size to the nearest page.
-+	 */
-+	shadow_pages = all_pages >> ASAN_SHADOW_SHIFT;
-+	if ((all_pages & ((1 << ASAN_SHADOW_SHIFT) - 1)))
-+		shadow_pages += 1;
-+
-+	if (all_pages > (1ULL << 32) / __PAGE_SIZE) {
-+		arena_stderr("error: arena size %lx too large", all_pages);
-+		return -EINVAL;
-+	}
-+
-+	if (globals_pages > all_pages) {
-+		arena_stderr("error: globals %lx do not fit in arena %lx",
-+				globals_pages, all_pages);
-+		return -EINVAL;
-+	}
-+
-+	if (globals_pages + shadow_pages >= all_pages) {
-+		arena_stderr("error: globals %lx do not leave room for shadow map %lx "
-+				"(arena pages %lx)",
-+				globals_pages, shadow_pages, all_pages);
-+		return -EINVAL;
-+	}
-+
-+	shadow_pgoff = all_pages - shadow_pages - globals_pages;
-+	__asan_shadow_memory_dynamic_address = shadow_pgoff * __PAGE_SIZE;
-+
-+	/*
-+	 * Allocate the last (1/ASAN_SHADOW_SCALE)th of an arena's pages for the map
-+	 * We find the offset and size from the arena map.
-+	 *
-+	 * The allocated map pages are zeroed out, meaning all memory is marked as valid
-+	 * even if it's not allocated already. This is expected: Since the actual memory
-+	 * pages are not allocated, accesses to it will trigger page faults and will be
-+	 * reported through BPF streams. Any pages allocated through bpf_arena_alloc_pages
-+	 * should be poisoned by the allocator right after the call succeeds.
-+	 */
-+	shadow_map = (u64)bpf_arena_alloc_pages(
-+		&arena, (void __arena *)__asan_shadow_memory_dynamic_address,
-+		shadow_pages, NUMA_NO_NODE, 0);
-+	if (!shadow_map) {
-+		arena_stderr("Could not allocate shadow map\n");
-+
-+		__asan_shadow_memory_dynamic_address = 0;
-+
-+		return -ENOMEM;
-+	}
-+
-+	asan_inited = true;
-+
-+	return 0;
-+}
-+
-+#pragma clang attribute pop
-+
-+#endif /* BPF_ARENA_ASAN */
-+
-+__weak char _license[] SEC("license") = "GPL";
+ static void emit_stdout(const char *bpf_stdout, bool force)
+ {
+ 	if (!force && env.verbosity == VERBOSE_NONE)
+@@ -1314,17 +1351,7 @@ void run_subtest(struct test_loader *tester,
+ 			goto tobj_cleanup;
+ 		}
+ 
+-		if (subspec->stderr.cnt) {
+-			err = get_stream(2, bpf_program__fd(tprog),
+-					 tester->log_buf, tester->log_buf_sz);
+-			if (err <= 0) {
+-				PRINT_FAIL("Unexpected retval from get_stream(): %d, errno = %d\n",
+-					   err, errno);
+-				goto tobj_cleanup;
+-			}
+-			emit_stderr(tester->log_buf, false /*force*/);
+-			validate_msgs(tester->log_buf, &subspec->stderr, emit_stderr);
+-		}
++		verify_stderr(bpf_program__fd(tprog), &subspec->stderr);
+ 
+ 		if (subspec->stdout.cnt) {
+ 			err = get_stream(1, bpf_program__fd(tprog),
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index 1a44467f4310..37955a8ad385 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -563,5 +563,7 @@ struct expected_msgs {
+ 
+ void validate_msgs(const char *log_buf, struct expected_msgs *msgs,
+ 		   void (*emit_fn)(const char *buf, bool force));
++void free_msgs(struct expected_msgs *msgs);
++void verify_test_stderr(struct bpf_object *obj, struct bpf_program *prog);
+ 
+ #endif /* __TEST_PROGS_H */
 -- 
 2.53.0
 
