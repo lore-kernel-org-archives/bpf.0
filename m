@@ -1,121 +1,99 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8604217D6
-	for <bpf@vger.kernel.org>; Sun, 26 Apr 2026 06:31:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13CC81A073F;
+	Sun, 26 Apr 2026 10:40:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777185097; cv=none; b=WZEi7hwEQ8zBFGObE1OI4rfjUcFfaHmHMUmXjUJdNFaQifmoRhjGL8dpRHAKfFsGBvV7W/j5J3cEhSN8zqRPgABlWRETsZW7kYxC1RUuIVz+d9R9OgA+RTuKePACmptbWuBviyGEm+zZILD27E1Brlmdjo/Xnvay5uxVDQD2aAk=
+	t=1777200005; cv=none; b=thNwi4hfi49/yuVC0ttU/KfZAfoDxChlp/ajDfLqiSuqZS8JJbTOOr+qjJcTlDi/mVP8sfwgth5R7oJLc2f5E/S7j0ky44MiCwyqFxAF5J1xsxHD6hBWW79x5WLg8N88+BzfkvIttNs9zYmfI7MchaMV/BBFVGw4+RcmVpKMYjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777185097; c=relaxed/simple;
-	bh=HxZVHvWazSVorOvbpUJDJhXnaoAWTKCRWrUhAhzsq0Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BhQrKfA/Yz4d6hQGx9DkwabnLRGmYxw5tAQblwTkgVqf5TH/wJ5l2OabxKZahZAA5agaFnPMiFoGFhF753b/pLUTWwLeSxchPgXcVHgYrENsnBBfR61c56HTmWxdU8S5YL7atpR6xBbNSXehnf7VwVfIFvmrYqvBDkbZEcIDEmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qUraleRI; arc=none smtp.client-ip=95.215.58.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1777200005; c=relaxed/simple;
+	bh=NobXfV/IHDZN4TMelBCg0nlIZMOXOjqrGKs387mb+bk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=vAsNZeKGOjRFSUtw43er4Lcx93GdOiJ8qu9o3dLsXWN1l4BI3mJsAEfjRfmVCI3ne28oUf3JWjFG4vcnzf1BzU8zDhSXPYsTqqjE2+mEZDmzRgCpqi42YZlZdGy9fcyaJ8PMeof+P6niOg/YGoARKbIULwKcB1fe3nH7LTlA65g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c2nDwSOX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qUraleRI"
-Message-ID: <daab27eb-2763-462b-8a9f-34adf0c92e0b@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777185093;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Hcsw6u5oUUHH4lK0hwux6zR3OGq3uFxkPRUG26PVa5Q=;
-	b=qUraleRIi/EyCohjYn2anF9Btn8a9wY0sT35yziTGOQMt/MbggGIR+OnbXTX4sdxfvOnJ3
-	gNnqfgRScqb77nvNSdn0uxC1ShrMJdmM/DAG1pMZsxw9Q4yP6zEXJuTt5/Souia32wR4eg
-	ItNqMVDBNhDywQPHfcGVjhIul9vHil8=
-Date: Sun, 26 Apr 2026 14:31:21 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c2nDwSOX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C580C2BCAF;
+	Sun, 26 Apr 2026 10:40:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777200004;
+	bh=NobXfV/IHDZN4TMelBCg0nlIZMOXOjqrGKs387mb+bk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=c2nDwSOXzyL/bNaYNnDRQKVbObHeaqUovKVtVLy7J5BDV5+FgUnA9cwsKVKeHNg3l
+	 mj4KUk8JS7MxJ6IR/m9dGs/Sssf5aLMnNp8qPipZKuge389Rj8jQVM13Pr8Zy2r+lX
+	 Hh3FChr2td5Ul8LNLiYSKvuFWWGeax4VSSlqz92BYXfKVHAo9PTEUKNLre5uuEQbrZ
+	 9Zk+y61MDzWYfrUnoxhV7f3i1+i3KhDye3BdW9jSHj6Xzbunl/BsI3Tx3OvpnF0EqM
+	 cS/73O39ObONnU7su4w1ookjO+ZYUANNZIIO6V9BE9NV8GXNaNYqSemwb0FUWcLPfR
+	 zVzLaKSJPcvdA==
+Date: Sun, 26 Apr 2026 13:39:57 +0300
+From: Leon Romanovsky <leon@kernel.org>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Paul Moore <paul@paul-moore.com>,
+	Roberto Sassu <roberto.sassu@huaweicloud.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Itay Avraham <itayavr@nvidia.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
+	Maher Sanalla <msanalla@nvidia.com>,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] Firmware LSM hook
+Message-ID: <20260426103957.GH172828@unreal>
+References: <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
+ <20260413164220.GP3694781@ziepe.ca>
+ <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
+ <20260413231920.GS3694781@ziepe.ca>
+ <CAHC9VhTLamfe4C81ZNRVT=H32x+KLxSqH3o0eBfrHsWAgAqxCA@mail.gmail.com>
+ <20260415134705.GG2577880@ziepe.ca>
+ <CAHC9VhSECYihup=tURo_Qk__xUdYYPkHgnz5CWA0BrRAkvwbog@mail.gmail.com>
+ <20260417191749.GK2577880@ziepe.ca>
+ <20260423140950.GE172828@unreal>
+ <20260424141921.GA3611611@ziepe.ca>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf] bpf, sockmap: zero-initialize pages allocated in
- bpf_msg_push_data
-To: Weiming Shi <bestswngs@gmail.com>, Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
- Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Simon Horman <horms@kernel.org>, bpf@vger.kernel.org,
- netdev@vger.kernel.org, Xiang Mei <xmei5@asu.edu>,
- Xinyu Ma <mmmxny@gmail.com>
-References: <20260424190310.1520555-2-bestswngs@gmail.com>
- <c4a9412d-b6ad-4b80-9580-865575f4152c@linux.dev> <aey55I9gC0VtaN1p@Air.local>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <aey55I9gC0VtaN1p@Air.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260424141921.GA3611611@ziepe.ca>
 
+On Fri, Apr 24, 2026 at 11:19:21AM -0300, Jason Gunthorpe wrote:
+> On Thu, Apr 23, 2026 at 05:09:50PM +0300, Leon Romanovsky wrote:
+> 
+> > > > Leon mentioned that different firmware revisions would have different
+> > > > parameters for a given opcode, and that one would need to inspect
+> > > > those parameters to properly filter the command.  Is that not true, or
+> > > > am I misreading or misunderstanding Leon's comments?
+> > > 
+> > > They are ABI stable, so there will be rules about future changes that
+> > > old software can follow to ignore or reject future things it doesn't
+> > > understand.
+> > 
+> > It is wishful thinking and applicable only to mlx5 devices. No one
+> > promises that other devices follow same ABI rules.
+> 
+> Well, I will definately kick them out of fwctl if they don't.
 
-On 4/26/26 1:59 AM, Weiming Shi wrote:
-> On 26-04-25 11:17, Jiayuan Chen wrote:
->> On 4/25/26 3:03 AM, Weiming Shi wrote:
->>> bpf_msg_push_data() allocates pages via alloc_pages() without
->>> __GFP_ZERO. In the non-copy path, the entire page of uninitialized
->>> heap content is added directly to the sk_msg scatterlist, which is
->>> then transmitted over TCP to userspace via tcp_bpf_push(). In the
->>> copy path, a gap of len bytes between the front and back memcpy
->>> regions is similarly left uninitialized.
->>>
->>> This leads to a kernel heap information leak: stale page content
->>> including kernel pointers from the direct-map and vmemmap regions
->>> is transmitted to userspace, which can be used to defeat KASLR.
->>>
->>> Add __GFP_ZERO to the alloc_pages() call to ensure the allocated
->>> page is always zeroed before it enters the scatterlist.
->>
->>
->> As the helper's own documentation says:
->>
->>      If a program of type BPF_PROG_TYPE_SK_MSG is run on a msg it may
->>      want to insert metadata or options into the msg. This can later be
->>      read and used by any of the lower layer BPF hooks.
->>
->> The inserted region is meant to be written by the BPF program — that's the
->> entire point of calling push.
->>
->> If the program doesn't fill it,  the push has no purpose to begin with.
->>
->>
->> Isn't the uninitialized content a bug in the BPF program rather than
->> something the kernel helper should paper over?
->>
-> Hi, Thanks for the review.
->
-> In my testing a process with only CAP_BPF + CAP_NET_ADMIN can receive
-> kernel heap and vmalloc pointers through recv() from the uninitialized
-> pushed region. The uninitialized memory contains critical kernel metadata
-> such as direct-map and vmalloc pointers, which breaks KASLR.
->
-> Kernels without CONFIG_INIT_ON_ALLOC_DEFAULT_ON (e.g. RHEL) are
-> directly affected the leak is not masked by any mitigation.
->
-> Thanks,
-> Weiming Shi
->
+It is easy to say but harder to follow. The kernel includes many devices that
+exist only in specific hyperscale environments, where the update cycle is
+tightly controlled. They easily can break FW backward compatibility.
 
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Thanks
 
-
-Previously I thought this was as same as bpf_xdp_adjust_head / 
-bpf_xdp_adjust_meta,
-but the function itself allocates a page, I believed the cost of 
-GFP_ZERO flag was irrelevant.
-
-Add one more thing: in the future, more and more AI systems will 
-complain about
-this kind of problem. I believe it is worth it.
-
-
+> 
+> Jason
