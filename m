@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC5D93B2FC8
-	for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 23:23:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C791E3ACF18
+	for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 23:23:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777332224; cv=none; b=o4Xs2HPGpgiWeTMMGxJtSizHPjOGM9SJGIIVg/wVwu16KPxAr0GKFYAuVIlThm6ZLOluB8ymdQes+x+W2ePjvUG5TFIyDu1AFyvo2ztyuRk9kkIimzFfeV0ZbUYBkIt6QWv3Jd+YmwqgoQPeK8J0DGqezhg41eCtNpRo7WXPpf8=
+	t=1777332228; cv=none; b=kqaNca2Hzj2rfNKBjnrq2TJFugNzVUgjIqmYNaZYMQqpWbZznh2X09GJetwARPO38m361jl6zQurrTdiOJxGhYCuO+8VAw0K7Wvaj+eWlXWn8d7c7CyrNT8S88E+B5V0Xg2lHWOJwUpU86Pupwd1tpe0fExCYHuOB6cIfKYZ+So=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777332224; c=relaxed/simple;
-	bh=0bbeEOXW0GRgSLYb1vWoEmVCrDjKNmvtmKnd6YkNf8s=;
+	s=arc-20240116; t=1777332228; c=relaxed/simple;
+	bh=xvbhnBRd6wieZQaXWKr6XODAoOC3IeKTneQHSCvOqnQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EfTLwttTxVoke/6pnTTZWOMqh3hbP+I5nOcksss//u+JS9kdRArhzdQW6v0zPwHVjqrYfTggBkrfJy6vBPa2gKcpE7paxgTj95aLPTMjS76mnm+f6UZZ7bBEXYOZ58oXLqv1LZrhL/VmPAshkwhUWmNcZmtPDyJbePUdxunkdYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MpJm8m5B; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=lShCFpYy3KsRJTZEr620fg6xNcmMLHZbXOoxryYCQCU9mUSixZUVpSm465ehGjX+hbrW5OkfIAKMRCKSXuSy1PjYqOsJqFdzTpDX3fU5KqXvwXlbNHmJIwVXsNjIVPjpk4QAzoSP9molCd8f1NXHSnSKf+VRZZ/Ryr5ANxb7hvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qkv9wTsf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MpJm8m5B"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 584ECC19425;
-	Mon, 27 Apr 2026 23:23:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qkv9wTsf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 278EFC19425;
+	Mon, 27 Apr 2026 23:23:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777332224;
-	bh=0bbeEOXW0GRgSLYb1vWoEmVCrDjKNmvtmKnd6YkNf8s=;
+	s=k20201202; t=1777332228;
+	bh=xvbhnBRd6wieZQaXWKr6XODAoOC3IeKTneQHSCvOqnQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MpJm8m5B/R6qfrcek5TDyPHfGpNr28g0hmMpz76n1j+KqqWxPYvC8dtd6h9y0wNE2
-	 VM3/1D+K0QduOev2kxNY+Q3Wg004CAOEXjv0CcgAC/qgrmnq4fHj5NfTztb+/sYQoR
-	 /yv/05D/nwT32BBZc5U/Chf8gddUj+zTl1gfW9rpBzlqBRdd8zMC3CeWpQ/pAuZPwF
-	 KEHwrp00iIU1Qn8LOUvQHbxVu9w1g8pgew0PLsqXIZmwCyZr6EB04TOjBjYRSI1kQt
-	 Il9vF8LdPDrfPSUmYykDi9BdLdhwkhYL9Tt293PHHokY0ljpQ6PKyg7L6ojH1B50Ug
-	 A8dxi3cfiJagQ==
+	b=qkv9wTsfb3a9NR1ADhjJ4jffK7WzmDvmM/+DrXIvdT/ZpKJKWbwLEYbxZDwX/MJ2d
+	 eaY2qdrAADlFMaXH0kkxuTY3VqNCT+lUE11wZtp2FmpdRenRe9VPnTHoc6ePhbZg6y
+	 JVp5uWTkmT0GqbVSiKGuxJbgAQ/1/qGold+DIO7+RxwRK4s1QLT0TLATdHBH0Od5SU
+	 cppJAgoZad9q7BjYTyesUtfxIDmBR/DKvuDaPDTa+672QDMEK0xMm9LE2GGMOsU0dl
+	 uuIoyuy++rhtMxfiMq8JRz5ZbOVnBWcP5eVBRjIdesy3Gs3jTw3q86fK0q6ho+dWBJ
+	 OX5S+yFpIR5Ng==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -42,9 +42,9 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Nikhil Dixit Limaye <ndixit@meta.com>,
 	"Nikita V. Shirokov" <tehnerd@tehnerd.com>,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next 3/7] selftests/bpf: Add bpf-nop benchmark for timing overhead baseline
-Date: Mon, 27 Apr 2026 16:23:00 -0700
-Message-ID: <20260427232313.1582588-4-puranjay@kernel.org>
+Subject: [PATCH bpf-next 4/7] selftests/bpf: Add XDP load-balancer common definitions
+Date: Mon, 27 Apr 2026 16:23:01 -0700
+Message-ID: <20260427232313.1582588-5-puranjay@kernel.org>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260427232313.1582588-1-puranjay@kernel.org>
 References: <20260427232313.1582588-1-puranjay@kernel.org>
@@ -56,176 +56,139 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a minimal benchmark that measures the overhead of the batch-timing
-infrastructure itself. The BPF program runs an empty BENCH_BPF_LOOP body
-(~1.5-2 ns/op), establishing the floor cost that all timing-library
-benchmarks include.
+Add the shared header for the XDP load-balancer benchmark.  This
+defines the data structures used by both the BPF program and
+userspace: flow_key, vip_definition, real_definition, and the
+stats/control structures.
 
-[root@virtme-ng tools/testing/selftests/bpf]# sudo ./bench -a -p8 bpf-nop
-Setting up benchmark 'bpf-nop'...
-Benchmark 'bpf-nop' started.
-bpf-nop: median 1.82 ns/op, stddev 0.01, p99 1.86 (1754 samples)
+Also provides the encapsulation source-address helpers shared
+between the BPF datapath (for encap) and userspace (for building
+expected output packets used in validation).
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile          |  2 +
- tools/testing/selftests/bpf/bench.c           |  2 +
- .../selftests/bpf/benchs/bench_bpf_nop.c      | 84 +++++++++++++++++++
- .../selftests/bpf/progs/bpf_nop_bench.c       | 14 ++++
- 4 files changed, 102 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_nop.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_nop_bench.c
+ .../selftests/bpf/xdp_lb_bench_common.h       | 112 ++++++++++++++++++
+ 1 file changed, 112 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/xdp_lb_bench_common.h
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 3d516f10f29e..97f9fbd41244 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -906,6 +906,7 @@ $(OUTPUT)/bench_htab_mem.o: $(OUTPUT)/htab_mem_bench.skel.h
- $(OUTPUT)/bench_bpf_crypto.o: $(OUTPUT)/crypto_bench.skel.h
- $(OUTPUT)/bench_sockmap.o: $(OUTPUT)/bench_sockmap_prog.skel.h
- $(OUTPUT)/bench_lpm_trie_map.o: $(OUTPUT)/lpm_trie_bench.skel.h $(OUTPUT)/lpm_trie_map.skel.h
-+$(OUTPUT)/bench_bpf_nop.o: $(OUTPUT)/bpf_nop_bench.skel.h bench_bpf_timing.h
- $(OUTPUT)/bench_bpf_timing.o: bench_bpf_timing.h
- $(OUTPUT)/bench.o: bench.h testing_helpers.h $(BPFOBJ)
- $(OUTPUT)/bench: LDLIBS += -lm
-@@ -930,6 +931,7 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 		 $(OUTPUT)/bench_sockmap.o \
- 		 $(OUTPUT)/bench_lpm_trie_map.o \
- 		 $(OUTPUT)/bench_bpf_timing.o \
-+		 $(OUTPUT)/bench_bpf_nop.o \
- 		 $(OUTPUT)/usdt_1.o \
- 		 $(OUTPUT)/usdt_2.o \
- 		 #
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index 47a4e72208d6..1696de5d6780 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -575,6 +575,7 @@ extern const struct bench bench_lpm_trie_insert;
- extern const struct bench bench_lpm_trie_update;
- extern const struct bench bench_lpm_trie_delete;
- extern const struct bench bench_lpm_trie_free;
-+extern const struct bench bench_bpf_nop;
- 
- static const struct bench *benchs[] = {
- 	&bench_count_global,
-@@ -653,6 +654,7 @@ static const struct bench *benchs[] = {
- 	&bench_lpm_trie_update,
- 	&bench_lpm_trie_delete,
- 	&bench_lpm_trie_free,
-+	&bench_bpf_nop,
- };
- 
- static void find_benchmark(void)
-diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_nop.c b/tools/testing/selftests/bpf/benchs/bench_bpf_nop.c
+diff --git a/tools/testing/selftests/bpf/xdp_lb_bench_common.h b/tools/testing/selftests/bpf/xdp_lb_bench_common.h
 new file mode 100644
-index 000000000000..e2d8c2ccf384
+index 000000000000..aed20a963701
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/bench_bpf_nop.c
-@@ -0,0 +1,84 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/tools/testing/selftests/bpf/xdp_lb_bench_common.h
+@@ -0,0 +1,112 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 +
-+#include "bench.h"
-+#include "bench_bpf_timing.h"
-+#include "bpf_nop_bench.skel.h"
-+#include "bpf_util.h"
++#ifndef XDP_LB_BENCH_COMMON_H
++#define XDP_LB_BENCH_COMMON_H
 +
-+static struct ctx {
-+	struct bpf_nop_bench *skel;
-+	struct bpf_bench_timing timing;
-+	int prog_fd;
-+} ctx;
++#define F_IPV6		(1 << 0)
++#define F_LRU_BYPASS	(1 << 1)
 +
-+static void nop_validate(void)
++#define CH_RING_SIZE	65537		/* per-VIP consistent hash ring slots */
++#define MAX_VIPS	16
++#define CH_RINGS_SIZE	(MAX_VIPS * CH_RING_SIZE)
++#define MAX_REALS	512
++#define DEFAULT_LRU_SIZE 100000		/* connection tracking cache size */
++#define ONE_SEC		1000000000U	/* 1 sec in nanosec */
++#define MAX_CONN_RATE	100000000	/* high enough to never trigger in bench */
++#define LRU_UDP_TIMEOUT	30000000000ULL	/* 30 sec in nanosec */
++#define PCKT_FRAGMENTED	0x3FFF
++#define KNUTH_HASH_MULT	2654435761U
++#define IPIP_V4_PREFIX	4268		/* 172.16/12 in network order */
++#define IPIP_V6_PREFIX1	1		/* 0100::/64 (RFC 6666 discard) */
++#define IPIP_V6_PREFIX2	0
++#define IPIP_V6_PREFIX3	0
++
++/* Stats indices (0..MAX_VIPS-1 are per-VIP packet/byte counters) */
++#define STATS_LRU	(MAX_VIPS + 0)	/* v1: total VIP packets, v2: LRU misses */
++#define STATS_XDP_TX	(MAX_VIPS + 1)
++#define STATS_XDP_PASS	(MAX_VIPS + 2)
++#define STATS_XDP_DROP	(MAX_VIPS + 3)
++#define STATS_NEW_CONN	(MAX_VIPS + 4)	/* v1: conn count, v2: last reset ts */
++#define STATS_LRU_MISS	(MAX_VIPS + 5)	/* v1: TCP LRU misses */
++#define STATS_SIZE	(MAX_VIPS + 6)
++
++#ifdef __BPF__
++#define lb_htons(x)	bpf_htons(x)
++#define LB_INLINE	static __always_inline
++#else
++#define lb_htons(x)	htons(x)
++#define LB_INLINE	static inline
++#endif
++
++LB_INLINE __be32 create_encap_ipv4_src(__u16 port, __be32 src)
 +{
-+	if (env.consumer_cnt != 0) {
-+		fprintf(stderr, "benchmark doesn't support consumers\n");
-+		exit(1);
-+	}
++	__u32 ip_suffix = lb_htons(port);
++
++	ip_suffix <<= 16;
++	ip_suffix ^= src;
++	return (0xFFFF0000 & ip_suffix) | IPIP_V4_PREFIX;
 +}
 +
-+static void nop_run_once(void *unused __always_unused)
++LB_INLINE void create_encap_ipv6_src(__u16 port, __be32 src, __be32 *saddr)
 +{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+
-+	bpf_prog_test_run_opts(ctx.prog_fd, &topts);
++	saddr[0] = IPIP_V6_PREFIX1;
++	saddr[1] = IPIP_V6_PREFIX2;
++	saddr[2] = IPIP_V6_PREFIX3;
++	saddr[3] = src ^ port;
 +}
 +
-+static void nop_setup(void)
-+{
-+	struct bpf_nop_bench *skel;
-+	int err;
-+
-+	setup_libbpf();
-+
-+	skel = bpf_nop_bench__open();
-+	if (!skel) {
-+		fprintf(stderr, "failed to open skeleton\n");
-+		exit(1);
-+	}
-+
-+	err = bpf_nop_bench__load(skel);
-+	if (err) {
-+		fprintf(stderr, "failed to load skeleton: %s\n", strerror(-err));
-+		bpf_nop_bench__destroy(skel);
-+		exit(1);
-+	}
-+
-+	ctx.skel = skel;
-+	ctx.prog_fd = bpf_program__fd(skel->progs.bench_nop);
-+
-+	BENCH_TIMING_INIT(&ctx.timing, skel, 0);
-+	bpf_bench_calibrate(&ctx.timing, nop_run_once, NULL);
-+
-+	env.duration_sec = 600;
-+}
-+
-+static void *nop_producer(void *input)
-+{
-+	while (true)
-+		nop_run_once(NULL);
-+
-+	return NULL;
-+}
-+
-+static void nop_measure(struct bench_res *res)
-+{
-+	bpf_bench_timing_measure(&ctx.timing, res);
-+}
-+
-+static void nop_report_final(struct bench_res res[], int res_cnt)
-+{
-+	bpf_bench_timing_report(&ctx.timing, "bpf-nop", NULL);
-+}
-+
-+const struct bench bench_bpf_nop = {
-+	.name		= "bpf-nop",
-+	.validate	= nop_validate,
-+	.setup		= nop_setup,
-+	.producer_thread = nop_producer,
-+	.measure	= nop_measure,
-+	.report_final	= nop_report_final,
++struct flow_key {
++	union {
++		__be32 src;
++		__be32 srcv6[4];
++	};
++	union {
++		__be32 dst;
++		__be32 dstv6[4];
++	};
++	union {
++		__u32 ports;
++		__u16 port16[2];
++	};
++	__u8 proto;
++	__u8 pad[3];
 +};
-diff --git a/tools/testing/selftests/bpf/progs/bpf_nop_bench.c b/tools/testing/selftests/bpf/progs/bpf_nop_bench.c
-new file mode 100644
-index 000000000000..01ed284c1bb3
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_nop_bench.c
-@@ -0,0 +1,14 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 +
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bench_bpf_timing.bpf.h"
++struct vip_definition {
++	union {
++		__be32 vip;
++		__be32 vipv6[4];
++	};
++	__u16 port;
++	__u8 proto;
++	__u8 pad;
++};
 +
-+SEC("syscall")
-+int bench_nop(void *ctx)
-+{
-+	return BENCH_BPF_LOOP(0, ({}));
-+}
++struct vip_meta {
++	__u32 flags;
++	__u32 vip_num;
++};
 +
-+char _license[] SEC("license") = "GPL";
++struct real_pos_lru {
++	__u32 pos;
++	__u64 atime;
++};
++
++struct real_definition {
++	__be32 dst;
++	__be32 dstv6[4];
++	__u8   flags;
++};
++
++struct lb_stats {
++	__u64 v1;
++	__u64 v2;
++};
++
++struct ctl_value {
++	__u8 mac[6];
++	__u8 pad[2];
++};
++
++#endif /* XDP_LB_BENCH_COMMON_H */
 -- 
 2.52.0
 
