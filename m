@@ -1,121 +1,76 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB9133065C
-	for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 20:14:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 711032F691F;
+	Mon, 27 Apr 2026 20:17:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777320883; cv=none; b=LHb8mV0EdA6nwwEgvkr5vhwKy3LWAZOHhz+KUEWLP41RTehx3wYblorTxoWJcVgNotgK59UHVZ0h4IWjG7NVs0qvupM2By/fDCnmjHMN2iaP2lhmpMduqvu5IgVRhF3Iky6+bziA142kW5YcUuMa16U59aeTkjwiLFn+CLMCFnM=
+	t=1777321068; cv=none; b=PoTsNot26uIY3Q8yrXGFir4wrzap4hv3oX6W60734Ow0PKxmuoEUExH56bDFq0S644P7wlOh/CY8JTX0RUI1Wy+YIcUCjw/wTSJA83fdDDuSbV1/fwpjghhJaggcs0J18vhXUPIIHisCxfoHdRnGZPwL+Ahbt2rI8wsWnxB2Yyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777320883; c=relaxed/simple;
-	bh=DcVwa/TaXFFqdaXeeMv2S017RzmWKaG1HXVD3QY8cFc=;
-	h=From:Subject:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=QHxYOIiH/DAvvprwV5ztFzCmxOO9qIcfN2d/tgm2UlYZE29VzmvNa0igw+JIo7zBDWymokLMTIRZd67mp3hv9Ni7I7LiYQMgCOwdAjo4lvgqSRXpmHfUTKEbO5e1hMZsXaVFEo5jD0m2Q8ol9x9YfEav+sZgVov8ewCG7ISx450=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=szPCm5qA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777321068; c=relaxed/simple;
+	bh=h3ynAWc+KoIn2+PfrPfZOKHeqJ7c7EO2O5VFULiKX/g=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OnEVv32C9JvwpDdmwgRRKzDvCy1jrmIy23R9bGJ5YZRQmWVEPRDDwcI3pvdsNndUD8w6+FTk4rtREeczynR9Nh1tTyqdQ60MIy4KrSzOsudfe3/qoJt8z4ojeaP7/xAEYBF6U86wlkUX0eV6hUmze9+N7wwYfIjy63D574R9CmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uZg05WDq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="szPCm5qA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97A0AC19425
-	for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 20:14:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uZg05WDq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 919C5C19425;
+	Mon, 27 Apr 2026 20:17:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777320882;
-	bh=DcVwa/TaXFFqdaXeeMv2S017RzmWKaG1HXVD3QY8cFc=;
-	h=From:Subject:Reply-To:Cc:In-Reply-To:References:Date:From;
-	b=szPCm5qAlfpFUaHTI90Id8+5SRNgAgIbRcNbRaB2ac4JIJYiFSd2318FsavSGkEJS
-	 vYHkICqaNQNdtYWF8pysZEPS/VaQDQ4T4Z6UXguBGvOSeXpYP/SVh0CtdfCYpZmLl5
-	 uoVYSGHcTVUwW4flLBEGmFzOuhPz4nUjKGR8iiVH72W7dkanfHC4UQ/8cbVW09ekGs
-	 6X8SmzAekD6x6Tk4edLhUDpZ19vB3z9LY/IDGH5c4FY+ZsL0a4k0P9KuxHtV966SuV
-	 cV+2zhZ61AmweF/YzGlijEB/B99k7Zwn7L2LiJxmc9THdExv9x0Cyz2Z3U5BK5LXnD
-	 t/y6c8ma9Z2oQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/3] bpf: arena: use page_ref_count() instead of
- page_mapped() in arena_free_pages()
-Reply-To: sashiko@lists.linux.dev
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260427-page_mapped-v1-2-e89c3592c74c@kernel.org>
-References: <20260427-page_mapped-v1-2-e89c3592c74c@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 27 Apr 2026 20:14:41 +0000
-Message-Id: <20260427201442.97A0AC19425@smtp.kernel.org>
+	s=k20201202; t=1777321067;
+	bh=h3ynAWc+KoIn2+PfrPfZOKHeqJ7c7EO2O5VFULiKX/g=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=uZg05WDqsUvgubQYtoia9zuGY+BfgeBh+A0L0TAgox5S6gpSMlOc387pWsqSWVDns
+	 2lS2/zPiZ6cBnEp401HXLASraMbLAPCXjOfr1d19gNtipPEKe8tBhoJgPZRlmlVdBd
+	 T4adWsYnFxiV+prsL8qFMh6tr7t272eB8wkg7PL1e5ENom2VzP6O+cF0AiFNGkvfrs
+	 zHkyEhHiOpMaRrhczJjjTREeGP2dYDiz4wEEXniF/rwIas8vVHl9YM5slMnmZmDTPX
+	 5ewinJM60znpxfBdbr+LxVw8NakjQxE92PYoJUbo9FhZAJK5uCtS4LHyjwVA8YnHS5
+	 vJByFaQBoGgvg==
+Date: Mon, 27 Apr 2026 13:17:45 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+Cc: David Wei <dw@davidwei.uk>, kys@microsoft.com, haiyangz@microsoft.com,
+ wei.liu@kernel.org, decui@microsoft.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ leon@kernel.org, longli@microsoft.com, kotaranov@microsoft.com,
+ horms@kernel.org, shradhagupta@linux.microsoft.com,
+ ssengar@linux.microsoft.com, ernis@linux.microsoft.com,
+ shirazsaleem@microsoft.com, linux-hyperv@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rdma@vger.kernel.org, stephen@networkplumber.org,
+ jacob.e.keller@intel.com, leitao@debian.org, kees@kernel.org,
+ john.fastabend@gmail.com, hawk@kernel.org, bpf@vger.kernel.org,
+ daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me,
+ dipayanroy@microsoft.com
+Subject: Re: [PATCH net-next v6 0/2] net: mana: add ethtool private flag for
+ full-page RX buffers
+Message-ID: <20260427131745.2eac52ef@kernel.org>
+In-Reply-To: <aex119OtL8CEGXkb@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20260407200216.272659-1-dipayanroy@linux.microsoft.com>
+	<20260409183509.0b24dea6@kernel.org>
+	<20260412125917.4fa8fc8d@kernel.org>
+	<ad5kuCZz+gR1TlSh@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+	<20260416083146.0bb94d2b@kernel.org>
+	<aeoVC27mIzoKytqA@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+	<685d7bf9-062d-4bd2-8448-f7714bb05302@davidwei.uk>
+	<aex119OtL8CEGXkb@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Sashiko AI review found 2 potential issue(s):
-- [Critical] Replacing `page_mapped()` with `page_ref_count() > 1` removes =
-the synchronous mapcount check, allowing the lockless `zap_pages()` page ta=
-ble walk to execute concurrently with `free_pgtables()` during `munmap()`, =
-leading to a page table use-after-free.
-- [Medium] The patch incorrectly uses a lifetime counter (`page_ref_count`)=
- as a semantic indicator to determine if a page is mapped in user space, vi=
-olating MM guidelines.
---
+On Sat, 25 Apr 2026 01:05:43 -0700 Dipayaan Roy wrote:
+> Hi Jakub,
+> with this new data from David, is it convincing enough for a mana driver
+> specific private flag, which can be set from user space by a udev rule
+> by detecting the underlying platform? If not then I will send the next
+> version with the other rxbuflen approach. 
 
-commit 7d590c0af75e613441c8863162be310388ecc992
-Author: David Hildenbrand (Arm) <david@kernel.org>
-
-bpf: arena: use page_ref_count() instead of page_mapped() in arena_free_pag=
-es()
-
-This commit changes the heuristic in arena_free_pages() to use
-page_ref_count(page) > 1 instead of page_mapped() to determine whether
-to call zap_pages(). This avoids mapcount usage as pages will not have
-a mapcount in the future.
-
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index 802656c6fd3c..608c55c260bc 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
-
-[ ... ]
-
-> @@ -729,7 +729,7 @@ static void arena_free_pages(struct bpf_arena *arena,=
- long uaddr, long page_cnt,
-> =20
->  	llist_for_each_safe(pos, t, __llist_del_all(&free_pages)) {
->  		page =3D llist_entry(pos, struct page, pcp_llist);
-> -		if (page_cnt =3D=3D 1 && page_mapped(page)) /* mapped by some user pro=
-cess */
-> +		if (page_cnt =3D=3D 1 && page_ref_count(page) > 1) /* maybe mapped by =
-user space */
-
-Can this lead to a page table use-after-free during concurrent munmap()?
-
-zap_pages() iterates over arena->vma_list and walks user page tables lockle=
-ssly.
-During a concurrent munmap(), unmap_region() executes unmap_vmas() (which d=
-rops
-mapcounts), free_pgtables() (which unlinks and frees page tables), and fina=
-lly
-tlb_finish_mmu() (which drops the batched page refcounts via mmu_gather).
-
-The VMA is only removed from arena->vma_list later during arena_vm_close(),
-meaning it is still visible to zap_pages() during free_pgtables().
-
-Since mmu_gather retains the page reference until tlb_finish_mmu(),
-page_ref_count(page) > 1 will remain true during free_pgtables().
-
-With the old page_mapped() check, it would correctly evaluate to false beca=
-use
-unmap_vmas() had already dropped the mapcount to 0. It appears this change
-could allow zap_pages() to walk page tables while they are actively being f=
-reed.
-This could also be forced by artificially inflating the refcount using GUP =
-pins.
-
-Also, does this use of page_ref_count() conflict with the MM guideline that
-refcount should be treated as a lifetime counter rather than a semantic
-indicator?=20
-
-Speculative references (like GUP pins or page_idle) can transiently inflate
-the refcount independently of user space mappings.
-
->  			/* Optimization for the common case of page_cnt=3D=3D1:
->  			 * If page wasn't mapped into some user vma there
->  			 * is no need to call zap_pages which is slow. When
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260427-page_mappe=
-d-v1-0-e89c3592c74c@kernel.org?part=3D2
+I think so, thank you both for the testing.
+Please look out for the net-next opening up and repost the patches.
+(The reopening is delayed, it was supposed to happen already but I
+can't get a clean run out of our CI, sigh)
