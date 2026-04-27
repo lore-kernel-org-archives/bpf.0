@@ -1,158 +1,139 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3A52370D5C
-	for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 23:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 218883B19B1
+	for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 23:39:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777332240; cv=none; b=p8/eV7SxPxAQH1jOpjMrGi/BsBFreiesxU9FTE1nOYCn0ZktZ4AsjCQJSf9ekoPLEpxCV1lTpGKSlyj+XzF/WR2Ry9tZjKyXT8l7AMMAgYTJJOSNAxygQ0z7vMkW+gW9IFH1PiV49nu/E+vAqoKegP/BEtewwplnZtFPtxor4hI=
+	t=1777333165; cv=none; b=cQEJMmTkqnnhzGssCmcSFDELWXHG/py7gdNSLo/JwgPxXAQmEoxGp3FUjmWUckh4btTl/BB2W52ZcK9bBRNF5Fl1/0MsttIEOmtDk9u2dMsPBu2EkSjVaYAds8lNcOTeiyIwyZkeqb0SssXKjaPlWxDW6lTF/R3I48fsdu1IFe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777332240; c=relaxed/simple;
-	bh=/koWvIaKxg45QZD0Nx3o2i2c9valNyy8bZFlKztRbkY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hN5xIa3r9SLOPd9rtJ2RKHM2+X4jaTAhIscXsjQZBxL7eI43/3oqorO0tHBNOvMOKOS+OrbTDzRGPd1Mkrb/OKitQsyqNINHJe+jS+RhG0v/tPZ/eVzW33YNlO7npu6UcFKBVGCZm3jnb3N11ei60Z+sfCtOwKumN0PFgW2uaNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NkSndlrs; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777333165; c=relaxed/simple;
+	bh=SBucPtcnygklf94lBFIXV7b+NSeIu4GqY8cDlkY3nOc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=m30OxMVAwp2+6RSAb//9L9OUHIA8njQLctF+0bBRpiq+WpHAubFl8DCQ/Y5UK0PNngp1MvTDUWqbabyVuCa0BowUmtpiVNaOEwZbuR0xajizoLTCDLm0VwBhWKU8Sby9EGf9IeBwnZA/DK6GB4p9j0lIwNuFJE3LSmA+gJhoawM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XZTOy6pa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NkSndlrs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BC2EC19425;
-	Mon, 27 Apr 2026 23:24:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XZTOy6pa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98511C19425;
+	Mon, 27 Apr 2026 23:39:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777332240;
-	bh=/koWvIaKxg45QZD0Nx3o2i2c9valNyy8bZFlKztRbkY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NkSndlrsNu18tzMBTRtDRgRqhJr5UXYsqTn7+Kwgq3StMblYuk3E2u9siREgECEKp
-	 7Tggx/gKwUhhQ8op9BpPWZZbN5DwE5PcDe6TvwyKRlMgkXp8gMsHtpaT0eq8d6SkB/
-	 gsWUsVUgzTlryB78xBzeXf8U/aWU/oT+lfYSSP2IUBFeDPIFQdtclewsQ/pcQ4r1WQ
-	 pZrpwnvl83FfbvpI1IojjZ4ZfvJ53QxKKXEhsRkEyLTCebjt7zDpztQA6NiFBiC7zQ
-	 DosCRWVkU90JuWQVphSSzNqMQuZGzG0i1Uu7I4k9zVFon+tnMQ3Qp5Lr2on6PWAFSL
-	 my1CJBGmC2U8g==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
-	Fei Chen <feichen@meta.com>,
-	Taruna Agrawal <taragrawal@meta.com>,
-	Nikhil Dixit Limaye <ndixit@meta.com>,
-	"Nikita V. Shirokov" <tehnerd@tehnerd.com>,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next 7/7] selftests/bpf: Add XDP load-balancer benchmark run script
-Date: Mon, 27 Apr 2026 16:23:04 -0700
-Message-ID: <20260427232313.1582588-8-puranjay@kernel.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260427232313.1582588-1-puranjay@kernel.org>
-References: <20260427232313.1582588-1-puranjay@kernel.org>
+	s=k20201202; t=1777333164;
+	bh=SBucPtcnygklf94lBFIXV7b+NSeIu4GqY8cDlkY3nOc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=XZTOy6pajfVljPFQ3rUNJ9uB4TlBncuSpq8UYXVRgT51duH21pNGCIqE2mxioaBXi
+	 6gC6DL71xZsPzzokJsHYJ+sVtbIkyFFfq3EvYoPmonDoAoa5NdyB38vllWvRzVAald
+	 IT6Gmrmhg5HSVuaxZ3Nu3yZe/hMzBAgWyUdGb/YXtoyx1/ISgU+YjfxUPJMOkLTsQn
+	 82ppBhmoFRX/Y1vk/M8U4eOcb7hKuHOUiL1N3eVvNHA2Q6kcmS99zXHxVGE65E0DVg
+	 zXHFnHOFBOm1/nzoFdZ/zgtLGqRwA/MyOfrFd3v6zriJcHCFPlGKgsSfaxqIFYGR+c
+	 cnesPDnrRbE/Q==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/7] selftests/bpf: Add bench_force_done() for
+ early benchmark completion
+Reply-To: sashiko@lists.linux.dev
+To: "Puranjay Mohan" <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260427232313.1582588-2-puranjay@kernel.org>
+References: <20260427232313.1582588-2-puranjay@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 27 Apr 2026 23:39:23 +0000
+Message-Id: <20260427233924.98511C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add a convenience script that runs all 24 XDP load-balancer scenarios
-and formats the results as a table with median, stddev, and p99
-columns.
+Sashiko AI review found 3 potential issue(s):
+- [High] Calling non-async-signal-safe POSIX functions in a signal handler =
+creates a self-deadlock risk.
+- [Medium] Missing state predicate for condition variable causes lost wakeu=
+ps, defeating the patch's purpose.
+- [Medium] Early benchmark completion passes negative sample counts to repo=
+rting functions, yielding NaN outputs.
+--
 
-  ./benchs/run_bench_xdp_lb.sh
+commit 7ae4c67dc4880455d3c6c1f70bd9e8d56eb4e69b
+Author: Puranjay Mohan <puranjay@kernel.org>
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- .../selftests/bpf/benchs/run_bench_xdp_lb.sh  | 79 +++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_xdp_lb.sh
+selftests/bpf: Add bench_force_done() for early benchmark completion
 
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_xdp_lb.sh b/tools/testing/selftests/bpf/benchs/run_bench_xdp_lb.sh
-new file mode 100755
-index 000000000000..f65cf46214a3
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_xdp_lb.sh
-@@ -0,0 +1,79 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source ./benchs/run_common.sh
-+
-+set -eufo pipefail
-+
-+WARMUP=${WARMUP:-3}
-+
-+RUN="sudo ./bench -q -w${WARMUP} -a xdp-lb --machine-readable"
-+
-+SEP="  +----------------------------------+----------+---------+----------+"
-+HDR="  | %-32s | %8s | %7s | %8s |\n"
-+ROW="  | %-32s | %8s | %7s | %8s |\n"
-+
-+function group_header()
-+{
-+	printf "%s\n" "$SEP"
-+	printf "$HDR" "$1" "p50" "stddev" "p99"
-+	printf "%s\n" "$SEP"
-+}
-+
-+function rval()
-+{
-+	echo "$1" | sed -nE "s/.*$2=([^ ]+).*/\1/p"
-+}
-+
-+function run_scenario()
-+{
-+	local sc="$1"
-+	shift
-+	local output rline
-+
-+	output=$($RUN --scenario "$sc" "$@" 2>&1) || true
-+	rline=$(echo "$output" | grep '^RESULT ' || true)
-+
-+	if [ -z "$rline" ]; then
-+		printf "$ROW" "$sc" "ERR" "-" "-"
-+		return
-+	fi
-+
-+	printf "$ROW" "$sc" \
-+		"$(rval "$rline" median)" \
-+		"$(rval "$rline" stddev)" \
-+		"$(rval "$rline" p99)"
-+}
-+
-+header "XDP load-balancer benchmark"
-+
-+group_header "Single-flow baseline"
-+for sc in tcp-v4-lru-hit tcp-v4-ch \
-+	  tcp-v6-lru-hit tcp-v6-ch \
-+	  udp-v4-lru-hit udp-v6-lru-hit \
-+	  tcp-v4v6-lru-hit; do
-+	run_scenario "$sc"
-+done
-+
-+group_header "Diverse flows (4K src addrs)"
-+for sc in tcp-v4-lru-diverse tcp-v4-ch-diverse \
-+	  tcp-v6-lru-diverse tcp-v6-ch-diverse \
-+	  udp-v4-lru-diverse; do
-+	run_scenario "$sc"
-+done
-+
-+group_header "TCP flags"
-+run_scenario tcp-v4-syn
-+run_scenario tcp-v4-rst-miss
-+
-+group_header "LRU stress"
-+run_scenario tcp-v4-lru-miss
-+run_scenario udp-v4-lru-miss
-+run_scenario tcp-v4-lru-warmup
-+
-+group_header "Early exits"
-+for sc in pass-v4-no-vip pass-v6-no-vip pass-v4-icmp pass-non-ip drop-v4-frag drop-v4-options \
-+	  drop-v6-frag; do
-+	run_scenario "$sc"
-+done
-+printf "%s\n" "$SEP"
--- 
-2.52.0
+The bench framework waits for duration_sec to elapse before collecting
+results. Benchmarks that know exactly how many samples they need can
+call bench_force_done() to signal completion early, avoiding wasted
+wall-clock time.
 
+> diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftest=
+s/bpf/bench.c
+> --- a/tools/testing/selftests/bpf/bench.c
+> +++ b/tools/testing/selftests/bpf/bench.c
+> @@ -741,6 +741,13 @@ static void setup_benchmark(void)
+>  static pthread_mutex_t bench_done_mtx =3D PTHREAD_MUTEX_INITIALIZER;
+>  static pthread_cond_t bench_done =3D PTHREAD_COND_INITIALIZER;
+> =20
+> +void bench_force_done(void)
+> +{
+> +	pthread_mutex_lock(&bench_done_mtx);
+> +	pthread_cond_signal(&bench_done);
+> +	pthread_mutex_unlock(&bench_done_mtx);
+> +}
+> +
+
+Since bench_force_done() is now exported for concurrent benchmark worker
+threads to call directly, could this lead to lost wakeups?
+
+Condition variables are stateless. If a fast-running benchmark finishes and
+signals the condition variable before main() reaches its wait statement:
+
+tools/testing/selftests/bpf/bench.c:main() {
+    ...
+    pthread_cond_wait(&bench_done, &bench_done_mtx);
+    ...
+}
+
+Will the signal be permanently lost, causing main() to sleep for the full
+duration and defeating the goal of the patch?
+
+Also, if a benchmark legitimately completes its target operations and calls
+bench_force_done() before the warmup period is fully satisfied:
+
+tools/testing/selftests/bpf/bench.c:main() {
+    ...
+    if (bench->report_final)
+        bench->report_final(state.results + env.warmup_sec,
+                            state.res_cnt - env.warmup_sec);
+}
+
+Could state.res_cnt - env.warmup_sec evaluate to a negative integer?
+
+Passing a negative sample count to reporting functions might cause
+reporter loops to fail bounds checks and yield nan outputs.
+
+>  static void collect_measurements(long delta_ns) {
+>  	int iter =3D state.res_cnt++;
+>  	struct bench_res *res =3D &state.results[iter];
+> @@ -750,11 +757,8 @@ static void collect_measurements(long delta_ns) {
+>  	if (bench->report_progress)
+>  		bench->report_progress(iter, res, delta_ns);
+> =20
+> -	if (iter =3D=3D env.duration_sec + env.warmup_sec) {
+> -		pthread_mutex_lock(&bench_done_mtx);
+> -		pthread_cond_signal(&bench_done);
+> -		pthread_mutex_unlock(&bench_done_mtx);
+> -	}
+> +	if (iter =3D=3D env.duration_sec + env.warmup_sec)
+> +		bench_force_done();
+>  }
+
+collect_measurements() executes in the context of a timer signal handler.
+
+Posix specifies that pthread_mutex_lock() and pthread_cond_signal() are
+not async-signal-safe.
+
+If the timer signal interrupts a thread exactly while it already holds
+bench_done_mtx, will the signal handler attempt to acquire the same
+non-recursive mutex and cause a self-deadlock?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260427232313.1582=
+588-1-puranjay@kernel.org?part=3D1
