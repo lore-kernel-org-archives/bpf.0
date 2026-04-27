@@ -1,151 +1,217 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011039.outbound.protection.outlook.com [52.101.52.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA763E6398
-	for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 17:56:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615B93E92B9;
+	Mon, 27 Apr 2026 17:59:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.39
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777312597; cv=pass; b=SbDwhfolXht0hC+w07t+hIGEcU4OXY5SV1jBYUQcVMDgnRUbjbcbR4Q7wm0IeH2y/XGOqvo0MoRJuZWwyAD7sTDlHlbkXtEpI4T4hqULRNkzVUL77VEgq7Oxf3Htfj/cW/3PzxHYvilpKCMjxP0J3avDlShK7aNeIbIbNv18NKQ=
+	t=1777312748; cv=fail; b=b4TLatg3zyOa1OhlflAS21g47m877pY/VhKSf6B/pPCbZsMFUQaGM5Eoq5efpqzQ9owW8nNuyfLSn3s5NSek5XenM1dykT8oHRGxcv84rf7XuHbj7Yp8wtIzJgfZQJ6goMVzKpNTo6DOzABcBwYUFO6uImHwGApWVwZ03fC7LfQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777312597; c=relaxed/simple;
-	bh=R8JgkOd5lr+BChFUFWuQ91yJgC7j7jLEQd1YL2cU9/U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UsC9x2+O6bFlH5utMCxhjNaQpfRPitnqPs0N3Fl+Lo8iiOqhHMD2VJ2jmp5a+ut1nuF6fwWdkLu1mpZM2IbCn+Mx7ZI+dFn23PCpjmmpfwy9/RQYcsYnoD1Sz6waCoAacCLLii3Nn923VDiipENDMv1FPbmu5cV0cOWBopZVzzw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fZhWDfJM; arc=pass smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777312748; c=relaxed/simple;
+	bh=PuFAP3hMj1cXVAXj0lTuvnZCyiOne4/d0V8P6ehqzx8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=KIcj1o8grkYAa7GA1e9WZZ6j3tPeotfEabZnwYc5xrpQzhQRJMESd+uXoBBxtZ2muj8D3QTq2Gp+iIfCSG6bSoO5MoeuXXzsJFeGxCWmYvm2RUofVc7315Yn6WX1Tbb7lCMVeAeFpP0K/fmEKPpX1nR/As/aaLAPLPN80bJjAoM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=JEzvcYXQ; arc=fail smtp.client-ip=52.101.52.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fZhWDfJM"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-43fe8bda8e9so5877458f8f.1
-        for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 10:56:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777312594; cv=none;
-        d=google.com; s=arc-20240605;
-        b=aqRbAOkzlfq6UfL5x4n6aNFLHlBRRWCBRjOq01SG2QJpbX9FGbYJH6ScMXYiJiF6bP
-         LUVFmw+iqX7ExXw58vssFNX7M10hdnhbAy+AGifd6v5y794E0P1CEORqCHgXuRsnOViL
-         roWql5MVt/u3pvBFKEoAljWqZFebT7Qv+ZHt5EYNgY9S6OhtYZ7qvu1Am+uUjCGxFq1f
-         S01vsXX31BbETb2y6zA2IV6Y0tG5Wlu/A0SI9INuv4CcQH9JchWpwVT+8olLchL1fCg7
-         yCvY4f5K24Kk8KLXW3c28suIfge6OM/EQTS0hbqLFu35LfFAVl4gpeFm2s//pUFymXVu
-         dC6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Bdtk+tbcesdydqaq4rR+B1vnJAlIJvTKsXgd/J/7xZc=;
-        fh=GpOlpQSEGZ80/560P0YK6ZTvONG+o2JAoGBotmoZrSI=;
-        b=OjzDeXsal792qO3pjhfzBM4a1P5ZeeWYMZF9cZwqfjH2G36dEleyzBOxm8XJzBEDZ7
-         C8iCT6XiJuI997CoHwgjVPqejkD/8r48hQyDi6HRaZ3hJEodJM4ju9N0/lf7kytn9Nxu
-         kLxMrJouP9CYE5Dz6cTwrppQxUL6ToWh1baQzrVMtuaLRLEPe67nDtuktzd5ToJZX+gM
-         jQAxs1DBD+6PNgas4VDPC4CQjgG+Lshur381snuz3hUSwCPSnLLKjCcp0RCo9xAqPIf6
-         MMqBpx68I9hJfmwp023s9Y4jARHvrIuG6ZoqkqaurXhJdaqitZMaGiiRrDxp7zYKB3g6
-         Wyrw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777312594; x=1777917394; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Bdtk+tbcesdydqaq4rR+B1vnJAlIJvTKsXgd/J/7xZc=;
-        b=fZhWDfJMdUS7rfGmLFrEjQTa3Bqoi/5sP4t7n8DezJ5vQYfldMPwsQXmCZN7BwqLW6
-         EQDbT6yBqAEQMZ1kk4PEVgza2b24CjRUYZyVy8pQ08Ei92EcdIVBuF5nAy2oubShVRxQ
-         7AtsvArK18UKWss0R9HnG+xeAdU2KuwvirJR9yOlKfyL9TE0lYlKIe1lobO1M3nWdkMA
-         ZeabfVK9gxdan+kE+8uvpSGP8jaw6QzUr4ApSUSyewKn6eL0lR4bo2fBg3HPNv92jE6/
-         KtArC46VD6BMupoCn40CTsJdXlI6nVF11hbNhY1iqP73Xz6B6boB2UDipNj91CYgyGma
-         f+sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777312594; x=1777917394;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Bdtk+tbcesdydqaq4rR+B1vnJAlIJvTKsXgd/J/7xZc=;
-        b=MQB8oHcFt79v2XYQKjDPV4NKLkG1lBCq2zWfhP7ACrXSI6gaFa98ap+fIlcjx6zz+5
-         Oxk6P/0VfWEgZ7NFZcj7cjNGbATXL8jfh/hQ0rU39jg4w5Zuf3v0pYdzhk674QQeQYP/
-         OIOVlkreudR3LpBYmsFE/3O2K0ff82ZCrtXqUSyKvEXfZI6TTrZXvWL3QBJLGK32I9xZ
-         Ugxj35/Uew2OGqocFzNQGd/TF+L8abYwtZn7M02Ad8XpDHWYtgbsVNJyTG7n02XscPUH
-         LiB4hpF2hVoANpo55dTL9yWhSj/nVIiip8+pwk+KYIQByot3H7p+YS5ESlZJrGlIexru
-         nBWw==
-X-Forwarded-Encrypted: i=1; AFNElJ9D8Q/PcWqa91wzJjQl6PLHK5kVCVPb08TpyKXh7O4s9kfHthKtB4JT2pk8xNJQiyLi6MU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJtkuB3NzrWD5HJVsKnVnbO7FtYnw857TpcMiJnfI8p36X2J21
-	Rp8w9fAc8NbMHovvOavLLSdHbH8vUh6/61hnMqC84mdUjLH5UrARvktv4/TZCDt9caitpDNxNlB
-	DbhcBHbQl4Hl4TIVRuHHAHqnko9hZ+/A=
-X-Gm-Gg: AeBDieshhGoSRZVoqrf7O6sdotB+u6nnTcCXwdVxMq24498TnaJG2fJxz17uAYql3T4
-	tfHst5p2l6hzujDOSjGqa8tKTgAQcIlFwa7Cmg9dOJR6j8LdD8nPC3bzBvGt96BnEdyCUuH7MX7
-	ezv15/uhYca3LAoq0blKU/hWXbeVfW89Fke/yZepX/eEOOcQf1puo+CgWxoe4IiM1SkI/nzKgHA
-	YqM/oU/aX3hxF0j/GoAumIlwAE2ePNrm4qmy9ZwXpyRmt71M3Z1hwEs8LDGjB0/ywJ+JIYfOA1I
-	XVasEqXvFrCxWgU+A4O1c5XUPa7RYfn3dv6KDdwIrc1IY2Dve+suTCavX4KkxaW1+19/jrkw/6E
-	8uLs=
-X-Received: by 2002:a05:6000:2dc3:b0:43d:1c4a:37c with SMTP id
- ffacd0b85a97d-4463f3c980cmr41554f8f.4.1777312593855; Mon, 27 Apr 2026
- 10:56:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="JEzvcYXQ"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dwpVDJgRLpkyPrfWdsCpP94nHFQqYhYYfzZrq3/Y3eNMNV9kiDiO/lbPQcnh84Kc9KV6mYkk8nn970vbv0+7s6iPEYVW6K4EoChbQ41Qt789Udh9qXYG0iRgkAlDfrPUTQ8sayrAf1ja/JDhQMouPOkZWD58nKWYqpFBMo1DDNj8wVNgDK9FxRdlDaJopLZdzHGxZYNJ5taZ4f+3AlBWDxckohAjQSiNvLpxdNeatx21GsEOk2kuIxck61/13uzdWjKAIWRN7lHpHYgB1JwAWYdhnI0JhIPLSMLkKBOcW0uKNe5jsqRdVec4b90SQh3bBTkUz0ka/PlhmT5JsiSnTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YWBdJXFvUsRNS535pCc24v4leweSht+XdLI4YB0XzRQ=;
+ b=JzUtnzYfifHT4anVN/U1LZ+ey7uTRcx8Nn6Nm2hS9ao6k8XZlQLiaLdpmpmADTsoF0ln9yrZ43mTgzp40gS4qmCP3SHZse2kmq2eYIeYuMuHwoWEH5Vv7fhlfZ2f/diNwlwlNxlMKsTb0izAMGGMQ4cYn6SIIE/MJoDjMtlx4eVbTb6wUFNjAz0H8mGu6ee9kYZLwb1h4NdHsUxdFPnysIwTjLgK6AvD73khRL2k8fi7iymz8mICE66X711dcKdxGAaSE87cWJD8y89JkEkcX+zpl2DCijx6ZDalEAkq61Vdd/L+W8dfRfgTksTcDbvv+E+khdr+3nyDPvxgL3L9HA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YWBdJXFvUsRNS535pCc24v4leweSht+XdLI4YB0XzRQ=;
+ b=JEzvcYXQdwVjYZQlnStgbJQRfUGE245OkUv62d/erL7f0QOnr7fp+plL1zfa5mv2O11r5j+JLE5qQdINthQPR+Bj7wYWw46AWrQu/eYz6ED1n8xbwCAyvlDxh9XEzqZC2g1/3KWQVSH/DH18jJwgAfYkttpt/Blmd/pUHyEDc3Wkd3edhlrvX1h1qaZ6ZPmQk/87myHHQ3TrQ1ak0Xvkilcg5V0KT50UAZqYfZ39xcshyA39b5FsO98OY/S/YtJ/myHG6I+ftEFEH6NVP/B7k+6+4RVku7Lrcmp3zsQ+ArtGrvl5bXoyxfgJj2OT6m5rwYJbHAOe8gpGdj72kjww1Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY8PR12MB8300.namprd12.prod.outlook.com (2603:10b6:930:7d::16)
+ by SA0PR12MB4352.namprd12.prod.outlook.com (2603:10b6:806:9c::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.16; Mon, 27 Apr
+ 2026 17:58:53 +0000
+Received: from CY8PR12MB8300.namprd12.prod.outlook.com
+ ([fe80::ce75:8187:3ac3:c5de]) by CY8PR12MB8300.namprd12.prod.outlook.com
+ ([fe80::ce75:8187:3ac3:c5de%3]) with mapi id 15.20.9870.013; Mon, 27 Apr 2026
+ 17:58:53 +0000
+Date: Mon, 27 Apr 2026 13:58:51 -0400
+From: Yury Norov <ynorov@nvidia.com>
+To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>, linux-alpha@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+	dmaengine@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-fsi@lists.ozlabs.org, amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+	linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+	linux-wireless@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+	xen-devel@lists.xenproject.org, linux-fsdevel@vger.kernel.org,
+	ocfs2-devel@lists.linux.dev, bpf@vger.kernel.org,
+	kasan-dev@googlegroups.com, linux-mm@kvack.org,
+	linux-x25@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-sound@vger.kernel.org, sound-open-firmware@alsa-project.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-sh@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH v1 7/9] x86: Add unsafe_copy_from_user()
+Message-ID: <ae-j2_QirCySZD02@yury>
+References: <cover.1777306795.git.chleroy@kernel.org>
+ <0ee46bb228d97163fbdc14f2a7c52b93d8bc34ce.1777306795.git.chleroy@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0ee46bb228d97163fbdc14f2a7c52b93d8bc34ce.1777306795.git.chleroy@kernel.org>
+X-ClientProxiedBy: BN1PR13CA0008.namprd13.prod.outlook.com
+ (2603:10b6:408:e2::13) To CY8PR12MB8300.namprd12.prod.outlook.com
+ (2603:10b6:930:7d::16)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260425-cnum-range-within-v1-1-2fdca70cb09d@gmail.com> <cbe38c19690a27094f622c637388fab76c18c5c1d9356b8702acac37abe4a9a5@mail.kernel.org>
-In-Reply-To: <cbe38c19690a27094f622c637388fab76c18c5c1d9356b8702acac37abe4a9a5@mail.kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 27 Apr 2026 18:56:22 +0100
-X-Gm-Features: AVHnY4KgOMd9BQUEKYPVX0rxaaDATcgEir8uDsUsIRoFwHNl7SKvGgs1lxU3NhQ
-Message-ID: <CAADnVQ+UmyqeqGmqo+9k9CyRVANXfw+L8uG=gfgSCBOSZdEuUg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: range_within() must check cnum ranges
- instead of min/max pairs
-To: bot+bpf-ci@kernel.org
-Cc: Eduard <eddyz87@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Kernel Team <kernel-team@fb.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY8PR12MB8300:EE_|SA0PR12MB4352:EE_
+X-MS-Office365-Filtering-Correlation-Id: 33128524-511f-440c-0040-08dea486a4e3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|10070799003|366016|376014|7416014|1800799024|56012099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	T80DamO5jzLhtBsxTULWy0efzaMbF8i7bT0PZKZ+UW4Z1vXusNNCyeFtPNKLbujbu9HADo2BygF39wi6lx74qp3NIinqoXF6o8xZWMAAFsZmucFOM22V5xO7kTuoG3Q6DbZQuR99ud23XQ2FkmrxQgMHmfI3XdFsqYAVjCS9aGVDF45G53+B/x+14PhezRjA9hqQvcw9EvJb6nHARdhsgHJSbcoZorjI9T48oVUEponu+eLNKghANZW7qOCu576IfZ6NRYzsY8ql1Bj8uCnhHA2nhVrKxbbZHG6LptctXV/l6KubZ/U3ZJxrPqPY1X92d625k4fagqEvx268olGcNZDaxDxTtIunEves9hFv+KACk+0uW+ma5OsqtlX5HthzXN6Acbz5tPRPmIKZ/YCyosbcqxLc7ZwX6TI/oKUfq/0tyKExxJEp/Vfc/ZG4cPWp456yUxuQQ7c0zO0EIJ+8b2gQDonWZCvn2KJzNH3N0drPOUzCQcDDQjndG2yh9Ke573Rkt//8VoZT4MTwoNB6z6b1QOagadBkLNDtxDt0AE1XfaIibN7XpAHe5nsEIn2aXs/8ZEHWz0Zv0D5+n5iwRxATzlfDoLqw+IUuN8nm7pwCMHkXF52Sms8QQtJ2rJZUXeJqLYfMQUF/D3X8mn4B7tCVxc1mKoVLz9/1oBAf2bseKRBX0rfB9ZeVX7GBdP+qZAYwkxdtBveQtq9fZ/UIGHDRO8YYxr5lavOVhUA40rc=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR12MB8300.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(366016)(376014)(7416014)(1800799024)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?6ev31P6fGlLQLOmFhG9wf+2ZENF2CJrasImnLdTMkk4B07wVpIqdqcEhUwVr?=
+ =?us-ascii?Q?VcuKpfWBww+Qglw6NKPvrbqw/iKodwZS6hoQ2ezn6gKQJTXowcVzIMKKmPVI?=
+ =?us-ascii?Q?CaGe2PzzTfbrd+1/kBuQd5inX41eLfMXGSMB4El+/BGeY7LidWaO2U6MXIZl?=
+ =?us-ascii?Q?To5KMHCCmaxaSW+0abx+uHxslGaDNGAxlD0ajEnVCyj2PyGw8gfavgZvUBeC?=
+ =?us-ascii?Q?31Pn2vGdNJPTEao0o8nkBbqzRysmZBZFRsyFAwtcHiF+LMJewEDkGWcf3C7D?=
+ =?us-ascii?Q?MhvHUO7rY2T4Gp8yOxYlhdkCQq0m4ykawDCJw9P3w79tbrFqeU7DKZcc6Svj?=
+ =?us-ascii?Q?gpUdDiMP1u+wbi6ktqsa2/SBsCawL8yd85/gdX8JeS4P5U//2zVMdqlbS5oF?=
+ =?us-ascii?Q?Om8kn23qHMWd1W0xp+L9zqhhURuKBI3C8K6/P0P2OiLTdsZ7lPLULvDBkdZf?=
+ =?us-ascii?Q?UKjydMyY/3pcrF3sadi8xEKK6PbOoyabovH4OGdbUvrwD7GG4qRTd8pK59oC?=
+ =?us-ascii?Q?snIKpVz1xKnwCa6xY5VnFP5/u/JjDPLADrD/WslKg8YXRFtCzAtBrdImcj0f?=
+ =?us-ascii?Q?8yOAh4lyWUDPVX2WM00ySuZhGhvO+v6NJ73vz9XlsUfOsWyYZ9DOEzjUfhbH?=
+ =?us-ascii?Q?0YLtM7C7LxhLfanXFKSW+D7acdbl8uANIv2lLYjkqPUxgpfNe8f+7W2LB5Nn?=
+ =?us-ascii?Q?7Np0MclwQhDcY1GLCNhmF+qQmAOMVCLRhyHjLhLWkRHgj+alwIysbQ3EuYLN?=
+ =?us-ascii?Q?5yHcsNNjsFo0wDyhRUVx5wyCMlW+Z4NGoPr32ydxiktuCQaON6kbvoanfM01?=
+ =?us-ascii?Q?VM4/fS2+speM2tcePSAnjiQa5qjOFuYZ0VtZfeGTBIZ1yXD2cHpN1ixZN0Rz?=
+ =?us-ascii?Q?L/dQY0op7e/9Yk5F3A4lFGTivTaixUSEIjTezh3qI+wT/tBYEl0Z0XCO2hjU?=
+ =?us-ascii?Q?sFOU7EJ1CIL6HbyGijpDH3Yp4I8rMW9VuNbKDzbyWnaJJg9tVdo0/XIJrdAh?=
+ =?us-ascii?Q?vVKIJZb+31gwlMVE1kXLTM4rt1jmj4rcA1rNCuw4fD++YKU0KqxirVrsn6kC?=
+ =?us-ascii?Q?lZa0X05s4hYIlo7g4DALYttelKqcNX1HEGU6vO71rQrVfydGtRIQzA8hZ8rQ?=
+ =?us-ascii?Q?O80VU2eqMYB7eYpBItWytqLFV33JZ/cuulFCjhdnG06CQcNI6/4ovyhT3Aa8?=
+ =?us-ascii?Q?PiZXBZphvtTKhhJqQ1c7RRKZs8niebQgxVT+NqLMFlyPhkta2YjjpBXgNIIx?=
+ =?us-ascii?Q?h+iPSpkL/BZ7G18/IWgE5T5t9GEq5s5xWwSmey7027/BRYe03neS8L78GvQZ?=
+ =?us-ascii?Q?5ceRI/ymV7A6xiSGKp4h0GdJvHPIvbvLvAXTNPJXPyEy/lkYzUg06m/F5Ppx?=
+ =?us-ascii?Q?Ucqpyqpi7uPkJEjc3424leqnNg3d1TwAm//hlnXAadNRP0K+njbmTw4CpTe2?=
+ =?us-ascii?Q?4HHWlSZ9YpBEw+Ohv14Uf9RwjiFvVAghctOlWmh5sz2AhDjQMGMs8VSWcPgV?=
+ =?us-ascii?Q?CT54kkzGd7BsoQ2aPoLVEhjPxQJKnRuZKDOQB6HL77e6jo+Karv0u6QI8scU?=
+ =?us-ascii?Q?/P+zWIUoY7Vp26Mnav/FMyG/vDm64Qhe7JrRNaXxdZN6cKMY0RccPxeEvM6K?=
+ =?us-ascii?Q?cokd+q0bbXdS3sEK+pM8MrC/A2+EernBjELOWvLW6UNcdosIRiZXx3jxfYAW?=
+ =?us-ascii?Q?NoTKA/lHF00/AFzSuUQZeA/Bt64WCRihJQrbIN0bhLrfQCWWaLbXoiNjdnxt?=
+ =?us-ascii?Q?OgQB96s+EfSA5RhJu/4bwnEHg5Lb6TZfXmPjZN7/WMw6zB/yunPn?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 33128524-511f-440c-0040-08dea486a4e3
+X-MS-Exchange-CrossTenant-AuthSource: CY8PR12MB8300.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2026 17:58:53.4408
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DFLDrWxkcKDSdWjcRZ0FWTXyKov5/udW2ySQZAiU/0h1WJYCpRdFgW8eHZBY8qsOSQ9+hnLtwBfn4bjMnIR9OQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4352
 
-On Sun, Apr 26, 2026 at 12:20=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
->
-> > bpf: range_within() must check cnum ranges instead of min/max pairs
-> >
-> > states.c:range_within() must be updated to properly check if
-> > cnum-based range in an old state is a superset of a range in the cur
-> > state. Currently it makes the decision using min/max accessors:
-> >
-> >   reg_umin(old) <=3D reg_umin(cur) <=3D reg_umax(old)
-> >
-> > This is wrong for cnums that cross both UT_MAX/0 and ST_MAX/ST_MIN
-> > boundaries. Consider cnum32{base=3D0x7FFFFFF0, size=3D0x80000020},
-> > which represents values [0x7FFFFFF0, ..., U32_MAX, 0, ..., 0x10].
-> > Its projections are u32_min/max=3D0/U32_MAX, s32_min/max=3DS32_MIN/MAX.
-> > A register with range [0x100, 0x200] (which lies entirely in the gap
-> > of the wrapping range) would pass the min/max check despite having no
-> > overlap with the actual cnum arc.
-> >
-> > This commit replaces min/max comparison with cnum{32,64}_is_subset()
-> > operation. The operation implementation is verified using cbmc model
-> > checker in [1].
-> >
-> > [1] https://github.com/eddyz87/cnum-verif/
-> >
-> > Fixes: bbc631085503 ("bpf: replace min/max fields with struct cnum{32,6=
-4}")
->
-> The Fixes tag points to commit bbc631085503, but that commit exists in
-> bpf-next/master and is not in the ancestry of the current branch
-> (patch-series.local). The current branch is based on a grafted commit
-> e06021ed87b0 that contains the same cnum-based code with the same bug.
->
-> While the Fixes tag is semantically correct (the bug was introduced when
-> min/max fields were replaced with cnum structures), the referenced commit
-> is unreachable from this branch. Should the Fixes tag reference the graft=
-ed
-> commit instead, or is this patch intended for a different branch?
+On Mon, Apr 27, 2026 at 07:13:48PM +0200, Christophe Leroy (CS GROUP) wrote:
+> At the time being, x86 and arm64 are missing unsafe_copy_from_user().
 
-AI is being confused.
-These patches were applied.
+No, they don't. They (should) rely on a generic implementation from
+linux/uaccess.h, like every other arch, except for  PPC and RISCV.
 
-ALL,
+But they #define arch_unsafe_get_user, and the unsafe_copy_from_user()
+becomes undefined conditionally on that.
 
-please periodically 'git pull' bpf-next to see what was applied.
+So please, fix that bug instead of introducing another arch flavor.
+We'd always choose generic version, unless there's strong evidence
+that arch one is better.  
 
-pw-bot was unreliable in the past and got very spotty recently.
-I think it misses every other applied patch.
-Maintainers don't have capacity to send manual emails with "Applied. Thanks=
-".
+
+Thanks,
+Yury
+ 
+> Add it.
+> 
+> Signed-off-by: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
+> ---
+>  arch/x86/include/asm/uaccess.h | 29 ++++++++++++++++++++++++-----
+>  1 file changed, 24 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+> index 3a0dd3c2b233..10c458ffa399 100644
+> --- a/arch/x86/include/asm/uaccess.h
+> +++ b/arch/x86/include/asm/uaccess.h
+> @@ -598,7 +598,7 @@ _label:									\
+>   * We want the unsafe accessors to always be inlined and use
+>   * the error labels - thus the macro games.
+>   */
+> -#define unsafe_copy_loop(dst, src, len, type, label)				\
+> +#define unsafe_put_loop(dst, src, len, type, label)				\
+>  	while (len >= sizeof(type)) {						\
+>  		unsafe_put_user(*(type *)(src),(type __user *)(dst),label);	\
+>  		dst += sizeof(type);						\
+> @@ -611,10 +611,29 @@ do {									\
+>  	char __user *__ucu_dst = (_dst);				\
+>  	const char *__ucu_src = (_src);					\
+>  	size_t __ucu_len = (_len);					\
+> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
+> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
+> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
+> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
+> +	unsafe_put_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
+> +	unsafe_put_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
+> +	unsafe_put_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
+> +	unsafe_put_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
+> +} while (0)
+> +
+> +#define unsafe_get_loop(dst, src, len, type, label)				\
+> +	while (len >= sizeof(type)) {						\
+> +		unsafe_get_user(*(type __user *)(src),(type *)(dst),label);	\
+> +		dst += sizeof(type);						\
+> +		src += sizeof(type);						\
+> +		len -= sizeof(type);						\
+> +	}
+> +
+> +#define unsafe_copy_from_user(_dst,_src,_len,label)			\
+> +do {									\
+> +	char *__ucu_dst = (_dst);					\
+> +	const char __user *__ucu_src = (_src);				\
+> +	size_t __ucu_len = (_len);					\
+> +	unsafe_get_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
+> +	unsafe_get_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
+> +	unsafe_get_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
+> +	unsafe_get_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
+>  } while (0)
+>  
+>  #ifdef CONFIG_CC_HAS_ASM_GOTO_OUTPUT
+> -- 
+> 2.49.0
+> 
