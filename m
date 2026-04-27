@@ -1,153 +1,209 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6661E313E36;
-	Mon, 27 Apr 2026 11:43:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777290233; cv=none; b=l7h9iIC9nDd1enxi/FgWaN5bw7tJL2iWvMU0Ykx31RnvndhIBO5abqIQkIrEHg9/CL41Zzy9g42qtuj8XLhhmXTbz8Yrsoj0oaIP5oViS18QmbUCB7PYX5rMswv3d6ZjYKNxTlZlCFw9bGTWw5zfywmJztPSCFJKhPuiEJxBKuc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777290233; c=relaxed/simple;
-	bh=pUuKH5IboberfrNDLhIOBfcC/4kG/ZkfQ05hwuIAsi0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DpmflXyEykROaRKPArtrZ0fl4MlKPO4iVPB4cvy44MluOI2ODiJQPjxdCyNm8Titc88u8O6gzneUhOzs9HcEDaq97CzjhLLqAoyKv5Mco9DmeQJl4CM9x/9U9keWI/Vg9jovNJBmcErbaohncts5VJyceb+ULs7usab/dXhHt78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DQW9hfF6; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D0530BBAE
+	for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 12:08:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777291725; cv=pass; b=qOTtZ9eI70GKAVblFzhxk+pzwjmCIbVy9U3Dgjk/RziH2VFqTGn4E2g6KdJakW/QcO+GCcG5sPnlZQ/T/8zHxKggCIzAQfwUciuhjFNcnYlle3iZTY0ZTJZhf7Q0WREq8ohRHC/Q5n08//6LYGbiNf4NOqcnqLeQkXYZVYl9aIQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777291725; c=relaxed/simple;
+	bh=PBbH4u/pktwkzzAmIYFi1Z2PyDMyzJnLpwEcNDyPPKE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NuYmWDtUKbd9GeoYYKAF6PPefaNiz/CszKItSSoh/ulTvtRVseXX4ibG+Bf81HQu+pVXkTDXkYk5ZGkU95b/OcicHdRbu6MtnQvbS2NyAzifoEPKPo/+vA3jjh4JGAlxlMaUXqb7tID7U9huFl6jNZHddmm04K+Ci8IaFM1L2c8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LPcdDQM3; arc=pass smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DQW9hfF6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9269C2BCB4;
-	Mon, 27 Apr 2026 11:43:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777290232;
-	bh=pUuKH5IboberfrNDLhIOBfcC/4kG/ZkfQ05hwuIAsi0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=DQW9hfF6jbPLDZeRU55aAhUUCT+ODmFhcz+2ZZizkNRvhXKvkqWrj2dXV0dCgyT6W
-	 WmHOUn7XStj9o+DVmnTv9Wt9Zuky4P03OyheRANyJvSyV6Nn0sfDb6nFmAY4pf7Vhs
-	 xdIH43SfcwV/iFb1pUqd3/tkCNUlwR1iB80R9wYWRb871lwJGAkb1nqcsYSU9PqGoS
-	 kDpNwk8LJ4Y7KiS5Lfaq7zig8wnCe9GcbvkfrYJ3OcafuKDgfhqvDU/R1HACev+TFT
-	 p8om3koW4hnwmMScX8R5DXYYF896On9OeeQBo8nKhJWIF0pdQjGYbiLfAKZrNXunWg
-	 RloiRLMR5QZQw==
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Date: Mon, 27 Apr 2026 13:43:16 +0200
-Subject: [PATCH 3/3] mm: remove page_mapped()
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LPcdDQM3"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-827270d50d4so9052445b3a.3
+        for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 05:08:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777291723; cv=none;
+        d=google.com; s=arc-20240605;
+        b=W+Y84HaFsV/T7D63AqiZu9HanLjIwVPk2byubFzg0EqhaRPLQLJcLh4++Veo2v23m7
+         LdSMPvF6d8iuTxI1lfGQwgvHozy1xwl1Jf0FcUvYLX40WFkXNq3Zw/KDgGvXxv9nNsXX
+         TCRvDKe0hyzEJwiR9YWnejLBAcdnEYvnmDyguJu6Jpz1tt2dggXOv9D1Mr9lS2j/iJ1R
+         mEik+fnzVXiXMD+PvCgayDjr0fNo5jFmPhrffSqpNnyqD7cosAyDpSfdspKixt1GMJH4
+         qKzmY0AvgwNxrVrZhqOHIMajNu9D6FQj5qopTM4nkL5TumgqixNEhXdSWNp4TaVxMblz
+         7xrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=KTTBNg3JjJPZzuR3ltBH7conCn/tJdSFB+vshOOqyNk=;
+        fh=2vcMt9UgHtkwXwptNriEyIGPh8blswQ/HZVdLHNm6Ow=;
+        b=GosAusfzshKqLkFOlbNRuktH/pAcLUGCEWZTrdluQk6rGSVgvCPliOHg64qkV66l2j
+         LMhbr7Q+teMZgKJBumBlU1cCRWH9wFd7x83N5hQD8kfEDLhyHK1cgdkEioRmSL8cEKZ/
+         EBxQykRW7j8dwI3UpP5ZVIceH0ZOSQqUHIB0/cwNsUhiguUFJvr+ipcOypVYpHbUTyvY
+         XnEpdJj+sRsO3p3gCXPO74iUWUOVW0CV4okUjnbAl1IzpJceCxKhc+Krhx5faOHX9MbT
+         cka4tGQ30h54Zd2WDx2wOsVotu7sjp4GKst/3xv2eIgsAKjsCTqDuwv61m0LVZZcfHVj
+         wPNQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777291723; x=1777896523; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KTTBNg3JjJPZzuR3ltBH7conCn/tJdSFB+vshOOqyNk=;
+        b=LPcdDQM34wRbMIZRu7i/p0IxXf9B7mo3GiCkbZxlw5dYR3s3fFPikvKw7rm6xTx5QL
+         Ico3k08K9VxKyibXiz/CEsXaKUAvz90fljoRFvSihWDZfRvgwF7C54HZuC6w28ct7Xc8
+         DQNem95kuB5ziL1BRTBA6VPDZmtobyszB76WceGc+Gkyu7RvczWsLcfV/Eb/FersyN2R
+         kJ3i+RuyzCux2LygQ5AS4CEPGyyzY976QvAjVh/VbEkXv07Zp9V2QjNGqjXbmX7B5g1T
+         XOGLAtNaq25LMbzM0m7oQNIUK7HPotE73Hnts9Qz7jfqjk/It0qFUYRW/HdNHMvIWiv+
+         EEnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777291723; x=1777896523;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=KTTBNg3JjJPZzuR3ltBH7conCn/tJdSFB+vshOOqyNk=;
+        b=ocj1zBDrB1Nr2H4CKoOXomZOajSdo0kc9v7kYIIEsXEEVAStAI1Feupe+9Nf+v+QVz
+         TgPXOIcMmm+osT5vyCW1mT8Vg6zp7lCPVQdMZBpX+xvzoIZMorDfDCvCfYuwkzSjevwd
+         BaBQ2RUJhO7fuqPY4gOXRMKFyUXBq+Da3kOtbBmjnhgOZWC3yuwgWBoEpkobl6LiYyEq
+         V9iKYloKeefYWivvTlLAIHdQ+INKgEJZ2h9LWRdkYQA5RiGGSU7YP7VKPtAZzpPnj8an
+         IhXcK83jzapfQjxYYC0JNKiBes6nTiK88fxZWthGL6IYSlAFVKyQ7DPVhweoLxmRb0k1
+         ZHQQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+t4d4OQidH+z0CA0h7q7ujZXtP31JvYXTA5FxTzc73841GzqkbsM1+s2ZWa3Wj5uiD4GU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzm+S/DEixsckWHAyVqOXlMkvmvLTzwL6gZhCvuuw8aHM9+dEd/
+	RSgMMowTpR8hSYpIXLBTphiNEPlkV/hPSe6jFsON1ZEnXL0opvK2mS/jvEfDyn8sM2iWRJ2eaI0
+	UPlkYXITQviOTGACO9Y5/LWBFilDfrOU=
+X-Gm-Gg: AeBDieumcEqYKYa22BoXxp5FOU/hOSaaw+g01OPpWeaMx6TZsB71/rIVjxNC6vofMBO
+	eiXdKJve+p8rjHt4/7qaqek3LvJKV/UZnCveAG8ZcGfM9MGzgJY/Bxf3UeiLuJdF+NUJ3+5m1gA
+	Xv3q/fRvJ3SqtIeQTo4iILh2wnW972mitAbYuDR8ExDQ119bP6QDWrP+baHkYSUUptOH8ffaNTO
+	nuxQGmtgIhAr1/iVV8wmV4k+GP+P7jrzGFrBGj+VYIN92z6i6oEK4/CL09XZTrQdEnmRf/FFrS/
+	xzi5LF21F9VK1HN4Sb2AmN00bR4=
+X-Received: by 2002:a05:6a00:2eaa:b0:82f:37:f590 with SMTP id
+ d2e1a72fcca58-82f8c90d03bmr48149115b3a.42.1777291723217; Mon, 27 Apr 2026
+ 05:08:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260427-page_mapped-v1-3-e89c3592c74c@kernel.org>
-References: <20260427-page_mapped-v1-0-e89c3592c74c@kernel.org>
-In-Reply-To: <20260427-page_mapped-v1-0-e89c3592c74c@kernel.org>
-To: Yoshinori Sato <ysato@users.sourceforge.jp>, 
- Rich Felker <dalias@libc.org>, 
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
- Jann Horn <jannh@google.com>, Matthew Wilcox <willy@infradead.org>, 
- "Liam R. Howlett" <liam@infradead.org>
-Cc: linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, linux-mm@kvack.org, 
- "David Hildenbrand (Arm)" <david@kernel.org>
-X-Mailer: b4 0.13.0
+References: <20260427112205.1346733-1-alan.maguire@oracle.com>
+In-Reply-To: <20260427112205.1346733-1-alan.maguire@oracle.com>
+From: Chengkaitao <pilgrimtao@gmail.com>
+Date: Mon, 27 Apr 2026 20:08:31 +0800
+X-Gm-Features: AVHnY4KozKx0cXA49lln_n24ueKcvz4u91Zw4blL0r_ck5w1mACIDfyZBvyGVBs
+Message-ID: <CAAWJmAbNAxJVviU_nY_TxcLXpW60U9MSi7M27EEs6OHz3GmPaw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] Fix undefined symbol references for module build
+ post cnum changes
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: ast@kernel.org, eddyz87@gmail.com, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, memxor@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Let's replace the last user of page_mapped() by folio_mapped() so we
-can get rid of page_mapped().
+On Mon, Apr 27, 2026 at 7:22=E2=80=AFPM Alan Maguire <alan.maguire@oracle.c=
+om> wrote:
+>
+> Seeing the following on bpf-next:
+>
+>  DESCEND objtool
+>   DESCEND bpf/resolve_btfids
+>   INSTALL libsubcmd_headers
+>   INSTALL libsubcmd_headers
+>   MODPOST Module.symvers
+> ERROR: modpost: "cnum64_umin" [drivers/net/ethernet/netronome/nfp/nfp.ko]=
+ undefined!
+> ERROR: modpost: "cnum64_umax" [drivers/net/ethernet/netronome/nfp/nfp.ko]=
+ undefined!
+> make[2]: *** [scripts/Makefile.modpost:147: Module.symvers] Error 1
+> make[1]: *** [bpf-next/Makefile:2089: modpost] Error 2
+> make: *** [Makefile:248: __sub-make] Error 2
+>
+> Further investigation suggests nfp indeed does pull in those symbols,
+> likely due to references in include/linux/bpf_verifier.h:
+>
+> static inline s64 reg_smax(const struct bpf_reg_state *reg)
+> {
+>         return cnum64_smax(reg->r64);
+> }
+>
+> static inline u64 reg_umin(const struct bpf_reg_state *reg)
+> {
+>         return cnum64_umin(reg->r64);
+> }
+>
+> ...
+>
+> Export symbols for these references.
+>
+> Reported-by: Kaitao Cheng <pilgrimtao@gmail.com>
+> Fixes: bbc631085503 ("bpf: replace min/max fields with struct cnum{32,64}=
+")
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  kernel/bpf/cnum_defs.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/kernel/bpf/cnum_defs.h b/kernel/bpf/cnum_defs.h
+> index 3ebd8f723dbb..7d992ee6a8a4 100644
+> --- a/kernel/bpf/cnum_defs.h
+> +++ b/kernel/bpf/cnum_defs.h
+> @@ -6,6 +6,7 @@
+>  #endif
+>
+>  #include <linux/cnum.h>
+> +#include <linux/kernel.h>
+>  #include <linux/limits.h>
+>  #include <linux/minmax.h>
+>  #include <linux/compiler_types.h>
+> @@ -23,6 +24,7 @@ struct cnum_t FN(from_urange)(ut min, ut max)
+>  {
+>         return (struct cnum_t){ .base =3D min, .size =3D (ut)max - min };
+>  }
+> +EXPORT_SYMBOL_GPL(FN(from_urange));
+>
+>  struct cnum_t FN(from_srange)(st min, st max)
+>  {
+> @@ -31,6 +33,7 @@ struct cnum_t FN(from_srange)(st min, st max)
+>
+>         return (struct cnum_t){ .base =3D base, .size =3D size };
+>  }
+> +EXPORT_SYMBOL_GPL(FN(from_srange));
+>
+>  /* True if this cnum represents two unsigned ranges. */
+>  static inline bool FN(urange_overflow)(struct cnum_t cnum)
+> @@ -48,11 +51,13 @@ ut FN(umin)(struct cnum_t cnum)
+>  {
+>         return FN(urange_overflow)(cnum) ? 0 : cnum.base;
+>  }
+> +EXPORT_SYMBOL_GPL(FN(umin));
+>
+>  ut FN(umax)(struct cnum_t cnum)
+>  {
+>         return FN(urange_overflow)(cnum) ? UT_MAX : cnum.base + cnum.size=
+;
+>  }
+> +EXPORT_SYMBOL_GPL(FN(umax));
+>
+>  /* True if this cnum represents two signed ranges. */
+>  static inline bool FN(srange_overflow)(struct cnum_t cnum)
+> @@ -71,6 +76,7 @@ st FN(smin)(struct cnum_t cnum)
+>                ? ST_MIN
+>                : min((st)cnum.base, (st)(cnum.base + cnum.size));
+>  }
+> +EXPORT_SYMBOL_GPL(FN(smin));
+>
+>  st FN(smax)(struct cnum_t cnum)
+>  {
+> @@ -78,6 +84,7 @@ st FN(smax)(struct cnum_t cnum)
+>                ? ST_MAX
+>                : max((st)cnum.base, (st)(cnum.base + cnum.size));
+>  }
+> +EXPORT_SYMBOL_GPL(FN(smax));
+>
+>  /*
+>   * Returns a possibly empty intersection of cnums 'a' and 'b'.
+> --
+> 2.39.3
+>
 
-Replace the remaining occurrences of page_mapped() in rmap documentation
-by folio_mapped().
+LGFM.
 
-Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
----
- include/linux/mm.h | 10 ----------
- mm/memory.c        |  2 +-
- mm/rmap.c          |  8 ++++----
- 3 files changed, 5 insertions(+), 15 deletions(-)
-
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index af23453e9dbd..87fcd068303a 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1888,16 +1888,6 @@ static inline bool folio_mapped(const struct folio *folio)
- 	return folio_mapcount(folio) >= 1;
- }
- 
--/*
-- * Return true if this page is mapped into pagetables.
-- * For compound page it returns true if any sub-page of compound page is mapped,
-- * even if this particular sub-page is not itself mapped by any PTE or PMD.
-- */
--static inline bool page_mapped(const struct page *page)
--{
--	return folio_mapped(page_folio(page));
--}
--
- static inline struct page *virt_to_head_page(const void *x)
- {
- 	struct page *page = virt_to_page(x);
-diff --git a/mm/memory.c b/mm/memory.c
-index ea6568571131..99854e6a2793 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -5464,7 +5464,7 @@ static vm_fault_t __do_fault(struct vm_fault *vmf)
- 	if (unlikely(PageHWPoison(vmf->page))) {
- 		vm_fault_t poisonret = VM_FAULT_HWPOISON;
- 		if (ret & VM_FAULT_LOCKED) {
--			if (page_mapped(vmf->page))
-+			if (folio_mapped(folio))
- 				unmap_mapping_folio(folio);
- 			/* Retry if a clean folio was removed from the cache. */
- 			if (mapping_evict_folio(folio->mapping, folio))
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 78b7fb5f367c..fb3c351f8c45 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -571,7 +571,7 @@ void __init anon_vma_init(void)
-  * In case it was remapped to a different anon_vma, the new anon_vma will be a
-  * child of the old anon_vma, and the anon_vma lifetime rules will therefore
-  * ensure that any anon_vma obtained from the page will still be valid for as
-- * long as we observe page_mapped() [ hence all those page_mapped() tests ].
-+ * long as we observe folio_mapped() [ hence all those folio_mapped() tests ].
-  *
-  * All users of this function must be very careful when walking the anon_vma
-  * chain and verify that the page in question is indeed mapped in it
-@@ -1999,7 +1999,7 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
- 	/*
- 	 * When racing against e.g. zap_pte_range() on another cpu,
- 	 * in between its ptep_get_and_clear_full() and folio_remove_rmap_*(),
--	 * try_to_unmap() may return before page_mapped() has become false,
-+	 * try_to_unmap() may return before folio_mapped() has become false,
- 	 * if page table locking is skipped: use TTU_SYNC to wait for that.
- 	 */
- 	if (flags & TTU_SYNC)
-@@ -2426,7 +2426,7 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
- 	/*
- 	 * When racing against e.g. zap_pte_range() on another cpu,
- 	 * in between its ptep_get_and_clear_full() and folio_remove_rmap_*(),
--	 * try_to_migrate() may return before page_mapped() has become false,
-+	 * try_to_migrate() may return before folio_mapped() has become false,
- 	 * if page table locking is skipped: use TTU_SYNC to wait for that.
- 	 */
- 	if (flags & TTU_SYNC)
-@@ -2927,7 +2927,7 @@ static struct anon_vma *rmap_walk_anon_lock(const struct folio *folio,
- 
- 	/*
- 	 * Note: remove_migration_ptes() cannot use folio_lock_anon_vma_read()
--	 * because that depends on page_mapped(); but not all its usages
-+	 * because that depends on folio_mapped(); but not all its usages
- 	 * are holding mmap_lock. Users without mmap_lock are required to
- 	 * take a reference count to prevent the anon_vma disappearing
- 	 */
-
--- 
-2.43.0
-
+--=20
+Yours,
+Chengkaitao
