@@ -1,120 +1,116 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C954282F3E;
-	Mon, 27 Apr 2026 18:40:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A7C62E414;
+	Mon, 27 Apr 2026 18:43:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777315213; cv=none; b=LHYds6PFnmEcJdWJKckRan2xtxcGISmKeJKKI+QQlwNDc6kb4XKtBQrZ3n8RteMap9d84odI8W56SWIYQFtLoug6Ap3z83vTsBq9e+5GARWrtt4C5nz4piwaJhPAQlzhcf+YGoSDdd5qQcCqW7vMIN+8+9IWzpgmcE8WxGWdysY=
+	t=1777315420; cv=none; b=juw6zZPQoaQue9wgFWBrB50C31WCGD1RgBd7GfRpAsKdpHqYmWTpmMH/u6boKVcQo43mpaCBx168YiBktnL0XRQDqaAqkz+oAt6vk3E3rpJbQuhOVUdP77IuGt/oO4FUf0SVlsGI43C1zlga0qYmAJVGKzctRv9xLaatPKISwH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777315213; c=relaxed/simple;
-	bh=/HusL2LtExbYgbua5UuILHfWISTnSh1CAhqnyumz+Bs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kDIDQuY1W2JfY0eev26fETZqXwSBwxw2HcZMlUNRuTK35m7pCJ7eb7VaSE7k35Fx3BiDf+WrtFVv/GqVrOr6+5p27GyzsBLGx9omynLbfJgNzMgeZzzur9PR5BIj5elNOBAUMkniW876yPf3suTACIpN81e/lALxqLBOomj/4h0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=phsTeeRh; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1777315420; c=relaxed/simple;
+	bh=YNWnzejcMeSQ0wSbEGkFtXtYmtMb1yUlJsY+y1UvjAU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=ORtxUFtb+daB4fQRaVnHNWPFrRmaeLUgNakEGjb/bavgVG3YByfFWQd+TiLOMlP97tnHn4JzpZsdyqXAAApx19Tq2fSxfJMHfOWgakwU1hhPKkX5YSqrKFxskQIQhGLoEe1UwdSLbf+++O5pB/F/O+Jha7ak9UFx/Wm11pgCDFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=etMhv87u; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="phsTeeRh"
-Received: by linux.microsoft.com (Postfix, from userid 1204)
-	id C703020B716A; Mon, 27 Apr 2026 11:40:12 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C703020B716A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1777315212;
-	bh=c9RCSoOaBSCbqRUxkmuPRyFNJC5Wn8rmCTPwlSbYIVQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=phsTeeRh1xzt23RXuaC4Il9OkAxXboOi53tfM/lLVqXxC3Dh78xEcvQZoPZIWhUpY
-	 WbTL+ZWNx0DLv7nslT/D45PToInmJ29R9pE6D82j5tzmK+VyHG/eIun94k+tVV+TDz
-	 6Qzsjwyrshmzj/mFeVHOy1qs/cdHbKzQmqds7JoU=
-Date: Mon, 27 Apr 2026 11:40:12 -0700
-From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	leon@kernel.org, longli@microsoft.com, kotaranov@microsoft.com,
-	horms@kernel.org, shradhagupta@linux.microsoft.com,
-	ssengar@linux.microsoft.com, ernis@linux.microsoft.com,
-	shirazsaleem@microsoft.com, linux-hyperv@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org, stephen@networkplumber.org,
-	jacob.e.keller@intel.com, dipayanroy@microsoft.com,
-	leitao@debian.org, kees@kernel.org, john.fastabend@gmail.com,
-	hawk@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-	ast@kernel.org, sdf@fomichev.me, yury.norov@gmail.com
-Subject: Re: [PATCH net] net: mana: hardening: Validate SHM offset from BAR0
- register to prevent crash due to alignment fault
-Message-ID: <ae+tjDl+RPCU6JDq@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <aepF3NwyANeklkfD@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <20260426131555.GA3501894@ziepe.ca>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="etMhv87u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EACEC19425;
+	Mon, 27 Apr 2026 18:43:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777315419;
+	bh=YNWnzejcMeSQ0wSbEGkFtXtYmtMb1yUlJsY+y1UvjAU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=etMhv87uUKkHkPh3fCaFz9Ef98Ni/18sb14CHkC4Ey8ZR0Xnx3RxZdzRSNlawpUEd
+	 JL9I10pa2fvBYEpexT9U8w66/T/L1mwXxHBkXSZ/V9QESRgldBZg2+4zgzNH8D3cdr
+	 yjqt5XEloSf0/R26B0hIj/sBmvYrPO86XexIgPrEUaBBK3SbWSV/BpQvCjpf9eSbRY
+	 6RJSud2wN1zbtcTvy6rqA84Ys8tWb67JSpO8WmI/FlQMq+chGtwdeSjXFlvPOGtsaf
+	 7UeMZCZUjjYYidleGqFPZeA8kXIM2TdZEmTvjrQApwYA+cQRKIVLKCHLzwE4cLk+f5
+	 AY8OyfGGH05ow==
+Content-Type: multipart/mixed; boundary="===============1942307117977074095=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260426131555.GA3501894@ziepe.ca>
+Message-Id: <af50d188f6bc2de81fe3c321b26a645a9425ba9f2644cb6f8525d5bb637385f9@mail.kernel.org>
+In-Reply-To: <20260427165906.84420-2-kaitao.cheng@linux.dev>
+References: <20260427165906.84420-2-kaitao.cheng@linux.dev>
+Subject: Re: [PATCH bpf-next v10 1/8] bpf: refactor __bpf_list_del to take list node pointer
+From: bot+bpf-ci@kernel.org
+To: kaitao.cheng@linux.dev,martin.lau@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,chengkaitao@kylinos.cn,linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 27 Apr 2026 18:43:39 +0000 (UTC)
 
-On Sun, Apr 26, 2026 at 10:15:55AM -0300, Jason Gunthorpe wrote:
-> On Thu, Apr 23, 2026 at 09:16:28AM -0700, Dipayaan Roy wrote:
-> > During Function Level Reset recovery, the MANA driver reads
-> > hardware BAR0 registers that may temporarily contain garbage values.
-> > The SHM (Shared Memory) offset read from GDMA_REG_SHM_OFFSET is used
-> > to compute gc->shm_base, which is later dereferenced via readl() in
-> > mana_smc_poll_register(). If the hardware returns an unaligned or
-> > out-of-range value, the driver must not blindly use it, as this would
-> > propagate the hardware error into a kernel crash.
-> 
-> It is not what we are calling "hardening" if you are hitting actual
-> crashes in actual real systems.
-> 
-> "hardening" is the driver defending against actively malicious
-> hardware, operating in ways that will never be seen in real systems,
-> attempting to compromise the kernel.
-> 
-> Drivers working around real world broken/buggy/malfunctioning HW is
-> just entirely normal stuff.
+--===============1942307117977074095==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+
+[ ... ]
+
+> @@ -2575,12 +2577,16 @@ static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head,
 >
-Hi Jason,
+>  __bpf_kfunc struct bpf_list_node *bpf_list_pop_front(struct bpf_list_head *head)
+>  {
+> -	return __bpf_list_del(head, false);
+> +	struct list_head *h = (void *)head;
+> +
+> +	return __bpf_list_del(head, h->next);
+>  }
 
-sure, I will drop the hardening label, in v2. 
-> > @@ -73,10 +74,25 @@ static int mana_gd_init_pf_regs(struct pci_dev *pdev)
-> >  	gc->phys_db_page_base = gc->bar0_pa + gc->db_page_off;
-> >  
-> >  	sriov_base_off = mana_gd_r64(gc, GDMA_SRIOV_REG_CFG_BASE_OFF);
-> > +	if (sriov_base_off >= gc->bar0_size ||
-> > +	    !IS_ALIGNED(sriov_base_off, sizeof(u32))) {
-> > +		dev_err(gc->dev,
-> > +			"SRIOV base offset 0x%llx out of range or unaligned (BAR0 size 0x%llx)\n",
-> > +			sriov_base_off, (u64)gc->bar0_size);
-> > +		return -EPROTO;
-> > +	}
-> 
-> .. and if it is entirely normal and something that happens is EPROTO
-> really the right way to deal with this race, or should the driver be
-> looping somehow until the device stabilizes??
-This is the current flow of the driver:
-mana_serv_reset()
-	mana_gd_suspend()
-	msleep(MANA_SERVICE_PERIOD * 1000); -> 10s
-	mana_gd_resume()
-		mana_gd_init_registers();  -> read the garbage followed by fault
-	mana_serv_rescan(); -> On mana_gd_resume err(EPROTO) full PCI remove + rescan
+This addresses an unaddressed review comment from Emil Tsalapatis in v8.
+The code reads h->next before __bpf_list_del checks if the list is
+initialized. If the list is uninitialized (h->next is NULL), a NULL pointer
+is passed to __bpf_list_del.
 
-The 10-second sleep in mana_serv_reset() already happens before
-mana_gd_resume() is called, so by the time we read the registers
-hardware should have stabilized. If we still see garbage after 10
-seconds, it suggests deeper hardware issue where PCI rescan is
-recomended from HW. This patch returns -EPROTO on detection
-of unaligned / out of range offset and that err code triggers the
-mana_serv_rescan().
+While the function will eventually initialize the list and return NULL without
+dereferencing the NULL pointer:
 
-> 
-> Jason
+kernel/bpf/helpers.c:__bpf_list_del() {
+	if (unlikely(!h->next)) {
+		INIT_LIST_HEAD(h);
+		return NULL;
+	}
+	...
+}
 
-Thanks Jason for the review comments, will post a v2 to drop the
-hardening label.
+this is counterintuitive - passing a potentially garbage value that is later
+ignored.
 
-Regards
-Dipayaan Roy
+Emil suggested moving the init check logic into the top-level kfuncs
+(bpf_list_pop_front/bpf_list_pop_back) to ensure the list_head passed to
+__bpf_list_del is always valid. You can also just init the list and return
+NULL in that case - we know it's empty.
 
+The same issue applies to bpf_list_pop_back() which reads h->prev before
+the initialization check.
+
+Original comment from Emil Tsalapatis (Thu, 19 Mar 2026 12:17:50 -0400):
+https://lore.kernel.org/bpf/DH6W7K2SLPYB.PCO7FQ6CR1YZ@etsalapatis.com/
+
+"The new code reads n _before_ we check if the list is initialized. So the n
+we are passing from the caller may well be NULL. However, __bpf_list_del()
+will in that case now a) call INIT_LIST_HEAD(() to properly set up prev/next,
+b) call list_empty() on the newly initialized list and exit without ever
+reading the NULL passed by the caller.
+
+This is kind of counterintuitive: We are passing essentially a garbage value
+to __bpf_list_del that we thankfully end upi ignoring. Can you move the init
+check logic into the top-level kfuncs to make sure the list_head we're passing
+to __bpf_list_del is always valid? You can also just init the list and return
+NULL in that case - we know it's empty."
+
+This issue remains unaddressed in v10.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25009536772
+--===============1942307117977074095==--
