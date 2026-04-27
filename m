@@ -1,234 +1,128 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A9F344D9D
-	for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 16:01:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3963D75D3
+	for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 16:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777305715; cv=none; b=BRd8EJX9LzeYTKF6zmbKMBwbVvVotOINWN5iET2kqmKnvei+VXMTur59bizqBlx1rL65Vm8ViNVXytN9+AWf+fp9Njxon5GLAA9zkf6hHrhH/QN0+lF78DXkkiqAKYDWCYPg4qJMElmlgdOpIHunZB2Qdeyj60UCSxvwZ3qBjJs=
+	t=1777308268; cv=none; b=I/W/67H6NLakgwYHxV0wPLyGSzdGwR4L0bjXp4FeClswMz8mGvc77h7f8/Qu8VXdDbG7kVKVBYMRceXHjIfd9w4ZZvOf8QKcCiqGrg08Nd9I3Bdbu71T6VPHVVsF4EZ4I1oz39MQT0VP4vkC2IEni0dd0Wr8e1kTrmYUQ65cehE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777305715; c=relaxed/simple;
-	bh=3nI4jh0qSpjXgDdJgMsEeE+LnWsU7E6SKeCla5t9yI8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NkpbdQHEgNP3MAibyXKLBV+QlVFi5fOpl/Q+BnnGnc9iRrlrUHgIE7Z5KOL1Ihozg7tLcXTooQg/Szcbu2SeMrV7uAlwjURqgZkfrMImjF5JqfQDjTN6BJb5X0YARgEJHIls7Gqv0YxfQJ7q1VuQSRSOgslxsn51BIkOzXIZK+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b=kmnqlfzT; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+	s=arc-20240116; t=1777308268; c=relaxed/simple;
+	bh=/5B+nT+VII1QG+UPQ34825UPZg9p6CaGmiyrAbPurII=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=IuKCzotnr1iBgnIYW9hqIVHdW3VyPzjyuHUdtK+1W/tAVeR2frkTVmp9tY5WDEyMnpW+wYNX0Ct/S815N+oEW9HSd5NcHA7x+xtCfAajDlqXO/S/Cf0Soa/fkfQVBFIGNZowflzYKfwrN/npczeomx/FT8Ewuyy6EbTFIuOoTtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iqi/kphS; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b="kmnqlfzT"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-488a88aeec9so129490995e9.2
-        for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 09:01:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iqi/kphS"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4852b81c73aso87498465e9.3
+        for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 09:44:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20251104.gappssmtp.com; s=20251104; t=1777305712; x=1777910512; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wUIn/GeHnKQMX3ItFkglQNbpq/QxkRY25o0nGMIbjjc=;
-        b=kmnqlfzT+VLa4gehYeZswkCKagxg08sH8GjJYZl2/2/P1VC3/8sMxqAT8tyWytFdp/
-         gujNcseGsm4It1DG1yAtSZbt0fAExk07ewBTz0BDE3j/au0wHaRWWCUUesoCh4Nn7gOb
-         5+20SiBbryxZ2gYymMKFbEGYq4CZy8nhDYqSFiQzUdLBcdiAv1WjLJ7sCHIF+mlQnBKZ
-         hZv9RqMX1bJvPshZXlOChFYQ7DPMThWEvQSYBr/n8df7hpo3L2jcDHbAhUVfscbX0mF7
-         33y6L63pADVRMkSZenN80mt6DlUoqZOQj1weSbI3Dc7prHxkrs7US46qS62iXrZaw3mm
-         cNaw==
+        d=gmail.com; s=20251104; t=1777308264; x=1777913064; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=XOemiNyVqs+ekn52g39qizfmeGZs2CUhA5GCh2RWNnM=;
+        b=iqi/kphSWmO2qoTCFFU0/1e05IAzGTRy9If8eZAb9htJebF55fjqvBDoGxjr7Yx3NZ
+         NUHFXconHXaGEfXVQzWMJUvLnrT0qKeJDt1i8+1xZmWf5Ac6OdRPUTi/Z6NBwSvdekPA
+         BVtvGx7Ae0pVCHhiN7QTtTxrvwmUwpvOVlq5HsxSQsucx7omMbLI9bLfIvdZmtCC17qZ
+         Ts2VMzy7Pvk11p7nFOxTs+toicpKpvhRDX++7hZ4o2fN5hytKfI2dw8dHewN5Mb+yiT0
+         of6moaamqh+QWglZXpw82vq6vrEdbbPkv36FRDJdn4OLg0OansD+3ucKJ8Z5O7jHkkcD
+         gYVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777305712; x=1777910512;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wUIn/GeHnKQMX3ItFkglQNbpq/QxkRY25o0nGMIbjjc=;
-        b=VjHeZKS1tHk7hbJv9oKLLw2EYV/d7nGUa6B5ORpt4Js1m/+NTeDxV/u9DHxxBd9FFf
-         eIunCEQI7cxLGWCn0bPMVnnrogwNnVf+V10FhvliXfXmoedxb6jiG45zpXvb+WVJ1VBu
-         6UDHRCabS9i2lRJTgnnvugG0my5a/gCW7Qd3pyN2JHrdg0cuHQC+e1cdB99sj1VqGfg6
-         FgFBuYsnayUcf7YUtKXLtLVVxpGQcz4sc9FouiWchsXHZ4jiy6K5AjYPk2o32AU4NukQ
-         ezWHKCMQXpo2JtBtC86SQUohWCBOMso8fsKjVs1WtkEIHbOhTaEmNFKp77zPMpOYUdAN
-         nfSQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+7V75/5zqByzvPq5DIl6cj7bwjqtU7NYVqqrRmCXXjWDgB0OsrkD2d87uuCq3/jTcBJ1Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwS9gVH3M9IKYYnvJRahdaQMEv6cw7JestYT+y1EAdRLEKwE/hK
-	0WJ2FW/GtEoonCTYNjiGwUmTxeu2IhP0oA3XDsp6gQDvxjispAXt4s1kPh57eGarVPs=
-X-Gm-Gg: AeBDietBWWpwGiMTey579/6j+4JxzZNaFaboKb5kq5hOOZy20XgREKOOEHRAn/umi4G
-	BqLRwupxVz4zZti4dUc5qt4MNJktyhSI9UNWOrv8X9GVrv/j2RVev5wfVeuRrT469t65p0VJ0PY
-	ljZm3aRwSU5qGPT1t0vYSy5zpcydzyDbuL1rXOHWcGunV8bJmB+l9sWDngZdea1L8kWXdkO2YI7
-	RpXdY0okf8HMWAMZrgGnqxiz7YSwwU5BkHRP3NEzIYYnitZS3D//r9BTkICWEK4L+eGEZN+UQid
-	1DSkyJv+ukygkc1IwEL+pUibhasuNe1kto0kp2iPe4qlyUcJRfChD8wab7Js+2vWWmrxH+Sc+4K
-	gg49BDZ9KHbZMQNhVwwphlm/122p6dxgZUdkrzffaQEwrS80+v9RH3ZVUYEbtf/AaK8hTRYsbdG
-	xQzeRLQxnoHIgGAdm0WdJdD4Rhc3NyI81fNDSND10J81d/awYRPPtUOGdYAzZod41acn0uooWUm
-	8xUZV6ljHAht+3o1LqjFp5Y7zwGbL1kFitZ
-X-Received: by 2002:a05:600c:6216:b0:48a:52ee:5776 with SMTP id 5b1f17b1804b1-48a76f53b01mr8705e9.11.1777305711990;
-        Mon, 27 Apr 2026 09:01:51 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1126:4:142d:11f2:435b:9d94? ([2620:10d:c092:500::7:64e5])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a59816b71sm230488865e9.1.2026.04.27.09.01.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Apr 2026 09:01:51 -0700 (PDT)
-Message-ID: <5d5f74ae-602e-4380-b4d3-442b4dc2ceb4@davidwei.uk>
-Date: Mon, 27 Apr 2026 17:01:48 +0100
+        d=1e100.net; s=20251104; t=1777308264; x=1777913064;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XOemiNyVqs+ekn52g39qizfmeGZs2CUhA5GCh2RWNnM=;
+        b=Fe83hhVHFOi7+HQl2AeBXwCOXMIyfxMIkIxtoUKm3KoG4kZ3dMnW4Vt9rH1facYv8V
+         jAmKqgEpie86T7QMOwH3Mnwjp97XY+yZThnSgsDC34o9LBW49Xg20chyyLIINUBMu0dA
+         zHXCiEp2Gjt1C1qUONyDH4dv5FlQysbt1WtVfljRC4As5cSRjWGd7zDWFwhfvJEBjIWm
+         4ZVLCOJ2K6VV7oU75lkWojbH5luW2VysJHOja8qRNwUB4gqd6HVKERSyMz6KtS5ozvQu
+         6QwASItMVNdP0axAHYIo/0XmcRTuW93HPvlf4mKRjHUZd0K32F4USC/fYZeu1J6hrZa4
+         l6QQ==
+X-Forwarded-Encrypted: i=1; AFNElJ85fgk5LLSCHyjUjgBKeUrBnzicCf2HK7QpsmhaerP+aNG5rER+rGqWNLhpuFif1MvMZbE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCnOcpH59QbigI7uq6ooK/1hUBlv4ztTMZaYd3gNfriwLuKl0z
+	gTAhk6YFoNUcUWPGpHplqzbTKFUAThSrRSlVJ5By+mU1k6EquQIXKGlr
+X-Gm-Gg: AeBDies+MSjnQpKmd+H/SYCSa/beLMwaK5Qyexg2qas1zAoKQua4saN90NancyDKifN
+	FxxuSoqcg/OApiCAI8qjz8qmbeXbT18kOruyRqVwjZgiDBKAQYWdscJR1uDZ2/aK/htbuByp23T
+	6SqjzCOqbBvIvlYFVhFNHO/NqBZVfi+lZCFE7ZnC1OJYVO+bS/lFsFkETpW4bbQ/82jgs/j4cXG
+	yTaJ5Tzb+pzDveVFY2BO1qxSFdN+JV4iM3IWPyuFiKjk7vSkEwx142CYfIT8i5g5sbZ1NpavEV3
+	MrRuq0D6UQShkfwskzq/PC/4I+4/rJ8dtZseA+CebCJG/BJhl8heOEerMaxnSQb4z5GiJpyFarW
+	Z2oiSbdMvSPg7nWvTBq9eC3mTx/UANkb5v0lMSSLr5fkCd0mXfeyHx5hu2NgUL1+/YhkIho6KCV
+	hfr7xdF7jRp3m8qYhgDbToGsL3jEZxkQ21gKLmwUZD/1I4lVUC7wVvd9XqFwTAf0cK8Yh1yJjHO
+	HMaY2ZcB4HXztNUee4=
+X-Received: by 2002:a05:600c:c4a6:b0:489:1f08:91b with SMTP id 5b1f17b1804b1-48a76f7b485mr1693265e9.16.1777308264351;
+        Mon, 27 Apr 2026 09:44:24 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:1126:4:e3bd:e018:b2be:4bf5? ([2620:10d:c092:500::4:2374])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a773ba261sm647015e9.8.2026.04.27.09.44.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Apr 2026 09:44:23 -0700 (PDT)
+Message-ID: <686d51d3081a3c34ce644ac6d52c8b8e41864192.camel@gmail.com>
+Subject: Re: [PATCH bpf-next] Fix undefined symbol references for module
+ build post cnum changes
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, 	bpf@vger.kernel.org, Kaitao Cheng <pilgrimtao@gmail.com>
+Date: Mon, 27 Apr 2026 09:44:22 -0700
+In-Reply-To: <20260427112205.1346733-1-alan.maguire@oracle.com>
+References: <20260427112205.1346733-1-alan.maguire@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 0/2] net: mana: add ethtool private flag for
- full-page RX buffers
-To: Dipayaan Roy <dipayanroy@linux.microsoft.com>, kuba@kernel.org
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
- decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, pabeni@redhat.com, leon@kernel.org,
- longli@microsoft.com, kotaranov@microsoft.com, horms@kernel.org,
- shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
- ernis@linux.microsoft.com, shirazsaleem@microsoft.com,
- linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
- stephen@networkplumber.org, jacob.e.keller@intel.com, leitao@debian.org,
- kees@kernel.org, john.fastabend@gmail.com, hawk@kernel.org,
- bpf@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me,
- dipayanroy@microsoft.com
-References: <20260407200216.272659-1-dipayanroy@linux.microsoft.com>
- <20260409183509.0b24dea6@kernel.org> <20260412125917.4fa8fc8d@kernel.org>
- <ad5kuCZz+gR1TlSh@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <20260416083146.0bb94d2b@kernel.org>
- <aeoVC27mIzoKytqA@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <685d7bf9-062d-4bd2-8448-f7714bb05302@davidwei.uk>
- <aex119OtL8CEGXkb@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-Content-Language: en-US
-From: David Wei <dw@davidwei.uk>
-In-Reply-To: <aex119OtL8CEGXkb@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-On 2026-04-25 01:05, Dipayaan Roy wrote:
-> On Fri, Apr 24, 2026 at 01:05:24PM -0700, David Wei wrote:
->> On 2026-04-23 05:48, Dipayaan Roy wrote:
->>> On Thu, Apr 16, 2026 at 08:31:46AM -0700, Jakub Kicinski wrote:
->>>> On Tue, 14 Apr 2026 09:00:56 -0700 Dipayaan Roy wrote:
->>>>> I still see roughly a 5% overhead from the atomic refcount operation
->>>>> itself, but on that platform there is no throughput drop when using
->>>>> page fragments versus full-page mode.
->>>>
->>>> That seems to contradict your claim that it's a problem with a specific
->>>> platform.. Since we're in the merge window I asked David Wei to try to
->>>> experiment with disabling page fragmentation on the ARM64 platforms we
->>>> have at Meta. If it repros we should use the generic rx-buf-len
->>>> ringparam because more NICs may want to implement this strategy.
->>>
->>> Hi Jakub,
->>>
->>> Thanks. I think I was not precise enough in my previous reply.
->>>
->>> What I meant is that the atomic refcount cost itself does not appear to
->>> be unique to the affected platform. I see a similar ~5% overhead on
->>> another ARM64 platformi (different vendor) as well. However, on that platform
->>> there is no throughput delta between fragment mode and full-page mode; both reach
->>> line rate.
->>>
->>> On the affected platform, fragment mode shows an additional ~15%
->>> throughput drop versus full-page mode. So the current data suggests that
->>> the atomic overhead is common, but the throughput regression is not
->>> explained by that overhead alone and likely depends on an additional
->>> platform-specific factor.
->>>
->>> Separately, the hardware team collected PCIe traces on the affected
->>> platform and reported stalls in the fragment-mode case that are not seen
->>> in full-page mode. They are still investigating the root cause, but
->>> their current hypothesis is that this is related to that platform’s
->>> PCIe/root-port microarchitecture rather than to page_pool refcounting
->>> alone.
->>>
->>> That said, I agree the right direction depends on whether this
->>> reproduces on other ARM64 platforms. If David is able to reproduce the
->>> same behavior, then using the generic rx-buf-len ringparam sounds like
->>> the better direction.
->>>
->>> Please let me know what David finds, and I can rework the patch
->>> accordingly.
->>
->> I ran a test on Grace, 4 KB pages, 72 cores, 1 NUMA node.
->>
->> Broadcom NIC, bnxt driver, 50 Gbps bandwidth. Hacked it up to either
->> give me 1 or 2 frags per page. No agg ring, no HDS, no HW GRO.
->>
->> Use 1 combined queue only for the server. Affinitized its net rx softirq
->> to run on core 4.
->>
->> Ran iperf3 server, taskset onto cpu cores 32-47. The iperf3 client is
->> running on a host w/ same hw in the same region. Using 32 queues, no
->> softirq affinities. The idea is to hammer page->pp_ref_count from
->> different cores.
->>
->> * 1 frag/page  -> 32.3 Gbps
->> * 2 frags/page -> 36.0 Gbps
->>
->> Comparing perf, for 2 frags/page the cost of skb_release_data() hitting
->> pp_ref_count goes up, as expected. Is this what you see? When you say
->> there's a +5% overhead, what function?
->>
->> Overall tput is higher with multiple frags. That's to be expected w/
->> page pool.
-> 
-> Hi David,
-> 
-> Thanks for running this. Your results are consistent with mine.
-> 
-> I have tested this on 2 ARM64 platforms from different vendors,
-> running ntttcp and iperf3 using 4k as base page size.
-> In my observation I see both platforms show a 5% overhead in
-> napi_pp_put_page (~3.9%) and page_pool_alloc_frag_netmem (~1.9%)
-> when running in fragment mode, both stalling on the LSE ldaddal
-> atomic that maintains pp_ref_count.
-> This seems to be same as your observation as well. However in my
-> observation one of the platform shows 15% drop in throughput when
-> in fragment mode vs page mode. The other platform I ran the test on
-> infact performs slighty better in fragment mode than in full page
-> mode (simillar observation as yours).
+On Mon, 2026-04-27 at 12:22 +0100, Alan Maguire wrote:
+> Seeing the following on bpf-next:
+>=20
+>  DESCEND objtool
+>   DESCEND bpf/resolve_btfids
+>   INSTALL libsubcmd_headers
+>   INSTALL libsubcmd_headers
+>   MODPOST Module.symvers
+> ERROR: modpost: "cnum64_umin" [drivers/net/ethernet/netronome/nfp/nfp.ko]=
+ undefined!
+> ERROR: modpost: "cnum64_umax" [drivers/net/ethernet/netronome/nfp/nfp.ko]=
+ undefined!
+> make[2]: *** [scripts/Makefile.modpost:147: Module.symvers] Error 1
+> make[1]: *** [bpf-next/Makefile:2089: modpost] Error 2
+> make: *** [Makefile:248: __sub-make] Error 2
+>=20
+> Further investigation suggests nfp indeed does pull in those symbols,
+> likely due to references in include/linux/bpf_verifier.h:
+>=20
+> static inline s64 reg_smax(const struct bpf_reg_state *reg)
+> {
+>         return cnum64_smax(reg->r64);
+> }
+>=20
+> static inline u64 reg_umin(const struct bpf_reg_state *reg)
+> {
+>         return cnum64_umin(reg->r64);
+> }
+>=20
+> ...
+>=20
+> Export symbols for these references.
+>=20
+> Reported-by: Kaitao Cheng <pilgrimtao@gmail.com>
+> Fixes: bbc631085503 ("bpf: replace min/max fields with struct cnum{32,64}=
+")
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
 
-That's not what I observe. I don't see napi_pp_put_page at all, and
-page_pool_alloc_frag_netmem is actually lower with 2 frags/page (4.06%)
-than 1 frag/page (5.73%).
+Hi Alan,
 
-The main difference is in skb_release_data which goes from
-0.85% (1 frag/page) to 3.32% (2 frags/page).
+thank you for the fix, apologies for breaking this.
 
-> 
-> So the atomic refcount overhead appears to be common across ARM64
-> platforms, but it does not cause a throughput regression.
-> The throughput regression seems specific to one platform only for which
-> we want to have the full page work around, also the HW team has
-> identified PCIe stalls in fragment mode that are absent in full-page mode.
-> Their investigation points to a suspected microarchitectural
-> issue in the PCIe root port. IMO, there seems to be no issue with
-> page_pool itself.
-> 
-> Given that:
->   - Grace shows fragments are faster (your data)
->   - A second ARM64 platform shows no regression (my data)
->   - Only the affected platform shows a throughput drop
->   - The HW team suspects this to a platform-specific PCIe issue,
->     also form our experiment data the drop in throughput seems to
->     be platform specific only.
-> 
-> I believe this remains a platform-specific workaround rather than
-> a generic issue. Would a private flag still be acceptable for this
-> case?
-> 
-> 
->>
->> There are some 200 Gbps NICs but they're mlx5 so I'd have to redo the
->> driver hack. Are you going to re-implement this change with rx-buf-len
->> instead of a private flag? If so, I won't spend more time running this
->> test.
->>
-> I can go either way depending on what Jakub prefers.
-> Hi Jakub,
-> with this new data from David, is it convincing enough for a mana driver
-> specific private flag, which can be set from user space by a udev rule
-> by detecting the underlying platform? If not then I will send the next
-> version with the other rxbuflen approach.
->>>
->>>
->>> Regards
->>> Dipayaan Roy
-> 
-> 
-> Thanks and Regards
-> Dipayaan Roy
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+
+[...]
