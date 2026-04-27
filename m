@@ -1,134 +1,167 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012066.outbound.protection.outlook.com [40.93.195.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4C061A073F
-	for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 20:42:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777322556; cv=none; b=N9rWQgz/ziZ590AfWxMzluxWlNC7sYHxaBpa9f10FqW4rhTeey/I4QgXaLr3iVbmvgRYCfJseHS0SVwKfGHiYd5YzEqPAQFlQUIc2fFQzc/qJhvGzcrWpayIwZLAeTuuYtBJFs1BAbR5xQWbZLBCQlr+UIvmdVYTeDedtfVfysU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777322556; c=relaxed/simple;
-	bh=HbJ5qZG16sTWpJh6tMQ3NMy2C/S7Rt6bGBsorglzEDQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MBkLZYXcOetXQ4WXZyEnjkTTXCWxtqaGliytOjQRu0nS/SEkZB1H+X1crvUYtg0Fy7GKfSxM2zq8Rvw1g6Kk6UvmJO9bOXx8bkPP3KPqxqNvIph4KXEiGhOuOH+UVWBpiDlasw+maCl+Sh8594QALMDtX1SbyWKbG8P4d9WLIsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sH0aZRKP; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC657EEA8;
+	Mon, 27 Apr 2026 20:48:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.66
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777322884; cv=fail; b=B2hIoX+BcMLzMBdA/BHGOLNnBxK4Xg7+reWTV89xL57S+kn9acW2p7AviPnEZBcdYeP8bDnMHKWJ9VG2Cc8Jm7iFJxGOEwoxOoIEyXz/GSidiQgBm/6gBHltnB+iFZEWcQzNsIdu5tEqAHHDxHJLwglV1h61shn1nlR1bCEiaE4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777322884; c=relaxed/simple;
+	bh=jmPZoAm3q6p8k29599qEZNUvgzWuS9W537WpfeQ/d7Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=qK3KtmgTs7Cy9hLbvJJAAySsOhUCPYZ29g/mFJ5GeBQ8RHDbtnxd/AxhJ/o/o0/bXZoLQZia+xkVpeRgRh9jUGBavy8/L8sU5F1Yx+AJHKsPCdCMs5wZhsdbz1hzd8/1MG9kqTO+Dc3mU0B9B1iT3wLt8B5+uOFvTEhqOEzlyrA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=fail (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Ekpevu7d reason="signature verification failed"; arc=fail smtp.client-ip=40.93.195.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sH0aZRKP"
-Message-ID: <7886af5e-2d1f-4fb3-bb67-68841b1d0351@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777322551;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=va3kfywYwunI0nAsplfGk/cNsJtg9Lnn6S30Om8IrCw=;
-	b=sH0aZRKPNmas1AhclnVsMHNahj2TmXz75X06YMl+wjVKoMmIdqEgfWJvlmbV5hyxJwlrj0
-	a/3Hxjofev5s6YRUg4gC4im/gPTvJ1vbSIWhJDN2qAFGufPk0pCVA6L5ar1/WfzyeTYsN7
-	P8zjZY5WBtxKfXkXgXG4kMkcB5gvGD4=
-Date: Mon, 27 Apr 2026 21:42:29 +0100
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Ekpevu7d"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=EKJfc55gBn7/JbJs21SiRzUuW0AsfDVMTGZmA7fovsVtMpwpJXl5dlFpVdpigSVe3EWg0hBB0fu4CdI1q6zDfHGeLadKtZhEqjE7ydQqdN2j4UzanfOMKli8tBLxG4xE9Gnus/RcdDUX4LAPWvelU3Kl+4NLuekf+MSaWUp21k9wamSHm393QK0i3y9MWuF2ysFyqzpmJJz8Mdo8isyyLOcS7eDXfzYJEZpvSAG2PouwHF3KGxptafxFzeABcOnr6b5s15caTbUtbWG0RfIUe5QbTeBgBo6MVAuW/CqNsRX4shiveKpaPp65fKEDjq8A+rCDlEl4UQlySXJLv6V2KA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wJfDnkGQDnB7YqaX7jhz4r3pYQAr7nSK9IhgO8ax4J4=;
+ b=rsQdUUbJcU9so0R7/zFg7mRBFAySidN5CdO0zGCGM86QKGAxvA74BKUH63WvS3Tk0mL+vASpIam1O4Zmh9rAGrdThUTlvlpfrqYPGShsqKfmDSbcq7tlmSOjpQkHGHahsJfn4U+n1o1vBx2EYhJ7brHFuKBy8kjZ7GFVjMtKqJ2iNZogaxH/G+wSti4US7N076mGb2fGyHmqtBMXTy6dvPieTRnpIUVrrTK2hX7jlr0w0xx58LcxU6+u4oe9MNGftQmzh7t1iNY2TSYrUg+Wkyi7Yd1NqHn0grLjG9obOU0YhlxEFl5sm8V4hgpq+BBuW9cBSBY8C+KZtmfBhZuaaw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wJfDnkGQDnB7YqaX7jhz4r3pYQAr7nSK9IhgO8ax4J4=;
+ b=Ekpevu7dvZexS27zf6AAushYVGKE2eyKqudikxclym3HcV42ATS6kdvhzRmxkgoE3UM6ANC+pGpRxFyh9gBzNh+b00reJl7lqMvIcy0JSfz+541KpWAKDyh+fz1lMlsGeW3w+f1gCG0cF+47eMxsS70gUjxMLhEN/viVEI3YCTpyhfe82oiQ3gIWQdD+eiGmuV51mjdQ3D5GBVCPtTRshca6OeMvxGY3iEbIzJsPiy+dpjuwSxW2GRx6o6JVH4a9y2xQ5lYy5EeK7FzcAG1vNoor5k6rR6JO3aXcfZMvQmoZFdkb1mqFlj8XmeJn6ScLYqvaY181izAl3zJrlxnFHg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY8PR12MB8300.namprd12.prod.outlook.com (2603:10b6:930:7d::16)
+ by SA3PR12MB7829.namprd12.prod.outlook.com (2603:10b6:806:316::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.16; Mon, 27 Apr
+ 2026 20:47:58 +0000
+Received: from CY8PR12MB8300.namprd12.prod.outlook.com
+ ([fe80::ce75:8187:3ac3:c5de]) by CY8PR12MB8300.namprd12.prod.outlook.com
+ ([fe80::ce75:8187:3ac3:c5de%3]) with mapi id 15.20.9870.013; Mon, 27 Apr 2026
+ 20:47:57 +0000
+Date: Mon, 27 Apr 2026 16:47:53 -0400
+From: Yury Norov <ynorov@nvidia.com>
+To: Andrew Cooper <andrew.cooper3@citrix.com>
+Cc: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>, linux-alpha@vger.kernel.org,
+	Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+	dmaengine@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-fsi@lists.ozlabs.org, amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+	linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+	linux-wireless@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+	xen-devel@lists.xenproject.org, linux-fsdevel@vger.kernel.org,
+	ocfs2-devel@lists.linux.dev, bpf@vger.kernel.org,
+	kasan-dev@googlegroups.com, linux-mm@kvack.org,
+	linux-x25@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-sound@vger.kernel.org, sound-open-firmware@alsa-project.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-sh@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH v1 2/9] uaccess: Convert INLINE_COPY_{TO/FROM}_USER
+ to kconfig and reduce ifdefery
+Message-ID: <ae_LeSk7XDEseaZb@yury>
+References: <cover.1777306795.git.chleroy@kernel.org>
+ <9fe875d2f55af59c12708336c571a46038528678.1777306795.git.chleroy@kernel.org>
+ <ae-tVFVfx72oCC_i@yury>
+ <f54c3c2b-33da-42a0-80b7-0f6615d930ce@citrix.com>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f54c3c2b-33da-42a0-80b7-0f6615d930ce@citrix.com>
+X-ClientProxiedBy: BN9PR03CA0735.namprd03.prod.outlook.com
+ (2603:10b6:408:110::20) To CY8PR12MB8300.namprd12.prod.outlook.com
+ (2603:10b6:930:7d::16)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 17/18] bpf, arm64: Add JIT support for stack
- arguments
-Content-Language: en-GB
-To: Puranjay Mohan <puranjay@kernel.org>, bot+bpf-ci@kernel.org,
- bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- jose.marchesi@oracle.com, kernel-team@fb.com, martin.lau@kernel.org,
- eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev,
- Puranjay Mohan <puranjay12@gmail.com>
-References: <20260424171724.2058333-1-yonghong.song@linux.dev>
- <8f7648b35db9645d6616e4af8c9c734c419439c1b784c04a8d649c902e77dcd5@mail.kernel.org>
- <m21pg0zs9z.fsf@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <m21pg0zs9z.fsf@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY8PR12MB8300:EE_|SA3PR12MB7829:EE_
+X-MS-Office365-Filtering-Correlation-Id: e21d145c-03ba-4a6a-9777-08dea49e433e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|10070799003|22082099003|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	HCC9cdge92V4m6hZLbkxYjY9nSdZMvY3eUrYJzVoB9gQOqmxAPK6rdaWqs+TbJRNyZBGFNrE679QPKqMgPKQHmcjESEesO2VJjPgChKtepPLUYOE/LkQQGZsmv4w+55OFZ+Sur4Mu4JOw7V/vNmvJwOlYlBhT92YWuGJR6DXk2yQMvjP+eOYlTJdO+YTWa/Jz5KJgNrHtOAvm1it4WHU2ZBZLuL/AhrqVVwkzc+IPXkcU79jgOjI9ydER1cGo3HoLCd6gdpsP3eOfNEEF1DgB1xwOU0GvQzD1FHx6RYh0dNBNICPgU4SwossH1u0yrKpK7DamImEaixNUhDIX5GqeLTvugMJVVzxBSaEiDILCjAbZA9Z+OHcM1SVIztBG4AIVhyBRLw7KvN9n80fJiW1prOhuq6i0UkL/bhvl2RXV8f/qvckHvjveZOF5G5W/CDJJbwSEMR5qmaHNd2zViXK41IHDwoAcE3lAUf9N3NwqTg0t13f/0OcaYbRU6vQ/EEXYIwU1f+9BVtx4tw2aV5CPMy3zTFmt8JHaFRFe4e6l7ArpDbBZg6Xml+AFgUU08CpDyCP3LHA2k7Yz8eX8hEKDJ4RCJADvvVuGPsqeH/7bVuUQfTS8EKRrxfaQNDlPFfA8ce4uzJFhb290nwgicqO9fWHhu657hjQi6f4ke3+NIkg+bbwnEo9XuQ/fkQEeFoGpwGekFQ1Ooc0oaJTcAZVREVLsSoJWh99E1nS7yB9CuQ=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR12MB8300.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(10070799003)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?iso-8859-1?Q?2oPD54n5ZXNlK/kFqbJNXD1QtsOVDwh+UJSvy6M6BXER4piMhd4MdKi/hs?=
+ =?iso-8859-1?Q?dtPpvaj4LxnpiHlSbO1r9fiNIKnpbVyt/rHkG6vZrPFcZWV33Wt3zTJ3qe?=
+ =?iso-8859-1?Q?ckpBkmbC6Q5Mugc8CDDrjZOIIHIUCmJaeWHL6owAAl4UEDpaubTbrYmMuI?=
+ =?iso-8859-1?Q?NqIws0lQ62II3JN8RQZuKwQsrYOL7Nq5cL28v9C0yBSaStZjc/oua7D88W?=
+ =?iso-8859-1?Q?lVp9FnMbzl5ZdPFHkvwcurNSWE6BI72RYLGmhfxuw+iEalNBTLg93jaryl?=
+ =?iso-8859-1?Q?OQazywBMu1WZqV5znY98J8cAhbSaXoqNerO0nX5QD3UEwjJsWjGXnlR9MF?=
+ =?iso-8859-1?Q?Bg4g2NlweZOcbd0J9a6HGZaL0npF+/is4ng5baw4IKHSBGb/WHSXYdb4td?=
+ =?iso-8859-1?Q?d3TtbuomhIdQorREntl9+RMaFZfUQj6JJP8xowgTVew4wom6mp8Ds/aio3?=
+ =?iso-8859-1?Q?yk6XHj08kGeyGvaiem4uBZf8Y2rOkdQseejpE4luAqcRFsSolHHNQ72xfS?=
+ =?iso-8859-1?Q?bae/SS8Lc8zTresY8jBaOtgkXkNPTJHB5HQDPPRP+g3130C3EcS8eD5tGO?=
+ =?iso-8859-1?Q?NzZ+ymHQUjmXdjSLHoKhP4TdN5hksLFroHF4YT+CieTOYyfTC3T4uN14Js?=
+ =?iso-8859-1?Q?UL87gmptyN6VwoW6YhMFZgHudT/IN/KukxSYBtWnZHqw/I/RRpeaTAknI1?=
+ =?iso-8859-1?Q?7z1yyEgD+nkCwBsbgf4V2o7fXMYFCDwVMoMNrl5ZLCY2ZZVCbVB+K2+wJ/?=
+ =?iso-8859-1?Q?inPaRdegXyxv3Z2bAPJAkiT8X0ISDMOe2eOf9iNEETkwOYz7Jr4nKvc80u?=
+ =?iso-8859-1?Q?XmIxrPRpBAhnAr8S7xfczH+Qqehg2TjkgAz64f8ZE8/9i1wG7mXVO1Q9as?=
+ =?iso-8859-1?Q?0uNtSUBT6CwjDIu2Amsqe4AUMw/9zUCctXgXVLfEx9aZcp1+1Dsxtt2N8z?=
+ =?iso-8859-1?Q?/L7OSlnpIcZg+TM7s8ia0P1nx+MU3SMI3qOYqLkDN6MHjtMX1beye9a0NQ?=
+ =?iso-8859-1?Q?ax9jU/0KlCxKchpGqMjIocKvlky4JLfKCTiBpS5XjJfREJ2e7Jew9rHsl9?=
+ =?iso-8859-1?Q?w8ClFQzQqaLDDgE4HpS45w/MKo9f93Ash6uWAME71hU/OPJaLBOz0Hpldd?=
+ =?iso-8859-1?Q?m2FT9tRGyPVIo1L+3HqLJUg9o1OscoKBqdF68jUKqgmevSHEfa1UBdv373?=
+ =?iso-8859-1?Q?tsqh6SgzYUFHbhsPtvMgwVDmVKImbZY1DOP0fd8wUojL2nHmKHuapuUelP?=
+ =?iso-8859-1?Q?Cy7jKpGJCTnRVCFUP+TcIiCMeg7jztgl1gZm6ZF5OEMPnLSgVXNc2frsXG?=
+ =?iso-8859-1?Q?i7Tl4usifn7qlFirf9xjgi/muZGT3O54fymYbGeXPWXs9yYi6E734lRU3s?=
+ =?iso-8859-1?Q?esZwUYXTz+a6EE2LAkm2J/jh8f4tiKB+vx1FITuMB8F09K/S0rGrQCfbOA?=
+ =?iso-8859-1?Q?zQJYWuF7cpp6qPoJQ4D/NwHej7OthQv0ts8RpcxqFrX8r2QFTE2kxBnbRQ?=
+ =?iso-8859-1?Q?zH+VYeLWY/k489znw1njCgLLGESMF0DyOWS6pKnzOdAZGSqYkjDH97a4Pw?=
+ =?iso-8859-1?Q?fCVnJ+gzPGl0Z8ysg8nsTHrAvnWX/YKoJKKlW6ayYaVF/toGLaJhXQXBwU?=
+ =?iso-8859-1?Q?hXseQkaBmAmk8jvoDWKtBllEbMiEapN9iuDyfvYHntUDaL2Gy1qlm+aosx?=
+ =?iso-8859-1?Q?1NyFkDKiwyMNtj9YU33Xjg14+fUyMnYdXGjdpUJk60YTi5RRQJD2DjjAV+?=
+ =?iso-8859-1?Q?wuTrE0HYz7zXrNZJofNvR8+A56trLl7EwyrqY231N4pMe/m58Zda1V/tIq?=
+ =?iso-8859-1?Q?bdVf26XRYGA8BCZj3ziv31rtyHAsm+JkxqEH6VRAcg40GKElJycg?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e21d145c-03ba-4a6a-9777-08dea49e433e
+X-MS-Exchange-CrossTenant-AuthSource: CY8PR12MB8300.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2026 20:47:57.4916
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ApBP39ijwBDa3/RbspzeLaHHXUB2RtFB8F4ypsIudayixW1tFGUX6nHaIuJK1Cdq2xPDFGyR8Es6N/9hhOEExA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7829
 
+On Mon, Apr 27, 2026 at 09:39:33PM +0100, Andrew Cooper wrote:
+> On 27/04/2026 7:39 pm, Yury Norov wrote:
+> > On Mon, Apr 27, 2026 at 07:13:43PM +0200, Christophe Leroy (CS GROUP) wrote:
+> >> Among the 21 architectures supported by the kernel, 16 define both
+> >> INLINE_COPY_TO_USER and INLINE_COPY_FROM_USER while the 5 other ones
+> >> don't define any of the two.
+> >>
+> >> To simplify and reduce risk of mistakes, convert them to a single
+> >> kconfig item named CONFIG_ARCH_WANTS_NOINLINE_COPY which will be
+> > We've got a special word for it: outline. Can you name it
+> > CONFIG_OUTLINE_USERCOPY, or similar?
+> 
+> You can't swap the "in" for "out" like this.  "out of line" is the
+> opposite of "inline" in this context, while "outline" means something
+> different and unrelated.
 
-
-On 4/27/26 2:06 AM, Puranjay Mohan wrote:
-> bot+bpf-ci@kernel.org writes:
->
->>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
->>> --- a/arch/arm64/net/bpf_jit_comp.c
->>> +++ b/arch/arm64/net/bpf_jit_comp.c
->> [ ... ]
->>
->>> @@ -1671,7 +1727,7 @@
->>>   	}
->>>   	if (src == fp) {
->>>   		src_adj = ctx->priv_sp_used ? priv_sp : A64_SP;
->>> -		off_adj = off + ctx->stack_size;
->>> +		off_adj = off + ctx->stack_size + ctx->stack_arg_size;
->>>   	} else {
->>>   		src_adj = src;
->>>   		off_adj = off;
->> When priv_sp_used is true, does this offset calculation produce correct
->> addresses for BPF fp-relative accesses?
->>
->> Looking at build_prologue:
->>
->> arch/arm64/net/bpf_jit_comp.c:build_prologue() {
->>      ...
->>      emit(A64_MOV(1, fp, priv_sp), ctx);
->>      emit(A64_ADD_I(1, fp, fp, ctx->stack_size), ctx);  /* line 612 */
->>
->>      if (ctx->stack_size && !ctx->priv_sp_used)
->>          emit(A64_SUB_I(1, A64_SP, A64_SP, ctx->stack_size), ctx);  /* line 620 */
->>
->>      if (ctx->stack_arg_size)
->>          emit(A64_SUB_I(1, A64_SP, A64_SP, ctx->stack_arg_size), ctx);  /* line 623 */
->>      ...
->> }
->>
->> When priv_sp_used is true:
->> - fp = priv_sp + stack_size (line 612)
->> - main SP is not decremented by stack_size (skipped at line 620)
->> - main SP is decremented by stack_arg_size (line 623-624)
->>
->> So the BPF program data lives on the private stack, while outgoing stack
->> args live on the real SP. These are separate memory regions.
->>
->> In build_insn, the computed address for fp-relative loads/stores becomes:
->>      addr = priv_sp + off + stack_size + stack_arg_size
->>
->> But the intended BPF address is:
->>      addr = fp + off = priv_sp + stack_size + off
->>
->> The computed address is stack_arg_size bytes too high, accessing memory
->> above the intended location on the private stack.
->> This would read/write into the private-stack guard region (16 bytes) or
->> past it when stack_arg_size > 16. Can this occur?  The verifier only
->> forbids tail_calls + stack_args (verifier.c:5657), not priv_stack +
->> stack_args. A kprobe BPF program that uses BPF_REG_FP and calls a kfunc
->> with 9+ arguments would trigger wrong memory accesses.
-> This analysis is correct, will fix in the next version.
-
-Thanks Puranjay, once you fixed this issue, I can submit next revision
-with your and my fixes.
-
->
->> Note that x86's bpf_int_jit_compile prevents priv_stack allocation when
->> stack_arg_depth != 0 (x86/bpf_jit_comp.c:3883). The arm64 version has no
->> equivalent guard.
->>
->> The same issue affects the ST case:
->>
->>
-[...]
-
->> ---
->> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
->> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->>
->> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24902767240
-
+Check KASAN_OUTLINE vs KASAN_INLINE for example
