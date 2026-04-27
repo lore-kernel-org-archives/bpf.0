@@ -1,147 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C5A3D3CE3
-	for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 14:21:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED893279DCA
+	for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 14:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.188.251
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777299661; cv=none; b=NPcVRC/BQDn5UcPBfD981Qrqb/ufpVAURo171SGflJaVh8O2LNJGYq3UHNYjMsnzl10Y+dPlhqRyLsQIhfdtGvGvh8vfgZ7j8i1VVs1RFUvu6AEN89KWOppFk97vNkzye6IeNsjUrwTVejuLXUP5ohlr1B7f4RE5Q3gh57M3Oc8=
+	t=1777299943; cv=none; b=ElrsvMXgVnBEAxJJODpXAXbUUhnlqXEn7+yRf1pawsORwc0fEO74U3teMtsZQMQpY+in/Zp4y6A8Mx1m+COeIbXEeLfi2pcSdUSeGcXmHZZQ3nCEuPTgpmbJn6PoBxL1NsGjUAbpUpAKGmQdjp+a7CypB1CgM5+Gqa6yFGI7nAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777299661; c=relaxed/simple;
-	bh=iYeaM1jIWkQgRPkEZHNaD/j88IYl3E3ZeJw9cZlyYl8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sXAb7Uu0SNVyTFxsPwW4w+CPYIULxdpbU0fcWwtPNPeXPGYksobp4m1l/J1SfdNnYdwWewWM25nkLmXChSosgNStzQTIHSIKvL6AvObCEZyBsOtGwD189HFzbjxPhvSxiVmvj/rne8uLlHoqLOnYSbTSsASQBYvPKzKaP97zB3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bD+VTiTp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777299943; c=relaxed/simple;
+	bh=JsKO2kLHjVQxR/IxgPt8nD8IBx0qTuKaDg2MkQDwqj4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JbkD+tyGAxqPi9ZAViwWRhkF3pF9Ks/x8GyXMz55qONURKlhsFR59VAdbUktU1vBE1DFbiD/p9v2cIkdb71+eiO61sFVxUZYfWugulO9nLQ593wVr14fWd8+iRi6t9GBaQWKccBDqa2ikioWcd9HMq7F+nDwJMlOk+ezWYWiK30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=onPtwnhR; arc=none smtp.client-ip=51.159.188.251
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bD+VTiTp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B3ABC4AF0C
-	for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 14:21:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777299661;
-	bh=iYeaM1jIWkQgRPkEZHNaD/j88IYl3E3ZeJw9cZlyYl8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=bD+VTiTpIJAQcPm4X7aatvaCwq8cFO3iNoQc+YM/5JtACWc/iHiAr+NYGWnNnGggN
-	 MKnkVL2kS8ZKBXN3QXUG0JeA0ZrPmb2oNLCc4siQCXbSAu/iG4wiWIIKC0daLu6Gll
-	 EEHkgHIQkUOKbDKplFjAkaPl9R9EImDXIcRgkq1POg2FIlwe/AsnoPJC9pQxVIyaEm
-	 OaWyzV19evFKRYRbLDL7CwZDk2F4e9xXwGm20HlyJjnHIpnnCeWTNWx4HMy1CoyV8L
-	 y8mdqxrajutBhr2yB5hUj6RPjX1lZrVZzSZC0EGSHeWvBEpiarE1XxRMzopCJ7K2la
-	 Ok9eTDzPZD2yQ==
-Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-6058ac0ebceso6188604137.2
-        for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 07:21:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ92XFrPokwr7UayxGgUf0eKq4y81GxciB6sb7hBJ3V6Gfm5SP36TSWiD9U8OqjLuPrZHV4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwoKJEgf3woBCxJL+eS0ooCphMRD7O2kyfcOT3Ysx0sLLm5TOge
-	YM3t+8f7CfF0AfGhN/Xi1DjqIWpz/SlZXITVgHYiXzaszokG5MX3nRqTU6A9g2NZhqLOpCSb5gj
-	7p165czV3p2zcIo7LtX8nreQwlDkPCkg=
-X-Received: by 2002:a05:6102:162a:b0:605:5d09:8631 with SMTP id
- ada2fe7eead31-616f807265emr21177893137.29.1777299660351; Mon, 27 Apr 2026
- 07:21:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="onPtwnhR"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=oss.cyber.gouv.fr; s=default; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=JsKO2kLHjVQxR/IxgPt8nD8IBx0qTuKaDg2MkQDwqj4=; b=onPtwnhRpBuWG24r/TDgzkg0NR
+	61wQrOBtoXKyLbTSe2P1bPo4ciDQafm/aTq1KTwF2tBZuXHe+lXNDDN0q1YmAkextI+OksnfwjT38
+	zqjC5Va4esHpcoqVt/Maeqh3wBxnT1hULhgnaLcSi/icB1CPWrQ817wwM0k7enAxEEYJIYR5juIfI
+	KzESkac68GV8zVqkDx0F/N3n8gVF+sPWqTxVCvmCXrphMlE8bebgi9EDP3o5wC9KSkZtLSKS6du4f
+	gqXZdvlCcOCo2AH5E79EhvPP4OntpTJhLOev6qzTenN6T7oH8seN3btkaMwFYDcrnnwP0x6HW0Jon
+	UD0rGzTA==;
+Received: from laubervilliers-658-1-215-187.w90-63.abo.wanadoo.fr ([90.63.246.187]:32626 helo=archlinux)
+	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.99.1)
+	(envelope-from <nicolas.bouchinet@oss.cyber.gouv.fr>)
+	id 1wHMu4-0000000B3NR-1n0a;
+	Mon, 27 Apr 2026 16:25:40 +0200
+Date: Mon, 27 Apr 2026 16:25:38 +0200
+From: Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>
+To: "Xavier Brouckaert (xabrouck)" <xabrouck@cisco.com>
+Cc: "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"security@kernel.org" <security@kernel.org>, Xiu Jianfeng <xiujianfeng@huawei.com>, 
+	Kees Cook <kees@kernel.org>
+Subject: Re: BPF: writable uprobe pt_regs context bypasses lockdown=integrity
+Message-ID: <ae9xx6WBG-3HyEHT@archlinux>
+References: <DM6PR11MB4722C282C0F20BB23F54A87ADB362@DM6PR11MB4722.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260427001602.38353-1-dwindsor@gmail.com> <20260427001602.38353-2-dwindsor@gmail.com>
- <CAP01T74iuSDJeL6g=5yLdYGb-VcESK1SYY3R1S1r-CtQEsW+oQ@mail.gmail.com>
- <CAEXv5_heSFK5rZYtaJG70Xgv92Um6Dbq8b95PtnpKy7XFwpKUw@mail.gmail.com>
- <CAP01T74WBjcMXbWYeaWB-oTk-bUzoxi_EEALDpT1hFUEOovnpw@mail.gmail.com> <ae82Vv0RWzcXqSaz@google.com>
-In-Reply-To: <ae82Vv0RWzcXqSaz@google.com>
-From: Song Liu <song@kernel.org>
-Date: Mon, 27 Apr 2026 07:20:45 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW60SRXZbFYRDm-QaTiB8tTtJD_N4jk1=680x5UsZmpj9w@mail.gmail.com>
-X-Gm-Features: AVHnY4IpuvPbEgxDVLoVsaHhXP3B7YAYoqdEKM5mE-x3NufiAn57piXniLfGauE
-Message-ID: <CAPhsuW60SRXZbFYRDm-QaTiB8tTtJD_N4jk1=680x5UsZmpj9w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-To: Matt Bobrowski <mattbobrowski@google.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, David Windsor <dwindsor@gmail.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Jan Kara <jack@suse.cz>, 
-	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM6PR11MB4722C282C0F20BB23F54A87ADB362@DM6PR11MB4722.namprd11.prod.outlook.com>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
+X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: nicolas.bouchinet@oss.cyber.gouv.fr
+X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: nicolas.bouchinet@oss.cyber.gouv.fr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-On Mon, Apr 27, 2026 at 11:11=E2=80=AFAM Matt Bobrowski
-<mattbobrowski@google.com> wrote:
->
-> On Mon, Apr 27, 2026 at 05:32:47AM +0200, Kumar Kartikeya Dwivedi wrote:
-> > On Mon, 27 Apr 2026 at 05:24, David Windsor <dwindsor@gmail.com> wrote:
-> > >
-> > > On Sun, Apr 26, 2026 at 10:57=E2=80=AFPM Kumar Kartikeya Dwivedi
-> > > <memxor@gmail.com> wrote:
-> > > >
-> > > > On Mon, 27 Apr 2026 at 02:16, David Windsor <dwindsor@gmail.com> wr=
-ote:
-> > > > >
-> > > > > Add bpf_init_inode_xattr() kfunc for BPF LSM programs to atomical=
-ly set
-> > > > > xattrs via inode_init_security hook using lsm_get_xattr_slot().
-> > > > >
-> > > > > lsm_get_xattr_slot() claims a slot by writing to xattr_count, whi=
-ch BPF
-> > > > > programs cannot do: hook arguments are not directly writable from=
- BPF.
-> > > > > To hide this, the BPF-facing API is just bpf_init_inode_xattr(nam=
-e,
-> > > > > value), and the verifier transparently rewrites each call into
-> > > > > bpf_init_inode_xattr_impl(xattrs, xattr_count, name, value). xatt=
-rs and
-> > > > > xattr_count are extracted from the hook context, which the verifi=
-er
-> > > > > spills to the stack at program entry since R1 is clobbered during=
- normal
-> > > > > execution.
-> > > > >
-> > > > > A previous attempt [1] required a kmalloc string output protocol =
-for
-> > > > > the xattr name. Since commit 6bcdfd2cac55 ("security: Allow all L=
-SMs to
-> > > > > provide xattrs for inode_init_security hook") [2], the xattr name=
- is no
-> > > > > longer allocated; it is a static constant. We take advantage of t=
-his by
-> > > > > passing the name directly. Because we rely on the hook-specific c=
-tx
-> > > > > layout, the kfunc is restricted to lsm/inode_init_security.
-> > > > >
-> > > > > Link: https://kernsec.org/pipermail/linux-security-module-archive=
-/2022-October/034878.html [1]
-> > > > > Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/li=
-nux.git/commit/?id=3D6bcdfd2cac55 [2]
-> > > > > Suggested-by: Song Liu <song@kernel.org>
-> > > > > Signed-off-by: David Windsor <dwindsor@gmail.com>
-> > > > > ---
-> > > >
-> > > > The explanation and code make no sense to me. Why not pass xattrs a=
-nd
-> > > > xattr_count directly as arguments, even if you choose to restrict t=
-he
-> > > > kfunc to a specific hook? Why does the verifier core need the hack =
-to
-> > > > spill the context and extract the two arguments?
-> > > >
-> > >
-> > > xattr_count is an output parameter; we cannot currently write to it i=
-n
-> > > bpf as there is no verifier support for writing to int *.  xattrs and
-> > > xattr_count can be fixed up by the verifier, so we only require the
-> > > user to pass the name and value.
-> >
-> > Sure, but the kfunc can. Did you try passing them in directly?
-> > If that doesn't work for some reason, we should fix it instead.
->
-> Hm, perhaps this fixup approach might be the simplest in order to
-> assure the needed safety?
+Hi, thanks for your report.
 
-+1. I think this is the best approach I can think of.
+For information, Xiu in CC and I are the new Lockdown maintainers for a few
+months now.
 
-Thanks,
-Song
+Honestly, I'm not found of `LOCKDOWN_BPF_WRITE_USER` being handled by Lockdown.
+Lockdown original goal is creating a bright line between uid-0 and ring-0. In
+other words, uid-0 should not be able to obtain write/and some read primitives
+to kernel mode.
 
-[...]
+Fighting against userspace processes taking control over other userspace
+processes should be handled by another security mechanism. Moreover, as you
+said, this kind of behavior can already be obtained through multiple ways,
+using ptrace as an example.
+
+Honestly I'd like to recenter Lockdown to its original purpose and move the
+`LOCKDOWN_BPF_WRITE_USER` thing elsewhere. IMHO, it matches well with YAMA.
+Kees, do you have any thought on this ?
+
+Best regards,
+
+Nicolas
