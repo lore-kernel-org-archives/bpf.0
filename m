@@ -1,68 +1,64 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD74826738D
-	for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 22:40:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8240F308F05;
+	Mon, 27 Apr 2026 22:44:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777329624; cv=none; b=TTmnuVsSlhbo0pQTiiayELJaCC/Q0qyG4E+JDPo+62NS2n4shZTia1cbxvX6plx4IE/LQlvua048wVCHAu/Ozev9xebTUMi945C2qsyY9Q7M4x61j3WUXwaLZs5TxCrcMtf0YWIduBF76IY//Kyd+wzCYJPJ78ENHLJvOq9kWBw=
+	t=1777329872; cv=none; b=q/TSrzFRt6jKdAHq47NxCtKV9jT6pSz/J1tpD4//G+BrMUk4Wdzi1BU5E+zV4h82T+l8vqEDigA/fSSA2IjsroL51PAUsvmRcnF6GRj2Dtl+k5aKxbdzpBU8i/gDnszBCDBplQGj7Yg+qzzvmffcJxEYp6IY18VXahCvnj8CUTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777329624; c=relaxed/simple;
-	bh=d5GAfifer7UhwpqXfJzxG4VAbQdW+fQHcgwzYkW70Mg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tDkcPvTNIrYbrN52GTddRg4TK1Ay7W9T18rkmTIQAWvkFhR4tu2xEKZcv/KhiZVA8qn3t7c81lBdrBauXo9JrkiSmKIg191T9z8z4ZeI2VE6EQz77VluQtGctm7IEG+1bIstxrO7kajh8Zf8ioIIAUcHY0aun9vTYfQDzPvcHZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XJLizVjH; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1777329872; c=relaxed/simple;
+	bh=R4LMRbc5mg+8UIeUjMdT+Efo6WUGtul9TLdlExK2ELg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=b4I7Zo4AwGZQTno7qf7eXzV/7kFVPUuITcE82Py3Sa+r1x1fdKwopcKRG9v/yjZehScNvb6DFBCplKpqebH/LmNJ8SmE+w8KUSbsfdTrWBYRBROxFwaN+/exxMcg4rKmi88UarAjjc2tg5q4HNT4WrtYfTtVBTgdFHCDbkRcuHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c6RgOq+V; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XJLizVjH"
-Date: Mon, 27 Apr 2026 15:40:12 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777329620;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WzrZN74GVBZokC1ryglYdW2bR4JGJX0G4YAAV4itqnE=;
-	b=XJLizVjHfNvoYMow1Gn+PESNu7GTFZH7JoiHLokhkU7NgzjoW4JfgkCkROS113iawSgOdc
-	ScOEwT8TqT+nbYw5BviqAr6mlCrLzc9pExN5zvd9cXgh17qOnmbyO2gNZA79M10CW8CkUY
-	Omj6sAtmd/uqwZgrobjziByoinoh4vk=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Nick Hudson <nhudson@akamai.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Willem de Bruijn <willemb@google.com>, Max Tottenham <mtottenh@akamai.com>, 
-	Anna Glasgall <aglasgal@akamai.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/6] bpf: refactor masks for ADJ_ROOM flags and encap
- validation
-Message-ID: <2026427223629.lOYH.martin.lau@linux.dev>
-References: <20260420104051.1528843-1-nhudson@akamai.com>
- <20260420104051.1528843-3-nhudson@akamai.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c6RgOq+V"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD4E5C19425;
+	Mon, 27 Apr 2026 22:44:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777329872;
+	bh=R4LMRbc5mg+8UIeUjMdT+Efo6WUGtul9TLdlExK2ELg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=c6RgOq+VoUwVn47JnHkDjnuu/vZqEpPZOlm1WZEXW/vRsvPtcEGYyFKv9mV4QRI4g
+	 sHTuo03n9gQ59wKHHTU91b6z0CY/HRapOAxL2u/H9v68niu59kvE7L5CJ2Iy6q5Fcz
+	 kZd2yb5mLU38GFtoTykuyYSTBnimjRDQyc3jh7DMUtOdDR3mxaT+iXvNAGF1i8Trea
+	 iBZ4c3jzhxByCX3W8ZYweQjMeL1Muhoo7vEde1Ax8Q7FfB/RsIs7uz1aGjkDSFpWCl
+	 r8WFeBXaND+y38YxAN8HcdklDfKfu+lLMFdQ1u/b4uYKWE6Ulb9sPXLQ7YyM35dihO
+	 /dYNut8aAZ1Ng==
+Date: Mon, 27 Apr 2026 15:44:29 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+ decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, pabeni@redhat.com, leon@kernel.org,
+ longli@microsoft.com, kotaranov@microsoft.com, horms@kernel.org,
+ shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
+ ernis@linux.microsoft.com, shirazsaleem@microsoft.com,
+ linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+ stephen@networkplumber.org, jacob.e.keller@intel.com,
+ dipayanroy@microsoft.com, leitao@debian.org, kees@kernel.org,
+ john.fastabend@gmail.com, hawk@kernel.org, bpf@vger.kernel.org,
+ daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me, yury.norov@gmail.com
+Subject: Re: [RFC PATCH net-next] net: mana: Force single RX buffer per page
+ under SWIOTLB bounce modes
+Message-ID: <20260427154429.6a141824@kernel.org>
+In-Reply-To: <ae91hyrLf4n23XE6@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <ae91hyrLf4n23XE6@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260420104051.1528843-3-nhudson@akamai.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Apr 20, 2026 at 11:40:47AM +0100, Nick Hudson wrote:
-> @@ -3618,8 +3623,8 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
->  {
->  	int ret;
->  
-> -	if (unlikely(flags & ~(BPF_F_ADJ_ROOM_FIXED_GSO |
-> -			       BPF_F_ADJ_ROOM_DECAP_L3_MASK |
-> +	if (unlikely(flags & ~(BPF_F_ADJ_ROOM_DECAP_MASK |
-> +			       BPF_F_ADJ_ROOM_FIXED_GSO |
->  			       BPF_F_ADJ_ROOM_NO_CSUM_RESET)))
+On Mon, 27 Apr 2026 07:41:11 -0700 Dipayaan Roy wrote:
+> In both cases, sub-page RX buffer fragments allocated via page_pool may
+> not be compatible with bounce buffering in this mode, leading to failures
+> in the RX path.
 
-It has conflict with a recent change. Please rebase with bpf-next/net.
-
-pw-bot: cr
+What does it mean to not be compatible with swiotlb?
+Normally that indicates that DMA API is mis-used.
