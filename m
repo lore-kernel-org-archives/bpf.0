@@ -1,231 +1,218 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011019.outbound.protection.outlook.com [52.101.52.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEACF36606C
-	for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 20:24:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15592C3252;
+	Mon, 27 Apr 2026 20:39:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.19
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777321448; cv=pass; b=sb2GE7TtWWYJY+vw7U38MIFs5CeouZEsr1wW5/WEda7KHEywDiY7vaTs7BL7YssnNRkTv3XLVBQHjaW68k1L11fLsMvDMbAAUBhiDqFye+M/kXB0GsD1lFSB9vX0UEazUKikOQ95Y+DbXA4MQWF+2ByDqbfLraDw/lPDPE2U51c=
+	t=1777322390; cv=fail; b=lEExJoaOBpcgPPXsxS/4cTksStJ/BFsFMhFYRkd3McATXeEFAF86XZ6dbAbxzlLTQ8oHyZ3Gkq14CqfcF+L7hHACUZF0g7hHWVFTqXSbuOC6mvy5aVDdhsk1ElkyCLaQIEJ4tFs9YR7Cdkdn5fHe63tCg+xWtWf533p6MKKYQIg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777321448; c=relaxed/simple;
-	bh=MIDQk6IaaivJ9A+oYRAlw1Zvj3fMOH5Mb+7qhf+hWso=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HmEUSXtE2kIWI8yGqip1BkjUQ6yKgbumWNCbYm9HJ3Y5CO3VNkcp1GmpnS+XcoPydjkET0ELrq7HzmVBtCY4iPugnoxHWX7JpBYAiEGRqtKgZ5a9QgnXMqgyySqM0EbUkQ4UEs7Nq9LYhTCCDd3zberW/THvQnmbrPdD/gs4MUU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DHIASxPY; arc=pass smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777322390; c=relaxed/simple;
+	bh=587KSE/mBHlcC1zyB/ZzV6dcer4yy+VvGcgD8lme/jE=;
+	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=uWy9LwhZiKld1VuVbgXZiL4/vpCh74geugiiTvjhn7AWTz9QLFJ6uOr5Thz3cJQpaZYQ/Z5cfyXewVf4QJ3BVVmq4sKUcYwOGGgwPccCt6d7YU9NUBWoBgElgLPfgbMWHPkJgUNtoa5EjZNr2rAMU4YD/iGxgEPzja9tUHsYZXc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=citrix.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=mXaS/4S2; arc=fail smtp.client-ip=52.101.52.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=citrix.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DHIASxPY"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-79a7109f568so127618367b3.1
-        for <bpf@vger.kernel.org>; Mon, 27 Apr 2026 13:24:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777321445; cv=none;
-        d=google.com; s=arc-20240605;
-        b=LB2kSxebEO2YgnkDAM7BWm2bbyhYgiqo7FKtPRJwhmYJfS3VneUJDHT7v0HlV/L3iw
-         attD8y9LN1Qo/w647cZfCxF5mdJ+mKVPHMFb1iDUjVjhWfLOUYsPqZoyuVd3G9JZ3/f+
-         j9yUHaN3zGH5N7D7ka1gcN0v9RPVgO4sU3H+Qhn4402rTPS+799f8olIogltmprnCw5S
-         IVdWs7A6baUPiRgn2m+79YpNRpqdYsDPiGF+dFZmjwy5SyqXtRCQG+D/pz+kCJYxi5QM
-         LDWLmvBPpLF5kijqErpqYeBWaxngsM84oiaM5rL48vOITnkgK4guXJUas1//CsHoLzRl
-         yZ+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=BCN7Y9kM9mKkjADQHIZKQPGfRhnTuCp0fYgbJCpzkI8=;
-        fh=t+mmM/gg8HvVqu3DtowYM9O0sTzrV4vLBdaKbxjGBCk=;
-        b=EQjraQELo1mvKJ7TzJ+qPke5yXXCfKnD0v/vVz8gnSJFJwN1VBcUXmk7l3T4LNGgkj
-         U7mSm+TYScSeg3zDNEU048khyxEm8m/Cq6JsYZSCXIUsR0HcRBBtKcitDW3oUkoH76Bb
-         nniviAPSn2fCivbZgMuVyef//7VUepmh6eOSFkgvvJi8dWYV3eVU1o2PMWu3dZ+qoFbt
-         Dow0OqG6cwE3gf+1tZZKbyXf7UZeeQ8DOJsEYhRqL8F5RCKiT1yGkTPt9dinsNWueEP4
-         IByg1dtMM4iHpV1YDfgu2RIWSP7aCJ4w9KCEocmY0o62E7ap6DgC33FjIo02/967Tc1M
-         +T2Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777321445; x=1777926245; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BCN7Y9kM9mKkjADQHIZKQPGfRhnTuCp0fYgbJCpzkI8=;
-        b=DHIASxPYsK59ooP+zWGMw+F6Sb/dbrUIbOuH310Pjtm7W4QduG9/to5nce+Pzt0CTk
-         4+d0Xz1/uxGFi0O/hKMO+1wH+nCI48DIseO81CGHTde+XLwXKuepYnBb6QyhrkZiT2Wm
-         JQ1/EudwaLhiZx0eE8kFi26LlbRJry+CMi6O/pPgLSAK2AgYl/UJ9WvS6pl08YY1DOyU
-         CvGA4i1kOxYhs1hJPWzLliy+dC8CNUV/l77Ufkt6WBjHIHnj3JBGAE1qcNLjaI4UldCt
-         HCdO18kzYeNBWjNYlLjL7YNB4pa5M59g/PhWUnmbj3UMOpCi51Le+aRId96y5hs3jj38
-         aiSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777321445; x=1777926245;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=BCN7Y9kM9mKkjADQHIZKQPGfRhnTuCp0fYgbJCpzkI8=;
-        b=hsUaJknu2rCCIC8LBq9IS41whHQQHnd/Ts2Vl42CbBMZ0VRrkMhnRTVhMwAfmLlEQz
-         8tGrDfIohLXpd/ARS/VuqtAz2Z6VcFexP6T+tDeBYgykyuZmhfgjV8QBtzMyxoKoxBph
-         3mRnxIq91PW8KyPwIsEkJwA5JgXK8Y3ZcjyDzYjgdRjeNn3IEojVmMaGzskM0s1Cs9vD
-         lqsob1d8r6YGOWg9gLiH2Y4L6x/waO2imaIZ7j9il75lViMRUKIfKhJ7q+QI18SFZSle
-         SadM71LafIj5pncSNFk/zBSLmrKzJMMeiwAd50iOyG2hvgeRXLXkrWOVZnUGgHtU6UE1
-         0Zrg==
-X-Forwarded-Encrypted: i=1; AFNElJ+kQpaIra/yrEXTMeI5EL9lCiHwrmhkZMkuWt8o1TZhZhM0yiUyMDBg/GtAetxvFKhZ9pY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyzwqcx9DIaDiSeCe7Ix2XWpkc1uc20Fp7wigbSlawUZkdp9QI/
-	QrMu8WJvtU/TaGvkbI/0cpyCXDiLdJhOk9kLQQcJKzw4P5bamkr+7U3uEBNbcVGtdr/0SwfhjXB
-	vEz5QAOx9+7/TeYl7qN/26Ig41+s+nFA=
-X-Gm-Gg: AeBDieslRaT6j8ibIiLUjJHtEa7ibIrljPTOJ9P9Ect50WG5ca7xKoXRBy4OcPKwCUu
-	or2JAy+EzCVIs2nVvWLdRQJXjIT4vYvV85lxFZC+Nbx6Wi+S/0Oqz7ClNsTLn4aKrRsIrFVnagc
-	zs3PgPRGvEP7NULhOj236GV5VhGpenWQiiCAwjDVFL7fLQMwkXzcvcjn+gqEQRtAATtvuNrkjZE
-	boaVbo9B4v6zjMNz72z5iVoVxjzBJaFP3fGhL6yJ+QaG4czITK/VAu40BdyF7WQhOKz7TnvPcIU
-	ijVUx5h0NnmzR14LkA==
-X-Received: by 2002:a05:690c:e0b:b0:7b1:3579:2ef7 with SMTP id
- 00721157ae682-7bcf5573815mr842387b3.28.1777321444779; Mon, 27 Apr 2026
- 13:24:04 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="mXaS/4S2"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=oUh77Y8MYJlZhKjg7cr9IZMNNqrz/rZ2qa3tNEc+fec4C7Ju2THcWJblbVnRaqWsvyoKQu+dUhBVNp4GpuLjmVm37rB1bK2CCCYDLT4BzK6PrU+SzNHI48mXeHIxXZZ1yckmz04lu6d99FmaPs4HZMLrAY6IoHyP3tghy99Mz1KEnbJuD4AsUgTBdf48+3RcVVgHji2YBIDA5Qvt/o6jqudWrz+L9xONlDtcVp5UYCJO+vJGt1BvCEOiHbDs8Q8H7qSmSnmE5EFe5fDVwFzrriTXjJgTDZFTAjlIDkMhLoj8cX3ZD0mM4vhMDH5j+EBD1cgIeMa5/5R7wZRZN3faMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=587KSE/mBHlcC1zyB/ZzV6dcer4yy+VvGcgD8lme/jE=;
+ b=JBSBPDWe2m0PUXgGc7whO81nXvxcarqS1U4Y+X8CQYCyQDQp+k4PTYxZYzV+P7o8uGNnzVqUd8ZSEiYQ/X29Gg7jV3JZdkFRu+SLujKDNw5PQ66DfWoCR3smuF4XOShj5DAgGaeS69ZUB2th02krtSFErSEjyLtujddPS1MOz3p/oh4aeeg2pXQXOID0eUQwz4WqzzPzCNJ1VT/xa19Ags3nCGgINqRiR24y1CZmhyqxt81o5jZYYKSWtuFkGu8/MzSQWt7aXGQeUe2HjZ28NR0imAc46B0gAucQ5+9ruoMJw7ZVD1v2RP/rIj8FC5uO9FnXzXmU7m2QSDQXx6aPSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
+ dkim=pass header.d=citrix.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=citrix.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=587KSE/mBHlcC1zyB/ZzV6dcer4yy+VvGcgD8lme/jE=;
+ b=mXaS/4S2ySUjjDWZ0IHnYqwUL9esfa44nwOyfeA3PSxmst6DepNPBSqa3gJjLITYVh03D8R5fmbdXIH3RhlOIPFr37oRxRWcMHUeKl83DVTcXJtcDCT6AgU6UejcOMBE1V143s18p1Wly9dN8WRFl0AoPR/HJoB+cbQxLS8VlD4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=citrix.com;
+Received: from IA1PR03MB8288.namprd03.prod.outlook.com (2603:10b6:208:59e::6)
+ by PH8PR03MB7197.namprd03.prod.outlook.com (2603:10b6:510:25d::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.26; Mon, 27 Apr
+ 2026 20:39:41 +0000
+Received: from IA1PR03MB8288.namprd03.prod.outlook.com
+ ([fe80::b5ee:28c6:e04b:5599]) by IA1PR03MB8288.namprd03.prod.outlook.com
+ ([fe80::b5ee:28c6:e04b:5599%3]) with mapi id 15.20.9846.025; Mon, 27 Apr 2026
+ 20:39:41 +0000
+Message-ID: <f54c3c2b-33da-42a0-80b7-0f6615d930ce@citrix.com>
+Date: Mon, 27 Apr 2026 21:39:33 +0100
+User-Agent: Mozilla Thunderbird
+Cc: Andrew Cooper <andrew.cooper3@citrix.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ David Laight <david.laight.linux@gmail.com>,
+ Thomas Gleixner <tglx@linutronix.de>, linux-alpha@vger.kernel.org,
+ Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-um@lists.infradead.org, dmaengine@vger.kernel.org,
+ linux-efi@vger.kernel.org, linux-fsi@lists.ozlabs.org,
+ amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ intel-gfx@lists.freedesktop.org, linux-wpan@vger.kernel.org,
+ netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+ linux-usb@vger.kernel.org, xen-devel@lists.xenproject.org,
+ linux-fsdevel@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+ bpf@vger.kernel.org, kasan-dev@googlegroups.com, linux-mm@kvack.org,
+ linux-x25@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ linux-sound@vger.kernel.org, sound-open-firmware@alsa-project.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+ linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linux-sh@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH v1 2/9] uaccess: Convert INLINE_COPY_{TO/FROM}_USER to
+ kconfig and reduce ifdefery
+To: Yury Norov <ynorov@nvidia.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+References: <cover.1777306795.git.chleroy@kernel.org>
+ <9fe875d2f55af59c12708336c571a46038528678.1777306795.git.chleroy@kernel.org>
+ <ae-tVFVfx72oCC_i@yury>
+Content-Language: en-GB
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Autocrypt: addr=andrew.cooper3@citrix.com; keydata=
+ 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
+ 6+ahAA==
+In-Reply-To: <ae-tVFVfx72oCC_i@yury>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PR3P250CA0028.EURP250.PROD.OUTLOOK.COM
+ (2603:10a6:102:57::33) To IA1PR03MB8288.namprd03.prod.outlook.com
+ (2603:10b6:208:59e::6)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260421221016.2967924-1-ameryhung@gmail.com> <20260421221016.2967924-5-ameryhung@gmail.com>
- <4de82d94-a975-4703-b45e-8932dfc28248@gmail.com> <CAMB2axO5TJwmYyvRheoZGH4ktRa0d8ig-UGK5E269iVoDH-zPw@mail.gmail.com>
- <CAEf4BzYuaA0xDm9WXv0vnorOgzmzsD-Rf6R3w5kus5Uo37SBFg@mail.gmail.com>
-In-Reply-To: <CAEf4BzYuaA0xDm9WXv0vnorOgzmzsD-Rf6R3w5kus5Uo37SBFg@mail.gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Mon, 27 Apr 2026 13:23:53 -0700
-X-Gm-Features: AVHnY4LJg5gx-H0HFRx-yTWyPQVFe5viQgXXN39uE_liNxV3HlNQ_-xyGCp3w6Y
-Message-ID: <CAMB2axN0tXAXe3k6o_QCY0=VVjdvME7nTE9urYUmYr_7vTuobQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/9] bpf: Refactor object relationship
- tracking and fix dynptr UAF bug
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	alexei.starovoitov@gmail.com, andrii@kernel.org, daniel@iogearbox.net, 
-	eddyz87@gmail.com, memxor@gmail.com, martin.lau@kernel.org, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR03MB8288:EE_|PH8PR03MB7197:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2c641edc-eb50-4bae-eff2-08dea49d1bca
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	9FY6m28LCnvy2YkNWJMU+RNswXX+UwdsQPdASIMzD4ybDBQF2lnqvw7QSZPd4BDHC6544/xGvr7GB2IBHK0xFm5TP97Q4B1LLrSYLufDx/SF+LLyKnRdZAhIUZNWvNg0Xs5VZ3Y96fvuQgvPSnPxAQkGJsp8+l2efbhOxHp/BdR2lVMpM++TBM4+FCcwak7FFBclmvyZjFF5YMn4tZiem79sc1Btt0cKEs8JPf9TGbKnDGPH/J9Y8EhC24T8KX1ItZRFFeXIU+G6K9NRUWxxrH7jD+OpsX4eWEXPyZJBnTOAua4918teYDpsYCArRx00EqYolosDciYnyZHCFXIVcvwB1j6VfSrJBdoJr9q4FR6IUGHdUZwHvSFkcMyhayrOK9wwb9KMjU6gnMokNDgilgm1hbCSR7oay+ZI0URVG6m2aFFU+eEEPwwe3PGIMvwNRVkUwpwiTyWxaqEmuwLDdZ0Qzn670vzddOnAl8EWaxRrUT6cmlQ/tvguQHMpnV2hNmfeyZUAZ3+5h41r/ERZCpoFCQ5C69bfEUQcbYKr9ym2osWQa1/n5l0sqiSYk/6JECxxCxmcHamWHf7LNL/hcXOMsg/bNvRMqStPCAohY+6JZNi7L0Ar/b4V3ZLBFmWPdpbmlnjlxOXg/5Kda/Bbg+FvpEqD1RRP+5yqOU3Vj/50V74AdZePk80A+r3os1lE5a/QEOkr6z00c3SGyd8xmkOuMWHXsMLEY/YVFSHzUb8=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR03MB8288.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MTdZYld2cGR3RFV6NUZRcm9jVXBRMlhvSlN4K2xTZ1Bkdy9GUWlHTVh6VGxr?=
+ =?utf-8?B?by84cnBsbmVBUzVEaHhsSXFjVEdycnJOcmQwb1JvWE1QMW1Ma2JMWnhXQ3A1?=
+ =?utf-8?B?YU9lV0ZORHllTDZtSVBKQ3RlMnp6dE5LNEhwNE5mL2hJMlZCVk9ZbkRtSDdn?=
+ =?utf-8?B?K29mVGpIY2JkOWpVWnIrYjNyNHh2VFlDdzhadjc5bFJTUDMxbkJQSDZUWit1?=
+ =?utf-8?B?bHNwY2xuWjZWOGNGRVJ0NHl3cEJnN3FmeXlmTVFtTkw0WVFlNkZqTk8zYkda?=
+ =?utf-8?B?RXRsR2VPRHZTaytHeUNYN0l1UkJXV3RxZTA3WStCaE5ObUMxWW4rSmVIb3lj?=
+ =?utf-8?B?Mzh0aXFtSnJ2R3Q3YVBIYVpCSlFjYXR6bGhweXFka0U1TlNOdkxrMjRFK1ZL?=
+ =?utf-8?B?Y0ZDYmFPa1I1STMzdEVSN0dySDNuRlp2U0hiUmZ1ODVCaWtaTlRwVG56ZGhP?=
+ =?utf-8?B?NmpMWWQ3TUlCaVR0ZHBNRkg2dm5BdUtPV1YrcTJyTFpLNXVFMkVqYzk0Y1ZD?=
+ =?utf-8?B?ckIrT0dCc21rdzk0UURPOW41YTRFbGtXeVM1N0VqWEJIWTJEdkFnQjR3Wjlm?=
+ =?utf-8?B?NnZxRkZ0MkFlTjg0SUV5dDVLZFQrN1paTUdzeE51enZYMFRjUlZtODdaOFZy?=
+ =?utf-8?B?a1VFMnNYd1Nac3RWZkUxWlJsNFoxM2g2djFzZW1sM3NJZFd2ZS84WnF3RnJL?=
+ =?utf-8?B?alZQck5OcVdXeklCMkY2WXBOMTM3WEUxSGovdXNwQm9XaDlhRWVFdmdXaEcx?=
+ =?utf-8?B?QUovaFVUQnE5cXY5QUlzWnFjZDNLOXNHKzBtTTRkNVZOK1J2cldwL2dkdnlH?=
+ =?utf-8?B?VWd1YkwzWTZHaWZnb0RrUStuZm1CT2VxM1JoYjladkFVb1M0YlpveS9QRndL?=
+ =?utf-8?B?S0R3VnZTMC9EUzRxb0dodm02eHNKRFdDT1hmWlM3U29yN2ZWOUxBVXJDTHlS?=
+ =?utf-8?B?NkZDRWNnWVEyczlBTC82MUcvM1pKVldDZGgrWkZOU3VnRlh6OHpwQ25ra2Fj?=
+ =?utf-8?B?RjlHMmE2T3VLWUZyRytIR3pqWVdUZWVMSmx5Z1FZTXl1TFFORTNFVXFheFQ2?=
+ =?utf-8?B?WmdlS3F6SnRzbEpzUTZGdkhzRHdpbGVBYUZOZHoweTFsV3ZyZ0swRFhNT3hm?=
+ =?utf-8?B?dWZSYzhCblRHS3BUdzRxRktBZVFpOGplZExETEwzTEVlbktWaGxsYlkySFk4?=
+ =?utf-8?B?WHltVy9EYTVRRktUQWFxSGhNaExjemNLY2YzT1ByaUtEUkhvZWIzaWJVL0Yy?=
+ =?utf-8?B?M3ZoamIvMkpzZTJRSGJWSkdxV3N1c0EwSzFGMU1pNnJmdDJ0OW9sQTdkLzRS?=
+ =?utf-8?B?YWZZRG9WR0loTzFFQy9lL0N0NWxaOFpiYnhXZjdIaFVoenBwMEpFY3VsU2pN?=
+ =?utf-8?B?dUprK2lLRHVEcHpCQklJT0hycSs2K2MrQWNVdFltZ2NPUjFRUU9wakV1QkJa?=
+ =?utf-8?B?YzNKN2FGTnlBUU4yZUdOTTIxd3hpNVFaaytwN3Z4cmhJT2xIVmFIbzdQU2Za?=
+ =?utf-8?B?YzBDOFFld3BCRTB3elU3MWRiS0lkRGJNZ0dvcDR0blZlL0FIYTRLMTJidisz?=
+ =?utf-8?B?T1RQZFM2NWxTcVpJUlpySTdZWFExTlozOTlJTUxqQUgyRUlpM3F4OVdVeDk1?=
+ =?utf-8?B?UmlmaFliTGxkTzB4NmxEVlZUZjdzWUJINzdBWlo3Q3B2cGJCbmoyK2V6K2Jj?=
+ =?utf-8?B?ZlBiVDJHMTY5cGdmeWlvbENXM3diVXN3elMzUEluL1pJY3owUWRmektKaE1Y?=
+ =?utf-8?B?bEpwendKKzRtMVZieHhZamxMK0QzL2JHb3NzYTVvUjZwNjZOREVaWXpwTVNO?=
+ =?utf-8?B?aGdyL2lwZGxoM0Y2b2w1MlhzRVNzUitBVjNTbGJlRkRGZElGV2tXUG5OWmpw?=
+ =?utf-8?B?NmhHYStiK2JsTDlzU0VoMEhRTXJpSVg0T2czNzlrcUlKL2hvdkdFWkhqalF5?=
+ =?utf-8?B?Z25wMitPVGhOMXNJc3J5WFIyRnBqOWttTUg3WTUwNW5HYlZTYmxNTEpVVUU5?=
+ =?utf-8?B?dTFqR1pRMTAvWHFHUFozRHlMdmJUQS9NUHdsQWoxRHRtZUZIdmx4SzNEQkhm?=
+ =?utf-8?B?dFRzTmtvdkZEMS9Ib29YbHNRZmVMZ3dnVWlrWmJMK2tEems3RUZSdGtVZjNB?=
+ =?utf-8?B?eWUweitoQTRvcnBiQnRZSlhSeG9oa2U3MER6NTdyWWY2VE5VazNycmp2YWd4?=
+ =?utf-8?B?T2RCQjBPSVZFL1dMQiswMm95WE5XMkxuMEZnVGt4dmhncWgzb0tuTWhDYWs0?=
+ =?utf-8?B?Uy91T0hVSFpNQS9VSDJsSHNFN3VBR2R0eUI4NkFaTmVRb3JjcXBRWFYrSlZ0?=
+ =?utf-8?B?MVI2V1daUUxINW1OeXdLelV0TDlEYWZKWnZ1TWdZSk5tNS9wVkIyY2d3TGdV?=
+ =?utf-8?Q?Z28RZNN4T+YLRj6w=3D?=
+X-OriginatorOrg: citrix.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2c641edc-eb50-4bae-eff2-08dea49d1bca
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR03MB8288.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2026 20:39:41.7379
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7P/OK4nVkYKoOZOPceJ7mFnHteXT+or/VZsK1G7zm1+pF+DiXElHabbIzD2P/Aa25ppayHLm/G+R8tVFazmqVeDsv153yTNZHilISIGWHks=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR03MB7197
 
-On Thu, Apr 23, 2026 at 5:04=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Thu, Apr 23, 2026 at 11:44=E2=80=AFAM Amery Hung <ameryhung@gmail.com>=
- wrote:
-> >
-> > On Thu, Apr 23, 2026 at 11:19=E2=80=AFAM Mykyta Yatsenko
-> > <mykyta.yatsenko5@gmail.com> wrote:
-> > >
-> > >
-> > >
-> > > On 4/21/26 11:10 PM, Amery Hung wrote:
-> > > > Refactor object relationship tracking in the verifier and fix a dyn=
-ptr
-> > > > use-after-free bug where file/skb dynptrs are not invalidated when =
-the
-> > > > parent referenced object is freed.
-> > > >
-> > > > Add parent_id to bpf_reg_state to precisely track child-parent
-> > > > relationships. A child object's parent_id points to the parent obje=
-ct's
-> > > > id. This replaces the PTR_TO_MEM-specific dynptr_id and does not
-> > > > increase the size of bpf_reg_state on 64-bit machines as there is
-> > > > existing padding.
-> > > >
-> > > > When calling dynptr constructors (i.e., process_dynptr_func() with
-> > > > MEM_UNINIT argument), track the parent's id if the parent is a
-> > > > referenced object. This only applies to file dynptr and skb dynptr,
-> > > > so only pass parent reg->id to kfunc constructors.
-> > > >
-> > > > For release_reference(), invalidating an object now also invalidate=
-s
-> > > > all descendants by traversing the object tree. This is done using
-> > > > stack-based DFS to avoid recursive call chains of release_reference=
-() ->
-> > > > unmark_stack_slots_dynptr() -> release_reference(). Referenced obje=
-cts
-> > > > encountered during tree traversal cannot be indirectly released. Th=
-ey
-> > > > require an explicit helper/kfunc call to release the acquired resou=
-rces.
-> > > >
-> > > > While the new design changes how object relationships are tracked i=
-n
-> > > > the verifier, it does not change the verifier's behavior. Here is t=
-he
-> > > > implication for dynptr, pointer casting, and owning/non-owning
-> > > > references:
-> > > >
-> > > > Dynptr:
-> > > >
-> > > > When initializing a dynptr, referenced dynptrs acquire a reference =
-for
-> > > > ref_obj_id. If the dynptr has a referenced parent, parent_id tracks=
- the
-> > > > parent's id. When cloning, ref_obj_id and parent_id are copied from=
- the
-> > > > original. Releasing a referenced dynptr via release_reference(ref_o=
-bj_id)
-> > > > invalidates all clones and derived slices. For non-referenced dynpt=
-rs,
-> > > > only the specific dynptr and its children are invalidated.
-> > > >
-> > > > Pointer casting:
-> > > >
-> > > > Referenced socket pointers and their casted counterparts share the =
-same
-> > > > lifetime but have different nullness =E2=80=94 they have different =
-id but the
-> > > > same ref_obj_id.
-> > > >
-> > > > Owning to non-owning reference conversion:
-> > > >
-> > > > After converting owning to non-owning by clearing ref_obj_id (e.g.,
-> > > > object(id=3D1, ref_obj_id=3D1) -> object(id=3D1, ref_obj_id=3D0)), =
-the
-> > > > verifier only needs to release the reference state, so it calls
-> > > > release_reference_nomark() instead of release_reference().
-> > > >
-> > > > Note that the error message "reference has not been acquired before=
-" in
-> > > > the helper and kfunc release paths is removed. This message was alr=
-eady
-> > > > unreachable. The verifier only calls release_reference() after
-> > > > confirming meta.ref_obj_id is valid, so the condition could never
-> > > > trigger in practice (no selftest exercises it either). With the
-> > > > refactor, release_reference() can now be called with non-acquired i=
-ds
-> > > > and have different error conditions. Report directly in
-> > > > release_reference() instead.
-> > > >
-> > > > Fixes: 870c28588afa ("bpf: net_sched: Add basic bpf qdisc kfuncs")
-> > > > Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> > > > ---
-> > > >   include/linux/bpf_verifier.h |  22 ++-
-> > > >   kernel/bpf/log.c             |   4 +-
-> > > >   kernel/bpf/states.c          |   9 +-
-> > > >   kernel/bpf/verifier.c        | 264 +++++++++++++++++-------------=
------
-> > > >   4 files changed, 152 insertions(+), 147 deletions(-)
-> > > >
->
-> [...]
->
-> > > > @@ -673,82 +675,56 @@ static int mark_stack_slots_dynptr(struct bpf=
-_verifier_env *env, struct bpf_reg_
-> > > >       mark_dynptr_stack_regs(env, &state->stack[spi].spilled_ptr,
-> > > >                              &state->stack[spi - 1].spilled_ptr, ty=
-pe);
-> > > >
-> > > > -     if (dynptr_type_refcounted(type)) {
-> > > > -             /* The id is used to track proper releasing */
-> > > > -             int id;
-> > > > -
-> > > > -             if (clone_ref_obj_id)
-> > > > -                     id =3D clone_ref_obj_id;
-> > > > -             else
-> > > > -                     id =3D acquire_reference(env, insn_idx);
-> > > > -
-> > > > -             if (id < 0)
-> > > > -                     return id;
-> > > > -
-> > > > -             state->stack[spi].spilled_ptr.ref_obj_id =3D id;
-> > > > -             state->stack[spi - 1].spilled_ptr.ref_obj_id =3D id;
->
-> is id assigned somewhere else now? where?
->
+On 27/04/2026 7:39 pm, Yury Norov wrote:
+> On Mon, Apr 27, 2026 at 07:13:43PM +0200, Christophe Leroy (CS GROUP) wrote:
+>> Among the 21 architectures supported by the kernel, 16 define both
+>> INLINE_COPY_TO_USER and INLINE_COPY_FROM_USER while the 5 other ones
+>> don't define any of the two.
+>>
+>> To simplify and reduce risk of mistakes, convert them to a single
+>> kconfig item named CONFIG_ARCH_WANTS_NOINLINE_COPY which will be
+> We've got a special word for it: outline. Can you name it
+> CONFIG_OUTLINE_USERCOPY, or similar?
 
-I figured that I missed this question. The existing
-mark_dynptr_stack_regs() above already assigned an id.
+You can't swap the "in" for "out" like this.  "out of line" is the
+opposite of "inline" in this context, while "outline" means something
+different and unrelated.
+
+~Andrew
