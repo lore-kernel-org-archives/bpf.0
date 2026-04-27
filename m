@@ -1,35 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A3FC30F94D;
-	Mon, 27 Apr 2026 11:43:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6661E313E36;
+	Mon, 27 Apr 2026 11:43:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777290224; cv=none; b=cGp4jVudY01Y8ajXOEVH/8eoBv4n7WtDuKSy65Gbkftopx0CcrqOkYnJGUPFEEMWkUoeIsvgI7N1rkbfS4d9bMJl7KfWs3cKb5W3ych3BCbCyR8uohvsjrbWiw+JzogXBRJhK1Z6YWFWJoqb0EZJ/2ZYOkl0zj1P49bipIpi3hI=
+	t=1777290233; cv=none; b=l7h9iIC9nDd1enxi/FgWaN5bw7tJL2iWvMU0Ykx31RnvndhIBO5abqIQkIrEHg9/CL41Zzy9g42qtuj8XLhhmXTbz8Yrsoj0oaIP5oViS18QmbUCB7PYX5rMswv3d6ZjYKNxTlZlCFw9bGTWw5zfywmJztPSCFJKhPuiEJxBKuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777290224; c=relaxed/simple;
-	bh=CGNwjR6rvJ+68NLhj05y2pTfObzjJ51LITNuN7MEmD0=;
+	s=arc-20240116; t=1777290233; c=relaxed/simple;
+	bh=pUuKH5IboberfrNDLhIOBfcC/4kG/ZkfQ05hwuIAsi0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=perlYE1WqMTCd2figEWWk8XmbQe0pvNXX1UTgW9cH60x8hjJaaK2ZiVK/ybwuFbKA4/u2xZ42gYXEyoZPu+RazU7v5XSUwg541cHaPQuVYvr1zL7bw/5ZfMPky1Tf0YEDJN6D+g11x+3ofjiq2FH5/25lHvK3bWFwJXRna/RdhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rdf9Pqyw; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=DpmflXyEykROaRKPArtrZ0fl4MlKPO4iVPB4cvy44MluOI2ODiJQPjxdCyNm8Titc88u8O6gzneUhOzs9HcEDaq97CzjhLLqAoyKv5Mco9DmeQJl4CM9x/9U9keWI/Vg9jovNJBmcErbaohncts5VJyceb+ULs7usab/dXhHt78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DQW9hfF6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rdf9Pqyw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 260D6C19425;
-	Mon, 27 Apr 2026 11:43:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DQW9hfF6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9269C2BCB4;
+	Mon, 27 Apr 2026 11:43:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777290224;
-	bh=CGNwjR6rvJ+68NLhj05y2pTfObzjJ51LITNuN7MEmD0=;
+	s=k20201202; t=1777290232;
+	bh=pUuKH5IboberfrNDLhIOBfcC/4kG/ZkfQ05hwuIAsi0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=rdf9PqywdjIWMAOYCFItX9wgSiEVvzPRQJIb7JuPPyrVeuryos8ETgMjPe3mI1Y4r
-	 dlzVy0Qfg3wmeeD4HTJU1B3cP1xzYhxi+azF8gG75wSP10LxRD3qP3sAv0/nzamAjO
-	 xEal3l0SDC4SPsFZen9s4yVBMa7Y5ULbBb5bUskvD8jJWzGx2lkifkpekak+RpZI+p
-	 jg5MPKQS7nrv69MYABY1dDtBQSkOGy4U4YpaIB6qsbPQNkrkhB+MOvwQ0y7N+w75yx
-	 HVLrEvfJ445QJZwAEM3X9raDthB94WoG4XVEo4jtvdxMWad88njd52wjvkAyRboxPi
-	 ZxuEFJ5rvaPQw==
+	b=DQW9hfF6jbPLDZeRU55aAhUUCT+ODmFhcz+2ZZizkNRvhXKvkqWrj2dXV0dCgyT6W
+	 WmHOUn7XStj9o+DVmnTv9Wt9Zuky4P03OyheRANyJvSyV6Nn0sfDb6nFmAY4pf7Vhs
+	 xdIH43SfcwV/iFb1pUqd3/tkCNUlwR1iB80R9wYWRb871lwJGAkb1nqcsYSU9PqGoS
+	 kDpNwk8LJ4Y7KiS5Lfaq7zig8wnCe9GcbvkfrYJ3OcafuKDgfhqvDU/R1HACev+TFT
+	 p8om3koW4hnwmMScX8R5DXYYF896On9OeeQBo8nKhJWIF0pdQjGYbiLfAKZrNXunWg
+	 RloiRLMR5QZQw==
 From: "David Hildenbrand (Arm)" <david@kernel.org>
-Date: Mon, 27 Apr 2026 13:43:15 +0200
-Subject: [PATCH 2/3] bpf: arena: use page_ref_count() instead of
- page_mapped() in arena_free_pages()
+Date: Mon, 27 Apr 2026 13:43:16 +0200
+Subject: [PATCH 3/3] mm: remove page_mapped()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,7 +37,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260427-page_mapped-v1-2-e89c3592c74c@kernel.org>
+Message-Id: <20260427-page_mapped-v1-3-e89c3592c74c@kernel.org>
 References: <20260427-page_mapped-v1-0-e89c3592c74c@kernel.org>
 In-Reply-To: <20260427-page_mapped-v1-0-e89c3592c74c@kernel.org>
 To: Yoshinori Sato <ysato@users.sourceforge.jp>, 
@@ -61,44 +60,93 @@ Cc: linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
  "David Hildenbrand (Arm)" <david@kernel.org>
 X-Mailer: b4 0.13.0
 
-Pages that BPF arena code maps are allocated through
-bpf_map_alloc_pages(), which does not allocate folios but pages.
+Let's replace the last user of page_mapped() by folio_mapped() so we
+can get rid of page_mapped().
 
-In the future, pages will not have a mapcount, only folios will.
-Converting the code to use folios and rely on folio_mapped() sounds like
-the wrong approach.
-
-Should BPF arena code allocate folios and use folio_mapped() here? But
-likely we would not want to use folios here longterm, as we don't really
-need folio information.
-
-Hard to tell. But in the meantime, we can simply use the page refcount
-instead, as a heuristic whether the page might be mapped to user space
-and we would want to try zapping it, so we can get rid of page_mapped().
-
-Page allocation will give us a page with a refcount of 1. Any user space
-mapping adds a page reference. While there can be references from other
-subsystems (e.g., GUP), in the common case for this test here relying on
-the page count is good enough.
+Replace the remaining occurrences of page_mapped() in rmap documentation
+by folio_mapped().
 
 Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
 ---
- kernel/bpf/arena.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/mm.h | 10 ----------
+ mm/memory.c        |  2 +-
+ mm/rmap.c          |  8 ++++----
+ 3 files changed, 5 insertions(+), 15 deletions(-)
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 802656c6fd3c..608c55c260bc 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -729,7 +729,7 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index af23453e9dbd..87fcd068303a 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1888,16 +1888,6 @@ static inline bool folio_mapped(const struct folio *folio)
+ 	return folio_mapcount(folio) >= 1;
+ }
  
- 	llist_for_each_safe(pos, t, __llist_del_all(&free_pages)) {
- 		page = llist_entry(pos, struct page, pcp_llist);
--		if (page_cnt == 1 && page_mapped(page)) /* mapped by some user process */
-+		if (page_cnt == 1 && page_ref_count(page) > 1) /* maybe mapped by user space */
- 			/* Optimization for the common case of page_cnt==1:
- 			 * If page wasn't mapped into some user vma there
- 			 * is no need to call zap_pages which is slow. When
+-/*
+- * Return true if this page is mapped into pagetables.
+- * For compound page it returns true if any sub-page of compound page is mapped,
+- * even if this particular sub-page is not itself mapped by any PTE or PMD.
+- */
+-static inline bool page_mapped(const struct page *page)
+-{
+-	return folio_mapped(page_folio(page));
+-}
+-
+ static inline struct page *virt_to_head_page(const void *x)
+ {
+ 	struct page *page = virt_to_page(x);
+diff --git a/mm/memory.c b/mm/memory.c
+index ea6568571131..99854e6a2793 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -5464,7 +5464,7 @@ static vm_fault_t __do_fault(struct vm_fault *vmf)
+ 	if (unlikely(PageHWPoison(vmf->page))) {
+ 		vm_fault_t poisonret = VM_FAULT_HWPOISON;
+ 		if (ret & VM_FAULT_LOCKED) {
+-			if (page_mapped(vmf->page))
++			if (folio_mapped(folio))
+ 				unmap_mapping_folio(folio);
+ 			/* Retry if a clean folio was removed from the cache. */
+ 			if (mapping_evict_folio(folio->mapping, folio))
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 78b7fb5f367c..fb3c351f8c45 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -571,7 +571,7 @@ void __init anon_vma_init(void)
+  * In case it was remapped to a different anon_vma, the new anon_vma will be a
+  * child of the old anon_vma, and the anon_vma lifetime rules will therefore
+  * ensure that any anon_vma obtained from the page will still be valid for as
+- * long as we observe page_mapped() [ hence all those page_mapped() tests ].
++ * long as we observe folio_mapped() [ hence all those folio_mapped() tests ].
+  *
+  * All users of this function must be very careful when walking the anon_vma
+  * chain and verify that the page in question is indeed mapped in it
+@@ -1999,7 +1999,7 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+ 	/*
+ 	 * When racing against e.g. zap_pte_range() on another cpu,
+ 	 * in between its ptep_get_and_clear_full() and folio_remove_rmap_*(),
+-	 * try_to_unmap() may return before page_mapped() has become false,
++	 * try_to_unmap() may return before folio_mapped() has become false,
+ 	 * if page table locking is skipped: use TTU_SYNC to wait for that.
+ 	 */
+ 	if (flags & TTU_SYNC)
+@@ -2426,7 +2426,7 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
+ 	/*
+ 	 * When racing against e.g. zap_pte_range() on another cpu,
+ 	 * in between its ptep_get_and_clear_full() and folio_remove_rmap_*(),
+-	 * try_to_migrate() may return before page_mapped() has become false,
++	 * try_to_migrate() may return before folio_mapped() has become false,
+ 	 * if page table locking is skipped: use TTU_SYNC to wait for that.
+ 	 */
+ 	if (flags & TTU_SYNC)
+@@ -2927,7 +2927,7 @@ static struct anon_vma *rmap_walk_anon_lock(const struct folio *folio,
+ 
+ 	/*
+ 	 * Note: remove_migration_ptes() cannot use folio_lock_anon_vma_read()
+-	 * because that depends on page_mapped(); but not all its usages
++	 * because that depends on folio_mapped(); but not all its usages
+ 	 * are holding mmap_lock. Users without mmap_lock are required to
+ 	 * take a reference count to prevent the anon_vma disappearing
+ 	 */
 
 -- 
 2.43.0
