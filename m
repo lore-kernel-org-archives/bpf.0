@@ -1,152 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B643E558C;
-	Tue, 28 Apr 2026 10:28:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B73225A38
+	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 10:33:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.181.231.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777372104; cv=none; b=SpWP3GCUZtm2fjEa9xPgc4YFt/Xjj/mDVQlWv6S3Al5zn5mksqSFFICyOPi83xYPBpuRXPSTkpOCx7szpedihLvOZGASC+w45EwKA0re12rbASjgbWqnzEI+RApE7aIhH/+iUlfoxY+lkJvg9f2zGCCK9Ey/hDWjQEq15UgMP8c=
+	t=1777372435; cv=none; b=dWa2eoPOG/RM5AT+njXYkkFpO3zbp8cu1weVIm+fLLvjEyKEaEdGXmyB04f2tvLf1OozEND6tKhj9NLgkXeiErIHaMSnEQ9iPu6bT4lH6WxFQepXDhE02xfbtbfhBOXyg1bWlnghZFw6RHHQFxs4tXEfnfl/RNEBsEAdBLmhOog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777372104; c=relaxed/simple;
-	bh=SLgVYK/tGlFyKAB1dxJHoLFTJWRSgM8nMEvuFI1vfoY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=udwTUt3r7NOzFiuaOxYxucPTqJobcWS4cn5k3Uj8rFRVNo1ahdu8KHAam1sNShjxHNHbO/yDX4UA4fiDuQuuh6xqQJyQWH4dmG0sREMZAy1IZOxeT01ExA8ovD6r+69EAu8KPI/Hk0bO7eLneuEDqm1u203Gt7pyACs989H5UDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vIKrx2Wm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777372435; c=relaxed/simple;
+	bh=qb7VeerfSjvHCIIJH0UYHXCzJDbJBJVWCoh+NyBO9yc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bFckv2EFIUxIayXqJclBZwO7dUnr0W7qFYFjj2haPMU99f3FMJzWgjTeNs/+63z+UVtffVNoHixznL1fjcwvMqUMAVIMJOxV5Ch0Z1o9hxTg9u57l2BBDT6umXHKQQdSkB6z997ZyjhPjd9DYrUXGqyvDTk7cY5spV7FzB706x4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b=UILAnKS4; arc=none smtp.client-ip=180.181.231.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vIKrx2Wm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB11DC2BCAF;
-	Tue, 28 Apr 2026 10:28:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777372104;
-	bh=SLgVYK/tGlFyKAB1dxJHoLFTJWRSgM8nMEvuFI1vfoY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=vIKrx2Wmdk7VlGdLYplTGfmTRWHs1aS4E9t8IVUtbT2twEnNO7P7Pm0e+xCgDLSfz
-	 4tw3nbPpKmdmfNW8gJZ15Wt9yvu0C/riqhWxaTmdLYMJJk1RlD6AQRh995uzXGVxdK
-	 OYHuUvG1mBQLjegZAyrYpWgF1bapjZuK1Isdf5gc8Mq+zcSaJAMqwyIdazwN3Qun8d
-	 9slq/CeWx/y7DBKGSHGOVEij2uB9fkfxnVMEe/OsyvnOW9KXzXv3QyfkQhoaOkk0Jp
-	 VtifzvPEr6r9u4x8b2N6rAzwEzFzNJ5HZ5nQLANEuNQCQ4NcobbX8BHaQNU5ujCYt0
-	 RO80XVfeUgd4Q==
-Content-Type: multipart/mixed; boundary="===============0722090956758177500=="
+	dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b="UILAnKS4"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=gondor.apana.org.au; s=h01; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:cc:to:subject:message-id:date:
+	from:content-type:reply-to; bh=UKNRuc+klmpa/bKfByFHMcR7TYxrYbxiLCr/auYg/YA=; 
+	b=UILAnKS4Ms+NmLCWu/z8Za7y4n8bSr3uGWDaoadHD5bMCVe8WVBUR70ww1OTLlA2VgxgPamDFs/
+	erS+Vqkqh+GDo03Z8ju18M398trJl072XSx5A7qKv8KISFa76COVwiBWdu2+q7dFwHH+MaU+6VPlZ
+	Bh5+REIwveLFCKUdezJDaePgFKMiX8cuwnuJRsiRx/S1kajbevYvgcSwo5OrkKJooLkQPxnyLRn2q
+	nsIp7XgGpB6bmS3glDYHuFkZzJdZekYHccQ9w+hsGNTKXUkJNF1jeFSZsTlljrI2b1t8COh42quEy
+	bzD8b5Rq7j3OGj3Op75p/GSYBEOPL2Nhx6tQ==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1wHflE-009UDa-1C;
+	Tue, 28 Apr 2026 18:33:49 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 28 Apr 2026 18:33:48 +0800
+Date: Tue, 28 Apr 2026 18:33:48 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
+	eddyz87@gmail.com, memxor@gmail.com,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v3 03/10] bpf: Implement get_next_key()
+ resizable hashtab
+Message-ID: <afCNDOhbszgMlGB7@gondor.apana.org.au>
+References: <20260424-rhash-v3-0-d0fa0ce4379b@meta.com>
+ <20260424-rhash-v3-3-d0fa0ce4379b@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <3e859787db4c4e0410c0a4110f162a0238673579eaca9ceb0a18702faf975000@mail.kernel.org>
-In-Reply-To: <20260428080317.702124-2-tushar.vyavahare@intel.com>
-References: <20260428080317.702124-2-tushar.vyavahare@intel.com>
-Subject: Re: [PATCH 1/5] selftests/xsk: Introduce helpers for setting UMEM properties
-From: bot+bpf-ci@kernel.org
-To: tushar.vyavahare@intel.com,netdev@vger.kernel.org,magnus.karlsson@intel.com,maciej.fijalkowski@intel.com,stfomichev@gmail.com,kernelxing@tencent.com,davem@davemloft.net,kuba@kernel.org,pabeni@redhat.com,ast@kernel.org,daniel@iogearbox.net,tirthendu.sarkar@intel.com,tushar.vyavahare@intel.com
-Cc: bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 28 Apr 2026 10:28:23 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260424-rhash-v3-3-d0fa0ce4379b@meta.com>
 
---===============0722090956758177500==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> index 7950c504ed28..d5cd8f590b25 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> @@ -303,6 +303,22 @@ static void test_spec_reset(struct test_spec *test)
->  	__test_spec_init(test, test->ifobj_tx, test->ifobj_rx);
->  }
+On Fri, Apr 24, 2026 at 12:50:45PM -0700, Mykyta Yatsenko wrote:
 >
-> +static void test_spec_set_unaligned(struct test_spec *test)
-> +{
-> +	test_spec_set_unaligned(test);
-> +}
-
-Does this function recurse unconditionally?  Looking at the functions
-this helper replaces, the body should set unaligned_mode = true on
-both ifobj_tx->umem and ifobj_rx->umem.  Instead, every call to
-test_spec_set_unaligned() recurses into itself with the same argument
-until the stack is exhausted.
-
-Five tests introduced in this commit call the broken helper:
-
-    testapp_send_receive_unaligned()
-    testapp_send_receive_unaligned_mb()
-    testapp_unaligned_inv_desc()
-    testapp_unaligned_inv_desc_4001_frame()
-    testapp_unaligned_inv_desc_mb()
-
-Each previously worked by directly setting the unaligned_mode fields.
-After this patch, those direct assignments are replaced with calls to
-test_spec_set_unaligned(), which crashes via stack overflow instead
-of running the test.
-
-> +
-> +static void test_spec_set_frame_size(struct test_spec *test, u32 size)
-> +{
-> +	test->ifobj_tx->umem->frame_size = size;
-> +	test->ifobj_rx->umem->frame_size = size;
-> +}
-> +
-> +static void test_spec_set_frame_headroom(struct test_spec *test, u32 size)
-> +{
-> +	test->ifobj_rx->umem->frame_headroom = size;
-> +}
-> +
-
-[ ... ]
-
-> @@ -2025,8 +2041,7 @@ int testapp_stats_fill_empty(struct test_spec *test)
->
->  int testapp_send_receive_unaligned(struct test_spec *test)
+>  static int rhtab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
 >  {
-> -	test->ifobj_tx->umem->unaligned_mode = true;
-> -	test->ifobj_rx->umem->unaligned_mode = true;
-> +	test_spec_set_unaligned(test);
->  	/* Let half of the packets straddle a 4K buffer boundary */
->  	if (pkt_stream_replace_half(test, MIN_PKT_SIZE, -MIN_PKT_SIZE / 2))
->  		return TEST_FAILURE;
-> @@ -2037,8 +2052,7 @@ int testapp_send_receive_unaligned(struct test_spec *test)
->  int testapp_send_receive_unaligned_mb(struct test_spec *test)
->  {
->  	test->mtu = MAX_ETH_JUMBO_SIZE;
-> -	test->ifobj_tx->umem->unaligned_mode = true;
-> -	test->ifobj_rx->umem->unaligned_mode = true;
-> +	test_spec_set_unaligned(test);
->  	if (pkt_stream_replace(test, DEFAULT_PKT_CNT, MAX_ETH_JUMBO_SIZE))
->  		return TEST_FAILURE;
->  	return testapp_validate_traffic(test);
-
-[ ... ]
-
-> @@ -2380,10 +2391,8 @@ int testapp_unaligned_inv_desc_4001_frame(struct test_spec *test)
->  	u64 page_size, umem_size;
->
->  	/* Odd frame size so the UMEM doesn't end near a page boundary. */
-> -	test->ifobj_tx->umem->frame_size = 4001;
-> -	test->ifobj_rx->umem->frame_size = 4001;
-> -	test->ifobj_tx->umem->unaligned_mode = true;
-> -	test->ifobj_rx->umem->unaligned_mode = true;
-> +	test_spec_set_frame_size(test, 4001);
-> +	test_spec_set_unaligned(test);
->  	/* This test exists to test descriptors that staddle the end of
->  	 * the UMEM but not a page.
->  	 */
-
-[ ... ]
-
-> @@ -2411,8 +2422,7 @@ int testapp_aligned_inv_desc_mb(struct test_spec *test)
->
->  int testapp_unaligned_inv_desc_mb(struct test_spec *test)
->  {
-> -	test->ifobj_tx->umem->unaligned_mode = true;
-> -	test->ifobj_rx->umem->unaligned_mode = true;
-> +	test_spec_set_unaligned(test);
->  	return testapp_invalid_desc_mb(test);
+> -	return -EOPNOTSUPP;
+> +	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
+> +	struct rhashtable_iter iter;
+> +	struct rhtab_elem *elem;
+> +	int ret = -ENOENT;
+> +
+> +	/*
+> +	 * Hold RCU across enter_from + walk_start to prevent the
+> +	 * element cached by enter_from from being freed before
+> +	 * walk_start re-acquires RCU.
+> +	 */
+> +	guard(rcu)();
+> +	/* If key is not found, places iterator at the beginning */
+> +	rhashtable_walk_enter_from(&rhtab->ht, &iter, key, rhtab->params);
+> +	rhashtable_walk_start(&iter);
+> +
+> +	elem = rhtab_iter_next(&iter);
+> +	if (elem) {
+> +		memcpy(next_key, elem->data, map->key_size);
+> +		ret = 0;
+> +	}
+> +
+> +	rhashtable_walk_stop(&iter);
+> +	rhashtable_walk_exit(&iter);
+> +
+> +	return ret;
 >  }
 
+The same issue from v2 still exists here.  If a rehash occurs
+in between calls to rhtab_map_get_next_key you could be iterating
+over the table forever.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25045852068
---===============0722090956758177500==--
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
