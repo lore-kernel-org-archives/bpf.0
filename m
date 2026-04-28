@@ -1,169 +1,134 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F341396593
-	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 09:30:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777368653; cv=pass; b=VKdn3rpj/FQYrYZsYw1/T+a7tfDEvVVc3lsD8HGdnzSakA8ijfRr67Z1nPe2Wz4LX8ja/ePSosgpmsRmFY5hjS77EjwWZugDkaS35UBc29+4KtKDSJ0EPptjdtCX6OpS3XO2vhrm1N60aJgiylt2kRxAKF9zP1vDnoH8xvBo6HY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777368653; c=relaxed/simple;
-	bh=hRPWI01LczqM4hpt5WQDV7pY2kzEn4X/KE1AsQfA4BY=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96CDB3D810B
+	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 09:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777368755; cv=none; b=Prm1X/uHEQcrZ5ggUoSICiPEnoboNnwHRMKHqlDU8JTCgRz5Hie0Izq9BiUmDoy2ySJeU4zSRHbdSKwbAAyBgesN5JPRqkY1SexaQOAGmIu8hW1WsNHeeu6S1m5u8QaU1JAB4JXuUp8HS03GWiwMAYoRgFoavzXfTyDK2Ewsfmc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777368755; c=relaxed/simple;
+	bh=WZ0dv++aH+AeLwkvbNXxLqu7wJ3mA6GpS63WG1N27Uc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QcbnUx9hPgYy3OWbbNyjoeqXOBWQwzyMsMcCakE9SgiWwNDtFS5MfO7cVH92FNQHRsyjSa/wmmF8rNT1q8QhuDSInP/R5mmZ529xuehCHkau/7D6rGDD+RzbQKxn2WIOcwJDlj9j2Bnp5sIu9/CLqcS9HF4xSgbpu8zlSKaTErc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hV9d+CL7; arc=pass smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	 To:Cc:Content-Type; b=pl+aS1049hao6P5yM75ahAJS1U4rAC5Qyhwzotoks0JGNnJ3iNq8SWteYJ8/TG4qRoXusZuhQFzqdqHyaziK3vWeirk81jFDhAPiVFg5DLwYtoNi59QP3GjeJBH3XODnLBnhyz4I1Grn16DcFIJoRXYf81U8VS54tXLi7/w8SzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hV9d+CL7"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6746d0b2b4aso14448262a12.3
-        for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 02:30:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777368651; cv=none;
-        d=google.com; s=arc-20240605;
-        b=b9mHVCJnbOvbQ2kFgmDLqOBSnTO1pw0Zt/J7zZ9io+RIXG1PLtWZpaZafTtZewE3pX
-         lutH+W14ciKZa1dIHq3w4ntDyt3LpfVpYGlxjbiy0M/HMJm1XPx+nH7/SfoNZCxZbyrz
-         vMbI15v6CIGj3ZrSERy5jYyHNt4njVYxCC8dyn0lMyvJhbt4I8jlGxs4r7wpv5WSSsx0
-         7Qo6XJIsDKBWbsjsow2zex0NVtNDZs4QUqYOJxv3zT/ebcLrp4WcVvZE1uU5vE0nyOY9
-         StWqSHSoM6stUUsF+iQXMyWBO3MScDmrEstyCqt874KbGnZLCyq0LuyvZqYtw8usatZ3
-         eRVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5QoxiNwVDl7IQJDnKzxsDGzAeRCuBbcVKoGRhpQQSSE=;
-        fh=7pQPbM1mTaKjUbZ75iTISJbipA72wUVZwkXXTYMxzFw=;
-        b=BfvnlZ9bNXxO2JX4juulIXLxdnFv+nn2EtvRacfubvIHNHedI0yUQD9CV7ngdXB7l9
-         Dj9lBR1AccamxhsDZ1GxJWFFrX2hCiSf1M4hO2ZIOLowo/Zy5D48MaVuHOCT27xZj0nl
-         UcubEUp5iSlE8rPAoI32uYCcbYvqX6KAqJwEmQws5OO+QuxrbJekYZGMMzXlHNlQoiJm
-         6KX48G60484CDyqS1M4lwZWR3Cw0Ox2hGif3y97mJ0+H0OH42l6gC2BoyiwjGkRrGB1y
-         r2zI4tM72hYpTT8T7TJKlg27PuvYfO9pUW7dzL0Hbss/2zwoJS7NSjKTnLhjy26sil8Z
-         KNOw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777368651; x=1777973451; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5QoxiNwVDl7IQJDnKzxsDGzAeRCuBbcVKoGRhpQQSSE=;
-        b=hV9d+CL7eamauCVp1RfGIwBQwNdgkOQbqytT5sFLFhFeLxnr3WKfF/TIyQqyR4bFzs
-         7eqbS2tLbyUrn+SVjcF6th59kol9t1UwjVwBv8EnX4nBcjYlm389kC36o6g6GVPOk/Om
-         C9rbKJBIK0cFSUozGEyC7rkfcRTs9qMsfAgph3ykf9ztUMeuMOhe/YBjt1V6dSd9fHxG
-         w6Foc4H06iR6zaXKyMOos1VOHXzD7iUCO+wscf24G6t23Y+UnJuhM0N020Ndn4MPk88C
-         4nCG1OahtjZmrZc8KYQuiIjgFWLnmEJsLVA5ZzOj+/35G7VPduZNhF7RK8Y+0V/2Uieb
-         +VBA==
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b886fc047d5so2003038066b.3
+        for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 02:32:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777368651; x=1777973451;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5QoxiNwVDl7IQJDnKzxsDGzAeRCuBbcVKoGRhpQQSSE=;
-        b=LOr5K8VjnzilblP8qABfbFZpYxkjNvlk+I7/ilBHafNd+M6RYFbryaEsTOlkX49YtB
-         9CU3F6Q1BwUUMRaySX8XO9PiP3zNstUJEoFr71gms+6JuTSn/aB9abkKpdpzNsghLpwE
-         i0+kz0iY1hDnSyjCTOGxx9pGICah1tkgXPrOmHTch/Br5xfeSWfPfoFqMsrQbt8o3Zao
-         x1itKUOxTeC2KbHkI2dB+0c6lzodpTLXPYKe6mxYFzpIP57KdT33ZJ7/a/Y7iSGFTOiE
-         7hogF4thed5BONASaMiHoGad9Pa1ij1NlCpVLg2puqjLzMjsfVMlrkoBa86lsyGFXtWE
-         dFTA==
-X-Gm-Message-State: AOJu0YyIHRxnetrpj0guelO7nuv7QKTF1uyAnBL8qkv87NseqdKZh93L
-	/ninlhtNJVYepgEWBSBWWTyuRhMZP+xLw7LKr77y3M2x60giZ1xC4ZxCYOErHlgwG9110nF4cYU
-	TVr5dAzddv1agyTyjps9uoXUQVdKS7oa9GGWnQ1Q=
-X-Gm-Gg: AeBDievnCQqIIIHOZ9UCgTb9wnpqJuPE1imFw6EZPvotnW+IHH4+m4sQTXj4DEBaO+n
-	MgP2Y7exuqxFspD1Fz9zS0f7Z21McgeuzA036frnRGaEX8pR7/yLJ9ev/Ysi0wnUm0mAbh+bkLI
-	U8UvKvKPdalXesbXNpU5COwj6YtsNL6ZxxzumH899XZlaJOo0M/RkhwIzBcPuvhBZX5wefjKTMG
-	pk+TMpQHDVSneavAhPp6PA9gGwOchnaELZETyyDKH2uAJu5vmf0shs5FtkwnNJncRRhl7NlKB+M
-	VucRU26EWEjqou+x
-X-Received: by 2002:a05:6402:324e:b0:66f:9f63:e537 with SMTP id
- 4fb4d7f45d1cf-679bb09a4a0mr768704a12.19.1777368650261; Tue, 28 Apr 2026
- 02:30:50 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1777368753; x=1777973553;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Al22kA6RCf7FSEzj29cZLSkjdM9EgXxihmBX7/SeSVI=;
+        b=TsY8IyNrsaiQw8Zp3LfQX2OxXE8fDIVU37v5vBVxhgTo6ARE4D/8O7eQ5kIA1+m721
+         Uabshiq171q7on3vzxmNkDyH9e0yAHM957OvrS5nAViEI+Yw5W/AkPBAAU90U3DJEhJD
+         EwOBCRRdSYQC91hArrhK1HJp9qQemmvqxz4zFvb/EUXeWBm7vL9QrpVQ2LYCILGDMEH3
+         ztNPQqBHSQ4KHL6IzNUgwVYLvp4/dKRQACkwMrpdkGkjhsLCRwwMuCAATnkDs2ryo5kA
+         waEOwAlUQGR5jZlMTh0xMtZhRgeRy5fcDJQbOfb/51axRtfN89kksdsn9kkzTEVHwtMC
+         mByQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+nTVB0Czhlm1WwBH5QAsKt9W3QXeU6fMT5CQP4RlB/aWh97Zo3UC1g3Xr/GK+o82avhQ4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvfXfQnH1u6u7/DHm+iQ8AyJUyMc2eGrJwr4SGGREgYVzAyzQd
+	33XXjhujhrkd9+DlNq5/9F6xebRq3j3/NiT6xHOwFwmyLTSYdTXkJ0CiSbaVqgjJHTw=
+X-Gm-Gg: AeBDieulX70csRgLrms3DXRz8MtYcxZWz7Ge7E7vUiYipQxkI60m6x0IKW3fc9aSo6P
+	svVzhdlZODAJqOcUrBiJBvpGliXCyKuWQlVdXREdsJGhtdAZiAFkxUAUemeeUKIwruhLb9F92kT
+	geZLVSe+7vtwKgt+8hV9xx2GZd5S8R7zO790VVJAxLMtMhBxOl5dK9gpuVDvimzZPhlKEbeTNKb
+	cvQJ1QYAOeoFNj3GP8xD5hte1gi/+5vb8uVvvUmJrIqhp2fmh0XbYEF8/81YjBlTKEHbUo3cazo
+	2Al4AaquysAVy+3iR3fC7hF3jhJW4vP+Iq9QZo3LYFfYnejxxNiTcl0K7lL0FThqF+iUR+tXhUT
+	sHQyWuY0s9F1Kb9Rzb/fLd2IJG8FeJyrPQi4UAY+IT7CteiNeQKypyDc1lFsFc/mWmXcd5rg5p6
+	B1ZO34C3uSxvrkJjm+U1U9cABdtzNnnioMONvoBs5kNXgvr+MGgpzGqTMGfP8FcWcL6PWt5lA=
+X-Received: by 2002:a17:907:25cd:b0:ba3:3091:e56c with SMTP id a640c23a62f3a-bb8026bd2f6mr130043666b.14.1777368752821;
+        Tue, 28 Apr 2026 02:32:32 -0700 (PDT)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bb80b2adf6esm74850766b.38.2026.04.28.02.32.32
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Apr 2026 02:32:32 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-67389cf78b0so19507499a12.2
+        for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 02:32:32 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ/0FTX9/riONCKCrmuvwFOE2++1b9Lbe9P4fnM6/1AbD6oaP6CnDBLudMLMlvsWD9DZW7Q=@vger.kernel.org
+X-Received: by 2002:a05:6402:5056:b0:676:d8a1:7a04 with SMTP id
+ 4fb4d7f45d1cf-679bb09a4admr915149a12.23.1777368324094; Tue, 28 Apr 2026
+ 02:25:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260427232313.1582588-6-puranjay@kernel.org> <20260428010537.21D54C2BCB4@smtp.kernel.org>
-In-Reply-To: <20260428010537.21D54C2BCB4@smtp.kernel.org>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Tue, 28 Apr 2026 10:30:38 +0100
-X-Gm-Features: AVHnY4KE5HUzAET2yt59SOTeeiiNhF7ATWdseO9Oh0RhsOO7380gLx6KyotcVcw
-Message-ID: <CANk7y0gRdXnn55RHjLgsGiR8gMUoiHxH6czdVwj-VNfZo-LArQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 5/7] selftests/bpf: Add XDP load-balancer BPF program
-To: sashiko@lists.linux.dev
-Cc: bpf@vger.kernel.org
+References: <cover.1777306795.git.chleroy@kernel.org> <c73b90236f2810edd47c84edd2a8d8e8e0c816da.1777306795.git.chleroy@kernel.org>
+In-Reply-To: <c73b90236f2810edd47c84edd2a8d8e8e0c816da.1777306795.git.chleroy@kernel.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 28 Apr 2026 11:25:11 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUvTBWoDN_wUo2n8-gkoheJ+-rbwew53OvoAwo8G5n1qg@mail.gmail.com>
+X-Gm-Features: AVHnY4JEWBVPw4tSjHgbQTia8gZd2WGJ1sv6qLdKJbtvs4hms1blpvc35yb0VWw
+Message-ID: <CAMuHMdUvTBWoDN_wUo2n8-gkoheJ+-rbwew53OvoAwo8G5n1qg@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 4/9] uaccess: Introduce copy_{to/from}_user_partial()
+To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+Cc: Yury Norov <ynorov@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, David Laight <david.laight.linux@gmail.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, linux-alpha@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-um@lists.infradead.org, 
+	dmaengine@vger.kernel.org, linux-efi@vger.kernel.org, 
+	linux-fsi@lists.ozlabs.org, amd-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org, 
+	linux-wpan@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-staging@lists.linux.dev, 
+	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-fsdevel@vger.kernel.org, 
+	ocfs2-devel@lists.linux.dev, bpf@vger.kernel.org, kasan-dev@googlegroups.com, 
+	linux-mm@kvack.org, linux-x25@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-sound@vger.kernel.org, sound-open-firmware@alsa-project.org, 
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-sh@vger.kernel.org, linux-arch@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 28, 2026 at 2:05=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
->
-> Sashiko AI review found 1 potential issue(s):
-> - [Medium] The `cold_lru` logic inside the benchmark loop's `reset` block=
- toggles the IP source address back and forth, breaking the benchmark's LRU=
- cache miss measurement.
-> --
->
-> commit 295ed705f4fdd57c01615b43803c47313840bbf1
-> Author: Puranjay Mohan <puranjay@kernel.org>
->
-> selftests/bpf: Add XDP load-balancer BPF program
->
-> Add the BPF datapath for the XDP load-balancer benchmark, a
-> simplified L4 load-balancer inspired by katran.
->
-> > diff --git a/tools/testing/selftests/bpf/progs/xdp_lb_bench.c b/tools/t=
-esting/selftests/bpf/progs/xdp_lb_bench.c
-> > new file mode 100644
-> > index 000000000000..b9fd848c035d
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-> [ ... ]
-> > +SEC("xdp")
-> > +int xdp_lb_bench(struct xdp_md *xdp)
-> > +{
-> [ ... ]
-> > +     if (cold_lru) {
-> > +             __u32 *saddr =3D data + saddr_off;
-> > +
-> > +             batch_gen++;
-> > +             batch_hash =3D (batch_gen ^ bpf_get_smp_processor_id()) *=
- KNUTH_HASH_MULT;
-> > +             if ((void *)(saddr + 1) <=3D data_end)
-> > +                     *saddr ^=3D batch_hash;
-> > +     }
-> > +
-> > +     return BENCH_BPF_LOOP(
-> > +             process_packet(xdp),
-> > +             ({
-> > +                     if (__bench_result =3D=3D XDP_TX) {
-> > +                             if (strip_encap(xdp, &saved_eth))
-> > +                                     return XDP_DROP;
-> > +                             if (rand_state)
-> > +                                     randomize_src(xdp, saddr_off, &ra=
-nd_state);
-> > +                     }
-> > +                     if (cold_lru) {
-> > +                             void *d =3D (void *)(long)xdp->data;
-> > +                             void *de =3D (void *)(long)xdp->data_end;
-> > +                             __u32 *__sa =3D d + saddr_off;
-> > +
-> > +                             if ((void *)(__sa + 1) <=3D de)
-> > +                                     *__sa ^=3D batch_hash;
->
-> Does this code toggle the source IP back and forth on alternating iterati=
-ons?
->
-> Because batch_hash is computed outside the loop and remains constant, XOR=
-ing
-> the source IP on every reset block will cause it to alternate between two
-> values.
->
-> Won't this allow the LRU cache to easily cache both addresses, leading to=
- a
-> near 100% cache hit rate and defeating the purpose of measuring cold_lru =
-cache
-> misses?
+Hi Christophe,
 
-All cold_lru scenarios also have flow_mask set, which means
-randomize_src() runs in the reset block on every iteration, producing
-a different source IP each time via an xorshift PRNG. The cold_lru XOR
-is an additional per-batch perturbation, not the sole source of flow
-diversity. With flow_mask =3D 0xFFFFFF (16M flow space) and a 100K LRU,
-most iterations genuinely miss.
+Thanks for your patch!
+
+On Mon, 27 Apr 2026 at 19:18, Christophe Leroy (CS GROUP)
+<chleroy@kernel.org> wrote:
+> Today there are approximately 3000 calls for copy_to_user() and
+> 3000 calls to copy_from_user().
+>
+> The majority of callers of copy_{to/from}_user() don't care about the
+> return value, they only check whether it is 0 or not, and when it is
+> not 0 they handle it as a -EACCES.
+
+I think the "a" can be dropped.
+
+> In order to allow better optimisation of copy_{to/from}_user() when
+> the size of the copy is known at build time, create new fonctions
+
+functions
+
+> named copy_{to/from}_user_partial() to be used by the few callers
+> that are interested in partial copies and need to now how many
+
+know
+
+> bytes remain at the end of the copy.
+>
+> For the time being it is just the same as copy_{to/from}_user().
+>
+> Signed-off-by: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
