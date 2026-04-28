@@ -1,116 +1,135 @@
-Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04E7396573;
-	Tue, 28 Apr 2026 20:59:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D2A256C84
+	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 21:03:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777409996; cv=none; b=FFKsWVXqKj4ynr13+/5fgniQaHHAYNS9qdgAChWp0d/470c6zNdz490JpSk9QeS6wtv15/wlLu2PPqqh3Rr6NwChm8UQ0zUqzftvoIf45f8ubJTavkw6YupVCuEm5I2b+ITA35tjAklRfbnspjsqfz4mD8bZo2TmorsF2xHOBIE=
+	t=1777410199; cv=none; b=K4uuVANvlk5YgEYjzto1q+Pxq11xz+rHn2HpZlq8JL+fV1vbaXCjOgFC2FZANVukEdPNTfPQD2M/x69if+AvnPVc3Va97dUt+hhyCOpA/OEa3NIUh8cltzHITwMpAuYdsnCret+SrFphjLt59c73QP8eaZ+STcFDZMbfGW/gYgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777409996; c=relaxed/simple;
-	bh=gJ5lkg0cTU4+nmb3wXY+poqfWNLYx0UBwrrG+u+ZiYc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bXbVh3dLecxgopLbpVINu8eYoNQ/cLczcw0Bnm0bERel67iBayS0oa6+qhLDw4B661xpj+OIE6bEmv00GZDNgulHW0U46hyLJA/gDyYXdSkHkGAySCivkBCP42xWPRKjYxQpRa0UA/enxRQcoSBs5Mh+VU3cI7oOZ56bwjWNgSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=cMBIqItF; arc=none smtp.client-ip=194.13.80.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
+	s=arc-20240116; t=1777410199; c=relaxed/simple;
+	bh=45NkpjwJ2hRgLdMju1pTU8rzvOVxyEXLwjh/mBF3Hvc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=TaXATlh+BZJD5gLC3PukIvUJBK8FD4S7MPJgDsRKB2bh8upI3a0P+3XeKcsKn2t4sz4BSniNjmVdYa/8seqLNmBxxYAM1FPusvKuRcom263HGsqjPLAQhSzxuesP4W2EV5V0LejDQUnzE3qHwvqQajBsyhGxdGBU+lDX7eEHsK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cstTgQi0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="cMBIqItF"
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 477FBA542E;
-	Tue, 28 Apr 2026 22:59:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
-	t=1777409986; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=R3fSEmRTZkVpxmyYMZywqZShe9mXH4lfAvPNdV5j8n0=;
-	b=cMBIqItF74Eqi1KNtJbHlFY8hjuUA9tzY9pMiyBqNVRtbVeu5rAb/2NELLcF88QXMdHV/D
-	e13bsYW4UdJKLl0luXCTAT+ONwpimCbq3mtM0OeXvzwVTRi2TsAOw2jxV+myYZBl1JJLId
-	oe+KZZgXp2nTUtd1Na0k7H42uFqXRjS4QqHkeeV9OCO0ynYgX7OBo1dqjqsMp1RNDy0W8l
-	el7K9NH57hG8LHnVjNkAZfJ6oRxSBHJ+vNe2IoIsp5/254h1ZDLCPirE081CUv1ltB5ZZW
-	Ttm5thAFq4T0VoM50B5ZokAZMv3L7kR51jhdvRMTNiKtSR0gyhRxJoKfT/BbGw==
-From: Nicolai Buchwitz <nb@tipi-net.de>
-To: netdev@vger.kernel.org
-Cc: Justin Chen <justin.chen@broadcom.com>,
-	Simon Horman <horms@kernel.org>,
-	Mohsin Bashir <mohsin.bashr@gmail.com>,
-	Doug Berger <opendmb@gmail.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Nicolai Buchwitz <nb@tipi-net.de>,
-	Mohsin Bashir <hmohsin@meta.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net-next v8 7/7] net: bcmgenet: reject MTU changes incompatible with XDP
-Date: Tue, 28 Apr 2026 22:58:44 +0200
-Message-ID: <20260428205846.2625550-8-nb@tipi-net.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260428205846.2625550-1-nb@tipi-net.de>
-References: <20260428205846.2625550-1-nb@tipi-net.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cstTgQi0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5968C2BCAF;
+	Tue, 28 Apr 2026 21:03:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777410199;
+	bh=45NkpjwJ2hRgLdMju1pTU8rzvOVxyEXLwjh/mBF3Hvc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=cstTgQi0BBV5ZHHHUpRc8m5eUjYMA5OI+GpQQpKl+Qg35F4UnPRu6pYUXz9D4idD8
+	 O7xfwbq5MrdKuXlTYZucAu8gHqAzIHaBH4R+lFW008Fhm47xJ0F4e1SY4eYVZR1zNV
+	 ifkfdDmEgSkpYI9W+l/9LseMPJXw1jD0KauxBUK6W7wYd9VXnEK7fy1s2eSXSxbgQt
+	 vwZLKBXi5Czh4SlANb4eA2iBlogAqDS8CJBJdntrM+otEmxL77Rjq232ZA7lVzwW5P
+	 Q77XTfn0KfSq8rU7lGxrbU0LUAju9DOnPY8szgrvf5KF8NN20Ux94N0+S714/X3VK4
+	 I6kFwzFKTot4w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] bpf: bpf_dbg: fix off-by-one in cmd_select and
+ pcap_next_pkt
+Reply-To: sashiko@lists.linux.dev
+To: "Hasan Basbunar" <basbunarhasan@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260428100109.56572-1-basbunarhasan@gmail.com>
+References: <20260428100109.56572-1-basbunarhasan@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 28 Apr 2026 21:03:18 +0000
+Message-Id: <20260428210318.E5968C2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
 
-Add a minimal ndo_change_mtu that rejects MTU values too large for
-single-page XDP buffers when an XDP program is attached. Without this,
-users could change the MTU at runtime and break the XDP buffer layout.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The patch introduces a logic error that processes a phantom pack=
+et at EOF, leading to an out-of-bounds read and potential crash.
+--
 
-When no XDP program is attached, any MTU change is accepted, matching
-the existing behavior without ndo_change_mtu.
+commit 0b409950f92375c0cacaee040b899aa78918dfb5
+Author: Hasan Basbunar <basbunarhasan@gmail.com>
 
-Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-Reviewed-by: Mohsin Bashir <hmohsin@meta.com>
----
- drivers/net/ethernet/broadcom/genet/bcmgenet.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+bpf: bpf_dbg: fix off-by-one in cmd_select and pcap_next_pkt
 
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-index 02ad2f410d6c..4d1ec68ec0c5 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-@@ -4085,6 +4085,20 @@ static int bcmgenet_xdp_xmit(struct net_device *dev, int num_frames,
- 	return sent;
- }
- 
-+static int bcmgenet_change_mtu(struct net_device *dev, int new_mtu)
-+{
-+	struct bcmgenet_priv *priv = netdev_priv(dev);
-+
-+	if (priv->xdp_prog && new_mtu > PAGE_SIZE - GENET_RX_HEADROOM -
-+	    SKB_DATA_ALIGN(sizeof(struct skb_shared_info))) {
-+		netdev_warn(dev, "MTU too large for single-page XDP buffer\n");
-+		return -EINVAL;
-+	}
-+
-+	WRITE_ONCE(dev->mtu, new_mtu);
-+	return 0;
-+}
-+
- static const struct net_device_ops bcmgenet_netdev_ops = {
- 	.ndo_open		= bcmgenet_open,
- 	.ndo_stop		= bcmgenet_close,
-@@ -4095,6 +4109,7 @@ static const struct net_device_ops bcmgenet_netdev_ops = {
- 	.ndo_eth_ioctl		= phy_do_ioctl_running,
- 	.ndo_set_features	= bcmgenet_set_features,
- 	.ndo_get_stats64	= bcmgenet_get_stats64,
-+	.ndo_change_mtu		= bcmgenet_change_mtu,
- 	.ndo_change_carrier	= bcmgenet_change_carrier,
- 	.ndo_bpf		= bcmgenet_xdp,
- 	.ndo_xdp_xmit		= bcmgenet_xdp_xmit,
--- 
-2.51.0
+bpf_dbg's interactive 'select <N>' command, documented in the file
+header ("select 3 (run etc will start from the 3rd packet in the pcap)")
+to use 1-based packet indexing, advances the pcap cursor one packet too
+many.
 
+[ ... ]
+
+> diff --git a/tools/bpf/bpf_dbg.c b/tools/bpf/bpf_dbg.c
+> index 00e560a17baf..f21576dc2326 100644
+> --- a/tools/bpf/bpf_dbg.c
+> +++ b/tools/bpf/bpf_dbg.c
+> @@ -923,12 +923,12 @@ static bool pcap_next_pkt(void)
+>  	struct pcap_pkthdr *hdr =3D pcap_curr_pkt();
+> =20
+>  	if (pcap_ptr_va_curr + sizeof(*hdr) -
+> -	    pcap_ptr_va_start >=3D pcap_map_size)
+> +	    pcap_ptr_va_start > pcap_map_size)
+>  		return false;
+>  	if (hdr->caplen =3D=3D 0 || hdr->len =3D=3D 0 || hdr->caplen > hdr->len)
+>  		return false;
+>  	if (pcap_ptr_va_curr + sizeof(*hdr) + hdr->caplen -
+> -	    pcap_ptr_va_start >=3D pcap_map_size)
+> +	    pcap_ptr_va_start > pcap_map_size)
+>  		return false;
+> =20
+>  	pcap_ptr_va_curr +=3D (sizeof(*hdr) + hdr->caplen);
+>  	return true;
+
+Does this change cause pcap_next_pkt() to return true when advancing past t=
+he
+final packet, leaving pcap_ptr_va_curr pointing exactly at the end of the
+mapped file boundary?
+
+If the cursor is placed at the end of the file, could this lead to an
+out-of-bounds read in commands like run or step?
+
+Looking at cmd_run(), the loop relies on pcap_next_pkt() returning false to
+terminate on the final packet:
+
+tools/bpf/bpf_dbg.c:cmd_run() {
+	...
+	do {
+		struct pcap_pkthdr *hdr =3D pcap_curr_pkt();
+		int ret =3D bpf_run_all(bpf_image, bpf_prog_len,
+				      (uint8_t *) hdr + sizeof(*hdr),
+				      hdr->caplen, hdr->len);
+		...
+	} while (pcap_next_pkt() && (!has_limit || (++i < pkts)));
+	...
+}
+
+If pcap_next_pkt() now returns true when advancing past the final packet, it
+appears the loop will execute an extra iteration where pcap_curr_pkt() poin=
+ts
+past the valid data, leading to an out-of-bounds dereference of hdr->caplen.
+
+> @@ -1141,7 +1141,7 @@ static int cmd_select(char *num)
+>  	pcap_reset_pkt();
+>  	bpf_reset();
+> =20
+> -	for (i =3D 0; i < which && (have_next =3D pcap_next_pkt()); i++)
+> +	for (i =3D 1; i < which && (have_next =3D pcap_next_pkt()); i++)
+>  		/* noop */;
+>  	if (!have_next || pcap_curr_pkt() =3D=3D NULL) {
+>  		rl_printf("no packet #%u available!\n", which);
+
+Does the combination of these changes also cause the select command to
+incorrectly succeed when requesting a packet beyond the end of the file?
+
+If have_next receives true when advancing past the final packet, a command
+like "select N+1" on an N-packet file will terminate the loop without an er=
+ror
+but leave the cursor positioned at the end of the mapped file boundary,
+meaning subsequent commands could read out of bounds.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260428100109.5657=
+2-1-basbunarhasan@gmail.com?part=3D1
