@@ -1,211 +1,85 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E26DA34CFD0
-	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 07:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97DC13F54D9;
+	Tue, 28 Apr 2026 07:20:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777359961; cv=none; b=Lp82i6y88qFmd+ao6iEVPjegkxokxSIZc5IgdV1IAuqh5DDNZpa1+EDxdGdd+n92Ser6yVTmkMPS23A5EIoIfzgQrAkLlNW0tixagAej6KE8EyxpQuwkC0ZchsAgTpJ4s47xBieszgJbWPMRiArD29x56UXL9ZS5xDf6pHRYaP0=
+	t=1777360842; cv=none; b=khtGB3QalFRO+K3+1ZLITOPfjfgc+zsbP3MkhDOho++tzVbEZ3q7mJmaR/HBHlOzB6KsOXbAXuucN8oysPLUxplUyP+8NaxxPEiX8nHMRPZDEjATqzhNGRS3cvDruyDJM9DybpfHVyvm39+QQWiYDTZMXaBH2HPGQPwbThgxk+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777359961; c=relaxed/simple;
-	bh=tACCu/RrLVvZC//dKCwwbhTR6SIl2MeUDsZQJWY4aCc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=neaFwtF5nY/LlvgrOF6b1alwDpPXIbENC+mEyal8H+gDjRXkNZ3JCgRclGxXHwUsjjSWbLrcmOkDuQcbyrnDGW9IPYMiJ1ooaXvoMNBzGBZyU8PnychusUFTXF+N4o7DqGqDlwz0KbP+1Up7p3upC4tYjZni4AaDxNiSnpUBDWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=snQhJN9q; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="snQhJN9q"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-488b0046078so100057735e9.1
-        for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 00:05:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777359958; x=1777964758; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ghYH9B96BjOnUVsotLaVY0NUZVw8cYbfQ/KArJKrvpM=;
-        b=snQhJN9qa2uOoOMMuUpxTqcCPpxy4Tvyz6axATUz9N9pNf24FmSRk6Kftd4/zArydW
-         RTxlm0JY4cqZEKgnPznzGvys9UfKChngS0vA5OhVq1c/J+6VCcmdoKKm7WHyIMnkOXCn
-         0Fe7T2nEoILCkNC+mDeCfrFS6JFzgUeiiXsog7hc2q6sunT7DPmOELShjezpuAHlo6ix
-         s9m6mdjZgSqSQJOVXWJ3kQhkMPiYjX+GcP8qdx0Fi1usWKxWWB1DKNJ6sCkryUeaITyv
-         ZnmhBMTchyy3at54VbAkGB2tpugQRAziq6QI3FD+8s+r9SlqjD7NnnPAMzlpSRLTWH1p
-         zjtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777359958; x=1777964758;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ghYH9B96BjOnUVsotLaVY0NUZVw8cYbfQ/KArJKrvpM=;
-        b=rGB5+LfRIFGRkAMk8CMA32CRmeeGVLC19AGOEkEp8BKA3Nlavrwg7bx/bEDOTyWThI
-         8NMOdYBjQm5nRywHcY0Pwvth0M060/pZzvAWSWGu8oaRX16zQTW5LXbFCkPwnyYgj0So
-         zQ/3w8cOfwakj0sSozMFRE+2OgRxS90FoW4eUtVLbH7VcoJ+mshhgsHJiLoUw+s2yki0
-         R3mo9vmH062N7D7ZtVQDJp3W5IGOy5FWzkAxz70cpZcwklgmAQdwH+eC3knFehnuYGSU
-         3wA0GUGHj3z1A04Ws2Me8PX0fxm1wcse5lHsrc42uNEAuCHec67HcvZuTpe44detTwuC
-         gLog==
-X-Gm-Message-State: AOJu0YxFHyIjcy4URkaHxgk+4nq210fprNgVFrVmR2L6xpS0ZU9fb6PD
-	FkhD4jsm8guldMH514xJHxCLq+1aObeBWdH6mtVJESYZrmUa3prmyE88
-X-Gm-Gg: AeBDievzdsFMT6de4Z/MqZCGn56DK/vOxFKCwGWAGGXpS1ZqOiYtH6w44Du/6ecnIUk
-	fyNjja096N9PtAx2jgXcnwZMkgxSoh5qpquGUuhkMKXwsBqfq8Li97DQwfcOGCRSuI0cOTVvxA1
-	wYJ44bv53Lq77owLVMfwk1EPJln0VWReF/MeFuKa/GgtdzIYRmAF1IG7QzJUPdL7WK5BfW7Ep1/
-	5TZCF4KySMOaBcoh5wshV5xjtGVXAyA7hOqxw2aCWsMaH46hFsSIfHta0x/aJkFP0Rov/yEIsHG
-	GMf4LOE+hbaPZGAn/0SrNcBr2XPztrSpnprEtZJeLCMXYVzYa9hbEWGSRXHVA1ikqTWqeyxny1T
-	XI+SAJO3kbw//CzJ/zzlAand2fxeKSFlShvYDSjMMa3pckdKMCsMBJN8EO5PvgF2BwAgqxYLDxi
-	mc4dss9b1QC8lagcoInlwJDGkRvmbL9ECpk+OHqyNtNwmTJMQIOvfE55h94rQVSxWb2Mcl4FiEn
-	ZFo8pIBEPzqp3A29Q==
-X-Received: by 2002:a05:600c:8b8b:b0:48a:568f:ae8a with SMTP id 5b1f17b1804b1-48a77aed44bmr29091265e9.8.1777359958027;
-        Tue, 28 Apr 2026 00:05:58 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:1126:4:b8d:4d94:5e6c:7b79? ([2620:10d:c092:500::5:add7])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a775ebb83sm12333835e9.23.2026.04.28.00.05.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2026 00:05:56 -0700 (PDT)
-Message-ID: <4386cf7de9b7fa5a03191bf97d7f5fda1f39de34.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/9] bpf: Refactor object relationship
- tracking and fix dynptr UAF bug
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
- alexei.starovoitov@gmail.com, 	andrii@kernel.org, daniel@iogearbox.net,
- memxor@gmail.com, martin.lau@kernel.org, 	mykyta.yatsenko5@gmail.com,
- kernel-team@meta.com
-Date: Tue, 28 Apr 2026 00:05:55 -0700
-In-Reply-To: <CAMB2axPaDEG_oKLxhcRmivv+YK_ExxNVY_KpSf1vvgLiPq1tvg@mail.gmail.com>
-References: <20260421221016.2967924-1-ameryhung@gmail.com>
-	 <20260421221016.2967924-5-ameryhung@gmail.com>
-	 <02dbf08511c72ea0c1a5caa33ed400f4a3e3c3c9.camel@gmail.com>
-	 <CAMB2axPaDEG_oKLxhcRmivv+YK_ExxNVY_KpSf1vvgLiPq1tvg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	s=arc-20240116; t=1777360842; c=relaxed/simple;
+	bh=7BQIk5pvORGUkLbKpjnxkQ4oY6i8zRO5e45MEUEzEQc=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=LbLCSYDBSWfJorz+1MT4iTdZw3AGyWv38X5egFAiRatLwTo1S1+dPtTJa6jklTh6qkUfM/WQugVitR+cjf11TifrRisbgIzxV9E4zkPXZXHqzHP2VeFJ/MjqI3ZmDN75dm3g9g9krOkgIXSS96fxXopmhoPXpfbSC4CXRoLtzsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8DxrOm5X_Bp2KgEAA--.14158S3;
+	Tue, 28 Apr 2026 15:20:26 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJDxjcK3X_BpkWV2AA--.26183S2;
+	Tue, 28 Apr 2026 15:20:24 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/3] Move thread_info into task_struct for LoongArch
+Date: Tue, 28 Apr 2026 15:20:18 +0800
+Message-ID: <20260428072021.7289-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJDxjcK3X_BpkWV2AA--.26183S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7AF45uw1xArWkZFy7Kr1fXwc_yoW8Jw4rpF
+	9rZrnxJr4rGr93Arnxt34Durn8Jw1xKw1ag3ZIy348CF42vF1UXr1kGrykXFyDtayrtrW0
+	qF1rGwn0gF1UJacCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
+	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
+	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+	kF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07UWHqcUUUUU=
 
-On Mon, 2026-04-27 at 13:21 -0700, Amery Hung wrote:
-> On Fri, Apr 24, 2026 at 3:48=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.c=
-om> wrote:
-> >=20
-> > On Tue, 2026-04-21 at 15:10 -0700, Amery Hung wrote:
-> >=20
-> > Tbh, I find current state of affairs with id/ref_obj_id/parent_id hard
-> > to follow. The release_reference() is an improvement, but the means by
-> > which the fields are propagated to bpf_reg_state objects are convoluted=
-.
-> > I wonder if having a separate "object table" in bpf_verifier_state and
-> > having bpf_reg_state->id refer to objects within this table would make
-> > things more straight forward.
->=20
-> I think this is a good idea in the long term. First, we need to make
-> id a stable and unique object identifier (i.e., always assign id to
-> objects; different objects have different ids). Then, we can create
-> the object table indexed by id and each entry contains the ref_obj_id
-> and parent_id moved from bpf_reg_state. Then, there will be helpers
-> managing the lifetime, relationship (e.g., bpf_obj_create,
-> bpf_obj_release, bpf_obj_clone) with clear semantics to centralize how
-> id,parent_id,ref_obj_id are manipulated.
->=20
-> If this makes sense, I can send this as a follow up patchset.
+This is still an RFC, based on 7.1-rc1. I will perform more tests locally.
+Looking forward to more review comments and test results.
 
-I'd play with it a bit, might make sense if we move a lot of objects
-into this table. E.g. forgo find_good_pkt_pointers() and keep packet
-info as one of the objects, etc.  On the other hand, dynptr and iters
-are inherently stack allocated objects, so it might be the case that
-the final implementation would be an over-complication.
+Tiezhu Yang (3):
+  LoongArch: Implement CONFIG_THREAD_INFO_IN_TASK
+  LoongArch: BPF: Inline bpf_get_current_task{_btf}() helpers
+  LoongArch: BPF: Inline bpf_get_smp_processor_id() helper
 
-[...]
+ arch/loongarch/Kconfig                   |  1 +
+ arch/loongarch/include/asm/current.h     | 22 ++++++++++++
+ arch/loongarch/include/asm/processor.h   | 44 +++---------------------
+ arch/loongarch/include/asm/ptrace.h      |  6 ----
+ arch/loongarch/include/asm/smp.h         |  3 +-
+ arch/loongarch/include/asm/stackframe.h  |  9 +++--
+ arch/loongarch/include/asm/switch_to.h   | 15 ++++++--
+ arch/loongarch/include/asm/thread_info.h | 13 +------
+ arch/loongarch/kernel/asm-offsets.c      |  7 ++--
+ arch/loongarch/kernel/entry.S            |  7 ++--
+ arch/loongarch/kernel/head.S             | 18 ++++++----
+ arch/loongarch/kernel/process.c          |  6 ++++
+ arch/loongarch/kernel/relocate.c         |  2 +-
+ arch/loongarch/kernel/setup.c            |  3 ++
+ arch/loongarch/kernel/smp.c              |  8 +++--
+ arch/loongarch/kernel/switch.S           |  9 ++---
+ arch/loongarch/net/bpf_jit.c             | 26 ++++++++++++++
+ 17 files changed, 115 insertions(+), 84 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/current.h
 
-> > >  static int mark_stack_slots_dynptr(struct bpf_verifier_env *env, str=
-uct bpf_reg_state *reg,
-> > > -                                enum bpf_arg_type arg_type, int insn=
-_idx, int clone_ref_obj_id)
-> > > +                                enum bpf_arg_type arg_type, int insn=
-_idx, int parent_id,
-> > > +                                struct bpf_dynptr_desc *dynptr)
-> >=20
-> > Having both parent_id and dynptr->parent_id as parameters of this
-> > function is very confusing, but I don't have a suggestion on how to
-> > better deal with it.
->=20
-> Does tweaking the argument name and reorder the if-else block make it
-> more obvious how these two arguments are used?
+-- 
+2.42.0
 
-Idk, let's go with your original code, maybe?  The eventual goal is to
-have a unified handling for both helpers and kfuncs, right?
-Meaning that these would be packed into some common arg_info_meta,
-with some comments on the structure fields should look ok.
-
-[...]
-
-> > > +/* Release id and objects referencing the id iteratively in a DFS ma=
-nner */
-> > > +static int release_reference(struct bpf_verifier_env *env, int id)
-> > > +{
-> > > +     u32 mask =3D (1 << STACK_SPILL) | (1 << STACK_DYNPTR);
-> > >       struct bpf_verifier_state *vstate =3D env->cur_state;
-> > > +     struct bpf_idmap *idstack =3D &env->idmap_scratch;
-> > > +     struct bpf_stack_state *stack;
-> > >       struct bpf_func_state *state;
-> > >       struct bpf_reg_state *reg;
-> > > -     int err;
-> > > +     int root_id =3D id, err;
-> > >=20
-> > > -     err =3D release_reference_nomark(vstate, ref_obj_id);
-> > > -     if (err)
-> > > -             return err;
-> > > +     idstack->cnt =3D 0;
-> > > +     idstack_push(idstack, id);
-> > >=20
-> > > -     bpf_for_each_reg_in_vstate(vstate, state, reg, ({
-> > > -             if (reg->ref_obj_id =3D=3D ref_obj_id)
-> > > -                     mark_reg_invalid(env, reg);
-> > > -     }));
-> > > +     if (find_reference_state(vstate, id))
-> > > +             WARN_ON_ONCE(release_reference_nomark(vstate, id));
-> > > +
-> > > +     while ((id =3D idstack_pop(idstack))) {
-> > > +             bpf_for_each_reg_in_vstate_mask(vstate, state, reg, sta=
-ck, mask, ({
-> > > +                     if (reg->id !=3D id && reg->parent_id !=3D id &=
-& reg->ref_obj_id !=3D id)
-> > > +                             continue;
-> > > +
-> > > +                     if (reg->ref_obj_id && id !=3D root_id) {
-> > > +                             struct bpf_reference_state *ref_state;
-> > > +
-> > > +                             ref_state =3D find_reference_state(env-=
->cur_state, reg->ref_obj_id);
-> > > +                             verbose(env, "Unreleased reference id=
-=3D%d alloc_insn=3D%d when releasing id=3D%d\n",
-> > > +                                     ref_state->id, ref_state->insn_=
-idx, root_id);
-> > > +                             return -EINVAL;
-> > > +                     }
-> > > +
-> > > +                     if (reg->id !=3D id) {
-> > > +                             err =3D idstack_push(idstack, reg->id);
-> > > +                             if (err)
-> > > +                                     return err;
-> > > +                     }
-> > > +
-> > > +                     if (!stack || stack->slot_type[BPF_REG_SIZE - 1=
-] =3D=3D STACK_SPILL)
-> > > +                             mark_reg_invalid(env, reg);
-> > > +                     else if (stack->slot_type[BPF_REG_SIZE - 1] =3D=
-=3D STACK_DYNPTR)
-> > > +                             invalidate_dynptr(env, state, stack);
-> >=20
-> > invalidate_dynptr() rewrites to stack slots, can it be the case that
-> > this body of bpf_for_each_reg_in_vstate_mask() is computed for first
-> > and second dynptr stack slots, hence triggering invalidate_dynptr() to
-> > rewrite three slots instead of two?
->=20
-> invalidate_dynptr() will mark the two stack slots as STACK_INVALID so
-> I didn't bother to check whether it is the first slot or not. Am I
-> missing anything?
-
-Oh, right, the =3D=3D STACK_DYNPTR won't fire for the second slot.
-Sorry for the noise.
-
-[...]
