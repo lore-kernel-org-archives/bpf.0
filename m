@@ -1,91 +1,170 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F2C2DAFCC
-	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 02:03:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F1B633F589;
+	Tue, 28 Apr 2026 05:37:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777341819; cv=none; b=GUyVehHsywWHqD5sP3jBeQdQdnBC6A5TS005SU+THB18vwKZUifkmOH8p+ZElxxEbAPcps9jmgWKAgkQTGBUBsR7lafB+M7kdYrrSYxp8FKo73m1uhPG5PycbSdT7nxFDgdQc08/RLQAkp91giZia9EaWh/LvLMGByUuHLphZt0=
+	t=1777354632; cv=none; b=kDgzKaoX7eCE+bwmzjdI78A5FV7aPHmY9sIdU0eUdTr00Q2rULBLSdKQNcexeTbKQ00yKFwdaQ+g6yEi1WvbLXaXY1KhZlNAOflhkU2+38CDb2ePcP1ZFOGxe8Sbp8tncRskIRYsjEcDBWWa/I9JP8Autwy2I6MES8GeecohOhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777341819; c=relaxed/simple;
-	bh=68hfuyCxi7qxZzfJ1OS66wyBIWZXAy1dYK1tQGa1ME8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ox3xtdbqXxB/Bd2m3K0WSwj1pTBXfIDApKULfSzoJpaaj3uNGs/RrNPc1N5W1C/DT7UPfydAi4Rc633OulhSkXMEL8UDIuTi+ZHWks06Iz26cz8nzCiYdhfzN/S1E/o0Dn5oP0vDQthJyv/A5iAfzLNWyjQuzmxEeaDg4i/MOZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aH9dzjsP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777354632; c=relaxed/simple;
+	bh=35j+qmt6iWL15WfQJe5Xfl8qePbfDGAdSt+9hvpfQxM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SiSzv4rIxflCaN54ujTxgBIBje0RdZbnHPjE2grD0a9FcfvqCTx6dltBu6VzDyWNE7GzfOqnEBvmPm84n6GbfiBlU2iU0TSz3GCYlXHER4BMeQKqJqP5rDo8HBURI7sS75ZRI/iAcY6KrHwx+VtyrUkvSjME41w60Xsu1vu9HBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ljwpku2y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aH9dzjsP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D1EC19425;
-	Tue, 28 Apr 2026 02:03:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ljwpku2y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41145C2BCAF;
+	Tue, 28 Apr 2026 05:37:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777341819;
-	bh=68hfuyCxi7qxZzfJ1OS66wyBIWZXAy1dYK1tQGa1ME8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=aH9dzjsPYtkzt37OhWpak9P2A9bvcZq7608racs+Tyow55r/ei8ArmoWedNqr9LgD
-	 V2wwjFrbNeKZiTGtZRuYB3nJ7JTVri/kf7hSNrNwuX7OKAVm1mCDGdygLUxEOqye1e
-	 14Er+RWI+YRxCLxAJv+tKYieVk5ivltOj2kXPoAaAYZwmde+6mWbuTMrYDLJuvAr5S
-	 9HqciD5ghvqcjHcPF4IFYvOZTZ+RdiKvXZq2AP9QT1IGp6TSFSctFnHQIek2bjkKvE
-	 WADgdketbb5RIorGD+PSLzbJnDCDGRA3klWZTSjjqVz/RWmU/e83ap6TWgO9fbZPXH
-	 /OCcv/Ao4xJ6Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 7/7] selftests/bpf: Add XDP load-balancer
- benchmark run script
-Reply-To: sashiko@lists.linux.dev
-To: "Puranjay Mohan" <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260427232313.1582588-8-puranjay@kernel.org>
-References: <20260427232313.1582588-8-puranjay@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 28 Apr 2026 02:03:38 +0000
-Message-Id: <20260428020339.45D1EC19425@smtp.kernel.org>
+	s=k20201202; t=1777354631;
+	bh=35j+qmt6iWL15WfQJe5Xfl8qePbfDGAdSt+9hvpfQxM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Ljwpku2ytv1a51/lWJ0in9sBUOvx/MFmaVm2lPWSgv9iXQ5Y5hi97v5lXatAQMj+o
+	 M6v48RpZX+/yodaSIkctR7XFA621nSVRkUAHLndGlPCH/3+0raZFnmvzHx6QFrbUSW
+	 MY2nLUR0beFVJYiZhHeXViYGYrVhJqildv0ZoE5dhL7L/xaz7W4ZNKOYDsAGmVW63b
+	 OBYu3z+Z+i9ktOYlazQVUXbybAFNByZdkO1qb2CjKEvkk9cyFBQIJt9meREV7C2c4Q
+	 pi2MNJfmfmSD0V3v0rlTi2dKaJpC9vRYnsWEHGQFNmGUTXSaHRe4IbR4Mphemz8+Vq
+	 ZokFl+wxATNAA==
+Message-ID: <06d11ed8-8532-4748-8ce2-6715c4665dc5@kernel.org>
+Date: Tue, 28 Apr 2026 07:37:00 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/3] mm: remove page_mapped()
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker
+ <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>,
+ Jann Horn <jannh@google.com>, Matthew Wilcox <willy@infradead.org>,
+ "Liam R. Howlett" <liam@infradead.org>, linux-sh@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+ linux-mm <linux-mm@kvack.org>, Ryan Roberts <Ryan.Roberts@arm.com>
+References: <20260427-page_mapped-v1-0-e89c3592c74c@kernel.org>
+ <97192ac3-643d-4393-87ef-53a9f3ddaf95@kernel.org>
+ <CAADnVQ+t549-aWEXq=ZUN79H-M=std3-Q8w3fU+dyNhF7mNjyA@mail.gmail.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <CAADnVQ+t549-aWEXq=ZUN79H-M=std3-Q8w3fU+dyNhF7mNjyA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Sashiko AI review found 1 potential issue(s):
-- [Medium] Any extra arguments passed to the script are silently ignored be=
-cause `"$@"` is used incorrectly inside the `run_scenario` bash function.
---
+On 4/27/26 23:38, Alexei Starovoitov wrote:
+> On Mon, Apr 27, 2026 at 9:59 PM David Hildenbrand (Arm)
+> <david@kernel.org> wrote:
+>>
+>> On 4/27/26 13:43, David Hildenbrand (Arm) wrote:
+>>> While preparing my slides for an LSF/MM talk, I realized that I did not
+>>> yet remove page_mapped().
+>>>
+>>> So let's do that. In the BPF arena code it's unclear which memdesc we
+>>> would want to allocate in the future: certainly something with a
+>>> refcount, but likely none with a mapcount. So let's just rely on
+>>> the page refcount instead to decide whether we want to try zapping the
+>>> page from user page tables.
+>>>
+>>> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+>>> ---
+>>
+>> I scanned AI review and I think it founds something that is not related to this
+>> patch.
+>>
+>> We use the page_mapped()->page_ref_count() check as an optimization to avoid
+>> calling zap_vma_range(). We must be able to call it even without that optimization.
+>>
+>> Just like the bulk zap call earlier
+>>
+>>         if (page_cnt > 1)
+>>                 /* bulk zap if multiple pages being freed */
+>>                 zap_pages(arena, full_uaddr, page_cnt);
+>>
+>> It talks about concurrent "munmap(), unmap_region() executes unmap_vmas()"
+>> racing with our zap_vma_range().
+>>
+>> Looking into the details, arena_map_mmap() calls remember_vma(). We reject
+>> mremap and VMA split. arena_vm_close() removes the VMA from the list. The
+>> arena->lock protects our VMA list.
+>>
+>> So in zap_pages, the VMA cannot go away. If we find a VMA, ->close could not
+>> have been called yet.
+>>
+>> In vma.c, we call remove_vma() after vms_clear_pte(). So after unmapping the
+>> pages and freeing the page tables.
+>>
+>> So munmap() can indeed race with zap_vma_range(), and the page_mapped() check
+>> would not have changed anything about that really.
+>>
+>>
+>> @BPF folks: does BPF take anywhere the mmap lock in read mode before calling
+>> zap_vma_range()? It should do that.
+> 
+> Yes, but do NOT.
 
-commit eb02fb82c543ffe6f8607af5eadc8ba489f2fb53
-Author: Puranjay Mohan <puranjay@kernel.org>
+In general, do NOT talk to me like that.
 
-selftests/bpf: Add XDP load-balancer benchmark run script
 
-This commit adds a convenience script to run 24 XDP load-balancer scenarios.
-It formats the benchmark results as a table displaying the median, standard
-deviation, and 99th percentile.
+As I discussed recently with Ryan, we should update the locking requirements for
+zap_vma_range().
 
-> diff --git a/tools/testing/selftests/bpf/benchs/run_bench_xdp_lb.sh b/too=
-ls/testing/selftests/bpf/benchs/run_bench_xdp_lb.sh
-> new file mode 100755
-> index 000000000000..f65cf46214a3
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/benchs/run_bench_xdp_lb.sh
+I assume friendly BPF folks will take care of fixing this.
 
-[ ... ]
+-- 
+Cheers,
 
-> +function run_scenario()
-> +{
-> +	local sc=3D"$1"
-> +	shift
-> +	local output rline
-> +
-> +	output=3D$($RUN --scenario "$sc" "$@" 2>&1) || true
-
-Does this silently ignore extra arguments passed to the script?
-
-In bash, "$@" inside a function evaluates to the arguments passed to that
-specific function, not the global script arguments. Since run_scenario is
-called with exactly one argument ($sc) throughout the script, shift will
-consume it and leave "$@" empty.
-
-Should the script's global arguments be passed explicitly to run_scenario
-when it is called, or should the script store its arguments in a global arr=
-ay?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260427232313.1582=
-588-1-puranjay@kernel.org?part=3D7
+David
