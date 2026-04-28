@@ -1,118 +1,139 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B943B2FFC
-	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 13:45:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AB18402B8B;
+	Tue, 28 Apr 2026 13:53:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777383906; cv=none; b=L3IsI/tSyqEnK1dNdQXz4SROzcAVfg+gthLBm99dPmKCijQmdw0vSpriQUJSkDuJlsdE4y+ejADQVj+Xl/8hpbRwALaenTLjcX87HRcRHHmeyq7w9jbGJjhVAwHuWQWj65z/XAhsLljf7KGDY+B8ksdPbndernMvKEwrtj5/wJQ=
+	t=1777384405; cv=none; b=NYZyJAyPw2uxlT1Gvpgd5MRtKqfAQk+z4vgOrTLdygJUpMME/BnInVrEY8VJX+Aay+6cwsfg9E69sV8l2Q06d0fp0tjwXBX7Zw97xkubc4qKJZFiE//4/WhqaYsIRibXaH7Je7I3EMIj0ntR0vbcU1s5jSpXxxkRF/8Kd6VONHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777383906; c=relaxed/simple;
-	bh=5oP+/aTKJ+enGuB3Bh2TxLME3CBRBGwXw2eS1fMjAmA=;
+	s=arc-20240116; t=1777384405; c=relaxed/simple;
+	bh=/10/r+fyQdY/hOZIRZp/3WlejG5AKgZQH91X4BAPJBo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ajJ0UW3pRXqSRa2CaoyJbXFHOrGxap6UaNaIO1wvkuDNn97gOIXv234XQEMXB58LOu6UVeXgLCoG8U3T3JTkep5nelwWYXk+/7BGlx35XMV45d1vhrYfgqwB83bo+l2Ozu0sp6oRD6CoO48lQgYpqBxzKy7BapeTmb+v244dvUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GeKfPEb6; arc=none smtp.client-ip=91.218.175.183
+	 In-Reply-To:Content-Type; b=O/cpbZ2+KDzA+T7wvWmJZ5hsxxWWWzB3ypqaTWNbIzEvTB2Yq6VffQWTUfT7UdGpo3uHiE8qeBSWBde/u0dftc2mcF3T4INk0/elaEawVR1AcyeJht101t8D4UijO+KPEbvmlwZrLcl+NKtCY9UcJdEk9FRGAxoEwpbj3m1zFNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VbrPgk4e; arc=none smtp.client-ip=91.218.175.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GeKfPEb6"
-Message-ID: <9a50d5b2-d3bb-4609-a810-003320540c45@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VbrPgk4e"
+Message-ID: <e908cd1a-a0ee-49b1-8528-c455bbd4c432@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777383900;
+	t=1777384401;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=DtKcuyRuY2HWpCwJ5nOA8Qprq/CoMLkFBcZif+m/6JY=;
-	b=GeKfPEb6voAMVCaDo9JMgRwg8JBIC0ZAbKrrsIu8mMdkJ6x+nvn+OVQFO+0DxnffvsXjYM
-	lFDekpLtOeIiFW6sn9J1zxGov6bMugIbVPW0ZJgzBzJcOppc22FPBXt9fhDBTD8ximfd7u
-	6X9Ei/1OFImo68WUqZLdkChDLO9G5r4=
-Date: Tue, 28 Apr 2026 14:44:57 +0100
+	bh=CzDFP7nbPCUcNjWgIu8emI3o1xLPnD8WwB+gomvVzqY=;
+	b=VbrPgk4eAqU5ZeED8lPdpS27fwXquEz0OuRwXyj7Vp8yZPmnov4EGJz41ABDABO/FSOW/9
+	0hqKE7JnFnjmCneGDKikUyuSf/6x4EJ3qh6cpHDoTth9p6cSYMTtx3ivNEycuTB6gT2i4b
+	kKa9dmTXzZ/cQiU646ZKE3wXb/vpt9Q=
+Date: Tue, 28 Apr 2026 21:52:33 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next] selftests/bpf: Rename libarena malloc/free
- methods
-To: Emil Tsalapatis <etsal@meta.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
-References: <20260428134252.2783519-1-etsal@meta.com>
-Content-Language: en-US
+Subject: Re: [PATCH bpf-next v10 1/8] bpf: refactor __bpf_list_del to take
+ list node pointer
+To: bot+bpf-ci@kernel.org, emil@etsalapatis.com
+Cc: shuah@kernel.org, john.fastabend@gmail.com, yonghong.song@linux.dev,
+ song@kernel.org, eddyz87@gmail.com, andrii@kernel.org, ast@kernel.org,
+ martin.lau@linux.dev, daniel@iogearbox.net, jolsa@kernel.org,
+ haoluo@google.com, sdf@fomichev.me, kpsingh@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev, chengkaitao@kylinos.cn,
+ linux-kselftest@vger.kernel.org
+References: <20260427165906.84420-2-kaitao.cheng@linux.dev>
+ <af50d188f6bc2de81fe3c321b26a645a9425ba9f2644cb6f8525d5bb637385f9@mail.kernel.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260428134252.2783519-1-etsal@meta.com>
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+In-Reply-To: <af50d188f6bc2de81fe3c321b26a645a9425ba9f2644cb6f8525d5bb637385f9@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On 4/28/26 2:42 PM, Emil Tsalapatis wrote:
-> From: Emil Tsalapatis <emil@etsalapatis.com>
-> 
-> The s390 architecture uses the token "free" for an enum, conflicting
-> with the malloc/free definitions. Rename the calls to arena_malloc and
-> arena_free instead to prevent collisions.
-> 
-> Reported-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> Signed-off-by: Emil Tsalapatis <etsal@meta.com>
-> Fixes: 7c8d208d816d0504aa916138ae097d9cb4ed4e56 ("Introduce arena library and runtime)
 
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
+在 2026/4/28 02:43, bot+bpf-ci@kernel.org 写道:
+>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>> --- a/kernel/bpf/helpers.c
+>> +++ b/kernel/bpf/helpers.c
+> 
+> [ ... ]
+> 
+>> @@ -2575,12 +2577,16 @@ static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head,
+>>
+>>  __bpf_kfunc struct bpf_list_node *bpf_list_pop_front(struct bpf_list_head *head)
+>>  {
+>> -	return __bpf_list_del(head, false);
+>> +	struct list_head *h = (void *)head;
+>> +
+>> +	return __bpf_list_del(head, h->next);
+>>  }
+> 
+> This addresses an unaddressed review comment from Emil Tsalapatis in v8.
+> The code reads h->next before __bpf_list_del checks if the list is
+> initialized. If the list is uninitialized (h->next is NULL), a NULL pointer
+> is passed to __bpf_list_del.
+> 
+> While the function will eventually initialize the list and return NULL without
+> dereferencing the NULL pointer:
+> 
+> kernel/bpf/helpers.c:__bpf_list_del() {
+> 	if (unlikely(!h->next)) {
+> 		INIT_LIST_HEAD(h);
+> 		return NULL;
+> 	}
+> 	...
+> }
+> 
+> this is counterintuitive - passing a potentially garbage value that is later
+> ignored.
+> 
+> Emil suggested moving the init check logic into the top-level kfuncs
+> (bpf_list_pop_front/bpf_list_pop_back) to ensure the list_head passed to
+> __bpf_list_del is always valid. You can also just init the list and return
+> NULL in that case - we know it's empty.
+> 
+> The same issue applies to bpf_list_pop_back() which reads h->prev before
+> the initialization check.
+> 
+> Original comment from Emil Tsalapatis (Thu, 19 Mar 2026 12:17:50 -0400):
+> https://lore.kernel.org/bpf/DH6W7K2SLPYB.PCO7FQ6CR1YZ@etsalapatis.com/
+> 
+> "The new code reads n _before_ we check if the list is initialized. So the n
+> we are passing from the caller may well be NULL. However, __bpf_list_del()
+> will in that case now a) call INIT_LIST_HEAD(() to properly set up prev/next,
+> b) call list_empty() on the newly initialized list and exit without ever
+> reading the NULL passed by the caller.
+> 
+> This is kind of counterintuitive: We are passing essentially a garbage value
+> to __bpf_list_del that we thankfully end upi ignoring. Can you move the init
+> check logic into the top-level kfuncs to make sure the list_head we're passing
+> to __bpf_list_del is always valid? You can also just init the list and return
+> NULL in that case - we know it's empty."
+> 
+> This issue remains unaddressed in v10.
+> 
+> 
 > ---
->  tools/testing/selftests/bpf/libarena/Makefile               | 2 --
->  .../selftests/bpf/libarena/include/libarena/common.h        | 6 +++---
->  tools/testing/selftests/bpf/libarena/src/common.bpf.c       | 4 ++--
->  3 files changed, 5 insertions(+), 7 deletions(-)
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 > 
-> diff --git a/tools/testing/selftests/bpf/libarena/Makefile b/tools/testing/selftests/bpf/libarena/Makefile
-> index 3c695f9c0054..5e2ab514805e 100644
-> --- a/tools/testing/selftests/bpf/libarena/Makefile
-> +++ b/tools/testing/selftests/bpf/libarena/Makefile
-> @@ -51,8 +51,6 @@ ASAN_FLAGS += -mllvm -asan-destructor-kind=none
->  override BPF_CFLAGS += -DENABLE_ATOMICS_TESTS
->  override BPF_CFLAGS += -O2 -g
->  override BPF_CFLAGS += -Wno-incompatible-pointer-types-discards-qualifiers
-> -# Required to define our own arena-based free()
-> -override BPF_CFLAGS += -Wno-incompatible-library-redeclaration
->  # Required for suppressing harmless vmlinux.h-related warnings.
->  override BPF_CFLAGS += -Wno-missing-declarations
->  override BPF_CFLAGS += $(INCLUDES)
-> diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/common.h b/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-> index e54cb7b869bd..ca1a6c1d6477 100644
-> --- a/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-> +++ b/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-> @@ -48,9 +48,9 @@ extern volatile u64 asan_violated;
->  
->  int arena_fls(__u64 word);
->  
-> -u64 malloc_internal(size_t size);
-> -#define malloc(size) ((void __arena *)malloc_internal((size)))
-> -void free(void __arena *ptr);
-> +u64 arena_malloc_internal(size_t size);
-> +#define arena_malloc(size) ((void __arena *)arena_malloc_internal((size)))
-> +void arena_free(void __arena *ptr);
->  
->  /*
->   * The verifier associates arenas with programs by checking LD.IMM
-> diff --git a/tools/testing/selftests/bpf/libarena/src/common.bpf.c b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-> index e5da1e37e83e..544bf9e1cb38 100644
-> --- a/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-> +++ b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-> @@ -38,12 +38,12 @@ __weak int arena_buddy_reset(void)
->  	return buddy_init(&buddy);
->  }
->  
-> -__weak u64 malloc_internal(size_t size)
-> +__weak u64 arena_malloc_internal(size_t size)
->  {
->  	return buddy_alloc_internal(&buddy, size);
->  }
->  
-> -__weak void free(void __arg_arena __arena *ptr)
-> +__weak void arena_free(void __arg_arena __arena *ptr)
->  {
->  	buddy_free_internal(&buddy, (u64)ptr);
->  }
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25009536772
+
+The '__bpf_list_del' function is a static function, so its scope and
+associated risk are both very limited. I think its purpose is code
+reuse and avoiding duplication.
+
+If we move 'unlikely(!h->next)' to the outer callers, I believe it
+brings no benefit other than making the code more redundant. Also,
+I think validating a function's parameters before execution is not
+counterintuitive; on the contrary, for global functions it is almost
+a hard requirement.
+
+-- 
+Thanks
+Kaitao Cheng
 
