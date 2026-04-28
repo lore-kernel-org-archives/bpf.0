@@ -1,299 +1,173 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88BF441037
-	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 14:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C48C738550B;
+	Tue, 28 Apr 2026 15:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777388146; cv=none; b=GHTYw0LjQAe0OkKk1KoSBzrRelEHFhP9O8HDTUGnFSE+/ZzzqbQUFqJKeGU1EzkGiCpt+UNvyKU5C8g2lmmZrow+0r70n9I1P76g4DIn6Ugu4/Lr04c+YqHLGj0ea2O2+ibN+6MqhMbDS7JweAL/gLH5Z8S03UyGAPhCSs65HEo=
+	t=1777390211; cv=none; b=h6dtwBA//2ZA3xvXjqnXQguS4PeQnewhHonkkF5tj3E515fCExZYugxq0+3RO0pQhKA7Z+SM2DGXLx1IcCvc+W1s67eZn1x7Zz2lMDHRAnTFxZv77X4dX/thSniDyJkI7yNL/zE14QzWV1wGU/Yios9T/LJrTBLNT4fXqKkRbYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777388146; c=relaxed/simple;
-	bh=PdDWFzw81l0GsH38DkKlqIYdqfQpj1JE8Wpnfq8O5i0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tv8W0y1JrONxsA4wYMOKRU0KBbGNmvMWVZNexIlQMQk8xqmg2W5Kx8y/TTOYtSisBrTZRfFzObr1BM/avt35v233xqQ5m6vlhcKrKqV5QdBJfwnAB2JxsDt9UbhUu1y48x0zbI8ub2uo33EdH/uTp3Ms25CR7etXPsXKTZ0wgU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YijnXylv; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777390211; c=relaxed/simple;
+	bh=muM6M8nKIHut7+xSa6h9L/Si3vdZRbFddH2GuYKYsTM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EUDYh+uMkWEevYl4K+jRKy/5yttPZ4R/CZEeGCjMlUPauuC5EhiS2rv5Y0hh+Sc7MsTW3RH2PZPVLmSH+7Q7fYFVyDo7QCQtB8jYc357k9w8LTnKRRSTpPi8BwZFaO/yR4VpMkWSqNYFphvazDjJz1czlM2IHRpS5KIwe/SffPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PsdWffEK; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YijnXylv"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43d0deb7ad5so9448295f8f.2
-        for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 07:55:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777388143; x=1777992943; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gy+Bj5Jvyjnx/aK2dlrsxvghM8Pu1GdFdW2d4Imv1Ns=;
-        b=YijnXylvBDf2KqIlgzJ2/IlbipLqtCJYTZZJv0hGVf7ih3R6OELciteO95jrnLIL5i
-         WZSofFSS+PZPv16YMvTGeFnFFqFr4D0Keau7FQgqvr8HXlx3eMqfw8sG2pDeRbcFNLvy
-         jjvfGS4lyowpdxmLYzTLSS18N9CEQEnhqdvai49OgL/2kNp5po0Ww/mlf9ig6vcq4l4V
-         RkgFoiMAhNQFAOk3SPT5N9aDRKHS0MiCpDbkyIXhVm0iHCWJNh1d5yRGhcFEJS1wC66o
-         Mi01ytwjW2KWYweBATmC79IidJxHVzEnT9wZVwA2+O90wClBjRovSvbjYt+4IWmJwijp
-         p2JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777388143; x=1777992943;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Gy+Bj5Jvyjnx/aK2dlrsxvghM8Pu1GdFdW2d4Imv1Ns=;
-        b=T4628x+WVZ6OQ8y1npI3mUooex7MW4MI/HZdGZOHHyoF9tKrlBC0tgcxUlnPL/Ah+h
-         w4IPL6Lxg3lctOe03U2hrKIK+mLv4RCe0jjPxKeH1IWQW3sAzIaLHJEJkJ5AzPU9U9gX
-         Nv7lf/Fhyz/1vq8SJJvONqQsVzOlmE4tU/3McDc+KFkDZ0XH5hTnNCjKk3fWBHMwkZ4l
-         NdCS4K+MBXTzw+9nYhCry7+ns53ytGniPu8j3VRBMPf5jS4l0EuzcZ24LQ8kVvoUlgzb
-         RzVNOd+iwftIlS0n7yxaHnE8dHPUZm5ny4hJXGeCizOI7kUfcVewDEgNW7gdO8fMlFhd
-         zUeA==
-X-Gm-Message-State: AOJu0Yy3Ks4JTUeMS2QY4o0l+5Fv/6FgD+jHfx+RHSVYQhUKgIWPoHvB
-	NGLTpk3KDGyrDBG+ASo8DlCZ6nDdC93S7F+zRTwICV1r3D0PR+snAy0F8LUv1Q==
-X-Gm-Gg: AeBDieuS0mlQ3sWZl+LizyG03E0z7PmrupshX0v6/yXIp4l+dgiY/q4Azibec4SK3RE
-	7CW8cjSrmTxvHC279QvXwrXjJzAQXuBk1o8jXtrIZjTZXp59lPAWMjW4bdxcnLFjVXMQ9qZ+Ulm
-	q1nYw+UsjWgjncIuLw0CAJg2rSvMCFW0yVk6P0Ku3ObXGlKRxJoAzBgJQUDE3awQ4zwOGJadHed
-	l+eYWnkJR3G7x8qgpVYB+xncQcWrEH43NXytliqvE//dPliFtDHdI1zTK1shtZTy5JGwWfoh1fl
-	ed2tcv/C8ym2y49VnCzhnjk2Aux+KXRimsOmeCiUsrHG+YxOBxeQldWeLgnpFNhSl5WZ4aZLsM4
-	EyJJOpGJhJvAgm318HQ++8JWtIIU7pWMsEMh7v3yPmYpPUKyZSyJNFfibSkBPTNC54wjHm3Qktv
-	1xHgz2ZmL1zosjlDmDTLWRnNYJjWq6y0saeMqfP3s1sXW1BWVG2tzgtT+dQq0+XQOO4jBGqGrIt
-	bwFzTQsnWMAc6rPAGI6XXoshQEO0SCzEqitOQpqpQd5jEdIAwt6FKqhMM9ZNK6mKCN7fMIpmvgR
-	V/9mPVKWqOFocdP9Qf0e8uvEH36Wuxtg0APHTZ5Edk5/ewuawSbM
-X-Received: by 2002:a05:6000:24c3:b0:439:beb9:5a96 with SMTP id ffacd0b85a97d-44649ba1e97mr6455652f8f.31.1777388142755;
-        Tue, 28 Apr 2026 07:55:42 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e0059b820af0e4d43c8.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:59b8:20af:e4d:43c8])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4463f4c0a35sm8024311f8f.22.2026.04.28.07.55.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2026 07:55:42 -0700 (PDT)
-Date: Tue, 28 Apr 2026 16:55:40 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Test insns processed breakdown
-Message-ID: <30df9a4d569143e1d23a7c7aefd7dca85a21e2c8.1777388107.git.paul.chaignon@gmail.com>
-References: <5c3514dbc879f22ba3f9eff8a2c730e13bd0572c.1777388107.git.paul.chaignon@gmail.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PsdWffEK"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63S6bkhe2999657;
+	Tue, 28 Apr 2026 15:29:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=YwP493
+	ILC63v3+UTyJCc1eyOdyX+yQa9BtJobhiIseo=; b=PsdWffEK1/ENih1fDvZINM
+	yXmTufIwIZ1g32nDNONaa2cF1DcBuvIwuv5IXeBIUQ1g8xM0oBwC3sEM9CeqIxl4
+	NfZubhzYoVxvA6WyZbRXsyKM/z3Lww/ZdaGN9nriInLbSi9//3w03AbZAYTIzuk+
+	+rSFHBPhFIjKLiUmmYb/WprKiF032NMfVTVHj9jhMu9v8tJ9CK5XvdAuE8r53U/4
+	LfXc1AWajPOXdwj/dTruXO09KLBmcmITV2sa6+pFZTNRiWGC3iAvbcDaFwxDCxKM
+	0cNBeLwy6NQR8Hs9UpBcF+t5TY2Nwb1UHQg4JcxtxGg/a6AdHpFSV1l4OFfb+rrQ
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4drnb568nu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 28 Apr 2026 15:29:49 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 63SFNo3i003786;
+	Tue, 28 Apr 2026 15:29:48 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4ds8xk2aa7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 28 Apr 2026 15:29:48 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63SFTiwr34996666
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 28 Apr 2026 15:29:44 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8760A2004B;
+	Tue, 28 Apr 2026 15:29:44 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3531C20049;
+	Tue, 28 Apr 2026 15:29:41 +0000 (GMT)
+Received: from [9.39.16.179] (unknown [9.39.16.179])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 28 Apr 2026 15:29:40 +0000 (GMT)
+Message-ID: <7d3bbb94-575f-4119-9ef0-62cff98795ce@linux.ibm.com>
+Date: Tue, 28 Apr 2026 20:59:39 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5c3514dbc879f22ba3f9eff8a2c730e13bd0572c.1777388107.git.paul.chaignon@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/5] powerpc/bpf: fix alignment of long branch
+ trampoline address
+To: adubey@linux.ibm.com, bpf@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com, ast@kernel.org,
+        andrii@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+References: <20260411221413.44304-1-adubey@linux.ibm.com>
+ <20260411221413.44304-2-adubey@linux.ibm.com>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <20260411221413.44304-2-adubey@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=AqDeGu9P c=1 sm=1 tr=0 ts=69f0d26d cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8
+ a=VwQbUJbxAAAA:8 a=atBhxT8-om9CWOQYYk4A:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDI4MDE0NSBTYWx0ZWRfX6u62VQKvlfki
+ LSaFxCoPf2J8cLw+nHlZFUbhVJaq8DqhSKIv/sQouhuHaBomuEvBfYz8471q1qU7EnzCDne6YS2
+ 1NB1mbKMWUzaqo9HQvwfxNc/VbzEvN60xHP6EyfRV/NO+ZSoUWxU2FazOh4mn1DCzk8YkWQJ18C
+ 5sPyAR4xqOTOsQUbKxb2EtRWRlpchoNfnW5Bmm+YyYf9XcsZ/OmSlWOY70l8PIcXwtb+B6ypxIl
+ vpgjlIAKj4vxxgXYkLe/Dmz3JsjqoLtW65sBQ19HMMHI8U70MUJOo+SXdO67GEA4a17ieHAqZjX
+ g8H3LJ3cwizp9wH0udoBX/Jakb9kWrvF/pu57mcJol/Wfiqf4BwVU3PJFbj5MhKOW5ZzLQYlagz
+ GQn9nZfpH3U08yAJIq8ndVMd7fgAXmWLDFXSVV7pH/qwEryW0HjkGKZypgLRlSQKqtipJP/OlAh
+ cCcs0qizQnBy66hXZqQ==
+X-Proofpoint-GUID: eAdXJj8nsRIqvr-NYA3wcRltfAJUWR6v
+X-Proofpoint-ORIG-GUID: eAdXJj8nsRIqvr-NYA3wcRltfAJUWR6v
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-28_04,2026-04-28_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 priorityscore=1501 phishscore=0 suspectscore=0 clxscore=1015
+ lowpriorityscore=0 spamscore=0 bulkscore=0 impostorscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2604280145
 
-This patch covers in global subprog selftests the new verifier log with
-the breakdown of instructions processed by global subprogs.
 
-Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
----
- .../bpf/progs/verifier_global_subprogs.c      | 60 ++++++++++++-------
- 1 file changed, 40 insertions(+), 20 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-index 1e08aff7532e..58faf5485667 100644
---- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-@@ -46,12 +46,13 @@ __noinline long global_dead(void)
- }
- 
- SEC("?raw_tp")
--__success __log_level(2)
-+__success __log_level(6)
- /* main prog is validated completely first */
- __msg("('global_calls_good_only') is global and assumed valid.")
- /* eventually global_good() is transitively validated as well */
- __msg("Validating global_good() func")
- __msg("('global_good') is safe for any args that match its prototype")
-+__msg("insns processed 7+2+5")
- int chained_global_func_calls_success(void)
- {
- 	int sum = 0;
-@@ -86,7 +87,8 @@ __noinline int global_unsupp(const int *mem)
- const volatile bool skip_unsupp_global = true;
- 
- SEC("?raw_tp")
--__success
-+__success __log_level(4)
-+__msg("insns processed 5")
- int guarded_unsupp_global_called(void)
- {
- 	if (!skip_unsupp_global)
-@@ -142,8 +144,9 @@ int anon_user_mem_invalid(void *ctx)
- }
- 
- SEC("?tracepoint")
--__success __log_level(2)
-+__success __log_level(6)
- __msg("Func#1 ('subprog_user_anon_mem') is safe for any args that match its prototype")
-+__msg("insns processed 6+5")
- int anon_user_mem_valid(void *ctx)
- {
- 	user_struct_t t = { .x = 42 };
-@@ -159,7 +162,8 @@ __noinline __weak int subprog_nonnull_ptr_good(int *p1 __arg_nonnull, int *p2 __
- int x = 47;
- 
- SEC("?raw_tp")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 7+4")
- int arg_tag_nonnull_ptr_good(void *ctx)
- {
- 	int y = 74;
-@@ -186,21 +190,24 @@ __weak int raw_tp_u64_array(u64 *ctx __arg_ctx)
- }
- 
- SEC("?raw_tp")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 12+5+2+2")
- int arg_tag_ctx_raw_tp(void *ctx)
- {
- 	return subprog_ctx_tag(ctx) + raw_tp_canonical(ctx) + raw_tp_u64_array(ctx);
- }
- 
- SEC("?raw_tp.w")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 12+5+2+2")
- int arg_tag_ctx_raw_tp_writable(void *ctx)
- {
- 	return subprog_ctx_tag(ctx) + raw_tp_canonical(ctx) + raw_tp_u64_array(ctx);
- }
- 
- SEC("?tp_btf/sys_enter")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 12+5+2+2")
- int arg_tag_ctx_raw_tp_btf(void *ctx)
- {
- 	return subprog_ctx_tag(ctx) + raw_tp_canonical(ctx) + raw_tp_u64_array(ctx);
-@@ -214,7 +221,8 @@ __weak int tp_whatever(struct whatever *ctx __arg_ctx)
- }
- 
- SEC("?tp")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 7+5+2")
- int arg_tag_ctx_tp(void *ctx)
- {
- 	return subprog_ctx_tag(ctx) + tp_whatever(ctx);
-@@ -231,7 +239,8 @@ __weak int kprobe_subprog_typedef(bpf_user_pt_regs_t *ctx __arg_ctx)
- }
- 
- SEC("?kprobe")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 12+5+2+2")
- int arg_tag_ctx_kprobe(void *ctx)
- {
- 	return subprog_ctx_tag(ctx) +
-@@ -266,7 +275,8 @@ __weak int perf_subprog_canonical(struct bpf_perf_event_data *ctx __arg_ctx)
- }
- 
- SEC("?perf_event")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 15+5+2+2+2")
- int arg_tag_ctx_perf(void *ctx)
- {
- 	return subprog_ctx_tag(ctx) +
-@@ -286,7 +296,8 @@ __weak int iter_subprog_typed(struct bpf_iter__task *ctx __arg_ctx)
- }
- 
- SEC("?iter/task")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 8+2+2")
- int arg_tag_ctx_iter_task(struct bpf_iter__task *ctx)
- {
- 	return (iter_subprog_void(ctx) + iter_subprog_typed(ctx)) & 1;
-@@ -305,7 +316,8 @@ __weak int tracing_subprog_u64(u64 *ctx __arg_ctx)
- int acc;
- 
- SEC("?fentry/" SYS_PREFIX "sys_nanosleep")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 12+2+2")
- int BPF_PROG(arg_tag_ctx_fentry)
- {
- 	acc += tracing_subprog_void(ctx) + tracing_subprog_u64(ctx);
-@@ -313,7 +325,8 @@ int BPF_PROG(arg_tag_ctx_fentry)
- }
- 
- SEC("?fexit/" SYS_PREFIX "sys_nanosleep")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 12+2+2")
- int BPF_PROG(arg_tag_ctx_fexit)
- {
- 	acc += tracing_subprog_void(ctx) + tracing_subprog_u64(ctx);
-@@ -321,14 +334,16 @@ int BPF_PROG(arg_tag_ctx_fexit)
- }
- 
- SEC("?fmod_ret/" SYS_PREFIX "sys_nanosleep")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 7+2+2")
- int BPF_PROG(arg_tag_ctx_fmod_ret)
- {
- 	return tracing_subprog_void(ctx) + tracing_subprog_u64(ctx);
- }
- 
- SEC("?lsm/bpf")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 11+2+2")
- int BPF_PROG(arg_tag_ctx_lsm)
- {
- 	int ret;
-@@ -339,7 +354,8 @@ int BPF_PROG(arg_tag_ctx_lsm)
- }
- 
- SEC("?struct_ops/test_1")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 7+2+2")
- int BPF_PROG(arg_tag_ctx_struct_ops)
- {
- 	return tracing_subprog_void(ctx) + tracing_subprog_u64(ctx);
-@@ -351,7 +367,8 @@ struct bpf_dummy_ops dummy_1 = {
- };
- 
- SEC("?syscall")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 12+2+2+2")
- int arg_tag_ctx_syscall(void *ctx)
- {
- 	return tracing_subprog_void(ctx) + tracing_subprog_u64(ctx) + tp_whatever(ctx);
-@@ -369,7 +386,8 @@ __weak int syscall_array_bpf_for(void *ctx __arg_ctx)
- }
- 
- SEC("?syscall")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 2+58")
- int arg_tag_ctx_syscall_bpf_for(void *ctx)
- {
- 	return syscall_array_bpf_for(ctx);
-@@ -394,7 +412,8 @@ struct {
- };
- 
- SEC("?syscall")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 5")
- int arg_tag_ctx_syscall_tailcall(void *ctx)
- {
- 	bpf_tail_call(ctx, &syscall_prog_array, 0);
-@@ -471,7 +490,8 @@ __weak int subprog_dynptr(struct bpf_dynptr *dptr)
- }
- 
- SEC("?xdp")
--__success __log_level(2)
-+__success __log_level(6)
-+__msg("insns processed 8+27")
- int arg_tag_dynptr(struct xdp_md *ctx)
- {
- 	struct bpf_dynptr dptr;
--- 
-2.43.0
+On 12/04/26 3:44 am, adubey@linux.ibm.com wrote:
+> From: Abhishek Dubey <adubey@linux.ibm.com>
+> 
+> Ensure the dummy trampoline address field present between the OOL stub
+> and the long branch stub is 8-byte aligned, for memory compatibility
+> when content loaded to a register.
+> 
+> Reported-by: Hari Bathini <hbathini@linux.ibm.com>
+> Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+> ---
+>   arch/powerpc/net/bpf_jit.h        |  4 ++--
+>   arch/powerpc/net/bpf_jit_comp.c   | 34 ++++++++++++++++++++++++++-----
+>   arch/powerpc/net/bpf_jit_comp64.c |  4 ++--
+>   3 files changed, 33 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+> index 7354e1d72f79..1184ad15d5a4 100644
+> --- a/arch/powerpc/net/bpf_jit.h
+> +++ b/arch/powerpc/net/bpf_jit.h
+> @@ -208,8 +208,8 @@ int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *
+>   int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct codegen_context *ctx,
+>   		       u32 *addrs, int pass, bool extra_pass);
+>   void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx);
+> -void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx);
+> -void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx);
+> +void bpf_jit_build_epilogue(u32 *image, u32 *fimage, struct codegen_context *ctx);
+> +void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context *ctx);
+>   void bpf_jit_realloc_regs(struct codegen_context *ctx);
+>   int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg, long exit_addr);
+>   
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> index a62a9a92b7b5..c255b30a37b0 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -49,11 +49,34 @@ asm (
+>   "	.popsection				;"
+>   );
+>   
+> -void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx)
+> +void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context *ctx)
+>   {
+>   	int ool_stub_idx, long_branch_stub_idx;
+>   
+>   	/*
+> +	 * In the final pass, align the mis-aligned dummy_tramp_addr field
+> +	 * in the fimage. The alignment NOP must appear before OOL stub,
+> +	 * to make ool_stub_idx & long_branch_stub_idx constant from end.
+> +	 *
+> +	 * Need alignment NOP in following conditions:
+> +	 *
 
+I don't think I follow this table..
+
+> +	 * OOL stub aligned	CONFIG_PPC_FTRACE_OUT_OF_LINE	Alignment NOP
+> +	 *      Y                               Y                     N
+
+> +	 *      Y                               N                     Y
+
+Please help me understand why a NOP is needed here
+
+> +	 *      N                               Y                     Y
+
+> +	 *      N                               N                     N
+
+and also, why a NOP isn't needed here..
+
+- Hari
