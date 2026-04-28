@@ -1,89 +1,124 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC9A477E2B
-	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 18:26:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12ED847AF56
+	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 18:26:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777400782; cv=none; b=okqwW0ouaEEhNg9L6Dn14FcYs3fZX+d2st8D1QKHxWgDezmAxFLHGnDZQ6mKWDv8gpk2T6xu5RDDDrKIM1aew3r1GpZKWVWOlsjT6egtUuKuf8P0o4st4wtAGtOOr6hVMU2NgEDwK2mM4Sdhspp7uMdgfz7q3+jHFiHM6N2HyiM=
+	t=1777400783; cv=none; b=SOVOZVeWD1Em+BkDIWV6BCUvPVbDBsjd0XIW7C+52eXFXYPXeeMMG/cfapGXrQ/80851Bb1vwH7Nd/0APCRKs2huoRwMWZXHUcCi2XifcObEPxyEN7Cfsph18f+T6WLSYRN1wkHsexNZjvF/oMzMBJEHDb8bwYCyGO6FUtWbMpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777400782; c=relaxed/simple;
-	bh=yS9oGUZDk1xU0RHbqO3rRoddTBWjLzDBNXZzDIfDh/8=;
+	s=arc-20240116; t=1777400783; c=relaxed/simple;
+	bh=WhVsdEkghFRIIIa0/a/roxynEZP8B8HknPXwBr8kGMY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=THlEjhBfZ7rnEQ8LED9oUuxlb9itZZ3R5CHHZo1eRiQaGQiNOSyspiQKgNcbf6nXfuE/0JgTYfpGeI/0XrP706rNRObpWZwz0RjYWdOFGIoGfLs0FL7DrKMTv29JYZ0MzooZg6qWwS2Tc7XbelTcVqHuOlbDrWEftF2/Ns4NFT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CItsaX78; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=Ew0ZY47ZBvdjXpBYQOYw4pNe9iZ2+Nh3stVGYvsbesXKmwj9EX1vhM3GEdsL8Zqv3zKbeafCG42Vc+9AhOo3n74w3Z54QlfaIqTxgVlCgxvw8nZCIiKiyIJbnRhZsrZadrzTlWpn96fNLLjnwuaK99RrttGqAvfYOx/WGVNrcIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a1fGbLYo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CItsaX78"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEAE4C2BCAF;
-	Tue, 28 Apr 2026 18:26:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a1fGbLYo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7CC2C2BCB6;
+	Tue, 28 Apr 2026 18:26:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1777400782;
-	bh=yS9oGUZDk1xU0RHbqO3rRoddTBWjLzDBNXZzDIfDh/8=;
+	bh=WhVsdEkghFRIIIa0/a/roxynEZP8B8HknPXwBr8kGMY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=CItsaX78Z5IoqcluBKFi1ETVF0jl0m0U6oPDMzhg4nJn16NRlZscJrl7tsN3/BXi7
-	 zgwf84icHHuTlEeKP7x63fNhNN0OFup6k95sNpISoJ/1jznbTXnmPKIL/6hyP8iY2h
-	 jMJlaIxW2+b87AZ8+urKJDp5IEY52Ay4/e2FwkaAWMto8el28WtA54kNCP46zWCPoJ
-	 pDZjXQIA9XqEvHiHjnVKDBjsgUCF+wEvjMZponwRNC3AolqWTqyTCfqCgT2Flf2g6G
-	 iYGFGOHskDjRj79ZUT3Tjl1dk5eY6dYmeFEyWSA0aTI3NUpx9btZNHE2vEPF7ci7um
-	 Zf3XgCyA4nmJA==
+	b=a1fGbLYoWm3WFtaQykLOEQfj38h1Ycasn4mUPPGnARLFmRR+L0O0fNyawsZH1Is/q
+	 k4i7Dhn0KpzhElA4U1TW5i95vhH0ZTujMTrw6cb9DbT2rimmAft5T8AKEmye4B1wOA
+	 XgAJXxeixb97CBN3qh6irgcsmMOy96NCISVBrkrFSVQ7790AC3Fw788lNNdbIpFyJ3
+	 2djuzQ1qP7nJXm72ElzHJJGL/T3QqUzRINn/+lJaka9+nAp0gXfMuVUL0Q9jbegH5E
+	 PBd6cfa2X8fuPztG8XykAH7QdOYepsIH6tkjXvL2T4xPWGbOa7FNICqPG272hfKOZy
+	 gA8P1ZfRi73ZQ==
 From: sashiko-bot@kernel.org
-Subject: Re: linux-next: build failure after merge of the bpf-next tree
+Subject: Re: [PATCH net-next] net: mana: Force single RX buffer per page for
+ CVM/encrypted guest memory
 Reply-To: sashiko@lists.linux.dev
-To: "Thierry Reding" <thierry.reding@kernel.org>
+To: "Dipayaan Roy" <dipayanroy@linux.microsoft.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260427132604.3754048-1-thierry.reding@kernel.org>
-References: <20260427132604.3754048-1-thierry.reding@kernel.org>
+In-Reply-To: <ae9pxvJfkAZYfKMf@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <ae9pxvJfkAZYfKMf@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 28 Apr 2026 18:26:21 +0000
-Message-Id: <20260428182621.EEAE4C2BCAF@smtp.kernel.org>
+Date: Tue, 28 Apr 2026 18:26:22 +0000
+Message-Id: <20260428182622.B7CC2C2BCB6@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 1 potential issue(s):
-- [Low] Incomplete adaptation to the btf_vlen() return type change.
+Sashiko AI review found 3 potential issue(s):
+- [Critical] Missing DMA Synchronization causing silent data corruption on =
+SWIOTLB/non-coherent architectures.
+- [High] The implementation violates the commit message's claims regarding =
+DMA alignment and mapping size when XDP or jumbo frames are enabled.
+- [High] Double Free and Use-After-Free in the `mana_create_rxq` error path.
 --
 
-commit 0212f8f14ef9fb92c19bf796baf0b7ea6478e094
-Author: Thierry Reding <thierry.reding@kernel.org>
+commit cd9b937476d6872de0ead35dec420877b132e896
+Author: Dipayaan Roy <dipayanroy@linux.microsoft.com>
 
-linux-next: build failure after merge of the bpf-next tree
+net: mana: Force single RX buffer per page for CVM/encrypted guest memory
 
-After merging the bpf-next tree, today's linux-next build (x86_64_perf)
-failed due to a sign-compare error. This patch fixes the build by changing
-loop variables to match the unsigned return type of btf_vlen().
+This commit forces the mana driver to use a single Rx buffer per page on
+Confidential VMs with encrypted memory. It aims to ensure page-aligned DMA
+mappings without offsets to work around issues with swiotlb bounce buffers
+when using sub-page fragments.
 
-> diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
-> index e58c49d047a2..d22e20a57b70 100644
-> --- a/tools/perf/builtin-trace.c
-> +++ b/tools/perf/builtin-trace.c
-> @@ -969,7 +969,7 @@ static bool syscall_arg__strtoul_btf_enum(char *bf, s=
-ize_t size, struct syscall_
->  	struct btf *btf =3D arg->trace->btf;
->  	struct btf_enum *be =3D btf_enum(bt);
+> When page_pool allocates sub-page RX buffer fragments, the bounce buffer
+> granularity may not align with these smaller fragment sizes, leading to
+> failure in mana driver rx path.
+
+Could the underlying issue with sub-page fragments be a lack of DMA
+synchronization rather than bounce buffer granularity?
+
+The mana driver relies on the page pool DMA map flag for sub-page
+Rx fragments, but does it call page_pool_dma_sync_for_cpu() or
+dma_sync_single_for_cpu() before processing the packet?
+
+On systems using swiotlb or non-coherent DMA, omitting this sync means
+the CPU might read stale data since the bounce buffer is never copied
+to the original CPU memory.
+
+Forcing a single buffer per page works around this because the single-page
+path calls dma_unmap_single(), which implicitly syncs the data. Would
+adding the mandatory CPU DMA sync for sub-page fragments be the correct
+fix here?
+
+> - Each RX buffer is exactly one PAGE_SIZE.
+> - The DMA offset is always 0.
+> - SWIOTLB maps full, page-aligned blocks.
+
+Does the implementation actually achieve these claims when XDP or jumbo
+frames are enabled?
+
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/=
+ethernet/microsoft/mana/mana_en.c
+> index a654b3699c4c..2d44eaf932a8 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+[ ... ]
+> @@ -754,8 +772,7 @@ static void mana_get_rxbuf_cfg(struct mana_port_conte=
+xt *apc,
+>  	/* Calculate datasize first (consistent across all cases) */
+>  	*datasize =3D mtu + ETH_HLEN;
 > =20
-> -	for (int i =3D 0; i < btf_vlen(bt); ++i, ++be) {
-> +	for (u32 i =3D 0; i < btf_vlen(bt); ++i, ++be) {
->  		const char *name =3D btf__name_by_offset(btf, be->name_off);
->  		int max_len =3D max(size, strlen(name));
+> -	/* For xdp and jumbo frames make sure only one packet fits per page */
+> -	if (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 || mana_xdp_get(apc)) {
+> +	if (mana_use_single_rxbuf_per_page(apc, mtu)) {
+>  		if (mana_xdp_get(apc)) {
+>  			*headroom =3D XDP_PACKET_HEADROOM;
+>  			*alloc_size =3D PAGE_SIZE;
 
-Should btf_enum_scnprintf() in the same file also be updated for
-consistency?
+If XDP is enabled, headroom is set to XDP_PACKET_HEADROOM, which is
+typically 256 bytes. When the driver subsequently maps the buffer,
+adding this headroom results in a DMA mapping with a 256-byte offset,
+rather than 0. The mapped size would also be the data size, not a full page.
 
-It appears the unsigned return value of btf_vlen() is implicitly cast to int
-there, masking the sign-compare warning:
+Additionally, for jumbo frames, alloc_size is elevated to a higher-order
+allocation, meaning the buffer is not exactly one page size.
 
-tools/perf/builtin-trace.c:btf_enum_scnprintf() {
-    ...
-	const int nr_entries =3D btf_vlen(type);
-
-	for (int i =3D 0; i < nr_entries; ++i, ++be) {
-    ...
-}
+If the hardware or the hypervisor strictly relies on 0-offset,
+page-aligned DMA addresses to function correctly with swiotlb, will enabling
+XDP cause DMA faults here?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260427132604.3754=
-048-1-thierry.reding@kernel.org?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/ae9pxvJfkAZYfKMf@li=
+nuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net?part=3D1
