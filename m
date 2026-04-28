@@ -1,188 +1,146 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28893624CB
-	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 20:54:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE952E62D9;
+	Tue, 28 Apr 2026 20:59:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777409671; cv=none; b=qViTziZ4SPuIUbZMkViOPa/d1Sg+L5P7sKVkxTl7g9wRvLPfY7jI8AXs1yoZvVeTV/6kSYC+ePqYGqL0J6AVFJbDeOxTlAvw2c1FSCnpxR6ySgv42eez2Y6/yBIO2QTv81kmjAXBGvAw5o+KdATmbSeUJAAiRWTySJJXh8TU+3E=
+	t=1777409982; cv=none; b=INsjO0p/I/u4xdAG3AW1gm/VAXPVFgOFAVFckFiO9ceVJZ6X1FmezF3BFtH/J9mhUuv7Max2Bl6xoTlGJpMXZnovoKOdqhlOoAB6TQB1miYZKRL5VmEYMuQZVwkULXHpZLxP8cqPRotZqCtErX4DzuHOT0Gp78pjt+bEqwpu/S0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777409671; c=relaxed/simple;
-	bh=F3MkMNEDXiJ9N4b+H9WtSz3Chu9Wi6FA4WsPi1oRhcM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JCK03f8YquBQvRRYBdtXOGh9JpQo5I6Pu5kPxjVoYBHD4qhCyqJY32v6/hEu66gPT8zSvB8rPvRLSVV2mwDPhShsU3AzBETexIQXNkjiJmNnIQYQRzZYldO2aPWCLwaGnWvZDDqOeE4lxEZ8lXSutdfwuzFBYvPNoOLqnk2cbjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fNxGPUxH; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1777409982; c=relaxed/simple;
+	bh=6sT1/s1i5oxSmF3EwWjQkdxqgkZ0odKsSOO/vw9jGR8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=oJDjvrFU3rMdBi3GEuWegfjRunTsk6nt/UKFcXOapbiFEfuW+P1TvnZOimSMpwcm6oNWMRKCHdEdDc3flYyJxmRo09UJ581Kwd2B5uIrerWqQtnYfx9RcQAgmq9oTdSkhPdZ8MiRhIHDbGBOAdj+oPCXANapnCC4kFiNHmo0Crs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=SOhnjjyS; arc=none smtp.client-ip=194.13.80.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fNxGPUxH"
-Message-ID: <8c6455e1-94f5-42e5-8d27-66787dec878f@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777409667;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+CuKGev6BLhfF7EnMPMhetPzsqE/BpqDNIPe4P7qFl8=;
-	b=fNxGPUxHLCkBLTX0lWJHc92rsqP3zwEp7LV5blEPvoYDbWcTk2GOBqxPxwZ5mXYzYXHQjY
-	TMvIMR7L+9O8b1b1+Ut/3IV75wjr4DwL9dzbERNp58FLbo7MgiqsZqY9YjJWIsWLsYSzHV
-	7pO0HnNDeauZVXaCmj1v0YPnjmMq6Oo=
-Date: Tue, 28 Apr 2026 21:54:21 +0100
+	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="SOhnjjyS"
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B9863A5433;
+	Tue, 28 Apr 2026 22:59:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1777409972; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=A9eHfN+iUBw6Z+AHDVUQsCdLr5m0rIKAFRfVklkXzTQ=;
+	b=SOhnjjySygatBhnDt3tkTTUQgzoOf8a1uS2/pXSH8kvtrkTgXDV+BCKdUvYNoXvRRIDqzg
+	p8lT3pAS8N23gLf3FqrVIrK1eGypFfQ9jT8+stlzBYpLLboyHkzk9098gesdzoSVw1a1UP
+	hm+R8+5a1h8Q2nhS9tSUqkrwxWnFCRXQqRWEllWRuxt/ridEnq2gJI/PDgd67Cva9pYE55
+	PL2hHUX5m6WsyGeVBcnO7+6Jl3BlPH2EokNhDZQTHHn6QTb1YGqa/es6HYpy8qb+WZTET9
+	Q7KH2Bx+zQJ//v++Sjhcq0frJB+R9Vw+u4BA8LP2DEs+RduskwQhCjHC5+vIlA==
+From: Nicolai Buchwitz <nb@tipi-net.de>
+To: netdev@vger.kernel.org
+Cc: Justin Chen <justin.chen@broadcom.com>,
+	Simon Horman <horms@kernel.org>,
+	Mohsin Bashir <mohsin.bashr@gmail.com>,
+	Doug Berger <opendmb@gmail.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Nicolai Buchwitz <nb@tipi-net.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v8 2/7] net: bcmgenet: register xdp_rxq_info for each RX ring
+Date: Tue, 28 Apr 2026 22:58:39 +0200
+Message-ID: <20260428205846.2625550-3-nb@tipi-net.de>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260428205846.2625550-1-nb@tipi-net.de>
+References: <20260428205846.2625550-1-nb@tipi-net.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 02/18] bpf: Add precision marking and
- backtracking for stack argument slots
-Content-Language: en-GB
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- "Jose E . Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com,
- Martin KaFai Lau <martin.lau@kernel.org>
-References: <20260424171433.2034470-1-yonghong.song@linux.dev>
- <20260424171443.2034958-1-yonghong.song@linux.dev>
- <d85346c710e62c1ccf1babe1c5e5ebce6c757fb6.camel@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <d85346c710e62c1ccf1babe1c5e5ebce6c757fb6.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-Last-TLS-Session-Version: TLSv1.3
 
+Register an xdp_rxq_info per RX ring and associate it with the ring's
+page_pool via MEM_TYPE_PAGE_POOL. This is required infrastructure for
+XDP program execution: the XDP framework needs to know the memory model
+backing each RX queue for correct page lifecycle management.
 
+No functional change - XDP programs are not yet attached or executed.
 
-On 4/28/26 9:46 AM, Eduard Zingerman wrote:
-> On Fri, 2026-04-24 at 10:14 -0700, Yonghong Song wrote:
->> Extend the precision marking and backtracking infrastructure to
->> support stack argument slots (r11-based accesses). Without this,
->> precision demands for scalar values passed through stack arguments
->> are silently dropped, which could allow the verifier to incorrectly
->> prune states with different constant values in stack arg slots.
->>
->> INSN_F_STACK_ARG_ACCESS is encoded as INSN_F_STACK_ACCESS |
->> INSN_F_DST_REG_STACK (BIT(9) | BIT(10)). This is safe because
->> INSN_F_STACK_ACCESS is only used for ST/STX/LDX insns while
->> INSN_F_DST_REG_STACK is only used for JMP insns — they never appear
->> on the same instruction. This keeps the total within the 12-bit
->> jmp_history flags budget.
->>
->> Three components are added:
->>
->> 1. Jump history recording for stack arg accesses:
->>     - check_stack_arg_write() records INSN_F_STACK_ARG_ACCESS for
->>       outgoing stores.
->>     - check_stack_arg_read() records INSN_F_STACK_ARG_ACCESS for
->>       incoming loads.
->>
->> 2. backtrack_insn() handling:
->>     - BPF_LDX: when backtracking through an incoming stack arg load,
->>       transfer precision demand from the destination register to the
->>       stack arg slot mask.
->>     - BPF_STX/BPF_ST: when backtracking through an outgoing stack arg
->>       store, transfer precision demand from the stack arg slot to the
->>       source register.
->>     - Call boundary: when exiting a callee back to the caller,
->>       propagate the callee's incoming stack arg precision bits to the
->>       caller's outgoing stack arg slots. The slot index maps directly
->>       (slot i in callee corresponds to slot i in caller) since the
->>       caller's stack_arg_regs only contains outgoing slots.
->>
->> 3. bpf_mark_chain_precision() state walking:
->>     - When iterating parent states, mark stack_arg_regs[spi].precise
->>       for slots that have pending precision demand.
->>
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->> ---
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
->
->>   include/linux/bpf_verifier.h | 13 ++++++++
->>   kernel/bpf/backtrack.c       | 61 ++++++++++++++++++++++++++++++++++--
->>   kernel/bpf/verifier.c        | 30 +++++++++++++++---
->>   3 files changed, 98 insertions(+), 6 deletions(-)
->>
->> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->> index 2cc349d7fc17..735f33ad3db7 100644
->> --- a/include/linux/bpf_verifier.h
->> +++ b/include/linux/bpf_verifier.h
->> @@ -393,6 +393,13 @@ enum {
->>   	INSN_F_SPI_SHIFT = 3, /* shifted 3 bits to the left */
->>   
->>   	INSN_F_STACK_ACCESS = BIT(9),
->> +	/*
->> +	 * INSN_F_STACK_ARG_ACCESS uses INSN_F_STACK_ACCESS | INSN_F_DST_REG_STACK.
->> +	 * This is safe because INSN_F_DST_REG_STACK is only used for JMP insns
->> +	 * while INSN_F_STACK_ACCESS is only used for ST/STX/LDX insns — they
->> +	 * never appear on the same instruction.
->> +	 */
->> +	INSN_F_STACK_ARG_ACCESS = BIT(9) | BIT(10),
-> Tbh, I'd split bpf_jmp_history_entry like this:
->
->    struct bpf_jmp_history_entry {
->           u32 idx:20;
-> 	 u32 frame:3;
-> 	 u32 spi:6;
->           /* insn idx can't be bigger than 1 million */
->           u32 prev_idx : 20;
->           /* special INSN_F_xxx flags */
->           u32 flags : 12;
->           /* additional registers that need precision tracking when this
->            * jump is backtracked, vector of six 10-bit records
->            */
->           u64 linked_regs;
->    };
+Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+---
+ drivers/net/ethernet/broadcom/genet/bcmgenet.c | 18 ++++++++++++++++++
+ drivers/net/ethernet/broadcom/genet/bcmgenet.h |  2 ++
+ 2 files changed, 20 insertions(+)
 
-Good point, let me try.
-
->
-> [...]
->
->> @@ -453,9 +498,10 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
->>   					     bt_stack_mask(bt));
->>   				return -EFAULT;
->>   			}
->> -			/* clear r1-r5 in callback subprog's mask */
->> +			/* clear r1-r5 and stack arg slots in callback subprog's mask */
->>   			for (i = BPF_REG_1; i <= BPF_REG_5; i++)
->>   				bt_clear_reg(bt, i);
->> +			bt->stack_arg_masks[bt->frame] = 0;
-> Nit: I think having these set at this point is a bug condition.
-
-This one is a leftover from early patch and I didn't remove it. I just tested again.
-this is indeed not needed. Will remove.
-
->
->>   			if (bt_subprog_exit(bt))
->>   				return -EFAULT;
->>   			return 0;
-> [...]
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> [...]
->
->>   static int check_outgoing_stack_args(struct bpf_verifier_env *env, struct bpf_func_state *caller,
->> @@ -7269,8 +7285,14 @@ static int check_mem_size_reg(struct bpf_verifier_env *env,
->>   	}
->>   	err = check_helper_mem_access(env, mem_reg, mem_argno, size_reg->umax_value,
->>   				      access_type, zero_size_allowed, meta);
->> -	if (!err)
->> -		err = mark_chain_precision(env, reg_from_argno(size_argno));
->> +	if (!err) {
->> +		int regno = reg_from_argno(size_argno);
->> +
->> +		if (regno >= 0)
->> +			err = mark_chain_precision(env, regno);
->> +		else
->> +			err = mark_stack_arg_precision(env, arg_from_argno(size_argno) - 1);
->> +	}
-> Nit: maybe make this a utility function, e.g. mark_arg_precision(env, argno) ?
-
-Sure, will do.
-
->
->>   	return err;
->>   }
->>   
+diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+index d013a3df9048..e71d9713f917 100644
+--- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
++++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+@@ -2780,7 +2780,23 @@ static int bcmgenet_rx_ring_create_pool(struct bcmgenet_priv *priv,
+ 		return err;
+ 	}
+ 
++	err = xdp_rxq_info_reg(&ring->xdp_rxq, priv->dev, ring->index, 0);
++	if (err)
++		goto err_free_pp;
++
++	err = xdp_rxq_info_reg_mem_model(&ring->xdp_rxq, MEM_TYPE_PAGE_POOL,
++					 ring->page_pool);
++	if (err)
++		goto err_unreg_rxq;
++
+ 	return 0;
++
++err_unreg_rxq:
++	xdp_rxq_info_unreg(&ring->xdp_rxq);
++err_free_pp:
++	page_pool_destroy(ring->page_pool);
++	ring->page_pool = NULL;
++	return err;
+ }
+ 
+ /* Initialize a RDMA ring */
+@@ -2809,6 +2825,7 @@ static int bcmgenet_init_rx_ring(struct bcmgenet_priv *priv,
+ 	if (ret) {
+ 		for (i = 0; i < ring->size; i++)
+ 			bcmgenet_free_rx_cb(ring->cbs + i, ring->page_pool);
++		xdp_rxq_info_unreg(&ring->xdp_rxq);
+ 		page_pool_destroy(ring->page_pool);
+ 		ring->page_pool = NULL;
+ 		return ret;
+@@ -3014,6 +3031,7 @@ static void bcmgenet_destroy_rx_page_pools(struct bcmgenet_priv *priv)
+ 	for (i = 0; i <= priv->hw_params->rx_queues; ++i) {
+ 		ring = &priv->rx_rings[i];
+ 		if (ring->page_pool) {
++			xdp_rxq_info_unreg(&ring->xdp_rxq);
+ 			page_pool_destroy(ring->page_pool);
+ 			ring->page_pool = NULL;
+ 		}
+diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.h b/drivers/net/ethernet/broadcom/genet/bcmgenet.h
+index 11a0ec563a89..82a6d29f481d 100644
+--- a/drivers/net/ethernet/broadcom/genet/bcmgenet.h
++++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.h
+@@ -16,6 +16,7 @@
+ #include <linux/dim.h>
+ #include <linux/ethtool.h>
+ #include <net/page_pool/helpers.h>
++#include <net/xdp.h>
+ 
+ #include "../unimac.h"
+ 
+@@ -579,6 +580,7 @@ struct bcmgenet_rx_ring {
+ 	u32		rx_max_coalesced_frames;
+ 	u32		rx_coalesce_usecs;
+ 	struct page_pool *page_pool;
++	struct xdp_rxq_info xdp_rxq;
+ 	struct bcmgenet_priv *priv;
+ };
+ 
+-- 
+2.51.0
 
