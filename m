@@ -1,93 +1,92 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DFCE21FF30
-	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 09:15:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679D73783C8
+	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 09:23:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777367715; cv=pass; b=ro1+fStjbpou0fj4f2tfF86vKwuhbQcuby9mWsxs1XKR9hboKjVAm5qhlorsnp48qRFdKtmzJebeNUyu6V0BrOv6dcRNzbCBwIIEM4xh+hQ/IDAPirxGGS5kp1eYy1XB84oZVSGGRKyUgViNmKtkpmsepFdlVCFEu22Xem1XTJM=
+	t=1777368228; cv=pass; b=o6qPZAh6P/WNzO8CPYR4iLlWiI7R0NVmuk14buy8vEVhWwci/t5BixW7RimFjiGLb6MxVQUkHBpT3mrFvnthr7OCl55ClY1uMGYQVy16MRJ12vyNul7S6tIOgYf1eNoGAx5KaEkY6wWYVbEPNagyvWIbeAQ/0wruFNZ24uAIaYE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777367715; c=relaxed/simple;
-	bh=YjqZEZx8tiCJ8VD58miLVFzU7n3mdJN57vq90O/bjAI=;
+	s=arc-20240116; t=1777368228; c=relaxed/simple;
+	bh=ssKZS8qpF/9gRr7EudgqoHQsoM2IqQqobR9GZAXp3jM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pDb3CSbSdrF6OfJ1fm9L2hVQeACxIiwN0mDS9lTjvKZ5spwHhp0jOiJbwvVWgCsifc186Ua0E4M3csm84jhS/ymIZ1MLQLTAEI1ZO2xn5upJcsWWhtjuEDkXEleH/s+Pkp1Q5tAaSB9fLJM9ZdNcDONqnjV8ylUY8XtbYS9O9JE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tAC8lOn3; arc=pass smtp.client-ip=209.85.208.51
+	 To:Cc:Content-Type; b=azOPT+AipKG4z3jO4KQ323UNfRPBe/eaDWnSi7ey6IcAruZmQrsYPaFiaaQjC1pNP0o0bdQgKXsUx+DkNzVFdq4P3VOqvU9Rwqj8SrPlybANW2yeWbl8xT3MMX6g+EbWVkSOcR8h/IeLGAtGMPtS/MmHsNaHa0dSJVa2WdV0Q6k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RrZMyfGz; arc=pass smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tAC8lOn3"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-67785ef88feso8961938a12.1
-        for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 02:15:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777367712; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RrZMyfGz"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b886fc047d5so2001540866b.3
+        for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 02:23:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777368223; cv=none;
         d=google.com; s=arc-20240605;
-        b=espeha5UsG8FDFJ2hc/kV7QiWsTqDhixetdbatqdFUNrtqRX7EqVcsPxqweglWqDS8
-         r4JtPuvw+EED1JQDHgqoRBUsohZBOvWODP8ArZ+JrdGg4iSOb+YmHy9V7mnQaPfKo6XA
-         D0yTPL+XM4QGjO1C5zZgdp+A3c5Nb1YvjChK4pD6v+wOr6zwyosyhThrOZ14WCzFsTir
-         na4REnpuhL6s/KxVOfA4j+l3f1UqYfczcrNGwUIURKYyLYeKUe3vLgH5Ud4Re1l/O0uf
-         Z9XPJ9Wv//JJZpK6GMY9OZEpKerbZfZRLET4OWdyyC+wBPFLSDvcmpP//+dIA1c2OrWJ
-         h1Zg==
+        b=Y2CLg/Hmc06fAikFdl3sKVBCrNXvywFPDRqH4LQHkFfWu72+zU2U0IjQPkPjsNYWKk
+         Qfx8IHRk2SswqH4vuEbTZeXUgSqEVu9RT4fqxw66aM0qMMMhAdccN05LWDp60BFBD21P
+         agy/lMfZmZ/VT6E65uNLxlhMj3RMrZdc/ykKmFCLsz9pXDQvcQzRNLby/cTZxDKI3G39
+         9Rdb8jovvKrljKysdlnP+nz3FPVxYn5B8vISRZHtZxCHSg0YyaEYAO2i5b7AyfvtU+1R
+         BvJCpHe104wYEJswYncTySRUd3UjOnA2m8DvWQWoGH2X2j2GY0FCSpsEUAA1nHDwwWj2
+         KDaQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=t3FNQO31qqSm2wmYS0/J9by0pPUv6cNeIE+R9Z9aG54=;
+        bh=y0mxmv6zlovaBEyNNFohEBcvoF1iektstSBLVSgu8JQ=;
         fh=PnmYwwIEyGc3uGnzLellVUyTXAaSujwRtCwQxVQ5pwc=;
-        b=QMUWgq9r872qSmtLHJnPxrH4LawbcG2gww9gEi7ft6ve5xvQvST/rDt26c0z669vnn
-         gNeRcDCwDvV8a4hICAZerRZ3MA0KrWj0lmIk23yk+yGS71/Gkik2qi8omQMhuRIGU++h
-         OBEhmwcz1O8fRTDkYKyikVjgmj2UWoSzK73q3tlRitmXlxv20zW/+ey2zPDMXstg8BYt
-         qtJBRocC2gQNpQjgE4adPc7Jx81NvwLyB3hOEDU0Ze4QgpJv/b+x7h1Ibe3f/qlK8R6D
-         vAB5Nj+RriadUKM4juununb6v6o8UQZxkNnChvQoNaWVCykFKhS6IzDvZtTvfIP7/n+6
-         UTEg==;
+        b=OWHqSyxV/AGkrGdpTqKzo77oleLqGVDrlJuL8y9hWrtBP0MwDc1C3mx7nivS8uq0LF
+         VmpFvHAz5rmLoCpD4FjTHwD7uEjUNLIfnJoxzt3EWI0Kx/z7geqgSnx11qUYE0PLQlDi
+         8zBbufz28FHVaO4CJmY8ntNIJkyKau0efjDuu7D3OwMdQnidkLOc625pEtI6nexxnv1R
+         XfmXB3oqqYunNzt+MRzBjDC1MF9kCmueOVqXBV7NhAj7LXxImlN/oH0mq4RJ2g7uzqLu
+         ASEUy7LFMpP54kZgCLsKpOd/THq6VuD8yiPzIOEwtOPNkm7qCxR1pgv3QdZicuvwcLk1
+         RP0Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777367712; x=1777972512; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777368223; x=1777973023; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=t3FNQO31qqSm2wmYS0/J9by0pPUv6cNeIE+R9Z9aG54=;
-        b=tAC8lOn3LwZA8UwHamXz2XmB2rRN+ekH4hNuX584z4XL2yK7o8NrAODM9X+NZisEKP
-         YRQEamGSmUd4LOCgdzblN3AdPVG3wX+tts7pB5YyYcRZxs5k02J/Zw6BLtSfs9zH9toA
-         65So5Z6+QqCKh37veMDsW/w+vIcEdqLlpYjqLjyHkP/azRE1jgKTvhnQ2YVtfehTkXnQ
-         bGq5vecrNSEnZHpgDJny3fAXUjX6Ddspq426+fP0OjWfjsRHJSa/KrDaVxMQi3DorbZD
-         AE+ug6L7MMW43qWb0lT6xtsOyRetqx8/dpZwo0QwTN09+F439gnhW6aBmvEZEmMyehk9
-         13sg==
+        bh=y0mxmv6zlovaBEyNNFohEBcvoF1iektstSBLVSgu8JQ=;
+        b=RrZMyfGzNRJGcpbRYAcgex/Th+U/3FkIKFMD0xFyZhAjJZZbNfXwtKqIK1ZJdKsVa1
+         I3Y9O2ySgbb1M7qliBTPLhNoDqDI//gpjteeM7YY9H9i/yNnJKjdRinc2lPh5skx5eWe
+         Wc/dfTbihG1jsTsbCYIuu0s4z+1x1DHfCm6gSTnTbV9tZJ6MbttVBJ0JC+bEn6tT2Jqg
+         bu2mWEHw6Mc1dv/9/FlrAChYXlMDiKrXvk10JCKARzuNWCT0n9THR6m77K+wa3o/LqP0
+         uU7zVQ3iuqibdMLDAovHrfhpqtAh16QeLyxn4hOPfPGA8Ju6/PWks4z7qzWK7Mk/4ryC
+         OqEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777367712; x=1777972512;
+        d=1e100.net; s=20251104; t=1777368223; x=1777973023;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=t3FNQO31qqSm2wmYS0/J9by0pPUv6cNeIE+R9Z9aG54=;
-        b=aoNnrUrC5mBBUsuwrozkeZS1Fu/GWpA2cj3DNyyzT3WeeY/eIGDWX1viYgwMKVq1wW
-         Wx8Kh0Q/bd6mJgkpytsUb0ji/sBI5TibF7rRBTcwafOqILQKg58GYAjUQOMxmNOTJrR8
-         JK9G6/pcOMaWD+HjNpldxKsbNv7/B/uawTWXXuJeo1AohsDUVkVybH/qwBLSer0X9cPI
-         kIRo1QKUnLYGxLz5WorutfzGyYE5bKiPJxXdIElPbTSYhx+oTVH4hrwNhabi7uEvohdH
-         k7V3hQhYEoO9k6jfuMdC1j4vhjQ7JAHG2TeKjk1wS7ILxLtoFPPjid+9guX7FtsdYPDf
-         AcsA==
-X-Gm-Message-State: AOJu0Yzr0he9olel/Khwc2k3Aynfw7QH+w6J5lNafxryH1SU13fwTnGq
-	UnlnsZDNb/tZ0fAIQpruK/qm9bmpamg60n2QDOZyfpSAoDbi9Y9aruVLNyk3Lfbaa6TaUrxDfVG
-	x3Fa3HtJGGjAgR6epWssEaSrhjyIehY0=
-X-Gm-Gg: AeBDiev8+SDCUVEhvmAdf504tfepbu1omo4Q7HqTsM2/SySKdGlWN2vUZ7YDd6/AmPZ
-	CXuNhOxwlSKEGY81uFJTDN6egSmlj5XotNNqQydU6PzJzZXlBlkKNEA5ntGVUdq73qhTz0ZBSTS
-	uax6GSf49DTHdeWxifjKftBo2AjkUWtdq76/6v6txUES3qcLdLNUGvAdETrjMMwxkO/cTUSYt9y
-	WmYc+VetlU2tlp0A+nghHyI27q1736jhqmcgg17YyvmmyTQtx2iAuL9x+BABAC4h/7qhi0ep1+L
-	6XQFqFJ3GVzwiw/9
-X-Received: by 2002:a05:6402:35c6:b0:66e:abe5:ab22 with SMTP id
- 4fb4d7f45d1cf-679bb04e47fmr1017401a12.5.1777367712243; Tue, 28 Apr 2026
- 02:15:12 -0700 (PDT)
+        bh=y0mxmv6zlovaBEyNNFohEBcvoF1iektstSBLVSgu8JQ=;
+        b=KTd7M4iGk3GR3PqJyIlpRLaeKA/iGZAVD/Ip0kHNRqmR81epKMSbMTfgSqHbsQClWM
+         AqFkHWnbexu+BFJVDaHm7T3bRuLKvfmHZTsgXtyA4P3N+d/B5zp4neab8MQcohy8pnsL
+         5JfUPAEqvyc/IaYDzQCjDzQm61YfHbDk/rnaDVvUrBS7QeSj8in3HpFeUKa9Sj/XZxZt
+         LS4XIiXdbtpPYEmjJzsvEFza/Iq7IlA+wCZfqWUYLznzyI9hvLQU4spkvruvOvjo7A9R
+         jVaogxM2q/wwKvtMYFm9bfHw0/zCmC3bTNVH0/015NcmHNADCYJ1RT23xtmZV43UNhym
+         0p7g==
+X-Gm-Message-State: AOJu0YyU3NQEI7YJg+2nGt0gcPiP8OTI6NAL1ZmQi66SrUOBAutX/Jts
+	UTQTfm7UNOnqoYpikB5GlzqfnHcxcdXx3lnzfe9AfAdkMeyHxuS+aLPGGgrYeLdjtjXqzrIBWSc
+	flLbGgeVD1uBt2514/00XCADf9bJwaxyd86XviPw=
+X-Gm-Gg: AeBDieuquhnxYfZ2sQd97/oMJT1tq+X/croY4TJF5iPE0luenX/Ye6f299w7sIIkDCX
+	Z5MgyyK7WeJwLAcvnJ06Bb0NuVsKa6bKrTybqRlKqPq5cqAUowXRP1Kxydug03/OZWC6wKN/Mbz
+	OZZRgmtLsNoa3q+kq/aZsGoRkDLx3ltTw49ukUtkIUk7VAceA1hRpk5ttZqGe1aIoTuVXewM2oU
+	QvFxsimWLN1SUKcwJtn2eUO+kE97jj9bJx0G0T8NbQb70bSMDOAjNUczFsU6ebaRfs9QS+aKp8h
+	FxaB5o6pQFw4Ol1CeOXurzBpzFk=
+X-Received: by 2002:a17:907:97cb:b0:ba5:216c:56e6 with SMTP id
+ a640c23a62f3a-bb7ff35965emr135483866b.0.1777368222785; Tue, 28 Apr 2026
+ 02:23:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260427232313.1582588-2-puranjay@kernel.org> <1e77ed1ac93e28f5ecb073ea7dbb4c009c81104148c3bb22a78d096e92b0656f@mail.kernel.org>
-In-Reply-To: <1e77ed1ac93e28f5ecb073ea7dbb4c009c81104148c3bb22a78d096e92b0656f@mail.kernel.org>
+References: <20260427232313.1582588-3-puranjay@kernel.org> <825349ab37b5f386b036f5c59476cd61c173f6fcd7632542c57fac1f1facdb9c@mail.kernel.org>
+In-Reply-To: <825349ab37b5f386b036f5c59476cd61c173f6fcd7632542c57fac1f1facdb9c@mail.kernel.org>
 From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Tue, 28 Apr 2026 10:15:00 +0100
-X-Gm-Features: AVHnY4IulzcwdVBhJdlh4VM18Hd4-Rqv5NQESETTc30678pBKjTc2WeHGzmSJzM
-Message-ID: <CANk7y0hoLpLk=_RpFR9yNBud3ZS5az82Hh=SjCX=fRLbW0RGWA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/7] selftests/bpf: Add bench_force_done() for
- early benchmark completion
+Date: Tue, 28 Apr 2026 10:23:31 +0100
+X-Gm-Features: AVHnY4JpI7UQFkDswWEy_KZ66SCph5Gk3XsNzsnGBKBzOoz5kq7H71157Lkguz8
+Message-ID: <CANk7y0hRPJ1sO2f+5NBeLb_tubRFNUDsH0qy3YDj3=RhtVZTzQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/7] selftests/bpf: Add BPF batch-timing library
 To: bot+bpf-ci@kernel.org
 Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
 	daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com, 
@@ -98,130 +97,176 @@ Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 28, 2026 at 1:05=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
+On Tue, Apr 28, 2026 at 1:18=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
 >
-> > diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selfte=
-sts/bpf/bench.c
-> > index 029b3e21f438..47a4e72208d6 100644
-> > --- a/tools/testing/selftests/bpf/bench.c
-> > +++ b/tools/testing/selftests/bpf/bench.c
-> > @@ -741,6 +741,13 @@ static void setup_benchmark(void)
-> >  static pthread_mutex_t bench_done_mtx =3D PTHREAD_MUTEX_INITIALIZER;
-> >  static pthread_cond_t bench_done =3D PTHREAD_COND_INITIALIZER;
-> >
-> > +void bench_force_done(void)
-> > +{
-> > +     pthread_mutex_lock(&bench_done_mtx);
-> > +     pthread_cond_signal(&bench_done);
-> > +     pthread_mutex_unlock(&bench_done_mtx);
-> > +}
-> > +
->
-> Is it safe to use pthread_mutex_lock() and pthread_cond_signal() here
-> given that collect_measurements() calls bench_force_done() from a
-> SIGALRM signal handler (sigalarm_handler)?
->
-> If the signal interrupts a thread that is already holding bench_done_mtx
-> (for example, a worker thread executing bench_force_done()), the signal
-> handler will attempt to lock the same mutex:
->
-> Thread context:
->     bench_force_done()
->         pthread_mutex_lock(&bench_done_mtx);  // lock acquired
->         [SIGALRM arrives]
-
-bench_force_done() is expected to be called from SIGALARM handlers
-only, it is never called in Thread context.
-
->
-> Signal handler context:
->     sigalarm_handler()
->         collect_measurements()
->             bench_force_done()
->                 pthread_mutex_lock(&bench_done_mtx);  // deadlock
->
-> This causes a self-deadlock because pthread_mutex_lock() and
-> pthread_cond_signal() are not async-signal-safe according to POSIX.
->
-> Could an async-signal-safe mechanism like an atomic flag with sem_post()
-> be used instead?
->
-> This concern was raised in the v1 and v2 reviews by Sashiko AI on lore:
-> https://lore.kernel.org/bpf/20260420124120.13970C19425@smtp.kernel.org/
->
->
-> Could this code lose wakeups because the condition variable is signaled
-> without a shared state predicate?
->
-> If a worker thread completes quickly and calls bench_force_done() before
-> main() reaches pthread_cond_wait(), the signal will be lost because POSIX
-> condition variables do not retain state:
->
-> Worker thread:
->     bench_force_done()
->         pthread_cond_signal(&bench_done);  // signal sent
->
-> Main thread (not waiting yet):
->     [still in setup]
->     pthread_cond_wait(&bench_done, &bench_done_mtx);  // misses signal
->
-> This would cause main() to block for the full timer duration, defeating
-> the purpose of bench_force_done(). Should a boolean flag be added to
-> track the done state?
-
-  t->warmup_ticks++;
-  if (t->warmup_ticks < env.warmup_sec)
-      return;
-  if (t->warmup_ticks =3D=3D env.warmup_sec) {
-      *t->timing_enabled =3D 1;
-      return;
-  }
-  // ... only here can bench_force_done() is called
-
-So bench_force_done() fires at earliest on tick warmup_sec + 1,
-meaning state.res_cnt >=3D warmup_sec + 1 when it fires. The subtraction
-is always positive
-
-> This concern was raised in the v1 and v2 reviews by Sashiko AI on lore:
-> https://lore.kernel.org/bpf/20260420124120.13970C19425@smtp.kernel.org/
->
->
-> >  static void collect_measurements(long delta_ns) {
-> >       int iter =3D state.res_cnt++;
-> >       struct bench_res *res =3D &state.results[iter];
-> > @@ -750,11 +757,8 @@ static void collect_measurements(long delta_ns) {
-> >       if (bench->report_progress)
-> >               bench->report_progress(iter, res, delta_ns);
-> >
-> > -     if (iter =3D=3D env.duration_sec + env.warmup_sec) {
-> > -             pthread_mutex_lock(&bench_done_mtx);
-> > -             pthread_cond_signal(&bench_done);
-> > -             pthread_mutex_unlock(&bench_done_mtx);
-> > -     }
-> > +     if (iter =3D=3D env.duration_sec + env.warmup_sec)
-> > +             bench_force_done();
-> >  }
+> > diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_timing.c b/to=
+ols/testing/selftests/bpf/benchs/bench_bpf_timing.c
+> > new file mode 100644
+> > index 000000000000..75a39da69655
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/benchs/bench_bpf_timing.c
 >
 > [ ... ]
 >
-> What happens if bench_force_done() is called before the warmup period
-> fully elapses?
+> > +static __u32 compute_batch_iters(__u64 per_op_ns)
+> > +{
+> > +     __u64 target_ns =3D (__u64)CALIBRATE_TARGET_MS * 1000000ULL;
+> > +     __u32 iters;
+> > +
+> > +     if (per_op_ns =3D=3D 0)
+> > +             return CALIBRATE_MIN_BATCH;
+> > +
+> > +     iters =3D target_ns / per_op_ns;
+> > +
+> > +     if (iters < CALIBRATE_MIN_BATCH)
+> > +             iters =3D CALIBRATE_MIN_BATCH;
+> > +     if (iters > CALIBRATE_MAX_BATCH)
+> > +             iters =3D CALIBRATE_MAX_BATCH;
+> > +
+> > +     return iters;
+> > +}
+> > +
+> > +void bpf_bench_calibrate(struct bpf_bench_timing *t, bpf_bench_run_fn =
+run_fn, void *run_ctx)
+> > +{
+> > +     __u64 elapsed, per_op_ns;
+> > +     __u64 time_n, time_2n;
+> > +     double ratio;
+> > +
+> > +     elapsed =3D measure_elapsed(t, run_fn, run_ctx, CALIBRATE_SEED_BA=
+TCH, CALIBRATE_RUNS);
+> > +     if (elapsed =3D=3D 0) {
+> > +             fprintf(stderr, "calibration: no timing samples, using de=
+fault\n");
+> > +             t->batch_iters =3D 10000;
+> > +             *t->batch_iters_bss =3D t->batch_iters;
+> > +             reset_timing(t);
+> > +             return;
+> > +     }
+> > +
+> > +     per_op_ns =3D elapsed / CALIBRATE_SEED_BATCH;
+> > +     t->batch_iters =3D compute_batch_iters(per_op_ns);
 >
-> In main(), the final sample count passed to bench->report_final() is
-> calculated as:
+> Will this integer division truncation break calibration for operations
+> taking less than 1 ns? If the total elapsed time for 100 iterations is un=
+der
+> 100 ns, per_op_ns evaluates to 0, forcing compute_batch_iters() to return
+> CALIBRATE_MIN_BATCH (100) instead of scaling up to reach the 10 ms target=
+.
+
+If individual operations take less than 1 ns then we can't meaninfully
+measure them, so returning 100 here is good enough.
+
 >
->     state.res_cnt - env.warmup_sec
+> > +
+> > +     time_n =3D measure_elapsed(t, run_fn, run_ctx, t->batch_iters, CA=
+LIBRATE_RUNS);
+> > +     time_2n =3D measure_elapsed(t, run_fn, run_ctx, t->batch_iters * =
+2, CALIBRATE_RUNS);
 >
-> If state.res_cnt is strictly less than env.warmup_sec, the resulting
-> negative count will bypass the iteration loops in the report_final
-> callbacks (like ops_report_final()), leaving aggregate variables at zero.
+> [ ... ]
 >
-> Would subsequent calculations divide by zero and corrupt the benchmark
-> summary?
+> > +static void reset_timing(struct bpf_bench_timing *t)
+> > +{
+> > +     *t->timing_enabled =3D 0;
+> > +     memset(t->samples, 0, sizeof(__u64) * BENCH_NR_CPUS * BENCH_NR_SA=
+MPLES);
+> > +     memset(t->idx, 0, sizeof(__u32) * BENCH_NR_CPUS);
+> > +}
 >
-> This concern was raised in the v1 and v2 reviews by Sashiko AI on lore:
-> https://lore.kernel.org/bpf/20260420124120.13970C19425@smtp.kernel.org/
+> Does this need CPU memory barriers to prevent hardware reordering?
+> While timing_enabled is volatile, weakly-ordered architectures like arm64=
+ might
+> reorder the memory stores across the flag toggle. This could allow backgr=
+ound
+> BPF executions to write samples while the arrays are being zeroed.
+
+reset_timing() is only called during calibration, which runs in
+setup() =E2=80=94 before any producer threads are started. There's no
+concurrent BPF execution to race with.
+
+> [ ... ]
 >
+> > diff --git a/tools/testing/selftests/bpf/progs/bench_bpf_timing.bpf.h b=
+/tools/testing/selftests/bpf/progs/bench_bpf_timing.bpf.h
+> > new file mode 100644
+> > index 000000000000..6a1ad75f1fd7
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/progs/bench_bpf_timing.bpf.h
+>
+> [ ... ]
+>
+> > +static __always_inline void bench_record_sample(__u64 elapsed_ns)
+> > +{
+> > +     __u32 cpu, idx;
+> > +
+> > +     if (!timing_enabled)
+> > +             return;
+> > +
+> > +     cpu =3D bpf_get_smp_processor_id() & BENCH_CPU_MASK;
+> > +     idx =3D timing_idx[cpu];
+> > +
+> > +     if (idx >=3D BENCH_NR_SAMPLES)
+> > +             return;
+> > +
+> > +     timing_samples[cpu][idx] =3D elapsed_ns;
+> > +     timing_idx[cpu] =3D idx + 1;
+> > +}
+>
+> Can this read-modify-write pattern cause lost samples or out-of-bounds
+> writes? If machines have more than 256 logical CPUs, BENCH_CPU_MASK will =
+alias
+> multiple CPUs to the same index. Concurrent thread executions could race =
+and
+> overwrite the index, potentially corrupting the timing statistics.
+
+xdp_lb_validate() checks bpf_num_possible_cpus() > BENCH_NR_CPUS and
+exits with an error.
+
+>
+> > +
+> > +/*
+> > + * @body:  expression to time; return value (int) stored in __bench_re=
+sult.
+> > + * @reset: undo body's side-effects so each iteration starts identical=
+ly.
+> > + *         May reference __bench_result.  Use ({}) for empty reset.
+> > + *
+> > + * Runs batch_iters timed iterations, then one untimed iteration whose
+> > + * return value the macro evaluates to (for validation).
+> > + */
+> > +#define BENCH_BPF_LOOP(body, reset) ({                                =
+       \
+> > +     __u64 __bench_start =3D bpf_ktime_get_ns();                      =
+ \
+> > +     __u32 __bench_i;                                                \
+> > +     int __bench_result;                                             \
+> > +                                                                     \
+> > +     for (__bench_i =3D 0;                                            =
+ \
+> > +          __bench_i < batch_iters && can_loop;                       \
+> > +          __bench_i++) {                                             \
+> > +             __bench_result =3D (body);                               =
+ \
+> > +             reset;                                                  \
+> > +     }                                                               \
+> > +                                                                     \
+> > +     bench_record_sample(bpf_ktime_get_ns() - __bench_start);        \
+> > +                                                                     \
+> > +     __bench_result =3D (body);                                       =
+ \
+> > +     __bench_result;                                                 \
+> > +})
+>
+> Should the final untimed iteration also evaluate the reset expression?
+> Without calling reset here, any side effects from the last body execution=
+ (like
+> memory allocations or map modifications) will leak into the next program
+> invocation and could violate benchmark isolation.
+
+This is by design, we want to have the last untimed iteration to have
+side effects so we can validate output.
+
 >
 > ---
 > AI reviewed your patch. Please fix the bug or email reply why it's not a =
