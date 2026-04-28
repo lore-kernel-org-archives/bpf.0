@@ -1,219 +1,494 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B5D5329E7E
-	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 16:46:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2387927FD75
+	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 16:47:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777394780; cv=none; b=rqH2WOT4DIJZO12CBem64OggIvIeG6p+jhOxKtjjcqRfncamekmxfULv/dLdA/NXRZx4cqLpukrje7jnZTvz9vc7Pw9UUp+WeLMYGBMwbIc/VgufloQHqX8k1J3RR3un70fCKDP4aNkBXeDTrVBBDH9GYq2weuylvq3oENd5eZU=
+	t=1777394828; cv=none; b=U1rR+ZhbWOI8f9acwgkTt0xgGtx3cW+ihMa1HqCDeOECyY1UE4Tw59VY4W34LKEtdco87mxjBAlpBKf1y2n9xAzPVzgVDmHIN/QyhofF5SGfE6kRCB64xB5CuWlqnfqYgo0RyFEwUuYGx0AAS+Eny3P51EED6gie7QB48YJZzxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777394780; c=relaxed/simple;
-	bh=/fNp2mFHrHzbvVCpc6jBdls5IoO2JoXdfxLFj9DPcrA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RK2QdGtpf6zDcI/0MVmPe34k2v9NTQkG6XNMLrDCgane2A4SQnIPB8WTFKkz4+v5ZT5Pg+AUaexFHmNecOXJPByS/yXEaYPnqf8JoGDU07eg4zgrsyinL9qC2VER+xm6600++rRkNfjKLsJHM/3g9ZtSKGlXcyvmyQRKz9JUT50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K7uL+FOv; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777394828; c=relaxed/simple;
+	bh=GKAoa7pUyahBEdOPKbHQ/gfmK6YWIHAkNW4tChVUmtk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cZiEN2w000o8i0Q51iEqwJj4qCESe8893tMnVpmTOUGhuVl1syXAT7/A4Ym+xgawNRb6VQtkwpzPNYfA8gZDBPwvK/loNEa2D9jTMD9wBS/r+FfHTg0rR/rzqPNPaYizBgS4thOYMuhgJERjfzCrAeTDyNKSYmXbKo9RYflJn2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jklp+w98; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K7uL+FOv"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4891d7164ddso59704745e9.3
-        for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 09:46:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777394778; x=1777999578; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xX6ZobyCZ0aP+zrMg2Q9FAh4/2uG9AusWr19tGXBlXY=;
-        b=K7uL+FOvmjDU7sdvWRowW7FXplbdotoG2L8t7qk8/6miL45C7jiIiuLamkow4fTXqy
-         x/3JCxJTJC5uXKKcbr/WeW5KUQB18/bzgVnLvuxhyCKHHwEWocLPBLW+58RUq6UC9kMb
-         AhMFXmZ1BSr8huESh3BaLd6nO+mh8+ANx+CgUx0a72d0HmiZKYHGoUrbKGfTqj0P1TTC
-         0AKP9AT2EnXZVuLj4offkCXlsSHyYI9X5/+q8AqwdLflXUlxG42T6yMc3K2le4QWzrHZ
-         SyifkwjCnK6IALvSKXgZiUP6SXbZ4cY9BMfOGY7TWhWuabLmyt7C7Io/JqTaNlQ6DgNj
-         UmKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777394778; x=1777999578;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xX6ZobyCZ0aP+zrMg2Q9FAh4/2uG9AusWr19tGXBlXY=;
-        b=OX9HdcmIPI1xxHcRuABtBynady72GQsnuMHcvJznWFCYVy+yAGl4K3Url22XoMQmm7
-         TrhKHGGa3yQpT6b1i9lc116SWMVVXmf6IILoLafxRtKSMO7IlmagettsTLfN2Q8l7TVM
-         7C6Mp0+wHbJ3Oyj+DbVuaNkzQpqV9T8crJZRdXia0x6y4lxYz1Zr13lfuV7Fitkp35/8
-         8d2ouVWQEc4BoGjxg+rJVjGbEEDybRRbzxEDrzO/C6wWwbYbnuD7I35RdDPZGbHxaLOO
-         XZ4OUX3IuNR2tTPf5XZFg9ISCQ9PjUaHacp0jTeOJX6hD8xqKt/xIy9SGHc8GVfCteUz
-         16AQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+UmFaTVCrnDv/AW/gKOgoFo1OnhTk4HOmD0bZ7zpsoAr+AMiyG9ygpxpJGpLcnZnKFLFU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSR/PvreMRTwexVJznDT9uDUYicfUQGlc7E1573D2hEQ04TfJa
-	Aie1GT0u6hcgpS1GhGPIQxwA0M3jnWZ4mQDCnWffaYSd8W8HQmaF+7s2
-X-Gm-Gg: AeBDiev1NG29/6P2LhO0+d6yK+IiQNoPmaRyXJQ4sjzDryYxDztZcpDvPwZtdO54BcR
-	Ntrgf6XZLzzk+x6fkSPdp3d9jgn7g+/ate5lC3s0BmKJSZXXN3lMnFk/13iRkI//TAlYCYNC7KX
-	eZd4pSsUHvgbCAPHHnoOMT5/G+Vj8LWnWRMYkItwoZhjDHZF9rZckce/zg+Yv4jTY6JXWfODV6P
-	lQVlqyh3+dLZyY6tRwE9KGdTS1wo1bXMMV1HG0vZClIjrWkVm9tWVdiotoGT5IXLNaa4/eviwJB
-	OW6qjrfNqr6xwIEFXNOBSB2/nZ1FxCWUevLp/wBuV8GQzivvsUIUfjASdTtbDNCc1+UfTdYb+Fm
-	LNtumtvsHupgtn/7Bh3+L3vty59mXsn7CKM1V5Ebl2VKV0FEscR8YgwSleF6jMDhVFjhnd/V+Hn
-	PIBDw0212WijiaqIjyWxfPKhlOkPw2iNWzfHynWKSDJZnhuaZS1tJ1IEkYUKbiN4QfodI3Q0J2H
-	v3D6OtvPlbpt9NWJ1w=
-X-Received: by 2002:a05:600c:c118:b0:48a:65ad:1881 with SMTP id 5b1f17b1804b1-48a7b533de1mr4570715e9.13.1777394777419;
-        Tue, 28 Apr 2026 09:46:17 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:1126:4:a18c:dabb:5dfa:d13d? ([2620:10d:c092:500::5:e452])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a7b569cb5sm5762265e9.2.2026.04.28.09.46.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2026 09:46:16 -0700 (PDT)
-Message-ID: <d85346c710e62c1ccf1babe1c5e5ebce6c757fb6.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 02/18] bpf: Add precision marking and
- backtracking for stack argument slots
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, "Jose E .
- Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com,  Martin KaFai Lau
- <martin.lau@kernel.org>
-Date: Tue, 28 Apr 2026 09:46:14 -0700
-In-Reply-To: <20260424171443.2034958-1-yonghong.song@linux.dev>
-References: <20260424171433.2034470-1-yonghong.song@linux.dev>
-	 <20260424171443.2034958-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jklp+w98"
+Message-ID: <29308729-2a9c-4a4e-9b4f-a92bd185ee22@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1777394822;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MjL6ik1GTg3sGjYfU1dXKxrHuOo3x5XRWCxnakQn/dg=;
+	b=jklp+w98bTMPJO1ZgN6LN4gbMJLg3bTtuT8V2DowhyIyE1P0jwKgC/F4tAl7OGb6FPia/3
+	u/+Y8BRkqowwEMmyejYZ55PkUeGY1aqjdCqKVWZxCtPzNt4znQQ1/c9j9gAynKm6Z0r+Wt
+	y4+8pkHmwrGgfgwMKFpogXGASn4e1DU=
+Date: Tue, 28 Apr 2026 17:47:00 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next 01/18] bpf: Support stack arguments for bpf
+ functions
+Content-Language: en-GB
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ "Jose E . Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com,
+ Martin KaFai Lau <martin.lau@kernel.org>
+References: <20260424171433.2034470-1-yonghong.song@linux.dev>
+ <20260424171438.2034741-1-yonghong.song@linux.dev>
+ <7a031b0dcbf54e34d6a6571256b1bb65b5617bcc.camel@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <7a031b0dcbf54e34d6a6571256b1bb65b5617bcc.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, 2026-04-24 at 10:14 -0700, Yonghong Song wrote:
-> Extend the precision marking and backtracking infrastructure to
-> support stack argument slots (r11-based accesses). Without this,
-> precision demands for scalar values passed through stack arguments
-> are silently dropped, which could allow the verifier to incorrectly
-> prune states with different constant values in stack arg slots.
->=20
-> INSN_F_STACK_ARG_ACCESS is encoded as INSN_F_STACK_ACCESS |
-> INSN_F_DST_REG_STACK (BIT(9) | BIT(10)). This is safe because
-> INSN_F_STACK_ACCESS is only used for ST/STX/LDX insns while
-> INSN_F_DST_REG_STACK is only used for JMP insns =E2=80=94 they never appe=
-ar
-> on the same instruction. This keeps the total within the 12-bit
-> jmp_history flags budget.
->=20
-> Three components are added:
->=20
-> 1. Jump history recording for stack arg accesses:
->    - check_stack_arg_write() records INSN_F_STACK_ARG_ACCESS for
->      outgoing stores.
->    - check_stack_arg_read() records INSN_F_STACK_ARG_ACCESS for
->      incoming loads.
->=20
-> 2. backtrack_insn() handling:
->    - BPF_LDX: when backtracking through an incoming stack arg load,
->      transfer precision demand from the destination register to the
->      stack arg slot mask.
->    - BPF_STX/BPF_ST: when backtracking through an outgoing stack arg
->      store, transfer precision demand from the stack arg slot to the
->      source register.
->    - Call boundary: when exiting a callee back to the caller,
->      propagate the callee's incoming stack arg precision bits to the
->      caller's outgoing stack arg slots. The slot index maps directly
->      (slot i in callee corresponds to slot i in caller) since the
->      caller's stack_arg_regs only contains outgoing slots.
->=20
-> 3. bpf_mark_chain_precision() state walking:
->    - When iterating parent states, mark stack_arg_regs[spi].precise
->      for slots that have pending precision demand.
->=20
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
->  include/linux/bpf_verifier.h | 13 ++++++++
->  kernel/bpf/backtrack.c       | 61 ++++++++++++++++++++++++++++++++++--
->  kernel/bpf/verifier.c        | 30 +++++++++++++++---
->  3 files changed, 98 insertions(+), 6 deletions(-)
->=20
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 2cc349d7fc17..735f33ad3db7 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -393,6 +393,13 @@ enum {
->  	INSN_F_SPI_SHIFT =3D 3, /* shifted 3 bits to the left */
-> =20
->  	INSN_F_STACK_ACCESS =3D BIT(9),
-> +	/*
-> +	 * INSN_F_STACK_ARG_ACCESS uses INSN_F_STACK_ACCESS | INSN_F_DST_REG_ST=
-ACK.
-> +	 * This is safe because INSN_F_DST_REG_STACK is only used for JMP insns
-> +	 * while INSN_F_STACK_ACCESS is only used for ST/STX/LDX insns =E2=80=
-=94 they
-> +	 * never appear on the same instruction.
-> +	 */
-> +	INSN_F_STACK_ARG_ACCESS =3D BIT(9) | BIT(10),
+On 4/28/26 7:29 AM, Eduard Zingerman wrote:
+> On Fri, 2026-04-24 at 10:14 -0700, Yonghong Song wrote:
+>
+> [...]
+>
+> I didn't see this in the patch, hence the question: should or should
+> not this feature be privileged bpf only?
 
-Tbh, I'd split bpf_jmp_history_entry like this:
+It is priviledged only. See add_subprog_and_kfunc().
+both bpf-to-bpf call and kfunc requires bpf_capable.
 
-  struct bpf_jmp_history_entry {
-         u32 idx:20;
-	 u32 frame:3;
-	 u32 spi:6;
-         /* insn idx can't be bigger than 1 million */
-         u32 prev_idx : 20;
-         /* special INSN_F_xxx flags */
-         u32 flags : 12;
-         /* additional registers that need precision tracking when this
-          * jump is backtracked, vector of six 10-bit records
-          */
-         u64 linked_regs;
-  };
+>
+> [...]
+>
+>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+>> index d5b4303315dd..2cc349d7fc17 100644
+>> --- a/include/linux/bpf_verifier.h
+>> +++ b/include/linux/bpf_verifier.h
+> [...]
+>
+>> @@ -508,6 +512,17 @@ struct bpf_verifier_state {
+>>   	     iter < frame->allocated_stack / BPF_REG_SIZE;		\
+>>   	     iter++, reg = bpf_get_spilled_reg(iter, frame, mask))
+>>   
+>> +#define bpf_get_spilled_stack_arg(slot, frame, mask)                   \
+>> +	((((slot) < frame->out_stack_arg_depth / BPF_REG_SIZE) &&           \
+>> +	  (frame->stack_arg_regs[slot].type != NOT_INIT))               \
+>> +	 ? &frame->stack_arg_regs[slot] : NULL)
+> can this be a static inline function?
 
-[...]
+We could but we have
 
-> @@ -453,9 +498,10 @@ static int backtrack_insn(struct bpf_verifier_env *e=
-nv, int idx, int subseq_idx,
->  					     bt_stack_mask(bt));
->  				return -EFAULT;
->  			}
-> -			/* clear r1-r5 in callback subprog's mask */
-> +			/* clear r1-r5 and stack arg slots in callback subprog's mask */
->  			for (i =3D BPF_REG_1; i <=3D BPF_REG_5; i++)
->  				bt_clear_reg(bt, i);
-> +			bt->stack_arg_masks[bt->frame] =3D 0;
+#define bpf_get_spilled_reg(slot, frame, mask)                          \
+         (((slot < frame->allocated_stack / BPF_REG_SIZE) &&             \
+           ((1 << frame->stack[slot].slot_type[BPF_REG_SIZE - 1]) & (mask))) \
+          ? &frame->stack[slot].spilled_ptr : NULL)
 
-Nit: I think having these set at this point is a bug condition.
+Should we do the same (as static inline function)?
 
->  			if (bt_subprog_exit(bt))
->  				return -EFAULT;
->  			return 0;
+>
+>> +
+>> +/* Iterate over 'frame', setting 'reg' to either NULL or a spilled stack arg. */
+>> +#define bpf_for_each_spilled_stack_arg(iter, frame, reg, mask)         \
+>> +	for (iter = 0, reg = bpf_get_spilled_stack_arg(iter, frame, mask); \
+>> +	     iter < frame->out_stack_arg_depth / BPF_REG_SIZE;              \
+>> +	     iter++, reg = bpf_get_spilled_stack_arg(iter, frame, mask))
+>> +
+>>   #define bpf_for_each_reg_in_vstate_mask(__vst, __state, __reg, __mask, __expr)   \
+>>   	({                                                               \
+>>   		struct bpf_verifier_state *___vstate = __vst;            \
+>> @@ -525,6 +540,11 @@ struct bpf_verifier_state {
+>>   					continue;                        \
+>>   				(void)(__expr);                          \
+>>   			}                                                \
+>> +			bpf_for_each_spilled_stack_arg(___j, __state, __reg, __mask) { \
+>> +				if (!__reg)                              \
+>> +					continue;                        \
+>> +				(void)(__expr);                          \
+>> +			}						 \
+>>   		}                                                        \
+>>   	})
+> Tangential nit: I think this macro is getting a bit too complicated,
+> we might want to introduce some proper reg_state iterator at some
+> point, e.g.:
+>
+>    struct ret_iter it = new_reg_iter(state);
+>    while ((reg = next_reg(&it))) { ... }
 
-[...]
+You mean have a static function with proper arguments and do the above?
+I guess can do a followup later to simplify it.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>
+>
+>>   
+>> @@ -739,10 +759,13 @@ struct bpf_subprog_info {
+>>   	bool keep_fastcall_stack: 1;
+>>   	bool changes_pkt_data: 1;
+>>   	bool might_sleep: 1;
+>> -	u8 arg_cnt:3;
+>> +	u8 arg_cnt:4;
+>>   
+>>   	enum priv_stack_mode priv_stack_mode;
+>> -	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_REG_ARGS];
+>> +	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_ARGS];
+>> +	u16 incoming_stack_arg_depth;
+> Can this be inferred from arg_cnt?
+> Also, the verifier keeps doing '/ BPF_REG_SIZE' on this number,
+> would it be more convenient to keep it as count?
 
-[...]
+This should work. Let me try.
 
->  static int check_outgoing_stack_args(struct bpf_verifier_env *env, struc=
-t bpf_func_state *caller,
-> @@ -7269,8 +7285,14 @@ static int check_mem_size_reg(struct bpf_verifier_=
-env *env,
->  	}
->  	err =3D check_helper_mem_access(env, mem_reg, mem_argno, size_reg->umax=
-_value,
->  				      access_type, zero_size_allowed, meta);
-> -	if (!err)
-> -		err =3D mark_chain_precision(env, reg_from_argno(size_argno));
-> +	if (!err) {
-> +		int regno =3D reg_from_argno(size_argno);
-> +
-> +		if (regno >=3D 0)
-> +			err =3D mark_chain_precision(env, regno);
-> +		else
-> +			err =3D mark_stack_arg_precision(env, arg_from_argno(size_argno) - 1)=
-;
-> +	}
+>
+>> +	u16 stack_arg_depth; /* incoming + max outgoing */
+>> +	u16 max_out_stack_arg_depth;
+>>   };
+>>   
+>>   struct bpf_verifier_env;
+>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+>> index 77af44d8a3ad..cfb35a2decf6 100644
+>> --- a/kernel/bpf/btf.c
+>> +++ b/kernel/bpf/btf.c
+>> @@ -7880,13 +7880,19 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
+>>   	}
+>>   	args = (const struct btf_param *)(t + 1);
+>>   	nargs = btf_type_vlen(t);
+>> -	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
+>> -		if (!is_global)
+>> -			return -EINVAL;
+>> -		bpf_log(log, "Global function %s() with %d > %d args. Buggy compiler.\n",
+>> +	if (nargs > MAX_BPF_FUNC_ARGS) {
+>> +		bpf_log(log, "Function %s() with %d > %d args not supported.\n",
+>> +			tname, nargs, MAX_BPF_FUNC_ARGS);
+> Nit: I'd report it as "kernel supports at-most %d parameters for regular functions, while function %s is declared to accept %d parameters"
+>       just to make the rules a bit more explicit.
 
-Nit: maybe make this a utility function, e.g. mark_arg_precision(env, argno=
-) ?
+Okay.
 
->  	return err;
->  }
-> =20
+>
+>> +		return -EINVAL;
+>> +	}
+> [...]
+>
+>> @@ -1378,9 +1382,21 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
+>>   	struct bpf_prog *prog = env->prog;
+>>   	struct bpf_insn *insn = prog->insnsi;
+>>   	bool has_kfunc_call = bpf_prog_has_kfunc_call(prog);
+>> -	int i, depth;
+>> +	int depth;
+>>   #endif
+>> -	int err = 0;
+>> +	int i, err = 0;
+>> +
+>> +	for (i = 0; i < env->subprog_cnt; i++) {
+>> +		struct bpf_subprog_info *subprog = &env->subprog_info[i];
+>> +		u16 outgoing = subprog->stack_arg_depth - subprog->incoming_stack_arg_depth;
+>> +
+>> +		if (subprog->max_out_stack_arg_depth > outgoing) {
+>> +			verbose(env,
+>> +				"func#%d writes stack arg slot at depth %u, but calls only require %u bytes\n",
+>> +				i, subprog->max_out_stack_arg_depth, outgoing);
+>> +			return -EINVAL;
+> Is this an internal error condition?
+> If it is, maybe use verifier_bug()?
+
+It is not. For example,
+
+SEC("tc")
+__description("stack_arg: write unused stack arg slot")
+__failure
+__msg("func#0 writes stack arg slot at depth 40, but calls only require 16 bytes")
+__naked void stack_arg_write_unused_slot(void)
+{
+         asm volatile (
+                 "r1 = 1;"
+                 "r2 = 2;"
+                 "r3 = 3;"
+                 "r4 = 4;"
+                 "r5 = 5;"
+                 /* Write to offset -40, unused for the callee */
+                 "*(u64 *)(r11 - 40) = 99;"
+                 "*(u64 *)(r11 - 16) = 20;"
+                 "*(u64 *)(r11 - 8) = 10;"
+                 "call subprog_7args;"
+                 "r0 = 0;"
+                 "exit;"
+                 ::: __clobber_all
+         );
+}
+
+>
+>> +		}
+>> +	}
+>>   
+>>   	if (env->prog->jit_requested &&
+>>   	    !bpf_prog_is_offloaded(env->prog->aux)) {
+>> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+>> index 8478d2c6ed5b..3e59d1c3a726 100644
+>> --- a/kernel/bpf/states.c
+>> +++ b/kernel/bpf/states.c
+>> @@ -838,6 +838,34 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+>>   	return true;
+>>   }
+>>   
+>> +/*
+>> + * Compare stack arg slots between old and current states.
+>> + * Outgoing stack args are path-local state and must agree for pruning.
+>> + */
+>> +static bool stack_arg_safe(struct bpf_verifier_env *env, struct bpf_func_state *old,
+>> +			   struct bpf_func_state *cur, struct bpf_idmap *idmap,
+>> +			   enum exact_level exact)
+>> +{
+>> +	int i, nslots;
+>> +
+>> +	nslots = min(old->out_stack_arg_depth, cur->out_stack_arg_depth) / BPF_REG_SIZE;
+> this is not safe, e.g. it will accept cur with one argument as
+> equivalent for old with two arguments.
+
+Good catch! Will fix.
+
+>
+>> +	for (i = 0; i < nslots; i++) {
+>> +		struct bpf_reg_state *old_arg = &old->stack_arg_regs[i];
+>> +		struct bpf_reg_state *cur_arg = &cur->stack_arg_regs[i];
+>> +
+>> +		if (old_arg->type == NOT_INIT && cur_arg->type == NOT_INIT)
+>> +			continue;
+>> +
+>> +		if (exact == EXACT && old_arg->type != cur_arg->type)
+>> +			return false;
+>> +
+>> +		if (!regsafe(env, old_arg, cur_arg, idmap, exact))
+>> +			return false;
+>> +	}
+> regsafe() seem handles NOT_INIT and EXACT in the same way,
+> I don't think there is a necessity to do the handling explicitly here.
+
+I agree that NOT_INIT and EXACT tracks are redundant. I keep them there
+for performance reason. But I guess the return is minimum, so I will just
+do regsafe() then.
+
+>
+>> +
+>> +	return true;
+>> +}
+>> +
+> [...]
+>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index ff6ff1c27517..bcf81692a22b 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -1361,6 +1361,18 @@ static int copy_stack_state(struct bpf_func_state *dst, const struct bpf_func_st
+>>   		return -ENOMEM;
+>>   
+>>   	dst->allocated_stack = src->allocated_stack;
+>> +
+>> +	/* copy stack args state */
+>> +	n = src->out_stack_arg_depth / BPF_REG_SIZE;
+>> +	if (n) {
+>> +		dst->stack_arg_regs = copy_array(dst->stack_arg_regs, src->stack_arg_regs, n,
+>> +						 sizeof(struct bpf_reg_state),
+>> +						 GFP_KERNEL_ACCOUNT);
+>> +		if (!dst->stack_arg_regs)
+>> +			return -ENOMEM;
+>> +	}
+>> +
+>> +	dst->out_stack_arg_depth = src->out_stack_arg_depth;
+> Given that this is capped by 12, does it make sense to maintain the counter?
+> It might be simpler to always allocate an array of 12 elements.
+
+The number of stack arguments is most 7. So yes, we can do it.
+
+>
+>>   	return 0;
+>>   }
+> [...]
+>
+>> @@ -4417,6 +4446,109 @@ static int check_stack_write(struct bpf_verifier_env *env,
+>>   	return err;
+>>   }
+>>   
+>> +/*
+>> + * Write a value to the outgoing stack arg area.
+>> + * off is a negative offset from r11 (e.g. -8 for arg6, -16 for arg7).
+>> + */
+>> +static int check_stack_arg_write(struct bpf_verifier_env *env, struct bpf_func_state *state,
+>> +				 int off, int value_regno)
+>> +{
+> Nit: Maybe replace value_regno with pointer to a register state?
+>       Just for consistency.
+
+yes, we can do it.
+
+>
+>> +	int max_stack_arg_regs = MAX_BPF_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS;
+>> +	struct bpf_subprog_info *subprog = &env->subprog_info[state->subprogno];
+>> +	int spi = -off / BPF_REG_SIZE - 1;
+>> +	struct bpf_func_state *cur;
+>> +	struct bpf_reg_state *arg;
+>> +	int err;
+>> +
+>> +	if (spi >= max_stack_arg_regs) {
+>> +		verbose(env, "stack arg write offset %d exceeds max %d stack args\n",
+>> +			off, max_stack_arg_regs);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	err = grow_stack_arg_slots(env, state, -off);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	/* Track the max outgoing stack arg access depth. */
+>> +	if (-off > subprog->max_out_stack_arg_depth)
+>> +		subprog->max_out_stack_arg_depth = -off;
+>> +
+>> +	cur = env->cur_state->frame[env->cur_state->curframe];
+>> +	if (value_regno >= 0) {
+>> +		state->stack_arg_regs[spi] = cur->regs[value_regno];
+> Nit: there is copy_register_state(), we should either use it here or
+> drop it and replace with direct assignments everywhere.
+
+Will use copy_register_state() to be consistant with our examples.
+
+>
+>> +	} else {
+>> +		/* BPF_ST: store immediate, treat as scalar */
+>> +		arg = &state->stack_arg_regs[spi];
+>> +		arg->type = SCALAR_VALUE;
+>> +		__mark_reg_known(arg, env->prog->insnsi[env->insn_idx].imm);
+>> +	}
+>> +	state->no_stack_arg_load = true;
+>> +	return 0;
+>> +}
+>> +
+>> +/*
+>> + * Read a value from the incoming stack arg area.
+>> + * off is a positive offset from r11 (e.g. +8 for arg6, +16 for arg7).
+>> + */
+>> +static int check_stack_arg_read(struct bpf_verifier_env *env, struct bpf_func_state *state,
+>> +				int off, int dst_regno)
+>> +{
+>> +	struct bpf_subprog_info *subprog = &env->subprog_info[state->subprogno];
+>> +	struct bpf_verifier_state *vstate = env->cur_state;
+>> +	int spi = off / BPF_REG_SIZE - 1;
+>> +	struct bpf_func_state *caller, *cur;
+>> +	struct bpf_reg_state *arg;
+>> +
+>> +	if (state->no_stack_arg_load) {
+>> +		verbose(env, "r11 load must be before any r11 store or call insn\n");
+>> +		return -EINVAL;
+>> +	}
+> I think the error message should be inverted, store should precede the load.
+> But tbh, I'd drop it altogether, the check right below should be sufficient.
+
+This is necessary. See
+
+SEC("tc")
+__description("stack_arg: r11 load after r11 store")
+__failure
+__msg("r11 load must be before any r11 store or call insn")
+__naked void stack_arg_load_after_store(void)
+{
+         asm volatile (
+                 "r1 = 1;"
+                 "r2 = 2;"
+                 "r3 = 3;"
+                 "r4 = 4;"
+                 "r5 = 5;"
+                 "*(u64 *)(r11 - 8) = 6;"
+                 "r0 = *(u64 *)(r11 + 8);"
+                 "call subprog_6args;"
+                 "exit;"
+                 ::: __clobber_all
+         );
+}
+         
+SEC("tc")
+__description("stack_arg: r11 load after a call")
+__failure
+__msg("r11 load must be before any r11 store or call insn")
+__naked void stack_arg_load_after_call(void)
+{
+         asm volatile (
+                 "call %[bpf_get_prandom_u32];"
+                 "r0 = *(u64 *)(r11 + 8);"
+                 "exit;"
+                 :: __imm(bpf_get_prandom_u32)
+                 : __clobber_all
+         );
+}
+
+>
+>> +
+>> +	if (off > subprog->incoming_stack_arg_depth) {
+>> +		verbose(env, "invalid read from stack arg off %d depth %d\n",
+>> +			off, subprog->incoming_stack_arg_depth);
+>> +		return -EACCES;
+>> +	}
+
+This is for this kind of failure:
+
+SEC("tc")
+__description("stack_arg: read from uninitialized stack arg slot")
+__failure
+__msg("invalid read from stack arg off 8 depth 0")
+__naked void stack_arg_read_uninitialized(void)
+{
+         asm volatile (
+                 "r0 = *(u64 *)(r11 + 8);"
+                 "r0 = 0;"
+                 "exit;"
+                 ::: __clobber_all
+         );
+}
+
+>> +
+>> +	caller = vstate->frame[vstate->curframe - 1];
+>> +	arg = &caller->stack_arg_regs[spi];
+>> +	cur = vstate->frame[vstate->curframe];
+>> +
+>> +	if (is_spillable_regtype(arg->type))
+>> +		copy_register_state(&cur->regs[dst_regno], arg);
+>> +	else
+>> +		mark_reg_unknown(env, cur->regs, dst_regno);
+> For stack writes we report error in such situations,
+> should the same be done here?
+
+We should be fine here.
+
+>
+>> +	return 0;
+>> +}
+>> +
+>> +static int check_outgoing_stack_args(struct bpf_verifier_env *env, struct bpf_func_state *caller,
+>> +				     int nargs)
+>> +{
+>> +	int i, spi;
+>> +
+>> +	for (i = MAX_BPF_FUNC_REG_ARGS; i < nargs; i++) {
+>> +		spi = i - MAX_BPF_FUNC_REG_ARGS;
+>> +		if (spi >= (caller->out_stack_arg_depth / BPF_REG_SIZE) ||
+>> +		    caller->stack_arg_regs[spi].type == NOT_INIT) {
+>> +			verbose(env, "stack %s not properly initialized\n",
+>> +				reg_arg_name(env, argno_from_arg(i + 1)));
+> Nit: error message is a bit confusing, I'd change it to better reflect the rules, e.g.:
+>       "function %s expects %d arguments, stack argument %d is not initialized".
+
+Okay.
+
+>
+>> +			return -EFAULT;
+>> +		}
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+> [...]
+
