@@ -1,278 +1,195 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679D73783C8
-	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 09:23:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767F838F24C
+	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 09:30:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777368228; cv=pass; b=o6qPZAh6P/WNzO8CPYR4iLlWiI7R0NVmuk14buy8vEVhWwci/t5BixW7RimFjiGLb6MxVQUkHBpT3mrFvnthr7OCl55ClY1uMGYQVy16MRJ12vyNul7S6tIOgYf1eNoGAx5KaEkY6wWYVbEPNagyvWIbeAQ/0wruFNZ24uAIaYE=
+	t=1777368611; cv=pass; b=O7ttaPxBdZqgUNbknes5XGN58xffb7BWmwZue/sO67tiAAXPvf9GVWhOTe1M4bVs9+yljO/36d/SWRiJTrDRXi2qRk52DahnGeA7OK22/W165+4AmDjApC9CdlTZd/oDhmr2HbFVdi4DSdEKj/DOgJA7SD8RDWvgfJt8KIZzwEU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777368228; c=relaxed/simple;
-	bh=ssKZS8qpF/9gRr7EudgqoHQsoM2IqQqobR9GZAXp3jM=;
+	s=arc-20240116; t=1777368611; c=relaxed/simple;
+	bh=bUKFL0mooMpwLXWWi23CY6Fe3FU71zNzPDR47LRd64g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=azOPT+AipKG4z3jO4KQ323UNfRPBe/eaDWnSi7ey6IcAruZmQrsYPaFiaaQjC1pNP0o0bdQgKXsUx+DkNzVFdq4P3VOqvU9Rwqj8SrPlybANW2yeWbl8xT3MMX6g+EbWVkSOcR8h/IeLGAtGMPtS/MmHsNaHa0dSJVa2WdV0Q6k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RrZMyfGz; arc=pass smtp.client-ip=209.85.218.50
+	 To:Cc:Content-Type; b=rT6nbrfWySp/IqiLMbUazNfuVYnltkaw+yYH0ARvV/GCGOkB/SrtluclD+wORU9/WE1QAQjzgPFMRBXMTqe4dirpQZ6NFAV5DmDdU20lGjGKv4bfjzbqLi8Tx4c0SlJT5mRPKmF318N6yZchPe4HQZk6HDm+U/j+scBDqG3Yx7Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tLVHdknt; arc=pass smtp.client-ip=209.85.208.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RrZMyfGz"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b886fc047d5so2001540866b.3
-        for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 02:23:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777368223; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tLVHdknt"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-671d60ef9c6so15459899a12.2
+        for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 02:30:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777368605; cv=none;
         d=google.com; s=arc-20240605;
-        b=Y2CLg/Hmc06fAikFdl3sKVBCrNXvywFPDRqH4LQHkFfWu72+zU2U0IjQPkPjsNYWKk
-         Qfx8IHRk2SswqH4vuEbTZeXUgSqEVu9RT4fqxw66aM0qMMMhAdccN05LWDp60BFBD21P
-         agy/lMfZmZ/VT6E65uNLxlhMj3RMrZdc/ykKmFCLsz9pXDQvcQzRNLby/cTZxDKI3G39
-         9Rdb8jovvKrljKysdlnP+nz3FPVxYn5B8vISRZHtZxCHSg0YyaEYAO2i5b7AyfvtU+1R
-         BvJCpHe104wYEJswYncTySRUd3UjOnA2m8DvWQWoGH2X2j2GY0FCSpsEUAA1nHDwwWj2
-         KDaQ==
+        b=RzJgsmhD09xR26/AUE3CpUM/XqV+8m9ipwfoFSrDu/Iyy7LG7hubEwRpuvBGXdwzvu
+         fox3UiuYK/GRd5pZzgtDIwgrEfhkwZ7RuIy5MwXshcbXlRu6llVxRgSTDHiMbAxNq0vr
+         4KwZhpUWSVC3KFfADDHpD3ckKO56OkHr1/Irux66nGwxYs+jRivHeJsGS6fMFIY+JKXh
+         C30AU8Z/WHC8lvY44Ux70FhQ4MnYWEywEspoSw49BzvMDrlr63plW81uvo65EWY+xiiN
+         FmgY/Bryu1YIFpmjFMxwXAZVPZlwIDf2GP9F8rWunyAb7SGviPNb42X8pbConl9nsMtg
+         Xd3Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=y0mxmv6zlovaBEyNNFohEBcvoF1iektstSBLVSgu8JQ=;
-        fh=PnmYwwIEyGc3uGnzLellVUyTXAaSujwRtCwQxVQ5pwc=;
-        b=OWHqSyxV/AGkrGdpTqKzo77oleLqGVDrlJuL8y9hWrtBP0MwDc1C3mx7nivS8uq0LF
-         VmpFvHAz5rmLoCpD4FjTHwD7uEjUNLIfnJoxzt3EWI0Kx/z7geqgSnx11qUYE0PLQlDi
-         8zBbufz28FHVaO4CJmY8ntNIJkyKau0efjDuu7D3OwMdQnidkLOc625pEtI6nexxnv1R
-         XfmXB3oqqYunNzt+MRzBjDC1MF9kCmueOVqXBV7NhAj7LXxImlN/oH0mq4RJ2g7uzqLu
-         ASEUy7LFMpP54kZgCLsKpOd/THq6VuD8yiPzIOEwtOPNkm7qCxR1pgv3QdZicuvwcLk1
-         RP0Q==;
+        bh=padr2h2XEYJ5NHhm6V/pkf1/fnbasfn4pd6o7auN6mA=;
+        fh=7pQPbM1mTaKjUbZ75iTISJbipA72wUVZwkXXTYMxzFw=;
+        b=JfRambb7VL8Ridcad5t3+4Zi0oh5VwzBHItQHlVzKEHxJl11QXIcrXoZhR1mGC23sW
+         yxIfrC3gL9kpvVfz9H1Rc4Tb1Tc26Jt5lStfMPnpjBDlQU2gmW7kOdCPn/hSXxyUYvEf
+         3ELfgRMu6boiiB/mab5XGe9d6O+UGta71YjwQbTU0B7othscoK00o1yDtSiFDsY+3XVe
+         fvtmh/wasxkcpc30HuoJiZNrSPvzdhkX0lbocgpgOvSkaRx5AbM6j0agNYeoGuyMKoZs
+         vbfBl3Lup/kabk61tZOFabDMUJWVp6G5i0oDJrvSDC6lng8BMwSQlrWsIKA+9GmmLT7/
+         J2sg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777368223; x=1777973023; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777368605; x=1777973405; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=y0mxmv6zlovaBEyNNFohEBcvoF1iektstSBLVSgu8JQ=;
-        b=RrZMyfGzNRJGcpbRYAcgex/Th+U/3FkIKFMD0xFyZhAjJZZbNfXwtKqIK1ZJdKsVa1
-         I3Y9O2ySgbb1M7qliBTPLhNoDqDI//gpjteeM7YY9H9i/yNnJKjdRinc2lPh5skx5eWe
-         Wc/dfTbihG1jsTsbCYIuu0s4z+1x1DHfCm6gSTnTbV9tZJ6MbttVBJ0JC+bEn6tT2Jqg
-         bu2mWEHw6Mc1dv/9/FlrAChYXlMDiKrXvk10JCKARzuNWCT0n9THR6m77K+wa3o/LqP0
-         uU7zVQ3iuqibdMLDAovHrfhpqtAh16QeLyxn4hOPfPGA8Ju6/PWks4z7qzWK7Mk/4ryC
-         OqEw==
+        bh=padr2h2XEYJ5NHhm6V/pkf1/fnbasfn4pd6o7auN6mA=;
+        b=tLVHdkntGNBtjmKgO6eXDsm6LCoBoeLN2jtrcO2/I2ZAikmVHenVtupwBa+IBHlX1c
+         JXoIn0oikhlx4JQBAMI9C6brT2p0YwGOMrtVRz7uf7Yl0CAdFRGIKRmfFdZTmVydj+0I
+         4SnrEpzkI55vnlmsTGHVIm0kwWTF3Njkgd1S//pEoASSJN3WV97U9CmfwkzIBKW27MF3
+         NeYl2Q2k4cDZHAOQnja0eNtGZ9o8vbtFbZwNWmcBdDlyr24QXbSOdj7sArwOmgLYiJMD
+         KVaAdg9HFgC6SiXTvr6H4hRYou3xi0CCYOnJLHrytHh8PqQzGJMzGUyMGfpB4C2d7glQ
+         nFVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777368223; x=1777973023;
+        d=1e100.net; s=20251104; t=1777368605; x=1777973405;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=y0mxmv6zlovaBEyNNFohEBcvoF1iektstSBLVSgu8JQ=;
-        b=KTd7M4iGk3GR3PqJyIlpRLaeKA/iGZAVD/Ip0kHNRqmR81epKMSbMTfgSqHbsQClWM
-         AqFkHWnbexu+BFJVDaHm7T3bRuLKvfmHZTsgXtyA4P3N+d/B5zp4neab8MQcohy8pnsL
-         5JfUPAEqvyc/IaYDzQCjDzQm61YfHbDk/rnaDVvUrBS7QeSj8in3HpFeUKa9Sj/XZxZt
-         LS4XIiXdbtpPYEmjJzsvEFza/Iq7IlA+wCZfqWUYLznzyI9hvLQU4spkvruvOvjo7A9R
-         jVaogxM2q/wwKvtMYFm9bfHw0/zCmC3bTNVH0/015NcmHNADCYJ1RT23xtmZV43UNhym
-         0p7g==
-X-Gm-Message-State: AOJu0YyU3NQEI7YJg+2nGt0gcPiP8OTI6NAL1ZmQi66SrUOBAutX/Jts
-	UTQTfm7UNOnqoYpikB5GlzqfnHcxcdXx3lnzfe9AfAdkMeyHxuS+aLPGGgrYeLdjtjXqzrIBWSc
-	flLbGgeVD1uBt2514/00XCADf9bJwaxyd86XviPw=
-X-Gm-Gg: AeBDieuquhnxYfZ2sQd97/oMJT1tq+X/croY4TJF5iPE0luenX/Ye6f299w7sIIkDCX
-	Z5MgyyK7WeJwLAcvnJ06Bb0NuVsKa6bKrTybqRlKqPq5cqAUowXRP1Kxydug03/OZWC6wKN/Mbz
-	OZZRgmtLsNoa3q+kq/aZsGoRkDLx3ltTw49ukUtkIUk7VAceA1hRpk5ttZqGe1aIoTuVXewM2oU
-	QvFxsimWLN1SUKcwJtn2eUO+kE97jj9bJx0G0T8NbQb70bSMDOAjNUczFsU6ebaRfs9QS+aKp8h
-	FxaB5o6pQFw4Ol1CeOXurzBpzFk=
-X-Received: by 2002:a17:907:97cb:b0:ba5:216c:56e6 with SMTP id
- a640c23a62f3a-bb7ff35965emr135483866b.0.1777368222785; Tue, 28 Apr 2026
- 02:23:42 -0700 (PDT)
+        bh=padr2h2XEYJ5NHhm6V/pkf1/fnbasfn4pd6o7auN6mA=;
+        b=VSOYYPTdlpPNH28YTTq446dqPB9JrsGi8CjJLXaTxe0UyThTrZCAlffmhe/sPIgI3v
+         pXwUymJxa9JCIGAPOBIrR12FLMu8PTBdHLn3/SkNL0B1MyRaatpB+2zqEIZhuRTkEVx0
+         4mdLRG6+iNIwkluJxcCo6YlmrXX1EC1przyQTO/iV16sMgHQqbaWy6T7nMXqCeNZI//Y
+         C9grq6X5Ow3zjf5LJdAdkWEulwZ6EKCKba2NcvI/wskGCGEFLf2sz0NpXy5MwwH0BO/K
+         o4/baH68slFupZ/0ZCSYquUYRrrqIeyhsudsSAJ2U0YFvZdhBXsXSdX4cM4BAhRGgxK3
+         isiw==
+X-Gm-Message-State: AOJu0YwKw3X7P7up5LGLpDbQbaYr2IKmi6dAmSXRA/K+FHWNges3LO3f
+	3mzPA71bNyCEmBYXH9pqXT1DBg1Au1m9I6ptljr20xgJilliafUFt+SqAJc5cwxzXz5BUNssh9i
+	X3dM8zZO0Gmazoz0iieEhw1T3OIwLCVQeC7DN
+X-Gm-Gg: AeBDievXjETfvMIL6DoOz7ydzDRu/Fr1JFZL/ciYbJib6X9lnCydNLmm+EE4dkrvdR1
+	uWB5OASFoJ11KLzolQH+t1KTCq9SlC+IOwV5203Q2pV/wj6rvyTY3x6Df3D2HLFoPKbRaQ2CEO3
+	VwtcjuqIwLICLUis8O2dXoxwFFpDmV5em7OTSMe0SrE/S+Qv6rwzmWtTw+aUPZCzAp2Vn6nBZ8G
+	qo5zRRZCH2ffV15np1Oxw84AkldW1kvq4fX8qAjSHHYrKXDQybM4DhRO7VmTfABS4Wg2veR4epy
+	SMFlg2xur8upvjyF
+X-Received: by 2002:a05:6402:505b:b0:671:a18b:32b8 with SMTP id
+ 4fb4d7f45d1cf-679bafe395amr1080072a12.0.1777368604754; Tue, 28 Apr 2026
+ 02:30:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260427232313.1582588-3-puranjay@kernel.org> <825349ab37b5f386b036f5c59476cd61c173f6fcd7632542c57fac1f1facdb9c@mail.kernel.org>
-In-Reply-To: <825349ab37b5f386b036f5c59476cd61c173f6fcd7632542c57fac1f1facdb9c@mail.kernel.org>
+References: <20260427232313.1582588-5-puranjay@kernel.org> <20260428003801.C1302C19425@smtp.kernel.org>
+In-Reply-To: <20260428003801.C1302C19425@smtp.kernel.org>
 From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Tue, 28 Apr 2026 10:23:31 +0100
-X-Gm-Features: AVHnY4JpI7UQFkDswWEy_KZ66SCph5Gk3XsNzsnGBKBzOoz5kq7H71157Lkguz8
-Message-ID: <CANk7y0hRPJ1sO2f+5NBeLb_tubRFNUDsH0qy3YDj3=RhtVZTzQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/7] selftests/bpf: Add BPF batch-timing library
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, mykyta.yatsenko5@gmail.com, feichen@meta.com, 
-	taragrawal@meta.com, ndixit@meta.com, tehnerd@tehnerd.com, 
-	kernel-team@meta.com, yonghong.song@linux.dev, clm@meta.com, 
-	ihor.solodrai@linux.dev
+Date: Tue, 28 Apr 2026 10:29:53 +0100
+X-Gm-Features: AVHnY4JIVqiwx6HnJAVFEI_4IC68ew2f0xo2HV5mBdY7wzDillWNC2ZErkFOiCc
+Message-ID: <CANk7y0jACz-MiJLtF1HO69kXz7M9fRzqW4BcgnP004M=spATmA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 4/7] selftests/bpf: Add XDP load-balancer common definitions
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 28, 2026 at 1:18=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
+On Tue, Apr 28, 2026 at 1:38=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
 >
-> > diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_timing.c b/to=
-ols/testing/selftests/bpf/benchs/bench_bpf_timing.c
+> Sashiko AI review found 3 potential issue(s):
+> - [Medium] Endianness bug and invalid arithmetic on network-order values =
+in IP encapsulation helpers.
+> - [Medium] Implicit compiler padding in shared BPF/userspace structures c=
+auses cross-architecture ABI breakage.
+> - [Low] Missing anonymous union for IPv4/IPv6 addresses in `struct real_d=
+efinition`.
+> --
+>
+> commit 27405cc11d849dd578c45222803d3bbd40b0e500
+> Author: Puranjay Mohan <puranjay@kernel.org>
+>
+> selftests/bpf: Add XDP load-balancer common definitions
+>
+> This commit adds the shared header for the XDP load-balancer benchmark.
+> It defines the data structures used by both the BPF program and userspace=
+,
+> along with encapsulation source-address helpers.
+>
+> > diff --git a/tools/testing/selftests/bpf/xdp_lb_bench_common.h b/tools/=
+testing/selftests/bpf/xdp_lb_bench_common.h
 > > new file mode 100644
-> > index 000000000000..75a39da69655
+> > index 000000000000..aed20a963701
 > > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/benchs/bench_bpf_timing.c
+> > +++ b/tools/testing/selftests/bpf/xdp_lb_bench_common.h
 >
 > [ ... ]
 >
-> > +static __u32 compute_batch_iters(__u64 per_op_ns)
+> > +LB_INLINE __be32 create_encap_ipv4_src(__u16 port, __be32 src)
 > > +{
-> > +     __u64 target_ns =3D (__u64)CALIBRATE_TARGET_MS * 1000000ULL;
-> > +     __u32 iters;
+> > +     __u32 ip_suffix =3D lb_htons(port);
 > > +
-> > +     if (per_op_ns =3D=3D 0)
-> > +             return CALIBRATE_MIN_BATCH;
-> > +
-> > +     iters =3D target_ns / per_op_ns;
-> > +
-> > +     if (iters < CALIBRATE_MIN_BATCH)
-> > +             iters =3D CALIBRATE_MIN_BATCH;
-> > +     if (iters > CALIBRATE_MAX_BATCH)
-> > +             iters =3D CALIBRATE_MAX_BATCH;
-> > +
-> > +     return iters;
-> > +}
-> > +
-> > +void bpf_bench_calibrate(struct bpf_bench_timing *t, bpf_bench_run_fn =
-run_fn, void *run_ctx)
-> > +{
-> > +     __u64 elapsed, per_op_ns;
-> > +     __u64 time_n, time_2n;
-> > +     double ratio;
-> > +
-> > +     elapsed =3D measure_elapsed(t, run_fn, run_ctx, CALIBRATE_SEED_BA=
-TCH, CALIBRATE_RUNS);
-> > +     if (elapsed =3D=3D 0) {
-> > +             fprintf(stderr, "calibration: no timing samples, using de=
-fault\n");
-> > +             t->batch_iters =3D 10000;
-> > +             *t->batch_iters_bss =3D t->batch_iters;
-> > +             reset_timing(t);
-> > +             return;
-> > +     }
-> > +
-> > +     per_op_ns =3D elapsed / CALIBRATE_SEED_BATCH;
-> > +     t->batch_iters =3D compute_batch_iters(per_op_ns);
->
-> Will this integer division truncation break calibration for operations
-> taking less than 1 ns? If the total elapsed time for 100 iterations is un=
-der
-> 100 ns, per_op_ns evaluates to 0, forcing compute_batch_iters() to return
-> CALIBRATE_MIN_BATCH (100) instead of scaling up to reach the 10 ms target=
-.
-
-If individual operations take less than 1 ns then we can't meaninfully
-measure them, so returning 100 here is good enough.
-
->
-> > +
-> > +     time_n =3D measure_elapsed(t, run_fn, run_ctx, t->batch_iters, CA=
-LIBRATE_RUNS);
-> > +     time_2n =3D measure_elapsed(t, run_fn, run_ctx, t->batch_iters * =
-2, CALIBRATE_RUNS);
->
-> [ ... ]
->
-> > +static void reset_timing(struct bpf_bench_timing *t)
-> > +{
-> > +     *t->timing_enabled =3D 0;
-> > +     memset(t->samples, 0, sizeof(__u64) * BENCH_NR_CPUS * BENCH_NR_SA=
-MPLES);
-> > +     memset(t->idx, 0, sizeof(__u32) * BENCH_NR_CPUS);
+> > +     ip_suffix <<=3D 16;
+> > +     ip_suffix ^=3D src;
+> > +     return (0xFFFF0000 & ip_suffix) | IPIP_V4_PREFIX;
 > > +}
 >
-> Does this need CPU memory barriers to prevent hardware reordering?
-> While timing_enabled is volatile, weakly-ordered architectures like arm64=
- might
-> reorder the memory stores across the flag toggle. This could allow backgr=
-ound
-> BPF executions to write samples while the arrays are being zeroed.
+> Is it safe to perform bitwise operations directly on network-order values
+> like this? Since lb_htons() returns a network-order port, left-shifting i=
+t
+> by 16 and masking with host-order constants like 0xFFFF0000 or combining
+> it with IPIP_V4_PREFIX (4268) seems to assume a little-endian architectur=
+e.
+> Could this generate corrupted packet headers on big-endian systems?
 
-reset_timing() is only called during calibration, which runs in
-setup() =E2=80=94 before any producer threads are started. There's no
-concurrent BPF execution to race with.
+It is safe, everything happens on the same host, this is a benchmark!
 
-> [ ... ]
 >
-> > diff --git a/tools/testing/selftests/bpf/progs/bench_bpf_timing.bpf.h b=
-/tools/testing/selftests/bpf/progs/bench_bpf_timing.bpf.h
-> > new file mode 100644
-> > index 000000000000..6a1ad75f1fd7
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/bench_bpf_timing.bpf.h
->
-> [ ... ]
->
-> > +static __always_inline void bench_record_sample(__u64 elapsed_ns)
+> > +
+> > +LB_INLINE void create_encap_ipv6_src(__u16 port, __be32 src, __be32 *s=
+addr)
 > > +{
-> > +     __u32 cpu, idx;
-> > +
-> > +     if (!timing_enabled)
-> > +             return;
-> > +
-> > +     cpu =3D bpf_get_smp_processor_id() & BENCH_CPU_MASK;
-> > +     idx =3D timing_idx[cpu];
-> > +
-> > +     if (idx >=3D BENCH_NR_SAMPLES)
-> > +             return;
-> > +
-> > +     timing_samples[cpu][idx] =3D elapsed_ns;
-> > +     timing_idx[cpu] =3D idx + 1;
+> > +     saddr[0] =3D IPIP_V6_PREFIX1;
+> > +     saddr[1] =3D IPIP_V6_PREFIX2;
+> > +     saddr[2] =3D IPIP_V6_PREFIX3;
+> > +     saddr[3] =3D src ^ port;
 > > +}
 >
-> Can this read-modify-write pattern cause lost samples or out-of-bounds
-> writes? If machines have more than 256 logical CPUs, BENCH_CPU_MASK will =
-alias
-> multiple CPUs to the same index. Concurrent thread executions could race =
-and
-> overwrite the index, potentially corrupting the timing statistics.
-
-xdp_lb_validate() checks bpf_num_possible_cpus() > BENCH_NR_CPUS and
-exits with an error.
-
+> Will saddr[0] evaluate to the correct prefix on all architectures? Becaus=
+e
+> IPIP_V6_PREFIX1 is defined as 1, it evaluates to 0100:: on little-endian
+> but ::1 on big-endian.
+>
+> Also, is it intended to XOR the network-order __be32 src with the
+> host-order __u16 port without a prior byte-order conversion?
+>
+> [ ... ]
+>
+> > +struct real_pos_lru {
+> > +     __u32 pos;
+> > +     __u64 atime;
+> > +};
+>
+> Could this shared structure cause ABI breakage between 32-bit userspace
+> and 64-bit BPF environments? In 64-bit environments, the compiler will
+> insert 4 bytes of padding after pos, but 32-bit environments only require
+> 4-byte alignment for __u64. Should an explicit padding field be added to
+> ensure identical memory layout?
 >
 > > +
-> > +/*
-> > + * @body:  expression to time; return value (int) stored in __bench_re=
-sult.
-> > + * @reset: undo body's side-effects so each iteration starts identical=
-ly.
-> > + *         May reference __bench_result.  Use ({}) for empty reset.
-> > + *
-> > + * Runs batch_iters timed iterations, then one untimed iteration whose
-> > + * return value the macro evaluates to (for validation).
-> > + */
-> > +#define BENCH_BPF_LOOP(body, reset) ({                                =
-       \
-> > +     __u64 __bench_start =3D bpf_ktime_get_ns();                      =
- \
-> > +     __u32 __bench_i;                                                \
-> > +     int __bench_result;                                             \
-> > +                                                                     \
-> > +     for (__bench_i =3D 0;                                            =
- \
-> > +          __bench_i < batch_iters && can_loop;                       \
-> > +          __bench_i++) {                                             \
-> > +             __bench_result =3D (body);                               =
- \
-> > +             reset;                                                  \
-> > +     }                                                               \
-> > +                                                                     \
-> > +     bench_record_sample(bpf_ktime_get_ns() - __bench_start);        \
-> > +                                                                     \
-> > +     __bench_result =3D (body);                                       =
- \
-> > +     __bench_result;                                                 \
-> > +})
+> > +struct real_definition {
+> > +     __be32 dst;
+> > +     __be32 dstv6[4];
+> > +     __u8   flags;
+> > +};
 >
-> Should the final untimed iteration also evaluate the reset expression?
-> Without calling reset here, any side effects from the last body execution=
- (like
-> memory allocations or map modifications) will leak into the next program
-> invocation and could violate benchmark isolation.
+> This isn't a bug, but earlier structures like flow_key and vip_definition
+> use an anonymous union to overlay their IPv4 and IPv6 addresses. Should
+> dst and dstv6 be placed in a union here as well to save memory and
+> maintain consistency?
 
-This is by design, we want to have the last untimed iteration to have
-side effects so we can validate output.
+No, some scenarios use both.
 
 >
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
+> [ ... ]
 >
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/250255=
-33577
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260427232313.15=
+82588-1-puranjay@kernel.org?part=3D4
