@@ -1,99 +1,215 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 508EE3B52FE
-	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 21:25:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F23853B8D4A;
+	Tue, 28 Apr 2026 21:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777411520; cv=none; b=frwS55paHTvBn6DRyMeXL1HAf3tAc/fokQRbWxnjacEtpMT4qSG26WTF2vfu7XyPjW+lKBzwUilmlQIgQrYH9wH+4mFfhhdq2r3X1Z2UYXiu0for8cjaS/B6COJ4cb0yqx40Eo1WwH8kyHtjLz3gQRo7YDwdFz71dQiI/dp1ECk=
+	t=1777412284; cv=none; b=RlSR1lG4oWMoP5AIDU9O27xXke7c+vYVGrqXwslZF6YRl0zYoW3qAIvg5HEzU+QVU4wnfNYkC1ZqwoEsY9YrSMpjK2CyZ7M+gfiRPGFCqR89jRs7i3JAPVR+aZw0TcPYGMttY8xWAR3xj794rchSNuONmbIQufV32NXwXafl51A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777411520; c=relaxed/simple;
-	bh=rY5EfCMgXzCeUQgzMVbghzxGoo1P1KQkynKve+Sv1Pk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=i+DwhR+MFmY1roHfzN8y1CjsfKLrcF9IuTMWDws5O6HM14oqr4CQtqyN0OFkQrDnnPMp310CkvkMBFNho4wYyzG/SnKBl9AzyK/7FXRAgpS4TZ5BWcW2YMUYzf3iFrDpoARQ3z7n45pTTGBw/AZQjbz1WzvvRrqcv9J9sGuBv44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eqOwnaAf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777412284; c=relaxed/simple;
+	bh=3DHxrurPMXhWs/+VFuk5zRg5OApGCHvlQgCxsQ6X7vM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=aIjr5uI1rhGCOJmtyaxNULWLg2bdjl3c3hyktUD8bSQMJeE/0v0jTbasvz4uv44ZmHLba9x6jjfoPFQLG4R4oheCIpm5fIh9J+m+bQ554xXKE3pIknP8Ih0jPiScB23uSG4Hk8kOGCr+mrP6dxzqHW84lp84YcbkMSZeh9eW8oA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BKpyABXY; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eqOwnaAf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C861EC2BCAF;
-	Tue, 28 Apr 2026 21:25:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777411519;
-	bh=rY5EfCMgXzCeUQgzMVbghzxGoo1P1KQkynKve+Sv1Pk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=eqOwnaAfRd2OFe5lc4619SWrwGw6EDGt5ThBIRJOV7BypjIHxW9abzi1HWcgfdR5T
-	 bbiuItKzazQ4FhRDB0QTfRIRFIwFJanI1UrtWggwB9+HizayEa8KhUMDQDL1OjfmPI
-	 /nEB+1TnyxXHx4Yu5DYooAfHYZ7eFObGiY2tF2csXGcp/HEmWavZDrHui4p0LisFCC
-	 kAoThTuiirQOigzzbXfgOHZtQu5TKjO17BSYnhfFIuPOX4Co/+8snAz5hcOQEMEPWx
-	 VXOX8uJpX4a4n4Ujom6kQXDcxyTXcLo+06jFGXoCV6OcbkxwvJuYR5AbmWKmNS2nZc
-	 CyLj9DPixsFLA==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH 3/3] LoongArch: BPF: Inline
- bpf_get_smp_processor_id() helper
-Reply-To: sashiko@lists.linux.dev
-To: "Tiezhu Yang" <yangtiezhu@loongson.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260428072021.7289-4-yangtiezhu@loongson.cn>
-References: <20260428072021.7289-4-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 28 Apr 2026 21:25:19 +0000
-Message-Id: <20260428212519.C861EC2BCAF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BKpyABXY"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 4CDAD4E42B64;
+	Tue, 28 Apr 2026 21:37:59 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id E94DD601D0;
+	Tue, 28 Apr 2026 21:37:58 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 049BC1072939F;
+	Tue, 28 Apr 2026 23:37:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1777412276; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=m2SIkG8G4dme99QjBJF700FHzCmI2Nw1YXi++Sm72C8=;
+	b=BKpyABXYUA3W1yBGbOawA4h4lg+xP/ujDg9fnM/GDmfVvQtFe4V86zv2jRnYLbIW85egeu
+	gzsW7by84jCsCEyDe38rcP0G9Lu0O5PyhiJVlX1VH0lqEiLpLLVqCPQ6zb2WFjm+11Eb5Y
+	n8RhoTuzI6NlP3mUu2V0iIjtY0wmrD64vrUUDjJFf8c9e/GfSIul/+IfTbDMPsSiDwMCw7
+	iSMV2XUHFoLSDmaAwdjiKsMThFnyCYBB9t0d5djhof0yNcYWt/373RotXiqc8RA8Tj6M7F
+	lFivzfSQqW2W19Ln1HG5awMplQ6C4gwNMrAWCyzv+PL9twiFGEXnUYVU/us/rQ==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 28 Apr 2026 23:37:43 +0200
+Message-Id: <DI5429HR7UGP.IJHX75ZB16AZ@bootlin.com>
+Subject: Re: [PATCH RFC bpf-next 2/8] bpf: mark instructions accessing
+ program stack
+Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
+ <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>,
+ <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>,
+ <linux-arm-kernel@lists.infradead.org>, <kasan-dev@googlegroups.com>,
+ <linux-mm@kvack.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>,
+ =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
+ <alexis.lothore@bootlin.com>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
+ <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, "David
+ Ahern" <dsahern@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>, "Ingo
+ Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
+ <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
+ <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime Coquelin"
+ <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
+ <alexandre.torgue@foss.st.com>, "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
+ "Alexander Potapenko" <glider@google.com>, "Andrey Konovalov"
+ <andreyknvl@gmail.com>, "Dmitry Vyukov" <dvyukov@google.com>, "Vincenzo
+ Frascino" <vincenzo.frascino@arm.com>, "Andrew Morton"
+ <akpm@linux-foundation.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
+ <20260413-kasan-v1-2-1a5831230821@bootlin.com>
+ <7dd64547-25a4-46de-a896-98fcec04468e@linux.dev>
+In-Reply-To: <7dd64547-25a4-46de-a896-98fcec04468e@linux.dev>
+X-Last-TLS-Session-Version: TLSv1.3
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The inlined `bpf_get_smp_processor_id` helper uses a sign-extending=
- load (`ldw`) instead of a zero-extending load (`ldwu`).
---
+On Sat Apr 25, 2026 at 1:18 AM CEST, Ihor Solodrai wrote:
+> On 4/13/26 11:28 AM, Alexis Lothor=C3=83=C2=A9 (eBPF Foundation) wrote:
+>> In order to prepare to emit KASAN checks in JITed programs, JIT
+>> compilers need to be aware about whether some load/store instructions
+>> are targeting the bpf program stack, as those should not be monitored
+>> (we already have guard pages for that, and it is difficult anyway to
+>> correctly monitor any kind of data passed on stack).
+>>=20
+>> To support this need, make the BPF verifier mark the instructions that
+>> access program stack:
+>> - add a setter that allows the verifier to mark instructions accessing
+>>   the program stack
+>> - add a getter that allows JIT compilers to check whether instructions
+>>   being JITed are accessing the stack
+>>=20
+>> Signed-off-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@boo=
+tlin.com>
+>> ---
+>>  include/linux/bpf.h          |  2 ++
+>>  include/linux/bpf_verifier.h |  2 ++
+>>  kernel/bpf/core.c            | 10 ++++++++++
+>>  kernel/bpf/verifier.c        |  7 +++++++
+>>  4 files changed, 21 insertions(+)
+>>=20
+>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>> index b4b703c90ca9..774a0395c498 100644
+>> --- a/include/linux/bpf.h
+>> +++ b/include/linux/bpf.h
+>> @@ -1543,6 +1543,8 @@ void bpf_jit_uncharge_modmem(u32 size);
+>>  bool bpf_prog_has_trampoline(const struct bpf_prog *prog);
+>>  bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, co=
+nst struct bpf_prog *prog,
+>>  				 int insn_idx);
+>> +bool bpf_insn_accesses_stack(const struct bpf_verifier_env *env,
+>> +			     const struct bpf_prog *prog, int insn_idx);
+>>  #else
+>>  static inline int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
+>>  					   struct bpf_trampoline *tr,
+>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+>> index b148f816f25b..ab99ed4c4227 100644
+>> --- a/include/linux/bpf_verifier.h
+>> +++ b/include/linux/bpf_verifier.h
+>> @@ -660,6 +660,8 @@ struct bpf_insn_aux_data {
+>>  	u16 const_reg_map_mask;
+>>  	u16 const_reg_subprog_mask;
+>>  	u32 const_reg_vals[10];
+>> +	/* instruction accesses stack */
+>> +	bool accesses_stack;
+>>  };
+>> =20
+>>  #define MAX_USED_MAPS 64 /* max number of maps accessed by one eBPF pro=
+gram */
+>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>> index 8b018ff48875..340abfdadbed 100644
+>> --- a/kernel/bpf/core.c
+>> +++ b/kernel/bpf/core.c
+>> @@ -1582,6 +1582,16 @@ bool bpf_insn_is_indirect_target(const struct bpf=
+_verifier_env *env, const struc
+>>  	insn_idx +=3D prog->aux->subprog_start;
+>>  	return env->insn_aux_data[insn_idx].indirect_target;
+>>  }
+>> +
+>> +bool bpf_insn_accesses_stack(const struct bpf_verifier_env *env,
+>> +			     const struct bpf_prog *prog, int insn_idx)
+>> +{
+>> +	if (!env)
+>> +		return false;
+>> +	insn_idx +=3D prog->aux->subprog_start;
+>> +	return env->insn_aux_data[insn_idx].accesses_stack;
+>> +}
+>> +
+>>  #endif /* CONFIG_BPF_JIT */
+>> =20
+>>  /* Base function for offset calculation. Needs to go into .text section=
+,
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 1e36b9e91277..7bce4fb4e540 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -3502,6 +3502,11 @@ static void mark_indirect_target(struct bpf_verif=
+ier_env *env, int idx)
+>>  	env->insn_aux_data[idx].indirect_target =3D true;
+>>  }
+>> =20
+>> +static void mark_insn_accesses_stack(struct bpf_verifier_env *env, int =
+idx)
+>> +{
+>> +	env->insn_aux_data[idx].accesses_stack =3D true;
+>> +}
+>> +
+>>  #define LR_FRAMENO_BITS	3
+>>  #define LR_SPI_BITS	6
+>>  #define LR_ENTRY_BITS	(LR_SPI_BITS + LR_FRAMENO_BITS + 1)
+>> @@ -6490,6 +6495,8 @@ static int check_mem_access(struct bpf_verifier_en=
+v *env, int insn_idx, u32 regn
+>>  		else
+>>  			err =3D check_stack_write(env, regno, off, size,
+>>  						value_regno, insn_idx);
+>> +
+>> +		mark_insn_accesses_stack(env, insn_idx);
+>
+> I am not sure this can be done unconditionally here.
+>
+> It may be possible in different states to have different pointer
+> types for the affected reg (PTR_TO_STACK in one execution path and say
+> PTR_TO_MAP_VALUE in another). And if set uncoditionally,
+> instrumentation may be skipped for legitimate targets.
+>
+> Maybe reset by default in check_mem_access()?
 
-commit 537ce2d4859db91089b968d6b560566858b53b6f
-Author: Tiezhu Yang <yangtiezhu@loongson.cn>
+Hmm, ok, thanks, I missed this subtlety. I still need to dig in there to
+make sure to really understand how the verifier handles those states,
+but if I understand correctly your point, I guess that just resetting
+the "accesses stack" flag at the entry of check_mem_access is not
+enough: it would make the final result depend on the order of the states
+being checked, eg:
+- first state being checked result in PTR_TO_MAP_VALUE, no flag set
+- second (and final) state being checked result in PTR_TO_STACK, flag is
+  now set
+- if no other state: insn ends up being (wrongly) marked to be ignored=20
 
-LoongArch: BPF: Inline bpf_get_smp_processor_id() helper
+So unless I am misunderstanding things here, the question rather becomes
+"for this specific insn, is there any state in which the accessed memory
+is anything else other than PTR_TO_STACK". The flag could just be
+inverted (ie set to true by default), and reset by any state resulting
+in something other than PTR_TO_STACK.
 
-This commit inlines the bpf_get_smp_processor_id() helper into a single
-load instruction on LoongArch. It accesses the thread_info which is always
-available in the thread pointer register.
-
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index b93b67d22c26..b1c6194c4099 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-
-[ ... ]
-
-> @@ -1154,6 +1155,12 @@ static int build_insn(const struct bpf_insn *insn,=
- struct jit_ctx *ctx, bool ext
->  			break;
->  		}
-> =20
-> +		/* Implement helper call to bpf_get_smp_processor_id() inline */
-> +		if (insn->src_reg =3D=3D 0 && insn->imm =3D=3D BPF_FUNC_get_smp_proces=
-sor_id) {
-> +			emit_insn(ctx, ldw, regmap[BPF_REG_0], LOONGARCH_GPR_TP, TI_CPU);
-
-Does this code need to use a zero-extending load (ldwu) instead of a
-sign-extending load (ldw)?
-
-The C implementation of bpf_get_smp_processor_id() returns a u64, meaning
-the 32-bit smp_processor_id() result is zero-extended to 64 bits.
-
-While CPU IDs are small positive integers so sign-extending and
-zero-extending produce the same result in practice, using the
-zero-extending ldwu would strictly match the BPF calling convention and
-original C helper semantics.
-
-> +			break;
-> +		}
-> +
->  		ret =3D bpf_jit_get_func_addr(ctx->prog, insn, extra_pass,
->  					    &func_addr, &func_addr_fixed);
->  		if (ret < 0)
-
+Alexis
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260428072021.7289=
--1-yangtiezhu@loongson.cn?part=3D3
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
