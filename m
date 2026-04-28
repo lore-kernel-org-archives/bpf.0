@@ -1,170 +1,211 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F1B633F589;
-	Tue, 28 Apr 2026 05:37:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E26DA34CFD0
+	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 07:05:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777354632; cv=none; b=kDgzKaoX7eCE+bwmzjdI78A5FV7aPHmY9sIdU0eUdTr00Q2rULBLSdKQNcexeTbKQ00yKFwdaQ+g6yEi1WvbLXaXY1KhZlNAOflhkU2+38CDb2ePcP1ZFOGxe8Sbp8tncRskIRYsjEcDBWWa/I9JP8Autwy2I6MES8GeecohOhQ=
+	t=1777359961; cv=none; b=Lp82i6y88qFmd+ao6iEVPjegkxokxSIZc5IgdV1IAuqh5DDNZpa1+EDxdGdd+n92Ser6yVTmkMPS23A5EIoIfzgQrAkLlNW0tixagAej6KE8EyxpQuwkC0ZchsAgTpJ4s47xBieszgJbWPMRiArD29x56UXL9ZS5xDf6pHRYaP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777354632; c=relaxed/simple;
-	bh=35j+qmt6iWL15WfQJe5Xfl8qePbfDGAdSt+9hvpfQxM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SiSzv4rIxflCaN54ujTxgBIBje0RdZbnHPjE2grD0a9FcfvqCTx6dltBu6VzDyWNE7GzfOqnEBvmPm84n6GbfiBlU2iU0TSz3GCYlXHER4BMeQKqJqP5rDo8HBURI7sS75ZRI/iAcY6KrHwx+VtyrUkvSjME41w60Xsu1vu9HBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ljwpku2y; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777359961; c=relaxed/simple;
+	bh=tACCu/RrLVvZC//dKCwwbhTR6SIl2MeUDsZQJWY4aCc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=neaFwtF5nY/LlvgrOF6b1alwDpPXIbENC+mEyal8H+gDjRXkNZ3JCgRclGxXHwUsjjSWbLrcmOkDuQcbyrnDGW9IPYMiJ1ooaXvoMNBzGBZyU8PnychusUFTXF+N4o7DqGqDlwz0KbP+1Up7p3upC4tYjZni4AaDxNiSnpUBDWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=snQhJN9q; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ljwpku2y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41145C2BCAF;
-	Tue, 28 Apr 2026 05:37:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777354631;
-	bh=35j+qmt6iWL15WfQJe5Xfl8qePbfDGAdSt+9hvpfQxM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Ljwpku2ytv1a51/lWJ0in9sBUOvx/MFmaVm2lPWSgv9iXQ5Y5hi97v5lXatAQMj+o
-	 M6v48RpZX+/yodaSIkctR7XFA621nSVRkUAHLndGlPCH/3+0raZFnmvzHx6QFrbUSW
-	 MY2nLUR0beFVJYiZhHeXViYGYrVhJqildv0ZoE5dhL7L/xaz7W4ZNKOYDsAGmVW63b
-	 OBYu3z+Z+i9ktOYlazQVUXbybAFNByZdkO1qb2CjKEvkk9cyFBQIJt9meREV7C2c4Q
-	 pi2MNJfmfmSD0V3v0rlTi2dKaJpC9vRYnsWEHGQFNmGUTXSaHRe4IbR4Mphemz8+Vq
-	 ZokFl+wxATNAA==
-Message-ID: <06d11ed8-8532-4748-8ce2-6715c4665dc5@kernel.org>
-Date: Tue, 28 Apr 2026 07:37:00 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="snQhJN9q"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-488b0046078so100057735e9.1
+        for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 00:05:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777359958; x=1777964758; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ghYH9B96BjOnUVsotLaVY0NUZVw8cYbfQ/KArJKrvpM=;
+        b=snQhJN9qa2uOoOMMuUpxTqcCPpxy4Tvyz6axATUz9N9pNf24FmSRk6Kftd4/zArydW
+         RTxlm0JY4cqZEKgnPznzGvys9UfKChngS0vA5OhVq1c/J+6VCcmdoKKm7WHyIMnkOXCn
+         0Fe7T2nEoILCkNC+mDeCfrFS6JFzgUeiiXsog7hc2q6sunT7DPmOELShjezpuAHlo6ix
+         s9m6mdjZgSqSQJOVXWJ3kQhkMPiYjX+GcP8qdx0Fi1usWKxWWB1DKNJ6sCkryUeaITyv
+         ZnmhBMTchyy3at54VbAkGB2tpugQRAziq6QI3FD+8s+r9SlqjD7NnnPAMzlpSRLTWH1p
+         zjtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777359958; x=1777964758;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ghYH9B96BjOnUVsotLaVY0NUZVw8cYbfQ/KArJKrvpM=;
+        b=rGB5+LfRIFGRkAMk8CMA32CRmeeGVLC19AGOEkEp8BKA3Nlavrwg7bx/bEDOTyWThI
+         8NMOdYBjQm5nRywHcY0Pwvth0M060/pZzvAWSWGu8oaRX16zQTW5LXbFCkPwnyYgj0So
+         zQ/3w8cOfwakj0sSozMFRE+2OgRxS90FoW4eUtVLbH7VcoJ+mshhgsHJiLoUw+s2yki0
+         R3mo9vmH062N7D7ZtVQDJp3W5IGOy5FWzkAxz70cpZcwklgmAQdwH+eC3knFehnuYGSU
+         3wA0GUGHj3z1A04Ws2Me8PX0fxm1wcse5lHsrc42uNEAuCHec67HcvZuTpe44detTwuC
+         gLog==
+X-Gm-Message-State: AOJu0YxFHyIjcy4URkaHxgk+4nq210fprNgVFrVmR2L6xpS0ZU9fb6PD
+	FkhD4jsm8guldMH514xJHxCLq+1aObeBWdH6mtVJESYZrmUa3prmyE88
+X-Gm-Gg: AeBDievzdsFMT6de4Z/MqZCGn56DK/vOxFKCwGWAGGXpS1ZqOiYtH6w44Du/6ecnIUk
+	fyNjja096N9PtAx2jgXcnwZMkgxSoh5qpquGUuhkMKXwsBqfq8Li97DQwfcOGCRSuI0cOTVvxA1
+	wYJ44bv53Lq77owLVMfwk1EPJln0VWReF/MeFuKa/GgtdzIYRmAF1IG7QzJUPdL7WK5BfW7Ep1/
+	5TZCF4KySMOaBcoh5wshV5xjtGVXAyA7hOqxw2aCWsMaH46hFsSIfHta0x/aJkFP0Rov/yEIsHG
+	GMf4LOE+hbaPZGAn/0SrNcBr2XPztrSpnprEtZJeLCMXYVzYa9hbEWGSRXHVA1ikqTWqeyxny1T
+	XI+SAJO3kbw//CzJ/zzlAand2fxeKSFlShvYDSjMMa3pckdKMCsMBJN8EO5PvgF2BwAgqxYLDxi
+	mc4dss9b1QC8lagcoInlwJDGkRvmbL9ECpk+OHqyNtNwmTJMQIOvfE55h94rQVSxWb2Mcl4FiEn
+	ZFo8pIBEPzqp3A29Q==
+X-Received: by 2002:a05:600c:8b8b:b0:48a:568f:ae8a with SMTP id 5b1f17b1804b1-48a77aed44bmr29091265e9.8.1777359958027;
+        Tue, 28 Apr 2026 00:05:58 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:1126:4:b8d:4d94:5e6c:7b79? ([2620:10d:c092:500::5:add7])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a775ebb83sm12333835e9.23.2026.04.28.00.05.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Apr 2026 00:05:56 -0700 (PDT)
+Message-ID: <4386cf7de9b7fa5a03191bf97d7f5fda1f39de34.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/9] bpf: Refactor object relationship
+ tracking and fix dynptr UAF bug
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
+ alexei.starovoitov@gmail.com, 	andrii@kernel.org, daniel@iogearbox.net,
+ memxor@gmail.com, martin.lau@kernel.org, 	mykyta.yatsenko5@gmail.com,
+ kernel-team@meta.com
+Date: Tue, 28 Apr 2026 00:05:55 -0700
+In-Reply-To: <CAMB2axPaDEG_oKLxhcRmivv+YK_ExxNVY_KpSf1vvgLiPq1tvg@mail.gmail.com>
+References: <20260421221016.2967924-1-ameryhung@gmail.com>
+	 <20260421221016.2967924-5-ameryhung@gmail.com>
+	 <02dbf08511c72ea0c1a5caa33ed400f4a3e3c3c9.camel@gmail.com>
+	 <CAMB2axPaDEG_oKLxhcRmivv+YK_ExxNVY_KpSf1vvgLiPq1tvg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] mm: remove page_mapped()
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker
- <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>,
- Jann Horn <jannh@google.com>, Matthew Wilcox <willy@infradead.org>,
- "Liam R. Howlett" <liam@infradead.org>, linux-sh@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
- linux-mm <linux-mm@kvack.org>, Ryan Roberts <Ryan.Roberts@arm.com>
-References: <20260427-page_mapped-v1-0-e89c3592c74c@kernel.org>
- <97192ac3-643d-4393-87ef-53a9f3ddaf95@kernel.org>
- <CAADnVQ+t549-aWEXq=ZUN79H-M=std3-Q8w3fU+dyNhF7mNjyA@mail.gmail.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <CAADnVQ+t549-aWEXq=ZUN79H-M=std3-Q8w3fU+dyNhF7mNjyA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On 4/27/26 23:38, Alexei Starovoitov wrote:
-> On Mon, Apr 27, 2026 at 9:59 PM David Hildenbrand (Arm)
-> <david@kernel.org> wrote:
->>
->> On 4/27/26 13:43, David Hildenbrand (Arm) wrote:
->>> While preparing my slides for an LSF/MM talk, I realized that I did not
->>> yet remove page_mapped().
->>>
->>> So let's do that. In the BPF arena code it's unclear which memdesc we
->>> would want to allocate in the future: certainly something with a
->>> refcount, but likely none with a mapcount. So let's just rely on
->>> the page refcount instead to decide whether we want to try zapping the
->>> page from user page tables.
->>>
->>> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
->>> ---
->>
->> I scanned AI review and I think it founds something that is not related to this
->> patch.
->>
->> We use the page_mapped()->page_ref_count() check as an optimization to avoid
->> calling zap_vma_range(). We must be able to call it even without that optimization.
->>
->> Just like the bulk zap call earlier
->>
->>         if (page_cnt > 1)
->>                 /* bulk zap if multiple pages being freed */
->>                 zap_pages(arena, full_uaddr, page_cnt);
->>
->> It talks about concurrent "munmap(), unmap_region() executes unmap_vmas()"
->> racing with our zap_vma_range().
->>
->> Looking into the details, arena_map_mmap() calls remember_vma(). We reject
->> mremap and VMA split. arena_vm_close() removes the VMA from the list. The
->> arena->lock protects our VMA list.
->>
->> So in zap_pages, the VMA cannot go away. If we find a VMA, ->close could not
->> have been called yet.
->>
->> In vma.c, we call remove_vma() after vms_clear_pte(). So after unmapping the
->> pages and freeing the page tables.
->>
->> So munmap() can indeed race with zap_vma_range(), and the page_mapped() check
->> would not have changed anything about that really.
->>
->>
->> @BPF folks: does BPF take anywhere the mmap lock in read mode before calling
->> zap_vma_range()? It should do that.
-> 
-> Yes, but do NOT.
+On Mon, 2026-04-27 at 13:21 -0700, Amery Hung wrote:
+> On Fri, Apr 24, 2026 at 3:48=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.c=
+om> wrote:
+> >=20
+> > On Tue, 2026-04-21 at 15:10 -0700, Amery Hung wrote:
+> >=20
+> > Tbh, I find current state of affairs with id/ref_obj_id/parent_id hard
+> > to follow. The release_reference() is an improvement, but the means by
+> > which the fields are propagated to bpf_reg_state objects are convoluted=
+.
+> > I wonder if having a separate "object table" in bpf_verifier_state and
+> > having bpf_reg_state->id refer to objects within this table would make
+> > things more straight forward.
+>=20
+> I think this is a good idea in the long term. First, we need to make
+> id a stable and unique object identifier (i.e., always assign id to
+> objects; different objects have different ids). Then, we can create
+> the object table indexed by id and each entry contains the ref_obj_id
+> and parent_id moved from bpf_reg_state. Then, there will be helpers
+> managing the lifetime, relationship (e.g., bpf_obj_create,
+> bpf_obj_release, bpf_obj_clone) with clear semantics to centralize how
+> id,parent_id,ref_obj_id are manipulated.
+>=20
+> If this makes sense, I can send this as a follow up patchset.
 
-In general, do NOT talk to me like that.
+I'd play with it a bit, might make sense if we move a lot of objects
+into this table. E.g. forgo find_good_pkt_pointers() and keep packet
+info as one of the objects, etc.  On the other hand, dynptr and iters
+are inherently stack allocated objects, so it might be the case that
+the final implementation would be an over-complication.
 
+[...]
 
-As I discussed recently with Ryan, we should update the locking requirements for
-zap_vma_range().
+> > >  static int mark_stack_slots_dynptr(struct bpf_verifier_env *env, str=
+uct bpf_reg_state *reg,
+> > > -                                enum bpf_arg_type arg_type, int insn=
+_idx, int clone_ref_obj_id)
+> > > +                                enum bpf_arg_type arg_type, int insn=
+_idx, int parent_id,
+> > > +                                struct bpf_dynptr_desc *dynptr)
+> >=20
+> > Having both parent_id and dynptr->parent_id as parameters of this
+> > function is very confusing, but I don't have a suggestion on how to
+> > better deal with it.
+>=20
+> Does tweaking the argument name and reorder the if-else block make it
+> more obvious how these two arguments are used?
 
-I assume friendly BPF folks will take care of fixing this.
+Idk, let's go with your original code, maybe?  The eventual goal is to
+have a unified handling for both helpers and kfuncs, right?
+Meaning that these would be packed into some common arg_info_meta,
+with some comments on the structure fields should look ok.
 
--- 
-Cheers,
+[...]
 
-David
+> > > +/* Release id and objects referencing the id iteratively in a DFS ma=
+nner */
+> > > +static int release_reference(struct bpf_verifier_env *env, int id)
+> > > +{
+> > > +     u32 mask =3D (1 << STACK_SPILL) | (1 << STACK_DYNPTR);
+> > >       struct bpf_verifier_state *vstate =3D env->cur_state;
+> > > +     struct bpf_idmap *idstack =3D &env->idmap_scratch;
+> > > +     struct bpf_stack_state *stack;
+> > >       struct bpf_func_state *state;
+> > >       struct bpf_reg_state *reg;
+> > > -     int err;
+> > > +     int root_id =3D id, err;
+> > >=20
+> > > -     err =3D release_reference_nomark(vstate, ref_obj_id);
+> > > -     if (err)
+> > > -             return err;
+> > > +     idstack->cnt =3D 0;
+> > > +     idstack_push(idstack, id);
+> > >=20
+> > > -     bpf_for_each_reg_in_vstate(vstate, state, reg, ({
+> > > -             if (reg->ref_obj_id =3D=3D ref_obj_id)
+> > > -                     mark_reg_invalid(env, reg);
+> > > -     }));
+> > > +     if (find_reference_state(vstate, id))
+> > > +             WARN_ON_ONCE(release_reference_nomark(vstate, id));
+> > > +
+> > > +     while ((id =3D idstack_pop(idstack))) {
+> > > +             bpf_for_each_reg_in_vstate_mask(vstate, state, reg, sta=
+ck, mask, ({
+> > > +                     if (reg->id !=3D id && reg->parent_id !=3D id &=
+& reg->ref_obj_id !=3D id)
+> > > +                             continue;
+> > > +
+> > > +                     if (reg->ref_obj_id && id !=3D root_id) {
+> > > +                             struct bpf_reference_state *ref_state;
+> > > +
+> > > +                             ref_state =3D find_reference_state(env-=
+>cur_state, reg->ref_obj_id);
+> > > +                             verbose(env, "Unreleased reference id=
+=3D%d alloc_insn=3D%d when releasing id=3D%d\n",
+> > > +                                     ref_state->id, ref_state->insn_=
+idx, root_id);
+> > > +                             return -EINVAL;
+> > > +                     }
+> > > +
+> > > +                     if (reg->id !=3D id) {
+> > > +                             err =3D idstack_push(idstack, reg->id);
+> > > +                             if (err)
+> > > +                                     return err;
+> > > +                     }
+> > > +
+> > > +                     if (!stack || stack->slot_type[BPF_REG_SIZE - 1=
+] =3D=3D STACK_SPILL)
+> > > +                             mark_reg_invalid(env, reg);
+> > > +                     else if (stack->slot_type[BPF_REG_SIZE - 1] =3D=
+=3D STACK_DYNPTR)
+> > > +                             invalidate_dynptr(env, state, stack);
+> >=20
+> > invalidate_dynptr() rewrites to stack slots, can it be the case that
+> > this body of bpf_for_each_reg_in_vstate_mask() is computed for first
+> > and second dynptr stack slots, hence triggering invalidate_dynptr() to
+> > rewrite three slots instead of two?
+>=20
+> invalidate_dynptr() will mark the two stack slots as STACK_INVALID so
+> I didn't bother to check whether it is the first slot or not. Am I
+> missing anything?
+
+Oh, right, the =3D=3D STACK_DYNPTR won't fire for the second slot.
+Sorry for the noise.
+
+[...]
