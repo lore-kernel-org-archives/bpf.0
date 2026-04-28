@@ -1,64 +1,64 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5DE3C3420
-	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 20:14:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C613C3420
+	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 20:14:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777407279; cv=none; b=qdafFw8L3/HXEu77XlZIfpOSBaDtgRulSPmDgGZHSEtpG788cdV/t3gdOXox3iBoYwcdfv08IYlpKEEl/ze+EaLzrndeOCxV66p+A4qBuI4QPxoVDQadOFkxfnpF35QyQ8PoTj7FOmN737sa9Ie0eLcSsFvy8no6l0MHLo8xp5M=
+	t=1777407283; cv=none; b=jC3Mfl9TxCpLCtQIjjm3viryiOFrsYzaNySGmr3vcD2fmmjExcn/4ZXgIKTcZSUvBMJmgfRctVQHTqN1Ia+hPFfDVnPMvNhBzZvDAd+a04f1vpEHh8KoIaYrxT09jjK7ws5vx0JOynKtWOfc1k0FnwAAg3MbBm+x3xhoPUhBFaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777407279; c=relaxed/simple;
-	bh=BErp0d1U5+aEsynElziAxBshyx8aO6tR8ZO7B0oRntI=;
+	s=arc-20240116; t=1777407283; c=relaxed/simple;
+	bh=1q4TLVmoLeT69MEbQPGYWdeD/g7Q7os3928cIaxHyo0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HfPMYHNJMemU/BVVOC/IAE28ssEEaXeBwC1t3uY1mczKEjGxg4qqQ9L3KZ+4283McTbXKdW3jdCX2wxWoO2OCQns4tZHn98Oj94iSXn3kqZBe8z7wfFalhL51bZN5iy+voPUmSG+yEmJSRQe4osOg+ccy28zfbNJSIgrabIChao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ngJKw7ed; arc=none smtp.client-ip=209.85.128.172
+	 MIME-Version; b=S4HHnN5wH61Jx81XQXthkvP4aZh2dWgA4Z7w4PgqZR8WdvrdFJ0O+WIzy9aroOrH5TIeoOD3LEvPE5tah7Kh5MEYSGYb0p6dHEQRKjprMVxZIcAgDYBFy5ISFRQe3ys5F73PRXAW5Vp7KtEf9FNmx7D4S9jSuH0X2jN+hZfgQ50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ApckJlWx; arc=none smtp.client-ip=209.85.128.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ngJKw7ed"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-7baee75f874so102306517b3.2
-        for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 13:14:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ApckJlWx"
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-7b4ee3a88e1so126813747b3.1
+        for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 13:14:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777407277; x=1778012077; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777407281; x=1778012081; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mxGpxJeTifp2DHb1htw3WR22i3J2taOg3LY7h1xl2kk=;
-        b=ngJKw7edwXy13ciAqO5cygnWrQbFPlxGEcXqQgD1YQduBNTohnAN38mWtHm/n4Rhrk
-         YgeEfYPgZP6FnYz9YD3CIVDrmpjDKKtCCgKBNVRpCyXwxpsyrlWLH4ARuMzXOOmLeXEV
-         Z+D6qBQ05LWa9Z2hQqcw2AA8Cy07+w7WVEMXvOCD877DPSBcfIBg+jomIHSJkqGENNqj
-         DBKoZtk/aB9Ad90d2apaHzJ+YIC9qtS5Tdw/3d1mDsay8tXg8sjjl6x+ZKgVl3JhUedz
-         m5EjdewANCPUC0Q66IPRhxhv+y584tlSKPsZeX0OLKIkhgAZyMW+1e7nT/BcetwHwcHx
-         68pw==
+        bh=cFwcnYAiHk5PGcTmT4nIhQaro9qZE/uyGnCLgPRNDPE=;
+        b=ApckJlWxu1wGczIwd7zC9+oOPvHLUIZjtyXFR/C4ZMPH8bNjb8JzzuGXG6gWizQyKP
+         nSOJUZCX1klcw/yADVKclQboyukPn/gnqc6ozbmY4TkDKZCj5cpPUcvsRjixitFz90GV
+         96+C7GTX8OIf7Dos5zu33tbXbLLg4xkvc1TqQ/JPBQn5GoDNskVAaN1CeJ1I78XEAGhC
+         9EVGDSFMTxHEuupySlri2JzYb/NLTVN9ZGe7n17yx+ssZRy3lo7r/zPR3EuN+pwFo6Js
+         W6kEfYqh3BZFNZ41t15SDp8/HFSRJiqd2xIPXpnbk4vVFZ86ry/ys09AV+DEzoXwWoZT
+         8JVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777407277; x=1778012077;
+        d=1e100.net; s=20251104; t=1777407281; x=1778012081;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=mxGpxJeTifp2DHb1htw3WR22i3J2taOg3LY7h1xl2kk=;
-        b=PByTFsmvej33WzczGx8GAQ0C1HWNbbitygGX5gseRWldWnaMVZ2etZwF7x9grpqDvF
-         kF6iVxKsPMtzdjbNGoHXpHmdn8lx0hLkDTXz5oNn32U+4xIo9Zl7pKnvTJIzZotJ+7t8
-         n2GzNhAU2KRggIpuw403YTrrDr9ReMiPxK0uWr2PeRCV7i38PPatx/i7jQQCNrncq983
-         /O7TamPLeGm022kMjP2YjUIJVsmK1dgIDzBRhjiQJNGsHAykD52bYogKprFMlJaGunky
-         5qHgAxBJ6LwXOx66ipDft0L6xSvGvTnILcUoZpyHF7U1ssEe4YNR4yrwBhZLmLEdqJN0
-         7KSA==
-X-Forwarded-Encrypted: i=1; AFNElJ/RhLw1xy9pE4s4eeZ8yhawhOc7xfWteyVeLMfusVvn5pzwrXc6vEeYVC3DIDKIPVJgGno=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzu+4digQ0XM3cA46hpvHkGPnzY1gY7QKpoOdvqfRzzkM8c8s7p
-	0KkxMU0p9RbQlh5nSp3p63yd7WYm2f8KFH5MVQM8AYq1OI6PAITRb/LI
-X-Gm-Gg: AeBDieu4R30dWvcqowGj7yM6AXWuzmcevhqlD03omhfCGmJx/t5jvnbydyAsqfYi5j5
-	OPhZkK2F+cdsEHCuDGcIbuL280m85bbyp8fY5LGJz2qgzpcK1XPojyeO5v4bZYBmZDMHR9MbMOg
-	sBPao7eXYQVkNuJrjkCYCk5/xHekH2XOq0kIrsscWve8rF1Kwt97PbqmMmyHsrfKCCu9lCgdetu
-	4WEgyvBUQ7X2KyKP6BXja27+GAWbd9gC9C/c6Q1lzfxTrZxP+LvMmvbY08lCIkGDMnTfL5vhh8q
-	O1wnFD1dlabC6BPfE1ztqndH28gSUNzh2t9Y6QoaFZx/fowj+B5oohSjE2JgyVjNes9xZmFFBq6
-	32LS2g3+TxypyQGKA2hWKhFqlA6+FS1uiyPQf/UrVxWJ88inKY50DXvqllRxgEry5RKqI0Zje5f
-	fgnfWIXMqVGWdaNHmnxjeBaVI0s1j/B9SBQeW7YRjd/Jcz8FzHRUxGEZ05wIIM1ONXSosVFzsD0
-	hQF5vcisrM=
-X-Received: by 2002:a05:690c:e3cb:b0:7ba:f6b4:358b with SMTP id 00721157ae682-7bd1dac9a1cmr12156067b3.43.1777407277081;
-        Tue, 28 Apr 2026 13:14:37 -0700 (PDT)
+        bh=cFwcnYAiHk5PGcTmT4nIhQaro9qZE/uyGnCLgPRNDPE=;
+        b=PxWQvkfw3jL/+BUHPGM8VpXrfRkzdIHZ4g5jPsxpVMXR/JM9VBtsa6FgT9WYngXCkb
+         I7tWGzmeduqVah7MUaoowby+g37+feZaSP49Qgx1Njp/lVGf9fG8QnlDfFV9N9lubZqq
+         5Fr7xA2aFrrUyF/CiZRs3DFb0Ol4hw5qSToXRyw4gSwDW7M95Ik3DwFstDqzfsgI3Tgf
+         lXIcXaUPDPhKAstDRLp44ZLt9gdHJsnJnJGxFX0sT03d2eblrrNcldxhSbLrdbfa5UEl
+         njCuYopLGQYwDr0MAJB1C3JZGHvZBJpxsG651zbTxrS6z+TysbPv2HSc2vqqkBboggST
+         uONQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8O4N8v346Vsl1Y8wmKz46wRubKx0bmma9gyTlob56151jhxtANIJn+OB3mjsqmZGtc7fM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyz/47AiNTj2h1Da/rknow5hdVt5BeiGfQ1Ik7Q7sdxAWBK1Ten
+	5nFmnpTu35Thjo5rrir5b61vC+b7M0HgxwH3jXKTJdDZBpwVQBkrhkdT
+X-Gm-Gg: AeBDieuiOY8A6QfWqW/AqvyqBPvlk4z+cqbdzbozADFvbVDwMVUHj7UHhtH32pT2xCB
+	bYlzrUl0XOfd1ZZBYD5iWNR0fvVWwOFqk9lm6RfZ6WC0PyV0qJ4C9kY2+ZD830MDgOwhsfZpcBx
+	kAiUOtK5nQjEeB3L9yszeNj20HZw7QYJUtv7W5aZGYrXiotudKyR0v8ZLMj2EarD3hzly/KcO9T
+	fwVIz12FrZKj147venDbsDU58uKWIoJHZDY2kJ6T/DOuak5w6faMPxOcmEfR0I8TmocKadUFH4Z
+	EwJZhXfsk8DFLFpBWN9tnQit7XtCsV9vY+akbfOEa+CxjUYRk1o57XoYqox9RLTHrfHH0lRqDhF
+	rXK9rJLWojGPTVpZ5RHztHKHcuc86+4M8WB+dTS80kSrCK/L1DIkAq7Mg59t+4dAN4xnLeB4I5u
+	reoF7u8qL+8d0/6zg3V614QV5Zp2VkJuqCDk9MN2jvl4EUhAkwDuaMBPdhpR0u2QVns9msO3dto
+	9/wF2I4Rb86FU4twCqaHA==
+X-Received: by 2002:a05:690c:81:b0:7b2:2382:e309 with SMTP id 00721157ae682-7bd1d988e3dmr12395177b3.33.1777407281015;
+        Tue, 28 Apr 2026 13:14:41 -0700 (PDT)
 Received: from zenbox.prizrak.me ([2600:1700:18fb:6011:4c60:c627:eabb:73c3])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd25af5385sm1392077b3.48.2026.04.28.13.14.36
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd25af5385sm1392077b3.48.2026.04.28.13.14.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2026 13:14:36 -0700 (PDT)
+        Tue, 28 Apr 2026 13:14:40 -0700 (PDT)
 From: Justin Suess <utilityemal77@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -71,9 +71,9 @@ Cc: martin.lau@linux.dev,
 	jolsa@kernel.org,
 	bpf@vger.kernel.org,
 	Justin Suess <utilityemal77@gmail.com>
-Subject: [PATCH bpf-next 1/4] bpf: Limit fields used in btf_record_equal comparisons
-Date: Tue, 28 Apr 2026 16:14:19 -0400
-Message-ID: <20260428201422.1518903-2-utilityemal77@gmail.com>
+Subject: [PATCH bpf-next 2/4] bpf: Use rcu_work in BTF teardown
+Date: Tue, 28 Apr 2026 16:14:20 -0400
+Message-ID: <20260428201422.1518903-3-utilityemal77@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260428201422.1518903-1-utilityemal77@gmail.com>
 References: <20260428201422.1518903-1-utilityemal77@gmail.com>
@@ -85,76 +85,101 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Compare the fixed btf_record header and each btf_field explicitly
-instead of memcmp'ing the whole allocation at once.
+Queue final BTF teardown from the RCU callback onto a rcu_work, making
+sure all rcu grace periods cease before proceeding with free work.
 
-This is necessary for the follow-on patches which extend record contents
-with data outside fields but part of the record that can't be compared
-meaningfully.
+Necessary for follow on patches that need to sync an irq_work but aren't
+safe in rcu context.
 
-The comment is updated to reflect individual field comparison, and
-retain useful information about zeroing behavior, while referencing
-auxiliary data attached to records as a reason for the individual field
-comparison.
-
-The reference to auxiliary data attached to the record will be relevant
-with the next patches.
+Work queue is per-btf object. Work is flushed during synchronous teardown.
 
 Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 ---
- kernel/bpf/syscall.c | 24 +++++++++++++++++++-----
- 1 file changed, 19 insertions(+), 5 deletions(-)
+ kernel/bpf/btf.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 3b1f0ba02f61..2caafce00f24 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -760,7 +760,8 @@ struct btf_record *btf_record_dup(const struct btf_record *rec)
- bool btf_record_equal(const struct btf_record *rec_a, const struct btf_record *rec_b)
- {
- 	bool a_has_fields = !IS_ERR_OR_NULL(rec_a), b_has_fields = !IS_ERR_OR_NULL(rec_b);
--	int size;
-+	size_t size;
-+	int i;
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 77af44d8a3ad..2b0511663319 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -28,6 +28,7 @@
+ #include <linux/string.h>
+ #include <linux/sysfs.h>
+ #include <linux/overflow.h>
++#include <linux/workqueue.h>
  
- 	if (!a_has_fields && !b_has_fields)
- 		return true;
-@@ -768,7 +769,6 @@ bool btf_record_equal(const struct btf_record *rec_a, const struct btf_record *r
- 		return false;
- 	if (rec_a->cnt != rec_b->cnt)
- 		return false;
--	size = struct_size(rec_a, fields, rec_a->cnt);
- 	/* btf_parse_fields uses kzalloc to allocate a btf_record, so unused
- 	 * members are zeroed out. So memcmp is safe to do without worrying
- 	 * about padding/unused fields.
-@@ -780,10 +780,24 @@ bool btf_record_equal(const struct btf_record *rec_a, const struct btf_record *r
- 	 *
- 	 * So while by default, we don't rely on the map BTF (which the records
- 	 * were parsed from) matching for both records, which is not backwards
--	 * compatible, in case list_head is part of it, we implicitly rely on
--	 * that by way of depending on memcmp succeeding for it.
-+	 * compatible; in case list_head is part of a record, we implicitly
-+	 * rely on that by way of depending on memcmp succeeding for each
-+	 * individual field.
-+	 *
-+	 * Comparing the whole record may be incorrect due to auxiliary data
-+	 * attached to the record.
- 	 */
--	return !memcmp(rec_a, rec_b, size);
-+	size = offsetof(struct btf_record, fields);
-+	if (memcmp(rec_a, rec_b, size))
-+		return false;
-+
-+	for (i = 0; i < rec_a->cnt; i++) {
-+		if (memcmp(&rec_a->fields[i], &rec_b->fields[i],
-+			   sizeof(rec_a->fields[i])))
-+			return false;
-+	}
-+
-+	return true;
+ #include <net/netfilter/nf_bpf_link.h>
+ 
+@@ -264,13 +265,13 @@ struct btf {
+ 	u32 data_size;
+ 	refcount_t refcnt;
+ 	u32 id;
+-	struct rcu_head rcu;
++	/* Final free runs after an RCU grace period in process context. */
++	struct rcu_work free_work;
+ 	struct btf_kfunc_set_tab *kfunc_set_tab;
+ 	struct btf_id_dtor_kfunc_tab *dtor_kfunc_tab;
+ 	struct btf_struct_metas *struct_meta_tab;
+ 	struct btf_struct_ops_tab *struct_ops_tab;
+ 	struct btf_layout *layout;
+-
+ 	/* split BTF support */
+ 	struct btf *base_btf;
+ 	u32 start_id; /* first type ID in this BTF (0 for base BTF) */
+@@ -1880,9 +1881,10 @@ static void btf_free(struct btf *btf)
+ 	kfree(btf);
  }
  
- void bpf_obj_free_timer(const struct btf_record *rec, void *obj)
+-static void btf_free_rcu(struct rcu_head *rcu)
++static void btf_free_work(struct work_struct *work)
+ {
+-	struct btf *btf = container_of(rcu, struct btf, rcu);
++	struct rcu_work *rwork = to_rcu_work(work);
++	struct btf *btf = container_of(rwork, struct btf, free_work);
+ 
+ 	btf_free(btf);
+ }
+@@ -1901,7 +1903,7 @@ void btf_put(struct btf *btf)
+ {
+ 	if (btf && refcount_dec_and_test(&btf->refcnt)) {
+ 		btf_free_id(btf);
+-		call_rcu(&btf->rcu, btf_free_rcu);
++		queue_rcu_work(system_wq, &btf->free_work);
+ 	}
+ }
+ 
+@@ -6013,6 +6015,7 @@ static struct btf *btf_parse(const union bpf_attr *attr, bpfptr_t uattr, u32 uat
+ 		goto errout_free;
+ 
+ 	btf_verifier_env_free(env);
++	INIT_RCU_WORK(&btf->free_work, btf_free_work);
+ 	refcount_set(&btf->refcnt, 1);
+ 	return btf;
+ 
+@@ -6400,6 +6403,7 @@ static struct btf *btf_parse_base(struct btf_verifier_env *env, const char *name
+ 		goto errout;
+ 
+ 	btf_check_sorted(btf);
++	INIT_RCU_WORK(&btf->free_work, btf_free_work);
+ 	refcount_set(&btf->refcnt, 1);
+ 
+ 	return btf;
+@@ -6535,6 +6539,7 @@ static struct btf *btf_parse_module(const char *module_name, const void *data,
+ 
+ 	btf_verifier_env_free(env);
+ 	btf_check_sorted(btf);
++	INIT_RCU_WORK(&btf->free_work, btf_free_work);
+ 	refcount_set(&btf->refcnt, 1);
+ 	return btf;
+ 
+@@ -8446,6 +8451,7 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
+ 				sysfs_remove_bin_file(btf_kobj, btf_mod->sysfs_attr);
+ 			purge_cand_cache(btf_mod->btf);
+ 			btf_put(btf_mod->btf);
++			flush_rcu_work(&btf_mod->btf->free_work);
+ 			kfree(btf_mod->sysfs_attr);
+ 			kfree(btf_mod);
+ 			break;
 -- 
 2.53.0
 
