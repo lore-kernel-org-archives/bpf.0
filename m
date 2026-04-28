@@ -1,173 +1,97 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C48C738550B;
-	Tue, 28 Apr 2026 15:30:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E49531D75E
+	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 16:08:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777390211; cv=none; b=h6dtwBA//2ZA3xvXjqnXQguS4PeQnewhHonkkF5tj3E515fCExZYugxq0+3RO0pQhKA7Z+SM2DGXLx1IcCvc+W1s67eZn1x7Zz2lMDHRAnTFxZv77X4dX/thSniDyJkI7yNL/zE14QzWV1wGU/Yios9T/LJrTBLNT4fXqKkRbYA=
+	t=1777392487; cv=none; b=lsWoRCzgbUv2NAbtBVRyKeUzRWvDmuAqVsuNi12TBJ9vylBcdX3xkkxowDdwjmKkjswSukDoWP/aCmeG+c7/ySqrDKym6AT3QGlgsWvKDEcCdH8rmU/if8O6myszPTqHluunU8xdhVq/R0WGxANrmjslKiu54ZgH9FMbBc9ByWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777390211; c=relaxed/simple;
-	bh=muM6M8nKIHut7+xSa6h9L/Si3vdZRbFddH2GuYKYsTM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EUDYh+uMkWEevYl4K+jRKy/5yttPZ4R/CZEeGCjMlUPauuC5EhiS2rv5Y0hh+Sc7MsTW3RH2PZPVLmSH+7Q7fYFVyDo7QCQtB8jYc357k9w8LTnKRRSTpPi8BwZFaO/yR4VpMkWSqNYFphvazDjJz1czlM2IHRpS5KIwe/SffPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PsdWffEK; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1777392487; c=relaxed/simple;
+	bh=DOvjwCqRSTMuph9VfUSOH3Bnxl1XAy9dSaasLTePhRU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YzgWWL+IECsi0QMTw+cRg2mRG+G9MYBH3ure0kgV5S93yJW9MU9VLaxRXzf90ZXuYNspZXGZcrC58Zfg7kCehv6klnLgfUcNJngmHI90NHjQvru1CsK9X5ZyncbKraunZnC/V91KADFLbZOYRlNEp5El13jiH4a7Hbjjp9f+IBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=qPSztoZg; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PsdWffEK"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63S6bkhe2999657;
-	Tue, 28 Apr 2026 15:29:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=YwP493
-	ILC63v3+UTyJCc1eyOdyX+yQa9BtJobhiIseo=; b=PsdWffEK1/ENih1fDvZINM
-	yXmTufIwIZ1g32nDNONaa2cF1DcBuvIwuv5IXeBIUQ1g8xM0oBwC3sEM9CeqIxl4
-	NfZubhzYoVxvA6WyZbRXsyKM/z3Lww/ZdaGN9nriInLbSi9//3w03AbZAYTIzuk+
-	+rSFHBPhFIjKLiUmmYb/WprKiF032NMfVTVHj9jhMu9v8tJ9CK5XvdAuE8r53U/4
-	LfXc1AWajPOXdwj/dTruXO09KLBmcmITV2sa6+pFZTNRiWGC3iAvbcDaFwxDCxKM
-	0cNBeLwy6NQR8Hs9UpBcF+t5TY2Nwb1UHQg4JcxtxGg/a6AdHpFSV1l4OFfb+rrQ
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4drnb568nu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 Apr 2026 15:29:49 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 63SFNo3i003786;
-	Tue, 28 Apr 2026 15:29:48 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4ds8xk2aa7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 Apr 2026 15:29:48 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63SFTiwr34996666
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 28 Apr 2026 15:29:44 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8760A2004B;
-	Tue, 28 Apr 2026 15:29:44 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3531C20049;
-	Tue, 28 Apr 2026 15:29:41 +0000 (GMT)
-Received: from [9.39.16.179] (unknown [9.39.16.179])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 28 Apr 2026 15:29:40 +0000 (GMT)
-Message-ID: <7d3bbb94-575f-4119-9ef0-62cff98795ce@linux.ibm.com>
-Date: Tue, 28 Apr 2026 20:59:39 +0530
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="qPSztoZg"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 1012BC5EF13;
+	Tue, 28 Apr 2026 16:08:47 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 4CA35601D0;
+	Tue, 28 Apr 2026 16:08:03 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9ED3E10728E5D;
+	Tue, 28 Apr 2026 18:07:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1777392481; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=R7YnNrHkXr0z6CcnblvtQUE03jaxaAjhHUqCoIZWK3k=;
+	b=qPSztoZgXx+kxLNzJum1hgHv4NAJeJDfINkViE9otpRTWo1Tif78POYWdHN2F/Bdfhfrzm
+	1ntwbF2ByJFgJmMVOSpK+czfI/tBWKMWfLQQzsy1OOYWSOAeBim5wKn1itEZ6A6pZSlMAw
+	0qGzC47poRHNgQr/8zCUGsyO2UiuEHgt3ZANU8gru1lBWXvi3Y7BFJ0ZRYX5Sao8QnnJSC
+	nYqi7zKWGJK87MVruHV/yncpE/W5C6dQzAv9wHnT8irsBW6UpZwbvvkvmd8zM8tekHjfxZ
+	OPmd39vhByGsk27HRvI3iFrkfgj/BHqOi0x/hkagWLqlx8QRqr/IKDV4o8O49g==
+Date: Tue, 28 Apr 2026 18:07:52 +0200
+From: Herve Codina <herve.codina@bootlin.com>
+To: Daniel Machon <daniel.machon@microchip.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
+ <horatiu.vultur@microchip.com>, Steen Hegelund
+ <steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ "Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
+ <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Arnd
+ Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mohsin Bashir <mohsin.bashr@gmail.com>, <netdev@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next v2 00/13] net: lan966x: add support for PCIe
+ FDMA
+Message-ID: <20260428180752.4e68fea8@bootlin.com>
+In-Reply-To: <20260428-lan966x-pci-fdma-v2-0-d3ec66e06202@microchip.com>
+References: <20260428-lan966x-pci-fdma-v2-0-d3ec66e06202@microchip.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/5] powerpc/bpf: fix alignment of long branch
- trampoline address
-To: adubey@linux.ibm.com, bpf@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com, ast@kernel.org,
-        andrii@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-References: <20260411221413.44304-1-adubey@linux.ibm.com>
- <20260411221413.44304-2-adubey@linux.ibm.com>
-Content-Language: en-US
-From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <20260411221413.44304-2-adubey@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=AqDeGu9P c=1 sm=1 tr=0 ts=69f0d26d cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8
- a=VwQbUJbxAAAA:8 a=atBhxT8-om9CWOQYYk4A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDI4MDE0NSBTYWx0ZWRfX6u62VQKvlfki
- LSaFxCoPf2J8cLw+nHlZFUbhVJaq8DqhSKIv/sQouhuHaBomuEvBfYz8471q1qU7EnzCDne6YS2
- 1NB1mbKMWUzaqo9HQvwfxNc/VbzEvN60xHP6EyfRV/NO+ZSoUWxU2FazOh4mn1DCzk8YkWQJ18C
- 5sPyAR4xqOTOsQUbKxb2EtRWRlpchoNfnW5Bmm+YyYf9XcsZ/OmSlWOY70l8PIcXwtb+B6ypxIl
- vpgjlIAKj4vxxgXYkLe/Dmz3JsjqoLtW65sBQ19HMMHI8U70MUJOo+SXdO67GEA4a17ieHAqZjX
- g8H3LJ3cwizp9wH0udoBX/Jakb9kWrvF/pu57mcJol/Wfiqf4BwVU3PJFbj5MhKOW5ZzLQYlagz
- GQn9nZfpH3U08yAJIq8ndVMd7fgAXmWLDFXSVV7pH/qwEryW0HjkGKZypgLRlSQKqtipJP/OlAh
- cCcs0qizQnBy66hXZqQ==
-X-Proofpoint-GUID: eAdXJj8nsRIqvr-NYA3wcRltfAJUWR6v
-X-Proofpoint-ORIG-GUID: eAdXJj8nsRIqvr-NYA3wcRltfAJUWR6v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-28_04,2026-04-28_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 phishscore=0 suspectscore=0 clxscore=1015
- lowpriorityscore=0 spamscore=0 bulkscore=0 impostorscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2604280145
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
+Hi Daniel, all,
 
+On Tue, 28 Apr 2026 15:06:49 +0200
+Daniel Machon <daniel.machon@microchip.com> wrote:
 
-On 12/04/26 3:44 am, adubey@linux.ibm.com wrote:
-> From: Abhishek Dubey <adubey@linux.ibm.com>
+> When lan966x operates as a PCIe endpoint, the driver currently uses
+> register-based I/O for frame injection and extraction. This approach is
+> functional but slow, topping out at around 33 Mbps on an Intel x86 host
+> with a lan966x PCIe card.
 > 
-> Ensure the dummy trampoline address field present between the OOL stub
-> and the long branch stub is 8-byte aligned, for memory compatibility
-> when content loaded to a register.
+> This series adds FDMA (Frame DMA) support for the PCIe path. When
+> operating as a PCIe endpoint, the internal FDMA engine on lan966x cannot
+> directly access host memory, so DMA buffers are allocated as contiguous
+> coherent memory and mapped through the PCIe Address Translation Unit
+> (ATU). The ATU provides outbound windows that translate internal FDMA
+> addresses to PCIe bus addresses, allowing the FDMA engine to read and
+> write host memory. Because the ATU requires contiguous address regions,
+> page_pool and normal per-page DMA mappings cannot be used. Instead,
+> frames are transferred using memcpy between the ATU-mapped buffers and
+> the network stack. With this, throughput increases from ~33 Mbps to
+> ~620 Mbps for default MTU.
 > 
-> Reported-by: Hari Bathini <hbathini@linux.ibm.com>
-> Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
-> ---
->   arch/powerpc/net/bpf_jit.h        |  4 ++--
->   arch/powerpc/net/bpf_jit_comp.c   | 34 ++++++++++++++++++++++++++-----
->   arch/powerpc/net/bpf_jit_comp64.c |  4 ++--
->   3 files changed, 33 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
-> index 7354e1d72f79..1184ad15d5a4 100644
-> --- a/arch/powerpc/net/bpf_jit.h
-> +++ b/arch/powerpc/net/bpf_jit.h
-> @@ -208,8 +208,8 @@ int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *
->   int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct codegen_context *ctx,
->   		       u32 *addrs, int pass, bool extra_pass);
->   void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx);
-> -void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx);
-> -void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx);
-> +void bpf_jit_build_epilogue(u32 *image, u32 *fimage, struct codegen_context *ctx);
-> +void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context *ctx);
->   void bpf_jit_realloc_regs(struct codegen_context *ctx);
->   int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg, long exit_addr);
->   
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-> index a62a9a92b7b5..c255b30a37b0 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
-> @@ -49,11 +49,34 @@ asm (
->   "	.popsection				;"
->   );
->   
-> -void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx)
-> +void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context *ctx)
->   {
->   	int ool_stub_idx, long_branch_stub_idx;
->   
->   	/*
-> +	 * In the final pass, align the mis-aligned dummy_tramp_addr field
-> +	 * in the fimage. The alignment NOP must appear before OOL stub,
-> +	 * to make ool_stub_idx & long_branch_stub_idx constant from end.
-> +	 *
-> +	 * Need alignment NOP in following conditions:
-> +	 *
 
-I don't think I follow this table..
+I have applied the whole series and performed some tests.
 
-> +	 * OOL stub aligned	CONFIG_PPC_FTRACE_OUT_OF_LINE	Alignment NOP
-> +	 *      Y                               Y                     N
+Issues observed in v1 are no more present.
 
-> +	 *      Y                               N                     Y
+Tested-by: Herve Codina <herve.codina@bootlin.com>
 
-Please help me understand why a NOP is needed here
-
-> +	 *      N                               Y                     Y
-
-> +	 *      N                               N                     N
-
-and also, why a NOP isn't needed here..
-
-- Hari
+Best regards,
+Hervé
