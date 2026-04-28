@@ -1,91 +1,178 @@
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0EAF3914E8;
-	Tue, 28 Apr 2026 11:34:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAED2D1931;
+	Tue, 28 Apr 2026 11:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777376082; cv=none; b=gFEykjUwBqBHr8Ht2WmfT1dJJrIY8qYeBOCIzrPJU6rncOpGCdZS1EWdzY8VTJbpi67Gu7Dh36rz5sy6fgV8ZNatQeMjUh3ON7gl490+Jv12QAXQFv8qS6eyMMxYgKsA0WNnZYKKtQTJ1ml/NIm86ZUi9IwOm/G3PkE/OkLUwJM=
+	t=1777376112; cv=none; b=ep17AZcZ+A2xn33ooW2F/h9/PLBfeES6qzJqLf9Qtgv2nsVlB8VjD5KBjhS1ir+tRGb6f+jXpp1I3YuERZmcSnEa6FQUZ4aucWxLTwlsxRJcnF7bn2lLTyPJGl/valYE0dd/CeaEvwqx731NPtQ0d5dJAs7+r7qkBuCUE5C6uCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777376082; c=relaxed/simple;
-	bh=hyfrXCz4cakoGqEZMfZnxEs8TTQzFbHPgNHVJxhRWN4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jnn94cM/o0HiOSruXStCQtUYg2jtlOmYJTM+tMLMcDXRMCG+lK2UjENZt0PgtAWSKkxIjSc56uYeacZaWuX69xh+JCg0ohPoDxo3fIKM21CBEpXwkQ7xjGlH9Sbtp57SQZhwuO6NpnD08s9unbu/usyuuOlnKbT+Bhy2gAKyZgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
-Received: from gate.crashing.org (localhost [127.0.0.1])
-	by gate.crashing.org (8.18.1/8.18.1/Debian-2) with ESMTP id 63SBY0U31059939;
-	Tue, 28 Apr 2026 06:34:00 -0500
-Received: (from segher@localhost)
-	by gate.crashing.org (8.18.1/8.18.1/Submit) id 63SBY0B51059937;
-	Tue, 28 Apr 2026 06:34:00 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Tue, 28 Apr 2026 06:34:00 -0500
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: Andrew Cooper <andrew.cooper3@citrix.com>
-Cc: Yury Norov <ynorov@nvidia.com>,
-        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Laight <david.laight.linux@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>, linux-alpha@vger.kernel.org,
-        Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        dmaengine@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-fsi@lists.ozlabs.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-fsdevel@vger.kernel.org,
-        ocfs2-devel@lists.linux.dev, bpf@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-x25@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        linux-sound@vger.kernel.org, sound-open-firmware@alsa-project.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH v1 2/9] uaccess: Convert INLINE_COPY_{TO/FROM}_USER
- to kconfig and reduce ifdefery
-Message-ID: <afCbKJg_Cq7yNO9j@gate>
-References: <cover.1777306795.git.chleroy@kernel.org>
- <9fe875d2f55af59c12708336c571a46038528678.1777306795.git.chleroy@kernel.org>
- <ae-tVFVfx72oCC_i@yury>
- <f54c3c2b-33da-42a0-80b7-0f6615d930ce@citrix.com>
+	s=arc-20240116; t=1777376112; c=relaxed/simple;
+	bh=Iz9rHSymK8ZiYjYhR8ZRcgGmX59ovYeer7wGZ2377LM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WUHDHciG8ESBWP0NyioWWkesoDKkAvn2Mo6CQVWPvXiNcI/elzTaiZeQetm+xiekRoKx8VTIZvgLS+QSsDgjiumWSz8CmZrJPWY75aQkL5MEZBLP68OPnI439Zk9aI/7e8+yAqAusQVZAL4SZC3edLwtSwF9zT9b3Xno9lLYqW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H3+f8bJd; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H3+f8bJd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F3FC2BCB7;
+	Tue, 28 Apr 2026 11:35:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777376112;
+	bh=Iz9rHSymK8ZiYjYhR8ZRcgGmX59ovYeer7wGZ2377LM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=H3+f8bJdU03gbWIoREsR1CdbmEQfJnU84waJmQID4O8fn9WE7H5KyWbUAqRaBP3PD
+	 1osYdT5BFzgE8b7gRsYAV3B8kphcrlqPPzxJ3fJG6IBrEzpofU0eWMew1FsgkhWdF1
+	 z0QX1TMEa+pZVtilMytIKIUjn85YYR5q3ZdPgrsfOkyf8myIm5YnlCmO8idIM7Xd3N
+	 SW49wNtptUZNCY2E8cVkddrZfAxSDTZIO8Ym3BWqlyAnmeTWU1+/+ipggCkIcxv8p2
+	 /MCi6vFGKB89LPYD+0zl7+VK/3OeWfMnqF8+VwRLGN+MUUk9bjDf1VzjVT+LrywWlZ
+	 ckvalacCBM+Vg==
+From: Simon Horman <horms@kernel.org>
+To: kerneljasonxing@gmail.com
+Cc: 'Simon Horman' <horms@kernel.org>,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	bjorn@kernel.org,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	jonathan.lemon@gmail.com,
+	sdf@fomichev.me,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	aleksander.lobakin@intel.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	kernelxing@tencent.com
+Subject: Re: [PATCH net v4 2/8] xsk: handle NULL dereference of the skb without frags issue
+Date: Tue, 28 Apr 2026 12:33:35 +0100
+Message-ID: <20260428113333.1296663-3-horms@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260424053816.27965-3-kerneljasonxing@gmail.com>
+References: <20260424053816.27965-3-kerneljasonxing@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f54c3c2b-33da-42a0-80b7-0f6615d930ce@citrix.com>
 
-On Mon, Apr 27, 2026 at 09:39:33PM +0100, Andrew Cooper wrote:
-> On 27/04/2026 7:39 pm, Yury Norov wrote:
-> > On Mon, Apr 27, 2026 at 07:13:43PM +0200, Christophe Leroy (CS GROUP) wrote:
-> >> Among the 21 architectures supported by the kernel, 16 define both
-> >> INLINE_COPY_TO_USER and INLINE_COPY_FROM_USER while the 5 other ones
-> >> don't define any of the two.
-> >>
-> >> To simplify and reduce risk of mistakes, convert them to a single
-> >> kconfig item named CONFIG_ARCH_WANTS_NOINLINE_COPY which will be
-> > We've got a special word for it: outline. Can you name it
-> > CONFIG_OUTLINE_USERCOPY, or similar?
-> 
-> You can't swap the "in" for "out" like this.  "out of line" is the
-> opposite of "inline" in this context, while "outline" means something
-> different and unrelated.
+From: 'Simon Horman' <horms@kernel.org>
 
-Yeah.  Technically much more correct for it is inline vs. functional.
-Not that that term won't be misunderstood as well :-)
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+Full review at: https://netdev-ai.bots.linux.dev/sashiko/
 
+Simon says:
 
-Segher
+Hi Jason,
+
+I'm providing this for informational purposes.
+My unedrstanding is that the problem flagged below
+is not present with the full 8 patches of the series
+applied.
+
+---
+xsk: handle NULL dereference of the skb without frags issue
+
+This change guards the existing xsk_inc_num_desc()/xsk_drop_skb() calls
+in xsk_build_skb()'s free_err path with an xs->skb check, and adds a new
+else branch that cancels the reserved CQ slot and bumps invalid_descs
+when xs->skb is NULL.
+
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 887abed25466..54d4895fc11e 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -973,9 +973,14 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
+>  		kfree_skb(skb);
+>  
+>  	if (err == -EOVERFLOW) {
+> -		/* Drop the packet */
+> -		xsk_inc_num_desc(xs->skb);
+> -		xsk_drop_skb(xs->skb);
+> +		if (xs->skb) {
+> +			/* Drop the packet */
+> +			xsk_inc_num_desc(xs->skb);
+> +			xsk_drop_skb(xs->skb);
+> +		} else {
+> +			xsk_cq_cancel_locked(xs->pool, 1);
+> +			xs->tx->invalid_descs++;
+> +		}
+
+The changelog states:
+
+    In this series, the skb is already freed by kfree_skb() inside
+    xsk_build_skb_zerocopy for the first-descriptor case, so we only need
+    to do the bookkeeping: cancel the one reserved CQ slot and account
+    for the single invalid descriptor.
+
+Is that accurate for this commit?
+
+Looking at xsk_build_skb_zerocopy() as it stands here, neither of its
+error returns actually frees the skb:
+
+    if (!skb) {
+            ...
+            skb = sock_alloc_send_skb(&xs->sk, hr, 1, &err);
+            if (unlikely(!skb))
+                    return ERR_PTR(err);
+
+            skb_reserve(skb, hr);
+
+            xsk_skb_init_misc(skb, xs, desc->addr);
+            if (desc->options & XDP_TX_METADATA) {
+                    err = xsk_skb_metadata(skb, buffer, desc, pool, hr);
+                    if (unlikely(err))
+                            return ERR_PTR(err);
+            }
+    }
+    ...
+    for (copied = 0, i = skb_shinfo(skb)->nr_frags; copied < len; i++) {
+            if (unlikely(i >= MAX_SKB_FRAGS))
+                    return ERR_PTR(-EOVERFLOW);
+
+            page = pool->umem->pgs[addr >> PAGE_SHIFT];
+            get_page(page);
+            ...
+            skb_fill_page_desc(skb, i, page, offset, copy);
+            ...
+    }
+
+So on the first-descriptor -EOVERFLOW path (xs->skb == NULL,
+IFF_TX_SKB_NO_LINEAR device), doesn't xsk_build_skb_zerocopy() return
+with the skb still allocated, up to MAX_SKB_FRAGS pages pinned via
+get_page() and attached through skb_fill_page_desc(), and an
+sk_wmem_alloc charge held by xsk_destruct_skb (installed by
+xsk_skb_init_misc)?
+
+Control then returns to xsk_build_skb():
+
+    skb = xsk_build_skb_zerocopy(xs, desc);
+    if (IS_ERR(skb)) {
+            err = PTR_ERR(skb);
+            skb = NULL;
+            goto free_err;
+    }
+    ...
+free_err:
+    if (skb && !skb_shinfo(skb)->nr_frags)
+            kfree_skb(skb);
+
+Since the local skb has been set to NULL, the kfree_skb() guard is
+skipped, and the new else-branch only performs the CQ cancel and
+invalid_descs bump.
+
+Doesn't that leak the sk_buff, the attached frag pages, and the
+sk_wmem_alloc charge every time a first descriptor hits the i >=
+MAX_SKB_FRAGS condition (or the xsk_skb_metadata failure)?
+
+A later patch in the series, "xsk: free the skb when hitting the upper
+bound MAX_SKB_FRAGS", adds an "if (!xs->skb) kfree_skb(skb);" inside
+xsk_build_skb_zerocopy() before the -EOVERFLOW return, which seems to
+confirm the skb is not freed at this commit. Should the changelog's
+premise be reworked, or the free added here so each patch in the series
+stands on its own?
