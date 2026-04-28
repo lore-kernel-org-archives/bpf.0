@@ -1,139 +1,104 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C125444D6B2
-	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 12:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679673AF65C;
+	Tue, 28 Apr 2026 13:07:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777380953; cv=none; b=RwIB+GE/4cgLHWAodrNb3+322dipN8kagrvJexcLAMTz4ugjBMarNt2P3J6wTljw/oabK0kdYRjIWqIQ/KSo/CIEkhQQEp+0OsqpfOwM4XbU2rLf6rPQmZX7P6Htxif+rDR7PEBoXWu19SFFYIU20MuL25U3dpsG/4naPJSZmDk=
+	t=1777381641; cv=none; b=WYlFFtfG3MwUDeM97q008QlA0WOGkJZOzmd1SKAFPBr5ZFkGGml8JBAweOj+yqrFzZLz78D0JQl0uQ5RCl3Cos0Xfm46qNGtSDBKk5zXCeJ97aKFnb/r13Kz1XK79/T2QdXbCFnIN+ns3x2AEHdIZhlOc4NdHwkx0qM7lO7sNZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777380953; c=relaxed/simple;
-	bh=47qUe5iD0anvdWaqTf9AsGaa0trp/rCOtUxo2FmvnEU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PZauAZsbWGRk8lcftN4zgN8RY8btYEbUw85eysW62g8GhbyWocQRgqbnEfoxZqaFd60EtnnKCx1PLv2gz19LyZEaX+2l/nPqmpGteZpQaL7TB1zayZ1XM0la2JGz7VPJ7E4P3k95cviirISwF4n4DgLhmP/SfYFu8KW6B0OgtSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hF58UUFv; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777381641; c=relaxed/simple;
+	bh=u5vp6FbftZARpKR4Xdii8fdcaaW1jSq2pgUEfYf9HaE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=MCBOfnTW7Y+y+Qs6nFgSWTpQ4DpBDo7vh8qQZmV52y1mVvdVIyjVw1V4n/1aMAlaJs4LdV1FxvWlpXFdx/GVXompt+QR9t5hd4X7ayOawia2n5kOfL05dy/7xAXx4j85NJtS7bnTPeFepGFdonV3zwI7OGM7N+Tx+s6ZZiM3sSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=mNYw/QFi; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hF58UUFv"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-35e563b0ee7so5441852a91.1
-        for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 05:55:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777380940; x=1777985740; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=slN5/hMTVlDaMpg5JpMzTWkk/vo41vVvsEaBCnd8nHM=;
-        b=hF58UUFvzV2IB93MalYDmlii2PA03+Wb9RjeFNw40uS/NAE+c96pQXf8/2iUcQRF6T
-         eJBjpitUZeWVq9SlXXkEngJ38tNAK15KJcLzhx3L6tFUFKLWPpdZhmzlufd/fCnb4f5h
-         vImFYEud7tdMuAeCTKSy3tKTTaMJQ2PuVggA3O0/Hfrf1lokJ50vBrTs3fpwGpFuFTXi
-         bff+1k/WYPH9FKTH3NJ2yiLhlFKExFxU8pXjmZNJnfIDHdf3kobQEvjaMybjOpXDc6Cm
-         8wdOEx7Iw58zYpfccrzzLo22swzHasWIWbFVHGG0yoVzmkkMZG49x2FRXjxdG9ATUd3r
-         lyXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777380940; x=1777985740;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=slN5/hMTVlDaMpg5JpMzTWkk/vo41vVvsEaBCnd8nHM=;
-        b=AWGMhRvBTvhlYG0HQpoyAgF6CXDr8A92iWHbdQ+isNYhVfQXHMVLjlSAIS1/8KFtMy
-         rwh+xSnsIgsj93FRBciuObZCEFskH1YN5k4g7wThNlydAVM2EjWi6b5mkkVgYqXLfqhH
-         SKjNU1w0NquQSZT4g/R52B0pzHUKXKiKTV0xqIdftox9yujlD9LmYsrBnCU6uxm4ONM6
-         90D3uYQ/cgtQYwzsB0y9D63VOPr4Wv5ZNSGvr3qpZVBnWeDasVMfyRFjEaLZTiL6tI3w
-         XecAiTjjs8IrrqDmbSdrYdlDl4vFZTrQFiWof7XsvhZv2cXZNS5TnWNQqE5y4O5JtaeQ
-         5DpA==
-X-Forwarded-Encrypted: i=1; AFNElJ/fLFoq+TIBjfFzzsxXfcwRjac46+rtbBA8K7p9PfKzbjW5YFG7heLbqwfZCBb65D3kDvM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YycYmQc4VGF/LpCcSdFTGlgVJsBIEGoqwyDEEMip0wSDNFwj5ko
-	txNYkEB9pRqBc7fpHT5XQmOaRJc8IwHhTClRZhis0Pg2+Hn3zf5tGTik
-X-Gm-Gg: AeBDietDrNmlwZNhVi/zsipDRVUYpbpjuINfAnJt0bLuludys21xUtnPAvl9YJGqBd8
-	vBM17lqbjRUz1GHGcSXKzz0VjJ8Ei6soALUrBF9QeGQzudm4fZAUhK/ZlDhykcg01ofnby2iY+7
-	JJLcTRnLy0IJsx9+Ap4UpBTr6LHmZohgb8KAbHwp8lNWT3s8PQAbjBQ/vUsZn7Lh1T8wOe4iK50
-	2mHfX52tPavK6R/t1c/9I4KlWq00AMq05A0wIsgxqtE9EJPAQD74c9E8HX6+krSWf6VpBdKOt5k
-	tmyYbCZtowuIkXYwqxCKAqy8JC5wowBopRt20BP3qHsyCojPkRhgCmQFlnPodhmPyyVMdKKEYs/
-	qCxQ/xsZov2L6axrikQHH4LYSMsa0jOWTqiS9zJE0fQyVx5vfNLPOcUxLa/DV/qAk5AUjycE8p3
-	b1bm3OAMqPKPDAOjVs+MLWuBQJW6DAvKn8bN2E1YDDG2zh4UI/ym4BNTh7QAtIZ4AnHA==
-X-Received: by 2002:a17:90b:3947:b0:35b:d795:cf5d with SMTP id 98e67ed59e1d1-36491ccb41dmr2618794a91.5.1777380940062;
-        Tue, 28 Apr 2026 05:55:40 -0700 (PDT)
-Received: from hyj0824TXAir.sustech.edu.cn ([2001:da8:201d:1103:3367:a44:8d5a:228a])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36490f9a304sm2912298a91.9.2026.04.28.05.55.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2026 05:55:39 -0700 (PDT)
-From: Linpu Yu <linpu5433@gmail.com>
-To: kerneljasonxing@gmail.com,
-	magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: sdf@fomichev.me,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	bjorn@kernel.org,
-	linux-kernel@vger.kernel.org,
-	tanyuan98@outlook.com,
-	yifanwucs@gmail.com
-Subject: [PATCH bpf-next v3] xskmap: reject TX-only AF_XDP sockets
-Date: Tue, 28 Apr 2026 20:54:58 +0800
-Message-ID: <20260428125518.4556-1-linpu5433@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <2b156bc4277a9e891f3399935416701d1f9efd7c.1777276241.git.linpu5433@gmail.com>
-References: <2b156bc4277a9e891f3399935416701d1f9efd7c.1777276241.git.linpu5433@gmail.com>
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="mNYw/QFi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1777381640; x=1808917640;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to:cc;
+  bh=u5vp6FbftZARpKR4Xdii8fdcaaW1jSq2pgUEfYf9HaE=;
+  b=mNYw/QFiX4yVAvoDdWKNKUuJT73LkDpsj0lroWmT4rvq+kunZsVSeFio
+   G/x1Zrvq3kwdnrYpUZxij3mKwSAF1zoaDRi0LqxvfJUGuJnac1j3up8R+
+   ASqyElaIbohS9G0Cjd4eMkkxYm56uZknSSvo1RJ9tV1rEwDod0DwTigPY
+   oEc25+tdbs8VbjZ1I/K/A04FMCVvjMWfbN0jD1TfeXcEn72PnUD548bHh
+   2pUkMTQ7J8fmWsTTq8FYMZmpm67pyq2/7dopb958FmFQC31TWYVvpe+2d
+   RNqOwxfocgrJvGxTUEHRJoZ1oH1yMX43fhUqvLug6tYe53gtIjC+dNgT7
+   w==;
+X-CSE-ConnectionGUID: l6k+7SRBSTiZ5RirIUYLoQ==
+X-CSE-MsgGUID: LJB9MmItSri1Voh4+Lz4uw==
+X-IronPort-AV: E=Sophos;i="6.23,204,1770620400"; 
+   d="scan'208";a="288093138"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Apr 2026 06:07:14 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Tue, 28 Apr 2026 06:07:12 -0700
+Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Tue, 28 Apr 2026 06:07:09 -0700
+From: Daniel Machon <daniel.machon@microchip.com>
+Date: Tue, 28 Apr 2026 15:06:50 +0200
+Subject: [PATCH net-next v2 01/13] MAINTAINERS: add FDMA library to Sparx5
+ SoC entry
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20260428-lan966x-pci-fdma-v2-1-d3ec66e06202@microchip.com>
+References: <20260428-lan966x-pci-fdma-v2-0-d3ec66e06202@microchip.com>
+In-Reply-To: <20260428-lan966x-pci-fdma-v2-0-d3ec66e06202@microchip.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
+	<horatiu.vultur@microchip.com>, Steen Hegelund
+	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Herve
+ Codina <herve.codina@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Mohsin Bashir
+	<mohsin.bashr@gmail.com>
+CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>
+X-Mailer: b4 0.14.3
 
-XSKMAP entries are used as redirect targets for incoming XDP frames.
-A TX-only AF_XDP socket lacks an Rx ring and cannot handle redirected
-traffic, but xsk_map_update_elem() currently allows such sockets to
-be inserted into the map.
+The FDMA library under drivers/net/ethernet/microchip/fdma/ is shared by
+the lan966x, sparx5 and lan969x drivers, but is not covered by an entry
+in the MAINTAINERS file. A subsequent patch will add new files to the
+FDMA library, so let's make sure it's covered.
 
-Redirecting packets to such a socket on the veth generic-XDP path
-causes a kernel crash in xsk_generic_rcv().
+Add drivers/net/ethernet/microchip/fdma/ to the Sparx5 SoC entry, since
+I am already listed there.
 
-This became possible after xsk_is_setup_for_bpf_map() was removed from
-the XSKMAP update path, which allowed bound TX-only sockets to be
-inserted into the map.
-
-Reject TX-only sockets during XSKMAP updates to avoid the crash.
-They remain fully operational for pure Tx purposes outside XSKMAP.
-
-Fixes: 968be23ceaca ("xsk: Fix possible segfault at xskmap entry insertion")
-Reported-by: Juefei Pu <tomapufckgml@gmail.com>
-Reported-by: Yuan Tan <yuantan098@gmail.com>
-Reported-by: Xin Liu <bird@lzu.edu.cn>
-Signed-off-by: Yifan Wu <yifanwucs@gmail.com>
-Signed-off-by: Linpu Yu <linpu5433@gmail.com>
+Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
 ---
-Changes in v3:
-- fix the Fixes tag to point to 968be23ceaca
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
- net/xdp/xskmap.c | 4 ++++
- 1 file changed, 4 insertions(+)
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e7dc9e6fad2e..53559c74a132 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3084,6 +3084,7 @@ M:	UNGLinuxDriver@microchip.com
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Supported
+ F:	arch/arm64/boot/dts/microchip/sparx*
++F:	drivers/net/ethernet/microchip/fdma/
+ F:	drivers/net/ethernet/microchip/vcap/
+ F:	drivers/pinctrl/pinctrl-microchip-sgpio.c
+ N:	sparx5
 
-diff --git a/net/xdp/xskmap.c b/net/xdp/xskmap.c
-index afa457506274..3bff346308d0 100644
---- a/net/xdp/xskmap.c
-+++ b/net/xdp/xskmap.c
-@@ -184,6 +184,10 @@ static long xsk_map_update_elem(struct bpf_map *map, void *key, void *value,
- 	}
- 
- 	xs = (struct xdp_sock *)sock->sk;
-+	if (!READ_ONCE(xs->rx)) {
-+		sockfd_put(sock);
-+		return -ENOBUFS;
-+	}
- 
- 	map_entry = &m->xsk_map[i];
- 	node = xsk_map_node_alloc(m, map_entry);
 -- 
-2.54.0
+2.34.1
+
