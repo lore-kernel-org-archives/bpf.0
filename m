@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB1B313539
-	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 08:12:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139A43AA187;
+	Tue, 28 Apr 2026 08:16:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777363942; cv=none; b=uZG+qZCUZwWrEhKo7iTsqCH5SCM4LF7yMMHALGc6rOxrSIF08pKC20dTQ8nREGDBNfiBLbBi69IoCUKBsD4XYXpm1oFHd9w5CyZzY3qhvYBx1x/DDdzT700CdFMEkorqtEbCVf0E8dQeB1K1mm+BEfUnmmHJ1MSnTP/Or9GQ2n4=
+	t=1777364200; cv=none; b=eyTqDD2YyPM5fytscB8PSRlDJZJGdmhNxuD2h0s2/H/xdhscIIHJOnDyr29Ajyk1ZJTO3gwVHKR0VJK5Y30molfMiO66HPu2vkD0ebc+dSLlnf3ZMADsvLdQXRxE5gxcteuUfah/z/26eXKoNKlcIH0FGX48lugab/F1A8BxbuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777363942; c=relaxed/simple;
-	bh=wWWSdK4kqaTeuEWEsFP+Ws///SZc85DrBERApaGTlys=;
+	s=arc-20240116; t=1777364200; c=relaxed/simple;
+	bh=8AlrguaazRg8WqpeXcLGIY23fI/h23c2cdRwp/9a1k8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aC3SMDgB5PVzPuJsupMy4J5mXBejMG4J9brLtf9BlW2QNeUnifYetk0I4O7YK5qghVrUv4LBlVTTekMRNDDtPNEKUaPvmDJN9OoRE1HwZ+FmcTAd+HdGQD8GMw/bWT3J2tF3nEt8zSpyK105gVrJo3JAKRfjJjMiRKdcybpzmuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V1Qzz8ak; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=Zwn+VcjkSaLgw9OfAEootsw9iQfDN7+zVPKTvy8DUXsPxlx8BJofC9eu+AXmvNkzNHxfv8KYdl5jJzv6Q9w98efyh1ddCZpyWpyeJ0tLBLIyKXDVTSDGGzjkkGX5QC2nntiY7ij/vgHFx0Uu94lqdzRq8pMhk98xEuNf9rHgzGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PKyVwkOQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V1Qzz8ak"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 776F0C2BCAF;
-	Tue, 28 Apr 2026 08:12:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PKyVwkOQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8CE9C2BCAF;
+	Tue, 28 Apr 2026 08:16:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777363941;
-	bh=wWWSdK4kqaTeuEWEsFP+Ws///SZc85DrBERApaGTlys=;
+	s=k20201202; t=1777364199;
+	bh=8AlrguaazRg8WqpeXcLGIY23fI/h23c2cdRwp/9a1k8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=V1Qzz8akwmKUrJKZDa3ABXy2/zDM4ePMvZenwIU0WMpcDE3Ch8xofqBUsbsYxkW1s
-	 Y2sg/oP94KjlL6HMg1u4LE1RmXL416fCHXvqY7lpDWCYbhYAIL7vwD2cBYg4KEYaZ1
-	 cbRPt+LVcun+IvD4lmPR1oQSMi/oM2NKGU1osgrH/+jMm/HC28tB3MJrVXzgqCQh/P
-	 YOkcdjDVrNrq0KB21iVsuN+l2zEcf0Vkp+nLHMFFMLsKl6C/bfnzMOebIYNSgaQJhB
-	 jKXI30eZVMXJu62cRwYI2dXU56Vr7RKjsLHziZHvQV4xJB/iasVz3Ji4dsuuf9y91Y
-	 XS/CQ4jAWHIzg==
-Message-ID: <014f3c0a-7c6f-4f64-95cd-b7b69d804880@kernel.org>
-Date: Tue, 28 Apr 2026 10:12:16 +0200
+	b=PKyVwkOQIDc94xOW0GulTQ5LSUfSMJABGPdm1wupXTlvPNzIMkBFW3Yj9KJOnWMjS
+	 ZzgXT+Yc6lIFlhkdOfz9iUSt4D1XicuxmJom1apMcAAjea/f9lNeCu4IuZ9K+69K9o
+	 axYllYt7Rr7KQyCI3u2TuGJkxfp2QMbZ8ZhbkWCZq2XjXyABa41xPRYFjxms12Asup
+	 4c0uKzfLOZJPhcO8AuYf4008tqs4ltgcrZhu+2j8UObP8EM/6i4y/io7Wg2K5gwxxE
+	 G70hucMUhNIWrkfwzYUBOLjfKuTdh5to/hZkIBj/aLkmfh3z5GrBk9oG843CnQq7gl
+	 +1hpoWv+5Og1w==
+Message-ID: <2b2eecf0-72f9-4959-9663-c80e3cd0c517@kernel.org>
+Date: Tue, 28 Apr 2026 10:16:29 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,14 +35,29 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [LSF/MM/BPF TOPIC] Using BPF in MM
-To: Roman Gushchin <roman.gushchin@linux.dev>, bpf <bpf@vger.kernel.org>,
- linux-mm <linux-mm@kvack.org>, Vlastimil Babka <vbabka@kernel.org>
-Cc: Shakeel Butt <shakeel.butt@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- lsf-pc <lsf-pc@lists.linux-foundation.org>,
- Daniel Borkmann <daniel@iogearbox.net>
-References: <7ia4o6j4c5y1.fsf@castle.c.googlers.com>
+Subject: Re: [PATCH 2/3] bpf: arena: use page_ref_count() instead of
+ page_mapped() in arena_free_pages()
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker
+ <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Rik van Riel <riel@surriel.com>,
+ Harry Yoo <harry@kernel.org>, Jann Horn <jannh@google.com>,
+ Matthew Wilcox <willy@infradead.org>, "Liam R. Howlett"
+ <liam@infradead.org>, linux-sh@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+ linux-mm <linux-mm@kvack.org>
+References: <20260427-page_mapped-v1-0-e89c3592c74c@kernel.org>
+ <20260427-page_mapped-v1-2-e89c3592c74c@kernel.org>
+ <20260427051758.e1b714a4b567917971920eaa@linux-foundation.org>
+ <CAADnVQJ9JXrtAnFgE8UFK=W1GDeT6T6Wi5zB7g0AfRjU8M4=bQ@mail.gmail.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -89,56 +104,34 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <7ia4o6j4c5y1.fsf@castle.c.googlers.com>
+In-Reply-To: <CAADnVQJ9JXrtAnFgE8UFK=W1GDeT6T6Wi5zB7g0AfRjU8M4=bQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 4/28/26 01:57, Roman Gushchin wrote:
-> [LSF/MM/BPF TOPIC] Using BPF in MM
-> ----------------------------------
+>>>
+>>> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+>>> ---
+>>>  kernel/bpf/arena.c | 2 +-
+>>
+>> BPF maintainers will probably want to carry this in the BPF tree.
+>> That's fine - please go ahead and add it.  I'll carry a duplicate in
+>> mm.git so it compiles.
 > 
-> Over the last decade, BPF successfully penetrated into multiple kernel
-> subsystems: started as a feature to filter (out) networking packets,
-> it captured its place in networking, tracing, security, HID drivers,
-> and scheduling. Memory management is a logical next step, and recently
-> we saw a growing number of proposals in this area.
-> 
-> In (approximately) historical order:
->   - BPF OOM
->   - BPF-based memcg stats access (landed)
->   - BPF-based NUMA balancing
->   - eBPF-mm
->   - cache_ext (BPF Page Cache)
->   - memcg_ext
+> We cannot carry the same patch in 2 trees.
+> Sooner or later it will create problems for linux-next
+> and issues during merge window if more changes
+> are done in the same area.
+> The only way to share a patch between trees is to
+> create a stable branch and pull it into 2 trees
+> then sha will be the same,
 
-There was also the BPF THP control.
+As lack of stable trees was raised a couple of times in the past, once we're
+done with a transition to a fully git-based mm-next workflow [1], we should be
+able to provide stable trees.
 
-> 
-> There are some obvious target which haven't been covered yet:
->   - BPF-driven readahead control
->   - BPF-driven KSM
->   - BPF-driven guest memory control
-> 
-> Despite a large number of suggestions only a relatively small feature
-> (query memcg statistics from BPF) made it to upstream.
-> 
-> It looks like using BPF in the MM subsystem comes with a set of somewhat
-> unique challenges and questions to be answered.
+[1]
+https://lore.kernel.org/r/20260421094216.8dfe14a8c62f2420fa5aace1@linux-foundation.org
 
-[...]
-
-I think you are missing one of the most important points: Unclear ABI stability
-guarantees.
-
-One the one hand, we are told that there are no ABI stability guarantees, and
-that we can change hooks (add/remove/modify) any time we want.
-
-On the other hand, as soon as there is some ebpf program out there that we
-break, you can rest assured that there will be trouble.
-
-In the area of THP, where we don't even know which hooks we will need long term
-and how they would look like, that was one of the reasons why the BPF THP
-control was rejected.
 
 -- 
 Cheers,
