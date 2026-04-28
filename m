@@ -1,100 +1,189 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8917404E
-	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 00:12:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 211D940DFC2
+	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 00:12:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777335138; cv=none; b=D8cm4S19/evf4inIA6PgkFbGnMCzBI0cWrcD76eDdHPbZHRe2g6q2khuWdUHPTULzflBa1rs0gaCYvCQbM7jA/KBPkCFVyfUJHxPpBuZBe7sG7yGfFG0IoQv49B4tE9Cb4tpTxqklhTzs8tDkCNqu92s0J3OUTQQJiuq/oHcCQs=
+	t=1777335174; cv=none; b=RYB1c+nWPANdblABqTi7UrIK4fdFGRVDTMQM/2Hpm7M1+3jFaT16Zt2SpwidjyjZ5MVJMf2/G9xnHWzriM0UqjtD0kJNvF/n5uwZpKWvXxHdgZIlE0ALSDYUuohPL7llidZLxqShs484+up90LpLCWVNA/+d5aK4KaKpnwVsI8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777335138; c=relaxed/simple;
-	bh=ZMu1aSAgdmCZioM1EmVZHkzCZgrBCpaxaiwCEN/Qzoc=;
+	s=arc-20240116; t=1777335174; c=relaxed/simple;
+	bh=ZTzqeKSs7yt4mjadCpjAaZLuI1Edgw3v4wVrEULsUrI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=EUMuklmMfJ1eVnHt81zfhbpP7AdwJDAXbrk7E7x9BGJ7v3pSb2rOWp5mDm21V6L6mUYe45PiN4xQvCXcEKPBmJ/4MbmILq+C23KnkHTPI9Ld6PKv8UFV4ahYu/hLU8BARyj+a9ZkSLudGAr+StNnPVuX8ccJBYhi7znQo6Xkuvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NQ16D0Ml; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=dj2Ze8hOi7gL+biDNwgqArt1Lxif7D+uX+BrA4qzVHYmb+0dIqwrqvK7mJGul/nqQm1JWIqP886zR/s2bASoqO45JTTkapK1s+vcPaOfnkqzby7VRIjswGv7I+XyEVkrMhuOr0vJ9SOJJFy0otBsGCjuQf6Bou/qDx2u49bfvgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GrpD0jIo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NQ16D0Ml"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1045C2BCB6;
-	Tue, 28 Apr 2026 00:12:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GrpD0jIo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5EDCC19425;
+	Tue, 28 Apr 2026 00:12:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777335137;
-	bh=ZMu1aSAgdmCZioM1EmVZHkzCZgrBCpaxaiwCEN/Qzoc=;
+	s=k20201202; t=1777335174;
+	bh=ZTzqeKSs7yt4mjadCpjAaZLuI1Edgw3v4wVrEULsUrI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=NQ16D0MltgsFEj/fX7NxW8ILP82sYRBb5HVAvUGtc55faChPIh7CuhN6BguF/FBcs
-	 DHk4SvNbceABYBwFDp7z6gzEgvBnxCUVSSqIEkXzFcSQsP464SBYurEBn/NPTic/yP
-	 BenvL3c7Ln9hZwU/DucDkoJXnWbJHBj8xkqsg6T9EMhTFTzYsxwf33tcV8nOXx8uSj
-	 gwF+pTxrsIIvZFTDbHptws5RgIIDCr6QgzzR0GX9WwZC+Gu+SoZbZIhPWaWXx5rdGL
-	 lCF3rj8pIdTm5vfHvfF94eYQcy4d9ZFvrx+D63jU/yKI8PF76pa65lFCAmPF9zsywn
-	 e2g9ilnOtZr+Q==
+	b=GrpD0jIodn9ViCazT6t02Oyh7WaDhsQc/G4JjgzoDbJhYEbcd/mAyLOWBN0q+YuLt
+	 nNoMCPmsCYthbIUDeEq5w6n7Y4k5iUajqDoDWS1tc/BVLDFRH4eWAPs6mX+Zzosq7r
+	 jSn4cEWksE91tW6H7C/Zoxx2finp+y3OB2kCE8paBW+f79y2XUq2djtwiOsTsa4c3Q
+	 1mE6asVFHTqMJuvwtfoBUm5xNWozoBg4rOLkYNtgpuHMdr4MxhwkEzBehvQauXb7D9
+	 MKDqlvF15CS98xjQfcT2uKs/SDbLGF9VaA2TwQGYwEyZUVu67vT5CcghpcjPb0t1/1
+	 mUx0w4IBA6H6Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: verify syncookie
- statistics in tcp_custom_syncookie
+Subject: Re: [PATCH bpf-next 2/7] selftests/bpf: Add BPF batch-timing
+ library
 Reply-To: sashiko@lists.linux.dev
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+To: "Puranjay Mohan" <puranjay@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260427001006.14465-3-jiayuan.chen@linux.dev>
-References: <20260427001006.14465-3-jiayuan.chen@linux.dev>
+In-Reply-To: <20260427232313.1582588-3-puranjay@kernel.org>
+References: <20260427232313.1582588-3-puranjay@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 28 Apr 2026 00:12:17 +0000
-Message-Id: <20260428001217.D1045C2BCB6@smtp.kernel.org>
+Date: Tue, 28 Apr 2026 00:12:53 +0000
+Message-Id: <20260428001253.E5EDCC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 1 potential issue(s):
-- [Medium] nstat command in read_tcpext_snmp() clobbers global history file=
- due to missing -s flag
+Sashiko AI review found 4 potential issue(s):
+- [Medium] Integer division truncation in `bpf_bench_calibrate()` breaks au=
+to-calibration for very fast BPF programs.
+- [Medium] Zero warmup time (`-w 0`) causes the benchmark to silently colle=
+ct no samples.
+- [Medium] BPF `can_loop` (`bpf_may_goto`) can prematurely terminate the ti=
+med loop, silently invalidating the userspace `ns/op` calculation.
+- [Low] The BPF header includes a non-existent file `<bpf_may_goto.h>`.
 --
 
-commit 6d6b9a4b92f87f759fc396b394eb46513c637ea5
-Author: Jiayuan Chen <jiayuan.chen@linux.dev>
+commit ecbc1ddd2ab895fa706970f55f150bb87ba2790e
+Author: Puranjay Mohan <puranjay@kernel.org>
 
-selftests/bpf: verify syncookie statistics in tcp_custom_syncookie
+selftests/bpf: Add BPF batch-timing library
+   =20
+This commit adds a reusable timing library for BPF benchmarks that need to
+measure BPF program execution time. It provides a BPF macro to record elaps=
+ed
+time and a userspace library to auto-calibrate batch iterations and compute
+statistics.
 
-This commit adds a read_tcpext_snmp() helper to network_helpers.c to read
-TcpExt SNMP counters via nstat. It uses this helper in the tcp_custom_synco=
-okie
-test to verify that LINUX_MIB_SYNCOOKIESRECV increments appropriately.
+> diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_timing.c b/tool=
+s/testing/selftests/bpf/benchs/bench_bpf_timing.c
+> new file mode 100644
+> index 000000000000..75a39da69655
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/benchs/bench_bpf_timing.c
+[ ... ]
+> +static int collect_samples(struct bpf_bench_timing *t,
+> +			   double *out, int max_out)
+> +{
+> +	unsigned int nr_cpus =3D bpf_num_possible_cpus();
+> +	__u32 timed_iters =3D t->batch_iters;
+> +	int total =3D 0;
+[ ... ]
+> +		for (__u32 i =3D 0; i < count && total < max_out; i++) {
+> +			__u64 sample =3D t->samples[cpu][i];
+> +
+> +			if (sample =3D=3D 0)
+> +				continue;
+> +			out[total++] =3D (double)sample / timed_iters;
 
-> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testin=
-g/selftests/bpf/network_helpers.c
-> --- a/tools/testing/selftests/bpf/network_helpers.c
-> +++ b/tools/testing/selftests/bpf/network_helpers.c
+If the loop in BENCH_BPF_LOOP is terminated early by the can_loop condition
+(e.g., due to instruction limits or yielding), the actual number of complet=
+ed
+iterations will be less than timed_iters.
+
+Since the BPF program only records the elapsed time, will dividing by
+timed_iters produce artificially low ns/op calculations?
+
+Should the BPF program explicitly record and export the actual number of
+completed iterations for this calculation?
+
+> +		}
+> +	}
+> +
+> +	qsort(out, total, sizeof(double), cmp_double);
+> +	return total;
+> +}
+[ ... ]
+> +void bpf_bench_timing_measure(struct bpf_bench_timing *t, struct bench_r=
+es *res)
+> +{
+> +	unsigned int nr_cpus;
+> +	__u32 total_samples;
+> +	int i;
+> +
+> +	t->warmup_ticks++;
+> +
+> +	if (t->warmup_ticks < env.warmup_sec)
+> +		return;
+> +
+> +	if (t->warmup_ticks =3D=3D env.warmup_sec) {
+> +		*t->timing_enabled =3D 1;
+> +		return;
+> +	}
+
+If the benchmark is run with zero warmup (env.warmup_sec =3D=3D 0),
+t->warmup_ticks becomes 1 on the first tick.
+
+Does this mean t->warmup_ticks =3D=3D env.warmup_sec will never be true, by=
+passing
+the assignment and preventing timing_enabled from ever being set to 1?
 
 [ ... ]
-
-> @@ -621,6 +621,28 @@ int get_socket_local_port(int sock_fd)
->  	return -1;
->  }
-> =20
-> +int read_tcpext_snmp(const char *name, unsigned long *val)
+> +void bpf_bench_calibrate(struct bpf_bench_timing *t, bpf_bench_run_fn ru=
+n_fn, void *run_ctx)
 > +{
-> +	char cmd[128], buf[128];
-> +	int ret =3D 0;
-> +	FILE *f;
+> +	__u64 elapsed, per_op_ns;
+> +	__u64 time_n, time_2n;
+> +	double ratio;
 > +
-> +	snprintf(cmd, sizeof(cmd),
-> +		 "nstat -az TcpExt%s | awk '/TcpExt/ {print $2}'", name);
+> +	elapsed =3D measure_elapsed(t, run_fn, run_ctx, CALIBRATE_SEED_BATCH, C=
+ALIBRATE_RUNS);
+> +	if (elapsed =3D=3D 0) {
+> +		fprintf(stderr, "calibration: no timing samples, using default\n");
+> +		t->batch_iters =3D 10000;
+> +		*t->batch_iters_bss =3D t->batch_iters;
+> +		reset_timing(t);
+> +		return;
+> +	}
+> +
+> +	per_op_ns =3D elapsed / CALIBRATE_SEED_BATCH;
 
-Does invoking nstat without the -s flag clobber the global history file?
+If the BPF operation executes in less than 1 ns (e.g., an empty loop or
+bpf-nop), elapsed could be less than 100 since CALIBRATE_SEED_BATCH is 100.
 
-By default, nstat writes its state to a shared history file in the
-temporary directory. Because BPF selftests run in parallel and share the
-/tmp filesystem, multiple threads executing read_tcpext_snmp() might race
-to write to this file.
+Will the integer division truncate per_op_ns to 0 here, causing
+compute_batch_iters() to incorrectly fall back to CALIBRATE_MIN_BATCH inste=
+ad
+of scaling up the iterations?
 
-Can this also corrupt the baseline for any concurrent networking tests that
-rely on nstat delta calculations?
+> +	t->batch_iters =3D compute_batch_iters(per_op_ns);
+[ ... ]
+> diff --git a/tools/testing/selftests/bpf/progs/bench_bpf_timing.bpf.h b/t=
+ools/testing/selftests/bpf/progs/bench_bpf_timing.bpf.h
+> new file mode 100644
+> index 000000000000..6a1ad75f1fd7
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/bench_bpf_timing.bpf.h
+> @@ -0,0 +1,69 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+> +
+> +#ifndef __BENCH_BPF_TIMING_BPF_H__
+> +#define __BENCH_BPF_TIMING_BPF_H__
+> +
+> +#include <stdbool.h>
+> +#include <linux/bpf.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf_may_goto.h>
 
-Would it be safer to invoke this as nstat -asz instead?
+Does bpf_may_goto.h exist in the kernel source tree?
 
-> +	f =3D popen(cmd, "r");
-> +	if (!f)
-> +		return -errno;
+I noticed that can_loop is typically defined in bpf_experimental.h. Will
+including this cause a No such file or directory build error?
+
+> +
+> +#ifndef BENCH_NR_SAMPLES
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260427001006.1446=
-5-1-jiayuan.chen@linux.dev?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260427232313.1582=
+588-1-puranjay@kernel.org?part=3D2
