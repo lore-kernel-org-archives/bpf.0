@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C2482C2349
-	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 01:29:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F2C2DAFCC
+	for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 02:03:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777339761; cv=none; b=m7J9fILuiwM1StWilugqiAOE1fCRCuOPrEk4t+WcGcxny75b04Il1eH9d6zwEaxPbf2MKUGkxbwGd48YwQW8+aWIqXBW2p4mJP0Lia7RC7OAesrT+PpOhFwNTcvNMHSQTqyxlmBDrZrJhbIe2lyKO5gMKGTJWUwQGS6Bdg070C8=
+	t=1777341819; cv=none; b=GUyVehHsywWHqD5sP3jBeQdQdnBC6A5TS005SU+THB18vwKZUifkmOH8p+ZElxxEbAPcps9jmgWKAgkQTGBUBsR7lafB+M7kdYrrSYxp8FKo73m1uhPG5PycbSdT7nxFDgdQc08/RLQAkp91giZia9EaWh/LvLMGByUuHLphZt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777339761; c=relaxed/simple;
-	bh=14beozC31s/baRQ0t9dRo2SGntRlXj8+C9d7yQjDXi4=;
+	s=arc-20240116; t=1777341819; c=relaxed/simple;
+	bh=68hfuyCxi7qxZzfJ1OS66wyBIWZXAy1dYK1tQGa1ME8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=X/wKLVF6t5OD4joq1Kf6P2gBurKtufCZU20cHVENAzdHr+4oERJwpablOV2gfHJEFObsSoYSUsWOxIfEtA5Z8xPhZd5cXHzCC9ujOVtPY8xwoCLqwdFkbLPd4VwtU+y2InpO9c4T5olu38TgoQYUWSaRQbxjv+UiwIq1K37HX2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VIb8sTD3; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=ox3xtdbqXxB/Bd2m3K0WSwj1pTBXfIDApKULfSzoJpaaj3uNGs/RrNPc1N5W1C/DT7UPfydAi4Rc633OulhSkXMEL8UDIuTi+ZHWks06Iz26cz8nzCiYdhfzN/S1E/o0Dn5oP0vDQthJyv/A5iAfzLNWyjQuzmxEeaDg4i/MOZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aH9dzjsP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VIb8sTD3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C90A1C19425;
-	Tue, 28 Apr 2026 01:29:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aH9dzjsP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D1EC19425;
+	Tue, 28 Apr 2026 02:03:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777339760;
-	bh=14beozC31s/baRQ0t9dRo2SGntRlXj8+C9d7yQjDXi4=;
+	s=k20201202; t=1777341819;
+	bh=68hfuyCxi7qxZzfJ1OS66wyBIWZXAy1dYK1tQGa1ME8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=VIb8sTD3PPhOvNd2vmoZBlmYwk12goGvzu5b5pD6knRo+MsH7qGlPBPAAofsYr/O2
-	 7wdJ3i5vkt9WPxBtbHfa9ppkrlxos9OnTl7qUEC5erLyqysoZblc0QtEJ/WlLSb1Ic
-	 0qd2y0dQL0F6/SOxH33TiquckIBUEMy77k2lha1VqbM6X0mOXkM3zwZp33BTjhuoQv
-	 YNzBGDyJApU80zMFmcikd4qutMOanMeAk2yiV1NphFY9tyA9NY2SfAEUhK/OJ5c1Zh
-	 mr4X2qZo20Ti/xYnN2VG8UbEHMCvbo9POBFzGUX+WFFPA4wWquMmrxTWTvfZukdlCz
-	 aX0bLZgNqDznA==
+	b=aH9dzjsPYtkzt37OhWpak9P2A9bvcZq7608racs+Tyow55r/ei8ArmoWedNqr9LgD
+	 V2wwjFrbNeKZiTGtZRuYB3nJ7JTVri/kf7hSNrNwuX7OKAVm1mCDGdygLUxEOqye1e
+	 14Er+RWI+YRxCLxAJv+tKYieVk5ivltOj2kXPoAaAYZwmde+6mWbuTMrYDLJuvAr5S
+	 9HqciD5ghvqcjHcPF4IFYvOZTZ+RdiKvXZq2AP9QT1IGp6TSFSctFnHQIek2bjkKvE
+	 WADgdketbb5RIorGD+PSLzbJnDCDGRA3klWZTSjjqVz/RWmU/e83ap6TWgO9fbZPXH
+	 /OCcv/Ao4xJ6Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 6/7] selftests/bpf: Add XDP load-balancer
- benchmark driver
+Subject: Re: [PATCH bpf-next 7/7] selftests/bpf: Add XDP load-balancer
+ benchmark run script
 Reply-To: sashiko@lists.linux.dev
 To: "Puranjay Mohan" <puranjay@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260427232313.1582588-7-puranjay@kernel.org>
-References: <20260427232313.1582588-7-puranjay@kernel.org>
+In-Reply-To: <20260427232313.1582588-8-puranjay@kernel.org>
+References: <20260427232313.1582588-8-puranjay@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 28 Apr 2026 01:29:20 +0000
-Message-Id: <20260428012920.C90A1C19425@smtp.kernel.org>
+Date: Tue, 28 Apr 2026 02:03:38 +0000
+Message-Id: <20260428020339.45D1EC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,77 +45,47 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Sashiko AI review found 1 potential issue(s):
-- [Low] Incorrect IPv4 checksum calculation for packets with IP options in =
-test packet generator
+- [Medium] Any extra arguments passed to the script are silently ignored be=
+cause `"$@"` is used incorrectly inside the `run_scenario` bash function.
 --
 
-commit cc1cb16090fdc833cb82a1c6a168d6cb11005220
+commit eb02fb82c543ffe6f8607af5eadc8ba489f2fb53
 Author: Puranjay Mohan <puranjay@kernel.org>
-selftests/bpf: Add XDP load-balancer benchmark driver
 
-This commit wires up the userspace side of the XDP load-balancer benchmark.
-It covers 24 scenarios and validates correctness before benchmarking by
-comparing the output packet byte-for-byte against an expected packet.
+selftests/bpf: Add XDP load-balancer benchmark run script
 
-> diff --git a/tools/testing/selftests/bpf/benchs/bench_xdp_lb.c b/tools/te=
-sting/selftests/bpf/benchs/bench_xdp_lb.c
-> new file mode 100644
-> index 000000000000..0b6709a2b03c
+This commit adds a convenience script to run 24 XDP load-balancer scenarios.
+It formats the benchmark results as a table displaying the median, standard
+deviation, and 99th percentile.
+
+> diff --git a/tools/testing/selftests/bpf/benchs/run_bench_xdp_lb.sh b/too=
+ls/testing/selftests/bpf/benchs/run_bench_xdp_lb.sh
+> new file mode 100755
+> index 000000000000..f65cf46214a3
 > --- /dev/null
-> +++ b/tools/testing/selftests/bpf/benchs/bench_xdp_lb.c
+> +++ b/tools/testing/selftests/bpf/benchs/run_bench_xdp_lb.sh
+
 [ ... ]
-> +static void build_packet(int idx)
+
+> +function run_scenario()
 > +{
-[ ... ]
-> +	if (sc->is_v6) {
-[ ... ]
-> +	} else {
-> +		struct iphdr iph =3D {};
-> +		__u32 ip_off =3D off;
+> +	local sc=3D"$1"
+> +	shift
+> +	local output rline
 > +
-> +		iph.version  =3D 4;
-> +		iph.ihl      =3D sc->set_ip_options ? 6 : 5;
-> +		iph.ttl      =3D 64;
-> +		iph.protocol =3D sc->ip_proto;
-> +		iph.saddr    =3D htonl(sc->src_addr);
-> +		iph.daddr    =3D htonl(sc->vip_addr);
-> +		iph.frag_off =3D sc->set_frag ? htons(IP_MF) : 0;
-> +		off +=3D sizeof(iph);
-> +
-> +		if (sc->set_ip_options) {
-> +			/* NOP option padding (4 bytes =3D 1 word) */
-> +			__u32 nop =3D htonl(0x01010101);
-> +
-> +			memcpy(p + off, &nop, sizeof(nop));
-> +			off +=3D sizeof(nop);
-> +		}
-> +
-> +		build_l4(sc, p, &off);
-> +
-> +		memcpy(p + off, "bench___payload!", 16);
-> +		off +=3D 16;
-> +
-> +		iph.tot_len =3D htons(off - ip_off);
-> +		iph.check   =3D ip_checksum(&iph, sizeof(iph));
+> +	output=3D$($RUN --scenario "$sc" "$@" 2>&1) || true
 
-Does this calculation exclude the appended IP options from the checksum?
+Does this silently ignore extra arguments passed to the script?
 
-When sc->set_ip_options is true, the header length is set to 6 words (24
-bytes) and 4 bytes of NOP options are copied directly into the packet
-buffer. However, ip_checksum() is only passed sizeof(iph), which is exactly
-20 bytes, and computes the checksum over the local iph struct alone.
+In bash, "$@" inside a function evaluates to the arguments passed to that
+specific function, not the global script arguments. Since run_scenario is
+called with exactly one argument ($sc) throughout the script, shift will
+consume it and leave "$@" empty.
 
-While this logically malformed packet might not cause the current tests
-to fail because the BPF program validates iph->ihl =3D=3D 5 before verifying
-the IP checksum, could this mask bugs or produce false test failures if
-the BPF program is later modified to validate L3 checksums?
-
-> +		memcpy(p + ip_off, &iph, sizeof(iph));
-> +	}
-> +
-> +	pkt_len[idx] =3D off;
-> +}
+Should the script's global arguments be passed explicitly to run_scenario
+when it is called, or should the script store its arguments in a global arr=
+ay?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260427232313.1582=
-588-1-puranjay@kernel.org?part=3D6
+588-1-puranjay@kernel.org?part=3D7
