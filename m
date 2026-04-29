@@ -1,182 +1,219 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AADDF274B3B
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 21:17:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFFD9274B3B
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 21:17:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777497422; cv=none; b=LOiudLySA8IE8DOpuYBUNQNxaaDoBG9saCoscBiMh5BFt5dlJCwA4KGMcY1N2s3rYb8grwmi+ZTD7Eb73x+ShXTKYlvlolMmAbUGQPvSL5rrJEAnkep/bnwV7OVJQNdj269ylchfY5K4h3z7zD9SvlEZESUXftXitIhAds6pVWQ=
+	t=1777497423; cv=none; b=iOzXR+MAWg5drbir1/CZJbcD52smSWYPc3GPx42PeuhpYvjf5a8DeHVGBcYsRiFzX9EvuPLkecrYKhh+lDcvuUc9AHen1yq/R3gTriA/KFLYi21N0FBbwPY1bxZwsfMNE90xIMLYmT1pPriI+dxwydciJdt4IOOv88b6pQctnhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777497422; c=relaxed/simple;
-	bh=HINDC7MBhtGoj96xzxhrUVOVUkyHyQPreGfvzgv3FXI=;
+	s=arc-20240116; t=1777497423; c=relaxed/simple;
+	bh=2P7K2Tx0jVIiqpciwVfFa3GN/7nUZTRuvZhCvH4/v/4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=T0XyCfCdJx/dtJEp6KzmdrnLQG2uEvdTWi8itVYbA1QtPQbRBxzIHJ2Tq/pqJUwgRd+ghReNShU/e76VC9SXOYKWtz4E6PXKLMqggF9ibNVAqAZCrkLRSSqnv3iPcsBEKsmp0J6Ezwgq/1OcBgjunNbDfcwsMtjDFLitP3fTMHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JJtI3STC; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=lyX/uZ7V5JFDJY/uWvv7+FCkPYlRuTopaQUT4AO9PTkZG34Zt7+jVYBfIjzWSzx+7A4Ty76zAJO8Ch0rCm+lFPM6d8V2jlohB7v3K+uUBE3o3nJypWS6ywejoLg5gtzI9cKlWQBTvQW8yu1UHYhQRN0gZRLqqTGUzRbZlXFQt90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HfaP5KeL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JJtI3STC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42E86C2BCB4;
-	Wed, 29 Apr 2026 21:17:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HfaP5KeL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19EC9C2BCB4;
+	Wed, 29 Apr 2026 21:17:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777497422;
-	bh=HINDC7MBhtGoj96xzxhrUVOVUkyHyQPreGfvzgv3FXI=;
+	s=k20201202; t=1777497423;
+	bh=2P7K2Tx0jVIiqpciwVfFa3GN/7nUZTRuvZhCvH4/v/4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=JJtI3STCJ+NjuMgIEXw0sIf2DDXUAm60X1ocX6FAzBNc2pVfLcBpWbJBieRr6Wfdi
-	 aBnvq8GfTGFOvDk26e/6MKiX9pQbEpAH4w5LDdqrTGrwnh/n2y9gL+p+a34Wd0Nxwc
-	 CkRph4maspmxCShJ/pPIkc9ERqCW0ihxxslflTJ/zJP6ybjTvBrWXr59AOvRwqck6n
-	 yj3MT2eq66fJHQ5jvXI+7WtXQwbWW3OvYxN9NXbwJ8LYt6GQuElLJg60HM2v6jzwcf
-	 EqjrsPetE5izVyiEaRRURSXMWj9hLVGMk3IJYp3j3lIgM7I4HUPEK3XGQHOHoL0r/+
-	 ZyLG9l+wcGldw==
+	b=HfaP5KeLeVybABgVQjq9z8pCpzl+HFXpUGKcD5jMR9S/Dggn7QTw1rXPAePQIHd3r
+	 LPWHqSImMie/VZ7Bc+Fm77W6N3oNxe9tQpl9HDgmgKU3uj3xbcYk+5NEGSdw1Za0MN
+	 HWyPUGre/58Bnv5QdJCeB9JHihKn+kbyWiRqkxS0hzO42OdS5y9o+KQdJVIodk2Dts
+	 BXqB3BFk5w/A5r8nscIXPuvGL7x3k1eI7H4xDSAZRFl9Xw0V5Vxgjo2aqKfNefuV/I
+	 +ps3L/MQFGeTB9bnOg1RQn187TJ320TuFfA17biZwS/v0UT3UdIBuXM+voOnVoZG2W
+	 OXJoUtdHQiKsg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v8 4/7] net: bcmgenet: add XDP_TX support
+Subject: Re: [PATCH net-next v8 5/7] net: bcmgenet: add XDP_REDIRECT and
+ ndo_xdp_xmit support
 Reply-To: sashiko@lists.linux.dev
 To: "Nicolai Buchwitz" <nb@tipi-net.de>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260428205846.2625550-5-nb@tipi-net.de>
-References: <20260428205846.2625550-5-nb@tipi-net.de>
+In-Reply-To: <20260428205846.2625550-6-nb@tipi-net.de>
+References: <20260428205846.2625550-6-nb@tipi-net.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Apr 2026 21:17:01 +0000
-Message-Id: <20260429211702.42E86C2BCB4@smtp.kernel.org>
+Date: Wed, 29 Apr 2026 21:17:02 +0000
+Message-Id: <20260429211703.19EC9C2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 6 potential issue(=
 s) to consider:
-- [High] Out-of-bounds array access in `bcmgenet_tx_reclaim` during interfa=
-ce teardown
-- [High] Incorrect DMA address calculation for local XDP_TX causes informat=
-ion leak and packet corruption
-- [High] Prepending `status_64` block overwrites XDP metadata and causes me=
-mory corruption
-- [Medium] XDP TX ring size is smaller than standard NAPI budget
+- [Critical] Prepended TSB in ndo_xdp_xmit completely overwrites struct xdp=
+_frame.
+- [Critical] Headroom validation in XDP_TX ignores metadata size, allowing =
+out-of-bounds writes.
+- [High] DMA mapping address in XDP_TX is incorrect when XDP metadata is pr=
+esent.
+- [High] Redirected XDP frames will be leaked indefinitely if the target in=
+terface is idle.
+- [Medium] bcmgenet_xdp_setup() clears NETDEV_XDP_ACT_NDO_XMIT when detachi=
+ng an XDP program, hiding device capabilities.
+- [Medium] Runt XDP frames (less than 60 bytes) will not be padded by the h=
+ardware and will be transmitted as undersized packets.
 --
 
-commit 9add891fa4e7cf62ec26683116338b5877c21662
+commit 893d59a522f087d2ccf486f06a06bb9e815cf330
 Author: Nicolai Buchwitz <nb@tipi-net.de>
 
-net: bcmgenet: add XDP_TX support
+net: bcmgenet: add XDP_REDIRECT and ndo_xdp_xmit support
 
-Implement XDP_TX using ring 16 (DESC_INDEX), the hardware default
-descriptor ring, dedicated to XDP TX for isolation from SKB TX queues.
+Add XDP_REDIRECT support and implement ndo_xdp_xmit for receiving
+redirected frames from other devices.
 
 > diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net=
 /ethernet/broadcom/genet/bcmgenet.c
-> index 1b60571446e1..3c3b0c44ea8a 100644
+> index 3c3b0c44ea8a..9dd258567824 100644
 > --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
 > +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> @@ -48,8 +48,10 @@
-> =20
->  #define GENET_Q0_RX_BD_CNT	\
->  	(TOTAL_DESC - priv->hw_params->rx_queues * priv->hw_params->rx_bds_per_=
-q)
-> +#define GENET_Q16_TX_BD_CNT	32
-
-Is it possible to drop packets here during bursts since this TX ring is sma=
-ller
-than the standard NAPI budget?
-
-The standard RX NAPI budget is 64, and TX completions are reclaimed only on=
-ce
-before the RX loop. If the RX loop processes a full budget of 64 packets and
-they all result in an XDP_TX action, the first 32 will fill the TX ring.
-
-The remaining 32 packets would fail in bcmgenet_xdp_xmit_frame() because
-ring->free_bds < 1, and be dropped.
 
 [ ... ]
-> @@ -2043,6 +2069,9 @@ static void bcmgenet_tx_reclaim_all(struct net_devi=
-ce *dev)
->  	do {
->  		bcmgenet_tx_reclaim(dev, &priv->tx_rings[i++], true);
->  	} while (i <=3D priv->hw_params->tx_queues && netif_is_multiqueue(dev));
+
+> @@ -2451,11 +2452,25 @@ static unsigned int bcmgenet_run_xdp(struct bcmge=
+net_rx_ring *ring,
+>  						true);
+>  			return XDP_DROP;
+>  		}
+> -		if (unlikely(!bcmgenet_xdp_xmit_frame(priv, xdpf, false))) {
 > +
-> +	/* Also reclaim XDP TX ring */
-> +	bcmgenet_tx_reclaim(dev, &priv->xdp_tx_ring, true);
->  }
+> +		tx_ring =3D &priv->xdp_tx_ring;
+> +		spin_lock(&tx_ring->lock);
+> +		if (unlikely(!bcmgenet_xdp_xmit_frame(priv, tx_ring,
+> +						      xdpf, false))) {
 
-Can this cause an out-of-bounds array access during interface teardown?
+Does the DMA mapping calculation in bcmgenet_xdp_xmit_frame() for this local
+XDP_TX path (dma_map =3D=3D false) account for XDP metadata?
 
-When bcmgenet_tx_reclaim_all() calls bcmgenet_tx_reclaim() with all =3D=3D =
-true,
-it unconditionally calls netdev_tx_reset_queue(netdev_get_tx_queue(dev, rin=
-g->index)).
+If an XDP program populates metadata, the calculation sizeof(*xdpf) +
+xdpf->headroom in the else block of bcmgenet_xdp_xmit_frame() will point
+to the start of the metadata rather than where the TSB was actually prepend=
+ed
+at xdpf->data. The hardware expects the TSB at the DMA address, so it might
+misinterpret the metadata as the status block.
 
-The XDP TX ring has an index of 16 (DESC_INDEX), but the network device is
-allocated with only GENET_MAX_MQ_CNT + 1 TX queues (typically 5). Accessing
-index 16 of dev->_tx is out-of-bounds, and netdev_tx_reset_queue() will wri=
-te
-to this invalid memory.
+> +			spin_unlock(&tx_ring->lock);
+>  			xdp_return_frame_rx_napi(xdpf);
+>  			return XDP_DROP;
+>  		}
+> +		bcmgenet_xdp_ring_doorbell(priv, tx_ring);
+> +		spin_unlock(&tx_ring->lock);
+>  		return XDP_TX;
+
+Does the headroom check earlier in this XDP_TX block adequately validate
+xdp->data_meta?
+
+Before backing up the pointers:
+	if (xdp->data - xdp->data_hard_start <
+	    sizeof(struct status_64) + sizeof(struct xdp_frame)) {
+
+This check validates the space before xdp->data, but the code then subtracts
+64 bytes from xdp->data_meta:
+	xdp->data -=3D sizeof(struct status_64);
+	xdp->data_meta -=3D sizeof(struct status_64);
+
+If an XDP program populates metadata, xdp->data_meta will be lower than
+xdp->data. The subtraction might push xdp->data_meta below
+xdp->data_hard_start, causing out-of-bounds writes when
+xdp_convert_buff_to_frame() constructs the struct xdp_frame.
 
 [ ... ]
-> @@ -2299,11 +2328,96 @@ static struct sk_buff *bcmgenet_xdp_build_skb(str=
-uct bcmgenet_rx_ring *ring,
->  	return skb;
+
+> @@ -3996,10 +4017,16 @@ static int bcmgenet_xdp_setup(struct net_device *=
+dev,
+>  		return -EOPNOTSUPP;
+>  	}
+> =20
+> +	if (!prog)
+> +		xdp_features_clear_redirect_target(dev);
+> +
+>  	old_prog =3D xchg(&priv->xdp_prog, prog);
+>  	if (old_prog)
+>  		bpf_prog_put(old_prog);
+> =20
+> +	if (prog)
+> +		xdp_features_set_redirect_target(dev, false);
+> +
+>  	return 0;
+>  }
+
+Can this unintentionally clear NETDEV_XDP_ACT_NDO_XMIT when detaching an XDP
+program?
+
+The driver statically implements ndo_xdp_xmit and advertises it in
+dev->xdp_features during probe, indicating the interface can receive XDP
+redirected frames from other interfaces regardless of its own XDP program s=
+tate.
+Calling xdp_features_clear_redirect_target(dev) when prog is NULL will
+clear the NETDEV_XDP_ACT_NDO_XMIT capability, hiding it from discovery.
+
+[ ... ]
+
+> @@ -4013,6 +4040,36 @@ static int bcmgenet_xdp(struct net_device *dev, st=
+ruct netdev_bpf *xdp)
+>  	}
 >  }
 > =20
-> +static bool bcmgenet_xdp_xmit_frame(struct bcmgenet_priv *priv,
-> +				     struct xdp_frame *xdpf, bool dma_map)
+> +static int bcmgenet_xdp_xmit(struct net_device *dev, int num_frames,
+> +			     struct xdp_frame **frames, u32 flags)
 > +{
-[ ... ]
-> +	if (dma_map) {
-[ ... ]
-> +	} else {
-> +		struct page *page =3D virt_to_page(xdpf->data);
+> +	struct bcmgenet_priv *priv =3D netdev_priv(dev);
+> +	struct bcmgenet_tx_ring *ring =3D &priv->xdp_tx_ring;
+> +	int sent =3D 0;
+> +	int i;
 > +
-> +		/* For local XDP_TX the caller already prepended the TSB
-> +		 * into xdpf->data/len, so dma_len =3D=3D xdpf->len.
-> +		 */
-> +		dma_len =3D xdpf->len;
-> +		mapping =3D page_pool_get_dma_addr(page) +
-> +			  sizeof(*xdpf) + xdpf->headroom;
+> +	if (unlikely(flags & ~XDP_XMIT_FLAGS_MASK))
+> +		return -EINVAL;
+> +
+> +	if (unlikely(!netif_running(dev)))
+> +		return -ENETDOWN;
+> +
+> +	spin_lock(&ring->lock);
+> +
+> +	for (i =3D 0; i < num_frames; i++) {
+> +		if (!bcmgenet_xdp_xmit_frame(priv, ring, frames[i], true))
+> +			break;
 
-Does this calculation result in an incorrect DMA address?
+Does bcmgenet_xdp_xmit_frame() overwrite the struct xdp_frame metadata when
+handling these redirected frames?
 
-The calculation implicitly assumes that xdpf resides exactly at the beginni=
-ng
-of the page. However, the driver configures the RX page pool with
-offset =3D XDP_PACKET_HEADROOM (typically 256 bytes).=20
+When dma_map =3D=3D true for redirected frames, the driver prepends a 64-by=
+te
+hardware TSB by calling memset(xdpf->data - sizeof(struct status_64), 0, 64=
+).
+Since the struct xdp_frame is located right before xdpf->data (or any prepe=
+nded
+metadata), writing backwards into the headroom could completely zero out the
+struct xdp_frame fields, leading to crashes when returning the frame.
 
-By omitting the distance from the start of the page to xdpf, the calculated
-DMA address points XDP_PACKET_HEADROOM bytes before the actual packet data,
-which could lead to transmitting uninitialized memory.
+Also, does this cause runt frames to be transmitted as undersized packets?
 
-> +		dma_sync_single_for_device(kdev, mapping, dma_len,
-> +					   DMA_BIDIRECTIONAL);
+If the XDP frame is less than 60 bytes, enabling DMA_TX_APPEND_CRC inside
+bcmgenet_xdp_xmit_frame() without first padding the frame might trigger the
+GENET hardware quirk where it fails to pad packets to the minimum Ethernet =
+size,
+causing them to be dropped by receiving switches.
+
+Is there a mechanism to ensure these redirected frames won't be leaked if t=
+he
+target interface is idle?
+
+Without setting DMA_TX_REQ_INTR in len_stat during transmission in
+bcmgenet_xdp_xmit_frame(), TX completions for the XDP TX ring rely entirely
+on being polled during the RX NAPI cycle. If the interface is receiving no
+normal traffic, the NAPI poll might never run, causing the redirected frame=
+s to
+sit in the TX ring indefinitely.
+
+> +		sent++;
 > +	}
-[ ... ]
-> +	case XDP_TX:
-> +		/* Prepend a zeroed TSB (Transmit Status Block).  The GENET
-> +		 * MAC has TBUF_64B_EN set globally, so hardware expects every
-> +		 * TX buffer to begin with a 64-byte struct status_64.  Back
-> +		 * up xdp->data into the RSB area (which is no longer needed
-> +		 * after the BPF program ran) and zero it.
-> +		 */
-> +		if (xdp->data - xdp->data_hard_start <
-> +		    sizeof(struct status_64) + sizeof(struct xdp_frame)) {
-> +			page_pool_put_full_page(ring->page_pool, rx_page,
-> +						true);
-> +			return XDP_DROP;
-> +		}
-> +		xdp->data -=3D sizeof(struct status_64);
-> +		xdp->data_meta -=3D sizeof(struct status_64);
-> +		memset(xdp->data, 0, sizeof(struct status_64));
-
-Could this overwrite XDP metadata and cause memory corruption?
-
-The space check does not account for metasize (xdp->data - xdp->data_meta).
-If the BPF program appended metadata, the memset() here completely overwrit=
-es
-it.
-
-Furthermore, if metasize is > 0, the shifted xdp->data_meta pointer could
-underflow and point exactly to or before xdp->data_hard_start. When
-xdp_convert_buff_to_frame() is subsequently called, it writes the xdp_frame
-structure at data_hard_start, which would overlap with the shifted data_met=
-a.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260428205846.2625=
-550-1-nb@tipi-net.de?part=3D4
+550-1-nb@tipi-net.de?part=3D5
