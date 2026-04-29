@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75AB033ADAE
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 19:25:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1AD233858B
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 19:41:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777490745; cv=none; b=XOL3M9HVc2b3HGVVmTmaSLneDeoOGVEW7cmv689PtqPuoaXpon3hlsnK6bb7K3HXLpVbNXe7oUBnmH7RrwRu8T4VRd3WY1PbjIAGuT572MMUZhYwVPONHTuTAwmnqtwwWqPm0zUu7WLPyrYHRvZGE8H1Hojd5iLPBXJdvd7aw6o=
+	t=1777491667; cv=none; b=AnKI8D6DcGlWS65pPva0VyPfol9g0bnJT26kxQO+uKMaFGtDuA3YUwsp8iUE3tMKR8EzDaRuZfdCovHfbo57rTx24RB5depYmYMj69NWUJqoG7/S/gzwMPj488M6QCkU1MF6NlSvj0CgdP2fqjtjtr4X4MepYxNEOx9VytNQc2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777490745; c=relaxed/simple;
-	bh=wrtNU4PldsqZz7/ZRzhj2B95OqUlU/IEl5nXKUC9oNQ=;
+	s=arc-20240116; t=1777491667; c=relaxed/simple;
+	bh=zdog0kvchKHSSn3V4En0FEc0BjxjV4Fj6H+LeR1E1Mw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hutfJE8y6ZgwDjvuCX+xjZwsNyU8SmkzX6seFfOUzxp2KlBReMloTopNm0F23pXzYqIdJIWWMluZzPM2kk8kygUV+K4BJ0d4FlRYjcALg2HtzvpQc2cDFdik+0gni0llloMCbtHxVvf/JWMyuBuTS8d3cipBW54kvfiYhPkNcw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uo1voscE; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=HKdQDDXw7LBOGqEdskWot429seW9VIejzyZ0LaNnlzQL30wxMyngg90n0+s6+XczgUHYMvwORleq5T9QE+gQvd7CRwHAnoqixpv5K8Phs5rKO2eyM6mJmPVOR8dxTGp1LvcVQM7dspLTf3JwxHQZLRb+ZnlQENAihfEkqlCiqpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s3dEdd70; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uo1voscE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCEA5C19425;
-	Wed, 29 Apr 2026 19:25:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s3dEdd70"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 806B7C19425;
+	Wed, 29 Apr 2026 19:41:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777490745;
-	bh=wrtNU4PldsqZz7/ZRzhj2B95OqUlU/IEl5nXKUC9oNQ=;
+	s=k20201202; t=1777491667;
+	bh=zdog0kvchKHSSn3V4En0FEc0BjxjV4Fj6H+LeR1E1Mw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Uo1voscEfLslm5JrjZgGU5kScL7zfhzMDFi/3cATjNTCpKHJVnCqbRowI3QZo8+1X
-	 3AtnHlWjpHN1qanUFybso+jMz/iNe1tHsTBxsIE9/jqRDWTOKfwDqmAbvrH4njtFCS
-	 2bVKbUSx+MS4J9DdSUk7zXVJCqmPwJD8kuZz8RKrUOlHfsN1gfluUykYNUCio72DHh
-	 NSrNM2NN43Nvm+rWz2wG4l1nb/3K/Dek2+EbGo/2dUQz1pQ035n5fgQQ+utT3o2hoe
-	 QvQoeVW7OW04nknnzODm96QHZ2ThPDRurUR4YX6zN0OOedVsvg0/CS+4V9/26b7m5g
-	 fa9ecdoQMSXiw==
+	b=s3dEdd70nJuaMNJzdyMCGCTVQhKNaq3fpElreCp8ZJkM+p+5WJ4iNC8H0GDnWFaRL
+	 UGsoTGLZxDmOXuMA9SLlHgaOA6Ke5MyUYneF7VWEEZQIrktgJvyBXJcB2f25FRi1v7
+	 nDtg4wuDzl3bTXrz2zYTtdQ2PMDbfetU+o83BVGn42z/npGutn4RFF0xzsco8dEo+x
+	 bjS3ObcvpFuJWPJcKIF7cw7gO8fyairQHfkgaQ83hfs5nSPU78TzZYYEkeXLERrhor
+	 HeKmMvSIMsAypebDN54545NilIKQMCno8PwdwDGapQLT9Yt5J6Fe2ZattOKSdjADjj
+	 +DEd27iiKgCtg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 3/3] riscv, bpf: Add 32 bit atomic operations
- to RV32 JIT
+Subject: Re: [PATCH bpf-next v9 02/11] selftests/bpf: Fix test_kmods KDIR to
+ honor O= and distro kernels
 Reply-To: sashiko@lists.linux.dev
-To: "Kuan-Wei Chiu" <visitorckw@gmail.com>
+To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260429123513.3477780-4-visitorckw@gmail.com>
-References: <20260429123513.3477780-4-visitorckw@gmail.com>
+In-Reply-To: <20260429-selftests-bpf_misconfig-v9-2-c311f06b4791@suse.com>
+References: <20260429-selftests-bpf_misconfig-v9-2-c311f06b4791@suse.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Apr 2026 19:25:44 +0000
-Message-Id: <20260429192544.DCEA5C19425@smtp.kernel.org>
+Date: Wed, 29 Apr 2026 19:41:06 +0000
+Message-Id: <20260429194107.806B7C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,78 +46,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] BPF atomic fetch operations and BPF_XCHG are emitted with relaxed =
-memory ordering, violating the BPF memory model.
+- [High] Automatical fallback to host kernel headers (`/lib/modules/$(uname=
+ -r)/build`) for building in-tree BPF test modules will cause confusing bui=
+ld failures and defeats the permissive skip logic.
 --
 
-commit f7db41188f6daa7740f66e1c205fcef2107a88ae
-Author: Kuan-Wei Chiu <visitorckw@gmail.com>
+commit ffa2987a74e06bf51c1a3ffcf2c85b1504b4d383
+Author: Ricardo B. Marli=C3=A8re <rbm@suse.com>
 
-riscv, bpf: Add 32 bit atomic operations to RV32 JIT
+selftests/bpf: Fix test_kmods KDIR to honor O=3D and distro kernels
 
-This commit adds native support for 32-bit BPF atomic operations to the RV32
-BPF JIT compiler. It maps BPF_ADD, BPF_AND, BPF_OR, BPF_XOR, and BPF_XCHG
-directly to their corresponding RISC-V amo*.w instructions.
+This commit updates the test_kmods Makefile to honor O=3D and
+KBUILD_OUTPUT directories, and falls back to distro kernel headers
+when the source tree is unconfigured.
 
-> diff --git a/arch/riscv/net/bpf_jit_comp32.c b/arch/riscv/net/bpf_jit_com=
-p32.c
-> index f8509950fed4..710c56b20f98 100644
-> --- a/arch/riscv/net/bpf_jit_comp32.c
-> +++ b/arch/riscv/net/bpf_jit_comp32.c
+> diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/test=
+ing/selftests/bpf/test_kmods/Makefile
+> index 63c4d3f6a12f..031c7454ce65 100644
+> --- a/tools/testing/selftests/bpf/test_kmods/Makefile
+> +++ b/tools/testing/selftests/bpf/test_kmods/Makefile
+> @@ -1,5 +1,16 @@
 [ ... ]
-> @@ -902,11 +902,40 @@ static int emit_store_r64(const s8 *dst, const s8 *=
-src, s16 off,
->  		case BPF_MEM:
->  			emit(rv_sw(RV_REG_T0, 0, lo(rs)), ctx);
->  			break;
-> -		case BPF_ATOMIC: /* Only BPF_ADD supported */
-> -			emit(rv_amoadd_w(RV_REG_ZERO, lo(rs), RV_REG_T0, 0, 0),
-> -			     ctx);
-> +		case BPF_ATOMIC:
-> +		{
-> +			s8 fetch_reg =3D (imm & BPF_FETCH) ? lo(rs) : RV_REG_ZERO;
-> +
-> +			switch (imm) {
-> +			case BPF_ADD:
-> +			case BPF_ADD | BPF_FETCH:
-> +				emit(rv_amoadd_w(fetch_reg, lo(rs), RV_REG_T0, 0, 0), ctx);
-> +				break;
-> +			case BPF_AND:
-> +			case BPF_AND | BPF_FETCH:
-> +				emit(rv_amoand_w(fetch_reg, lo(rs), RV_REG_T0, 0, 0), ctx);
-> +				break;
-> +			case BPF_OR:
-> +			case BPF_OR | BPF_FETCH:
-> +				emit(rv_amoor_w(fetch_reg, lo(rs), RV_REG_T0, 0, 0), ctx);
-> +				break;
-> +			case BPF_XOR:
-> +			case BPF_XOR | BPF_FETCH:
-> +				emit(rv_amoxor_w(fetch_reg, lo(rs), RV_REG_T0, 0, 0), ctx);
-> +				break;
-> +			case BPF_XCHG:
-> +				emit(rv_amoswap_w(fetch_reg, lo(rs), RV_REG_T0, 0, 0), ctx);
-> +				break;
+> +KMOD_O :=3D $(or $(O),$(KBUILD_OUTPUT))
+> +KMOD_O_VALID :=3D $(if $(KMOD_O),$(if $(wildcard $(KMOD_O)/Module.symver=
+s),$(KMOD_O)))
+> +KDIR ?=3D $(if $(KMOD_O_VALID),$(SRCTREE_KDIR), \
+> +	    $(if $(wildcard $(SRCTREE_KDIR)/Module.symvers),$(SRCTREE_KDIR), \
+> +		/lib/modules/$(shell uname -r)/build))
 
-According to the BPF instruction set specification, atomic operations that
-return a value (like BPF_FETCH variants and BPF_XCHG) must have fully
-ordered semantics and act as full memory barriers.
+Will falling back to the host kernel headers cause compilation errors when
+building in-tree test modules like bpf_testmod?
 
-Since the aq (acquire) and rl (release) bits are passed as 0 to the
-rv_amo*_w functions here, doesn't this emit the instructions with relaxed
-memory ordering? Could this allow the CPU to reorder memory accesses around
-the atomic operations and lead to data races or synchronization failures in
-BPF programs?
+Since bpf_testmod relies heavily on internal BPF structures, experimental
+macros, and kfuncs that change frequently between kernel releases, compiling
+it against /lib/modules/$(uname -r)/build on a system where the running
+kernel does not exactly match the upstream source tree will likely fail.
 
-> +			default:
-> +				return -1;
-> +			}
-> +			if (imm & BPF_FETCH) {
-> +				emit(rv_addi(hi(rs), RV_REG_ZERO, 0), ctx);
-> +				bpf_put_reg64(src, rs, ctx);
-> +			}
->  			break;
->  		}
+Additionally, if the host headers are present, the permissive skip check
+further down in the file will pass since the directory exists.
+
+Because the compilation failure is not ignored by the parent bpf/Makefile,
+won't this abort the entire BPF selftests build with confusing C compilation
+errors instead of silently skipping the unconfigured kernel tree?
+
+Should in-tree test modules avoid falling back to host distro headers to
+prevent these version mismatches?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260429123513.3477=
-780-1-visitorckw@gmail.com?part=3D3
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260429-selftests-=
+bpf_misconfig-v9-0-c311f06b4791@suse.com?part=3D2
