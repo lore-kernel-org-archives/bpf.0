@@ -1,164 +1,288 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D8F938238C
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 02:44:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777430648; cv=pass; b=XS/9KkmIUUv52RwkyfqPu3/P6OfIlUTyCmiEGgkq+L+2bHhRkVBCykLEOubFA3GXq0j9EqM4LEPbG/FaaeVosilVoAIzyRg141dOrNPWl3w3hZMaPg+5h3T9wB+px0laEX5gfRJSalNGespEgh/AsQNikfpll72OEHEie3HLz7A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777430648; c=relaxed/simple;
-	bh=rTsk9Q7rhkspFsFRLH/VFkmPQ4IjUkKjQ73CU1uejN8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DCrG5CCkjNujitLTmv7L9/Xe+cQRWePihlT2ScQ0L3M16nE1i57klgCMD2NUEpLEQLf8qcmiVUhaCmAUGuZbF9VvywUZLqDdNuAAHTKJ3OsX330AoSrKMts66FmMd0E/Ja+VFGSLjT4f7QUoEFKa5KAJSycaQj6bgFBJHXnzzsY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rN9gckdO; arc=pass smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F311482E8
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 03:39:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777433982; cv=none; b=bA2UIrlAUBY+qwzWfbMsvQxMF/CT7ufriKDO1EpMdORN/MlvX8pzjCQE4vMewqwHQPrIMo+7Z16CvWROwN/71GXwbq5a65A55hpr2vmU8V0LLM3qZBwqgqKv6r4yNuAr1dnpXReAnH63j9MdJel/UQ8V+FNdUmFMdgyHDxFgeyE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777433982; c=relaxed/simple;
+	bh=j9yGC/cPqbovN/V61k7Jm7HtApN03Bpv46VdAn62Log=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=qzdbVFUYpfGcmnMr34b8yNu1kjo6lDklBZ1OJdVeYUHANKPIXqRIQ7Ek7MOCk0kRhUGKHCLYuDJJEFy5MyOXyeyTtvsOJ7lQBZSiAuG10x/5aK/FMjkSkjxknnTmyxBqjO2PNKr5cdSnYCzqJZ0MwoGCUV9QZmX+CNPmq/kYVO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lIgM7hen; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rN9gckdO"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-7986e0553bdso119038777b3.2
-        for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 19:44:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777430646; cv=none;
-        d=google.com; s=arc-20240605;
-        b=GEEBK6ZOev6lAKcs6SSll1Y1vAGLCD8sfu4flqhLOQCNCI4P3sm5BT8sF/Mq3cTzjk
-         fX96THJ/3dGDZs1L+o5euGRNfWH3xMkX65BAdy9FovJsK9/GR22EAtrkiRq1x0MXthbj
-         sOlgYZ1jKOnxjcZSJG/g2wWPSlnkJAJ9LkH7pKElkBjUMB/r0rH+j1GFFDbL/iPyH2WX
-         3rR+YUz5N7q0Wyd9eVQJysQZgIIC9mlll7pyktOEh2FyOayRB5KD40RPGWAk0UZyhQ6c
-         HhA96QgDXEGX5dgHDnrCtWbSmCuCfHgoS8Qra4iZiRTN62woqOpmI9itNT5kRy8VquAS
-         xggw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=q+KoLGDSrHSIZG6+XblKTC21gPEBzNKAEyUWN1fUvUg=;
-        fh=3UZBFjDE3b3eVYTRM9i9Aqhc9ftniMlNIio9NnF+Olg=;
-        b=RuumQj9M8QSG9FNCkJsu29hrpkC1/FY69DiI5mIVtdNFHwd0PXBz+q8D8YI5+xcmWd
-         FBa5Tz5LC7tvXz4WKM9ZcP2kywFs/rBPWxIx+3Ncx5ldhHbdqvng4yPpJ/xcdCTwa/4K
-         UxCD4E9Wbj53XBJfFP/9o+e4R6x2T+MEIWYlFAuxKef1dBZgAIbe033rax7Y3p1sGxRD
-         9y7tucXHWMf85izkAxUN4L1nZTy/SOh/mV6Sd2WUrMdCfR6R3p3JGsuYZ3Sn0pnF+coj
-         3K6uMWUqIpXyvOETGcOef9k/W5lWPq63LspKUwgRWS+IWPeMIEV/HKLymVAqlrWPCOLj
-         +HHg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777430646; x=1778035446; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q+KoLGDSrHSIZG6+XblKTC21gPEBzNKAEyUWN1fUvUg=;
-        b=rN9gckdO21y+FjDIRIiXV4cF8LfTIP9NkunQB9xLjZPWpHwi2MdIumHUS0tBpB8RGr
-         +2WW1cB1WknNACZvSuXdIhMl/L+s2TMAr9FXOQnXxPLsHCV/nWXUh0aQZLnxkzhdbpgP
-         Rh0Fb1n6nE6uNT5o6UJy91eY2tM6bpruf7O2irgjNrOe2v9qJQuRyEWY2iiqeGQzJVvj
-         sp9Ci41PxlpSUOjtU3LjVbuYZbXQLfhkID/tb42hI5xGDSf/85z/gRH8KyKgonp73En8
-         n/dsLxxk0epCePoEXW5xEoHL6QW2n3In0VfgJHkddPLAt6qxwp2qTW/nrsQ/GlzzPmcV
-         qaDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777430646; x=1778035446;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=q+KoLGDSrHSIZG6+XblKTC21gPEBzNKAEyUWN1fUvUg=;
-        b=RrTyt+ToeRiaiBmZfQu+gO9oxcIHBMU8+2QO00blfEgkKjXunqxou8fwWg7kNn8+eX
-         5Gk01XMubzqxOEwO7Smt/bdF+ejoQeF/jT87E6m/QqkMD55VfMnwZxy8lNTVSnFTnjIu
-         ng9RzVLiGIleGRgkaUQFe1w24ufHHz//yhyuBXW3dk8Nm0JRchqeLhTykyMMKfuH6qBF
-         DyIojA+hjKwo3gwf1ZwGPAPP2Ayb0K0GvQ5nSvF3HAB3MP0lR7R8REEWrSLvpVe8sZMf
-         zjdUb5ZXJdDmFRJ02oc89ZrjTDzDhCd/+pR2wFoGLZdANgEQxEY1YXjAxZkoiWHq3pOx
-         EnSg==
-X-Gm-Message-State: AOJu0YwAyQNt1EggnO4GkygLl2QWgfoM3oneoR2vx29IsdKZSCbCpjkf
-	7opnKfVVc4aDG+Zw8QxriscEocjKt8AX/lYLdJ7xni9rDCQZnCM3k2BjuCHdlXFGAkUqkO034ZA
-	lllWIcT7p4BjllzA8mP0vuixsiBOwrPI=
-X-Gm-Gg: AeBDiesPrZ1BaNf2IYKqaclZSlyB27+VvbslTJFrrLTHQsNBBKE94RJ25+HSkeWq8oh
-	5zNGuFX+swaCLGvpQbdfokRPECeiyU9EvsHwDAxV03Keys52pgz2c5hIzfr6e/BaaKCNs0v3mY6
-	M5wPlFzPGypW6O6odEkxZDGSZyIBOP8P80vNIFB8e2Am/eZ9tbFNcjPh1dYUkRGkM4b3M+Ngsev
-	KkTzsJGDFHjeMOSN0Td0AFekU5eLmzSxPOuoe4wkxwTmJbYji4HJO6XGi0GX4Uq43sJmlJ9zwyf
-	KGLfWGLbwPwTlgvsEhb1PRpp5f4+IzUD/ElEk6cFvfBzQzhKIEM=
-X-Received: by 2002:a05:690c:e3c4:b0:7b2:9347:7bdf with SMTP id
- 00721157ae682-7bd1dab7ebbmr21814177b3.37.1777430646358; Tue, 28 Apr 2026
- 19:44:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lIgM7hen"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F4A4C19425;
+	Wed, 29 Apr 2026 03:39:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777433982;
+	bh=j9yGC/cPqbovN/V61k7Jm7HtApN03Bpv46VdAn62Log=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=lIgM7henhhwHy6cC2ea+H+GPZ8gbOMAtXMZqZ5hIJkyDofow+vXVcc95yA7wAyt4u
+	 W2rdBKLiZrfzcoIPd3+ULDm65VsCTU9qESUvT31iloEKjVfrStV0wT9tGFmDoHT0QM
+	 jRaQy5X9cmLgMkDRfmt6YokHK5kJBQ+s6U2t0XPtBZfEanYoe0k8qd7aDVhJGXqECy
+	 VkP245AegJZx98uEsHZAZDg4W7cbcgchvU8kHCOoW99rRv3JAKS2hpfU/e7UQjPjpO
+	 uOXZSFisZDef8N+6W/I+eElj6nykm6xwhcSzIIwl1PMMWNP9Z52ODK0acRMl3Kao2s
+	 sRigFTp5Z+DVg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 4/4] selftests/bpf: Add kptr nmi deadlock
+ reproducer
+Reply-To: sashiko@lists.linux.dev
+To: "Justin Suess" <utilityemal77@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260428201422.1518903-5-utilityemal77@gmail.com>
+References: <20260428201422.1518903-5-utilityemal77@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 29 Apr 2026 03:39:41 +0000
+Message-Id: <20260429033942.0F4A4C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <7ia4o6j4c5y1.fsf@castle.c.googlers.com>
-In-Reply-To: <7ia4o6j4c5y1.fsf@castle.c.googlers.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Wed, 29 Apr 2026 10:43:29 +0800
-X-Gm-Features: AVHnY4LELreyRpJUwIYExN_byZ7hf2FVYTBc2vbJPsf4Yl0K-6feZLhlmOKYcHc
-Message-ID: <CALOAHbDFvNLQi4xOBj2vvTng-vT+X42NtsCiuqHMt1PTpnxAyw@mail.gmail.com>
-Subject: Re: [LSF/MM/BPF TOPIC] Using BPF in MM
-To: Roman Gushchin <roman.gushchin@linux.dev>, Song Liu <song@kernel.org>, 
-	Petr Mladek <pmladek@suse.com>
-Cc: bpf <bpf@vger.kernel.org>, linux-mm <linux-mm@kvack.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	lsf-pc <lsf-pc@lists.linux-foundation.org>, Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 28, 2026 at 7:58=E2=80=AFAM Roman Gushchin <roman.gushchin@linu=
-x.dev> wrote:
->
-> [LSF/MM/BPF TOPIC] Using BPF in MM
-> ----------------------------------
->
-> Over the last decade, BPF successfully penetrated into multiple kernel
-> subsystems: started as a feature to filter (out) networking packets,
-> it captured its place in networking, tracing, security, HID drivers,
-> and scheduling. Memory management is a logical next step, and recently
-> we saw a growing number of proposals in this area.
->
-> In (approximately) historical order:
->   - BPF OOM
->   - BPF-based memcg stats access (landed)
->   - BPF-based NUMA balancing
->   - eBPF-mm
->   - cache_ext (BPF Page Cache)
->   - memcg_ext
->
-> There are some obvious target which haven't been covered yet:
->   - BPF-driven readahead control
->   - BPF-driven KSM
->   - BPF-driven guest memory control
->
-> Despite a large number of suggestions only a relatively small feature
-> (query memcg statistics from BPF) made it to upstream.
+Thank you for your contribution! Sashiko AI review found 7 potential issue(=
+s) to consider:
+- [High] has_nmi_handler_btf() checks for the wrong BTF kind and name, caus=
+ing the test to unconditionally skip.
+- [High] BPF_PROG signature mismatch for the tracepoint causes verifier rej=
+ection.
+- [High] Race condition drops the kptr before the task is reaped, bypassing=
+ the deadlock reproducer.
+- [High] Race window in Hash map test leaks task_struct and causes a test t=
+imeout.
+- [High] Expected hash map deadlock avoidance aborts incorrectly fail the t=
+est.
+- [Medium] find_test_cpu incorrectly fails the test on single-core systems.
+- [Low] Unnecessary manual validation of skeleton file descriptors.
+--
 
-We are exploring an alternative approach that leverages livepatch
-combined with BPF to modularize struct_ops-based kernel hooks. This
-allows us to deploy these hooks as out-of-tree modules without direct
-kernel modification or the immediate need for upstreaming.
+commit 5f0b05bfc83b9c9298c4508b14319e9427f9679a
+Author: Justin Suess <utilityemal77@gmail.com>
+selftests/bpf: Add kptr nmi deadlock reproducer
 
-  https://lore.kernel.org/live-patching/20260402092607.96430-1-laoar.shao@g=
-mail.com/
-  https://lore.kernel.org/live-patching/20260416001628.2062468-1-song@kerne=
-l.org/
-  https://lore.kernel.org/bpf/CAPhsuW53pymgmFsHSkSwDvEAJ=3D+Rp2T102JYe4i9kg=
-dePpR=3D6Q@mail.gmail.com/
+This commit adds a deadlock reproducer for task struct kptrs, using an NMI
+PMU event to trigger deletions while freeing the last task reference. It
+includes test cases for array and hash map types.
 
-In practice, we first introduce the BPF hooks via a livepatch and
-subsequently attach BPF programs to them. Below is a recent use case
-from our production environment (though not MM related) for reference:
+> diff --git a/tools/testing/selftests/bpf/prog_tests/task_kptr_nmi_deadloc=
+k_repro.c b/tools/testing/selftests/bpf/prog_tests/task_kptr_nmi_deadlock_r=
+epro.c
+> new file mode 100644
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/task_kptr_nmi_deadlock_repro=
+.c
+[ ... ]
+> +static int find_test_cpu(void)
+> +{
+> +	cpu_set_t cpuset;
+> +	int cpu, err;
+> +
+> +	err =3D sched_getaffinity(0, sizeof(cpuset), &cpuset);
+> +	if (!ASSERT_OK(err, "sched_getaffinity"))
+> +		return -1;
+> +
+> +	for (cpu =3D 1; cpu < CPU_SETSIZE; cpu++) {
 
-   https://lore.kernel.org/live-patching/CALOAHbDnNba_w_nWH3-S9GAXw0+VKuLTh=
-1gy5hy9Yqgeo4C0iA@mail.gmail.com/
+Is it intentional to start iterating at cpu 1 here? On single-core systems =
+or
+environments affined only to CPU 0, this will exit without a match and trig=
+ger
+the ASSERT_TRUE failure below.
 
-In one of our clusters, we needed to route BGP traffic through
-specific NICs based on destination IP addresses. To achieve this
-without service interruption, we applied a livepatch to
-bond_xmit_3ad_xor_slave_get() to introduce a new hook,
-bond_get_slave_hook(). We then attached a BPF program to this hook to
-select the outgoing NIC by parsing the SKB. Because the destination
-IPs must be adjusted on demand, a static livepatch alone was
-insufficient; the BPF integration provided the necessary dynamic
-flexibility.
+> +		if (CPU_ISSET(cpu, &cpuset))
+> +			return cpu;
+> +	}
+> +
+> +	ASSERT_TRUE(false, "cpu_available");
+> +	return -1;
+> +}
+[ ... ]
+> +static bool has_nmi_handler_btf(void)
+> +{
+> +	struct btf *btf;
+> +	int id;
+> +
+> +	btf =3D btf__load_vmlinux_btf();
+> +	if (libbpf_get_error(btf)) {
+> +		printf("SKIP:no vmlinux BTF\n");
+> +		test__skip();
+> +		return false;
+> +	}
+> +
+> +	id =3D btf__find_by_name_kind(btf, "nmi_handler", BTF_KIND_FUNC);
 
-To fully support this architecture, several work-in-progress
-enhancements are being developed for both the livepatch and BPF
-subsystems.
+Will this lookup always fail and cause the test to unconditionally skip? Ke=
+rnel
+tracepoints generate a BTF_KIND_TYPEDEF named btf_trace_nmi_handler rather
+than a BTF_KIND_FUNC named after the tracepoint.
 
-+Song, Petr (CC'd for their expertise in BPF and livepatch).
+> +	btf__free(btf);
+> +	if (id <=3D 0) {
+> +		printf("SKIP:no BTF FUNC nmi_handler\n");
+> +		test__skip();
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+[ ... ]
+> +static bool stash_exited_tasks(struct task_kptr_nmi_deadlock_repro *skel)
+> +{
+> +	int i, status;
+> +
+> +	for (i =3D 0; i < STASHED_TASKS; i++) {
+> +		int pipefd[2];
+> +		char sync;
+> +		pid_t child_pid;
+
+Can the race condition here cause the reproducer to bypass the deadlock
+entirely?
+
+Since NMIs are firing continuously via the PMU while the child processes are
+forked, running, and waited on, the NMI handler could frequently delete the
+map element and release the kptr while the kernel still holds its own
+reference to the active or zombie task.
+
+If the NMI drops a non-final reference, __put_task_struct won't be invoked
+from the NMI context, missing the intended deadlock scenario.
+
+> +
+> +		if (!ASSERT_OK(pipe2(pipefd, O_CLOEXEC), "pipe2"))
+> +			return false;
+[ ... ]
+> +	err =3D task_kptr_nmi_deadlock_repro__load(skel);
+> +	if (!ASSERT_OK(err, "task_kptr_nmi_deadlock_repro__load"))
+> +		goto cleanup;
+> +
+> +	if (bpf_program__fd(skel->progs.clear_task_kptrs_from_nmi) < 0) {
+
+This isn't a bug, but is it necessary to check the file descriptor here? The
+BPF skeleton guarantees that all programs and maps have valid file descript=
+ors
+after a successful load.
+
+> +		test__skip();
+> +		goto cleanup;
+> +	}
+[ ... ]
+> diff --git a/tools/testing/selftests/bpf/progs/task_kptr_nmi_deadlock_rep=
+ro.c b/tools/testing/selftests/bpf/progs/task_kptr_nmi_deadlock_repro.c
+> new file mode 100644
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/task_kptr_nmi_deadlock_repro.c
+[ ... ]
+> +SEC("lsm.s/file_open")
+> +int insert_task_kptr_from_lsm(struct file *ctx_file)
+> +{
+> +	struct task_map_value init =3D {};
+> +	struct task_map_value *slot;
+> +	struct task_struct *task, *acquired;
+> +	__u32 pid;
+> +	int i, ret;
+> +
+> +	(void)ctx_file;
+> +
+> +	pid =3D bpf_get_current_pid_tgid() >> 32;
+> +	i =3D find_target_slot(pid);
+> +	if (i < 0)
+> +		return 0;
+> +
+> +	task =3D bpf_get_current_task_btf();
+> +	acquired =3D bpf_task_acquire(task);
+> +	if (!acquired) {
+> +		task_kptr_nmi_err =3D TASK_KPTR_NMI_ACQUIRE_ERR;
+> +		return 0;
+> +	}
+> +
+> +	/*
+> +	 * Race is OK for these specific map types. Userspace may
+> +	 * have modified the array, causing inconsistency. This
+> +	 * error TASK_KPTR_NMI_CREATE_ERR is non-fatal for test
+> +	 * purposes. But may be important if this test is
+> +	 * extended for other map types.
+> +	 */
+> +	switch (task_kptr_nmi_map_type) {
+> +	case TASK_KPTR_NMI_MAP_HASH:
+> +		pid =3D i;
+> +		ret =3D bpf_map_update_elem(&stashed_tasks_hash, &pid, &init,
+> +					  BPF_NOEXIST);
+> +		if (ret && ret !=3D -EEXIST) {
+> +			task_kptr_nmi_err =3D TASK_KPTR_NMI_CREATE_ERR;
+> +			goto release_task;
+> +		}
+> +		slot =3D bpf_map_lookup_elem(&stashed_tasks_hash, &pid);
+
+Could this leak the task struct and cause a test timeout?
+
+If an NMI fires immediately after the lookup but before bpf_kptr_xchg() is
+called in stash_task(), clear_hash_tasks() will successfully delete the
+empty element. The LSM hook would then resume and write the acquired task
+struct into the deleted element's memory.
+
+Since it is no longer in the map, subsequent NMIs cannot find it, causing a
+timeout while waiting for task_kptr_nmi_deleted to increment.
+
+> +		if (!slot) {
+> +			task_kptr_nmi_err =3D TASK_KPTR_NMI_LOOKUP_ERR;
+> +			goto release_task;
+> +		}
+> +		break;
+[ ... ]
+> +static __always_inline void clear_hash_tasks(void)
+> +{
+> +	int i;
+> +
+> +	for (i =3D 0; i < MAX_TARGET_PIDS; i++) {
+> +		__u32 slot =3D i;
+> +
+> +		if (!task_kptr_nmi_pids[i])
+> +			continue;
+> +		if (!bpf_map_delete_elem(&stashed_tasks_hash, &slot)) {
+> +			task_kptr_nmi_live[i] =3D 0;
+> +			task_kptr_nmi_deleted++;
+> +		} else if (bpf_map_lookup_elem(&stashed_tasks_hash, &slot)) {
+> +			set_delete_err(-EIO);
+
+Does this incorrectly fail the test during an expected hash map deadlock
+avoidance abort?
+
+BPF hash maps use a bucket lock for concurrent updates and deletions. If the
+NMI interrupts the LSM hook while it holds the bucket lock,
+bpf_map_delete_elem() aborts to avoid deadlocking and returns -EBUSY.
+
+Treating this resilient spinlock abort as a fatal -EIO error makes the test
+inherently flaky.
+
+> +		}
+> +	}
+> +}
+[ ... ]
+> +SEC("?tp_btf/nmi_handler")
+> +int BPF_PROG(clear_task_kptrs_from_nmi, void *handler, void *regs, s64 d=
+elta_ns,
+> +	     int handled)
+
+Does this program signature match the tracepoint?
+
+The actual nmi_handler tracepoint provides only 3 arguments, but the BPF_PR=
+OG
+macro is used here with 4 arguments. The macro automatically expands to read
+ctx[3], which the verifier will reject as an out-of-bounds context access
+(offset >=3D 24), causing the program to fail to load unconditionally.
+
+> +{
+> +	(void)handler;
+> +	(void)regs;
+> +	(void)delta_ns;
+> +	(void)handled;
+> +
+> +	if (task_kptr_nmi_deleted >=3D task_kptr_nmi_inserted)
+> +		return 0;
 
 --=20
-Regards
-Yafang
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260428201422.1518=
+903-1-utilityemal77@gmail.com?part=3D4
