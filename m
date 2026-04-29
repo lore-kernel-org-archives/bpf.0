@@ -1,186 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB463F077B
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 11:57:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A661537F746;
+	Wed, 29 Apr 2026 12:04:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777463873; cv=none; b=sVv2PHJmU8zwsANgoTeJhYXpK6KSiQ+p99yyqYm2UnyFJ3y7uJlCG6DpCaOjvCUOco2AkdCncutiZSF8XNyZ8ZkJl/5ZYVajKpvZQzwTAt1y7XKbbhQ+V2uJw0XEeE0i8oNoovKFUpkk5SQ2Xe3/H2bJlzQyg8h8ptV1LAl9kFA=
+	t=1777464271; cv=none; b=DtG3pto73cN9WluKMSFxsl2KSEZet2Z5n0MGeAPIqccxA8L24AZecBO7Eyg02sXeciqbNpx6e0qtHoV2/kfCPT6VU+bfflGIlMJfquGTisaX7H8GpumYGHbeAvrOr5m/afG6dUnQfdgzq+N41gOR4Nlb88OzF9qzxLduyudnQ3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777463873; c=relaxed/simple;
-	bh=pdn+AkY8bW50TrgcAAV4i1IuSf0bty1nzLmh/Gyioqo=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=rs2WbAnlwv5TrNUNgIGusUZ5SA1NWHPUGzRwH4dCweiImjzbyLu3kiBXk/bSeTFo374HstiH2cDWFUa6CpCfLbtfld7at8pjkmsgTtYzLHvUuBLbT7cx4tF77N76/8prRVagopKRA8PARfAHUI6GKmoDMYxulbr3Q20O0bXg9oY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vx03F00H; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777464271; c=relaxed/simple;
+	bh=IFAJiEknzlPW2ICs1yOFKVmjs8x4lk0T6++/h57So3A=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=ob2upJYGWdjRmLFKp5oVDZbAIkXmZA/Ea1fqUEFIAqsVtz/sUFR5aQbK5JXVXCgIQ+K4ENH06Piyc4OlyL8x1iBTKsDDc5fXSxx/Saxw2/UHNvvpoHldDo9ctvpzE8ZjOpbFGi+8IUJSEF0pn5Jtk2xFELElAOCZluRd+Od5CU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=p91l+b9K; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vx03F00H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09799C19425;
-	Wed, 29 Apr 2026 11:57:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777463872;
-	bh=pdn+AkY8bW50TrgcAAV4i1IuSf0bty1nzLmh/Gyioqo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=Vx03F00HWosl4+yvVepv+JWdofkdn7Y8Tw+eNI6tA+njc9L4CdplsTtdB0XKqBzRm
-	 DZMp8zkH8QqEMZpilF/2wi+H3u1t2+9h8DCtUzZReADVzN4fz+51oP0z3oWiTSkJ22
-	 sR+z+tQELQ/NZoG0esvE5G8c8JqgnNtAAraVa8B331H1rcw0dQF7GzSRiUTAR3IxW+
-	 N2uWOuyzSCMB8oxa9tmXSO0h66ZyJtcVnDF9zIV9Tzq+BqnLY72tLR5oKRLrwyJDr0
-	 Y95gQRr2NiVacjg3FQ27V1Cy6OCmdUZsx4OUGXZxOLGVAmLNAq22iefcLTOvZbZwDN
-	 9AzsXLs5VBo9w==
-Content-Type: multipart/mixed; boundary="===============4518827398568603776=="
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="p91l+b9K"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEF49C19425;
+	Wed, 29 Apr 2026 12:04:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1777464271;
+	bh=IFAJiEknzlPW2ICs1yOFKVmjs8x4lk0T6++/h57So3A=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=p91l+b9KXgYp+Fpi6U9aqoSTXGyLkwjQj5O0IWHaunxWDbsyPe4UIGd3MhQITqXve
+	 mMVkpv5deeKDCdo1AcrYwtt4HN8fwUttVKMprhzGq97Xl2sH4gsaAQtDh/h4u7dzyn
+	 Uu6KEeZltN5dUHPSEfLPCV/FoI+Ley1LWMlkJa3E=
+Date: Wed, 29 Apr 2026 05:04:30 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Muhammad Usama Anjum <usama.anjum@arm.com>, David Hildenbrand
+ <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
+ <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, Mike
+ Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal
+ Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>, Zi Yan
+ <ziy@nvidia.com>, Uladzislau Rezki <urezki@gmail.com>, Nick Terrell
+ <terrelln@fb.com>, David Sterba <dsterba@suse.com>, Vishal Moola
+ <vishal.moola@gmail.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, Ryan.Roberts@arm.com, david.hildenbrand@arm.com
+Subject: Re: [PATCH v6 0/3] mm: Free contiguous order-0 pages efficiently
+Message-Id: <20260429050430.d86f01dbe731edc9fa932add@linux-foundation.org>
+In-Reply-To: <20260429103326.GA1743@cmpxchg.org>
+References: <20260401101634.2868165-1-usama.anjum@arm.com>
+	<20260429103326.GA1743@cmpxchg.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <4c8081076c40ee589523fd56267a00b0c7f18cb409fd11a8b285bcd87849bd61@mail.kernel.org>
-In-Reply-To: <20260429105608.92741-3-tangyazhou@zju.edu.cn>
-References: <20260429105608.92741-3-tangyazhou@zju.edu.cn>
-Subject: Re: [PATCH bpf-next v8 2/3] bpf: Fix s16 truncation for large bpf-to-bpf call offsets
-From: bot+bpf-ci@kernel.org
-To: tangyazhou@zju.edu.cn,bpf@vger.kernel.org,ast@kernel.org,eddyz87@gmail.com,emil@etsalapatis.com,puranjay@kernel.org,xukuohai@huaweicloud.com
-Cc: daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,tangyazhou518@outlook.com,shenghaoyuan0928@163.com,ziye@zju.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 29 Apr 2026 11:57:52 +0000 (UTC)
-
---===============4518827398568603776==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/include/linux/filter.h b/include/linux/filter.h
-> index b77d0b06db6e..c4d25d78291b 100644
-> --- a/include/linux/filter.h
-> +++ b/include/linux/filter.h
-> @@ -1152,9 +1152,6 @@ bool sk_filter_charge(struct sock *sk, struct sk_filter *fp);
->  void sk_filter_uncharge(struct sock *sk, struct sk_filter *fp);
->
->  u64 __bpf_call_base(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
-> -#define __bpf_call_base_args \
-> -	((u64 (*)(u64, u64, u64, u64, u64, const struct bpf_insn *)) \
-> -	 (void *)__bpf_call_base)
->
->  struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_prog *prog);
->  void bpf_jit_compile(struct bpf_prog *prog);
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index fcc881909969..8f7db5f0c7e5 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -1771,6 +1771,9 @@ static u32 abs_s32(s32 x)
->  	return x >= 0 ? (u32)x : -(u32)x;
->  }
->
-> +static u64 (*interpreters_args[])(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5,
-> +				  const struct bpf_insn *insn);
-> +
->  /**
->   *	___bpf_prog_run - run eBPF program on a given context
->   *	@regs: is the array of MAX_BPF_EXT_REG eBPF pseudo-registers
-> @@ -2077,10 +2080,10 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
->  		CONT;
->
->  	JMP_CALL_ARGS:
-> -		BPF_R0 = (__bpf_call_base_args + insn->imm)(BPF_R1, BPF_R2,
-> +		BPF_R0 = (interpreters_args[insn->off])(BPF_R1, BPF_R2,
->  							    BPF_R3, BPF_R4,
->  							    BPF_R5,
-> -							    insn + insn->off + 1);
-> +							    insn + insn->imm + 1);
->  		CONT;
->
->  	JMP_TAIL_CALL: {
+On Wed, 29 Apr 2026 06:33:26 -0400 Johannes Weiner <hannes@cmpxchg.org> wrote:
 
-[ ... ]
+> On Wed, Apr 01, 2026 at 11:16:18AM +0100, Muhammad Usama Anjum wrote:
+> > Hi All,
+> > 
+> > A recent change to vmalloc caused some performance benchmark regressions (see
+> > [1]). I'm attempting to fix that (and at the same time significantly improve
+> > beyond the baseline) by freeing a contiguous set of order-0 pages as a batch.
+> 
+> I think we should revert the original patch.
+> 
+> The premise is that we can save some allocator calls by requesting
+> higher orders and splitting them up into singles. This is a frivolous
+> and short-sighted use of a very coveted and expensive resource.
+> 
+> The buddy allocator tries hard to retain contiguity *if it isn't
+> needed by the caller*. This patch actively works around that.
+> 
+> The cost of recreating those higher orders elsewhere is shouldered by
+> whoever actually needs the contiguity down the line. And that process
+> is orders of magnitudes more expensive than we save here:
+> 
+> We're saving cycles per page in the vmalloc path, and later spend tens
+> of thousands of cycles per page to recreate the contiguity. Scanning
+> PFN ranges, folio locks, rmap walks, TLB flushes, page copies.
+> 
+> That's a terrible trade-off.
 
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index 300e4e251931..8947ef74f6a8 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -1250,9 +1250,9 @@ static int jit_subprogs(struct bpf_verifier_env *env)
->  		}
->  		if (!bpf_pseudo_call(insn))
->  			continue;
-> -		insn->off = env->insn_aux_data[i].call_imm;
-> -		subprog = bpf_find_subprog(env, i + insn->off + 1);
-> -		insn->imm = subprog;
-> +		insn->imm = env->insn_aux_data[i].call_imm;
-> +		subprog = bpf_find_subprog(env, i + insn->imm + 1);
-> +		insn->off = subprog;
->  	}
->
->  	prog->jited = 1;
-> diff --git a/tools/bpf/bpftool/cfg.c b/tools/bpf/bpftool/cfg.c
-> index e3785f9a697d..df43a0e0023f 100644
-> --- a/tools/bpf/bpftool/cfg.c
-> +++ b/tools/bpf/bpftool/cfg.c
-> @@ -142,7 +142,7 @@ static bool cfg_partition_funcs(struct cfg *cfg, struct bpf_insn *cur,
->  			continue;
->  		if (cur->src_reg != BPF_PSEUDO_CALL)
->  			continue;
-> -		func = cfg_append_func(cfg, cur + cur->off + 1);
-> +		func = cfg_append_func(cfg, cur + cur->imm + 1);
->  			return true;
->  	}
+That's persuasive.
 
-A previous reviewer noted in v7 that while this change correctly updates
-the call offset calculation from cur->off to cur->imm, there's a related
-issue in cfg_partition_funcs() that appears unaddressed.
+afaict much/all of this series remains useful after a06157804399
+("mm/vmalloc: request large order pages from buddy allocator") is
+reverted?
 
-After the patch, when JIT is enabled and programs are exported as
-translated, insn->off now holds the subprogram index rather than the jump
-offset. The cfg_partition_funcs() function uses this to calculate the
-target subprogram start for control-flow graph generation.
-
-Since this code path processes JIT-enabled translated programs where
-insn->off is now a subprogram index (not an offset), does the calculation
-'cur + cur->imm + 1' correctly identify the target instruction? Or does
-it need to look up the subprogram's actual address using the index stored
-in cur->off?
-
-This could affect "bpftool prog dump xlated visual" and potentially cause
-corrupted graphs or out-of-bounds memory access.
-
-Reference: https://lore.kernel.org/bpf/20260421204648.B573FC2BCB0@smtp.kernel.org/
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/disasm_helpers.c b/tools/testing/selftests/bpf/disasm_helpers.c
-> index f529f1c8c171..96b1f2ffe438 100644
-> --- a/tools/testing/selftests/bpf/disasm_helpers.c
-> +++ b/tools/testing/selftests/bpf/disasm_helpers.c
-> @@ -4,7 +4,6 @@
->  #include "disasm.h"
->
->  struct print_insn_context {
-> -	char scratch[16];
->  	char *buf;
->  	size_t sz;
->  };
-
-The commit message states this patch series includes a selftest
-(tools/testing/selftests/bpf/progs/call_large_imm.c) to verify the fix.
-
-A reviewer raised a concern in v7 about the test design: the selftest
-reportedly causes a kernel panic on unpatched kernels when JIT is disabled.
-While reproducing the bug validates the fix, this behavior is disruptive
-for CI systems and git bisect workflows that run the test suite on older
-or unpatched kernel trees.
-
-The reviewer suggested redesigning the test to fail gracefully. If the
-large padding block were placed before the call instruction instead of
-after it, the call site would be at a large positive offset. When the bug
-triggers and the offset gets truncated to a negative value (e.g., -32768),
-the jump would land safely inside the valid padding instructions rather
-than jumping out of bounds and crashing the kernel.
-
-Was this concern addressed in v8? The current disasm_helpers.c changes
-don't appear related to this test design issue.
-
-Reference: https://lore.kernel.org/bpf/20260421210253.5AB2AC2BCB0@smtp.kernel.org/
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25105802774
---===============4518827398568603776==--
+What I'm not understanding is how significant all of this is.  Sure,
+making many-page vmallocs faster is both beneficial and harmful.  And we
+have super-focused microbenchmarks which demonstrate both effects.  But
+how often does the kernel actually *do* this stuff in real-world (or
+even real-world corner-case) situations?
