@@ -1,172 +1,208 @@
-Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4616340298
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 22:39:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E12349B0D
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 22:43:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777502365; cv=none; b=Mkl171AQr8bJ+DQ9qG/tJoyatfzcQpZVfftqu75S3dJL8bRskp+zCLy/0+pOzVMggm8LYafhKaLBiPaGPMyB6hYzCotlUqEipLkUslOCh8lHqhfGVEoR7rNgBYpw63WZ3QqVZ+MiwfNxiwfqvXIRSmaQ5BgRb+Ns0+/2TqGkjgw=
+	t=1777502611; cv=none; b=AdvGcsHShGfhH6wyrjUYfAyeDVhMMe9b+tavVA7RCPJ9NL2eN7oLJyXeEzmIH4tMsT5+Ujoc9Mw7TXuUfFzm/4zfEwz/lGupl0JrZ3tH5euzpBnuRJFL+SfuQyfl8nROmBqmL2j5nmuM5ANMxV/90uyhuNUt2szgsyPUYUijuTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777502365; c=relaxed/simple;
-	bh=v+Lf5gMQS9L7eFCl2J/uJqjn0gXBj8rSRynjkxYNunw=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=jvlNVF8ymEgvaE+OuVY0HBiaCt6NUPPbSR/Fxc8t+An5sYNHpyMDVdkCDroB3FfKmylXQtpuhYC1/65U8exwf+aVuM3IQVcEGPGybKc4fw7GqHJj+sro1daClG7YYsmqwoEIElWqIAsfxhFzriQLr5a2WI+DJSSNdjbTFpHfv7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=Pjy0L/l3; arc=none smtp.client-ip=194.13.80.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
+	s=arc-20240116; t=1777502611; c=relaxed/simple;
+	bh=N1kZikJ/vQqpafRqJdxFD91wKyFhvN8xNeW6LopZmh4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=mXZWboHyNAWFGNFJfm61Sq5e5Mt5FmLmWUFg6ATcUhKEyeHANvdfGlFH2tXSAFXQM5J6Mnro22n+ks09purxbLGDOKalyiJRF2f8cE3mrur9phNC2KFGy99m7kgUzOzO0ohpHjDMnrlXW6cjHnMGWwLQ2yjCjoZVjtMYe4QrZuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jPZ0D37I; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="Pjy0L/l3"
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CA840A5398;
-	Thu, 30 Apr 2026 00:39:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
-	t=1777502361; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=4TrQlw5eAMEZj5539nZeQ71X2cB2IQNqmh7vkQ18I/I=;
-	b=Pjy0L/l3D08XwA+OxJYKivO0CIywk/4bNkZaL0kFzGR6f3hUDR/tIk+kLQ49EMXrw2THde
-	GaK0f5N2Cp73fbNg9Bre6eJ7uCuC0MjDjlhziYpeSsZMPu7ldoSXg4Euujt50VtMHNF9xy
-	hz5G/PKCQKSgKtlXEuODaVgmJaQ5Z5oH6vTpWLvoIMeaKOXAEkViZpbNX1cLKuIKqt2x+n
-	3EW4vfomyXLOJstBH4A+LonHeGLGHFxl81XSK/qIb2c7uV4H5beH/3ByIS5PEYnyelxqBR
-	ROKfZ3rr+2uJkNVRNiZmjiFIbo5y7jhytN+RPSdk+VkJ9OeWaxQDmeC9ESA8MA==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jPZ0D37I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1917C19425;
+	Wed, 29 Apr 2026 22:43:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777502610;
+	bh=N1kZikJ/vQqpafRqJdxFD91wKyFhvN8xNeW6LopZmh4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=jPZ0D37IUk9uOl+rEa9oqyx1koMrDuW/50ZVOwPCwVJ6m+gXTRZxMi2ExtxhWYT2f
+	 S63mNFbWUp4R1XXVT1onXIXnw1/U1PthK7G24NTf4S/2iV7MLUpGwz8wbJENcLAej2
+	 rXXzkzuOtL+J1H0TZKv0Ag4ZtgsD30AVcAXEziZblCxYNHnRQyRvi0+ExZVI5+lu6l
+	 tsd6/6zoMDX8of8emM7jESKLuaGUrGpOD6jbzdRUpw1koaaTSkEBPaRAr0hXXHRO57
+	 F+9kd9VDhYuGbQ35lYRQSZSyZBZj1wqXJ7hgPHNFvBoF7vUVKRQWeMcqc512ORv4OR
+	 vlAuMC5vFieyQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next 07/11] net: devmem: support TX over
+ NETMEM_TX_NO_DMA devices
+Reply-To: sashiko@lists.linux.dev
+To: "Bobby Eshleman" <bobbyeshleman@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260428-tcp-dm-netkit-v1-7-719280eba4d2@meta.com>
+References: <20260428-tcp-dm-netkit-v1-7-719280eba4d2@meta.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 29 Apr 2026 22:43:29 +0000
+Message-Id: <20260429224330.C1917C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Date: Thu, 30 Apr 2026 00:39:21 +0200
-From: Nicolai Buchwitz <nb@tipi-net.de>
-To: sashiko@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v8 6/7] net: bcmgenet: add XDP statistics
- counters
-In-Reply-To: <20260429211704.710D9C19425@smtp.kernel.org>
-References: <20260428205846.2625550-7-nb@tipi-net.de>
- <20260429211704.710D9C19425@smtp.kernel.org>
-Message-ID: <9846f1275ea211e3d03c6b6e5a6fdbce@tipi-net.de>
-X-Sender: nb@tipi-net.de
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
 
-On 29.4.2026 23:17, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential 
-> issue(s) to consider:
-> - [High] XDP_TX headroom check ignores metadata size, and TSB insertion 
-> corrupts metadata state.
-> - [Medium] Non-atomic updates to global XDP statistics from concurrent 
-> NAPI contexts cause data races and cache-line bouncing.
-> - [Medium] Missing counter increment when `xdp_convert_buff_to_frame()` 
-> fails in the `XDP_TX` path.
-> --
-> 
-> commit 9febde2d94a02157dc480d909cc304c59196d72f
-> Author: Nicolai Buchwitz <nb@tipi-net.de>
-> 
-> net: bcmgenet: add XDP statistics counters
-> 
-> This commit exposes per-action XDP counters via ethtool -S. It uses
-> the soft MIB infrastructure and increments the counters in
-> bcmgenet_run_xdp().
-> 
->> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c 
->> b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
->> index 9dd258567824..02ad2f410d6c 100644
->> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
->> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> 
-> [ ... ]
-> 
->> @@ -2428,6 +2435,7 @@ static unsigned int bcmgenet_run_xdp(struct 
->> bcmgenet_rx_ring *ring,
->> 
->>  	switch (act) {
->>  	case XDP_PASS:
->> +		priv->mib.xdp_pass++;
-> 
-> Is it safe to update global priv->mib statistics here?
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
+- [High] Calling `netdev_queue_get_dma_dev()` on an unlocked physical devic=
+e triggers a lockdep assertion.
+- [High] Unrecognized unreadable SKBs bypass device capability checks in `v=
+alidate_xmit_unreadable_skb()`.
+- [High] Dangling `binding->dev` and `binding->vdev` pointers in TX binding=
+s cause ABA vulnerabilities and bypass DMA isolation.
+- [Medium] Missing rollback on `genlmsg_reply()` failure creates zombie bin=
+dings in the netlink TX bind path.
+--
 
-The XDP counters follow the existing soft MIB convention in this
-driver (plain u32, unsynchronized). A larger ring refactoring is
-AFAIK planned that should address all MIB counters consistently.
+commit ad5b7f6dddf55058541369471398808c30d9cb9e
+Author: Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: net: devmem: support TX over NETMEM_TX_NO_DMA devices
 
-> 
-> Since bcmgenet_run_xdp() can execute concurrently in multiple 
-> independent
-> NAPI polling contexts (one per RX ring), non-atomic increments to 
-> shared
-> global variables can cause data races and lost increments.
-> 
-> Continually modifying a shared cacheline on the fast-path for every 
-> packet
-> could also force cacheline bouncing across CPUs and degrade XDP 
-> performance.
-> Should these statistics be maintained per-queue or using per-CPU 
-> variables
-> instead?
-> 
->>  		return XDP_PASS;
->>  	case XDP_TX:
->>  		/* Prepend a zeroed TSB (Transmit Status Block).  The GENET
->>  		 * MAC has TBUF_64B_EN set globally, so hardware expects every
->>  		 * TX buffer to begin with a 64-byte struct status_64.  Back
->>  		 * up xdp->data into the RSB area (which is no longer needed
->>  		 * after the BPF program ran) and zero it.
->>  		 */
->>  		if (xdp->data - xdp->data_hard_start <
->>  		    sizeof(struct status_64) + sizeof(struct xdp_frame)) {
->>  			page_pool_put_full_page(ring->page_pool, rx_page,
->>  						true);
->> +			priv->mib.xdp_tx_err++;
->>  			return XDP_DROP;
->>  		}
->>  		xdp->data -= sizeof(struct status_64);
->>  		xdp->data_meta -= sizeof(struct status_64);
->>  		memset(xdp->data, 0, sizeof(struct status_64));
-> 
-> While not introduced by this patch, does this headroom check and TSB
-> insertion handle metadata correctly?
+This patch adds support for devmem TX over netkit virtual devices by finding
+the underlying DMA-capable physical device. It updates
+validate_xmit_unreadable_skb() and netdev_nl_bind_tx_doit() to handle the
+dual-device validation and binding setup.
 
-Already addressed under patches 4 and 5: xdp_convert_buff_to_frame()
-validates headroom against metasize. The memset writes into the former
-RSB area, above the metadata; both data and data_meta shift equally so
-the metadata position is preserved.
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 06c195906231..f6575cf48287 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -3990,22 +3990,32 @@ static struct sk_buff *sk_validate_xmit_skb(struc=
+t sk_buff *skb,
+>  static struct sk_buff *validate_xmit_unreadable_skb(struct sk_buff *skb,
+>  						    struct net_device *dev)
+>  {
+> +	struct net_devmem_dmabuf_binding *binding;
+>  	struct skb_shared_info *shinfo;
+>  	struct net_iov *niov;
+> =20
+>  	if (likely(skb_frags_readable(skb)))
+>  		goto out;
+> =20
+> -	if (!dev->netmem_tx)
+> -		goto out_free;
+> -
+>  	shinfo =3D skb_shinfo(skb);
+> +	if (shinfo->nr_frags =3D=3D 0)
+> +		goto out;
+> +
+> +	niov =3D netmem_to_net_iov(skb_frag_netmem(&shinfo->frags[0]));
+> +	if (!net_is_devmem_iov(niov))
+> +		goto out;
 
-> 
-> The headroom check doesn't account for metasize, which could cause
-> xdp_convert_buff_to_frame() to fail its own bounds check later.
-> 
-> Additionally, if the XDP program added metadata, it would be located at
-> [old_data - metasize, old_data]. The memset writes zeroes to
-> [new_data, new_data + 64], which is [old_data - 64, old_data], 
-> potentially
-> overwriting the original metadata.
-> 
-> Since xdp->data_meta is shifted back by 64 bytes, could it now point to
-> garbage memory and corrupt the metadata state?
-> 
->> 
->>  		xdpf = xdp_convert_buff_to_frame(xdp);
->>  		if (unlikely(!xdpf)) {
->>  			page_pool_put_full_page(ring->page_pool, rx_page,
->>  						true);
->>  			return XDP_DROP;
->>  		}
-> 
-> Are we missing a counter increment on this failure path?
+Will this allow unreadable fragments that are not devmem iovs (such as those
+potentially introduced by io_uring) to bypass device capability checks?
 
-Fair point, but xdp_convert_buff_to_frame() failure is an extremely
-rare path (insufficient headroom for xdp_frame). Can be addressed in
-a follow-up.
+Previously, if dev->netmem_tx was NETMEM_TX_NONE, any unreadable fragment
+would trigger goto out_free. Now, if it's unreadable but not a devmem iov,
+it jumps to out and returns the SKB, successfully bypassing the
+dev->netmem_tx check below and potentially failing open on legacy devices.
 
-> 
-> The preceding headroom check failure explicitly increments xdp_tx_err 
-> before
-> dropping, but this path returns directly. Since it doesn't fall through 
-> to
-> the XDP_DROP switch case, the dropped packet appears to be unaccounted 
-> for
-> in the new statistics.
+> -	if (shinfo->nr_frags > 0) {
+> -		niov =3D netmem_to_net_iov(skb_frag_netmem(&shinfo->frags[0]));
+> -		if (net_is_devmem_iov(niov) &&
+> -		    READ_ONCE(net_devmem_iov_binding(niov)->dev) !=3D dev)
+> +	binding =3D net_devmem_iov_binding(niov);
+> +
+> +	switch (dev->netmem_tx) {
+> +	case NETMEM_TX_DMA:
+> +		if (READ_ONCE(binding->dev) !=3D dev)
+>  			goto out_free;
+> +		break;
+> +	case NETMEM_TX_NO_DMA:
+> +		break;
+> +	default: /* NETMEM_TX_NONE */
+> +		goto out_free;
+>  	}
+> =20
+>  out:
+> diff --git a/net/core/devmem.c b/net/core/devmem.c
+> index cde4c89bc146..644c286b778f 100644
+> --- a/net/core/devmem.c
+> +++ b/net/core/devmem.c
+[ ... ]
+> @@ -212,6 +212,7 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+>  	}
+> =20
+>  	binding->dev =3D dev;
+> +	binding->vdev =3D vdev;
 
-Thanks,
-Nicolai
+Are dev_hold() references needed here for the TX bindings?
+
+Without a reference count, and since TX bindings do not have an RX queue
+memory provider to provide an unregister hook, these pointers could become
+dangling if the devices are destroyed.
+
+If a new net_device is later allocated at the same address, couldn't this
+lead to an ABA problem in net_devmem_get_binding() and allow users to
+transmit packets mapped for the old device's DMA domain?
+
+>  	xa_init_flags(&binding->bound_rxqs, XA_FLAGS_ALLOC);
+> =20
+>  	err =3D percpu_ref_init(&binding->ref,
+> diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+> index b8f6076d8007..bc6057aee98e 100644
+> --- a/net/core/netdev-genl.c
+> +++ b/net/core/netdev-genl.c
+[ ... ]
+> @@ -1164,16 +1197,26 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, s=
+truct genl_info *info)
+>  		goto err_unlock_netdev;
+>  	}
+> =20
+> -	if (!netdev->netmem_tx) {
+> +	if (netdev->netmem_tx =3D=3D NETMEM_TX_NONE) {
+>  		err =3D -EOPNOTSUPP;
+>  		NL_SET_ERR_MSG(info->extack,
+>  			       "Driver does not support netmem TX");
+>  		goto err_unlock_netdev;
+>  	}
+> =20
+> -	dma_dev =3D netdev_queue_get_dma_dev(netdev, 0, NETDEV_QUEUE_TYPE_TX);
+> -	binding =3D net_devmem_bind_dmabuf(netdev, dma_dev, DMA_TO_DEVICE,
+> -					 dmabuf_fd, priv, info->extack);
+> +	bind_dev =3D netdev_find_netmem_tx_dev(netdev);
+> +	if (!bind_dev) {
+> +		err =3D -EOPNOTSUPP;
+> +		NL_SET_ERR_MSG(info->extack,
+> +			       "No DMA-capable device found for netmem TX");
+> +		goto err_unlock_netdev;
+> +	}
+> +
+> +	dma_dev =3D netdev_queue_get_dma_dev(bind_dev, 0, NETDEV_QUEUE_TYPE_TX);
+
+Does this cause a lockdep assertion if bind_dev !=3D netdev?
+
+In this function, netdev is locked via netdev_get_by_index_lock(), but
+bind_dev is found via netdev_find_netmem_tx_dev(). When bind_dev is not
+the same as netdev (e.g., netkit), it appears bind_dev is unlocked.
+
+Calling netdev_queue_get_dma_dev() on bind_dev will trigger the
+netdev_ops_assert_locked(dev) assertion inside that function and cause a
+splat.
+
+> +	binding =3D net_devmem_bind_dmabuf(bind_dev,
+> +					 bind_dev !=3D netdev ? netdev : NULL,
+> +					 dma_dev, DMA_TO_DEVICE, dmabuf_fd,
+> +					 priv, info->extack);
+>  	if (IS_ERR(binding)) {
+>  		err =3D PTR_ERR(binding);
+>  		goto err_unlock_netdev;
+
+Is there a missing rollback if genlmsg_reply() fails at the end of this
+function?
+
+After the binding is successfully created here and attached to the socket,
+the locks are released and the function returns the result of
+genlmsg_reply().
+
+If sending the netlink response fails (e.g., due to memory exhaustion), it
+returns an error code, but unlike the RX path, there is no err_unbind
+rollback. Does this leave a zombie binding active in the kernel that
+userspace has no dmabuf_id for?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260428-tcp-dm-net=
+kit-v1-0-719280eba4d2@meta.com?part=3D7
