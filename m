@@ -1,312 +1,545 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA97221723;
-	Wed, 29 Apr 2026 17:21:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 796491E4AF;
+	Wed, 29 Apr 2026 18:34:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777483284; cv=none; b=i78WiA1/KM9gvfr5GbutBQffI0ulXkVMoJUdqLjTtrq3UWEd63EZMD28uICbSkbXw77+M4oZd/Wk4d06FvNmKOM90kWWUg7Lbp9yqx0lF0pF/vDPRKIex5GukII8gw2i1MIi5Kpb+mh7k9J4eIYsIZhmIqLb40ywDwX+yB3iYoU=
+	t=1777487701; cv=none; b=Dp8L+cGKcAycHuKJ8jcgDhsaTjsmdRFTxPlurbXWiZfMMnnzyu5MT/N3nhKSkxwHAK/vtrPdKdH4NMRoesL0gnb+u7+oqqyVvkS3Z471EOUTMNDl8vJaFkT6Mu8hJY4Ml7o78ePm3dMqvRkFnSVu57CCZVrsTVlNQFrKbVcTw34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777483284; c=relaxed/simple;
-	bh=1cBIpQ9aLppMsBzdk2K03CSWCfbmpNrt9lwop9BHqdE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oXL2AeC0h/sHzj77jUhS5a6fPpyevuUVWxBnHerXVG7H4TWkFeK7Yl4cKdz4ZoUemMcwOkBJLaEVnlWrZT1xrPo/J9u/AcqU8lH+IPyoBWniOpIFyVk40QmQRzh2dWpLlBB9qkLffwh8bIbEHL2FUcmfKo43l5MTY0hhGZF1hoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M9q9IlrV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777487701; c=relaxed/simple;
+	bh=n+NVogIRep+ymWOMp2E7Apj2QseV5XL4POXOI9RDhJY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=p+xEqE0LprkLzCBWGwPieFNC/dLSzUbdM0LlP/2mGELsrnQuNJeVg557OEpAJQAnCOkBCJO5YWQRuvcnOs4Z9jPEqNk6v/dd0HDPthC6+Y4siX5ouMQ6MhZVtBV4niAlGy2vmgunABXQdXgk3Zp6GJfuYpx42pqPYtRtWtZxleA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=QA9pTiwH; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M9q9IlrV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EDD6C2BCC7;
-	Wed, 29 Apr 2026 17:21:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777483284;
-	bh=1cBIpQ9aLppMsBzdk2K03CSWCfbmpNrt9lwop9BHqdE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=M9q9IlrV1D++szawI5M5qCwBp0JnucogxIWLOZSBKSyZTCSUwWYyRzXksneaB6HmF
-	 RVT6t+mfxs6xi0McWnLpkJJz3aoFjpGXynrsSnpZ2fomQ/voKLxNozpwcsjHL56J7U
-	 dJb8ku8wHW1QQkYoWweovgeEEaoNRPF25FA8TMUnzkf/0Hi/suJZLEczWYLvmLDBhR
-	 lws5h1MbgTBZ52og1Nu6P9tYABW/LXW4xiMn0uT7vLWWKrYcwt3ebBF/AMvNtp+MRs
-	 XkU6T72tVIf3tQxWGE++MyyTS7HhoBeH96+2zBEXOnmOP0X+Mx8Qu+893CyQrY5Csa
-	 OxcUeGGABSIWA==
-From: hawk@kernel.org
-To: netdev@vger.kernel.org
-Cc: hawk@kernel.org,
-	kernel-team@cloudflare.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net-next v3 2/5] veth: implement Byte Queue Limits (BQL) for latency reduction
-Date: Wed, 29 Apr 2026 19:20:29 +0200
-Message-ID: <20260429172036.1028526-3-hawk@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260429172036.1028526-1-hawk@kernel.org>
-References: <20260429172036.1028526-1-hawk@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="QA9pTiwH"
+Received: from narnia (unknown [40.78.12.246])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 7333820B716C;
+	Wed, 29 Apr 2026 11:34:57 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7333820B716C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1777487698;
+	bh=aXf97LxHBjTD88WDN+5b5+qAq1In70SnE4SHaSh20fw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=QA9pTiwHhn5AlGUAySLt/5UyqLZ9EU3CVB01yvPj6G4dFq0p6BPf1BClO56Tf5Wsb
+	 hhIW2vL6Sy6E8c9/4luMkhJG21XpcdmhSOoP70rIhVnKAhP5ZTbSeCcQoBwm46ZqLu
+	 8zXURytoakXil4veOyees8Dl/5DhUDyTn0+/+2iI=
+From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+To: Fan Wu <wufan@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, Paul Moore <paul@paul-moore.com>,
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G=C3=BC?=
+ =?utf-8?Q?nther?= Noack <gnoack@google.com>, "Dr.
+ David Alan Gilbert" <linux@treblig.org>, Andrew Morton
+ <akpm@linux-foundation.org>, James.Bottomley@hansenpartnership.com,
+ dhowells@redhat.com, Fan Wu <wufan@kernel.org>, Ryan Foster
+ <foster.ryan.r@gmail.com>, Randy Dunlap <rdunlap@infradead.org>,
+ linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Song Liu
+ <song@kernel.org>
+Subject: Re: [PATCH v5 06/10] security: Hornet LSM
+In-Reply-To: <CAKtyLkF5L_sDHmtT2eVhmHLdhB_rAxWzotUJER6A5DFQ=S6EPw@mail.gmail.com>
+References: <20260420212653.438685-1-bboscaccy@linux.microsoft.com>
+ <20260420212653.438685-7-bboscaccy@linux.microsoft.com>
+ <CAKtyLkF5L_sDHmtT2eVhmHLdhB_rAxWzotUJER6A5DFQ=S6EPw@mail.gmail.com>
+Date: Wed, 29 Apr 2026 11:34:55 -0700
+Message-ID: <87jytpk434.fsf@microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Jesper Dangaard Brouer <hawk@kernel.org>
+Fan Wu <wufan@kernel.org> writes:
 
-Commit dc82a33297fc ("veth: apply qdisc backpressure on full ptr_ring to
-reduce TX drops") gave qdiscs control over veth by returning
-NETDEV_TX_BUSY when the ptr_ring is full (DRV_XOFF).  That commit noted
-a known limitation: the 256-entry ptr_ring sits in front of the qdisc as
-a dark buffer, adding base latency because the qdisc has no visibility
-into how many bytes are already queued there.
+> On Mon, Apr 20, 2026 at 2:27=E2=80=AFPM Blaise Boscaccy
+> <bboscaccy@linux.microsoft.com> wrote:
+>>
+>> This adds the Hornet Linux Security Module which provides enhanced
+>> signature verification and data validation for eBPF programs. This
+>> allows users to continue to maintain an invariant that all code
+>> running inside of the kernel has actually been signed and verified, by
+>> the kernel.
+>>
+>> This effort builds upon the currently excepted upstream solution. It
+>> further hardens it by providing deterministic, in-kernel checking of
+>> map hashes to solidify auditing along with preventing TOCTOU attacks
+>> against lskel map hashes.
+>>
+>> Target map hashes are passed in via PKCS#7 signed attributes. Hornet
+>> determines the extent which the eBFP program is signed and defers to
+>> other LSMs for policy decisions.
+>>
+>> Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+>> Nacked-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+>
+> ...
+>
+>> diff --git a/security/hornet/Kconfig b/security/hornet/Kconfig
+>> new file mode 100644
+>> index 0000000000000..19406aa237ac6
+>> --- /dev/null
+>> +++ b/security/hornet/Kconfig
+>> @@ -0,0 +1,11 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only
+>> +config SECURITY_HORNET
+>> +       bool "Hornet support"
+>> +       depends on SECURITY
+>
+> The dependency doesn't seem to be complete, for example,
+> PKCS7_MESSAGE_PARSER is not selected.
+>
+>> +       default n
+>> +       help
+>> +         This selects Hornet.
+>> +         Further information can be found in
+>> +         Documentation/admin-guide/LSM/Hornet.rst.
+>> +
+>> +         If you are unsure how to answer this question, answer N.
+>> diff --git a/security/hornet/Makefile b/security/hornet/Makefile
+>> new file mode 100644
+>> index 0000000000000..26b6f954f762e
+>> --- /dev/null
+>> +++ b/security/hornet/Makefile
+>> @@ -0,0 +1,7 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only
+>> +obj-$(CONFIG_SECURITY_HORNET) :=3D hornet.o
+>> +
+>> +hornet-y :=3D hornet.asn1.o \
+>> +       hornet_lsm.o \
+>> +
+>> +$(obj)/hornet.asn1.o: $(obj)/hornet.asn1.c $(obj)/hornet.asn1.h
+>> diff --git a/security/hornet/hornet.asn1 b/security/hornet/hornet.asn1
+>> new file mode 100644
+>> index 0000000000000..c8d47b16b65d7
+>> --- /dev/null
+>> +++ b/security/hornet/hornet.asn1
+>> @@ -0,0 +1,13 @@
+>> +-- SPDX-License-Identifier: BSD-3-Clause
+>> +--
+>> +-- Copyright (C) 2009 IETF Trust and the persons identified as authors
+>> +-- of the code
+>
+> I'm not a lawyer, but since this is a new AA which is not in the RFC,
+> should the copyright belong to IETF?
+>
 
-Add BQL support so the qdisc gets feedback and can begin shaping traffic
-before the ring fills.  In testing with fq_codel, BQL reduces ping RTT
-under UDP load from ~6.61ms to ~0.36ms (18x).
+gah thanks.=20
+>> +--
+>> +-- https://www.rfc-editor.org/rfc/rfc5652#section-3
+>> +
+>> +HornetData ::=3D SET OF Map
+>> +
+>> +Map ::=3D SEQUENCE {
+>> +       index                   INTEGER ({ hornet_map_index }),
+>> +       sha                     OCTET STRING ({ hornet_map_hash })
+>> +} ({ hornet_next_map })
+>> diff --git a/security/hornet/hornet_lsm.c b/security/hornet/hornet_lsm.c
+>> new file mode 100644
+>> index 0000000000000..f7d62fe6229c9
+>> --- /dev/null
+>> +++ b/security/hornet/hornet_lsm.c
+>> @@ -0,0 +1,346 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Hornet Linux Security Module
+>> + *
+>> + * Author: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+>> + *
+>> + * Copyright (C) 2026 Microsoft Corporation
+>> + */
+>> +
+>> +#include <linux/lsm_hooks.h>
+>> +#include <uapi/linux/lsm.h>
+>> +#include <linux/bpf.h>
+>> +#include <linux/verification.h>
+>> +#include <crypto/public_key.h>
+>> +#include <linux/module_signature.h>
+>> +#include <crypto/pkcs7.h>
+>> +#include <linux/sort.h>
+>> +#include <linux/asn1_decoder.h>
+>> +#include <linux/oid_registry.h>
+>> +#include "hornet.asn1.h"
+>> +
+>> +#define MAX_USED_MAPS 64
+>> +
+>> +struct hornet_maps {
+>> +       bpfptr_t fd_array;
+>> +};
+>> +
+>> +/* The only hashing algorithm available is SHA256 due to it be hardcoded
+>> +   in the bpf subsystem. */
+>> +
+>> +struct hornet_parse_context {
+>> +       int indexes[MAX_USED_MAPS];
+>> +       bool skips[MAX_USED_MAPS];
+>> +       unsigned char hashes[SHA256_DIGEST_SIZE * MAX_USED_MAPS];
+>> +       int hash_count;
+>> +};
+>> +
+>> +struct hornet_prog_security_struct {
+>> +       bool checked[MAX_USED_MAPS];
+>> +       unsigned char hashes[SHA256_DIGEST_SIZE * MAX_USED_MAPS];
+>> +};
+>> +
+>> +struct hornet_map_security_struct {
+>> +       bool checked;
+>> +       int index;
+>> +};
+>> +
+>
+> Can maps be shared between programs? If so, since the LSM blob is
+> per-map, a second program's load will overwrite map_security->index
+> set by the first. A later run of the first program would then fail to
+> find its own map.
+>
 
-Charge a fixed VETH_BQL_UNIT (1) per packet rather than skb->len, so
-the DQL limit tracks packets-in-flight.  Unlike a physical NIC, veth
-has no link speed -- the ptr_ring drains at CPU speed and is
-packet-indexed, not byte-indexed, so bytes are not the natural unit.
-With byte-based charging, small packets sneak many more entries into
-the ring before STACK_XOFF fires, deepening the dark buffer under
-mixed-size workloads.  Testing with a concurrent min-size packet flood
-shows 3.7x ping RTT degradation with skb->len charging versus no
-change with fixed-unit charging.
+Yes, it can. We can support that.
 
-Charge BQL inside veth_xdp_rx() under the ptr_ring producer_lock, after
-confirming the ring is not full.  The charge must precede the produce
-because the NAPI consumer can run on another CPU and complete the SKB
-the instant it becomes visible in the ring.  Doing both under the same
-lock avoids a pre-charge/undo pattern -- BQL is only charged when
-produce is guaranteed to succeed.
+>> +struct lsm_blob_sizes hornet_blob_sizes __ro_after_init =3D {
+>> +       .lbs_bpf_map =3D sizeof(struct hornet_map_security_struct),
+>> +       .lbs_bpf_prog =3D sizeof(struct hornet_prog_security_struct),
+>> +};
+>> +
+>> +static inline struct hornet_prog_security_struct *
+>> +hornet_bpf_prog_security(struct bpf_prog *prog)
+>> +{
+>> +       return prog->aux->security + hornet_blob_sizes.lbs_bpf_prog;
+>> +}
+>> +
+>> +static inline struct hornet_map_security_struct *
+>> +hornet_bpf_map_security(struct bpf_map *map)
+>> +{
+>> +       return map->security + hornet_blob_sizes.lbs_bpf_map;
+>> +}
+>> +
+>> +static int hornet_verify_hashes(struct hornet_maps *maps,
+>> +                               struct hornet_parse_context *ctx,
+>> +                               struct bpf_prog *prog)
+>> +{
+>> +       int map_fd;
+>> +       u32 i;
+>> +       struct bpf_map *map;
+>> +       int err =3D 0;
+>> +       unsigned char hash[SHA256_DIGEST_SIZE];
+>> +       struct hornet_prog_security_struct *security =3D hornet_bpf_prog=
+_security(prog);
+>> +       struct hornet_map_security_struct *map_security;
+>> +
+>> +       for (i =3D 0; i < ctx->hash_count; i++) {
+>> +               if (ctx->skips[i])
+>> +                       continue;
+>> +
+>> +               err =3D copy_from_bpfptr_offset(&map_fd, maps->fd_array,
+>> +                                             ctx->indexes[i] * sizeof(m=
+ap_fd),
+>> +                                             sizeof(map_fd));
+>> +               if (err < 0)
+>> +                       return LSM_INT_VERDICT_FAULT;
+>> +
+>> +               CLASS(fd, f)(map_fd);
+>> +               if (fd_empty(f))
+>> +                       return LSM_INT_VERDICT_FAULT;
+>> +               if (unlikely(fd_file(f)->f_op !=3D &bpf_map_fops))
+>> +                       return LSM_INT_VERDICT_FAULT;
+>> +
+>> +               map =3D fd_file(f)->private_data;
+>> +               if (!map->frozen)
+>> +                       return LSM_INT_VERDICT_FAULT;
+>> +
+>> +               map->ops->map_get_hash(map, SHA256_DIGEST_SIZE, hash);
+>> +
+>> +               err =3D memcmp(hash, &ctx->hashes[i * SHA256_DIGEST_SIZE=
+],
+>> +                             SHA256_DIGEST_SIZE);
+>> +               if (err)
+>> +                       return LSM_INT_VERDICT_UNEXPECTED;
+>> +
+>> +               security->checked[i] =3D true;
+>> +               memcpy(&security->hashes[i * SHA256_DIGEST_SIZE], hash, =
+SHA256_DIGEST_SIZE);
+>> +               map_security =3D hornet_bpf_map_security(map);
+>> +               map_security->checked =3D true;
+>> +               map_security->index =3D i;
+>> +       }
+>> +       return LSM_INT_VERDICT_OK;
+>> +}
+>> +
+>> +int hornet_next_map(void *context, size_t hdrlen,
+>> +                    unsigned char tag,
+>> +                    const void *value, size_t vlen)
+>> +{
+>> +       struct hornet_parse_context *ctx =3D (struct hornet_parse_contex=
+t *)context;
+>> +
+>> +       if (++ctx->hash_count >=3D MAX_USED_MAPS)
+>> +               return -EINVAL;
+>> +       return 0;
+>> +}
+>> +
+>> +int hornet_map_index(void *context, size_t hdrlen,
+>> +                    unsigned char tag,
+>> +                    const void *value, size_t vlen)
+>> +{
+>> +       struct hornet_parse_context *ctx =3D (struct hornet_parse_contex=
+t *)context;
+>> +
+>> +       if (vlen > 1)
+>> +               return -EINVAL;
+>> +
+>> +       ctx->indexes[ctx->hash_count] =3D *(u8 *)value;
+>> +       return 0;
+>> +}
+>> +
+>> +int hornet_map_hash(void *context, size_t hdrlen,
+>> +                   unsigned char tag,
+>> +                   const void *value, size_t vlen)
+>> +
+>> +{
+>> +       struct hornet_parse_context *ctx =3D (struct hornet_parse_contex=
+t *)context;
+>> +
+>> +       if (vlen !=3D SHA256_DIGEST_SIZE && vlen !=3D 0)
+>> +               return -EINVAL;
+>> +
+>> +       if (vlen) {
+>> +               ctx->skips[ctx->hash_count] =3D false;
+>> +               memcpy(&ctx->hashes[ctx->hash_count * SHA256_DIGEST_SIZE=
+], value, vlen);
+>> +       } else
+>> +               ctx->skips[ctx->hash_count] =3D true;
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static int hornet_check_program(struct bpf_prog *prog, union bpf_attr *=
+attr,
+>> +                               struct bpf_token *token, bool is_kernel,
+>> +                               enum lsm_integrity_verdict *verdict)
+>> +{
+>> +       struct hornet_maps maps =3D {0};
+>> +       bpfptr_t usig =3D make_bpfptr(attr->signature, is_kernel);
+>> +       struct pkcs7_message *msg;
+>> +       struct hornet_parse_context *ctx;
+>> +       void *sig;
+>> +       int err;
+>> +       const void *authattrs;
+>> +       size_t authattrs_len;
+>> +       struct key *key;
+>> +
+>> +       if (!attr->signature) {
+>> +               *verdict =3D LSM_INT_VERDICT_UNSIGNED;
+>> +               return 0;
+>> +       }
+>> +
+>> +       ctx =3D kzalloc(sizeof(struct hornet_parse_context), GFP_KERNEL);
+>> +       if (!ctx)
+>> +               return -ENOMEM;
+>> +
+>> +       maps.fd_array =3D make_bpfptr(attr->fd_array, is_kernel);
+>> +       sig =3D kzalloc(attr->signature_size, GFP_KERNEL);
+>> +       if (!sig) {
+>> +               err =3D -ENOMEM;
+>> +               goto out;
+>> +       }
+>> +       err =3D copy_from_bpfptr(sig, usig, attr->signature_size);
+>> +       if (err !=3D 0)
+>> +               goto cleanup_sig;
+>> +
+>> +       msg =3D pkcs7_parse_message(sig, attr->signature_size);
+>> +       if (IS_ERR(msg)) {
+>> +               *verdict =3D LSM_INT_VERDICT_BADSIG;
+>> +               err =3D 0;
+>> +               goto cleanup_sig;
+>> +       }
+>> +
+>> +       if (system_keyring_id_check(attr->keyring_id) =3D=3D 0)
+>> +               key =3D (struct key*)(unsigned long)attr->keyring_id;
+>> +       else
+>> +               key =3D key_ref_to_ptr(lookup_user_key(attr->keyring_id,=
+ 0, KEY_DEFER_PERM_CHECK));
+>
+> You might need to key_put the user key.
+>
+>> +
+>> +       if (verify_pkcs7_message_sig(prog->insnsi, prog->len * sizeof(st=
+ruct bpf_insn), msg,
+>> +                                    key,
+>> +                                    VERIFYING_BPF_SIGNATURE,
+>> +                                    NULL, NULL)) {
+>> +               *verdict =3D LSM_INT_VERDICT_UNKNOWNKEY;
+>> +               err =3D 0;
+>> +               goto cleanup_msg;
+>> +       }
+>> +
+>> +       if (pkcs7_get_authattr(msg, OID_hornet_data,
+>> +                              &authattrs, &authattrs_len) =3D=3D -ENODA=
+TA) {
+>> +               *verdict =3D LSM_INT_VERDICT_PARTIALSIG;
+>> +               err =3D 0;
+>> +               goto cleanup_msg;
+>> +       }
+>> +
+>> +       err =3D asn1_ber_decoder(&hornet_decoder, ctx, authattrs, authat=
+trs_len);
+>> +       if (err < 0 || authattrs =3D=3D NULL) {
+>> +               *verdict =3D LSM_INT_VERDICT_BADSIG;
+>> +               err =3D 0;
+>> +               goto cleanup_msg;
+>> +       }
+>> +
+>> +       err =3D hornet_verify_hashes(&maps, ctx, prog);
+>> +       if (err =3D=3D 0)
+>> +               *verdict =3D LSM_INT_VERDICT_OK;
+>> +       else
+>> +               *verdict =3D err;
+>> +
+>> +cleanup_msg:
+>> +       pkcs7_free_message(msg);
+>> +cleanup_sig:
+>> +       kfree(sig);
+>> +out:
+>> +       kfree(ctx);
+>> +       return err;
+>> +}
+>> +
+>> +static const struct lsm_id hornet_lsmid =3D {
+>> +       .name =3D "hornet",
+>> +       .id =3D LSM_ID_HORNET,
+>> +};
+>> +
+>> +static int hornet_bpf_prog_load_integrity(struct bpf_prog *prog, union =
+bpf_attr *attr,
+>> +                                         struct bpf_token *token, bool =
+is_kernel)
+>> +{
+>> +       enum lsm_integrity_verdict verdict;
+>> +       int result =3D hornet_check_program(prog, attr, token, is_kernel=
+, &verdict);
+>> +
+>> +       if (result < 0)
+>> +               return result;
+>> +
+>> +       return security_bpf_prog_load_post_integrity(prog, attr, token, =
+is_kernel,
+>> +                                                    &hornet_lsmid, verd=
+ict);
+>> +}
+>> +
+>> +static int hornet_verify_map(struct bpf_prog *prog, int index)
+>> +{
+>> +       unsigned char hash[SHA256_DIGEST_SIZE];
+>> +       int i;
+>> +       struct bpf_map *map;
+>> +       struct hornet_prog_security_struct *security =3D hornet_bpf_prog=
+_security(prog);
+>> +       struct hornet_map_security_struct *map_security;
+>> +
+>> +       if (!security->checked[index])
+>> +               return 0;
+>> +
+>> +       for (i =3D 0; i < prog->aux->used_map_cnt; i++) {
+>> +               map =3D prog->aux->used_maps[i];
+>> +               map_security =3D hornet_bpf_map_security(map);
+>> +               if (map_security->index !=3D index)
+>> +                       continue;
+>> +
+>> +               if (!map->frozen)
+>> +                       return -EPERM;
+>> +
+>> +               map->ops->map_get_hash(map, SHA256_DIGEST_SIZE, hash);
+>> +               if (memcmp(hash, &security->hashes[index * SHA256_DIGEST=
+_SIZE],
+>> +                          SHA256_DIGEST_SIZE) !=3D 0)
+>> +                       return -EPERM;
+>> +               else
+>> +                       return 0;
+>> +       }
+>> +       return -EINVAL;
+>> +}
+>> +
+>> +static int hornet_check_prog_maps(u32 ufd)
+>> +{
+>> +       CLASS(fd, f)(ufd);
+>> +       struct bpf_prog *prog;
+>> +       int i, result =3D 0;
+>> +
+>> +       if (fd_empty(f))
+>> +               return -EBADF;
+>> +       if (fd_file(f)->f_op !=3D &bpf_prog_fops)
+>> +               return -EINVAL;
+>> +
+>> +       prog =3D fd_file(f)->private_data;
+>> +
+>> +       mutex_lock(&prog->aux->used_maps_mutex);
+>> +       if (!prog->aux->used_map_cnt)
+>> +               goto out;
+>> +
+>> +       for (i =3D 0; i < prog->aux->used_map_cnt; i++) {
+>> +               result =3D hornet_verify_map(prog, i);
+>> +               if (result)
+>> +                       goto out;
+>> +       }
+>
+> This loop is kind of confusing for me, I guess it's just iterating
+> through the maps the program currently in use. I feel the nested loop
+> is unnecessary and the hash could be saved into the map's blob
+> instead. Please correct me if I'm wrong here.
+>
 
-BQL is enabled only when a real qdisc is attached (guarded by
-!qdisc_txq_has_no_queue), as HARD_TX_LOCK provides serialization
-for TXQ modification like dql_queued(). For lltx devices, like veth,
-this HARD_TX_LOCK serialization isn't provided.  The ptr_ring
-producer_lock provides additional serialization that would allow
-BQL to work correctly even with noqueue, though that combination
-is not currently enabled, as the netstack will drop and warn.
+It turns out that we can. I'll send out the simplified version in v6.
 
-Track per-SKB BQL state via a VETH_BQL_FLAG pointer tag in the ptr_ring
-entry.  This is necessary because the qdisc can be replaced live while
-SKBs are in-flight -- each SKB must carry the charge decision made at
-enqueue time rather than re-checking the peer's qdisc at completion.
-
-Complete per-SKB in veth_xdp_rcv() rather than in bulk, so STACK_XOFF
-clears promptly when producer and consumer run on different CPUs.
-
-BQL introduces a second independent queue-stop mechanism (STACK_XOFF)
-alongside the existing DRV_XOFF (ring full).  Both must be clear for
-the queue to transmit.  Reset BQL state in veth_napi_del_range() after
-synchronize_net() to avoid racing with in-flight veth_poll() calls.
-Clamp the reset loop to the peer's real_num_tx_queues, since the peer
-may have fewer TX queues than the local device has RX queues (e.g. when
-veth is enslaved to a bond with XDP attached).
-
-Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
----
- drivers/net/veth.c | 76 +++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 65 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index e35df717e65e..3de25ba34a90 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -34,9 +34,13 @@
- #define DRV_VERSION	"1.0"
- 
- #define VETH_XDP_FLAG		BIT(0)
-+#define VETH_BQL_FLAG		BIT(1)
- #define VETH_RING_SIZE		256
- #define VETH_XDP_HEADROOM	(XDP_PACKET_HEADROOM + NET_IP_ALIGN)
- 
-+/* Fixed BQL charge: DQL limit tracks packets-in-flight, not bytes */
-+#define VETH_BQL_UNIT		1
-+
- #define VETH_XDP_TX_BULK_SIZE	16
- #define VETH_XDP_BATCH		16
- 
-@@ -280,6 +284,21 @@ static bool veth_is_xdp_frame(void *ptr)
- 	return (unsigned long)ptr & VETH_XDP_FLAG;
- }
- 
-+static bool veth_ptr_is_bql(void *ptr)
-+{
-+	return (unsigned long)ptr & VETH_BQL_FLAG;
-+}
-+
-+static struct sk_buff *veth_ptr_to_skb(void *ptr)
-+{
-+	return (void *)((unsigned long)ptr & ~VETH_BQL_FLAG);
-+}
-+
-+static void *veth_skb_to_ptr(struct sk_buff *skb, bool bql)
-+{
-+	return bql ? (void *)((unsigned long)skb | VETH_BQL_FLAG) : skb;
-+}
-+
- static struct xdp_frame *veth_ptr_to_xdp(void *ptr)
- {
- 	return (void *)((unsigned long)ptr & ~VETH_XDP_FLAG);
-@@ -295,7 +314,7 @@ static void veth_ptr_free(void *ptr)
- 	if (veth_is_xdp_frame(ptr))
- 		xdp_return_frame(veth_ptr_to_xdp(ptr));
- 	else
--		kfree_skb(ptr);
-+		kfree_skb(veth_ptr_to_skb(ptr));
- }
- 
- static void __veth_xdp_flush(struct veth_rq *rq)
-@@ -309,19 +328,33 @@ static void __veth_xdp_flush(struct veth_rq *rq)
- 	}
- }
- 
--static int veth_xdp_rx(struct veth_rq *rq, struct sk_buff *skb)
-+static int veth_xdp_rx(struct veth_rq *rq, struct sk_buff *skb, bool do_bql,
-+		       struct netdev_queue *txq)
- {
--	if (unlikely(ptr_ring_produce(&rq->xdp_ring, skb)))
-+	struct ptr_ring *ring = &rq->xdp_ring;
-+
-+	spin_lock(&ring->producer_lock);
-+	if (unlikely(!ring->size) || __ptr_ring_full(ring)) {
-+		spin_unlock(&ring->producer_lock);
- 		return NETDEV_TX_BUSY; /* signal qdisc layer */
-+	}
-+
-+	/* BQL charge before produce; consumer cannot see entry yet */
-+	if (do_bql)
-+		netdev_tx_sent_queue(txq, VETH_BQL_UNIT);
-+
-+	__ptr_ring_produce(ring, veth_skb_to_ptr(skb, do_bql));
-+	spin_unlock(&ring->producer_lock);
- 
- 	return NET_RX_SUCCESS; /* same as NETDEV_TX_OK */
- }
- 
- static int veth_forward_skb(struct net_device *dev, struct sk_buff *skb,
--			    struct veth_rq *rq, bool xdp)
-+			    struct veth_rq *rq, bool xdp, bool do_bql,
-+			    struct netdev_queue *txq)
- {
- 	return __dev_forward_skb(dev, skb) ?: xdp ?
--		veth_xdp_rx(rq, skb) :
-+		veth_xdp_rx(rq, skb, do_bql, txq) :
- 		__netif_rx(skb);
- }
- 
-@@ -352,6 +385,7 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
- 	struct net_device *rcv;
- 	int length = skb->len;
- 	bool use_napi = false;
-+	bool do_bql = false;
- 	int ret, rxq;
- 
- 	rcu_read_lock();
-@@ -375,8 +409,11 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
- 	}
- 
- 	skb_tx_timestamp(skb);
-+	txq = netdev_get_tx_queue(dev, rxq);
- 
--	ret = veth_forward_skb(rcv, skb, rq, use_napi);
-+	/* BQL charge happens inside veth_xdp_rx() under producer_lock */
-+	do_bql = use_napi && !qdisc_txq_has_no_queue(txq);
-+	ret = veth_forward_skb(rcv, skb, rq, use_napi, do_bql, txq);
- 	switch (ret) {
- 	case NET_RX_SUCCESS: /* same as NETDEV_TX_OK */
- 		if (!use_napi)
-@@ -388,8 +425,6 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
- 		/* If a qdisc is attached to our virtual device, returning
- 		 * NETDEV_TX_BUSY is allowed.
- 		 */
--		txq = netdev_get_tx_queue(dev, rxq);
--
- 		if (qdisc_txq_has_no_queue(txq)) {
- 			dev_kfree_skb_any(skb);
- 			goto drop;
-@@ -412,6 +447,7 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
- 		net_crit_ratelimited("%s(%s): Invalid return code(%d)",
- 				     __func__, dev->name, ret);
- 	}
-+
- 	rcu_read_unlock();
- 
- 	return ret;
-@@ -900,7 +936,8 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
- 
- static int veth_xdp_rcv(struct veth_rq *rq, int budget,
- 			struct veth_xdp_tx_bq *bq,
--			struct veth_stats *stats)
-+			struct veth_stats *stats,
-+			struct netdev_queue *peer_txq)
- {
- 	int i, done = 0, n_xdpf = 0;
- 	void *xdpf[VETH_XDP_BATCH];
-@@ -928,9 +965,13 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
- 			}
- 		} else {
- 			/* ndo_start_xmit */
--			struct sk_buff *skb = ptr;
-+			bool bql_charged = veth_ptr_is_bql(ptr);
-+			struct sk_buff *skb = veth_ptr_to_skb(ptr);
- 
- 			stats->xdp_bytes += skb->len;
-+			if (peer_txq && bql_charged)
-+				netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_UNIT);
-+
- 			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
- 			if (skb) {
- 				if (skb_shared(skb) || skb_unclone(skb, GFP_ATOMIC))
-@@ -975,7 +1016,7 @@ static int veth_poll(struct napi_struct *napi, int budget)
- 	peer_txq = peer_dev ? netdev_get_tx_queue(peer_dev, queue_idx) : NULL;
- 
- 	xdp_set_return_frame_no_direct();
--	done = veth_xdp_rcv(rq, budget, &bq, &stats);
-+	done = veth_xdp_rcv(rq, budget, &bq, &stats, peer_txq);
- 
- 	if (stats.xdp_redirect > 0)
- 		xdp_do_flush();
-@@ -1073,6 +1114,7 @@ static int __veth_napi_enable(struct net_device *dev)
- static void veth_napi_del_range(struct net_device *dev, int start, int end)
- {
- 	struct veth_priv *priv = netdev_priv(dev);
-+	struct net_device *peer;
- 	int i;
- 
- 	for (i = start; i < end; i++) {
-@@ -1091,6 +1133,17 @@ static void veth_napi_del_range(struct net_device *dev, int start, int end)
- 		ptr_ring_cleanup(&rq->xdp_ring, veth_ptr_free);
- 	}
- 
-+	/* Reset BQL on peer's txqs: remaining ring items were freed above
-+	 * without BQL completion, so DQL state must be reset.
-+	 */
-+	peer = rtnl_dereference(priv->peer);
-+	if (peer) {
-+		int peer_end = min(end, (int)peer->real_num_tx_queues);
-+
-+		for (i = start; i < peer_end; i++)
-+			netdev_tx_reset_queue(netdev_get_tx_queue(peer, i));
-+	}
-+
- 	for (i = start; i < end; i++) {
- 		page_pool_destroy(priv->rq[i].page_pool);
- 		priv->rq[i].page_pool = NULL;
-@@ -1740,6 +1793,7 @@ static void veth_setup(struct net_device *dev)
- 	dev->priv_flags |= IFF_PHONY_HEADROOM;
- 	dev->priv_flags |= IFF_DISABLE_NETPOLL;
- 	dev->lltx = true;
-+	dev->bql = true;
- 
- 	dev->netdev_ops = &veth_netdev_ops;
- 	dev->xdp_metadata_ops = &veth_xdp_metadata_ops;
--- 
-2.43.0
-
+> -Fan
+>
+>> +out:
+>> +       mutex_unlock(&prog->aux->used_maps_mutex);
+>> +       return result;
+>> +}
+>> +
+>> +static int hornet_bpf(int cmd, union bpf_attr *attr, unsigned int size,=
+ bool kernel)
+>> +{
+>> +       /* in horent_bpf(), anything that had originated from kernel spa=
+ce we assume
+>> +          has already been checked, in some form or another, so we don'=
+t bother
+>> +          checking the intergity of any maps. In hornet_bpf_prog_load_i=
+ntegrity(),
+>> +          hornet doesn't make any opinion on that and delegates that to=
+ the downstream
+>> +          policy enforcement. */
+>> +
+>> +       if (cmd !=3D BPF_PROG_RUN)
+>> +               return 0;
+>> +       if (kernel)
+>> +               return 0;
+>> +
+>> +       return hornet_check_prog_maps(attr->test.prog_fd);
+>> +}
+>> +
+>> +static struct security_hook_list hornet_hooks[] __ro_after_init =3D {
+>> +       LSM_HOOK_INIT(bpf_prog_load_integrity, hornet_bpf_prog_load_inte=
+grity),
+>> +       LSM_HOOK_INIT(bpf, hornet_bpf),
+>> +};
+>> +
+>> +static int __init hornet_init(void)
+>> +{
+>> +       pr_info("Hornet: eBPF signature verification enabled\n");
+>> +       security_add_hooks(hornet_hooks, ARRAY_SIZE(hornet_hooks), &horn=
+et_lsmid);
+>> +       return 0;
+>> +}
+>> +
+>> +DEFINE_LSM(hornet) =3D {
+>> +       .id =3D &hornet_lsmid,
+>> +       .blobs =3D &hornet_blob_sizes,
+>> +       .init =3D hornet_init,
+>> +};
+>> --
+>> 2.53.0
+>>
