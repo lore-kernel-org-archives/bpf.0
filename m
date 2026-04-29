@@ -1,42 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187AE1E25F9
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 01:49:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0118A37FF42
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 02:26:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777427390; cv=none; b=sOx7RGkSbo7zFNS9oMALFmTjLYZtBioNrJHg8m2cs16DlAOqqNyKJIE+JL6o7jst1TiNs6i6qlEg+MAxpM+8jBW2Ne0tNX8gn5lQxoxSQB+9yJa7lNVxAhjWzByJazSTx8O3nPpDt+lCEfk7q+RUUJb8/0M0qkJpOdsnTN3cSvw=
+	t=1777429619; cv=none; b=NCj+QgPpWVY+PrztnDsWQh1EJiX5AmZkbb+XGnpB7bYHCbE0pBAasSC2V2YusSXQ84t+Pmj3a6WHcEVNLQy5y92F800nEQrsefVQq/p1q7ZiyqvkhoTnU30gEgyMMA6Da3UI96cEcAYFZsKJ0u0FJVZJYdE5UnxGTURKngbp16I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777427390; c=relaxed/simple;
-	bh=2aX/+VoHidjDizQdg6x8FZK9YZgi0J3yPJaYctwKZA8=;
+	s=arc-20240116; t=1777429619; c=relaxed/simple;
+	bh=9+aglqEiyH9/bhiwsL/cO8knYtPmcyeODrTV+S88yXg=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=tTmaVilfhC1gGNrhVuyHiM+7XgBV7zNO5TLElo8QSjcO9lbhXZSP3eQmYm6mJ25qJoR0UkT18Itu/FYtQ+qvRweoGi8ilyFopxuat0XMTAKUxFmo5mZXAh/ucSjeysRmpn0u4ENBQi/JAyiXiStsFuaidlN9LSF/Q3GBuWCY984=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eU6AzgoV; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=qdVRWBgYzMr/oK2WjslZqoAvtODQBH3z7+y29bLNJ9iYfAITT9HX8/2kverW+Lxyo9KT8vaoppjChXhO8ypLnvvw/Hd+OVCNa0ZqumN8vShfxvUyUPJGHOAiuA4yXTIZEtvCd6ULLd1CbyhP3kI383wE6HjfFOu7MsHkGQGsssc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o+598qN0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eU6AzgoV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C1A0C2BCB7;
-	Wed, 29 Apr 2026 01:49:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o+598qN0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AC1BC2BCB7;
+	Wed, 29 Apr 2026 02:26:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777427389;
-	bh=2aX/+VoHidjDizQdg6x8FZK9YZgi0J3yPJaYctwKZA8=;
+	s=k20201202; t=1777429618;
+	bh=9+aglqEiyH9/bhiwsL/cO8knYtPmcyeODrTV+S88yXg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=eU6AzgoV8em4FQGnou7wGiyxR32VrK4fDryyO+h5XX+rAGYWahwqr1CYM6AOOWlHA
-	 gl3HMIXyDQjJr/L/OWyUf/3RbRWoo/z6AnwcuhvEAJbUF3cwZAGFHczAsX+URORBqu
-	 O+fmdCnT5HAMxVdz9cssMCstJEiSXBks9g7ATV/sJHjYLYfsN+gnGKYaWXrEW/KOBI
-	 2mzlcvsDCvSwf3GejcC+4iRsxy1wo9qzzyKRyqddGQU5BMgyPdyhAb7yb99rKSE5IT
-	 NefryF+S5OWlx22wUTaLxUa8EfDMDSBvOUux8gTGa8TrIYxzEUAzRj4Qa8+2jz2Glq
-	 PfSCxSyAAluww==
+	b=o+598qN0V0xXWLY0WrIghucVPA4r5pv2AD8hBxQYnDNwdsZiUUWqa6XVYddiwsgjV
+	 LoBa2dDi9oP7Jdgt+d81udZh7OklEhnS3chmdKxJuyqp+EEtZY8TYUq5NHJT6te5pB
+	 kSt9G5dBIOdubqs2fs+NyAL1/vNqFZqdYDDVg351ufxSnjYAeo3suPeuRekBoA+7Md
+	 1XJNWTQ/FKqEsPu/FJyARW9YatytcXyRBArP7n6usLAHrH403X+1AkfZ9C74KxKUzM
+	 cOQIBNfcg6qgveDMU0tLVPJ7xWJMFOOfGTPuiAxyhgEUyWwa2ZZB0ZVbRG1xPpVSwX
+	 q+/+Qx6nHJzCg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/4] bpf: Use rcu_work in BTF teardown
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Print breakdown of insns processed
+ by subprogs
 Reply-To: sashiko@lists.linux.dev
-To: "Justin Suess" <utilityemal77@gmail.com>
+To: "Paul Chaignon" <paul.chaignon@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260428201422.1518903-3-utilityemal77@gmail.com>
-References: <20260428201422.1518903-3-utilityemal77@gmail.com>
+In-Reply-To: <5c3514dbc879f22ba3f9eff8a2c730e13bd0572c.1777398528.git.paul.chaignon@gmail.com>
+References: <5c3514dbc879f22ba3f9eff8a2c730e13bd0572c.1777398528.git.paul.chaignon@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Apr 2026 01:49:48 +0000
-Message-Id: <20260429014949.7C1A0C2BCB7@smtp.kernel.org>
+Date: Wed, 29 Apr 2026 02:26:57 +0000
+Message-Id: <20260429022658.5AC1BC2BCB7@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,53 +46,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Use-After-Free in `btf_module_notify()` when flushing RCU work aft=
-er `btf_put()`.
+- [High] Out-of-bounds array read of `env->prog->aux->func_info_aux` in `bp=
+f_subprog_is_global` during `print_verification_stats`.
 --
 
-commit dc547d68e9d5193df746bf0203a1b6ef30ad4a58
-Author: Justin Suess <utilityemal77@gmail.com>
+commit ef2118bdc82dd49b98dca03db90f551c13fc5d86
+Author: Paul Chaignon <paul.chaignon@gmail.com>
 
-bpf: Use rcu_work in BTF teardown
+bpf: Print breakdown of insns processed by subprogs
 
-This commit queues the final BTF teardown from an RCU callback onto
-an rcu_work. This ensures all RCU grace periods cease before proceeding
-with the free work, allowing synchronous teardown for subsequent patches.
+When using global functions, the verifier performs function-by-function
+verification, and only the sum of instructions processed is reported.
+This patch implements a breakdown of instructions processed per global
+function under BPF_LOG_STATS, as is done for stack depths.
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 77af44d8a3ad..2b0511663319 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -8446,6 +8451,7 @@ static int btf_module_notify(struct notifier_block =
-*nb, unsigned long op,
->  				sysfs_remove_bin_file(btf_kobj, btf_mod->sysfs_attr);
->  			purge_cand_cache(btf_mod->btf);
->  			btf_put(btf_mod->btf);
-> +			flush_rcu_work(&btf_mod->btf->free_work);
+> @@ -18288,6 +18295,13 @@ static void print_verification_stats(struct bpf_=
+verifier_env *env)
+>  				verbose(env, "+");
+>  		}
+>  		verbose(env, "\n");
+> +		verbose(env, "insns processed %d", env->subprog_info[0].insn_processed=
+);
+> +		for (i =3D 1; i < env->subprog_cnt; i++) {
+> +			if (!bpf_subprog_is_global(env, i))
 
-Can this result in a use-after-free regression of the btf object?
+Does this code cause an out-of-bounds read of the func_info_aux array?
 
-When btf_put() drops the module's reference to the BTF object, the current
-thread no longer owns a reference. If this was the last reference,
-queue_rcu_work() is invoked to asynchronously free the btf object after
-an RCU grace period.
+If a default exception callback is injected during verification,
+add_hidden_subprog() increments env->subprog_cnt but does not resize the
+func_info_aux array.
 
-Because the thread is no longer inside an RCU read-side critical section,
-it can be preempted before flush_rcu_work() runs. During this preemption
-window, the RCU grace period could expire, allowing the background workqueue
-to execute btf_free_work() and free the btf object via kfree().
+When print_verification_stats() later iterates up to the new env->subprog_c=
+nt
+and calls bpf_subprog_is_global(env, i):
 
-When the thread resumes, flush_rcu_work() evaluates &btf_mod->btf->free_work
-and checks its internal state. Does this directly dereference the
-potentially freed btf memory?
+kernel/bpf/verifier.c:bpf_subprog_is_global() {
+	struct bpf_func_info_aux *aux =3D env->prog->aux->func_info_aux;
 
->  			kfree(btf_mod->sysfs_attr);
->  			kfree(btf_mod);
->  			break;
+	return aux && aux[subprog].linkage =3D=3D BTF_FUNC_GLOBAL;
+}
+
+Could this read past the end of the aux array when i reaches the index of
+the newly added hidden subprogram?
+
+> +				continue;
+> +			verbose(env, "+%d", env->subprog_info[i].insn_processed);
+> +		}
+> +		verbose(env, "\n");
+>  	}
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260428201422.1518=
-903-1-utilityemal77@gmail.com?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/5c3514dbc879f22ba3f=
+9eff8a2c730e13bd0572c.1777398528.git.paul.chaignon@gmail.com?part=3D1
