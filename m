@@ -1,111 +1,148 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94A7274B3B
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 21:17:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CCA13AE6FB
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 21:20:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777497425; cv=none; b=Z6iS4Ca5yYOzt+0EL5tnLb2F8yI+Q0GKoswwK4jzRQfOihrq5onEMn4o26/jt0kp40b9adqz6Wz1dBqZFvXZpIRtzh00g81PlpEZisgACNdnv+8ilorgBWjFsK9rXhNx5STA1r8CD43+tz3FBidp9im5zELRoAtbzUurZawWzao=
+	t=1777497608; cv=none; b=QeAB4gPcWgFa0vecll3xU8y8f+jjFdlSmDvr5KCK1Rtew2X6r58iPY7llqEhdVsD980q8Ci7JOz6dh7NmC5osqF9B9J+y6XFx7Ii/77PvXIoB9Na1mZc5g5rpIdyg7mOYNppadv+CGQUEIl1vNDffEm8xThcx2fX78YR0nQkhxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777497425; c=relaxed/simple;
-	bh=Sx/1c4Blm/mI+NKMnLiDmnAHNzpD/jLnqJupZf1FP5U=;
+	s=arc-20240116; t=1777497608; c=relaxed/simple;
+	bh=dRVvlwBv0Z/uiR/DKQmb26v+265b+bL105u+3LZ6Xxs=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pHEooEoD3e4uaxLOgtSIhQH68LKvvujssLoFOmVroMdM2fwHOnaPESuiSMoqzR5ixE8MT2MNKbVM9IJf+oH5NLgY/P6OnYTS6vxe+3o0GhbZGmfmxRUalAr8cAVggt7tGdyw7TxgcGDH8sqP4qm7eC+DYsE7wRMXySwwbf7E3vY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uQmRLDE5; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=TAX0Sl4lMRi43RPZWblJ2BavDwLho4C85Mu1N4mk4mEYkTKRYOcmOpYCbPXT6UJqJKAUIPg7mB1DAsYLLMxaFnrQq061Nz59yZ6Ec+jMmH8QtMwHR8w7ud42EeIMSQya0MwFlMfTy2vQm+Eb2E+BZiXxIuQcail4WZNerT9byMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F4M0uYYL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uQmRLDE5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CF4CC19425;
-	Wed, 29 Apr 2026 21:17:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F4M0uYYL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 024BAC19425;
+	Wed, 29 Apr 2026 21:20:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777497425;
-	bh=Sx/1c4Blm/mI+NKMnLiDmnAHNzpD/jLnqJupZf1FP5U=;
+	s=k20201202; t=1777497608;
+	bh=dRVvlwBv0Z/uiR/DKQmb26v+265b+bL105u+3LZ6Xxs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=uQmRLDE5wP/k8mTHgiQFK3L5m+b84zSaP5fnLo5D9slWC7D5ACzpTtTACJLKBIxNz
-	 2yxNNFzLHRLwIR8uFrdpIWq4N5tYcvdS6c2oZixSvgZ/9dZiFwD2A9W1DZcZ8xYCg6
-	 ZFByK87aco2jtO6GElWgd54Wuwyjvnf+Qji5yNDLeA6vtsDHdI8o+Xt8xdDC65zYAf
-	 HsISMHfTjvqwXxVttOPJswYw58fATDHBMlfZYblRZZOrJDFnxJM31XPqUmaZtvUo10
-	 9DQ+7SekOvftG+j90bfqSHLvQbKJqcCZO1h0M88YRSsRKZVTwr90OEuWa57HbFxwgg
-	 vOL89DUsc5dqQ==
+	b=F4M0uYYLG5nh2SVs5pf6a9Ut6mxlIyU4fzXg3R1esOQADjH8Yf9fjiFXQhP6kzf9G
+	 WRjavXlJoiClnq5hXHj9y2CJDrphZl2hEgVU/Knfxsk5v+GtGT7hMvGRaEKqGAmcPI
+	 HEpgED8qEE7VwVoMFG5OxR6obJ7G90vkJZiznKuU217na8hpSPadIgOeGrhZPGkHaY
+	 oQh/hl3W8+Cy/iJIxA+Q8+UaKfG+nefrZCiml88mlY4qEcTFatGb9WDKuoYKQgSJRw
+	 mlEU93y7fPsIFaJrxwVpUw58QvX1rDI3SMwowiVhLNrmp0ZkDg575wg3tzSsWaz95W
+	 lwdgrx19xjDqA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v8 7/7] net: bcmgenet: reject MTU changes
- incompatible with XDP
+Subject: Re: [v6 01/10] crypto: pkcs7: add flag for validated trust on a
+ signed info block
 Reply-To: sashiko@lists.linux.dev
-To: "Nicolai Buchwitz" <nb@tipi-net.de>
+To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260428205846.2625550-8-nb@tipi-net.de>
-References: <20260428205846.2625550-8-nb@tipi-net.de>
+In-Reply-To: <20260429191431.2345448-2-bboscaccy@linux.microsoft.com>
+References: <20260429191431.2345448-2-bboscaccy@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Apr 2026 21:17:04 +0000
-Message-Id: <20260429211705.4CF4CC19425@smtp.kernel.org>
+Date: Wed, 29 Apr 2026 21:20:06 +0000
+Message-Id: <20260429212008.024BAC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Medium] The XDP MTU validation logic contains a mathematical error (igno=
-ring L2 headers) and is structurally unreachable (dead code) because the de=
-vice's maximum MTU is fixed at 1500.
+- [High] State persistence across validations causes false blacklist reject=
+ions and API breakage if a pkcs7_message is evaluated multiple times.
+- [Medium] verify_pkcs7_message_sig is exported using EXPORT_SYMBOL, creati=
+ng a licensing mismatch with its prerequisite GPL functions.
+- [Low] The commit message references a nonexistent function.
 --
 
-commit b8018c0a123b4927db5ca8c39c8395c751532069
-Author: Nicolai Buchwitz <nb@tipi-net.de>
+commit f9218a5ea80d770fbf301c4067d4e4b1febdf4ab
+Author: James Bottomley <James.Bottomley@HansenPartnership.com>
 
-net: bcmgenet: reject MTU changes incompatible with XDP
+crypto: pkcs7: add flag for validated trust on a signed info block
 
-This commit introduces a minimal ndo_change_mtu function to the bcmgenet
-driver. It checks if an XDP program is attached and rejects MTU values that
-would exceed the capacity of a single-page XDP buffer.
+This commit adds a verified flag to the pkcs7_signed_info struct to track
+if a signer has passed trust validation. It also exports
+verify_pkcs7_message_sig so consumers can retrieve trusted pkcs7 objects.
 
-> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net=
-/ethernet/broadcom/genet/bcmgenet.c
-> index 02ad2f410d6c..4d1ec68ec0c5 100644
-> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> @@ -4085,6 +4085,20 @@ static int bcmgenet_xdp_xmit(struct net_device *de=
-v, int num_frames,
+> Allow consumers of struct pkcs7_message to tell if any of the sinfo
+> fields has passed a trust validation.  Note that this does not happen
+> in parsing, pkcs7_validate_trust() must be explicitly called or called
+> via validate_pkcs7_trust().  Since the way to get this trusted pkcs7
+
+This isn't a bug, but does validate_pkcs7_trust() exist in the tree?
+It looks like this might be a typo for verify_pkcs7_signature() or
+verify_pkcs7_message_sig().
+
+> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+> index e0761436ec7f..9bda49295bd0 100644
+> --- a/certs/system_keyring.c
+> +++ b/certs/system_keyring.c
+> @@ -380,6 +380,7 @@ int verify_pkcs7_message_sig(const void *data, size_t=
+ len,
+>  	pr_devel("<=3D=3D%s() =3D %d\n", __func__, ret);
+>  	return ret;
+>  }
+> +EXPORT_SYMBOL(verify_pkcs7_message_sig);
+
+Could this cause an API licensing mismatch?
+
+To legitimately use verify_pkcs7_message_sig(), a consumer must parse the
+raw payload into a pkcs7_message and eventually free it using
+pkcs7_parse_message() and pkcs7_free_message().
+
+Since those prerequisite functions are restricted to EXPORT_SYMBOL_GPL,
+non-GPL modules wouldn't be able to legally acquire or manage the required
+structures to use this new export. Should this be EXPORT_SYMBOL_GPL instead?
+
+> diff --git a/crypto/asymmetric_keys/pkcs7_trust.c b/crypto/asymmetric_key=
+s/pkcs7_trust.c
+> index 9a87c34ed173..78ebfb6373b6 100644
+> --- a/crypto/asymmetric_keys/pkcs7_trust.c
+> +++ b/crypto/asymmetric_keys/pkcs7_trust.c
+
 [ ... ]
-> +static int bcmgenet_change_mtu(struct net_device *dev, int new_mtu)
-> +{
-> +	struct bcmgenet_priv *priv =3D netdev_priv(dev);
-> +
-> +	if (priv->xdp_prog && new_mtu > PAGE_SIZE - GENET_RX_HEADROOM -
-> +	    SKB_DATA_ALIGN(sizeof(struct skb_shared_info))) {
 
-Is this condition actually reachable, and does it correctly account for L2
-headers?
+> @@ -127,6 +127,7 @@ static int pkcs7_validate_trust_one(struct pkcs7_mess=
+age *pkcs7,
+>  		for (p =3D sinfo->signer; p !=3D x509; p =3D p->signer)
+>  			p->verified =3D true;
+>  	}
+> +	sinfo->verified =3D true;
+>  	kleave(" =3D 0");
+>  	return 0;
+>  }
 
-The bcmgenet driver does not appear to override dev->max_mtu, which
-defaults to ETH_DATA_LEN (1500). Because dev_validate_mtu() in the core
-networking stack checks that new_mtu <=3D dev->max_mtu before calling
-ndo_change_mtu, new_mtu will never exceed 1500.
+Will these verified flags cause issues if a parsed pkcs7_message is evaluat=
+ed
+multiple times?
 
-Given that PAGE_SIZE (typically 4096) minus GENET_RX_HEADROOM and the
-skb_shared_info alignment is roughly 3454 bytes, the check new_mtu > 3454
-will always evaluate to false.
+Exporting verify_pkcs7_message_sig() allows a caller to evaluate a parsed
+PKCS#7 message against multiple keyrings sequentially. If a message is
+validated successfully against the first keyring, the certificates and
+sinfo are marked verified =3D true.
 
-Also, new_mtu represents the L3 payload size. Shouldn't the check add the
-L2 header overhead when comparing against the L2 buffer capacity?
+When the same message is then validated against a second keyring, the inter=
+nal
+blacklist check is_key_on_revocation_list() invokes pkcs7_validate_trust()
+against the blacklist keyring.
 
-Furthermore, is it possible for an MTU change to corrupt the XDP buffer
-layout as the commit message claims?
+In pkcs7_validate_trust_one(), the code checks:
 
-The hardware DMA appears to be statically configured to write a maximum of
-RX_BUF_LENGTH (2048) bytes per buffer, and bcmgenet_desc_rx() explicitly
-drops any packet larger than 2048 bytes. It seems structurally impossible
-to overflow the 4096-byte page and corrupt skb_shared_info.
+	for (x509 =3D sinfo->signer; x509; x509 =3D x509->signer) {
+		if (x509->seen) {
+			if (x509->verified)
+				goto verified;
 
-> +		netdev_warn(dev, "MTU too large for single-page XDP buffer\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	WRITE_ONCE(dev->mtu, new_mtu);
-> +	return 0;
-> +}
+Because the certificate's verified flag is still true from the first keyring
+check, won't the blacklist check hit this goto and falsely conclude the
+certificate is blacklisted?
+
+This seems like it would cause the second validation to unconditionally ret=
+urn
+-EKEYREJECTED for a valid message.
+
+Additionally, if detached data is provided, pkcs7_supply_detached_data()
+unconditionally returns -EINVAL on a second call. Does the state need to
+be cleared before a subsequent validation?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260428205846.2625=
-550-1-nb@tipi-net.de?part=3D7
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260429191431.2345=
+448-1-bboscaccy@linux.microsoft.com?part=3D1
