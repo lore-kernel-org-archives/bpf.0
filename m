@@ -1,42 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80598324B33
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 08:47:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6266F324B33
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 08:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777452463; cv=none; b=K1rviqIfFKmklTdUtIXJZECUuoa2BtV7Lk7kfpUiFU9F9fD/RRAxTHCmWlgosa0NhDxeQVwDu5cVYpT7jOfRbxkTn2j/12s5ZO0LM4ZgIaYzwulW6lxlszMjH6Ac9ZUWf+BgpTk1MxvCjU2CnQOES750k0ka6N7cEo7QYunIYrA=
+	t=1777452464; cv=none; b=Xa6Nwhk6pbLg7XJwQNtdfu+io0jI+nELd2RFDDXIfs/09I9ijfEEpWCBr4kgOnK6Mlak5R8uRwV8M6zZJCLoD9qRwEWYQeW/WFJtJ/50q24Zpl7sy5aD0jyi8Kdcn2Vsmrp7ILgqP8I6GRcPlS98g4vO5Uvms76DGiMDg2LIB5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777452463; c=relaxed/simple;
-	bh=pBdwXTVLrK0oFQD6bArWR5dRqCiEOTRuDCX6+n2Z/GE=;
+	s=arc-20240116; t=1777452464; c=relaxed/simple;
+	bh=B4lT78+Ob3GHAqdYMDmsHdEJi21Wzg+dNW40VuzMsho=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=b/q2ktLRiNyYtd/qad7FV/QR1tyZwdxKh7qIv7lh590BZ3t/Dmz7LHJ9KVAQQEyVqlyds2S0uKjjdIvus2aBifClvrNuF1bo9f5wqHpE+97aLjNVDLR4f2sTWROOnXb3VjSrKDlq5+TMai8GMmL72F8RqnEMBS9mP0Lb5jji47k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Trg9Cb7j; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=s3448w46RFp5wvYeu2l6HbtLzDiZQVTrJ6p4UJ2p1mjp/lw+0nPhtu/FFpQOF4+ieDzLXwtOqDdGpdynmZtfgCz9nllfTaoiCjxN1Pm+l+f0DT+S58jWCVeVTikVXuMbZyc8xUKrVKAP0Rxi3k19YpNyxS10Bu5BeLN+6+vmKNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EfP5bTBE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Trg9Cb7j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22F87C19425;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EfP5bTBE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9047C19425;
 	Wed, 29 Apr 2026 08:47:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777452463;
-	bh=pBdwXTVLrK0oFQD6bArWR5dRqCiEOTRuDCX6+n2Z/GE=;
+	s=k20201202; t=1777452464;
+	bh=B4lT78+Ob3GHAqdYMDmsHdEJi21Wzg+dNW40VuzMsho=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Trg9Cb7jOw1h+y+oQPv0rr0JNtzYbISI34h7gXc696AR7jpY+xZU6hSEdt6xLQbEe
-	 jxV+HDFyNp6jIe/+9YHXTBmfZOtEU54sH3yCVyWE+hrxQvaYGxpD9CFLKN4AMPGBAk
-	 n9OP3wc9vdYGJpD6xrpnIk7B1JmnRewBZQkdIMdl9GBqWu+0Y5bnc3rRWZn702VPQB
-	 axFwD1jl/woQL/VygDPc5rMjPeavaexgva/WFrZyzqBlJujcI2Wv+KeaHEqQv+z/Mz
-	 P/wJaRpx1SPQiC1gG8Xc9MGSlkUVDPBwMDqQ/f8b7r9IOobvQ6MDjEVsxngFVrWorO
-	 3/xL9swIe9oHg==
+	b=EfP5bTBEZkXLZzhYy7evMiJUpEN72CedgeGK2J3gZ19w1j1tfrMKBpnEKXY+0o3nI
+	 whiDTN6/aiL1b9tBZWR7P5we68Ef1kQEsaiJuxub6CnpwBVypwPq9RYbdmiq511NHs
+	 SHAtj1AKmLRVc9lt0jWHL774rcTnuPZBB4leznrPe8mQkWk0Gu2SJDb+ylevz0m2O3
+	 oxUxxx4wRjaYJxKh5T1pNDD6P8PYEo7p3FNYC1Iy3F3ixJVFfiSXY++00lf5Fgakl4
+	 xSjM5syNAyV7YV8znDYBmeQsExBop5kBCGpAbd4vV8qmvfO30VVSMy4SFfV9hwfStt
+	 L756v7IHVG1Ug==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 4/5] selftests/xsk: Use umem_size() helper consistently
+Subject: Re: [PATCH 5/5] selftests/xsk: Introduce mmap_size in umem struct
 Reply-To: sashiko@lists.linux.dev
 To: "Tushar Vyavahare" <tushar.vyavahare@intel.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260428080317.702124-5-tushar.vyavahare@intel.com>
-References: <20260428080317.702124-5-tushar.vyavahare@intel.com>
+In-Reply-To: <20260428080317.702124-6-tushar.vyavahare@intel.com>
+References: <20260428080317.702124-6-tushar.vyavahare@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Apr 2026 08:47:42 +0000
-Message-Id: <20260429084743.22F87C19425@smtp.kernel.org>
+Date: Wed, 29 Apr 2026 08:47:43 +0000
+Message-Id: <20260429084743.E9047C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,50 +45,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The patch misses an open-coded calculation of the UMEM size in `=
-testapp_unaligned_inv_desc_4001_frame()`, failing to fulfill the commit mes=
-sage's claim.
+- [Medium] Meaningful code and commit message mismatch regarding `mmap_size=
+` computation, failing to resolve the over-unmapping risk.
 --
 
-commit 55b162869fca46ad80bf9c4d74237ed3830d1f8e
+commit 88aa7962c655c10bde2c97d706550190e3d87126
 Author: Tushar Vyavahare <tushar.vyavahare@intel.com>
 
-selftests/xsk: Use umem_size() helper consistently
+selftests/xsk: Introduce mmap_size in umem struct
 
-This commit replaces the remaining open-coded calculations of the UMEM
-size with the umem_size() helper in test_xsk.c to centralize computation.
+This commit stores the finalized mapping length in xsk_umem_info as mmap_si=
+ze
+when the UMEM mapping is created. The intent is to use this exact value dur=
+ing
+teardown instead of recomputing it from the frame geometry.
 
 > diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/te=
 sting/selftests/bpf/prog_tests/test_xsk.c
-> index ea229ea446ca..ba4768f83eb6 100644
+> index ba4768f83eb6..ba1bcfc6b74b 100644
 > --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
 > +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> @@ -1581,7 +1581,7 @@ static int thread_common_ops(struct test_spec *test=
+[ ... ]
+> @@ -1594,6 +1594,8 @@ static int thread_common_ops(struct test_spec *test=
 , struct ifobject *ifobject)
->  	int ret;
->  	u32 i;
+>  	if (bufs =3D=3D MAP_FAILED)
+>  		return -errno;
 > =20
-> -	umem_sz =3D umem->num_frames * umem->frame_size;
-> +	umem_sz =3D umem_size(umem);
->  	mmap_flags =3D MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE;
+> +	umem->mmap_size =3D ceil_u64(umem_sz, HUGEPAGE_SIZE) * HUGEPAGE_SIZE;
+> +
+>  	ret =3D xsk_configure_umem(ifobject, umem, bufs, umem_sz);
+>  	if (ret)
+>  		return ret;
 
-Since open-coded calculations are being replaced here, did this miss the
-calculation in testapp_unaligned_inv_desc_4001_frame()?
+The commit message states that this change "removes duplicated size
+arithmetic in cleanup and guarantees that munmap() uses the same canonical
+size that was established at setup time."
 
-tools/testing/selftests/bpf/prog_tests/test_xsk.c:testapp_unaligned_inv_des=
-c_4001_frame() {
-    ...
-	page_size =3D sysconf(_SC_PAGESIZE);
-	umem_size =3D test->ifobj_tx->xsk->umem->num_frames *
-		test->ifobj_tx->xsk->umem->frame_size;
-	assert(umem_size % page_size > MIN_PKT_SIZE);
-    ...
-}
+However, looking earlier in thread_common_ops():
 
-Checking the subsequent patch in the series ('selftests/xsk: Introduce
-mmap_size in umem struct'), it appears it does not resolve this missed
-calculation either.
+	bufs =3D mmap(NULL, umem_sz, PROT_READ | PROT_WRITE, mmap_flags, -1, 0);
+
+The size passed to mmap() is just umem_sz, without the hugepage rounding.
+
+By setting umem->mmap_size to the rounded-up value here, does this still
+duplicate the size arithmetic rather than using the exact mapping metadata?
+
+If standard pages are used and umem_sz is not a multiple of HUGEPAGE_SIZE,
+could this cause munmap() to use an inflated size and inadvertently unmap
+adjacent memory?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260428080317.7021=
-24-1-tushar.vyavahare@intel.com?part=3D4
+24-1-tushar.vyavahare@intel.com?part=3D5
