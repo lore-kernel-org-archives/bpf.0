@@ -1,122 +1,164 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044F9225A38
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 02:36:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777430184; cv=none; b=cK6mZDhOkksUNgkptGI6DAfYYHmksvTg8+OuQ7nTWfReH7XEX9BPGLR5rmQNDQ76ytFOqGxs8gNzucWFweR3CkOcuh8NqsaGkajzKDqBiMoscW6MPSgSuVsUzLF7rchKdkS8+NS63CSisUM+IaswEw8rsXZkYgq+qIuinWayzaE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777430184; c=relaxed/simple;
-	bh=UBr3As8VuTlZ3p0+z3f6dBPX/TCdYOlHEfPJsaqzM+A=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=cP4ku7KUYA0tSokDY4YqpzkOMJzPuTfYrb8ZXoPsd5AoCxHYqaSZJU5YVX1dDpZxS8Y7Jev8WpQDQp7RvAsdjajFAtqMK3/O2axRb2BC7HyMZfOJi2Ba82yH/gF6C2PkzU4yu6UGKNnycGeqXjJNK/q1YN/7DEtVYMnJQWFFGKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W/6pyNky; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D8F938238C
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 02:44:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777430648; cv=pass; b=XS/9KkmIUUv52RwkyfqPu3/P6OfIlUTyCmiEGgkq+L+2bHhRkVBCykLEOubFA3GXq0j9EqM4LEPbG/FaaeVosilVoAIzyRg141dOrNPWl3w3hZMaPg+5h3T9wB+px0laEX5gfRJSalNGespEgh/AsQNikfpll72OEHEie3HLz7A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777430648; c=relaxed/simple;
+	bh=rTsk9Q7rhkspFsFRLH/VFkmPQ4IjUkKjQ73CU1uejN8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DCrG5CCkjNujitLTmv7L9/Xe+cQRWePihlT2ScQ0L3M16nE1i57klgCMD2NUEpLEQLf8qcmiVUhaCmAUGuZbF9VvywUZLqDdNuAAHTKJ3OsX330AoSrKMts66FmMd0E/Ja+VFGSLjT4f7QUoEFKa5KAJSycaQj6bgFBJHXnzzsY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rN9gckdO; arc=pass smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W/6pyNky"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73482C2BCB7;
-	Wed, 29 Apr 2026 02:36:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777430183;
-	bh=UBr3As8VuTlZ3p0+z3f6dBPX/TCdYOlHEfPJsaqzM+A=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=W/6pyNkyUXDwbhz43C11S9K2kZIxlI8+Iy7LjWmw8OMkcPfTOSfkEm3ufCV3Ygk1V
-	 2ZJYw1jVS1L2iEDcjKrXinPBd/6PYuFiLM+NczvAG/cKH/QNgFFjUXBRuxrKBpE/F9
-	 JFjhbjMmUR/TbAq7bTvFcYaQJ9QSI6IdBtx6aUcBPQsu6JoeNxpFhW1fqGVeAJ33LT
-	 OQk/GH6d7/M7lVXMiDBGsFpKEWjR4gdE+17G3rJIXuYXzsdQpsM5Hok76MQrg1Xc9m
-	 HZ2QU4UFtCOr10x5FS3gcEavA8N7xJMspdnSM1rMMQmIIYAr8l58ujpomdq9SbdunI
-	 fqQL1WyM0yaWg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Test insns processed
- breakdown
-Reply-To: sashiko@lists.linux.dev
-To: "Paul Chaignon" <paul.chaignon@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <24f2a5b5f8e3041d03d78305ca0e2277f684d588.1777398528.git.paul.chaignon@gmail.com>
-References: <24f2a5b5f8e3041d03d78305ca0e2277f684d588.1777398528.git.paul.chaignon@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Apr 2026 02:36:22 +0000
-Message-Id: <20260429023623.73482C2BCB7@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rN9gckdO"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-7986e0553bdso119038777b3.2
+        for <bpf@vger.kernel.org>; Tue, 28 Apr 2026 19:44:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777430646; cv=none;
+        d=google.com; s=arc-20240605;
+        b=GEEBK6ZOev6lAKcs6SSll1Y1vAGLCD8sfu4flqhLOQCNCI4P3sm5BT8sF/Mq3cTzjk
+         fX96THJ/3dGDZs1L+o5euGRNfWH3xMkX65BAdy9FovJsK9/GR22EAtrkiRq1x0MXthbj
+         sOlgYZ1jKOnxjcZSJG/g2wWPSlnkJAJ9LkH7pKElkBjUMB/r0rH+j1GFFDbL/iPyH2WX
+         3rR+YUz5N7q0Wyd9eVQJysQZgIIC9mlll7pyktOEh2FyOayRB5KD40RPGWAk0UZyhQ6c
+         HhA96QgDXEGX5dgHDnrCtWbSmCuCfHgoS8Qra4iZiRTN62woqOpmI9itNT5kRy8VquAS
+         xggw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=q+KoLGDSrHSIZG6+XblKTC21gPEBzNKAEyUWN1fUvUg=;
+        fh=3UZBFjDE3b3eVYTRM9i9Aqhc9ftniMlNIio9NnF+Olg=;
+        b=RuumQj9M8QSG9FNCkJsu29hrpkC1/FY69DiI5mIVtdNFHwd0PXBz+q8D8YI5+xcmWd
+         FBa5Tz5LC7tvXz4WKM9ZcP2kywFs/rBPWxIx+3Ncx5ldhHbdqvng4yPpJ/xcdCTwa/4K
+         UxCD4E9Wbj53XBJfFP/9o+e4R6x2T+MEIWYlFAuxKef1dBZgAIbe033rax7Y3p1sGxRD
+         9y7tucXHWMf85izkAxUN4L1nZTy/SOh/mV6Sd2WUrMdCfR6R3p3JGsuYZ3Sn0pnF+coj
+         3K6uMWUqIpXyvOETGcOef9k/W5lWPq63LspKUwgRWS+IWPeMIEV/HKLymVAqlrWPCOLj
+         +HHg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777430646; x=1778035446; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q+KoLGDSrHSIZG6+XblKTC21gPEBzNKAEyUWN1fUvUg=;
+        b=rN9gckdO21y+FjDIRIiXV4cF8LfTIP9NkunQB9xLjZPWpHwi2MdIumHUS0tBpB8RGr
+         +2WW1cB1WknNACZvSuXdIhMl/L+s2TMAr9FXOQnXxPLsHCV/nWXUh0aQZLnxkzhdbpgP
+         Rh0Fb1n6nE6uNT5o6UJy91eY2tM6bpruf7O2irgjNrOe2v9qJQuRyEWY2iiqeGQzJVvj
+         sp9Ci41PxlpSUOjtU3LjVbuYZbXQLfhkID/tb42hI5xGDSf/85z/gRH8KyKgonp73En8
+         n/dsLxxk0epCePoEXW5xEoHL6QW2n3In0VfgJHkddPLAt6qxwp2qTW/nrsQ/GlzzPmcV
+         qaDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777430646; x=1778035446;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=q+KoLGDSrHSIZG6+XblKTC21gPEBzNKAEyUWN1fUvUg=;
+        b=RrTyt+ToeRiaiBmZfQu+gO9oxcIHBMU8+2QO00blfEgkKjXunqxou8fwWg7kNn8+eX
+         5Gk01XMubzqxOEwO7Smt/bdF+ejoQeF/jT87E6m/QqkMD55VfMnwZxy8lNTVSnFTnjIu
+         ng9RzVLiGIleGRgkaUQFe1w24ufHHz//yhyuBXW3dk8Nm0JRchqeLhTykyMMKfuH6qBF
+         DyIojA+hjKwo3gwf1ZwGPAPP2Ayb0K0GvQ5nSvF3HAB3MP0lR7R8REEWrSLvpVe8sZMf
+         zjdUb5ZXJdDmFRJ02oc89ZrjTDzDhCd/+pR2wFoGLZdANgEQxEY1YXjAxZkoiWHq3pOx
+         EnSg==
+X-Gm-Message-State: AOJu0YwAyQNt1EggnO4GkygLl2QWgfoM3oneoR2vx29IsdKZSCbCpjkf
+	7opnKfVVc4aDG+Zw8QxriscEocjKt8AX/lYLdJ7xni9rDCQZnCM3k2BjuCHdlXFGAkUqkO034ZA
+	lllWIcT7p4BjllzA8mP0vuixsiBOwrPI=
+X-Gm-Gg: AeBDiesPrZ1BaNf2IYKqaclZSlyB27+VvbslTJFrrLTHQsNBBKE94RJ25+HSkeWq8oh
+	5zNGuFX+swaCLGvpQbdfokRPECeiyU9EvsHwDAxV03Keys52pgz2c5hIzfr6e/BaaKCNs0v3mY6
+	M5wPlFzPGypW6O6odEkxZDGSZyIBOP8P80vNIFB8e2Am/eZ9tbFNcjPh1dYUkRGkM4b3M+Ngsev
+	KkTzsJGDFHjeMOSN0Td0AFekU5eLmzSxPOuoe4wkxwTmJbYji4HJO6XGi0GX4Uq43sJmlJ9zwyf
+	KGLfWGLbwPwTlgvsEhb1PRpp5f4+IzUD/ElEk6cFvfBzQzhKIEM=
+X-Received: by 2002:a05:690c:e3c4:b0:7b2:9347:7bdf with SMTP id
+ 00721157ae682-7bd1dab7ebbmr21814177b3.37.1777430646358; Tue, 28 Apr 2026
+ 19:44:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <7ia4o6j4c5y1.fsf@castle.c.googlers.com>
+In-Reply-To: <7ia4o6j4c5y1.fsf@castle.c.googlers.com>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Wed, 29 Apr 2026 10:43:29 +0800
+X-Gm-Features: AVHnY4LELreyRpJUwIYExN_byZ7hf2FVYTBc2vbJPsf4Yl0K-6feZLhlmOKYcHc
+Message-ID: <CALOAHbDFvNLQi4xOBj2vvTng-vT+X42NtsCiuqHMt1PTpnxAyw@mail.gmail.com>
+Subject: Re: [LSF/MM/BPF TOPIC] Using BPF in MM
+To: Roman Gushchin <roman.gushchin@linux.dev>, Song Liu <song@kernel.org>, 
+	Petr Mladek <pmladek@suse.com>
+Cc: bpf <bpf@vger.kernel.org>, linux-mm <linux-mm@kvack.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	lsf-pc <lsf-pc@lists.linux-foundation.org>, Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] Asserting exact verifier instruction counts in C-based BPF selft=
-ests causes test flakiness.
-- [Low] Unused test configuration from blindly elevating log levels to 6 wi=
-thout corresponding assertions.
---
+On Tue, Apr 28, 2026 at 7:58=E2=80=AFAM Roman Gushchin <roman.gushchin@linu=
+x.dev> wrote:
+>
+> [LSF/MM/BPF TOPIC] Using BPF in MM
+> ----------------------------------
+>
+> Over the last decade, BPF successfully penetrated into multiple kernel
+> subsystems: started as a feature to filter (out) networking packets,
+> it captured its place in networking, tracing, security, HID drivers,
+> and scheduling. Memory management is a logical next step, and recently
+> we saw a growing number of proposals in this area.
+>
+> In (approximately) historical order:
+>   - BPF OOM
+>   - BPF-based memcg stats access (landed)
+>   - BPF-based NUMA balancing
+>   - eBPF-mm
+>   - cache_ext (BPF Page Cache)
+>   - memcg_ext
+>
+> There are some obvious target which haven't been covered yet:
+>   - BPF-driven readahead control
+>   - BPF-driven KSM
+>   - BPF-driven guest memory control
+>
+> Despite a large number of suggestions only a relatively small feature
+> (query memcg statistics from BPF) made it to upstream.
 
-commit c4e03a953efa7cd8cf2e1a288a0c55c4f73cace2
-Author: Paul Chaignon <paul.chaignon@gmail.com>
+We are exploring an alternative approach that leverages livepatch
+combined with BPF to modularize struct_ops-based kernel hooks. This
+allows us to deploy these hooks as out-of-tree modules without direct
+kernel modification or the immediate need for upstreaming.
 
-selftests/bpf: Test insns processed breakdown
+  https://lore.kernel.org/live-patching/20260402092607.96430-1-laoar.shao@g=
+mail.com/
+  https://lore.kernel.org/live-patching/20260416001628.2062468-1-song@kerne=
+l.org/
+  https://lore.kernel.org/bpf/CAPhsuW53pymgmFsHSkSwDvEAJ=3D+Rp2T102JYe4i9kg=
+dePpR=3D6Q@mail.gmail.com/
 
-This patch updates global subprog selftests to verify the new verifier
-log breakdown of instructions processed by global subprogs. It does this
-by increasing log levels and adding new message assertions.
+In practice, we first introduce the BPF hooks via a livepatch and
+subsequently attach BPF programs to them. Below is a recent use case
+from our production environment (though not MM related) for reference:
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c=
- b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-> index 1e08aff7532e..7092a046c018 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+   https://lore.kernel.org/live-patching/CALOAHbDnNba_w_nWH3-S9GAXw0+VKuLTh=
+1gy5hy9Yqgeo4C0iA@mail.gmail.com/
 
-[ ... ]
+In one of our clusters, we needed to route BGP traffic through
+specific NICs based on destination IP addresses. To achieve this
+without service interruption, we applied a livepatch to
+bond_xmit_3ad_xor_slave_get() to introduce a new hook,
+bond_get_slave_hook(). We then attached a BPF program to this hook to
+select the outgoing NIC by parsing the SKB. Because the destination
+IPs must be adjusted on demand, a static livepatch alone was
+insufficient; the BPF integration provided the necessary dynamic
+flexibility.
 
-> @@ -186,21 +187,24 @@ __weak int raw_tp_u64_array(u64 *ctx __arg_ctx)
->  }
-> =20
->  SEC("?raw_tp")
-> -__success __log_level(2)
-> +__success __log_level(6)
-> +__msg("insns processed 12+5+2+2")
->  int arg_tag_ctx_raw_tp(void *ctx)
+To fully support this architecture, several work-in-progress
+enhancements are being developed for both the livepatch and BPF
+subsystems.
 
-Will hardcoding exact instruction counts cause the tests to become flaky ac=
-ross
-different LLVM/Clang versions or optimization levels?
-
-Since test_loader.c natively supports regex matching within __msg using the
-{{...}} syntax, would it be more reliable to use a pattern to validate the
-log format?
-
-For example, __msg("insns processed {{[0-9]+(\+[0-9]+)*}}") might prevent
-failures when the compiler generates slightly different assembly.
-
-[ ... ]
-
-> @@ -321,14 +331,15 @@ int BPF_PROG(arg_tag_ctx_fexit)
->  }
-> =20
->  SEC("?fmod_ret/" SYS_PREFIX "sys_nanosleep")
-> -__success __log_level(2)
-> +__success __log_level(6)
-> +__msg("insns processed 7+2+2")
->  int BPF_PROG(arg_tag_ctx_fmod_ret)
->  {
->  	return tracing_subprog_void(ctx) + tracing_subprog_u64(ctx);
->  }
-> =20
->  SEC("?lsm/bpf")
-> -__success __log_level(2)
-> +__success __log_level(6)
->  int BPF_PROG(arg_tag_ctx_lsm)
->  {
->  	int ret;
-
-Is the log level increase to 6 intentional for arg_tag_ctx_lsm and other
-similar tests in this patch (like anon_user_mem_valid and arg_tag_dynptr)?
-
-These tests don't appear to have corresponding __msg assertions added to
-actually verify the resulting stats breakdown, which might just add
-unnecessary overhead and log data to the test execution.
++Song, Petr (CC'd for their expertise in BPF and livepatch).
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/5c3514dbc879f22ba3f=
-9eff8a2c730e13bd0572c.1777398528.git.paul.chaignon@gmail.com?part=3D2
+Regards
+Yafang
