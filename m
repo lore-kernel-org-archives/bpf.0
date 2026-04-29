@@ -1,163 +1,148 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13014274B3B
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 23:47:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C907C359A6C
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 23:57:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777506480; cv=none; b=NvY7iaRHqyy+sbwubsswAU/qu79MixKT0MuqVLOGzW9aoF1uPiMFqQxvPWznLFyf9BgsangREqBOrYBQJfg486MaDmGfVeZiSee83TtPmfcHZbzlW2NZFAmPTb7jxOqNGv8B+ZR2PZDFMFRZDpPKuKKwBLY9o5fkDakz2xFWBaE=
+	t=1777507054; cv=none; b=MOxr54+6OfA7hssbohHknzqAbjbZqJluJ/WGB0ODRYELiR4Rm/LcOU/reXwlmhGyoYJl3AsEQbkmx+FDfm40xsSJ7ePW6DzhzVAnesaxnPifzlJccUa69+WZdOES1L+7LWdUhqcq3/gDUIX0Y3a0d/+baBsMoMLLZLjWydXDbO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777506480; c=relaxed/simple;
-	bh=GFAzHbNwJu5mhtHEzS8CVBMhj66Od0WbqTAM3IWj3kE=;
+	s=arc-20240116; t=1777507054; c=relaxed/simple;
+	bh=3DOPIjlDEPHs1RvXSpOfs7tN35qpUrezxPdh+YGQysE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=t3eTx/8uq7Et6xUTt2zNLS7bv1LUMO6DYWQfygLAo9MIz2ZE+dSclobotx+WW0td00Z8ZTuBEz427zCn5sw4BEgoZhLEOD3yZ8ZWK1MHak97QoVqrp7+F+d+r2Y3eT176nb2n3RUJSrQSU9+0QceYVhsP0qenmsQavgwEJRjv0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pSFmlhjj; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=V3gBCPgA9vC+IGDCcdd0bnmxcUYMrzHOE3oGL5XQ9yCPFyVbEuTx3g7dAigQ1VeAYz8ODXOpHVSoHtGezwZzKdk9VUZC71Bb/+bIRW0X3bUD2leDLfFEjXa2IytK4WhTI/Zld/aa8xm0nn2J3tPDiwHklKq35kluphh2GAu91VI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CDHI9yt9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pSFmlhjj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81FD3C19425;
-	Wed, 29 Apr 2026 23:47:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CDHI9yt9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65395C19425;
+	Wed, 29 Apr 2026 23:57:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777506479;
-	bh=GFAzHbNwJu5mhtHEzS8CVBMhj66Od0WbqTAM3IWj3kE=;
+	s=k20201202; t=1777507054;
+	bh=3DOPIjlDEPHs1RvXSpOfs7tN35qpUrezxPdh+YGQysE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=pSFmlhjj9u16Xr17H4pyDLcKlCCQ8BbGdoO/6v5w24ztfHsIZnyr5QAPMoKV7J6wD
-	 drMXDxUPMKLrM0NAA21gAwlBwvfkPQ6m7QcMAf4hbtOHJHTJUo2CqvhB2F80BOX9nm
-	 BzcC84imGutxWfD6wog0byNp5xnXSaFzoXpsQ1GEXS9gwalZPkvZ+7wTm9hq9/en0t
-	 r48/9bZsV0v/6EbYIGuAWken+iksCdmr7gQU+z+A8e7P6lUrBA4yr00bein2sjfSZP
-	 tc+pX0WBWz3k2lXwZznLZAiswREnb8ZjbODVNH8q3+ZIvZlviHUKpGBxKJqN11eiHu
-	 sFNb5hg+uvn+Q==
+	b=CDHI9yt9iybBv8XvKio9Wn9irm2hW+Sr3ZAE94wcPgFTD/ZEP5LG19UYJLIaSoPcD
+	 y3sauOG7zK3bTBV/ifjqrq3hLxtfEgciCB5wisft9k0yFsX0BXwSHw4LANIubMkcz2
+	 /o1KOaq5VdGvaTw9tD2FOZzcub671BmB+xA6jNMl4X0wveyrHNZ1c264VaoXQlmXev
+	 zWRtANfVgRHvHOIXHOU5A/rlH1K7VTEvz4BzvaOoabgL3xwNfZc5kfYrD4DHF7ZYnd
+	 97zN2Qeru48OJsZtWLnPD8NZRn24lv7t5Nj0XOd5qqxviLGUqIgb0c32uIvXowYy+x
+	 QOutuJsV28nWw==
 From: sashiko-bot@kernel.org
-Subject: Re: [v6 08/10] hornet: Add a light skeleton data extractor scripts
+Subject: Re: [v6 09/10] selftests/hornet: Add a selftest for the Hornet LSM
 Reply-To: sashiko@lists.linux.dev
 To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260429191431.2345448-9-bboscaccy@linux.microsoft.com>
-References: <20260429191431.2345448-9-bboscaccy@linux.microsoft.com>
+In-Reply-To: <20260429191431.2345448-10-bboscaccy@linux.microsoft.com>
+References: <20260429191431.2345448-10-bboscaccy@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Apr 2026 23:47:58 +0000
-Message-Id: <20260429234759.81FD3C19425@smtp.kernel.org>
+Date: Wed, 29 Apr 2026 23:57:33 +0000
+Message-Id: <20260429235734.65395C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
 s) to consider:
-- [Critical] Silent data corruption of the extracted eBPF payload due to un=
-quoted printf format string injection.
-- [Critical] Overly broad grep patterns in `extract-insn.sh` and `extract-m=
-ap.sh` cause payload duplication and severe corruption.
-- [High] Execution failure due to missing C preprocessor include paths.
-- [Medium] Bash scripting pitfalls: Incorrect exit code on failure, command=
- injection, and copy-paste error in usage.
+- [Medium] Makefile targets lack `$(OUTPUT)/` prefix, breaking out-of-tree =
+builds.
+- [Medium] Makefile hardcodes host architecture and kernel paths, breaking =
+cross-compilation.
+- [Medium] Makefile has an unconditional build dependency on kernel cryptog=
+raphic signing keys.
+- [Medium] BPF program uses `bpf_probe_read_str()` for a user-space pointer.
+- [Medium] BPF program uses `BPF_CORE_READ()` to access tracepoint context =
+fields.
 --
 
-commit 398e95d4981b28182554e7639f02b8c22e6185c8
+commit 1e13c1e9492cd70a4a039a9763aae8236928bf0c
 Author: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+selftests/hornet: Add a selftest for the Hornet LSM
 
-hornet: Add a light skeleton data extractor scripts
+This selftest contains a testcase that utilizes light skeleton eBPF
+loaders and exercises hornet's map validation.
 
-This commit introduces scripts to extract eBPF instruction and map data
-payloads from autogenerated light skeleton headers. These payloads can
-then be used for signing a light skeleton binary using gen_sig.
-
-> diff --git a/scripts/hornet/extract-insn.sh b/scripts/hornet/extract-insn=
-.sh
-> new file mode 100755
-> index 000000000000..52338f057ff6
+> diff --git a/tools/testing/selftests/hornet/Makefile b/tools/testing/self=
+tests/hornet/Makefile
+> new file mode 100644
+> index 000000000000..432bce59f54e
 > --- /dev/null
-> +++ b/scripts/hornet/extract-insn.sh
-> @@ -0,0 +1,27 @@
+> +++ b/tools/testing/selftests/hornet/Makefile
 [ ... ]
-> +function usage() {
-> +    echo "Sample script for extracting instructions"
-> +    echo "autogenerated eBPF lskel headers"
-> +    echo ""
-> +    echo "USAGE: header_file"
-> +    exit
-> +}
+> +BPF_CFLAGS :=3D -target bpf \
+> +	-D__TARGET_ARCH_$(ARCH) \
+> +	-I/usr/include/$(shell uname -m)-linux-gnu \
 
-Could this exit successfully (code 0) upon a usage error?
+Does this hardcoded include path break cross-compilation? If building for
+arm64 on an x86 host, it looks like this will pull in x86 headers instead
+of the target architecture headers.
 
-Calling exit without an argument defaults to the exit status of the previous
-echo command, which is 0. If invoked incorrectly by a build system or
-Makefile, this might fail to halt the build process.
+> +	$(KHDR_INCLUDES)
+> +
+> +vmlinux.h:
+> +	$(BPFTOOL) btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
 
-This issue is also present in extract-map.sh and extract-skel.sh.
+Does this hardcode the host kernel's BTF? This will fail in build
+environments where the host kernel lacks BTF, or when cross-compiling
+where the target kernel's built BTF ($(objtree)/vmlinux) should be used.
 
+Also, shouldn't custom build rules like this use the $(OUTPUT)/ prefix?
+Since this Makefile includes ../lib.mk, items in TEST_GEN_PROGS and
+TEST_GEN_FILES are prefixed with $(OUTPUT)/. When building out-of-tree
+(make O=3Ddir), make might fail to match the expected $(OUTPUT)/ targets
+for vmlinux.h, trivial.bpf.o, loader.h, and the other explicit rules.
+
+> +
+> +trivial.bpf.o: trivial.bpf.c vmlinux.h
+> +	$(CLANG) $(CFLAGS) $(BPF_CFLAGS) -c $< -o $@
+> +
+> +loader.h: trivial.bpf.o
+> +	$(BPFTOOL) gen skeleton -S -k $(CERTDIR)/signing_key.pem -i $(CERTDIR)/=
+signing_key.x509 \
+
+Does this create an unconditional dependency on kernel cryptographic signing
+keys? If the target kernel configuration disables module signing or other
+features that generate these specific keys, the files won't exist and the
+build might fail unconditionally instead of gracefully skipping.
+
+> +		-L $< name trivial > $@
 [ ... ]
-> +if [ $ARGC -ne $EXPECTED_ARGS ] ; then
-> +    usage
-> +else
-> +    printf $(gcc -E $1 | grep "opts_insn" | \
-> +		 awk -F"=3D" '{print $2}' | sed 's/;\+$//' | sed 's/\"//g')
-> +fi
-
-The autogenerated light skeletons explicitly include headers like <bpf/bpf.=
-h>.
-
-Since the script does not provide include paths (-I) to GCC or accept CFLAG=
-S,
-will the C preprocessor terminate with a fatal error if these headers are
-not present in the standard system include paths, resulting in an empty
-output file?
-
-Additionally, is it possible for the unquoted $1 to cause word-splitting
-or unintended command execution if a filename contains spaces or starts
-with a compiler flag?
-
-The grep pattern "opts_insn" appears to be overly broad. Could this match
-not only the target byte array but also structural assignments generated by
-bpftool, such as opts.insns_sz =3D sizeof(opts_insn) - 1?
-
-Because the extra code is unquoted, it would split into multiple arguments.
-When printf receives extra arguments without format specifiers, it repeated=
-ly
-reuses the format string, which in this case would cause it to duplicate
-and corrupt the eBPF binary payload output.
-
-Finally, since printf is called without a format specifier, could the
-extracted eBPF payload be silently corrupted?
-
-Bash's printf dynamically evaluates escapes. A byte sequence like \x25
-(the % character) followed by \x73 (s) would be interpreted as %s and
-replaced with an empty string, or \x64 (d) to 0, silently altering
-the bytes and invalidating cryptographic signatures.
-
-Could this be prevented by using a format string like
-printf "%b" "$(...)"?
-
-The gcc include, unquoted $1, and printf issues are also present in
-extract-map.sh and extract-skel.sh.
-
-> diff --git a/scripts/hornet/extract-map.sh b/scripts/hornet/extract-map.sh
-> new file mode 100755
-> index 000000000000..c309f505c623
+> diff --git a/tools/testing/selftests/hornet/trivial.bpf.c b/tools/testing=
+/selftests/hornet/trivial.bpf.c
+> new file mode 100644
+> index 000000000000..d38c5b53ff93
 > --- /dev/null
-> +++ b/scripts/hornet/extract-map.sh
-> @@ -0,0 +1,27 @@
+> +++ b/tools/testing/selftests/hornet/trivial.bpf.c
 [ ... ]
-> +function usage() {
-> +    echo "Sample script for extracting instructions"
+> +SEC("tracepoint/syscalls/sys_enter_unlinkat")
+> +int handle_enter_unlink(struct trace_event_raw_sys_enter *ctx)
+> +{
+> +	char filename[128] =3D { 0 };
+> +	struct task_struct *task;
+> +	unsigned long start_time =3D 0;
+> +	int pid =3D bpf_get_current_pid_tgid() >> 32;
+> +	char *pathname_ptr =3D (char *) BPF_CORE_READ(ctx, args[1]);
 
-This isn't a bug, but there is a copy-paste error in the usage message here.
-Should this say "extracting map data" instead of "extracting instructions"?
+Should tracepoint arguments be accessed directly (e.g., ctx->args[1])
+instead of using BPF_CORE_READ()?=20
 
-[ ... ]
-> +if [ $ARGC -ne $EXPECTED_ARGS ] ; then
-> +    usage
-> +else
-> +    printf $(gcc -E $1 | grep "opts_data" | \
-> +		 awk -F"=3D" '{print $2}' | sed 's/;\+$//' | sed 's/\"//g')
-> +fi
+Passing the verifier-translated tracepoint context pointer (PTR_TO_CTX)
+to memory-reading helpers (which BPF_CORE_READ expands to) is an
+anti-pattern that defeats direct memory access optimizations and can
+lead to verifier rejection.
 
-Similar to extract-insn.sh, does the overly broad "opts_data" grep pattern
-also match extra struct assignments like opts.data_sz =3D sizeof(opts_data)=
- - 1
-and cause payload duplication?
+> +
+> +	bpf_probe_read_str(filename, sizeof(filename), pathname_ptr);
+
+Will this fail to read the user-space pointer? On architectures with strict
+user/kernel memory separation (like x86 with SMAP), bpf_probe_read_str()
+cannot read user memory. Would bpf_probe_read_user_str() be more
+appropriate here?
+
+> +	task =3D (struct task_struct *)bpf_get_current_task();
+> +	start_time =3D BPF_CORE_READ(task, start_time);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260429191431.2345=
-448-1-bboscaccy@linux.microsoft.com?part=3D8
+448-1-bboscaccy@linux.microsoft.com?part=3D9
