@@ -1,223 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D65AB3F166E;
-	Wed, 29 Apr 2026 13:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777469950; cv=none; b=YBQDB1O40ddZNPECiAwl21JanZd53oa58luiXPigcfZ5ZQoXdvSm2trDnVnS814O1cOxxvlqFFoJD5a10aJihpJKH8lOqlz7OVdSex9uTekPfEgoUBoKmTnCE8CMx12vsqvzg/FtpCgMZHzKf8pQw0qJ6ZPH0m0jqZbIolFCcjc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777469950; c=relaxed/simple;
-	bh=osP4W3/oJUMKZpmJm93icRtApK2brzZfwQDW6ma8R6c=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=NjBiU3yeq3os2ZxBOehGlDE6XCrHLsrk8mVDKyDle8kGBByrMbq9WAlMSofB8FVcUyGwrdE3I+awbFS/yB5QRsGOd2uhT7nIwK7Cx0yp1uprP0lK8Socoi2+TMEYZZQQomNDLFhZjVmMheD+OrMkkB8eCdZxTKmUqSzTg4J2ro4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H0V1AVmj; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28CE03148B5
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 13:52:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777470734; cv=pass; b=kunaO5j0ct49FLNpMflC2aKDz8G8nArg6rkC8Do2iVe6W5Br18ZVk7e/pfq0k+B4rlUGSGKhQZxSWjh4brTcyRVGPQKgH8vRmBcX/es2UOPa3hOA7SpT1IaqZYmuRDFL38ps+NYNbClaRlHimcvUXwVh7I9OYKcJbjM5z0pjPKU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777470734; c=relaxed/simple;
+	bh=Vcj/jlizRJmi2EXdt/aWTfJdSBrV6aLiC1QJnc1gyc0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pH9w5JJWlCWTIzVmzQNntm2tmL/Nm5FKDCjDoSPXVrkXRBjbA641waQheADJifHp79gOjt4/G6kWJ0VeFm520FkhIaT/3rUWGTnyUvW4XRRdr+Mb89RwzIG8gvhoz0j6QIhHMXW5kow1Eu24J5epKhP7niYz6fUWq/FcBHSPXLs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com; spf=pass smtp.mailfrom=0x0f.com; dkim=pass (1024-bit key) header.d=0x0f.com header.i=@0x0f.com header.b=Tqgax0rh; arc=pass smtp.client-ip=74.125.82.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0x0f.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H0V1AVmj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 671B7C19425;
-	Wed, 29 Apr 2026 13:39:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777469950;
-	bh=osP4W3/oJUMKZpmJm93icRtApK2brzZfwQDW6ma8R6c=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=H0V1AVmjU8vN0wCJa9cvT651MLkif544jnbmf2erblDU+qmb87Qq5z8u6lfn2RLia
-	 QRpe4n6UcHWrtxj32ZAFxVdOijGNYwhcqu5gXGObGSPykwxQCDV0T3KlZqf1C2ZeY4
-	 MlNukFm8/pY3sj8wA7APgIdNeNKMUwNIXTt6/lph1Kh5Ou1KfJrwSlnviTR2qE51yk
-	 IkJP4IA57m3x6QK6oEQY+3MVPXhXwcxHqMKlu7/AKI4MUgp+6sWWsLixM+/B2B6z2V
-	 HfV9v7/n4H5RnGnFiphs1tzGZjWIHLy6twm3GGQoXSM9HxuMqJ6LFp5dpdGA+roew/
-	 pT6TTAZ/oeUkw==
-Content-Type: multipart/mixed; boundary="===============4284955305587179238=="
+	dkim=pass (1024-bit key) header.d=0x0f.com header.i=@0x0f.com header.b="Tqgax0rh"
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-12db2e415a7so5152025c88.1
+        for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 06:52:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777470729; cv=none;
+        d=google.com; s=arc-20240605;
+        b=TcTpcFjepCN6bSC9Kh+GY4atbiG7vCzNePjoqIUsG5aF0x6w0PfC2Z/yjDOtIdGEMO
+         8Pu9EEl396BA9FeyxbN8t197iqowQ+SMH8HuCNS0KAVyJqlLmOl0BxR2vQdYVF1FpYuC
+         HhM6+aOLyqTgPqswF7W6XdhnhLqJpcxbJA9x4+ytWIT/UCROIGMeTWz379u8SNbIIPPO
+         oqXnRak4u520/+6tcap3DH64MvSQxN+4eklDx3Qlz94ImoPjytaAAItlqqYyMKxATYCk
+         Omr/qxje7Tr77GPIXVsxmprjHgejGZZg0v3FShXYopsQqXgujsg3alXojWw2O+6G+Ws0
+         u+uQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=Vcj/jlizRJmi2EXdt/aWTfJdSBrV6aLiC1QJnc1gyc0=;
+        fh=1nXatgaNKvrw0NcHxbHZsN5qAUXSQvVmWJBcw9ZpZhc=;
+        b=VAzDq43nAXxOzQYwfOrlj2KGT1RX34+KAhAqDrB0zWoNNVPk5USHI6cw0ETg7Gp6QF
+         ng/k9GvTSQEoolDfvV/i70GIo1C53L+BEmks3SaNByBQ4SOC1AcaO/k91mTHQHd/GVnW
+         Bs5gLh2zwqK3F5HE6jaIEM/eLdUVJI3aHHlckIZ32znTr7fxTUdn230pgcu6MjOYp91e
+         d4I1MSwc/3epi512glJ4DHL5rrzisPCZxiBCne4vhvv/5NqwV19Vyy1shQPbpeacIVF6
+         B/9y/2Rbs3TPWVS82tMfGGZ1Qq+b7j40fVgzZ3fr6FSbdH7O6aHlGjCN1iZcFH3NiiTE
+         gwpA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google; t=1777470729; x=1778075529; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vcj/jlizRJmi2EXdt/aWTfJdSBrV6aLiC1QJnc1gyc0=;
+        b=Tqgax0rhVN4z4dkfCgOaPw70NMrOaoW+PCCEgJWZrAH7EI11PB0wFd4xH63V1Qs2sF
+         Tz2/GaLlM4+dvRn+kfuFf/dNMFcmHDlDlE6hIV7OkeB5awkclcymbh4UyObeAlVizG4F
+         uYvltIwyl9VpsVluhKQXFLMMj3tGSx5gZASn4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777470729; x=1778075529;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vcj/jlizRJmi2EXdt/aWTfJdSBrV6aLiC1QJnc1gyc0=;
+        b=XNUAil/O8BagqV0NiThv5WBnMvpOCYLoKopPo9v4WgPDPZ64y9DnyCgkwu7rsuy75F
+         rgaPfpsjbPIBwuS8cVtwmyvfadcvnFTR34C3jqSKgoehBu4giiehktbO8m3YeQRgPi4W
+         RGIRnu8OX6x4qyXXLvPzfK7oLunDytRkYWgXzcbmFHDsZsfHb4niGmfPQD3Y1AEeudQ+
+         7qr7Zb9A12xiDdVMe8SyKO7iLF/kCFTKIgwKhtHnrbSEqByT49Y1vwa9BJdwSNI2JAv4
+         zBN4FCDfOC0qRU233t0eQzmrMSDjqEnSpaETV7bxiu30JSGoviGXtNwJkd1xXj2H8dj4
+         ZhKg==
+X-Forwarded-Encrypted: i=1; AFNElJ8MEQOmSYO94FZGxTy0ltlxtIdMG+U73qNxQbZqYubLKd6YtPvMxWkf0RHJC6GNIHmiWKA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDZIjUSD2bnZge9SfjB5MeJDDrhbvoUP8I/FGFBHTwdbWy8yMm
+	+yAOegjh+4LH/N9BCpGFA4UMNVPhIWCks8LKhsSMiqlRHmQAMDotlc/Lu/ZbdfJns2wytYosxdE
+	SxCrvy8+CC6/KpVZZPbCJA875OJKod5QApscegHT0rg==
+X-Gm-Gg: AeBDievUcVG87c/8TEV9xC4Oe6UF/bg+JiExXpzkTsbEWIoSHazraDXRryOqoJPap/p
+	IxbP1U76ZYzqqILUQpv+B6a+c9w0GBpvvL+yQPFGYdxnobI9NYQsa673O8k50e7dbEKd/etrl59
+	8Ai5IEaKSlzIlMv6GQPVBZ9XF7CvMThyoUGkSMHVL+a34tVoF9GfGashsMslSFSH3MuA4aH+UPM
+	MNETlmjyWDC0jUK7hYQZQWmubouInswXdYP54+7oy7zjTvdLc3oNU7Ii/pxlXH5nwS7vu6nHAit
+	IuvMTPMk7qe5zWsIhEpj
+X-Received: by 2002:a05:7022:f216:b0:12d:de3f:f3e4 with SMTP id
+ a92af1059eb24-12de2a59d9dmr1339377c88.36.1777470729259; Wed, 29 Apr 2026
+ 06:52:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <5c97b756f6430dd7c58b8bc4eaff2f906765eb7218c9cb1b48e47187d0028816@mail.kernel.org>
-In-Reply-To: <20260429124046.3480827-1-visitorckw@gmail.com>
 References: <20260429124046.3480827-1-visitorckw@gmail.com>
+In-Reply-To: <20260429124046.3480827-1-visitorckw@gmail.com>
+From: Daniel Palmer <daniel@0x0f.com>
+Date: Wed, 29 Apr 2026 22:51:58 +0900
+X-Gm-Features: AVHnY4LZkGH0GYT9Uy0ZRDPAVwacyW0kO68S2UYtW7_ZVjCKOsFUrrOGP3b2h40
+Message-ID: <CAFr9PXm0qxeSYq42MEOARKsmOT-hRLbT4UpchkwuSOMYKYzfOw@mail.gmail.com>
 Subject: Re: [PATCH bpf-next] m68k, bpf: Add initial BPF JIT compiler support
-From: bot+bpf-ci@kernel.org
-To: visitorckw@gmail.com,geert@linux-m68k.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,jserv@ccns.ncku.edu.tw,eleanor15x@gmail.com,linux-kernel@vger.kernel.org,linux-m68k@lists.linux-m68k.org,bpf@vger.kernel.org,visitorckw@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 29 Apr 2026 13:39:10 +0000 (UTC)
+To: Kuan-Wei Chiu <visitorckw@gmail.com>
+Cc: geert@linux-m68k.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, 
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
+	jserv@ccns.ncku.edu.tw, eleanor15x@gmail.com, linux-kernel@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
---===============4284955305587179238==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi Kuan-Wei,
 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 13f49378b157..9d6e73c1caaf 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4699,6 +4699,12 @@ L:	bpf@vger.kernel.org
->  S:	Maintained
->  F:	arch/loongarch/net/
+On Wed, 29 Apr 2026 at 21:41, Kuan-Wei Chiu <visitorckw@gmail.com> wrote:
 >
-> +BPF JIT FOR M68K
-           ^^^
+> Add a BPF JIT compiler for the m68k architecture.
+>
+> The JIT generates m68k machine code targeting m68020+ processors. It
+> currently excludes 68000/68010 and coldfire processors, as it relies on
+> 32 bit branch displacements (b<cc>.l) to handle large bpf programs.
+>
+> Tested with the test_bpf.ko:
+> test_bpf: Summary: 1053 PASSED, 0 FAILED, [1041/1041 JIT'ed]
+> test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
+>
+> Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
 
-This isn't a bug, but the surrounding BPF JIT entries all use lowercase
-'for': 'BPF JIT for ARM', 'BPF JIT for ARM64', 'BPF JIT for LOONGARCH',
-'BPF JIT for MIPS', etc. For consistency, this should be 'BPF JIT for
-M68K'.
+Cool! Which CPUs did you test on? I guess 040 that is in QEMU?
+I'll check on real 030, 040 and 060 machines a bit later.
+Since you are doing code generation for m68k now maybe you could help
+me when I resend my patches for runtime consts support? [0]
 
-> +M:	Kuan-Wei Chiu <visitorckw@gmail.com>
-> +L:	bpf@vger.kernel.org
-> +S:	Maintained
-> +F:	arch/m68k/net/
-> +
->  BPF JIT for MIPS (32-BIT AND 64-BIT)
->  M:	Johan Almbladh <johan.almbladh@anyfinetworks.com>
->  M:	Paul Burton <paulburton@kernel.org>
+Thanks,
 
-[ ... ]
+Daniel
 
-> diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
-> index 11835eb59d94..67ac01c9ab42 100644
-> --- a/arch/m68k/Kconfig
-> +++ b/arch/m68k/Kconfig
-> @@ -8,6 +8,7 @@ config M68K
->  	select ARCH_HAS_CPU_FINALIZE_INIT if MMU
->  	select ARCH_HAS_CURRENT_STACK_POINTER
->  	select ARCH_HAS_DMA_PREP_COHERENT if M68K_NONCOHERENT_DMA && !COLDFIRE
-> +	select HAVE_EBPF_JIT if (!COLDFIRE && !M68000 && !M68010)
-                                                          ^^^^^^^
-
-Does this reference a valid Kconfig symbol? The symbol M68010 doesn't
-appear to be defined anywhere in the kernel tree. A search across
-arch/m68k/ and the wider tree shows M68010 is referenced only in this
-new line. The m68k CPU Kconfig (arch/m68k/Kconfig.cpu) defines
-COLDFIRE, M68000, M68020, M68030, M68040, M68060, SUN3, M68KCLASSIC,
-etc., but no M68010.
-
-Because undefined Kconfig symbols evaluate to 'n', the condition
-!M68010 is always true. This means the gating for 68010 hardware that
-the commit message describes is never actually enforced (dead
-sub-expression).
-
-The commit message states the JIT targets 'm68020+ processors...
-excludes 68000/68010 and coldfire', so the intent is clearly to exclude
-68010 - but that exclusion is not functional as written.
-
->  	select ARCH_HAS_SYNC_DMA_FOR_DEVICE if M68K_NONCOHERENT_DMA
->  	select ARCH_HAVE_NMI_SAFE_CMPXCHG if RMW_INSNS
->  	select ARCH_MIGHT_HAVE_PC_PARPORT if ISA
-
-[ ... ]
-
-> diff --git a/arch/m68k/net/bpf_jit_comp.c b/arch/m68k/net/bpf_jit_comp.c
-> new file mode 100644
-> index 000000000000..cfeffd03c434
-> --- /dev/null
-> +++ b/arch/m68k/net/bpf_jit_comp.c
-
-[ ... ]
-
-> @@ -0,0 +1,1543 @@
-
-[ ... ]
-
-> +static void emit_alu64_x(const struct bpf_insn *insn, struct jit_ctx *ctx)
-> +{
-
-[ ... ]
-
-> +	case BPF_XOR:
-> +		emit_16(ctx, 0xb180 | (s_lo << 9) | d_lo);		/* eor.l d_lo, s_lo */
-> +		emit_16(ctx, 0xb180 | (s_hi << 9) | d_hi);		/* eor.l d_hi, s_hi */
-                                                                       ^^^^^^^^^^^
-
-The comments describe the operand order in reverse. The m68k 'eor.l Dn,
-<ea>' opcode 0xB180 has Dn (bits 11-9) encode the source register and
-EA (bits 2-0) encode the destination (EA = EA XOR Dn). The emitted
-instruction is:
-
-  0xb180 | (s_lo << 9) | d_lo    /* d_lo := d_lo ^ s_lo */
-
-which is functionally correct. However, the comment reads 'eor.l d_lo,
-s_lo', which in m68k assembler convention (source first) describes the
-wrong operation: s_lo := d_lo ^ s_lo.
-
-This is inconsistent with the correctly-worded sibling comment in
-emit_alu32_x:
-
-  emit_16(ctx, 0xb180 | (s_reg << 9) | d_reg);  /* eor.l src, dst */
-
-The emitted machine code is correct; only the comments are reversed.
-This also affects the BPF_XOR case in emit_alu64_k (four lines total).
-
-> +		break;
-> +	}
-> +
-> +	bpf_put_reg32(dst[1], d_lo, ctx);
-> +	bpf_put_reg32(dst[0], d_hi, ctx);
-> +}
-
-[ ... ]
-
-> +static void build_prologue(struct jit_ctx *ctx)
-> +{
-> +	int bpf_stack = 512;
-> +	int total_stack = SCRATCH_SIZE + bpf_stack;
-> +
-> +	emit_16(ctx, 0x7021);					/* moveq #33, %d0 */
-> +
-> +	emit_16(ctx, 0x4e56);					/* link %a6, #-total_stack */
-> +	emit_16(ctx, -total_stack);
-> +
-> +	emit_16(ctx, 0x48e7);					/* movem.l d2-d5, -(%sp) */
-                                                                  ^^^^^^
-
-Does this comment accurately describe the register mask 0x3f3c? The
-mask 0x3f3c in predecrement mode (bits 2-5 and 8-13 set) encodes the
-register set {D2, D3, D4, D5, D6, D7, A2, A3, A4, A5} - that's 10
-registers, not just d2-d5.
-
-Predecrement register mask encoding uses bit 0=A7, bit 1=A6, ..., bit
-7=A0, bit 8=D7, bit 9=D6, ..., bit 15=D0. A true 'movem.l d2-d5,
--(%sp)' would use mask 0x3c00.
-
-The save matches the corresponding epilogue restore (mask 0x3cfc, which
-in postincrement mode covers the same 10 registers), so the code is
-functionally correct and the stack is balanced. However, D6, D7, A2-A5
-are never modified by the JIT and do not need to be saved, causing 24
-bytes of wasted stack space and 6 unnecessary register saves per JIT'd
-function call.
-
-> +	emit_16(ctx, 0x3f3c);
-> +
-> +	emit_16(ctx, 0x2d40);					/* move.l %d0, off(%fp) */
-> +	emit_16(ctx, (u16)STACK_OFFSET(BPF_TC_LO));
-
-[ ... ]
-
-> +static void build_epilogue(struct jit_ctx *ctx)
-> +{
-> +	emit_16(ctx, 0x4cdf);					/* movem.l (%sp)+, d2-d5 */
-                                                                  ^^^^^^
-
-Similar to the prologue comment issue, the mask 0x3cfc in postincrement
-mode (bits 2-7 and 10-13 set) encodes restoring {D2, D3, D4, D5, D6,
-D7, A2, A3, A4, A5}. A true 'movem.l (%sp)+, d2-d5' would use mask
-0x003c.
-
-Postincrement mask encoding uses bit 0=D0, bit 1=D1, ..., bit 7=D7, bit
-8=A0, ..., bit 15=A7. This matches the prologue's save, so the stack is
-balanced and values are correctly restored, but the comment is
-inaccurate.
-
-> +	emit_16(ctx, 0x3cfc);
-> +
-> +	emit_16(ctx, 0x4e5e);					/* unlk %fp */
-> +	emit_16(ctx, 0x4e75);					/* rts */
-> +}
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25110417551
---===============4284955305587179238==--
+0 - https://lore.kernel.org/linux-m68k/20251127000505.2117956-1-daniel@thingy.jp/
