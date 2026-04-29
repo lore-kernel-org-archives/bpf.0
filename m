@@ -1,114 +1,116 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C803A0E99
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 21:04:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A96DA38550A
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 21:08:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777496672; cv=none; b=Vn9qJSLYaZw2ouAupbST2TMiPIwOjz01h7u8MURBABAvcurXEuzZTB5T99yvGcnWEiviXlILzdlDIF9bnn+as6JrvBXwd5saXkrjJMzhihnRgXC5yRPivAT3rHmOUoSOt/GKp1qzW+YCfZin+qwm9IT5m8mfUcNt1/0JvF6czNg=
+	t=1777496896; cv=none; b=qzwnywFYvuzic6MJJUksloR1gVHII1yMh/4IKwkBubocyh2jNFBxu4OnyZzTS90899QoIuQkdx/g0nNveCHJ0lwdBH5IA3yOWGOo/j90rpKljTT8VReInLvhw1sXSOgSj5DH2wf+N3+EhjQTO7sTxb2cTmacYL3tcJWfyS1dex8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777496672; c=relaxed/simple;
-	bh=PUv/wtdAaCDxWTSqwMEnMtq40S4x3X73v2jPSv0r6w4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=rfWET6q96BOXN5Sfbkfb+Syp7P1nFuXmguXtW1pLpxSyS1edWyRtd2Q5BpSyHJavfber6VP4Cuk/SXws47GMptnjr14NSbpNNCoSniR2O1rqrRgZDtSq8udP3+A8wdkl3dEn7Ipuh26/KpB0Iq9JZ070Sflh5UtiSNXDnEk4klM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=r9GKvN5f; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1777496896; c=relaxed/simple;
+	bh=Ctj2AF5p+hGmcUpCMAGgVxU5o4TN3q/kApIC+UMFYoU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=OEy4uvHRyPkvz0PRXMkwyCMX8F0BaFV6kZE0RgBJsFvNmH4Jq3Fah242bkTIxLSHY7L9AJulHabCu/GkW5uNzs5fH0srTs8/XnbR6TrdBn7RnemM7BsBS1UgRjlpl4Mr0b2lF8UgJLWv6mCOFcaA75Fz4KOkiT1UTk6MIjLt/Qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N/kk7UDq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="r9GKvN5f"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 24A50C5EF31;
-	Wed, 29 Apr 2026 21:05:11 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id C9ABC5FD43;
-	Wed, 29 Apr 2026 21:04:26 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E461E1072B31D;
-	Wed, 29 Apr 2026 23:04:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1777496666; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=vZB3xOONBlzwTld0/b/9vkSKWE1hI2mPZDQMBd4wIO0=;
-	b=r9GKvN5f/LCZsgVMuxe4ogTRntwEaB81/uuSDp6sckQm4YzHfqhQfZC1shdX6/JxDZGNfy
-	AgkzDeMhl7Xfg0shl/vQO5SO5OvysfEwo2Qrb6SgaWj3RyPWw9jUf0UF0gmFErPW3jwy+l
-	+1DcHSJpPRoxqDeFkX3cLLMsU2WivuTZATX8+vMpS7ow5vSaDxrN1XU3QHsZ93IuzEl/AG
-	H62OS547wYcYrYZSa79e1KNqN/ILxEkMfK3Qg30Xtcc/g+wk/24+a5VLT0GESly19Q0WrC
-	DIyeoB34o+Z6bKCF3I6seRMlLZzglj7gdIfssoPYG14X9xW85exm889oev04eg==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N/kk7UDq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29EA6C19425;
+	Wed, 29 Apr 2026 21:08:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777496896;
+	bh=Ctj2AF5p+hGmcUpCMAGgVxU5o4TN3q/kApIC+UMFYoU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=N/kk7UDqCgHdWR5K/Nq3WtfZnZgWmWXE1v8MxEIXgApvmgsYRdnzgkjz3ufTs8VJZ
+	 opSGKkGpNuzL6ZH6Td2Jzeke1afd8U6QIzKQDU6ZVJ5iAiZwMIU84uwXas2YGI7A2q
+	 4iZkVcODpWS+hZslxjJ9aFnpTbOtc6dCVXxSVPXTlTHoJg6p7BHaP4qCwiLeJ0Zn1N
+	 BO72h9cmWvWxcNe7ki4F8hifxMLPXb0Y1iTwcXK1IHh2IyQesyLUVjuA9Fg/leLNXp
+	 0NRRpQYd8kwk/dJP5TLAdvkhWgKUe8NeruZ8SAmgjAd3kI6IV+gNgKv+HnUJ7jTNUx
+	 QgFfM6R0VvPNA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v9 09/11] selftests/bpf: Tolerate benchmark
+ build failures
+Reply-To: sashiko@lists.linux.dev
+To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260429-selftests-bpf_misconfig-v9-9-c311f06b4791@suse.com>
+References: <20260429-selftests-bpf_misconfig-v9-9-c311f06b4791@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 29 Apr 2026 21:08:15 +0000
+Message-Id: <20260429210816.29EA6C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 29 Apr 2026 23:04:24 +0200
-Message-Id: <DI5XZAYSH081.1FI819ZYQZW8L@bootlin.com>
-Subject: Re: [PATCH RFC bpf-next 3/8] bpf: add BPF_JIT_KASAN for KASAN
- instrumentation of JITed programs
-Cc: <bpf@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: <sashiko@lists.linux.dev>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260413-kasan-v1-3-1a5831230821@bootlin.com>
- <20260425051840.1E7C1C2BCB2@smtp.kernel.org>
-In-Reply-To: <20260425051840.1E7C1C2BCB2@smtp.kernel.org>
-X-Last-TLS-Session-Version: TLSv1.3
 
-On Sat Apr 25, 2026 at 7:18 AM CEST, sashiko-bot wrote:
-> Sashiko AI review found 2 potential issue(s):
-> - [Medium] BPF_JIT_KASAN is defined as a hidden config, preventing users =
-from disabling it.
-> - [Medium] Mismatch between commit message claims and Kconfig implementat=
-ion regarding KASAN modes.
-> --
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] Skipped `bench` binary causes `make install` to fail due to miss=
+ing files in `TEST_GEN_PROGS_EXTENDED`.
+- [Medium] Using `$(wildcard $^)` to filter missing prerequisites breaks `m=
+ake -n` (dry run) and drastically increases compiler error noise.
+--
 
-[...]
+commit 31a306fe854d559a436ecf84354b5b73a31012e8
+Author: Ricardo B. Marli=C3=A8re <rbm@suse.com>
 
->> @@ -101,4 +105,9 @@ config BPF_LSM
->> =20
->>  	  If you are unsure how to answer this question, answer N.
->> =20
->> +config BPF_JIT_KASAN
->> +	bool
->> +	depends on HAVE_EBPF_JIT_KASAN
->> +	default y if BPF_JIT && KASAN_GENERIC
->> +
->>  endmenu # "BPF subsystem"
->
-> Since this config is defined as a bool without a prompt string, it acts a=
-s a
-> hidden symbol that is forcefully enabled whenever its dependencies are me=
-t.
->
-> Because KASAN instrumentation emits shadow memory checks, it can signific=
-antly
-> inflate the size of generated JIT code.
->
-> Could this code expansion cause large BPF programs to exceed the strict B=
-PF
-> JIT memory limits (bpf_jit_limit) and break BPF functionality?
+selftests/bpf: Tolerate benchmark build failures
 
-It likely can, indeed, but...
+This commit modifies the selftests/bpf Makefile to tolerate build failures
+for benchmark objects when PERMISSIVE is set. It changes the compilation and
+linking steps for the bench binary to emit a skip message and avoid failing
+the entire build if a dependency is missing or fails to compile.
 
-> If so, would it make sense to provide a prompt text so users and automate=
-d
-> testing systems have a mechanism to manually disable CONFIG_BPF_JIT_KASAN
-> to work around JIT limits or isolate bugs without having to entirely disa=
-ble
-> KASAN_GENERIC?
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
+ts/bpf/Makefile
+> index a64e822dc540..db4ff951fc88 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
 
-... the discussions around this RFC rather tend make the series go in
-the opposite direction ([1]) and keep it systematically enabled if KASAN
-is enabled (I'll even drop this patch in the next revision and just make
-the KASAN code in JIT directly depend on KASAN_GENERIC).
+[ ... ]
 
-[1] https://lore.kernel.org/bpf/CAADnVQLj=3DUosnsC-4V2+mN92Fe0-kW++U+m-O9c9=
-3kk6BwiXgw@mail.gmail.com/
+> @@ -988,7 +989,8 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
+>  		 $(OUTPUT)/usdt_2.o \
+>  		 #
+>  	$(call msg,BINARY,,$@)
+> -	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
+> +	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$(if $(PERMISSIVE),$(wi=
+ldcard $^),$^)) $(LDLIBS) -o $@ $(if $(PERMISSIVE),|| \
+> +		($(RM) $@; printf '  %-12s %s\n' 'SKIP-LINK' '$(notdir $@) (some bench=
+marks may have been skipped)' 1>&2))
+
+Does using $(wildcard $^) here break make -n (dry run) and cause excessive
+linker noise?
+
+Since bench.c statically references every benchmark, omitting missing objec=
+ts
+from the command line forces the linker to run anyway, resulting in a large
+number of undefined reference errors before it fails.
+
+If $^ were used directly, the compiler would fail cleanly and immediately w=
+ith
+a "No such file or directory" error before running the linker, which would
+then correctly trigger the || SKIP-LINK fallback.
+
+Also, evaluating $(wildcard $^) in a recipe causes missing generated objects
+to be silently omitted during make -n.
+
+Will skipping the bench binary cleanly cause make install to fail, since
+bench is unconditionally listed in TEST_GEN_PROGS_EXTENDED?
+
+During make install, the selftest build system uses rsync to copy all targe=
+ts
+in TEST_GEN_PROGS_EXTENDED. Since the skipped bench binary won't exist on d=
+isk,
+rsync fails with a "No such file or directory" error and aborts the pipelin=
+e,
+defeating the purpose of the permissive build mode.
+
+I do see this was fixed later in the series by commit
+ce682ab9bce04cbe3adda3d7a63647774ad61f5d "selftests/bpf: Tolerate missing
+files during install".
 
 --=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260429-selftests-=
+bpf_misconfig-v9-0-c311f06b4791@suse.com?part=3D9
