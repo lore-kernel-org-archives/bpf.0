@@ -1,93 +1,77 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12853BED18
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 12:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9D33F7A8C
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 12:35:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777466146; cv=none; b=Bbcx/y68LFucmtWfbajh2oWrhD7mX8Dn4qgUWCj0IIZEzTum7GEEqZ+CE/u99vgQPwnjRX1MSuswRtprIN4GlRWvU7CpR44Q6jhuqr6Fzb1RDCuJtc15RDic06SVi8/wPhlAy7dD7f7CYe6SBHbg/TShfSxZ+qUpmTrIhx64F4w=
+	t=1777466154; cv=none; b=f92y8Np0Xpnj0wDVN/ozvHD9z68+ZzeD1tOfwGF7WTaZmDn/gbf5E814gcNJFG0wFge8E/VVTVlsHFzCVDoMbSqjAzNqqCBPqtmpD6dKXzkunRPmfE+WXrc6D4QmldQmfNLaQhyuJNtJ5qErFFommdv79iadi47a1dnuyFM35Ak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777466146; c=relaxed/simple;
-	bh=R6LT/oXtwCIK8rBIYICuZx9Lf4fBXDESH6WRM3D3CCM=;
+	s=arc-20240116; t=1777466154; c=relaxed/simple;
+	bh=vqut0vK5KntPrajlpkM2HSqc9+hZY4ZQ0CEjyeDWeyE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EhIFTksFg6AE4CtvHXK3eyf/YxTdsXixmfO0HMkNxNiixSJSRro4Xl+upHjJ4dUp8wqYXW8Sc9l3JFVpuVA6lCadZQmM2qxvL+CCv3xZOh73t9ko4ZdVrEC/IgeqUsROShujo3oEi0r2preChCIFcxONAE9a1adx+X03/dMfMpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jR5SAkx4; arc=none smtp.client-ip=209.85.216.45
+	 MIME-Version; b=uhoPE1vcM8KTI0FB/ekuN/Cn6TsQ12y8I9GBbp5X8ZId86h+oWe0H0Ai/idBDou7ajzLohynKwzWb1dOB68NxwEojdgAPfSWeDPHy8dgKoDM5RWfBYhgmiG/UNsgoFuNxq9/KZhYv7UfNS0aUVQFfR0+hYbylW5VZDnz9mDjXMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EzkVfNGW; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jR5SAkx4"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-35d94f4ee36so7615171a91.3
-        for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 05:35:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EzkVfNGW"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-488d2079582so146359935e9.2
+        for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 05:35:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777466144; x=1778070944; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777466148; x=1778070948; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Quty2+kN4SQkJsBp5DT7Nz27mG7X1e/3uN0TQkO7euI=;
-        b=jR5SAkx4NjBUmwyqsG3ga2JbSumv0G2NcpfF8yNSGE3uKi1XhORvY065IZdyOtFBe/
-         TCWvmGdtEtAEnSuZ9g08Jr9twJoHSRzlmAWcRE6fb0l7mQq8kTCtr1QqTvUeUHoOvBHY
-         QCiZ0t1KU91StUUQ+YOfrYexs8bedhFRQUwWLipu58qv38+RsqsbqRRXQ7q9+WDARd3b
-         MeaDNWyL5rlJAkcUrsKAerCmoZVTZiqHwvpBDz50ksO5KDxe6ONIU8peRzcCK9tsBxaP
-         tMS4WcJnmbpfXlKPBjsOYzvm8qDm1u61CNqVo9GCPkcfADf+Q+MEpFL2zIJWSe08Lk3K
-         0t1g==
+        bh=jZAFdTvgv7ZDBz5Q2Pc7VeLQwtxOy5o6AziVPA6ZPDE=;
+        b=EzkVfNGWmv1lQp7qcqD1g2U85iBvrLpaZu5+Ic3JuufXrCd8ePU9Bzt2BI8K+YyY/q
+         oW3CJP+VUD9kqquu5w7mYw7MHghCYy+ipYvzziCq0nfnBKYMKAYNM17BtxMJAsDvZXAk
+         e/NuYfpToQXyI2zuqaU6TvFQCBJuSNahEQ7GI0yJF0Xhc99Rcz5VGp7Bt1H6/oMWIya2
+         k0uuJR//duKK0uRwxWS2QNVXehkE5ab3u0KoUKqrkdRssClGwv3sD1f5xb99GSxnTXTw
+         0Ns747bQ/VzzK7nmbKyG1d4aOQFK36RP2U3YKKUHt5WZmSeqtmo05AyzUAC/3iXV2Nry
+         cwYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777466144; x=1778070944;
+        d=1e100.net; s=20251104; t=1777466148; x=1778070948;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Quty2+kN4SQkJsBp5DT7Nz27mG7X1e/3uN0TQkO7euI=;
-        b=GICsB+LTlVepuF626I9spKpw/V1to14Ovs2/hmMV3NH8lQIMv/ZVFYq+TM5+hgcWI3
-         BjwyZRsuhXnlpz+Lo7rEn9zuY0faqJmtOLfDgZjSFEpunv2l6c08iqEdpc1ut9X1ZdHi
-         wpvTXH6fQsFECfVQprHU7tYkRlmQr+o29u1h47s18ivchCsmYfe4cqOrGtARrnrhB2DV
-         EovNVs41TrqjL4s+tX6Td9KYNm88eTJW9FObGYN9LDXiWVYfsPU5HblhnbiI6dyjfls/
-         TBq8k+A4b5nnXv8omN2KGGg5TXnblbQ4L9mAM10g7iLu493ZsqcWXFW1lGlaNN0jgJ8+
-         55QA==
-X-Forwarded-Encrypted: i=1; AFNElJ9WIigxr+2sQpPTkO/ueDHkfhajCrr7PRCqtQR/3xEubS7ZH5mN0+1a6zMx30ywrrqTn+Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoqwyX1ylIOWqaukvKn6fgGu6Y4DJ2DAmRud6yvzyHHdzPhbRW
-	hqknY9v5BshYM1AHOLXQuH7TSTypblUDZY0MGXhC5CNEAx9KkUy4qX/P
-X-Gm-Gg: AeBDiet4l3D5TUX0G42QdOOyTekm8IwhOaEg1G1okgVN23x5c7v7ZDivqjEf3l5XGF+
-	7PMHv7xn+IgTJ7BOfspmnXsFdcb0EWKhOD4sJkftAF2N2R94//bwuJrAGkT8kqKAvhffWzlEBzq
-	X3gnS3NPjWlmxM8IWgTj0CX4MDyEqK+a2eJiHeiskMkWwdMnmMDPN7oS1uXWBLg4VylxsPWYUDV
-	z3uDfSNeHcNGjvWEMDRVqC8NdQylc+QqMkaQDklfbbSSM4L7WpiV+ugj+ILgbj0FV9DGFb/AFjl
-	S09Y+RCVHIbM4Bl+H5O8sunURAgdpV2RW/YIJaz0P4Z1ABxwtUanH6rW8h0ePtU8bNSpizSVJul
-	nsEOQoOD3WyOkl3kfDP95i+BoESn7cP9jl740nGa2VLpsDqSLBbhSwfDOfmhPRcifTfGzhT6ILy
-	qlUnMkyFv2vIDc+rT6NQbYYvjJdlB1QDXEDfpgikKEFQbd6NW2DvGnNhNXldorLGR7BxorVqDLd
-	rpkXpQJFUDB5C2NYarblUTwPB8zCKI8CSeedkyYlfeB
-X-Received: by 2002:a17:90b:554f:b0:35a:18b1:c245 with SMTP id 98e67ed59e1d1-36491f6c91fmr7853015a91.3.1777466144094;
-        Wed, 29 Apr 2026 05:35:44 -0700 (PDT)
-Received: from visitorckw-work01.c.googlers.com.com (32.237.80.34.bc.googleusercontent.com. [34.80.237.32])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-364a419c9a6sm2261855a91.7.2026.04.29.05.35.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2026 05:35:43 -0700 (PDT)
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	luke.r.nels@gmail.com,
-	xi.wang@gmail.com,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	alex@ghiti.fr,
-	jserv@ccns.ncku.edu.tw,
-	eleanor15x@gmail.com,
-	marscheng@google.com,
+        bh=jZAFdTvgv7ZDBz5Q2Pc7VeLQwtxOy5o6AziVPA6ZPDE=;
+        b=GuWkw1QmNPujPFWH98Cdici4FUa1W2xVv3xbCnJnk/tbcv3IdENKbHfxse4p9aAAY2
+         CU7aGhI4Z3o2SDxFJ3HcSoIO/NQvsF/LzdOZZmFFyuxJiyeI2jshwVQDsfKNBYcjYasq
+         /3ppMYfQ/1MV5Div7jfTtg5oaPAWT0BiacdQb/exkJiI+trDCmzA5ihO222bPkWxkOK8
+         2O4opoywwuhFIwtCJ281uTjnvx2Htwc+LiiGu7k0liMoIoOe1ldvfiiUfW2CtslRs2F7
+         r2h8xR0y5FvxBJi0Pn2BNpiap1LAxS5C+ITqyYpu4KV1gfVFwadsuhSLYR2OUtpHiwb6
+         A6RQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+5sADO0OsRAVc/6P6hBOyKOj9up7SLRL37knLC4Ku5ZlswQ3Tfv3MGaiTaJg9xhjF6GGI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YykN/VjQvRgQfWzy2JPu68iBKxcl45MtDbPwsJeLf6nV4LYLoUU
+	eELDEk1nQ/eg4R9PUUrJntbfJz1teDOjLAe9WqtpYsaujQTuJnPjwwrk
+X-Gm-Gg: AeBDiev+/s/UQ08sfw08BmJ/inyIe1E6/kGaWBxz8l5aP7YC7vYKOATCzwlT+duKin5
+	UcIJCDQDVwsgxggbrylqle4tAka8pVzwFh5BoRTae+GCObojiNGWWVcRGd+uVksF0NsrVh3C5wy
+	p8LoVZIes6/JTpCsmOEFAeUJMTPBjjTF+wNywmu5EIauSODn/Ez8eDpaSrmh/5w9tBh1lVeLzxM
+	jC+M/+Sfz2YTL5gu2beyr7p7GZ0hLY/6D0LwmEc+FDcwIeub2H9HlteQ5l4IIrulgCUFik00Bbo
+	LB1bX8eX6/TwQ7HENTM0eM+jnMNK4pYOylzftFqQlZ//JGkBXKe57GHQ9tGh75ekh7+7kgp3JjH
+	gyFmPNLMutf6RBaPzlra2fvy2HRezbbzCmRpfDn08qs3QlnPkwytZdqpNFBbOFXKtG6Z8UU/AtO
+	Qc7k6Sbf/Tix/XeYgZG2c/v77jS59LdAyQz91WOh5q9qPE1W94F6h/RHmKQBwcythN5GnvMWNUW
+	bnX4w==
+X-Received: by 2002:a05:600c:314d:b0:48a:58ae:992f with SMTP id 5b1f17b1804b1-48a7b531975mr56915905e9.16.1777466147586;
+        Wed, 29 Apr 2026 05:35:47 -0700 (PDT)
+Received: from localhost.localdomain ([2a05:6e02:1135:da10:ada7:48a3:13c3:5e89])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a7bc12bcbsm86942355e9.1.2026.04.29.05.35.46
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 29 Apr 2026 05:35:47 -0700 (PDT)
+From: Hasan Basbunar <basbunarhasan@gmail.com>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	Kuan-Wei Chiu <visitorckw@gmail.com>
-Subject: [PATCH bpf-next 3/3] riscv, bpf: Add 32 bit atomic operations to RV32 JIT
-Date: Wed, 29 Apr 2026 12:35:13 +0000
-Message-ID: <20260429123513.3477780-4-visitorckw@gmail.com>
-X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
-In-Reply-To: <20260429123513.3477780-1-visitorckw@gmail.com>
-References: <20260429123513.3477780-1-visitorckw@gmail.com>
+	Hasan Basbunar <basbunarhasan@gmail.com>
+Subject: [PATCH v3] bpf: bpf_dbg: split pcap_next_pkt() validation/advance, fix off-by-one in cmd_select
+Date: Wed, 29 Apr 2026 14:35:43 +0200
+Message-ID: <20260429123543.61559-1-basbunarhasan@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260429084441.22089-1-basbunarhasan@gmail.com>
+References: <20260429084441.22089-1-basbunarhasan@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -96,111 +80,137 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The RV32 BPF JIT compiler currently only supports the BPF_ADD atomic
-operation. Other 32 bit atomic operations (and, or, xor, xchg) and
-their BPF_FETCH variants are not supported and gracefully fall back to
-the interpreter.
+bpf_dbg's interactive 'select <N>' command, documented in the file
+header ("select 3 (run etc will start from the 3rd packet in the
+pcap)") to use 1-based packet indexing, advances the pcap cursor one
+packet too many. The loop in cmd_select():
 
-Since the RISC-V A extension is required for Linux on RV32, we can
-natively support these 32-bit BPF atomic operations by mapping them
-directly to the corresponding RISC-V amo*.w instructions.
+	pcap_reset_pkt();         /* cursor on packet 1 */
+	for (i = 0; i < which && (have_next = pcap_next_pkt()); i++)
+		/* noop */;
 
-Implement BPF_ADD, BPF_AND, BPF_OR, BPF_XOR, and BPF_XCHG with and
-without BPF_FETCH. BPF_CMPXCHG requires a more complex lr.w/sc.w
-loop and is left to fall back to the interpreter.
+calls pcap_next_pkt() N times to reach packet N, but pcap_next_pkt()
+validates the packet at the cursor and then advances past it. After
+N calls the cursor is on packet N+1, so 'select 3' positions on
+packet 4, 'select 4' on packet 5, etc.
 
-Before this patch:
-[  138.862161] test_bpf: Summary: 1054 PASSED, 0 FAILED, [843/1042 JIT'ed]
+Simply changing the loop init to 'i = 1' (so it advances N-1 times)
+fixes the user-visible symptom but leaves the final landed-on packet
+unvalidated, and combined with pcap_next_pkt()'s '>=' boundary
+checks, mis-handles the boundary cases on the last and just-past-the-
+last packet. As pointed out by the Sashiko AI review on v1 and v2,
+this surfaces in two ways:
 
-After this patch:
-[  157.024124] test_bpf: Summary: 1054 PASSED, 0 FAILED, [902/1042 JIT'ed]
+  1. On a perfect pcap (no trailing bytes after the last packet),
+     pcap_next_pkt()'s '>= pcap_map_size' rejects packets whose body
+     ends exactly at the file boundary, so 'select N' on an N-packet
+     file errors as "no packet #N available" even though the packet
+     is fully in-bounds.
 
-Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+  2. On a truncated pcap (filehdr + a few stray bytes that happen to
+     pass try_load_pcap()'s 'pcap_map_size > sizeof(filehdr)' guard
+     but not enough to contain a full pkthdr), 'select 1' returns
+     CMD_OK without ever validating the header, and a subsequent
+     'step' or 'run' dereferences pcap_curr_pkt()->caplen past the
+     mapped region.
+
+Fix all three issues by splitting pcap_next_pkt() into a pure
+validator (pcap_curr_pkt_valid()) and a validate-advance-validate
+combinator. The boundary check now uses '>' instead of '>=', so a
+packet whose body ends exactly at pcap_map_size is correctly accepted.
+pcap_next_pkt() returns true only when both the current packet was
+valid and, after advancing, the new cursor position is also valid.
+This means the do-while in cmd_run() exits cleanly after the last
+packet (no past-end dereference), and cmd_select() can call
+pcap_curr_pkt_valid() after the loop to bounds-check the final
+packet.
+
+Reproduction (deterministic, no kernel needed): build bpf_dbg from
+the unmodified tree, synthesize a pcap with N>=2 packets each with a
+distinct payload byte, and drive 'select 1 / step 1 / quit'. Before
+this fix, 'select 1' shows packet 2's payload. After this fix,
+'select K' shows packet K for all K in 1..N, 'select N+1' correctly
+errors with "no packet #N+1 available!", and 'select 1' on a pcap
+truncated to filehdr + 1 byte also correctly errors.
+
+Cloudflare's downstream mirror at github.com/cloudflare/bpftools
+carries the same defect.
+
+Fixes: fd981e3c321a ("filter: bpf_dbg: add minimal bpf debugger")
+Signed-off-by: Hasan Basbunar <basbunarhasan@gmail.com>
 ---
- arch/riscv/net/bpf_jit_comp32.c | 47 +++++++++++++++++++++++++--------
- 1 file changed, 36 insertions(+), 11 deletions(-)
+Changes in v3:
+ - Split pcap_next_pkt() into pcap_curr_pkt_valid() (pure validator)
+   and pcap_next_pkt() (validate-current, advance, validate-new).
+ - Boundary check now uses '>' instead of '>='; a packet whose body
+   ends exactly at pcap_map_size is correctly accepted.
+ - cmd_select() validates the final landed-on packet via
+   pcap_curr_pkt_valid() instead of the dead
+   `pcap_curr_pkt() == NULL` check.
+ - Empirically verified in a clean Debian container (gcc -Wall -O0)
+   against:
+     * 5-packet pcap, select K for K in 1..6 (5 successes + 1 error
+       on K=6, payload byte matches K per the file header docs);
+     * 1-packet pcap, select 1 (succeeds), select 2 (errors);
+     * truncated pcap (filehdr + 1 byte), select 1 errors cleanly
+       without dereferencing past the mapped region;
+     * `run` after `select 3` on a 5-packet pcap processes exactly
+       3 packets and exits cleanly without past-end deref.
+ - Addresses both review concerns raised by Sashiko AI on v1 and v2.
+ - v1: https://lore.kernel.org/bpf/20260428100109.56572-1-basbunarhasan@gmail.com/
+   v2: https://lore.kernel.org/bpf/20260429084441.22089-1-basbunarhasan@gmail.com/
 
-diff --git a/arch/riscv/net/bpf_jit_comp32.c b/arch/riscv/net/bpf_jit_comp32.c
-index f8509950fed4..710c56b20f98 100644
---- a/arch/riscv/net/bpf_jit_comp32.c
-+++ b/arch/riscv/net/bpf_jit_comp32.c
-@@ -877,7 +877,7 @@ static int emit_load_r64(const s8 *dst, const s8 *src, s16 off,
+ tools/bpf/bpf_dbg.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/tools/bpf/bpf_dbg.c b/tools/bpf/bpf_dbg.c
+index 4895602ab37d..db12d2f8fb73 100644
+--- a/tools/bpf/bpf_dbg.c
++++ b/tools/bpf/bpf_dbg.c
+@@ -918,21 +918,30 @@ static struct pcap_pkthdr *pcap_curr_pkt(void)
+ 	return (void *) pcap_ptr_va_curr;
+ }
  
- static int emit_store_r64(const s8 *dst, const s8 *src, s16 off,
- 			  struct rv_jit_context *ctx, const u8 size,
--			  const u8 mode)
-+			  const u8 mode, s32 imm)
+-static bool pcap_next_pkt(void)
++static bool pcap_curr_pkt_valid(void)
  {
- 	const s8 *tmp1 = bpf2rv32[TMP_REG_1];
- 	const s8 *tmp2 = bpf2rv32[TMP_REG_2];
-@@ -902,11 +902,40 @@ static int emit_store_r64(const s8 *dst, const s8 *src, s16 off,
- 		case BPF_MEM:
- 			emit(rv_sw(RV_REG_T0, 0, lo(rs)), ctx);
- 			break;
--		case BPF_ATOMIC: /* Only BPF_ADD supported */
--			emit(rv_amoadd_w(RV_REG_ZERO, lo(rs), RV_REG_T0, 0, 0),
--			     ctx);
-+		case BPF_ATOMIC:
-+		{
-+			s8 fetch_reg = (imm & BPF_FETCH) ? lo(rs) : RV_REG_ZERO;
+ 	struct pcap_pkthdr *hdr = pcap_curr_pkt();
+ 
+ 	if (pcap_ptr_va_curr + sizeof(*hdr) -
+-	    pcap_ptr_va_start >= pcap_map_size)
++	    pcap_ptr_va_start > pcap_map_size)
+ 		return false;
+ 	if (hdr->caplen == 0 || hdr->len == 0 || hdr->caplen > hdr->len)
+ 		return false;
+ 	if (pcap_ptr_va_curr + sizeof(*hdr) + hdr->caplen -
+-	    pcap_ptr_va_start >= pcap_map_size)
++	    pcap_ptr_va_start > pcap_map_size)
+ 		return false;
++	return true;
++}
 +
-+			switch (imm) {
-+			case BPF_ADD:
-+			case BPF_ADD | BPF_FETCH:
-+				emit(rv_amoadd_w(fetch_reg, lo(rs), RV_REG_T0, 0, 0), ctx);
-+				break;
-+			case BPF_AND:
-+			case BPF_AND | BPF_FETCH:
-+				emit(rv_amoand_w(fetch_reg, lo(rs), RV_REG_T0, 0, 0), ctx);
-+				break;
-+			case BPF_OR:
-+			case BPF_OR | BPF_FETCH:
-+				emit(rv_amoor_w(fetch_reg, lo(rs), RV_REG_T0, 0, 0), ctx);
-+				break;
-+			case BPF_XOR:
-+			case BPF_XOR | BPF_FETCH:
-+				emit(rv_amoxor_w(fetch_reg, lo(rs), RV_REG_T0, 0, 0), ctx);
-+				break;
-+			case BPF_XCHG:
-+				emit(rv_amoswap_w(fetch_reg, lo(rs), RV_REG_T0, 0, 0), ctx);
-+				break;
-+			default:
-+				return -1;
-+			}
-+			if (imm & BPF_FETCH) {
-+				emit(rv_addi(hi(rs), RV_REG_ZERO, 0), ctx);
-+				bpf_put_reg64(src, rs, ctx);
-+			}
- 			break;
- 		}
-+		}
- 		break;
- 	case BPF_DW:
- 		emit(rv_sw(RV_REG_T0, 0, lo(rs)), ctx);
-@@ -1308,20 +1337,16 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		}
++static bool pcap_next_pkt(void)
++{
++	struct pcap_pkthdr *hdr;
  
- 		if (emit_store_r64(dst, src, off, ctx, BPF_SIZE(code),
--				   BPF_MODE(code)))
-+				   BPF_MODE(code), 0))
- 			return -1;
- 		break;
++	if (!pcap_curr_pkt_valid())
++		return false;
++	hdr = pcap_curr_pkt();
+ 	pcap_ptr_va_curr += (sizeof(*hdr) + hdr->caplen);
+-	return true;
++	return pcap_curr_pkt_valid();
+ }
  
- 	case BPF_STX | BPF_ATOMIC | BPF_W:
--		if (insn->imm != BPF_ADD) {
--			pr_info_once(
--				"bpf-jit: not supported: atomic operation %02x ***\n",
--				insn->imm);
-+		if (insn->imm == BPF_CMPXCHG)
- 			return -EFAULT;
--		}
+ static void pcap_reset_pkt(void)
+@@ -1143,7 +1152,7 @@ static int cmd_select(char *num)
  
- 		if (emit_store_r64(dst, src, off, ctx, BPF_SIZE(code),
--				   BPF_MODE(code)))
-+				   BPF_MODE(code), insn->imm))
- 			return -1;
- 		break;
- 
+ 	for (i = 1; i < which && (have_next = pcap_next_pkt()); i++)
+ 		/* noop */;
+-	if (!have_next || pcap_curr_pkt() == NULL) {
++	if (!have_next || !pcap_curr_pkt_valid()) {
+ 		rl_printf("no packet #%u available!\n", which);
+ 		pcap_reset_pkt();
+ 		return CMD_ERR;
 -- 
-2.54.0.545.g6539524ca2-goog
+2.53.0
 
