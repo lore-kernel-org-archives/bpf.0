@@ -1,148 +1,143 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CCA13AE6FB
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 21:20:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D953A7F66
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 21:29:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777497608; cv=none; b=QeAB4gPcWgFa0vecll3xU8y8f+jjFdlSmDvr5KCK1Rtew2X6r58iPY7llqEhdVsD980q8Ci7JOz6dh7NmC5osqF9B9J+y6XFx7Ii/77PvXIoB9Na1mZc5g5rpIdyg7mOYNppadv+CGQUEIl1vNDffEm8xThcx2fX78YR0nQkhxU=
+	t=1777498171; cv=none; b=gSNn6MYFuE73NMjA7jBwC8mlNnhirgLo21bDbHHlhQwbuo/SmxMylNsWr3wUHt1oKvFixhZa88yurGu8xSdAm5BLrUwaks0lcenc1eQn9OonuzLqSu2zT+oIeGyCGxCxl87bQ6CtWU374RKHQGKzdXPL2JpLzwtZUq8mT06w5Lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777497608; c=relaxed/simple;
-	bh=dRVvlwBv0Z/uiR/DKQmb26v+265b+bL105u+3LZ6Xxs=;
+	s=arc-20240116; t=1777498171; c=relaxed/simple;
+	bh=Hph1RsYxqQ9N4uCfoGd9vUdXSdHiGTIxZSubqlVGeaI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=TAX0Sl4lMRi43RPZWblJ2BavDwLho4C85Mu1N4mk4mEYkTKRYOcmOpYCbPXT6UJqJKAUIPg7mB1DAsYLLMxaFnrQq061Nz59yZ6Ec+jMmH8QtMwHR8w7ud42EeIMSQya0MwFlMfTy2vQm+Eb2E+BZiXxIuQcail4WZNerT9byMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F4M0uYYL; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=gG2r3N+4n0I4P27FrlL2DKKLZT0wZwp+Ni0xhuioRp1fJh2dEGZBc5a2OksXLs+sWPArvHtwmuWJqHNtZW6qDLDRq1Lj9ZDNb032nl+LJU9TsXvVyegwDp798HpfIo7WDl5BDqWAOC2z0Q81A5x3aOZjIw6wj0YUvNbg5Ra2zUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sw16/FvJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F4M0uYYL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 024BAC19425;
-	Wed, 29 Apr 2026 21:20:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sw16/FvJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44DD4C19425;
+	Wed, 29 Apr 2026 21:29:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777497608;
-	bh=dRVvlwBv0Z/uiR/DKQmb26v+265b+bL105u+3LZ6Xxs=;
+	s=k20201202; t=1777498171;
+	bh=Hph1RsYxqQ9N4uCfoGd9vUdXSdHiGTIxZSubqlVGeaI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=F4M0uYYLG5nh2SVs5pf6a9Ut6mxlIyU4fzXg3R1esOQADjH8Yf9fjiFXQhP6kzf9G
-	 WRjavXlJoiClnq5hXHj9y2CJDrphZl2hEgVU/Knfxsk5v+GtGT7hMvGRaEKqGAmcPI
-	 HEpgED8qEE7VwVoMFG5OxR6obJ7G90vkJZiznKuU217na8hpSPadIgOeGrhZPGkHaY
-	 oQh/hl3W8+Cy/iJIxA+Q8+UaKfG+nefrZCiml88mlY4qEcTFatGb9WDKuoYKQgSJRw
-	 mlEU93y7fPsIFaJrxwVpUw58QvX1rDI3SMwowiVhLNrmp0ZkDg575wg3tzSsWaz95W
-	 lwdgrx19xjDqA==
+	b=Sw16/FvJ4XWNqq1YPl78bY8XWVH7i7vSI0vRCMB0oUC/f9fsvZqrMum58c/MMaZtJ
+	 IQb+gYDi7Ql6pmZa17pH3zQ5mI9nUavGyliEpzF7TB2uPW7tdodImmPAHT7cxaXHDx
+	 C9PaGDI8v/xt34IzpMHiG5llNwwGAmMO4Oj1lWVk8OhMJm9BKZ+oDhiVIfR3ZWlAmM
+	 MVcK59CpsFWHxggMzPVFY8+zpbWmFetM4Z00eXKF1Zl4QoOJ+NzChHk7+HA32zBoSN
+	 HO/Xavki1lAkIrCNeUxAIPbNw0yOw7ExwnGF/KfV4SSa4FruPoNTOOGZnu2uA22Ej0
+	 iiZt3MYIKpyhg==
 From: sashiko-bot@kernel.org
-Subject: Re: [v6 01/10] crypto: pkcs7: add flag for validated trust on a
- signed info block
+Subject: Re: [PATCH bpf-next v9 10/11] selftests/bpf: Provide weak
+ definitions for cross-test functions
 Reply-To: sashiko@lists.linux.dev
-To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
+To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260429191431.2345448-2-bboscaccy@linux.microsoft.com>
-References: <20260429191431.2345448-2-bboscaccy@linux.microsoft.com>
+In-Reply-To: <20260429-selftests-bpf_misconfig-v9-10-c311f06b4791@suse.com>
+References: <20260429-selftests-bpf_misconfig-v9-10-c311f06b4791@suse.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Apr 2026 21:20:06 +0000
-Message-Id: <20260429212008.024BAC19425@smtp.kernel.org>
+Date: Wed, 29 Apr 2026 21:29:29 +0000
+Message-Id: <20260429212931.44DD4C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] State persistence across validations causes false blacklist reject=
-ions and API breakage if a pkcs7_message is evaluated multiple times.
-- [Medium] verify_pkcs7_message_sig is exported using EXPORT_SYMBOL, creati=
-ng a licensing mismatch with its prerequisite GPL functions.
-- [Low] The commit message references a nonexistent function.
+- [Medium] Test flakiness and deterministic failure due to Identical Code F=
+olding (ICF) of weak stubs.
+- [Low] Missing `<alloca.h>` include for `alloca()` in `testing_helpers.c`.
 --
 
-commit f9218a5ea80d770fbf301c4067d4e4b1febdf4ab
-Author: James Bottomley <James.Bottomley@HansenPartnership.com>
+commit 45cfa2851c72a65543e44de19ed32088ef920e33
+Author: Ricardo B. Marli=C3=A8re <rbm@suse.com>
 
-crypto: pkcs7: add flag for validated trust on a signed info block
+selftests/bpf: Provide weak definitions for cross-test functions
 
-This commit adds a verified flag to the pkcs7_signed_info struct to track
-if a signer has passed trust validation. It also exports
-verify_pkcs7_message_sig so consumers can retrieve trusted pkcs7 objects.
+This commit replaces forward declarations of uprobe_multi_func_{1,2,3}() wi=
+th
+weak no-op stubs to allow the linker to resolve them when skeletons are
+missing. It also moves stack_mprotect() to testing_helpers.c to make it
+universally available and resolve an issue where the previous weak stub
+returned 0.
 
-> Allow consumers of struct pkcs7_message to tell if any of the sinfo
-> fields has passed a trust validation.  Note that this does not happen
-> in parsing, pkcs7_validate_trust() must be explicitly called or called
-> via validate_pkcs7_trust().  Since the way to get this trusted pkcs7
-
-This isn't a bug, but does validate_pkcs7_trust() exist in the tree?
-It looks like this might be a typo for verify_pkcs7_signature() or
-verify_pkcs7_message_sig().
-
-> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-> index e0761436ec7f..9bda49295bd0 100644
-> --- a/certs/system_keyring.c
-> +++ b/certs/system_keyring.c
-> @@ -380,6 +380,7 @@ int verify_pkcs7_message_sig(const void *data, size_t=
- len,
->  	pr_devel("<=3D=3D%s() =3D %d\n", __func__, ret);
->  	return ret;
->  }
-> +EXPORT_SYMBOL(verify_pkcs7_message_sig);
-
-Could this cause an API licensing mismatch?
-
-To legitimately use verify_pkcs7_message_sig(), a consumer must parse the
-raw payload into a pkcs7_message and eventually free it using
-pkcs7_parse_message() and pkcs7_free_message().
-
-Since those prerequisite functions are restricted to EXPORT_SYMBOL_GPL,
-non-GPL modules wouldn't be able to legally acquire or manage the required
-structures to use this new export. Should this be EXPORT_SYMBOL_GPL instead?
-
-> diff --git a/crypto/asymmetric_keys/pkcs7_trust.c b/crypto/asymmetric_key=
-s/pkcs7_trust.c
-> index 9a87c34ed173..78ebfb6373b6 100644
-> --- a/crypto/asymmetric_keys/pkcs7_trust.c
-> +++ b/crypto/asymmetric_keys/pkcs7_trust.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/=
+testing/selftests/bpf/prog_tests/bpf_cookie.c
+> index 35adc3f6d443..5a864cd8ad1b 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
 
 [ ... ]
 
-> @@ -127,6 +127,7 @@ static int pkcs7_validate_trust_one(struct pkcs7_mess=
-age *pkcs7,
->  		for (p =3D sinfo->signer; p !=3D x509; p =3D p->signer)
->  			p->verified =3D true;
->  	}
-> +	sinfo->verified =3D true;
->  	kleave(" =3D 0");
->  	return 0;
->  }
+> -/* defined in prog_tests/uprobe_multi_test.c */
+> -void uprobe_multi_func_1(void);
+> -void uprobe_multi_func_2(void);
+> -void uprobe_multi_func_3(void);
+> +/*
+> + * Weak uprobe target stubs. noinline is required because
+> + * uprobe_multi_test_run() takes their addresses to configure the BPF
+> + * program's attachment points; an inlined function has no stable
+> + * address in the binary to probe. The strong definitions in
+> + * uprobe_multi_test.c take precedence when that translation unit is
+> + * linked.
+> + */
+> +noinline __weak void uprobe_multi_func_1(void) {}
+> +noinline __weak void uprobe_multi_func_2(void) {}
+> +noinline __weak void uprobe_multi_func_3(void) {}
 
-Will these verified flags cause issues if a parsed pkcs7_message is evaluat=
-ed
-multiple times?
+Because these three weak stubs are structurally identical empty functions,
+can compiler and linker optimization passes like Identical Code Folding
+(ICF) merge them into a single memory address?
 
-Exporting verify_pkcs7_message_sig() allows a caller to evaluate a parsed
-PKCS#7 message against multiple keyrings sequentially. If a message is
-validated successfully against the first keyring, the certificates and
-sinfo are marked verified =3D true.
+If they are folded into a single address, bpf_program__attach_uprobe_multi()
+will attach three separate uprobes to the exact same offset, each with a
+different cookie.
 
-When the same message is then validated against a second keyring, the inter=
-nal
-blacklist check is_key_on_revocation_list() invokes pkcs7_validate_trust()
-against the blacklist keyring.
+Calling any of the functions would then execute the shared address,
+triggering all three uprobes simultaneously. This would increment the BPF
+program counters multiple times per call, causing assertions like:
 
-In pkcs7_validate_trust_one(), the code checks:
+    ASSERT_EQ(skel->bss->uprobe_multi_func_1_result, 1, ...);
 
-	for (x509 =3D sinfo->signer; x509; x509 =3D x509->signer) {
-		if (x509->seen) {
-			if (x509->verified)
-				goto verified;
+to fail deterministically, as the result would be 3 instead of 1.
 
-Because the certificate's verified flag is still true from the first keyring
-check, won't the blacklist check hit this goto and falsely conclude the
-certificate is blacklisted?
+Would it make sense to make these stubs structurally unique, perhaps by
+adding unique inline assembly to each?
 
-This seems like it would cause the second validation to unconditionally ret=
-urn
--EKEYREJECTED for a valid message.
+[ ... ]
 
-Additionally, if detached data is provided, pkcs7_supply_detached_data()
-unconditionally returns -EINVAL on a second call. Does the state need to
-be cleared before a subsequent validation?
+> diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testin=
+g/selftests/bpf/testing_helpers.c
+> index 6fbe1e995660..3f7ae76c209b 100644
+> --- a/tools/testing/selftests/bpf/testing_helpers.c
+> +++ b/tools/testing/selftests/bpf/testing_helpers.c
+
+[ ... ]
+
+> +int stack_mprotect(void)
+> +{
+> +	void *buf;
+> +	long sz;
+> +	int ret;
+> +
+> +	sz =3D sysconf(_SC_PAGESIZE);
+> +	if (sz < 0)
+> +		return sz;
+> +
+> +	buf =3D alloca(sz * 3);
+
+Does this code rely on a glibc-specific extension to provide alloca() via
+<stdlib.h>?
+
+The original implementation in test_lsm.c included <malloc.h>, but the new
+location in testing_helpers.c includes neither <malloc.h> nor <alloca.h>.
+
+On systems with strict POSIX-compliant C libraries, such as musl, omitting
+<alloca.h> can result in an implicit function declaration error and lead
+to build failures.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260429191431.2345=
-448-1-bboscaccy@linux.microsoft.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260429-selftests-=
+bpf_misconfig-v9-0-c311f06b4791@suse.com?part=3D10
