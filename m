@@ -1,292 +1,225 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DFB63CA4A0
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 19:03:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777489385; cv=pass; b=u0HEMykLLFwXDmIqkI701GdfP/zctTCO0O1jQbz8YRkb4L/U4rH+tTMI3aoFHidKvP+smRkrUrxHp1deOQ3VWtkZ/3ymRwYIfWCl/NtspdgzQmof1IroPH6nQXy3a0jdnvZKfOIVpGSj2/F4xiuyDGPTQ4M7Su0fk57VLJAuWZA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777489385; c=relaxed/simple;
-	bh=5nTtgSqfFoVNpfqepgSsx4hdfpDEIoZNJZwx0GctVp0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O4xcYkycQD4X2Px2wGBU2Qkte2LLYQKLQWus/n+oMi+JgXxO0KwVfeAl5vqYgtez2i8Jjgp4eFTxJlAevXrF+2hMzAtnpJ+fA1Xs5XgBrADuSl5tHt7j2ueJ+qy12h2AGaShTns+9yC0Ox1I3Dg6jatfVkgo9Zukt6BoU4HfyZE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LXczAXS0; arc=pass smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9745B423A74;
+	Wed, 29 Apr 2026 19:14:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777490082; cv=none; b=PZrPTqNl/xLCz0qMvhHomEb4fwzJo2URJMXRugoE6rQb+XSFezWT16+LcQ7v/EbUxNcVyldgev09XZMEkc8mvxxrUmeCTbKiLF7nJKncijq15HzxhMs5zilTp3mCVAI+r2LvpCjXov26zFu7TVK59wo+HVrhyPunvf58ZCiU4aw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777490082; c=relaxed/simple;
+	bh=eDNFve5BvQVN5kDPGljlTpB8y/WtCsX81JLYh/d88r8=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=E3l3FekKSCexFNpWI7XnLG7Inpd9IMvndmQMbFHF2TPVMCql6ViJVUrSpIiuJi/b7/wds6r9vRGpcahV3J7aOQg5IhUHFONBLSy8yfCp+ILUDzSyUviWmBW9JzW+1Da15R5DZQYon8vNjn7oyIT86CCd3cX3bKwrPQs9XYX5HsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=BYKGgbIi; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LXczAXS0"
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-59e4a04f059so77519e87.2
-        for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 12:03:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777489381; cv=none;
-        d=google.com; s=arc-20240605;
-        b=T4Fi/TyY3cQWcEzsD1F0gFwQY13SzMJaBj5doF1HXc7YgLtBf6Oc47zMxdkeYAAdzh
-         5He0T+Q/xoBzFgtLJR+sAICQhB/4it6pxsr29P41ldmIYmQQeDgX2kYaKR6AFYmIOJqB
-         ctkYYtZdAcf6RuUd98AAdrwW/JVNfLuwBwhYUkyW80hYerp4wkyCS4/gH5OWMMTNIT4z
-         Gbuuda9OPUf6PQlnCbbSft5iwDmoqAOa7k4wcYE7fqmGoHlezbEs5u3AsCrO2fNMY4E0
-         s30dCepaaoNGofcJS0PmORJpIfWyxSdf1Xm/SHb1yxj7bD+elExG5Im6wVqpkNN1VF5w
-         o4GQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Xo041R5MieCcoDpSjd4k9u0LJQ8ZHIpKG4t+NUGoKJo=;
-        fh=8Xrih5f4t4Vux/Aykna4s5+AXrg/SOqRFTWht2jdbog=;
-        b=a+vGAMlvRFABIbFZOVcNcfMR05xt5EGb15Y4CpqDlhpkWS/fNKabjYnvQFsxhTL9UT
-         SIr59xOj8DOTFgJWsJjUJjpJkF9Luz0EEbJ+zjUE7SYPfAT7+CzeEjroiu+ZOSg8OAXN
-         zfVFwaz4ul9kNjDrglqHRefKfrWBer7wZ4haD9PncVJ/N/VBLRX7VDUO4cvzpGbI6iPd
-         yvtN0Rt/upo8g+PAH5PQ5T9PYWFPcZZYYlP20sGqKigNviLuskceKzHqLC375u8+jf05
-         YH52bpOJHN5Tpush2bZT3kJZY7C9TjTwwMjDgwT3boB6RNLsDfvc0VqHy06cr1nX/h0G
-         x1jQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777489381; x=1778094181; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xo041R5MieCcoDpSjd4k9u0LJQ8ZHIpKG4t+NUGoKJo=;
-        b=LXczAXS0O62tyNHWmiBNZPWDfoZAsdz8+ykLXqhcTlmg7W2SRoCzcIyT2SzhLMYnsw
-         e2pXZvxS5i0fHjdtZ30xJwJAlA2LiJfm3yBaiZrUSUhIZTP19ACwYDWfzdCIuV1EHN2L
-         BDBCTvxn3tUJtr86YXmJVPE4OXFRGbzjcjxkpw/GQMxzk+VEufTfs4n4ek3jOrwIf4QK
-         8fnaEX4tioW74b19O3tFK8L9HIoO6S47DPYtAKs73wYH8B/6ralSw9WJOVr2T9RVlF0+
-         V1MwoMNon31Rq3/JroEuMh4xhbZvoeAoggedDHT3VZPdY9t5UtcjlvBzzMUr1d84+CHR
-         KR4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777489381; x=1778094181;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Xo041R5MieCcoDpSjd4k9u0LJQ8ZHIpKG4t+NUGoKJo=;
-        b=obT7947B3wG8Q4gxPIpM+wlGlSNXyv9pSz37FJJa+7vU6rSMTx8xqxT8CmrZrP7B5g
-         SGdMcMIadjDAB+yF7tDUAeeP80LobRNBRvJ64tRRX8/suwVVO6VKzcfL7i1JPmygmoau
-         WUal1xgH0ZFfeVVMfzWKZDkRtJlNOTAE8ZzVwk10HWXi4bIw3HPu0bikboRj1MukaBcV
-         1RZEQcs06qxET+6F/mnLcI40RX9x7wgiMALx6/ozvDjO8DKzCqmk+Jj/2s+eSsHz2+5H
-         X83Pl83yUqOlpjsdchDYY6SRI+rO65SDnS2wjW83wpjW01pA+LVYF5d0DGynoiBXHnzH
-         GM5A==
-X-Forwarded-Encrypted: i=1; AFNElJ/g/owmcXQWKRxZg3Gdmw1EHv3xiNUUmUexmrKzag/EV3lTLbeO5rmo/eEVAPOyHcLLtnk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywlac3MvVm8GltvjfkYrB9GGxMxKPzfXHmxdf6vjyvNc1qEjeGy
-	oO4WdYkbW2CrkVSwC+R8bxZZPTmogkdz8UNf/oL+lkxm824N+QnfWHungLbBBABTBwpCarXXFKu
-	da28qNKdD5Pe3eNqDxSbR+KzYxpmV/Gw=
-X-Gm-Gg: AeBDiesl8BUhA6QiJrwahuR3/Bpt5roLyzHJYoZBhJZrM3P8qlEvWJ65vo/pPHZrw8N
-	CwO84lSag68jqEh+QpWU0rWUnqshRg1JnnXVfWnTbZhOBM8lCO6rTvWNGtQryp2fv/Cm+OV8aFd
-	vljSoXjY4AoxI5Eub+YETGm1Y72UAxorPjmooKO29KA+BEoJ8YzVTqMhQX1i9dGezMVVXnYp3VL
-	QVk+BcaYniac+JOdgLv7IYoNI6S5Ok1fq57QDDkWm5dvXtDfWtPm3Hpmv4fnc+I5VY4dpliKYw8
-	Uvj0YS1n5mfh/zt0mI29L5N8VnETkwEXNkSr9GHo9gcZ2t/p
-X-Received: by 2002:a05:6512:2381:b0:5a2:a13e:9082 with SMTP id
- 2adb3069b0e04-5a74662a7a2mr3961810e87.35.1777489381092; Wed, 29 Apr 2026
- 12:03:01 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="BYKGgbIi"
+Received: from narnia.corp.microsoft.com (unknown [40.78.12.246])
+	by linux.microsoft.com (Postfix) with ESMTPSA id A1B8320B716C;
+	Wed, 29 Apr 2026 12:14:38 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A1B8320B716C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1777490080;
+	bh=sCQ4yZrkc9gSLLzVT1c4isnA9UECn/LxCschBlDa6iY=;
+	h=From:To:Subject:Date:From;
+	b=BYKGgbIiyz04+/4E2ZigyKUFcZX+5x548qIU8GsMrjDK7O9oJ+/g1xVvj6TUUb8u7
+	 q6+pKYb2VwA4SUG/Xr/6Lv8sRTOSDyqfkSS1NYwiRAWiyfL+arAVyOgHCWFA/bh9dK
+	 1/8yE7jnXT+T45yF7jvn6qGrlxOVfh+4dJ9H8U9s=
+From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>,
+	"Jonathan Corbet" <corbet@lwn.net>,
+	"Paul Moore" <paul@paul-moore.com>,
+	"James Morris" <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	"Andrew Morton" <akpm@linux-foundation.org>,
+	James.Bottomley@HansenPartnership.com,
+	dhowells@redhat.com,
+	"Fan Wu" <wufan@kernel.org>,
+	"Ryan Foster" <foster.ryan.r@gmail.com>,
+	"Randy Dunlap" <rdunlap@infradead.org>,
+	linux-security-module@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	"Song Liu" <song@kernel.org>
+Subject: [v6 00/10] Reintroduce Hornet LSM
+Date: Wed, 29 Apr 2026 12:14:05 -0700
+Message-ID: <20260429191431.2345448-1-bboscaccy@linux.microsoft.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260424053816.27965-1-kerneljasonxing@gmail.com>
- <20260424053816.27965-9-kerneljasonxing@gmail.com> <afE7EFYdrNg1u_g2@devvm7509.cco0.facebook.com>
- <CAL+tcoA0j+tHOPr-DLyW26_EF1JhwqV+no0Lcx335FtKRbwUAw@mail.gmail.com> <afIeuwJNfwVmk9Pn@devvm7509.cco0.facebook.com>
-In-Reply-To: <afIeuwJNfwVmk9Pn@devvm7509.cco0.facebook.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Wed, 29 Apr 2026 22:02:22 +0300
-X-Gm-Features: AVHnY4KmgWuhp5WgftHZ3GgAU4eUEIeLgS0_cetfcVVTWyHZR3sBrC477Rs-0ao
-Message-ID: <CAL+tcoBTO9QGM220EO=m1TdiXwod7QzG59j7vQL3qoVSrb2QEw@mail.gmail.com>
-Subject: Re: [PATCH net v4 8/8] xsk: fix u64 descriptor address truncation on
- 32-bit architectures
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
-	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, 
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
-	john.fastabend@gmail.com, aleksander.lobakin@intel.com, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 29, 2026 at 6:14=E2=80=AFPM Stanislav Fomichev <sdf.kernel@gmai=
-l.com> wrote:
->
-> On 04/29, Jason Xing wrote:
-> > On Wed, Apr 29, 2026 at 2:11=E2=80=AFAM Stanislav Fomichev <sdf.kernel@=
-gmail.com> wrote:
-> > >
-> > > On 04/24, Jason Xing wrote:
-> > > > From: Jason Xing <kernelxing@tencent.com>
-> > > >
-> > > > In copy mode TX, xsk_skb_destructor_set_addr() stores the 64-bit
-> > > > descriptor address into skb_shinfo(skb)->destructor_arg (void *) vi=
-a a
-> > > > uintptr_t cast:
-> > > >
-> > > >     skb_shinfo(skb)->destructor_arg =3D (void *)((uintptr_t)addr | =
-0x1UL);
-> > > >
-> > > > On 32-bit architectures uintptr_t is 32 bits, so the upper 32 bits =
-of
-> > > > the descriptor address are silently dropped. In unaligned mode the =
-chunk
-> > > > offset is encoded in bits 48-63 of the descriptor address
-> > > > (XSK_UNALIGNED_BUF_OFFSET_SHIFT =3D 48), meaning the offset is lost
-> > > > entirely. The completion queue then returns a truncated address to
-> > > > userspace, making buffer recycling impossible.
-> > > >
-> > > > Fix this by handling the 32-bit case in the destructor_arg helpers:
-> > > >
-> > > > - xsk_skb_destructor_set_addr(): on !CONFIG_64BIT, allocate an
-> > > >   xsk_addrs struct via kmem_cache_zalloc() to store the full u64
-> > > >   address. Leave num_descs as 0 (zalloc) so that the subsequent
-> > > >   xsk_inc_num_desc() brings it to the correct count of 1.
-> > > >
-> > > > - xsk_skb_destructor_is_addr(): on !CONFIG_64BIT, return true only
-> > > >   when destructor_arg is NULL (not yet set), false when it points t=
-o
-> > > >   an xsk_addrs struct.
-> > > >
-> > > > - xsk_skb_init_misc(): call xsk_skb_destructor_set_addr() first
-> > > >   before touching any other skb fields; on failure return early so
-> > > >   the skb destructor is never changed from sock_wfree.
-> > > >
-> > > > The existing xsk_consume_skb() already handles 32-bit correctly aft=
-er
-> > > > these changes: xsk_skb_destructor_is_addr() returns false for any
-> > > > allocated xsk_addrs, so the kmem_cache_free path is always taken.
-> > > >
-> > > > The overhead is one extra kmem_cache_zalloc per first descriptor on
-> > > > 32-bit only; 64-bit builds are completely unchanged.
-> > > >
-> > > > Closes: https://lore.kernel.org/all/20260419045824.D9E5EC2BCAF@smtp=
-.kernel.org/
-> > > > Fixes: 0ebc27a4c67d ("xsk: avoid data corruption on cq descriptor n=
-umber")
-> > > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > > > ---
-> > > >  net/xdp/xsk.c | 38 +++++++++++++++++++++++++++++++-------
-> > > >  1 file changed, 31 insertions(+), 7 deletions(-)
-> > > >
-> > > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > > > index ed96f6ec8ff2..fe88f47741b5 100644
-> > > > --- a/net/xdp/xsk.c
-> > > > +++ b/net/xdp/xsk.c
-> > > > @@ -558,7 +558,10 @@ static int xsk_cq_reserve_locked(struct xsk_bu=
-ff_pool *pool)
-> > > >
-> > > >  static bool xsk_skb_destructor_is_addr(struct sk_buff *skb)
-> > > >  {
-> > > > -     return (uintptr_t)skb_shinfo(skb)->destructor_arg & 0x1UL;
-> > > > +     if (IS_ENABLED(CONFIG_64BIT))
-> > > > +             return (uintptr_t)skb_shinfo(skb)->destructor_arg & 0=
-x1UL;
-> > > > +     else
-> > > > +             return !skb_shinfo(skb)->destructor_arg;
-> > >
-> > > Don't understand why we need to special case CONFIG_64BIT here?
-> > > Shouldn't the same existing condition work on 32bit?
-> >
-> > Because 0x1UL is the particular semantic applied on a 64-bit arch.
-> > xsk_skb_destructor_set_addr() sets it while
-> > xsk_skb_destructor_is_addr() recognizes it. They are a pair.
-> >
-> > As you noticed, one liner works but is not that appropriate: on a
-> > 32-bit arch, this member should be either a NULL point or a valid
-> > pointer pointing to a memory region. Testing if it's NULL can be
-> > helpful as to the long term maintenance because of its readability and
-> > robustness/safety.
-> >
-> > The error path in allocation of skb is really complex, which is why
-> > I'm so cautious to take care of it :)
->
-> Let's cleanup the error path instead of adding more complexity? Similar t=
-o what
-> you do with your "xsk: fix xsk_addrs slab leak on multi-buffer error path=
-",
-> but maybe add a few NULL checks?
+This patch series introduces the next iteration of the Hornet LSM.
+Hornet’s goal is to provide a secure and extensible in-kernel
+signature verification mechanism for eBPF programs.
 
-Good suggestion. I think I can cook a follow up patch to do such a
-thing targetting net-next tree. This patch 8 belongs to net material
-which means it will be backported to the older stable kernel as soon
-as it gets merged. IIUC, the better way is to make it as simple as
-possible?
+Hornet addresses concerns from users who require strict audit trails and
+verification guarantees for eBPF programs, especially in
+security-sensitive environments. Many production systems need assurance
+that only authorized, unmodified eBPF programs are loaded into the
+kernel. Hornet provides this assurance through cryptographic signature
+verification.
 
->
-> Instead of 32 vs 64, I'd like to reason about whether destructor_arg
-> is an address or an allocated array (not whether we have 1 or >1
-> descriptors). And we special case 32 bit by always allocating it.
->
-> Haven't checked, but maybe this is all you need (besides your _set_addr
-> changes)?
->
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 6149f6a79897..03f217e85d31 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -589,6 +589,8 @@ static u32 xsk_get_num_desc(struct sk_buff *skb)
->                 return 1;
->
->         xsk_addr =3D (struct xsk_addrs *)skb_shinfo(skb)->destructor_arg;
-> +       if (!xsk_addr)
-> +               return 0;
->
->         return xsk_addr->num_descs;
->  }
+The currently accepted loader-plus-map signature verification scheme,
+mandated by Alexei and KP, is simple to implement and generally
+acceptable if users and administrators are satisfied with it. However,
+verifying both the loader and the maps offers additional benefits
+beyond verifying the loader alone:
 
-Right, as I mentioned, how about posting a new cleanup patch with your
-suggested-by tag?
+1. Security and Audit Integrity
 
->
-> > I've noticed the status has been changed to 'changes requested'. Does
-> > that mean one way or another I have to post a new version?
->
-> That wasn't me :-) From my POW, patches 1-7 are good to go..
+A key advantage is that the LSM hook for authorizing BPF program loads
+can operate after signature verification. This ensures:
 
-Great! Thanks for the review. My hope is to get this series merged
-soon in the net tree.
+* Access control decisions are based on verified signature status.
+* Accurate system state measurement and logging.
+* Log entries claiming a verified signature are truthful, avoiding
+  misleading records where only the loader was verified while the actual
+  BPF program verification occurs later without logging.
 
->
-> > >
-> > > >  }
-> > > >
-> > > >  static u64 xsk_skb_destructor_get_addr(struct sk_buff *skb)
-> > > > @@ -566,9 +569,21 @@ static u64 xsk_skb_destructor_get_addr(struct =
-sk_buff *skb)
-> > > >       return (u64)((uintptr_t)skb_shinfo(skb)->destructor_arg & ~0x=
-1UL);
-> > > >  }
-> > > >
-> > > > -static void xsk_skb_destructor_set_addr(struct sk_buff *skb, u64 a=
-ddr)
-> > > > +static int xsk_skb_destructor_set_addr(struct sk_buff *skb, u64 ad=
-dr)
-> > > >  {
-> > >
-> > > [..]
-> > >
-> > > > +     if (!IS_ENABLED(CONFIG_64BIT)) {
-> > > > +             struct xsk_addrs *xsk_addr;
-> > > > +
-> > > > +             xsk_addr =3D kmem_cache_zalloc(xsk_tx_generic_cache, =
-GFP_KERNEL);
-> > > > +             if (!xsk_addr)
-> > > > +                     return -ENOMEM;
-> > > > +             xsk_addr->addrs[0] =3D addr;
-> > > > +             skb_shinfo(skb)->destructor_arg =3D (void *)xsk_addr;
-> > > > +             return 0;
-> > > > +     }
-> > > > +
-> > > >       skb_shinfo(skb)->destructor_arg =3D (void *)((uintptr_t)addr =
-| 0x1UL);
-> > > > +     return 0;
-> > >
-> > > I think this is gonna be a 3rd copy paste of the same logic? Let's
-> > > move to a new helper and replace existing kmem_cache_zalloc places?
-> > >
-> > > xsk_skb_destructor_alloc_list(prev_addr) ?
->
-> Any comments on this?
+2. TOCTOU Attack Prevention
 
-I didn't comment on this because I thought I was not that sure if we
-needed to wrap it up in the stable kernels :)
+The current map hash implementation may be vulnerable to a TOCTOU
+attack because it allows unfrozen maps to cache a previously
+calculated hash. The accepted “trusted loader” scheme cannot detect
+this and may permit loading altered maps.
 
-Of course, it would be easier for me to work on the net-next tree to
-make the code look
-more neat and elegant.
+3. Supply Chain Integrity
 
-Thanks,
-Jason
+Verify that eBPF programs and their associated map data have not been
+modified since they were built and signed, in the kernel proper, may
+aid in protecting against supply chain attacks.
+
+This approach addresses concerns from users who require strict audit
+trails and verification guarantees, especially in security-sensitive
+environments. Map hashes for extended verification are passed via the
+existing PKCS#7 UAPI and verified by the crypto subsystem. Hornet then
+calculates the program’s verification state.  Hornet itself does not
+enforce a policy on whether unsigned or partially signed programs
+should be rejected. It delegates that decision to downstream LSMs
+hook, making it a composable building block in a larger security
+architecture.
+
+Changes in V6:
+- Doc cleanup
+- Error handling improvements
+- Support for shareable maps
+
+Link to V5: https://lore.kernel.org/linux-security-module/20260420212653.438685-1-bboscaccy@linux.microsoft.com/
+
+Changes in V5:
+- Added IPE documentation
+
+Link to V4: https://lore.kernel.org/linux-security-module/20260416173500.176716-1-bboscaccy@linux.microsoft.com/
+
+Changes in V4:
+- IPE integration
+- Arbitrary keyring support
+
+Link to V3: https://lore.kernel.org/linux-security-module/20260326060655.2550595-1-bboscaccy@linux.microsoft.com/
+
+Changes in V3:
+- Updated for signed attribute patch series changes
+- Added some new result enum values
+- Minor documentation clarification
+- Misc style fixes
+- Added missing signed-off-by tags
+
+Link to V2: https://lore.kernel.org/linux-security-module/20260227233930.2418522-1-bboscaccy@linux.microsoft.com/
+
+Changes in V2:
+- Addressed possible TocTou races in hash verification
+- Improved documentation and tooling
+- Added Alexie's nack
+
+Link to RFC: https://lore.kernel.org/linux-security-module/20251211021257.1208712-1-bboscaccy@linux.microsoft.com/
+
+Blaise Boscaccy (6):
+  lsm: security: Add additional enum values for bpf integrity checks
+  security: Hornet LSM
+  hornet: Introduce gen_sig
+  hornet: Add a light skeleton data extractor scripts
+  selftests/hornet: Add a selftest for the Hornet LSM
+  ipe: Add BPF program load policy enforcement via Hornet integration
+
+James Bottomley (3):
+  crypto: pkcs7: add flag for validated trust on a signed info block
+  crypto: pkcs7: add ability to extract signed attributes by OID
+  crypto: pkcs7: add tests for pkcs7_get_authattr
+
+Paul Moore (1):
+  lsm: framework for BPF integrity verification
+
+ Documentation/admin-guide/LSM/Hornet.rst     | 323 +++++++++++++++
+ Documentation/admin-guide/LSM/index.rst      |   1 +
+ Documentation/admin-guide/LSM/ipe.rst        | 162 +++++++-
+ Documentation/security/ipe.rst               |  39 ++
+ MAINTAINERS                                  |   9 +
+ certs/system_keyring.c                       |   1 +
+ crypto/asymmetric_keys/Makefile              |   4 +-
+ crypto/asymmetric_keys/pkcs7_aa.asn1         |  18 +
+ crypto/asymmetric_keys/pkcs7_key_type.c      |  44 +-
+ crypto/asymmetric_keys/pkcs7_parser.c        |  81 ++++
+ crypto/asymmetric_keys/pkcs7_parser.h        |   1 +
+ crypto/asymmetric_keys/pkcs7_trust.c         |   1 +
+ include/crypto/pkcs7.h                       |   4 +
+ include/linux/lsm_hook_defs.h                |   5 +
+ include/linux/oid_registry.h                 |   3 +
+ include/linux/security.h                     |  28 ++
+ include/uapi/linux/lsm.h                     |   1 +
+ scripts/Makefile                             |   1 +
+ scripts/hornet/Makefile                      |   5 +
+ scripts/hornet/extract-insn.sh               |  27 ++
+ scripts/hornet/extract-map.sh                |  27 ++
+ scripts/hornet/extract-skel.sh               |  27 ++
+ scripts/hornet/gen_sig.c                     | 397 +++++++++++++++++++
+ scripts/hornet/write-sig.sh                  |  27 ++
+ security/Kconfig                             |   3 +-
+ security/Makefile                            |   1 +
+ security/hornet/Kconfig                      |  13 +
+ security/hornet/Makefile                     |   7 +
+ security/hornet/hornet.asn1                  |  12 +
+ security/hornet/hornet_lsm.c                 | 350 ++++++++++++++++
+ security/ipe/Kconfig                         |  14 +
+ security/ipe/audit.c                         |  15 +
+ security/ipe/eval.c                          |  73 +++-
+ security/ipe/eval.h                          |  11 +
+ security/ipe/hooks.c                         |  63 +++
+ security/ipe/hooks.h                         |  15 +
+ security/ipe/ipe.c                           |  14 +
+ security/ipe/ipe.h                           |   3 +
+ security/ipe/policy.h                        |  14 +
+ security/ipe/policy_parser.c                 |  27 ++
+ security/security.c                          |  75 +++-
+ tools/testing/selftests/Makefile             |   1 +
+ tools/testing/selftests/hornet/Makefile      |  63 +++
+ tools/testing/selftests/hornet/loader.c      |  21 +
+ tools/testing/selftests/hornet/trivial.bpf.c |  33 ++
+ 45 files changed, 2056 insertions(+), 8 deletions(-)
+ create mode 100644 Documentation/admin-guide/LSM/Hornet.rst
+ create mode 100644 crypto/asymmetric_keys/pkcs7_aa.asn1
+ create mode 100644 scripts/hornet/Makefile
+ create mode 100755 scripts/hornet/extract-insn.sh
+ create mode 100755 scripts/hornet/extract-map.sh
+ create mode 100755 scripts/hornet/extract-skel.sh
+ create mode 100644 scripts/hornet/gen_sig.c
+ create mode 100755 scripts/hornet/write-sig.sh
+ create mode 100644 security/hornet/Kconfig
+ create mode 100644 security/hornet/Makefile
+ create mode 100644 security/hornet/hornet.asn1
+ create mode 100644 security/hornet/hornet_lsm.c
+ create mode 100644 tools/testing/selftests/hornet/Makefile
+ create mode 100644 tools/testing/selftests/hornet/loader.c
+ create mode 100644 tools/testing/selftests/hornet/trivial.bpf.c
+
+-- 
+2.53.0
+
