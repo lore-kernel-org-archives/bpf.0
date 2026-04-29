@@ -1,254 +1,163 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A1CF365A1B
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 23:32:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13014274B3B
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 23:47:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777505530; cv=none; b=PNs7O/yKkVbg504nAwEKekSW8zlsdTifJs9uR/Ue5iI5K1x73up4HCUFEmOPAueGF/Sxl70m3UCi9tD0SgX01aCjwD0IblWT4J5G4KC5sdXTYzAHmW7/pRCTuqXIIO1zzWc/+7rOXVQo4R7obWjIzRZVpPb/Vh0RkKmLooftbpM=
+	t=1777506480; cv=none; b=NvY7iaRHqyy+sbwubsswAU/qu79MixKT0MuqVLOGzW9aoF1uPiMFqQxvPWznLFyf9BgsangREqBOrYBQJfg486MaDmGfVeZiSee83TtPmfcHZbzlW2NZFAmPTb7jxOqNGv8B+ZR2PZDFMFRZDpPKuKKwBLY9o5fkDakz2xFWBaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777505530; c=relaxed/simple;
-	bh=fCPK7mvr874VkO6hAZFUGOTU1mDxWHWwYoAnm4z/UQQ=;
+	s=arc-20240116; t=1777506480; c=relaxed/simple;
+	bh=GFAzHbNwJu5mhtHEzS8CVBMhj66Od0WbqTAM3IWj3kE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=MY6TfDDDh+RZomscQkkRTU7satY4jbZs/cQJWb9etxsskWMtFu34VhCnqAglEf/7RyU187XQgHYEzchgvbQcOJXputvd4qBsjza8j++82+GDDF/q5cCKt05HyhhTTMFHwKjgTTzcUKQnkj1EQiTg2HtjClrIMS+uQyL4w/YJqqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sfO4Njkm; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=t3eTx/8uq7Et6xUTt2zNLS7bv1LUMO6DYWQfygLAo9MIz2ZE+dSclobotx+WW0td00Z8ZTuBEz427zCn5sw4BEgoZhLEOD3yZ8ZWK1MHak97QoVqrp7+F+d+r2Y3eT176nb2n3RUJSrQSU9+0QceYVhsP0qenmsQavgwEJRjv0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pSFmlhjj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sfO4Njkm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89CC5C19425;
-	Wed, 29 Apr 2026 23:32:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pSFmlhjj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81FD3C19425;
+	Wed, 29 Apr 2026 23:47:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777505529;
-	bh=fCPK7mvr874VkO6hAZFUGOTU1mDxWHWwYoAnm4z/UQQ=;
+	s=k20201202; t=1777506479;
+	bh=GFAzHbNwJu5mhtHEzS8CVBMhj66Od0WbqTAM3IWj3kE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=sfO4NjkmeRcM6BAl5NhUzSU9jwkrt/s4tayAGHCcNQ/jKpR64ErEF0gxVfYi3aFV8
-	 /OZxCsCi3M7ltiuGNLaZ4dz+OUbHcUebuG+HcBpV1h7H8tuoZyiyJGSB1G4lSx2/eG
-	 KfAKX3Fne0J9cjdH1hEWsP3QnrmAFHyrLYgu/LIX7uj8nrt7P2XpbjNWe/ODNBS8JC
-	 YQHGh/+JX6Gld4lLdRIvC0WdwrGfTuTSYZSXObaVl/trwr7ypjXrOj+KXkKJdRhyE0
-	 WufQdo4aPXZtqdJ/9i10CrWVoMQ91nNF0JEvJUtswanNQn0rsttQ2GQrls+7HeLSsz
-	 aT61nw1wMGQWg==
+	b=pSFmlhjj9u16Xr17H4pyDLcKlCCQ8BbGdoO/6v5w24ztfHsIZnyr5QAPMoKV7J6wD
+	 drMXDxUPMKLrM0NAA21gAwlBwvfkPQ6m7QcMAf4hbtOHJHTJUo2CqvhB2F80BOX9nm
+	 BzcC84imGutxWfD6wog0byNp5xnXSaFzoXpsQ1GEXS9gwalZPkvZ+7wTm9hq9/en0t
+	 r48/9bZsV0v/6EbYIGuAWken+iksCdmr7gQU+z+A8e7P6lUrBA4yr00bein2sjfSZP
+	 tc+pX0WBWz3k2lXwZznLZAiswREnb8ZjbODVNH8q3+ZIvZlviHUKpGBxKJqN11eiHu
+	 sFNb5hg+uvn+Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [v6 07/10] hornet: Introduce gen_sig
+Subject: Re: [v6 08/10] hornet: Add a light skeleton data extractor scripts
 Reply-To: sashiko@lists.linux.dev
 To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260429191431.2345448-8-bboscaccy@linux.microsoft.com>
-References: <20260429191431.2345448-8-bboscaccy@linux.microsoft.com>
+In-Reply-To: <20260429191431.2345448-9-bboscaccy@linux.microsoft.com>
+References: <20260429191431.2345448-9-bboscaccy@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Apr 2026 23:32:08 +0000
-Message-Id: <20260429233209.89CC5C19425@smtp.kernel.org>
+Date: Wed, 29 Apr 2026 23:47:58 +0000
+Message-Id: <20260429234759.81FD3C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 7 potential issue(=
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
-- [High] Off-by-one bounds check logic in argument parsing aborts execution=
- on valid inputs
-- [High] Private key passphrase is exposed via command-line arguments
-- [Medium] `write-sig.sh` does not modify the target header file as intended
-- [Medium] Missing error handling for OpenSSL allocations and encoding can =
-lead to crashes
-- [Medium] `sha256()` destroys global OpenSSL error strings, breaking subse=
-quent error reporting
-- [Medium] Incomplete command-line argument parsing ignores `--help` and un=
-recognized flags
-- [Medium] Memory leaks of OpenSSL context objects and ASN.1 structures
+- [Critical] Silent data corruption of the extracted eBPF payload due to un=
+quoted printf format string injection.
+- [Critical] Overly broad grep patterns in `extract-insn.sh` and `extract-m=
+ap.sh` cause payload duplication and severe corruption.
+- [High] Execution failure due to missing C preprocessor include paths.
+- [Medium] Bash scripting pitfalls: Incorrect exit code on failure, command=
+ injection, and copy-paste error in usage.
 --
 
-commit bf20721f572ef02a45417d08219036dd03d54e92
+commit 398e95d4981b28182554e7639f02b8c22e6185c8
 Author: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-hornet: Introduce gen_sig
 
-This commit introduces the gen_sig tool to create pkcs#7 signatures for
-data payloads with an appended set of hashes. It also provides a script
-to rewrite an autogenerated eBPF lskel header with a new signature.
+hornet: Add a light skeleton data extractor scripts
 
-> diff --git a/scripts/hornet/gen_sig.c b/scripts/hornet/gen_sig.c
-> new file mode 100644
-> index 000000000000..8e328b4ca120
-> --- /dev/null
-> +++ b/scripts/hornet/gen_sig.c
-> @@ -0,0 +1,397 @@
-[ ... ]
-> +static void usage(const char *prog)
-> +{
-> +	fprintf(stderr,
-> +		"Usage:\n"
-> +		"  %s --data content.bin --cert signer.crt --key signer.key [-pass pas=
-s]\n"
+This commit introduces scripts to extract eBPF instruction and map data
+payloads from autogenerated light skeleton headers. These payloads can
+then be used for signing a light skeleton binary using gen_sig.
 
-Is it safe to accept the private key passphrase via a command-line argument?
-Local users can view process arguments through the proc filesystem or tools
-like ps, which could allow them to harvest the passphrase.
-
-[ ... ]
-> +static int sha256(const char *path, unsigned char out[SHA256_LEN], unsig=
-ned int *out_len)
-> +{
-[ ... ]
-> +done:
-> +	EVP_MD_CTX_free(ctx);
-> +	fclose(f);
-> +	ERR_free_strings();
-> +	return rc;
-> +}
-
-Could clearing the error strings here cause issues with error reporting
-later in the program? If a subsequent cryptographic operation fails after
-this function returns, the global OpenSSL error state will be empty,
-preventing tools from printing human-readable error messages.
-
-[ ... ]
-> +static void add_hash(MAP_SET *set, unsigned char *buffer, int buffer_len=
-, int index)
-> +{
-> +	HORNET_MAP *map =3D NULL;
-> +
-> +	map =3D HORNET_MAP_new();
-> +	ASN1_INTEGER_set(map->index, index);
-
-Is it possible for HORNET_MAP_new() to return a NULL pointer? If so,
-dereferencing it immediately on the next line might cause a crash.
-
-> +	ASN1_OCTET_STRING_set(map->hash, buffer, buffer_len);
-> +	sk_HORNET_MAP_push(set->maps, map);
-> +}
-
-If pushing the map onto the stack fails, will the allocated map object
-be leaked since it won't be freed when the parent set is later destroyed?
-
-> +
-> +int main(int argc, char **argv)
-> +{
-[ ... ]
-> +	const char *short_opts =3D "C:K:P:O:A:Sh";
-
-This isn't a bug, but the short option D for data appears to be missing
-from this string.
-
-> +
-> +	static const struct option long_opts[] =3D {
-> +		{"cert", required_argument, 0, 'C'},
-> +		{"key",  required_argument, 0, 'K'},
-> +		{"pass",  required_argument, 0, 'P'},
-> +		{"out",  required_argument, 0, 'O'},
-> +		{"data",  required_argument, 0, 'D'},
-> +		{"add",  required_argument, 0, 'A'},
-> +		{"help",    no_argument,       0, 'h'},
-> +		{0, 0, 0, 0}
-> +	};
-> +
-> +	while ((opt =3D getopt_long_only(argc, argv, short_opts, long_opts, NUL=
-L)) !=3D -1) {
-> +		switch (opt) {
-
-Should there be a handler for the help flag or unrecognized options here?
-If someone passes the help flag, the program seems to silently ignore it
-and proceed instead of displaying the usage information.
-
-[ ... ]
-> +		case 'A':
-> +			if (strchr(optarg, ':')) {
-> +				hashes[hash_count].file =3D strsep(&optarg, ":");
-> +				hashes[hash_count].index =3D atoi(optarg);
-> +				if (++hash_count >=3D MAX_HASHES) {
-> +					usage(argv[0]);
-> +					return EXIT_FAILURE;
-> +				}
-
-Does this check prematurely abort the program on valid input? Since the
-array can hold exactly MAX_HASHES items, if a user provides exactly that
-many items, incrementing hash_count to MAX_HASHES will trigger this failure
-path rather than allowing the program to continue processing.
-
-> +			} else {
-> +				usage(argv[0]);
-> +				return EXIT_FAILURE;
-> +			}
-> +		}
-> +	}
-[ ... ]
-> +	si =3D CMS_add1_signer(cms_out, signer, pkey, EVP_sha256(), flags);
-> +	ERR(!si, "add signer failed");
-> +
-> +	set =3D MAP_SET_new();
-> +	set->maps =3D sk_HORNET_MAP_new_null();
-
-When MAP_SET_new() is called, doesn't it automatically allocate an empty
-stack for the maps field? Overwriting it with sk_HORNET_MAP_new_null()
-might leak that initially allocated stack.
-
-Also, can MAP_SET_new() fail and return NULL here before set->maps is
-accessed?
-
-> +
-> +	for (i =3D 0; i < hash_count; i++) {
-> +		if (sha256(hashes[i].file, hash_buffer, &hash_len) !=3D 0) {
-> +			DIE("failed to hash input");
-> +		}
-> +		add_hash(set, hash_buffer, hash_len, hashes[i].index);
-> +	}
-> +
-> +	oid =3D OBJ_txt2obj("2.25.316487325684022475439036912669789383960", 1);
-> +	if (!oid) {
-> +		ERR_print_errors_fp(stderr);
-> +		DIE("create oid failed");
-> +	}
-> +
-> +	der_len =3D ASN1_item_i2d((ASN1_VALUE *)set, &der, ASN1_ITEM_rptr(MAP_S=
-ET));
-> +	CMS_signed_add1_attr_by_OBJ(si, oid, V_ASN1_SEQUENCE, der, der_len);
-
-Are we sure ASN1_item_i2d() succeeded? If it fails, it can return a negative
-value, which would be passed as the length to CMS_signed_add1_attr_by_OBJ().
-Some OpenSSL APIs treat negative lengths as null-terminated strings and
-attempt to call strlen() on a potentially NULL pointer.
-
-> +
-> +	err =3D CMS_final(cms_out, data_in, NULL, CMS_NOCERTS | CMS_BINARY);
-> +	ERR(!err, "cms final failed");
-> +
-> +	OPENSSL_free(der);
-> +	MAP_SET_free(set);
-> +
-> +	b_out =3D bio_open_wr(out_path);
-> +	ERR(!b_out, "opening output path failed");
-> +
-> +	i2d_CMS_bio_stream(b_out, cms_out, NULL, 0);
-> +
-> +	BIO_free(data_in);
-> +	BIO_free(b_out);
-> +	EVP_cleanup();
-> +	ERR_free_strings();
-> +	return 0;
-> +}
-
-Does this function leak the signer, pkey, and cms_out objects? I don't see
-calls to X509_free(), EVP_PKEY_free(), or CMS_ContentInfo_free() before
-returning.
-
-> diff --git a/scripts/hornet/write-sig.sh b/scripts/hornet/write-sig.sh
+> diff --git a/scripts/hornet/extract-insn.sh b/scripts/hornet/extract-insn=
+.sh
 > new file mode 100755
-> index 000000000000..7eaabe3bab9a
+> index 000000000000..52338f057ff6
 > --- /dev/null
-> +++ b/scripts/hornet/write-sig.sh
+> +++ b/scripts/hornet/extract-insn.sh
 > @@ -0,0 +1,27 @@
+[ ... ]
+> +function usage() {
+> +    echo "Sample script for extracting instructions"
+> +    echo "autogenerated eBPF lskel headers"
+> +    echo ""
+> +    echo "USAGE: header_file"
+> +    exit
+> +}
+
+Could this exit successfully (code 0) upon a usage error?
+
+Calling exit without an argument defaults to the exit status of the previous
+echo command, which is 0. If invoked incorrectly by a build system or
+Makefile, this might fail to halt the build process.
+
+This issue is also present in extract-map.sh and extract-skel.sh.
+
 [ ... ]
 > +if [ $ARGC -ne $EXPECTED_ARGS ] ; then
 > +    usage
 > +else
-> +    SIG=3D$(xxd -p $2 | tr -d '\n' | sed 's/\(..\)/\\\\x\1/g')
-> +    sed '/const char opts_sig/,/;/c\\tstatic const char opts_sig[] __att=
-ribute__((__aligned__(8))) =3D "\\\n'"$(printf '%s\n' "$SIG")"'\";' $1
+> +    printf $(gcc -E $1 | grep "opts_insn" | \
+> +		 awk -F"=3D" '{print $2}' | sed 's/;\+$//' | sed 's/\"//g')
 > +fi
 
-Does this script actually modify the intended header file? It looks like
-the sed command is missing the in-place edit flag, so the output is merely
-printed to standard output while the original file remains unchanged.
+The autogenerated light skeletons explicitly include headers like <bpf/bpf.=
+h>.
+
+Since the script does not provide include paths (-I) to GCC or accept CFLAG=
+S,
+will the C preprocessor terminate with a fatal error if these headers are
+not present in the standard system include paths, resulting in an empty
+output file?
+
+Additionally, is it possible for the unquoted $1 to cause word-splitting
+or unintended command execution if a filename contains spaces or starts
+with a compiler flag?
+
+The grep pattern "opts_insn" appears to be overly broad. Could this match
+not only the target byte array but also structural assignments generated by
+bpftool, such as opts.insns_sz =3D sizeof(opts_insn) - 1?
+
+Because the extra code is unquoted, it would split into multiple arguments.
+When printf receives extra arguments without format specifiers, it repeated=
+ly
+reuses the format string, which in this case would cause it to duplicate
+and corrupt the eBPF binary payload output.
+
+Finally, since printf is called without a format specifier, could the
+extracted eBPF payload be silently corrupted?
+
+Bash's printf dynamically evaluates escapes. A byte sequence like \x25
+(the % character) followed by \x73 (s) would be interpreted as %s and
+replaced with an empty string, or \x64 (d) to 0, silently altering
+the bytes and invalidating cryptographic signatures.
+
+Could this be prevented by using a format string like
+printf "%b" "$(...)"?
+
+The gcc include, unquoted $1, and printf issues are also present in
+extract-map.sh and extract-skel.sh.
+
+> diff --git a/scripts/hornet/extract-map.sh b/scripts/hornet/extract-map.sh
+> new file mode 100755
+> index 000000000000..c309f505c623
+> --- /dev/null
+> +++ b/scripts/hornet/extract-map.sh
+> @@ -0,0 +1,27 @@
+[ ... ]
+> +function usage() {
+> +    echo "Sample script for extracting instructions"
+
+This isn't a bug, but there is a copy-paste error in the usage message here.
+Should this say "extracting map data" instead of "extracting instructions"?
+
+[ ... ]
+> +if [ $ARGC -ne $EXPECTED_ARGS ] ; then
+> +    usage
+> +else
+> +    printf $(gcc -E $1 | grep "opts_data" | \
+> +		 awk -F"=3D" '{print $2}' | sed 's/;\+$//' | sed 's/\"//g')
+> +fi
+
+Similar to extract-insn.sh, does the overly broad "opts_data" grep pattern
+also match extra struct assignments like opts.data_sz =3D sizeof(opts_data)=
+ - 1
+and cause payload duplication?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260429191431.2345=
-448-1-bboscaccy@linux.microsoft.com?part=3D7
+448-1-bboscaccy@linux.microsoft.com?part=3D8
