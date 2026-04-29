@@ -1,118 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E7431A7E2
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 04:38:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6DD42E11C7
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 05:07:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777437527; cv=none; b=VZgNfTxfPlkLMkkREQAt7Lvb6HQ9y/zRKH94199+frstIj6hfPhhWxENeGSILpmo04m5r9p+f463MS+PjVQRaFkuRA1PnHKgz1HODcvrjZhgv4kKUE/UFBMBqjnwNDExMYZrrn/8DPsKs922y1nrKjjiIW0Ie66yHgw2pJv+3ec=
+	t=1777439237; cv=none; b=BWhaPd7WpjnCGs37lJlENZfh7ADl6AyJhDDOTRoaDTwnmigwy8DspYUI2u7wo5oX5RoqlxoYk6nxAumMmD26ubyRRSP4DbzNXfeTIntpUwFMeU+LMs8U5w29619G/CLGbI+76z44+aD2SgBgIPkNqoDAIybsMKjVFWNT7WHLehw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777437527; c=relaxed/simple;
-	bh=qpV3QUFmgYEqNitU/ldekwclnyjVyKwRL5qaO1Czzmg=;
+	s=arc-20240116; t=1777439237; c=relaxed/simple;
+	bh=XzVWWzBSBYTWVRzaVk6QRXVQQhDBBCYbbiqIyxtBxPI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=muT7+BjyMMgm8dAOoUUF+K0/iOhA6tYyPrHwkkoeVl80ONo7PkMZ2SgiVW4Dolh7B32Ju8XzM2TWiv3Ld+2oy8A8nTxOTuT/n3xRDpDbHUS1IkPF7fwurh0pUlttM9HybLU5B9uknlcGP1RkgwLfgSNPWuUaa2QM1CTmAOuRIbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rR9xYdxB; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=SFqYbuS0cE9nIC4MNkCQBP033JeWRkxFG7/HkR7Olk9D0UKbMCZOs206TK0KQGDeDzF+2Udk5SiCHdZZdqKfxq0RRs2fwPO5mJXdHc6mLJVgsPKoXD86Da3bcsPMhnPh2BSYHN8haox7K0M4i81eP7huyAwgBGxM6GoqvP4BMZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lAccHTkA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rR9xYdxB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9012C19425;
-	Wed, 29 Apr 2026 04:38:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lAccHTkA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53C37C19425;
+	Wed, 29 Apr 2026 05:07:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777437526;
-	bh=qpV3QUFmgYEqNitU/ldekwclnyjVyKwRL5qaO1Czzmg=;
+	s=k20201202; t=1777439237;
+	bh=XzVWWzBSBYTWVRzaVk6QRXVQQhDBBCYbbiqIyxtBxPI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=rR9xYdxBcuiLFCf86+Et493SfI8LNGnIklhRve/B30USCHBOXi5tlL5FfGGfFB6yX
-	 XseriQAImwyUvOWgGzMUnspgIjMuEfFp7fcMf63r2T8CXro56av0R7csshCAEaBFPw
-	 XW9tkzoQd69nf4pVT+KQYW1G9I7GdhvXXFVkhE2tEYBsaIZL13tO3fZzoh055yRY7a
-	 fgGeP9KJ7ixstCiu8b3dg32yFo/MH5ORn9vtKSk86/1KK70V9mxMlHFH8oCXfoMeR/
-	 IMWejKoRydhJm6gYVgdQiY1Cd7VnGU9CYoVvt/wcAC5fj2FZVUjF9ruF6aLzc6OzUr
-	 UWhh/RhLuVdhA==
+	b=lAccHTkAeJDCZrncUNPI4fzy7TXso64q22PQtpTEIRORFuz+TwO3kCibRrbaRdjKa
+	 5DKjfKGE65jEMUqqn35UCQW4Uw4NDS9sA3DQANMXwzNWIsJ+qCSdibnrlazyDbYQi1
+	 l3/TaIulqU5xXHvOlp0p8aJftEIjTbfPrh6FZRx2bLy1K0q3bzslMN4igcSS/8RoxY
+	 alM9ntgpqxjBpX3H6EUh8cxrHi5Rftsobuxxk3xuU6OQ74C3DNS0r40cE6aNUEszkt
+	 dN/a0p3BMOJ/8vUOMGLu+IqlSHRnmANthXp2So5DWRCLFhm0uKLvSQxCpLYFMu69BH
+	 WFYcucav40ANg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v8 06/11] selftests/bpf: Tolerate test file
- compilation failures
+Subject: Re: [PATCH bpf-next v8 08/11] selftests/bpf: Allow test_progs to
+ link with a partial object set
 Reply-To: sashiko@lists.linux.dev
 To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260428-selftests-bpf_misconfig-v8-6-bf02cf97dbcb@suse.com>
-References: <20260428-selftests-bpf_misconfig-v8-6-bf02cf97dbcb@suse.com>
+In-Reply-To: <20260428-selftests-bpf_misconfig-v8-8-bf02cf97dbcb@suse.com>
+References: <20260428-selftests-bpf_misconfig-v8-8-bf02cf97dbcb@suse.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Apr 2026 04:38:46 +0000
-Message-Id: <20260429043846.B9012C19425@smtp.kernel.org>
+Date: Wed, 29 Apr 2026 05:07:16 +0000
+Message-Id: <20260429050717.53C37C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The error-handling branch (`||`) executes in an unpredictable di=
-rectory context depending on which command failed, potentially leaving stal=
-e object files or deleting unintended files.
-- [Low] The patch breaks the verbose output mode (`V=3D1`) by unconditional=
-ly executing the pretty-printed 'BTFIDS' message.
+- [High] Permissive mode completely breaks `test_maps` compilation if any m=
+ap test fails to build.
 --
 
-commit 2bc133e2e13cac20b234b4431b2122c75b488855
+commit 15e53592c403b04c6a911fd423e83a28f95d78e8
 Author: Ricardo B. Marli=C3=A8re <rbm@suse.com>
-selftests/bpf: Tolerate test file compilation failures
 
-This commit modifies the BPF selftest build to make per-test compilation
-non-fatal in permissive mode. It removes the output object on failure and
-skips the BTFIDS post-processing step if the object file is missing. The
-msg macro is also replaced with a plain printf inside the BTFIDS shell bloc=
-k.
+selftests/bpf: Allow test_progs to link with a partial object set
+
+This commit modifies the test runner linker recipe in permissive mode to on=
+ly
+link against test objects that already exist on disk, while keeping the full
+list as order-only prerequisites. This allows the build to succeed even if
+individual test files fail to compile.
 
 > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
 ts/bpf/Makefile
-> index 608e6dff0392..f0545ee6b32a 100644
+> index f0545ee6b32a..9a5177455f0a 100644
 > --- a/tools/testing/selftests/bpf/Makefile
 > +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -717,11 +717,14 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:		=
-	\
->  		      $(TRUNNER_TESTS_DIR)/%.c				\
->  		      | $(TRUNNER_OUTPUT)/%.test.d
->  	$$(call msg,TEST-OBJ,$(TRUNNER_BINARY),$$@)
-> -	$(Q)cd $$(@D) && $$(CC) -I. $$(CFLAGS) -MMD -MT $$@ -c $(CURDIR)/$$< $$=
-(LDLIBS) -o $$(@F)
-> +	$(Q)cd $$(@D) && $$(CC) -I. $$(CFLAGS) -MMD -MT $$@ -c $(CURDIR)/$$< $$=
-(LDLIBS) -o $$(@F) $(if $(PERMISSIVE),|| \
-> +		($(RM) $$(@F); printf '  %-12s %s\n' 'SKIP-TEST' '$$(notdir $$@)' 1>&2=
-))
+> @@ -767,14 +767,15 @@ endif
+>  # some X.test.o files have runtime dependencies on Y.bpf.o files
+>  $(OUTPUT)/$(TRUNNER_BINARY): | $(TRUNNER_BPF_OBJS)
+> =20
+> -$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
+> +$(OUTPUT)/$(TRUNNER_BINARY): $(if $(PERMISSIVE),$$(wildcard $(TRUNNER_TE=
+ST_OBJS)),$(TRUNNER_TEST_OBJS))	\
+>  			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
+>  			     $(TRUNNER_LIB_OBJS)			\
+>  			     $(TRUNNER_BPFTOOL)				\
+>  			     $(OUTPUT)/veristat				\
+> -			     | $(TRUNNER_BINARY)-extras
+> +			     | $(TRUNNER_BINARY)-extras			\
+> +			     $(if $(PERMISSIVE),$(TRUNNER_TEST_OBJS))
+>  	$$(call msg,BINARY,,$$@)
+> -	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) $$(LLVM_LDLIBS)=
+ $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
+> +	$(Q)$$(CC) $$(CFLAGS) $(if $(PERMISSIVE),$$(filter %.a %.o,$$(wildcard =
+$(TRUNNER_TEST_OBJS)) $$(filter-out $(TRUNNER_TEST_OBJS),$$^)),$$(filter %.=
+a %.o,$$^)) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
 
-If cd $$(@D) fails, the && short-circuits and the || branch executes in the
-original directory. Will this cause $(RM) $$(@F) to delete the wrong file
-and leave a stale object file in $$(@D)?
+Does this change break the test_maps build in permissive mode?
 
-If a stale object file is left behind, the subsequent [ -f $$@ ] check
-would pass, and RESOLVE_BTFIDS might incorrectly operate on the stale
-object.
+The modified linker recipe applies to all test runners, which includes
+test_maps. In permissive mode, if a test in map_tests/ fails to compile, its
+object file is excluded from the linker command line.
 
-Could the directory change be isolated? For example:
-(cd $$(@D) && $$(CC) ... -o $$(@F)) || ($(RM) $$@; ...)
+Unlike test_progs.c which uses weak references, test_maps.c expects strong
+references to all tests. The map_tests/tests.h header expands to
+"extern void test_##name(void);" and makes direct calls to "test_##name();".
 
->  	$$(if $$(TEST_NEEDS_BTFIDS),						\
-> -		$$(call msg,BTFIDS,$(TRUNNER_BINARY),$$@)			\
-> +		$(Q)if [ -f $$@ ]; then						\
-> +		printf '  %-8s%s %s\n' "BTFIDS" " [$(TRUNNER_BINARY)]" "$$(notdir $$@)=
-"; \
-
-This isn't a bug, but does this break the verbose output mode (V=3D1)?
-
-The msg macro used previously evaluated to an empty string when V=3D1, which
-suppressed the pretty-printed message so only the raw shell commands were
-shown.
-
-Because this replaces the msg macro with an unconditional printf inside the
-shell script block, it appears Make will echo the raw shell script block
-and the shell will execute the printf, resulting in redundant and
-misaligned output.
-
->  		$(RESOLVE_BTFIDS) --btf $(TRUNNER_OUTPUT)/btf_data.bpf.o $$@;	\
-> -		$(RESOLVE_BTFIDS) --patch_btfids $$@.BTF_ids $$@)
-> +		$(RESOLVE_BTFIDS) --patch_btfids $$@.BTF_ids $$@;		\
-> +		fi)
+If a test object is excluded, will the linker abort with an "undefined
+reference" error when linking test_maps, defeating the purpose of
+permissive mode?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260428-selftests-=
-bpf_misconfig-v8-0-bf02cf97dbcb@suse.com?part=3D6
+bpf_misconfig-v8-0-bf02cf97dbcb@suse.com?part=3D8
