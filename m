@@ -1,189 +1,163 @@
-Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D913AEF59
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 22:18:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777501097; cv=pass; b=Madx+rzTVAlHLV6J6vjxz0NSzucoz3kTkzMYXkZy634dnXFyBGZkYUWmT6VbyHai5fOtlg6fJrYpngFPXI48Ck96+gLOSn/kW5PGTwFiAFbQThb9oBau3RwR1eI9w8bS0NmGBpzAzpNkDFSZij0ofbMwJkBiKccUtCfrwx0Lpx0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777501097; c=relaxed/simple;
-	bh=tYF5ImeKfH0MhfqFqALg1UhDM4+qKe5D6LzI6Qrw3sI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a8Y5/lWLfTOJBWLuKB9Z0Q+f3x1P5fo2veCWrxOXo3vFqj+Ou5UmhjcoD43TfAm9WDNg5nm8VipL+oCCceBHopoJ2KSxzVbcZdfA67fugP2r9UqaywlQaMWgh2S0WiBrLLiy7A9ZqTYeUaAe/JNxu4wCImDkm14lZVjnLxxXp5A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SmYXcBVD; arc=pass smtp.client-ip=209.85.221.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677B444102D
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 22:24:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777501453; cv=none; b=qJyo0bLX/2nKpcNk70Ad+TdxlNdy0Dxgs7y1MXLb/1dWYwHNMp0VJAw/p3rd3IthGuDfwptF+mYFvQjcE8DKhLDtbud1MopsQxFGt+dURspf7Lz5VREGvAHy3ngraK4JhbY9I9tOsU2Jq8iNpmrfJGIhTH6S8dRhPD4RNysCteI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777501453; c=relaxed/simple;
+	bh=iGIx6eiN7zQf647BdAifVBOJdPODtS7g0KA82Nv/E78=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=iUivtZidBFnxnO69bSbo1r3g+bdyuJkpzFLxY8cFbJI8BTCeptgYeKYsGOzIbmM9ILSblWqjn08qyxaEDFqEDKgnXSL1gdQ55ao4BbWjrGpV1x7O84+vVITGgckGDVztfrQm4usyMAMUIllDF+K11WMA9g4O81x+5zlTG36oNRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=G+bp3Yla; arc=none smtp.client-ip=194.13.80.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SmYXcBVD"
-Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-444826c16ffso238167f8f.1
-        for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 15:18:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777501079; cv=none;
-        d=google.com; s=arc-20240605;
-        b=LsQmV1oZ5GpDublXql3wjRO5UZI5wG3carZTY5469h5VL1jLWxAPWC9VJeG62oepll
-         rlvDYJT3xw/YUND40HluhS/lG2KMe89H79pvzhBjaVF2X4fKc36Kd/fxzIRMlbyrTTwP
-         OJ1hHYlRghcWlr+JL0ZdzWeYHidM6D3qXfa+sFCyAYTQOWBShXP3f+GnOjP7j3pPqlGL
-         fMA3akJsGHrIYaYaNKJCXqdP7Ulhh2DckZ93Ua2opo1HgqwNEqwYOQUDF73PKwAqbbfk
-         bBx6EtTYxWL/JAxNuS0/b6dCyxUsBZ/WYbrq7Suh0/rbFLpKK6117lRK9s7bi8bPcNFr
-         qJqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=U2h3VezLsp5DKwP85IUlxsYIWmkmTvnb6c5O+N8gFCw=;
-        fh=qHkpieUBBBxp61uLS/AlrxLy3s/Z9jUZBF8kVClLLGE=;
-        b=H9L/GESTOT32nooekO/H1MIUEODZp8h3Pk3SdmO8tKX9VAKRUJwYgv3cYa7sBREDc0
-         4z4fJ9upjVfPqaqmkokbckqP8XlnidnD3CRPVPQfiW2KWQl3p8JLcJo5KzzUWK8O66PK
-         jAJp83ilI+8S/06TSu7XRCJm/+gZzR0jtgWwD1ZhXm3iUYYWVhzMROGmsuCg8GjOQE1O
-         G3eoltt4ZDJAiatjAI4ZcaEQAq10vndd/ZTuQX/Ett3p4jaZ8BSGoWfohCku6CfoQOrY
-         YEMGZK7eiqa0+HqHf9+GcWgC14f2g4FdzA9+YDwIe4OxLW5p/IMlOcTy8xnZHQ2/odgf
-         /dCw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777501079; x=1778105879; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=U2h3VezLsp5DKwP85IUlxsYIWmkmTvnb6c5O+N8gFCw=;
-        b=SmYXcBVDM0QMXxkSOyPf7Y1vJuCdP4uvOkj3GRxRwTxjlWnvTjzAXEVyio7tW6M0dJ
-         JsDE5dl19hUUyblK12AyY89+tBYhw/ev9Ret49JaZ/3m2bZyB2zFga14zEX5OADa2YUx
-         cCjZQYGAoN136UuKxGZOcoTHCAZ/8eX9Z3B0mZ9jecc+FLz6J8PrpjVEbDvhbyzb/LkK
-         rieD56lM25dD2ms00iYTfyiL3qLPgvlOF5M75VsDTxps1aO2nntktCe5NZfYxXHLfpIM
-         j1dqRtpFwPSDkSvjwHi9Zlbnafp7c9ZqwFi8MK9lHZXHwetBrK9HEXX9jmpMTPY1YKqr
-         2hFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777501079; x=1778105879;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U2h3VezLsp5DKwP85IUlxsYIWmkmTvnb6c5O+N8gFCw=;
-        b=YRvPC4s3ZzeJQ0ykDjRhiTSaCw5QSgMW6o0JGAVp3GhTayYx0H8osgnR/5i2v3UNJt
-         wUTT500d/lZD4L4MZFKMpncOOgQXPW17xSyF2+J8GGhb69IaxhapW9irLaL0QsyJxgo/
-         MZgPh/ILXGDxU6RFS/LQdi/HAHpjEP32eWAyHPGJVCykgI3D214OTEZCvD3tww8oQMal
-         IA7gbkw3nfgs7F8lSnvCNxixv5B44fNueUwdO4bRMv4LN8h6JVASdz17IYSCPUWp6qeP
-         1Un6af5BaBQQB0r/a/fSYe399R+pX/gATOPS4pTWIU6npEewhEjcY2snqar1fNlLRFZj
-         wISw==
-X-Forwarded-Encrypted: i=1; AFNElJ9xXSNtuPVz0Rxw0yTSkCZWRSpJMx5U89MGZNNivmtuYgj7+3wFvcwJoGhItNa8Rt7dJrs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+Qqp7y0fu0G4fXKhlauaZ+LmSOWmm0+czInVbKePAyBe614dr
-	sdU4gXuL2Nz1K9mqDjWwSp++g8oVI4ib2qyL2txW++QQo+KDb85Viv8sPJ9Y0uD4Ur258Spa21M
-	ZggTr4tJL+0V5gpfK68GqRS0Fld3tBQo=
-X-Gm-Gg: AeBDiest6In9JxuyLqGABoota8ZJx6ZMyn9BFa2YAnmDas5ppIrHlFm74a2LUMZDAar
-	AMfqyOdeKE1rRtkY2AHnM27OxHY6TGgbbGhEY9vwawkd8o5rt30bwcuN7lihxFNvVEiNK9AFEH7
-	7aiK3cuTOdtXLFW4O3KadnZrkuf0lH7g09HrsLvvbLk3PcbKYBOtmf4ONcXTm3h/Yt738AjeJIv
-	kzRB6avNldJe7PvKT2uvbalgzM7n3IZqe79KfX328fC6F8vrZqw54KJj6G+EIxwCGajJYsHuKPp
-	SCByMvUwp4cKiIp0UvqI5UGpsqqL3wmhUDrVx6oOAGTJ7NV6Un0ExLjqQQl+5UccaY7YvNK4ThM
-	yfOvYMjABq4ytU0xRUpSLGhHpPCuDf5fz3cFofDoOj3LFoAXz195ZFB/HP2NXzX2+d7Fo
-X-Received: by 2002:a05:6000:1869:b0:43d:69ff:6898 with SMTP id
- ffacd0b85a97d-4493d7fa267mr276743f8f.9.1777501079154; Wed, 29 Apr 2026
- 15:17:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="G+bp3Yla"
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CE2D0A53A6;
+	Thu, 30 Apr 2026 00:24:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1777501444; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=d4gXF/4TbLDUTUJqF5RI64DL4J7e89oj8p6pphOtx7M=;
+	b=G+bp3YlaUDx29fwq+6erg9WliYTHzFtI7GxefrA92h/m0FiE2zJcEstVjQ4npNQ0eMx6dY
+	AtuI8RiWjSXxP1+8GPVyj6DHcEB/n5KSQZJEjjWOYgfKboF8BOGacvXzJjWSlj8o/rkz06
+	l2tcHcmyewXjHdJkP+yhUgDUB5s53st46Pq9i+QC6Jtj3kZAK1PITvHx2W8ugvicwf14rh
+	W0tEQLahtqtPUcXDXyhsVnCUtKP86XD2wXNavh79D7GR5MSAXgmXqv4uyTlj59/h9/J5UJ
+	kaRTlPeGGQ2WlT7mE2wscRJ0CEcDX2hVov97+T8UqYF1hYPMmLdcVHTSux+cRQ==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5c3514dbc879f22ba3f9eff8a2c730e13bd0572c.1777388107.git.paul.chaignon@gmail.com>
- <20260428230844.EFA64C2BCAF@smtp.kernel.org> <DI56ZVH6HKDK.1L8J5HPA37J09@gmail.com>
- <DI578ZDDKR6K.QH52KXPV1CLN@gmail.com> <afIPMllq5VI-bJLY@mail.gmail.com> <afIphKy2138OC5GR@mail.gmail.com>
-In-Reply-To: <afIphKy2138OC5GR@mail.gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Thu, 30 Apr 2026 00:17:22 +0200
-X-Gm-Features: AVHnY4KrtM4V07tNGQMH1e-9IWZnb87S9yAPWfWBWf463BF_kxL9uAQjccpYRzs
-Message-ID: <CAP01T74Vk3+udUbt5scHNuudje9ArOatSARQdkbhtFw7E7nJLg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Print breakdown of insns processed by subprogs
-To: Paul Chaignon <paul.chaignon@gmail.com>
-Cc: sashiko@lists.linux.dev, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Date: Thu, 30 Apr 2026 00:24:04 +0200
+From: Nicolai Buchwitz <nb@tipi-net.de>
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v8 3/7] net: bcmgenet: add basic XDP support
+ (PASS/DROP)
+In-Reply-To: <20260429211701.55F2FC19425@smtp.kernel.org>
+References: <20260428205846.2625550-4-nb@tipi-net.de>
+ <20260429211701.55F2FC19425@smtp.kernel.org>
+Message-ID: <eb3d0d5fc61f9d07c7ae20b3ec7760d9@tipi-net.de>
+X-Sender: nb@tipi-net.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed, 29 Apr 2026 at 17:53, Paul Chaignon <paul.chaignon@gmail.com> wrote:
->
-> On Wed, Apr 29, 2026 at 04:01:25PM +0200, Paul Chaignon wrote:
-> > On Wed, Apr 29, 2026 at 02:07:33AM +0200, Kumar Kartikeya Dwivedi wrote:
-> > > On Wed Apr 29, 2026 at 1:55 AM CEST, Kumar Kartikeya Dwivedi wrote:
-> > > > On Wed Apr 29, 2026 at 1:08 AM CEST, sashiko-bot wrote:
-> > > >> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> > > >> - [High] Out-of-bounds read in `bpf_subprog_is_global()` when printing verification stats for programs with hidden subprograms.
-> > > >> --
-> > > >>
-> > > >> commit 08128f883e58301e0f97b1d4a94656be63b8f790
-> > > >> Author: Paul Chaignon <paul.chaignon@gmail.com>
-> > > >>
-> > > >> bpf: Print breakdown of insns processed by subprogs
-> > > >>
-> > > >> This patch tracks the number of instructions processed by each global
-> > > >> function (subprog) during BPF verification. It then reports this
-> > > >> breakdown in the verifier logs under BPF_LOG_STATS.
-> > > >>
-> > > >>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > >>> index 03f9e16c2abe..b48389b48eb6 100644
-> > > >>> --- a/kernel/bpf/verifier.c
-> > > >>> +++ b/kernel/bpf/verifier.c
-> > > >>
-> > > >> [ ... ]
-> > > >>
-> > > >>> @@ -18288,6 +18295,13 @@ static void print_verification_stats(struct bpf_verifier_env *env)
-> > > >>>                                 verbose(env, "+");
-> > > >>>                 }
-> > > >>>                 verbose(env, "\n");
-> > > >>> +               verbose(env, "insns processed %d", env->subprog_info[0].insn_processed);
-> > > >>> +               for (i = 1; i < env->subprog_cnt; i++) {
-> > > >>> +                       if (!bpf_subprog_is_global(env, i))
-> > > >>
-> > > >> Could this introduce a regression due to an out-of-bounds read on the
-> > > >> func_info_aux array if there are hidden subprograms?
-> > > >>
-> > > >> At load time, if BTF is present, env->prog->aux->func_info_aux is allocated
-> > > >> with exactly func_info_cnt elements, and env->subprog_cnt initially matches
-> > > >> func_info_cnt.
-> > > >>
-> > > >> During verification, if a feature like bpf_throw is used without an explicit
-> > > >> callback, add_hidden_subprog() is called which increments env->subprog_cnt
-> > > >> but does not resize the func_info_aux array.
-> > > >>
-> > > >> Since this loop iterates up to the updated env->subprog_cnt, when i reaches
-> > > >> the index of a hidden subprogram, bpf_subprog_is_global() will access
-> > > >> aux[i].linkage where i >= func_info_cnt:
-> > > >>
-> > > >> kernel/bpf/verifier.c:bpf_subprog_is_global() {
-> > > >>  struct bpf_func_info_aux *aux = env->prog->aux->func_info_aux;
-> > > >>
-> > > >>  return aux && aux[subprog].linkage == BTF_FUNC_GLOBAL;
-> > > >> }
-> > > >>
-> > > >> Is it possible to skip hidden subprograms here, or limit the check to
-> > > >> func_info_cnt?
-> > > >
-> > > > Don't see it happening, since hidden subprogs never get verified, so we won't
-> > > > invoke bpf_subprog_is_global() with such a subprog index.
-> > >
-> > > Ah, no, stupid me. We get here after fixing up and adding the hidden subprog. So
-> > > we can still do OOB since subprog_cnt includes the hidden_subprog_cnt. How about
-> > > the following as a fix? I checked over other places where we iterate over all of
-> > > the subprogs and those look fine, so instead of changing bpf_subprog_is_global()
-> > > we can adjust this function to only consider real subprogs. Didn't compile test.
-> >
-> > That's a nice find! I also doubted it initially as we have that pattern
-> > everywhere.
-> >
-> > It looks like this would be a fix for commit 335d1c5b5452 ("bpf:
-> > Implement support for adding hidden subprogs") (or technically, the next
-> > commit as 335d1c5b5452 didn't have any user). So maybe I can resend as a
-> > first patch (with you as a co-author) and the following diff (took the
-> > opportunity to simplify the logic on the assumption that we always have
-> > the main "subprog").
->
-> Just saw that subprog_info is statically allocated (contrary to
-> func_info_aux) so we wouldn't get an OOB on the existing code, just
-> some garbage "+0" on the stack depths.
+On 29.4.2026 23:17, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential 
+> issue(s) to consider:
+> - [High] Hardware checksum offload (CHECKSUM_COMPLETE) is 
+> unconditionally applied after XDP execution, causing valid modified 
+> packets to be dropped.
+> - [Medium] The driver advertises NETDEV_XDP_ACT_BASIC without 
+> supporting XDP_TX, violating the XDP feature API contract.
+> --
+> 
+> commit fcb14e148a380096868da445b34bcc00893540bf
+> Author: Nicolai Buchwitz <nb@tipi-net.de>
+> 
+> net: bcmgenet: add basic XDP support (PASS/DROP)
+> 
+> This commit adds basic XDP support to the bcmgenet driver, allowing XDP
+> programs to execute in the RX path with support for XDP_PASS and 
+> XDP_DROP.
+> 
+>> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c 
+>> b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+>> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+>> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> [ ... ]
+>> @@ -2404,30 +2462,34 @@ static unsigned int bcmgenet_desc_rx(struct 
+>> bcmgenet_rx_ring *ring,
+> [ ... ]
+>> +		/* Save rx_csum before XDP runs - an XDP program
+>> +		 * could overwrite the RSB via bpf_xdp_adjust_head.
+>>  		 */
+>> +		if (dev->features & NETIF_F_RXCSUM)
+>> +			rx_csum = (__force __be16)(status->rx_csum & 0xffff);
+>> 
+>> +		xdp_init_buff(&xdp, PAGE_SIZE, &ring->xdp_rxq);
+>> +		xdp_prepare_buff(&xdp, page_address(rx_page),
+>> +				 GENET_RX_HEADROOM, pkt_len, true);
+>> 
+>> +		xdp_act = bcmgenet_run_xdp(ring, xdp_prog, &xdp, rx_page);
+>> +		if (xdp_act != XDP_PASS)
+>> +			goto next;
+>> 
+>> +		skb = bcmgenet_xdp_build_skb(ring, &xdp);
+>> +		if (unlikely(!skb)) {
+>> +			BCMGENET_STATS64_INC(stats, dropped);
+>> +			page_pool_put_full_page(ring->page_pool,
+>> +						rx_page, true);
+>> +			goto next;
+>>  		}
+>> 
+>>  		/* Set up checksum offload */
+>>  		if (dev->features & NETIF_F_RXCSUM) {
+>> -			rx_csum = (__force __be16)(status->rx_csum & 0xffff);
+>>  			if (rx_csum) {
+>>  				skb->csum = (__force __wsum)ntohs(rx_csum);
+>>  				skb->ip_summed = CHECKSUM_COMPLETE;
+>>  			}
+> 
+> If the XDP program modifies the packet payload (e.g., rewriting IPs or
+> ports), the hardware checksum saved before XDP execution will no longer 
+> match
+> the new payload.
+> 
+> If we unconditionally apply this old checksum and set CHECKSUM_COMPLETE 
+> on
+> the SKB here, will the network stack drop the valid modified packet due 
+> to a
+> hardware checksum failure?
+> 
+> Should the checksum be invalidated when an XDP program is present?
 
-Yeah, I don't think it was buggy before this, e.g. adjust_btf_func()
-explicitly avoids touching func_info for this reason.
-Just feel free to fold the diff into your commit and resend, no need
-to send a separate change or make me co author.
+This is the standard pattern across XDP drivers (e.g. ice). With
+CHECKSUM_COMPLETE, the stack performs software validation by combining
+the hardware checksum with its own pseudo-header sum. If an XDP program
+modifies the packet, validation fails and the stack drops the packet,
+no silent corruption. XDP programs that modify packets and return PASS
+are extremely rare; the common pattern is modify+TX/REDIRECT.
 
->
-> >
-> > Not sure if it would need to be sent to bpf instead of bpf-next. Maybe
-> > keep the patchset on bpf-next, but add "Cc: stable@vger.kernel.org"?
->
-> [...]
->
+> 
+> [ ... ]
+>> @@ -4054,6 +4148,7 @@ static int bcmgenet_probe(struct platform_device 
+>> *pdev)
+>>  			 NETIF_F_RXCSUM;
+>>  	dev->hw_features |= dev->features;
+>>  	dev->vlan_features |= dev->features;
+>> +	dev->xdp_features = NETDEV_XDP_ACT_BASIC;
+>> 
+>>  	netdev_sw_irq_coalesce_default_on(dev);
+> 
+> The commit message notes that XDP_TX is not yet supported and returns
+> XDP_ABORTED.
+> 
+> The UAPI definition for NETDEV_XDP_ACT_BASIC implies support for 
+> XDP_PASS,
+> XDP_DROP, XDP_ABORTED, and XDP_TX. Does advertising this flag without 
+> XDP_TX
+> support break feature detection for userspace applications?
+> 
+> I see from the patch series that XDP_TX support is added in a later 
+> commit.
+> Would it be safer to defer setting NETDEV_XDP_ACT_BASIC until that 
+> patch to
+> avoid breaking userspace assumptions during a bisect?
+
+Per <linux/netdev.h>, NETDEV_XDP_ACT_BASIC = "XDP features set supported
+by all drivers (XDP_ABORTED, XDP_DROP, XDP_PASS, XDP_TX)". The XDP_TX
+listed there is the BPF action constant, which is always handled (we
+return XDP_ABORTED for unsupported actions, which is the documented
+behavior). The driver-level XDP_TX *capability* is a separate flag
+(NETDEV_XDP_ACT_XDP_TX), not implied by BASIC.
+
+Thanks
+Nicolai
