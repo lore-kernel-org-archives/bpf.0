@@ -1,41 +1,41 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590702EFDA6
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 22:55:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64CC52EFDA6
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 22:56:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777503311; cv=none; b=k7VZFwi35qENxv4HevT+IJAd9Us94FNoS+ohosCp1LUJ82mABYI0zIFKSqKv12Qhz2kbSqmb8wPWcDUBx0EIn8eTqqzmR4lIc3q7DWgHVLtcb91trWjVWHZjLdP9dTiC7Vr29NBH2Yo4wZGuCe9D/mWiVwQIn6zhirnyXoVIK5Q=
+	t=1777503362; cv=none; b=i37d5sDQxQxo4ajfFwz9VF8T91tpVJ32TOSxtBofDO04+BCBQRfOBonQli4uv+gkLfKIea62Hy8BWHTyAXdwwPGeOXzKnIGW6xR4Wa4fLekU3PkA7kNnsyOmKT8Yqe64K0W6rJdc5FeOdAIkSX9cGflPqMu+1hkS70petqa8Li8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777503311; c=relaxed/simple;
-	bh=VTIrMGmdAJmuAYVwd8MFv7OEW/WKt9BuDeuRb707dn8=;
+	s=arc-20240116; t=1777503362; c=relaxed/simple;
+	bh=FywfVDR9cXiiJ7SYm4iq3ZXN30HLQ/+mEVzcyrY5jm8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bbLSgeChADYXHl0POkXFC/BXLwHn8rSYynqT3vW/1xY8eWZP4NSIPxJhf7ZYQsd17F8b9jPzhhA1ZsTPytOj8ISJraNBgrLV4MEAoKKqkuKhR1I4KudX68b/8OV+KAlcAr/1tx90dfNdFGhM2ogqu4y5soJZMAjepR91pv+fVKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ubts3PlG; arc=none smtp.client-ip=95.215.58.181
+	 In-Reply-To:Content-Type; b=SVa53DSroJSSaebaUMqodtETZ5g8wEhoKa+rGqP1yTXTnubC7p0QT19bDgrzalajIeYJ43CyCwz7qPlVpj0a8K0Ow4AezZFUvuRnY/EA055zZyt5jIpP6eFjDop165a9lJ2d1vO/NbGcuaW9BQ0CWqzvwcnkZoiv3dI9hTrzJ6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=n1b0tKHu; arc=none smtp.client-ip=91.218.175.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ubts3PlG"
-Message-ID: <5a11f86d-ba74-4c90-ae81-7d9cfc119da5@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="n1b0tKHu"
+Message-ID: <d581f2a8-75f3-4e93-bd75-69bfc2dc96dc@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777503308;
+	t=1777503359;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=4De/6p4FKgX1vIRfTEfZcdkRk+3wRWu1EgsLqSth7KU=;
-	b=Ubts3PlG1F2tDXPr+tGnJ94at0lwpTzW1SZoGinHDw46GSCqTfOOSz9A6WH0tNsfErbav2
-	ibRk0L/F6atQW5ADFvw3D2Yfw2dXzXBKLgX2SoaWnc33O+4/900viUlW440HjOaPASla0J
-	0Gq4HSmPxywNUbBMyeip4ZYMn0SXmJM=
-Date: Wed, 29 Apr 2026 23:55:02 +0100
+	bh=tMi0MKn+KOcAa/CMO5Jt5Vwi6GSl0q99nW7LK+Am4AI=;
+	b=n1b0tKHun0HAt0efMoYDKkueVhgNMRQ6MBFh05Y80tnDI8W2YVq8TnEREwbzr8b3SqxM3X
+	XBiTke7oirqkBfSrPyWNCgcBkBeWd/94G/bx8Ab5822LKB45CpjEIvt5TWnwFMRO3N14c6
+	UXyDTkny60d8kHXpI8HVsj9sqlWp7j0=
+Date: Wed, 29 Apr 2026 23:55:57 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 03/18] bpf: Refactor record_call_access() to
- extract per-arg logic
+Subject: Re: [PATCH bpf-next 04/18] bpf: Extend liveness analysis to track
+ stack argument slots
 Content-Language: en-GB
 To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
@@ -43,49 +43,76 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
  "Jose E . Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com,
  Martin KaFai Lau <martin.lau@kernel.org>
 References: <20260424171433.2034470-1-yonghong.song@linux.dev>
- <20260424171449.2035279-1-yonghong.song@linux.dev>
- <06f9e1f9f49dbdb0eb96152c3421e83b9cfb474b.camel@gmail.com>
+ <20260424171454.2035580-1-yonghong.song@linux.dev>
+ <0ab27743df8930a342517e1f3246662c86c0763a.camel@gmail.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <06f9e1f9f49dbdb0eb96152c3421e83b9cfb474b.camel@gmail.com>
+In-Reply-To: <0ab27743df8930a342517e1f3246662c86c0763a.camel@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 4/29/26 1:51 AM, Eduard Zingerman wrote:
+On 4/29/26 1:22 PM, Eduard Zingerman wrote:
 > On Fri, 2026-04-24 at 10:14 -0700, Yonghong Song wrote:
->> Extract the per-argument FP-derived pointer handling from
->> record_call_access() into a new record_arg_access() helper.
->>
->> The existing loop body — checking arg_is_fp, querying stack access
->> bytes, and calling record_stack_access/record_imprecise — will be
->> reused for stack argument slots in the next patch. Factoring it out
->> now avoids duplicating the logic.
->>
->> No functional change.
->>
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->> ---
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 >
 > [...]
 >
->> +static int record_arg_access(struct bpf_verifier_env *env,
+>> diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
+>> index db73c4740b1e..b65285d61efe 100644
+>> --- a/kernel/bpf/const_fold.c
+>> +++ b/kernel/bpf/const_fold.c
+>> @@ -51,13 +51,22 @@ static void const_reg_xfer(struct bpf_verifier_env *env, struct const_arg_info *
+>>   			   struct bpf_insn *insn, struct bpf_insn *insns, int idx)
+>>   {
+>>   	struct const_arg_info unknown = { .state = CONST_ARG_UNKNOWN, .val = 0 };
+>> -	struct const_arg_info *dst = &ci_out[insn->dst_reg];
+>> -	struct const_arg_info *src = &ci_out[insn->src_reg];
+>> +	struct const_arg_info *dst, *src;
+> Nit: there is no harm in computing addresses before validating the range.
+>
+>>   	u8 class = BPF_CLASS(insn->code);
+>>   	u8 mode = BPF_MODE(insn->code);
+>>   	u8 opcode = BPF_OP(insn->code) | BPF_SRC(insn->code);
+>>   	int r;
+>>   
+>> +	/* Stack arguments use BPF_REG_PARAMS which is outside the tracked register set. */
+>> +	if (insn->dst_reg == BPF_REG_PARAMS)
+> Nit: I'd add several accessors:
+>       - is_stack_arg_st(insn)
+>       - is_stack_arg_stx(insn)
+>       - is_stack_arg_ldx(insn)
+>
+>> +		return;
+>> +	if (insn->src_reg == BPF_REG_PARAMS) {
+>> +		ci_out[insn->dst_reg] = unknown;
+>> +		return;
+>> +	}
+>> +
+>> +	dst = &ci_out[insn->dst_reg];
+>> +	src = &ci_out[insn->src_reg];
+>>   	switch (class) {
+>>   	case BPF_ALU:
+>>   	case BPF_ALU64:
 > [...]
 >
->> +		for (int f = 0; f <= depth; f++) {
->> +			err = mark_stack_read(instance, f, insn_idx, SPIS_ALL);
->> +			if (err)
->> +				return err;
->> +		}
->> +		return 1;
-> Why having both 0 and 1 as success return codes in this function?
+>> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+>> @@ -1560,6 +1603,9 @@ static int compute_subprog_args(struct bpf_verifier_env *env,
+>>   	struct arg_track at_out[MAX_BPF_REG];
+>>   	struct arg_track (*at_stack_in)[MAX_ARG_SPILL_SLOTS] = NULL;
+>>   	struct arg_track *at_stack_out = NULL;
+>> +	struct arg_track (*at_stack_arg_in)[MAX_STACK_ARG_SLOTS] = NULL;
+>> +	struct arg_track at_stack_arg_out[MAX_STACK_ARG_SLOTS];
+>> +	struct arg_track at_stack_arg_entry[MAX_STACK_ARG_SLOTS];
+> I think this implementation is correct.  That being said, an
+> alternative option would be to track at_stack_arg_{in,out} as a part
+> of at_{in,out}, just at indexes >=11. This should avoid duplicating
+> the code processing joins in compute_subprog_args(), record_call_access(),
+> and memory handling a bit. Wdyt?
 
-You are right. Will remove 1.
+Good point. Let me give a try.
 
->
 >
 > [...]
 
