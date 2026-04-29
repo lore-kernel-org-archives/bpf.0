@@ -1,117 +1,114 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45EC13B7AE
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 20:56:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C803A0E99
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 21:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777496200; cv=none; b=QeE2MRQcCh7JDcStq1dGAaemE8s/d0gmc9KLZuIAgEFDhU5aOKDaMKDyh4e6z5SFYT74jPqIHj3e0nCWDZUapcTtE2xDWi92hhXFIB81+OubO9HKlYVaDDiylgmOuw0nmzGp6kgox1eS2CjrMXxu90zzlNN48xIkEZVI541xHsU=
+	t=1777496672; cv=none; b=Vn9qJSLYaZw2ouAupbST2TMiPIwOjz01h7u8MURBABAvcurXEuzZTB5T99yvGcnWEiviXlILzdlDIF9bnn+as6JrvBXwd5saXkrjJMzhihnRgXC5yRPivAT3rHmOUoSOt/GKp1qzW+YCfZin+qwm9IT5m8mfUcNt1/0JvF6czNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777496200; c=relaxed/simple;
-	bh=KcM6bkgoovknVoO7DyH8RZjp7sIX9YJ7+Gg8p+SHoPo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qGIpP3PWe5A0I5yFLD36W0r2kB84sNKuwdNzegUORVD0p+sjZR09vB2PweqTPEpxhG6mgU7U4vaF/zS7Zsf8dRTtzMMswspj3i46nHTieqJMGhj5/5OiD9YwsqYduKi0+pHwPkm+8oS1g3CHt3CGzg9WZTTt99JLltGX/0l+Y28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=o7ri0tpI; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1777496672; c=relaxed/simple;
+	bh=PUv/wtdAaCDxWTSqwMEnMtq40S4x3X73v2jPSv0r6w4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=rfWET6q96BOXN5Sfbkfb+Syp7P1nFuXmguXtW1pLpxSyS1edWyRtd2Q5BpSyHJavfber6VP4Cuk/SXws47GMptnjr14NSbpNNCoSniR2O1rqrRgZDtSq8udP3+A8wdkl3dEn7Ipuh26/KpB0Iq9JZ070Sflh5UtiSNXDnEk4klM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=r9GKvN5f; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="o7ri0tpI"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ba922426c5cso27681766b.3
-        for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 13:56:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777496197; x=1778100997; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vb9L8WftaoHrfrq4miMFqQPjpoEXQCa3yqkZ/uqlKz0=;
-        b=o7ri0tpIxidoqyCZodGZdwHDV05ZqwchcenKXVoZ3C5KMYLzXZpuAtK+KsALM/VFLL
-         7f/hPeSokPE4n0/ciMl7XYdpNWZHqjFev35z/QgSDuW8arSt67hT++VoKYBcxWs67Okk
-         0hucZSGyuMKfXxbptbDM8a1ShMGaYyjdU1c//vpfUf+5q/X3EVZseLa4JToW3fjnCda2
-         s0nBSUSZA4dosJ/C1OrHd1eDjkJqDzxnrWO1nlx00TSlLQwpYPyyH2fRVD0OSs5GPe4C
-         whYlgzA0i0tagfGZkzSrlyUq/+HbwDlg3L95+pLSk8VxjbYxP+D805jeH7tv078/Su/k
-         xkcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777496197; x=1778100997;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vb9L8WftaoHrfrq4miMFqQPjpoEXQCa3yqkZ/uqlKz0=;
-        b=ilDwYzH52XBFtjwVpn7nLX/m9RlpYRQ1ygzXdLicCXT/5yIRMIUueaOZ4Neyfew7r2
-         jQUZpjJxsfvx0KBkCxONou39kklzgru3QwWlrH7f8qwQttXLdg1jUo/VgoEW5oHgGL4X
-         osm4iwbEWWiiD8PUXmyCVcMOqFrRccLhZP2Yh+shMZBLHWSBYgGjjEn70L/JVWJaPzIC
-         /rpyDDIRUdNQFEsXjk26KFVYABkztu2RtUpUxOubiloBidpfYpEGbtFLH2x7OJ4tGY/r
-         ngupfAnQ4K3dHGQq/KPP/PioqKrhKvwR/dW0x7kS6aX5ght1AQfzSitFTTNQTgNSLhKw
-         uvwQ==
-X-Forwarded-Encrypted: i=1; AFNElJ99nkYM0zx4WJKcnpVDgvgB6HNr4LGQMMJfakUl8AFZoIZPnnF37tfpH/e6RK4k1cQ68WM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSbc2cBgpFZiKWVUeHxG5InzGdd6FHVH+UuonGEgMl7DahkvVR
-	QRa5fm5+MJbrtJNA8g4gDl6I1576ElL6MLURXaLQMaVcAxq9Gx5hipXmNV3fYuK5SA==
-X-Gm-Gg: AeBDieuxr9Gm64Zt2qfz5fBKPUfSa3em904Fm0u0ikdRLMiTZEE7jsQexpAbUulhsBp
-	pn6uU0lJogr7Qq79wfth9lfI6z2qHlYxBEoyTtsiuKV4mjUEIYl2m8A8jxjhTt5eN6aga3WMJRd
-	HdmW3uAKbgZAh22vY9d8OLlWOLCrif44QMw5WPD02N++ocUG7F10DFA3Vfe9HSFXlZRZr0UQvLg
-	9SoaqDvBrPx3Y46g2EOZNBLouGJpLi2INozfZd5NygFd+UqEvYplyb4nS/xXkL1pb+6W1yYSaTG
-	8cvVUlEHBdLtJomWBpTEQCIZbYu1zbB+VLqu5VB5qMsKFp4xJ6ciOsXQkhlN1N8oHB2O1zwgC+G
-	gQiBnremHs4YxprXuL82RiF9Did2gHW0YXM1g46ldWUhnnP/cLsEMGb8aH31U8BFt4gPZJAGPLB
-	mS9wXpydNbK2EfD1/R58Cn5Z+/EKzBjxqKbAZ7fyKrjm3N6LJiTIWF037YdFofboHlK6OYayjFG
-	Rz5ASZugn3Z
-X-Received: by 2002:a17:906:eec7:b0:ba7:8dd9:cede with SMTP id a640c23a62f3a-bbac4bd280bmr18426666b.13.1777496196643;
-        Wed, 29 Apr 2026 13:56:36 -0700 (PDT)
-Received: from google.com (57.35.34.34.bc.googleusercontent.com. [34.34.35.57])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bb980a6f9d6sm140892666b.10.2026.04.29.13.56.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2026 13:56:36 -0700 (PDT)
-Date: Wed, 29 Apr 2026 20:56:32 +0000
-From: Matt Bobrowski <mattbobrowski@google.com>
-To: Quan Sun <2022090917019@std.uestc.edu.cn>
-Cc: daniel@iogearbox.net, bpf@vger.kernel.org, viro@zeniv.linux.org.uk,
-	brauner@kernel.org, jack@suse.cz, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: Null-Pointer Dereference in bpf_remove_dentry_xattr via Negative
- Dentry
-Message-ID: <afJwgCvB3oV1wWCV@google.com>
-References: <1587cbf4-1293-4e25-ad24-c970836a1686@std.uestc.edu.cn>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="r9GKvN5f"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 24A50C5EF31;
+	Wed, 29 Apr 2026 21:05:11 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id C9ABC5FD43;
+	Wed, 29 Apr 2026 21:04:26 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E461E1072B31D;
+	Wed, 29 Apr 2026 23:04:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1777496666; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=vZB3xOONBlzwTld0/b/9vkSKWE1hI2mPZDQMBd4wIO0=;
+	b=r9GKvN5f/LCZsgVMuxe4ogTRntwEaB81/uuSDp6sckQm4YzHfqhQfZC1shdX6/JxDZGNfy
+	AgkzDeMhl7Xfg0shl/vQO5SO5OvysfEwo2Qrb6SgaWj3RyPWw9jUf0UF0gmFErPW3jwy+l
+	+1DcHSJpPRoxqDeFkX3cLLMsU2WivuTZATX8+vMpS7ow5vSaDxrN1XU3QHsZ93IuzEl/AG
+	H62OS547wYcYrYZSa79e1KNqN/ILxEkMfK3Qg30Xtcc/g+wk/24+a5VLT0GESly19Q0WrC
+	DIyeoB34o+Z6bKCF3I6seRMlLZzglj7gdIfssoPYG14X9xW85exm889oev04eg==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1587cbf4-1293-4e25-ad24-c970836a1686@std.uestc.edu.cn>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 29 Apr 2026 23:04:24 +0200
+Message-Id: <DI5XZAYSH081.1FI819ZYQZW8L@bootlin.com>
+Subject: Re: [PATCH RFC bpf-next 3/8] bpf: add BPF_JIT_KASAN for KASAN
+ instrumentation of JITed programs
+Cc: <bpf@vger.kernel.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: <sashiko@lists.linux.dev>,
+ =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
+ <alexis.lothore@bootlin.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260413-kasan-v1-3-1a5831230821@bootlin.com>
+ <20260425051840.1E7C1C2BCB2@smtp.kernel.org>
+In-Reply-To: <20260425051840.1E7C1C2BCB2@smtp.kernel.org>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed, Apr 29, 2026 at 04:59:01PM +0800, Quan Sun wrote:
-> I found a Null-Pointer Dereference vulnerability in the Linux kernel BPF
-> subsystem. The issue is triggered when a sleepable `BPF_PROG_TYPE_LSM`
-> program is attached to the `bpf_lsm_inode_create` hook and invokes the BPF
-> kfunc `bpf_remove_dentry_xattr` (or `bpf_set_dentry_xattr`) using a negative
-> dentry. This causes the kernel to dereference a NULL inode pointer during
-> lock acquisition, resulting in an immediate kernel panic.
-> 
-> Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
-> 
-> ## Root Cause
-> 
-> This vulnerability is caused by a missing NULL check in the BPF filesystem
-> kfuncs for extended attributes (`bpf_set_dentry_xattr` and
-> `bpf_remove_dentry_xattr`).
-> 
-> 1. A sleepable BPF LSM program is loaded and attached to the `inode_create`
-> LSM hook (`bpf_lsm_inode_create`).
-> 2. When a user attempts to create a new file (e.g., via `open(...,
-> O_CREAT)`), the VFS layer allocates a negative dentry (a dentry that
-> represents a path but does not yet have an associated inode) and passes it
-> to the `security_inode_create` hook.
-> 3. The BPF LSM program is invoked and receives this negative dentry as part
-> of its context (`ctx->dentry`).
-> 4. The BPF program passes this dentry directly to the
-> `bpf_remove_dentry_xattr` kfunc.
-> 5. Inside the kfunc, the kernel calls `d_inode(dentry)` to retrieve the
-> associated inode. Since the dentry is negative, this returns `NULL`.
-> 6. The kfunc blindly calls `inode_lock(inode)` on the retrieved inode
-> without verifying if it is valid.
-> 7. Attempting to lock a NULL pointer causes a null-pointer dereference,
-> leading to a kernel panic.
+On Sat Apr 25, 2026 at 7:18 AM CEST, sashiko-bot wrote:
+> Sashiko AI review found 2 potential issue(s):
+> - [Medium] BPF_JIT_KASAN is defined as a hidden config, preventing users =
+from disabling it.
+> - [Medium] Mismatch between commit message claims and Kconfig implementat=
+ion regarding KASAN modes.
+> --
 
-Sent through a fix here:
-- https://lore.kernel.org/bpf/20260429205438.2601592-1-mattbobrowski@google.com/T/#u
+[...]
 
-Thanks for the report.
+>> @@ -101,4 +105,9 @@ config BPF_LSM
+>> =20
+>>  	  If you are unsure how to answer this question, answer N.
+>> =20
+>> +config BPF_JIT_KASAN
+>> +	bool
+>> +	depends on HAVE_EBPF_JIT_KASAN
+>> +	default y if BPF_JIT && KASAN_GENERIC
+>> +
+>>  endmenu # "BPF subsystem"
+>
+> Since this config is defined as a bool without a prompt string, it acts a=
+s a
+> hidden symbol that is forcefully enabled whenever its dependencies are me=
+t.
+>
+> Because KASAN instrumentation emits shadow memory checks, it can signific=
+antly
+> inflate the size of generated JIT code.
+>
+> Could this code expansion cause large BPF programs to exceed the strict B=
+PF
+> JIT memory limits (bpf_jit_limit) and break BPF functionality?
+
+It likely can, indeed, but...
+
+> If so, would it make sense to provide a prompt text so users and automate=
+d
+> testing systems have a mechanism to manually disable CONFIG_BPF_JIT_KASAN
+> to work around JIT limits or isolate bugs without having to entirely disa=
+ble
+> KASAN_GENERIC?
+
+... the discussions around this RFC rather tend make the series go in
+the opposite direction ([1]) and keep it systematically enabled if KASAN
+is enabled (I'll even drop this patch in the next revision and just make
+the KASAN code in JIT directly depend on KASAN_GENERIC).
+
+[1] https://lore.kernel.org/bpf/CAADnVQLj=3DUosnsC-4V2+mN92Fe0-kW++U+m-O9c9=
+3kk6BwiXgw@mail.gmail.com/
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
