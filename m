@@ -1,91 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A661537F746;
-	Wed, 29 Apr 2026 12:04:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA801A6836;
+	Wed, 29 Apr 2026 12:08:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777464271; cv=none; b=DtG3pto73cN9WluKMSFxsl2KSEZet2Z5n0MGeAPIqccxA8L24AZecBO7Eyg02sXeciqbNpx6e0qtHoV2/kfCPT6VU+bfflGIlMJfquGTisaX7H8GpumYGHbeAvrOr5m/afG6dUnQfdgzq+N41gOR4Nlb88OzF9qzxLduyudnQ3A=
+	t=1777464528; cv=none; b=gP5TGHfXb2PQrCn54UDHD7rFwGHAJqJM0Co9dzCM5bSizZDteFO7nsvXA3oaDIqDYmOMUrEOjw/AeeJtGhBVBxpJOAG89bSEx8dJkFVPplGboP9F4/MsdJQQzfTeVACnRFX0BFeDpnsjYeI6X1wkV6QOhvCENte/4Q7Ebzqh/yU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777464271; c=relaxed/simple;
-	bh=IFAJiEknzlPW2ICs1yOFKVmjs8x4lk0T6++/h57So3A=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=ob2upJYGWdjRmLFKp5oVDZbAIkXmZA/Ea1fqUEFIAqsVtz/sUFR5aQbK5JXVXCgIQ+K4ENH06Piyc4OlyL8x1iBTKsDDc5fXSxx/Saxw2/UHNvvpoHldDo9ctvpzE8ZjOpbFGi+8IUJSEF0pn5Jtk2xFELElAOCZluRd+Od5CU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=p91l+b9K; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777464528; c=relaxed/simple;
+	bh=ZF/XsrD0e0HGXVLkEQFaGIfDME5NQbbaeOlTvonjrmw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GykHWIxHVyCV9VuMIAztgnukSj49mGfsFb+CiKIU1vuGDGMSWoXvGOwTNxyN3ENIUQdOSMQ1UaNWKeZ1u2O3R5fXMbBNaZvmADLP57GvnLp3QC6JBlUQwTZNyLE1nO65VSqG/inUBkB1pGdvM5MZAkb40Axs+0pS/bS+ydvU9vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=NFVXKl2J; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="p91l+b9K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEF49C19425;
-	Wed, 29 Apr 2026 12:04:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1777464271;
-	bh=IFAJiEknzlPW2ICs1yOFKVmjs8x4lk0T6++/h57So3A=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=p91l+b9KXgYp+Fpi6U9aqoSTXGyLkwjQj5O0IWHaunxWDbsyPe4UIGd3MhQITqXve
-	 mMVkpv5deeKDCdo1AcrYwtt4HN8fwUttVKMprhzGq97Xl2sH4gsaAQtDh/h4u7dzyn
-	 Uu6KEeZltN5dUHPSEfLPCV/FoI+Ley1LWMlkJa3E=
-Date: Wed, 29 Apr 2026 05:04:30 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Muhammad Usama Anjum <usama.anjum@arm.com>, David Hildenbrand
- <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
- <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, Mike
- Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal
- Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>, Zi Yan
- <ziy@nvidia.com>, Uladzislau Rezki <urezki@gmail.com>, Nick Terrell
- <terrelln@fb.com>, David Sterba <dsterba@suse.com>, Vishal Moola
- <vishal.moola@gmail.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, Ryan.Roberts@arm.com, david.hildenbrand@arm.com
-Subject: Re: [PATCH v6 0/3] mm: Free contiguous order-0 pages efficiently
-Message-Id: <20260429050430.d86f01dbe731edc9fa932add@linux-foundation.org>
-In-Reply-To: <20260429103326.GA1743@cmpxchg.org>
-References: <20260401101634.2868165-1-usama.anjum@arm.com>
-	<20260429103326.GA1743@cmpxchg.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="NFVXKl2J"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=XGhjKKkinCQ7SqO3jSiquNRsyFtuUhdkM2jGtjxk/GI=; b=NFVXKl2JhV5lwVFY+kI8hidbwh
+	XEkhC/HpVl3ejnKx96vsY4Pb+ikhVuK8P+E/6VVueBmWNGD3ncm343w9qm9vhluhlJGcznK4i7GyC
+	MNdCp8GmrJLE7F68pMGUGNvSHPv9+Lka/YPMjyBxRXcBX3ZYYiIIznUB0vOKN/aMnrVvC92msHGi/
+	BJ0Wb1UWR9fJCb4f6xBdwPfaSP+mf/vcdIyzP/ekIq1W9Ux1isyTQyxv/l3sQ1UvozlJgQ08v+gJf
+	wtOfGvyrdSkBk7LL92Q3Lc3EaR+My1JCxuEesYpkK/uAcwu6NZK0Eu8t8Jt8P94MJf8zCTr0dnaNw
+	fHZjNxzQ==;
+Received: from sslproxy07.your-server.de ([78.47.199.104])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wI3iU-0009K7-1O;
+	Wed, 29 Apr 2026 14:08:34 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wI3iS-000CiM-2c;
+	Wed, 29 Apr 2026 14:08:32 +0200
+Message-ID: <f954a636-4d21-47c0-8afa-cc4b24adb0fb@iogearbox.net>
+Date: Wed, 29 Apr 2026 14:08:31 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 00/11] net: devmem: support devmem with netkit
+ devices
+To: Bobby Eshleman <bobbyeshleman@gmail.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>,
+ Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>,
+ Michael Chan <michael.chan@broadcom.com>,
+ Pavan Chebbi <pavan.chebbi@broadcom.com>,
+ Joshua Washington <joshwash@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>,
+ Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
+ Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com,
+ Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>,
+ David Wei <dw@davidwei.uk>
+Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Stanislav Fomichev <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>,
+ Bobby Eshleman <bobbyeshleman@meta.com>
+References: <20260428-tcp-dm-netkit-v1-0-719280eba4d2@meta.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260428-tcp-dm-netkit-v1-0-719280eba4d2@meta.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27986/Wed Apr 29 08:25:43 2026)
 
-On Wed, 29 Apr 2026 06:33:26 -0400 Johannes Weiner <hannes@cmpxchg.org> wrote:
+Hi Bobby,
 
-> On Wed, Apr 01, 2026 at 11:16:18AM +0100, Muhammad Usama Anjum wrote:
-> > Hi All,
-> > 
-> > A recent change to vmalloc caused some performance benchmark regressions (see
-> > [1]). I'm attempting to fix that (and at the same time significantly improve
-> > beyond the baseline) by freeing a contiguous set of order-0 pages as a batch.
+On 4/29/26 12:41 AM, Bobby Eshleman wrote:
+> This series enables TCP devmem TX through netkit devices.
 > 
-> I think we should revert the original patch.
-> 
-> The premise is that we can save some allocator calls by requesting
-> higher orders and splitting them up into singles. This is a frivolous
-> and short-sighted use of a very coveted and expensive resource.
-> 
-> The buddy allocator tries hard to retain contiguity *if it isn't
-> needed by the caller*. This patch actively works around that.
-> 
-> The cost of recreating those higher orders elsewhere is shouldered by
-> whoever actually needs the contiguity down the line. And that process
-> is orders of magnitudes more expensive than we save here:
-> 
-> We're saving cycles per page in the vmalloc path, and later spend tens
-> of thousands of cycles per page to recreate the contiguity. Scanning
-> PFN ranges, folio locks, rmap walks, TLB flushes, page copies.
-> 
-> That's a terrible trade-off.
+> Netkit now supports queue leasing. A physical NIC's RX queue can be
+> leased to a netkit guest interface inside a container namespace. This
+> gives the container a devmem-capable data path on the RX side (bind-rx,
+> etc...). On the TX side, the container process binds to its netkit guest
+> interface and sends traffic that netkit redirects (via BPF or ip
+> forwarding) to the physical NIC for DMA.
+[...]
+Thanks for working on this, after the RX queue leasing got merged, I've
+been looking into the same actually. :)
 
-That's persuasive.
+I think the NETMEM_TX_* enum approach seems reasonable.
 
-afaict much/all of this series remains useful after a06157804399
-("mm/vmalloc: request large order pages from buddy allocator") is
-reverted?
+What I have a PoC on is to build out TX queue leasing as first-class
+symmetric infrastructure to complement the RX queue leasing - basically
+I implemented an equivalent to the latter in netdev_nl_queue_create_doit
+et al, so you can have independent RX and TX leases and per-queue
+accountability, such that ynl queue-get op shows the full picture, and
+lastly we could also enable AF_XDP TX-only support through this infra.
 
-What I'm not understanding is how significant all of this is.  Sure,
-making many-page vmallocs faster is both beneficial and harmful.  And we
-have super-focused microbenchmarks which demonstrate both effects.  But
-how often does the kernel actually *do* this stuff in real-world (or
-even real-world corner-case) situations?
+Would you be open to collab on integrating both and migrating the devmem
+code to work off an TX queue object? Next week is LSF/MM/BPF, are you
+there by any chance to catch up in person?
+
+Thanks a lot,
+Daniel
