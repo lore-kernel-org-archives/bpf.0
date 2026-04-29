@@ -1,22 +1,23 @@
-Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA5C12FE056
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 17:19:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C917535F16B
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 17:20:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777483195; cv=none; b=d6T9kit7xgpGEKGEbcDhZ8KypHXmTL13YYvlxMcPLtWTiKxu1k60GxN9hBW7yd04Lkl3wsuT08ZmUzCSrZQP6k8PfuNztgqQuZsxgLSwD0iZyKpmm0XX7NjDdinfzQTIIZJl8BvVm9pQNiIuuaQ9njd2e/HplspSVs0MYM/yflw=
+	t=1777483205; cv=none; b=VuqKio217Qqa3Wk3N+Um89vaunzyX13tkEBBsuZaN4kiYDjecg9DGee8zvBLMoosKu0K/RujhZfd8Cux9TWSLfWEgoOGBCynHNCdIEaKALOUb05rJp98u2iip9o/YZUbuMY38Njsiz/lpUFwQizgfh2+AvkSXDRSZS+3XSpoxGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777483195; c=relaxed/simple;
-	bh=nfrmjf/T7eRViNzk9LsMHpDp0kFcb9K3P+xo97UCPEk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f5OfSJJTr+JhpHUjXWyz7Z/KeHqLi2u5G8xUgaDqHIFJQYPLQLAYX1fazBN2n4/dauqNeWMJwFG8GtAmavawgpblARSuiAXQ7k3S3tmK6sKyGwxCRlJ49lkKVdjaJG+1FSjHiZf7lJBWNoxmPvYXrl1UayLUbOi64ZNchfAvOPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=209.97.182.222
+	s=arc-20240116; t=1777483205; c=relaxed/simple;
+	bh=hKbybxsRTbKx9iT9R+I1oa5EIAFcoNwQG1qGp0/z4Lw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Q0OZzpfnFzj8mkRrMNLhFvWp0H9RzKmNW8Easwe/7FmgTayjh5VXFwJcjwKi9Ce/vLsCSn6hc1e/Ke6jElmWuFNnMzl66wQSwJeE8QZKipUDyshv6e/XYax8XmcQn4BTZTOCroB6YshDykeRpBY2/6hLNFMqyWTOagFk865O6ww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=162.243.164.118
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zju.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
 Received: from zju.edu.cn (unknown [112.10.248.232])
-	by mtasvr (Coremail) with SMTP id _____wB3YS+lPfJple3iAA--.5867S3;
-	Thu, 30 Apr 2026 01:19:35 +0800 (CST)
+	by mtasvr (Coremail) with SMTP id _____wDn7z+qPfJpzu3iAA--.5884S3;
+	Thu, 30 Apr 2026 01:19:38 +0800 (CST)
 Received: from wolframium.tail477849.ts.net (unknown [112.10.248.232])
-	by mail-app2 (Coremail) with SMTP id zC_KCgAHd8ycPfJp+XbsAA--.50090S2;
-	Thu, 30 Apr 2026 01:19:30 +0800 (CST)
+	by mail-app2 (Coremail) with SMTP id zC_KCgAnmM2mPfJpFHfsAA--.28035S2;
+	Thu, 30 Apr 2026 01:19:37 +0800 (CST)
 From: Yazhou Tang <tangyazhou@zju.edu.cn>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -37,10 +38,12 @@ Cc: daniel@iogearbox.net,
 	tangyazhou518@outlook.com,
 	shenghaoyuan0928@163.com,
 	ziye@zju.edu.cn
-Subject: [PATCH bpf-next v9 0/3] bpf: Fix call offset truncation and OOB read in bpf_patch_call_args()
-Date: Thu, 30 Apr 2026 01:19:01 +0800
-Message-ID: <20260429171904.107244-1-tangyazhou@zju.edu.cn>
+Subject: [PATCH bpf-next v9 1/3] bpf: Fix out-of-bounds read in bpf_patch_call_args()
+Date: Thu, 30 Apr 2026 01:19:02 +0800
+Message-ID: <20260429171904.107244-2-tangyazhou@zju.edu.cn>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260429171904.107244-1-tangyazhou@zju.edu.cn>
+References: <20260429171904.107244-1-tangyazhou@zju.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,125 +51,109 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zC_KCgAHd8ycPfJp+XbsAA--.50090S2
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBhEQCmnxDY5JjAAAsT
-X-CM-DELIVERINFO: =?B?VHXA1QXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9Fl4kZpcWgURt7JxKtTN72XRwZde+XHIdiWxxU6n6Y1YeHqXNoyTn5S/FBjUAHmtxAaK
-	eS0yVwlOPkq6Y7WWloYYldo5FDjm71qckgved/pkt9v8Oud/fyLmdXdReursHA==
-X-Coremail-Antispam: 1Uk129KBj93XoWxXr48Ww48ZF1UXFyUJw4kZrc_yoWrtry7pF
-	s5G34fKryvqrW0krWxAa17CF45KFs8uF47uF18X343uF4avF1xtryxKr4akF9xGrZ3G3WU
-	ZF4avF93C3WUCagCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+X-CM-TRANSID:zC_KCgAnmM2mPfJpFHfsAA--.28035S2
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAgMQCmnxDY5J4AAAsp
+X-CM-DELIVERINFO: =?B?GfwfegXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9JbrTQrMiN5RXULcsl7pn2aP6rKTp6s5rZCw1xZMO6SxiNIfQMh/VCwxdZGtMw2baInR
+	FB6fs10b/PVh/m2u8ue4YAfjdlMM2Ipe4QR+kY3GyUn0cVa1tQaXI36YXbHBzw==
+X-Coremail-Antispam: 1Uk129KBj93XoWxXF4fur4rury8ZFW5Wr4rWFX_yoW5CF1rpF
+	1DJ3W2kF4rXw4Ik347GF47Zr15JFs5ZrW7KFWrJ340kr42qFs7Jrn0gFnrZFWfXrnak3yx
+	Jr1I93ySk3y8W3cCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
 	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU9Eb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
+	0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
 	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
 	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
-	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC2
-	0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
-	0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
-	14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20x
-	vaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8
-	JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8YFAJUUUUU==
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE
+	14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjcxG0xvY0x
+	0EwIxGrVCF72vEw4AK0wACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCF
+	x2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14
+	v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY
+	67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2
+	IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UNtxhUUUUU=
 
 From: Yazhou Tang <tangyazhou518@outlook.com>
 
-This patchset addresses a silent truncation bug in the BPF verifier that
-occurs when a bpf-to-bpf call involves a massive relative jump offset.
-Additionally, it fixes a pre-existing out-of-bounds (OOB) read issue
-in the interpreter fallback path.
+The interpreters_args array only accommodates stack depths up to
+MAX_BPF_STACK (512 bytes). However, do_misc_fixups() may allow a larger
+stack depth if JIT is requested.
 
-Because the BPF instruction set utilizes a 32-bit imm field for bpf-to-bpf
-calls, implicitly downcasting it to the 16-bit insn->off in bpf_patch_call_args()
-causes incorrect call targets or subprog ID resolution for large BPF programs.
-While fixing this by swapping the imm and off fields, it was discovered that
-the original code also had a load-time OOB read vulnerability when the stack
-depth exceeds MAX_BPF_STACK during JIT fallback.
+If JIT compilation later fails and falls back to the interpreter, the
+verifier invokes bpf_patch_call_args() with this oversized stack depth.
+This causes a load-time out-of-bounds (OOB) read when calculating the
+interpreter function pointer index.
 
-Patch 1/3 fixes the pre-existing OOB read in bpf_patch_call_args(). It
-changes the function to return an int and explicitly rejects the JIT
-fallback if the stack depth exceeds MAX_BPF_STACK, preventing a potential
-stack buffer overflow.
+Fix this by changing bpf_patch_call_args() to return an int and explicitly
+rejecting the JIT fallback (returning -EINVAL) if the stack depth exceeds
+MAX_BPF_STACK.
 
-Patch 2/3 fixes the s16 truncation bug. It keeps the original imm field
-unchanged and uses the off field to store the interpreter function index.
-It also adjusts the JMP_CALL_ARGS case in ___bpf_prog_run() and the dumper
-code accordingly, while safely removing a previous workaround in the
-selftests disasm helpers.
-
-Patch 3/3 introduces a selftest for this fix.
-
+Fixes: 1ea47e01ad6e ("bpf: add support for bpf_call to interpreter")
+Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
+Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
+Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
 ---
+ include/linux/bpf.h | 2 +-
+ kernel/bpf/core.c   | 6 +++++-
+ kernel/bpf/fixups.c | 6 +++++-
+ 3 files changed, 11 insertions(+), 3 deletions(-)
 
-Change log:
-
-v9:
-1. Modify the selftest in patch 3/3: use __clobber_all in inline asm.
-   (Sashiko AI reviewer)
-
-v8: https://lore.kernel.org/bpf/20260429105608.92741-1-tangyazhou@zju.edu.cn/
-1. Update cfg_partition_funcs() in bpftool to use insn->imm for call target
-   calculation. (Sashiko AI reviewer)
-2. Modify the selftest in patch 3/3: add a large padding before the call
-   instruction, preventing the kernel panic on kernel without the fix.
-   (Sashiko AI reviewer)
-3. Modify the selftest in patch 3/3: make it more clear.
-
-v7: https://lore.kernel.org/bpf/20260421144504.823756-1-tangyazhou@zju.edu.cn/
-1. Rebase the patchset to the bpf-next tree to resolve the apply conflict.
-   (Alexei)
-2. Add Patch 1/3 to properly fix a pre-existing OOB read in bpf_patch_call_args().
-   (Sashiko AI reviewer)
-
-v6: https://lore.kernel.org/bpf/20260412170334.716778-1-tangyazhou@zju.edu.cn/
-1. Use a different but clearer approach to resolve this issue: keeping
-   the original imm field unchanged and using the off field to store the
-   interpreter function index. (Kuohai)
-2. Update the related dumper code and remove a previous workaround in the
-   selftests disasm helpers, which is no longer needed after this fix.
-
-v5: https://lore.kernel.org/bpf/20260326090133.221957-1-tangyazhou@zju.edu.cn/
-1. Some minor changes in commit messages. (AI Reviewer)
-
-v4: https://lore.kernel.org/bpf/20260326063329.10031-1-tangyazhou@zju.edu.cn/
-1. Remove some redundant commit messages of patch 2/3. (Emil)
-2. Change the number of instructions in padding_subprog() from 200,000
-   to 32,765, which is the minimum number of instructions required to
-   trigger the verifier failure. (Emil)
-
-v3: https://lore.kernel.org/bpf/20260323122254.98540-1-tangyazhou@zju.edu.cn/
-1. Resend to fix a typo in v2 and add "Fixes" tag. The rest of the changes
-   are identical to v2.
-
-v2 (incorrect): https://lore.kernel.org/bpf/20260323081748.106603-1-tangyazhou@zju.edu.cn/
-1. Move the s16 boundary check from fixup_call_args() to bpf_patch_call_args(),
-   and change the return type of bpf_patch_call_args() to int. (Emil)
-2. Add Patch 3/3 to fix the incorrect subprog ID in dumped bpf_pseudo_call
-   instructions, which is caused by the same truncation issue. (Puranjay)
-3. Refine the new selftest for clarity and add detailed comments explaining
-   the test design. (Emil)
-
-v1: https://lore.kernel.org/bpf/20260316190220.113417-1-tangyazhou@zju.edu.cn/
-
-Yazhou Tang (3):
-  bpf: Fix out-of-bounds read in bpf_patch_call_args()
-  bpf: Fix s16 truncation for large bpf-to-bpf call offsets
-  selftests/bpf: Add test for large offset bpf-to-bpf call
-
- include/linux/bpf.h                           |  2 +-
- include/linux/filter.h                        |  3 -
- kernel/bpf/core.c                             | 17 +++--
- kernel/bpf/fixups.c                           | 12 ++--
- tools/bpf/bpftool/cfg.c                       |  2 +-
- tools/bpf/bpftool/xlated_dumper.c             | 10 +--
- tools/testing/selftests/bpf/disasm_helpers.c  | 18 -----
- .../selftests/bpf/prog_tests/verifier.c       |  2 +
- .../bpf/progs/verifier_call_large_imm.c       | 66 +++++++++++++++++++
- 9 files changed, 94 insertions(+), 38 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_call_large_imm.c
-
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 715b6df9c403..eb6b816bc8b5 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2922,7 +2922,7 @@ int bpf_check_uarg_tail_zero(bpfptr_t uaddr, size_t expected_size,
+ int bpf_check(struct bpf_prog **fp, union bpf_attr *attr, bpfptr_t uattr, u32 uattr_size);
+ 
+ #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+-void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
++int bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
+ #endif
+ 
+ struct btf *bpf_get_btf_vmlinux(void);
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index ae10b9ca018d..fcc881909969 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2394,13 +2394,17 @@ EVAL4(PROG_NAME_LIST, 416, 448, 480, 512)
+ #undef PROG_NAME_LIST
+ 
+ #ifdef CONFIG_BPF_SYSCALL
+-void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
++int bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
+ {
+ 	stack_depth = max_t(u32, stack_depth, 1);
++	/* Prevent out-of-bounds read to interpreters_args */
++	if (stack_depth > MAX_BPF_STACK)
++		return -EINVAL;
+ 	insn->off = (s16) insn->imm;
+ 	insn->imm = interpreters_args[(round_up(stack_depth, 32) / 32) - 1] -
+ 		__bpf_call_base_args;
+ 	insn->code = BPF_JMP | BPF_CALL_ARGS;
++	return 0;
+ }
+ #endif
+ #endif
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index fba9e8c00878..300e4e251931 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -1416,7 +1416,11 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
+ 		depth = get_callee_stack_depth(env, insn, i);
+ 		if (depth < 0)
+ 			return depth;
+-		bpf_patch_call_args(insn, depth);
++		err = bpf_patch_call_args(insn, depth);
++		if (err) {
++			verbose(env, "interpreter stack depth %d is too large\n", depth);
++			return err;
++		}
+ 	}
+ 	err = 0;
+ #endif
 -- 
 2.54.0
 
