@@ -1,114 +1,117 @@
-Received: from mail-ej1-f74.google.com (mail-ej1-f74.google.com [209.85.218.74])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA902FE58C
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 20:55:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45EC13B7AE
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 20:56:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777496103; cv=none; b=IdwzRUICwWMJtI/N7odMP/op1xBdAlsap5z3r3b57tigI7rDjMvc8SnwSyakQw3nnVPxfuL+qyljvMXiuDXUgzDUYGIRh0D2bezOlLOdnPEer2PeGNSTDR2U3O8e2Ew5WMN481+qGNXudEI33czLFcDs3lvCbLw5nyoOzdh7yIk=
+	t=1777496200; cv=none; b=QeE2MRQcCh7JDcStq1dGAaemE8s/d0gmc9KLZuIAgEFDhU5aOKDaMKDyh4e6z5SFYT74jPqIHj3e0nCWDZUapcTtE2xDWi92hhXFIB81+OubO9HKlYVaDDiylgmOuw0nmzGp6kgox1eS2CjrMXxu90zzlNN48xIkEZVI541xHsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777496103; c=relaxed/simple;
-	bh=Hxjbo3Zx2q/+uXsUBZGF198A7I4kf90j2iYWVhvYYXQ=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Ls8J3Y0GkifOzr9Nm7L/TbgUlhn2wcki8QMRN1i0e/0bFmVsBz6blGoCpVROJqJOsu8hBR8wWXrALnX8lW70Gv6Ssu3fcZ63BRS551xwX/NbyGAf84T99vgNsrKJ+X7psZlUe/uNJUDybYRL4aVmtVZ6m4FHh/grUFjtN8+vb30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--mattbobrowski.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dgMltR0k; arc=none smtp.client-ip=209.85.218.74
+	s=arc-20240116; t=1777496200; c=relaxed/simple;
+	bh=KcM6bkgoovknVoO7DyH8RZjp7sIX9YJ7+Gg8p+SHoPo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qGIpP3PWe5A0I5yFLD36W0r2kB84sNKuwdNzegUORVD0p+sjZR09vB2PweqTPEpxhG6mgU7U4vaF/zS7Zsf8dRTtzMMswspj3i46nHTieqJMGhj5/5OiD9YwsqYduKi0+pHwPkm+8oS1g3CHt3CGzg9WZTTt99JLltGX/0l+Y28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=o7ri0tpI; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--mattbobrowski.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dgMltR0k"
-Received: by mail-ej1-f74.google.com with SMTP id a640c23a62f3a-b90484c398cso10095666b.3
-        for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 13:55:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="o7ri0tpI"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ba922426c5cso27681766b.3
+        for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 13:56:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777496100; x=1778100900; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YWBETTdxULGRSZ3WoX6T32thw9DEb2PF1LKCiPKUtBI=;
-        b=dgMltR0klZoUbzf/Qz37Wxgs4AUnnrZQS/bDhiZc/zfV3+TryH5ZM+s1oCZRrHNnj8
-         AWcL62/Cn5JKrDBm7H5M6Vo4avY8/+5tF2DzwuGtO+ADwEau98Uknuq81tTkuxBN8dFa
-         g1Affl0mJj0cGKtfYp/+wWelimbiWdAn/UnL2CBOF6J/FtE7qIMieqekGUSoLOSFhAYk
-         gpyO3kUddzsOrQLRmz0qKdiOHOMRGpvO/7VXQ0ykjh97Ctf41t3VR3lAQnqCLCfD7uUf
-         EfniTh8D63sDW1p3N5OjDT3VxhM1vyHG+trVortpbGwpkdseOC6cEH0k8t3hzk5wLsk9
-         P46g==
+        d=google.com; s=20251104; t=1777496197; x=1778100997; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vb9L8WftaoHrfrq4miMFqQPjpoEXQCa3yqkZ/uqlKz0=;
+        b=o7ri0tpIxidoqyCZodGZdwHDV05ZqwchcenKXVoZ3C5KMYLzXZpuAtK+KsALM/VFLL
+         7f/hPeSokPE4n0/ciMl7XYdpNWZHqjFev35z/QgSDuW8arSt67hT++VoKYBcxWs67Okk
+         0hucZSGyuMKfXxbptbDM8a1ShMGaYyjdU1c//vpfUf+5q/X3EVZseLa4JToW3fjnCda2
+         s0nBSUSZA4dosJ/C1OrHd1eDjkJqDzxnrWO1nlx00TSlLQwpYPyyH2fRVD0OSs5GPe4C
+         whYlgzA0i0tagfGZkzSrlyUq/+HbwDlg3L95+pLSk8VxjbYxP+D805jeH7tv078/Su/k
+         xkcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777496100; x=1778100900;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YWBETTdxULGRSZ3WoX6T32thw9DEb2PF1LKCiPKUtBI=;
-        b=GyoA0IJslgsmjNbzZM+IiK8tER9Kkx29dTce8Nm5LzrBnO74fyTqhJdGzoeFmMCJKg
-         IrjsVzUo0hLX7Z3a1x/E/NiJkYKu2FEWdVzNwWZNj2dedFJ5S6xZXjk2bcW5eIpC9RE4
-         ZTO32Z1ZNxh1FiYHX2W+9NvK33rtdN8w+NkYaAWcJQVXycTnghk9v9AL/Xf3b5g6JqCm
-         oIncPhc9DUdr6ucYppGi9wFW0V7RnhuK8XsUJhyZmJnQ5RYKzKqwbhMD4sCcv1IV0ZZ7
-         XdVhM9+OGqoRn/EFP5hY5BFUwK9eK8vq5x80xbU+skMQpQxuBvtQWwLjV6XcE0T7wq4t
-         KaHA==
-X-Gm-Message-State: AOJu0YxJzcIAGpPcOWHIeFQ2dZba485L6zoi7RkPusnlG3dDLSWdelA8
-	IwZX7U0uNdCjSJAkf7pex//oSfY4NDox6/idJkr3gmzYbfzpIRWmLQWGnNXnjQ8PVHH3k2r5fVG
-	ASImqFi9CxtIPrkVn+UTI9OrYB1O+9wzCmbzwfRc+9l2ERg161vrHk7YF7SXmkXPTNkLUMAITy7
-	81u+Uf2J9em66ESGfbhjKiyFf9PclbkbwfHk3kFuBznsobY/88rYS80D4rxrUr6CpnWz421w==
-X-Received: from edbbl16.prod.google.com ([2002:a05:6402:2110:b0:678:aaa4:67])
- (user=mattbobrowski job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:1f08:b0:677:1d09:56e7 with SMTP id 4fb4d7f45d1cf-679bb096ab5mr4971345a12.23.1777496099509;
- Wed, 29 Apr 2026 13:54:59 -0700 (PDT)
-Date: Wed, 29 Apr 2026 20:54:38 +0000
+        d=1e100.net; s=20251104; t=1777496197; x=1778100997;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vb9L8WftaoHrfrq4miMFqQPjpoEXQCa3yqkZ/uqlKz0=;
+        b=ilDwYzH52XBFtjwVpn7nLX/m9RlpYRQ1ygzXdLicCXT/5yIRMIUueaOZ4Neyfew7r2
+         jQUZpjJxsfvx0KBkCxONou39kklzgru3QwWlrH7f8qwQttXLdg1jUo/VgoEW5oHgGL4X
+         osm4iwbEWWiiD8PUXmyCVcMOqFrRccLhZP2Yh+shMZBLHWSBYgGjjEn70L/JVWJaPzIC
+         /rpyDDIRUdNQFEsXjk26KFVYABkztu2RtUpUxOubiloBidpfYpEGbtFLH2x7OJ4tGY/r
+         ngupfAnQ4K3dHGQq/KPP/PioqKrhKvwR/dW0x7kS6aX5ght1AQfzSitFTTNQTgNSLhKw
+         uvwQ==
+X-Forwarded-Encrypted: i=1; AFNElJ99nkYM0zx4WJKcnpVDgvgB6HNr4LGQMMJfakUl8AFZoIZPnnF37tfpH/e6RK4k1cQ68WM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSbc2cBgpFZiKWVUeHxG5InzGdd6FHVH+UuonGEgMl7DahkvVR
+	QRa5fm5+MJbrtJNA8g4gDl6I1576ElL6MLURXaLQMaVcAxq9Gx5hipXmNV3fYuK5SA==
+X-Gm-Gg: AeBDieuxr9Gm64Zt2qfz5fBKPUfSa3em904Fm0u0ikdRLMiTZEE7jsQexpAbUulhsBp
+	pn6uU0lJogr7Qq79wfth9lfI6z2qHlYxBEoyTtsiuKV4mjUEIYl2m8A8jxjhTt5eN6aga3WMJRd
+	HdmW3uAKbgZAh22vY9d8OLlWOLCrif44QMw5WPD02N++ocUG7F10DFA3Vfe9HSFXlZRZr0UQvLg
+	9SoaqDvBrPx3Y46g2EOZNBLouGJpLi2INozfZd5NygFd+UqEvYplyb4nS/xXkL1pb+6W1yYSaTG
+	8cvVUlEHBdLtJomWBpTEQCIZbYu1zbB+VLqu5VB5qMsKFp4xJ6ciOsXQkhlN1N8oHB2O1zwgC+G
+	gQiBnremHs4YxprXuL82RiF9Did2gHW0YXM1g46ldWUhnnP/cLsEMGb8aH31U8BFt4gPZJAGPLB
+	mS9wXpydNbK2EfD1/R58Cn5Z+/EKzBjxqKbAZ7fyKrjm3N6LJiTIWF037YdFofboHlK6OYayjFG
+	Rz5ASZugn3Z
+X-Received: by 2002:a17:906:eec7:b0:ba7:8dd9:cede with SMTP id a640c23a62f3a-bbac4bd280bmr18426666b.13.1777496196643;
+        Wed, 29 Apr 2026 13:56:36 -0700 (PDT)
+Received: from google.com (57.35.34.34.bc.googleusercontent.com. [34.34.35.57])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bb980a6f9d6sm140892666b.10.2026.04.29.13.56.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Apr 2026 13:56:36 -0700 (PDT)
+Date: Wed, 29 Apr 2026 20:56:32 +0000
+From: Matt Bobrowski <mattbobrowski@google.com>
+To: Quan Sun <2022090917019@std.uestc.edu.cn>
+Cc: daniel@iogearbox.net, bpf@vger.kernel.org, viro@zeniv.linux.org.uk,
+	brauner@kernel.org, jack@suse.cz, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: Null-Pointer Dereference in bpf_remove_dentry_xattr via Negative
+ Dentry
+Message-ID: <afJwgCvB3oV1wWCV@google.com>
+References: <1587cbf4-1293-4e25-ad24-c970836a1686@std.uestc.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
-Message-ID: <20260429205438.2601592-1-mattbobrowski@google.com>
-Subject: [PATCH bpf-next] bpf: fix crash in bpf_[set|remove]_dentry_xattr for
- negative dentries
-From: Matt Bobrowski <mattbobrowski@google.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Quan Sun <2022090917019@std.uestc.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1587cbf4-1293-4e25-ad24-c970836a1686@std.uestc.edu.cn>
 
-bpf_set_dentry_xattr and bpf_remove_dentry_xattr BPF kfuncs attempt to
-lock the inode of the supplied dentry without checking if it is
-NULL. If a negative dentry is passed (e.g. from
-security_inode_create), d_inode(dentry) returns NULL, and
-inode_lock(inode) will cause a NULL pointer dereference.
+On Wed, Apr 29, 2026 at 04:59:01PM +0800, Quan Sun wrote:
+> I found a Null-Pointer Dereference vulnerability in the Linux kernel BPF
+> subsystem. The issue is triggered when a sleepable `BPF_PROG_TYPE_LSM`
+> program is attached to the `bpf_lsm_inode_create` hook and invokes the BPF
+> kfunc `bpf_remove_dentry_xattr` (or `bpf_set_dentry_xattr`) using a negative
+> dentry. This causes the kernel to dereference a NULL inode pointer during
+> lock acquisition, resulting in an immediate kernel panic.
+> 
+> Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
+> 
+> ## Root Cause
+> 
+> This vulnerability is caused by a missing NULL check in the BPF filesystem
+> kfuncs for extended attributes (`bpf_set_dentry_xattr` and
+> `bpf_remove_dentry_xattr`).
+> 
+> 1. A sleepable BPF LSM program is loaded and attached to the `inode_create`
+> LSM hook (`bpf_lsm_inode_create`).
+> 2. When a user attempts to create a new file (e.g., via `open(...,
+> O_CREAT)`), the VFS layer allocates a negative dentry (a dentry that
+> represents a path but does not yet have an associated inode) and passes it
+> to the `security_inode_create` hook.
+> 3. The BPF LSM program is invoked and receives this negative dentry as part
+> of its context (`ctx->dentry`).
+> 4. The BPF program passes this dentry directly to the
+> `bpf_remove_dentry_xattr` kfunc.
+> 5. Inside the kfunc, the kernel calls `d_inode(dentry)` to retrieve the
+> associated inode. Since the dentry is negative, this returns `NULL`.
+> 6. The kfunc blindly calls `inode_lock(inode)` on the retrieved inode
+> without verifying if it is valid.
+> 7. Attempting to lock a NULL pointer causes a null-pointer dereference,
+> leading to a kernel panic.
 
-Trivially fix this by adding a NULL check for inode before attempting
-to lock it, returning -EINVAL if it is NULL.
+Sent through a fix here:
+- https://lore.kernel.org/bpf/20260429205438.2601592-1-mattbobrowski@google.com/T/#u
 
-Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
-Closes: https://lore.kernel.org/bpf/1587cbf4-1293-4e25-ad24-c970836a1686@std.uestc.edu.cn/
-Fixes: 56467292794b ("bpf: fs/xattr: Add BPF kfuncs to set and remove xattrs")
-Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
----
- fs/bpf_fs_kfuncs.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
-index 9d27be058494..a0d58d5e3022 100644
---- a/fs/bpf_fs_kfuncs.c
-+++ b/fs/bpf_fs_kfuncs.c
-@@ -289,6 +289,9 @@ __bpf_kfunc int bpf_set_dentry_xattr(struct dentry *dentry, const char *name__st
- 	struct inode *inode = d_inode(dentry);
- 	int ret;
- 
-+	if (!inode)
-+		return -EINVAL;
-+
- 	inode_lock(inode);
- 	ret = bpf_set_dentry_xattr_locked(dentry, name__str, value_p, flags);
- 	inode_unlock(inode);
-@@ -314,6 +317,9 @@ __bpf_kfunc int bpf_remove_dentry_xattr(struct dentry *dentry, const char *name_
- 	struct inode *inode = d_inode(dentry);
- 	int ret;
- 
-+	if (!inode)
-+		return -EINVAL;
-+
- 	inode_lock(inode);
- 	ret = bpf_remove_dentry_xattr_locked(dentry, name__str);
- 	inode_unlock(inode);
--- 
-2.54.0.545.g6539524ca2-goog
-
+Thanks for the report.
