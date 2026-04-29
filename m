@@ -1,143 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D953A7F66
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 21:29:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA4685474F
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 21:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777498171; cv=none; b=gSNn6MYFuE73NMjA7jBwC8mlNnhirgLo21bDbHHlhQwbuo/SmxMylNsWr3wUHt1oKvFixhZa88yurGu8xSdAm5BLrUwaks0lcenc1eQn9OonuzLqSu2zT+oIeGyCGxCxl87bQ6CtWU374RKHQGKzdXPL2JpLzwtZUq8mT06w5Lk=
+	t=1777498291; cv=none; b=aL3Gk7/rRkweLZEN0uI5tlIkRNxFlr+YXDCv2I3LahNyxfX/IgBxo/tKIYiueS/4gV1sIgHpGF8E4lHFj1X03QZ/qTEWt0magMAzRRIbAugv8ZyP7Z7VlQXzuK7MST040Kc5otO+kvUtjMFZxpkDqKcyLWiRHz42kSM8a4l4WF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777498171; c=relaxed/simple;
-	bh=Hph1RsYxqQ9N4uCfoGd9vUdXSdHiGTIxZSubqlVGeaI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gG2r3N+4n0I4P27FrlL2DKKLZT0wZwp+Ni0xhuioRp1fJh2dEGZBc5a2OksXLs+sWPArvHtwmuWJqHNtZW6qDLDRq1Lj9ZDNb032nl+LJU9TsXvVyegwDp798HpfIo7WDl5BDqWAOC2z0Q81A5x3aOZjIw6wj0YUvNbg5Ra2zUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sw16/FvJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777498291; c=relaxed/simple;
+	bh=+My9DTjOCuWyhF3CS8RgMFRbM0cHQ68Q7W+MomrR2dI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=fyFIMcjTUtVtKqHcsIp50mxUN5tvRMCXyoqGhRIeGO5+1h9H7ZWSwtZcBdRZVj8wDrJy5SI8hClvI2WJyjDUcOwrDFsS5qu/xyCxFB8QANU+ZpZkiiiGSYS6EtZI6UZ4g9uk9Z2YxrvS+508B22eVm0DOi2K2qzIfa73TyuGMC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=S7JyE9z0; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sw16/FvJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44DD4C19425;
-	Wed, 29 Apr 2026 21:29:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777498171;
-	bh=Hph1RsYxqQ9N4uCfoGd9vUdXSdHiGTIxZSubqlVGeaI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Sw16/FvJ4XWNqq1YPl78bY8XWVH7i7vSI0vRCMB0oUC/f9fsvZqrMum58c/MMaZtJ
-	 IQb+gYDi7Ql6pmZa17pH3zQ5mI9nUavGyliEpzF7TB2uPW7tdodImmPAHT7cxaXHDx
-	 C9PaGDI8v/xt34IzpMHiG5llNwwGAmMO4Oj1lWVk8OhMJm9BKZ+oDhiVIfR3ZWlAmM
-	 MVcK59CpsFWHxggMzPVFY8+zpbWmFetM4Z00eXKF1Zl4QoOJ+NzChHk7+HA32zBoSN
-	 HO/Xavki1lAkIrCNeUxAIPbNw0yOw7ExwnGF/KfV4SSa4FruPoNTOOGZnu2uA22Ej0
-	 iiZt3MYIKpyhg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v9 10/11] selftests/bpf: Provide weak
- definitions for cross-test functions
-Reply-To: sashiko@lists.linux.dev
-To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260429-selftests-bpf_misconfig-v9-10-c311f06b4791@suse.com>
-References: <20260429-selftests-bpf_misconfig-v9-10-c311f06b4791@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Apr 2026 21:29:29 +0000
-Message-Id: <20260429212931.44DD4C19425@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="S7JyE9z0"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 654F3C5CD5D
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 21:32:12 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id F142A5FD43;
+	Wed, 29 Apr 2026 21:31:27 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 076EF1072B383;
+	Wed, 29 Apr 2026 23:31:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1777498287; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=lCWh6tcZi9k3OV9RSuqq38Tvxh/sTNtCBC/zukANFHM=;
+	b=S7JyE9z0P7UerB5WFHq+rvcwzKIuIAcvzzH1TlWgzRp61FPF8OAr2I/0UnM0Qg+WRluGcC
+	vhxlHfZYENDs+eT6XTme7hlhWaB7lOVp4H6mBPHhE/v5nDcOwDK0pIDXw1hsz/h1/Xmz8c
+	9CY/7jHgNKBYWWdcAAyxqZsiIrsjAWAoTxNBDFPOzij/5EVGEGYn7G8/o1tDhHdM15hUV9
+	4JoGt1EApZM2oBezHhcnUuYBuP2iNNiYmLaXMGwYGkreetROLgxvTYLYCIlc5FILtGxgei
+	AuSpYKI355vYAVsSNyyzCwLgznw3l+0xgUb28RWGlRoJWdUR0vmicDZ9dFziDA==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 29 Apr 2026 23:31:26 +0200
+Message-Id: <DI5YJZV8HWWA.2Y1YLSO42IH4D@bootlin.com>
+Subject: Re: [PATCH RFC bpf-next 4/8] bpf, x86: add helper to emit kasan
+ checks in x86 JITed programs
+Cc: <bpf@vger.kernel.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: <sashiko@lists.linux.dev>,
+ =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
+ <alexis.lothore@bootlin.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260413-kasan-v1-4-1a5831230821@bootlin.com>
+ <20260425054606.612E9C2BCB0@smtp.kernel.org>
+In-Reply-To: <20260425054606.612E9C2BCB0@smtp.kernel.org>
+X-Last-TLS-Session-Version: TLSv1.3
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] Test flakiness and deterministic failure due to Identical Code F=
-olding (ICF) of weak stubs.
-- [Low] Missing `<alloca.h>` include for `alloca()` in `testing_helpers.c`.
---
+On Sat Apr 25, 2026 at 7:46 AM CEST, sashiko-bot wrote:
+> Sashiko AI review found 3 potential issue(s):
+> - [High] Missing call depth accounting for Retbleed mitigations leads to =
+call depth counter underflow.
+> - [Medium] BPF_ST instructions are incorrectly classified as memory reads=
+ instead of writes.
+> - [Low] Flawed stack realignment logic wastes stack space.
+> --
 
-commit 45cfa2851c72a65543e44de19ed32088ef920e33
-Author: Ricardo B. Marli=C3=A8re <rbm@suse.com>
+[...]
 
-selftests/bpf: Provide weak definitions for cross-test functions
+>> @@ -1301,6 +1305,95 @@ static void emit_store_stack_imm64(u8 **pprog, in=
+t reg, int stack_off, u64 imm64
+>>  	emit_stx(pprog, BPF_DW, BPF_REG_FP, reg, stack_off);
+>>  }
+>> =20
+>> +static int emit_kasan_check(u8 **pprog, u32 addr_reg, struct bpf_insn *=
+insn,
+>> +			    u8 *ip, bool accesses_stack)
+>> +{
+>> +#ifdef CONFIG_BPF_JIT_KASAN
+>> +	bool is_write =3D BPF_CLASS(insn->code) =3D=3D BPF_STX;
+>
+> Does this code incorrectly classify BPF_ST instructions as memory reads?
+>
+> The BPF instruction set includes the BPF_ST class for storing immediate
+> values into memory. Because BPF_CLASS(insn->code) for BPF_ST evaluates to
+> 0x02, the is_write condition evaluates to false. This causes the helper t=
+o
+> inject KASAN load checks instead of store checks, leading to inaccurate
+> error reporting.
 
-This commit replaces forward declarations of uprobe_multi_func_{1,2,3}() wi=
-th
-weak no-op stubs to allow the linker to resolve them when skeletons are
-missing. It also moves stack_mprotect() to testing_helpers.c to make it
-universally available and resolve an issue where the previous weak stub
-returned 0.
+This helper is called in do_jit only for BPF_STX and BPF_LDX insns in the n=
+ext
+commit, so it will never wrongly classify wrongly a BPF_ST insn. But I
+can add a comment, or even enforce a stricter check to make it
+future-proof.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/=
-testing/selftests/bpf/prog_tests/bpf_cookie.c
-> index 35adc3f6d443..5a864cd8ad1b 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+>> +	u32 bpf_size =3D BPF_SIZE(insn->code);
+>> +	s32 off =3D insn->off;
+>> +	u8 *prog =3D *pprog;
+>> +	void *kasan_func;
+>> +
+>> +	if (accesses_stack)
+>> +		return 0;
+>> +
+>> +	/* Derive KASAN check function from access type and size */
+>> +	switch (bpf_size) {
+>
+> [ ... ]
+>
+>> +	/* Save r10 */
+>> +	EMIT2(0x41, 0x52);
+>> +	/* Save r11 */
+>> +	EMIT2(0x41, 0x53);
+>> +	/* We have pushed 72 bytes, realign stack to 16 bytes: sub rsp, 8 */
+>> +	EMIT4(0x48, 0x83, 0xEC, 8);
+>
+> Is this stack realignment logic correct?
+>
+> The x86 BPF JIT prologue pushes a variable number of callee-saved registe=
+rs
+> and subtracts an 8-byte aligned stack_depth, meaning the stack pointer ca=
+n
+> be 8-byte misaligned prior to the check. If the stack is initially 8-byte
+> misaligned, pushing 72 bytes and subtracting 8 preserves the 8-byte
+> misalignment. Because the Linux kernel is compiled with 8-byte stack
+> alignment, the sub rsp, 8 instruction seems unnecessary and wastes 8 byte=
+s
+> of stack space.
 
-[ ... ]
+Hmmm, I have been assuming that stack was aligned when reaching the
+emit_kasan_check, but indeed, as we could be anywhere in the prog, rsp
+can already be misaligned. However, I understand for SytemV ABI, sec
+3.2.2 that the stack must systematically be aligned on 16 bytes before
+any function call. So I'll have to find a way to make this part a bit
+smarter and add the alignment only if needed.
 
-> -/* defined in prog_tests/uprobe_multi_test.c */
-> -void uprobe_multi_func_1(void);
-> -void uprobe_multi_func_2(void);
-> -void uprobe_multi_func_3(void);
-> +/*
-> + * Weak uprobe target stubs. noinline is required because
-> + * uprobe_multi_test_run() takes their addresses to configure the BPF
-> + * program's attachment points; an inlined function has no stable
-> + * address in the binary to probe. The strong definitions in
-> + * uprobe_multi_test.c take precedence when that translation unit is
-> + * linked.
-> + */
-> +noinline __weak void uprobe_multi_func_1(void) {}
-> +noinline __weak void uprobe_multi_func_2(void) {}
-> +noinline __weak void uprobe_multi_func_3(void) {}
+>> +
+>> +	/* mov rdi, addr_reg */
+>> +	EMIT_mov(BPF_REG_1, addr_reg);
+>> +
+>> +	/* add rdi, off (if offset is non-zero) */
+>> +	if (off) {
+>
+> [ ... ]
+>
+>> +	/* Adjust ip to account for the instrumentation generated so far */
+>> +	ip +=3D (prog - *pprog);
+>> +	/* call kasan_func */
+>> +	if (emit_call(&prog, kasan_func, ip))
+>> +		return -ERANGE;
+>
+> Does this call need call depth accounting for Retbleed mitigations?
+>
+> When CONFIG_CALL_DEPTH_TRACKING is enabled, every call instruction execut=
+ed
+> in the kernel must be properly accounted for to increment the call depth
+> counter. Other dynamically emitted calls in the BPF JIT explicitly emit
+> this tracking via x86_call_depth_emit_accounting() prior to emitting the
+> actual call.
+>
+> By omitting this accounting, the call to the KASAN function will not
+> increment the call depth counter. When the KASAN function returns, its
+> return thunk will decrement the counter, causing it to underflow. This
+> causes the return thunks to assume the Return Stack Buffer is empty and
+> trigger expensive RSB stuffing on subsequent returns.
 
-Because these three weak stubs are structurally identical empty functions,
-can compiler and linker optimization passes like Identical Code Folding
-(ICF) merge them into a single memory address?
+I completely missed out this (and that's likely not the only one). I'll
+take a look into it.
 
-If they are folded into a single address, bpf_program__attach_uprobe_multi()
-will attach three separate uprobes to the exact same offset, each with a
-different cookie.
-
-Calling any of the functions would then execute the shared address,
-triggering all three uprobes simultaneously. This would increment the BPF
-program counters multiple times per call, causing assertions like:
-
-    ASSERT_EQ(skel->bss->uprobe_multi_func_1_result, 1, ...);
-
-to fail deterministically, as the result would be 3 instead of 1.
-
-Would it make sense to make these stubs structurally unique, perhaps by
-adding unique inline assembly to each?
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testin=
-g/selftests/bpf/testing_helpers.c
-> index 6fbe1e995660..3f7ae76c209b 100644
-> --- a/tools/testing/selftests/bpf/testing_helpers.c
-> +++ b/tools/testing/selftests/bpf/testing_helpers.c
-
-[ ... ]
-
-> +int stack_mprotect(void)
-> +{
-> +	void *buf;
-> +	long sz;
-> +	int ret;
-> +
-> +	sz =3D sysconf(_SC_PAGESIZE);
-> +	if (sz < 0)
-> +		return sz;
-> +
-> +	buf =3D alloca(sz * 3);
-
-Does this code rely on a glibc-specific extension to provide alloca() via
-<stdlib.h>?
-
-The original implementation in test_lsm.c included <malloc.h>, but the new
-location in testing_helpers.c includes neither <malloc.h> nor <alloca.h>.
-
-On systems with strict POSIX-compliant C libraries, such as musl, omitting
-<alloca.h> can result in an implicit function declaration error and lead
-to build failures.
+Alexis
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260429-selftests-=
-bpf_misconfig-v9-0-c311f06b4791@suse.com?part=3D10
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
