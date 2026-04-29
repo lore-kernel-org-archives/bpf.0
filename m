@@ -1,161 +1,114 @@
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 817493D092D
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 10:25:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BFA73DE427
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 10:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777458337; cv=none; b=nXn1nvHvVE7hnt/6RZUVWW1xfzWIFtE3aWil7kXNhTVDOCUevd+KBtJrY9TNGZ/p5nr5vBlZFBxjSvpYMatpQerEjcpLJCsBiuLsaD8r1OF+mDEXKPA+cFtozi6JeGbO/Lxi8b3A6qPJkALgTeao/93ijPIYlyOp1DAf8Gh805k=
+	t=1777458816; cv=none; b=bUbWmJQecDQGTqufoXGUEsEASvRRuU+vyuIN6bouWX9hScbk/fp5ggosISH2VOlZmdKEqfQeMKSvlD20nf6siwyBWE+7joGLup8qPvgoVC+5d/kIdqsW83O+s03UQ7veNFx5Jp5HK60KBrx9u+WBQd0oDgXbUQbQRPXn0oDT7m8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777458337; c=relaxed/simple;
-	bh=uKx2BLK4SWtORQ3Y1X9QU+u3JmhryAfpmr007sf8OrM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dK9wY684v7bCX1I/X5xn578C9r+DP/ygT1hmsvdNACxzGeKGhtxUZbGBZv8Zt7Wu26Hh9sWLckV9w8g+88NsbEge+VjNdxPvoqv3cIRuSZGbKXvpPRnWON6Yhcw7BRcsfCx7aPBgdnVtk8a6dFLheKsRJdab8j2Rl5EOc9ENiDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=syDuJ2eb; arc=none smtp.client-ip=95.215.58.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1777458816; c=relaxed/simple;
+	bh=UmShxRC6zXdEi19yg5n4FmGwxPh4rT9g/WgZDs5vHuQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=td8fN5b2plTEd8+3W3x+dixLsXG0dcVGsMtIRKgTHw5Nb5KEMr/ExbAppNAZxTavj5j9FHLH1ORVaNQKl63B67nyleIGlpq0JPd5TiQ2HPlqs3TUeMHmWasya+xWXSiK69hDuwHjmEzD/LIe4EDgrqIz5eNI5yDApBlN3peZKx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org; spf=pass smtp.mailfrom=cmpxchg.org; dkim=pass (2048-bit key) header.d=cmpxchg.org header.i=@cmpxchg.org header.b=EpwayYP1; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmpxchg.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="syDuJ2eb"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777458333;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0ubnPqyEuUH+bb9tWP9+TOUp+n6C5onOR58LCuBDEiw=;
-	b=syDuJ2ebh9z2sjffREH58o0aT6Ajjew8W5I8ReEUtvp2EQkdghmYv8iT9JcU1iX87oMIbX
-	D+xmbMoFNHgWVKDoL6XEe6kPFjJgAeA5FQrv1tK/6uUbSyjmFqItMdxDS/n3eJA5ihtrWC
-	pDy1LXDxeyfrSgRVjezaD0bM6Fa+Scc=
-From: Usama Arif <usama.arif@linux.dev>
-To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Cc: Usama Arif <usama.arif@linux.dev>,
-	Yury Norov <ynorov@nvidia.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	David Laight <david.laight.linux@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	linux-alpha@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	kvm@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	dmaengine@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-fsi@lists.ozlabs.org,
-	amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org,
-	linux-wpan@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-wireless@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	linux-staging@lists.linux.dev,
-	linux-serial@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	xen-devel@lists.xenproject.org,
-	linux-fsdevel@vger.kernel.org,
-	ocfs2-devel@lists.linux.dev,
-	bpf@vger.kernel.org,
-	kasan-dev@googlegroups.com,
-	linux-mm@kvack.org,
-	linux-x25@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	sound-open-firmware@alsa-project.org,
-	linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org,
-	linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linux-sh@vger.kernel.org,
-	linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH v1 7/9] x86: Add unsafe_copy_from_user()
-Date: Wed, 29 Apr 2026 03:25:19 -0700
-Message-ID: <20260429102520.1617327-1-usama.arif@linux.dev>
-In-Reply-To: <0ee46bb228d97163fbdc14f2a7c52b93d8bc34ce.1777306795.git.chleroy@kernel.org>
-References: 
+	dkim=pass (2048-bit key) header.d=cmpxchg.org header.i=@cmpxchg.org header.b="EpwayYP1"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-43d77f6092eso8624725f8f.2
+        for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 03:33:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg.org; s=google; t=1777458812; x=1778063612; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rc1bdtiiLVnrHG/ySdu4hkFQib6QmOtBtlzbNliUfdc=;
+        b=EpwayYP1a25T9uZmWPDwtK9u2GFuQxMsQ57cOyHVNzBiwDTCHkZ6XErPck5T3OSWBt
+         FqpMrq9N36wf/JWaaMTultN8ZyO8iVW2h1neAqZJjT3aEkbY+lj7OChaMTcv2wrkXeyy
+         rtyVipUFsC7SxB1S3G3DPwm9wD7f0g+1wCp4NPJQ0f1IBjxj3jC2s8Uh/dHVNnJ7NxMO
+         qKE5YUddBINhKi0gQOuPmbj2IwGvqZnWl1U6osduPiFeytJ7Xsy7XGIQYxv0YrWFJSUc
+         nmAH5h7GHKZyFPftPmfd3CkyBEJJl9zEs/woj8j0yVR/CUiYVofMY9C7sDSFFNVdGwvp
+         bK9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777458812; x=1778063612;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Rc1bdtiiLVnrHG/ySdu4hkFQib6QmOtBtlzbNliUfdc=;
+        b=P+d/gtxH+AHnzgaIO/rlOWcUSKP6mzsTRo0Y6sMkSkeTezua4KgBhrQh51BAUesJSQ
+         eIMUgf1fiAeF35MS2Z6/X4RLQKgTmVQG3kYQrL8A6by7aUbwvT9jUbyN6vaz9/Q2DgIS
+         hUEAE+YPHokAOWjB+qt0sm10+eR1HtGZqN4EjpMrw5TfpVx+8CYkAGvCxxKg09MMvzC8
+         igz5llbQTNpyAuY7PaHJrlvieqmzLMOh6L6NTiL/WYvN2QBXBxi0KR6/q19pF8UxfD28
+         tzZlWGiIFaH8VwX8eVWNbGCeRSTnNFDNkg0pIVUo/eDVQrR5Nl2UkB2oYWDyykHtirMm
+         bLjg==
+X-Forwarded-Encrypted: i=1; AFNElJ/hwZ6NebwgrEVAUehflVZdkIFnzSYzcVyiEDRqJ02qmQnfkUZfqzINQNkIEgprGNUTpXw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKytTiET2EfeIIOhhDgWavpZEwgEz2ZMvztmb1QsPw3dAygzbC
+	U46tKlYdlPRGO3mg/q1RK93J7H7yunJmoZ5E3JzV83fiQIoMGT1rABIXbxQ0vSgBDWo=
+X-Gm-Gg: AeBDietSltukKDZEumNFcy/2NVItz0e45Srt01Otsof0tr2r2rblIKpQKoccTznGwQd
+	2f3plzX8HLMRplbfis3s2CFiIVkVE77tbLRZ8xPbLWmtRAp4TO2KSiGx4aMkqa0uLDYI+9XD1JO
+	xV5iwjrMe/IFpPyQi/zBu957XE2NgOo5hHLanc9j2ACKsKNiHJInOeyRfrykCarMPUsJhwKTJ55
+	l6HydZ/5iBHov43CnINM3/1y0mjbVbeuNr2WH0MwVbEo6vwyRW3x9T39y5zfzjsR5jZmPxLFKBv
+	eOntdgZX2Emv7edDV/hf61/H9FBHHwJ25VP5QNOolQFJEJZ/LMehehWKXa2oRnf1k9GRhkeuagj
+	OaFPTQtKkTl08zKino8iH4w4oLCzfPTnmjr1RfFXjbVUHgnu0SSnjNH9ecj99dda8BNKXrtywNK
+	pTXNDv/KU5MHDq3Rg=
+X-Received: by 2002:a05:6000:438a:b0:43d:c95c:5e75 with SMTP id ffacd0b85a97d-44648f28e79mr12311770f8f.4.1777458812324;
+        Wed, 29 Apr 2026 03:33:32 -0700 (PDT)
+Received: from localhost ([2620:10d:c092:600::1:ef7e])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-447b3d481b2sm5124018f8f.4.2026.04.29.03.33.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Apr 2026 03:33:31 -0700 (PDT)
+Date: Wed, 29 Apr 2026 06:33:26 -0400
+From: Johannes Weiner <hannes@cmpxchg.org>
+To: Muhammad Usama Anjum <usama.anjum@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Brendan Jackman <jackmanb@google.com>, Zi Yan <ziy@nvidia.com>,
+	Uladzislau Rezki <urezki@gmail.com>, Nick Terrell <terrelln@fb.com>,
+	David Sterba <dsterba@suse.com>,
+	Vishal Moola <vishal.moola@gmail.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	Ryan.Roberts@arm.com, david.hildenbrand@arm.com
+Subject: Re: [PATCH v6 0/3] mm: Free contiguous order-0 pages efficiently
+Message-ID: <20260429103326.GA1743@cmpxchg.org>
+References: <20260401101634.2868165-1-usama.anjum@arm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260401101634.2868165-1-usama.anjum@arm.com>
 
-On Mon, 27 Apr 2026 19:13:48 +0200 "Christophe Leroy (CS GROUP)" <chleroy@kernel.org> wrote:
+On Wed, Apr 01, 2026 at 11:16:18AM +0100, Muhammad Usama Anjum wrote:
+> Hi All,
+> 
+> A recent change to vmalloc caused some performance benchmark regressions (see
+> [1]). I'm attempting to fix that (and at the same time significantly improve
+> beyond the baseline) by freeing a contiguous set of order-0 pages as a batch.
 
-> At the time being, x86 and arm64 are missing unsafe_copy_from_user().
-> 
-> Add it.
-> 
-> Signed-off-by: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
-> ---
->  arch/x86/include/asm/uaccess.h | 29 ++++++++++++++++++++++++-----
->  1 file changed, 24 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-> index 3a0dd3c2b233..10c458ffa399 100644
-> --- a/arch/x86/include/asm/uaccess.h
-> +++ b/arch/x86/include/asm/uaccess.h
-> @@ -598,7 +598,7 @@ _label:									\
->   * We want the unsafe accessors to always be inlined and use
->   * the error labels - thus the macro games.
->   */
-> -#define unsafe_copy_loop(dst, src, len, type, label)				\
-> +#define unsafe_put_loop(dst, src, len, type, label)				\
->  	while (len >= sizeof(type)) {						\
->  		unsafe_put_user(*(type *)(src),(type __user *)(dst),label);	\
->  		dst += sizeof(type);						\
-> @@ -611,10 +611,29 @@ do {									\
->  	char __user *__ucu_dst = (_dst);				\
->  	const char *__ucu_src = (_src);					\
->  	size_t __ucu_len = (_len);					\
-> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
-> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
-> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
-> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
-> +	unsafe_put_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
-> +	unsafe_put_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
-> +	unsafe_put_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
-> +	unsafe_put_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
-> +} while (0)
-> +
-> +#define unsafe_get_loop(dst, src, len, type, label)				\
-> +	while (len >= sizeof(type)) {						\
-> +		unsafe_get_user(*(type __user *)(src),(type *)(dst),label);	\
+I think we should revert the original patch.
 
-Hi,
+The premise is that we can save some allocator calls by requesting
+higher orders and splitting them up into singles. This is a frivolous
+and short-sighted use of a very coveted and expensive resource.
 
-Just wanted to check if src and dst need to be swapped? Same for arm64 patch.
+The buddy allocator tries hard to retain contiguity *if it isn't
+needed by the caller*. This patch actively works around that.
 
-> +		dst += sizeof(type);						\
-> +		src += sizeof(type);						\
-> +		len -= sizeof(type);						\
-> +	}
-> +
-> +#define unsafe_copy_from_user(_dst,_src,_len,label)			\
-> +do {									\
-> +	char *__ucu_dst = (_dst);					\
-> +	const char __user *__ucu_src = (_src);				\
-> +	size_t __ucu_len = (_len);					\
-> +	unsafe_get_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
-> +	unsafe_get_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
-> +	unsafe_get_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
-> +	unsafe_get_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
->  } while (0)
->  
->  #ifdef CONFIG_CC_HAS_ASM_GOTO_OUTPUT
-> -- 
-> 2.49.0
-> 
-> 
+The cost of recreating those higher orders elsewhere is shouldered by
+whoever actually needs the contiguity down the line. And that process
+is orders of magnitudes more expensive than we save here:
+
+We're saving cycles per page in the vmalloc path, and later spend tens
+of thousands of cycles per page to recreate the contiguity. Scanning
+PFN ranges, folio locks, rmap walks, TLB flushes, page copies.
+
+That's a terrible trade-off.
