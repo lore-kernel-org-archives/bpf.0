@@ -1,110 +1,161 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21F563AC0E6
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 09:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 817493D092D
+	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 10:25:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777455685; cv=none; b=jMt2fO+XRwg6YKoslbSdgAcNiwzfO4/H4VDu5O1RU7ETwCIzpR0mmxEhynuljWPceb5i39ZeNSrZZAZSRQmKNTpX3ZX7HADsE7i2QFQOyn/NyR3kd1qXDvg1tFJNePL+J3nC0ezZ71rzvB90Mz+gsN1Am4JRutOAlrR3WI13w9E=
+	t=1777458337; cv=none; b=nXn1nvHvVE7hnt/6RZUVWW1xfzWIFtE3aWil7kXNhTVDOCUevd+KBtJrY9TNGZ/p5nr5vBlZFBxjSvpYMatpQerEjcpLJCsBiuLsaD8r1OF+mDEXKPA+cFtozi6JeGbO/Lxi8b3A6qPJkALgTeao/93ijPIYlyOp1DAf8Gh805k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777455685; c=relaxed/simple;
-	bh=Fjw4fusNEIPqHrb1lk1Mq47GHfYCNEOxMbTroxbWuuo=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=sBg0JGLmHx4bKi3PZO3ux5EDmo/9lPUMrEz2/qa56Pu8XyTkCzEVWhTybRFqJqB0DGp9ifPk3KlsyJrsZHDcJdfHU/ujH1DhUp0lo4tyc0WMhCae9NqmnPhxaItqi9qLY2VGSQfuBKsSOQIvrt98BFo4HZOzxq0YjLViMAcVs60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=emso+6Rq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777458337; c=relaxed/simple;
+	bh=uKx2BLK4SWtORQ3Y1X9QU+u3JmhryAfpmr007sf8OrM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=dK9wY684v7bCX1I/X5xn578C9r+DP/ygT1hmsvdNACxzGeKGhtxUZbGBZv8Zt7Wu26Hh9sWLckV9w8g+88NsbEge+VjNdxPvoqv3cIRuSZGbKXvpPRnWON6Yhcw7BRcsfCx7aPBgdnVtk8a6dFLheKsRJdab8j2Rl5EOc9ENiDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=syDuJ2eb; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="emso+6Rq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AF41C2BCB3;
-	Wed, 29 Apr 2026 09:41:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777455684;
-	bh=Fjw4fusNEIPqHrb1lk1Mq47GHfYCNEOxMbTroxbWuuo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=emso+6RqRh9IDbk0r8bnpgw9X75TvZ4ZRpXU51UDuGcrOSkcMxQOxUdG6SxrsZito
-	 n1R0nPdqcyvGMLip3gVT3DBy8lkp4aJACwQUe6uabTGi0h6M9YkGQbfuIxaArQ54/E
-	 MABhXMol/tJY9CozEv/hbVWR5a3t4tN9XovhMkNuwMOVU9KycP5lsYcVB1zoUTcsc6
-	 wAEdVISXK+I2y+EIMFzUX/aB5eeXtK9IF6eNCGcPwZVKWKaj7UNkjazcrAX8fZYjL1
-	 XW6i1NT4Y+lBdYK5cKZfUBXw/S1TuUXwqPHfIz9iiJ0ok0oSmtm5DfZ21jCwxrZQ5V
-	 YUSDMHf6GGw1g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] bpf: bpf_dbg: fix off-by-one in cmd_select
-Reply-To: sashiko@lists.linux.dev
-To: "Hasan Basbunar" <basbunarhasan@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260429084441.22089-1-basbunarhasan@gmail.com>
-References: <20260429084441.22089-1-basbunarhasan@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Apr 2026 09:41:23 +0000
-Message-Id: <20260429094124.8AF41C2BCB3@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="syDuJ2eb"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1777458333;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0ubnPqyEuUH+bb9tWP9+TOUp+n6C5onOR58LCuBDEiw=;
+	b=syDuJ2ebh9z2sjffREH58o0aT6Ajjew8W5I8ReEUtvp2EQkdghmYv8iT9JcU1iX87oMIbX
+	D+xmbMoFNHgWVKDoL6XEe6kPFjJgAeA5FQrv1tK/6uUbSyjmFqItMdxDS/n3eJA5ihtrWC
+	pDy1LXDxeyfrSgRVjezaD0bM6Fa+Scc=
+From: Usama Arif <usama.arif@linux.dev>
+To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+Cc: Usama Arif <usama.arif@linux.dev>,
+	Yury Norov <ynorov@nvidia.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	David Laight <david.laight.linux@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	linux-alpha@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	kvm@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	dmaengine@vger.kernel.org,
+	linux-efi@vger.kernel.org,
+	linux-fsi@lists.ozlabs.org,
+	amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org,
+	linux-wpan@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-staging@lists.linux.dev,
+	linux-serial@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	xen-devel@lists.xenproject.org,
+	linux-fsdevel@vger.kernel.org,
+	ocfs2-devel@lists.linux.dev,
+	bpf@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-mm@kvack.org,
+	linux-x25@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	sound-open-firmware@alsa-project.org,
+	linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org,
+	linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH v1 7/9] x86: Add unsafe_copy_from_user()
+Date: Wed, 29 Apr 2026 03:25:19 -0700
+Message-ID: <20260429102520.1617327-1-usama.arif@linux.dev>
+In-Reply-To: <0ee46bb228d97163fbdc14f2a7c52b93d8bc34ce.1777306795.git.chleroy@kernel.org>
+References: 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The patch introduces a logic regression in `cmd_select` that ski=
-ps bounds-checking for the newly selected packet, allowing subsequent comma=
-nds to blindly dereference invalid or out-of-bounds packets and crash the d=
-ebugger.
---
+On Mon, 27 Apr 2026 19:13:48 +0200 "Christophe Leroy (CS GROUP)" <chleroy@kernel.org> wrote:
 
-commit 34793f5a31a990a20ff41f65cd4c82f4419849d0
-Author: Hasan Basbunar <basbunarhasan@gmail.com>
+> At the time being, x86 and arm64 are missing unsafe_copy_from_user().
+> 
+> Add it.
+> 
+> Signed-off-by: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
+> ---
+>  arch/x86/include/asm/uaccess.h | 29 ++++++++++++++++++++++++-----
+>  1 file changed, 24 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+> index 3a0dd3c2b233..10c458ffa399 100644
+> --- a/arch/x86/include/asm/uaccess.h
+> +++ b/arch/x86/include/asm/uaccess.h
+> @@ -598,7 +598,7 @@ _label:									\
+>   * We want the unsafe accessors to always be inlined and use
+>   * the error labels - thus the macro games.
+>   */
+> -#define unsafe_copy_loop(dst, src, len, type, label)				\
+> +#define unsafe_put_loop(dst, src, len, type, label)				\
+>  	while (len >= sizeof(type)) {						\
+>  		unsafe_put_user(*(type *)(src),(type __user *)(dst),label);	\
+>  		dst += sizeof(type);						\
+> @@ -611,10 +611,29 @@ do {									\
+>  	char __user *__ucu_dst = (_dst);				\
+>  	const char *__ucu_src = (_src);					\
+>  	size_t __ucu_len = (_len);					\
+> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
+> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
+> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
+> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
+> +	unsafe_put_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
+> +	unsafe_put_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
+> +	unsafe_put_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
+> +	unsafe_put_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
+> +} while (0)
+> +
+> +#define unsafe_get_loop(dst, src, len, type, label)				\
+> +	while (len >= sizeof(type)) {						\
+> +		unsafe_get_user(*(type __user *)(src),(type *)(dst),label);	\
 
-bpf: bpf_dbg: fix off-by-one in cmd_select
+Hi,
 
-This commit changes the loop in cmd_select() to start from 1 instead of 0.
-The intent is to fix an off-by-one error where selecting a packet advances
-the cursor one packet too far.
+Just wanted to check if src and dst need to be swapped? Same for arm64 patch.
 
-> After this fix, 'select K' shows packet K for all K in 1..N, and
-> 'select N+1' correctly errors with "no packet #N+1 available!".
-
-Is this description accurate?
-
-For select N+1, the loop will run N times and attempt to validate the
-first N packets. If the Nth packet is valid, pcap_next_pkt() returns
-true and parks the cursor at the end of the file. Because have_next remains
-true, it appears the function will return CMD_OK rather than an error.
-
-Does it only error during testing due to a pre-existing off-by-one check in
-pcap_next_pkt() that falsely rejects valid packets aligning exactly with the
-file's end? If the PCAP has any trailing garbage bytes, it seems select N+1
-would silently succeed.
-
-> diff --git a/tools/bpf/bpf_dbg.c b/tools/bpf/bpf_dbg.c
-> index 00e560a17baf..4895602ab37d 100644
-> --- a/tools/bpf/bpf_dbg.c
-> +++ b/tools/bpf/bpf_dbg.c
-> @@ -1141,7 +1141,7 @@ static int cmd_select(char *num)
->  	pcap_reset_pkt();
->  	bpf_reset();
-> =20
-> -	for (i =3D 0; i < which && (have_next =3D pcap_next_pkt()); i++)
-> +	for (i =3D 1; i < which && (have_next =3D pcap_next_pkt()); i++)
-
-Does this change skip bounds checking for the newly selected packet?
-
-Looking at pcap_next_pkt(), it validates the current packet and then
-unconditionally advances the cursor. By reducing the loop to which - 1
-iterations, it seems cmd_select() positions the cursor on the target packet
-but never passes that packet to pcap_next_pkt() for validation.
-
-For example, if which is 1, the loop executes 0 times and have_next remains
-true. Could this cause cmd_select() to return CMD_OK even if the PCAP is
-empty or the first packet is truncated?
-
-If so, could subsequent commands like run or step blindly dereference the
-unvalidated packet from pcap_curr_pkt(), potentially causing an
-out-of-bounds memory read?
-
->  		/* noop */;
->  	if (!have_next || pcap_curr_pkt() =3D=3D NULL) {
->  		rl_printf("no packet #%u available!\n", which);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260429084441.2208=
-9-1-basbunarhasan@gmail.com?part=3D1
+> +		dst += sizeof(type);						\
+> +		src += sizeof(type);						\
+> +		len -= sizeof(type);						\
+> +	}
+> +
+> +#define unsafe_copy_from_user(_dst,_src,_len,label)			\
+> +do {									\
+> +	char *__ucu_dst = (_dst);					\
+> +	const char __user *__ucu_src = (_src);				\
+> +	size_t __ucu_len = (_len);					\
+> +	unsafe_get_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
+> +	unsafe_get_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
+> +	unsafe_get_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
+> +	unsafe_get_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
+>  } while (0)
+>  
+>  #ifdef CONFIG_CC_HAS_ASM_GOTO_OUTPUT
+> -- 
+> 2.49.0
+> 
+> 
