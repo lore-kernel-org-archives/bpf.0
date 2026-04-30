@@ -1,29 +1,29 @@
-Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.6])
+Received: from m16.mail.126.com (m16.mail.126.com [117.135.210.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4B2342CA7;
-	Thu, 30 Apr 2026 05:48:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CDB419D092;
+	Thu, 30 Apr 2026 05:48:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777528117; cv=none; b=auoDRlZ33AB/mBZCAUUgg1SfUHviKIkaBQzS3cHd+22rChAvw9ZgAYhIZqpysPxG+RFBs7yCaxLnQ17q/EEWyLp1sb+XKEZ36CugiCyuSrti8A6y3k9KiZ2xmRQOZAOUpzPGseuEPiI4zqfLnQQ0aQxwwaBDx8/3+NYFFrXj5/g=
+	t=1777528130; cv=none; b=cxb+SW015tFzPKRUx90bPAtvEDyIHGEZUphjT2dOA6f0H7hp8kVHUHPkQojrQk09tTEc9WrGl7EZ2z0vjsV3GvFEaGvqb0owTQwUvrEXaazXEFvF4sHjW8ODjWDYmw+6pyGZO7feA9sPsZRQCTSPhaxbXbO6DLshXdguoNNO9AM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777528117; c=relaxed/simple;
-	bh=HP1pSMM9V2ArS02zWR8uH4xFmoyqTB/Yxh6lYmMea5s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UZAZQSARt6XBS0WHn8t/K6gBOMZttGYNpXGsofXq0GbxQdaq9WrA8IhZAxcaBdaLeH1f2C2Yaz0MmCohgnMvlGJRwC/Rzuvcwc6XhTEGWkdG4YqKelhJ8tMXQaxxwN6lS5Uu6x5pe5TXbf1ycI0zBzaIMXsM4UmmT6w14X+qjC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=b5lLOSZv; arc=none smtp.client-ip=220.197.31.6
+	s=arc-20240116; t=1777528130; c=relaxed/simple;
+	bh=VEVeRnr6OLUlat5XpaoH5+gakKZyyaACOfNTuaD1cRw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VTUZ8RHcQ1WOhUY/X183/nARGdQoIibsMmwztCyKTLB2lt8QWgxr7zbW7hpmnv8UOEZMoqhjWS8RR+6TU2Sa8Nc/HGKUywFyKJrs0I6rwhlpntBfZShKsKQdgfZeJvuwBGW04PxTpfWvyK4+0fin6hHiQFYGR2c5pSyl6R0ZmpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=UY13qZ/L; arc=none smtp.client-ip=117.135.210.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="b5lLOSZv"
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="UY13qZ/L"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=0m
-	8TYbetduYdxNm+Um1dv88oPni/RqlOcUYxgZMk5KI=; b=b5lLOSZvuYiIdsV2M1
-	rtkvo/HsxQZp6yZjtW/rHyPeYdeOOeUmbD9z9qnrZ6maXiCoOcQUghhOHncuzmbo
-	U7IgSPt5wajj9RCahr9kPPyHz6CeRrI0Kcf/7JR2JuhwheR5l/b7b42fwf76xLN7
-	8BmsoQf3dL+G7waKmSzeULFyE=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Rz
+	jqN/aA6EV6+Xb+ZRvgUonnTkHTfHjAf8xD8ppttkc=; b=UY13qZ/Lj4/mEhFNfU
+	yhtg4du6IKhqyaQ3B0N9v/ssoxZuqLRxfJaQJfLRVef8sh6s6bIQdXS+Kg7SIknY
+	cAOb0ioJztgXoJCwvSigD4U1EVQyjH9zEllJ9xftgJPAvqDrvsTrZEjT8lOTkN/n
+	Znn8aRGLXjAMDc28Cd7Dmo2mE=
 Received: from song-MS-7D48.. (unknown [])
-	by gzsmtp4 (Coremail) with SMTP id PykvCgDHN2Pk7PJpXA58AA--.25521S2;
-	Thu, 30 Apr 2026 13:47:17 +0800 (CST)
+	by gzsmtp2 (Coremail) with SMTP id PSkvCgD31y7c7PJpwDQpDw--.55843S2;
+	Thu, 30 Apr 2026 13:47:10 +0800 (CST)
 From: Song Chen <chensong_2000@126.com>
 To: andrii@kernel.org,
 	eddyz87@gmail.com,
@@ -41,9 +41,9 @@ To: andrii@kernel.org,
 Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Song Chen <chensong_2000@126.com>
-Subject: [PATCH 2/2] kernel/bpf/verifier: Support module kfunc resolution via instruction offset
-Date: Thu, 30 Apr 2026 13:47:14 +0800
-Message-ID: <20260430054714.38980-1-chensong_2000@126.com>
+Subject: [PATCH 1/2] tools/lib/bpf/libbpf: Prioritize module kfuncs over vmlinux kfuncs
+Date: Thu, 30 Apr 2026 13:47:07 +0800
+Message-ID: <20260430054707.38965-1-chensong_2000@126.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -52,47 +52,81 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PykvCgDHN2Pk7PJpXA58AA--.25521S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7AFyDuFyrXF43uF13WF17KFg_yoW8GryDpF
-	4rGFZ09r40vw13Cw1kAF4IvFyUGan8Kw47Kan8J3yayr10qw4IyF4jkr1av3sIyw48A3WS
-	yFW09Fyjva4UZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UIhFxUUUUU=
-X-CM-SenderInfo: xfkh02prqjsjqqqqqiyswou0bp/xtbBpAWLC2ny7OWP3QAA3h
+X-CM-TRANSID:PSkvCgD31y7c7PJpwDQpDw--.55843S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KF45Zr4DCw47Ar43Ar47urg_yoW8ur4kpF
+	Z5Jr13ZF4xJrySvFWkZrW5u343C3WxKw42vFW3JF1rZr1rtF4kJF1Fy3WYyF90v34qva40
+	9r4YqFy7C3yUZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UIg4hUUUUU=
+X-CM-SenderInfo: xfkh02prqjsjqqqqqiyswou0bp/xtbBsh6JCWny7N6arwAA3w
 
-Use the instruction's 'off' field to indicate the source of a kfunc.
-When libbpf resolves a kfunc, it sets insn->off to 0 for vmlinux
-kfuncs or a non-zero module ID for module kfuncs.
+Change the kfunc resolution order in find_ksym_btf_id() to search
+module BTFs before vmlinux BTF. This allows kernel modules to override
+vmlinux kfuncs with the same name, enabling a form of live-patching
+for kfuncs.
 
-The verifier now checks insn->off to determine where to look up the
-kfunc address: off == 0 searches in vmlinux, while off > 0 searches
-in the corresponding module BTF. This enables proper resolution of
-module kfuncs that may override vmlinux kfuncs with the same name.
-
-This works in conjunction with the libbpf change that prioritizes
-module kfuncs during BTF resolution.
+Previously, vmlinux kfuncs were always preferred, making it impossible
+for modules to provide enhanced or fixed versions of existing kfuncs.
+With this change, modules can now override kernel kfuncs, while
+programs that don't use module BTFs remain unaffected.
 
 Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Signed-off-by: Song Chen <chensong_2000@126.com>
 ---
- kernel/bpf/verifier.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/lib/bpf/libbpf.c | 34 ++++++++++++++++++----------------
+ 1 file changed, 18 insertions(+), 16 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 159b25f8269d..93f275e3c1e5 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3498,7 +3498,10 @@ static int add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, s16 offset)
- 	if (err)
- 		return err;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 0be7017800fe..9c308930bddb 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -8538,29 +8538,31 @@ static int find_ksym_btf_id(struct bpf_object *obj, const char *ksym_name,
+ {
+ 	struct module_btf *mod_btf;
+ 	struct btf *btf;
+-	int i, id, err;
++	int i, id = 0, err;
  
--	addr = kallsyms_lookup_name(kfunc.name);
-+	if (offset)
-+		addr = module_kallsyms_lookup_name(kfunc.name);
-+	else
-+		addr = kallsyms_lookup_name(kfunc.name);
- 	if (!addr) {
- 		verbose(env, "cannot find address for kernel function %s\n", kfunc.name);
- 		return -EINVAL;
+-	btf = obj->btf_vmlinux;
+ 	mod_btf = NULL;
+-	id = btf__find_by_name_kind(btf, ksym_name, kind);
+ 
+-	if (id == -ENOENT) {
+-		err = load_module_btfs(obj);
+-		if (err)
+-			return err;
++	err = load_module_btfs(obj);
++	if (err)
++		goto search_vmlinux;
+ 
+-		for (i = 0; i < obj->btf_module_cnt; i++) {
+-			/* we assume module_btf's BTF FD is always >0 */
+-			mod_btf = &obj->btf_modules[i];
+-			btf = mod_btf->btf;
+-			id = btf__find_by_name_kind_own(btf, ksym_name, kind);
+-			if (id != -ENOENT)
+-				break;
+-		}
++	for (i = 0; i < obj->btf_module_cnt; i++) {
++		/* we assume module_btf's BTF FD is always >0 */
++		mod_btf = &obj->btf_modules[i];
++		btf = mod_btf->btf;
++		id = btf__find_by_name_kind_own(btf, ksym_name, kind);
++		if (id != -ENOENT)
++			goto found;
+ 	}
+-	if (id <= 0)
++
++search_vmlinux:
++	btf = obj->btf_vmlinux;
++	mod_btf = NULL;
++	id = btf__find_by_name_kind(btf, ksym_name, kind);
++	if (id == -ENOENT)
+ 		return -ESRCH;
+ 
++found:
+ 	*res_btf = btf;
+ 	*res_mod_btf = mod_btf;
+ 	return id;
 -- 
 2.43.0
 
