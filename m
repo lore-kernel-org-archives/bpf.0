@@ -1,148 +1,150 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C907C359A6C
-	for <bpf@vger.kernel.org>; Wed, 29 Apr 2026 23:57:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B682E63C
+	for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 00:31:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777507054; cv=none; b=MOxr54+6OfA7hssbohHknzqAbjbZqJluJ/WGB0ODRYELiR4Rm/LcOU/reXwlmhGyoYJl3AsEQbkmx+FDfm40xsSJ7ePW6DzhzVAnesaxnPifzlJccUa69+WZdOES1L+7LWdUhqcq3/gDUIX0Y3a0d/+baBsMoMLLZLjWydXDbO4=
+	t=1777509112; cv=none; b=uVlaEwjoH+eQSyohotsbJ9F0GB9x0PUqVduFRr0NNJlI9XLuAX4hPIEvGYxFvvM3OO7SLuRvu0f0i0hR98nv+HL+xx3EkHaLD35nJzcnJBmydWnG8y+MnYC7jT8tl8uIX86ha4dIhiKpmZnWrKIw762Dz1akk13lrs53frg/KWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777507054; c=relaxed/simple;
-	bh=3DOPIjlDEPHs1RvXSpOfs7tN35qpUrezxPdh+YGQysE=;
+	s=arc-20240116; t=1777509112; c=relaxed/simple;
+	bh=M+RkB+8Rnys/ZZ9UQuEl3jP8D5ca43+eti7gHYBjvHU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=V3gBCPgA9vC+IGDCcdd0bnmxcUYMrzHOE3oGL5XQ9yCPFyVbEuTx3g7dAigQ1VeAYz8ODXOpHVSoHtGezwZzKdk9VUZC71Bb/+bIRW0X3bUD2leDLfFEjXa2IytK4WhTI/Zld/aa8xm0nn2J3tPDiwHklKq35kluphh2GAu91VI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CDHI9yt9; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=CtbMmWoehT/4sbIkI9lSqL5PXFdR3Ia9hWN7tAWcnex4UuFoENWFSgxuJoGe/s0ZLCBFs7drLUZQ0zpbzV0caKjRRg0s1r1rkZBrNxmcjqv/nr9xShm6Fj/XbMWNfTVOP/gLSs5wNLJeN6NDVZUShch4RZ3UART7Jk1pmo1XchU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CNrUf/2t; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CDHI9yt9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65395C19425;
-	Wed, 29 Apr 2026 23:57:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CNrUf/2t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 827D0C19425;
+	Thu, 30 Apr 2026 00:31:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777507054;
-	bh=3DOPIjlDEPHs1RvXSpOfs7tN35qpUrezxPdh+YGQysE=;
+	s=k20201202; t=1777509111;
+	bh=M+RkB+8Rnys/ZZ9UQuEl3jP8D5ca43+eti7gHYBjvHU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=CDHI9yt9iybBv8XvKio9Wn9irm2hW+Sr3ZAE94wcPgFTD/ZEP5LG19UYJLIaSoPcD
-	 y3sauOG7zK3bTBV/ifjqrq3hLxtfEgciCB5wisft9k0yFsX0BXwSHw4LANIubMkcz2
-	 /o1KOaq5VdGvaTw9tD2FOZzcub671BmB+xA6jNMl4X0wveyrHNZ1c264VaoXQlmXev
-	 zWRtANfVgRHvHOIXHOU5A/rlH1K7VTEvz4BzvaOoabgL3xwNfZc5kfYrD4DHF7ZYnd
-	 97zN2Qeru48OJsZtWLnPD8NZRn24lv7t5Nj0XOd5qqxviLGUqIgb0c32uIvXowYy+x
-	 QOutuJsV28nWw==
+	b=CNrUf/2tvLE5xE3fBfCRbadKzLbBT4+zlkPQQLz4AijbRN4fuY3TnLySmxVPM6uFD
+	 MUnJA5hRwOP9huuQuX+glt4EEvKld0+rSOV9wYpvGiJ4j39J9yDvs7jAUFFLsBi+ph
+	 +WB3HcK/J6tIWu5ckSRwz95HedV57z7fG5Q13w+rN4qbsl3AVh00c9yAECnrWFQmtj
+	 dPLRZJbWsrQio/hcR0Dl32fXOeDwd6f7D++jWWO2KERcF0Ctv14aX82FJLJ8up2J8r
+	 L/xXAqPCStRnPjE2E/qV3Qd2jQe3LBKwjCaqJZRbCQB5AjqD2FV9/sssMWBpV4V1sB
+	 Q9Plk1rrlit8A==
 From: sashiko-bot@kernel.org
-Subject: Re: [v6 09/10] selftests/hornet: Add a selftest for the Hornet LSM
+Subject: Re: [v6 10/10] ipe: Add BPF program load policy enforcement via
+ Hornet integration
 Reply-To: sashiko@lists.linux.dev
 To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260429191431.2345448-10-bboscaccy@linux.microsoft.com>
-References: <20260429191431.2345448-10-bboscaccy@linux.microsoft.com>
+In-Reply-To: <20260429191431.2345448-11-bboscaccy@linux.microsoft.com>
+References: <20260429191431.2345448-11-bboscaccy@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 29 Apr 2026 23:57:33 +0000
-Message-Id: <20260429235734.65395C19425@smtp.kernel.org>
+Date: Thu, 30 Apr 2026 00:31:50 +0000
+Message-Id: <20260430003151.827D0C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Makefile targets lack `$(OUTPUT)/` prefix, breaking out-of-tree =
-builds.
-- [Medium] Makefile hardcodes host architecture and kernel paths, breaking =
-cross-compilation.
-- [Medium] Makefile has an unconditional build dependency on kernel cryptog=
-raphic signing keys.
-- [Medium] BPF program uses `bpf_probe_read_str()` for a user-space pointer.
-- [Medium] BPF program uses `BPF_CORE_READ()` to access tracepoint context =
-fields.
+- [High] Silent fail-open of `BPF_PROG_LOAD` policies when `CONFIG_IPE_PROP=
+_BPF_SIGNATURE` is disabled
+- [Low] Build failure due to unconditional access to conditionally compiled=
+ field `ctx->bpf_kernel`
 --
 
-commit 1e13c1e9492cd70a4a039a9763aae8236928bf0c
+commit 168706f9eca9b1981fccd36319334eda60264af6
 Author: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
-selftests/hornet: Add a selftest for the Hornet LSM
 
-This selftest contains a testcase that utilizes light skeleton eBPF
-loaders and exercises hornet's map validation.
+ipe: Add BPF program load policy enforcement via Hornet integration
 
-> diff --git a/tools/testing/selftests/hornet/Makefile b/tools/testing/self=
-tests/hornet/Makefile
-> new file mode 100644
-> index 000000000000..432bce59f54e
-> --- /dev/null
-> +++ b/tools/testing/selftests/hornet/Makefile
+This commit adds support for the bpf_prog_load_post_integrity LSM hook,
+enabling IPE to make policy decisions about BPF program loading based on
+integrity verdicts from the Hornet LSM. It introduces the BPF_PROG_LOAD
+operation and multiple properties like bpf_signature, bpf_keyring, and
+bpf_kernel.
+
+> diff --git a/security/ipe/eval.c b/security/ipe/eval.c
+> index 21439c5be336..9a6d583fea12 100644
+> --- a/security/ipe/eval.c
+> +++ b/security/ipe/eval.c
 [ ... ]
-> +BPF_CFLAGS :=3D -target bpf \
-> +	-D__TARGET_ARCH_$(ARCH) \
-> +	-I/usr/include/$(shell uname -m)-linux-gnu \
-
-Does this hardcoded include path break cross-compilation? If building for
-arm64 on an x86 host, it looks like this will pull in x86 headers instead
-of the target architecture headers.
-
-> +	$(KHDR_INCLUDES)
-> +
-> +vmlinux.h:
-> +	$(BPFTOOL) btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
-
-Does this hardcode the host kernel's BTF? This will fail in build
-environments where the host kernel lacks BTF, or when cross-compiling
-where the target kernel's built BTF ($(objtree)/vmlinux) should be used.
-
-Also, shouldn't custom build rules like this use the $(OUTPUT)/ prefix?
-Since this Makefile includes ../lib.mk, items in TEST_GEN_PROGS and
-TEST_GEN_FILES are prefixed with $(OUTPUT)/. When building out-of-tree
-(make O=3Ddir), make might fail to match the expected $(OUTPUT)/ targets
-for vmlinux.h, trivial.bpf.o, loader.h, and the other explicit rules.
-
-> +
-> +trivial.bpf.o: trivial.bpf.c vmlinux.h
-> +	$(CLANG) $(CFLAGS) $(BPF_CFLAGS) -c $< -o $@
-> +
-> +loader.h: trivial.bpf.o
-> +	$(BPFTOOL) gen skeleton -S -k $(CERTDIR)/signing_key.pem -i $(CERTDIR)/=
-signing_key.x509 \
-
-Does this create an unconditional dependency on kernel cryptographic signing
-keys? If the target kernel configuration disables module signing or other
-features that generate these specific keys, the files won't exist and the
-build might fail unconditionally instead of gracefully skipping.
-
-> +		-L $< name trivial > $@
+> @@ -297,6 +342,32 @@ static bool evaluate_property(const struct ipe_eval_=
+ctx *const ctx,
+>  		return evaluate_fsv_sig_false(ctx);
+>  	case IPE_PROP_FSV_SIG_TRUE:
+>  		return evaluate_fsv_sig_true(ctx);
+> +	case IPE_PROP_BPF_SIG_NONE:
+> +		return evaluate_bpf_sig(ctx, LSM_INT_VERDICT_NONE);
 [ ... ]
-> diff --git a/tools/testing/selftests/hornet/trivial.bpf.c b/tools/testing=
-/selftests/hornet/trivial.bpf.c
-> new file mode 100644
-> index 000000000000..d38c5b53ff93
-> --- /dev/null
-> +++ b/tools/testing/selftests/hornet/trivial.bpf.c
+> +	case IPE_PROP_BPF_KERNEL_FALSE:
+> +		return !ctx->bpf_kernel;
+> +	case IPE_PROP_BPF_KERNEL_TRUE:
+> +		return ctx->bpf_kernel;
+
+If the kernel is compiled with CONFIG_IPE_PROP_BPF_SIGNATURE disabled,
+will this cause a build failure?
+
+In security/ipe/eval.h, the bpf_kernel field is conditionally compiled:
+
+#ifdef CONFIG_IPE_PROP_BPF_SIGNATURE
+	enum lsm_integrity_verdict bpf_verdict;
+	s32 bpf_keyring_id;
+	bool bpf_kernel;
+#endif /* CONFIG_IPE_PROP_BPF_SIGNATURE */
+
+Since evaluate_property() accesses ctx->bpf_kernel unconditionally, it seems
+this would result in an undefined struct member error when the config is
+turned off.
+
+>  	default:
+>  		return false;
+>  	}
+
+> diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
+> index 495bb765de1b..5af13903287f 100644
+> --- a/security/ipe/ipe.c
+> +++ b/security/ipe/ipe.c
 [ ... ]
-> +SEC("tracepoint/syscalls/sys_enter_unlinkat")
-> +int handle_enter_unlink(struct trace_event_raw_sys_enter *ctx)
-> +{
-> +	char filename[128] =3D { 0 };
-> +	struct task_struct *task;
-> +	unsigned long start_time =3D 0;
-> +	int pid =3D bpf_get_current_pid_tgid() >> 32;
-> +	char *pathname_ptr =3D (char *) BPF_CORE_READ(ctx, args[1]);
+> @@ -60,6 +70,10 @@ static struct security_hook_list ipe_hooks[] __ro_afte=
+r_init =3D {
+>  #ifdef CONFIG_IPE_PROP_FS_VERITY_BUILTIN_SIG
+>  	LSM_HOOK_INIT(inode_setintegrity, ipe_inode_setintegrity),
+>  #endif /* CONFIG_IPE_PROP_FS_VERITY_BUILTIN_SIG */
+> +#ifdef CONFIG_IPE_PROP_BPF_SIGNATURE
+> +	LSM_HOOK_INIT(bpf_prog_load_post_integrity, ipe_bpf_prog_load_post_inte=
+grity),
+> +	LSM_HOOK_INIT(bpf_prog_load, ipe_bpf_prog_load),
+> +#endif /* CONFIG_IPE_PROP_BPF_SIGNATURE */
+>  };
 
-Should tracepoint arguments be accessed directly (e.g., ctx->args[1])
-instead of using BPF_CORE_READ()?=20
+Does this create a scenario where policies fail-open silently if
+CONFIG_IPE_PROP_BPF_SIGNATURE is disabled?
 
-Passing the verifier-translated tracepoint context pointer (PTR_TO_CTX)
-to memory-reading helpers (which BPF_CORE_READ expands to) is an
-anti-pattern that defeats direct memory access optimizations and can
-lead to verifier rejection.
+> diff --git a/security/ipe/policy_parser.c b/security/ipe/policy_parser.c
+> index 6fa5bebf8471..71f63de56616 100644
+> --- a/security/ipe/policy_parser.c
+> +++ b/security/ipe/policy_parser.c
+[ ... ]
+> @@ -237,6 +237,7 @@ static const match_table_t operation_tokens =3D {
+>  	{IPE_OP_KEXEC_INITRAMFS,	"op=3DKEXEC_INITRAMFS"},
+>  	{IPE_OP_POLICY,			"op=3DPOLICY"},
+>  	{IPE_OP_X509,			"op=3DX509_CERT"},
+> +	{IPE_OP_BPF_PROG_LOAD,		"op=3DBPF_PROG_LOAD"},
+>  	{IPE_OP_INVALID,		NULL}
+>  };
 
-> +
-> +	bpf_probe_read_str(filename, sizeof(filename), pathname_ptr);
+Because BPF_PROG_LOAD is added unconditionally to the parser, an administra=
+tor
+could load a policy containing "DEFAULT op=3DBPF_PROG_LOAD action=3DDENY"
+successfully.
 
-Will this fail to read the user-space pointer? On architectures with strict
-user/kernel memory separation (like x86 with SMAP), bpf_probe_read_str()
-cannot read user memory. Would bpf_probe_read_user_str() be more
-appropriate here?
+However, because the LSM hooks are not registered, IPE will never evaluate
+BPF program loads. This results in all BPF loads being silently allowed,
+which contradicts the loaded policy.
 
-> +	task =3D (struct task_struct *)bpf_get_current_task();
-> +	start_time =3D BPF_CORE_READ(task, start_time);
+Could the parser be updated to reject BPF_PROG_LOAD rules when the
+corresponding enforcement hooks are disabled?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260429191431.2345=
-448-1-bboscaccy@linux.microsoft.com?part=3D9
+448-1-bboscaccy@linux.microsoft.com?part=3D10
