@@ -1,64 +1,64 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A980F3FB070
-	for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 08:44:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76BDD34EF1F
+	for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 08:45:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777538674; cv=none; b=s3fEGgmZUzWJcUPy8L13pje9SAe8SheI1oqMehW7RiFCPek/a3fFL4U5W8hTX//s1gtqCgHyy+syFw325p/kMGL2dsh+Xp0z0gqk3GZyxzOcN4dPvFElH6vWJ/3BMgAeax2ZUBjjdS9o9Nn9N5nANy1O2Ml1AVFmI0lC6f8VizQ=
+	t=1777538729; cv=none; b=SQYJjONhJrjt3ut0iPUZ36GLlLVQFs+ka97G/ojfujzRhTWs9qmkKTIWMF9YaWM8TwNHVJvYWq03MpOGieooitK/pcLZSAh1HuVgYTFyTI2CISONEwBkzo6MV/DkWnNCeDyUlM3LNvPZ1WxlvXT4Uw+ZfNkUPvC6aVp/XYbPv+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777538674; c=relaxed/simple;
-	bh=wHJZHlhQATkgvaH4ZORqkgzCPcgYCdywLzx2mWeJ63E=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ab73bejb1+bVwilK177Fu5NE8C5y6mVFov8BiOs3KbVwNYBPxhSy5+NxYWi0MaIVXdVRN6fUkI3+9vjuT0jdSsLDOpl2uk03GuyfCQFkFhwRfW9sz7V47RlsNFICM16c29X8KNoCHa/PRtjjJM6toMXF5hNRZWttATZmnQj4h/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OzjUm2d/; arc=none smtp.client-ip=209.85.221.45
+	s=arc-20240116; t=1777538729; c=relaxed/simple;
+	bh=9JW0V1Jqk2HJn6OAxOnfIEh+5Xo2t8DZwWxlH1Lu1aU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U75CNBHiJH39UFujVHNs9gMOHllioCeNPk/rshL3ojPYInBm510IZM+nttwt6kJOcxAivGBT/q3g4RnFy0poxJZxtcsxJJAuyVTnVLqPNUojO6WlWAmqnjRmhzNhzEnNdPdX9xrUwq9zUZLnnwr6kELkQHFcRP99sfXW/dkDiqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KTHnfBl9; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OzjUm2d/"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43d70b3e159so341982f8f.0
-        for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 01:44:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KTHnfBl9"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-44261378651so1139452f8f.0
+        for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 01:45:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777538671; x=1778143471; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GgFoP+Hqf8/38qhDMqyf+8AbFzuKkMT9RvTAVFKvNjo=;
-        b=OzjUm2d/siiM6Yn6libH9WBg256REqAc2U7Iw4WQJNaV6ciCRGf8nie2x0gCudecSi
-         WjT1KukTa9jWOcGtqexD5SkPsZaXG/P1ov6moRSbh+36oQFKO5sLqaWkzPPyPF2DvDgm
-         YsWlkNyXYQaEanfkQeNV4vyLJD0YhFJUs8k0BPhqbMuJaZymCTm6OmEvpQgDcPmSlAPz
-         RGbKlkLqPUBUC+9X6h/23WMt8YjiZHOdwyaQLFbTCqLqcu3YyxkmUxxvNwFb6ZVYmgTP
-         Db46xSm99S78ZUW0vcUa4tNzd7LrZXDlYElOTt5cDZI0voPKd217Fuuk1sxlVKKUz/g+
-         YMnQ==
+        d=gmail.com; s=20251104; t=1777538727; x=1778143527; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fN/IXRU2Lz0NMw9iP+ZSu90P3q6UL7SFaPXuu14Spgc=;
+        b=KTHnfBl92D26BxRulUNdeZfh0wyVfJb1yLbgiOkwvU77WbqsGvXcytIUzdmQHTl5OQ
+         02PES6axLP3R9zUe6zkGL0oMC4XyIvN+X4i1HzcLvsJrUpxZ+RsvmdNuKxb3BR1ADKXd
+         5pbvhVmuGiDPTxwij/KWkhHMc2Zhnr7+1y/0m6ecIwTfvBvjykJPqFcC7lpG41E84q84
+         zQQp6TjDigxNX7tvOtlq0HKj07zsKtLY6HElgmk9Bx4yfuf7BS2dT9JZe6a4/sa/wgZw
+         zj2d3HHZbq2sxTXJH0RKsqb/U0CshraHYUDWUZeJki15d0bEJbRKvsiZ3Q3He3PfQFWz
+         Om+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777538671; x=1778143471;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GgFoP+Hqf8/38qhDMqyf+8AbFzuKkMT9RvTAVFKvNjo=;
-        b=mS0B8/CgzqVbu/jl90JkoMd1ZrqW5/J34sSYUgfyGDIewMGZdjoWUc4mMkmHXJggZm
-         IC7ScgtiP+K5OVE5ONAbwpOuSJtAvnLiAlqQQZcNKKBciVHz+L6rcK+y/fcCSyrVU5EE
-         0bWSk8d9KAV4OsE2pm4WqI4Zf1mzXHIHkhkLe1TYNmJQaPFtEpTq0oYzgTn/melDZbtv
-         ui/Ed2kr7pQCJAnOIjo0CkbX6wzU1c/BJ5NEWpDduNWyIEPhJuXM0kO7TO/BUNyHYVhg
-         NMo0ndFB4AtThqadsmEtnLjtKH5nufkGPV60p4ZzYjWPTeRk8LwoLS97NOH6mk2XGBsq
-         eLuQ==
-X-Gm-Message-State: AOJu0YzGvyYli3fybOIhbX/YWPuWBkW9QemPE97YuOP8s6OkqMwDa9hh
-	EYqRPRvG3YRqT1xuMK8RBrdZ2TZstUSlMogpbcSvi0J7dwH99VsBZGRl1AxM5Q==
-X-Gm-Gg: AeBDiet0eagDj/7LAzy6odX0HPRh4Q/oF7gUsYAmHykwxoePln+tMBQCdaR+GJHsLPW
-	n49RKcYnQ+9Cw1/8bD9xBJks4cEqELEOlfPs6jKlSTfz7UBHaQJkAfUmz+a6mcsGFLVaaBeoHog
-	3dxUFBM/dNU2wuw0BRtuBNQBKT7ikVfEGuySnNOKzNd6MZzQjc/U18TNpyGkAolfL3rKLVct/iq
-	X0cvGEy/lzuuD/x3Mxk4cpoQuQBFrtDUj0JUfKEyZKrMA+uzf1A3sp50innldnZi9vEhNwE0jfA
-	pgvs3WsqY5I9Ul7+hhTFqwSWlfCdrcw5ROZsfVATgTVsjN/b/CTOWTJUmYM8wXXfBg5CAgTAL5Z
-	8+Ng1WIiJm/LdT4sUbfrOCLAAHFBJhxpUYob8lz+C0g1P4BskecfwYyZKS4iyQAXqcXAfulPU9Y
-	mToqUuSCj+OC3uIzOdj7oIKjp5v9nPqWrib4mjVOJqTmWEce7bvycg/QKyWdomz6BJaGz8qqdPB
-	4yITzWRvCasOqtALrWkJpOXJzqRdljaB42fOQ9I66CpBvrFFD2AtN4RP7pI239ilkCw8dmcmayx
-	IK/ixDbsYKlAO7gdGAufaOjzBPzDVRKFaaBfESp4xokicbDvsZABSw==
-X-Received: by 2002:a05:6000:186c:b0:441:2473:c30a with SMTP id ffacd0b85a97d-4493ec61a3bmr3026040f8f.31.1777538670700;
-        Thu, 30 Apr 2026 01:44:30 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1777538727; x=1778143527;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fN/IXRU2Lz0NMw9iP+ZSu90P3q6UL7SFaPXuu14Spgc=;
+        b=soL9SOY7xdxml4FpN2b4uCPllBHO4gIOrCfh02kWVVZDiJ9kCngyRUgqNp4ydrSUGc
+         f/Xp49wrTZCnZOuhRBxqn7q170hiiEWfy+sHz0W4N4ZecRP7IGL4tkd46q7YObC4Dqgt
+         Svpj77U+Qo5mpapoEH6/+FiAOegdCGmHO+V3PBvFzBVZg7YRdOD6ygL/GpXd9rW7rwVb
+         lZa1J1A0Ju6hFpBx5bhY+eEEh6ZJe4Qs5h9RsCeIzffEJJ00G4+Vd53uaIh+opZ3twgk
+         452ucN1TUdPLVrbt62T2U8ncmT/YGkZRQHsGwDa6k+FiFyco8nzd9vBtXJ9915bSG3+h
+         oaOw==
+X-Gm-Message-State: AOJu0Yw5s3iU855Crfl0qsUrwUOrjuEqO9ZuY6moqatXmjfH3CBN94uj
+	+UzCBd6t58QU1D9JO/W54TuAhUsmS9MmpMuCZqIYPmDb7FLx++KeUx3ZeXuDGg==
+X-Gm-Gg: AeBDiesF+iwv/50VKiqgHucO2ECQPAL+IkSntVgtN8LkuVhvl7e3iG3ddZYHb0yJAZw
+	MgOArX4N3oTQxPMGpRUxFrJv+Hh5WueXwAOONQqAzW5G3dGoJvMSTO4+9niqWEnbCiADc+V1Gg2
+	xteLO2ekA1rhARPvhuItK9vup6SijIvaKKQOgCW52e8UBK5XD7W6utJWgr/S1XI58Cn6Iv3cB8u
+	T+TiPAMgNasdftGTbCwxTkYTMtKxW75ZJtNwUG7aD0jvhWZczlRTdMwtb88+J9b3RcfA6OLrk6g
+	b8JzNWgoJUQpwhG6pn78Tf9ECq1VwOpNMs8cVjH+XymNWprZ0XqRdijruW54jEPeFV6g9J1OpBU
+	ruZ8dyBY7SpsJcUbjRfRVyu2fyduJAX8Np83Q+p7F/XLr8LXcU6c5bla/YO8vrUDvVQAAb1lWUT
+	VMJmnmUVDZaPlcKKe0Uy4H0ueK80eVmiQk8w9WtgmtnukRxpH1cq+evYOlzHO98tpsxW1KWNgLD
+	fGLzfKrSape5cFndJ38NV7rY7J1eefDmilz+S6XiCsycFhrHEAG7hQ6rmopQssqiG1CoFRPIBPP
+	5SMFjGvy/BYvVseEO1SxGYdMhXbMq7JBN/tj6bN5hgTphcZir2WTWw==
+X-Received: by 2002:a05:600c:608f:b0:489:1abb:5559 with SMTP id 5b1f17b1804b1-48a85e24614mr24896685e9.5.1777538726455;
+        Thu, 30 Apr 2026 01:45:26 -0700 (PDT)
 Received: from mail.gmail.com (2a01cb0889497e00275e75a6e46be847.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:275e:75a6:e46b:e847])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-447b76e5c22sm11647119f8f.28.2026.04.30.01.44.29
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a822bceeesm51076305e9.8.2026.04.30.01.45.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Apr 2026 01:44:30 -0700 (PDT)
-Date: Thu, 30 Apr 2026 10:44:28 +0200
+        Thu, 30 Apr 2026 01:45:25 -0700 (PDT)
+Date: Thu, 30 Apr 2026 10:45:24 +0200
 From: Paul Chaignon <paul.chaignon@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -66,9 +66,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next v3 1/2] bpf: Print breakdown of insns processed by
- subprogs
-Message-ID: <5590f9c67e614ec9054d0c7e74e87cc690a52c56.1777538384.git.paul.chaignon@gmail.com>
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Test insns processed breakdown
+Message-ID: <3a5157f4573edaa8846f6fc4041f715136f693b1.1777538384.git.paul.chaignon@gmail.com>
+References: <5590f9c67e614ec9054d0c7e74e87cc690a52c56.1777538384.git.paul.chaignon@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,117 +77,43 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <5590f9c67e614ec9054d0c7e74e87cc690a52c56.1777538384.git.paul.chaignon@gmail.com>
 
-When using global functions (i.e. subprogs), the verifier performs
-function-by-function verification. In that case, the sum of the
-instructions processed in each global function and in the main program
-counts towards the 1 million instructions limit. Only that sum is
-reported in the verifier logs.
-
-While starting to use global functions in Cilium (finally!), we found it
-can be useful to have the breakdown per global function, to understand
-exactly where the budget is currently spent. This patch implements this
-breakdown, under BPF_LOG_STATS, as done for the stack depths.
-
-When iterating over subprogs, we need to skip the hidden subprogs at the
-end because they don't have a corresponding func_info_aux entry and
-calling bpf_subprog_is_global() would result in an OOB access.
+This patch covers in global subprog selftests the new verifier log with
+the breakdown of instructions processed by global subprogs. The test
+ensures the log line is present and that it has the right number of
+subcounts.
 
 Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
 ---
 Changes in v3:
-  - Skip hidden subprogs when displaying stack depths and insns counts.
+  - Limit testing to one program and use a regex to prevent failures
+    across compiler versions.
 Changes in v2:
-  - None for this patch.
+  - Adapted the tests to pass on cpu=v4 and alu32.
 
- include/linux/bpf_verifier.h |  1 +
- kernel/bpf/verifier.c        | 25 ++++++++++++++++---------
- 2 files changed, 17 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/progs/verifier_global_subprogs.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 101ca6cc5424..976e2b2f40e8 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -779,6 +779,7 @@ struct bpf_subprog_info {
- 	u32 exit_idx; /* Index of one of the BPF_EXIT instructions in this subprogram */
- 	u16 stack_depth; /* max. stack depth used by this function */
- 	u16 stack_extra;
-+	u32 insn_processed;
- 	/* offsets in range [stack_depth .. fastcall_stack_off)
- 	 * are used for bpf_fastcall spills and fills.
- 	 */
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 03f9e16c2abe..11054ad89c14 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -18215,6 +18215,7 @@ static int do_check_subprogs(struct bpf_verifier_env *env)
- 	struct bpf_prog_aux *aux = env->prog->aux;
- 	struct bpf_func_info_aux *sub_aux;
- 	int i, ret, new_cnt;
-+	u32 insn_processed;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+index 1e08aff7532e..dc09d0e2d8ad 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
++++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+@@ -46,12 +46,13 @@ __noinline long global_dead(void)
+ }
  
- 	if (!aux->func_info)
- 		return 0;
-@@ -18229,6 +18230,8 @@ static int do_check_subprogs(struct bpf_verifier_env *env)
- 		if (!bpf_subprog_is_global(env, i))
- 			continue;
- 
-+		insn_processed = env->insn_processed;
-+
- 		sub_aux = subprog_aux(env, i);
- 		if (!sub_aux->called || sub_aux->verified)
- 			continue;
-@@ -18236,6 +18239,7 @@ static int do_check_subprogs(struct bpf_verifier_env *env)
- 		env->insn_idx = env->subprog_info[i].start;
- 		WARN_ON_ONCE(env->insn_idx == 0);
- 		ret = do_check_common(env, i);
-+		env->subprog_info[i].insn_processed = env->insn_processed - insn_processed;
- 		if (ret) {
- 			return ret;
- 		} else if (env->log.level & BPF_LOG_LEVEL) {
-@@ -18262,10 +18266,12 @@ static int do_check_subprogs(struct bpf_verifier_env *env)
- 
- static int do_check_main(struct bpf_verifier_env *env)
+ SEC("?raw_tp")
+-__success __log_level(2)
++__success __log_level(6)
+ /* main prog is validated completely first */
+ __msg("('global_calls_good_only') is global and assumed valid.")
+ /* eventually global_good() is transitively validated as well */
+ __msg("Validating global_good() func")
+ __msg("('global_good') is safe for any args that match its prototype")
++__msg("insns processed {{[0-9]+\\+[0-9]+\\+[0-9]+$}}")
+ int chained_global_func_calls_success(void)
  {
-+	u32 insn_processed = env->insn_processed;
- 	int ret;
- 
- 	env->insn_idx = 0;
- 	ret = do_check_common(env, 0);
-+	env->subprog_info[0].insn_processed = env->insn_processed - insn_processed;
- 	if (!ret)
- 		env->prog->aux->stack_depth = env->subprog_info[0].stack_depth;
- 	return ret;
-@@ -18274,19 +18280,20 @@ static int do_check_main(struct bpf_verifier_env *env)
- 
- static void print_verification_stats(struct bpf_verifier_env *env)
- {
--	int i;
-+	/* Skip over hidden subprogs which are not verified. */
-+	int i, subprog_cnt = env->subprog_cnt - env->hidden_subprog_cnt;
- 
- 	if (env->log.level & BPF_LOG_STATS) {
- 		verbose(env, "verification time %lld usec\n",
- 			div_u64(env->verification_time, 1000));
--		verbose(env, "stack depth ");
--		for (i = 0; i < env->subprog_cnt; i++) {
--			u32 depth = env->subprog_info[i].stack_depth;
--
--			verbose(env, "%d", depth);
--			if (i + 1 < env->subprog_cnt)
--				verbose(env, "+");
--		}
-+		verbose(env, "stack depth %d", env->subprog_info[0].stack_depth);
-+		for (i = 1; i < subprog_cnt; i++)
-+			verbose(env, "+%d", env->subprog_info[i].stack_depth);
-+		verbose(env, "\n");
-+		verbose(env, "insns processed %d", env->subprog_info[0].insn_processed);
-+		for (i = 1; i < subprog_cnt; i++)
-+			if (bpf_subprog_is_global(env, i))
-+				verbose(env, "+%d", env->subprog_info[i].insn_processed);
- 		verbose(env, "\n");
- 	}
- 	verbose(env, "processed %d insns (limit %d) max_states_per_insn %d "
+ 	int sum = 0;
 -- 
 2.43.0
 
