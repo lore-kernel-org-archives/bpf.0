@@ -1,110 +1,130 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A70428466;
-	Thu, 30 Apr 2026 13:30:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 462EE41C30D
+	for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 13:41:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777555855; cv=none; b=VLFegq0RmETxgf3B3bP3Y5pXYWJhiIJvFYHktOfgFfEUWPOCrN2OCpUi5fqbjjq7dHrV5jQdP/6r8zRS7vpLcHQGCiKYQiARAN3BpzHXc6CxwM098p2TnxXr8u8BGCBXRItURgO/0etN1qOPGlfOJsiLTV/LtAF6EA40/WYE9sM=
+	t=1777556495; cv=none; b=Mkq5BkMI3wCDf6m8Qe0iWCdfQWtsfFvgxuhyhVfEUO+xc6z6FJ6kYASnQmeGeJN4p9PES6SKPGXSdW610MsF2lb/k68gah3S0mdOJHnA1KwRTtesmvZHgbhEL6ttrq7oWjkR44NSKmDkkoAF/f0tvHmzw/o1OPnelB2ESukCUFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777555855; c=relaxed/simple;
-	bh=ax+ZlzG3JzpEyOXWLGjBwvOJikwf72NuWSrlZfkyUjc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=dqeAgQq7ggUubxy/u3wzqyWFC0RuAsN10wbU7S/E4cA3ojuZu4pxWOAKcIQbVj8NzaeeyehQgThFD3aCAHHSCfvzrLEbKvf9ozrEf625iJhYysAKECUgQmxyBYfyKxT3K99xZPUA8m7VxSEt/gtLB1O28Wvi5gSOLyNV/fzA49s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nn4ZH4IM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777556495; c=relaxed/simple;
+	bh=mhk33mtzD8g4vzwSfKVIfBBgXit6/xNJrz6wTbAeFLk=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=MgqF+gKAZS1bj3uA1k7d2vokR+2XconIy5HZ4eovffATie1pmp8+dzzPlop+5AfEUFev8Z1DBbv6MPczkCEARqVE7NUQp91VrN4/51kfl61vn6nG90CXGNKTH8oMNGMLE7HtSkMMMG3dUbzOFyq1zpGD2CgpvUaYHlqnjU4wzYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gQbWoFc+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nn4ZH4IM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D509C2BCB3;
-	Thu, 30 Apr 2026 13:30:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gQbWoFc+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C77EEC2BCB3;
+	Thu, 30 Apr 2026 13:41:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777555855;
-	bh=ax+ZlzG3JzpEyOXWLGjBwvOJikwf72NuWSrlZfkyUjc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=Nn4ZH4IM8mAh7wzJ7Hs0EXFwva7EvObCD/4pI2dNyr3Rd8YvWnQlzsOuPxRpurhzd
-	 pW70HIQvfZfTMMqb1GWcwj6Fuv2Zy5IfF/unB3SHO1heMARKh1Phn9e7hPNSPDxL7C
-	 a+mOQKAwoExvgQOl6oucmjb9mRsbS7SCD9y2daHw+GFE/6+kARMVTrwPWX6MR0Y7oJ
-	 8bw793TBWO5W7zX5k3HdrJ0guU2H+FVT4YXyakStStq8ZN0Ri3LBsf2e1cu0D/HvWn
-	 BHH0QXvkCD0b0R5co8ZszOWdH1LbwJlDPRm0Ez0GMpUhUa2H1rtSwgcZClYopog+vh
-	 icong+Vjzp9ug==
-Content-Type: multipart/mixed; boundary="===============9109038514088101794=="
+	s=k20201202; t=1777556494;
+	bh=mhk33mtzD8g4vzwSfKVIfBBgXit6/xNJrz6wTbAeFLk=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=gQbWoFc+wcUCJs00WPAdSUyI8Dk5PzzcBReKer797bGA3hmloxl6vFxXPuEa+MVsj
+	 8Ay8t+xunYJDT4OalQV+7poc+rSuqtTeFjp/EToePAmdZMZNGGlqzrCdcrAAZ/VNNU
+	 e2pNsuBtkzRjKW/BTU+Y4KBBm2YwV813OBl4ZuSZdOdg4DXeutOLHQBh6FjdNi8Cms
+	 04O/8LshBdW5cJc7yxDbX6qG6SXoggfTLzw7xGH2aNvDsSoC3ZjGWFdhLFkDwslQQ3
+	 JPTHf/XobNeGLtJa7EIrC+o4/lRKImOYiudqT6RGFbRTN/HMW1g5JrHbTqXhm4IvDq
+	 xU7qR5kDyUITg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v10 05/11] selftests/bpf: Make skeleton headers
+ order-only prerequisites of .test.d
+Reply-To: sashiko@lists.linux.dev
+To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260430-selftests-bpf_misconfig-v10-5-cd302a31af16@suse.com>
+References: <20260430-selftests-bpf_misconfig-v10-5-cd302a31af16@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 30 Apr 2026 13:41:34 +0000
+Message-Id: <20260430134134.C77EEC2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <9f76c238686812e3453aa5541d2a6db53ece8414508a8176a6e556d1eb372254@mail.kernel.org>
-In-Reply-To: <20260430-selftests-bpf_misconfig-v10-10-cd302a31af16@suse.com>
-References: <20260430-selftests-bpf_misconfig-v10-10-cd302a31af16@suse.com>
-Subject: Re: [PATCH bpf-next v10 10/11] selftests/bpf: Provide weak definitions for cross-test functions
-From: bot+bpf-ci@kernel.org
-To: rbm@suse.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 30 Apr 2026 13:30:52 +0000 (UTC)
 
---===============9109038514088101794==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] Changing BPF skeletons to order-only prerequisites of `.test.d` =
+can cause test files to compile against stale `.skel.h` files or fail to co=
+mpile entirely.
+- [Medium] The commit message's justification for keeping `$(BPFOBJ)` as a =
+normal prerequisite relies on a factual misunderstanding of GNU Make semant=
+ics.
+--
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> index 35adc3f6d443..5a864cd8ad1b 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> @@ -252,10 +252,17 @@ static void kprobe_multi_attach_api_subtest(void)
->  	kprobe_multi__destroy(skel);
->  }
->
-> -/* defined in prog_tests/uprobe_multi_test.c */
-> -void uprobe_multi_func_1(void);
-> -void uprobe_multi_func_2(void);
-> -void uprobe_multi_func_3(void);
-> +/*
-> + * Weak uprobe target stubs. noinline is required because
-> + * uprobe_multi_test_run() takes their addresses to configure the BPF
-> + * program's attachment points; an inlined function has no stable
-> + * address in the binary to probe. The strong definitions in
-> + * uprobe_multi_test.c take precedence when that translation unit is
-> + * linked.
-> + */
-> +noinline __weak void uprobe_multi_func_1(void) {}
-> +noinline __weak void uprobe_multi_func_2(void) {}
-> +noinline __weak void uprobe_multi_func_3(void) {}
+commit 8d292a14fcd0b996b2eefecd2620dba48edb8cd2
+Author: Ricardo B. Marli=C3=A8re <rbm@suse.com>
 
-Can compiler optimization passes like Identical Code Folding (ICF) merge
-these three structurally identical weak stub functions into a single
-memory address?
+selftests/bpf: Make skeleton headers order-only prerequisites of .test.d
 
-If they are folded into a single address, bpf_program__attach_uprobe_multi()
-would attach three separate uprobes to the exact same offset, each with a
-different cookie. Calling any of the functions would then execute the shared
-address, triggering all three uprobes simultaneously:
+This commit moves the BPF skeleton dependencies to be order-only prerequisi=
+tes
+for the generated .test.d files. It intends to prevent build failures when
+skeletons are intentionally skipped.
 
-  uprobe_multi_test_run() {
-      uprobe_multi_func_1();  // triggers all 3 uprobes
-      uprobe_multi_func_2();  // triggers all 3 uprobes
-      uprobe_multi_func_3();  // triggers all 3 uprobes
-  }
+> $$(BPFOBJ) is intentionally kept as a normal prerequisite: a libbpf
+> rebuild legitimately invalidates .test.d, since libbpf header changes
+> can affect the headers .test.o sees. Only the skeleton headers are
+> moved to order-only.
 
-This would increment the BPF program counters multiple times per call,
-causing assertions like:
+Does updating .test.d actually force .test.o to rebuild?
 
-  ASSERT_EQ(skel->bss->uprobe_multi_func_1_result, 1, ...);
+In the current Makefile structure, .test.d is attached as an order-only
+prerequisite to .test.o. In GNU Make, an order-only prerequisite being
+updated does not force its dependent targets to rebuild.
 
-to fail deterministically, as the result would be 3 instead of 1.
+It seems .test.o actually rebuilds upon libbpf changes because GCC's
+-MMD flag dynamically embeds explicit paths to the libbpf headers as
+normal prerequisites inside the .d file itself, rather than relying on
+.test.d invalidation.
 
-Would it make sense to make these stubs structurally unique, perhaps by
-adding unique inline assembly to each?
+> Note that adding a new BPF skeleton via a modified existing local header
+> still works correctly: GNU make builds order-only prerequisites that do
+> not exist (the order-only qualifier only suppresses timestamp-driven
+> rebuilds, not existence-driven builds), so a brand-new .skel.h listed in
+> TRUNNER_BPF_SKELS is generated even when .test.d is otherwise up to date.
 
-This concern was raised by sashiko-bot@kernel.org in v9:
-https://lore.kernel.org/bpf/20260429212931.44DD4C19425@smtp.kernel.org/
+Will GNU Make actually build the order-only prerequisites if the target
+itself is already up to date?
 
-[ ... ]
+If a local header is modified, .test.d is not considered out of date
+because it only depends on the .c file and global headers. If the target
+(.test.d) does not need to be rebuilt, Make does not evaluate or build
+its order-only prerequisites at all.
 
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
+ts/bpf/Makefile
+> index 9a4d8bea0c184..608e6dff03926 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -726,11 +726,11 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:		=
+	\
+>  $(TRUNNER_TEST_OBJS:.o=3D.d): $(TRUNNER_OUTPUT)/%.test.d:			\
+>  			    $(TRUNNER_TESTS_DIR)/%.c			\
+>  			    $(TRUNNER_EXTRA_HDRS)			\
+> +			    $$(BPFOBJ) | $(TRUNNER_OUTPUT)		\
+>  			    $(TRUNNER_BPF_SKELS)			\
+>  			    $(TRUNNER_BPF_LSKELS)			\
+>  			    $(TRUNNER_BPF_LSKELS_SIGNED)		\
+> -			    $(TRUNNER_BPF_SKELS_LINKED)			\
+> -			    $$(BPFOBJ) | $(TRUNNER_OUTPUT)
+> +			    $(TRUNNER_BPF_SKELS_LINKED)
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Can this regression cause test files to compile against stale skeleton
+headers or fail to compile entirely?
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25167006036
---===============9109038514088101794==--
+If a developer modifies an existing local header to include a new skeleton
+header, the .test.o file is considered out of date because its previously
+generated .d file tracks the local header. However, the .test.d target
+does not track the local header, so Make considers it up to date.
+
+Because .test.d is up to date, Make skips evaluating its order-only
+prerequisites (the skeletons). Make then proceeds to build .test.o before
+the new skeleton is generated, leading to either a compilation failure or
+a silent build corruption where the test runs against a stale BPF object.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260430-selftests-=
+bpf_misconfig-v10-0-cd302a31af16@suse.com?part=3D5
