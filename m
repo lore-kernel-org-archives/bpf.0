@@ -1,157 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B69414884C
-	for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 18:59:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777575572; cv=none; b=gypmmmRblc6AbxrCk0cRd6gLXOUX78RbCK4bjoGkb9g5iivi98RTQrHuP4RVO2hS/95o/rC7s+uWfsErAQh2MgVnOxkNg1xRX6hj+n1sI/GTtgddeAR9vWc3XNT+tkF/AIQWTv+zHXLmzCWKCzgzHUoO27ReT/7cHhgamJMHbr8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777575572; c=relaxed/simple;
-	bh=cmysySsWdjAW2DeVnRVYBWMGCd1+kfk6SX+VT/GiZBo=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=eZ2xT6hHerGz7E/1UlzvgrdEUJyiHLSZrzRhsDwkC4pWvtpQiqrhC5zEGYWjEIkye99mKb+J1+sLxunxb8bSQRKICNAoTLEqUMelOkIGHB8uogUbXzUD2GEB/o3kzdwqUQnTm7Ein8K4aLqy2DcBLg7MAIbqKE5nRdhKaitnCxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VvOj8rHl; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA1083242B5
+	for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 20:32:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777581178; cv=pass; b=CDYo0sZON6xvTeyts4rKsTmZYdwGAGvbX3eUOn/0QTENLsTClt8L/mPy+xOxqjSa65N1R5AWOaKZyF052jpcONcf9ZCT7/XWw12FoV603er9DReYgMxZ7DKiE9hVk+pI+aWA20mWTjovt/EOlMHOboM9Gq9ELWHptQa/3PUPLms=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777581178; c=relaxed/simple;
+	bh=U2eH8NGTZAa0spz3Gpw8B0ZcuVJWHa8CNLda7oex5Hc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ekq0vSw2bdpByOsqytXOp1pE9yBhi1Ocr3hOi55RjKwOC+qdNJM6IKKHrsS99RAgg9sgUfj/+URWU9Td0R6B+rMMp1iXMLq8dpybkJdkNFKwixcorilpNAH6qkTkV8C/+bsZy4n1lmZZIasxJJAQzHcJT0hNOkUW/kLZU1Gd3gI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=icZoEP0e; arc=pass smtp.client-ip=74.125.82.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VvOj8rHl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6051C2BCB3;
-	Thu, 30 Apr 2026 18:59:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777575571;
-	bh=cmysySsWdjAW2DeVnRVYBWMGCd1+kfk6SX+VT/GiZBo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=VvOj8rHlrGy6LT0daNM8XlNssj9hIFRWZdCUbo3HI+7i7Q/Bd4zU782GGiC55O5Gl
-	 +wfNNObaLhk1bXb/n1QgQxIkbVfAEf16ATromG/UDAyw0xbk8Aw9xQlOAWOP5ttEJo
-	 l9OHd5tngQYnX3/vaigPZN8OuzSmeMbXxFU33c1kI+mbzjKi6o0frFF03rRUHTmqI0
-	 wEzJcZckoTz6h/A5xTrYql6vnpW2IJsAfR+lTunzUqRCAzB4bjnD7cz3eGBVoih3zr
-	 uUlDQeeEak3Ia3dBo+SeHQEgkfaAoxE/WkrRIv8jLz9K/Be8zHmCd5QB6cne37a1GQ
-	 CbO9JhnXKnZ3w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net, v2] net: mana: Fix crash from unvalidated SHM
- offset read from BAR0 during FLR
-Reply-To: sashiko@lists.linux.dev
-To: "Dipayaan Roy" <dipayanroy@linux.microsoft.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <afJUszROT+yKjth0@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <afJUszROT+yKjth0@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 30 Apr 2026 18:59:31 +0000
-Message-Id: <20260430185931.B6051C2BCB3@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="icZoEP0e"
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-12dca45ca21so1831529c88.1
+        for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 13:32:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777581176; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KsGGDDxQE+/BkXkSgAXSUUAOIr0+JrhJEbZo8f5z0g4JNbx/IXRLnI8Q/jGlASYo65
+         bmP7FhTWxAevHJCyA+AfKsYGjS+8M4QvumhAhGzhPsOiJcXMOTjsNjkYz8uFHDsbX17D
+         jJQzHe6HWOatdAGzPlGsL3X21SYprlopm0Uut/kRcTxpXBRTQpTEZs5y3qdJjGQURHmT
+         ekdNRM/JIhqqxZQthJ/lH5wAH3ruWO/VLr/IVsjMg+lLbtcaoNeHXmeA5ZhgZZRa43sY
+         XsyFJKhxrLvfif5Fv63GFSqWao31Gvt94lGvOSauf8NVWNEkbA3uSbS8g+hoOdevskzC
+         LiNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=TMxaUy4qZ0yhVhil4Cjh0E5+hmuhmKfd+HYIaVWBDiE=;
+        fh=cDCgUeUsMteTo9hsOMDLWeNXvhNm87TRObisZiHxods=;
+        b=RxBkOTQI5f05BJ4CuXgnl6QMTXLJV30spx0TvJw7+4RXi8A41tHjNa/FZc1ryCvk+P
+         R2PUEqOWKSQAmuStJA4R8sgFxh+odLb8fa0NJ/NmXQSCK5LLQpWyHP9CmPbT9HluFmsd
+         9krvGQDWQDCEVGb9XCeJbMZPFTfo7G0k9mtEZMg4IbUEq4qnGwVSiGVo/eK9l712MiMw
+         w0HaQNox+vk61X779Ug3//y0gi89pgizLZHysN3nidTdPEBDwgSH5ooInM/pt3T9YfO5
+         xI5Pe2Z2Oz0KkGUCQ2SaUQ0iKMB6We3QPcp2kXFkga7+ah43Gt+yqiQAL7D1+bX8VqcW
+         QpYA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1777581176; x=1778185976; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TMxaUy4qZ0yhVhil4Cjh0E5+hmuhmKfd+HYIaVWBDiE=;
+        b=icZoEP0etWqUV5+RIHho1Peu9vOEoiezTz+D8YB0T/YQL1PAim0nF54pPOm2jNqGbI
+         9kCvMDq2hJOB85t+TjOTzw4zzHKcXIlB3ZsWlKZfalJ/hyA9UFHWX1Q0+Et4aA+rXNOZ
+         RqIQHv273qs1xSxTpn+uX4idOUHuouj8apeYXtLIYVYDnKdKUXvtKuMZkcskhDKil0+3
+         vzH/dqedaxvlTX4knBKaP/12HmGA4XdLWIwiIPBAvrUv1XISk+jgazuMIeRlgvNp/Pno
+         hNGkQpi/7ej157c7NX97ImsWviAdFjXG6MtW2A0N7XvEYUYgZyvxdy/a1tPsM26W6sf9
+         3jNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777581176; x=1778185976;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=TMxaUy4qZ0yhVhil4Cjh0E5+hmuhmKfd+HYIaVWBDiE=;
+        b=ATHpwYQjTSlBiMP6y6kUMOy05xFtd7oY1SxzFKTfnr4FWwk/1R3NIIZa0AsVi8UC06
+         Uk+DiPRTikbFrHimchzMHAkgeZFbdIj8vm7Epi7T04dvEjxvRO8OUDnf065q7uEmCit7
+         SeDbqVSyRiFnlX3QnSNj/4RAS3SRlO1CIlnhMPMB2bAvBdFHwY0sRZI4ivVKAzI/cZzX
+         wNzAXsBvj9I1aPRCrJXWxhCvpU4R3MwrJY05KejBF+IDe6xgjDBfycezLZs5s1nf9oLM
+         wWI4lJtbfVQfVnPYTk1YTJw9VreSZaWt8GeNs/gzVwXsXNwh3aIJZ49JxQzHZbubVKjH
+         4rZQ==
+X-Forwarded-Encrypted: i=1; AFNElJ//nzMjKXyRw0V0K0iGw9plWqNFTVsDV9Oydw3JNT3yq3/eThBY6knp6fkFNn4Lp1C5WzU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBehOyVEBLADsMsolUovoxnZLbF6q6okg9rJrP2AcHLebg6/Q7
+	AFrXFwX7DqxTvZ8yqJDJWXLrKG6ddvobd/CkWF1mn122X3bKLPKKOupq9AqjlHHOsAX9RoOnb3O
+	9HXGloKxx/6rCvEO1gop6CPo7h1tudUrf7/vWGQzG
+X-Gm-Gg: AeBDieurym7T35ImQ1/uwIL5cHYL8dax/6h2mzRkbLZk0fJC4+QWPp9zMi9eHlr2vhT
+	H70TE+7rEdwEGwCLvgH5jFZ40oJOu6nT87MvDw9RrrSofyRlL4dhxgVzu1Q4JSC1EQmEBQ1TkfK
+	xDXXY6zfc1Oc4RTjDPu5Txly8zlrFLl8oZNMgAs5GluLrCNACHPnEa6pxbm8baOLT/70sM3Cn8Y
+	2HfIYpyx1SEajmnJaACQKGMdGuyYgXfjNKj8zuM3wScZsRv09O9NWTiQSHuidkf8xJPy+BqeETV
+	YDCiGZbDVAvY7t6hW+TpXcw6OSda1WmGrtRc3oPUUKiNGfUvhEpdyPGqfH3V6TFXUb7YgFf5JWq
+	4is/1DhtjuVhypOegRF1PLWCiQOOKxvTsii6ojesi9dXFzOx49ByFc9Kk5jy5zh90GRwsqX7izz
+	5e+mILcDY4
+X-Received: by 2002:a05:7022:427:b0:12c:8e7f:1b30 with SMTP id
+ a92af1059eb24-12deac42292mr2220710c88.2.1777581175300; Thu, 30 Apr 2026
+ 13:32:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260430184405.1227386-1-kuniyu@google.com> <20260430184405.1227386-3-kuniyu@google.com>
+In-Reply-To: <20260430184405.1227386-3-kuniyu@google.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Thu, 30 Apr 2026 13:32:44 -0700
+X-Gm-Features: AVHnY4Ls7u6p0o5JMcAnAHJzpiAZfoiB3CE6dVbmTrXjuY0KiwPbdq7_p-En4PA
+Message-ID: <CAAVpQUC83MxhfV-sreAPvfPJoqW=G20CPCPdRaQ6hvMt_khFtw@mail.gmail.com>
+Subject: Re: [PATCH v1 bpf 2/2] selftest: bpf: Add test for bpf_tcp_sock() and
+ RAW socket.
+To: Martin KaFai Lau <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
-- [High] Incomplete fix: Missing bounds and alignment validation for the do=
-orbell page offset (`db_page_off`), leaving the driver vulnerable to out-of=
--bounds MMIO accesses and arbitrary physical memory mapping.
-- [High] Missing minimum BAR0 size validation for fixed-offset configuratio=
-n registers.
-- [Low] Duplicate macro definitions for SMC_APERTURE_BITS and related const=
-ants.
-- [Low] Dangling sentence fragment in the commit message.
---
-
-commit a719bcc10e344c9685c78dde6408c1022c5a812e
-Author: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-net: mana: Fix crash from unvalidated SHM offset read from BAR0 during FLR
-
-This commit validates the SHM offset read from BAR0 to prevent out-of-bounds
-and unaligned accesses. It computes safely by subtracting from bar0_size
-instead of adding.
-
-> without validating the offset read from hardware. If the register
-> returns a garbage value that is neither within bar 0 bounds nor aligned
-> to the 4-byte granularity, thus causing the alignment fault.
-
-This isn't a bug, but there appears to be a dangling sentence fragment left
-over in the commit message.
-
-> diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/ne=
-t/ethernet/microsoft/mana/gdma_main.c
-> index 098fbda0d128..d8e816882f02 100644
-> --- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
-> +++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-> @@ -43,8 +43,9 @@ static u64 mana_gd_r64(struct gdma_context *g, u64 offs=
-et)
->  static int mana_gd_init_pf_regs(struct pci_dev *pdev)
->  {
->  	struct gdma_context *gc =3D pci_get_drvdata(pdev);
-> -	void __iomem *sriov_base_va;
-> +	u64 remaining_barsize;
->  	u64 sriov_base_off;
-> +	u64 sriov_shm_off;
-> =20
->  	gc->db_page_size =3D mana_gd_r32(gc, GDMA_PF_REG_DB_PAGE_SIZE) & 0xFFFF;
-
-Is gc->bar0_size guaranteed to be large enough before this initial read?
-
-If a device exposes an unusually small BAR0, could this read from the fixed
-GDMA_PF_REG_DB_PAGE_SIZE offset result in an out-of-bounds MMIO access
-before the dynamic offset validations are reached?
-
-[ ... ]
-
-> @@ -73,10 +74,28 @@ static int mana_gd_init_pf_regs(struct pci_dev *pdev)
->  	gc->phys_db_page_base =3D gc->bar0_pa + gc->db_page_off;
-> =20
->  	sriov_base_off =3D mana_gd_r64(gc, GDMA_SRIOV_REG_CFG_BASE_OFF);
-> +	if (sriov_base_off >=3D gc->bar0_size ||
-> +	    gc->bar0_size - sriov_base_off <
-> +		GDMA_PF_REG_SHM_OFF + sizeof(u64) ||
-> +	    !IS_ALIGNED(sriov_base_off, sizeof(u64))) {
-> +		dev_err(gc->dev,
-> +			"SRIOV base offset 0x%llx out of range or unaligned (BAR0 size 0x%llx=
-)\n",
-> +			sriov_base_off, (u64)gc->bar0_size);
-> +		return -EPROTO;
-> +	}
-
-While this cleanly fixes the bounds and alignment checks for sriov_base_off,
-should similar checks be applied to db_page_off which is read just above
-this section?
-
-In mana_gd_init_pf_regs():
-        gc->db_page_off =3D mana_gd_r64(gc, GDMA_PF_REG_DB_PAGE_OFF);
-
-        if (gc->db_page_off >=3D gc->bar0_size) {
-                dev_err(gc->dev, ...);
-                return -EPROTO;
-        }
-
-Could this leave a regression with out-of-bounds MMIO accesses or alignment
-faults if gc->bar0_size - gc->db_page_off is smaller than the required
-doorbell page size?
-
-> diff --git a/include/net/mana/shm_channel.h b/include/net/mana/shm_channe=
-l.h
-> index 5199b41497ff..dbabcfb95daf 100644
-> --- a/include/net/mana/shm_channel.h
-> +++ b/include/net/mana/shm_channel.h
-> @@ -4,6 +4,12 @@
->  #ifndef _SHM_CHANNEL_H
->  #define _SHM_CHANNEL_H
-> =20
-> +#define SMC_APERTURE_BITS 256
-> +#define SMC_BASIC_UNIT (sizeof(u32))
-> +#define SMC_APERTURE_DWORDS (SMC_APERTURE_BITS / (SMC_BASIC_UNIT * 8))
-> +#define SMC_LAST_DWORD (SMC_APERTURE_DWORDS - 1)
-> +#define SMC_APERTURE_SIZE  (SMC_APERTURE_BITS / 8)
+On Thu, Apr 30, 2026 at 11:44=E2=80=AFAM Kuniyuki Iwashima <kuniyu@google.c=
+om> wrote:
+>
+> Let's extend sockopt_sk.c to cover bpf_tcp_sock() for the
+> wrong socket type.
+>
+> Before:
+>   # ./test_progs -t sockopt_sk
+>   [  151.948613] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>   [  151.951376] BUG: KASAN: slab-out-of-bounds in sol_tcp_sockopt+0xc7/0=
+x8e0
+>   [  151.954159] Read of size 8 at addr ffff88801083d760 by task test_pro=
+gs/1259
+>   ...
+>   run_test:FAIL:getsetsockopt unexpected error: -1 (errno 22)
+>   #427     sockopt_sk:FAIL
+>
+> After:
+>   #427     sockopt_sk:OK
+>
+> While at it, missing free() is fixed up.
+>
+> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+> ---
+>  .../selftests/bpf/prog_tests/sockopt_sk.c       | 17 ++++++++++++++++-
+>  tools/testing/selftests/bpf/progs/sockopt_sk.c  | 16 ++++++++++++++++
+>  2 files changed, 32 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/tools/=
+testing/selftests/bpf/prog_tests/sockopt_sk.c
+> index 53637431ec5d..87e771c8991f 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+> @@ -190,7 +190,7 @@ static int getsetsockopt(void)
+>         fd =3D socket(AF_NETLINK, SOCK_RAW, 0);
+>         if (fd < 0) {
+>                 log_err("Failed to create AF_NETLINK socket");
+> -               return -1;
+> +               goto err;
+>         }
+>
+>         buf.u32 =3D 1;
+> @@ -211,6 +211,21 @@ static int getsetsockopt(void)
+>         }
+>         ASSERT_EQ(optlen, 8, "Unexpected NETLINK_LIST_MEMBERSHIPS value")=
+;
+>
+> +       /* Trick bpf_tcp_sock() with IPPROTO_TCP */
+> +       close(fd);
+> +       fd =3D socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
+> +       if (fd < 0) {
+> +               log_err("Failed to create RAW socket");
+> +               goto err;
+> +       }
 > +
->  struct shm_channel {
->  	struct device *dev;
->  	void __iomem *base;
+> +       optlen =3D 60;
+> +       err =3D setsockopt(fd, SOL_TCP, TCP_SAVED_SYN, &buf, optlen);
+> +       if (err) {
 
-Does exporting these macros to the header file result in duplicate
-definitions?=20
+Ugh, I forgot to commit s/err/!err/ change.. :/
 
-It looks like the original definitions might still be present in
-drivers/net/ethernet/microsoft/mana/shm_channel.c.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/afJUszROT+yKjth0@li=
-nuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net?part=3D1
+pw-bot: cr
