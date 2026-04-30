@@ -1,62 +1,65 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3541136495B
-	for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 18:44:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A3247CC99
+	for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 18:44:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777574652; cv=none; b=dc1HDlI08roXiN+0lACB1qqCxGI+w2FiMRQNH5ZiV8GydECJifJR4zpzv9H6MmSL65JY9/YOiJRf4JM4IVNG4uhs6PbgHkmd2zhWJTvTna8dLZYAOGATIUBEDwVxJAVFqxHgLNdTrc5HmxP+f0kV5CcKiuAJt5FRkN8m3juAgSY=
+	t=1777574654; cv=none; b=qL+FvP9wWS+jjMWD96JJinr2t16Q3cvi78yxUfkQoFp13wHG1CmQzQ/9UsGdWLsjt7w0RLjr5A30K9Ga+9meAYtOyLE6MUk21Ut7XAYzzaMHc6sp1y7wUNLeqhGpQ8MxreZMkSxcpua32Iln+R1CaUd+QEUsgsN3vDbEYWVLPBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777574652; c=relaxed/simple;
-	bh=/PRIKgLfKPj4zMKorNmQ1wB3iJTK0C/w2vdDIs7PKVk=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=OCQql1Nar8IXWkqIp0ail2Y6HI65K/UCTdK4OwMnifZthmx3RXq4A+oflxPnXr/AzVFAkhwF9QD9e65WJqVXaTsj8GITnaKVMb0FOqhLzafD3fHDoQcNRpCgUscoBBAlrzBXSstFzQUm8SjBAGhQAWO7c6j7ZPmgBns2O2sGn+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U92MX/DK; arc=none smtp.client-ip=209.85.216.73
+	s=arc-20240116; t=1777574654; c=relaxed/simple;
+	bh=5cfjlg3GQ6sMGcsFREj82Hbpq0DXadM7BwJqf7Dy09Y=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Yp61s6TJwzb/Tbr36Cru27j6I9iB+fTMm4cJ93DlDIWJeDc9ndEpozw3/8iaKhs+DnXq+uJEDuFTgIzzDorka9wD/nYkCrAzfaqRDjdy9ffbZstP83huDsSIABIzzpKEy25r399ihvG2EfiORROGuEHJzl7gaUrneGPdokrV2u8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MiIvaBQr; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U92MX/DK"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-35da86144daso1447343a91.3
-        for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 11:44:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MiIvaBQr"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-82fa860e71eso738339b3a.0
+        for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 11:44:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777574648; x=1778179448; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YSFg1U9KtAY77SgXkcle8/Z1smWtplMzJzd6qV/sqH0=;
-        b=U92MX/DKFZjA2U0RpyT4OPLiMTkZnNo6UpEezgKpey9pTj0Q6ivtJLxfqhduwFs3Ny
-         zdlynOq/yrfN3Slp7bs7J9F3057oey3DXssKn7IGNYBKC0mH+esBQkJo0O2hSsmc0xcV
-         31Q3zlAaNFrpDNzBH7KXlWIx4SmbIQ5FUBAF/1RckuG0AH5Y3XHINvc+243mCQTwerki
-         /C6O+U642gbXOj/zjmFQPGQitgIhajw+S79pyTo4xJR3ZB2WZYa/PqvuzDCUt9RwqBYr
-         Zt39kVRAmq+72WC2phGfNeAanb6UpAXDxBGBD2jo67as8eyiLnmeGVD5A7QBoz09OsrG
-         0tcA==
+        d=google.com; s=20251104; t=1777574650; x=1778179450; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=x8OenfZCy+qWu1Qhs0vDlZYR6b4P/Y7vHqJjLORFF7s=;
+        b=MiIvaBQrLzQjIpuU0GRioKi1QceZY2ut0QurdSc8V8FrF2E7ZNVdcXGo1qiL58XT57
+         RuJWyVsvTovbbT5OAmUdLa1Aj+RhLFmol6fVue/qLiTV7x7WZmpEn21FGHRDeEx1V/QU
+         snad2RBESDl9ggAZdwCGCtH/8jiOickhfKXiPu8sJnXssIQhiQDOeaYOId0Y8fRYZqTn
+         qm4VfyhMrZ0dWpC51TzyK+i9sU++1KDsgCzouoLbfRuniqF3uJfnZWR4Es9hBl4OcW3u
+         vvKvK7UA1+dpwMn8ECcPEwpKy+X4kqvwHuLAMOiDJvuJd8JaT261EsmgUo58HIeDAMcW
+         iiww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777574648; x=1778179448;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YSFg1U9KtAY77SgXkcle8/Z1smWtplMzJzd6qV/sqH0=;
-        b=VhjIpRwa2BYZr+TW8mw9wG9XhSdZfdWkzfN1xQKfcx/lDSGbRZdoOhsCAJVDbI1o3Y
-         4OT/Y8/suqtv86oV/lJQsF9oGpH40tJEmRqLrIyfffsselUiyU7c+s566lJEtmxo1VnL
-         n4XccM9G3vTXJEzOn4CFwNHY9DVaPihWQrajgx9WAcNKyrruSQFd/qldJC34Fh1o52VZ
-         ZHGPtmX8wahKPJSLZSRPErzcniz99MJehx6xN0BFhcF0/HynOTUhQE1cqdruPsYHXQs1
-         9ib+SjZLGsDrFSzHbOXWfyfxKKdsn1gMwIoAoT02q4/Bc9R157oYN4jdLijiGuBhTRX4
-         o01w==
-X-Forwarded-Encrypted: i=1; AFNElJ/rQ8u8Gf5f/KPS5p6hMTG02ZngZ1gwGmW4NS7ydJOZsDl/ee6iOuoDWnh/wG/CSUAXUUA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwC5fKeVFshO7jSkIMCBTUBhMrqHvBm3wbHdN2ejwcmeOaL1Wb
-	a3IBCePlMMPnKAXQoxSbkzFnQfWruTgE2Gl8aRvpfKyuI8jy2lqu9t1LNF7Kl3oLyOajL6ODbge
-	vW5JY6Q==
-X-Received: from pgbq1.prod.google.com ([2002:a63:5c01:0:b0:c74:664d:4080])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:6a0a:b0:39f:aa3:5e56
- with SMTP id adf61e73a8af0-3a3cf5e8cd2mr5001483637.14.1777574648207; Thu, 30
- Apr 2026 11:44:08 -0700 (PDT)
-Date: Thu, 30 Apr 2026 18:43:50 +0000
+        d=1e100.net; s=20251104; t=1777574650; x=1778179450;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x8OenfZCy+qWu1Qhs0vDlZYR6b4P/Y7vHqJjLORFF7s=;
+        b=l5i5A9Bh0Wl5duhNu+hJcg1c2e69ejMlii1plV6/Y6VxdEL0I9yYjYAPV11el/KapF
+         u+nQEcWiFC3rvICt0VSkl6NkexuJY9NgEVoDvR0KUYtHl50p3pdVSbysTeUOYhxw7cL6
+         w3KfDkwyr1CtdnJ5UIZrd92vRcAgRSI5AZ8POfdziSf26DTlKWa/o7wq93TvzsGy66CG
+         Y5vjB92l3EiO12b/TzxdMSEL15ROO0cXEsrK2AE6tZn7CniCHQql3IW+ieVcHrQIQmpQ
+         7JcL03IYwzWZAdWqrIhrp+2uLypYNv5rCIqbX5KmVHNd+kgQoy8cSkxyoSUqVdK+ZMC1
+         i+Qw==
+X-Forwarded-Encrypted: i=1; AFNElJ9Mw8u2XL/b6wTM0UYkavC+p83tPe62LI5ZeS/LiraPBONYjq8F8LQQVCvQaX3mIcyBQ6M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZRW8vky68R/wgzcEJnYqjc81CYkm3NjKcpne/oBUCkqhQLKf8
+	0/Re9OzdRooEqWLedUetQy6rZhv8nkzAF1umg9frrhKuG51P6J8e+sFT9JkP5C/Zt0DFeBUouqf
+	t8bAkKA==
+X-Received: from pfr21.prod.google.com ([2002:a05:6a00:94d5:b0:82f:b8b3:900f])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:4005:b0:82a:ea3:c172
+ with SMTP id d2e1a72fcca58-834fdc92504mr4452770b3a.46.1777574650172; Thu, 30
+ Apr 2026 11:44:10 -0700 (PDT)
+Date: Thu, 30 Apr 2026 18:43:51 +0000
+In-Reply-To: <20260430184405.1227386-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20260430184405.1227386-1-kuniyu@google.com>
 X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
-Message-ID: <20260430184405.1227386-1-kuniyu@google.com>
-Subject: [PATCH v1 bpf 0/2] bpf: tcp: Fix type confusion in bpf_tcp_sock().
+Message-ID: <20260430184405.1227386-2-kuniyu@google.com>
+Subject: [PATCH v1 bpf 1/2] bpf: tcp: Fix type confusion in bpf_tcp_sock().
 From: Kuniyuki Iwashima <kuniyu@google.com>
 To: Martin KaFai Lau <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
@@ -64,7 +67,8 @@ To: Martin KaFai Lau <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.n
 Cc: John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
 	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
 	Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
+	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Damiano Melotti <melotti@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
 bpf_tcp_sock() only check if sk->sk_protocol is IPPROTO_TCP,
@@ -72,18 +76,67 @@ but RAW socket can bypass it:
 
   socket(AF_INET, SOCK_RAW, IPPROTO_TCP)
 
-Patch 1 fixes it and Patch 2 adds a test.
+Calling bpf_setsockopt() in SOCKOPT prog triggers out-of-bounds
+access to another slab object. [0]
 
+Let's use sk_is_tcp().
 
-Kuniyuki Iwashima (2):
-  bpf: tcp: Fix type confusion in bpf_tcp_sock().
-  selftest: bpf: Add test for bpf_tcp_sock() and RAW socket.
+[0]:
+BUG: KASAN: slab-out-of-bounds in sol_tcp_sockopt (net/core/filter.c:5519)
+Read of size 8 at addr ffff88801083d760 by task test_progs/1259
 
- net/core/filter.c                               |  2 +-
- .../selftests/bpf/prog_tests/sockopt_sk.c       | 17 ++++++++++++++++-
- tools/testing/selftests/bpf/progs/sockopt_sk.c  | 16 ++++++++++++++++
- 3 files changed, 33 insertions(+), 2 deletions(-)
+CPU: 1 UID: 0 PID: 1259 Comm: test_progs Tainted: G           OE       7.0.0-11175-gb5c111f4967b #1 PREEMPT(full)
+Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.17.0-debian-1.17.0-1 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl (lib/dump_stack.c:94 lib/dump_stack.c:120)
+ print_report (mm/kasan/report.c:378 mm/kasan/report.c:482)
+ kasan_report (mm/kasan/report.c:595)
+ sol_tcp_sockopt (net/core/filter.c:5519)
+ __bpf_getsockopt (net/core/filter.c:5633)
+ bpf_sk_getsockopt (net/core/filter.c:5654)
+ bpf_prog_629ba00a1601e9f2__setsockopt+0x86/0x22c
+ __cgroup_bpf_run_filter_setsockopt (./include/linux/bpf.h:1402 ./include/linux/filter.h:722 ./include/linux/filter.h:729 kernel/bpf/cgroup.c:81 kernel/bpf/cgroup.c:2026)
+ do_sock_setsockopt (net/socket.c:2363)
+ __x64_sys_setsockopt (net/socket.c:2406)
+ do_syscall_64 (arch/x86/entry/syscall_64.c:63)
+ entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121)
+RIP: 0033:0x7f85f82fe7de
+Code: 55 48 63 c9 48 63 ff 45 89 c9 48 89 e5 48 83 ec 08 6a 2c e8 34 69 f7 ff c9 c3 66 90 f3 0f 1e fa 49 89 ca b8 36 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 0a c3 66 0f 1f 84 00 00 00 00 00 48 8b 15 e1
+RSP: 002b:00007ffe59dcecd8 EFLAGS: 00000202 ORIG_RAX: 0000000000000036
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f85f82fe7de
+RDX: 000000000000001c RSI: 0000000000000006 RDI: 000000000000000d
+RBP: 00007ffe59dcef20 R08: 000000000000003c R09: 0000000000000000
+R10: 00007ffe59dcef00 R11: 0000000000000202 R12: 00007ffe59dcf268
+R13: 0000000000000003 R14: 00007f85f9da5000 R15: 000055b2f3201400
+ </TASK>
 
+The buggy address belongs to the object at ffff88801083d280
+ which belongs to the cache RAW of size 1792
+The buggy address is located 1248 bytes inside of
+ allocated 1792-byte region [ffff88801083d280, ffff88801083d980)
+
+Fixes: 655a51e536c0 ("bpf: Add struct bpf_tcp_sock and BPF_FUNC_tcp_sock")
+Reported-by: Damiano Melotti <melotti@google.com>
+Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+---
+ net/core/filter.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index bc96c18df4e0..cd88633f8dc1 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -7475,7 +7475,7 @@ u32 bpf_tcp_sock_convert_ctx_access(enum bpf_access_type type,
+ 
+ BPF_CALL_1(bpf_tcp_sock, struct sock *, sk)
+ {
+-	if (sk_fullsock(sk) && sk->sk_protocol == IPPROTO_TCP)
++	if (sk_fullsock(sk) && sk_is_tcp(sk))
+ 		return (unsigned long)sk;
+ 
+ 	return (unsigned long)NULL;
 -- 
 2.54.0.545.g6539524ca2-goog
 
