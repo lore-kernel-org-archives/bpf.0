@@ -1,167 +1,157 @@
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 112E447D94E
-	for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 18:44:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B69414884C
+	for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 18:59:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777574655; cv=none; b=iZC1u9bGpx9QjVH4pgSHHlrE+1iIDArWEgloonCrspffSVZNvWQPp4c0pC5kIiJm0eaFtZupk5gH7GUhZT+vdwI9jQ+RU1+g6U/4DWikXzFm75fF/szL+aVjcnzVvSxhDPudIYw/bDhcKk1PCWt7dVdpZlhSdMb3JZ5p5Uc7mys=
+	t=1777575572; cv=none; b=gypmmmRblc6AbxrCk0cRd6gLXOUX78RbCK4bjoGkb9g5iivi98RTQrHuP4RVO2hS/95o/rC7s+uWfsErAQh2MgVnOxkNg1xRX6hj+n1sI/GTtgddeAR9vWc3XNT+tkF/AIQWTv+zHXLmzCWKCzgzHUoO27ReT/7cHhgamJMHbr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777574655; c=relaxed/simple;
-	bh=/HEsPTBP2Z/J3XuWMk0gaH/F8ujsApOQLRx2eiOFc3c=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=uPbd7jXlceTzoRQd9/8HJ2Hwd4p7HjuuJQTGa9N1jv8gHmA3+Psi0or8uOQVqICmFpXNIcu2g/0ZGTacHH0Opr/TBfdSWMAsNh5njhdf4qUcapTpVLafRIQMACB7ECbHlJAWlggzeQYQfA2o2TuPTEh2eignn4ziqo3H+gSeKIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tsicAHzB; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	s=arc-20240116; t=1777575572; c=relaxed/simple;
+	bh=cmysySsWdjAW2DeVnRVYBWMGCd1+kfk6SX+VT/GiZBo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=eZ2xT6hHerGz7E/1UlzvgrdEUJyiHLSZrzRhsDwkC4pWvtpQiqrhC5zEGYWjEIkye99mKb+J1+sLxunxb8bSQRKICNAoTLEqUMelOkIGHB8uogUbXzUD2GEB/o3kzdwqUQnTm7Ein8K4aLqy2DcBLg7MAIbqKE5nRdhKaitnCxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VvOj8rHl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tsicAHzB"
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-82f7bec24fdso835238b3a.2
-        for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 11:44:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777574652; x=1778179452; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8B+EV+dAZPjMHacRoI0PFkSCDi+v0zDQ1718UXTo0aI=;
-        b=tsicAHzBnDU/zQai9tEdrPbtBfZxHKL9iACY6xY4FCLp6R1G8+XWdcHvtpAjcFx6IG
-         S6GUHaMkQJ6eswhc5JEXCzOSXzUgiQRBA3ZFeigB3qHNned7Eg3KI9u/fLoUkRZeJMTa
-         8wNdkg5y6LFLsAglWjS+8YuK+X5QuG2FunEGo15keOB7Eo2qStrJiEAD5vGrMgNMjjJa
-         ZypxWBf+ks7EzOvNwLkbL4jNkFoXHyv9fpNSdVNdFWpeZkDReLjlpJ9aCTn+5vsVEPae
-         ddum1atanFQI5+RqeeaEqjhuuXsdMKdWXM1Una0FY07nA6m+Q1/Sj+FXJLnhT6NGwEX0
-         TRCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777574652; x=1778179452;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8B+EV+dAZPjMHacRoI0PFkSCDi+v0zDQ1718UXTo0aI=;
-        b=SeJwHAeCgiLDjJPHHxhEVUi/VZnOlIIBg3B7rdHCvDxBf2UtP5Q6Zimysgm7SLgr71
-         jBsKegGXYIWmF77J+mS9IoDN6u+91/JCvqldzStveIM7BRtRaxw+q/14MTbvqYN4p4NJ
-         TWL2ZCDFS8qsZFMwDWNsvMgz+sq2d3FAccQY0VhpcCV0I3uipH/YlJMzRsQJ3XxtZ8iu
-         8VgXlUkIKYhEk4geDzMAj9qTYANgUnUcC/1AcvORMEOniR/r7z05HVSIW0nxm0V5Q7Nu
-         x2y7fMEPEu6ZsQdrrFmLzbDgiKF8EGOf8OmfEusMJpD9GHd36azdmdSid+ccPjJ2YiBc
-         a+tQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8AOfGVGs4FjFcFmGZg44ospzzF18/ibzIeseT8uZLnQi2SZlHcrGohC9ChOeBisWW+COM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBIhxtNDZ+2IKRQ55VNzpu8EuXcUjsOXRL7epBO4E1acEOAqHT
-	vpT90twBkvPtwcP1QDnYg65GzUfg08Lpx3OrW2F9X/ulh9OGXw2QwsVPYoaQsjPKW9W/swVQi9z
-	6mH5exA==
-X-Received: from pfva20.prod.google.com ([2002:a05:6a00:c94:b0:82f:8afc:f74a])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:b46:b0:82f:390a:69df
- with SMTP id d2e1a72fcca58-834fdcb6501mr4991165b3a.35.1777574652100; Thu, 30
- Apr 2026 11:44:12 -0700 (PDT)
-Date: Thu, 30 Apr 2026 18:43:52 +0000
-In-Reply-To: <20260430184405.1227386-1-kuniyu@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VvOj8rHl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6051C2BCB3;
+	Thu, 30 Apr 2026 18:59:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777575571;
+	bh=cmysySsWdjAW2DeVnRVYBWMGCd1+kfk6SX+VT/GiZBo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=VvOj8rHlrGy6LT0daNM8XlNssj9hIFRWZdCUbo3HI+7i7Q/Bd4zU782GGiC55O5Gl
+	 +wfNNObaLhk1bXb/n1QgQxIkbVfAEf16ATromG/UDAyw0xbk8Aw9xQlOAWOP5ttEJo
+	 l9OHd5tngQYnX3/vaigPZN8OuzSmeMbXxFU33c1kI+mbzjKi6o0frFF03rRUHTmqI0
+	 wEzJcZckoTz6h/A5xTrYql6vnpW2IJsAfR+lTunzUqRCAzB4bjnD7cz3eGBVoih3zr
+	 uUlDQeeEak3Ia3dBo+SeHQEgkfaAoxE/WkrRIv8jLz9K/Be8zHmCd5QB6cne37a1GQ
+	 CbO9JhnXKnZ3w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net, v2] net: mana: Fix crash from unvalidated SHM
+ offset read from BAR0 during FLR
+Reply-To: sashiko@lists.linux.dev
+To: "Dipayaan Roy" <dipayanroy@linux.microsoft.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <afJUszROT+yKjth0@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <afJUszROT+yKjth0@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 30 Apr 2026 18:59:31 +0000
+Message-Id: <20260430185931.B6051C2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260430184405.1227386-1-kuniyu@google.com>
-X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
-Message-ID: <20260430184405.1227386-3-kuniyu@google.com>
-Subject: [PATCH v1 bpf 2/2] selftest: bpf: Add test for bpf_tcp_sock() and RAW socket.
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-Let's extend sockopt_sk.c to cover bpf_tcp_sock() for the
-wrong socket type.
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
+- [High] Incomplete fix: Missing bounds and alignment validation for the do=
+orbell page offset (`db_page_off`), leaving the driver vulnerable to out-of=
+-bounds MMIO accesses and arbitrary physical memory mapping.
+- [High] Missing minimum BAR0 size validation for fixed-offset configuratio=
+n registers.
+- [Low] Duplicate macro definitions for SMC_APERTURE_BITS and related const=
+ants.
+- [Low] Dangling sentence fragment in the commit message.
+--
 
-Before:
-  # ./test_progs -t sockopt_sk
-  [  151.948613] ==================================================================
-  [  151.951376] BUG: KASAN: slab-out-of-bounds in sol_tcp_sockopt+0xc7/0x8e0
-  [  151.954159] Read of size 8 at addr ffff88801083d760 by task test_progs/1259
-  ...
-  run_test:FAIL:getsetsockopt unexpected error: -1 (errno 22)
-  #427     sockopt_sk:FAIL
+commit a719bcc10e344c9685c78dde6408c1022c5a812e
+Author: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+net: mana: Fix crash from unvalidated SHM offset read from BAR0 during FLR
 
-After:
-  #427     sockopt_sk:OK
+This commit validates the SHM offset read from BAR0 to prevent out-of-bounds
+and unaligned accesses. It computes safely by subtracting from bar0_size
+instead of adding.
 
-While at it, missing free() is fixed up.
+> without validating the offset read from hardware. If the register
+> returns a garbage value that is neither within bar 0 bounds nor aligned
+> to the 4-byte granularity, thus causing the alignment fault.
 
-Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
----
- .../selftests/bpf/prog_tests/sockopt_sk.c       | 17 ++++++++++++++++-
- tools/testing/selftests/bpf/progs/sockopt_sk.c  | 16 ++++++++++++++++
- 2 files changed, 32 insertions(+), 1 deletion(-)
+This isn't a bug, but there appears to be a dangling sentence fragment left
+over in the commit message.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-index 53637431ec5d..87e771c8991f 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-@@ -190,7 +190,7 @@ static int getsetsockopt(void)
- 	fd = socket(AF_NETLINK, SOCK_RAW, 0);
- 	if (fd < 0) {
- 		log_err("Failed to create AF_NETLINK socket");
--		return -1;
-+		goto err;
- 	}
- 
- 	buf.u32 = 1;
-@@ -211,6 +211,21 @@ static int getsetsockopt(void)
- 	}
- 	ASSERT_EQ(optlen, 8, "Unexpected NETLINK_LIST_MEMBERSHIPS value");
- 
-+	/* Trick bpf_tcp_sock() with IPPROTO_TCP */
-+	close(fd);
-+	fd = socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
-+	if (fd < 0) {
-+		log_err("Failed to create RAW socket");
-+		goto err;
-+	}
-+
-+	optlen = 60;
-+	err = setsockopt(fd, SOL_TCP, TCP_SAVED_SYN, &buf, optlen);
-+	if (err) {
-+		log_err("Unexpected setsockopt(TCP_SAVED_SYN)");
-+		goto err;
-+	}
-+
- 	free(big_buf);
- 	close(fd);
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/sockopt_sk.c b/tools/testing/selftests/bpf/progs/sockopt_sk.c
-index cb990a7d3d45..5e0b27e7855c 100644
---- a/tools/testing/selftests/bpf/progs/sockopt_sk.c
-+++ b/tools/testing/selftests/bpf/progs/sockopt_sk.c
-@@ -149,6 +149,20 @@ int _setsockopt(struct bpf_sockopt *ctx)
- 	if (sk && sk->family == AF_NETLINK)
- 		goto out;
- 
-+	if (sk && sk->family == AF_INET && sk->type == SOCK_RAW) {
-+		struct bpf_tcp_sock *tp = bpf_tcp_sock(sk);
-+
-+		if (tp) {
-+			char saved_syn[60];
-+
-+			bpf_getsockopt(sk, SOL_TCP, TCP_SAVED_SYN,
-+				       &saved_syn, sizeof(saved_syn));
-+			goto consumed;
-+		}
-+
-+		goto out;
-+	}
-+
- 	/* Make sure bpf_get_netns_cookie is callable.
- 	 */
- 	if (bpf_get_netns_cookie(NULL) == 0)
-@@ -224,6 +238,8 @@ int _setsockopt(struct bpf_sockopt *ctx)
- 		return 0; /* couldn't get sk storage */
- 
- 	storage->val = optval[0];
-+
-+consumed:
- 	ctx->optlen = -1; /* BPF has consumed this option, don't call kernel
- 			   * setsockopt handler.
- 			   */
--- 
-2.54.0.545.g6539524ca2-goog
+> diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/ne=
+t/ethernet/microsoft/mana/gdma_main.c
+> index 098fbda0d128..d8e816882f02 100644
+> --- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> +++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> @@ -43,8 +43,9 @@ static u64 mana_gd_r64(struct gdma_context *g, u64 offs=
+et)
+>  static int mana_gd_init_pf_regs(struct pci_dev *pdev)
+>  {
+>  	struct gdma_context *gc =3D pci_get_drvdata(pdev);
+> -	void __iomem *sriov_base_va;
+> +	u64 remaining_barsize;
+>  	u64 sriov_base_off;
+> +	u64 sriov_shm_off;
+> =20
+>  	gc->db_page_size =3D mana_gd_r32(gc, GDMA_PF_REG_DB_PAGE_SIZE) & 0xFFFF;
 
+Is gc->bar0_size guaranteed to be large enough before this initial read?
+
+If a device exposes an unusually small BAR0, could this read from the fixed
+GDMA_PF_REG_DB_PAGE_SIZE offset result in an out-of-bounds MMIO access
+before the dynamic offset validations are reached?
+
+[ ... ]
+
+> @@ -73,10 +74,28 @@ static int mana_gd_init_pf_regs(struct pci_dev *pdev)
+>  	gc->phys_db_page_base =3D gc->bar0_pa + gc->db_page_off;
+> =20
+>  	sriov_base_off =3D mana_gd_r64(gc, GDMA_SRIOV_REG_CFG_BASE_OFF);
+> +	if (sriov_base_off >=3D gc->bar0_size ||
+> +	    gc->bar0_size - sriov_base_off <
+> +		GDMA_PF_REG_SHM_OFF + sizeof(u64) ||
+> +	    !IS_ALIGNED(sriov_base_off, sizeof(u64))) {
+> +		dev_err(gc->dev,
+> +			"SRIOV base offset 0x%llx out of range or unaligned (BAR0 size 0x%llx=
+)\n",
+> +			sriov_base_off, (u64)gc->bar0_size);
+> +		return -EPROTO;
+> +	}
+
+While this cleanly fixes the bounds and alignment checks for sriov_base_off,
+should similar checks be applied to db_page_off which is read just above
+this section?
+
+In mana_gd_init_pf_regs():
+        gc->db_page_off =3D mana_gd_r64(gc, GDMA_PF_REG_DB_PAGE_OFF);
+
+        if (gc->db_page_off >=3D gc->bar0_size) {
+                dev_err(gc->dev, ...);
+                return -EPROTO;
+        }
+
+Could this leave a regression with out-of-bounds MMIO accesses or alignment
+faults if gc->bar0_size - gc->db_page_off is smaller than the required
+doorbell page size?
+
+> diff --git a/include/net/mana/shm_channel.h b/include/net/mana/shm_channe=
+l.h
+> index 5199b41497ff..dbabcfb95daf 100644
+> --- a/include/net/mana/shm_channel.h
+> +++ b/include/net/mana/shm_channel.h
+> @@ -4,6 +4,12 @@
+>  #ifndef _SHM_CHANNEL_H
+>  #define _SHM_CHANNEL_H
+> =20
+> +#define SMC_APERTURE_BITS 256
+> +#define SMC_BASIC_UNIT (sizeof(u32))
+> +#define SMC_APERTURE_DWORDS (SMC_APERTURE_BITS / (SMC_BASIC_UNIT * 8))
+> +#define SMC_LAST_DWORD (SMC_APERTURE_DWORDS - 1)
+> +#define SMC_APERTURE_SIZE  (SMC_APERTURE_BITS / 8)
+> +
+>  struct shm_channel {
+>  	struct device *dev;
+>  	void __iomem *base;
+
+Does exporting these macros to the header file result in duplicate
+definitions?=20
+
+It looks like the original definitions might still be present in
+drivers/net/ethernet/microsoft/mana/shm_channel.c.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/afJUszROT+yKjth0@li=
+nuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net?part=3D1
