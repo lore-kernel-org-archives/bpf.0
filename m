@@ -1,104 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587B13612F8;
-	Thu, 30 Apr 2026 13:30:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4840530CD95;
+	Thu, 30 Apr 2026 13:30:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777555838; cv=none; b=uZFPUhZgbkC5EW+xEi0mGtI2hFPqVQYwMweXqBX/bxahekSgIxkmqFnko5UWMO3ywpqBDvOuGkTeXRxWdtjAj7+eDA4pVT/tEn1uFdgctbReYc6DOYqtpyve/Oah8IGb0Uzplu7AxlNsKj3fOn1ssT91b/pcOkrAG7BH/nqWRIw=
+	t=1777555844; cv=none; b=ZHQKEzvFpS9HiMGPPfnDgXuLFUHCkXPLmSKDKZDbVAVyvc0ccM5MeigC9YNFYEgBsRN6Bq2YTohWHerfr35ryOijKCAd5mjx3MOxm7DEKy6W5zeKw6pQ8oRrnl6GxoR+nkY7bWn/DQUN/qlSUGnCw++D12n1B0NrMF4KEgWY56k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777555838; c=relaxed/simple;
-	bh=h+4bMEtabwEnb4cgXjarrinMk3NN1aJ/kUR0Gy5zT9w=;
+	s=arc-20240116; t=1777555844; c=relaxed/simple;
+	bh=99fXgXxUkzhOkBU7eJUf1hb+gT5gO46DzyHAbfFJ5QA=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ImIwcUSPBCKfj5F5/j6wVMmT33Qk43R5AeuK7KIcwshafEgOcJODe4Mt5iv3HZKXVXaDkP+N7dcGnssJ7wQPSM2DrJ7sX6Qj0Hxfi/Q96wkhS7Gdg/GVE+W0yp4bXwejGZm7zSPhPHtgDORD/1N3mXVchE++osNgjDRH8YMsXjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q4k4/6aA; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=l/cHt1Ln+kEA+VS7e6fR5tpjZ+6FkFrOeJKqUyGnAZCyqjimsSxtxbGIy7Z+aCW2GWl+MGoX4KwOek+3zlRlf5mrlo5wQ+xbQIzfC1zLfk9D+zZTrOAeCL9wsioiZMptBM+BhcrnSM3mSHZyT9/TVT/SlmKXfX0SA31Msuotk+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NGw2x4Id; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q4k4/6aA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02136C2BCC6;
-	Thu, 30 Apr 2026 13:30:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NGw2x4Id"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F329C2BCB8;
+	Thu, 30 Apr 2026 13:30:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777555838;
-	bh=h+4bMEtabwEnb4cgXjarrinMk3NN1aJ/kUR0Gy5zT9w=;
+	s=k20201202; t=1777555843;
+	bh=99fXgXxUkzhOkBU7eJUf1hb+gT5gO46DzyHAbfFJ5QA=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=q4k4/6aAFjyd2v3/Lp7vn5NYRPEaQdr68oi3F/ZSwGNLpMC1+x0KwqftrDnYeIQiU
-	 EoBgdkkg3RiAmp1B6eeyY7fWqJ4dGMFw9h8JO4cf3QF9fzqFqIyaMwQ94iK4c1ZVWF
-	 bZ0VGpzFdzxmh50QkjZoSHrkv4OVgCbcjxa4jikqQpjxgBO/fweV2Y4aECsro6Ikn+
-	 OmtTB0I7N9MSszp9FHhi093tS78zvSCtQRy0FUdcbL0iOnz80XTAdXLgPXkEDb/H10
-	 DTJwHQp9NabYvEUm01syc1X2Q7cv6GepEfK3pXtpBl2UhSjP1er0z6clZFgc+F+fDg
-	 1vJyGCJEZZ10Q==
-Content-Type: multipart/mixed; boundary="===============8038474828220066970=="
+	b=NGw2x4IdwxygxnePm/+WJkjN7Y6m79Jacj01lZdcxm2EorVacE9jYIs62hBdxPamU
+	 D/D4O3ZEEBBGbBiR31WwPiGEV4pAsHEpEZo7TFjEtGC/ZKDSoPQQd8KpkDtrlnv5hF
+	 gfJa+3kdZGPthumlyrlHvXwUtBHfoJ4u4GorGSFArm9WE52IweJCintmziFIMc2oip
+	 wDeT7tgj8NzvOZN07ipiEySiPpDhkCO1DvI/sVFrMazidOq0EDN6b5/AzBEE0RXBRn
+	 Flkga3AixW/xMVf/Ss7TTDkZSIQtLKS/r6g/6eL5PqyNTJ2u/LLgo6i+T3Kemh2ftk
+	 Dbb8O6TNQgwvg==
+Content-Type: multipart/mixed; boundary="===============7899902004849665635=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d1297f1c857e5430af42dcb3e4d05c7ddaff08470a43893cac0fbcb83ec51666@mail.kernel.org>
-In-Reply-To: <20260430-selftests-bpf_misconfig-v10-2-cd302a31af16@suse.com>
-References: <20260430-selftests-bpf_misconfig-v10-2-cd302a31af16@suse.com>
-Subject: Re: [PATCH bpf-next v10 02/11] selftests/bpf: Fix test_kmods KDIR to honor O= and distro kernels
+Message-Id: <3a9c0b3b4546f4041ab4d20c1f231e704c2d93209ace88294ae84aacbbdfabe4@mail.kernel.org>
+In-Reply-To: <20260430-selftests-bpf_misconfig-v10-6-cd302a31af16@suse.com>
+References: <20260430-selftests-bpf_misconfig-v10-6-cd302a31af16@suse.com>
+Subject: Re: [PATCH bpf-next v10 06/11] selftests/bpf: Tolerate test file compilation failures
 From: bot+bpf-ci@kernel.org
 To: rbm@suse.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
 Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 30 Apr 2026 13:30:34 +0000 (UTC)
+Date: Thu, 30 Apr 2026 13:30:40 +0000 (UTC)
 
---===============8038474828220066970==
+--===============7899902004849665635==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 6094fe99b5f6..cc6ee7a2df93 100644
+> index 608e6dff0392..9becc077eb23 100644
 > --- a/tools/testing/selftests/bpf/Makefile
 > +++ b/tools/testing/selftests/bpf/Makefile
 
 [ ... ]
 
-> diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/testing/selftests/bpf/test_kmods/Makefile
-> index 63c4d3f6a12f..031c7454ce65 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/Makefile
-> +++ b/tools/testing/selftests/bpf/test_kmods/Makefile
-> @@ -1,5 +1,16 @@
->  TEST_KMOD_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
-> -KDIR ?= $(abspath $(TEST_KMOD_DIR)/../../../../..)
-> +SRCTREE_KDIR := $(abspath $(TEST_KMOD_DIR)/../../../../..)
-> +# Honor O=/KBUILD_OUTPUT only if they point at a prepared kernel build
-> +# directory (one containing Module.symvers); otherwise treat the value as a
-> +# selftests-only output directory and fall back to in-tree or distro headers.
-> +# The parent bpf/Makefile resolves O=/KBUILD_OUTPUT to absolute paths before
-> +# invoking this sub-make so relative paths still anchor to the user's
-> +# invocation directory.
-> +KMOD_O := $(or $(O),$(KBUILD_OUTPUT))
-> +KMOD_O_VALID := $(if $(KMOD_O),$(if $(wildcard $(KMOD_O)/Module.symvers),$(KMOD_O)))
-> +KDIR ?= $(if $(KMOD_O_VALID),$(SRCTREE_KDIR), \
-> +	    $(if $(wildcard $(SRCTREE_KDIR)/Module.symvers),$(SRCTREE_KDIR), \
-> +		/lib/modules/$(shell uname -r)/build))
+> @@ -717,11 +723,14 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:			\
+>  		      $(TRUNNER_TESTS_DIR)/%.c				\
+>  		      | $(TRUNNER_OUTPUT)/%.test.d
+>  	$$(call msg,TEST-OBJ,$(TRUNNER_BINARY),$$@)
+> -	$(Q)cd $$(@D) && $$(CC) -I. $$(CFLAGS) -MMD -MT $$@ -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F)
+> +	$(Q)(cd $$(@D) && $$(CC) -I. $$(CFLAGS) -MMD -MT $$@ -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F)) $(if $(filter test_progs%,$1),$(if $(PERMISSIVE),|| \
+> +		($(RM) $$@; printf '  %-12s %s\n' 'SKIP-TEST' '$$(notdir $$@)' 1>&2)))
+>  	$$(if $$(TEST_NEEDS_BTFIDS),						\
+> -		$$(call msg,BTFIDS,$(TRUNNER_BINARY),$$@)			\
+> +		$(Q)if [ -f $$@ ]; then						\
+> +		$(if $(V),true,printf '  %-8s%s %s\n' "BTFIDS" " [$(TRUNNER_BINARY)]" "$$(notdir $$@)"); \
+>  		$(RESOLVE_BTFIDS) --btf $(TRUNNER_OUTPUT)/btf_data.bpf.o $$@;	\
+> -		$(RESOLVE_BTFIDS) --patch_btfids $$@.BTF_ids $$@)
+> +		$(RESOLVE_BTFIDS) --patch_btfids $$@.BTF_ids $$@;		\
+> +		fi)
 
-Will falling back to the host kernel headers cause compilation errors
-when building in-tree test modules like bpf_testmod?
+Does this condition correctly handle V=0 or V=2?
 
-Since bpf_testmod relies heavily on internal BPF structures,
-experimental macros, and kfuncs that change frequently between kernel
-releases, compiling it against /lib/modules/$(uname -r)/build on a
-system where the running kernel does not exactly match the upstream
-source tree will likely fail.
+In GNU Make, the $(if) function evaluates to true if the condition expands
+to any non-empty string. If a user sets make V=0, $(V) expands to the
+string "0", which Make considers true.
 
-If the host headers are present, the permissive skip check further down
-in the file will pass since the directory exists. Because the
-compilation failure is not ignored by the parent bpf/Makefile, won't
-this abort the entire BPF selftests build with confusing C compilation
-errors instead of silently skipping the unconfigured kernel tree?
+Consequently, $(if $(V),true,printf ...) will execute true;, silencing the
+BTFIDS output entirely. The standard msg macro used for other compilation
+steps explicitly checks ifeq ($(V),1).
 
-Should in-tree test modules avoid falling back to host distro headers to
-prevent these version mismatches?
+This results in inconsistent behavior where V=0 correctly prints brief
+messages like TEST-OBJ but silently skips BTFIDS.
 
-This was raised by Sashiko AI reviewer in v9:
-
-    https://lore.kernel.org/bpf/20260429194107.806B7C19425@smtp.kernel.org/
-
-The issue was acknowledged in v9 but has not been addressed in v10.
-
-[ ... ]
+Could this explicitly check for "1", such as using
+$(if $(filter 1,$(V)),true,printf ...) to accurately match the behavior of
+the msg macro?
 
 
 ---
@@ -106,4 +93,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25167006036
---===============8038474828220066970==--
+--===============7899902004849665635==--
