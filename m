@@ -1,170 +1,179 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010005.outbound.protection.outlook.com [40.93.198.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B6129CE1;
-	Thu, 30 Apr 2026 21:01:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777582871; cv=none; b=t+gnwwbIcd/mcBTV90bcQDRudn2m9GzQ10LOsnvGA7/nTcbmQ3QeL0cRBnGc6V4XMwk8pQEIeGumnzeaNaz2EEvY2mkHZh+cJAcIOeel+MmLcOlsGruc6nUGUqEspH485xV4TTg4C89XT7Q/EeeZaVrNGx9RtxEd1ok3naM1MHQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777582871; c=relaxed/simple;
-	bh=+z9FQaVXJ2Okb/XwK9/H1gWDAQjlyC23w3vbqkdClS4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Mqi+qfs6NxEkXUY6yIaM4A8BXzEARJ22C5zdcgJwuCYL6wJDK6rt3kehQ7lScsLSAeHhUz4pDY063FYIjrOm0aHDCIACAsEFl1C6tX4mdUsoG2fKT1DniJBkDO7Z0jGx4XtbMUBVs3hU4WnC9rTRoPNRBnERfK6WLGDhmKUvxOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=HU9w2p+W; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6E972622;
+	Thu, 30 Apr 2026 21:14:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.5
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777583643; cv=fail; b=q7EXEb/+ZFuV8g1/qKQ/Jr7dNZa9ixGcTIkFm4/hpg8EaaeWCJcshkXijhSB4s18AwU9ywWggc8PgQq7fKeMnvMdkecPNYZdw67RPzUcKoL4bzTkPa/CCcQH6GYitjDiFPHaW7aNzHb13Bc9+9xaDIQeBZVczbdhsHYLt3kz+Tg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777583643; c=relaxed/simple;
+	bh=bYytc2ztmJUdgRh+g5MPsWIzUGdVFPary3ts7H0w5sM=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=gXHDBTy11rhVhWmqxKDOjILbhV0PmmrEmMx97rA2tPJB2qwXzeO9D58gnHEH+KeUIFQWK+H5gL+iabr/xZZ+pVF7TlIklJkF52H4A9bW/QXPBZ8sgNdbuupalYlsUU59NAnyrOM0Me5DuE7GgLQj/i4s19obYOjjbpZqpjFt+X4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=fqQ5PfYo; arc=fail smtp.client-ip=40.93.198.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="HU9w2p+W"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=TsBQHE+KItiTEMUqUkDd6inEHQTMmXP6hOUnVC7fjzE=; b=HU9w2p+WM+2k+Ksv0+9rOHVzo5
-	X9jfYuz3Bv8aVYa6SJOzqxTWU3F8bhch7qpIiGy1yxNcuhcw/V43iG6VcRbadlS3iR220EJKrBvY6
-	OkMpp6jDevGwypRCRYp4sWyI6yAEdp7RmOErLnTtDrAwk08ue9xZSgWmiYmPyZtNMVcrzguGuLJ9e
-	UNfHfdAU48OTpKP3MDeU4rz69wkCJGfvjq7dJlugaTk7BfgC57vt4IxIs25RTxapg3ADNsuJAYjrt
-	lCUo7C29NqJ6H99vdpd+Ho7W7E4pv9d6V4lD95CGL/8Ge+wjH6aBCOQQ5+yzhsSGpLf12Lka0iaSj
-	/42ic4Qg==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wIYVH-00098H-2P;
-	Thu, 30 Apr 2026 23:00:59 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wIYVH-000A2r-0e;
-	Thu, 30 Apr 2026 23:00:58 +0200
-Message-ID: <8570431a-38c0-49ab-8022-32ce59d5999b@iogearbox.net>
-Date: Thu, 30 Apr 2026 23:00:58 +0200
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="fqQ5PfYo"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=v0OK9GV2gEMr4/zxIjHHQjJ1xTbBT8NzNKmFHebrU0ZbMr8sap521GP65aHOqK9oS/P9Amh0vvMS8PCUQFKuBi/FxfQS1EvLi4F6AFqqgRKvIn0ladlvy6RFFYfh+Gc25wIlZsIXCXssVvjvkXo0t5sQXeBUCpyEtrBCzpVsgt50jUmynyC8a+BOEnYZP+R5aKkUKobUpJ1xcOZqLVSsaDVqDYRM06gqcdAsmntL9deso5XXNXict66F2Knb+gURWys/OS0Am8awreCw5CJ4DZ51YQZsYxsxPDo8Yi8kT5bpqRLtCJ5FKucAjDsc2xXZBE7FQBae3nU8rRtFDVuBIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QRn+Atoo0Tub/MJUyqcXAlIGpLkykDYDrGB2uE2CuG8=;
+ b=y+AffW7TQejzbBWffnFQh6KaaZo0S2vja3QM1tswe/37ply9NHLgtBXuUqpgs0skJQp/dBGGzfkbowrEPuTj0aELSQgccQPz5dNfyztup7IAgJ6BkfS953QBbEx9HrAH8ZQNsFyfnOX7JYBFRC8FhTOFwGtoUJtKTSzYV+C7/82U7VTWS/M7X9/KPf8iDFZdTVut+tNF4etBRtPC61Cd/uFgCwMafZIN9uJ52blIzb7UkbinopvtyuTTsnilCITm6CtN1HGmGKurToD5kmvUJh8tBaj6BZXsDQEnAkai/BLHC9RyFoWz+IgZ3Y8dOkoSxgotRKDGYLDI7CJ7snwfhg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QRn+Atoo0Tub/MJUyqcXAlIGpLkykDYDrGB2uE2CuG8=;
+ b=fqQ5PfYoa9WTYukJ0+QAmzoFfq+DlrIMjjf2fx4fcg9OZc3xc9Dq28px7m/Vf/wRPiIzMYE+g91LCbgQinFeOoJRhDxbmOeg5X6s5eOZyhNE2J0o/X3tWT78jgdilsQ/o/XH9JESfKpLMXQaSRbJSeYiL90rS3nIvtMpz60t6yn60587cV0uPhtLbPqjn0KcdfTqRvM/fIFcUViNfFK0Mwol6Pp2zODEwirmgvwe4vEGnwm+u3yjbTnbZ9NBksRsLAgWBsu+Ma0n5ygs4OC8oZfOFZYqroTNQoeJXUDIebaNnebRA6gk8OfYnZ/6BmDJK+59fyhUfzE0GqObBkUSQQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY8PR12MB8300.namprd12.prod.outlook.com (2603:10b6:930:7d::16)
+ by DM4PR12MB6256.namprd12.prod.outlook.com (2603:10b6:8:a3::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9870.20; Thu, 30 Apr 2026 21:13:56 +0000
+Received: from CY8PR12MB8300.namprd12.prod.outlook.com
+ ([fe80::ce75:8187:3ac3:c5de]) by CY8PR12MB8300.namprd12.prod.outlook.com
+ ([fe80::ce75:8187:3ac3:c5de%3]) with mapi id 15.20.9870.020; Thu, 30 Apr 2026
+ 21:13:55 +0000
+From: Yury Norov <ynorov@nvidia.com>
+To: Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jinjie Ruan <ruanjinjie@huawei.com>,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-arch@vger.kernel.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: Yury Norov <ynorov@nvidia.com>
+Subject: [PATCH 0/6] lib: rework bitreverse
+Date: Thu, 30 Apr 2026 17:13:44 -0400
+Message-ID: <20260430211351.658193-1-ynorov@nvidia.com>
+X-Mailer: git-send-email 2.51.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0274.namprd03.prod.outlook.com
+ (2603:10b6:a03:39e::9) To CY8PR12MB8300.namprd12.prod.outlook.com
+ (2603:10b6:930:7d::16)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 bpf 1/2] bpf: tcp: Fix type confusion in
- bpf_tcp_sock().
-To: Kuniyuki Iwashima <kuniyu@google.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>,
- bpf@vger.kernel.org, netdev@vger.kernel.org,
- Damiano Melotti <melotti@google.com>
-References: <20260430184405.1227386-1-kuniyu@google.com>
- <20260430184405.1227386-2-kuniyu@google.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260430184405.1227386-2-kuniyu@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27987/Thu Apr 30 08:25:46 2026)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY8PR12MB8300:EE_|DM4PR12MB6256:EE_
+X-MS-Office365-Filtering-Correlation-Id: 919cf35c-e24a-48af-ea8f-08dea6fd6302
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|1800799024|10070799003|366016|18002099003|56012099003|921020;
+X-Microsoft-Antispam-Message-Info:
+	SPwn79hu4mpZbmd0li5fYtGc34idG9EvU/wMDfiHGkiKvF/Qb6QCMqBTHdyfNg5LwcuBiFuC56G7XJFwsI7ARiOoyRAiU2OXqRXfOUXjy7BTx3addb5lov9Vs/SAtXfEWhmQUMzTYR50Ll3ZO3NAXke9oTcuCrpwq+vsxAI2KAY0AXf2W950j4n7RBErzlIKGKLNGnTHU7++Yu674SLGtSnO9FXotFb5MBq1vO9iETdl84KGNLp3Y2JJ2AsSLchBw/bDXD7BFKDDJM9CVcmadTQ5S2ItWv02oWWvjzh+oRJG6aUy2/z6Tb4+61AIcxTz+Kv+n4KsCzzH83ISgn2vKAJGnC7B0xc1AFxpH9FCo2YLnWpYwxsXPxrKk0OJi6hSRkle95zLePQsOcfm23X59RaP9GVHodxy/q0GaHFqWzSNIP0+itUTw93vjB0S279GNZeBajkIW/7c9SbbHNuZebBwjY+7B/N4uO+xjhJNvYBxQmXbMPqrM88+u/BCau7jH4QqVXSB/EeZSh5F9o0vg6GpZEUl7WrB0LUcZ3ucv1ShrRg+PI5dcezPJTEvBkPtXzHGS3skVO9gpDjqEtVcbIqqAAnJu0VV9OZBmKECqQE2YBESa6es24tl8+lVWTym3sH2qvH/3rJQISyrky+GHUKkRkIuOw3rZsqmrLZCOzzn8wVBN4ZqjJXqj2cbGkRL/+9lfrhgyEEePAJUFvSIkLIio1EDX9Q0vz21ROltgPc=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR12MB8300.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(10070799003)(366016)(18002099003)(56012099003)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?g95T87zbdJ000amw3EymqQ0gAPj8Dj0n2NO0Y5EYGjIyti3MynWX3s42+cRk?=
+ =?us-ascii?Q?KiaeyytztVnc97z3eEcf/1YtjpdFNIUKIDM28DUJ5NjvhabpDDHkIMAcXuI7?=
+ =?us-ascii?Q?UvCAwf7kcE4dOZQx2yzHx27becHw7y1x/y3QS5BTDJqHXTFzjiACSzKMrCR9?=
+ =?us-ascii?Q?dwjZQfnRk6F87vFsA9ZmM2g3Oi+JLX87vjg0n/SWyiJANpgnq3qmFXwe3e0M?=
+ =?us-ascii?Q?HSwSIBDXOf+64qny3xNmAQie2/lk6wc/P9yV1jK7WmMmkAPXatm+DDpfb+OQ?=
+ =?us-ascii?Q?rWVhJnsyn7OMtQBLWO28ib5jZoD9EyuewGteDkxJLcLy6hQX06S+bME1iWtA?=
+ =?us-ascii?Q?gkaf4UuMSnOll/tcHMPlB/A1ymBit59iPooNIlaA5CKyRlMitvtzoKpRNPyt?=
+ =?us-ascii?Q?jHXfNmltrnj2N14C0LuC0avLdhUK4nfYS0DoVRj/XF9uQsNOzdT0vWYX25Mz?=
+ =?us-ascii?Q?lnU56W2phvhtw0hVE3MBDE5MQMLX2qXpBVgHC+tg8jhH/qYN9uYDyrgUBFdW?=
+ =?us-ascii?Q?KVaj49rD9e8su8sKWF0nNA7KUm5IaSRdFSDV2Xq/i2ltbbUYKcvk31lY09vq?=
+ =?us-ascii?Q?qh8lMrpzcgAiw25sVLQ52EBe+AKjdLjeL+Y320pnpm5FbC9wMUDzEto5jSKn?=
+ =?us-ascii?Q?CMCeWiLMLpbW7rapc1ebYRLrQGsGVn55vl8s51RKz0/s2/jVLgOWSeek41HJ?=
+ =?us-ascii?Q?qKaXPmP0pX8eHQUNpgb6svFMhKBum8qgM4HSs7zpuDH/pPMd+i1DGcHhYsfh?=
+ =?us-ascii?Q?K+o3FwEJww5NAoXN0gKMVrW/vRC+uALEn+3SysaC1v4RqU0zcqJyfv5SQ0w4?=
+ =?us-ascii?Q?6ZfQqMwR1NBsLpeGqpppZABtMardRSqw2iiDYNELPD83kWhPHnIUGNHVAeMZ?=
+ =?us-ascii?Q?RGNetU35JnTZ3APGJBIfECyLsW3cQm7QcrQ7H+edk5KxQ444dyyEdyrzbfzP?=
+ =?us-ascii?Q?Q/SvFcsuem9nY3BVUJLDr3JdBNWTeKbBol3dVl0N71AvSiFTsiEhlzson1zY?=
+ =?us-ascii?Q?w32iC948kn9AhMrGZVDtA8P+dnkr2/f9XaQog/LeBINgJSqULjXQBoEuLQz+?=
+ =?us-ascii?Q?IhsBx18CFadrGtHojYGJTz+1F/hGtAO0mo5z00N/GuXssHBPOWOH+IZV8TAr?=
+ =?us-ascii?Q?2iEcWcw9TVYhnjd6Bo7ahDXG4yRycCwOMT4ShK1tQxwZThozC+fekjDuYl1o?=
+ =?us-ascii?Q?7vqk68HkIh4+4jH6+trY+SOGFaWMtHBOh+9N6sO1TLys+T7QVmqEWr+bBhAT?=
+ =?us-ascii?Q?OVwYeLKSjbGTMZweIb63rSe4qGIl5F6xAxEzH6OFuUnR0sT9VmgijZ0l//i2?=
+ =?us-ascii?Q?u1ThAcuR0y+E4U0WQv2o6MNN1K0itrScbro8fEZjwjqBN7vSCw3qcydfF0r3?=
+ =?us-ascii?Q?Y68y3x+lXC/7MiGtIAnuH2Pkn0n8y2UR+8+4GRAL8jIg9PfdgnuPB/yFd3C8?=
+ =?us-ascii?Q?cVrRXz1SO4N6N2MjaqzqpTEiU363VGavCqELzIDRZDLQyuHWLB9xUvFsTXoF?=
+ =?us-ascii?Q?5aYPlJr/uNUDDJJI6CT8OwbAm+PUfJdmY8aUnzG051hDTSYgHvoK9A2wCJVv?=
+ =?us-ascii?Q?BSPxPm954H/d+HzcoP8k7DccU3BMbLehUHmIwvRBDqL5ACmyYPspxB1Lh4Ct?=
+ =?us-ascii?Q?1orVC6RrrvB5qegCZF2HaIqcDqpDplwlnsyhZ3ay/aSB5NuvpBW1nSNucs7P?=
+ =?us-ascii?Q?i+dSA0VIjWp8O1rYTDw8P9ErBlNblgFeiypmnwIALVxJb+z+BhYhOneJOXRq?=
+ =?us-ascii?Q?hUjFTFd6oC5EuCJl3c5hEkNMypY7AG7eVxjQdb1CgL+MdAacJwDQ?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 919cf35c-e24a-48af-ea8f-08dea6fd6302
+X-MS-Exchange-CrossTenant-AuthSource: CY8PR12MB8300.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2026 21:13:55.3471
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: B25ZgCAYu78XhGs25DylfUSSlNvvS1eOzDxAYibijJORYq7ZXSgN/xppiv0eplmrBCZuGmqcZ9Cjrsc2v9x1Ag==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6256
 
-On 4/30/26 8:43 PM, Kuniyuki Iwashima wrote:
-> bpf_tcp_sock() only check if sk->sk_protocol is IPPROTO_TCP,
-> but RAW socket can bypass it:
-> 
->    socket(AF_INET, SOCK_RAW, IPPROTO_TCP)
-> 
-> Calling bpf_setsockopt() in SOCKOPT prog triggers out-of-bounds
-> access to another slab object. [0]
-> 
-> Let's use sk_is_tcp().
-> 
-> [0]:
-> BUG: KASAN: slab-out-of-bounds in sol_tcp_sockopt (net/core/filter.c:5519)
-> Read of size 8 at addr ffff88801083d760 by task test_progs/1259
-> 
-> CPU: 1 UID: 0 PID: 1259 Comm: test_progs Tainted: G           OE       7.0.0-11175-gb5c111f4967b #1 PREEMPT(full)
-> Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.17.0-debian-1.17.0-1 04/01/2014
-> Call Trace:
->   <TASK>
->   dump_stack_lvl (lib/dump_stack.c:94 lib/dump_stack.c:120)
->   print_report (mm/kasan/report.c:378 mm/kasan/report.c:482)
->   kasan_report (mm/kasan/report.c:595)
->   sol_tcp_sockopt (net/core/filter.c:5519)
->   __bpf_getsockopt (net/core/filter.c:5633)
->   bpf_sk_getsockopt (net/core/filter.c:5654)
->   bpf_prog_629ba00a1601e9f2__setsockopt+0x86/0x22c
->   __cgroup_bpf_run_filter_setsockopt (./include/linux/bpf.h:1402 ./include/linux/filter.h:722 ./include/linux/filter.h:729 kernel/bpf/cgroup.c:81 kernel/bpf/cgroup.c:2026)
->   do_sock_setsockopt (net/socket.c:2363)
->   __x64_sys_setsockopt (net/socket.c:2406)
->   do_syscall_64 (arch/x86/entry/syscall_64.c:63)
->   entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121)
-> RIP: 0033:0x7f85f82fe7de
-> Code: 55 48 63 c9 48 63 ff 45 89 c9 48 89 e5 48 83 ec 08 6a 2c e8 34 69 f7 ff c9 c3 66 90 f3 0f 1e fa 49 89 ca b8 36 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 0a c3 66 0f 1f 84 00 00 00 00 00 48 8b 15 e1
-> RSP: 002b:00007ffe59dcecd8 EFLAGS: 00000202 ORIG_RAX: 0000000000000036
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f85f82fe7de
-> RDX: 000000000000001c RSI: 0000000000000006 RDI: 000000000000000d
-> RBP: 00007ffe59dcef20 R08: 000000000000003c R09: 0000000000000000
-> R10: 00007ffe59dcef00 R11: 0000000000000202 R12: 00007ffe59dcf268
-> R13: 0000000000000003 R14: 00007f85f9da5000 R15: 000055b2f3201400
->   </TASK>
-> 
-> The buggy address belongs to the object at ffff88801083d280
->   which belongs to the cache RAW of size 1792
-> The buggy address is located 1248 bytes inside of
->   allocated 1792-byte region [ffff88801083d280, ffff88801083d980)
-> 
-> Fixes: 655a51e536c0 ("bpf: Add struct bpf_tcp_sock and BPF_FUNC_tcp_sock")
-> Reported-by: Damiano Melotti <melotti@google.com>
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-First one lgtm:
+This series is a resend for Jinjie Ruan's "arch/riscv: Add bitrev.h file
+to support rev8 and brev8" [1], my follow-up "lib: compile generic
+bitrev based on GENERIC_BITREVERSE" [2], and the fix for a build error
+reported by Nathan Chancellor [3].
 
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+No changes, except for combining pieces together and rebasing on top of
+the tree.
 
-Thanks!
+[1] https://lore.kernel.org/all/20260421130752.607500-1-ruanjinjie@huawei.com/
+[2] https://lore.kernel.org/all/20260427205210.397471-1-ynorov@nvidia.com/
+[3] https://lore.kernel.org/all/20260429202922.GA3575295@ax162/
+
+Build-tested against x86 tinyconfig and defconfig, having disabled and
+enabiled CRC32 and BITREVERSE, correspondingly.
+
+Jinjie Ruan (3):
+  lib/bitrev: Introduce GENERIC_BITREVERSE and cleanup Kconfig
+  bitops: Define generic __bitrev8/16/32 for reuse
+  arch/riscv: Add bitrev.h file to support rev8 and brev8
+
+Yury Norov (3):
+  lib: include crc32.h conditionally on CONFIG_CRC32
+  lib: compile generic bitrev.c conditionally on GENERIC_BITREVERSE
+  MAINTAINERS: BITOPS: include bitrev.[ch]
+
+ MAINTAINERS                           |  2 ++
+ arch/riscv/Kconfig                    |  2 ++
+ arch/riscv/include/asm/bitrev.h       | 51 +++++++++++++++++++++++++++
+ include/asm-generic/bitops/__bitrev.h | 25 +++++++++++++
+ include/linux/bitrev.h                | 20 +++--------
+ include/linux/etherdevice.h           |  4 +++
+ lib/Kconfig                           | 18 ++++++++++
+ lib/Makefile                          |  2 +-
+ lib/bitrev.c                          |  3 --
+ 9 files changed, 107 insertions(+), 20 deletions(-)
+ create mode 100644 arch/riscv/include/asm/bitrev.h
+ create mode 100644 include/asm-generic/bitops/__bitrev.h
+
+-- 
+2.51.0
+
