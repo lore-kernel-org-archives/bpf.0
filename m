@@ -1,153 +1,127 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E8F42188D
-	for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 13:13:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C72A4279FA;
+	Thu, 30 Apr 2026 13:30:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777554839; cv=none; b=ZWZzDahaRmkFvO3UJuo17qB+hVs+NAeCAEQtzcpnCUUlLciBtbfpFMGSCEYSyMdERs1Qw8SDRZ+bxyNrxVUdVouF4+hU89m954zpoQmXXkKsOYdE4sM4nrCMQJH1Jr6Dlw5haQen+d+jIWGw+i5UVE5Ve8vBxLLWzOjPEE7l+gE=
+	t=1777555833; cv=none; b=EN/+aRBby96J1v9tuwZcODkpTyc19FnCtREwQFM/MPUggddjGn/ef4+ynPF5xZI+eUB3VojzpHJD3VaB6874cJgAWPhjB3y8EMigwWmVg3gPMPPOk743QQC19YEODnlkdNmDUiiYKC3gyuBeD/RL2FktreBAWD/DbelDhVAPGuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777554839; c=relaxed/simple;
-	bh=xJjJzowTCghhIo1M1BBoQR1p6lnqeUhBs3J9/RR1jz0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=EulS1PhqDdhwBttdCsxEHwqV3rAQgQ6lb1+cYu/BPyqii1JV1EtxuM/Brc6BzZjrKuogJnKrw1UQMvVgBv+Iu4tdScYaamApRRwgvV64i+hjg0pNKEq5UNISy95OB8o2OeX5SiAfgl2EmGnXuJi2qvks2YXs0wnlUBAqyTJWo1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fVJ5i1Ae; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1777555833; c=relaxed/simple;
+	bh=skooFsp+/4GbOAuwrVnXAE8MeO/sNiwc6B6Hb4tb1cQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=f7jICPU8ceXqwCxxElm6VoQU4df6DbUpiAZBsfj3LHfx4uUUlfJTyDZmylt+n5U8Fosv1zZLg1s+oJmJhP4zGbjYt4xKZWblhyKo4WKzh//ojMSoU+LvV2/aYslbff/3M/E0E3qLSSyzqRsxpEkv3tTzyip4s9jsV4UPL4QPhm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m9sdh+DH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fVJ5i1Ae"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4891b0786beso6185275e9.1
-        for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 06:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1777554835; x=1778159635; darn=vger.kernel.org;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zRe/Of4HXhlzR8gGS5doxSOHHPYhsd1Ia0Z7yzBuFU4=;
-        b=fVJ5i1AeMcp41RtRmLNu+o+kRto0mUspGVdiWU/993NPcPfPudk8Ykc6k+OvZ0Oexj
-         SsukS4hswULkGY1F30NLzYGDVCxNeK/z2evY4aeBSzNw8hO/s0bLdb/EzkKzFh+n8u6h
-         leu1WwgnhgIfgOKdgRhSzUnfhpltakxBwjQkDuNzAx3wkjTj9tTxvKzQ0oKlRHSnGqiT
-         BSpG42qle+dLTUCxbN41ncuqwnxpfvN3JIFJ+BzqXkwn8408zUe+jB8i0Gu3Uy+3f0Bn
-         rHKFkycoOLwlMUopeJmE4tc6Ggv6anT13AnxbaMkpV+ul/MfZqzJAaEhlQAvgjndH/+5
-         4SLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777554835; x=1778159635;
-        h=in-reply-to:references:from:to:cc:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zRe/Of4HXhlzR8gGS5doxSOHHPYhsd1Ia0Z7yzBuFU4=;
-        b=bpifm5smw+Mjkss23FX1nMaj1PuW7QiJ3+/v2X6ApSlTWZ8zLSlI5k85HuGO5hskAW
-         4kjiKp649lFLn0KyU8TFqXZEpkWdYPhUNBEdQJ+2zHWQsp7VuuyC7zKwgJEnobGYRziN
-         c09z6izzrTFeP2iUQtxamM+JHf61AkS9WOVCn0G+9+Jxjx3rh26ZMxfTyPqFYeQQAiUE
-         gViON+RwrJ5JAb/vk5E9uur9xhZTnZPZZACsS5AGS8TKZ6kruaGeq+a/E0aertyl/ojG
-         WeNV1h5kN1dAqv9Lwot/UWhFXknfqDrdGyWt8TilQt7aw4OWZ7DFPJULdrRrn+3v1BCc
-         3k+w==
-X-Gm-Message-State: AOJu0YxRfDsm9VXNiX8V+Oj2IJE1TC+lf4cRz94+fNq+Tbvrsx8Cj9Ym
-	/EWPGjSycyQS5JeaaUNNEP3q/fsKwLNoD61elB4jgSF3WeauZJmUaqkh6NNmFuz5jTs=
-X-Gm-Gg: AeBDievT18eNiHlKlhrCG/42GImUvR4nt4Iw3cac9TOlui5OX07qKvc8U9MHsTdCZ5s
-	Q+k7nGC71Khpinx2thW1qqI74ibOi6oMfvbxh1r/oB1VYSWZFdzVjsRxAgGr9AVqG3VSzGX1Hct
-	kMQktsfJtz72qJPtqlyUdIJSIYgTlNqSdolEVBHRfgNkmY2/LeG25G8q2DsE00z9q5H8KNos0I2
-	8lIeBs/F+rE8r1JfbVafuo3BNhcI3xRC+xRB91Z6B79dh+ChfdkLn/1OQuYTDZOdoq0K5jCvk2d
-	F5gn2D/Czx4zXFczR9uwXoiFdaTdtzvd6/EcnR2eN3v7/gnCHnGnvSEAaRdSX0NDNoAsDqF0o7p
-	w13Md6CamsJfnF71Jka+sd7rtxW7DCHZUvZYfAFRVad4yp628XshQ9CIlPx7ECM/HTfMbcaxeHF
-	M9vcIyOLkJFdbZEMqRDsHLBFEmrshkCEJ3tw==
-X-Received: by 2002:a05:600c:3e8d:b0:48a:53ea:140b with SMTP id 5b1f17b1804b1-48a844a4728mr48868965e9.28.1777554834909;
-        Thu, 30 Apr 2026 06:13:54 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:105d:2ecf:67ff:fe81:9da0])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ed46afda3fsm3707956eec.30.2026.04.30.06.13.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Apr 2026 06:13:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m9sdh+DH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2FD3C2BCB3;
+	Thu, 30 Apr 2026 13:30:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777555832;
+	bh=skooFsp+/4GbOAuwrVnXAE8MeO/sNiwc6B6Hb4tb1cQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=m9sdh+DHnSNbP/yyTyMTdPwbWbkw3KJ67bx4FvicVup6RoeIVEL9PW8RDZDK+v0kB
+	 a3Q/p3z3ovaVbmtXqgmOFrntlnMvs5cBCawshPu02bQg/xvkKoPz6SWCZNwYnoQEb6
+	 lKcN2sCTeQSHPJxhLbWGv20LujYKCgX0Ifas4pc6SGdamEbB+rrKd7MtN9wKJVf9es
+	 xsN+Ldf1ZuuhtH5kEUmaLouU546vK8HMG+zIfXXb0xOFcjd8JXJNb/ETvgBZg/vqt4
+	 VEWrxtsyEFU93Awz3Ts4Y0zH0mcD8Wvw10OPk55VDnmq0bVKPyom0+ss/jZY8u5PAf
+	 Ml+n57nvbfiQg==
+Content-Type: multipart/mixed; boundary="===============6049219023370403133=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 30 Apr 2026 10:13:51 -0300
-Message-Id: <DI6ILKHKXCTR.2TAXUY0YUC5DS@suse.com>
-Subject: Re: [PATCH bpf-next v10 06/11] selftests/bpf: Tolerate test file
- compilation failures
-Cc: <bpf@vger.kernel.org>
-To: <sashiko@lists.linux.dev>, =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?=
- <rbm@suse.com>
-From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
-X-Mailer: aerc 0.21.0-120-g22b95d38161f
-References: <20260430-selftests-bpf_misconfig-v10-6-cd302a31af16@suse.com>
- <20260430131052.3E683C2BCB3@smtp.kernel.org>
-In-Reply-To: <20260430131052.3E683C2BCB3@smtp.kernel.org>
+MIME-Version: 1.0
+Message-Id: <deceeca5bb5e141c8ad07c5ed3754c6b2613fa0b99383614f1cfcc31bd09d39c@mail.kernel.org>
+In-Reply-To: <20260430-selftests-bpf_misconfig-v10-7-cd302a31af16@suse.com>
+References: <20260430-selftests-bpf_misconfig-v10-7-cd302a31af16@suse.com>
+Subject: Re: [PATCH bpf-next v10 07/11] selftests/bpf: Skip tests whose objects were not built
+From: bot+bpf-ci@kernel.org
+To: rbm@suse.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
+Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 30 Apr 2026 13:30:28 +0000 (UTC)
 
-On Thu Apr 30, 2026 at 10:10 AM -03, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Low] The inline condition `$(if $(V))` incorrectly suppresses the `BTF=
-IDS` pretty output when `V=3D0` or `V=3D2`.
-> --
->
-> commit 0d69d461adbd02ed2bb765aad81f923aeaf2a8da
-> Author: Ricardo B. Marli=C3=A8re <rbm@suse.com>
->
-> selftests/bpf: Tolerate test file compilation failures
->
-> This commit makes per-test compilation non-fatal for test_progs, skipping
-> missing objects during linking. It adjusts the BTFIDS step to use standar=
-d
-> printf instead of the msg macro within the shell conditionals.
->
->> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selfte=
-sts/bpf/Makefile
->> index 608e6dff03926..9becc077eb231 100644
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->
-> [ ... ]
->
->> @@ -717,11 +723,14 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:	=
-		\
->>  		      $(TRUNNER_TESTS_DIR)/%.c				\
->>  		      | $(TRUNNER_OUTPUT)/%.test.d
->>  	$$(call msg,TEST-OBJ,$(TRUNNER_BINARY),$$@)
->> -	$(Q)cd $$(@D) && $$(CC) -I. $$(CFLAGS) -MMD -MT $$@ -c $(CURDIR)/$$< $=
-$(LDLIBS) -o $$(@F)
->> +	$(Q)(cd $$(@D) && $$(CC) -I. $$(CFLAGS) -MMD -MT $$@ -c $(CURDIR)/$$< =
-$$(LDLIBS) -o $$(@F)) $(if $(filter test_progs%,$1),$(if $(PERMISSIVE),|| \
->> +		($(RM) $$@; printf '  %-12s %s\n' 'SKIP-TEST' '$$(notdir $$@)' 1>&2))=
-)
->>  	$$(if $$(TEST_NEEDS_BTFIDS),						\
->> -		$$(call msg,BTFIDS,$(TRUNNER_BINARY),$$@)			\
->> +		$(Q)if [ -f $$@ ]; then						\
->> +		$(if $(V),true,printf '  %-8s%s %s\n' "BTFIDS" " [$(TRUNNER_BINARY)]"=
- "$$(notdir $$@)"); \
->
-> Does this condition correctly handle V=3D0 or V=3D2?
->
-> In GNU Make, the $(if) function evaluates to true if the condition expand=
-s to
-> any non-empty string. If a user sets make V=3D0, $(V) expands to the stri=
-ng "0",
-> which Make considers true.
->
-> Consequently, `$(if $(V),true,printf ...)` will execute `true;`, silencin=
-g the
-> BTFIDS output entirely. The standard msg macro used for other compilation=
- steps
-> explicitly checks `ifeq ($(V),1)`.
->
-> This results in inconsistent behavior where V=3D0 correctly prints brief =
-messages
-> like TEST-OBJ but silently skips BTFIDS.
->
-> Could this explicitly check for "1", such as using
-> `$(if $(filter 1,$(V)),true,printf ...)` to accurately match the behavior=
- of
-> the msg macro?
+--===============6049219023370403133==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-ugh I forgot about this one
+> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+> index cc14b13e23fe..7ba82974ee78 100644
+> --- a/tools/testing/selftests/bpf/test_progs.c
+> +++ b/tools/testing/selftests/bpf/test_progs.c
+
+[ ... ]
+
+> @@ -2046,15 +2069,20 @@ int main(int argc, char **argv)
+>  		struct prog_test_def *test = &prog_test_defs[i];
+>
+>  		test->test_num = i + 1;
+> -		test->should_run = should_run(&env.test_selector,
+> -					      test->test_num, test->test_name);
+> +		test->selected = should_run(&env.test_selector,
+> +					    test->test_num, test->test_name);
+> +		test->should_run = test->selected;
+>
+> -		if ((test->run_test == NULL && test->run_serial_test == NULL) ||
+> -		    (test->run_test != NULL && test->run_serial_test != NULL)) {
+> +		if (test->run_test && test->run_serial_test) {
+>  			fprintf(stderr, "Test %d:%s must have either test_%s() or serial_test_%sl() defined.\n",
+>  				test->test_num, test->test_name, test->test_name, test->test_name);
+>  			exit(EXIT_ERR_SETUP_INFRA);
+>  		}
+> +		if (!test->run_test && !test->run_serial_test) {
+> +			test->not_built = true;
+> +			test->should_run = false;
+> +			continue;
+> +		}
+>  		if (test->should_run)
+>  			test->should_tmon = should_tmon(&env.tmon_selector, test->test_name);
+>  	}
+> @@ -2106,9 +2134,18 @@ int main(int argc, char **argv)
+>
+>  	for (i = 0; i < prog_test_cnt; i++) {
+>  		struct prog_test_def *test = &prog_test_defs[i];
+> +		struct test_state *state = &test_states[i];
+>
+> -		if (!test->should_run)
+> +		if (!test->should_run) {
+> +			if (test->not_built && test->selected &&
+> +			    !env.get_test_cnt && !env.list_test_names) {
+> +				state->tested = true;
+> +				state->skip_cnt = 1;
+> +				env.not_built_cnt++;
+> +				print_test_result(test, state);
+> +			}
+>  			continue;
+> +		}
+
+When test->should_run is false (which it is for unbuilt tests due to the
+code above setting test->should_run = false), the continue statement skips
+the env.get_test_cnt and env.list_test_names blocks that follow.
+
+Won't this completely omit unbuilt tests from the output of --list (-l) and
+--count modes? The code only prints unbuilt tests when !env.get_test_cnt &&
+!env.list_test_names is true.
+
+If CI systems use test_progs -l to discover and distribute tests across
+parallel jobs, they won't be aware of unbuilt tests. Could this undermine
+the stated goal of keeping unbuilt tests visible in CI results?
+
+Reference: sashiko-bot raised this concern in v10 discussion at
+https://lore.kernel.org/bpf/20260430131344.B40DDC2BCB3@smtp.kernel.org/
 
 >
->>  		$(RESOLVE_BTFIDS) --btf $(TRUNNER_OUTPUT)/btf_data.bpf.o $$@;	\
->> -		$(RESOLVE_BTFIDS) --patch_btfids $$@.BTF_ids $$@)
->> +		$(RESOLVE_BTFIDS) --patch_btfids $$@.BTF_ids $$@;		\
->> +		fi)
+>  		if (env.get_test_cnt) {
+>  			env.succ_cnt++;
 
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25167006036
+--===============6049219023370403133==--
