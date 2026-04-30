@@ -1,121 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEFFB477E2D;
-	Thu, 30 Apr 2026 16:42:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F18472794
+	for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 17:50:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777567324; cv=none; b=PiCSxp8a0ICAJ+q265ASubj2Ck6Jjn1x/McglSSZV35R2Q76RWc3IM9ag63NHIubXLfXZYQNH7OQLj4BC8FjiMf/hgAlIEg3/D/kPi5IecNo8zKol13TbvmjEDEdbUqYMKhwrJkwtwFUtWxm2NjHNtesy8MsjATxpqrBnRHFVck=
+	t=1777571433; cv=none; b=FlMg1vvg/JHgG46TVq+96m5TPnWDwshyoxip37Fq1gs2YLymrx+K0nXDFh3tNrPIkuCouc0eIqZIpaWA6IjMxq2V65iTKblhVaN15FGFhDcxFkwLP0w5LahUFpX7yP37bzfkZ4LPAcwiHQvN9qYoHBWkPTaZsmCuxs7PQRNw1gU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777567324; c=relaxed/simple;
-	bh=p4T/P+cg/+Opc0jMFVbXpIndKd5hyRAAi2QVvcmPkao=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=cOkvFI66TYKXG9AqKKP9bxjJs4uNhpa++uZpPRMYrRTLEJJxk1nGewQiAF75AzgojgWhGo+i5xnPIS7i3t7VDYKM1xGU5ET0Wd3uFItO4IIYIwpxgJXMqXN6HpnIQSgGWchfgQpZMAApgYeiZqLONug7LeyqnO0XKDX0wvgiN2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l41aP/nC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777571433; c=relaxed/simple;
+	bh=kEdW7EIrFjhtlqsPOdgL64/jkA4ADvKNvNxeaOjLL1I=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=iKDtYpML+7GBYUdDQBzfnWqPeL/kl6UWXIEpWcvxPqBqKOxHcGSpKxN+s/SyZwb+1FKiLQPscbrbLeLgUxIASFL0aLgYKooWDjdWwfRilK+Nn/DJtsNPful36B89fmLUsU+MNFFbKXaXurNCw6qbLUsZkLhTds1qhKu51K3eXfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nY4RuW/O; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l41aP/nC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0ACCC2BCB3;
-	Thu, 30 Apr 2026 16:42:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777567323;
-	bh=p4T/P+cg/+Opc0jMFVbXpIndKd5hyRAAi2QVvcmPkao=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=l41aP/nCKVEvjEtcCuk0FP679QF+oR6VmiNTV3WBNKbJTyGabRcbMjIq5A0iH7J4U
-	 WZvPnAL5Yri+vk3VQlCjgoI5qu5ONE35KswnB/1WLCaoK/BvKJHx+JCAmMeZ3K23Qy
-	 3uM5Wpw9dtBk3ayjwr1b6CPaI8+k33IhPIGeE1TdWEmOZZU39JX0jUhN9OTIY3mp6/
-	 QZUjlen4GUjA9ocT63bHqGsR0HRgpOcBsjSYSNNpiBllZN0tw6PeV5CiMfa/LAPdgE
-	 jEvew7z3xTiQfSMZaRJkR9Sw7vEViVPAZ7hEqZGKeydQtDybtk0Fux99gnDy+3DQDR
-	 6vDkE7VbAvD9Q==
-Content-Type: multipart/mixed; boundary="===============3289116302628097459=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nY4RuW/O"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f07336b357836aa0d9b5017f4bdf56969d6cb4044b8df5fd9dc67baf593b761e@mail.kernel.org>
-In-Reply-To: <20260430-selftests-bpf_misconfig-v11-2-e11f7a8c4fdc@suse.com>
-References: <20260430-selftests-bpf_misconfig-v11-2-e11f7a8c4fdc@suse.com>
-Subject: Re: [PATCH bpf-next v11 02/11] selftests/bpf: Fix test_kmods KDIR to honor O= and distro kernels
-From: bot+bpf-ci@kernel.org
-To: rbm@suse.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 30 Apr 2026 16:42:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1777571429;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Nw/7KpLkvKo4TFF8/HeokXiwpBf9w53SwvYgIfr+UD4=;
+	b=nY4RuW/OKLGNb4QSU9YL8m53BIZgS9aLj42bOOsWrTWp7FDttAC4l3TsMTdS0wguWMUYeq
+	Gd6vrCmU1p8G7Vj8J9vX0bm0bNanTBeSr6e9Q85uZl6SErNDOiLRCmxv7ugyJYfrEWMDEg
+	ufWY/k8cIaU/xQyEUtBBpYf9Pw6l4Xk=
+Date: Thu, 30 Apr 2026 17:50:27 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <f3778bc7e9dd3b2f213a847cf9229f82dd70507c@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH net 6/7] net: tls: fix use-after-free in
+ tls_sw_sendmsg_locked after bpf verdict
+To: "Jakub Kicinski" <kuba@kernel.org>, davem@davemloft.net
+Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+ andrew+netdev@lunn.ch, horms@kernel.org, bpf@vger.kernel.org,
+ john.fastabend@gmail.com, sd@queasysnail.net,
+ linux-kselftest@vger.kernel.org, "Jakub Kicinski" <kuba@kernel.org>,
+ "Alessandro G" <ale.grpp@gmail.com>, ast@kernel.org
+In-Reply-To: <20260429222944.2139041-7-kuba@kernel.org>
+References: <20260429222944.2139041-1-kuba@kernel.org>
+ <20260429222944.2139041-7-kuba@kernel.org>
+X-Migadu-Flow: FLOW_OUT
 
---===============3289116302628097459==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 6094fe99b5f6..cc6ee7a2df93 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/testing/selftests/bpf/test_kmods/Makefile
-> index 63c4d3f6a12f..031c7454ce65 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/Makefile
-> +++ b/tools/testing/selftests/bpf/test_kmods/Makefile
-> @@ -1,5 +1,16 @@
->  TEST_KMOD_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
-> -KDIR ?= $(abspath $(TEST_KMOD_DIR)/../../../../..)
-> +SRCTREE_KDIR := $(abspath $(TEST_KMOD_DIR)/../../../../..)
-> +# Honor O=/KBUILD_OUTPUT only if they point at a prepared kernel build
-> +# directory (one containing Module.symvers); otherwise treat the value as a
-> +# selftests-only output directory and fall back to in-tree or distro headers.
-> +# The parent bpf/Makefile resolves O=/KBUILD_OUTPUT to absolute paths before
-> +# invoking this sub-make so relative paths still anchor to the user's
-> +# invocation directory.
-> +KMOD_O := $(or $(O),$(KBUILD_OUTPUT))
-> +KMOD_O_VALID := $(if $(KMOD_O),$(if $(wildcard $(KMOD_O)/Module.symvers),$(KMOD_O)))
-> +KDIR ?= $(if $(KMOD_O_VALID),$(SRCTREE_KDIR), \
-> +	    $(if $(wildcard $(SRCTREE_KDIR)/Module.symvers),$(SRCTREE_KDIR), \
-> +		/lib/modules/$(shell uname -r)/build))
-
-Will the automatic fallback to /lib/modules/$(uname -r)/build cause
-confusing build failures?
-
-Since bpf_testmod relies heavily on internal BPF structures, experimental
-macros, and kfuncs that change frequently between kernel releases, compiling
-it against host distro headers on a system where the running kernel does not
-match the upstream source tree will likely fail.
-
-If the host headers are present, the permissive skip check further down in
-the file will pass since the directory exists. However, because the
-compilation failure is not ignored by the parent bpf/Makefile, this would
-abort the entire BPF selftests build with confusing C compilation errors
-instead of silently skipping the unconfigured kernel tree.
-
-Should in-tree test modules avoid falling back to host distro headers to
-prevent these version mismatches?
-
-This concern was raised in v9 and v10 by bot+bpf-ci@kernel.org and
-sashiko-bot@kernel.org:
-
-  "Will falling back to the host kernel headers cause compilation errors
-  when building in-tree test modules like bpf_testmod? Since bpf_testmod
-  relies heavily on internal BPF structures, experimental macros, and
-  kfuncs that change frequently between kernel releases, compiling it
-  against /lib/modules/$(uname -r)/build on a system where the running
-  kernel does not exactly match the upstream source tree will likely fail.
-  If the host headers are present, the permissive skip check further down
-  in the file will pass since the directory exists. Because the compilation
-  failure is not ignored by the parent bpf/Makefile, won't this abort the
-  entire BPF selftests build with confusing C compilation errors instead of
-  silently skipping the unconfigured kernel tree? Should in-tree test
-  modules avoid falling back to host distro headers to prevent these
-  version mismatches?"
-
-Reference: https://lore.kernel.org/bpf/d1297f1c857e5430af42dcb3e4d05c7ddaff08470a43893cac0fbcb83ec51666@mail.kernel.org/
-
-[ ... ]
+April 29, 2026 at 3:29 PM, "Jakub Kicinski" <kuba@kernel.org mailto:kuba@=
+kernel.org?to=3D%22Jakub%20Kicinski%22%20%3Ckuba%40kernel.org%3E > wrote:
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>=20
+>=20After bpf_exec_tx_verdict() returns in the zerocopy path, the local
+> msg_pl/msg_en pointers may be stale. If a BPF program set apply_bytes
+> such that tls_push_record() splits the open record via
+> tls_split_open_record(), ctx->open_rec is replaced with the split
+> remainder while the original record is pushed to the tx_list and may
+> be freed by tls_tx_records(). The caller's cached msg_pl/msg_en still
+> reference the old (now-freed) record.
+>=20
+>=20This is triggered when bpf_exec_tx_verdict() returns -ENOSPC (BPF set
+> cork_bytes > remaining data) after an internal record split: the code
+> dereferences msg_pl->cork_bytes on the freed record, causing a UAF.
+>=20
+>=20Reported-by: Alessandro G <ale.grpp@gmail.com>
+> Fixes: 54a3ecaeeeae ("bpf: fix ktls panic with sockmap")
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: john.fastabend@gmail.com
+> CC: sd@queasysnail.net
+> CC: jiayuan.chen@linux.dev
+> CC: ast@kernel.org
+> CC: bpf@vger.kernel.org
+> ---
+>  net/tls/tls_sw.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>=20
+>=20diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index 600e13effaab..d086b43fc675 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+> @@ -1157,6 +1157,13 @@ static int tls_sw_sendmsg_locked(struct sock *sk=
+, struct msghdr *msg,
+>  else if (ret =3D=3D -ENOMEM)
+>  goto wait_for_memory;
+>  else if (ctx->open_rec && ret =3D=3D -ENOSPC) {
+> + /* bpf_exec_tx_verdict() may have
+> + * called tls_split_open_record(),
+> + * freeing the old record. Re-fetch.
+> + */
+> + rec =3D ctx->open_rec;
+> + msg_pl =3D &rec->msg_plaintext;
+> + msg_en =3D &rec->msg_encrypted;
+>  if (msg_pl->cork_bytes) {
+>  ret =3D 0;
+>  goto send_end;
+> --=20
+>=202.54.0
+>=20
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25176431268
---===============3289116302628097459==--
+Reviewed-by:=20Jiayuan Chen <jiayuan.chen@linux.dev mailto:jiayuan.chen@l=
+inux.dev=20>
