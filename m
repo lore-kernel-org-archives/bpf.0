@@ -1,120 +1,102 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C72A4279FA;
-	Thu, 30 Apr 2026 13:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587B13612F8;
+	Thu, 30 Apr 2026 13:30:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777555833; cv=none; b=EN/+aRBby96J1v9tuwZcODkpTyc19FnCtREwQFM/MPUggddjGn/ef4+ynPF5xZI+eUB3VojzpHJD3VaB6874cJgAWPhjB3y8EMigwWmVg3gPMPPOk743QQC19YEODnlkdNmDUiiYKC3gyuBeD/RL2FktreBAWD/DbelDhVAPGuo=
+	t=1777555838; cv=none; b=uZFPUhZgbkC5EW+xEi0mGtI2hFPqVQYwMweXqBX/bxahekSgIxkmqFnko5UWMO3ywpqBDvOuGkTeXRxWdtjAj7+eDA4pVT/tEn1uFdgctbReYc6DOYqtpyve/Oah8IGb0Uzplu7AxlNsKj3fOn1ssT91b/pcOkrAG7BH/nqWRIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777555833; c=relaxed/simple;
-	bh=skooFsp+/4GbOAuwrVnXAE8MeO/sNiwc6B6Hb4tb1cQ=;
+	s=arc-20240116; t=1777555838; c=relaxed/simple;
+	bh=h+4bMEtabwEnb4cgXjarrinMk3NN1aJ/kUR0Gy5zT9w=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=f7jICPU8ceXqwCxxElm6VoQU4df6DbUpiAZBsfj3LHfx4uUUlfJTyDZmylt+n5U8Fosv1zZLg1s+oJmJhP4zGbjYt4xKZWblhyKo4WKzh//ojMSoU+LvV2/aYslbff/3M/E0E3qLSSyzqRsxpEkv3tTzyip4s9jsV4UPL4QPhm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m9sdh+DH; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=ImIwcUSPBCKfj5F5/j6wVMmT33Qk43R5AeuK7KIcwshafEgOcJODe4Mt5iv3HZKXVXaDkP+N7dcGnssJ7wQPSM2DrJ7sX6Qj0Hxfi/Q96wkhS7Gdg/GVE+W0yp4bXwejGZm7zSPhPHtgDORD/1N3mXVchE++osNgjDRH8YMsXjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q4k4/6aA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m9sdh+DH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2FD3C2BCB3;
-	Thu, 30 Apr 2026 13:30:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q4k4/6aA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02136C2BCC6;
+	Thu, 30 Apr 2026 13:30:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777555832;
-	bh=skooFsp+/4GbOAuwrVnXAE8MeO/sNiwc6B6Hb4tb1cQ=;
+	s=k20201202; t=1777555838;
+	bh=h+4bMEtabwEnb4cgXjarrinMk3NN1aJ/kUR0Gy5zT9w=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=m9sdh+DHnSNbP/yyTyMTdPwbWbkw3KJ67bx4FvicVup6RoeIVEL9PW8RDZDK+v0kB
-	 a3Q/p3z3ovaVbmtXqgmOFrntlnMvs5cBCawshPu02bQg/xvkKoPz6SWCZNwYnoQEb6
-	 lKcN2sCTeQSHPJxhLbWGv20LujYKCgX0Ifas4pc6SGdamEbB+rrKd7MtN9wKJVf9es
-	 xsN+Ldf1ZuuhtH5kEUmaLouU546vK8HMG+zIfXXb0xOFcjd8JXJNb/ETvgBZg/vqt4
-	 VEWrxtsyEFU93Awz3Ts4Y0zH0mcD8Wvw10OPk55VDnmq0bVKPyom0+ss/jZY8u5PAf
-	 Ml+n57nvbfiQg==
-Content-Type: multipart/mixed; boundary="===============6049219023370403133=="
+	b=q4k4/6aAFjyd2v3/Lp7vn5NYRPEaQdr68oi3F/ZSwGNLpMC1+x0KwqftrDnYeIQiU
+	 EoBgdkkg3RiAmp1B6eeyY7fWqJ4dGMFw9h8JO4cf3QF9fzqFqIyaMwQ94iK4c1ZVWF
+	 bZ0VGpzFdzxmh50QkjZoSHrkv4OVgCbcjxa4jikqQpjxgBO/fweV2Y4aECsro6Ikn+
+	 OmtTB0I7N9MSszp9FHhi093tS78zvSCtQRy0FUdcbL0iOnz80XTAdXLgPXkEDb/H10
+	 DTJwHQp9NabYvEUm01syc1X2Q7cv6GepEfK3pXtpBl2UhSjP1er0z6clZFgc+F+fDg
+	 1vJyGCJEZZ10Q==
+Content-Type: multipart/mixed; boundary="===============8038474828220066970=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <deceeca5bb5e141c8ad07c5ed3754c6b2613fa0b99383614f1cfcc31bd09d39c@mail.kernel.org>
-In-Reply-To: <20260430-selftests-bpf_misconfig-v10-7-cd302a31af16@suse.com>
-References: <20260430-selftests-bpf_misconfig-v10-7-cd302a31af16@suse.com>
-Subject: Re: [PATCH bpf-next v10 07/11] selftests/bpf: Skip tests whose objects were not built
+Message-Id: <d1297f1c857e5430af42dcb3e4d05c7ddaff08470a43893cac0fbcb83ec51666@mail.kernel.org>
+In-Reply-To: <20260430-selftests-bpf_misconfig-v10-2-cd302a31af16@suse.com>
+References: <20260430-selftests-bpf_misconfig-v10-2-cd302a31af16@suse.com>
+Subject: Re: [PATCH bpf-next v10 02/11] selftests/bpf: Fix test_kmods KDIR to honor O= and distro kernels
 From: bot+bpf-ci@kernel.org
 To: rbm@suse.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
 Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 30 Apr 2026 13:30:28 +0000 (UTC)
+Date: Thu, 30 Apr 2026 13:30:34 +0000 (UTC)
 
---===============6049219023370403133==
+--===============8038474828220066970==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-> index cc14b13e23fe..7ba82974ee78 100644
-> --- a/tools/testing/selftests/bpf/test_progs.c
-> +++ b/tools/testing/selftests/bpf/test_progs.c
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 6094fe99b5f6..cc6ee7a2df93 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
 
 [ ... ]
 
-> @@ -2046,15 +2069,20 @@ int main(int argc, char **argv)
->  		struct prog_test_def *test = &prog_test_defs[i];
->
->  		test->test_num = i + 1;
-> -		test->should_run = should_run(&env.test_selector,
-> -					      test->test_num, test->test_name);
-> +		test->selected = should_run(&env.test_selector,
-> +					    test->test_num, test->test_name);
-> +		test->should_run = test->selected;
->
-> -		if ((test->run_test == NULL && test->run_serial_test == NULL) ||
-> -		    (test->run_test != NULL && test->run_serial_test != NULL)) {
-> +		if (test->run_test && test->run_serial_test) {
->  			fprintf(stderr, "Test %d:%s must have either test_%s() or serial_test_%sl() defined.\n",
->  				test->test_num, test->test_name, test->test_name, test->test_name);
->  			exit(EXIT_ERR_SETUP_INFRA);
->  		}
-> +		if (!test->run_test && !test->run_serial_test) {
-> +			test->not_built = true;
-> +			test->should_run = false;
-> +			continue;
-> +		}
->  		if (test->should_run)
->  			test->should_tmon = should_tmon(&env.tmon_selector, test->test_name);
->  	}
-> @@ -2106,9 +2134,18 @@ int main(int argc, char **argv)
->
->  	for (i = 0; i < prog_test_cnt; i++) {
->  		struct prog_test_def *test = &prog_test_defs[i];
-> +		struct test_state *state = &test_states[i];
->
-> -		if (!test->should_run)
-> +		if (!test->should_run) {
-> +			if (test->not_built && test->selected &&
-> +			    !env.get_test_cnt && !env.list_test_names) {
-> +				state->tested = true;
-> +				state->skip_cnt = 1;
-> +				env.not_built_cnt++;
-> +				print_test_result(test, state);
-> +			}
->  			continue;
-> +		}
+> diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/testing/selftests/bpf/test_kmods/Makefile
+> index 63c4d3f6a12f..031c7454ce65 100644
+> --- a/tools/testing/selftests/bpf/test_kmods/Makefile
+> +++ b/tools/testing/selftests/bpf/test_kmods/Makefile
+> @@ -1,5 +1,16 @@
+>  TEST_KMOD_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
+> -KDIR ?= $(abspath $(TEST_KMOD_DIR)/../../../../..)
+> +SRCTREE_KDIR := $(abspath $(TEST_KMOD_DIR)/../../../../..)
+> +# Honor O=/KBUILD_OUTPUT only if they point at a prepared kernel build
+> +# directory (one containing Module.symvers); otherwise treat the value as a
+> +# selftests-only output directory and fall back to in-tree or distro headers.
+> +# The parent bpf/Makefile resolves O=/KBUILD_OUTPUT to absolute paths before
+> +# invoking this sub-make so relative paths still anchor to the user's
+> +# invocation directory.
+> +KMOD_O := $(or $(O),$(KBUILD_OUTPUT))
+> +KMOD_O_VALID := $(if $(KMOD_O),$(if $(wildcard $(KMOD_O)/Module.symvers),$(KMOD_O)))
+> +KDIR ?= $(if $(KMOD_O_VALID),$(SRCTREE_KDIR), \
+> +	    $(if $(wildcard $(SRCTREE_KDIR)/Module.symvers),$(SRCTREE_KDIR), \
+> +		/lib/modules/$(shell uname -r)/build))
 
-When test->should_run is false (which it is for unbuilt tests due to the
-code above setting test->should_run = false), the continue statement skips
-the env.get_test_cnt and env.list_test_names blocks that follow.
+Will falling back to the host kernel headers cause compilation errors
+when building in-tree test modules like bpf_testmod?
 
-Won't this completely omit unbuilt tests from the output of --list (-l) and
---count modes? The code only prints unbuilt tests when !env.get_test_cnt &&
-!env.list_test_names is true.
+Since bpf_testmod relies heavily on internal BPF structures,
+experimental macros, and kfuncs that change frequently between kernel
+releases, compiling it against /lib/modules/$(uname -r)/build on a
+system where the running kernel does not exactly match the upstream
+source tree will likely fail.
 
-If CI systems use test_progs -l to discover and distribute tests across
-parallel jobs, they won't be aware of unbuilt tests. Could this undermine
-the stated goal of keeping unbuilt tests visible in CI results?
+If the host headers are present, the permissive skip check further down
+in the file will pass since the directory exists. Because the
+compilation failure is not ignored by the parent bpf/Makefile, won't
+this abort the entire BPF selftests build with confusing C compilation
+errors instead of silently skipping the unconfigured kernel tree?
 
-Reference: sashiko-bot raised this concern in v10 discussion at
-https://lore.kernel.org/bpf/20260430131344.B40DDC2BCB3@smtp.kernel.org/
+Should in-tree test modules avoid falling back to host distro headers to
+prevent these version mismatches?
 
->
->  		if (env.get_test_cnt) {
->  			env.succ_cnt++;
+This was raised by Sashiko AI reviewer in v9:
+
+    https://lore.kernel.org/bpf/20260429194107.806B7C19425@smtp.kernel.org/
+
+The issue was acknowledged in v9 but has not been addressed in v10.
 
 [ ... ]
 
@@ -124,4 +106,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25167006036
---===============6049219023370403133==--
+--===============8038474828220066970==--
