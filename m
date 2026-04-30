@@ -1,99 +1,265 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9694B2D47E9;
-	Thu, 30 Apr 2026 04:14:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350E018FC80;
+	Thu, 30 Apr 2026 04:34:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777522488; cv=none; b=a7d+M0gJ0O9ZUbqwdQmd9r/We4kdZZd17DTseo9LM7TjMJlsCTfKpd/d/KkARbTqxBUoNJOKNxtPJp7+AUEtJ9mwNnNWYZWUwB/f+Zo8iBI7We+OM4aE05q8/l7zKnM5+cR3qMD/3VvPjmGcskvZsLWdT9LE6Ddzu18qHkrhM0s=
+	t=1777523662; cv=none; b=lK33ACYVqHNgJB+t1DRD4/HkbNMHfFJZW9ZQBQsU4rpTfWH5n43qc2Y50oFpPdTqc28hfAZU19727I9IqaGFvljWOd91K+vWpoFp2XPE8f/eMWtFC9Drbi17CzDQ8B69rJ+xaau/Hcm/fbX68Eh1vHzWr8mXY9NR3fLdBMsHID8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777522488; c=relaxed/simple;
-	bh=pY5Z0JU9R0/M9rcc+AfaXh+Txwf10xCNN96WW6JbLmU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=FD3NpTQfklMZnobkl1JkrTRZM4ppFpbFub7sfNSgnNhrTiFuXUZf2HAcBgLGVabfgCVxs1OPD3yuPY8bFNqGzic43ML7s4rvmqlz1JEGvvIrdFX7QoL50oWK3cC4NOToAS/Ac3yehTdJS/GfR9jSDKSO+GI0CzVuSt5j+zZdSS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=EydXyQFm; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="EydXyQFm"
-Received: from [10.18.164.158] (unknown [167.220.238.30])
-	by linux.microsoft.com (Postfix) with ESMTPSA id A113D20B716E;
-	Wed, 29 Apr 2026 21:14:39 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A113D20B716E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1777522487;
-	bh=f4lvFbqZ1bUHQGIEf1oyNYgP5GTQnnfJHXC/uoz5x10=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=EydXyQFmqdyYQxNSPrqMNvsU33oR0G6vcbvCOuR7T67MOhwkbab5O3DOhr0a4wnUr
-	 iessjkR24bvGpuutDpYPwhqVnHTB5sFUKg63FiOfGHFk7NAxZtCbwvJP2YsULAQV0F
-	 UEWqB29jY1PtSj9HJojS2v/5EJSUvNuLgh6YnC0o=
-Message-ID: <faf63e56-144c-4261-be39-77b93f620159@linux.microsoft.com>
-Date: Thu, 30 Apr 2026 09:44:36 +0530
+	s=arc-20240116; t=1777523662; c=relaxed/simple;
+	bh=lVH/o/wvIbAmHU9Ncn31aqgJu7ZUTF0l3hAbIddGMQc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QlzCnohGEcJL5oh1uo3QNgfryVMFKIzJNo/HGu1eA2465YHlz9UQNBQqOxDmcEdCXHl6X4S8lLfgJoi/vwmTfTtpcXumYcLhUibxiMI8v+E55WzrJBf42hXQoSNtNLEBE2lFNOQj/ChlI21LeegtGvt0OqiVQPuvtwx11evTj0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost.localdomain (unknown [36.163.144.42])
+	by APP-05 (Coremail) with SMTP id zQCowAAXqg292_JpXhv9Dg--.5878S2;
+	Thu, 30 Apr 2026 12:34:06 +0800 (CST)
+From: Pengpeng Hou <pengpeng@iscas.ac.cn>
+To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
+	Pengpeng Hou <pengpeng@iscas.ac.cn>
+Subject: [PATCH v3] bpf: crypto: snapshot params before string validation
+Date: Thu, 30 Apr 2026 12:34:04 +0800
+Message-ID: <20260430043404.58221-1-pengpeng@iscas.ac.cn>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] net: mana: remove double CQ cleanup in
- mana_create_rxq error path
-To: Dipayaan Roy <dipayanroy@linux.microsoft.com>, kys@microsoft.com,
- haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, leon@kernel.org, longli@microsoft.com,
- kotaranov@microsoft.com, horms@kernel.org, shradhagupta@linux.microsoft.com,
- ssengar@linux.microsoft.com, ernis@linux.microsoft.com,
- shirazsaleem@microsoft.com, linux-hyperv@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rdma@vger.kernel.org, stephen@networkplumber.org,
- jacob.e.keller@intel.com, dipayanroy@microsoft.com, leitao@debian.org,
- kees@kernel.org, john.fastabend@gmail.com, hawk@kernel.org,
- bpf@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me,
- yury.norov@gmail.com
-References: <20260430035935.1859220-1-dipayanroy@linux.microsoft.com>
- <20260430035935.1859220-4-dipayanroy@linux.microsoft.com>
-Content-Language: en-US
-From: Aditya Garg <gargaditya@linux.microsoft.com>
-In-Reply-To: <20260430035935.1859220-4-dipayanroy@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowAAXqg292_JpXhv9Dg--.5878S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3WF1Duw4UWr17Jw4kGr1ftFb_yoWxWFykpF
+	yrW398Kw1rJr47CryxWF4rXF1rAFyxZF13GrW3GF1YyF9xXr92gF1IkrWUZFy3ta93Ww1Y
+	yrZYkrWUuw13JrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9014x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+	6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+	n2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+	kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+	67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+	CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1x
+	MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
+	VFxhVjvjDU0xZFpf9x0pRiSdgUUUUU=
+X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
 
-On 30-04-2026 09:27, Dipayaan Roy wrote:
-> In mana_create_rxq(), the error cleanup path calls mana_destroy_rxq()
-> followed by mana_deinit_cq(). This is incorrect for two reasons:
-> 
-> 1. mana_destroy_rxq() already calls mana_deinit_cq() internally,
->     so the CQ's GDMA queue is destroyed twice.
-> 
-> 2. mana_destroy_rxq() frees the rxq via kfree(rxq) before returning.
->     The subsequent mana_deinit_cq(apc, cq) then operates on freed memory
->     since cq points to &rxq->rx_cq, which is embedded in the
->     already-freed rxq structure — a use-after-free.
-> 
-> Remove the redundant mana_deinit_cq() call from the error path since
-> mana_destroy_rxq() already handles CQ cleanup. mana_deinit_cq() is
-> itself safe for an uninitialized CQ as it checks for a NULL gdma_cq
-> before proceeding.
-> 
-> Fixes: ca9c54d2d6a5 ("net: mana: Add a driver for Microsoft Azure Network Adapter (MANA)")
-> Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
-> Signed-off-by: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-> ---
->   drivers/net/ethernet/microsoft/mana/mana_en.c | 3 ---
->   1 file changed, 3 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
-> index f2a6ea162dc3..9afc786b297a 100644
-> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-> @@ -2799,9 +2799,6 @@ static struct mana_rxq *mana_create_rxq(struct mana_port_context *apc,
->   
->   	mana_destroy_rxq(apc, rxq, false);
->   
-> -	if (cq)
-> -		mana_deinit_cq(apc, cq);
-> -
->   	return NULL;
->   }
->   
+bpf_crypto_ctx_create() receives a BPF-supplied params pointer. The
+current selftests use static initializers, but BPF programs can also
+build the struct in writable BPF memory before calling the kfunc. The
+verifier checks that the memory is accessible; it does not prove that
+the fixed type[] and algo[] fields are NUL-terminated strings.
 
-Reviewed-by: Aditya Garg <gargaditya@linux.microsoft.com>
+Copy the params once into a local snapshot, validate the reserved fields
+and fixed-width strings there, and then use the same snapshot for all
+later checks and crypto API calls. This also keeps key_len and authsize
+stable across validation and use if params points at mutable BPF memory.
+
+Clear the local snapshot before returning because it contains key
+material.
+
+Add a selftest that fills algo[] completely and expects -EINVAL.
+
+Fixes: 3e1c6f35409f ("bpf: make common crypto API for TC/XDP programs")
+Cc: stable@vger.kernel.org
+Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
+---
+Changes since v2: https://lore.kernel.org/all/20260424070105.1-bpf-crypto-v2-pengpeng@iscas.ac.cn/
+- clear the local params snapshot with memzero_explicit() on success and
+  error paths because it contains key material
+- remove the redundant fd > 0 check from the added selftest; skeleton
+  open_and_load() already validates the program, and fd 0 is valid
+
+ kernel/bpf/crypto.c                             | 49 ++++++++++++++++---------
+ tools/testing/selftests/bpf/prog_tests/crypto_sanity.c | 16 ++++++++
+ tools/testing/selftests/bpf/progs/crypto_sanity.c      | 28 ++++++++++++++
+ 3 files changed, 76 insertions(+), 17 deletions(-)
+
+diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
+index 51f89cecefb4..72e5707c1ead 100644
+--- a/kernel/bpf/crypto.c
++++ b/kernel/bpf/crypto.c
+@@ -147,31 +147,47 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+ 		      int *err)
+ {
+ 	const struct bpf_crypto_type *type;
++	struct bpf_crypto_params params_copy;
+ 	struct bpf_crypto_ctx *ctx;
+ 
+-	if (!params || params->reserved[0] || params->reserved[1] ||
+-	    params__sz != sizeof(struct bpf_crypto_params)) {
++	if (!params || params__sz != sizeof(params_copy)) {
+ 		*err = -EINVAL;
+ 		return NULL;
+ 	}
+ 
+-	type = bpf_crypto_get_type(params->type);
++	params_copy = *params;
++
++	if (params_copy.reserved[0] || params_copy.reserved[1]) {
++		*err = -EINVAL;
++		goto err_clear_params;
++	}
++
++	if (strnlen(params_copy.type, sizeof(params_copy.type)) ==
++	    sizeof(params_copy.type) ||
++	    strnlen(params_copy.algo, sizeof(params_copy.algo)) ==
++	    sizeof(params_copy.algo)) {
++		*err = -EINVAL;
++		goto err_clear_params;
++	}
++
++	type = bpf_crypto_get_type(params_copy.type);
+ 	if (IS_ERR(type)) {
+ 		*err = PTR_ERR(type);
+-		return NULL;
++		goto err_clear_params;
+ 	}
+ 
+-	if (!type->has_algo(params->algo)) {
++	if (!type->has_algo(params_copy.algo)) {
+ 		*err = -EOPNOTSUPP;
+ 		goto err_module_put;
+ 	}
+ 
+-	if (!!params->authsize ^ !!type->setauthsize) {
++	if (!!params_copy.authsize ^ !!type->setauthsize) {
+ 		*err = -EOPNOTSUPP;
+ 		goto err_module_put;
+ 	}
+ 
+-	if (!params->key_len || params->key_len > sizeof(params->key)) {
++	if (!params_copy.key_len ||
++	    params_copy.key_len > sizeof(params_copy.key)) {
+ 		*err = -EINVAL;
+ 		goto err_module_put;
+ 	}
+@@ -183,19 +198,19 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+ 	}
+ 
+ 	ctx->type = type;
+-	ctx->tfm = type->alloc_tfm(params->algo);
++	ctx->tfm = type->alloc_tfm(params_copy.algo);
+ 	if (IS_ERR(ctx->tfm)) {
+ 		*err = PTR_ERR(ctx->tfm);
+ 		goto err_free_ctx;
+ 	}
+ 
+-	if (params->authsize) {
+-		*err = type->setauthsize(ctx->tfm, params->authsize);
++	if (params_copy.authsize) {
++		*err = type->setauthsize(ctx->tfm, params_copy.authsize);
+ 		if (*err)
+ 			goto err_free_tfm;
+ 	}
+ 
+-	*err = type->setkey(ctx->tfm, params->key, params->key_len);
++	*err = type->setkey(ctx->tfm, params_copy.key, params_copy.key_len);
+ 	if (*err)
+ 		goto err_free_tfm;
+ 
+@@ -207,6 +222,7 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+ 
+ 	refcount_set(&ctx->usage, 1);
+ 
++	memzero_explicit(&params_copy, sizeof(params_copy));
+ 	return ctx;
+ 
+ err_free_tfm:
+@@ -215,7 +231,8 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+ 	kfree(ctx);
+ err_module_put:
+ 	module_put(type->owner);
+-
++err_clear_params:
++	memzero_explicit(&params_copy, sizeof(params_copy));
+ 	return NULL;
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c b/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c
+index 42bd07f7218d..2ef1e276a63a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c
++++ b/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c
+@@ -117,6 +117,18 @@ void test_crypto_sanity(void)
+ 	udp_test_port = skel->data->udp_test_port;
+ 	memcpy(skel->bss->key, crypto_key, sizeof(crypto_key));
+ 	snprintf(skel->bss->algo, 128, "%s", algo);
++
++	pfd = bpf_program__fd(skel->progs.skb_crypto_setup_bad_algo);
++	err = bpf_prog_test_run_opts(pfd, &opts);
++	if (!ASSERT_OK(err, "skb_crypto_setup_bad_algo") ||
++	    !ASSERT_OK(opts.retval, "skb_crypto_setup_bad_algo retval"))
++		goto fail;
++
++	if (!ASSERT_OK(skel->bss->status, "skb_crypto_setup_bad_algo status"))
++		goto fail;
++
++	opts.retval = 0;
++
+ 	pfd = bpf_program__fd(skel->progs.skb_crypto_setup);
+ 	if (!ASSERT_GT(pfd, 0, "skb_crypto_setup fd"))
+ 		goto fail;
+diff --git a/tools/testing/selftests/bpf/progs/crypto_sanity.c b/tools/testing/selftests/bpf/progs/crypto_sanity.c
+index dfd8a258f14a..32977b797042 100644
+--- a/tools/testing/selftests/bpf/progs/crypto_sanity.c
++++ b/tools/testing/selftests/bpf/progs/crypto_sanity.c
+@@ -82,6 +82,34 @@ int skb_crypto_setup(void *ctx)
+ 	return 0;
+ }
+ 
++SEC("syscall")
++int skb_crypto_setup_bad_algo(void *ctx)
++{
++	struct bpf_crypto_params params = {
++		.type = "skcipher",
++		.key_len = 16,
++	};
++	struct bpf_crypto_ctx *cctx;
++	int err = 0;
++
++	status = 0;
++
++	__builtin_memset(params.algo, 'a', sizeof(params.algo));
++	__builtin_memcpy(&params.key, key, sizeof(key));
++
++	cctx = bpf_crypto_ctx_create(&params, sizeof(params), &err);
++	if (cctx) {
++		bpf_crypto_ctx_release(cctx);
++		status = -EIO;
++		return 0;
++	}
++
++	if (err != -EINVAL)
++		status = err;
++
++	return 0;
++}
++
+ SEC("tc")
+ int decrypt_sanity(struct __sk_buff *skb)
+ {
+-- 
+2.50.1 (Apple Git-155)
+
