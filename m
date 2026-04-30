@@ -1,144 +1,123 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5D1383C96
-	for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 22:31:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDDC837BE73
+	for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 22:31:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777588293; cv=none; b=t6YkvjJY+VFcNy/BIgNkqDHLTEdUDBB0S/dmruuOuwZcf/a9axK+6PiFDcMzQ23iQNdJkVM3jIH1rMhzizb/o39c+y4n0bOl6umc0jUPXijAYuTSFn8mvqVCgjr0M+bydNUaSfNhG3mdlt0WryXTy5miMp827CJAVcs+X/4itDA=
+	t=1777588294; cv=none; b=VWHCAkaDsBDakQKAwkx02rZotJgmK/uXcj6fLFV48Pei4D2K9syyQYYTWYNZFk2YEzvOWBCxWenIm68MrCuoFCSoPLDIJe2YfUQoW/z9cFVfyG/JMd6Er6X2CZ8l7mxX5AO8NQAXJ0xyVWBcES9vCKx8n+cv4uQVcMZueWAlMpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777588293; c=relaxed/simple;
-	bh=ZUgtzHBVwCLIR/ZL7cLRWvgvef4rlL6c+WywzLm7+zQ=;
+	s=arc-20240116; t=1777588294; c=relaxed/simple;
+	bh=doPcbtPxlN5/tuWeenrkC1sHAArF9mgd7LjPbvmBW+Q=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=klWayFLRD+WCkIsRRP35XyR7BbuemvWz441vb5S2IOpmfbBB4q6SHyDR0jWxJ1qW44moKw051EvrUqOZ/8mcnhnO3RlYkneUcm+TjHCOCKxJ2tvYduEJkd8lYPIopm+5nNJovRlIWINLfx1ik5g48AxtQy/zXLwBumTgSOKpH6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T9pkqkBo; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=YhCBGTHUu3wsfEgEGiICIc+OMI0Fa5JmYAR+g5nv29HNfv+aHhhjGpl/PEJQq+jEIciaucnAUzxMIm9zDc9XxvTKotV/zJlKSTbCdqN+sETSsG8OfieO80lC/k0S7uLSphv9HtbdKdcblm0wBxrG1t2+cea3MjMhD7HykuljhTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u3Z1PzCc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T9pkqkBo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE5B8C2BCC4;
-	Thu, 30 Apr 2026 22:31:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u3Z1PzCc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 844A3C2BCC6;
+	Thu, 30 Apr 2026 22:31:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777588292;
-	bh=ZUgtzHBVwCLIR/ZL7cLRWvgvef4rlL6c+WywzLm7+zQ=;
+	s=k20201202; t=1777588293;
+	bh=doPcbtPxlN5/tuWeenrkC1sHAArF9mgd7LjPbvmBW+Q=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=T9pkqkBoqcryN162h0ym3FHQvxKPd8qG2P6+Boxj6cZHO+S7hxQzqKeWlPsu1D4q7
-	 gYElw5fnt5gmFT5rBwb+KrHAJdxELFco/lY8z9BY+GRQMayECMcmEcyTPujBxPLJm1
-	 F3K7AQzxY9jmAhCEp+r4EDEVf+YL6pNC/Mw1NZ243O6vbzfTTcEFMh6Anhi+88525h
-	 lwHz7a2CHXNOgVBo0YfToJuO0fyCjwXz6pcBEutvGv6TI2wXr2KDNDiet5carWNaFR
-	 FsSRRZlJvY35mNJpR3Rt+6OkRlspuGXms/FuFuBnQ/+SUBEkWQI2WlOReYSvimNBRe
-	 otj497TnsMU8w==
+	b=u3Z1PzCchdIe3HEsugPJ9Mxwgp6n/f0FFD818HxlAUmR6BVUoDlavCg4BUQrATQwX
+	 bxPssxG1POpeL8kjBT/+F1g3hcQ8rJnn92WK5e2UiPCYo+OAUxz++OKgxUOUvgx4rq
+	 P9W5tnx2aX1a5mQ1JC1okx1A/Rd1Gxc9CNn4FGn9x4+jHqW/ilihOnSIHVMzb65q7/
+	 PhzXD6eLBuNxJxpoqVZxdJlzKFQbDCxAyB3lnCXHAk0mHqPu6KsjQsEAgwluyPUeCo
+	 M1WUeu5Oqw6UNFtZ2rlEuqDMkdUl9XjTh7kBS1BsEfp2ENLaTYzo3kzBWjlKXKAhBc
+	 HWKYshnYoqr5A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net 5/7] selftests: bpf: cover wrapped sk_msg ring
- chaining in ktls TX path
+Subject: Re: [PATCH net 6/7] net: tls: fix use-after-free in
+ tls_sw_sendmsg_locked after bpf verdict
 Reply-To: sashiko@lists.linux.dev
 To: "Jakub Kicinski" <kuba@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260429222944.2139041-6-kuba@kernel.org>
-References: <20260429222944.2139041-6-kuba@kernel.org>
+In-Reply-To: <20260429222944.2139041-7-kuba@kernel.org>
+References: <20260429222944.2139041-7-kuba@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Thu, 30 Apr 2026 22:31:32 +0000
-Message-Id: <20260430223132.BE5B8C2BCC4@smtp.kernel.org>
+Message-Id: <20260430223133.844A3C2BCC6@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Test fragility due to hardcoded fragment count allows silent fal=
-se positive passes
-- [Medium] Flawed splice() return value validation masks setup failures
-- [Low] Usage of ASSERT_TRUE() for pointer validation instead of ASSERT_OK_=
-PTR()
+- [Critical] Arithmetic underflow, state corruption, and silent data duplic=
+ation in the iterator rollback path.
+- [High] Use-After-Free when `bpf_exec_tx_verdict` returns `-ENOMEM`.
 --
 
-commit ff8ec72cdd60f8b61132bc64e2221ed120c71020
+commit ba7ab075901b934710734a96c18f344dbc28cf04
 Author: Jakub Kicinski <kuba@kernel.org>
 
-selftests: bpf: cover wrapped sk_msg ring chaining in ktls TX path
+net: tls: fix use-after-free in tls_sw_sendmsg_locked after bpf verdict
 
-This commit adds a regression test for an off-by-one error in
-tls_push_record(). It uses a BPF program to drop bytes and splices
-data to force an sk_msg scatterlist ring to wrap and trigger the bug.
+This patch fixes a use-after-free in tls_sw_sendmsg_locked() when
+bpf_exec_tx_verdict() returns -ENOSPC. It updates msg_pl and msg_en after a
+possible record split to avoid referencing a freed record.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c b/tool=
-s/testing/selftests/bpf/prog_tests/sockmap_ktls.c
-> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index 2c6a3c4a9fcc..4f8d656f39a3 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+> @@ -1157,6 +1157,13 @@ static int tls_sw_sendmsg_locked(struct sock *sk, =
+struct msghdr *msg,
+>  				else if (ret =3D=3D -ENOMEM)
+>  					goto wait_for_memory;
 
-[ ... ]
+If bpf_exec_tx_verdict() splits the record, pushes it to tx_list, and then
+encounters an -ENOMEM error while transmitting, it returns -ENOMEM.
 
-> +static void test_sockmap_ktls_tx_wrapped_chain(int family, int sotype)
-> +{
-> +	int c =3D -1, p =3D -1, one =3D 1, prog_fd, map_fd;
-> +	int pipefd[2] =3D { -1, -1 };
-> +	struct test_sockmap_ktls *skel;
-> +	char byte;
-> +	ssize_t n;
-> +	int err, i;
-> +
-> +	skel =3D test_sockmap_ktls__open_and_load();
-> +	if (!ASSERT_TRUE(skel, "open ktls skel"))
+This jumps to wait_for_memory without refetching msg_en. If
+sk_stream_wait_memory() returns 0, the loop continues and evaluates:
 
-This isn't a bug, but should this use ASSERT_OK_PTR() instead of
-ASSERT_TRUE() for validating the skeleton pointer? ASSERT_OK_PTR()
-is specifically designated for checking pointers in BPF selftests
-and properly handles both NULL and ERR_PTR values.
+	if (ctx->open_rec && msg_en->sg.size < required_size)
+		goto alloc_encrypted;
 
-> +		return;
+Could this result in a use-after-free read when dereferencing msg_en->sg.si=
+ze,
+since msg_en still points to the freed original record?
 
-[ ... ]
+>  				else if (ctx->open_rec && ret =3D=3D -ENOSPC) {
+> +					/* bpf_exec_tx_verdict() may have
+> +					 * called tls_split_open_record(),
+> +					 * freeing the old record. Re-fetch.
+> +					 */
+> +					rec =3D ctx->open_rec;
+> +					msg_pl =3D &rec->msg_plaintext;
+> +					msg_en =3D &rec->msg_encrypted;
+>  					if (msg_pl->cork_bytes) {
+>  						ret =3D 0;
+>  						goto send_end;
 
-> +	/* packetized pipe so each splice frag becomes its own sg entry */
-> +	err =3D pipe2(pipefd, O_DIRECT);
-> +	if (!ASSERT_OK(err, "pipe2"))
-> +		goto out;
-> +	err =3D fcntl(pipefd[0], F_SETPIPE_SZ, 17 * 4096);
-> +	if (!ASSERT_GE(err, 17 * 4096, "F_SETPIPE_SZ"))
-> +		goto out;
-> +
-> +	for (i =3D 0; i < 17; i++) {
-> +		byte =3D 'A' + i;
-> +		if (!ASSERT_EQ(write(pipefd[1], &byte, 1), 1, "write to pipe"))
-> +			goto out;
-> +	}
+If bpf_exec_tx_verdict() splits the record and then returns -ENOSPC (for
+example, from a failed sk_msg_alloc on the remainder), the new msg_pl points
+to the remainder record. If msg_pl->cork_bytes is 0, execution falls through
+to rollback_iter:
 
-Will this silently fail to wrap the ring if the kernel is configured
-with a CONFIG_MAX_SKB_FRAGS value greater than 17?
+rollback_iter:
+	copied -=3D try_to_copy;
+	sk_msg_sg_copy_clear(msg_pl, first);
+	iov_iter_revert(&msg->msg_iter,
+			msg_pl->sg.size - orig_size);
 
-The test relies on 17 fragments to fill the ring, as the default capacity
-for NR_MSG_FRAG_IDS is MAX_SKB_FRAGS + 1. However, MAX_SKB_FRAGS can be
-configured up to 45. If the capacity exceeds 17, the 18th byte sent later
-in the test will just be placed at index 17, so sg.end will never wrap to 0.
+Since msg_pl is now the remainder record, its size might be smaller than
+orig_size. Does the subtraction in iov_iter_revert() underflow and corrupt
+the iterator state?
 
-Would it be more robust to dynamically determine the fragment limit by
-reading /proc/sys/net/core/max_skb_frags instead of hardcoding 17?
+Also, sk_msg_sg_copy_clear(msg_pl, first) is called, but 'first' was captur=
+ed
+from the original record. Could this cause an out-of-bounds access on the
+remainder's scatterlist?
 
-> +
-> +	/* drop the first 16 bytes so sg.start advances to 16 */
-> +	skel->bss->apply_bytes =3D 16;
-> +
-> +	n =3D splice(pipefd[0], NULL, c, NULL, 17, 0);
-> +	if (n < 0)
-> +		ASSERT_EQ(errno, EACCES, "splice errno");
-
-Could this splice check mask potential test setup failures?
-
-If the BPF program drops 16 bytes as expected, tls_sw_sendmsg() will
-return the remaining 1 byte, making splice() return 1. The n < 0 check
-evaluates to false and is bypassed.
-
-However, if the BPF program fails to drop the bytes due to a setup issue
-or future regression, splice() will return 17. The n < 0 check is still
-bypassed, but the full sk_msg ring will be flushed. The subsequent
-1-byte send() will then start a new ring at sg.end =3D 1 instead of
-wrapping the existing one.
-
-Should this strictly assert the exact expected return value, for example
-using ASSERT_EQ(n, 1, "splice returns remaining byte"), to guarantee
-the ring state is set up correctly?
+Additionally, is it safe to roll back the iterator after the first chunk of
+the split record was successfully transmitted? It seems this could lead to
+the application re-sending already committed data.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260429222944.2139=
-041-1-kuba@kernel.org?part=3D5
+041-1-kuba@kernel.org?part=3D6
