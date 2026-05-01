@@ -1,121 +1,80 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 066FD41B35D
-	for <bpf@vger.kernel.org>; Fri,  1 May 2026 17:11:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80B62F6910;
+	Fri,  1 May 2026 17:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777655472; cv=none; b=iwmxky7Y2u1lnJQhn0hi3K6CJpDqNbiuqRH+BsAr4Vv67avePxQ+OzKNbTSJ2iQs6uQGRgTWKc0S89LQ52K0n5QReNXAh+7kjMuUmJy0XjMEQgcDEhy8eaac/985Ti8XOHC/qoGXfYFD+FvHUNOmfyPPRNszHf9FvStB8bhgnsk=
+	t=1777655657; cv=none; b=d6SogR4mkk7FumOC/I+MK/zOUVxE0DRvObgqjuG8glokE1Q3qBDIW2DC6ebC6AilVB7T/dvdc+/GhW7fKWsfGthpbKAY15+QA9CcJxzECb80merHQIp8wyQsvyIXRIFHvWOLIYRDM1YAH/hTUwu8ZoMLW7b9nX2JsFmJu6h47jY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777655472; c=relaxed/simple;
-	bh=nKP86u6QALSKLKK1kCP/ux1DnrpOGG1lDJi0J2BspHA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=NZ+X4mR8FyNc4q/i0HUdwpc8vZMep0/36pdoBckqb2HMgt6DeeVi/JXXE6qNbLI4XzuB8gnuKTGILFfK4CGyrQEBQ8AbWT7xjGNXWK0olRFWmExNRCLsB1QHXgDIrMMaspAA7gDhEz0BIEw82Ge5gNsloO9t65Sm9SSv6Yvhey8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CUJhgf5U; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777655657; c=relaxed/simple;
+	bh=cTInKL0vnv1m17I0Uo9CYtS7vCNe6CQR8YpO+Hhi1p8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VMK4yd8HJ7SsH8FymBSoxsxaekfn4yVuiajtwZr8ONUQflBj2VEdZJ8NzRx7et0UnKwMQs48iar4jsjrgB1Vpbo0cwFHP6DaUHHBBq3OYM+1qi5aLPFxEamqaPebmy+G9tv9GpUH980DV1+XY9TSEHOUDeF4Fv+4R40Ei97BS/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=u+I9EEI/; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CUJhgf5U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2EE3C2BCC4;
-	Fri,  1 May 2026 17:11:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777655471;
-	bh=nKP86u6QALSKLKK1kCP/ux1DnrpOGG1lDJi0J2BspHA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=CUJhgf5UWhB14/gf1VfDPUyLdQTDUN2mMopQo2Vb+MBxJgwfBS0QobNMz4jvzyZD+
-	 nrlJ9JB+KzDMpksh5cHZA+PRpOwn90lbN3A2thfu1ssKjooG3Mgdo/4uuw/wxrbVZk
-	 zORot3SoOq5mYFrn+IYmEFSMsURjvSwTXlVXkzAThWKLXiwQzsXLh4ttrTDsugkPz1
-	 bEHbpRUmbUJbz4cP53NSp5D8u7TQPqmY8qu5RK76e9M7pA8XbxqGX59fjQu1gJtD8v
-	 qhNx5whLYzA6koSKUt/gxC09k0quqJoryDQ99Q3zRbIT/JOzkOARfFukEm57jjmCMT
-	 jg0Xrj66N78YA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/2 v3] selftests/bpf: Test LINK_DETACH for
- perf link
-Reply-To: sashiko@lists.linux.dev
-To: "Florian Lehner" <dev@der-flo.net>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260501160901.224134-3-dev@der-flo.net>
-References: <20260501160901.224134-3-dev@der-flo.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 01 May 2026 17:11:11 +0000
-Message-Id: <20260501171111.B2EE3C2BCC4@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="u+I9EEI/"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=lLJVwKR+EGGEi9cMlsW7QVMJE91Mo9bGN8zBGdpkLnI=; b=u+I9EEI/AB86R5VT4TkU4k8rsU
+	TLMdzjjcBzScJIZfKf/g8wrUGda+btr5RWsguNxBF1nysIWqWMAh9H07fMriOjK5ANltD7k1sYxZN
+	ao1NhwskbN8CL5y3h6AjSycbFOfsaJBNkTxHY0vUNycbpPze7FRlIb6EWLc03k5qpeIc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1wIrQw-000qct-9N; Fri, 01 May 2026 19:13:46 +0200
+Date: Fri, 1 May 2026 19:13:46 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Alex Elder <elder@riscstar.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com,
+	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
+	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
+	arnd@arndb.de, gregkh@linuxfoundation.org, daniel@riscstar.com,
+	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
+	alexandre.torgue@foss.st.com, ast@kernel.org,
+	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
+	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
+	julianbraha@gmail.com, livelycarpet87@gmail.com,
+	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
+	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+	rohan.g.thomas@altera.com, sdf@fomichev.me,
+	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
+	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 04/12] net: stmmac: dma: create a separate
+ dma_device pointer
+Message-ID: <9203d8dd-8ec0-415e-9c2e-5b06b1b8dc11@lunn.ch>
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-5-elder@riscstar.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260501155421.3329862-5-elder@riscstar.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The `test_perf_link_detach` test verification is brittle and lik=
-ely to falsely pass, as a single call to `burn_cpu()` is too short to guara=
-ntee a perf event tick.
---
-
-commit 80a1776d4374467cf1d037c1e22a1252e27c885c
-Author: Florian Lehner <dev@der-flo.net>
-
-selftests/bpf: Test LINK_DETACH for perf link
-
-This commit adds a new test, test_perf_link_detach(), to verify the
-BPF_LINK_DETACH syscall path for software perf events. It creates a link,
-verifies execution, detaches it, and checks that the program is no longer
-invoked.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/perf_link.c b/tools/t=
-esting/selftests/bpf/prog_tests/perf_link.c
-> index 9e3a0d217af8..b75112c1b67d 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/perf_link.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/perf_link.c
-
-[ ... ]
-
-> +void test_perf_link_detach(void)
-> +{
-> +	struct test_perf_link *skel =3D NULL;
-> +	int pfd =3D -1, link_fd =3D -1, err;
-> +	int run_cnt_before, run_cnt_after;
-> +	__u64 timeout_time_ns;
-
-[ ... ]
-
-> +	/* detach via BPF_LINK_DETACH - BPF program should no longer be execute=
-d */
-> +	err =3D bpf_link_detach(link_fd);
-> +	if (!ASSERT_OK(err, "link_detach"))
-> +		goto cleanup;
+>  	if (priv->dma_cap.host_dma_width) {
+> -		ret = dma_set_mask_and_coherent(device,
+> -				DMA_BIT_MASK(priv->dma_cap.host_dma_width));
+> +		u64 mask = DMA_BIT_MASK(priv->dma_cap.host_dma_width);
 > +
-> +	/* make sure there are no stragglers */
-> +	kern_sync_rcu();
-> +
-> +	run_cnt_before =3D skel->bss->run_cnt;
-> +	burn_cpu();
-> +	run_cnt_after =3D skel->bss->run_cnt;
-> +
-> +	ASSERT_EQ(run_cnt_before, run_cnt_after, "run_cnt_detached");
+> +		ret = dma_set_mask_and_coherent(priv->dma_device, mask);
 
-Is a single call to burn_cpu() sufficient to guarantee a perf event tick he=
-re?
+I'm nitpicking, but i don't think you need to introduce mask.
+DMA_BIT_MASK... is already on a line of its own, and is within the 80
+limit. Nothing changes here with s/device/priv->dma_device/
 
-The software CPU clock perf event is configured in perf_link_setup() to sam=
-ple
-at 1000 Hz, meaning it triggers approximately once every 1 millisecond of C=
-PU
-time.
-
-The burn_cpu() function executes a fixed loop of 1,000,000 iterations. On
-modern CPUs, this loop often takes significantly less than 1 millisecond to
-complete.
-
-Because a single burn_cpu() invocation takes less than the 1ms interval, is
-it possible that no timer interrupt occurs during this window?
-
-If so, run_cnt_after would equal run_cnt_before even if the detach operation
-failed and the program was still attached, causing the test to falsely pass.
-Could this be changed to use a time-based loop (similar to the initial
-execution check) for several milliseconds to ensure correctness?
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260501160901.2241=
-34-1-dev@der-flo.net?part=3D2
+	Andrew
