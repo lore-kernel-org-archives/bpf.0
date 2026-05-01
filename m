@@ -1,109 +1,121 @@
-Received: from mail-24426.protonmail.ch (mail-24426.protonmail.ch [109.224.244.26])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C66327C1D
-	for <bpf@vger.kernel.org>; Fri,  1 May 2026 17:58:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.26
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251FE33B6E8
+	for <bpf@vger.kernel.org>; Fri,  1 May 2026 18:06:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777658342; cv=none; b=m77XrbjVN3XRB30Zx/xBltTmhGL6ewUCnZTHsb8mmcN0trgppGTIT3HcoGRUrbAHD9337YhlXsGAid5TIBhjXzzBkdWwpPkXqa1D0u/AI6rfvCfdCtL2xNTiZqsHCwIEaEbDwV61nU24F7V+QV73PDBTFVCn+D0u20qScIY96LM=
+	t=1777658789; cv=none; b=BixHUMklywj7NQw7T4dS1BrDQDJGM+XwLpoNaN+GdwvBxu69ZSaJeeeTUpw2MrU3DUGTZfrk3ZhVw/Qa6DD6aHNcIZx+U2nkvaa//KWaiC9zXvwMp+AtxYHUYLFpvXYY5q55Y+iN/T2/66ZzypDp1UwP1YzE3i7IDlOnDI9Xm70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777658342; c=relaxed/simple;
-	bh=rhqMFZvmeOvxnriBYHGR+ySCTl4MDpJ+hzg0JAQ5qC0=;
-	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Uyq3fxd55Z0Ub77tQnP5kglk7Sm9bZbTe6kPeOA9XMl3luuoFX+e79NomvTEalx6vG1X+VXzVFoXLGBrX3digYEvRhhXlTFLE+oVVsbP2bG4Mhb6lqFthfMkPHuBkuTZ+L0mAv81d3P0CP925A+/JWmWFDp0fvalUDJVwPvZtsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=nxGCBiuH; arc=none smtp.client-ip=109.224.244.26
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
+	s=arc-20240116; t=1777658789; c=relaxed/simple;
+	bh=oKkQnY5vlFNovbcjfh6JBo8TVogGXpyGhtvkDtTNy3E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=O3nT0ea8eUkeJG+ZuPjpKfWLnk0Sj5SG5cdflEfEfGZd+BeRX23ECdEEqfW8EExICbjXrd2c0YPnpOzfFFlV3GCgMU1hyTrF8wuqpgyjxggC8/RQ/X/9vRZ9Oa7ulQaiGgqfULRf8zmV0+yjVJ3PrZKcKfXcjiNq7na14azN48A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=psJ3Fjh4; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="nxGCBiuH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-	s=protonmail3; t=1777658331; x=1777917531;
-	bh=0KsiO/GfIkeRExHRdfMoo8/90PdCZw6HZW464yEwajs=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=nxGCBiuHz+MzcERazudYfA9RIeoL0PCGK/us4eRY3t5zsUG9WV91hVQYaxQ6lo7py
-	 MXg/66ri4NBfXSO8YmRmtZZXr+esMO0NfmCfxzxqOniXPdkq+iNG0wJcD+LS3YKiFp
-	 Yq/LnWgQGYCYA+CKRPYGrIXNZUrDiKp7M/VxRQqoLUE3IePUrrI0dNIOJMx6idZc4p
-	 6ZTdvp3hg7QXCS4Y/rJwjplRp3YBeQdOWX2gUpe7k5nTktsHhne8Omqj1UyL8Tg/Hz
-	 xQ/K+LnrufTP+pb28dAIA1feoqtbSuX220hk3ixPm2haFIAlL40Bk5YTbUSokrNwK0
-	 zg+UScdmzIYWw==
-Date: Fri, 01 May 2026 17:58:44 +0000
-To: bpf@vger.kernel.org
-From: hadrien Patte <hadrien.patte@protonmail.com>
-Cc: qmo@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, linux-kernel@vger.kernel.org, Hadrien Patte <hadrien.patte@protonmail.com>
-Subject: [PATCH bpf-next] bpftool: Resolve libcrypto link flags via pkg-config
-Message-ID: <20260501175829.9833-1-hadrien.patte@protonmail.com>
-Feedback-ID: 2516487:user:proton
-X-Pm-Message-ID: 7b816e66bd4118b2e522f01e1632e30ae6710b96
+	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="psJ3Fjh4"
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-79a46260385so28859617b3.3
+        for <bpf@vger.kernel.org>; Fri, 01 May 2026 11:06:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1777658787; x=1778263587; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h1DjW845zhModhDu44NYwmrHvDI4OE4s13MqVWiObLc=;
+        b=psJ3Fjh4F/IvT+GnFPrExEwYlGYre21c/sJ635RZrszNYBXaXf5wN64XMn6ym7/psU
+         Q2p+xXX2OyIDv3LMm6MTze4TlZkVqEoa5LBRKzq8SHUMpzTAWhKGajoUlT/6qaLDwchY
+         5BnJcxhDXuQgHakxWjVfWWVVLyFWoIHmsKPMrAtEoUGU4SP3U/bJWLSo/wF43VT4VLU3
+         JVzTAhYmNHQMjGVKGbxeLIpjZKHAtTc12qpZWpK/Atj7nRqy6PwkvuqCStFJ1iK3aWrp
+         kNUE6XQc2lSrMSKr6TAQQe2G4Uo/xq82lf8T/LX65G1UDU74tl4CipLKYY0ErDW5fkzF
+         Md4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777658787; x=1778263587;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h1DjW845zhModhDu44NYwmrHvDI4OE4s13MqVWiObLc=;
+        b=dQcZKdde5Lamrm+R+9cO4JwxdRtdIwSqhDxUvaAF/foK5xGrNwnD+9zV/iDM7EpHMp
+         WDrICf/8wJBtBfAXwDaqoUPQePw8fqmvTZnu8Qf1giaEP8EQZv/sXCj5GA82hkqs2gui
+         qt8hm+VUYLqSp2PrgD4dXMtv0fM3HZOYLEaH0dtHMXVatgtin8z0tBQeajvMZDDf5s8A
+         ckF3XCwWsGPY9rs0C7Pj4XfKYXSiXkWwICwh4umsUtsEbsP9G8o1OQGsTi3RU4DRGxm0
+         KqJTFbTkJGFVcoLjNIGMXhuhQqI3SV4YqmWVet3z5j5CfNAIQ6EuJrmHQjLBZhmpQSgI
+         vgMw==
+X-Forwarded-Encrypted: i=1; AFNElJ8tv3N6QZxDdiWMUTuV3O2agxoFkcKR0AnzKcpVEslpLzdJKalAocgjowP46dyY0aN3eTk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3v7SidiipciCjpueah6QHZP/6ORJ5syE37bbYLCiPp9JyAewh
+	iDP80MnOJWd/EMf0KUA4e/gkIzQBWNDhnRyWZ1UTVQ02utRsFWkBAwIe43WOvNpCI9g=
+X-Gm-Gg: AeBDievoYZ7cecOWR0ZCDGQ4Ti6bsPlqoNh2dMyAyhhQiMRT1Yw7bs2bf8CYb3rJ2Lj
+	xkEMtNLO8xmIt6EFdgZpZJYWUbGguiIrIAxNr0L+x2/DFwhXNNIh/hCfiIkZepNkPfGs5dpvYNW
+	Z37Qh8B2azbMBuccasC4Op6U3/9PW9tZIhW/+yzrfsHkN315Vrfc2PBzhu+OOSFEIVgAUgfMBv1
+	h7giEZ8g8bPuGKCID0SXxEl1Hd9zQ27JW4rcEvjfZ3zhR+dfUX4ZfTDin+hmlYN/X+wg9yhqfkB
+	N8Q4/7k3BUdytSf58LesL2NVIL+0hKAhgAVsrGTsoZyWybWa0IjEiMZ/Fq42k/NIIsRSdqcyOmQ
+	gksu3iO/ZFXBNZHEDN0BJvVgWiAwRIazdc67valFgqH0FBCG5XZzQJVHBwt0Gy+HHJWjBgV3kMD
+	9sQ7NGUJ5jLhAITOKk6UE+fNHJaaLC1yGYhG/y/5EgcprDmYJANFzJTCSozxkrfcKenqkCDNmr4
+	w==
+X-Received: by 2002:a05:690c:dd3:b0:7af:6904:3f3f with SMTP id 00721157ae682-7bd77170409mr4261187b3.45.1777658787005;
+        Fri, 01 May 2026 11:06:27 -0700 (PDT)
+Received: from [172.22.22.28] (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd66019105sm14575347b3.0.2026.05.01.11.06.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 May 2026 11:06:26 -0700 (PDT)
+Message-ID: <539b9de3-4a78-44cf-9085-06cd0cab2d17@riscstar.com>
+Date: Fri, 1 May 2026 13:06:23 -0500
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 04/12] net: stmmac: dma: create a separate
+ dma_device pointer
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com,
+ rmk+kernel@armlinux.org.uk, andersson@kernel.org, konradybcio@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, linusw@kernel.org,
+ brgl@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
+ daniel@riscstar.com, mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
+ alexandre.torgue@foss.st.com, ast@kernel.org, boon.khai.ng@altera.com,
+ chenchuangyu@xiaomi.com, chenhuacai@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, hkallweit1@gmail.com, inochiama@gmail.com,
+ john.fastabend@gmail.com, julianbraha@gmail.com, livelycarpet87@gmail.com,
+ matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
+ prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+ rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
+ weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-5-elder@riscstar.com>
+ <9203d8dd-8ec0-415e-9c2e-5b06b1b8dc11@lunn.ch>
+Content-Language: en-US
+From: Alex Elder <elder@riscstar.com>
+In-Reply-To: <9203d8dd-8ec0-415e-9c2e-5b06b1b8dc11@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Hadrien Patte <hadrien.patte@protonmail.com>
+On 5/1/26 12:13 PM, Andrew Lunn wrote:
+>>   	if (priv->dma_cap.host_dma_width) {
+>> -		ret = dma_set_mask_and_coherent(device,
+>> -				DMA_BIT_MASK(priv->dma_cap.host_dma_width));
+>> +		u64 mask = DMA_BIT_MASK(priv->dma_cap.host_dma_width);
+>> +
+>> +		ret = dma_set_mask_and_coherent(priv->dma_device, mask);
+> 
+> I'm nitpicking, but i don't think you need to introduce mask.
+> DMA_BIT_MASK... is already on a line of its own, and is within the 80
+> limit. Nothing changes here with s/device/priv->dma_device/
+> 
+> 	Andrew
 
-When building bpftool with EXTRA_LDFLAGS=3D-static on Ubuntu 26.04
-(OpenSSL 3.5.5), the link fails because libcrypto.a references
-libjitterentropy symbols, which are not on the link line:
+I did this.  It was simply to silence a checkpatch.pl warning
+about a long line.
 
-  LINK     bpftool
-  /usr/bin/ld: libcrypto.a(libdefault-lib-seed_src_jitter.o):
-    in function `ossl_prov_acquire_entropy_from_jitter':
-    (.text+0x11c): undefined reference to `jent_entropy_collector_alloc'
-    (.text+0x130): undefined reference to `jent_read_entropy'
-    (.text+0x13c): undefined reference to `jent_entropy_collector_free'
-  /usr/bin/ld: libcrypto.a(libdefault-lib-seed_src_jitter.o):
-    in function `jitter_instantiate':
-    (.text+0x61c): undefined reference to `jent_entropy_init_ex'
-  collect2: error: ld returned 1 exit status
+I don't care either way, I'll gladly put it back the way it was.
 
-The set of transitive dependencies pulled in by libcrypto.a varies
-across distributions and OpenSSL builds (cf. commit 08a749184322
-("bpftool: Fix dependencies for static build"), which addressed a
-similar libz ordering issue), so hard-coding them in the Makefile is
-fragile.
-
-Resolve libcrypto's link flags via pkg-config, which knows about
-these transitive deps. Pass --static when the user requested a static
-build via EXTRA_LDFLAGS=3D-static so pkg-config emits the static link
-line (e.g. "-lcrypto -l:libjitterentropy.a -lz -lzstd -ldl -pthread"
-on Ubuntu 26.04). Fall back to -lcrypto if pkg-config or
-libcrypto.pc is unavailable, preserving the previous behavior on
-minimal build environments.
-
-Signed-off-by: Hadrien Patte <hadrien.patte@protonmail.com>
----
- tools/bpf/bpftool/Makefile | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 0febf60e1b64..d9ab860a6cce 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -103,7 +103,17 @@ SKIP_LLVM ?=3D
- SKIP_LIBBFD ?=3D
- SKIP_CRYPTO ?=3D
- ifneq ($(SKIP_CRYPTO),1)
--  CRYPTO_LIBS :=3D -lcrypto
-+  # Resolve libcrypto link flags via pkg-config so transitive dependencies
-+  # (e.g. libjitterentropy on distros where libcrypto.a references it) are
-+  # included for static builds. Pass --static when the user requested a
-+  # static build via EXTRA_LDFLAGS=3D-static. Fall back to -lcrypto if
-+  # pkg-config or libcrypto.pc is unavailable.
-+  ifneq ($(findstring -static,$(EXTRA_LDFLAGS)),)
-+    CRYPTO_LIBS :=3D $(shell pkg-config --libs --static libcrypto 2>/dev/n=
-ull)
-+  else
-+    CRYPTO_LIBS :=3D $(shell pkg-config --libs libcrypto 2>/dev/null)
-+  endif
-+  CRYPTO_LIBS :=3D $(if $(CRYPTO_LIBS),$(CRYPTO_LIBS),-lcrypto)
- endif
-=20
- FEATURE_TESTS :=3D clang-bpf-co-re
---=20
-2.54.0
-
-
+					-Alex
