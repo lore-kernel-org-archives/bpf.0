@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D138363B9
-	for <bpf@vger.kernel.org>; Fri,  1 May 2026 04:03:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B98F29A9E9
+	for <bpf@vger.kernel.org>; Fri,  1 May 2026 04:03:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777608180; cv=none; b=Qfwu85xUxGOkqf4IXybTtd8cbvdPuo/SfJnhBLDnvErEeMdN7jHap4khzm9rN0VLp+NFbuWwLPPNwJGHKj98uWI7X51vv1QzXRtCi9FYVwhz9/yU3RjI6DZI/doSar2cVcsCN6D9zeAs8mWQjPcC9CCIuSatE4zt2aB5USmOGZg=
+	t=1777608181; cv=none; b=ZLy0z4g1mZJTWIK5jKUmoYQZQQ3NyFwjBP44dDyCcrQ+TaExBeIa1ik7Dk2+2mP0IG40lv/b+xlNI78QPQUXhteEAReNBJSzSl28nNEuueK3mtGAVPX1Bgdi4rIgU2TSTmFie4ndGkwR4cg3dcb3b7zWR3QvpylWhkeEi++HGn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777608180; c=relaxed/simple;
-	bh=e7FCXUg9eXLX6bk0LZGKpTCfpgtx95DCMYLQzN/cKQc=;
+	s=arc-20240116; t=1777608181; c=relaxed/simple;
+	bh=iHVTMhtKeBA0iVmliuKMuCjgnBtZGNMd75vWTTWeflE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=f00W5y4WWsmAgCDbu1pvktnvTcO4bxMV8G+Wqs7rJ7HofL5o0pyZiK20zp+xR1v7E756Q6nhVNNRzWksORkfjCiiUJUnQxqeUHRKpGshzq7fjEuShZ39ozkBtBb8pVa+4OXJYwCZmmPW281AdhYSgLQkh/1tQkY9+wtfJIpOMic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nK0IC7mc; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=jaolDYuoD9CWCF/vOUWx7sTflng2GPRhVLzHpm+jSks7YmsL00PYBHLkbQ4eQxhUSvGfS2iPKFCSGDtNJeS5CQvJHouo6Ib016f2+YsZMtUohxAt/Nw7cNFhd6keybvQ/GA7jJ4rdJaR56vmi7a1WWvH2kJXkIwEN3Hkf9pwqbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fifJZInx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nK0IC7mc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59883C2BCB7;
-	Fri,  1 May 2026 04:03:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fifJZInx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 282FEC2BCB7;
+	Fri,  1 May 2026 04:03:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777608180;
-	bh=e7FCXUg9eXLX6bk0LZGKpTCfpgtx95DCMYLQzN/cKQc=;
+	s=k20201202; t=1777608181;
+	bh=iHVTMhtKeBA0iVmliuKMuCjgnBtZGNMd75vWTTWeflE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=nK0IC7mcub2vAqmzVzYrZ+uWpWxSg0wyTor/FAw/2g0jYt2Y+WLsED796Xyt/gf2u
-	 hqszY8R4orO+bNvQpISYSzrjnxQaXNW5pJh4Ia3TPnWlPer8exlE+++s+tqT8g8sVL
-	 qHv63QLRIh/oJaIBWGefyh8pGFE7yG9Jl79Jl4TkPN3TGmmPIZf7OA2K9WGnAbF3wE
-	 Ev/sWukci4LtwLakIBZLHQxESLP+9Qu48TYWnqUpk/aCKw8Hie6T+82Lx7D+aIOSaq
-	 7Q2esJhwgRN5IbQH66LpKscjv8+GoE351AqKb2jwV7VBVfHQYI5YNobleHncygiD7/
-	 UUS/+IEflVKHw==
+	b=fifJZInx0b4AiRbGZRvLmL1nexF3NgofeYvITR6rhvaOuAvKQOiZk/NQnDbrLrJFc
+	 a/esMWXLjAWtPq/3Y0W8PNM20CDfkvBXLwWYcJULY0GBCveKlv0bv/K9FcPi/RiKP6
+	 1lYoeCtzHCAtqMx9Khh6jIlVwX96ycDFnWT1j1Dhu5Blx4LNakjFLTHgJ42bPs+fC/
+	 hDVUsiS2TRKyHgXKKaNGuYZR9lxmlCwmdOFm5EguJlj06okGX4ykPfiYTQnzkNBmgy
+	 eCC4yWwzeKXigna4G5mC1Ew6JgKMMChcv05t3HIeph9PLk+Z8QBaQ7JKkE3rmLFoP1
+	 FWsH+G+iJxCtQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/3] net: mana: Skip WQ object destruction for
- uninitialized RXQ
+Subject: Re: [PATCH 3/3] net: mana: remove double CQ cleanup in
+ mana_create_rxq error path
 Reply-To: sashiko@lists.linux.dev
 To: "Dipayaan Roy" <dipayanroy@linux.microsoft.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260430035935.1859220-3-dipayanroy@linux.microsoft.com>
-References: <20260430035935.1859220-3-dipayanroy@linux.microsoft.com>
+In-Reply-To: <20260430035935.1859220-4-dipayanroy@linux.microsoft.com>
+References: <20260430035935.1859220-4-dipayanroy@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 01 May 2026 04:02:59 +0000
-Message-Id: <20260501040300.59883C2BCB7@smtp.kernel.org>
+Date: Fri, 01 May 2026 04:03:00 +0000
+Message-Id: <20260501040301.282FEC2BCB7@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,66 +46,92 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Critical] Critical Use-After-Free and Double-Free in `mana_create_rxq()`=
- error path.
-- [High] Incomplete Fix: The identical bug fixed in `mana_destroy_rxq()` ex=
-ists in `mana_destroy_txq()`.
+- [High] Uninitialized CQ ID in error path clobbers global `cq_table[0]`
+- [High] Uninitialized `tx_object` handles in `mana_create_txq` error path =
+destroy valid WQ object 0
 --
 
-commit c317e37e7bd422dc85e0c08611eda7f514d25eef
+commit fbbff2b6d2993ad6206b12c69d7d995282d02696
 Author: Dipayaan Roy <dipayanroy@linux.microsoft.com>
 
-net: mana: Skip WQ object destruction for uninitialized RXQ
+    net: mana: remove double CQ cleanup in mana_create_rxq error path
 
-This commit adds a check for INVALID_MANA_HANDLE in mana_destroy_rxq()
-to prevent sending a bogus destroy command to the hardware when
-mana_create_rxq() fails before the WQ object is created.
+This commit removes a redundant mana_deinit_cq() call in the error path of
+mana_create_rxq(). Previously, mana_destroy_rxq() was called first, which
+already cleans up the CQ and frees the rxq structure. The subsequent
+mana_deinit_cq() call caused a use-after-free by accessing the embedded
+CQ from the already-freed structure.
 
 > diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/=
 ethernet/microsoft/mana/mana_en.c
-> index dfb4ba9f7664..f2a6ea162dc3 100644
+> index f2a6ea162dc3..9afc786b297a 100644
 > --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
 > +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-> @@ -2524,7 +2524,8 @@ static void mana_destroy_rxq(struct mana_port_conte=
-xt *apc,
->  	if (xdp_rxq_info_is_reg(&rxq->xdp_rxq))
->  		xdp_rxq_info_unreg(&rxq->xdp_rxq);
+> @@ -2799,9 +2799,6 @@ static struct mana_rxq *mana_create_rxq(struct mana=
+_port_context *apc,
 > =20
-> -	mana_destroy_wq_obj(apc, GDMA_RQ, rxq->rxobj);
-> +	if (rxq->rxobj !=3D INVALID_MANA_HANDLE)
-> +		mana_destroy_wq_obj(apc, GDMA_RQ, rxq->rxobj);
+>  	mana_destroy_rxq(apc, rxq, false);
 
-Does this incomplete fix leave a regression in the TX queue destruction pat=
-h?
+This isn't a bug introduced by this commit, but while reviewing this error
+path I noticed a pre-existing issue. Does this sequence clobber the global
+cq_table[0]?
 
-In mana_create_txq(), apc->tx_qp is allocated via kzalloc_objs(), defaulting
-tx_object to 0. It is set to INVALID_MANA_HANDLE only at the start of each
-queue's loop iteration.
+When mana_gd_create_mana_wq_cq() allocates a queue via kzalloc_obj(),
+queue->id is initialized to 0.
 
-If mana_create_txq() fails early, it calls mana_destroy_txq(apc), which
-unconditionally iterates over all apc->num_queues and calls:
+The actual hardware queue ID is only assigned later when
+mana_create_wq_obj() successfully completes.
 
-    mana_destroy_wq_obj(apc, GDMA_SQ, apc->tx_qp[i].tx_object);
+If mana_create_wq_obj() fails in mana_create_rxq(), the error path calls:
+mana_destroy_rxq() -> mana_deinit_cq() -> mana_gd_destroy_queue() ->
+mana_gd_destroy_cq()
 
-For the failing queue, it sends a destroy command for INVALID_MANA_HANDLE,
-and for unreached queues, it sends 0. Should mana_destroy_txq() conditional=
-ly
-check if tx_object is initialized before destroying it, similar to this fix?
+Inside mana_gd_destroy_cq(), it uses queue->id (which is still 0) to clear
+the gc->cq_table[id] array entry:
 
-While looking at this error path, I noticed a pre-existing regression that
-is noted as fixed in a later commit (fbbff2b6d2993ad net: mana: remove
-double CQ cleanup in mana_create_rxq error path).
+mana_gd_destroy_cq() {
+	u32 id =3D queue->id;
+	...
+	gc->cq_table[id] =3D NULL;
+}
 
-In mana_create_rxq(), a local pointer cq is assigned to &rxq->rx_cq. If an
-error occurs, it calls mana_destroy_rxq(), which frees rxq. Immediately
-after, the error path checks if (cq) and calls mana_deinit_cq(apc, cq).
+This unintentionally clobbers the cq_table entry for CQ 0, which is a
+valid queue ID (e.g., belonging to the hardware control channel or
+another active queue).
 
-Since cq points into the freed rxq memory, does this result in a
-use-after-free and double-free when mana_deinit_cq() reads cq->gdma_cq?
+Could this lead to dropped completions for CQ 0 and potentially hang the
+device? Should queue->id be explicitly initialized to INVALID_QUEUE_ID?
 
-> =20
->  	mana_deinit_cq(apc, &rxq->rx_cq);
+I also noticed a similar pre-existing issue in the mana_create_txq()
+error path. Can this destroy valid WQ object 0?
+
+In mana_create_txq(), apc->tx_qp is allocated using kzalloc_objs(), meaning
+all tx_object fields initially default to 0.
+
+The initialization loop sets tx_object =3D INVALID_MANA_HANDLE iteratively.
+
+If queue creation fails midway (e.g., at i =3D 0), mana_create_txq() jumps =
+to
+the error path and calls mana_destroy_txq().
+
+mana_destroy_txq() loops over all apc->num_queues and unconditionally calls
+mana_destroy_wq_obj(apc, GDMA_SQ, apc->tx_qp[i].tx_object).
+
+For the queue indices that were not yet reached by the initialization loop,
+tx_object remains 0. Because 0 is a valid hardware handle, this issues
+spurious hardware requests to destroy WQ object 0 multiple times.
+
+Could this inadvertently destroy an active queue belonging to another VF/PF
+or the hardware control channel? Should all tx_object handles be initialized
+to INVALID_MANA_HANDLE before the queue creation loop begins?
+
+> -	if (cq)
+> -		mana_deinit_cq(apc, cq);
+> -
+>  	return NULL;
+>  }
+>
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260430035935.1859=
-220-1-dipayanroy@linux.microsoft.com?part=3D2
+220-1-dipayanroy@linux.microsoft.com?part=3D3
