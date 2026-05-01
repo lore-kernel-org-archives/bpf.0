@@ -1,114 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ABB440B6DF
-	for <bpf@vger.kernel.org>; Fri,  1 May 2026 16:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495A4402B98;
+	Fri,  1 May 2026 17:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777654750; cv=none; b=L26WcqumGqozUyMmP/NhVkBNvxENkTe5Os6Pw87wBfickpKgE71sKUKSZOKvnm6f5dXZmfqZqzohNtGPA7xGZWp4azIVrY32lRowTC3KFLvCQnZ1zFlTP6aZxD3LHYcAkJ2Ekv5fAqX/ZTifYzbgsyN0/w+7pHTxoES+kC1vq10=
+	t=1777655211; cv=none; b=bRlMxenRpRGk+6JB1u01QD/24wsM4xJ0e4CemSoX1rA+By2lXSmN6rM491a3fSb3EjJnz95j8d2/s4lQgBEeKpJzFG8kFMa5cnIK7POafzx+9TDJ7Ms6qzvg7hunU23UiXdYCWvBHRqAD+iGctpHY7Kxr4Fg9Xv1YuLmVZHzfQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777654750; c=relaxed/simple;
-	bh=QQ0Fmk+9mh9JEgWY8eIjORnk6vI3LUE6Zd6VI7fa/nc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=YbPAESyaetv2M9srJBcNRSelueL5lBgKARn7ia7cu9qT+Kmc61nR1NVgtAkzytQ+Y21PGTQf8ec7iAQEEhG8oEsbVsE4SZZ2rtjyttQEpYXadzUWat0fkwS6TagXTNjg1Og7FtIwIyZ7y+/DQavZOHl9M6ThEQqBrULWYqg3Bjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LF1ZWN0t; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777655211; c=relaxed/simple;
+	bh=4imj/IMIMrx39ICad1g98Rh7aEv+9l7I2apVSPKjhBw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dW+ejlDPpD7OMec6dkM9iyP+bH8naOTS6BC8cw3M5cUlfATKVkwc/DDI73tNh6P0tir08PbO4pS1ZNTZaJKtDOFgQT1RcYZXN5xsmp/Yoe+GIbjzkiQUlJSxfX/SECUfzHsmOZKTpbz9IUaXSVfJJUPK0uwARizmAFm6hXFRi+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=znFlC6Z1; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LF1ZWN0t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EABE1C2BCC6;
-	Fri,  1 May 2026 16:59:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777654750;
-	bh=QQ0Fmk+9mh9JEgWY8eIjORnk6vI3LUE6Zd6VI7fa/nc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=LF1ZWN0tCScpB+yPUV2Ss4PwjjfQ457KV263QPQZEDeJXxO9ks9EVh6AAGjfbBrXs
-	 Sska+1fNSuzjVEhU7jHOtXgKP7duZcVWoD6KWeh40ZkWYJ5fmPygDwGe/i7zGrEe/6
-	 DKF51foGSfUf2/Mf12X3XklgL8pH0lyydN+xU9MLoaq0dFpNQnNvDQBX/Z+rXls90J
-	 z6kNd71+GBL0i3yZRHi7iz2O6xJFlkyZqAh6O8UdzR6+w86HSRQlPLEwsNKoQ8Hr3k
-	 wazYuf4o1OjJtKQwehyOU43jnr9n8V1sfNTa66rpj13/9yv4YTSd69FOuKTHnPFOKh
-	 hN3jl9ufxNbpQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 1/2 v3] bpf: Add LINK_DETACH support for perf
- link
-Reply-To: sashiko@lists.linux.dev
-To: "Florian Lehner" <dev@der-flo.net>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260501160901.224134-2-dev@der-flo.net>
-References: <20260501160901.224134-2-dev@der-flo.net>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 01 May 2026 16:59:09 +0000
-Message-Id: <20260501165909.EABE1C2BCC6@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="znFlC6Z1"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=bZzzOxdjkmfCxqp8bZuNqOw9QLZECcXjlZTbJ9BtGjs=; b=znFlC6Z1LbaPEB8hdbXzJvnLmX
+	ZBb5bVF2HsqCqy7NL8xzUAScLF3GtUTr2nfELsGPhw5RG6eMWlshgtivDVmVnuBJG1PPwK2X/OEFw
+	7Pwq/+yrfBQMddetIGMjgb6xDlSbYL5+c3pO1lHwmCZw38A89SyejKB1b5Jl0htXaRDk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1wIrJf-000qaI-Mk; Fri, 01 May 2026 19:06:15 +0200
+Date: Fri, 1 May 2026 19:06:15 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Alex Elder <elder@riscstar.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com,
+	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
+	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
+	arnd@arndb.de, gregkh@linuxfoundation.org,
+	Daniel Thompson <daniel@riscstar.com>, mohd.anwar@oss.qualcomm.com,
+	a0987203069@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
+	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
+	julianbraha@gmail.com, livelycarpet87@gmail.com,
+	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
+	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+	rohan.g.thomas@altera.com, sdf@fomichev.me,
+	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
+	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 03/12] net: pcs: pcs-xpcs: Preserve BMCR_ANENBLE
+ during link up
+Message-ID: <91332fc1-11ed-444e-a211-699420cf0108@lunn.ch>
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-4-elder@riscstar.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260501155421.3329862-4-elder@riscstar.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Concurrent execution of BPF_LINK_DETACH and BPF_OBJ_GET_INFO_BY_FD=
- (or /proc/pid/fdinfo reads) causes a NULL pointer dereference on event->pr=
-og.
---
+On Fri, May 01, 2026 at 10:54:11AM -0500, Alex Elder wrote:
+> From: Daniel Thompson <daniel@riscstar.com>
+> 
+> Currently the XCPS found on Toshiba TC9564 (a.k.a. Qualcomm QPS615)
+> is unable to operate at 1000base-X and slower with a PHY connected
+> using SGMII/2500base-X (in our case a Qualcomm QCA8081). The link
+> negotiates speed correctly but the MAC can't get any packets out.
 
-commit 738bb49794369ff2bcc7c3d461300bd57e714cf5
-Author: Florian Lehner <dev@der-flo.net>
+We need to break this down into its components.
 
-bpf: Add LINK_DETACH support for perf link
+I assume you are saying the PHY negotiates the media speed with the
+link partner. That is PHY talking to PHY.
 
-This commit implements the .detach operation for bpf_perf_link, allowing
-BPF_LINK_DETACH to release the perf event without destroying the link objec=
-t.
+But we also have the PCS talking to the PHY. There can be inband
+signalling here, for SGMII and 2500BaseX. But not for over clocked
+SGMII, which is how some vendors implement 2500BaseX. SGMII signalling
+does not work when overclocked to 2.5G.
 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
+> This attracted attention to the ANENABLE bit and we observed that the
+> bit is currently set during config and cleared during link up.
 
-[ ... ]
+Here we are talking about the PCS ANEBNABLE, not the PHY ANEBNABLE. So
+this is negotiation between the PCS and the PHY.
 
-> @@ -4095,22 +4117,42 @@ static int bpf_perf_link_fill_link_info(const str=
-uct bpf_link *link,
->  {
->  	struct bpf_perf_link *perf_link;
->  	const struct perf_event *event;
-> +	struct file *perf_file;
-> +	int ret;
-> =20
->  	perf_link =3D container_of(link, struct bpf_perf_link, link);
-> -	event =3D perf_get_event(perf_link->perf_file);
-> -	if (IS_ERR(event))
-> +
-> +	mutex_lock(&bpf_perf_link_mutex);
-> +	perf_file =3D perf_link->perf_file;
-> +	if (perf_file)
-> +		get_file(perf_file);
-> +	mutex_unlock(&bpf_perf_link_mutex);
-> +
-> +	if (!perf_file)
-> +		return 0;
-> +
-> +	event =3D perf_get_event(perf_file);
-> +	if (IS_ERR(event)) {
-> +		fput(perf_file);
->  		return PTR_ERR(event);
-> +	}
-> =20
->  	switch (event->prog->type) {
+> Preserving the bit during link up allows the system to work as expected.
 
-Can this result in a NULL pointer dereference on event->prog?
+>  	int ret;
+>  
+>  	if (neg_mode == PHYLINK_PCS_NEG_INBAND_ENABLED)
+>  		return;
 
-If a concurrent BPF_LINK_DETACH triggers bpf_perf_link_release(), it sets
-perf_link->perf_file =3D NULL under the mutex, drops the mutex, and then ca=
-lls
-perf_event_free_bpf_prog(event).
+Think about this.
 
-If perf_event_free_bpf_prog() clears event->prog right after we drop the
-mutex here but before we evaluate the switch statement, evaluating
-event->prog->type could panic.
+>  	ret = xpcs_write(xpcs, MDIO_MMD_VEND2, MII_BMCR,
+> -			 mii_bmcr_encode_fixed(speed, duplex));
+> +			 mii_bmcr_encode_fixed(speed, duplex) | an_enable);
 
-Would it be safer to use link->prog->type instead? The program reference in
-link->prog is pinned for the lifetime of the link object.
+And mii_bmcr_encode_fixed().
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260501160901.2241=
-34-1-dev@der-flo.net?part=3D1
+    Andrew
