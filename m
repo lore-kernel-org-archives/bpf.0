@@ -1,172 +1,133 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2E41FD4
-	for <bpf@vger.kernel.org>; Fri,  1 May 2026 07:53:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1F73CA499
+	for <bpf@vger.kernel.org>; Fri,  1 May 2026 15:37:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.174
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777622007; cv=pass; b=CEsxKNh92Ra/ntsc7/IpCcWmIfCX2lNA4dO4dTNjo5MvQXRdufR0h11Hrflh9LvY3yxOMsVvZ8ljJe8iAAsoEgZmWxlr3kWaT8E0vVaPIsMIlnDOROpD+45GOD1unycaH/ZmBE7Afnzvq5bLmlJVlwilbqJUr28/MpsNH+hs6IM=
+	t=1777649856; cv=pass; b=Xp8xyyTGcrD8gIlQy5ROwV3VIRMK9OfKW10nuMUX2TSMANKeeVA6lxJK0hionLW5o+vA4EJ3+eZy/jLlvBUgbwG88S4UucE1WRb5Y0d2gydYpGyA9E4SMFuQOL8P1yWbu3Mr31FXQ/Qho6wB8Yu6rz10aE7caGTYTQ6CVpjHd5E=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777622007; c=relaxed/simple;
-	bh=kZ+Fe86L4eg40Yv1e0omdEPVY9hdZBkrNGtDoJCsMLQ=;
+	s=arc-20240116; t=1777649856; c=relaxed/simple;
+	bh=TmZOkd4LjdDYloHzxeaTkn/dgtYW8v+Yk+8UEv1tCuM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VZ3FvLzBBNFKFlRMTKV/Mm+2+2B/L/tJbwpI1P5lBMY1xwhQ2WjaWfA3yvBHyqMLWuKlVHLbRPFBOsQZZpXZLOKh+cxeZ+2JPpW3Fx4eZz8vMFqL6EjXnQX4GPyRFD0BJ7rxaKPnkh7e7DTFpn2zLsYiSv0qwsGS0nxiRVCq/cg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rxh8vrIW; arc=pass smtp.client-ip=209.85.221.44
+	 To:Cc:Content-Type; b=f+2Bb2BJzGIE03cHq1zrDs5oJIwtEKuo9Gvwnfbm8FIf7AO6gdVXUN8ED01ud9VFEuj+hdAf9fqkVxaXms7WRSErhU+jbyao2puCzTcZYF9JzYDdgcwEorKnCg+i2EgIw8vtjM4/rnfDJJDpRLyR7YyJzJfNuW+mUW8/wGdA3Pk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FXEE6EtR; arc=pass smtp.client-ip=209.85.160.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rxh8vrIW"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43d77f60944so1128603f8f.3
-        for <bpf@vger.kernel.org>; Fri, 01 May 2026 00:53:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777622004; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FXEE6EtR"
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-50e614fdb42so16832581cf.3
+        for <bpf@vger.kernel.org>; Fri, 01 May 2026 08:37:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777649854; cv=none;
         d=google.com; s=arc-20240605;
-        b=MIasEDSfo/2NLPKC1vwR6ssHcOUKIEuhSb401Id2QuRfbR0DOogbQkliz1qh+/WsIh
-         Hb09ZIVv2m3Rk7GvQ2n5pY00aJxd5Pur9hTsTlDHOj/dbwSshJ9+JkKXjxozUx6GXjEi
-         yztOHaQmoEV2Bf1bsti973AZDRa7S2lhPhBPW9es1y5/pPx3HndciqJRDBS1rxMTcx2m
-         QyEcvuEYMeebWRecRtrtzurAjT/5B0PcaXBPUUqJ60bzTHCGc4wG96paO/c5Oy7hW7Dk
-         XF+zjUh2bNL90F2PLvOu1bkkJr5Ue4imSZ9C4wFMuDuyhwfDIVdAZ/3X33NcZVViq1nN
-         VBGg==
+        b=jhoo6WH9nrCx+V0I/TonsItsng4nS8HJaOE6YMn1t7G7MDBOqCc1nZgWl2ig8MfQHU
+         xLxiRtrytgE+4qhDwWYoxflBkZoNMeGEDScQGp7xFVsEQId4+QE7rZgstkio3gDhJN9X
+         c5cOSjXQFjFEyriHhKFGQdTBS9J/q8VelxYUsA50UBPq10aDxos1F3UQxTQGqbFnrOh5
+         j7nCj+q+9z9zP7KfLeMXU8qYOwWJclxvfwcB+H3iQGq4H0QGMzBGH6CngIJIeelHG6mx
+         v1NGlBOiU2j4KPrRPuwubp9XfK5fuqMrcAVom0rk/vBHinNN0hyR5tLIxC5T4MIu2xjM
+         7yyQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=k33OE9cE/aaOG0xCZOkihFCZ44hXEKHH/zGHya7QAW0=;
-        fh=BaBjdC2LuLhkWzS5SOF8ju62MTzYk/v3SfK2xAjP1QU=;
-        b=UgUDdt0w2ylnwFyIBR5+uSz4ERAyf74didXz2m+MwynrwCMl2cASx7ljYMT56UK7eq
-         7QhtpbsMrzlLI8Xqy+aQ+Gf5pDbVPSannpG8+Dx9SXKiHDTvLoB4mEM7BHa+2cFum7wD
-         d54VipEvT+vf6RU41JaMOmoJ/pxQOWSzk1VI/Q38WDRpwEC7aZQmGibQa/c28xXB/ZT8
-         AktKYeVB6qcaEGA8a+I2Dc9frGYYoQM9Q/FNAbGtI4MXDU2zTOLFX2BCBO2i6AfVT965
-         wShs/mUtp6eRVu4Wgs72ap0byxsxuAVH6poJg5RGgjuZfj1FOqWusW/cbzhoImtNOji5
-         WvTw==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=TmZOkd4LjdDYloHzxeaTkn/dgtYW8v+Yk+8UEv1tCuM=;
+        fh=Qwt4tMGvjWQB2au6ups0MdHJd6MlCaRXgW7bH+YlIYw=;
+        b=X5x3/Fhx1GrDyLhH+xiyki9drU3+eGBOgHa9HU62uiEujqiU6QSTvzzepNlP7Vn9dn
+         /FWhaGaha+1p4SvMT6mNgpW7PNm+pEFoj6z/8fDCJA4/Fwe4AfWNsyjsahRjrx8o2Pw6
+         7CVZDUmy8/4xTOplTef6NS/7b925DdLL4dDUTEwo9DNcIR59P46wNHzybimHnOjr5Jg3
+         ZDm+VKZl3dcvkj1KiAlbumWhBrh06BflDkW0AM50eTK1xydvP7FxrlwBXgbK5c3IhIZ9
+         y3g4dYWcCxKGVIwHLMSa8PK+54dweSfK9trKp483i+ICiE1nzmTxz7PxC592Gmaem2la
+         u4uA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777622004; x=1778226804; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k33OE9cE/aaOG0xCZOkihFCZ44hXEKHH/zGHya7QAW0=;
-        b=rxh8vrIWJbN30BHruGb6WQVCd+SoQudZWEbgf+XMqV/nBVf6YgNBrGKraAysOmfleD
-         bTM1OBxQPvA3gPXE7qfdoZy4Aaqs1B1PdE8NCh0vtsjDw31ukDs6qB/bmzgc5zEb6Dhf
-         A52bJiVYNBT73DoMdO4AXLLcjqqxQsI0QRSX13FzGG/sNeueAQ+xu3JbfjhcKAd6X9Rw
-         SB93in7bTW8hNFZzVK1uvfqAvlxACQughSWOpH33VvNA9mGvPdJCtKXwEBIlERi0AEpv
-         0A1nHIMhhjqPQVVmsaMPQSl+mGG5R6Bdv7zVWwZ+jU7psgH++M61Fv+un9p2ir+JNqpR
-         8N0A==
+        d=gmail.com; s=20251104; t=1777649854; x=1778254654; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TmZOkd4LjdDYloHzxeaTkn/dgtYW8v+Yk+8UEv1tCuM=;
+        b=FXEE6EtREwYj4KAs1LNIJ1N/UwhJG0PZ7wgEEEvZ7H/ieYXQqZE9B91k20MCTkHwVb
+         nrq4yqaZCSvDix9tSJwSVgyjiadaEIGkN91qw3HS/EyVzEKX1gdqbRETmnLar8ldIJ4W
+         js244wvNIEnkSWXNcCtdTou86m3rrW74e2r5WC3aikTzH+ObvLrnwStoce5evLSlgRrk
+         aR/I/3s2Onm0sFaIQao7dUpCW03Vgjg/FJQLV/RYlt6ZtXvsVj/uKHi3As/5O/eoD+Xy
+         aQFqsCfAN1hqAzkp6xDsKuvfOnu9699HEjlQu6Q8PdL7RVTrP1tMLfRDPLUgfjunJ0Ah
+         GiNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777622004; x=1778226804;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=k33OE9cE/aaOG0xCZOkihFCZ44hXEKHH/zGHya7QAW0=;
-        b=KmWpF96PiHVTHN1Z088GfFb7+Pc47WL47NcMx+s6vFiGzFVL9v+dD+fMehHtN1bn4K
-         TctYsBmX2C/qHUiWZ0TNFBppAgXSX2oMTPGgPsUHiXPYVX3/JuJsMeQspK7jIE+/+yjM
-         fogxbv3CzjUkuuEkSYX2oN5N2ty97Jo2L2h6ZvVqNEGQE2tU1gIEuY2q6p7e5TJIwn1E
-         kMKkDnncf8vpkdEmwKaz6gg7VvG+++7QvIVyPByG/WZ1OOMvGLmr5wtpSDBeuLkxXqGi
-         ivWZwsy4Gp67sQ/CwK3QEjyIaEghEBiGYuGs+JkvtXbAtAaVEFZCD9rtw4VuWWzYlRxW
-         /ErQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9Xig1XwNY6OMen8POoK/UutchxuAQZuemkc2xJnXW2xSDP+32pb9AXTspgrhbz4ihdVJI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6E2q/6b/KM/DWmbgQVgsLjTqT1w7R6CL2SOENLXDgh3H4nKCL
-	cP2V3xiCdMdubTK1oG/+wowv5ZnLURiahlZyyLWnivWjO92EAxYyw2X5nu7Hgm9QIGc1Opx4uAB
-	MEl6z5fzKrKRauvexek5oJ+E6D/MShGk=
-X-Gm-Gg: AeBDiev2QV8gBwYKA1kaQQg5N+JU82RQ9mdnos2VNgCU7/3iVPdT+yXNeKBYa2Gsfc6
-	dTxcpExk7z+sV3wxskJJIVbA5sjGKA28AxpAjnxrIQlR9066jQWcH+EqTfV3pMNB7VH8aChY5bG
-	3MdszRWxQlUc9o6dHEnrii6H3j0XSvO8alNpIXJNGZdferFcKXsHZfqtj7IJPTtpUlnHt56TCIc
-	En16nY0ZU+l9xWeuOOkyIG4xhDwpXGZ2XYv43YS11bgjncyBsi9Xn9j9Q07p18N91b4+gef8fuR
-	fax4ou3CWAhgTWJAKRPgQNCTrwgFNquZQrygvrLsjfcQY92jayPN8OjXg2dQdwkfN4XCQd3EnJD
-	j5Hs=
-X-Received: by 2002:a05:6000:290d:b0:43b:5231:e94a with SMTP id
- ffacd0b85a97d-4493ec61b1dmr10070807f8f.30.1777622003618; Fri, 01 May 2026
- 00:53:23 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1777649854; x=1778254654;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TmZOkd4LjdDYloHzxeaTkn/dgtYW8v+Yk+8UEv1tCuM=;
+        b=U6i37Jo8dndLvYtq2LLSFjEchInlBEQvoas7W2AGM8OgH9g2HfGJiBugf4UDmn+YK1
+         pJxvOmexVlcoU+gaq5V+L1RhqmprqfkVYakaLkOwW5qSWfdq3ZroDln8WBpiFA+1VN+3
+         4zY4cAX7RSv5GP7jtvIyvuhex8YyCJMMtIieDpQIrUa4AM8t24Q9CoopK75ilWw/K+p5
+         +NNUXA7/hEagQIe2anVtF/VDcNUoRa4ThLv3AQmHH7FH/2pjWqhHqWzQd4/UrSGkFM+j
+         /vi8eM9fNLwKzAOJXzF7ahzucS5mSkmDxnwONvfwWn5xVgPJWkw3Enj3U9mD5Ri+0mAR
+         q9Zg==
+X-Forwarded-Encrypted: i=1; AFNElJ/GPgPgr/gXuum1sS3Xj6aKcqPt+7zpbgm25jRnVNTgd1iwwVSty9gS3EYqe6lt7dpFYUA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7znQ6cmm5F2JedYBUNwpZrWTO2K6v1FMaAzoNgncc8/3f+ARZ
+	ZibVn9saAQghG+V8ukH4kKx9U333sLhcaDHnSgwFzNttrN/HNw23RAvxux0pcipI2tGbfUDZV/2
+	LTN6Xk0lli5sv8XrwSsg7NSbIb9/nVIs=
+X-Gm-Gg: AeBDiesA+3cWurWhAuEwyqUcx59yZx/5xh7EiuvlAiJa7oYbro83iUQBH8M8mSqvfIV
+	yCTDTGE9MrCwv+gfsfa+BW/aNYxIkvfqMtKT0pOg9NHxcGajuCqoIr098nJZ0RU7pns1exXpnvf
+	wh08pMyqQI3AxU8T6Epdng7bdPT594nnX1RHKs4Q1wDvYW38fs6J7xkh2r6fqC3+2b8QIBPA5wS
+	XQEix2e7uS07+StbfCHvmRI1sxtvGRmJTfD7L/eq5iWrH2NfeMBKhKNUW+Fu7rNL5vP6oJeYaeR
+	G+NUxkZu3peWXd6GqRRkJ5YHPRclp0hPV4IpDgIAm+jKWV5BBqBV2Duu8vJytQ==
+X-Received: by 2002:a05:622a:1390:b0:50d:86d9:4c24 with SMTP id
+ d75a77b69052e-5103e801278mr51004741cf.12.1777649853785; Fri, 01 May 2026
+ 08:37:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260429171904.107244-1-tangyazhou@zju.edu.cn>
- <20260429171904.107244-3-tangyazhou@zju.edu.cn> <518d74d6-7750-4950-a76f-3e67e480840e@huaweicloud.com>
- <6fc310e8-f929-4b1a-b298-71f2445e3c6e@zju.edu.cn> <c801c51e-70d5-4bdd-8f83-d1f71f84186d@kernel.org>
- <e85fa7f9-02ef-42ad-80eb-26c1756737da@zju.edu.cn>
-In-Reply-To: <e85fa7f9-02ef-42ad-80eb-26c1756737da@zju.edu.cn>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 1 May 2026 08:53:11 +0100
-X-Gm-Features: AVHnY4L4F5uDmKjqIJ3-QnJcpNYOy7slWl6QGUuFWHkTPuS1A16-aLImymF98wY
-Message-ID: <CAADnVQLqpwc2q_Zesgvqq0WLNzcnGUc9D5QTdzLDX8_tj7OBFA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 2/3] bpf: Fix s16 truncation for large
- bpf-to-bpf call offsets
-To: Yazhou Tang <tangyazhou@zju.edu.cn>
-Cc: Quentin Monnet <qmo@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Puranjay Mohan <puranjay@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Yazhou Tang <tangyazhou518@outlook.com>, Shenghao Yuan <shenghaoyuan0928@163.com>, 
-	Tianci Cao <ziye@zju.edu.cn>
+References: <20260427001602.38353-1-dwindsor@gmail.com> <20260427001602.38353-2-dwindsor@gmail.com>
+ <CAP01T74iuSDJeL6g=5yLdYGb-VcESK1SYY3R1S1r-CtQEsW+oQ@mail.gmail.com>
+ <CAEXv5_heSFK5rZYtaJG70Xgv92Um6Dbq8b95PtnpKy7XFwpKUw@mail.gmail.com>
+ <CAP01T74WBjcMXbWYeaWB-oTk-bUzoxi_EEALDpT1hFUEOovnpw@mail.gmail.com>
+ <ae82Vv0RWzcXqSaz@google.com> <CAPhsuW60SRXZbFYRDm-QaTiB8tTtJD_N4jk1=680x5UsZmpj9w@mail.gmail.com>
+ <CAP01T75SBw6NNvBKyPW11JSYY2oh449yoBsWi_GOBR5Kq1ykmw@mail.gmail.com>
+ <afCUADdbNrpbEPMa@google.com> <CAP01T76ipTgY3EM8uMSXymdO4co3AWZeXqwV3amqDnHiFXhrTw@mail.gmail.com>
+In-Reply-To: <CAP01T76ipTgY3EM8uMSXymdO4co3AWZeXqwV3amqDnHiFXhrTw@mail.gmail.com>
+From: David Windsor <dwindsor@gmail.com>
+Date: Fri, 1 May 2026 11:37:22 -0400
+X-Gm-Features: AVHnY4LLx68NFbw4R6d2DByeiT2ksgjJ8FlMA2rRsoOrBqjrTHhEtUSBsgoGVxM
+Message-ID: <CAEXv5_jkPwf1EGCd3OkCzsnL_dF8fF=x-RNKSuvNZn24Ns5erg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: add bpf_init_inode_xattr kfunc for
+ atomic inode labeling
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Matt Bobrowski <mattbobrowski@google.com>, Song Liu <song@kernel.org>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Jan Kara <jack@suse.cz>, 
+	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-security-module@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 1, 2026 at 8:36=E2=80=AFAM Yazhou Tang <tangyazhou@zju.edu.cn> =
-wrote:
->
-> Hi Quentin,
->
-> Thanks for your reply.
->
-> On 4/30/26 23:25, Quentin Monnet wrote:
-> > 2026-04-30 23:00 UTC+0800 ~ Yazhou Tang <tangyazhou@zju.edu.cn>
-> >> Hi Kuohai,
-> >>
-> >> Thanks for your review and the Acked-by tag.
-> >>
-> >> On 4/30/26 11:29, Xu Kuohai wrote:
-> >>> On 4/30/2026 1:19 AM, Yazhou Tang wrote:
-> >>
-> >> [...]
-> >>
-> >>>> diff --git a/tools/bpf/bpftool/cfg.c b/tools/bpf/bpftool/cfg.c
-> >>>> index e3785f9a697d..df43a0e0023f 100644
-> >>>> --- a/tools/bpf/bpftool/cfg.c
-> >>>> +++ b/tools/bpf/bpftool/cfg.c
-> >>>> @@ -142,7 +142,7 @@ static bool cfg_partition_funcs(struct cfg *cfg,
-> >>>> struct bpf_insn *cur,
-> >>>>                continue;
-> >>>>            if (cur->src_reg !=3D BPF_PSEUDO_CALL)
-> >>>>                continue;
-> >>>> -        func =3D cfg_append_func(cfg, cur + cur->off + 1);
-> >>>> +        func =3D cfg_append_func(cfg, cur + cur->imm + 1);
-> >>>
-> >>> Do we need to matain backward compatibility with the old bpftool here=
-?
-> >>> I suspect not, but I'm not entirely sure.
-> >>
-> >> I agree. Since bpftool is maintained in-tree, it should be enough to j=
-ust
-> >> keep it in sync with the current kernel tree.
+Hi,
+
 > >
-> > Hi, bpftool is also mirrored on GitHub at
-> > https://github.com/libbpf/bpftool
-> > and many people build it from there, so yes, it should be backward
-> > compatible if possible at all.
+> > > Even if we wanted to ensure argument provenance was stuff loaded from
+> > > context, the right solution would be some kfunc flag that constraints
+> > > the argument to be derived by following the ctx pointer, not whatever
+> > > is done in this patch.
+> >
+> > OK, so it is provenance-like tracking which you were initially kinda
+> > alluding to here. Currently, I don't believe that PTR_TO_CTX is
+> > preserved upon any subsequent R1 (ctx) dereferences, so we'd need to
+> > think about how this type could be preserved such that we can enforce
+> > this kinda constraint (__ctx) at the time which the new BPF kfunc is
+> > called. Do you have any ideas on how to do this?
 >
-> Thanks for pointing that out. Considering this situation, I will make
-> sure to maintain backward compatibility in bpftool.
->
-> However, since the xlated format for BPF_PSEUDO_CALL swaps the imm and
-> off fields, distinguishing the old format from the new one purely from
-> the instruction stream seems a bit tricky. Both fields could technically
-> contain small integers.
->
-> I'm not very familiar with bpftool. Is there a standard/preferred way
-> in bpftool to probe for such kernel behavior changes?
->
-> One potential approach could be to load a minimal dummy BPF program with
-> a BPF_PSEUDO_CALL instruction, dump its xlated instructions, and check
-> whether the kernel stored the offset in imm or off. Finally use this
-> boolean result for subsequent bpftool dumps.
->
-> Do you have any suggestions on this? Thanks again for the guidance.
+> I think we'll have to track in the register whether the PTR_TO_BTF_ID
+> came from a PTR_TO_CTX load. That said, I still prefer changing the
+> prototype to pack the array and its output size parameter together. It
+> is even clearer to have a well named type than int *xattr_count in the
+> prototype.
 
-There should be no need to do probing in bpftool.
-The xlated insns should be translated back to the original format
-by the kernel.
+Thanks for your feedback, sorry I've been busy this week. I will send
+v2 with this change, as well as Matt's suggested change for guarding
+the bpf xattr namespace.
