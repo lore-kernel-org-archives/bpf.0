@@ -1,206 +1,312 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1CFE363085;
-	Fri,  1 May 2026 07:16:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 114A6365A19;
+	Fri,  1 May 2026 07:16:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777619805; cv=none; b=tJIHasf/wZh4Bhcv+uo9MGUAAxD+thhXTXa5FSkiNhwZ7puX4NNLCrX6KaZorz8R7YCLGXMIciur1nLcc9G9vEKSv0YUKvxMoPv16PDxUZ++1o0LSXDlQ7DYH0k16Zti8fIob9T1y7w/c8DquE/X+9gqBpkauQNemzWftRHlwUE=
+	t=1777619816; cv=none; b=m4FzCuBfQ32xz7GgaTuCr9fSvRpYXU8rzuBu0XEE/dwpBCmZ+5enHhok5DPeGPLIUfyejTjRpVIQynktAaliJUJ/g+hd+0JgmVS8dNAWhNVeoIooMBm9EmwYGh36O9VNTVlYEMLv+HEDFoiLxg/9t+Av94/MHg6AKm9GrWZ3GpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777619805; c=relaxed/simple;
-	bh=BMVIWjhQFdiNIxrpRvfWpVliRlfHvRQ6uvScvVVbO2s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tu8/ms0J5yQTkp0ruXUNZqaPh3SCk/T5I4cV23LbYo60rD1CQIMgZJsdVxMwuJMHUNIEY192dtLZZetxatYoDLnxVFqAA/Qi/LOThkQJHHNaaC1ozuUSKQZiRVDLBBWFGu2dGSF5D8sxGG6CD5fq2CrWDVB0yi4TFFtYB9cYn6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sr6N1b1+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777619816; c=relaxed/simple;
+	bh=1cBIpQ9aLppMsBzdk2K03CSWCfbmpNrt9lwop9BHqdE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=O+UwYCFkSRn4tGc2irR6fKoGITii8SwHLZlYJ7ZpMn/pRkD4Di47wrFHQ8cf72asgGCMGLpp1H+CSYgfaJESZ3h1ayjoikeq4I3vIrxgvfVjwaVexk16uPhaJ4GdNHolCpHYAY2G0I4+/8j0vR1lEt3HCmEmC1plxXCib/DGl6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KSvPEf9Z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sr6N1b1+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A150C2BCB4;
-	Fri,  1 May 2026 07:16:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KSvPEf9Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78D99C2BCB4;
+	Fri,  1 May 2026 07:16:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777619805;
-	bh=BMVIWjhQFdiNIxrpRvfWpVliRlfHvRQ6uvScvVVbO2s=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Sr6N1b1+X4lriw6ICe9xJrngw12j7kSdtJjPGgLq6J5A1uaDbIPENr5bS21IxXltt
-	 aI6+vje4aizCJy0axNrhlm2ZwpUCCLFi/6k5pWgO06u57QM7cENFpp+NOTJVK9LIxi
-	 dVvo56z4BE1FPSlXn/AQwjU2pHKIq2G29WueQjNmzdHhwfNmFm/682FEsclCDn8mWB
-	 nfhBXXJexddoeD217viTrhX0EzkzSv6wPDI2ogtakUUly6D4ZDlm9AgFI9va67/pdU
-	 5YGBE39Zu21zX2OTt/axKDIoajATzMN+r+rCZAnPpNUVMxqXYZiY9+Dj3RHDqDH689
-	 75wBCD8v5wl6g==
+	s=k20201202; t=1777619815;
+	bh=1cBIpQ9aLppMsBzdk2K03CSWCfbmpNrt9lwop9BHqdE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=KSvPEf9ZdMM1VfqNcV4XeZsXckO456yIw6cEcFBXXEAj+26dWkzMZu84Nj/BV5E+M
+	 7xMk7ccVzc8D/Q2DIvZWDeRccs8uoQl6u0hVxW3LVKWKMHBoTZ+91TcNHhwhCPJ9vF
+	 /L0yfla9SSy7ZWS7W2dh58G94U85dzt2HJHsi/tVymKKLL32F5dVdFhaBkSWcW6G6F
+	 Gwgi7oEsOnbJOuQQBtSvQ04Jmp4zwHtDD0rbeo/OQ0QU0dtrWPl4beHWeLTwz9MgQF
+	 F1RUi3Tk2Nz7ie7a7f+hFGZXfuWFfUfNJjL+dCSucq9kl87A/kRpeZliCez1bxtVt+
+	 hMYVSASxML6hw==
 From: hawk@kernel.org
 To: netdev@vger.kernel.org
 Cc: hawk@kernel.org,
 	kernel-team@cloudflare.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Chris Arges <carges@cloudflare.com>,
-	Mike Freemon <mfreemon@cloudflare.com>,
-	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-	=?UTF-8?q?Jonas=20K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
-	Breno Leitao <leitao@debian.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Stanislav Fomichev <sdf@fomichev.me>,
+	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v4 0/4] veth: add Byte Queue Limits (BQL) support
-Date: Fri,  1 May 2026 09:16:27 +0200
-Message-ID: <20260501071633.644353-1-hawk@kernel.org>
+Subject: [PATCH net-next v4 2/4] veth: implement Byte Queue Limits (BQL) for latency reduction
+Date: Fri,  1 May 2026 09:16:29 +0200
+Message-ID: <20260501071633.644353-3-hawk@kernel.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260501071633.644353-1-hawk@kernel.org>
+References: <20260501071633.644353-1-hawk@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Jesper Dangaard Brouer <hawk@kernel.org>
 
-This series adds BQL (Byte Queue Limits) to the veth driver, reducing
-latency by dynamically limiting in-flight packets in the ptr_ring and
-moving buffering into the qdisc where AQM algorithms can act on it.
+Commit dc82a33297fc ("veth: apply qdisc backpressure on full ptr_ring to
+reduce TX drops") gave qdiscs control over veth by returning
+NETDEV_TX_BUSY when the ptr_ring is full (DRV_XOFF).  That commit noted
+a known limitation: the 256-entry ptr_ring sits in front of the qdisc as
+a dark buffer, adding base latency because the qdisc has no visibility
+into how many bytes are already queued there.
 
-Problem:
-  veth's 256-entry ptr_ring acts as a "dark buffer" -- packets queued
-  there are invisible to the qdisc's AQM.  Under load, the ring fills
-  completely (DRV_XOFF backpressure), adding up to 256 packets of
-  unmanaged latency before the qdisc even sees congestion.
+Add BQL support so the qdisc gets feedback and can begin shaping traffic
+before the ring fills.  In testing with fq_codel, BQL reduces ping RTT
+under UDP load from ~6.61ms to ~0.36ms (18x).
 
-Solution:
-  BQL (STACK_XOFF) dynamically limits in-flight packets, stopping the
-  queue before the ring fills.  This keeps the ring shallow and pushes
-  excess packets into the qdisc, where sojourn-based AQM can measure
-  and drop them.
+Charge a fixed VETH_BQL_UNIT (1) per packet rather than skb->len, so
+the DQL limit tracks packets-in-flight.  Unlike a physical NIC, veth
+has no link speed -- the ptr_ring drains at CPU speed and is
+packet-indexed, not byte-indexed, so bytes are not the natural unit.
+With byte-based charging, small packets sneak many more entries into
+the ring before STACK_XOFF fires, deepening the dark buffer under
+mixed-size workloads.  Testing with a concurrent min-size packet flood
+shows 3.7x ping RTT degradation with skb->len charging versus no
+change with fixed-unit charging.
 
-  Test setup: veth pair, UDP flood, 13000 iptables rules in consumer
-  namespace (slows NAPI-64 cycle to ~6-7ms), ping measures RTT under load.
+Charge BQL inside veth_xdp_rx() under the ptr_ring producer_lock, after
+confirming the ring is not full.  The charge must precede the produce
+because the NAPI consumer can run on another CPU and complete the SKB
+the instant it becomes visible in the ring.  Doing both under the same
+lock avoids a pre-charge/undo pattern -- BQL is only charged when
+produce is guaranteed to succeed.
 
-                   BQL off                    BQL on
-  fq_codel:  RTT ~22ms, 4% loss         RTT ~1.3ms, 0% loss
-  sfq:       RTT ~24ms, 0% loss         RTT ~1.5ms, 0% loss
+BQL is enabled only when a real qdisc is attached (guarded by
+!qdisc_txq_has_no_queue), as HARD_TX_LOCK provides serialization
+for TXQ modification like dql_queued(). For lltx devices, like veth,
+this HARD_TX_LOCK serialization isn't provided.  The ptr_ring
+producer_lock provides additional serialization that would allow
+BQL to work correctly even with noqueue, though that combination
+is not currently enabled, as the netstack will drop and warn.
 
-  BQL reduces ping RTT by ~17x for both qdiscs.  Consumer throughput
-  is unchanged (~10K pps) -- BQL adds no overhead.
+Track per-SKB BQL state via a VETH_BQL_FLAG pointer tag in the ptr_ring
+entry.  This is necessary because the qdisc can be replaced live while
+SKBs are in-flight -- each SKB must carry the charge decision made at
+enqueue time rather than re-checking the peer's qdisc at completion.
 
-CoDel bug discovered during BQL development:
-  Our original motivation for BQL was fq_codel ping loss observed under
-  load (4-26% depending on NAPI cycle time).  Investigating this led us
-  to discover a bug in the CoDel implementation: codel_dequeue() does
-  not reset vars->first_above_time when a flow goes empty, contrary to
-  the reference algorithm.  This causes stale CoDel state to persist
-  across empty periods in fq_codel's per-flow queues, penalizing sparse
-  flows like ICMP ping.  A fix for this has been applied to the net tree
-  815980fe6dbb ("net_sched: codel: fix stale state for empty flows in fq_codel")
-  
-  BQL remains valuable independently: it reduces RTT by ~17x by moving
-  buffering from the dark ptr_ring into the qdisc.  Additionally, BQL
-  clears STACK_XOFF per-SKB as each packet completes, rather than
-  batch-waking after 64 packets (DRV_XOFF).  This keeps sojourn times
-  below fq_codel's target, preventing CoDel from entering dropping
-  state on non-congested flows in the first place.
+Complete per-SKB in veth_xdp_rcv() rather than in bulk, so STACK_XOFF
+clears promptly when producer and consumer run on different CPUs.
 
-Key design decisions:
-  - Charge-under-lock in veth_xdp_rx(): The BQL charge must precede
-    the ptr_ring produce, because the NAPI consumer can run on another
-    CPU and complete the SKB immediately after it becomes visible.  To
-    avoid a pre-charge/undo pattern, the charge is done under the
-    ptr_ring producer_lock after confirming the ring is not full.  BQL
-    is only charged when produce is guaranteed to succeed, keeping
-    num_queued monotonically increasing.  HARD_TX_LOCK already
-    serializes dql_queued() (veth requires a qdisc for BQL); the
-    ptr_ring lock additionally would allow noqueue to work correctly.
+BQL introduces a second independent queue-stop mechanism (STACK_XOFF)
+alongside the existing DRV_XOFF (ring full).  Both must be clear for
+the queue to transmit.  Reset BQL state in veth_napi_del_range() after
+synchronize_net() to avoid racing with in-flight veth_poll() calls.
+Clamp the reset loop to the peer's real_num_tx_queues, since the peer
+may have fewer TX queues than the local device has RX queues (e.g. when
+veth is enslaved to a bond with XDP attached).
 
-  - Per-SKB BQL tracking via pointer tag: A VETH_BQL_FLAG bit in the
-    ptr_ring pointer records whether each SKB was BQL-charged.  This is
-    necessary because the qdisc can be replaced live (noqueue->sfq or
-    vice versa) while SKBs are in-flight -- the completion side must
-    know the charge state that was decided at enqueue time.
+Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+---
+ drivers/net/veth.c | 76 +++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 65 insertions(+), 11 deletions(-)
 
-  - IFF_NO_QUEUE + BQL coexistence: A new dev->bql flag enables BQL
-    sysfs exposure for IFF_NO_QUEUE devices that opt in to DQL
-    accounting, without changing IFF_NO_QUEUE semantics.
-
-Background and acknowledgments:
-  Mike Freemon reported the veth dark buffer problem internally at
-  Cloudflare and showed that recompiling the kernel with a ptr_ring
-  size of 30 (down from 256) made fq_codel work dramatically better.
-  This was the primary motivation for a proper BQL solution that
-  achieves the same effect dynamically without a kernel rebuild.
-
-  Chris Arges wrote a reproducer for the dark buffer latency problem:
-    https://github.com/netoptimizer/veth-backpressure-performance-testing
-  This is where we first observed ping packets being dropped under
-  fq_codel, which became our secondary motivation for BQL.  In
-  production we switched to SFQ on veth devices as a workaround.
-
-  Jonas Koeppeler provided extensive testing and code review.
-  Together we discovered that the fq_codel ping loss was actually a
-  12-year-old CoDel bug (stale first_above_time in empty flows), not
-  caused by the dark buffer itself.
-
-Patch overview:
-  1. net: add dev->bql flag to allow BQL sysfs for IFF_NO_QUEUE devices
-  2. veth: implement Byte Queue Limits (BQL) for latency reduction
-  3. veth: add tx_timeout watchdog as BQL safety net
-  4. net: sched: add timeout count to NETDEV WATCHDOG message
-
-Jesper Dangaard Brouer (4):
-  net: add dev->bql flag to allow BQL sysfs for IFF_NO_QUEUE devices
-  veth: implement Byte Queue Limits (BQL) for latency reduction
-  veth: add tx_timeout watchdog as BQL safety net
-  net: sched: add timeout count to NETDEV WATCHDOG message
-
- .../networking/net_cachelines/net_device.rst  |  1 +
- drivers/net/veth.c                            | 94 ++++++++++++++++---
- include/linux/netdevice.h                     |  2 +
- net/core/net-sysfs.c                          |  8 +-
- net/sched/sch_generic.c                       |  8 +-
- 5 files changed, 97 insertions(+), 16 deletions(-)
-
-V3: https://lore.kernel.org/all/20260429172036.1028526-1-hawk@kernel.org/
-
-Changes since V3:
-  - Drop selftest patch (patch 5 from V3) per maintainer request.
-  - Rebase on latest net-next.
-
-V2: https://lore.kernel.org/all/20260413094442.1376022-1-hawk@kernel.org/
-
-Changes since V2:
-  - Patch 2 (veth BQL): fix syzbot WARNING in veth_napi_del_range():
-    clamp BQL reset loop to peer's real_num_tx_queues.  The loop was
-    iterating dev->real_num_rx_queues but indexing peer's txq[], which
-    goes out of bounds when the peer has fewer TX queues (e.g. veth
-    enslaved to a bond with XDP attached).
-
-V1: https://lore.kernel.org/all/20260324174719.1224337-1-hawk@kernel.org/
-
-Changes since V1:
-  - Patch 1 (dev->bql flag): add kdoc entry for @bql in struct net_device.
-  - Patch 2 (veth BQL): charge fixed VETH_BQL_UNIT (1) per packet instead
-    of skb->len.  veth has no link speed; the ptr_ring is packet-indexed.
-    Byte-based charging lets small packets sneak many entries into the ring.
-    Testing: min-size packet flood causes 3.7x ping RTT degradation with
-    skb->len vs no change with fixed-unit charging.
-  - Patch 3 (tx_timeout watchdog): fix race with peer NAPI: replace
-    netdev_tx_reset_queue() with clear_bit(STACK_XOFF) + netif_tx_wake_queue()
-    to avoid dql_reset() racing with concurrent dql_completed().
-  - Cover letter: update CoDel fix reference to merged commit in net tree.
-
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Simon Horman <horms@kernel.org>
-Cc: Chris Arges <carges@cloudflare.com>
-Cc: Mike Freemon <mfreemon@cloudflare.com>
-Cc: Toke Høiland-Jørgensen <toke@toke.dk>
-Cc: Jonas Köppeler <j.koeppeler@tu-berlin.de>
-Cc: Breno Leitao <leitao@debian.org>
-Cc: kernel-team@cloudflare.com
-
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index e35df717e65e..3de25ba34a90 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -34,9 +34,13 @@
+ #define DRV_VERSION	"1.0"
+ 
+ #define VETH_XDP_FLAG		BIT(0)
++#define VETH_BQL_FLAG		BIT(1)
+ #define VETH_RING_SIZE		256
+ #define VETH_XDP_HEADROOM	(XDP_PACKET_HEADROOM + NET_IP_ALIGN)
+ 
++/* Fixed BQL charge: DQL limit tracks packets-in-flight, not bytes */
++#define VETH_BQL_UNIT		1
++
+ #define VETH_XDP_TX_BULK_SIZE	16
+ #define VETH_XDP_BATCH		16
+ 
+@@ -280,6 +284,21 @@ static bool veth_is_xdp_frame(void *ptr)
+ 	return (unsigned long)ptr & VETH_XDP_FLAG;
+ }
+ 
++static bool veth_ptr_is_bql(void *ptr)
++{
++	return (unsigned long)ptr & VETH_BQL_FLAG;
++}
++
++static struct sk_buff *veth_ptr_to_skb(void *ptr)
++{
++	return (void *)((unsigned long)ptr & ~VETH_BQL_FLAG);
++}
++
++static void *veth_skb_to_ptr(struct sk_buff *skb, bool bql)
++{
++	return bql ? (void *)((unsigned long)skb | VETH_BQL_FLAG) : skb;
++}
++
+ static struct xdp_frame *veth_ptr_to_xdp(void *ptr)
+ {
+ 	return (void *)((unsigned long)ptr & ~VETH_XDP_FLAG);
+@@ -295,7 +314,7 @@ static void veth_ptr_free(void *ptr)
+ 	if (veth_is_xdp_frame(ptr))
+ 		xdp_return_frame(veth_ptr_to_xdp(ptr));
+ 	else
+-		kfree_skb(ptr);
++		kfree_skb(veth_ptr_to_skb(ptr));
+ }
+ 
+ static void __veth_xdp_flush(struct veth_rq *rq)
+@@ -309,19 +328,33 @@ static void __veth_xdp_flush(struct veth_rq *rq)
+ 	}
+ }
+ 
+-static int veth_xdp_rx(struct veth_rq *rq, struct sk_buff *skb)
++static int veth_xdp_rx(struct veth_rq *rq, struct sk_buff *skb, bool do_bql,
++		       struct netdev_queue *txq)
+ {
+-	if (unlikely(ptr_ring_produce(&rq->xdp_ring, skb)))
++	struct ptr_ring *ring = &rq->xdp_ring;
++
++	spin_lock(&ring->producer_lock);
++	if (unlikely(!ring->size) || __ptr_ring_full(ring)) {
++		spin_unlock(&ring->producer_lock);
+ 		return NETDEV_TX_BUSY; /* signal qdisc layer */
++	}
++
++	/* BQL charge before produce; consumer cannot see entry yet */
++	if (do_bql)
++		netdev_tx_sent_queue(txq, VETH_BQL_UNIT);
++
++	__ptr_ring_produce(ring, veth_skb_to_ptr(skb, do_bql));
++	spin_unlock(&ring->producer_lock);
+ 
+ 	return NET_RX_SUCCESS; /* same as NETDEV_TX_OK */
+ }
+ 
+ static int veth_forward_skb(struct net_device *dev, struct sk_buff *skb,
+-			    struct veth_rq *rq, bool xdp)
++			    struct veth_rq *rq, bool xdp, bool do_bql,
++			    struct netdev_queue *txq)
+ {
+ 	return __dev_forward_skb(dev, skb) ?: xdp ?
+-		veth_xdp_rx(rq, skb) :
++		veth_xdp_rx(rq, skb, do_bql, txq) :
+ 		__netif_rx(skb);
+ }
+ 
+@@ -352,6 +385,7 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	struct net_device *rcv;
+ 	int length = skb->len;
+ 	bool use_napi = false;
++	bool do_bql = false;
+ 	int ret, rxq;
+ 
+ 	rcu_read_lock();
+@@ -375,8 +409,11 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	}
+ 
+ 	skb_tx_timestamp(skb);
++	txq = netdev_get_tx_queue(dev, rxq);
+ 
+-	ret = veth_forward_skb(rcv, skb, rq, use_napi);
++	/* BQL charge happens inside veth_xdp_rx() under producer_lock */
++	do_bql = use_napi && !qdisc_txq_has_no_queue(txq);
++	ret = veth_forward_skb(rcv, skb, rq, use_napi, do_bql, txq);
+ 	switch (ret) {
+ 	case NET_RX_SUCCESS: /* same as NETDEV_TX_OK */
+ 		if (!use_napi)
+@@ -388,8 +425,6 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
+ 		/* If a qdisc is attached to our virtual device, returning
+ 		 * NETDEV_TX_BUSY is allowed.
+ 		 */
+-		txq = netdev_get_tx_queue(dev, rxq);
+-
+ 		if (qdisc_txq_has_no_queue(txq)) {
+ 			dev_kfree_skb_any(skb);
+ 			goto drop;
+@@ -412,6 +447,7 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
+ 		net_crit_ratelimited("%s(%s): Invalid return code(%d)",
+ 				     __func__, dev->name, ret);
+ 	}
++
+ 	rcu_read_unlock();
+ 
+ 	return ret;
+@@ -900,7 +936,8 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
+ 
+ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+ 			struct veth_xdp_tx_bq *bq,
+-			struct veth_stats *stats)
++			struct veth_stats *stats,
++			struct netdev_queue *peer_txq)
+ {
+ 	int i, done = 0, n_xdpf = 0;
+ 	void *xdpf[VETH_XDP_BATCH];
+@@ -928,9 +965,13 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+ 			}
+ 		} else {
+ 			/* ndo_start_xmit */
+-			struct sk_buff *skb = ptr;
++			bool bql_charged = veth_ptr_is_bql(ptr);
++			struct sk_buff *skb = veth_ptr_to_skb(ptr);
+ 
+ 			stats->xdp_bytes += skb->len;
++			if (peer_txq && bql_charged)
++				netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_UNIT);
++
+ 			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
+ 			if (skb) {
+ 				if (skb_shared(skb) || skb_unclone(skb, GFP_ATOMIC))
+@@ -975,7 +1016,7 @@ static int veth_poll(struct napi_struct *napi, int budget)
+ 	peer_txq = peer_dev ? netdev_get_tx_queue(peer_dev, queue_idx) : NULL;
+ 
+ 	xdp_set_return_frame_no_direct();
+-	done = veth_xdp_rcv(rq, budget, &bq, &stats);
++	done = veth_xdp_rcv(rq, budget, &bq, &stats, peer_txq);
+ 
+ 	if (stats.xdp_redirect > 0)
+ 		xdp_do_flush();
+@@ -1073,6 +1114,7 @@ static int __veth_napi_enable(struct net_device *dev)
+ static void veth_napi_del_range(struct net_device *dev, int start, int end)
+ {
+ 	struct veth_priv *priv = netdev_priv(dev);
++	struct net_device *peer;
+ 	int i;
+ 
+ 	for (i = start; i < end; i++) {
+@@ -1091,6 +1133,17 @@ static void veth_napi_del_range(struct net_device *dev, int start, int end)
+ 		ptr_ring_cleanup(&rq->xdp_ring, veth_ptr_free);
+ 	}
+ 
++	/* Reset BQL on peer's txqs: remaining ring items were freed above
++	 * without BQL completion, so DQL state must be reset.
++	 */
++	peer = rtnl_dereference(priv->peer);
++	if (peer) {
++		int peer_end = min(end, (int)peer->real_num_tx_queues);
++
++		for (i = start; i < peer_end; i++)
++			netdev_tx_reset_queue(netdev_get_tx_queue(peer, i));
++	}
++
+ 	for (i = start; i < end; i++) {
+ 		page_pool_destroy(priv->rq[i].page_pool);
+ 		priv->rq[i].page_pool = NULL;
+@@ -1740,6 +1793,7 @@ static void veth_setup(struct net_device *dev)
+ 	dev->priv_flags |= IFF_PHONY_HEADROOM;
+ 	dev->priv_flags |= IFF_DISABLE_NETPOLL;
+ 	dev->lltx = true;
++	dev->bql = true;
+ 
+ 	dev->netdev_ops = &veth_netdev_ops;
+ 	dev->xdp_metadata_ops = &veth_xdp_metadata_ops;
 -- 
 2.43.0
 
