@@ -1,16 +1,16 @@
 Received: from mx.der-flo.net (mx.der-flo.net [193.160.39.236])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2563FB06F
-	for <bpf@vger.kernel.org>; Fri,  1 May 2026 16:16:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3514D3F074A
+	for <bpf@vger.kernel.org>; Fri,  1 May 2026 16:16:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.160.39.236
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777652168; cv=none; b=O4Yz7/l8DZKvA4EIn9clbQKA079KMkNnIyW3EawBTwSr03XqucW3SFN1w1i45o9E0cjz8ZH2P4MOn9ohAkC0h1fzZ4a6tKKNlSGqd7vnA+EbVW4dtCDNEDbPQzoy8fVqBUodc6iykebaNx6JF5Z9SuOmSfC2VMGKu38MVS/f3k8=
+	t=1777652169; cv=none; b=ZNfd65h0IBgv5qyoCX3b0zapUGvOwiLn36ZJhODDoaFauGS9dvJy+cuVQTs6DyI2oamPCZDV0csT8TzjPFFemfsWzObM2uiJvEhQDmVNJhBsN5l7TqFreS18/LwTy0VWWbJnuxWdfFdQg7iCZ46FlVMW37AFJWEMNpmzrz/x3Q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777652168; c=relaxed/simple;
-	bh=qLPcmMpCv13oX166+RVfXYyfmhdBuFM6ixJMcIaG54Q=;
+	s=arc-20240116; t=1777652169; c=relaxed/simple;
+	bh=nrBY/2JFSP+E0QAacNglCxEWWMOeEFJ7utV/ROpXr4A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ogHANRxtzDn8mayR5lwDDmKYZzX7D9Lesmod/jCuSXHRxurW3rA+4W86jSC42ZM9nWWUl76z9XJGxpw/xcjyKq3xWgC+q/ViwLqcaAPHIt7fge6hHTIkdAvZq3+5X6yn9IGByUBzG4tdpB/Dj08lZ361J7vRqfVkMptDhoQLV9g=
+	 MIME-Version; b=pz7sR5IPe11RYVzVDHuZGgk2U7pW9iMkQlcBQqqcNUwAJnx+Z87qeuz/V6jIyeaG0fgvZaIWt/N+L1si9R1/uDG1GoMio3xnHM7aVS6Byf81LfsvhGriLwczzLg/tXFNx/C/HQIe6nmMzRodp878SNM/420oc9Z1Pz+AR5hBJkc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=der-flo.net; spf=pass smtp.mailfrom=der-flo.net; arc=none smtp.client-ip=193.160.39.236
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=der-flo.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=der-flo.net
@@ -33,9 +33,9 @@ Cc: ast@kernel.org,
 	sdf@fomichev.me,
 	sun.jian.kdev@gmail.com,
 	Florian Lehner <dev@der-flo.net>
-Subject: [PATCH bpf-next 1/2 v3] bpf: Add LINK_DETACH support for perf link
-Date: Fri,  1 May 2026 18:09:00 +0200
-Message-ID: <20260501160901.224134-2-dev@der-flo.net>
+Subject: [PATCH bpf-next 2/2 v3] selftests/bpf: Test LINK_DETACH for perf link
+Date: Fri,  1 May 2026 18:09:01 +0200
+Message-ID: <20260501160901.224134-3-dev@der-flo.net>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260501160901.224134-1-dev@der-flo.net>
 References: <20260501160901.224134-1-dev@der-flo.net>
@@ -47,161 +47,118 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Implement the .detach operation for bpf_perf_link, allowing BPF_LINK_DETACH
-to release the perf event without destroying the link object. This mirrors
-the existing behavior for xdp and cgroup links.
-
-Introduce bpf_perf_link_mutext to guard perf_file against concurrent access
-from BPF_OBJ_GET_INFO_BY_FD and /proc fdinfo: the detach path NULLs out
-perf_file under the lock, while fill_link_info and show_fdinfo take a
-get_file() reference under the same lock before dereferencing it.
+Add test_perf_link_detach() to verify that the new LINK_DETACH support for
+BPF perf links works correctly. The test creates a link to a BPF program
+for a software perf event, confirms the program is executed, calls
+bpf_link_detach() to exercise the BPF_LINK_DETACH syscall path, and then
+verifies the program is no longer invoked after detach.
 
 Signed-off-by: Florian Lehner <dev@der-flo.net>
 ---
- kernel/bpf/syscall.c | 87 +++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 73 insertions(+), 14 deletions(-)
+ .../selftests/bpf/prog_tests/perf_link.c      | 79 ++++++++++++++++---
+ 1 file changed, 67 insertions(+), 12 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 3b1f0ba02f61..efd759970e10 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3880,13 +3880,35 @@ struct bpf_perf_link {
- 	struct file *perf_file;
- };
+diff --git a/tools/testing/selftests/bpf/prog_tests/perf_link.c b/tools/testing/selftests/bpf/prog_tests/perf_link.c
+index 9e3a0d217af8..b75112c1b67d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/perf_link.c
++++ b/tools/testing/selftests/bpf/prog_tests/perf_link.c
+@@ -18,29 +18,84 @@ static void burn_cpu(void)
+ 		barrier();
+ }
  
-+/* Serializes bpf_perf_link_release() against bpf_perf_link_fill_link_info()
-+ * and bpf_perf_link_show_fdinfo() to prevent a use-after-free on perf_file
-+ * when BPF_LINK_DETACH races with BPF_OBJ_GET_INFO_BY_FD or /proc fdinfo.
-+ */
-+static DEFINE_MUTEX(bpf_perf_link_mutex);
-+
- static void bpf_perf_link_release(struct bpf_link *link)
+-void test_perf_link(void)
++static int perf_link_setup(struct test_perf_link **skel, int *pfd)
  {
- 	struct bpf_perf_link *perf_link = container_of(link, struct bpf_perf_link, link);
--	struct perf_event *event = perf_link->perf_file->private_data;
-+	struct perf_event *event;
-+	struct file *perf_file;
-+
-+	mutex_lock(&bpf_perf_link_mutex);
-+	perf_file = perf_link->perf_file;
-+	perf_link->perf_file = NULL;
-+	mutex_unlock(&bpf_perf_link_mutex);
+-	struct test_perf_link *skel = NULL;
+ 	struct perf_event_attr attr;
+-	int pfd = -1, link_fd = -1, err;
+-	int run_cnt_before, run_cnt_after;
+-	struct bpf_link_info info;
+-	__u32 info_len = sizeof(info);
+-	__u64 timeout_time_ns;
  
-+	if (!perf_file)
-+		return;
+-	/* create perf event */
+ 	memset(&attr, 0, sizeof(attr));
+ 	attr.size = sizeof(attr);
+ 	attr.type = PERF_TYPE_SOFTWARE;
+ 	attr.config = PERF_COUNT_SW_CPU_CLOCK;
+ 	attr.freq = 1;
+ 	attr.sample_freq = 1000;
+-	pfd = syscall(__NR_perf_event_open, &attr, 0, -1, -1, PERF_FLAG_FD_CLOEXEC);
+-	if (!ASSERT_GE(pfd, 0, "perf_fd"))
++	*pfd = syscall(__NR_perf_event_open, &attr, 0, -1, -1, PERF_FLAG_FD_CLOEXEC);
++	if (!ASSERT_GE(*pfd, 0, "perf_fd"))
++		return -1;
 +
-+	event = perf_file->private_data;
- 	perf_event_free_bpf_prog(event);
--	fput(perf_link->perf_file);
-+	fput(perf_file);
++	*skel = test_perf_link__open_and_load();
++	if (!ASSERT_OK_PTR(*skel, "skel_load"))
++		return -1;
++
++	return 0;
 +}
 +
-+static int bpf_perf_link_detach(struct bpf_link *link)
++void test_perf_link_detach(void)
 +{
-+	bpf_perf_link_release(link);
-+	return 0;
- }
++	struct test_perf_link *skel = NULL;
++	int pfd = -1, link_fd = -1, err;
++	int run_cnt_before, run_cnt_after;
++	__u64 timeout_time_ns;
++
++	if (perf_link_setup(&skel, &pfd))
++		goto cleanup;
++
++	link_fd = bpf_link_create(bpf_program__fd(skel->progs.handler), pfd,
++				  BPF_PERF_EVENT, NULL);
++	if (!ASSERT_GE(link_fd, 0, "link_fd"))
+ 		goto cleanup;
  
- static void bpf_perf_link_dealloc(struct bpf_link *link)
-@@ -4095,22 +4117,42 @@ static int bpf_perf_link_fill_link_info(const struct bpf_link *link,
- {
- 	struct bpf_perf_link *perf_link;
- 	const struct perf_event *event;
-+	struct file *perf_file;
-+	int ret;
- 
- 	perf_link = container_of(link, struct bpf_perf_link, link);
--	event = perf_get_event(perf_link->perf_file);
--	if (IS_ERR(event))
-+
-+	mutex_lock(&bpf_perf_link_mutex);
-+	perf_file = perf_link->perf_file;
-+	if (perf_file)
-+		get_file(perf_file);
-+	mutex_unlock(&bpf_perf_link_mutex);
-+
-+	if (!perf_file)
-+		return 0;
-+
-+	event = perf_get_event(perf_file);
-+	if (IS_ERR(event)) {
-+		fput(perf_file);
- 		return PTR_ERR(event);
+-	skel = test_perf_link__open_and_load();
+-	if (!ASSERT_OK_PTR(skel, "skel_load"))
++	/* ensure we get at least one perf_event prog execution */
++	timeout_time_ns = get_time_ns() + BURN_TIMEOUT_NS;
++	while (true) {
++		burn_cpu();
++		if (skel->bss->run_cnt > 0)
++			break;
++		if (!ASSERT_LT(get_time_ns(), timeout_time_ns, "run_cnt_timeout"))
++			goto cleanup;
 +	}
- 
- 	switch (event->prog->type) {
- 	case BPF_PROG_TYPE_PERF_EVENT:
--		return bpf_perf_link_fill_perf_event(event, info);
-+		ret = bpf_perf_link_fill_perf_event(event, info);
-+		break;
- 	case BPF_PROG_TYPE_TRACEPOINT:
--		return bpf_perf_link_fill_tracepoint(event, info);
-+		ret = bpf_perf_link_fill_tracepoint(event, info);
-+		break;
- 	case BPF_PROG_TYPE_KPROBE:
--		return bpf_perf_link_fill_probe(event, info);
-+		ret = bpf_perf_link_fill_probe(event, info);
-+		break;
- 	default:
--		return -EOPNOTSUPP;
-+		ret = -EOPNOTSUPP;
- 	}
 +
-+	fput(perf_file);
-+	return ret;
- }
- 
- static void bpf_perf_event_link_show_fdinfo(const struct perf_event *event,
-@@ -4163,26 +4205,43 @@ static void bpf_perf_link_show_fdinfo(const struct bpf_link *link,
- {
- 	struct bpf_perf_link *perf_link;
- 	const struct perf_event *event;
-+	struct file *perf_file;
- 
- 	perf_link = container_of(link, struct bpf_perf_link, link);
--	event = perf_get_event(perf_link->perf_file);
--	if (IS_ERR(event))
++	/* detach via BPF_LINK_DETACH - BPF program should no longer be executed */
++	err = bpf_link_detach(link_fd);
++	if (!ASSERT_OK(err, "link_detach"))
++		goto cleanup;
 +
-+	mutex_lock(&bpf_perf_link_mutex);
-+	perf_file = perf_link->perf_file;
-+	if (perf_file)
-+		get_file(perf_file);
-+	mutex_unlock(&bpf_perf_link_mutex);
++	/* make sure there are no stragglers */
++	kern_sync_rcu();
 +
-+	if (!perf_file)
- 		return;
- 
-+	event = perf_get_event(perf_file);
-+	if (IS_ERR(event))
-+		goto out;
++	run_cnt_before = skel->bss->run_cnt;
++	burn_cpu();
++	run_cnt_after = skel->bss->run_cnt;
 +
- 	switch (event->prog->type) {
- 	case BPF_PROG_TYPE_PERF_EVENT:
--		return bpf_perf_event_link_show_fdinfo(event, seq);
-+		bpf_perf_event_link_show_fdinfo(event, seq);
-+		break;
- 	case BPF_PROG_TYPE_TRACEPOINT:
--		return bpf_tracepoint_link_show_fdinfo(event, seq);
-+		bpf_tracepoint_link_show_fdinfo(event, seq);
-+		break;
- 	case BPF_PROG_TYPE_KPROBE:
--		return bpf_probe_link_show_fdinfo(event, seq);
-+		bpf_probe_link_show_fdinfo(event, seq);
-+		break;
- 	default:
--		return;
-+		break;
- 	}
-+out:
-+	fput(perf_file);
- }
++	ASSERT_EQ(run_cnt_before, run_cnt_after, "run_cnt_detached");
++
++cleanup:
++	if (link_fd >= 0)
++		close(link_fd);
++	if (pfd >= 0)
++		close(pfd);
++	test_perf_link__destroy(skel);
++}
++
++void test_perf_link(void)
++{
++	struct test_perf_link *skel = NULL;
++	int pfd = -1, link_fd = -1, err;
++	int run_cnt_before, run_cnt_after;
++	struct bpf_link_info info;
++	__u32 info_len = sizeof(info);
++	__u64 timeout_time_ns;
++
++	if (perf_link_setup(&skel, &pfd))
+ 		goto cleanup;
  
- static const struct bpf_link_ops bpf_perf_link_lops = {
- 	.release = bpf_perf_link_release,
-+	.detach = bpf_perf_link_detach,
- 	.dealloc = bpf_perf_link_dealloc,
- 	.fill_link_info = bpf_perf_link_fill_link_info,
- 	.show_fdinfo = bpf_perf_link_show_fdinfo,
+ 	link_fd = bpf_link_create(bpf_program__fd(skel->progs.handler), pfd,
 -- 
 2.53.0
 
