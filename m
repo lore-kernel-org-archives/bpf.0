@@ -1,139 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A946735CB73
-	for <bpf@vger.kernel.org>; Fri,  1 May 2026 18:44:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87CE209F43;
+	Fri,  1 May 2026 19:05:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777661093; cv=none; b=QBhzEiS2jZIMrdkuwikm2iAq2wqdSXDrtjye9kNBi6vw/J/qhVirEvnugf3RiNeaxqK+nStWEY6/DnqJ56nNL7fZDGgpn6ou+R5rmLIirVOw3BH5sAixd5vavDV90OM+2WEjBSkBprmtgWGxZ3LeEyY3HmLylwblkSjtki3d1Ys=
+	t=1777662336; cv=none; b=p331A2Td8R33SZ+P7EwDZHvP246rK40a/OkW4fwMDKmPKZdSQ1IryjBGPhiH2+jOV2yqvG1uAAM87C+KFo+uY965fvLzAQ2N7emZ4jWwz4DtgimvLRbSDQYl/NANg+Vo4S7OPAbCsXnyu2Nmn87Dvq5A+VxXVEajTsIXJN22HPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777661093; c=relaxed/simple;
-	bh=K8nHr3DM6NMvbTY+tBkuvX45tVg7Bk5xes8k36A+pZ4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uyJuecZenmQ13cuUR1VWHJidvFEIfqgCt7I7Fsx9BYLfH/Zxr5Frk/DNDctYJKp5/W1TQDmfbkj3X5QlWVn+Aci5ih+Jt6Jk7eeg0hVkJjUNPWjNPPi9omDGfrvv0Gf9jZ8mtdYyyY5ocVbLSS5l0Nm5II8WzYyOb3nuMYa1Ug0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZnzJ3lTa; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777662336; c=relaxed/simple;
+	bh=ufnSYvn8Uzt3nTQsV1VJKLbQYH3r3L0bOIJ7Sm6Df/I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dwxbdJc9OWwBsb+juNLpfdL1sqzxyCtjkmQJWOXR8/lTu57gohHvy0SGCjf+STRzEsixhebddSSh7c2MSMADRbeDVhAC2KwtUmO8Cw1pkGoSUDU77pI37s0tgovhFj9nkdZnQvFE29xfizLZLjgTzOK05Ljm/f6HdDOL+W0xYNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=2aopWn4Z; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZnzJ3lTa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68309C2BCB4;
-	Fri,  1 May 2026 18:44:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777661093;
-	bh=K8nHr3DM6NMvbTY+tBkuvX45tVg7Bk5xes8k36A+pZ4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=ZnzJ3lTat7Cvd78aagxiF1lFZ2d/6dwh7EGKv/YnWnU+19xHlDCACJc9DOMJN1jrY
-	 Nsz8T4kTX/F/jGQYbE7lWk0nlbvJMjGCrXegETMRHelJgcWtyluUL2mlAicFe2CGpI
-	 h3fvy32Ka3kMVXDlZAgzPHl10+viXqj+sdUNS4h0dfp/e7+By9Cc1cYelNaGoe5ov9
-	 fTQ79h0z/fDY+9ELTStmqNNBMvNTzITwhtSgsKKaLNtb+WiQZfeOkzz/CLbYQcilbf
-	 SyotwsL+WDwxv6ph76TGRUSh6zdCUbww2bcenvbiiQ4yJFh3b1MHK52gnc54PwK2U6
-	 nq5kv+DJG8R9A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v1 bpf 2/2] selftest: bpf: Add test for bpf_tcp_sock()
- and RAW socket.
-Reply-To: sashiko@lists.linux.dev
-To: "Kuniyuki Iwashima" <kuniyu@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260430184405.1227386-3-kuniyu@google.com>
-References: <20260430184405.1227386-3-kuniyu@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 01 May 2026 18:44:52 +0000
-Message-Id: <20260501184453.68309C2BCB4@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="2aopWn4Z"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=zr1miL8fEoh0znlRNbkoD7ZZWFwQTcpiCWJezhzfkWE=; b=2aopWn4ZWWUJPQxJ+ht/UIkJ+v
+	vkgJl4IX6j5VZk1n6LbGHadysUccJ0QjcoSvhvw+ZCdXCpfCcEu1ihL2mKiw6RYni+9knLTq2t0vX
+	+q4DH2uZbxMRfss3zSE9cotXt7E9cBZC5jZ+/6EerFlTpjUtJZiVrk8Ug/y2Bv4FjvC8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1wItAY-000rhF-A4; Fri, 01 May 2026 21:04:58 +0200
+Date: Fri, 1 May 2026 21:04:58 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Alex Elder <elder@riscstar.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com,
+	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
+	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
+	arnd@arndb.de, gregkh@linuxfoundation.org,
+	Daniel Thompson <daniel@riscstar.com>, mohd.anwar@oss.qualcomm.com,
+	a0987203069@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
+	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
+	julianbraha@gmail.com, livelycarpet87@gmail.com,
+	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
+	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+	rohan.g.thomas@altera.com, sdf@fomichev.me,
+	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
+	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 10/12] net: stmmac: tc956x: add TC956x/QPS615
+ support
+Message-ID: <2ce5897d-5bbb-486a-b0f0-0e30e54b451a@lunn.ch>
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-11-elder@riscstar.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260501155421.3329862-11-elder@riscstar.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] The selftest logic is inverted: it will fail on a correctly fixed =
-kernel and pass on a buggy kernel (if KASAN is disabled).
---
+> +static struct tc956x_mac_speed mac_speed[] = {
+> +	{ PHY_INTERFACE_MODE_2500BASEX,	SPEED_2500,  SP_SEL_SGMII_2500M, },
+> +	{ PHY_INTERFACE_MODE_SGMII,	SPEED_2500,  SP_SEL_SGMII_2500M, },
+> +	{ PHY_INTERFACE_MODE_SGMII,	SPEED_1000,  SP_SEL_SGMII_1000M, },
 
-commit ba32f094566f3d6a513a47837fc65f3b355951f9
-Author: Kuniyuki Iwashima <kuniyu@google.com>
+That looks odd. Some vendors implemented 2500BaseX using SGMII
+overclocked. But that is not strictly 2500BaseX. Having the 2500BASEX
+entry suggests you have real 2500BASEX, so why have an SGMII entry
+with SPEED_2500?
 
-selftest: bpf: Add test for bpf_tcp_sock() and RAW socket.
+> +/* We have one IRQ chip instance with 25 IRQs in its domain */
 
-This patch extends sockopt_sk.c to test the behavior of bpf_tcp_sock()
-when called on a socket with the wrong type (SOCK_RAW).
+One per MAC, or one overall?
 
-> diff --git a/tools/testing/selftests/bpf/progs/sockopt_sk.c b/tools/testi=
-ng/selftests/bpf/progs/sockopt_sk.c
-> index cb990a7d3d458..5e0b27e7855cb 100644
-> --- a/tools/testing/selftests/bpf/progs/sockopt_sk.c
-> +++ b/tools/testing/selftests/bpf/progs/sockopt_sk.c
-
-[ ... ]
-
-> @@ -149,6 +149,20 @@ int _setsockopt(struct bpf_sockopt *ctx)
->  	if (sk && sk->family =3D=3D AF_NETLINK)
->  		goto out;
-> =20
-> +	if (sk && sk->family =3D=3D AF_INET && sk->type =3D=3D SOCK_RAW) {
-> +		struct bpf_tcp_sock *tp =3D bpf_tcp_sock(sk);
+> +static struct irq_domain *
+> +tc956x_msigen_irq_domain_instantiate(struct tc956x_data *td)
+> +{
+> +	struct irq_domain_chip_generic_info dgc_info;
+> +	struct irq_domain_info info;
 > +
-> +		if (tp) {
-> +			char saved_syn[60];
+> +	dgc_info.name = "tc956x-msigen";
+
+If it is one per MAC, maybe this name should indicate which instance
+of the MAC this is.
+
+> +static int tc956x_mac_setup(void *apriv, struct mac_device_info *mac)
+> +{
+> +	struct stmmac_priv *priv = apriv;
+> +	struct stmmac_desc_ops *desc;
+> +	struct stmmac_dma_ops *dma;
+> +	struct tc956x_data *td;
 > +
-> +			bpf_getsockopt(sk, SOL_TCP, TCP_SAVED_SYN,
-> +				       &saved_syn, sizeof(saved_syn));
-> +			goto consumed;
-> +		}
+> +	td = priv->plat->bsp_priv;
 > +
-> +		goto out;
+> +	/* dwxgmac301_dma_ops needs extending to provide DMA address translation */
+> +	dma = &td->dma;
+> +	*dma = dwxgmac301_dma_ops;
+> +	dma->init_rx_chan = tc956x_dma_init_rx_chan;
+> +	dma->init_tx_chan = tc956x_dma_init_tx_chan;
+> +	mac->dma = dma;
+
+I could be reading this wrong....
+
+dma points to the global dwxgmac301_dma_ops, which you added a few
+patches back.
+
+You then modify it, changing two values in it.
+
+Doesn't that break any other dwxgmac301 in the system? Shouldn't you
+be making a copy of the global structure, and then making
+modifications to your copy? mac->dma then points to your copy?
+
+> +	/* dwxgmac210_desc_ops also needs extending for the same reason */
+> +	desc = &td->desc;
+> +	*desc = dwxgmac210_desc_ops;
+> +	desc->set_addr = tc956x_desc_set_addr;
+> +	desc->set_sec_addr = tc956x_desc_set_sec_addr;
+> +	mac->desc = desc;
+
+And the same problem here?
+
+> +/* Called by tc956x_dwmac_probe(); return errors with dev_err_probe() */
+> +static int tc956x_dwmac_parse_dt(struct tc956x_data *td)
+> +{
+> +	struct device_node *mdio_node;
+> +	struct device *dev = td->dev;
+> +	struct device_node *np;
+> +
+> +	np = dev_of_node(dev);
+> +	if (!np)
+> +		return dev_err_probe(dev, -EINVAL, "no devicetree node\n");
+> +
+> +	/* Find the MDIO bus */
+> +	for_each_child_of_node(np, mdio_node) {
+> +		if (of_device_is_compatible(mdio_node,
+> +					    "snps,dwmac-mdio"))
+> +			break;
 > +	}
 
-On a fixed kernel where bpf_tcp_sock() correctly returns NULL for a SOCK_RAW
-socket, won't tp evaluate to false? This causes the program to jump to the
-out label instead of the consumed label.=20
+It looks like if you put the ethernet properties into an ethernet node
+in DT, this might go away? Or at least allow you to use
+stmmac_of_get_mdio(). 
 
-When jumping to out, ctx->optlen is left unmodified, which tells the kernel
-to proceed with the native setsockopt handler instead of bypassing it.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/tools/=
-testing/selftests/bpf/prog_tests/sockopt_sk.c
-> index 53637431ec5de..87e771c8991fc 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-
-[ ... ]
-
-> @@ -211,6 +211,21 @@ static int getsetsockopt(void)
->  	}
->  	ASSERT_EQ(optlen, 8, "Unexpected NETLINK_LIST_MEMBERSHIPS value");
-> =20
-> +	/* Trick bpf_tcp_sock() with IPPROTO_TCP */
-> +	close(fd);
-> +	fd =3D socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
-> +	if (fd < 0) {
-> +		log_err("Failed to create RAW socket");
-> +		goto err;
-> +	}
-> +
-> +	optlen =3D 60;
-> +	err =3D setsockopt(fd, SOL_TCP, TCP_SAVED_SYN, &buf, optlen);
-> +	if (err) {
-> +		log_err("Unexpected setsockopt(TCP_SAVED_SYN)");
-> +		goto err;
-> +	}
-
-If the BPF program falls back to the native handler (because bpf_tcp_sock()
-returned NULL on a fixed kernel), the kernel will process this through
-raw_setsockopt() and ip_setsockopt(). Since the level is SOL_TCP, doesn't
-ip_setsockopt() return -ENOPROTOOPT here?
-
-This would cause setsockopt() to return -1 and err to be non-zero, meaning
-the test will fail unconditionally on a correctly fixed kernel.
-
-Ironically, on a buggy kernel where bpf_tcp_sock() incorrectly returns a
-pointer, the BPF program hits the consumed label, sets ctx->optlen =3D -1
-to bypass the kernel, and setsockopt() returns 0, causing the test to
-falsely pass.
-
-Should this test logic be inverted to expect an error (such as -ENOPROTOOPT)
-to properly validate the fix?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260430184405.1227=
-386-1-kuniyu@google.com?part=3D2
+	Andrew
