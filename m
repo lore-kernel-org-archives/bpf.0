@@ -1,308 +1,260 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98A8D2248A0;
-	Fri,  1 May 2026 02:47:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149332DCC04
+	for <bpf@vger.kernel.org>; Fri,  1 May 2026 03:29:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777603634; cv=none; b=KcvAAZl2bcx5x202iNhWIQV+bKmTsYRbCjgVhtcWCdNaGb31S2gRsDK6DL6apiEiCuadC9oPw4tQn9GrZhddiuuLL5hPH7VB6JknrGmxY+oTYanx83H2ft/0I1IzKvziSvq4Zgn0j37tSHtV+ZxZvniS2qjXsCjkmam5ny5nELs=
+	t=1777606178; cv=none; b=lwf5TySShdrMZv5s11NLjNaenrtJprotEtOK9++ASTdB4tYWRn/awvXlLKCqvmJ4QnCOhz34BBNtQ/UH3jpo1dEgTOUKBYeCEvfScjiXDEpECXEEDu5/jQh192nKTd1t17aJJw209n/4gCBXcCJYb9f+wr7duYyqew4u1euxOEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777603634; c=relaxed/simple;
-	bh=mp7wCVHKYP/qulllPnqf7wgBjMtQWA+Ux3allb23uLc=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hEVRjvc2PXWA6QHoAzHPUjSPzpWUWdtgk5muYBZMpKIPGWZ5X60MwzMbuAzXQUzGLW33Yv3SBBFpte3HolNGO8DPI/ROiE/99rtnDGdpArJbh5VHH3Do8pOpvG2V25LC2LZJNYgSnlCyNFEGzSPViiv0XsCZ+pYL2sGzfZ39F4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=sklgjJFf; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1777606178; c=relaxed/simple;
+	bh=cZfTMIMKNTtYHRa010I665NFQ7IXtH/nYQmAfdK3zls=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y0he3dztMO7heFYyXyncQ4UW0j2EAUor7E4cyPPIbTlFYS9OKTOuhb4+Zo/OFaUOSBVUF6HJYA9GydujX5cYrOEMktShGsJPvAgg5U5IHhuWTChFKa1+GCaSiTc20ho1VjEWFMKAZV48C9pdRM2G5Wszj2ubx5GrBw2GjVTYRLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AxbkzECo; arc=none smtp.client-ip=209.85.214.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="sklgjJFf"
-Received: by linux.microsoft.com (Postfix, from userid 1204)
-	id CE62A20B7165; Thu, 30 Apr 2026 19:47:12 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CE62A20B7165
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1777603632;
-	bh=a0poFJQ1XUcEZiu4/+aYzPlxXTd3s8PJOPHeWEIdnNY=;
-	h=Date:From:To:Subject:From;
-	b=sklgjJFfUvuT89yG2ci3SkvoX3jh0f6iWagbrJ9jiUxXEFD9KgT6/LWyqViTZfQo2
-	 HVuoXdgf5GpDY697bHewQ7ZX7qYr0f4Bdlsu9zM4q9wFgppYh5nL6ooD7SVNryKLhU
-	 OnxMi82weHXHvZgHKO1oLnIlZxqlxsjGX3gm6hAQ=
-Date: Thu, 30 Apr 2026 19:47:12 -0700
-From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-To: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	leon@kernel.org, longli@microsoft.com, kotaranov@microsoft.com,
-	horms@kernel.org, shradhagupta@linux.microsoft.com,
-	ssengar@linux.microsoft.com, ernis@linux.microsoft.com,
-	shirazsaleem@microsoft.com, linux-hyperv@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org, stephen@networkplumber.org,
-	jacob.e.keller@intel.com, dipayanroy@microsoft.com,
-	leitao@debian.org, kees@kernel.org, john.fastabend@gmail.com,
-	hawk@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-	ast@kernel.org, sdf@fomichev.me, yury.norov@gmail.com
-Subject: [PATCH net, v3] net: mana: Fix crash from unvalidated SHM offset
- read from BAR0 during FLR
-Message-ID: <afQUMClyjmBVfD+u@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AxbkzECo"
+Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2aaed195901so6545455ad.0
+        for <bpf@vger.kernel.org>; Thu, 30 Apr 2026 20:29:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777606176; x=1778210976; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=y5pMq+0ztTJey3vt9ZG8NcMewBWSWt2n8Zyo2B0ipWk=;
+        b=AxbkzECovBsRtT+F4Ka9KfuDYyw///lwX3k+k5SJfDwSeY5ZY/40+AitWG0OAsbFRG
+         TsWvemnNmbl1ZWbgKcOg33kn1c7n9vkIjcliB0TyXzAgbYJHZsY7yxrohix0qhiO/1v+
+         hB/OeH1Deu0MQKow1/1C5eptpAPz2tIAvDI8wqjHNz/312y88YQkDrDaGTuSTi0ux2iJ
+         lbEz6lpI9WlMay3GsgVc80WE8hP31my5CRUdRmxqC7+sWIJ738RbGm2gCC8qCzZO9/oP
+         OrMjqpAkrpzK+tA15Crl/A6uLp2UiFai7LSvuLZbMnNsFnQ7d64yg0KboWlUcbWVT909
+         4L3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777606176; x=1778210976;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y5pMq+0ztTJey3vt9ZG8NcMewBWSWt2n8Zyo2B0ipWk=;
+        b=a5fsXJFDzj0rhSXeA0Y08BzA4lVzCkf8Uxq9tJktvZFJatbcLXxHBGYGV1SlOxRk1i
+         yHgj2d/jKhKrEM0BhpOhvHNxI0RFDMPuP961et0gLBLijl8eS6ED5yhgvBz8l/0EOObT
+         Om21JUslNRtPH5RpYWBU9CQC//Thf2Ocdq/EyJhqkE9/Zz/yjzSqKDOXGJLmopdak8I7
+         R/XlG88SYYtEgdPz5qnRYzUkpHcfyNauP1U8PG++5KWL4gvIYxMEIT7lCwLgTf9fIblZ
+         M7EjtDnhN2JsuxesGMO41i2rkguxbBjBzf+NhDkPsK14FQ9y+Uhh1MAuMfhZjJQ30RQ3
+         jLbw==
+X-Forwarded-Encrypted: i=1; AFNElJ8sUlKfyB0E8643u/MHjL16AsJsnKqgSGhpk9/defQGg5398N6uutRKxwaAZL9tF9iFXsE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8vqDJiJwJnB7Y5Jt/mES2lgvjUUwa1BiLb3NTjEAAgK/GUsiY
+	Wso16b9k3n/39yvCqBoJCJppMAHrUrgKfKKzkOE+nnc+xvjnTyz+13aH
+X-Gm-Gg: AeBDiesvZXdRnYFn7uY6CrC4gSukXpPK/0IYR1Y24BmzFFUkJsnA6F400FrJ/37/G86
+	kSsmrS8Gr6bdcxgGjqbKqUQW7NEB45nQKPoZVudn5EuJnx/6B365w8TXMztr8qfCAIgtJPkehIR
+	T1Wg3oIePRjTei02rRdgeZHpQWaxfhRc+MgbvPh8qp3+xGaauZtDIPvFkuCBVSaG/vcNMXKAdtf
+	UUGtq5xRzrzldHM8jgWk9+7jkHtTGN3WZwtlcmbUt/uhT/lrWXLp4pYTU+wiDmb4ZVLAonLKRwH
+	+HqkzOECmx/qYEBNzNygaYD8Xgg7/aG43uVl9R748T7WR3kh2NHs3N/12epmk5X8/RVKDBkKgFD
+	2PLVoSIz3ZMTc6imLKWtUd6/GFEFwywSSYnX6KTvxloyBg4tQ1YDxmHo4WvEenD90XTgrA5G9WW
+	lsxJGGgNbyGvjuWiSD+ybJXF7D+cw=
+X-Received: by 2002:a17:902:9a81:b0:2b2:a267:784a with SMTP id d9443c01a7336-2b9d442a93bmr7345535ad.24.1777606176324;
+        Thu, 30 Apr 2026 20:29:36 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:46::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b9caa7ee38sm9906495ad.16.2026.04.30.20.29.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Apr 2026 20:29:35 -0700 (PDT)
+Date: Thu, 30 Apr 2026 20:29:35 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Jason Xing <kerneljasonxing@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
+	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, ast@kernel.org, 
+	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, 
+	aleksander.lobakin@intel.com, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Jason Xing <kernelxing@tencent.com>
+Subject: Re: [PATCH net v4 8/8] xsk: fix u64 descriptor address truncation on
+ 32-bit architectures
+Message-ID: <afQdzWlMzjgpAUq7@devvm7509.cco0.facebook.com>
+References: <20260424053816.27965-1-kerneljasonxing@gmail.com>
+ <20260424053816.27965-9-kerneljasonxing@gmail.com>
+ <afE7EFYdrNg1u_g2@devvm7509.cco0.facebook.com>
+ <CAL+tcoA0j+tHOPr-DLyW26_EF1JhwqV+no0Lcx335FtKRbwUAw@mail.gmail.com>
+ <afIeuwJNfwVmk9Pn@devvm7509.cco0.facebook.com>
+ <CAL+tcoBTO9QGM220EO=m1TdiXwod7QzG59j7vQL3qoVSrb2QEw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL+tcoBTO9QGM220EO=m1TdiXwod7QzG59j7vQL3qoVSrb2QEw@mail.gmail.com>
 
-During Function Level Reset recovery, the MANA driver reads
-hardware BAR0 registers that may temporarily contain garbage values.
-The SHM (Shared Memory) offset read from GDMA_REG_SHM_OFFSET is used
-to compute gc->shm_base, which is later dereferenced via readl() in
-mana_smc_poll_register(). If the hardware returns an unaligned or
-out-of-range value, the driver must not blindly use it, as this would
-propagate the hardware error into a kernel crash.
+On 04/29, Jason Xing wrote:
+> On Wed, Apr 29, 2026 at 6:14 PM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
+> >
+> > On 04/29, Jason Xing wrote:
+> > > On Wed, Apr 29, 2026 at 2:11 AM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
+> > > >
+> > > > On 04/24, Jason Xing wrote:
+> > > > > From: Jason Xing <kernelxing@tencent.com>
+> > > > >
+> > > > > In copy mode TX, xsk_skb_destructor_set_addr() stores the 64-bit
+> > > > > descriptor address into skb_shinfo(skb)->destructor_arg (void *) via a
+> > > > > uintptr_t cast:
+> > > > >
+> > > > >     skb_shinfo(skb)->destructor_arg = (void *)((uintptr_t)addr | 0x1UL);
+> > > > >
+> > > > > On 32-bit architectures uintptr_t is 32 bits, so the upper 32 bits of
+> > > > > the descriptor address are silently dropped. In unaligned mode the chunk
+> > > > > offset is encoded in bits 48-63 of the descriptor address
+> > > > > (XSK_UNALIGNED_BUF_OFFSET_SHIFT = 48), meaning the offset is lost
+> > > > > entirely. The completion queue then returns a truncated address to
+> > > > > userspace, making buffer recycling impossible.
+> > > > >
+> > > > > Fix this by handling the 32-bit case in the destructor_arg helpers:
+> > > > >
+> > > > > - xsk_skb_destructor_set_addr(): on !CONFIG_64BIT, allocate an
+> > > > >   xsk_addrs struct via kmem_cache_zalloc() to store the full u64
+> > > > >   address. Leave num_descs as 0 (zalloc) so that the subsequent
+> > > > >   xsk_inc_num_desc() brings it to the correct count of 1.
+> > > > >
+> > > > > - xsk_skb_destructor_is_addr(): on !CONFIG_64BIT, return true only
+> > > > >   when destructor_arg is NULL (not yet set), false when it points to
+> > > > >   an xsk_addrs struct.
+> > > > >
+> > > > > - xsk_skb_init_misc(): call xsk_skb_destructor_set_addr() first
+> > > > >   before touching any other skb fields; on failure return early so
+> > > > >   the skb destructor is never changed from sock_wfree.
+> > > > >
+> > > > > The existing xsk_consume_skb() already handles 32-bit correctly after
+> > > > > these changes: xsk_skb_destructor_is_addr() returns false for any
+> > > > > allocated xsk_addrs, so the kmem_cache_free path is always taken.
+> > > > >
+> > > > > The overhead is one extra kmem_cache_zalloc per first descriptor on
+> > > > > 32-bit only; 64-bit builds are completely unchanged.
+> > > > >
+> > > > > Closes: https://lore.kernel.org/all/20260419045824.D9E5EC2BCAF@smtp.kernel.org/
+> > > > > Fixes: 0ebc27a4c67d ("xsk: avoid data corruption on cq descriptor number")
+> > > > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> > > > > ---
+> > > > >  net/xdp/xsk.c | 38 +++++++++++++++++++++++++++++++-------
+> > > > >  1 file changed, 31 insertions(+), 7 deletions(-)
+> > > > >
+> > > > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > > > > index ed96f6ec8ff2..fe88f47741b5 100644
+> > > > > --- a/net/xdp/xsk.c
+> > > > > +++ b/net/xdp/xsk.c
+> > > > > @@ -558,7 +558,10 @@ static int xsk_cq_reserve_locked(struct xsk_buff_pool *pool)
+> > > > >
+> > > > >  static bool xsk_skb_destructor_is_addr(struct sk_buff *skb)
+> > > > >  {
+> > > > > -     return (uintptr_t)skb_shinfo(skb)->destructor_arg & 0x1UL;
+> > > > > +     if (IS_ENABLED(CONFIG_64BIT))
+> > > > > +             return (uintptr_t)skb_shinfo(skb)->destructor_arg & 0x1UL;
+> > > > > +     else
+> > > > > +             return !skb_shinfo(skb)->destructor_arg;
+> > > >
+> > > > Don't understand why we need to special case CONFIG_64BIT here?
+> > > > Shouldn't the same existing condition work on 32bit?
+> > >
+> > > Because 0x1UL is the particular semantic applied on a 64-bit arch.
+> > > xsk_skb_destructor_set_addr() sets it while
+> > > xsk_skb_destructor_is_addr() recognizes it. They are a pair.
+> > >
+> > > As you noticed, one liner works but is not that appropriate: on a
+> > > 32-bit arch, this member should be either a NULL point or a valid
+> > > pointer pointing to a memory region. Testing if it's NULL can be
+> > > helpful as to the long term maintenance because of its readability and
+> > > robustness/safety.
+> > >
+> > > The error path in allocation of skb is really complex, which is why
+> > > I'm so cautious to take care of it :)
+> >
+> > Let's cleanup the error path instead of adding more complexity? Similar to what
+> > you do with your "xsk: fix xsk_addrs slab leak on multi-buffer error path",
+> > but maybe add a few NULL checks?
+> 
+> Good suggestion. I think I can cook a follow up patch to do such a
+> thing targetting net-next tree. This patch 8 belongs to net material
+> which means it will be backported to the older stable kernel as soon
+> as it gets merged. IIUC, the better way is to make it as simple as
+> possible?
+> 
+> >
+> > Instead of 32 vs 64, I'd like to reason about whether destructor_arg
+> > is an address or an allocated array (not whether we have 1 or >1
+> > descriptors). And we special case 32 bit by always allocating it.
+> >
+> > Haven't checked, but maybe this is all you need (besides your _set_addr
+> > changes)?
+> >
+> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > index 6149f6a79897..03f217e85d31 100644
+> > --- a/net/xdp/xsk.c
+> > +++ b/net/xdp/xsk.c
+> > @@ -589,6 +589,8 @@ static u32 xsk_get_num_desc(struct sk_buff *skb)
+> >                 return 1;
+> >
+> >         xsk_addr = (struct xsk_addrs *)skb_shinfo(skb)->destructor_arg;
+> > +       if (!xsk_addr)
+> > +               return 0;
+> >
+> >         return xsk_addr->num_descs;
+> >  }
+> 
+> Right, as I mentioned, how about posting a new cleanup patch with your
+> suggested-by tag?
+> 
+> >
+> > > I've noticed the status has been changed to 'changes requested'. Does
+> > > that mean one way or another I have to post a new version?
+> >
+> > That wasn't me :-) From my POW, patches 1-7 are good to go..
+> 
+> Great! Thanks for the review. My hope is to get this series merged
+> soon in the net tree.
+> 
+> >
+> > > >
+> > > > >  }
+> > > > >
+> > > > >  static u64 xsk_skb_destructor_get_addr(struct sk_buff *skb)
+> > > > > @@ -566,9 +569,21 @@ static u64 xsk_skb_destructor_get_addr(struct sk_buff *skb)
+> > > > >       return (u64)((uintptr_t)skb_shinfo(skb)->destructor_arg & ~0x1UL);
+> > > > >  }
+> > > > >
+> > > > > -static void xsk_skb_destructor_set_addr(struct sk_buff *skb, u64 addr)
+> > > > > +static int xsk_skb_destructor_set_addr(struct sk_buff *skb, u64 addr)
+> > > > >  {
+> > > >
+> > > > [..]
+> > > >
+> > > > > +     if (!IS_ENABLED(CONFIG_64BIT)) {
+> > > > > +             struct xsk_addrs *xsk_addr;
+> > > > > +
+> > > > > +             xsk_addr = kmem_cache_zalloc(xsk_tx_generic_cache, GFP_KERNEL);
+> > > > > +             if (!xsk_addr)
+> > > > > +                     return -ENOMEM;
+> > > > > +             xsk_addr->addrs[0] = addr;
+> > > > > +             skb_shinfo(skb)->destructor_arg = (void *)xsk_addr;
+> > > > > +             return 0;
+> > > > > +     }
+> > > > > +
+> > > > >       skb_shinfo(skb)->destructor_arg = (void *)((uintptr_t)addr | 0x1UL);
+> > > > > +     return 0;
+> > > >
+> > > > I think this is gonna be a 3rd copy paste of the same logic? Let's
+> > > > move to a new helper and replace existing kmem_cache_zalloc places?
+> > > >
+> > > > xsk_skb_destructor_alloc_list(prev_addr) ?
+> >
+> > Any comments on this?
+> 
+> I didn't comment on this because I thought I was not that sure if we
+> needed to wrap it up in the stable kernels :)
+> 
+> Of course, it would be easier for me to work on the net-next tree to
+> make the code look
+> more neat and elegant.
 
-The following crash was observed on an arm64 Hyper-V guest running
-kernel 6.17.0-3013-azure during VF reset recovery triggered by HWC
-timeout.
-
-[13291.785274] Unable to handle kernel paging request at virtual address ffff8000a200001b
-[13291.785311] Mem abort info:
-[13291.785332]   ESR = 0x0000000096000021
-[13291.785343]   EC = 0x25: DABT (current EL), IL = 32 bits
-[13291.785355]   SET = 0, FnV = 0
-[13291.785363]   EA = 0, S1PTW = 0
-[13291.785372]   FSC = 0x21: alignment fault
-[13291.785382] Data abort info:
-[13291.785391]   ISV = 0, ISS = 0x00000021, ISS2 = 0x00000000
-[13291.785404]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-[13291.785412]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-[13291.785421] swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000014df3a1000
-[13291.785432] [ffff8000a200001b] pgd=1000000100438403, p4d=1000000100438403, pud=1000000100439403, pmd=0068000fc2000711
-[13291.785703] Internal error: Oops: 0000000096000021 [#1]  SMP
-[13291.830975] Modules linked in: tls qrtr mana_ib ib_uverbs ib_core xt_owner xt_tcpudp xt_conntrack nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 nft_compat nf_tables cfg80211 8021q garp mrp stp llc binfmt_misc joydev serio_raw nls_iso8859_1 hid_generic aes_ce_blk aes_ce_cipher polyval_ce ghash_ce sm4_ce_gcm sm4_ce_ccm sm4_ce sm4_ce_cipher hid_hyperv sm4 sm3_ce sha3_ce hv_netvsc hid vmgenid hyperv_keyboard hyperv_drm sch_fq_codel nvme_fabrics efi_pstore dm_multipath nfnetlink vsock_loopback vmw_vsock_virtio_transport_common hv_sock vmw_vsock_vmci_transport vmw_vmci vsock dmi_sysfs ip_tables x_tables autofs4
-[13291.862630] CPU: 122 UID: 0 PID: 61796 Comm: kworker/122:2 Tainted: G        W           6.17.0-3013-azure #13-Ubuntu VOLUNTARY
-[13291.869902] Tainted: [W]=WARN
-[13291.871901] Hardware name: Microsoft Corporation Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.1 01/08/2026
-[13291.878086] Workqueue: events mana_serv_func
-[13291.880718] pstate: 62400005 (nZCv daif +PAN -UAO +TCO -DIT -SSBS BTYPE=--)
-[13291.884835] pc : mana_smc_poll_register+0x48/0xb0
-[13291.887902] lr : mana_smc_setup_hwc+0x70/0x1c0
-[13291.890493] sp : ffff8000ab79bbb0
-[13291.892364] x29: ffff8000ab79bbb0 x28: ffff00410c8b5900 x27: ffff00410d630680
-[13291.896252] x26: ffff004171f9fd80 x25: 000000016ed55000 x24: 000000017f37e000
-[13291.899990] x23: 0000000000000000 x22: 000000016ed55000 x21: 0000000000000000
-[13291.904497] x20: ffff8000a200001b x19: 0000000000004e20 x18: ffff8000a6183050
-[13291.908308] x17: 0000000000000000 x16: 0000000000000000 x15: 000000000000000a
-[13291.912542] x14: 0000000000000004 x13: 0000000000000000 x12: 0000000000000000
-[13291.916298] x11: 0000000000000000 x10: 0000000000000001 x9 : ffffc45006af1bd8
-[13291.920945] x8 : ffff000151129000 x7 : 0000000000000000 x6 : 0000000000000000
-[13291.925293] x5 : 000000015f214000 x4 : 000000017217a000 x3 : 000000016ed50000
-[13291.930436] x2 : 000000016ed55000 x1 : 0000000000000000 x0 : ffff8000a1ffffff
-[13291.934342] Call trace:
-[13291.935736]  mana_smc_poll_register+0x48/0xb0 (P)
-[13291.938611]  mana_smc_setup_hwc+0x70/0x1c0
-[13291.941113]  mana_hwc_create_channel+0x1a0/0x3a0
-[13291.944283]  mana_gd_setup+0x16c/0x398
-[13291.946584]  mana_gd_resume+0x24/0x70
-[13291.948917]  mana_do_service+0x13c/0x1d0
-[13291.951583]  mana_serv_func+0x34/0x68
-[13291.953732]  process_one_work+0x168/0x3d0
-[13291.956745]  worker_thread+0x2ac/0x480
-[13291.959104]  kthread+0xf8/0x110
-[13291.961026]  ret_from_fork+0x10/0x20
-[13291.963560] Code: d2807d00 9417c551 71000673 54000220 (b9400281)
-[13291.967299] ---[ end trace 0000000000000000 ]---
-
-Disassembly of mana_smc_poll_register() around the crash site:
-
-Disassembly of section .text:
-
-00000000000047c8 <mana_smc_poll_register>:
-    47c8: d503201f        nop
-    47cc: d503201f        nop
-    47d0: d503233f        paciasp
-    47d4: f800865e        str     x30, [x18], #8
-    47d8: a9bd7bfd        stp     x29, x30, [sp, #-48]!
-    47dc: 910003fd        mov     x29, sp
-    47e0: a90153f3        stp     x19, x20, [sp, #16]
-    47e4: 91007014        add     x20, x0, #0x1c
-    47e8: 5289c413        mov     w19, #0x4e20
-    47ec: f90013f5        str     x21, [sp, #32]
-    47f0: 12001c35        and     w21, w1, #0xff
-    47f4: 14000008        b       4814 <mana_smc_poll_register+0x4c>
-    47f8: 36f801e1  tbz  w1, #31, 4834 <mana_smc_poll_register+0x6c>
-    47fc: 52800042        mov     w2, #0x2
-    4800: d280fa01        mov     x1, #0x7d0
-    4804: d2807d00        mov     x0, #0x3e8
-    4808: 94000000        bl      0 <usleep_range_state>
-    480c: 71000673        subs    w19, w19, #0x1
-    4810: 54000200        b.eq    4850 <mana_smc_poll_register+0x88>
-    4814: b9400281      ldr   w1, [x20] <-- **** CRASHED HERE *****
-    4818: d50331bf        dmb     oshld
-    481c: 2a0103e2        mov     w2, w1
-    ...
-
-From the crash signature x20 = ffff8000a200001b, this address
-ends in 0x1b which is not 4-byte aligned, so the 'ldr w1, [x20]'
-instruction (readl) triggers the arm64 alignment fault (FSC = 0x21).
-
-The root cause is in mana_gd_init_vf_regs(), which computes:
-
-  gc->shm_base = gc->bar0_va + mana_gd_r64(gc, GDMA_REG_SHM_OFFSET);
-
-The offset is used without any validation.  The same problem exists
-in mana_gd_init_pf_regs() for sriov_base_off and sriov_shm_off.
-
-Fix this by validating all offsets before use:
-
-- VF: check shm_off is within BAR0, properly aligned to 4 bytes
-  (readl requirement), and leaves room for the full 256-bit
-  (32-byte) SMC aperture.
-
-- PF: check sriov_base_off is within BAR0, aligned to 8 bytes
-  (readq requirement), and leaves room to safely read the
-  sriov_shm_off register at sriov_base_off + GDMA_PF_REG_SHM_OFF.
-  Then check sriov_shm_off leaves room for the full SMC aperture.
-  All arithmetic uses subtraction rather than addition to avoid
-  integer overflow on garbage values.
-
-Define SMC_APERTURE_SIZE (32 bytes, derived from the 256-bit aperture
-width)
-
-Return -EPROTO on invalid values.  The existing recovery path in
-mana_serv_reset() already handles -EPROTO by falling through to PCI
-device rescan, giving the hardware another chance to present valid
-register values after reset.
-
-Fixes: 9bf66036d686 ("net: mana: Handle hardware recovery events when probing the device")
-Signed-off-by: Dipayaan Roy <dipayanroy@linux.microsoft.com>
----
-Changes in v3:
-- Fixed commit message.
-- Removed macro duplicates.
-Changes in v2:
-- Fix sriov_base_off alignment check: sizeof(u32) to sizeof(u64), since
-  mana_gd_r64() (readq) requires 8-byte alignment on arm64.
-- Fix sriov_base_off bounds: also verify enough space remains in BAR0
-  to safely read sriov_shm_off at offset GDMA_PF_REG_SHM_OFF + 8 bytes.
-- Fix integer overflow: rewrite bounds checks using subtraction
-  (remaining = bar0_size - base) instead of addition.
-- Fix SMC aperture size: add gc->bar0_size - shm_off < SMC_APERTURE_SIZE
-  checks in both VF and PF paths; previously only the start address was
-  validated, but mana_smc_poll_register() accesses up to shm_base + 0x1c
-  (28 bytes from base, 32 bytes total).
-- Export SMC_APERTURE_SIZE to shm_channel.h.
----
- .../net/ethernet/microsoft/mana/gdma_main.c   | 40 ++++++++++++++++---
- .../net/ethernet/microsoft/mana/shm_channel.c |  5 ---
- include/net/mana/shm_channel.h                |  6 +++
- 3 files changed, 41 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-index 098fbda0d128..d8e816882f02 100644
---- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
-+++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-@@ -43,8 +43,9 @@ static u64 mana_gd_r64(struct gdma_context *g, u64 offset)
- static int mana_gd_init_pf_regs(struct pci_dev *pdev)
- {
- 	struct gdma_context *gc = pci_get_drvdata(pdev);
--	void __iomem *sriov_base_va;
-+	u64 remaining_barsize;
- 	u64 sriov_base_off;
-+	u64 sriov_shm_off;
- 
- 	gc->db_page_size = mana_gd_r32(gc, GDMA_PF_REG_DB_PAGE_SIZE) & 0xFFFF;
- 
-@@ -73,10 +74,28 @@ static int mana_gd_init_pf_regs(struct pci_dev *pdev)
- 	gc->phys_db_page_base = gc->bar0_pa + gc->db_page_off;
- 
- 	sriov_base_off = mana_gd_r64(gc, GDMA_SRIOV_REG_CFG_BASE_OFF);
-+	if (sriov_base_off >= gc->bar0_size ||
-+	    gc->bar0_size - sriov_base_off <
-+		GDMA_PF_REG_SHM_OFF + sizeof(u64) ||
-+	    !IS_ALIGNED(sriov_base_off, sizeof(u64))) {
-+		dev_err(gc->dev,
-+			"SRIOV base offset 0x%llx out of range or unaligned (BAR0 size 0x%llx)\n",
-+			sriov_base_off, (u64)gc->bar0_size);
-+		return -EPROTO;
-+	}
- 
--	sriov_base_va = gc->bar0_va + sriov_base_off;
--	gc->shm_base = sriov_base_va +
--			mana_gd_r64(gc, sriov_base_off + GDMA_PF_REG_SHM_OFF);
-+	remaining_barsize = gc->bar0_size - sriov_base_off;
-+	sriov_shm_off = mana_gd_r64(gc, sriov_base_off + GDMA_PF_REG_SHM_OFF);
-+	if (sriov_shm_off >= remaining_barsize ||
-+	    remaining_barsize - sriov_shm_off < SMC_APERTURE_SIZE ||
-+	    !IS_ALIGNED(sriov_shm_off, sizeof(u32))) {
-+		dev_err(gc->dev,
-+			"SRIOV SHM offset 0x%llx out of range or unaligned (BAR0 size 0x%llx)\n",
-+			sriov_shm_off, (u64)gc->bar0_size);
-+		return -EPROTO;
-+	}
-+
-+	gc->shm_base = gc->bar0_va + sriov_base_off + sriov_shm_off;
- 
- 	return 0;
- }
-@@ -84,6 +103,7 @@ static int mana_gd_init_pf_regs(struct pci_dev *pdev)
- static int mana_gd_init_vf_regs(struct pci_dev *pdev)
- {
- 	struct gdma_context *gc = pci_get_drvdata(pdev);
-+	u64 shm_off;
- 
- 	gc->db_page_size = mana_gd_r32(gc, GDMA_REG_DB_PAGE_SIZE) & 0xFFFF;
- 
-@@ -111,7 +131,17 @@ static int mana_gd_init_vf_regs(struct pci_dev *pdev)
- 	gc->db_page_base = gc->bar0_va + gc->db_page_off;
- 	gc->phys_db_page_base = gc->bar0_pa + gc->db_page_off;
- 
--	gc->shm_base = gc->bar0_va + mana_gd_r64(gc, GDMA_REG_SHM_OFFSET);
-+	shm_off = mana_gd_r64(gc, GDMA_REG_SHM_OFFSET);
-+	if (shm_off >= gc->bar0_size ||
-+	    gc->bar0_size - shm_off < SMC_APERTURE_SIZE ||
-+	    !IS_ALIGNED(shm_off, sizeof(u32))) {
-+		dev_err(gc->dev,
-+			"SHM offset 0x%llx out of range or unaligned (BAR0 size 0x%llx)\n",
-+			shm_off, (u64)gc->bar0_size);
-+		return -EPROTO;
-+	}
-+
-+	gc->shm_base = gc->bar0_va + shm_off;
- 
- 	return 0;
- }
-diff --git a/drivers/net/ethernet/microsoft/mana/shm_channel.c b/drivers/net/ethernet/microsoft/mana/shm_channel.c
-index 0f1679ebad96..d21b5db06e50 100644
---- a/drivers/net/ethernet/microsoft/mana/shm_channel.c
-+++ b/drivers/net/ethernet/microsoft/mana/shm_channel.c
-@@ -61,11 +61,6 @@ union smc_proto_hdr {
- 	};
- }; /* HW DATA */
- 
--#define SMC_APERTURE_BITS 256
--#define SMC_BASIC_UNIT (sizeof(u32))
--#define SMC_APERTURE_DWORDS (SMC_APERTURE_BITS / (SMC_BASIC_UNIT * 8))
--#define SMC_LAST_DWORD (SMC_APERTURE_DWORDS - 1)
--
- static int mana_smc_poll_register(void __iomem *base, bool reset)
- {
- 	void __iomem *ptr = base + SMC_LAST_DWORD * SMC_BASIC_UNIT;
-diff --git a/include/net/mana/shm_channel.h b/include/net/mana/shm_channel.h
-index 5199b41497ff..dbabcfb95daf 100644
---- a/include/net/mana/shm_channel.h
-+++ b/include/net/mana/shm_channel.h
-@@ -4,6 +4,12 @@
- #ifndef _SHM_CHANNEL_H
- #define _SHM_CHANNEL_H
- 
-+#define SMC_APERTURE_BITS 256
-+#define SMC_BASIC_UNIT (sizeof(u32))
-+#define SMC_APERTURE_DWORDS (SMC_APERTURE_BITS / (SMC_BASIC_UNIT * 8))
-+#define SMC_LAST_DWORD (SMC_APERTURE_DWORDS - 1)
-+#define SMC_APERTURE_SIZE  (SMC_APERTURE_BITS / 8)
-+
- struct shm_channel {
- 	struct device *dev;
- 	void __iomem *base;
--- 
-2.43.0
-
+Are you concerned that you're gonna break something in the net tree? Why not
+do it properly from the start? If you want, you can post 1-7 patches
+separately and we follow up with this one but still into net?
