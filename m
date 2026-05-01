@@ -1,43 +1,57 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 702442770A;
-	Fri,  1 May 2026 00:31:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03238267B07;
+	Fri,  1 May 2026 00:57:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777595515; cv=none; b=SqtbNukJvu9A3hldsLUOy+6qbjkRmJThG3+3kkQspM2iK/I5jeQVmGO0wZDM6icr2trZgGrylPmyjokuLGR8FXTWrZO5iP8cxpM2yL5w9s+xsUURjDMcQZ5dimqAyBzBNYRKLyiwI4VqCODhuWFdxU5asZNPJCI6tFlQsLmuuOE=
+	t=1777597047; cv=none; b=JD4c2rLDfWlXOcZWPdJkHcZu4jkl5w4HdRaNj1qZ18HiMmtWs8Svaxq7g/Sbnmt2a6LImacj5AgR6oKbI4AOJwoy7Sapo6yuKoEhDAU6LH2V2f+B0RxshBxG7+dSnvsWA92wAoslc9GB7XM1yKjxmDJzuB4MGFqTN/O68vlRXH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777595515; c=relaxed/simple;
-	bh=YsbhzFCZ8r2kzDLdzun5DytE0uEepvTLkrIdp8LuMu4=;
+	s=arc-20240116; t=1777597047; c=relaxed/simple;
+	bh=bs05aRDwfyaoPAgx838AnsLYLubyaA3dlIOPWod+1Y8=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QOrxeweESYUu8/wq2NZQ3ByNy/z2+80J0k4yaHYFO7Vuur59EOkYN0NHG+nHlMHKMDd0xTn1sm2KBniZsCZ19bJ746QhUct/2CB5D17lA5yTgzAoUsWWVVA0fgMkjxDvhfCFWWbm/ljLB+J114428p3Eq6gYPrKwf3OWWaxS1Jo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oCc2WnCz; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=NLmm3ir5XRclqCfupRLzDEd4cnzhBVPA2Y2KpCxHHus4AeLFa/5VvNuPP6Xd3h7Q8sObOursrlz/so4w+A1Il4sBmb9MgxxUI0KRH4oCxQlSjak2muob9TMmKm5FKNZ+fGv80VA7L5JrG1/PFzXpnzNI6JHrOowNX02eOf1sRsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oL9KNxZS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oCc2WnCz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86AA4C2BCB3;
-	Fri,  1 May 2026 00:31:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oL9KNxZS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8953EC2BCB3;
+	Fri,  1 May 2026 00:57:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777595515;
-	bh=YsbhzFCZ8r2kzDLdzun5DytE0uEepvTLkrIdp8LuMu4=;
+	s=k20201202; t=1777597046;
+	bh=bs05aRDwfyaoPAgx838AnsLYLubyaA3dlIOPWod+1Y8=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=oCc2WnCz+KoSJ/KtzGj4IjhwyngxqHGuFBiruuKdqOAUhYIk0DpGMSWfPJwQxHgkS
-	 U3nVU6b5ytJagpuE2Icgf91Eta0s35XQJ8EIjsdz5pzYus7zBF4CBP52HPSqXdbZJs
-	 FE7h2ZkLa5dmQdHzRmq1D7AzauJn636Xsm4QJzKViaEj7eVX8dzaFqIgV/w0nQED4Y
-	 rF8p5k6giYHKYyBFC9KN/+kt9xWxNyciFRntH5tXyNXVD9Iy7tNGYWPc20ViyPAV53
-	 qokPjCCosSlLFzyueE76o5aFG/i5/OpF5SnXNSF1BobmGt0SYtNYUexK0Zg6tM9A9V
-	 b5Fb1rMRmDBxA==
-Date: Thu, 30 Apr 2026 17:31:53 -0700
+	b=oL9KNxZS0ZtiRkjef9sVKNyf4iisFfLGGPVRLgjI3Ykn73Pdz6xvS6dfrqE2ygcPv
+	 bLIhEmQlxG6faHCYchb2dVOEEbX2LVpLbw830jUWwcs4x7X4HK1YlF/UNau/t7Kiq9
+	 HTVWjnsq/e4P8gbPCMVmLn2jIV+uA3swtV3M614QO67pxQOA+D6i53AmjBBQva4p0u
+	 QIt/71GKKjQHAlr+KuHvT8UMZ+GA2GLOXPFJIqK/Fsb9ZqGmOzZPlOvvWvb5i6EUFk
+	 l4FNG9tyPtC9zWfX3R0lBpW5ppy26FZTo/1ANIyvRCoosEh2jitBofEiME7/UEziyj
+	 U0yKPeDSEfB4A==
+Date: Thu, 30 Apr 2026 17:57:24 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: "David S. Miller" <davem@davemloft.net>, David Ahern
- <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Martin KaFai Lau
- <martin.lau@kernel.org>, netdev@vger.kernel.org, bpf@vger.kernel.org,
- kernel-team@cloudflare.com
-Subject: Re: [PATCH net] net: Clear skb metadata before LWT xmit
-Message-ID: <20260430173153.5cd1d348@kernel.org>
-In-Reply-To: <20260428-wip-skb-local-storage-from-scratch-v1-1-8f7ca9b378ce@cloudflare.com>
-References: <20260428-wip-skb-local-storage-from-scratch-v1-1-8f7ca9b378ce@cloudflare.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Alex Shi
+ <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu
+ <dzm91@hust.edu.cn>, Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi
+ <pavan.chebbi@broadcom.com>, Joshua Washington <joshwash@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>, Saeed Mahameed
+ <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, Mark Bloch
+ <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Alexander Duyck
+ <alexanderduyck@fb.com>, kernel-team@meta.com, Daniel Borkmann
+ <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>, Shuah
+ Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, Stanislav Fomichev
+ <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, Bobby Eshleman
+ <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next 07/11] net: devmem: support TX over
+ NETMEM_TX_NO_DMA devices
+Message-ID: <20260430175724.0c134a0d@kernel.org>
+In-Reply-To: <20260428-tcp-dm-netkit-v1-7-719280eba4d2@meta.com>
+References: <20260428-tcp-dm-netkit-v1-0-719280eba4d2@meta.com>
+	<20260428-tcp-dm-netkit-v1-7-719280eba4d2@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,10 +61,31 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 28 Apr 2026 21:44:37 +0200 Jakub Sitnicki wrote:
-> skb metadata is meant for passing information between XDP and TC.
-> LWT programs cannot access the __sk_buff->data_meta pseudo-pointer.
+On Tue, 28 Apr 2026 15:42:04 -0700 Bobby Eshleman wrote:
+>  	shinfo = skb_shinfo(skb);
+> +	if (shinfo->nr_frags == 0)
+> +		goto out;
 
-netdev wasn't CCed on the sashiko reply but I think it now auto-marks
-the patches as Changes Requested :| The Sashiko comments didn't seem
-actionable to me. WDYT?
+Feels tempting to cover the NETMEM_TX_NO_DMA / NETMEM_TX_NONE
+cases here before we even look at the frags?
+
+> -	if (shinfo->nr_frags > 0) {
+> -		niov = netmem_to_net_iov(skb_frag_netmem(&shinfo->frags[0]));
+> -		if (net_is_devmem_iov(niov) &&
+> -		    READ_ONCE(net_devmem_iov_binding(niov)->dev) != dev)
+> +	niov = netmem_to_net_iov(skb_frag_netmem(&shinfo->frags[0]));
+> +	if (!net_is_devmem_iov(niov))
+> +		goto out;
+> +
+> +	binding = net_devmem_iov_binding(niov);
+> +
+> +	switch (dev->netmem_tx) {
+> +	case NETMEM_TX_DMA:
+> +		if (READ_ONCE(binding->dev) != dev)
+>  			goto out_free;
+> +		break;
+> +	case NETMEM_TX_NO_DMA:
+> +		break;
+> +	default: /* NETMEM_TX_NONE */
+> +		goto out_free;
+>  	}
