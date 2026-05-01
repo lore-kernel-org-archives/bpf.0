@@ -1,76 +1,131 @@
-Received: from mx.der-flo.net (mx.der-flo.net [193.160.39.236])
+Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9376E3F2114
-	for <bpf@vger.kernel.org>; Fri,  1 May 2026 16:16:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.160.39.236
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8CA83D5225;
+	Fri,  1 May 2026 16:40:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777652168; cv=none; b=f+Dt/Op0IIjwuqbxgWRqiYkmHWfE2XqgwYitKojZXjiMpDkudRWzaFSHvQpNEuF5GnRzmPTjn31MPE9aclM7huW8bKn9RA2LivqA8XzoTgN/TcJ1Efcrp27W5ujJ+0arc4hJh23XuUiGnTJeBn70ELHM9JII3rn2TkZGbH91V/4=
+	t=1777653639; cv=none; b=nJTN+FEmNG+ofs5V205X1h1JHo3Ml8njx1v3MsexVv9iaLPdfaxQHE1NTfE3gmNWZZ4vwLruVplXFh+vMYFLY9gxYoWkmAUIkR5ETnaTOGL8zCyfH354SVoWfmJ3D7icpLrO1Dru0wYBH0hLxi0d5y3/KG8PRXXEAPmbykWZYIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777652168; c=relaxed/simple;
-	bh=wndAzVybXdecmRF6y5uRZdwAfuwbJxNPn9i+p8A/etU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gzWp/iMkeDPUD2l7+MJsPZflF/arNyjVjJvJJmLsbJjy5tyaCVyVQ3s0UZlOdZCudCm/hVf2ky+6cqOuh2tmoPQaxB1oFyJna+nqbWFIQcPxa4KkBknJHaJkH13JWoQIFV5lwc+Qm6wIRY2uNZXQJx5StPltTcwxolSkUt+4m3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=der-flo.net; spf=pass smtp.mailfrom=der-flo.net; arc=none smtp.client-ip=193.160.39.236
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=der-flo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=der-flo.net
-From: Florian Lehner <dev@der-flo.net>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	hawk@kernel.org,
-	sdf@fomichev.me,
-	sun.jian.kdev@gmail.com,
-	Florian Lehner <dev@der-flo.net>
-Subject: [PATCH bpf-next 0/2 v3] bpf: Add LINK_DETACH for perf links
-Date: Fri,  1 May 2026 18:08:59 +0200
-Message-ID: <20260501160901.224134-1-dev@der-flo.net>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1777653639; c=relaxed/simple;
+	bh=oPTsl+/496bFh76vbS1ubzBHeDSAPNRi0MlcpI2817E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U+ZVv/+EzOCx4UY+E75zoYg85vOTPU6AkJsaqIKoStxLbQDZ5jAeEpQz64cUNYzTQ7bmFwz6QDrAEfhmz2JTdZSrhDa5hltdDXkwyOTUKYQuCGbYO6Ysc04ybD4EId8NLkKg4QPOadl0GMINdPvFk6kuW0RE9OOalDdq9j9N49g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=bDC7G1JY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=P4E3P4Bt; arc=none smtp.client-ip=103.168.172.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="bDC7G1JY";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="P4E3P4Bt"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id 51EB1EC00AD;
+	Fri,  1 May 2026 12:40:31 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Fri, 01 May 2026 12:40:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1777653631; x=
+	1777740031; bh=EDzZJrBF0h84N+Gtj5o0fJbwTeT70yzNk/Y8SM68IW0=; b=b
+	DC7G1JY1tzExZduEO995/ESD+VNnu/KrSx7JhYOSmTVsEOMKkqzxuGMpicbQ80em
+	Wqx13fCwm+tThfzk0+pzWF75hfxJDHc3pi8uiNb3u8gyju5447qCPxMIY4d5LQ0g
+	kII9wLOHvwgw5kdumYNCJyA3NWmdK6YAYn7QfK+o7rl3/1HgMEc1zQDfL9cDhNyo
+	Y++upjGdsDIMJCEUiWqbvRZrsIFmoYbbuqH1xwL90aw3M8Vf5yXJVtYITVRN0vyz
+	C/kG5M5PxVRfBD98yiVqbihsqbqNGf28kXWde6UwnDGaC+KP7L5fHcU9CBQoiKgi
+	QVg6vxfx8upmTQggx2psQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1777653631; x=1777740031; bh=EDzZJrBF0h84N+Gtj5o0fJbwTeT70yzNk/Y
+	8SM68IW0=; b=P4E3P4BtuuHNMN79XJ2aVUD3zx3/BVjKaJtogChu7l/G8HTeQRT
+	Nyuu2kBFiTZKQXKo6B/UeG5dMIRSKJBH5fRuai+rsyz9wd1IkZGM2LiKRm7PH3RJ
+	WEOtjMkzpXH8fp240O0hAG6aA3+zOB6vyF3gdGodZ8ed3q8nc6viZ3q9q7CX7asM
+	HzVKDvGrr8w2BmzTX5+anRxk47A+rgGJjITPhj5qztp0PzX0GTeYYN4KfAfxqGIt
+	S9Dbn+wrse9tSZ/pvS4Zi66NamosmEDshQSfTd3RPPS+2FwLnknhdEgdqSep8Eks
+	lQ0oeN13EaxmpvJT2gH+AGYkg6x/BdXBnlA==
+X-ME-Sender: <xms:ftf0adt4OR1Pl7ZxS8dVFC9df0y3_juzHJ9YUmMWAM_hUCCPpXBW4A>
+    <xme:ftf0aTKDm3VeLQsp6ES5u7b-u4i7d8yRI_XGpUAMAjS_G2zKzCHHHFmxL1mN_MiC7
+    J3oUePw_impsgUw_zsV5pxQqlWwwSPztH3ZA3f-bYVfAvKjYXG0GlY>
+X-ME-Received: <xmr:ftf0aUqrG5MGzwGTEYSWqo_7k6CXx8UhykqdxhqZ13fi9n6Aw0Ug0ukOVxAH>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdeltdejtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesthdtredttd
+    dtjeenucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshih
+    shhnrghilhdrnhgvtheqnecuggftrfgrthhtvghrnhepuefhhfffgfffhfefueeiudegtd
+    efhfekgeetheegheeifffguedvuefffefgudffnecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpd
+    hnsggprhgtphhtthhopedufedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepkhhu
+    sggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofh
+    htrdhnvghtpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthhope
+    hprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtoheprghnughrvgifodhnvght
+    uggvvheslhhunhhnrdgthhdprhgtphhtthhopehhohhrmhhssehkvghrnhgvlhdrohhrgh
+    dprhgtphhtthhopegsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    jhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhm
+X-ME-Proxy: <xmx:ftf0aeVdqjBR69tUD6d6GY1ZWvntYS09CBO8xud9CgBsnt76kB--jQ>
+    <xmx:ftf0aR0GebU2wwF71G8yEE5JJ715hteOvKgvE1RR9zT_FlZV1OdhoQ>
+    <xmx:ftf0adTvQflkmo4ENF5Dpbkxpf2Ne-yCE6TzV_g7QsSKJ6SWSdcMFA>
+    <xmx:ftf0aVQdZm18VXqJpC580VHl7Q-N_iNyf58KxOZ5qC7LhsHUr__vpQ>
+    <xmx:f9f0absOJcs2rNO4ZceBOqI6mRlu5h6eJzW2650Fn0T0AgnW0BuI4x0b>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 1 May 2026 12:40:30 -0400 (EDT)
+Date: Fri, 1 May 2026 18:40:27 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+	bpf@vger.kernel.org, john.fastabend@gmail.com,
+	linux-kselftest@vger.kernel.org,
+	=?utf-8?B?6ZKx5LiA6ZOt?= <yimingqian591@gmail.com>,
+	daniel@iogearbox.net, jonathan.lemon@gmail.com
+Subject: Re: [PATCH net 4/7] net: tls: fix off-by-one in sg_chain entry count
+ for wrapped sk_msg ring
+Message-ID: <afTXe_kAumf2vjvE@krikkit>
+References: <20260429222944.2139041-1-kuba@kernel.org>
+ <20260429222944.2139041-5-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260429222944.2139041-5-kuba@kernel.org>
 
-73b11c2a introduced LINK_DETACH and implemented it for some link types,
-like xdp, netns and others.
+[I'm slowly trying to catch up with the chunk of ktls patches that
+were posted in the past 3 days]
 
-This patch implements LINK_DETACH for perf links, re-using existing link
-release handling code.
+2026-04-29, 15:29:41 -0700, Jakub Kicinski wrote:
+[...]
+> Every other wrapped-ring arithmetic operation in the sk_msg subsystem
+> (sk_msg_iter_dist, sk_msg_iter_var_next, sk_msg_iter_var_prev,
+> bpf_msg_pull_data) correctly uses NR_MSG_FRAG_IDS as the ring modulus.
+> This sg_chain call is the sole remaining use of MAX_SKB_FRAGS for
+> ring-modulus arithmetic and was introduced after the ring expansion.
 
----
+[...]
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index 906a1998c630..600e13effaab 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+> @@ -802,7 +802,7 @@ static int tls_push_record(struct sock *sk, int flags,
+>  
+>  	if (msg_pl->sg.end < msg_pl->sg.start) {
+>  		sg_chain(&msg_pl->sg.data[msg_pl->sg.start],
+> -			 MAX_SKB_FRAGS - msg_pl->sg.start + 1,
+> +			 NR_MSG_FRAG_IDS - msg_pl->sg.start + 1,
+>  			 msg_pl->sg.data);
 
-Change log:
+And get rid of the [start] / NR - start dance to make this code a bit
+clearer?
 
-v3:
- 1. Introduce bpf_perf_link_mutex to guard against concurrent access 
-
-v2: https://lore.kernel.org/bpf/20260304210212.235096-1-dev@der-flo.net/
- 1. Drop LINK_DETACH support for iter
- 2. Add test for LINK_DETACH for perf event links
-
-v1: https://lore.kernel.org/bpf/aJOhPoTLdYnZmHYA@der-flo.net/
-
-Florian Lehner (2):
-  bpf: Add LINK_DETACH support for perf link
-  selftests/bpf: Test LINK_DETACH for perf link
-
- kernel/bpf/syscall.c                          | 87 ++++++++++++++++---
- .../selftests/bpf/prog_tests/perf_link.c      | 79 ++++++++++++++---
- 2 files changed, 140 insertions(+), 26 deletions(-)
+This should maybe even be an skmsg helper to avoid "random" code
+making assumptions on the size of the sg.data array. The last
+paragraph in your commit message also tends to suggest that.
 
 -- 
-2.53.0
-
+Sabrina
