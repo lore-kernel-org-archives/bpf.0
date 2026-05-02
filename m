@@ -1,63 +1,63 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F086538A702
-	for <bpf@vger.kernel.org>; Sat,  2 May 2026 20:07:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F5638B152
+	for <bpf@vger.kernel.org>; Sat,  2 May 2026 20:07:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777752455; cv=none; b=Y9cuPLFxqvfUupPO3b9YAcNZ7e4IUPGb8/N0eEDIicxJ8qb+PgAi4Jjdfjh4PrrFmCy0Cv+uPFF3RqVtQ+aIpcYTME2EvIYSYsjaCsMJGeLshZ/I/GTw/qnI1szSkzaVSFlj+lACCC5f1LRBu7cCjC2vVbUuIkOOtssujMDgh+c=
+	t=1777752457; cv=none; b=X6TUE/SbWmjADsDpgRy4a2WSazCFafzBi5CkzfW9+f4VV2hy7WitEQXZQmj6P5rpn3zrpdRJvjVV3rSF7Ho+JUit6s6s3GXwDwvo3TAwqRqqDbILiAwySpHNbEP6kFEJ8wvO9wVOZg4prahP+ah8BEXj4oCAkfRokZ0o48DEWXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777752455; c=relaxed/simple;
-	bh=fctOOu8ihanad4KwnadnhQVcL0yq7+8B+O+aK7WYNr0=;
+	s=arc-20240116; t=1777752457; c=relaxed/simple;
+	bh=+YpubXTqYL6p/LBM2xcyraCoGtvRPZckW9SCjuULUpU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qw6b36gXHDLL6dQuYWOrr/8s5+KNJHDAkfYr5p/TCrEqHzvoJSzhwHALJT03WF6LCAOEyG5WvtR9RwMyRswjb2RDTozwZbVPvyV6kSi4xdS66OPQSPs36VHWV5sEoX2WITNUlw5oDB/mfgRlbp0KKF9LSQVf0q03Qi10SMkZw+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L99LJwb7; arc=none smtp.client-ip=209.85.208.43
+	 MIME-Version; b=EMbT2Vpw8ZuPPNtXD8RlGp7TkkAEGRUORzKiFBIMT+N+FFR8l5RvcgHO+MqHnrE5ctAer9/bJBfrZjKWWfWVcraPETqsUUvdsheeF82v54oIEq35L8PEpZK1+g5lg8vTgbmkNnJChnJJndukxhHy81PY4gSvlwjBw3uqOyTjtIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XnFsnUXv; arc=none smtp.client-ip=209.85.208.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L99LJwb7"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-676e62faf2bso4751034a12.1
-        for <bpf@vger.kernel.org>; Sat, 02 May 2026 13:07:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XnFsnUXv"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-67bc8609a9bso2553181a12.0
+        for <bpf@vger.kernel.org>; Sat, 02 May 2026 13:07:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777752451; x=1778357251; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777752454; x=1778357254; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i0ej40ghKn8TLZMMNc2ToDzMeEQCp4B7994Wm2iXNOY=;
-        b=L99LJwb7ghjZyJGAltcmlCigsj1usM68fDPWZpkd3mI5PpuZCKqf9rBZ8Ot0+3xfJV
-         Klvb9dBriboTRcFfzlaxtebi/tbyn9sXgKRGvc6wg9rNngLXmfpyQk6y0IRu4Zv6jq0R
-         jvoNHa8bgcdVdFNXXa8eYo5mLZYQCvyVeni/bLh3fAjtb0krx4HUyD4+o2pri/RJvgKT
-         jefcTC8GiJluLmgVb05QPMPx1RbsFI1NeiQ29MIpVdabAU7D0uAIiYFfRothlyAytDEN
-         4LqnnhfutO3FMlgsNRT2O7Yh2bdgt7pvlzWKk69MPkmyO7PCta7AwddDexDRs16bGoYB
-         0Fvg==
+        bh=NHOVkZbEluwxEdvBl/xFayOrth4UzlsG2h26MqrcyuA=;
+        b=XnFsnUXv5oFgvT2Pr7iJgAyMsZ4F25tQeApAMim2+fAWGjupFY8/JIQmgb4GT9d2Z9
+         h9eCVw0wBPR2UC8fGT7TFcEgSHarOnxwjkxDkhLRHCjdW9wkfCsHul1oyHx+v0ZIbux6
+         7lLSJnjhVhuxYGUiVWnMvysfVTz736kCK/w82Y1Bxhjp56DCCfTgk9EiBbRawqu7pGb8
+         wy+TiOd13qaIlxSGFX0WVI4nNUiFILctgYNhCmt+IdDUkvvBdgierUDmYxoAICiDZfAA
+         1fUrlL3WXMn0NiYPOml4Z0BdAa5urzgb8dJRHoJI9nthU9yz8+/THOJzo7K4PUlDx2iT
+         pmcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777752451; x=1778357251;
+        d=1e100.net; s=20251104; t=1777752454; x=1778357254;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=i0ej40ghKn8TLZMMNc2ToDzMeEQCp4B7994Wm2iXNOY=;
-        b=q/SzyfLNF1bpsOyVt9x1jCh7p/VVdrQc0tadNmIybJnOJpxkjYV3bQrvNpW4vZevwH
-         xaguxoMg7ARaIurP7hIjA+4s2XR5UB2rshe+vwXSWisiPWuaryxaKsX7O+mmwUkKOaqA
-         UcGXPwHw02ZpVM2ep1jfDugfdvnkKubiLMqAdoKqR9d+AmWkIuWEt/bOc1k2LRpLLVqc
-         93TxcVgUN6nTwwjvfMUuHcFLILV896+zxDU4cqVRF+CfMscEbgHnh8TFNH2UmOhP/HR2
-         hle87QZAczRvZDg3IDsi8djd5K6HD+BGF+HuHLlFarDfSq4eF9rxAiWpr7/ncMicdvly
-         0kZw==
-X-Gm-Message-State: AOJu0YzcahbDZWQ3cQ/iCzSJISb2nyL4rHi33mmWcXKW1Ox3Mwen8etl
-	BlayA4GzLeG/7+2O7fKpsk307Cf7jDIv5/uYThIpguc9nEh+hgoEQBF/
-X-Gm-Gg: AeBDieu0FFfGOxxV8uNMuoYbAx0j8fuEUfzCu942vgLRXvJrPBA+GhJGK6QpwqgsKXP
-	g4MdkSWmXv1gE8duwKXOyxviRZkSCM2hD7H8O7EsTipiHy1I+01/UxIophMaSv9jNfdfAIELXkL
-	rjYWPFCoBUNVCm+fPNj/YyahQXMj7XppZ63EYSbrFqxGbKS1Hb7cTCpJ1A+F+pF4fmWEhyKvdZE
-	UN9wkC1385kiWUO5S8yXcOP4m8pdHSKCTCwqQd8FpAGQ7a3gBCRyoVm9S/zLJXd5fLTcBxO15n1
-	oHyE3qoQ/5bz46Q4Fk5Bo8MBLZ/1GcI3ER1aFCaxJO1XwuRoxqtL2jT0Ven+aaRIgD76BobClVZ
-	D9ufjseuCsIB1v0IpkdU7QZMx0qb48yonb39EgcKSaZlzKIKVzJFA6s7TVZGN154Y/S4/MZEuOQ
-	hUJr7UjBrOn6C47wazkwhxZmpMXoLRBIVarmOR9ehFwEJx6BPKlsBS5G4oKCzhIqRSOj809rBSa
-	5Y/J9v/rAtwS6QZ2QzaV06BqbJh
-X-Received: by 2002:a05:6402:158d:b0:678:f8f4:a7f3 with SMTP id 4fb4d7f45d1cf-67c1620cccemr1505390a12.0.1777752451354;
-        Sat, 02 May 2026 13:07:31 -0700 (PDT)
+        bh=NHOVkZbEluwxEdvBl/xFayOrth4UzlsG2h26MqrcyuA=;
+        b=Qohu8xkmSqokWe6jdY2x/0vvpb8Ey0GgmBUH80SP3MCV5jRTBFFkZ18eVMzLtVHGYj
+         lE+lNyz8CnvDyCf9EVwdU7WC8A6MT9ghlBWRm95IAsjTPmHivbxSIJcmzrHnwOGsZaS/
+         LwfGEEbhpdIrDRPjzY4cEwX/5dvgolA+8eX9DV7Xbfnx7nRe0KNWUFswjzNneCN3e5+l
+         zdJhyj0jgPhy+31+a8Ls249TXALQ/nISGJGuaR88lsV2ID6WJF6Vlj7I4dle4d9meVyO
+         +aCfhtrJR5LMK89JTcUrY8lHtnBRLv+Z71X6LRkR4zqtkqG4egasmq9fMATyjoKei0PT
+         wUtA==
+X-Gm-Message-State: AOJu0Ywi9FYsIV4gDZ6GGOHZEQLVLPv9nwhm2cIEop8GU4qHPkyOBKMT
+	nMbxehhDffqgsmwHEGulHlEBHUo7+dRfr8+SmmUiAw57WOkKGAVLtVjq
+X-Gm-Gg: AeBDiesGOFi3YZOPeF1oihSXDf9mnNq/3AFfwjlj+wLeb8m72F8TTHyu9tFy9b942mP
+	r9GbG6/IbDDajcTnkBwGcNgBPqWWlorkPr2mC7JS/LstHPg462D6m0HhxETSmXLyWvrU8jBJSIg
+	F3KP7fbxrqm9GpqEg1l4wpnxzxSy8KjDX2Ty9nGDNVXYt56R1ULBPWOAxhP1wlUERC5/fw+m2pR
+	zc05iTG+act/GBdX9363BIpBDqF6nyxRxF1+atAH0UO+nDUY9iwfEtcZxB5B+LCmfyIz6qmz/Z7
+	xWXR7QK7HZiLdE9p+xdZYUfI846pmTswrR5JGl6+4vgeyysiWDwRQzM4D0azkO6sS92VyoSvLJF
+	XeIVHGvyqdgcqntfX9BqVkMA1Rexfi2qnDGpbLPHWLdfGLT2GeOpfd3X1GvJ9W72pDHUZBaLGUL
+	0haKUlKYo/fSmNMeC0Ms5DCuTpF4XfdG+Fix41toUcoMQz2G6MavnfvaQZbasPFU5Zmmb5OWElZ
+	ix+v3SqLLrikY4sA+odWL7qqT40
+X-Received: by 2002:a05:6402:a0d4:b0:670:6b0f:f77f with SMTP id 4fb4d7f45d1cf-67c1ababf30mr1346182a12.17.1777752454243;
+        Sat, 02 May 2026 13:07:34 -0700 (PDT)
 Received: from KERNELXING-MC1.tencent.com ([41.128.91.35])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-67b88094aa4sm1902528a12.24.2026.05.02.13.07.28
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-67b88094aa4sm1902528a12.24.2026.05.02.13.07.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 May 2026 13:07:30 -0700 (PDT)
+        Sat, 02 May 2026 13:07:33 -0700 (PDT)
 From: Jason Xing <kerneljasonxing@gmail.com>
 To: davem@davemloft.net,
 	edumazet@google.com,
@@ -77,9 +77,9 @@ To: davem@davemloft.net,
 Cc: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Jason Xing <kernelxing@tencent.com>
-Subject: [PATCH net v5 1/8] xsk: reject sw-csum UMEM binding to IFF_TX_SKB_NO_LINEAR devices
-Date: Sat,  2 May 2026 23:07:15 +0300
-Message-Id: <20260502200722.53960-2-kerneljasonxing@gmail.com>
+Subject: [PATCH net v5 2/8] xsk: free the skb when hitting the upper bound MAX_SKB_FRAGS
+Date: Sat,  2 May 2026 23:07:16 +0300
+Message-Id: <20260502200722.53960-3-kerneljasonxing@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20260502200722.53960-1-kerneljasonxing@gmail.com>
 References: <20260502200722.53960-1-kerneljasonxing@gmail.com>
@@ -93,58 +93,44 @@ Content-Transfer-Encoding: 8bit
 
 From: Jason Xing <kernelxing@tencent.com>
 
-skb_checksum_help() is a common helper that writes the folded
-16-bit checksum back via skb->data + csum_start + csum_offset,
-i.e. it relies on the skb's linear head and fails (with WARN_ONCE
-and -EINVAL) when skb_headlen() is 0.
+Fix it by explicitly adding kfree_skb() before returning back to its
+caller.
 
-AF_XDP generic xmit takes two very different paths depending on the
-netdev. Drivers that advertise IFF_TX_SKB_NO_LINEAR (e.g. virtio_net)
-skip the "copy payload into a linear head" step on purpose as a
-performance optimisation: xsk_build_skb_zerocopy() only attaches UMEM
-pages as frags and never calls skb_put(), so skb_headlen() stays 0
-for the whole skb. For these skbs there is simply no linear area for
-skb_checksum_help() to write the csum into - the sw-csum fallback is
-structurally inapplicable.
+How to reproduce it in virtio_net:
+1. the current skb is the first one (which means xs->skb is NULL) and
+   hit the limit MAX_SKB_FRAGS.
+2. xsk_build_skb_zerocopy() returns -EOVERFLOW.
+3. the caller xsk_build_skb() clears skb by using 'skb = NULL;'. This
+   is why bug can be triggered.
+4. there is no chance to free this skb anymore.
 
-The patch tries to catch this and reject the combination with error at
-setup time. Rejecting at bind() converts this silent per-packet failure
-into a synchronous, actionable -EOPNOTSUPP at setup time. HW csum and
-launch_time metadata on IFF_TX_SKB_NO_LINEAR drivers are unaffected
-because they do not call skb_checksum_help().
+Note that if in this case the xs->skb is not NULL, xsk_build_skb() will
+call xsk_drop_skb(xs->skb) to do the right thing.
 
-Without the patch, every descriptor carrying 'XDP_TX_METADATA |
-XDP_TXMD_FLAGS_CHECKSUM' produces:
-1) a WARN_ONCE "offset (N) >= skb_headlen() (0)" from skb_checksum_help(),
-2) sendmsg() returning -EINVAL without consuming the descriptor
-   (invalid_descs is not incremented),
-3) a wedged TX ring: __xsk_generic_xmit() does not advance the
-    consumer on non-EOVERFLOW errors, so the next sendmsg() re-reads
-    the same descriptor and re-hits the same WARN until the socket
-    is closed.
-
-Closes: https://lore.kernel.org/all/20260419045822.843BFC2BCAF@smtp.kernel.org/#t
-Fixes: 30c3055f9c0d ("xsk: wrap generic metadata handling onto separate function")
+Fixes: cf24f5a5feea ("xsk: add support for AF_XDP multi-buffer on Tx path")
 Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 Signed-off-by: Jason Xing <kernelxing@tencent.com>
 ---
- net/xdp/xsk_buff_pool.c | 3 +++
- 1 file changed, 3 insertions(+)
+ net/xdp/xsk.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index 37b7a68b89b3..c2521b6547e3 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -169,6 +169,9 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
- 	if (force_zc && force_copy)
- 		return -EINVAL;
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 6149f6a79897..46660943c81e 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -776,8 +776,11 @@ static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
+ 	addr = buffer - pool->addrs;
  
-+	if (pool->tx_sw_csum && (netdev->priv_flags & IFF_TX_SKB_NO_LINEAR))
-+		return -EOPNOTSUPP;
-+
- 	if (xsk_get_pool_from_qid(netdev, queue_id))
- 		return -EBUSY;
+ 	for (copied = 0, i = skb_shinfo(skb)->nr_frags; copied < len; i++) {
+-		if (unlikely(i >= MAX_SKB_FRAGS))
++		if (unlikely(i >= MAX_SKB_FRAGS)) {
++			if (!xs->skb)
++				kfree_skb(skb);
+ 			return ERR_PTR(-EOVERFLOW);
++		}
  
+ 		page = pool->umem->pgs[addr >> PAGE_SHIFT];
+ 		get_page(page);
 -- 
 2.41.3
 
