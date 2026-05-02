@@ -1,224 +1,186 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6613E353ED9
-	for <bpf@vger.kernel.org>; Sat,  2 May 2026 15:56:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CBD3845C0
+	for <bpf@vger.kernel.org>; Sat,  2 May 2026 15:56:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777737379; cv=none; b=mP/E+7jqN4s2Ogokp2w69uuf97U21SRQdlHHNofsH1HRAmHo5ZhT4HOIgPuL9TIew1GV7aT6o+9Ez/yuNxlnTaYQlZNiDvK3OW5YQ0kSoz+qGNStGt2bsaWvEqLvhAOmUzxl9Q95OMc0Cfmmxmo1xn1yvRyTsrdlgT6Kn7jSxVc=
+	t=1777737380; cv=none; b=ahvYpxjdmlP9zQWr+yN2DcaZm7ClSZENGNQ9ZxCduEgkeJgsdw4RUwDkW8AkQCkb3GEUUmGAKIicxYPvuO+1vU931167YLml3UXNf76kq0KBCu+E/2rjNSjS360u0wc66WL5xVncuzpR6zYxi1KXZwOThUQAWDMMzQ3+LPLUVfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777737379; c=relaxed/simple;
-	bh=2fvirarBl916LCvUw0OuvqLNKnStFg47YuzKgYYIuAg=;
+	s=arc-20240116; t=1777737380; c=relaxed/simple;
+	bh=s3pxqv69uaw9/ge2y+A/IMConfYhFCKwfeWUpaI0y8s=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=aWwMCmJuvXjFVuFBzdP96NDKHt3m35ff7dzLwvRS2p4FLWoql+1OLaG/dUcbEi+39NliPkJzkJ/OrN2q7IlXNSud+S+j24dorT7eXzoDuz+zJ7z0LsBkgJDn61nNsJNDvk4AQotcncRebm3TqnzoF3UHzKmXwglgx9IM2ppGGN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ugOxBwA3; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=Ba0kfoNC0ydlTa9HhtOy1IbAZ7XbrUnP3+6ZuyWzXg1ng7DhVZZYD25SVgx9Nem0uDlcX8qCOXWp7s9pM7jfg39gJQodz7WnFI12rq7D8EWlmrNJHdtKgumnptgMBnXKelsWfay/KoxCAdSHfR5DWmHODMaqHDDDMNyVa2dW8MU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YbrVwxKK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ugOxBwA3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC605C19425;
-	Sat,  2 May 2026 15:56:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YbrVwxKK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCDFDC19425;
+	Sat,  2 May 2026 15:56:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1777737379;
-	bh=2fvirarBl916LCvUw0OuvqLNKnStFg47YuzKgYYIuAg=;
+	bh=s3pxqv69uaw9/ge2y+A/IMConfYhFCKwfeWUpaI0y8s=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=ugOxBwA3FL2ysPncyT0dL2kzR5yDd8GwXD//yWkunCpRGs2Quho+XSsQCMjtv0kqW
-	 EaMohZ3h3qzELq4jX6owFyMzlzULNLTp1cXSYYfxFrlqHBiXy25j8y/Dp5fIuX29x+
-	 R7UeRmPBz5ejJS91LjYUpJ56Vah4GS4eUaCy2nxH05BQO/2/a23HICnUKG5xtoapRD
-	 7M6PqUXj5ksfK569MvkP61pEgXuCqUGdqMwaXVQO0qqcCT+w9bDW1CHwoSJxfhdmNl
-	 fE9y3ultEzwVb45ezqP4TnCSePpfhvQkmmfP3j+xU/86hAUaPysYWbL89T+9ev/eMp
-	 xTyWQ35H/MNwQ==
+	b=YbrVwxKKcH/v9qcZmoXNe0xqwGJFXcFdrtw6FEjgjbvvSFAePGkoX+rnBYdfnhliu
+	 XD9qA1h/vPB6031LlwLTA43rvwHcPAz9lYus19FEIAVxLqdMB8PzUg3MdoJJ+fY7/w
+	 82pnCytVchsdS02ZLDPtMuo0r+R3inVIDo+cvSJ0yV4SMWr7D5Ebx8R+hhIjJvaU3e
+	 MNkiJPJAHoRggDycDlFXJZLISJtjNOb/0UDA5vXMWyFuqJx+TWYSjphy9JrdWgzePY
+	 +BG9wnq/+IhDndKFMAFvkwcizkk8N6W444aJeiagax9NGoSURdIU01EF8H+5BAtm1w
+	 ZTiujc6PCr7RA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 10/12] net: stmmac: tc956x: add TC956x/QPS615
+Subject: Re: [PATCH net-next 11/12] misc: tc956x_pci: add TC956x/QPS615
  support
 Reply-To: sashiko@lists.linux.dev
 To: "Alex Elder" <elder@riscstar.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260501155421.3329862-11-elder@riscstar.com>
-References: <20260501155421.3329862-11-elder@riscstar.com>
+In-Reply-To: <20260501155421.3329862-12-elder@riscstar.com>
+References: <20260501155421.3329862-12-elder@riscstar.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 02 May 2026 15:56:18 +0000
-Message-Id: <20260502155618.EC605C19425@smtp.kernel.org>
+Date: Sat, 02 May 2026 15:56:19 +0000
+Message-Id: <20260502155619.BCDFDC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
-- [High] The RX queue IRQ mapping loop incorrectly checks `res->tx_irq[i]` =
-instead of `res->rx_irq[i]` for failures.
-- [High] DMA address truncation on 32-bit architectures leads to corrupted =
-hardware DMA programming.
-- [High] Mapped IRQs are never disposed, leaking descriptors and causing a =
-WARN on device removal.
-- [Medium] Hardware clocks and resets are leaked on `probe()` and `mac_enab=
-le()` error paths.
-- [Medium] OF node reference leak for `mdio_node` on probe error paths and =
-device removal.
+- [High] Dangling `platform_data` pointer and stateless device link lead to=
+ Use-After-Free
+- [High] Devres lifecycle violation causes memory leak of device links
+- [High] Reference count leak of PCI peer device
+- [High] Missing `pci_free_irq_vectors()` in error paths and remove function
 --
 
-commit e138cc3787ee995063c093b9ca94f6ca453bbcda
-Author: Daniel Thompson <daniel@riscstar.com>
-Subject: net: stmmac: tc956x: add TC956x/QPS615 support
+commit 7eab7fd4b209226034d88bc445ad71c833dda6b7
+Author: Alex Elder <elder@riscstar.com>
 
-This commit adds support for the Toshiba TC956x eMAC/MSIGEN combination,
-implemented as a driver for an auxiliary bus device that bridges TC956x
-level interrupts to PCIe MSIs.
+misc: tc956x_pci: add TC956x/QPS615 support
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-tc956x.c b/drivers=
-/net/ethernet/stmicro/stmmac/dwmac-tc956x.c
-> new file mode 100644
-> index 000000000000..27ff83dd3bd9
-> --- /dev/null
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-tc956x.c
+This commit introduces support for the Toshiba TC956x Ethernet AVB/TSN
+bridge, configuring its PCI functions and creating auxiliary devices to
+support the XGMAC interfaces.
+
+diff --git a/drivers/misc/tc956x_pci.c b/drivers/misc/tc956x_pci.c
+--- /dev/null
++++ b/drivers/misc/tc956x_pci.c
 
 [ ... ]
 
-> +static int tc956x_mac_enable(struct tc956x_data *td)
+> +static struct tc956x_chip *chip_get(struct pci_dev *pdev)
 > +{
-> +	const struct tc956x_chip *chip =3D td->auxbus_data->chip;
-> +	struct plat_stmmacenet_data *plat =3D td->plat;
-> +	u32 id =3D td->auxbus_data->mac_id;
-> +	int ret;
+
+[ ... ]
+
+> +	/* Function 1 has to get the chip structure from function 0 */
+> +	peer =3D pci_get_slot(pdev->bus, PCI_DEVFN(PCI_SLOT(devfn), 0));
+> +	if (!peer)
+> +		return ERR_PTR(-ENXIO);
+
+Does this leak the pci_dev reference count?
+
+pci_get_slot() returns a device with its reference count incremented, but I
+do not see a matching pci_dev_put(peer) in either the success path or when
+returning -EPROBE_DEFER below.
+
 > +
-> +	tc956x_clock_enable(chip, id, MAC_CLOCK_TX);
-> +	tc956x_clock_enable(chip, id, MAC_CLOCK_RX);
-> +	tc956x_clock_enable(chip, id, MAC_CLOCK_ALL);
-> +	if (id)
-> +		tc956x_clock_enable(chip, id, MAC_CLOCK_RMII);
+> +	/* If function 0 hasn't set up the chip yet, try again later */
+> +	chip =3D dev_get_platdata(&peer->dev);
+> +	if (!chip)
+> +		return ERR_PTR(-EPROBE_DEFER);
 > +
-> +	/* Set the speed related registers */
-> +	ret =3D tc956x_mac_configure(td, plat->max_speed);
+> +	/* Mark function 1's device as dependent on function 0 */
+> +	link =3D device_link_add(dev, &peer->dev, DL_FLAG_STATELESS);
+
+Is DL_FLAG_STATELESS safe to use here?
+
+Stateless links do not enforce unbind ordering. If function 0 is unbound by
+the user, its devres will free the chip structure and unmap the MMIO regions
+while function 1 remains bound. Will function 1 cause a use-after-free if it
+accesses the freed chip state or unmapped MMIO space?
+
+> +	if (!link)
+> +		return ERR_PTR(-ENODEV);
+> +
+> +	ret =3D devm_add_action_or_reset(&peer->dev, chip_link_del, link);
+
+Should this cleanup action be attached to dev (function 1) instead of
+peer->dev (function 0)?
+
+If function 1's probe fails downstream, its own devres list is rolled back,
+but this cleanup action remains attached to function 0. Will this leak the
+device link and accumulate duplicate devres actions on function 0 each time
+function 1 defers its probe?
+
 > +	if (ret)
-> +		return ret;
-
-If tc956x_mac_configure() fails, will this leak the clocks that were just
-enabled since tc956x_clock_disable() is not called?
+> +		return ERR_PTR(ret);
+> +
+> +	return chip;
+> +}
 
 [ ... ]
 
-> +static void tc956x_dma_init_rx_chan(struct stmmac_priv *priv,
-> +				    void __iomem *ioaddr,
-> +				    struct stmmac_dma_cfg *dma_cfg,
-> +				    dma_addr_t phy, u32 chan)
+> +static int
+> +tc956x_function_probe(struct pci_dev *pdev, const struct pci_device_id *=
+id)
 > +{
-> +	dma_addr_t translated =3D phy + TC956X_SLV00_SRC_ADDR;
-
-If dma_addr_t is 32-bit on the target architecture, will adding
-TC956X_SLV00_SRC_ADDR (0x1000000000ULL) to phy truncate the result and cause
-the upper 32 bits to be 0?=20
-
-Should translated be explicitly typed as u64? The same pattern appears
-in tc956x_dma_init_tx_chan(), tc956x_desc_set_addr(), and
-tc956x_desc_set_sec_addr().
 
 [ ... ]
 
-> +static int tc956x_dwmac_parse_dt(struct tc956x_data *td)
-> +{
-> +	struct device_node *mdio_node;
-> +	struct device *dev =3D td->dev;
-> +	struct device_node *np;
+> +	/* We called pcim_enable_device() so this will be freed automatically */
+> +	ret =3D pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_MSI);
+> +	if (ret < 1)
+> +		return dev_err_probe(dev, ret ? : -EIO,
+> +				     "failed to allocate IRQ vectors\n");
+
+Is this comment accurate?
+
+According to PCI subsystem guidelines, pci_alloc_irq_vectors() requires
+explicit manual cleanup. Should the error paths below and the remove functi=
+on
+call pci_free_irq_vectors(pdev) to prevent leaking system IRQ resources?
+
 > +
-> +	np =3D dev_of_node(dev);
-> +	if (!np)
-> +		return dev_err_probe(dev, -EINVAL, "no devicetree node\n");
+> +	ret =3D pci_irq_vector(pdev, 0);
+> +	if (ret < 1)
+> +		return dev_err_probe(dev, ret ? : -EIO, "failed to get IRQ\n");
+> +	msigen_irq =3D ret;
 > +
-> +	/* Find the MDIO bus */
-> +	for_each_child_of_node(np, mdio_node) {
-> +		if (of_device_is_compatible(mdio_node,
-> +					    "snps,dwmac-mdio"))
-> +			break;
-> +	}
+> +	ret =3D chip_init(chip, pdev);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to initialize chip\n");
 > +
-> +	/* Pass the MDIO bus (if there is one) to the core driver */
-> +	if (mdio_node) {
-> +		td->plat->mdio_node =3D mdio_node;
-> +		td->plat->mdio_bus_data->needs_reset =3D true;
-> +	}
+> +	/* We're ready; the other function can now probe */
+> +	dev->platform_data =3D chip;
+> +
+> +	ret =3D function_xgmac_adev_add(pdev, chip, msigen_irq);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to add xgmap device\n");
+
+If function_xgmac_adev_add() fails, devm_kzalloc() will automatically free
+the chip structure upon exit, but dev->platform_data is not cleared.
+
+Will function 1's chip_get() retrieve this dangling pointer via
+dev_get_platdata() and cause a use-after-free when it probes later?
+
 > +
 > +	return 0;
 > +}
-
-Since the loop breaks early when a compatible node is found, does this leak
-the reference to mdio_node?=20
-
-Is a call to of_node_put() needed in tc956x_dwmac_remove() and on probe
-error paths?
-
-[ ... ]
-
-> +static int tc956x_stmmac_resources_init(struct tc956x_data *td,
-> +					struct stmmac_resources *res)
+> +
+> +static void tc956x_function_remove(struct pci_dev *pdev)
 > +{
-> +	struct irq_domain *irq_domain =3D td->irq_domain;
-> +	u32 i;
+> +	struct tc956x_chip *chip =3D dev_get_platdata(&pdev->dev);
 > +
-> +	res->irq =3D irq_create_mapping(irq_domain, HWIRQ_EVENT);
-> +	if (!res->irq)
-> +		return -EINVAL;
+> +	pci_clear_master(pdev);
 > +
-> +	for (i =3D 0; i < td->plat->tx_queues_to_use; i++) {
-> +		res->tx_irq[i] =3D irq_create_mapping(irq_domain, HWIRQ_TX0 + i);
-> +		if (!res->tx_irq[i])
-> +			return -EINVAL;
-> +	}
-> +
-> +	for (i =3D 0; i < td->plat->rx_queues_to_use; i++) {
-> +		res->rx_irq[i] =3D irq_create_mapping(irq_domain, HWIRQ_RX0 + i);
-> +		if (!res->tx_irq[i])
-> +			return -EINVAL;
-> +	}
-
-Should this be checking res->rx_irq[i] instead of res->tx_irq[i]?=20
-
-If tx_irq[i] was previously set during the TX mapping loop, this check won't
-catch RX mapping failures and uninitialized IRQs could be left in the
-resource structure.
-
-[ ... ]
-
-> +static int tc956x_dwmac_probe(struct auxiliary_device *adev,
-> +			      const struct auxiliary_device_id *id)
-> +{
-
-[ ... ]
-
-> +	ret =3D tc956x_mac_enable(td);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "failed to enable MAC\n");
-> +
-> +	ret =3D stmmac_dvr_probe(dev, td->plat, &res);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "failed stmmac probe\n");
-> +
-> +	return 0;
+> +	if (&pdev->dev =3D=3D chip->dev)
+> +		chip_msigen_disable(chip);
 > +}
 
-Does this error path need to call tc956x_mac_disable(td) to unwind the
-hardware state if stmmac_dvr_probe() fails?
-
-[ ... ]
-
-> +static void tc956x_dwmac_remove(struct auxiliary_device *adev)
-> +{
-> +	struct device *dev =3D &adev->dev;
-> +	struct net_device *ndev =3D dev_get_drvdata(dev);
-> +	struct stmmac_priv *priv =3D netdev_priv(ndev);
-> +	struct tc956x_data *td =3D priv->plat->bsp_priv;
-> +
-> +	stmmac_dvr_remove(dev);
-> +	tc956x_mac_disable(td);
-> +}
-
-Are the IRQs created by irq_create_mapping() leaking here?
-
-There appear to be no calls to irq_dispose_mapping() on device removal or
-probe error paths. While IRQ_DOMAIN_FLAG_DESTROY_GC frees the generic
-chip data, the descriptors might leak and trigger a warning in
-irq_domain_remove().
+Does this function need a call to pci_free_irq_vectors(pdev) to clean up the
+allocated IRQ vectors before returning?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260501155421.3329=
-862-1-elder@riscstar.com?part=3D10
+862-1-elder@riscstar.com?part=3D11
