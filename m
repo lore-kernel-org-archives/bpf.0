@@ -1,139 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23DB382F2B
-	for <bpf@vger.kernel.org>; Sat,  2 May 2026 15:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC74E382F2B
+	for <bpf@vger.kernel.org>; Sat,  2 May 2026 15:56:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777737376; cv=none; b=bovdJGcnnYQP3tsM+MoPppT9rKVOkXHAdGscoSDr5/vjZaMxYxqBUeqbTtPtBwQl5FxHygSNquMT1pyJsDYDpesrmzZNIMX8OMYTMxM4wIEzMdXNTKeOpFt1guzti+ctMMTb1XfVEUXC71Heqb+rVNbLy7DylClu3s2JcWHITQk=
+	t=1777737377; cv=none; b=JAlDr9hMNUoGRfC2K9wjOB/z0mjhp4h0ULJN21LymPAxZEyx0PLETy6iD79WSC04/BGiBvCnHBvxbMYtn77MxZvowTd/g0NKS/6JUBzXBBBhjlbUTq7322ysGQdgEDWuaSBzmpfsWUqnvuScrZuVm4xvBt2JsQLHuM7KAxPvccA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777737376; c=relaxed/simple;
-	bh=K/X9JDenG83+2FGxFcZgksyjcT9TnyvdqZvXbAjY57A=;
+	s=arc-20240116; t=1777737377; c=relaxed/simple;
+	bh=J6dF+o+bXxTVddBTRRABSaYMyOCfv+dYYRcLJPWq3Tk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=KdNPgEOQwgGQMokGU830IQOdbVGHUPUa2AJFJQXamcuSEHl11Y07JZH9gPRxG8JWi115CLK6RKTLssfHO/J9zh9mw+xgAveHokgskGVhXMCXNUXFFpdJ5IQsxfJICN4a2h7hiJ85ACmRUlwwi9iW/dy/y97wqrVSP9RYxCXXH9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sNpHK6pM; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=UkqjUUxf5Ezn+XSd64G2+zGnbSbUAEJ38ErbUD5VkDqxMog6f5wM7JOApDtc/8/4YnIDJ6om13n9o6OJLhwirFE2EDETFQxgjP3idP8dWmGFfRZe78AicdVbIVm9isLpfsH5IOsm2naa5n7VTOSmC1Tl/pMJMQnQHhdvSEcrQdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IC17W6UO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sNpHK6pM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82EA3C19425;
-	Sat,  2 May 2026 15:56:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IC17W6UO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51FDCC19425;
+	Sat,  2 May 2026 15:56:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777737376;
-	bh=K/X9JDenG83+2FGxFcZgksyjcT9TnyvdqZvXbAjY57A=;
+	s=k20201202; t=1777737377;
+	bh=J6dF+o+bXxTVddBTRRABSaYMyOCfv+dYYRcLJPWq3Tk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=sNpHK6pMthlQHyh8ral5J1uCKt3qVtX4M2k3XoEI6R+UL90r+TsnktomM+Aqo1H48
-	 X743WUkQxX4SXxfXG/Y1GbKKDRDWZ255WHgYUyVL976WQx6/rOk+cXVq3aH070eRVV
-	 iTuH5WLv8EzblFGwrxHtwLAkqy/7qCeoIiT95Zh5aHydxNTXSX9z3xnnq4EZzO8BbZ
-	 6HJhLnJTB2nRhpTRjh/3nEmuRQ+ZFse5D50hCuTJNHXBhEvd9fQrkIBnsj/QWPUTf+
-	 TvvG8XnmxbY2Sb4uH2TZjjUhb20VoH7HODyp+l2o6+n54jURSIPKFpq/dyOVzULeav
-	 LNQzkWTFEV9kA==
+	b=IC17W6UOxBx8KxrbNkHLiohfBX1rVNGUN13IiXBybUv/kxEl1WDCkjMwxzFFquzcG
+	 WCI/sij0X9OlrHAcN0txXU48sRTRiNkpfL+QqS+CZu2qJ+1SyqGDWdkUiDq4EOwe14
+	 7quVRk9T7HbcLHohPnadM73Lgfe9QWx/vNnvHDW6pAabDyrP9gEIldWxBXew7GjpqL
+	 O0rJvoOSdbC7zk1vl4GgZpLjDYXVyu4ftb3+bqI+zWWGY3SStPx6tCYxkToqV48MYv
+	 sRTQUf23Ffy+CCIsZnmU/lOvxaZcIWG3ilaQnYS4FtvjpJRm+PA/PgnotUjWq71Cba
+	 Ti//47sYm9+6Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 04/12] net: stmmac: dma: create a separate
- dma_device pointer
+Subject: Re: [PATCH net-next 03/12] net: pcs: pcs-xpcs: Preserve
+ BMCR_ANENBLE during link up
 Reply-To: sashiko@lists.linux.dev
 To: "Alex Elder" <elder@riscstar.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260501155421.3329862-5-elder@riscstar.com>
-References: <20260501155421.3329862-5-elder@riscstar.com>
+In-Reply-To: <20260501155421.3329862-4-elder@riscstar.com>
+References: <20260501155421.3329862-4-elder@riscstar.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 02 May 2026 15:56:15 +0000
-Message-Id: <20260502155616.82EA3C19425@smtp.kernel.org>
+Date: Sat, 02 May 2026 15:56:16 +0000
+Message-Id: <20260502155617.51FDCC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] DMA mappings are permanently leaked if an error occurs mid-packet =
-in `stmmac_xmit`, `stmmac_tso_xmit`, or `jumbo_frm`.
-- [High] In `jumbo_frm()` (`chain_mode.c` and `ring_mode.c`), assigning a `=
-dma_addr_t` to an `unsigned int` breaks `dma_mapping_error()` detection.
+- [High] Unconditionally forcing BMCR_ANENABLE for SGMII interfaces during =
+out-of-band link configuration breaks forced and fixed links.
 --
 
-commit 152df859f4e94baeb0ca419c5b87bcb9e5f13d3d
-Author: Alex Elder <elder@riscstar.com>
+commit 3fde24f4d6c6c8c6b563418e32cec40953863f8a
+Author: Daniel Thompson <daniel@riscstar.com>
 
-net: stmmac: dma: create a separate dma_device pointer
+net: pcs: pcs-xpcs: Preserve BMCR_ANENBLE during link up
 
-This commit adds a second dma_device pointer to the stmmac_priv structure.
-The new pointer handles all DMA operations independently from the normal
-device pointer, allowing better management of common internal IPs for
-specialized Ethernet bridge chips.
+This commit unconditionally sets the BMCR_ANENABLE bit for SGMII interfaces
+during link up. This change was introduced to resolve an issue on a specific
+hardware platform where the MAC fails to transmit packets despite negotiati=
+ng
+the speed correctly.
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/chain_mode.c b/drivers/n=
-et/ethernet/stmicro/stmmac/chain_mode.c
-> index fc04a23342cf..331e6523ee01 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/chain_mode.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/chain_mode.c
-> @@ -34,10 +34,10 @@ static int jumbo_frm(struct stmmac_tx_queue *tx_q, st=
-ruct sk_buff *skb,
->  	buf_len =3D min_t(unsigned int, nopaged_len, bmax);
->  	len =3D nopaged_len - buf_len;
+> diff --git a/drivers/net/pcs/pcs-xpcs.c b/drivers/net/pcs/pcs-xpcs.c
+> index b2c84b7e1e11..1d62d5b31c61 100644
+> --- a/drivers/net/pcs/pcs-xpcs.c
+> +++ b/drivers/net/pcs/pcs-xpcs.c
+> @@ -1263,11 +1263,14 @@ static void xpcs_link_up_sgmii_1000basex(struct d=
+w_xpcs *xpcs,
+>  					 phy_interface_t interface,
+>  					 int speed, int duplex)
+>  {
+> +	u16 an_enable;
+>  	int ret;
 > =20
-> -	des2 =3D dma_map_single(priv->device, skb->data,
-> +	des2 =3D dma_map_single(priv->dma_device, skb->data,
->  			      buf_len, DMA_TO_DEVICE);
->  	desc->des2 =3D cpu_to_le32(des2);
-> -	if (dma_mapping_error(priv->device, des2))
-> +	if (dma_mapping_error(priv->dma_device, des2))
+>  	if (neg_mode =3D=3D PHYLINK_PCS_NEG_INBAND_ENABLED)
+>  		return;
+> =20
+> +	an_enable =3D (interface =3D=3D PHY_INTERFACE_MODE_SGMII ? BMCR_ANENABL=
+E : 0);
+> +
 
-This isn't a bug introduced by this patch, but since the patch modifies the=
-se
-DMA mapping calls, it brings up a potential issue.
+Will this break forced and fixed links by enabling auto-negotiation?
 
-Does the use of an unsigned int for des2 break error detection?
+This function handles forcing the link state when in-band auto-negotiation
+is explicitly disabled, as indicated by the early return for
+PHYLINK_PCS_NEG_INBAND_ENABLED. When this function continues, phylink is
+requesting out-of-band negotiation or a fixed link.
 
-On 64-bit architectures, dma_map_single() returns a 64-bit dma_addr_t.
-Assigning this to the unsigned int des2 truncates the upper 32 bits.
+By unconditionally setting BMCR_ANENABLE here, the hardware might ignore
+the fixed speed and duplex bits, instead waiting for auto-negotiation to
+complete. If the system uses a fixed link (e.g., MAC-to-MAC) or connects
+to a PHY with in-band signaling disabled, SGMII AN base pages will never
+arrive.
 
-If the mapping fails, it returns an error code that becomes 0xFFFFFFFF after
-truncation. When this truncated value is passed to dma_mapping_error(), it
-is cast back to a 64-bit value, which no longer matches the expected error
-code representation.
-
-Will this bypass the error check and record an invalid physical address in
-tx_q->tx_skbuff_dma[entry].buf? This same pattern also appears in the
-jumbo_frm() function in ring_mode.c.
+Could this cause the MAC PCS to wait indefinitely, failing to establish a
+link and dropping all traffic?
 
 [ ... ]
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
-net/ethernet/stmicro/stmmac/stmmac_main.c
-> index ca68248dbc78..1104cf750295 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-[ ... ]
-> @@ -4876,9 +4876,9 @@ static netdev_tx_t stmmac_xmit(struct sk_buff *skb,=
- struct net_device *dev)
-> =20
->  		desc =3D stmmac_get_tx_desc(priv, tx_q, entry);
-> =20
-> -		dma_addr =3D skb_frag_dma_map(priv->device, frag, 0, frag_size,
-> -					    DMA_TO_DEVICE);
-> -		if (dma_mapping_error(priv->device, dma_addr))
-> +		dma_addr =3D skb_frag_dma_map(priv->dma_device, frag, 0,
-> +					    frag_size, DMA_TO_DEVICE);
-> +		if (dma_mapping_error(priv->dma_device, dma_addr))
->  			goto dma_map_err; /* should reuse desc w/o issues */
 
-Similarly, can this leak DMA mappings if an error occurs mid-packet?
-
-If skb_frag_dma_map() fails for a multi-fragment packet, the code jumps
-to the dma_map_err label. However, tx_q->cur_tx is only updated at the very
-end of the function upon complete success.
-
-Because cur_tx is not advanced on the error path, stmmac_tx_clean() won't
-unmap these partially filled descriptor entries. On the next transmission,
-the driver will start at the unmodified cur_tx index and blindly overwrite
-the tx_skbuff_dma entries.
-
-Could this result in permanently leaking the previously successful DMA
-mappings? The same concern appears to apply to stmmac_tso_xmit() and
-jumbo_frm() where multiple fragments are mapped sequentially.
-
-[ ... ]
+>  	ret =3D xpcs_write(xpcs, MDIO_MMD_VEND2, MII_BMCR,
+> -			 mii_bmcr_encode_fixed(speed, duplex));
+> +			 mii_bmcr_encode_fixed(speed, duplex) | an_enable);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260501155421.3329=
-862-1-elder@riscstar.com?part=3D4
+862-1-elder@riscstar.com?part=3D3
