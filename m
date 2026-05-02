@@ -1,42 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE62382F2B
-	for <bpf@vger.kernel.org>; Sat,  2 May 2026 15:56:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6613E353ED9
+	for <bpf@vger.kernel.org>; Sat,  2 May 2026 15:56:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777737378; cv=none; b=EV8Po3wAA5rz5rWPL2w0OBM/m7b4No6M2LckAQMK9Bjixkyhx9DW6hH0QloncsGngFxLabfmB2iJzikIxWriMBST0LO4lLQ8+rDXxcfr9jLXhlUT2ElEkP6HILqJQRMHuWMi9BXjQEdv5hia5DqIW2EhkoyMUo2TKYFTK948GpA=
+	t=1777737379; cv=none; b=mP/E+7jqN4s2Ogokp2w69uuf97U21SRQdlHHNofsH1HRAmHo5ZhT4HOIgPuL9TIew1GV7aT6o+9Ez/yuNxlnTaYQlZNiDvK3OW5YQ0kSoz+qGNStGt2bsaWvEqLvhAOmUzxl9Q95OMc0Cfmmxmo1xn1yvRyTsrdlgT6Kn7jSxVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777737378; c=relaxed/simple;
-	bh=fwkaiDzOmgv4OmRIlzriCd3RkFsQGVlLeZFs8PrK3XM=;
+	s=arc-20240116; t=1777737379; c=relaxed/simple;
+	bh=2fvirarBl916LCvUw0OuvqLNKnStFg47YuzKgYYIuAg=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Cw+okX2ADhXf+jJZQSFDEntytU4tFCUPO9qaG6VQHFZp6Wxo+6zPH2wtJQZeUdx5nSHgoP6qM5ti4ic4MISAe0V/IY0BM1fNwXjl9kFm4OA0vTIuZiFnDZW1ZW+kQwQwB5sBGkGUd3rWQjXL1VHmDp4kDJdkfUjOnaC0AKy9ofc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cKNNLDQq; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=aWwMCmJuvXjFVuFBzdP96NDKHt3m35ff7dzLwvRS2p4FLWoql+1OLaG/dUcbEi+39NliPkJzkJ/OrN2q7IlXNSud+S+j24dorT7eXzoDuz+zJ7z0LsBkgJDn61nNsJNDvk4AQotcncRebm3TqnzoF3UHzKmXwglgx9IM2ppGGN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ugOxBwA3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cKNNLDQq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E65FC19425;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ugOxBwA3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC605C19425;
 	Sat,  2 May 2026 15:56:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777737378;
-	bh=fwkaiDzOmgv4OmRIlzriCd3RkFsQGVlLeZFs8PrK3XM=;
+	s=k20201202; t=1777737379;
+	bh=2fvirarBl916LCvUw0OuvqLNKnStFg47YuzKgYYIuAg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=cKNNLDQqtb8vckJ4NPjjOuCIGCn4WX7KJkVwQa0rxWD60me9qM2zXMrubaz5zBpV1
-	 s7r5Gw8YlGMQ9DH1e+ffpcC1ttlGI674POlHqmhAKC+JAsB/O3ioM+3L+IEo98xllT
-	 vyKsQrjZmK+0ohfunfN7VkPXt8m0v+p7L1OwMIyHhEE0aw9JWvkG5p2RRo2eWx7ZY/
-	 mEtTr9CKzSeyLpbswfwYGYq3eerxAkY6tprDhLwFxPhNbBz9X4TWuKJF8ekJHLVocd
-	 Khr50vXAl/y2Rnm60DCTdQ1BamaPmkREhMC/msiZRwt29LfThl0yzWLBOv0hBWejWC
-	 GTnsGV7vtnO8Q==
+	b=ugOxBwA3FL2ysPncyT0dL2kzR5yDd8GwXD//yWkunCpRGs2Quho+XSsQCMjtv0kqW
+	 EaMohZ3h3qzELq4jX6owFyMzlzULNLTp1cXSYYfxFrlqHBiXy25j8y/Dp5fIuX29x+
+	 R7UeRmPBz5ejJS91LjYUpJ56Vah4GS4eUaCy2nxH05BQO/2/a23HICnUKG5xtoapRD
+	 7M6PqUXj5ksfK569MvkP61pEgXuCqUGdqMwaXVQO0qqcCT+w9bDW1CHwoSJxfhdmNl
+	 fE9y3ultEzwVb45ezqP4TnCSePpfhvQkmmfP3j+xU/86hAUaPysYWbL89T+9ev/eMp
+	 xTyWQ35H/MNwQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 09/12] gpio: tc956x: add TC956x/QPS615 support
+Subject: Re: [PATCH net-next 10/12] net: stmmac: tc956x: add TC956x/QPS615
+ support
 Reply-To: sashiko@lists.linux.dev
 To: "Alex Elder" <elder@riscstar.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260501155421.3329862-10-elder@riscstar.com>
-References: <20260501155421.3329862-10-elder@riscstar.com>
+In-Reply-To: <20260501155421.3329862-11-elder@riscstar.com>
+References: <20260501155421.3329862-11-elder@riscstar.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 02 May 2026 15:56:17 +0000
-Message-Id: <20260502155618.2E65FC19425@smtp.kernel.org>
+Date: Sat, 02 May 2026 15:56:18 +0000
+Message-Id: <20260502155618.EC605C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,135 +46,179 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 5 potential issue(=
 s) to consider:
-- [High] Function signature mismatch for `tc956x_gpio_set` causing build fa=
-ilures.
-- [High] Sleeping in atomic context bug on PREEMPT_RT due to `can_sleep =3D=
- false`.
-- [Medium] Uninitialized stack variable used if `regmap_read()` fails.
-- [Medium] Ignored `regmap_update_bits()` return value can cause incorrect =
-hardware state.
-- [Low] Kconfig depends on a non-existent symbol.
+- [High] The RX queue IRQ mapping loop incorrectly checks `res->tx_irq[i]` =
+instead of `res->rx_irq[i]` for failures.
+- [High] DMA address truncation on 32-bit architectures leads to corrupted =
+hardware DMA programming.
+- [High] Mapped IRQs are never disposed, leaking descriptors and causing a =
+WARN on device removal.
+- [Medium] Hardware clocks and resets are leaked on `probe()` and `mac_enab=
+le()` error paths.
+- [Medium] OF node reference leak for `mdio_node` on probe error paths and =
+device removal.
 --
 
-commit ff81a192de0fcb35d3c4b8a32cad777cd0bff29e
-Author: Alex Elder <elder@riscstar.com>
+commit e138cc3787ee995063c093b9ca94f6ca453bbcda
+Author: Daniel Thompson <daniel@riscstar.com>
+Subject: net: stmmac: tc956x: add TC956x/QPS615 support
 
-gpio: tc956x: add TC956x/QPS615 support
+This commit adds support for the Toshiba TC956x eMAC/MSIGEN combination,
+implemented as a driver for an auxiliary bus device that bridges TC956x
+level interrupts to PCIe MSIs.
 
-This commit adds support for the GPIO controller embedded in the Toshiba
-TC956x Ethernet-AVB/TSN bridge. It implements an auxiliary device driver
-for the GPIO block using regmap.
-
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-[ ... ]
-> +config GPIO_TC956X
-> +	tristate "Toshiba TC956X GPIO support"
-> +	depends on TOSHIBA_TC956X_PCI
-
-Does TOSHIBA_TC956X_PCI exist in the tree at this point? Reference to a
-non-existent config symbol causes silent build failures. If it is added
-later in the patch series, this temporarily leaves the driver unselectable
-and breaks bisectability.
-
-[ ... ]
-> diff --git a/drivers/gpio/gpio-tc956x.c b/drivers/gpio/gpio-tc956x.c
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-tc956x.c b/drivers=
+/net/ethernet/stmicro/stmmac/dwmac-tc956x.c
+> new file mode 100644
+> index 000000000000..27ff83dd3bd9
 > --- /dev/null
-> +++ b/drivers/gpio/gpio-tc956x.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-tc956x.c
+
 [ ... ]
-> +static int tc956x_gpio_get_direction(struct gpio_chip *gc, unsigned int =
-offset)
+
+> +static int tc956x_mac_enable(struct tc956x_data *td)
 > +{
-> +	struct tc956x_gpio *gpio =3D gpiochip_get_data(gc);
-> +	u32 reg;
-> +	u32 val;
+> +	const struct tc956x_chip *chip =3D td->auxbus_data->chip;
+> +	struct plat_stmmacenet_data *plat =3D td->plat;
+> +	u32 id =3D td->auxbus_data->mac_id;
+> +	int ret;
 > +
-> +	if (test_bit(offset, gpio->input_only))
-> +		return GPIO_LINE_DIRECTION_IN;
+> +	tc956x_clock_enable(chip, id, MAC_CLOCK_TX);
+> +	tc956x_clock_enable(chip, id, MAC_CLOCK_RX);
+> +	tc956x_clock_enable(chip, id, MAC_CLOCK_ALL);
+> +	if (id)
+> +		tc956x_clock_enable(chip, id, MAC_CLOCK_RMII);
 > +
-> +	reg =3D offset < 32 ? GPIO_EN0_OFFSET : GPIO_EN1_OFFSET;
-> +
-> +	regmap_read(gpio->regmap, reg, &val);
+> +	/* Set the speed related registers */
+> +	ret =3D tc956x_mac_configure(td, plat->max_speed);
+> +	if (ret)
+> +		return ret;
 
-If regmap_read() fails, does it leave the stack variable val uninitialized?
-Should the return value be checked before evaluating val in the next line?
+If tc956x_mac_configure() fails, will this leak the clocks that were just
+enabled since tc956x_clock_disable() is not called?
 
-> +	if (val & BIT(offset % 32))
-> +		return GPIO_LINE_DIRECTION_IN;
-> +
-> +	return GPIO_LINE_DIRECTION_OUT;
-> +}
 [ ... ]
-> +static int tc956x_gpio_direction_output(struct gpio_chip *gc,
-> +					unsigned int offset, int value)
+
+> +static void tc956x_dma_init_rx_chan(struct stmmac_priv *priv,
+> +				    void __iomem *ioaddr,
+> +				    struct stmmac_dma_cfg *dma_cfg,
+> +				    dma_addr_t phy, u32 chan)
 > +{
-> +	struct tc956x_gpio *gpio =3D gpiochip_get_data(gc);
-> +	u32 vreg;
-> +	u32 dreg;
-> +	u32 mask;
+> +	dma_addr_t translated =3D phy + TC956X_SLV00_SRC_ADDR;
+
+If dma_addr_t is 32-bit on the target architecture, will adding
+TC956X_SLV00_SRC_ADDR (0x1000000000ULL) to phy truncate the result and cause
+the upper 32 bits to be 0?=20
+
+Should translated be explicitly typed as u64? The same pattern appears
+in tc956x_dma_init_tx_chan(), tc956x_desc_set_addr(), and
+tc956x_desc_set_sec_addr().
+
 [ ... ]
-> +	/* Set output value first, then direction */
-> +	regmap_update_bits(gpio->regmap, vreg, mask, value ? mask : 0);
 
-If this first regmap_update_bits() fails, should the function bail out
-early? Ignoring the error and proceeding to change the direction to output
-anyway could actively drive an unintended logic level onto the pin.
-
-> +
-> +	return regmap_update_bits(gpio->regmap, dreg, mask, 0);
-> +}
-> +
-> +static int tc956x_gpio_get(struct gpio_chip *gc, unsigned int offset)
+> +static int tc956x_dwmac_parse_dt(struct tc956x_data *td)
 > +{
-> +	u32 reg =3D offset < 32 ? GPIO_IN0_OFFSET : GPIO_IN1_OFFSET;
-> +	struct tc956x_gpio *gpio =3D gpiochip_get_data(gc);
-> +	u32 val;
+> +	struct device_node *mdio_node;
+> +	struct device *dev =3D td->dev;
+> +	struct device_node *np;
 > +
-> +	regmap_read(gpio->regmap, reg, &val);
-
-Similar to tc956x_gpio_get_direction(), does this leave val uninitialized
-and return unpredictable states if regmap_read() fails?
-
+> +	np =3D dev_of_node(dev);
+> +	if (!np)
+> +		return dev_err_probe(dev, -EINVAL, "no devicetree node\n");
 > +
-> +	return val & BIT(offset % 32) ? 1 : 0;
+> +	/* Find the MDIO bus */
+> +	for_each_child_of_node(np, mdio_node) {
+> +		if (of_device_is_compatible(mdio_node,
+> +					    "snps,dwmac-mdio"))
+> +			break;
+> +	}
+> +
+> +	/* Pass the MDIO bus (if there is one) to the core driver */
+> +	if (mdio_node) {
+> +		td->plat->mdio_node =3D mdio_node;
+> +		td->plat->mdio_bus_data->needs_reset =3D true;
+> +	}
+> +
+> +	return 0;
 > +}
-> +
-> +static int tc956x_gpio_set(struct gpio_chip *gc, unsigned int offset, in=
-t value)
 
-Does the set function pointer in struct gpio_chip expect a void return
-type? Assigning a function returning int could trigger an incompatible
-pointer type compiler error or cause Control Flow Integrity panics at
-runtime.
+Since the loop breaks early when a compatible node is found, does this leak
+the reference to mdio_node?=20
 
-> +{
-> +	u32 reg =3D offset < 32 ? GPIO_OUT0_OFFSET : GPIO_OUT1_OFFSET;
-> +	struct tc956x_gpio *gpio =3D gpiochip_get_data(gc);
-> +	u32 mask =3D BIT(offset % 32);
-> +
-> +	return regmap_update_bits(gpio->regmap, reg, mask, value ? mask : 0);
-> +}
+Is a call to of_node_put() needed in tc956x_dwmac_remove() and on probe
+error paths?
+
 [ ... ]
-> +static int tc956x_gpio_probe(struct auxiliary_device *adev,
-> +			     const struct auxiliary_device_id *id)
+
+> +static int tc956x_stmmac_resources_init(struct tc956x_data *td,
+> +					struct stmmac_resources *res)
 > +{
+> +	struct irq_domain *irq_domain =3D td->irq_domain;
+> +	u32 i;
+> +
+> +	res->irq =3D irq_create_mapping(irq_domain, HWIRQ_EVENT);
+> +	if (!res->irq)
+> +		return -EINVAL;
+> +
+> +	for (i =3D 0; i < td->plat->tx_queues_to_use; i++) {
+> +		res->tx_irq[i] =3D irq_create_mapping(irq_domain, HWIRQ_TX0 + i);
+> +		if (!res->tx_irq[i])
+> +			return -EINVAL;
+> +	}
+> +
+> +	for (i =3D 0; i < td->plat->rx_queues_to_use; i++) {
+> +		res->rx_irq[i] =3D irq_create_mapping(irq_domain, HWIRQ_RX0 + i);
+> +		if (!res->tx_irq[i])
+> +			return -EINVAL;
+> +	}
+
+Should this be checking res->rx_irq[i] instead of res->tx_irq[i]?=20
+
+If tx_irq[i] was previously set during the TX mapping loop, this check won't
+catch RX mapping failures and uninitialized IRQs could be left in the
+resource structure.
+
 [ ... ]
-> +	gc->base =3D -1;
-> +	gc->ngpio =3D TC956X_GPIO_COUNT;
-> +	gc->can_sleep =3D false;
 
-Is it safe to set can_sleep to false while using a regmap? By default,
-MMIO regmaps use spinlock_t for synchronization, which becomes a sleepable
-rt_mutex on PREEMPT_RT kernels. Calling these GPIO methods from an atomic
-context on PREEMPT_RT could cause a panic.
+> +static int tc956x_dwmac_probe(struct auxiliary_device *adev,
+> +			      const struct auxiliary_device_id *id)
+> +{
 
+[ ... ]
+
+> +	ret =3D tc956x_mac_enable(td);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to enable MAC\n");
 > +
-> +	dev_set_drvdata(dev, gpio);
+> +	ret =3D stmmac_dvr_probe(dev, td->plat, &res);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed stmmac probe\n");
 > +
-> +	return devm_gpiochip_add_data(dev, gc, gpio);
+> +	return 0;
 > +}
+
+Does this error path need to call tc956x_mac_disable(td) to unwind the
+hardware state if stmmac_dvr_probe() fails?
+
+[ ... ]
+
+> +static void tc956x_dwmac_remove(struct auxiliary_device *adev)
+> +{
+> +	struct device *dev =3D &adev->dev;
+> +	struct net_device *ndev =3D dev_get_drvdata(dev);
+> +	struct stmmac_priv *priv =3D netdev_priv(ndev);
+> +	struct tc956x_data *td =3D priv->plat->bsp_priv;
+> +
+> +	stmmac_dvr_remove(dev);
+> +	tc956x_mac_disable(td);
+> +}
+
+Are the IRQs created by irq_create_mapping() leaking here?
+
+There appear to be no calls to irq_dispose_mapping() on device removal or
+probe error paths. While IRQ_DOMAIN_FLAG_DESTROY_GC frees the generic
+chip data, the descriptors might leak and trigger a warning in
+irq_domain_remove().
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260501155421.3329=
-862-1-elder@riscstar.com?part=3D9
+862-1-elder@riscstar.com?part=3D10
