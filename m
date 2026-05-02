@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C31540DFB4;
-	Sat,  2 May 2026 16:46:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1439A1E633C;
+	Sat,  2 May 2026 16:47:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777740363; cv=none; b=lWr6H436E2CfIvDkCsJyp3h8EbjTT09gxpk5/T7WZGdBtPruivaoFWWiAa8cAr2Iew2CWjk1ZTAX+qIxIP8+5QJzYubLtDc8zIuB3k67Ab0nsj/B3K/9tC7iPfCJ1VTKawmSIE3/aQuneKDoCL08KidMxgOOc3UF4iPtrr8KGP0=
+	t=1777740436; cv=none; b=M3KBxGmFqdA5NpwjHUnpkflCSrO9IO4Dnnj8NNNhQLU8CXmvT/pTcwzx7hKH4owvg9dO6fMz6Je7eHUC51CPLkEA91UdXneXP0wulEPPtWrazd1Qf2t6T9H2vK5vhjqltRufgbMk9umdFJnXyL8X3r7ZI5FHqW+i2rxF+SH+O94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777740363; c=relaxed/simple;
-	bh=s93VJCDBnvDfrecPRtxHRCkkBez6Fz+HZPYqWbqIAkw=;
+	s=arc-20240116; t=1777740436; c=relaxed/simple;
+	bh=zymvXjOjeTSggFeuoM050BBTeP4ivuV+K0ZODz63sG8=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=R9mKTvcdvy79jBM8bB6wSd2YxNEE02/pBH6BvO8hgidAcutpl8kUgB1Bo+pMcrwi2LZIWJ101cnbDHyV59ZGp/8yFclg171/joZkCDeq54NcZ9KNvmpBppKK/XLjY+TaAkYPXsoRtPCGcaP/Mhx3GG2/mpUVGVDpxtmbZxSe8M0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mM0VFItv; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=uQp/EtTLnNkk6qAMz66zeq5u8bLcgc7gi8wrAoFshW7+AHXdhc+kDwSNZEWFTNXhW7JLLozTeXWJtTpGMRkOBRRbDdhvOW4GXBErqetZDvhMhUn7orn+AcF/05DwP/1X+KVdJ7TaruX8ym+xExD/CznlrcIjYO+HX/QORvE+8DA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C2a0Vi3Q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mM0VFItv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB58BC19425;
-	Sat,  2 May 2026 16:46:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C2a0Vi3Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4943CC19425;
+	Sat,  2 May 2026 16:47:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777740362;
-	bh=s93VJCDBnvDfrecPRtxHRCkkBez6Fz+HZPYqWbqIAkw=;
+	s=k20201202; t=1777740435;
+	bh=zymvXjOjeTSggFeuoM050BBTeP4ivuV+K0ZODz63sG8=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=mM0VFItvv0NwJhTS9Qka9pD2gQhdVDRZNLnEudvHavHJW8PcHO1CMmyYOlFMYXz72
-	 bW8edgGGN9KR5w5kt2QryXHza2K+FphEN+EM4T8tSbNtE1HSOOLzrc+jJPFnNtUhQH
-	 4ixpGPO2jxLUANqnBRaPcgA9a/zpzuEzU0fK4wBgHb1zgFflgV4MpWUzVefa1ssRrX
-	 CS6kp8LDHcZKBTHfy+4rpnDCnoXki8a045qnr45cxJxAIf4sLzfCgohbieuv3ChkTE
-	 9eHKCPBEQfvlwA6xypbDE/fQa1CJkU9UugGOdptKEvZovhqrc4dn+cQaaQfD3cOpTE
-	 IR1LR8d3C7y9Q==
-Date: Sat, 2 May 2026 09:45:59 -0700
+	b=C2a0Vi3QX0WD3xutTIXFvjrVMuUqle24NF4BAQHxyUpWgq77agsQiQDARZ48oGEr8
+	 zWeFVrQ+2yNo3XsQXXseVTkoumlvbwMcqRQ9Yrv9/oCfoJJfiKSyfy/R/1KWeM8Ejx
+	 j3kgXK8lc2stL15qKUXCkaF9uBbZyYkkj9ca4JUpNJEbRoD1qD1piUoN2e5hAWLFZo
+	 hmI8PjcAL1L79x9BIkN1E2eRROzi9GCkLp+6y/VFSfpgKhQs2XFoSYrQPXb4whpnxD
+	 2Fh+iykG/8DvSFLTzfAlLeLNrYwBZESP4BuukCRYY4PUWPAJsNa9OBiyeLZcaDz2BO
+	 p7nB8soAtHKMg==
+Date: Sat, 2 May 2026 09:47:12 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Alex Elder <elder@riscstar.com>
 Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
@@ -48,12 +48,10 @@ Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
  devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
  linux-stm32@st-md-mailman.stormreply.com,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 11/12] misc: tc956x_pci: add TC956x/QPS615
- support
-Message-ID: <20260502094559.15c3f479@kernel.org>
-In-Reply-To: <20260501155421.3329862-12-elder@riscstar.com>
+Subject: Re: [PATCH net-next 00/12] net: enable TC956x support
+Message-ID: <20260502094712.69b29dc8@kernel.org>
+In-Reply-To: <20260501155421.3329862-1-elder@riscstar.com>
 References: <20260501155421.3329862-1-elder@riscstar.com>
-	<20260501155421.3329862-12-elder@riscstar.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -63,16 +61,13 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri,  1 May 2026 10:54:19 -0500 Alex Elder wrote:
-> The Toshiba TC956x is an Ethernet AVB/TSN bridge,  and is
-> essentially a small and highly-specialized SoC.  It implements
-> a number of internal functions, including a GPIO controller,
-> control registers managing internal reset and clock control
-> signals, a PCIe switch and internal endpoint, and mapping
-> hardware that translates between PCIe and internal addressing.
+On Fri,  1 May 2026 10:54:08 -0500 Alex Elder wrote:
+>  create mode 100644 Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
+>  create mode 100644 drivers/gpio/gpio-tc956x.c
+>  create mode 100644 drivers/misc/tc956x_pci.c
+>  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-tc956x.c
+>  create mode 100644 drivers/net/pcs/pcs-xpcs-regmap.c
+>  create mode 100644 include/linux/pcs/pcs-xpcs-regmap.h
+>  create mode 100644 include/soc/toshiba/tc956x-dwmac.h
 
-drivers/misc/tc956x_pci.c:541:17: error: call to undeclared function 'u32_get_bits'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-  541 |         chip->rev_id = u32_get_bits(val, NCID_REV_ID_MASK);
-      |                        ^
--- 
-pw-bot: cr
+Please add an entry to MAITNAINERS for tx956x stuff?
