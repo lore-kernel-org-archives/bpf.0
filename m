@@ -1,134 +1,169 @@
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9E92155C97
-	for <bpf@vger.kernel.org>; Sat,  2 May 2026 17:03:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777741405; cv=none; b=DL3HIZaFnDzyKRrGgNLWm9XftZYjii1AXSHlgBhDJPpm6lF7Lolf7WgiQT7P4t6rlTzpuf5s3Y9NvekBgwYh4pgcQPHZ1zECibHbBS96/DTaNEnMMjTjrfUk0DF2o/CIgN0FXe8gR6zjZzEtOnTWhi0pzB7i7srd8SyaT3pu/5I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777741405; c=relaxed/simple;
-	bh=50SaXAJ5EsO7igu7WHyWFpLAoPpVRg4nKYinvVZUGTA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=uZJi/S+sK5ELtSRWg96xj1ZBO2dUzAFhHzsYUlyRVB/JAhzyJ2T7DCINZ/uNfKcJj0h/oOEpWOHsEdfr2JZmKMYcBZbwG5LF36yi8sONIPcBHJeMr8xZLNSrxDrObIVJtz8VD4rlbYFIX3HqK+jEGL2wszLdTN8YMPmNb+i1d2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fg+2V8UV; arc=none smtp.client-ip=209.85.210.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97A953876B0
+	for <bpf@vger.kernel.org>; Sat,  2 May 2026 19:04:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777748690; cv=pass; b=Q1fD77WxABF3lkrLIgsupoRIlczJA7qVzDtigIJFXRSHh4vtAq7Uiw/VqmIx3hXkkUsExl14jk795ulr8ODMHIcGx6MVoLAb9eNklHlAjFgM20bMvjU2icIXxNvAenZzbKxunVMBSPIjuS89QHRQlEwfq4AlTrAq3+EoCx+pto8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777748690; c=relaxed/simple;
+	bh=JabJJvGOVACFB5Q05Gm+KwlOst4BTOxQbBgtxJNSxhE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OpU/mTpPZQHx5UVKCtMhnXw/XkNn6+kFug3mwAIBceUmhVpACussbALpF4ciC7GyMh91WdIjF1JvCEBpfKv5WPnXjhYiqQK8sazT6qh6gQJLIQHouXw+235LlrdBm8mp/QH8fbRenCZlM4XvTLjHVIG41JbdUUUFvIXSu/oOW5w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tJ0AUG7d; arc=pass smtp.client-ip=209.85.167.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fg+2V8UV"
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7de7c57b52cso2403922a34.3
-        for <bpf@vger.kernel.org>; Sat, 02 May 2026 10:03:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tJ0AUG7d"
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5a3af1b7549so4020585e87.1
+        for <bpf@vger.kernel.org>; Sat, 02 May 2026 12:04:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777748686; cv=none;
+        d=google.com; s=arc-20240605;
+        b=htuqhJdqcF6Tnk3BT3BSP+ZBXm2RFJgfF/F24/fuQ/Ip8GiIXgXik4swZmfVszB8GE
+         uW7DUy81fTPrJRdS2Spq2KF4uKGcZQgI0QUbRSAE/9kgYhUesO/xWxDO1uS7j0SDnArb
+         3TL+7KTcClHmkh7AcnrBX3ZI5BBtTeTj9x571KkUKgtmDPhjGHJtxXhpdhw6vT7nYnNT
+         0Z3GzfsRw+/BcIkUD0NwtixS9eYGLiQ5CIWyBy3Miq5ysw5ujm9vFMgETv/3DkqCC9JL
+         kBnTe2jVGybmYoswJA/0RWoJkJiXb4mCIZyet6TQl1G4SQWJpqZOuF6fxBYwVbMEPqx8
+         vprA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=UJEn27V6OkYesuaUVcNgLy1Ezf+jQkNNDAQg+5dVDzg=;
+        fh=JLcVtqjXw0muFvONtsPF/0ahnLj1Z7kKvyqbhQLD+ZA=;
+        b=c/8kYDKDUnwGX6p6lLytbJ+zoJZqBFXIBmLruSjXxJEJF1owZL/4DjdYNPF5qiNv6G
+         dCDH3+8V+rKzyoqzaJt2Dt97LKdtmoLcd48rThdzFR4s/YYf/Zgd1LjsDtEKjqeXS8Ep
+         ah+bfn6zAhZDkPX6UfwmW6u08PeswcSr5rLjakEXkCIghPpHNiHam2vIGAqLFdbOISJT
+         +bhRnBuB6aNwjWZ5lvPFo56nATBNrnHeLtv487eC/fKLroDM5S9HAuJ3awZ2D27Lz/aG
+         BwOHrq/A+9zuqWpZJFwA5BjOjyDHwKFAlI+vMfrqFidtFDRAZDgFOg2U4eG8581UoFC/
+         5uDw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777741403; x=1778346203; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1777748686; x=1778353486; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gsDXyJe+iue9chJdcI7xrmbR/IebWMX+5ZCmubsnUyI=;
-        b=fg+2V8UVzKtSnvcFccjlaeTBDEMJ7KGjv1eJCVtUSEpKpjA3+Gcmi1FJeiY28/g6dM
-         6PCBvfCEC/KMukpyvAaVsiK1ksilNrCHQo8v1dFOEpM7MNjt0gkt36dvrEW9on3KDBBM
-         DUqSMEBMRg2FxwXhofxnOsQaLUeV8juHOdzaCOxJ6Y+QXLZRFk5LGLfvzDCJyu4ZKs5y
-         zPYlmt2sRPQizON80iY9z/YcS3XCfR7OD/dQh+wi9hJG4OFtgt9ySbdzMfXF0f4r6qUP
-         tVqKo/gsxRLskNKgvMIgFjJsBbllZemieyZeDEv6veyXo/JRAWQfieKQE8XSApXbHKFL
-         /c1A==
+        bh=UJEn27V6OkYesuaUVcNgLy1Ezf+jQkNNDAQg+5dVDzg=;
+        b=tJ0AUG7dhkSzOJzkp5ME5CQTf+lbbkBHLNqtJi2+FQwaw1VuFN8ybt//bO1oO5tdD4
+         RnotA4P4MEVgVtLPwxRwVyq3IA3nXyecK34EQO1Aln5e3iyf7+5UsHNwk31opsUc/t86
+         7TyNGkFPb7YMvhnhJWWW/ZxQHo409VISb8XYTshKOKA61WnDZQkp1rCp1pCpGvXcsWHS
+         WJGa/ZCvsJmsEIZHRFF9KVvjvSwd08XFVgOE9ndJBmDFfhBkM2hlMTl86o9KAoIoBjzx
+         AOumvS8S+4Dd76GtKVNOiBpt6PQbMBMP9ORbAIR2YXc03qAu/sxfv11rgzYTmlhHnJT8
+         u5Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777741403; x=1778346203;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gsDXyJe+iue9chJdcI7xrmbR/IebWMX+5ZCmubsnUyI=;
-        b=mImig2b/msr0/TNMdTxZ//FwldJcNCcIiH1HvlwYq1ETzrebukhSKEOu1o24zaN6oy
-         Y0pVqsiJYAksdL63QQZGV97EDv7WCW0QAxupbpUhtOx/w4tJRkPHvu975iWY+3iFbqlG
-         mNkZN+We1OlXGBEu/cLXdc4U1Vi9bi2eEF3l5AMHWK7RtBMzD6/IlCLQCMkXYCvBlm2o
-         M6dDPCP5lZOX+XxLpnltm/5cI0WXIc6GeO3XMBaBdBaTJwTIV8np15L33nXorbo4DvjE
-         1MsGZKYrIsE04jtqvmgcoB0+iZbkoUcplqjmppnMUM4aeqShxZUKnu+V0zh+//OZ78Mk
-         Yntg==
-X-Forwarded-Encrypted: i=1; AFNElJ+46/U5jcIpsKgwGLlbo8xYGOZE2/JmRZd9DodOM4C4FFjrYVB+uPOJehYyvaXKX/b0+2U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0BhrDkNwvhiaEogb6ptQJK3aO9JKqqsLCHj8KWyH7Yp+qByZc
-	2FEKDYdqqVpTNWCZejdOUlNrjP0pcIaKsIacxs5JLWmzUkJPKVKlur1s
-X-Gm-Gg: AeBDievbt8soPMtrX3u9SC7pS/ikKiAfOi0rgo0TbFk1ZRtvhbI/bwfkwwcIOgsJEju
-	x+W2TZviCheb8gYHsZx2bEMgTCKj2m77mRIu2rvHwP2AbAqLLwc1JL2CnKuUN2LJHeE0I7eGVno
-	I7KqWZZFJofya6jtHcpVq/XuhYTv8sqKW9z82pTj6UH5kQsni5yMEcHM3rRN3i7o+OHb4kK5oEA
-	Gz+B4AJuWOq5Xo6nLFY9Sfks+e5HN4UfE25+ykhOrQqPFf1DBFrs57IPRINQQ9n0Hu5pkmFgoy/
-	Nmnjffrt4BYqRhQZ+F/2ouN9KnMHBVqiZUEd5m81DVB0nTmnfx1MtwJ9g3+cI/JaB9zbDuKLcOg
-	hW8nn3P/eskFGQXHVKXVhlU4AVnR2sTprGzlY5RoDuVKsCuJTgJWhVdS1vVX1Ld6aox36puTx0a
-	R4xHt6/nWnoMBSMPGjw85xleKhrNstuzy5BqILVPZm8dppTwR2OxK4zOgY3tpGoCbh/Ls4H9Vxp
-	NBdDGYdCs2Kt9rDEECTeoDfmL4ogMfBKp2V20k=
-X-Received: by 2002:a05:6830:6615:b0:7d7:fb8c:3c29 with SMTP id 46e09a7af769-7dee13a715emr2337052a34.14.1777741402628;
-        Sat, 02 May 2026 10:03:22 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:49::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7decadc350dsm4335406a34.22.2026.05.02.10.03.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 May 2026 10:03:22 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1777748686; x=1778353486;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UJEn27V6OkYesuaUVcNgLy1Ezf+jQkNNDAQg+5dVDzg=;
+        b=TAGELxGdpB8fMEzr8x9QPN+Dd0HK0Vksi8vC59xM6oM7BWaA6L1YOQ4eR9qwGZWiOT
+         FfOyQuiDkuHSj6CnMqFU1RpoLYWcZHVsA2FoTunVpSv06ovA0EYnH1K+/jsxM4WXwALW
+         dRx/VxIH5kpIij1KrmeItlLDQTLxmTZ/XhG94WK7qg5CCDe6H47vndytffxrsuZ5ffte
+         gTb/Ygd1IWZh7TVrNp/Kjpg6F9nAiwt8ZkI7n1Lj/QXMiaIPl4HakCI37e1AV3YVghWA
+         G0QEixsKRQE56DWltLrdPqCem8J6TNMSfiWvmnY8oProlKqUi8wIgsqm6idIZSIeztPT
+         P2iA==
+X-Gm-Message-State: AOJu0Ywzt0tFmQoolnAnIfBjiW2fUfzMNmvF419z0cXqKc5vhUn28xDV
+	w0/8vAnMX/ATEqQHZicbAk5jxm4ekyfGI2Z46ZrduoeqLxUp8vLeQkNH4O/VV3lAu160Q8Ybak9
+	JuTQXvRXfzY6lzTkpaPGH2Fs3NTZtXM0=
+X-Gm-Gg: AeBDievHwqygvGAFettnSSacmOn4SrBICt1ObUQOLu2l7HLaTuwbKJ8+psGosleevOg
+	QF8JmTzmvc4UnSY0uLWR8zenlrBF+cgdTrl7SiZ3tFHrfqpYuhD2MaZ30VeGm6jG0RonblSToSi
+	KiS9K620qytO757YLolY5cclXeT8WKQjjQQjhaXIgvrkeM4mcZuFkhR6Q7NAn0jj19JsivGgv6r
+	JZ6vJo5kxyTZejCzFZr2FNsV93rlUtKqJwOoGECfeixNSvhFP4k1+zD525kDt8lT/S+EbknfChO
+	7Qwe3Zahy7JkE8Q9vKq7ggJ2Z5i427iY2vElt3dhZYSW6dnj
+X-Received: by 2002:a05:6512:31c9:b0:5a7:46f1:d96a with SMTP id
+ 2adb3069b0e04-5a862ec3439mr409761e87.13.1777748685442; Sat, 02 May 2026
+ 12:04:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260424053816.27965-2-kerneljasonxing@gmail.com>
+ <20260425054032.28A27C2BCB2@smtp.kernel.org> <99816901-6026-49ec-9c20-b548ed362d11@redhat.com>
+In-Reply-To: <99816901-6026-49ec-9c20-b548ed362d11@redhat.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Sat, 2 May 2026 22:04:06 +0300
+X-Gm-Features: AVHnY4Lr-W5067WEgcSeNunEx2Jj-8DqWBliGYLjrFqxjd89zBTtZWswi8YtXcc
+Message-ID: <CAL+tcoDcOz0q9MNNOfgYdt2XAKHAkjFW=r-seHifYqyMH3RV5g@mail.gmail.com>
+Subject: Re: [PATCH net v4 1/8] xsk: reject sw-csum UMEM binding to
+ IFF_TX_SKB_NO_LINEAR devices
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: bpf@vger.kernel.org, "netdev@vger.kernel.org" <netdev@vger.kernel.org>, sashiko@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 02 May 2026 10:03:21 -0700
-Message-Id: <DI8CQDATE33J.30U4FNOVZY97R@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Jose E .
- Marchesi" <jose.marchesi@oracle.com>, <kernel-team@fb.com>, "Martin KaFai
- Lau" <martin.lau@kernel.org>
-Subject: Re: [PATCH bpf-next 01/18] bpf: Support stack arguments for bpf
- functions
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc
-References: <20260424171433.2034470-1-yonghong.song@linux.dev>
- <20260424171438.2034741-1-yonghong.song@linux.dev>
-In-Reply-To: <20260424171438.2034741-1-yonghong.song@linux.dev>
 
-On Fri Apr 24, 2026 at 10:14 AM PDT, Yonghong Song wrote:
-> @@ -1669,6 +1669,8 @@ struct bpf_prog_aux {
->  	u32 max_pkt_offset;
->  	u32 max_tp_access;
->  	u32 stack_depth;
-> +	u16 incoming_stack_arg_depth;
-> +	u16 stack_arg_depth; /* both incoming and max outgoing of stack argumen=
-ts */
->  	u32 id;
->  	u32 func_cnt; /* used by non-func prog as the number of func progs */
->  	u32 real_func_cnt; /* includes hidden progs, only used for JIT and free=
-ing progs */
+On Tue, Apr 28, 2026 at 4:13=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wro=
+te:
+>
+> On 4/25/26 7:40 AM, sashiko-bot@kernel.org wrote:
+> > Sashiko AI review found 1 potential issue(s):
+> > - [High] The patch incompletely fixes the WARN_ON_ONCE in skb_checksum_=
+help() triggered by pure-fragment SKBs. It successfully prevents the explic=
+it fallback in xsk_skb_metadata() (which wedged the TX ring), but leaves th=
+e implicit generic network stack fallback vulnerable. If a user sets XDP_TX=
+MD_FLAGS_CHECKSUM on an IFF_TX_SKB_NO_LINEAR device and the hardware checks=
+um offload is disabled at runtime (e.g., via `ethtool -K eth0 tx off`), the=
+ core stack's validate_xmit_skb() takes over. Because NETIF_F_SG is allowed=
+ to remain active even without checksum features, skb_needs_linearize() eva=
+luates to false, leaving the SKB unlinearized. The SKB is then passed to sk=
+b_csum_hwoffload_help() -> skb_checksum_help(), which hits the exact same W=
+ARN_ON_ONCE(offset >=3D skb_headlen(skb)) because skb_headlen is 0.
+> > --
+> >
+> > commit 86ab0a4900aa60bee0c3df7393a2846b5ff74ccb
+> > Author: Jason Xing <kerneljasonxing@gmail.com>
+> >
+> > xsk: reject sw-csum UMEM binding to IFF_TX_SKB_NO_LINEAR devices
+> >
+> > This commit attempts to fix a warning triggered in skb_checksum_help()
+> > by AF_XDP pure-fragment SKBs. It rejects sw-csum UMEM binding for
+> > drivers advertising IFF_TX_SKB_NO_LINEAR at setup time.
+> >
+> > Closes: https://lore.kernel.org/all/20260419045822.843BFC2BCAF@smtp.ker=
+nel.org/#t
+> > Fixes: 30c3055f9c0d ("xsk: wrap generic metadata handling onto separate=
+ function")
+> > Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> >
+> >> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+> >> index cd7bc50872f6b5..d981cfdd853578 100644
+> >> --- a/net/xdp/xsk_buff_pool.c
+> >> +++ b/net/xdp/xsk_buff_pool.c
+> >> @@ -175,6 +175,9 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+> >>      if (force_zc && force_copy)
+> >>              return -EINVAL;
+> >>
+> >> +    if (pool->tx_sw_csum && (netdev->priv_flags & IFF_TX_SKB_NO_LINEA=
+R))
+> >> +            return -EOPNOTSUPP;
+> >> +
+> >
+> > Does this still leave a path for the warning in skb_checksum_help() to
+> > trigger if hardware checksum offloading is disabled at runtime?
+> >
+> > If a user sets XDP_TXMD_FLAGS_CHECKSUM on an IFF_TX_SKB_NO_LINEAR devic=
+e,
+> > and hardware checksum offload is later disabled (e.g., via ethtool -K
+> > eth0 tx off), the core stack's validate_xmit_skb() will take over.
+> >
+> > Because NETIF_F_SG can remain active even without checksum features,
+> > skb_needs_linearize() evaluates to false, leaving the SKB unlinearized.
+> >
+> > The SKB is then passed to skb_csum_hwoffload_help() which falls back to
+> > skb_checksum_help(). Since the pure-fragment SKB still has a headlen of=
+ 0,
+> > won't this hit the exact same WARN_ON_ONCE(offset >=3D skb_headlen(skb)=
+)
+> > warning?
+>
+> My take here is the issue describe above should be handled separately.
+> (And on top of my head I don't see an easy way to address it short of an
+> additional check in the tx path, which I think we want to avoid).
 
-...
+Agreed. I've already reworded the commit message locally :)
 
-> @@ -739,10 +759,13 @@ struct bpf_subprog_info {
->  	bool keep_fastcall_stack: 1;
->  	bool changes_pkt_data: 1;
->  	bool might_sleep: 1;
-> -	u8 arg_cnt:3;
-> +	u8 arg_cnt:4;
-> =20
->  	enum priv_stack_mode priv_stack_mode;
-> -	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_REG_ARGS];
-> +	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_ARGS];
-> +	u16 incoming_stack_arg_depth;
-> +	u16 stack_arg_depth; /* incoming + max outgoing */
-> +	u16 max_out_stack_arg_depth;
->  };
-
-I asked before but if there was an answer it got lost in all emails.
-So will ask again: why duplicate incoming_stack_arg_depth
-and stack_arg_depth in two places? One should be enough.
-
-And another question:
-max_out_stack_arg_depth is computed only to error like this in bpf_fixup_ca=
-ll_args().
-
-+               u16 outgoing =3D subprog->stack_arg_depth - subprog->incomi=
-ng_stack_arg_depth;
-+
-+               if (subprog->max_out_stack_arg_depth > outgoing) {
-+                       verbose(env,
-+                               "func#%d writes stack arg slot at depth %u,=
- but calls only require %u bytes\n",
-+                               i, subprog->max_out_stack_arg_depth, outgoi=
-ng);
-+                       return -EINVAL;
-
-why bother? What will go wrong if it's not there?
+Thanks,
+Jason
