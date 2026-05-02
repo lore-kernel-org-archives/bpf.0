@@ -1,107 +1,179 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC74E382F2B
-	for <bpf@vger.kernel.org>; Sat,  2 May 2026 15:56:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE62382F2B
+	for <bpf@vger.kernel.org>; Sat,  2 May 2026 15:56:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777737377; cv=none; b=JAlDr9hMNUoGRfC2K9wjOB/z0mjhp4h0ULJN21LymPAxZEyx0PLETy6iD79WSC04/BGiBvCnHBvxbMYtn77MxZvowTd/g0NKS/6JUBzXBBBhjlbUTq7322ysGQdgEDWuaSBzmpfsWUqnvuScrZuVm4xvBt2JsQLHuM7KAxPvccA=
+	t=1777737378; cv=none; b=EV8Po3wAA5rz5rWPL2w0OBM/m7b4No6M2LckAQMK9Bjixkyhx9DW6hH0QloncsGngFxLabfmB2iJzikIxWriMBST0LO4lLQ8+rDXxcfr9jLXhlUT2ElEkP6HILqJQRMHuWMi9BXjQEdv5hia5DqIW2EhkoyMUo2TKYFTK948GpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777737377; c=relaxed/simple;
-	bh=J6dF+o+bXxTVddBTRRABSaYMyOCfv+dYYRcLJPWq3Tk=;
+	s=arc-20240116; t=1777737378; c=relaxed/simple;
+	bh=fwkaiDzOmgv4OmRIlzriCd3RkFsQGVlLeZFs8PrK3XM=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UkqjUUxf5Ezn+XSd64G2+zGnbSbUAEJ38ErbUD5VkDqxMog6f5wM7JOApDtc/8/4YnIDJ6om13n9o6OJLhwirFE2EDETFQxgjP3idP8dWmGFfRZe78AicdVbIVm9isLpfsH5IOsm2naa5n7VTOSmC1Tl/pMJMQnQHhdvSEcrQdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IC17W6UO; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=Cw+okX2ADhXf+jJZQSFDEntytU4tFCUPO9qaG6VQHFZp6Wxo+6zPH2wtJQZeUdx5nSHgoP6qM5ti4ic4MISAe0V/IY0BM1fNwXjl9kFm4OA0vTIuZiFnDZW1ZW+kQwQwB5sBGkGUd3rWQjXL1VHmDp4kDJdkfUjOnaC0AKy9ofc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cKNNLDQq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IC17W6UO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51FDCC19425;
-	Sat,  2 May 2026 15:56:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cKNNLDQq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E65FC19425;
+	Sat,  2 May 2026 15:56:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777737377;
-	bh=J6dF+o+bXxTVddBTRRABSaYMyOCfv+dYYRcLJPWq3Tk=;
+	s=k20201202; t=1777737378;
+	bh=fwkaiDzOmgv4OmRIlzriCd3RkFsQGVlLeZFs8PrK3XM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=IC17W6UOxBx8KxrbNkHLiohfBX1rVNGUN13IiXBybUv/kxEl1WDCkjMwxzFFquzcG
-	 WCI/sij0X9OlrHAcN0txXU48sRTRiNkpfL+QqS+CZu2qJ+1SyqGDWdkUiDq4EOwe14
-	 7quVRk9T7HbcLHohPnadM73Lgfe9QWx/vNnvHDW6pAabDyrP9gEIldWxBXew7GjpqL
-	 O0rJvoOSdbC7zk1vl4GgZpLjDYXVyu4ftb3+bqI+zWWGY3SStPx6tCYxkToqV48MYv
-	 sRTQUf23Ffy+CCIsZnmU/lOvxaZcIWG3ilaQnYS4FtvjpJRm+PA/PgnotUjWq71Cba
-	 Ti//47sYm9+6Q==
+	b=cKNNLDQqtb8vckJ4NPjjOuCIGCn4WX7KJkVwQa0rxWD60me9qM2zXMrubaz5zBpV1
+	 s7r5Gw8YlGMQ9DH1e+ffpcC1ttlGI674POlHqmhAKC+JAsB/O3ioM+3L+IEo98xllT
+	 vyKsQrjZmK+0ohfunfN7VkPXt8m0v+p7L1OwMIyHhEE0aw9JWvkG5p2RRo2eWx7ZY/
+	 mEtTr9CKzSeyLpbswfwYGYq3eerxAkY6tprDhLwFxPhNbBz9X4TWuKJF8ekJHLVocd
+	 Khr50vXAl/y2Rnm60DCTdQ1BamaPmkREhMC/msiZRwt29LfThl0yzWLBOv0hBWejWC
+	 GTnsGV7vtnO8Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 03/12] net: pcs: pcs-xpcs: Preserve
- BMCR_ANENBLE during link up
+Subject: Re: [PATCH net-next 09/12] gpio: tc956x: add TC956x/QPS615 support
 Reply-To: sashiko@lists.linux.dev
 To: "Alex Elder" <elder@riscstar.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260501155421.3329862-4-elder@riscstar.com>
-References: <20260501155421.3329862-4-elder@riscstar.com>
+In-Reply-To: <20260501155421.3329862-10-elder@riscstar.com>
+References: <20260501155421.3329862-10-elder@riscstar.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 02 May 2026 15:56:16 +0000
-Message-Id: <20260502155617.51FDCC19425@smtp.kernel.org>
+Date: Sat, 02 May 2026 15:56:17 +0000
+Message-Id: <20260502155618.2E65FC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
 s) to consider:
-- [High] Unconditionally forcing BMCR_ANENABLE for SGMII interfaces during =
-out-of-band link configuration breaks forced and fixed links.
+- [High] Function signature mismatch for `tc956x_gpio_set` causing build fa=
+ilures.
+- [High] Sleeping in atomic context bug on PREEMPT_RT due to `can_sleep =3D=
+ false`.
+- [Medium] Uninitialized stack variable used if `regmap_read()` fails.
+- [Medium] Ignored `regmap_update_bits()` return value can cause incorrect =
+hardware state.
+- [Low] Kconfig depends on a non-existent symbol.
 --
 
-commit 3fde24f4d6c6c8c6b563418e32cec40953863f8a
-Author: Daniel Thompson <daniel@riscstar.com>
+commit ff81a192de0fcb35d3c4b8a32cad777cd0bff29e
+Author: Alex Elder <elder@riscstar.com>
 
-net: pcs: pcs-xpcs: Preserve BMCR_ANENBLE during link up
+gpio: tc956x: add TC956x/QPS615 support
 
-This commit unconditionally sets the BMCR_ANENABLE bit for SGMII interfaces
-during link up. This change was introduced to resolve an issue on a specific
-hardware platform where the MAC fails to transmit packets despite negotiati=
-ng
-the speed correctly.
+This commit adds support for the GPIO controller embedded in the Toshiba
+TC956x Ethernet-AVB/TSN bridge. It implements an auxiliary device driver
+for the GPIO block using regmap.
 
-> diff --git a/drivers/net/pcs/pcs-xpcs.c b/drivers/net/pcs/pcs-xpcs.c
-> index b2c84b7e1e11..1d62d5b31c61 100644
-> --- a/drivers/net/pcs/pcs-xpcs.c
-> +++ b/drivers/net/pcs/pcs-xpcs.c
-> @@ -1263,11 +1263,14 @@ static void xpcs_link_up_sgmii_1000basex(struct d=
-w_xpcs *xpcs,
->  					 phy_interface_t interface,
->  					 int speed, int duplex)
->  {
-> +	u16 an_enable;
->  	int ret;
-> =20
->  	if (neg_mode =3D=3D PHYLINK_PCS_NEG_INBAND_ENABLED)
->  		return;
-> =20
-> +	an_enable =3D (interface =3D=3D PHY_INTERFACE_MODE_SGMII ? BMCR_ANENABL=
-E : 0);
-> +
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+[ ... ]
+> +config GPIO_TC956X
+> +	tristate "Toshiba TC956X GPIO support"
+> +	depends on TOSHIBA_TC956X_PCI
 
-Will this break forced and fixed links by enabling auto-negotiation?
-
-This function handles forcing the link state when in-band auto-negotiation
-is explicitly disabled, as indicated by the early return for
-PHYLINK_PCS_NEG_INBAND_ENABLED. When this function continues, phylink is
-requesting out-of-band negotiation or a fixed link.
-
-By unconditionally setting BMCR_ANENABLE here, the hardware might ignore
-the fixed speed and duplex bits, instead waiting for auto-negotiation to
-complete. If the system uses a fixed link (e.g., MAC-to-MAC) or connects
-to a PHY with in-band signaling disabled, SGMII AN base pages will never
-arrive.
-
-Could this cause the MAC PCS to wait indefinitely, failing to establish a
-link and dropping all traffic?
+Does TOSHIBA_TC956X_PCI exist in the tree at this point? Reference to a
+non-existent config symbol causes silent build failures. If it is added
+later in the patch series, this temporarily leaves the driver unselectable
+and breaks bisectability.
 
 [ ... ]
+> diff --git a/drivers/gpio/gpio-tc956x.c b/drivers/gpio/gpio-tc956x.c
+> --- /dev/null
+> +++ b/drivers/gpio/gpio-tc956x.c
+[ ... ]
+> +static int tc956x_gpio_get_direction(struct gpio_chip *gc, unsigned int =
+offset)
+> +{
+> +	struct tc956x_gpio *gpio =3D gpiochip_get_data(gc);
+> +	u32 reg;
+> +	u32 val;
+> +
+> +	if (test_bit(offset, gpio->input_only))
+> +		return GPIO_LINE_DIRECTION_IN;
+> +
+> +	reg =3D offset < 32 ? GPIO_EN0_OFFSET : GPIO_EN1_OFFSET;
+> +
+> +	regmap_read(gpio->regmap, reg, &val);
 
->  	ret =3D xpcs_write(xpcs, MDIO_MMD_VEND2, MII_BMCR,
-> -			 mii_bmcr_encode_fixed(speed, duplex));
-> +			 mii_bmcr_encode_fixed(speed, duplex) | an_enable);
+If regmap_read() fails, does it leave the stack variable val uninitialized?
+Should the return value be checked before evaluating val in the next line?
+
+> +	if (val & BIT(offset % 32))
+> +		return GPIO_LINE_DIRECTION_IN;
+> +
+> +	return GPIO_LINE_DIRECTION_OUT;
+> +}
+[ ... ]
+> +static int tc956x_gpio_direction_output(struct gpio_chip *gc,
+> +					unsigned int offset, int value)
+> +{
+> +	struct tc956x_gpio *gpio =3D gpiochip_get_data(gc);
+> +	u32 vreg;
+> +	u32 dreg;
+> +	u32 mask;
+[ ... ]
+> +	/* Set output value first, then direction */
+> +	regmap_update_bits(gpio->regmap, vreg, mask, value ? mask : 0);
+
+If this first regmap_update_bits() fails, should the function bail out
+early? Ignoring the error and proceeding to change the direction to output
+anyway could actively drive an unintended logic level onto the pin.
+
+> +
+> +	return regmap_update_bits(gpio->regmap, dreg, mask, 0);
+> +}
+> +
+> +static int tc956x_gpio_get(struct gpio_chip *gc, unsigned int offset)
+> +{
+> +	u32 reg =3D offset < 32 ? GPIO_IN0_OFFSET : GPIO_IN1_OFFSET;
+> +	struct tc956x_gpio *gpio =3D gpiochip_get_data(gc);
+> +	u32 val;
+> +
+> +	regmap_read(gpio->regmap, reg, &val);
+
+Similar to tc956x_gpio_get_direction(), does this leave val uninitialized
+and return unpredictable states if regmap_read() fails?
+
+> +
+> +	return val & BIT(offset % 32) ? 1 : 0;
+> +}
+> +
+> +static int tc956x_gpio_set(struct gpio_chip *gc, unsigned int offset, in=
+t value)
+
+Does the set function pointer in struct gpio_chip expect a void return
+type? Assigning a function returning int could trigger an incompatible
+pointer type compiler error or cause Control Flow Integrity panics at
+runtime.
+
+> +{
+> +	u32 reg =3D offset < 32 ? GPIO_OUT0_OFFSET : GPIO_OUT1_OFFSET;
+> +	struct tc956x_gpio *gpio =3D gpiochip_get_data(gc);
+> +	u32 mask =3D BIT(offset % 32);
+> +
+> +	return regmap_update_bits(gpio->regmap, reg, mask, value ? mask : 0);
+> +}
+[ ... ]
+> +static int tc956x_gpio_probe(struct auxiliary_device *adev,
+> +			     const struct auxiliary_device_id *id)
+> +{
+[ ... ]
+> +	gc->base =3D -1;
+> +	gc->ngpio =3D TC956X_GPIO_COUNT;
+> +	gc->can_sleep =3D false;
+
+Is it safe to set can_sleep to false while using a regmap? By default,
+MMIO regmaps use spinlock_t for synchronization, which becomes a sleepable
+rt_mutex on PREEMPT_RT kernels. Calling these GPIO methods from an atomic
+context on PREEMPT_RT could cause a panic.
+
+> +
+> +	dev_set_drvdata(dev, gpio);
+> +
+> +	return devm_gpiochip_add_data(dev, gc, gpio);
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260501155421.3329=
-862-1-elder@riscstar.com?part=3D3
+862-1-elder@riscstar.com?part=3D9
