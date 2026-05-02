@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36C2A382394
-	for <bpf@vger.kernel.org>; Sat,  2 May 2026 15:56:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23DB382F2B
+	for <bpf@vger.kernel.org>; Sat,  2 May 2026 15:56:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777737376; cv=none; b=Cdlu2fQ3PEiBaViPPQgXQTxYYO3u655xp3YM4hUgjxu7S6L01RLxb9ReIK5QQOVKSMS4sZ3d14yhb/tuLMl5IkLIIU3fTYHTix0hbsEkE5jb92LW/+UvRqfCns2tCcb4pqd+xJt3ezNyWOoulDbQ4eyN83gARaumZ+UNd0inLIQ=
+	t=1777737376; cv=none; b=bovdJGcnnYQP3tsM+MoPppT9rKVOkXHAdGscoSDr5/vjZaMxYxqBUeqbTtPtBwQl5FxHygSNquMT1pyJsDYDpesrmzZNIMX8OMYTMxM4wIEzMdXNTKeOpFt1guzti+ctMMTb1XfVEUXC71Heqb+rVNbLy7DylClu3s2JcWHITQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1777737376; c=relaxed/simple;
-	bh=1j/knQLl8Yb+i/UX/D0utQ++b+nVkqi8BqL+7dSSaFo=;
+	bh=K/X9JDenG83+2FGxFcZgksyjcT9TnyvdqZvXbAjY57A=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=f9qnW17KkiLpWbtEBbRZ61Ay5qVf1XDqO9vgWk/OnmBKRmP/D75enkv2JVRkMoZS3AI1L+ZWcDW7tlxtcHqqSf/yWefu9Q+2F9tySZdWtmNCDlG4nQyB4YFKwMREGv7OgeSWX0QpUJAZM1uP+Jl56m2mW3WFi5wXSeFhnEUy+qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AGa8H3JA; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=KdNPgEOQwgGQMokGU830IQOdbVGHUPUa2AJFJQXamcuSEHl11Y07JZH9gPRxG8JWi115CLK6RKTLssfHO/J9zh9mw+xgAveHokgskGVhXMCXNUXFFpdJ5IQsxfJICN4a2h7hiJ85ACmRUlwwi9iW/dy/y97wqrVSP9RYxCXXH9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sNpHK6pM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AGa8H3JA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF378C19425;
-	Sat,  2 May 2026 15:56:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sNpHK6pM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82EA3C19425;
+	Sat,  2 May 2026 15:56:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777737375;
-	bh=1j/knQLl8Yb+i/UX/D0utQ++b+nVkqi8BqL+7dSSaFo=;
+	s=k20201202; t=1777737376;
+	bh=K/X9JDenG83+2FGxFcZgksyjcT9TnyvdqZvXbAjY57A=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=AGa8H3JA8QeNRuVCu+v+5E+Ycnus6YIBup5XXqhq4/c4xGUdzbNYOBpypHcyJzcHK
-	 1luSuinY5eVxE8iSol2AzmLooCnfLk8PIzgbzm4rMDtteGqmTjvwiQ2DSIG8bNOhbJ
-	 mI9F8Dg6f/0o4B1sGAxv1D32cr0A1pGi9L0OO8Ba3+R5302h34ndUvFfrXg07M0/4a
-	 XBXs5zrEobSGuaNk5tbaXqoPgYJTh6nYT7GrcnLz2uiGdIkqZuI0TCrLhlBsH9NY+V
-	 1ecHwQ7lbF1hH067u7OWscIzXFW83J53YpYVRnZR3a9HadSxpBthOYA23y9GsZNvB+
-	 UO7+qOILOu/jg==
+	b=sNpHK6pMthlQHyh8ral5J1uCKt3qVtX4M2k3XoEI6R+UL90r+TsnktomM+Aqo1H48
+	 X743WUkQxX4SXxfXG/Y1GbKKDRDWZ255WHgYUyVL976WQx6/rOk+cXVq3aH070eRVV
+	 iTuH5WLv8EzblFGwrxHtwLAkqy/7qCeoIiT95Zh5aHydxNTXSX9z3xnnq4EZzO8BbZ
+	 6HJhLnJTB2nRhpTRjh/3nEmuRQ+ZFse5D50hCuTJNHXBhEvd9fQrkIBnsj/QWPUTf+
+	 TvvG8XnmxbY2Sb4uH2TZjjUhb20VoH7HODyp+l2o6+n54jURSIPKFpq/dyOVzULeav
+	 LNQzkWTFEV9kA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 08/12] dt-bindings: net: toshiba,tc965x-dwmac:
- add TC956x Ethernet bridge
+Subject: Re: [PATCH net-next 04/12] net: stmmac: dma: create a separate
+ dma_device pointer
 Reply-To: sashiko@lists.linux.dev
 To: "Alex Elder" <elder@riscstar.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260501155421.3329862-9-elder@riscstar.com>
-References: <20260501155421.3329862-9-elder@riscstar.com>
+In-Reply-To: <20260501155421.3329862-5-elder@riscstar.com>
+References: <20260501155421.3329862-5-elder@riscstar.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Sat, 02 May 2026 15:56:15 +0000
-Message-Id: <20260502155615.AF378C19425@smtp.kernel.org>
+Message-Id: <20260502155616.82EA3C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,89 +46,94 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] The binding adds GPIO provider capabilities but omits `gpio-cont=
-roller` and `#gpio-cells` from the `required` list.
-- [Medium] The Ethernet endpoint is incorrectly modeled as a PCI bridge, ap=
-plying bus properties to an endpoint.
+- [High] DMA mappings are permanently leaked if an error occurs mid-packet =
+in `stmmac_xmit`, `stmmac_tso_xmit`, or `jumbo_frm`.
+- [High] In `jumbo_frm()` (`chain_mode.c` and `ring_mode.c`), assigning a `=
+dma_addr_t` to an `unsigned int` breaks `dma_mapping_error()` detection.
 --
 
-commit c5a5d0d7a89f5ad66c878c805902efc5e0bd117a
-Author: Daniel Thompson <daniel@riscstar.com>
+commit 152df859f4e94baeb0ca419c5b87bcb9e5f13d3d
+Author: Alex Elder <elder@riscstar.com>
 
-dt-bindings: net: toshiba,tc965x-dwmac: add TC956x Ethernet bridge
+net: stmmac: dma: create a separate dma_device pointer
 
-This commit adds devicetree bindings for the Toshiba TC956x family of
-Ethernet-AVB/TSN bridges.
+This commit adds a second dma_device pointer to the stmmac_priv structure.
+The new pointer handles all DMA operations independently from the normal
+device pointer, allowing better management of common internal IPs for
+specialized Ethernet bridge chips.
 
-> diff --git a/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.y=
-aml b/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
-> new file mode 100644
-> index 000000000000..d95d22a3761d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
-> @@ -0,0 +1,111 @@
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/chain_mode.c b/drivers/n=
+et/ethernet/stmicro/stmmac/chain_mode.c
+> index fc04a23342cf..331e6523ee01 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/chain_mode.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/chain_mode.c
+> @@ -34,10 +34,10 @@ static int jumbo_frm(struct stmmac_tx_queue *tx_q, st=
+ruct sk_buff *skb,
+>  	buf_len =3D min_t(unsigned int, nopaged_len, bmax);
+>  	len =3D nopaged_len - buf_len;
+> =20
+> -	des2 =3D dma_map_single(priv->device, skb->data,
+> +	des2 =3D dma_map_single(priv->dma_device, skb->data,
+>  			      buf_len, DMA_TO_DEVICE);
+>  	desc->des2 =3D cpu_to_le32(des2);
+> -	if (dma_mapping_error(priv->device, des2))
+> +	if (dma_mapping_error(priv->dma_device, des2))
+
+This isn't a bug introduced by this patch, but since the patch modifies the=
+se
+DMA mapping calls, it brings up a potential issue.
+
+Does the use of an unsigned int for des2 break error detection?
+
+On 64-bit architectures, dma_map_single() returns a 64-bit dma_addr_t.
+Assigning this to the unsigned int des2 truncates the upper 32 bits.
+
+If the mapping fails, it returns an error code that becomes 0xFFFFFFFF after
+truncation. When this truncated value is passed to dma_mapping_error(), it
+is cast back to a 64-bit value, which no longer matches the expected error
+code representation.
+
+Will this bypass the error check and record an invalid physical address in
+tx_q->tx_skbuff_dma[entry].buf? This same pattern also appears in the
+jumbo_frm() function in ring_mode.c.
 
 [ ... ]
-
-> +allOf:
-> +  - $ref: /schemas/pci/pci-bus-common.yaml#
-
-Is it correct to reference pci-bus-common.yaml# here? Since the tc956x_emac0
-node is a PCI endpoint (an Ethernet controller attached to an internal PCIe
-switch) rather than a PCI bus or bridge, applying bridge-specific properties
-could be semantically invalid.
-
-> +  - $ref: /schemas/pci/pci-device.yaml#
-> +
-> +unevaluatedProperties: false
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - pci1179,0220 # Toshiba TC9564 (a.k.a. Qualcomm QPS615)
-> +
-> +  "#gpio-cells":
-> +    const: 2
-> +
-> +  gpio-controller: true
-
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
+net/ethernet/stmicro/stmmac/stmmac_main.c
+> index ca68248dbc78..1104cf750295 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 [ ... ]
+> @@ -4876,9 +4876,9 @@ static netdev_tx_t stmmac_xmit(struct sk_buff *skb,=
+ struct net_device *dev)
+> =20
+>  		desc =3D stmmac_get_tx_desc(priv, tx_q, entry);
+> =20
+> -		dma_addr =3D skb_frag_dma_map(priv->device, frag, 0, frag_size,
+> -					    DMA_TO_DEVICE);
+> -		if (dma_mapping_error(priv->device, dma_addr))
+> +		dma_addr =3D skb_frag_dma_map(priv->dma_device, frag, 0,
+> +					    frag_size, DMA_TO_DEVICE);
+> +		if (dma_mapping_error(priv->dma_device, dma_addr))
+>  			goto dma_map_err; /* should reuse desc w/o issues */
 
-> +required:
-> +  - compatible
-> +  - reg
+Similarly, can this leak DMA mappings if an error occurs mid-packet?
 
-Should gpio-controller and #gpio-cells be explicitly included in this
-required list?
+If skb_frag_dma_map() fails for a multi-fragment packet, the code jumps
+to the dma_map_err label. However, tx_q->cur_tx is only updated at the very
+end of the function upon complete success.
 
-The binding defines gpio-controller and #gpio-cells above, indicating the
-hardware acts as a GPIO provider. Omitting them from the required list could
-allow incomplete device tree nodes to silently pass schema validation.
+Because cur_tx is not advanced on the error path, stmmac_tx_clean() won't
+unmap these partially filled descriptor entries. On the next transmission,
+the driver will start at the unmodified cur_tx index and blindly overwrite
+the tx_skbuff_dma entries.
 
-> +examples:
-> +  - |
-> +    pcie {
-> +      #address-cells =3D <3>;
-> +      #size-cells =3D <2>;
-> +
-> +      tc956x_emac0: pci@0,0 {
-> +        compatible =3D "pci1179,0220";
-> +        reg =3D <0x50000 0x0 0x0 0x0 0x0>;
-> +        #address-cells =3D <3>;
-> +        #size-cells =3D <2>;
-> +        device_type =3D "pci";
-> +        ranges;
-
-Does this endpoint node need bridge properties like device_type =3D "pci",
-#address-cells =3D <3>, #size-cells =3D <2>, and ranges?
-
-The child of this node is an mdio bus, which does not use PCI addresses and
-does not require PCI bridge translation. Using device_type =3D "pci" on an
-endpoint might confuse OS PCI enumeration logic, which expects nodes with
-this device_type to be actual PCI-to-PCI bridges.
+Could this result in permanently leaking the previously successful DMA
+mappings? The same concern appears to apply to stmmac_tso_xmit() and
+jumbo_frm() where multiple fragments are mapped sequentially.
 
 [ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260501155421.3329=
-862-1-elder@riscstar.com?part=3D8
+862-1-elder@riscstar.com?part=3D4
