@@ -1,165 +1,304 @@
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011062.outbound.protection.outlook.com [52.101.62.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A7823BCE3;
-	Sat,  2 May 2026 01:40:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777686013; cv=fail; b=WBpPJ+rwEYs396wadrQbIOOqGzv0qejPfLj39IZvLZi9Tpjrck0+bUj6NG04ujX3035TawIHTLSffr/ATccCy52tGDNCTRvtErR1km60UsPi55o9mbiYYzGNDFJV5i0o+MRL6/zePPMHBOYts54/9TwHXjWxgcYKC3pu6OdMs/U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777686013; c=relaxed/simple;
-	bh=cClQ7j2/h902schO2qlspekVolG+YvgO4ypr3s9VcFo=;
-	h=Date:From:To:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=TpOd0PaLkL8ITMb2SAuIQ4V94yG4d9EnLmf5S7MC2nR5VFBtgrCjF1n2v8apeGwRAcAmh5xpP2F4iVgfSV7lA4Xl1gi7fv14kxL7A3WtoP55Oay0tIwbGRewq+RiqgOhWQPs/RDFZCTTlYAsFN59Iej48EmNZGuwULjGkYGA02o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nHq8p11Z; arc=fail smtp.client-ip=52.101.62.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F057B1B86C7;
+	Sat,  2 May 2026 01:53:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777686807; cv=none; b=UO33xIPHgsfONYE9AsK2LAUIrIqd8kGa5b/tT4XJpEdLATi2lIJZL1f/WEhd7FJC8WxNW/BTh4iktfVy6Z2ucgABiskvuy40pU3JcdC9/wXJm/cCnnHPV/jteKaxaFZHV5JJFecVL6b0BVZA28aIlZY9C4NdlJZbaeSHiugAlO0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777686807; c=relaxed/simple;
+	bh=tP6odST16kHneBq163ppFX5qwhXGu2JISuBZ10PCSX8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GKTazgrJbQUJYbu2WOTd2UJWCAc/pEvWQ6QaqzYZ5Gkk24M3nM3VWBsSS+DRr8AbTD1bFFXtBKxVp4/ZFVLtan1Vn+7fn8FsRScyhhzZCYna5s9+vY/XNMxIwE8lKQtH4KJhuNVAkeXgBBh7u3XOsyFF7Dz+TD33uoCV/svXEoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cW0lRa2j; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nHq8p11Z"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ZyZmTIwEFzqKUSzEjIYgO/+b499yKqkyhvoFPV2fmFpwRymDnHma3C3IADf/0ltV8xEiTUeyF6ird6kVhkA53upuLnVOA4LjgQMTa2T72FRErvO0Q74j7gOZ/hAnksOE63YQYA8xeHK2QLiu0UCLeAcm/iOlT1Hk2e3Jjucvrc1Mz8JOqG0an9kHU1+pCXSSRQfLouQPQqHjgESd8DYFQPucbJbJ3H42AIK4H09Hdj94WUWs6QpCsELJ9FFEEHh1YVmLhc3zNqrt53AtvpCWrdUAG1RvzVTgOvMmqnYYHrXDQhcK062XAAtLC1bnuds3huScvIlOli4MqDwri3O6HQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UUNzZqyB1P+rsckaUA5Z0suBRN/bKa2GIoBig/CtGkc=;
- b=TBjForPAtfViL8GEJdy/Ttwyw3/0mQ1zmcSDmWdePC/M+hSHhj8WMPHNV87SVz6wsfa5OZn9i29ju261W7B4ZV2AhN6tfG9uMO5Ej6jAaKunOpIOc/ZTfArcCd9K9XWzZ+zv9C+ajmgWs2NrcMMSzXvJfiBf8r521tABqFP8XRWQ7T3c5kL4N1Zgjh6fQMokRytNAezgl7CXam+xC0Dti+bxVInVwto/m9LZ0i05skpLR0cGut01x93sUY7JfJByEUl32TiBz9x591HjC+qbK3vG44Qdr4r0HtCQ+EWVEejQ8OP8+r/sgsBp0L1IwwWV+bsOUhtCxrJMZwKTUV/GXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UUNzZqyB1P+rsckaUA5Z0suBRN/bKa2GIoBig/CtGkc=;
- b=nHq8p11ZYnqusIXIv31KqKOriWcLKmIYd41nzMPpHXvCAg61fv8ISfR2c2N2+hdlqB6BILYygnEVPqdsaSKCSvYZ3/tO84OMX0W2Hh13R49A4KU8gmX0+DFGgtpGR5NtgJpjiAOwYV3UGd+WVpB7d8MeEe3q9vuYmpdRma5BOiEXrf1jE/O8wm9V7kV6PksFAYJzYLRA/C9PiNnDmvZq3u7TSxPAQWKk0l5pG8FWFT1K2flFCeWXvku/pYBX+B/F5arufXimmdH2fryHjGEGA0o5ftWgYMTjjnrvjC6j05fD5WwjO8EXspydD9nL5SjeD1158PsWN3twdRbZj+jUOQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY8PR12MB8300.namprd12.prod.outlook.com (2603:10b6:930:7d::16)
- by SA1PR12MB6824.namprd12.prod.outlook.com (2603:10b6:806:25f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.23; Sat, 2 May
- 2026 01:40:03 +0000
-Received: from CY8PR12MB8300.namprd12.prod.outlook.com
- ([fe80::ce75:8187:3ac3:c5de]) by CY8PR12MB8300.namprd12.prod.outlook.com
- ([fe80::ce75:8187:3ac3:c5de%3]) with mapi id 15.20.9870.022; Sat, 2 May 2026
- 01:40:03 +0000
-Date: Fri, 1 May 2026 21:40:00 -0400
-From: Yury Norov <ynorov@nvidia.com>
-To: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Arnd Bergmann <arnd@arndb.de>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Jinjie Ruan <ruanjinjie@huawei.com>, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-	netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 0/6] lib: rework bitreverse
-Message-ID: <afVV8LaelVkqgnLr@yury>
-References: <20260430211351.658193-1-ynorov@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260430211351.658193-1-ynorov@nvidia.com>
-X-ClientProxiedBy: SJ0PR03CA0166.namprd03.prod.outlook.com
- (2603:10b6:a03:338::21) To CY8PR12MB8300.namprd12.prod.outlook.com
- (2603:10b6:930:7d::16)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cW0lRa2j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E072C2BCB4;
+	Sat,  2 May 2026 01:53:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777686806;
+	bh=tP6odST16kHneBq163ppFX5qwhXGu2JISuBZ10PCSX8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=cW0lRa2jMjlnVHN52tqUju3bSkFBHSvoQxSTIiq48RY2XCejOiCBn7hFpoPyiLtcJ
+	 Y8XODEl5hfvUF0aE3TKjQa4tFcMBuTpAArhJ0ApsK5oejpcTKYy2R7rqPFlPKakT0c
+	 snjbhDVF071nDw6wt8q4iBKUjSgwwDVMEofqibJHXp5GemhO89JuZ9fccDw0fU0O+R
+	 nCqlzaTR72CJN0UEnr9FH22GWLlwXjMfIGEY21RiyqO4X9RDz1shF3lpY5LBH1PeG1
+	 wgN7nvrCpogeT/3ZXQBPz/45Z4+8dhhF0EyPCxh4hWHTXGRu2mYfP1ufo3ii/ZbN/W
+	 vCeLxdu4uh5vg==
+Date: Fri, 1 May 2026 18:53:24 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+ decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, pabeni@redhat.com, leon@kernel.org,
+ longli@microsoft.com, kotaranov@microsoft.com, horms@kernel.org,
+ shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
+ ernis@linux.microsoft.com, shirazsaleem@microsoft.com,
+ linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+ stephen@networkplumber.org, jacob.e.keller@intel.com,
+ dipayanroy@microsoft.com, leitao@debian.org, kees@kernel.org,
+ john.fastabend@gmail.com, hawk@kernel.org, bpf@vger.kernel.org,
+ daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me, yury.norov@gmail.com
+Subject: Re: [PATCH net, v2] net: mana: Fix crash from unvalidated SHM
+ offset read from BAR0 during FLR
+Message-ID: <20260501185324.0f02dc72@kernel.org>
+In-Reply-To: <afJUszROT+yKjth0@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <afJUszROT+yKjth0@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY8PR12MB8300:EE_|SA1PR12MB6824:EE_
-X-MS-Office365-Filtering-Correlation-Id: f8133d8a-0614-428c-6f32-08dea7ebbb02
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|10070799003|366016|22082099003|18002099003|56012099003|921020;
-X-Microsoft-Antispam-Message-Info:
-	w7yqP/UZAj3/lNbAccOFyoKOHiVfZLwVCKF2/21rg6rP3vh5x6u420bZYowKrnuzu78c30q+SBIm1jL4eEzMF1cSVpxrCSmMNYsWtme7by4EG63ZLQ45Ii6/2VAWNKiE7fAzjSaqd6FshqpDf/4d2a70BSuWuZDuAPV0TUdYmjaDLijMvmyGzG/V2c4vVIvY97Xq6PfoRmzJiWnpg0sOSwGZVesbZAuvSPRxRkeOH3fHPrzU6Oa36LCyozMKrIz/LFBEa6V8p0l2cSPHzVRlwffT6nKwfodppxg7f0N6+dIfO992G74nNTl4WZxw7XzehXVIXVfOX12e3jx0JuxGMB07Iq1Mt3gd5Qo6cOAOL9LU8AprmMj0ITlM++zbuXVwVmRR8FGTh8f/7CTJLJEcRsM3d2EUJi2ybjHq7f4tRtNzSoUqu8WzpVPn0wpMHGwDrInJMg/SgnK9bquyWeyhqTnPOmnVAUBF7LjlCL8mWuHOdgRJ9NPo6ijbkJ2GR0KsbWDUa/pfUDACd4KB+fz222q7tQYTLmCtzUyCkttJT/RpxahMCtrJblZIjisSK0kfmuwpOQ713v3805TfoitcvOyLa/AyAqK27qPb9NUoeqr2POPaHFe+Ni3q4SRCQGoZ/E2sCEQQCW7UZ6fMm2xfb9fQyekwuRy7JrtlKvHBuHqieJDdlT2ATP0zyCFCFmrKNP7IgS1IgvtpPIovlhA0/b2izBNXaPhg3QOB6VpJUCk=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR12MB8300.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(10070799003)(366016)(22082099003)(18002099003)(56012099003)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?6hFs/rsgtk9OW1AIv+14XVhFLYNcGHY+SCkYGNBX5mYrt9vSXGphd4X5Qw0J?=
- =?us-ascii?Q?8oCOHB8B4nMVm2rTIjfdOI16yW40w0Ub9knahAIZHAxCGJmdTCvgHrXgu7DC?=
- =?us-ascii?Q?wwsotZg3sNNgW3Vp4Fo1MEm6JTOKedDxOLgMDBaHaeyCgm0uhHgYVa85A+aO?=
- =?us-ascii?Q?11HLggudfhqU2cKjRnUSdZ/4MxEVDA4WxAuH+HXrLD2j17/V7tOoR1PnLKda?=
- =?us-ascii?Q?VvAlkfPdloAyGWZ+rWTTvpMsY4uhImupHgyyG3Q/b9ySdJsdaqHcHgYedG9u?=
- =?us-ascii?Q?Zx3wu7zDzw+jq25OxZsVKVsesqdX/zTAHcD1MkIw4mzT41CsnRsyjCkaIWtC?=
- =?us-ascii?Q?+6v+BVONDauP3ji2bZjglan+0Quhl/F+4X/MBNZDgHS+HzMXCa+UWQQc5rQj?=
- =?us-ascii?Q?4hPLa8D6WnIq/pNKfHSICS9k5pDQ65Hh3gyndKHwmzwDxIrjAlX9xd39/YD5?=
- =?us-ascii?Q?1dWMrnPeNqPs5s5n9bp9iQmxZBqUAYZ8wdou8EUs4zqGdL6ftvffvwNlxcNL?=
- =?us-ascii?Q?Gqyqjazr0UBiTklzk3t52AslIs0qsoI1SYNzHv15GQSky8p4BA2WhH54n1uw?=
- =?us-ascii?Q?y6FsOpnBbSh+9N80+lnyTjgGA3ZzvRKr3MwCCD/ejM+EohVBL87LfYWY+gJu?=
- =?us-ascii?Q?L61F+kphO+hsAKQBNJUJ8/wGnh5pb1nInyN+rtL9BCFGjM2Rafd22LOQg/r2?=
- =?us-ascii?Q?+z2nkFW/llAn/l6uJhTdiUk9kLZLW/dTqEuvmxgYa9yxvu3uDO0bHNqLkj91?=
- =?us-ascii?Q?PUUwPkrOUs2VgMaKnPwb5QwM6EhXXRoEqu399HWclpZcZ+qscmVX4ytxwGdw?=
- =?us-ascii?Q?8VUmr17DFDwda78qetxMWRS4pSUIMpiStMo9CqN03TzWMHFf/vnI0yzDn90T?=
- =?us-ascii?Q?+s79Ju/ctkQwb42NFZ+zyL/2UD0voc+bMRVJCaiKaAXmMymAZBWILUX1oU2Y?=
- =?us-ascii?Q?TQZ2owGZ4TefFIorw04zGx8NL7JjsTBu5MHoib4W8HU2+TJzea7gajedBzyL?=
- =?us-ascii?Q?RlyIUbRYN9prLdADXHrj0gi+y06GFkhf8QPX/JLZ1HGJKC1Hb9aZQtD0eu50?=
- =?us-ascii?Q?KWAxcaUerXyhEf/CHYAtE5ODJS0VcIg2ZjMF/tdOKhzx9nXwazqb1gu938Wi?=
- =?us-ascii?Q?AECSjUTWPIcavruY5orJ2ZvlppQ4alm5XtHObmyd/7T0la/IUs9HjayPkl2U?=
- =?us-ascii?Q?8xZdYe+9PMqD6iFGUr6AT1X8PdimgD93+WrtbFdktZBZVkuV3NC2xU5BOO3z?=
- =?us-ascii?Q?xM36eiivPU4/XLawEBvrMF18O48DFBeJ5q7RhCMd00QMwAq8LlaJj05luRYH?=
- =?us-ascii?Q?spxP9YK4GVgJrpahhzgVDQcn8gRDc2uceel8Dn8yz7fYf/Dtn0tv93QCDMYR?=
- =?us-ascii?Q?iBAs1KzuH6y7KcRYlY0DGD8P9PTUKAgUU0K4U2Kxqj4exVIFTJVoH7FYbtfb?=
- =?us-ascii?Q?oUo4+hlzcjzxMbVEg033dfOXKp52Z1isPT43CS8P1UYu0A5R17hgYDBFLtjO?=
- =?us-ascii?Q?nusX+E4GaNPib/qsawqBzkeocwoa/8WViutkNjS6BYMLPnSAMK+edpYCF2Tb?=
- =?us-ascii?Q?h6cxwECfs/ygeoP2X8uK6kC8tdHbOLVOOUepgUN+6tRXgrGKLz7PT7S1XeAd?=
- =?us-ascii?Q?h0O9ywGt9SZYg51yIJROI9ATSfRWm6SWJILkhlhr7GhsOj5wi37H6wkYSEmW?=
- =?us-ascii?Q?iF0pz4JtmB8evmZsnlAPT33iVVITEQXdcV9rCqep57Nf5jMvxNDRJMW09cSE?=
- =?us-ascii?Q?QQmMtEIZhilUJZleKZH/D8+qLQVHJqS+ImbMj3y0vKGg1yfxlYR5?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8133d8a-0614-428c-6f32-08dea7ebbb02
-X-MS-Exchange-CrossTenant-AuthSource: CY8PR12MB8300.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2026 01:40:03.4056
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CH1Sh37d3VDG/k6E3pjQcwu2jxnrR9HR5EkjZxGqPqKfFKU79CwY6x5CbLbJJSshnmI3wLn/+ECpE7s8Znpnpg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6824
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Apr 30, 2026 at 05:13:44PM -0400, Yury Norov wrote:
-> This series is a resend for Jinjie Ruan's "arch/riscv: Add bitrev.h file
-> to support rev8 and brev8" [1], my follow-up "lib: compile generic
-> bitrev based on GENERIC_BITREVERSE" [2], and the fix for a build error
-> reported by Nathan Chancellor [3].
+On Wed, 29 Apr 2026 11:57:55 -0700 Dipayaan Roy wrote:
+> During Function Level Reset recovery, the MANA driver reads
+> hardware BAR0 registers that may temporarily contain garbage values.
+> The SHM (Shared Memory) offset read from GDMA_REG_SHM_OFFSET is used
+> to compute gc->shm_base, which is later dereferenced via readl() in
+> mana_smc_poll_register(). If the hardware returns an unaligned or
+> out-of-range value, the driver must not blindly use it, as this would
+> propagate the hardware error into a kernel crash.
 > 
-> No changes, except for combining pieces together and rebasing on top of
-> the tree.
+> The following crash was observed on an arm64 Hyper-V guest running
+> kernel 6.17.0-3013-azure during VF reset recovery triggered by HWC
+> timeout.
 > 
-> [1] https://lore.kernel.org/all/20260421130752.607500-1-ruanjinjie@huawei.com/
-> [2] https://lore.kernel.org/all/20260427205210.397471-1-ynorov@nvidia.com/
-> [3] https://lore.kernel.org/all/20260429202922.GA3575295@ax162/
+> [13291.785274] Unable to handle kernel paging request at virtual address ffff8000a200001b
+> [13291.785311] Mem abort info:
+> [13291.785332]   ESR = 0x0000000096000021
+> [13291.785343]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [13291.785355]   SET = 0, FnV = 0
+> [13291.785363]   EA = 0, S1PTW = 0
+> [13291.785372]   FSC = 0x21: alignment fault
+> [13291.785382] Data abort info:
+> [13291.785391]   ISV = 0, ISS = 0x00000021, ISS2 = 0x00000000
+> [13291.785404]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+> [13291.785412]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+> [13291.785421] swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000014df3a1000
+> [13291.785432] [ffff8000a200001b] pgd=1000000100438403, p4d=1000000100438403, pud=1000000100439403, pmd=0068000fc2000711
+> [13291.785703] Internal error: Oops: 0000000096000021 [#1]  SMP
+> [13291.830975] Modules linked in: tls qrtr mana_ib ib_uverbs ib_core xt_owner xt_tcpudp xt_conntrack nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 nft_compat nf_tables cfg80211 8021q garp mrp stp llc binfmt_misc joydev serio_raw nls_iso8859_1 hid_generic aes_ce_blk aes_ce_cipher polyval_ce ghash_ce sm4_ce_gcm sm4_ce_ccm sm4_ce sm4_ce_cipher hid_hyperv sm4 sm3_ce sha3_ce hv_netvsc hid vmgenid hyperv_keyboard hyperv_drm sch_fq_codel nvme_fabrics efi_pstore dm_multipath nfnetlink vsock_loopback vmw_vsock_virtio_transport_common hv_sock vmw_vsock_vmci_transport vmw_vmci vsock dmi_sysfs ip_tables x_tables autofs4
+> [13291.862630] CPU: 122 UID: 0 PID: 61796 Comm: kworker/122:2 Tainted: G        W           6.17.0-3013-azure #13-Ubuntu VOLUNTARY
+> [13291.869902] Tainted: [W]=WARN
+> [13291.871901] Hardware name: Microsoft Corporation Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.1 01/08/2026
+> [13291.878086] Workqueue: events mana_serv_func
+> [13291.880718] pstate: 62400005 (nZCv daif +PAN -UAO +TCO -DIT -SSBS BTYPE=--)
+> [13291.884835] pc : mana_smc_poll_register+0x48/0xb0
+> [13291.887902] lr : mana_smc_setup_hwc+0x70/0x1c0
+> [13291.890493] sp : ffff8000ab79bbb0
+> [13291.892364] x29: ffff8000ab79bbb0 x28: ffff00410c8b5900 x27: ffff00410d630680
+> [13291.896252] x26: ffff004171f9fd80 x25: 000000016ed55000 x24: 000000017f37e000
+> [13291.899990] x23: 0000000000000000 x22: 000000016ed55000 x21: 0000000000000000
+> [13291.904497] x20: ffff8000a200001b x19: 0000000000004e20 x18: ffff8000a6183050
+> [13291.908308] x17: 0000000000000000 x16: 0000000000000000 x15: 000000000000000a
+> [13291.912542] x14: 0000000000000004 x13: 0000000000000000 x12: 0000000000000000
+> [13291.916298] x11: 0000000000000000 x10: 0000000000000001 x9 : ffffc45006af1bd8
+> [13291.920945] x8 : ffff000151129000 x7 : 0000000000000000 x6 : 0000000000000000
+> [13291.925293] x5 : 000000015f214000 x4 : 000000017217a000 x3 : 000000016ed50000
+> [13291.930436] x2 : 000000016ed55000 x1 : 0000000000000000 x0 : ffff8000a1ffffff
+> [13291.934342] Call trace:
+> [13291.935736]  mana_smc_poll_register+0x48/0xb0 (P)
+> [13291.938611]  mana_smc_setup_hwc+0x70/0x1c0
+> [13291.941113]  mana_hwc_create_channel+0x1a0/0x3a0
+> [13291.944283]  mana_gd_setup+0x16c/0x398
+> [13291.946584]  mana_gd_resume+0x24/0x70
+> [13291.948917]  mana_do_service+0x13c/0x1d0
+> [13291.951583]  mana_serv_func+0x34/0x68
+> [13291.953732]  process_one_work+0x168/0x3d0
+> [13291.956745]  worker_thread+0x2ac/0x480
+> [13291.959104]  kthread+0xf8/0x110
+> [13291.961026]  ret_from_fork+0x10/0x20
+> [13291.963560] Code: d2807d00 9417c551 71000673 54000220 (b9400281)
+> [13291.967299] ---[ end trace 0000000000000000 ]---
 > 
-> Build-tested against x86 tinyconfig and defconfig, having disabled and
-> enabiled CRC32 and BITREVERSE, correspondingly.
+> Disassembly of mana_smc_poll_register() around the crash site:
+> 
+> Disassembly of section .text:
+> 
+> 00000000000047c8 <mana_smc_poll_register>:
+>     47c8: d503201f        nop
+>     47cc: d503201f        nop
+>     47d0: d503233f        paciasp
+>     47d4: f800865e        str     x30, [x18], #8
+>     47d8: a9bd7bfd        stp     x29, x30, [sp, #-48]!
+>     47dc: 910003fd        mov     x29, sp
+>     47e0: a90153f3        stp     x19, x20, [sp, #16]
+>     47e4: 91007014        add     x20, x0, #0x1c
+>     47e8: 5289c413        mov     w19, #0x4e20
+>     47ec: f90013f5        str     x21, [sp, #32]
+>     47f0: 12001c35        and     w21, w1, #0xff
+>     47f4: 14000008        b       4814 <mana_smc_poll_register+0x4c>
+>     47f8: 36f801e1  tbz  w1, #31, 4834 <mana_smc_poll_register+0x6c>
+>     47fc: 52800042        mov     w2, #0x2
+>     4800: d280fa01        mov     x1, #0x7d0
+>     4804: d2807d00        mov     x0, #0x3e8
+>     4808: 94000000        bl      0 <usleep_range_state>
+>     480c: 71000673        subs    w19, w19, #0x1
+>     4810: 54000200        b.eq    4850 <mana_smc_poll_register+0x88>
+>     4814: b9400281      ldr   w1, [x20] <-- **** CRASHED HERE *****
+>     4818: d50331bf        dmb     oshld
+>     481c: 2a0103e2        mov     w2, w1
+>     ...
+> 
+> From the crash signature x20 = ffff8000a200001b, this address
+> ends in 0x1b which is not 4-byte aligned, so the 'ldr w1, [x20]'
+> instruction (readl) triggers the arm64 alignment fault (FSC = 0x21).
+> 
+> The root cause is in mana_gd_init_vf_regs(), which computes:
+> 
+>   gc->shm_base = gc->bar0_va + mana_gd_r64(gc, GDMA_REG_SHM_OFFSET);
+> 
+> The offset is used without any validation.  The same problem exists
+> in mana_gd_init_pf_regs() for sriov_base_off and sriov_shm_off.
+> 
+> Fix this by validating all offsets before use:
+> 
+> - VF: check shm_off is within BAR0, properly aligned to 4 bytes
+>   (readl requirement), and leaves room for the full 256-bit
+>   (32-byte) SMC aperture.
+> 
+> - PF: check sriov_base_off is within BAR0, aligned to 8 bytes
+>   (readq requirement), and leaves room to safely read the
+>   sriov_shm_off register at sriov_base_off + GDMA_PF_REG_SHM_OFF.
+>   Then check sriov_shm_off leaves room for the full SMC aperture.
+>   All arithmetic uses subtraction rather than addition to avoid
+>   integer overflow on garbage firmware values.
+> 
+> without validating the offset read from hardware. If the register
+> returns a garbage value that is neither within bar 0 bounds nor aligned
+> to the 4-byte granularity, thus causing the alignment fault.
+> 
+> Define SMC_APERTURE_SIZE (32 bytes, derived from the 256-bit aperture
+> width)
+> 
+> Return -EPROTO on invalid values.  The existing recovery path in
+> mana_serv_reset() already handles -EPROTO by falling through to PCI
+> device rescan, giving the hardware another chance to present valid
+> register values after reset.
+> 
+> Fixes: 9bf66036d686 ("net: mana: Handle hardware recovery events when probing the device")
+> Signed-off-by: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+> 
+> ---
+> Changes in v2:
+> - Fix sriov_base_off alignment check: sizeof(u32) to sizeof(u64), since
+>   mana_gd_r64() (readq) requires 8-byte alignment on arm64.
+> - Fix sriov_base_off bounds: also verify enough space remains in BAR0
+>   to safely read sriov_shm_off at offset GDMA_PF_REG_SHM_OFF + 8 bytes.
+> - Fix integer overflow: rewrite bounds checks using subtraction
+>   (remaining = bar0_size - base) instead of addition.
+> - Fix SMC aperture size: add gc->bar0_size - shm_off < SMC_APERTURE_SIZE
+>   checks in both VF and PF paths; previously only the start address was
+>   validated, but mana_smc_poll_register() accesses up to shm_base + 0x1c
+>   (28 bytes from base, 32 bytes total).
+> - Export SMC_APERTURE_SIZE to shm_channel.h.
+> ---
+>  .../net/ethernet/microsoft/mana/gdma_main.c   | 40 ++++++++++++++++---
+>  include/net/mana/shm_channel.h                |  6 +++
+>  2 files changed, 41 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> index 098fbda0d128..d8e816882f02 100644
+> --- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> +++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+> @@ -43,8 +43,9 @@ static u64 mana_gd_r64(struct gdma_context *g, u64 offset)
+>  static int mana_gd_init_pf_regs(struct pci_dev *pdev)
+>  {
+>  	struct gdma_context *gc = pci_get_drvdata(pdev);
+> -	void __iomem *sriov_base_va;
+> +	u64 remaining_barsize;
+>  	u64 sriov_base_off;
+> +	u64 sriov_shm_off;
+>  
+>  	gc->db_page_size = mana_gd_r32(gc, GDMA_PF_REG_DB_PAGE_SIZE) & 0xFFFF;
+>  
+> @@ -73,10 +74,28 @@ static int mana_gd_init_pf_regs(struct pci_dev *pdev)
+>  	gc->phys_db_page_base = gc->bar0_pa + gc->db_page_off;
+>  
+>  	sriov_base_off = mana_gd_r64(gc, GDMA_SRIOV_REG_CFG_BASE_OFF);
+> +	if (sriov_base_off >= gc->bar0_size ||
+> +	    gc->bar0_size - sriov_base_off <
+> +		GDMA_PF_REG_SHM_OFF + sizeof(u64) ||
 
-I've got a feedback from sashiko bot.
+nit: fits on a single line, I think?
 
-1. We need to do #if IS_DEFINED(CONFIG_CRC32) instead of #ifdef,
-   because it may be a module.
-2. Selecting GENERIC_BITREVERSE without BITREVERSE causes the unmet
-   direct dependency warning:
+> +	    !IS_ALIGNED(sriov_base_off, sizeof(u64))) {
+> +		dev_err(gc->dev,
+> +			"SRIOV base offset 0x%llx out of range or unaligned (BAR0 size 0x%llx)\n",
+> +			sriov_base_off, (u64)gc->bar0_size);
+> +		return -EPROTO;
+> +	}
+>  
+> -	sriov_base_va = gc->bar0_va + sriov_base_off;
+> -	gc->shm_base = sriov_base_va +
+> -			mana_gd_r64(gc, sriov_base_off + GDMA_PF_REG_SHM_OFF);
+> +	remaining_barsize = gc->bar0_size - sriov_base_off;
+> +	sriov_shm_off = mana_gd_r64(gc, sriov_base_off + GDMA_PF_REG_SHM_OFF);
+> +	if (sriov_shm_off >= remaining_barsize ||
+> +	    remaining_barsize - sriov_shm_off < SMC_APERTURE_SIZE ||
+> +	    !IS_ALIGNED(sriov_shm_off, sizeof(u32))) {
+> +		dev_err(gc->dev,
+> +			"SRIOV SHM offset 0x%llx out of range or unaligned (BAR0 size 0x%llx)\n",
+> +			sriov_shm_off, (u64)gc->bar0_size);
+> +		return -EPROTO;
+> +	}
+> +
+> +	gc->shm_base = gc->bar0_va + sriov_base_off + sriov_shm_off;
+>  
+>  	return 0;
+>  }
+> @@ -84,6 +103,7 @@ static int mana_gd_init_pf_regs(struct pci_dev *pdev)
+>  static int mana_gd_init_vf_regs(struct pci_dev *pdev)
+>  {
+>  	struct gdma_context *gc = pci_get_drvdata(pdev);
+> +	u64 shm_off;
+>  
+>  	gc->db_page_size = mana_gd_r32(gc, GDMA_REG_DB_PAGE_SIZE) & 0xFFFF;
+>  
+> @@ -111,7 +131,17 @@ static int mana_gd_init_vf_regs(struct pci_dev *pdev)
+>  	gc->db_page_base = gc->bar0_va + gc->db_page_off;
+>  	gc->phys_db_page_base = gc->bar0_pa + gc->db_page_off;
+>  
+> -	gc->shm_base = gc->bar0_va + mana_gd_r64(gc, GDMA_REG_SHM_OFFSET);
+> +	shm_off = mana_gd_r64(gc, GDMA_REG_SHM_OFFSET);
+> +	if (shm_off >= gc->bar0_size ||
+> +	    gc->bar0_size - shm_off < SMC_APERTURE_SIZE ||
+> +	    !IS_ALIGNED(shm_off, sizeof(u32))) {
+> +		dev_err(gc->dev,
+> +			"SHM offset 0x%llx out of range or unaligned (BAR0 size 0x%llx)\n",
+> +			shm_off, (u64)gc->bar0_size);
+> +		return -EPROTO;
+> +	}
+> +
+> +	gc->shm_base = gc->bar0_va + shm_off;
+>  
+>  	return 0;
+>  }
+> diff --git a/include/net/mana/shm_channel.h b/include/net/mana/shm_channel.h
+> index 5199b41497ff..dbabcfb95daf 100644
+> --- a/include/net/mana/shm_channel.h
+> +++ b/include/net/mana/shm_channel.h
+> @@ -4,6 +4,12 @@
+>  #ifndef _SHM_CHANNEL_H
+>  #define _SHM_CHANNEL_H
+>  
+> +#define SMC_APERTURE_BITS 256
+> +#define SMC_BASIC_UNIT (sizeof(u32))
+> +#define SMC_APERTURE_DWORDS (SMC_APERTURE_BITS / (SMC_BASIC_UNIT * 8))
+> +#define SMC_LAST_DWORD (SMC_APERTURE_DWORDS - 1)
+> +#define SMC_APERTURE_SIZE  (SMC_APERTURE_BITS / 8)
 
-   WARNING: unmet direct dependencies detected for GENERIC_BITREVERSE
-  Depends on [n]: BITREVERSE [=n]
-  Selected by [m]:
-  - MYCONFIG [=m]
+AI bots complain that we're redefining this.
+Since it's a fix I think it's better to remove the existing definition
+even if it lives in a driver that goes via a different tree.
 
-I'll send a v2 to fix it
-
-Thanks,
-Yury
+>  struct shm_channel {
+>  	struct device *dev;
+>  	void __iomem *base;
+-- 
+pw-bot: cr
