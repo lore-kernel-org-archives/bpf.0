@@ -1,329 +1,146 @@
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E3032417DE
-	for <bpf@vger.kernel.org>; Sat,  2 May 2026 20:10:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777752656; cv=pass; b=iJ50wvpY9Nh3ODnPG4lH+IrVo5OTtyEMxofvIBCB0s5ymH4XiaWI625C9XgG5rrF0ARlJeHt2d9pwCNV9VzWoSExVuDXIJs8kDQVxQ0XT4Gq3DUbMU4Sxaw9jsWskIhdzNqigcC4SKh5crSiwqLOJwwfXrwgHeRpYO7ddB3CLio=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777752656; c=relaxed/simple;
-	bh=BmEnXgg8tPmIxiFsOcmAbWfmmt0C7J2crnmvAJpu9+w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IICXUKvAmpWqNFRumrEnVZ3WeyNYgewBLXmugUkrfBOH756zYmrPJ36iPayjt3msIt4wSIeacGQfwMT5UmRv8OQ0WVIO+pi19WTZ9YOOd76MHloHucQXZ7tl4n+cgUOMlAYhXeW5fyfcrqDi/bRPMLWzbKeJUouStFc/iyqO00s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wdmpil0s; arc=pass smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC44F309EEB
+	for <bpf@vger.kernel.org>; Sat,  2 May 2026 21:55:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777758909; cv=none; b=bKJAXTXjhlGj/7Syo684xfSO6w+QsJSrP6eiTaz6sRDsxQEiN7wk/uBR4ylsTfe11xSP0/JUkPfPoN6b0WAS72FdN+bumJOPFrFfbFqBzYGmY0sjV+pC/FGaGEXz5YAjPK//UnzyWtOaXn9blPhwtbX7+qsjqfDU8fSltP4jPwU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777758909; c=relaxed/simple;
+	bh=UJToFbk/smw7T+5219I0qKEaU/aJjyTwHoz37DS/4FU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SfGnXzA1nyTvv7skowS/atVdByV4UcLQwJwcrjSb3ksSkOd+6538wCqt5h7pUGlbuWZ0NECl3/xyMT9A52wJoHrXsR9ISqoVlvCV29Nqusbt6Pi5v2+8sWjc1MA+C4FELOWEM34H2t2RAi79tkhpIA83x51tZOpuDY+QteJ7PRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Fth92p0t; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wdmpil0s"
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-38e7c3a2deaso26802851fa.2
-        for <bpf@vger.kernel.org>; Sat, 02 May 2026 13:10:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777752652; cv=none;
-        d=google.com; s=arc-20240605;
-        b=J0p8FEwJ7sIkTjoOjvKk/lssBiEs3vtMzWpdPSpuruGgCLP9zcEXNKTRjHy4mogFpO
-         gV4/z79MPpjhJfy7nyM4Ll2mauiPCCKgCYgMHANdrTgOoIG3RArMaUQMpqF+6GXkRc//
-         EtxvVJrf+1NrvaEqKekv18Rf4bF7xZ38WcH0l5XJMyhB8hbCfLvQLyZmP6mbBR32bw5c
-         2pjO22eLz847XHsKlU8nC0IjYY0uSqg0YqdRz2pGnFLVcCQTeim0n0q5VnsavnfMAecR
-         t6U2q4UQ7zb8vuTM5a9i9ytMISrnKW0gaelIt+jGq1KlMqjk2/USCFSkJGB8XiXD0mRB
-         uWCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=jW8dBReU46ZQAD/dWYei/c27fmURyLmNJvMDiBp4D0g=;
-        fh=ojLXBTH9CYa7b9DvZ81kzRpde9irtVaNbNWj06wIFGo=;
-        b=EdS75GC+ZbdFmsGeKlVU7RUsaROgLwUoQkIRf+ox8evITfBUaBdRnOQzG8pBV3JHto
-         4Wy0SpwTGb73LdX1B8J4VObdC5VKt/qPv6SG+UPz73l5AE/IKEVybsV7g1Jp7voDg7Xl
-         0LR3j4Nz0bJn75wsyNDz0lh8MwSq+qfRLCwwRxM8c0Vv5O7GpQQQBsbwpuI50h740wZi
-         yFhqhbxhK77bVEa2M5mIID6QU7TywzCR50PWvmKXud9zWtoTEjUxdSE3wYrVO8KPjy5b
-         Wfv8LaHwvLVS87ZH3Z0t5eRLskWzwzSdgaWoC75+pSIDkV8ZBnWQgUNMFfGzG8rrog2Y
-         ufEA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777752652; x=1778357452; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jW8dBReU46ZQAD/dWYei/c27fmURyLmNJvMDiBp4D0g=;
-        b=Wdmpil0swa6R91ryCKVrIxLw1aJs57it2jWYC+uayqAim3pMevx/+8RYtHwsT2h6GX
-         alMoRt9UcqD9Es8rZWlvo1hKnrqYnOmge/fx8mfBC2Ub6T5OcSrdnRkFT91S6oGqilIk
-         IF2p2KOu81rOvrvLZ01HjGX5Vehr2GaCJRmUkZIMIIlJfq6AURBG64eavvor9dkbM8o9
-         CNxyJTBZuSThphePgE2oYi7lpN56VSGAevIR0pCbUkLnEokffCWSKRBOyd1Rl8djcaxo
-         NiUdvIK3UpZAVm8RCigA0E9COS0Ap+jmpx7MEe+YQ/3NlOxWrNT9FdJBUx4H75VpyjKG
-         JyPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777752652; x=1778357452;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jW8dBReU46ZQAD/dWYei/c27fmURyLmNJvMDiBp4D0g=;
-        b=Bf0E72XIuu6uDZy46cg2iFVurtVwGUNywfo7eubQoSk07uJ+OTNlLZloJUE9ryQq3T
-         a+UGPePv8NrL9WobE9PP/02JT82+VZbsvIuE+TtO9zSZjfmcahbO+R1Nh5U3+3TvpeIm
-         kSoP6L06G0giQ8a5cfjMRqj03ytJafddyUHVUXpYd72xQDZcWo/XvPLEEGRNoUkUmImy
-         g+ghWsHZ7neTddQLe/T7Bol0A/k0bO+Mu6HNoJB0exoVpJbp5OVJZQPJzVNDH4Ur6jWP
-         x9oKvhnamYuAExSdRwEAkc6nQyYeI10yuRwzZfMtLEDQX/Wx07Rn2jSZCH1Hav/5e+3P
-         2iNg==
-X-Forwarded-Encrypted: i=1; AFNElJ+3RRUMyBj/4XVfFB5xdNKXjh+UfSHqagkSCmI8oA4DNOQpq5SrqhmbN1Es4wALGxklRLY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVdu5wPRaN3tgeYwbLrt4OHDjuEalQNS1TR0Y6fDAetbiNIFM6
-	joDy7rcKvZDoCVFHzKJDOvC4vZNZY9VnojG9lVkGta4/UzEiWYbPQ/cDkSt+SGDF6C4UZlExPxr
-	gQRBuEfbL7mgTVFSgq88XGPURP4xpU5c=
-X-Gm-Gg: AeBDiet1l/q8kwF/7SDJ6nDXrY2fknQJnFvdNRsMpPI3+ePdhv28hLp9/fM7uP1M0sS
-	cC2UfL3Y9m8Ras6pVSsfGenMtw6FN+X/FLPm2oscY3voLdLqFYeyLgCJPD/j6x6tXk+WoLVdgi9
-	R1CkJh236CgWXbD5qyk/zeEo8JEtAvmAKcPRtxr8TAWuoHvQg05KfLiN2KwGmhWkmiqm3qep9ey
-	lZWDTe8RUg5LmKv/97s31fmOeMapaiHKnnm+dg51amo8lLQkSULL0XQa9VmEqA6bhUXpVcsizFs
-	1IAFKgWOU9s4c7rZHSqHUB0VTluWbZZ6h6iM5MEZsdNqnLiI
-X-Received: by 2002:a05:6512:3b84:b0:5a2:a3dc:51e3 with SMTP id
- 2adb3069b0e04-5a862ec11b8mr1072024e87.12.1777752652108; Sat, 02 May 2026
- 13:10:52 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Fth92p0t"
+Message-ID: <7bfa2ead-3b2f-4ec3-be38-2146acc69eb2@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1777758902;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lwiEKTGaoix92Mpj7lQCpAT9D/2ZAH85mNbwd/weSO8=;
+	b=Fth92p0tBSkQ2ctZqheNGKYLqVx2l/OHQuKeXsiKtWnN1bFPa7kONQCvG/Th9maiRAy+rY
+	sTuXycAtT9jffm2egvQfzI6uJ7tPZKyk50MrRLIk6dX/wodqeEl5xRVzsz9rXxlwgvyo7e
+	tq+0vgXu48uFBz8qfyW6BQ66gLRv4Gw=
+Date: Sat, 2 May 2026 23:54:59 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260424053816.27965-1-kerneljasonxing@gmail.com>
- <20260424053816.27965-9-kerneljasonxing@gmail.com> <afE7EFYdrNg1u_g2@devvm7509.cco0.facebook.com>
- <CAL+tcoA0j+tHOPr-DLyW26_EF1JhwqV+no0Lcx335FtKRbwUAw@mail.gmail.com>
- <afIeuwJNfwVmk9Pn@devvm7509.cco0.facebook.com> <CAL+tcoBTO9QGM220EO=m1TdiXwod7QzG59j7vQL3qoVSrb2QEw@mail.gmail.com>
- <afQdzWlMzjgpAUq7@devvm7509.cco0.facebook.com>
-In-Reply-To: <afQdzWlMzjgpAUq7@devvm7509.cco0.facebook.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Sat, 2 May 2026 23:10:14 +0300
-X-Gm-Features: AVHnY4Jgcbb21Gilb1zdl9-vTL4PgXfvRBz0aENbiyrkhBnNys-4k2fvK1e251M
-Message-ID: <CAL+tcoDWQG-QaixC_WDsGJemZHN0AffCqCMtdeaqad8ecF-EnA@mail.gmail.com>
-Subject: Re: [PATCH net v4 8/8] xsk: fix u64 descriptor address truncation on
- 32-bit architectures
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
-	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, 
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
-	john.fastabend@gmail.com, aleksander.lobakin@intel.com, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next 01/18] bpf: Support stack arguments for bpf
+ functions
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ "Jose E . Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com,
+ Martin KaFai Lau <martin.lau@kernel.org>
+References: <20260424171433.2034470-1-yonghong.song@linux.dev>
+ <20260424171438.2034741-1-yonghong.song@linux.dev>
+ <DI8CQDATE33J.30U4FNOVZY97R@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <DI8CQDATE33J.30U4FNOVZY97R@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, May 1, 2026 at 6:29=E2=80=AFAM Stanislav Fomichev <sdf.kernel@gmail=
-.com> wrote:
+
+
+On 5/2/26 6:03 PM, Alexei Starovoitov wrote:
+> On Fri Apr 24, 2026 at 10:14 AM PDT, Yonghong Song wrote:
+>> @@ -1669,6 +1669,8 @@ struct bpf_prog_aux {
+>>   	u32 max_pkt_offset;
+>>   	u32 max_tp_access;
+>>   	u32 stack_depth;
+>> +	u16 incoming_stack_arg_depth;
+>> +	u16 stack_arg_depth; /* both incoming and max outgoing of stack arguments */
+>>   	u32 id;
+>>   	u32 func_cnt; /* used by non-func prog as the number of func progs */
+>>   	u32 real_func_cnt; /* includes hidden progs, only used for JIT and freeing progs */
+> ...
 >
-> On 04/29, Jason Xing wrote:
-> > On Wed, Apr 29, 2026 at 6:14=E2=80=AFPM Stanislav Fomichev <sdf.kernel@=
-gmail.com> wrote:
-> > >
-> > > On 04/29, Jason Xing wrote:
-> > > > On Wed, Apr 29, 2026 at 2:11=E2=80=AFAM Stanislav Fomichev <sdf.ker=
-nel@gmail.com> wrote:
-> > > > >
-> > > > > On 04/24, Jason Xing wrote:
-> > > > > > From: Jason Xing <kernelxing@tencent.com>
-> > > > > >
-> > > > > > In copy mode TX, xsk_skb_destructor_set_addr() stores the 64-bi=
-t
-> > > > > > descriptor address into skb_shinfo(skb)->destructor_arg (void *=
-) via a
-> > > > > > uintptr_t cast:
-> > > > > >
-> > > > > >     skb_shinfo(skb)->destructor_arg =3D (void *)((uintptr_t)add=
-r | 0x1UL);
-> > > > > >
-> > > > > > On 32-bit architectures uintptr_t is 32 bits, so the upper 32 b=
-its of
-> > > > > > the descriptor address are silently dropped. In unaligned mode =
-the chunk
-> > > > > > offset is encoded in bits 48-63 of the descriptor address
-> > > > > > (XSK_UNALIGNED_BUF_OFFSET_SHIFT =3D 48), meaning the offset is =
-lost
-> > > > > > entirely. The completion queue then returns a truncated address=
- to
-> > > > > > userspace, making buffer recycling impossible.
-> > > > > >
-> > > > > > Fix this by handling the 32-bit case in the destructor_arg help=
-ers:
-> > > > > >
-> > > > > > - xsk_skb_destructor_set_addr(): on !CONFIG_64BIT, allocate an
-> > > > > >   xsk_addrs struct via kmem_cache_zalloc() to store the full u6=
-4
-> > > > > >   address. Leave num_descs as 0 (zalloc) so that the subsequent
-> > > > > >   xsk_inc_num_desc() brings it to the correct count of 1.
-> > > > > >
-> > > > > > - xsk_skb_destructor_is_addr(): on !CONFIG_64BIT, return true o=
-nly
-> > > > > >   when destructor_arg is NULL (not yet set), false when it poin=
-ts to
-> > > > > >   an xsk_addrs struct.
-> > > > > >
-> > > > > > - xsk_skb_init_misc(): call xsk_skb_destructor_set_addr() first
-> > > > > >   before touching any other skb fields; on failure return early=
- so
-> > > > > >   the skb destructor is never changed from sock_wfree.
-> > > > > >
-> > > > > > The existing xsk_consume_skb() already handles 32-bit correctly=
- after
-> > > > > > these changes: xsk_skb_destructor_is_addr() returns false for a=
-ny
-> > > > > > allocated xsk_addrs, so the kmem_cache_free path is always take=
-n.
-> > > > > >
-> > > > > > The overhead is one extra kmem_cache_zalloc per first descripto=
-r on
-> > > > > > 32-bit only; 64-bit builds are completely unchanged.
-> > > > > >
-> > > > > > Closes: https://lore.kernel.org/all/20260419045824.D9E5EC2BCAF@=
-smtp.kernel.org/
-> > > > > > Fixes: 0ebc27a4c67d ("xsk: avoid data corruption on cq descript=
-or number")
-> > > > > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > > > > > ---
-> > > > > >  net/xdp/xsk.c | 38 +++++++++++++++++++++++++++++++-------
-> > > > > >  1 file changed, 31 insertions(+), 7 deletions(-)
-> > > > > >
-> > > > > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > > > > > index ed96f6ec8ff2..fe88f47741b5 100644
-> > > > > > --- a/net/xdp/xsk.c
-> > > > > > +++ b/net/xdp/xsk.c
-> > > > > > @@ -558,7 +558,10 @@ static int xsk_cq_reserve_locked(struct xs=
-k_buff_pool *pool)
-> > > > > >
-> > > > > >  static bool xsk_skb_destructor_is_addr(struct sk_buff *skb)
-> > > > > >  {
-> > > > > > -     return (uintptr_t)skb_shinfo(skb)->destructor_arg & 0x1UL=
-;
-> > > > > > +     if (IS_ENABLED(CONFIG_64BIT))
-> > > > > > +             return (uintptr_t)skb_shinfo(skb)->destructor_arg=
- & 0x1UL;
-> > > > > > +     else
-> > > > > > +             return !skb_shinfo(skb)->destructor_arg;
-> > > > >
-> > > > > Don't understand why we need to special case CONFIG_64BIT here?
-> > > > > Shouldn't the same existing condition work on 32bit?
-> > > >
-> > > > Because 0x1UL is the particular semantic applied on a 64-bit arch.
-> > > > xsk_skb_destructor_set_addr() sets it while
-> > > > xsk_skb_destructor_is_addr() recognizes it. They are a pair.
-> > > >
-> > > > As you noticed, one liner works but is not that appropriate: on a
-> > > > 32-bit arch, this member should be either a NULL point or a valid
-> > > > pointer pointing to a memory region. Testing if it's NULL can be
-> > > > helpful as to the long term maintenance because of its readability =
-and
-> > > > robustness/safety.
-> > > >
-> > > > The error path in allocation of skb is really complex, which is why
-> > > > I'm so cautious to take care of it :)
-> > >
-> > > Let's cleanup the error path instead of adding more complexity? Simil=
-ar to what
-> > > you do with your "xsk: fix xsk_addrs slab leak on multi-buffer error =
-path",
-> > > but maybe add a few NULL checks?
-> >
-> > Good suggestion. I think I can cook a follow up patch to do such a
-> > thing targetting net-next tree. This patch 8 belongs to net material
-> > which means it will be backported to the older stable kernel as soon
-> > as it gets merged. IIUC, the better way is to make it as simple as
-> > possible?
-> >
-> > >
-> > > Instead of 32 vs 64, I'd like to reason about whether destructor_arg
-> > > is an address or an allocated array (not whether we have 1 or >1
-> > > descriptors). And we special case 32 bit by always allocating it.
-> > >
-> > > Haven't checked, but maybe this is all you need (besides your _set_ad=
-dr
-> > > changes)?
-> > >
-> > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > > index 6149f6a79897..03f217e85d31 100644
-> > > --- a/net/xdp/xsk.c
-> > > +++ b/net/xdp/xsk.c
-> > > @@ -589,6 +589,8 @@ static u32 xsk_get_num_desc(struct sk_buff *skb)
-> > >                 return 1;
-> > >
-> > >         xsk_addr =3D (struct xsk_addrs *)skb_shinfo(skb)->destructor_=
-arg;
-> > > +       if (!xsk_addr)
-> > > +               return 0;
-> > >
-> > >         return xsk_addr->num_descs;
-> > >  }
-> >
-> > Right, as I mentioned, how about posting a new cleanup patch with your
-> > suggested-by tag?
-> >
-> > >
-> > > > I've noticed the status has been changed to 'changes requested'. Do=
-es
-> > > > that mean one way or another I have to post a new version?
-> > >
-> > > That wasn't me :-) From my POW, patches 1-7 are good to go..
-> >
-> > Great! Thanks for the review. My hope is to get this series merged
-> > soon in the net tree.
-> >
-> > >
-> > > > >
-> > > > > >  }
-> > > > > >
-> > > > > >  static u64 xsk_skb_destructor_get_addr(struct sk_buff *skb)
-> > > > > > @@ -566,9 +569,21 @@ static u64 xsk_skb_destructor_get_addr(str=
-uct sk_buff *skb)
-> > > > > >       return (u64)((uintptr_t)skb_shinfo(skb)->destructor_arg &=
- ~0x1UL);
-> > > > > >  }
-> > > > > >
-> > > > > > -static void xsk_skb_destructor_set_addr(struct sk_buff *skb, u=
-64 addr)
-> > > > > > +static int xsk_skb_destructor_set_addr(struct sk_buff *skb, u6=
-4 addr)
-> > > > > >  {
-> > > > >
-> > > > > [..]
-> > > > >
-> > > > > > +     if (!IS_ENABLED(CONFIG_64BIT)) {
-> > > > > > +             struct xsk_addrs *xsk_addr;
-> > > > > > +
-> > > > > > +             xsk_addr =3D kmem_cache_zalloc(xsk_tx_generic_cac=
-he, GFP_KERNEL);
-> > > > > > +             if (!xsk_addr)
-> > > > > > +                     return -ENOMEM;
-> > > > > > +             xsk_addr->addrs[0] =3D addr;
-> > > > > > +             skb_shinfo(skb)->destructor_arg =3D (void *)xsk_a=
-ddr;
-> > > > > > +             return 0;
-> > > > > > +     }
-> > > > > > +
-> > > > > >       skb_shinfo(skb)->destructor_arg =3D (void *)((uintptr_t)a=
-ddr | 0x1UL);
-> > > > > > +     return 0;
-> > > > >
-> > > > > I think this is gonna be a 3rd copy paste of the same logic? Let'=
-s
-> > > > > move to a new helper and replace existing kmem_cache_zalloc place=
-s?
-> > > > >
-> > > > > xsk_skb_destructor_alloc_list(prev_addr) ?
-> > >
-> > > Any comments on this?
-> >
-> > I didn't comment on this because I thought I was not that sure if we
-> > needed to wrap it up in the stable kernels :)
-> >
-> > Of course, it would be easier for me to work on the net-next tree to
-> > make the code look
-> > more neat and elegant.
+>> @@ -739,10 +759,13 @@ struct bpf_subprog_info {
+>>   	bool keep_fastcall_stack: 1;
+>>   	bool changes_pkt_data: 1;
+>>   	bool might_sleep: 1;
+>> -	u8 arg_cnt:3;
+>> +	u8 arg_cnt:4;
+>>   
+>>   	enum priv_stack_mode priv_stack_mode;
+>> -	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_REG_ARGS];
+>> +	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_ARGS];
+>> +	u16 incoming_stack_arg_depth;
+>> +	u16 stack_arg_depth; /* incoming + max outgoing */
+>> +	u16 max_out_stack_arg_depth;
+>>   };
+> I asked before but if there was an answer it got lost in all emails.
+> So will ask again: why duplicate incoming_stack_arg_depth
+> and stack_arg_depth in two places? One should be enough.
+
+We can remove 'incoming_stack_arg_depth' in bpf_subprog_info since
+in bpf_subprog_info we have 'arg_cnt' field.
+
+I am not sure whether we can remove stack_arg_depth.
+stack_arg_depth is to accumulate the incoming + max_outgoing since
+the subprog may have multiple functions inside.
+At this verification point, we accumulate such infomation at bpf_subprog_info.
+At this point, we only have main program, so we cannot copy
+subprog info stack_arg_depth to subprog. The subprog allocations
+are in jit_subprogs(). Did I miss anything?
+
 >
-> Are you concerned that you're gonna break something in the net tree? Why =
-not
+> And another question:
+> max_out_stack_arg_depth is computed only to error like this in bpf_fixup_call_args().
+>
+> +               u16 outgoing = subprog->stack_arg_depth - subprog->incoming_stack_arg_depth;
+> +
+> +               if (subprog->max_out_stack_arg_depth > outgoing) {
+> +                       verbose(env,
+> +                               "func#%d writes stack arg slot at depth %u, but calls only require %u bytes\n",
+> +                               i, subprog->max_out_stack_arg_depth, outgoing);
+> +                       return -EINVAL;
+>
+> why bother? What will go wrong if it's not there?
 
-My primary concern is this patch would be a little bit more
-complicated (more insertions/deletions). IIUC, the fix should be as
-simple as possible to easily get backported while we can do some
-cleanup work on the next branch.
+This is related to jit. For example, we have the following x86 jit stack layout:
 
-Please see this new version (v5) with your advice applied. Does it look goo=
-d?
-https://lore.kernel.org/all/20260502200722.53960-9-kerneljasonxing@gmail.co=
-m/
+       high address
+       +-------------------------+
+       | incoming stack arg N    |  [rbp + 16 + (N-7)*8]  (from caller)
+       | ...                     |
+       | incoming stack arg 7    |  [rbp + 16]
+       +-------------------------+
+       | return address          |  [rbp + 8]
+       | saved rbp               |  [rbp]
+       +-------------------------+
+       | BPF program stack       |  (round_up(stack_depth, 8) bytes)
+       +-------------------------+
+       | callee-saved regs       |  (r12, rbx, r13, r14, r15 as needed)
+       +-------------------------+
+       | outgoing arg M          |  [rsp + (M-7)*8]
+       | ...                     |
+       | outgoing arg 7          |  [rsp]
+       +-------------------------+  rsp
+       low address
 
-Thanks,
-Jason
+Let us say M = 8, so we will do
+     *(r11 - 8) = X1
+          is translated to r9 = X1
+     *(r11 - 16) = X2
+          is to store X2 to slot 'outgoing arg 7'
+     *(r11 - 24) = X3
+          is to store X3 to slot 'outgoing arg 8'
+
+Let us we have another *(r11 - 32) = X4 in the code, it
+will to store the X4 in 'callee-saved regs' area and this
+will corrupt the callee-saved regs.
+That is why we should reject it in verifier.
+
