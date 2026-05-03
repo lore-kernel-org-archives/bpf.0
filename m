@@ -1,97 +1,145 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C910B3D16F1
-	for <bpf@vger.kernel.org>; Sun,  3 May 2026 17:01:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958B3234964;
+	Sun,  3 May 2026 17:23:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777827674; cv=none; b=QGJs54lI3iBsg43Dfzs5oZMYe6O3t3nLlDtIk0Ev401yz+HGs7I4XxNydBtnN1Cy4FaxbieQZOXOsGK5ahGPlynMoE0eIFxBZmE+XYyC98zQHpzZR6BE7bBmFflc/nq+ntZRtvmQq+A7tjUsDUc3dN3OgP+gYRXc4Xt0UyWQHqY=
+	t=1777829010; cv=none; b=TFWy1GZt0sBqSyUuoBTj4+xcESe/zZx3g4dry+p7dWbK5EEwFCG+hkXzt5T/c55NS9vEoVg2GJFYKbezQPy9sK9Ta8gsIRFx784B1aFyP3hJMl3ckuGIBUVF8IXN/XDjg0yze/pfbkvnUefyzhuajJ8ZElYqh+mEx/5YRhDujb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777827674; c=relaxed/simple;
-	bh=xcismaF+50EUVwBdvTSHVQ3O45RhQiaHzhsBFqxZFoE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=VIhRBNV2q2uWvnded8pOti0ksjpyiDlh241RQdUXS3oCev2rhWL7YPl5Q6nmGV0uoX/g3XvSbvUuHbD0E53XG10oRCzxLHYR1KINJ3B4f1ToZ8so3SpXQXslrdgJGGIfgncc6h/G8smazFlj8b52BC21H4p/8zqpRhzqH6Pk+38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=df9RzoNq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777829010; c=relaxed/simple;
+	bh=MAX1WLXMN+1GNFQMEzikaKWBNYQVg3O6ltYlnFE7FsA=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Y870UvkL63kUEgvfrWvnJHGOqnStUdVaiakc8BMMAXHGy4IHteTrX+KNXG27i0Q2DJGEl8lohrNl9DAhBsl3swxZA6zfPQTsCTl+9jTIFXLDbXB5HbYlu7EK+WlIhS+zEo1y22tmzF0B8uD0wBr5IHCgS8cRi5ni33KLixXrX7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a0Va3qU7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="df9RzoNq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6786C2BCB4;
-	Sun,  3 May 2026 17:01:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a0Va3qU7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6890EC2BCB4;
+	Sun,  3 May 2026 17:23:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777827674;
-	bh=xcismaF+50EUVwBdvTSHVQ3O45RhQiaHzhsBFqxZFoE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=df9RzoNqg+dDIb6Q6hMIwIdAgNMLrIuc9/WPogwNOpicKGN9AWb8Fli7wjvnhx000
-	 cxKqMyC6GbTgGIHcO4jAY1MsQZFQwXy14epHUa1WrLijEB/dI3Qo6g5W3sEVZppY7F
-	 Jm+1YdZTD/x62qAvZe32fxmnsT7qUSJ7XPUFIbTRsAAcuN4YYVLolZHScQMnnD36fz
-	 piGC7Mdt7K+D2YpNLrIFf3D3Vzbu+XEgNXgZblyr9oXH8/dgQwVWowW6sFvkP9DypM
-	 BjD+To+sSmkDFawGLT9ey+VdOxJM0XrobP9DxUjPthMx//6RHp3dlJ04xcTHzQyQ97
-	 tm0rHf0GiX6JA==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v3] bpf: introduce TAINT_UNSAFE_BPF for mutating
- helpers
-Reply-To: sashiko@lists.linux.dev
-To: "Aaron Tomlin" <atomlin@atomlin.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260503164700.548164-1-atomlin@atomlin.com>
-References: <20260503164700.548164-1-atomlin@atomlin.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 03 May 2026 17:01:13 +0000
-Message-Id: <20260503170113.D6786C2BCB4@smtp.kernel.org>
+	s=k20201202; t=1777829010;
+	bh=MAX1WLXMN+1GNFQMEzikaKWBNYQVg3O6ltYlnFE7FsA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=a0Va3qU7k0KT2KpuPOfeQKseLEbqBUjzORSfVBhgmDQOObUBkkCdxvDoHLjpd43F1
+	 4h5E8P8OrIs5Z0UILb+AOKF+7NCz7YXpKCyj9Yrm7i/7DQN7Py2Q8AaguvE2ct80tm
+	 d+wSUyyFPwtOAtNKc4KXOoPjSXJ1b/vVLlu8uJT6+MCJS/T6HrPlm14plfWF9Qx3bJ
+	 UevK+enFcqpLdvPcaERjr8HF9MWDcVbVW62RtlPF7gxfDqB37rwvPQq7rdAkhJPipZ
+	 MRt8QpthU5PmyJRppz6aMhFBNwH+8Yz3X+DuoJRCmFErqNvlaQc6z+OiLcpznurp04
+	 E7ix8cgHvBKcA==
+Content-Type: multipart/mixed; boundary="===============1060358541369016392=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <91c02dbb561c7a4d760ff3314c99fed77870e0d7665848b5832f6719d21feb17@mail.kernel.org>
+In-Reply-To: <20260503165024.1526680-3-vernon2gm@gmail.com>
+References: <20260503165024.1526680-3-vernon2gm@gmail.com>
+Subject: Re: [PATCH 2/4] bpf: add bpf_cgroup_{flush_stats,stall} function
+From: bot+bpf-ci@kernel.org
+To: vernon2gm@gmail.com,akpm@linux-foundation.org,david@kernel.org,ljs@kernel.org,roman.gushchin@linux.dev,inwardvessel@gmail.com,shakeel.butt@linux.dev,ast@kernel.org,daniel@iogearbox.net,surenb@google.com
+Cc: linux-kernel@vger.kernel.org,linux-mm@kvack.org,bpf@vger.kernel.org,baohua@kernel.org,lance.yang@linux.dev,dev.jain@arm.com,yanglincheng@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun,  3 May 2026 17:23:28 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Premature kernel tainting in bpf_prog_load() before the program =
-is fully loaded and exposed.
---
+--===============1060358541369016392==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit b04c8335f7a6d97d5ae1eb32256b36d77ac00d40
-Author: Aaron Tomlin <atomlin@atomlin.com>
-
-bpf: introduce TAINT_UNSAFE_BPF for mutating helpers
-
-This patch introduces a new kernel taint flag (TAINT_UNSAFE_BPF / "V") to
-indicate when an eBPF program utilizing destructive or mutating helpers is
-loaded.
-
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index baa12b24bb64..d7b04f1fc9f1 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
 
 [ ... ]
 
-> @@ -3083,6 +3083,13 @@ static int bpf_prog_load(union bpf_attr *attr, bpf=
-ptr_t uattr, u32 uattr_size)
->  	if (err < 0)
->  		goto free_used_maps;
-> =20
-> +	/*
-> +	 * The program has passed the verifier. If it utilises unsafe
-> +	 * helpers, formally taint the kernel now.
-> +	 */
-> +	if (prog->aux->taints_kernel)
-> +		add_taint(TAINT_UNSAFE_BPF, LOCKDEP_STILL_OK);
+> @@ -2819,6 +2820,32 @@ __bpf_kfunc struct cgroup *bpf_cgroup_from_id(u64 cgid)
+>  	return cgrp;
+>  }
+>
+> +/**
+> + * bpf_cgroup_stall - acquire the total stall time of cgroup
+> + * @cgrp: cgroup struct
+> + * @states: psi states
+> + *
+> + * Return the total stall time.
+> + */
+> +__bpf_kfunc unsigned long bpf_cgroup_stall(struct cgroup *cgrp,
+> +					   enum psi_states states)
+> +{
+> +	struct psi_group *group = cgroup_psi(cgrp);
 > +
->  	err =3D bpf_prog_mark_insn_arrays_ready(prog);
->  	if (err < 0)
->  		goto free_used_maps;
+> +	return div_u64(group->total[PSI_AVGS][states], NSEC_PER_MSEC);
+> +}
 
-Is it possible for the kernel to be tainted prematurely here?
+Can cgroup_psi() return NULL here? Looking at include/linux/psi.h, cgroup_psi()
+returns cgrp->psi for non-root cgroups, which is allocated in
+psi_cgroup_alloc() only when the psi_cgroups_enabled static branch is true.
 
-If bpf_prog_mark_insn_arrays_ready() or bpf_prog_alloc_id() fail, the BPF
-program load is aborted, the program is freed, and it is never exposed to
-user space or executed. Consequently, the kernel's execution flow and memory
-could not have been compromised by the program.
+When the kernel boots with cgroup_disable=pressure or psi=0, cgrp->psi remains
+NULL for all non-root cgroups. The sysfs *.pressure files are gated by
+cgroup_psi_enabled() so they never hit this case, but these new kfuncs are
+directly callable from BPF programs without such gating.
 
-Should the add_taint() call be deferred until after bpf_prog_alloc_id()
-completes successfully, which is the point where the program is actually
-exposed and cannot be gone underneath us?
+A BPF program could obtain a valid non-root cgroup (e.g., via
+bpf_cgroup_from_id) and call bpf_cgroup_stall on it. If PSI is disabled for
+cgroups, this would dereference NULL at group->total[...].
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260503164700.5481=
-64-1-atomlin@atomlin.com?part=3D1
+Similarly for bpf_cgroup_flush_stats below, passing NULL to
+psi_group_flush_stats would eventually reach __psi_group_flush_stats which
+does mutex_lock(&NULL->avgs_lock).
+
+Should these functions check for NULL after calling cgroup_psi()?
+
+A subsystem pattern also flags this as potentially concerning: the `states`
+parameter is used directly as an array index without bounds checking. The
+backing array is declared as u64 total[NR_PSI_AGGREGATORS][NR_PSI_STATES - 1]
+(see include/linux/psi_types.h, struct psi_group), while enum psi_states has
+the range 0..NR_PSI_STATES-1 (PSI_NONIDLE is the last member).
+
+The BPF verifier only checks that the register is SCALAR_VALUE and does not
+validate enum ranges. Because the parameter is not marked __const, a BPF
+program can pass any scalar, including values derived from map lookups or
+arithmetic.
+
+Passing PSI_NONIDLE (a valid enum value) reads one element past the inner
+array; passing a negative value (legal because enum is signed int in C) reads
+memory before the array. This would leak adjacent memory contents to the BPF
+program.
+
+Existing BPF cgroup-stat kfuncs guard against this pattern:
+
+bpf_mem_cgroup_page_state (mm/bpf_memcontrol.c):
+	if (unlikely(!memcg_stat_item_valid(idx)))
+		return (unsigned long)-1;
+
+bpf_mem_cgroup_memory_events (mm/bpf_memcontrol.c):
+	if (unlikely(event >= MEMCG_NR_MEMORY_EVENTS))
+		return (unsigned long)-1;
+
+Should this function add a similar check, such as:
+	if ((unsigned int)states >= NR_PSI_STATES - 1)
+		return -1;
+
+> +
+> +/**
+> + * bpf_cgroup_flush_stats - Flush cgroup's statistics
+> + * @cgrp: cgroup struct
+> + */
+> +__bpf_kfunc void bpf_cgroup_flush_stats(struct cgroup *cgrp)
+> +{
+> +	struct psi_group *group = cgroup_psi(cgrp);
+> +
+> +	psi_group_flush_stats(group);
+> +}
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25285279315
+--===============1060358541369016392==--
