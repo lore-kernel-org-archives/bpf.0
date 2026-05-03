@@ -1,112 +1,215 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CC21378826
-	for <bpf@vger.kernel.org>; Sun,  3 May 2026 17:57:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F0538B7C9
+	for <bpf@vger.kernel.org>; Sun,  3 May 2026 17:57:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777831032; cv=none; b=ZFzMl66jQE8iCks7FK1Bjn65G+UwvOLFjpmENbNEszeTopS7Ghc9LL3qxKx3fWQQXNCajImnCZntjdWN3i9f51nURLdiFCjnQ++zkWEGrZbWxndMQQ4gFBjLggmMDGF4QkBP4FbzJIw42khLdNzKKzEkq2lKtxmd4RvVjeDtvjc=
+	t=1777831057; cv=none; b=d1VZqvLrkY8fz6U1WbyFH0d9dX7f91oluk/NMUgf0f5lXOtQ6bHZ3+toDeJ/SKrCXz5bcEVfcBjwduPJb4kL6jpha6TyKcEt1xZG5Y5q4v3F9RyeAPL6cI7M0rGF96MpR5Vx0oAXYN2mQdu6gdXK+udwBV9Khn9gnybUweXL7B0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777831032; c=relaxed/simple;
-	bh=1XE2vYB14dioBFRhAgV5y7WwaOpoCWCjDjwrjYCgAk4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B3yLJlHFuBPkVz715y09fjyPBQSGnomvVnnjxgR3YbCvBMQJ57Ws1vNopVjUf79MQyMkLLuQMkqnlfA8R35ZSaCnxO7LiS/r11BAgcIy1s3fD0mQdF3LQxfx9vOl/V+PpxyFxOBNwaHlKQAwdI5Lm2pd69SXYrUVpbjjDexRp+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K62Ur1a5; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777831057; c=relaxed/simple;
+	bh=zVts2Sl56neHgMzrpJEoNG6Bprg9zkois4U0qEFaEGM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=bU97F8dJHTyHNDCWu71bW7Mx+MmfubO1Epy218dPZlgs+vmiXdYMGrGOU4ti062Cbg3V0N1MIi9N1WA7BUMsoBEF7pHlKTiqB8mwDJU7msFrBdeTBpkefGUvSpv5SLFfWGRuptojQRZ0I0Pm24SU2VkhzFacnZFJ2P91zWfevE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YRg7jFdt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K62Ur1a5"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c70c112cb61so1924081a12.0
-        for <bpf@vger.kernel.org>; Sun, 03 May 2026 10:57:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777831030; x=1778435830; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=e1I20Yc1jyO4cAtDXypF5oj/hHWjCxlXQ+fPgE0FtSo=;
-        b=K62Ur1a5u+ohVZsD6jKsEzlU/BCzhH8Cyy3bmFcrISLrhobpzdPrLZfVcJ/z9j8n92
-         rNg230PKN4dvUQD/CxL3AAwUDT7aKnJKxQEzW1O8i7hnli9kQjP02YbHv6L4IO0olbZ9
-         tQmtXW57dS9+eA/MYBmZIcBPSw4FP4v1ykPJdTaMd65gNG4vZuG+V8lUOJsaHvO0vv2K
-         k6ZWuRCBk+HLxwf/iWez5JCVXvq8x9P+/O67IvoRW11FmyMdGZXt/aRa3NTk+J/f8Zii
-         cadIZMe7WNwLb91An75YQNb6MJHGFSS+9Wpgja5n+1ZQceDf3vKgp5wntgQlj/Z4sZzb
-         6qfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777831030; x=1778435830;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e1I20Yc1jyO4cAtDXypF5oj/hHWjCxlXQ+fPgE0FtSo=;
-        b=oS6UUdXCgZDH5+N5nKJK+0JqJYOjqcVTDP1yBpjcxYZatSWSVM/W3q8ipEuxR3f5zJ
-         KK5frZYQqY3HjItDTNrKS3XR/NE/ySFGv3lZUGIgZsyvMEjNFUHNB/48P49hpRDbqBVP
-         v+sc6/5Usjji59LV9raM/BLw9YRNh70cbmRhTonZcuCt4S4GjL+96Wlqt9Ib8ktxlzLU
-         rzsOpcDHrjx69BgrXQJffhZo9EizQjFiKa69a+OUjjmshHvazAMAIG6zjGJQL8FLQzfO
-         WJ5jxKTGWRKp8sCVE533OmJ08cD3oyBN5ga5cwJeNqWL+Pg5pBa3ZfI+gPq+02QtIhSg
-         bx9w==
-X-Forwarded-Encrypted: i=1; AFNElJ/WofFDbU0IdoV6vxiz3AxTXsk5ReMuKUDdiJpF4o8oS67jruF/cS0d2BPvYvs2Km25n1M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuPjb91UxZTTiBpEpee0A4vLLWFm4yG1/pb6f3AgFNu1rAB0wX
-	ENXTpysY3lvCBTXtqtk4lmE2EzQg4wtSGkdfhIgVhfZz1Dv9CKMeAujw
-X-Gm-Gg: AeBDieuMf3VGI519NI7QV4EIUXTHwBGCuQkanh456NvvfCy6WEZNYEcAsBow8MNr82w
-	JBoo7ED6zwvnCqqm1/+jP7KvDITPgK9kjFQJtXD3+6YnP8HGz3DPAXhDDepp0BVzrk/vY/WfUBu
-	fWHUXo7ibLFq7iOJzTkhnn73+Ln4zB2rGhlUjgZVR3RbTGmjOqv+ABw1MT4avvKXCAk2G77qQi/
-	dNPmsHXShtkI35DFU7FvLWVdSRdz4yUBADU2oG6TT6rLT12GPARNsD9cg7Wl2rdrGetMOXRVi+9
-	Gbc5ZKF66YHI7o4jzD9dB742QQnBZnx8WSC3okO8x8+GpL+75T6HUaPiaM/A+s8/flfikvmaG0n
-	akx/V2qeiG/TK4RRPsSOtUtn3PiI7YqPJKi/OI46CQh4+KKg3YPPJD9DAAj2ii2cXcz6ycqo58j
-	2/YPV4e+hq+hshgRnvOSgvQzy39mjq6aCf7C0sdMXTgco1kL9qAsPCj5bOQQOscEXz/H8LKEMLY
-	BhB6/Gl
-X-Received: by 2002:a05:6a20:7f96:b0:39c:126c:93b5 with SMTP id adf61e73a8af0-3a7f1ca3049mr6620214637.21.1777831030416;
-        Sun, 03 May 2026 10:57:10 -0700 (PDT)
-Received: from google.com (61-230-38-200.dynamic-ip.hinet.net. [61.230.38.200])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-835158bc863sm8450886b3a.26.2026.05.03.10.57.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 May 2026 10:57:10 -0700 (PDT)
-Date: Mon, 4 May 2026 01:57:05 +0800
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc: geert@linux-m68k.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
-	jolsa@kernel.org, jserv@ccns.ncku.edu.tw, eleanor15x@gmail.com,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next] m68k, bpf: Add initial BPF JIT compiler support
-Message-ID: <afeMcXsismO_ft_d@google.com>
-References: <20260429124046.3480827-1-visitorckw@gmail.com>
- <98dfc3ebe6bf519aec70bf629acae897903d8146.camel@physik.fu-berlin.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YRg7jFdt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6190AC2BCB4;
+	Sun,  3 May 2026 17:57:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777831057;
+	bh=zVts2Sl56neHgMzrpJEoNG6Bprg9zkois4U0qEFaEGM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=YRg7jFdtf1oq5wBfFfoLCtzsHt636LKUSt2fyXyLqMxG6aT1acds4Lc6q11GmiZLw
+	 a33eR/zHbKk1KWMA3P0chHbQ7macBVVbgMzKzx0zqQSpqM5rGioelwXQkVr8r0yWWc
+	 a70CZ7ECcJGK4QFzfC7qfUEAobY4Oq5W33oIk70Tt4hLq9odMvl4U4vS1lr/p6W6Ut
+	 xTNkQ/l3e0YYuOViX3Cy1IZFl39SpSXHqiTIBbQXn2kcg79ItLPqKZ3cxjJHH0C0zf
+	 q+GLWdCLoxdfxXhrvKB1zh0qJnIVT7t7EqCu8s3tbt8O9Np7hjkZm2xN7y1hmIZsRl
+	 nl39PYaaGOTCQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 4/4] samples: bpf: add mthp_ext
+Reply-To: sashiko@lists.linux.dev
+To: "Vernon Yang" <vernon2gm@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260503165024.1526680-5-vernon2gm@gmail.com>
+References: <20260503165024.1526680-5-vernon2gm@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 03 May 2026 17:57:36 +0000
+Message-Id: <20260503175737.6190AC2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <98dfc3ebe6bf519aec70bf629acae897903d8146.camel@physik.fu-berlin.de>
 
-On Wed, Apr 29, 2026 at 03:59:44PM +0200, John Paul Adrian Glaubitz wrote:
-> Hi Kuan-Wei,
-> 
-> On Wed, 2026-04-29 at 12:40 +0000, Kuan-Wei Chiu wrote:
-> > Add a BPF JIT compiler for the m68k architecture.
-> > 
-> > The JIT generates m68k machine code targeting m68020+ processors. It
-> > currently excludes 68000/68010 and coldfire processors, as it relies on
-> > 32 bit branch displacements (b<cc>.l) to handle large bpf programs.
-> 
-> First of all, this is extremely cool! Thanks a lot for the work!
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
+- [High] Infinite loop in `trigger_scan()` when `read()` returns an error
+- [Medium] Integer overflow in `FROM_MB()` macro disables fallback logic fo=
+r values >=3D 4096
+- [Medium] Spurious mTHP fallback during initial cgroup scan due to zero-in=
+itialized baseline
+- [Medium] Failure in `setup_psi_trigger()` masks the error code and exits =
+successfully
+--
 
-Thanks. :)
+commit d30597e7a4d6ca7d5532535074e0c66c2c92f486
+Author: Vernon Yang <yanglincheng@kylinos.cn>
 
-> 
-> Secondly, since you seem to be well-versed in compiler-related stuff on
-> m68k, may I ask you whether you would be interested in helping to fix a
-> stopper bug in the LLVM M68k backend?
-> 
-> I have outlined the problem in [1], maybe you could help getting this fixed
-> as this would fully enable LLVM on M68k which means we could finally use
-> Rust on the architecture and maybe also build the Linux kernel on m68k
-> with clang.
-> 
-I'm not very familiar with the llvm codebase, but I'll definitely take
-a look at it and see how much I can help out. :)
+samples: bpf: add mthp_ext
 
-Regards,
-Kuan-Wei
+This commit adds a new BPF sample program, mthp_ext, to adjust mTHP sizes
+based on cgroup memory pressure and usage. It monitors the cgroup directory
+and automatically falls back to 4KB sizes during high memory pressure or
+low usage.
+
+> diff --git a/samples/bpf/mthp_ext.h b/samples/bpf/mthp_ext.h
+> new file mode 100644
+> index 000000000000..33dc01bcebd3
+> --- /dev/null
+> +++ b/samples/bpf/mthp_ext.h
+> @@ -0,0 +1,30 @@
+[ ... ]
+> +#define min(a, b)	((a) < (b) ? a : b)
+> +#define FROM_MB(s)	(s * 1024 * 1024)
+
+Does this macro suffer from a 32-bit integer overflow if s is 4096 or
+larger?
+
+If s is an unsigned int like configs.min_mem, 4096 * 1048576 would wrap to =
+0,
+which could silently disable the fallback logic.
+
+> +#define TO_MB(s)	(s / 1024 / 1024)
+> +
+> +struct config_local {
+> +	unsigned long threshold;
+> +	unsigned long interval;
+> +	unsigned int  init_order;
+> +	unsigned int  min_mem;
+[ ... ]
+> diff --git a/samples/bpf/mthp_ext.bpf.c b/samples/bpf/mthp_ext.bpf.c
+> new file mode 100644
+> index 000000000000..bbee3e9f679c
+> --- /dev/null
+> +++ b/samples/bpf/mthp_ext.bpf.c
+[ ... ]
+> +SEC("iter.s/cgroup")
+> +int cgroup_scan(struct bpf_iter__cgroup *ctx)
+> +{
+> +	struct cgroup *cgrp =3D ctx->cgroup;
+> +	struct mem_cgroup *memcg;
+> +	struct mem_info *info;
+> +	struct alert_event *e;
+> +	unsigned long curr_stall;
+> +	unsigned long curr_mem;
+> +	unsigned long delta;
+> +
+> +	if (!cgrp)
+> +		return 1;
+> +
+> +	if (!cgroup_has_tasks(cgrp))
+> +		return 0;
+> +
+> +	info =3D bpf_cgrp_storage_get(&cgrp_storage, cgrp, 0,
+> +				    BPF_LOCAL_STORAGE_GET_F_CREATE);
+> +	if (!info)
+> +		return 0;
+> +
+> +	memcg =3D bpf_get_mem_cgroup(&cgrp->self);
+> +	if (!memcg)
+> +		return 0;
+> +
+> +	bpf_cgroup_flush_stats(cgrp);
+> +	curr_stall =3D bpf_cgroup_stall(cgrp, PSI_MEM_FULL);
+> +	delta =3D curr_stall - info->stall;
+
+During the initial scan of a cgroup, info->stall will be zero-initialized.
+Since curr_stall represents cumulative stall time, won't delta be a very
+large number?
+
+This seems like it could incorrectly trigger the 4KB fallback during the
+first interval regardless of current memory pressure.
+
+> +	bpf_mem_cgroup_flush_stats(memcg);
+> +	curr_mem =3D bpf_mem_cgroup_page_state(memcg, NR_ANON_MAPPED) +
+> +		   bpf_mem_cgroup_page_state(memcg, NR_SHMEM);
+> +	if (curr_mem < FROM_MB(configs.min_mem) || delta >=3D configs.threshold)
+> +		info->order =3D 0;
+> +	else
+> +		info->order =3D PMD_ORDER;
+[ ... ]
+> diff --git a/samples/bpf/mthp_ext.c b/samples/bpf/mthp_ext.c
+> new file mode 100644
+> index 000000000000..0e064bad136f
+> --- /dev/null
+> +++ b/samples/bpf/mthp_ext.c
+[ ... ]
+> +static int trigger_scan(struct bpf_link *iter_link)
+> +{
+> +	char buf[256];
+> +	int fd;
+> +
+> +	fd =3D bpf_iter_create(bpf_link__fd(iter_link));
+> +	if (fd < 0) {
+> +		fprintf(stderr, "ERROR: bpf_iter_create failed: %s\n",
+> +			strerror(errno));
+> +		return -1;
+> +	}
+> +
+> +	/* Read to trigger the iter program execution */
+> +	while (read(fd, buf, sizeof(buf)))
+> +		;
+
+If read() returns an error (like -1 for EINTR), will this result in an infi=
+nite
+busy-wait loop since -1 evaluates to true in C?
+
+Could this be updated to check for > 0 instead?
+
+> +
+> +	close(fd);
+> +	return 0;
+> +}
+[ ... ]
+> +int main(int argc, char **argv)
+> +{
+[ ... ]
+> +	psi_fd =3D setup_psi_trigger(root_path, "some", threshold * 1000,
+> +				   interval * 1000);
+> +	if (psi_fd < 0) {
+> +		fprintf(stderr, "ERROR: PSI trigger setup failed\n");
+> +		goto psi_setup_fail;
+> +	}
+> +
+> +	monitor_thread(psi_fd, &skel->bss->configs, iter_link, rb);
+> +
+> +	close(psi_fd);
+> +psi_setup_fail:
+> +	ring_buffer__free(rb);
+> +rb_fail:
+> +	bpf_link__destroy(iter_link);
+> +exit_fixed:
+> +attach_iter_fail:
+> +	bpf_link__destroy(ops_link);
+> +attach_opts_fail:
+> +load_skel_fail:
+> +	mthp_ext__destroy(skel);
+> +open_skel_fail:
+> +	close(root_fd);
+> +
+> +	printf("\nExiting...\n");
+> +
+> +	return err;
+> +}
+
+If setup_psi_trigger() fails, the code jumps to psi_setup_fail. However, err
+was previously set to 0 from a successful BPF operation.
+
+Does this cause the program to log an error but exit with a success status
+code?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260503165024.1526=
+680-1-vernon2gm@gmail.com?part=3D4
