@@ -1,63 +1,63 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2507375AC4
-	for <bpf@vger.kernel.org>; Sun,  3 May 2026 16:51:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D72F537C924
+	for <bpf@vger.kernel.org>; Sun,  3 May 2026 16:51:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777827061; cv=none; b=mJkvIer5KHPuBBzGlMbR79JrcYMcIGEk6leih3GwzyZBMP0u+M6e8jJxZPm5CcN8VHjDyaggGLuu9YhaTj1aJRe4GAHdBdtw5tTg8ep6eC2ffvQYaaVP3v4nmU0jlH1sKxMg2D47juvmzDKV7ZcxPMxgTyRz4fsxQeJ/nyMSfUY=
+	t=1777827074; cv=none; b=h/yClSfCI+xcvQ9rr4l3ZvCk975fv/0FJnGhUgvgshuaK/BYrA2rBqzEIsN7ZH+hKPk3c9FkyT0yt27vqqsiw0jzkvunyJaufJCsj4i9hTu39LTBMecu7xkFGVyI+25k1NboAshjdPcrardbyC+5TWgXrbG4ce6nNUojmCe5vNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777827061; c=relaxed/simple;
-	bh=I4my/LYj+yUD/4GouKxkZKg9azWROTPg1jyt3aShvm4=;
+	s=arc-20240116; t=1777827074; c=relaxed/simple;
+	bh=cg0Bbj9AjsnGxOq+y64e/b7OOW2yTNEQkbhwRm29D18=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A4LGO+xJg6yqj7gKIDI3g6comKBcuwZHg+WygXsctR9aU/Ka6oHqB4wy3epkK8PrrimLZUEN2djGSh9u7lWjYsitSjOXfAeGUNszUafDeeqrGCfTro6jYjEr3lQYfG7YDMNfSG+nrOmSIKUzVzzskLv844kVeMKEAiYmm56N5Ag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kirnkBUr; arc=none smtp.client-ip=209.85.215.170
+	 MIME-Version; b=B8JLE0IKpibg8Zu4WkerZOhpaoRfkePVHrwUBHNUKCp/nLCMwtpaZDUK+xnkNq6y4E3Kqr8o7HKy+PuVUvikIKuVoZEGE0PNXj8ccSvjqv0854rzYEf9GaXtzwC74P3FBfFvz/YKcz6HlU0OS/NFQ2fTPKT9otyC0PvF6HoZR5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F8uc6kUE; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kirnkBUr"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c8027e876fcso107945a12.1
-        for <bpf@vger.kernel.org>; Sun, 03 May 2026 09:51:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F8uc6kUE"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ba21d32776so1641555ad.2
+        for <bpf@vger.kernel.org>; Sun, 03 May 2026 09:51:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777827060; x=1778431860; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777827070; x=1778431870; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZQGcz1ZaEzbqgScDrowVXARi09LONkb6J25l1BcDqBA=;
-        b=kirnkBUrD4i3fSIAwyWfB9Dj+sClJtnXuVjyy8OslpCy7XuLgVPsOIvwqHuv8WmmR/
-         dsJIuNl4nnmgDnmz3aF3A+Dcdhv92jZVAEtpl0SnwGzqzWpMRDBQaEi93yh3rM0AlmnX
-         d2QI+QGcK0uMVz/ydvZ9Hdkz6ivWA4lvC3Mp4CPPcXFxoTM/TUcwC9AriyxR6PbZqOFN
-         GPZ5rrOK4a0iPtpK0RObIX2rDqidi2MwIh7ITxyMtKNUdZds6T+B17iY2XXXyPvi+WVz
-         Luh2tt1Vv3jQFbV5zC4YYy5+NQx6plONI3FiC0EuHlGy1nPeyqmiazz/m+w9jtv7RAgl
-         UPtA==
+        bh=54CfH1z6TNt780aoevT0/jV5wyQdFbwCsijFcJJLlPI=;
+        b=F8uc6kUE4I6zWfN5IDXIex5D7Mpv+4viKNr/FUdgjEpJtG6ECX2Htn1wSq6dxFng42
+         lERQ3CqDvSR7kftoEHGNv5i6E6cW+3zoj5lLucwIGcur3DR9tvKf+7fDeuRmOswKtS7i
+         dGeIr2BRUN7lVaL4AOjEQ4IZCRewz3T5a61Ji5clBsR/vFlduKYn9Whsn031jBn782xJ
+         CXsJvcYOPP0pmcoRrLP+3Dj3LSc8RDKhoBYh4U9bPdfFvFcxzPYbzUYLSftiPj2XIGXm
+         oOs5UFrj7rbgPlGCcVnKE9Ic5mXdwB3Bt4DvJZNhGPxlHHpQFlAqERf8LitN9o54OkZ3
+         s5uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777827060; x=1778431860;
+        d=1e100.net; s=20251104; t=1777827070; x=1778431870;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ZQGcz1ZaEzbqgScDrowVXARi09LONkb6J25l1BcDqBA=;
-        b=keOUJHXx8PfE95mOaDNYv7MV0CNwb7H/g9E8bUE7KIPrZrsENg8x4rkfMKN/BQb727
-         l3XbLeG2JkpoenvrzUrTKg9JRlHQO2TNNvY5PB2gbUOe9dC/dArNxQ5+QDo/g0xxm4mC
-         AgfgRZ4f/D0s3Xy+s+hA2WqmbWnKlhPb71UD4pJfQwYZdYsYQy9ifu4qL8ydWodbsRqV
-         WOAk/8QrEovyC8g9qs2BqCYTVMqCeZ8dR+P0idhTpU3Q41Pz2S0NdS01tMTbqV5lukAf
-         172XJm10wNw/c5+zr3T7+9OgB8tSkA/+yXcoEEX00OIRlMO/CTgXBbq17t8K+TZbYeVs
-         D8kQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/iS5hLq8lQGA9Zm+sSmV/oVfJNqkC6faZVgRRSoXn43Xm5NtE7W8KXTWUXZiST5yxiZDQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9mY2BuF7eAQWawJ+MdOWDDOCrWscC3S1xDsSI861JwDUhusze
-	nTNLadukrz+1u3+xKOiW6Yib0mesGoWMclAqfSonvpq5t4yPGKT0A5vK
-X-Gm-Gg: AeBDiesZhjgKNEnjPKJga49d86QFOl23c7zg8duRGHbUL9wtFQGRdrBiLz6+nLUsEZl
-	we05AXT+hHdx8BHSEbOKuKiLB9KoJia6tQ6ldD6wP+bJoyZxY6+mj74Ppkn1d+um72H2tSd2MpB
-	9h4QOIuTVCIXvpaziNH9F/OsYuTQomsf/BxhAkYT/pgNVjeN/PIYt/rPZMYbOho/BNor1Enci0O
-	ai/sx7EJu3hOqy4lOQ3PZ14zbcOfWTmgai5ig9+KyfhtBJI79OcVRyZ9J2WOKDvXyYT5i5g8SAr
-	xZgMAINu+O/x4LumP9mNM903lX3WEzTuaIInetDNg0Vc5yK2823X4srfm9HNYM8qhOkdr3FLqEY
-	f42m5AFzItM+GO9O8ceV8cQI5/DXeI32rf9UkfBuwp32ZQrHwLTj+xf6ZiI9+bJ6cUnYYNWrQUs
-	Dv2iEPmcM4q9l4vhaagHmSArhjNzHRlWBaF2bBT5WimhtlIj8=
-X-Received: by 2002:a05:6a21:3384:b0:398:a659:eb0 with SMTP id adf61e73a8af0-3a7f1bc4ba4mr6919770637.34.1777827059924;
-        Sun, 03 May 2026 09:50:59 -0700 (PDT)
+        bh=54CfH1z6TNt780aoevT0/jV5wyQdFbwCsijFcJJLlPI=;
+        b=MzVZj8Ouq3hx+j7Plv24PD0OGKwIMCmjGylEd0mqaHUTlB54kl6klN5/Z+IL9TTaXO
+         Zpbnan4mWNQ4raZ+9zS7eSwabCfIH2MGmLFyGko3uJX6Voo+EAMqOaMS+zqOOV/O/VTr
+         MX8Qb9G1zER0oXHUsyW9CSqwHAsZUU4XawKA42IgyZDU5wJkI8ZQHnOm2x0IxjrgOK4B
+         xlyv0Wq9fIyTPrN0mHXTyMGe0CyrgVEFOoan6uN/vbWsiay6uL7LAndwKlAiMshi4cK3
+         JwVjN8yc4QIr6Ws80gvf0ivSTPshIFgVvlMe0hkOMgnfJAVM8/scgGgzCdSnl6fQPTk+
+         QULQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+U1zmufo+StSUqVAniuJz5fVILRuxWY/XNJ5Gi0OP9feYRs6V2znlhrRMMILfk0PfhvHc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPcRKWF0cSfrwM1oKmxhitl3inRN3rQQz6QajAP0UMd7ccvNwY
+	B+bKW7xNKJlbJnjycPmoZcunkfu/SqZF1RlHI2dLVdWTpjU/b3aUUH0A
+X-Gm-Gg: AeBDieuFbNXFVI+qlcJp2sZoUhOpclwV2WqKI4ngXsJWy/6KHtxo21PW3GDCX81cHVV
+	2VKgY1HfF+ldbn/ipIaX4Be64OeaAzjTDIKMqT5HHDKvFbsMXFl0sq2d5wm4QkaVc/gGiyYPTTS
+	0faAuJWVEztGDwtCCAmke9dQelG7ybNHtZ3RNcbalxuNPjHaxDVT6BrupnmU42Cf7YljEa/LJmr
+	/yFixz0l80BO1g++++RFeqXzijmull2eau+C6myNHtG5NtsX6C1W6U9x6cp6fJxYNXTamczXFRO
+	NroGnx1Q0HTqtCG8EL1L1fdrpVBKC7qszXHKNhArm11QVXu515QbRno6GcDGM90bCpw5RmfKbHD
+	D+i2QOorp56BY1vtZvhV8ACJ7TADYwB31ij4fIOX8WXLI6KRyxmrFFJDEkRpGQO89DgokzWYmtp
+	Sdtt9HCv5eF8XAqRzIdqxWumtj+nTf3K2SmF1vmspty722Sj8=
+X-Received: by 2002:a05:6a20:4327:b0:3a0:b65a:5df0 with SMTP id adf61e73a8af0-3a7f1bc4159mr6507949637.29.1777827069644;
+        Sun, 03 May 2026 09:51:09 -0700 (PDT)
 Received: from localhost.localdomain ([114.231.84.174])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83707fab756sm1494277b3a.44.2026.05.03.09.50.51
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83707fab756sm1494277b3a.44.2026.05.03.09.51.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 May 2026 09:50:59 -0700 (PDT)
+        Sun, 03 May 2026 09:51:09 -0700 (PDT)
 From: Vernon Yang <vernon2gm@gmail.com>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -75,9 +75,9 @@ Cc: linux-kernel@vger.kernel.org,
 	lance.yang@linux.dev,
 	dev.jain@arm.com,
 	Vernon Yang <yanglincheng@kylinos.cn>
-Subject: [PATCH 1/4] psi: add psi_group_flush_stats() function
-Date: Mon,  4 May 2026 00:50:21 +0800
-Message-ID: <20260503165024.1526680-2-vernon2gm@gmail.com>
+Subject: [PATCH 2/4] bpf: add bpf_cgroup_{flush_stats,stall} function
+Date: Mon,  4 May 2026 00:50:22 +0800
+Message-ID: <20260503165024.1526680-3-vernon2gm@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260503165024.1526680-1-vernon2gm@gmail.com>
 References: <20260503165024.1526680-1-vernon2gm@gmail.com>
@@ -91,85 +91,70 @@ Content-Transfer-Encoding: 8bit
 
 From: Vernon Yang <yanglincheng@kylinos.cn>
 
-Add psi_group_flush_stats() function to prepare for the subsequent
-mthp_ext ebpf program.
+Add bpf_cgroup_{flush_stats,stall} function to prepare for the
+subsequent mthp_ext ebpf program.
 
 no function changes.
 
 Signed-off-by: Vernon Yang <yanglincheng@kylinos.cn>
 ---
- include/linux/psi.h |  1 +
- kernel/sched/psi.c  | 34 ++++++++++++++++++++++++++--------
- 2 files changed, 27 insertions(+), 8 deletions(-)
+ kernel/bpf/helpers.c | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/include/linux/psi.h b/include/linux/psi.h
-index e0745873e3f2..7b4fd8190810 100644
---- a/include/linux/psi.h
-+++ b/include/linux/psi.h
-@@ -22,6 +22,7 @@ void psi_init(void);
- void psi_memstall_enter(unsigned long *flags);
- void psi_memstall_leave(unsigned long *flags);
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 2bb60200c266..87f3072adce3 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -29,6 +29,7 @@
+ #include <linux/task_work.h>
+ #include <linux/irq_work.h>
+ #include <linux/buildid.h>
++#include <linux/psi.h>
  
-+void psi_group_flush_stats(struct psi_group *group);
- int psi_show(struct seq_file *s, struct psi_group *group, enum psi_res res);
- struct psi_trigger *psi_trigger_create(struct psi_group *group, char *buf,
- 				       enum psi_res res, struct file *file,
-diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index d9c9d9480a45..76ffad90b0b5 100644
---- a/kernel/sched/psi.c
-+++ b/kernel/sched/psi.c
-@@ -1242,11 +1242,35 @@ void psi_cgroup_restart(struct psi_group *group)
+ #include "../../lib/kstrtox.h"
+ 
+@@ -2819,6 +2820,32 @@ __bpf_kfunc struct cgroup *bpf_cgroup_from_id(u64 cgid)
+ 	return cgrp;
  }
- #endif /* CONFIG_CGROUPS */
  
-+/*
-+ * __psi_group_flush_stats - flush the total stall time of a psi group
-+ * @group: psi group to flush
++/**
++ * bpf_cgroup_stall - acquire the total stall time of cgroup
++ * @cgrp: cgroup struct
++ * @states: psi states
++ *
++ * Return the total stall time.
 + */
-+static void __psi_group_flush_stats(struct psi_group *group)
++__bpf_kfunc unsigned long bpf_cgroup_stall(struct cgroup *cgrp,
++					   enum psi_states states)
 +{
-+	u64 now;
++	struct psi_group *group = cgroup_psi(cgrp);
 +
-+	/* Update averages before reporting them */
-+	mutex_lock(&group->avgs_lock);
-+	now = sched_clock();
-+	collect_percpu_times(group, PSI_AVGS, NULL);
-+	if (now >= group->avg_next_update)
-+		group->avg_next_update = update_averages(group, now);
-+	mutex_unlock(&group->avgs_lock);
++	return div_u64(group->total[PSI_AVGS][states], NSEC_PER_MSEC);
 +}
 +
-+void psi_group_flush_stats(struct psi_group *group)
++/**
++ * bpf_cgroup_flush_stats - Flush cgroup's statistics
++ * @cgrp: cgroup struct
++ */
++__bpf_kfunc void bpf_cgroup_flush_stats(struct cgroup *cgrp)
 +{
-+	if (static_branch_likely(&psi_disabled))
-+		return;
++	struct psi_group *group = cgroup_psi(cgrp);
 +
-+	__psi_group_flush_stats(group);
++	psi_group_flush_stats(group);
 +}
 +
- int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
- {
- 	bool only_full = false;
- 	int full;
--	u64 now;
- 
- 	if (static_branch_likely(&psi_disabled))
- 		return -EOPNOTSUPP;
-@@ -1256,13 +1280,7 @@ int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
- 		return -EOPNOTSUPP;
+ /**
+  * bpf_task_under_cgroup - wrap task_under_cgroup_hierarchy() as a kfunc, test
+  * task's membership of cgroup ancestry.
+@@ -4732,6 +4759,8 @@ BTF_ID_FLAGS(func, bpf_cgroup_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_cgroup_release, KF_RELEASE)
+ BTF_ID_FLAGS(func, bpf_cgroup_ancestor, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_cgroup_from_id, KF_ACQUIRE | KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_cgroup_stall)
++BTF_ID_FLAGS(func, bpf_cgroup_flush_stats, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_task_under_cgroup, KF_RCU)
+ BTF_ID_FLAGS(func, bpf_task_get_cgroup1, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
  #endif
- 
--	/* Update averages before reporting them */
--	mutex_lock(&group->avgs_lock);
--	now = sched_clock();
--	collect_percpu_times(group, PSI_AVGS, NULL);
--	if (now >= group->avg_next_update)
--		group->avg_next_update = update_averages(group, now);
--	mutex_unlock(&group->avgs_lock);
-+	__psi_group_flush_stats(group);
- 
- #ifdef CONFIG_IRQ_TIME_ACCOUNTING
- 	only_full = res == PSI_IRQ;
 -- 
 2.53.0
 
