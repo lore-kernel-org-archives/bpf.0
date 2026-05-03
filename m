@@ -1,77 +1,51 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4363A3E66
-	for <bpf@vger.kernel.org>; Sun,  3 May 2026 20:43:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753613128CC
+	for <bpf@vger.kernel.org>; Sun,  3 May 2026 20:44:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777841033; cv=none; b=hTjVtdfRYrZ950dwZlin9/Xt1FqojsFJ/o+JXqUIl91VytysV7TchEChLD0ZBKAm+ke0ykUFfm5jcOYNDjZ3GLQilcn3JVpBdRt+aHTAxB9CplaJkzjjGarD0/EPhHSozmVlsImNz2OMrFW9Q9+Afe55qumOgR0TTA38g5cSM+U=
+	t=1777841057; cv=none; b=ibiK365yocpto86sU9a2YaxVp+GLqQGw/vDx8TJ8hKj/je5f3c8wiK4FczxMlHCzh+BLQCeSCQ72cM/e8H1gSSjKdsbHfZ3L5MdFNW9ZcQLM7WK8z8ghnZGmk0Q/pqDQLNtpt4BPV9ymnKvFhQX4EKVokPPSboKRKL2qFjACuUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777841033; c=relaxed/simple;
-	bh=JGTFDOpQMa80Wxe8Qa0u5FYvnouUdfJPDVq09M01nws=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=DrboG4CHuN8bhOYrNL27EED4RvZsiADJLPYF44ZY93e3ANkGfiCnk0856YAb4i7e7B34XLxp5pNqCASi0/HCmA50mdPP9qENXOwCm13JGqSUybNhsM8dNNPalKKsN53xPBKruD4uW46D5RLLA2iKwxJ5PkCI0fOz2vpAJFg9bDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jvmRcceM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777841057; c=relaxed/simple;
+	bh=I9qjlUGMFqhkk5U2rCVGA52uqoD8c4HlXYrp29tQLyA=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=lOt5F7fJ/JV6ADnfnmJFcuDj6wV4G7kBZUjB8ou7Tp5iW/w0FwUtJwlRw0kkR3dD+X1Q9a/C4xlIMvpA/OmazL0KEtV0JE6ieH4UjbneXYc6BIyMyL1gMk3DVW6fJAKecoK0vmMGIyJcawkNYKTE9kFX1ztH6YqJfJVH8PfIQvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BoKTMI0l; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jvmRcceM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F800C2BCB4;
-	Sun,  3 May 2026 20:43:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BoKTMI0l"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B35EC2BCB4;
+	Sun,  3 May 2026 20:44:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777841033;
-	bh=JGTFDOpQMa80Wxe8Qa0u5FYvnouUdfJPDVq09M01nws=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=jvmRcceMZddZxnFjj1bxuVM71AV6OoETJ+ddnB854kVcrE+wGTglWCoVIY2HBmnAG
-	 DsW866Qv7ZQxG1ajkZz7cOS1zu2m8gSN67CSa85yyLdS5qwymC31G/lvV7rSFE1TWf
-	 4Rezvr5PS15KEXJhat4hbFVNi3GzwRqrhlSF+MOa5cQB7RUuEj8aPpTKscrxq128cn
-	 ffIqZ37ZOw24PiKib5GXvcgzurc2VW7aVc/JJA9aw7ko9O40EtegdnW4OcewJURSzs
-	 ecMFZGSlwUXIOynVu9rZjtcCGz9U7eo6teG67y78GFOo8KJ/0FIBr4ILkv0G2cUt9n
-	 rlo234dyvyXow==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 1/2] bpf: enforce VFS constraints for xattr
- related BPF kfuncs
-Reply-To: sashiko@lists.linux.dev
-To: "Matt Bobrowski" <mattbobrowski@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260503200819.1530328-1-mattbobrowski@google.com>
-References: <20260503200819.1530328-1-mattbobrowski@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 03 May 2026 20:43:52 +0000
-Message-Id: <20260503204353.2F800C2BCB4@smtp.kernel.org>
+	s=k20201202; t=1777841057;
+	bh=I9qjlUGMFqhkk5U2rCVGA52uqoD8c4HlXYrp29tQLyA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=BoKTMI0l/ZSCDLTHkXWR11o8n76W/wIZvImXWKPIvpbFlh5g8Bs1T4LK8kGcC8DXE
+	 +9ROlq8UY+Y+vHF+q0CnJSJGWEJXY0OSEQgRa4+Avllbp51880ALgc2pqJXsv+K+rJ
+	 a3olegyF+LoKXBeQDefA8bWy5grhG+T0UUL7xlx3bRNJmipYEo85UfwVW7itkeH5Ao
+	 Y4t/UtBMJtH/Z3a8bGAzKhvTv+ZJxVLKnqmmcX9hk4Y9fxS9N+tGn2IK/UFTosYUZU
+	 gIBtE7uXQdNUUjmCrg97XkPw6AoA6xxQSsI5bncxu2Jq4nl7vBtVplWZE+DSke/iyD
+	 MqpZclUIEIc9Q==
+Content-Type: multipart/mixed; boundary="===============7720530520412859774=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <5c447a881915a06db87c17ef1384f42674b0c171858c82e33666cb667101b338@mail.kernel.org>
+In-Reply-To: <20260503200819.1530328-1-mattbobrowski@google.com>
+References: <20260503200819.1530328-1-mattbobrowski@google.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: enforce VFS constraints for xattr related BPF kfuncs
+From: bot+bpf-ci@kernel.org
+To: mattbobrowski@google.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,viro@zeniv.linux.org.uk,brauner@kernel.org,jack@suse.cz,memxor@gmail.com,mattbobrowski@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun,  3 May 2026 20:44:15 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
-- [High] bpf_set_dentry_xattr and bpf_remove_dentry_xattr will crash the ke=
-rnel with a NULL pointer dereference if passed a negative dentry.
-- [High] bpf_xattr_write_permission() bypasses IS_APPEND() checks, allowing=
- BPF programs to modify xattrs on append-only files.
-- [High] bpf_xattr_read_permission and bpf_xattr_write_permission use WARN_=
-ON(!inode), allowing BPF programs to trivially spam the kernel log or trigg=
-er panics.
-- [Medium] bpf_cgroup_read_xattr() misses the new VFS name length constrain=
-t check.
---
-
-commit 6ac57f528df35ba363e277e2447059faac6477b7
-Author: Matt Bobrowski <mattbobrowski@google.com>
-
-bpf: enforce VFS constraints for xattr related BPF kfuncs
-
-This commit enforces VFS constraints and semantics regarding name and value
-lengths within the xattr related BPF kfuncs. It rejects names that are empty
-or longer than XATTR_NAME_MAX, and values larger than XATTR_SIZE_MAX. It al=
-so
-validates the supplied flags to ensure only XATTR_CREATE and XATTR_REPLACE =
-can
-be used alongside the default flag value 0.
-
-Closes: https://lore.kernel.org/bpf/20260429221005.6D1C6C19425@smtp.kernel.=
-org/
+--===============7720530520412859774==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
 > diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
 > index 9d27be058494..a48cf35dedd2 100644
@@ -80,127 +54,77 @@ org/
 
 [ ... ]
 
-> @@ -117,10 +132,10 @@ static int bpf_xattr_read_permission(const char *na=
-me, struct inode *inode)
-
-This wasn't introduced by this patch, but do bpf_xattr_read_permission() and
-bpf_xattr_write_permission() use WARN_ON(!inode), allowing BPF programs to
-trivially spam the kernel log or trigger panics?
-
-BPF LSM programs can attach to hooks that inherently supply negative dentri=
-es
-(like vfs_mkdir), where d_inode(dentry) is legally NULL. Passing a negative
-dentry would intentionally trigger the warning in these permission checks:
-
-static int bpf_xattr_write_permission(const char *name, struct inode *inode)
-{
-	if (WARN_ON(!inode))
-		return -EINVAL;
-
-This could panic the system if panic_on_warn is configured. Should these ch=
-ecks
-gracefully return -ENOENT or -EINVAL without firing a WARN_ON()?
-
+> @@ -117,10 +132,10 @@ static int bpf_xattr_read_permission(const char *name, struct inode *inode)
 >   * @name__str: name of the xattr
 >   * @value_p: output buffer of the xattr value
 >   *
-
-[ ... ]
-
-> @@ -187,10 +206,18 @@ static int bpf_xattr_write_permission(const char *n=
-ame, struct inode *inode)
-
-This wasn't introduced by this patch, but does bpf_xattr_write_permission()
-bypass IS_APPEND() checks, allowing BPF programs to modify xattrs on
-append-only files?
-
-Standard VFS xattr modifications enforce restrictions via xattr_permission(=
-),
-which explicitly checks IS_IMMUTABLE(inode) || IS_APPEND(inode) to block
-metadata tampering on append-only files. However, bpf_xattr_write_permissio=
-n()
-bypasses xattr_permission() and calls inode_permission(..., MAY_WRITE)
-directly.
-
-Because inode_permission() checks IS_IMMUTABLE but not IS_APPEND, could BPF
-programs be erroneously permitted to modify security.bpf.* xattrs on files
-marked as append-only?
-
->   * @value_p: xattr value
->   * @flags: flags to pass into filesystem operations
+> - * Get xattr *name__str* of *dentry* and store the output in *value_ptr*.
+> + * Get xattr *name__str* of *dentry* and store the output in *value_p*.
 >   *
-
-[ ... ]
-
-> @@ -274,11 +315,19 @@ __bpf_kfunc_start_defs();
->   * @value_p: xattr value
->   * @flags: flags to pass into filesystem operations
+> - * For security reasons, only *name__str* with prefixes "user." or
+> - * "security.bpf." are allowed.
+> + * For security reasons, only *name__str* values prefixed with "user." or
+> + * "security.bpf." are permitted.
 >   *
-> - * Set xattr *name__str* of *dentry* to the value in *value_ptr*.
-> + * Set xattr *name__str* of *dentry* to the value in *value_p*.
-
-This problem wasn't introduced by this patch, but will bpf_set_dentry_xattr=
-()
-and bpf_remove_dentry_xattr() crash the kernel with a NULL pointer derefere=
-nce
-if passed a negative dentry?
-
-BPF LSM programs can attach to hooks that inherently supply negative dentri=
-es
-(such as inode_create or vfs_mkdir), where d_inode(dentry) is legally NULL.=
- If
-a BPF program invokes bpf_set_dentry_xattr() or bpf_remove_dentry_xattr() on
-such a negative dentry, the kfunc will assign inode =3D NULL and subsequent=
-ly
-call inode_lock(inode).
-
-Because inode_lock() unconditionally dereferences the inode pointer, would =
-this
-immediately trigger a NULL pointer dereference and oops the kernel?
-
->   *
->   * For security reasons, only *name__str* with prefix "security.bpf."
->   * is allowed.
-
-[ ... ]
-
-> @@ -327,14 +376,15 @@ __bpf_kfunc int bpf_remove_dentry_xattr(struct dent=
-ry *dentry, const char *name_
->   * @name__str: name of the xattr
->   * @value_p: output buffer of the xattr value
->   *
-> - * Get xattr *name__str* of *cgroup* and store the output in *value_ptr*.
-> + * Get xattr *name__str* of *cgroup* and store the output in *value_p*.
->   *
-> - * For security reasons, only *name__str* with prefix "user." is allowed.
-> + * For security reasons, only *name__str* values prefixed with "user." a=
-re
-> + * permitted.
->   *
->   * Return: length of the xattr value on success, a negative value on err=
-or.
+>   * Return: length of the xattr value on success, a negative value on error.
 >   */
->  __bpf_kfunc int bpf_cgroup_read_xattr(struct cgroup *cgroup, const char =
-*name__str,
-> -					struct bpf_dynptr *value_p)
-> +				      struct bpf_dynptr *value_p)
->  {
->  	struct bpf_dynptr_kern *value_ptr =3D (struct bpf_dynptr_kern *)value_p;
+> @@ -133,6 +148,10 @@ __bpf_kfunc int bpf_get_dentry_xattr(struct dentry *dentry, const char *name__st
+>  	void *value;
+>  	int ret;
+>
+> +	ret = bpf_xattr_validate_name(name__str);
+> +	if (ret)
+> +		return ret;
+> +
+
+In the previous patch discussion, Sashiko AI raised a concern about
+WARN_ON(!inode) in bpf_xattr_read_permission() potentially causing a DoS
+on panic_on_warn systems. You acknowledged that dropping the WARN_ON
+makes sense since attempting to set xattr on a negative dentry is
+invalid and should be handled gracefully. Can this still happen if a
+BPF program passes a negative dentry to bpf_get_dentry_xattr() or the
+_locked variants? If d_inode(dentry) returns NULL and is passed to
+bpf_xattr_read_permission() or bpf_xattr_write_permission(), wouldn't
+the WARN_ON(!inode) trigger?
+
+[ ... ]
+
+> @@ -206,7 +233,17 @@ int bpf_set_dentry_xattr_locked(struct dentry *dentry, const char *name__str,
 >  	u32 value_len;
+>  	int ret;
+>
+> +	if (flags & ~(XATTR_CREATE | XATTR_REPLACE))
+> +		return -EINVAL;
+> +
+> +	ret = bpf_xattr_validate_name(name__str);
+> +	if (ret)
+> +		return ret;
+> +
+>  	value_len = __bpf_dynptr_size(value_ptr);
+> +	if (value_len > XATTR_SIZE_MAX)
+> +		return -E2BIG;
+> +
 
-Does bpf_cgroup_read_xattr() miss the new VFS name length constraint check?
+Sashiko AI raised a concern about a potential VFS lock bypass through
+the BPF verifier's kfunc substitution mechanism. The verifier
+unconditionally rewrites calls to bpf_set_dentry_xattr() to
+bpf_set_dentry_xattr_locked() for hooks that hold inode locks, but
+doesn't verify that the dentry argument is the specific context
+argument that was locked.
 
-The commit message explicitly states the goal is to "Enforce VFS constraints
-and semantics regarding name and value lengths within the xattr related BPF
-kfuncs", specifically rejecting names that are empty or longer than
-XATTR_NAME_MAX.
+Can a BPF program obtain a trusted pointer to an unrelated, unlocked
+dentry and pass it to the kfunc, causing the substituted _locked
+variant to execute __vfs_setxattr() without acquiring the proper VFS
+locks? You mentioned this is "probably a valid concern" that "should be
+reviewed in further depth separately," but should this be addressed
+before the patch is merged to avoid introducing a security regression?
 
-While bpf_xattr_validate_name() was correctly added to the dentry-related
-kfuncs like bpf_get_dentry_xattr() and bpf_set_dentry_xattr(), it appears to
-be completely omitted in bpf_cgroup_read_xattr(). Could this allow BPF
-programs to bypass the intended length constraints when reading cgroup xatt=
-rs?
+[ ... ]
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260503200819.1530=
-328-1-mattbobrowski@google.com?part=3D1
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25289845959
+--===============7720530520412859774==--
