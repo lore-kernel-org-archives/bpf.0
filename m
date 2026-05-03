@@ -1,125 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B743559F5
-	for <bpf@vger.kernel.org>; Sun,  3 May 2026 20:58:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CC92244687
+	for <bpf@vger.kernel.org>; Sun,  3 May 2026 21:18:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777841917; cv=none; b=X2KeL2b3VAAsr/fUmx6Y9h8F0Gmc7dhjV5qbPwDxBoOvHLojKA8D77OUxeS4gnoOPOP+dJnPgTi7c+SZFdz2/nAUbkxlhdoEbGXXOxv7sUxZO7FmzvguJQeIh3ZaM0xSq+JJ/dad78pvEbrPvLUXzfy7K2BgLoYzDhmHzmjxI7k=
+	t=1777843118; cv=none; b=pbLp7+3tBAcaoFHSKDGieq9bC9sjaoUavXq20H0sYCsT/LcM8Rbsbt3wKMeRcvH/uIknvauzSEpTnPte/9Ftu4mQr68slijKRYku0Th+jsaB9Jhv/Zfqu9tzsOn8oIS/9dmurGs27xVBl/4uVpoVu1SDIDvdwyCJTMEQQLkGkJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777841917; c=relaxed/simple;
-	bh=eJ+pbOtMM3LpSJu3hw5KkcT1IRFoqepE+ZMoA8v+HwY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kl0QONKcLSWmvpUZWaU3C/fUGbnU9Rsd1wY0rcbtF8/08Lzf44wlpUEuKtCEEl/9U8WlJgcp6y5gmSbPnFAhLdRL5tEzwJ4T+QwpceS3p4XWcZgHeQ9JCLh2o7ZB22/5B3Z04sYxu17OwumHiW+ZbIL+w5gb29y/BFhsvC6EUbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ETy6jiHi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777843118; c=relaxed/simple;
+	bh=haN1sX6U4lKH6nUQoeLAygvoIHtzLbgJQI2ir///UcM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=R1xWqUJ/wVx3rAr244+SQSzcKYDSwUD/9zzVtANPZTWQ8FP+AM9LNLz0E2Bh9lZyS5st8d0jOVN1JrziMqbbVgBGBpk+Au6SYK92pqI0j5w5zEvXlyUEj5Kb9lvFK0H4ywZtFCNW8iOZLqTWicSNMQyv62v6oJKovjoz41qAngE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PJRGytHh; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ETy6jiHi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E511C2BCB4;
-	Sun,  3 May 2026 20:58:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777841916;
-	bh=eJ+pbOtMM3LpSJu3hw5KkcT1IRFoqepE+ZMoA8v+HwY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=ETy6jiHi+n0HmI5OTfzn4n7cgXVSUp8mJV/fPHaqBvS0zEk3TEbh/OMHSMb1sjGwX
-	 y3LAU4OSoqiqFHGV53VWVfH2aXok3sa02S5386xJbD6r3fVFwpb/B+lhg8Xy/aqCM7
-	 VAAwG7dOtCLL5zPZ77SZn+b33iGhGwdbeEOpvtuunqVC4dSKgdRdSUUG4g0l7O+ghX
-	 rwoiw4qeUVEnFMhCt3cFYJdG48Tf6RUcpBdXnbm1OE5b/Z7AJs8fh1ULpD+IjmDgYf
-	 P65LbUtaCfTM7PVEqYCDGmjIKBLY6lt+QnHq62LY0st6eB8GXfhoqrl1frjElFpYUM
-	 cFs9nyBwqQyVg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: add new negative tests for
- xattr related BPF kfuncs
-Reply-To: sashiko@lists.linux.dev
-To: "Matt Bobrowski" <mattbobrowski@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PJRGytHh"
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-50e5ad864a6so39989001cf.0
+        for <bpf@vger.kernel.org>; Sun, 03 May 2026 14:18:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777843116; x=1778447916; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nX7JRFIn+c55jasTYHXgs4OSkjxaNZAxpIUIWQNuYaM=;
+        b=PJRGytHh8YtTh+RYk6L0ZB5bS7PGBGMCPFTkzqCwJ22yZLenTkRLQndJETm2XFxAfn
+         Cs08efOfZAG6UEu+QUIZz/VIfLvTJP4Bkm95I9CcxeXGLt07BZEXoYJgLmESNS93j9+a
+         T6zSAWCkkT1/yh2XdqJf0vNqeEH/uki7o90UHv2An3EIuMeoHT099StDoqAecLPG211J
+         sq4dRqflDYhGHs1HRIubcS0jWQbCPQuGgbIogb6aM6JB/znu1RDbG2fI1xLGEhOKcSrU
+         3QEnApG+5i+AEnqUcV8SWzwKTRELIzKfFeyAKAk//6TtnyDWyKiWJY9wXQHnsyFxIzOm
+         RqSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777843116; x=1778447916;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nX7JRFIn+c55jasTYHXgs4OSkjxaNZAxpIUIWQNuYaM=;
+        b=VCdW+JYPA/W0YOAhfZqGiAIqZ6eMiCGXKvT5k0VRi+42OlZZntKIukhZEjnmPeVMox
+         wbQZlb7gjJsjQArRORrWfCAPCTXiZXzgwEnnyt88Qvl+2Sud6iEkR/tsjH/3YImVXwNk
+         RU9RxBQq1m75WiX9DHivQsxH/vePtX/TC6XJIE9eR/Uo+HBYC9ijHKhLFDkasOzbpaaa
+         mN04ZFCLXxMU+fyc17hAQswfxHCGNC6W1NvWS8A7vlADVuMl9jlHfnJma4vLWblgvKZR
+         ebyE2PZSWCI3UqKKKmhYgovZrCqeMLxp4XDzOo9Z4j2xHzcIbiZRnfNbrcigvg2xPWzk
+         A1GQ==
+X-Gm-Message-State: AOJu0YzT3ASQq/5SID1X/GN8c2S+4zgkBu4EBQZJUYNz4ItN8jToJe5Z
+	H20frpeYbXP1vq61k3vJQSGjIuyECJGqWLy7AWu32NmASH7FzcF+KBWC/hJXyQ==
+X-Gm-Gg: AeBDieu/Z1ZHcB9Wxv72VjmNhBfRSd8mmkTR/ZX40i2YZ7FJaG5uqjQWSvvdNqdM4Cg
+	wXVfISp4NGAiyJfldsEVQL4CiPy8tTTsRAczkX+U+T5CeaIejuUusy7M4/3SUACyWpkm8nzc0yT
+	elgLbIBqHIjey+eu1NuhBe9v4nOYYLPt+K/k2XNPlryd+6GtrJU/5sBRVS68mdsUDRIT+laQVBZ
+	7vw0qD5vZ58N8UVyyqRsX2p9zuIkkXZPHBFeocoEtMNq5bHwJEbVUM7kJCk0WdCR5dohGPFlR8v
+	eyd6Upu1Ca3k4CvvmOLyt1cDNQ18It3l0sX340j88xEZgiGBwMDDjuHnnB+MfaeLOdnECSNY7Zw
+	wwlkNyuR5FrNJ8QD80ArOMv4sGk5h8J7CVxz/1LOZQH5TgT/R7udjACLWE0wrxtQNcVTiZ1htzU
+	9wERjc7GCIgD6LPWR9lZ+e4IPHMYlaAm4w5hIc2ihcCeAd+S63uGugwUORalIoYODe9a7oxlize
+	N/xNhxfhnSBBUFVvnKiDOxbLDYOLqQrppCqUtjwfpBv7iwQY1xe
+X-Received: by 2002:a05:622a:1e8c:b0:50d:912c:c2cb with SMTP id d75a77b69052e-5104bf92bbcmr105928041cf.42.1777843116123;
+        Sun, 03 May 2026 14:18:36 -0700 (PDT)
+Received: from battery.lan (pool-100-15-227-251.washdc.fios.verizon.net. [100.15.227.251])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b53d831651sm96146346d6.47.2026.05.03.14.18.35
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 May 2026 14:18:35 -0700 (PDT)
+From: David Windsor <dwindsor@gmail.com>
+To: 
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260503200819.1530328-2-mattbobrowski@google.com>
-References: <20260503200819.1530328-2-mattbobrowski@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 03 May 2026 20:58:35 +0000
-Message-Id: <20260503205836.5E511C2BCB4@smtp.kernel.org>
+Subject: [PATCH v2 0/2] bpf: add bpf_init_inode_xattr kfunc for atomic inode labeling
+Date: Sun,  3 May 2026 17:18:29 -0400
+Message-ID: <20260503211835.16103-1-dwindsor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] The BPF program will be unconditionally rejected by the verifier=
- because a mutable `.bss` variable is passed to a kfunc argument requiring =
-a constant string, causing the test to fail and leak a temporary file.
-- [Low] Mismatch between BPF program variable names and the generated skele=
-ton fields accessed in the test, which will cause a build failure.
---
+Many in-kernel LSMs (SELinux, Smack, IMA) store security labels in
+extended attributes. For these LSMs, atomic labeling during inode
+creation is critical: if the inode becomes accessible before its xattr
+is set, it is briefly unlabeled, which can disrupt LSMs making policy
+decisions based on file labels.
 
-commit fced0fe9408f12be9c0811a441c1071b5b9e4b39
-Author: Matt Bobrowski <mattbobrowski@google.com>
+Existing LSMs solve this by setting xattrs directly in the
+inode_init_security hook, which runs before the inode becomes
+accessible. BPF LSM programs currently lack this capability because
+the hook uses an output parameter (xattr_count) that BPF programs
+cannot write to, and existing kfuncs like bpf_set_dentry_xattr
+require a dentry that isn't available until after the inode is
+accessible.
 
-selftests/bpf: add new negative tests for xattr related BPF kfuncs
+commit 6bcdfd2cac55 ("security: Allow all LSMs to provide xattrs
+for inode_init_security hook") allows us to reserve an xattr slot
+for BPF. Before this, the hook returned a single xattr owned by one
+LSM, leaving nowhere for a BPF program to write without clobbering
+an existing entry.
 
-Add a set of negative tests to verify the newly enforced constraints
-applied to xattr related BPF kfuncs.
+This series introduces the bpf_init_inode_xattr() kfunc, which takes
+the combined inode_init_security xattr context argument to access
+xattrs and xattr_count, and internally writes to xattr_count via
+lsm_get_xattr_slot().
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c b/tools/t=
-esting/selftests/bpf/prog_tests/fs_kfuncs.c
-> --- a/tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c
-> @@ -128,6 +128,11 @@ static void test_set_remove_xattr(void)
->  	if (!ASSERT_OK_PTR(skel, "test_set_remove_xattr__open_and_load"))
->  		return;
-> =20
-> +	/* Prepare the long name for negative test */
-> +	memset(skel->bss->long_name, 'a', 256);
-> +	memcpy(skel->bss->long_name, "security.bpf.", 13);
-> +	skel->bss->long_name[256] =3D '\0';
-> +
+v2:
+  - pass the xattr state as a combined context object and drop the
+    verifier fixup path (Kumar)
+  - restrict bpf_init_inode_xattr labels to bpf.* namespace (Matt)
+  - cap bpf_init_inode_xattr() at BPF_LSM_INODE_INIT_XATTRS slots per
+    invocation (AI)
 
-Can this leak the temporary testfile on the filesystem? If open_and_load
-fails due to verifier issues with long_name, this returns directly instead
-of taking the goto out path to reach remove(testfile) called later in the
-function.
+David Windsor (2):
+  bpf: add bpf_init_inode_xattr kfunc for atomic inode labeling
+  selftests/bpf: add tests for bpf_init_inode_xattr kfunc
 
-[ ... ]
+ fs/bpf_fs_kfuncs.c                            | 106 +++++++++++++++++-
+ include/linux/bpf_lsm.h                       |   3 +
+ include/linux/evm.h                           |   9 +-
+ include/linux/lsm_hook_defs.h                 |   4 +-
+ include/linux/lsm_hooks.h                     |  16 ++-
+ include/linux/security.h                      |   5 +
+ kernel/bpf/bpf_lsm.c                          |   1 +
+ security/bpf/hooks.c                          |   1 +
+ security/integrity/evm/evm_main.c             |   8 +-
+ security/security.c                           |   7 +-
+ security/selinux/hooks.c                      |   4 +-
+ security/smack/smack_lsm.c                    |  13 +--
+ tools/testing/selftests/bpf/bpf_kfuncs.h      |   5 +
+ .../selftests/bpf/prog_tests/fs_kfuncs.c      |  49 ++++++++
+ .../bpf/progs/test_init_inode_xattr.c         |  32 ++++++
+ 15 files changed, 233 insertions(+), 30 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_init_inode_xattr.c
 
-> @@ -188,6 +193,14 @@ static void test_set_remove_xattr(void)
->  	ASSERT_TRUE(skel->bss->locked_remove_security_selinux_fail,
->  		    "locked_remove_security_selinux_fail");
-> =20
-> +	ASSERT_EQ(skel->bss->ret_name_empty, -ERANGE, "ret_code_name_empty");
-> +	ASSERT_EQ(skel->bss->ret_name_too_long, -ERANGE,
-> +		  "ret_code_name_too_long");
-> +	ASSERT_EQ(skel->bss->ret_value_too_large, -E2BIG,
-> +		  "ret_code_value_too_large");
-> +	ASSERT_EQ(skel->bss->ret_invalid_flags, -EINVAL,
-> +		  "ret_code_invalid_flags");
-> +
 
-Will this cause a build failure? The BPF program declares these variables
-with a ret_code_ prefix (such as ret_code_name_empty), so the generated
-skeleton structure will not contain fields like ret_name_empty.
+base-commit: 2ca6723a5f7b68c739dba47b2639e3eaa7884b09
+-- 
+2.53.0
 
-> diff --git a/tools/testing/selftests/bpf/progs/test_set_remove_xattr.c b/=
-tools/testing/selftests/bpf/progs/test_set_remove_xattr.c
-> --- a/tools/testing/selftests/bpf/progs/test_set_remove_xattr.c
-> +++ b/tools/testing/selftests/bpf/progs/test_set_remove_xattr.c
-> @@ -17,6 +17,14 @@ static const char xattr_selinux[] =3D "security.selinu=
-x";
->  char value_bar[] =3D "world";
->  char read_value[32];
-> =20
-> +const char xattr_negative[] =3D "security.bpf.negative";
-> +int ret_code_name_empty;
-> +int ret_code_name_too_long;
-> +int ret_code_value_too_large;
-> +int ret_code_invalid_flags;
-> +char long_name[257];
-
-Will the verifier reject this program? The kfunc bpf_get_dentry_xattr
-expects a constant string for its name__str argument. Because long_name
-is declared without the const qualifier, it is placed in the writable
-.bss map rather than the read-only .rodata map.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260503200819.1530=
-328-1-mattbobrowski@google.com?part=3D2
