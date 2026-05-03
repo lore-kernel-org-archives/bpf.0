@@ -1,61 +1,60 @@
-Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021088.outbound.protection.outlook.com [52.101.95.88])
+Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021075.outbound.protection.outlook.com [52.101.95.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B0C294A10;
-	Sun,  3 May 2026 15:21:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C10E51A6830;
+	Sun,  3 May 2026 15:23:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.75
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777821688; cv=fail; b=DxPc3Uq2LPHLc0MvtHzphADa2+Lmr9Eomh6wmz3/93X9xeEZTuekE6W1iRqn75EbLZt4Q2ZMemBcldSqQKKXsmnljXZsUzNqwESCBTyFaD8TD33c+35/nTjXtKFEVp/yyqfcms7TQr3WJmuwXmrv/Q5SZVZ7a2mzqGdLet6HgE8=
+	t=1777821840; cv=fail; b=fZiVC3ChGGbebg+UPxWFfH52K1cF5ao0N5Ew9tsU6HPBiaN8USpVw7fD4ZhJF6Bgav4eVxGsElee17F/cdx4ft96U/6JFlHW+FYT1csTukUqALhdGlgcUxNRK/lMuK4DIJcCIcSeotvxlBUHfElIGQsciO0y618THbEpkW/dYhw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777821688; c=relaxed/simple;
-	bh=zE4m/kBpiTkrE4P8zpSaW2pS9MgkxcMhAto0qwMOANA=;
+	s=arc-20240116; t=1777821840; c=relaxed/simple;
+	bh=/5htAh7m51sDWuMcTvD+mn6EbPmQ990jOb1r8Iqy0ZY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Ey47TFvhp4wArFGQa4mwRolYB4qYrSb8qcIbZ2AnjG+SQSVq6utg/9JhPSlJwnAbFGAyVeUdNs9dp8FZ9VI84aHHQ0fzljaQK1f6C8UwzgaW5o9JA32nAp4ghWZaUzs3Ev2ekj6PdEjTMz1wfruLd82AzUnU3OTdRy6cEGMBEhg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.95.88
+	 Content-Disposition:In-Reply-To:MIME-Version; b=RRYGOh16uFCzZjMhqp3+lEdIgGDvLpYC5KuB8RKPVBxf43SnCM4ed4gH9dAfxSajssxBound6HeLegmunlg4MpbJ7MDwOnxS+9blxt3ZPzO2cM342tngRl+ioIOBCwwzD3UbzB8qUYHE06xuQECOlrs2BHV88Zfi2mkXpRcJVtY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.95.75
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=L/hGfqf3vJV0j8WTRl7CdZW+2fVU6y731OJSGg9XqPK/YKJjSl12Gwyc/toqUEssAUCcNgsyqzAZQjrmEH6bmgCtbGXZFq17PjA648EYemBRMZnltdbZVkLBpa7ayN+2i4Q37zsw5AoDjXN9pjMR2ANo7TysOhm/FxZd3N86gqEWY3Q/bDQjupuKdokda9AkAHiPDueZnCjpiCZGOYNAd3dVVcDf+H5QdSvpkXECRziSqYO/x6abYUiwnHnqPk5QgDuIHGV6LO5gq0tk/kqL5+7sFOdo4z0JQQJVt7Al3VejbhjKeyNRob8+MOyuY7i43Mj4AggqSWNSsYHX3ZougA==
+ b=YmzTmdP5WTCAEN4jdrZEpChftMVdEbFYjVdgp/uUfjA6CrXtjc4+AuHim9X2TzHJpLeds3Y0z68QE5Q62ArvJQd+6n+QFqFWhFHxyJ2g7kAGsQ5p6xouUOsikcDBYxP8QrxtfZKzGANl4aX06ABNZ76ApXJI9kjMVyhAwd+ARG6ixHlvhq+aTngPq6o+gZQWC+/ZoiUEwR33mHgfF9p+68/JC6oFKmo7d6Nzy/Tuq21v2flxlRjzSrXfpQv4HqA9z9Lt/e3E3bnZAd7TuCC/FMVqLrswS9/jviaPKbe7Lu0yYp0SO7O5eVDtY8AdMKeFNrFxY9Ml1+Rek/JLQGapgA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ahCXzR5lYEEplkOD4ye1mUbtNaK8pF9UyeNhmXA9jkI=;
- b=e3j0mFOU2zwkUl7NTfkfkgGgEZurHh+PRBIMmVQkyU0Uw97ozNeWuOhU8ansbw5w8FUebWWCx0fCsRN3urNLK8fISrHpgQ5XtEhsuRhP5IIfmEoTOQClIFOeCh9vHJgDTr+g27fWsnAlcsZZtmOt1M8CRhFP+W6KuNzYa/fcfD8ZqF+xvxJ1VegCtAXwsz9OKw7C5tCMYgECFzCDYiVdrDrRbT4QxOMckU0RFVzDKHPeXa1Q2GG1bFIsWHMuU2ThWtY9snaUZ9EUAKyG0opKlXB+RL6NuxoVOYexPAso/h4wuNz3PNFIp5lb7kagerbK8qCrIIQ4XULfjiSnc8dPMQ==
+ bh=77j2RMKzKrhEgQ3RgHJ0BQeXprL+yipR47zt3XDKTPA=;
+ b=VXRDFCZWP9J6fv7nD+7rGtGLA7tEPz/cDScPar96bdI/TsrBB7AC6GuUkcnuIMD+NVxdAlXhlOoMUuV/yDQE5daI20DGKsSg3fCy+uQZCACTzQ0sCt2VnZ8iJkreRQhCOv4ralsuTxaQevgpjZwx/sD+hVlIaRMhaKbzdMF1TcvwSVXHjghzZUIK7bQ++oNHcjBgaEK9OMbg90NHnGSVS0cFPk6LJ3RlwIwp91LycIu4YkE/qiw1UWBmGpYkoLM46jTeJzxoPzuWLO+RRLQZRFHIWrVQIBQWRK65XpJr8wWjUtF9tNxxk7AoUQW5i6KwAB2VrRv7SiQYV9Gig3yYhw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
  dkim=pass header.d=atomlin.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=atomlin.com;
 Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:70::10)
- by LO2P123MB7019.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:329::7) with
+ by LO6P123MB6838.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:301::6) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.25; Sun, 3 May
- 2026 15:21:23 +0000
+ 2026 15:23:55 +0000
 Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
  ([fe80::de8e:2e4f:6c6:f3bf]) by CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
  ([fe80::de8e:2e4f:6c6:f3bf%2]) with mapi id 15.20.9846.025; Sun, 3 May 2026
- 15:21:22 +0000
-Date: Sun, 3 May 2026 11:21:18 -0400
+ 15:23:55 +0000
+Date: Sun, 3 May 2026 11:23:52 -0400
 From: Aaron Tomlin <atomlin@atomlin.com>
-To: bot+bpf-ci@kernel.org
+To: Randy Dunlap <rdunlap@infradead.org>
 Cc: corbet@lwn.net, song@kernel.org, kpsingh@kernel.org, 
 	mattbobrowski@google.com, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
 	eddyz87@gmail.com, memxor@gmail.com, rostedt@goodmis.org, mhiramat@kernel.org, 
 	skhan@linuxfoundation.org, jolsa@kernel.org, martin.lau@linux.dev, yonghong.song@linux.dev, 
 	mathieu.desnoyers@efficios.com, neelx@suse.com, sean@ashe.io, chjohnst@gmail.com, steve@abita.co, 
 	mproche@gmail.com, nick.lange@gmail.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
 Subject: Re: [RFC PATCH] bpf: introduce TAINT_UNSAFE_BPF for mutating helpers
-Message-ID: <nfwk43nu6ntqzpylhkmqwvep2kqb32y53aswfs6o7yb65wryhg@cl46g3hw2pyv>
+Message-ID: <wvpx3ur3zwoqi5uw7243mmgziq6llsxhzs4zsn3qceelober4c@qx5wehsd2jix>
 References: <20260503035220.520479-1-atomlin@atomlin.com>
- <78ecdb5fbbc2bba3e5d0d001c499c9011ac2e5d7dca29f60b0736c4f70c29d9f@mail.kernel.org>
+ <e456f0f0-5e49-4de4-9184-32ebc53cd0a1@infradead.org>
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="gjadjj6egzx3gocb"
+	protocol="application/pgp-signature"; boundary="3ktthgpn6mguhd4t"
 Content-Disposition: inline
-In-Reply-To: <78ecdb5fbbc2bba3e5d0d001c499c9011ac2e5d7dca29f60b0736c4f70c29d9f@mail.kernel.org>
-X-ClientProxiedBy: BN1PR13CA0028.namprd13.prod.outlook.com
- (2603:10b6:408:e2::33) To CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
+In-Reply-To: <e456f0f0-5e49-4de4-9184-32ebc53cd0a1@infradead.org>
+X-ClientProxiedBy: BN9PR03CA0240.namprd03.prod.outlook.com
+ (2603:10b6:408:f8::35) To CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
  (2603:10a6:400:70::10)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -64,208 +63,120 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB3523:EE_|LO2P123MB7019:EE_
-X-MS-Office365-Filtering-Correlation-Id: c9a17ae4-79ca-4a70-53f3-08dea927a261
+X-MS-TrafficTypeDiagnostic: CWLP123MB3523:EE_|LO6P123MB6838:EE_
+X-MS-Office365-Filtering-Correlation-Id: 384393b1-00ad-4905-f665-08dea927fd61
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|18002099003|22082099003|56012099003;
+	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|22082099003|18002099003|56012099003;
 X-Microsoft-Antispam-Message-Info:
-	Gxb2bDPvk3Hxp+ViJcxHEcFs0dfyc2uac4gq+UgP4eqitjCzdwTMCPkVzHnEGKOzxOgXvs126PFWGKo5QTI5xkSMErwnkBsZhJo6Z1/eZBANEGDfT7DjFudmvgaWtryi0C7ALpSIm35eUU0vnypUh3O6i77I8WgRf0YZ5CWrTThpqyEqP9oANhuur0LQ4KN0MiJM6VtcVrV7dKOIvX0qMxYsAl1U5IWtgNXhk8q+b3tmsaLKNZNDjTJ94fTokoDV3qjXkFakH8nTeYdWjpy+k76U0ps2c1tll+rZUzLHeyalYtbugt0KRu6ilEmv9KfNiQvFNDKbhyIWXMUn+eOLi6i2wDKmQYXSvweZ42vCjFR8pQmq8haVGNQr1rkKquuT2oXugnA2HnUY1UOeM+9LFoPBZAZNbRkPUkXhu+cS5KYdKTs7DGkqkBXh/g+6+QHxJM6XqqSTUoZN2qHJwKGv2ccz/VBxj4bK41C4vCqk/yKvkfNf54tW+w2jaQTBCvAqtwacljnlh3ETVJCGHv5jf8ppGjfpxXhzAjiCh0lmRLZmVZIMJYvlT+n6MwDPjX2IF4JK9maf8bKurOrZE3iWRA2xdgETgb+FydC/yDkwdKf2evpgGaDFkAuq5U6U5SST8aSGbddp8+G0aU3ZvFgFDGQSljlDn+BDTaVZeUbVXhSt/1/i8j574dK9LCucr+TW
+	kkquSJu0EkB8AXcR9gCddkkMNXpaz//Vmg1uXrzsPkwud5z2eQ1R94o6is/s5xBlxkPPA0/Yf1xi5RfBAzS+btQytSKBggH4VYeBiSYUFJOsVHukf84x15Y5lF7AMRmmW4TweLRv53WQie5uMdpI9tkDKwW9i8jivJjeK77y8cmXoXS7KG91dxWIYCcbzLb7q+AT6Xh6zq1F8Ob1eRMhfiGHwq2xi9o5aU98FlY3UDsaiKFyC1shO+ihkzCpfNTRo/19ayLZgG+0hGkdZiU1oFIvwNCb9waUPpKDxreyJtn2AZcBW1xr4co97DAx0D32tQhstanjC8alEshMBftZPWQT20G9oAebHUwFqakx9b9fvi/SFwCPsSMzj0UWW4hac5kJ0i6d8y44KwL0KlJG53cq7i4ztaOmXUCN1XxoSyqom2c2lx0l3XXB8gk9XrKtFmGcd5EEgxXXcB/RFV6I3L0zDRCFCPkOPqVhvAQXdARmqUbelUp75vyMswSH2fbVxw7znHWydpq3ioN/u7acHuod3w9WMSe4GRD5+A/fYvqIJGi7pIOLD0YiUev0G8XmlxDuBFfRSvvROGzY3JmqBZN6nHz/81y2UH91t0ae/M++ogFzkDxCqp0aPpncw5imwgyrdeVVezI9Zb/KPGGQgGJpWEqBi1dNNssuZlcE4pD2rgEJr+JAAwUyeuekQNbL
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZVByYTc2MEhMZDRUL3o2R2Fuak55QXA0bFI1NHBwVFIxNDdYU3ZJam1iZGdj?=
- =?utf-8?B?RzhBekNVc3JBelN4eFIvR1BuTWxJTFNkQjErTzJzWWtwb255RDFacFdKVnBl?=
- =?utf-8?B?YUNsT3Bkd0JFeDI5MlpNV0lYZmNkbll4TWw3ekVRVGUwM3M1M043UzJ4a09P?=
- =?utf-8?B?QkZrRmpNeTRsWlhDc3hYU3lVZlFKYnBybUJLRFNpKytta1RxTTlzSGhpK1Zr?=
- =?utf-8?B?L01Pc1RQcWk0MktwZW56ZVBHYVFRWWZvOXlqNHZxVTh5Z0tBU2trNjlMMVlu?=
- =?utf-8?B?aUlhTTRBNVFEeVU3WElwN3I1bEIyS2pDUm1UVXhIMHIyUWQ1TmpWZTkvYjQx?=
- =?utf-8?B?SERRaTk5SWtuVlY1bGRySU1xQll1RHBOcjdjRCswdWUrakF6bkU4d0VlOVdK?=
- =?utf-8?B?SWhnV3V3ODIzMVUyK29RKzZBdENRMlFuR1VYdGdXaENsblNGTzgvWHFyNnE5?=
- =?utf-8?B?YjJuMDR5M1ZTNFFFbjdNdFkzTGxXUjh1NlNudGZma0NWYk1ESXNJNGxQY2xD?=
- =?utf-8?B?RHZtekUxU25qa1RVeWw3VXRFNjNHbkxUdWdsbEZTMjVNUFpHbFJiRDZabmZQ?=
- =?utf-8?B?UVN5ems1MWg2Z3dpVjZnVFNYY05OYnQ1LzZPTW90bjEwMHk4cjlUTC9EbXFU?=
- =?utf-8?B?SmxPRnA2YUx6blFxUlE1NHg0Zm12bDcyWVhJQVhzTC9IZ1hrTXZyWDZabDdX?=
- =?utf-8?B?S1o5L2ZNSklWVWR5OXBxTzIvQS9BK1hjNTluenowRWRQZzArSWZsZ2lsSk1l?=
- =?utf-8?B?dnJoSXhJM3VSeVVvKy94d2dVelprazBFbzcvZ2xrSnBtL3dYZVZhN05mWkhn?=
- =?utf-8?B?Y2FBNnlucWg5ZkJiQ3RJMy9jbm45a3RxUVVFUGkzL0diMU9Ydkc5QVIrVjR4?=
- =?utf-8?B?Z0hSR1ByNDZrTVNZUUJPVVEzcTFvUkRSaUUwVVYrM0Y5MzRiRlhSTVJhQlNm?=
- =?utf-8?B?ZXRKQ2U2MTg0RkxMUkgxWFF6Z09lUTdvWCtIbEFpb2Q4WWZ0RWJIempBbkFK?=
- =?utf-8?B?N3FQRW1LakNjcEVya0RBbVdRd0RlaVlndXhOVUtvVUV6T3AxOVJmVnNGc1Z5?=
- =?utf-8?B?SEVUaDBZU29iNjI1VmoyWERBRTJKYS9iREdhTFRRVFA0YVRYM0xnLzJtbGxS?=
- =?utf-8?B?cGpDVTJqZ1o4bzhUNVk3dml5QWt3YXVYcU1YSVcraFVhUkJSUkVCVVRPRUIw?=
- =?utf-8?B?SCtYOUJWanowZldPQUJxejZIY1RIUnpPN2Z6dVJpWEdCRStlTTh2ZHc2WnFQ?=
- =?utf-8?B?NHVQZXR6N3JRWUp0OWZwMzdzeUN0WDdCekRCT1RBalJyVDIyR1poUlN2cUJC?=
- =?utf-8?B?M0FJZnN6UHN3SC90bDdvUTlJSTVwM24wUTFOL0JlTzdXZHIxSThjb01hV21M?=
- =?utf-8?B?UTl6VUducGVlYVMxYk8yaStlY0FGMXNvVW1ickVzNnhKeE02dzk5TXRVSHNs?=
- =?utf-8?B?QmphbDIrMmg0SDZLMHlCMUJHOW5NWUpOcFYyaGNCT2ZaTFNpdHhEd3JQNjV0?=
- =?utf-8?B?ck9yT1NEUS9ITjVyenhZbVAzYzlybDRtZXBBMGdBcWpFQnc0amJOTDEyTkxH?=
- =?utf-8?B?QWxSWWI5OGZhSTVleW02Rlhua296UTA2SlN3NUZqNkxieXhFUlQ3OHBNUEZm?=
- =?utf-8?B?S2FwbHNkcU5xblMwMHJ6RFpBRlJPQVd1SHFIV2FEc1F4K2FFV3pCZzE3dFNu?=
- =?utf-8?B?aHlnZHZ6bXowSERySFg4RnVRd1hFcGField1OGJNU0I3SmVLNXA2bDVIZnJJ?=
- =?utf-8?B?N2VCUTM0WFVSYW1NWEwyN2E5SE9abWdBMGx4ZDhmS3ZHdHlmbjNUR21xanA1?=
- =?utf-8?B?c3dMQ01JcTBIczl2d2pZZlBtOHVVR1czT2kxTkJFdm5Pa2RsQ0VHblk0bGUw?=
- =?utf-8?B?ZDQrY2dBaERSVkVSdms0Lyt5blRzai9Wc2E5cEp6NmFDaFhUK1Nrc1pZR1Jt?=
- =?utf-8?B?SDlHV3JEQWtCeTRJSGxNM3JzTGpLaDcwOXFrTkw2ZUNWMFdOdTVRODNsenN3?=
- =?utf-8?B?a0pCSEVUME52VmFPWE9IV1R1aW12N01GK083T2VDTkZoMEs3OXhpWElkSnBm?=
- =?utf-8?B?TjZjQlpYN1BBVXpUMHZpRDIwd3VmWkw0T1F6Q2xTY0JyUjhXY3Irc3MxZmxl?=
- =?utf-8?B?Ym84N3NYMUFoUTg1YUduR3hkZFM0cFIvdlJ5WVhSZEdqTUMzTlE5Zlg5bkc5?=
- =?utf-8?B?WmhtOUw2TUNaUlJaekVZQzVwc0NVaHBLdEFRL3hMaWljMDNHbHBTak9HR0Ur?=
- =?utf-8?B?UW84UzlEQ3lUMEQzczR4RGd3bzVvZXp5WjhJamlkczFMYmtaMWJRV0dRbVJX?=
- =?utf-8?B?UWUxZVhWRktTaUtvS3pmOCtPZWMrWGRDdzBIcjBKTUlJMzhuTUNyUT09?=
+	=?utf-8?B?bU5RZHdhMUdUa2hFWG51UXVQalNqQ3JUelFXb3ptbWZSb0ZHVlp2ZmRJVkla?=
+ =?utf-8?B?aWZhY0oxbk0wRFpSd1pnckRFK3RIMk44aUpTZGlqOUFqK2RIbWZ5ajUrcmw1?=
+ =?utf-8?B?Rmtvd3VFSHVzYTJmdmdscXVkYjhKNDlCNmxodmI0VWNvbXJla3oyb0Z0Wkhh?=
+ =?utf-8?B?OE4wUC9BRU5udlRGOTc0bU5INFh1Ym8xTitTVmRnV1FYMjN3WExkTTJVVnFB?=
+ =?utf-8?B?OGE2TlhKeXUxT203SnlZRnJ2MSt5MWd4LzFqcU9MQzdUc0hGelZHaEFmajVW?=
+ =?utf-8?B?MDNHN05xNGoyUVk1MVV6azIxczhsY0luQTE1ejRlT2hJSTZFTXZCMVJBYjdy?=
+ =?utf-8?B?b0dqcWVEK3JJYUlzZ1BocHlIM1prNkw3US9PL1NDTzV5Qk1ZYzY0V1dENlov?=
+ =?utf-8?B?NUtyQVFUZnB5MVdORHBOcmhaazhoYUpCZ3dzd2kyOWxoUkdpV3Q4bnJGb2xy?=
+ =?utf-8?B?QkFEOHZFRndNbkFnUWRudU1BYzhpRnFtb0xMQXh6cWxGaUhVVnlsS25HK3FI?=
+ =?utf-8?B?cFgzNzlkK1U3dkJaOHQ0Y1R4citZbGR1ZTU4TEdBRlU2NlJ3cUJnc2hzcHZ5?=
+ =?utf-8?B?V3BueW1yQ055MEU5UkFtQlFEUGRPS2NTMC84Z1JHaGVBc21hbllzdzNyTTFz?=
+ =?utf-8?B?UUZRcnN2R1BUcDZtempwWS9NbFZ2WGVMT1A2bkZUMU12eXVpZlFMcDFJZzlY?=
+ =?utf-8?B?VnRiRkJsN3ZBaVNqbG9qMFBVSlVaS0pkR2YxVitLdlpFVUNqNmtQZG5nMVZ1?=
+ =?utf-8?B?QW9RcUtnSFZQM3J6b290MXY2UnkrNjZnSUxYQmJ1L2pXbnR1OFFLZi8vV0NE?=
+ =?utf-8?B?YkhGbjd5TE8welZ4Ulc5SjdhcGNBaFFqMzhCeXdkd2dJLzcwUEtyNTR1TVFG?=
+ =?utf-8?B?MFhXMXhHV3hQbi9OYWU1QzJSUFdIazRsVXhxMUFiUUxjNDZqKzNhVlpYdzla?=
+ =?utf-8?B?U2h2eEp4QmY0amVuYmk3aWw1NTBqOXdiUFo0aVpnNS9nZWU4dWh6MmFyM1RV?=
+ =?utf-8?B?RHBQREpvNDNrZVJoU2N4WHBydHYybkJST3RRdVpsQ1N0NDUzelBNMVAzaHJs?=
+ =?utf-8?B?eU53SmRWd0RPS002QzdLZTJQQW9wR1hCbXFFcGs0RFV5ZHFiM3Zjdk5ZK2VN?=
+ =?utf-8?B?SVhlNFRNOC95OTBjeGxhVkFzZldxbG80OTJGaHEwZXhUMVU0ajRrUHhYNUhE?=
+ =?utf-8?B?QUxBelE2YTdzQW9EamQ0ZUxQdDRtb0RZT3YwQ290Zzd5bkZ3d3gxYjg5cjBP?=
+ =?utf-8?B?RGZTMnU4VXpOWlQvczRKTU45K2lBeHhFdkNJTDQwanFSRUVsWEJLRnJtS0dQ?=
+ =?utf-8?B?U0NSbWU0bVhWSU5DLzFYNWN1WEtQdTcvNHNXMFdZamc2R0pVUHpIRm9qbFpS?=
+ =?utf-8?B?TzU4MDNuOUg5UVpTdWZBeEJDV2pzcWZSL2g1eC9zM0ZpWDZpVk52QnYxNzZa?=
+ =?utf-8?B?b0lJdDZabllicW1oSTRkaU9LRldqaGl0MzE4UVQ5UG5aNjBEVS9hbG90aU8r?=
+ =?utf-8?B?bTZlUEVtOEdVYmxhcHFRb1NvNjViZ1YyUU1adWl2bUpWVEpHRHNkaS8wSVFp?=
+ =?utf-8?B?Qnl4THpOMkFvbDFEdXdCRHdwUnBwWGRqbnIrQWE1bnc2TGU5cjhLbzEwY0pv?=
+ =?utf-8?B?bHA0cE5Tb0doOHRFaFU3RkVJdVNrOHg4MGt6cjhaMVhzcHphcmtYMU03b2p4?=
+ =?utf-8?B?ODQyR002UHJkMzBySk1XOVpkUG1VUGxZTWFIU1Q4SkZEa3JHNzNiV2RRZFYx?=
+ =?utf-8?B?Z2RXSWZJNlBFQ0U4VHhnL0VVdnY4OUZNemREVmV1ZGt6cmdwTHk0TDFqenpt?=
+ =?utf-8?B?aTFEeU1rSVBQNVlHYWpTc2R1cGxXdFV3eFovL3dQWWlGMHdGK3J5WGFKWko4?=
+ =?utf-8?B?ZVQ1ckk4cHhQN0xWYUZTRzZuS215Q0IyQnAvWHVPTHU2dVJzNmFZZ1pYWGs5?=
+ =?utf-8?B?RUJjOWd1dWNna0FoZXIwSFNnVUFYY1AyUDF4S0JzYW5qbjFLcUZ1UGFQYzRT?=
+ =?utf-8?B?WmUrNGZhYkJVY3k4NDd6SmFQc05rRWcyTzUzNXFGTk5sdEkveFdIdmJKd2hQ?=
+ =?utf-8?B?RzNSZlJwOGRSNXp2ZlpKNWIyWXN3SDdEdkloRVdsVUV1VHNMYzQvTFRRLzJ1?=
+ =?utf-8?B?T0tpUldMS2oxcmExRGZ1RklLN3ZOblA5dmpMOFpWNktrM29HaFNDN0lzek9X?=
+ =?utf-8?B?NkRJakFkbDIzVllVT3BWUEpvTi9yTjN1d1lvVDRhVmlnUG9PTyt4cXYvVDFU?=
+ =?utf-8?B?aHNFZkNRcjlWOFNBdTZTdVUrQVZDR2p2VzBab2QwNW5oOG9DZXp2Q3g5ekRw?=
+ =?utf-8?B?K29CbW45RnVIMzlOODNTOTVDS2kvNjNxZGttOU9DWTFadnRMSldNQT09?=
 X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c9a17ae4-79ca-4a70-53f3-08dea927a261
+X-MS-Exchange-CrossTenant-Network-Message-Id: 384393b1-00ad-4905-f665-08dea927fd61
 X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2026 15:21:22.8593
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2026 15:23:55.5259
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2Xf/m/R4FhCcMZFtvRPQqqyYowKxa0aJ0J4D/HGEPeO9eHwtSf+xsG7g5HxcYBdws2CwOillFDonSYM6rbJTOQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO2P123MB7019
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4dbrTn97GRiNHLFT3lWbqgGpsqW82jzAAV43BzH1dl1f89Wgn3R0UT9hEsv2uLuqJYa4ZTIhpkKASTaTpNYuaw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO6P123MB6838
 
---gjadjj6egzx3gocb
+--3ktthgpn6mguhd4t
 Content-Type: text/plain; protected-headers=v1; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 Subject: Re: [RFC PATCH] bpf: introduce TAINT_UNSAFE_BPF for mutating helpers
 MIME-Version: 1.0
 
-On Sun, May 03, 2026 at 04:44:33AM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentat=
-ion/admin-guide/tainted-kernels.rst
-> > index 9ead927a37c0..630f24996e7b 100644
-> > --- a/Documentation/admin-guide/tainted-kernels.rst
-> > +++ b/Documentation/admin-guide/tainted-kernels.rst
-> > @@ -79,30 +79,31 @@ which bits are set::
-> >  Table for decoding tainted state
-> >  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > -=3D=3D=3D  =3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > -Bit  Log  Number  Reason that got the kernel tainted
-> > -=3D=3D=3D  =3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+On Sat, May 02, 2026 at 09:29:27PM -0700, Randy Dunlap wrote:
+> > + 20) ``V`` if an eBPF program utilising unsafe, mutating helpers (such=
+ as
+> > +     bpf_probe_write_user() or bpf_override_return()) was loaded. Thes=
+e helpers
+> > +     bypass standard eBPF safety guarantees and can alter execution fl=
+ow or
+> > +     corrupt memory.
 >=20
-> [ ... ]
+> (If this patch goes forward:)
 >=20
-> > + 19  _/J   524288  userspace used a mutating debug operation in fwctl
-> > + 20  _/V  1048576  an unsafe eBPF program (mutating helper) was loaded
-> > +=3D=3D=3D  =3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> In this same file (above), there is a little script around line 77 where
+> it should be changed:
+> s/20/21/
 >=20
-> This isn't a bug, but the bottom border has 7 equals signs (=3D=3D=3D=3D=
-=3D=3D=3D) for
-> the Number column while the top and header borders have 6 (=3D=3D=3D=3D=
-=3D=3D). Will
-> this cause a Sphinx 'Malformed table' warning when rendering the
-> documentation?
-
-[ ... ]
-
-> Earlier in the same file, around line 77, there's a shell command example
-> for checking taint bits. With the addition of bit 20, shouldn't that
-> command be updated from 'seq 20' to 'seq 21' so it checks all 21 bits
-> (0-20)?
-
-[ ... ]
-
-> The current command only checks bits 0-19:
+> Also please update tools/debugging/kernel-chktaint for this taint flag.
 >=20
->     $ for i in $(seq 20); do echo $(($i-1)) $(($(cat /proc/sys/kernel/tai=
-nted)>>($i-1)&1));done
->=20
-> Since 'seq 20' produces 1..20, and the expression uses $(($i-1)), it only
-> computes bit positions 0..19, missing the newly added bit 20.
+Hi Randy,
 
-Acknowledged. This will be resolved in the next iteration.
-
-> There's a comment earlier in this file that explicitly states: "if you
-> modify the taint_flags or TAINT_FLAGS_COUNT, please also modify
-> tools/debugging/kernel-chktaint and
-> Documentation/admin-guide/tainted-kernels.rst".
->=20
-> While the Documentation was updated, was tools/debugging/kernel-chktaint
-> also updated? The script currently processes flags 0-19 and ends with the
-> J flag check. Without adding a section to check bit 20, the script won't
-> decode the 'V' character in the taint string output when
-> TAINT_UNSAFE_BPF is set.
->=20
-> The script would need something like:
->=20
->     T=3D`expr $T / 2`
->     if [ `expr $T % 2` -eq 0 ]; then
->         addout " "
->     else
->         addout "V"
->         echo " * an unsafe eBPF program (mutating helper) was loaded (#20=
-)"
->     fi
-
-Acknowledged. I will incorporate the suggested check for the "V" flag into
-tools/debugging/kernel-chktaint.
-
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index a822c589c9bd..3f893d9ea764 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -183,6 +183,7 @@ unsigned int trace_call_bpf_faultable(struct trace_=
-event_call *call, void *ctx)
-> >  #ifdef CONFIG_BPF_KPROBE_OVERRIDE
-> >  BPF_CALL_2(bpf_override_return, struct pt_regs *, regs, unsigned long,=
- rc)
-> >  {
-> > +	add_taint(TAINT_UNSAFE_BPF, LOCKDEP_STILL_OK);
-> >  	regs_set_return_value(regs, rc);
-> >  	override_function_with_return(regs);
-> >  	return 0;
->=20
-> Since bpf_override_return is a helper invoked at runtime and can execute
-> frequently on hot kprobes, will calling add_taint() here cause severe
-> cache line bouncing?
->=20
-> Looking at add_taint(), it unconditionally calls set_bit() on the global
-> tainted_mask.
-
-[ ... ]
-
-> Also, the commit message and documentation mention the system is tainted
-> when an unsafe eBPF program 'was loaded'. By applying the taint here
-> during execution instead of at program load time (e.g., in the verifier),
-> could this allow an unsafe BPF program to remain dormant and avoid
-> detection until a specific trigger occurs?
-
-Acknowledged. I'll move the taint application to check_helper_call().
+Acknowledged. I'll address the above within the next iteration.
 
 
 Kind regards,
 --=20
 Aaron Tomlin
 
---gjadjj6egzx3gocb
+--3ktthgpn6mguhd4t
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEEeQaE6/qKljiNHm6b4t6WWBnMd9YFAmn3Z+4ACgkQ4t6WWBnM
-d9YtGA/9HCrj8+eeUd2p1VoCHQ+ZXNHS13JVjdwkpgoxNQI5UPrD7Tozy/WVZE8P
-k/lTI3ZPsLzpV3jhP5t1PipnShRSc0WuhUF4D4+hTg2TIax8oHFlvXI12+YkrhLT
-Jj7dCiAQG+4ug+RzmIU/dCT236FoSfCu247P0oc2crPePT56CRcrqD6jRe+dEpZE
-9lNigyARbhvRKWMxD0XQX9mJdD+xaSnMPKNLhY+r7ORlKVPci5qypHPSewG0G/j0
-nyR4PrAVuBThf7jo0lD9cwM5vc0lWIfrXJLFFgEh7g1RvJqQZIQfoTVJuVgaeSvs
-oPE3zt/BkqN8ddwn8qGzVRij7ZCjddTIp47rX6XgIpR52Ut/H88jFm5QA+DmhhrC
-MDX6pgavJhy+nUUHoAV+LbPvzlQTK1lqXykaE2JWPC2bg1HP/1+B3UHN9X+6jzm4
-Sx7hguvJ9lLbZp1DQ5yy+CDI9pz6gfZC6oBZUhBk8OLosx2pyueLrjscJ3XuMShf
-/k0etoBwx1j1X6xeMQR4Y0NrPdfrMj6opdoqfqepW+pvlVEzxnJTjoH09v5/3is2
-DtYQnlNLue+K2tW/FoxEb3z30BwAhQWgU8sck5GSe+dX3/5UMx5BvFkhT69O4YWA
-rriiqoiMQY8355R9UQ2W5uq1y0B8yxZtifypYkFlr7iuDf/YzKg=
-=xhPQ
+iQIzBAEBCgAdFiEEeQaE6/qKljiNHm6b4t6WWBnMd9YFAmn3aIgACgkQ4t6WWBnM
+d9bcNw/5AXLy3/piW6h3xQX8n5Oku+AbhNk/MainyEOLv3hxPkb8EbtwJkSAWAHH
+tNYmr4GfkIfPb8ApzgZn820HfoLd7uVDBUU+tHj7WC3j6BspmZSxLHlR1iAxVeBY
+c1ILtc033zGlvFYc5O+6nT+OmLKKqzI7aTZCwTLCPmaKe09bQlPO/UK/82nsl8+h
+tkp6ruwHpfkWGUzlZ9WAnlGymIzZapDUeyAcEk1HrjNb2ntpkQIYs0A1oHWSQCro
+X7i5uJgpyA8T9dBVMzS6pLts+4wq4wLp92C71nib9Fvsy5yAXpQVYALSaId9QDEn
+oY94+1RKkmNjnNKP7wE8AZvq1NHXmFhdP8oJ3ULj8TqKT4w4eVrug1Qs0KIB6ylu
+Q3UccG7Fhkm1/RgAVX+5I39BtZBTk6B73T81qtNgj76uY4dDmFb+IzQDxJBZAOT1
+AdACk6cYxaiAE9bO8fWIZ9q6TELsjHTPatr/gMQPfO05m4tRfVw9Gcl0e8B04vkU
+wxCVo4yIU/AZ4Pvs7AnEW59j/Vd4byqcxIqllGeR08pny0ACioZq3yDFCoO392hb
+Tr7I11JO1vwSD6PlUbKzimDOUpUMJOSjTCSJBBknZSpS43ndVKv2RuLOPiHX7OmH
+YRiLvnlwF8TlnCo6Xo9lOiFaEDYA43lsC7R+Ec+x0ECmXrhycnA=
+=aPsn
 -----END PGP SIGNATURE-----
 
---gjadjj6egzx3gocb--
+--3ktthgpn6mguhd4t--
