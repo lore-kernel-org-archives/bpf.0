@@ -1,106 +1,116 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7BAD2E62A9;
-	Sun,  3 May 2026 03:38:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCE002C11D7
+	for <bpf@vger.kernel.org>; Sun,  3 May 2026 03:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777779486; cv=none; b=GgLUj7kkaeZz3ee5hf2SRnII9aMoHDTTlsFqxdjfIFe6m5ffxLDjLKIqUG4FzGEn/yRdGexV6BF5dJBGCriq1GvQ3JsiVD0Uv57rUZa0bkWqVAPaShGmU4KKggzwtRGRA9tM8MQHmMgFEQe1EEdgQZVsObO1JX4fJnkytOiZ0aY=
+	t=1777779765; cv=none; b=Xs8kWd6hHTLMpPEbjAF8JO094rhyWEf4ggnzIHFT0CPwdqH13kLRm/EZte2FeRVLRsOr7Y7C0UHq8N+yHpwaoELiR+o27075wulUCOPk8Lw+GBk2N91uj1SZinIid60ULzkQ3VTbCvC53HXhevmcnY8qCtHlIn0bHzMlqs9w95g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777779486; c=relaxed/simple;
-	bh=WmmpyX1K6RGWPIfadBlZg/ek/3iePlbUJRyOO0swObY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ekZimyQL9A8KvCcqRRvWh26hWSentJb99PQnQrFLworVblLPK9Nl4v451ea+yfuega20XEe+Tz6JQMvL8aILR02incfeNQhK4tUXXDyKDo5neZ+mciqEhtMNb29AroW8UQrWL3TysojeN/t9yqO/PwWDHN2ieNYE7XAb6kzOcac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Lxq88ZCn; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1777779765; c=relaxed/simple;
+	bh=tjG1kTWygatN70wVlmDcJrkF7ZiwlCkEtZ14WpNp9YM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b8/RWmD2SZFW6TY0XwYxIraNOfpzBPrRQD0TwfR3NEZdy9A9iCHADgqHhH4hboQzIcqmY/qT2rQRvUe6q/lNpKAVYb+yUA9Idp3/HfqhsMkRHo1gwQdGAUp1dlM33emzcuVunbjxBS9VC7HOdKmbQYp7Bf2ZRVrza0q4LXE0czg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bogIRTBj; arc=none smtp.client-ip=209.85.222.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Lxq88ZCn"
-Received: by linux.microsoft.com (Postfix, from userid 1204)
-	id A88B620B7168; Sat,  2 May 2026 20:38:04 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A88B620B7168
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1777779484;
-	bh=ZIS5xXbTQdgHRdNjkf4kTseeEPdbP6MssM1GrGX32H4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Lxq88ZCnJP6fNS3tzIYkmaCpeELaZaCIcHVRYrfYkscKgfTBPYdrTMHIaI4G4gJSY
-	 tXhE2MdVb1M2hLfSxGzpzDqTl6kbx7RcAmx3s4wpubR7MUcvwAPOuP/4wIWeazgIJW
-	 GE9H1QGI+Bttolt20ywCKDcPMVMLKEmr3WA4l/Rg=
-Date: Sat, 2 May 2026 20:38:04 -0700
-From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-To: Simon Horman <horms@kernel.org>
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	leon@kernel.org, longli@microsoft.com, kotaranov@microsoft.com,
-	shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
-	ernis@linux.microsoft.com, shirazsaleem@microsoft.com,
-	linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-	stephen@networkplumber.org, jacob.e.keller@intel.com,
-	dipayanroy@microsoft.com, leitao@debian.org, kees@kernel.org,
-	john.fastabend@gmail.com, hawk@kernel.org, bpf@vger.kernel.org,
-	daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me,
-	yury.norov@gmail.com
-Subject: Re: [PATCH 0/3] net: mana: Fix mana_destroy_rxq() cleanup for
- partial RXQ init
-Message-ID: <afbDHPE5BBfYBRlH@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20260430035935.1859220-1-dipayanroy@linux.microsoft.com>
- <20260502165258.GM15617@horms.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bogIRTBj"
+Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-95d04f205beso369460241.3
+        for <bpf@vger.kernel.org>; Sat, 02 May 2026 20:42:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777779763; x=1778384563; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=PiiXKGJux6g44aioDbCLD/YNgU+NyVlVqd4RaEM0CyY=;
+        b=bogIRTBj2NYB1Wx+NISe61rixqiMmilhr6CMCY7MKJG9isjO5Seco0qVA/yOZsaVcG
+         5pOsfzym9wWCYc+pUCe6ybYbOqDaw5zC0prMnbavrZN7dY+N7ngFWBC2pIh3QZYnKi1A
+         MXRpArxUJogCawuyP3oz0W1TlDavMuTk+pzBS71GlcJV/OQ/DfIqTQmnc+REdEkj0Z23
+         ypD37ohPkyq6mpAQIl6Oci4+/yiHktxJXiKQTsRzk7G4WARSfY3POLfuEX+YzMzRsQVn
+         YCRXv2utqrytLSwHwSQ5lGMMCAVityzCZ7CO7b2wBaQGFvkVWyXqQ0wCLDnkKySuwXAh
+         +ZmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777779763; x=1778384563;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PiiXKGJux6g44aioDbCLD/YNgU+NyVlVqd4RaEM0CyY=;
+        b=lcE7wdWoIetd9XUCvbHQQKGti5/vc2SCCjbFkG+NW78Ss6zQvlcGzUFc4JSTUeOXR5
+         c13KAPi4iY+uVTX9LyYxby37dy3/GBDTYiDySo0FSLTqunuJCu0vNIw/Bq3qYrKdOzaQ
+         jGRA+J6YswVzkbeBn4BJC+NaVfPOAF/F7+mTrH9x9T56V7cky9x1RRKKfHb4D/jKTqNY
+         8Q1TIZYVFqaTbBWefv600n/usKYSRdrjqXi6XFCy7HWGrAMe6hXzMmgFoHQoe2zj6Ylr
+         KOr3FDBgQcUV1xU68dqd7/T6z1bqqA0zP6Vnhy9XCvmPFp82KDnbi2ts3BUL3PDN3kHt
+         4hUw==
+X-Forwarded-Encrypted: i=1; AFNElJ/3lBiKSeNKW/ZSZAQi8hX/Umni4HqA6O1PvBY4nCJIXdzKUM1xClKKc81gD+KDz8NVGe0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLDssABPFIDbxtt0v1ps6PbdkPkZeOtzI3dMqQ6DtOEBYk7F1m
+	zCb0TgBAyNjaTClG2WXOlSLVC5DUxNRjur8Jk0FjrtuAMx1Cu2T6CrNN
+X-Gm-Gg: AeBDievfPhqJsw5epwJzzuzwTuBNuXhlJqZZmTowDWzJRYNoWSSBDb4AAlApqnlvzuA
+	PgbZsw3p3eFDioSIHYge9ldGsnvKb31Ou6DSCGR2Wo+tO9ucXKLsmr8PC9ijFLc0XQawoIXVGnA
+	/VJdBTXvzuF9qbSSNdkCHoMmswtsSFKqBxI+fsSO/rS+CFZVBzwqsZDDanSp6qDbvEV9eI9a3do
+	1ak8KzHZ+81EtHge+7thqVRiFs9h4tiWLdXivACp3qLwr6dkCMou7Ntg0RLmAVlMAOF/tU95373
+	vJ8/YkcpwTw+1FZvznfGAXiSpiR/nwfqBT67ngFkRXsLT3VSPy5n1wif7Mi4kbYVbuXydTdSAeY
+	tqjC5NCT+tqc3FhdyFLlxr6/00qP3GMGgVWiNP6GmUlFf8aiqGLFGl/J/pvdsN9Zqm1oa/I6f/C
+	a/1Y4ZqpEMj4cCLKDNS+juL6e/UsRepwDCJxLG51Z+VNo=
+X-Received: by 2002:a05:6102:4b0c:b0:604:f29d:84be with SMTP id ada2fe7eead31-62d84a67460mr2488161137.3.1777779762631;
+        Sat, 02 May 2026 20:42:42 -0700 (PDT)
+Received: from [172.27.209.232] ([129.222.53.215])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-95ce0af57f6sm3669350241.8.2026.05.02.20.42.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 May 2026 20:42:41 -0700 (PDT)
+Sender: Julian Braha <julian.braha@gmail.com>
+Message-ID: <1fe6bcb7-b5c0-454f-ad54-5014006edab5@gmail.com>
+Date: Sun, 3 May 2026 04:42:35 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260502165258.GM15617@horms.kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 09/12] gpio: tc956x: add TC956x/QPS615 support
+To: Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, maxime.chevallier@bootlin.com,
+ rmk+kernel@armlinux.org.uk, andersson@kernel.org, konradybcio@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, linusw@kernel.org,
+ brgl@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org
+Cc: daniel@riscstar.com, mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
+ alexandre.torgue@foss.st.com, ast@kernel.org, boon.khai.ng@altera.com,
+ chenchuangyu@xiaomi.com, chenhuacai@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, hkallweit1@gmail.com, inochiama@gmail.com,
+ john.fastabend@gmail.com, livelycarpet87@gmail.com,
+ matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
+ prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+ rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
+ weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-10-elder@riscstar.com>
+Content-Language: en-US
+From: Julian Braha <julianbraha@gmail.com>
+In-Reply-To: <20260501155421.3329862-10-elder@riscstar.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, May 02, 2026 at 05:52:58PM +0100, Simon Horman wrote:
-> On Wed, Apr 29, 2026 at 08:57:51PM -0700, Dipayaan Roy wrote:
-> > When mana_create_rxq() fails partway through initialization (e.g. the
-> > hardware rejects the WQ object creation), the error path calls
-> > mana_destroy_rxq() to tear down a partially-initialized RXQ.
-> > This exposed multiple issues in mana_destroy_rxq() path, as it assumed
-> > the RXQ was always fully initialized, leading to multiple issues:
-> > 
-> > 1. xdp_rxq_info_unreg() was called on an unregistered xdp_rxq,
-> >    triggering a WARN_ON ("Driver BUG") in net/core/xdp.c.
-> > 
-> > 2. mana_destroy_wq_obj() was called with INVALID_MANA_HANDLE,
-> >    sending a bogus destroy command to the hardware.
-> > 
-> > 3. mana_deinit_cq() was called twice — once inside mana_destroy_rxq()
-> >    and again in mana_create_rxq()'s error path — causing a
-> >    use-after-free since mana_destroy_rxq() frees the rxq first.
-> > 
-> > This was observed during ethtool ring parameter changes when the
-> > hardware returned an error creating the RXQ. This series makes
-> > mana_destroy_rxq() safe to call at any stage of RXQ initialization
-> > by guarding each teardown step, and removes the redundant cleanup
-> > in mana_create_rxq().
-> 
-> For the series:
-> 
-> Reviewed-by: Simon Horman <horms@kernel.org>
-> 
-> I don't think that you need to repost for this. But please keep in mind for
-> future submissions that fixes for code present in the net tree should be
-> targeted at that tree, like this:
-> 
-> Subject: [PATCH net vN/M] ...
-Thanks Simon,
-it was a typo from my end.
+On 5/1/26 16:54, Alex Elder wrote:
+> +config GPIO_TC956X
+> +	tristate "Toshiba TC956X GPIO support"
+> +	depends on TOSHIBA_TC956X_PCI
+> +	default m if TOSHIBA_TC956X_PCI
 
-> 
-> Also, FTR, there is an AI generated review of this patch-set available
-> on sashiko.dev. It seems to me that the issues flagged there pre-date
-> this patch-set and should not block progress of it. But you may wish
-> to use that review as the basis of some follow-up.
-Agreed, Sashiko flagged a pre-exisitng issue in the tx path.
-I will send that as a separate patch set.
+Hi Alex,
 
-Thanks and Regards
-Dipayaan Roy
+In your Kconfig changes, this condition 'if TOSHIBA_TC956X_PCI' is dead
+code. Since you have the dependency on TOSHIBA_TC956X_PCI, you can just
+make the 'default m' unconditional - assuming this is what you intended.
 
+Perhaps you would prefer to use 'default TOSHIBA_TC956X_PCI', which
+would have GPIO_TC956X default to 'm' or 'y' when TOSHIBA_TC956X_PCI is
+'m' or 'y', respectively.
 
+- Julian Braha
