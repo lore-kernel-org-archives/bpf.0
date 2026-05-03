@@ -1,159 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E2F382394
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05AF13876CD
 	for <bpf@vger.kernel.org>; Sun,  3 May 2026 20:09:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777838966; cv=none; b=p5EeNHKoOZolZ3Y+cGJjEu17OknH62k/o7cHTuIeKU8VTr9zFTo9kOVP4cjBvAV+ML46lMrppXGI30cbsnf0pAZUtlNuQoZefUTZjfccrFIGlc5qgq1FGIAIAthyGvE7m0DA9K6Vws9uSbbOBUpnzPt3DbDItPjRwdRMk6QP8os=
+	t=1777838967; cv=none; b=g/1XzXZ6hdCDwsRaafVP9sx7GYf1ijwFRe2y+o+9POQ6H3clITw0jPgM81+33tyNfaSnJ/ciL397AR71u8wx8aypzuliRb1qEQDMY4vsbWKzUntOxirgXOjUgCzBfc9yfD93zwza7gfvxYN0KYcf9vuPEd8GTxTK/TPojH2v7RA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777838966; c=relaxed/simple;
-	bh=3xkZ1I4V9e5W+zJ8RdTsPcKI5CtCMPp6aRPOwKILVbg=;
+	s=arc-20240116; t=1777838967; c=relaxed/simple;
+	bh=xySxV++GOM5XIXlCfurX0mk8vfsj9ELxkmA3xnUfNVw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pbkmapyDv/TEt2XGg66+LsNK9C1N/1IpMa11TFRzroYHkxD6z2T13vIYY9tpwJQBBhXyi3y9Yj+PoooEN9Z+9p28QwqkcwWZfuRlDNKJ5gXotwgWFLmhwKgOWFIhuzvvqkkUxylipf9kou0mAiUx+nF4mdyuzAR5bCg96eA65VI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Va9il2PR; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=c18mYhjfGcyANCz/oLZYp5Az0J5eHmV9Uks6lSHu7gZJTScBOGWfRu/r9Jvb83ZnAePE1naZtX6p2Am4rC2U21ZFF2XP3ECuW9l7gArf+smUr1VsXsjFhHaZN5JqrUxJZxMqqUiGbEhfRDWhb+dtpuJKarlShBePQBZiQQlweWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zlyc/reE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Va9il2PR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEF06C2BCC4;
-	Sun,  3 May 2026 20:09:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zlyc/reE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A500AC2BCB4;
+	Sun,  3 May 2026 20:09:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1777838966;
-	bh=3xkZ1I4V9e5W+zJ8RdTsPcKI5CtCMPp6aRPOwKILVbg=;
+	bh=xySxV++GOM5XIXlCfurX0mk8vfsj9ELxkmA3xnUfNVw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Va9il2PRm3CzVl+fZAlTzdcBg1Xj/XVdK23v9qIjmFuNlQupysejTIDnYmX2DSXZF
-	 wjgBe9Bmdc0KhDjmiQvSwLtvcOWacHwuu7GeC/nEWPKoNDwIZ1rGc8ffFuybVuIT4s
-	 7QohMy4fxjujMI4Tkma4nVjS6t+dMeNep2Rae2E4j9SciKhcjBtTqha9cE6CSLRP7z
-	 pk3W/ZcYYyhE8grvqRhCHbdHB9g6fW0DkKNBaLIolOkWGrGuRYZHMATeetMUKooLQI
-	 pYLJmOOB3eCQH7yjsZ7SS+bD8A34j4uRok75twV9/7tclRgQm3eqDXrun5+bivlL6u
-	 MIaVfhGWn2xog==
+	b=Zlyc/reEgYocqjgihK3Zqts9vXWyVj7+5cCZSp2SkMENgXKCDMtTUOr+rdbeNWQnv
+	 x9cC1U1eOk5PajNDtg+dHp82rq0NxnfuzOQIwG+bTpKYLhF0+Lu4ounc5pbb3kPLt3
+	 /geyffV12YOYOvHs5f9SeiboFfPfbjoRt3FNOh9r2g32Sf/UOFAbhdxac2i/Plxhgx
+	 64ZEWHFAkiZFxtG+vYLVXbUNO6XM7nZLANIS3yl7kp/Yc5fD8QDMyphfcCvH2D7kN9
+	 53pzA7kgTtkRAF79YDil1xKusWRARJ8jQOLQfNVBoXoIzFJMu2XNFHb8qlmn8rcGYE
+	 E4NgYgNYFQ/OQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v5 4/8] xsk: fix use-after-free of xs->skb in
- xsk_build_skb() free_err path
+Subject: Re: [PATCH net v5 5/8] xsk: prevent CQ desync when freeing
+ half-built skbs in xsk_build_skb()
 Reply-To: sashiko@lists.linux.dev
 To: "Jason Xing" <kerneljasonxing@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260502200722.53960-5-kerneljasonxing@gmail.com>
-References: <20260502200722.53960-5-kerneljasonxing@gmail.com>
+In-Reply-To: <20260502200722.53960-6-kerneljasonxing@gmail.com>
+References: <20260502200722.53960-6-kerneljasonxing@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 03 May 2026 20:09:25 +0000
-Message-Id: <20260503200925.DEF06C2BCC4@smtp.kernel.org>
+Date: Sun, 03 May 2026 20:09:26 +0000
+Message-Id: <20260503200926.A500AC2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Memory leak of SKB in xsk_build_skb_zerocopy() when TX metadata pr=
-ocessing fails.
-- [High] Memory leak of xsk_addr array when an SKB fragment allocation fail=
-s and the packet is subsequently dropped.
-- [High] Double completion and Completion Queue (CQ) state desynchronizatio=
-n when xsk_skb_metadata() fails.
+- [High] In `xsk_build_skb_zerocopy()`, if `xsk_skb_metadata()` fails, the =
+newly allocated `skb` is leaked.
 --
 
-commit 7c8b265d19cf8eaa2671c3f79683f55810dfc68a
+commit 88b75ff1d12b482a55e1724cc457909cf3ea19dd
 Author: Jason Xing <kerneljasonxing@gmail.com>
 
-xsk: fix use-after-free of xs->skb in xsk_build_skb() free_err path
+xsk: prevent CQ desync when freeing half-built skbs in xsk_build_skb()
 
-When xsk_build_skb() processes multi-buffer packets in copy mode, the
-first descriptor stores data into the skb linear area without adding
-any frags, so nr_frags stays at 0. The caller then sets xs->skb =3D skb
-to accumulate subsequent descriptors.
+Postpone the skb initialization phase in xsk_build_skb() until the first
+frag allocation is completed to prevent the skb destructor from running
+on error paths. Before the initialization, the skb can be safely freed
+by kfree_skb().
 
-Fix by using a !xs->skb check to handle first frag situation, ensuring
-we only free skbs that were freshly allocated in this call.
-
-Closes: https://lore.kernel.org/all/20260415082654.21026-4-kerneljasonxing@=
-gmail.com/
+Closes: https://lore.kernel.org/all/20260419045822.843BFC2BCAF@smtp.kernel.=
+org/
 
 > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 06ee260f3afc..55378c3855d5 100644
+> index 55378c3855d5..af3c5752bb63 100644
 > --- a/net/xdp/xsk.c
 > +++ b/net/xdp/xsk.c
-> @@ -972,7 +972,7 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock =
-*xs,
->  	return skb;
+> @@ -819,8 +819,6 @@ static struct sk_buff *xsk_build_skb_zerocopy(struct =
+xdp_sock *xs,
+>  			return ERR_PTR(err);
 > =20
->  free_err:
-> -	if (skb && !skb_shinfo(skb)->nr_frags)
-> +	if (skb && !xs->skb)
+>  		skb_reserve(skb, hr);
+> -
+> -		xsk_skb_init_misc(skb, xs, desc->addr);
+>  		if (desc->options & XDP_TX_METADATA) {
+>  			err =3D xsk_skb_metadata(skb, buffer, desc, pool, hr);
+>  			if (unlikely(err))
 
-Does this code leak the SKB if xsk_build_skb_zerocopy() allocations fail
-during TX metadata processing?
+Could this leak the newly allocated skb if xsk_skb_metadata() fails?
 
-If xsk_build_skb_zerocopy() allocates a new SKB using sock_alloc_send_skb()
-but metadata parsing fails (e.g., xsk_skb_metadata() returns an error), it
-returns ERR_PTR(err). The caller xsk_build_skb() explicitly overwrites its
-local pointer with skb =3D NULL before jumping to free_err:
+If xsk_skb_metadata() returns an error, xsk_build_skb_zerocopy() will return
+ERR_PTR(err) directly without freeing the skb.
 
-        skb =3D xsk_build_skb_zerocopy(xs, desc);
-        if (IS_ERR(skb)) {
-                err =3D PTR_ERR(skb);
-                skb =3D NULL;
-                goto free_err;
-        }
+The caller receives the error pointer, sets its local skb variable to NULL,
+and jumps to the free_err label:
 
-Since skb is NULL, this check is bypassed, and the newly allocated SKB and
-its associated socket write memory quota are leaked.
+net/xdp/xsk.c:xsk_build_skb() {
+    ...
+	if (dev->priv_flags & IFF_TX_SKB_NO_LINEAR) {
+		skb =3D xsk_build_skb_zerocopy(xs, desc);
+		if (IS_ERR(skb)) {
+			err =3D PTR_ERR(skb);
+			skb =3D NULL;
+			goto free_err;
+		}
+    ...
+}
 
-I understand this is fixed later in the patch series by commit "xsk: avoid
-skb leak in XDP_TX_METADATA case".
+Because the skb is explicitly nullified here, the kfree_skb(skb) call in
+the cleanup path is bypassed, leaving the socket buffer and its associated
+sk_wmem_alloc charge leaked.
 
-Does this code leak the xsk_addr array when an SKB fragment allocation
-fails and the packet is subsequently dropped?
-
-When appending a fragment to an in-progress packet (xs->skb !=3D NULL), the
-code identifies an inline address tag and replaces it by allocating an
-xsk_addr array via kmem_cache_zalloc(), initializing xsk_addr->num_descs
-to 1.
-
-If alloc_page() subsequently fails, the code returns -EAGAIN to retry later,
-leaving xs->skb intact.
-
-If the packet is dropped before a successful retry (e.g., socket close
-triggering xsk_release() and xsk_drop_skb()), xsk_consume_skb() attempts to
-clean up the array. However, xsk_consume_skb() uses the check
-if (unlikely(num_descs > 1)) to determine if it should call
-kmem_cache_free().
-
-Since num_descs is exactly 1, the check evaluates to false, and the xsk_add=
-rs
-allocation is leaked.
-
-I see this is fixed later in the patch series by commit "xsk: fix xsk_addrs
-slab leak on multi-buffer error path".
-
->  		kfree_skb(skb);
-
-Can this kfree_skb() call lead to a double completion and Completion Queue
-(CQ) state desynchronization if xsk_skb_metadata() fails?
-
-In xsk_build_skb() copy mode, xsk_skb_init_misc() sets
-skb->destructor =3D xsk_destruct_skb. Immediately after, if xsk_skb_metadat=
-a()
-fails, execution jumps to free_err and triggers this kfree_skb(skb).
-
-This executes the SKB destructor, which unconditionally submits the failed
-descriptor to the Completion Queue by advancing the user-visible
-ring->producer pointer.
-
-Immediately following the free, the free_err handler calls
-xsk_cq_cancel_locked(), which decrements the internally cached cached_prod
-reservation counter. This desynchronizes the internal reservation counter f=
-rom
-the user-visible ring pointer and falsely pushes a completion event to user
-space for a descriptor that failed transmission.
-
-I note this is fixed later in the patch series by commit "xsk: prevent CQ
-desync when freeing half-built skbs in xsk_build_skb()".
-
-> =20
->  	if (err =3D=3D -EOVERFLOW) {
+While this pre-existing issue is explicitly fixed later in this patch series
+in commit "xsk: avoid skb leak in XDP_TX_METADATA case", should it be
+addressed earlier to ensure intermediate states remain safe during a bisect?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260502200722.5396=
-0-1-kerneljasonxing@gmail.com?part=3D4
+0-1-kerneljasonxing@gmail.com?part=3D5
