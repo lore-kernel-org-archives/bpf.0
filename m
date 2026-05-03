@@ -1,77 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9FD31A549;
-	Sun,  3 May 2026 02:14:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A0D421CC4F;
+	Sun,  3 May 2026 02:20:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777774470; cv=none; b=hFwVkMKLQHHagQHukfQaogc1QdyCBkBe2i27lGvQ94YScnvNV2eLPWg2Bdo2akD3LZi4i+p7SssIqKf9vkxvp7iy1+UTKxBp89aYDH6F0rgQVPwwuqt283MP6FRYOg11wS6H7P3/dxSedn69VrV+m+VDl4OyTqs52TgKpsNIMN4=
+	t=1777774859; cv=none; b=JwdoJkCmGDY5R4Hg8ojBW73vS4WId7Gl08nhetFQIL8uYG3GuuetBxDq66yqjjXY7PfCmpi8hlINtJN2bpdvNFZRIIhvQBHixqf1q0UCzSeGhZYWO4Sm1YW/mXqUoA6VcJYhGIxXegrfWXucohRYaLqBc14v86btVTRVEP4YipQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777774470; c=relaxed/simple;
-	bh=WrE0mBieKMvVSSs7pOWhhotigsQi1SiBQNbII0L224I=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dgDrfAaYmxGbo9Egtj25WIPf5/pkqVVx+jF/wMA/ogKHSAeGaI/FZ1ZmleBQvh0ZYjZW0xYENYOAU1QUzA0ZqCMNS/+yXEwac62BN0cA3TvaAbW8SZqfpK/3AJXesSiTrcM+RgxOfFqxtOcOPvo9wP4j8XLlTLXy9xjO4R1VuMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=luD2Nriv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777774859; c=relaxed/simple;
+	bh=EMyqomnyxRApDEITdtBFpV/A2iTOiaKaUchQkA05FTM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=PL311TKyI8i85uDbBetfFpPwgwuesGa93OnbCuChYUBMokvY1PHiBTn4o5ErJu00GRUyJOlsnBxdDz5xDyzaGwnCVxkBXl1q3HaYasTB1xIT/HdKL0AzZN3fV430uORjv17wUy38FyN+3PImDR5cZEUJLTR3EfH6Mq9zqH1YxM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IMW+ssfY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="luD2Nriv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A71FC19425;
-	Sun,  3 May 2026 02:14:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IMW+ssfY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAC94C19425;
+	Sun,  3 May 2026 02:20:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777774470;
-	bh=WrE0mBieKMvVSSs7pOWhhotigsQi1SiBQNbII0L224I=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=luD2NrivuOz6+qE1pSR5XkhLqWFdneRIkn2WNostSMg1HqThOxgRNL6fidSulRf1w
-	 mWVdqW89dMACy03eo9Zv08sfjzk2cTvVliKrFCmpttr48ku+GXQ/4sDgompfv54adv
-	 pqlh+63F9DHQ4axILVjqOjC1WcUl4Ezf294Yd2ebK842lnMTOyqK3hHu9YxMUDOcnF
-	 3Aq6gDSUe14G8y74tGXSpIAOXGmQcxNsFuVsVBHy+43Y5fX3GqQ/cE4WSlhosPkH1z
-	 u+TA3dOa0WmhNZjayRyBJGTMgqRsPaB4toy1GvGAV4tRi9lCTCAiQ3S4pR7I+BpLIk
-	 wf38VcnjgXhqQ==
-Date: Sat, 2 May 2026 19:14:27 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Alex Elder <elder@riscstar.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, maxime.chevallier@bootlin.com,
- rmk+kernel@armlinux.org.uk, andersson@kernel.org, konradybcio@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- linusw@kernel.org, brgl@kernel.org, arnd@arndb.de,
- gregkh@linuxfoundation.org, daniel@riscstar.com,
- mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
- alexandre.torgue@foss.st.com, ast@kernel.org, boon.khai.ng@altera.com,
- chenchuangyu@xiaomi.com, chenhuacai@kernel.org, daniel@iogearbox.net,
- hawk@kernel.org, hkallweit1@gmail.com, inochiama@gmail.com,
- john.fastabend@gmail.com, julianbraha@gmail.com, livelycarpet87@gmail.com,
- matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
- prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
- rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
- weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 11/12] misc: tc956x_pci: add TC956x/QPS615
- support
-Message-ID: <20260502191427.34048082@kernel.org>
-In-Reply-To: <649428a4-9505-4a1a-bbbe-bd90be9b8155@riscstar.com>
-References: <20260501155421.3329862-1-elder@riscstar.com>
-	<20260501155421.3329862-12-elder@riscstar.com>
-	<20260502094559.15c3f479@kernel.org>
-	<649428a4-9505-4a1a-bbbe-bd90be9b8155@riscstar.com>
+	s=k20201202; t=1777774858;
+	bh=EMyqomnyxRApDEITdtBFpV/A2iTOiaKaUchQkA05FTM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=IMW+ssfYStNYF88x7lj14xgU0XUkheaiznsUmV1iJ/xiKeWAYsdkjw3t3j4TU+i45
+	 CYU2VIRXVI6frORf8lnORIKV8oih4q/LFpvqowh7C7/LfKdX469f7vf85OZ7prxmbY
+	 jHUV+6Chbj5PtUtO5x9b2m6c8YT153+AnRmMUt7zIXT7tAyHEfQ/IpuYXNp1MNmw5s
+	 hZdMyS7iBUHvefUpOWMrklHZby6aMSOsIqtT83603zRjkW73xIYx9WvcPnS+dlTlfx
+	 ilbMv8ZHNyzltrDHKzXs7XFGtjzrfAu7z4n3y2Brsqle5poz+PBDm5nKeOHr30LMEq
+	 CkwR5hkiO7QrQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02ECA380CFEC;
+	Sun,  3 May 2026 02:20:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/7] net: tls: fix a few random bugs
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177777481080.3993534.13171841772484372879.git-patchwork-notify@kernel.org>
+Date: Sun, 03 May 2026 02:20:10 +0000
+References: <20260429222944.2139041-1-kuba@kernel.org>
+In-Reply-To: <20260429222944.2139041-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ bpf@vger.kernel.org, john.fastabend@gmail.com, sd@queasysnail.net,
+ linux-kselftest@vger.kernel.org
 
-On Sat, 2 May 2026 21:06:33 -0500 Alex Elder wrote:
-> > drivers/misc/tc956x_pci.c:541:17: error: call to undeclared function 'u32_get_bits'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> >    541 |         chip->rev_id = u32_get_bits(val, NCID_REV_ID_MASK);
-> >        |                        ^  
+Hello:
+
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed, 29 Apr 2026 15:29:37 -0700 you wrote:
+> Fix a few random bugs, from external reports and my local scan
+> with various AI tools. Mostly corner cases in code which I don't
+> think TLS maintainers would consider "battle tested".
 > 
-> Yeah I think I noticed an error like that shows up with 32-bit builds?
-> In any case we didn't see it during development, and we'll make sure
-> <linux/bitfield.h> gets included.
+> Jakub Kicinski (7):
+>   net: tls: fix silent data drop under pipe back-pressure
+>   selftests: tls: add test for data loss on small pipe
+>   net: tls: fix page pin leak on sendpage_ok() failure
+>   net: tls: fix off-by-one in sg_chain entry count for wrapped sk_msg
+>     ring
+>   selftests: bpf: cover wrapped sk_msg ring chaining in ktls TX path
+>   net: tls: fix use-after-free in tls_sw_sendmsg_locked after bpf
+>     verdict
+>   selftests: bpf: cover tls_sw_sendmsg UAF after bpf_exec_tx_verdict
+>     split
+> 
+> [...]
 
-on x86 it hits on all configs, I suspected you're building for ARM?
+Here is the summary with links:
+  - [net,1/7] net: tls: fix silent data drop under pipe back-pressure
+    https://git.kernel.org/netdev/net/c/7e7be31bfdb0
+  - [net,2/7] selftests: tls: add test for data loss on small pipe
+    https://git.kernel.org/netdev/net/c/bd3a4795d574
+  - [net,3/7] net: tls: fix page pin leak on sendpage_ok() failure
+    (no matching commit)
+  - [net,4/7] net: tls: fix off-by-one in sg_chain entry count for wrapped sk_msg ring
+    (no matching commit)
+  - [net,5/7] selftests: bpf: cover wrapped sk_msg ring chaining in ktls TX path
+    (no matching commit)
+  - [net,6/7] net: tls: fix use-after-free in tls_sw_sendmsg_locked after bpf verdict
+    (no matching commit)
+  - [net,7/7] selftests: bpf: cover tls_sw_sendmsg UAF after bpf_exec_tx_verdict split
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
