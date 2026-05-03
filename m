@@ -1,286 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E41B37BE80
-	for <bpf@vger.kernel.org>; Sun,  3 May 2026 05:18:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2C09340281
+	for <bpf@vger.kernel.org>; Sun,  3 May 2026 06:56:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777785514; cv=none; b=lz6rZFQfg3S8pjeqiS7WsGaAMMAkKn2P/0jLkUeeSB/Pnh8RA42KRg5fkTTALlFDFgSd5SX4UprwXvMFiYG8SZck7ZOVT9+KMKddB1N+oeP2y7QRALtPLVlZxqj+ReLLSvLyGAFFFPBWoYvjjefJXhz7NyaYks+R93USSb3W9Gw=
+	t=1777791390; cv=none; b=mYsKpwCBzvTn1TafrjyTR3k4c+LGFw8q/BQHyusaKXtr70EFHdAkhW5W4R3gN6ZIS0eeHcn6C6tQCEifSG+YbDkn4Ybxq7aH+hYRwZtFlkj/dryLkBbevd42JLu7kOQBXjvF1+6P5PmLhqXb9bXIem6hE2TW2nlsldToqN6XLS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777785514; c=relaxed/simple;
-	bh=KrgWOi1++IUXfdXoHA26zg0lkROYbc+/DLGNGrxCWt8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=RgLQRZkjbEy6F7YxifLnjMt8Re2NsXVXkweW8fsAcPWagL6kZ8DUGZcuaE1TEKPSTmfj2t+5z9+r0kisI5xiJZllaJjBoheem5fp5braoj+OSfBU+a3worsW3lE1/7eL0Fyv15Ise1lmjY1N7ifqUF+clLTF8jJgwnLMyvbVS8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MP+f9t5b; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MP+f9t5b"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4773C2BCB4;
-	Sun,  3 May 2026 05:18:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777785514;
-	bh=KrgWOi1++IUXfdXoHA26zg0lkROYbc+/DLGNGrxCWt8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=MP+f9t5bCyNBlRHPWEn4WNstRPFpWFnSoPQ5zGVRl0oH36PWaFJ9d2vRRxIPx0yJs
-	 uraE0hDoWZKbAZISUO3T7Rh6WyR7FCRdHJA5bDVySmIylSNXH+c/UPw4vzOVQmPOwI
-	 1oN1dMSW/QN2rJo6DauXPaRyXDdLTlVYP1Lx7eVaa6b7TMNXFmrjapgCLz9jPVyMnG
-	 fgVGJb1z0YOZ4KvI5JQWLLNhqj+owMINkWpzjP8kvIybY5rFjo9YgqmBUN5OGNZdLs
-	 u3v6480AEGDwUmYON2fLCuClDzBGuFRRv2cpys7JR9Ca078+dtURGriccPD72F0ESC
-	 D5VOSqMd+ZZSw==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC v2 3/3] tools/ufq_iosched: add BPF example scheduler and
- build scaffolding
-Reply-To: sashiko@lists.linux.dev
-To: "Kaitao cheng" <kaitao.cheng@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260503035623.28771-4-kaitao.cheng@linux.dev>
-References: <20260503035623.28771-4-kaitao.cheng@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 03 May 2026 05:18:33 +0000
-Message-Id: <20260503051833.E4773C2BCB4@smtp.kernel.org>
+	s=arc-20240116; t=1777791390; c=relaxed/simple;
+	bh=9OMJ5kVcEKuW+8lmfiN/lMqqmKC9ZUR2NxuDeIxIyAE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kLQosMHZ+GcfOYEIEs/pXQIZshZq/BXkb8dR3x1vz0UwTRQaAKPdmlTWCZAdRefH+2NN4Y72XRW0nsdY7+ZcKd5+KO9qEh2ORxsLukN+aitbrgP5mJQp5+hc82idSWWACc+bR1eoZ44bRpu5cT76qtcHtMLTwjJ6efKP0/2zQQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [115.236.2.93])
+	by mtasvr (Coremail) with SMTP id _____wBHJKyA8fZpzP_+AA--.19853S3;
+	Sun, 03 May 2026 14:56:01 +0800 (CST)
+Received: from [10.16.97.57] (unknown [115.236.2.93])
+	by mail-app3 (Coremail) with SMTP id zS_KCgAnYXR88fZpTFjZAA--.5506S3;
+	Sun, 03 May 2026 14:55:57 +0800 (CST)
+Message-ID: <6fb4db24-e98b-4129-8f22-689ad7c04323@zju.edu.cn>
+Date: Sun, 3 May 2026 14:55:56 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v9 2/3] bpf: Fix s16 truncation for large
+ bpf-to-bpf call offsets
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Quentin Monnet <qmo@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>,
+ bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Eduard <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>,
+ Puranjay Mohan <puranjay@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Yazhou Tang <tangyazhou518@outlook.com>,
+ Shenghao Yuan <shenghaoyuan0928@163.com>, Tianci Cao <ziye@zju.edu.cn>
+References: <20260429171904.107244-1-tangyazhou@zju.edu.cn>
+ <20260429171904.107244-3-tangyazhou@zju.edu.cn>
+ <518d74d6-7750-4950-a76f-3e67e480840e@huaweicloud.com>
+ <6fc310e8-f929-4b1a-b298-71f2445e3c6e@zju.edu.cn>
+ <c801c51e-70d5-4bdd-8f83-d1f71f84186d@kernel.org>
+ <e85fa7f9-02ef-42ad-80eb-26c1756737da@zju.edu.cn>
+ <CAADnVQLqpwc2q_Zesgvqq0WLNzcnGUc9D5QTdzLDX8_tj7OBFA@mail.gmail.com>
+Content-Language: en-US
+From: Yazhou Tang <tangyazhou@zju.edu.cn>
+In-Reply-To: <CAADnVQLqpwc2q_Zesgvqq0WLNzcnGUc9D5QTdzLDX8_tj7OBFA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zS_KCgAnYXR88fZpTFjZAA--.5506S3
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAg8RCmnyXw44nQAFs8
+X-CM-DELIVERINFO: =?B?4i73MgXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9HD5f/v2qbBNnu6nxZck69OEbrQHbtpMSfDVWDU4csKRYmXNQcYDsTwU3hDC4QhK7rlp
+	+gVSAxRwAgTnAYSk+3jCcrV/MQC0rlf45yYz57wsVt9PEwr806Wj2HDVxNsdIQ==
+X-Coremail-Antispam: 1Uk129KBj93XoWxArW5Gw17AF18Aw1rWry3Awc_yoW5AF1kpa
+	98Ga4jkF4DXr13ArnrKw4IkFW5trWSk348Wr45try5X3sYqr1ftF48tF4Fkw13ur1xGF12
+	va4jvF9rWF1UXagCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2
+	ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
+	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGO
+	UUUUU
 
-Thank you for your contribution! Sashiko AI review found 9 potential issue(=
-s) to consider:
-- [High] Hallucinated BPF rbtree traversal functions
-- [High] Wait-context violation and lock inversion via `bpf_request_bio_try=
-_merge`
-- [High] Verifier rejection due to unreleased acquired request references
-- [High] Verifier rejection from accessing non-owning reference after tree =
-mutation
-- [High] Target request permanently orphaned after a merge operation
-- [High] Red-black tree corruption due to mutable traversal keys
-- [High] Use-After-Free when accessing `free->__data_len`
-- [Medium] Incorrect queue insertion order for `BLK_MQ_INSERT_AT_HEAD`
-- [Medium] Non-atomic updates to per-CPU array statistics
---
+Hi Alexei,
 
-commit 837eafbebf3f48dff3cc402191f742e1f891291d
-Author: Kaitao Cheng <chengkaitao@kylinos.cn>
-tools/ufq_iosched: add BPF example scheduler and build scaffolding
+Thanks for your advice.
 
-Add ufq_iosched as a simple example for the UFQ block I/O scheduler. It
-implements the eBPF struct_ops hooks the kernel exposes to exercise the
-behavior and stability of the kernel UFQ scheduling framework.
+On 5/1/26 15:53, Alexei Starovoitov wrote:
+> On Fri, May 1, 2026 at 8:36 AM Yazhou Tang <tangyazhou@zju.edu.cn> wrote:
+>>
+>> Hi Quentin,
+>>
+>> Thanks for your reply.
+>>
+>> On 4/30/26 23:25, Quentin Monnet wrote:
+>>> 2026-04-30 23:00 UTC+0800 ~ Yazhou Tang <tangyazhou@zju.edu.cn>
+>>>> Hi Kuohai,
+>>>>
+>>>> Thanks for your review and the Acked-by tag.
+>>>>
+>>>> On 4/30/26 11:29, Xu Kuohai wrote:
+>>>>> On 4/30/2026 1:19 AM, Yazhou Tang wrote:
+>>>>
+>>>> [...]
+>>>>
+>>>>>> diff --git a/tools/bpf/bpftool/cfg.c b/tools/bpf/bpftool/cfg.c
+>>>>>> index e3785f9a697d..df43a0e0023f 100644
+>>>>>> --- a/tools/bpf/bpftool/cfg.c
+>>>>>> +++ b/tools/bpf/bpftool/cfg.c
+>>>>>> @@ -142,7 +142,7 @@ static bool cfg_partition_funcs(struct cfg *cfg,
+>>>>>> struct bpf_insn *cur,
+>>>>>>                 continue;
+>>>>>>             if (cur->src_reg != BPF_PSEUDO_CALL)
+>>>>>>                 continue;
+>>>>>> -        func = cfg_append_func(cfg, cur + cur->off + 1);
+>>>>>> +        func = cfg_append_func(cfg, cur + cur->imm + 1);
+>>>>>
+>>>>> Do we need to matain backward compatibility with the old bpftool here?
+>>>>> I suspect not, but I'm not entirely sure.
+>>>>
+>>>> I agree. Since bpftool is maintained in-tree, it should be enough to just
+>>>> keep it in sync with the current kernel tree.
+>>>
+>>> Hi, bpftool is also mirrored on GitHub at
+>>> https://github.com/libbpf/bpftool
+>>> and many people build it from there, so yes, it should be backward
+>>> compatible if possible at all.
+>>
+>> Thanks for pointing that out. Considering this situation, I will make
+>> sure to maintain backward compatibility in bpftool.
+>>
+>> However, since the xlated format for BPF_PSEUDO_CALL swaps the imm and
+>> off fields, distinguishing the old format from the new one purely from
+>> the instruction stream seems a bit tricky. Both fields could technically
+>> contain small integers.
+>>
+>> I'm not very familiar with bpftool. Is there a standard/preferred way
+>> in bpftool to probe for such kernel behavior changes?
+>>
+>> One potential approach could be to load a minimal dummy BPF program with
+>> a BPF_PSEUDO_CALL instruction, dump its xlated instructions, and check
+>> whether the kernel stored the offset in imm or off. Finally use this
+>> boolean result for subsequent bpftool dumps.
+>>
+>> Do you have any suggestions on this? Thanks again for the guidance.
+> 
+> There should be no need to do probing in bpftool.
+> The xlated insns should be translated back to the original format
+> by the kernel.
 
-> diff --git a/tools/ufq_iosched/ufq_simple.bpf.c b/tools/ufq_iosched/ufq_s=
-imple.bpf.c
-> new file mode 100644
-> index 000000000000..81954e73068a
-> --- /dev/null
-> +++ b/tools/ufq_iosched/ufq_simple.bpf.c
+Got it. I will restore the original format for the xlated insns in
+bpf_insn_prepare_dump() and drop the bpftool modifications.
 
-[ ... ]
+One minor issue is that the printed offset will still be truncated
+if the real offset (the original insn->imm) is out of s16 bounds.
+To avoid confusion, I will just set it to 0 in that case. See prior
+discussion in https://lore.kernel.org/bpf/422fce2b-228d-40d0-8fbf-f295f2aac0db@zju.edu.cn/
 
-> +static void stat_add(u32 idx, u32 val)
-> +{
-> +	u64 *cnt_p =3D bpf_map_lookup_elem(&stats, &idx);
-> +
-> +	if (cnt_p)
-> +		(*cnt_p) +=3D val;
-> +}
+Thanks for your guidance.
 
-Since operations like insert_req can run in process context while finish_req
-might run in softirq on the same CPU, could these non-atomic updates result
-in lost statistics? Should this use __sync_fetch_and_add() instead?
-
-[ ... ]
-
-> +int BPF_STRUCT_OPS(ufq_simple_insert_req, struct request_queue *q,
-> +		   struct request *rq, blk_insert_t flags,
-> +		   struct list_head *freeq)
-> +{
-[ ... ]
-> +	if (flags & BLK_MQ_INSERT_AT_HEAD) {
-[ ... ]
-> +		/* Add queue_list_node to dispatch list */
-> +		bpf_spin_lock(&ufq_sd->lock);
-> +		ret =3D bpf_list_push_back(&ufq_sd->dispatch, &qnode->node);
-> +		bpf_spin_unlock(&ufq_sd->lock);
-> +	} else {
-
-Does using bpf_list_push_back() here place the request at the tail of the
-dispatch list rather than the head? Since dispatch_req pops from the front,
-this seems to violate the requested BLK_MQ_INSERT_AT_HEAD semantics.
-
-[ ... ]
-
-> +struct request *BPF_STRUCT_OPS(ufq_simple_dispatch_req, struct request_q=
-ueue *q)
-> +{
-[ ... ]
-> +		snode =3D container_of(rb_node, struct sort_tree_node, rb_node);
-> +
-> +		/* Get request from sort_tree_node (this will be returned) */
-> +		rq =3D bpf_kptr_xchg(&snode->req, NULL);
-> +		bpf_spin_unlock(&ufq_sd->lock);
-> +		bpf_obj_drop(snode);
-> +	}
-> +	if (!rq)
-> +		bpf_printk("ufq_simple/dispatch_req: no request to dispatch");
-> +
-> +out:
-> +	if (rq) {
-> +		stat_add(UFQ_SIMP_DISPATCH_CNT, 1);
-> +		stat_add(UFQ_SIMP_DISPATCH_SIZE, rq->__data_len);
-> +	}
-> +
-> +	return rq;
-> +}
-
-Will the verifier reject this program because it returns an acquired refere=
-nce
-from bpf_kptr_xchg without calling bpf_request_release()? Also, if the
-verifier did allow this, would the request reference permanently leak since
-the block layer doesn't consume BPF kptr references?
-
-> +bool BPF_STRUCT_OPS(ufq_simple_has_req, struct request_queue *q, int rqs=
-_count)
-> +{
-[ ... ]
-> +	bpf_spin_lock(&ufq_sd->lock);
-> +	has =3D !bpf_list_empty(&ufq_sd->dispatch) ||
-> +	      bpf_rbtree_root(&ufq_sd->sort_tree_read) ||
-> +	      bpf_rbtree_root(&ufq_sd->sort_tree_write);
-
-The functions bpf_rbtree_root(), bpf_rbtree_left(), and bpf_rbtree_right()
-are used throughout this file, but they do not appear to exist in the BPF
-API. The API only exposes bpf_rbtree_add(), bpf_rbtree_remove(), and
-bpf_rbtree_first(). Will this code fail to compile and load?
-
-[ ... ]
-
-> +struct request *BPF_STRUCT_OPS(ufq_simple_merge_req, struct request_queu=
-e *q,
-> +				struct request *rq, int *type)
-> +{
-[ ... ]
-> +		if (mt) {
-> +			if (rq->mq_ctx !=3D targ_mq_ctx || rq->mq_hctx !=3D targ_mq_hctx) {
-> +				mt =3D ELEVATOR_NO_MERGE;
-> +				break;
-> +			}
-> +
-> +			rb_node =3D bpf_rbtree_remove(tree, rb_node);
-> +			if (rb_node) {
-> +				snode =3D container_of(rb_node,
-> +					struct sort_tree_node, rb_node);
-> +				targ =3D bpf_kptr_xchg(&snode->req, NULL);
-> +				bpf_spin_unlock(&ufq_sd->lock);
-> +				if (targ) {
-> +					*type =3D mt;
-> +					stat_add(UFQ_SIMP_RQMERGE_CNT, 1);
-> +					stat_add(UFQ_SIMP_RQMERGE_SIZE, targ->__data_len);
-> +					stat_sub(UFQ_SIMP_INSERT_CNT, 1);
-> +					stat_sub(UFQ_SIMP_INSERT_SIZE, targ->__data_len);
-> +				}
-> +
-> +				bpf_obj_drop(snode);
-> +			} else {
-> +				bpf_spin_unlock(&ufq_sd->lock);
-> +				*type =3D ELEVATOR_NO_MERGE;
-> +			}
-> +			return targ;
-> +		}
-> +	}
-> +	bpf_spin_unlock(&ufq_sd->lock);
-> +
-> +	return NULL;
-> +}
-
-If a candidate request is found for merging, it gets permanently removed fr=
-om
-the scheduler's rbtree and its node is dropped. Since dispatch_req will now
-never see it, does this result in a permanent I/O hang for the merged target
-request?
-
-> +static struct request *merge_bio_left_unlock(struct ufq_simple_data *ufq=
-_sd,
-> +					     struct bpf_rb_root *tree,
-> +					     struct sort_tree_node *snode,
-> +					     struct request *cand)
-> +{
-[ ... ]
-> +	if (left_end =3D=3D cand_start)
-> +		free =3D bpf_request_try_merge(left_rq, cand);
-> +
-> +	if (free =3D=3D cand) {
-> +		removed =3D bpf_rbtree_remove(tree, &snode->rb_node);
-> +		left_rq =3D bpf_kptr_xchg(&left_node->req, left_rq);
-
-According to BPF safety rules, removing a node from a collection invalidates
-all non-owning references to that collection. Will the verifier reject this
-program because it accesses left_node right after calling bpf_rbtree_remove=
-()?
-
-> +		bpf_spin_unlock(&ufq_sd->lock);
-> +		if (removed) {
-> +			struct sort_tree_node *drop =3D container_of(removed,
-> +					struct sort_tree_node, rb_node);
-> +			bpf_obj_drop(drop);
-> +		}
-> +		stat_add(UFQ_SIMP_RQMERGE_CNT, 1);
-> +		stat_add(UFQ_SIMP_RQMERGE_SIZE, free->__data_len);
-
-If bpf_request_try_merge() is successful, it merges and frees the candidate
-request. By passing free->__data_len to stat_add, does this cause a
-use-after-free read on a request that was just returned to the block layer?
-
-[ ... ]
-
-> +struct request *BPF_STRUCT_OPS(ufq_simple_merge_bio,
-> +			       struct request_queue *q, struct bio *bio,
-> +			       unsigned int nr_segs, bool *merged)
-> +{
-[ ... ]
-> +	bpf_spin_lock(&ufq_sd->lock);
-[ ... ]
-> +	while (rb_node && count < UFQ_LOOP_MAX) {
-> +		count++;
-> +		snode =3D container_of(rb_node, struct sort_tree_node, rb_node);
-> +		cand =3D bpf_kptr_xchg(&snode->req, NULL);
-> +		if (!cand)
-> +			break;
-> +
-> +		cand_start =3D cand->__sector;
-> +		cand_end =3D cand_start + (cand->__data_len >> SECTOR_SHIFT);
-> +
-> +		if (end < cand_start) {
-> +			rb_node =3D bpf_rbtree_left(tree, rb_node);
-> +		} else if (start > cand_end) {
-> +			rb_node =3D bpf_rbtree_right(tree, rb_node);
-> +		} else if (cand_start =3D=3D end) {
-> +			if (bpf_request_bio_try_merge(cand, bio, nr_segs)) {
-
-The rbtree traversal here compares against cand->__sector. If a request was
-previously front-merged, its __sector would be modified by the block layer.
-Since the node isn't re-inserted to update its sorting key, could subsequent
-traversals navigate down the wrong tree branches and corrupt the red-black
-tree?
-
-Additionally, the code holds a bpf_spin_lock while calling the kfunc
-bpf_request_bio_try_merge().
-
-Looking at bpf_request_bio_try_merge() in block/ufq-kfunc.c, it internally
-acquires a spin_lock:
-
-block/ufq-kfunc.c:bpf_request_bio_try_merge() {
-    ...
-	spin_lock(&ctx->lock);
-	merged =3D blk_attempt_bio_merge(rq->q, rq, bio, nr_segs, true) =3D=3D BIO=
-_MERGE_OK;
-	spin_unlock(&ctx->lock);
-    ...
-}
-
-Since bpf_spin_lock() maps to a raw_spinlock_t, and spin_lock() is sleepable
-on PREEMPT_RT kernels, will this create a sleep-in-atomic context that
-triggers a lockdep BUG and system panic?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260503035623.2877=
-1-1-kaitao.cheng@linux.dev?part=3D3
