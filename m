@@ -1,60 +1,76 @@
-Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021075.outbound.protection.outlook.com [52.101.95.75])
+Received: from CWXP265CU009.outbound.protection.outlook.com (mail-ukwestazon11021089.outbound.protection.outlook.com [52.101.100.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C10E51A6830;
-	Sun,  3 May 2026 15:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906DB269D18;
+	Sun,  3 May 2026 15:37:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.100.89
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777821840; cv=fail; b=fZiVC3ChGGbebg+UPxWFfH52K1cF5ao0N5Ew9tsU6HPBiaN8USpVw7fD4ZhJF6Bgav4eVxGsElee17F/cdx4ft96U/6JFlHW+FYT1csTukUqALhdGlgcUxNRK/lMuK4DIJcCIcSeotvxlBUHfElIGQsciO0y618THbEpkW/dYhw=
+	t=1777822659; cv=fail; b=uAQhQirziqZNvl6EpGrVhiqVi9CInRNBXb1FBaPKe0M66s7Akj7kZZ96XygsApLpsHtNBfwWqe7N4koNV4hXtosPAaa1oZpBJmGadxnxf7NUhKyIdmE+hx/7U7kMWtHY8HtheDkIf+O+x5/NVC4GxX3nHdbxwilbypJPN9yTFxI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777821840; c=relaxed/simple;
-	bh=/5htAh7m51sDWuMcTvD+mn6EbPmQ990jOb1r8Iqy0ZY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=RRYGOh16uFCzZjMhqp3+lEdIgGDvLpYC5KuB8RKPVBxf43SnCM4ed4gH9dAfxSajssxBound6HeLegmunlg4MpbJ7MDwOnxS+9blxt3ZPzO2cM342tngRl+ioIOBCwwzD3UbzB8qUYHE06xuQECOlrs2BHV88Zfi2mkXpRcJVtY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.95.75
+	s=arc-20240116; t=1777822659; c=relaxed/simple;
+	bh=EjyuMHGg8JTvl/X2z0RATRMo/Iq/Bl9zkJ7+/eFHhFk=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=I2WIc5+XbVctOrvWy6PlxKLOKRmx98nr83xMlhdvqg2ahV2R97gQaj3GP0NxNwZW49hH8EFV+O5xAJAC9AbfjeJ3SZ0F61QhNjuk46afwFlMmaAZW86wJzsnogUifJw9eeMOBFMuMY2vshvLjkIHtyNYgb1g7y0XVSWWkNVXxtw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.100.89
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YmzTmdP5WTCAEN4jdrZEpChftMVdEbFYjVdgp/uUfjA6CrXtjc4+AuHim9X2TzHJpLeds3Y0z68QE5Q62ArvJQd+6n+QFqFWhFHxyJ2g7kAGsQ5p6xouUOsikcDBYxP8QrxtfZKzGANl4aX06ABNZ76ApXJI9kjMVyhAwd+ARG6ixHlvhq+aTngPq6o+gZQWC+/ZoiUEwR33mHgfF9p+68/JC6oFKmo7d6Nzy/Tuq21v2flxlRjzSrXfpQv4HqA9z9Lt/e3E3bnZAd7TuCC/FMVqLrswS9/jviaPKbe7Lu0yYp0SO7O5eVDtY8AdMKeFNrFxY9Ml1+Rek/JLQGapgA==
+ b=sdCHqmLqMlYAAdH0rrqfnjjMzBFxhZAsdcZoYlFw8elhhJt6syYeKHZi65GAEV0C3ifGriXkIOlbB/SSxAdGoDsKeCDRGMRnBP7QajNSapEfUNVacZSWcmUQFQ+5R/4j55jHWYiizGLVfShd+aN6+XLWsWSK4TfS400bu+KhClAX7wxlHpTME+pbkff/YUUyA6wl6vS97jZz4e6QsCa8hO1NU3td9ngPT+JCKBAMvKxYRxcQMqVZVDw1weCTGEEN9HFHCVNl0uUs+zYdzzk0Tz8Z6XpVMN8Fuxt8VV1pS4ABK/jlmobv0fSmmoekkg0GF4A8N3CBfl/Jx9zD2rXgLA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=77j2RMKzKrhEgQ3RgHJ0BQeXprL+yipR47zt3XDKTPA=;
- b=VXRDFCZWP9J6fv7nD+7rGtGLA7tEPz/cDScPar96bdI/TsrBB7AC6GuUkcnuIMD+NVxdAlXhlOoMUuV/yDQE5daI20DGKsSg3fCy+uQZCACTzQ0sCt2VnZ8iJkreRQhCOv4ralsuTxaQevgpjZwx/sD+hVlIaRMhaKbzdMF1TcvwSVXHjghzZUIK7bQ++oNHcjBgaEK9OMbg90NHnGSVS0cFPk6LJ3RlwIwp91LycIu4YkE/qiw1UWBmGpYkoLM46jTeJzxoPzuWLO+RRLQZRFHIWrVQIBQWRK65XpJr8wWjUtF9tNxxk7AoUQW5i6KwAB2VrRv7SiQYV9Gig3yYhw==
+ bh=VNDg4s4CxElRJ7ZQ8/5ti1QR2j6oH79ZmmsCBtGcQoQ=;
+ b=zG9ieQgP36NvZznIHPaillT4cAl2nyEUAv57M+y5GHr5eFUv/nQhXgqhrXBBCr6gleo3AvjuEsva/bpLoqwRSF9KDArLP4z0C79Mw44xGzglbjOTMYB+DN0o6eyKZfBq2G5zh2IBIa/xCN16FIjaUNNh3nBTQ6QK/5wNsAqKpHwE7jv7yPG8jcwLELFloxWN3hIXdxS1ScuO3bzavDiwwl7f2HaelryXD7dHGPCB5zj88dd1GKZWJpH2YtR2PLafh0Bzf1rk7nZNZAYTxL2CGxQfq2sskeZWJooAGbLWIok08Yzzi+O8MP3fP24NOl1uSwSUyS8mYlhutDd9fFjp1g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
  dkim=pass header.d=atomlin.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=atomlin.com;
 Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:70::10)
- by LO6P123MB6838.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:301::6) with
+ by CWLP123MB4066.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:8d::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.25; Sun, 3 May
- 2026 15:23:55 +0000
+ 2026 15:37:33 +0000
 Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
  ([fe80::de8e:2e4f:6c6:f3bf]) by CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
  ([fe80::de8e:2e4f:6c6:f3bf%2]) with mapi id 15.20.9846.025; Sun, 3 May 2026
- 15:23:55 +0000
-Date: Sun, 3 May 2026 11:23:52 -0400
+ 15:37:33 +0000
 From: Aaron Tomlin <atomlin@atomlin.com>
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: corbet@lwn.net, song@kernel.org, kpsingh@kernel.org, 
-	mattbobrowski@google.com, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	eddyz87@gmail.com, memxor@gmail.com, rostedt@goodmis.org, mhiramat@kernel.org, 
-	skhan@linuxfoundation.org, jolsa@kernel.org, martin.lau@linux.dev, yonghong.song@linux.dev, 
-	mathieu.desnoyers@efficios.com, neelx@suse.com, sean@ashe.io, chjohnst@gmail.com, steve@abita.co, 
-	mproche@gmail.com, nick.lange@gmail.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] bpf: introduce TAINT_UNSAFE_BPF for mutating helpers
-Message-ID: <wvpx3ur3zwoqi5uw7243mmgziq6llsxhzs4zsn3qceelober4c@qx5wehsd2jix>
-References: <20260503035220.520479-1-atomlin@atomlin.com>
- <e456f0f0-5e49-4de4-9184-32ebc53cd0a1@infradead.org>
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3ktthgpn6mguhd4t"
-Content-Disposition: inline
-In-Reply-To: <e456f0f0-5e49-4de4-9184-32ebc53cd0a1@infradead.org>
-X-ClientProxiedBy: BN9PR03CA0240.namprd03.prod.outlook.com
- (2603:10b6:408:f8::35) To CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
+To: corbet@lwn.net,
+	song@kernel.org,
+	kpsingh@kernel.org,
+	mattbobrowski@google.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org
+Cc: skhan@linuxfoundation.org,
+	jolsa@kernel.org,
+	martin.lau@linux.dev,
+	yonghong.song@linux.dev,
+	mathieu.desnoyers@efficios.com,
+	rdunlap@infradead.org,
+	atomlin@atomlin.com,
+	neelx@suse.com,
+	sean@ashe.io,
+	chjohnst@gmail.com,
+	steve@abita.co,
+	mproche@gmail.com,
+	nick.lange@gmail.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: [RFC PATCH v2] bpf: introduce TAINT_UNSAFE_BPF for mutating helpers
+Date: Sun,  3 May 2026 11:37:30 -0400
+Message-ID: <20260503153730.541685-1-atomlin@atomlin.com>
+X-Mailer: git-send-email 2.51.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BN9PR03CA0667.namprd03.prod.outlook.com
+ (2603:10b6:408:10e::12) To CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
  (2603:10a6:400:70::10)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -63,120 +79,235 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB3523:EE_|LO6P123MB6838:EE_
-X-MS-Office365-Filtering-Correlation-Id: 384393b1-00ad-4905-f665-08dea927fd61
+X-MS-TrafficTypeDiagnostic: CWLP123MB3523:EE_|CWLP123MB4066:EE_
+X-MS-Office365-Filtering-Correlation-Id: cf8b956c-dfd6-4f40-ebf1-08dea929e504
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|22082099003|18002099003|56012099003;
+	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|921020|18002099003|56012099003;
 X-Microsoft-Antispam-Message-Info:
-	kkquSJu0EkB8AXcR9gCddkkMNXpaz//Vmg1uXrzsPkwud5z2eQ1R94o6is/s5xBlxkPPA0/Yf1xi5RfBAzS+btQytSKBggH4VYeBiSYUFJOsVHukf84x15Y5lF7AMRmmW4TweLRv53WQie5uMdpI9tkDKwW9i8jivJjeK77y8cmXoXS7KG91dxWIYCcbzLb7q+AT6Xh6zq1F8Ob1eRMhfiGHwq2xi9o5aU98FlY3UDsaiKFyC1shO+ihkzCpfNTRo/19ayLZgG+0hGkdZiU1oFIvwNCb9waUPpKDxreyJtn2AZcBW1xr4co97DAx0D32tQhstanjC8alEshMBftZPWQT20G9oAebHUwFqakx9b9fvi/SFwCPsSMzj0UWW4hac5kJ0i6d8y44KwL0KlJG53cq7i4ztaOmXUCN1XxoSyqom2c2lx0l3XXB8gk9XrKtFmGcd5EEgxXXcB/RFV6I3L0zDRCFCPkOPqVhvAQXdARmqUbelUp75vyMswSH2fbVxw7znHWydpq3ioN/u7acHuod3w9WMSe4GRD5+A/fYvqIJGi7pIOLD0YiUev0G8XmlxDuBFfRSvvROGzY3JmqBZN6nHz/81y2UH91t0ae/M++ogFzkDxCqp0aPpncw5imwgyrdeVVezI9Zb/KPGGQgGJpWEqBi1dNNssuZlcE4pD2rgEJr+JAAwUyeuekQNbL
+	2dBc8lxmb/aoOfklWEL9LG0KhKk2kgeWTffiyI0iNnSC2XOiVXE/YqryKZJf5Nf9++86KRM+MlEUO20GQ7lg5ls3MEq9k7padW/DmLpxbZ+c52LiO5DJOpXrtYIYF/RBwID/QU5UZ41ZIN+i5u8Mj0F/Gn3QGYG5l7PlhEhYnwDBZkCih42QLmJ9yAQsXn6kymJKJtREx6Er53Pbfh4OzyhKdfjs/SO4FHVIk4aGFBeFOKqbPUxZwlcproMIYNPsgXngrnsbnRTXqF2ra9JfyzFECYsJ02c9jT0Sb4sdf0qUihVr3o6wPhcGWvL98+oIDfm8fgSPHDO9koEE7yQmpWBDw0FJe+B7wctQLyKd35paBlVzx9OBQ8YobPsVXzLKz9e4I2RACj98rBB679fHRDYUF6T4L7COr1SC+a85PU6x0B0aDWnF2I6ojdtgT+IqgQRcGCdEAWvH6c8BLeWH7/1dVeHx7KRL8nt54XqKSPoqwFaVx6eGAVhSa9pjDNYWWK8bWG+QWuCityEyioZ4nx5vrxMm3tPL3yYEQFPVu5EZ0OMnZPQjc6JQIgFoz77FJpNJruaLg6r+PQ+kURVXmxJNLEYg/Eww39bKNVQdbgk+/hjWNQMzoEE6ruZapR0AV4rlz0mCX0kYXULNOJgcy5qqwLXVdAHd4h+yzMYksTTyTZEkALK4uTQjowIiwYEQIsqbIoKMuxnAno0D0Ht4GbkuPig4GIsjuLlVf37TQb1bat6guN7FKmuLCyuHnb3c
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(921020)(18002099003)(56012099003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bU5RZHdhMUdUa2hFWG51UXVQalNqQ3JUelFXb3ptbWZSb0ZHVlp2ZmRJVkla?=
- =?utf-8?B?aWZhY0oxbk0wRFpSd1pnckRFK3RIMk44aUpTZGlqOUFqK2RIbWZ5ajUrcmw1?=
- =?utf-8?B?Rmtvd3VFSHVzYTJmdmdscXVkYjhKNDlCNmxodmI0VWNvbXJla3oyb0Z0Wkhh?=
- =?utf-8?B?OE4wUC9BRU5udlRGOTc0bU5INFh1Ym8xTitTVmRnV1FYMjN3WExkTTJVVnFB?=
- =?utf-8?B?OGE2TlhKeXUxT203SnlZRnJ2MSt5MWd4LzFqcU9MQzdUc0hGelZHaEFmajVW?=
- =?utf-8?B?MDNHN05xNGoyUVk1MVV6azIxczhsY0luQTE1ejRlT2hJSTZFTXZCMVJBYjdy?=
- =?utf-8?B?b0dqcWVEK3JJYUlzZ1BocHlIM1prNkw3US9PL1NDTzV5Qk1ZYzY0V1dENlov?=
- =?utf-8?B?NUtyQVFUZnB5MVdORHBOcmhaazhoYUpCZ3dzd2kyOWxoUkdpV3Q4bnJGb2xy?=
- =?utf-8?B?QkFEOHZFRndNbkFnUWRudU1BYzhpRnFtb0xMQXh6cWxGaUhVVnlsS25HK3FI?=
- =?utf-8?B?cFgzNzlkK1U3dkJaOHQ0Y1R4citZbGR1ZTU4TEdBRlU2NlJ3cUJnc2hzcHZ5?=
- =?utf-8?B?V3BueW1yQ055MEU5UkFtQlFEUGRPS2NTMC84Z1JHaGVBc21hbllzdzNyTTFz?=
- =?utf-8?B?UUZRcnN2R1BUcDZtempwWS9NbFZ2WGVMT1A2bkZUMU12eXVpZlFMcDFJZzlY?=
- =?utf-8?B?VnRiRkJsN3ZBaVNqbG9qMFBVSlVaS0pkR2YxVitLdlpFVUNqNmtQZG5nMVZ1?=
- =?utf-8?B?QW9RcUtnSFZQM3J6b290MXY2UnkrNjZnSUxYQmJ1L2pXbnR1OFFLZi8vV0NE?=
- =?utf-8?B?YkhGbjd5TE8welZ4Ulc5SjdhcGNBaFFqMzhCeXdkd2dJLzcwUEtyNTR1TVFG?=
- =?utf-8?B?MFhXMXhHV3hQbi9OYWU1QzJSUFdIazRsVXhxMUFiUUxjNDZqKzNhVlpYdzla?=
- =?utf-8?B?U2h2eEp4QmY0amVuYmk3aWw1NTBqOXdiUFo0aVpnNS9nZWU4dWh6MmFyM1RV?=
- =?utf-8?B?RHBQREpvNDNrZVJoU2N4WHBydHYybkJST3RRdVpsQ1N0NDUzelBNMVAzaHJs?=
- =?utf-8?B?eU53SmRWd0RPS002QzdLZTJQQW9wR1hCbXFFcGs0RFV5ZHFiM3Zjdk5ZK2VN?=
- =?utf-8?B?SVhlNFRNOC95OTBjeGxhVkFzZldxbG80OTJGaHEwZXhUMVU0ajRrUHhYNUhE?=
- =?utf-8?B?QUxBelE2YTdzQW9EamQ0ZUxQdDRtb0RZT3YwQ290Zzd5bkZ3d3gxYjg5cjBP?=
- =?utf-8?B?RGZTMnU4VXpOWlQvczRKTU45K2lBeHhFdkNJTDQwanFSRUVsWEJLRnJtS0dQ?=
- =?utf-8?B?U0NSbWU0bVhWSU5DLzFYNWN1WEtQdTcvNHNXMFdZamc2R0pVUHpIRm9qbFpS?=
- =?utf-8?B?TzU4MDNuOUg5UVpTdWZBeEJDV2pzcWZSL2g1eC9zM0ZpWDZpVk52QnYxNzZa?=
- =?utf-8?B?b0lJdDZabllicW1oSTRkaU9LRldqaGl0MzE4UVQ5UG5aNjBEVS9hbG90aU8r?=
- =?utf-8?B?bTZlUEVtOEdVYmxhcHFRb1NvNjViZ1YyUU1adWl2bUpWVEpHRHNkaS8wSVFp?=
- =?utf-8?B?Qnl4THpOMkFvbDFEdXdCRHdwUnBwWGRqbnIrQWE1bnc2TGU5cjhLbzEwY0pv?=
- =?utf-8?B?bHA0cE5Tb0doOHRFaFU3RkVJdVNrOHg4MGt6cjhaMVhzcHphcmtYMU03b2p4?=
- =?utf-8?B?ODQyR002UHJkMzBySk1XOVpkUG1VUGxZTWFIU1Q4SkZEa3JHNzNiV2RRZFYx?=
- =?utf-8?B?Z2RXSWZJNlBFQ0U4VHhnL0VVdnY4OUZNemREVmV1ZGt6cmdwTHk0TDFqenpt?=
- =?utf-8?B?aTFEeU1rSVBQNVlHYWpTc2R1cGxXdFV3eFovL3dQWWlGMHdGK3J5WGFKWko4?=
- =?utf-8?B?ZVQ1ckk4cHhQN0xWYUZTRzZuS215Q0IyQnAvWHVPTHU2dVJzNmFZZ1pYWGs5?=
- =?utf-8?B?RUJjOWd1dWNna0FoZXIwSFNnVUFYY1AyUDF4S0JzYW5qbjFLcUZ1UGFQYzRT?=
- =?utf-8?B?WmUrNGZhYkJVY3k4NDd6SmFQc05rRWcyTzUzNXFGTk5sdEkveFdIdmJKd2hQ?=
- =?utf-8?B?RzNSZlJwOGRSNXp2ZlpKNWIyWXN3SDdEdkloRVdsVUV1VHNMYzQvTFRRLzJ1?=
- =?utf-8?B?T0tpUldMS2oxcmExRGZ1RklLN3ZOblA5dmpMOFpWNktrM29HaFNDN0lzek9X?=
- =?utf-8?B?NkRJakFkbDIzVllVT3BWUEpvTi9yTjN1d1lvVDRhVmlnUG9PTyt4cXYvVDFU?=
- =?utf-8?B?aHNFZkNRcjlWOFNBdTZTdVUrQVZDR2p2VzBab2QwNW5oOG9DZXp2Q3g5ekRw?=
- =?utf-8?B?K29CbW45RnVIMzlOODNTOTVDS2kvNjNxZGttOU9DWTFadnRMSldNQT09?=
+	=?us-ascii?Q?uz8p9Q39ooE4QgCVNezri4ogcGUSsfL6dZZUQSKtiLhi3s7n09vssgHzRif4?=
+ =?us-ascii?Q?/8uYBYgiC3pbbkWf+hUcb9l5pJTwKR09E/+uFc4xYctE2td7z4IK2HGooQIC?=
+ =?us-ascii?Q?7eGt0yXv5KVXe6/lOlbxELzAO+arpNUWL0IIeOHbvMigRg6MlNOaYd7csBDK?=
+ =?us-ascii?Q?l2JNdoZstOCjGfCle2/nikHscBqmkhhf166iV0ygGlmXc7rpoGQbA+wlZeLE?=
+ =?us-ascii?Q?Deg0b8zCKsIoBsAuH5BSIMdOdXeZqEyjSttV5UGE1CqCg08A0KgvzjFLgcrZ?=
+ =?us-ascii?Q?MypkMH3mQ1mkDPHayCKtdVycBZ36U9MPGlquVFcvfNQ6p9p612+6PbKLUGWh?=
+ =?us-ascii?Q?z7MzobsXVoLw11ptdtk0gd9gy4XYIoZ3bCMuSoMwdLadCB1yfAmPIJxQUIyU?=
+ =?us-ascii?Q?zsVhC/Jfjwd+ZbQE1G6SliizEJIoAzY7xygqMepQnik+1y9FdKafTTdxaobS?=
+ =?us-ascii?Q?Qld7rk8TZatB9Lqh/D7Omv8O70jTehIURJ0FeaVDbwQK9M22uulqu6JC+YDU?=
+ =?us-ascii?Q?miiPi33yvYqdi9od/+X7KSDEDwa0IfFq/2j833c5gx1IKL2a190MLzwd96Sy?=
+ =?us-ascii?Q?EB0fqFbAIWyZyFuF9/uSqBS5eszIOiGn5i9X3c1mQKqEt73HOahqluFxUFLV?=
+ =?us-ascii?Q?Nkel4LlbHimYDU7L1D2HtVDxI7yqGxxP7zb9YS03AkJhUxCLN19cwhTOInMx?=
+ =?us-ascii?Q?RATgySm5OZL0wYCEFXekgyGoJXacgdwHC5pXdZXZ+IqdjCpz2TPWds81mSmY?=
+ =?us-ascii?Q?q3kd3sZxh6RZKtY3Up1+NPT37hq8oIAUs2NzsOBGpSJJ5WV0Lw/ju1K+2Dzy?=
+ =?us-ascii?Q?HJHgmPDxXN5v0Gs/O249AhsgIH7Cx1Gge4c78Az923AyV2RzyG0DqCES0C7S?=
+ =?us-ascii?Q?/1YBw1vcv9y3FVBvBrddH7xTnHK4SqYf67Dry19qqlT0e4HGl/alTFsl9o4T?=
+ =?us-ascii?Q?y/6+HVpKlmTLrxJEkl9CPjmRudkixLKh0d/abbL+Ucyo/9GEKO7p5KoOzV3F?=
+ =?us-ascii?Q?Lijc1AVFcD92iSGpR9IpBYY0F5xq4aM2/gbdu5Xfsvbo7kI/xlb1W66UPYid?=
+ =?us-ascii?Q?6xc5J/vXu5jDsL1VBwTmBf7yhEOL21ilPd0FWaP6Yq78UHQAG0fOl6oHp3l2?=
+ =?us-ascii?Q?ca8aPieINNf8woXLFLcHHIG8OjacKhQUMdQFOCxUNYAtTydVoKrApba+r6Vd?=
+ =?us-ascii?Q?pMpVkd76cAp8CTFFWAuAN5PUuYpR3RAh83fSCNuqkxjqOimYRR1O3o280+ae?=
+ =?us-ascii?Q?TU74l9Pb2lDetsvL1yU+hYTQ2Zq0YGjpbgcpw093iJg8LYZz8bx5sHfY7bR0?=
+ =?us-ascii?Q?az66aCsS5wl5P3+oKiGLuwf2sqfZtyHr7mWrK32OWYROR3yXzzq13CL2/Lf9?=
+ =?us-ascii?Q?McH1CgGD9pe7qDWazhPFu5ZIGqHxrUvL+kWO4Cc+w2YbOFI+INgyZXcK7HTL?=
+ =?us-ascii?Q?U3p3AAx1JRbSt1Hkt7jVqI3RIGj7YrncN3IihXy0xiHZBzbew5XcmhP7xoHO?=
+ =?us-ascii?Q?j/q/D7O5x/XoDX7bPSjShPB1auQxUhPjaVyUbKYDwNanPWODoQYSzy/0f0tm?=
+ =?us-ascii?Q?y78jpreWnNPHrVMLGdCLCcTa7WKBQ07IOLvu9vTikkzTnitag8S2ZARHtOB1?=
+ =?us-ascii?Q?axPXZd4EnO6h+LdWx7TXlkKDwNt4GeEDNkSWrizoWxEdrsGdIZwbePUUVTLX?=
+ =?us-ascii?Q?619omkR3rdp+8cNlReZ+kqe001f1zMEfTY/Ua/MSeLHWKzqJGrMlUMpKNhH8?=
+ =?us-ascii?Q?Pb+yOkDAMA=3D=3D?=
 X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 384393b1-00ad-4905-f665-08dea927fd61
+X-MS-Exchange-CrossTenant-Network-Message-Id: cf8b956c-dfd6-4f40-ebf1-08dea929e504
 X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2026 15:23:55.5259
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2026 15:37:33.6545
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4dbrTn97GRiNHLFT3lWbqgGpsqW82jzAAV43BzH1dl1f89Wgn3R0UT9hEsv2uLuqJYa4ZTIhpkKASTaTpNYuaw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO6P123MB6838
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ifcx49Brgsou469VFAJTANVmm2/KKLL7I+1S1LpUV/7XfkmjEZKpg8viqfE8tSH8b7HTPDyqZvjiVbGbUIp2OA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP123MB4066
 
---3ktthgpn6mguhd4t
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [RFC PATCH] bpf: introduce TAINT_UNSAFE_BPF for mutating helpers
-MIME-Version: 1.0
+The primary remit of the eBPF verifier is to ensure that eBPF programs
+can neither crash the kernel nor corrupt memory. Nevertheless,
+administrative utilities such as "bpftrace --unsafe" permit the loading
+of programs that employ destructive or mutating helpers, most notably
+bpf_probe_write_user() and bpf_override_return().
 
-On Sat, May 02, 2026 at 09:29:27PM -0700, Randy Dunlap wrote:
-> > + 20) ``V`` if an eBPF program utilising unsafe, mutating helpers (such=
- as
-> > +     bpf_probe_write_user() or bpf_override_return()) was loaded. Thes=
-e helpers
-> > +     bypass standard eBPF safety guarantees and can alter execution fl=
-ow or
-> > +     corrupt memory.
->=20
-> (If this patch goes forward:)
->=20
-> In this same file (above), there is a little script around line 77 where
-> it should be changed:
-> s/20/21/
->=20
-> Also please update tools/debugging/kernel-chktaint for this taint flag.
->=20
-Hi Randy,
+Since commit b28573ebfabe ("bpf: Remove bpf_probe_write_user() warning
+message"), the kernel no longer issues a warning when an attempt is made to
+invoke such destructive helpers.
 
-Acknowledged. I'll address the above within the next iteration.
+Consequently, this patch introduces a novel kernel taint flag,
+TAINT_UNSAFE_BPF ("V"). Tainting the kernel establishes a permanent and
+readily auditable indicator (i.e., /proc/sys/kernel/tainted) to alert
+maintainers that the kernel's execution flow or user memory may have been
+compromised by an eBPF program.
 
+Signed-off-by: Aaron Tomlin <atomlin@atomlin.com>
+---
+Changes since v1 [1]:
+ - Moved the taint from run-time execution to load-time verification
+ - Added "V" flag decoding to tools/debugging/kernel-chktaint
+   (Randy Dunlap)
+ - Updated the seq command in tainted-kernels.rst to check all 21 bits
+   (Randy Dunlap)
+ - Fixed a Sphinx "Malformed table" warning by expanding the number
+   column boundaries in tainted-kernels.rst
 
-Kind regards,
---=20
-Aaron Tomlin
+[1]: https://lore.kernel.org/lkml/20260503035220.520479-1-atomlin@atomlin.com/
+---
+ Documentation/admin-guide/tainted-kernels.rst | 56 ++++++++++---------
+ include/linux/panic.h                         |  3 +-
+ kernel/bpf/verifier.c                         |  8 +++
+ kernel/panic.c                                |  1 +
+ tools/debugging/kernel-chktaint               |  8 +++
+ 5 files changed, 50 insertions(+), 26 deletions(-)
 
---3ktthgpn6mguhd4t
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
+index 9ead927a37c0..d26a8d29808c 100644
+--- a/Documentation/admin-guide/tainted-kernels.rst
++++ b/Documentation/admin-guide/tainted-kernels.rst
+@@ -74,35 +74,36 @@ a particular type of taint. It's best to leave that to the aforementioned
+ script, but if you need something quick you can use this shell command to check
+ which bits are set::
+ 
+-	$ for i in $(seq 20); do echo $(($i-1)) $(($(cat /proc/sys/kernel/tainted)>>($i-1)&1));done
++	$ for i in $(seq 21); do echo $(($i-1)) $(($(cat /proc/sys/kernel/tainted)>>($i-1)&1));done
+ 
+ Table for decoding tainted state
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+-===  ===  ======  ========================================================
+-Bit  Log  Number  Reason that got the kernel tainted
+-===  ===  ======  ========================================================
+-  0  G/P       1  proprietary module was loaded
+-  1  _/F       2  module was force loaded
+-  2  _/S       4  kernel running on an out of specification system
+-  3  _/R       8  module was force unloaded
+-  4  _/M      16  processor reported a Machine Check Exception (MCE)
+-  5  _/B      32  bad page referenced or some unexpected page flags
+-  6  _/U      64  taint requested by userspace application
+-  7  _/D     128  kernel died recently, i.e. there was an OOPS or BUG
+-  8  _/A     256  ACPI table overridden by user
+-  9  _/W     512  kernel issued warning
+- 10  _/C    1024  staging driver was loaded
+- 11  _/I    2048  workaround for bug in platform firmware applied
+- 12  _/O    4096  externally-built ("out-of-tree") module was loaded
+- 13  _/E    8192  unsigned module was loaded
+- 14  _/L   16384  soft lockup occurred
+- 15  _/K   32768  kernel has been live patched
+- 16  _/X   65536  auxiliary taint, defined for and used by distros
+- 17  _/T  131072  kernel was built with the struct randomization plugin
+- 18  _/N  262144  an in-kernel test has been run
+- 19  _/J  524288  userspace used a mutating debug operation in fwctl
+-===  ===  ======  ========================================================
++===  ===  =======  ========================================================
++Bit  Log  Number   Reason that got the kernel tainted
++===  ===  =======  ========================================================
++  0  G/P        1  proprietary module was loaded
++  1  _/F        2  module was force loaded
++  2  _/S        4  kernel running on an out of specification system
++  3  _/R        8  module was force unloaded
++  4  _/M       16  processor reported a Machine Check Exception (MCE)
++  5  _/B       32  bad page referenced or some unexpected page flags
++  6  _/U       64  taint requested by userspace application
++  7  _/D      128  kernel died recently, i.e. there was an OOPS or BUG
++  8  _/A      256  ACPI table overridden by user
++  9  _/W      512  kernel issued warning
++ 10  _/C     1024  staging driver was loaded
++ 11  _/I     2048  workaround for bug in platform firmware applied
++ 12  _/O     4096  externally-built ("out-of-tree") module was loaded
++ 13  _/E     8192  unsigned module was loaded
++ 14  _/L    16384  soft lockup occurred
++ 15  _/K    32768  kernel has been live patched
++ 16  _/X    65536  auxiliary taint, defined for and used by distros
++ 17  _/T   131072  kernel was built with the struct randomization plugin
++ 18  _/N   262144  an in-kernel test has been run
++ 19  _/J   524288  userspace used a mutating debug operation in fwctl
++ 20  _/V  1048576  an unsafe eBPF program (mutating helper) was loaded
++===  ===  =======  ========================================================
+ 
+ Note: The character ``_`` is representing a blank in this table to make reading
+ easier.
+@@ -189,3 +190,8 @@ More detailed explanation for tainting
+  19) ``J`` if userspace opened /dev/fwctl/* and performed a FWTCL_RPC_DEBUG_WRITE
+      to use the devices debugging features. Device debugging features could
+      cause the device to malfunction in undefined ways.
++
++ 20) ``V`` if an eBPF program utilising unsafe, mutating helpers (such as
++     bpf_probe_write_user() or bpf_override_return()) was loaded. These helpers
++     bypass standard eBPF safety guarantees and can alter execution flow or
++     corrupt memory.
+diff --git a/include/linux/panic.h b/include/linux/panic.h
+index f1dd417e54b2..8622c02c2c24 100644
+--- a/include/linux/panic.h
++++ b/include/linux/panic.h
+@@ -88,7 +88,8 @@ static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
+ #define TAINT_RANDSTRUCT		17
+ #define TAINT_TEST			18
+ #define TAINT_FWCTL			19
+-#define TAINT_FLAGS_COUNT		20
++#define TAINT_UNSAFE_BPF		20
++#define TAINT_FLAGS_COUNT		21
+ #define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
+ 
+ struct taint_flag {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 69d75515ed3f..cf0634d8901f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10287,6 +10287,14 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		return err;
+ 	}
+ 
++	/*
++	 * Taint the kernel if the program attempts to use mutating
++	 * helpers.
++	 */
++	if (func_id == BPF_FUNC_probe_write_user ||
++	    func_id == BPF_FUNC_override_return)
++		add_taint(TAINT_UNSAFE_BPF, LOCKDEP_STILL_OK);
++
+ 	/* eBPF programs must be GPL compatible to use GPL-ed functions */
+ 	if (!env->prog->gpl_compatible && fn->gpl_only) {
+ 		verbose(env, "cannot call GPL-restricted function from non-GPL compatible program\n");
+diff --git a/kernel/panic.c b/kernel/panic.c
+index 20feada5319d..1ae19bd8fc1d 100644
+--- a/kernel/panic.c
++++ b/kernel/panic.c
+@@ -825,6 +825,7 @@ const struct taint_flag taint_flags[TAINT_FLAGS_COUNT] = {
+ 	TAINT_FLAG(RANDSTRUCT,			'T', ' '),
+ 	TAINT_FLAG(TEST,			'N', ' '),
+ 	TAINT_FLAG(FWCTL,			'J', ' '),
++	TAINT_FLAG(UNSAFE_BPF,			'V', ' '),
+ };
+ 
+ #undef TAINT_FLAG
+diff --git a/tools/debugging/kernel-chktaint b/tools/debugging/kernel-chktaint
+index e1571c04afb5..c0fbd7bcfcfd 100755
+--- a/tools/debugging/kernel-chktaint
++++ b/tools/debugging/kernel-chktaint
+@@ -211,6 +211,14 @@ else
+ 	addout "J"
+ 	echo " * fwctl's mutating debug interface was used (#19)"
+ fi
++
++T=`expr $T / 2`
++if [ `expr $T % 2` -eq 0 ]; then
++	addout " "
++else
++	addout "V"
++	echo " * an unsafe eBPF program (mutating helper) was loaded (#20)"
++fi
+ echo "Raw taint value as int/string: $taint/'$out'"
+ 
+ # report on any tainted loadable modules
+-- 
+2.51.0
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEeQaE6/qKljiNHm6b4t6WWBnMd9YFAmn3aIgACgkQ4t6WWBnM
-d9bcNw/5AXLy3/piW6h3xQX8n5Oku+AbhNk/MainyEOLv3hxPkb8EbtwJkSAWAHH
-tNYmr4GfkIfPb8ApzgZn820HfoLd7uVDBUU+tHj7WC3j6BspmZSxLHlR1iAxVeBY
-c1ILtc033zGlvFYc5O+6nT+OmLKKqzI7aTZCwTLCPmaKe09bQlPO/UK/82nsl8+h
-tkp6ruwHpfkWGUzlZ9WAnlGymIzZapDUeyAcEk1HrjNb2ntpkQIYs0A1oHWSQCro
-X7i5uJgpyA8T9dBVMzS6pLts+4wq4wLp92C71nib9Fvsy5yAXpQVYALSaId9QDEn
-oY94+1RKkmNjnNKP7wE8AZvq1NHXmFhdP8oJ3ULj8TqKT4w4eVrug1Qs0KIB6ylu
-Q3UccG7Fhkm1/RgAVX+5I39BtZBTk6B73T81qtNgj76uY4dDmFb+IzQDxJBZAOT1
-AdACk6cYxaiAE9bO8fWIZ9q6TELsjHTPatr/gMQPfO05m4tRfVw9Gcl0e8B04vkU
-wxCVo4yIU/AZ4Pvs7AnEW59j/Vd4byqcxIqllGeR08pny0ACioZq3yDFCoO392hb
-Tr7I11JO1vwSD6PlUbKzimDOUpUMJOSjTCSJBBknZSpS43ndVKv2RuLOPiHX7OmH
-YRiLvnlwF8TlnCo6Xo9lOiFaEDYA43lsC7R+Ec+x0ECmXrhycnA=
-=aPsn
------END PGP SIGNATURE-----
-
---3ktthgpn6mguhd4t--
