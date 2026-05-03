@@ -1,229 +1,114 @@
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 577CE3537E2
-	for <bpf@vger.kernel.org>; Sun,  3 May 2026 21:18:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D783A9D84;
+	Sun,  3 May 2026 21:52:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777843123; cv=none; b=hN7N35ocD6tzkM4jxdV/hLUiE/2YTU7DOkugPQC5sU/CJsoA4VScMM7FgPXqXtMEDqHwbyEYCC+HvU9ZjZfpVslvPJeZzM8cKqnXUucYrowpofF6UhavZm0Rhwz1vd9l80aqa+bF3WuP8CR4KWzex05AMGFrkiEt9ohmbiAnTuo=
+	t=1777845179; cv=none; b=rf1UEQc4a++hsIw9jUq/E1GWMptxpW651qV1KYZDyF8zxO2kSIZiqGoi2GRdRgWb99mInSC0gEmhCjsWulekSlzOjp/w8t/YJgkrbDf/Txd+T/Y+lpNREwcJHjuPleprpYu/JTthp83JNkopfc2txBz339cQuY6OArcD5eMP9SU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777843123; c=relaxed/simple;
-	bh=0rvNq6Ngdr9sbO2BAvOPTZrSqe1KCyp+hciX6ow1LY4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=p9svSzjmHG9S+RVjqm6PGGiYRaTattmIIhJx5v2nfL9GF1pZAJe28YJl2bsp4jiUYf1TaWIxSoNeA8l9kVa9M2ArN2iXyKU1PRU+/w1fIeeEpoD5U/Wn0yAXa41+4C6aPfax+g0XnAM6hHZcoB399QdUv5hntIagIh9rNbcX/7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QVNWfhCk; arc=none smtp.client-ip=209.85.219.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777845179; c=relaxed/simple;
+	bh=72SmyEyDLbiT7++hepSoCz6MaVfcFTfSnK6Vg/ULnSo=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=iWXfM9XGGrZXkvTpUHMl4CW8+8OMfJjrekYjkk7yx/iU4V4m98+XsvfIMH8z6iMPNwLrh7KqHZxSdv0dlJKzf6kZCps29A5wHYViliTqJovZthlx+X5idefGO9D6iJGEZc9iNExDkjX4mUi2jmiJlY9QVxClo14N2kTbdtnFtAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NIukK26J; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QVNWfhCk"
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-8b7105dfb35so14197906d6.3
-        for <bpf@vger.kernel.org>; Sun, 03 May 2026 14:18:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777843120; x=1778447920; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rRi8xj1SPXf/3lAen7R/NSSWw8Zycq/3ZwGnVVa+VnE=;
-        b=QVNWfhCkjo9PV1ud76pmQj/R/E9mcBBkyNelZwGOMfSMOR3KkzIHcFYFFIuuR6g0PU
-         ANA3T1PKCqtL06sDb/v+sHnnIZtxm5hhf1ZbpdsXmD1HKY0CviY6667AdrITYB5KpP6h
-         0gQtFz7AVFUTZHRxnTWaEk6/gFeTNdXrAEd96ZNjkZ7dGATM6e66/FGekGbYeqP0NveG
-         p1uzFtaDho0yyWVtut4uH4Gl/7wIZBGinkND3QZ8E2AdBCxCsuXuls9wjiIIBQL+2nTq
-         MTaZq4KqBzLHgICOU9y1aAzO4bwgjKA5pxLKCEzcKariVV4JtLCa8HjLy6oUKcCoom7B
-         y7gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777843120; x=1778447920;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=rRi8xj1SPXf/3lAen7R/NSSWw8Zycq/3ZwGnVVa+VnE=;
-        b=HP463CdvOBDcvc4Ukl3mIGeJk5FFdn0/4qv60y0g1tkSyxYMNPhoHOLuVftC9sTcyz
-         SVcHCXr/KGzP2/6GuY7Sg0nh2zGXgLAjGhsTDjvEsJKio02EB9dpJN5wEZxd4/5mCgL7
-         WV10TyIHnbbVQKnu2K148kloUuQr6h418coiLs8xDtaGHgrR1+p0ki7UF2/8WxTNdJNx
-         GSmA6TyK0p8oa5tJi2g70bmZ9sALF0L6sxOkbO6Md8axo2JEkCzYYYLTqdFirJyGPvAu
-         p5LKDGLWz9hYcAKlpv/Z0a2rkgP3qkdAND78q9nZ5RBaElQfc/acj3dp8EbrIRlrD//J
-         gNDw==
-X-Forwarded-Encrypted: i=1; AFNElJ/7VQnlkWw7PTDef565jqUbGEVy6ngK8WbD00x4QZbQAK845FeMYc4pJUjkqMnBlglG6ts=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVxa3m0f/h3EdHj8deYNdWhYtdJ1qhj/BwWxQ8GqbsLFYB4shF
-	gV3Z6b4pI+JK2nAPA12fTcsDyS6gosAUPChwFBJP4QscDBOBRRln+Mf9
-X-Gm-Gg: AeBDietkVSNHDG7PACIthAavZJfoJdpmT89nP9fVB1UFjRyYGDCT0APWWz+BsFz5Z7A
-	fx8u4jZONpAXRwM0nWqEomnnaYiKHdrDY4/xnEBtVrAbps3pHzuWYqT5ZLJimhSAWMeL+solpYc
-	SG0rNOU3/tg1X/4aLCkM9TlkqaxDj6SFQ1xi+DFoc1ov8ZutCbYx+u3Ja0DhGlQAndqAHnFmDaS
-	ylL+hbxKZG5HCIBHVHEjGI23gJ+15cgg5/0Mfs8mUIGwqIW7ePziWJAKhYO4jcKU2pYmNjwBPjz
-	JROFZNoQVF3PWLTBgmq7PtTSSH1F+LI3ZrHUwPPHcFeHuO3n9nDiZrzpom6XCrSrfSXWIAcc3t2
-	l7Pxp3NmWhFA6SsIhPd5MciBaKuavH2XcIR61nyB422YY+Y+ihWbLIS2Y2MxnroY4UUKDQbGl5P
-	tVYFfolbQsdpnSLjODzWdE+J+Ih4d3v1y32zbvxjM36i7r+O6Bn3RbYlqiyX8Lm3lD4r/T2Eq4w
-	ejCTvFvyc/jHEkXvuqh7tMVnTc5HIPJ3ICLjSu2jEzLwBQlX1tqY+W9nwIhkZs=
-X-Received: by 2002:a05:6214:8015:b0:8ac:b1ad:3a1f with SMTP id 6a1803df08f44-8b66834bdcamr118113156d6.35.1777843120210;
-        Sun, 03 May 2026 14:18:40 -0700 (PDT)
-Received: from battery.lan (pool-100-15-227-251.washdc.fios.verizon.net. [100.15.227.251])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b53d831651sm96146346d6.47.2026.05.03.14.18.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 May 2026 14:18:39 -0700 (PDT)
-From: David Windsor <dwindsor@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 2/2] selftests/bpf: add tests for bpf_init_inode_xattr kfunc
-Date: Sun,  3 May 2026 17:18:31 -0400
-Message-ID: <20260503211835.16103-3-dwindsor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260503211835.16103-1-dwindsor@gmail.com>
-References: <20260503211835.16103-1-dwindsor@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NIukK26J"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40645C2BCC4;
+	Sun,  3 May 2026 21:52:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777845178;
+	bh=72SmyEyDLbiT7++hepSoCz6MaVfcFTfSnK6Vg/ULnSo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=NIukK26JIkbEydwsy8SnFcdQycTfospEyi+XJPBki4SE1XVDLj6Hp4C7mys7CmE5i
+	 Al1yGkqzH0BH7S8MoM2/a8Ov/apQpGD9b68wVydCpvgEFCcrV4StzV5BK+IlYppcsY
+	 JR/RBWSsowp2hJwCaPN/YA/usRrAX86kky7WfFiDY60i+rd/Swh3ZXnObXfRrudab1
+	 Imr33IlORwX1BfodLQ/50/agc+/VhFaM+AqJK7i0Y2nuPv01jZ8su55u2Bt5gWlauD
+	 vPqRTu8Y+gnPfS4l5nmGoe4zBQ+S3fFjj/kPZ8GxneEb3PcNzGGy/mzdSxyIJCfnxK
+	 DZ/pwatjnG0CA==
+Content-Type: multipart/mixed; boundary="===============6494934059923081557=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Message-Id: <2cf158e1e197e0674095c692361a1adcd5190d5d8f89061fcac605ce0907eb2d@mail.kernel.org>
+In-Reply-To: <20260503211835.16103-3-dwindsor@gmail.com>
+References: <20260503211835.16103-3-dwindsor@gmail.com>
+Subject: Re: [PATCH v2 2/2] selftests/bpf: add tests for bpf_init_inode_xattr kfunc
+From: bot+bpf-ci@kernel.org
+To: dwindsor@gmail.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,shuah@kernel.org
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun,  3 May 2026 21:52:57 +0000 (UTC)
 
-Test bpf atomic inode xattr labeling in inode_init_security.
+--===============6494934059923081557==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
 
-Signed-off-by: David Windsor <dwindsor@gmail.com>
----
- tools/testing/selftests/bpf/bpf_kfuncs.h      |  5 ++
- .../selftests/bpf/prog_tests/fs_kfuncs.c      | 49 +++++++++++++++++++
- .../bpf/progs/test_init_inode_xattr.c         | 32 ++++++++++++
- 3 files changed, 86 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_init_inode_xattr.c
+PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvZnNf
+a2Z1bmNzLmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9mc19rZnVu
+Y3MuYwo+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL2ZzX2tm
+dW5jcy5jCj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvZnNf
+a2Z1bmNzLmMKPiBAQCAtOSw2ICs5LDcgQEAKPiAgI2luY2x1ZGUgPHRlc3RfcHJvZ3MuaD4KPiAg
+I2luY2x1ZGUgInRlc3RfZ2V0X3hhdHRyLnNrZWwuaCIKPiAgI2luY2x1ZGUgInRlc3Rfc2V0X3Jl
+bW92ZV94YXR0ci5za2VsLmgiCj4gKyNpbmNsdWRlICJ0ZXN0X2luaXRfaW5vZGVfeGF0dHIuc2tl
+bC5oIgo+ICAjaW5jbHVkZSAidGVzdF9mc3Zlcml0eS5za2VsLmgiCj4KPiAgc3RhdGljIGNvbnN0
+IGNoYXIgdGVzdGZpbGVbXSA9ICIvdG1wL3Rlc3RfcHJvZ3NfZnNfa2Z1bmNzIjsKPiBAQCAtMjY4
+LDYgKzI2OSw1MSBAQCBzdHJ1Y3QgZnN2ZXJpdHlfZW5hYmxlX2FyZyBhcmcgPSB7MH07Cj4gIAly
+ZW1vdmUodGVzdGZpbGUpOwo+ICB9Cj4KPiArc3RhdGljIHZvaWQgdGVzdF9pbml0X2lub2RlX3hh
+dHRyKHZvaWQpCj4gK3sKPiArCXN0cnVjdCB0ZXN0X2luaXRfaW5vZGVfeGF0dHIgKnNrZWwgPSBO
+VUxMOwo+ICsJaW50IGZkID0gLTEsIGVycjsKPiArCWNoYXIgdmFsdWVfb3V0WzMyXTsKCkNvdWxk
+IHZhbHVlX291dCBiZSByZWFkIHdoaWxlIHVuaW5pdGlhbGl6ZWQ/IElmIGdldHhhdHRyKCkgc3Vj
+Y2VlZHMgYnV0CnJldHVybnMgZmV3ZXIgYnl0ZXMgdGhhbiBleHBlY3RlZCwgdGhlIHNpemUgQVNT
+RVJUX0VRIGNoZWNrIHdpbGwgZmFpbCBidXQKZXhlY3V0aW9uIHdpbGwgY29udGludWUuCgpUaGUg
+c3Vic2VxdWVudCBzdHJuY21wKCkgbWlnaHQgdGhlbiByZWFkIHVuaW5pdGlhbGl6ZWQgc3RhY2sg
+bWVtb3J5LiBXb3VsZCBpdApiZSBiZXR0ZXIgdG8gemVyby1pbml0aWFsaXplIHRoaXMgYnVmZmVy
+LCBvciB1c2UgaWYgKCFBU1NFUlRfRVEoLi4uKSkgdG8KYWJvcnQgdGhlIHRlc3QgZWFybHk/Cgo+
+ICsJY29uc3QgY2hhciAqdGVzdGZpbGVfbmV3ID0gIi90bXAvdGVzdF9wcm9nc19mc19rZnVuY3Nf
+bmV3IjsKPiArCj4gKwlza2VsID0gdGVzdF9pbml0X2lub2RlX3hhdHRyX19vcGVuX2FuZF9sb2Fk
+KCk7Cj4gKwlpZiAoIUFTU0VSVF9PS19QVFIoc2tlbCwgInRlc3RfaW5pdF9pbm9kZV94YXR0cl9f
+b3Blbl9hbmRfbG9hZCIpKQo+ICsJCXJldHVybjsKPiArCj4gKwlza2VsLT5ic3MtPm1vbml0b3Jl
+ZF9waWQgPSBnZXRwaWQoKTsKPiArCWVyciA9IHRlc3RfaW5pdF9pbm9kZV94YXR0cl9fYXR0YWNo
+KHNrZWwpOwo+ICsJaWYgKCFBU1NFUlRfT0soZXJyLCAidGVzdF9pbml0X2lub2RlX3hhdHRyX19h
+dHRhY2giKSkKPiArCQlnb3RvIG91dDsKPiArCj4gKwkvKiBDcmVhdGUgYSBuZXcgZmlsZSDigJQg
+dGhpcyB0cmlnZ2VycyBpbm9kZV9pbml0X3NlY3VyaXR5ICovCj4gKwlmZCA9IG9wZW4odGVzdGZp
+bGVfbmV3LCBPX0NSRUFUIHwgT19SRFdSLCAwNjQ0KTsKCklmIHRoZSB0ZXN0IGZpbGUgYWxyZWFk
+eSBleGlzdHMgZnJvbSBhIHByZXZpb3VzIGZhaWxlZCBydW4sIHdpbGwgb3BlbigpIGp1c3QKb3Bl
+biB0aGUgZXhpc3RpbmcgZmlsZSB3aXRob3V0IHRyaWdnZXJpbmcgdGhlIGlub2RlX2luaXRfc2Vj
+dXJpdHkgaG9vaz8KClNpbmNlIHRoZSBob29rIG9ubHkgZmlyZXMgd2hlbiBhIG5ldyBpbm9kZSBp
+cyBpbnN0YW50aWF0ZWQsIHRoaXMgd291bGQgY2F1c2UKdGhlIHRlc3QgdG8gcGVyc2lzdGVudGx5
+IGZhaWwuIEFsc28sIHNpbmNlIHRoaXMgcnVucyBhcyByb290IGluIHRoZQp3b3JsZC13cml0YWJs
+ZSAvdG1wIGRpcmVjdG9yeSwgY291bGQgdGhpcyBwcmVkaWN0YWJsZSBwYXRoIGJlIHZ1bG5lcmFi
+bGUgdG8KYSBzeW1saW5rIGF0dGFjaz8KCldvdWxkIGFkZGluZyBPX0VYQ0wgdG8gdGhlIG9wZW4g
+ZmxhZ3MgZW5zdXJlIGJvdGggdGhhdCB0aGUgaG9vayBpcyB0cmlnZ2VyZWQKYW5kIHByZXZlbnQg
+c3ltbGluayBpc3N1ZXM/Cgo+ICsJaWYgKCFBU1NFUlRfR0UoZmQsIDAsICJjcmVhdGVfZmlsZSIp
+KQo+ICsJCWdvdG8gb3V0Owo+ICsKPiArCUFTU0VSVF9FUShza2VsLT5kYXRhLT5pbml0X3Jlc3Vs
+dCwgMCwgImluaXRfcmVzdWx0Iik7Cj4gKwo+ICsJLyogVGhlIGluaXR4YXR0cnMgY2FsbGJhY2sg
+cHJlcGVuZHMgInNlY3VyaXR5LiIgdG8gdGhlIG5hbWUgKi8KPiArCWVyciA9IGdldHhhdHRyKHRl
+c3RmaWxlX25ldywgInNlY3VyaXR5LmJwZi50ZXN0X2xhYmVsIiwgdmFsdWVfb3V0LAo+ICsJCSAg
+ICAgICBzaXplb2YodmFsdWVfb3V0KSk7Cj4gKwlpZiAoZXJyIDwgMCAmJiBlcnJubyA9PSBFTk9E
+QVRBKSB7CgpJZiB0aGUgdW5kZXJseWluZyAvdG1wIGZpbGVzeXN0ZW0gZG9lcyBub3Qgc3VwcG9y
+dCBleHRlbmRlZCBhdHRyaWJ1dGVzIGF0CmFsbCwgZ2V0eGF0dHIoKSByZXR1cm5zIC0xIHdpdGgg
+ZXJybm8gc2V0IHRvIEVPUE5PVFNVUFAgKG9yIEVOT1RTVVApLiBTaG91bGQKdGhpcyBjb25kaXRp
+b24gYWxzbyBiZSBoYW5kbGVkIHRvIGNvcnJlY3RseSBza2lwIHRoZSB0ZXN0IGluc3RlYWQgb2Yg
+ZmFpbGluZwpvbiB0aGUgbmV4dCBBU1NFUlRfR0UgY2hlY2s/Cgo+ICsJCXByaW50ZigiJXM6U0tJ
+UDpmaWxlc3lzdGVtIGRpZCBub3QgYXBwbHkgTFNNIHhhdHRyc1xuIiwKPiArCQkgICAgICAgX19m
+dW5jX18pOwo+ICsJCXRlc3RfX3NraXAoKTsKPiArCQlnb3RvIG91dDsKPiArCX0KPiArCWlmICgh
+QVNTRVJUX0dFKGVyciwgMCwgImdldHhhdHRyIikpCj4gKwkJZ290byBvdXQ7Cj4gKwo+ICsJQVNT
+RVJUX0VRKGVyciwgKGludClzaXplb2Yoc2tlbC0+ZGF0YS0+eGF0dHJfdmFsdWUpLCAieGF0dHJf
+c2l6ZSIpOwo+ICsJQVNTRVJUX0VRKHN0cm5jbXAodmFsdWVfb3V0LCAidGVzdF92YWx1ZSIsCj4g
+KwkJCSAgc2l6ZW9mKCJ0ZXN0X3ZhbHVlIikpLCAwLCAieGF0dHJfdmFsdWUiKTsKPiArCj4gK291
+dDoKPiArCWNsb3NlKGZkKTsKCklmIGFuIGVycm9yIG9jY3VycyBiZWZvcmUgdGhlIGZpbGUgaXMg
+b3BlbmVkIChlLmcuIGR1cmluZyBza2VsZXRvbiBsb2FkIG9yCmF0dGFjaCksIGZkIHdpbGwgYmUg
+LTEuIERvZXMgdGhpcyByZXN1bHQgaW4gYW4gdW5uZWNlc3NhcnkgY2xvc2UoLTEpIHdoaWNoCnJl
+dHVybnMgLUVCQURGPyBTaG91bGQgdGhpcyBiZSBndWFyZGVkIHdpdGggaWYgKGZkID49IDApPwoK
+PiArCXRlc3RfaW5pdF9pbm9kZV94YXR0cl9fZGVzdHJveShza2VsKTsKPiArCXJlbW92ZSh0ZXN0
+ZmlsZV9uZXcpOwo+ICt9CgoKLS0tCkFJIHJldmlld2VkIHlvdXIgcGF0Y2guIFBsZWFzZSBmaXgg
+dGhlIGJ1ZyBvciBlbWFpbCByZXBseSB3aHkgaXQncyBub3QgYSBidWcuClNlZTogaHR0cHM6Ly9n
+aXRodWIuY29tL2tlcm5lbC1wYXRjaGVzL3ZtdGVzdC9ibG9iL21hc3Rlci9jaS9jbGF1ZGUvUkVB
+RE1FLm1kCgpDSSBydW4gc3VtbWFyeTogaHR0cHM6Ly9naXRodWIuY29tL2tlcm5lbC1wYXRjaGVz
+L2JwZi9hY3Rpb25zL3J1bnMvMjUyOTEzODEyMzc=
 
-diff --git a/tools/testing/selftests/bpf/bpf_kfuncs.h b/tools/testing/selftests/bpf/bpf_kfuncs.h
-index ae71e9b69051..5d67eb773e44 100644
---- a/tools/testing/selftests/bpf/bpf_kfuncs.h
-+++ b/tools/testing/selftests/bpf/bpf_kfuncs.h
-@@ -92,4 +92,9 @@ extern int bpf_set_dentry_xattr(struct dentry *dentry, const char *name__str,
- 				const struct bpf_dynptr *value_p, int flags) __ksym __weak;
- extern int bpf_remove_dentry_xattr(struct dentry *dentry, const char *name__str) __ksym __weak;
- 
-+struct lsm_xattr_ctx;
-+extern int bpf_init_inode_xattr(struct lsm_xattr_ctx *xattr_ctx,
-+				const char *name__str,
-+				const struct bpf_dynptr *value_p) __ksym __weak;
-+
- #endif
-diff --git a/tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c
-index 43a26ec69a8e..26daef116ee2 100644
---- a/tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c
-@@ -9,6 +9,7 @@
- #include <test_progs.h>
- #include "test_get_xattr.skel.h"
- #include "test_set_remove_xattr.skel.h"
-+#include "test_init_inode_xattr.skel.h"
- #include "test_fsverity.skel.h"
- 
- static const char testfile[] = "/tmp/test_progs_fs_kfuncs";
-@@ -268,6 +269,51 @@ static void test_fsverity(void)
- 	remove(testfile);
- }
- 
-+static void test_init_inode_xattr(void)
-+{
-+	struct test_init_inode_xattr *skel = NULL;
-+	int fd = -1, err;
-+	char value_out[32];
-+	const char *testfile_new = "/tmp/test_progs_fs_kfuncs_new";
-+
-+	skel = test_init_inode_xattr__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_init_inode_xattr__open_and_load"))
-+		return;
-+
-+	skel->bss->monitored_pid = getpid();
-+	err = test_init_inode_xattr__attach(skel);
-+	if (!ASSERT_OK(err, "test_init_inode_xattr__attach"))
-+		goto out;
-+
-+	/* Create a new file — this triggers inode_init_security */
-+	fd = open(testfile_new, O_CREAT | O_RDWR, 0644);
-+	if (!ASSERT_GE(fd, 0, "create_file"))
-+		goto out;
-+
-+	ASSERT_EQ(skel->data->init_result, 0, "init_result");
-+
-+	/* The initxattrs callback prepends "security." to the name */
-+	err = getxattr(testfile_new, "security.bpf.test_label", value_out,
-+		       sizeof(value_out));
-+	if (err < 0 && errno == ENODATA) {
-+		printf("%s:SKIP:filesystem did not apply LSM xattrs\n",
-+		       __func__);
-+		test__skip();
-+		goto out;
-+	}
-+	if (!ASSERT_GE(err, 0, "getxattr"))
-+		goto out;
-+
-+	ASSERT_EQ(err, (int)sizeof(skel->data->xattr_value), "xattr_size");
-+	ASSERT_EQ(strncmp(value_out, "test_value",
-+			  sizeof("test_value")), 0, "xattr_value");
-+
-+out:
-+	close(fd);
-+	test_init_inode_xattr__destroy(skel);
-+	remove(testfile_new);
-+}
-+
- void test_fs_kfuncs(void)
- {
- 	/* Matches xattr_names in progs/test_get_xattr.c */
-@@ -286,6 +332,9 @@ void test_fs_kfuncs(void)
- 	if (test__start_subtest("set_remove_xattr"))
- 		test_set_remove_xattr();
- 
-+	if (test__start_subtest("init_inode_xattr"))
-+		test_init_inode_xattr();
-+
- 	if (test__start_subtest("fsverity"))
- 		test_fsverity();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_init_inode_xattr.c b/tools/testing/selftests/bpf/progs/test_init_inode_xattr.c
-new file mode 100644
-index 000000000000..5bc5b90a98f2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_init_inode_xattr.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Isovalent, a Cisco company. */
-+
-+#include "vmlinux.h"
-+#include <errno.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_kfuncs.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+__u32 monitored_pid;
-+int init_result = -1;
-+
-+const char xattr_name[] = "bpf.test_label";
-+char xattr_value[] = "test_value";
-+
-+SEC("lsm.s/inode_init_security")
-+int BPF_PROG(test_init_inode_xattr, struct inode *inode, struct inode *dir,
-+	     const struct qstr *qstr, struct lsm_xattr_ctx *xattr_ctx)
-+{
-+	struct bpf_dynptr value_ptr;
-+	__u32 pid;
-+
-+	pid = bpf_get_current_pid_tgid() >> 32;
-+	if (pid != monitored_pid)
-+		return 0;
-+
-+	bpf_dynptr_from_mem(xattr_value, sizeof(xattr_value), 0, &value_ptr);
-+	init_result = bpf_init_inode_xattr(xattr_ctx, xattr_name, &value_ptr);
-+
-+	return 0;
-+}
--- 
-2.53.0
-
+--===============6494934059923081557==--
