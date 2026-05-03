@@ -1,155 +1,124 @@
-Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2C09340281
-	for <bpf@vger.kernel.org>; Sun,  3 May 2026 06:56:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB3A285058
+	for <bpf@vger.kernel.org>; Sun,  3 May 2026 07:47:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777791390; cv=none; b=mYsKpwCBzvTn1TafrjyTR3k4c+LGFw8q/BQHyusaKXtr70EFHdAkhW5W4R3gN6ZIS0eeHcn6C6tQCEifSG+YbDkn4Ybxq7aH+hYRwZtFlkj/dryLkBbevd42JLu7kOQBXjvF1+6P5PmLhqXb9bXIem6hE2TW2nlsldToqN6XLS8=
+	t=1777794447; cv=none; b=m4pC2v3CnxxQsuCRy5eIPep7xAG8VNQn2gzUFAntJb/xUNoxiQBP3Emfp+/x2yJ5mk4m2uwD8XkhMJwlTjWUlVrGpCoWf9DjyC4vQfVusSI1Iwi5Boo8Yyq6ec2mggCmp4q0e5iHXWpFJUjIySoc6FONxgYM1/ZP5cux70ccqHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777791390; c=relaxed/simple;
-	bh=9OMJ5kVcEKuW+8lmfiN/lMqqmKC9ZUR2NxuDeIxIyAE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kLQosMHZ+GcfOYEIEs/pXQIZshZq/BXkb8dR3x1vz0UwTRQaAKPdmlTWCZAdRefH+2NN4Y72XRW0nsdY7+ZcKd5+KO9qEh2ORxsLukN+aitbrgP5mJQp5+hc82idSWWACc+bR1eoZ44bRpu5cT76qtcHtMLTwjJ6efKP0/2zQQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=162.243.161.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [115.236.2.93])
-	by mtasvr (Coremail) with SMTP id _____wBHJKyA8fZpzP_+AA--.19853S3;
-	Sun, 03 May 2026 14:56:01 +0800 (CST)
-Received: from [10.16.97.57] (unknown [115.236.2.93])
-	by mail-app3 (Coremail) with SMTP id zS_KCgAnYXR88fZpTFjZAA--.5506S3;
-	Sun, 03 May 2026 14:55:57 +0800 (CST)
-Message-ID: <6fb4db24-e98b-4129-8f22-689ad7c04323@zju.edu.cn>
-Date: Sun, 3 May 2026 14:55:56 +0800
+	s=arc-20240116; t=1777794447; c=relaxed/simple;
+	bh=AUvylvy68dl04OdIiiLs+NuPkDs4SC2DZfWj5iFnP98=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=oH3+0ydE8N9ybWtREMfzOAJI7laKzBqyxT6vcj41ux/nSOBlPXqVn4455w197P4eQ8xV0IVD0D56JDwKgR9zKl2TqckRF/sBwxW22GlW+KkL04YWIXx+lszQyz2puDa6Ew3QpT3h5dWT45pEGcP4XolaR+2BIYj0IKfHAug7Www=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QkZ6qwRU; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QkZ6qwRU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C84EC2BCB4;
+	Sun,  3 May 2026 07:47:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777794446;
+	bh=AUvylvy68dl04OdIiiLs+NuPkDs4SC2DZfWj5iFnP98=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=QkZ6qwRULKW/EzqVZD6kqMnlzBlHPwNL57HPg4blh74Ib9B9LKWAnjCkXg7FLPPQF
+	 ULLgnOp/um7o0L3UBw8Ighghb3IBl2H0QGj2Vn4yzODEs1+8fpU/83Kysxz/257ASo
+	 aq4zbiUzyX9X+ErpLP5ZuEE8lc/IG7ptNagfcx0o8I4FjhViLDgoTzucd+xpog8UGF
+	 XULiw5SoBFgbxOlJKgWKssboBIYhnhNg6iZY1X6rUIBoxO0yjYe9o0mmAjPywZcG6N
+	 XJKjJDgODpskAHPF78hAQL+ETcRHu544YZBapshOgDHCZaqPz5jd47WIVaFlHCCIXT
+	 wPZNzcoGTje1A==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v3 1/2] net: mana: Use per-queue allocation for
+ tx_qp to reduce allocation size
+Reply-To: sashiko@lists.linux.dev
+To: "Aditya Garg" <gargaditya@linux.microsoft.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260502074552.23857-2-gargaditya@linux.microsoft.com>
+References: <20260502074552.23857-2-gargaditya@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 03 May 2026 07:47:25 +0000
+Message-Id: <20260503074726.1C84EC2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v9 2/3] bpf: Fix s16 truncation for large
- bpf-to-bpf call offsets
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Quentin Monnet <qmo@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>,
- bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Eduard <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>,
- Puranjay Mohan <puranjay@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Yazhou Tang <tangyazhou518@outlook.com>,
- Shenghao Yuan <shenghaoyuan0928@163.com>, Tianci Cao <ziye@zju.edu.cn>
-References: <20260429171904.107244-1-tangyazhou@zju.edu.cn>
- <20260429171904.107244-3-tangyazhou@zju.edu.cn>
- <518d74d6-7750-4950-a76f-3e67e480840e@huaweicloud.com>
- <6fc310e8-f929-4b1a-b298-71f2445e3c6e@zju.edu.cn>
- <c801c51e-70d5-4bdd-8f83-d1f71f84186d@kernel.org>
- <e85fa7f9-02ef-42ad-80eb-26c1756737da@zju.edu.cn>
- <CAADnVQLqpwc2q_Zesgvqq0WLNzcnGUc9D5QTdzLDX8_tj7OBFA@mail.gmail.com>
-Content-Language: en-US
-From: Yazhou Tang <tangyazhou@zju.edu.cn>
-In-Reply-To: <CAADnVQLqpwc2q_Zesgvqq0WLNzcnGUc9D5QTdzLDX8_tj7OBFA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zS_KCgAnYXR88fZpTFjZAA--.5506S3
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAg8RCmnyXw44nQAFs8
-X-CM-DELIVERINFO: =?B?4i73MgXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9HD5f/v2qbBNnu6nxZck69OEbrQHbtpMSfDVWDU4csKRYmXNQcYDsTwU3hDC4QhK7rlp
-	+gVSAxRwAgTnAYSk+3jCcrV/MQC0rlf45yYz57wsVt9PEwr806Wj2HDVxNsdIQ==
-X-Coremail-Antispam: 1Uk129KBj93XoWxArW5Gw17AF18Aw1rWry3Awc_yoW5AF1kpa
-	98Ga4jkF4DXr13ArnrKw4IkFW5trWSk348Wr45try5X3sYqr1ftF48tF4Fkw13ur1xGF12
-	va4jvF9rWF1UXagCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AK
-	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2
-	ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGO
-	UUUUU
 
-Hi Alexei,
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] Lockless functions (mana_get_stats64 and mana_xdp_xmit) can experi=
+ence a TOCTOU Use-After-Free when accessing the dynamically allocated tx_qp=
+ arrays during driver teardown.
+- [High] Unprotected updates to u64_stats sequence counters in mana_xdp_xmi=
+t can corrupt stats synchronization for readers, leading to a hard lockup.
+--
 
-Thanks for your advice.
+commit a5fe13810d8b6aacf3c073e5e3abaddcaa39dd5d
+Author: Aditya Garg <gargaditya@linux.microsoft.com>
 
-On 5/1/26 15:53, Alexei Starovoitov wrote:
-> On Fri, May 1, 2026 at 8:36 AM Yazhou Tang <tangyazhou@zju.edu.cn> wrote:
->>
->> Hi Quentin,
->>
->> Thanks for your reply.
->>
->> On 4/30/26 23:25, Quentin Monnet wrote:
->>> 2026-04-30 23:00 UTC+0800 ~ Yazhou Tang <tangyazhou@zju.edu.cn>
->>>> Hi Kuohai,
->>>>
->>>> Thanks for your review and the Acked-by tag.
->>>>
->>>> On 4/30/26 11:29, Xu Kuohai wrote:
->>>>> On 4/30/2026 1:19 AM, Yazhou Tang wrote:
->>>>
->>>> [...]
->>>>
->>>>>> diff --git a/tools/bpf/bpftool/cfg.c b/tools/bpf/bpftool/cfg.c
->>>>>> index e3785f9a697d..df43a0e0023f 100644
->>>>>> --- a/tools/bpf/bpftool/cfg.c
->>>>>> +++ b/tools/bpf/bpftool/cfg.c
->>>>>> @@ -142,7 +142,7 @@ static bool cfg_partition_funcs(struct cfg *cfg,
->>>>>> struct bpf_insn *cur,
->>>>>>                 continue;
->>>>>>             if (cur->src_reg != BPF_PSEUDO_CALL)
->>>>>>                 continue;
->>>>>> -        func = cfg_append_func(cfg, cur + cur->off + 1);
->>>>>> +        func = cfg_append_func(cfg, cur + cur->imm + 1);
->>>>>
->>>>> Do we need to matain backward compatibility with the old bpftool here?
->>>>> I suspect not, but I'm not entirely sure.
->>>>
->>>> I agree. Since bpftool is maintained in-tree, it should be enough to just
->>>> keep it in sync with the current kernel tree.
->>>
->>> Hi, bpftool is also mirrored on GitHub at
->>> https://github.com/libbpf/bpftool
->>> and many people build it from there, so yes, it should be backward
->>> compatible if possible at all.
->>
->> Thanks for pointing that out. Considering this situation, I will make
->> sure to maintain backward compatibility in bpftool.
->>
->> However, since the xlated format for BPF_PSEUDO_CALL swaps the imm and
->> off fields, distinguishing the old format from the new one purely from
->> the instruction stream seems a bit tricky. Both fields could technically
->> contain small integers.
->>
->> I'm not very familiar with bpftool. Is there a standard/preferred way
->> in bpftool to probe for such kernel behavior changes?
->>
->> One potential approach could be to load a minimal dummy BPF program with
->> a BPF_PSEUDO_CALL instruction, dump its xlated instructions, and check
->> whether the kernel stored the offset in imm or off. Finally use this
->> boolean result for subsequent bpftool dumps.
->>
->> Do you have any suggestions on this? Thanks again for the guidance.
-> 
-> There should be no need to do probing in bpftool.
-> The xlated insns should be translated back to the original format
-> by the kernel.
+net: mana: Use per-queue allocation for tx_qp to reduce allocation size
 
-Got it. I will restore the original format for the xlated insns in
-bpf_insn_prepare_dump() and drop the bpftool modifications.
+This commit converts tx_qp from a contiguous array allocation to an array of
+pointers. It allocates each queue's mana_tx_qp individually via kvzalloc,
+which provides vmalloc fallback and helps avoid allocation failures due to
+memory fragmentation.
 
-One minor issue is that the printed offset will still be truncated
-if the real offset (the original insn->imm) is out of s16 bounds.
-To avoid confusion, I will just set it to 0 in that case. See prior
-discussion in https://lore.kernel.org/bpf/422fce2b-228d-40d0-8fbf-f295f2aac0db@zju.edu.cn/
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_bpf.c b/drivers/net=
+/ethernet/microsoft/mana/mana_bpf.c
+> index 7697c9b52ed3..b5e9bb184a1d 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_bpf.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
+> @@ -68,7 +68,7 @@ int mana_xdp_xmit(struct net_device *ndev, int n, struc=
+t xdp_frame **frames,
+>  		count++;
+>  	}
+> =20
+> -	tx_stats =3D &apc->tx_qp[q_idx].txq.stats;
+> +	tx_stats =3D &apc->tx_qp[q_idx]->txq.stats;
 
-Thanks for your guidance.
+Can mana_xdp_xmit() be called concurrently on multiple CPUs that map to the
+same q_idx?
 
+If the number of online CPUs exceeds the number of TX queues,
+smp_processor_id() % ndev->real_num_tx_queues will result in multiple CPUs
+sharing the same queue index.
+
+The subsequent call to u64_stats_update_begin() requires mutual exclusion
+among writers. Concurrent writes without locks could corrupt the underlying
+sequence counter, potentially leaving it permanently odd and causing readers
+to spin infinitely.
+
+Additionally, since this function runs locklessly, could this pointer
+dereference race with the driver teardown path?
+
+If a teardown thread clears port_is_up right after the early check in
+mana_xdp_xmit(), and proceeds to call mana_destroy_txq(), it frees the tx_qp
+elements via kvfree() without an intervening synchronize_net() or RCU grace
+period. This could lead to a use-after-free when accessing txq.stats.
+
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/=
+ethernet/microsoft/mana/mana_en.c
+> index a654b3699c4c..8adf72b96145 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+
+[ ... ]
+
+> @@ -614,7 +614,7 @@ static void mana_get_stats64(struct net_device *ndev,
+>  	}
+> =20
+>  	for (q =3D 0; q < num_queues; q++) {
+> -		tx_stats =3D &apc->tx_qp[q].txq.stats;
+> +		tx_stats =3D &apc->tx_qp[q]->txq.stats;
+
+Could this suffer from the same use-after-free race with teardown as
+mentioned above?
+
+Since mana_get_stats64() runs locklessly, it can run concurrently with
+teardown paths like mana_per_port_queue_reset_work_handler(). The tx_qp
+array elements might be freed by mana_destroy_txq() while mana_get_stats64()
+is attempting to read the stats.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260502074552.2385=
+7-1-gargaditya@linux.microsoft.com?part=3D1
