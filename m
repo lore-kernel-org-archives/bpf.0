@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2113A9D84
-	for <bpf@vger.kernel.org>; Sun,  3 May 2026 21:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BFC370D6D
+	for <bpf@vger.kernel.org>; Sun,  3 May 2026 22:12:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777845598; cv=none; b=JvvD55bOQ74biilFBoBzoOTA4NJt/n1vmCzwlk5mi6nfb4iVDk0dUNzjwYj4YupERsYGb6KEA6bLYWXM2GY9UBP3Z6bNzgiV0ouQE0ef6MkZxRen4ab3t6w/K4UxtPFaP1QLwSgZuVkoscEZmw4gc0yMYpyFLTjFheuED3bpP5Q=
+	t=1777846322; cv=none; b=fmBHd7Y/KsEdBfdzvOA5bwJePF9d83T7NzLHPunzEZwVZJYpZ0qt1uUn/oarCngzP/WlEDsJ69dzfjWTtsFI97KCxQBoNUKvllDcV8JoB3uImnZWT1Ep3xhWLRzmm63hH3dqxanNzhxD4MCbvLUpNQCyEKjSAf2y42Xe4iFSzIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777845598; c=relaxed/simple;
-	bh=f6qeSgrgy0PbQbD40ae5eS+0TiLIwJLgghCtxkdf9lY=;
+	s=arc-20240116; t=1777846322; c=relaxed/simple;
+	bh=bDnnwCVn9aHfiRddj3/UTVA8YKrQGCPk0TyyNAiPaNc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mfyKNK1v4x8deZTEKCipBuIEiYk+EUsa+8D4bGhtlb1USyz1ekYxkIFg2kt7bXyjB5/HVwJ7kpXwe+kWaP6/OLvxZGYNEvh07vhlUz+n1DL58Cdtv2P9SOwho9EK36MDB+58eanzupFQFKH2bOnSdFhJXeJMaYw5QPSJeZMOFeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ig1bJXlm; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=Q0iQAM4lk2zIsDsES1wIC3Gn3Mlsp/l4Vc5kIH/rl1rzsB5auqxP+9j5Ehl6YvQRjuL8wpjpbFMwMW+bCErErTV8vsQO5G0HtCiKqekopvRAhibNmVq4/dCv0F6JVEqZ/c2pWBYXfFTUi/Oyw+QNJLQCAg6YtyTIbfDBpfcXXns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S1l3Mr1f; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ig1bJXlm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4828CC2BCB4;
-	Sun,  3 May 2026 21:59:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S1l3Mr1f"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFD1BC2BCB4;
+	Sun,  3 May 2026 22:12:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777845598;
-	bh=f6qeSgrgy0PbQbD40ae5eS+0TiLIwJLgghCtxkdf9lY=;
+	s=k20201202; t=1777846322;
+	bh=bDnnwCVn9aHfiRddj3/UTVA8YKrQGCPk0TyyNAiPaNc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Ig1bJXlm+xeRc3jbEQtren13BOPdxx/L5yH4rn7dsf6gUcqb3SSVNXb9XR1PiAAiZ
-	 hZ+MkQRMULlNnWreutNFsKlWQY8y0rw0RETxquL86cIme2GYmp7A+2LpE4/s25GWlq
-	 ugTw2Pa2g6ktwIXjozoQnpFP6/k6bZaXN7Dt3xGDTthhbRGYIIkdLLIcJ46pPm6BVv
-	 /41Rm2AyY+0OE5pic+dWtD8tdj1dMSHP7BIdxj2o1N5FI+E8eff5AXCmNB6dMqgWB3
-	 +Onnx4vJadHKLK+nhp/SYDPGs+AS/btgN0MCSeCuKoF3q0ILmMiwQ9kjeLkjJ3tsrg
-	 Om0ldiwqDi1Uw==
+	b=S1l3Mr1fLgiF55qoQEiIsz5d0XuB0aZsrrED7XwSJwVZ5A5Ii+pmWrCYUQ54yCDWq
+	 kjtxidlVJdPBpfB8NKMG2J9x78hKcxP4W0bxDRgEsCFmvcrnyxMLMBp2l7fAbMueFu
+	 mhQMaaOZQwdWCgHbGc67CCjozlm6cPStDboPkCRNCRcvgRg7dLLK2j5pM5fed4SSO5
+	 SaPG9V2sq4Cj+aUd2c0YYRArtvmS3U+kdZKklRsJNXD29R/xFrOGD+Wl5bHzpw+CIc
+	 GD/4vlEzIepWA8jLKUjki17DxhUWWGDyTr2bbZNvBNo87hmfME7aI8lYPXUyNF6T26
+	 ZGdeyaJZ10Ekg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/2] bpf: add bpf_init_inode_xattr kfunc for atomic
- inode labeling
+Subject: Re: [PATCH v2 2/2] selftests/bpf: add tests for
+ bpf_init_inode_xattr kfunc
 Reply-To: sashiko@lists.linux.dev
 To: "David Windsor" <dwindsor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260503211835.16103-2-dwindsor@gmail.com>
-References: <20260503211835.16103-2-dwindsor@gmail.com>
+In-Reply-To: <20260503211835.16103-3-dwindsor@gmail.com>
+References: <20260503211835.16103-3-dwindsor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 03 May 2026 21:59:57 +0000
-Message-Id: <20260503215958.4828CC2BCB4@smtp.kernel.org>
+Date: Sun, 03 May 2026 22:12:01 +0000
+Message-Id: <20260503221201.DFD1BC2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,127 +46,99 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] `bpf_init_inode_xattr` uses `GFP_KERNEL` for memory allocation, wh=
-ich can cause filesystem deadlocks.
-- [High] SELinux unconditionally reserves an xattr slot before returning -E=
-OPNOTSUPP, creating a gap that causes subsequent LSM xattrs to be silently =
-ignored.
-- [Medium] `bpf_init_inode_xattr` returns `-EINVAL` instead of `-EOPNOTSUPP=
-` when the filesystem does not support xattrs, creating a footgun that can =
-break system-wide file creation.
+- [Medium] The test will fail spuriously if the target test file already ex=
+ists.
+- [Medium] Uninitialized stack memory is read if `getxattr` returns a small=
+er length than expected.
+- [Low] The test fails instead of gracefully skipping on filesystems that d=
+o not support xattrs.
 --
 
-commit 00cf871463d8e20da79c3ca19beea5e0a775a6d4
+commit 96e5b274b42a271a01409d6e21dc11302496f1d3
 Author: David Windsor <dwindsor@gmail.com>
 
-bpf: add bpf_init_inode_xattr kfunc for atomic inode labeling
+selftests/bpf: add tests for bpf_init_inode_xattr kfunc
 
-This commit adds the bpf_init_inode_xattr() kfunc to allow BPF LSM
-programs to atomically set xattrs via the inode_init_security hook.
-It encapsulates the xattr array and count into a new lsm_xattr_ctx
-structure and updates existing callers to use it.
+This commit tests BPF atomic inode xattr labeling via the
+inode_init_security LSM hook.
 
-> diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
-> index 9d27be058494..193accc00796 100644
-> --- a/fs/bpf_fs_kfuncs.c
-> +++ b/fs/bpf_fs_kfuncs.c
-
+> diff --git a/tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c b/tools/t=
+esting/selftests/bpf/prog_tests/fs_kfuncs.c
+> index 43a26ec69a8e..26daef116ee2 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/fs_kfuncs.c
 [ ... ]
-
-> +static int __bpf_init_inode_xattr(struct lsm_xattr_ctx *xattr_ctx,
-> +				  const char *name__str,
-> +				  const struct bpf_dynptr *value_p)
+> @@ -268,6 +269,51 @@ static void test_fsverity(void)
+>  	remove(testfile);
+>  }
+> =20
+> +static void test_init_inode_xattr(void)
 > +{
-
+> +	struct test_init_inode_xattr *skel =3D NULL;
+> +	int fd =3D -1, err;
+> +	char value_out[32];
+> +	const char *testfile_new =3D "/tmp/test_progs_fs_kfuncs_new";
 [ ... ]
+> +	/* Create a new file =E2=80=94 this triggers inode_init_security */
+> +	fd =3D open(testfile_new, O_CREAT | O_RDWR, 0644);
 
-> +	xattrs =3D xattr_ctx->xattrs;
-> +	xattr_count =3D xattr_ctx->xattr_count;
-> +	if (!xattrs || !xattr_count)
-> +		return -EINVAL;
+Could this cause spuriously failing tests if the file already exists from a
+previous, aborted run?
 
-Does returning -EINVAL here break file creation on filesystems that do not
-support xattrs?
+If the file exists, no new inode is created, so the inode_init_security
+hook won't be triggered, leaving init_result at -1.
 
-For filesystems like pipefs or procfs, the initxattrs callback passed to
-security_inode_init_security is NULL, making xattr_ctx->xattrs NULL. If
-a BPF program propagates this -EINVAL return value directly from the
-inode_init_security hook, the core VFS wrapper treats it as a hard error
-and aborts inode creation entirely.
+Should we unlink the file before opening it, or use the O_EXCL flag to ensu=
+re
+we're creating a new inode?
 
-Could this return -EOPNOTSUPP instead to align with other LSMs and allow
-the core code to gracefully ignore the unsupported operation?
-
-[ ... ]
-
-> +	value_len =3D __bpf_dynptr_size(value_ptr);
-> +	if (value_len =3D=3D 0 || value_len > XATTR_SIZE_MAX)
-> +		return -EINVAL;
+> +	if (!ASSERT_GE(fd, 0, "create_file"))
+> +		goto out;
 > +
-> +	value =3D __bpf_dynptr_data(value_ptr, value_len);
-> +	if (!value)
-> +		return -EINVAL;
+> +	ASSERT_EQ(skel->data->init_result, 0, "init_result");
 > +
-> +	/* Combine xattr value + name into one allocation. */
-> +	xattr_value =3D kmalloc(value_len + name_len + 1, GFP_KERNEL);
-> +	if (!xattr_value)
-> +		return -ENOMEM;
+> +	/* The initxattrs callback prepends "security." to the name */
+> +	err =3D getxattr(testfile_new, "security.bpf.test_label", value_out,
+> +		       sizeof(value_out));
+> +	if (err < 0 && errno =3D=3D ENODATA) {
 
-Could this GFP_KERNEL allocation cause an ABBA deadlock?
+Will this fail the test instead of gracefully skipping it on filesystems
+that don't support extended attributes?
 
-The inode_init_security LSM hook is executed during VFS file creation
-(e.g., vfs_mkdir, vfs_create), typically while the caller holds critical
-filesystem locks or active journal transactions.
+If the filesystem lacks xattr support (like some tmpfs configs), getxattr
+will return -EOPNOTSUPP.
 
-Calling kmalloc with GFP_KERNEL allows the memory allocator to sleep and
-enter direct memory reclaim. This might attempt to flush dirty pages or
-free inodes on the same filesystem, recursively attempting to acquire
-the exact same locks.
+Could we broaden the check to include EOPNOTSUPP?
 
-Should this use GFP_NOFS, similar to how the core
-security_inode_init_security wrapper and other LSMs handle allocations
-in this hook?
+> +		printf("%s:SKIP:filesystem did not apply LSM xattrs\n",
+> +		       __func__);
+> +		test__skip();
+> +		goto out;
+> +	}
+> +	if (!ASSERT_GE(err, 0, "getxattr"))
+> +		goto out;
+> +
+> +	ASSERT_EQ(err, (int)sizeof(skel->data->xattr_value), "xattr_size");
+> +	ASSERT_EQ(strncmp(value_out, "test_value",
+> +			  sizeof("test_value")), 0, "xattr_value");
 
-[ ... ]
+Could this lead to an uninitialized stack memory read?
 
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index 97801966bf32..dca81a22bf83 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
+If getxattr returns a smaller size than expected, the size assertion will
+fail, but execution will continue to strncmp since there is no goto out.
+Because value_out is uninitialized, strncmp may read garbage data and
+trigger KMSAN errors.
 
-[ ... ]
+Would it be better to wrap the size assertion with if (!ASSERT_EQ(...))
+goto out, or zero-initialize value_out?
 
->  static int selinux_inode_init_security(struct inode *inode, struct inode=
- *dir,
->  				       const struct qstr *qstr,
-> -				       struct xattr *xattrs, int *xattr_count)
-> +				       struct lsm_xattr_ctx *xattr_ctx)
->  {
->  	const struct cred_security_struct *crsec =3D selinux_cred(current_cred(=
-));
->  	struct superblock_security_struct *sbsec;
-> -	struct xattr *xattr =3D lsm_get_xattr_slot(xattrs, xattr_count);
-> +	struct xattr *xattr =3D lsm_get_xattr_slot(xattr_ctx);
->  	u32 newsid, clen;
->  	u16 newsclass;
->  	int rc;
-
-This isn't a bug introduced by this patch, but does allocating the xattr
-slot here cause subsequent LSM xattrs to be silently ignored if SELinux
-later returns -EOPNOTSUPP?
-
-selinux_inode_init_security calls lsm_get_xattr_slot unconditionally
-at the beginning of the function. If it subsequently decides not to
-provide an xattr (e.g., if the mount does not support labeling), it
-returns -EOPNOTSUPP.
-
-Since the slot has already been consumed and the count incremented, the
-reserved slot's name pointer is left as NULL. The filesystem's
-initxattrs iterators loop over the array and terminate early upon
-encountering name =3D=3D NULL, which causes any valid xattrs added by
-subsequent LSMs (like EVM or this new BPF kfunc) to be dropped and
-ignored instead of being written to disk.
+> +
+> +out:
+> +	close(fd);
+> +	test_init_inode_xattr__destroy(skel);
+> +	remove(testfile_new);
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260503211835.1610=
-3-1-dwindsor@gmail.com?part=3D1
+3-1-dwindsor@gmail.com?part=3D2
