@@ -1,114 +1,172 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D783A9D84;
-	Sun,  3 May 2026 21:52:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2113A9D84
+	for <bpf@vger.kernel.org>; Sun,  3 May 2026 21:59:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777845179; cv=none; b=rf1UEQc4a++hsIw9jUq/E1GWMptxpW651qV1KYZDyF8zxO2kSIZiqGoi2GRdRgWb99mInSC0gEmhCjsWulekSlzOjp/w8t/YJgkrbDf/Txd+T/Y+lpNREwcJHjuPleprpYu/JTthp83JNkopfc2txBz339cQuY6OArcD5eMP9SU=
+	t=1777845598; cv=none; b=JvvD55bOQ74biilFBoBzoOTA4NJt/n1vmCzwlk5mi6nfb4iVDk0dUNzjwYj4YupERsYGb6KEA6bLYWXM2GY9UBP3Z6bNzgiV0ouQE0ef6MkZxRen4ab3t6w/K4UxtPFaP1QLwSgZuVkoscEZmw4gc0yMYpyFLTjFheuED3bpP5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777845179; c=relaxed/simple;
-	bh=72SmyEyDLbiT7++hepSoCz6MaVfcFTfSnK6Vg/ULnSo=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=iWXfM9XGGrZXkvTpUHMl4CW8+8OMfJjrekYjkk7yx/iU4V4m98+XsvfIMH8z6iMPNwLrh7KqHZxSdv0dlJKzf6kZCps29A5wHYViliTqJovZthlx+X5idefGO9D6iJGEZc9iNExDkjX4mUi2jmiJlY9QVxClo14N2kTbdtnFtAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NIukK26J; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777845598; c=relaxed/simple;
+	bh=f6qeSgrgy0PbQbD40ae5eS+0TiLIwJLgghCtxkdf9lY=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=mfyKNK1v4x8deZTEKCipBuIEiYk+EUsa+8D4bGhtlb1USyz1ekYxkIFg2kt7bXyjB5/HVwJ7kpXwe+kWaP6/OLvxZGYNEvh07vhlUz+n1DL58Cdtv2P9SOwho9EK36MDB+58eanzupFQFKH2bOnSdFhJXeJMaYw5QPSJeZMOFeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ig1bJXlm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NIukK26J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40645C2BCC4;
-	Sun,  3 May 2026 21:52:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ig1bJXlm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4828CC2BCB4;
+	Sun,  3 May 2026 21:59:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777845178;
-	bh=72SmyEyDLbiT7++hepSoCz6MaVfcFTfSnK6Vg/ULnSo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=NIukK26JIkbEydwsy8SnFcdQycTfospEyi+XJPBki4SE1XVDLj6Hp4C7mys7CmE5i
-	 Al1yGkqzH0BH7S8MoM2/a8Ov/apQpGD9b68wVydCpvgEFCcrV4StzV5BK+IlYppcsY
-	 JR/RBWSsowp2hJwCaPN/YA/usRrAX86kky7WfFiDY60i+rd/Swh3ZXnObXfRrudab1
-	 Imr33IlORwX1BfodLQ/50/agc+/VhFaM+AqJK7i0Y2nuPv01jZ8su55u2Bt5gWlauD
-	 vPqRTu8Y+gnPfS4l5nmGoe4zBQ+S3fFjj/kPZ8GxneEb3PcNzGGy/mzdSxyIJCfnxK
-	 DZ/pwatjnG0CA==
-Content-Type: multipart/mixed; boundary="===============6494934059923081557=="
+	s=k20201202; t=1777845598;
+	bh=f6qeSgrgy0PbQbD40ae5eS+0TiLIwJLgghCtxkdf9lY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=Ig1bJXlm+xeRc3jbEQtren13BOPdxx/L5yH4rn7dsf6gUcqb3SSVNXb9XR1PiAAiZ
+	 hZ+MkQRMULlNnWreutNFsKlWQY8y0rw0RETxquL86cIme2GYmp7A+2LpE4/s25GWlq
+	 ugTw2Pa2g6ktwIXjozoQnpFP6/k6bZaXN7Dt3xGDTthhbRGYIIkdLLIcJ46pPm6BVv
+	 /41Rm2AyY+0OE5pic+dWtD8tdj1dMSHP7BIdxj2o1N5FI+E8eff5AXCmNB6dMqgWB3
+	 +Onnx4vJadHKLK+nhp/SYDPGs+AS/btgN0MCSeCuKoF3q0ILmMiwQ9kjeLkjJ3tsrg
+	 Om0ldiwqDi1Uw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 1/2] bpf: add bpf_init_inode_xattr kfunc for atomic
+ inode labeling
+Reply-To: sashiko@lists.linux.dev
+To: "David Windsor" <dwindsor@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260503211835.16103-2-dwindsor@gmail.com>
+References: <20260503211835.16103-2-dwindsor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 03 May 2026 21:59:57 +0000
+Message-Id: <20260503215958.4828CC2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <2cf158e1e197e0674095c692361a1adcd5190d5d8f89061fcac605ce0907eb2d@mail.kernel.org>
-In-Reply-To: <20260503211835.16103-3-dwindsor@gmail.com>
-References: <20260503211835.16103-3-dwindsor@gmail.com>
-Subject: Re: [PATCH v2 2/2] selftests/bpf: add tests for bpf_init_inode_xattr kfunc
-From: bot+bpf-ci@kernel.org
-To: dwindsor@gmail.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,shuah@kernel.org
-Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun,  3 May 2026 21:52:57 +0000 (UTC)
 
---===============6494934059923081557==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] `bpf_init_inode_xattr` uses `GFP_KERNEL` for memory allocation, wh=
+ich can cause filesystem deadlocks.
+- [High] SELinux unconditionally reserves an xattr slot before returning -E=
+OPNOTSUPP, creating a gap that causes subsequent LSM xattrs to be silently =
+ignored.
+- [Medium] `bpf_init_inode_xattr` returns `-EINVAL` instead of `-EOPNOTSUPP=
+` when the filesystem does not support xattrs, creating a footgun that can =
+break system-wide file creation.
+--
 
-PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvZnNf
-a2Z1bmNzLmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9mc19rZnVu
-Y3MuYwo+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL2ZzX2tm
-dW5jcy5jCj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvZnNf
-a2Z1bmNzLmMKPiBAQCAtOSw2ICs5LDcgQEAKPiAgI2luY2x1ZGUgPHRlc3RfcHJvZ3MuaD4KPiAg
-I2luY2x1ZGUgInRlc3RfZ2V0X3hhdHRyLnNrZWwuaCIKPiAgI2luY2x1ZGUgInRlc3Rfc2V0X3Jl
-bW92ZV94YXR0ci5za2VsLmgiCj4gKyNpbmNsdWRlICJ0ZXN0X2luaXRfaW5vZGVfeGF0dHIuc2tl
-bC5oIgo+ICAjaW5jbHVkZSAidGVzdF9mc3Zlcml0eS5za2VsLmgiCj4KPiAgc3RhdGljIGNvbnN0
-IGNoYXIgdGVzdGZpbGVbXSA9ICIvdG1wL3Rlc3RfcHJvZ3NfZnNfa2Z1bmNzIjsKPiBAQCAtMjY4
-LDYgKzI2OSw1MSBAQCBzdHJ1Y3QgZnN2ZXJpdHlfZW5hYmxlX2FyZyBhcmcgPSB7MH07Cj4gIAly
-ZW1vdmUodGVzdGZpbGUpOwo+ICB9Cj4KPiArc3RhdGljIHZvaWQgdGVzdF9pbml0X2lub2RlX3hh
-dHRyKHZvaWQpCj4gK3sKPiArCXN0cnVjdCB0ZXN0X2luaXRfaW5vZGVfeGF0dHIgKnNrZWwgPSBO
-VUxMOwo+ICsJaW50IGZkID0gLTEsIGVycjsKPiArCWNoYXIgdmFsdWVfb3V0WzMyXTsKCkNvdWxk
-IHZhbHVlX291dCBiZSByZWFkIHdoaWxlIHVuaW5pdGlhbGl6ZWQ/IElmIGdldHhhdHRyKCkgc3Vj
-Y2VlZHMgYnV0CnJldHVybnMgZmV3ZXIgYnl0ZXMgdGhhbiBleHBlY3RlZCwgdGhlIHNpemUgQVNT
-RVJUX0VRIGNoZWNrIHdpbGwgZmFpbCBidXQKZXhlY3V0aW9uIHdpbGwgY29udGludWUuCgpUaGUg
-c3Vic2VxdWVudCBzdHJuY21wKCkgbWlnaHQgdGhlbiByZWFkIHVuaW5pdGlhbGl6ZWQgc3RhY2sg
-bWVtb3J5LiBXb3VsZCBpdApiZSBiZXR0ZXIgdG8gemVyby1pbml0aWFsaXplIHRoaXMgYnVmZmVy
-LCBvciB1c2UgaWYgKCFBU1NFUlRfRVEoLi4uKSkgdG8KYWJvcnQgdGhlIHRlc3QgZWFybHk/Cgo+
-ICsJY29uc3QgY2hhciAqdGVzdGZpbGVfbmV3ID0gIi90bXAvdGVzdF9wcm9nc19mc19rZnVuY3Nf
-bmV3IjsKPiArCj4gKwlza2VsID0gdGVzdF9pbml0X2lub2RlX3hhdHRyX19vcGVuX2FuZF9sb2Fk
-KCk7Cj4gKwlpZiAoIUFTU0VSVF9PS19QVFIoc2tlbCwgInRlc3RfaW5pdF9pbm9kZV94YXR0cl9f
-b3Blbl9hbmRfbG9hZCIpKQo+ICsJCXJldHVybjsKPiArCj4gKwlza2VsLT5ic3MtPm1vbml0b3Jl
-ZF9waWQgPSBnZXRwaWQoKTsKPiArCWVyciA9IHRlc3RfaW5pdF9pbm9kZV94YXR0cl9fYXR0YWNo
-KHNrZWwpOwo+ICsJaWYgKCFBU1NFUlRfT0soZXJyLCAidGVzdF9pbml0X2lub2RlX3hhdHRyX19h
-dHRhY2giKSkKPiArCQlnb3RvIG91dDsKPiArCj4gKwkvKiBDcmVhdGUgYSBuZXcgZmlsZSDigJQg
-dGhpcyB0cmlnZ2VycyBpbm9kZV9pbml0X3NlY3VyaXR5ICovCj4gKwlmZCA9IG9wZW4odGVzdGZp
-bGVfbmV3LCBPX0NSRUFUIHwgT19SRFdSLCAwNjQ0KTsKCklmIHRoZSB0ZXN0IGZpbGUgYWxyZWFk
-eSBleGlzdHMgZnJvbSBhIHByZXZpb3VzIGZhaWxlZCBydW4sIHdpbGwgb3BlbigpIGp1c3QKb3Bl
-biB0aGUgZXhpc3RpbmcgZmlsZSB3aXRob3V0IHRyaWdnZXJpbmcgdGhlIGlub2RlX2luaXRfc2Vj
-dXJpdHkgaG9vaz8KClNpbmNlIHRoZSBob29rIG9ubHkgZmlyZXMgd2hlbiBhIG5ldyBpbm9kZSBp
-cyBpbnN0YW50aWF0ZWQsIHRoaXMgd291bGQgY2F1c2UKdGhlIHRlc3QgdG8gcGVyc2lzdGVudGx5
-IGZhaWwuIEFsc28sIHNpbmNlIHRoaXMgcnVucyBhcyByb290IGluIHRoZQp3b3JsZC13cml0YWJs
-ZSAvdG1wIGRpcmVjdG9yeSwgY291bGQgdGhpcyBwcmVkaWN0YWJsZSBwYXRoIGJlIHZ1bG5lcmFi
-bGUgdG8KYSBzeW1saW5rIGF0dGFjaz8KCldvdWxkIGFkZGluZyBPX0VYQ0wgdG8gdGhlIG9wZW4g
-ZmxhZ3MgZW5zdXJlIGJvdGggdGhhdCB0aGUgaG9vayBpcyB0cmlnZ2VyZWQKYW5kIHByZXZlbnQg
-c3ltbGluayBpc3N1ZXM/Cgo+ICsJaWYgKCFBU1NFUlRfR0UoZmQsIDAsICJjcmVhdGVfZmlsZSIp
-KQo+ICsJCWdvdG8gb3V0Owo+ICsKPiArCUFTU0VSVF9FUShza2VsLT5kYXRhLT5pbml0X3Jlc3Vs
-dCwgMCwgImluaXRfcmVzdWx0Iik7Cj4gKwo+ICsJLyogVGhlIGluaXR4YXR0cnMgY2FsbGJhY2sg
-cHJlcGVuZHMgInNlY3VyaXR5LiIgdG8gdGhlIG5hbWUgKi8KPiArCWVyciA9IGdldHhhdHRyKHRl
-c3RmaWxlX25ldywgInNlY3VyaXR5LmJwZi50ZXN0X2xhYmVsIiwgdmFsdWVfb3V0LAo+ICsJCSAg
-ICAgICBzaXplb2YodmFsdWVfb3V0KSk7Cj4gKwlpZiAoZXJyIDwgMCAmJiBlcnJubyA9PSBFTk9E
-QVRBKSB7CgpJZiB0aGUgdW5kZXJseWluZyAvdG1wIGZpbGVzeXN0ZW0gZG9lcyBub3Qgc3VwcG9y
-dCBleHRlbmRlZCBhdHRyaWJ1dGVzIGF0CmFsbCwgZ2V0eGF0dHIoKSByZXR1cm5zIC0xIHdpdGgg
-ZXJybm8gc2V0IHRvIEVPUE5PVFNVUFAgKG9yIEVOT1RTVVApLiBTaG91bGQKdGhpcyBjb25kaXRp
-b24gYWxzbyBiZSBoYW5kbGVkIHRvIGNvcnJlY3RseSBza2lwIHRoZSB0ZXN0IGluc3RlYWQgb2Yg
-ZmFpbGluZwpvbiB0aGUgbmV4dCBBU1NFUlRfR0UgY2hlY2s/Cgo+ICsJCXByaW50ZigiJXM6U0tJ
-UDpmaWxlc3lzdGVtIGRpZCBub3QgYXBwbHkgTFNNIHhhdHRyc1xuIiwKPiArCQkgICAgICAgX19m
-dW5jX18pOwo+ICsJCXRlc3RfX3NraXAoKTsKPiArCQlnb3RvIG91dDsKPiArCX0KPiArCWlmICgh
-QVNTRVJUX0dFKGVyciwgMCwgImdldHhhdHRyIikpCj4gKwkJZ290byBvdXQ7Cj4gKwo+ICsJQVNT
-RVJUX0VRKGVyciwgKGludClzaXplb2Yoc2tlbC0+ZGF0YS0+eGF0dHJfdmFsdWUpLCAieGF0dHJf
-c2l6ZSIpOwo+ICsJQVNTRVJUX0VRKHN0cm5jbXAodmFsdWVfb3V0LCAidGVzdF92YWx1ZSIsCj4g
-KwkJCSAgc2l6ZW9mKCJ0ZXN0X3ZhbHVlIikpLCAwLCAieGF0dHJfdmFsdWUiKTsKPiArCj4gK291
-dDoKPiArCWNsb3NlKGZkKTsKCklmIGFuIGVycm9yIG9jY3VycyBiZWZvcmUgdGhlIGZpbGUgaXMg
-b3BlbmVkIChlLmcuIGR1cmluZyBza2VsZXRvbiBsb2FkIG9yCmF0dGFjaCksIGZkIHdpbGwgYmUg
-LTEuIERvZXMgdGhpcyByZXN1bHQgaW4gYW4gdW5uZWNlc3NhcnkgY2xvc2UoLTEpIHdoaWNoCnJl
-dHVybnMgLUVCQURGPyBTaG91bGQgdGhpcyBiZSBndWFyZGVkIHdpdGggaWYgKGZkID49IDApPwoK
-PiArCXRlc3RfaW5pdF9pbm9kZV94YXR0cl9fZGVzdHJveShza2VsKTsKPiArCXJlbW92ZSh0ZXN0
-ZmlsZV9uZXcpOwo+ICt9CgoKLS0tCkFJIHJldmlld2VkIHlvdXIgcGF0Y2guIFBsZWFzZSBmaXgg
-dGhlIGJ1ZyBvciBlbWFpbCByZXBseSB3aHkgaXQncyBub3QgYSBidWcuClNlZTogaHR0cHM6Ly9n
-aXRodWIuY29tL2tlcm5lbC1wYXRjaGVzL3ZtdGVzdC9ibG9iL21hc3Rlci9jaS9jbGF1ZGUvUkVB
-RE1FLm1kCgpDSSBydW4gc3VtbWFyeTogaHR0cHM6Ly9naXRodWIuY29tL2tlcm5lbC1wYXRjaGVz
-L2JwZi9hY3Rpb25zL3J1bnMvMjUyOTEzODEyMzc=
+commit 00cf871463d8e20da79c3ca19beea5e0a775a6d4
+Author: David Windsor <dwindsor@gmail.com>
 
---===============6494934059923081557==--
+bpf: add bpf_init_inode_xattr kfunc for atomic inode labeling
+
+This commit adds the bpf_init_inode_xattr() kfunc to allow BPF LSM
+programs to atomically set xattrs via the inode_init_security hook.
+It encapsulates the xattr array and count into a new lsm_xattr_ctx
+structure and updates existing callers to use it.
+
+> diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
+> index 9d27be058494..193accc00796 100644
+> --- a/fs/bpf_fs_kfuncs.c
+> +++ b/fs/bpf_fs_kfuncs.c
+
+[ ... ]
+
+> +static int __bpf_init_inode_xattr(struct lsm_xattr_ctx *xattr_ctx,
+> +				  const char *name__str,
+> +				  const struct bpf_dynptr *value_p)
+> +{
+
+[ ... ]
+
+> +	xattrs =3D xattr_ctx->xattrs;
+> +	xattr_count =3D xattr_ctx->xattr_count;
+> +	if (!xattrs || !xattr_count)
+> +		return -EINVAL;
+
+Does returning -EINVAL here break file creation on filesystems that do not
+support xattrs?
+
+For filesystems like pipefs or procfs, the initxattrs callback passed to
+security_inode_init_security is NULL, making xattr_ctx->xattrs NULL. If
+a BPF program propagates this -EINVAL return value directly from the
+inode_init_security hook, the core VFS wrapper treats it as a hard error
+and aborts inode creation entirely.
+
+Could this return -EOPNOTSUPP instead to align with other LSMs and allow
+the core code to gracefully ignore the unsupported operation?
+
+[ ... ]
+
+> +	value_len =3D __bpf_dynptr_size(value_ptr);
+> +	if (value_len =3D=3D 0 || value_len > XATTR_SIZE_MAX)
+> +		return -EINVAL;
+> +
+> +	value =3D __bpf_dynptr_data(value_ptr, value_len);
+> +	if (!value)
+> +		return -EINVAL;
+> +
+> +	/* Combine xattr value + name into one allocation. */
+> +	xattr_value =3D kmalloc(value_len + name_len + 1, GFP_KERNEL);
+> +	if (!xattr_value)
+> +		return -ENOMEM;
+
+Could this GFP_KERNEL allocation cause an ABBA deadlock?
+
+The inode_init_security LSM hook is executed during VFS file creation
+(e.g., vfs_mkdir, vfs_create), typically while the caller holds critical
+filesystem locks or active journal transactions.
+
+Calling kmalloc with GFP_KERNEL allows the memory allocator to sleep and
+enter direct memory reclaim. This might attempt to flush dirty pages or
+free inodes on the same filesystem, recursively attempting to acquire
+the exact same locks.
+
+Should this use GFP_NOFS, similar to how the core
+security_inode_init_security wrapper and other LSMs handle allocations
+in this hook?
+
+[ ... ]
+
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index 97801966bf32..dca81a22bf83 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+
+[ ... ]
+
+>  static int selinux_inode_init_security(struct inode *inode, struct inode=
+ *dir,
+>  				       const struct qstr *qstr,
+> -				       struct xattr *xattrs, int *xattr_count)
+> +				       struct lsm_xattr_ctx *xattr_ctx)
+>  {
+>  	const struct cred_security_struct *crsec =3D selinux_cred(current_cred(=
+));
+>  	struct superblock_security_struct *sbsec;
+> -	struct xattr *xattr =3D lsm_get_xattr_slot(xattrs, xattr_count);
+> +	struct xattr *xattr =3D lsm_get_xattr_slot(xattr_ctx);
+>  	u32 newsid, clen;
+>  	u16 newsclass;
+>  	int rc;
+
+This isn't a bug introduced by this patch, but does allocating the xattr
+slot here cause subsequent LSM xattrs to be silently ignored if SELinux
+later returns -EOPNOTSUPP?
+
+selinux_inode_init_security calls lsm_get_xattr_slot unconditionally
+at the beginning of the function. If it subsequently decides not to
+provide an xattr (e.g., if the mount does not support labeling), it
+returns -EOPNOTSUPP.
+
+Since the slot has already been consumed and the count incremented, the
+reserved slot's name pointer is left as NULL. The filesystem's
+initxattrs iterators loop over the array and terminate early upon
+encountering name =3D=3D NULL, which causes any valid xattrs added by
+subsequent LSMs (like EVM or this new BPF kfunc) to be dropped and
+ignored instead of being written to disk.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260503211835.1610=
+3-1-dwindsor@gmail.com?part=3D1
