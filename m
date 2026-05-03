@@ -1,704 +1,97 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 704513CD8D5
-	for <bpf@vger.kernel.org>; Sun,  3 May 2026 16:51:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C910B3D16F1
+	for <bpf@vger.kernel.org>; Sun,  3 May 2026 17:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777827099; cv=none; b=NJO5/U0bdHsAHL7tmDrizN4qYNvmtvZDqUVaP/ikFvW+mhSE2ir8dxFjq0iOkpShroQgmfrUb/+Vb6sSIK7SW/31HnBHs1pfLTth3ZWz+M3jET2NJcT1lngaM3GBKJUdh6ymdvR3up14YCKxwqULyHrjGIu2kOBrK9Yk6forbDQ=
+	t=1777827674; cv=none; b=QGJs54lI3iBsg43Dfzs5oZMYe6O3t3nLlDtIk0Ev401yz+HGs7I4XxNydBtnN1Cy4FaxbieQZOXOsGK5ahGPlynMoE0eIFxBZmE+XYyC98zQHpzZR6BE7bBmFflc/nq+ntZRtvmQq+A7tjUsDUc3dN3OgP+gYRXc4Xt0UyWQHqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777827099; c=relaxed/simple;
-	bh=z7gyAYMig6uJ3OQmowNQvBSFZn0SdQWRfQXdX2kdkmg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Gr0bCvo0yufnUZIjj23M9wVT+ObwgmHgfYO3mUaj1KCPU/xDpM5rC5RxlD0hB6kwnBUf82dNoXDYgAdw6pXhuqV+oC3SEHJHS3TJRFx50wJ3SxPKUBQOKDc+nlNa6o31PnTHFY8o+nSM4lsL9OXFX1sBDxxnsX4Ahbfz6LsRMTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TgGpS4F8; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777827674; c=relaxed/simple;
+	bh=xcismaF+50EUVwBdvTSHVQ3O45RhQiaHzhsBFqxZFoE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=VIhRBNV2q2uWvnded8pOti0ksjpyiDlh241RQdUXS3oCev2rhWL7YPl5Q6nmGV0uoX/g3XvSbvUuHbD0E53XG10oRCzxLHYR1KINJ3B4f1ToZ8so3SpXQXslrdgJGGIfgncc6h/G8smazFlj8b52BC21H4p/8zqpRhzqH6Pk+38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=df9RzoNq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TgGpS4F8"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8379e010b01so38185b3a.1
-        for <bpf@vger.kernel.org>; Sun, 03 May 2026 09:51:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777827089; x=1778431889; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kdu5+fSnVWCGaHSDNy5Sqn0Y2MXs1Uyb3JHpXbPoVvc=;
-        b=TgGpS4F86K1VxJ/MHrPzY0fKK8kOj44E3XC5Gi/HGDU9pgaQJ6Rwdf8qPjvRJashvh
-         QNABaF0Do8HtNKDk4P/hbVcwmtUEyvpjmgLRXWe8qM4NwlI9XSOgpVRjz8ySIr/LHJo9
-         jlKAzLn2l12+2pWENNlqcWXHxfOMLGzcKo4iRf7GFRRNyyo1MoyoslW9V1QtIpSbj2Q7
-         hKmSLgRGKRHr9WZcQKXqSDPaNaMXgOAGuCbF6dEtZ27fR+ziRn86B9bHORLGuayPI4w0
-         WR/hHRRtAH8qsxXDef2RXt2eRiSdql0L6EAGdQ7KVzN6LV6IvjlHni7sGurEYqfl9MRK
-         yOEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777827089; x=1778431889;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Kdu5+fSnVWCGaHSDNy5Sqn0Y2MXs1Uyb3JHpXbPoVvc=;
-        b=RUddDq1/jvjhntemSJ3iTq0uoChedltuskkxX28/UbnSjO82wHWj4//+5lQZT3AhPa
-         YKIbCPPMDkhlM7LD4YcOf1f2U293osNzwx0rkuGSXxhpfrVVvZIh+TAoE/p1UyN987M3
-         hN3s+UXgk9NrLYbULV1vRgUhB25eQ7qY2AgH+toVcQEJoRz/UNaMAamgoVa4PjXwFHIh
-         5wghgqHZEEb3/hjSq4FdW8rUFbLie7n+Ch54e+Q6Pc1GPiu77Xb46FUOwt9T4t6qkq82
-         JDdFYc609amt10wHwGBM3waf+PH/Kt4xD1DBguzEwpjjcbxevzibLbIxBsoLjN51KNCi
-         2OLQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+swpy/5D56hIpAbJRJX1IEfL3gH55kOv68sOY82jeVgIo9hM+6MIOD37r/MyXvSFpmjwg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydRuedB2M4zHvUC/6+WXbglfmylO3mSAx2GPghJF0TCNDbogIQ
-	99OZH76GLyPEkbl0t/dKH2seNcl6GghojCyPPGJu7A7XNu4w3jbEuO7I
-X-Gm-Gg: AeBDieuE6vpJIqUtqgqBbOAAG898iNUsFjenyvX0a+Btizmp86mKcDyh9o0/E5hw5LQ
-	uTqTFNsN73WE4v5flCVvfMkziU3ollGN0fougIblCjtIKE7cLu6H27QLpljIAF9/43ELGEMDRB1
-	oOY6VKGym8K2W2xsYwRLKnXTTkh1ldcJ31gK57onSAXwyvPWS5SvkM/+FT7Ig9P7Sn4yAxwRFph
-	f5UfDFO/lYVywWo+lqcj8O8Gg0shLB3yT3OqmHFB/YnBgmFJiWPv+BvdV7/QRK2AoLdeMk7x3jC
-	Zrx3M9cQkNw+0kxCLRstC46JPA8ocTVNQCs37gkxLcFPdqdH31gRtw5A5rfEowZVYG5dWcU/HVo
-	icZpqrLgdalIkCkI+CFTH6hym5IdCwAuzpYv7VFLdQb75jUQDxRV46jHTke8U51+2rI2+3iCl00
-	qDpFp/JAcwG68PBfWSCUW8EPIclMtkX+TTe12T5KUWQlRJaxg=
-X-Received: by 2002:a05:6a00:8188:b0:835:351c:f236 with SMTP id d2e1a72fcca58-835351cf525mr3911226b3a.29.1777827089059;
-        Sun, 03 May 2026 09:51:29 -0700 (PDT)
-Received: from localhost.localdomain ([114.231.84.174])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83707fab756sm1494277b3a.44.2026.05.03.09.51.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 May 2026 09:51:28 -0700 (PDT)
-From: Vernon Yang <vernon2gm@gmail.com>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	roman.gushchin@linux.dev,
-	inwardvessel@gmail.com,
-	shakeel.butt@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	surenb@google.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	bpf@vger.kernel.org,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	dev.jain@arm.com,
-	Vernon Yang <yanglincheng@kylinos.cn>
-Subject: [PATCH 4/4] samples: bpf: add mthp_ext
-Date: Mon,  4 May 2026 00:50:24 +0800
-Message-ID: <20260503165024.1526680-5-vernon2gm@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260503165024.1526680-1-vernon2gm@gmail.com>
-References: <20260503165024.1526680-1-vernon2gm@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="df9RzoNq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6786C2BCB4;
+	Sun,  3 May 2026 17:01:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777827674;
+	bh=xcismaF+50EUVwBdvTSHVQ3O45RhQiaHzhsBFqxZFoE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=df9RzoNqg+dDIb6Q6hMIwIdAgNMLrIuc9/WPogwNOpicKGN9AWb8Fli7wjvnhx000
+	 cxKqMyC6GbTgGIHcO4jAY1MsQZFQwXy14epHUa1WrLijEB/dI3Qo6g5W3sEVZppY7F
+	 Jm+1YdZTD/x62qAvZe32fxmnsT7qUSJ7XPUFIbTRsAAcuN4YYVLolZHScQMnnD36fz
+	 piGC7Mdt7K+D2YpNLrIFf3D3Vzbu+XEgNXgZblyr9oXH8/dgQwVWowW6sFvkP9DypM
+	 BjD+To+sSmkDFawGLT9ey+VdOxJM0XrobP9DxUjPthMx//6RHp3dlJ04xcTHzQyQ97
+	 tm0rHf0GiX6JA==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH v3] bpf: introduce TAINT_UNSAFE_BPF for mutating
+ helpers
+Reply-To: sashiko@lists.linux.dev
+To: "Aaron Tomlin" <atomlin@atomlin.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260503164700.548164-1-atomlin@atomlin.com>
+References: <20260503164700.548164-1-atomlin@atomlin.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 03 May 2026 17:01:13 +0000
+Message-Id: <20260503170113.D6786C2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Vernon Yang <yanglincheng@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Premature kernel tainting in bpf_prog_load() before the program =
+is fully loaded and exposed.
+--
 
-Design mthp_ext case to address real workload issues.
+commit b04c8335f7a6d97d5ae1eb32256b36d77ac00d40
+Author: Aaron Tomlin <atomlin@atomlin.com>
 
-The main functions of the mthp_ext are as follows:
+bpf: introduce TAINT_UNSAFE_BPF for mutating helpers
 
-- When sub-cgroup is under high memory pressure (default, full 100ms 1s),
-  it will automatically fallback to using 4KB.
-- When the anon+shmem memory usage of sub-cgroup falls below the minimum
-  memory (default 16MB), small-memory processes will automatically
-  fallback to using 4KB.
-- Under normal conditions, when there is no memory pressure and the
-  anon+shmem memory usage exceeds the minimum memory, all mTHP sizes
-  shall be utilized by kernel.
-- Monitor the root-cgroup (/sys/fs/cgroup) directory by default, with
-  support for specifying any cgroup directory.
+This patch introduces a new kernel taint flag (TAINT_UNSAFE_BPF / "V") to
+indicate when an eBPF program utilizing destructive or mutating helpers is
+loaded.
 
-Signed-off-by: Vernon Yang <yanglincheng@kylinos.cn>
----
- samples/bpf/.gitignore     |   1 +
- samples/bpf/Makefile       |   7 +-
- samples/bpf/mthp_ext.bpf.c | 142 ++++++++++++++++
- samples/bpf/mthp_ext.c     | 340 +++++++++++++++++++++++++++++++++++++
- samples/bpf/mthp_ext.h     |  30 ++++
- 5 files changed, 519 insertions(+), 1 deletion(-)
- create mode 100644 samples/bpf/mthp_ext.bpf.c
- create mode 100644 samples/bpf/mthp_ext.c
- create mode 100644 samples/bpf/mthp_ext.h
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
 
-diff --git a/samples/bpf/.gitignore b/samples/bpf/.gitignore
-index 0002cd359fb1..2a73581876b4 100644
---- a/samples/bpf/.gitignore
-+++ b/samples/bpf/.gitignore
-@@ -49,3 +49,4 @@ iperf.*
- /vmlinux.h
- /bpftool/
- /libbpf/
-+mthp_ext
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 95a4fa1f1e44..357c7d1c45ef 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -37,6 +37,7 @@ tprogs-y += xdp_fwd
- tprogs-y += task_fd_query
- tprogs-y += ibumad
- tprogs-y += hbm
-+tprogs-y += mthp_ext
- 
- # Libbpf dependencies
- LIBBPF_SRC = $(TOOLS_PATH)/lib/bpf
-@@ -122,6 +123,7 @@ always-y += task_fd_query_kern.o
- always-y += ibumad_kern.o
- always-y += hbm_out_kern.o
- always-y += hbm_edt_kern.o
-+always-y += mthp_ext.bpf.o
- 
- COMMON_CFLAGS = $(TPROGS_USER_CFLAGS)
- TPROGS_LDFLAGS = $(TPROGS_USER_LDFLAGS)
-@@ -289,6 +291,8 @@ $(obj)/hbm_out_kern.o: $(src)/hbm.h $(src)/hbm_kern.h
- $(obj)/hbm.o: $(src)/hbm.h
- $(obj)/hbm_edt_kern.o: $(src)/hbm.h $(src)/hbm_kern.h
- 
-+mthp_ext: $(obj)/mthp_ext.skel.h
-+
- # Override includes for xdp_sample_user.o because $(srctree)/usr/include in
- # TPROGS_CFLAGS causes conflicts
- XDP_SAMPLE_CFLAGS += -Wall -O2 \
-@@ -347,10 +351,11 @@ $(obj)/%.bpf.o: $(src)/%.bpf.c $(obj)/vmlinux.h $(src)/xdp_sample.bpf.h $(src)/x
- 		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
- 		-c $(filter %.bpf.c,$^) -o $@
- 
--LINKED_SKELS := xdp_router_ipv4.skel.h
-+LINKED_SKELS := xdp_router_ipv4.skel.h mthp_ext.skel.h
- clean-files += $(LINKED_SKELS)
- 
- xdp_router_ipv4.skel.h-deps := xdp_router_ipv4.bpf.o xdp_sample.bpf.o
-+mthp_ext.skel.h-deps := mthp_ext.bpf.o
- 
- LINKED_BPF_SRCS := $(patsubst %.bpf.o,%.bpf.c,$(foreach skel,$(LINKED_SKELS),$($(skel)-deps)))
- 
-diff --git a/samples/bpf/mthp_ext.bpf.c b/samples/bpf/mthp_ext.bpf.c
-new file mode 100644
-index 000000000000..bbee3e9f679c
---- /dev/null
-+++ b/samples/bpf/mthp_ext.bpf.c
-@@ -0,0 +1,142 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include "mthp_ext.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+#include <vdso/bits.h>
-+
-+struct mem_info {
-+	unsigned long stall;
-+	unsigned int  order;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_CGRP_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, struct mem_info);
-+} cgrp_storage SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(max_entries, 256 * 1024);
-+} events SEC(".maps");
-+
-+struct config_local configs;
-+
-+/*
-+ * mthp_choose_impl: Choose the custom mTHP orders, read order from cgrp_storage,
-+ *		     which is Adjustment by the cgroup_scan().
-+ * @cgrp: control group
-+ * @orders: original orders
-+ *
-+ * Return suited mTHP orders.
-+ */
-+SEC("struct_ops/mthp_choose")
-+unsigned long BPF_PROG(mthp_choose_impl, struct cgroup *cgrp, unsigned long orders)
-+{
-+	struct mem_info *info;
-+	unsigned int order;
-+
-+	if (configs.fixed) {
-+		order = configs.init_order;
-+		goto out;
-+	}
-+
-+	info = bpf_cgrp_storage_get(&cgrp_storage, cgrp, 0, 0);
-+	if (!info)
-+		return orders;
-+
-+	order = info->order;
-+out:
-+	if (!order)
-+		return 0;
-+
-+	orders &= BIT(order + 1) - 1;
-+	return orders;
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_mthp_ops mthp_ops = {
-+	.mthp_choose = (void *)mthp_choose_impl,
-+};
-+
-+/* backport from kernel/cgroup/cgroup.c */
-+static bool cgroup_has_tasks(struct cgroup *cgrp)
-+{
-+	return cgrp->nr_populated_csets;
-+}
-+
-+/*
-+ * cgroup_scan: scan all descendant cgroups under root cgroup.
-+ *
-+ * 1. When the memory usage of the sub-cgroup falls below the <min> threshold,
-+ *    it will automatically fall back to using 4KB size; otherwise, it will
-+ *    use all mTHP sizes.
-+ * 2. When memory.pressure stall time of the sub-cgroup exceeds <threshold>,
-+ *    it will automatically fall back to using 4KB size; otherwise, it will
-+ *    use all mTHP sizes.
-+ *
-+ * Return 1 indicates termination of the iteration loop, and return 0 indicates
-+ * iteration to the next sub-cgroup.
-+ */
-+SEC("iter.s/cgroup")
-+int cgroup_scan(struct bpf_iter__cgroup *ctx)
-+{
-+	struct cgroup *cgrp = ctx->cgroup;
-+	struct mem_cgroup *memcg;
-+	struct mem_info *info;
-+	struct alert_event *e;
-+	unsigned long curr_stall;
-+	unsigned long curr_mem;
-+	unsigned long delta;
-+
-+	if (!cgrp)
-+		return 1;
-+
-+	if (!cgroup_has_tasks(cgrp))
-+		return 0;
-+
-+	info = bpf_cgrp_storage_get(&cgrp_storage, cgrp, 0,
-+				    BPF_LOCAL_STORAGE_GET_F_CREATE);
-+	if (!info)
-+		return 0;
-+
-+	memcg = bpf_get_mem_cgroup(&cgrp->self);
-+	if (!memcg)
-+		return 0;
-+
-+	bpf_cgroup_flush_stats(cgrp);
-+	curr_stall = bpf_cgroup_stall(cgrp, PSI_MEM_FULL);
-+	delta = curr_stall - info->stall;
-+	bpf_mem_cgroup_flush_stats(memcg);
-+	curr_mem = bpf_mem_cgroup_page_state(memcg, NR_ANON_MAPPED) +
-+		   bpf_mem_cgroup_page_state(memcg, NR_SHMEM);
-+	if (curr_mem < FROM_MB(configs.min_mem) || delta >= configs.threshold)
-+		info->order = 0;
-+	else
-+		info->order = PMD_ORDER;
-+
-+	if (configs.debug) {
-+		e = bpf_ringbuf_reserve(&events, sizeof(*e), 0);
-+		if (e) {
-+			e->prev_stall = info->stall;
-+			e->curr_stall = curr_stall;
-+			e->delta = delta;
-+			e->mem = curr_mem;
-+			e->order = info->order;
-+			bpf_probe_read_kernel_str(e->name, sizeof(e->name),
-+						  cgrp->kn->name);
-+			bpf_ringbuf_submit(e, 0);
-+		}
-+	}
-+
-+	info->stall = curr_stall;
-+	bpf_put_mem_cgroup(memcg);
-+
-+	return 0;
-+}
-+
-+char LICENSE[] SEC("license") = "GPL";
-diff --git a/samples/bpf/mthp_ext.c b/samples/bpf/mthp_ext.c
-new file mode 100644
-index 000000000000..0e064bad136f
---- /dev/null
-+++ b/samples/bpf/mthp_ext.c
-@@ -0,0 +1,340 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <stdint.h>
-+#include <string.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <unistd.h>
-+#include <signal.h>
-+#include <time.h>
-+#include <stdbool.h>
-+#include <getopt.h>
-+#include <sys/epoll.h>
-+#include <linux/limits.h>
-+#include <sys/stat.h>
-+#include <linux/bpf.h>
-+#include <bpf/bpf.h>
-+#include <bpf/libbpf.h>
-+#include "mthp_ext.h"
-+#include "mthp_ext.skel.h"
-+
-+#define DEFAULT_ROOT		"/sys/fs/cgroup"
-+#define DEFAULT_THRESHOLD_MS	100UL
-+#define DEFAULT_INTERVAL_MS	1000UL
-+#define DEFAULT_ORDER		PMD_ORDER
-+#define DEFAULT_MIN_MEM		16
-+
-+static bool exiting;
-+
-+static void usage(const char *name)
-+{
-+	fprintf(stderr,
-+		"Usage: %s [OPTIONS]\n\n"
-+		"Monitor specified cgroup, adjust mTHP size via cgroup_bpf.\n\n"
-+		"Currently supports fixed mTHP size and automatic mTHP size adjustment.\n"
-+		"By default, it monitors the entire cgroup and automatically\n"
-+		"adjusts mTHP size within the specified time window <interval>.\n"
-+		"1. When the memory size of the sub-cgroup falls below\n"
-+		"   the <min> threshold, it will automatically fall back to\n"
-+		"   using 4KB size; otherwise, it will use all mTHP sizes.\n"
-+		"2. When memory.pressure stall time of the sub-cgroup exceeds\n"
-+		"   <threshold>, it will automatically fall back to using 4KB\n"
-+		"   size; otherwise, it will use all mTHP sizes.\n\n"
-+		"Options:\n"
-+		"  -r, --root=PATH        Root cgroup path (default: /sys/fs/cgroup)\n"
-+		"  -t, --threshold=MS     threshold in ms (default: %lu)\n"
-+		"  -i, --interval=MS      interval in ms (default: %lu)\n"
-+		"  -o, --order=NR         Initial mthp order (default: %d)\n"
-+		"  -m, --min=MB           Minimum memory size for mTHP (default: %d)\n"
-+		"  -f, --fixed            Use fixed order, disable auto-adjustment\n"
-+		"  -d, --debug            Enable debug output\n"
-+		"  -h, --help             Show this help\n",
-+		name, DEFAULT_THRESHOLD_MS, DEFAULT_INTERVAL_MS, DEFAULT_ORDER,
-+		DEFAULT_MIN_MEM);
-+}
-+
-+static void sig_handler(int sig)
-+{
-+	exiting = true;
-+}
-+
-+static int setup_psi_trigger(const char *cgroup_path, const char *type,
-+			     unsigned long stall_us, unsigned long window_us)
-+{
-+	char path[PATH_MAX];
-+	char trigger[128];
-+	int fd, nr;
-+
-+	snprintf(path, sizeof(path), "%s/memory.pressure", cgroup_path);
-+	fd = open(path, O_RDWR | O_NONBLOCK);
-+	if (fd < 0) {
-+		fprintf(stderr, "ERROR: open PSI file failed\n");
-+		return -errno;
-+	}
-+
-+	nr = snprintf(trigger, sizeof(trigger), "%s %lu %lu",
-+		      type, stall_us, window_us);
-+	if (write(fd, trigger, nr) < 0) {
-+		fprintf(stderr, "ERROR: write PSI trigger failed\n");
-+		close(fd);
-+		return -errno;
-+	}
-+
-+	return fd;
-+}
-+
-+static int trigger_scan(struct bpf_link *iter_link)
-+{
-+	char buf[256];
-+	int fd;
-+
-+	fd = bpf_iter_create(bpf_link__fd(iter_link));
-+	if (fd < 0) {
-+		fprintf(stderr, "ERROR: bpf_iter_create failed: %s\n",
-+			strerror(errno));
-+		return -1;
-+	}
-+
-+	/* Read to trigger the iter program execution */
-+	while (read(fd, buf, sizeof(buf)))
-+		;
-+
-+	close(fd);
-+	return 0;
-+}
-+
-+static void *monitor_thread(int psi_fd, struct config_local *configs,
-+		struct bpf_link *iter_link, struct ring_buffer *rb)
-+{
-+	struct epoll_event e;
-+	int epoll_fd;
-+	int nfds;
-+
-+	epoll_fd = epoll_create1(0);
-+	if (epoll_fd < 0) {
-+		fprintf(stderr, "ERROR: epoll_create1 failed\n");
-+		return NULL;
-+	}
-+
-+	e.events = EPOLLPRI;
-+	e.data.fd = psi_fd;
-+	if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, psi_fd, &e)) {
-+		fprintf(stderr, "ERROR: epoll_ctl failed\n");
-+		goto CLOSE;
-+	}
-+
-+	/* First initialization */
-+	trigger_scan(iter_link);
-+	if (configs->debug)
-+		ring_buffer__poll(rb, 0);
-+
-+	/* Auto adjustment */
-+	while (!exiting) {
-+		nfds = epoll_wait(epoll_fd, &e, 1, configs->interval);
-+		trigger_scan(iter_link);
-+
-+		if (configs->debug) {
-+			printf("PSI: memory pressure %s\n", nfds ? "high" : "low");
-+			ring_buffer__poll(rb, 0);
-+		}
-+	}
-+
-+CLOSE:
-+	close(epoll_fd);
-+	return NULL;
-+}
-+
-+static int handle_event(void *ctx, void *data, size_t len)
-+{
-+	struct alert_event *e = data;
-+
-+	printf("cgroup %s: stall %lu -> %lu (+%lu), mem %luMB, mthp order=%d\n",
-+		e->name[0] ? e->name : "/",
-+		e->prev_stall, e->curr_stall, e->delta, TO_MB(e->mem), e->order);
-+
-+	return 0;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	const char *root_path = DEFAULT_ROOT;
-+	unsigned long threshold = DEFAULT_THRESHOLD_MS;
-+	unsigned long interval = DEFAULT_INTERVAL_MS;
-+	unsigned int init_order = DEFAULT_ORDER;
-+	unsigned int min_mem = DEFAULT_MIN_MEM;
-+	bool fixed = false;
-+	bool debug = false;
-+	struct mthp_ext *skel;
-+	struct bpf_link *iter_link;
-+	struct bpf_link *ops_link;
-+	struct ring_buffer *rb;
-+	int root_fd;
-+	int psi_fd;
-+	int err = 0;
-+	int opt;
-+
-+	static struct option long_options[] = {
-+		{"root",       required_argument, 0, 'r'},
-+		{"threshold",  required_argument, 0, 't'},
-+		{"interval",   required_argument, 0, 'i'},
-+		{"order",      required_argument, 0, 'o'},
-+		{"min",        required_argument, 0, 'm'},
-+		{"fixed",      no_argument,       0, 'f'},
-+		{"debug",      no_argument,       0, 'd'},
-+		{"help",       no_argument,       0, 'h'},
-+		{0, 0, 0, 0}
-+	};
-+
-+	while ((opt = getopt_long(argc, argv, "r:t:i:o:m:fdh",
-+				  long_options, NULL)) != -1) {
-+		switch (opt) {
-+		case 'r':
-+			root_path = optarg;
-+			break;
-+		case 't':
-+			threshold = strtoul(optarg, NULL, 10);
-+			break;
-+		case 'i':
-+			interval = strtoul(optarg, NULL, 10);
-+			break;
-+		case 'o':
-+			init_order = min(strtoul(optarg, NULL, 10), PMD_ORDER);
-+			break;
-+		case 'm':
-+			min_mem = strtoul(optarg, NULL, 10);
-+			break;
-+		case 'f':
-+			fixed = true;
-+			break;
-+		case 'd':
-+			debug = true;
-+			break;
-+		case 'h':
-+			usage(argv[0]);
-+			return 0;
-+		default:
-+			usage(argv[0]);
-+			return -EINVAL;
-+		}
-+	}
-+
-+	if (!threshold || !interval) {
-+		fprintf(stderr, "ERROR: threshold and interval must be > 0\n");
-+		usage(argv[0]);
-+		return -EINVAL;
-+	}
-+
-+	signal(SIGINT, sig_handler);
-+	signal(SIGTERM, sig_handler);
-+
-+	root_fd = open(root_path, O_RDONLY);
-+	if (root_fd < 0) {
-+		fprintf(stderr, "ERROR: open '%s' failed: %s\n",
-+			root_path, strerror(errno));
-+		return -errno;
-+	}
-+
-+	skel = mthp_ext__open();
-+	if (!skel) {
-+		fprintf(stderr, "ERROR: failed to open BPF skeleton\n");
-+		err = -ENOMEM;
-+		goto open_skel_fail;
-+	}
-+
-+	skel->bss->configs.threshold = threshold;
-+	skel->bss->configs.interval = interval;
-+	skel->bss->configs.init_order = init_order;
-+	skel->bss->configs.min_mem = min_mem;
-+	skel->bss->configs.fixed = fixed;
-+	skel->bss->configs.debug = debug;
-+
-+	err = mthp_ext__load(skel);
-+	if (err) {
-+		fprintf(stderr, "ERROR: failed to load BPF program: %d\n", err);
-+		goto load_skel_fail;
-+	}
-+
-+	/* Attach struct_ops to root cgroup for mthp_choose */
-+	DECLARE_LIBBPF_OPTS(bpf_struct_ops_opts, opts);
-+	opts.flags = BPF_F_CGROUP_FD;
-+	opts.target_fd = root_fd;
-+	ops_link = bpf_map__attach_struct_ops_opts(skel->maps.mthp_ops, &opts);
-+	err = libbpf_get_error(ops_link);
-+	if (err) {
-+		fprintf(stderr, "ERROR: attach struct_ops failed: %d\n", err);
-+		ops_link = NULL;
-+		goto attach_opts_fail;
-+	}
-+
-+	printf("Monitoring         : %s\n"
-+	       "threshold          : %lums\n"
-+	       "Interval           : %lums\n"
-+	       "Initial order      : %d%s\n"
-+	       "min memory         : %dMB\n"
-+	       "Debug              : %s\n"
-+	       "Press Ctrl+C to exit.\n\n",
-+	       root_path, threshold, interval, init_order,
-+	       fixed ? " (fixed)" : " (auto)", min_mem,
-+	       debug ? "on" : "off");
-+
-+	if (fixed) {
-+		while (!exiting)
-+			usleep(interval * 1000);
-+		goto exit_fixed;
-+	}
-+
-+	/* Auto adjustment, attach cgroup iter for scanning root + descendants */
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, iter_opts);
-+	union bpf_iter_link_info linfo = {
-+		.cgroup.cgroup_fd = root_fd,
-+		.cgroup.order = BPF_CGROUP_ITER_DESCENDANTS_PRE,
-+	};
-+	iter_opts.link_info = &linfo;
-+	iter_opts.link_info_len = sizeof(linfo);
-+	iter_link = bpf_program__attach_iter(skel->progs.cgroup_scan, &iter_opts);
-+	err = libbpf_get_error(iter_link);
-+	if (err) {
-+		fprintf(stderr, "ERROR: attach cgroup iter failed: %d\n", err);
-+		iter_link = NULL;
-+		goto attach_iter_fail;
-+	}
-+
-+	/* Set up ring buffer for receiving alerts */
-+	rb = ring_buffer__new(bpf_map__fd(skel->maps.events),
-+			      handle_event, NULL, NULL);
-+	if (!rb) {
-+		fprintf(stderr, "ERROR: failed to create ring buffer\n");
-+		err = -ENOMEM;
-+		goto rb_fail;
-+	}
-+
-+
-+	psi_fd = setup_psi_trigger(root_path, "some", threshold * 1000,
-+				   interval * 1000);
-+	if (psi_fd < 0) {
-+		fprintf(stderr, "ERROR: PSI trigger setup failed\n");
-+		goto psi_setup_fail;
-+	}
-+
-+	monitor_thread(psi_fd, &skel->bss->configs, iter_link, rb);
-+
-+	close(psi_fd);
-+psi_setup_fail:
-+	ring_buffer__free(rb);
-+rb_fail:
-+	bpf_link__destroy(iter_link);
-+exit_fixed:
-+attach_iter_fail:
-+	bpf_link__destroy(ops_link);
-+attach_opts_fail:
-+load_skel_fail:
-+	mthp_ext__destroy(skel);
-+open_skel_fail:
-+	close(root_fd);
-+
-+	printf("\nExiting...\n");
-+
-+	return err;
-+}
-diff --git a/samples/bpf/mthp_ext.h b/samples/bpf/mthp_ext.h
-new file mode 100644
-index 000000000000..33dc01bcebd3
---- /dev/null
-+++ b/samples/bpf/mthp_ext.h
-@@ -0,0 +1,30 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef __MTHP_EXT_H__
-+#define __MTHP_EXT_H__
-+
-+#define CGROUP_NAME_LEN 128
-+#define PMD_ORDER	9
-+#define min(a, b)	((a) < (b) ? a : b)
-+#define FROM_MB(s)	(s * 1024 * 1024)
-+#define TO_MB(s)	(s / 1024 / 1024)
-+
-+struct config_local {
-+	unsigned long threshold;
-+	unsigned long interval;
-+	unsigned int  init_order;
-+	unsigned int  min_mem;
-+	bool fixed;
-+	bool debug;
-+};
-+
-+struct alert_event {
-+	unsigned long prev_stall;
-+	unsigned long curr_stall;
-+	unsigned long delta;
-+	unsigned long mem;
-+	unsigned int  order;
-+	char name[CGROUP_NAME_LEN];
-+};
-+
-+#endif /* __MTHP_EXT_H__ */
--- 
-2.53.0
+[ ... ]
 
+> @@ -3083,6 +3083,13 @@ static int bpf_prog_load(union bpf_attr *attr, bpf=
+ptr_t uattr, u32 uattr_size)
+>  	if (err < 0)
+>  		goto free_used_maps;
+> =20
+> +	/*
+> +	 * The program has passed the verifier. If it utilises unsafe
+> +	 * helpers, formally taint the kernel now.
+> +	 */
+> +	if (prog->aux->taints_kernel)
+> +		add_taint(TAINT_UNSAFE_BPF, LOCKDEP_STILL_OK);
+> +
+>  	err =3D bpf_prog_mark_insn_arrays_ready(prog);
+>  	if (err < 0)
+>  		goto free_used_maps;
+
+Is it possible for the kernel to be tainted prematurely here?
+
+If bpf_prog_mark_insn_arrays_ready() or bpf_prog_alloc_id() fail, the BPF
+program load is aborted, the program is freed, and it is never exposed to
+user space or executed. Consequently, the kernel's execution flow and memory
+could not have been compromised by the program.
+
+Should the add_taint() call be deferred until after bpf_prog_alloc_id()
+completes successfully, which is the point where the program is actually
+exposed and cannot be gone underneath us?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260503164700.5481=
+64-1-atomlin@atomlin.com?part=3D1
