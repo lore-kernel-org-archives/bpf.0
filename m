@@ -1,353 +1,323 @@
-Received: from CWXP265CU010.outbound.protection.outlook.com (mail-ukwestazon11022075.outbound.protection.outlook.com [52.101.101.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B664D2DCF62;
-	Sun,  3 May 2026 16:47:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.101.75
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777826828; cv=fail; b=ZeRDiMaocpeYgWqfxafDWmiAQpyycT2HpuNJSTrP3qWmeUn6DJ6YhOsAPJHfaz04xw2ylMRnVlZzDBEpt5OdL+3d+/V6sos+El6ZcA9PBYvLUq4Ms2qhlAV2UNO6X8BizvkgxzaSqjiU3KEWK/4E2ZKroqPdOv3FH6n+ZcHETLs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777826828; c=relaxed/simple;
-	bh=oSnFpbWk93IkA+A2u2x7q5f3rembYapA3ZGZJcMPYoA=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=VRla1VFls3IeI339ZHsTLOPXTtQ6nH7Yug79gFrY3M8LMc9uMztRdxZj21lBwhiagUhwK3X5fdfbJWGhWaK4xM8FoiW7VNvyXTRkQj4nuap2ItJxRQa70dGuBeWu0RBT4yFAtzQmT0bYKitIKqbYxsE9fRNHRmx4teh6lI3rXU0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.101.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ScEc0Nd5ZWNRGtrDKLLvncJ+YJnnNKIhS/oqXuswogAlhIA87jgvvidpk6Lep3RaOR+gKfug54PTvqHMHZrYxfXY28az7wRMnp+EMjKEf5Ex7RupF3bI3H85ZeeYPLSfp4WbjvA6t5e9IJPrYtTbg2xv1rHqlWXyAMA0wDzb99HDdjxlCRwRgZG95Bi+HkOpeITBWKIqNAZMnthYxQtRkrUzPwiQ0WN8phweqqHzIILRuxbLHsNR9h1E5LitWCoeefx5D/l4wQX7bXJrJExfwJp5pvPYNjV79LrRi+grqL6HhjHJTjXOiwlYyLpFkl1dSVl2P31WaVMeq2pWForndQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Hi7IOF9ztXtqMtd8sTwaQmdsj2IkSZhOy8jYNUe8Plg=;
- b=mNG3miyb2SgayF1v8dM9JZUlZi/0vyQj2xQ7EkyGG9wSy3Pd0JESHqKa7Hjhl4HZcApTn+yAXCylKneE6VBQkUnkUbbrPrQX7zpeEEiK1c3DPyck7faHqvarphFOmyXavs0sFVgsrRfswoVsVplzlSUT5XkycZSd3XO8o2rVqYEUnuwdJ+TAjhOxPLm3qD4xJ6oowwOucW5pJSWdMVPq0NtlewFgCd4rfNXFVgFDGp2xkTDYSoOoeXUSC1RlMMsPVZhYkqDT+h9U14SxFzGISLcEV+tC/SJ+eglgbvBTdFt5EZ6RpzEsevP5FGSeIaOpmfXZ5xttkl1ZKfUpYeQ8kw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
- dkim=pass header.d=atomlin.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=atomlin.com;
-Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:70::10)
- by LOYP123MB3535.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:119::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.26; Sun, 3 May
- 2026 16:47:04 +0000
-Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
- ([fe80::de8e:2e4f:6c6:f3bf]) by CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
- ([fe80::de8e:2e4f:6c6:f3bf%2]) with mapi id 15.20.9846.025; Sun, 3 May 2026
- 16:47:04 +0000
-From: Aaron Tomlin <atomlin@atomlin.com>
-To: corbet@lwn.net,
-	song@kernel.org,
-	kpsingh@kernel.org,
-	mattbobrowski@google.com,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B27B2F2914
+	for <bpf@vger.kernel.org>; Sun,  3 May 2026 16:50:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777827053; cv=none; b=GrGhqQoTF4ZNF3wNMPRFMtm+2g88JX6AYB+OcV8XrwxyYM5mGbla37eVeFXESGtom/1iziCuscBtU2bR8NzvkWrFvsMoQpINycQZXuTQWM7X54m257Qt3Z4CE6ZP16WZGNwmIwac1uzNBe6zqHFuqMqa0gtmmlgiTkcsFbXxU+U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777827053; c=relaxed/simple;
+	bh=EvTSV0gLgu8GLRzob+OE79Vx8RCDYuUqhgqfqhKXQ1Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=g51Rf0w72ZlLnzuJOXrjRZMvkvXLFxIS/NHQR7BdLdDVxp7v14ThYzKYHbmR+00bxt3QY66Krjcx9mgFRemN4jYnZL6XCv6W7iqpX87obJHYNDt0wKr7KMPDdG9ZqxqZaAH1O6CyBKqYovWlJ7cb4keRVZ7vMjfZrVwtFKOxbx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r37hz/e5; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r37hz/e5"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c7358a7a8d1so1970683a12.3
+        for <bpf@vger.kernel.org>; Sun, 03 May 2026 09:50:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777827051; x=1778431851; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TS2sd/8o5RJAjVUI5sxoWuY3InAZTHu0PH6QjJRWXc8=;
+        b=r37hz/e5GJm79PmyMroseSFsf0sayB+iLDug2qMbWvJMK77z7d4hTtpV+0QKEm8eje
+         6FxOH1KNVVaSShkuYo1rF/ZE+tdNzXLV2bv0KlUKPvVfDQaL7MbP6o7E850GQunCJNOi
+         zG5rDVMmM7Z1zO30RYel8Jqouz7MJ5rTODoJsBJgj4EZ3ole77yasMlRERN6r3wUcyho
+         v3NdwIKoMDWN2pJmvKIUwPLcWsigWWxFkxfUDbggkxNe8DNb0rJZMSc0VliuS5KGaKWo
+         jHMp8PlZe4osrqw8cxTWupyKYlD+aKL/OXrM3e6du1k6Bg8HBsN0jrCePm1XBY1y6aoP
+         nXcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777827051; x=1778431851;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TS2sd/8o5RJAjVUI5sxoWuY3InAZTHu0PH6QjJRWXc8=;
+        b=rJWOFOiu68QR2809Wm9X9CA16vYqF3j8Eg/+aIW1MRyNfd4axRH500DUM9uT7EhrD/
+         Z/fnaYq9G7gMfokPdVYm9GZk3v96Hnf4kpnqD0SzolwCwvbdQwECCiNe4lt6K7R4/1fA
+         S7L9I9BJzSLxDaVwrYwxqWSKkbhqdHYpYTAgmR+MK6PxLF2spCaCGgJ8WXMoJ7RDHDe8
+         vz8ABVmE+qTP1RIpBoEKQ3k2WlQQeHldOy+kSaEWIf9VK3PDpZ/eO8j1jRr3dwU9hEht
+         mwLfIO6BjBr/Y+VmQSSlYF7rxMgfmIuN2goqgCvShUxl6ZcVGP9Q2qeAFQLsX8xb8ERh
+         n7EA==
+X-Forwarded-Encrypted: i=1; AFNElJ/oyYSZRo/ZlSk0PK0qbdXL1MwSqYN2mlXetrRpNCatQQHHezyYoRetEJv8p62EAJF7/iE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPikkK6eY9BOJ1TmIR4zldbSNzpdEqDo6bxAMJ8xGZ+7IGSIlO
+	5GQSxGX5BUQGBx0WU7mP3Kxcfx4ETGb9sq6M5SEG8aLKAdRXYQaWVtRR
+X-Gm-Gg: AeBDietWblQuihQqVdLxprC0Fl6noGbDG9yjtdv419J40X+S8xh5/aZN+46MvQ/3ryi
+	w9AbSGIab+NGuYq51K3FDiSCMO+dhfGkRaBDFs4ODZuUtafxWQda1QTTFqbZNS8LheEeQuRY0DW
+	Qn6DUEP04/+vu6NIsoB0wZAyRS1tuwhO+Jut/WiG7tYGp2xzpT/2YRga77Uwm6/A9/p+0xoxWGT
+	Z3UTX1uAf+EteVQcOV0Df18UQ6eMzsPzXngyIaJr/sgW3Z96e5vkDoglgAS8ZO3fLlRTxFALfy4
+	yRq/3L4yyhF90Q3KbV7+GHt8pkJOfhY/gJ1KHmtsCqu/DFhLn4pSpmxJ64ifqtYV/U78kp59u/S
+	4HRDDK+apqJXOG6SXtWczpiPqdCvtHQW2qe+yzedX2nXsHT/UBSCsu8dV6xbzC6iro7iKrS3bVi
+	VKisr2WQ5/bL8fO3t7jiv3tW45zVVPOY4YhGIN3oPfac3ZLiA=
+X-Received: by 2002:a05:6a20:7491:b0:3a2:d838:bfdb with SMTP id adf61e73a8af0-3a7f1f1de5amr6999048637.29.1777827051325;
+        Sun, 03 May 2026 09:50:51 -0700 (PDT)
+Received: from localhost.localdomain ([114.231.84.174])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83707fab756sm1494277b3a.44.2026.05.03.09.50.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 May 2026 09:50:50 -0700 (PDT)
+From: Vernon Yang <vernon2gm@gmail.com>
+To: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	roman.gushchin@linux.dev,
+	inwardvessel@gmail.com,
+	shakeel.butt@linux.dev,
 	ast@kernel.org,
 	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org
-Cc: skhan@linuxfoundation.org,
-	jolsa@kernel.org,
-	martin.lau@linux.dev,
-	yonghong.song@linux.dev,
-	mathieu.desnoyers@efficios.com,
-	rdunlap@infradead.org,
-	atomlin@atomlin.com,
-	neelx@suse.com,
-	sean@ashe.io,
-	chjohnst@gmail.com,
-	steve@abita.co,
-	mproche@gmail.com,
-	nick.lange@gmail.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	surenb@google.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
 	bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: [RFC PATCH v3] bpf: introduce TAINT_UNSAFE_BPF for mutating helpers
-Date: Sun,  3 May 2026 12:47:00 -0400
-Message-ID: <20260503164700.548164-1-atomlin@atomlin.com>
-X-Mailer: git-send-email 2.51.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BN1PR12CA0030.namprd12.prod.outlook.com
- (2603:10b6:408:e1::35) To CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:400:70::10)
+	baohua@kernel.org,
+	lance.yang@linux.dev,
+	dev.jain@arm.com,
+	Vernon Yang <yanglincheng@kylinos.cn>
+Subject: [PATCH 0/4] mm: introduce mthp_ext via cgroup-bpf to make mTHP more transparent
+Date: Mon,  4 May 2026 00:50:20 +0800
+Message-ID: <20260503165024.1526680-1-vernon2gm@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB3523:EE_|LOYP123MB3535:EE_
-X-MS-Office365-Filtering-Correlation-Id: fb4df9f2-9490-41d7-f737-08dea9339ae3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|18002099003|56012099003|921020;
-X-Microsoft-Antispam-Message-Info:
-	4VflK8Jm+o8ff1iaY/zNDzDN4FfkZpsaCRmc7G+0Ga7OqiJ77kwRg0e8P7yaunfTuovnvWPSk8wE4jVJqe+zu7638GsDySJH+u9XFRDzp6DX9RvowzZsw85sszJPOvhT76sYGmH79HJ91E3bRw354xmOsHsZHZuMo1J0GTMAi+uSzfhnWmk4qND/7Mmu4z/LWLzPUK5eUt97FSfkjwDEaXykugpeh/V0+rQl202bI4pDgNs9djlluGAFi6GoGptc1uej+XGngwlySCkJm63lMQighVd/HiasSs7fMn50cX1QzDbSlgP6eKq5Y5gycbp0+3vbSh12iT8uH6DvALXIMSzzbaBPMTaUivXEvGoig3puPV3/tLXhi3NMMCORY2TKWIb6JJwkQehQ8kHH9TbKTTuj6ZbxdmqDTPKDjGSB1nf3UBaCRyEnlF6j2Umu8efasfX1x0MpXEY+aoY8Z23+9FWBwj1kH7oejceDJU8YICRF2qftmaskZKIwxBUTI0p72P04T09lxTWoR7dbh+wdaorMp8ucZcxeALFNdo+2J6zRYx9ZOxMxe9V9BSaETZ9+1PNGhLhMv+0ooL08FcNTC0dXCC9Su6tOIrv0pmaMKE739WvRX3041hYo/1QLBAJhioDGdBWQlcauKq215zAcP+r7ssXKR/fEKOGKpObsjaSv6IL8F/+gme15mEHMTyncF5KnQ1cBU+XE450RvXMm/LPOh2ZbanhBXZmpUvi9IovydPYGHx0hMmO7IID98cba
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(18002099003)(56012099003)(921020);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?8cxQlcfwVqDyjvVZUD3spGCAxWuuneI9ZQvAldsbWYtl714RK3OBTG3jhAKs?=
- =?us-ascii?Q?rdt0EREwGyn4+oYiOJublvKLLoCm/xY5hlD03Obq9qSJNbZzrS0VgOpfi5No?=
- =?us-ascii?Q?DFCn+TNA0vXk9Z8RSDjto07c/Cd2LdXaKdEzS33ox1/t44JkfsDPC39nKYwo?=
- =?us-ascii?Q?0NkYr56VKJLp4EwPBlTGotCaYYLb3XAa5iiU4rNXawub0NAq3aA5Kl0mhhvS?=
- =?us-ascii?Q?Xc2wYeeBDh9mvoJBk4aqrByL586AO9wn++QzzxKkAAJtZc2rYtqRsjX082FC?=
- =?us-ascii?Q?B0+mB0arLJGN7k5CWll/xP0KGnTXjz9sqWN9+YCe1zo85s4AC/nNCdRpFaIW?=
- =?us-ascii?Q?Wrmes0fF9tXO3AqsQdBsDDo11B6mQKMspubIWUZErzh6hN0cgwuLqL/mlAod?=
- =?us-ascii?Q?kUj0J7nFa4mlwpVCf6UJ18BUBhhlLwQ6k4VXVwVXmXdjlTx6rQCaonR5FPBN?=
- =?us-ascii?Q?q8ABtnawVmbV1h3/1qS4VbjKCcA2/Aqh6bRQbvW6S81sy2L5YFLZSnhniDty?=
- =?us-ascii?Q?XL7A8hJnR3wPb74r7zweukt42NOs3ffIPzadR56HYWvTaoiGB6u7wH1H321h?=
- =?us-ascii?Q?YdQbIqtVGvEBgBCwacqHRd4dnaz5lKNeHGGzcumR7w02NAh5IdxcuEXGL/eA?=
- =?us-ascii?Q?deTTua2dFwlV/qfyfADpdY21LfgZcv2WL237Q5I1HHBvNz59q658AJwzp7Xw?=
- =?us-ascii?Q?K8igrFAkzFPzlYBh+q7A/I7lzXH3G8ufPcDCALQEjYglWx9UdpKpKZvdkNWg?=
- =?us-ascii?Q?zkSosXLhybowRTMostEPwr+BQ7R7vUMzC2ZixT0R3qf3eJDHVDMpaXkNFNLu?=
- =?us-ascii?Q?Avs1+lrGVuxWipwE0p6c2/C+7jajeqLOqtAjigrTV0J7A8d+FyPJOrVtJywZ?=
- =?us-ascii?Q?/a62nJmnMfi/XU4oEEgydVUrg7smzmNvcOWv9kAQ/AFD/IakdI4Yr+rI1rgp?=
- =?us-ascii?Q?ZLFJ4YFqMz/UbrV4rXkikCp/uSDSjTPpsMmRewp76/MBnraWDavggy/YuAzN?=
- =?us-ascii?Q?Mm4rJr4xpp/wiLqqX3tqLA0VUQ1vMtdR92qJ9CLjTb0VBnqwihiOPD5qbnl4?=
- =?us-ascii?Q?K9vuK6j6tqbp+3Vu22/PLO9iVcfajxQk+JzHV1/Wt1MdnjPNgFS2he/W0IcE?=
- =?us-ascii?Q?s5jmTMCyB5wdBn3pFqeY/tb+u7nToGmDR5Yg4Xk9ZHz/G3AUIYfZkEFHCFNc?=
- =?us-ascii?Q?0V6FNb49df3BXVYbIr1R8vNOwQVjkyOfMmkr2E9XCzwiS2v/JscNP1s1N24U?=
- =?us-ascii?Q?b+mdW0UxRuMEsYNYgRJe5UTiT5T9qzHYZkcmzFqQqA1+SZEObW9gfcyfxH27?=
- =?us-ascii?Q?q6AMQgznDGzduCgTit1vWz3XcIdWae735urZZsjP3FMzVlepizxgyrO2VoRD?=
- =?us-ascii?Q?wGb2lhVCNAaUSwugtLjrejjqNE9rLC+GsI9Swd1n3+6LaCYoNt+A05j1vtdF?=
- =?us-ascii?Q?JaBEH9FpQm9g3Oe/MsGoUpnOPq5E2QFkh4aX2XXB+4isYZUQaTzcGCdceCHq?=
- =?us-ascii?Q?V2h4LQylqpBJtzQZ8s1kXpR9xq8IzzBt/vxGZ3XdqNbBhKxGd1C6LpeP1gOH?=
- =?us-ascii?Q?8ywNrXoNm5teAsOakJj33mImdgkHHbxWtesGtnzZ5X3r1yfEg7sTTXAz5RAR?=
- =?us-ascii?Q?UkwcPc849WtJzYLrx3HA1Kh8u5oClUmZGAFwsuJLJcct5vNrTjNzGVlIMm3P?=
- =?us-ascii?Q?9E3Xeshmbj4/J7QskNMutC+PUnkWWBSbnFNaUtYlp27OACtedUFIQkQpTaBF?=
- =?us-ascii?Q?CA7uyJ3pdA=3D=3D?=
-X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb4df9f2-9490-41d7-f737-08dea9339ae3
-X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2026 16:47:04.1843
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XkIk8Z1vTYQ+JCC5wK7vNPPsQjKCwQ5xUUZGeqGxHxc/2v1JmzVu/nA3x71d2fondznD+p4ixaPHUjvf+AoW6g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LOYP123MB3535
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-The primary remit of the eBPF verifier is to ensure that eBPF programs
-can neither crash the kernel nor corrupt memory. Nevertheless,
-administrative utilities such as "bpftrace --unsafe" permit the loading
-of programs that employ destructive or mutating helpers, most notably
-bpf_probe_write_user() and bpf_override_return().
+From: Vernon Yang <yanglincheng@kylinos.cn>
 
-Since commit b28573ebfabe ("bpf: Remove bpf_probe_write_user() warning
-message"), the kernel no longer issues a warning when an attempt is made to
-invoke such destructive helpers.
+Hi all,
 
-Consequently, this patch introduces a novel kernel taint flag,
-TAINT_UNSAFE_BPF ("V"). Tainting the kernel establishes a permanent and
-readily auditable indicator (i.e., /proc/sys/kernel/tainted) to alert
-maintainers that the kernel's execution flow or user memory may have been
-compromised by an eBPF program.
+Background
+==========
 
-Signed-off-by: Aaron Tomlin <atomlin@atomlin.com>
----
-Changes since v2 [1]:
- - Deferred the application of TAINT_UNSAFE_BPF until after the eBPF
-   verifier successfully completes
- - Added taints_kernel to struct bpf_prog_aux to track the presence of
-   mutating helpers during static analysis without causing premature
-   side effects
+As is well known, a system can simultaneously run multiple different
+scenarios. However, THP is not beneficial in every scenario — it is only
+most suitable for memory-intensive applications that are not sensitive
+to tail latency. For example, Redis, which is sensitive to tail latency,
+is not suitable for THP. But in practice, due to Redis issues, the
+entire THP functionality is often turned off, preventing other scenarios
+from benefiting from it.
 
-Changes since v1 [2]:
- - Moved the taint from run-time execution to load-time verification
- - Added "V" flag decoding to tools/debugging/kernel-chktaint
-   (Randy Dunlap)
- - Updated the seq command in tainted-kernels.rst to check all 21 bits
-   (Randy Dunlap)
- - Fixed a Sphinx "Malformed table" warning by expanding the number
-   column boundaries in tainted-kernels.rst
+There are also some embedded scenarios (e.g. Android) that directly use
+2MB THP, where the granularity is too large. Therefore, we introduced
+mTHP in v6.8, which supports multiple-size THP. In practice, however, we
+still globally fix a single mTHP size and are unable to automatically
+select different mTHP sizes based on different scenarios.
 
-[1]: https://lore.kernel.org/lkml/20260503153730.541685-1-atomlin@atomlin.com/
-[2]: https://lore.kernel.org/lkml/20260503035220.520479-1-atomlin@atomlin.com/
----
- Documentation/admin-guide/tainted-kernels.rst | 56 ++++++++++---------
- include/linux/bpf.h                           |  1 +
- include/linux/panic.h                         |  3 +-
- kernel/bpf/syscall.c                          |  7 +++
- kernel/bpf/verifier.c                         |  8 +++
- kernel/panic.c                                |  1 +
- tools/debugging/kernel-chktaint               |  8 +++
- 7 files changed, 58 insertions(+), 26 deletions(-)
+After testing, it was found that
 
-diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
-index 9ead927a37c0..d26a8d29808c 100644
---- a/Documentation/admin-guide/tainted-kernels.rst
-+++ b/Documentation/admin-guide/tainted-kernels.rst
-@@ -74,35 +74,36 @@ a particular type of taint. It's best to leave that to the aforementioned
- script, but if you need something quick you can use this shell command to check
- which bits are set::
- 
--	$ for i in $(seq 20); do echo $(($i-1)) $(($(cat /proc/sys/kernel/tainted)>>($i-1)&1));done
-+	$ for i in $(seq 21); do echo $(($i-1)) $(($(cat /proc/sys/kernel/tainted)>>($i-1)&1));done
- 
- Table for decoding tainted state
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
--===  ===  ======  ========================================================
--Bit  Log  Number  Reason that got the kernel tainted
--===  ===  ======  ========================================================
--  0  G/P       1  proprietary module was loaded
--  1  _/F       2  module was force loaded
--  2  _/S       4  kernel running on an out of specification system
--  3  _/R       8  module was force unloaded
--  4  _/M      16  processor reported a Machine Check Exception (MCE)
--  5  _/B      32  bad page referenced or some unexpected page flags
--  6  _/U      64  taint requested by userspace application
--  7  _/D     128  kernel died recently, i.e. there was an OOPS or BUG
--  8  _/A     256  ACPI table overridden by user
--  9  _/W     512  kernel issued warning
-- 10  _/C    1024  staging driver was loaded
-- 11  _/I    2048  workaround for bug in platform firmware applied
-- 12  _/O    4096  externally-built ("out-of-tree") module was loaded
-- 13  _/E    8192  unsigned module was loaded
-- 14  _/L   16384  soft lockup occurred
-- 15  _/K   32768  kernel has been live patched
-- 16  _/X   65536  auxiliary taint, defined for and used by distros
-- 17  _/T  131072  kernel was built with the struct randomization plugin
-- 18  _/N  262144  an in-kernel test has been run
-- 19  _/J  524288  userspace used a mutating debug operation in fwctl
--===  ===  ======  ========================================================
-+===  ===  =======  ========================================================
-+Bit  Log  Number   Reason that got the kernel tainted
-+===  ===  =======  ========================================================
-+  0  G/P        1  proprietary module was loaded
-+  1  _/F        2  module was force loaded
-+  2  _/S        4  kernel running on an out of specification system
-+  3  _/R        8  module was force unloaded
-+  4  _/M       16  processor reported a Machine Check Exception (MCE)
-+  5  _/B       32  bad page referenced or some unexpected page flags
-+  6  _/U       64  taint requested by userspace application
-+  7  _/D      128  kernel died recently, i.e. there was an OOPS or BUG
-+  8  _/A      256  ACPI table overridden by user
-+  9  _/W      512  kernel issued warning
-+ 10  _/C     1024  staging driver was loaded
-+ 11  _/I     2048  workaround for bug in platform firmware applied
-+ 12  _/O     4096  externally-built ("out-of-tree") module was loaded
-+ 13  _/E     8192  unsigned module was loaded
-+ 14  _/L    16384  soft lockup occurred
-+ 15  _/K    32768  kernel has been live patched
-+ 16  _/X    65536  auxiliary taint, defined for and used by distros
-+ 17  _/T   131072  kernel was built with the struct randomization plugin
-+ 18  _/N   262144  an in-kernel test has been run
-+ 19  _/J   524288  userspace used a mutating debug operation in fwctl
-+ 20  _/V  1048576  an unsafe eBPF program (mutating helper) was loaded
-+===  ===  =======  ========================================================
- 
- Note: The character ``_`` is representing a blank in this table to make reading
- easier.
-@@ -189,3 +190,8 @@ More detailed explanation for tainting
-  19) ``J`` if userspace opened /dev/fwctl/* and performed a FWTCL_RPC_DEBUG_WRITE
-      to use the devices debugging features. Device debugging features could
-      cause the device to malfunction in undefined ways.
-+
-+ 20) ``V`` if an eBPF program utilising unsafe, mutating helpers (such as
-+     bpf_probe_write_user() or bpf_override_return()) was loaded. These helpers
-+     bypass standard eBPF safety guarantees and can alter execution flow or
-+     corrupt memory.
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index b4b703c90ca9..b2e236a7ed0d 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1698,6 +1698,7 @@ struct bpf_prog_aux {
- 	bool changes_pkt_data;
- 	bool might_sleep;
- 	bool kprobe_write_ctx;
-+	bool taints_kernel;
- 	u64 prog_array_member_cnt; /* counts how many times as member of prog_array */
- 	struct mutex ext_mutex; /* mutex for is_extended and prog_array_member_cnt */
- 	struct bpf_arena *arena;
-diff --git a/include/linux/panic.h b/include/linux/panic.h
-index f1dd417e54b2..8622c02c2c24 100644
---- a/include/linux/panic.h
-+++ b/include/linux/panic.h
-@@ -88,7 +88,8 @@ static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
- #define TAINT_RANDSTRUCT		17
- #define TAINT_TEST			18
- #define TAINT_FWCTL			19
--#define TAINT_FLAGS_COUNT		20
-+#define TAINT_UNSAFE_BPF		20
-+#define TAINT_FLAGS_COUNT		21
- #define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
- 
- struct taint_flag {
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index a3c0214ca934..34b25609e72b 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3083,6 +3083,13 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, u32 uattr_size)
- 	if (err < 0)
- 		goto free_used_maps;
- 
-+	/*
-+	 * The program has passed the verifier. If it utilises unsafe
-+	 * helpers, formally taint the kernel now.
-+	 */
-+	if (prog->aux->taints_kernel)
-+		add_taint(TAINT_UNSAFE_BPF, LOCKDEP_STILL_OK);
-+
- 	err = bpf_prog_mark_insn_arrays_ready(prog);
- 	if (err < 0)
- 		goto free_used_maps;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 69d75515ed3f..9d56082a2ac1 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10287,6 +10287,14 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		return err;
- 	}
- 
-+	/*
-+	 * Flag the program if it attempts to use mutating helpers.
-+	 * The actual taint is deferred until successful verification.
-+	 */
-+	if (func_id == BPF_FUNC_probe_write_user ||
-+	    func_id == BPF_FUNC_override_return)
-+		env->prog->aux->taints_kernel = true;
-+
- 	/* eBPF programs must be GPL compatible to use GPL-ed functions */
- 	if (!env->prog->gpl_compatible && fn->gpl_only) {
- 		verbose(env, "cannot call GPL-restricted function from non-GPL compatible program\n");
-diff --git a/kernel/panic.c b/kernel/panic.c
-index 20feada5319d..1ae19bd8fc1d 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -825,6 +825,7 @@ const struct taint_flag taint_flags[TAINT_FLAGS_COUNT] = {
- 	TAINT_FLAG(RANDSTRUCT,			'T', ' '),
- 	TAINT_FLAG(TEST,			'N', ' '),
- 	TAINT_FLAG(FWCTL,			'J', ' '),
-+	TAINT_FLAG(UNSAFE_BPF,			'V', ' '),
- };
- 
- #undef TAINT_FLAG
-diff --git a/tools/debugging/kernel-chktaint b/tools/debugging/kernel-chktaint
-index e1571c04afb5..c0fbd7bcfcfd 100755
---- a/tools/debugging/kernel-chktaint
-+++ b/tools/debugging/kernel-chktaint
-@@ -211,6 +211,14 @@ else
- 	addout "J"
- 	echo " * fwctl's mutating debug interface was used (#19)"
- fi
-+
-+T=`expr $T / 2`
-+if [ `expr $T % 2` -eq 0 ]; then
-+	addout " "
-+else
-+	addout "V"
-+	echo " * an unsafe eBPF program (mutating helper) was loaded (#20)"
-+fi
- echo "Raw taint value as int/string: $taint/'$out'"
- 
- # report on any tainted loadable modules
--- 
-2.51.0
+- When the system has a lot of free memory, it is normal for Redis to
+  use mTHP. performance degradation in Redis only occurs when the system
+  is under high memory pressure.
+- Additionally, when a large number of small-memory processes use mTHP,
+  memory waste is prone to occur, and performance degradation may also
+  happen during fast memory allocation/release.
+
+Previously, "Cgroup-based THP control"[1] was proposed, but it had the
+following issues.
+
+- It breaks the cgroup hierarchy property.
+- Add new THP knobs, making sysadmin's job more complex
+
+Previously, "mm, bpf: BPF-MM, BPF-THP"[2] was proposed, but it had the
+following issues.
+
+- It didn't address the issue on the per-process mode.
+- For global mode, the prctl(PR_SET_THP_DISABLE) has already achieved
+  the same objective, there is no need to add two mechanisms for the
+  same purpose.
+- Attaching st_ops to mm_struct, the same issues that cgroup-bpf once
+  faced are likely to arise again, e.g. lifetime of cgroup vs bpf, dying
+  cgroups, wq deadlock, etc. It is recommended to use cgroup-bpf for
+  implementation.
+- The test cases are too simplistic, lacking eBPF cases similar to real
+  workloads such as sched_ext.
+
+If I miss some thing, please let me know. Thanks!
+
+Solution
+========
+
+This series will solve all the problems mentioned above.
+
+1. Using cgroup-bpf to customize mTHP size for different scenarios
+2. Use a cgroup eBPF program to monitor all sub-cgroups. Sub-cgroups
+   under the same parent-cgroup adopt the same eBPF program. Only multiple
+   sibling-cgroups (where the parent-cgroup has no attached eBPF program)
+   are supported to attach multiple different eBPF programs without
+   breaking the hierarchy property of the cgroup.
+3. Automatically select different mTHP sizes for different cgroups,
+   let's focus on making them truly transparent.
+4. Design mthp_ext case to address real workload issues.
+
+The main functions of the mthp_ext are as follows:
+
+- When sub-cgroup is under high memory pressure (default, full 100ms 1s),
+  it will automatically fallback to using 4KB.
+- When the anon+shmem memory usage of sub-cgroup falls below the minimum
+  memory (default 16MB), small-memory processes will automatically
+  fallback to using 4KB.
+- Under normal conditions, when there is no memory pressure and the
+  anon+shmem memory usage exceeds the minimum memory, all mTHP sizes
+  shall be utilized by kernel.
+- Monitor the root-cgroup (/sys/fs/cgroup) directory by default, with
+  support for specifying any cgroup directory.
+
+Performance
+===========
+
+The below is some performance test results, testing on x86_64 machine
+(AMD Ryzen9 9950X 16C32T, 32G memory, 8G zram).
+
+NOTE: The following always/never labels indicate setting all mTHP sizes
+to always/never. Detailed test script reference[4].
+
+redis results
+~~~~~~~~~~~~~
+
+command: redis-benchmark --csv -r 3000000 -n 3000000 -d 1024 -c 16 -P 32 -t set
+
+When cgroup memory.high=max.
+
+| redis-noBGSAVE | always      | never                | always+mthp_ext      |
+|----------------|-------------|----------------------|----------------------|
+| rps            | 1410824.167 | 1210387.500 (-14.2%) | 1265659.833 (-10.3%) |
+| avg_latency_ms | 0.220       | 0.259       (-17.7%) | 0.247       (-12.3%) |
+| p95_latency_ms | 0.618       | 0.708       (-14.6%) | 0.676       (-9.40%) |
+| p99_latency_ms | 0.687       | 0.818       (-19.1%) | 0.756       (-10.0%) |
+
+| redis-BGSAVE   | always      | never                | always+mthp_ext      |
+|----------------|-------------|----------------------|----------------------|
+| rps            | 1418032.127 | 1212306.873 (-14.5%) | 1261069.373 (-11.1%) |
+| avg_latency_ms | 0.218       | 0.259       (-18.8%) | 0.248       (-13.8%) |
+| p95_latency_ms | 0.620       | 0.714       (-15.2%) | 0.687       (-10.8%) |
+| p99_latency_ms | 0.684       | 0.828       (-21.1%) | 0.756       (-10.5%) |
+
+When cgroup memory.high=2G.
+
+| redis-noBGSAVE | always    | never                 | always+mthp_ext       |
+|----------------|-----------|-----------------------|-----------------------|
+| rps            | 24813.980 | 1049254.583 (4128.5%) | 1063171.270 (4184.6%) |
+| avg_latency_ms | 13.317    | 0.302       (  97.7%) | 0.298       (  97.8%) |
+| p95_latency_ms | 23.220    | 0.754       (  96.8%) | 0.828       (  96.4%) |
+| p99_latency_ms | 369.492   | 1.154       (  99.7%) | 1.615       (  99.6%) |
+
+| redis-BGSAVE   | always    | never                 | always+mthp_ext       |
+|----------------|-----------|-----------------------|-----------------------|
+| rps            | 48373.433 | 1058403.500 (2088.0%) | 1070805.707 (2113.6%) |
+| avg_latency_ms | 6.884     | 0.300       (  95.6%) | 0.296       (  95.7%) |
+| p95_latency_ms | 16.474    | 0.743       (  95.5%) | 0.820       (  95.0%) |
+| p99_latency_ms | 326.058   | 1.170       (  99.6%) | 1.586       (  99.5%) |
+
+When the redis is under no memory pressure, RPS drops by 10.3% (from 1.4M to
+1.2M, Is this within the acceptable range?).
+
+However, under high memory pressure, RPS improve by 4184.6% (from 24K to 1M),
+while significantly reducing the tail latency by 99%.
+
+unixbench results
+~~~~~~~~~~~~~~~~~
+
+command: ./Run -c 1 shell8
+
+| unixbench shell8 | always  |      never      | always+mthp_ext |
+|------------------|---------|-----------------|-----------------|
+| Score            | 23019.4 | 24378.3 (5.90%) | 24314.5 (5.63%) |
+
+mthp_ext improved by 5.63%.
+
+kernbench results
+~~~~~~~~~~~~~~~~~
+
+When cgroup memory.high=max, mthp_ext no regression.
+
+                            always                 never               always+mthp_ext
+Amean     user-32    19666.44 (   0.00%)    18464.56 *   6.11%*    19650.13 *   0.08%*
+Amean     syst-32     1169.16 (   0.00%)     2235.17 * -91.18%*     1169.42 (  -0.02%)
+Amean     elsp-32      702.51 (   0.00%)      699.90 *   0.37%*      702.15 (   0.05%)
+BAmean-95 user-32    19665.93 (   0.00%)    18461.86 (   6.12%)    19647.61 (   0.09%)
+BAmean-95 syst-32     1168.68 (   0.00%)     2234.27 ( -91.18%)     1169.20 (  -0.04%)
+BAmean-95 elsp-32      702.34 (   0.00%)      699.80 (   0.36%)      702.04 (   0.04%)
+BAmean-99 user-32    19665.93 (   0.00%)    18461.86 (   6.12%)    19647.61 (   0.09%)
+BAmean-99 syst-32     1168.68 (   0.00%)     2234.27 ( -91.18%)     1169.20 (  -0.04%)
+BAmean-99 elsp-32      702.34 (   0.00%)      699.80 (   0.36%)      702.04 (   0.04%)
+
+When cgroup memory.high=2G, mthp_ext improved by 20.98%.
+
+                            always                 never               always+mthp_ext
+Amean     user-32    20459.89 (   0.00%)    18517.24 *   9.49%*    19963.73 *   2.43%*
+Amean     syst-32    11890.63 (   0.00%)     6681.95 *  43.80%*     9395.94 *  20.98%*
+Amean     elsp-32     1305.29 (   0.00%)      928.13 *  28.89%*     1109.37 *  15.01%*
+BAmean-95 user-32    20439.38 (   0.00%)    18510.65 (   9.44%)    19957.89 (   2.36%)
+BAmean-95 syst-32    11789.99 (   0.00%)     6679.03 (  43.35%)     9381.77 (  20.43%)
+BAmean-95 elsp-32     1302.18 (   0.00%)      927.89 (  28.74%)     1108.65 (  14.86%)
+BAmean-99 user-32    20439.38 (   0.00%)    18510.65 (   9.44%)    19957.89 (   2.36%)
+BAmean-99 syst-32    11789.99 (   0.00%)     6679.03 (  43.35%)     9381.77 (  20.43%)
+BAmean-99 elsp-32     1302.18 (   0.00%)      927.89 (  28.74%)     1108.65 (  14.86%)
+
+TODO
+====
+
+- Do not destroy the cgroup hierarchy property. If an eBPF program
+  already exists in the sub-cgroup, trigger an error and clear the
+  already set bpf_mthp_ops data.
+- mthp_ext handles different "enum tva_type" values. For example, for
+  small-memory processes, only 4KB is used in TVA_PAGEFAULT, while
+  TVA_KHUGEPAGED/TVA_FORCED_COLLAPSE continues to collapse all mthp
+  size. Under high memory pressure, only 4KB is used for
+  TVA_PAGEFAULT/TVA_KHUGEPAGED, while TVA_FORCED_COLLAPSE continues to
+  collapse all mthp size.
+- selftest
+
+If there are additional scenarios, please let me know as well, so I can
+conduct further prototype verification tests to make mTHP more
+transparent.
+
+If any of the above the strategies can be integrated into the kernel,
+please let me know. I would be delighted to incorporate these strategies
+into the kernel.
+
+This series is based on linux v7.1-rc1 (26fd6bff2c05) + "mm: BPF OOM"[3]
+first four patches.
+
+Thank you very much for your comments and discussions.
+
+[1] https://lore.kernel.org/linux-mm/20241030083311.965933-1-gutierrez.asier@huawei-partners.com
+[2] https://lore.kernel.org/linux-mm/20251026100159.6103-1-laoar.shao@gmail.com
+[3] https://lore.kernel.org/linux-mm/20260127024421.494929-1-roman.gushchin@linux.dev
+[4] https://github.com/vernon2gh/app_and_module/tree/main/mthp_ext
+
+Vernon Yang (4):
+  psi: add psi_group_flush_stats() function
+  bpf: add bpf_cgroup_{flush_stats,stall} function
+  mm: introduce bpf_mthp_ops struct ops
+  samples: bpf: add mthp_ext
+
+ MAINTAINERS                     |   3 +
+ include/linux/bpf_huge_memory.h |  35 ++++
+ include/linux/cgroup-defs.h     |   1 +
+ include/linux/huge_mm.h         |   6 +
+ include/linux/psi.h             |   1 +
+ kernel/bpf/helpers.c            |  29 +++
+ kernel/sched/psi.c              |  34 +++-
+ mm/Kconfig                      |  14 ++
+ mm/Makefile                     |   1 +
+ mm/bpf_huge_memory.c            | 169 ++++++++++++++++
+ samples/bpf/.gitignore          |   1 +
+ samples/bpf/Makefile            |   7 +-
+ samples/bpf/mthp_ext.bpf.c      | 142 +++++++++++++
+ samples/bpf/mthp_ext.c          | 340 ++++++++++++++++++++++++++++++++
+ samples/bpf/mthp_ext.h          |  30 +++
+ 15 files changed, 804 insertions(+), 9 deletions(-)
+ create mode 100644 include/linux/bpf_huge_memory.h
+ create mode 100644 mm/bpf_huge_memory.c
+ create mode 100644 samples/bpf/mthp_ext.bpf.c
+ create mode 100644 samples/bpf/mthp_ext.c
+ create mode 100644 samples/bpf/mthp_ext.h
+
+--
+2.53.0
 
