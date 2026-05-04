@@ -1,133 +1,164 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 506E03DE45D
-	for <bpf@vger.kernel.org>; Mon,  4 May 2026 14:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 959A03DE44F;
+	Mon,  4 May 2026 14:23:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777903554; cv=none; b=PvDoC8uRk39WyU3+uGAX9SGxl6DStHxKj1geUuY6w6dHcIHsC48dqTZkJqqqWunVJHCTuduB/hmKR/ptFsRTRm1PlggqAom4bRfbnkA5LwvlmY3z8gTjsfcAQI5bsAqur0QtGeCLa+lquBZ5KVVnNQC9OGtDCoEjqHVxShnsAJg=
+	t=1777904633; cv=none; b=Q+E8Xw5qcO1taUkheaEAslrrHjkQsSn9GTmmPepXF+DM1MbStOiIWtizZmZsnMQK4jbJWDeCPnhQx/6A0z0piKosgTxNwjgyOHNIE8n/nGhmgooLfo7zTqCvhXe8Hv5l/aohsEWJqjJWQEj2lgEWgyd/zsX49iY/fWXcjknGMSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777903554; c=relaxed/simple;
-	bh=puUQpxpOOMqnVd2eFLdmJ7ba/xPE6klpnVs5liK0em8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
-	 References:In-Reply-To; b=tMH0y5QgXhiOwBXHm3VUzKm7j1vaHMLfbzvzj/LGDoQjNMwYA8bjVLBfHekQ7NmDcYjCfhMP4jHXVJpsKrl8X3eUFpogsamtKrbjSNO8cYACEnEVLngELwkU7etq0vDIzWY1BppOPkr754LbuLgMxl3WvkzPDZD4umbXE6Btjco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=DxNcDIBG; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1777904633; c=relaxed/simple;
+	bh=3kvxwpgdMQiXmQKOEsF6fyhQKPZdd1FaKeFuVx6Aywg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=pIzyznmNtKAZqrdNaisdBE61PWK66GiKnSsk3+3GM4f9VjMxP2gpqlXkLvMiV73UkOvM4ruiuDt7EZze7OK6rQIZyb4ne65GRTeq+frp39coQHOH0Aua39qy37LB3RrG2PkNoAwJU0fvzR+EDqhFZUHlhgkwTerWyoDuwATKEHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Mzj3XLlj; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="DxNcDIBG"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-bba0dde4f43so667198566b.3
-        for <bpf@vger.kernel.org>; Mon, 04 May 2026 07:05:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1777903552; x=1778508352; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:subject:from:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qxH/n2fmjxOiVX9boi8Uf5ZeGO40PmkXCnUi1eKqyXY=;
-        b=DxNcDIBGFCSvjP3F8COyW4TYD3OkmV5R8C/gk5EGyNTePyZGoLPBOnRRGQpbEay0x2
-         CQhQif77TqeXgN6akSy9/YuXhUoqKNqZcZpXr/PbSPWNRV19iP6yUlQvVff8kHgi1I1B
-         +Yam1GTZ57agNtH6AZ6855pfGA8Y9JqQHqxQvIWypTAla3Q+bZ38YJ+9GSIyFXvl+gJY
-         qaxH7Tal91MSDstmAIZRCs257gxGhOiAB5ntK9awRSa2V7CBcUAgwC9O3AbVyzWKEH34
-         WoVGQq21sTLCv6oY8DFXNg9TjOST/MwVY3klj99ysVoR8tOYd47HFJjMGZmrAqiRCoBx
-         kZTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777903552; x=1778508352;
-        h=in-reply-to:references:cc:subject:from:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qxH/n2fmjxOiVX9boi8Uf5ZeGO40PmkXCnUi1eKqyXY=;
-        b=EJ82vq6U7yTliNxBhgQtQABD+xAIFJReaMIpHzpIzpqfElVKcKHlGjVAFAAiUV6nfU
-         dfPaCrn2Bw3LeQYovozX00FT5k+J6CwT9XaseA6EjRrCAJCvlDqamQxVefuflgglt/yx
-         inxseNln3YvR6c7bswSdnbWOYT7bNRWdPS4NwRQr/MqCigvylMGRs0xsvH6sEq+VrU7o
-         EUc+c6UioFQzAoqNs0Yvm5iG4CMXE00hWQeGaIrjjyuFwtmkHtzY1G2N9WOvAJQ1PUd8
-         FU0Gwlrlsj4MsUr/yGFu1Eo8f4KSymBm87yyN8lnef7pIV7toGSu7GQEpXFG6kbSPy7M
-         nKGg==
-X-Gm-Message-State: AOJu0YzNgGhl+w4XuHw5vch1VUfm4kEDlpIhAorZmWIwhLowhD0ZSjUG
-	mJv360Cr8UwNKaH0Q1bjDfkvOQ6idveJ6VWEHLwq2xe553AadCoZ8FvkkIAm28kj6dOH3iegnNW
-	UTjuL3aY=
-X-Gm-Gg: AeBDieue3rTwoNjdWT9HoogpYph80vsfleCysT02pC5U9efbmlWtSfMVdwtFOB5x3OL
-	zjwSY3Khc1xZDVAPpHLYBGKY3d68VH0HTYVSJ8cpKms3k3QUl98QSAEZnv62TmDcXco24/GVmnh
-	eCLndgBpm+0YqtV4nmXmYXzEQ6x/Sj6vKo/HJmDI9AqpTwhyQMIVHswI20tMgXNARllfKpQwjI7
-	Cw9fzXOxlDIFdyXriNhjYhzZM9OFSA7oPeBlMJ/JwEib1sL1ewRzA/mB0718E/0e3HgbAIHpKd+
-	MxKoNWIFUJ21sp4kp+mjhV/X275AceqZswXx85JdZzKqha+w1h4XxrRFYLa6gTYK00O6noCW4Y+
-	Y53SPAv5LOyy9R+LHgEHvi68XKfDNvVf1Z8/9P05GP2JPRkyWj28y9NdBmYa7d1SmPnyW3Hfy5i
-	IyAw+H7VOJ2lsixCv99K+HdA==
-X-Received: by 2002:a17:907:3cd4:b0:bad:d530:dbf7 with SMTP id a640c23a62f3a-bbffd6c43bbmr534556066b.32.1777903551577;
-        Mon, 04 May 2026 07:05:51 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:1294:2ecf:67ff:fe81:9da0])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-574a6ee0b24sm6221372e0c.16.2026.05.04.07.05.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2026 07:05:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Mzj3XLlj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1777904631; x=1809440631;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to:cc;
+  bh=3kvxwpgdMQiXmQKOEsF6fyhQKPZdd1FaKeFuVx6Aywg=;
+  b=Mzj3XLljY9zoihKjbQl3tbJh0XU/HxrSMZnvTRqk41iD6zTyRg3QUlrD
+   vCpIO+mzjp3RaoIe2LoEQUXPd3kcbPrKUKd+AA0UhUi9Cj0bGFEoYbnKe
+   J7pdGOO93WQ16zM+gX7JbCVs7GVZ2HB7QxEjUwnO94fqwEsAZmglfcJaM
+   kEAaPZNThof9h0E2kW/eiaPJEGQSFi/1nJy9gyebLXef0gK30/AI95ibl
+   AXq/cdgXW6ujnTRyTSJt6kbaAlVlfXrjiRFcZvqtS9QUhCXo3BbvQleWF
+   blaKuuH2wlaPUFduwnVF7en3MGvguzCacWr+aagdHjGNnXJVuOXhfqFxP
+   Q==;
+X-CSE-ConnectionGUID: +jH7nhy1SJmKH/F7PkkBwQ==
+X-CSE-MsgGUID: lbyuZs6UQROMwHP2ti7vFg==
+X-IronPort-AV: E=Sophos;i="6.23,215,1770620400"; 
+   d="scan'208";a="224241158"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 May 2026 07:23:50 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Mon, 4 May 2026 07:23:50 -0700
+Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Mon, 4 May 2026 07:23:46 -0700
+From: Daniel Machon <daniel.machon@microchip.com>
+Date: Mon, 4 May 2026 16:23:17 +0200
+Subject: [PATCH net-next v3 04/13] net: lan966x: add FDMA LLP register
+ write helper
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 04 May 2026 11:05:49 -0300
-Message-Id: <DI9Y7J0BSMZQ.1JG02IF9PP4QX@suse.com>
-To: <bot+bpf-ci@kernel.org>, <rbm@suse.com>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
- <eddyz87@gmail.com>, <memxor@gmail.com>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <shuah@kernel.org>,
- <nathan@kernel.org>, <nick.desaulniers+lkml@gmail.com>, <morbo@google.com>,
- <justinstitt@google.com>
-From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
-Subject: Re: [PATCH bpf-next v11 01/11] selftests/bpf: Add BPF_STRICT_BUILD
- toggle
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
- <alan.maguire@oracle.com>, <martin.lau@kernel.org>, <clm@meta.com>,
- <ihor.solodrai@linux.dev>
-X-Mailer: aerc 0.21.0-120-g22b95d38161f
-References: <20260430-selftests-bpf_misconfig-v11-1-e11f7a8c4fdc@suse.com>
- <62fa35211e90c3961079550e6b826dd1bee301e86838a03ab15cb0b4a631aa8d@mail.kernel.org>
-In-Reply-To: <62fa35211e90c3961079550e6b826dd1bee301e86838a03ab15cb0b4a631aa8d@mail.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20260504-lan966x-pci-fdma-v3-4-a56f5740d870@microchip.com>
+References: <20260504-lan966x-pci-fdma-v3-0-a56f5740d870@microchip.com>
+In-Reply-To: <20260504-lan966x-pci-fdma-v3-0-a56f5740d870@microchip.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
+	<horatiu.vultur@microchip.com>, Steen Hegelund
+	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Herve
+ Codina <herve.codina@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Mohsin Bashir
+	<mohsin.bashr@gmail.com>
+CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+X-Mailer: b4 0.14.3
 
-On Thu Apr 30, 2026 at 1:41 PM -03, bot+bpf-ci wrote:
->> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selfte=
-sts/bpf/Makefile
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -44,6 +44,12 @@
->>  SKIP_LIBBFD	?=3D
->>  SKIP_CRYPTO	?=3D
->>
->> +# When BPF_STRICT_BUILD is 1, any BPF object, skeleton, test object, or
->> +# benchmark compilation failure is fatal. Set to 0 to tolerate failures
->> +# and continue building the remaining tests.
->> +BPF_STRICT_BUILD ?=3D 1
->> +PERMISSIVE :=3D $(filter 0,$(BPF_STRICT_BUILD))
->                      ^^^^
->
-> The PERMISSIVE variable is defined here but never used anywhere in the
-> Makefile. The commit message claims "subsequent Makefile rules use to
-> make individual build steps non-fatal," but a search through the file
-> shows PERMISSIVE only appears at this definition line.
->
-> This makes the BPF_STRICT_BUILD=3D0 option documented in the commit messa=
-ge
-> non-functional. Users following the provided example will expect permissi=
-ve
-> mode to work, but it has no actual effect.
->
-> Should this commit include the Makefile rules that actually use PERMISSIV=
-E,
-> or is this feature incomplete?
+The FDMA Link List Pointer (LLP) register points to the first DCB in the
+chain and must be written before the channel is activated. This tells
+the FDMA engine where to begin DMA transfers.
 
-Users of this come later in the series. Kept as standalone commit for
-improving readability a bit.
+Move the LLP register writes from the channel start/activate functions
+into the allocation functions and introduce a shared
+lan966x_fdma_llp_configure() helper. This is needed because the upcoming
+PCIe FDMA path writes ATU-translated addresses to the LLP registers
+instead of DMA addresses. Keeping the writes in the shared
+start/activate path would overwrite these translated addresses.
 
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/251764=
-31268
+Tested-by: Herve Codina <herve.codina@bootlin.com>
+Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
+---
+ .../net/ethernet/microchip/lan966x/lan966x_fdma.c  | 29 ++++++++++------------
+ 1 file changed, 13 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+index f8ce735a7fc0..6c5761e886d4 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+@@ -109,6 +109,13 @@ static int lan966x_fdma_rx_alloc_page_pool(struct lan966x_rx *rx)
+ 	return PTR_ERR_OR_ZERO(rx->page_pool);
+ }
+ 
++static void lan966x_fdma_llp_configure(struct lan966x *lan966x, u64 addr,
++				       u8 channel_id)
++{
++	lan_wr(lower_32_bits(addr), lan966x, FDMA_DCB_LLP(channel_id));
++	lan_wr(upper_32_bits(addr), lan966x, FDMA_DCB_LLP1(channel_id));
++}
++
+ static int lan966x_fdma_rx_alloc(struct lan966x_rx *rx)
+ {
+ 	struct lan966x *lan966x = rx->lan966x;
+@@ -127,6 +134,9 @@ static int lan966x_fdma_rx_alloc(struct lan966x_rx *rx)
+ 	fdma_dcbs_init(fdma, FDMA_DCB_INFO_DATAL(fdma->db_size),
+ 		       FDMA_DCB_STATUS_INTR);
+ 
++	lan966x_fdma_llp_configure(lan966x, (u64)fdma->dma,
++				   fdma->channel_id);
++
+ 	return 0;
+ }
+ 
+@@ -136,14 +146,6 @@ static void lan966x_fdma_rx_start(struct lan966x_rx *rx)
+ 	struct fdma *fdma = &rx->fdma;
+ 	u32 mask;
+ 
+-	/* When activating a channel, first is required to write the first DCB
+-	 * address and then to activate it
+-	 */
+-	lan_wr(lower_32_bits((u64)fdma->dma), lan966x,
+-	       FDMA_DCB_LLP(fdma->channel_id));
+-	lan_wr(upper_32_bits((u64)fdma->dma), lan966x,
+-	       FDMA_DCB_LLP1(fdma->channel_id));
+-
+ 	lan_wr(FDMA_CH_CFG_CH_DCB_DB_CNT_SET(fdma->n_dbs) |
+ 	       FDMA_CH_CFG_CH_INTR_DB_EOF_ONLY_SET(1) |
+ 	       FDMA_CH_CFG_CH_INJ_PORT_SET(0) |
+@@ -214,6 +216,9 @@ static int lan966x_fdma_tx_alloc(struct lan966x_tx *tx)
+ 
+ 	fdma_dcbs_init(fdma, 0, 0);
+ 
++	lan966x_fdma_llp_configure(lan966x, (u64)fdma->dma,
++				   fdma->channel_id);
++
+ 	return 0;
+ 
+ out:
+@@ -235,14 +240,6 @@ static void lan966x_fdma_tx_activate(struct lan966x_tx *tx)
+ 	struct fdma *fdma = &tx->fdma;
+ 	u32 mask;
+ 
+-	/* When activating a channel, first is required to write the first DCB
+-	 * address and then to activate it
+-	 */
+-	lan_wr(lower_32_bits((u64)fdma->dma), lan966x,
+-	       FDMA_DCB_LLP(fdma->channel_id));
+-	lan_wr(upper_32_bits((u64)fdma->dma), lan966x,
+-	       FDMA_DCB_LLP1(fdma->channel_id));
+-
+ 	lan_wr(FDMA_CH_CFG_CH_DCB_DB_CNT_SET(fdma->n_dbs) |
+ 	       FDMA_CH_CFG_CH_INTR_DB_EOF_ONLY_SET(1) |
+ 	       FDMA_CH_CFG_CH_INJ_PORT_SET(0) |
+
+-- 
+2.34.1
 
