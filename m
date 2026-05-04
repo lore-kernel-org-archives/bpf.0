@@ -1,67 +1,67 @@
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F113D8131
-	for <bpf@vger.kernel.org>; Mon,  4 May 2026 13:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973223DC4CE
+	for <bpf@vger.kernel.org>; Mon,  4 May 2026 13:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777900077; cv=none; b=LoqQZJxM0XAf9lY58trQ/9jODJHOuUsRqZRM+E6la6B4psfQlB2+kpMXphnbgoRXktdb5twlPIWZhkDE3DyPFhcZqngb+/t5gwWEL7tYw5+srmEG8NEoF5dAcx9MGGe//lyLTCKfJxx/3+oPhsULvXtXAQV9DzXuBKkvWH3kIpY=
+	t=1777901684; cv=none; b=h9HREOA6eEtFErsPAwd3cylwxIs79J7ydHfbZowU0f8YSW5pXF55SZpFPwDOAg+fDx0tOstx9AWQ8cfT1Z3hVUIc3QlUf2rjipWb/SjLj7Znrv+tGTUD31AkEqBA7YXmVij0NsjAzgf6E78by4mfyF7TBQivQldOqk1dpihinqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777900077; c=relaxed/simple;
-	bh=SfrLhYfvia58mIrqMwiqY24xvyzZfeN95GCFj9Ymlu8=;
+	s=arc-20240116; t=1777901684; c=relaxed/simple;
+	bh=fE/FMqRtr05uo+J0w0E8qsFyUlmDDBPKI19czQaErzI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eHtFqFkTDDTWs1OJsyPVP7tvD2j+HdS8TEWwOiBdVHVLwzBbqULBmw7y2zwSy+zsBZILiDKqfnNFMhXkQJzwTh2zScKtw+fwovYttY7+/CdapN17YEnzZh8vBP0vFu3vBHtTXAKVwILnEhtly/oV6Kpfp+mjVtoPaQFBQb5nfeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=vRzD39VN; arc=none smtp.client-ip=209.85.219.50
+	 In-Reply-To:Content-Type; b=GsLVA8Mk11yAkUgtxoxGKra9ugXu6yVWan9wEIe1/YxfK+2G2JGD4ShYQO6k1fnxAzKW+b5z7BBZmBYo4++SDikyW37FbQitoZ2Ch6y+ZsWjJ0OyJxpP9XcwA3m+AwSM+eOOJjrsbXkJNrXuUzn1FakXUNsoy2nED1SXU9TYZNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=IARYnIuF; arc=none smtp.client-ip=209.85.160.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="vRzD39VN"
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-8aca4e14411so41505786d6.3
-        for <bpf@vger.kernel.org>; Mon, 04 May 2026 06:07:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="IARYnIuF"
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-5102582e23eso31434661cf.1
+        for <bpf@vger.kernel.org>; Mon, 04 May 2026 06:34:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1777900075; x=1778504875; darn=vger.kernel.org;
+        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1777901678; x=1778506478; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=orEuFxihbtCw78bb0MGSYlMJ0pgE+offZfO0F9CrVb0=;
-        b=vRzD39VN3deczejGqt9SufnxB8wHk6NHfv9oYhWXRya1NwOOjMIr9pvl/sNUvMCl9H
-         FOi1wFLMGpO1uG+7ISWuUgc9msPeJIczmqB/JK/kknw36JtsV1Iog4u/ZSQcDuZcwLdW
-         3crdaBslFVDS7hgCZcj0Ga1++6O3wReejN6gK2qSHNq0CB2w8thMmsCPbk37852ToJev
-         W14PGnDaI6D/WpVMtBJJILy2gxHKuZh2ppEJq3aRW9hwUJ9+G+JTC/mf9DX7+06Y/fl7
-         qq9mCTQYjdFGU+GBx6FzsXtT+MCOhrPDHsqpdEwrGLNgfM69naPCqIzNylOrB/g52E+E
-         GfUA==
+        bh=1O51d4ds85yTh8lyD3JZ4q7u8vPdQtNHSLTt8d3PVfM=;
+        b=IARYnIuF1jJJrB45HAzJaAtwE+AeyXoN91edqT8qe4dqB9eycPEBOeLfpbjRndv2p7
+         b1KTlNc/O7xHE8z8JpMGnwfuvFJOsigZyTVXl9Dzv3zHK3rS12ZhVun3jts6+mXEGbmw
+         70OKRfGlkhCJrz8BtUen4+30f0EA2u0RZqvTLPUb4ZInITmwks28S48SG273UIh+Dafz
+         J+dLHOlNYGpwQGzTTLA8thF81/iZcz62YxDr6puMELr40aJJPq99InHfWYgqNGBkjfhA
+         saRoIlS47YYiU6OqLCOdreoTIPFJVBwtTe2xXAvwWc3S+wjEVEfKGKHCJVvDqdaWHouy
+         U3zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777900075; x=1778504875;
+        d=1e100.net; s=20251104; t=1777901678; x=1778506478;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=orEuFxihbtCw78bb0MGSYlMJ0pgE+offZfO0F9CrVb0=;
-        b=rmSGhyCrdz11WCZ30QBRYZFezZuu5GYg9fDpP6UVfH20ickUkH6PUn/hUfFzwuC01T
-         7zY9Coxn2w8TXz2FdpTbEacqVzbPgjiPNDzZvvLOn8a0cVDkqVhJlRDHAWMfJW3Wt1Ao
-         6w9KC6L7ocMeFQ5hJY7mdQ1RctuuNIAk7GHVrcbL2hf4+AKu5+7KIPDJGtESxdWCqemd
-         RKO+IpwS0Zix6iVQHPAKeW6g7AvaWhqTYTJoG9PAbGkyE+Wb9okhApBgHe71y3wpaFGl
-         Ax3oewNM6gLwNOPvUkH3Bevb5q4Ypi7LndW6Hkw0w0U9tsI4gSkt5fmTtwiyVjjU3g2e
-         bKOQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/PkBK2uA2AkFXPK36UMLGzaDEUWPlc3fvBRRM9AUVc8B6TvdjPTaOdH6VPmVssfiC2M28=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyd2dBJrw8CxK5BSGSaNssns8oguEXTlbdJi+BUUijgExLHfJ21
-	cEZJdwyZlpwwjRGwQ3KI3vHblD9tKdD9E19LysrmgSQeaIUpgcHAOjSEe1ffSicnDoA=
-X-Gm-Gg: AeBDiesHezERKaVEnkFIZWYggLZli79A2M4PH1+X0AKE184k0HUQDHtD14IgrsQqYir
-	HY8OdpqYSEDEisPnoAJe7BRjxxUV28SdfPl2VFrmmcp7eTG8Eo87QRcRpiUOMPYBMUxF0Z7Nv4r
-	2RJzRDNupyHzKnERpI7OZlKhUdKf7tZKF87UoV82Ga1vEotUvt4tS5ncGK4itER/3GSZhmNEDFg
-	EQGOBEiB+ZLgiMg72wQw2bJ+DAKJmTn/z4VPnZZBvg/2PNaO5h9ZwYLhS6WS0NA+lLsygoF68Ol
-	v5aNWyvczn5fDuBTEVpr73FbhR1G1zPIIPOT7jZnY23vUPVJbW3MRN1RnIm9WVwm4mAD0+cl/Ct
-	WpCyKfRHdkemm5tu4dEQ+6AZOtKK9fOUpzW23a1Vl3nKwFQ7jJKli3c0jY5praSxpy1TKp0k0lM
-	+AA+PxyTEBOzYjIp2Fqc3ymxNIz7vx7q46x1N2lILtrpgf2XjwcweRGZ/fKtGHkV+tunrY86yd7
-	Q==
-X-Received: by 2002:a05:6214:5342:b0:8ac:b4d5:50ec with SMTP id 6a1803df08f44-8b668a1fafbmr160317526d6.38.1777900074368;
-        Mon, 04 May 2026 06:07:54 -0700 (PDT)
+        bh=1O51d4ds85yTh8lyD3JZ4q7u8vPdQtNHSLTt8d3PVfM=;
+        b=AyAvJB2MOP52hzhAXeoC9Wj0NyLc55EOQghfXZ9tRnQA5T9dyiEu2JVA1ED+mieOhp
+         HJC1w5y3T83M5CiVG9+jRMduw8Yo+0Z9BcxsgwcOuM7U4+17dtLckI4ZhRz/22AldQqy
+         I8ozpis2i5p3EzBf7pv/J9uQRTM9Sy+eHUWCedqKKTmMOLVqZoi5nmSLxZZuUTwyCRkK
+         wQ0lefnx4oLgnzMNYmMqKwPFN6EOA96ugxH9OF83pZUsB2EUrIGaO5GmkIUPmIPtIe8p
+         xU3WNPcpNeLV19j9BkTWISZjBlJUVO4U1ZM6nRL616+6xO1Wls8j9t5y3YO4hweMDzXX
+         +J4g==
+X-Forwarded-Encrypted: i=1; AFNElJ8JuVDGgSn6h9D2BA6qL02teitMrYnQfqPwZrzdPfxKr9UJpZqMRiG1jw21nUtcWzYY97A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDEW/rm/KJyePCg1w8A+BSuCpXEDiNNqKar+trpBbsrzHdIK0I
+	/aAOkeSwQFnu/xp57DiNlGlNeUmkevsVujVooJIBxr/l6CKH0DOTTZQ284L3Fl5ce1M=
+X-Gm-Gg: AeBDiettOPxewvlGnfJuR5LyeNSfbAZTRf/xl6WBeAMEh/Z8WbB/NAPnj52hsDwfs6y
+	msL2NflmYshuI8cLXXdjT5S8rm/nElhIG8026grbPRCvDPxuJ51fIvDtoxG2C6ekJGybjROzria
+	Mw45DE1LEhK4AY45HANt2toR+8k2wR4nmCmolW2QPglIgMTpdfY2BX4mojEiMSOFhuAf3WPMC7x
+	dGJzlA6Cm304J1EKbX0a575aQIKaNOOub3xygle1x2IIqghzH/jcdVCGEqV4Wm4LikC+mhoScSY
+	OaBzyOkJKgr7tPKlPloyJqFwgthDYOEE4Xe8pkyS0vppkecMWZXTm2+/fK/ktdsP7E07DGfBzRR
+	G0NIITNH06xuGVDJXApfIBCMnD0Eq5ljUrksTWKqeMvDuPvZP3Lo6dp0OIkTjMlwVaPME6QrKZq
+	1FTpJfT92r5GLYA4y16IpT3PlCQFNYcD3HLzzj0L5B6PBJ6uXCaoFwb3XuTxjtyL6WXi2fV347v
+	g==
+X-Received: by 2002:a05:622a:48a:b0:50d:9e8d:9837 with SMTP id d75a77b69052e-5104bde3d42mr142601201cf.11.1777901678300;
+        Mon, 04 May 2026 06:34:38 -0700 (PDT)
 Received: from [172.22.22.28] (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b53c6b8398sm130363776d6.37.2026.05.04.06.07.50
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8fc2c91c807sm1137764785a.32.2026.05.04.06.34.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 May 2026 06:07:53 -0700 (PDT)
-Message-ID: <53fb87c9-25f3-4da1-aa7b-104c10c92a06@riscstar.com>
-Date: Mon, 4 May 2026 08:07:50 -0500
+        Mon, 04 May 2026 06:34:37 -0700 (PDT)
+Message-ID: <164fb5ca-9c42-46ad-a13c-3757ff5d2fdd@riscstar.com>
+Date: Mon, 4 May 2026 08:34:33 -0500
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,356 +69,213 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 09/12] gpio: tc956x: add TC956x/QPS615 support
-To: Bartosz Golaszewski <brgl@kernel.org>
-Cc: daniel@riscstar.com, mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
- alexandre.torgue@foss.st.com, ast@kernel.org, boon.khai.ng@altera.com,
- chenchuangyu@xiaomi.com, chenhuacai@kernel.org, daniel@iogearbox.net,
- hawk@kernel.org, hkallweit1@gmail.com, inochiama@gmail.com,
- john.fastabend@gmail.com, julianbraha@gmail.com, livelycarpet87@gmail.com,
- matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
+Subject: Re: [PATCH net-next 08/12] dt-bindings: net: toshiba,tc965x-dwmac:
+ add TC956x Ethernet bridge
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com,
+ rmk+kernel@armlinux.org.uk, andersson@kernel.org, konradybcio@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, linusw@kernel.org,
+ brgl@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
+ Daniel Thompson <daniel@riscstar.com>, mohd.anwar@oss.qualcomm.com,
+ a0987203069@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+ boon.khai.ng@altera.com, chenchuangyu@xiaomi.com, chenhuacai@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, hkallweit1@gmail.com,
+ inochiama@gmail.com, john.fastabend@gmail.com, julianbraha@gmail.com,
+ livelycarpet87@gmail.com, matthew.gerlach@altera.com,
+ mcoquelin.stm32@gmail.com, me@ziyao.cc,
  prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
  rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
  weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
  bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
  devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
  linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com,
- rmk+kernel@armlinux.org.uk, andersson@kernel.org, konradybcio@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, linusw@kernel.org,
- arnd@arndb.de, gregkh@linuxfoundation.org
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20260501155421.3329862-1-elder@riscstar.com>
- <20260501155421.3329862-10-elder@riscstar.com>
- <CAMRc=McWXCqyv1LmWMuEMmE3HqaURx_eMD8rkDs9AJT+7W2aYw@mail.gmail.com>
+ <20260501155421.3329862-9-elder@riscstar.com>
+ <20260504-fascinating-teal-tarsier-b116c8@quoll>
 Content-Language: en-US
 From: Alex Elder <elder@riscstar.com>
-In-Reply-To: <CAMRc=McWXCqyv1LmWMuEMmE3HqaURx_eMD8rkDs9AJT+7W2aYw@mail.gmail.com>
+In-Reply-To: <20260504-fascinating-teal-tarsier-b116c8@quoll>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/4/26 7:46 AM, Bartosz Golaszewski wrote:
-> On Fri, 1 May 2026 17:54:17 +0200, Alex Elder <elder@riscstar.com> said:
->> Toshiba TC956x is an Ethernet-AVB/TSN bridge and is essentially
->> a small and highly-specialized SoC.  TC956x includes a GPIO block that
->> can be accessed, alongside several other peripherals, via two PCIe
->> endpoint functions.  The PCIe function driver creates an auxiliary
->> device for the GPIO block, and that device gets bound to this auxiliary
->> device driver.
+On 5/4/26 6:00 AM, Krzysztof Kozlowski wrote:
+> On Fri, May 01, 2026 at 10:54:16AM -0500, Alex Elder wrote:
+>> From: Daniel Thompson <daniel@riscstar.com>
 >>
->> Co-developed-by: Daniel Thompson <daniel@riscstar.com>
+>> Add devicetree bindings for the Toshiba TC956x family of Ethernet-AVB/TSN
+>> bridges.
+>>
 >> Signed-off-by: Daniel Thompson <daniel@riscstar.com>
 >> Signed-off-by: Alex Elder <elder@riscstar.com>
-
-Thanks Bartosz, I've got some responses below.
-
 >> ---
->>   drivers/gpio/Kconfig       |  11 ++
->>   drivers/gpio/Makefile      |   1 +
->>   drivers/gpio/gpio-tc956x.c | 209 +++++++++++++++++++++++++++++++++++++
->>   3 files changed, 221 insertions(+)
->>   create mode 100644 drivers/gpio/gpio-tc956x.c
+>>   .../bindings/net/toshiba,tc956x-dwmac.yaml    | 111 ++++++++++++++++++
+>>   1 file changed, 111 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
 >>
->> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
->> index 020e51e30317a..746cedea7e91d 100644
->> --- a/drivers/gpio/Kconfig
->> +++ b/drivers/gpio/Kconfig
->> @@ -1646,6 +1646,17 @@ config GPIO_TC3589X
->>   	  This enables support for the GPIOs found on the TC3589X
->>   	  I/O Expander.
->>
->> +config GPIO_TC956X
->> +	tristate "Toshiba TC956X GPIO support"
->> +	depends on TOSHIBA_TC956X_PCI
->> +	default m if TOSHIBA_TC956X_PCI
->> +	help
->> +	  This enables support for the GPIO controller embedded in the Toshiba
->> +	  TC956X (and Qualcomm QPS615).  This device connects to the host
->> +	  via PCIe port, which is the upstream port on an internal PCIe
->> +	  switch.  On some platforms, a few of the GPIO lines are used to
->> +	  manage external resets.
->> +
->>   config GPIO_TIMBERDALE
->>   	bool "Support for timberdale GPIO IP"
->>   	depends on MFD_TIMBERDALE
->> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
->> index b267598b517de..c3584e7cba9b4 100644
->> --- a/drivers/gpio/Makefile
->> +++ b/drivers/gpio/Makefile
->> @@ -178,6 +178,7 @@ obj-$(CONFIG_GPIO_SYSCON)		+= gpio-syscon.o
->>   obj-$(CONFIG_GPIO_TANGIER)		+= gpio-tangier.o
->>   obj-$(CONFIG_GPIO_TB10X)		+= gpio-tb10x.o
->>   obj-$(CONFIG_GPIO_TC3589X)		+= gpio-tc3589x.o
->> +obj-$(CONFIG_GPIO_TC956X)		+= gpio-tc956x.o
->>   obj-$(CONFIG_GPIO_TEGRA186)		+= gpio-tegra186.o
->>   obj-$(CONFIG_GPIO_TEGRA)		+= gpio-tegra.o
->>   obj-$(CONFIG_GPIO_THUNDERX)		+= gpio-thunderx.o
->> diff --git a/drivers/gpio/gpio-tc956x.c b/drivers/gpio/gpio-tc956x.c
+>> diff --git a/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml b/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
 >> new file mode 100644
->> index 0000000000000..12221d8f812d9
+>> index 0000000000000..d95d22a3761da
 >> --- /dev/null
->> +++ b/drivers/gpio/gpio-tc956x.c
->> @@ -0,0 +1,209 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +
->> +/*
->> + * Copyright (C) 2026 by RISCstar Solutions Corporation.  All rights reserved.
->> + */
->> +
->> +/*
->> + * The Toshiba TC956X implements a PCIe Gen 3 switch that connects an
->> + * upstream x4 port to two downstream PCIe x2 ports.  It incorporates
->> + * an internal endpoint on a internal PCIe port that implements two
->> + * Synopsys XGMAC Ethernet interfaces.
->> + *
->> + * 35 GPIOs are also implemented by an embedded GPIO controller.  Three
->> + * registers control the first 32 GPIOs (other than 20 and 21, which are
->> + * reserved).  Three other registers control GPIOs 32 through 36. GPIOs
->> + * 22-24, 27-28, 31, and 34 are treated as "input only".
->> + *
->> + * There is a TC956X PCI power controller driver that accesses the
->> + * direction and output value registers for GPIOs 2 and 3.  These
->> + * GPIOs control the reset signal for the two downstream PCIe ports.
->> + * Their values will never change during operation of this driver, and
->> + * this driver reserves these two GPIOS.
->> + */
->> +
->> +#include <linux/auxiliary_bus.h>
->> +#include <linux/dev_printk.h>
+>> +++ b/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
+>> @@ -0,0 +1,111 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/net/toshiba,tc956x-dwmac.yaml#
 > 
-> This is implied by device.h which is guarnteed by platform_device.h. Please
-> drop it.
-
-OK, I'll drop it.
-
->> +#include <linux/gpio/driver.h>
->> +#include <linux/module.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/regmap.h>
->> +
->> +#define DRIVER_NAME		"tc956x-gpio"
->> +
->> +#define TC956X_GPIO_COUNT	37	/* Number of GPIOs (20-21 reserved) */
->> +
->> +/* The GPIO offsets are relative to 0x1200 in TC956X SFR space */
->> +#define GPIO_IN0_OFFSET		0x00		/* Input value (0-31) */
->> +#define GPIO_EN0_OFFSET		0x08		/* 0: out; 1: in (0-31) */
->> +#define GPIO_OUT0_OFFSET	0x10		/* Output value (0-31) */
->> +
->> +#define GPIO_IN1_OFFSET		0x04		/* Input value (32-36) */
->> +#define GPIO_EN1_OFFSET		0x0c		/* 0: out; 1: in (32-36) */
->> +#define GPIO_OUT1_OFFSET	0x14		/* Output value (32-36) */
->> +
->> +/*
->> + * struct tc956x_gpio - Information related to the embedded GPIO controller
->> + * @chip:		GPIO chip structure
->> + * @regmap:		MMIO register map for SFR GPIO region access
->> + * @input_only:		Bitmap indicating which GPIOs are input-only
->> + */
->> +struct tc956x_gpio {
->> +	struct gpio_chip chip;
->> +	struct regmap *regmap;
->> +	DECLARE_BITMAP(input_only, TC956X_GPIO_COUNT);
->> +};
->> +
->> +static int tc956x_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
->> +{
->> +	struct tc956x_gpio *gpio = gpiochip_get_data(gc);
->> +	u32 reg;
->> +	u32 val;
->> +
->> +	if (test_bit(offset, gpio->input_only))
->> +		return GPIO_LINE_DIRECTION_IN;
->> +
->> +	reg = offset < 32 ? GPIO_EN0_OFFSET : GPIO_EN1_OFFSET;
->> +
->> +	regmap_read(gpio->regmap, reg, &val);
->> +	if (val & BIT(offset % 32))
->> +		return GPIO_LINE_DIRECTION_IN;
->> +
->> +	return GPIO_LINE_DIRECTION_OUT;
->> +}
->> +
->> +static int tc956x_gpio_direction_input(struct gpio_chip *gc,
->> +				       unsigned int offset)
->> +{
->> +	u32 reg = offset < 32 ? GPIO_EN0_OFFSET : GPIO_EN1_OFFSET;
->> +	struct tc956x_gpio *gpio = gpiochip_get_data(gc);
->> +	u32 mask = BIT(offset % 32);
->> +
->> +	return regmap_update_bits(gpio->regmap, reg, mask, mask);
->> +}
->> +
->> +static int tc956x_gpio_direction_output(struct gpio_chip *gc,
->> +					unsigned int offset, int value)
->> +{
->> +	struct tc956x_gpio *gpio = gpiochip_get_data(gc);
->> +	u32 vreg;
->> +	u32 dreg;
->> +	u32 mask;
->> +
->> +	if (test_bit(offset, gpio->input_only))
->> +		return -EINVAL;
->> +
->> +	if (offset < 32) {
->> +		vreg = GPIO_OUT0_OFFSET;
->> +		dreg = GPIO_EN0_OFFSET;
->> +	} else {
->> +		vreg = GPIO_OUT1_OFFSET;
->> +		dreg = GPIO_EN1_OFFSET;
->> +	}
->> +	mask = BIT(offset % 32);
->> +
->> +	/* Set output value first, then direction */
->> +	regmap_update_bits(gpio->regmap, vreg, mask, value ? mask : 0);
->> +
->> +	return regmap_update_bits(gpio->regmap, dreg, mask, 0);
->> +}
->> +
->> +static int tc956x_gpio_get(struct gpio_chip *gc, unsigned int offset)
->> +{
->> +	u32 reg = offset < 32 ? GPIO_IN0_OFFSET : GPIO_IN1_OFFSET;
->> +	struct tc956x_gpio *gpio = gpiochip_get_data(gc);
->> +	u32 val;
->> +
->> +	regmap_read(gpio->regmap, reg, &val);
->> +
->> +	return val & BIT(offset % 32) ? 1 : 0;
->> +}
->> +
->> +static int tc956x_gpio_set(struct gpio_chip *gc, unsigned int offset, int value)
->> +{
->> +	u32 reg = offset < 32 ? GPIO_OUT0_OFFSET : GPIO_OUT1_OFFSET;
->> +	struct tc956x_gpio *gpio = gpiochip_get_data(gc);
->> +	u32 mask = BIT(offset % 32);
->> +
->> +	return regmap_update_bits(gpio->regmap, reg, mask, value ? mask : 0);
->> +}
->> +
->> +static int tc956x_gpio_init_valid_mask(struct gpio_chip *gc,
->> +				       unsigned long *valid_mask,
->> +				       unsigned int ngpios)
->> +{
->> +	/*
->> +	 * GPIOs 2 and 3 are used by the PCI power control driver, and
->> +	 * we don't allow them to be used.  GPIOs 20 and 21 are reserved
->> +	 * (and not usable).
->> +	 */
->> +	bitmap_fill(valid_mask, ngpios);
->> +	bitmap_clear(valid_mask, 2, 2);
->> +	bitmap_clear(valid_mask, 20, 2);
->> +
->> +	return 0;
->> +}
->> +
->> +static int tc956x_gpio_probe(struct auxiliary_device *adev,
->> +			     const struct auxiliary_device_id *id)
->> +{
->> +	struct device *dev = &adev->dev;
->> +	struct tc956x_gpio *gpio;
->> +	struct gpio_chip *gc;
->> +
->> +	if (!dev->platform_data)
->> +		return -EINVAL;
->> +
->> +	gpio = devm_kzalloc(dev, sizeof(*gpio), GFP_KERNEL);
->> +	if (!gpio)
->> +		return -ENOMEM;
+> Filename and here: toshiba,tc9564-dwmac
+> (s/x/4/)
 > 
-> Add newline.
-
-I will add a newline here.
-
 > 
->> +	gpio->regmap = dev->platform_data;
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Toshiba TC956x Ethernet-AVB/TSN Controller
+>> +
+>> +maintainers:
+>> +  - Alex Elder <elder@riscstar.com>
+>> +  - Daniel Thompson <daniel@riscstar.com>
+>> +
+>> +description: |
+>> +  This node provides properties for configuring the Ethernet PCI functions
+>> +  that are attached to the internal downstream port of the TC956x's PCIe
+>> +  switch.
 > 
-> It's not clear whether this is an mmio regmap or a slow-bus one that can fail.
-> In the code above you're checking the return values of regmap operations quite
-> inconsistently. Could you please verify if you need it and either always check
-> them or not at all?
-
-You're right.  I'm returning the result of regmap_update_bits()
-from two callback functions.  But yes, this is an MMIO regmap.
-
-I will return 0 and ignore the return value of regmap_update_bits()
-in those spots, and will add some comments that make it clear that
-this is an MMIO regmap.
-
->> +
->> +	/* Mark GPIOs 22, 23, 24, 27, 28, 31, and 34 as input only */
->> +	bitmap_set(gpio->input_only, 22, 3);
->> +	bitmap_set(gpio->input_only, 27, 2);
->> +	set_bit(31, gpio->input_only);
->> +	set_bit(34, gpio->input_only);
->> +
->> +	gc = &gpio->chip;
->> +
->> +	gc->label = DRIVER_NAME;
->> +	gc->parent = dev->parent;
->> +
->> +	gc->get_direction = tc956x_gpio_get_direction;
->> +	gc->direction_input = tc956x_gpio_direction_input;
->> +	gc->direction_output = tc956x_gpio_direction_output;
->> +	gc->get = tc956x_gpio_get;
->> +	gc->set = tc956x_gpio_set;
->> +	gc->init_valid_mask = tc956x_gpio_init_valid_mask;
->> +
->> +	gc->base = -1;
->> +	gc->ngpio = TC956X_GPIO_COUNT;
->> +	gc->can_sleep = false;
+> Describe rather the hardware directly, not the DTS or the binding
+> itself.
 > 
-> This makes me think this is an MMIO regmap after all.
+> Just say what is the hardware, what is consists of, what is less
+> obvious or usual (if there is such).
 
-You are correct.
+I understand what you're saying.  We will reword this to focus
+on the hardware in version 2.
 
 > 
 >> +
->> +	dev_set_drvdata(dev, gpio);
+>> +  TC956x are a family of Ethernet-AVB/TSN bridge chips that combine a PCIe
+>> +  switch together with a number of Ethernet controllers. These bindings
+>> +  cover only the Ethernet functions of these devices.
 > 
-> There's no corresponding dev_get_drvdata().
+> What about the rest of the hardware - a PCIe switch? Shouldn't it be
+> described?
 
-I hadn't noticed that.  We're only using the GPIO chip data
-field (gc->gpiodev->data) instead.  I'll drop this call.
+It maybe should, just to provide a more complete picture.  It's
+a little strange, because the PCIe switch support (or at least
+its power controller) was already upstreamed:
+
+  
+https://lore.kernel.org/all/20251101-tc9563-v9-0-de3429f7787a@oss.qualcomm.com/
+
+That introduced DeviceTree bindings for a PCI device, which is
+itself sort of spanning two worlds of discoverability.
+
+That code focused on the *switch*.  This series is focused on
+the *Ethernet interfaces*.  But the "chip" has several other
+components, some of which (GPIO anyway, for now) also need to
+be modeled.
+
+I want to talk more with Daniel about this but either way we
+will revisit this and will attempt to describe the hardware in
+a more complete way when we send out v2.
 
 >> +
->> +	return devm_gpiochip_add_data(dev, gc, gpio);
->> +}
+>> +allOf:
+>> +  - $ref: /schemas/pci/pci-bus-common.yaml#
+>> +  - $ref: /schemas/pci/pci-device.yaml#
 >> +
->> +static const struct auxiliary_device_id tc956x_gpio_ids[] = {
->> +	{ .name = "tc956x_pci.tc9564-gpio", },
->> +	{ }
->> +};
->> +MODULE_DEVICE_TABLE(auxiliary, tc956x_gpio_ids);
->> +
->> +static struct auxiliary_driver tc956x_gpio_driver = {
->> +	.name		= DRIVER_NAME,
->> +	.probe          = tc956x_gpio_probe,
->> +	.id_table       = tc956x_gpio_ids,
->> +	.driver = {
->> +		.name		= DRIVER_NAME,
->> +		.owner		= THIS_MODULE,
->> +		.probe_type	= PROBE_PREFER_ASYNCHRONOUS,
->> +	},
->> +};
->> +module_auxiliary_driver(tc956x_gpio_driver);
->> +
->> +MODULE_DESCRIPTION("Toshiba TC956X PCIe GPIO Driver");
->> +MODULE_LICENSE("GPL");
->> +MODULE_ALIAS("auxiliary:" DRIVER_NAME);
->> --
->> 2.51.0
->>
->>
+>> +unevaluatedProperties: false
 > 
-> There are a few minor issues but overall looks good!
+> Place both (allOf+unevaluatedProperties) after "required:".
 
-Thank you very much for the review Bartosz.  I'll implement
-all of your suggestions in the next version.
+OK.
+
+> 
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - pci1179,0220 # Toshiba TC9564 (a.k.a. Qualcomm QPS615)
+>> +
+>> +  "#gpio-cells":
+>> +    const: 2
+>> +
+>> +  gpio-controller: true
+>> +
+>> +  # We can't allOf reference Ethernet-controller.yaml because we end up with
+> 
+> s/Ethernet-controller.yaml/ethernet-controller.yaml/
+
+OK.
+
+> 
+>> +  # contradictory $nodename rules (`ethernet@` versus `pci@`). Happily only a
+> 
+> But which schema requires pci@ for devices? If I am not mistaken, only
+> dtschema/schemas/pci/pci-bus-common.yaml requires it, and it does not
+> apply to actual PCI device.
+
+We'll revisit this and will simplify/clarify if possible in v2.
+
+>> +  # small number of the properties are useful on TC956x so we can just reference
+>> +  # what we need.
+>> +  phy-connection-type:
+>> +    $ref: ethernet-controller.yaml#/properties/phy-connection-type
+>> +
+>> +  phy-handle:
+>> +    $ref: ethernet-controller.yaml#/properties/phy-handle
+>> +
+>> +  phy-mode:
+>> +    $ref: ethernet-controller.yaml#/properties/phy-mode
+>> +
+>> +  mdio:
+>> +    $ref: snps,dwmac.yaml#/properties/mdio
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +examples:
+>> +  - |
+>> +    pcie {
+>> +      #address-cells = <3>;
+>> +      #size-cells = <2>;
+>> +
+>> +      tc956x_emac0: pci@0,0 {
+>> +        compatible = "pci1179,0220";
+>> +        reg = <0x50000 0x0 0x0 0x0 0x0>;
+>> +        #address-cells = <3>;
+>> +        #size-cells = <2>;
+>> +        device_type = "pci";
+>> +        ranges;
+>> +
+>> +        gpio-controller;
+>> +        #gpio-cells = <2>;
+>> +
+>> +        phy-mode = "10gbase-r";
+>> +        phy-handle = <&tc956x_emac0_phy>;
+>> +
+>> +        mdio {
+>> +          compatible = "snps,dwmac-mdio";
+>> +          #address-cells = <1>;
+>> +          #size-cells = <0>;
+>> +
+>> +          tc956x_emac0_phy: ethernet-phy@1c {
+>> +            compatible = "ethernet-phy-id311c.1c12";
+>> +            reg = <0x1c>;
+>> +          };
+>> +        };
+>> +      };
+> 
+> Keep only one example, unless you have different properties (not their
+> values, but their presence),
+
+OK.  Thanks a lot for your review Krzysztof.
 
 					-Alex
-
-
 > 
-> Bart
+> 
+> Best regards,
+> Krzysztof
+> 
 
