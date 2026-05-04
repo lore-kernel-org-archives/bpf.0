@@ -1,128 +1,229 @@
-Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012027.outbound.protection.outlook.com [52.101.53.27])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D0E3A63EF
-	for <bpf@vger.kernel.org>; Mon,  4 May 2026 14:59:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.194
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777906747; cv=none; b=H1mDqjxnS4V/46bC6udvQIQ/hFuunOjntiQiSkqG4ScPs+rJPlYbUdoD7gEiqRDWB8v8xHpiHOx/Z2rd269Zgf+WLh91OWhg5B3bBFep9M9yNf/9jAv0XwOrVuG+eGRdkhUO/MWiriIgrcBKxLHerCmcrbxByQskYKCLNAs8hiE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777906747; c=relaxed/simple;
-	bh=CsDy/LfJFNDUkKNXWKhbZTlzGt8sVL1eoAGYyZGFDDg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RqqAS9bwPQEaqk1fUocGdKmcE3rbRfse5Yt+tp+DKFnT4MuyH/PE7L6FDB6tPVFB1rxOBp1xa1C5VesFO4J4ryJko4+h2/S3d29LPyeU80Ciw43OTLYlq917on1VJZIYahOaP0nY2Gl1f0HTtfX3cxZwopvW3t8fq89O2LIsIWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aVPFtxR7; arc=none smtp.client-ip=209.85.210.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996CC218E91;
+	Mon,  4 May 2026 16:46:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.27
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777913204; cv=fail; b=gc2QuICXDLnBa0famGCtyzX2j0Z+PHvwyhimwBQ8bCHE5HSS8nLLLMY7pscU+Ya+Q7+knPXnSM/Cf8POLAAKyeBF054TQJLyuV2/U/MOsPPVcMMZhiFNaVqG+DP+n/qaWFsiCo5uZo6L5LcTXjL+mwvDZCwdggY5cOudC2a40jE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777913204; c=relaxed/simple;
+	bh=hJmGNyG1AyuN/jn4sAM0FDaxToTj3Xc1OUjQZBEvQPM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=RhaM3R9YrD/eeCUM8IUviXyYvsa3YhxuhuC4y7e6AHAv/PBGGglKHn4ktqWdfXOOxrAaIfmsmV3XwEiEVhqi7DjFbZ6rFCMWoSoTz5ThnplsmWicBF3otI8poHlUZWgD/hZq2rGQQHvL1mNLY/p9Wl3bon5+LaYMbTzOzgp4QwM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=JUd+Ia5i; arc=fail smtp.client-ip=52.101.53.27
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aVPFtxR7"
-Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-82fbdd60b64so3020793b3a.3
-        for <bpf@vger.kernel.org>; Mon, 04 May 2026 07:59:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777906744; x=1778511544; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b8q/EPPyhCK5sjTLWIJy3Uk1FD9dao+2uQzQee1Mzzc=;
-        b=aVPFtxR7Fwl81rIfLRl++vTcutGGx7w0pqeP8kywybU6xUHZfe7sgcb802FuGDajcr
-         OV4R4pNJyfSOmBJqWVFv0sWluqX0sEAEok3EwkW1cwJ8rc/N9tR7yrSiXiSv4vi1CI6Q
-         bZr+U0wwuyhKASfxw/r33j9BJvCq1s/D3v+RikkuZc4pxOXIsgJzCRiqIBMFbBP00GDh
-         kIsh5xBesdE4HyZthgKM52SujgmIZz6P+EVJIVxpZcvXZ3DlFgzrhZ1cxp24+lYbRsxY
-         /d8kyYwRPgyr1856K4JVNuc3kBuJcBiPTdD5ycEiEX271yG8TKH6k7FC9a08GNRg4kNh
-         9qYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777906744; x=1778511544;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b8q/EPPyhCK5sjTLWIJy3Uk1FD9dao+2uQzQee1Mzzc=;
-        b=HV2i885XLIt7dTkL5ZaMtaVD/XbXlRSbO4JVVQCXNjpgYnh0Am9qOq48067V1fEra/
-         3DJJjTUI6efTBNIzeKalL174Jzj6tZ9Sp5MQj8dVODzfGFOToW/3zYcIYSLI4MLIoTX6
-         NrrOjrA2HRKvFYsRDys/wOwZZdz24ILFHO68TBQS/tSvsylaepyc5zlh630KsTVXolIR
-         LTk1+UnJxEg6xeOgyULgMAU10FBP0ejIOJBjY8MzacLFSYMpFXpDzfTTcokpWO4K7v2O
-         3ffqOxsUuBWyqPrODgqiYsbpWpFLK8/4C/b/o27VIIvB87YSOjXCLX9/SJ/u3ZxuAEQN
-         Gm6Q==
-X-Forwarded-Encrypted: i=1; AFNElJ9MPTWw4lj4ATAwWEvSuI5Pt5ihZclpmmwMsyRNM9S3NbBUqvk+onDybSZyhVlZ98Cv3H4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxuTKPjzHJzpiKjoGjiwSuL+vRWA8CAATKTOQElnSQQe0PkEnX
-	YrZbqk+WcJjKrkK0eFz3yQMp2r6xfCs13sZXA+0jLfkUaHokdm8i5tCl
-X-Gm-Gg: AeBDiev/ChUS/HlqnEH38uOHBzoL7kJKJ7WeCTLZEu8Qohq2AOZiR7C5e/G/0BPowPc
-	e2fBGocKVjC/jvBnjrIAsmqtpbL8rN2fbRqupO2OeZ8iQZ3XB/EWxWNSDviiOmXPbaTmHOaQZi7
-	zKDTNxm1OUpcuSItqWyInBhkJ95gh5yWQ85z1Qc+9PtljJtaLz5XC38yhmUt1K+Z35eq7jjyzZk
-	rsbOpJZRjZSyXuH9vWzyh/TzjePDIeOBSMuYB7RD1RtMOW6M8hJJBMcgmRISrTbhUNedToTHwyZ
-	pjR/fJtYycTfoEMMG9VHTU7uYtNwt/e3tWbRPezbjH/xf/q6QeUIi9gaiRz4DlR2mCsGiVNqSCn
-	qV/mPQWMAgNHym6uQPWhfT4nm3rJUFP+O2dIu+Po3n9nAn5CDYs/a2T3YBCAzfp2o8Qh5fAXohR
-	37rZhVVILtGeNWKBF1o8FDpD03lAg=
-X-Received: by 2002:a05:6a21:9981:b0:3a2:df61:50e6 with SMTP id adf61e73a8af0-3a7f1caabb5mr10192770637.47.1777906744036;
-        Mon, 04 May 2026 07:59:04 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:50::])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c7ffbca323dsm10468070a12.28.2026.05.04.07.59.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2026 07:59:03 -0700 (PDT)
-Date: Mon, 4 May 2026 07:59:03 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
-	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, horms@kernel.org, 
-	andrew+netdev@lunn.ch, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH net v5 8/8] xsk: fix u64 descriptor address truncation on
- 32-bit architectures
-Message-ID: <afi0I6UZ9FlueHBE@devvm7509.cco0.facebook.com>
-References: <20260502200722.53960-1-kerneljasonxing@gmail.com>
- <20260502200722.53960-9-kerneljasonxing@gmail.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="JUd+Ia5i"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lUxpyL1mzNlgYbiSIr9+Bhr+mxbXjeYt0uyMjpYZXkRo9mpisxseUDtUO9Dbj7VbJv7EyNj9QdstWLhi1/Tqq94KyBraDsyr5lDGvXRrZiqMTmheLvwjLmpatoCZpvlUkVJbYSh4AYhlO7iKprqbdP+2+JyXHyMjMyLpD2GxFycOx7P8Gg3RGqociP64DaagtZLSh5nnaLYgwEhaN2Re9cq6Pqp7zNrcqoW/AZpt4+UwDsqzrkIA2HeDQiUn1EnmK2xFFIQDkUj3kq+yonNcua7Jh7NTp4OHaeE65mHY+7is7ty+uXXtpTkcUjZh2x0p01t8/Qt8s8pChWsRXOenYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UHuERGd1sK4CdydouUCBXL5vCSbdgoTx8VciQd+tgP8=;
+ b=oNX5fwtiCGJ9/yVUM0hEKJ88dlmbazsfpXoZavdE2NN/MQ8QsKIeRy6nftJOIm2p57arVSv+OyD/Zkwa7mxJtcUcOQQ0e8m2W/AsZZKNzmdxwI951i4wImJ0rcofUJTq2Wyixib0ydJSA9JH8nBOq08aUxCIJH54zNkv4BNUiINufqHOvVMKkcfhehph0rMeJniTZdy6mTBtTyc68WF1IjpTFZSTJco4eaD/xgRuo9HX3wVeE1U+jcryeH77S9yFWGASKzeU2rsqB2zETug/VDYNa50Nf7w1j1RII89DwTAdCNsUtbuBz4S9bqgRwR1U+VEnmGdgZ8nOx/z38I6hGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UHuERGd1sK4CdydouUCBXL5vCSbdgoTx8VciQd+tgP8=;
+ b=JUd+Ia5itdel5OXuVl78KMBgBCWZmjnylBybRYsDW9Yb43++0rUT9GB/54InWcgGnEaepJRBEEk8keZDKahwyY99OL1rjdvxUxk5taC13BMm+gU1CGbmmwVwWLQKPi9MVeNQ6qMk472aowSigRFCBaRYqAgKWpFjJIUE0cNIGuaV/mgRamS1sNAyCqJaHETev1YZQq8/JgcQ+JbvSGolb5CsjU3CC6nyGOCeFBb7phjeeVu8OogvYwA5VFxsJcnZPTXBuEZwMsofIygMf72w5s5mYsW+ujFd5x2wl+Uwh75mIqv6KHoKgTlWmwcBJrxWdMjIFMBufPG/Jq3+IPlYIg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY8PR12MB8300.namprd12.prod.outlook.com (2603:10b6:930:7d::16)
+ by SA1PR12MB6972.namprd12.prod.outlook.com (2603:10b6:806:24f::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.25; Mon, 4 May
+ 2026 16:46:35 +0000
+Received: from CY8PR12MB8300.namprd12.prod.outlook.com
+ ([fe80::ce75:8187:3ac3:c5de]) by CY8PR12MB8300.namprd12.prod.outlook.com
+ ([fe80::ce75:8187:3ac3:c5de%3]) with mapi id 15.20.9870.023; Mon, 4 May 2026
+ 16:46:35 +0000
+Date: Mon, 4 May 2026 12:46:33 -0400
+From: Yury Norov <ynorov@nvidia.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Ruan Jinjie <ruanjinjie@huawei.com>, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	Linux-Arch <linux-arch@vger.kernel.org>,
+	Netdev <netdev@vger.kernel.org>, bpf@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH 1/6] lib: include crc32.h conditionally on CONFIG_CRC32
+Message-ID: <afjNaToyptiMogV4@yury>
+References: <20260430211351.658193-1-ynorov@nvidia.com>
+ <20260430211351.658193-2-ynorov@nvidia.com>
+ <ec4ed7f5-b1c8-49e4-b83d-e29c5414b9de@app.fastmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ec4ed7f5-b1c8-49e4-b83d-e29c5414b9de@app.fastmail.com>
+X-ClientProxiedBy: BN9PR03CA0978.namprd03.prod.outlook.com
+ (2603:10b6:408:109::23) To CY8PR12MB8300.namprd12.prod.outlook.com
+ (2603:10b6:930:7d::16)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260502200722.53960-9-kerneljasonxing@gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY8PR12MB8300:EE_|SA1PR12MB6972:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9a27bd40-65c2-4216-10d3-08dea9fcb43e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|10070799003|366016|376014|7416014|18002099003|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	FaZ9sRedoW3ImLrwx0HkiodscazAtwnekX5u6lKKuZ4N4E1pz/OCA1FaWWeVrAtevIzuFxNH5X5QLMiiPz5xUC9chVNbj7xGepByzxcjaJx1FQPzU4GBrKS6I9uFPZivEBxKJn29dHSY59i8dLaw0lXSNTu0r8i+MmrHpyj1QyF7bRIRJuGEjPaFmVPGbq/jeCIdM6FTywXIxoOv0KZc4bJwPUtIjcHa+OpQjKjls7paMOPY09wqMJHixxEGPW83inio3RcJZdP+YELHUciUcJgB+z5enbW7RaRCBPT4LPTQ3j9mZUK9ZVsiLqSwd6YOAqeZzu/5CF/fzL5+sOJpewVUL0jwc5G9wqkFtqn25MhSqfmCJoqVDc3c2uSkQQPJ7DYY9Vh/v8+0d8OpgScrdhMjOxpEuFdHa5UsyZyE9GjhVMpfShHpv8gkIAqk0ShTfPNdcVXjVpV4L4GSGn9Uy9Dnxak2lbtznPOBi9iEC9uqw7KhKFhxrkK+c13se46ru0+YKXNH699RVs+K/X9YJS+RMfKW4GDJQjZw81L8FT3cwtWCxKFeY7RxhJ7NRRy9loXwIyC3B+DLkZN6vUpkxCgmrKOP5o6aeZMSfMXjfLgnMMdOpwUhgU1CT0ggRP7BSTNBhkQ464RbGAbWOFjS20sm4I/B16fB7+gXdbZNgCw5vaIQBDsDXczqfM/57mVs
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR12MB8300.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(10070799003)(366016)(376014)(7416014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?S/0c4CyBAIC8r4lJHinFy1JC/Af2dne4JwPlJ7fQj+o4s74+TStVS1DdcgbP?=
+ =?us-ascii?Q?3hBssJ4xB2nENMIgwAnkHuRHAG8tLjiTpQ9vdIp9jvxDNPfZXbn0PIj4+pk9?=
+ =?us-ascii?Q?AKCuSCVTZFI1oz+7GFOJ+1ouvCxOSojoQAVZbwfOzAXIULshKbXO0j3JNDWa?=
+ =?us-ascii?Q?QlGqiD+QUDoaviSshW3Q2Ha2gBzJBS1C3lciq8MB3VeC96jTdXlMV+VSUtx9?=
+ =?us-ascii?Q?R+IyOV3mBq0NrbM6V0K/cJCa7aOryGAXhun8XD8qNRj7OsF3TJlcVv7coxYF?=
+ =?us-ascii?Q?tzVXnG0Ci5p2sTGbK3fgF2JmRP9lihMC+qP/aATV+sQxVQm1oKDVGqFLyurM?=
+ =?us-ascii?Q?J7T+RrO5nvbNtPnmScwkehCGSHkud3CTt7BXn5Uvh/lXUm7cUsfCBu/ScdJv?=
+ =?us-ascii?Q?QJ4QvKaM3XT0cQ/ob4iB2AB5PHs2zBMNmxNo6iY34DCJu6NlJKMk6lbEZTqb?=
+ =?us-ascii?Q?O2txobyG5GDigFIVp78zpufYqPtr1Do5PTN0jtLiwZ2jvLg+SNC1c5F/LfSN?=
+ =?us-ascii?Q?0RV5LD2zn9exZqhys1aJpteg9p9FdbLRCgdTQTR5osyqB1f/qJ3PQHH0kTLW?=
+ =?us-ascii?Q?ozA8wDITNe4eRvALClpLDovvuMmdhbzHfat5wkwgfr1m4C5T0IR5aHOUoyhe?=
+ =?us-ascii?Q?eokKWA2FezxnTqsyFC26/2nmGfOiXUXaHRcLqAKR73oUO98QwlutifTPTg2O?=
+ =?us-ascii?Q?5K5yg6sx6+Fs1X3AL3Cp9U5MS4Bu7jz+6zRbkyOZz9C5mxEcakd2+nnMFVmr?=
+ =?us-ascii?Q?BqLQq/DsHpnu4yhQNVaFr7n/1ZnlsiRrjvfcqerqKkWW9alrZUXGnrDaBvZF?=
+ =?us-ascii?Q?OAMZVxbK8C2pXNCncrbbiYvFv+zMRRbFOm6mGFb6vBcjXM1Q6IIQeQA2SLg0?=
+ =?us-ascii?Q?5kT/RoWZnj4vlh4/6ghY/Y3430dkl8rbLvFQnQvOfXtj4QNAnEBfk+Rwwnyz?=
+ =?us-ascii?Q?wv9yYA3Y5mBg33ZMleys3nD/dIYoeAm99Cft/4sQ3ZHDUqrOlPBnJMCICzy/?=
+ =?us-ascii?Q?pK36DPFE7VnBMiULvtT3XcgaqLm0ex2hvQeXMAhxd+Iuo8+hjK31y93NY7G7?=
+ =?us-ascii?Q?Ll/rUz1TcyFNOiiZ/6AzfonTAcDDWRtNA6vMe1hzd1zXBSXS843vdCkOxueA?=
+ =?us-ascii?Q?+0OHIXacI9dfhGxytZxNm3eTTtHYPqmoy+kqkRwXROltYb4qsZDKMPLJE4DJ?=
+ =?us-ascii?Q?W0TiZBh6eJdPYDySTY7FJgDu9qc7nxm9QtDEDZpimlHgk119IRGyp46lkEhx?=
+ =?us-ascii?Q?SwLlj9LBVoHXtOOxz+7nBpMtx+hjC3wOC9UqkUsv1g0wuuoH5s3nSNeQz+ct?=
+ =?us-ascii?Q?TslwNWp/2RQWaklGxUWpsw+8CpZN82map5LtD6/fcB89aX9WxAGZ2JsmPK/k?=
+ =?us-ascii?Q?S/uXIbXAcA2Tk2HHod450OEhDu0XLbIEmfNTv70f2dCfzATKfA4xaqKmWYqk?=
+ =?us-ascii?Q?wxsW7JWOk29wH8ezU6aZMZDductwnUUSf05Xy8qocZuQY0Lg+NZU0pu/BXO/?=
+ =?us-ascii?Q?pwbvU+CDSID9gVYhvHUrLGurxahlDvs6eRw2ffhV6GvD7lCrykkspOChvW0F?=
+ =?us-ascii?Q?iWU3gmUhNrYrET51KyUtgdgr2fPOtQCY1JKL8dJFHSc+vbDEg7ic0C1D/N98?=
+ =?us-ascii?Q?BDozNYTWzwlqdwgLGR5JemVrniA+JVUlP61fAztZkyVa7oRdrdto4HO9VO9V?=
+ =?us-ascii?Q?JSFC44vMT56CXoTXYhTA+DfkV+6i++XIiRzOp50Kh39def7fe6Si1MwWCDuk?=
+ =?us-ascii?Q?6lkfgMOgOIqPB+7F2g1dMQEaA8lMleHll9S/fv1SP6CoBWCgG3bq?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a27bd40-65c2-4216-10d3-08dea9fcb43e
+X-MS-Exchange-CrossTenant-AuthSource: CY8PR12MB8300.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2026 16:46:35.6394
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Djyr6J6L+VC2xMACqmD4nArtqyrUHGPwYB9QIX3TMBmBwQZT7vYXDFUwYYHQPcnm24TemnhUDmflTfviiEGqLA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6972
 
-On 05/02, Jason Xing wrote:
-> From: Jason Xing <kernelxing@tencent.com>
+On Mon, May 04, 2026 at 10:03:10AM +0200, Arnd Bergmann wrote:
+> On Thu, Apr 30, 2026, at 23:13, Yury Norov wrote:
+> > Currently, bitreverse API is either declared based on
+> > CONFIG_HAVE_ARCH_BITREVERSE, wired to arch implementation, or if the
+> > arch has no bitreverse, based on generic implementation.
+> >
+> > So, regardless of CONFIG_BITREVERSE=n, the corresponding API is always
+> > declared. If that happens, the functions become declared but not
+> > implemented, which is an error.
 > 
-> In copy mode TX, xsk_skb_destructor_set_addr() stores the 64-bit
-> descriptor address into skb_shinfo(skb)->destructor_arg (void *) via a
-> uintptr_t cast:
-> 
->     skb_shinfo(skb)->destructor_arg = (void *)((uintptr_t)addr | 0x1UL);
-> 
-> On 32-bit architectures uintptr_t is 32 bits, so the upper 32 bits of
-> the descriptor address are silently dropped. In XDP_ZEROCOPY unaligned
-> mode the chunk offset is encoded in bits 48-63 of the descriptor
-> address (XSK_UNALIGNED_BUF_OFFSET_SHIFT = 48), meaning the offset is
-> lost entirely. The completion queue then returns a truncated address to
-> userspace, making buffer recycling impossible.
-> 
-> Fix this by handling the 32-bit case directly in
-> xsk_skb_destructor_set_addr(): when !CONFIG_64BIT, allocate an
-> xsk_addrs struct (the same path already used for multi-descriptor
-> SKBs) to store the full u64 address. The existing tagged-pointer logic
-> in xsk_skb_destructor_is_addr() stays unchanged: slab pointers returned
-> from kmem_cache_zalloc() are always word-aligned and therefore have
-> bit 0 clear, which correctly identifies them as a struct pointer
-> rather than an inline tagged address on every architecture.
-> 
-> Factor the shared kmem_cache_zalloc + destructor_arg assignment into
-> __xsk_addrs_alloc() and add a wrapper xsk_addrs_alloc() that handles
-> the inline-to-list upgrade (is_addr check + get_addr + num_descs = 1).
-> The three former open-coded kmem_cache_zalloc call sites now reduce to
-> a single call each.
-> 
-> Propagate the -ENOMEM from xsk_skb_destructor_set_addr() through
-> xsk_skb_init_misc() so the caller can clean up the skb via kfree_skb()
-> before skb->destructor is installed.
-> 
-> The overhead is one extra kmem_cache_zalloc per first descriptor on
-> 32-bit only; 64-bit builds are completely unchanged.
-> 
-> Closes: https://lore.kernel.org/all/20260419045824.D9E5EC2BCAF@smtp.kernel.org/
-> Fixes: 0ebc27a4c67d ("xsk: avoid data corruption on cq descriptor number")
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> I'm not following that description. Why is it an error to declare
+> a funtion that is not implemented? Isn't that how optional interfaces
+> tend to work in general?
 
-LGTM, thanks!
+Never heard about such a thing like "optional interface". And git grep
+tends to second that...
+ 
+> > The only header requiring the crc32 and bitreverse prototypes is
+> > include/linux/etherdevice.h. Thus, protect inclusion of corresponding
+> > headers in the etherdevice with CONFIG_CRC32, together with the only
+> > function depending on it.
+> ...
+> >  #include <linux/if_ether.h>
+> >  #include <linux/netdevice.h>
+> >  #include <linux/random.h>
+> > +#ifdef CONFIG_CRC32
+> >  #include <linux/crc32.h>
+> > +#endif
+> >  #include <linux/unaligned.h>
+> >  #include <asm/bitsperlong.h>
+> 
+> Don't add #ifdef blocks around headers. If the header cannot
+> be included without side-effects, change the linux/crc32.h
+> file instead of its users.
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+linux/acpi.h does that like many othes. What exactly is wrong with
+protecting headers inclusion?
+ 
+> It looks like the problem is the check for CONFIG_GENERIC_BITREVERSE
+> in include/asm-generic/bitops/__bitrev.h, which ends up
+> hinding the generic___bitrev32() helper without need.
+> 
+> Simply removing the #ifdef there should avoid the build failure.
+
+OK, it seems like this is what I don't understand.
+
+We've got an optional feature, like CRC32, which is enabled by
+CONFIG_CRC32. The most conservative way is to declare everything
+CRC32-related in the corresponding header, and then protect the header
+with IS_ENABLED(CONFIG_CRC32).
+
+I understand that from practical perspective, we can declare some simple
+macros, like header size, unprotected. But what we've got now is a sort
+of mess: all CRC32-related functions are declared unprotected, and
+generic headers are good to use them. Compiler is happy while those
+functions are actually unused. Next, CRC32 depends on BITREVERSE, which
+is again unprotected, and it may optionally have an arch implementation.
+
+So if arch bitrev() is implemented, you can use part of bitreverse and
+crc32 APIs despite that they are explicitly disabled - just because they
+are implemented as macros in unprotected headers. And you cannot use some
+others - because they are implemented differently, as a real functions.
+
+And this is not covered by any written rule - just the implementation
+details. And to make it worse, this all is available to drivers, which
+may simply fail after the next kernel update.
+
+Can you please elaborate on how is that supposed to work. In my naive
+world, if I disable some feature, I'm pretty sure that my kernel
+shouldn't build if I try to use it. Can you point to any related
+kernel docs?
+
+Thanks,
+Yury
+
+> > +#ifdef CONFIG_CRC32
+> >  /**
+> >   * eth_hw_addr_crc - Calculate CRC from netdev_hw_addr
+> >   * @ha: pointer to hardware address
+> > @@ -291,6 +294,7 @@ static inline u32 eth_hw_addr_crc(struct netdev_hw_addr *ha)
+> >  {
+> >  	return ether_crc(ETH_ALEN, ha->addr);
+> >  }
+> > +#endif
+> 
+> I see there are only user users of this function, neither of
+> them are performance critical. So the other options would
+> be to either open-code this function in the two callers
+> and remove it entirely, or move it into net/ethernet/eth.c.
+> 
+>       Arnd
