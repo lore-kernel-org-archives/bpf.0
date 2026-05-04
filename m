@@ -1,148 +1,173 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [67.231.149.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2E639D6E7
-	for <bpf@vger.kernel.org>; Mon,  4 May 2026 11:10:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF3E168BD;
+	Mon,  4 May 2026 11:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777893043; cv=none; b=nR9fM+uc2VqFB4N8C2qrVZ0bSUFQIhyEhsbhkB1m9LeVS+VlirD4FKWjsGs+tkZRSNwnv+2c0Rqn24+XqohxwI04PgIt3OoKMRsQt7+qynd/fqiB2G6vq18EgtfJ3iHJ+iHJBjD+00H1fkoad8ruPICMTGTE0KwTliQdE8nN5wo=
+	t=1777893343; cv=none; b=aUygSPMjegtI74U3M+RQDyl0UMjjADkOmwCX/woMf/aqJwL4Isk/IwpXvt5cWE4QL+6Cr3Ud36GXCamd6QI/UoJZpbLb9gVtO13sLj3h7U8fGbWMddwOguC4e3gq1v+JUlG8Te/vo0EMs/LUPYkJLf179Qsrj3pxtXArS6nxqrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777893043; c=relaxed/simple;
-	bh=hvIkUcGplTr0pRBj7FPS35gKKC1V+FL/vIDr6oudE3s=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=vFFmCSO5iuWeWENUbD4+hajnM0j+1Sdyg6B0lUAMx1Xm6fuRt7coEVaKUlsxKmdnbRom1qdMa+kR24vcuZA9kWoQ1fWHZhVrgKel/9kEhePI0pDlQfnx8wC+Cr8Rk+fPzF/z+cEGuiH7VtfN+UOhWKxbruBmOMuWNrqWeZUAvK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=E09DFkDx; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1777893343; c=relaxed/simple;
+	bh=4osoaC9ULRt+4TLmPswqg2KcCVPsZe/vyQEqG0SoY1U=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uQfcJAKW99S7vYBk/D+uMN0cfoPKsenbbEW2Jz+ho/+6mi3jFzJ5CcCH6dzUuj8GkNLYF7nxnKHqMoKnbLWrKOXwlr7AatSIWV/EnGiuDO7xIrT3bxOEv6Az3KH/viTDeR0TTbbaECTNCOO93Bs7dZT//n0YWUCd959zTf1fxG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com; spf=pass smtp.mailfrom=akamai.com; dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b=etnPPRaE; arc=none smtp.client-ip=67.231.149.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=akamai.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="E09DFkDx"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4891f625344so41375545e9.0
-        for <bpf@vger.kernel.org>; Mon, 04 May 2026 04:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1777893040; x=1778497840; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:from:to:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1neqE2LfHfnexRseyojdeVHubjDEvUEc2J6H5swOBYE=;
-        b=E09DFkDxagbIYWAD8Ygu/of2O10AM3YMyUut/Jvw76i2EFXSaqZDIWcgWldX5EwYOV
-         vKJ9GlB+7V/gN0o/PPb9hGxeMlKsiKxbqnAsHDBllMbC/CDrp6r+lmtO3p9Qrz3THgdl
-         Wljc1e498f6h4Btp+aKnYPTNOKxPa9tx85Cf12PncPjzA+CmIjbAgI65kL/Zc3WIKEhl
-         t8BF0SxEdcjAd8n0NuQfzGFJ9wrYITxj0ebFpXw5Rw7+gsf5h73PT5sBpG7dUB7lFJLS
-         MW7XC5gwcbXV8igapSfaK09C1i6SzBzCZjWsj92QOoU7DqjV+JxgRAyfJcZ48M/8jun2
-         4Sbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777893040; x=1778497840;
-        h=in-reply-to:references:subject:from:to:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1neqE2LfHfnexRseyojdeVHubjDEvUEc2J6H5swOBYE=;
-        b=NV2Wt8n2alC2sJ1q3RW9T7BiYOpzvYQkfEP2f/azXV1pnlRObZeYLrGC5em5FjVPGm
-         gTnsrhvvcDVhVb9eC8Dr1Yp2DQ/5PkbGSz9iDeYOX4/3TJ2U0NJLK8xki9Z9opo3TXLL
-         sB/mFJ0tD0jkm7bwaRWWVaLP8Ehy3YrnYYS3IlGzQZQaSI5hC+VOxGuCSFc68kz7Hv+1
-         ll4Fs1jk4dh3ZOQqJisdrr4TZug6XMrO6CxCME8Ma4Tdr8xTZadX0krLdNTd7da6tQ22
-         28p81Ljsu7ICkYy3eBqyezSXxM6Z6ZQuPaFA/02wBY1y6uaa7BMcd9dEJ4ON50d879Ds
-         g2aQ==
-X-Gm-Message-State: AOJu0YyS/cViVV3v2VJQAmceLiUP4f9p0GFuXmdOBYOTsID5eIzo/CFx
-	1Dc2ip37E0Z3UaCUpe35r2DUf9VmKWpCQjrXV9+amwz6W15/6zmWDydkc6C1s/6VwE+Oa5SkARZ
-	ufug4
-X-Gm-Gg: AeBDieugTf8yTrD2aw6KUUOsb9iLEZxADvQIYz+lOUS6iR+xW7g7LVEcHIPYpGZcKKP
-	MY4LKugwIVP/mrNCgtcjWO3OFbC0DPbMH3W83a8PJYswuMKtajU4ArSAQ5cq5iH+H7dY8/lOPw+
-	3cHP0OTRyh/9/0bbB5kNdBh2b66FB1NistDwO54eMZT3qEd6XZCuZKpfKEsUs5PwspFy8HYbH2M
-	y9oMF68zu3Efcign14aOPKa8Wna6Q94I4o7shpExBku4un2ZpWYhkuL9V7n8rwwhIuYO+2t0w86
-	OBBSYDR8ACMErQWm9nTa0X+/+oUZsm2PkRmThDBiJ0Uq2yu9WObu59oa04ZeNxG4YjDGc2/Pv9z
-	lOyd1u5pVS6JhQdf7moIDE1qZWRdWftZWs9kWzjLQSa7iK+nLCZkI4u7CGBRqK8qUWU/aOxpfyM
-	fZZ6mXsZ7JcLuOM9yFjxrgag==
-X-Received: by 2002:a05:600c:c093:b0:488:a9c3:44a3 with SMTP id 5b1f17b1804b1-48a93d94566mr156970375e9.2.1777893039791;
-        Mon, 04 May 2026 04:10:39 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:1294:2ecf:67ff:fe81:9da0])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-62bfd8b5886sm5469429137.8.2026.05.04.04.10.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2026 04:10:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="etnPPRaE"
+Received: from pps.filterd (m0050093.ppops.net [127.0.0.1])
+	by m0050093.ppops.net-00190b01. (8.18.1.11/8.18.1.11) with ESMTP id 643MqLk02006127;
+	Mon, 4 May 2026 11:18:04 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=jan2016.eng; bh=pvoGKj2RPkl+IEzPTmKy0HEr6NZA0fp/3
+	u8yXbIUFOw=; b=etnPPRaEaRAALa0gxqZLGS1byuCzA3bkCT+CrjcIm8RLO3e/t
+	lT7vtJ319g1wf4ZR1r0OteqKrgIE6VQzWA9fK0pD62rYazcOC7EXvVeC+w6fkgY4
+	akvZ+5BJg+/l+WtSH6q+IgEH18v86YT3gDkzVwTgTa7Bxsq4k+BNW8iQV0Ey84Ym
+	0cXzUcvgq4M/NaoE2OHoz/V90MpyQkYEKiXnBMb6pD4eaYChtMziFMv23Qn1fdoH
+	8iefVFC3RA3gkNdLSWQbR9FTOZ9PYHb8kws7gYCz1+xzmPjYYRI8cAcq+4yfrtqz
+	Zib1GniI4cw/qpOugrUE0QmVCvTk9d5AW8ttw==
+Received: from prod-mail-ppoint6 (prod-mail-ppoint6.akamai.com [184.51.33.61])
+	by m0050093.ppops.net-00190b01. (PPS) with ESMTPS id 4dw8hp8vd0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 04 May 2026 11:18:03 +0100 (BST)
+Received: from pps.filterd (prod-mail-ppoint6.akamai.com [127.0.0.1])
+	by prod-mail-ppoint6.akamai.com (8.18.1.7/8.18.1.7) with ESMTP id 644ACCZm014212;
+	Mon, 4 May 2026 06:18:02 -0400
+Received: from prod-mail-relay01.akamai.com ([172.27.118.31])
+	by prod-mail-ppoint6.akamai.com (PPS) with ESMTP id 4dwckxf3fu-1;
+	Mon, 04 May 2026 06:18:02 -0400 (EDT)
+Received: from muc-lhvdhd.munich.corp.akamai.com (muc-lhvdhd.munich.corp.akamai.com [172.29.0.147])
+	by prod-mail-relay01.akamai.com (Postfix) with ESMTP id 5113984;
+	Mon,  4 May 2026 10:18:01 +0000 (UTC)
+From: Nick Hudson <nhudson@akamai.com>
+To: bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Willem de Bruijn <willemb@google.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Nick Hudson <nhudson@akamai.com>, Max Tottenham <mtottenh@akamai.com>,
+        Anna Glasgall <aglasgal@akamai.com>
+Subject: [PATCH bpf-next v6 0/6] bpf: decap flags and GSO state updates
+Date: Mon,  4 May 2026 11:17:53 +0100
+Message-Id: <20260504101759.3319427-1-nhudson@akamai.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 04 May 2026 08:10:34 -0300
-Message-Id: <DI9UHCRWR7LE.13J5GTVBCCDZ8@suse.com>
-Cc: <bpf@vger.kernel.org>
-To: <sashiko@lists.linux.dev>, =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?=
- <rbm@suse.com>
-From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
-Subject: Re: [PATCH bpf-next v11 05/11] selftests/bpf: Make skeleton headers
- order-only prerequisites of .test.d
-X-Mailer: aerc 0.21.0-120-g22b95d38161f
-References: <20260430-selftests-bpf_misconfig-v11-5-e11f7a8c4fdc@suse.com>
- <20260430162921.0829BC2BCB3@smtp.kernel.org>
-In-Reply-To: <20260430162921.0829BC2BCB3@smtp.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-04_03,2026-04-30_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0
+ lowpriorityscore=0 malwarescore=0 mlxscore=0 adultscore=0 bulkscore=0
+ mlxlogscore=785 suspectscore=0 spamscore=0 phishscore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2604200000
+ definitions=main-2605040108
+X-Authority-Analysis: v=2.4 cv=Z8fc2nRA c=1 sm=1 tr=0 ts=69f8725b cx=c_pps
+ a=WPLAOKU3JHlOa4eSsQmUFQ==:117 a=WPLAOKU3JHlOa4eSsQmUFQ==:17
+ a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Ifg-1AOnLHOf1gn6spyb:22
+ a=d4nn1RXdvEacMIURMw2s:22 a=X7Ea-ya5AAAA:8 a=g1FTZKP8ERfPk9Mz4Y4A:9
+X-Proofpoint-ORIG-GUID: HldOv0ZmmUBAEeajCSKNNNl7l0Wnxj4r
+X-Proofpoint-GUID: HldOv0ZmmUBAEeajCSKNNNl7l0Wnxj4r
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA0MDEwOSBTYWx0ZWRfX+UviPLXiPnkD
+ fsvAgZdwzQfzHm6qn9xQOjP+XKUh7Plr9b83Z9QELBrunks8Ra9Kc5oAKyOd9rXlrGDMt2HCYg6
+ ok+8zJMj2FghDHEztixRtsJUwFUzBs5oG1215ODs1LNuQkuzvfvUEX3bYXUpidNg4o0W1L3oXkF
+ /zzAJ4ZvpAnzQTlGTn0wfVSojpP6pTvfNTO9uspKzfiF6npfU+5ttdKkjqziqTJfv7Ie6R0Ba6q
+ dcqmGzngPirxiBcXY1JgiWPji4CCcP480Y5D00ZtUH8ieJVmH2X5q473nJzQO4wXd9mxo/16bQn
+ OisaRE5MlwLL6uKVPvWz3Xk78AKsVkTEmY5rg2d3oOfO3FMnkJrAgfvI6aNT7m8vmZR5BFxKZGZ
+ pHNpvRnDj5phFxfNDVf7Vu39gwhTFFGLgDGPMtpHn5Yfp1RqvCHV6a1drRzqpm21aoOBlbH44Oa
+ S01QZqqhvNAYehNfvlw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-04_03,2026-04-30_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
+ suspectscore=0 phishscore=0 clxscore=1015 adultscore=0 spamscore=0
+ lowpriorityscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605040109
 
-Addressed in https://lore.kernel.org/all/DI6KY4J2N2UB.39XQW4ZLTT1VV@suse.co=
-m
 
-On Thu Apr 30, 2026 at 1:29 PM -03, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Medium] Making BPF skeletons order-only prerequisites of `.test.d` pre=
-vents the generation of newly added skeletons when they are included via ex=
-isting local headers, breaking the build.
-> --
->
-> commit c609958fbea63ac5aab9bea46f3e2a6881af6a94
-> Author: Ricardo B. Marli=C3=A8re <rbm@suse.com>
->
-> selftests/bpf: Make skeleton headers order-only prerequisites of .test.d
->
-> This commit changes the Makefile to make BPF skeleton headers order-only
-> prerequisites for .test.d files to prevent unnecessary recompilation. The
-> BPF object file is kept as a normal prerequisite.
->
->> Note that adding a new BPF skeleton via a modified existing local header
->> still works correctly: GNU make builds order-only prerequisites that do
->> not exist (the order-only qualifier only suppresses timestamp-driven
->> rebuilds, not existence-driven builds), so a brand-new .skel.h listed in
->> TRUNNER_BPF_SKELS is generated even when .test.d is otherwise up to date=
-.
->
-> Is this assumption about GNU Make accurate? According to the GNU Make man=
-ual,
-> order-only prerequisites are never checked when determining if the target=
- is
-> out of date.
->
-> If a new BPF skeleton is added and included via an existing local header,
-> the normal prerequisites of .test.d remain unchanged. Make will consider
-> .test.d up to date, skipping the order-only prerequisites entirely.
->
->> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selfte=
-sts/bpf/Makefile
->> index 9a4d8bea0c184..608e6dff03926 100644
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -726,11 +726,11 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:	=
-		\
->>  $(TRUNNER_TEST_OBJS:.o=3D.d): $(TRUNNER_OUTPUT)/%.test.d:			\
->>  			    $(TRUNNER_TESTS_DIR)/%.c			\
->>  			    $(TRUNNER_EXTRA_HDRS)			\
->> +			    $$(BPFOBJ) | $(TRUNNER_OUTPUT)		\
->>  			    $(TRUNNER_BPF_SKELS)			\
->>  			    $(TRUNNER_BPF_LSKELS)			\
->>  			    $(TRUNNER_BPF_LSKELS_SIGNED)		\
->> -			    $(TRUNNER_BPF_SKELS_LINKED)			\
->> -			    $$(BPFOBJ) | $(TRUNNER_OUTPUT)
->> +			    $(TRUNNER_BPF_SKELS_LINKED)
->
-> Could this break incremental builds? The old .d file would still track th=
-e
-> dependency on the modified local header, causing .test.o to be correctly
-> identified as out of date.
->
-> When Make runs the compiler for .test.o, will it fail immediately with a
-> missing file error because the new skeleton was never generated?
->
-> Furthermore, if a subsequent patch tolerates test file compilation failur=
-es,
-> would this result in tests being silently skipped?
+This series extends bpf_skb_adjust_room() with decapsulation-specific
+flags and tunnel GSO state updates for decap use cases.
+
+Motivation
+----------
+
+When BPF decapsulates tunneled packets, skb GSO state needs to be
+updated to match the removed tunnel layer. This includes clearing the
+corresponding tunnel GSO type bits and resetting encapsulation state
+once no tunnel GSO flags remain.
+
+Series Overview
+---------------
+
+- Name the adjust_room flag enum for CO-RE lookups.
+- Refactor adjust_room helper masks for maintainable validation logic.
+- Add new DECAP flags to UAPI.
+- Add guard rails for incompatible/invalid decap flag combinations.
+- Implement decap GSO state clearing on shrink.
+- Add selftests to validate decap GSO and encapsulation state.
+
+Changes v5 -> v6:
+- Patch 5: extend decap-state handling for the new L4/IPXIP decap
+  flags to non-GSO packets as well: when decapsulation is requested
+  on a non-GSO skb, clear skb->encapsulation directly so behavior is
+  consistent with the GSO path.
+- Patch 6: broaden tc_tunnel coverage to exercise and validate both
+  GSO and non-GSO decapsulation paths. This includes selecting
+  IPXIP decap flags from the outer tunnel header family, adding
+  explicit post-decap encapsulation checks for non-GSO packets,
+  and removing forced TSO disable so GSO cases are exercised in
+  the test harness.
+
+Changes v4 -> v5:
+- Patch 5: Remove explicit clearing of encap_hdr_csum and
+  remcsum_offload on UDP decap, per review feedback.
+- Patch 6: Remove SKB_GSO_TUNNEL_REMCSUM from SKB_GSO_UDP_TUNNEL_MASK
+  in selftests, and minor test improvements.
+
+Changes v3 -> v4:
+- Patch 5: drop SKB_GSO_TUNNEL_REMCSUM handling from this series.
+- Patch 5: clear encap_hdr_csum and remcsum_offload directly on UDP
+  decap.
+
+Changes v2 -> v3:
+- Add a new selftests patch to validate decap GSO state behavior.
+- Reorder the series so helper-mask refactoring precedes UAPI DECAP
+  flag additions.
+- Refresh patch 2 and patch 3 split to keep refactoring
+  behavior-neutral.
+- Patch 5: add decap tunnel GSO-state checks in "bpf: clear decap
+  tunnel GSO state in skb_adjust_room" (per Gemini/sashiko).
+
+Changes v1 -> v2:
+- Patch 3: decap flag acceptance intentionally remains L3-only while
+  adding helper masks.
+- Patch 4: decap with L4/IPXIP support enabled with guard rails.
+
+Co-developed-by: Max Tottenham <mtottenh@akamai.com>
+Signed-off-by: Max Tottenham <mtottenh@akamai.com>
+Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
+Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
+Signed-off-by: Nick Hudson <nhudson@akamai.com>
+
+Nick Hudson (6):
+  bpf: name the enum for BPF_FUNC_skb_adjust_room flags
+  bpf: refactor masks for ADJ_ROOM flags and encap validation
+  bpf: add BPF_F_ADJ_ROOM_DECAP_* flags for tunnel decapsulation
+  bpf: allow new DECAP flags and add guard rails
+  bpf: clear decap state on skb_adjust_room shrink path
+  selftests/bpf: tc_tunnel - validate decap GSO and encapsulation state
+
+ include/uapi/linux/bpf.h                                |  36 ++++++++++-
+ net/core/filter.c                                       | 119 ++++++++++++++++++++++++++++++-----
+ tools/include/uapi/linux/bpf.h                          |  36 ++++++++++-
+ tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c |   1 -
+ tools/testing/selftests/bpf/progs/test_tc_tunnel.c      |  91 ++++++++++++++++++++++++---
+ 5 files changed, 252 insertions(+), 31 deletions(-)
+
+-- 
+2.34.1
 
