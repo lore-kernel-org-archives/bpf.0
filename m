@@ -1,54 +1,54 @@
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A7233F580
-	for <bpf@vger.kernel.org>; Mon,  4 May 2026 21:06:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144D733EAEC
+	for <bpf@vger.kernel.org>; Mon,  4 May 2026 21:06:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777928783; cv=none; b=K7WY7ZttL1u56EMHoXQJ7wgY0AiMLoBnwj1KeWD7qdV60+VKgsprw8t/+xxLSKfqL3hkyk2byiO4t7L78cQ9/Cg6CIoO9UdSURFoT9LTYP+BHfRAzb85XCmvo3Odn55IdNdat/tznhZOMS1YdC2QVBMN2CZ2U7ebMTqPmgM58BY=
+	t=1777928784; cv=none; b=ivgcmht+B+Fuo5YnMJi/4bbOcXdRYGADCUKF9eAVlj/wkWEnF9KNEUiyhVwu9S2oxClDnOpv78Z9RAxhp46AFAIK6Ab5L9qVAV8PcSoR8M/X0lyzm+dPbjn/2+LzF/EOup7vsal0cMerVSgj5COojg2SdPIrvxUTtmPC6vfsnck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777928783; c=relaxed/simple;
-	bh=cG/yesVRvvntcKSQhtEbypsl9lWGthOVsQu6VxN6nT8=;
+	s=arc-20240116; t=1777928784; c=relaxed/simple;
+	bh=bzB+fl9VtvLM5Uyg9T51LJiJi48HHHF0xxoKeg03HoA=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=QZvS/FEtK+mfyqbzzYCafGW7h3zeTmIAmv566c7se659RuarVnZCPTlbXWA44BbsMolBGKcWvTFBHKJ/P0BdXYrqd69wy84clpHO1kTVTkxpu09V2EVRj9yIV1kitWT9qTUQijwde1ucEKQgjgm4qMX6aX/a/fXfiV+9o7et8cU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ICjNUjgR; arc=none smtp.client-ip=209.85.210.201
+	 To:Cc:Content-Type; b=ToEHxiQ3ZkoV8Snq+I5OfSYCt5kEo3s32QexISer2O/rlglBj/6nInvwJbkGOO3ExTndYRdKY5DZNZgDKympyJ8wUl8OL4WaZesnnI1dTCBHcBvwI1R5RXxmw4HlGTiP+Ca3g7ffJEHH+SSuPVFrc5pZy6yGtVDMs/f0pi3SRww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hlZr+WMc; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ICjNUjgR"
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-82fd55bf6cdso3196368b3a.3
-        for <bpf@vger.kernel.org>; Mon, 04 May 2026 14:06:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hlZr+WMc"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c797d8c9c2dso5576534a12.2
+        for <bpf@vger.kernel.org>; Mon, 04 May 2026 14:06:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777928781; x=1778533581; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1777928782; x=1778533582; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5zoNImAKoVG1tOJMnje5UjYQ+6eRMKYNpQz4KdMgcck=;
-        b=ICjNUjgR/Ph15ePSxM5cM96i+7OtqSKgpDtCoa+fk+XhuWMwf69HpVB+4euOvf68Y1
-         cz31ZoBqjrHk/sukJDCE1Tc6H3T3Z4v95pD1RftMg+2eZJHFGe9ukKBJC3I5w2UzL64M
-         mcWte52a6PugvicNVVCrLabYjLjjXVlp5S1JPv0GqbIX6kVkfB4woGbi7g+OVF6Px0BJ
-         SdY1i1pgtSq3MXROZZt41SBXwbX7bowbd0LGhjM1V0O3L0/nJfoRu+2/w9m3OdCTdLgq
-         DQIqaMWi2Qog1BP4TzAe2gvse8pRE2WWJPZq9Ep43g53p2vuWLbMjqSfYXOtNNTX8fdk
-         GNMw==
+        bh=oMVtTJExhZiVc3HBoDF7EBw2DGe7oG5ooUfjkrrLuzY=;
+        b=hlZr+WMcgwF01DoazkyQbjthLr2ALlFs+eTHlwC1EZkkeJwXseT541JpEqkJ/bU3ZK
+         MBZ0uHQtgK41YFxFNy28+O2IxuJtESm3vJ2tpjK8JYPtn0JPB/HWW4pnnEU/xUem56UO
+         fjGp6gD4k7R2vhnauPlVAMs+wg4Afw8sRDBhH79D4PHNGDRWF0Xi57IQf0DTgXwvxWqp
+         k7AenbkQGLfWZDTDa4E+VGmuLES2obUlmVlRNvZFlCzrCQiJDhx9bBX05rawVt1skoFR
+         pebeZzsyMEKUWvUBj3Vx8mDNRfOHiqAzIF6tEM9xG/839IyMS8KfmDFCHsNkfoZU3ZB2
+         TMPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777928781; x=1778533581;
+        d=1e100.net; s=20251104; t=1777928782; x=1778533582;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5zoNImAKoVG1tOJMnje5UjYQ+6eRMKYNpQz4KdMgcck=;
-        b=jqoeKdIdkhSRq/Spc0gQuJkZx48yksVKIVLexAhGyJGVLeBM7+sSIAccGxuw4W7SYA
-         IGqd+7bqwYXD8CSAR6gM96oj7qL1RSghUjmMfJlcHcS3u54jvMsnXqp38VUt0TCPdH9E
-         sYZ0XPD/Mll/6mVcEVbG2k4HCL9pF7nZ6pv0h/UItFmhhcfUgDDejUTjE2HCHkfB2i3S
-         hlJY5vPKYoArGljjAqwwIMHpVrBdv0lO9PWPzKEeXqOOI2/hxO2Vi5inbiPZ9UKEuKMM
-         coqppU6d/tpahnaswLKgt+4atk4hfIZFPLHYH+2zXyNOxCx0VrG2+YsdfZbW/Dr9AnJ7
-         Ru+Q==
-X-Forwarded-Encrypted: i=1; AFNElJ/jPO5StAmT03i+weNMH4KaKlvSBmILdyS9m95WQDxufY5coBQ7kTqFKDEC2t9vQZ/Ho0k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTQn1NEvt8zeQS4GS5jvngLZKzX7tjAAXuq4wNIr+mxY0X6yA8
-	lWK0ng3whyVuawo0X6hO4BwrBDNfWh9so+fpYqVIQQh0xXCb9lz+9Otxq7lvtRX8FW/0OCOYiNb
-	c5ftmgA==
-X-Received: from pfud19.prod.google.com ([2002:a05:6a00:10d3:b0:82f:20ed:8059])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:288f:b0:835:405a:7e68
- with SMTP id d2e1a72fcca58-835405a7fd9mr7331136b3a.32.1777928780467; Mon, 04
- May 2026 14:06:20 -0700 (PDT)
-Date: Mon,  4 May 2026 21:04:52 +0000
+        bh=oMVtTJExhZiVc3HBoDF7EBw2DGe7oG5ooUfjkrrLuzY=;
+        b=N5quxMpkFRUnUr6ZTd8RaNKjdvQVNxxoG1HT7WzpDSpStL5USQmrN3BLdadvySgkkq
+         gJpVniRoBhMKVq4w8xmlWRrqAAZogNhgrdlqPhXXMj3o2b3MkUAuE53LcH5jb2XtVOtD
+         jJmRwBffbaZfSGvToWHWJgeVNbLs1cmdKOvwjcM2TnfZzBpBrKH7Qa6o1AZUhMwTDx9j
+         iShHYmLZJhBX2gonOH58eXTX/cjCuo8ae9zuXaZ964f0e3IpPVnJr173ocaTs+Wuqrtn
+         2cxGUui7UuN6KJcZbnhu9LEWqTMSABCQbCxHaNd6/6c/uQEawS8WVwKISf92/KtWin6Z
+         H8yg==
+X-Forwarded-Encrypted: i=1; AFNElJ9lo0B4Djvmuam/PA7d/7vtgcqdRr6mAetPR9xuMl4SBnrl5o/vpk75YOpL+AIlFF0WtpI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKUaq9pAIFGN6Sr3LszpxsjoIMlcN2BMC7eYDvE9UTQ8bc5K5G
+	QW6jj+MsrbbPPs/jtvmf4dATMYJmuOgKAdYdBTLe+O6Xoyde1/UOuNK9iRTVEnOF4yi8zlzR+JD
+	zatUF9w==
+X-Received: from pfbig18.prod.google.com ([2002:a05:6a00:8b92:b0:839:35e5:3d67])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:448b:b0:82c:7383:3745
+ with SMTP id d2e1a72fcca58-8352d1766b9mr11524504b3a.19.1777928782246; Mon, 04
+ May 2026 14:06:22 -0700 (PDT)
+Date: Mon,  4 May 2026 21:04:53 +0000
 In-Reply-To: <20260504210610.180150-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260504210610.180150-1-kuniyu@google.com>
 X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
-Message-ID: <20260504210610.180150-6-kuniyu@google.com>
-Subject: [PATCH v2 bpf 5/6] bpf: tcp: Fix type confusion in bpf_skc_to_tcp6_sock().
+Message-ID: <20260504210610.180150-7-kuniyu@google.com>
+Subject: [PATCH v2 bpf 6/6] bpf: tcp: Fix type confusion in sol_tcp_sockopt().
 From: Kuniyuki Iwashima <kuniyu@google.com>
 To: Martin KaFai Lau <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
@@ -70,32 +70,34 @@ Cc: John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.
 	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-bpf_skc_to_tcp6_sock() only checks if sk->sk_protocol is IPPROTO_TCP
-and sk->sk_family is AF_INET6, but RAW socket can bypass it:
+sol_tcp_sockopt() only checks if sk->sk_protocol is IPPROTO_TCP,
+but RAW socket can bypass it:
 
-  socket(AF_INET6, SOCK_RAW, IPPROTO_TCP)
+  socket(AF_INET, SOCK_RAW, IPPROTO_TCP)
 
-Let's check sk->sk_type too.
+Let's use sk_is_tcp().
 
-Fixes: af7ec1383361 ("bpf: Add bpf_skc_to_tcp6_sock() helper")
+Note that initially sol_tcp_sockopt() checked sk->sk_prot->setsockopt.
+
+Fixes: 2ab42c7b871f ("bpf: Check the protocol of a sock to agree the calls to bpf_setsockopt().")
 Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
 ---
  net/core/filter.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/net/core/filter.c b/net/core/filter.c
-index 7d945dc2cb92..684922efd481 100644
+index 684922efd481..ef0877eefaa7 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -11947,7 +11947,7 @@ BPF_CALL_1(bpf_skc_to_tcp6_sock, struct sock *, sk)
- 	 */
- 	BTF_TYPE_EMIT(struct tcp6_sock);
- 	if (sk && sk_fullsock(sk) && sk->sk_protocol == IPPROTO_TCP &&
--	    sk->sk_family == AF_INET6)
-+	    sk->sk_type == SOCK_STREAM && sk->sk_family == AF_INET6)
- 		return (unsigned long)sk;
+@@ -5481,7 +5481,7 @@ static int sol_tcp_sockopt(struct sock *sk, int optname,
+ 			   char *optval, int *optlen,
+ 			   bool getopt)
+ {
+-	if (sk->sk_protocol != IPPROTO_TCP)
++	if (!sk_is_tcp(sk))
+ 		return -EINVAL;
  
- 	return (unsigned long)NULL;
+ 	switch (optname) {
 -- 
 2.54.0.545.g6539524ca2-goog
 
