@@ -1,163 +1,191 @@
-Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3813F3090D7;
-	Mon,  4 May 2026 08:03:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896363446C0;
+	Mon,  4 May 2026 08:42:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777881815; cv=none; b=GRAEZrve5PKYcc7AcBQqCpLkG74N64ayGIqCf82EvEKh5zdXaAIpTQil5++CeiMkKpQZUMAmPgaLykn8nuxhawKiS3pjDs57XKVpqVcAi8T9GMcSTZcD7q7tmu7zVzKk54BKReCUXGm21YXnQByc22kGlyeFv73snmd35WGmZs4=
+	t=1777884150; cv=none; b=j3QNMZNWgsWMR9Qw14QfnjL5L29c8ZgTMteGOuSR0NICI/6jqTcVDuAcBVTY/dBcKZUyrYXPJujr5/o9AxWmR2Dqkhl0r7K106cYm3xtc3ZMfcRqpOaslKhp2DNmq9F2Ew1dmKBJw2tUr69Fc/qtmfcCv2ZHjpAOH0u1llRQXYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777881815; c=relaxed/simple;
-	bh=85KGlEIKITdOlWoiiVxvYUZbQ1nS1XmOFsk2A93rDas=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=q9pB6kjPcvVB4KXX8hcMxDybmM7bKfwl7k60BEZ7cx20Uq2Q51BQaPbtsMj00nu+VCggrVZNfcIEkY5clD20sTVcZ3o6TM1J1DNi9rETgievdxkCOWdW9h63FsR572VWjNmMDWPAtk7D5Fy91gML4wZYmDcFkAqPuE42ehJL84E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=lKIQozwE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WjdGsF4l; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1777884150; c=relaxed/simple;
+	bh=MxZyxmuXOA5R5x7zMlhVQs1yDcUAcMFxNU48wUisLC0=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=CRGkZ8BYmsi651+oicuNbZ0knZp40M9N9I7EX+tEXmJ851uBSmwuZPwo/INlClsIyJCdolX8RUrSdFSm3tmLMchYknZxyxo6kxYydevePjOjsnbbBFRWq42klYHUowT5Fz4MlVbblV4jfb7YtuhImAxk8pVi2gDJnBUeK0GQ45A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=FtQ7uXFL; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="lKIQozwE";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WjdGsF4l"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id 6C2D7EC011A;
-	Mon,  4 May 2026 04:03:32 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Mon, 04 May 2026 04:03:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1777881812;
-	 x=1777968212; bh=lRsobUL6Yqd5naNkEfLWDCbqmttFKUBjkDP0RSCMYno=; b=
-	lKIQozwEzFcnuVHJBHQ8r+b5oT97obr68Nf8luMuM3L6O5raCOhhUY7Gctoc1Tp8
-	629KHqe8wadhboVSnp1pfYRpNmc+pZFNyYU2mpbW7M44o6VsakgiDSDF58QBnZ/3
-	Dd9pzdJUeabis3j6EQvltT0CjZH22hQT5XhkNdF8dWHnvjTSZ5VfKpv8fFimENov
-	y2OBPInLOxFUOFKOPP23zqPiM6Xvy5WtUk1iqfX92udoVLSVv+/NSGC8fBHcdL34
-	kNewsRgHuStBFHX0paWLj+tG4PMjqZpZnThCSW9mR0nkKphUBaakjPL3G6X4XzOR
-	sxsvI2tnrlNp4u4Y/z/Uvw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1777881812; x=
-	1777968212; bh=lRsobUL6Yqd5naNkEfLWDCbqmttFKUBjkDP0RSCMYno=; b=W
-	jdGsF4ltkHFNmq4MXhLG7F9XwWgGquAASSnmd6Fq8+oajRxrbhR3fa1qAIKOUp6W
-	dz7xegS3ZIzYHyXjL/vCt6mOhMYDrDuAeDbXahTA2ce6HwaHuXFChrssQdGXTdxg
-	ASXkoguUZsTFwE5CuZfGLN4oZchI1xBKCYhv6yyMWLFHhoPk8GQ4LJ5j4JaAfNqg
-	z7I+qjcYP9OcdQESVckBq+8S86XCu0Awvx1iamWM3zqhSeIYTlj4VSN2gHrxbps0
-	1Ms2cGh4aVk79gTiXDdVzyKDoiA721QeovwvOxsqhSeNFyjNsk734G/FtEoFNW94
-	jEaf2B4dgR/JL3witKL4Q==
-X-ME-Sender: <xms:0lL4aR2L0rD3fWiyNVDOAkvHSrIlIVgK7WgBt5qGs_zUs8aj_oHPMw>
-    <xme:0lL4aS4d7LLhmWZPmmqNI-uWQTdk3frrl8Hg52cxJA3YYwV50unHO5OE1dJewfCJI
-    Ko-eGJUCsgRPHN7n1uj2hZUa5YYdBsN4955qUHj3NcpB41Loa17Uh0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdelkeefudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopedvhedpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepphgrlhhmvghrsegurggssggvlhhtrdgtohhmpdhrtghpthhtohepug
-    grvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopegrohhusegvvggtshdr
-    sggvrhhkvghlvgihrdgvughupdhrtghpthhtohepshgufhesfhhomhhitghhvghvrdhmvg
-    dprhgtphhtthhopegrlhgvgiesghhhihhtihdrfhhrpdhrtghpthhtohepjhhohhhnrdhf
-    rghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdhrtghpthhtohephihurhihrdhnohhroh
-    hvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdr
-    tghomhdprhgtphhtthhopehruhgrnhhjihhnjhhivgeshhhurgifvghirdgtohhm
-X-ME-Proxy: <xmx:0lL4aRNeIpiqXc5fB1MHgBXrEJ9lZQQEpD-B8lPFp6wgoeLl-5ZA4Q>
-    <xmx:0lL4aT2fjft0esTMjzTU1zcrFbzA-_AFE7_VP8BpUHgzkmYgKHRnUg>
-    <xmx:0lL4admhcWGT28uCEY5xSJDz_pBSgWnQV3r2LytJJkg8HARZKaDyFg>
-    <xmx:0lL4aZ6Wh97kTjE3ydg7__JVwDupqwjhpu_1wCpVBBAEliM3JtcswQ>
-    <xmx:1FL4afDExJRXBh0UiKSRKS_WkzSEFtnYN1B_2siySxbqJTYh84FcyA8z>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id B4B35700069; Mon,  4 May 2026 04:03:30 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="FtQ7uXFL"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6443Qx0D3769724;
+	Mon, 4 May 2026 08:42:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pp1; bh=HcLqKW1LPdShwrJ53be3nTSoauY1
+	L/oc83mlWkZIFNA=; b=FtQ7uXFLiAnTrzqWJwML4ufc8KQYP3gftkfR9NBwlVYO
+	KrxGkzcw12zyMt0htGK9fHj+I5hOq2uhw9PV910DqHarZsOxqDqN5GmmhowHasNc
+	OyhB989Qpjgq3WgBnUen8bJEyg7mkCydn5GDJzZBM0oX5FdJQb9n3SQZJAAoK288
+	PHtQWFQs3ZqhQQM7j6QzwJ68SoUiPyEHQjAE97UaSPK2Q+xH6M1e3KKmeU9bCNvq
+	2N40ONT+vy2cNTiMr0+LfZSB8HM40PcNttoO+mKoCzsTKKlsUEg06yr+u6E4Dil0
+	9wKMIRupUz/0gsEY2Nalmiodis1eEk3lrflHE1w/DA==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9w660g8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 04 May 2026 08:42:23 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6448dQN8006629;
+	Mon, 4 May 2026 08:42:22 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dwwtg474y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 04 May 2026 08:42:22 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6448fsKm29098580
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 4 May 2026 08:41:54 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 56A885805D;
+	Mon,  4 May 2026 08:42:21 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 47AE858059;
+	Mon,  4 May 2026 08:42:19 +0000 (GMT)
+Received: from [9.61.252.117] (unknown [9.61.252.117])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  4 May 2026 08:42:18 +0000 (GMT)
+Message-ID: <362eaba2-54dd-4b59-81f5-65abb916e916@linux.ibm.com>
+Date: Mon, 4 May 2026 14:12:17 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AduvTQsiZ6dJ
-Date: Mon, 04 May 2026 10:03:10 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Yury Norov" <ynorov@nvidia.com>, "Paul Walmsley" <pjw@kernel.org>,
- "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
- "Alexandre Ghiti" <alex@ghiti.fr>, "Yury Norov" <yury.norov@gmail.com>,
- "Rasmus Villemoes" <linux@rasmusvillemoes.dk>,
- "Andrew Lunn" <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Jesper Dangaard Brouer" <hawk@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>,
- "Stanislav Fomichev" <sdf@fomichev.me>,
- "Ruan Jinjie" <ruanjinjie@huawei.com>, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org, Linux-Arch <linux-arch@vger.kernel.org>,
- Netdev <netdev@vger.kernel.org>, bpf@vger.kernel.org
-Cc: "Nathan Chancellor" <nathan@kernel.org>
-Message-Id: <ec4ed7f5-b1c8-49e4-b83d-e29c5414b9de@app.fastmail.com>
-In-Reply-To: <20260430211351.658193-2-ynorov@nvidia.com>
-References: <20260430211351.658193-1-ynorov@nvidia.com>
- <20260430211351.658193-2-ynorov@nvidia.com>
-Subject: Re: [PATCH 1/6] lib: include crc32.h conditionally on CONFIG_CRC32
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: Saket Kumar Bhaskar <skb99@linux.ibm.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>, bpf <bpf@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Cc: LKML <linux-kernel@vger.kernel.org>
+From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Subject: [mainline][bpf] build failure: conflicting bpf_arena_* prototypes
+ between vmlinux.h and bpf_arena_common.h
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=XPQAjwhE c=1 sm=1 tr=0 ts=69f85bef cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=NEAV23lmAAAA:8
+ a=Twlkf-z8AAAA:8 a=VnNF1IyMAAAA:8 a=YpS5cAcgm0N0_-8T5d8A:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10 a=-74SuR6ZdpOK_LpdRCUo:22
+X-Proofpoint-ORIG-GUID: qeXqwpzTW6JxWApumdjaFVfclh9k_hBq
+X-Proofpoint-GUID: qeXqwpzTW6JxWApumdjaFVfclh9k_hBq
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA0MDA5MiBTYWx0ZWRfXwgx6MUuZMipr
+ 2LHot8qENNDik5eDv75/+yQXETdG9t78RsnkXjnCygW+KNPTmM1W57egnILQ7NbM/U99bMmOMEs
+ BjHu2c6XBENHPAk6nuH9XFMD0NmhXqqC3Ll8TBFGTKOoD89s2lL3ik3A4bbRQmiK1G7MbJjuJ7w
+ OuUt1Uie8Hk07ZnhYtTyqVl56ItMgCg3JTfbskr5K36WaClosuoR3Jjp19WqWGyz1IOVPbEJjia
+ 4bMmsfwD7tVeNgsf+3FyLBWKQrAZLSQEInabXVt1zCbgEDhJbFuWtpKZuV8llgOink4qbhYpWla
+ 5dPhxJJBY/pdRxsSZmjvD0HgZ+gG6a2vJgGRihKHhubZvZ+VQ6mX3C4HBycBs7O9MEE8jTPVAVw
+ x2m0JeW9VyMm0EZYANLZ7t9rYlVFUrYNfLFb4mdBxQPmBkG5yvkVakjjFzABPkA9upktbAjvWj8
+ 0mv+wHVKhKsUP7j++mQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-04_03,2026-04-30_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0 spamscore=0
+ priorityscore=1501 impostorscore=0 phishscore=0 malwarescore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605040092
 
-On Thu, Apr 30, 2026, at 23:13, Yury Norov wrote:
-> Currently, bitreverse API is either declared based on
-> CONFIG_HAVE_ARCH_BITREVERSE, wired to arch implementation, or if the
-> arch has no bitreverse, based on generic implementation.
->
-> So, regardless of CONFIG_BITREVERSE=n, the corresponding API is always
-> declared. If that happens, the functions become declared but not
-> implemented, which is an error.
+Greetings!!!
 
-I'm not following that description. Why is it an error to declare
-a funtion that is not implemented? Isn't that how optional interfaces
-tend to work in general?
+I’m seeing a CLANG-BPF build failure in tools/testing/selftests/bpf
+related to conflicting prototypes of bpf_arena_* helpers between
+vmlinux.h and bpf_arena_common.h, on mainline kernel.
 
-> The only header requiring the crc32 and bitreverse prototypes is
-> include/linux/etherdevice.h. Thus, protect inclusion of corresponding
-> headers in the etherdevice with CONFIG_CRC32, together with the only
-> function depending on it.
-...
->  #include <linux/if_ether.h>
->  #include <linux/netdevice.h>
->  #include <linux/random.h>
-> +#ifdef CONFIG_CRC32
->  #include <linux/crc32.h>
-> +#endif
->  #include <linux/unaligned.h>
->  #include <asm/bitsperlong.h>
 
-Don't add #ifdef blocks around headers. If the header cannot
-be included without side-effects, change the linux/crc32.h
-file instead of its users.
+Error log:
 
-It looks like the problem is the check for CONFIG_GENERIC_BITREVERSE
-in include/asm-generic/bitops/__bitrev.h, which ends up
-hinding the generic___bitrev32() helper without need.
+   In file included from progs/arena_strsearch.c:12:
+   In file included from 
+tools/testing/selftests/bpf/bpf_arena_strsearch.h:4:
+   tools/testing/selftests/bpf/bpf_arena_common.h:47:15:
+     error: conflicting types for 'bpf_arena_alloc_pages'
+       void __arena* bpf_arena_alloc_pages(void *map,
+                                           void __arena *addr,
+                                           __u32 page_cnt,
+                                           __u32 node_id,
+                                           __u64 flags);
 
-Simply removing the #ifdef there should avoid the build failure.
+   tools/testing/selftests/bpf/tools/include/vmlinux.h:135295:14:
+     note: previous declaration is here
+       extern void *bpf_arena_alloc_pages(void *p__map,
+                                          void *addr__ign,
+                                          u32 page_cnt,
+                                          int node_id,
+                                          u64 flags) __weak __ksym;
 
-> +#ifdef CONFIG_CRC32
->  /**
->   * eth_hw_addr_crc - Calculate CRC from netdev_hw_addr
->   * @ha: pointer to hardware address
-> @@ -291,6 +294,7 @@ static inline u32 eth_hw_addr_crc(struct netdev_hw_addr *ha)
->  {
->  	return ether_crc(ETH_ALEN, ha->addr);
->  }
-> +#endif
+   tools/testing/selftests/bpf/bpf_arena_common.h:49:5:
+     error: conflicting types for 'bpf_arena_reserve_pages'
+       int bpf_arena_reserve_pages(void *map,
+                                   void __arena *addr,
+                                   __u32 page_cnt) __ksym __weak;
 
-I see there are only user users of this function, neither of
-them are performance critical. So the other options would
-be to either open-code this function in the two callers
-and remove it entirely, or move it into net/ethernet/eth.c.
+   tools/testing/selftests/bpf/tools/include/vmlinux.h:135297:12:
+     note: previous declaration is here
+       extern int bpf_arena_reserve_pages(void *p__map,
+                                          void *ptr__ign,
+                                          u32 page_cnt) __weak __ksym;
 
-      Arnd
+   tools/testing/selftests/bpf/bpf_arena_common.h:50:6:
+     error: conflicting types for 'bpf_arena_free_pages'
+       void bpf_arena_free_pages(void *map,
+                                 void __arena *ptr,
+                                 __u32 page_cnt) __ksym __weak;
+
+   tools/testing/selftests/bpf/tools/include/vmlinux.h:135296:13:
+     note: previous declaration is here
+       extern void bpf_arena_free_pages(void *p__map,
+                                        void *ptr__ign,
+                                        u32 page_cnt) __weak __ksym;
+
+Tool chain Versions:
+
+gcc (GCC) 14.2.0
+# clang --version
+clang version 23.0.0git (https://github.com/llvm/llvm-project.git 
+bd6bfba3e50343c112a04b639394ab85be17c29b)
+
+# llc --version
+LLVM (http://llvm.org/):
+   LLVM version 23.0.0git
+   Optimized build.
+   Default target: powerpc64le-unknown-linux-gnu
+   Host CPU: (unknown)
+
+   Registered Targets:
+     bpf     - BPF (host endian)
+     bpfeb   - BPF (big endian)
+     bpfel   - BPF (little endian)
+     ppc32   - PowerPC 32
+     ppc32le - PowerPC 32 LE
+     ppc64   - PowerPC 64
+     ppc64le - PowerPC 64 LE
+
+# objcopy --version | head -1
+GNU objcopy version 2.35.2-67.el9_7.1
+# ld --version | head -1
+GNU ld version 2.35.2-67.el9_7.1
+
+
+If you happen to fix this, please add below tag.
+
+
+Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+
+
+Regards,
+
+Venkat.
+
+
