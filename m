@@ -1,229 +1,206 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF9703A5E62
-	for <bpf@vger.kernel.org>; Mon,  4 May 2026 10:39:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A2D3A6B92;
+	Mon,  4 May 2026 11:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777891185; cv=none; b=eqU6nB2cece1Zf9v4JX4sIqe6MvAI8+5LriA3wsdbg1VZnUgJ8Jj2DJaizMsyhEEM1Rpgxn3bwV1uPFqBsAt2T/hE2Ym5YULASDCUPuMj7KQwK2f5DuJNMbsi7axGBYf2Vxd4mNRqceyYIpf6ZDquyJiDssoY7AY5xtNAhLpEJw=
+	t=1777892410; cv=none; b=XesU8s3uNAVGhY8YOPwMF4SuWXXE3lvWpuS0xUkDOLiI8InvX9MgYehGmHAWPpIQjJAHHYUw0GbFrWRgcs51UkXWdRpN+ULtyxl6svMOrqUX/EI3iMWpR+9FvPEVp1phXjm4JOlgaWmn+J8Lv9j+DvGiXw8GDlZuN19B1/+kFvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777891185; c=relaxed/simple;
-	bh=HiTErpuqFVSslF098bJ8btSDZbP0y9XQfoTQqUphJ+0=;
+	s=arc-20240116; t=1777892410; c=relaxed/simple;
+	bh=Qekei4EBSl8zy90b3baTSwFNYdFd4J9Yt5RBNUtCJWw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bpv9c3hzN/0X7hPkM3zZIpc5zwqOYVJt8zhyQF0d+h1nA5CwcmXB5dvwgCNMdXwHyUIohuigoTC8AgluzYrumYapGLcI1TfMVm5ONjto76XGDTK4AjGrzMI+1I+TSFfz1zJTVJq8rXYD0RSjSYm+tBY9ZOENGVxD555xI6Di4JM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nYdUrHzb; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=nj8RwWddPxCvfgU81AmOErs1Xhm2igliJeWfvS0bSKDMD6iypwWXmIYgp+jXtgBiSgBOr25hSHLqXZd7wEhtAAupD+wz4bziFjNK11eNH6JWQCv3URSg5gdIDrwuPV7ePsoGn/VEjqqYzgiVHEjpvOeVciqxxhASfHdCJcKx7sE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ea8gYidQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nYdUrHzb"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6746d0b2b4aso6124330a12.3
-        for <bpf@vger.kernel.org>; Mon, 04 May 2026 03:39:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777891182; x=1778495982; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZX1d5M5RvOYvFUvKAGcNOcL7WzsNE4biHw6Lj8CwwOw=;
-        b=nYdUrHzb4aooM/p2bFCOVcFEokBCaMiNCk++WxeMxy0JOf8CZqxlZu3GMI3X/VsK2C
-         DOW16RgKonh6BXVaPxE8ZbJf6HxJxfHS4xps+sEPxa//ofVIvnNxE6dQxYqQeBqdADw3
-         LILshf957ZqpEnMETbpLHOAoTUilZCQ8Vum06cNbRC+oUt7Sc8OEqqiXSBGDXHm+WJk7
-         RT+J9lbiY1vRklKhWV1Cr2gWpOiQo3kaXCKBYfF203XzEzCLvhu5Gy8k48sHfvfNavnZ
-         b/oc4i460NdeWnRcZhZF4w7FqXIv9Hkem5UR/oCL3eVOtdGeZHJ9JZHXvLJSNu2zPyyH
-         Z95w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777891182; x=1778495982;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZX1d5M5RvOYvFUvKAGcNOcL7WzsNE4biHw6Lj8CwwOw=;
-        b=pLGQokV5/rs++UCtYhwksgXw11b3ezZMvjzATQxUOqSmawMZFelLfIrhWQYK4hX9Cj
-         zf7tqwygOojCdI6ob2yTkXasSsEXND7xSfuCuqt8y9UaE/sYOvxlwOT1XZQpXyc1TBQR
-         Lo0gIh7v7ue7IVgwtdKkJ6dPs0rCc1/0yptGnfdMfCXOAls5j5N9kbszeMZocH9WnQFX
-         moS95dsSQUo2af0+K1Ns99jSRZI7fMpGWGERXPnqRkkNelV/lPLjX9/DBTxK9480e4OE
-         wqowJRT35TMPMxxEXCiW9jouJGITGqaRnOdDCcnuKodTiRIFs6F0hrXwYXf1P9b2L1au
-         qVOg==
-X-Gm-Message-State: AOJu0YwQYYbDI5EIXS5Byllrjemkqe+G3Uzep0URC12o+RL/O3nKCg3H
-	X5EL/UCSvTfBDp5g+2a0QggHmbk4dYmkykTSfOlJI+GaO8vKdv5pgyAaswWy4Nd0uv6NBqpALBu
-	BSlTRnOtO
-X-Gm-Gg: AeBDiesaakF0VGtz3BUMD6djUWTvwapT6UnWh1Dd9xgGHlyOuKEw0x1NEjS/iIHs30O
-	pwuoKngWV1OaK3VJJ2CvJ1WaLgokFQyOTyGvCj2/A45hXjvld/fsNSkyhQT3PXKKALU7YP0omM7
-	1z6d038RCqw0rZRmDLJ3j14SnAd+cGY1wRYSAX0uqaePmOuH12AT0m3GzJ2U+9g0jnN90HnWXDK
-	P2H5pVVQYIstP6ajiQWKzAhe8C+JGOeXGIcZD05ZWCPnLLsfuC66DAy82DtoJsU0WyS7XaPbFDk
-	PLPDqHL/lXRlgJqKjldZCdZ/b0FjiUVJvHW1npFNZtqm/xvT9mJFGMLrva2DCbYqwVaPx9YohsI
-	MviDM0shOyGyAe0jbJYzM3EaxE1bpb0tus7LiaS5yA0w8y4ln6/YblYauuHFkAXvtXtZwi7Om2V
-	189Z/47U0+84/Iee+5vz6XFAlNc+hJVxLLs9mQh8X4Y26cf/TMP62jiSM60Ps4UgU1BJ+5mM8HN
-	NslewscRCp8Pbg=
-X-Received: by 2002:a17:907:6d13:b0:bae:9df4:d9e6 with SMTP id a640c23a62f3a-bbffb7472e8mr450836066b.30.1777891181557;
-        Mon, 04 May 2026 03:39:41 -0700 (PDT)
-Received: from google.com (5.180.204.35.bc.googleusercontent.com. [35.204.180.5])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bbe6d977b7esm397286166b.48.2026.05.04.03.39.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2026 03:39:40 -0700 (PDT)
-Date: Mon, 4 May 2026 10:39:36 +0000
-From: Matt Bobrowski <mattbobrowski@google.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 1/2] bpf: enforce VFS constraints for xattr
- related BPF kfuncs
-Message-ID: <afh3aEKMctxTg7pL@google.com>
-References: <20260504085428.2865671-1-mattbobrowski@google.com>
- <20260504-anzweifeln-sackkarre-911bc140473f@brauner>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ea8gYidQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AE67C2BCB8;
+	Mon,  4 May 2026 11:00:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777892410;
+	bh=Qekei4EBSl8zy90b3baTSwFNYdFd4J9Yt5RBNUtCJWw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ea8gYidQNl+OaH9FchlMaM9K+7g6ktdoQHPZPXS4Qs92VgpYkUkRUPZEDZDwNx0VH
+	 Drq+pTs9CBE039unHT2/+Hu4Ky2OnpMq6+A8jUev0t6NMD0HQV+aIGH7nMCjRD3l83
+	 YM3CptFu9pWmZn7Oi69MAVLlQGL4YBL2n/vA4LEjJJHEYA9khVhT+eOxgIC4mqFkGu
+	 xIDmYOJtKTgQY6T5hX+jrjcR0s7iGVUWLJJTh5JuvV5zfAPqGfRnDQpdfoZm6+YOCP
+	 ol3dq2DVdr/RxOxqX/rLm7m6/r9I10FeSAQTYgaOBZPi7m9mgQt1vE11qcLQ+0rDAJ
+	 jFc/WIwAKuRTg==
+Date: Mon, 4 May 2026 13:00:07 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Alex Elder <elder@riscstar.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com, 
+	rmk+kernel@armlinux.org.uk, andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org, 
+	arnd@arndb.de, gregkh@linuxfoundation.org, 
+	Daniel Thompson <daniel@riscstar.com>, mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com, 
+	alexandre.torgue@foss.st.com, ast@kernel.org, boon.khai.ng@altera.com, chenchuangyu@xiaomi.com, 
+	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org, hkallweit1@gmail.com, 
+	inochiama@gmail.com, john.fastabend@gmail.com, julianbraha@gmail.com, 
+	livelycarpet87@gmail.com, matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, 
+	me@ziyao.cc, prabhakar.mahadev-lad.rj@bp.renesas.com, 
+	richardcochran@gmail.com, rohan.g.thomas@altera.com, sdf@fomichev.me, 
+	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com, wens@kernel.org, 
+	netdev@vger.kernel.org, bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 08/12] dt-bindings: net: toshiba,tc965x-dwmac:
+ add TC956x Ethernet bridge
+Message-ID: <20260504-fascinating-teal-tarsier-b116c8@quoll>
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-9-elder@riscstar.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260504-anzweifeln-sackkarre-911bc140473f@brauner>
+In-Reply-To: <20260501155421.3329862-9-elder@riscstar.com>
 
-On Mon, May 04, 2026 at 11:42:56AM +0200, Christian Brauner wrote:
-> On Mon, May 04, 2026 at 08:54:27AM +0000, Matt Bobrowski wrote:
-> > Enforce VFS constraints and semantics regarding name and value lengths
-> > within the xattr related BPF kfuncs. Specifically, reject names that
-> > are empty or longer than XATTR_NAME_MAX, and values larger than
-> > XATTR_SIZE_MAX. Also validate the supplied flags to ensure that only
-> > XATTR_CREATE and XATTR_REPLACE can be used alongside the default flag
-> > value 0.
-> > 
-> > Fixes: 56467292794b ("bpf: fs/xattr: Add BPF kfuncs to set and remove xattrs")
-> > Closes: https://lore.kernel.org/bpf/20260429221005.6D1C6C19425@smtp.kernel.org/
-> > Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
-> > ---
-> > Changes in v2:
-> >  - New helper bpf_xattr_validate_name() incorporated into pre-existing
-> >    BPF kfunc bpf_cgroup_read_xattr() (Sashiko AI).
-> > 
-> > fs/bpf_fs_kfuncs.c | 85 ++++++++++++++++++++++++++++++++++++++--------
-> >  1 file changed, 70 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
-> > index 9d27be058494..eb9aef1e135e 100644
-> > --- a/fs/bpf_fs_kfuncs.c
-> > +++ b/fs/bpf_fs_kfuncs.c
-> > @@ -93,6 +93,21 @@ __bpf_kfunc int bpf_path_d_path(const struct path *path, char *buf, size_t buf__
-> >  	return len;
-> >  }
-> >  
-> > +static int bpf_xattr_validate_name(const char *name)
-> > +{
-> > +	u32 name_len;
-> > +
-> > +	/*
-> > +	 * Impose the same restrictions on the supplied name as done so within
-> > +	 * the VFS by helpers like import_xattr_name().
-> > +	 */
-> > +	name_len = strlen(name);
-> > +	if (!name_len || name_len > XATTR_NAME_MAX)
-> > +		return -ERANGE;
-> > +
-> > +	return 0;
-> > +}
+On Fri, May 01, 2026 at 10:54:16AM -0500, Alex Elder wrote:
+> From: Daniel Thompson <daniel@riscstar.com>
 > 
-> Can you please unify the check between import_xattr_name() and bpf,
-> please. This just asks for someone starting to return different errnos
-> from the two locations if we need any additional checks at some point...
-
-I'm glad you suggested this because I was thinking the exact same
-thing, although wasn't sure whether you'd be open to it.
-
-> > +
-> >  static bool match_security_bpf_prefix(const char *name__str)
-> >  {
-> >  	return !strncmp(name__str, XATTR_NAME_BPF_LSM, XATTR_NAME_BPF_LSM_LEN);
-> > @@ -117,10 +132,10 @@ static int bpf_xattr_read_permission(const char *name, struct inode *inode)
-> >   * @name__str: name of the xattr
-> >   * @value_p: output buffer of the xattr value
-> >   *
-> > - * Get xattr *name__str* of *dentry* and store the output in *value_ptr*.
-> > + * Get xattr *name__str* of *dentry* and store the output in *value_p*.
-> >   *
-> > - * For security reasons, only *name__str* with prefixes "user." or
-> > - * "security.bpf." are allowed.
-> > + * For security reasons, only *name__str* values prefixed with "user." or
-> > + * "security.bpf." are permitted.
-> >   *
-> >   * Return: length of the xattr value on success, a negative value on error.
-> >   */
-> > @@ -133,6 +148,10 @@ __bpf_kfunc int bpf_get_dentry_xattr(struct dentry *dentry, const char *name__st
-> >  	void *value;
-> >  	int ret;
-> >  
-> > +	ret = bpf_xattr_validate_name(name__str);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> >  	value_len = __bpf_dynptr_size(value_ptr);
-> >  	value = __bpf_dynptr_data_rw(value_ptr, value_len);
-> >  	if (!value)
-> > @@ -150,10 +169,10 @@ __bpf_kfunc int bpf_get_dentry_xattr(struct dentry *dentry, const char *name__st
-> >   * @name__str: name of the xattr
-> >   * @value_p: output buffer of the xattr value
-> >   *
-> > - * Get xattr *name__str* of *file* and store the output in *value_ptr*.
-> > + * Get xattr *name__str* of *file* and store the output in *value_p*.
-> >   *
-> > - * For security reasons, only *name__str* with prefixes "user." or
-> > - * "security.bpf." are allowed.
-> > + * For security reasons, only *name__str* values prefixed with "user." or
-> > + * "security.bpf." are permitted.
-> >   *
-> >   * Return: length of the xattr value on success, a negative value on error.
-> >   */
-> > @@ -187,10 +206,18 @@ static int bpf_xattr_write_permission(const char *name, struct inode *inode)
-> >   * @value_p: xattr value
-> >   * @flags: flags to pass into filesystem operations
-> >   *
-> > - * Set xattr *name__str* of *dentry* to the value in *value_ptr*.
-> > + * Set xattr *name__str* of *dentry* to the value in *value_p*.
-> >   *
-> > - * For security reasons, only *name__str* with prefix "security.bpf."
-> > - * is allowed.
-> > + * For security reasons, only *name__str* values prefixed with "security.bpf."
-> > + * are permitted.
-> > + *
-> > + * The length constraints imposed on both the xattr name and value abide those
-> > + * that are also enforced by the VFS. Additionally, the flags argument respects
-> > + * what's enforced by the VFS in the same way. By default, the flag value of 0
-> > + * is permitted and an xattr will be created if it does not exist, or the value
-> > + * will be replaced if the xattr already exists. More course grained control
-> > + * over these exact semantics is permitted by explicitly specifying either
-> > + * XATTR_CREATE or XATTR_REPLACE.
-> >   *
-> >   * The caller already locked dentry->d_inode.
-> >   *
-> > @@ -206,7 +233,17 @@ int bpf_set_dentry_xattr_locked(struct dentry *dentry, const char *name__str,
-> >  	u32 value_len;
-> >  	int ret;
-> >  
-> > +	if (flags & ~(XATTR_CREATE | XATTR_REPLACE))
-> > +		return -EINVAL;
-> > +
-> > +	ret = bpf_xattr_validate_name(name__str);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> >  	value_len = __bpf_dynptr_size(value_ptr);
-> > +	if (value_len > XATTR_SIZE_MAX)
-> > +		return -E2BIG;
-> > +
+> Add devicetree bindings for the Toshiba TC956x family of Ethernet-AVB/TSN
+> bridges.
 > 
-> Hm, this is also open-coded in fs/xattr.c and here now. I wonder whether
-> we can easily build this around the same infra as fs/xattr.c is. So use
-> struct kernel_xattr_ctx and struct kname because then all codepaths:
+> Signed-off-by: Daniel Thompson <daniel@riscstar.com>
+> Signed-off-by: Alex Elder <elder@riscstar.com>
+> ---
+>  .../bindings/net/toshiba,tc956x-dwmac.yaml    | 111 ++++++++++++++++++
+>  1 file changed, 111 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
 > 
-> syscall/internal, io_uring and the bpf interface are the same thing with
-> shared helpers and behavior.
+> diff --git a/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml b/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
+> new file mode 100644
+> index 0000000000000..d95d22a3761da
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
+> @@ -0,0 +1,111 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/toshiba,tc956x-dwmac.yaml#
 
-At this point, I can't really see why this couldn't be done. I'll try
-and introduce a set of shareable helpers which are tasked with
-enforcing these constraints uniformly across all of these various
-subsystems.
+Filename and here: toshiba,tc9564-dwmac
+(s/x/4/)
+
+
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Toshiba TC956x Ethernet-AVB/TSN Controller
+> +
+> +maintainers:
+> +  - Alex Elder <elder@riscstar.com>
+> +  - Daniel Thompson <daniel@riscstar.com>
+> +
+> +description: |
+> +  This node provides properties for configuring the Ethernet PCI functions
+> +  that are attached to the internal downstream port of the TC956x's PCIe
+> +  switch.
+
+Describe rather the hardware directly, not the DTS or the binding
+itself.
+
+Just say what is the hardware, what is consists of, what is less
+obvious or usual (if there is such).
+
+> +
+> +  TC956x are a family of Ethernet-AVB/TSN bridge chips that combine a PCIe
+> +  switch together with a number of Ethernet controllers. These bindings
+> +  cover only the Ethernet functions of these devices.
+
+What about the rest of the hardware - a PCIe switch? Shouldn't it be
+described?
+
+> +
+> +allOf:
+> +  - $ref: /schemas/pci/pci-bus-common.yaml#
+> +  - $ref: /schemas/pci/pci-device.yaml#
+> +
+> +unevaluatedProperties: false
+
+Place both (allOf+unevaluatedProperties) after "required:".
+
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - pci1179,0220 # Toshiba TC9564 (a.k.a. Qualcomm QPS615)
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +
+> +  gpio-controller: true
+> +
+> +  # We can't allOf reference Ethernet-controller.yaml because we end up with
+
+s/Ethernet-controller.yaml/ethernet-controller.yaml/
+
+> +  # contradictory $nodename rules (`ethernet@` versus `pci@`). Happily only a
+
+But which schema requires pci@ for devices? If I am not mistaken, only
+dtschema/schemas/pci/pci-bus-common.yaml requires it, and it does not
+apply to actual PCI device.
+
+
+> +  # small number of the properties are useful on TC956x so we can just reference
+> +  # what we need.
+> +  phy-connection-type:
+> +    $ref: ethernet-controller.yaml#/properties/phy-connection-type
+> +
+> +  phy-handle:
+> +    $ref: ethernet-controller.yaml#/properties/phy-handle
+> +
+> +  phy-mode:
+> +    $ref: ethernet-controller.yaml#/properties/phy-mode
+> +
+> +  mdio:
+> +    $ref: snps,dwmac.yaml#/properties/mdio
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    pcie {
+> +      #address-cells = <3>;
+> +      #size-cells = <2>;
+> +
+> +      tc956x_emac0: pci@0,0 {
+> +        compatible = "pci1179,0220";
+> +        reg = <0x50000 0x0 0x0 0x0 0x0>;
+> +        #address-cells = <3>;
+> +        #size-cells = <2>;
+> +        device_type = "pci";
+> +        ranges;
+> +
+> +        gpio-controller;
+> +        #gpio-cells = <2>;
+> +
+> +        phy-mode = "10gbase-r";
+> +        phy-handle = <&tc956x_emac0_phy>;
+> +
+> +        mdio {
+> +          compatible = "snps,dwmac-mdio";
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +
+> +          tc956x_emac0_phy: ethernet-phy@1c {
+> +            compatible = "ethernet-phy-id311c.1c12";
+> +            reg = <0x1c>;
+> +          };
+> +        };
+> +      };
+
+Keep only one example, unless you have different properties (not their
+values, but their presence),
+
+
+Best regards,
+Krzysztof
+
