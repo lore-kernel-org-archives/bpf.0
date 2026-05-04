@@ -1,54 +1,54 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE9333EAED
-	for <bpf@vger.kernel.org>; Mon,  4 May 2026 21:06:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3749B33F593
+	for <bpf@vger.kernel.org>; Mon,  4 May 2026 21:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777928775; cv=none; b=NikVF464+AWtEnz9HBRBaIy9s/YkfdNw/cpeXPz3LT5zc1VwL44CAgx2N6mfi8aVSbUaDC7uO5itSW1OVQiqtxGQ+aPrIbovof/cr5O1OCbM8uOffF0dwYqUO0q0Gr7Q0JL8sVfbmn3Ma2/g6ThHgaAsaPhCidw5H2FwkqT79Yw=
+	t=1777928777; cv=none; b=EVbFXvZVuo7i7Vg/YsfcxF4qtYnmDmh9aqY7sYdMmYk0ScUKxr44p4WfmmMTePa9vtSDW2ekSt9QWLEqRciuWdeIMuzfr+3v4GTtM5WrnxfFoE8EeKXFE88vziLDFfSIT/7L9sy9YE2CXqAy2NK7a7AnlLYCiVaEqEky4m+nv1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777928775; c=relaxed/simple;
-	bh=XNnXMQyTYIsRINKZ+fuKyExOfi5B9sDWIjRfhJKWUM0=;
+	s=arc-20240116; t=1777928777; c=relaxed/simple;
+	bh=+tXOfed2AA1Peg5INonHwlEN3i7UeoxVPDgFqjVYyWs=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=S8kzQF+qFoiPUmHgbYrxeaYTPeMPCwGEBDRB0d9TflWalVPZkPQIbEZqjjfCtEky3dB5uTzQCwm6B979VTiNVqyX/L+1nkEB45YOUVIbESktlO1hhtX7zrZizoilpg3GlbJlKE1C16nPt0PBhfhHJlLRlOVlHYwJKdM34D4Q6mg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MJt3wHcJ; arc=none smtp.client-ip=209.85.214.201
+	 To:Cc:Content-Type; b=CtebNoba1ZNDd8CZ51yi4NsPgZxhqOGaSvnTCrKffe0zZ4frT3zZken+9a+/gGcdSCfVerZLISLWCZdooIKZTxY4hhjpth5fSaS8xJNqFR1shUvEO9EMGeg3Pa7GU8rEErSKXQOhRz4NB/++EWkFZrg8pjA9cTQvUTI7wqayj3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GEJuVEud; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MJt3wHcJ"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2b9b8137828so41410195ad.0
-        for <bpf@vger.kernel.org>; Mon, 04 May 2026 14:06:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GEJuVEud"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-3594620fe97so11121854a91.1
+        for <bpf@vger.kernel.org>; Mon, 04 May 2026 14:06:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777928774; x=1778533574; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1777928775; x=1778533575; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pG1PifT/WtK1zubWGWAhV6g6QgONGiju6lqkRiDLra8=;
-        b=MJt3wHcJ6uQjI24ddqdwK7pom92VnLuZvXP1+hFLKPwEsVYRNnkoiCx+HBodJuIpxr
-         BzEOHZgWkQiTA+CFPcwDlFfaSpUjxgZPgQvN/51wGHgDAac0CzGDyvbxWbYDEcR7faYU
-         yNmGAh1FVc2jLqh+iPamRNBmrMYnbUm4x6Z4v7ukA3ql0aOnp/RN8uYgffDY54j2qIC9
-         FGBxoRgclpIcWQxQ/YdF1Tpdisbb+WGUGyo+fHtFCwFedvAEqIIPLLMgt9AhuI/AiJsK
-         84gMkd+WfS5Ynuv5DzJ0PBCEfw5qCE9hYIdJUIuoYtbgopLuDtdqd3hnkzoB7Qg+jAJe
-         OeVQ==
+        bh=C5D0xEZ9yNUhyoPUL8WiMnGxIjniG9b8lDvBpm0pDEk=;
+        b=GEJuVEudWXbywTpSRft7L9Yod9FE2EqF6kOx7YcuW2fEeCtp/TqvW5iuk9JbGYq8Av
+         i6fQKjPhKetkZI6ojp3dg2KBgrqjBv71y4pXo3+0D8pEAAg9KIFZ4tEw5sIOHJ3hRIRd
+         OpHcLa/JTruaMK2hDOUwg6ZDKc/HyGEffdbCWJ2vsRoSTwjW3AWd8dTeUsYd67o3Hxfo
+         +44aUoLxXhZYQVmfGQwefh3UbPlpCRNh4qk7Vg4cG3vzOSmbKjMp4pEGSDLDg3r5aHrr
+         Xkr82v+jKVj+kA0UU9yNGXT/Pf93jbQQ0626IZDkMriD+qb8QKvBhpcLVDmxm9sXM54p
+         XJIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777928774; x=1778533574;
+        d=1e100.net; s=20251104; t=1777928775; x=1778533575;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pG1PifT/WtK1zubWGWAhV6g6QgONGiju6lqkRiDLra8=;
-        b=dWeIcNynWptuffeuAKLYAlHER9WVwTQgY0VAIivdX0wD5NJZ5THBDEBLFydoRWwgBH
-         Eft1r2RJjdosk349UijjOBB7REK3YjErimipdTLxIfDewwtLm3ovAKH5kKI0Gn11598B
-         Ok2gEHzuJOALTorcB7OOG8mf88nBdFYJfNuuhhlGGT07CFCwfrCrC4uhwBSX1NKMIPCa
-         jUUiYbv/qg2sKsdyYMHEzosiKR+z/LsDuDFLzkdb9CgI5w+nbjGlNxogDk0TAS/fIEnW
-         zytdWgNtvFBRkSeiGWpHfHd7KMeizNLTmbDVpI99d53YGbjj1YOS75tlQs7PIaN94FP1
-         Hcmg==
-X-Forwarded-Encrypted: i=1; AFNElJ93dDS1TgfKGevEA1qx7W+a4l70sK+810GJbI8SF8/Wke9d8ydsKk3N1LO+1bnUxf6nfeY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0GhbEXhY+btVrYgPpvpNYbG6eGrCp6nYv/bYOADIQhaM87n0O
-	nhHwGwQ0VZWj38I/qY6lWrPkAKo4KoM6274YpiYTvRoZgWDWGhxS5pc8P+twF4HYr0/3dD+lp0b
-	lQJt8zQ==
-X-Received: from plty2.prod.google.com ([2002:a17:902:8642:b0:2b5:f921:9e3a])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:248:b0:2ba:bfc:76b5
- with SMTP id d9443c01a7336-2ba0bfc88a3mr79496205ad.4.1777928773753; Mon, 04
- May 2026 14:06:13 -0700 (PDT)
-Date: Mon,  4 May 2026 21:04:48 +0000
+        bh=C5D0xEZ9yNUhyoPUL8WiMnGxIjniG9b8lDvBpm0pDEk=;
+        b=Zqd+TUOxxG87wdGsJwdtVeydOnqOvHmMhBF6MK1zgd9+R6xkmLykQQUPo7ntYXVbwY
+         T2/bY71DD/+fCWl814M6niwEQj2KKXkG4rMMQ6/fcsTgoB8xP5qEoUObBC5VfN3FrFsE
+         Yi3Q8/KR0qrKOmh+juGtmmAZh0vQcuSqtyKyref8XnUC1feMPMyCsnaw7wCvJL5MZC3N
+         GxsUcej+y5qMFmFS2FaKtJkoaIIBEAB6uXWakQOhz3zrL3LSFK8tkAdUSAbEGxQvsz0T
+         MadOtQecExgWtig3Xlci4WylthB65LJ90hQMZu0bin2djHu71sfcfCccRYsNVuzO86v3
+         0lpQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+ojiCEtWFBttDjthN6+vEMx7YlIe5BYyYzu3rC9RQ8pLkYwxo3fOQrw8+sxV+tPNavkmE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtYaGNke8uTMxKndprpGstk/ohPV0RhvIvoOSCDnU5YIqCEDjK
+	/p9zpp0oEYF9Cn0AJQTpew5+m3Sb+QkiMjM+7FbWUq3ZYW/kMB6bU13FDubJc1dSjWHIcg/DYRe
+	Ungszdw==
+X-Received: from plbt6.prod.google.com ([2002:a17:903:c86:b0:2b2:6eb1:9305])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:530f:b0:35d:9da0:4947
+ with SMTP id 98e67ed59e1d1-3650cdda6b7mr11964572a91.11.1777928775449; Mon, 04
+ May 2026 14:06:15 -0700 (PDT)
+Date: Mon,  4 May 2026 21:04:49 +0000
 In-Reply-To: <20260504210610.180150-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260504210610.180150-1-kuniyu@google.com>
 X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
-Message-ID: <20260504210610.180150-2-kuniyu@google.com>
-Subject: [PATCH v2 bpf 1/6] bpf: tcp: Fix type confusion in bpf_tcp_sock().
+Message-ID: <20260504210610.180150-3-kuniyu@google.com>
+Subject: [PATCH v2 bpf 2/6] selftest: bpf: Add test for bpf_tcp_sock() and RAW socket.
 From: Kuniyuki Iwashima <kuniyu@google.com>
 To: Martin KaFai Lau <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
@@ -67,77 +67,104 @@ To: Martin KaFai Lau <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.n
 Cc: John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
 	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
 	Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Damiano Melotti <melotti@google.com>
+	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-bpf_tcp_sock() only checks if sk->sk_protocol is IPPROTO_TCP,
-but RAW socket can bypass it:
+Let's extend sockopt_sk.c to cover bpf_tcp_sock() for the
+wrong socket type.
 
-  socket(AF_INET, SOCK_RAW, IPPROTO_TCP)
+Before:
+  # ./test_progs -t sockopt_sk
+  [  151.948613] ==================================================================
+  [  151.951376] BUG: KASAN: slab-out-of-bounds in sol_tcp_sockopt+0xc7/0x8e0
+  [  151.954159] Read of size 8 at addr ffff88801083d760 by task test_progs/1259
+  ...
+  run_test:FAIL:getsetsockopt unexpected error: -1 (errno 0)
+  #427     sockopt_sk:FAIL
 
-Calling bpf_setsockopt() in SOCKOPT prog triggers out-of-bounds
-access to another slab object. [0]
+After:
+  #427     sockopt_sk:OK
 
-Let's use sk_is_tcp().
+While at it, missing free() is fixed up.
 
-[0]:
-BUG: KASAN: slab-out-of-bounds in sol_tcp_sockopt (net/core/filter.c:5519)
-Read of size 8 at addr ffff88801083d760 by task test_progs/1259
-
-CPU: 1 UID: 0 PID: 1259 Comm: test_progs Tainted: G           OE       7.0.0-11175-gb5c111f4967b #1 PREEMPT(full)
-Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.17.0-debian-1.17.0-1 04/01/2014
-Call Trace:
- <TASK>
- dump_stack_lvl (lib/dump_stack.c:94 lib/dump_stack.c:120)
- print_report (mm/kasan/report.c:378 mm/kasan/report.c:482)
- kasan_report (mm/kasan/report.c:595)
- sol_tcp_sockopt (net/core/filter.c:5519)
- __bpf_getsockopt (net/core/filter.c:5633)
- bpf_sk_getsockopt (net/core/filter.c:5654)
- bpf_prog_629ba00a1601e9f2__setsockopt+0x86/0x22c
- __cgroup_bpf_run_filter_setsockopt (./include/linux/bpf.h:1402 ./include/linux/filter.h:722 ./include/linux/filter.h:729 kernel/bpf/cgroup.c:81 kernel/bpf/cgroup.c:2026)
- do_sock_setsockopt (net/socket.c:2363)
- __x64_sys_setsockopt (net/socket.c:2406)
- do_syscall_64 (arch/x86/entry/syscall_64.c:63)
- entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121)
-RIP: 0033:0x7f85f82fe7de
-Code: 55 48 63 c9 48 63 ff 45 89 c9 48 89 e5 48 83 ec 08 6a 2c e8 34 69 f7 ff c9 c3 66 90 f3 0f 1e fa 49 89 ca b8 36 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 0a c3 66 0f 1f 84 00 00 00 00 00 48 8b 15 e1
-RSP: 002b:00007ffe59dcecd8 EFLAGS: 00000202 ORIG_RAX: 0000000000000036
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f85f82fe7de
-RDX: 000000000000001c RSI: 0000000000000006 RDI: 000000000000000d
-RBP: 00007ffe59dcef20 R08: 000000000000003c R09: 0000000000000000
-R10: 00007ffe59dcef00 R11: 0000000000000202 R12: 00007ffe59dcf268
-R13: 0000000000000003 R14: 00007f85f9da5000 R15: 000055b2f3201400
- </TASK>
-
-The buggy address belongs to the object at ffff88801083d280
- which belongs to the cache RAW of size 1792
-The buggy address is located 1248 bytes inside of
- allocated 1792-byte region [ffff88801083d280, ffff88801083d980)
-
-Fixes: 655a51e536c0 ("bpf: Add struct bpf_tcp_sock and BPF_FUNC_tcp_sock")
-Reported-by: Damiano Melotti <melotti@google.com>
 Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- net/core/filter.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2: Inverted if (err) to if (!err)
+---
+ .../selftests/bpf/prog_tests/sockopt_sk.c      | 18 +++++++++++++++++-
+ tools/testing/selftests/bpf/progs/sockopt_sk.c | 16 ++++++++++++++++
+ 2 files changed, 33 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index bc96c18df4e0..cd88633f8dc1 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -7475,7 +7475,7 @@ u32 bpf_tcp_sock_convert_ctx_access(enum bpf_access_type type,
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+index 53637431ec5d..5fd33ad2eaaf 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+@@ -190,7 +190,7 @@ static int getsetsockopt(void)
+ 	fd = socket(AF_NETLINK, SOCK_RAW, 0);
+ 	if (fd < 0) {
+ 		log_err("Failed to create AF_NETLINK socket");
+-		return -1;
++		goto err;
+ 	}
  
- BPF_CALL_1(bpf_tcp_sock, struct sock *, sk)
- {
--	if (sk_fullsock(sk) && sk->sk_protocol == IPPROTO_TCP)
-+	if (sk_fullsock(sk) && sk_is_tcp(sk))
- 		return (unsigned long)sk;
+ 	buf.u32 = 1;
+@@ -211,6 +211,22 @@ static int getsetsockopt(void)
+ 	}
+ 	ASSERT_EQ(optlen, 8, "Unexpected NETLINK_LIST_MEMBERSHIPS value");
  
- 	return (unsigned long)NULL;
++	/* Trick bpf_tcp_sock() with IPPROTO_TCP */
++	close(fd);
++	fd = socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
++	if (fd < 0) {
++		log_err("Failed to create RAW socket");
++		goto err;
++	}
++
++	optlen = 20;
++	errno = 0;
++	err = setsockopt(fd, SOL_TCP, TCP_SAVED_SYN, &buf, optlen);
++	if (!err) {
++		log_err("Unexpected setsockopt(TCP_SAVED_SYN)");
++		goto err;
++	}
++
+ 	free(big_buf);
+ 	close(fd);
+ 	return 0;
+diff --git a/tools/testing/selftests/bpf/progs/sockopt_sk.c b/tools/testing/selftests/bpf/progs/sockopt_sk.c
+index cb990a7d3d45..5e0b27e7855c 100644
+--- a/tools/testing/selftests/bpf/progs/sockopt_sk.c
++++ b/tools/testing/selftests/bpf/progs/sockopt_sk.c
+@@ -149,6 +149,20 @@ int _setsockopt(struct bpf_sockopt *ctx)
+ 	if (sk && sk->family == AF_NETLINK)
+ 		goto out;
+ 
++	if (sk && sk->family == AF_INET && sk->type == SOCK_RAW) {
++		struct bpf_tcp_sock *tp = bpf_tcp_sock(sk);
++
++		if (tp) {
++			char saved_syn[60];
++
++			bpf_getsockopt(sk, SOL_TCP, TCP_SAVED_SYN,
++				       &saved_syn, sizeof(saved_syn));
++			goto consumed;
++		}
++
++		goto out;
++	}
++
+ 	/* Make sure bpf_get_netns_cookie is callable.
+ 	 */
+ 	if (bpf_get_netns_cookie(NULL) == 0)
+@@ -224,6 +238,8 @@ int _setsockopt(struct bpf_sockopt *ctx)
+ 		return 0; /* couldn't get sk storage */
+ 
+ 	storage->val = optval[0];
++
++consumed:
+ 	ctx->optlen = -1; /* BPF has consumed this option, don't call kernel
+ 			   * setsockopt handler.
+ 			   */
 -- 
 2.54.0.545.g6539524ca2-goog
 
