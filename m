@@ -1,191 +1,192 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896363446C0;
-	Mon,  4 May 2026 08:42:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777884150; cv=none; b=j3QNMZNWgsWMR9Qw14QfnjL5L29c8ZgTMteGOuSR0NICI/6jqTcVDuAcBVTY/dBcKZUyrYXPJujr5/o9AxWmR2Dqkhl0r7K106cYm3xtc3ZMfcRqpOaslKhp2DNmq9F2Ew1dmKBJw2tUr69Fc/qtmfcCv2ZHjpAOH0u1llRQXYE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777884150; c=relaxed/simple;
-	bh=MxZyxmuXOA5R5x7zMlhVQs1yDcUAcMFxNU48wUisLC0=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=CRGkZ8BYmsi651+oicuNbZ0knZp40M9N9I7EX+tEXmJ851uBSmwuZPwo/INlClsIyJCdolX8RUrSdFSm3tmLMchYknZxyxo6kxYydevePjOjsnbbBFRWq42klYHUowT5Fz4MlVbblV4jfb7YtuhImAxk8pVi2gDJnBUeK0GQ45A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=FtQ7uXFL; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E201D3451B2
+	for <bpf@vger.kernel.org>; Mon,  4 May 2026 08:44:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777884285; cv=pass; b=Y1MW61SKx4fr+xzGuyOrD7GiEBZdq5GITb9rZNr+xz/3mkhjVf4fRSYk+KypmRwBugXY5H9EwUa5XdWI1puhFOChRJKzsxLF7+VPdffgkPJKIyF++xa/ultdXQlS2PYV4R3CCm5ZoGjdnojixUhTUzEKTTLJV6aiR32AGa9MmEc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777884285; c=relaxed/simple;
+	bh=Qss+U8wLLo/f7M25oY4It/y3e4/yeO8e1s7iZDkFkYI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=koE8qnpO5quCEnQ69KmWhP2P+8sHePxeHbCwvvLxOdQcYh+rJLOI6l4ZTKIugaolOfD1ih2j5RbIiI/022Elo+UVd5zQc59SCup1sXvZEFjMmFirsj8BjPiANenB6D+CJ3ekoBKaR6vps+z1x5DGNp2YGHUnYpOj/XjB7+a1fxM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k1CeAr9R; arc=pass smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="FtQ7uXFL"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6443Qx0D3769724;
-	Mon, 4 May 2026 08:42:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pp1; bh=HcLqKW1LPdShwrJ53be3nTSoauY1
-	L/oc83mlWkZIFNA=; b=FtQ7uXFLiAnTrzqWJwML4ufc8KQYP3gftkfR9NBwlVYO
-	KrxGkzcw12zyMt0htGK9fHj+I5hOq2uhw9PV910DqHarZsOxqDqN5GmmhowHasNc
-	OyhB989Qpjgq3WgBnUen8bJEyg7mkCydn5GDJzZBM0oX5FdJQb9n3SQZJAAoK288
-	PHtQWFQs3ZqhQQM7j6QzwJ68SoUiPyEHQjAE97UaSPK2Q+xH6M1e3KKmeU9bCNvq
-	2N40ONT+vy2cNTiMr0+LfZSB8HM40PcNttoO+mKoCzsTKKlsUEg06yr+u6E4Dil0
-	9wKMIRupUz/0gsEY2Nalmiodis1eEk3lrflHE1w/DA==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9w660g8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 May 2026 08:42:23 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6448dQN8006629;
-	Mon, 4 May 2026 08:42:22 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dwwtg474y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 May 2026 08:42:22 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6448fsKm29098580
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 4 May 2026 08:41:54 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 56A885805D;
-	Mon,  4 May 2026 08:42:21 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 47AE858059;
-	Mon,  4 May 2026 08:42:19 +0000 (GMT)
-Received: from [9.61.252.117] (unknown [9.61.252.117])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  4 May 2026 08:42:18 +0000 (GMT)
-Message-ID: <362eaba2-54dd-4b59-81f5-65abb916e916@linux.ibm.com>
-Date: Mon, 4 May 2026 14:12:17 +0530
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k1CeAr9R"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-488ab2db91aso46017555e9.3
+        for <bpf@vger.kernel.org>; Mon, 04 May 2026 01:44:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777884281; cv=none;
+        d=google.com; s=arc-20240605;
+        b=GF0Bqj9pX/C2NBMSvOHx/aTkKjSUHab0prairlbSjGWOy0CHje+W+E2cfBOmZ3UXqs
+         ISMpQgShb2dkq7cAamdS6kPxb9MKDJoTMRmTPfe5tA4p5milH4MoxdNxoywGhX+0P6aU
+         tIbyyeRsHsnGQUsm3nMHerpaO/KinXH8fopBglz1F5gqa0xRP1VzI22oV5VLmyRAVN08
+         SPamWvIZsjfyC4EY/p4ppC+EWqrTctpUY3UgROr5c/fhcWYwFUDt1lueZQrcY0NjTEye
+         uyPmdqFtlLyij5tAM7pUwL2xIXJK6RRixZTNVJHKFZxUTHJb9qJtR7DIN253WJ1B93S4
+         +wNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Jv9NxqtRyL2CP+9T7R4yPhEDtmnf2mNkhJO8Wz5finE=;
+        fh=Aey5tJ8DhbksTf0EgoDLfFyEfGwNdDcZGWw4qFU/2no=;
+        b=GNnxFwSzFaFXPeO/P8X9lhCbgY72rUr4cSLUdaPU4I2G1Gw8KGLHsi5zu9HwfIv+id
+         vGSKuYxmBWhn5Qh5EA8WG0h9DZLrhoyWNObOY4Xbp2uEVN2EBXz9m3NKyjwr3yMfPRBh
+         JgkS4bZgMDnd5SnuZ2hu9jdIHG9n8VkN37ue4oDuzmf5UPA2nqetXdZDiRH4rjDMxSMa
+         568oZeBUsCDpu31zvfC/Ju8bXoxkl9MpjMJySKSkv2LNN2cjzFOmqRBcKJLkFwBwYM5d
+         Vy7i5Wnz4ifxC1ahVxzVgjROorMnlL8BPJ4Gz/ZmE7eo6tYMQp19mtoyLn3ce7PZ62qc
+         ZCIQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777884281; x=1778489081; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jv9NxqtRyL2CP+9T7R4yPhEDtmnf2mNkhJO8Wz5finE=;
+        b=k1CeAr9RoIWU3UKzYwtTuQ4eIpRSewZvELf4NAC4bMh0QQUMODwRGapadbSBV3Z/Wa
+         xo4XTmHY8DPEicPCIYpErpNIKDCX/JOdil8X0Q63KHh5Nc2Vq9EuWlBCYqJ/BMcRDegJ
+         0+BkeO6mwi2XqCXGt31fTZach2+zJEg+JJruf5MtlewOE/xjvTT/j4TY55kC8yxwS/El
+         XvCMysfj5heGNL5g9m0YJv6nn08JpgiIZHURuFQx/E3HKjM9PVFLuucitKPpmosVHueD
+         449PzEmvxXJ8jgDKp0FNYhTzbmi0O3MMAcZRHZBnWpPnkjM4qY6bYjx7m4Uq4ztCvnW5
+         xl5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777884281; x=1778489081;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Jv9NxqtRyL2CP+9T7R4yPhEDtmnf2mNkhJO8Wz5finE=;
+        b=NGthsaV5I+YQWSbZa8Pnxy9DaVMFQ4GvsKTsa5hXNh7tpEw9TwIgIJnlTNcTcpwBSg
+         6LwtEAD5SH7dMEw3poLJRKNTQLGXKOy5RrkasPsKbDZbBZPXDbFkBfRXlrvE007j2v/5
+         Vv2svOmwOz9n/EuviZR1n1sx/Q01iC+xRseTxIPgT0wT/8e9ENKQz4NfnM8CathF/P5N
+         v/0ukfiwjNEK8liTWyPxQRBb8m+fvbGYZduFEeCGOfHrMFwNQ6YZL3XRirIoITH1iAm9
+         J70auTxQ+scHg/p9T92nYC6dAoAqLccKjRt/v8bbMrwAwGObexg65hTwiVA0ftoINFdZ
+         NhSA==
+X-Forwarded-Encrypted: i=1; AFNElJ87siAJu1qIfY41IDo+gCtFj/Z1+o3cZxCueYeJgPtOE1z56yTv7z7m279FBD/ngBmU+94=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfemAVj1AzT8mwFRnqAZ0xQLIR2khc1rNyIsAPw+aiWdxjFr7z
+	r/yTAxeK3wOI5QiZzy/ODbrZkg09aZ0qhWkWSvJooKINBvVIuQIvPtuiKNtEBFSEsLHVVQKU1Yt
+	Z1byNIWvInCWy2YOhiV+9AP/tOa/L7Ek=
+X-Gm-Gg: AeBDievx7hzzMe/xi1gEvWao6aJI4E8DEBc5B7Xfcsji6MFmMlqPBM1D/s8wBp7UXcE
+	l1ejhgwlwrMZ2WCtgVHJQVFGyTXKtFAzVgGr9ObL+qe1jpaEH51EQvc8hyJHxaRiDo6v9voE2Vu
+	jkWOYmC5VfGYbYP4BDS016LzxlkYizZWXin3lVQdDXmfu++G8QHo4uzBxoOmMX7c9eqlGLQqsUk
+	lNcxEDiSfF1Zg7PoyX5JHqcVKWxoE11vlgrZvNr8YsIZ/PTdCp0MS/WQa/jKJLFfbDe2wnJrkUz
+	uPmli5THH1O7X3p/Poy49kGjFtzFGxh/3cxxFgp+Kilr4qivGs9t91fzMEN+M9xBwaUvxDbAKQg
+	IMRo=
+X-Received: by 2002:a05:600d:f:b0:489:c57:7836 with SMTP id
+ 5b1f17b1804b1-48a9867756dmr114115895e9.27.1777884281056; Mon, 04 May 2026
+ 01:44:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-GB
-To: Saket Kumar Bhaskar <skb99@linux.ibm.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>, bpf <bpf@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Cc: LKML <linux-kernel@vger.kernel.org>
-From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Subject: [mainline][bpf] build failure: conflicting bpf_arena_* prototypes
+References: <362eaba2-54dd-4b59-81f5-65abb916e916@linux.ibm.com>
+In-Reply-To: <362eaba2-54dd-4b59-81f5-65abb916e916@linux.ibm.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 4 May 2026 10:44:30 +0200
+X-Gm-Features: AVHnY4JZ5hfoCAF-GdNeTg5qxvY890QoN5Fk7GQtaHRmuk32fVJ1xR5wgivEK84
+Message-ID: <CAADnVQL7Hm592aGOKbmOMRiPuKz1uCLKu9KE3poZqyR51y4HhA@mail.gmail.com>
+Subject: Re: [mainline][bpf] build failure: conflicting bpf_arena_* prototypes
  between vmlinux.h and bpf_arena_common.h
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=XPQAjwhE c=1 sm=1 tr=0 ts=69f85bef cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=NEAV23lmAAAA:8
- a=Twlkf-z8AAAA:8 a=VnNF1IyMAAAA:8 a=YpS5cAcgm0N0_-8T5d8A:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=-74SuR6ZdpOK_LpdRCUo:22
-X-Proofpoint-ORIG-GUID: qeXqwpzTW6JxWApumdjaFVfclh9k_hBq
-X-Proofpoint-GUID: qeXqwpzTW6JxWApumdjaFVfclh9k_hBq
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA0MDA5MiBTYWx0ZWRfXwgx6MUuZMipr
- 2LHot8qENNDik5eDv75/+yQXETdG9t78RsnkXjnCygW+KNPTmM1W57egnILQ7NbM/U99bMmOMEs
- BjHu2c6XBENHPAk6nuH9XFMD0NmhXqqC3Ll8TBFGTKOoD89s2lL3ik3A4bbRQmiK1G7MbJjuJ7w
- OuUt1Uie8Hk07ZnhYtTyqVl56ItMgCg3JTfbskr5K36WaClosuoR3Jjp19WqWGyz1IOVPbEJjia
- 4bMmsfwD7tVeNgsf+3FyLBWKQrAZLSQEInabXVt1zCbgEDhJbFuWtpKZuV8llgOink4qbhYpWla
- 5dPhxJJBY/pdRxsSZmjvD0HgZ+gG6a2vJgGRihKHhubZvZ+VQ6mX3C4HBycBs7O9MEE8jTPVAVw
- x2m0JeW9VyMm0EZYANLZ7t9rYlVFUrYNfLFb4mdBxQPmBkG5yvkVakjjFzABPkA9upktbAjvWj8
- 0mv+wHVKhKsUP7j++mQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-04_03,2026-04-30_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0 spamscore=0
- priorityscore=1501 impostorscore=0 phishscore=0 malwarescore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605040092
+To: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Cc: Saket Kumar Bhaskar <skb99@linux.ibm.com>, Hari Bathini <hbathini@linux.ibm.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, bpf <bpf@vger.kernel.org>, 
+	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Greetings!!!
+On Mon, May 4, 2026 at 10:42=E2=80=AFAM Venkat Rao Bagalkote
+<venkat88@linux.ibm.com> wrote:
+>
+> Greetings!!!
+>
+> I=E2=80=99m seeing a CLANG-BPF build failure in tools/testing/selftests/b=
+pf
+> related to conflicting prototypes of bpf_arena_* helpers between
+> vmlinux.h and bpf_arena_common.h, on mainline kernel.
+>
+>
+> Error log:
+>
+>    In file included from progs/arena_strsearch.c:12:
+>    In file included from
+> tools/testing/selftests/bpf/bpf_arena_strsearch.h:4:
+>    tools/testing/selftests/bpf/bpf_arena_common.h:47:15:
+>      error: conflicting types for 'bpf_arena_alloc_pages'
+>        void __arena* bpf_arena_alloc_pages(void *map,
+>                                            void __arena *addr,
+>                                            __u32 page_cnt,
+>                                            __u32 node_id,
+>                                            __u64 flags);
+>
+>    tools/testing/selftests/bpf/tools/include/vmlinux.h:135295:14:
+>      note: previous declaration is here
+>        extern void *bpf_arena_alloc_pages(void *p__map,
+>                                           void *addr__ign,
+>                                           u32 page_cnt,
+>                                           int node_id,
+>                                           u64 flags) __weak __ksym;
+>
+>    tools/testing/selftests/bpf/bpf_arena_common.h:49:5:
+>      error: conflicting types for 'bpf_arena_reserve_pages'
+>        int bpf_arena_reserve_pages(void *map,
+>                                    void __arena *addr,
+>                                    __u32 page_cnt) __ksym __weak;
+>
+>    tools/testing/selftests/bpf/tools/include/vmlinux.h:135297:12:
+>      note: previous declaration is here
+>        extern int bpf_arena_reserve_pages(void *p__map,
+>                                           void *ptr__ign,
+>                                           u32 page_cnt) __weak __ksym;
+>
+>    tools/testing/selftests/bpf/bpf_arena_common.h:50:6:
+>      error: conflicting types for 'bpf_arena_free_pages'
+>        void bpf_arena_free_pages(void *map,
+>                                  void __arena *ptr,
+>                                  __u32 page_cnt) __ksym __weak;
+>
+>    tools/testing/selftests/bpf/tools/include/vmlinux.h:135296:13:
+>      note: previous declaration is here
+>        extern void bpf_arena_free_pages(void *p__map,
+>                                         void *ptr__ign,
+>                                         u32 page_cnt) __weak __ksym;
+>
+> Tool chain Versions:
+>
+> gcc (GCC) 14.2.0
+> # clang --version
+> clang version 23.0.0git (https://github.com/llvm/llvm-project.git
+> bd6bfba3e50343c112a04b639394ab85be17c29b)
+>
+> # llc --version
+> LLVM (http://llvm.org/):
+>    LLVM version 23.0.0git
+>    Optimized build.
+>    Default target: powerpc64le-unknown-linux-gnu
+>    Host CPU: (unknown)
+>
+>    Registered Targets:
+>      bpf     - BPF (host endian)
+>      bpfeb   - BPF (big endian)
+>      bpfel   - BPF (little endian)
+>      ppc32   - PowerPC 32
+>      ppc32le - PowerPC 32 LE
+>      ppc64   - PowerPC 64
+>      ppc64le - PowerPC 64 LE
+>
+> # objcopy --version | head -1
+> GNU objcopy version 2.35.2-67.el9_7.1
+> # ld --version | head -1
+> GNU ld version 2.35.2-67.el9_7.1
+>
+>
+> If you happen to fix this, please add below tag.
+>
+>
+> Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
 
-I’m seeing a CLANG-BPF build failure in tools/testing/selftests/bpf
-related to conflicting prototypes of bpf_arena_* helpers between
-vmlinux.h and bpf_arena_common.h, on mainline kernel.
-
-
-Error log:
-
-   In file included from progs/arena_strsearch.c:12:
-   In file included from 
-tools/testing/selftests/bpf/bpf_arena_strsearch.h:4:
-   tools/testing/selftests/bpf/bpf_arena_common.h:47:15:
-     error: conflicting types for 'bpf_arena_alloc_pages'
-       void __arena* bpf_arena_alloc_pages(void *map,
-                                           void __arena *addr,
-                                           __u32 page_cnt,
-                                           __u32 node_id,
-                                           __u64 flags);
-
-   tools/testing/selftests/bpf/tools/include/vmlinux.h:135295:14:
-     note: previous declaration is here
-       extern void *bpf_arena_alloc_pages(void *p__map,
-                                          void *addr__ign,
-                                          u32 page_cnt,
-                                          int node_id,
-                                          u64 flags) __weak __ksym;
-
-   tools/testing/selftests/bpf/bpf_arena_common.h:49:5:
-     error: conflicting types for 'bpf_arena_reserve_pages'
-       int bpf_arena_reserve_pages(void *map,
-                                   void __arena *addr,
-                                   __u32 page_cnt) __ksym __weak;
-
-   tools/testing/selftests/bpf/tools/include/vmlinux.h:135297:12:
-     note: previous declaration is here
-       extern int bpf_arena_reserve_pages(void *p__map,
-                                          void *ptr__ign,
-                                          u32 page_cnt) __weak __ksym;
-
-   tools/testing/selftests/bpf/bpf_arena_common.h:50:6:
-     error: conflicting types for 'bpf_arena_free_pages'
-       void bpf_arena_free_pages(void *map,
-                                 void __arena *ptr,
-                                 __u32 page_cnt) __ksym __weak;
-
-   tools/testing/selftests/bpf/tools/include/vmlinux.h:135296:13:
-     note: previous declaration is here
-       extern void bpf_arena_free_pages(void *p__map,
-                                        void *ptr__ign,
-                                        u32 page_cnt) __weak __ksym;
-
-Tool chain Versions:
-
-gcc (GCC) 14.2.0
-# clang --version
-clang version 23.0.0git (https://github.com/llvm/llvm-project.git 
-bd6bfba3e50343c112a04b639394ab85be17c29b)
-
-# llc --version
-LLVM (http://llvm.org/):
-   LLVM version 23.0.0git
-   Optimized build.
-   Default target: powerpc64le-unknown-linux-gnu
-   Host CPU: (unknown)
-
-   Registered Targets:
-     bpf     - BPF (host endian)
-     bpfeb   - BPF (big endian)
-     bpfel   - BPF (little endian)
-     ppc32   - PowerPC 32
-     ppc32le - PowerPC 32 LE
-     ppc64   - PowerPC 64
-     ppc64le - PowerPC 64 LE
-
-# objcopy --version | head -1
-GNU objcopy version 2.35.2-67.el9_7.1
-# ld --version | head -1
-GNU ld version 2.35.2-67.el9_7.1
-
-
-If you happen to fix this, please add below tag.
-
-
-Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-
-
-Regards,
-
-Venkat.
-
-
+The issue is in your setup.
+It was brought up a couple times in the past.
+Please search archives.
