@@ -1,103 +1,155 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144D733EAEC
-	for <bpf@vger.kernel.org>; Mon,  4 May 2026 21:06:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2C93603D9
+	for <bpf@vger.kernel.org>; Mon,  4 May 2026 21:40:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777928784; cv=none; b=ivgcmht+B+Fuo5YnMJi/4bbOcXdRYGADCUKF9eAVlj/wkWEnF9KNEUiyhVwu9S2oxClDnOpv78Z9RAxhp46AFAIK6Ab5L9qVAV8PcSoR8M/X0lyzm+dPbjn/2+LzF/EOup7vsal0cMerVSgj5COojg2SdPIrvxUTtmPC6vfsnck=
+	t=1777930818; cv=none; b=UlIcEUKyHQL2uggYmoUJbxwlzEoDzY665VFlJOTFoWeqUs9jLA5DL+qF0RJKHuQEyIEXMLSKgTpV1f8BK1W3SBZjcRafIiR976MHoFs2QkcdWFjboDxxAUtEAPszuMsowt+XdKmbdCHxC2T2wzG7Gw5jqU6etj49LliZNEit/qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777928784; c=relaxed/simple;
-	bh=bzB+fl9VtvLM5Uyg9T51LJiJi48HHHF0xxoKeg03HoA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ToEHxiQ3ZkoV8Snq+I5OfSYCt5kEo3s32QexISer2O/rlglBj/6nInvwJbkGOO3ExTndYRdKY5DZNZgDKympyJ8wUl8OL4WaZesnnI1dTCBHcBvwI1R5RXxmw4HlGTiP+Ca3g7ffJEHH+SSuPVFrc5pZy6yGtVDMs/f0pi3SRww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hlZr+WMc; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	s=arc-20240116; t=1777930818; c=relaxed/simple;
+	bh=Y50nOL3Ll7Oblxb0C4m3AvGvJOmWeDTR/15bG4Rwt+8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=o5avd8v8ZKjmRWe+9z2lxXp3ERh+RvFy77VW6vniuCSDXMmBw5kTXZG13tVmQGwNZ69t+kG4Mo5jJ6G+MTvhq5inTTJk9aoD5+JTFcuZpAaExkqGLHsP+gokAv8NabIEyckUbUwb/JKwQTQcvOQvZKXjCiuqjSjgyXMxV0+4z0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GInbEMaN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hlZr+WMc"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c797d8c9c2dso5576534a12.2
-        for <bpf@vger.kernel.org>; Mon, 04 May 2026 14:06:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777928782; x=1778533582; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oMVtTJExhZiVc3HBoDF7EBw2DGe7oG5ooUfjkrrLuzY=;
-        b=hlZr+WMcgwF01DoazkyQbjthLr2ALlFs+eTHlwC1EZkkeJwXseT541JpEqkJ/bU3ZK
-         MBZ0uHQtgK41YFxFNy28+O2IxuJtESm3vJ2tpjK8JYPtn0JPB/HWW4pnnEU/xUem56UO
-         fjGp6gD4k7R2vhnauPlVAMs+wg4Afw8sRDBhH79D4PHNGDRWF0Xi57IQf0DTgXwvxWqp
-         k7AenbkQGLfWZDTDa4E+VGmuLES2obUlmVlRNvZFlCzrCQiJDhx9bBX05rawVt1skoFR
-         pebeZzsyMEKUWvUBj3Vx8mDNRfOHiqAzIF6tEM9xG/839IyMS8KfmDFCHsNkfoZU3ZB2
-         TMPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777928782; x=1778533582;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oMVtTJExhZiVc3HBoDF7EBw2DGe7oG5ooUfjkrrLuzY=;
-        b=N5quxMpkFRUnUr6ZTd8RaNKjdvQVNxxoG1HT7WzpDSpStL5USQmrN3BLdadvySgkkq
-         gJpVniRoBhMKVq4w8xmlWRrqAAZogNhgrdlqPhXXMj3o2b3MkUAuE53LcH5jb2XtVOtD
-         jJmRwBffbaZfSGvToWHWJgeVNbLs1cmdKOvwjcM2TnfZzBpBrKH7Qa6o1AZUhMwTDx9j
-         iShHYmLZJhBX2gonOH58eXTX/cjCuo8ae9zuXaZ964f0e3IpPVnJr173ocaTs+Wuqrtn
-         2cxGUui7UuN6KJcZbnhu9LEWqTMSABCQbCxHaNd6/6c/uQEawS8WVwKISf92/KtWin6Z
-         H8yg==
-X-Forwarded-Encrypted: i=1; AFNElJ9lo0B4Djvmuam/PA7d/7vtgcqdRr6mAetPR9xuMl4SBnrl5o/vpk75YOpL+AIlFF0WtpI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKUaq9pAIFGN6Sr3LszpxsjoIMlcN2BMC7eYDvE9UTQ8bc5K5G
-	QW6jj+MsrbbPPs/jtvmf4dATMYJmuOgKAdYdBTLe+O6Xoyde1/UOuNK9iRTVEnOF4yi8zlzR+JD
-	zatUF9w==
-X-Received: from pfbig18.prod.google.com ([2002:a05:6a00:8b92:b0:839:35e5:3d67])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:448b:b0:82c:7383:3745
- with SMTP id d2e1a72fcca58-8352d1766b9mr11524504b3a.19.1777928782246; Mon, 04
- May 2026 14:06:22 -0700 (PDT)
-Date: Mon,  4 May 2026 21:04:53 +0000
-In-Reply-To: <20260504210610.180150-1-kuniyu@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GInbEMaN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0C49C2BCF6
+	for <bpf@vger.kernel.org>; Mon,  4 May 2026 21:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777930817;
+	bh=Y50nOL3Ll7Oblxb0C4m3AvGvJOmWeDTR/15bG4Rwt+8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GInbEMaNBddNYam4nEQhGN9wFDIVXpZOLXn7Eo6EYf33iaZxZr9lh6pefmy7ZZsh0
+	 NV9Ln8cVNWOFmS1TVfuEoLpSxV32594TyHxKW7df7UblgAdDt9Va9i54iSZkNrlfbV
+	 Lqzo9fWkmQoEvP4IaZ7RSsQbFSUD7pGOVWXfmXlvroS9Ev0Me7ITDD1HO1j68Ja/8L
+	 2AmOgp84Q2fnoic5JcAZYjCqIWFlxNw4nDdKLAPVNG0g+dLLfHC91dm/QQ0oda5evR
+	 6qePQHil8ubYNqCSR6JM0reNjME6b+BUO1uBjhI5n8S/qZ3M7TeDqvoEVrUBfyRf9N
+	 U/oLzIeNNxTVQ==
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-8a4b8c3a30bso48064946d6.3
+        for <bpf@vger.kernel.org>; Mon, 04 May 2026 14:40:17 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ+EuKHRad/sX3BsmEHDcgJ+bEyxqLRKxf5G13ZBqhtPU/AgqSzwFNtL2q32T0LlSzE3qb0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQsiLGGRPRfmBzvWy/CTWHOb9Uuo4VtSAYI2UtyEEzR5t/ARSo
+	9lsKpK+uaN/nQXNiube4vDDUuTTlyor2Bqy8UUyPjy06h06X7+CsCXSVtiddTrHmjh5P17ymOrs
+	x201LLLSTKfkXzWrurNlJZ+fqID54r40=
+X-Received: by 2002:a05:6214:3d85:b0:8ac:a57e:ec1f with SMTP id
+ 6a1803df08f44-8b6682578c9mr199893326d6.29.1777930816774; Mon, 04 May 2026
+ 14:40:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260504210610.180150-1-kuniyu@google.com>
-X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
-Message-ID: <20260504210610.180150-7-kuniyu@google.com>
-Subject: [PATCH v2 bpf 6/6] bpf: tcp: Fix type confusion in sol_tcp_sockopt().
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
+MIME-Version: 1.0
+References: <20260503211835.16103-1-dwindsor@gmail.com> <20260503211835.16103-2-dwindsor@gmail.com>
+ <CAHC9VhSy5K5nQTtFUE4BScy1Ur61v7eZW067vTcUYDQeJb13Bw@mail.gmail.com>
+In-Reply-To: <CAHC9VhSy5K5nQTtFUE4BScy1Ur61v7eZW067vTcUYDQeJb13Bw@mail.gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Mon, 4 May 2026 23:40:04 +0200
+X-Gmail-Original-Message-ID: <CAPhsuW6sy2cdC4B7Z48-5A-yVX6fmVWxS_fWVjQxiX95KeUguw@mail.gmail.com>
+X-Gm-Features: AVHnY4J0bS_HHPQgD6P5PhrQ2PHNLPsmkZlDK5-_kikrw0qSIAQXpt5kgUuK21Y
+Message-ID: <CAPhsuW6sy2cdC4B7Z48-5A-yVX6fmVWxS_fWVjQxiX95KeUguw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] bpf: add bpf_init_inode_xattr kfunc for atomic
+ inode labeling
+To: Paul Moore <paul@paul-moore.com>
+Cc: David Windsor <dwindsor@gmail.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Jan Kara <jack@suse.cz>, John Fastabend <john.fastabend@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Eric Snowberg <eric.snowberg@oracle.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	selinux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-sol_tcp_sockopt() only checks if sk->sk_protocol is IPPROTO_TCP,
-but RAW socket can bypass it:
+On Mon, May 4, 2026 at 10:14=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+[...]
+> > diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
+> > index 9d27be058494..193accc00796 100644
+> > --- a/fs/bpf_fs_kfuncs.c
+> > +++ b/fs/bpf_fs_kfuncs.c
+> > @@ -10,6 +10,7 @@
+> >  #include <linux/fsnotify.h>
+> >  #include <linux/file.h>
+> >  #include <linux/kernfs.h>
+> > +#include <linux/lsm_hooks.h>
+> >  #include <linux/mm.h>
+> >  #include <linux/xattr.h>
+> >
+> > @@ -353,6 +354,97 @@ __bpf_kfunc int bpf_cgroup_read_xattr(struct cgrou=
+p *cgroup, const char *name__s
+> >  }
+> >  #endif /* CONFIG_CGROUPS */
+> >
+> > +static int bpf_xattrs_used(const struct lsm_xattr_ctx *ctx)
+> > +{
+> > +       const size_t prefix_len =3D sizeof(XATTR_BPF_LSM_SUFFIX) - 1;
+> > +       int i, n =3D 0;
+> > +
+> > +       for (i =3D 0; i < *ctx->xattr_count; i++) {
+> > +               const char *name =3D ctx->xattrs[i].name;
+> > +
+> > +               if (name && !strncmp(name, XATTR_BPF_LSM_SUFFIX, prefix=
+_len))
+> > +                       n++;
+> > +       }
+> > +       return n;
+> > +}
+[...]
+> > +
+> >  static int bpf_fs_kfuncs_filter(const struct bpf_prog *prog, u32 kfunc=
+_id)
+> >  {
+> >         if (!btf_id_set8_contains(&bpf_fs_kfunc_set_ids, kfunc_id) ||
+> > -           prog->type =3D=3D BPF_PROG_TYPE_LSM)
+> > +           prog->type =3D=3D BPF_PROG_TYPE_LSM) {
+> > +               /* bpf_init_inode_xattr only attaches to inode_init_sec=
+urity. */
+> > +               if (kfunc_id =3D=3D bpf_init_inode_xattr_btf_ids[0] &&
+> > +                   prog->aux->attach_btf_id !=3D bpf_lsm_inode_init_se=
+curity_btf_ids[0])
+> > +                       return -EACCES;
 
-  socket(AF_INET, SOCK_RAW, IPPROTO_TCP)
+We need to mark bpf_init_inode_xattr with KF_RCU (requires a trusted
+pointer), then we can remove this check above.
 
-Let's use sk_is_tcp().
+> >                 return 0;
+> > +       }
+> >         return -EACCES;
+> >  }
+>
+> Perhaps I'm simply not seeing it, but is there a check to ensure that
+> there is only one BPF LSM calling into security_inode_init_security()
+> at any given time?  With the BPF LSM only reserving a single xattr
+> slot, multiple loaded BPF LSM programs providing
+> security_inode_init_security() callbacks will be a problem.
 
-Note that initially sol_tcp_sockopt() checked sk->sk_prot->setsockopt.
+I don't think there is such a check. Also, a single BPF LSM function
+may call the kfunc multiple times, which is also problematic.
 
-Fixes: 2ab42c7b871f ("bpf: Check the protocol of a sock to agree the calls to bpf_setsockopt().")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
----
- net/core/filter.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I think we will need to make the default bigger, and also introduce
+some realloc mechanism for the worst case scenario. This should
+work, but the code might be a bit messy.
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 684922efd481..ef0877eefaa7 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5481,7 +5481,7 @@ static int sol_tcp_sockopt(struct sock *sk, int optname,
- 			   char *optval, int *optlen,
- 			   bool getopt)
- {
--	if (sk->sk_protocol != IPPROTO_TCP)
-+	if (!sk_is_tcp(sk))
- 		return -EINVAL;
- 
- 	switch (optname) {
--- 
-2.54.0.545.g6539524ca2-goog
+Thanks,
+Song
 
+>
+> > diff --git a/include/linux/security.h b/include/linux/security.h
+> > index 41d7367cf403..a2fc72e63ada 100644
+> > --- a/include/linux/security.h
+> > +++ b/include/linux/security.h
+> > @@ -68,6 +68,11 @@ struct watch;
+> >  struct watch_notification;
+> >  struct lsm_ctx;
+> >
+[...]
