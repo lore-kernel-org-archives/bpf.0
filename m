@@ -1,183 +1,229 @@
-Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [67.231.149.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82FD83976A0;
-	Mon,  4 May 2026 10:19:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF9703A5E62
+	for <bpf@vger.kernel.org>; Mon,  4 May 2026 10:39:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777889957; cv=none; b=hY6xu299OQO5MquGlGihPXnzcOWK4waUtB3Ps/fLuO68vSjpIv9dSk0W+XD6GZlWXvCA3JobvGg/G6GPChdSQljeIELshN3X1cAsMqJppiqPlP0mrBLCbO1BCgDcfaXh9BKp8IPk6s7RODlFN9Fz+IQTBSv/mZnFUyKDmWm3Tyg=
+	t=1777891185; cv=none; b=eqU6nB2cece1Zf9v4JX4sIqe6MvAI8+5LriA3wsdbg1VZnUgJ8Jj2DJaizMsyhEEM1Rpgxn3bwV1uPFqBsAt2T/hE2Ym5YULASDCUPuMj7KQwK2f5DuJNMbsi7axGBYf2Vxd4mNRqceyYIpf6ZDquyJiDssoY7AY5xtNAhLpEJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777889957; c=relaxed/simple;
-	bh=B9PztazuqRQ5Q8WBiRRSkloZBGk5uN5tNczsCGdRr80=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ng9Gmmh4eN+s8FbTSDfRqapBKkk+hvokYAN4kT3HHT2MmShxZ93TD9pEuY81v/mlN/+CRo8YRG1ZdlxyBCjH8qetJaXvPk6/SEo04gX+KuGALG8S/qwPQuFZc4lqH3GrlQ4F+tWze8CBEYw2i1J1Fg30YnNzIuCbDDTlrEq0QYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com; spf=pass smtp.mailfrom=akamai.com; dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b=dbWSLy+a; arc=none smtp.client-ip=67.231.149.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=akamai.com
+	s=arc-20240116; t=1777891185; c=relaxed/simple;
+	bh=HiTErpuqFVSslF098bJ8btSDZbP0y9XQfoTQqUphJ+0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bpv9c3hzN/0X7hPkM3zZIpc5zwqOYVJt8zhyQF0d+h1nA5CwcmXB5dvwgCNMdXwHyUIohuigoTC8AgluzYrumYapGLcI1TfMVm5ONjto76XGDTK4AjGrzMI+1I+TSFfz1zJTVJq8rXYD0RSjSYm+tBY9ZOENGVxD555xI6Di4JM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nYdUrHzb; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="dbWSLy+a"
-Received: from pps.filterd (m0050093.ppops.net [127.0.0.1])
-	by m0050093.ppops.net-00190b01. (8.18.1.11/8.18.1.11) with ESMTP id 6441f1Ax2352384;
-	Mon, 4 May 2026 11:18:14 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=jan2016.eng; bh=fjsfqYchq
-	3DjEAG8b/CETK61SPAP70Nmy/r/vD5tnVg=; b=dbWSLy+aO2g1cUZ1vOQ2x0Zvr
-	gnT0QtHsPhqTG34WWufko9ZMBVg3+wEQggwHwBK1YgyJrK0f6idUq2Ga1i4rRX2H
-	N5GechDQMPFZNU/vUiGdvrxv4CbbBVmpYHw2/Fmvp3hA7v1B/AWTr19FyXGwj0lK
-	tI5ea3JAkujT4UBhRRo8dX3WVC7fbfS1iELu2hkPXZHUt2umb9rabNeHSNQ/jxHT
-	WG/gFVZMz8HLXp0CVl0jBEiWcSjEUxmioL+3MWRZw36mrByPyU6Icz00qx75k65/
-	J12OaPOkCHptZYazBQAYD0XsFWlCSfjrTzYZxAV8yzW68Tgt2tHIqfzbrCs+A==
-Received: from prod-mail-ppoint1 (prod-mail-ppoint1.akamai.com [184.51.33.18])
-	by m0050093.ppops.net-00190b01. (PPS) with ESMTPS id 4dw8hp8vdy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 May 2026 11:18:13 +0100 (BST)
-Received: from pps.filterd (prod-mail-ppoint1.akamai.com [127.0.0.1])
-	by prod-mail-ppoint1.akamai.com (8.18.1.7/8.18.1.7) with ESMTP id 644ACGaI005922;
-	Mon, 4 May 2026 06:18:12 -0400
-Received: from prod-mail-relay01.akamai.com ([172.27.118.31])
-	by prod-mail-ppoint1.akamai.com (PPS) with ESMTP id 4dwckwq08u-1;
-	Mon, 04 May 2026 06:18:12 -0400 (EDT)
-Received: from muc-lhvdhd.munich.corp.akamai.com (muc-lhvdhd.munich.corp.akamai.com [172.29.0.147])
-	by prod-mail-relay01.akamai.com (Postfix) with ESMTP id BB92284;
-	Mon,  4 May 2026 10:18:10 +0000 (UTC)
-From: Nick Hudson <nhudson@akamai.com>
-To: bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Nick Hudson <nhudson@akamai.com>, Max Tottenham <mtottenh@akamai.com>,
-        Anna Glasgall <aglasgal@akamai.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 5/6] bpf: clear decap state on skb_adjust_room shrink path
-Date: Mon,  4 May 2026 11:17:58 +0100
-Message-Id: <20260504101759.3319427-6-nhudson@akamai.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260504101759.3319427-1-nhudson@akamai.com>
-References: <20260504101759.3319427-1-nhudson@akamai.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nYdUrHzb"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6746d0b2b4aso6124330a12.3
+        for <bpf@vger.kernel.org>; Mon, 04 May 2026 03:39:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1777891182; x=1778495982; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZX1d5M5RvOYvFUvKAGcNOcL7WzsNE4biHw6Lj8CwwOw=;
+        b=nYdUrHzb4aooM/p2bFCOVcFEokBCaMiNCk++WxeMxy0JOf8CZqxlZu3GMI3X/VsK2C
+         DOW16RgKonh6BXVaPxE8ZbJf6HxJxfHS4xps+sEPxa//ofVIvnNxE6dQxYqQeBqdADw3
+         LILshf957ZqpEnMETbpLHOAoTUilZCQ8Vum06cNbRC+oUt7Sc8OEqqiXSBGDXHm+WJk7
+         RT+J9lbiY1vRklKhWV1Cr2gWpOiQo3kaXCKBYfF203XzEzCLvhu5Gy8k48sHfvfNavnZ
+         b/oc4i460NdeWnRcZhZF4w7FqXIv9Hkem5UR/oCL3eVOtdGeZHJ9JZHXvLJSNu2zPyyH
+         Z95w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777891182; x=1778495982;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZX1d5M5RvOYvFUvKAGcNOcL7WzsNE4biHw6Lj8CwwOw=;
+        b=pLGQokV5/rs++UCtYhwksgXw11b3ezZMvjzATQxUOqSmawMZFelLfIrhWQYK4hX9Cj
+         zf7tqwygOojCdI6ob2yTkXasSsEXND7xSfuCuqt8y9UaE/sYOvxlwOT1XZQpXyc1TBQR
+         Lo0gIh7v7ue7IVgwtdKkJ6dPs0rCc1/0yptGnfdMfCXOAls5j5N9kbszeMZocH9WnQFX
+         moS95dsSQUo2af0+K1Ns99jSRZI7fMpGWGERXPnqRkkNelV/lPLjX9/DBTxK9480e4OE
+         wqowJRT35TMPMxxEXCiW9jouJGITGqaRnOdDCcnuKodTiRIFs6F0hrXwYXf1P9b2L1au
+         qVOg==
+X-Gm-Message-State: AOJu0YwQYYbDI5EIXS5Byllrjemkqe+G3Uzep0URC12o+RL/O3nKCg3H
+	X5EL/UCSvTfBDp5g+2a0QggHmbk4dYmkykTSfOlJI+GaO8vKdv5pgyAaswWy4Nd0uv6NBqpALBu
+	BSlTRnOtO
+X-Gm-Gg: AeBDiesaakF0VGtz3BUMD6djUWTvwapT6UnWh1Dd9xgGHlyOuKEw0x1NEjS/iIHs30O
+	pwuoKngWV1OaK3VJJ2CvJ1WaLgokFQyOTyGvCj2/A45hXjvld/fsNSkyhQT3PXKKALU7YP0omM7
+	1z6d038RCqw0rZRmDLJ3j14SnAd+cGY1wRYSAX0uqaePmOuH12AT0m3GzJ2U+9g0jnN90HnWXDK
+	P2H5pVVQYIstP6ajiQWKzAhe8C+JGOeXGIcZD05ZWCPnLLsfuC66DAy82DtoJsU0WyS7XaPbFDk
+	PLPDqHL/lXRlgJqKjldZCdZ/b0FjiUVJvHW1npFNZtqm/xvT9mJFGMLrva2DCbYqwVaPx9YohsI
+	MviDM0shOyGyAe0jbJYzM3EaxE1bpb0tus7LiaS5yA0w8y4ln6/YblYauuHFkAXvtXtZwi7Om2V
+	189Z/47U0+84/Iee+5vz6XFAlNc+hJVxLLs9mQh8X4Y26cf/TMP62jiSM60Ps4UgU1BJ+5mM8HN
+	NslewscRCp8Pbg=
+X-Received: by 2002:a17:907:6d13:b0:bae:9df4:d9e6 with SMTP id a640c23a62f3a-bbffb7472e8mr450836066b.30.1777891181557;
+        Mon, 04 May 2026 03:39:41 -0700 (PDT)
+Received: from google.com (5.180.204.35.bc.googleusercontent.com. [35.204.180.5])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bbe6d977b7esm397286166b.48.2026.05.04.03.39.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 May 2026 03:39:40 -0700 (PDT)
+Date: Mon, 4 May 2026 10:39:36 +0000
+From: Matt Bobrowski <mattbobrowski@google.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/2] bpf: enforce VFS constraints for xattr
+ related BPF kfuncs
+Message-ID: <afh3aEKMctxTg7pL@google.com>
+References: <20260504085428.2865671-1-mattbobrowski@google.com>
+ <20260504-anzweifeln-sackkarre-911bc140473f@brauner>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-04_03,2026-04-30_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
- adultscore=0 mlxlogscore=999 malwarescore=0 lowpriorityscore=0 suspectscore=0
- phishscore=0 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2604200000 definitions=main-2605040108
-X-Authority-Analysis: v=2.4 cv=Z8fc2nRA c=1 sm=1 tr=0 ts=69f87266 cx=c_pps
- a=StLZT/nZ0R8Xs+spdojYmg==:117 a=StLZT/nZ0R8Xs+spdojYmg==:17
- a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Ifg-1AOnLHOf1gn6spyb:22
- a=d4nn1RXdvEacMIURMw2s:22 a=X7Ea-ya5AAAA:8 a=cwecSWJ0lc1IdipTo1IA:9
-X-Proofpoint-ORIG-GUID: W2qgSKo2dGQBrqp-aY1PbFNDgv8VsgTG
-X-Proofpoint-GUID: W2qgSKo2dGQBrqp-aY1PbFNDgv8VsgTG
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA0MDEwOSBTYWx0ZWRfX+7C7TCAvpm14
- 29rdzmtSDcoiJ/8b648FAYkoKEXQxPpWy54taiunF0PJLwP0TY/Un06nRTGqPzckaTOk21UqXBh
- 6pidY4ahsikqV3bYUGIL0z/8XEt9w7quxIoZU0O16F1DZcxQSXVZOyLrWk0qEonlonEwbwzKv+J
- G90Qx2aFnTFwXG9WP+hkvi83I96mVJu70Omt223M4s2SebRIuJENFCVgrbuLNQ+uLHVqIcfRMGW
- XfRtIrExiufMePJudfM4SxIH6xRxajnHEkBmcVuAPQScsC3gsIkYMMWCpfIYyb8HCICPIfLgc1q
- 7r3107aoTUcUbf5f66I7489N9O2N3cWoHxOo29ikN1MR6e8+2JMO7LPnQx+ShxCb0RBftM1PLhZ
- RhrIvTVZd5Yy3oWhIFY5Dh3WbV4Plut5fKYbq34lEDCSsylKvr2+u88MNUX4u0jK+VSkQaLWC+V
- IvrtQqkZsIZ9X1nz/ZQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-04_03,2026-04-30_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
- suspectscore=0 phishscore=0 clxscore=1015 adultscore=0 spamscore=0
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605040109
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260504-anzweifeln-sackkarre-911bc140473f@brauner>
 
-On shrink in bpf_skb_adjust_room(), apply decapsulation state updates
-according to BPF_F_ADJ_ROOM_DECAP_* flags.
+On Mon, May 04, 2026 at 11:42:56AM +0200, Christian Brauner wrote:
+> On Mon, May 04, 2026 at 08:54:27AM +0000, Matt Bobrowski wrote:
+> > Enforce VFS constraints and semantics regarding name and value lengths
+> > within the xattr related BPF kfuncs. Specifically, reject names that
+> > are empty or longer than XATTR_NAME_MAX, and values larger than
+> > XATTR_SIZE_MAX. Also validate the supplied flags to ensure that only
+> > XATTR_CREATE and XATTR_REPLACE can be used alongside the default flag
+> > value 0.
+> > 
+> > Fixes: 56467292794b ("bpf: fs/xattr: Add BPF kfuncs to set and remove xattrs")
+> > Closes: https://lore.kernel.org/bpf/20260429221005.6D1C6C19425@smtp.kernel.org/
+> > Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
+> > ---
+> > Changes in v2:
+> >  - New helper bpf_xattr_validate_name() incorporated into pre-existing
+> >    BPF kfunc bpf_cgroup_read_xattr() (Sashiko AI).
+> > 
+> > fs/bpf_fs_kfuncs.c | 85 ++++++++++++++++++++++++++++++++++++++--------
+> >  1 file changed, 70 insertions(+), 15 deletions(-)
+> > 
+> > diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
+> > index 9d27be058494..eb9aef1e135e 100644
+> > --- a/fs/bpf_fs_kfuncs.c
+> > +++ b/fs/bpf_fs_kfuncs.c
+> > @@ -93,6 +93,21 @@ __bpf_kfunc int bpf_path_d_path(const struct path *path, char *buf, size_t buf__
+> >  	return len;
+> >  }
+> >  
+> > +static int bpf_xattr_validate_name(const char *name)
+> > +{
+> > +	u32 name_len;
+> > +
+> > +	/*
+> > +	 * Impose the same restrictions on the supplied name as done so within
+> > +	 * the VFS by helpers like import_xattr_name().
+> > +	 */
+> > +	name_len = strlen(name);
+> > +	if (!name_len || name_len > XATTR_NAME_MAX)
+> > +		return -ERANGE;
+> > +
+> > +	return 0;
+> > +}
+> 
+> Can you please unify the check between import_xattr_name() and bpf,
+> please. This just asks for someone starting to return different errnos
+> from the two locations if we need any additional checks at some point...
 
-For GSO skbs, clear only the tunnel gso_type bits that correspond to the
-requested decap layer:
-- DECAP_L4_UDP: SKB_GSO_UDP_TUNNEL{,_CSUM}
-- DECAP_L4_GRE: SKB_GSO_GRE{,_CSUM}
-- DECAP_IPXIP4: SKB_GSO_IPXIP4
-- DECAP_IPXIP6: SKB_GSO_IPXIP6
+I'm glad you suggested this because I was thinking the exact same
+thing, although wasn't sure whether you'd be open to it.
 
-Then clear skb->encapsulation only if no tunnel GSO bits remain, keeping
-encapsulation set for cases such as ESP-in-UDP where tunnel state remains.
+> > +
+> >  static bool match_security_bpf_prefix(const char *name__str)
+> >  {
+> >  	return !strncmp(name__str, XATTR_NAME_BPF_LSM, XATTR_NAME_BPF_LSM_LEN);
+> > @@ -117,10 +132,10 @@ static int bpf_xattr_read_permission(const char *name, struct inode *inode)
+> >   * @name__str: name of the xattr
+> >   * @value_p: output buffer of the xattr value
+> >   *
+> > - * Get xattr *name__str* of *dentry* and store the output in *value_ptr*.
+> > + * Get xattr *name__str* of *dentry* and store the output in *value_p*.
+> >   *
+> > - * For security reasons, only *name__str* with prefixes "user." or
+> > - * "security.bpf." are allowed.
+> > + * For security reasons, only *name__str* values prefixed with "user." or
+> > + * "security.bpf." are permitted.
+> >   *
+> >   * Return: length of the xattr value on success, a negative value on error.
+> >   */
+> > @@ -133,6 +148,10 @@ __bpf_kfunc int bpf_get_dentry_xattr(struct dentry *dentry, const char *name__st
+> >  	void *value;
+> >  	int ret;
+> >  
+> > +	ret = bpf_xattr_validate_name(name__str);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> >  	value_len = __bpf_dynptr_size(value_ptr);
+> >  	value = __bpf_dynptr_data_rw(value_ptr, value_len);
+> >  	if (!value)
+> > @@ -150,10 +169,10 @@ __bpf_kfunc int bpf_get_dentry_xattr(struct dentry *dentry, const char *name__st
+> >   * @name__str: name of the xattr
+> >   * @value_p: output buffer of the xattr value
+> >   *
+> > - * Get xattr *name__str* of *file* and store the output in *value_ptr*.
+> > + * Get xattr *name__str* of *file* and store the output in *value_p*.
+> >   *
+> > - * For security reasons, only *name__str* with prefixes "user." or
+> > - * "security.bpf." are allowed.
+> > + * For security reasons, only *name__str* values prefixed with "user." or
+> > + * "security.bpf." are permitted.
+> >   *
+> >   * Return: length of the xattr value on success, a negative value on error.
+> >   */
+> > @@ -187,10 +206,18 @@ static int bpf_xattr_write_permission(const char *name, struct inode *inode)
+> >   * @value_p: xattr value
+> >   * @flags: flags to pass into filesystem operations
+> >   *
+> > - * Set xattr *name__str* of *dentry* to the value in *value_ptr*.
+> > + * Set xattr *name__str* of *dentry* to the value in *value_p*.
+> >   *
+> > - * For security reasons, only *name__str* with prefix "security.bpf."
+> > - * is allowed.
+> > + * For security reasons, only *name__str* values prefixed with "security.bpf."
+> > + * are permitted.
+> > + *
+> > + * The length constraints imposed on both the xattr name and value abide those
+> > + * that are also enforced by the VFS. Additionally, the flags argument respects
+> > + * what's enforced by the VFS in the same way. By default, the flag value of 0
+> > + * is permitted and an xattr will be created if it does not exist, or the value
+> > + * will be replaced if the xattr already exists. More course grained control
+> > + * over these exact semantics is permitted by explicitly specifying either
+> > + * XATTR_CREATE or XATTR_REPLACE.
+> >   *
+> >   * The caller already locked dentry->d_inode.
+> >   *
+> > @@ -206,7 +233,17 @@ int bpf_set_dentry_xattr_locked(struct dentry *dentry, const char *name__str,
+> >  	u32 value_len;
+> >  	int ret;
+> >  
+> > +	if (flags & ~(XATTR_CREATE | XATTR_REPLACE))
+> > +		return -EINVAL;
+> > +
+> > +	ret = bpf_xattr_validate_name(name__str);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> >  	value_len = __bpf_dynptr_size(value_ptr);
+> > +	if (value_len > XATTR_SIZE_MAX)
+> > +		return -E2BIG;
+> > +
+> 
+> Hm, this is also open-coded in fs/xattr.c and here now. I wonder whether
+> we can easily build this around the same infra as fs/xattr.c is. So use
+> struct kernel_xattr_ctx and struct kname because then all codepaths:
+> 
+> syscall/internal, io_uring and the bpf interface are the same thing with
+> shared helpers and behavior.
 
-For non-GSO skbs, there are no tunnel GSO bits to consult, so clear
-skb->encapsulation directly when DECAP_L4_* or DECAP_IPXIP_* flags are set.
-
-This keeps decap state handling consistent between GSO and non-GSO packets.
-
-Co-developed-by: Max Tottenham <mtottenh@akamai.com>
-Signed-off-by: Max Tottenham <mtottenh@akamai.com>
-Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
-Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
-Signed-off-by: Nick Hudson <nhudson@akamai.com>
----
- net/core/filter.c | 39 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 185a11f425fa..3213732dff84 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3666,9 +3666,48 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
- 		if (!(flags & BPF_F_ADJ_ROOM_FIXED_GSO))
- 			skb_increase_gso_size(shinfo, len_diff);
- 
-+		/* Selective GSO flag clearing based on decap type.
-+		 * Only clear the flags for the tunnel layer being removed.
-+		 */
-+		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
-+		    (shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-+					 SKB_GSO_UDP_TUNNEL_CSUM)))
-+			shinfo->gso_type &= ~(SKB_GSO_UDP_TUNNEL |
-+					      SKB_GSO_UDP_TUNNEL_CSUM);
-+		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE) &&
-+		    (shinfo->gso_type & (SKB_GSO_GRE | SKB_GSO_GRE_CSUM)))
-+			shinfo->gso_type &= ~(SKB_GSO_GRE |
-+					      SKB_GSO_GRE_CSUM);
-+		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP4) &&
-+		    (shinfo->gso_type & SKB_GSO_IPXIP4))
-+			shinfo->gso_type &= ~SKB_GSO_IPXIP4;
-+		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP6) &&
-+		    (shinfo->gso_type & SKB_GSO_IPXIP6))
-+			shinfo->gso_type &= ~SKB_GSO_IPXIP6;
-+
-+		/* Clear encapsulation flag only when no tunnel GSO flags remain */
-+		if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
-+			     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) {
-+			if (!(shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-+						  SKB_GSO_UDP_TUNNEL_CSUM |
-+						  SKB_GSO_GRE |
-+						  SKB_GSO_GRE_CSUM |
-+						  SKB_GSO_IPXIP4 |
-+						  SKB_GSO_IPXIP6 |
-+						  SKB_GSO_ESP)))
-+				if (skb->encapsulation)
-+					skb->encapsulation = 0;
-+		}
-+
- 		/* Header must be checked, and gso_segs recomputed. */
- 		shinfo->gso_type |= SKB_GSO_DODGY;
- 		shinfo->gso_segs = 0;
-+	} else {
-+		/* For non-GSO packets, clear encapsulation if decap flags are set */
-+		if ((flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
-+			      BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) &&
-+		    skb->encapsulation)
-+			skb->encapsulation = 0;
- 	}
- 
- 	return 0;
--- 
-2.34.1
-
+At this point, I can't really see why this couldn't be done. I'll try
+and introduce a set of shareable helpers which are tasked with
+enforcing these constraints uniformly across all of these various
+subsystems.
