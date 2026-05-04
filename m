@@ -1,155 +1,141 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2C93603D9
-	for <bpf@vger.kernel.org>; Mon,  4 May 2026 21:40:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC0C736E47A;
+	Mon,  4 May 2026 21:50:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777930818; cv=none; b=UlIcEUKyHQL2uggYmoUJbxwlzEoDzY665VFlJOTFoWeqUs9jLA5DL+qF0RJKHuQEyIEXMLSKgTpV1f8BK1W3SBZjcRafIiR976MHoFs2QkcdWFjboDxxAUtEAPszuMsowt+XdKmbdCHxC2T2wzG7Gw5jqU6etj49LliZNEit/qg=
+	t=1777931424; cv=none; b=pIy/ZtQ+Td8u7eXEDI6YRn0UnRAWk5x4G4zcKChivxE1SiCU9fTatjhmcJ6WsahYA34+AIMHZ459lkJ0c/pCgNKj0w1aQETuLaqAa/dagej17pWo4tLc+SCUoxoJvCm2wgGPHcZAry4acVr7MciLytZWpgxl42B+ve+PCF5jpSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777930818; c=relaxed/simple;
-	bh=Y50nOL3Ll7Oblxb0C4m3AvGvJOmWeDTR/15bG4Rwt+8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o5avd8v8ZKjmRWe+9z2lxXp3ERh+RvFy77VW6vniuCSDXMmBw5kTXZG13tVmQGwNZ69t+kG4Mo5jJ6G+MTvhq5inTTJk9aoD5+JTFcuZpAaExkqGLHsP+gokAv8NabIEyckUbUwb/JKwQTQcvOQvZKXjCiuqjSjgyXMxV0+4z0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GInbEMaN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777931424; c=relaxed/simple;
+	bh=FmK10/+ipLRQv3vVu5kjbdbxEcWPXkjzomIWzmxkkGQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=izy21z6l3gd1+QrFEP3tGaT+BqA9gzPa8dSKTouplIWZ30p1zquSwt99By66xKInv/ob618iup1T77zvADH+EUhvGREnfaS8rUSZLvW9icMA5L+8PdXQUwLT+r88s3mVznHMZQ1axkoEeFKPK6gEJ1Sb2P6m2gX+94oNpexvCyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CHJwWQCF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GInbEMaN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0C49C2BCF6
-	for <bpf@vger.kernel.org>; Mon,  4 May 2026 21:40:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CHJwWQCF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D4C0C2BCB8;
+	Mon,  4 May 2026 21:50:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777930817;
-	bh=Y50nOL3Ll7Oblxb0C4m3AvGvJOmWeDTR/15bG4Rwt+8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GInbEMaNBddNYam4nEQhGN9wFDIVXpZOLXn7Eo6EYf33iaZxZr9lh6pefmy7ZZsh0
-	 NV9Ln8cVNWOFmS1TVfuEoLpSxV32594TyHxKW7df7UblgAdDt9Va9i54iSZkNrlfbV
-	 Lqzo9fWkmQoEvP4IaZ7RSsQbFSUD7pGOVWXfmXlvroS9Ev0Me7ITDD1HO1j68Ja/8L
-	 2AmOgp84Q2fnoic5JcAZYjCqIWFlxNw4nDdKLAPVNG0g+dLLfHC91dm/QQ0oda5evR
-	 6qePQHil8ubYNqCSR6JM0reNjME6b+BUO1uBjhI5n8S/qZ3M7TeDqvoEVrUBfyRf9N
-	 U/oLzIeNNxTVQ==
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-8a4b8c3a30bso48064946d6.3
-        for <bpf@vger.kernel.org>; Mon, 04 May 2026 14:40:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ+EuKHRad/sX3BsmEHDcgJ+bEyxqLRKxf5G13ZBqhtPU/AgqSzwFNtL2q32T0LlSzE3qb0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQsiLGGRPRfmBzvWy/CTWHOb9Uuo4VtSAYI2UtyEEzR5t/ARSo
-	9lsKpK+uaN/nQXNiube4vDDUuTTlyor2Bqy8UUyPjy06h06X7+CsCXSVtiddTrHmjh5P17ymOrs
-	x201LLLSTKfkXzWrurNlJZ+fqID54r40=
-X-Received: by 2002:a05:6214:3d85:b0:8ac:a57e:ec1f with SMTP id
- 6a1803df08f44-8b6682578c9mr199893326d6.29.1777930816774; Mon, 04 May 2026
- 14:40:16 -0700 (PDT)
+	s=k20201202; t=1777931424;
+	bh=FmK10/+ipLRQv3vVu5kjbdbxEcWPXkjzomIWzmxkkGQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=CHJwWQCF54nhQOLn/SJxDPFTuMH+F56TLIpvh/6rmq0BeODWnymObs0iNt0JkQ5i1
+	 zHTdeYlyuSjR/QHA16w9nMgy6k6+rUoXggY2XBOY0PJzk+lW5NibMgMs0zOrQEvRAo
+	 a/Zw3nQONSIMspah4kR6PZ5p8+pYjlCEFu0l9tIn3KWgfIuyyVJyMVbTZtAwR8a5bm
+	 8gcoOoXRBPQyzHasFESxI/lO9q3kvaXSjYNBA4ah7zqNwqauQE1dlvx7i2wvgkIJq5
+	 NNMHr7wz80kYhMUwOyrlF9XnCg2qn1D208b/zBDszc9GbLszsiA0MUTZsL/K4ykTLq
+	 QGwMhuTEm5chQ==
+Content-Type: multipart/mixed; boundary="===============6308584774407186442=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260503211835.16103-1-dwindsor@gmail.com> <20260503211835.16103-2-dwindsor@gmail.com>
- <CAHC9VhSy5K5nQTtFUE4BScy1Ur61v7eZW067vTcUYDQeJb13Bw@mail.gmail.com>
-In-Reply-To: <CAHC9VhSy5K5nQTtFUE4BScy1Ur61v7eZW067vTcUYDQeJb13Bw@mail.gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Mon, 4 May 2026 23:40:04 +0200
-X-Gmail-Original-Message-ID: <CAPhsuW6sy2cdC4B7Z48-5A-yVX6fmVWxS_fWVjQxiX95KeUguw@mail.gmail.com>
-X-Gm-Features: AVHnY4J0bS_HHPQgD6P5PhrQ2PHNLPsmkZlDK5-_kikrw0qSIAQXpt5kgUuK21Y
-Message-ID: <CAPhsuW6sy2cdC4B7Z48-5A-yVX6fmVWxS_fWVjQxiX95KeUguw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] bpf: add bpf_init_inode_xattr kfunc for atomic
- inode labeling
-To: Paul Moore <paul@paul-moore.com>
-Cc: David Windsor <dwindsor@gmail.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Matt Bobrowski <mattbobrowski@google.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Jan Kara <jack@suse.cz>, John Fastabend <john.fastabend@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	selinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <f3fb214ed73246731c525dfdccdcd379bd6d4f1e4570eba0cd19d56f888f9b0a@mail.kernel.org>
+In-Reply-To: <20260504210610.180150-2-kuniyu@google.com>
+References: <20260504210610.180150-2-kuniyu@google.com>
+Subject: Re: [PATCH v2 bpf 1/6] bpf: tcp: Fix type confusion in bpf_tcp_sock().
+From: bot+bpf-ci@kernel.org
+To: kuniyu@google.com,martin.lau@linux.dev,daniel@iogearbox.net,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: john.fastabend@gmail.com,sdf@fomichev.me,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,edumazet@google.com,kuniyu@google.com,kuni1840@gmail.com,bpf@vger.kernel.org,netdev@vger.kernel.org,melotti@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  4 May 2026 21:50:22 +0000 (UTC)
 
-On Mon, May 4, 2026 at 10:14=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
-[...]
-> > diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
-> > index 9d27be058494..193accc00796 100644
-> > --- a/fs/bpf_fs_kfuncs.c
-> > +++ b/fs/bpf_fs_kfuncs.c
-> > @@ -10,6 +10,7 @@
-> >  #include <linux/fsnotify.h>
-> >  #include <linux/file.h>
-> >  #include <linux/kernfs.h>
-> > +#include <linux/lsm_hooks.h>
-> >  #include <linux/mm.h>
-> >  #include <linux/xattr.h>
-> >
-> > @@ -353,6 +354,97 @@ __bpf_kfunc int bpf_cgroup_read_xattr(struct cgrou=
-p *cgroup, const char *name__s
-> >  }
-> >  #endif /* CONFIG_CGROUPS */
-> >
-> > +static int bpf_xattrs_used(const struct lsm_xattr_ctx *ctx)
-> > +{
-> > +       const size_t prefix_len =3D sizeof(XATTR_BPF_LSM_SUFFIX) - 1;
-> > +       int i, n =3D 0;
-> > +
-> > +       for (i =3D 0; i < *ctx->xattr_count; i++) {
-> > +               const char *name =3D ctx->xattrs[i].name;
-> > +
-> > +               if (name && !strncmp(name, XATTR_BPF_LSM_SUFFIX, prefix=
-_len))
-> > +                       n++;
-> > +       }
-> > +       return n;
-> > +}
-[...]
-> > +
-> >  static int bpf_fs_kfuncs_filter(const struct bpf_prog *prog, u32 kfunc=
-_id)
-> >  {
-> >         if (!btf_id_set8_contains(&bpf_fs_kfunc_set_ids, kfunc_id) ||
-> > -           prog->type =3D=3D BPF_PROG_TYPE_LSM)
-> > +           prog->type =3D=3D BPF_PROG_TYPE_LSM) {
-> > +               /* bpf_init_inode_xattr only attaches to inode_init_sec=
-urity. */
-> > +               if (kfunc_id =3D=3D bpf_init_inode_xattr_btf_ids[0] &&
-> > +                   prog->aux->attach_btf_id !=3D bpf_lsm_inode_init_se=
-curity_btf_ids[0])
-> > +                       return -EACCES;
+--===============6308584774407186442==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-We need to mark bpf_init_inode_xattr with KF_RCU (requires a trusted
-pointer), then we can remove this check above.
-
-> >                 return 0;
-> > +       }
-> >         return -EACCES;
-> >  }
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index bc96c18df4e0..cd88633f8dc1 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -7475,7 +7475,7 @@ u32 bpf_tcp_sock_convert_ctx_access(enum bpf_access_type type,
 >
-> Perhaps I'm simply not seeing it, but is there a check to ensure that
-> there is only one BPF LSM calling into security_inode_init_security()
-> at any given time?  With the BPF LSM only reserving a single xattr
-> slot, multiple loaded BPF LSM programs providing
-> security_inode_init_security() callbacks will be a problem.
-
-I don't think there is such a check. Also, a single BPF LSM function
-may call the kfunc multiple times, which is also problematic.
-
-I think we will need to make the default bigger, and also introduce
-some realloc mechanism for the worst case scenario. This should
-work, but the code might be a bit messy.
-
-Thanks,
-Song
-
+>  BPF_CALL_1(bpf_tcp_sock, struct sock *, sk)
+>  {
+> -	if (sk_fullsock(sk) && sk->sk_protocol == IPPROTO_TCP)
+> +	if (sk_fullsock(sk) && sk_is_tcp(sk))
+>  		return (unsigned long)sk;
 >
-> > diff --git a/include/linux/security.h b/include/linux/security.h
-> > index 41d7367cf403..a2fc72e63ada 100644
-> > --- a/include/linux/security.h
-> > +++ b/include/linux/security.h
-> > @@ -68,6 +68,11 @@ struct watch;
-> >  struct watch_notification;
-> >  struct lsm_ctx;
-> >
-[...]
+>  	return (unsigned long)NULL;
+
+While this patch fixes bpf_tcp_sock(), does sol_tcp_sockopt() remain
+vulnerable? Since ctx->sk evaluates to PTR_TO_SOCKET in a CGROUP_SOCKOPT
+program and is directly accepted by bpf_setsockopt() and bpf_getsockopt()
+via ARG_PTR_TO_BTF_ID_SOCK_COMMON, can a user create a RAW socket with
+IPPROTO_TCP and directly pass ctx->sk to bpf_setsockopt(), bypassing
+bpf_tcp_sock() entirely?
+
+Looking at sol_tcp_sockopt():
+
+static int sol_tcp_sockopt(struct sock *sk, int optname,
+			   char *optval, int *optlen,
+			   bool getopt)
+{
+	if (sk->sk_protocol != IPPROTO_TCP)
+		return -EINVAL;
+
+This appears to only check sk->sk_protocol == IPPROTO_TCP without verifying
+sk->sk_type == SOCK_STREAM, which would allow the same slab out-of-bounds
+access through a different code path.
+
+Additionally, do bpf_skc_to_tcp_sock() and bpf_skc_to_tcp6_sock() suffer
+from the same type confusion? They appear to check sk->sk_protocol ==
+IPPROTO_TCP without verifying sk->sk_type == SOCK_STREAM.
+
+Could a BPF program pass a RAW socket with IPPROTO_TCP to these helpers
+and receive a valid BTF pointer to struct tcp_sock, allowing out-of-bounds
+slab reads?
+
+Looking at bpf_skc_to_tcp_sock():
+
+BPF_CALL_1(bpf_skc_to_tcp_sock, struct sock *, sk)
+{
+	if (sk && sk_fullsock(sk) && sk->sk_protocol == IPPROTO_TCP)
+		return (unsigned long)sk;
+
+	return (unsigned long)NULL;
+}
+
+And bpf_skc_to_tcp6_sock():
+
+BPF_CALL_1(bpf_skc_to_tcp6_sock, struct sock *, sk)
+{
+	/* tcp6_sock type is not generated in dwarf and hence btf,
+	 * trigger an explicit type generation here.
+	 */
+	BTF_TYPE_EMIT(struct tcp6_sock);
+	if (sk && sk_fullsock(sk) && sk->sk_protocol == IPPROTO_TCP &&
+	    sk->sk_family == AF_INET6)
+		return (unsigned long)sk;
+
+Finally, does bpf_mptcp_sock_from_subflow() in net/mptcp/bpf.c also need
+a similar update? It checks sk->sk_protocol == IPPROTO_TCP and immediately
+evaluates sk_is_mptcp(sk).
+
+Since sk_is_mptcp() indiscriminately casts the socket to struct tcp_sock
+and accesses tcp_sk(sk)->is_mptcp, passing a RAW socket could trigger an
+immediate out-of-bounds slab read. If this memory happens to be non-zero,
+it might proceed to call mptcp_subflow_ctx(sk)->conn, which would read a
+garbage pointer from out-of-bounds memory:
+
+struct mptcp_sock *bpf_mptcp_sock_from_subflow(struct sock *sk)
+{
+	if (sk && sk_fullsock(sk) && sk->sk_protocol == IPPROTO_TCP && sk_is_mptcp(sk))
+		return mptcp_sk(mptcp_subflow_ctx(sk)->conn);
+
+	return NULL;
+}
+
+These issues were raised by sashiko-bot@kernel.org in v1:
+https://lore.kernel.org/bpf/20260501184452.7F46FC2BCB4@smtp.kernel.org/
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25344293379
+--===============6308584774407186442==--
