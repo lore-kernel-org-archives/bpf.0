@@ -1,54 +1,54 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3749B33F593
-	for <bpf@vger.kernel.org>; Mon,  4 May 2026 21:06:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C981F33F361
+	for <bpf@vger.kernel.org>; Mon,  4 May 2026 21:06:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777928777; cv=none; b=EVbFXvZVuo7i7Vg/YsfcxF4qtYnmDmh9aqY7sYdMmYk0ScUKxr44p4WfmmMTePa9vtSDW2ekSt9QWLEqRciuWdeIMuzfr+3v4GTtM5WrnxfFoE8EeKXFE88vziLDFfSIT/7L9sy9YE2CXqAy2NK7a7AnlLYCiVaEqEky4m+nv1w=
+	t=1777928779; cv=none; b=Zq9Yq0HeQrbHAOUlv4m1pa3tKtff+EplSu5OKYMRoNGrE+sPCRJjomJD47QKauo6QGGSq1UG/NR3yXmHiS+K4TX8b9tEBSbLV71XYbqmjkwqJ66+J8uachMyrPhsDcR0NKs+0TGw5XP2ydjhd61xY84N1mzQUdyBsF25lOrH0qA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777928777; c=relaxed/simple;
-	bh=+tXOfed2AA1Peg5INonHwlEN3i7UeoxVPDgFqjVYyWs=;
+	s=arc-20240116; t=1777928779; c=relaxed/simple;
+	bh=t+vSCHW8sXankiqKU0KBJsHXgvrd1DectD2FhYEqlNU=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=CtebNoba1ZNDd8CZ51yi4NsPgZxhqOGaSvnTCrKffe0zZ4frT3zZken+9a+/gGcdSCfVerZLISLWCZdooIKZTxY4hhjpth5fSaS8xJNqFR1shUvEO9EMGeg3Pa7GU8rEErSKXQOhRz4NB/++EWkFZrg8pjA9cTQvUTI7wqayj3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GEJuVEud; arc=none smtp.client-ip=209.85.216.74
+	 To:Cc:Content-Type; b=AeQv6IhLU1le4fZHB3rl7Plqa2mgeke0cZ2gqU+DpVlAte1AFycAVciLHJaapxW3lmrK51lnOeolDUPuSUrAGzGCZAM1CwD5lpSxrpPtmXUI8hjXMIftlPdcq/nycktaxvnrInVCiydwJ80d/INHB2Xc8IPo78W8PXkTpxVID6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ills+6fq; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GEJuVEud"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-3594620fe97so11121854a91.1
-        for <bpf@vger.kernel.org>; Mon, 04 May 2026 14:06:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ills+6fq"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-36524e2c5dfso1861297a91.3
+        for <bpf@vger.kernel.org>; Mon, 04 May 2026 14:06:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777928775; x=1778533575; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1777928777; x=1778533577; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=C5D0xEZ9yNUhyoPUL8WiMnGxIjniG9b8lDvBpm0pDEk=;
-        b=GEJuVEudWXbywTpSRft7L9Yod9FE2EqF6kOx7YcuW2fEeCtp/TqvW5iuk9JbGYq8Av
-         i6fQKjPhKetkZI6ojp3dg2KBgrqjBv71y4pXo3+0D8pEAAg9KIFZ4tEw5sIOHJ3hRIRd
-         OpHcLa/JTruaMK2hDOUwg6ZDKc/HyGEffdbCWJ2vsRoSTwjW3AWd8dTeUsYd67o3Hxfo
-         +44aUoLxXhZYQVmfGQwefh3UbPlpCRNh4qk7Vg4cG3vzOSmbKjMp4pEGSDLDg3r5aHrr
-         Xkr82v+jKVj+kA0UU9yNGXT/Pf93jbQQ0626IZDkMriD+qb8QKvBhpcLVDmxm9sXM54p
-         XJIg==
+        bh=sSqMpkiDL5DK8PRDUUfeCWvxInuXlDLXwweDPX2/AgM=;
+        b=Ills+6fqXtP2x4NrQJNgHEXv72pgDxqQ1XDWEcYKysIX9wh3s1vkQZom1OjFtV7A2h
+         POK8ybLbpGdmcOujQsVcGQojlt6mYkUbzHegCgdbSth38n1Xqlxz7DkiHWTe6qRxvKcV
+         +hOqe1k20h8TKBVBqfTL7KJvY7bLGVv37z7QRllSmbbZjnVWRsqFs2nV5X2+NZ3Z7EX1
+         dnGKQ+fzwqWO4ybqgswgOszEg5Imge/RXFJt8h3BnVyPPkpcoV4vZVjempnX6/BccHuA
+         9lLn+wLosE2+Qe8B6u2kmtloCDiLtREAQT/tb0zRm81Q670hIu6twZIdZfUEZsA5/4CG
+         OWvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777928775; x=1778533575;
+        d=1e100.net; s=20251104; t=1777928777; x=1778533577;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C5D0xEZ9yNUhyoPUL8WiMnGxIjniG9b8lDvBpm0pDEk=;
-        b=Zqd+TUOxxG87wdGsJwdtVeydOnqOvHmMhBF6MK1zgd9+R6xkmLykQQUPo7ntYXVbwY
-         T2/bY71DD/+fCWl814M6niwEQj2KKXkG4rMMQ6/fcsTgoB8xP5qEoUObBC5VfN3FrFsE
-         Yi3Q8/KR0qrKOmh+juGtmmAZh0vQcuSqtyKyref8XnUC1feMPMyCsnaw7wCvJL5MZC3N
-         GxsUcej+y5qMFmFS2FaKtJkoaIIBEAB6uXWakQOhz3zrL3LSFK8tkAdUSAbEGxQvsz0T
-         MadOtQecExgWtig3Xlci4WylthB65LJ90hQMZu0bin2djHu71sfcfCccRYsNVuzO86v3
-         0lpQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+ojiCEtWFBttDjthN6+vEMx7YlIe5BYyYzu3rC9RQ8pLkYwxo3fOQrw8+sxV+tPNavkmE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtYaGNke8uTMxKndprpGstk/ohPV0RhvIvoOSCDnU5YIqCEDjK
-	/p9zpp0oEYF9Cn0AJQTpew5+m3Sb+QkiMjM+7FbWUq3ZYW/kMB6bU13FDubJc1dSjWHIcg/DYRe
-	Ungszdw==
-X-Received: from plbt6.prod.google.com ([2002:a17:903:c86:b0:2b2:6eb1:9305])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:530f:b0:35d:9da0:4947
- with SMTP id 98e67ed59e1d1-3650cdda6b7mr11964572a91.11.1777928775449; Mon, 04
- May 2026 14:06:15 -0700 (PDT)
-Date: Mon,  4 May 2026 21:04:49 +0000
+        bh=sSqMpkiDL5DK8PRDUUfeCWvxInuXlDLXwweDPX2/AgM=;
+        b=fmfy9835ZSjBjG1YEWT//xJdu6Xxmojigf5UtuK3unxryp7Lzp1wLU3/2BGoxlQ7Yw
+         qObkTiwUn++ESFHMmvKRBrJhGqj6x+oKFvbd4OYZrkztj61lnO+6ZAkcr78JvumZjPjO
+         FsRtEmbNv6PDQrsDk0GUDmnUT7IwkgUZK8ZJL9n7ZWrG06KNArFORegbr3+TPz0cNdA8
+         32e7Bfj2DjBuyNDo5y9p69QB/Y/9R+ly6M+lEGYB3apL7+h4tgngc6CxoVnGyFWPenzv
+         Yx/VrEwNk7rBO4WwScXCpS7hslwswGA5/hw15jbc8zFAYO/U0bctHe1YpbZ5krpHZ2GJ
+         TH3A==
+X-Forwarded-Encrypted: i=1; AFNElJ+1vexjpsLGJjTe398cYHuDwQxZFISQ6/xqATWyX/Fk7TfdLY7f/Fylx6xSmShDlto6Mgg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYIARAJx0dVjwSzCVw+828i/a/dnihUe+7V6mTkm9U17dbmwuD
+	Z2I5MM3XY5tyt9/DNuXXbw1EQuDxj+DPn6iI3D4edeqiXLT/Myx1TmnxI8OBuYcEsHB/9k51TMu
+	IubE1/A==
+X-Received: from plas14.prod.google.com ([2002:a17:903:200e:b0:2ba:1a1e:b2d2])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:48:b0:35b:a7be:ae47
+ with SMTP id 98e67ed59e1d1-365774d3253mr527355a91.21.1777928777100; Mon, 04
+ May 2026 14:06:17 -0700 (PDT)
+Date: Mon,  4 May 2026 21:04:50 +0000
 In-Reply-To: <20260504210610.180150-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260504210610.180150-1-kuniyu@google.com>
 X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
-Message-ID: <20260504210610.180150-3-kuniyu@google.com>
-Subject: [PATCH v2 bpf 2/6] selftest: bpf: Add test for bpf_tcp_sock() and RAW socket.
+Message-ID: <20260504210610.180150-4-kuniyu@google.com>
+Subject: [PATCH v2 bpf 3/6] mptcp: bpf: fix type confusion in bpf_mptcp_sock_from_subflow()
 From: Kuniyuki Iwashima <kuniyu@google.com>
 To: Martin KaFai Lau <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
@@ -67,104 +67,44 @@ To: Martin KaFai Lau <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.n
 Cc: John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
 	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
 	Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
+	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	"Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Let's extend sockopt_sk.c to cover bpf_tcp_sock() for the
-wrong socket type.
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 
-Before:
-  # ./test_progs -t sockopt_sk
-  [  151.948613] ==================================================================
-  [  151.951376] BUG: KASAN: slab-out-of-bounds in sol_tcp_sockopt+0xc7/0x8e0
-  [  151.954159] Read of size 8 at addr ffff88801083d760 by task test_progs/1259
-  ...
-  run_test:FAIL:getsetsockopt unexpected error: -1 (errno 0)
-  #427     sockopt_sk:FAIL
+bpf_mptcp_sock_from_subflow() only checks if sk->sk_protocol is
+IPPROTO_TCP, but RAW socket can bypass it:
 
-After:
-  #427     sockopt_sk:OK
+  socket(AF_INET, SOCK_RAW, IPPROTO_TCP)
 
-While at it, missing free() is fixed up.
+In this case, it would NOT be valid to call sk_is_mptcp() which will
+assume sk is a pointer to a struct tcp_sock, and wrongly checks for:
+tcp_sk(sk)->is_mptcp.
 
+Fixes: 3bc253c2e652 ("bpf: Add bpf_skc_to_mptcp_sock_proto")
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
 Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
 ---
-v2: Inverted if (err) to if (!err)
+v1: https://lore.kernel.org/mptcp/20260430-mptcp-bpf-mptcp-sock-type-v1-1-d2ed5cda7da9@kernel.org/
 ---
- .../selftests/bpf/prog_tests/sockopt_sk.c      | 18 +++++++++++++++++-
- tools/testing/selftests/bpf/progs/sockopt_sk.c | 16 ++++++++++++++++
- 2 files changed, 33 insertions(+), 1 deletion(-)
+ net/mptcp/bpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-index 53637431ec5d..5fd33ad2eaaf 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-@@ -190,7 +190,7 @@ static int getsetsockopt(void)
- 	fd = socket(AF_NETLINK, SOCK_RAW, 0);
- 	if (fd < 0) {
- 		log_err("Failed to create AF_NETLINK socket");
--		return -1;
-+		goto err;
- 	}
+diff --git a/net/mptcp/bpf.c b/net/mptcp/bpf.c
+index 8a16672b94e2..4cc16cbeb328 100644
+--- a/net/mptcp/bpf.c
++++ b/net/mptcp/bpf.c
+@@ -14,7 +14,7 @@
  
- 	buf.u32 = 1;
-@@ -211,6 +211,22 @@ static int getsetsockopt(void)
- 	}
- 	ASSERT_EQ(optlen, 8, "Unexpected NETLINK_LIST_MEMBERSHIPS value");
+ struct mptcp_sock *bpf_mptcp_sock_from_subflow(struct sock *sk)
+ {
+-	if (sk && sk_fullsock(sk) && sk->sk_protocol == IPPROTO_TCP && sk_is_mptcp(sk))
++	if (sk && sk_fullsock(sk) && sk_is_tcp(sk) && sk_is_mptcp(sk))
+ 		return mptcp_sk(mptcp_subflow_ctx(sk)->conn);
  
-+	/* Trick bpf_tcp_sock() with IPPROTO_TCP */
-+	close(fd);
-+	fd = socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
-+	if (fd < 0) {
-+		log_err("Failed to create RAW socket");
-+		goto err;
-+	}
-+
-+	optlen = 20;
-+	errno = 0;
-+	err = setsockopt(fd, SOL_TCP, TCP_SAVED_SYN, &buf, optlen);
-+	if (!err) {
-+		log_err("Unexpected setsockopt(TCP_SAVED_SYN)");
-+		goto err;
-+	}
-+
- 	free(big_buf);
- 	close(fd);
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/sockopt_sk.c b/tools/testing/selftests/bpf/progs/sockopt_sk.c
-index cb990a7d3d45..5e0b27e7855c 100644
---- a/tools/testing/selftests/bpf/progs/sockopt_sk.c
-+++ b/tools/testing/selftests/bpf/progs/sockopt_sk.c
-@@ -149,6 +149,20 @@ int _setsockopt(struct bpf_sockopt *ctx)
- 	if (sk && sk->family == AF_NETLINK)
- 		goto out;
- 
-+	if (sk && sk->family == AF_INET && sk->type == SOCK_RAW) {
-+		struct bpf_tcp_sock *tp = bpf_tcp_sock(sk);
-+
-+		if (tp) {
-+			char saved_syn[60];
-+
-+			bpf_getsockopt(sk, SOL_TCP, TCP_SAVED_SYN,
-+				       &saved_syn, sizeof(saved_syn));
-+			goto consumed;
-+		}
-+
-+		goto out;
-+	}
-+
- 	/* Make sure bpf_get_netns_cookie is callable.
- 	 */
- 	if (bpf_get_netns_cookie(NULL) == 0)
-@@ -224,6 +238,8 @@ int _setsockopt(struct bpf_sockopt *ctx)
- 		return 0; /* couldn't get sk storage */
- 
- 	storage->val = optval[0];
-+
-+consumed:
- 	ctx->optlen = -1; /* BPF has consumed this option, don't call kernel
- 			   * setsockopt handler.
- 			   */
+ 	return NULL;
 -- 
 2.54.0.545.g6539524ca2-goog
 
