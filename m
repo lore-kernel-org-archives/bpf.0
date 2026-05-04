@@ -1,173 +1,161 @@
-Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [67.231.149.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF3E168BD;
-	Mon,  4 May 2026 11:15:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE1729E116
+	for <bpf@vger.kernel.org>; Mon,  4 May 2026 12:43:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777893343; cv=none; b=aUygSPMjegtI74U3M+RQDyl0UMjjADkOmwCX/woMf/aqJwL4Isk/IwpXvt5cWE4QL+6Cr3Ud36GXCamd6QI/UoJZpbLb9gVtO13sLj3h7U8fGbWMddwOguC4e3gq1v+JUlG8Te/vo0EMs/LUPYkJLf179Qsrj3pxtXArS6nxqrI=
+	t=1777898604; cv=none; b=jD07MVQ/P/qc9nR8zJzDgkmKDm24VCgmaB4kxYCBYmjZAwtkZpy4XSF1UpYJ7e+Ut8ZyrHCvM7wRqHHiEHYsQy7o3W14SLiP/aMBvytAnj3ri7KGVAynamV7nJINuheo3YiZIeG6tsBC8fWdRFKYNzkND4PjQemvsuU1bFhmwNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777893343; c=relaxed/simple;
-	bh=4osoaC9ULRt+4TLmPswqg2KcCVPsZe/vyQEqG0SoY1U=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uQfcJAKW99S7vYBk/D+uMN0cfoPKsenbbEW2Jz+ho/+6mi3jFzJ5CcCH6dzUuj8GkNLYF7nxnKHqMoKnbLWrKOXwlr7AatSIWV/EnGiuDO7xIrT3bxOEv6Az3KH/viTDeR0TTbbaECTNCOO93Bs7dZT//n0YWUCd959zTf1fxG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com; spf=pass smtp.mailfrom=akamai.com; dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b=etnPPRaE; arc=none smtp.client-ip=67.231.149.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=akamai.com
+	s=arc-20240116; t=1777898604; c=relaxed/simple;
+	bh=jWGoglP6jmcwlrHvt1gQ9/+zWIwt0vegzHr25BbK6cc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Ug5Ow1BmepDYYyCiWMU/zdrIGH1nf+0Vy8XQrFO9vLuB8Fg8Qe+DbLrmnBPaHbpMkgycnIbYwGhLgivr/Wx5fHR5fXaw8GRTTdPxfhtJje1fXqWbyThwDd9HSJCjwvLHWTM9dIhVJeGzVpgd2Z2TvvWH/fEdxYiwe1aIYVJwrfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XvLtTlsJ; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="etnPPRaE"
-Received: from pps.filterd (m0050093.ppops.net [127.0.0.1])
-	by m0050093.ppops.net-00190b01. (8.18.1.11/8.18.1.11) with ESMTP id 643MqLk02006127;
-	Mon, 4 May 2026 11:18:04 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=jan2016.eng; bh=pvoGKj2RPkl+IEzPTmKy0HEr6NZA0fp/3
-	u8yXbIUFOw=; b=etnPPRaEaRAALa0gxqZLGS1byuCzA3bkCT+CrjcIm8RLO3e/t
-	lT7vtJ319g1wf4ZR1r0OteqKrgIE6VQzWA9fK0pD62rYazcOC7EXvVeC+w6fkgY4
-	akvZ+5BJg+/l+WtSH6q+IgEH18v86YT3gDkzVwTgTa7Bxsq4k+BNW8iQV0Ey84Ym
-	0cXzUcvgq4M/NaoE2OHoz/V90MpyQkYEKiXnBMb6pD4eaYChtMziFMv23Qn1fdoH
-	8iefVFC3RA3gkNdLSWQbR9FTOZ9PYHb8kws7gYCz1+xzmPjYYRI8cAcq+4yfrtqz
-	Zib1GniI4cw/qpOugrUE0QmVCvTk9d5AW8ttw==
-Received: from prod-mail-ppoint6 (prod-mail-ppoint6.akamai.com [184.51.33.61])
-	by m0050093.ppops.net-00190b01. (PPS) with ESMTPS id 4dw8hp8vd0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 May 2026 11:18:03 +0100 (BST)
-Received: from pps.filterd (prod-mail-ppoint6.akamai.com [127.0.0.1])
-	by prod-mail-ppoint6.akamai.com (8.18.1.7/8.18.1.7) with ESMTP id 644ACCZm014212;
-	Mon, 4 May 2026 06:18:02 -0400
-Received: from prod-mail-relay01.akamai.com ([172.27.118.31])
-	by prod-mail-ppoint6.akamai.com (PPS) with ESMTP id 4dwckxf3fu-1;
-	Mon, 04 May 2026 06:18:02 -0400 (EDT)
-Received: from muc-lhvdhd.munich.corp.akamai.com (muc-lhvdhd.munich.corp.akamai.com [172.29.0.147])
-	by prod-mail-relay01.akamai.com (Postfix) with ESMTP id 5113984;
-	Mon,  4 May 2026 10:18:01 +0000 (UTC)
-From: Nick Hudson <nhudson@akamai.com>
-To: bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Nick Hudson <nhudson@akamai.com>, Max Tottenham <mtottenh@akamai.com>,
-        Anna Glasgall <aglasgal@akamai.com>
-Subject: [PATCH bpf-next v6 0/6] bpf: decap flags and GSO state updates
-Date: Mon,  4 May 2026 11:17:53 +0100
-Message-Id: <20260504101759.3319427-1-nhudson@akamai.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XvLtTlsJ"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-48374014a77so46592965e9.3
+        for <bpf@vger.kernel.org>; Mon, 04 May 2026 05:43:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777898600; x=1778503400; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+ufm/8wyV7h2cWwxL5F4jbAArsiyVqXQndXIOjfMIX4=;
+        b=XvLtTlsJ9uh3K33svRXL/rWcr2sD5q3Xga6b5UTIeCDK0LNib8hVKkfBTGtUmww0/M
+         WoKK8s8TQdmUbdOxi8ywztkLLraGkG1nG+bUb5ZASV5SwteD8gFcQs8+2K6vDMXpOOok
+         klki9QE/d2fWuF8JQcIHyyMjxdRdS4KTQB9gSrYmpvSc6o90dKvqDW584M/CjZxa+8xB
+         LG2mgEB7bUGvJ3XUx2+cCKLgauyRDQyHHsq9HHlU+/63Klhep0rDOgo7cMrsuzP9ZAw9
+         lHYItr+KtzOk/AQeaU6GxYZA4zLPGwN/BXSgogNGA51dQBxgN/F0YEykHtwtR7ygbykd
+         hjjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777898600; x=1778503400;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=+ufm/8wyV7h2cWwxL5F4jbAArsiyVqXQndXIOjfMIX4=;
+        b=AF9v0uwmIyfW5lfiZNprlc2J2l89dAo+QcAfSjSkFvAL56gVna5v4bFg2ULi2zBEZd
+         fdZyfeV/3gUQdLCmkJ5ZEDo+4FHNFYyJNscZuYLL4kju2avshGc11+OvYpkqbz8SA+bO
+         P96xzX/egX3cwH2aOXix4IyAayQM1v+GbAJKIrkeDYU+qTj87dDdNVl1zEpTPTMhCdHY
+         cNbgjwdmAE3w1aiA9mkYJTePZhIhX391qaT1MGiGx3KnBO1J4S0+NxUvabWsxtQXhUrT
+         ySy8C+1NShj5oi3pJAdkC+M/6kvgNbkD0aurQBP3MrfZ5/5zKH7wRtD2KQKc1lQcWFw6
+         +pJw==
+X-Forwarded-Encrypted: i=1; AFNElJ9OuV5ROAI1i/41v5ntC9XEXSu0SvrLSl1rs7rVgh1BkTRLDsdiQrsCIxgM38j5FTNXjtY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHsvmrgDsRZooe+nZxO+UDbugH6n58a7q51sMEBafCG+jo2EIt
+	FgA/HN93VmDTnvF0VPHcPBjMw6d2GS83PdKHZF7VDlQHLYWxZktfno1d
+X-Gm-Gg: AeBDiesIhTf0pmmd6J6Gf8bCFFTw4g9dJPDyW5gCZooCXCwIgZR2twKy831wEDUd6Y0
+	y984F3/9VBCyUYfuZOLxRpIViA1W8OPFOLucWLKOM1Sp3TUky0iNFuoGZmR2DymNZ0LhrcQCiSE
+	qWegl9VE9QluV3HZkCo5DmTs4WgqOwuqPWBH8oWVejZGbLeFU6EzlJ71On/i86quQQMmiz1kdQI
+	Pi7+w2zmUCUCeGgOEYtzITG0C6VyfP9I/FUu2XaC2X1YmPhRj9GLPZNEr6Ufdjtjm1HlK2pCxAo
+	SEB/y1qyuE7YFwU7TZp5uKrY9eh8lpBxeeFCebSHS2XbRyDOh954AOJk0Cdf76iXG/4U2NMpQjy
+	akYvlhvVSsUY3bZss0jyKBiWo5oQaNjFK9FGUdwfiuoUbtEvBOyc7AqOfsasIGlhhYU66f3Aqib
+	ICR4LcM5RJe1HzecCAUAok/A1/zC2qorZ+3b+A1SoNo6mwFO2FFhuAxN4dOCOlcKaSykCPNgzIi
+	eU=
+X-Received: by 2002:a05:600c:a411:b0:48a:7b55:12a6 with SMTP id 5b1f17b1804b1-48a980fc3e7mr112517875e9.0.1777898600087;
+        Mon, 04 May 2026 05:43:20 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a8fef2a67sm111207925e9.5.2026.05.04.05.43.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 May 2026 05:43:19 -0700 (PDT)
+Date: Mon, 4 May 2026 13:43:18 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: "Arnd Bergmann" <arnd@arndb.de>
+Cc: "Yury Norov" <ynorov@nvidia.com>, "Paul Walmsley" <pjw@kernel.org>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
+ "Alexandre Ghiti" <alex@ghiti.fr>, "Yury Norov" <yury.norov@gmail.com>,
+ "Rasmus Villemoes" <linux@rasmusvillemoes.dk>, "Andrew Lunn"
+ <andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
+ Abeni" <pabeni@redhat.com>, "Andrew Morton" <akpm@linux-foundation.org>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Jesper Dangaard Brouer" <hawk@kernel.org>, "John
+ Fastabend" <john.fastabend@gmail.com>, "Stanislav Fomichev"
+ <sdf@fomichev.me>, "Ruan Jinjie" <ruanjinjie@huawei.com>,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, Linux-Arch
+ <linux-arch@vger.kernel.org>, Netdev <netdev@vger.kernel.org>,
+ bpf@vger.kernel.org, "Nathan Chancellor" <nathan@kernel.org>
+Subject: Re: [PATCH 1/6] lib: include crc32.h conditionally on CONFIG_CRC32
+Message-ID: <20260504134318.6eae8193@pumpkin>
+In-Reply-To: <ec4ed7f5-b1c8-49e4-b83d-e29c5414b9de@app.fastmail.com>
+References: <20260430211351.658193-1-ynorov@nvidia.com>
+	<20260430211351.658193-2-ynorov@nvidia.com>
+	<ec4ed7f5-b1c8-49e4-b83d-e29c5414b9de@app.fastmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-04_03,2026-04-30_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0
- lowpriorityscore=0 malwarescore=0 mlxscore=0 adultscore=0 bulkscore=0
- mlxlogscore=785 suspectscore=0 spamscore=0 phishscore=0 classifier=spam
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2604200000
- definitions=main-2605040108
-X-Authority-Analysis: v=2.4 cv=Z8fc2nRA c=1 sm=1 tr=0 ts=69f8725b cx=c_pps
- a=WPLAOKU3JHlOa4eSsQmUFQ==:117 a=WPLAOKU3JHlOa4eSsQmUFQ==:17
- a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Ifg-1AOnLHOf1gn6spyb:22
- a=d4nn1RXdvEacMIURMw2s:22 a=X7Ea-ya5AAAA:8 a=g1FTZKP8ERfPk9Mz4Y4A:9
-X-Proofpoint-ORIG-GUID: HldOv0ZmmUBAEeajCSKNNNl7l0Wnxj4r
-X-Proofpoint-GUID: HldOv0ZmmUBAEeajCSKNNNl7l0Wnxj4r
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA0MDEwOSBTYWx0ZWRfX+UviPLXiPnkD
- fsvAgZdwzQfzHm6qn9xQOjP+XKUh7Plr9b83Z9QELBrunks8Ra9Kc5oAKyOd9rXlrGDMt2HCYg6
- ok+8zJMj2FghDHEztixRtsJUwFUzBs5oG1215ODs1LNuQkuzvfvUEX3bYXUpidNg4o0W1L3oXkF
- /zzAJ4ZvpAnzQTlGTn0wfVSojpP6pTvfNTO9uspKzfiF6npfU+5ttdKkjqziqTJfv7Ie6R0Ba6q
- dcqmGzngPirxiBcXY1JgiWPji4CCcP480Y5D00ZtUH8ieJVmH2X5q473nJzQO4wXd9mxo/16bQn
- OisaRE5MlwLL6uKVPvWz3Xk78AKsVkTEmY5rg2d3oOfO3FMnkJrAgfvI6aNT7m8vmZR5BFxKZGZ
- pHNpvRnDj5phFxfNDVf7Vu39gwhTFFGLgDGPMtpHn5Yfp1RqvCHV6a1drRzqpm21aoOBlbH44Oa
- S01QZqqhvNAYehNfvlw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-04_03,2026-04-30_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
- suspectscore=0 phishscore=0 clxscore=1015 adultscore=0 spamscore=0
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605040109
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Mon, 04 May 2026 10:03:10 +0200
+"Arnd Bergmann" <arnd@arndb.de> wrote:
 
-This series extends bpf_skb_adjust_room() with decapsulation-specific
-flags and tunnel GSO state updates for decap use cases.
+> On Thu, Apr 30, 2026, at 23:13, Yury Norov wrote:
+> > Currently, bitreverse API is either declared based on
+> > CONFIG_HAVE_ARCH_BITREVERSE, wired to arch implementation, or if the
+> > arch has no bitreverse, based on generic implementation.
+> >
+> > So, regardless of CONFIG_BITREVERSE=n, the corresponding API is always
+> > declared. If that happens, the functions become declared but not
+> > implemented, which is an error.  
+> 
+> I'm not following that description. Why is it an error to declare
+> a funtion that is not implemented? Isn't that how optional interfaces
+> tend to work in general?
+> 
+> > The only header requiring the crc32 and bitreverse prototypes is
+> > include/linux/etherdevice.h. Thus, protect inclusion of corresponding
+> > headers in the etherdevice with CONFIG_CRC32, together with the only
+> > function depending on it.  
+> ...
+> >  #include <linux/if_ether.h>
+> >  #include <linux/netdevice.h>
+> >  #include <linux/random.h>
+> > +#ifdef CONFIG_CRC32
+> >  #include <linux/crc32.h>
+> > +#endif
+> >  #include <linux/unaligned.h>
+> >  #include <asm/bitsperlong.h>  
+> 
+> Don't add #ifdef blocks around headers. If the header cannot
+> be included without side-effects, change the linux/crc32.h
+> file instead of its users.
+> 
+> It looks like the problem is the check for CONFIG_GENERIC_BITREVERSE
+> in include/asm-generic/bitops/__bitrev.h, which ends up
+> hinding the generic___bitrev32() helper without need.
+> 
+> Simply removing the #ifdef there should avoid the build failure.
+> 
+> > +#ifdef CONFIG_CRC32
+> >  /**
+> >   * eth_hw_addr_crc - Calculate CRC from netdev_hw_addr
+> >   * @ha: pointer to hardware address
+> > @@ -291,6 +294,7 @@ static inline u32 eth_hw_addr_crc(struct netdev_hw_addr *ha)
+> >  {
+> >  	return ether_crc(ETH_ALEN, ha->addr);
+> >  }
+> > +#endif  
+> 
+> I see there are only user users of this function, neither of
+> them are performance critical. So the other options would
+> be to either open-code this function in the two callers
+> and remove it entirely, or move it into net/ethernet/eth.c.
 
-Motivation
-----------
+Or change to a #define so that only the users need to have the
+required headers included.
 
-When BPF decapsulates tunneled packets, skb GSO state needs to be
-updated to match the removed tunnel layer. This includes clearing the
-corresponding tunnel GSO type bits and resetting encapsulation state
-once no tunnel GSO flags remain.
+But open-coding in the callers saves anyone trying to read the code
+having to look at another file to see what is going on.
 
-Series Overview
----------------
+-- David
 
-- Name the adjust_room flag enum for CO-RE lookups.
-- Refactor adjust_room helper masks for maintainable validation logic.
-- Add new DECAP flags to UAPI.
-- Add guard rails for incompatible/invalid decap flag combinations.
-- Implement decap GSO state clearing on shrink.
-- Add selftests to validate decap GSO and encapsulation state.
-
-Changes v5 -> v6:
-- Patch 5: extend decap-state handling for the new L4/IPXIP decap
-  flags to non-GSO packets as well: when decapsulation is requested
-  on a non-GSO skb, clear skb->encapsulation directly so behavior is
-  consistent with the GSO path.
-- Patch 6: broaden tc_tunnel coverage to exercise and validate both
-  GSO and non-GSO decapsulation paths. This includes selecting
-  IPXIP decap flags from the outer tunnel header family, adding
-  explicit post-decap encapsulation checks for non-GSO packets,
-  and removing forced TSO disable so GSO cases are exercised in
-  the test harness.
-
-Changes v4 -> v5:
-- Patch 5: Remove explicit clearing of encap_hdr_csum and
-  remcsum_offload on UDP decap, per review feedback.
-- Patch 6: Remove SKB_GSO_TUNNEL_REMCSUM from SKB_GSO_UDP_TUNNEL_MASK
-  in selftests, and minor test improvements.
-
-Changes v3 -> v4:
-- Patch 5: drop SKB_GSO_TUNNEL_REMCSUM handling from this series.
-- Patch 5: clear encap_hdr_csum and remcsum_offload directly on UDP
-  decap.
-
-Changes v2 -> v3:
-- Add a new selftests patch to validate decap GSO state behavior.
-- Reorder the series so helper-mask refactoring precedes UAPI DECAP
-  flag additions.
-- Refresh patch 2 and patch 3 split to keep refactoring
-  behavior-neutral.
-- Patch 5: add decap tunnel GSO-state checks in "bpf: clear decap
-  tunnel GSO state in skb_adjust_room" (per Gemini/sashiko).
-
-Changes v1 -> v2:
-- Patch 3: decap flag acceptance intentionally remains L3-only while
-  adding helper masks.
-- Patch 4: decap with L4/IPXIP support enabled with guard rails.
-
-Co-developed-by: Max Tottenham <mtottenh@akamai.com>
-Signed-off-by: Max Tottenham <mtottenh@akamai.com>
-Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
-Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
-Signed-off-by: Nick Hudson <nhudson@akamai.com>
-
-Nick Hudson (6):
-  bpf: name the enum for BPF_FUNC_skb_adjust_room flags
-  bpf: refactor masks for ADJ_ROOM flags and encap validation
-  bpf: add BPF_F_ADJ_ROOM_DECAP_* flags for tunnel decapsulation
-  bpf: allow new DECAP flags and add guard rails
-  bpf: clear decap state on skb_adjust_room shrink path
-  selftests/bpf: tc_tunnel - validate decap GSO and encapsulation state
-
- include/uapi/linux/bpf.h                                |  36 ++++++++++-
- net/core/filter.c                                       | 119 ++++++++++++++++++++++++++++++-----
- tools/include/uapi/linux/bpf.h                          |  36 ++++++++++-
- tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c |   1 -
- tools/testing/selftests/bpf/progs/test_tc_tunnel.c      |  91 ++++++++++++++++++++++++---
- 5 files changed, 252 insertions(+), 31 deletions(-)
-
--- 
-2.34.1
+> 
+>       Arnd
+> 
 
