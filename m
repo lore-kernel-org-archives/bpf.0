@@ -1,56 +1,57 @@
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B0AA436368;
-	Tue,  5 May 2026 12:34:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26227439006;
+	Tue,  5 May 2026 12:34:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777984461; cv=none; b=UvX2oTj+i61Xj+luMFFmmJSkTj6JKmYGGC20Cr4p6zeuhSqa3LkYwDcaab1Ede8Pg0R3sTWBpK79/s7beFtAvOFhDPFOWH3s7ftguoTEL0gJ+X6RBAbc+po9kpOve5IDUnG5zuTTIj0Ls/2AS142kO7WEhCURRiBno5VfQAC0/0=
+	t=1777984462; cv=none; b=H8clXQQ+pTBPn2foP53vPzFxjkur37XxGWoTb9/0dpQSUWkq3UelfiMCFg854UDMrD5uwGlKDipLKPISD4BtzRSUyTnA3Fctjqe6dRjJLk0ZEf+/xG4JMkwj/zcCIZqmymQCNQ4QH0m3Sxv00PaTxMuj0iCwfLaCYmVac7prvkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777984461; c=relaxed/simple;
-	bh=VFklPgQiiPSeqER8OyAqG3N9VRr+ig2M3tZzdxjkJsc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ssXiPVRgbQ4QC1sX5vGleuy81vZDfTYScQc7YrpqCOkSnIexAJGImd8sn6742DLshw4NO+4MXXJOXjZOCpiqGRS4wLoIfSAGGLvC+RDseMej/N5gKoTEhnyjNYNYbFTBkFdj9hB3DN8g0clZyoTdwc4VucUBCQjLHDCT1xAdmC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=GYO9Kxnw; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1777984462; c=relaxed/simple;
+	bh=JX5DB7kuIFLTsjbACmu21PvGbIRTip8UGIdm1g5XdgQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=vGMZdpQQJt/+1rPPaKM3eAhdBp2jKeyU3lIB5/Q8p6ed6xDSn+7aDYGG4lOLzHgzT063HFjXPxvFWekf2YGlmxFPcWi6zffygH2i893sfd5Wf95QwgOm5vaDY951XzGTujEwlygsmgTY/OAJ4eBwBP1+twNQWoI459ahoE6a1Kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qmlDclUp; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="GYO9Kxnw"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 645CD5SL599575;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qmlDclUp"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6457Vt1j2805903;
 	Tue, 5 May 2026 12:33:48 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=wDW++CGHOP4UoCeI+NHJp/Rz+4K72y7e5MBlqd2dS
-	5c=; b=GYO9KxnwyvMIMwIxYDtR7UfZBkimR6Av636MQKpLpFFjzhlsXI8mEY3fh
-	UbBsj0MRY7iUE1ICpKldsqLdnHr82FtPJQ2H0VBskmFIYtx29HeKofziiK/ghA+m
-	K81+3v8b+L/7/aYciP/sKb5xquMEGkngFpdJ/izw+wDMs8TkuDJDbdl2BBUkSk8+
-	FtgB6xasfYwHB+rnyxZfFizr53jnlU9Mk1URuUU9U0bxfqSFJ2WsnmySflVO+oKg
-	HneAU76p4bgCmi+wHwpgSKngqiT8To4edsuqzZGx3tM5pDgR9mm58SA2M1qVQtDx
-	tcmq7b4iCCHNvzBzGTj0fgk4lYcDg==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9y1bkkg-1
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=cSiBsMiyvS7cygGX5
+	2RlC3XdEyvxbuMMGQjKtYeDTPg=; b=qmlDclUpN92qW9d+YesE/GcqxsAMp6EoH
+	a7TF23djLdcniuwKYSgTgKz/6lsQCeNXtSDHFF6Z3jyAqYe6cfMmrsF/DqRHQy++
+	0yNRVBvugQoSfdz5ADQ09ktEGubO+OYDPml6Ouoxaos13IskEQEyYbJmFJuKjIYy
+	BZWKc+lxueQ9aHXCpaMsWvX15mh14f/n/jpg64rauPmT5jkxLYLRIGOUys1CwMgt
+	rrGzT/5ayP+1wtPm3NT41a1xTHbRwRlQiN4RqFRD2SN7ovIlIvS5TRjVmRz1vVqw
+	VvbDmhIAd+8PWcI38S+TziSrK8cRD2iGrhaByh+VMfhZXkRL2Tklw==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9v7bn05-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 05 May 2026 12:33:47 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 645CORDk016273;
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 645COOsh030976;
 	Tue, 5 May 2026 12:33:46 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dwvkjsj4v-1
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dwx9y9aq7-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 05 May 2026 12:33:46 +0000 (GMT)
 Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 645CXgwl45351184
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 645CXhR320185376
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 5 May 2026 12:33:42 GMT
+	Tue, 5 May 2026 12:33:43 GMT
 Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 29E912004B;
+	by IMSVA (Postfix) with ESMTP id 42B072004B;
+	Tue,  5 May 2026 12:33:43 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B45B42004D;
 	Tue,  5 May 2026 12:33:42 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B230D2004D;
-	Tue,  5 May 2026 12:33:41 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
 	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  5 May 2026 12:33:41 +0000 (GMT)
+	Tue,  5 May 2026 12:33:42 +0000 (GMT)
 From: Jens Remus <jremus@linux.ibm.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         x86@kernel.org, Steven Rostedt <rostedt@kernel.org>,
@@ -80,11 +81,14 @@ Cc: Jens Remus <jremus@linux.ibm.com>, bpf@vger.kernel.org, linux-mm@kvack.org,
         Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
         Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
         Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH v9 0/6] x86/vdso: VDSO updates and fixes for sframes
-Date: Tue,  5 May 2026 14:33:34 +0200
-Message-ID: <20260505123340.3770025-1-jremus@linux.ibm.com>
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH v10 2/6] x86/asm: Avoid emitting DWARF CFI for non-VDSO
+Date: Tue,  5 May 2026 14:33:36 +0200
+Message-ID: <20260505123340.3770025-3-jremus@linux.ibm.com>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260505123340.3770025-1-jremus@linux.ibm.com>
+References: <20260505123340.3770025-1-jremus@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -94,110 +98,122 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: hy-u69z9qrLRbeoEPEQKKikpMdUB_vDT
-X-Proofpoint-GUID: mMiaA0kVCfuIXUlGhc8SwxpOlWBGYvvT
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA1MDExNCBTYWx0ZWRfX403IkCiWrITO
- u6nRm6SHFiimTS4/rLl3yOHyfY+/3EUwgAT5lFQvAmAFSNAcytjflpkvFuPDqQDUqGwuUthBu6A
- TvyBAhJ5M6px8iyqerIb2EGmK5gBc+VRhoAGP4EDwg4UstqgZzcRGs9Qivf85IXoxARXikxO6bj
- j6oaMkEzM1o7GtkLQQ407Pid10Cx5NGtPEAP1RuiqgmQ1LxR/FfjyQ13PrcK9ulE8T9RTr+N2wp
- rRWihyfpYEvsU3E7pkfbJWx2dlKboPWcHSd3HEg8teFgCHiA0wyFkvJ6n9BOAFM/40ingpxwGUe
- eTvXICsfI6EoQbwyalEjR1E7R797ha9qPzcpWPRoo5xqx0DG43gAxoW40PxKy6WYJK6AQ56KrO3
- TBAr/MFfs6nIsCfowIrzML99aoqcVYRut0Vr/VcfaZ3Wz7DW0Tx2sLTwxxJ4gbKEkBrL8B6lpj3
- kzNONLNL2KGglivo+oA==
-X-Authority-Analysis: v=2.4 cv=UbFhjqSN c=1 sm=1 tr=0 ts=69f9e3ac cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA1MDExNCBTYWx0ZWRfX+8UcH5+UOaM1
+ NiyK+gIU52dpuz51o6BTQysBsVyNT/2mHHR9qR+6Emc/FTD5h+tcOm+YkehVAPO5XFOYOi9bgMg
+ Yk8NhMcfHccMTzJgElEu0S/Gq0x1tew69hfaJkeFN5/h5GDUT1S/CrDWP4SiLTJy4OJ2n8VcGJ+
+ zdt3iXbDlgGIua5NU1SD1/qsimPp+X7M21nFoGb/aYNW63LIsa3bNIG+toisTxLPz+310iBbCfs
+ zTeEMnf+xooGMloeqkO5fmBGK8oOsZf744P0kcRi6BpBwA2FSzrV1D6yuWwbSAoJF30dmRkkU6D
+ vLvlivEsq9xlD4KUxctpiONUN76EfOv1mdeITHDkHe7Yp6vn06VV8MK41EqyxL6NWHfsfpRzXT+
+ HhnxMntyythGAMxfrm9LY6aUx819saPNKadhTIavu+/FKJ2FDOKdImtOXDZhvzw5bfofFPlPwBA
+ sRd0ERyHmcZAWKrhGyg==
+X-Proofpoint-GUID: 0_uFKNj1zBABeQQdK6Fa-tlAuwKxXQCu
+X-Proofpoint-ORIG-GUID: CPvQIMWgxbWFE4k8IOhb5eoIN_adUwGA
+X-Authority-Analysis: v=2.4 cv=eu/vCIpX c=1 sm=1 tr=0 ts=69f9e3ac cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
  a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=VnNF1IyMAAAA:8
- a=yyHzTi5TPZ6eMx7n6w4A:9 a=2JgSa4NbpEOStq-L5dxp:22
+ a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=oGMlB6cnAAAA:8
+ a=VnNF1IyMAAAA:8 a=zOOTxvlrTZNIKiBVQswA:9 a=2JgSa4NbpEOStq-L5dxp:22
+ a=NdAtdrkLVvyUPsUoGJp4:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-05-05_02,2026-04-30_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 spamscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
- adultscore=0 priorityscore=1501 bulkscore=0 phishscore=0 impostorscore=0
+ priorityscore=1501 phishscore=0 lowpriorityscore=0 clxscore=1015 adultscore=0
+ suspectscore=0 malwarescore=0 bulkscore=0 impostorscore=0 spamscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605050114
 
-This enables generation of SFrame V3 stack trace information for VDSO on
-x86-64.  It's a continuation of Josh's and Steve's work:
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-   https://lore.kernel.org/all/cover.1737511963.git.jpoimboe@kernel.org/
-   https://lore.kernel.org/all/20250425023750.669174660@goodmis.org/
+It was decided years ago that .cfi_* annotations aren't maintainable in
+the kernel.  They were replaced by objtool unwind hints.  For the kernel
+proper, ensure the CFI_* macros don't do anything.
 
-This series focuses only on the VDSO code. They are helpful fixes
-and updates that doesn't rely on sframes (although the last patch
-is sframe related).
+On the other hand the VDSO library *does* use them, so user space can
+unwind through it.
 
-This series applies on top of tip:master (a375022d6383):
+Make sure these macros only work for VDSO.  They aren't actually being
+used outside of VDSO anyway, so there's no functional change.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git  master
+[ Jens Remus: Define CFI_SIGNAL_FRAME for !BUILD_VDSO. ]
 
-Like the unwind user sframe series [1] it depends on the binutils 2.46
-release to be used to build the VDSO with SFrame V3 stack trace
-information (using the assembler option --gsframe-3).
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Acked-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+Signed-off-by: Jens Remus <jremus@linux.ibm.com>
+---
+ arch/x86/include/asm/dwarf2.h | 52 ++++++++++++++++++++++++-----------
+ 1 file changed, 36 insertions(+), 16 deletions(-)
 
-[1]: [PATCH v14 00/19] unwind_deferred: Implement sframe handling,
-    https://lore.kernel.org/all/20260505121718.3572346-1-jremus@linux.ibm.com/
-
-Changes in v10:
-- Rebased on tip:master (a375022d6383).
-
-Changes in v9 (see indivicual patch notes):
-- Always define KEEP_SFRAME to either true/false in specific VDSO linker
-  scripts and use #if instead of #ifdef in common one. (Peter)
-- Reword patch 6 commit message to provide more details.
-- Note: Binutils 2.46 with SFrame V3 support has been released.
-
-Changes in v8:
-- Discard .sframe for x32 and x86-32 VDSOs. (Josh/Indu)
-- Define CFI_SIGNAL_FRAME for !BUILD_VDSO.
-- Drop .cfi_sections .sframe in dwarf2.h in favor of the explicitly
-  specified more specific assembler option --gsframe-3.
-- Incorporate missing changes and review feedback from Steven's v6
-  (I erroneously based my v6 on Steven's v5):
-  - Reword patch 3 commit subject to Steven's v6 one.
-  - Remove SYM_F_ALIGN in __vdso_sgx_enter_enclave(). (Josh)
-
-Changes in v7:
-- Rebase on H. Peter Anvin's vDSO changes on tip:x86/entry. (Peter)
-- Simplify adding assembler option -Wa,--gsframe-3.  Add for vdso64
-  only.
-- Align to .eh_frame and mark .sframe as KEEP in vDSO linker script.
-  Note that GNU linker 2.46 will mark .sframe as KEEP in its default
-  linker script as well.
-
-Changes in v6:
-- SFrame V3 support (SFrame V2 is not supported).
-- Prevent GNU_SFRAME program table entry to empty .sframe section.
-- Integrate v5 review feedback. (Josh)
-
-Regards,
-Jens
-
-
-Josh Poimboeuf (6):
-  x86/vdso: Fix DWARF generation for getrandom()
-  x86/asm: Avoid emitting DWARF CFI for non-VDSO
-  x86/asm: Use CFI_* macros in SYM_FUNC_* macros so they can be added to
-    VDSO
-  x86/vdso: Use SYM_FUNC_{START,END} in __kernel_vsyscall()
-  x86/vdso: Use CFI macros in __vdso_sgx_enter_enclave()
-  x86/vdso: Enable sframe generation in VDSO
-
- arch/Kconfig                                  |  7 +++
- arch/x86/entry/vdso/common/vdso-layout.lds.S  | 17 +++++-
- arch/x86/entry/vdso/vdso32/system_call.S      | 10 +---
- arch/x86/entry/vdso/vdso32/vdso32.lds.S       |  3 ++
- arch/x86/entry/vdso/vdso64/Makefile           |  1 +
- arch/x86/entry/vdso/vdso64/vdso64.lds.S       |  2 +
- arch/x86/entry/vdso/vdso64/vdsox32.lds.S      |  6 +++
- .../x86/entry/vdso/vdso64/vgetrandom-chacha.S |  3 +-
- arch/x86/entry/vdso/vdso64/vsgx.S             | 18 +++----
- arch/x86/include/asm/dwarf2.h                 | 52 +++++++++++++------
- arch/x86/include/asm/linkage.h                | 33 +++++++++---
- arch/x86/include/asm/vdso.h                   |  1 -
- 12 files changed, 107 insertions(+), 46 deletions(-)
-
---
+diff --git a/arch/x86/include/asm/dwarf2.h b/arch/x86/include/asm/dwarf2.h
+index 09c9684d3ad6..13e2e64ef265 100644
+--- a/arch/x86/include/asm/dwarf2.h
++++ b/arch/x86/include/asm/dwarf2.h
+@@ -6,6 +6,15 @@
+ #warning "asm/dwarf2.h should be only included in pure assembly files"
+ #endif
+ 
++#ifdef BUILD_VDSO
++
++	/*
++	 * For the vDSO, emit both runtime unwind information and debug
++	 * symbols for the .dbg file.
++	 */
++
++	.cfi_sections .eh_frame, .debug_frame
++
+ #define CFI_STARTPROC		.cfi_startproc
+ #define CFI_ENDPROC		.cfi_endproc
+ #define CFI_DEF_CFA		.cfi_def_cfa
+@@ -22,21 +31,32 @@
+ #define CFI_ESCAPE		.cfi_escape
+ #define CFI_SIGNAL_FRAME	.cfi_signal_frame
+ 
+-#ifndef BUILD_VDSO
+-	/*
+-	 * Emit CFI data in .debug_frame sections, not .eh_frame sections.
+-	 * The latter we currently just discard since we don't do DWARF
+-	 * unwinding at runtime.  So only the offline DWARF information is
+-	 * useful to anyone.  Note we should not use this directive if we
+-	 * ever decide to enable DWARF unwinding at runtime.
+-	 */
+-	.cfi_sections .debug_frame
+-#else
+-	 /*
+-	  * For the vDSO, emit both runtime unwind information and debug
+-	  * symbols for the .dbg file.
+-	  */
+-	.cfi_sections .eh_frame, .debug_frame
+-#endif
++#else /* !BUILD_VDSO */
++
++/*
++ * On x86, these macros aren't used outside VDSO.  As well they shouldn't be:
++ * they're fragile and very difficult to maintain.
++ */
++
++.macro nocfi args:vararg
++.endm
++
++#define CFI_STARTPROC		nocfi
++#define CFI_ENDPROC		nocfi
++#define CFI_DEF_CFA		nocfi
++#define CFI_DEF_CFA_REGISTER	nocfi
++#define CFI_DEF_CFA_OFFSET	nocfi
++#define CFI_ADJUST_CFA_OFFSET	nocfi
++#define CFI_OFFSET		nocfi
++#define CFI_REL_OFFSET		nocfi
++#define CFI_REGISTER		nocfi
++#define CFI_RESTORE		nocfi
++#define CFI_REMEMBER_STATE	nocfi
++#define CFI_RESTORE_STATE	nocfi
++#define CFI_UNDEFINED		nocfi
++#define CFI_ESCAPE		nocfi
++#define CFI_SIGNAL_FRAME	nocfi
++
++#endif /* !BUILD_VDSO */
+ 
+ #endif /* _ASM_X86_DWARF2_H */
+-- 
 2.51.0
 
