@@ -1,799 +1,163 @@
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD8E48095C
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 15:09:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E3139B952;
+	Tue,  5 May 2026 15:14:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777993750; cv=none; b=gpawhgmTVfqvdb4tiuY3ZGWufu7S2PoP9tbFoyt4mQxNbZPkwePEkfeb6yrN0wHuYom1hqd5hSKdGn47jesxi8gx/DYP9CA2mXq38kokR9oxTy7E0jbCHC7B4Qoit/cSRvsM4bvMPVvyrAm/wtzYKjVnqrWl4KVdhlRPgwt/GC0=
+	t=1777994053; cv=none; b=L0O5NtIQ4pgvMm7c+Idtb4sL5+B0OTS5x0nK25zYVtzv8jRM/SUxdiue/cnyIGYs/MGnNYsX96XLjVvQ52Wb61+qbNfk+ZrQ5AXcJej6jxEoCwBzIl7AGGGjjp4vzecR8AeIETZevAOitmDk0sdxnCkkOvqd4zBOURzMnUIbcOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777993750; c=relaxed/simple;
-	bh=nvRlXk0SxEJ5nwLxY/r/87+3eNg5N/zIFZ+y6YU4oQU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JDbN+TLOW2K6QdyEEvAtgZCtRX4eEZR63n95PKF6I8cpRrGS9u6x//0g7OkFJdcPtjbQi1Bowda3gJFmtIu5Iti65hWGpX/xuM2W5FNhzEfiKZKemus8j1CVGaN9x9tCBDevnEH0tPe8Dyy9UyZcL4h2QFbyCV7dHEtXyP6Q5vE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WNRhIrw0; arc=none smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777994053; c=relaxed/simple;
+	bh=yJ/mQCKDNyWieksngGmTrHElKRuZ0mOGGcnfFjZfoqk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W2T+JgacibGB6y1EKnDcgzTz94XO6KrQhZSIilU4MxP0J2rLhXn9XZlGqn0GhVfktKwu9evANrAmWR336A+aVSqDiTweEjg62+zBVqRZ34mHwRDPxF0d+s+yB5X+3CTVQFQ3bR5zMumPGX/pHXoRJLdGOV8qeScudZCBhqtmNXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eqMQr+8E; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WNRhIrw0"
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-7982c3b7da9so49854387b3.1
-        for <bpf@vger.kernel.org>; Tue, 05 May 2026 08:09:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777993748; x=1778598548; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GvvvCn8k83hLzR9AMjFQb9M4jvzTg1YTi3t+NjKHa6M=;
-        b=WNRhIrw0pTRxYdpB5Jzt2sls06GNflQBO19fv+9ANxnpKSVe7DSZ3FwExfBx6ZL9Uf
-         /E5wC+SnF06I9HXuNJOL2N9RhWlkHKgP/yulB39e7GDvF9Ju/iMkMSRzNYymmKe73uBh
-         08bpX6ZgU4CIE3cAKSMqueG1u49JSV/WsHLDohXTXRN/k+H6KBhww8iAaO8Goe7Z8HPe
-         S2scrTh98X58UwHBCMKe3BbcAPP5H7aUjfC5brcKJDzzysj2/fJk2CTMaGLOtfzKRAKH
-         dU6BkejNYTELGw+J3w43h34RxsMVpxxZvbx9cx2dv/fPw62mFK0f9pWxHlZTzoAlrfFP
-         GR7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777993748; x=1778598548;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GvvvCn8k83hLzR9AMjFQb9M4jvzTg1YTi3t+NjKHa6M=;
-        b=U5jX0bhuxiLw07lCf3WoeBSUeTTZm6IS8YpV87L5tgG3eQXlHn2R7LFYeyqzT/Q81N
-         jPn33zWvFiKXvJ0OjymJmijNkflNrl0jGmiBtFx2SqGOiJ7BBDTfntnOnINWqtPldivq
-         vDnQGkXRntqI09JbYCZvTeBhyWuXrkrgKMMUIUxnwio/QmcaEwXxTJzSP6Q8r/2yr+5y
-         +Oh5VSA1AKDLwBDy2tn9Z8bWfV1bLXyw44wZcR7lKzq/wTRONBKks+zcmse8/s52Rq/z
-         m1eI7Dg+GOKnu1x+5hYsCrx2oZsES4N4qCaRZw58/GYHQB50vWE40t6S3pEo3hJVRo/B
-         j+tQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+5WZwJW0sIfsb2hsfpwqXRHRvPBAd/PIZ/mwIjJOUwdfgUrNgVVQPvKhrzgmwzx/L8bNc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLOj279tbVyWLJ94YiHzGgOmSyV70w933RPRA0PDMIrBxZ/EQs
-	bUgUohjSlbHpqLoUOoYkSoJt2ZBeUFyOaudz6JYxagm10pZgSizrTIR1
-X-Gm-Gg: AeBDievZmhMbY9Hs2flvW3WvioV9eIqP0q8lKBveN2b6XAucUkYnYF4VvkiYve4xEII
-	G7G6JdVPaLCvMQnbXWMLEPlwL0t8HhC/yXiD2FzrgcJoE4GPvtSbPlB1Mt2eP97J+y8ma3g7hRF
-	2Trlcu8B3aVIyMWer4JdBX8mv7yHdidihAnyFTVqTqmx8t7/+DTfugZ918ARqSFnykoXkeLZT6u
-	+5IhzDgi0QHNGL7rGQhhw93T7vysYqyawC1gmZ0YQaqveq5qE0xjq2q13o1Ksskb8XRzeCQMAL6
-	oGQdtPsTT9WIXGwfSjl+Jk8CY42RGm8oNQK+LBg3V3ha4UGIgJPdXU0wgqsqjdbvk3lwL2gHFmY
-	1EWld56aYIAuw/j7Hhalx1D6aME7Dx/05QdA77AhYoCRus73lmLLt6161xR+tq4kw3q0GQ025er
-	BKIPnbBCe9nL3HFp0L+kVoWxTe9fjbA4myVi9XbZSV6M1EmVkrQZ+0o/75NOyX8+7oNyetqNxJ3
-	tiRqwGom+g=
-X-Received: by 2002:a05:690c:a018:b0:7bd:4792:66ef with SMTP id 00721157ae682-7bd7714a6dcmr135180467b3.42.1777993747708;
-        Tue, 05 May 2026 08:09:07 -0700 (PDT)
-Received: from zenbox.prizrak.me ([2600:1700:18fb:6011:2fd9:17ad:6991:cb6c])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd6688d16fsm65061117b3.42.2026.05.05.08.09.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 May 2026 08:09:07 -0700 (PDT)
-From: Justin Suess <utilityemal77@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	bpf@vger.kernel.org,
-	mic@digikod.net,
-	Justin Suess <utilityemal77@gmail.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: [bpf-next v2 2/2] selftests/bpf: Add kptr destructor NMI exerciser
-Date: Tue,  5 May 2026 11:08:51 -0400
-Message-ID: <20260505150851.3090688-3-utilityemal77@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260505150851.3090688-1-utilityemal77@gmail.com>
-References: <20260505150851.3090688-1-utilityemal77@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eqMQr+8E"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87951C2BCB4;
+	Tue,  5 May 2026 15:14:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777994053;
+	bh=yJ/mQCKDNyWieksngGmTrHElKRuZ0mOGGcnfFjZfoqk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=eqMQr+8EBUJ65SoEkkHVJK8O4j3mVUGSiFlBXcji5jIKi+gn7xoGcTfrt4UF7m9h5
+	 1xTyCxkWlU2Qlr+INPcwtfdEA0Wuqfmi50hFZgdN5FeCe+6+Q/jmz86p5YrjHMpRT5
+	 pOzGG2HwqocyR8wIzTEBJEAp4mp/18pUPAEe77F47mCJ0LOAcxP/1H385YJd160Qul
+	 DfboSff+xTkwSR6ucKFpr5yHv7+FlASzLzGfXMecYe0tyNO8lry9sF+yUqyfCwxz8+
+	 LLVa4TBrDWB0e0cTs+HiMWMQZ5m6QkAeHuZHgvmFLvU7SO/4QDgTqzj3JWeTjqmGl1
+	 1k2ulheBiDS/g==
+Message-ID: <64a691f2-4104-4538-9aa6-6feadc756c56@kernel.org>
+Date: Tue, 5 May 2026 17:14:08 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH v2 bpf 3/6] mptcp: bpf: fix type confusion in
+ bpf_mptcp_sock_from_subflow()
+Content-Language: fr
+To: Kuniyuki Iwashima <kuniyu@google.com>, sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org, MPTCP Linux <mptcp@lists.linux.dev>
+References: <20260504210610.180150-4-kuniyu@google.com>
+ <20260505041435.187D0C2BCB4@smtp.kernel.org>
+ <CAAVpQUB-K4YBE5Em4xg5wWsjtK=7xZwwXFynX2vUN4DQDx2tRw@mail.gmail.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <CAAVpQUB-K4YBE5Em4xg5wWsjtK=7xZwwXFynX2vUN4DQDx2tRw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Programs attached to tp_btf/nmi_handler can drop refcounted kptrs from
-NMI context by deleting map entries or clearing map values.  Add a
-dedicated BPF-side selftest program that populates hash and array maps
-with cpumask kptrs and clears them again from the NMI handler.
+Hi Kuniyuki,
 
-This test fails on the upstream and results in a lockdep warning, but
-passes when NMI dtors are properly offloaded by the previous commit.
+(+cc MPTCP ML)
 
-The test asserts that every object queued for destruction in hardirq
-from NMI had the dtor called on it. The irq_work which has the
-IRQ_WORK_HARD_IRQ flag is drained with kern_sync_rcu to ensure
-consistency.
+On 05/05/2026 07:43, Kuniyuki Iwashima wrote:
+> Could you follow up on the comments by Sashiko ?
 
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Signed-off-by: Justin Suess <utilityemal77@gmail.com>
----
- .../selftests/bpf/prog_tests/kptr_dtor_nmi.c  | 259 +++++++++++
- .../selftests/bpf/progs/kptr_dtor_nmi.c       | 414 ++++++++++++++++++
- 2 files changed, 673 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/kptr_dtor_nmi.c
- create mode 100644 tools/testing/selftests/bpf/progs/kptr_dtor_nmi.c
+Thank you for having forwarded this!
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kptr_dtor_nmi.c b/tools/testing/selftests/bpf/prog_tests/kptr_dtor_nmi.c
-new file mode 100644
-index 000000000000..a1aa8b6646b3
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/kptr_dtor_nmi.c
-@@ -0,0 +1,259 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+
-+#include <errno.h>
-+#include <linux/perf_event.h>
-+#include <sched.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+
-+#include <test_progs.h>
-+
-+#include "kptr_dtor_nmi.skel.h"
-+
-+#define KPTR_DTOR_NMI_MAX_SLOTS 8
-+#define KPTR_DTOR_NMI_ROUNDS 256
-+#define DELETE_TIMEOUT_NS (5ULL * 1000 * 1000 * 1000)
-+
-+enum kptr_dtor_nmi_map_type {
-+	KPTR_DTOR_NMI_MAP_HASH = 1,
-+	KPTR_DTOR_NMI_MAP_ARRAY,
-+};
-+
-+struct kptr_dtor_nmi_case {
-+	const char *name;
-+	__u32 map_type;
-+};
-+
-+__maybe_unused
-+static int find_test_cpu(void)
-+{
-+	cpu_set_t cpuset;
-+	int cpu, err;
-+
-+	err = sched_getaffinity(0, sizeof(cpuset), &cpuset);
-+	if (!ASSERT_OK(err, "sched_getaffinity"))
-+		return -1;
-+
-+	for (cpu = 0; cpu < CPU_SETSIZE; cpu++) {
-+		if (CPU_ISSET(cpu, &cpuset))
-+			return cpu;
-+	}
-+
-+	ASSERT_TRUE(false, "cpu_available");
-+	return -1;
-+}
-+
-+__maybe_unused
-+static int open_nmi_pmu_event_on_cpu(int cpu)
-+{
-+	struct perf_event_attr attr = {
-+		.size = sizeof(attr),
-+		.type = PERF_TYPE_HARDWARE,
-+		.config = PERF_COUNT_HW_CPU_CYCLES,
-+		.freq = 1,
-+		.sample_freq = 1000,
-+	};
-+	int pmu_fd;
-+
-+	pmu_fd = syscall(__NR_perf_event_open, &attr, -1, cpu, -1,
-+			 PERF_FLAG_FD_CLOEXEC);
-+	if (pmu_fd == -1) {
-+		if (errno == ENOENT || errno == EOPNOTSUPP) {
-+			printf("SKIP:no PERF_COUNT_HW_CPU_CYCLES\n");
-+			test__skip();
-+		}
-+		return -1;
-+	}
-+
-+	return pmu_fd;
-+}
-+
-+__maybe_unused
-+static bool pin_to_cpu(int cpu, cpu_set_t *old_cpuset)
-+{
-+	cpu_set_t cpuset;
-+	int err;
-+
-+	err = sched_getaffinity(0, sizeof(*old_cpuset), old_cpuset);
-+	if (!ASSERT_OK(err, "sched_getaffinity"))
-+		return false;
-+
-+	CPU_ZERO(&cpuset);
-+	CPU_SET(cpu, &cpuset);
-+	err = sched_setaffinity(0, sizeof(cpuset), &cpuset);
-+	if (!ASSERT_OK(err, "sched_setaffinity"))
-+		return false;
-+
-+	return true;
-+}
-+
-+__maybe_unused
-+static void restore_affinity(const cpu_set_t *old_cpuset)
-+{
-+	ASSERT_OK(sched_setaffinity(0, sizeof(*old_cpuset), old_cpuset),
-+		  "restore_affinity");
-+}
-+
-+__maybe_unused
-+static bool run_syscall_prog(struct bpf_program *prog, const char *name)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	int err;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
-+	if (!ASSERT_OK(err, name))
-+		return false;
-+	if (!ASSERT_EQ(opts.retval, 0, name))
-+		return false;
-+
-+	return true;
-+}
-+
-+__maybe_unused
-+static bool wait_for_nmi_drain(struct kptr_dtor_nmi *skel,
-+			       __u32 expected_deleted,
-+			       __u32 expected_release_calls)
-+{
-+	u64 now_ns, timeout_time_ns;
-+
-+	now_ns = get_time_ns();
-+	timeout_time_ns = now_ns + DELETE_TIMEOUT_NS;
-+	while (skel->bss->kptr_dtor_nmi_deleted < expected_deleted ||
-+	       skel->bss->kptr_dtor_nmi_release_calls < expected_release_calls) {
-+		if (skel->bss->kptr_dtor_nmi_setup_err ||
-+		    skel->bss->kptr_dtor_nmi_nmi_err ||
-+		    skel->bss->kptr_dtor_nmi_cleanup_err)
-+			break;
-+		now_ns = get_time_ns();
-+		if (now_ns >= timeout_time_ns)
-+			break;
-+		sched_yield();
-+	}
-+
-+	if (!ASSERT_EQ(skel->bss->kptr_dtor_nmi_setup_err, 0,
-+		       "kptr_dtor_nmi_setup_err"))
-+		return false;
-+	if (!ASSERT_EQ(skel->bss->kptr_dtor_nmi_nmi_err, 0,
-+		       "kptr_dtor_nmi_nmi_err"))
-+		return false;
-+	if (!ASSERT_EQ(skel->bss->kptr_dtor_nmi_cleanup_err, 0,
-+		       "kptr_dtor_nmi_cleanup_err"))
-+		return false;
-+	if (!ASSERT_GE(skel->bss->kptr_dtor_nmi_deleted, expected_deleted,
-+		       "kptr_dtor_nmi_deleted"))
-+		return false;
-+	if (!ASSERT_GE(skel->bss->kptr_dtor_nmi_release_calls,
-+		       expected_release_calls,
-+		       "kptr_dtor_nmi_release_calls"))
-+		return false;
-+	if (!ASSERT_LT(now_ns, timeout_time_ns, "kptr_dtor_nmi_timeout"))
-+		return false;
-+
-+	return true;
-+}
-+
-+__maybe_unused
-+static void run_kptr_dtor_nmi_case(const struct kptr_dtor_nmi_case *test)
-+{
-+	struct kptr_dtor_nmi *skel;
-+	cpu_set_t old_cpuset;
-+	bool pinned = false;
-+	int cpu = -1;
-+	int pmu_fd = -1;
-+	int err, round;
-+
-+	cpu = find_test_cpu();
-+	if (cpu < 0)
-+		return;
-+
-+	skel = kptr_dtor_nmi__open();
-+	if (!ASSERT_OK_PTR(skel, "kptr_dtor_nmi__open"))
-+		return;
-+
-+	skel->bss->kptr_dtor_nmi_map_type = test->map_type;
-+	bpf_program__set_autoattach(skel->progs.clear_kptrs_from_nmi, false);
-+
-+	err = kptr_dtor_nmi__load(skel);
-+	if (!ASSERT_OK(err, "kptr_dtor_nmi__load"))
-+		goto cleanup;
-+
-+	err = kptr_dtor_nmi__attach(skel);
-+	if (!ASSERT_OK(err, "kptr_dtor_nmi__attach"))
-+		goto cleanup;
-+
-+	skel->links.clear_kptrs_from_nmi =
-+		bpf_program__attach_trace(skel->progs.clear_kptrs_from_nmi);
-+	if (!ASSERT_OK_PTR(skel->links.clear_kptrs_from_nmi,
-+			   "attach_tp_btf_nmi_handler"))
-+		goto cleanup;
-+
-+	pinned = pin_to_cpu(cpu, &old_cpuset);
-+	if (!pinned)
-+		goto cleanup;
-+
-+	pmu_fd = open_nmi_pmu_event_on_cpu(cpu);
-+	if (pmu_fd < 0)
-+		goto cleanup;
-+
-+	for (round = 0; round < KPTR_DTOR_NMI_ROUNDS; round++) {
-+		__u32 expected_total;
-+
-+		if (!run_syscall_prog(skel->progs.populate_kptrs, "populate_kptrs"))
-+			goto cleanup;
-+
-+		expected_total = (round + 1) * KPTR_DTOR_NMI_MAX_SLOTS;
-+		if (!ASSERT_EQ(skel->bss->kptr_dtor_nmi_setup_created,
-+			       expected_total,
-+			       "kptr_dtor_nmi_setup_created"))
-+			goto cleanup;
-+
-+		if (!wait_for_nmi_drain(skel, expected_total, expected_total))
-+			goto cleanup;
-+
-+		kern_sync_rcu();
-+	}
-+
-+	if (!run_syscall_prog(skel->progs.cleanup_kptrs, "cleanup_kptrs"))
-+		goto cleanup;
-+	/*
-+	 * The grace period for rcu cannot complete until the CPU that ran the
-+	 * hard irq_work has passed through a quiescent state after running
-+	 * our dtor work. This effectively flushes our pending work and allows
-+	 * the test to verify the dtor was called the expected number of times.
-+	 */
-+	kern_sync_rcu();
-+	ASSERT_EQ(skel->bss->kptr_dtor_nmi_cleanup_deleted, 0,
-+		  "kptr_dtor_nmi_cleanup_deleted");
-+
-+cleanup:
-+	if (pmu_fd >= 0)
-+		close(pmu_fd);
-+	if (pinned)
-+		restore_affinity(&old_cpuset);
-+	kptr_dtor_nmi__destroy(skel);
-+}
-+
-+void serial_test_kptr_dtor_nmi(void)
-+{
-+/*
-+ * nmi_handler isn't supported for these architectures.
-+ */
-+#if defined(__aarch64__) || defined(__s390x__)
-+	test__skip();
-+	return;
-+#else
-+	static const struct kptr_dtor_nmi_case tests[] = {
-+		{ "hash", KPTR_DTOR_NMI_MAP_HASH },
-+		{ "array", KPTR_DTOR_NMI_MAP_ARRAY },
-+	};
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		if (!test__start_subtest(tests[i].name))
-+			continue;
-+		run_kptr_dtor_nmi_case(&tests[i]);
-+	}
-+#endif
-+}
-diff --git a/tools/testing/selftests/bpf/progs/kptr_dtor_nmi.c b/tools/testing/selftests/bpf/progs/kptr_dtor_nmi.c
-new file mode 100644
-index 000000000000..1ab5951a7a22
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kptr_dtor_nmi.c
-@@ -0,0 +1,414 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <linux/errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+#define KPTR_DTOR_NMI_MAX_SLOTS 8
-+
-+enum kptr_dtor_nmi_map_type {
-+	KPTR_DTOR_NMI_MAP_HASH = 1,
-+	KPTR_DTOR_NMI_MAP_ARRAY,
-+};
-+
-+enum kptr_dtor_nmi_err {
-+	KPTR_DTOR_NMI_SETUP_CREATE_ERR = 1,
-+	KPTR_DTOR_NMI_SETUP_LOOKUP_ERR,
-+	KPTR_DTOR_NMI_SETUP_STALE_ERR,
-+	KPTR_DTOR_NMI_SETUP_MAP_ERR,
-+	KPTR_DTOR_NMI_DELETE_ERR,
-+	KPTR_DTOR_NMI_CLEANUP_ERR,
-+};
-+
-+struct kptr_dtor_nmi_value {
-+	struct bpf_cpumask __kptr * mask;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, __u32);
-+	__type(value, struct kptr_dtor_nmi_value);
-+	__uint(max_entries, KPTR_DTOR_NMI_MAX_SLOTS);
-+} kptr_dtor_nmi_hash SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, __u32);
-+	__type(value, struct kptr_dtor_nmi_value);
-+	__uint(max_entries, KPTR_DTOR_NMI_MAX_SLOTS);
-+} kptr_dtor_nmi_array SEC(".maps");
-+
-+struct bpf_cpumask *bpf_cpumask_create(void) __ksym __weak;
-+void bpf_cpumask_release(struct bpf_cpumask *cpumask) __ksym __weak;
-+
-+__u32 kptr_dtor_nmi_live_mask;
-+__u32 kptr_dtor_nmi_map_type;
-+__u32 kptr_dtor_nmi_setup_created;
-+__u32 kptr_dtor_nmi_deleted;
-+__u32 kptr_dtor_nmi_cleanup_deleted;
-+__u32 kptr_dtor_nmi_release_calls;
-+__u32 kptr_dtor_nmi_setup_err;
-+__u32 kptr_dtor_nmi_nmi_err;
-+__u32 kptr_dtor_nmi_cleanup_err;
-+int kptr_dtor_nmi_setup_errno;
-+int kptr_dtor_nmi_nmi_errno;
-+int kptr_dtor_nmi_cleanup_errno;
-+
-+static void set_err(__u32 *err_dst, int *errno_dst, __u32 err, int err_no)
-+{
-+	if (!*err_dst) {
-+		*err_dst = err;
-+		*errno_dst = err_no;
-+	}
-+}
-+
-+static bool slot_is_live(__u32 slot)
-+{
-+	return kptr_dtor_nmi_live_mask & (1U << slot);
-+}
-+
-+static void mark_slot_live(__u32 slot)
-+{
-+	kptr_dtor_nmi_live_mask |= 1U << slot;
-+}
-+
-+static void clear_slot_live(__u32 slot)
-+{
-+	kptr_dtor_nmi_live_mask &= ~(1U << slot);
-+}
-+
-+static struct kptr_dtor_nmi_value *lookup_hash_value(__u32 slot)
-+{
-+	return bpf_map_lookup_elem(&kptr_dtor_nmi_hash, &slot);
-+}
-+
-+static struct kptr_dtor_nmi_value *lookup_array_value(__u32 slot)
-+{
-+	return bpf_map_lookup_elem(&kptr_dtor_nmi_array, &slot);
-+}
-+
-+static int stash_mask(struct kptr_dtor_nmi_value *value, __u32 slot)
-+{
-+	struct bpf_cpumask *mask, *old;
-+
-+	mask = bpf_cpumask_create();
-+	if (!mask)
-+		return -ENOMEM;
-+
-+	old = bpf_kptr_xchg(&value->mask, mask);
-+	if (old) {
-+		bpf_cpumask_release(old);
-+		return -EEXIST;
-+	}
-+
-+	mark_slot_live(slot);
-+	kptr_dtor_nmi_setup_created++;
-+	return 0;
-+}
-+
-+static bool populate_hash_slot(__u32 slot)
-+{
-+	struct kptr_dtor_nmi_value init = {};
-+	struct kptr_dtor_nmi_value *value;
-+	int err;
-+
-+	err = bpf_map_update_elem(&kptr_dtor_nmi_hash, &slot, &init, BPF_NOEXIST);
-+	if (err) {
-+		set_err(&kptr_dtor_nmi_setup_err,
-+				&kptr_dtor_nmi_setup_errno,
-+				KPTR_DTOR_NMI_SETUP_CREATE_ERR, err);
-+		return false;
-+	}
-+
-+	value = lookup_hash_value(slot);
-+	if (!value) {
-+		set_err(&kptr_dtor_nmi_setup_err,
-+				&kptr_dtor_nmi_setup_errno,
-+				KPTR_DTOR_NMI_SETUP_LOOKUP_ERR, -ENOENT);
-+		return false;
-+	}
-+
-+	err = stash_mask(value, slot);
-+	if (err) {
-+		set_err(&kptr_dtor_nmi_setup_err,
-+				&kptr_dtor_nmi_setup_errno,
-+				KPTR_DTOR_NMI_SETUP_STALE_ERR, err);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+static bool populate_array_slot(__u32 slot)
-+{
-+	struct kptr_dtor_nmi_value *value;
-+	int err;
-+
-+	value = lookup_array_value(slot);
-+	if (!value) {
-+		set_err(&kptr_dtor_nmi_setup_err,
-+				&kptr_dtor_nmi_setup_errno,
-+				KPTR_DTOR_NMI_SETUP_LOOKUP_ERR, -ENOENT);
-+		return false;
-+	}
-+
-+	err = stash_mask(value, slot);
-+	if (err) {
-+		set_err(&kptr_dtor_nmi_setup_err,
-+				&kptr_dtor_nmi_setup_errno,
-+				KPTR_DTOR_NMI_SETUP_STALE_ERR, err);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+static bool clear_hash_slot_from_nmi(__u32 slot)
-+{
-+	struct kptr_dtor_nmi_value *value;
-+	int err;
-+
-+	if (!slot_is_live(slot))
-+		return true;
-+
-+	err = bpf_map_delete_elem(&kptr_dtor_nmi_hash, &slot);
-+	if (!err) {
-+		clear_slot_live(slot);
-+		kptr_dtor_nmi_deleted++;
-+		return true;
-+	}
-+
-+	/*
-+	 * Hash deletes take rqspinlock-backed bucket locks. NMI reentry can lose
-+	 * those acquisitions with -EDEADLK or -ETIMEDOUT even though the slot is
-+	 * still valid, so leave it live and retry on a later NMI.
-+	 */
-+	if (err == -EDEADLK || err == -ETIMEDOUT)
-+		return true;
-+
-+	value = lookup_hash_value(slot);
-+	if (value)
-+		set_err(&kptr_dtor_nmi_nmi_err,
-+				&kptr_dtor_nmi_nmi_errno,
-+				KPTR_DTOR_NMI_DELETE_ERR, err);
-+
-+	return false;
-+}
-+
-+static bool clear_array_slot_from_nmi(__u32 slot)
-+{
-+	struct kptr_dtor_nmi_value init = {};
-+	int err;
-+
-+	if (!slot_is_live(slot))
-+		return true;
-+
-+	err = bpf_map_update_elem(&kptr_dtor_nmi_array, &slot, &init, BPF_EXIST);
-+	if (err) {
-+		set_err(&kptr_dtor_nmi_nmi_err,
-+				&kptr_dtor_nmi_nmi_errno,
-+				KPTR_DTOR_NMI_DELETE_ERR, err);
-+		return false;
-+	}
-+
-+	clear_slot_live(slot);
-+	kptr_dtor_nmi_deleted++;
-+	return true;
-+}
-+
-+static bool cleanup_hash_slot(__u32 slot)
-+{
-+	struct kptr_dtor_nmi_value *value;
-+	struct bpf_cpumask *old = NULL;
-+
-+	value = lookup_hash_value(slot);
-+	if (!value) {
-+		clear_slot_live(slot);
-+		return true;
-+	}
-+
-+	old = bpf_kptr_xchg(&value->mask, old);
-+	if (old) {
-+		bpf_cpumask_release(old);
-+		kptr_dtor_nmi_cleanup_deleted++;
-+	}
-+
-+	if (bpf_map_delete_elem(&kptr_dtor_nmi_hash, &slot) &&
-+	    lookup_hash_value(slot)) {
-+		set_err(&kptr_dtor_nmi_cleanup_err,
-+				&kptr_dtor_nmi_cleanup_errno,
-+				KPTR_DTOR_NMI_CLEANUP_ERR, -EIO);
-+		return false;
-+	}
-+
-+	clear_slot_live(slot);
-+	return true;
-+}
-+
-+static bool cleanup_array_slot(__u32 slot)
-+{
-+	struct kptr_dtor_nmi_value *value;
-+	struct bpf_cpumask *old = NULL;
-+
-+	value = lookup_array_value(slot);
-+	if (!value) {
-+		set_err(&kptr_dtor_nmi_cleanup_err,
-+				&kptr_dtor_nmi_cleanup_errno,
-+				KPTR_DTOR_NMI_CLEANUP_ERR, -ENOENT);
-+		return false;
-+	}
-+
-+	old = bpf_kptr_xchg(&value->mask, old);
-+	if (old) {
-+		bpf_cpumask_release(old);
-+		kptr_dtor_nmi_cleanup_deleted++;
-+	}
-+
-+	clear_slot_live(slot);
-+	return true;
-+}
-+
-+static void populate_hash_masks(void)
-+{
-+	__u32 slot;
-+
-+	for (slot = 0; slot < KPTR_DTOR_NMI_MAX_SLOTS; slot++) {
-+		if (!populate_hash_slot(slot))
-+			return;
-+	}
-+}
-+
-+static void populate_array_masks(void)
-+{
-+	__u32 slot;
-+
-+	for (slot = 0; slot < KPTR_DTOR_NMI_MAX_SLOTS; slot++) {
-+		if (!populate_array_slot(slot))
-+			return;
-+	}
-+}
-+
-+static void clear_hash_masks_from_nmi(void)
-+{
-+	__u32 slot;
-+
-+	for (slot = 0; slot < KPTR_DTOR_NMI_MAX_SLOTS; slot++) {
-+		if (!clear_hash_slot_from_nmi(slot))
-+			return;
-+	}
-+}
-+
-+static void clear_array_masks_from_nmi(void)
-+{
-+	__u32 slot;
-+
-+	for (slot = 0; slot < KPTR_DTOR_NMI_MAX_SLOTS; slot++) {
-+		if (!clear_array_slot_from_nmi(slot))
-+			return;
-+	}
-+}
-+
-+static void cleanup_hash_masks(void)
-+{
-+	__u32 slot;
-+
-+	for (slot = 0; slot < KPTR_DTOR_NMI_MAX_SLOTS; slot++) {
-+		if (!cleanup_hash_slot(slot))
-+			return;
-+	}
-+}
-+
-+static void cleanup_array_masks(void)
-+{
-+	__u32 slot;
-+
-+	for (slot = 0; slot < KPTR_DTOR_NMI_MAX_SLOTS; slot++) {
-+		if (!cleanup_array_slot(slot))
-+			return;
-+	}
-+}
-+
-+SEC("syscall")
-+int populate_kptrs(void *ctx)
-+{
-+	(void)ctx;
-+
-+	switch (kptr_dtor_nmi_map_type) {
-+	case KPTR_DTOR_NMI_MAP_HASH:
-+		populate_hash_masks();
-+		break;
-+	case KPTR_DTOR_NMI_MAP_ARRAY:
-+		populate_array_masks();
-+		break;
-+	default:
-+		set_err(&kptr_dtor_nmi_setup_err,
-+			&kptr_dtor_nmi_setup_errno,
-+			KPTR_DTOR_NMI_SETUP_MAP_ERR, -EINVAL);
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int cleanup_kptrs(void *ctx)
-+{
-+	(void)ctx;
-+
-+	switch (kptr_dtor_nmi_map_type) {
-+	case KPTR_DTOR_NMI_MAP_HASH:
-+		cleanup_hash_masks();
-+		break;
-+	case KPTR_DTOR_NMI_MAP_ARRAY:
-+		cleanup_array_masks();
-+		break;
-+	default:
-+		set_err(&kptr_dtor_nmi_cleanup_err,
-+			&kptr_dtor_nmi_cleanup_errno,
-+			KPTR_DTOR_NMI_CLEANUP_ERR, -EINVAL);
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+SEC("tp_btf/nmi_handler")
-+int BPF_PROG(clear_kptrs_from_nmi, void *handler, void *regs, s64 delta_ns,
-+	     int handled)
-+{
-+	(void)handler;
-+	(void)regs;
-+	(void)delta_ns;
-+	(void)handled;
-+
-+	if (kptr_dtor_nmi_deleted >= kptr_dtor_nmi_setup_created)
-+		return 0;
-+
-+	switch (kptr_dtor_nmi_map_type) {
-+	case KPTR_DTOR_NMI_MAP_HASH:
-+		clear_hash_masks_from_nmi();
-+		break;
-+	case KPTR_DTOR_NMI_MAP_ARRAY:
-+		clear_array_masks_from_nmi();
-+		break;
-+	default:
-+		set_err(&kptr_dtor_nmi_nmi_err,
-+			&kptr_dtor_nmi_nmi_errno,
-+			KPTR_DTOR_NMI_DELETE_ERR, -EINVAL);
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+SEC("fentry/bpf_cpumask_release")
-+int BPF_PROG(count_cpumask_release, struct bpf_cpumask *mask)
-+{
-+	(void)mask;
-+	kptr_dtor_nmi_release_calls++;
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+> On Mon, May 4, 2026 at 9:14 PM <sashiko-bot@kernel.org> wrote:
+
+(...)
+
+>>> diff --git a/net/mptcp/bpf.c b/net/mptcp/bpf.c
+>>> index 8a16672b94e2..4cc16cbeb328 100644
+>>> --- a/net/mptcp/bpf.c
+>>> +++ b/net/mptcp/bpf.c
+>>> @@ -14,7 +14,7 @@
+>>>
+>>>  struct mptcp_sock *bpf_mptcp_sock_from_subflow(struct sock *sk)
+>>>  {
+>>> -     if (sk && sk_fullsock(sk) && sk->sk_protocol == IPPROTO_TCP && sk_is_mptcp(sk))
+>>> +     if (sk && sk_fullsock(sk) && sk_is_tcp(sk) && sk_is_mptcp(sk))
+>>>               return mptcp_sk(mptcp_subflow_ctx(sk)->conn);
+>>
+>> Could this cause a regression by dereferencing a NULL pointer when accessed
+>> concurrently?
+>>
+>> In subflow_ulp_fallback(), icsk->icsk_ulp_data is set to NULL prior to
+>> clearing tcp_sk(sk)->is_mptcp. If a BPF program triggers in this window,
+>> sk_is_mptcp() would return true but mptcp_subflow_ctx(sk) would return NULL,
+>> leading to a NULL pointer dereference.
+
+This would need to be confirmed, but from what I see, that's not a new
+bug introduced by the patch here.
+
+>> Additionally, could ctx->conn be NULL when read here?
+>>
+>> During subflow_ulp_init(), the context is allocated and is_mptcp is set to 1,
+>> but ctx->conn is initially NULL. Passing NULL to mptcp_sk(ctx->conn) triggers
+>> a kernel panic on CONFIG_DEBUG_NET builds. On non-debug builds, it returns a
+>> non-NULL offset pointer, which bypasses BPF verifier NULL checks and causes
+>> invalid memory accesses.
+
+Same here: not a new bug.
+
+>> Could this introduce a regression with a use-after-free of the mptcp_sock
+>> during teardown?
+>>
+>> During subflow_ulp_release(), sock_put(ctx->conn) drops the reference to the
+>> parent mptcp_sock and may free it. However, ctx->conn is not cleared, and the
+>> subflow context remains valid until the RCU grace period ends.
+>>
+>> If a BPF tracing program triggers after sock_put(), could this retrieve
+>> and return the dangling ctx->conn pointer, enabling the BPF program to read
+>> from freed kernel slab memory?
+Same here: not a new bug.
+
+Sashiko is good at finding potential existing bugs that predate a patch,
+which is good, but someone has to fix them :)
+
+Because the issues raised here are not new, I suggest not blocking this
+patch. I will check if someone can look at it quickly.
+
+Cheers,
+Matt
 -- 
-2.53.0
+Sponsored by the NGI0 Core fund.
 
