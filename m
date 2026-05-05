@@ -1,182 +1,186 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E84336C5BB
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 19:09:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B473BFE41
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 19:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.169
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778008195; cv=pass; b=NXc19Kzj7CFT/BVseV+QI3qa4doN2zFWwOJstyUMI04KcT+n94uHwMBy6qh5Li+y9jqh9GDkuKuP2B8yo8x6tVjDsmTzVZn0dZm9YvFtPrTIRozY95Xf2pn69R5irjZlDDu5nwb3FT9axjhK6oDd+s/rMlMYA/t3FiMlLCyi9+U=
+	t=1778008769; cv=pass; b=mmIjyHyaJ5c0piigDVnRuKUry83t43O25SSCdxRWSEoWRTh4+RqH7fl2Q5O7AQPhzPfVb/09p666moa2ecdYLLjR4qV4fTDVLF+PAz18fSEKfn4zPC+0zOr2c+OMfSN5Tvl6BkhUpXbluk+yb3gfyW9r2+8z9T7KsEIoAqs1eTA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778008195; c=relaxed/simple;
-	bh=Bx9gkPPFEl1fePOmnwnlCcaRXiZsz2HzPTFaFk9GHic=;
+	s=arc-20240116; t=1778008769; c=relaxed/simple;
+	bh=OJ/azNTybqYl8mOJ31pbz8g2rYikwtmrBFK0JFJNo5c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DzZAnjzpAa6y+05NgUCEW6yBsQptBGqupZF9wSbBRRzu4GnTyDUxYZHQow/Np+ZIwrcwjfymi1+jsR14nv02bBUkPPsw4ECzVpAfA52QsJYPXEou5y5M2Rfxzk2KaUGFXAyo8bWYVBtmpGl4jkDhBNeJhGzswVJUSZG0ZnsS8BM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mvxXfJ6D; arc=pass smtp.client-ip=209.85.167.42
+	 To:Cc:Content-Type; b=qvTru0LgKwJr1nHmnXRFuns1J0br6fXTR88LNQ6wcEEbL3JueDQau9P+ljKYfqY6CsVTToDjtIxDauwPsija6KHmg2UFEv3Rwt6ImXq8cD02s/tv6NfEWp1BKcRvmoCXG7cK4zku6jcEOl4loZhjLe366MQVVkQuEVnBJXliUXk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KUthnH/v; arc=pass smtp.client-ip=209.85.208.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mvxXfJ6D"
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5a87edf88b3so1363988e87.0
-        for <bpf@vger.kernel.org>; Tue, 05 May 2026 12:09:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778008192; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KUthnH/v"
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-38e7c3a2deaso52343521fa.2
+        for <bpf@vger.kernel.org>; Tue, 05 May 2026 12:19:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778008766; cv=none;
         d=google.com; s=arc-20240605;
-        b=Z8Z5zFWuZ6svVQWUAxR0qnUb8dNz/IIEhwVmYqIxp6v0VTCtiVv8IrwIazDCB4M0+c
-         XuhfXXSt+9ZSzk2MC5+LLssnjRoUXq0C9WEpe3+xSmDBsbkbpjHf4lULR/4KjG/xX7IE
-         KVrHH+joR4cUS2oQCBrx8BA7aJTcECTpm+YbQM3daA9LTMluXpC3LaBC7unyE90lpn49
-         UOl1waZt82Szx0zZ6Tz34rX16QQi3NoEUtRoSzpMpscfEful50IoP8h8lldDXn9gAjMH
-         ofjAts4V6SFjecVIONrVUhU4YmqVcwBjSGH2YX89DIdaFd8WBiZr0hFgQCxzjMJeaZsS
-         0+dQ==
+        b=hDBkWkqsUTDHxcDgCySXDOCroPLRNfYx20GTr4ZY905spjj+6DtfdUHE+Y7hb7CDhm
+         jxCz+7eJFBLKJ+BsTweBM9Iks30CmDx39kS7I9akiKYXmdKKgsEmTOFeV+33MlUxoR6v
+         sZsGB/5dW02BK2aMaQbcmEHAOsaVR8eorhfh8Gy9QRcWcnnJ0AbywmJMYxGmobwtlRjl
+         OsmzkSRxJB1BcttrrQtlJVmsfcEDXc56+I34aFvm59xRHOTcqA4uemZRdiM96YLncRNm
+         xxAyafdSV/iMWruBH5dGcc1VcZYiIW+chrprDb6oiousr+V55PbpRPrA78RtfPm0RvwI
+         tFQQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=r6f5dGGeyzIZr/Pk0ZoSjwO9CpIcEaa4a+69NQ9afqU=;
-        fh=Nsd0F4Tqz99s5KyVzoz1cO2JqxapLWSIRLlLyE50/1A=;
-        b=es1xzWah1DoBLZJph0zeQIBzbDsS7554VDoOq+ArmllJ1EHFEuwLVijvpEoqEBh82/
-         /+Rg5bVCy0iEB/C9kbCjU5ZvkJlmUmT8mM9dnhgFYmdhwGDWgf6jOy/R5jTJvXgii99u
-         6nzvrUoqFTM+V5fYY3dPjQR1K+oBuwwT6tizWUY8/2nwu6vIJKJEXxZkebSJ3KDpfS19
-         Gt9FwG1vOBDJ4zolis7IR6RMdX5aVUAlYxxdvsTnbfaQ1dewG6/qvDHF9vN0DJqpL9Rp
-         tu6s32WwImF+34aCm5B6kXjNBHDoVBHwQ5QP9OslYp81AheMOs9z33NC0ttTjT3XYvBo
-         8o8g==;
+        bh=J2hInhsFpGHxbrTs3e35Gl5nCTj5ZNbvxNvr+9nvuEc=;
+        fh=7pQPbM1mTaKjUbZ75iTISJbipA72wUVZwkXXTYMxzFw=;
+        b=ScrNYOzt8/ZQdeDCzEpS126DtYnZgs7M2TuDNqtnoU/VYbeXGcck6HPheD+rUpij1r
+         7UtHNenaRU2/Bw75regRnDR3Un+EwNB+2ruYjQW5vS0t7Xc9+qmgpKyGwteSfwpfT6UG
+         OdlI5RS0SSUVlVWkRm0twU9yeIADU6QL3cFTbdquUosuo+SgKM9uxjHTh3uxIt0GMemo
+         DAWIEAnFi0EMVbTzoaUs/fKPjLVcbDsAok9mDjWWjuhEbx2MGHCmuNA6Il6esO1Hbo72
+         sBjN0KMTR3JlbmtgeMu0+FXWL0o/RRfE3jGAn279QJJcYRw9U24ziSSotUwB7ORa6zby
+         C6Ug==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778008192; x=1778612992; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778008766; x=1778613566; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=r6f5dGGeyzIZr/Pk0ZoSjwO9CpIcEaa4a+69NQ9afqU=;
-        b=mvxXfJ6DPIdMtmEF4GCWwcPWSizeDTCL+EskQTmsJYfhXnKkXfJDT2yRsi6woiS346
-         QtDu4fh90x5QD4111MTzP3WyjUNknLdGnxvMq4ERR6gRUXsyHLBTjm6c3LrhEEcRP4Fx
-         bjUu8+n6UpxDz6U4Kh6M246QqWr71of4Egd5T1UTFGK58vo8MoIuyh0nU/0vDmhJ/PnK
-         7lHvuXJLgEJE2/MLyMMhZbP/33tmn2mESRvU0kRHHs8ugjwfs0nB5SJBsNvv0e0ehAcs
-         0QHBNnGEvrg+zB+strNjR/GXZzsEBY5fNsyP4GC6ObuMqeLEIMzCfYUa+wLL+a4MDC0s
-         aicg==
+        bh=J2hInhsFpGHxbrTs3e35Gl5nCTj5ZNbvxNvr+9nvuEc=;
+        b=KUthnH/vycmSN/CFJ3WMJOWNIOEiHKET46Wb8meHeH+RYrmaq7w92eLvuzTWI4ocZF
+         tBM0Sy2/RrOadpdrgyFUCmH85UV5zx6dMzCUtgoG+WXrOFJl3U0ruU6mpHJq5s/btcL+
+         Hx+gBrKW7ApZI7JZ8Pv6FbLMFCdpCFwVNn+aTP9iC0juj+Z5zuTvXEtTkKh5R1PwN8k8
+         +vzFUuonFNUemtwgzoCAqxb2D+z+/gEt0ZNWkPuCgzAoWokiu9aMUYmslvqD8juPJ9iJ
+         6vK3C5kT9oqaZLEfdAPHksNKvIdIf1ATD6qXvnyidfFi4OEJsUcfYxjFnHaDuCn9xQoO
+         HNnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778008192; x=1778612992;
+        d=1e100.net; s=20251104; t=1778008766; x=1778613566;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=r6f5dGGeyzIZr/Pk0ZoSjwO9CpIcEaa4a+69NQ9afqU=;
-        b=QhJLk3PlMrwoaqvKrbKyrVm1TFvmw4MftiYqQkRuFG6v0MKgPEAFuUFPV/Bl1/m21y
-         bwtPmVxkKUXfNgbrmNkhImZkWKNzLmkv5SrpMAxUlC7g+naYYM/NuFEZqkPNo41xmI3t
-         jAf6RkFLJe+R02RuQ85Sbbnb8VOpSd7tbCEe2gZfAjjq63Oi3sPNRf8CweVJYh1udVfu
-         3WPh2Q5sglgrx47d+biw116HE8b+/V9JJNVAQhFR5P6Sv7fpr9cyHS2yjqyuwqKYSOPA
-         f3wmv2LqnmBq+FGEtyosDelrGMoVqc/wauD/ngWC18N2O9RTSymWp7gJfBovHyvzX3/o
-         5Icw==
-X-Forwarded-Encrypted: i=1; AFNElJ8mYZZH7E5zbfbEwifoJJUVia56iB1A2twm1QEeV95aSjOdAJlgyBl4WaS7ImoR0PhWlUg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywt5UyeE75ALvsm+HoB9uygOECLueqhVyWKKLv7P0dfxEgdtTVC
-	czmRiMRQhnhRctoi11Cx9aOytTdy9dVvK/fwMarmXcX0pd+GcNd3AvlYgghNxd5RkBVSfcmVCLn
-	UAugV7DWnjSaKmoaW9IOpvSXK2h87Oyc=
-X-Gm-Gg: AeBDievdO8nT2mO2SU5isISahvLwJEqfAVh1mf1n3pCxpff0UIiMYL/TRcvVyXk37w1
-	6At0HqMml9D4QRETB8CpWwz8w06+zEGnyNwbBA5/2yQG8lgildKrDZfXMwMqxy0eNi6I6ghKopA
-	7f9Ovv4yjbAHXVB/jQkG8q6dDg6FCTjBKY0ePP/7GYMti3relHX2ROwW1OBOFxhBqAR75Gqim3w
-	fg2O/9nvgR1qunGr00rmYPxkF66Vq8idwUhtv0DkzYjTQ5BjuaH3A0T7CfQyhpCEZIOb0KrclwR
-	RAhtGgqz58/lXF9sP8Rt9HJQDCoopMHtGNT36VS3meC1e2Sr
-X-Received: by 2002:a05:6512:3c81:b0:5a7:4783:a13a with SMTP id
- 2adb3069b0e04-5a887adfe0cmr13645e87.6.1778008192233; Tue, 05 May 2026
- 12:09:52 -0700 (PDT)
+        bh=J2hInhsFpGHxbrTs3e35Gl5nCTj5ZNbvxNvr+9nvuEc=;
+        b=bJTsstg7ld4+LSNG02psSR9rJ7mGbEa3f5ZgJlHR7j1vgyQa0ZNm0CPl3P4q0KIW1E
+         uTbSZGwxxkL1+gV2syX143kMb6Rpq2szOUOB6xxY/55KLStGT0LUAzL4IfExP7wIca+v
+         nLPy4wHSe0x+jzhh8apveGtCmjUVwDgxCEwyQdeuFEVFB+jQKxRQcXWAYgliLPxBZBS8
+         PghzbVC0JMGxA8rivFBvycouqDO8KbK8GUzqPmASbzGwi9DUAotVuJIxPHLKvjqI4h+J
+         l4qV08iGLgEVOI8wfnaDCfPHrAGUODKPfDyJracN726ao2ssJXlaepUbBW61B19PimaJ
+         2v6w==
+X-Gm-Message-State: AOJu0Yx6yoOanbUxeSC7EzLjXJn+88SyQiN1y4Xs7/ZHvma7KyJUW/61
+	3mMSbOgbKkEi03Qyv7QG+3hBOLFknUBxpfU0Rs6itDTn4wV/tm85gjRbTdTvyNSgFMbIpGxkmas
+	qAJ4j5nPlK9m3UpmKiaYQe3crDgOholBehDId
+X-Gm-Gg: AeBDieumR/ZtiMJm7xCfkjqKydFYChfckE3NR2sR9pTi4LKz/kkkWwzqS7k4e3SDuu+
+	A+k+UefsYvu09rQ+eQDXD/OsGS8c5eIGOBE2r7mIB/+st4IYPLRboeuaPbdzxM/ahWxHYbFlsN3
+	kqQWFZdJkJv/JHu8lmbhy4d3+Za77Vv+oRrU8P0IqUqg/IGJlMYvR6L8BYNoBfZIzRgoYWWllXi
+	epdWfSi//sm4Zgm3w+kdKgnwgFwzZcdJKDag9O9+oF6s6AX4sggXZ0UaEqbpprie/C8u5espbpe
+	hzZGhLA1zYzzDsVr6CslAftSmr2RTYAUBrXfvnmGIAepkFQH
+X-Received: by 2002:a05:6512:124c:b0:5a8:7f4c:8a22 with SMTP id
+ 2adb3069b0e04-5a887cdf0a2mr16191e87.20.1778008765335; Tue, 05 May 2026
+ 12:19:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260502200722.53960-1-kerneljasonxing@gmail.com> <7418a37b-1aff-4b48-80b9-012830e5f9aa@intel.com>
-In-Reply-To: <7418a37b-1aff-4b48-80b9-012830e5f9aa@intel.com>
+References: <20260502200722.53960-2-kerneljasonxing@gmail.com> <20260503200923.7665EC2BCB4@smtp.kernel.org>
+In-Reply-To: <20260503200923.7665EC2BCB4@smtp.kernel.org>
 From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Tue, 5 May 2026 22:09:07 +0300
-X-Gm-Features: AVHnY4Kmshfoum5z54jJolebXkA9r9-UGluPM9tCJdED7bWrAykrbXBKxnxoXaY
-Message-ID: <CAL+tcoBQiEtYaeCECCPkOnWdHD1vGPYbtUEe+RVUPn1j6SEuHw@mail.gmail.com>
-Subject: Re: [PATCH net v5 0/8] xsk: fix bugs around xsk skb allocation
-To: Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
-	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, 
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
-	john.fastabend@gmail.com, horms@kernel.org, andrew+netdev@lunn.ch, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>
+Date: Tue, 5 May 2026 22:18:45 +0300
+X-Gm-Features: AVHnY4Izr1VDOtLcrgCkeA9mksANhIATUkN7CcbB1jdPUEjGd4YL-TtrrNIfxM0
+Message-ID: <CAL+tcoD09aryHzbUTwDMBP1u2fiCDO3MWo3fvsVSK58DG0TvNQ@mail.gmail.com>
+Subject: Re: [PATCH net v5 1/8] xsk: reject sw-csum UMEM binding to
+ IFF_TX_SKB_NO_LINEAR devices
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 5, 2026 at 6:45=E2=80=AFPM Alexander Lobakin
-<aleksander.lobakin@intel.com> wrote:
+On Sun, May 3, 2026 at 11:09=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
-> From: Jason Xing <kerneljasonxing@gmail.com>
-> Date: Sat,  2 May 2026 23:07:14 +0300
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+e(s) to consider:
+> - [High] Unconditional rejection of `XDP_UMEM_TX_SW_CSUM` breaks valid na=
+tive zero-copy configurations.
+> - [High] The root cause of the 'wedged TX ring' remains unaddressed, allo=
+wing trivial userspace triggers.
+> --
 >
-> > From: Jason Xing <kernelxing@tencent.com>
-> >
-> > There are rare issues around xsk_build_skb(). Some of them
-> > were founded by Sashiko[1][2].
+> commit a1862dee263d88bc3b6ca0898f858a88e2e37fce
+> Author: Jason Xing <kerneljasonxing@gmail.com>
 >
-> For the series:
+> xsk: reject sw-csum UMEM binding to IFF_TX_SKB_NO_LINEAR devices
 >
-> Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+> This commit attempts to prevent silent per-packet failures and wedged TX
+> rings when using sw-csum with drivers advertising IFF_TX_SKB_NO_LINEAR.
+> It does so by rejecting the bind operation with -EOPNOTSUPP during setup.
 >
-> Just don't forget to look at Sashiko's replies, I haven't looked deep
-> into them, so can't say whether anything there makes sense.
+> Closes: https://lore.kernel.org/all/20260419045822.843BFC2BCAF@smtp.kerne=
+l.org/#t
+> Fixes: 30c3055f9c0d ("xsk: wrap generic metadata handling onto separate f=
+unction")
+> Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+>
+> > Without the patch, every descriptor carrying 'XDP_TX_METADATA |
+> > XDP_TXMD_FLAGS_CHECKSUM' produces:
+> > 1) a WARN_ONCE "offset (N) >=3D skb_headlen() (0)" from skb_checksum_he=
+lp(),
+> > 2) sendmsg() returning -EINVAL without consuming the descriptor
+> >    (invalid_descs is not incremented),
+> > 3) a wedged TX ring: __xsk_generic_xmit() does not advance the
+> >     consumer on non-EOVERFLOW errors, so the next sendmsg() re-reads
+> >     the same descriptor and re-hits the same WARN until the socket
+> >     is closed.
+>
+> Does this completely resolve the wedged TX ring issue? While this patch
+> prevents skb_checksum_help() from returning -EINVAL, xsk_skb_metadata()
+> can still return -EINVAL for other reasons, such as an out-of-bounds
+> csum_start or csum_offset provided by userspace.
+>
+> If xsk_build_skb() returns -EINVAL, wouldn't __xsk_generic_xmit() still
+> evaluate if (err !=3D -EOVERFLOW) goto out; and break its loop without
+> consuming the descriptor? Might the generic transmit path need to be
+> updated to consume the descriptor and drop the packet on terminal errors
+> like -EINVAL to fully prevent userspace from wedging the ring?
 
-Thanks for the review. I'm currently away from the keyboard because of
-the long vacation. Now I'll handle them one by one in the following
-two days. Hopefully, I can manage it today :P
+I believe we've 'discussed' this before. This is a fresh new and
+pre-existing bug (happending) unrelated to this one. A few days ago,
+thanks to your reminder, it was put on my to-do list.
+
+>
+> > diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+> > index cd7bc50872f6..d981cfdd8535 100644
+> > --- a/net/xdp/xsk_buff_pool.c
+> > +++ b/net/xdp/xsk_buff_pool.c
+> > @@ -175,6 +175,9 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+> >       if (force_zc && force_copy)
+> >               return -EINVAL;
+> >
+> > +     if (pool->tx_sw_csum && (netdev->priv_flags & IFF_TX_SKB_NO_LINEA=
+R))
+> > +             return -EOPNOTSUPP;
+> > +
+>
+> Will this check unconditionally reject valid native zero-copy configurati=
+ons?
+>
+> In native zero-copy mode (when force_zc is set), the transmission path
+> bypasses __xsk_generic_xmit() entirely and processes descriptors natively=
+,
+> meaning it does not use xsk_build_skb_zerocopy() or invoke
+> skb_checksum_help().
+>
+> If a UMEM legitimately has the XDP_UMEM_TX_SW_CSUM flag set (for example,
+> when shared across multiple devices), it appears this will now return
+> -EOPNOTSUPP. Should this check be restricted to only apply when using the
+> generic datapath?
+
+The same topic we 'discussed' before. No one is using the software
+checksum feature on zerocopy mode. People will be warned because of
+wrong usage and then adjust their own codes correspondingly.
 
 Thanks,
 Jason
 
 >
-> >
-> > [1]: https://lore.kernel.org/all/20260415082654.21026-1-kerneljasonxing=
-@gmail.com/
-> > [2]: https://lore.kernel.org/all/20260418045644.28612-1-kerneljasonxing=
-@gmail.com/
-> >
-> > ---
-> > v5
-> > Link: https://lore.kernel.org/all/20260424053816.27965-1-kerneljasonxin=
-g@gmail.com/
-> > 1. reword patch 3
-> > 2. adjust the order of patch 6 that is now moved up to be patch 2)
-> > 3. use helper in patch (Stan)
-> >
-> > v4
-> > Link: https://lore.kernel.org/all/20260422033650.68457-1-kerneljasonxin=
-g@gmail.com/
-> > 1. fix 32-bit arch issue in patch 8 (Alexander && Maciej)
-> > 2. add acked-by tags (Stan)
-> >
-> > v3
-> > Link: https://lore.kernel.org/all/20260420082805.14844-1-kerneljasonxin=
-g@gmail.com/
-> > 1. use !xs->skb as the indicator of first frag in patch 3 (Stan)
-> > 2. move init skb after it's allocated successfully, so patch 4,5,6 have
-> >    been adjusted accordingly (Stan)
-> > 3. do not support 32-bit arch (Stan)
-> > 4. add acked-by tags (Stan)
-> >
-> > v2
-> > Link: https://lore.kernel.org/all/20260418045644.28612-1-kerneljasonxin=
-g@gmail.com/#t
-> > 1. add four patches spotted by sashiko to fix buggy pre-existing
-> > behavior
-> > 2. adjust the order of 8 patches.
-> >
-> >
-> >
-> > Jason Xing (8):
-> >   xsk: reject sw-csum UMEM binding to IFF_TX_SKB_NO_LINEAR devices
-> >   xsk: free the skb when hitting the upper bound MAX_SKB_FRAGS
-> >   xsk: handle NULL dereference of the skb without frags issue
-> >   xsk: fix use-after-free of xs->skb in xsk_build_skb() free_err path
-> >   xsk: prevent CQ desync when freeing half-built skbs in xsk_build_skb(=
-)
-> >   xsk: avoid skb leak in XDP_TX_METADATA case
-> >   xsk: fix xsk_addrs slab leak on multi-buffer error path
-> >   xsk: fix u64 descriptor address truncation on 32-bit architectures
-> >
-> >  net/xdp/xsk.c           | 115 ++++++++++++++++++++++++++--------------
-> >  net/xdp/xsk_buff_pool.c |   3 ++
-> >  2 files changed, 77 insertions(+), 41 deletions(-)
->
-> Thanks,
-> Olek
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260502200722.53=
+960-1-kerneljasonxing@gmail.com?part=3D1
