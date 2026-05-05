@@ -1,93 +1,92 @@
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B473BFE41
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 19:19:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE3830DECE
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 19:27:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778008769; cv=pass; b=mmIjyHyaJ5c0piigDVnRuKUry83t43O25SSCdxRWSEoWRTh4+RqH7fl2Q5O7AQPhzPfVb/09p666moa2ecdYLLjR4qV4fTDVLF+PAz18fSEKfn4zPC+0zOr2c+OMfSN5Tvl6BkhUpXbluk+yb3gfyW9r2+8z9T7KsEIoAqs1eTA=
+	t=1778009228; cv=pass; b=CcM7S6AvqsGgFQfAl4PmQujEZULNu0mfSaj5fUrlm4+zKBwmfBka7g2W7uDn149Mzw0DUKbYpVVKANvkvovxZdEbMLoKqa7Rb3rJ9u4zNHTmdE7ipQmccro413iZomJt0qlEASKEkKfo/H0QKsLegZfi+nK5DxoMbh+oVt52rsY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778008769; c=relaxed/simple;
-	bh=OJ/azNTybqYl8mOJ31pbz8g2rYikwtmrBFK0JFJNo5c=;
+	s=arc-20240116; t=1778009228; c=relaxed/simple;
+	bh=8e0G55xL7HvEe7Whpe/9RNUYBx4esqcy97V/NGtaNmU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qvTru0LgKwJr1nHmnXRFuns1J0br6fXTR88LNQ6wcEEbL3JueDQau9P+ljKYfqY6CsVTToDjtIxDauwPsija6KHmg2UFEv3Rwt6ImXq8cD02s/tv6NfEWp1BKcRvmoCXG7cK4zku6jcEOl4loZhjLe366MQVVkQuEVnBJXliUXk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KUthnH/v; arc=pass smtp.client-ip=209.85.208.169
+	 To:Cc:Content-Type; b=hMdQ/EzD0gBMe4iI4pC5r0na8KGEWLrtI5GxCeG2UYvFMmlsK2j3gDL2i8spUPvx00ICkYzXLoOUpR3QWSClrhinNgBm9YXkz1bWdRkoYzioZlLtKAaP4+Dln4yDa1N8UoNS7o3BdDjAmP9o0KzxHuS8lHqaHL9bjSdESgQ321U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q+URabIX; arc=pass smtp.client-ip=209.85.167.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KUthnH/v"
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-38e7c3a2deaso52343521fa.2
-        for <bpf@vger.kernel.org>; Tue, 05 May 2026 12:19:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778008766; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q+URabIX"
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5a860667fabso4584113e87.0
+        for <bpf@vger.kernel.org>; Tue, 05 May 2026 12:27:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778009224; cv=none;
         d=google.com; s=arc-20240605;
-        b=hDBkWkqsUTDHxcDgCySXDOCroPLRNfYx20GTr4ZY905spjj+6DtfdUHE+Y7hb7CDhm
-         jxCz+7eJFBLKJ+BsTweBM9Iks30CmDx39kS7I9akiKYXmdKKgsEmTOFeV+33MlUxoR6v
-         sZsGB/5dW02BK2aMaQbcmEHAOsaVR8eorhfh8Gy9QRcWcnnJ0AbywmJMYxGmobwtlRjl
-         OsmzkSRxJB1BcttrrQtlJVmsfcEDXc56+I34aFvm59xRHOTcqA4uemZRdiM96YLncRNm
-         xxAyafdSV/iMWruBH5dGcc1VcZYiIW+chrprDb6oiousr+V55PbpRPrA78RtfPm0RvwI
-         tFQQ==
+        b=Ws21ZZ8tj/rpdYC+yHkdh6fS62GpSCZ/5TiS2eHcNosTOBMWmJbUxJXXFi3PHBJWO5
+         qQ602yPZlW7fZoZeLc4ifK/KfCfmdG9HzJRvqUKn8AoMKDEzHw75zdd6Z6gwvu3OsAzN
+         TNiAEvQf03lTT4/Kk45m55uregHbbEzuSJG1Z+XvwR4UzZU4n/3cCi9xaGgHinHEGv3h
+         wGWDd6XqMxMtc8kNwyV0f+wXbrZJOfm2yuDwuqdtiQ5zdmLpY0EJEZOBDp4b63ubSSNX
+         TJkBVpxlb4nMcU6OFVgVkYTOAjZxJ7naO6f4Wic6h63gmqXGTUrD6pPj4QoSUlzGSXvk
+         2Xvw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=J2hInhsFpGHxbrTs3e35Gl5nCTj5ZNbvxNvr+9nvuEc=;
+        bh=YrlYF5xXPgCryFWDSMdpLq3EQMd37IvsrKIsSlr1DBQ=;
         fh=7pQPbM1mTaKjUbZ75iTISJbipA72wUVZwkXXTYMxzFw=;
-        b=ScrNYOzt8/ZQdeDCzEpS126DtYnZgs7M2TuDNqtnoU/VYbeXGcck6HPheD+rUpij1r
-         7UtHNenaRU2/Bw75regRnDR3Un+EwNB+2ruYjQW5vS0t7Xc9+qmgpKyGwteSfwpfT6UG
-         OdlI5RS0SSUVlVWkRm0twU9yeIADU6QL3cFTbdquUosuo+SgKM9uxjHTh3uxIt0GMemo
-         DAWIEAnFi0EMVbTzoaUs/fKPjLVcbDsAok9mDjWWjuhEbx2MGHCmuNA6Il6esO1Hbo72
-         sBjN0KMTR3JlbmtgeMu0+FXWL0o/RRfE3jGAn279QJJcYRw9U24ziSSotUwB7ORa6zby
-         C6Ug==;
+        b=IXoO1/5ZGf3RTSnE8gySCYS5FsXDEXnNrV/kHIrLekPWFhtMvxi0xTs5XMFxT9phBd
+         2K7kFgXKWE+C/ZbyprrkaRfOQ+xP0OkNR8vxnW4hwWpo9z3oO9uSWPBenExMD19lkEd2
+         D4cLyqTAs3RALNsiW6v9SyqGcqxcllsrtAD0ZQccq37aRvXVNutH4478wEfyWSRNgWIK
+         l2oW+vjXsbA0EYPBIjuHy4pbRf3kH5qTiLQ4vQd3hDkhwbcp24AYvgbUTwzT2JNRdrAV
+         zaj9OV8zHzD9bu3px0UoWMzCzTZHOequrUhG6toqkZRY0pMiCs3a221SU6JCC5O8J2N3
+         ZLgA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778008766; x=1778613566; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778009224; x=1778614024; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=J2hInhsFpGHxbrTs3e35Gl5nCTj5ZNbvxNvr+9nvuEc=;
-        b=KUthnH/vycmSN/CFJ3WMJOWNIOEiHKET46Wb8meHeH+RYrmaq7w92eLvuzTWI4ocZF
-         tBM0Sy2/RrOadpdrgyFUCmH85UV5zx6dMzCUtgoG+WXrOFJl3U0ruU6mpHJq5s/btcL+
-         Hx+gBrKW7ApZI7JZ8Pv6FbLMFCdpCFwVNn+aTP9iC0juj+Z5zuTvXEtTkKh5R1PwN8k8
-         +vzFUuonFNUemtwgzoCAqxb2D+z+/gEt0ZNWkPuCgzAoWokiu9aMUYmslvqD8juPJ9iJ
-         6vK3C5kT9oqaZLEfdAPHksNKvIdIf1ATD6qXvnyidfFi4OEJsUcfYxjFnHaDuCn9xQoO
-         HNnA==
+        bh=YrlYF5xXPgCryFWDSMdpLq3EQMd37IvsrKIsSlr1DBQ=;
+        b=q+URabIXqaZBvpcrTYR6pPxThe3Te/5GOITLtx6bP0BrL8URvE8p+8o6nuvxM5VS+T
+         a3kA7JvSvla5jQOSVGa2258XFFQ1GIaOtcifH+5nQqe1m/X65q/HIwJ7dt2egWSdUwvM
+         CnZUmRIJBeiJp3dI2WYYcbBwjmtt3XbcuYfMVCyq+RBvVfsFsVkhsT1evBhsUoJqVCsZ
+         HQcnkbg6mOzop9xU18tASx7wPSPQsoZ30IoJECeAgJD/zHpVUjN2tXKgamhYqibo9ymi
+         xivQnseh8UauMnEZcxTLPqFMFrPrBVTyAvVlg9NSbQxv49tMFYWgh2rCdws/XpY1DW6x
+         MYww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778008766; x=1778613566;
+        d=1e100.net; s=20251104; t=1778009224; x=1778614024;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=J2hInhsFpGHxbrTs3e35Gl5nCTj5ZNbvxNvr+9nvuEc=;
-        b=bJTsstg7ld4+LSNG02psSR9rJ7mGbEa3f5ZgJlHR7j1vgyQa0ZNm0CPl3P4q0KIW1E
-         uTbSZGwxxkL1+gV2syX143kMb6Rpq2szOUOB6xxY/55KLStGT0LUAzL4IfExP7wIca+v
-         nLPy4wHSe0x+jzhh8apveGtCmjUVwDgxCEwyQdeuFEVFB+jQKxRQcXWAYgliLPxBZBS8
-         PghzbVC0JMGxA8rivFBvycouqDO8KbK8GUzqPmASbzGwi9DUAotVuJIxPHLKvjqI4h+J
-         l4qV08iGLgEVOI8wfnaDCfPHrAGUODKPfDyJracN726ao2ssJXlaepUbBW61B19PimaJ
-         2v6w==
-X-Gm-Message-State: AOJu0Yx6yoOanbUxeSC7EzLjXJn+88SyQiN1y4Xs7/ZHvma7KyJUW/61
-	3mMSbOgbKkEi03Qyv7QG+3hBOLFknUBxpfU0Rs6itDTn4wV/tm85gjRbTdTvyNSgFMbIpGxkmas
-	qAJ4j5nPlK9m3UpmKiaYQe3crDgOholBehDId
-X-Gm-Gg: AeBDieumR/ZtiMJm7xCfkjqKydFYChfckE3NR2sR9pTi4LKz/kkkWwzqS7k4e3SDuu+
-	A+k+UefsYvu09rQ+eQDXD/OsGS8c5eIGOBE2r7mIB/+st4IYPLRboeuaPbdzxM/ahWxHYbFlsN3
-	kqQWFZdJkJv/JHu8lmbhy4d3+Za77Vv+oRrU8P0IqUqg/IGJlMYvR6L8BYNoBfZIzRgoYWWllXi
-	epdWfSi//sm4Zgm3w+kdKgnwgFwzZcdJKDag9O9+oF6s6AX4sggXZ0UaEqbpprie/C8u5espbpe
-	hzZGhLA1zYzzDsVr6CslAftSmr2RTYAUBrXfvnmGIAepkFQH
-X-Received: by 2002:a05:6512:124c:b0:5a8:7f4c:8a22 with SMTP id
- 2adb3069b0e04-5a887cdf0a2mr16191e87.20.1778008765335; Tue, 05 May 2026
- 12:19:25 -0700 (PDT)
+        bh=YrlYF5xXPgCryFWDSMdpLq3EQMd37IvsrKIsSlr1DBQ=;
+        b=A+S7NELq8QzoqUqfdwgItP2ZRvy7iqJOmLB4bLDCvXLCBMDuNxlsDIRNTJ1tzpnCrZ
+         dCLbEU0p1wGpFPSztohqE4J6cpZDFr2BMoXt2zKbtutxz4NglRrPr0amoC9NOh9wJ6tp
+         ea3wfVb9l2WHiM60YPWFBvr0sY/PD51P8uaomDS6ceRx2o/Uyoavq1nTPVDA2ohu+BXs
+         eWz888hvKZF7N9Awm4ZzLiwzjZ3AcS0ZuGOCQp9qeTMT3z04rVM3gY/aqSjQLMibimxl
+         6N8xci5Z2jSjgipPhWnJ1eUTbQ4XEi2yirfnGo2nTJ+2Vnj8BZ4ZcO3MWJ6v0UV/ursK
+         X81A==
+X-Gm-Message-State: AOJu0YzwK4NEwdm2vd3kdKP+EmYfDkGbbtdLkTRsqyWSodx3Xt4gAi9X
+	jiwN3cIOHk8ce/eFk6oKqsjPiOsLQK+fdXxJHwF+Fkihy/buRgYhNygmt//UP6fAAXTYBzdho98
+	gVh8RiiMYhh/WJOsG0icUclhOiUva6F0=
+X-Gm-Gg: AeBDiet1YMnuAPuZs+dbJ+Ft7uxTnQCDBmN7VG7hNCPLpKElNqQakB83DhtRBZyq44u
+	A9DxNIB9lcuHf5KVSrwdYLKm03L2u+qhLRGKR3FUztQAM6MxwSCGxo1lLYCmX51rJ34AzDGRwTz
+	mEErrJe7ZnUACvFrzgk/XephVDYuqg6XQnBox7DTP+Km9ggd7fXc4H1FbB/jw+QArqp/EILfjb2
+	A6AhoVy1ONxodRZlFWYZkG39pzb5qXoh+B7PIx1Cp0jrXbvg25ab0NfVuMnSfD19UURBeVKzB3u
+	LmRZgroR10Quzpgj7JSEfna9NL8NR7+dEVtNpU9N6GCEkIb3tX9XmeOjRCw=
+X-Received: by 2002:a05:6512:2309:b0:5a4:b2d:25c0 with SMTP id
+ 2adb3069b0e04-5a887ad8c13mr32293e87.3.1778009224323; Tue, 05 May 2026
+ 12:27:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260502200722.53960-2-kerneljasonxing@gmail.com> <20260503200923.7665EC2BCB4@smtp.kernel.org>
-In-Reply-To: <20260503200923.7665EC2BCB4@smtp.kernel.org>
+References: <20260502200722.53960-3-kerneljasonxing@gmail.com> <20260503200924.4EE32C2BCF4@smtp.kernel.org>
+In-Reply-To: <20260503200924.4EE32C2BCF4@smtp.kernel.org>
 From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Tue, 5 May 2026 22:18:45 +0300
-X-Gm-Features: AVHnY4Izr1VDOtLcrgCkeA9mksANhIATUkN7CcbB1jdPUEjGd4YL-TtrrNIfxM0
-Message-ID: <CAL+tcoD09aryHzbUTwDMBP1u2fiCDO3MWo3fvsVSK58DG0TvNQ@mail.gmail.com>
-Subject: Re: [PATCH net v5 1/8] xsk: reject sw-csum UMEM binding to
- IFF_TX_SKB_NO_LINEAR devices
+Date: Tue, 5 May 2026 22:26:24 +0300
+X-Gm-Features: AVHnY4LbIaAP9el5vDm6d-RIfE6mVNp52XjYBafC8ZxDY6o9lGAyPNzX7cLkfwU
+Message-ID: <CAL+tcoBPNghJT-RTrWSHr9HYvr0QG1p=sL0u+Gm18YU4UE2PvA@mail.gmail.com>
+Subject: Re: [PATCH net v5 2/8] xsk: free the skb when hitting the upper bound MAX_SKB_FRAGS
 To: sashiko@lists.linux.dev
 Cc: bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -95,92 +94,137 @@ Content-Transfer-Encoding: quoted-printable
 
 On Sun, May 3, 2026 at 11:09=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
-> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+> Thank you for your contribution! Sashiko AI review found 3 potential issu=
 e(s) to consider:
-> - [High] Unconditional rejection of `XDP_UMEM_TX_SW_CSUM` breaks valid na=
-tive zero-copy configurations.
-> - [High] The root cause of the 'wedged TX ring' remains unaddressed, allo=
-wing trivial userspace triggers.
+> - [Critical] This problem wasn't introduced by this patch, but returning =
+-EOVERFLOW when xs->skb is NULL leads to an unconditional NULL pointer dere=
+ference in the caller's error path.
+> - [High] Calling kfree_skb(skb) directly on a partially built SKB trigger=
+s the custom XSK destructor, which incorrectly submits the failed descripto=
+r to the AF_XDP completion queue.
+> - [High] This problem wasn't introduced by this patch, but an identical S=
+KB memory leak exists when xsk_skb_metadata() fails.
 > --
 >
-> commit a1862dee263d88bc3b6ca0898f858a88e2e37fce
+> commit cf402952a5ccf9981b4749df15227be947716b0d
 > Author: Jason Xing <kerneljasonxing@gmail.com>
 >
-> xsk: reject sw-csum UMEM binding to IFF_TX_SKB_NO_LINEAR devices
+> xsk: free the skb when hitting the upper bound MAX_SKB_FRAGS
 >
-> This commit attempts to prevent silent per-packet failures and wedged TX
-> rings when using sw-csum with drivers advertising IFF_TX_SKB_NO_LINEAR.
-> It does so by rejecting the bind operation with -EOPNOTSUPP during setup.
+> This patch explicitly adds kfree_skb() before returning -EOVERFLOW to
+> its caller when hitting the MAX_SKB_FRAGS limit on a newly allocated
+> SKB. This prevents the SKB from being permanently leaked.
 >
-> Closes: https://lore.kernel.org/all/20260419045822.843BFC2BCAF@smtp.kerne=
-l.org/#t
-> Fixes: 30c3055f9c0d ("xsk: wrap generic metadata handling onto separate f=
-unction")
-> Acked-by: Stanislav Fomichev <sdf@fomichev.me>
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
->
-> > Without the patch, every descriptor carrying 'XDP_TX_METADATA |
-> > XDP_TXMD_FLAGS_CHECKSUM' produces:
-> > 1) a WARN_ONCE "offset (N) >=3D skb_headlen() (0)" from skb_checksum_he=
-lp(),
-> > 2) sendmsg() returning -EINVAL without consuming the descriptor
-> >    (invalid_descs is not incremented),
-> > 3) a wedged TX ring: __xsk_generic_xmit() does not advance the
-> >     consumer on non-EOVERFLOW errors, so the next sendmsg() re-reads
-> >     the same descriptor and re-hits the same WARN until the socket
-> >     is closed.
->
-> Does this completely resolve the wedged TX ring issue? While this patch
-> prevents skb_checksum_help() from returning -EINVAL, xsk_skb_metadata()
-> can still return -EINVAL for other reasons, such as an out-of-bounds
-> csum_start or csum_offset provided by userspace.
->
-> If xsk_build_skb() returns -EINVAL, wouldn't __xsk_generic_xmit() still
-> evaluate if (err !=3D -EOVERFLOW) goto out; and break its loop without
-> consuming the descriptor? Might the generic transmit path need to be
-> updated to consume the descriptor and drop the packet on terminal errors
-> like -EINVAL to fully prevent userspace from wedging the ring?
-
-I believe we've 'discussed' this before. This is a fresh new and
-pre-existing bug (happending) unrelated to this one. A few days ago,
-thanks to your reminder, it was put on my to-do list.
-
->
-> > diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-> > index cd7bc50872f6..d981cfdd8535 100644
-> > --- a/net/xdp/xsk_buff_pool.c
-> > +++ b/net/xdp/xsk_buff_pool.c
-> > @@ -175,6 +175,9 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
-> >       if (force_zc && force_copy)
-> >               return -EINVAL;
+> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > index 887abed25466..d706b1e0bf60 100644
+> > --- a/net/xdp/xsk.c
+> > +++ b/net/xdp/xsk.c
+> > @@ -856,8 +856,11 @@ static struct sk_buff *xsk_build_skb_zerocopy(stru=
+ct xdp_sock *xs,
+> >       addr =3D buffer - pool->addrs;
 > >
-> > +     if (pool->tx_sw_csum && (netdev->priv_flags & IFF_TX_SKB_NO_LINEA=
-R))
-> > +             return -EOPNOTSUPP;
-> > +
+> >       for (copied =3D 0, i =3D skb_shinfo(skb)->nr_frags; copied < len;=
+ i++) {
+> > -             if (unlikely(i >=3D MAX_SKB_FRAGS))
+> > +             if (unlikely(i >=3D MAX_SKB_FRAGS)) {
+> > +                     if (!xs->skb)
+> > +                             kfree_skb(skb);
 >
-> Will this check unconditionally reject valid native zero-copy configurati=
-ons?
+> Does calling kfree_skb() directly here incorrectly trigger the custom
+> XSK destructor for a dropped packet?
 >
-> In native zero-copy mode (when force_zc is set), the transmission path
-> bypasses __xsk_generic_xmit() entirely and processes descriptors natively=
-,
-> meaning it does not use xsk_build_skb_zerocopy() or invoke
-> skb_checksum_help().
+> Earlier in xsk_build_skb_zerocopy(), the newly allocated SKB is initializ=
+ed
+> via xsk_skb_init_misc(), which explicitly sets skb->destructor =3D
+> xsk_destruct_skb.
 >
-> If a UMEM legitimately has the XDP_UMEM_TX_SW_CSUM flag set (for example,
-> when shared across multiple devices), it appears this will now return
-> -EOPNOTSUPP. Should this check be restricted to only apply when using the
-> generic datapath?
+> When xsk_destruct_skb() runs, it calls xsk_cq_submit_addr_locked(), which
+> erroneously generates a spurious TX completion for userspace and bypasses
+> the queue's cached_prod reservation state, corrupting the completion queu=
+e
+> logic.
+>
+> Should the destructor be cleared first to safely discard the partially
+> built SKB?
+>
+> Note that this regression was fixed later in the patch series by commit
+> 88b75ff1d12b ("xsk: prevent CQ desync when freeing half-built skbs in
+> xsk_build_skb()").
+>
+> This problem wasn't introduced by this patch, but can returning -EOVERFLO=
+W
+> when xs->skb is NULL cause a NULL pointer dereference in the caller's err=
+or
+> path?
 
-The same topic we 'discussed' before. No one is using the software
-checksum feature on zerocopy mode. People will be warned because of
-wrong usage and then adjust their own codes correspondingly.
+It's a very carefully designed order of this series. Without this
+patch the skb is unconditionally leaked (permanent memory loss), which
+is strictly worse than a single spurious CQ completion that userspace
+can handle. Patch 5/8 then eliminates the destructor issue by
+postponing xsk_skb_init_misc() past all error paths.
+
+This is why I move this patch ahead in this version.
+
+>
+> In the caller xsk_build_skb(), the local skb pointer is set to NULL, and
+> execution jumps to the free_err label. Because err =3D=3D -EOVERFLOW, the=
+ error
+> handler unconditionally calls:
+>
+>         xsk_inc_num_desc(xs->skb);
+>         xsk_drop_skb(xs->skb);
+>
+> Since xs->skb is strictly NULL, these functions will immediately derefere=
+nce
+> the NULL pointer via skb_shinfo(NULL) inside xsk_skb_destructor_is_addr()=
+,
+> causing a panic.
+>
+> Note that this regression was fixed later in the patch series by commit
+> 819a57cd3753 ("xsk: handle NULL dereference of the skb without frags
+> issue").
+>
+> This problem wasn't introduced by this patch either, but is there an
+> identical SKB memory leak earlier in this function when xsk_skb_metadata(=
+)
+> fails?
+
+As you noticed, this patch doesn't introduce new bugs at all and the
+following patches take care of it.
+
+>
+> If desc->options & XDP_TX_METADATA is set and xsk_skb_metadata() fails,
+> the function returns ERR_PTR(err) directly without freeing the newly
+> allocated skb:
+>
+>         xsk_skb_init_misc(skb, xs, desc->addr);
+>         if (desc->options & XDP_TX_METADATA) {
+>                 err =3D xsk_skb_metadata(skb, buffer, desc, pool, hr);
+>                 if (unlikely(err))
+>                         return ERR_PTR(err);
+>         }
+>
+> The caller xsk_build_skb() explicitly overrides its local skb pointer to
+> NULL before jumping to free_err, causing this SKB to be permanently leake=
+d.
+>
+> An unprivileged user could trigger this leak by providing malformed
+> metadata, leading to memory exhaustion.
+>
+> Note that this regression was fixed later in the patch series by commit
+> f1079e939977 ("xsk: avoid skb leak in XDP_TX_METADATA case").
+
+Right, it has been fixed...
+
+No action needs to be taken so far.
 
 Thanks,
 Jason
 
 >
+> >                       return ERR_PTR(-EOVERFLOW);
+> > +             }
+>
 > --
 > Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260502200722.53=
-960-1-kerneljasonxing@gmail.com?part=3D1
+960-1-kerneljasonxing@gmail.com?part=3D2
