@@ -1,164 +1,151 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C042DCF57;
-	Tue,  5 May 2026 14:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F193481641
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 15:09:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777991164; cv=none; b=C/DmbEPrrY/5iW3PXaxEJj7GBR8LiBiFmmspCQYHFsaUPgg6Ieu6le/3rLVmmID5R9lSBSggGxvDOJTOeHCUuKTC46trhSjRI/yAo+wh1lh/E19OzTJF0uRREsDkfqx7oriF/QmrxMKAxBi3PNz/g64k6r8aswv7mpJ00YpEY20=
+	t=1777993741; cv=none; b=JqkHy2Odd4KD0lsctUL7cKUaSruud5o7jqzTyNOcEyfcffc/yRisjlqr2MMFjEg0AHZYpOrTg/6aAD7g5t3YkJI9GpRsfsRZnZcx3dFitHdaq3BTUtLMQcabUGnXyzyumxxBWQv2908klCagWe6oTe8GpWbqbw2k0vs4FNbnb0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777991164; c=relaxed/simple;
-	bh=dVMLlvpIsPqrrJ5OGyjATjQGXN8IXebHgRZ82n1YKqE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B09iPv0OF2VTk/I4MTQ45UBIiOUXqfPrFA/h5AQhkRDbiN06kY1VrsX1LektYEBEgMoSlMahlJMhBIGM7JegIM7PIqdYQylS9K6CBAHMHcMrLr4o9em4kg+6Jx3+CkhXWPT4RdjF2nGcwcDhb7hpSsyZUWm8+tCzR+ZQ2HM+6Sk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kCK8AOLU; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1777993741; c=relaxed/simple;
+	bh=ZC53DySwaxNxos0KBspofY8J0bMlu7Ke+z7JIev3reI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mUD1gq3j5f4HqZ2RNZrjHhNrD5UJNiV1ALEtPy+y+Om7HOlN5lpYe+AQsVozPIXofVV3+KjlnWcOkUBR7oC7DXjRjHSQuoYd6UlGxpfonpQc/MBI09zcpB9JnijIjxxsTQHXyVAbnDdx5j+tHwxmliEXq+qeZMsvn0EP02zEhm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i5hFn7ME; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="kCK8AOLU"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6458GFvT3351555;
-	Tue, 5 May 2026 14:25:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=OcbaiP
-	rXeZHYc5M9HkIsXuvWd1b75GWDcR6c1FbMbYw=; b=kCK8AOLUroh6Op3oeyQ3tA
-	kzVZqVy8brV9VXXxeWMe1xe0uegxlWAP7GlX8ovDne5GCGOJ6mN9A3M0+tQFZE20
-	UTAuXEd/hKZHIZs8OG43OgomII2KZKukRUZem/GJs0sfy9YuMQpVUokP8VRGp6vL
-	JYE+nxrBRCmpjDntN+grlI7ctrouR/3JLVJDZB5W5tbJlHV+UI8bCPaHaeHLc8UF
-	TydQHg1610Pfo5WZB90/4C/nUKCa8SmXcog7SJZ71loAJvqR88Kk6S/w+8lgjgWF
-	u2G30tRfEWu8a/MYl7AjhmB16dpF+9ri5gKb0s98DPHx1vLFSdz/DlD+IgM1lFng
-	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9w6bs5k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 May 2026 14:25:06 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 645EOgrs014230;
-	Tue, 5 May 2026 14:25:05 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dwukqa509-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 May 2026 14:25:05 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 645EP1Rl29229442
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 5 May 2026 14:25:01 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A2A3F20043;
-	Tue,  5 May 2026 14:25:01 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0C4A020040;
-	Tue,  5 May 2026 14:25:01 +0000 (GMT)
-Received: from [9.52.200.195] (unknown [9.52.200.195])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  5 May 2026 14:25:00 +0000 (GMT)
-Message-ID: <d272218d-214d-4a13-8f45-dacd3e94f5dd@linux.ibm.com>
-Date: Tue, 5 May 2026 16:25:00 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i5hFn7ME"
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-7991db3dc98so56789557b3.0
+        for <bpf@vger.kernel.org>; Tue, 05 May 2026 08:09:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777993740; x=1778598540; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qxDQRgSzgD4cT5D6+LrkYNQC6yKdhWlfrWk5j0mdxGc=;
+        b=i5hFn7MEbOravMYt+FykyYZEKPeKCePD13Y35QSnalf2uywpeMNs0UkC/wc5pNeb6A
+         ve8TuIFGIscms3GxAtBZwcWqgNE96dvQXP+T+2yC2Y4EQ3UGw7QdNzSANRjl76qgwj6N
+         +RIfJROjIa34dBZXyEvTn94NpuG9iheksXzHKLpgnwWbIduujzfjipe5ZnsnrQuPlqOv
+         qlU9l6BI4vWzENGYb+4+URqBLqvylroMhXKcDv/ggophoP65tZDXewBMJR4CGoEG4uYL
+         hnz3PiAeXbuKioDl19itYai4NWyXeC5PQtnboXrgBf9qG3wVTCkMtYIbTUsUwjP4Miip
+         HqFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777993740; x=1778598540;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qxDQRgSzgD4cT5D6+LrkYNQC6yKdhWlfrWk5j0mdxGc=;
+        b=L2K3gBc2GEPKsfQvqjRXTwIB8gYyV7stz1X2G6BpPe/wOuTJhFuFQOxThkY/pfkOd+
+         dGxsx9cH7n+3QaKUIWYJuptH0k0D+ofybaBYjXV3sLyj7r/2YNPAJM/cVd97ss0olmIB
+         BS+xJn055HoGWVKiIkEk3mO2xGrXFlvX6x8M3fQ6DXO4ciVfcv21BRlTv3En7tjt/fAM
+         QT+If/W2USm3xIBRS6WQ31Xx7R1BJejAanAPDFNceHH4b9Xfm61FcUVfbfJQ9xZG46dV
+         HYfVLaiLABeVgkrGJmbHNfxB6KbC9zZvLxe0wJWY3qzk3TqA5hIftph1hfl2PZl9Tkzi
+         bsNw==
+X-Forwarded-Encrypted: i=1; AFNElJ+W6griLdM8PrPBXba5mGQlcvpDsK4n0z4BMpizmybgIecqiAWVsyIdfXWpxd9F0+WRZSk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlfKdaL6C2Nw4fAPzLH+9XAUA1bKq+UquCsKYGNlZ2z6CJ1m+T
+	2/TVqonFN30oUGDV3SVG+HDFhKxW9uHGgZXW3XB/AxDIc7OmPnjmmM9y
+X-Gm-Gg: AeBDietM5Q4StJ/suawxqiYdYwGJejtQ89XUUTgXFpQS+EwxdYfHSjwvrxHXUWO5ZnL
+	2R1V7y/EthwLsUmCb65+CZgifwxG43yeZz13DOHdg66GFtAsQ7VvwehRKADKAJlqfeni5RLbs5b
+	Zc6qaOhs+n0y+4aEelqLMb8/rzkUQmQYa30bmOFFlsIw8BU0if7U3rF5wSXXRH8AWi7rsj9Q3zz
+	IYiR/2ej6ZUY6mTWH9HLHkpziBY1uAb+lLQBxUIkLIGlC4JMt2T6dfTQsBiYbmcRve4HgQuJFQF
+	SRJ70zykdX61LMp7g5wol5NF1R729TbYWb0Q+KViaL5SLBr8XrMvMIeuZWdUovJe2iCKgC+Y17Q
+	AsnyU1LpboISNDqRQWFWNttdWU9Wmk6CVXpzt9440ngVF28leUw6ZnaczlrdrfiyjiFpyz0954z
+	YrFedAEGuUUo68cGMpPWgH3pujib5gwZclgzuG5wpQPzisRo278bwZYrcl8t0E9cKo+ALc2zUfL
+	GIXfhEd33c=
+X-Received: by 2002:a05:690c:260f:b0:7bd:6129:f255 with SMTP id 00721157ae682-7bd76f7e251mr159851227b3.4.1777993739588;
+        Tue, 05 May 2026 08:08:59 -0700 (PDT)
+Received: from zenbox.prizrak.me ([2600:1700:18fb:6011:2fd9:17ad:6991:cb6c])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd6688d16fsm65061117b3.42.2026.05.05.08.08.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 May 2026 08:08:59 -0700 (PDT)
+From: Justin Suess <utilityemal77@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Cc: martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	bpf@vger.kernel.org,
+	mic@digikod.net,
+	Justin Suess <utilityemal77@gmail.com>
+Subject: [bpf-next v2 0/2] bpf: Fix deadlock in kptr dtor in nmi
+Date: Tue,  5 May 2026 11:08:49 -0400
+Message-ID: <20260505150851.3090688-1-utilityemal77@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 0/6] x86/vdso: VDSO updates and fixes for sframes
-To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        x86@kernel.org, Steven Rostedt <rostedt@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Indu Bhagat <ibhagatgnu@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dylan Hatch <dylanbhatch@google.com>,
-        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Kees Cook <kees@kernel.org>, Sam James <sam@gentoo.org>,
-        Andy Lutomirski <luto@kernel.org>
-Cc: bpf@vger.kernel.org, linux-mm@kvack.org,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Jose E. Marchesi" <jemarch@gnu.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "Carlos O'Donell" <codonell@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
-        "Liam R. Howlett" <liam@infradead.org>,
-        Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
-        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-References: <20260505123340.3770025-1-jremus@linux.ibm.com>
-Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20260505123340.3770025-1-jremus@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=XPQAjwhE c=1 sm=1 tr=0 ts=69f9fdc2 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8
- a=meVymXHHAAAA:8 a=VnNF1IyMAAAA:8 a=0MvmVg10__VCTnNSAJcA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=2JgSa4NbpEOStq-L5dxp:22
-X-Proofpoint-ORIG-GUID: OcluZmLD_x4gMqANWuezmnnGoe4w0tND
-X-Proofpoint-GUID: li-2q0iBa1957f3jFzff7LHFnhy2TzmZ
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA1MDEzNSBTYWx0ZWRfX6Qsc9D8QpNTK
- eVoHxsAXC1MYjkQwzPmUOAQB7ApXGRsFCVGUrUanv9+LtbWXKa8Xs78P+2QBoI1CTlDqq09Gjiz
- oZqcKyVJKtik+oZty+qxqmlj+kMooiyKvLBq+InO1eejVaKGNq7kmyFxN9lSCSsQFrc4dF6RmJM
- ZLddMM8FdmtlaVClPXWPZuFaMqChGvOV0aqCZrB3eWqdvV5q2SYrpm8lyfm+5j0TDhgpvk3sbNX
- W+Zddmf5VVe4Er1Znp8kaceVNpCH5C7lv68OsKF5h8pavFM3mfEi/7YBtcAQ5KrdgqDI5bKQGI/
- RdeauxQ6L2iNSOEYrMkYy6yNVNn4IJ0vz31CtwDVxm+EgcCNB/XWFsrg/UBVQjH9UYxM5/6ryUe
- 7QymP34wcEkCc59eKn2qNka3xSO9ODNF2Ucp6Oi5iOXR0b5fDcoAFRink0RblFi82cdTiW7a9Ys
- no2tKJkXF/og3584JYA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-05_02,2026-04-30_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0 spamscore=0
- priorityscore=1501 impostorscore=0 phishscore=0 malwarescore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605050135
 
-On 5/5/2026 2:33 PM, Jens Remus wrote:
-> This enables generation of SFrame V3 stack trace information for VDSO on
-> x86-64.  It's a continuation of Josh's and Steve's work:
-> 
->    https://lore.kernel.org/all/cover.1737511963.git.jpoimboe@kernel.org/
->    https://lore.kernel.org/all/20250425023750.669174660@goodmis.org/
-> 
-> This series focuses only on the VDSO code. They are helpful fixes
-> and updates that doesn't rely on sframes (although the last patch
-> is sframe related).
-> 
-> This series applies on top of tip:master (a375022d6383):
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git  master
-> 
-> Like the unwind user sframe series [1] it depends on the binutils 2.46
-> release to be used to build the VDSO with SFrame V3 stack trace
-> information (using the assembler option --gsframe-3).
-> 
-> [1]: [PATCH v14 00/19] unwind_deferred: Implement sframe handling,
->     https://lore.kernel.org/all/20260505121718.3572346-1-jremus@linux.ibm.com/
-> 
-> Changes in v10:
-> - Rebased on tip:master (a375022d6383).
-Apologies for the incorrect series version in the cover letter.
+Hello,
 
-Regards,
-Jens
+While following up on a Sashiko report [1], I found that referenced kptr
+destructors can run from NMI context. One way to trigger this is from a
+tracing program attached to tp_btf/nmi_handler while a map element is
+being torn down.
+
+That is problematic because referenced kptr destructor paths are not
+universally NMI-safe. In particular, they may rely on operations such as
+call_rcu(), which can deadlock when reached from NMI context.
+
+This is v2 of the series. The approach from v1 was effectively discarded:
+instead of teaching the broader teardown path about deferred destruction,
+this revision fixes the problem at the referenced-kptr exchange and
+teardown points directly.
+
+This revision is also different from the problematic solution I proposed
+in [2]. The freelist hijacking approach was too brittle and touched
+allocator internals in an unsafe way.
+
+This revision uses a global (percpu) irq work queue and llist.
+
+The core change is to offload destructor execution that originates from
+NMI context. It preallocates offload jobs from the global BPF memory
+allocator, tracks the number of live destructor-backed references so the
+pool stays ahead of NMI frees, and runs the actual destructor from
+irq_work after NMI exits. Non-destructor kptr exchanges keep the fast
+path, while referenced kptr exchanges pay the extra bookkeeping needed to
+guarantee that teardown can be deferred safely.
+
+The second patch adds a dedicated selftest based on the reproducer from
+the report [3]. This utilizes the cpumask bpf kptr instead, to simplify
+the test harness. It exercises both hash and array map cases by creating
+cpumask kptrs and dropping them from an NMI handler, then verifies that
+objects queued from NMI do get their destructors run.
+
+1. bpf: Offload kptr destructors that run from NMI
+2. selftests/bpf: Add kptr destructor NMI exerciser
+
+Kind regards,
+Justin Suess
+
+[1] https://lore.kernel.org/bpf/20260421010536.17FB1C19425@smtp.kernel.org/
+[2] https://lore.kernel.org/bpf/afYLJAT9brXkWxz2@zenbox/
+[3] https://lore.kernel.org/bpf/20260421201035.1729473-1-utilityemal77@gmail.com/
+
+Justin Suess (2):
+  bpf: Offload kptr destructors that run from NMI
+  selftests/bpf: Add kptr destructor NMI exerciser
+
+ include/linux/bpf.h                           |  16 +
+ include/linux/bpf_verifier.h                  |   1 +
+ kernel/bpf/fixups.c                           |  33 +-
+ kernel/bpf/helpers.c                          |  24 +-
+ kernel/bpf/syscall.c                          | 181 ++++++++
+ kernel/bpf/verifier.c                         |   2 +
+ .../selftests/bpf/prog_tests/kptr_dtor_nmi.c  | 259 +++++++++++
+ .../selftests/bpf/progs/kptr_dtor_nmi.c       | 414 ++++++++++++++++++
+ 8 files changed, 915 insertions(+), 15 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/kptr_dtor_nmi.c
+ create mode 100644 tools/testing/selftests/bpf/progs/kptr_dtor_nmi.c
+
+
+base-commit: 2ca6723a5f7b68c739dba47b2639e3eaa7884b09
 -- 
-Jens Remus
-Linux on Z Development (D3303)
-jremus@de.ibm.com / jremus@linux.ibm.com
-
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
+2.53.0
 
