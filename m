@@ -1,108 +1,162 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA9037F8A9
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 12:40:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A6B382F23;
+	Tue,  5 May 2026 12:41:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777984835; cv=none; b=Wo3qm3Aa7WETkapyIMru+tC+OoFx+5DgNUXjH0MhYQFqYURi+zVYfULQTNGIsZZP3cP+XTMp3jGVnGo5Gyuvzz7PHvAEFuIvynU53tPMJ3b1+UeA0zkqlwc0BSnD/Du5IRgvgz2Np0ha4ex5CfEi/vM8ewmcwxwgVYM896JMmG0=
+	t=1777984860; cv=none; b=dgsCXS2SVqQ8AE0QgW5gj5vur3j186u7PdKLArBIfKS4h9N5kVWplpEcc+PvuBnD0HZvgLeqwqn+Zjj+mBBp3idM2DVh41me+iVRRjK/UKrfDvySqJ0fX6ThnSdfDWirvPTUbcUq/qVfqAHu4cPUAd23atOJd+ByULLcSI2qsnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777984835; c=relaxed/simple;
-	bh=EltVhwcSqhbNXlv/OFk0lsNbmYBXcj784F/MlaF4Kyc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Vtlq0V+oK07gkp9JDQw8THXNtnx12nwPsmSO+2AGAsC3MBYPFgtdaT+v3Z/nmucybRBxvTHIcdVusif4oa0onedWxOtCcLQMzHdJ2wJZutOSev3IvkXelESwGAiWq6DHqDIrFf5RPPyPqxHY/g/kOKoXsh2fP4Id/PJrqmQerOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aKB8egic; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777984860; c=relaxed/simple;
+	bh=xSeupnuvJlm1SCUwSLTr6zr3hWRgUFyf0/4uoYJZNaI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=S9Au2SglrDL+8AhNKd/YwG+gIy35pg6TF4W1IWl6nbqcZ2aG7smAe4ihbi7D2lzQwwmeod4+sxbf06bi1Y3Ms5dIxcEdUUwtsjF25GiMle9WDd6tmAx+T3SBSLoGrjgBhAs4wIA9PTADFhYlREIQBzYHzvqzlR0PW4vLaLYCe2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aZgitXAQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aKB8egic"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B339EC2BCB4;
-	Tue,  5 May 2026 12:40:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aZgitXAQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23959C2BCB4;
+	Tue,  5 May 2026 12:40:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777984834;
-	bh=EltVhwcSqhbNXlv/OFk0lsNbmYBXcj784F/MlaF4Kyc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=aKB8egicY0DWoAhLZqh6pr347RAE78rFUxTuIzJ5BxYk5ppY86zp2PQ4PvDuN0+0p
-	 YVaYy+D3tVW6N9l88EFdATM4TwW8jWjqZGKeGOln5typuWLMdN5WCRTkhMvPUNOMjq
-	 I9hjcYV/Sc+G3oAjp/6sJJr+hnnzUdUcHFpfrKWfmojvEtTKwT0YLtEAaLkTVpgRkI
-	 ACGSsw9dXthf9LVBXjSD5Om+oMsNDmpoM3cBMAY2ynvkg1r6QLV7SoYYI9x12QLFaU
-	 IhsTtdoCJF3xLjB4p8+zuvoA60+DgKMdeM0DTTyptjPGSUh8n0d0QrBxDDc0wfnjvX
-	 dwS8iNWIWiNcQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v14 08/19] unwind_user: Stop when reaching an outermost
- frame
-Reply-To: sashiko@lists.linux.dev
-To: "Jens Remus" <jremus@linux.ibm.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260505121718.3572346-9-jremus@linux.ibm.com>
-References: <20260505121718.3572346-9-jremus@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 05 May 2026 12:40:34 +0000
-Message-Id: <20260505124034.B339EC2BCB4@smtp.kernel.org>
+	s=k20201202; t=1777984859;
+	bh=xSeupnuvJlm1SCUwSLTr6zr3hWRgUFyf0/4uoYJZNaI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=aZgitXAQKnW8uvL01qWyAO8epkmapRR+vivO7oPD4fKv9/nkYvrQ+aO/slBm5f88/
+	 QZTDO48wpznV2zMZUJLQ4fxkCKqYciPLGFUf69yd4J8scVI45m1Cc21jAUiTsDTSUz
+	 J8g6LLCuC357F0VkIUPeiPKoFjs20PODZ6jmcw26u+w6eJu7+BXxsDH21QKjK6gCd6
+	 f0aK4gasN5dT0zd+L59XUVA64VNl7JTnZOc2hgy3Lk3xHGSwNIyJb2k8451k4tehkz
+	 IyAQERUtR9xEMDBPHx98qVih9IJW72p62eJ4UtkSnHZxDmt7SBAFAv4MAs4IkEgq5v
+	 fG55DM5de+v/Q==
+Message-ID: <0737c71e-0614-4ecf-9801-a7e71be198d4@kernel.org>
+Date: Tue, 5 May 2026 14:40:56 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v4 2/4] veth: implement Byte Queue Limits (BQL)
+ for latency reduction
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, kernel-team <kernel-team@cloudflare.com>,
+ Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>
+References: <20260501071633.644353-3-hawk@kernel.org>
+ <20260502071828.616C3C19425@smtp.kernel.org>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <20260502071828.616C3C19425@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The newly added `outermost` field in `struct unwind_user_frame` =
-is read uninitialized during SFrame unwinding, which can randomly truncate =
-stack traces.
---
 
-commit 84ee374fd6a62072e8d61545c4ceae42822e4e37
-Author: Jens Remus <jremus@linux.ibm.com>
 
-unwind_user: Stop when reaching an outermost frame
+On 02/05/2026 09.18, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [Critical] Out-of-bounds array access on peer_dev->_tx in veth_poll() when local RX queues exceed peer TX queues.
+> - [High] Disabling XDP permanently stops peer TX queues if they were backpressured (DRV_XOFF leak).
+> --
+> 
+> commit 9bc3ed022846dda6dd5cc131e798f949f63f491f
+> Author: Jesper Dangaard Brouer <hawk@kernel.org>
+> 
+> veth: implement Byte Queue Limits (BQL) for latency reduction
+> 
+> This commit adds byte queue limits support to the veth driver to provide
+> qdiscs with feedback and reduce latency. It charges a fixed unit per
+> packet rather than byte-based charging.
+> 
+>> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+>> index e35df717e65e2..3de25ba34a906 100644
+>> --- a/drivers/net/veth.c
+>> +++ b/drivers/net/veth.c
+> 
+> [ ... ]
+> 
+>> @@ -975,7 +1016,7 @@ static int veth_poll(struct napi_struct *napi, int budget)
+>>   	peer_txq = peer_dev ? netdev_get_tx_queue(peer_dev, queue_idx) : NULL;
+>>   
+>>   	xdp_set_return_frame_no_direct();
+>> -	done = veth_xdp_rcv(rq, budget, &bq, &stats);
+>> +	done = veth_xdp_rcv(rq, budget, &bq, &stats, peer_txq);
+> 
+> Could this lead to an out-of-bounds array access on the peer device's
+> transmit queues?
+> 
+> If a veth pair is configured asymmetrically, the local device might have
+> more receive queues than the peer has transmit queues.
+> 
+> If packets are redirected from another interface into a higher-indexed
+> receive queue, the poll function will run with a queue_idx greater than or
+> equal to peer_dev->real_num_tx_queues.
+> 
+> Since netdev_get_tx_queue() performs a direct array access without bounds
+> checking, peer_txq would point out-of-bounds. This out-of-bounds pointer is
+> then passed into the new veth_xdp_rcv() code paths and accessed by
+> netif_tx_queue_stopped().
+> 
+> Should queue_idx be checked against peer_dev->real_num_tx_queues before
+> fetching the transmit queue?
+Yes, for the XDP redirect code path, which enqueues frames into the
+peer's ptr_ring using smp_processor_id() % peer->real_num_rx_queues
+as the ring index.  Then this is actually possible.
 
-This commit adds an outermost frame indicator to the unwind user frame
-structure, and modifies the unwinder to stop when it is reached.
+It is not a bug introduced in this patchset, but given we access
+peer_txq a bit earlier, then a fix for this is needed as part of this
+patchset. I have prepared a patch that fixes this.
 
-> diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
-> index 1fb2724197332..fdb1001e37505 100644
-> --- a/kernel/unwind/user.c
-> +++ b/kernel/unwind/user.c
-> @@ -32,6 +32,12 @@ static int unwind_user_next_common(struct unwind_user_=
-state *state,
->  {
->  	unsigned long cfa, fp, ra;
-> =20
-> +	/* Stop unwinding when reaching an outermost frame. */
-> +	if (frame->outermost) {
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index e35df717e65e..0cfb19b760dd 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -972,7 +972,8 @@ static int veth_poll(struct napi_struct *napi, int 
+budget)
 
-Could this evaluate uninitialized stack memory during SFrame unwinding?
+         /* NAPI functions as RCU section */
+         peer_dev = rcu_dereference_check(priv->peer, 
+rcu_read_lock_bh_held());
+-       peer_txq = peer_dev ? netdev_get_tx_queue(peer_dev, queue_idx) : 
+NULL;
++       peer_txq = (peer_dev && queue_idx < peer_dev->real_num_tx_queues) ?
++                  netdev_get_tx_queue(peer_dev, queue_idx) : NULL;
 
-In kernel/unwind/user.c, unwind_user_next_sframe() declares the frame
-variable on the stack without zero-initializing it:
 
-unwind_user_next_sframe() {
-        struct unwind_user_frame frame;
-        ...
-        err =3D sframe_find(..., &frame);
-        ...
-        return unwind_user_next_common(state, &frame);
-}
 
-Since sframe_find() does not populate the newly added outermost field at th=
-is
-point in the patch series, frame->outermost contains uninitialized memory
-when checked here.
+> [ ... ]
+> 
+>> @@ -1091,6 +1133,17 @@ static void veth_napi_del_range(struct net_device *dev, int start, int end)
+>>   		ptr_ring_cleanup(&rq->xdp_ring, veth_ptr_free);
+>>   	}
+>>   
+>> +	/* Reset BQL on peer's txqs: remaining ring items were freed above
+>> +	 * without BQL completion, so DQL state must be reset.
+>> +	 */
+>> +	peer = rtnl_dereference(priv->peer);
+>> +	if (peer) {
+>> +		int peer_end = min(end, (int)peer->real_num_tx_queues);
+>> +
+>> +		for (i = start; i < peer_end; i++)
+>> +			netdev_tx_reset_queue(netdev_get_tx_queue(peer, i));
+>> +	}
+> 
+> Does this cleanup leave peer transmit queues permanently stopped if they
+> were backpressured when xdp was disabled?
+> 
+> When the ptr_ring is full, veth_xmit() stops the transmit queue using
+> netif_tx_stop_queue(), which sets the __QUEUE_STATE_DRV_XOFF flag.
+> 
+> While netdev_tx_reset_queue() successfully clears the newly added
+> __QUEUE_STATE_STACK_XOFF flag, it does not clear __QUEUE_STATE_DRV_XOFF.
+> If a queue was backpressured exactly when xdp is disabled, it appears it
+> would remain locked forever.
+> 
+> Would it be appropriate to wake the queues using netif_tx_wake_queue() or
+> explicitly clear the __QUEUE_STATE_DRV_XOFF flag during this cleanup?
 
-If this evaluates to true, does it erroneously set state->done and silently
-truncate stack traces?
+The watchdog timer in this patchset will call netif_tx_wake_queue().
+So, we would recover from this unlikely case.  I guess there is no harm
+in adding a netif_tx_wake_queue() call here (but we should likely guard
+it with netif_running(dev)).
 
-I note that this is fixed later in the series by the commit
-"unwind_user/sframe: Add support for outermost frame indication", but
-introducing the uninitialized read in this commit could break kernel
-bisectability.
+--Jesper
 
-> +		state->done =3D true;
-> +		return 0;
-> +	}
-> +
->  	/* Get the Canonical Frame Address (CFA) */
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260505121718.3572=
-346-1-jremus@linux.ibm.com?part=3D8
