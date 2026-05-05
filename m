@@ -1,264 +1,215 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5BB3AB27A
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 19:49:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35DA026ED41
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 20:15:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778010546; cv=none; b=qoRsqpbin2QfDp/nGpk7n+nEOmqSmPUfspdMsx9LEXudbyJ11qeuW/Q1ZlQA45eBr1Fvhi4LJyMqX6syzJBB187s3DxcX4kgXctiAqFXKc2yALje6wTiCTRKlY+3WvDsTL4n1Nfrpp0Rdniux/v9G2A0i8DMPxnunCviM9nCq8M=
+	t=1778012133; cv=none; b=JjIBwrFVYCo7kd1TqVs9y1yL1g5V3gwU76pIO5fhDqAreKlINvrlypP4bcXX0mOnef8ouKIr/CgcYLNpYTvrE/peOp2isZfMJuJ1RShL0zLqmtNTnG3v/wNc++S2GONmcg4HQ4VchzNatsl0Y32bKwgU5zpPDkoQzfnn015sizw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778010546; c=relaxed/simple;
-	bh=VeFPThJFfd/csWp0ZhdKuiEdkfEO62OKX5hm3f7ZLBk=;
+	s=arc-20240116; t=1778012133; c=relaxed/simple;
+	bh=lRFB10J3W7dkzbx+5UnZQmQXfdmjFmWBTtJDp4+fZsQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=P6nyrR7RggYnzhBXKETSRXFBm8o8QI+bF2Ot6NSyV4Mr71NrvBA5N1X9EuombJLvMVr6mp9ULIl5DyCtgRZ2rZf24fsriQNVt53K2NL+Uu5EKWRIGMigspvR9MVw17+JrBrE2FrK6M6EEfvvtYF1z9FHSD3eIK6C0zWXdjCgbaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JqAeIWDX; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=EtVhAwGMCUoTtx52yzqS6rYZm/FPPxjJNYdpmEkFKRwBlEHdVsOIsuZwsP/unJydejkRmvZr5KW2PsIz1f4138uwCBvLftWzmFliZ80w4CUqcuTu+iQQapizbSrwfodC2JU46ZCl8/WxcaH8gDJeHCGuvZmsJCpv9fysW0MWx0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mhGZjJzq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JqAeIWDX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 536EAC2BCF4;
-	Tue,  5 May 2026 19:49:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mhGZjJzq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1E6AC2BCB4;
+	Tue,  5 May 2026 20:15:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778010546;
-	bh=VeFPThJFfd/csWp0ZhdKuiEdkfEO62OKX5hm3f7ZLBk=;
+	s=k20201202; t=1778012132;
+	bh=lRFB10J3W7dkzbx+5UnZQmQXfdmjFmWBTtJDp4+fZsQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=JqAeIWDXB4GUFtXgFZ92Ta8J+h33R7JmnQZtnY2wiDmVSsoSlfTPQQg8ds5LV2lJR
-	 xKfUAP+K5Dg6ApTjo2SMgSee3z3Tg4GDmNqKF66I2iIcM9nyOb15w+hnLheiEg1sk2
-	 U++Mz/wmOrC1ga22riCWutYSCbbM+AB8Sm1zBwKjCUrR1u9kWirWDMx9XGe9Zrr+hV
-	 QiU0BiSRrDCVf+2977ClR92n+fMNon1Z/SJt08lFmIppaeZYVzCVfWSx9K2J3IAPJ0
-	 aYLfHJMEJ8NOvdKGYEuAQX8j22JWdyyPfBIp3bptD4T+gUbR7w2x5G2gaW+mrq6KQQ
-	 jUPhcztBCWjaw==
+	b=mhGZjJzq/h0f3Tfwq9GBTS7bLovht2OQzLnYs0PPfgmnw3snXMm8VwtCNnUGSY4j2
+	 4M3aODUtu9lQk4inlUBAD1OrnIMDq9ityvih8kEHHlJaPY69TqwPIZ0NWi0dhNcrje
+	 vLHzqcvwM/SMYSkxMryUArYQy/YGwQ4gTVaNdhiP7n9+eV8hGEtVIB7iyd6rU2+dWH
+	 nBxgxGdT7KR4iwFxIXncSGdIs/3rlQEVqMptNzIL02nrzeRDHldi9zKBllaN78C7Im
+	 3Vy9KQBUKKy1raJQ7wc4JPfq+ztsYdT3xoC9CaJ4+0y5FbK8hogbWsIBa+b+HLZkus
+	 k0epZgozH5eaw==
 From: sashiko-bot@kernel.org
-Subject: Re: [bpf-next v2 1/2] bpf: Offload kptr destructors that run from
- NMI
+Subject: Re: [bpf-next v2 2/2] selftests/bpf: Add kptr destructor NMI
+ exerciser
 Reply-To: sashiko@lists.linux.dev
 To: "Justin Suess" <utilityemal77@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260505150851.3090688-2-utilityemal77@gmail.com>
-References: <20260505150851.3090688-2-utilityemal77@gmail.com>
+In-Reply-To: <20260505150851.3090688-3-utilityemal77@gmail.com>
+References: <20260505150851.3090688-3-utilityemal77@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 05 May 2026 19:49:05 +0000
-Message-Id: <20260505194906.536EAC2BCF4@smtp.kernel.org>
+Date: Tue, 05 May 2026 20:15:32 +0000
+Message-Id: <20260505201532.A1E6AC2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
-- [Critical] Multiple concurrent consumers on the lockless `bpf_dtor_kptr_i=
-dle` list cause ABA memory corruption.
-- [High] Unrestricted assignment to `env->insn_aux_data[insn_idx].kptr_has_=
-dtor` causes mismatched JIT patching for subprograms.
-- [High] Time-of-Check to Time-of-Use (TOCTOU) race in `bpf_kptr_offload_in=
-c` under-allocates the job pool.
-- [High] TOCTOU race in `bpf_dtor_kptr_trim` steals jobs from concurrent in=
-sertions, leading to NMI deadlocks.
-- [Medium] Preallocated offload jobs are never trimmed during non-NMI teard=
-own, causing unbounded memory retention.
+- [High] Read-modify-write data race on `kptr_dtor_nmi_live_mask` between s=
+yscall and NMI contexts.
+- [High] Non-atomic increment of `kptr_dtor_nmi_release_calls` in a global =
+fentry hook leads to lost updates.
+- [Medium] API Contract Violation: Incorrect BPF program signature for the =
+`tp_btf/nmi_handler` tracepoint.
+- [Medium] Test flakiness due to reliance on natural RCU grace periods and =
+a misplaced `kern_sync_rcu()` call.
 --
 
-commit 274934ceea98ba86682bc3758a94297eee420620
+commit cb04c2d31ab28ab2b4ff2bbc2cd6c029cabdc851
 Author: Justin Suess <utilityemal77@gmail.com>
 
-bpf: Offload kptr destructors that run from NMI
+selftests/bpf: Add kptr destructor NMI exerciser
 
-A BPF program attached to tp_btf/nmi_handler can delete map entries or
-swap out referenced kptrs from NMI context. This patch introduces an
-offload pool to let a worker invoke destructors after NMI exits.
+Programs attached to tp_btf/nmi_handler can drop refcounted kptrs from
+NMI context by deleting map entries or clearing map values. Add a
+dedicated BPF-side selftest program that populates hash and array maps
+with cpumask kptrs and clears them again from the NMI handler.
 
-Closes: https://lore.kernel.org/bpf/20260421201035.1729473-1-utilityemal77@=
-gmail.com/
-
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 3b1f0ba02f613..162bfd4796ea0 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-
-[ ... ]
-
-> @@ -65,6 +68,131 @@ static DEFINE_SPINLOCK(map_idr_lock);
+> diff --git a/tools/testing/selftests/bpf/prog_tests/kptr_dtor_nmi.c b/too=
+ls/testing/selftests/bpf/prog_tests/kptr_dtor_nmi.c
+> index 0000000000000..a1aa8b6646b36
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/kptr_dtor_nmi.c
 
 [ ... ]
 
-> +static struct bpf_dtor_kptr_work *bpf_dtor_kptr_pop_idle(void)
-> +{
-> +	struct llist_node *node;
-> +
-> +	node =3D llist_del_first(&bpf_dtor_kptr_idle);
-> +	if (!node)
-> +		return NULL;
-> +
-> +	return llist_entry(node, struct bpf_dtor_kptr_work, node);
-> +}
-
-Is this susceptible to an ABA issue resulting in list corruption?
-
-The llist_del_first() function is strictly single-consumer because it lacks
-ABA protection. Here, bpf_dtor_kptr_pop_idle() is accessed concurrently by
-multiple consumers: bpf_dtor_kptr_offload() running in NMI context across
-multiple CPUs, and bpf_dtor_kptr_trim() running in irq_work context.
-
-If CPU 0 begins popping a node, is interrupted, and CPU 1 pops and re-pushes
-nodes, could CPU 0's cmpxchg succeed but set the list head to a stale or
-freed next pointer?
-
-[ ... ]
-
-> +static void bpf_dtor_kptr_trim(void)
-> +{
-> +	struct bpf_dtor_kptr_work *job;
-> +	long total;
-> +	long needed;
-> +
-> +	for (;;) {
-> +		total =3D atomic_long_read(&bpf_dtor_kptr_total);
-> +		needed =3D atomic_long_read(&bpf_dtor_kptr_refs) +
-> +			 atomic_long_read(&bpf_dtor_kptr_active);
-> +		if (total <=3D needed)
-> +			return;
-> +
-> +		job =3D bpf_dtor_kptr_pop_idle();
-> +		if (!job)
-> +			return;
-> +
-> +		if (!atomic_long_try_cmpxchg(&bpf_dtor_kptr_total, &total, total - 1))=
- {
-> +			bpf_dtor_kptr_push_idle(job);
-> +			continue;
-> +		}
-
-Can a concurrent bpf_kptr_offload_inc() cause this to violate the
-total >=3D refs + active invariant?
-
-If bpf_dtor_kptr_trim() reads needed, and then another CPU increments refs
-in bpf_kptr_offload_inc():
-
-CPU1
-bpf_dtor_kptr_trim()
-   needed =3D refs + active;
-
-CPU2
-bpf_kptr_offload_inc()
-   atomic_long_inc_return(&bpf_dtor_kptr_refs);
-   bpf_dtor_kptr_reserve() observes the old high total and skips allocation
-
-CPU1 would see the cmpxchg succeed because total hasn't changed, successful=
-ly
-freeing the job. Does this lead to an empty idle list when the kptr is later
-freed in an NMI?
-
-[ ... ]
-
-> +int bpf_kptr_offload_inc(void)
-> +{
-> +	long needed;
-> +	int err;
-> +
-> +	if (unlikely(!bpf_global_ma_set))
-> +		return -ENOMEM;
-> +
-> +	/*
-> +	 * Read active before incrementing refs so a free path moving one slot =
-from
-> +	 * refs to active cannot shrink the reservation snapshot below the stea=
-dy
-> +	 * state we need to cover. Racing results worst case in a larger reserv=
-ation.
-> +	 */
-> +	needed =3D atomic_long_read(&bpf_dtor_kptr_active);
-> +	needed +=3D atomic_long_inc_return(&bpf_dtor_kptr_refs);
-> +	err =3D bpf_dtor_kptr_reserve(needed);
-
-Could an NMI interrupting this sequence result in under-allocating the job
-pool?
-
-If an NMI free occurs precisely after active is read but before refs is
-incremented:
-
-CPU1
-bpf_kptr_offload_inc()
-   needed =3D atomic_long_read(&bpf_dtor_kptr_active);
-   // NMI interrupts CPU1
-   bpf_dtor_kptr_offload()
-      atomic_long_inc(&bpf_dtor_kptr_active);
-      // pops job
-   bpf_kptr_offload_dec()
-      atomic_long_dec(&bpf_dtor_kptr_refs);
-   // NMI exits
-   needed +=3D atomic_long_inc_return(&bpf_dtor_kptr_refs);
-
-In this scenario, needed is calculated with the old active value and the new
-refs value, making it 1 less than the true requirement. Would a subsequent
-NMI free encounter an empty job list?
-
-[ ... ]
-
-> +void bpf_kptr_offload_dec(void)
-> +{
-> +	long val;
-> +
-> +	val =3D atomic_long_dec_return(&bpf_dtor_kptr_refs);
-> +	if (!WARN_ON_ONCE(val < 0))
-> +		return;
-> +
-> +	/*
-> +	 * Clamp a mismatched decrement back to zero without overwriting a
-> +	 * concurrent increment that already repaired the counter.
-> +	 */
-> +	do {
-> +		val =3D atomic_long_read(&bpf_dtor_kptr_refs);
-> +		if (val >=3D 0)
-> +			break;
-> +	} while (!atomic_long_try_cmpxchg(&bpf_dtor_kptr_refs, &val, 0));
-> +}
-
-When kptrs are deleted from normal process or softirq contexts, does this c=
-ode
-cause unbounded memory retention?
-
-Since bpf_dtor_kptr_trim() is exclusively invoked by the irq_work worker
-during NMI teardown, the global idle list might never be trimmed for non-NMI
-teardowns. This could cause the pool memory to stay at the high-water mark =
-of
-concurrent kptrs indefinitely.
-
-[ ... ]
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 11054ad89c14d..2c7b21bda666a 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-> @@ -9950,6 +9950,8 @@ static int check_helper_call(struct bpf_verifier_en=
-v *env, struct bpf_insn *insn
->  		if (err)
->  			return err;
->  	}
-> +	env->insn_aux_data[insn_idx].kptr_has_dtor =3D
-> +		func_id =3D=3D BPF_FUNC_kptr_xchg && !!meta.kptr_field->kptr.dtor;
+> @@ -193,12 +193,12 @@ static void run_kptr_dtor_nmi_case(const struct kpt=
+r_dtor_nmi_case *test)
+>  			       "kptr_dtor_nmi_setup_created"))
+>  			goto cleanup;
 > =20
->  	err =3D record_func_map(env, &meta, func_id, insn_idx);
->  	if (err)
+>  		if (!wait_for_nmi_drain(skel, expected_total, expected_total))
+>  			goto cleanup;
+> =20
+>  		kern_sync_rcu();
 
-Does this unrestricted assignment cause mismatched JIT patching for subprog=
-rams?
+Is it possible for the test to flake here due to relying on the natural
+background RCU grace period?
 
-If a BPF static subprogram contains a bpf_kptr_xchg instruction and is call=
-ed
-twice by the main program - once with a map containing a destructor kptr,
-and once without - the verifier will simulate the subprogram twice. The
-second pass will blindly overwrite kptr_has_dtor for that instruction.
+For hash maps, deleted elements are freed and their kptrs are destructed via
+RCU callbacks, which increment the release calls counter. The
+wait_for_nmi_drain() loop waits for up to 5 seconds for this counter to hit
+the target, but we only force an RCU grace period with kern_sync_rcu() after
+the wait loop completes.
 
-If the last simulated path had no destructor, the JIT patches the instructi=
-on
-to bpf_kptr_xchg_nodtor. At runtime, would the path with a destructor execu=
-te
-this un-instrumented variant, skipping bpf_kptr_offload_inc() and causing
-an NMI deadlock when freed?
+Under heavy system load, could the natural grace period take longer than
+5 seconds and cause the wait loop to time out?
+
+>  	}
+> =20
+>  	if (!run_syscall_prog(skel->progs.cleanup_kptrs, "cleanup_kptrs"))
+>  		goto cleanup;
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/kptr_dtor_nmi.c b/tools/te=
+sting/selftests/bpf/progs/kptr_dtor_nmi.c
+> index 0000000000000..1ab5951a7a223
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/kptr_dtor_nmi.c
+
+[ ... ]
+
+> @@ -66,15 +66,15 @@ static void set_err(__u32 *err_dst, int *errno_dst, _=
+_u32 err, int err_no)
+>  static bool slot_is_live(__u32 slot)
+>  {
+>  	return kptr_dtor_nmi_live_mask & (1U << slot);
+>  }
+> =20
+>  static void mark_slot_live(__u32 slot)
+>  {
+>  	kptr_dtor_nmi_live_mask |=3D 1U << slot;
+>  }
+> =20
+>  static void clear_slot_live(__u32 slot)
+>  {
+>  	kptr_dtor_nmi_live_mask &=3D ~(1U << slot);
+>  }
+
+Can this sequence cause updates to the live mask to be lost?
+
+Since kptr_dtor_nmi_live_mask is updated using non-atomic bitwise operation=
+s,
+if an NMI interrupts the syscall program exactly between the load and store
+instructions of mark_slot_live():
+
+syscall context (mark_slot_live)
+    loads kptr_dtor_nmi_live_mask
+    <NMI interrupts>
+
+NMI context (clear_slot_live)
+    loads, clears bit, stores kptr_dtor_nmi_live_mask
+
+syscall context resumes
+    stores modified mask, overwriting the NMI's cleared bit
+
+If this happens, the NMI handler on subsequent runs will encounter an
+already-deleted slot, fail with -ENOENT, and permanently abort the loop.
+Should these updates use atomic builtins like __sync_fetch_and_or()?
+
+> =20
+>  static struct kptr_dtor_nmi_value *lookup_hash_value(__u32 slot)
+
+[ ... ]
+
+> @@ -375,12 +375,12 @@ int cleanup_kptrs(void *ctx)
+>  		break;
+>  	}
+> =20
+>  	return 0;
+>  }
+> =20
+>  SEC("tp_btf/nmi_handler")
+>  int BPF_PROG(clear_kptrs_from_nmi, void *handler, void *regs, s64 delta_=
+ns,
+>  	     int handled)
+>  {
+>  	(void)handler;
+
+Does this signature match the kernel tracepoint for nmi_handler?
+
+The nmi_handler tracepoint in the kernel has exactly 3 arguments: handler,
+delta_ns, and handled. By including a regs parameter here, the BPF_PROG
+macro maps delta_ns to ctx[1] and handled to ctx[3].
+
+Since the actual context size is 3 elements, accessing handled would read
+out-of-bounds. Should the regs parameter be removed to match the tracepoint?
+
+>  	(void)regs;
+>  	(void)delta_ns;
+
+[ ... ]
+
+> @@ -402,10 +402,10 @@ int BPF_PROG(clear_kptrs_from_nmi, void *handler, v=
+oid *regs, s64 delta_ns,
+>  		break;
+>  	}
+> =20
+>  	return 0;
+>  }
+> =20
+>  SEC("fentry/bpf_cpumask_release")
+>  int BPF_PROG(count_cpumask_release, struct bpf_cpumask *mask)
+>  {
+>  	(void)mask;
+>  	kptr_dtor_nmi_release_calls++;
+>  	return 0;
+>  }
+
+Could concurrent global calls to bpf_cpumask_release() cause lost updates
+to this counter?
+
+This fentry hook traces the function globally across all CPUs. The counter
+is incremented non-atomically, which translates to a load-add-store
+sequence. If bpf_cpumask_release is executed concurrently on multiple CPUs
+(e.g., when running selftests in parallel), these increments can race.
+
+If an increment generated by the test itself is lost, the test will fall
+short of expected_release_calls, causing wait_for_nmi_drain() to hang and
+time out. Should this use __sync_fetch_and_add() instead?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260505150851.3090=
-688-1-utilityemal77@gmail.com?part=3D1
+688-1-utilityemal77@gmail.com?part=3D2
