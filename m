@@ -1,130 +1,147 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F7D4A3415
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 18:22:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF3E4A33E9
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 18:22:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778005377; cv=none; b=dibOSMuJp8PC/XJ8KN1VNe9Lw3bv4qcdubRLJBir2S30KdF1yBjGZOcWlOk/kFHpvlsRVc75ZQg6+FfGQ5HsByT1cpzcfV75ezFgBuGUVQT/z2xn+xBNbJEP9XS/8jExvq0X6+pTQ9lhMeW3OHzv1pATzwsGPuWoEUyikmuldNs=
+	t=1778005377; cv=none; b=spYy6Kdw2LhdLan5bk6N324Ka0DR1Wqv2Rs9r03pA06JV6rSF1VzzxSmZbDqAifFdizTmkB47v07XQcvOFG64Jhif5nkjf8USrsDvUDDnsycWpVIJBj80xZ8BXQQmXdTBNtTgwnqhYfTc/y/Yqsm0CiZYpLi8xeDdlGiKC8lmic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1778005377; c=relaxed/simple;
-	bh=fpStNQfSPwP0jLhlomZz2huYkcvpiec7S3ugAJxK4Ig=;
+	bh=MVvbWbiiSz15cUD6cd8+miXl8wjF+MmYskV1CskrZGo=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ijVJjdJxn4kWmHDp93ucI9amoaWmCD/AFtQGPv/YHjVL/zPGHRzX218aA0L2ybtg5ooSBJqjNKsJhnwpajZQXT2Q8L5q+Ne1hIbLfRivOZfZujewN2QvN/9uoSFJ9ZNjkAXddw+W44aCSgS2fQ+7KQXdqwZMkhX0wEminodTQEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oB7wZcRF; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=kQ/QUV5fSDyOTkYM7fz+y+S6Edq5NwUiHlvK1oruIlFbDPAAUQeuwPj6466WwBFRnAQd+t3aRGMnFriSEAhHAfC4lqvNUKgj6VH73kPxlPIr0tFrnhKDjtcDdP6FbNKcPQZmFv2/nmhZhfm5cwqL3WoD1B7s9/JCwF9UNY7p7Ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ux0aBu/h; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oB7wZcRF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A54BCC2BCB4;
-	Tue,  5 May 2026 18:22:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ux0aBu/h"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 623CAC2BCB4;
+	Tue,  5 May 2026 18:22:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778005376;
-	bh=fpStNQfSPwP0jLhlomZz2huYkcvpiec7S3ugAJxK4Ig=;
+	s=k20201202; t=1778005377;
+	bh=MVvbWbiiSz15cUD6cd8+miXl8wjF+MmYskV1CskrZGo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=oB7wZcRF+mv+b0YDPdTPWNpgXHmDXbL6rVemjAcdreuC3X25Mvu1pw1LbTK6FrFv3
-	 tSAgiCO+MRnhFHhjIIiXfJjzMnFTBNtdE6MAzilYIUIYIgn+UEMFZYaZe8bBx0vWaY
-	 Ocs2EvgJ31cYYZjrtXtUr40RZMsyuEZjsCoen3MgOEdrNtlFVjz/351DAFbI6SYJFc
-	 6bzVUAT9mxGO2ZXNmR0vZqXR5qQDjITmg4uprX5FpHLseMtBirolKiawldbHfjrBxe
-	 rotZAZVLW0x8p+oiQgQJQGe2f7Metb+rlcia1FYdVny8HEvNmQFSUt8oS9sMdFu+eb
-	 YrPqzP4dPWzTA==
+	b=ux0aBu/hkEUez428Og82S0PUq5aRal6PyRnfTLvyWXI/a0m5q3Oir9VXyVyHkHPJh
+	 UrgudmCpkT8PdGmf1RGkymUj4NNs7J6uxgQrQlTEQlgvzfME10AzVAbVt+QZwTZAZz
+	 QoGmh8TYHdHUkpPZdWSOQcj27oU02clcuHsGisFYxIFdjsHwQeZKSziThJoUGvXbJN
+	 8dQjKOCe2oAIVSEkwTtCF3ELjcM5Ai1PydFyWbyb9Kf8aOjKCjCD9cz3rRD3mhJxT6
+	 PLpHiwkkyTIbok38GTvZhQ8qOgtChrJToCCRtcNHecxMA8g8OCMJDPg4Su6nMaQpx5
+	 JH+EHQNQmUwpg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3 05/13] net: lan966x: export FDMA helpers for
- reuse
+Subject: Re: [PATCH net-next v3 06/13] net: lan966x: add FDMA ops dispatch
+ for PCIe support
 Reply-To: sashiko@lists.linux.dev
 To: "Daniel Machon" <daniel.machon@microchip.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260504-lan966x-pci-fdma-v3-5-a56f5740d870@microchip.com>
-References: <20260504-lan966x-pci-fdma-v3-5-a56f5740d870@microchip.com>
+In-Reply-To: <20260504-lan966x-pci-fdma-v3-6-a56f5740d870@microchip.com>
+References: <20260504-lan966x-pci-fdma-v3-6-a56f5740d870@microchip.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Tue, 05 May 2026 18:22:56 +0000
-Message-Id: <20260505182256.A54BCC2BCB4@smtp.kernel.org>
+Message-Id: <20260505182257.623CAC2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Critical] Data race and Use-After-Free during driver teardown due to loc=
-kless state modification and incorrect ordering
-- [High] Unsafe DMA teardown due to ignored timeout in lan966x_fdma_tx_disa=
-ble() and lan966x_fdma_rx_disable()
+- [High] Teardown asymmetry in `lan966x_remove()` frees FDMA memory before =
+network devices are unregistered, creating a UAF window.
+- [High] Premature network device registration exposes the interface before=
+ FDMA structures are allocated.
+- [High] If `fdma_init()` fails during probe, the NAPI context is deleted w=
+hile still enabled, violating networking subsystem rules.
 --
 
-commit d9b72843e1c15f3261008784be970a31341a866d
+commit 26b4dc8869b3940c369a8ef84d983f66881dd6b2
 Author: Daniel Machon <daniel.machon@microchip.com>
 
-net: lan966x: export FDMA helpers for reuse
+net: lan966x: add FDMA ops dispatch for PCIe support
 
-Make shared FDMA helpers non-static, so they can be reused by the PCIe
-FDMA implementation.
+Introduce lan966x_fdma_ops to support different FDMA implementations
+for platform and PCIe. Plumb fdma_init, fdma_deinit, fdma_xmit,
+fdma_poll and fdma_resize through the ops table, and select the
+implementation at probe time based on runtime PCI bus detection.
 
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/driv=
-ers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> index 6c5761e886d47..25e673bdf0841 100644
-> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-[ ... ]
-> @@ -171,7 +171,7 @@ static void lan966x_fdma_rx_start(struct lan966x_rx *=
-rx)
->  		lan966x, FDMA_CH_ACTIVATE);
->  }
-> =20
-> -static void lan966x_fdma_rx_disable(struct lan966x_rx *rx)
-> +void lan966x_fdma_rx_disable(struct lan966x_rx *rx)
->  {
->  	struct lan966x *lan966x =3D rx->lan966x;
->  	struct fdma *fdma =3D &rx->fdma;
-
-This isn't a bug introduced in this patch, but exporting this function
-exposes an existing issue.
-
-Does this code handle hardware timeouts safely? Looking at the implementati=
-on
-of lan966x_fdma_rx_disable(), the return value of readx_poll_timeout_atomic=
-()
-is ignored:
-
-    readx_poll_timeout_atomic(lan966x_fdma_channel_active, lan966x,
-                              val, !(val & BIT(fdma->channel_id)),
-                              READL_SLEEP_US, READL_TIMEOUT_US);
-
-If the hardware is unresponsive and the poll times out, the driver might
-falsely assume the channel is halted and proceed to alter hardware state.
-
-If the caller later frees the coherent DMA rings while the DMA engine is
-still active, could this lead to memory corruption or IOMMU faults?
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/driv=
+ers/net/ethernet/microchip/lan966x/lan966x_main.c
+> index 47752d3fde0b1..9f69634ebb0ae 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
 
 [ ... ]
-> @@ -265,7 +265,7 @@ static void lan966x_fdma_tx_activate(struct lan966x_t=
-x *tx)
->  		lan966x, FDMA_CH_ACTIVATE);
->  }
+
+> @@ -1232,7 +1247,7 @@ static int lan966x_probe(struct platform_device *pd=
+ev)
+>  	if (err)
+>  		goto cleanup_fdb;
 > =20
-> -static void lan966x_fdma_tx_disable(struct lan966x_tx *tx)
-> +void lan966x_fdma_tx_disable(struct lan966x_tx *tx)
->  {
->  	struct lan966x *lan966x =3D tx->lan966x;
->  	struct fdma *fdma =3D &tx->fdma;
+> -	err =3D lan966x_fdma_init(lan966x);
+> +	err =3D lan966x->ops->fdma_init(lan966x);
 
-This is another pre-existing issue exposed by exporting these helpers.
+While reviewing this refactor, I noticed an existing issue regarding the
+initialization order. Earlier in the probe sequence, the driver loops over
+child nodes and calls lan966x_probe_port(), which executes register_netdev(=
+).
 
-The same ignored timeout issue from readx_poll_timeout_atomic() exists
-here in lan966x_fdma_tx_disable().
+Once register_netdev() returns, the network device is fully visible to the
+system and transmission can be initiated.
 
-Additionally, is it safe to modify tx->activated without holding the
-lan966x->tx_lock?
+However, the FDMA memory arrays (like tx.dcbs_buf) are not allocated until
+lan966x->ops->fdma_init(lan966x) is called here.
 
-Looking at the driver teardown path, lan966x_remove() appears to call
-lan966x->ops->fdma_deinit() (which calls lan966x_fdma_tx_disable() and frees
-the DMA rings) before lan966x_cleanup_ports() unregisters the netdev.
+If a packet is sent between register_netdev() and fdma_init(), could
+lan966x->ops->fdma_xmit() execute and dereference the unallocated tx->dcbs_=
+buf
+array?
 
-If the network interface is up and actively transmitting during module
-removal, could the networking stack concurrently call lan966x_port_xmit(),
-acquire tx_lock, and write to tx->fdma.dcbs while it is being freed,
-resulting in a use-after-free?
+Additionally, if lan966x->ops->fdma_init() fails, the error path jumps to
+cleanup_ptp. This explicitly bypasses cleanup_fdma and skips
+lan966x->ops->fdma_deinit().
+
+Since NAPI is enabled early inside lan966x_probe_port() via
+lan966x_fdma_netdev_init(), and fdma_deinit() (which contains the
+napi_disable() call) is skipped, the NAPI context remains active.
+
+The error path then proceeds to lan966x_cleanup_ports(), which ultimately
+calls netif_napi_del().
+
+Can deleting an active NAPI context without disabling it first lead to cras=
+hes
+if the background polling task is concurrently scheduled?
+
+>  	if (err)
+>  		goto cleanup_ptp;
+
+[ ... ]
+
+> @@ -1273,7 +1288,7 @@ static void lan966x_remove(struct platform_device *=
+pdev)
+> =20
+>  	lan966x_taprio_deinit(lan966x);
+>  	lan966x_vcap_deinit(lan966x);
+> -	lan966x_fdma_deinit(lan966x);
+> +	lan966x->ops->fdma_deinit(lan966x);
+
+There also appears to be a similar pre-existing issue here during teardown.
+
+lan966x->ops->fdma_deinit() cleanly frees the FDMA RX/TX structures, but the
+network interfaces are still active because lan966x_cleanup_ports() (which
+unregisters the netdevs) has not executed yet.
+
+During this window, if userspace or the network stack triggers a transmissi=
+on,
+lan966x_port_xmit() will see port->lan966x->fdma as true and invoke
+lan966x->ops->fdma_xmit().
+
+Could this transmission routine dereference the recently freed tx->dcbs_buf
+buffers, resulting in a use-after-free?
+
+>  	lan966x_cleanup_ports(lan966x);
+> =20
+>  	cancel_delayed_work_sync(&lan966x->stats_work);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260504-lan966x-pc=
-i-fdma-v3-0-a56f5740d870@microchip.com?part=3D5
+i-fdma-v3-0-a56f5740d870@microchip.com?part=3D6
