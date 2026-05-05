@@ -1,179 +1,164 @@
-Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EBF2EDD6C
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 00:28:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777940892; cv=none; b=pU5gbLMWFaqKoEtWKSWVJJ+1E/0o+L+mwmHbw6kt8jE5E8Tuamg35f35iuQU5x5XImM5nGUJer4B6N9rKLfUCT4J2WBO4+TyQoc9VuFKLNCUSp3oZsdb8RFm9wCZxUnJKhmsVAivDBIBPdDk1ugf70/67fM/M33TEc9zKN9+lK4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777940892; c=relaxed/simple;
-	bh=rz0GaQVWFC5Ldv7XCxhQcnrPcxM3OWUNdbw0/XWxahY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PTwmfPf9eiHhUb/0ADEWhMOrdIaUNctc19H2uuZYSmLsRDjJjuJ9ToXvpN3Ir8jO3nmKjMX6W+VrnM7je7TZ7IBrb3l8gh9xrF2Xt3ogjGZ2r/DqiakW5TelHiD0aYyHi5ncUmVHdFvXRO2QWQ0XxTjFPrb++ybo9StQK/g7cVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MDa2Dl2c; arc=none smtp.client-ip=74.125.224.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F50317143
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 01:07:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777943279; cv=pass; b=WLsrznxeyDR9bCuOsqrKpOICp00YQKAsCHJff4yvjcjsd4HdsSA3tOgx8VMhOImRphxobhVq8Hrt8MY2xq8ci4N8BCyAu7BH7CqqNBWeM8JcZ5PO8Uih7KykrxpqZk/49NKmUyaBzt5ry/Oglaskcj7nBb2yYDhm9HDRJG11qiI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777943279; c=relaxed/simple;
+	bh=h25CviPPheRk/GDUJ4W9hQ0/45Mh6Y0yTtuThhLME2o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ie0PD717rJzoS9V1Q/mad5erTsor0M3Q0OxUuXs7iru8N3V05yqPxegvhwweQKNtGyonCNgAxtEzpwbW1fdrUBuFQSZK68/ElvHzc0LMcMg+pwFfV45cb0SqouSCLXawu0g5T47dRJz9ysiRDzH/BpxwHR1djhLg7WaHUDkCX+k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qTVpH+gh; arc=pass smtp.client-ip=209.85.219.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MDa2Dl2c"
-Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-65c2cd216c9so3505080d50.3
-        for <bpf@vger.kernel.org>; Mon, 04 May 2026 17:28:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qTVpH+gh"
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-8acb856a674so64455456d6.0
+        for <bpf@vger.kernel.org>; Mon, 04 May 2026 18:07:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777943277; cv=none;
+        d=google.com; s=arc-20240605;
+        b=aBhwRdEMeseuiR+E+MNp/TdTNHGB3xpzqIjGX/wit/fdk9r7VmTcf1ifcANR9CLsmM
+         3uFkADkYutalfwH8OUDeU/i71eO8Lj5ra6xv+bYlC+lqeIWXkZX/XGbwuGrRb+SXHAm1
+         SHPq0BAROqvJvg0C4Shb5/lV/EKKtZjTzdP9Ga3XGgg0j67CDH/3KXv0tm3wC5D8GFcw
+         9bMKfHbufpjOFLl6OxgUI9/fhdU9L1CXubDNfbkkl/u+J99Ip+TRcF35Y1g46wATSYCk
+         wYxgaTDaMBtS2rZTZGsU0V4MkeSLOcVFZtpwaCCKj7yWGLynUynGjQX9wFt5+DLZaFsb
+         M3BQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=hBjcwpnTtESMydnEYbNcBRuOTt7JQKpfxpc/oQOpx+s=;
+        fh=p4CYe1ShxVWQIdGVaR5s+a05AIM4WYr9bJVJPMmlPfI=;
+        b=cUGf+SFFOf3v6qLou56ElIJ1phZZKt7TxFwn6quABVRH6xoUslZiRAycHjx6Ht/6tx
+         aipRCFgUbytsbctBwdWBIyPnsgg4AlTOPDPZfxE5G9lvZ08q7J4TO7bvLp3gcmiu2Hol
+         GvNvSHcDJUlbzAiuqj06RrBGVFn9unkOUkG2WPV2KJeiBT0FA0zpjv4RLV2+iMelcC6f
+         gtd6ZWgP83oeWs8MWBzsrj3puFQCDhTxbC71i98dLkpQIfxoqjQP8ey6XswtAwb5d9t3
+         dHWyMVOa8Vw+RRjoI25ytxp3eUzKPmzjD2NU51w7pTXm8dsPCL5fVwhkVW+wBMR2BnI/
+         ePbQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777940889; x=1778545689; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TSp2GUXkgxtGrFcBtn8vEntUxKtdvA3MvOWwc4dLMzU=;
-        b=MDa2Dl2ca6GUYsU2a7xMr0ZWI0GwSUsx99y85UMGJrdr/6fezJxNDssw/37zR49cHV
-         ORLgcwD0xL+9lxuvRmGoGXCAnAer/y8Tu2Fjf51Scpgp5RIBuhTn+Ou/Q8F0pwShjJ6z
-         UnaHXDe9T2eSnyfO1KIHX26/+3VfeZfA8i7MCiJY+lPRrUhsagBE3cNCKSlhJ7jzlIS1
-         guFPRzm+p18+GD5+ZkB+OzXCk/yy6IkBlDM4tieLvfG0HatfEolLYlQlo6P0DvgtRZvq
-         cnux6lda/RdvmEtsoiBbYh3V++0EEVcc3WHwRFAJlKZRah5IbSNVmXPbAhIqGJyF7OAV
-         eMgg==
+        d=gmail.com; s=20251104; t=1777943277; x=1778548077; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hBjcwpnTtESMydnEYbNcBRuOTt7JQKpfxpc/oQOpx+s=;
+        b=qTVpH+ghIW+/XDi+RUUfZXIYXca2uui6Y3kQjl7dpab9CnbohPRqTtY61ha6Pfw0dF
+         /74/B/feQnq7guYOFCAUg031sk91U/WQe+BOPqubaszqRlgYLTXnCReddRjNexwcGYLJ
+         HO6jhE1QudPeuO9oMC3TGGT8AqlYW9ebmTH+cgVxpWglLLhK4W5KthSHbrrBEs6LrECG
+         1BbgBA+cUOg9skzw/GjyX5Q8/FPAuHJ1QcX/fdXcFtQbyaZFE41gHp0gueQL+O1WTyun
+         aZx0cKVG3YxGx6qJjsjyke0idcF5LJNhvhP7FLpiOFf0OlVwfn9NhTMMtW+8ROf9KGAz
+         iUhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777940889; x=1778545689;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TSp2GUXkgxtGrFcBtn8vEntUxKtdvA3MvOWwc4dLMzU=;
-        b=DH1LHC950XFe7Xo74GF/XNfjfoY8dwRZ6RYNLZETTxKN7cI5Tws7YzmG7IOYv/SKYT
-         fzvbYsX49rf9BtqaQvplbgyRFsSA/E+lag8f5fKwi6iaXbYI22+y5wRBgBH7rPXtiiTE
-         0tcqLul6ZunCAhtuLt7ZbNNhyEmITNgAfwDueDPsKa4AnNy+rEdBUWTC1x0ZlO7igQRY
-         yFYUYhNqIrUKghK54OIzlsabx1G0BMfTazYl2bEMTbrOIWhZ6K0w7hB5OkyR8O5STssO
-         UtMGdp/E8xqKHqGy6RHzUw0lScIFtmkAFBSY1yLtiMPU9pclSBzhrZpaV4awR2XylTXm
-         2KAA==
-X-Forwarded-Encrypted: i=1; AFNElJ/6bZO1/Mu6ijD49Gnc2aHc/5zYUe0KL+O+cigsVtbvu7ebBV47JnhX81eiqR/dKXBSYvI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMY8V14H4qMxs2Jsrbvc/5n04p3TQcflljnTWPsXFfkjuS+w9l
-	BKsiCY/FRefXlvdf49uWhCdqvuum4WmrOpEkE3eUfDulaN/eW83p2+uO
-X-Gm-Gg: AeBDiete3DIwdy9utv7LfJZRToFjVKHjS0o+biifb5hPFtR7Ctm67ErC9TpJlheTD1t
-	3geIT/rpN7pMX2DG3/yvyGzZTV4tbHQp4NIurUtEh7Ac546PAuzXnHh47y/saUFDqaU2EYgCraJ
-	ju5k3xjF/SKQ57cBNQpc9R9JmzV8WSuUlXdeZoiIAwAtjvS5/8qx1jA7/nWuNuLHbQSuVmXY/r8
-	lEvSD2evmHqGQ+V5+QJV+BKtm7SGURvBH90SF0rLlbB1bfRIK+0s81gxxthTJ2o/zXMlWaTJj3Z
-	F6ey2WRWsyifUULcB4+1ntZ6of0x0bmzgT14G/Gr3wnfW54FrA9ATvT+tm/3+qrwdsCX8x2sPEK
-	NTe/n28ABK8lGgsMS6VWnfWjfc+fboYAnZiNeKuv9fIlBE9U/vjgQlGZzPUfbKuThVqNIkLTTDb
-	yr0l1Uogu9aFh+u042gFwN/LUpDLL4Vu0KizVEC6Hi
-X-Received: by 2002:a05:690e:1c08:b0:64e:e896:a86 with SMTP id 956f58d0204a3-65c3db39b1dmr12329280d50.36.1777940888641;
-        Mon, 04 May 2026 17:28:08 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:73::])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65c2e8ae9c7sm6268726d50.19.2026.05.04.17.28.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2026 17:28:08 -0700 (PDT)
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Mon, 04 May 2026 17:27:53 -0700
-Subject: [PATCH net-next v2 6/6] selftests: drv-net: add netkit devmem
- tests
+        d=1e100.net; s=20251104; t=1777943277; x=1778548077;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=hBjcwpnTtESMydnEYbNcBRuOTt7JQKpfxpc/oQOpx+s=;
+        b=Vu0XS8SSOM4oWsj3K/yqI8SLxQSBTHlNofVExT1IQ9w+jty42pulD01JZ20f//1j+M
+         Sp20lbOb46RzeVQmFMpE9qNrbRYnKfM7LtaG12jJtrR3Ze56PP0AIcVnjX/k4E026s1B
+         O5D9trB9RCIACbv0GS51a+ereUx02TxeihDYU6NjQZsSK0BR6K8Y3qGACbcjzbZrHEfS
+         WzcPtgxnHlZJSMNUwC8g4FWLg5YJVDbcmbaLuQpHNPfh8X5t1vdGbFLul21JT1XQ1yoY
+         +OaXLTW2HIf+VmQub8+U/nAlBFQHE0GvjTU9Vs9daqaf3aI1MPuG/rC91A5rxHssywj5
+         DrMQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8OX3/hhonVTaxKfPHVAunVt4O6g1DsTg3Vixt7C5ldNYFzUHuKFput6x9uHjAcSILN/fc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvP8vtu2t3me7RRZelhJ9dpT5vrQ7WDq5tdqB+9SqjLGWdKxIV
+	56+KrN9PgiZbkY5teW/PB723uUCWd80aLC1yGbLTt/xzwY5TLBWnlLkp1TcZl5QOoUusW7/CwMG
+	hoMdYQiKM663625Hsy+wnHWYVXCME+wY=
+X-Gm-Gg: AeBDies6JUMzBhvpMkthgbzehX57TeCiy7FO74vwoiFQRHZ7G2Uge/HwKrqNvApneDP
+	x64dwJrIM0Qr9ioZ6n8FmkQTBTWciXKwFW8Y7qd0hPTonlgc18K2ZkpPiVbJbpONBRZgezskhIp
+	OdowgD2yoHx8XSgVF4ixbROiv5UiPwwbppDew7R8rM0ELYBiYgPoQnNhcbqN4rtkmMmXtBc1jNa
+	/1iu+Fmxbtj1WgyAGDh6fSiBQmRk0jbRwSRKm8e9E950pbntCMPCVieel0LrABNiznAwpS5+s0P
+	UX0uCSi6tBKQX8f2DovxD4xN00tVTXrYhCebto9t4vtKSRj4zjNmY0dFUgaCag==
+X-Received: by 2002:a05:6214:2b98:b0:8ac:dd87:b5b2 with SMTP id
+ 6a1803df08f44-8ba9ea852bdmr30666216d6.11.1777943276686; Mon, 04 May 2026
+ 18:07:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260504-tcp-dm-netkit-v2-6-56d52ac72fd4@meta.com>
-References: <20260504-tcp-dm-netkit-v2-0-56d52ac72fd4@meta.com>
-In-Reply-To: <20260504-tcp-dm-netkit-v2-0-56d52ac72fd4@meta.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>, 
- Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>, 
- Michael Chan <michael.chan@broadcom.com>, 
- Pavan Chebbi <pavan.chebbi@broadcom.com>, 
- Joshua Washington <joshwash@google.com>, 
- Harshitha Ramamurthy <hramamurthy@google.com>, 
- Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, 
- Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
- Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Stanislav Fomichev <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, 
- Bobby Eshleman <bobbyeshleman@meta.com>
-X-Mailer: b4 0.14.3
+References: <20260503211835.16103-1-dwindsor@gmail.com> <20260503211835.16103-2-dwindsor@gmail.com>
+ <CAHC9VhSy5K5nQTtFUE4BScy1Ur61v7eZW067vTcUYDQeJb13Bw@mail.gmail.com>
+ <CAPhsuW6sy2cdC4B7Z48-5A-yVX6fmVWxS_fWVjQxiX95KeUguw@mail.gmail.com>
+ <CAHC9VhQLN5NA_ZMMNyUdMCZVdwC3VM4PUnzka8xDK5rpR2a3sw@mail.gmail.com> <CAPhsuW5nDaLAV5UfAHeX6QPeF6bs-WDkFYOzYO7Q9_O6v=jEHA@mail.gmail.com>
+In-Reply-To: <CAPhsuW5nDaLAV5UfAHeX6QPeF6bs-WDkFYOzYO7Q9_O6v=jEHA@mail.gmail.com>
+From: David Windsor <dwindsor@gmail.com>
+Date: Mon, 4 May 2026 21:07:45 -0400
+X-Gm-Features: AVHnY4LpG15Ov5YRtOS0i0ZsEyHFvRUaNMxQ4C3yLGhd4sFsYnvO-3LzEMQWXWc
+Message-ID: <CAEXv5_jp5wKgR_ZozL3n+4NgrLTg9FQ-HW1EHTtkyA_6GDMhgQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] bpf: add bpf_init_inode_xattr kfunc for atomic
+ inode labeling
+To: Song Liu <song@kernel.org>
+Cc: Paul Moore <paul@paul-moore.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Jan Kara <jack@suse.cz>, John Fastabend <john.fastabend@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Eric Snowberg <eric.snowberg@oracle.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Bobby Eshleman <bobbyeshleman@meta.com>
+On Mon, May 4, 2026 at 7:09=E2=80=AFPM Song Liu <song@kernel.org> wrote:
+>
+> On Tue, May 5, 2026 at 12:42=E2=80=AFAM Paul Moore <paul@paul-moore.com> =
+wrote:
+> [...]
+> > > > Perhaps I'm simply not seeing it, but is there a check to ensure th=
+at
+> > > > there is only one BPF LSM calling into security_inode_init_security=
+()
+> > > > at any given time?  With the BPF LSM only reserving a single xattr
+> > > > slot, multiple loaded BPF LSM programs providing
+> > > > security_inode_init_security() callbacks will be a problem.
+> > >
+> > > I don't think there is such a check. Also, a single BPF LSM function
+> > > may call the kfunc multiple times, which is also problematic.
+> > >
 
-Add nk_devmem.py with four tests for TCP devmem through a netkit device:
+bpf_xattrs_used() guards against this. The lsm_xattr_ctx is shared
+between all callers, so xattr additions by another LSM (or by calling
+it multiple times in the same function) will be tracked by this.
 
-These tests are just duplicates of the original devmem tests, with some
-adjusted parameters such as telling ncdevmem to avoid device setup
-(since it only has access to netkit, not a phys device).
+> > > I think we will need to make the default bigger, and also introduce
+> > > some realloc mechanism for the worst case scenario. This should
+> > > work, but the code might be a bit messy.
+> >
+> > Thanks for the clarification, that is what I was afraid of when
+> > looking at the code, but I was hoping I was just missing it.
+> >
+> > Increasing the default is an option, but I don't think we want to
+> > support a dynamic reallocation scheme for the xattr slots, that will
+> > likely get extremely messy with synchronization between the LSM
+> > framework and BPF LSM hook registrations as well as special code to
+> > handle inodes with lifetimes that are disjoint from the BPF LSM
+> > programs ... I suppose there may be a way to do it, but it will surely
+> > be ugly and come at a cost.
+>
+> BPF trampoline already handles all the synchronizations, such as
+> add hook, remove hook, etc. properly. So this is not that hard.
+> All we really need is to allocate a new array, copy pointers, and free
+> the old array. And we only really need this in the worst case
+> scenarios.
+>
 
-Each test uses NetDrvContEnv with primary_rx_redirect=True to set up the
-BPF redirect program on the primary netkit interface.
+How many bpf-lsm programs do we envision being attached at once? I'd
+think that stacking of bpf-lsms would be difficult to reason about
+(moreso than static LSMs) and won't work that well in practice, but
+may be wrong. Most LSMs use 1 xattr, Smack is the only one who uses 2
+IIRC.
 
-Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
----
-Changes in v2:
-- Add nk_devmem.py to TEST_PROGS in Makefile (Sashiko)
----
- tools/testing/selftests/drivers/net/hw/Makefile    |  1 +
- .../testing/selftests/drivers/net/hw/nk_devmem.py  | 40 ++++++++++++++++++++++
- 2 files changed, 41 insertions(+)
-
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index 85ca4d1ecf9e..2f78c6aec397 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -34,6 +34,7 @@ TEST_PROGS = \
- 	irq.py \
- 	loopback.sh \
- 	nic_timestamp.py \
-+	nk_devmem.py \
- 	nk_netns.py \
- 	nk_qlease.py \
- 	ntuple.py \
-diff --git a/tools/testing/selftests/drivers/net/hw/nk_devmem.py b/tools/testing/selftests/drivers/net/hw/nk_devmem.py
-new file mode 100755
-index 000000000000..c069d525798b
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/hw/nk_devmem.py
-@@ -0,0 +1,40 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+"""Test devmem TCP with netkit."""
-+
-+from os import path
-+from lib.py import ksft_run, ksft_exit, ksft_disruptive
-+from lib.py import NetDrvContEnv
-+from lib.py.devmem import setup_test, run_rx, run_tx, run_tx_chunks, run_rx_hds
-+
-+
-+@ksft_disruptive
-+def check_nk_rx(cfg) -> None:
-+    run_rx(cfg)
-+
-+
-+@ksft_disruptive
-+def check_nk_tx(cfg) -> None:
-+    run_tx(cfg)
-+
-+
-+@ksft_disruptive
-+def check_nk_tx_chunks(cfg) -> None:
-+    run_tx_chunks(cfg)
-+
-+
-+@ksft_disruptive
-+def check_nk_rx_hds(cfg) -> None:
-+    run_rx_hds(cfg)
-+
-+
-+def main() -> None:
-+    with NetDrvContEnv(__file__, rxqueues=2, primary_rx_redirect=True) as cfg:
-+        setup_test(cfg, path.abspath(path.dirname(__file__) + "/ncdevmem"))
-+        ksft_run([check_nk_rx, check_nk_tx, check_nk_tx_chunks, check_nk_rx_hds],
-+                 args=(cfg,))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
-
--- 
-2.52.0
-
+> Thanks,
+> Song
