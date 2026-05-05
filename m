@@ -1,155 +1,178 @@
-Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF7F3B38BD
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 05:38:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3B81C8604
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 05:43:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777959528; cv=pass; b=oo6tjtouh7Uc9KPbKE64HLUhIUg4jf9lNGLX6uTvZsV5CVT2IMquHSy8gLOh2e61EMqGW2TBhLCXXLVOW5YpPS9SE6o1omupR5bEKYueEI6uoTxLWGVBpWbsfGAXNeObgp0pxdoa6k/SdN0OauRwj+cpt2YoW/FESIr7t7rK/mw=
+	t=1777959803; cv=pass; b=Z7Jh2AH/lonTdGhtuMuWr7ZkPP9PYfkma6iax1qExl6OGNnynC6Gv6VoLTzMt1ZmEBz8GKTuaAvGUJ2XudPGSGDjDsP4juUam/30Icm1F7LYCRs6NLrtn9mZtIBvOihMhdhCfHMJSFhlwHTUgbL+EZZYWkat/FvmmUi0zWqyIuA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777959528; c=relaxed/simple;
-	bh=E15gTeE9IxpQqCiyRIAnhJyJyhZa2kflNcSZimN2LgU=;
+	s=arc-20240116; t=1777959803; c=relaxed/simple;
+	bh=PBDvQznMxWjpcwNYDmYcjrNP7ss5epTT/kwErEyvUEY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cMxDq5IYoFwinynU6eGD9EGe/eaK+FOPmjp+bnYTvLyHSvddTjRd5A0iKdRPjEsyv5thaCO4lMkYEBs9h9psNU0g0tNvXIrRTbphkdV8aUZo+Idcupxrhfn53aUvo4K6ZOPppTD9OV8l/oLbODZMhAB+00U0fjAHXv+uHcnOdYI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JGeVS5s7; arc=pass smtp.client-ip=74.125.82.44
+	 To:Cc:Content-Type; b=rQNzz8J0Go68iCl/PnTd0BpHD626u+Umn17TuIOC+3kiweCg1kzuGOKOzl9sswBuBzIFda7S+1LljDso6PCdvWSf0ccUBkdNGCRQ9hceBo+jYCvRDpH7yRz3fk9w9XwLvfd1P4JNZzQCFR7NEU7yiGgyybJ3Ym/4x4wIoqc6his=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IYOz3x5N; arc=pass smtp.client-ip=74.125.82.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JGeVS5s7"
-Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-12dbd0f7ecaso10846976c88.0
-        for <bpf@vger.kernel.org>; Mon, 04 May 2026 22:38:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777959526; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IYOz3x5N"
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-1309f4ee973so1179838c88.1
+        for <bpf@vger.kernel.org>; Mon, 04 May 2026 22:43:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777959801; cv=none;
         d=google.com; s=arc-20240605;
-        b=M2Eqv17/iIodV/rqGag69KmLiyTQLTjNvNLdsZO3nJrPnzbM6/jKTOpPfAyNk6Mljx
-         47+ButMHiluC5mdipxnhFskVVCBpI/RVgb1oZXxKqMGY6BPxdsrU7L7Is+mG7k1HCyrh
-         VJdZeD4iQAtOQXno1EYB8faymIO1sJQHKOt2TfhUE5mwV2Ej8gxlOchcmnjL5a7KlDQd
-         v9KI3H5tD88y+t3AlVIYZsTChDAvR5+q6XUcTw52IBlqfb2Ta0lSjG68AUxCpf8XIpJ1
-         adA6N8sjTvApE+7MPVRboQeZkXwWg3LzjyxK9gWs2il8ETPvAUqvZ6zYidLuOIPvqVsB
-         USiA==
+        b=aPi6Ynk65akppqK/jw6dJm3Nxv/qkT9hMishJfqwTWcFPM1QmOyoJ45pdxh2n6GLXT
+         X9OCgfhyAbJWwYWNp++WhtVqhae/Gf1RyVR7yaF7CjOIaa3cgc9NHDJi5XGq95GTNkfv
+         63p9+8pEowH1kgYBw2HEOiCujG+JoHyiGBjInbPQSOJc/cvZRUGnqq5OHJXb+XFOHxHV
+         syMqzbVMiZJ0MZQ2uEvOmByKe7hupDFhxPSCsn/EHymaoJl2/v2xedLsUGF+VQTYauwe
+         0edX8/Ol3gAVsRkL+KC6GIFU5xI+S7uGEAvMTp6kBVFT2rzfVuTPRwGFyrS4ik6vp3/I
+         Unxg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=OUm1t+0gZGzttowhsI56qfvRdvVsKy6ujIh4wA8TLdQ=;
-        fh=7pQPbM1mTaKjUbZ75iTISJbipA72wUVZwkXXTYMxzFw=;
-        b=kuOPPCT9Z+b9z+EyXDjkL858G3v6tkP7jYYijboY9NWgosLzA3r1gkWS5zhirGcI4t
-         ax0457h/2XIKiuZ9V3no+f1gkXvtTQUcO4ho1cW+niUJECpj0ADa9bwdzcwevlrQL8dk
-         mGk1SCJbFscHObrqRxI+YkNnG/fuPPYmBfwYWuDKqdMc0GW2ErkQzR8A5xVV+gAQai4x
-         KlZRHirhZ/FuJK+TjwT/ydfFXxyDUWFp9xNjUqwnpMOtb7jn5XsqqesbP+ggiEG8AOcZ
-         vHGGJcPZhE5bImIw8ueYUl9Dc4LqaOP0ec1Q73IRi65B4KHUlUAGFmgXi+1EgbtOLWKm
-         Zyhg==;
+        bh=ID9/lDtQnEfLjPMFXed1O963xIM5qgALbX2MVBfWr7U=;
+        fh=BPNtcH7ntRniEjYIhZkfaTTujl+FWspWzDXVu7iCfaY=;
+        b=Sq/hmIVezHRqfBjM++JuBHw0T0dZShz0jA1bj2Nt2yiAMc45pJxKx4lJVGOUiIshJN
+         MzfY/NA9oFJpZ7sv+pimRn6YS+BW+Qh/EacSyhq27pLC2ySGs8w92XGEIBsBKzwBwIOs
+         IRPaY8YJgr1ywWpwvwkyTBLxsbMBBIRZDRD42/5DqYsKqRZrplVYoKa3tCeIBXuTeIu/
+         b4KwarllfIyYX1fAkmuTYEmo5e2eRhwgBQVAerCieFrkFPz2TVr2UWFO07DWaPx6TQjI
+         MADatdrTTLqJrpyTZBmmXHzS3sC/f/s0o95nKOFCi+oCLst3jwoz1cLTllFq4HPUefAY
+         MzGQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777959526; x=1778564326; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1777959801; x=1778564601; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OUm1t+0gZGzttowhsI56qfvRdvVsKy6ujIh4wA8TLdQ=;
-        b=JGeVS5s770MsFHq7525VEvrPaQXtHuJaLtVjGup0Ij0iERSEgMAkJ7PelS5YztsolX
-         I6UiMzGaKnNa/lvlRt6RsU6KhqfgWbwGJPFNlSCVjvFFo9QmYuPMcPkI5TWWt+NsUMML
-         DzSJ4LnWZKVTTOlTY7ZkOdqHqvwpwvHIgJweHryQZZ+oi8jzUkK+e/cpLyKXiWNdBaAE
-         d3bobPmBxwDQ6ETP9BbP+oalYo3VPVij487W8IxJX0emgzzS6VNuBFT283X/vWAj8wtb
-         OSTtfM1chgDNBLgpzCHQqATzGISjy05CZGOAiXTEu+LuQg56wCnxTjFGg8/hHMNPYQP4
-         W73A==
+        bh=ID9/lDtQnEfLjPMFXed1O963xIM5qgALbX2MVBfWr7U=;
+        b=IYOz3x5N0R87o/Sy4/9v1LAHuuK5Tw9rXIPTCfpYeGpvHiR82v3NP9VtFdMncp65IQ
+         FgH+CZ18xFUg2ufdaI56Cf6Gko47OrmxiRWSXT8Qd98xFRH7KwcJ4o9PsaohGrMSvglL
+         C6/RBU3jNBeUstokcbLcbTe6jhzZDdyFp+1Vj83BPIuqw3hSYUDmFGAMji6pt4CotU7E
+         D9h+KiSIbEUT+22RX0ztOGLnMYc19obQ3CVz8HR/eJv5LeAa0s134+K7Ri0ye4tYb7Ov
+         /ROSv0QNjZXy3Xl7ruShw4nFjFk8kBxbn7wUoOVZgI7CteD6WkoKZ+dfi77Tx8aoMVEO
+         PJUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777959526; x=1778564326;
+        d=1e100.net; s=20251104; t=1777959801; x=1778564601;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=OUm1t+0gZGzttowhsI56qfvRdvVsKy6ujIh4wA8TLdQ=;
-        b=dliOEUum6YtgkehfxI64ekeCKIBAgkCOcVskPwNmricJ0ABdXjJUakkTt5eOXjSl8/
-         p8gABgyP0GzW5Y/SlCh+mp3FJGMOVJ6PJQTFeq3mMnJSOVTd6F+NQAk0WZ2/vIezG7Hf
-         zCI6EXJ7efGKJZNzeFk/NgLU8HqzjJTo350zL6SDIgSxpK1BtCoCAmluHEKXU5I+/bXA
-         pAcUU5AEFsSy0bNMfVjNJ7ROTwCETdBfpwpKVqAUrl5bq0He+DheUfCYRnDRW910xq0M
-         XwvcEgHV33JsLVn0oNTcnK4VBrQGrHpmEfkISkMqumasI85Kmiu9j4dLsPh6G+CN3LyP
-         TEvA==
-X-Gm-Message-State: AOJu0YzIewZ10RCeRGyjOgjLAx+G6StZ9T18Rf7H5SjVx39ctVdgNcse
-	rPV5/ugs4j85wcaHbBIJJwwJDQeVk7/pC3qkRb2zbHs18pdl+NhsVlVBP/0vOWMiwWSoamdkOVB
-	bPp8X1qpiMk2YoYBWbVP6RMAkenZZyWj9Tm9eAtb0
-X-Gm-Gg: AeBDiesd7VC13EjsOjMdI+bq1smlZt9o+bB4NE/yLuh83WNW3GOY4883gL8KW21leDq
-	wSBNEA0u33lpRbmaki6UI2brUC5EraSomnbIcvh+73n/XtJStXhBwZIDYMR7HU9L0s2VOmmqxZ+
-	VqkGI7hJ6a//eAP7Tx7o0NehtT7Qnbnk7mueLGyjNbjsb5fC/wrFTTFbNUloniqYJ4lZlm1g/FS
-	GuKEBRke6yMshFxsmC9uq4jGsXr75IVOiUwQVdzBr1igiBxPT0n0qlzTLlMdWMloDjRtgMkqbOp
-	1Wm5b88V2iuKkPUSCbeUj9nYAPGq5IYvI4M1mb+rjXjPVmOmxvUp8cCjNVIVxZ6gsjnzYUgqty+
-	AE6IsDNlqNPpyualyhUAC3/ypyRa43pGRgg12nAsqvospmBwjj8HSuipDQHgW01Bla1pY9xwLJQ
-	==
-X-Received: by 2002:a05:7022:5f12:b0:130:9f2d:ff99 with SMTP id
- a92af1059eb24-1309f2e02bemr1361751c88.20.1777959525442; Mon, 04 May 2026
- 22:38:45 -0700 (PDT)
+        bh=ID9/lDtQnEfLjPMFXed1O963xIM5qgALbX2MVBfWr7U=;
+        b=pCz/SGDzjF7RpXA2GXFrkfbofVAqp585jS1tOCT386XY0jDqdAwiQt1e1DVSZI8AJA
+         4LVfkukoqnC3m7ar0X4qVVVrSNn2UQ6X7UkIxi4dVoE9T+i/YC9Lut0FU+2FD8p4d05B
+         t/PmSrQv1DhgoJB4n0iS2YSf1tIQxdUo6Kg1xGIMRiDf/nO/OB7jGhlpLjU1r9Ktwmyv
+         gAlM40seeABinKmgre0XInwXgz1szG+3qhBgrhB/h4Dq2hgaw7OOQXQdTI0a422IFzbF
+         nlv1QfFbAiGT7kz0mPBav5LZtnj0fscLqrPoqrsfgtibo52ae5I5oQOCCAxQ7gLQntok
+         vTQg==
+X-Gm-Message-State: AOJu0Yx+1YFFCAGq5oz9PSIfnjDjtrayGiebxuRlsS8N+Squ8cieeadP
+	0ZOxy0J2ybazORNQ/pUeQ+bMS2xOBGGYwulyhxgSnvmS0z93fsw8rWdPJGVA5c1QE4nwtyUpf05
+	1cdBsHCn2olBAHheqsR41D6+k0FnEtKGCj4QPblrvUC76wBTL/zHTh3SAEd0=
+X-Gm-Gg: AeBDiet63Pb2qnOaLlDaS54mkriJ7wB5LAudCkf+4mlUi87LUkwtg6MXtn3ni7wdwk5
+	BOh+f7TWVD1uZuRfzWHDX0KYnJOECW643zP3ALgUfXO7tcx3xpwUl/Nez3hZaTiCYz5RGSfANBR
+	YOG/Y2wHxyn5qUCc18kIKkRwnzkweKBzvVgCdF5BmYOPmamfG0VkIs2oIxk5RDyjAxSqz7FhGmy
+	6Xj7wq2qy+MsxxwppIPI5G2rZQNVbJ+is7jPrUvQAEEyfQ8BJSH9aVp7WY6s5QBJrjDC7C7lvsq
+	aTj4NHgWTUCdrAfYummdHBzjscvtuKTTgwdkQQ+jZ23/R0WwOkYd4hv1Rq7lh5Wk07mG7JhgxKk
+	B+jPHEztr0Rxfe2vUOrsC2lB9HmuEs6vHpo8zN7XYaAYzVPFiKqJyUUmrCOXLkaozd+DnITbISy
+	MJrvWX74DP
+X-Received: by 2002:a05:7022:4381:b0:130:9bce:ba26 with SMTP id
+ a92af1059eb24-1309bcebb05mr1826901c88.35.1777959800854; Mon, 04 May 2026
+ 22:43:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260504210610.180150-3-kuniyu@google.com> <20260505041433.8B6AEC2BCC7@smtp.kernel.org>
-In-Reply-To: <20260505041433.8B6AEC2BCC7@smtp.kernel.org>
+References: <20260504210610.180150-4-kuniyu@google.com> <20260505041435.187D0C2BCB4@smtp.kernel.org>
+In-Reply-To: <20260505041435.187D0C2BCB4@smtp.kernel.org>
 From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Mon, 4 May 2026 22:38:34 -0700
-X-Gm-Features: AVHnY4IxGWS5GN45za6_yY6sd3bDU6y42Zis9J4CL8PN0-baQe0fNUQ6g7bQ_Cc
-Message-ID: <CAAVpQUAbUnN_bBfguit7GO1VkQFwO3Oj-1adra820r3RpjO=kw@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf 2/6] selftest: bpf: Add test for bpf_tcp_sock() and
- RAW socket.
-To: sashiko@lists.linux.dev
+Date: Mon, 4 May 2026 22:43:09 -0700
+X-Gm-Features: AVHnY4JOCOb71wu5mt1KFGtOvg7crQc-IG8Nxqs_vTCH-gFp-2Dt9Bt1UXsuzwI
+Message-ID: <CAAVpQUB-K4YBE5Em4xg5wWsjtK=7xZwwXFynX2vUN4DQDx2tRw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf 3/6] mptcp: bpf: fix type confusion in bpf_mptcp_sock_from_subflow()
+To: sashiko@lists.linux.dev, Matthieu Baerts <matttbe@kernel.org>
 Cc: bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
+Hi Matt,
+
+Could you follow up on the comments by Sashiko ?
+
 On Mon, May 4, 2026 at 9:14=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
 e(s) to consider:
-> - [Low] Newly added code uses manual error checks instead of the mandated=
- modern ASSERT_* macros.
+> - [High] NULL pointer dereferences in bpf_mptcp_sock_from_subflow due to =
+lockless concurrent accesses
+> - [High] Use-After-Free in BPF programs returning freed mptcp socket duri=
+ng teardown
 > --
 >
-> commit 1a574056fa08ab8c66dcd9b6ee5f0739ff6721b7
-> Author: Kuniyuki Iwashima <kuniyu@google.com>
+> commit 52dbcdaad7d49ff5db2faacf11c47b1c581024a8
+> Author: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+> mptcp: bpf: fix type confusion in bpf_mptcp_sock_from_subflow()
 >
-> selftest: bpf: Add test for bpf_tcp_sock() and RAW socket.
+> This commit fixes a type confusion issue in bpf_mptcp_sock_from_subflow()=
+ by
+> checking if the socket is actually a TCP socket before calling sk_is_mptc=
+p().
+> Previously, raw sockets could bypass the IPPROTO_TCP check and cause inco=
+rrect
+> assumptions about the socket type.
 >
-> This commit adds a test to cover bpf_tcp_sock() for wrong socket types,
-> specifically tricking it with IPPROTO_TCP on an AF_INET RAW socket. It
-> also fixes a missing free() in the test.
->
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/tool=
-s/testing/selftests/bpf/prog_tests/sockopt_sk.c
-> > index 53637431ec5d..5fd33ad2eaaf 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
->
-> [ ... ]
->
-> > @@ -211,6 +211,22 @@ static int getsetsockopt(void)
-> >       }
-> >       ASSERT_EQ(optlen, 8, "Unexpected NETLINK_LIST_MEMBERSHIPS value")=
-;
+> > diff --git a/net/mptcp/bpf.c b/net/mptcp/bpf.c
+> > index 8a16672b94e2..4cc16cbeb328 100644
+> > --- a/net/mptcp/bpf.c
+> > +++ b/net/mptcp/bpf.c
+> > @@ -14,7 +14,7 @@
 > >
-> > +     /* Trick bpf_tcp_sock() with IPPROTO_TCP */
-> > +     close(fd);
-> > +     fd =3D socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
-> > +     if (fd < 0) {
-> > +             log_err("Failed to create RAW socket");
-> > +             goto err;
-> > +     }
+> >  struct mptcp_sock *bpf_mptcp_sock_from_subflow(struct sock *sk)
+> >  {
+> > -     if (sk && sk_fullsock(sk) && sk->sk_protocol =3D=3D IPPROTO_TCP &=
+& sk_is_mptcp(sk))
+> > +     if (sk && sk_fullsock(sk) && sk_is_tcp(sk) && sk_is_mptcp(sk))
+> >               return mptcp_sk(mptcp_subflow_ctx(sk)->conn);
 >
-> This isn't a bug, but should this new code use the modern ASSERT_OK_FD()
-> macro instead of manual fd checks and log_err()?
-
-I don't mix different styles in the same file, also such
-cleanup should be done in bpf-next.
-
-
+> Could this cause a regression by dereferencing a NULL pointer when access=
+ed
+> concurrently?
 >
-> > +
-> > +     optlen =3D 20;
-> > +     errno =3D 0;
-> > +     err =3D setsockopt(fd, SOL_TCP, TCP_SAVED_SYN, &buf, optlen);
-> > +     if (!err) {
-> > +             log_err("Unexpected setsockopt(TCP_SAVED_SYN)");
-> > +             goto err;
-> > +     }
+> In subflow_ulp_fallback(), icsk->icsk_ulp_data is set to NULL prior to
+> clearing tcp_sk(sk)->is_mptcp. If a BPF program triggers in this window,
+> sk_is_mptcp() would return true but mptcp_subflow_ctx(sk) would return NU=
+LL,
+> leading to a NULL pointer dereference.
 >
-> Could we use ASSERT_ERR() for this error check as well?
-
-Same.
+> Additionally, could ctx->conn be NULL when read here?
+>
+> During subflow_ulp_init(), the context is allocated and is_mptcp is set t=
+o 1,
+> but ctx->conn is initially NULL. Passing NULL to mptcp_sk(ctx->conn) trig=
+gers
+> a kernel panic on CONFIG_DEBUG_NET builds. On non-debug builds, it return=
+s a
+> non-NULL offset pointer, which bypasses BPF verifier NULL checks and caus=
+es
+> invalid memory accesses.
+>
+> Could this introduce a regression with a use-after-free of the mptcp_sock
+> during teardown?
+>
+> During subflow_ulp_release(), sock_put(ctx->conn) drops the reference to =
+the
+> parent mptcp_sock and may free it. However, ctx->conn is not cleared, and=
+ the
+> subflow context remains valid until the RCU grace period ends.
+>
+> If a BPF tracing program triggers after sock_put(), could this retrieve
+> and return the dangling ctx->conn pointer, enabling the BPF program to re=
+ad
+> from freed kernel slab memory?
+>
+> >
+> >       return NULL;
+> >  }
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260504210610.18=
+0150-1-kuniyu@google.com?part=3D3
