@@ -1,64 +1,64 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D22481641
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 15:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD8E48095C
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 15:09:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777993745; cv=none; b=qyy1NolC4MMxklvzbgmRWAj4RpXXZiJTYrZ7CHDD9jBzQ9JFYJV3+rhoM3vw9LFritN5d7WsDFI79aHLeCv9pWhvRUlbkH7TuKIpYCyO8Q0s7ceFotPvvZdwXXo3GFqU7su91Z707O++7JdNiyeRsGGl9yzkAPHENdvxu0PH4EM=
+	t=1777993750; cv=none; b=gpawhgmTVfqvdb4tiuY3ZGWufu7S2PoP9tbFoyt4mQxNbZPkwePEkfeb6yrN0wHuYom1hqd5hSKdGn47jesxi8gx/DYP9CA2mXq38kokR9oxTy7E0jbCHC7B4Qoit/cSRvsM4bvMPVvyrAm/wtzYKjVnqrWl4KVdhlRPgwt/GC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777993745; c=relaxed/simple;
-	bh=fmyoa6/Iu65L/dqMt5+myMPc8p2oG4QAZ6IMVWChDlw=;
+	s=arc-20240116; t=1777993750; c=relaxed/simple;
+	bh=nvRlXk0SxEJ5nwLxY/r/87+3eNg5N/zIFZ+y6YU4oQU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=awl4EaB36X/J9Lz8Q2vIyRtJ3G4ZaHE9BuVRhP7B+Ekns3WQ6KUDFqVqrd8JctNCiFAf5mgqzozIIHY06A0gLZfTdonFCy1tVQVQmAkGvpLtOrMKzQMSbPQ0z5NQJqG+dLhT8lStkvVFwa3Fcl0rvn4L207q6BgtZzTWU7x2Ri0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PdwaaUDd; arc=none smtp.client-ip=209.85.128.181
+	 MIME-Version; b=JDbN+TLOW2K6QdyEEvAtgZCtRX4eEZR63n95PKF6I8cpRrGS9u6x//0g7OkFJdcPtjbQi1Bowda3gJFmtIu5Iti65hWGpX/xuM2W5FNhzEfiKZKemus8j1CVGaN9x9tCBDevnEH0tPe8Dyy9UyZcL4h2QFbyCV7dHEtXyP6Q5vE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WNRhIrw0; arc=none smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PdwaaUDd"
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-7982c3b7da9so49852957b3.1
-        for <bpf@vger.kernel.org>; Tue, 05 May 2026 08:09:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WNRhIrw0"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-7982c3b7da9so49854387b3.1
+        for <bpf@vger.kernel.org>; Tue, 05 May 2026 08:09:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777993742; x=1778598542; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777993748; x=1778598548; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tSrfic8QNEdeBzlBs/q3bZ9xfcw9wo8Lw5s0yR7htxo=;
-        b=PdwaaUDd/UdRWSuXleoHiodIzYMFRlOVXi8qpGBroSjukVVA7O/eqMxCnrwqttpL4s
-         DJlBv+INzfmhYpDYcOxxntYQABw3z/5lDyTGlxJM/xtwFc/gz3fYk4r+DORFjYk2zmUv
-         Vi2IYJ+01PSkSGZWq9f8frKd9chjFtkg7hW0mVZiZ5lz4ZNt132UYdZAWcpidnJlwkfz
-         mUskkdwYKJGEsVaajPJK9inDXpY4MmioRlydAZjPpdxb2pzFKvoJtwIpe1obhcHi5K8T
-         y1SQWXDuYPTW8MvRdqiNX/ligh3dC0NMwp/Th4TLzu45DVry8ZhSzsLGoo+HFL/FxxcO
-         /ilw==
+        bh=GvvvCn8k83hLzR9AMjFQb9M4jvzTg1YTi3t+NjKHa6M=;
+        b=WNRhIrw0pTRxYdpB5Jzt2sls06GNflQBO19fv+9ANxnpKSVe7DSZ3FwExfBx6ZL9Uf
+         /E5wC+SnF06I9HXuNJOL2N9RhWlkHKgP/yulB39e7GDvF9Ju/iMkMSRzNYymmKe73uBh
+         08bpX6ZgU4CIE3cAKSMqueG1u49JSV/WsHLDohXTXRN/k+H6KBhww8iAaO8Goe7Z8HPe
+         S2scrTh98X58UwHBCMKe3BbcAPP5H7aUjfC5brcKJDzzysj2/fJk2CTMaGLOtfzKRAKH
+         dU6BkejNYTELGw+J3w43h34RxsMVpxxZvbx9cx2dv/fPw62mFK0f9pWxHlZTzoAlrfFP
+         GR7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777993742; x=1778598542;
+        d=1e100.net; s=20251104; t=1777993748; x=1778598548;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=tSrfic8QNEdeBzlBs/q3bZ9xfcw9wo8Lw5s0yR7htxo=;
-        b=qQyLj/D/cQtRWPClecIhOlPHAmcfi+1gwEaDhs2TQH8L/+wZCGjZSlr//H2mNmBrku
-         ecHdk3x/HGT9EWC1z1FMfQdLTLg9ywMyshRJnNcDRF30pfwH0xadibl1SSGpmm/6B94Q
-         +Yf+ce7dG25wuqtEXrCHKlypqTdEgI+p++IiTZ9HyVbjTzNJAWciHciI94rjkNJQmMBL
-         o32pETxMbS4NNXwpfLMsYF6ANZUkq3+xWZJMh+XKAHEUBNei/c1Z8EvhD6nVzPtiLCsm
-         Wh0rXNlvrI74JSVrNidUnLmlnEWK2xRdGFfoxep4tlp0T8o/KNsChmxTjXYb03tPTSuJ
-         aSUg==
-X-Forwarded-Encrypted: i=1; AFNElJ+vCqCKwPm9iEl2yFk+3x7OVlLCufg+xUh/FKHlNMZfUM3aoCMbvuexYk17red8/aYGHDA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVQpB1a1cxP9jljBXVxyz0Xc69yJBfj3pRJbUjZitXDU1/Qo6a
-	4BTzwNhuao2pOIgNL4b46u2Isfc0XZGN5iiL0M8rul8OOA+W1AceYx0f
-X-Gm-Gg: AeBDieu0fLd7lJnp/G7QgG5GzsS4vNwBGtdOgpldx1rPpDek0DcT8B5hF6cJ32p6ZvC
-	G8pQqDBNBvLWrVWD2u7aPK34ocwT6jj72RpTb0TB0az7mBDfn+6AbqLeWCBAIVwd5KKhvHFNhz1
-	U3izYBDnXkpuyxcRlXsrcBaHA8/d6p70uD1bdOnntOX4XnmUIh1hFTgBkxmOwSfL13Pg4RbkeJ6
-	upmGebsx+8OVTpBCCC9jl/Hg3Els7o9lJTB2NnaVV0LBYN1DnUJTMmOtlBVElSMtvrfInof1pCi
-	LQ43DhG7iIZXxey5SEid77IQKHqIUzuYdxVqrleuWKctk3XRIiefxnJBKsLggDk9YRPhnUO5o8x
-	RSoOimySn2P7XsuMuHomBT+/As5EnDKX8VEkEI1gK+DaEdnBEcSQr6OU0Myis4H9bjl/d7sD/Mn
-	0U4ioN+1zAFCxeO9pdKRIjtc/rYP2MXUmR3WUtMsYB8ISqAgu6h4YkDo65StNEJA3+LRHcy2l4Z
-	SSx7HFwoFU=
-X-Received: by 2002:a05:690c:39d:b0:7bd:a50c:454d with SMTP id 00721157ae682-7bda50c48b5mr53342627b3.13.1777993742143;
-        Tue, 05 May 2026 08:09:02 -0700 (PDT)
+        bh=GvvvCn8k83hLzR9AMjFQb9M4jvzTg1YTi3t+NjKHa6M=;
+        b=U5jX0bhuxiLw07lCf3WoeBSUeTTZm6IS8YpV87L5tgG3eQXlHn2R7LFYeyqzT/Q81N
+         jPn33zWvFiKXvJ0OjymJmijNkflNrl0jGmiBtFx2SqGOiJ7BBDTfntnOnINWqtPldivq
+         vDnQGkXRntqI09JbYCZvTeBhyWuXrkrgKMMUIUxnwio/QmcaEwXxTJzSP6Q8r/2yr+5y
+         +Oh5VSA1AKDLwBDy2tn9Z8bWfV1bLXyw44wZcR7lKzq/wTRONBKks+zcmse8/s52Rq/z
+         m1eI7Dg+GOKnu1x+5hYsCrx2oZsES4N4qCaRZw58/GYHQB50vWE40t6S3pEo3hJVRo/B
+         j+tQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+5WZwJW0sIfsb2hsfpwqXRHRvPBAd/PIZ/mwIjJOUwdfgUrNgVVQPvKhrzgmwzx/L8bNc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLOj279tbVyWLJ94YiHzGgOmSyV70w933RPRA0PDMIrBxZ/EQs
+	bUgUohjSlbHpqLoUOoYkSoJt2ZBeUFyOaudz6JYxagm10pZgSizrTIR1
+X-Gm-Gg: AeBDievZmhMbY9Hs2flvW3WvioV9eIqP0q8lKBveN2b6XAucUkYnYF4VvkiYve4xEII
+	G7G6JdVPaLCvMQnbXWMLEPlwL0t8HhC/yXiD2FzrgcJoE4GPvtSbPlB1Mt2eP97J+y8ma3g7hRF
+	2Trlcu8B3aVIyMWer4JdBX8mv7yHdidihAnyFTVqTqmx8t7/+DTfugZ918ARqSFnykoXkeLZT6u
+	+5IhzDgi0QHNGL7rGQhhw93T7vysYqyawC1gmZ0YQaqveq5qE0xjq2q13o1Ksskb8XRzeCQMAL6
+	oGQdtPsTT9WIXGwfSjl+Jk8CY42RGm8oNQK+LBg3V3ha4UGIgJPdXU0wgqsqjdbvk3lwL2gHFmY
+	1EWld56aYIAuw/j7Hhalx1D6aME7Dx/05QdA77AhYoCRus73lmLLt6161xR+tq4kw3q0GQ025er
+	BKIPnbBCe9nL3HFp0L+kVoWxTe9fjbA4myVi9XbZSV6M1EmVkrQZ+0o/75NOyX8+7oNyetqNxJ3
+	tiRqwGom+g=
+X-Received: by 2002:a05:690c:a018:b0:7bd:4792:66ef with SMTP id 00721157ae682-7bd7714a6dcmr135180467b3.42.1777993747708;
+        Tue, 05 May 2026 08:09:07 -0700 (PDT)
 Received: from zenbox.prizrak.me ([2600:1700:18fb:6011:2fd9:17ad:6991:cb6c])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd6688d16fsm65061117b3.42.2026.05.05.08.09.01
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd6688d16fsm65061117b3.42.2026.05.05.08.09.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 May 2026 08:09:01 -0700 (PDT)
+        Tue, 05 May 2026 08:09:07 -0700 (PDT)
 From: Justin Suess <utilityemal77@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -73,9 +73,9 @@ Cc: martin.lau@linux.dev,
 	mic@digikod.net,
 	Justin Suess <utilityemal77@gmail.com>,
 	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: [bpf-next v2 1/2] bpf: Offload kptr destructors that run from NMI
-Date: Tue,  5 May 2026 11:08:50 -0400
-Message-ID: <20260505150851.3090688-2-utilityemal77@gmail.com>
+Subject: [bpf-next v2 2/2] selftests/bpf: Add kptr destructor NMI exerciser
+Date: Tue,  5 May 2026 11:08:51 -0400
+Message-ID: <20260505150851.3090688-3-utilityemal77@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260505150851.3090688-1-utilityemal77@gmail.com>
 References: <20260505150851.3090688-1-utilityemal77@gmail.com>
@@ -87,437 +87,713 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A BPF program attached to tp_btf/nmi_handler can delete map entries or
-swap out referenced kptrs from NMI context. Today that runs the kptr
-destructor inline. Destructors such as bpf_cpumask_release() can take
-RCU-related locks, so running them from NMI can deadlock the system.
+Programs attached to tp_btf/nmi_handler can drop refcounted kptrs from
+NMI context by deleting map entries or clearing map values.  Add a
+dedicated BPF-side selftest program that populates hash and array maps
+with cpumask kptrs and clears them again from the NMI handler.
 
-Preallocate offload jobs from the global BPF memory allocator, track the
-number of live destructor-backed references so the pool stays ahead of
-NMI frees, and let the worker invoke the destructor after NMI exits.
+This test fails on the upstream and results in a lockdep warning, but
+passes when NMI dtors are properly offloaded by the previous commit.
 
-The algorithm for preallocation is simple: The invariant is total >=
-refs + active, where refs = the ref kptrs installed in maps, active =
-jobs being executed in the irq_work worker, and total is the number of
-job structures allocated. To avoid excessive pre-allocation calls while
-maintaining the invariant, we allocate the needed slots, plus a small
-amount of extra, min(needed, BPF_DTOR_KPTR_RESERVE_HEADROOM), where
-BPF_DTOR_KPTR_RESERVE_HEADROOM is 64 in this patch.
-
-A small but harmless ordering subtlety: the active atomic is read before
-refs. This can result in a small amount of over allocation, but this
-won't be leaked and will properly be carried into the trim stage.
-
-The trim stage is simple. It uses a CAS loop to free excessive leftover
-idle job slots. It snapshots total refs and active, pops an idle job if
-the pool is excessively large, and attempts a cmpxhg to decrement it
-atomically. On a failure case, it will just push the job back into the
-idle list and retry.
-
-There are several best-effort mitigation methods to tackle the memory
-pressure problem, preserving integrity under this unlikely scenario.
-
-If reserving another offload slot fails while installing a new
-destructor-backed kptr through bpf_kptr_xchg(), leave the destination
-unchanged and return the incoming pointer so the caller keeps ownership.
-
-This is superior to leaking the pointer, and should only happen if the
-accounting is incorrect. Moreover, this is a condition the caller can
-check for and recover from.
-
-If NMI teardown still fails to grab an idle offload job despite that
-reserve accounting, warn once and run the destructor inline rather than
-leak the object permanently. Attempt to repair the counter safely with
-another CAS loop in that case, preserving concurrent increments.
-
-This fix does come with small performance tradeoffs for safety. xchg can
-no longer be inlined for referenced kptrs, as inlining would break the
-reference counting. The inlining fix is preserved for kptrs with no
-destructor defined.
-
-This keeps refcounted kptr teardown out of NMI context without slowing
-down raw kptr exchanges that never need destructor handling.
+The test asserts that every object queued for destruction in hardirq
+from NMI had the dtor called on it. The irq_work which has the
+IRQ_WORK_HARD_IRQ flag is drained with kern_sync_rcu to ensure
+consistency.
 
 Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Reported-by: Justin Suess <utilityemal77@gmail.com>
-Closes: https://lore.kernel.org/bpf/20260421201035.1729473-1-utilityemal77@gmail.com/
 Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 ---
- include/linux/bpf.h          |  16 ++++
- include/linux/bpf_verifier.h |   1 +
- kernel/bpf/fixups.c          |  33 ++++---
- kernel/bpf/helpers.c         |  24 ++++-
- kernel/bpf/syscall.c         | 181 +++++++++++++++++++++++++++++++++++
- kernel/bpf/verifier.c        |   2 +
- 6 files changed, 242 insertions(+), 15 deletions(-)
+ .../selftests/bpf/prog_tests/kptr_dtor_nmi.c  | 259 +++++++++++
+ .../selftests/bpf/progs/kptr_dtor_nmi.c       | 414 ++++++++++++++++++
+ 2 files changed, 673 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/kptr_dtor_nmi.c
+ create mode 100644 tools/testing/selftests/bpf/progs/kptr_dtor_nmi.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 715b6df9c403..307de5caa646 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3454,6 +3454,22 @@ static inline struct bpf_prog *bpf_prog_get_type(u32 ufd,
- 
- void __bpf_free_used_maps(struct bpf_prog_aux *aux,
- 			  struct bpf_map **used_maps, u32 len);
-+/* Direct-call target used by fixups for bpf_kptr_xchg() sites without dtors. */
-+u64 bpf_kptr_xchg_nodtor(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+diff --git a/tools/testing/selftests/bpf/prog_tests/kptr_dtor_nmi.c b/tools/testing/selftests/bpf/prog_tests/kptr_dtor_nmi.c
+new file mode 100644
+index 000000000000..a1aa8b6646b3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/kptr_dtor_nmi.c
+@@ -0,0 +1,259 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+#ifdef CONFIG_BPF_SYSCALL
-+int bpf_kptr_offload_inc(void);
-+void bpf_kptr_offload_dec(void);
-+#else
-+static inline int bpf_kptr_offload_inc(void)
-+{
-+	return 0;
-+}
++#define _GNU_SOURCE
 +
-+static inline void bpf_kptr_offload_dec(void)
-+{
-+}
-+#endif
- 
- bool bpf_prog_get_ok(struct bpf_prog *, enum bpf_prog_type *, bool);
- 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 976e2b2f40e8..8e39ff92dd2c 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -672,6 +672,7 @@ struct bpf_insn_aux_data {
- 	bool non_sleepable; /* helper/kfunc may be called from non-sleepable context */
- 	bool is_iter_next; /* bpf_iter_<type>_next() kfunc call */
- 	bool call_with_percpu_alloc_ptr; /* {this,per}_cpu_ptr() with prog percpu alloc */
-+	bool kptr_has_dtor;
- 	u8 alu_state; /* used in combination with alu_limit */
- 	/* true if STX or LDX instruction is a part of a spill/fill
- 	 * pattern for a bpf_fastcall call.
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index fba9e8c00878..459e855e86a5 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -2284,23 +2284,30 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 			goto next_insn;
- 		}
- 
--		/* Implement bpf_kptr_xchg inline */
--		if (prog->jit_requested && BITS_PER_LONG == 64 &&
--		    insn->imm == BPF_FUNC_kptr_xchg &&
--		    bpf_jit_supports_ptr_xchg()) {
--			insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_2);
--			insn_buf[1] = BPF_ATOMIC_OP(BPF_DW, BPF_XCHG, BPF_REG_1, BPF_REG_0, 0);
--			cnt = 2;
-+		/* Implement bpf_kptr_xchg inline. */
-+		if (insn->imm == BPF_FUNC_kptr_xchg &&
-+		    !env->insn_aux_data[i + delta].kptr_has_dtor) {
-+			if (prog->jit_requested && BITS_PER_LONG == 64 &&
-+			    bpf_jit_supports_ptr_xchg()) {
-+				insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_2);
-+				insn_buf[1] = BPF_ATOMIC_OP(BPF_DW, BPF_XCHG,
-+						     BPF_REG_1, BPF_REG_0, 0);
-+				cnt = 2;
- 
--			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
--			if (!new_prog)
--				return -ENOMEM;
-+				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
-+				if (!new_prog)
-+					return -ENOMEM;
- 
--			delta    += cnt - 1;
--			env->prog = prog = new_prog;
--			insn      = new_prog->insnsi + i + delta;
-+				delta    += cnt - 1;
-+				env->prog = prog = new_prog;
-+				insn      = new_prog->insnsi + i + delta;
-+				goto next_insn;
-+			}
++#include <errno.h>
++#include <linux/perf_event.h>
++#include <sched.h>
++#include <sys/syscall.h>
++#include <unistd.h>
 +
-+			insn->imm = bpf_kptr_xchg_nodtor - __bpf_call_base;
- 			goto next_insn;
- 		}
++#include <test_progs.h>
 +
- patch_call_imm:
- 		fn = env->ops->get_func_proto(insn->imm, env->prog);
- 		/* all functions that have prototype and verifier allowed
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index baa12b24bb64..cdc64ab83ef6 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1728,7 +1728,7 @@ void bpf_wq_cancel_and_free(void *val)
- 	bpf_async_cancel_and_free(val);
- }
- 
--BPF_CALL_2(bpf_kptr_xchg, void *, dst, void *, ptr)
-+BPF_CALL_2(bpf_kptr_xchg_nodtor, void *, dst, void *, ptr)
- {
- 	unsigned long *kptr = dst;
- 
-@@ -1736,12 +1736,32 @@ BPF_CALL_2(bpf_kptr_xchg, void *, dst, void *, ptr)
- 	return xchg(kptr, (unsigned long)ptr);
- }
- 
-+BPF_CALL_2(bpf_ref_kptr_xchg, void *, dst, void *, ptr)
-+{
-+	unsigned long *kptr = dst;
-+	void *old;
++#include "kptr_dtor_nmi.skel.h"
 +
-+	/*
-+	 * If the incoming pointer cannot be torn down safely from NMI later on,
-+	 * leave the destination untouched and return ptr so the caller keeps
-+	 * ownership.
-+	 */
-+	if (ptr && bpf_kptr_offload_inc())
-+		return (unsigned long)ptr;
++#define KPTR_DTOR_NMI_MAX_SLOTS 8
++#define KPTR_DTOR_NMI_ROUNDS 256
++#define DELETE_TIMEOUT_NS (5ULL * 1000 * 1000 * 1000)
 +
-+	old = (void *)xchg(kptr, (unsigned long)ptr);
-+	if (old)
-+		bpf_kptr_offload_dec();
-+	return (unsigned long)old;
-+}
-+
- /* Unlike other PTR_TO_BTF_ID helpers the btf_id in bpf_kptr_xchg()
-  * helper is determined dynamically by the verifier. Use BPF_PTR_POISON to
-  * denote type that verifier will determine.
-+ * No-dtor callsites are redirected to bpf_kptr_xchg_nodtor() from fixups.
-  */
- static const struct bpf_func_proto bpf_kptr_xchg_proto = {
--	.func         = bpf_kptr_xchg,
-+	.func         = bpf_ref_kptr_xchg,
- 	.gpl_only     = false,
- 	.ret_type     = RET_PTR_TO_BTF_ID_OR_NULL,
- 	.ret_btf_id   = BPF_PTR_POISON,
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 3b1f0ba02f61..162bfd4796ea 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -7,6 +7,7 @@
- #include <linux/bpf_trace.h>
- #include <linux/bpf_lirc.h>
- #include <linux/bpf_verifier.h>
-+#include <linux/bpf_mem_alloc.h>
- #include <linux/bsearch.h>
- #include <linux/btf.h>
- #include <linux/hex.h>
-@@ -19,6 +20,8 @@
- #include <linux/fdtable.h>
- #include <linux/file.h>
- #include <linux/fs.h>
-+#include <linux/irq_work.h>
-+#include <linux/llist.h>
- #include <linux/license.h>
- #include <linux/filter.h>
- #include <linux/kernel.h>
-@@ -65,6 +68,131 @@ static DEFINE_SPINLOCK(map_idr_lock);
- static DEFINE_IDR(link_idr);
- static DEFINE_SPINLOCK(link_idr_lock);
- 
-+struct bpf_dtor_kptr_work {
-+	struct llist_node node;
-+	void *obj;
-+	btf_dtor_kfunc_t dtor;
++enum kptr_dtor_nmi_map_type {
++	KPTR_DTOR_NMI_MAP_HASH = 1,
++	KPTR_DTOR_NMI_MAP_ARRAY,
 +};
 +
-+/* Queue pending dtors per CPU; the idle pool stays global. */
-+static DEFINE_PER_CPU(struct llist_head, bpf_dtor_kptr_jobs);
-+static LLIST_HEAD(bpf_dtor_kptr_idle);
-+/* Keep total >= refs + active so NMI frees never need to allocate. */
-+static atomic_long_t bpf_dtor_kptr_refs = ATOMIC_LONG_INIT(0);
-+static atomic_long_t bpf_dtor_kptr_active = ATOMIC_LONG_INIT(0);
-+static atomic_long_t bpf_dtor_kptr_total = ATOMIC_LONG_INIT(0);
++struct kptr_dtor_nmi_case {
++	const char *name;
++	__u32 map_type;
++};
 +
-+/* Bound reserve overshoot so the pool tracks demand instead of growing on itself. */
-+#define BPF_DTOR_KPTR_RESERVE_HEADROOM 64L
-+
-+static void bpf_dtor_kptr_worker(struct irq_work *work);
-+static DEFINE_PER_CPU(struct irq_work, bpf_dtor_kptr_irq_work) =
-+	IRQ_WORK_INIT_HARD(bpf_dtor_kptr_worker);
-+
-+static void bpf_dtor_kptr_push_idle(struct bpf_dtor_kptr_work *job)
++__maybe_unused
++static int find_test_cpu(void)
 +{
-+	llist_add(&job->node, &bpf_dtor_kptr_idle);
++	cpu_set_t cpuset;
++	int cpu, err;
++
++	err = sched_getaffinity(0, sizeof(cpuset), &cpuset);
++	if (!ASSERT_OK(err, "sched_getaffinity"))
++		return -1;
++
++	for (cpu = 0; cpu < CPU_SETSIZE; cpu++) {
++		if (CPU_ISSET(cpu, &cpuset))
++			return cpu;
++	}
++
++	ASSERT_TRUE(false, "cpu_available");
++	return -1;
 +}
 +
-+static struct bpf_dtor_kptr_work *bpf_dtor_kptr_pop_idle(void)
++__maybe_unused
++static int open_nmi_pmu_event_on_cpu(int cpu)
 +{
-+	struct llist_node *node;
++	struct perf_event_attr attr = {
++		.size = sizeof(attr),
++		.type = PERF_TYPE_HARDWARE,
++		.config = PERF_COUNT_HW_CPU_CYCLES,
++		.freq = 1,
++		.sample_freq = 1000,
++	};
++	int pmu_fd;
 +
-+	node = llist_del_first(&bpf_dtor_kptr_idle);
-+	if (!node)
-+		return NULL;
-+
-+	return llist_entry(node, struct bpf_dtor_kptr_work, node);
-+}
-+
-+static void bpf_dtor_kptr_trim(void)
-+{
-+	struct bpf_dtor_kptr_work *job;
-+	long total;
-+	long needed;
-+
-+	for (;;) {
-+		total = atomic_long_read(&bpf_dtor_kptr_total);
-+		needed = atomic_long_read(&bpf_dtor_kptr_refs) +
-+			 atomic_long_read(&bpf_dtor_kptr_active);
-+		if (total <= needed)
-+			return;
-+
-+		job = bpf_dtor_kptr_pop_idle();
-+		if (!job)
-+			return;
-+
-+		if (!atomic_long_try_cmpxchg(&bpf_dtor_kptr_total, &total, total - 1)) {
-+			bpf_dtor_kptr_push_idle(job);
-+			continue;
++	pmu_fd = syscall(__NR_perf_event_open, &attr, -1, cpu, -1,
++			 PERF_FLAG_FD_CLOEXEC);
++	if (pmu_fd == -1) {
++		if (errno == ENOENT || errno == EOPNOTSUPP) {
++			printf("SKIP:no PERF_COUNT_HW_CPU_CYCLES\n");
++			test__skip();
 +		}
++		return -1;
++	}
 +
-+		bpf_mem_free(&bpf_global_ma, job);
++	return pmu_fd;
++}
++
++__maybe_unused
++static bool pin_to_cpu(int cpu, cpu_set_t *old_cpuset)
++{
++	cpu_set_t cpuset;
++	int err;
++
++	err = sched_getaffinity(0, sizeof(*old_cpuset), old_cpuset);
++	if (!ASSERT_OK(err, "sched_getaffinity"))
++		return false;
++
++	CPU_ZERO(&cpuset);
++	CPU_SET(cpu, &cpuset);
++	err = sched_setaffinity(0, sizeof(cpuset), &cpuset);
++	if (!ASSERT_OK(err, "sched_setaffinity"))
++		return false;
++
++	return true;
++}
++
++__maybe_unused
++static void restore_affinity(const cpu_set_t *old_cpuset)
++{
++	ASSERT_OK(sched_setaffinity(0, sizeof(*old_cpuset), old_cpuset),
++		  "restore_affinity");
++}
++
++__maybe_unused
++static bool run_syscall_prog(struct bpf_program *prog, const char *name)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	int err;
++
++	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
++	if (!ASSERT_OK(err, name))
++		return false;
++	if (!ASSERT_EQ(opts.retval, 0, name))
++		return false;
++
++	return true;
++}
++
++__maybe_unused
++static bool wait_for_nmi_drain(struct kptr_dtor_nmi *skel,
++			       __u32 expected_deleted,
++			       __u32 expected_release_calls)
++{
++	u64 now_ns, timeout_time_ns;
++
++	now_ns = get_time_ns();
++	timeout_time_ns = now_ns + DELETE_TIMEOUT_NS;
++	while (skel->bss->kptr_dtor_nmi_deleted < expected_deleted ||
++	       skel->bss->kptr_dtor_nmi_release_calls < expected_release_calls) {
++		if (skel->bss->kptr_dtor_nmi_setup_err ||
++		    skel->bss->kptr_dtor_nmi_nmi_err ||
++		    skel->bss->kptr_dtor_nmi_cleanup_err)
++			break;
++		now_ns = get_time_ns();
++		if (now_ns >= timeout_time_ns)
++			break;
++		sched_yield();
++	}
++
++	if (!ASSERT_EQ(skel->bss->kptr_dtor_nmi_setup_err, 0,
++		       "kptr_dtor_nmi_setup_err"))
++		return false;
++	if (!ASSERT_EQ(skel->bss->kptr_dtor_nmi_nmi_err, 0,
++		       "kptr_dtor_nmi_nmi_err"))
++		return false;
++	if (!ASSERT_EQ(skel->bss->kptr_dtor_nmi_cleanup_err, 0,
++		       "kptr_dtor_nmi_cleanup_err"))
++		return false;
++	if (!ASSERT_GE(skel->bss->kptr_dtor_nmi_deleted, expected_deleted,
++		       "kptr_dtor_nmi_deleted"))
++		return false;
++	if (!ASSERT_GE(skel->bss->kptr_dtor_nmi_release_calls,
++		       expected_release_calls,
++		       "kptr_dtor_nmi_release_calls"))
++		return false;
++	if (!ASSERT_LT(now_ns, timeout_time_ns, "kptr_dtor_nmi_timeout"))
++		return false;
++
++	return true;
++}
++
++__maybe_unused
++static void run_kptr_dtor_nmi_case(const struct kptr_dtor_nmi_case *test)
++{
++	struct kptr_dtor_nmi *skel;
++	cpu_set_t old_cpuset;
++	bool pinned = false;
++	int cpu = -1;
++	int pmu_fd = -1;
++	int err, round;
++
++	cpu = find_test_cpu();
++	if (cpu < 0)
++		return;
++
++	skel = kptr_dtor_nmi__open();
++	if (!ASSERT_OK_PTR(skel, "kptr_dtor_nmi__open"))
++		return;
++
++	skel->bss->kptr_dtor_nmi_map_type = test->map_type;
++	bpf_program__set_autoattach(skel->progs.clear_kptrs_from_nmi, false);
++
++	err = kptr_dtor_nmi__load(skel);
++	if (!ASSERT_OK(err, "kptr_dtor_nmi__load"))
++		goto cleanup;
++
++	err = kptr_dtor_nmi__attach(skel);
++	if (!ASSERT_OK(err, "kptr_dtor_nmi__attach"))
++		goto cleanup;
++
++	skel->links.clear_kptrs_from_nmi =
++		bpf_program__attach_trace(skel->progs.clear_kptrs_from_nmi);
++	if (!ASSERT_OK_PTR(skel->links.clear_kptrs_from_nmi,
++			   "attach_tp_btf_nmi_handler"))
++		goto cleanup;
++
++	pinned = pin_to_cpu(cpu, &old_cpuset);
++	if (!pinned)
++		goto cleanup;
++
++	pmu_fd = open_nmi_pmu_event_on_cpu(cpu);
++	if (pmu_fd < 0)
++		goto cleanup;
++
++	for (round = 0; round < KPTR_DTOR_NMI_ROUNDS; round++) {
++		__u32 expected_total;
++
++		if (!run_syscall_prog(skel->progs.populate_kptrs, "populate_kptrs"))
++			goto cleanup;
++
++		expected_total = (round + 1) * KPTR_DTOR_NMI_MAX_SLOTS;
++		if (!ASSERT_EQ(skel->bss->kptr_dtor_nmi_setup_created,
++			       expected_total,
++			       "kptr_dtor_nmi_setup_created"))
++			goto cleanup;
++
++		if (!wait_for_nmi_drain(skel, expected_total, expected_total))
++			goto cleanup;
++
++		kern_sync_rcu();
++	}
++
++	if (!run_syscall_prog(skel->progs.cleanup_kptrs, "cleanup_kptrs"))
++		goto cleanup;
++	/*
++	 * The grace period for rcu cannot complete until the CPU that ran the
++	 * hard irq_work has passed through a quiescent state after running
++	 * our dtor work. This effectively flushes our pending work and allows
++	 * the test to verify the dtor was called the expected number of times.
++	 */
++	kern_sync_rcu();
++	ASSERT_EQ(skel->bss->kptr_dtor_nmi_cleanup_deleted, 0,
++		  "kptr_dtor_nmi_cleanup_deleted");
++
++cleanup:
++	if (pmu_fd >= 0)
++		close(pmu_fd);
++	if (pinned)
++		restore_affinity(&old_cpuset);
++	kptr_dtor_nmi__destroy(skel);
++}
++
++void serial_test_kptr_dtor_nmi(void)
++{
++/*
++ * nmi_handler isn't supported for these architectures.
++ */
++#if defined(__aarch64__) || defined(__s390x__)
++	test__skip();
++	return;
++#else
++	static const struct kptr_dtor_nmi_case tests[] = {
++		{ "hash", KPTR_DTOR_NMI_MAP_HASH },
++		{ "array", KPTR_DTOR_NMI_MAP_ARRAY },
++	};
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(tests); i++) {
++		if (!test__start_subtest(tests[i].name))
++			continue;
++		run_kptr_dtor_nmi_case(&tests[i]);
++	}
++#endif
++}
+diff --git a/tools/testing/selftests/bpf/progs/kptr_dtor_nmi.c b/tools/testing/selftests/bpf/progs/kptr_dtor_nmi.c
+new file mode 100644
+index 000000000000..1ab5951a7a22
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/kptr_dtor_nmi.c
+@@ -0,0 +1,414 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <vmlinux.h>
++#include <linux/errno.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++#define KPTR_DTOR_NMI_MAX_SLOTS 8
++
++enum kptr_dtor_nmi_map_type {
++	KPTR_DTOR_NMI_MAP_HASH = 1,
++	KPTR_DTOR_NMI_MAP_ARRAY,
++};
++
++enum kptr_dtor_nmi_err {
++	KPTR_DTOR_NMI_SETUP_CREATE_ERR = 1,
++	KPTR_DTOR_NMI_SETUP_LOOKUP_ERR,
++	KPTR_DTOR_NMI_SETUP_STALE_ERR,
++	KPTR_DTOR_NMI_SETUP_MAP_ERR,
++	KPTR_DTOR_NMI_DELETE_ERR,
++	KPTR_DTOR_NMI_CLEANUP_ERR,
++};
++
++struct kptr_dtor_nmi_value {
++	struct bpf_cpumask __kptr * mask;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, __u32);
++	__type(value, struct kptr_dtor_nmi_value);
++	__uint(max_entries, KPTR_DTOR_NMI_MAX_SLOTS);
++} kptr_dtor_nmi_hash SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__type(key, __u32);
++	__type(value, struct kptr_dtor_nmi_value);
++	__uint(max_entries, KPTR_DTOR_NMI_MAX_SLOTS);
++} kptr_dtor_nmi_array SEC(".maps");
++
++struct bpf_cpumask *bpf_cpumask_create(void) __ksym __weak;
++void bpf_cpumask_release(struct bpf_cpumask *cpumask) __ksym __weak;
++
++__u32 kptr_dtor_nmi_live_mask;
++__u32 kptr_dtor_nmi_map_type;
++__u32 kptr_dtor_nmi_setup_created;
++__u32 kptr_dtor_nmi_deleted;
++__u32 kptr_dtor_nmi_cleanup_deleted;
++__u32 kptr_dtor_nmi_release_calls;
++__u32 kptr_dtor_nmi_setup_err;
++__u32 kptr_dtor_nmi_nmi_err;
++__u32 kptr_dtor_nmi_cleanup_err;
++int kptr_dtor_nmi_setup_errno;
++int kptr_dtor_nmi_nmi_errno;
++int kptr_dtor_nmi_cleanup_errno;
++
++static void set_err(__u32 *err_dst, int *errno_dst, __u32 err, int err_no)
++{
++	if (!*err_dst) {
++		*err_dst = err;
++		*errno_dst = err_no;
 +	}
 +}
 +
-+static int bpf_dtor_kptr_reserve(long needed)
++static bool slot_is_live(__u32 slot)
 +{
-+	struct bpf_dtor_kptr_work *job;
-+	long headroom;
-+	long target;
++	return kptr_dtor_nmi_live_mask & (1U << slot);
++}
 +
-+	headroom = min_t(long, needed, BPF_DTOR_KPTR_RESERVE_HEADROOM);
-+	if (check_add_overflow(needed, headroom, &target))
-+		target = needed;
++static void mark_slot_live(__u32 slot)
++{
++	kptr_dtor_nmi_live_mask |= 1U << slot;
++}
 +
-+	while (atomic_long_read(&bpf_dtor_kptr_total) < target) {
-+		job = bpf_mem_alloc(&bpf_global_ma, sizeof(*job));
-+		if (!job)
-+			return -ENOMEM;
-+		atomic_long_inc(&bpf_dtor_kptr_total);
-+		bpf_dtor_kptr_push_idle(job);
++static void clear_slot_live(__u32 slot)
++{
++	kptr_dtor_nmi_live_mask &= ~(1U << slot);
++}
++
++static struct kptr_dtor_nmi_value *lookup_hash_value(__u32 slot)
++{
++	return bpf_map_lookup_elem(&kptr_dtor_nmi_hash, &slot);
++}
++
++static struct kptr_dtor_nmi_value *lookup_array_value(__u32 slot)
++{
++	return bpf_map_lookup_elem(&kptr_dtor_nmi_array, &slot);
++}
++
++static int stash_mask(struct kptr_dtor_nmi_value *value, __u32 slot)
++{
++	struct bpf_cpumask *mask, *old;
++
++	mask = bpf_cpumask_create();
++	if (!mask)
++		return -ENOMEM;
++
++	old = bpf_kptr_xchg(&value->mask, mask);
++	if (old) {
++		bpf_cpumask_release(old);
++		return -EEXIST;
++	}
++
++	mark_slot_live(slot);
++	kptr_dtor_nmi_setup_created++;
++	return 0;
++}
++
++static bool populate_hash_slot(__u32 slot)
++{
++	struct kptr_dtor_nmi_value init = {};
++	struct kptr_dtor_nmi_value *value;
++	int err;
++
++	err = bpf_map_update_elem(&kptr_dtor_nmi_hash, &slot, &init, BPF_NOEXIST);
++	if (err) {
++		set_err(&kptr_dtor_nmi_setup_err,
++				&kptr_dtor_nmi_setup_errno,
++				KPTR_DTOR_NMI_SETUP_CREATE_ERR, err);
++		return false;
++	}
++
++	value = lookup_hash_value(slot);
++	if (!value) {
++		set_err(&kptr_dtor_nmi_setup_err,
++				&kptr_dtor_nmi_setup_errno,
++				KPTR_DTOR_NMI_SETUP_LOOKUP_ERR, -ENOENT);
++		return false;
++	}
++
++	err = stash_mask(value, slot);
++	if (err) {
++		set_err(&kptr_dtor_nmi_setup_err,
++				&kptr_dtor_nmi_setup_errno,
++				KPTR_DTOR_NMI_SETUP_STALE_ERR, err);
++		return false;
++	}
++
++	return true;
++}
++
++static bool populate_array_slot(__u32 slot)
++{
++	struct kptr_dtor_nmi_value *value;
++	int err;
++
++	value = lookup_array_value(slot);
++	if (!value) {
++		set_err(&kptr_dtor_nmi_setup_err,
++				&kptr_dtor_nmi_setup_errno,
++				KPTR_DTOR_NMI_SETUP_LOOKUP_ERR, -ENOENT);
++		return false;
++	}
++
++	err = stash_mask(value, slot);
++	if (err) {
++		set_err(&kptr_dtor_nmi_setup_err,
++				&kptr_dtor_nmi_setup_errno,
++				KPTR_DTOR_NMI_SETUP_STALE_ERR, err);
++		return false;
++	}
++
++	return true;
++}
++
++static bool clear_hash_slot_from_nmi(__u32 slot)
++{
++	struct kptr_dtor_nmi_value *value;
++	int err;
++
++	if (!slot_is_live(slot))
++		return true;
++
++	err = bpf_map_delete_elem(&kptr_dtor_nmi_hash, &slot);
++	if (!err) {
++		clear_slot_live(slot);
++		kptr_dtor_nmi_deleted++;
++		return true;
++	}
++
++	/*
++	 * Hash deletes take rqspinlock-backed bucket locks. NMI reentry can lose
++	 * those acquisitions with -EDEADLK or -ETIMEDOUT even though the slot is
++	 * still valid, so leave it live and retry on a later NMI.
++	 */
++	if (err == -EDEADLK || err == -ETIMEDOUT)
++		return true;
++
++	value = lookup_hash_value(slot);
++	if (value)
++		set_err(&kptr_dtor_nmi_nmi_err,
++				&kptr_dtor_nmi_nmi_errno,
++				KPTR_DTOR_NMI_DELETE_ERR, err);
++
++	return false;
++}
++
++static bool clear_array_slot_from_nmi(__u32 slot)
++{
++	struct kptr_dtor_nmi_value init = {};
++	int err;
++
++	if (!slot_is_live(slot))
++		return true;
++
++	err = bpf_map_update_elem(&kptr_dtor_nmi_array, &slot, &init, BPF_EXIST);
++	if (err) {
++		set_err(&kptr_dtor_nmi_nmi_err,
++				&kptr_dtor_nmi_nmi_errno,
++				KPTR_DTOR_NMI_DELETE_ERR, err);
++		return false;
++	}
++
++	clear_slot_live(slot);
++	kptr_dtor_nmi_deleted++;
++	return true;
++}
++
++static bool cleanup_hash_slot(__u32 slot)
++{
++	struct kptr_dtor_nmi_value *value;
++	struct bpf_cpumask *old = NULL;
++
++	value = lookup_hash_value(slot);
++	if (!value) {
++		clear_slot_live(slot);
++		return true;
++	}
++
++	old = bpf_kptr_xchg(&value->mask, old);
++	if (old) {
++		bpf_cpumask_release(old);
++		kptr_dtor_nmi_cleanup_deleted++;
++	}
++
++	if (bpf_map_delete_elem(&kptr_dtor_nmi_hash, &slot) &&
++	    lookup_hash_value(slot)) {
++		set_err(&kptr_dtor_nmi_cleanup_err,
++				&kptr_dtor_nmi_cleanup_errno,
++				KPTR_DTOR_NMI_CLEANUP_ERR, -EIO);
++		return false;
++	}
++
++	clear_slot_live(slot);
++	return true;
++}
++
++static bool cleanup_array_slot(__u32 slot)
++{
++	struct kptr_dtor_nmi_value *value;
++	struct bpf_cpumask *old = NULL;
++
++	value = lookup_array_value(slot);
++	if (!value) {
++		set_err(&kptr_dtor_nmi_cleanup_err,
++				&kptr_dtor_nmi_cleanup_errno,
++				KPTR_DTOR_NMI_CLEANUP_ERR, -ENOENT);
++		return false;
++	}
++
++	old = bpf_kptr_xchg(&value->mask, old);
++	if (old) {
++		bpf_cpumask_release(old);
++		kptr_dtor_nmi_cleanup_deleted++;
++	}
++
++	clear_slot_live(slot);
++	return true;
++}
++
++static void populate_hash_masks(void)
++{
++	__u32 slot;
++
++	for (slot = 0; slot < KPTR_DTOR_NMI_MAX_SLOTS; slot++) {
++		if (!populate_hash_slot(slot))
++			return;
++	}
++}
++
++static void populate_array_masks(void)
++{
++	__u32 slot;
++
++	for (slot = 0; slot < KPTR_DTOR_NMI_MAX_SLOTS; slot++) {
++		if (!populate_array_slot(slot))
++			return;
++	}
++}
++
++static void clear_hash_masks_from_nmi(void)
++{
++	__u32 slot;
++
++	for (slot = 0; slot < KPTR_DTOR_NMI_MAX_SLOTS; slot++) {
++		if (!clear_hash_slot_from_nmi(slot))
++			return;
++	}
++}
++
++static void clear_array_masks_from_nmi(void)
++{
++	__u32 slot;
++
++	for (slot = 0; slot < KPTR_DTOR_NMI_MAX_SLOTS; slot++) {
++		if (!clear_array_slot_from_nmi(slot))
++			return;
++	}
++}
++
++static void cleanup_hash_masks(void)
++{
++	__u32 slot;
++
++	for (slot = 0; slot < KPTR_DTOR_NMI_MAX_SLOTS; slot++) {
++		if (!cleanup_hash_slot(slot))
++			return;
++	}
++}
++
++static void cleanup_array_masks(void)
++{
++	__u32 slot;
++
++	for (slot = 0; slot < KPTR_DTOR_NMI_MAX_SLOTS; slot++) {
++		if (!cleanup_array_slot(slot))
++			return;
++	}
++}
++
++SEC("syscall")
++int populate_kptrs(void *ctx)
++{
++	(void)ctx;
++
++	switch (kptr_dtor_nmi_map_type) {
++	case KPTR_DTOR_NMI_MAP_HASH:
++		populate_hash_masks();
++		break;
++	case KPTR_DTOR_NMI_MAP_ARRAY:
++		populate_array_masks();
++		break;
++	default:
++		set_err(&kptr_dtor_nmi_setup_err,
++			&kptr_dtor_nmi_setup_errno,
++			KPTR_DTOR_NMI_SETUP_MAP_ERR, -EINVAL);
++		break;
 +	}
 +
 +	return 0;
 +}
 +
-+int bpf_kptr_offload_inc(void)
++SEC("syscall")
++int cleanup_kptrs(void *ctx)
 +{
-+	long needed;
-+	int err;
++	(void)ctx;
 +
-+	if (unlikely(!bpf_global_ma_set))
-+		return -ENOMEM;
-+
-+	/*
-+	 * Read active before incrementing refs so a free path moving one slot from
-+	 * refs to active cannot shrink the reservation snapshot below the steady
-+	 * state we need to cover. Racing results worst case in a larger reservation.
-+	 */
-+	needed = atomic_long_read(&bpf_dtor_kptr_active);
-+	needed += atomic_long_inc_return(&bpf_dtor_kptr_refs);
-+	err = bpf_dtor_kptr_reserve(needed);
-+	if (err)
-+		atomic_long_dec(&bpf_dtor_kptr_refs);
-+
-+	return err;
-+}
-+
-+void bpf_kptr_offload_dec(void)
-+{
-+	long val;
-+
-+	val = atomic_long_dec_return(&bpf_dtor_kptr_refs);
-+	if (!WARN_ON_ONCE(val < 0))
-+		return;
-+
-+	/*
-+	 * Clamp a mismatched decrement back to zero without overwriting a
-+	 * concurrent increment that already repaired the counter.
-+	 */
-+	do {
-+		val = atomic_long_read(&bpf_dtor_kptr_refs);
-+		if (val >= 0)
-+			break;
-+	} while (!atomic_long_try_cmpxchg(&bpf_dtor_kptr_refs, &val, 0));
-+}
-+
- int sysctl_unprivileged_bpf_disabled __read_mostly =
- 	IS_BUILTIN(CONFIG_BPF_UNPRIV_DEFAULT_OFF) ? 2 : 0;
- 
-@@ -807,6 +935,46 @@ void bpf_obj_free_task_work(const struct btf_record *rec, void *obj)
- 	bpf_task_work_cancel_and_free(obj + rec->task_work_off);
- }
- 
-+static void bpf_dtor_kptr_worker(struct irq_work *work)
-+{
-+	struct llist_node *jobs, *node, *next;
-+
-+	jobs = llist_del_all(this_cpu_ptr(&bpf_dtor_kptr_jobs));
-+	llist_for_each_safe(node, next, jobs) {
-+		struct bpf_dtor_kptr_work *job;
-+
-+		job = llist_entry(node, struct bpf_dtor_kptr_work, node);
-+		job->dtor(job->obj);
-+		atomic_long_dec(&bpf_dtor_kptr_active);
-+		bpf_dtor_kptr_push_idle(job);
++	switch (kptr_dtor_nmi_map_type) {
++	case KPTR_DTOR_NMI_MAP_HASH:
++		cleanup_hash_masks();
++		break;
++	case KPTR_DTOR_NMI_MAP_ARRAY:
++		cleanup_array_masks();
++		break;
++	default:
++		set_err(&kptr_dtor_nmi_cleanup_err,
++			&kptr_dtor_nmi_cleanup_errno,
++			KPTR_DTOR_NMI_CLEANUP_ERR, -EINVAL);
++		break;
 +	}
 +
-+	bpf_dtor_kptr_trim();
++	return 0;
 +}
 +
-+static void bpf_dtor_kptr_offload(void *obj, btf_dtor_kfunc_t dtor)
++SEC("tp_btf/nmi_handler")
++int BPF_PROG(clear_kptrs_from_nmi, void *handler, void *regs, s64 delta_ns,
++	     int handled)
 +{
-+	struct bpf_dtor_kptr_work *job;
++	(void)handler;
++	(void)regs;
++	(void)delta_ns;
++	(void)handled;
 +
-+	atomic_long_inc(&bpf_dtor_kptr_active);
-+	job = bpf_dtor_kptr_pop_idle();
-+	if (WARN_ON_ONCE(!job)) {
-+		atomic_long_dec(&bpf_dtor_kptr_active);
-+		/*
-+		 * This should stay unreachable if reserve accounting is correct. If it
-+		 * ever breaks, running the destructor unsafely is still better than
-+		 * leaking the object permanently.
-+		 */
-+		dtor(obj);
-+		return;
++	if (kptr_dtor_nmi_deleted >= kptr_dtor_nmi_setup_created)
++		return 0;
++
++	switch (kptr_dtor_nmi_map_type) {
++	case KPTR_DTOR_NMI_MAP_HASH:
++		clear_hash_masks_from_nmi();
++		break;
++	case KPTR_DTOR_NMI_MAP_ARRAY:
++		clear_array_masks_from_nmi();
++		break;
++	default:
++		set_err(&kptr_dtor_nmi_nmi_err,
++			&kptr_dtor_nmi_nmi_errno,
++			KPTR_DTOR_NMI_DELETE_ERR, -EINVAL);
++		break;
 +	}
 +
-+	job->obj = obj;
-+	job->dtor = dtor;
-+	if (llist_add(&job->node, this_cpu_ptr(&bpf_dtor_kptr_jobs)))
-+		irq_work_queue(this_cpu_ptr(&bpf_dtor_kptr_irq_work));
++	return 0;
 +}
 +
- void bpf_obj_free_fields(const struct btf_record *rec, void *obj)
- {
- 	const struct btf_field *fields;
-@@ -842,6 +1010,19 @@ void bpf_obj_free_fields(const struct btf_record *rec, void *obj)
- 			xchgd_field = (void *)xchg((unsigned long *)field_ptr, 0);
- 			if (!xchgd_field)
- 				break;
-+			if (in_nmi() && field->kptr.dtor) {
-+				bpf_dtor_kptr_offload(xchgd_field, field->kptr.dtor);
-+				bpf_kptr_offload_dec();
-+				break;
-+			}
-+			if (field->kptr.dtor)
-+				/*
-+				 * Dtor kptrs reach storage through bpf_ref_kptr_xchg(), which
-+				 * pairs installation with bpf_kptr_offload_inc(). Drop that
-+				 * reservation on non-NMI teardown once no active transition is
-+				 * needed.
-+				 */
-+				bpf_kptr_offload_dec();
- 
- 			if (!btf_is_kernel(field->kptr.btf)) {
- 				pointee_struct_meta = btf_find_struct_meta(field->kptr.btf,
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 11054ad89c14..2c7b21bda666 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9950,6 +9950,8 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		if (err)
- 			return err;
- 	}
-+	env->insn_aux_data[insn_idx].kptr_has_dtor =
-+		func_id == BPF_FUNC_kptr_xchg && !!meta.kptr_field->kptr.dtor;
- 
- 	err = record_func_map(env, &meta, func_id, insn_idx);
- 	if (err)
++SEC("fentry/bpf_cpumask_release")
++int BPF_PROG(count_cpumask_release, struct bpf_cpumask *mask)
++{
++	(void)mask;
++	kptr_dtor_nmi_release_calls++;
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.53.0
 
