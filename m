@@ -1,181 +1,130 @@
-Received: from flow-b7-smtp.messagingengine.com (flow-b7-smtp.messagingengine.com [202.12.124.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0C325A2BB;
-	Tue,  5 May 2026 06:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.142
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777962852; cv=none; b=sDWyK/UWWkr89mhict/HiMesFfUaBRFxziCMjthhF5TgiPVZbN8im9oLsgRB3b4eIpN3S/ig+a5e/mWo0dc0EXOCAKvIAiK0jf3f+6RgGHPKfnU+34KBCqLl28JnplF6p6SAs7rohqC1yl3El3p3IrRcRyxuRsxRFR4PhuYg2x8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777962852; c=relaxed/simple;
-	bh=8rTZRRKXctVdIweleOee7CPkZZL8SqlWUIGqOF+HSqU=;
-	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=e2CAdiyeznddZUU+CjZOfd2mYxvfCOhSrDlmgTqSK5+DnAkMsgNy0cab9RGclcqp4Nbcf9IotHcBWDQ7esLk/jY/fVDru/TA5z4VFxLblPzoTJCLPmoRdvIqgIi72u1nO+szoz0kZYsHQ8gkyWwdJ9Q34tIXnlbXF+sR8Xj0WxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=u1R7aGqI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ajkXX1nP; arc=none smtp.client-ip=202.12.124.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58AF73DB641
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 07:00:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777964448; cv=pass; b=e7Xfqu1g6bqavEXWZkDwR4qSOgv6BLMI5FFfQTLytbVH9M7V3W0IBcnOsSxvXzhYQIT6jWcKeIiiHUch8xMna3tcTruB2AS90JsHXepzblCpcILbFTXix+5/Yx5EgdjxJG1aRxT/QydDtN4PYFDq3fb3dzowsCRkfpgcjSYEaZQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777964448; c=relaxed/simple;
+	bh=fNaUy4JEgd7bwzjsrzd2PI7TZG2tO9lgcuJ/vKp6wQo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RFKwRTUeFbWbp/C7Z9GL0DtyIim9q4N5/8jjoroKOjrwLlVTymdTk0p+vlcIwygjsvza7tjs6pjIHDirqbh9tp7uEVI7UCYPFfDVxAf9oAuqZua4RBr3jZWMnoUQhucmFleyLWhsvbpek03AClb5BVpVkfYra/wBpI760UUKs/c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com; spf=pass smtp.mailfrom=0x0f.com; dkim=pass (1024-bit key) header.d=0x0f.com header.i=@0x0f.com header.b=gMurAuiO; arc=pass smtp.client-ip=74.125.82.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0x0f.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="u1R7aGqI";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ajkXX1nP"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.stl.internal (Postfix) with ESMTP id B09DF130028C;
-	Tue,  5 May 2026 02:34:03 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Tue, 05 May 2026 02:34:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:content-transfer-encoding:content-type:content-type:date:date
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1777962843;
-	 x=1777970043; bh=mSzVT7Fb6Q1GJvMmXV4hAtUQgAfzR7myXYKHCqT7Zp4=; b=
-	u1R7aGqIUCFHM+/QbYGpsFVEKiZeLoCsSxD6etpr4TI1UhmqIl6UT+oFHi8hc05w
-	0Kh9aq4ttEtsryomzEJEv9kPB8Fftb1JtIP+uWtc9es/UdFJvjtmfZByxSRQdISj
-	hKwz24Zmre1KLPUOkI0Hn/wASeAoPUQh12qShGm7UZNKBBQ4FfTdc/jHMpYZui62
-	mzIdz6iBI/24IO3jpBXC55Edd6Px2sYtlBrDGRQblJjdavx2QnZCA9BgMQkeBB7u
-	l5yQ4GsAKfjqk0an+lys1CTVV83c9xbtX2TyR/r17pep5BV10h9nr1XzvPWxNOEw
-	sTQbBCVBg+MY6GIg4QycmQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:content-transfer-encoding:content-type
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1777962843; x=1777970043; bh=m
-	SzVT7Fb6Q1GJvMmXV4hAtUQgAfzR7myXYKHCqT7Zp4=; b=ajkXX1nP6snZdVKF3
-	j0gwvAj5S9cREUzuND2pMdCFhf3YMYp37T1kxU4Gsk48v/h7/ose5qJRMEIzdGgs
-	fe8yA5TFh4XHKm4b76NQUwZ48xElDEi9fmTKyKk4KYtJrSRjs+Vmc8yOGCPcY317
-	4ju7HH81ucPovlqXA79zHL+ulbK8niU69ZTg0Yxq1QCqk48a7+hgSkv7Inl2WBi9
-	vCclUolYb4Cc7GXKp7lbbXxwCu0c8xFvQl+TPgiEqPmp5bQAU+kLKBTvSvtXZMhF
-	bIz6HbPn4psmb/MbWw7iG7uOE5/SBBx/d19Wbh7PwW3mWspWrXXtMKqj2yg+Fwpa
-	roBXw==
-X-ME-Sender: <xms:WY_5aTmdaM4OKhG8xWdJ49xyodp-nrw4qj7CQ51RPQU42f9CPTX39A>
-    <xme:WY_5aRr75hktxD3-avGWlXJ-Zw0-igJgXhKy1Xing9OPwcM_Omr4mn_bAo1ux33Fz
-    SSGlHbI-bwj8TbyQ53wq3ZCUlq1_DIpB8GW-6iicUhEU7YsOm-mOKc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddutddutdduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvffkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpefhkeeltdfffefhgffhteetheeuhffgteeghfdtueefudeuleetgfehtdejieffhfen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeegjedpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtoheptghuihihuhhnhhhuihessgihthgvuggrnhgtvgdrtghomhdprhgtph
-    htthhopegsvghnrdguohhokhhssegtohguvghthhhinhhkrdgtohdruhhkpdhrtghpthht
-    ohepphgrlhhmvghrsegurggssggvlhhtrdgtohhmpdhrtghpthhtoheprghouhesvggvtg
-    hsrdgsvghrkhgvlhgvhidrvgguuhdprhgtphhtthhopegtlhesghgvnhhtfihordhorhhg
-    pdhrtghpthhtoheprghlvgigsehghhhithhirdhfrhdprhgtphhtthhopegrnhguhigsnh
-    grtgesghhmrghilhdrtghomhdprhgtphhtthhopegvugguhiiikeejsehgmhgrihhlrdgt
-    ohhmpdhrtghpthhtohepmhgvmhigohhrsehgmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:WY_5aRP-G1AZF66xxJHwKdzzA4REx0aM98VL9jtjTc-7cNqSRC2JrQ>
-    <xmx:WY_5afupNhAomgYOUp9eRs5fIzdUV3vo78FkWK8Y5wILvs0fjAzaHQ>
-    <xmx:WY_5aY1hkGHq06h0lw9neBCLRVCRbvSxiX7tdKxyRk5szccY56SvQA>
-    <xmx:WY_5ae1sqHKpt2devCX1YzTH1h8JSb6XlF2sb-7RTsitxUPltD_8BA>
-    <xmx:W4_5aafHexNRNA4nUj3kE13hAfhlWJDQLkDJihm9sNYAgzDk-Kj8TeiD>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 10624700065; Tue,  5 May 2026 02:34:01 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (1024-bit key) header.d=0x0f.com header.i=@0x0f.com header.b="gMurAuiO"
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-12dfee30612so2236521c88.0
+        for <bpf@vger.kernel.org>; Tue, 05 May 2026 00:00:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777964445; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Lmbmb6gOxWYz6ceAYHWjvwsV92Mj1SzAWho7KA4q4tI1I21oqgR2V5vmgIDrIYWL3b
+         AXsRxcorU42IVtnLC76UiaF+DHYdiA+YHakNQeVyX2DswKEJ9GkZC9VmaGq+BcPVU3B7
+         Ihps/o4pcLO2KfaUrvG9eBEbWlEdCW3u/dzp2g9rSFmLRW+XT5Mf2u3wNIZHTeRtZBbQ
+         Gswg9o+ShNd/2H39DaDHPuxlqkesW0626uwc4Iilo/I3hhXDeoiGenMrIfQ5ByWDqsh3
+         bCJIfs2GRYmg4OVPpcqJCLZnrKlD5kCa/qhBnRSNTAvhT0CvzCIIaUtlloOMLj0SsdzR
+         DqzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=Jm+rYaIrVP077A6xaWFYDY91HFVdV+ekVVmFuHZ77ac=;
+        fh=yitGoYWl2f2TIljguNqE/1IxsNyVpvC0TLXfmTHaZ4c=;
+        b=DjJr3gF3ccIK9PRulk01DGlkcr0NY00o4kdHDHTIgund+RPZNWnVtTOQo3uakjV6YY
+         xS9UXP+Swz2jF7LoSVxKlR8Mv6WD0N0sj/3Savjjj35+KW2q5NwUaNIDGz2k97G7ZlSZ
+         mkK9LOFjOI5W56ZNat7yyrI8/nJjssHo4A6LiIqla9tUvfG3KxvJ6XMHmKejCCy0R4Fx
+         PeON+4B2xm7mBFRMHfviNm6CvlyRwT3FKf9XLcEZXoo9s48t4DAQbLbHOxI4a178Qwtr
+         iHMgy5qClWTh6I620REvT8n1m54jcQhQGN9oBvias09g/rNcREPbI26xKUmYwnKlKq7g
+         ac2A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google; t=1777964445; x=1778569245; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jm+rYaIrVP077A6xaWFYDY91HFVdV+ekVVmFuHZ77ac=;
+        b=gMurAuiO7KLhzQ1jwf9a4Vbz3r241lOR8CC8cDWSWaKuE4sP42MPx2cUV99Hoy9NI2
+         Sjy1wR92b2csCTHlckxgoixrPdrGZshFH5ReaWyvgXKr/qZXLkHJi/KVKQGB2z3m5t9I
+         EyiO/3uwlKeezxoIYLrjLISxBuIR79adYDc8Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777964445; x=1778569245;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jm+rYaIrVP077A6xaWFYDY91HFVdV+ekVVmFuHZ77ac=;
+        b=U6Rvczy2fMGrjwXzZ7eugdV1JB4dGtKNbWTmZJUOpkHTexA7Nc0rdFi7zyOHsgE1Nn
+         HtVYctbHUi4CIN/oZvyng3/ny5MI5QXc6KtSi0Q9aqfeCFJYcMqDwKaGyWifi5s8jPFv
+         I10PVoUNFMVoXkUSXVxddI7Lrs0KpOOZJdapYTUu2ZwrWH7RXNNOJ7//L7euACB6eKad
+         2rWcP4gLzMPHRe5A7GJ5gSgru5pMnonS8ZLTbgAuL09JX5E1edo0pi9xvi+hfuFuVsSj
+         NDy3vVYpTWQZhx1EMEtyEOW+JPUQQglHZeZAlQkQf76bDozcvxqvhJIC34SV0dZvCzoT
+         Hz7Q==
+X-Forwarded-Encrypted: i=1; AFNElJ8KeufzFc+fdvCe4DNTKtOuFyUjL2PpdkQLIoOOvqJIc7uNBXjRa5jDhrpJM1Yc84tBwN4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxyWr7S4SKbylu1YUsvf1WvQwM2K/e9ot3QIIaSY3ijvmgVSj4h
+	2rtQ8nqI3yyVb3k8O+GEYb5pIafivHJzPVPfkD0lppyTIMegfA5gAvMQYNwl0oCQBT8PIx0rqX0
+	uw8TfFpi7Qi7nRqGTZK/0qoU0XTeen99Djiu21X0U5g==
+X-Gm-Gg: AeBDievXvGGars85/GSVDu16taMjrLBfxVJ6H3ZABAC0S51gzHZ/vrTugtf7jV5oEX2
+	R6ZolXFXIWdfTG5wVg6Cc+4+/363uwqAnmG4P3Se23VzI15MERLpersJOax4v6ivTkLWJKQTB6M
+	qyosuhCuwne8mQEO7aEyaRvkmXjmojrual7yM7hKhKRgO9gorHgZ9vcFhOCluvFxxA1TN4xi7RM
+	l7eV7JRAs6wT1OQ6mPpg6UQdRCy2cuM2ZBktfVnFwzWF1lWCHAAQRDb/JYD8KRFatxOomOUdvCt
+	B+4Pf9B+Z12b+WMkdA8D
+X-Received: by 2002:a05:7022:327:b0:12d:ce34:3f92 with SMTP id
+ a92af1059eb24-12dfd83a401mr5902092c88.31.1777964445094; Tue, 05 May 2026
+ 00:00:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: A7c2EfDQgAZJ
-Date: Tue, 05 May 2026 08:33:04 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Yunhui Cui" <cuiyunhui@bytedance.com>, "Paul Walmsley" <pjw@kernel.org>,
- "Palmer Dabbelt" <palmer@dabbelt.com>,
- "Albert Ou" <aou@eecs.berkeley.edu>, "Alexandre Ghiti" <alex@ghiti.fr>,
- "Dennis Zhou" <dennis@kernel.org>, "Tejun Heo" <tj@kernel.org>,
- "Christoph Lameter (Ampere)" <cl@gentwo.org>,
- "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>,
- "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
- "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
- "Jiri Olsa" <jolsa@kernel.org>,
- =?UTF-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, pulehui@huawei.com,
- puranjay@kernel.org, "Thomas Huth" <thuth@redhat.com>,
- "Andrew Jones" <ajones@ventanamicro.com>,
- "Ben Dooks" <ben.dooks@codethink.co.uk>,
- =?UTF-8?Q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>,
- "Samuel Holland" <samuel.holland@sifive.com>,
- "Zong Li" <zong.li@sifive.com>,
- "Conor.Dooley" <conor.dooley@microchip.com>,
- "Thomas Gleixner" <tglx@kernel.org>, "Deepak Gupta" <debug@rivosinc.com>,
- seanwascoding@gmail.com, "Andy Chiu" <andybnac@gmail.com>,
- menglong8.dong@gmail.com, cyrilbur@tenstorrent.com,
- wangruikang@iscas.ac.cn, "Atish Patra" <atishp@rivosinc.com>,
- "Anup Patel" <apatel@ventanamicro.com>, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>,
- "Justin Stitt" <justinstitt@google.com>, qingfang.deng@siflower.com.cn,
- Linux-Arch <linux-arch@vger.kernel.org>, llvm@lists.linux.dev
-Message-Id: <3720c3a4-cc0d-4ba8-97ae-35def0189e2e@app.fastmail.com>
-In-Reply-To: <20260505062026.91724-2-cuiyunhui@bytedance.com>
-References: <20260505062026.91724-1-cuiyunhui@bytedance.com>
- <20260505062026.91724-2-cuiyunhui@bytedance.com>
-Subject: Re: [PATCH v4 1/3] riscv: io: avoid null-pointer arithmetic in PIO helpers
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20260503181504.1037640-1-visitorckw@gmail.com>
+In-Reply-To: <20260503181504.1037640-1-visitorckw@gmail.com>
+From: Daniel Palmer <daniel@0x0f.com>
+Date: Tue, 5 May 2026 16:00:33 +0900
+X-Gm-Features: AVHnY4Knljmbad1uAV-c-Ej0bF2s3_zZ_vBMVSTnG6PT4pfSJpN8GeS8OCMKyKk
+Message-ID: <CAFr9PXnLSM8PA6zhLY0z4ck79EZtEwcduY=K2kLbzRh8QrfP_w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] m68k, bpf: Add initial BPF JIT compiler support
+To: Kuan-Wei Chiu <visitorckw@gmail.com>
+Cc: geert@linux-m68k.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, 
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
+	jserv@ccns.ncku.edu.tw, eleanor15x@gmail.com, marscheng@google.com, 
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, May 5, 2026, at 08:20, Yunhui Cui wrote:
-> The RISC-V PIO helpers derive I/O addresses from PCI_IOBASE in ins*(),
-> outs*(), and ioport_map().
+Hi Kuan-Wei,
+
+On Mon, 4 May 2026 at 03:15, Kuan-Wei Chiu <visitorckw@gmail.com> wrote:
 >
-> Under configurations where I/O port support is not available, these
-> expressions can still be formed during compilation and trigger
-> -Wnull-pointer-arithmetic warnings from clang.
+> Add a BPF JIT compiler for the m68k architecture.
+>
+> The JIT generates m68k machine code targeting m68020+ processors. It
+> currently excludes 68000/68010 and coldfire processors, as it relies on
+> 32 bit branch displacements (b<cc>.l) to handle large bpf programs.
+>
+> Tested with the test_bpf.ko:
+> test_bpf: Summary: 1053 PASSED, 0 FAILED, [1041/1041 JIT'ed]
+> test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
 
-If a driver attempts to use ISA port operations in a configuration
-without CONFIG_HAS_IOPORT, there is a NULL pointer warning because
-this is actually a NULL pointer access that will crash the
-kernel if the driver is ever loaded. You should not attempt
-to shut up the useful warning here but instead make sure every
-such code has a proper 'depends on HAS_IOPORT' dependency.
+Results match on a real 68040 (Apple Macintosh LC475, 1993 vintage):
 
-> 
-> +#ifdef CONFIG_HAS_IOPORT
->  __io_reads_ins(ins,  u8, b, __io_pbr(), __io_par(addr))
->  __io_reads_ins(ins, u16, w, __io_pbr(), __io_par(addr))
->  __io_reads_ins(ins, u32, l, __io_pbr(), __io_par(addr))
-> -#define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
-> -#define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-> -#define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-> +#define insb(addr, buffer, count) __insb(PCI_IO_ADDR(addr), buffer, count)
-> +#define insw(addr, buffer, count) __insw(PCI_IO_ADDR(addr), buffer, count)
-> +#define insl(addr, buffer, count) __insl(PCI_IO_ADDR(addr), buffer, count)
-> +#endif
+test_bpf: Summary: 1053 PASSED, 0 FAILED, [1041/1041 JIT'ed]
+test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
+test_bpf: test_skb_segment: Summary: 2 PASSED, 0 FAILED
+# uname -a
+Linux buildroot 7.1.0-rc1-multi-00465-g1f6c5a18ddbd #26 Tue May  5
+12:25:51 JST 2026 m68k GNU/Linux
+# cat /proc/cpuinfo
+CPU:            68040
+MMU:            68040
+FPU:            68040
+Clocking:       32.3MHz
+BogoMips:       21.55
+Calibration:    107776 loops
 
-Can you try to remove the custom accessors altogether and
-use the ones from asm-generic instead? These should already
-have the correct behavior all the time, in particular they
-already come with the correct #ifdef check that is apparently
-missing in the riscv version.
+Also the time the test took seems to be considerably shorter with JIT.
 
-> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> index ca5a1ce6f0f89..d799e5ccc9437 100644
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -1205,8 +1205,12 @@ static inline void __iomem 
-> *ioremap_np(phys_addr_t offset, size_t size)
->  #define ioport_map ioport_map
->  static inline void __iomem *ioport_map(unsigned long port, unsigned 
-> int nr)
->  {
-> +#ifdef CONFIG_HAS_IOPORT
->  	port &= IO_SPACE_LIMIT;
->  	return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-> +#else
-> +	return NULL;
-> +#endif
->  }
+So:
 
-The function definition here is guarded by the #ifdef CONFIG_HAS_IOPORT_MAP
-check, which should already prevent it from being visible when
-CONFIG_HAS_IOPORT is disabled.
-
-     Arnd
+Tested-by: Daniel Palmer <daniel@thingy.jp>
