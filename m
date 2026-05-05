@@ -1,165 +1,152 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F91B34250D
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 12:49:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA619242D72
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 12:53:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777985388; cv=none; b=gxfKZNsQ35z+2idY7yRnrcq0UaLNyPp5T4b83cGuyX2ZJSnze7/vad97w3P1LuRqJlAjLAQZHAfnOuzULApuEpYt8s/QYsYH1PUeotjXnJ3QA7OaYpba8DRUtjRFTX1OMSKb6KuPalJCoTCNtEpa9AeaUkRLQ4wIImJk3KXOZk8=
+	t=1777985617; cv=none; b=UW7Qy4+aDhP1ZvJ3Apd9cDatGto0XmP4dYtnnWWUR3HGpZKQujoYRiO1WzlHkJSksTVSNGA1N0eA9nkomHLk3pXl49eRHUINdWscBVBpt49h8gexYFtQBpyU0fPS7giHz2ZH9JVRUMkZ4pUjriczyNVB8c5mwv9cCgaIMdKzToU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777985388; c=relaxed/simple;
-	bh=jG+JayU0NiOJchomLTK5WSAt2BuNGCFnbzEKeRi7r20=;
+	s=arc-20240116; t=1777985617; c=relaxed/simple;
+	bh=zuj4Yr23PJ0UKZfcFRe5I6jNMxUuBafQfs90DMeszlw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=iP91J6SiF8xWS80/d8bcPg4/Dp6TXhz0IGQZJCMcUXoj4fV2CISzIdefajfeDm7ytwvW4DbOIlzkrzHN+FuzfrdqLd34eYAnupvQURh5fEqgf9ABY9Ib+1AAZm5fWjJ2+vj3vO5cgf7jm3QtSUlextid7YB8CV5wDyI3/7RxoCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=baPe5rau; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=FkJjz1ZrvpqnMETdBEcfbbZu5Su2tgfREPf+6iHvHn0I5xacWj24ioHp1ddqdWr0PFkvZKbsptNbdBADriuUA+45jofSv5ssJiW/sW22Hu9zBqeRzm79MZ3JunQbeNkNlChYaM5zq6FqDdzI0Ck3y9SO37ijYGbAZDMDJ+V2Ww4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J8iwjjZJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="baPe5rau"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 669E2C2BCB4;
-	Tue,  5 May 2026 12:49:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J8iwjjZJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72A36C2BCB4;
+	Tue,  5 May 2026 12:53:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777985388;
-	bh=jG+JayU0NiOJchomLTK5WSAt2BuNGCFnbzEKeRi7r20=;
+	s=k20201202; t=1777985616;
+	bh=zuj4Yr23PJ0UKZfcFRe5I6jNMxUuBafQfs90DMeszlw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=baPe5rauYuRvLsCIGxFpDP46BgNiO+gCM+qGG1WR8bggAsKbz3sECn9sxi3P6LwBA
-	 EynzyQlHYXL0HE/We21fj67KRUyhzd3H9IiUu8VB+ybCCcDYHGoj7y6NeKNcCN7GOG
-	 I5RDbwmdjpMQxvTMuOVGScmATGI893TjdOXyzLO430cAEZiGnV0kwgCjpqCHgHtgou
-	 dgQ1YeuHs7oNEUiumPmLWk66hY9MNurqf07PPfMiRSwfRtwhqMS4Cy0mGaA22Z8AHV
-	 S2igY7G7JxKkFgx5jlAJGzXtSsYtwnapG6DMzQnFSta1cKL8qzvA3+1xw+JSFiSYKo
-	 IlGCes4O0iQ0A==
+	b=J8iwjjZJwhJWtcD4WXWfPJiFtDmds9kpCo5NFyvCjPlqRciQgPGyIbE3uVvZ4ZqAw
+	 EgD/c5+oJ1Z9XKhGfkLG9L18DeOKIkBZOGztkRqFDvuB3JK4f8ScyHyvwybAbTyPGx
+	 rKj8G0sndzvS1JkVLJB53VFIMnZQYwCmY247zO4I6JdolU5CVRRmddBxIrJzRO+hA1
+	 tXheKzg3apqjfCpKBgd1WUskRHtZo5sBatCAc5XGui5VyL5TyzQaLez/w/X3hG+aVz
+	 DhCoqQVfaPQJYSm/38ypQFtwUxiJu2/du4Zahi19BDkcjoxEXj9w/jCd7hUwrkmaeG
+	 NjS6q+Xft3tmg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v14 02/19] unwind_user/sframe: Add support for reading
- .sframe headers
+Subject: Re: [PATCH v14 06/19] unwind_user/sframe: Detect .sframe sections
+ in executables
 Reply-To: sashiko@lists.linux.dev
 To: "Jens Remus" <jremus@linux.ibm.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260505121718.3572346-3-jremus@linux.ibm.com>
-References: <20260505121718.3572346-3-jremus@linux.ibm.com>
+In-Reply-To: <20260505121718.3572346-7-jremus@linux.ibm.com>
+References: <20260505121718.3572346-7-jremus@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 05 May 2026 12:49:46 +0000
-Message-Id: <20260505124948.669E2C2BCB4@smtp.kernel.org>
+Date: Tue, 05 May 2026 12:53:35 +0000
+Message-Id: <20260505125336.72A36C2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Missing validation of shdr.abi_arch allows parsing SFrame data f=
-rom mismatched architectures.
-- [Medium] VMA addresses are incorrectly evaluated as boolean flags to chec=
-k for zero-length inputs.
-- [Low] Mixing goto error handling with scoped_guard scope-based cleanup.
+- [High] Missing `PT_LOAD` segment type check when registering executable s=
+ections for sframe unwinding.
+- [High] Off-by-one error in maple tree insertion bounds causes adjacent ex=
+ecutable segments to fail registration.
 --
 
-commit afe7c9eb6f0e6fc3f73d0b6a555f8d3926cf6ccf
+commit 610ebc2ab2a7fd5ae4cd4a346076c9d5c2acc195
 Author: Josh Poimboeuf <jpoimboe@kernel.org>
 
-unwind_user/sframe: Add support for reading .sframe headers
+unwind_user/sframe: Detect .sframe sections in executables
 
-This commit introduces basic infrastructure for unwinding user space stacks
-with SFrame. It adds support for parsing the .sframe section header.
+When loading an ELF executable, automatically detect an .sframe section
+and associate it with the mm_struct.
 
-Link: https://lore.kernel.org/all/f27e8463783febfa0dabb0432a3dd6be8ad98412.=
-1737511963.git.jpoimboe@kernel.org/
-
-> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
-> new file mode 100644
-> index 0000000000000..c128c1eeaca20
-> --- /dev/null
-> +++ b/kernel/unwind/sframe.c
+> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+> index 16a56b6b3f6ca..55047659a3cf4 100644
+> --- a/fs/binfmt_elf.c
+> +++ b/fs/binfmt_elf.c
 [ ... ]
-> +static int sframe_read_header(struct sframe_section *sec)
+> @@ -637,6 +638,21 @@ static inline int make_prot(u32 p_flags, struct arch=
+_elf_state *arch_state,
+>  	return arch_elf_adjust_prot(prot, arch_state, has_interp, is_interp);
+>  }
+> =20
+> +static void elf_add_sframe(struct elf_phdr *text, struct elf_phdr *sfram=
+e,
+> +			   unsigned long base_addr)
 > +{
-> +	unsigned long header_end, fdes_start, fdes_end, fres_start, fres_end;
-> +	struct sframe_header shdr;
-> +	unsigned int num_fdes;
+> +	unsigned long sframe_start, sframe_end, text_start, text_end;
 > +
-> +	if (copy_from_user(&shdr, (void __user *)sec->sframe_start, sizeof(shdr=
-))) {
-> +		dbg("header usercopy failed\n");
-> +		return -EFAULT;
-> +	}
+> +	sframe_start =3D base_addr + sframe->p_vaddr;
+> +	sframe_end   =3D sframe_start + sframe->p_memsz;
 > +
-> +	if (shdr.preamble.magic !=3D SFRAME_MAGIC ||
-> +	    shdr.preamble.version !=3D SFRAME_VERSION_3 ||
-> +	    !(shdr.preamble.flags & SFRAME_F_FDE_SORTED) ||
-> +	    !(shdr.preamble.flags & SFRAME_F_FDE_FUNC_START_PCREL) ||
-> +	    shdr.auxhdr_len) {
-> +		dbg("bad/unsupported sframe header\n");
-> +		return -EINVAL;
-> +	}
+> +	text_start   =3D base_addr + text->p_vaddr;
+> +	text_end     =3D text_start + text->p_memsz;
 
-Should we also validate shdr.abi_arch to ensure it matches the expected
-architecture?
+Should text_end be calculated as text_start + text->p_memsz - 1?
 
-If malformed or foreign-architecture SFrame data is passed in (for instance,
-with an unexpected endianness or register mapping), the kernel might interp=
-ret
-it incorrectly and generate invalid stack traces.
+Since the maple tree API strictly expects inclusive ranges [first, last] fo=
+r=20
+insertions, passing the exclusive text_end would cause the inserted range=20
+to cover one byte beyond the actual segment.
 
-Furthermore, accepting arbitrary values here could risk ABI calcification if
-userspace starts supplying invalid values that we later want to reject.
-
-[ ... ]
-> +int sframe_add_section(unsigned long sframe_start, unsigned long sframe_=
-end,
-> +		       unsigned long text_start, unsigned long text_end)
-> +{
-> +	struct vm_area_struct *sframe_vma, *text_vma;
-> +	struct mm_struct *mm =3D current->mm;
-> +	struct sframe_section *sec;
-> +	int ret;
-> +
-> +	if (!sframe_start || !sframe_end || !text_start || !text_end) {
-
-Is it safe to use VMA start addresses as boolean flags?
-
-Since vm_start can legitimately be zero in certain configurations (if
-mmap_min_addr permits), evaluating !sframe_start or !text_start could
-incorrectly reject perfectly valid mappings at address 0.
-
-Also, to check for zero-length sections, would it be better to explicitly u=
-se
-comparisons like sframe_start >=3D sframe_end instead?
-
-> +		dbg("zero-length sframe/text address\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	scoped_guard(mmap_read_lock, mm) {
-[ ... ]
-> +	sec =3D kzalloc(sizeof(*sec), GFP_KERNEL);
-> +	if (!sec)
-> +		return -ENOMEM;
-> +
-> +	sec->sframe_start	=3D sframe_start;
-> +	sec->sframe_end		=3D sframe_end;
-> +	sec->text_start		=3D text_start;
-> +	sec->text_end		=3D text_end;
-> +
-> +	ret =3D sframe_read_header(sec);
-> +	if (ret)
-> +		goto err_free;
-
-Is it acceptable to mix goto error handling with scoped_guard() cleanup
-helpers in the same function?
-
-The kernel's cleanup subsystem guidelines generally suggest that usage of
-goto and cleanup helpers shouldn't be mixed in the same routine.
-
-Could sec be allocated using __free(kfree) to avoid the goto entirely?
+If an ELF binary has adjacent executable PT_LOAD segments, could the first=
+=20
+segment's inclusive end overlap with the next segment's start and fail=20
+subsequent insertions?
 
 > +
-> +	/* TODO nowhere to store it yet - just free it and return an error */
-> +	ret =3D -ENOSYS;
-> +
-> +err_free:
-> +	free_section(sec);
-> +	return ret;
+> +	/* Ignore return value, sframe section isn't critical */
+> +	sframe_add_section(sframe_start, sframe_end, text_start, text_end);
 > +}
+> +
+[ ... ]
+> @@ -712,6 +729,19 @@ static unsigned long load_elf_interp(struct elfhdr *=
+interp_elf_ex,
+>  				error =3D -ENOMEM;
+>  				goto out;
+>  			}
+> +			break;
+> +		}
+> +		case PT_GNU_SFRAME:
+> +			sframe_phdr =3D eppnt;
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (sframe_phdr) {
+> +		eppnt =3D interp_elf_phdata;
+> +		for (i =3D 0; i < interp_elf_ex->e_phnum; i++, eppnt++) {
+> +			if (eppnt->p_flags & PF_X)
+> +				elf_add_sframe(eppnt, sframe_phdr, load_addr);
+
+Does this need to verify the segment is loadable (eppnt->p_type =3D=3D PT_L=
+OAD)?
+
+If non-loadable segments like PT_GNU_STACK have the PF_X flag set, they
+typically have p_vaddr and p_memsz as 0. Processing these segments would
+compute bogus text boundaries and bypass VMA validation. If a legitimate
+PT_LOAD segment overlaps with these bogus ranges, could its insertion fail
+silently and break stack unwinding for the executable?
+
+>  		}
+>  	}
+> =20
+[ ... ]
+> @@ -1242,6 +1276,14 @@ static int load_elf_binary(struct linux_binprm *bp=
+rm)
+>  			elf_brk =3D k;
+>  	}
+> =20
+> +	if (sframe_phdr) {
+> +		for (i =3D 0, elf_ppnt =3D elf_phdata;
+> +		     i < elf_ex->e_phnum; i++, elf_ppnt++) {
+> +			if ((elf_ppnt->p_flags & PF_X))
+> +				elf_add_sframe(elf_ppnt, sframe_phdr, load_bias);
+
+Similarly, should this also check if the segment is a PT_LOAD segment befor=
+e=20
+adding it to the sframe sections?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260505121718.3572=
-346-1-jremus@linux.ibm.com?part=3D2
+346-1-jremus@linux.ibm.com?part=3D6
