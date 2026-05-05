@@ -1,178 +1,158 @@
-Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3B81C8604
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 05:43:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777959803; cv=pass; b=Z7Jh2AH/lonTdGhtuMuWr7ZkPP9PYfkma6iax1qExl6OGNnynC6Gv6VoLTzMt1ZmEBz8GKTuaAvGUJ2XudPGSGDjDsP4juUam/30Icm1F7LYCRs6NLrtn9mZtIBvOihMhdhCfHMJSFhlwHTUgbL+EZZYWkat/FvmmUi0zWqyIuA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777959803; c=relaxed/simple;
-	bh=PBDvQznMxWjpcwNYDmYcjrNP7ss5epTT/kwErEyvUEY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rQNzz8J0Go68iCl/PnTd0BpHD626u+Umn17TuIOC+3kiweCg1kzuGOKOzl9sswBuBzIFda7S+1LljDso6PCdvWSf0ccUBkdNGCRQ9hceBo+jYCvRDpH7yRz3fk9w9XwLvfd1P4JNZzQCFR7NEU7yiGgyybJ3Ym/4x4wIoqc6his=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IYOz3x5N; arc=pass smtp.client-ip=74.125.82.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854593C9EF3
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 06:20:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777962056; cv=none; b=KhbyJ56JU6u3rTEqcyKZyMtgIGmHMpIbiCfi2IFPnnOozSvs2S/lSDKz8CSCsCM7TMYOMbu7mon6XUYpMj3vYIjt6Rjd3F7TVCTSas8JNlN8WswIVbhZllMDBZjmLL4PKWPf7SZUBYYB9+2M0cKQtKT74dahn1ereod5VFRrslw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777962056; c=relaxed/simple;
+	bh=1N/LGKwuOq9v0S6+Nwko/9VEdnuS/5VPERf1X8fCvxQ=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version:Content-Type; b=I9nfdQpl/X9xShhBPM34hqBtoQ0WFhW/dXsAiau/i7u4xFIatGTNz//pLLHNa829NlffVQBNe9TMPvG0UBYVCL0zHA8Q0C/oyviKsQvyRAcRclKKaM2rUDwWNOiRmyLGP2oltYjXxqmBdIIvmgutXxorayBPcHpkRvKoOpVGSuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=FsV0MrSy; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IYOz3x5N"
-Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-1309f4ee973so1179838c88.1
-        for <bpf@vger.kernel.org>; Mon, 04 May 2026 22:43:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777959801; cv=none;
-        d=google.com; s=arc-20240605;
-        b=aPi6Ynk65akppqK/jw6dJm3Nxv/qkT9hMishJfqwTWcFPM1QmOyoJ45pdxh2n6GLXT
-         X9OCgfhyAbJWwYWNp++WhtVqhae/Gf1RyVR7yaF7CjOIaa3cgc9NHDJi5XGq95GTNkfv
-         63p9+8pEowH1kgYBw2HEOiCujG+JoHyiGBjInbPQSOJc/cvZRUGnqq5OHJXb+XFOHxHV
-         syMqzbVMiZJ0MZQ2uEvOmByKe7hupDFhxPSCsn/EHymaoJl2/v2xedLsUGF+VQTYauwe
-         0edX8/Ol3gAVsRkL+KC6GIFU5xI+S7uGEAvMTp6kBVFT2rzfVuTPRwGFyrS4ik6vp3/I
-         Unxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ID9/lDtQnEfLjPMFXed1O963xIM5qgALbX2MVBfWr7U=;
-        fh=BPNtcH7ntRniEjYIhZkfaTTujl+FWspWzDXVu7iCfaY=;
-        b=Sq/hmIVezHRqfBjM++JuBHw0T0dZShz0jA1bj2Nt2yiAMc45pJxKx4lJVGOUiIshJN
-         MzfY/NA9oFJpZ7sv+pimRn6YS+BW+Qh/EacSyhq27pLC2ySGs8w92XGEIBsBKzwBwIOs
-         IRPaY8YJgr1ywWpwvwkyTBLxsbMBBIRZDRD42/5DqYsKqRZrplVYoKa3tCeIBXuTeIu/
-         b4KwarllfIyYX1fAkmuTYEmo5e2eRhwgBQVAerCieFrkFPz2TVr2UWFO07DWaPx6TQjI
-         MADatdrTTLqJrpyTZBmmXHzS3sC/f/s0o95nKOFCi+oCLst3jwoz1cLTllFq4HPUefAY
-         MzGQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="FsV0MrSy"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8379e010b01so762518b3a.1
+        for <bpf@vger.kernel.org>; Mon, 04 May 2026 23:20:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777959801; x=1778564601; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ID9/lDtQnEfLjPMFXed1O963xIM5qgALbX2MVBfWr7U=;
-        b=IYOz3x5N0R87o/Sy4/9v1LAHuuK5Tw9rXIPTCfpYeGpvHiR82v3NP9VtFdMncp65IQ
-         FgH+CZ18xFUg2ufdaI56Cf6Gko47OrmxiRWSXT8Qd98xFRH7KwcJ4o9PsaohGrMSvglL
-         C6/RBU3jNBeUstokcbLcbTe6jhzZDdyFp+1Vj83BPIuqw3hSYUDmFGAMji6pt4CotU7E
-         D9h+KiSIbEUT+22RX0ztOGLnMYc19obQ3CVz8HR/eJv5LeAa0s134+K7Ri0ye4tYb7Ov
-         /ROSv0QNjZXy3Xl7ruShw4nFjFk8kBxbn7wUoOVZgI7CteD6WkoKZ+dfi77Tx8aoMVEO
-         PJUQ==
+        d=bytedance.com; s=google; t=1777962053; x=1778566853; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IABxPdOKi9qQ0ncIcorYGTDUXVbyRSpLw0RRqytGSAg=;
+        b=FsV0MrSyX4dGKdiYBjvMJ9Znh2XOJdS0ondvQExYTP/ZZvjB8PFlRxVXsvQ2IST+v/
+         h4JNWJmC4ZCQ5jEffyic0zd+xwMdDY/d+ZzBH8PnaDVNWWQXODeTiIKoeTkYxZ+w8rYE
+         7COZbfLpHfZ8mRvW/5y6Cq+4gS+QUZIlRUvxbdtULto8pFG6ehbE0K9kf4WhvzFiGSh+
+         3I04eNkiw16xvQ5s6p9sXiu0PsDhPx3aUaxpuJGqFhAtSjTP78ZYb+312t9kv9atG6+t
+         lSkK4w2SBUNCyEshTZJlAa+b2xDOL8og2YFR25EhQCa2tP8xQ7G1LYn59+hc8dufgRwq
+         93zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777959801; x=1778564601;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ID9/lDtQnEfLjPMFXed1O963xIM5qgALbX2MVBfWr7U=;
-        b=pCz/SGDzjF7RpXA2GXFrkfbofVAqp585jS1tOCT386XY0jDqdAwiQt1e1DVSZI8AJA
-         4LVfkukoqnC3m7ar0X4qVVVrSNn2UQ6X7UkIxi4dVoE9T+i/YC9Lut0FU+2FD8p4d05B
-         t/PmSrQv1DhgoJB4n0iS2YSf1tIQxdUo6Kg1xGIMRiDf/nO/OB7jGhlpLjU1r9Ktwmyv
-         gAlM40seeABinKmgre0XInwXgz1szG+3qhBgrhB/h4Dq2hgaw7OOQXQdTI0a422IFzbF
-         nlv1QfFbAiGT7kz0mPBav5LZtnj0fscLqrPoqrsfgtibo52ae5I5oQOCCAxQ7gLQntok
-         vTQg==
-X-Gm-Message-State: AOJu0Yx+1YFFCAGq5oz9PSIfnjDjtrayGiebxuRlsS8N+Squ8cieeadP
-	0ZOxy0J2ybazORNQ/pUeQ+bMS2xOBGGYwulyhxgSnvmS0z93fsw8rWdPJGVA5c1QE4nwtyUpf05
-	1cdBsHCn2olBAHheqsR41D6+k0FnEtKGCj4QPblrvUC76wBTL/zHTh3SAEd0=
-X-Gm-Gg: AeBDiet63Pb2qnOaLlDaS54mkriJ7wB5LAudCkf+4mlUi87LUkwtg6MXtn3ni7wdwk5
-	BOh+f7TWVD1uZuRfzWHDX0KYnJOECW643zP3ALgUfXO7tcx3xpwUl/Nez3hZaTiCYz5RGSfANBR
-	YOG/Y2wHxyn5qUCc18kIKkRwnzkweKBzvVgCdF5BmYOPmamfG0VkIs2oIxk5RDyjAxSqz7FhGmy
-	6Xj7wq2qy+MsxxwppIPI5G2rZQNVbJ+is7jPrUvQAEEyfQ8BJSH9aVp7WY6s5QBJrjDC7C7lvsq
-	aTj4NHgWTUCdrAfYummdHBzjscvtuKTTgwdkQQ+jZ23/R0WwOkYd4hv1Rq7lh5Wk07mG7JhgxKk
-	B+jPHEztr0Rxfe2vUOrsC2lB9HmuEs6vHpo8zN7XYaAYzVPFiKqJyUUmrCOXLkaozd+DnITbISy
-	MJrvWX74DP
-X-Received: by 2002:a05:7022:4381:b0:130:9bce:ba26 with SMTP id
- a92af1059eb24-1309bcebb05mr1826901c88.35.1777959800854; Mon, 04 May 2026
- 22:43:20 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1777962053; x=1778566853;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IABxPdOKi9qQ0ncIcorYGTDUXVbyRSpLw0RRqytGSAg=;
+        b=cckXiCCyx0v0rLY34aik3jNA/6KnRpWDW34M/4XLghfbNeV5ejcRQYuSJgRzEr8zXV
+         TB+f48/HmVH52WcR+nlGMRZueIYDZxkuWBqgdwK7owQxYk2keczjwrl7ua/1R0YIiFPx
+         Tqj3X+ZuEdcog2FbTQA0+xw5eA3D8y6WuphQOdg3KftuUcSqhqnFKyZf8gKntF7hJ8F5
+         J8fjT1IMzXngcxBaUzrwuFziq/hkQhiT3q9GF9PJDWDzAOG7zn2IWG/0P6tjJZZf4gM2
+         safa6Ho00p8M/TgIBUhrDzy6m471Z12IqxjXIYfjZxL3jc+/V5RST0aOGyM1U0DAMcaG
+         kFTQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+3vD+jjqx71pOtd26dR5hGKrLfN7Mb2z5uMzePQXssOvTP3pgRPGk+wB4Sxf/BLbUgnQE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaCyKNpSvw/wZbgxSUlylV1JrQ3GUPt5r25TDZ2u7PkwqSBwTn
+	3etP4WsOpepQMSNDqOhSEb4bdsgb9mqP9gD2EEHeHhh92ZfXd50Xi8e1ugI0c0+ObJ0=
+X-Gm-Gg: AeBDiev2bHNLXEfsOU+z7q681QPZ3+jv4dZfSCSWTxzo/uEmvJMFm0mfd/7zuOoMeTP
+	xlIsUP7Xg5t0ZzZzHxtYtV+o7VwklLZZW33oNc30GxupEHYCZjqU5K8hCeIVXTimpYKO5xR3QpX
+	+0gB5ElhGVjWjr7NrAnKcoQ+68D243Vu8L0iZ42hYvjEGNgH769oAL32y4CLuK/yVyMRb6Ks58p
+	0R8b8tNOvV4h6TajH3UPlBtcWk8yjXmKAXueKJ1ciNKwdJuYEooE1WDHylejUnzhWBDjoFG2KXZ
+	Z/F5tIz4/6QQjK0Va53H5wRlXOkxFu04wjDWgZNZnIfDovLCx4/ml4HoR6mLnXraKvrjT3PSPiS
+	MuCvr4M54xuVKH5275xxT0KM6goWEnHnEmf7HANH/DJ4yumJSl0nByx2Ujj1DP3y+pjAz8vry3S
+	yKgyocMjSq/ZgtFzvLuVJd9RSFZIJs+TLhR/1Rb2mfa9pu22rygO1JqAmuN1z9yVjh
+X-Received: by 2002:a05:6a00:c8c:b0:838:3f54:a0ee with SMTP id d2e1a72fcca58-8383f54a1aamr5208071b3a.7.1777962052522;
+        Mon, 04 May 2026 23:20:52 -0700 (PDT)
+Received: from L6YN4KR4K9.bytedance.net ([61.213.176.12])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-839679c8c10sm880738b3a.37.2026.05.04.23.20.42
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 04 May 2026 23:20:52 -0700 (PDT)
+From: Yunhui Cui <cuiyunhui@bytedance.com>
+To: pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	dennis@kernel.org,
+	tj@kernel.org,
+	cl@gentwo.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	bjorn@kernel.org,
+	pulehui@huawei.com,
+	puranjay@kernel.org,
+	thuth@redhat.com,
+	ajones@ventanamicro.com,
+	ben.dooks@codethink.co.uk,
+	rkrcmar@ventanamicro.com,
+	cuiyunhui@bytedance.com,
+	samuel.holland@sifive.com,
+	zong.li@sifive.com,
+	conor.dooley@microchip.com,
+	tglx@kernel.org,
+	debug@rivosinc.com,
+	seanwascoding@gmail.com,
+	andybnac@gmail.com,
+	menglong8.dong@gmail.com,
+	cyrilbur@tenstorrent.com,
+	wangruikang@iscas.ac.cn,
+	atishp@rivosinc.com,
+	apatel@ventanamicro.com,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	bpf@vger.kernel.org,
+	arnd@arndb.de,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	qingfang.deng@siflower.com.cn,
+	linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v4 0/3] riscv: improve percpu helpers and PIO mapping
+Date: Tue,  5 May 2026 14:20:23 +0800
+Message-Id: <20260505062026.91724-1-cuiyunhui@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260504210610.180150-4-kuniyu@google.com> <20260505041435.187D0C2BCB4@smtp.kernel.org>
-In-Reply-To: <20260505041435.187D0C2BCB4@smtp.kernel.org>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Mon, 4 May 2026 22:43:09 -0700
-X-Gm-Features: AVHnY4JOCOb71wu5mt1KFGtOvg7crQc-IG8Nxqs_vTCH-gFp-2Dt9Bt1UXsuzwI
-Message-ID: <CAAVpQUB-K4YBE5Em4xg5wWsjtK=7xZwwXFynX2vUN4DQDx2tRw@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf 3/6] mptcp: bpf: fix type confusion in bpf_mptcp_sock_from_subflow()
-To: sashiko@lists.linux.dev, Matthieu Baerts <matttbe@kernel.org>
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Matt,
+This series makes three small RISC-V cleanups and fixes around percpu access
+and PIO helper handling.
 
-Could you follow up on the comments by Sashiko ?
+This work is motivated in part by build reports from lkp and by follow-up
+review/discussion around the percpu access rework:
 
-On Mon, May 4, 2026 at 9:14=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 2 potential issu=
-e(s) to consider:
-> - [High] NULL pointer dereferences in bpf_mptcp_sock_from_subflow due to =
-lockless concurrent accesses
-> - [High] Use-After-Free in BPF programs returning freed mptcp socket duri=
-ng teardown
-> --
->
-> commit 52dbcdaad7d49ff5db2faacf11c47b1c581024a8
-> Author: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-> mptcp: bpf: fix type confusion in bpf_mptcp_sock_from_subflow()
->
-> This commit fixes a type confusion issue in bpf_mptcp_sock_from_subflow()=
- by
-> checking if the socket is actually a TCP socket before calling sk_is_mptc=
-p().
-> Previously, raw sockets could bypass the IPPROTO_TCP check and cause inco=
-rrect
-> assumptions about the socket type.
->
-> > diff --git a/net/mptcp/bpf.c b/net/mptcp/bpf.c
-> > index 8a16672b94e2..4cc16cbeb328 100644
-> > --- a/net/mptcp/bpf.c
-> > +++ b/net/mptcp/bpf.c
-> > @@ -14,7 +14,7 @@
-> >
-> >  struct mptcp_sock *bpf_mptcp_sock_from_subflow(struct sock *sk)
-> >  {
-> > -     if (sk && sk_fullsock(sk) && sk->sk_protocol =3D=3D IPPROTO_TCP &=
-& sk_is_mptcp(sk))
-> > +     if (sk && sk_fullsock(sk) && sk_is_tcp(sk) && sk_is_mptcp(sk))
-> >               return mptcp_sk(mptcp_subflow_ctx(sk)->conn);
->
-> Could this cause a regression by dereferencing a NULL pointer when access=
-ed
-> concurrently?
->
-> In subflow_ulp_fallback(), icsk->icsk_ulp_data is set to NULL prior to
-> clearing tcp_sk(sk)->is_mptcp. If a BPF program triggers in this window,
-> sk_is_mptcp() would return true but mptcp_subflow_ctx(sk) would return NU=
-LL,
-> leading to a NULL pointer dereference.
->
-> Additionally, could ctx->conn be NULL when read here?
->
-> During subflow_ulp_init(), the context is allocated and is_mptcp is set t=
-o 1,
-> but ctx->conn is initially NULL. Passing NULL to mptcp_sk(ctx->conn) trig=
-gers
-> a kernel panic on CONFIG_DEBUG_NET builds. On non-debug builds, it return=
-s a
-> non-NULL offset pointer, which bypasses BPF verifier NULL checks and caus=
-es
-> invalid memory accesses.
->
-> Could this introduce a regression with a use-after-free of the mptcp_sock
-> during teardown?
->
-> During subflow_ulp_release(), sock_put(ctx->conn) drops the reference to =
-the
-> parent mptcp_sock and may free it. However, ctx->conn is not cleared, and=
- the
-> subflow context remains valid until the RCU grace period ends.
->
-> If a BPF tracing program triggers after sock_put(), could this retrieve
-> and return the dangling ctx->conn pointer, enabling the BPF program to re=
-ad
-> from freed kernel slab memory?
->
-> >
-> >       return NULL;
-> >  }
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260504210610.18=
-0150-1-kuniyu@google.com?part=3D3
+https://lore.kernel.org/all/202512202218.FI6bB5kV-lkp@intel.com/
+https://lore.kernel.org/all/202512210052.w0bpUAAO-lkp@intel.com/
+
+1. Avoid forming invalid PIO address expressions when I/O port support is not
+enabled, while keeping the generic pci_iounmap() behavior intact.
+
+2. Introduce arch/riscv/include/asm/percpu.h with RISC-V-specific percpu
+helpers, including the fix for the 8/16-bit add_return LR/SC fallback.
+
+3. Cache the percpu offset in thread_info so percpu accesses can use it
+directly across the relevant RISC-V paths.
+
+Yunhui Cui (3):
+  riscv: io: avoid null-pointer arithmetic in PIO helpers
+  riscv: introduce percpu.h into include/asm
+  riscv: store percpu offset into thread_info
+
+ arch/riscv/include/asm/asm.h         |   6 +-
+ arch/riscv/include/asm/io.h          |  26 ++-
+ arch/riscv/include/asm/percpu.h      | 284 +++++++++++++++++++++++++++
+ arch/riscv/include/asm/switch_to.h   |   8 +
+ arch/riscv/include/asm/thread_info.h |   3 +-
+ arch/riscv/kernel/asm-offsets.c      |   1 +
+ arch/riscv/kernel/smpboot.c          |   7 +
+ arch/riscv/net/bpf_jit_comp64.c      |   9 +-
+ include/asm-generic/io.h             |   4 +
+ 9 files changed, 326 insertions(+), 22 deletions(-)
+ create mode 100644 arch/riscv/include/asm/percpu.h
+
+-- 
+2.39.5
+
