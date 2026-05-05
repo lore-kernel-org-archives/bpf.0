@@ -1,152 +1,99 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2706266B46;
-	Tue,  5 May 2026 12:26:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ADB63A2570
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 12:27:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.188.251
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777983974; cv=none; b=dVrJ/4Ab6PCQd5fNgg3P/JKyw2x8dtAjy/Wb+jiN6Ce66a3M+/XfHOVA+UI8lcmWvAVdgH7CGSm35ear4oKaJSpm5zbNxre8kvSSzDmEuBzsPYIRmfrEMdm9nZPsabaIuF8bnm1jXwTtWVK3Fs+v6s81gSS5KWi4b/aYx2Kw+0E=
+	t=1777984066; cv=none; b=UWCClog6v32+B9k8skOf6x7luT1O7VtOQDxcQS+8vFkdxtmC2nhl030yEik+e6E3LoGdXpjgYdmR6lV/40HbgGvo57WmkQTHPwy4oL+PcvQmSGuoFzaYlKWHxE89zVUv1GMJiK6JLFZsgrGwKkgzxEVFDEUxCeA8J6mk0Q4ieHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777983974; c=relaxed/simple;
-	bh=SSzGheLxfH63C+BPoHDfVIFzYV3ZF/EWijsBQAasu28=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qPrQb/19svLf7yNAjurC8/FrgNPVT3AQ2WPmq8x/1rTQfmnevhZ2Fem3Hcr/q7tNqmZCG3gmuVmOboHuA2ohHaqDhEkNdCH3ezhsJ1nou/O3sREria8j7MAErbSkz/Hz63+mKyloa9lOYWoK6fELIs8TgoJLrlXmSEr43F4nXbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=GIM2vmV+; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1777984066; c=relaxed/simple;
+	bh=Fa/3962kpvhdF7V+0z88Zf2DU1hMlF5cUeKj970O0jg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C12Kd1jvthIfoOHAD734QghYV87+bx/FwxAv0kzHxUsE5RVh2paqY7Q/BjejBGWvQH/FDMIH5bbcnH4p0+y4hkiyEa/8IDrvLjXis7Qz+gkt8qbvLuz0cLEsobZu9Ep5iJy0ihfeUy+rA36sn8t/Rb/H/OfX4t9VKodUICDIV0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=S2KQtR4j; arc=none smtp.client-ip=51.159.188.251
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="GIM2vmV+"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6458GFjI3351555;
-	Tue, 5 May 2026 12:25:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=iCOWk4
-	XOOb4vtcraw1379WOq3zAGck0wfj3WDT9TNJQ=; b=GIM2vmV+9wx6cP+IduZG3B
-	TI0bMI/1ja4/d9+QjEs9nzDQtIqhrhiRMix7vC5oJEucMH1Z6RHEQi36+sgtLfiY
-	iTTHnFwL8PrBQk9WWK/Rj6DELX36l2id3xcsK3XbmubmyCRKZQfztt/FhY6Ochhv
-	jbRnckLaHYXJu3kv9JrMHWIkcm5wi4DRx3UnShZ643ThGZguxNZfFZEDFemb1/Ag
-	/PoN9kgG5biOexWa5iQari9tI7faj58NCwCl9+KcvTXHC+WWJ1QmobcsrJ+y2Uol
-	CgrDUyisrCeHvUZBHImiQRW4peWLd2zv1JX9/8xsNU2pB/LVvHLZd6WYJqhleMNA
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9w6b8cg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 May 2026 12:25:45 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 645COPCC016264;
-	Tue, 5 May 2026 12:25:44 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dwvkjsgwd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 May 2026 12:25:44 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 645CPeWe49545694
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 5 May 2026 12:25:40 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A12B42004D;
-	Tue,  5 May 2026 12:25:40 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 020592004E;
-	Tue,  5 May 2026 12:25:40 +0000 (GMT)
-Received: from [9.52.200.195] (unknown [9.52.200.195])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  5 May 2026 12:25:39 +0000 (GMT)
-Message-ID: <6eb9cbb6-c997-49ee-97a6-66a721073846@linux.ibm.com>
-Date: Tue, 5 May 2026 14:25:39 +0200
+	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="S2KQtR4j"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=oss.cyber.gouv.fr; s=default; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=IxfTjv8LOMYjfUi8h0wbVoUSkjcjlTLTPYdh0YikeHc=; b=S2KQtR4jzO7j0+clGGWn4QIVgT
+	3tICv4HAfSV2VzWGeprV7p4BQxufNYl4MRzi3ym1YXFVMRKvBZTpHSo4qcIUycHqNlUT33xHHmc4d
+	0MDd+hpRiFhUiZgqGT0z+/ybU+fuwnWJrH5CtxrjawJbgA0bu2aLsIIFdm7/SJBsdXNd/tiFsfyJc
+	mgl65e3Wzyq0qfChUwT60zP9N2cXfgDwX4ZQsJueElmg6WvZ9Rt7mymSXyy4FpgBoJgInYEry8wT8
+	/g1dfBk6TZoNl+3SV4akrd4yDI9DHlD5VuLK5u4T1BA/46Pjb8BWzFMH47nBKiJQk2+p6W2VfqKmj
+	BKIH+8wQ==;
+Received: from laubervilliers-658-1-215-187.w90-63.abo.wanadoo.fr ([90.63.246.187]:17959 helo=archlinux)
+	by pf-012 with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.99.2)
+	(envelope-from <nicolas.bouchinet@oss.cyber.gouv.fr>)
+	id 1wKEsI-00000003jl2-2Hnm;
+	Tue, 05 May 2026 14:27:42 +0200
+Date: Tue, 5 May 2026 14:27:41 +0200
+From: Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>
+To: sashiko@lists.linux.dev
+Cc: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	bpf@vger.kernel.org
+Subject: Re: [PATCH v5 02/14] lockdown: Make the relationship to MODULE_SIG a
+ dependency
+Message-ID: <afngZZcIZnZ2DrBC@archlinux>
+References: <20260505-module-hashes-v5-2-e174a5a49fce@weissschuh.net>
+ <20260505093229.D8CD2C2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 00/19] unwind_deferred: Implement sframe handling
-To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        x86@kernel.org, Steven Rostedt <rostedt@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Indu Bhagat <ibhagatgnu@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dylan Hatch <dylanbhatch@google.com>,
-        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Kees Cook <kees@kernel.org>, Sam James <sam@gentoo.org>
-Cc: bpf@vger.kernel.org, linux-mm@kvack.org,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Jose E. Marchesi" <jemarch@gnu.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "Carlos O'Donell" <codonell@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
-        "Liam R. Howlett" <liam@infradead.org>,
-        Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
-        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-References: <20260505121718.3572346-1-jremus@linux.ibm.com>
-Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20260505121718.3572346-1-jremus@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=XPQAjwhE c=1 sm=1 tr=0 ts=69f9e1c9 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=lNt1pmmDVPWPLV_8P3QA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: PLhVfBiZn-aSt5WckmzZBbYhLO1gOr68
-X-Proofpoint-GUID: ybGT5PYqAhNLFmbquT73cbhc8mA2NIVX
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA1MDExNCBTYWx0ZWRfX4WxFhGafDnwu
- h4Uo06QecP4Z+vTG+IBqEHK5gaPO6wxJxl9Xj3y/JBtxdsWpyGnyFFBxbKKoXMRx0aBFnzT0fJ+
- qkv+m8GgjVrSCFRe1VR26p5tq3ifVWviMJmFQ70DVSLUr4OILE9VSOybjGa2u76pBb6+4wnLBHN
- 9LMzeJ13JPvZmu6Bqieop9zrVlm7hAV4jNqEUTdM6Zbx1UkfjLo3m2ZR87T+L+kM7oHML4EnfCS
- DRH6KcksTuS8yfL3/sXkVP8UnNXurhrYUK1pVWKyahQQQrJPL5lnBIHMNq8cyum5XYYVFxpP3Vb
- hKX8V8cpgTm/cqtriKD4P/FZp/uWa9+7d1ZE7AO8b1JIkaqqXg/Cpm6Stnmyzr/YugH0hAk6l0f
- Vk8cUNNr24eRLvwuAHY+vf+Y/JeEUjYBxDvzXGcRmc7oQ8YdpP4hFApjPJEEv0tZP0kiKBfk1Pa
- R0bLN4WHhLyjB+DpeDA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-05_02,2026-04-30_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0 spamscore=0
- priorityscore=1501 impostorscore=0 phishscore=0 malwarescore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605050114
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260505093229.D8CD2C2BCB4@smtp.kernel.org>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - pf-012
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
+X-Get-Message-Sender-Via: pf-012: authenticated_id: nicolas.bouchinet@oss.cyber.gouv.fr
+X-Authenticated-Sender: pf-012: nicolas.bouchinet@oss.cyber.gouv.fr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-On 5/5/2026 2:16 PM, Jens Remus wrote:
-> This is the implementation of parsing the SFrame V3 stack trace information
-> from an .sframe section in an ELF file.  It's a continuation of Josh's and
-> Steve's work that can be found here:
+> > diff --git a/security/lockdown/Kconfig b/security/lockdown/Kconfig
+> > index e84ddf4840101..155959205b8ea 100644
+> > --- a/security/lockdown/Kconfig
+> > +++ b/security/lockdown/Kconfig
+> > @@ -1,7 +1,7 @@
+> >  config SECURITY_LOCKDOWN_LSM
+> >  	bool "Basic module for enforcing kernel lockdown"
+> >  	depends on SECURITY
+> > -	select MODULE_SIG if MODULES
+> > +	depends on !MODULES || MODULE_SIG
 > 
->    https://lore.kernel.org/all/cover.1737511963.git.jpoimboe@kernel.org/
->    https://lore.kernel.org/all/20250827201548.448472904@kernel.org/
+> Will this change silently disable CONFIG_SECURITY_LOCKDOWN_LSM in existing
+> defconfigs?
+> 
+> Because Kconfig's savedefconfig strips out automatically selected symbols,
+> many in-tree defconfigs contain CONFIG_SECURITY_LOCKDOWN_LSM=y but omit
+> CONFIG_MODULE_SIG=y. Since CONFIG_MODULE_SIG has no default y, it will
+> initialize to n.
+> 
+> With CONFIG_MODULES=y and CONFIG_MODULE_SIG=n, this new dependency evaluates
+> to n. As a result, Kconfig will drop CONFIG_SECURITY_LOCKDOWN_LSM from the
+> final configuration without any warnings, leaving the kernel unprotected by
+> lockdown. This also degrades discoverability, hiding the Lockdown LSM in
+> menuconfig unless a user explicitly enables MODULE_SIG first.
 
-I forgot to mention that Steven is working on a system call for dynamic
-linkers to register .sframe for .text in dynamic libraries (DSOs), that
-is supposed to replace the last test-patch of this series.  Feedback
-on that is much appreciated as well:
+I think the bot is correct, powerpc/configs/skiroot_defconfig,
+powerpc/configs/ppc64_defconfig, s390/configs/debug_defconfig and
+s390/configs/defconfig all set CONFIG_SECURITY_LOCKDOWN_LSM{,_EARLY}=y.
+They also set CONFIG_MODULE_SIG_FORCE=y but do not set CONFIG_MODULE_SIG
+directly. The new 'depends on' condition will thus evict
+CONFIG_SECURITY_LOCKDOWN_LSM{,_EARLY} from the generated .config.
 
-[RFC][PATCH] unwind: Add stacktrace_setup system call
-https://lore.kernel.org/all/20260429114355.6c712e6a@gandalf.local.home/
-
-Regards,
-Jens
--- 
-Jens Remus
-Linux on Z Development (D3303)
-jremus@de.ibm.com / jremus@linux.ibm.com
-
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
-
+Nicolas
