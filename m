@@ -1,162 +1,165 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A6B382F23;
-	Tue,  5 May 2026 12:41:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F91B34250D
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 12:49:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777984860; cv=none; b=dgsCXS2SVqQ8AE0QgW5gj5vur3j186u7PdKLArBIfKS4h9N5kVWplpEcc+PvuBnD0HZvgLeqwqn+Zjj+mBBp3idM2DVh41me+iVRRjK/UKrfDvySqJ0fX6ThnSdfDWirvPTUbcUq/qVfqAHu4cPUAd23atOJd+ByULLcSI2qsnU=
+	t=1777985388; cv=none; b=gxfKZNsQ35z+2idY7yRnrcq0UaLNyPp5T4b83cGuyX2ZJSnze7/vad97w3P1LuRqJlAjLAQZHAfnOuzULApuEpYt8s/QYsYH1PUeotjXnJ3QA7OaYpba8DRUtjRFTX1OMSKb6KuPalJCoTCNtEpa9AeaUkRLQ4wIImJk3KXOZk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777984860; c=relaxed/simple;
-	bh=xSeupnuvJlm1SCUwSLTr6zr3hWRgUFyf0/4uoYJZNaI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S9Au2SglrDL+8AhNKd/YwG+gIy35pg6TF4W1IWl6nbqcZ2aG7smAe4ihbi7D2lzQwwmeod4+sxbf06bi1Y3Ms5dIxcEdUUwtsjF25GiMle9WDd6tmAx+T3SBSLoGrjgBhAs4wIA9PTADFhYlREIQBzYHzvqzlR0PW4vLaLYCe2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aZgitXAQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777985388; c=relaxed/simple;
+	bh=jG+JayU0NiOJchomLTK5WSAt2BuNGCFnbzEKeRi7r20=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=iP91J6SiF8xWS80/d8bcPg4/Dp6TXhz0IGQZJCMcUXoj4fV2CISzIdefajfeDm7ytwvW4DbOIlzkrzHN+FuzfrdqLd34eYAnupvQURh5fEqgf9ABY9Ib+1AAZm5fWjJ2+vj3vO5cgf7jm3QtSUlextid7YB8CV5wDyI3/7RxoCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=baPe5rau; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aZgitXAQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23959C2BCB4;
-	Tue,  5 May 2026 12:40:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="baPe5rau"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 669E2C2BCB4;
+	Tue,  5 May 2026 12:49:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777984859;
-	bh=xSeupnuvJlm1SCUwSLTr6zr3hWRgUFyf0/4uoYJZNaI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aZgitXAQKnW8uvL01qWyAO8epkmapRR+vivO7oPD4fKv9/nkYvrQ+aO/slBm5f88/
-	 QZTDO48wpznV2zMZUJLQ4fxkCKqYciPLGFUf69yd4J8scVI45m1Cc21jAUiTsDTSUz
-	 J8g6LLCuC357F0VkIUPeiPKoFjs20PODZ6jmcw26u+w6eJu7+BXxsDH21QKjK6gCd6
-	 f0aK4gasN5dT0zd+L59XUVA64VNl7JTnZOc2hgy3Lk3xHGSwNIyJb2k8451k4tehkz
-	 IyAQERUtR9xEMDBPHx98qVih9IJW72p62eJ4UtkSnHZxDmt7SBAFAv4MAs4IkEgq5v
-	 fG55DM5de+v/Q==
-Message-ID: <0737c71e-0614-4ecf-9801-a7e71be198d4@kernel.org>
-Date: Tue, 5 May 2026 14:40:56 +0200
+	s=k20201202; t=1777985388;
+	bh=jG+JayU0NiOJchomLTK5WSAt2BuNGCFnbzEKeRi7r20=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=baPe5rauYuRvLsCIGxFpDP46BgNiO+gCM+qGG1WR8bggAsKbz3sECn9sxi3P6LwBA
+	 EynzyQlHYXL0HE/We21fj67KRUyhzd3H9IiUu8VB+ybCCcDYHGoj7y6NeKNcCN7GOG
+	 I5RDbwmdjpMQxvTMuOVGScmATGI893TjdOXyzLO430cAEZiGnV0kwgCjpqCHgHtgou
+	 dgQ1YeuHs7oNEUiumPmLWk66hY9MNurqf07PPfMiRSwfRtwhqMS4Cy0mGaA22Z8AHV
+	 S2igY7G7JxKkFgx5jlAJGzXtSsYtwnapG6DMzQnFSta1cKL8qzvA3+1xw+JSFiSYKo
+	 IlGCes4O0iQ0A==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v14 02/19] unwind_user/sframe: Add support for reading
+ .sframe headers
+Reply-To: sashiko@lists.linux.dev
+To: "Jens Remus" <jremus@linux.ibm.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260505121718.3572346-3-jremus@linux.ibm.com>
+References: <20260505121718.3572346-3-jremus@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 05 May 2026 12:49:46 +0000
+Message-Id: <20260505124948.669E2C2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v4 2/4] veth: implement Byte Queue Limits (BQL)
- for latency reduction
-To: sashiko@lists.linux.dev
-Cc: bpf@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, kernel-team <kernel-team@cloudflare.com>,
- Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>
-References: <20260501071633.644353-3-hawk@kernel.org>
- <20260502071828.616C3C19425@smtp.kernel.org>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <20260502071828.616C3C19425@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [Medium] Missing validation of shdr.abi_arch allows parsing SFrame data f=
+rom mismatched architectures.
+- [Medium] VMA addresses are incorrectly evaluated as boolean flags to chec=
+k for zero-length inputs.
+- [Low] Mixing goto error handling with scoped_guard scope-based cleanup.
+--
 
+commit afe7c9eb6f0e6fc3f73d0b6a555f8d3926cf6ccf
+Author: Josh Poimboeuf <jpoimboe@kernel.org>
 
-On 02/05/2026 09.18, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [Critical] Out-of-bounds array access on peer_dev->_tx in veth_poll() when local RX queues exceed peer TX queues.
-> - [High] Disabling XDP permanently stops peer TX queues if they were backpressured (DRV_XOFF leak).
-> --
-> 
-> commit 9bc3ed022846dda6dd5cc131e798f949f63f491f
-> Author: Jesper Dangaard Brouer <hawk@kernel.org>
-> 
-> veth: implement Byte Queue Limits (BQL) for latency reduction
-> 
-> This commit adds byte queue limits support to the veth driver to provide
-> qdiscs with feedback and reduce latency. It charges a fixed unit per
-> packet rather than byte-based charging.
-> 
->> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
->> index e35df717e65e2..3de25ba34a906 100644
->> --- a/drivers/net/veth.c
->> +++ b/drivers/net/veth.c
-> 
-> [ ... ]
-> 
->> @@ -975,7 +1016,7 @@ static int veth_poll(struct napi_struct *napi, int budget)
->>   	peer_txq = peer_dev ? netdev_get_tx_queue(peer_dev, queue_idx) : NULL;
->>   
->>   	xdp_set_return_frame_no_direct();
->> -	done = veth_xdp_rcv(rq, budget, &bq, &stats);
->> +	done = veth_xdp_rcv(rq, budget, &bq, &stats, peer_txq);
-> 
-> Could this lead to an out-of-bounds array access on the peer device's
-> transmit queues?
-> 
-> If a veth pair is configured asymmetrically, the local device might have
-> more receive queues than the peer has transmit queues.
-> 
-> If packets are redirected from another interface into a higher-indexed
-> receive queue, the poll function will run with a queue_idx greater than or
-> equal to peer_dev->real_num_tx_queues.
-> 
-> Since netdev_get_tx_queue() performs a direct array access without bounds
-> checking, peer_txq would point out-of-bounds. This out-of-bounds pointer is
-> then passed into the new veth_xdp_rcv() code paths and accessed by
-> netif_tx_queue_stopped().
-> 
-> Should queue_idx be checked against peer_dev->real_num_tx_queues before
-> fetching the transmit queue?
-Yes, for the XDP redirect code path, which enqueues frames into the
-peer's ptr_ring using smp_processor_id() % peer->real_num_rx_queues
-as the ring index.  Then this is actually possible.
+unwind_user/sframe: Add support for reading .sframe headers
 
-It is not a bug introduced in this patchset, but given we access
-peer_txq a bit earlier, then a fix for this is needed as part of this
-patchset. I have prepared a patch that fixes this.
+This commit introduces basic infrastructure for unwinding user space stacks
+with SFrame. It adds support for parsing the .sframe section header.
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index e35df717e65e..0cfb19b760dd 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -972,7 +972,8 @@ static int veth_poll(struct napi_struct *napi, int 
-budget)
+Link: https://lore.kernel.org/all/f27e8463783febfa0dabb0432a3dd6be8ad98412.=
+1737511963.git.jpoimboe@kernel.org/
 
-         /* NAPI functions as RCU section */
-         peer_dev = rcu_dereference_check(priv->peer, 
-rcu_read_lock_bh_held());
--       peer_txq = peer_dev ? netdev_get_tx_queue(peer_dev, queue_idx) : 
-NULL;
-+       peer_txq = (peer_dev && queue_idx < peer_dev->real_num_tx_queues) ?
-+                  netdev_get_tx_queue(peer_dev, queue_idx) : NULL;
+> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+> new file mode 100644
+> index 0000000000000..c128c1eeaca20
+> --- /dev/null
+> +++ b/kernel/unwind/sframe.c
+[ ... ]
+> +static int sframe_read_header(struct sframe_section *sec)
+> +{
+> +	unsigned long header_end, fdes_start, fdes_end, fres_start, fres_end;
+> +	struct sframe_header shdr;
+> +	unsigned int num_fdes;
+> +
+> +	if (copy_from_user(&shdr, (void __user *)sec->sframe_start, sizeof(shdr=
+))) {
+> +		dbg("header usercopy failed\n");
+> +		return -EFAULT;
+> +	}
+> +
+> +	if (shdr.preamble.magic !=3D SFRAME_MAGIC ||
+> +	    shdr.preamble.version !=3D SFRAME_VERSION_3 ||
+> +	    !(shdr.preamble.flags & SFRAME_F_FDE_SORTED) ||
+> +	    !(shdr.preamble.flags & SFRAME_F_FDE_FUNC_START_PCREL) ||
+> +	    shdr.auxhdr_len) {
+> +		dbg("bad/unsupported sframe header\n");
+> +		return -EINVAL;
+> +	}
 
+Should we also validate shdr.abi_arch to ensure it matches the expected
+architecture?
 
+If malformed or foreign-architecture SFrame data is passed in (for instance,
+with an unexpected endianness or register mapping), the kernel might interp=
+ret
+it incorrectly and generate invalid stack traces.
 
-> [ ... ]
-> 
->> @@ -1091,6 +1133,17 @@ static void veth_napi_del_range(struct net_device *dev, int start, int end)
->>   		ptr_ring_cleanup(&rq->xdp_ring, veth_ptr_free);
->>   	}
->>   
->> +	/* Reset BQL on peer's txqs: remaining ring items were freed above
->> +	 * without BQL completion, so DQL state must be reset.
->> +	 */
->> +	peer = rtnl_dereference(priv->peer);
->> +	if (peer) {
->> +		int peer_end = min(end, (int)peer->real_num_tx_queues);
->> +
->> +		for (i = start; i < peer_end; i++)
->> +			netdev_tx_reset_queue(netdev_get_tx_queue(peer, i));
->> +	}
-> 
-> Does this cleanup leave peer transmit queues permanently stopped if they
-> were backpressured when xdp was disabled?
-> 
-> When the ptr_ring is full, veth_xmit() stops the transmit queue using
-> netif_tx_stop_queue(), which sets the __QUEUE_STATE_DRV_XOFF flag.
-> 
-> While netdev_tx_reset_queue() successfully clears the newly added
-> __QUEUE_STATE_STACK_XOFF flag, it does not clear __QUEUE_STATE_DRV_XOFF.
-> If a queue was backpressured exactly when xdp is disabled, it appears it
-> would remain locked forever.
-> 
-> Would it be appropriate to wake the queues using netif_tx_wake_queue() or
-> explicitly clear the __QUEUE_STATE_DRV_XOFF flag during this cleanup?
+Furthermore, accepting arbitrary values here could risk ABI calcification if
+userspace starts supplying invalid values that we later want to reject.
 
-The watchdog timer in this patchset will call netif_tx_wake_queue().
-So, we would recover from this unlikely case.  I guess there is no harm
-in adding a netif_tx_wake_queue() call here (but we should likely guard
-it with netif_running(dev)).
+[ ... ]
+> +int sframe_add_section(unsigned long sframe_start, unsigned long sframe_=
+end,
+> +		       unsigned long text_start, unsigned long text_end)
+> +{
+> +	struct vm_area_struct *sframe_vma, *text_vma;
+> +	struct mm_struct *mm =3D current->mm;
+> +	struct sframe_section *sec;
+> +	int ret;
+> +
+> +	if (!sframe_start || !sframe_end || !text_start || !text_end) {
 
---Jesper
+Is it safe to use VMA start addresses as boolean flags?
 
+Since vm_start can legitimately be zero in certain configurations (if
+mmap_min_addr permits), evaluating !sframe_start or !text_start could
+incorrectly reject perfectly valid mappings at address 0.
+
+Also, to check for zero-length sections, would it be better to explicitly u=
+se
+comparisons like sframe_start >=3D sframe_end instead?
+
+> +		dbg("zero-length sframe/text address\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	scoped_guard(mmap_read_lock, mm) {
+[ ... ]
+> +	sec =3D kzalloc(sizeof(*sec), GFP_KERNEL);
+> +	if (!sec)
+> +		return -ENOMEM;
+> +
+> +	sec->sframe_start	=3D sframe_start;
+> +	sec->sframe_end		=3D sframe_end;
+> +	sec->text_start		=3D text_start;
+> +	sec->text_end		=3D text_end;
+> +
+> +	ret =3D sframe_read_header(sec);
+> +	if (ret)
+> +		goto err_free;
+
+Is it acceptable to mix goto error handling with scoped_guard() cleanup
+helpers in the same function?
+
+The kernel's cleanup subsystem guidelines generally suggest that usage of
+goto and cleanup helpers shouldn't be mixed in the same routine.
+
+Could sec be allocated using __free(kfree) to avoid the goto entirely?
+
+> +
+> +	/* TODO nowhere to store it yet - just free it and return an error */
+> +	ret =3D -ENOSYS;
+> +
+> +err_free:
+> +	free_section(sec);
+> +	return ret;
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260505121718.3572=
+346-1-jremus@linux.ibm.com?part=3D2
