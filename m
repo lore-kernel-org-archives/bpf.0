@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F5E35A3AE
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB1F83B2FCC
 	for <bpf@vger.kernel.org>; Tue,  5 May 2026 04:14:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777954473; cv=none; b=P1wD2JwvFRkbN5BGKWK/ps0yRP7XBuIV0/Z08r5bThzzauTNm6awU5AeWRdyqtK1LmpCuD7Cgz9jMQK+RyNF0vI73L3j2hauE7IKdJw3wZX2Mm6Qxzim5ig+78UpNNcTQpjd1hecmSFKaqcsyPQCMxNxgfLzoRxqQ5hBJZUs09I=
+	t=1777954473; cv=none; b=DYm/OR+Bt2wsc0G6qUBQvGY903WwbrZc+nIcg4/AvW88kGVdpCk5NqhHEqSHtiKI/dGqJIG/RUz5GZoM+Fo5or9LF7CwUQNOy0o3xs+zH+MGO2FovBxKkYxkGz4mvdxXwtFsmMsnNAyBugntglYfHgDAARWtOAqCYWn1BcNh4Qc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1777954473; c=relaxed/simple;
-	bh=wxVMjxc93tWm6+g6rMGUL40dFUnAaEYw/Ar6v4MV4HA=;
+	bh=7hxkhdsuBRHAgeF2Ik/PFLtR//oVRVF0e5+d72nyUp4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fa4wFEIA8mZNqa9wkUthSTN2vPaAo+b/NjtxmYVjpHk6sStZ6IOGjANlKdW0/NBjn5AfxDbMIBTsB6dJjby6qS+hDJ08syceT2JsoxEanwr7QGcUZNTQml0poseiSbyrW5NLxWW9shkdohFHwZd77Nbn+5pF+YIFBP5gQSQfNDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GpwJCDro; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=ZJWSx9+41yyaMX1tAHk00nWclBwvex88LFvMLAmnbl3bGpyZX66MjuCHpjkIFAYWksBXejEI2zOkXtR9ycmpIOckHXqA4EUGMylWuXOwnqZI4nxcePxL2vcYq+Tab9VIy1s692rCcy9XM9Ny1QHDTc/Pq74BeuqavcFxT9OYUM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WKvvdJZy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GpwJCDro"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD566C2BCB4;
-	Tue,  5 May 2026 04:14:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WKvvdJZy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B6AEC2BCC7;
+	Tue,  5 May 2026 04:14:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777954472;
-	bh=wxVMjxc93tWm6+g6rMGUL40dFUnAaEYw/Ar6v4MV4HA=;
+	s=k20201202; t=1777954473;
+	bh=7hxkhdsuBRHAgeF2Ik/PFLtR//oVRVF0e5+d72nyUp4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=GpwJCDroICIhLQRV4o1aq3b9V0seOURbiorGAd6Jo3yC4ITZIo50vOh15tPkY1Hvs
-	 pBLf0ryQ8b2lql4awSXqodcg7knZu98MasO1GMLGv88bavnxDSHsnaRIjdFWX+jitQ
-	 ifzrENN2Qf0BwUoXotysPaKV5Bi94AR4VgkxzOIMXW2f1Z+47AOwZ0HbAy3NfUcnjI
-	 LhbUUk3sV0gmJWfN3RVgd27qRhUlCfQezpt0AlaGdbchle4QM0Md5Unq1g2crgo1AF
-	 y3pzK9gkSznJZaWuYdHM1zhC+BELnPNuY3Ofc6EQBds3qA663HwDxZ6Q3LoI7aZqId
-	 ui2Ixd2YPv1NA==
+	b=WKvvdJZyYNMXfWqyFYNguoVqrWIzfPT5vWacqFb4x0Jvx/FMJpSNM0SNabca35KNQ
+	 S8zTqRetFLGHnYnZKrA/tCHF7QmvIONyE0EaK0iTOztWwwUnG7nlxkxeV42vqRA9Kj
+	 4QV/dFyS8qErnIUNK61LjC1JxaBxRX5aUC+jJ7r/kYybKDhnesRpLartq0LjkDwJyn
+	 do47JTfcwBLagwp+JxA2CQWuXuu6V8uGqBIZnp7ouEZwmpMoPrY4mK2qaA09v5jU+B
+	 Br6wVqkmHapOZYCvVLo7DvM0+ws64geksJbWuMNfnE6wxoPUCqt3se/VmO8DGWT4Jx
+	 gfQNKd3vQkGzA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 bpf 1/6] bpf: tcp: Fix type confusion in
- bpf_tcp_sock().
+Subject: Re: [PATCH v2 bpf 2/6] selftest: bpf: Add test for bpf_tcp_sock()
+ and RAW socket.
 Reply-To: sashiko@lists.linux.dev
 To: "Kuniyuki Iwashima" <kuniyu@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260504210610.180150-2-kuniyu@google.com>
-References: <20260504210610.180150-2-kuniyu@google.com>
+In-Reply-To: <20260504210610.180150-3-kuniyu@google.com>
+References: <20260504210610.180150-3-kuniyu@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 05 May 2026 04:14:32 +0000
-Message-Id: <20260505041432.BD566C2BCB4@smtp.kernel.org>
+Date: Tue, 05 May 2026 04:14:33 +0000
+Message-Id: <20260505041433.8B6AEC2BCC7@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,71 +46,53 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Critical] The OpenVPN (ovpn) driver contains a critical type confusion v=
-ulnerability due to insufficient socket type checking, leading to out-of-bo=
-unds slab writes.
+- [Low] Newly added code uses manual error checks instead of the mandated m=
+odern ASSERT_* macros.
 --
 
-commit 3e93f247feecc891b15b8d713331586af9371dfd
+commit 1a574056fa08ab8c66dcd9b6ee5f0739ff6721b7
 Author: Kuniyuki Iwashima <kuniyu@google.com>
 
-bpf: tcp: Fix type confusion in bpf_tcp_sock().
+selftest: bpf: Add test for bpf_tcp_sock() and RAW socket.
 
-This commit fixes an out-of-bounds slab access bug in BPF by using sk_is_tc=
-p()
-instead of just checking sk_protocol for IPPROTO_TCP. This prevents raw soc=
-kets
-created with IPPROTO_TCP from bypassing the type check.
+This commit adds a test to cover bpf_tcp_sock() for wrong socket types,
+specifically tricking it with IPPROTO_TCP on an AF_INET RAW socket. It
+also fixes a missing free() in the test.
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index bc96c18df4e03..cd88633f8dc14 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -7475,7 +7475,7 @@ u32 bpf_tcp_sock_convert_ctx_access(enum bpf_access=
-_type type,
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/tools/=
+testing/selftests/bpf/prog_tests/sockopt_sk.c
+> index 53637431ec5d..5fd33ad2eaaf 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+
+[ ... ]
+
+> @@ -211,6 +211,22 @@ static int getsetsockopt(void)
+>  	}
+>  	ASSERT_EQ(optlen, 8, "Unexpected NETLINK_LIST_MEMBERSHIPS value");
 > =20
->  BPF_CALL_1(bpf_tcp_sock, struct sock *, sk)
->  {
-> -	if (sk_fullsock(sk) && sk->sk_protocol =3D=3D IPPROTO_TCP)
-> +	if (sk_fullsock(sk) && sk_is_tcp(sk))
+> +	/* Trick bpf_tcp_sock() with IPPROTO_TCP */
+> +	close(fd);
+> +	fd =3D socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
+> +	if (fd < 0) {
+> +		log_err("Failed to create RAW socket");
+> +		goto err;
+> +	}
 
-This correctly prevents a type confusion where a raw socket can bypass the
-protocol check. Does the OpenVPN (ovpn) driver need a similar fix for this
-exact same pattern?
+This isn't a bug, but should this new code use the modern ASSERT_OK_FD()
+macro instead of manual fd checks and log_err()?
 
-In drivers/net/ovpn/netlink.c, the driver accepts an arbitrary socket file
-descriptor from userspace and determines the socket type using only sk_prot=
-ocol
-without verifying sk_type.
+> +
+> +	optlen =3D 20;
+> +	errno =3D 0;
+> +	err =3D setsockopt(fd, SOL_TCP, TCP_SAVED_SYN, &buf, optlen);
+> +	if (!err) {
+> +		log_err("Unexpected setsockopt(TCP_SAVED_SYN)");
+> +		goto err;
+> +	}
 
-If a user creates a raw socket via socket(AF_INET, SOCK_RAW, IPPROTO_UDP) a=
-nd
-passes it to the OpenVPN netlink interface, it seems it would pass the prot=
-ocol
-check and call ovpn_udp_socket_attach().
-
-This eventually passes the socket to setup_udp_tunnel_sock(), which casts t=
-he
-socket to udp_sk(sk) and overwrites multiple fields (such as encap_type,
-encap_rcv, and gro_receive).
-
-Since struct udp_sock is larger than struct raw_sock, could this result in =
-an
-out-of-bounds slab write?
-
-Similarly, passing a raw TCP socket appears to cause ovpn_tcp_socket_attach=
-()
-to replace sk->sk_prot with ovpn_tcp_prot. This might mean subsequent TCP
-socket operations will operate out-of-bounds on the raw_sock object.
-
-Should ovpn be updated to validate sk_type =3D=3D SOCK_DGRAM or SOCK_STREAM=
- in a
-similar manner to this fix?
-
->  		return (unsigned long)sk;
-> =20
->  	return (unsigned long)NULL;
+Could we use ASSERT_ERR() for this error check as well?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260504210610.1801=
-50-1-kuniyu@google.com?part=3D1
+50-1-kuniyu@google.com?part=3D2
