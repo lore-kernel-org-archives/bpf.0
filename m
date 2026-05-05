@@ -1,272 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A309D47A0B7
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 16:06:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7F148B368
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 16:25:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777997185; cv=none; b=m/KoSP6SpIa0oMbb/i/C+iO10+LNYLZRpzQllXggcXrNDTkSAkEEVwoAVT/3/5CUJp7JhkxOCJxwrmA2zm9wT8Uv/d/Tdi1O73iEwgurM9HUIvGPg25H9tjp7+ggVYQUBd8qNi0h3OcGblHusr6TSWub0jegKoQk7/K6/EykaKQ=
+	t=1777998336; cv=none; b=n6JQD2aH4D/jSNH2B0RccTIehq1f96BqOU2B+jYTUrAjSk/SUSMHpHnINTmocd4l+zh6MXAOJ8xRTMAAqaeG+MvmOzfrRIciXa/EIj/HXXZSY19Mo5+fUR9gX58k/vnhLVP/ZR4+BVuVu7zeUlhcQFXvlKouopfVst9hB29MIPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777997185; c=relaxed/simple;
-	bh=1jSbhbnlPPqTZQXOTCJhWgKJuBTjM8t4+Lr2QRB8rto=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=sgdaudk/x3jdGBq9LSGujFc/1MLkN+yT/DouehqQxe3uLasUd9CweBuYPWm3y94WrdJ/VIIA3nVt4CjfcpS/K1ONDf5Q3+/2aY61OoctkFEusSD+avr+X6s2+FOYIXF8AzYrwruNMhjDgDFJOXyKkrVKysmrRZ+9sQTwVHX/0TM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rQO0bM2p; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777998336; c=relaxed/simple;
+	bh=10ad65O0ps7iM6dei8qNX30QY3FkTiMh2oPpwbtxSn0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uzUjyC6CZhDzya46W2lS55VUJa7gKwwfxYsMoNgZR32BZCM80KgMfHB0Pk0H1HTo/54Pvjg22jriJvcBtwMy8BO6HUJEl33y23vF+6jRNNi3AERjttmVlt8HJ4ljXHSesRKBjLhLZSM2wQmXE94Je9a/RlKUI5bPocWExzjOF4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=BOLA12n2; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rQO0bM2p"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD26DC2BCB4;
-	Tue,  5 May 2026 16:06:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777997185;
-	bh=1jSbhbnlPPqTZQXOTCJhWgKJuBTjM8t4+Lr2QRB8rto=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=rQO0bM2pbATZS4GnGuND9SBZCMyG2Lw+8fO/yt8Ldy2osKyOcpbY2inQ6QOsqy0ll
-	 iNWqZ/lMq7oUSz37XFrDUGZVUuEbbtCu5F50xMVKP+zzngbPFergVGOED6S6bSEH/w
-	 +MEQCREUNVB9ljkgSEEaWBM5xigRWfKkhfVr3QpvK9DUz5v06iNGUxGKcWAVvoCQvQ
-	 0SGOo2NcmeRbcXol46SBOTPfCB64xo+LuMP8geJqyMpzV98LauqhMMworGJrR6aWgQ
-	 rz2t1mpNmPP/p7Xw14qbAn0/BZ00YOKb19x1gkzamHVYtnRUruRoEvcdbgQ5nVKsjf
-	 4ggfE6AmSUOow==
-Content-Type: multipart/mixed; boundary="===============0207227395593299497=="
+	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="BOLA12n2"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-488a9033b2cso48558405e9.2
+        for <bpf@vger.kernel.org>; Tue, 05 May 2026 09:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1777998332; x=1778603132; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dvgEgjFlnhgVavTSLAwA8kue6OnY1fSQmcbYOk/Oxj8=;
+        b=BOLA12n2zlvmTn6BetXu2cIMwXhJbX+fAz/gLq6do6zp3kF4K8bysb/R3kx6QmU/sL
+         sy3LWQoP4bi8cfnuP560JUjb7CQJze1XckvA6zXP0cQCyFX4ek6Ex+BhPLyNPHbkcKvi
+         mi3Mf1XGJcV9KZdHYB4NPiQe4Be5mJyy0DlMvUJcGYrNtvX/tmmSESSG8uRanKtf6QrH
+         +jXCiqbm1qvvfa3oR65MrApVGLhfnE5RhpdCkSitxFVUhnKXbOyeOYf85Na4ivlYhRxp
+         29xl5m38ckNZuCyrfLY9/TP0RzuQ/yCbLpPNfD20ghiwdgtgdjyIoXBIwXneCGn1k6w7
+         F+hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777998332; x=1778603132;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dvgEgjFlnhgVavTSLAwA8kue6OnY1fSQmcbYOk/Oxj8=;
+        b=c5qrjG1ADT9+P6Z7Z8KtugXRIhVhwmoJjeZaG1sceYq6a1mqd3DP5SklKN6QB9T3Qy
+         RFhlX08KdQbWtNnfJ4SRsDsRITFJuiMsfFIToA4xD10DK/yqOf7BwkY/VjA9q8eeI0Km
+         WpNHcHZ8VH0GGMndmEx7YuCVmZD4666C+YgheFZbXtSNgVS2xxjrtJAO2xnZY6UWOOmF
+         Je1Y11OWYqPkZMRoKUOuT78HfzlUXhAb7yvBjrv9Rau0rtYOGnIvaTm4F3rmx0IhGYoa
+         K5Mhyc0CK9nRzjQT3phDVDrWSmETl9LPdzDSUzgsEPQ/PYHssp8W6hXc2tjEOsIvQMIc
+         og4w==
+X-Forwarded-Encrypted: i=1; AFNElJ+qgwuhhaJ9YtIe5L7zaTnwKGeoMT7d2RKhRt4Pqn5ODKUjhoc9bKFRpXCyNyjbzYVmt44=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzL6ZrWhmZq80L1jXmR/dbrDvHhmxqU1rK8tXrXOO7nDahwWdHe
+	tDpjFzgXNrHLlxZk0rdviUxg7IcyW+O5N/H6WqSaju/fPxOCqT+vu9c+9MDGRc+X9Rw=
+X-Gm-Gg: AeBDietq7be4dupHvwv2sFA3O6H06SAfPszDf2tw+ZHa1vA6dYEegEPUPMAx9cWH3hJ
+	oSiLoyNz/LELbnSHWMegE7xTlneS3QqDLUb7gFBnT2C4UU9+H/UUSf9DJJOptf6AEvQb08UWkp8
+	sqPeLkczb0vb8QXm+8ihkcIGUht7D3cICm5VOZJL6x3mn5SUOehlzI2v394xHVrLWUXwqeqvPSo
+	LOhB9LkKVM673pCdssSHBy08dtGp7Tx6VrxKzUzc5ZWUzTbtnNh9uVinvUDYJxRWIh0GAMBdj9/
+	m/w2r3gWMsP8O+rkshYr31oHBvlp1Bvfs7+Xev3xQwXL0txC8nWIBA+sEJ+sd4mEsJ3ybwNcZcX
+	1fkqvjVEZDpr1AzJ1NL/1o4Ob8tJ6B/WG7ZEY3iSkr6xrb9E/5vPlegO/6bERc7uqi4dbjes6oq
+	0PwiBwmcXj5SReelapR9g2A9nOyvzpB/iP0of9JXQ5uW5MCcgOqDjBjAC3VsSLrcfyB77d8z9/m
+	ZRlPAbJZVv+T62X/jjvVU2VWsG/63UyNPazSyFq5Cs7j2KMXtWhichx5U9fR3i65nH3nGziavOF
+	878k43lLYM4/wkDTVk4=
+X-Received: by 2002:a05:600c:3e05:b0:489:1ff1:74df with SMTP id 5b1f17b1804b1-48a9852fbcfmr256956845e9.1.1777998332149;
+        Tue, 05 May 2026 09:25:32 -0700 (PDT)
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a81ed6bafsm737620655e9.2.2026.05.05.09.25.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 May 2026 09:25:31 -0700 (PDT)
+Date: Tue, 5 May 2026 17:25:28 +0100
+From: Daniel Thompson <daniel@riscstar.com>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, maxime.chevallier@bootlin.com,
+	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
+	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
+	arnd@arndb.de, gregkh@linuxfoundation.org,
+	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
+	alexandre.torgue@foss.st.com, ast@kernel.org,
+	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
+	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
+	julianbraha@gmail.com, livelycarpet87@gmail.com,
+	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
+	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+	rohan.g.thomas@altera.com, sdf@fomichev.me,
+	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
+	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 12/12] arm64: dts: qcom: qcs6490-rb3gen2: enable
+ TC9564 with a single QCS8081 phy
+Message-ID: <afoZ-LuVRaX6ixs4@aspen.lan>
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-13-elder@riscstar.com>
+ <d29621c3-07fc-4720-abff-d8901a0d791c@lunn.ch>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c2bc74937f3da0174c896daa2d129c9572a5c6434f8d71da26283fe7f011c4af@mail.kernel.org>
-In-Reply-To: <20260505150851.3090688-2-utilityemal77@gmail.com>
-References: <20260505150851.3090688-2-utilityemal77@gmail.com>
-Subject: Re: [bpf-next v2 1/2] bpf: Offload kptr destructors that run from NMI
-From: bot+bpf-ci@kernel.org
-To: utilityemal77@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,bpf@vger.kernel.org,mic@digikod.net,utilityemal77@gmail.com,alexei.starovoitov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  5 May 2026 16:06:23 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d29621c3-07fc-4720-abff-d8901a0d791c@lunn.ch>
 
---===============0207227395593299497==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 3b1f0ba02f61..162bfd4796ea 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-
-[ ... ]
-
-> @@ -65,6 +68,131 @@ static DEFINE_SPINLOCK(map_idr_lock);
->  static DEFINE_IDR(link_idr);
->  static DEFINE_SPINLOCK(link_idr_lock);
+On Fri, May 01, 2026 at 11:09:42PM +0200, Andrew Lunn wrote:
+> > +					tc956x_emac1_phy: ethernet-phy@1c {
+> > +						compatible = "ethernet-phy-id004d.d101";
+> > +						reg = <0x1c>;
+> > +						reset-gpios = <&tc956x_emac0 1 GPIO_ACTIVE_LOW>;
+> > +						reset-assert-us = <20>;
+> > +						reset-deassert-us = <20>;
+> > +
+> > +						pinctrl-names = "default";
+> > +						pinctrl-0 = <&qep_irq_pin>;
+> > +						interrupts-extended = <&tlmm 101 IRQ_TYPE_EDGE_FALLING>;
 >
-> +struct bpf_dtor_kptr_work {
-> +	struct llist_node node;
-> +	void *obj;
-> +	btf_dtor_kfunc_t dtor;
-> +};
-> +
-> +/* Queue pending dtors per CPU; the idle pool stays global. */
-> +static DEFINE_PER_CPU(struct llist_head, bpf_dtor_kptr_jobs);
-> +static LLIST_HEAD(bpf_dtor_kptr_idle);
-> +/* Keep total >= refs + active so NMI frees never need to allocate. */
-> +static atomic_long_t bpf_dtor_kptr_refs = ATOMIC_LONG_INIT(0);
-> +static atomic_long_t bpf_dtor_kptr_active = ATOMIC_LONG_INIT(0);
-> +static atomic_long_t bpf_dtor_kptr_total = ATOMIC_LONG_INIT(0);
-> +
-> +/* Bound reserve overshoot so the pool tracks demand instead of growing on itself. */
-> +#define BPF_DTOR_KPTR_RESERVE_HEADROOM 64L
-> +
-> +static void bpf_dtor_kptr_worker(struct irq_work *work);
-> +static DEFINE_PER_CPU(struct irq_work, bpf_dtor_kptr_irq_work) =
-> +	IRQ_WORK_INIT_HARD(bpf_dtor_kptr_worker);
-> +
-> +static void bpf_dtor_kptr_push_idle(struct bpf_dtor_kptr_work *job)
-> +{
-> +	llist_add(&job->node, &bpf_dtor_kptr_idle);
-> +}
-> +
-> +static struct bpf_dtor_kptr_work *bpf_dtor_kptr_pop_idle(void)
-> +{
-> +	struct llist_node *node;
-> +
-> +	node = llist_del_first(&bpf_dtor_kptr_idle);
-> +	if (!node)
-> +		return NULL;
-> +
-> +	return llist_entry(node, struct bpf_dtor_kptr_work, node);
-> +}
+> What is probably wrong. PHY interrupts are level, not edge.
 
-Does bpf_dtor_kptr_pop_idle() handle multiple concurrent consumers
-safely?
-
-The documentation for llist_del_first() in lib/llist.c explicitly
-states:
-
-  Only one llist_del_first user can be used simultaneously with multiple
-  llist_add users without lock. Because otherwise llist_del_first,
-  llist_add, llist_add (or llist_del_all, llist_add, llist_add)
-  sequence in another user may change @head->first->next, but keep
-  @head->first.
-
-This is the classic ABA race that llist_del_first cannot defend against.
-
-In this patch, bpf_dtor_kptr_pop_idle() has multiple concurrent
-consumers:
-
-  1. bpf_dtor_kptr_offload() called from NMI context on any CPU
-     (the function installed below, called from bpf_obj_free_fields
-     when in_nmi()).
-
-  2. bpf_dtor_kptr_trim() called from the per-CPU irq_work worker on
-     any CPU (called from bpf_dtor_kptr_worker below).
-
-Both paths call bpf_dtor_kptr_pop_idle() which calls
-llist_del_first(&bpf_dtor_kptr_idle) on the global idle list. Two or
-more CPUs can be popping simultaneously with no external lock and no
-single-consumer guarantee.
-
-Can the following race timeline produce list corruption or
-double-ownership?
-
-Initial state: idle list = A -> B -> C -> NULL
-
-CPU0 (NMI): enters bpf_dtor_kptr_pop_idle
-  entry = head->first = A
-  next  = A->next     = B
-  (stalls before cmpxchg)
-
-CPU1 (NMI/worker): runs bpf_dtor_kptr_pop_idle
-  entry = A, next = B, cmpxchg(head->first, A, B) succeeds.
-  Now idle = B -> C -> NULL. CPU1 uses A (for offload or mem_free).
-
-CPU1: pops again, takes B. idle = C -> NULL.
-
-CPU1 eventually runs worker -> push_idle(A). Now idle = A -> C -> NULL.
-   A->next = C (not B anymore).
-
-CPU0 resumes:
-  Its cached next variable is still B, cmpxchg(&head->first, A, B)
-  finds head->first is currently A, so the cmpxchg succeeds.
-  Result: head->first = B, but B has been popped and is in CPU1's
-  per-CPU bpf_dtor_kptr_jobs list already (not free).
-
-Node B is now simultaneously:
-  (a) considered removed from idle (CPU1 popped it and is using it)
-  (b) referenced as idle->first by the head pointer
-
-Another pop_idle() may grab B again as if it were idle, while it is
-active in a per-CPU jobs list. Then bpf_dtor_kptr_worker will execute
-job->dtor() on already-freed/reused job->obj, or the same job is pushed
-into two lists, corrupting llist_node chains.
-
-Concurrency is not hypothetical here. A BPF tp_btf/nmi_handler program
-calling bpf_map_delete_elem can fire on multiple CPUs simultaneously.
-The irq_work worker also runs on any CPU that queued work. Thus both
-bpf_dtor_kptr_offload and bpf_dtor_kptr_trim can run concurrently on
-different CPUs, giving at least 2 concurrent llist_del_first consumers.
-
-Typical fixes require either:
-  - using a locked list (spinlock + list_head), or
-  - using llist_del_all() with batch processing, or
-  - a cmpxchg-based stack that properly handles ABA (e.g., using a
-    tagged pointer).
-
-> +
-> +static void bpf_dtor_kptr_trim(void)
-> +{
-> +	struct bpf_dtor_kptr_work *job;
-> +	long total;
-> +	long needed;
-> +
-> +	for (;;) {
-> +		total = atomic_long_read(&bpf_dtor_kptr_total);
-> +		needed = atomic_long_read(&bpf_dtor_kptr_refs) +
-> +			 atomic_long_read(&bpf_dtor_kptr_active);
-> +		if (total <= needed)
-> +			return;
-> +
-> +		job = bpf_dtor_kptr_pop_idle();
-> +		if (!job)
-> +			return;
-> +
-> +		if (!atomic_long_try_cmpxchg(&bpf_dtor_kptr_total, &total, total - 1)) {
-> +			bpf_dtor_kptr_push_idle(job);
-> +			continue;
-> +		}
-> +
-> +		bpf_mem_free(&bpf_global_ma, job);
-> +	}
-> +}
-
-[ ... ]
-
-> +static void bpf_dtor_kptr_worker(struct irq_work *work)
-> +{
-> +	struct llist_node *jobs, *node, *next;
-> +
-> +	jobs = llist_del_all(this_cpu_ptr(&bpf_dtor_kptr_jobs));
-> +	llist_for_each_safe(node, next, jobs) {
-> +		struct bpf_dtor_kptr_work *job;
-> +
-> +		job = llist_entry(node, struct bpf_dtor_kptr_work, node);
-> +		job->dtor(job->obj);
-> +		atomic_long_dec(&bpf_dtor_kptr_active);
-> +		bpf_dtor_kptr_push_idle(job);
-> +	}
-> +
-> +	bpf_dtor_kptr_trim();
-> +}
-> +
-> +static void bpf_dtor_kptr_offload(void *obj, btf_dtor_kfunc_t dtor)
-> +{
-> +	struct bpf_dtor_kptr_work *job;
-> +
-> +	atomic_long_inc(&bpf_dtor_kptr_active);
-> +	job = bpf_dtor_kptr_pop_idle();
-> +	if (WARN_ON_ONCE(!job)) {
-> +		atomic_long_dec(&bpf_dtor_kptr_active);
-> +		/*
-> +		 * This should stay unreachable if reserve accounting is correct. If it
-> +		 * ever breaks, running the destructor unsafely is still better than
-> +		 * leaking the object permanently.
-> +		 */
-> +		dtor(obj);
-> +		return;
-> +	}
-> +
-> +	job->obj = obj;
-> +	job->dtor = dtor;
-> +	if (llist_add(&job->node, this_cpu_ptr(&bpf_dtor_kptr_jobs)))
-> +		irq_work_queue(this_cpu_ptr(&bpf_dtor_kptr_irq_work));
-> +}
-> +
->  void bpf_obj_free_fields(const struct btf_record *rec, void *obj)
->  {
->  	const struct btf_field *fields;
-> @@ -842,6 +1010,19 @@ void bpf_obj_free_fields(const struct btf_record *rec, void *obj)
->  		xchgd_field = (void *)xchg((unsigned long *)field_ptr, 0);
->  		if (!xchgd_field)
->  			break;
-> +		if (in_nmi() && field->kptr.dtor) {
-> +			bpf_dtor_kptr_offload(xchgd_field, field->kptr.dtor);
-> +			bpf_kptr_offload_dec();
-> +			break;
-> +		}
-> +		if (field->kptr.dtor)
-> +			/*
-> +			 * Dtor kptrs reach storage through bpf_ref_kptr_xchg(), which
-> +			 * pairs installation with bpf_kptr_offload_inc(). Drop that
-> +			 * reservation on non-NMI teardown once no active transition is
-> +			 * needed.
-> +			 */
-> +			bpf_kptr_offload_dec();
->
->  		if (!btf_is_kernel(field->kptr.btf)) {
->  			pointee_struct_meta = btf_find_struct_meta(field->kptr.btf,
+Thanks (and agree). Will fix.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25385531271
---===============0207227395593299497==--
+Daniel.
