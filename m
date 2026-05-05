@@ -1,134 +1,157 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F784A340F
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 18:22:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE81309F1D
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 18:32:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778005380; cv=none; b=QKDfYKx6lEVxyWidKoU0RDFUWS8Ly2DaUQ29o3s19rfuUkDSdlrvRs69+LhWA7NUXZX662D0U+0HVmKmKfvpubPF07K2x7cVTdeyGHnAxDcLJkHgXh3ZwtF3Zc77l0eF5LM3VwOuQiJYsDjvQRUKMTaiXCSLR9X4lfVdwQpQvik=
+	t=1778005975; cv=none; b=A4/PtdyQIj31pA4x72FVoLewoq6ir2czaJDqvy0dEq2GmesuOy2Bn34Q/9MV/sG48wyf2HwTvB0F7H7lp6ig3K5zGIZgKEBjMITeoTQUC9BRqZ30ProC+vNAmptxarschljTwZaiFQNv4frfZQwgTy/3s1cJawfN4EpAlTiwpOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778005380; c=relaxed/simple;
-	bh=RvOp31bN8+LFvBEHdN+i0tR018r1dlq43ximR6EKVBY=;
+	s=arc-20240116; t=1778005975; c=relaxed/simple;
+	bh=LIcscJcVVLqUCcOXfjCP3LEG10P/ux94nhxWp+r/ilM=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=DD2ha5U7DfE3emxTqphu6xKtR9YbXKUbuGIykGyA3BnEchbpFRZ9UDtR628Pc2KouCT3vIybWKifc22RpAYzoxDczGEEnXZw+2BU+RB0rdRnkACv5KIdi6+rCPtCK2aTQbgAJkuJfRxNi3+6zuyIp76/w69keQK4oUnhlUaWjEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nRAsSOtA; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=p26PlMifHHjbf+aJlzOqdVXpqO+nU+8sfKy9pqzHK+Dx97RGH9yqOibGtLc8OA8QQmWy6qhvE5ikf+28+wrDsxrubz3HmJGPmZ0l74MMlI3Le4e1n0hAesGB/EOEW23huVTdvZHbWe8+xL44qJgv+Y4msdSaWd7nPMaox6x/jUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=njHnCTAR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nRAsSOtA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89186C2BCB4;
-	Tue,  5 May 2026 18:22:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="njHnCTAR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF63AC2BCB4;
+	Tue,  5 May 2026 18:32:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778005379;
-	bh=RvOp31bN8+LFvBEHdN+i0tR018r1dlq43ximR6EKVBY=;
+	s=k20201202; t=1778005974;
+	bh=LIcscJcVVLqUCcOXfjCP3LEG10P/ux94nhxWp+r/ilM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=nRAsSOtAOp/+WsJ0cT4rtnJ80xrN4ChfATeB8EHrNcCMajsdHos0MeFQax5mvpOJk
-	 IspDgg+tBEYY2UxaNnEjvoanww7wXFmsQjELvpGZMhyQqOb4yuAeGgMRdaoiZtcAh2
-	 Pz9aSg1Qb1r2cy0KMgUSaQpAOoLxx/Re2Hh6ZCYjJw4gNESjChwvBRn283fawG+Zw0
-	 SuU1iGNAjk5Lkk8E8My45WuW9aEOU8uOXD2EhHOww67DE30wFKYE7mNnzkkTQUJY52
-	 cag9hMCxsE8JZd0pfgdNjV2kTNMbgxVS4WiQApEWtu7TK8cOh9y1m1iU7tQgvk3dB7
-	 Yubg1gxCF8iww==
+	b=njHnCTARWSID9EX0eeIVXmChdV+n9iS3C5msY7t7Vl27qwNMA2YtEwzSUqUXG8EtS
+	 Z7GKqDF7n29xq2MX+nrPwJl5bEbAW107PlWd70GvbNI9bTUzDUj3ahyaZyfIEfXRhe
+	 gSE/UEipea3FM3zmg+oVgiqGPVAAqAMoeMli/zsfo3fVXHnAF7gJcz0sVKbw10RvxJ
+	 Ag7AVhKpiJn6zuBF/5Ul3i63sduFydQejtD7AJUIlJcakCxt2te5O3wgK2dpH/M/vF
+	 8K1FVikLK/+WtN9EVOY6zlYvUQs69qHWmcYo8mTWx5X0jKFqwZku5OqhV+V6wHIPsp
+	 R7+4/GF1kjTgQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3 10/13] net: lan966x: add PCIe FDMA MTU
- change support
+Subject: Re: [PATCH v14 12/19] unwind_user/sframe: Add .sframe validation
+ option
 Reply-To: sashiko@lists.linux.dev
-To: "Daniel Machon" <daniel.machon@microchip.com>
+To: "Jens Remus" <jremus@linux.ibm.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260504-lan966x-pci-fdma-v3-10-a56f5740d870@microchip.com>
-References: <20260504-lan966x-pci-fdma-v3-10-a56f5740d870@microchip.com>
+In-Reply-To: <20260505121718.3572346-13-jremus@linux.ibm.com>
+References: <20260505121718.3572346-13-jremus@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 05 May 2026 18:22:59 +0000
-Message-Id: <20260505182259.89186C2BCB4@smtp.kernel.org>
+Date: Tue, 05 May 2026 18:32:54 +0000
+Message-Id: <20260505183254.AF63AC2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] NAPI enablement race condition in reload paths can permanently sta=
-ll the device.
+- [High] Denial of Service (Soft Lockup) due to unyielding loops in .sframe=
+ section validation.
+- [High] Integer overflows on 32-bit architectures bypass bounds checks, al=
+lowing arbitrary kernel/MMIO reads.
+- [Low] Incorrect format specifier '%d' used for unsigned 32-bit integer.
 --
 
-commit 20d04dd9ba5afad59c5a90474d47aff04eccef0c
-Author: Daniel Machon <daniel.machon@microchip.com>
+commit 1f173c4dc22a264948bc63183c96747aa7022119
+Author: Josh Poimboeuf <jpoimboe@kernel.org>
 
-net: lan966x: add PCIe FDMA MTU change support
+unwind_user/sframe: Add .sframe validation option
 
-This commit adds MTU change support for the PCIe FDMA path. It allows
-continuous ATU-mapped RX and TX buffers to be reallocated with a new size
-upon MTU changes, falling back to reusing existing buffers upon allocation
-failure.
+This commit adds a debug feature to validate all .sframe sections when
+first loading the file rather than on demand.=20
 
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/=
-drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> index 2c54880460772..491ddc337760f 100644
-> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
+> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+> index 4419626f01734..45988cdc5c37a 100644
+> --- a/kernel/unwind/sframe.c
+> +++ b/kernel/unwind/sframe.c
+
 [ ... ]
-> @@ -354,9 +359,155 @@ static int lan966x_fdma_pci_init(struct lan966x *la=
-n966x)
-[ ... ]
-> +static int lan966x_fdma_pci_reload(struct lan966x *lan966x, int new_mtu)
+
+> +static int sframe_validate_section(struct sframe_section *sec)
 > +{
+> +	unsigned long prev_ip =3D 0;
+> +	unsigned int i;
+> +
+> +	for (i =3D 0; i < sec->num_fdes; i++) {
+
+Can a maliciously crafted .sframe mapping with extremely large values for
+sec->num_fdes and fde.fres_num cause a soft lockup?
+
+The outer and inner loops iterate over values parsed directly from the
+user-provided .sframe section header, which could be up to 4 billion.
+
+Since there is no cond_resched() called within these loops, processing a
+large section might monopolize the CPU for an extended period and trigger
+the soft lockup watchdog.=20
+
+> +		struct sframe_fre_internal *fre, *prev_fre =3D NULL;
+> +		unsigned long ip, fre_addr;
+> +		struct sframe_fde_internal fde;
+> +		struct sframe_fre_internal fres[2];
+> +		bool which =3D false;
+> +		unsigned int j;
+> +		int ret;
+> +
+> +		ret =3D safe_read_fde(sec, i, &fde);
+
 [ ... ]
-> +	/* Keep this order: rx_start, wakeup_netdev, napi_enable. */
-> +	lan966x_fdma_rx_start(&lan966x->rx);
-> +	lan966x_fdma_pci_wakeup_netdev(lan966x);
-> +	napi_enable(&lan966x->napi);
 
-Is this ordering vulnerable to a race condition that can permanently stall
-the device?
+> +		fre_addr =3D sec->fres_start + fde.fres_off;
+> +		for (j =3D 0; j < fde.fres_num; j++) {
+> +			int ret;
+> +
+> +			fre =3D which ? fres : fres + 1;
+> +			which =3D !which;
+> +
+> +			ret =3D safe_read_fre(sec, &fde, fre_addr, fre);
+> +			if (ret) {
+> +				dbg_sec("FDE %u: safe_read_fre(%u) failed\n", i, j);
+> +				dbg_sec("FDE: func_addr:%#lx func_size:%#x fda_off:%#x fres_off:%#x =
+fres_num:%d info:%u info2:%u rep_size:%u\n",
 
-If an interrupt fires immediately after lan966x_fdma_rx_start() but before
-napi_enable(), could the following sequence occur:
+This isn't a bug, but does fres_num use the wrong format specifier?
 
-lan966x_fdma_rx_start()
-  -> enables hardware interrupts via FDMA_INTR_DB_ENA
+The fres_num field is defined as a u32, so %u should probably be used
+instead of %d. If a user provides a fres_num exceeding 0x7FFFFFFF, it will
+incorrectly print as a negative number in the debug output.
 
-Hardware Interrupt
-lan966x_fdma_irq_handler()
-  -> masks interrupt via FDMA_INTR_DB_ENA
-  -> napi_schedule()
-     -> drops the event because napi_enable() hasn't run yet
+> +					fde.func_addr, fde.func_size,
+> +					fde.fda_off,
+> +					fde.fres_off, fde.fres_num,
+> +					fde.info, fde.info2,
+> +					fde.rep_size);
+> +				return ret;
+> +			}
+> +
+> +			fre_addr +=3D fre->size;
 
-napi_enable()
-  -> clears NAPI state but schedules no poll
+Could this addition overflow on 32-bit architectures?
 
-Since the hardware interrupt remains masked by the ISR and NAPI will never =
-run
-to unmask it, does this leave the NAPI polling permanently stalled?
+Calculations like fre_addr +=3D fre->size (and similarly
+fda_addr =3D sec->fres_start + _fde.fres_off in __read_fde() called by
+safe_read_fde()) use 32-bit arithmetic on 32-bit architectures.
 
-Should napi_enable() be called before lan966x_fdma_rx_start() unmasks the
-hardware interrupts?
+A maliciously crafted .sframe section could cause these calculations to wrap
+around to a small value, which perfectly bypasses the bounds checks.
+
+Because user_read_access_begin() validates the whole section range upfront
+and UNSAFE_GET_USER_INC omits per-access access_ok() checks, this wrap
+around could allow arbitrary kernel or MMIO reads.
 
 > +
-> +	return err;
-> +restore:
+> +			if (prev_fre && fre->ip_off <=3D prev_fre->ip_off) {
+> +				dbg_sec("FDE %u: FRE %u not sorted\n", i, j);
+> +				return -EFAULT;
+> +			}
 > +
-> +	/* No new buffers are allocated at this point. Use the old buffers,
-> +	 * but reset them before starting the FDMA again.
-> +	 */
+> +			prev_fre =3D fre;
+> +		}
+> +	}
 > +
-> +	memcpy(&lan966x->tx.fdma, &tx_fdma_old, sizeof(struct fdma));
-> +	memcpy(&lan966x->rx.fdma, &rx_fdma_old, sizeof(struct fdma));
-> +
-> +	lan966x->rx.max_mtu =3D old_mtu;
-> +
-> +	lan966x_fdma_pci_reset_mem(lan966x);
-> +
-> +	/* Keep this order: rx_start, wakeup_netdev, napi_enable. */
-> +	lan966x_fdma_rx_start(&lan966x->rx);
-> +	lan966x_fdma_pci_wakeup_netdev(lan966x);
-> +	napi_enable(&lan966x->napi);
-
-Does this restore path have the same race condition between unmasking
-hardware interrupts and enabling NAPI?
-
-> +
-> +	return err;
+> +	return 0;
 > +}
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260504-lan966x-pc=
-i-fdma-v3-0-a56f5740d870@microchip.com?part=3D10
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260505121718.3572=
+346-1-jremus@linux.ibm.com?part=3D12
