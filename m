@@ -1,111 +1,192 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A9B35A938
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 18:55:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6036D3BE632
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 18:59:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778007329; cv=none; b=mmccTsFuj9nYKLKh4LzXB2hoOGSmNMwDerKwSfge723+YDzfbnDRFczci1Gh6fvMCwsY1XR305YgLdEMcOKT8gkpqRcKvNS57JVmFplkdBKY/kLsNOKsPaqFPGat09EfcvPu4zOpYsvzYCrzWlNLeDY/X0cwuIumdXoAnHpC/iI=
+	t=1778007573; cv=none; b=NtCoww5tnTTPb+Osigek/V44yaPte1uP2wb8/UQaPNBTODcrgqifv0bHI3VT8whLGyZSo9hwW8H/Pc3fn/djQsSAMSwVM5o8X47iCVNquUt+IBi7WalqUZf7wy2seLwF63zHByY4+ydolin5/UNwiapuGZUZ0iwGqs+fFKB5Xvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778007329; c=relaxed/simple;
-	bh=XZm2Ut+Ma2RKQq/L3l06yXGeXi21lkPdRM38IC2/grI=;
+	s=arc-20240116; t=1778007573; c=relaxed/simple;
+	bh=YLB+Fml/+YB9uzd5Ggm/gkGNijcXlstV+lyDy2kHGi8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=cGpYzujffjhVBjjUnVV0/oCHPnCHr/nAd8Xu6gLorV4fet69bqd5vkU3rcxmEV+GfyvHJre1Pt5BAs9oho02iD9kJQQ//WTxLv7s6xGwwiP6ud3QL+tMuYNWcN0pLEURO0xES2uahZC7hBI/aIegRLQUINocvgSxqOG2NnKX1oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aGgPlcOT; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=Xk6FTQFD8hc+VQHEX4Fk9/+Yse1XMgZn/W8nizbvf8l5auCjoaYRXroRwozJ2ePPOpjCwkBELN8cmCoDrv2e+0R1CqsD0qS0X7GiksVYUIg+8K7MQSXogy8Qx9oaKCSXgmy37n7UlFlTmweyqDuU80Hjma6zBZKpL18IbFITSx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gLBAZAER; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aGgPlcOT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E529C2BCB4;
-	Tue,  5 May 2026 18:55:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gLBAZAER"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C708CC2BCB4;
+	Tue,  5 May 2026 18:59:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778007328;
-	bh=XZm2Ut+Ma2RKQq/L3l06yXGeXi21lkPdRM38IC2/grI=;
+	s=k20201202; t=1778007572;
+	bh=YLB+Fml/+YB9uzd5Ggm/gkGNijcXlstV+lyDy2kHGi8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=aGgPlcOT9tIr5QltZxqCtxf5ib2j1gppbppzUUd+B9wy9n1vMTQdQmJLumhRSAagm
-	 Mvr12O7+1GaB1zPW/3ZOo6S2YtrqtGFjkDS9YA73TaZgi8IrU0iJOOvxQ0iCPwBNWc
-	 oc9zYFVCAwIjnEW0jblYJK520K5U7B9rka6eKqtGM80/u1M61SxNL6KTGt9SFMGu74
-	 7LcZHJxxbKtg4KEDL3L/S6k6GjZxqyxLjeequ36OGhW9+K4FQ4ltv1LvQR2m+0nDrL
-	 grtYI8MNKI69kZptdtFByrBhI/tvalcy8hgCrF+WSml/1RkM71i5jr1Vk3s9YVBaxT
-	 1ckpLmlI3k3qQ==
+	b=gLBAZAEROApyb4gjjqmICM3rtd12XbD/hQxrR3RlQSCZm81MVhBUYKtUFYvsvBumF
+	 912DdBwJtH5aZt0kwOQqDfFCXwnMaGIdQVDyLbFpHrrsdqeBDqvZUDyGD4d1ipE8st
+	 SAoWprFodGlCHFL4KQDHrYtqonG+CzYpx1ZnEReHWGzlcHKHF4eOIZlQ4156zltTiB
+	 NbEF5b25iAbw+WqPCb7f1VR7mXFVbKDQmVOpalzkKZSwhU5/KJKnGro653PmVoywbv
+	 x2SbKL6YujCV9VVkbp9rv5s4h96RZSOi0Kco6Q3u7A0SV2L0LipRmlsSkAC/BKW1WU
+	 4X0+wEAG2SdkQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v14 07/19] unwind_user/sframe: Wire up unwind_user to
- sframe
+Subject: Re: [PATCH v14 05/19] unwind_user/sframe: Add support for reading
+ .sframe contents
 Reply-To: sashiko@lists.linux.dev
 To: "Jens Remus" <jremus@linux.ibm.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260505121718.3572346-8-jremus@linux.ibm.com>
-References: <20260505121718.3572346-8-jremus@linux.ibm.com>
+In-Reply-To: <20260505121718.3572346-6-jremus@linux.ibm.com>
+References: <20260505121718.3572346-6-jremus@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 05 May 2026 18:55:28 +0000
-Message-Id: <20260505185528.8E529C2BCB4@smtp.kernel.org>
+Date: Tue, 05 May 2026 18:59:32 +0000
+Message-Id: <20260505185932.C708CC2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
 s) to consider:
-- [High] Unbounded linear scan of user-controlled sframe entries can cause =
-a CPU hard lockup in NMI context.
-- [Medium] The commit message claims to refactor `unwind_user_next_common()=
-` by removing an unused `pt_regs` parameter, but this change is entirely ab=
-sent from the code modifications.
+- [Critical] Division by zero in `__find_fre` when `fde->rep_size` is 0.
+- [High] `mtree_insert_range` is called with an exclusive end boundary, pre=
+venting contiguous SFrame sections.
+- [High] Unbounded linear search over user-controlled memory in `__find_fre=
+` can cause hard lockups in atomic context.
+- [High] Integer overflows in SFrame header parsing allow bypass of bounds =
+checks on 32-bit architectures.
+- [Medium] Generic SFrame unwinding code uses `unsafe_get_user()` for unali=
+gned accesses, breaking strict-alignment architectures.
 --
 
-commit 2e1e17bbaa1c0426d41d66ce7930a944f3e86ae7
+commit 159c92acf3c961aecc6383f6c3f35a955591abf3
 Author: Josh Poimboeuf <jpoimboe@kernel.org>
 
-unwind_user/sframe: Wire up unwind_user to sframe
+unwind_user/sframe: Add support for reading .sframe contents
 
-This commit hooks up the sframe infrastructure into the unwind_user interfa=
-ce
-to support user-space stack unwinding via sframe. It adds the
-UNWIND_USER_TYPE_SFRAME type and updates the unwind_user_next() logic to
-attempt sframe unwinding when available.
+This commit adds support for reading .sframe section contents to facilitate
+user space stack unwinding. It introduces the sframe_find() interface which
+uses user_read_access_begin() and unsafe_*() accessors for performance.
+Support is included for SFrame V3, internal FDE representations, and
+PC-relative offsets.
 
->     [ Jens Remus: Remove unused pt_regs from unwind_user_next_common() and
->     its callers.  Simplify unwind_user_next_sframe(). ]
+Link: https://lore.kernel.org/all/77c0d1ec143bf2a53d66c4ecb190e7e0a576fbfd.=
+1737511963.git.jpoimboe@kernel.org/
+Link: https://lore.kernel.org/all/b35ca3a3-8de5-4d32-8d30-d4e562f6b0de@linu=
+x.ibm.com/
 
-This isn't a bug, but does this commit message match the changes?
-Looking at the diff and the code, there are no modifications to
-unwind_user_next_common() or its callers to remove a pt_regs parameter.
-
-> diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
-> index 90ab3c1a205ef..1fb2724197332 100644
-> --- a/kernel/unwind/user.c
-> +++ b/kernel/unwind/user.c
-[ ... ]
-> @@ -82,6 +83,16 @@ static int unwind_user_next_fp(struct unwind_user_stat=
-e *state)
->  	return unwind_user_next_common(state, &fp_frame);
->  }
+> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+> index fdb2a49085638..c60aa527984a1 100644
+> --- a/kernel/unwind/sframe.c
+> +++ b/kernel/unwind/sframe.c
+> @@ -15,9 +15,338 @@
+>  #include <linux/unwind_user_types.h>
 > =20
-> +static int unwind_user_next_sframe(struct unwind_user_state *state)
+>  #include "sframe.h"
+> +#include "sframe_debug.h"
+
+[ ... ]
+
+> +static __always_inline int __read_fre(struct sframe_section *sec,
+> +				      struct sframe_fde_internal *fde,
+> +				      unsigned long fre_addr,
+> +				      struct sframe_fre_internal *fre)
 > +{
-> +	struct unwind_user_frame frame;
+[ ... ]
+> +	if (fre_addr + addr_size + 1 > sec->fres_end)
+> +		return -EFAULT;
 > +
-> +	/* sframe expects the frame to be local storage */
-> +	if (sframe_find(state->ip, &frame))
+> +	UNSAFE_GET_USER_INC(ip_off, cur, addr_size, Efault);
 
-Can this sequence cause a hard lockup in NMI context?
+Will this cause alignment faults on architectures with strict alignment
+requirements?
 
-Since this unwinder is often called from NMI context (like perf), sframe_fi=
-nd()
-eventually calls __find_fre() to search for Frame Row Entries. If __find_fr=
-e()
-performs a linear scan over an unbounded, user-controlled number of entries
-(fde->fres_num), it could spin for a long time without yielding.
+The .sframe format uses packed structures and variable-length datawords. The
+cur pointer might be unaligned here, and UNSAFE_GET_USER_INC() performs
+16-bit or 32-bit reads via unsafe_get_user().
 
-If a malicious userspace program maps a large VMA and provides hundreds of
-millions of FREs, would this loop calling unsafe_get_user() on every
-iteration tie up the CPU long enough in NMI context to trigger the hard
-lockup detector?
+[ ... ]
 
-> +		return -ENOENT;
-> +	return unwind_user_next_common(state, &frame);
-> +}
+> +static __always_inline int __find_fre(struct sframe_section *sec,
+> +				      struct sframe_fde_internal *fde,
+> +				      unsigned long ip,
+> +				      struct unwind_user_frame *frame)
+> +{
+> +	unsigned char fde_pctype =3D SFRAME_V3_FDE_PCTYPE(fde->info);
+> +	struct sframe_fre_internal *fre, *prev_fre =3D NULL;
+> +	struct sframe_fre_internal fres[2];
+> +	unsigned long fre_addr;
+> +	bool which =3D false;
+> +	unsigned int i;
+> +	u32 ip_off;
+> +
+> +	ip_off =3D ip - fde->func_addr;
+> +
+> +	if (fde_pctype =3D=3D SFRAME_FDE_PCTYPE_MASK)
+> +		ip_off %=3D fde->rep_size;
+
+Can a malicious user provide an SFrame section with a rep_size of 0?
+
+Since fde->rep_size is populated directly from the user-provided
+_fda.rep_size without validation, a 0 value here would trigger a
+divide-by-zero exception and a kernel panic.
+
+> +
+> +	fre_addr =3D sec->fres_start + fde->fres_off;
+> +
+> +	for (i =3D 0; i < fde->fres_num; i++) {
+
+Can this loop cause a hard lockup in atomic context?
+
+fde->fres_num is a 32-bit value copied from user space without validation.
+Since sframe_find() is designed to be called by unwinders in NMI context, an
+attacker could provide a very large number of valid entries. Executing
+billions of iterations and unsafe_get_user() calls could stall the CPU
+and trigger the hard lockup detector.
+
+> +		int ret;
+> +
+
+[ ... ]
+
+> @@ -120,8 +449,10 @@ int sframe_add_section(unsigned long sframe_start, u=
+nsigned long sframe_end,
+>  	sec->text_end		=3D text_end;
+> =20
+>  	ret =3D sframe_read_header(sec);
+> -	if (ret)
+> +	if (ret) {
+> +		dbg_print_header(sec);
+>  		goto err_free;
+> +	}
+
+Can shdr.fre_len cause an integer overflow on 32-bit architectures during
+header parsing?
+
+If a malicious user provides a large fre_len in the header, fres_end
+(calculated as fres_start + shdr.fre_len) could wrap around the 32-bit
+address space. This would bypass the bounds check in sframe_read_header(),
+allowing fres_start and fdes_start to point into kernel memory. Later, when
+__read_fde() and __find_fre() use unsafe_get_user(), this could lead to
+arbitrary kernel memory disclosure.
+
+> =20
+>  	ret =3D mtree_insert_range(sframe_mt, sec->text_start, sec->text_end, s=
+ec, GFP_KERNEL);
+
+Does passing sec->text_end directly as the last parameter to
+mtree_insert_range() break contiguous mappings?
+
+mtree_insert_range() expects the last boundary to be inclusive, but
+sec->text_end represents the exclusive end address of the executable segmen=
+t.
+If user space maps seamlessly contiguous text segments, the insertion for t=
+he
+second segment might overlap with the claimed end of the first, causing it =
+to
+fail with -EEXIST.
+
+>  	if (ret) {
+>  		dbg("mtree_insert_range failed: text=3D%lx-%lx\n",
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260505121718.3572=
-346-1-jremus@linux.ibm.com?part=3D7
+346-1-jremus@linux.ibm.com?part=3D5
