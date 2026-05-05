@@ -1,163 +1,230 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E3139B952;
-	Tue,  5 May 2026 15:14:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777994053; cv=none; b=L0O5NtIQ4pgvMm7c+Idtb4sL5+B0OTS5x0nK25zYVtzv8jRM/SUxdiue/cnyIGYs/MGnNYsX96XLjVvQ52Wb61+qbNfk+ZrQ5AXcJej6jxEoCwBzIl7AGGGjjp4vzecR8AeIETZevAOitmDk0sdxnCkkOvqd4zBOURzMnUIbcOg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777994053; c=relaxed/simple;
-	bh=yJ/mQCKDNyWieksngGmTrHElKRuZ0mOGGcnfFjZfoqk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W2T+JgacibGB6y1EKnDcgzTz94XO6KrQhZSIilU4MxP0J2rLhXn9XZlGqn0GhVfktKwu9evANrAmWR336A+aVSqDiTweEjg62+zBVqRZ34mHwRDPxF0d+s+yB5X+3CTVQFQ3bR5zMumPGX/pHXoRJLdGOV8qeScudZCBhqtmNXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eqMQr+8E; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE008370D4A;
+	Tue,  5 May 2026 15:45:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777995917; cv=fail; b=pU8N/G+Z8pBQR5wj5lcE8F9InXgsZjbGPcr4vYbVvm9lj2SSXhnXvy+zRAE9L0mpa60kZ04NNSNWrj6m5532z3p0lzSFQ21SJPNt1Qg67St184Os5SXoQYh9SijePkuxcBQRTxhKbQX4BOIFz+6XdgSHfFBFf/nFJcV4W+Q53NM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777995917; c=relaxed/simple;
+	bh=zCpf/XfUlBj3ngaMrO8qRIc5gwtd4igYdGfESKpQwnw=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=AOJjE7YGSDiwL78x/w03udwhiJiC1jytbDlGniQMh459k8PUwmPB58u1bHkrcmh1q8G213sZztmSRA22m1DutfMBxt4c73fqjqQqonbPJ3bhYX2aEiZ+ZFFMhcU4SXH0/GS3HSdO8CVCYXWVyjoVYRazJD8AEInA0Rkq6L12kdw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F1/yvVRP; arc=fail smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eqMQr+8E"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87951C2BCB4;
-	Tue,  5 May 2026 15:14:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777994053;
-	bh=yJ/mQCKDNyWieksngGmTrHElKRuZ0mOGGcnfFjZfoqk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=eqMQr+8EBUJ65SoEkkHVJK8O4j3mVUGSiFlBXcji5jIKi+gn7xoGcTfrt4UF7m9h5
-	 1xTyCxkWlU2Qlr+INPcwtfdEA0Wuqfmi50hFZgdN5FeCe+6+Q/jmz86p5YrjHMpRT5
-	 pOzGG2HwqocyR8wIzTEBJEAp4mp/18pUPAEe77F47mCJ0LOAcxP/1H385YJd160Qul
-	 DfboSff+xTkwSR6ucKFpr5yHv7+FlASzLzGfXMecYe0tyNO8lry9sF+yUqyfCwxz8+
-	 LLVa4TBrDWB0e0cTs+HiMWMQZ5m6QkAeHuZHgvmFLvU7SO/4QDgTqzj3JWeTjqmGl1
-	 1k2ulheBiDS/g==
-Message-ID: <64a691f2-4104-4538-9aa6-6feadc756c56@kernel.org>
-Date: Tue, 5 May 2026 17:14:08 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F1/yvVRP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777995916; x=1809531916;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=zCpf/XfUlBj3ngaMrO8qRIc5gwtd4igYdGfESKpQwnw=;
+  b=F1/yvVRP38ydN2XlkXeH1bp5APjFOB3xHPZ9mtIFxggZdIFFE9IzO4gK
+   h2tV1bFIWOthrYqgtkMylzU87/C0VVm/mhzu7jwK7Z3JI4RfBTxCX9Ktq
+   9GyQrxXI3BQY5PcTWUBhguV/cRG193hWdwzEDT/qEp2neIn6XH73/O3s6
+   SQVuczqxLtWOP/Mh3oAnQDX+sRXOGrl1YK2+QHDTcTI3dPHZX00fA2Lf+
+   MVu/A3DMh+LcBLOJGjoGFISUKdwMiu6bxAwFT8yQLOQweHblBUAf2NGwY
+   agzPowe5JIhT1FPTkNvrXLx3ph71oBqSl+r/D7LTVFUy4auAXHKnyMAF2
+   g==;
+X-CSE-ConnectionGUID: v0uSyz0oQrSTT/YJf86k/g==
+X-CSE-MsgGUID: SR6dZ61bRO+NKwUGmlYdkQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11777"; a="89175385"
+X-IronPort-AV: E=Sophos;i="6.23,217,1770624000"; 
+   d="scan'208";a="89175385"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2026 08:45:15 -0700
+X-CSE-ConnectionGUID: zyCS8SvbSdC0QcZHtlR+JQ==
+X-CSE-MsgGUID: rL4Nk+BkT3G8k8A2un0d2g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,217,1770624000"; 
+   d="scan'208";a="239836646"
+Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
+  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2026 08:45:15 -0700
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Tue, 5 May 2026 08:45:14 -0700
+Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Tue, 5 May 2026 08:45:14 -0700
+Received: from PH0PR06CU001.outbound.protection.outlook.com (40.107.208.0) by
+ edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Tue, 5 May 2026 08:45:14 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=h3iJKUgxizKbqQ2qUmqSWYVj57Nkqcnu39bq8mhxHY4sVGlaubzQhp/4+lnmjIyQddmNO/dWy2Nvep8HrdkH+m5xgPqLbvEFeL572gjM5pVckbn/Q7Sqt6wCzFaadJnpBNpyppzWpP4zP/8Mra5Iuh55/NsQYObbOB92MC0LEeaXKa/h3jdBnaL04KtYi95Rhi+Uc0DdMtFqLK+RgdmeIFafGIndSG26vXrJ7dC4NUdD2IXjKsFXlvHcmFyfiVqJUWWAYq15dLiWicW3AEHUWh9j3pO/ijGkgwRSRes8aspge4owoWyanXzXSWUIBtM3sFLCkWBjVNnF0YyVWdVJ+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ks5U6FrGCtuD6FwyBlM+RvXM0YzW3S/akt87kT5iF1M=;
+ b=KlIcmd9he0Xe2YBoD+t0fFWcKB4v03actVguMDX8v2bftE2ukF+G1mLO1hKbCShQcV+x+gSCj1VUvOcNh3gxuBC8Lb627kpsogN3LiiNQBCxI9B+lCjckstSmDCBjwXbZjdfH7PDaXGaasvu6GH8uc6KIgw4EgM9elywjqJGzj96eOyHohBoe869xpsIk3l1nmm4A9ci+FoZlXifezW7Y1SGqcp5xkTPGJQVp1NGCrNn9jgv23ivjlCngG6w9JMTBUgFhQUsuZ2WOZMG6tNB76ptHfxeTWANON8bloT3gI+AVWlnKmeeZrSTMj3dDJy/yy76hULx+tXISXObOZYSdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
+ by LV8PR11MB8535.namprd11.prod.outlook.com (2603:10b6:408:1ed::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.25; Tue, 5 May
+ 2026 15:45:06 +0000
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::6aa:411d:4bfa:619c]) by DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::6aa:411d:4bfa:619c%5]) with mapi id 15.20.9891.008; Tue, 5 May 2026
+ 15:45:05 +0000
+Message-ID: <7418a37b-1aff-4b48-80b9-012830e5f9aa@intel.com>
+Date: Tue, 5 May 2026 17:44:00 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v5 0/8] xsk: fix bugs around xsk skb allocation
+To: Jason Xing <kerneljasonxing@gmail.com>
+CC: <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <bjorn@kernel.org>, <magnus.karlsson@intel.com>,
+	<maciej.fijalkowski@intel.com>, <jonathan.lemon@gmail.com>,
+	<sdf@fomichev.me>, <ast@kernel.org>, <daniel@iogearbox.net>,
+	<hawk@kernel.org>, <john.fastabend@gmail.com>, <horms@kernel.org>,
+	<andrew+netdev@lunn.ch>, <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+	Jason Xing <kernelxing@tencent.com>
+References: <20260502200722.53960-1-kerneljasonxing@gmail.com>
+Content-Language: en-US
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <20260502200722.53960-1-kerneljasonxing@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: VI1PR02CA0078.eurprd02.prod.outlook.com
+ (2603:10a6:802:14::49) To DS0PR11MB8718.namprd11.prod.outlook.com
+ (2603:10b6:8:1b9::20)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH v2 bpf 3/6] mptcp: bpf: fix type confusion in
- bpf_mptcp_sock_from_subflow()
-Content-Language: fr
-To: Kuniyuki Iwashima <kuniyu@google.com>, sashiko@lists.linux.dev
-Cc: bpf@vger.kernel.org, MPTCP Linux <mptcp@lists.linux.dev>
-References: <20260504210610.180150-4-kuniyu@google.com>
- <20260505041435.187D0C2BCB4@smtp.kernel.org>
- <CAAVpQUB-K4YBE5Em4xg5wWsjtK=7xZwwXFynX2vUN4DQDx2tRw@mail.gmail.com>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
- YBNdx5Xl74NLSgx6y/1NiMQGuKeu+2BmtnkiGxBNanfXcnl4L4Lzz+iXBvvbtCbynnnqDDqU
- c7SPFMpMesgpcu1xFt0F6bcxE+0ojRtSCZ5HDElKlHJNYtD1uwY4UYVGWUGCF/+cY1YLmtfb
- WdNb/SFo+Mp0HItfBC12qtDIXYvbfNUGVnA5jXeWMEyYhSNktLnpDL2gBUCsdbkov5VjiOX7
- CRTkX0UgNWRjyFZwThaZADEvAOo12M5uSBk7h07yJ97gqvBtcx45IsJwfUJE4hy8qZqsA62A
- nTRflBvp647IXAiCcwWsEgE5AXKwA3aL6dcpVR17JXJ6nwHHnslVi8WesiqzUI9sbO/hXeXw
- TDSB+YhErbNOxvHqCzZEnGAAFf6ges26fRVyuU119AzO40sjdLV0l6LE7GshddyazWZf0iac
- nEhX9NKxGnuhMu5SXmo2poIQttJuYAvTVUNwQVEx/0yY5xmiuyqvXa+XT7NKJkOZSiAPlNt6
- VffjgOP62S7M9wDShUghN3F7CPOrrRsOHWO/l6I/qJdUMW+MHSFYPfYiFXoLUZyPvNVCYSgs
- 3oQaFhHapq1f345XBtfG3fOYp1K2wTXd4ThFraTLl8PHxCn4ywARAQABzSRNYXR0aGlldSBC
- YWVydHMgPG1hdHR0YmVAa2VybmVsLm9yZz7CwZEEEwEIADsCGwMFCwkIBwIGFQoJCAsCBBYC
- AwECHgECF4AWIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZUDpDAIZAQAKCRD2t4JPQmmgcz33
- EACjROM3nj9FGclR5AlyPUbAq/txEX7E0EFQCDtdLPrjBcLAoaYJIQUV8IDCcPjZMJy2ADp7
- /zSwYba2rE2C9vRgjXZJNt21mySvKnnkPbNQGkNRl3TZAinO1Ddq3fp2c/GmYaW1NWFSfOmw
- MvB5CJaN0UK5l0/drnaA6Hxsu62V5UnpvxWgexqDuo0wfpEeP1PEqMNzyiVPvJ8bJxgM8qoC
- cpXLp1Rq/jq7pbUycY8GeYw2j+FVZJHlhL0w0Zm9CFHThHxRAm1tsIPc+oTorx7haXP+nN0J
- iqBXVAxLK2KxrHtMygim50xk2QpUotWYfZpRRv8dMygEPIB3f1Vi5JMwP4M47NZNdpqVkHrm
- jvcNuLfDgf/vqUvuXs2eA2/BkIHcOuAAbsvreX1WX1rTHmx5ud3OhsWQQRVL2rt+0p1DpROI
- 3Ob8F78W5rKr4HYvjX2Inpy3WahAm7FzUY184OyfPO/2zadKCqg8n01mWA9PXxs84bFEV2mP
- VzC5j6K8U3RNA6cb9bpE5bzXut6T2gxj6j+7TsgMQFhbyH/tZgpDjWvAiPZHb3sV29t8XaOF
- BwzqiI2AEkiWMySiHwCCMsIH9WUH7r7vpwROko89Tk+InpEbiphPjd7qAkyJ+tNIEWd1+MlX
- ZPtOaFLVHhLQ3PLFLkrU3+Yi3tXqpvLE3gO3LM7BTQRV4/npARAA5+u/Sx1n9anIqcgHpA7l
- 5SUCP1e/qF7n5DK8LiM10gYglgY0XHOBi0S7vHppH8hrtpizx+7t5DBdPJgVtR6SilyK0/mp
- 9nWHDhc9rwU3KmHYgFFsnX58eEmZxz2qsIY8juFor5r7kpcM5dRR9aB+HjlOOJJgyDxcJTwM
- 1ey4L/79P72wuXRhMibN14SX6TZzf+/XIOrM6TsULVJEIv1+NdczQbs6pBTpEK/G2apME7vf
- mjTsZU26Ezn+LDMX16lHTmIJi7Hlh7eifCGGM+g/AlDV6aWKFS+sBbwy+YoS0Zc3Yz8zrdbi
- Kzn3kbKd+99//mysSVsHaekQYyVvO0KD2KPKBs1S/ImrBb6XecqxGy/y/3HWHdngGEY2v2IP
- Qox7mAPznyKyXEfG+0rrVseZSEssKmY01IsgwwbmN9ZcqUKYNhjv67WMX7tNwiVbSrGLZoqf
- Xlgw4aAdnIMQyTW8nE6hH/Iwqay4S2str4HZtWwyWLitk7N+e+vxuK5qto4AxtB7VdimvKUs
- x6kQO5F3YWcC3vCXCgPwyV8133+fIR2L81R1L1q3swaEuh95vWj6iskxeNWSTyFAVKYYVskG
- V+OTtB71P1XCnb6AJCW9cKpC25+zxQqD2Zy0dK3u2RuKErajKBa/YWzuSaKAOkneFxG3LJIv
- Hl7iqPF+JDCjB5sAEQEAAcLBXwQYAQIACQUCVeP56QIbDAAKCRD2t4JPQmmgc5VnD/9YgbCr
- HR1FbMbm7td54UrYvZV/i7m3dIQNXK2e+Cbv5PXf19ce3XluaE+wA8D+vnIW5mbAAiojt3Mb
- 6p0WJS3QzbObzHNgAp3zy/L4lXwc6WW5vnpWAzqXFHP8D9PTpqvBALbXqL06smP47JqbyQxj
- Xf7D2rrPeIqbYmVY9da1KzMOVf3gReazYa89zZSdVkMojfWsbq05zwYU+SCWS3NiyF6QghbW
- voxbFwX1i/0xRwJiX9NNbRj1huVKQuS4W7rbWA87TrVQPXUAdkyd7FRYICNW+0gddysIwPoa
- KrLfx3Ba6Rpx0JznbrVOtXlihjl4KV8mtOPjYDY9u+8x412xXnlGl6AC4HLu2F3ECkamY4G6
- UxejX+E6vW6Xe4n7H+rEX5UFgPRdYkS1TA/X3nMen9bouxNsvIJv7C6adZmMHqu/2azX7S7I
- vrxxySzOw9GxjoVTuzWMKWpDGP8n71IFeOot8JuPZtJ8omz+DZel+WCNZMVdVNLPOd5frqOv
- mpz0VhFAlNTjU1Vy0CnuxX3AM51J8dpdNyG0S8rADh6C8AKCDOfUstpq28/6oTaQv7QZdge0
- JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <CAAVpQUB-K4YBE5Em4xg5wWsjtK=7xZwwXFynX2vUN4DQDx2tRw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|LV8PR11MB8535:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6d982f74-4ec0-4fde-e694-08deaabd4754
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info: I5OPu8KTU6tK3Pqo7q7c8cM7bjFchtKAo5ftvEe2xOCvWhHR2T21nK7YTdlNC2VJTgxNcMQIvpNIBygWiAnwShESRJ4sKc0zqkCIqfrbIBU5OcvmAVZ/Vk1RFcVbOsp9Y2CcjHmFa+/Lu3flHnVUbtBkOTLCuFqJ9+E3vkGBhdjDzq0Sg5MnSReFPKiE1ApPZ4OqhYV3hR0EdEUIQErqiUmaevbzumWS5tSuaGZpMgdy/HaONAODc9wd1sfoiAb1bcRlzyjZaVhPZqNVHWCPpQrmJbxoaD57qOgVGcSsP7nzTRU9i8zQdLVzKON71seQbqwEfr55KvuL4d1VF1mKJ0FZhgkwuRpkHt2F6jkrqLLYniQP67ihZGYzlqIpKL+XEKMp+Qt2ZhM5mUPipnt8sfilYcxAnZE5sxBw1RjB64JvZfVTnXoGc6aDEEBRXA/TWusQ/28XfYix/MOnvkgsY9Hw61EYfDUn4Cl+yRvQPfhkav2RisrKIlhULP7PDO4U9qlOWg4CX1b+Zj70gyZLFBshII1UuAq+XnI2hFtJnBMFZF7epctsGkCooQ8Ji350LgibD3JQuVb5xgQ2lT2otsF6RpOX+lRNHxh/MX/f0qJnT41h+0XAPyWatZhMOHPL+KUKPxot2u5qRzh1qNUpl2jfFTwf8q/qfhG1sjyiur9iMuvDyluvpFvSroG+rq/h
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NU8zTmRYL0lMSS9RQjZRdC9FRjR5VmIxa1pZeFNpdXg2MGRyN1cybDd3bUxo?=
+ =?utf-8?B?aGN1c2tteU9zNWRtMHJkS1lRVTNnVTMveW9xZSs4VmRjWE10NWNucnVURXhW?=
+ =?utf-8?B?ckd3RFVFU0tCSkJHMGF5cG84aHhyZEJYQ2JXR3FtczFIMU5jL1ZjSlRDbVoy?=
+ =?utf-8?B?elA1d3k3K3dmcVZ0THdjcy9XR1BUcnd0NWw3cjZuUnBTZ1pUNTVFWS9hMXhj?=
+ =?utf-8?B?QnMzNktEVTRCVWh0elY0ZXFHdG9GM3VmZGtOU25WWUo4c1kxYTdMSGxXSnpj?=
+ =?utf-8?B?MjAzQ3JlZ0pTNVREYXU0M0FqelE0eW5oRlJUYUxNS05uR0FPZlJWa1BFcEwx?=
+ =?utf-8?B?RmlZKzFTdWV5dWlMU0l1SjN4N0k4QkF1ejg2WWkvV3RUKzZtNWpuZk5jNUlD?=
+ =?utf-8?B?eHRlVUlGUGlnRTNLenRJdVdPVW1PMCtJRGxnNkhtR3NucEJqWENYd2lFUUJZ?=
+ =?utf-8?B?bldvNHJYWGhrS09mVDVXa1U5OVNmbWtvY0llMHZ6dmZTTzh0ZEQyVVZUaE00?=
+ =?utf-8?B?OGhaVHVLNE5JRkthczV1b2FNZEUvckN0RW0rcjBKZ1VBM1BXb3NaUTdRQ2p4?=
+ =?utf-8?B?anRUY1VNM0pyU3NCSDNZOXFWenFwbHEzenovZ2FuZVZsb1d1UVNHTzlJa0pm?=
+ =?utf-8?B?TEVaVnVGLzdhU0dPWHdZZW5YbGovK1BPQ3RvV09CSktDRHJha3Z6bTJyNExo?=
+ =?utf-8?B?cXVydHh6VmlsdVhJNUM1OHRRazNMM3B3SUJxbGJYemJyRnZ6Y1V2VnpFaXZn?=
+ =?utf-8?B?a3d5UFpyeHFzMERoY1VhNjQzbEplVjZPSmU1WlRYbjRaeldXdkVZcVBrazVK?=
+ =?utf-8?B?TStibnZJVUdqcW5tUEwvb09xdnROd1liNVJJTEI2TXd5T1RTelVNdFhoSEMr?=
+ =?utf-8?B?ZjBLYVNNU0tMcVU0V1REcXdENDhTazRyTlR4a0phSENVTUVPNFU4QzZzKytB?=
+ =?utf-8?B?eXR6MjV5U2Y2Vm9pSmhXU3loczJpdUxmbThhcGkrNzdKNEV0SW5sNlJ6dUpZ?=
+ =?utf-8?B?RWEzT2h1Y2hqb0xxSEQ1bUFhT3dRbWZ0THpDYlBnUHpMSWs0aWYxcjNIUEVw?=
+ =?utf-8?B?Ym04OGROaDlDWFQyOFAxc0lldFV6anIwdE9OL05SbU1vWWFCSVV3MTNCYklS?=
+ =?utf-8?B?eUQxR2E0dW0wY0NpTHVzSjd5dDRPd3V2Q1I4S0xrdUgwaWVYNzMrUld2RUEy?=
+ =?utf-8?B?ZHB6UHdCQkpFb2VTaXU2SjcrK0tPQzBDR3ZZbDBYaDc1VFI1d3Ixa3NvOVJa?=
+ =?utf-8?B?bVR1QjdqMXoxRlQ3TWFLUS9IQ1I2YUVseTZqT1dsazBSekZPRGpSeTM4dE5I?=
+ =?utf-8?B?YTBBK0RKTTFlVC80b3dFaHRic25tSlNnMXVWTURVTjVibnVkY0NuSjJiMWMy?=
+ =?utf-8?B?NWVjZEU4N3JaK0xDS3h4dHpaZy9tcnlEMUpOaU1vSDFQWEVlMjBoUWN6Q0o4?=
+ =?utf-8?B?ekN5MWdLNTlvZXVXODhidzZPeVdLendnV2hoU3RDeHZjMFJzUVF4V1FRVXFm?=
+ =?utf-8?B?aFlyTW1VcnBNbm10cU9hQUxrMDJnVkdPZHl2bkV3MDN3NnlhbzR3Z2UybkxW?=
+ =?utf-8?B?cVlaaGg4WENrODFOZ1BUN2UzNndYbjg4Q1FEd3pBUUd5K3d2YWNadW9VQ05E?=
+ =?utf-8?B?MFFSQURnaEcwUDdMZWw2NTBxOFFmeFlRRDl5NDZqaEFrcVcxcFpCdFpmQUFk?=
+ =?utf-8?B?aEwyMUxQREF2TWs4U3ZrSlRBNlNRb0l3UFRzcG1Ndk1vakVSZ0xLalpzb3NK?=
+ =?utf-8?B?cERjaUtGQVhwaCsxZlVob0VVOE9KcUJlYVZobFVPSDBnUDB3RTdxZnhidllI?=
+ =?utf-8?B?MXNKRTRNeDFuRTZuQXlYVEw2NkNlakdPSjRKQm5XVUp4L1BscS9Zdlp3aW1z?=
+ =?utf-8?B?VVpRQWNITUpnSGtGVGEyZ2FTNmtPMFMvbWt4OSs5UWlLRmJTbDdwZWVHcVRp?=
+ =?utf-8?B?OFpZeWhlNG9FL2Vzd2xHQXNwbjlyN25tRzRkQ2liUktWeEVudXo2YkwrVDZB?=
+ =?utf-8?B?SFYrY0xicjdFVE5OMjRKbzRVa1p2RkNDSUpWYXNpVkJwSkZNalhoMkw1TVFC?=
+ =?utf-8?B?a3hGN3ExR2tFUG5XMkR1b3VuaEd4Z0xaSExmVjNmRzVmaysyM05LdnhKM2pX?=
+ =?utf-8?B?bzhXTW9rSnhwcHdISlF2NktoT0tSYk9CRGROMS9EMUV2dUlZVGFtck1MbWxJ?=
+ =?utf-8?B?clRwUTU3K3RqYzVGOUJLbU53blZQNlVWUHdmYUZrMFFhbWZ0dXdhUFU1SC96?=
+ =?utf-8?B?Z2c0YktJL09LbFNyeitrRmwxRTBuY0ZvV1hpNUU2eFBSbzhwVncyanA1VUVz?=
+ =?utf-8?B?QXY0Y2sxTFVKMDU0aDVQVnY3TmY4cmMweW9LeXVCTkY4L3pQUkFlRjBQRmdK?=
+ =?utf-8?Q?QCLnRb95dTwwmbuY=3D?=
+X-Exchange-RoutingPolicyChecked: QMC/u7dfeTj2OD8RlQm2DH6o6mPa3S88fuReaDzrWFOSjXB2wLSsRQIR96jYN2S8r/3CpEul76y71GRYATNEgUal/2B9VMf4SZ6Vahf4eG/A7AeyD7Bz1F27L6xS5wazqAkqeVPmXaynP9kN5eoF0R1mpBZ15kHVvyEkkfOvb8+UxwRoTMzyeWWO2wF99JXzio8AcbeOKlP/p+NXuSXX6dL7fvI4x8xkE5mc3CWkFOeqiAtvpzMdJwxuGheqLkt8Nl1GD7WzP2Z1nSnoYvQoktglYyvEcI9lY9uYgpIemoYX0C6E1UflxHbVrM6V/kObCeJb+Gr9eNs9l+kXYEImoA==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d982f74-4ec0-4fde-e694-08deaabd4754
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2026 15:45:05.8269
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FUTUJn8pngSzsPWUUF1wRZFK/oSHMPopIK8n9fZ5gjaWWAO78DgSsvC+GAQZlyKIIH/AtPjNb4kHBeLMIZWNGiJS56VZQYerJV5MZitDyOw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR11MB8535
+X-OriginatorOrg: intel.com
 
-Hi Kuniyuki,
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Sat,  2 May 2026 23:07:14 +0300
 
-(+cc MPTCP ML)
+> From: Jason Xing <kernelxing@tencent.com>
+> 
+> There are rare issues around xsk_build_skb(). Some of them
+> were founded by Sashiko[1][2].
 
-On 05/05/2026 07:43, Kuniyuki Iwashima wrote:
-> Could you follow up on the comments by Sashiko ?
+For the series:
 
-Thank you for having forwarded this!
+Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
 
-> On Mon, May 4, 2026 at 9:14 PM <sashiko-bot@kernel.org> wrote:
+Just don't forget to look at Sashiko's replies, I haven't looked deep
+into them, so can't say whether anything there makes sense.
 
-(...)
+> 
+> [1]: https://lore.kernel.org/all/20260415082654.21026-1-kerneljasonxing@gmail.com/
+> [2]: https://lore.kernel.org/all/20260418045644.28612-1-kerneljasonxing@gmail.com/
+> 
+> ---
+> v5
+> Link: https://lore.kernel.org/all/20260424053816.27965-1-kerneljasonxing@gmail.com/
+> 1. reword patch 3
+> 2. adjust the order of patch 6 that is now moved up to be patch 2)
+> 3. use helper in patch (Stan)
+> 
+> v4
+> Link: https://lore.kernel.org/all/20260422033650.68457-1-kerneljasonxing@gmail.com/
+> 1. fix 32-bit arch issue in patch 8 (Alexander && Maciej)
+> 2. add acked-by tags (Stan)
+> 
+> v3
+> Link: https://lore.kernel.org/all/20260420082805.14844-1-kerneljasonxing@gmail.com/
+> 1. use !xs->skb as the indicator of first frag in patch 3 (Stan)
+> 2. move init skb after it's allocated successfully, so patch 4,5,6 have
+>    been adjusted accordingly (Stan)
+> 3. do not support 32-bit arch (Stan)
+> 4. add acked-by tags (Stan)
+> 
+> v2
+> Link: https://lore.kernel.org/all/20260418045644.28612-1-kerneljasonxing@gmail.com/#t
+> 1. add four patches spotted by sashiko to fix buggy pre-existing
+> behavior
+> 2. adjust the order of 8 patches.
+> 
+> 
+> 
+> Jason Xing (8):
+>   xsk: reject sw-csum UMEM binding to IFF_TX_SKB_NO_LINEAR devices
+>   xsk: free the skb when hitting the upper bound MAX_SKB_FRAGS
+>   xsk: handle NULL dereference of the skb without frags issue
+>   xsk: fix use-after-free of xs->skb in xsk_build_skb() free_err path
+>   xsk: prevent CQ desync when freeing half-built skbs in xsk_build_skb()
+>   xsk: avoid skb leak in XDP_TX_METADATA case
+>   xsk: fix xsk_addrs slab leak on multi-buffer error path
+>   xsk: fix u64 descriptor address truncation on 32-bit architectures
+> 
+>  net/xdp/xsk.c           | 115 ++++++++++++++++++++++++++--------------
+>  net/xdp/xsk_buff_pool.c |   3 ++
+>  2 files changed, 77 insertions(+), 41 deletions(-)
 
->>> diff --git a/net/mptcp/bpf.c b/net/mptcp/bpf.c
->>> index 8a16672b94e2..4cc16cbeb328 100644
->>> --- a/net/mptcp/bpf.c
->>> +++ b/net/mptcp/bpf.c
->>> @@ -14,7 +14,7 @@
->>>
->>>  struct mptcp_sock *bpf_mptcp_sock_from_subflow(struct sock *sk)
->>>  {
->>> -     if (sk && sk_fullsock(sk) && sk->sk_protocol == IPPROTO_TCP && sk_is_mptcp(sk))
->>> +     if (sk && sk_fullsock(sk) && sk_is_tcp(sk) && sk_is_mptcp(sk))
->>>               return mptcp_sk(mptcp_subflow_ctx(sk)->conn);
->>
->> Could this cause a regression by dereferencing a NULL pointer when accessed
->> concurrently?
->>
->> In subflow_ulp_fallback(), icsk->icsk_ulp_data is set to NULL prior to
->> clearing tcp_sk(sk)->is_mptcp. If a BPF program triggers in this window,
->> sk_is_mptcp() would return true but mptcp_subflow_ctx(sk) would return NULL,
->> leading to a NULL pointer dereference.
-
-This would need to be confirmed, but from what I see, that's not a new
-bug introduced by the patch here.
-
->> Additionally, could ctx->conn be NULL when read here?
->>
->> During subflow_ulp_init(), the context is allocated and is_mptcp is set to 1,
->> but ctx->conn is initially NULL. Passing NULL to mptcp_sk(ctx->conn) triggers
->> a kernel panic on CONFIG_DEBUG_NET builds. On non-debug builds, it returns a
->> non-NULL offset pointer, which bypasses BPF verifier NULL checks and causes
->> invalid memory accesses.
-
-Same here: not a new bug.
-
->> Could this introduce a regression with a use-after-free of the mptcp_sock
->> during teardown?
->>
->> During subflow_ulp_release(), sock_put(ctx->conn) drops the reference to the
->> parent mptcp_sock and may free it. However, ctx->conn is not cleared, and the
->> subflow context remains valid until the RCU grace period ends.
->>
->> If a BPF tracing program triggers after sock_put(), could this retrieve
->> and return the dangling ctx->conn pointer, enabling the BPF program to read
->> from freed kernel slab memory?
-Same here: not a new bug.
-
-Sashiko is good at finding potential existing bugs that predate a patch,
-which is good, but someone has to fix them :)
-
-Because the issues raised here are not new, I suggest not blocking this
-patch. I will check if someone can look at it quickly.
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
+Thanks,
+Olek
