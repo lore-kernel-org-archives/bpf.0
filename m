@@ -1,67 +1,66 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5538492536
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 16:46:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F0B3DE441
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 16:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777999600; cv=none; b=Q2ExMvfH+m5kaKxrr9FMZu/Th0ysOV11t22gSQsLQE01YCND7gd6a8rtNmFq56Z/WgBWpf5OelMN1hwipQ8BLo4K+HKTanDGOlfcy7vG5AAAy4+JwuKOzEk62Eabjuyi9tQ/q96K11pfI2qdt8AGEpN2+oSWgAudg6OyAC/Gdl0=
+	t=1778000266; cv=none; b=TdMrA9inQGwktuLo7fJRKHFZJl8K3b7kpUgVOCXWqasGCHPC3BvTfmtR9yPepm1yLkqEAHnxrNdke2XUbGM3bVmMHfp1JfFPUXwjdSJOd8YzgDclgfy9v8BWJJG0AT7H6ZXiVP2bEadORzzxr9iBH4qF9efeidrdL94v1VXr9s4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777999600; c=relaxed/simple;
-	bh=lP8GSMfbSOdPUQu2yG23BWNhx5HOEezwIqDOAMp/G78=;
+	s=arc-20240116; t=1778000266; c=relaxed/simple;
+	bh=bSUk1Gkcfu/PImKNZfN7B5e8QXU7yU7J+f1S+wP0XGQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kaIgcYubV7xDxcYFVoZnMwuTQQ9d+FuNegDKkIGBL7+2OiklPLaeAqBS4gdEZAcK8Lp5WcSY6kZssDL24wewxH5dRqcEt1kS5daLdLXKMir0IOSDkPW4UzwNx348//rO8m1F/NV04qCsuZgEnJAPrcp5Zw8Xb0zikr+uMyIXZ2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=JkAevuNr; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+	 In-Reply-To:Content-Type; b=MddT/vIThHz7YMuAJxfzi6zmoIji5ZZGYaBxD8UDE98fkuxPe5pVEjEWqahx6XBsYxQa1ub0dnB/X+BTo4Y54+5du4eU4XyO+0pwE/BapAYzFEZBH/srpCAvuP3VNYXc3RpWpHOX/FUu48WlC7T8+gx6ilL0HhG6ra98N+NizyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SO2lST1B; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="JkAevuNr"
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-7bd5e373d07so49328507b3.2
-        for <bpf@vger.kernel.org>; Tue, 05 May 2026 09:46:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SO2lST1B"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-43fe62837baso3035274f8f.3
+        for <bpf@vger.kernel.org>; Tue, 05 May 2026 09:57:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1777999597; x=1778604397; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778000263; x=1778605063; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DrfGKIeyY4VV6HtGnp4FKIxytz8xo/bAXQmJCIlvsw8=;
-        b=JkAevuNruhd/yKdOlNO/Zb4RDcsdJSG8b3alVSqro2WqzsHTZqjrgeqGwWn2qboD0R
-         Vvg10QJ5eul0ZaRcVdACZe4ej6YQ6+ykfGXbLrDof53cKOyGDxvQFOXpyBJ+2JgLVEdw
-         CmpVDaZfiR0KHOvghsUBqRSnDsIhdmcqGpqEKij3Mk++aVjWT9/l7oNgAwcNdv4WrqzR
-         VKOV4rioDm/xd4aAmUWWAdto+cotpCAZ+6rYpyPyqRF1zOt4OeqzKXizhKTimcDgL49s
-         DVZZn78TEwa/SfVNS6gcZBT2+EQL3ju7rQ3KLi2V0oDD5NG3pvX1PUlHpZ2sENlL3aJA
-         TQjw==
+        bh=Gf8p2hTR3w/DkxMYWfJ41+/E5OReCnE0qZTNiffMl6k=;
+        b=SO2lST1BIV+E8EuWwoo9xbzgimSyGYC9Q3+/l6B3Wc41ajMNQVJyFMyBgxJe06P+I1
+         /Ga1uuLi3JK8tFPFiCpQBfdYn6L/PgOhMt5KSKMQiqDd+xT8Gjq4FGDSO9PuVSaHmf+i
+         TApd6T5rqz6Bum6GX5uObv/aDT1L6GzIDvDwDgcNBfxhpb1ye10lEOyN2WEYxn+RFslF
+         VL5XIAIt7qqkaHn2DJFFSgnNe1H/JPeXBzoaw4EhUlU1c/kgghjtvTGgiX3dQLUjXPfr
+         e7CzNmdk50EuqG+YFbekToLUBODETW7bTp0+umDRtF+sUSlhi+MsgQGl1i+DKc1DtZxM
+         uqlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777999597; x=1778604397;
+        d=1e100.net; s=20251104; t=1778000263; x=1778605063;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DrfGKIeyY4VV6HtGnp4FKIxytz8xo/bAXQmJCIlvsw8=;
-        b=EUxEbF1xnyVHJcQD6yyDvCFsw/wladVdEyqLxGzB24YIK4vN27QY/83El/jMoqTcOw
-         +tiiIMEV9qCwGqV53M7YW1A+O6FID8gU+kwIYyfQP2OOYRq1ugR74xeVS1Cw2ovV3149
-         1pr/Gp0a5d5Ra7DU7n/CyQdWqSN+aNTAHl0kfDFPs1vgB3T1OnJyvX5bZgJQSGHWFh3Q
-         2pQzzba6qGKryU9mH42UmyY/Y7OxGZaRq2bpD/MlFlSuUlV0Lt1a2dEqtWsjn+/wp1/p
-         dVOeRG5NBBCHmLd3w2hfwKrxbdBvg8qPMFvk23Yw3gi1RYLkCd12HP2FOAK9h59J4FpT
-         NnZw==
-X-Forwarded-Encrypted: i=1; AFNElJ/jX8aaOmaIHltcO9IBujpv4aUitlbvTFX2ohwbZBBRMekckTpnX+SufKNrA9h+P3+ajdE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGJpmv9amWihFoTOkGyRFzl21hgK9pXyOm852K6ZxAZwHFmXdI
-	1mZ3/w3rFFW7FT5882RQFrPrVUXrGQyIRvAiKyYzF1Yrp/PLntIWOWn2VHy1nVV7tns=
-X-Gm-Gg: AeBDieuXTh6U75XQNamdsntIEnO59i0+4WvSZwRPTuIs1obo1NI4Aai3lTT2/MyewqJ
-	BWb1CLLE9jhOSALMrzzReOjttf658xz+uHiY2M6fSnbpkgGzsGoVKY1yZjJN+Nkki8RKdZCUKgK
-	tsodn2GZk0XJErPNulTqgx56Jd+omqPfZzsN9I2UyPnBLZ+fDMfp9ESYjXseqdJ835yXU/nodRd
-	IgwUdaLeA7oopxsB/WQmdfCsdjX+yqIX06K7MK1ET+j3olUrx+uF9XpnuULedu2Bgl2ryUuYmLD
-	g6bXA1tekg2F+AMPE6ZRzbCHFaRIDZayHJx2cVtNvzexY2/Co/isqjKcRbYP4uUZUlBhZFW3jKQ
-	HkY9h4rGvHzdesSVTjj05lcp5gvdw3BZpGSUqM20s0QOpbZDlxH8pBr9cH7oV1KSh23t6MH4RiP
-	Qv+EjmqP7bdeegvZu/wDvSn1kHClSLdtH10U2cdS6HLepJZjGYMmy4lzAJIhPqEngz39ZpanMts
-	w==
-X-Received: by 2002:a05:690c:60c4:b0:7bd:8cb2:4fa4 with SMTP id 00721157ae682-7bdac5ffe89mr42184327b3.39.1777999596609;
-        Tue, 05 May 2026 09:46:36 -0700 (PDT)
-Received: from [172.22.22.28] (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd66558f35sm66666507b3.15.2026.05.05.09.46.33
+        bh=Gf8p2hTR3w/DkxMYWfJ41+/E5OReCnE0qZTNiffMl6k=;
+        b=Azz7tNmNCYezakiXVIrbEVeArbXb0pnpLXnPSqedq8NagtRBcK7SPKd8SAZFIZb904
+         GUc5Alg5z9vw7mIwat8hkcNjZ3W2P1YtBJ7KBBasL0LdBeg7P0rpqlg2Q+EpCtVj7ce4
+         Z6N2rAdEVFwe4Pp7Yw2XuEY1hte2yln4/7JxsyfZqYoASFZVJq4zFoKCpaliUE6XEXi8
+         FQHRpARUPyCuTYlPKueyg+KmlAF0B65+7+8+/dmA/jogcbsAXMTrba7v0pvDZTCWzCbu
+         xNXjaoGMTiD3ejH7sRlb9OKm8Ntat3m/zKQWSehR72CtgRNQiIq3NYHrV6CdP8X46cJW
+         zH2g==
+X-Gm-Message-State: AOJu0YyXokTKaNeEI9brQpgZtme9h7EuAz/SYgzNNLxbR0pvN1k2v9jh
+	4IyVFCkMNhqcnRyt/RVFBy7NNMp83cqW+AQuqbn6mvUc4YIuluXtPJ9QqzseONeb
+X-Gm-Gg: AeBDies4GPEu9021H0e7AEvrD2JgzK9bogeHxN7lc35liNJoCRyBJ2qNh+ceggSZAP/
+	hD58+xmsvjSblkG3YxY1i/QfY3zIc61vH7+L/YWBYjLIovIo77yco98vVHpfh/3HcghaG7DwGb8
+	izjto4aR15r0LRhfvxQwqpbad/VrYvrcO3qWQ7hwqsX6M1pVJYfd64ppMEPG09hubRTEjuVhzpz
+	oVWAbkzk3OVTWbdlEgdupi67aVBX5pK3tC7VtiUXIFdiTurjOfnmqkipt+D0j1QmbOig9cnvPbX
+	OralpVnJGJ7KPToF9mt6jz4xCGuDvI93XpcVNw9euhxKFpyFkvKoG9sOPXXUvj4OVGuP/hU/I+W
+	1mnjrfzep1TmXUeh3Qmy90xecsW61aWtgtsBF1IrYz2i0APyJ4BC56sq1BMSCy7j5CTRg6iz5o3
+	EFnWcKhmpgIvrVdA0pS2g4D0Zg0Jh3CvJnAbSuVPVLh30AlCtZykMh8VpwT1PzO6FI5/ZbpArtb
+	sGn+azqe0OcDobgzer8/A==
+X-Received: by 2002:a05:6000:2386:b0:451:4d47:c9d9 with SMTP id ffacd0b85a97d-4514d47ca15mr222281f8f.14.1778000262723;
+        Tue, 05 May 2026 09:57:42 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45055e2d3d0sm5656100f8f.34.2026.05.05.09.57.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 May 2026 09:46:36 -0700 (PDT)
-Message-ID: <c716efe3-1b60-4a82-8fcf-1928c0233d64@riscstar.com>
-Date: Tue, 5 May 2026 11:46:33 -0500
+        Tue, 05 May 2026 09:57:42 -0700 (PDT)
+Message-ID: <9a83db58-5192-4d12-80f1-2a63ba29def3@gmail.com>
+Date: Tue, 5 May 2026 17:57:41 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,65 +68,100 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 12/12] arm64: dts: qcom: qcs6490-rb3gen2: enable
- TC9564 with a single QCS8081 phy
-To: Mohd Ayaan Anwar <mohd.anwar@oss.qualcomm.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com,
- rmk+kernel@armlinux.org.uk, andersson@kernel.org, konradybcio@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, linusw@kernel.org,
- brgl@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
- Daniel Thompson <daniel@riscstar.com>, a0987203069@gmail.com,
- alexandre.torgue@foss.st.com, ast@kernel.org, boon.khai.ng@altera.com,
- chenchuangyu@xiaomi.com, chenhuacai@kernel.org, daniel@iogearbox.net,
- hawk@kernel.org, hkallweit1@gmail.com, inochiama@gmail.com,
- john.fastabend@gmail.com, julianbraha@gmail.com, livelycarpet87@gmail.com,
- matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
- prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
- rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
- weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20260501155421.3329862-1-elder@riscstar.com>
- <20260501155421.3329862-13-elder@riscstar.com>
- <afod8ot7xb+g0wzN@oss.qualcomm.com>
+Subject: Re: [PATCH bpf-next v3 02/10] rhashtable: Add
+ rhashtable_walk_enter_from()
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
+ eddyz87@gmail.com, memxor@gmail.com, Mykyta Yatsenko <yatsenko@meta.com>
+References: <20260424-rhash-v3-0-d0fa0ce4379b@meta.com>
+ <20260424-rhash-v3-2-d0fa0ce4379b@meta.com>
+ <afCNcFLArNkj7GXh@gondor.apana.org.au>
 Content-Language: en-US
-From: Alex Elder <elder@riscstar.com>
-In-Reply-To: <afod8ot7xb+g0wzN@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <afCNcFLArNkj7GXh@gondor.apana.org.au>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 5/5/26 11:42 AM, Mohd Ayaan Anwar wrote:
-> Hi Alex,
-> On Fri, May 01, 2026 at 10:54:20AM -0500, Alex Elder wrote:
->> From: Daniel Thompson <daniel@riscstar.com>
->>
->> The QCS6490 RB3Gen2 includes a Toshiba TC9564 (a.k.a. Qualcomm QPS615).
->> TC9564 is an twin Ethernet-AVB/TSN bridge with an integrated PCIe switch.
->>
->> There are multiple builds of RB3Gen2 with components included/excluded.
->> That means whether or not there is a phy attached to eMAC0 depends on
->> the exact board. However all versions include a TC9564 combined with a
->> single QCS8081 attached to eMAC1.
->>
->> Add properties to the existing PCI nodes to describe how the TC9564 and
->> QCS8081 are connected to each other (and to the host SoC).
->>
->> (Note: "pci1179,0220" is documented in the "net/toshiba,tc956x-dwmac.yaml"
->> binding, but checkpatch.pl doesn't recognize that.)
->>
->> Co-developed-by: Alex Elder <elder@riscstar.com>
->> Signed-off-by: Alex Elder <elder@riscstar.com>
->> Signed-off-by: Daniel Thompson <daniel@riscstar.com>
+
+
+On 4/28/26 11:35 AM, Herbert Xu wrote:
+> On Fri, Apr 24, 2026 at 12:50:44PM -0700, Mykyta Yatsenko wrote:
+> .
+>> diff --git a/lib/rhashtable.c b/lib/rhashtable.c
+>> index 6074ed5f66f3..2a6098edf737 100644
+>> --- a/lib/rhashtable.c
+>> +++ b/lib/rhashtable.c
+>> @@ -692,6 +692,47 @@ void rhashtable_walk_enter(struct rhashtable *ht, struct rhashtable_iter *iter)
+>>  }
+>>  EXPORT_SYMBOL_GPL(rhashtable_walk_enter);
+>>  
+>> +/**
+>> + * rhashtable_walk_enter_from - Initialise a walk starting at a key's bucket
+>> + * @ht:		Table to walk over
+>> + * @iter:	Hash table iterator
+>> + * @key:	Key whose bucket to start from
+>> + * @params:	Hash table parameters
+>> + *
+>> + * Like rhashtable_walk_enter(), but positions the iterator at the bucket
+>> + * containing @key.  If @key is not present in the main table, the iterator is
+>> + * positioned at the beginning.
+>> + *
+>> + * Same constraints as rhashtable_walk_enter() apply.
+>> + */
+>> +void rhashtable_walk_enter_from(struct rhashtable *ht,
+>> +				struct rhashtable_iter *iter,
+>> +				const void *key,
+>> +				const struct rhashtable_params params)
+>> +				__must_hold(RCU)
+>> +{
+>> +	struct bucket_table *tbl;
+>> +	struct rhash_head *he;
+>> +
+>> +	rhashtable_walk_enter(ht, iter);
+>> +
+>> +	if (!key)
+>> +		return;
+>> +
+>> +	tbl = iter->walker.tbl;
+>> +	if (!tbl)
+>> +		return;
+>> +
+>> +	he = __rhashtable_lookup_one(ht, tbl, key, params,
+>> +				     RHT_LOOKUP_NORMAL);
+>> +	if (!he)
+>> +		return;
+>> +
+>> +	iter->slot = rht_key_hashfn(ht, tbl, key, params);
+>> +	iter->p = he;
+>> +}
+>> +EXPORT_SYMBOL_GPL(rhashtable_walk_enter_from);
 > 
-> There's a minor typo in the PHY name - QCS8081 instead of QCA8081.
-
-OK, I'll fix that too.  Thanks a lot Ayaan.
-
-					-Alex
-
+> I still think this is misguided.  I'm not going to stop you from
+> doing it if you really wanted to, but this thing will not work well
+> if your rhashtable is constantly resizing.
 > 
-> 	Ayaan
+> You also need to consider the possibility that an adversary is
+> triggering the constant rehashing.
+> 
+> Cheers,
+
+Herbert,
+We brainstormed with Alexei on how to integrate rhashtable better,
+as a BPF map, we have the next proposal:
+
+Introduce rhashtable_next_key() API
+```
+static inline struct rhash_head *rhashtable_next_key(
+	struct rhashtable *ht, const void *prev_key,
+	const struct rhashtable_params params);
+```
+
+It returns the next element, by finding prev_key in the tbl chain
+and returning the next element in whatever tbl the prev one is.
+This way we keep rhashtable API tight, less surface, not exposing unnecessary
+details, although, this new API will have the same issues with full
+iteration support (which we fine to deal with on userspace side).
+Appreciate if you share your opinion on this.
+
 
