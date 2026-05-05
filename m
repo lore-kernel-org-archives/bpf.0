@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD9D198A17
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 09:49:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58AAD334688
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 10:04:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777974548; cv=none; b=PcbBMcBfQp26aDEFyqEl6rSiTOZt9MB5PjaBqpdcykDa/x7EyGZemOvJCo7PgRqCR1jetCJbESXjkZ+t/oZJJGb0ofGDnFyC4rEo7vByaUzom0veegeOCWIMrP/xDz0f2NN/RmbtGcCI8vnUDq1PW4xnEQa29XpNJUKAAS5KTHs=
+	t=1777975477; cv=none; b=pXpvK7p4QfRK65COUrGql+NxbR+Hvq2eUlsT8pkowO9pLSulIvMmYjsbvoY+AOoP7t0nTcQBYl20E/huQz7usqfedy7xuMw219ujYJtRoZuVm9ZHl4NJcrc8Nia6Sa2sEMkYrczfvlGC+T5LThX8mJx+kLa+L5n/8IpmxzA103o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777974548; c=relaxed/simple;
-	bh=WMkkDnjGKorBFdLE6fQYlpfqC1mPGchKEquw2+qnOR0=;
+	s=arc-20240116; t=1777975477; c=relaxed/simple;
+	bh=JDapasCD4yNPrs6WlyacY/Ut1sq/7GPVrcrQY0AimW0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kOZdbTUw3duNZsyeoxE1pTtFDE3bGMoFBaf4BhT2/A0FBYzdzMhnuxdJRJu/MAd1y08dQCOgbudycbpjYsZvI7dbbPbm4y9mp2JpHCl+glU2voU9W1FkuF01UmBhThngaTWe1ydO4yUwMEJ2mtciR0mOG38UO26xtIh23JCDJ10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jX5HSNM7; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=favoXsUIY48EFkLshoJOUguc7rpyt8sS7yqnUGq3mlQRP0NIKQ5S1KyHhME/HcGcf2lIzeIF2y3v7GtzwJsBk1PlTEhpTNn2GF+xoHuUipIEhlBYYL3dwdlyZpo4Ftj0wtSeepZjurZ2cVejed4wK0kGMUOCaiDxADKkLL3ngi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xp/n/mfM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jX5HSNM7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 649D0C2BCB4;
-	Tue,  5 May 2026 09:49:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xp/n/mfM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF27CC2BCB4;
+	Tue,  5 May 2026 10:04:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777974547;
-	bh=WMkkDnjGKorBFdLE6fQYlpfqC1mPGchKEquw2+qnOR0=;
+	s=k20201202; t=1777975477;
+	bh=JDapasCD4yNPrs6WlyacY/Ut1sq/7GPVrcrQY0AimW0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=jX5HSNM7VXOljhf3TwRgpMYoAn6FmKhTyEJzze39dgC9LOS2cT25SYlLYQXpl9Vvt
-	 sRiZU2k3nMW2mPhxZx86D1PdQQfcsUA+zFLNC/iXL6vxSZVY3Ps4hsmZANVugfMGsd
-	 BhlnHwuLSHJcYKzkYMSLKXNDv9t8U3IAsZ0xCdHG/Ltk7nM3VfUPKWnELVLgS7eXWH
-	 1ERbFdSOrzuLemKn0oEg4oaoITU7e0p2CJnr71wjXWlTk6IgMw3A/4WVRGN3kHKUVb
-	 APfWd0cD3HlZpVLn1jFBAMinRKU6E7k1KAYs9We96YSa3SHc6hWni2pn32pYn6P9QV
-	 C8RkAbGc76s5Q==
+	b=Xp/n/mfM5nWjq8VMqRrjE9CPHM7CGdI0tsnU5wzkdikWqzncQ0iEsFkgTS/bmBche
+	 8MfLRKd1q4brQgiIB/3PdFNmCyBgOG/H4tLh+eQ36zfDT+KdYrqXcPqeo6CJN0pzLA
+	 huriGtJ+0laoYg4WlHounanxndH5r8BGWPswcXfzwOjUWaHW+zGEs3cgzBnFQFz8Sk
+	 Q5ZnQhXA1u+AZZ2RxPgiNv2lvvk5ntupYbBciJm/qLVeLpSHQFpTyUhJTsVgRZ2kfp
+	 DC3eIRNV+KzEEWgWRCFmDlYSqV1BHBBf6I4pJCHFlj05Z747Hwed8sMGVNFI8NhiWA
+	 Avo0k/q9mRRkg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 12/14] module: Introduce hash-based integrity
- checking
+Subject: Re: [PATCH v5 14/14] kbuild: make CONFIG_MODULE_HASHES compatible
+ with module stripping
 Reply-To: sashiko@lists.linux.dev
 To: =?utf-8?b?VGhvbWFzIFdlacOfc2NodWg=?= <linux@weissschuh.net>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260505-module-hashes-v5-12-e174a5a49fce@weissschuh.net>
-References: <20260505-module-hashes-v5-12-e174a5a49fce@weissschuh.net>
+In-Reply-To: <20260505-module-hashes-v5-14-e174a5a49fce@weissschuh.net>
+References: <20260505-module-hashes-v5-14-e174a5a49fce@weissschuh.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 05 May 2026 09:49:06 +0000
-Message-Id: <20260505094907.649D0C2BCB4@smtp.kernel.org>
+Date: Tue, 05 May 2026 10:04:36 +0000
+Message-Id: <20260505100436.EF27CC2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,99 +46,111 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] Build corruption due to concurrent Kbuild executions of the `modul=
-es` target.
-- [High] Standalone module builds and installations are fundamentally broke=
-n.
-- [Low] Memory leak in the `modules-merkle-tree` host utility.
+- [High] The string comparison in `scripts/Makefile.modinst` unconditionall=
+y fails, completely breaking `make modules_install` when `CONFIG_MODULE_HAS=
+HES` is enabled.
+- [High] Module hashes are calculated on unstripped modules if `INSTALL_MOD=
+_STRIP` is not explicitly passed during the build phase (`make modules`), l=
+eading to unbootable modules.
+- [Medium] The build system unconditionally generates redundant `.ko.stripp=
+ed` files for every module, even if `CONFIG_MODULE_HASHES` is disabled or n=
+o stripping is requested.
 --
 
-commit 199906bc761e41bbeca38213843237f79baf0aaf
+commit c60e91b7cfcdafd6de940881990bcbadd0ee0179
 Author: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
 
-module: Introduce hash-based integrity checking
+kbuild: make CONFIG_MODULE_HASHES compatible with module stripping
 
-This commit introduces a hash-based integrity checking mechanism to support
-reproducible builds. It embeds a Merkle tree root of all builtin modules
-into vmlinux, while out-of-tree modules continue to be validated through
-signatures.
+This commit aims to fix module loading when CONFIG_MODULE_HASHES is used
+alongside module stripping. It records the INSTALL_MOD_STRIP value in Kconf=
+ig
+and validates consistency between build and install time. It also introduces
+stripped module variants during compilation to ensure the generated hashes
+match the final installed files.
 
-> diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
-> index 9ba45e5b32b18..68708a039a621 100644
-> --- a/scripts/Makefile.modinst
-> +++ b/scripts/Makefile.modinst
+> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+> index 99482fac07018..a5b3807e2304d 100644
+> --- a/kernel/module/Kconfig
+> +++ b/kernel/module/Kconfig
+
 [ ... ]
-> @@ -116,6 +122,11 @@ quiet_cmd_sign :=3D
->        cmd_sign :=3D :
->  endif
+
+> @@ -423,6 +423,11 @@ config MODULE_HASHES
 > =20
-> +ifeq ($(KBUILD_EXTMOD)|$(CONFIG_MODULE_HASHES),|y)
-> +quiet_cmd_sign =3D MERKLE [M] $@
-> +      cmd_sign =3D cat $(objtree)/$*.merkle >> $@
+>  	  Also see the warning in MODULE_SIG about stripping modules.
+> =20
+> +# To validate the consistency of INSTALL_MOD_STRIP for MODULE_HASHES
+> +config MODULE_INSTALL_STRIP
+> +	string
+> +	default "$(INSTALL_MOD_STRIP)"
+> +
+
+Is it intended for config MODULE_INSTALL_STRIP to lack a depends on
+MODULE_HASHES statement? Without it, the config appears to be evaluated
+and saved as a quoted string even when hashes are not used.
+
+[ ... ]
+
+> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+> index 44a382689a5aa..9924a7bb73c5e 100644
+> --- a/scripts/Makefile.modfinal
+> +++ b/scripts/Makefile.modfinal
+
+[ ... ]
+
+> +%.ko.stripped: %.ko $(wildcard include/config/MODULE_INSTALL_STRIP)
+> +	$(call cmd,install_mod)
+> +	$(call cmd,strip_mod)
+
+Does cmd_strip_mod evaluate to a no-op during the build phase if
+INSTALL_MOD_STRIP is not explicitly passed to the build command?
+
+Since users typically pass INSTALL_MOD_STRIP=3D1 only during the module
+installation step and not during compilation, this might cause hashes to be
+calculated on unstripped modules during the build. If the modules are then
+properly stripped during installation, could this result in a hash mismatch
+that prevents module loading?
+
+> +
+> +ifneq ($(CONFIG_MODULE_INSTALL_STRIP),)
+> +modules.order: $(modules:%.o=3D%.ko.stripped)
 > +endif
 
-If modules are built and installed independently of a full vmlinux compilat=
-ion
-using make modules followed by make modules_install, will this cat command
-abort with a missing file error?=20
+Since Kconfig strings are exported to Make with quotes, won't this check
+evaluate to true even if the string is empty, as the value will be "" rather
+than completely empty?
 
-The .merkle files appear to only be generated by scripts/modules-merkle-tree
-during the vmlinux link stage, which might leave standalone module builds
-without the required proof files.
+This looks like it would force the generation of .ko.stripped targets for
+all modules, adding unnecessary overhead to the build even if module hashes
+are disabled or no stripping is requested.
 
-> diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-> index 6cc661e5292b0..a0332c06bde1d 100644
-> --- a/scripts/Makefile.vmlinux
-> +++ b/scripts/Makefile.vmlinux
 [ ... ]
-> @@ -78,6 +78,33 @@ ifdef CONFIG_BUILDTIME_TABLE_SORT
->  vmlinux.unstripped: scripts/sorttable
->  endif
+
+> diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
+> index b95f613e23c89..fd1fb89bb0bd7 100644
+> --- a/scripts/Makefile.modinst
+> +++ b/scripts/Makefile.modinst
+> @@ -68,8 +68,8 @@ __modinst: $(install-y)
 > =20
-> +ifdef CONFIG_MODULE_HASHES
-> +targets +=3D .tmp_module_hashes.c
-> +
-> +modules.order: vmlinux.unstripped FORCE
-> +	$(Q)echo "  MAKE    modules"
-> +	$(Q)$(MAKE) -f $(srctree)/Makefile modules
+>  ifdef CONFIG_MODULE_HASHES
+>  ifeq ($(KBUILD_EXTMOD),)
+> -ifdef INSTALL_MOD_STRIP
+> -$(error CONFIG_MODULE_HASHES and INSTALL_MOD_STRIP are mutually exclusiv=
+e)
+> +ifneq ($(INSTALL_MOD_STRIP),$(CONFIG_MODULE_INSTALL_STRIP))
+> +$(error Inconsistent values for INSTALL_MOD_STRIP between build and inst=
+allation)
+>  endif
 
-Can this recursive make invocation race with the top-level modules target if
-a user runs make -j vmlinux modules?=20
+Kconfig string options are exported to Make with literal double quotes,
+such as CONFIG_MODULE_INSTALL_STRIP=3D"1", while the INSTALL_MOD_STRIP
+variable passed via the command line or environment is typically unquoted.
 
-Since both targets share the modpost prerequisite, it seems Kbuild could
-evaluate both concurrently. This might cause two independent instances of
-scripts/Makefile.modfinal to compile and link the exact same .mod.o and
-.ko files at the same time, leading to unpredictable file truncations.
-
-> diff --git a/scripts/modules-merkle-tree.c b/scripts/modules-merkle-tree.c
-> new file mode 100644
-> index 0000000000000..10e3455d5d7af
-> --- /dev/null
-> +++ b/scripts/modules-merkle-tree.c
-[ ... ]
-> +	mt =3D build_merkle(fh_list, num_files);
-> +	write_merkle_root(mt, argv[1]);
-> +	for (size_t i =3D 0; i < num_files; i++) {
-> +		char *signame;
-> +		int fd;
-> +
-> +		signame =3D xstrdup_replace_suffix(fh_list[i].name, kmod_suffix, ".mer=
-kle");
-> +
-> +		fd =3D open(signame, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-> +		if (fd < 0)
-> +			err(1, "Can't create %s", signame);
-> +
-> +		build_proof(mt, i, fd);
-> +		append_module_signature_magic(fd, lseek(fd, 0, SEEK_CUR));
-> +		if (close(fd))
-> +			err(1, "Can't write %s", signame);
-> +	}
-
-Does this code leak the signame string? The xstrdup_replace_suffix helper
-allocates memory that does not appear to be freed before the end of the
-loop, which might leave memory stranded for each kernel module processed.
+Will this literal comparison always evaluate as unequal, meaning 1 !=3D "1",
+and therefore prevent module installation when CONFIG_MODULE_HASHES is enab=
+led?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260505-module-has=
-hes-v5-0-e174a5a49fce@weissschuh.net?part=3D12
+hes-v5-0-e174a5a49fce@weissschuh.net?part=3D14
