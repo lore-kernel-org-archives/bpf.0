@@ -1,226 +1,296 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA30017A300
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 18:51:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB063E3155
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 18:55:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778007118; cv=none; b=kxISzWUBpZ9ngcWjDXhW2go/GZVz9VGH6XH05uKcb5VjTM4f1IDHxKuIMj0z2E8UOZ/vJEMLha/EPAHzgMGWS5LMuj94MIemkkJDOPY5U6Cx6b0dBdSJ+9atXbGEH3jjkldkjnOLWE9xgOH0//NQEKXgSWetD0yE3EIXDp5IhsI=
+	t=1778007303; cv=none; b=GKaWKEWzZ4zyAh5sEcRL2WrAh3shl8p0rwyqmnBImzscG94wlu1/ubvdUgfRIF2xzknCLiFcRlZpiSJg8/KxcouXSvhxehv7HuJ0qm3MkyXum/n2fKCP+J58GzEBT3a5l4E49zZuwVPRtHUi6B6l6y1SlhlynKhwGLz9ELE0zC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778007118; c=relaxed/simple;
-	bh=r9qUVs/Nq5uwKhhdOVmDVzzEmSwcL8SKfjuYF4XAz5o=;
+	s=arc-20240116; t=1778007303; c=relaxed/simple;
+	bh=Ra9QuESiH3L7qc5vHTdAL0D4CVFlgSy+CjpgOg8oRG4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=lzpC3VbDHLiUTYqNgJTZc/Ohogi/DYvRS7c66K3dg3f/RrImjTSTCtH9EmbL0bh/QhN101vS8PP2gjg24EpKsKcBbwuZOfX5PTZzYqnz6Y6xsHtBWEMUV7bLN20LI2aZNutXYZJnrS8KfjpzxTH1mvtH3ZLlvIsSHcFqCM0KWa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=anjdmOt/; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=I7V+S5Wzuc42DxSCA1z+imO4PTlKeTZLXgTS6VSyXaEb2zyKHd4om4cECnq6gYAFAlWodo3AbHnlvL+QPu/crmA1M6zBpGYnXWaUavQDDCHtQaHwELiro7yh9h1b1GkQc1MHA+XhmiUZWuESSHdr2eDxAC7ADsVT7cJInZSS/dU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OSDxxuCA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="anjdmOt/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39F35C2BCB4;
-	Tue,  5 May 2026 18:51:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OSDxxuCA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB501C2BCB4;
+	Tue,  5 May 2026 18:55:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778007118;
-	bh=r9qUVs/Nq5uwKhhdOVmDVzzEmSwcL8SKfjuYF4XAz5o=;
+	s=k20201202; t=1778007303;
+	bh=Ra9QuESiH3L7qc5vHTdAL0D4CVFlgSy+CjpgOg8oRG4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=anjdmOt/7+IgTKTnCIf4ma0tyYKdSrecDO3vvVxhdAiWzE+ldjaZDfhwFhwF1i/o+
-	 VEgbt99nC77JeOeCuOGGUVNkID41mHB0g//ptGSFnR9ppf2s/3Nlw5cQoqZzUQUKqZ
-	 JeTEKqBgm5yM//wLcNXm5XNxSVlsRFrvJeDy9aHey+VDslb9/7UqOvnFzCDMw5B0Gk
-	 X/NE3eFgxzoFnh0jFJvsgdOqzX6pR6/zEqk18xU0HyEA7mzzWKYqjnN7hSaA/e+KGH
-	 BYEkxObLrwOUrQVw29tYKRE9I6TATMrW5jTBYFnkbBpLMmBZVNEs0m2XSMEJY4GvNR
-	 E74Vwalz6LplA==
+	b=OSDxxuCA7SMT5D2gnDNovoLZaraWtVadAr+hfGHts313eUzD+lk2CC0Y8RqdV2fg1
+	 WQ9J9HyjHJHa6B1X32GreU5NH8uzpT/DoYJAfKcZEW2Xm+lXJfsZBnIbU7/8XV8wUo
+	 UGl+2EZ8X5NTw/yQoFN2cv6gcCzwjYQiKxMDDczbnFQ4mjcILwVNSOx/crjF5DLn6j
+	 XtExFtAE7EV4l43tUqaOvifp92dyRcfjeaIkeg/IEzBpJV8dFWXfcQhjFUPfMQQirW
+	 kfhieAIlqG6r1HxK5WPbDLeaeuwBgbD6GuoQjKKWvDz0GLaix2vv9y8NJTqYne/hrS
+	 yiNZ4/ETA1YAg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v14 03/19] unwind_user/sframe: Store .sframe section
- data in per-mm maple tree
+Subject: Re: [PATCH v14 16/19] unwind_user/sframe: Add support for SFrame V3
+ flexible FDEs
 Reply-To: sashiko@lists.linux.dev
 To: "Jens Remus" <jremus@linux.ibm.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260505121718.3572346-4-jremus@linux.ibm.com>
-References: <20260505121718.3572346-4-jremus@linux.ibm.com>
+In-Reply-To: <20260505121718.3572346-17-jremus@linux.ibm.com>
+References: <20260505121718.3572346-17-jremus@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 05 May 2026 18:51:57 +0000
-Message-Id: <20260505185158.39F35C2BCB4@smtp.kernel.org>
+Date: Tue, 05 May 2026 18:55:02 +0000
+Message-Id: <20260505185502.CB501C2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 6 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Critical] Concurrency Use-After-Free and Double Free in sframe_remove_se=
-ction
-- [High] Unbounded memory leak of sframe_section allocations leading to Den=
-ial of Service (OOM)
-- [High] Missing MT_FLAGS_USE_RCU initialization breaks lockless NMI unwind=
-ing
-- [Medium] Child processes silently lose .sframe unwind data on fork()
-- [Medium] Inclusive bound semantics in maple tree cause 1-byte overlap rej=
-ections for contiguous sections
-- [Low] Zero-address validation falsely rejects valid memory mappings
+- [High] Valid flexible FREs ending in a single padding data word are incor=
+rectly rejected.
+- [High] Valid flexible FRE rules for CFA and FP/RA produce unhandled enums=
+, triggering user-controlled WARN_ON_ONCE().
+- [High] Outermost frame unwinding is unconditionally broken, causing unint=
+ended fallback to frame pointers.
 --
 
-commit 3b41045a6b38a262cb32acf9ed118e4d667448dd
-Author: Josh Poimboeuf <jpoimboe@kernel.org>
+commit 7d3289b2e756d08c38877458400ce276ff3f5994
+Author: Jens Remus <jremus@linux.ibm.com>
 
-unwind_user/sframe: Store .sframe section data in per-mm maple tree
+unwind_user/sframe: Add support for SFrame V3 flexible FDEs
 
-Associate an .sframe section with its mm by adding it to a per-mm maple
-tree which is indexed by the corresponding text address range. A single
-.sframe section can be associated with multiple text ranges.
-
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index f1ad69c6dc2d4..0d92fb1c61a99 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-[ ... ]
-> @@ -1072,6 +1074,13 @@ static void mmap_init_lock(struct mm_struct *mm)
->  #endif
->  }
-> =20
-> +static void mm_init_sframe(struct mm_struct *mm)
-> +{
-> +#ifdef CONFIG_HAVE_UNWIND_USER_SFRAME
-> +	mt_init(&mm->sframe_mt);
-> +#endif
-> +}
-> +
->  static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struc=
-t *p,
-
-mt_init() initializes the maple tree with flags set to 0. Since stack
-unwinding typically occurs in profiling interrupts (NMIs) which must
-traverse the maple tree locklessly via RCU, does this missing
-MT_FLAGS_USE_RCU flag allow concurrent modifications to perform in-place
-updates instead of RCU-safe copy-on-write allocations? This could result in
-the NMI unwinder observing corrupted tree states.
-
-[ ... ]
-> @@ -1100,6 +1109,7 @@ static struct mm_struct *mm_init(struct mm_struct *=
-mm, struct task_struct *p,
->  	mm->pmd_huge_pte =3D NULL;
->  #endif
->  	mm_init_uprobes_state(mm);
-> +	mm_init_sframe(mm);
->  	hugetlb_count_init(mm);
-> =20
->  	mm_flags_clear_all(mm);
-
-When a process forks, this initializes an empty sframe_mt for the child's
-mm_struct. While dup_mmap() duplicates the parent's VMAs, it doesn't appear
-that the registered .sframe entries are propagated to the child's maple tre=
-e.
-Will child processes silently lose their .sframe unwind data for shared
-libraries registered prior to the fork?
+SFrame V3 introduces flexible FDEs in addition to the regular FDEs.
+The key difference is that flexible FDEs encode the CFA, RA, and FP
+tracking information using two FRE data words, a control word and an
+offset, or a single padding data word of zero.
 
 > diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
-> index c128c1eeaca20..fdb2a49085638 100644
+> index 2721f4af53fd3..2ba2c8b385f96 100644
 > --- a/kernel/unwind/sframe.c
 > +++ b/kernel/unwind/sframe.c
 [ ... ]
-> @@ -81,6 +81,7 @@ static int sframe_read_header(struct sframe_section *se=
-c)
->  int sframe_add_section(unsigned long sframe_start, unsigned long sframe_=
-end,
->  		       unsigned long text_start, unsigned long text_end)
->  {
-> +	struct maple_tree *sframe_mt =3D &current->mm->sframe_mt;
->  	struct vm_area_struct *sframe_vma, *text_vma;
->  	struct mm_struct *mm =3D current->mm;
->  	struct sframe_section *sec;
-> @@ -88,10 +89,12 @@ int sframe_add_section(unsigned long sframe_start, un=
-signed long sframe_end,
->  	if (!sframe_start || !sframe_end || !text_start || !text_end) {
-
-Virtual addresses can legitimately be zero, such as when mmap_min_addr
-permits it. Does checking !text_start falsely reject valid zero-address
-VMAs? Checking the range bounds explicitly might be safer here.
-
+> @@ -189,16 +193,147 @@ static __always_inline int __find_fde(struct sfram=
+e_section *sec,
 [ ... ]
->  		}
->  	}
-> =20
->  	sec =3D kzalloc(sizeof(*sec), GFP_KERNEL);
+> +static __always_inline int
+> +__read_flex_fde_fre_datawords(struct sframe_section *sec,
+> +			      struct sframe_fde_internal *fde,
+> +			      unsigned long cur,
+> +			      unsigned char dataword_count,
+> +			      unsigned char dataword_size,
+> +			      struct sframe_fre_internal *fre)
+> +{
+> +	u32 cfa_ctl, ra_ctl, fp_ctl;
+> +	s32 cfa_off, ra_off, fp_off;
+> +
+> +	if (dataword_count < 2)
+> +		return -EFAULT;
+> +	UNSAFE_GET_USER_INC(cfa_ctl, cur, dataword_size, Efault);
+> +	UNSAFE_GET_USER_INC(cfa_off, cur, dataword_size, Efault);
+> +	dataword_count -=3D 2;
+> +
+> +	ra_off =3D sec->ra_off;
+> +	ra_ctl =3D ra_off ? 2 : 0; /* regnum=3D0, deref_p=3D(ra_off !=3D 0), re=
+g_p=3D0 */
+> +	if (dataword_count >=3D 2) {
 
-This allocates the section with GFP_KERNEL instead of GFP_KERNEL_ACCOUNT,
-which bypasses memory cgroup limits.
+The commit message mentions that flexible FDEs can use a single padding
+data word of zero. However, this code checks dataword_count >=3D 2 for both
+the RA and FP blocks.
 
-Furthermore, is there a mechanism to clean up these allocated sections when
-the corresponding VMA is torn down (e.g., via munmap)? Without cleanup hooks
-in the VMA teardown paths, it looks like an application could repeatedly mm=
-ap
-an executable region, register it here, and munmap it, leaking kernel memory
-and maple tree nodes indefinitely.
+If an FRE ends with a single padding data word, it will bypass both of these
+blocks and reach the check below:
 
-[ ... ]
-> -	/* TODO nowhere to store it yet - just free it and return an error */
-> -	ret =3D -ENOSYS;
-> +	ret =3D mtree_insert_range(sframe_mt, sec->text_start, sec->text_end, s=
-ec, GFP_KERNEL);
-
-The Maple Tree API stores ranges inclusively as [first, last]. Since VMA
-boundaries are exclusive, does passing sec->text_end directly cause the
-maple tree range to incorrectly cover one extra byte?
-
-If an application registers two perfectly contiguous .sframe sections, the
-insertion of the second section could fail with -EEXIST because the first
-section erroneously claims the first byte of the second section. Using
-sec->text_end - 1 might prevent this overlap.
-
-> +	if (ret) {
-> +		dbg("mtree_insert_range failed: text=3D%lx-%lx\n",
-> +		    sec->text_start, sec->text_end);
-> +		goto err_free;
+> +		UNSAFE_GET_USER_INC(ra_ctl, cur, dataword_size, Efault);
+> +		dataword_count--;
+> +		if (ra_ctl) {
+> +			UNSAFE_GET_USER_INC(ra_off, cur, dataword_size, Efault);
+> +			dataword_count--;
+> +		} else {
+> +			/* Padding RA location info */
+> +			ra_ctl =3D ra_off ? 2 : 0; /* re-deduce (see above) */
+> +		}
 > +	}
 > +
+> +	fp_off =3D sec->fp_off;
+> +	fp_ctl =3D fp_off ? 2 : 0; /* regnum=3D0, deref_p=3D(fp_off !=3D 0), re=
+g_p=3D0 */
+> +	if (dataword_count >=3D 2) {
+> +		UNSAFE_GET_USER_INC(fp_ctl, cur, dataword_size, Efault);
+> +		dataword_count--;
+> +		if (fp_ctl) {
+> +			UNSAFE_GET_USER_INC(fp_off, cur, dataword_size, Efault);
+> +			dataword_count--;
+> +		} else {
+> +			/* Padding FP location info */
+> +			fp_ctl =3D fp_off ? 2 : 0; /* re-deduce (see above) */
+> +		}
+> +	}
+> +
+> +	if (dataword_count)
+> +		return -EFAULT;
+
+Could this incorrectly reject valid FREs ending in a single padding data wo=
+rd
+since dataword_count would be 1 here?
+
+> +
+> +	fre->cfa_ctl	=3D cfa_ctl;
+> +	fre->cfa_off	=3D cfa_off;
+> +	fre->ra_ctl	=3D ra_ctl;
+> +	fre->ra_off	=3D ra_off;
+> +	fre->fp_ctl	=3D fp_ctl;
+> +	fre->fp_off	=3D fp_off;
+> +
 > +	return 0;
+> +
+> +Efault:
+> +	return -EFAULT;
+> +}
+[ ... ]
+>  static __always_inline int __read_fre(struct sframe_section *sec,
+>  				      struct sframe_fde_internal *fde,
+>  				      unsigned long fre_addr,
+>  				      struct sframe_fre_internal *fre)
+>  {
+[ ... ]
+>  	if (!dataword_count) {
+>  		/*
+>  		 * A FRE without data words indicates RA undefined /
+>  		 * outermost frame.
+>  		 */
+> -		cfa_off	=3D 0;
+> -		ra_off	=3D 0;
+> -		fp_off	=3D 0;
+> -		goto done;
+> -	}
+> +		fre->cfa_ctl	=3D 0;
+> +		fre->cfa_off	=3D 0;
+> +		fre->ra_ctl	=3D 0;
+> +		fre->ra_off	=3D 0;
+> +		fre->fp_ctl	=3D 0;
+> +		fre->fp_off	=3D 0;
 > =20
->  err_free:
->  	free_section(sec);
->  	return ret;
->  }
-> =20
-> +static int __sframe_remove_section(struct mm_struct *mm,
-> +				   struct sframe_section *sec)
-> +{
-> +	if (!mtree_erase(&mm->sframe_mt, sec->text_start)) {
-> +		dbg("mtree_erase failed: text=3D%lx\n", sec->text_start);
+> -	UNSAFE_GET_USER_INC(cfa_off, cur, dataword_size, Efault);
+
+When __read_fre() processes an outermost frame, it zeroes out fre->cfa_ctl.
+In __find_fre(), this is later passed to sframe_init_cfa_rule_data():
+
+> -static __always_inline void
+> +static __always_inline int
+>  sframe_init_cfa_rule_data(struct unwind_user_cfa_rule_data *cfa_rule_dat=
+a,
+> -			  unsigned char fre_info,
+> -			  s32 offset)
+> +			  u32 ctlword, s32 offset)
+>  {
+> -	if (SFRAME_V3_FRE_CFA_BASE_REG_ID(fre_info) =3D=3D SFRAME_BASE_REG_FP)
+> -		cfa_rule_data->rule =3D UNWIND_USER_CFA_RULE_FP_OFFSET;
+> -	else
+> -		cfa_rule_data->rule =3D UNWIND_USER_CFA_RULE_SP_OFFSET;
+> +	bool deref_p =3D SFRAME_V3_FLEX_FDE_CTRLWORD_DEREF_P(ctlword);
+> +	bool reg_p =3D SFRAME_V3_FLEX_FDE_CTRLWORD_REG_P(ctlword);
+> +
+> +	if (reg_p) {
+> +		unsigned int regnum =3D SFRAME_V3_FLEX_FDE_CTRLWORD_REGNUM(ctlword);
+> +
+> +		switch (regnum) {
+> +		case SFRAME_REG_SP:
+> +			cfa_rule_data->rule =3D UNWIND_USER_CFA_RULE_SP_OFFSET;
+> +			break;
+> +		case SFRAME_REG_FP:
+> +			cfa_rule_data->rule =3D UNWIND_USER_CFA_RULE_FP_OFFSET;
+> +			break;
+> +		default:
+> +			cfa_rule_data->rule =3D UNWIND_USER_CFA_RULE_REG_OFFSET;
+> +			cfa_rule_data->regnum =3D regnum;
+> +		}
+> +	} else {
 > +		return -EINVAL;
 > +	}
+
+Because ctlword is 0 for an outermost frame, reg_p will evaluate to false,
+and this unconditionally returns -EINVAL.
+
+Does this unintentionally break outermost frame unwinding? Returning an
+error here will cause __find_fre() to fail before it can reach the
+frame->outermost check, resulting in a fallback to frame pointer unwinding
+instead of stopping gracefully.
+
 > +
-> +	free_section(sec);
+> +	if (deref_p)
+> +		cfa_rule_data->rule |=3D UNWIND_USER_RULE_DEREF;
+> +
+
+Also, does this append UNWIND_USER_RULE_DEREF to CFA rules in a way that is
+not supported by the unwinder?
+
+If a CFA rule uses SP/FP with deref_p=3D1, this creates a combined enum like
+UNWIND_USER_CFA_RULE_SP_OFFSET | UNWIND_USER_RULE_DEREF. Because .sframe
+sections are user-supplied, could an attacker use this to trigger an
+unhandled enum path and hit a WARN_ON_ONCE() during unwinding?
+
+>  	cfa_rule_data->offset =3D offset;
 > +
 > +	return 0;
-> +}
-> +
->  int sframe_remove_section(unsigned long sframe_start)
+>  }
+> =20
+>  static __always_inline void
+>  sframe_init_rule_data(struct unwind_user_rule_data *rule_data,
+> -		      s32 offset)
+> +		      u32 ctlword, s32 offset)
 >  {
-> -	return -ENOSYS;
-> +	struct mm_struct *mm =3D current->mm;
-> +	struct sframe_section *sec;
-> +	unsigned long index =3D 0;
-> +	bool found =3D false;
-> +	int ret =3D 0;
+> -	if (offset) {
+> -		rule_data->rule =3D UNWIND_USER_RULE_CFA_OFFSET_DEREF;
+> -		rule_data->offset =3D offset;
+> -	} else {
+> +	bool deref_p =3D SFRAME_V3_FLEX_FDE_CTRLWORD_DEREF_P(ctlword);
+> +	bool reg_p =3D SFRAME_V3_FLEX_FDE_CTRLWORD_REG_P(ctlword);
 > +
-> +	mt_for_each(&mm->sframe_mt, sec, index, ULONG_MAX) {
-> +		if (sec->sframe_start =3D=3D sframe_start) {
+> +	if (!ctlword && !offset) {
+>  		rule_data->rule =3D UNWIND_USER_RULE_RETAIN;
+> +		return;
+> +	}
+> +	if (reg_p) {
+> +		unsigned int regnum =3D SFRAME_V3_FLEX_FDE_CTRLWORD_REGNUM(ctlword);
+> +
+> +		rule_data->rule =3D UNWIND_USER_RULE_REG_OFFSET;
+> +		rule_data->regnum =3D regnum;
+> +	} else {
+> +		rule_data->rule =3D UNWIND_USER_RULE_CFA_OFFSET;
+>  	}
+> +
+> +	if (deref_p)
+> +		rule_data->rule |=3D UNWIND_USER_RULE_DEREF;
+> +
+> +	rule_data->offset =3D offset;
+>  }
 
-Can concurrent calls to sframe_remove_section() cause a use-after-free and
-subsequent double free?
+Similarly, if a rule for FP/RA is set to *(CFA + offset) with reg_p=3D0
+and deref_p=3D0, this assigns UNWIND_USER_RULE_CFA_OFFSET without the
+UNWIND_USER_RULE_DEREF flag.
 
-mt_for_each() locklessly iterates mm->sframe_mt, and internally acquires and
-drops the RCU read lock, meaning the returned sec pointer has no lifetime
-protection in the loop body.
+Is this combination handled by the rest of the unwinding logic, or will
+it fall through to an unsupported state and abort unwinding?
 
-If two threads concurrently invoke sframe_remove_section(), both could
-receive the exact same sec pointer from the tree. Thread A could then call
-__sframe_remove_section(), erasing the entry and freeing sec via
-free_section(). Thread B would then evaluate the if statement using the
-freed sec pointer, causing a use-after-free read, and potentially proceeding
-to free it again.
-
-Additionally, does free_section() need to use kfree_rcu() instead of
-kfree() to prevent lockless NMI unwinders from hitting a use-after-free
-when reading payloads?
+> =20
+>  static __always_inline int __find_fre(struct sframe_section *sec,
+> @@ -344,9 +492,10 @@ static __always_inline int __find_fre(struct sframe_=
+section *sec,
+>  		return -EINVAL;
+>  	fre =3D prev_fre;
+> =20
+> -	sframe_init_cfa_rule_data(&frame->cfa, fre->info, fre->cfa_off);
+> -	sframe_init_rule_data(&frame->ra, fre->ra_off);
+> -	sframe_init_rule_data(&frame->fp, fre->fp_off);
+> +	if (sframe_init_cfa_rule_data(&frame->cfa, fre->cfa_ctl, fre->cfa_off))
+> +		return -EINVAL;
+> +	sframe_init_rule_data(&frame->ra, fre->ra_ctl, fre->ra_off);
+> +	sframe_init_rule_data(&frame->fp, fre->fp_ctl, fre->fp_off);
+>  	frame->outermost =3D SFRAME_V3_FRE_RA_UNDEFINED_P(fre->info);
+> =20
+>  	return 0;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260505121718.3572=
-346-1-jremus@linux.ibm.com?part=3D3
+346-1-jremus@linux.ibm.com?part=3D16
