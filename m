@@ -1,113 +1,116 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 566AB35A3AE
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 04:14:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F5E35A3AE
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 04:14:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777954472; cv=none; b=mT6EhodSqziEFZC4fYJAymnVpQMa/QoJZT56JQV2df/ujVoxjCgbIbsuBV5+UKBfRCH8L5wr7OiKjIbeV0bK8C3i/+e7d8aFx16vvod8YDS+vQrnfC4qI0NwlBvqrruDUqBIrICUf0Z0XMmIBPRfdaQBzrpi5vgVbATAW1tihiw=
+	t=1777954473; cv=none; b=P1wD2JwvFRkbN5BGKWK/ps0yRP7XBuIV0/Z08r5bThzzauTNm6awU5AeWRdyqtK1LmpCuD7Cgz9jMQK+RyNF0vI73L3j2hauE7IKdJw3wZX2Mm6Qxzim5ig+78UpNNcTQpjd1hecmSFKaqcsyPQCMxNxgfLzoRxqQ5hBJZUs09I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777954472; c=relaxed/simple;
-	bh=J8ZHnWTVGSMJKFXv1kPKiRu7wzbnnopVtNqtbZV9bFU=;
+	s=arc-20240116; t=1777954473; c=relaxed/simple;
+	bh=wxVMjxc93tWm6+g6rMGUL40dFUnAaEYw/Ar6v4MV4HA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=dKc9DDd1+nAvjva6yfIS0q9+Hvi36AWsWaIF42KQ8HWytJMxuko+iiBAwtkiuMR6ZJOGG8WZr3tsa4NS2enO1UiymRyxIZlWPwxldQfeSHfHmQeTfeSQD+/Iq6Yfdf2xQ2gXntpewn3PrQjQ7SvUJdtHRzENy9nFXnKBDwiJWbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lpX9183K; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=fa4wFEIA8mZNqa9wkUthSTN2vPaAo+b/NjtxmYVjpHk6sStZ6IOGjANlKdW0/NBjn5AfxDbMIBTsB6dJjby6qS+hDJ08syceT2JsoxEanwr7QGcUZNTQml0poseiSbyrW5NLxWW9shkdohFHwZd77Nbn+5pF+YIFBP5gQSQfNDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GpwJCDro; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lpX9183K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD280C2BCB4;
-	Tue,  5 May 2026 04:14:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GpwJCDro"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD566C2BCB4;
+	Tue,  5 May 2026 04:14:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1777954472;
-	bh=J8ZHnWTVGSMJKFXv1kPKiRu7wzbnnopVtNqtbZV9bFU=;
+	bh=wxVMjxc93tWm6+g6rMGUL40dFUnAaEYw/Ar6v4MV4HA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=lpX9183KFew3B+3WpDdCuOrUDfCtFjsiXiKlxRhNn0uJGIq8WrlrlRcWLPhCGK6Qo
-	 KQxlovtNApubvEWEEZWU7+0abPfCbFepeXYfJgUO/FaN3onskeFdH+9Mwff/bKBPqX
-	 KmqNN8UPOi+M7f7ASA8HPk4cYnPKptUmUXum3DbgFiIEMGTWj5Oe+GTvB3kWNZSQje
-	 SMNsQiAvfAs8mCbN3eDaQ10szxGCkFCyEG62c7OwUcfaQehEWAaPkww/TAHyEO9RmE
-	 r/AdL2oavJSP6Cdsg6jwiUh26xvMuxlCoQTUgo3DflEh6s3tYRdR7cRVjk5TbBwAM3
-	 WdDJhfcbcIbVg==
+	b=GpwJCDroICIhLQRV4o1aq3b9V0seOURbiorGAd6Jo3yC4ITZIo50vOh15tPkY1Hvs
+	 pBLf0ryQ8b2lql4awSXqodcg7knZu98MasO1GMLGv88bavnxDSHsnaRIjdFWX+jitQ
+	 ifzrENN2Qf0BwUoXotysPaKV5Bi94AR4VgkxzOIMXW2f1Z+47AOwZ0HbAy3NfUcnjI
+	 LhbUUk3sV0gmJWfN3RVgd27qRhUlCfQezpt0AlaGdbchle4QM0Md5Unq1g2crgo1AF
+	 y3pzK9gkSznJZaWuYdHM1zhC+BELnPNuY3Ofc6EQBds3qA663HwDxZ6Q3LoI7aZqId
+	 ui2Ixd2YPv1NA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 6/6] selftests/bpf: tc_tunnel - validate decap GSO
- and encapsulation state
+Subject: Re: [PATCH v2 bpf 1/6] bpf: tcp: Fix type confusion in
+ bpf_tcp_sock().
 Reply-To: sashiko@lists.linux.dev
-To: "Nick Hudson" <nhudson@akamai.com>
+To: "Kuniyuki Iwashima" <kuniyu@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260504101759.3319427-7-nhudson@akamai.com>
-References: <20260504101759.3319427-7-nhudson@akamai.com>
+In-Reply-To: <20260504210610.180150-2-kuniyu@google.com>
+References: <20260504210610.180150-2-kuniyu@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 05 May 2026 04:14:31 +0000
-Message-Id: <20260505041431.CD280C2BCB4@smtp.kernel.org>
+Date: Tue, 05 May 2026 04:14:32 +0000
+Message-Id: <20260505041432.BD566C2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Pointer arithmetic `kskb->head + kskb->end` causes build failures =
-and runtime logic errors on 32-bit kernels.
-- [Medium] Missing kernel feature causes test to fail instead of skip, brea=
-king CI on older kernels.
+- [Critical] The OpenVPN (ovpn) driver contains a critical type confusion v=
+ulnerability due to insufficient socket type checking, leading to out-of-bo=
+unds slab writes.
 --
 
-commit f73fb4725baa7b601a1b82c32e5095c6b4294f5c
-Author: Nick Hudson <nhudson@akamai.com>
+commit 3e93f247feecc891b15b8d713331586af9371dfd
+Author: Kuniyuki Iwashima <kuniyu@google.com>
 
-selftests/bpf: tc_tunnel - validate decap GSO and encapsulation state
+bpf: tcp: Fix type confusion in bpf_tcp_sock().
 
-This commit enhances the tc_tunnel selftest to validate post-decap tunnel
-state for both GSO and non-GSO packets, and checks IPXIP decap for IPIP/SIT
-paths.
+This commit fixes an out-of-bounds slab access bug in BPF by using sk_is_tc=
+p()
+instead of just checking sk_protocol for IPPROTO_TCP. This prevents raw soc=
+kets
+created with IPPROTO_TCP from bypassing the type check.
 
-> diff --git a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c b/tools/t=
-esting/selftests/bpf/progs/test_tc_tunnel.c
-> index 7376df405a6b..853bca962910 100644
-> --- a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
-> +++ b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
-[ ... ]
-> @@ -621,6 +645,11 @@ static int decap_internal(struct __sk_buff *skb, int=
- off, int len, char proto)
->  		break;
->  	case IPPROTO_GRE:
->  		olen +=3D sizeof(struct gre_hdr);
-> +		if (!bpf_core_enum_value_exists(enum bpf_adj_room_flags,
-> +						BPF_F_ADJ_ROOM_DECAP_L4_GRE))
-> +			return TC_ACT_SHOT;
-
-If the kernel is missing support for these new decapsulation flags, will
-returning TC_ACT_SHOT cause the test harness to time out and fail the test?
-
-Since selftests often run on older kernels, should missing features gracefu=
-lly
-skip the test instead of failing it to prevent false positives and CI
-breakages on stable or LTS branches?
-
-[ ... ]
-> @@ -655,6 +688,40 @@ static int decap_internal(struct __sk_buff *skb, int=
- off, int len, char proto)
->  	if (bpf_skb_adjust_room(skb, -olen, BPF_ADJ_ROOM_MAC, flags))
->  		return TC_ACT_SHOT;
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index bc96c18df4e03..cd88633f8dc14 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -7475,7 +7475,7 @@ u32 bpf_tcp_sock_convert_ctx_access(enum bpf_access=
+_type type,
 > =20
-> +	kskb =3D bpf_cast_to_kern_ctx(skb);
-> +	shinfo =3D bpf_core_cast(kskb->head + kskb->end, struct skb_shared_info=
-);
+>  BPF_CALL_1(bpf_tcp_sock, struct sock *, sk)
+>  {
+> -	if (sk_fullsock(sk) && sk->sk_protocol =3D=3D IPPROTO_TCP)
+> +	if (sk_fullsock(sk) && sk_is_tcp(sk))
 
-Will this arithmetic work correctly on 32-bit kernels?
+This correctly prevents a type confusion where a raw socket can bypass the
+protocol check. Does the OpenVPN (ovpn) driver need a similar fix for this
+exact same pattern?
 
-On 64-bit architectures, sk_buff_data_t is an integer offset, so
-kskb->head + kskb->end works. However, on 32-bit platforms, sk_buff_data_t =
-is
-a pointer (unsigned char *), making the addition of two pointers invalid C =
-and
-causing build failures.
+In drivers/net/ovpn/netlink.c, the driver accepts an arbitrary socket file
+descriptor from userspace and determines the socket type using only sk_prot=
+ocol
+without verifying sk_type.
 
-Furthermore, even if cross-compiled with a 64-bit vmlinux.h, adding
-kskb->head to an absolute kskb->end pointer would yield an invalid address =
-at
-runtime.
+If a user creates a raw socket via socket(AF_INET, SOCK_RAW, IPPROTO_UDP) a=
+nd
+passes it to the OpenVPN netlink interface, it seems it would pass the prot=
+ocol
+check and call ovpn_udp_socket_attach().
+
+This eventually passes the socket to setup_udp_tunnel_sock(), which casts t=
+he
+socket to udp_sk(sk) and overwrites multiple fields (such as encap_type,
+encap_rcv, and gro_receive).
+
+Since struct udp_sock is larger than struct raw_sock, could this result in =
+an
+out-of-bounds slab write?
+
+Similarly, passing a raw TCP socket appears to cause ovpn_tcp_socket_attach=
+()
+to replace sk->sk_prot with ovpn_tcp_prot. This might mean subsequent TCP
+socket operations will operate out-of-bounds on the raw_sock object.
+
+Should ovpn be updated to validate sk_type =3D=3D SOCK_DGRAM or SOCK_STREAM=
+ in a
+similar manner to this fix?
+
+>  		return (unsigned long)sk;
+> =20
+>  	return (unsigned long)NULL;
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260504101759.3319=
-427-1-nhudson@akamai.com?part=3D6
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260504210610.1801=
+50-1-kuniyu@google.com?part=3D1
