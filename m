@@ -1,152 +1,223 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA619242D72
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 12:53:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC3A335555;
+	Tue,  5 May 2026 13:22:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777985617; cv=none; b=UW7Qy4+aDhP1ZvJ3Apd9cDatGto0XmP4dYtnnWWUR3HGpZKQujoYRiO1WzlHkJSksTVSNGA1N0eA9nkomHLk3pXl49eRHUINdWscBVBpt49h8gexYFtQBpyU0fPS7giHz2ZH9JVRUMkZ4pUjriczyNVB8c5mwv9cCgaIMdKzToU=
+	t=1777987329; cv=none; b=ttuiStpDa0+3zWlonsIlo3lab0XkrGJD3gAJM8eN9N6vHs51AeNZHOkmFZ2g1QdHyHiWP61wUIHvitL8dUZHHNX2ZCS0dIUddefODV8T5IbfOzVshPLMUQ01LQpemPaw+Sya0X15J00zm3TiME72CyeAiLPp7L7Q0uElLFLw+J0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777985617; c=relaxed/simple;
-	bh=zuj4Yr23PJ0UKZfcFRe5I6jNMxUuBafQfs90DMeszlw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=FkJjz1ZrvpqnMETdBEcfbbZu5Su2tgfREPf+6iHvHn0I5xacWj24ioHp1ddqdWr0PFkvZKbsptNbdBADriuUA+45jofSv5ssJiW/sW22Hu9zBqeRzm79MZ3JunQbeNkNlChYaM5zq6FqDdzI0Ck3y9SO37ijYGbAZDMDJ+V2Ww4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J8iwjjZJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777987329; c=relaxed/simple;
+	bh=rsNXvHZFXruMLnsGUPFyTQ0lT0Wwh0YQovcguINFEy4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EhMuOfNFwc8YEvOaabbCwUXf0/RQf2FAXpBrsJG0a+aTHLwohOxReyqJg8H0Z/TXGiNIvkpsO98HsAvgbpfzPuGG1C3Ir3LlcDNd+LBCFzlmZqVwFwEIUyCXPPnfy9aswHxC39zJ8DTk+fDdQkK2FSuSEcGCVav0Y4w04cPuv2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WMr3X792; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J8iwjjZJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72A36C2BCB4;
-	Tue,  5 May 2026 12:53:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WMr3X792"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E59ACC2BCB4;
+	Tue,  5 May 2026 13:22:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777985616;
-	bh=zuj4Yr23PJ0UKZfcFRe5I6jNMxUuBafQfs90DMeszlw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=J8iwjjZJwhJWtcD4WXWfPJiFtDmds9kpCo5NFyvCjPlqRciQgPGyIbE3uVvZ4ZqAw
-	 EgD/c5+oJ1Z9XKhGfkLG9L18DeOKIkBZOGztkRqFDvuB3JK4f8ScyHyvwybAbTyPGx
-	 rKj8G0sndzvS1JkVLJB53VFIMnZQYwCmY247zO4I6JdolU5CVRRmddBxIrJzRO+hA1
-	 tXheKzg3apqjfCpKBgd1WUskRHtZo5sBatCAc5XGui5VyL5TyzQaLez/w/X3hG+aVz
-	 DhCoqQVfaPQJYSm/38ypQFtwUxiJu2/du4Zahi19BDkcjoxEXj9w/jCd7hUwrkmaeG
-	 NjS6q+Xft3tmg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v14 06/19] unwind_user/sframe: Detect .sframe sections
- in executables
-Reply-To: sashiko@lists.linux.dev
-To: "Jens Remus" <jremus@linux.ibm.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260505121718.3572346-7-jremus@linux.ibm.com>
-References: <20260505121718.3572346-7-jremus@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 05 May 2026 12:53:35 +0000
-Message-Id: <20260505125336.72A36C2BCB4@smtp.kernel.org>
+	s=k20201202; t=1777987328;
+	bh=rsNXvHZFXruMLnsGUPFyTQ0lT0Wwh0YQovcguINFEy4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=WMr3X792ZQLV7ao4Zlh5ye75S4tqSqVnNWIQeuk5X9TUJT0JzwvA7AiTmdlDY+G4k
+	 wZvcADh5OrTU/JLEuwnRbEfIg707fzsPRoDP0+YHZcCWQFvf1zZV3RZHWeuRw9EhqB
+	 7eOOisYdm3TpZ0WzReSbTBagckLFB5PgtJ7dla7Si+garjrrsMwqcAzpgIGjEasIxw
+	 RUh/rvYcGpxMz/LQmkcQNWHqxSuP9Cspba6zxCEwc4moWe27XtWF3QyHqTbxy9mvPi
+	 OdMEjgzL4bnUAn0diLcAyfGNAlnw5H80py6vyaJZwyPp8S1OZlcqyW00LAZquTymAp
+	 FZh6uah92a6cQ==
+From: hawk@kernel.org
+To: netdev@vger.kernel.org
+Cc: hawk@kernel.org,
+	kernel-team@cloudflare.com,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Chris Arges <carges@cloudflare.com>,
+	Mike Freemon <mfreemon@cloudflare.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+	=?UTF-8?q?Jonas=20K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
+	Breno Leitao <leitao@debian.org>,
+	Simon Schippers <simon.schippers@tu-dortmund.de>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v5 0/5] veth: add Byte Queue Limits (BQL) support
+Date: Tue,  5 May 2026 15:21:52 +0200
+Message-ID: <20260505132159.241305-1-hawk@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Missing `PT_LOAD` segment type check when registering executable s=
-ections for sframe unwinding.
-- [High] Off-by-one error in maple tree insertion bounds causes adjacent ex=
-ecutable segments to fail registration.
---
+From: Jesper Dangaard Brouer <hawk@kernel.org>
 
-commit 610ebc2ab2a7fd5ae4cd4a346076c9d5c2acc195
-Author: Josh Poimboeuf <jpoimboe@kernel.org>
+This series adds BQL (Byte Queue Limits) to the veth driver, reducing
+latency by dynamically limiting in-flight packets in the ptr_ring and
+moving buffering into the qdisc where AQM algorithms can act on it.
 
-unwind_user/sframe: Detect .sframe sections in executables
+Problem:
+  veth's 256-entry ptr_ring acts as a "dark buffer" -- packets queued
+  there are invisible to the qdisc's AQM.  Under load, the ring fills
+  completely (DRV_XOFF backpressure), adding up to 256 packets of
+  unmanaged latency before the qdisc even sees congestion.
 
-When loading an ELF executable, automatically detect an .sframe section
-and associate it with the mm_struct.
+Solution:
+  BQL (STACK_XOFF) dynamically limits in-flight packets, stopping the
+  queue before the ring fills.  This keeps the ring shallow and pushes
+  excess packets into the qdisc, where sojourn-based AQM can measure
+  and drop them.
 
-> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-> index 16a56b6b3f6ca..55047659a3cf4 100644
-> --- a/fs/binfmt_elf.c
-> +++ b/fs/binfmt_elf.c
-[ ... ]
-> @@ -637,6 +638,21 @@ static inline int make_prot(u32 p_flags, struct arch=
-_elf_state *arch_state,
->  	return arch_elf_adjust_prot(prot, arch_state, has_interp, is_interp);
->  }
-> =20
-> +static void elf_add_sframe(struct elf_phdr *text, struct elf_phdr *sfram=
-e,
-> +			   unsigned long base_addr)
-> +{
-> +	unsigned long sframe_start, sframe_end, text_start, text_end;
-> +
-> +	sframe_start =3D base_addr + sframe->p_vaddr;
-> +	sframe_end   =3D sframe_start + sframe->p_memsz;
-> +
-> +	text_start   =3D base_addr + text->p_vaddr;
-> +	text_end     =3D text_start + text->p_memsz;
+  Test setup: veth pair, UDP flood, 13000 iptables rules in consumer
+  namespace (slows NAPI-64 cycle to ~6-7ms), ping measures RTT under load.
 
-Should text_end be calculated as text_start + text->p_memsz - 1?
+                   BQL off                    BQL on
+  fq_codel:  RTT ~22ms, 4% loss         RTT ~1.3ms, 0% loss
+  sfq:       RTT ~24ms, 0% loss         RTT ~1.5ms, 0% loss
 
-Since the maple tree API strictly expects inclusive ranges [first, last] fo=
-r=20
-insertions, passing the exclusive text_end would cause the inserted range=20
-to cover one byte beyond the actual segment.
+  BQL reduces ping RTT by ~17x for both qdiscs.  Consumer throughput
+  is unchanged (~10K pps) -- BQL adds no overhead.
 
-If an ELF binary has adjacent executable PT_LOAD segments, could the first=
-=20
-segment's inclusive end overlap with the next segment's start and fail=20
-subsequent insertions?
+CoDel bug discovered during BQL development:
+  Our original motivation for BQL was fq_codel ping loss observed under
+  load (4-26% depending on NAPI cycle time).  Investigating this led us
+  to discover a bug in the CoDel implementation: codel_dequeue() does
+  not reset vars->first_above_time when a flow goes empty, contrary to
+  the reference algorithm.  This causes stale CoDel state to persist
+  across empty periods in fq_codel's per-flow queues, penalizing sparse
+  flows like ICMP ping.  A fix for this has been applied to the net tree
+  815980fe6dbb ("net_sched: codel: fix stale state for empty flows in fq_codel")
+  
+  BQL remains valuable independently: it reduces RTT by ~17x by moving
+  buffering from the dark ptr_ring into the qdisc.  Additionally, BQL
+  clears STACK_XOFF per-SKB as each packet completes, rather than
+  batch-waking after 64 packets (DRV_XOFF).  This keeps sojourn times
+  below fq_codel's target, preventing CoDel from entering dropping
+  state on non-congested flows in the first place.
 
-> +
-> +	/* Ignore return value, sframe section isn't critical */
-> +	sframe_add_section(sframe_start, sframe_end, text_start, text_end);
-> +}
-> +
-[ ... ]
-> @@ -712,6 +729,19 @@ static unsigned long load_elf_interp(struct elfhdr *=
-interp_elf_ex,
->  				error =3D -ENOMEM;
->  				goto out;
->  			}
-> +			break;
-> +		}
-> +		case PT_GNU_SFRAME:
-> +			sframe_phdr =3D eppnt;
-> +			break;
-> +		}
-> +	}
-> +
-> +	if (sframe_phdr) {
-> +		eppnt =3D interp_elf_phdata;
-> +		for (i =3D 0; i < interp_elf_ex->e_phnum; i++, eppnt++) {
-> +			if (eppnt->p_flags & PF_X)
-> +				elf_add_sframe(eppnt, sframe_phdr, load_addr);
+Key design decisions:
+  - Charge-under-lock in veth_xdp_rx(): The BQL charge must precede
+    the ptr_ring produce, because the NAPI consumer can run on another
+    CPU and complete the SKB immediately after it becomes visible.  To
+    avoid a pre-charge/undo pattern, the charge is done under the
+    ptr_ring producer_lock after confirming the ring is not full.  BQL
+    is only charged when produce is guaranteed to succeed, keeping
+    num_queued monotonically increasing.  HARD_TX_LOCK already
+    serializes dql_queued() (veth requires a qdisc for BQL); the
+    ptr_ring lock additionally would allow noqueue to work correctly.
 
-Does this need to verify the segment is loadable (eppnt->p_type =3D=3D PT_L=
-OAD)?
+  - Per-SKB BQL tracking via pointer tag: A VETH_BQL_FLAG bit in the
+    ptr_ring pointer records whether each SKB was BQL-charged.  This is
+    necessary because the qdisc can be replaced live (noqueue->sfq or
+    vice versa) while SKBs are in-flight -- the completion side must
+    know the charge state that was decided at enqueue time.
 
-If non-loadable segments like PT_GNU_STACK have the PF_X flag set, they
-typically have p_vaddr and p_memsz as 0. Processing these segments would
-compute bogus text boundaries and bypass VMA validation. If a legitimate
-PT_LOAD segment overlaps with these bogus ranges, could its insertion fail
-silently and break stack unwinding for the executable?
+  - IFF_NO_QUEUE + BQL coexistence: A new dev->bql flag enables BQL
+    sysfs exposure for IFF_NO_QUEUE devices that opt in to DQL
+    accounting, without changing IFF_NO_QUEUE semantics.
 
->  		}
->  	}
-> =20
-[ ... ]
-> @@ -1242,6 +1276,14 @@ static int load_elf_binary(struct linux_binprm *bp=
-rm)
->  			elf_brk =3D k;
->  	}
-> =20
-> +	if (sframe_phdr) {
-> +		for (i =3D 0, elf_ppnt =3D elf_phdata;
-> +		     i < elf_ex->e_phnum; i++, elf_ppnt++) {
-> +			if ((elf_ppnt->p_flags & PF_X))
-> +				elf_add_sframe(elf_ppnt, sframe_phdr, load_bias);
+Background and acknowledgments:
+  Mike Freemon reported the veth dark buffer problem internally at
+  Cloudflare and showed that recompiling the kernel with a ptr_ring
+  size of 30 (down from 256) made fq_codel work dramatically better.
+  This was the primary motivation for a proper BQL solution that
+  achieves the same effect dynamically without a kernel rebuild.
 
-Similarly, should this also check if the segment is a PT_LOAD segment befor=
-e=20
-adding it to the sframe sections?
+  Chris Arges wrote a reproducer for the dark buffer latency problem:
+    https://github.com/netoptimizer/veth-backpressure-performance-testing
+  This is where we first observed ping packets being dropped under
+  fq_codel, which became our secondary motivation for BQL.  In
+  production we switched to SFQ on veth devices as a workaround.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260505121718.3572=
-346-1-jremus@linux.ibm.com?part=3D6
+  Jonas Koeppeler provided extensive testing and code review.
+  Together we discovered that the fq_codel ping loss was actually a
+  12-year-old CoDel bug (stale first_above_time in empty flows), not
+  caused by the dark buffer itself.
+
+Patch overview:
+  1. veth: fix OOB txq access in veth_poll() with asymmetric queue counts
+  2. net: add dev->bql flag to allow BQL sysfs for IFF_NO_QUEUE devices
+  3. veth: implement Byte Queue Limits (BQL) for latency reduction
+  4. veth: add tx_timeout watchdog as BQL safety net
+  5. net: sched: add timeout count to NETDEV WATCHDOG message
+
+Jesper Dangaard Brouer (5):
+  veth: fix OOB txq access in veth_poll() with asymmetric queue counts
+  net: add dev->bql flag to allow BQL sysfs for IFF_NO_QUEUE devices
+  veth: implement Byte Queue Limits (BQL) for latency reduction
+  veth: add tx_timeout watchdog as BQL safety net
+  net: sched: add timeout count to NETDEV WATCHDOG message
+
+ .../networking/net_cachelines/net_device.rst  |   1 +
+ drivers/net/veth.c                            | 107 ++++++++++++++++--
+ include/linux/netdevice.h                     |   2 +
+ net/core/net-sysfs.c                          |   8 +-
+ net/sched/sch_generic.c                       |   8 +-
+ 5 files changed, 109 insertions(+), 17 deletions(-)
+
+V4: https://lore.kernel.org/all/20260501071633.644353-1-hawk@kernel.org/
+
+Changes since V4:
+  - New patch 1: fix OOB txq access in veth_poll() when veth peers have
+    asymmetric RX/TX queue counts.  XDP redirect can deliver frames to
+    an RX queue index that exceeds the peer's TX queue count, causing
+    an out-of-bounds netdev_get_tx_queue() access.  Found by sashiko-bot.
+  - Patch 3 (veth BQL): wake stopped peer txqs in veth_napi_del_range()
+    to clear DRV_XOFF after NAPI teardown.  A concurrent veth_xmit()
+    can set DRV_XOFF between rcu_assign_pointer(napi, NULL) and
+    synchronize_net(); with NAPI gone, no veth_poll() clears it.
+    Guarded by netif_running() to skip during device close.
+
+V3: https://lore.kernel.org/all/20260429172036.1028526-1-hawk@kernel.org/
+
+Changes since V3:
+  - Drop selftest patch (patch 5 from V3) per maintainer request.
+  - Rebase on latest net-next.
+
+V2: https://lore.kernel.org/all/20260413094442.1376022-1-hawk@kernel.org/
+
+Changes since V2:
+  - Patch 2 (veth BQL): fix syzbot WARNING in veth_napi_del_range():
+    clamp BQL reset loop to peer's real_num_tx_queues.  The loop was
+    iterating dev->real_num_rx_queues but indexing peer's txq[], which
+    goes out of bounds when the peer has fewer TX queues (e.g. veth
+    enslaved to a bond with XDP attached).
+
+V1: https://lore.kernel.org/all/20260324174719.1224337-1-hawk@kernel.org/
+
+Changes since V1:
+  - Patch 1 (dev->bql flag): add kdoc entry for @bql in struct net_device.
+  - Patch 2 (veth BQL): charge fixed VETH_BQL_UNIT (1) per packet instead
+    of skb->len.  veth has no link speed; the ptr_ring is packet-indexed.
+    Byte-based charging lets small packets sneak many entries into the ring.
+    Testing: min-size packet flood causes 3.7x ping RTT degradation with
+    skb->len vs no change with fixed-unit charging.
+  - Patch 3 (tx_timeout watchdog): fix race with peer NAPI: replace
+    netdev_tx_reset_queue() with clear_bit(STACK_XOFF) + netif_tx_wake_queue()
+    to avoid dql_reset() racing with concurrent dql_completed().
+  - Cover letter: update CoDel fix reference to merged commit in net tree.
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Simon Horman <horms@kernel.org>
+Cc: Chris Arges <carges@cloudflare.com>
+Cc: Mike Freemon <mfreemon@cloudflare.com>
+Cc: Toke Høiland-Jørgensen <toke@toke.dk>
+Cc: Jonas Köppeler <j.koeppeler@tu-berlin.de>
+Cc: Breno Leitao <leitao@debian.org>
+Cc: Simon Schippers <simon.schippers@tu-dortmund.de>
+Cc: kernel-team@cloudflare.com
+
+-- 
+2.43.0
+
