@@ -1,199 +1,190 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C2030DEA9
-	for <bpf@vger.kernel.org>; Tue,  5 May 2026 13:46:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777988787; cv=none; b=NRQNMWXBUuo03UKzDJqeRixTz1AvgBlog7+SxteAJTVDy27L8t6BGkoC3Tg4j2bIyLwQsdSO1aq+565Cz79Nlzk+G30CwZz8p6QhdZrOG5cqg7E9Aon6bt8J8IfZJqOYe2V83KDthA3mJwhPRF4KmCN62+CWe8W53SoFz0mumJo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777988787; c=relaxed/simple;
-	bh=/SB9w/lu4rpLZoP5zMPyBIrox/m4yq/Erix3efeJsZA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B6aHxN06fGFsLRjDIPuUnvUGpTABFAMMGdPe3I8zqXwxRhxZ9P20Wx/fj5aZQd85GpQ8GmTp0dPW9OA5zT8r0NAAihMDjwSZ+pGPCoGzxO0ph5Z8SXm9dQOV739QCwCt3lrfACrRCM2ms/TWJVRhlzXTk7WP1F13P3O3K6vnnSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=THhM5hHn; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFA343636A
+	for <bpf@vger.kernel.org>; Tue,  5 May 2026 13:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777988996; cv=pass; b=rX0cXDBBQf1JNiNE50+cpDOFnY7qVk0UYbIpYsU5zZPtjmDVYOHQMclj94D+Wmskx+VezS0H5/TBQ91+Mj+JRdMSWRDoJJ4Trfq1dmpfTORVOUFACWlUBJ1YnA5NNlL8/oIx56C18PJLua54LkU9y/VQWSDIbHsgkQYSfX5VhEk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777988996; c=relaxed/simple;
+	bh=dwtJGGtWfivJTDnEUkDart9O2ukOCksxaNnx6dZ9xy4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZmrY5weIYHQI2xOaJbJv6NYzQUV4RaQRWyV2WPy6Kl2mWlvAMapISCNRVO0vN4InMdY52Q6kjSwP7kKxZtdeeb/mZkqOD9TCpr3ohWYId9WkYzuFOYaGgFe719olKcDpReJH8JwfPwz164bVudbO+vC4dErpdSIGKrzwqq+HT3I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=frbFmbFg; arc=pass smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="THhM5hHn"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-43d77f6092eso3272984f8f.2
-        for <bpf@vger.kernel.org>; Tue, 05 May 2026 06:46:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="frbFmbFg"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3651fa24c6bso2128826a91.2
+        for <bpf@vger.kernel.org>; Tue, 05 May 2026 06:49:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777988994; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ZOe+Sn7z++jaT2AZuaF/S6hRNHfwgA3Q6u21n0rMYwnOYuFm8m+eXEuHna+Xi9T4Yp
+         KnM23X5B8SyubFxffEMcSLFm79NqAAHzSVQCEweTu4KF0vG8fCNNHk89TV8Tr8leOdUt
+         dirIPZHRRqgQdLjueXju55rB8SxkXuzWpVJeTpQBzf3J8q2s9GpYThaUbvxBOld9epvq
+         16zmEM0Y1xsLvzG4JXm4jp9s74lb9lRerz1eqYZJvFEUqFMseKl2SBD2GMTZ1nnyjlTD
+         x9oVDKN270q5CGYJW1k07IONBcte/3W/EE7GqMzFYYCCmU5lVdrMIBBQE4mxsoBdEIZm
+         jPwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Hqf6lIUgsNlkAq08zxsjQWbzrMpXMe/Oxc4pqEJz68g=;
+        fh=XOtnwTiS6oFEBbOexWCP80yuH9+9PIfkcXGnxACluR0=;
+        b=gj2le1t5WTsnokHmfGa49BGSkvOkeWqmQw7BDnzYMVyjebtJwHRxnkkTZWaLR5HRVp
+         hDwB29uPhuvfjUCBbkqCq/c5PAURDb2v6Z9vb5o7MJ6QluR9Ar65//IskJI8Cea5Gf3V
+         0g2C15JPW76WjOCyTNNeq43rCV8xMVnM7wiuiQVqmZUtY1oAzsmQ0PEWZy+lib9ZCK2/
+         TpTBDwJoSifx0C822oHv4JWRv05E5F7S5cUwS/64l61n1xTh/IJrkS5lBA3sVdrgQQmO
+         9YGjfCO6ZwaLa8ASMFrjhOBQtozP9Yj8GPPJDXvejtm2mjOGgD+HtAXvqYminGSEkeUN
+         yfwA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777988784; x=1778593584; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BldvR/KjLpUT5P5fABoq+Uvhcs7WX2y4diGy1AvlJkU=;
-        b=THhM5hHnsDjnKw2Z9uMfcbiD3ilRrmwMuBqW+ZqOOcUPoT56z0tGaesXR3apIyJS/9
-         esQkkVdfIECbumkJiASfhUmkKLEqpR+Y+byvzQgzJ44RTZmkeh2AYp2V+yfpqxtjgkL6
-         /dR8x9wxjvVxBV6AsAjawIkJiE6b6cT38p2FAExjhUAGoB6BB0du0Skzz6uyMumbjoSk
-         rx6VMquugihIxVeEwhKT3ynVhqLisIi3jgxB5e+V6XZ7vP5zkcg9QVR1zclIc+xkb9E7
-         FsYpQC7a5qqSoQ8H8u41yV1ZYD86avvJ/caAbEclMlaJS2x1l9R1XzY2dI+mmGmcFRPM
-         r4fw==
+        d=paul-moore.com; s=google; t=1777988994; x=1778593794; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Hqf6lIUgsNlkAq08zxsjQWbzrMpXMe/Oxc4pqEJz68g=;
+        b=frbFmbFgOy5VDj09J4f62miUa6qVAKlhZG3/8HfPOneejt5h6GUtQh+bJQcYyVXcJy
+         OmsPiOMuN59cYHOycQHeT/fex5uKz0C3c9lNgZRI5cWhWaf/YgfV3zrNKOTQvhctF7/b
+         SsxJo8VaIiPaynadx4HM4POuFQY7HM3sNWB3aP6pj6djFe1joxyMQF/ThxZnKM3T5tui
+         olWtUGCea0udn3tlMK8N80eYwbORI2WLMtMKL0G6v0P3OTM6azccnmnPrJCmunmrLZ93
+         RPuZFY0oa1or8jPs4empxBo4YHxMqqLLDwDL19QSzLbL4rVWxUp9aOEvIlTWfpe1qw18
+         Fg0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777988784; x=1778593584;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BldvR/KjLpUT5P5fABoq+Uvhcs7WX2y4diGy1AvlJkU=;
-        b=XXVO6n5kYRFLLt5H6AOCbL3XgwMWjyLiTu5QEraaeWQYPdydpSlKsUONaILBDTRTN/
-         C2T+wk5bqElK7W0Xq6YLdfWMKtuTTdQC1kQxpbKpVc/CNWBIwiuR+/rJxRWten47Xt+X
-         Y8EQHajmbiHvArrIIMuxMjMNqquTi2jvwIVoJ1WV/0p7bYY89JLDtZkK1IZ6NEFtpYQ9
-         izta4ob1RnMbTljQU8G3hPh5QdSnj9vPk89pXCD4DnDm1oF02HnVu5/N7aJ1ob1v3qM6
-         8QMcay/kdt9MD/CRLaVdaC25HGdi4p+DRIF1xAOv/NRW+8vPeiJBH0N8dec7X+dWVNKF
-         ybBg==
-X-Forwarded-Encrypted: i=1; AFNElJ9FgnJFwHWooZ3CpOL/0JB3QvVJBcOI2/ypDJW+ryGuGA/bi0QtBXGBhKRB2c+vaojw8Q0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2J9aDuYqFFwLy3P/wsG+5oQeNYsHczn5cQGLgQ/977hJdkrU0
-	nsZwQZcDOgQOpCG+7ftzlVhtmubO1XS7gEDTgF+a+e1RJ6uNoTsXDUN0UaZr6Qgf
-X-Gm-Gg: AeBDies5/a9qEyEA60N0QB22GU4wTSjAAWJIog8SEOeeP15BQpP6NUIbSOORsGydtW9
-	HwzxGmw46YJHZ1mLgRXQwV/JWW3A9LycqOC/tcHl2TaUfL5lmI3iozjUIMnS1f88fSEOQLfOkPB
-	bvc6hLokzNl6YkQJGDMf1vhGJ0KtkC2XkmtY/4tCSGa+74VrQUqlqur+U9m4nPt/TKTj6oIzSUC
-	qWUz44wj5wC67PWIPedV74WpcozNanpp4XyJc0+0x81uuVnaLuSIGJTFyiyIx31XrAzY1b1iO3y
-	/BVHF3qsym49w6/lJ9jtgtMv2Jrv0xqXR9LNLCrF3t8CF7+NNCdDKsKt0UzY/XG75Ok8yNE1mB8
-	uL5oVJBJe5lQI7DMSh7DkSxhOGCyXG6PwCyk1XzeZe7oZ1UtYXHEue3LfydM3hX1GC+MC6c/He7
-	16TaAREdgHTgETBsmYlaS+uTy1Hwbs3k5ihG0G8ZpbIui+RDnqlhRuWDl61a7RpIxNtqHbMkR2B
-	CxM6rABW7QIjEaS6fK9BQ==
-X-Received: by 2002:a05:6000:2484:b0:449:9aee:4573 with SMTP id ffacd0b85a97d-450043993camr6193613f8f.18.1777988784196;
-        Tue, 05 May 2026 06:46:24 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45054b02f76sm4482703f8f.23.2026.05.05.06.46.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 May 2026 06:46:23 -0700 (PDT)
-Message-ID: <ba47c5e7-b543-418d-bc25-c5d1c6f1e59d@gmail.com>
-Date: Tue, 5 May 2026 14:46:20 +0100
+        d=1e100.net; s=20251104; t=1777988994; x=1778593794;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Hqf6lIUgsNlkAq08zxsjQWbzrMpXMe/Oxc4pqEJz68g=;
+        b=NnU2F6ssJEiGGcxp9T8cLAOn0ddqlwPONqPbZb8phP+n8omG53rAKRPX7DHvnKjwKK
+         mEc1hEyfFreS7bJ2L7ia8qgunrp5+TptUNHReCFhycMv38/fXMjBb8FXrbJY4ZSpi86q
+         i3NCLg4vD1cl5c6+ELViALBYhUWS5YcWpvKupuTSI0TCfwWY7LCogaLco56Z//VgItjv
+         slolGuhbYpYb+RMGL0gAxwgGV9tikLRdJ1LMgMLw8YFyIFqIPPKJUyIYvt8RGVfQa7GA
+         Y5ewcQ7Jjrty6UoB/3l66xO+gDVNJPUPwJzWz/4FZHfQVYQNiRJtLEjM3aWFrm6bABwO
+         H7MA==
+X-Forwarded-Encrypted: i=1; AFNElJ9DTevvZzc4kxS+KGVhIlE+UeDus8XxXqVJkisOdcWP8OZp18oNs1EKyVCIOEv1EefMWaY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOvLLXGQYNXu6uVN1gVaOSuzyUmDQdYpSWqfUTZD7AHYKuVj38
+	m8WHD9g83h8MpAh/VOXBW7/Z/FWUOWWJJAzTNqUpFmTc5+sHi05Q0VRofP7MykIvsup9pQCkwiC
+	Lzg5GPlMrgEmQovn+j+PLc6WrdL5eJDBP7JgQFt/6
+X-Gm-Gg: AeBDievnRewUtb4WCxlgnG9pKJA1D1B5rkB82Zildvijb7eY9HHjPGYSTdx0Tp9jhyF
+	+HYA0aEtALzfH7DQIJiq930br1LIxEMsqjNG7E0nvDGeuVSWRliCmREIDhtahlWuT+9oIBY/gow
+	PatKffbZmM2xF8W2Pzypv74Os4LucZOP6u88sjqmEZFUiXJs0mWIQD+Gwzz0XdUQhR7r4SQ+EP+
+	n+fc/n8MwAU6WA57zAlBQ4ofqAotbSfNAuiU3jtThlAt85G/5K4P9ooLsCybjnu0AUvVS1oES3o
+	f19oO5qwAfP1rU8Ikw==
+X-Received: by 2002:a17:90b:3a84:b0:361:4521:d311 with SMTP id
+ 98e67ed59e1d1-3657747cdadmr3159694a91.18.1777988993821; Tue, 05 May 2026
+ 06:49:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [SECURITY] BPF task_work context confusion enables cross-process
- bpf_probe_write_user() via token delegation
-To: Keshav goyal <keshavgoyal1744.kg@gmail.com>, bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, ast@kernel.org,
- Daniel Borkmann <daniel@iogearbox.net>
-References: <CADb5NHh0-ybPPCXbXEEye2uN+0fu1g4zq0QCRvrgJmoLHn=y9g@mail.gmail.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <CADb5NHh0-ybPPCXbXEEye2uN+0fu1g4zq0QCRvrgJmoLHn=y9g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260503211835.16103-1-dwindsor@gmail.com> <20260503211835.16103-2-dwindsor@gmail.com>
+ <CAHC9VhSy5K5nQTtFUE4BScy1Ur61v7eZW067vTcUYDQeJb13Bw@mail.gmail.com>
+ <CAPhsuW6sy2cdC4B7Z48-5A-yVX6fmVWxS_fWVjQxiX95KeUguw@mail.gmail.com>
+ <CAHC9VhQLN5NA_ZMMNyUdMCZVdwC3VM4PUnzka8xDK5rpR2a3sw@mail.gmail.com>
+ <CAPhsuW5nDaLAV5UfAHeX6QPeF6bs-WDkFYOzYO7Q9_O6v=jEHA@mail.gmail.com>
+ <CAHC9VhRx7L1WXYgQvWmGN0a7ssSaDKx4JPhup2E3W161sdp74A@mail.gmail.com> <CAPhsuW5zRktottTujy_O1=8VkdJGDO71M3DVVM4ezffwT_dm+A@mail.gmail.com>
+In-Reply-To: <CAPhsuW5zRktottTujy_O1=8VkdJGDO71M3DVVM4ezffwT_dm+A@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 5 May 2026 09:49:42 -0400
+X-Gm-Features: AVHnY4Kdcn8NUgT3x3TCJLSbVA7TxZZZNO16IatME0SS0-imLL4d0tdSq1ceCGU
+Message-ID: <CAHC9VhTWpFbK30ueZw5zTgNfMoABLXcbny=_eWOV17+1ebFVKA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] bpf: add bpf_init_inode_xattr kfunc for atomic
+ inode labeling
+To: Song Liu <song@kernel.org>
+Cc: David Windsor <dwindsor@gmail.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Jan Kara <jack@suse.cz>, John Fastabend <john.fastabend@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Eric Snowberg <eric.snowberg@oracle.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
-Ask your LLM why this is not a security issue. 
-Mine did well providing the right answer.
+On Tue, May 5, 2026 at 5:00=E2=80=AFAM Song Liu <song@kernel.org> wrote:
+> On Tue, May 5, 2026 at 4:02=E2=80=AFAM Paul Moore <paul@paul-moore.com> w=
+rote:
+> > On Mon, May 4, 2026 at 7:09=E2=80=AFPM Song Liu <song@kernel.org> wrote=
+:
+> > > On Tue, May 5, 2026 at 12:42=E2=80=AFAM Paul Moore <paul@paul-moore.c=
+om> wrote:
+> > > [...]
+> > > > > > Perhaps I'm simply not seeing it, but is there a check to ensur=
+e that
+> > > > > > there is only one BPF LSM calling into security_inode_init_secu=
+rity()
+> > > > > > at any given time?  With the BPF LSM only reserving a single xa=
+ttr
+> > > > > > slot, multiple loaded BPF LSM programs providing
+> > > > > > security_inode_init_security() callbacks will be a problem.
+> > > > >
+> > > > > I don't think there is such a check. Also, a single BPF LSM funct=
+ion
+> > > > > may call the kfunc multiple times, which is also problematic.
+> > > > >
+> > > > > I think we will need to make the default bigger, and also introdu=
+ce
+> > > > > some realloc mechanism for the worst case scenario. This should
+> > > > > work, but the code might be a bit messy.
+> > > >
+> > > > Thanks for the clarification, that is what I was afraid of when
+> > > > looking at the code, but I was hoping I was just missing it.
+> > > >
+> > > > Increasing the default is an option, but I don't think we want to
+> > > > support a dynamic reallocation scheme for the xattr slots, that wil=
+l
+> > > > likely get extremely messy with synchronization between the LSM
+> > > > framework and BPF LSM hook registrations as well as special code to
+> > > > handle inodes with lifetimes that are disjoint from the BPF LSM
+> > > > programs ... I suppose there may be a way to do it, but it will sur=
+ely
+> > > > be ugly and come at a cost.
+> > >
+> > > BPF trampoline already handles all the synchronizations, such as
+> > > add hook, remove hook, etc. properly. So this is not that hard.
+> >
+> > How do you plan to handle the issue of disjoint lifetimes?
+> >
+> > > All we really need is to allocate a new array, copy pointers, and fre=
+e
+> > > the old array. And we only really need this in the worst case
+> > > scenarios.
+> >
+> > Oh, is that all? :D
+> >
+> > Keep in mind that the code must also handle arbitrary ordering of
+> > LSMs; in other words, you must handle a BPF LSM that isn't at the end
+> > of the LSM order.  While a BPF LSM at the end of the LSM list is the
+> > most common, and recommended ordering for the vast majority of users,
+> > we've been working to make the ordering as generalized as possible.
+>
+> All the BPF LSM hooks are called together, so it should be fine.
+> Maybe I missed some corner cases.
 
-It would be a good idea to do a little bit more due diligence 
-before reporting issues like this.
+I was thinking about the LSM framework as a whole, not just the
+potential for multiple BPF programs attached to the BPF LSM.
 
-On 5/3/26 3:28 PM, Keshav goyal wrote:
-> Hello Linux Kernel Security Team,
-> I would like to report a potential security issue in the BPF subsystem involving task_work scheduling and context confusion.
-> 
-> Summary
-> -------
-> A BPF tracing program can target an arbitrary PID using bpf_task_from_pid() and schedule a callback via bpf_task_work_schedule_signal(). The callback executes in the context of the target task, allowing bpf_probe_write_user() to write into that task’s userspace memory.
-> 
-> This effectively turns the helper from “write current task memory” into “write arbitrary target process memory”.
-> 
-> Impact
-> ------
-> This creates a cross-process userspace memory write primitive.
-> 
-> I have confirmed that:
-> - The target process can be root-owned
-> - No ptrace or same-UID checks are required
-> - The write occurs successfully in the victim process memory
-> 
-> Importantly, I was able to reproduce this not only as root, but also via a token-delegated BPF loader in a user namespace (using libbpf BPF token support).
-> 
-> This suggests a potential privilege-boundary bypass depending on deployment of delegated BPF capabilities.
-> 
-> Proof of Concept
-> ----------------
-> I am attaching:
-> - PoC source code
-> - build + run instructions
-> - screenshots demonstrating memory modification
-> - logs showing successful execution
-> 
-> Key observed output:
-> 
->   scheduled=... ran=... err=0
->   BUF=AAAAAAAAAAAAAAAA
->   BUF=BPFOKAAAAAAAAAAA
-> 
-> This confirms that a BPF program modified memory of another process.
-> 
-> Root Cause
-> ----------
-> The issue appears to arise from the following behavior:
-> 
-> - bpf_task_from_pid() resolves arbitrary tasks
-> - bpf_task_work_schedule_signal() queues attacker-controlled work
-> - task_work executes in the target task context (current == victim)
-> - bpf_probe_write_user() writes to current->mm without validating origin
-> 
-> This combination allows cross-process memory writes.
-> 
-> Environment
-> -----------
-> - Kernel: upstream built from kernel.org <http://kernel.org/> (latest mainline at time of testing)
-> - Architecture: x86_64
-> - Test setup: QEMU VM with custom kernel
-> - BPF features: BTF enabled, tracing programs allowed, lockdown disabled
-> 
-> Reproduction
-> ------------
-> I have included step-by-step reproduction instructions in the attached materials. The issue is reliably reproducible.
-> 
->  I was able to reproduce the same behavior using a token-delegated BPF loader running inside a user namespace (via LIBBPF_BPF_TOKEN_PATH), rather than directly as init-namespace root.
-> 
-> In this setup:
-> - The loader runs as a non-root user (UID 1000 mapped inside a user namespace)
-> - BPF access is granted via a token
-> - The target process is still a root-owned process in the init namespace
-> 
-> Even in this configuration, the BPF program successfully schedules task_work on the target and bpf_probe_write_user() modifies the victim’s userspace memory.
-> 
-> Example output:
-> 
->   scheduled=... ran=... err=0 
->   BUF=AAAAAAAAAAAAAAAA 
->   BUF=BPFOKAAAAAAAAAAA 
-> 
-> This suggests the behavior is not limited to fully privileged root contexts, but also applies in delegated BPF scenarios.
-> 
-> Request
-> -------
-> I would appreciate your guidance on:
-> - whether this is considered a valid security boundary violation
-> - recommended disclosure process
-> - whether additional hardening or checks are expected here
-> 
-> Please let me know if any additional information or testing is required.
-> 
-> Thank you for your time and for maintaining the kernel.
-> 
-> Best regards,  
-> Keshav Goyal
-> 
-> IMG1:
-> IMG 1.png
-> 
-> IMG2:
-> IMG 2.png
-> IMG3:
-> IMG 3.png
-> IMG4:
-> IMG 4.png
-> IMG5.1:
-> IMG 5.1.png
-> IMG5.2:
-> IMG 5.2.png
-> 
-> 
-> 
+> Either way, I agree with David that we don't need too many xattrs.
+> Since BPF LSM is reserved to the privileged users only, it is safe
+> to put a reasonable limit, say 4 or 8, and do not handle the realloc.
+> If the admin would like to brick a system with BPF LSM, there are
+> many other ways to do it.
 
+That is definitely the easier route.  However, please add code to
+ensure the number of attached BPF programs is limited to the number of
+requested slots.
+
+--=20
+paul-moore.com
