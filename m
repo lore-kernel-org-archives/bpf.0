@@ -1,155 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 578373148C2
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 21:24:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E843030DD1C
+	for <bpf@vger.kernel.org>; Wed,  6 May 2026 21:37:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778102655; cv=none; b=BUTV2Pyvfz+EfcO3rPMsYWcYrsoMV4hviE90b4LZD/UFm3vy9d+Q0V4wqCKVe7PIvjy5PBkuSGgiv0U50UZPTV7wu3qs5rgnEAZjxIE8PNV+5bKguApNNfrR3jLfx6inhgFZNW5pk4fXVYrf1t3Y+qdtuDtT2XQtv4N3aV7TgAU=
+	t=1778103458; cv=none; b=nXGC8qng73Bc0vspBWgxhlVGW9uRDHhDwqroITHLAlNPXCgGXDRX6NpDti3MfYJuzuuL28QBKlKPvRXTkryntDwNOXsLVIHb9bmOjBix4GdLkj9MIAXNttahau8lXZa9Iw4/SA2fj6RtgViN+dn/xXqGBTY+wfFXCEwATvRB1kQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778102655; c=relaxed/simple;
-	bh=2ZSmL+nmtfO2Q7wFInt/mN1fJAz6Ttl9qttx7gjN97A=;
+	s=arc-20240116; t=1778103458; c=relaxed/simple;
+	bh=ZYK/fBItO8PQPsZYOECgypzK4/lUMCC/GecmBuhm4j8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=JRfPzj0DE9tLAe+g0Co8oneHXhTkOA5XHGFewOvxQi+/6DoN7eW1HxVrDN9mCLH/BXWkdxTo2h9TQ2JbYIlwFGy9asIHiqSx1bp+Kh4AFFWkrx0QAlOiZP0vK2JiFyt4Pj7mqTZAGtgiKP90a6MxBVssl9+QJsUkLXwEXGpbB28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=omtMHDLs; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=Xsd2HAXGcldJbjYJySFuZyUV8HVGt0F58Zk5geioJlLunFJ98Y1B6/SCJAZ01g9+oZFY01Uoqzoo1+cD/Huq+bLSFaVp3LOEV4y/+WtY2Y4dyYIAS9ZwBk5hOPipbDzU5WRJzfbLxQngMmO27wcZMS+rgqrzUQBTfz/zbR+cgiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ICHyg28x; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="omtMHDLs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF3DCC2BCB0;
-	Wed,  6 May 2026 21:24:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ICHyg28x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71A33C2BCB0;
+	Wed,  6 May 2026 21:37:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778102654;
-	bh=2ZSmL+nmtfO2Q7wFInt/mN1fJAz6Ttl9qttx7gjN97A=;
+	s=k20201202; t=1778103457;
+	bh=ZYK/fBItO8PQPsZYOECgypzK4/lUMCC/GecmBuhm4j8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=omtMHDLsrR9o5ytO7ssp+GRlMbHxpr4QN76CsxCt87W8Na/ZHPOZ6TYe/VN3VZAgo
-	 mDPHqNRhGOZlIOyc/STKN1JjiqixmA6i8fA4DvHX7sAGC8KVw7zXl1V/RDTXZy93Gp
-	 RcwdAmYeNW7TXUQlGyHE6ax0Woh7HgLSl16C6RGcsfncSqz8NezDTdJpExkO60VVtb
-	 /fU3IvGPFrn3xTW5eijtU2Jf0aD1FTEoV3MfPDUNpTcZDShILBeyrkJDYU6LTHSWXw
-	 iKDtvFbbx7uHkAFmCVVG63EBw7bzsztuMoJ+QhjZb7EEKxUsf8ql3RWU7kbmEjY3ig
-	 IfRf1TB1aDRPA==
+	b=ICHyg28xWvbGfcoKw5d1C3Xq14GmSf1JqU24cN5525NqbA/GsCOSc404LuFzh01tO
+	 omkJ792UYc1gxwksOmfkRuxugPpFBXRDBwgPwlg8eWeUEOlAzwerVCx/mR7yK0APm1
+	 1Mb1fZpjDEsgT5ie5xTuzL7ZJSRxabvtaOhVhGrrsVwP4r0MMkqDUCrLAFQZjHmSFK
+	 6eWcDc1ItymqZxmjwdsSg4roECwudDDnIQKaY2xht107Ux6W4hYKyLYVowsllQa021
+	 S8WtPb1gkXxpAzUyPJ0hLuFtuSzM1xC+CqHzuVLxmvVto8F2dHUumPDJbE0iSKlntY
+	 veAJJ7Cu1Q0AQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 2/2] selftests/bpf: add tests to verify the
- enforcement of CONFIG_CGROUP_LSM_NUM
+Subject: Re: [PATCH v2 1/5] arch: select HAVE_ARCH_BITREVERSE conditionally
+ on BITREVERSE
 Reply-To: sashiko@lists.linux.dev
-To: "Paul Houssel" <paulhoussel2@gmail.com>
+To: "Yury Norov" <ynorov@nvidia.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260506150547.767315-3-paulhoussel2@gmail.com>
-References: <20260506150547.767315-3-paulhoussel2@gmail.com>
+In-Reply-To: <20260506175207.110893-2-ynorov@nvidia.com>
+References: <20260506175207.110893-2-ynorov@nvidia.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 06 May 2026 21:24:14 +0000
-Message-Id: <20260506212414.CF3DCC2BCB0@smtp.kernel.org>
+Date: Wed, 06 May 2026 21:37:36 +0000
+Message-Id: <20260506213737.71A33C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] The test leaks `struct bpf_link *` objects, leading to memory and =
-file descriptor leaks that permanently exhaust global LSM cgroup slots.
-- [Medium] The test assumes any attachment failure is strictly due to the `=
-CONFIG_CGROUP_LSM_NUM` limit, which masks genuine bugs.
-- [Medium] The test is flaky when run in parallel because it assumes exclus=
-ive access to the global `cgroup_lsm_atype` array.
-- [Medium] The test hardcodes `CONFIG_CGROUP_LSM_NUM=3D10`, making it britt=
-le on non-default kernel configurations.
-- [Low] The message provided to the `ASSERT_EQ` macro for the attached coun=
-t is misleading.
+- [Medium] The commit introduces a performance regression in fbdev by makin=
+g the hardware capability flag HAVE_ARCH_BITREVERSE dependent on the BITREV=
+ERSE API, based on a factually incorrect premise.
 --
 
-commit c964298fd80079f668d77b4f5c169d14d01bc9e0
-Author: Paul Houssel <paulhoussel2@gmail.com>
+commit 62f45d1f26fdd43913871c56d8d0139e89cc923a
+Author: Yury Norov <ynorov@nvidia.com>
 
-selftests/bpf: add tests to verify the enforcement of CONFIG_CGROUP_LSM_NUM
+arch: select HAVE_ARCH_BITREVERSE conditionally on BITREVERSE
 
-This commit adds a selftest to verify that the kernel enforces
-CONFIG_CGROUP_LSM_NUM as the maximum number of concurrently attachable
-per-cgroup LSM hook slots.
+This commit modifies architecture Kconfig files to only select
+HAVE_ARCH_BITREVERSE if BITREVERSE is enabled. The stated goal is to avoid
+generating unneeded code on architectures that have bit reversal instructio=
+ns
+but do not currently need the API.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_lsm_num.c b/to=
-ols/testing/selftests/bpf/prog_tests/cgroup_lsm_num.c
-> new file mode 100644
-> index 0000000000000..1c5825c6c3d07
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_lsm_num.c
+The commit message states that selecting the option when the API is not
+needed "may lead to generating the unneeded code." Is this description
+accurate?
 
-[ ... ]
+Looking at the implementation, HAVE_ARCH_BITREVERSE only enables inline
+assembly macros in linux/bitrev.h. The software fallback table in
+lib/bitrev.c is strictly gated by obj-$(CONFIG_BITREVERSE) +=3D bitrev.o in
+lib/Makefile, so no out-of-line code is generated when BITREVERSE=3Dn.
 
-> @@ -0,0 +1,60 @@
+> diff --git a/lib/Kconfig b/lib/Kconfig
+> index 00a9509636c18..d8e7e89ae3205 100644
+> --- a/lib/Kconfig
+> +++ b/lib/Kconfig
+> @@ -58,6 +58,7 @@ config BITREVERSE
+>  config HAVE_ARCH_BITREVERSE
+>  	bool
+>  	default n
+> +	depends on BITREVERSE
+>  	help
+>  	  This option enables the use of hardware bit-reversal instructions on
+>  	  architectures which support such operations.
 
-[ ... ]
+Does tying a hardware capability flag (HAVE_ARCH_BITREVERSE) to a software
+API (BITREVERSE) cause unintended performance regressions elsewhere?
 
-> +	bpf_object__for_each_program(prog, skel->obj) {
-> +		struct bpf_link *link;
-> +
-> +		link =3D bpf_program__attach_cgroup(prog, cgroup_fd);
-> +		if (!link) {
-> +			if (errno =3D=3D EOPNOTSUPP) {
-> +				test__skip();
-> +				goto out;
-> +			}
-> +			failed++;
+For example, drivers/video/fbdev/core/fb_draw.h opportunistically checks
+for the hardware capability:
 
-Should this check if errno is specifically E2BIG?
+#if defined(CONFIG_HAVE_ARCH_BITREVERSE)
 
-If the attachment fails for an unrelated reason, such as an invalid hook
-configuration (EINVAL) or memory exhaustion (ENOMEM), this will still
-increment the failure count and might falsely pass the test.
+The fbdev core intentionally avoids selecting BITREVERSE to prevent pulling
+in the 256-byte lookup table, but uses the fast, native hardware
+instructions if the architecture supports them.
 
-> +		} else {
-> +			attached++;
-
-Does this code leak the struct bpf_link objects?
-
-The link pointer returned by bpf_program__attach_cgroup() is dynamically
-allocated, but bpf_link__destroy() is never called to free it during or
-after the loop.
-
-Because these leaked file descriptors keep the BPF links active in the
-kernel, they will indefinitely occupy the slots in the global
-cgroup_lsm_atype array. Could this exhaust the available slots and cause
-subsequent tests in the suite that use BPF_LSM_CGROUP hooks to
-spuriously fail with -E2BIG?
-
-> +		}
-> +	}
-> +
-> +	// CONFIG_CGROUP_LSM_NUM set to 10
-> +	// -> 10 programs shall be attached
-> +	ASSERT_EQ(attached, 10, "at least one attached");
-
-Since CONFIG_CGROUP_LSM_NUM limits the number of distinct per-cgroup
-LSM hooks globally across the entire system, could this test fail when
-run in parallel?
-
-If the test suite is executed concurrently (e.g., test_progs -j) and another
-running test utilizes lsm_cgroup hooks, some slots will already be occupied.
-This would cause the limit to be exhausted prematurely and fail the asserti=
-on.
-
-Will this test fail on custom or distribution kernels where the limit is
-configured to a higher value?
-
-While the selftest Kconfig fragment sets the limit to 10, selftests are
-often executed against pre-built kernels. If the limit is greater than 12,
-all 12 BPF programs will successfully attach, causing the hardcoded
-assertion to fail unconditionally.
-
-Could the test dynamically read the limit via
-extern int CONFIG_CGROUP_LSM_NUM __kconfig instead?
-
-This isn't a bug, but the assertion message says "at least one attached"
-when it actually verifies that exactly 10 are attached.
-
-> +	// -> 2 programs shall be rejected
-> +	ASSERT_EQ(failed, 2, "limit was enforced");
-> +
-> +out:
-> +	close(cgroup_fd);
-> +	cgroup_lsm_num__destroy(skel);
-> +}
+With this patch applied, if a user builds a kernel where BITREVERSE=3Dn,
+fb_draw.h will believe the architecture lacks hardware support. Won't this
+force fbdev to fall back to the much slower manual bit-twiddling function
+fb_comp() in its tight pixel-drawing loops?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260506150547.7673=
-15-1-paulhoussel2@gmail.com?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260506175207.1108=
+93-1-ynorov@nvidia.com?part=3D1
