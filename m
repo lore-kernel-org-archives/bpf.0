@@ -1,64 +1,64 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4CE3B3898
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 21:14:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6596259C80
+	for <bpf@vger.kernel.org>; Wed,  6 May 2026 21:17:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778102044; cv=none; b=O2p2HIOnKTTFz3soWNzx/NcrAEPBk3lwRlcm/eH+2Bk6wfVxJ3TT3mFqMvp7rnOeVduSmVLMDE1xj6+Uknu9JEt3B4MX6ZMTdJREviuWoKM/5jQ++yXK74TRHnzC4UXzE3cpu2GehUvoNR5zn4ANrL6L1mwa9JXy7EfNI04UX90=
+	t=1778102266; cv=none; b=Z2H4lIEr/JHWHnE59sT/MgZ8iOOdheKxZb3u6oxJMiPRHmG3wOCyObndWT7NILR6fo6kJ4uCcPt4cJC0yl4oRcUFAkmg9mEPzibeLU3i4WzzuUCLhevKKkp6c4q0djTpaGGfqVKE4+6Qm3mI7IBOVbaYtI0QKGGYxiAbJ7fBBcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778102044; c=relaxed/simple;
-	bh=mrs33gwyXYYksIamyxpT/skyjGMUYhds2gPM1h88ZjI=;
+	s=arc-20240116; t=1778102266; c=relaxed/simple;
+	bh=qct9180ue/H0QODWWGitx8QQGo9oBwuKWknYkPEnMTk=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PuIGTHIAAXBRwh58thtVULn3OumGYKf7uJfMvIx1i/659oobXwhyZ1dkpHe+Z0v99Mn0x1DXYXIzTMVhghfQd3Idpuu/0WYoiJIUccENsL1CQ8cVd3Fd8VoG9geIIW+IXy1f5pDAWcz1A05nzGyMaXCTynD/v/HEveeRgksitqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M+oV3yvC; arc=none smtp.client-ip=209.85.128.52
+	 MIME-Version:Content-Type; b=mweqMt8DjoxzzS1rlP1kLLT5qXpGLJ6CclSFZEWx1Jr5dYnns8Sp2ruPvCGNl04xtwR6dxJCxgOJM9t9jrwluz3mzqsErhAZjmPxQeMedlMdn+X39mAdMBwTH2F4d9deKIfL3U+JgY9Ie/BKK+C1giVRfdbfZttIFKtalr+rM1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vu3xUGL/; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M+oV3yvC"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-48374014a77so1591585e9.3
-        for <bpf@vger.kernel.org>; Wed, 06 May 2026 14:14:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vu3xUGL/"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48909558b3aso1567035e9.0
+        for <bpf@vger.kernel.org>; Wed, 06 May 2026 14:17:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778102041; x=1778706841; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778102263; x=1778707063; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=X97wysjOr3lFu30H+gcrFHrWvOgZ1GUmxbYI7Sxyn5c=;
-        b=M+oV3yvC+DbwjHWMdh6KoH6BPTK9tcsiQZUmoYmA8AtkZWsfKWMFDUbzza+XCJ4Lqm
-         LZvl2IEbjpT8TgEb7uoI9PSoEslhtXKWoX/F/QyZ8OspxeWcoJCYcxfPjJ9ZKQPysLtr
-         QwiyZBrEiuM7OTEl0QlJ2e2LzDrA9w0cRn80oRkrE5iure/ZPesZfelHsvZwgLHpKMlV
-         YuWwoIYQJ9+lxdWanYvmmd8Ck9yeaE93hKqe6Fr1170++GysffX0qUmVuBBScKazYnX/
-         65Xq3fizV7LYVij1jPq8nIcvnLhuC2uBvDD9pf0YU7jATtTJlTnC2A0VwdDLKJ0EvLsk
-         P/vQ==
+        bh=qct9180ue/H0QODWWGitx8QQGo9oBwuKWknYkPEnMTk=;
+        b=Vu3xUGL/zj8PGSEu+ykyOhSSEBJ1ab+jICL8MpBMrSDWEIelgogW3PDAd5QjgRnEd5
+         AxBNgS+SZoO18GscLQ9Su7VcPYGwNT5V5VJ1wzlOqjipxDJRnDJh6HWDnhNQFG6KJtQy
+         3Z5k1oOMgvNxxhUZ2GzFgb/2QYNwGaCNWzIHtsCmRp5XuMw7/G5LdojIPUqaDsWStGHo
+         IX9larYeKr7CaBZ9yW+CHEdF0hOOhNBKMMVGB5tZ0LM7An7Pwt/0J9f15pypDn83n45Z
+         SkrOHxspB31T5rTcGoJSMDnaTNwfzZVHHU+zpCMbHjDmJXfcdRSom9z8qGwFMxJeXy7P
+         vIxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778102041; x=1778706841;
+        d=1e100.net; s=20251104; t=1778102263; x=1778707063;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=X97wysjOr3lFu30H+gcrFHrWvOgZ1GUmxbYI7Sxyn5c=;
-        b=kABb7nMyyBxoYL8a7GgVJLuPxKJZkloohrGXqSKI1/4nOqpXhqW9rxAhm1V1xpvYFE
-         Kk+QUyV41EXQjWe6N1JuGMsXcR0qo0QzKB1DzplkN6zDru0auvfpxCBRx6O7XT3ZYi5p
-         eAUMXiXlYt7jiMdnQNJpNle/08ReJQE2HOIBF0yyQ4e7upLad4EVCbY+YkjP6xQPX+Dp
-         8WRtrgl0Ydj+K0BlnL7Z54mhNXV3yuNE1qKVJVQKW5Em9q2Tg4i/EAsusOPRngsFJOSl
-         EH0ivgWtQ8WLrB3yvyQzx//YfORmt9O+Q0wSjMQb7EwNNbiq0yAB8bAT3M6TQdEkABLP
-         O9Qw==
-X-Forwarded-Encrypted: i=1; AFNElJ92WBqzqbYeMZIoGXI4L/ZWjnQY2Sw/w0TD/T/ls44vSZrYM/ymoeimqGoY6u4KevJA69k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPAKckeMz1P3fC+41okdACQGvU9lsfmtSNY8myqA9cTbYstrvZ
-	jO6L0TLv2qcbiLWm70HgdjNgkKgiAOlenAQwv2b4C1zZe0oYU/Cd8ZO6
-X-Gm-Gg: AeBDiet2QQMsnVpocxZbfFXHWfLlKKsdejOxn/f7PBZClGIrp9sGA2CaOsz5BCiTyLS
-	/Hxf8BoxLn5kBa86keFSmEWUqtK5PAc7ZHaSvHgKzCCeX9035Y7mkIuPK/t0nSn4SNk7LfLzUG0
-	NdU32igZQ2+pvMD61fjypizFXuKryHJtHIP9TXe0yuwmaQVgoDg4PwtVwEy8v/lS93KRDYbh8AJ
-	7CSGPwcaFaUqqPKtNokCJvN42JA3Wuus33RxpypvgUgqaVG5dW2upZd3OOBTrrMX/vPOQn69EN4
-	Qxd7N4m6ZKoZcRI6BdRArypakeOgWbX1qs5P8XPWEcLESzMjQJVEtIFhbcTiNZ/KtpE17JjNiiT
-	ElWoqmdG0i8rTE3FiWwOjpL0yJQn+QqXet69wIGYBCB0MnvACrD6lSPCGmmn3JFW7MP/d65b+VG
-	vAIP9dpdhYZQwjA1xKjfvdHvBctAo8+IvggqI0+1Xk/2pf6yhx9RzZFmjxEImeWyvG2TTlvEY=
-X-Received: by 2002:a05:600c:8b8b:b0:48a:97b6:7420 with SMTP id 5b1f17b1804b1-48e51f4143fmr85845735e9.24.1778102041063;
-        Wed, 06 May 2026 14:14:01 -0700 (PDT)
+        bh=qct9180ue/H0QODWWGitx8QQGo9oBwuKWknYkPEnMTk=;
+        b=UWzgbJjyYOSQwwDd+jEovAohcWo+/LRxXwlMDJ05cTi9vCQyf3iFBXsq0r45syWwV5
+         6kHFxRSayl1aSt7PlVs0ya7AcI4p4XhsJqsCPAekCFmxLE7++wOpSI83me45Jt7fLNzA
+         KWj4Yse5X/+4TF2cqxhEcUtm/OOD1oR+ybx9RB7sS+MgqqpEoDa4G+pcL7XugYALIwAB
+         xiVtW/TpfxmnC+SntNwuzuZFzdg1cUGKpUcxMI/y92pHO7LQBz3twpE7cMMZu6sFJcG4
+         6GyDo8OMDojjFRnRD2ae7tO1mULhAbC0KXqZl9kEkRNdzEXZNXSvVgW1oH7elgOZAzLO
+         Tb6A==
+X-Forwarded-Encrypted: i=1; AFNElJ/9MEOOvnEjx5j3sLKqKvvMLbb061zvIHgMItA/utDZUY8QjKY2eqO1ywErjarGAyuFhrs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUz070anEkQOFRq9w287AHFhdJDykixbSl8u0wLRNEk566/Sld
+	KGwyrR0aGIK1B8i0SgHhb9bgAfW2nRum4r/4GsY/ILsjwC9cpeIx572r
+X-Gm-Gg: AeBDiesqmhLNK3gQQ3RmxIgWRKuETfpupudniflqiHuu1zNNrnQ6HxHM5opWNqQd8xK
+	gTlCNAMAfrMH0o++x7P7akoheu3yh8UQYa3lhKHxQTd5qDpf2sMJ2R8nXfH9ae+HFi/VY183dzo
+	zA4zzbnv0CLULiOfDUBNdwDaQZ8jSqb2St7w9ef6bCuFW1/XGbhXOw8JfU9PEqdoylCFy1e/UiA
+	ailtt/JgvS1b2DfFVBJ6ddDI9bLJaT6gzK7tbeOSi9VYfJJzIW1R1hfOtUXqGj2VMc2SW9yfC6h
+	qkZ6X7WFd7Iy7UxGps0G5p6uu3vyY5zQaHd525OWRWmZcvXdlAyQpEADKOFHF/qxuB6v3/C/UnH
+	1L9N+w99ychBpLBrvmS5e4cZWGxMLZMIZ0IjNQq1jucHGZ/l3uKHGxDlcwiYZDbtHq4ZckJAf4B
+	uECh5AXXQPwCPindD98NXCrya0jF0pIDLEwwnxRyNlrUqKMcP1eXAUrGFXB/rCDwAbFrYBWlk=
+X-Received: by 2002:a05:600c:696:b0:489:1c1f:35df with SMTP id 5b1f17b1804b1-48e51e215a4mr45435345e9.10.1778102263311;
+        Wed, 06 May 2026 14:17:43 -0700 (PDT)
 Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e53826022sm78527045e9.0.2026.05.06.14.14.00
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e530c3a18sm24141125e9.11.2026.05.06.14.17.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2026 14:14:00 -0700 (PDT)
-Date: Wed, 6 May 2026 22:13:58 +0100
+        Wed, 06 May 2026 14:17:43 -0700 (PDT)
+Date: Wed, 6 May 2026 22:17:41 +0100
 From: David Laight <david.laight.linux@gmail.com>
 To: Jens Remus <jremus@linux.ibm.com>
 Cc: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf
@@ -83,11 +83,12 @@ Cc: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf
  Kees Cook <kees@kernel.org>, Sam James <sam@gentoo.org>
 Subject: Re: [PATCH v14 04/19] x86/uaccess: Add unsafe_copy_from_user()
  implementation
-Message-ID: <20260506221358.55ba5187@pumpkin>
-In-Reply-To: <9f85f092-c376-4350-9a12-479d7b70399a@linux.ibm.com>
+Message-ID: <20260506221741.44693d87@pumpkin>
+In-Reply-To: <20260506221358.55ba5187@pumpkin>
 References: <20260505121718.3572346-1-jremus@linux.ibm.com>
 	<20260505121718.3572346-5-jremus@linux.ibm.com>
 	<9f85f092-c376-4350-9a12-479d7b70399a@linux.ibm.com>
+	<20260506221358.55ba5187@pumpkin>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -98,68 +99,10 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed, 6 May 2026 16:09:16 +0200
-Jens Remus <jremus@linux.ibm.com> wrote:
+On Wed, 6 May 2026 22:13:58 +0100
+David Laight <david.laight.linux@gmail.com> wrote:
 
-> On 5/5/2026 2:17 PM, Jens Remus wrote:
-> > From: Josh Poimboeuf <jpoimboe@kernel.org>
-> > 
-> > Add an x86 implementation of unsafe_copy_from_user() similar to the
-> > existing unsafe_copy_to_user().  
-> 
-> > diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h  
-> 
-> > -#define unsafe_copy_to_user(_dst,_src,_len,label)			\
-> > -do {									\
-> > -	char __user *__ucu_dst = (_dst);				\
-> > -	const char *__ucu_src = (_src);					\
-> > -	size_t __ucu_len = (_len);					\
-> > -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
-> > -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
-> > -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
-> > -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
-> > +#define unsafe_copy_to_user(_dst, _src, _len, label)				\
-> > +do {										\
-> > +	void __user *__dst = (_dst);						\
-> > +	const void *__src = (_src);						\
-> > +	size_t __len = (_len);							\
-> > +	unsafe_copy_to_user_loop(__dst, __src, __len, u64, label);		\
-> > +	unsafe_copy_to_user_loop(__dst, __src, __len, u32, label);		\
-> > +	unsafe_copy_to_user_loop(__dst, __src, __len, u16, label);		\
-> > +	unsafe_copy_to_user_loop(__dst, __src, __len, u8,  label);		\
-> > +} while (0)
-> > +
-> > +#define unsafe_copy_from_user_loop(dst, src, len, type, label)			\
-> > +	while (len >= sizeof(type)) {						\
-> > +		unsafe_get_user(*(type *)(dst), (type __user *)(src), label);	\
-> > +		dst += sizeof(type);						\
-> > +		src += sizeof(type);						\
-> > +		len -= sizeof(type);						\
-> > +	}
-> > +
-> > +#define unsafe_copy_from_user(_dst, _src, _len, label)				\
-> > +do {										\
-> > +	void *__dst = (_dst);							\
-> > +	void __user *__src = (_src);						\  
-> 
-> 	const void __user *__src = (_src);					\
-> 
-> This was suggested by Sashiko AI review.  Any objections?
+...
+> Try compiling it :-)
 
-Try compiling it :-)
-
--- David
-
-> 
-> > +	size_t __len = (_len);							\
-> > +	unsafe_copy_from_user_loop(__dst, __src, __len, u64, label);		\
-> > +	unsafe_copy_from_user_loop(__dst, __src, __len, u32, label);		\
-> > +	unsafe_copy_from_user_loop(__dst, __src, __len, u16, label);		\
-> > +	unsafe_copy_from_user_loop(__dst, __src, __len, u8,  label);		\
-> >  } while (0)
-> >  
-> >  #ifdef CONFIG_CC_HAS_ASM_GOTO_OUTPUT  
-> 
-> Thanks and regards,
-> Jens
-
+Ignore me...
