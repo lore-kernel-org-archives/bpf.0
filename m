@@ -1,106 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E843030DD1C
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 21:37:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB903101C0;
+	Wed,  6 May 2026 21:44:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778103458; cv=none; b=nXGC8qng73Bc0vspBWgxhlVGW9uRDHhDwqroITHLAlNPXCgGXDRX6NpDti3MfYJuzuuL28QBKlKPvRXTkryntDwNOXsLVIHb9bmOjBix4GdLkj9MIAXNttahau8lXZa9Iw4/SA2fj6RtgViN+dn/xXqGBTY+wfFXCEwATvRB1kQ=
+	t=1778103880; cv=none; b=FFPezFVil7m81416qf9E/sM9FWcf7wZy1LC6oaLporoqt8knxKZWlzll/t7D17PowPA7qjTR88x2sDS8Vz/AqWxYA+Y6WjVyt8PdZ84BVOXqTN8X/EP7kLOyf7kK6LciCjvaeCgUz9k6yEg7q5PmgM0K8II2BXxGlDYeW6CzZMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778103458; c=relaxed/simple;
-	bh=ZYK/fBItO8PQPsZYOECgypzK4/lUMCC/GecmBuhm4j8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Xsd2HAXGcldJbjYJySFuZyUV8HVGt0F58Zk5geioJlLunFJ98Y1B6/SCJAZ01g9+oZFY01Uoqzoo1+cD/Huq+bLSFaVp3LOEV4y/+WtY2Y4dyYIAS9ZwBk5hOPipbDzU5WRJzfbLxQngMmO27wcZMS+rgqrzUQBTfz/zbR+cgiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ICHyg28x; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778103880; c=relaxed/simple;
+	bh=0AzRbZDfTEETX0mURLiMJOAo/Cw3XAkHZPAXujK/W+c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vvo8eUTjUXd4bO6Asumjpkk5pcBh/eejq5Gb6WZk0diQ6oUJcqOF9YkS+WTspTIK9iPIQ2F4odE8DY2b44hvZliEk6xgYktYNpBOYyLZdUyA4Lcl1R0CVLqKHgtaDVxmiC1dajMnN+OEkLxIFlYyMECcXCsY2Jb4ldt7c9AQYCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=4Lbcp1pa; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ICHyg28x"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71A33C2BCB0;
-	Wed,  6 May 2026 21:37:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778103457;
-	bh=ZYK/fBItO8PQPsZYOECgypzK4/lUMCC/GecmBuhm4j8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=ICHyg28xWvbGfcoKw5d1C3Xq14GmSf1JqU24cN5525NqbA/GsCOSc404LuFzh01tO
-	 omkJ792UYc1gxwksOmfkRuxugPpFBXRDBwgPwlg8eWeUEOlAzwerVCx/mR7yK0APm1
-	 1Mb1fZpjDEsgT5ie5xTuzL7ZJSRxabvtaOhVhGrrsVwP4r0MMkqDUCrLAFQZjHmSFK
-	 6eWcDc1ItymqZxmjwdsSg4roECwudDDnIQKaY2xht107Ux6W4hYKyLYVowsllQa021
-	 S8WtPb1gkXxpAzUyPJ0hLuFtuSzM1xC+CqHzuVLxmvVto8F2dHUumPDJbE0iSKlntY
-	 veAJJ7Cu1Q0AQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/5] arch: select HAVE_ARCH_BITREVERSE conditionally
- on BITREVERSE
-Reply-To: sashiko@lists.linux.dev
-To: "Yury Norov" <ynorov@nvidia.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260506175207.110893-2-ynorov@nvidia.com>
-References: <20260506175207.110893-2-ynorov@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 06 May 2026 21:37:36 +0000
-Message-Id: <20260506213737.71A33C2BCB0@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="4Lbcp1pa"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=/ZNWf4ch/DDdXxetEbDLgq9TJj4asvdiGEKsrUNbO5U=; b=4Lbcp1pa3/N6zwvEs16t+auhDu
+	jOV9EVBxcRy2SdMdQ3LfFdF6q1rWwe9Pec1f1JL0kjstJ3VBBiNU55jHCq3FxW+66HwlthS7muuPH
+	GovLk1v9MCIaOg/ndV8+6dEW4lDcmpGrYKGbPW/IMn9HCou4cI8bcsnx7r14QpXKK7Xo=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1wKk27-001hvI-1n; Wed, 06 May 2026 23:43:55 +0200
+Date: Wed, 6 May 2026 23:43:55 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Alex Elder <elder@riscstar.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com,
+	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
+	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
+	arnd@arndb.de, gregkh@linuxfoundation.org, daniel@riscstar.com,
+	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
+	alexandre.torgue@foss.st.com, ast@kernel.org,
+	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
+	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
+	julianbraha@gmail.com, livelycarpet87@gmail.com,
+	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
+	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+	rohan.g.thomas@altera.com, sdf@fomichev.me,
+	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
+	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 09/12] gpio: tc956x: add TC956x/QPS615 support
+Message-ID: <ec5765aa-b830-468b-8965-a95fbe020065@lunn.ch>
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-10-elder@riscstar.com>
+ <736fb3b7-c88a-4ec4-96ad-d1b79cc48d30@lunn.ch>
+ <30cec7dd-ac3c-47ab-896a-c29992bd5ba5@riscstar.com>
+ <3666e3e6-e6f3-4cbf-b9fe-caa394fbab7c@lunn.ch>
+ <0751a051-9894-45be-92d6-0d46f2c39293@riscstar.com>
+ <7d7b6b89-3ef4-4891-a794-c8b11f39db34@lunn.ch>
+ <79684efa-4ba9-4144-a99b-dab935007a2f@riscstar.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <79684efa-4ba9-4144-a99b-dab935007a2f@riscstar.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The commit introduces a performance regression in fbdev by makin=
-g the hardware capability flag HAVE_ARCH_BITREVERSE dependent on the BITREV=
-ERSE API, based on a factually incorrect premise.
---
+> To be clear, the reason you're asking is that you're suggesting
+> we might want to model the GPIO controller differently, correct?
 
-commit 62f45d1f26fdd43913871c56d8d0139e89cc923a
-Author: Yury Norov <ynorov@nvidia.com>
+Correct.
 
-arch: select HAVE_ARCH_BITREVERSE conditionally on BITREVERSE
+> I.e., model it as *not* associated with the embedded PCIe
+> functions.  Then we need to think about what its parent device
+> would be (the power control device, which I think somehow
+> duplicates the switch device?).
 
-This commit modifies architecture Kconfig files to only select
-HAVE_ARCH_BITREVERSE if BITREVERSE is enabled. The stated goal is to avoid
-generating unneeded code on architectures that have bit reversal instructio=
-ns
-but do not currently need the API.
+Logically, the GPIO controller cannot be part of a downstream
+function, if you need to use the GPIO controller to turn the
+downstream function on.
 
-The commit message states that selecting the option when the API is not
-needed "may lead to generating the unneeded code." Is this description
-accurate?
+Logically, the GPIO controller needs to be above the switch downstream
+end points. Where above, i don't know. Which is why i was asking about
+where it appears in the address spaces.
 
-Looking at the implementation, HAVE_ARCH_BITREVERSE only enables inline
-assembly macros in linux/bitrev.h. The software fallback table in
-lib/bitrev.c is strictly gated by obj-$(CONFIG_BITREVERSE) +=3D bitrev.o in
-lib/Makefile, so no out-of-line code is generated when BITREVERSE=3Dn.
+But i also don't know too much about PCI, i'm used to SoCs with simple
+linear MMIO.
 
-> diff --git a/lib/Kconfig b/lib/Kconfig
-> index 00a9509636c18..d8e7e89ae3205 100644
-> --- a/lib/Kconfig
-> +++ b/lib/Kconfig
-> @@ -58,6 +58,7 @@ config BITREVERSE
->  config HAVE_ARCH_BITREVERSE
->  	bool
->  	default n
-> +	depends on BITREVERSE
->  	help
->  	  This option enables the use of hardware bit-reversal instructions on
->  	  architectures which support such operations.
+From the little i know, it is more than what address space does the
+GPIO appear in. Its also, what enumerable entity does it appear in
+within the PCI bus. Because its the enumeration which is going to
+trigger a driver load, which can then drive the GPIO controller.
 
-Does tying a hardware capability flag (HAVE_ARCH_BITREVERSE) to a software
-API (BITREVERSE) cause unintended performance regressions elsewhere?
+Or, something more radical, you make the PCIe power controller an MFD,
+instantiating both the power controller and a GPIO controller over the
+I2C bus. GPIO access will not be as fast, but is there anything here
+which needs to be fast?
 
-For example, drivers/video/fbdev/core/fb_draw.h opportunistically checks
-for the hardware capability:
-
-#if defined(CONFIG_HAVE_ARCH_BITREVERSE)
-
-The fbdev core intentionally avoids selecting BITREVERSE to prevent pulling
-in the 256-byte lookup table, but uses the fast, native hardware
-instructions if the architecture supports them.
-
-With this patch applied, if a user builds a kernel where BITREVERSE=3Dn,
-fb_draw.h will believe the architecture lacks hardware support. Won't this
-force fbdev to fall back to the much slower manual bit-twiddling function
-fb_comp() in its tight pixel-drawing loops?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260506175207.1108=
-93-1-ynorov@nvidia.com?part=3D1
+      Andrew
