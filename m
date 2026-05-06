@@ -1,108 +1,155 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6596259C80
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 21:17:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 578373148C2
+	for <bpf@vger.kernel.org>; Wed,  6 May 2026 21:24:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778102266; cv=none; b=Z2H4lIEr/JHWHnE59sT/MgZ8iOOdheKxZb3u6oxJMiPRHmG3wOCyObndWT7NILR6fo6kJ4uCcPt4cJC0yl4oRcUFAkmg9mEPzibeLU3i4WzzuUCLhevKKkp6c4q0djTpaGGfqVKE4+6Qm3mI7IBOVbaYtI0QKGGYxiAbJ7fBBcI=
+	t=1778102655; cv=none; b=BUTV2Pyvfz+EfcO3rPMsYWcYrsoMV4hviE90b4LZD/UFm3vy9d+Q0V4wqCKVe7PIvjy5PBkuSGgiv0U50UZPTV7wu3qs5rgnEAZjxIE8PNV+5bKguApNNfrR3jLfx6inhgFZNW5pk4fXVYrf1t3Y+qdtuDtT2XQtv4N3aV7TgAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778102266; c=relaxed/simple;
-	bh=qct9180ue/H0QODWWGitx8QQGo9oBwuKWknYkPEnMTk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mweqMt8DjoxzzS1rlP1kLLT5qXpGLJ6CclSFZEWx1Jr5dYnns8Sp2ruPvCGNl04xtwR6dxJCxgOJM9t9jrwluz3mzqsErhAZjmPxQeMedlMdn+X39mAdMBwTH2F4d9deKIfL3U+JgY9Ie/BKK+C1giVRfdbfZttIFKtalr+rM1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vu3xUGL/; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778102655; c=relaxed/simple;
+	bh=2ZSmL+nmtfO2Q7wFInt/mN1fJAz6Ttl9qttx7gjN97A=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=JRfPzj0DE9tLAe+g0Co8oneHXhTkOA5XHGFewOvxQi+/6DoN7eW1HxVrDN9mCLH/BXWkdxTo2h9TQ2JbYIlwFGy9asIHiqSx1bp+Kh4AFFWkrx0QAlOiZP0vK2JiFyt4Pj7mqTZAGtgiKP90a6MxBVssl9+QJsUkLXwEXGpbB28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=omtMHDLs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vu3xUGL/"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48909558b3aso1567035e9.0
-        for <bpf@vger.kernel.org>; Wed, 06 May 2026 14:17:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778102263; x=1778707063; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qct9180ue/H0QODWWGitx8QQGo9oBwuKWknYkPEnMTk=;
-        b=Vu3xUGL/zj8PGSEu+ykyOhSSEBJ1ab+jICL8MpBMrSDWEIelgogW3PDAd5QjgRnEd5
-         AxBNgS+SZoO18GscLQ9Su7VcPYGwNT5V5VJ1wzlOqjipxDJRnDJh6HWDnhNQFG6KJtQy
-         3Z5k1oOMgvNxxhUZ2GzFgb/2QYNwGaCNWzIHtsCmRp5XuMw7/G5LdojIPUqaDsWStGHo
-         IX9larYeKr7CaBZ9yW+CHEdF0hOOhNBKMMVGB5tZ0LM7An7Pwt/0J9f15pypDn83n45Z
-         SkrOHxspB31T5rTcGoJSMDnaTNwfzZVHHU+zpCMbHjDmJXfcdRSom9z8qGwFMxJeXy7P
-         vIxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778102263; x=1778707063;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=qct9180ue/H0QODWWGitx8QQGo9oBwuKWknYkPEnMTk=;
-        b=UWzgbJjyYOSQwwDd+jEovAohcWo+/LRxXwlMDJ05cTi9vCQyf3iFBXsq0r45syWwV5
-         6kHFxRSayl1aSt7PlVs0ya7AcI4p4XhsJqsCPAekCFmxLE7++wOpSI83me45Jt7fLNzA
-         KWj4Yse5X/+4TF2cqxhEcUtm/OOD1oR+ybx9RB7sS+MgqqpEoDa4G+pcL7XugYALIwAB
-         xiVtW/TpfxmnC+SntNwuzuZFzdg1cUGKpUcxMI/y92pHO7LQBz3twpE7cMMZu6sFJcG4
-         6GyDo8OMDojjFRnRD2ae7tO1mULhAbC0KXqZl9kEkRNdzEXZNXSvVgW1oH7elgOZAzLO
-         Tb6A==
-X-Forwarded-Encrypted: i=1; AFNElJ/9MEOOvnEjx5j3sLKqKvvMLbb061zvIHgMItA/utDZUY8QjKY2eqO1ywErjarGAyuFhrs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUz070anEkQOFRq9w287AHFhdJDykixbSl8u0wLRNEk566/Sld
-	KGwyrR0aGIK1B8i0SgHhb9bgAfW2nRum4r/4GsY/ILsjwC9cpeIx572r
-X-Gm-Gg: AeBDiesqmhLNK3gQQ3RmxIgWRKuETfpupudniflqiHuu1zNNrnQ6HxHM5opWNqQd8xK
-	gTlCNAMAfrMH0o++x7P7akoheu3yh8UQYa3lhKHxQTd5qDpf2sMJ2R8nXfH9ae+HFi/VY183dzo
-	zA4zzbnv0CLULiOfDUBNdwDaQZ8jSqb2St7w9ef6bCuFW1/XGbhXOw8JfU9PEqdoylCFy1e/UiA
-	ailtt/JgvS1b2DfFVBJ6ddDI9bLJaT6gzK7tbeOSi9VYfJJzIW1R1hfOtUXqGj2VMc2SW9yfC6h
-	qkZ6X7WFd7Iy7UxGps0G5p6uu3vyY5zQaHd525OWRWmZcvXdlAyQpEADKOFHF/qxuB6v3/C/UnH
-	1L9N+w99ychBpLBrvmS5e4cZWGxMLZMIZ0IjNQq1jucHGZ/l3uKHGxDlcwiYZDbtHq4ZckJAf4B
-	uECh5AXXQPwCPindD98NXCrya0jF0pIDLEwwnxRyNlrUqKMcP1eXAUrGFXB/rCDwAbFrYBWlk=
-X-Received: by 2002:a05:600c:696:b0:489:1c1f:35df with SMTP id 5b1f17b1804b1-48e51e215a4mr45435345e9.10.1778102263311;
-        Wed, 06 May 2026 14:17:43 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e530c3a18sm24141125e9.11.2026.05.06.14.17.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2026 14:17:43 -0700 (PDT)
-Date: Wed, 6 May 2026 22:17:41 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Jens Remus <jremus@linux.ibm.com>
-Cc: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf
- <jpoimboe@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter
- Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, x86@kernel.org, bpf@vger.kernel.org,
- linux-mm@kvack.org, Namhyung Kim <namhyung@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>, "Jose E. Marchesi" <jemarch@gnu.org>, Beau Belgrave
- <beaub@linux.microsoft.com>, Florian Weimer <fweimer@redhat.com>, "Carlos
- O'Donell" <codonell@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>,
- Jiri Olsa <jolsa@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand
- <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett"
- <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport
- <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
- <mhocko@suse.com>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik
- <gor@linux.ibm.com>, Ilya Leoshkevich <iii@linux.ibm.com>, "Steven Rostedt
- (Google)" <rostedt@goodmis.org>, Indu Bhagat <ibhagatgnu@gmail.com>, Peter
- Zijlstra <peterz@infradead.org>, Dylan Hatch <dylanbhatch@google.com>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav
- Petkov <bp@alien8.de>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Kees Cook <kees@kernel.org>, Sam James <sam@gentoo.org>
-Subject: Re: [PATCH v14 04/19] x86/uaccess: Add unsafe_copy_from_user()
- implementation
-Message-ID: <20260506221741.44693d87@pumpkin>
-In-Reply-To: <20260506221358.55ba5187@pumpkin>
-References: <20260505121718.3572346-1-jremus@linux.ibm.com>
-	<20260505121718.3572346-5-jremus@linux.ibm.com>
-	<9f85f092-c376-4350-9a12-479d7b70399a@linux.ibm.com>
-	<20260506221358.55ba5187@pumpkin>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="omtMHDLs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF3DCC2BCB0;
+	Wed,  6 May 2026 21:24:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778102654;
+	bh=2ZSmL+nmtfO2Q7wFInt/mN1fJAz6Ttl9qttx7gjN97A=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=omtMHDLsrR9o5ytO7ssp+GRlMbHxpr4QN76CsxCt87W8Na/ZHPOZ6TYe/VN3VZAgo
+	 mDPHqNRhGOZlIOyc/STKN1JjiqixmA6i8fA4DvHX7sAGC8KVw7zXl1V/RDTXZy93Gp
+	 RcwdAmYeNW7TXUQlGyHE6ax0Woh7HgLSl16C6RGcsfncSqz8NezDTdJpExkO60VVtb
+	 /fU3IvGPFrn3xTW5eijtU2Jf0aD1FTEoV3MfPDUNpTcZDShILBeyrkJDYU6LTHSWXw
+	 iKDtvFbbx7uHkAFmCVVG63EBw7bzsztuMoJ+QhjZb7EEKxUsf8ql3RWU7kbmEjY3ig
+	 IfRf1TB1aDRPA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3 2/2] selftests/bpf: add tests to verify the
+ enforcement of CONFIG_CGROUP_LSM_NUM
+Reply-To: sashiko@lists.linux.dev
+To: "Paul Houssel" <paulhoussel2@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260506150547.767315-3-paulhoussel2@gmail.com>
+References: <20260506150547.767315-3-paulhoussel2@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 06 May 2026 21:24:14 +0000
+Message-Id: <20260506212414.CF3DCC2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Wed, 6 May 2026 22:13:58 +0100
-David Laight <david.laight.linux@gmail.com> wrote:
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+s) to consider:
+- [High] The test leaks `struct bpf_link *` objects, leading to memory and =
+file descriptor leaks that permanently exhaust global LSM cgroup slots.
+- [Medium] The test assumes any attachment failure is strictly due to the `=
+CONFIG_CGROUP_LSM_NUM` limit, which masks genuine bugs.
+- [Medium] The test is flaky when run in parallel because it assumes exclus=
+ive access to the global `cgroup_lsm_atype` array.
+- [Medium] The test hardcodes `CONFIG_CGROUP_LSM_NUM=3D10`, making it britt=
+le on non-default kernel configurations.
+- [Low] The message provided to the `ASSERT_EQ` macro for the attached coun=
+t is misleading.
+--
 
-...
-> Try compiling it :-)
+commit c964298fd80079f668d77b4f5c169d14d01bc9e0
+Author: Paul Houssel <paulhoussel2@gmail.com>
 
-Ignore me...
+selftests/bpf: add tests to verify the enforcement of CONFIG_CGROUP_LSM_NUM
+
+This commit adds a selftest to verify that the kernel enforces
+CONFIG_CGROUP_LSM_NUM as the maximum number of concurrently attachable
+per-cgroup LSM hook slots.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_lsm_num.c b/to=
+ols/testing/selftests/bpf/prog_tests/cgroup_lsm_num.c
+> new file mode 100644
+> index 0000000000000..1c5825c6c3d07
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_lsm_num.c
+
+[ ... ]
+
+> @@ -0,0 +1,60 @@
+
+[ ... ]
+
+> +	bpf_object__for_each_program(prog, skel->obj) {
+> +		struct bpf_link *link;
+> +
+> +		link =3D bpf_program__attach_cgroup(prog, cgroup_fd);
+> +		if (!link) {
+> +			if (errno =3D=3D EOPNOTSUPP) {
+> +				test__skip();
+> +				goto out;
+> +			}
+> +			failed++;
+
+Should this check if errno is specifically E2BIG?
+
+If the attachment fails for an unrelated reason, such as an invalid hook
+configuration (EINVAL) or memory exhaustion (ENOMEM), this will still
+increment the failure count and might falsely pass the test.
+
+> +		} else {
+> +			attached++;
+
+Does this code leak the struct bpf_link objects?
+
+The link pointer returned by bpf_program__attach_cgroup() is dynamically
+allocated, but bpf_link__destroy() is never called to free it during or
+after the loop.
+
+Because these leaked file descriptors keep the BPF links active in the
+kernel, they will indefinitely occupy the slots in the global
+cgroup_lsm_atype array. Could this exhaust the available slots and cause
+subsequent tests in the suite that use BPF_LSM_CGROUP hooks to
+spuriously fail with -E2BIG?
+
+> +		}
+> +	}
+> +
+> +	// CONFIG_CGROUP_LSM_NUM set to 10
+> +	// -> 10 programs shall be attached
+> +	ASSERT_EQ(attached, 10, "at least one attached");
+
+Since CONFIG_CGROUP_LSM_NUM limits the number of distinct per-cgroup
+LSM hooks globally across the entire system, could this test fail when
+run in parallel?
+
+If the test suite is executed concurrently (e.g., test_progs -j) and another
+running test utilizes lsm_cgroup hooks, some slots will already be occupied.
+This would cause the limit to be exhausted prematurely and fail the asserti=
+on.
+
+Will this test fail on custom or distribution kernels where the limit is
+configured to a higher value?
+
+While the selftest Kconfig fragment sets the limit to 10, selftests are
+often executed against pre-built kernels. If the limit is greater than 12,
+all 12 BPF programs will successfully attach, causing the hardcoded
+assertion to fail unconditionally.
+
+Could the test dynamically read the limit via
+extern int CONFIG_CGROUP_LSM_NUM __kconfig instead?
+
+This isn't a bug, but the assertion message says "at least one attached"
+when it actually verifies that exactly 10 are attached.
+
+> +	// -> 2 programs shall be rejected
+> +	ASSERT_EQ(failed, 2, "limit was enforced");
+> +
+> +out:
+> +	close(cgroup_fd);
+> +	cgroup_lsm_num__destroy(skel);
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260506150547.7673=
+15-1-paulhoussel2@gmail.com?part=3D2
