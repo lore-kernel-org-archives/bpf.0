@@ -1,140 +1,124 @@
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A4B4963B3
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 18:51:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D54309DDF;
+	Wed,  6 May 2026 19:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778093479; cv=none; b=PEh+NEWNDqLDJ+YT3Pki6RUTA7RefrcwoYjgVnmmI5tXYCmnesqflyIG8RwPRSjrDXph016EVdGtI53Ly6CsjyCwyT+epc/GKmhBhvHoztYeTVNhvovZ/61vloN+NM720ULhBGxVc8O+VDZkAJldXNdlAMtEVZGGWGWoyQq0c1E=
+	t=1778096185; cv=none; b=pxBUktwfklVdSf/xIsXvpf6sOQMPcoUPLIfABKcxSFbmy7nIOsriT7NjctGTl8moNQiTwobpd6ZNI0Nn5Qn34tz/Yr4vXsAIC4/Uwh/+Ffl/cU9d9wi3zf4DC24ylruC7wMjTb71sHhRrtN5InNpHVXkQpVDFSvdsQhcsRQBwGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778093479; c=relaxed/simple;
-	bh=s8SojpSoc+YK02FQkvYYyW4yXNu4hN2c6ETT93ArWJQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V3X9f/LhACEhTsjBndmucT6rL8sfMNvUVPt0pgmEzyZIr4qJgBxD9WyL8M1MmaqExzo5lp5KZQIRruvii7C/f0AJB5f5Yze33JN/D79tlIXoa4tmtzp4i1kukldbOaRXJb6/IKd70XMYgsET5CAC1xA/xVl4QsukfxR3UGu1lCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=yqlozRSf; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+	s=arc-20240116; t=1778096185; c=relaxed/simple;
+	bh=NrxXVqT6gZqs778saJwmFa7N3g9GsPnabIuBuX5oqIM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I4FiMrnvDZNdfErLsi9r6YZoshWbsZx6Ez8POJMxb4AEHCnNWCdl4dKZIyTtIeCD2IuRkAjR1qmkf+Sqg/ORPdXPt/HelPvGUcCgjy97xU0diKOgcfhxK6s87/Az0Y+2XPNGN3+YwQNiRX27Lkbdv3gQQJbfGK1tfYOQ1aXlZ5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b1aEmZsd; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="yqlozRSf"
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-8f984bddf4eso2144785a.1
-        for <bpf@vger.kernel.org>; Wed, 06 May 2026 11:51:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1778093477; x=1778698277; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qVXRMaORBAm1p+hmPERIzD3vaX/XPR3tJcXrI0tApsg=;
-        b=yqlozRSfuCUJJ9D/wW3WpVlAitl6p+MalJd4d+qGeBPP7HHYOs15Ifo4zv4JyQM3RY
-         oHUbujbmeUjmk/O4VeGR+RGnA5ACtoV1slnTP6zjtIbj9FGxzvsCksN3JeAJuUeQBmX1
-         nRTiF8ZF9styqnDRIE7ecUgF92XqjybzmU2tpys//cSjNx11JXVgSmQFJy+B++GX2ZOC
-         u6zWm0k2NWbcK/N5MW1WjdBqxvdMsVhpGXTL2VLC3zGDINTcSdycmkw83ftcdERHrH5w
-         WiRYxhwO/qEdWGPjZdrnDZShFy8obFYV9aNveGpk9ZuEsT82efZmnwLdExxspdhvUjsj
-         3Z3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778093477; x=1778698277;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qVXRMaORBAm1p+hmPERIzD3vaX/XPR3tJcXrI0tApsg=;
-        b=Ho1IbwQ7ZQR4+PRmZSCJLhbGEnZOrvlY+wWTxEpu7cf0LoBPUN+TfO9tt1atT5kyQe
-         q6a9XL3FceKLJ0B7vZIyepdZ2aUlgvEXWLn6yFqU0zo3M+vy7PIigL1s8b1lz1IOViyz
-         mfY5GBpl2RiAPOFrZ7ql8Xmlw2S5yVBoXChxMEL1yKCbWqMhx/pC0oU7f+dbcB+JkBwn
-         Ds0/hVnb9rtDSE8DbUx5aVL8VufwrQK7c4dmEbm2BNRwE2feiYusgyeVBbx7H8LCdS7n
-         Z9zBnrRZ7R9CWvl1cwsaMn6ncNVjHRUPrTaqgFhWY+9/29lpJ635hockDv/f5RnjDYZb
-         1zpA==
-X-Forwarded-Encrypted: i=1; AFNElJ9+dNffI5l+z00rbfi+PoD8T24BsO8UFFY/nF7WEup5hcxUo8qt65Z/cVIh0dGR9qcVc+E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNqz2fXEw1FsMTMJSeSDIkLhojx+LHrgzbO7lqNZ6z4MHY7KjY
-	p4uZYB2BhMfbs3vy65xUdw9SEM4MrdaU/X58rFEADlAMgL9mMH6VpR/813NfkHMD8YwD3/+4dAk
-	6GybgXeM=
-X-Gm-Gg: AeBDievkoSwGwGUMmS6oc/6usrpCUsQ5qXN1ddQgbC7cCV6rsiUfZzM8geLY3XHPdZ4
-	SRitdfOa9y+oWEhu4rvAbmuHmiK2DxuA3jjH07W285x8ikPMehtszrUAYsnI4mJv1zQYOd4WOHn
-	nUYSpOwokJF6udFWLdHsqOfd5gA8Zpub18gEXJM2BztvyE2lr6Z/5hx6vSFBiU3SBvhBoYUM7fz
-	zPlKVzUCrmd3ArfLFbjVVuVuhblb47O8p6UoFKA/n3GwsMgk1j9xY08fgB+5PxEt1FeJ1sU129d
-	gtBqSY/ymxyIln/RKgw/ejk9aFOX0gjwpsQ9PvTO/Gq9hHUMNvmvlzMWTPqbgZptozn9PeCgIrw
-	79Re5GwEbIqP3XvNM092b0znn1lEQMAfBSkrzWle4OXs4C2grBY/h+E4n0gRs+8CIkuBfPjYwFk
-	yAkX3HTnYvtRz9Z3krBeysyHdCbvJJOXdUOhog6JzeikUwz8SmO5jYnJVdJPkv+2WLc6CHPzQjo
-	w==
-X-Received: by 2002:a05:620a:1a13:b0:8cf:d804:456a with SMTP id af79cd13be357-904d4c54265mr713100885a.20.1778093476942;
-        Wed, 06 May 2026 11:51:16 -0700 (PDT)
-Received: from [172.22.22.28] (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8fc293837b5sm1889639085a.10.2026.05.06.11.51.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 May 2026 11:51:16 -0700 (PDT)
-Message-ID: <a52659e8-0382-4eb2-ab2f-5563bbb73fcc@riscstar.com>
-Date: Wed, 6 May 2026 13:51:12 -0500
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b1aEmZsd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778096184; x=1809632184;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NrxXVqT6gZqs778saJwmFa7N3g9GsPnabIuBuX5oqIM=;
+  b=b1aEmZsduuWco4AxxSp8zlKiz86wHzrzziogs1YRRHJD4/oe+51tdfkR
+   pwiKNM0y0cLGVEZXmNJeci2erKx2NEA0cPeVERwx7E8v/3la6yWKtFbXR
+   Jt16SbnGCIrdr77Gexmwc1xCp/wSWg3J67juQMToiGOMbW0jQxvEvHV9Z
+   xXMJ8eCqiZBZJCbevmcbC+kX2mNPGSrcAYAVBuiy4bw5cDJZqQ6KZMlQi
+   Trzf/NVxGlwWzofye2kWNcSiUzbTT5C0CyRt6TOOeSeNQMzdik5KGyx7G
+   ErhH6HYTfhj7BDK56VBCAHBuA0gB47mLg1dqJZ8mDX0XxDMlXKAtA/WGU
+   A==;
+X-CSE-ConnectionGUID: +nfR/DgkT5CNCWxGE2i+PA==
+X-CSE-MsgGUID: zu9r6EXQQ7GZfXeP1J97Kw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11778"; a="79086557"
+X-IronPort-AV: E=Sophos;i="6.23,220,1770624000"; 
+   d="scan'208";a="79086557"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2026 12:36:23 -0700
+X-CSE-ConnectionGUID: FE+u2+MMSB+CUTST28UnZA==
+X-CSE-MsgGUID: SuIM1A7jSJGWv3SsGJVDrA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,220,1770624000"; 
+   d="scan'208";a="233132424"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by fmviesa007.fm.intel.com with ESMTP; 06 May 2026 12:36:21 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wKi2d-000000006bx-0SxN;
+	Wed, 06 May 2026 19:36:19 +0000
+Date: Wed, 6 May 2026 21:36:09 +0200
+From: kernel test robot <lkp@intel.com>
+To: Kuniyuki Iwashima <kuniyu@google.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: oe-kbuild-all@lists.linux.dev, Kuniyuki Iwashima <kuniyu@google.com>,
+	bpf@vger.kernel.org, netdev@vger.kernel.org,
+	Eulgyu Kim <eulgyukim@snu.ac.kr>
+Subject: Re: [PATCH v1 bpf] bpf: Free reuseport cBPF prog after RCU grace
+ period.
+Message-ID: <202605062104.y7Xps52z-lkp@intel.com>
+References: <20260424235247.1990272-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 09/12] gpio: tc956x: add TC956x/QPS615 support
-To: Julian Braha <julianbraha@gmail.com>, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, maxime.chevallier@bootlin.com,
- rmk+kernel@armlinux.org.uk, andersson@kernel.org, konradybcio@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, linusw@kernel.org,
- brgl@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org
-Cc: daniel@riscstar.com, mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
- alexandre.torgue@foss.st.com, ast@kernel.org, boon.khai.ng@altera.com,
- chenchuangyu@xiaomi.com, chenhuacai@kernel.org, daniel@iogearbox.net,
- hawk@kernel.org, hkallweit1@gmail.com, inochiama@gmail.com,
- john.fastabend@gmail.com, livelycarpet87@gmail.com,
- matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
- prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
- rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
- weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20260501155421.3329862-1-elder@riscstar.com>
- <20260501155421.3329862-10-elder@riscstar.com>
- <1fe6bcb7-b5c0-454f-ad54-5014006edab5@gmail.com>
-Content-Language: en-US
-From: Alex Elder <elder@riscstar.com>
-In-Reply-To: <1fe6bcb7-b5c0-454f-ad54-5014006edab5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260424235247.1990272-1-kuniyu@google.com>
 
-On 5/2/26 10:42 PM, Julian Braha wrote:
-> On 5/1/26 16:54, Alex Elder wrote:
->> +config GPIO_TC956X
->> +	tristate "Toshiba TC956X GPIO support"
->> +	depends on TOSHIBA_TC956X_PCI
->> +	default m if TOSHIBA_TC956X_PCI
-> 
-> Hi Alex,
-> 
-> In your Kconfig changes, this condition 'if TOSHIBA_TC956X_PCI' is dead
-> code. Since you have the dependency on TOSHIBA_TC956X_PCI, you can just
-> make the 'default m' unconditional - assuming this is what you intended.
+Hi Kuniyuki,
 
-I'm not sure I'd call it "dead" but you're right, it's not
-necessary because it already depends on that symbol.
+kernel test robot noticed the following build errors:
 
-> Perhaps you would prefer to use 'default TOSHIBA_TC956X_PCI', which
-> would have GPIO_TC956X default to 'm' or 'y' when TOSHIBA_TC956X_PCI is
-> 'm' or 'y', respectively.
+[auto build test ERROR on bpf/master]
 
-Yeah that might be better.  I'd like to eventually include
-COMPILE_TEST as well, and that might need the "if" on the
-default.  I'll find out whenever I test that.
+url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/bpf-Free-reuseport-cBPF-prog-after-RCU-grace-period/20260425-093050
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
+patch link:    https://lore.kernel.org/r/20260424235247.1990272-1-kuniyu%40google.com
+patch subject: [PATCH v1 bpf] bpf: Free reuseport cBPF prog after RCU grace period.
+config: x86_64-rhel-9.4-ltp (https://download.01.org/0day-ci/archive/20260506/202605062104.y7Xps52z-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260506/202605062104.y7Xps52z-lkp@intel.com/reproduce)
 
-This GPIO feature should still be a module even if
-TOSHIBA_TC956X_PCI is y, because it's not always
-necessary to enable the GPIO driver (depending on
-how devicetree defines the PHY resets).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605062104.y7Xps52z-lkp@intel.com/
 
-So:  In drivers/gpio/Kconfig it will be "default m", and
-for drivers/net/ethernet/stmicro/stmmac/Kconfig it will be
-default TOSHIBA_TC956X_PCI (at least for now).
+All errors (new ones prefixed by >>):
 
-Thanks a lot for the suggestion.
+>> net/core/filter.c:1666:6: error: conflicting types for 'sk_reuseport_prog_free'; have 'void(struct bpf_prog *, bool)' {aka 'void(struct bpf_prog *, _Bool)'}
+    1666 | void sk_reuseport_prog_free(struct bpf_prog *prog, bool wait_rcu)
+         |      ^~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/bpf_verifier.h:9,
+                    from net/core/filter.c:21:
+   include/linux/filter.h:1146:6: note: previous declaration of 'sk_reuseport_prog_free' with type 'void(struct bpf_prog *)'
+    1146 | void sk_reuseport_prog_free(struct bpf_prog *prog);
+         |      ^~~~~~~~~~~~~~~~~~~~~~
 
-					-Alex
 
-> - Julian Braha
+vim +1666 net/core/filter.c
 
+  1665	
+> 1666	void sk_reuseport_prog_free(struct bpf_prog *prog, bool wait_rcu)
+  1667	{
+  1668		if (!prog)
+  1669			return;
+  1670	
+  1671		if (bpf_prog_was_classic(prog))
+  1672			call_rcu(&prog->aux->rcu, sk_reuseport_prog_free_rcu);
+  1673		else
+  1674			bpf_prog_put(prog);
+  1675	}
+  1676	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
