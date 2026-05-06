@@ -1,62 +1,62 @@
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 066CD3F9F37
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 14:27:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5489E47F2F3
+	for <bpf@vger.kernel.org>; Wed,  6 May 2026 14:27:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778077641; cv=none; b=re4qfPzb+u2XEasIDqt0ODkWhP7qNeukfWSPmXY1xOc7bpcRXxpFTR3Nb9zY4n7JDNouIhYLlfhmsLxHLJo4XT4qXnKSJZEv3djlpF1WbiIV8Ci2TMwEA6u99nt/uHMmU3QRIwyjEycl7suANo9kfPOx8OkyXrD8oBeWzT6rIMo=
+	t=1778077645; cv=none; b=AtPqRefS6D6oQOkP5op5ZJX2fvDunOFlnbVT/GYclyfcKeVuRtiT7i1EY/ta8YMKzkNS0xsWeASfnXotLkBmcKB28KiJ/IonBeTx+YZbjnCjpm9CF7f8svbMp6cEVWtK18OOcAUjfBzIBbs7BiB9w/kCVOkuEwEvnv+zXmA0Wl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778077641; c=relaxed/simple;
-	bh=7A7H14Os5Fq4pk48+TzvpzZw4cQEQv1W/+I8Yb/QkWQ=;
+	s=arc-20240116; t=1778077645; c=relaxed/simple;
+	bh=BzeX94441cswHkbsQc/+gIoVnBxhBs7DF2GRrl0MOj4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mSUCgXA60tWGy165i72fiGqJlE8ft0rUpMF/YKmxZ8jv5MzOFgvRNBm67xlGabBIuRNXF2TF47N8+HaUCWuN50BFfq+zl7HJ4PN6b6YvC4xsBQBzeSAMJ7SZrCCYXcRqMyJEpuBv1tQ4uOsKdaJmSlWx7tfAwtOAWCd/6dPollA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JFK3qdW7; arc=none smtp.client-ip=209.85.221.172
+	 MIME-Version; b=EoJFIzzgaooqbISj9mxgA9HuurQp+QFzYHLWWzzGiSHplE7zNqnByh1gXbsbnVwH4zun72yS0AL1NVFZ/uccOAnFk4xGAVybzVTpZJaoNTqOauAPVKS6XfIBwvcTUbY/hPNP1BSjEsA4g+ms9Mvw1xpuL3H9ZsLvs0yG7YTf7gI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LD5ZrXxP; arc=none smtp.client-ip=209.85.219.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JFK3qdW7"
-Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-5752b279662so1088475e0c.2
-        for <bpf@vger.kernel.org>; Wed, 06 May 2026 07:27:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LD5ZrXxP"
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-8b3fe2f19a4so58788496d6.2
+        for <bpf@vger.kernel.org>; Wed, 06 May 2026 07:27:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778077635; x=1778682435; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778077638; x=1778682438; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=w7q9fWoBalSNAy42DwZh+BidXaZCdk39kmCXBgdWrao=;
-        b=JFK3qdW7/kLsZhDCApVRzadTQ+HjFX4U4AEYmRTVKP8ahAYNRG1W6//XvSojTe1KRQ
-         suGUYF5NBvblJ4Y2djezw1bMIG+uGKt30C0ZP/XtLzZQRwYP8tjYIm6jhXpoj9z/Og2g
-         sygH+GyyxXsb6bwk+c5LlRC2Uc4ubw7jhiwVU3MJcigSwfjg/g2xCjCQchFBDCVV0F43
-         QhWuIkiP6kGaZxxx4OQdnaLV/zf0tkZAr/CPeapGkLeA/10i8LRrow9Zc8qjnyIcAKF0
-         aT96getNS41gPKMvEVmhnViL9Rkz4ZJTjgYDbO+mpcRgiDfVEeakZMDA1iB8BYlYaSLa
-         KcwQ==
+        bh=6bTNnxuGpficxnDh+SY37WmiIuJPAHbR0Q4L6x8/7Ic=;
+        b=LD5ZrXxPCcDrEZJgtQ8ht7CoehTIj+WiT2+e3goqjn/LHv4O7QYnDVmpDL6exS2x2l
+         wG3Z6h43TuVAdrHc9yWmeGMIBgZ/ADGsLhymEKQLmWRVZlXzGs73h9kwFQSXYR1rXyec
+         aavMc95pHDDcNxNNwvjY5KT73eU4TZHoFpm2Hx60Fbez6CVgNQXmE/DYRWFt5VJVIMSF
+         rp+JxxwgByevFgqFuRFHfY3XuvN482JJenwwUg6igT4e+hSnKqSrPjDjYNeD1ZkvRk1P
+         +bwN94xBkDj+bNck9788YxABBmsKGB+B7sTh4j6E28xD5d2ONd3o2m2uPJuE6bYno5FP
+         w68Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778077635; x=1778682435;
+        d=1e100.net; s=20251104; t=1778077638; x=1778682438;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=w7q9fWoBalSNAy42DwZh+BidXaZCdk39kmCXBgdWrao=;
-        b=XxhP24tmBmN5Eh8fJQ36ScKIwpKu9wvHfVJ8JDikAEfmck10LzlsnmsHMCUp4c1t5O
-         YhVLxyybe7JwVJiWuUY5j7tzRxpQlpAX3SjlzDKBDIjWFlQGvAuR/YGs0Cde58LkNHnn
-         laJNq4fnA/4cLqKjCSDJcLkBdC/EoSArrRMzoJYkvGJX43ngYF4Y0KESUt+Pj0axrjwo
-         7QFdtk3BIuPsZDrqSeauNqijT+6eHKcr7OaZnzeTOSCyv6gmiSClba8VTA+E2doigjix
-         HzE8DHhIhKDP3aiVv77cQw7cC4tBpAFwDxV/0sG8KrPEm0y9FJM96WyYj61DsHE4jJrD
-         MKKQ==
-X-Gm-Message-State: AOJu0Yy6mBLXDgSe6tGPHzv0OZKaSGJ3/cnehxfD8r+eSjvRjC64k4N7
-	6LKVeBvQqS8zUmivmQMMxVotXeylz6Jmh6JWoN9Aku7nRizM0PyDtX0PQurpGvCH8eY=
-X-Gm-Gg: AeBDiesRmytJeBHaxMZH8gboUCYpqishu0ijy01xXMBXx343ifYYUTLHc7JyVvuQpWQ
-	4Odr+IREPsGOkoHAj/9TJosAhJOQo2cQqqr4xNjp8y6JDCYz9837alwSrVPfAD1JTc0JNN+1wKg
-	YNGEGDDiq01N2cyAFbk2etG3cFIqOwXlAI8/5/CeWhd2R4ERICKdn8aS0RGQMkvD8wyZftq5Ylw
-	GpC6RQ+mkvSdumYMvfLAoGNS65J8H3ZTHMteNFNT3XW7+LUJMwkydpjQlLPVqh1jFolFCtHIVYR
-	kTgQdWP/UZtzwNW+0yLwt6pX5eu8Zb+YJCKgILil8U8InyvZajXWsLQH59a2iswkqOfqIzB/ohx
-	x5JpUFmCu7wHyuVrf3jMf5fGi0iGtOQJ6DlN1gUxuRp25+05qH7IMn3uUcojKChEiKz6wKFEe9X
-	+N786+7DdSUACszum1CHV3bnEczw==
-X-Received: by 2002:a05:6122:e16b:b0:570:f670:587d with SMTP id 71dfb90a1353d-575596f452bmr301175e0c.12.1778077634523;
-        Wed, 06 May 2026 07:27:14 -0700 (PDT)
-Received: from localhost ([2a03:2880:f800:c::])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b53c0e7ebdsm201467556d6.29.2026.05.06.07.27.14
+        bh=6bTNnxuGpficxnDh+SY37WmiIuJPAHbR0Q4L6x8/7Ic=;
+        b=d7VInip6jfpBiIv/49DqSaRHCMxTcvveYWAAEwDveKHvlSYktuyikex4/D42Vy+O7J
+         DJ6XT3QRSnjY48DJLL6zjsysWtG5Jj4RcZZsmmT1GOUThoKr90sfHZc7J3ljIgEglZXh
+         jpcU4fj+Cmw/cYq/y5VeiGBqMowdFRFNJnqD3CmC/CBx38C1H4NhKde5mIZRsQWI7ulY
+         GgBECI3InhuVQMN1CSY+L0POauEUhq/1QYymQ0ZMjxGI4Kn/xou5aoqf5aZUX3ChJn8U
+         AtZrdA31BqpYkZl/0BJks9gG7Gm4nyZT8Il05ds4Um4XF8moL/GEaM3eIsB8UZsMgLfU
+         l2IA==
+X-Gm-Message-State: AOJu0YyXCQnEBl3pSIKKGBj0MAqqJWZgkLJw4aUq21cXTLfrcOZfz7ri
+	6rvTF0tPPK3a3dQg7wJx7Miq670pr7sA/wbjbjtkMZDvWWpZ9ldHyBeu2azoWxCyUcQ=
+X-Gm-Gg: AeBDiesWOQ49SzfI8hdV8EQBM5rIDgDEXg9RQnlX03BrbG0NncBtWeVfBQiDYlezHVU
+	G8X18FpzD1w7XWEdTX3v7eTbsiDWZzPcetX8doVaxU01HcWXiO7BSsZeuFbCQKDuYSm5D5azoLJ
+	d2+fWtdTbYnYCYZARdjYb4Y1QkSX+X/EvOwJeGFJfofAaYtiJOecqEzMSSVfCseev9tMAMAkz08
+	kTlotmWrTgEfp+yoeeXLIRh+B2d9phyUgeQYu45IBJhM64cd4yXqHoBBFBnshsqqkLFgkX0VDrN
+	wQfquxdxXlsukesx/aUqcS6/b+ohZxUcZwHFroLyksaWxOHmAElNAjcaK6aVg90gGLPCrocex42
+	izuSNFCXr7yrub/0BzMiUhLIpIxecRo4x3CXIY88TuMINSCbgjv7RY9mDf4zaEg1X6NzVsheHgG
+	99nePu+ZswSI6yxJ9ouc+iVQ2Dnao=
+X-Received: by 2002:a05:6214:4c87:b0:8ae:660a:be74 with SMTP id 6a1803df08f44-8bc42783129mr47284046d6.7.1778077638079;
+        Wed, 06 May 2026 07:27:18 -0700 (PDT)
+Received: from localhost ([2a03:2880:f800:18::])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b53d6442d0sm177652366d6.46.2026.05.06.07.27.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2026 07:27:14 -0700 (PDT)
+        Wed, 06 May 2026 07:27:17 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -69,9 +69,9 @@ Cc: netdev@vger.kernel.org,
 	mykyta.yatsenko5@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 02/12] bpf: Unify dynptr handling in the verifier
-Date: Wed,  6 May 2026 07:26:58 -0700
-Message-ID: <20260506142709.2298255-3-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v4 04/12] bpf: Preserve reg->id of pointer objects after null-check
+Date: Wed,  6 May 2026 07:27:00 -0700
+Message-ID: <20260506142709.2298255-5-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260506142709.2298255-1-ameryhung@gmail.com>
 References: <20260506142709.2298255-1-ameryhung@gmail.com>
@@ -83,385 +83,124 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Simplify dynptr checking for helper and kfunc by unifying it. Remember
-the initialized dynptr (i.e.,g !(arg_type |= MEM_UNINIT)) pass to a
-dynptr kfunc during process_dynptr_func() so that we can easily
-retrieve the information for verification later. By saving it in
-meta->dynptr, there is no need to call dynptr helpers such as
-dynptr_id(), dynptr_ref_obj_id() and dynptr_type() in check_func_arg().
+Preserve reg->id of pointer objects after null-checking the register so
+that children objects derived from it can still refer to it in the new
+object relationship tracking mechanism introduced in a later patch. This
+change incurs a slight increase in the number of states in one selftest
+bpf object, rbtree_search.bpf.o. For Meta bpf objects, the increase of
+states is also negligible.
 
-Remove and open code the helpers in process_dynptr_func() when
-saving id, ref_obj_id, and type.
+Selftest BPF objects with insns_diff > 0
 
-Besides, since dynptr ref_obj_id information is now pass around in
-meta->bpf_dynptr_desc, drop the check in helper_multiple_ref_obj_use.
+Program                   Insns (A)  Insns (B)  Insns   (DIFF)  States (A)  States (B)  States (DIFF)
+------------------------  ---------  ---------  --------------  ----------  ----------  -------------
+rbtree_search                  6820       7326   +506 (+7.42%)         379         398   +19 (+5.01%)
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+Meta BPF objects with insns_diff > 0
+
+Program                   Insns (A)  Insns (B)  Insns   (DIFF)  States (A)  States (B)  States (DIFF)
+------------------------  ---------  ---------  --------------  ----------  ----------  -------------
+ned_imex_be_tclass               52         57     +5 (+9.62%)           5           6   +1 (+20.00%)
+ned_imex_be_tclass               52         57     +5 (+9.62%)           5           6   +1 (+20.00%)
+ned_skop_auto_flowlabel         523        526     +3 (+0.57%)          39          40    +1 (+2.56%)
+ned_skop_mss                    289        292     +3 (+1.04%)          20          20    +0 (+0.00%)
+ned_skopt_bet_classifier         78         82     +4 (+5.13%)           8           8    +0 (+0.00%)
+dctcp_update_alpha              252        320   +68 (+26.98%)          21          27   +6 (+28.57%)
+dctcp_update_alpha              252        320   +68 (+26.98%)          21          27   +6 (+28.57%)
+ned_ts_func                     119        126     +7 (+5.88%)           6           7   +1 (+16.67%)
+tw_egress                      1119       1128     +9 (+0.80%)          95          96    +1 (+1.05%)
+tw_ingress                     1128       1137     +9 (+0.80%)          95          96    +1 (+1.05%)
+tw_tproxy_router               4380       4465    +85 (+1.94%)         114         118    +4 (+3.51%)
+tw_tproxy_router4              3093       3170    +77 (+2.49%)          83          88    +5 (+6.02%)
+ttls_tc_ingress               34656      35717  +1061 (+3.06%)         936         970   +34 (+3.63%)
+tw_twfw_egress               222327     222338    +11 (+0.00%)       10563       10564    +1 (+0.01%)
+tw_twfw_ingress               78295      78299     +4 (+0.01%)        3825        3826    +1 (+0.03%)
+tw_twfw_tc_eg                222839     222859    +20 (+0.01%)       10584       10585    +1 (+0.01%)
+tw_twfw_tc_in                 78295      78299     +4 (+0.01%)        3825        3826    +1 (+0.03%)
+tw_twfw_egress                 8080       8085     +5 (+0.06%)         456         456    +0 (+0.00%)
+tw_twfw_ingress                8053       8056     +3 (+0.04%)         454         454    +0 (+0.00%)
+tw_twfw_tc_eg                  8154       8174    +20 (+0.25%)         456         457    +1 (+0.22%)
+tw_twfw_tc_in                  8060       8063     +3 (+0.04%)         455         455    +0 (+0.00%)
+tw_twfw_egress               222327     222338    +11 (+0.00%)       10563       10564    +1 (+0.01%)
+tw_twfw_ingress               78295      78299     +4 (+0.01%)        3825        3826    +1 (+0.03%)
+tw_twfw_tc_eg                222839     222859    +20 (+0.01%)       10584       10585    +1 (+0.01%)
+tw_twfw_tc_in                 78295      78299     +4 (+0.01%)        3825        3826    +1 (+0.03%)
+tw_twfw_egress                 8080       8085     +5 (+0.06%)         456         456    +0 (+0.00%)
+tw_twfw_ingress                8053       8056     +3 (+0.04%)         454         454    +0 (+0.00%)
+tw_twfw_tc_eg                  8154       8174    +20 (+0.25%)         456         457    +1 (+0.22%)
+tw_twfw_tc_in                  8060       8063     +3 (+0.04%)         455         455    +0 (+0.00%)
+
+Looking into rbtree_search, the reason for such increase is that the
+verifier has to explore the main loop shown below for one more iteration
+until state pruning decides the current state is safe.
+
+long rbtree_search(void *ctx)
+{
+	...
+	bpf_spin_lock(&glock0);
+	rb_n = bpf_rbtree_root(&groot0);
+	while (can_loop) {
+		if (!rb_n) {
+			bpf_spin_unlock(&glock0);
+			return __LINE__;
+		}
+
+		n = rb_entry(rb_n, struct node_data, r0);
+		if (lookup_key == n->key0)
+			break;
+		if (nr_gc < NR_NODES)
+			gc_ns[nr_gc++] = rb_n;
+		if (lookup_key < n->key0)
+			rb_n = bpf_rbtree_left(&groot0, rb_n);
+		else
+			rb_n = bpf_rbtree_right(&groot0, rb_n);
+	}
+	...
+}
+
+Below is what the verifier sees at the start of each iteration
+(65: may_goto) after preserving id of rb_n. Without id of rb_n, the
+verifier stops exploring the loop at iter 16.
+
+           rb_n  gc_ns[15]
+iter 15    257   257
+
+iter 16    290   257    rb_n: idmap add 257->290
+                        gc_ns[15]: check 257 != 290 --> state not equal
+
+iter 17    325   257    rb_n: idmap add 290->325
+                        gc_ns[15]: idmap add 257->257 --> state safe
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- include/linux/bpf_verifier.h |  13 ++-
- kernel/bpf/verifier.c        | 178 +++++++----------------------------
- 2 files changed, 40 insertions(+), 151 deletions(-)
+ kernel/bpf/verifier.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 976e2b2f40e8..f330e9cf297e 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1376,6 +1376,13 @@ struct bpf_map_desc {
- 	int uid;
- };
- 
-+/* The last initialized dynptr; Populated by process_dynptr_func() */
-+struct bpf_dynptr_desc {
-+	enum bpf_dynptr_type type;
-+	u32 id;
-+	u32 ref_obj_id;
-+};
-+
- struct bpf_kfunc_call_arg_meta {
- 	/* In parameters */
- 	struct btf *btf;
-@@ -1416,16 +1423,12 @@ struct bpf_kfunc_call_arg_meta {
- 	struct {
- 		struct btf_field *field;
- 	} arg_rbtree_root;
--	struct {
--		enum bpf_dynptr_type type;
--		u32 id;
--		u32 ref_obj_id;
--	} initialized_dynptr;
- 	struct {
- 		u8 spi;
- 		u8 frameno;
- 	} iter;
- 	struct bpf_map_desc map;
-+	struct bpf_dynptr_desc dynptr;
- 	u64 mem_size;
- };
- 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6931012d3ee2..0bee6279c38e 100644
+index 0891a3ac4d51..e1e95a066019 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -233,6 +233,7 @@ static void bpf_map_key_store(struct bpf_insn_aux_data *aux, u64 state)
+@@ -15268,15 +15268,10 @@ static void mark_ptr_or_null_reg(struct bpf_func_state *state,
  
- struct bpf_call_arg_meta {
- 	struct bpf_map_desc map;
-+	struct bpf_dynptr_desc dynptr;
- 	bool raw_mode;
- 	bool pkt_access;
- 	u8 release_regno;
-@@ -241,7 +242,6 @@ struct bpf_call_arg_meta {
- 	int mem_size;
- 	u64 msize_max_value;
- 	int ref_obj_id;
--	int dynptr_id;
- 	int func_id;
- 	struct btf *btf;
- 	u32 btf_id;
-@@ -465,11 +465,6 @@ static bool is_ptr_cast_function(enum bpf_func_id func_id)
- 		func_id == BPF_FUNC_skc_to_tcp_request_sock;
- }
+ 		mark_ptr_not_null_reg(reg);
  
--static bool is_dynptr_ref_function(enum bpf_func_id func_id)
--{
--	return func_id == BPF_FUNC_dynptr_data;
--}
--
- static bool is_sync_callback_calling_kfunc(u32 btf_id);
- static bool is_async_callback_calling_kfunc(u32 btf_id);
- static bool is_callback_calling_kfunc(u32 btf_id);
-@@ -538,8 +533,6 @@ static bool helper_multiple_ref_obj_use(enum bpf_func_id func_id,
- 		ref_obj_uses++;
- 	if (is_acquire_function(func_id, map))
- 		ref_obj_uses++;
--	if (is_dynptr_ref_function(func_id))
--		ref_obj_uses++;
- 
- 	return ref_obj_uses > 1;
- }
-@@ -7038,8 +7031,9 @@ static int process_kptr_func(struct bpf_verifier_env *env, int regno,
-  * use case. The second level is tracked using the upper bit of bpf_dynptr->size
-  * and checked dynamically during runtime.
-  */
--static int process_dynptr_func(struct bpf_verifier_env *env, struct bpf_reg_state *reg, argno_t argno, int insn_idx,
--			       enum bpf_arg_type arg_type, int clone_ref_obj_id)
-+static int process_dynptr_func(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
-+			       argno_t argno, int insn_idx, enum bpf_arg_type arg_type,
-+			       int clone_ref_obj_id, struct bpf_dynptr_desc *dynptr)
- {
- 	int spi, err = 0;
- 
-@@ -7104,6 +7098,8 @@ static int process_dynptr_func(struct bpf_verifier_env *env, struct bpf_reg_stat
- 		}
- 
- 		if (reg->type != CONST_PTR_TO_DYNPTR) {
-+			struct bpf_func_state *state = bpf_func(env, reg);
-+
- 			spi = dynptr_get_spi(env, reg);
- 			if (spi < 0)
- 				return spi;
-@@ -7113,6 +7109,14 @@ static int process_dynptr_func(struct bpf_verifier_env *env, struct bpf_reg_stat
- 			 * in check_helper_call and mark_btf_func_reg_size in check_kfunc_call.
- 			 */
- 			mark_stack_slot_obj_read(env, spi, BPF_DYNPTR_NR_SLOTS);
-+
-+			reg = &state->stack[spi].spilled_ptr;
-+		}
-+
-+		if (dynptr) {
-+			dynptr->type = reg->dynptr.type;
-+			dynptr->id = reg->id;
-+			dynptr->ref_obj_id = reg->ref_obj_id;
- 		}
- 	}
- 	return err;
-@@ -7882,72 +7886,6 @@ static int check_func_arg_reg_off(struct bpf_verifier_env *env,
+-		if (!reg_may_point_to_spin_lock(reg)) {
+-			/* For not-NULL ptr, reg->ref_obj_id will be reset
+-			 * in release_reference().
+-			 *
+-			 * reg->id is still used by spin_lock ptr. Other
+-			 * than spin_lock ptr type, reg->id can be reset.
+-			 */
+-			reg->id = 0;
+-		}
++		/*
++		 * reg->id is preserved for object relationship tracking
++		 * and spin_lock lock state tracking
++		 */
  	}
  }
  
--static struct bpf_reg_state *get_dynptr_arg_reg(struct bpf_verifier_env *env,
--						const struct bpf_func_proto *fn,
--						struct bpf_reg_state *regs)
--{
--	struct bpf_reg_state *state = NULL;
--	int i;
--
--	for (i = 0; i < MAX_BPF_FUNC_REG_ARGS; i++)
--		if (arg_type_is_dynptr(fn->arg_type[i])) {
--			if (state) {
--				verbose(env, "verifier internal error: multiple dynptr args\n");
--				return NULL;
--			}
--			state = &regs[BPF_REG_1 + i];
--		}
--
--	if (!state)
--		verbose(env, "verifier internal error: no dynptr arg found\n");
--
--	return state;
--}
--
--static int dynptr_id(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
--{
--	struct bpf_func_state *state = bpf_func(env, reg);
--	int spi;
--
--	if (reg->type == CONST_PTR_TO_DYNPTR)
--		return reg->id;
--	spi = dynptr_get_spi(env, reg);
--	if (spi < 0)
--		return spi;
--	return state->stack[spi].spilled_ptr.id;
--}
--
--static int dynptr_ref_obj_id(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
--{
--	struct bpf_func_state *state = bpf_func(env, reg);
--	int spi;
--
--	if (reg->type == CONST_PTR_TO_DYNPTR)
--		return reg->ref_obj_id;
--	spi = dynptr_get_spi(env, reg);
--	if (spi < 0)
--		return spi;
--	return state->stack[spi].spilled_ptr.ref_obj_id;
--}
--
--static enum bpf_dynptr_type dynptr_get_type(struct bpf_verifier_env *env,
--					    struct bpf_reg_state *reg)
--{
--	struct bpf_func_state *state = bpf_func(env, reg);
--	int spi;
--
--	if (reg->type == CONST_PTR_TO_DYNPTR)
--		return reg->dynptr.type;
--
--	spi = bpf_get_spi(reg->var_off.value);
--	if (spi < 0) {
--		verbose(env, "verifier internal error: invalid spi when querying dynptr type\n");
--		return BPF_DYNPTR_TYPE_INVALID;
--	}
--
--	return state->stack[spi].spilled_ptr.dynptr.type;
--}
--
- static int check_arg_const_str(struct bpf_verifier_env *env,
- 			       struct bpf_reg_state *reg, argno_t argno)
- {
-@@ -8305,7 +8243,8 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 					 true, meta);
- 		break;
- 	case ARG_PTR_TO_DYNPTR:
--		err = process_dynptr_func(env, reg, argno_from_reg(regno), insn_idx, arg_type, 0);
-+		err = process_dynptr_func(env, reg, argno_from_reg(regno), insn_idx, arg_type, 0,
-+					  &meta->dynptr);
- 		if (err)
- 			return err;
- 		break;
-@@ -8968,7 +8907,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
- 			if (ret)
- 				return ret;
- 
--			ret = process_dynptr_func(env, reg, argno, -1, arg->arg_type, 0);
-+			ret = process_dynptr_func(env, reg, argno, -1, arg->arg_type, 0, NULL);
- 			if (ret)
- 				return ret;
- 		} else if (base_type(arg->arg_type) == ARG_PTR_TO_BTF_ID) {
-@@ -10048,52 +9987,10 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 			}
- 		}
- 		break;
--	case BPF_FUNC_dynptr_data:
--	{
--		struct bpf_reg_state *reg;
--		int id, ref_obj_id;
--
--		reg = get_dynptr_arg_reg(env, fn, regs);
--		if (!reg)
--			return -EFAULT;
--
--
--		if (meta.dynptr_id) {
--			verifier_bug(env, "meta.dynptr_id already set");
--			return -EFAULT;
--		}
--		if (meta.ref_obj_id) {
--			verifier_bug(env, "meta.ref_obj_id already set");
--			return -EFAULT;
--		}
--
--		id = dynptr_id(env, reg);
--		if (id < 0) {
--			verifier_bug(env, "failed to obtain dynptr id");
--			return id;
--		}
--
--		ref_obj_id = dynptr_ref_obj_id(env, reg);
--		if (ref_obj_id < 0) {
--			verifier_bug(env, "failed to obtain dynptr ref_obj_id");
--			return ref_obj_id;
--		}
--
--		meta.dynptr_id = id;
--		meta.ref_obj_id = ref_obj_id;
--
--		break;
--	}
- 	case BPF_FUNC_dynptr_write:
- 	{
--		enum bpf_dynptr_type dynptr_type;
--		struct bpf_reg_state *reg;
-+		enum bpf_dynptr_type dynptr_type = meta.dynptr.type;
- 
--		reg = get_dynptr_arg_reg(env, fn, regs);
--		if (!reg)
--			return -EFAULT;
--
--		dynptr_type = dynptr_get_type(env, reg);
- 		if (dynptr_type == BPF_DYNPTR_TYPE_INVALID)
- 			return -EFAULT;
- 
-@@ -10284,10 +10181,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		return -EFAULT;
- 	}
- 
--	if (is_dynptr_ref_function(func_id))
--		regs[BPF_REG_0].dynptr_id = meta.dynptr_id;
--
--	if (is_ptr_cast_function(func_id) || is_dynptr_ref_function(func_id)) {
-+	if (is_ptr_cast_function(func_id)) {
- 		/* For release_reference() */
- 		regs[BPF_REG_0].ref_obj_id = meta.ref_obj_id;
- 	} else if (is_acquire_function(func_id, meta.map.ptr)) {
-@@ -10301,6 +10195,11 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		regs[BPF_REG_0].ref_obj_id = id;
- 	}
- 
-+	if (func_id == BPF_FUNC_dynptr_data) {
-+		regs[BPF_REG_0].dynptr_id = meta.dynptr.id;
-+		regs[BPF_REG_0].ref_obj_id = meta.dynptr.ref_obj_id;
-+	}
-+
- 	err = do_refine_retval_range(env, regs, fn->ret_type, func_id, &meta);
- 	if (err)
- 		return err;
-@@ -11896,7 +11795,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 				meta->release_regno = regno;
- 			} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_clone] &&
- 				   (dynptr_arg_type & MEM_UNINIT)) {
--				enum bpf_dynptr_type parent_type = meta->initialized_dynptr.type;
-+				enum bpf_dynptr_type parent_type = meta->dynptr.type;
- 
- 				if (parent_type == BPF_DYNPTR_TYPE_INVALID) {
- 					verifier_bug(env, "no dynptr type for parent of clone");
-@@ -11904,30 +11803,17 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 				}
- 
- 				dynptr_arg_type |= (unsigned int)get_dynptr_type_flag(parent_type);
--				clone_ref_obj_id = meta->initialized_dynptr.ref_obj_id;
-+				clone_ref_obj_id = meta->dynptr.ref_obj_id;
- 				if (dynptr_type_refcounted(parent_type) && !clone_ref_obj_id) {
- 					verifier_bug(env, "missing ref obj id for parent of clone");
- 					return -EFAULT;
- 				}
- 			}
- 
--			ret = process_dynptr_func(env, reg, argno, insn_idx,
--						  dynptr_arg_type, clone_ref_obj_id);
-+			ret = process_dynptr_func(env, reg, argno, insn_idx, dynptr_arg_type,
-+						  clone_ref_obj_id, &meta->dynptr);
- 			if (ret < 0)
- 				return ret;
--
--			if (!(dynptr_arg_type & MEM_UNINIT)) {
--				int id = dynptr_id(env, reg);
--
--				if (id < 0) {
--					verifier_bug(env, "failed to obtain dynptr id");
--					return id;
--				}
--				meta->initialized_dynptr.id = id;
--				meta->initialized_dynptr.type = dynptr_get_type(env, reg);
--				meta->initialized_dynptr.ref_obj_id = dynptr_ref_obj_id(env, reg);
--			}
--
- 			break;
- 		}
- 		case KF_ARG_PTR_TO_ITER:
-@@ -12550,7 +12436,7 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_ca
- 		}
- 	} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_slice] ||
- 		   meta->func_id == special_kfunc_list[KF_bpf_dynptr_slice_rdwr]) {
--		enum bpf_type_flag type_flag = get_dynptr_type_flag(meta->initialized_dynptr.type);
-+		enum bpf_type_flag type_flag = get_dynptr_type_flag(meta->dynptr.type);
- 
- 		mark_reg_known_zero(env, regs, BPF_REG_0);
- 
-@@ -12574,11 +12460,11 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_ca
- 			}
- 		}
- 
--		if (!meta->initialized_dynptr.id) {
-+		if (!meta->dynptr.id) {
- 			verifier_bug(env, "no dynptr id");
- 			return -EFAULT;
- 		}
--		regs[BPF_REG_0].dynptr_id = meta->initialized_dynptr.id;
-+		regs[BPF_REG_0].dynptr_id = meta->dynptr.id;
- 
- 		/* we don't need to set BPF_REG_0's ref obj id
- 		 * because packet slices are not refcounted (see
-@@ -12766,7 +12652,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	if (meta.release_regno) {
- 		struct bpf_reg_state *reg = &regs[meta.release_regno];
- 
--		if (meta.initialized_dynptr.ref_obj_id) {
-+		if (meta.dynptr.ref_obj_id) {
- 			err = unmark_stack_slots_dynptr(env, reg);
- 		} else {
- 			err = release_reference(env, reg->ref_obj_id);
 -- 
 2.52.0
 
