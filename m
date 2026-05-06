@@ -1,182 +1,134 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7319319F12D
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 01:19:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2FFA19DF6A;
+	Wed,  6 May 2026 02:31:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.132.163.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778030342; cv=none; b=cqk9w72EiEA0k/4QiUUzYUNFDikylR+Kbl9sXLsFI5ib0jqa7+xGJjx1JtAzjA66OdOT30R9YkKZ1/KG0lKB91VP981+qO2pLhJB2smqppAgSVIu1ezPAInE2WOtEQSHlJkIf+cJjAz+F5oFPaUntQy8AxcKrpK0+iD47qsgYbM=
+	t=1778034671; cv=none; b=hrGXYl2nZSDtICYm+qnGAY2ZnV/YtcYrCyafKk7wtXkoWbvXyVYK8iZnVw0ExwL2x4ZmpqDIuFTUfy5reHkprnjPp4FP2DZPztHPei5bZ9VEYaSKDh1yMP/2ckJ59khsoxI8EuDdV1z/v0UgqMjrKRqyTBvZtyw/DLtfvCEpIvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778030342; c=relaxed/simple;
-	bh=LR7LAldVcgI9obIy+/bO4y0ruSnBiqbukoMOuSekzAM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CsykoHJXQPaHfFdEP6rfKP/o7CgvaTjnHmOHWjA3z2gtUaiX/GreGlbwrDGH+UCLvAdV6govLFaylLLs84GFYZPR1uCVUhSR0qt05mfUKVD9M+6Fh+kF1f41bbfD9EO+iL5OTccFqHOLUgJif7iIMMeBvGznE+qafRUgjzLMtgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y4Y4ZHY8; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y4Y4ZHY8"
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-899d6b7b073so61173636d6.2
-        for <bpf@vger.kernel.org>; Tue, 05 May 2026 18:19:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778030340; x=1778635140; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xefO3CdiqRR6SyOJAzo15ugz1YtLwmd7HdJ9NdZnMzE=;
-        b=Y4Y4ZHY8PPueFBZKDPWXnnqfv8cs0PyPjc16gSrV0otZf49UYYk1cc8zl1JFHwQW6e
-         p64n5l0rwA88PcU3r68rZFiRQrdzauWhf+b7C+0CgrIfkQzh1Pdk0CpHjYYJcHPzphkd
-         qDUmnhynED+hcaTKBi0rco+Vm054G9mP1spV5Patr8DmieKr/MKb3GtrDM/rli5t13+h
-         qAYjb9oyepwlXIhgmrWM8My/JkupNlE2XjAvGOhfyF5vuEBZC+0QFnOEiuet3KKmzk7V
-         k6v7a5w5y1Nkgdaf6I/GbmrjSdC2CC/6/2EABZGrq7aDdBHxrIeQioKNyQxeHsownUj/
-         WsJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778030340; x=1778635140;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xefO3CdiqRR6SyOJAzo15ugz1YtLwmd7HdJ9NdZnMzE=;
-        b=M+h2/ogkiaGisd5xMYu+K9nhhy3WYsIVs+xPZIidoDZSaLrPPs5/PtOv+uOebq7r2X
-         75qhLQU3L3VAKGu+KTMLPwKeSuAAIr482Kn+x3l0e/1Dfxkqn2vJuENSYTYUG/TJtsCq
-         2QpAz66Wri2RBZCuPMT4Bxq3XUvRWxvqTMIIMt3t85l7tK17S9fngV3Z7n5e20xs2y9G
-         kY6PUeKUdFqN3Fbd7vUX2Qhj6VTdcECxzsz4BrdlE/lmkuiJB0S9N5/ZW8kwao4fMEx2
-         odUiwtee4bFA1+4zNf37msrSoAEb8HjZigwUD/vKvVwsFC+eucy/PSr9KoArsL8Ck1Xo
-         NCEw==
-X-Gm-Message-State: AOJu0YxaiFXNjCwQH+bIkWbHd6feqFQXz/+7icrCD6LC+W8nhnVcTr3R
-	k5PQzj843gPKAfnCzGZ+XbCrPLmlEXZbMxll7DDE5/qRvm07c1+699v+
-X-Gm-Gg: AeBDieuxPWf1prbCDAPh9FWvSqA3oqg5UavDfSn/61net3Dxg7p3asItWRQsyoEKuJg
-	peyt8X2MRaROW/jvsp0MfVCzNPGA5fjHD9jifxF6kbZduJR+9oloQKLcmPRAxfFwt//7LG1tHIb
-	Xax+hgLxok4hEsqRHqATMdYdx317Uf3c17yStrZKtU1uR66wmTmfvQ+FeX1eNp+X4zDF8y/K4d3
-	GsKHIofaHz8s1rsWSKzWPy7PvLRioNNHyLfHp95sJwulUa+ln4eeURk4rgQ5xEFIKKm48rzSZwQ
-	HGJHgH5ayrsWvq64jPgxjKCpjau/yAQ09T88DTS/GKlU89uA6ep/09/Y5ZcalQOmtM95oJ20HFH
-	M5i8YblRKtZnwH33ovFBWewB0A7J/JHRXKX/aF8XykPnC61YHA2CM0fHuZSPauNscNYODX2d1di
-	/yJRZ4oKYdDANezevYVMFVtArOQhSL9xsHLnyEBTdwz2cOcYKp3c5hK/tMJw==
-X-Received: by 2002:a05:6214:f66:b0:89a:622e:d32c with SMTP id 6a1803df08f44-8bc44f852fcmr21784616d6.36.1778030340115;
-        Tue, 05 May 2026 18:19:00 -0700 (PDT)
-Received: from devvm29614.prn0.facebook.com ([2a03:2880:f800:2e::])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b538b1d953sm186780256d6.3.2026.05.05.18.18.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 May 2026 18:18:59 -0700 (PDT)
-Date: Tue, 5 May 2026 18:18:56 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: sashiko@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/6] net: devmem: support TX over
- NETMEM_TX_NO_DMA devices
-Message-ID: <afqXAKj4fJbTd4tL@devvm29614.prn0.facebook.com>
-References: <20260504-tcp-dm-netkit-v2-2-56d52ac72fd4@meta.com>
- <20260506002905.DF681C2BCB4@smtp.kernel.org>
+	s=arc-20240116; t=1778034671; c=relaxed/simple;
+	bh=g5oNCXLIrRB8Peo+P5aiq5oeMf2uwLyTTn+a4i74TPs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IHwgMEfwmu39wnwoy2cCxvvZAAOV0IyBIomipSx26bkFue+J/1dJ4wozFzkdDYPLWnzaw5cegee1NhcIf2T0tOIcmOBmGT/MKCMCpZ0CN0p65AuuuISAC//nmPfGpe4p8NZXDIi7+fZ0FLlARmD+sRxnjhw7iMQNFzeafqgdF2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=radxa.com; spf=pass smtp.mailfrom=radxa.com; arc=none smtp.client-ip=18.132.163.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=radxa.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=radxa.com
+X-QQ-mid: esmtpsz16t1778034653t405f70b0
+X-QQ-Originating-IP: 4meMtvNm/og9G0fVM/ycSpSa183Qcv1XH6iFoe6ZdSA=
+Received: from [127.0.0.1] ( [116.234.74.217])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 06 May 2026 10:30:47 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 2498618263695594642
+Message-ID: <DD71CDEABC7C16D5+02d052ff-13bb-4712-a847-91416f76c578@radxa.com>
+Date: Wed, 6 May 2026 10:30:46 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260506002905.DF681C2BCB4@smtp.kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 10/12] net: stmmac: tc956x: add TC956x/QPS615
+ support
+To: Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, maxime.chevallier@bootlin.com,
+ rmk+kernel@armlinux.org.uk, andersson@kernel.org, konradybcio@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, linusw@kernel.org,
+ brgl@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org
+Cc: Daniel Thompson <daniel@riscstar.com>, mohd.anwar@oss.qualcomm.com,
+ a0987203069@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+ boon.khai.ng@altera.com, chenchuangyu@xiaomi.com, chenhuacai@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, hkallweit1@gmail.com,
+ inochiama@gmail.com, john.fastabend@gmail.com, julianbraha@gmail.com,
+ livelycarpet87@gmail.com, matthew.gerlach@altera.com,
+ mcoquelin.stm32@gmail.com, me@ziyao.cc,
+ prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+ rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
+ weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-11-elder@riscstar.com>
+Content-Language: en-US
+From: Xilin Wu <sophon@radxa.com>
+In-Reply-To: <20260501155421.3329862-11-elder@riscstar.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpsz:radxa.com:qybglogicsvrsz:qybglogicsvrsz3b-0
+X-QQ-XMAILINFO: MxdW4jxL6NvXsbtSC0sdkRTYslY/wd+PTnnOEmueE64hCrFI+earuJRV
+	hgNg2Ceej//UIQfd+2Wlk//epUITPXjjocchjWHEZMcdfNK1LLNLFyz0ZfXIRI3td8fvLcg
+	ioV78ncJzF7+KQCzQK9t0u73IRt2vWCCO0ElFvy14O+nJcxgQpZdBKTQ9TxTIcZUoaAwD4Q
+	xxzCEbjkDEoZxLTSeuiKoMKu+9qsf2zYfVwTd4hlpiDd5MHlm0CJzfCfSSoeI2FKWi3VgWo
+	9CEexip17TssKCTg8w/buxu5ytVm0435turBile67gA71cUUxk7zTng8zNvMjJmNoMxOCli
+	SSSo40gjI+GpvWoeF8JpMycBvTtnwXL8DvuC8k18EOcCQq+lv2FwbMqMBWph7sa7gSjdkCp
+	O8jkqB5fGOO5vVNzg/eaRrs7biPOkQy44iN36TDJx0Wb03IkHOXbWxOab453acDV/JxVNOl
+	uN9OScd0yczqaUxHJhVCBUC6AHGRz92UcT3bVSvvvD+L9qnUx3msHzghPxpppLzzOOcG0xw
+	n79UGEvdQpwNrII1tgGEiLdYEYaUqmKTtnlD19HdD5uYy9GBUatNcBJtzhbCH9ijDsGrDTy
+	sIre1iDEw9SwHlD/oFtCYBgrgyS6IHnf2+zt/3HEx1OgJOH5rlUg03KJ4BOL5bmDkOOdVtg
+	hV3z89018f9IgXo2HO9E26kHWJoIdXlggavuQIQ/xNcS8GyZ973bAYpcbARpt/R5eHrlGKt
+	yYmwp6EciINtFp7rAHahigqRc7OkhTAYteXoLX+w13hrYAAbpmbGo7nyIQh6eVXWksTovTp
+	DNCclkxdoVXVsPuZuHvdsyeAiCuxOhLSqYwUXbeLg/0vNJMLPsFFK1MyzNaPPLIFuwuERmM
+	W0BM4I5HB7dilQPZZyLzEFCaY2yOLQxcMxwiwF8R32kA1J4gqGyz16Qs8HzIVHG3H24Vu5H
+	bSaoBbcHAZIxNn+BUYUmS+plXKCWKlZWHhqmJJh7mvJXe92jRy1l2J4fKNglrg3Cni9s=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+X-QQ-RECHKSPAM: 0
 
-On Wed, May 06, 2026 at 12:29:05AM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
-> - [High] Double lock lockdep splat and potential deadlock in netdev_nl_bind_tx_doit()
-> - [High] Use-After-Free of dma_dev pointer in netdev_nl_bind_tx_doit()
-> - [High] ABA vulnerability and pointer aliasing due to untracked vdev lifecycle
-> --
+On 5/1/2026 11:54 PM, Alex Elder wrote:
+> From: Daniel Thompson <daniel@riscstar.com>
 > 
-> commit fea3266a76d31b8278bf86dac679860b442a5bea
-> Author: Bobby Eshleman <bobbyeshleman@meta.com>
+> Toshiba TC956x is an Ethernet AVB/TSN bridge and is essentially a
+> small and highly-specialized SoC. TC956x includes an "eMAC" subsystem
+> that can be accessed, along with several other peripherals, via two
+> PCIe endpoint functions. There is a main driver for the endpoint that
+> decomposes things and creates auxiliary bus devices to model the SoC.
 > 
-> net: devmem: support TX over NETMEM_TX_NO_DMA devices
+> The eMAC consists of a Designware XGMAC, XPCS and PMA. Each eMAC is
+> supported by an MSIGEN that bridges TC956x level interrupts to PCIe
+> MSIs.
 > 
-> This patch enables devmem TX bindings on netkit virtual devices by routing
-> the binding to the underlying DMA-capable physical device. It extends the
-> skb validation and binding lookup to support the netkit architecture.
+> Add a driver for the eMAC/MSIGEN combination.
 > 
-> > diff --git a/net/core/devmem.c b/net/core/devmem.c
-> > index cde4c89bc146..644c286b778f 100644
-> > --- a/net/core/devmem.c
-> > +++ b/net/core/devmem.c
-> [ ... ]
-> > @@ -212,6 +212,7 @@ net_devmem_bind_dmabuf(struct net_device *dev,
-> >  	}
-> >  
-> >  	binding->dev = dev;
-> > +	binding->vdev = vdev;
-> >  	xa_init_flags(&binding->bound_rxqs, XA_FLAGS_ALLOC);
+> Co-developed-by: Alex Elder <elder@riscstar.com>
+> Signed-off-by: Alex Elder <elder@riscstar.com>
+> Signed-off-by: Daniel Thompson <daniel@riscstar.com>
+> ---
+>   drivers/net/ethernet/stmicro/stmmac/Kconfig   |  13 +
+>   drivers/net/ethernet/stmicro/stmmac/Makefile  |   2 +
+>   .../ethernet/stmicro/stmmac/dwmac-tc956x.c    | 791 ++++++++++++++++++
+>   include/soc/toshiba/tc956x-dwmac.h            |  84 ++
+>   4 files changed, 890 insertions(+)
+>   create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-tc956x.c
+>   create mode 100644 include/soc/toshiba/tc956x-dwmac.h
 > 
-> Is it possible for this virtual device to be unregistered and freed while
-> the binding is still active? Since there is no reference count acquired on
-> vdev, and no NETDEV_UNREGISTER notifier seems to clean up the binding for
-> the virtual device, vdev could become a dangling pointer.
-> 
-> [ ... ]
-> > @@ -397,7 +398,8 @@ struct net_devmem_dmabuf_binding *net_devmem_get_binding(struct sock *sk,
-> >  	 */
-> >  	dst_dev = dst_dev_rcu(dst);
-> >  	if (unlikely(!dst_dev) ||
-> > -	    unlikely(dst_dev != READ_ONCE(binding->dev))) {
-> > +	    unlikely(dst_dev != READ_ONCE(binding->dev) &&
-> > +		     dst_dev != READ_ONCE(binding->vdev))) {
-> 
-> If vdev was freed as mentioned above, and a new, unrelated network device
-> is allocated at the exact same memory address, could this pointer comparison
-> incorrectly pass due to the ABA problem?
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> index e3dd5adda5aca..66bcfaccbe21f 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> @@ -404,6 +404,19 @@ config DWMAC_MOTORCOMM
+>   	  This enables glue driver for Motorcomm DWMAC-based PCI Ethernet
+>   	  controllers. Currently only YT6801 is supported.
+>   
+> +config DWMAC_TC956X
+> +	tristate "Toshiba TC956X DWMAC support"
+> +	depends on PCI
+> +	depends on COMMON_CLK
+> +	depends on TOSHIBA_TC956X_PCI
+> +	default m if TOSHIBA_TC956X_PCI
 
-For reviewers, we could add a dev_hold() on the netkit to avoid the ABA
-problem, but then a guest ns user can use bind-tx to prevent the the ns
-manager user from being able to delete the netkit. This ->dev and ->vdev
-check only exists to inform the sendmsg() caller early about the
-mismatch, so I leaned towards this not being a great trade-off.
-Especially since validate_xmit_unreadable_skb() does the validation
-correctly. I'm open to adding this if that seems like a better approach,
-though.
+Hi Alex,
 
-> 
-> [ ... ]
-> > diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-> > index b8f6076d8007..0e296c3bb677 100644
-> > --- a/net/core/netdev-genl.c
-> > +++ b/net/core/netdev-genl.c
-> [ ... ]
-> > @@ -1164,16 +1197,30 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
-> [ ... ]
-> > +	bind_dev = netdev_find_netmem_tx_dev(netdev);
-> > +	if (!bind_dev) {
-> > +		err = -EOPNOTSUPP;
-> > +		NL_SET_ERR_MSG(info->extack,
-> > +			       "No DMA-capable device found for netmem TX");
-> > +		goto err_unlock_netdev;
-> > +	}
-> > +
-> > +	if (bind_dev != netdev)
-> > +		netdev_lock(bind_dev);
-> 
-> Will acquiring netdev_lock() on bind_dev while already holding it on netdev
-> trigger a lockdep warning? Since both are struct net_device instances, their
-> locks belong to the exact same lockdep class. Without a mutex_lock_nested()
-> annotation, acquiring them sequentially might trigger a possible circular
-> locking dependency splat, and introduce a potential deadlock if locked in
-> reverse order elsewhere.
+I think GENERIC_IRQ_CHIP should be selected here.
 
-The tests passed with CONFIG_LOCKDEP=y and CONFIG_PROVE_LOCKING=y. Since
-they take the bind_dev != netdev path, I'm not not sure if this is
-needed. Though I admit I don't fully understand mutex subclasses...
+Thank you for the driver.
 
-> 
-> > +	dma_dev = netdev_queue_get_dma_dev(bind_dev, 0, NETDEV_QUEUE_TYPE_TX);
-> > +	if (bind_dev != netdev)
-> > +		netdev_unlock(bind_dev);
-> > +	binding = net_devmem_bind_dmabuf(bind_dev,
-> > +					 bind_dev != netdev ? netdev : NULL,
-> > +					 dma_dev, DMA_TO_DEVICE, dmabuf_fd,
-> > +					 priv, info->extack);
-> 
-> Is it safe to use dma_dev after dropping the bind_dev lock? Since
-> netdev_queue_get_dma_dev() returns a raw device pointer without acquiring a
-> reference via get_device(), what prevents a concurrent hardware hot-unplug
-> or driver unbind from freeing the dma_dev between netdev_unlock() and the
-> subsequent use in net_devmem_bind_dmabuf()?
+-- 
+Best regards,
+Xilin Wu <sophon@radxa.com>
 
-Valid, will fix.
-
-Best,
-Bobby
