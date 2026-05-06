@@ -1,172 +1,261 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A0FE3F0ABC
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 15:28:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D54A3EFD22;
+	Wed,  6 May 2026 15:30:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778081302; cv=none; b=tguur/a7EUC6DburTWU+f9pHU3WC2ZOjX0ElZticzxWCMwAn9NrLA62WqBGmnhGqBWJM/lmmK6xDYXZB8itFX+JldBhNWeZK5Wh6frEb1tK9aD97/OH7z/qYkTFSTkPoR1MrVSQXRayiFM/GXIOKfAoHRxT4YkOW7J3fkMKxxEw=
+	t=1778081406; cv=none; b=pUqI03kKjUtPzyHHizkCOvnuLqpvS3j/OQHcElAoyV9zn14NzdNJJpMTN/gLxtIAw8siHr9HH0hs2gttlc+lbyjKuJ1gtB1TyODo9AiYBfOFTdtWxfWIABzIr+gyTm/NRwPfFYpajGvgGOULbUwWmzKgtrMQAstDb22XtWdikEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778081302; c=relaxed/simple;
-	bh=ZjEF3HpGwOZm1XS1TR6kZf0bNGfRZAZycuJei4ErS4k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ssm6sZ1n3g/4RHRwwdFb/EIuQtfRK1Y+lAokKRjWQnBjYpogKj/EMc+QHCFZlzJCJn3owky6LIFq/EhbDkpba0TcXk+x0qPGq8KDW8Z+xLCWm6FmztU5vaCT2Fos8bDjKevtSsZqiipxRqWziHMvs/jIVfBG3t42sExg5COZEM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=C+XW4o+3; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+	s=arc-20240116; t=1778081406; c=relaxed/simple;
+	bh=L5M9nBwS1nHUqtwhyuXq/8w0QC5A7ZsRsEYrR2CeSTI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AncNvFhH2hnckRc+q7mieWHsqOuAwizJ8Mb9uLLTUBvnPZB0H+aNjjOefa4wbBWGmU4EKMMIWFz8Gm54xNkr+bPDrg7+atDYqKWTecawJaA6F2CcU6QTDRyesS/Cm3ZBjrA/HyMUFs81RERZPDwyEZ+WWAGPEKDNKEIVFJwM1M4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=jT6QKA10; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="C+XW4o+3"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-44da2de25f3so2454029f8f.1
-        for <bpf@vger.kernel.org>; Wed, 06 May 2026 08:28:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1778081300; x=1778686100; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CGs4aXiGfe9FWzGIQNV1c8scbxohD/REqUQGlNaM17Q=;
-        b=C+XW4o+3BpfIYq+R7bvkXpReBGJrMLl/LMNXIlRWJaDMCP8l12gnAozRU838922lJO
-         RRMdFfzQKpQnWzb6ARXvdQ/RtmoNDrD6n6niAyKgqBRMYhB4EgtCI9TgzaWGrCFvQr69
-         fFOwH466Yb5gBEBbxEPPUBIughRl1DS0H5ACmf77Pp1KVqBLSvWKdCqpaMHf8bQrkbrG
-         WSEmp1uejt1RRMTrd2KyJVV6XAhyvlzZlZ6XjoIR5zHH8AFIBX7xOryI1vY82/TAmX2r
-         QaH5nTkRIC2PshdIC8H4YqtCezuEp5OV4V4OailE6fk5iyxuluRnpcZi1h4qmNgHK/m3
-         OkoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778081300; x=1778686100;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CGs4aXiGfe9FWzGIQNV1c8scbxohD/REqUQGlNaM17Q=;
-        b=Ia3L4f5lXybthdqhieeWvOTlMhsK60GOPMGEu6/iNxxxLn/uklp1XU7iyfRgr77o9D
-         J9cfyY5XxOThMJTCM5mzkOoxCJ5XjCUVv2uT63hsalFzl7Fq9tsV+PWNIDgJqAw5Vwpb
-         PVkv8IXqEB7OcVfpO8ZCKECIR/XM2n9VthPllRHZUG/BUowMWHYjEG3/LROhpQrg/Hpe
-         os6NN0SjXaRymv2mX4tGDErhMNb2DmZX3/t7o/65L4JKT20LYvkAk8XUz4rX1Qhlc/0b
-         e63aFAH8rOTUNvlnihEAGwy2ioxQ3Zn2o7FYE25vaI5cyKVEgP4BmP6AiCcKiDd6s83j
-         AsyA==
-X-Forwarded-Encrypted: i=1; AFNElJ9HMXW9bzvh5BX/NOwMBXyUlZ8BeUBNS5wxWZhm1pVtprxVtgIhn8DCph7rm68eNZn9BFM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6z56ApxnBqSdaas9I3wH67jtHKyLtNBEv83Gp2AAwvzRJ9r0j
-	OMFLKhI2UlfzNvh+L7VyTkVsRnfiHAvT56A3ZkswFrF667FIt+ML1XJHiWrxzTz9j8o=
-X-Gm-Gg: AeBDietXOrXRZne/v/SwceE/UopRSfv+KQMUDWuG0Qo6UXGSLg9cyq/dC2CiLy109Zw
-	+M1GCJJJEz4Y1sSVPieAgbTkuaV8/RCxmq1P4Qbn43V1InzuesMpViiiZrDNq2TnpFtP+IC/UmW
-	3nuuJN/IalHVrWsLEWc/DEXHQA7lPWp4WnsRRZA5xbEmUs1cJbPgV9Htp96YcRx/n5VuIq60jQi
-	x8ryiDhaccaz5S7t5qegrAdxDp/b8KHRdp48CgH3NgQgRSJoVXZwNZPCbZK7RartvHBh2M2wGTR
-	+qb/OwL9enYvvACYRqgpP/RQILFDqnm4jt4gWyh2mP83gItqmFckN7A+Z8yuvojm0S6z7ThHngV
-	d5w/0CTec+Piwbfk3DyU+j0UoYpaZlH+Of5DW5+iE62t3/cGAMWrOqCefkM1pYOOIvcfbhASd3U
-	y99rKrikslFcr0tYfsDuop7QhoAT3PSQhxslPjGgo1RigFZba54dYY9SZDeXnopNH3NHwL6Pytk
-	diqSEuFBh7ugvR84bY9c5dkzm7AaOJbkiFPzWZS0XX8XGG+WhS3DxSLWY20qI3mH1kRcWxHpocN
-	Szve2XZb86nSd0VqjfQ=
-X-Received: by 2002:a05:6000:2405:b0:44e:902f:e341 with SMTP id ffacd0b85a97d-4515cf11ce9mr6889250f8f.20.1778081299271;
-        Wed, 06 May 2026 08:28:19 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45055960902sm14773996f8f.28.2026.05.06.08.28.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2026 08:28:18 -0700 (PDT)
-Date: Wed, 6 May 2026 16:28:15 +0100
-From: Daniel Thompson <daniel@riscstar.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Xilin Wu <sophon@radxa.com>, Alex Elder <elder@riscstar.com>,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com,
-	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
-	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
-	arnd@arndb.de, gregkh@linuxfoundation.org,
-	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
-	alexandre.torgue@foss.st.com, ast@kernel.org,
-	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
-	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
-	julianbraha@gmail.com, livelycarpet87@gmail.com,
-	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
-	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
-	rohan.g.thomas@altera.com, sdf@fomichev.me,
-	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
-	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 10/12] net: stmmac: tc956x: add TC956x/QPS615
- support
-Message-ID: <afteD2d8d87Nyvl7@aspen.lan>
-References: <20260501155421.3329862-1-elder@riscstar.com>
- <20260501155421.3329862-11-elder@riscstar.com>
- <224E233C593EF171+8c8a43dd-5061-40f8-9eb7-f360eabf2ecc@radxa.com>
- <4015f47a-af62-441d-b1b8-a8598f963970@lunn.ch>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="jT6QKA10"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 646EvBOF1237317;
+	Wed, 6 May 2026 15:30:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=8o/pHM
+	I0SFKBZ63TlqEPtfnkb+IoVS3CknkKEfiaa6w=; b=jT6QKA10pECSJNX3FttuUV
+	rgXFx9AU8t0Gg2FceIpKj9Re6XL5APpTgqCF6KRmfQSddARoFEx2NtNExTA3YTcN
+	A2PmdRsd1yAZQHYOWnpm4ZCpIyCdjAcMBfG2wlk81eO82rM54g0cvn4mx5ANAX8v
+	T3u5o5UxVS7j+9MxkIhGNZAU02UuTwMYWlmVQVXliA3Jg5MZ0+SwtD09Bf241RqY
+	MSl1ruVsINP4DiohX7HzUplGwh2jp7YLKJLIOUnLn8VxkabS8xKYjchkwixsjrYZ
+	23zR9rHdNuKS257CBpShwyMgRiIisOctcTQuTkMIkAk+jDMyab7pPpNRE0Tb9VrQ
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9xxrp8f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 06 May 2026 15:30:00 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 646FOZ2V018357;
+	Wed, 6 May 2026 15:29:59 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dwuyw6wtg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 06 May 2026 15:29:59 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 646FTvI856623434
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 6 May 2026 15:29:57 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C209E2004B;
+	Wed,  6 May 2026 15:29:57 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9E36220043;
+	Wed,  6 May 2026 15:29:57 +0000 (GMT)
+Received: from [9.52.200.195] (unknown [9.52.200.195])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  6 May 2026 15:29:57 +0000 (GMT)
+Message-ID: <82fca24b-d166-4e87-abc9-07cfc9cb8160@linux.ibm.com>
+Date: Wed, 6 May 2026 17:29:57 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4015f47a-af62-441d-b1b8-a8598f963970@lunn.ch>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 05/19] unwind_user/sframe: Add support for reading
+ .sframe contents
+To: Steven Rostedt <rostedt@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Indu Bhagat <ibhagatgnu@gmail.com>,
+        bpf@vger.kernel.org, sashiko@lists.linux.dev
+References: <20260505121718.3572346-6-jremus@linux.ibm.com>
+ <20260505185932.C708CC2BCB4@smtp.kernel.org>
+ <4e5d51f0-8f4c-4a07-9141-8b26d2c90fc6@linux.ibm.com>
+ <20260506110142.7b2943d7@fedora>
+Content-Language: en-US
+From: Jens Remus <jremus@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20260506110142.7b2943d7@fedora>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA2MDE0OSBTYWx0ZWRfXxXqdvENYODpM
+ m+gFT++Mtd4vUeKEnK0kFi2Hy8UtOx+st0US3LArD+LkRRtdBY/t9T4SPLkfz1jhgnVlhOrBKb3
+ 7saTQl/NhXk2tM662Gfjrnfb9598mYUMy18ZzJLkXXil8/Cc/ZDHiQ8XcIbG+O0QRaqcoe9/xGJ
+ IAG0AbWWYZZaRzIK9Aw+kT9C9BkEhSkEUMdLwBchgrlhvBSWkwPLkJ7wefNHHU2FbM3WjlVyEDK
+ KqdWv5HIpsORniR9PsYJWhGt3zu5eHidHy3wlg61H3xJJw3LTQ24SUcbqufGx+yMar1sjC8romO
+ 61KRAEkC0WJynWlmgVavjG0SJIZ3ym8ayF+Bw7SwePYDU+ffh790EDrSiUgf9141HfsljA9qoNK
+ pW5ROnzcElcoB3+ICcjsUp/B6zb7Q7XIaxMrVvz7IOTzU4UjMPM9DJwAsyPvZW6e8uhE9iDkKfB
+ /aqLmbeyj2kNQ2vwlgA==
+X-Proofpoint-ORIG-GUID: mdWZrTYdRrElCejZloWldTdKAwVD-PKL
+X-Proofpoint-GUID: abjZye90Suc1ux3vqlNHF-JMUX8B6gTN
+X-Authority-Analysis: v=2.4 cv=ctWrVV4i c=1 sm=1 tr=0 ts=69fb5e78 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=VnNF1IyMAAAA:8
+ a=CBcInBAli9MMVMz-rO8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-06_01,2026-05-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 lowpriorityscore=0 adultscore=0 clxscore=1015
+ suspectscore=0 impostorscore=0 spamscore=0 malwarescore=0 phishscore=0
+ bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2604200000
+ definitions=main-2605060149
 
-On Wed, May 06, 2026 at 04:19:54PM +0200, Andrew Lunn wrote:
-> On Wed, May 06, 2026 at 08:59:01PM +0800, Xilin Wu wrote:
-> > On 5/1/2026 11:54 PM, Alex Elder wrote:
-> > > +	/* AXI Configuration */
-> > > +	axi = &td->axi;
-> > > +	axi->axi_lpi_en = 1;
-> > > +	axi->axi_wr_osr_lmt = 31;
-> > > +	axi->axi_rd_osr_lmt = 31;
-> > > +	/* All sizes (2^2..2^8) are supported */
-> > > +	axi->axi_blen_regval = DMA_AXI_BLEN_MASK;
-> > > +	plat->axi = axi;
-> > > +
-> > > +	plat->mac_port_sel_speed = speed;
-> > > +	plat->flags = STMMAC_FLAG_MULTI_MSI_EN | STMMAC_FLAG_TSO_EN;
-> >
-> > I got WoL working only after adding STMMAC_FLAG_USE_PHY_WOL here. I guess
-> > it's required, since the driver clocks down the MAC/PMA/XPCS in its suspend
-> > hook?
->
-> Nice to see somebody testing WoL.
+On 5/6/2026 5:01 PM, Steven Rostedt wrote:
+> On Wed, 6 May 2026 16:34:34 +0200
+> Jens Remus <jremus@linux.ibm.com> wrote:
+> 
+>>>> +static __always_inline int __read_fre(struct sframe_section *sec,
+>>>> +				      struct sframe_fde_internal *fde,
+>>>> +				      unsigned long fre_addr,
+>>>> +				      struct sframe_fre_internal *fre)
+>>>> +{  
+>>> [ ... ]  
+>>>> +	if (fre_addr + addr_size + 1 > sec->fres_end)
+>>>> +		return -EFAULT;
+>>>> +
+>>>> +	UNSAFE_GET_USER_INC(ip_off, cur, addr_size, Efault);  
+>>>
+>>> Will this cause alignment faults on architectures with strict alignment
+>>> requirements?
+>>>
+>>> The .sframe format uses packed structures and variable-length datawords. The
+>>> cur pointer might be unaligned here, and UNSAFE_GET_USER_INC() performs
+>>> 16-bit or 32-bit reads via unsafe_get_user().  
+>>
+>> IIUC this should not be an issue for x86-64, s390, and arm64.
+> 
+> Do we have a way to make sure that sframe support will always be for
+> architectures that can handle alignment issues like this? There should
+> be something to force this via configs or something that will trigger a
+> warning or bug if this is built for architectures that can't handle
+> this alignment.
 
-Absolutely!
+Any suggestions are very welcome.
 
-We recently stripped out the (obviously broken and partially ported)
-WoL support we had in tc956x-pci.c. We planned to bring it back later.
-Hadn't realized it could be so easy.
+>>>> +
+>>>> +	fre_addr = sec->fres_start + fde->fres_off;
+>>>> +
+>>>> +	for (i = 0; i < fde->fres_num; i++) {  
+>>>
+>>> Can this loop cause a hard lockup in atomic context?
+>>>
+>>> fde->fres_num is a 32-bit value copied from user space without validation.
+>>> Since sframe_find() is designed to be called by unwinders in NMI context, an
+> 
+> What? No. This looks to be a hallucination. sframe_find() will never be
+> called in NMI context. In fact, it can only be called in task context.
+> 
+>>> attacker could provide a very large number of valid entries. Executing
+>>> billions of iterations and unsafe_get_user() calls could stall the CPU
+>>> and trigger the hard lockup detector.  
+>>
+>> Please advise.
+> 
+> That said, we should verify that fde->fres_num is at least always
+> smaller than the size of the table.
 
+If we carry the .sframe header sfh->num_fres over to a new sec->num_fres
+then __read_fde() could check:
 
-> In your testing, is it the PHY doing the WoL, or the MAC? I assume
-> PHY.
->
-> If i remember the DT correctly, the PHY interrupt is connected to a
-> SoC GPIO, not a GPIO of this chip.
+	if (_fda.fres_num > sec->num_fres)
+		return -EINVAL;
 
-On RB3Gen2 (and I think also the QPS615 reference design) the phy
-interrupt is routed twice. It is connected both to the TC9564 GPIO
-block and to the host SoC.
+But I am not sure if that check provides much benefit, as fde->fres_num
+is relative to fde->fres_off, which points into the
+[sec->fres_start, sec->fres_end[ part of the .sframe section.
+So even a small fde->fres_num might be out of range.  Given the FRE are
+variable size, it is not easily possible to check upfront in
+__read_fde() whether the fde->fres_num is valid.
 
+The validity is checked later in __read_fre() before any fields are read
+from the FRE, with fre_addr = sec->fres_start + fde->fres_off being
+passed as argument:
 
-> So for your board, it is the SoCs
-> GPIO controllers ability to perform the wake which is
-> important. However, where the PHY interrupt is connected is a board
-> design issue. Could the PHY interrupt be connected to the chip? Would
-> the chip be able to wake the system? Should STMMAC_FLAG_USE_PHY_WOL be
-> conditional?
+	if (fre_addr + addr_size + 1 > sec->fres_end)
+		return -EFAULT;
 
-I couldn't think of any reason to use the TC9564 GPIO block for the
-interrupts on RB3gen2 so I left it unused and the DT describes the SoC
-routing only.
+	[...]
 
-However if TC9564 were to be mounted on a real PCIe card then we'd have
-to use the TC9564 GPIO instead and would have to leave enough of the
-TC9564 enabled to handle the interrupt (and also to load a firmware to
-catch the interrupt and drive the PCI wake up signal).
+	if (cur + (dataword_count * dataword_size) > sec->fres_end)
+		return -EFAULT;
 
-However such systems would need extensions to the current driver. We
-have done all we can to make it possible to add those extensions in the
-future but we would not be able to test them: not only do would a real
-PCIe card need extra driver features to play nice with ACPI but the
-card would also need an I2C EEPROM. We don't have that EEPROM on
-RB3gen2 (and again, we'd need firmware to read it).
+> 
+>>
+>>>   
+>>>> +		int ret;
+>>>> +  
+>>>
+>>> [ ... ]
+>>>   
+>>>> @@ -120,8 +449,10 @@ int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
+>>>>  	sec->text_end		= text_end;
+>>>>  
+>>>>  	ret = sframe_read_header(sec);
+>>>> -	if (ret)
+>>>> +	if (ret) {
+>>>> +		dbg_print_header(sec);
+>>>>  		goto err_free;
+>>>> +	}  
+>>>
+>>> Can shdr.fre_len cause an integer overflow on 32-bit architectures during
+>>> header parsing?
+>>>
+>>> If a malicious user provides a large fre_len in the header, fres_end
+>>> (calculated as fres_start + shdr.fre_len) could wrap around the 32-bit
+>>> address space. This would bypass the bounds check in sframe_read_header(),
+>>> allowing fres_start and fdes_start to point into kernel memory. Later, when
+>>> __read_fde() and __find_fre() use unsafe_get_user(), this could lead to
+>>> arbitrary kernel memory disclosure.  
+>>
+>> SFrame is currently only supported on 64-bit architectures (i.e. x86-64,
+>> arm64, s390 64-bit).  So unsigned long fres_end should always be 64-bit.
+>> Do we need to add the following to the header parsing?
+>>
+>> if (fdes_start >= fdes_end || fres_start >= fres_end) {
+>> 	dbg_sec("inconsistent FDE/FRE start/end address\n");
+>> 	return -EINVAL;
+>> }
+> 
+> I guess this wouldn't hurt.
 
-TL;DR - there are conceivable (and sane) hardware designs where the
-interrupt goes only to the TC9564 GPIO, but they are too different to
-RB3gen2 (and related SBC designs) for them to be supported before
-they exist!
+Ok.
 
+>>>>  
+>>>>  	ret = mtree_insert_range(sframe_mt, sec->text_start, sec->text_end, sec, GFP_KERNEL);  
+>>>
+>>> Does passing sec->text_end directly as the last parameter to
+>>> mtree_insert_range() break contiguous mappings?
+>>>
+>>> mtree_insert_range() expects the last boundary to be inclusive, but
+>>> sec->text_end represents the exclusive end address of the executable segment.
+>>> If user space maps seamlessly contiguous text segments, the insertion for the
+>>> second segment might overlap with the claimed end of the first, causing it to
+>>> fail with -EEXIST.  
+>>
+>> Addressed in previous patch.
+> 
+> And I just sent a patch to fix the documentation of
+> mtree_insert_range() to update the kerneldoc to explicitly state it is
+> inclusive :-p
 
-Daniel.
+Thanks!
+
+>>
+>>>   
+>>>>  	if (ret) {
+>>>>  		dbg("mtree_insert_range failed: text=%lx-%lx\n",  
+>>>   
+Regards,
+Jens
+-- 
+Jens Remus
+Linux on Z Development (D3303)
+jremus@de.ibm.com / jremus@linux.ibm.com
+
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
+
