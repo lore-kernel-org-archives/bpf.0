@@ -1,241 +1,296 @@
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9315B4657DD
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 13:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778074235; cv=pass; b=HJ7sEMelHlNrVFbJCve+XDXr4eJUsBPMXT2UPJWjq9tnKq9dDsYx/9I/7oA7e31QVz5+fxv4RlpjYL36ASt9MkMuWTUvirsDeozBuIRpuQ0UhtfU/Lue7PpIVgqTetUv2iA8mjB7k/O8QSkdjuz5rBN3wLqgtkpImOXj3EeWc50=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778074235; c=relaxed/simple;
-	bh=DQGFFoiJU2K9izdQcUie2/5EAXfsMBq2jClS/CVRmtw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GHtRBLtpci8ZmsByIUmodI2QAgFnB+tElQgHFqC+uY4i8Gvbol5ikKE7g5kkxbKBRO6g7OAux922ysN54fmReEXPV9DwJYeazC5iBZwmI4JU1FyDqQSoAsqQqyP+cwnfsSNjTB+xvvszk1vm2TUxJPYA0f2oVP4HIEFH2CJqA2I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xt6eskqh; arc=pass smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3889F4779B9;
+	Wed,  6 May 2026 13:42:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778074945; cv=none; b=D3ZXe8hc45me/2tTLKoXm0UyKsPf3MedNxNpidMAdkGCLGpTmpT0quKxT2uLVT4Z162IFZvtRQEClivdEfDQj1zrtsetRPLY66ckznNrlM1zrwNByJCHa85Z5zr6/DQ+wXI/uMkD+zdMIYJsIA909j2mzuuGgazSqmUa5EYQ6Aw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778074945; c=relaxed/simple;
+	bh=XjJt4MMiRneSTZZ6NdJgHvj44kR4uurKFf9SIauftKg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P1xJWZRtxCZsDzI6cJC52+p/XlWLEgvZI3jkJFey+pkXye14QpQACijhZiYS2sGOh4ZGSGhA7960kuk9G0D30n5Hum2IzLOrn4iJ/WNCxLxB0OuYpkEAmEcL176woUdqRwzeih4HFD8H/9/aUjDcA8dFNtt6evvTw5ym0iLilGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tdrB7WbH; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xt6eskqh"
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-38a01c80c34so62693301fa.0
-        for <bpf@vger.kernel.org>; Wed, 06 May 2026 06:30:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778074232; cv=none;
-        d=google.com; s=arc-20240605;
-        b=QT9XYo3sn5YXbHtui8INDewAg4jz3fMLmqXVj9UsTRkyM8STSIfyKS+DPR0jbboL3v
-         zGnBXkXeWBngfMPdzx6dqnSYsfGwNecZz52HFtWyrP8bLpbGL9YVhGq/WjPyF46iKy6d
-         THYi0iopSMht3Sm7qD5Mp3cJ2foZ2K5dXzdNwYUEpaUgoVri49z+V9jshENvVCgL8pRX
-         UKv4/0X/B7YoBHaK4fjN39HHjGZnbsq/bZXclodnCl7VPX995LQMI4DbIAohcPt3Wff9
-         ta5l/eZJNYCAJ0PKfcw2mBBm0MbRa3n2k0ozD/gfcgvrr0bTQUFuI/45ZIkui/C01R0k
-         ISug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=xriIljB3f3HwbzgR4DqwJHEbsPSrXHAu4RDpo4RPiXo=;
-        fh=HrpXh9wkq9WGU+qkOK/whRNTox/f6EhQ6cTlX3T8GPI=;
-        b=BqV2stQKiUdmELC15dDqxu4S/asRyBmoMynn9qWSXMmFywfqT57NV7VOJpQa+oRfif
-         yCPLR2gHKhgu+bMxEkaXGIk8CdJHQeUEUHnm61EWinwwnc+X3wkLDQa2e1zjWbpCaokK
-         5tAviCAmP0qvbcNMYmBMKuSJ7G0oxOiYnwNODsW3XpZSiZdQs/BBe/7xjY7LIxOPvYAK
-         H1sTXmPCv6WlzW62WT0L/hPeG+XRBHcjwGyyOf5oz/whHgZn+67bUyFyxIH/OIv1qTAM
-         7whorhtWIlpBT9S/0YUG1lKMjtP5criNwpU2ojzQHs7xWKS2PbTOg4dKLUDtqnGe7xSt
-         xAqQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778074232; x=1778679032; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xriIljB3f3HwbzgR4DqwJHEbsPSrXHAu4RDpo4RPiXo=;
-        b=Xt6eskqhp/iJHMjgXSW6l8I792hpd0K/ftOplT3EZQMTqLtr6a998QpUWsDMwQbTbg
-         gXh0IugPGX4qNz5Bp6j22cv2OMofhvRUDpDI/Q2fTZTUni6f9WmDvsLpfFyEpIPP06cj
-         CslJsJoJtaoZcl5RBam0nKv8PvN0HKdwHvKZeADRU088niy7ny9WZ6VDhqBINsZx5X+4
-         lflwZ9pk3WjqBbkssWVppUfBVrbHvHRIqgE7KXJUIKpKHXwcVwWl527mIEQow/9OOz62
-         uTWGP+QwvA5jFeUoul3HleU/2xrRcaoebMsAxAE0ukOkv/oXpkvvmNJgdPT/2KJMKajM
-         PUaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778074232; x=1778679032;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=xriIljB3f3HwbzgR4DqwJHEbsPSrXHAu4RDpo4RPiXo=;
-        b=ObSB6MFw/19ftsvn58rdmsmS/gucze8DJ/dXEY/64tacUe1S9YWD7SD/FzQ9z3ME5m
-         05GYLpjYKoEPrg9bT5cP/aRt+ImOXGswnZ3bNGksX1h6/4L1oSwiGHcaFbRKUKDK2ZSs
-         Mt0PwNr7czimeXWC0tkXr3aLyz7U2UMrL1EsiekuVPSQKS1TdXg0lqTv8HU0AaePY7PF
-         XAitmN5xNPzU2U6etsE4YWNQYuSGkQyOYcuafqvn4cdWyUOrvV5KdEJ/am8JJUQc34Wh
-         5fm/cojJ1amkQPGhh6vo9qyy6WyHfK9Xgyx8ShyoKbu9ZojsBzbahjo9X9/jyNPi1EFw
-         TbAw==
-X-Forwarded-Encrypted: i=1; AFNElJ/PtbUvarFjwNvoMvQG90I1Na7gE9FOW4j7jQR4NEhe4NzoMdkZQbFiEn5PFbckK7cBj+w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVkP4LccnrylJhnLbmLF/sr4KYR6euuTyDv1en/z/C4YMIZtrz
-	g1l6NNpEstHNcQT8Zz5flf7sXiMyOi/QFOf4Y0Dyj/zDRyS21Zt0QBr7vjXXh3hPaAbISghriRZ
-	3hyX/Qb3tX93R/LlwbRt4bK3VV96xxuU=
-X-Gm-Gg: AeBDievn1F0jgt3s9wChQ4Gdz/H61HFQnEOxM9zQP6pybO1CU6HmUosnmAmBoaFfZVF
-	geDxpIjsBzdd+FKKIRf1uqSemJ806LTwT0fjIMEXzrVdaBcz2BkpR3S1KM6xTF3HuHM4inBkjIN
-	d4sPRjVz10N82449YQczezUP8XoFeIHr096yKbDpNuP1G38L+AG2iNhL9h6L9+aR+M+uCHFrrVK
-	PqTArJ6kqmfhHQ/9NbgYXaLb4PfV2BrxD+MxMCw0OENqtbJMWiNgM7rpqgFcO5VVvePjATLPKrf
-	4Sd7xqhEmcvI/t3u
-X-Received: by 2002:a05:651c:32e:b0:38e:a8ef:b61 with SMTP id
- 38308e7fff4ca-393c4329231mr10333541fa.29.1778074231469; Wed, 06 May 2026
- 06:30:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tdrB7WbH"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 646B4p632210426;
+	Wed, 6 May 2026 13:42:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=Uvy47b
+	2CJY1t+DIcurbHCRix+0waFmJr2FYMuBH0/oE=; b=tdrB7WbHhfs3PmRupMHd+m
+	zDTakINT8qvjFuoTZFAKNPk5F0dDS+33iFZo5nEDeWDf5NYPZXpt+dnFIX01AA3n
+	C7YNpuukaNwx2PtBmrazw+T314TZeHsI6CEAmvQjn1PE75Hvz0S7ywXEDc23RINH
+	uD7Isv8qvS+CUmLzkGVSE0pSfusKNb6NNM5GYK0FQgYy9OHduBetL5bKWldvB6ea
+	M/RvktgNIT7STgFo2Ru8n/WqkXr5CSPb7Wqb1QGE2p4QA4tFvyJRum5Tpr08R3o1
+	f6T+zsIHKMHijgjG7LK/M/uFFV9S33p54ytuXjS92ZKdz7tEDpW1SfNLaL0EpWyA
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9y1gx1w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 06 May 2026 13:42:19 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 646DdZxn007576;
+	Wed, 6 May 2026 13:42:18 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dwwtge8a1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 06 May 2026 13:42:18 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 646DgGEs50856380
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 6 May 2026 13:42:16 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A53C120043;
+	Wed,  6 May 2026 13:42:16 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8369D20040;
+	Wed,  6 May 2026 13:42:16 +0000 (GMT)
+Received: from [9.52.200.195] (unknown [9.52.200.195])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  6 May 2026 13:42:16 +0000 (GMT)
+Message-ID: <f106e4a1-4f60-4c65-97bc-2257005765e5@linux.ibm.com>
+Date: Wed, 6 May 2026 15:42:16 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260503165024.1526680-5-vernon2gm@gmail.com> <c13f99d42c434ec73ec1e8cf1141047146ab359e60e56e78e1c32554d6e01e9b@mail.kernel.org>
-In-Reply-To: <c13f99d42c434ec73ec1e8cf1141047146ab359e60e56e78e1c32554d6e01e9b@mail.kernel.org>
-From: Vernon Yang <vernon2gm@gmail.com>
-Date: Wed, 6 May 2026 21:30:18 +0800
-X-Gm-Features: AVHnY4J-CoTLNdm_hcCx9sRfTfkhudhff53vbP0Y0iHDb1_fw8_5BpxVx-dB9-s
-Message-ID: <CACZaFFPr+=2zJSMEkfSiYQ8NvEtc3tr4VWBoi5u0BST66E6E_w@mail.gmail.com>
-Subject: Re: [PATCH 4/4] samples: bpf: add mthp_ext
-To: bot+bpf-ci@kernel.org
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
-	roman.gushchin@linux.dev, inwardvessel@gmail.com, shakeel.butt@linux.dev, 
-	ast@kernel.org, daniel@iogearbox.net, surenb@google.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
-	baohua@kernel.org, lance.yang@linux.dev, dev.jain@arm.com, 
-	yanglincheng@kylinos.cn, andrii@kernel.org, martin.lau@kernel.org, 
-	eddyz87@gmail.com, yonghong.song@linux.dev, clm@meta.com, 
-	ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 02/19] unwind_user/sframe: Add support for reading
+ .sframe headers
+To: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf
+ <jpoimboe@kernel.org>,
+        Indu Bhagat <ibhagatgnu@gmail.com>
+Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev
+References: <20260505121718.3572346-3-jremus@linux.ibm.com>
+ <20260505124948.669E2C2BCB4@smtp.kernel.org>
+Content-Language: en-US
+From: Jens Remus <jremus@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20260505124948.669E2C2BCB4@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: u63sPowX08cZjLfRc8HYO0aZzJiZvLVK
+X-Proofpoint-GUID: _y2Q5mmT00oMzphCrb6X7uL8BgPI6OJu
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA2MDEzNCBTYWx0ZWRfX515t7tDsKe91
+ XlTmSkftQMI8X/5oyGwxPLzwoSws5zQ+7I8njjmQgHGturkojm2US+gysl71ytnbSyoeNldPABQ
+ Q3TAlTJ2P8vM2Bpy/f3ViNkoR9r7lUWuMR5lgnIHfwFjk/xIxf68D/eHoVHiuHAuJrG1JABQTll
+ G7MXwRhCI0YoIT0Pk0ab1S2Mks9veP3bZty0jp0MbkIWRDUZ+N4K4fEzYLj54MBmEKfUApYlmBe
+ B/e/YiEF1B2oc7gfhX5quFACucC1ZGKT2wmOKQ37VWscbLJo3jSuE/KPsjLOunbm/IttZ1ru8ES
+ ab8vUdBVJBfUH3yDnexMoooOBv8cWnhvLiNS+5/M0JmNaK9zJuQ+R6fCaYfO0SDXrwgPulvMEM0
+ ODnC7ci5vAcdB6+7qYI6tbRdu4KnzevUmb3cBH1CS7yQ2SqmJv51yv/QjIAd3oiJHRGkaWKttEw
+ upVcfbGEIonNVSpCGYg==
+X-Authority-Analysis: v=2.4 cv=UbFhjqSN c=1 sm=1 tr=0 ts=69fb453b cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=ADBILDl3CrY6QJhYfcwA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-05_03,2026-05-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 spamscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ adultscore=0 priorityscore=1501 bulkscore=0 phishscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605060134
 
-On Mon, May 4, 2026 at 1:35=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
->
-> > diff --git a/samples/bpf/.gitignore b/samples/bpf/.gitignore
-> > index 0002cd359fb1..2a73581876b4 100644
-> > --- a/samples/bpf/.gitignore
-> > +++ b/samples/bpf/.gitignore
->
+On 5/5/2026 2:49 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
+> - [Medium] Missing validation of shdr.abi_arch allows parsing SFrame data from mismatched architectures.
+> - [Medium] VMA addresses are incorrectly evaluated as boolean flags to check for zero-length inputs.
+> - [Low] Mixing goto error handling with scoped_guard scope-based cleanup.
+> --
+> 
+> commit afe7c9eb6f0e6fc3f73d0b6a555f8d3926cf6ccf
+> Author: Josh Poimboeuf <jpoimboe@kernel.org>
+> 
+> unwind_user/sframe: Add support for reading .sframe headers
+> 
+> This commit introduces basic infrastructure for unwinding user space stacks
+> with SFrame. It adds support for parsing the .sframe section header.
+> 
+> Link: https://lore.kernel.org/all/f27e8463783febfa0dabb0432a3dd6be8ad98412.1737511963.git.jpoimboe@kernel.org/
+> 
+>> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+>> new file mode 100644
+>> index 0000000000000..c128c1eeaca20
+>> --- /dev/null
+>> +++ b/kernel/unwind/sframe.c
 > [ ... ]
->
-> > diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-> > index 95a4fa1f1e44..357c7d1c45ef 100644
-> > --- a/samples/bpf/Makefile
-> > +++ b/samples/bpf/Makefile
->
-> [ ... ]
->
-> > diff --git a/samples/bpf/mthp_ext.bpf.c b/samples/bpf/mthp_ext.bpf.c
-> > new file mode 100644
-> > index 000000000000..bbee3e9f679c
->
-> [ ... ]
->
-> > diff --git a/samples/bpf/mthp_ext.c b/samples/bpf/mthp_ext.c
-> > new file mode 100644
-> > index 000000000000..0e064bad136f
-> > --- /dev/null
-> > +++ b/samples/bpf/mthp_ext.c
-> > @@ -0,0 +1,340 @@
-> > +// SPDX-License-Identifier: GPL-2.0
->
-> [ ... ]
->
-> > +int main(int argc, char **argv)
-> > +{
-> > +     const char *root_path =3D DEFAULT_ROOT;
-> > +     unsigned long threshold =3D DEFAULT_THRESHOLD_MS;
-> > +     unsigned long interval =3D DEFAULT_INTERVAL_MS;
-> > +     unsigned int init_order =3D DEFAULT_ORDER;
-> > +     unsigned int min_mem =3D DEFAULT_MIN_MEM;
-> > +     bool fixed =3D false;
-> > +     bool debug =3D false;
-> > +     struct mthp_ext *skel;
-> > +     struct bpf_link *iter_link;
-> > +     struct bpf_link *ops_link;
-> > +     struct ring_buffer *rb;
-> > +     int root_fd;
-> > +     int psi_fd;
-> > +     int err =3D 0;
-> > +     int opt;
->
-> [ ... ]
->
-> > +     /* Attach struct_ops to root cgroup for mthp_choose */
-> > +     DECLARE_LIBBPF_OPTS(bpf_struct_ops_opts, opts);
-> > +     opts.flags =3D BPF_F_CGROUP_FD;
-> > +     opts.target_fd =3D root_fd;
-> > +     ops_link =3D bpf_map__attach_struct_ops_opts(skel->maps.mthp_ops,=
- &opts);
->                                                    ^^^^^^^^^^^^^^^^^^^^^^=
-^^^^
-> Will mthp_ext compile with these symbols? A tree-wide grep shows that
-> bpf_struct_ops_opts, BPF_F_CGROUP_FD, and bpf_map__attach_struct_ops_opts=
-()
-> do not exist anywhere in the kernel source tree:
->
->   $ git grep -n "struct bpf_struct_ops_opts"
->   samples/bpf/mthp_ext.c:260:   DECLARE_LIBBPF_OPTS(bpf_struct_ops_opts, =
-opts);
->
->   $ git grep -n "BPF_F_CGROUP_FD"
->   samples/bpf/mthp_ext.c:261:   opts.flags =3D BPF_F_CGROUP_FD;
->
->   $ git grep -n "bpf_map__attach_struct_ops_opts"
->   samples/bpf/mthp_ext.c:263:   ops_link =3D bpf_map__attach_struct_ops_o=
-pts(skel->maps.mthp_ops, &opts);
->
-> The struct bpf_struct_ops_opts type is not defined in tools/lib/bpf/libbp=
-f.h.
-> The BPF_F_CGROUP_FD flag does not appear in include/uapi/linux/bpf.h or a=
-ny
-> other header. The bpf_map__attach_struct_ops_opts() function is not decla=
-red
-> in libbpf.h or exported in tools/lib/bpf/libbpf.map.
->
-> The only existing libbpf API for struct_ops attachment is:
->
->   tools/lib/bpf/libbpf.h:
->     LIBBPF_API struct bpf_link *
->     bpf_map__attach_struct_ops(const struct bpf_map *map);
->
-> which takes no opts parameter and cannot attach to a specific cgroup fd.
->
-> Samples/bpf/Makefile was modified earlier in this commit to add mthp_ext =
-to
-> tprogs-y, meaning the build system will attempt to compile mthp_ext.c dur=
-ing
-> make samples/bpf/. That compilation will fail with undefined type, undefi=
-ned
-> identifier, and implicit declaration errors.
->
-> This looks like it depends on an out-of-tree libbpf extension that adds a
-> per-cgroup struct_ops attachment API. Is that libbpf patch supposed to be
-> included earlier in this series, or should the sample use a different att=
-ach
-> mechanism?
+>> +static int sframe_read_header(struct sframe_section *sec)
+>> +{
+>> +	unsigned long header_end, fdes_start, fdes_end, fres_start, fres_end;
+>> +	struct sframe_header shdr;
+>> +	unsigned int num_fdes;
+>> +
+>> +	if (copy_from_user(&shdr, (void __user *)sec->sframe_start, sizeof(shdr))) {
+>> +		dbg("header usercopy failed\n");
+>> +		return -EFAULT;
+>> +	}
+>> +
+>> +	if (shdr.preamble.magic != SFRAME_MAGIC ||
+>> +	    shdr.preamble.version != SFRAME_VERSION_3 ||
+>> +	    !(shdr.preamble.flags & SFRAME_F_FDE_SORTED) ||
+>> +	    !(shdr.preamble.flags & SFRAME_F_FDE_FUNC_START_PCREL) ||
 
-This series is based on linux v7.1-rc1 (26fd6bff2c05) + "mm: BPF OOM"[3]
-first four patches.
+	    shdr.abi_arch != sframe_abi_arch() ||
 
-All of the above definitions are in  "mm: BPF OOM" PATCH#2.
+>> +	    shdr.auxhdr_len) {
+>> +		dbg("bad/unsupported sframe header\n");
+>> +		return -EINVAL;
+>> +	}
+> 
+> Should we also validate shdr.abi_arch to ensure it matches the expected
+> architecture?
+> 
+> If malformed or foreign-architecture SFrame data is passed in (for instance,
+> with an unexpected endianness or register mapping), the kernel might interpret
+> it incorrectly and generate invalid stack traces.
+> 
+> Furthermore, accepting arbitrary values here could risk ABI calcification if
+> userspace starts supplying invalid values that we later want to reject.
 
-https://lore.kernel.org/linux-mm/20260127024421.494929-3-roman.gushchin@lin=
-ux.dev/
+I could introduce an architecture-specific sframe_abi_arch() and update
+the SFrame header validation as above.  For x86 the implementation in
+in unwind_user_sframe.h could look as follows:
 
-> > +     err =3D libbpf_get_error(ops_link);
-> > +     if (err) {
-> > +             fprintf(stderr, "ERROR: attach struct_ops failed: %d\n", =
-err);
-> > +             ops_link =3D NULL;
-> > +             goto attach_opts_fail;
-> > +     }
->
+#ifdef CONFIG_X86_64
+#define sframe_abi_arch()	SFRAME_ABI_AMD64_ENDIAN_LITTLE
+#endif
+
+Given sframe.o is only linked in if CONFIG_HAVE_UNWIND_USER_SFRAME and
+that is only selected if X86_64 this should be fine.
+
+Do you see any value?
+
 > [ ... ]
->
-> > diff --git a/samples/bpf/mthp_ext.h b/samples/bpf/mthp_ext.h
-> > new file mode 100644
-> > index 000000000000..33dc01bcebd3
->
+>> +int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
+>> +		       unsigned long text_start, unsigned long text_end)
+>> +{
+>> +	struct vm_area_struct *sframe_vma, *text_vma;
+>> +	struct mm_struct *mm = current->mm;
+>> +	struct sframe_section *sec;
+>> +	int ret;
+>> +
+>> +	if (!sframe_start || !sframe_end || !text_start || !text_end) {
+
+	if (sframe_start >= sframe_end || text_start >= text_end) {
+		dbg("invalid sframe/text address\n");
+
+Do you agree?
+
+> Is it safe to use VMA start addresses as boolean flags?
+> 
+> Since vm_start can legitimately be zero in certain configurations (if
+> mmap_min_addr permits), evaluating !sframe_start or !text_start could
+> incorrectly reject perfectly valid mappings at address 0.
+> 
+> Also, to check for zero-length sections, would it be better to explicitly use
+> comparisons like sframe_start >= sframe_end instead?
+> 
+>> +		dbg("zero-length sframe/text address\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	scoped_guard(mmap_read_lock, mm) {
 > [ ... ]
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/252852=
-79315
+>> +	sec = kzalloc(sizeof(*sec), GFP_KERNEL);
+>> +	if (!sec)
+>> +		return -ENOMEM;
+>> +
+>> +	sec->sframe_start	= sframe_start;
+>> +	sec->sframe_end		= sframe_end;
+>> +	sec->text_start		= text_start;
+>> +	sec->text_end		= text_end;
+>> +
+>> +	ret = sframe_read_header(sec);
+>> +	if (ret)
+>> +		goto err_free;
+> 
+> Is it acceptable to mix goto error handling with scoped_guard() cleanup
+> helpers in the same function?
+> 
+> The kernel's cleanup subsystem guidelines generally suggest that usage of
+> goto and cleanup helpers shouldn't be mixed in the same routine.
+
+This references to the following comment in include/linux/cleanup.h:
+
+  Lastly, given that the benefit of cleanup helpers is removal of
+  "goto", and that the "goto" statement can jump between scopes, the
+  expectation is that usage of "goto" and cleanup helpers is never
+  mixed in the same function. I.e. for a given routine, convert all
+  resources that need a "goto" cleanup to scope-based cleanup, or
+  convert none of them.
+
+> 
+> Could sec be allocated using __free(kfree) to avoid the goto entirely?
+
+The goto error handling is used outside the scoped_guard().  So I think
+it is fine.  Do you see any value in converting it as follows (my naive
+attempt):
+
+diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+@@ -722,13 +722,14 @@ static int sframe_read_header(struct sframe_section *sec)
+        return 0;
+ }
+
++DEFINE_FREE(free_section, struct sframe_section *, if (_T) free_section(_T))
+ int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
+                       unsigned long text_start, unsigned long text_end)
+ {
+        struct maple_tree *sframe_mt = &current->mm->sframe_mt;
+        struct vm_area_struct *sframe_vma, *text_vma;
+        struct mm_struct *mm = current->mm;
+-       struct sframe_section *sec;
++       struct sframe_section *sec __free(free_section) = NULL;
+        int ret;
+
+        if (sframe_start >= sframe_end || text_start >= text_end) {
+@@ -768,7 +769,7 @@ int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
+        ret = sframe_read_header(sec);
+        if (ret) {
+                dbg_print_header(sec);
+-               goto err_free;
++               return ret;
+        }
+
+        ret = sframe_validate_section(sec);
+@@ -784,10 +785,6 @@ int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
+        }
+
+        return 0;
+-
+-err_free:
+-       free_section(sec);
+-       return ret;
+ }
+
+> 
+>> +
+>> +	/* TODO nowhere to store it yet - just free it and return an error */
+>> +	ret = -ENOSYS;
+>> +
+>> +err_free:
+>> +	free_section(sec);
+>> +	return ret;
+>> +}
+> 
+
+Thanks and regards,
+Jens
+-- 
+Jens Remus
+Linux on Z Development (D3303)
+jremus@de.ibm.com / jremus@linux.ibm.com
+
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
+
