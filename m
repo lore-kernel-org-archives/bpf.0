@@ -1,105 +1,101 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB903101C0;
-	Wed,  6 May 2026 21:44:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80CC63264F6
+	for <bpf@vger.kernel.org>; Wed,  6 May 2026 21:49:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778103880; cv=none; b=FFPezFVil7m81416qf9E/sM9FWcf7wZy1LC6oaLporoqt8knxKZWlzll/t7D17PowPA7qjTR88x2sDS8Vz/AqWxYA+Y6WjVyt8PdZ84BVOXqTN8X/EP7kLOyf7kK6LciCjvaeCgUz9k6yEg7q5PmgM0K8II2BXxGlDYeW6CzZMc=
+	t=1778104183; cv=none; b=plT7QK8o1cwgAt3Q/rodWRDsAoyT+tSDyDxFR3nRR/mXqAGtNauGf6rH+6k6mDxCLY61Y3NvrpeoexwHzgpONTHMZQ491xk4gCEUXQZWTEerfKUG2R2zZmySzg8a1oN/TVLGjdAz2bKnwkpOk/a0vyrr3xRbhcQF+2xaUhdCnkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778103880; c=relaxed/simple;
-	bh=0AzRbZDfTEETX0mURLiMJOAo/Cw3XAkHZPAXujK/W+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vvo8eUTjUXd4bO6Asumjpkk5pcBh/eejq5Gb6WZk0diQ6oUJcqOF9YkS+WTspTIK9iPIQ2F4odE8DY2b44hvZliEk6xgYktYNpBOYyLZdUyA4Lcl1R0CVLqKHgtaDVxmiC1dajMnN+OEkLxIFlYyMECcXCsY2Jb4ldt7c9AQYCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=4Lbcp1pa; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	s=arc-20240116; t=1778104183; c=relaxed/simple;
+	bh=Y9y2Gvy68fCuKuyJl0Z+tFp6omQst7rBqtIF2XjZieg=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=sdw64jskrxfg6KkF3cDWr7Gzc+Lzc/JyOERDJD0IsE54DtBKtlbuVvjel82J36EYuHxSZKnry3bNv0yv8SgcygRvz8WqVv1jVFLZMLNvYWC5jPva9kTvrGbZccOIhNBn06vm0UsSC9l/lTfET30Sgg33Ficmp3Hr/73rydVJX10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kKTPkjb2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="4Lbcp1pa"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=/ZNWf4ch/DDdXxetEbDLgq9TJj4asvdiGEKsrUNbO5U=; b=4Lbcp1pa3/N6zwvEs16t+auhDu
-	jOV9EVBxcRy2SdMdQ3LfFdF6q1rWwe9Pec1f1JL0kjstJ3VBBiNU55jHCq3FxW+66HwlthS7muuPH
-	GovLk1v9MCIaOg/ndV8+6dEW4lDcmpGrYKGbPW/IMn9HCou4cI8bcsnx7r14QpXKK7Xo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1wKk27-001hvI-1n; Wed, 06 May 2026 23:43:55 +0200
-Date: Wed, 6 May 2026 23:43:55 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Alex Elder <elder@riscstar.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com,
-	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
-	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
-	arnd@arndb.de, gregkh@linuxfoundation.org, daniel@riscstar.com,
-	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
-	alexandre.torgue@foss.st.com, ast@kernel.org,
-	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
-	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
-	julianbraha@gmail.com, livelycarpet87@gmail.com,
-	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
-	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
-	rohan.g.thomas@altera.com, sdf@fomichev.me,
-	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
-	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 09/12] gpio: tc956x: add TC956x/QPS615 support
-Message-ID: <ec5765aa-b830-468b-8965-a95fbe020065@lunn.ch>
-References: <20260501155421.3329862-1-elder@riscstar.com>
- <20260501155421.3329862-10-elder@riscstar.com>
- <736fb3b7-c88a-4ec4-96ad-d1b79cc48d30@lunn.ch>
- <30cec7dd-ac3c-47ab-896a-c29992bd5ba5@riscstar.com>
- <3666e3e6-e6f3-4cbf-b9fe-caa394fbab7c@lunn.ch>
- <0751a051-9894-45be-92d6-0d46f2c39293@riscstar.com>
- <7d7b6b89-3ef4-4891-a794-c8b11f39db34@lunn.ch>
- <79684efa-4ba9-4144-a99b-dab935007a2f@riscstar.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kKTPkjb2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AAE8C2BCB0;
+	Wed,  6 May 2026 21:49:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778104183;
+	bh=Y9y2Gvy68fCuKuyJl0Z+tFp6omQst7rBqtIF2XjZieg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=kKTPkjb23MXPL8B6FAP5RPfAAgDToVyyHr46fMWSeeuvv4ThYeqjUU+xltdpoe5Fd
+	 yBQHDvH33VCNOvh/PV9FYcTibu5+2/8t4h6Qh22lUv7M0zAJCehlkXKmRcf9Pa+/Gz
+	 Ne+fRs1E1dA7GNb9C3NP2N8+KA3r/sEs3lcONVfsCLd3f6a4kus5RPoghJ+gblrtXF
+	 S70pj09tsLjdeC1f2ZYeclkUjv7sGCOAfUaefWrcBS2W+YPaiE82hBWtSJXC+tIOsn
+	 gh44uansw+PmR3Oatyn59IrOHNHxDFtvF8LkwbE1k8W4zRlAiMzcywvLTrke4yeXJE
+	 1Bc/HfplZ0URw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 2/5] lib/bitrev: Introduce GENERIC_BITREVERSE
+Reply-To: sashiko@lists.linux.dev
+To: "Yury Norov" <ynorov@nvidia.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260506175207.110893-3-ynorov@nvidia.com>
+References: <20260506175207.110893-3-ynorov@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 06 May 2026 21:49:42 +0000
+Message-Id: <20260506214943.1AAE8C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <79684efa-4ba9-4144-a99b-dab935007a2f@riscstar.com>
 
-> To be clear, the reason you're asking is that you're suggesting
-> we might want to model the GPIO controller differently, correct?
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The commit's instructions for architectures to explicitly enable=
+ GENERIC_BITREVERSE will trigger Kconfig unmet dependency warnings.
+--
 
-Correct.
+commit dfa2feef3c11e8e7f890a24d4a12c9d0c88f4918
+Author: Yury Norov <ynorov@nvidia.com>
 
-> I.e., model it as *not* associated with the embedded PCIe
-> functions.  Then we need to think about what its parent device
-> would be (the power control device, which I think somehow
-> duplicates the switch device?).
+lib/bitrev: Introduce GENERIC_BITREVERSE
 
-Logically, the GPIO controller cannot be part of a downstream
-function, if you need to use the GPIO controller to turn the
-downstream function on.
+This commit introduces GENERIC_BITREVERSE to allow architectures to provide
+hardware-accelerated bit reversal implementations while still being able to
+fall back to the generic version. It modifies Kconfig and the Makefile to
+make GENERIC_BITREVERSE selectable.
 
-Logically, the GPIO controller needs to be above the switch downstream
-end points. Where above, i don't know. Which is why i was asking about
-where it appears in the address spaces.
+> Architectures that require generic bitreverse API as a fallback should
+> explicitly enable GENERIC_BITREVERSE together with HAVE_ARCH_BITREVERSE.
 
-But i also don't know too much about PCI, i'm used to SoCs with simple
-linear MMIO.
+Will this instruction for architectures to explicitly enable GENERIC_BITREV=
+ERSE
+trigger Kconfig unmet dependency warnings?
 
-From the little i know, it is more than what address space does the
-GPIO appear in. Its also, what enumerable entity does it appear in
-within the PCI bus. Because its the enumeration which is going to
-trigger a driver load, which can then drive the GPIO controller.
+> diff --git a/lib/Kconfig b/lib/Kconfig
+> index d8e7e89ae3205..a33988adfaa3e 100644
+> --- a/lib/Kconfig
+> +++ b/lib/Kconfig
+[ ... ]
+> @@ -63,6 +64,17 @@ config HAVE_ARCH_BITREVERSE
+>  	  This option enables the use of hardware bit-reversal instructions on
+>  	  architectures which support such operations.
+> =20
+> +config GENERIC_BITREVERSE
+> +	tristate
+> +	depends on BITREVERSE
 
-Or, something more radical, you make the PCIe power controller an MFD,
-instantiating both the power controller and a GPIO controller over the
-I2C bus. GPIO access will not be as fast, but is there anything here
-which needs to be fast?
+If an architecture follows the instruction in the commit message and
+uses select GENERIC_BITREVERSE unconditionally, Kconfig will force it to y
+even when BITREVERSE is n or m.
 
-      Andrew
+Even if an architecture attempts to select it conditionally via
+select GENERIC_BITREVERSE if HAVE_ARCH_BITREVERSE, a warning will still occ=
+ur
+when BITREVERSE=3Dm. Kconfig promotes the boolean condition HAVE_ARCH_BITRE=
+VERSE
+to y, which in turn forces the tristate GENERIC_BITREVERSE to y, violating =
+its
+dependency on BITREVERSE (m).
+
+Should architectures instead use select GENERIC_BITREVERSE if BITREVERSE to
+properly inherit the dependency, or should the Kconfig dependencies be
+restructured?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260506175207.1108=
+93-1-ynorov@nvidia.com?part=3D2
