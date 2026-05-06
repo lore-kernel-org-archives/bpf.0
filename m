@@ -1,134 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD7330E0D5
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 18:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A4B4963B3
+	for <bpf@vger.kernel.org>; Wed,  6 May 2026 18:51:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778093441; cv=none; b=Beei7nQ2fpAbpcZtyKUDW2kiIwNi+Pis/Xh2GtakfVqeRJ0ewbX2SAZ5rYoXtbvpUMFjmBcdui7oIhMJLi5IRNbq+tH+Xvz2gAr8JHi0ilWEAfjcfA2olikbqFIr7TnnG3w1y4Ffi1nxRbdbzny2Dxo9L/trGxluXYclMQE9HyY=
+	t=1778093479; cv=none; b=PEh+NEWNDqLDJ+YT3Pki6RUTA7RefrcwoYjgVnmmI5tXYCmnesqflyIG8RwPRSjrDXph016EVdGtI53Ly6CsjyCwyT+epc/GKmhBhvHoztYeTVNhvovZ/61vloN+NM720ULhBGxVc8O+VDZkAJldXNdlAMtEVZGGWGWoyQq0c1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778093441; c=relaxed/simple;
-	bh=7Lju96bFqUm5R3L1CmwnzDMlukkEI3ssxu7dXLCVz44=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fJgCn8VpsEA7011pbIHyNYZAddtl+uy9LLeMbMZCnLUF7nyrpll9E97CwwXQkrpOKLutmtYENVazsFzEhv9Vjb1KuPbY6eWNHKgy/9S3qicnYXG8n6l9b2pxnevgJAFBPHvq9lEf1ufyrx3RMRYi2otheSTKdk4OBkRMCJ4IdTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QVF0wMlu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778093479; c=relaxed/simple;
+	bh=s8SojpSoc+YK02FQkvYYyW4yXNu4hN2c6ETT93ArWJQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=V3X9f/LhACEhTsjBndmucT6rL8sfMNvUVPt0pgmEzyZIr4qJgBxD9WyL8M1MmaqExzo5lp5KZQIRruvii7C/f0AJB5f5Yze33JN/D79tlIXoa4tmtzp4i1kukldbOaRXJb6/IKd70XMYgsET5CAC1xA/xVl4QsukfxR3UGu1lCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=yqlozRSf; arc=none smtp.client-ip=209.85.222.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QVF0wMlu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53895C2BCB0;
-	Wed,  6 May 2026 18:50:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778093440;
-	bh=7Lju96bFqUm5R3L1CmwnzDMlukkEI3ssxu7dXLCVz44=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=QVF0wMluGgCFly0vhp5hECUHn20aT7i4X5+rHlS++ByRIGXsqBZVgr4XhDVXl2rP6
-	 LhNTQKcOo82KDUSPp8b9A5y+dfuCc9vnhCeb5zbjxaC9wqwfnD1wjvGJEJa8XPl90a
-	 I7nPjCznMvmfGumqAONi+bpS67K2LVpjPzF8ey0PJyJoa1HFJoxzUHREJLJNEMyuU1
-	 ylG0kOp+pAFjYs2NZOvsK4LCOuXPaLOM8b+MCZ7kkySnS0fXO93g/RHg9r/cgAe01a
-	 0Mv7U6x9fcE9uzT1+s19y56bU3JZoyBMZe09lSR82wFPmmIWYG6eV3Q229ZNRKtaGE
-	 7C6JhBetOhE6g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v5 3/5] veth: implement Byte Queue Limits (BQL)
- for latency reduction
-Reply-To: sashiko@lists.linux.dev
-To: hawk@kernel.org
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260505132159.241305-4-hawk@kernel.org>
-References: <20260505132159.241305-4-hawk@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 06 May 2026 18:50:39 +0000
-Message-Id: <20260506185040.53895C2BCB0@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="yqlozRSf"
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-8f984bddf4eso2144785a.1
+        for <bpf@vger.kernel.org>; Wed, 06 May 2026 11:51:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1778093477; x=1778698277; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qVXRMaORBAm1p+hmPERIzD3vaX/XPR3tJcXrI0tApsg=;
+        b=yqlozRSfuCUJJ9D/wW3WpVlAitl6p+MalJd4d+qGeBPP7HHYOs15Ifo4zv4JyQM3RY
+         oHUbujbmeUjmk/O4VeGR+RGnA5ACtoV1slnTP6zjtIbj9FGxzvsCksN3JeAJuUeQBmX1
+         nRTiF8ZF9styqnDRIE7ecUgF92XqjybzmU2tpys//cSjNx11JXVgSmQFJy+B++GX2ZOC
+         u6zWm0k2NWbcK/N5MW1WjdBqxvdMsVhpGXTL2VLC3zGDINTcSdycmkw83ftcdERHrH5w
+         WiRYxhwO/qEdWGPjZdrnDZShFy8obFYV9aNveGpk9ZuEsT82efZmnwLdExxspdhvUjsj
+         3Z3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778093477; x=1778698277;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qVXRMaORBAm1p+hmPERIzD3vaX/XPR3tJcXrI0tApsg=;
+        b=Ho1IbwQ7ZQR4+PRmZSCJLhbGEnZOrvlY+wWTxEpu7cf0LoBPUN+TfO9tt1atT5kyQe
+         q6a9XL3FceKLJ0B7vZIyepdZ2aUlgvEXWLn6yFqU0zo3M+vy7PIigL1s8b1lz1IOViyz
+         mfY5GBpl2RiAPOFrZ7ql8Xmlw2S5yVBoXChxMEL1yKCbWqMhx/pC0oU7f+dbcB+JkBwn
+         Ds0/hVnb9rtDSE8DbUx5aVL8VufwrQK7c4dmEbm2BNRwE2feiYusgyeVBbx7H8LCdS7n
+         Z9zBnrRZ7R9CWvl1cwsaMn6ncNVjHRUPrTaqgFhWY+9/29lpJ635hockDv/f5RnjDYZb
+         1zpA==
+X-Forwarded-Encrypted: i=1; AFNElJ9+dNffI5l+z00rbfi+PoD8T24BsO8UFFY/nF7WEup5hcxUo8qt65Z/cVIh0dGR9qcVc+E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNqz2fXEw1FsMTMJSeSDIkLhojx+LHrgzbO7lqNZ6z4MHY7KjY
+	p4uZYB2BhMfbs3vy65xUdw9SEM4MrdaU/X58rFEADlAMgL9mMH6VpR/813NfkHMD8YwD3/+4dAk
+	6GybgXeM=
+X-Gm-Gg: AeBDievkoSwGwGUMmS6oc/6usrpCUsQ5qXN1ddQgbC7cCV6rsiUfZzM8geLY3XHPdZ4
+	SRitdfOa9y+oWEhu4rvAbmuHmiK2DxuA3jjH07W285x8ikPMehtszrUAYsnI4mJv1zQYOd4WOHn
+	nUYSpOwokJF6udFWLdHsqOfd5gA8Zpub18gEXJM2BztvyE2lr6Z/5hx6vSFBiU3SBvhBoYUM7fz
+	zPlKVzUCrmd3ArfLFbjVVuVuhblb47O8p6UoFKA/n3GwsMgk1j9xY08fgB+5PxEt1FeJ1sU129d
+	gtBqSY/ymxyIln/RKgw/ejk9aFOX0gjwpsQ9PvTO/Gq9hHUMNvmvlzMWTPqbgZptozn9PeCgIrw
+	79Re5GwEbIqP3XvNM092b0znn1lEQMAfBSkrzWle4OXs4C2grBY/h+E4n0gRs+8CIkuBfPjYwFk
+	yAkX3HTnYvtRz9Z3krBeysyHdCbvJJOXdUOhog6JzeikUwz8SmO5jYnJVdJPkv+2WLc6CHPzQjo
+	w==
+X-Received: by 2002:a05:620a:1a13:b0:8cf:d804:456a with SMTP id af79cd13be357-904d4c54265mr713100885a.20.1778093476942;
+        Wed, 06 May 2026 11:51:16 -0700 (PDT)
+Received: from [172.22.22.28] (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8fc293837b5sm1889639085a.10.2026.05.06.11.51.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 May 2026 11:51:16 -0700 (PDT)
+Message-ID: <a52659e8-0382-4eb2-ab2f-5563bbb73fcc@riscstar.com>
+Date: Wed, 6 May 2026 13:51:12 -0500
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 09/12] gpio: tc956x: add TC956x/QPS615 support
+To: Julian Braha <julianbraha@gmail.com>, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, maxime.chevallier@bootlin.com,
+ rmk+kernel@armlinux.org.uk, andersson@kernel.org, konradybcio@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, linusw@kernel.org,
+ brgl@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org
+Cc: daniel@riscstar.com, mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
+ alexandre.torgue@foss.st.com, ast@kernel.org, boon.khai.ng@altera.com,
+ chenchuangyu@xiaomi.com, chenhuacai@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, hkallweit1@gmail.com, inochiama@gmail.com,
+ john.fastabend@gmail.com, livelycarpet87@gmail.com,
+ matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
+ prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+ rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
+ weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-10-elder@riscstar.com>
+ <1fe6bcb7-b5c0-454f-ad54-5014006edab5@gmail.com>
+Content-Language: en-US
+From: Alex Elder <elder@riscstar.com>
+In-Reply-To: <1fe6bcb7-b5c0-454f-ad54-5014006edab5@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] Resetting the peer's TX queue during NAPI deletion fails to explic=
-itly schedule the qdisc if it was stopped solely by BQL, potentially strand=
-ing buffered packets indefinitely.
-- [High] veth_napi_del_range() conditionally skips waking the peer's stoppe=
-d TX queue when the local device is going down, permanently leaking the DRV=
-_XOFF stop state on the peer.
-- [Medium] DRV_XOFF queue wakeups are bypassed for deactivated TX queues, l=
-eading to permanently stuck queues if reactivated.
---
+On 5/2/26 10:42 PM, Julian Braha wrote:
+> On 5/1/26 16:54, Alex Elder wrote:
+>> +config GPIO_TC956X
+>> +	tristate "Toshiba TC956X GPIO support"
+>> +	depends on TOSHIBA_TC956X_PCI
+>> +	default m if TOSHIBA_TC956X_PCI
+> 
+> Hi Alex,
+> 
+> In your Kconfig changes, this condition 'if TOSHIBA_TC956X_PCI' is dead
+> code. Since you have the dependency on TOSHIBA_TC956X_PCI, you can just
+> make the 'default m' unconditional - assuming this is what you intended.
 
-commit 1b05a5559481675536cd1059fcf1bd7e7b6e721c
-Author: Jesper Dangaard Brouer <hawk@kernel.org>
-Subject: veth: implement Byte Queue Limits (BQL) for latency reduction
+I'm not sure I'd call it "dead" but you're right, it's not
+necessary because it already depends on that symbol.
 
-This commit adds Byte Queue Limits (BQL) support to veth to give qdiscs=20
-visibility into the ptr_ring queue depth, reducing base latency. It charges=
-=20
-a fixed unit per packet under the producer lock and resets BQL state on=20
-NAPI deletion.
+> Perhaps you would prefer to use 'default TOSHIBA_TC956X_PCI', which
+> would have GPIO_TC956X default to 'm' or 'y' when TOSHIBA_TC956X_PCI is
+> 'm' or 'y', respectively.
 
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 0cfb19b760dd5..86b78900c48e3 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
+Yeah that might be better.  I'd like to eventually include
+COMPILE_TEST as well, and that might need the "if" on the
+default.  I'll find out whenever I test that.
 
-[ ... ]
+This GPIO feature should still be a module even if
+TOSHIBA_TC956X_PCI is y, because it's not always
+necessary to enable the GPIO driver (depending on
+how devicetree defines the PHY resets).
 
-> @@ -1074,6 +1118,7 @@ static int __veth_napi_enable(struct net_device *de=
-v)
->  static void veth_napi_del_range(struct net_device *dev, int start, int e=
-nd)
->  {
->  	struct veth_priv *priv =3D netdev_priv(dev);
-> +	struct net_device *peer;
->  	int i;
-> =20
->  	for (i =3D start; i < end; i++) {
-> @@ -1092,6 +1137,24 @@ static void veth_napi_del_range(struct net_device =
-*dev, int start, int end)
->  		ptr_ring_cleanup(&rq->xdp_ring, veth_ptr_free);
->  	}
-> =20
-> +	/* Reset BQL and wake stopped peer txqs.  A concurrent veth_xmit()
-> +	 * may have set DRV_XOFF between rcu_assign_pointer(napi, NULL) and
-> +	 * synchronize_net(), and NAPI can no longer clear it.
-> +	 * Only wake when the device is still up.
-> +	 */
-> +	peer =3D rtnl_dereference(priv->peer);
-> +	if (peer) {
-> +		int peer_end =3D min_t(int, end, peer->real_num_tx_queues);
-> +
-> +		for (i =3D start; i < peer_end; i++) {
-> +			struct netdev_queue *txq =3D netdev_get_tx_queue(peer, i);
-> +
-> +			netdev_tx_reset_queue(txq);
-> +			if (netif_running(dev))
-> +				netif_tx_wake_queue(txq);
+So:  In drivers/gpio/Kconfig it will be "default m", and
+for drivers/net/ethernet/stmicro/stmmac/Kconfig it will be
+default TOSHIBA_TC956X_PCI (at least for now).
 
-Does netdev_tx_reset_queue() clear STACK_XOFF without scheduling the qdisc?
+Thanks a lot for the suggestion.
 
-If netif_tx_wake_queue() only schedules the qdisc when DRV_XOFF was set,
-wouldn't a queue stopped solely by BQL (STACK_XOFF set, DRV_XOFF clear) be
-stalled indefinitely here?
+					-Alex
 
-By checking netif_running(dev), the wakeup is skipped when the local device
-is brought down. Does this permanently leak the DRV_XOFF state on the peer?
-If the local device is brought back up later, it appears the peer's TX queue
-would remain wedged.
+> - Julian Braha
 
-Additionally, if a user reduces the peer's active TX queues (e.g., via
-ethtool), the loop bound peer->real_num_tx_queues will skip deactivated
-queues.
-
-If those inactive queues had DRV_XOFF set, do they retain that state
-permanently when reactivated later, since BQL resets on real_num changes
-but DRV_XOFF does not?
-
-> +		}
-> +	}
-> +
->  	for (i =3D start; i < end; i++) {
->  		page_pool_destroy(priv->rq[i].page_pool);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260505132159.2413=
-05-1-hawk@kernel.org?part=3D3
