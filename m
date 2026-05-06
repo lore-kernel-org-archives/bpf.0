@@ -1,125 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D46B42FDC38
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 19:46:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3DCC2FDC38;
+	Wed,  6 May 2026 19:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778096816; cv=none; b=PosnNW617lq2x2MPBqp4JO4ke6rEskrKwDU/ouzSdZegMXtvQwZhnaWb/v4/a1Ujf4Q7DlI+uiugKXgl7C12jh1KT0T00bhWHRrCWog+5IAxUtjZcyAAU9PcluoCJCpFaiErbK51nxX8PlUJXuFZSMsC0E1PHsOnOEVOI6Fjsro=
+	t=1778097180; cv=none; b=ZJYDoPNuBRYt60Wt9Y09uBCgtHXNsSJlD+aCQS59vPaekE0wY9ByC3YCzdZa6TAWkDR0nOxocsaRa6+NBHdmwjdSfrjItOwmelsVw/Q0za8pBak2SMJK5wJraQCZt/t6EHxPvfAteJy0yGKzEBbjtPGUcPq9yCtLKKj+w/2pUS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778096816; c=relaxed/simple;
-	bh=XBNDL4CJFBw8l9o/x8Dqwpun1LKl1TCA7S89kHjtJsA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uJIMqLTB+ytLv9I3E+FWhc1Ng4tBYmp5rZ/rIoWUW6p9Fme3ZKju7BLS8sE3IxyH3e+yxsOhIiSofq+/ILzPehKMSqO9SqQWLqH5Dijm5kDSoqWa7jM6S3g1cJqsUqemmDdojZDOVhjPiBjCI8nham3lb1N76CGa8VrfhRv+pxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qb1MvDYf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778097180; c=relaxed/simple;
+	bh=IOtFOPMt4Nq2ieBI30BlD7YV0L0Y+BTFgi5nZlW+WLg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i5Grgjz9h1AdLwQTiMm70DDpdGoHSUEPVYzAXiBA+qLYIZVL7ijyxyFuQOMd9zCIeJhHYN4ElJBaNhynrutwBzEjMKQLmQ/lWkQxusTeMgkXwDp0X3g3BLMBQeP2mK0MPYxkbFW6R8xa5Oby380EPG0wYL8yPp9J65ZTdz1WaTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=sTc/uhrd; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qb1MvDYf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 549DFC2BCB0;
-	Wed,  6 May 2026 19:46:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778096816;
-	bh=XBNDL4CJFBw8l9o/x8Dqwpun1LKl1TCA7S89kHjtJsA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Qb1MvDYfs9jCmnNkp3o/Sju+aQTLFo2gQLi/nhTGMF4DrPw6VeIuidMjO5iGH3ona
-	 zGdkg3KXNh4Kc83/RH3+dBw5A1XyGFOWFMlmTyo0JLl+lKTGmSBUcDYTh1E+aos3X5
-	 3J0gK12dQjsElGperwCHbLTS7m2NUw8m8woSMaof9R/wyGXkUXN7XdeBrBL5qariYP
-	 jejpzMQl87eEl+yUfZHQt+m3MS+dPV4sEm80iCu7HxSfhKvp7W0puO/X2ndLJNXC/t
-	 vkiXOFAoPx4S/M6zhVeWCKMkS4SWwaGGs5GHEzVxOkKH6sAmX5z9pol5OGQR25vG6x
-	 tGXp+tSBnt2TQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/2] bpf: render CGROUP_LSM_NUM configurable as a
- KConfig
-Reply-To: sashiko@lists.linux.dev
-To: "Paul Houssel" <paulhoussel2@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260506131257.713895-2-paulhoussel2@gmail.com>
-References: <20260506131257.713895-2-paulhoussel2@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 06 May 2026 19:46:55 +0000
-Message-Id: <20260506194656.549DFC2BCB0@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="sTc/uhrd"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=LLm/OyrLL/bFbrU/6UU1ygktiOEEMm3JkZVjxWOAaEM=; b=sTc/uhrdL+f56jIUOYaI0nqCje
+	VW5KJ91Ih/YjryXx+Dtp4boxbSBp2M6yCNeZ2uiaISvG8eGaokn5gkGgnJF8sE6m5eX8idzZSW83L
+	7wzQEjNtqgX9EUcUGWHGKlsfwhGELCW2T+rQqz/LLmbboncShwHwquVOVBF6Eet5PNCs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1wKiI8-001hI4-02; Wed, 06 May 2026 21:52:20 +0200
+Date: Wed, 6 May 2026 21:52:19 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Daniel Thompson <daniel@riscstar.com>
+Cc: Xilin Wu <sophon@radxa.com>, Alex Elder <elder@riscstar.com>,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com,
+	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
+	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
+	arnd@arndb.de, gregkh@linuxfoundation.org,
+	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
+	alexandre.torgue@foss.st.com, ast@kernel.org,
+	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
+	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
+	julianbraha@gmail.com, livelycarpet87@gmail.com,
+	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
+	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+	rohan.g.thomas@altera.com, sdf@fomichev.me,
+	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
+	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 10/12] net: stmmac: tc956x: add TC956x/QPS615
+ support
+Message-ID: <982d4d8c-5348-4fd7-8ad2-aac9b3791150@lunn.ch>
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-11-elder@riscstar.com>
+ <224E233C593EF171+8c8a43dd-5061-40f8-9eb7-f360eabf2ecc@radxa.com>
+ <4015f47a-af62-441d-b1b8-a8598f963970@lunn.ch>
+ <afteD2d8d87Nyvl7@aspen.lan>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <afteD2d8d87Nyvl7@aspen.lan>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] Setting `CONFIG_CGROUP_LSM_NUM` to large values (e.g., 300) causes=
- a stack frame size violation in `cgroup_bpf_inherit()`, breaking the build=
- and risking stack overflows.
-- [High] Increasing `CONFIG_CGROUP_LSM_NUM` massively bloats `struct cgroup=
-` for every cgroup instance system-wide, causing severe un-reclaimable memo=
-ry overhead.
-- [Low] Setting `CONFIG_CGROUP_LSM_NUM` to 0 creates a global zero-length a=
-rray.
---
+> TL;DR - there are conceivable (and sane) hardware designs where the
+> interrupt goes only to the TC9564 GPIO, but they are too different to
+> RB3gen2 (and related SBC designs) for them to be supported before
+> they exist!
 
-commit 51a90971268ad1dbaa85eb0becb17cac4d98af78
-Author: Paul Houssel <paulhoussel2@gmail.com>
+Agreed. I'm just trying to be cautious. It would be bad to saying that
+WoL is supported in general, because a board might come along where it
+does not work because the TC9564 itself cannot wake the system. If the
+driver needs to say WoL is supported, it should try to validate the
+system is using a supported set of features.
 
-bpf: render CGROUP_LSM_NUM configurable as a KConfig
+But lets get the basic features supported first, WoL can be added
+later.
 
-This commit introduces the CONFIG_CGROUP_LSM_NUM Kconfig option to allow
-configuring the maximum number of simultaneously attachable BPF_PROG_TYPE_L=
-SM
-programs per cgroup. It replaces the hardcoded limit of 10 with a
-configurable range from 0 to 300.
-
-> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-> index eb3de35734f09..7f51598aa8fe6 100644
-> --- a/kernel/bpf/Kconfig
-> +++ b/kernel/bpf/Kconfig
-[ ... ]
-> @@ -101,4 +101,17 @@ config BPF_LSM
-> =20
->  	  If you are unsure how to answer this question, answer N.
-> =20
-> +config CGROUP_LSM_NUM
-> +	int "Maximum number of per-cgroup LSM hooks"
-> +	depends on BPF_LSM
-> +	depends on CGROUP_BPF
-> +	range 0 300
-
-Could this large upper bound cause a stack frame size violation?
-
-In kernel/bpf/cgroup.c, cgroup_bpf_inherit() allocates an array of pointers
-on the stack:
-
-    struct bpf_prog_array *arrays[ARRAY_SIZE(cgrp->bpf.effective)];
-
-The size of the effective array scales directly with MAX_CGROUP_BPF_ATTACH_=
-TYPE.
-If CONFIG_CGROUP_LSM_NUM is configured to its maximum of 300,
-MAX_CGROUP_BPF_ATTACH_TYPE becomes 329. Allocating 329 pointers on the stack
-requires 2,632 bytes, which exceeds the standard kernel stack frame warning
-threshold (CONFIG_FRAME_WARN=3D2048).
-
-Does this large upper bound also bloat struct cgroup for every cgroup
-instance system-wide?
-
-MAX_CGROUP_BPF_ATTACH_TYPE dictates the size of four arrays embedded direct=
-ly
-inside struct cgroup_bpf: effective (pointers), progs (hlist_heads),
-flags (u8), and revisions (u32).
-
-Increasing the limit from the default 10 to 300 adds over 6KB of memory ove=
-rhead
-to struct cgroup_bpf. Because struct cgroup_bpf is embedded within
-struct cgroup, this results in >6KB of un-reclaimable slab memory bloat for
-every single cgroup created system-wide.
-
-Could a minimum value of 0 create a global zero-length array?
-
-If set to 0, the declaration in kernel/bpf/cgroup.c expands to:
-
-    static struct cgroup_lsm_atype cgroup_lsm_atype[0];
-
-While GCC supports zero-length arrays as an extension, declaring a static
-global zero-length array is non-standard C and can trigger warnings in
-fortified builds or with stricter compiler flags.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260506131257.7138=
-95-1-paulhoussel2@gmail.com?part=3D1
+       Andrew
