@@ -1,117 +1,139 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F12285066;
-	Tue,  5 May 2026 22:35:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2528A4C6C
+	for <bpf@vger.kernel.org>; Wed,  6 May 2026 00:29:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778020511; cv=none; b=ZvEg0SheEQkN/So8iFYl3d5YpB46mQ17u5+RTvpKzzgNe1f3/a6R9zti6DVXg7l3hs4Cs2vCIOh7u6vg1VaLoVdUiNyAIRz0pRKSN6E6SW+wyolSnh403gNfv6BLxI/QymLjFqOothMauNGuXs6+beVxNfGS4eMV+SdjcQj+nC8=
+	t=1778027346; cv=none; b=OAiZjftmSb70Dw3UUrjTq/YreVCpo4NnW3GAa2JdSQPiSJk6w/3vcDQfRSKu+85MUEjA0w3lvhhIEOq+ZPcRMlkR6ZoRIEbJj+0qzLY41ZEjGQ3Bax0ignDYUDyMjHN/6HpKMwDMo1smTqC8FaQGwvofCFSIGIyx5Wa38s0pHOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778020511; c=relaxed/simple;
-	bh=w6OTTCfPyCZr+g37wh6OMJntQU+LnbrUZIbyk9kla1w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CHz2lUzaAMI5Dz02pW7AR8Cyh1FytMtAMqTVeXvId+V3OxO9npYwf+5/OYlV1bo81rQhbxRZ5YlNBW8IZWYoM1qgVgqA+nzShVpNWHAO2VPbnkR4f+hqFqG/UpRITST0qWQWOfQqKCG0iSvbfxJgRL9LKBtKLFwklZjzMEFlr/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ph0uz4Cp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778027346; c=relaxed/simple;
+	bh=eHsVhJFvGTUJyB7UNfzlJXv4rgEDMjIcPGTsq+XGdwI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=j12Y0cHaa4eqsZPUsQ4hZ2YwEhbPaZ//FeA5xbm4kakZuz4gWRQ7vP6inopaxjdWED5OvMiEAyCKCRUVv+jdRI7V0FIVGXU0FXJ+8mMqyeGKTsQjaW9bMn5yO2YscEF3EAEzhj9PLNYS6Ey6InTzgXW3qn1dC6x2BARgH1hj074=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kRvdNzlo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ph0uz4Cp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA204C2BCB4;
-	Tue,  5 May 2026 22:35:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kRvdNzlo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF681C2BCB4;
+	Wed,  6 May 2026 00:29:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778020510;
-	bh=w6OTTCfPyCZr+g37wh6OMJntQU+LnbrUZIbyk9kla1w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ph0uz4CpWQ720yfvpqVRFD28JgjmpTRa1zS9AmMs+6WlcrFPfO4hs0p2MkGu89vW4
-	 qdZPmCapJPO3RXfNoDV8U6GnEhQr0bqzYoj05ZkDu+lFpojXORUmCdHxNEpeltV/DD
-	 n0/g83ToyZcKTNnbmQbgEDlWEVn70gsrSC7sJF7/BH/UVgSrvIC01iob1+3g754Bvw
-	 rNr/VJfMg4K/s5iXxrFf1a4N1CufjQYujbTNdOEPOM2gHn/6BqEzPX5zZ9IMNHOMYJ
-	 CkVMaF04SI2YRpSWqs/6BloC/ItubHEUNLgxWqq+a4JSWeRsyGZhrfZ7IE0qUSx7jh
-	 oMGfNr+9QSv9w==
-Date: Tue, 5 May 2026 15:35:09 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: sashiko@lists.linux.dev
-Cc: Suchit Karunakaran <suchitkarunakaran@gmail.com>, bpf@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH RESEND] perf/lock: Fix non-atomic max/time and min_time
- updates in contention_data
-Message-ID: <afpwnf5VfjxBgIhS@google.com>
-References: <20260504135138.17050-1-suchitkarunakaran@gmail.com>
- <20260504172338.6FA50C2BCB8@smtp.kernel.org>
+	s=k20201202; t=1778027346;
+	bh=eHsVhJFvGTUJyB7UNfzlJXv4rgEDMjIcPGTsq+XGdwI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=kRvdNzlorEEVUzNKkbtBU+0bvRJAnX4u+1G+7AFYXMuBsGYS+cQYFhY6ZIT21Mpxi
+	 KBiFRlMejomSabxB9Tb7C2h1YTQnDfIrrsHUX7C0LedJPymQEdbfdUSDNxNxrOrCU1
+	 mfRRgkCGm5sm1WS39xlWg/bdDoRi3e+BJ/mHk3VHqwRY28DXEREX1YEdv6zcp/eifO
+	 TtUxOx7Bh0b8uo6Xd6xLMLKH7Cg3x7x4dfdSUZMP/+ra1ax/BcCMEoSryFGJuTedQE
+	 6i7aSe1b6qeUkbBK5z7Un6sqWeNkgqt2LyvG6DWOYO+wNRWTey9WVwJuSCB3XhZKkJ
+	 j5/gOlO7nPeGw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v2 2/6] net: devmem: support TX over
+ NETMEM_TX_NO_DMA devices
+Reply-To: sashiko@lists.linux.dev
+To: "Bobby Eshleman" <bobbyeshleman@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260504-tcp-dm-netkit-v2-2-56d52ac72fd4@meta.com>
+References: <20260504-tcp-dm-netkit-v2-2-56d52ac72fd4@meta.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 06 May 2026 00:29:05 +0000
+Message-Id: <20260506002905.DF681C2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260504172338.6FA50C2BCB8@smtp.kernel.org>
 
-Hello,
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] Double lock lockdep splat and potential deadlock in netdev_nl_bind=
+_tx_doit()
+- [High] Use-After-Free of dma_dev pointer in netdev_nl_bind_tx_doit()
+- [High] ABA vulnerability and pointer aliasing due to untracked vdev lifec=
+ycle
+--
 
-On Mon, May 04, 2026 at 05:23:37PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] The use of `__sync_val_compare_and_swap` introduces a compiler dependency on BPF ISA v3, breaking the `perf` tool build on older toolchains.
-> --
-> 
-> commit 30820839a2cfcfa987fbc2e0f79fa0e2f2cf0dc3
-> Author: Suchit Karunakaran <suchitkarunakaran@gmail.com>
-> 
-> perf/lock: Fix non-atomic max/time and min_time updates in contention_data
-> 
-> This commit replaces bare conditional assignments with a bpf_loop()-based CAS
-> retry loop to fix non-atomic updates of max_time and min_time.
-> 
-> > diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> > index 96e7d853b9edf..5c8431be674ac 100644
-> > --- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> > +++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> [ ... ]
-> > @@ -486,16 +493,49 @@ static inline s32 get_owner_stack_id(u64 *stacktrace)
-> >  	return -1;
-> >  }
-> >  
-> > +static long cas_min_max_cb(u64 idx, void *arg)
-> > +{
-> > +	struct cas_ctx *ctx = arg;
-> > +
-> > +	if (!ctx->max_done) {
-> > +		u64 old_max = ctx->data->max_time;
-> > +		if (old_max >= ctx->duration) {
-> > +			ctx->max_done = 1;
-> > +		} else {
-> > +			u64 r = __sync_val_compare_and_swap(
-> > +				&ctx->data->max_time, old_max, ctx->duration);
-> 
-> Does this cause build failures on older toolchains?
-> 
-> The built-in __sync_val_compare_and_swap lowers to the BPF_CMPXCHG
-> instruction, which requires BPF CPU v3 (-mcpu=v3).
+commit fea3266a76d31b8278bf86dac679860b442a5bea
+Author: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Hmm.. this looks like a real concern.  We could add -mcpu=v3 to the
-compiler option, but then there would be compatibility issues with old
-kernels.  It seems it's added in v5.1 kernel and the oldest longterm
-support kernel version is 5.10.  So I think it's fine to add it.
+net: devmem: support TX over NETMEM_TX_NO_DMA devices
 
-Could you please update the build flag as well?  It can be a separate
-commit.
+This patch enables devmem TX bindings on netkit virtual devices by routing
+the binding to the underlying DMA-capable physical device. It extends the
+skb validation and binding lookup to support the netkit architecture.
 
-Thanks,
-Namhyung
+> diff --git a/net/core/devmem.c b/net/core/devmem.c
+> index cde4c89bc146..644c286b778f 100644
+> --- a/net/core/devmem.c
+> +++ b/net/core/devmem.c
+[ ... ]
+> @@ -212,6 +212,7 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+>  	}
+> =20
+>  	binding->dev =3D dev;
+> +	binding->vdev =3D vdev;
+>  	xa_init_flags(&binding->bound_rxqs, XA_FLAGS_ALLOC);
 
-> 
-> The perf build system compiles BPF skeletons using the host compiler's default
-> target features, without explicitly passing an -mcpu flag. On toolchains
-> where the default BPF target is v1 or v2 (such as Clang < 18), the compiler
-> may fail to generate the instruction and throw a fatal error (e.g.,
-> 'hardware compare and swap not supported' or an unresolved libcall to
-> __sync_val_compare_and_swap_8).
-> 
-> > +			if (r == old_max)
-> > +				ctx->max_done = 1;
-> > +		}
-> > +	}
-> [ ... ]
-> 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260504135138.17050-1-suchitkarunakaran@gmail.com?part=1
+Is it possible for this virtual device to be unregistered and freed while
+the binding is still active? Since there is no reference count acquired on
+vdev, and no NETDEV_UNREGISTER notifier seems to clean up the binding for
+the virtual device, vdev could become a dangling pointer.
+
+[ ... ]
+> @@ -397,7 +398,8 @@ struct net_devmem_dmabuf_binding *net_devmem_get_bind=
+ing(struct sock *sk,
+>  	 */
+>  	dst_dev =3D dst_dev_rcu(dst);
+>  	if (unlikely(!dst_dev) ||
+> -	    unlikely(dst_dev !=3D READ_ONCE(binding->dev))) {
+> +	    unlikely(dst_dev !=3D READ_ONCE(binding->dev) &&
+> +		     dst_dev !=3D READ_ONCE(binding->vdev))) {
+
+If vdev was freed as mentioned above, and a new, unrelated network device
+is allocated at the exact same memory address, could this pointer comparison
+incorrectly pass due to the ABA problem?
+
+[ ... ]
+> diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+> index b8f6076d8007..0e296c3bb677 100644
+> --- a/net/core/netdev-genl.c
+> +++ b/net/core/netdev-genl.c
+[ ... ]
+> @@ -1164,16 +1197,30 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, s=
+truct genl_info *info)
+[ ... ]
+> +	bind_dev =3D netdev_find_netmem_tx_dev(netdev);
+> +	if (!bind_dev) {
+> +		err =3D -EOPNOTSUPP;
+> +		NL_SET_ERR_MSG(info->extack,
+> +			       "No DMA-capable device found for netmem TX");
+> +		goto err_unlock_netdev;
+> +	}
+> +
+> +	if (bind_dev !=3D netdev)
+> +		netdev_lock(bind_dev);
+
+Will acquiring netdev_lock() on bind_dev while already holding it on netdev
+trigger a lockdep warning? Since both are struct net_device instances, their
+locks belong to the exact same lockdep class. Without a mutex_lock_nested()
+annotation, acquiring them sequentially might trigger a possible circular
+locking dependency splat, and introduce a potential deadlock if locked in
+reverse order elsewhere.
+
+> +	dma_dev =3D netdev_queue_get_dma_dev(bind_dev, 0, NETDEV_QUEUE_TYPE_TX);
+> +	if (bind_dev !=3D netdev)
+> +		netdev_unlock(bind_dev);
+> +	binding =3D net_devmem_bind_dmabuf(bind_dev,
+> +					 bind_dev !=3D netdev ? netdev : NULL,
+> +					 dma_dev, DMA_TO_DEVICE, dmabuf_fd,
+> +					 priv, info->extack);
+
+Is it safe to use dma_dev after dropping the bind_dev lock? Since
+netdev_queue_get_dma_dev() returns a raw device pointer without acquiring a
+reference via get_device(), what prevents a concurrent hardware hot-unplug
+or driver unbind from freeing the dma_dev between netdev_unlock() and the
+subsequent use in net_devmem_bind_dmabuf()?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260504-tcp-dm-net=
+kit-v2-0-56d52ac72fd4@meta.com?part=3D2
