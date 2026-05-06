@@ -1,122 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB9E3F076E
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 15:52:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A7A480325;
+	Wed,  6 May 2026 15:57:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778082759; cv=none; b=SWCmv84lfjgewnE03VOZwjITMkYoPIlvZHcz1bhbHvoimHhgm57A54LMNQ/3VLyQGuFJQz8Kgl8rXXltT4dEuNTovst1M29x/XwoJ4VwQNIQsmlmLTizDiv/N4C6P5Gd2776EOicWmblp/cUV7FyHgS6s75GgpPQrNVLTBfGtOo=
+	t=1778083044; cv=none; b=hNFRkU9n+0qZ7pH7rqEXxGRYnVpzrQRBpvHjjHIvIxLSzcps7rsNgkoTj5mhw5zp/I+iavOI/i43CGdZOHnEWI95ajIUzNJ2T3jNhSulgToHh+0UlD8A3hEdV5kVcTVvalVQNeOup850x9n3K1pdIJLo3jaaEzTUCXQIsIoQi24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778082759; c=relaxed/simple;
-	bh=ceHdrbU8TgZGhmGH+deacKbDZcLJJ0KHn0TyT2+uKso=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=XpLhQh2dVMhAEmiVJhm9AFw7EekRwfrtcaG9NW6IuHJ7lmdxmu+w6l/cLfnm6EGmwXT6FWdQfQx6b8dYSOlBux5mzNYDwhGJp2nQwVraTuif0SyD6vjJAtUHeAxa3pkVYPoncQJ0jvxxySAeGlvGxLwAFs+hmJPyeXS9UIwDNkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qEJAjYXz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778083044; c=relaxed/simple;
+	bh=dX3bGLfWiKE2ITDJscni4W8mvCQnjDfEwCyr6lUxYS4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KI0gNw7r8RzpCJXGB/WWxa4t0LJqVaytqqGQHiEMW2rH11G3KPmdXvsOgLW79ASvpit/35MItZ7t2lws0/O8AuCSMCGp/ssd/YXiE1LQqOhpVSISNLI5tbIXjdnDsfQJRIzsLJ9/XRwIA5uBzaSidWg1INb+S02GRxyfQuf543Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=yT600PMk; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qEJAjYXz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7FDEC2BCB0;
-	Wed,  6 May 2026 15:52:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778082758;
-	bh=ceHdrbU8TgZGhmGH+deacKbDZcLJJ0KHn0TyT2+uKso=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=qEJAjYXzhwUQjOFLTQl9/NN7pw4WoG38Kn4yQruft/C+2KFZpVndP+NeXqkLm/EF7
-	 Xkn85n8V/WsFx1fPzXljR98LkdeoU9bMoSy2/j/BEBf+kOiU55FnV5YBwt6aibyWLT
-	 pef9xS3xguBPww+6sqn/drz4XTaeEvTMVLGapAY6pVXXXKX0Tw8uPIqiMN67hjyofX
-	 3Xom2JldQhOcBiHYp2F0sx1iiyH0H+n87/ypD9k5Z7wO3/YGRk6uJWNMIyvJUaFM9S
-	 VvwlQq7i4iPegytV5QxhKSVk4TYB1/m9yKZei1RpfZO2NqAemLOU/EWsSoJG5QGmXy
-	 tZxeUmQk+FP5Q==
-Content-Type: multipart/mixed; boundary="===============1287482027544834248=="
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="yT600PMk"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=1+Wztvuy0mJzlF3FNcQ0AyichYU2Z09zwwj4BuQcjo4=; b=yT600PMky5Bc7rOdWUY/HYanZ2
+	ht/+YIA92DXNE0eB1ig/4bui/cnoKbZJueQ4b9IG7molm8Cd9hRHD/24YruLk35oGfHKzmIxyxWT9
+	tBf22d4UDXY7UfvUy7CR61aBYu71nhGduWaB2U7PYJ3RY3Dab5MVDHE0iysqtitRtwcI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1wKebu-001fZx-3z; Wed, 06 May 2026 17:56:30 +0200
+Date: Wed, 6 May 2026 17:56:30 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Xilin Wu <sophon@radxa.com>
+Cc: Daniel Thompson <daniel@riscstar.com>, Alex Elder <elder@riscstar.com>,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com,
+	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
+	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
+	arnd@arndb.de, gregkh@linuxfoundation.org,
+	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
+	alexandre.torgue@foss.st.com, ast@kernel.org,
+	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
+	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
+	julianbraha@gmail.com, livelycarpet87@gmail.com,
+	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
+	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+	rohan.g.thomas@altera.com, sdf@fomichev.me,
+	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
+	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 10/12] net: stmmac: tc956x: add TC956x/QPS615
+ support
+Message-ID: <a8b5d96b-3c8f-4ec5-b205-bbacafbf47aa@lunn.ch>
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-11-elder@riscstar.com>
+ <224E233C593EF171+8c8a43dd-5061-40f8-9eb7-f360eabf2ecc@radxa.com>
+ <4015f47a-af62-441d-b1b8-a8598f963970@lunn.ch>
+ <4C0D95BC59F1A4ED+53f3be85-2cdd-4058-8950-57970027d481@radxa.com>
+ <aftgorkah-Hjrvq2@aspen.lan>
+ <549BE66F62F1470F+a489d4fd-10ab-484c-9b55-6aecfd05d383@radxa.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <283f244ee4c180a4a69cf5cffdbeffea1a0928262758906384f3512e09fe3c44@mail.kernel.org>
-In-Reply-To: <20260506150547.767315-2-paulhoussel2@gmail.com>
-References: <20260506150547.767315-2-paulhoussel2@gmail.com>
-Subject: Re: [PATCH v3 1/2] bpf: render CGROUP_LSM_NUM configurable as a KConfig
-From: bot+bpf-ci@kernel.org
-To: paulhoussel2@gmail.com,paul.houssel@orange.com,andrii@kernel.org,yonghong.song@linux.dev,paulhoussel2@gmail.com,kpsingh@kernel.org,ast@kernel.org,song@kernel.org,martin.lau@kernel.org,christian.koenig@amd.com,fw@strlen.de,tjmercier@google.com,lirongqing@baidu.com,paul.chaignon@gmail.com,alibuda@linux.alibaba.com,kuba@kernel.org
-Cc: sdf@fomichev.me,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  6 May 2026 15:52:37 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <549BE66F62F1470F+a489d4fd-10ab-484c-9b55-6aecfd05d383@radxa.com>
 
---===============1287482027544834248==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+> > Does that mean you don't get phy interrupts reported in /proc/interrupts
+> > before any suspend happens?
+> > 
+> 
+> No. The phy works in polling mode AFAIK.
 
-> diff --git a/include/linux/bpf-cgroup-defs.h b/include/linux/bpf-cgroup-defs.h
-> index c9e6b26abab6..9ab5ca3dbaba 100644
-> --- a/include/linux/bpf-cgroup-defs.h
-> +++ b/include/linux/bpf-cgroup-defs.h
-> @@ -12,7 +12,7 @@ struct bpf_prog_array;
->
->  #ifdef CONFIG_BPF_LSM
->  /* Maximum number of concurrently attachable per-cgroup LSM hooks. */
-> -#define CGROUP_LSM_NUM 10
-> +#define CGROUP_LSM_NUM CONFIG_CGROUP_LSM_NUM
->  #else
->  #define CGROUP_LSM_NUM 0
->  #endif
+You should be able to tell from dmesg:
 
-[ ... ]
+Generic FE-GE Realtek PHY r8169-0-600:00: attached PHY driver (mii_bus:phy_addr=r8169-0-600:00, irq=MAC)
 
-> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-> index eb3de35734f0..050af0b72651 100644
-> --- a/kernel/bpf/Kconfig
-> +++ b/kernel/bpf/Kconfig
-> @@ -101,4 +101,23 @@ config BPF_LSM
->
->  	  If you are unsure how to answer this question, answer N.
->
-> +config CGROUP_LSM_NUM
-> +	int "Maximum number of per-cgroup LSM hooks"
-> +	depends on BPF_LSM
-> +	depends on CGROUP_BPF
-> +	range 0 300
-              ^^^
+irq= can be MAC, POLL, or the interrupt number if interrupts are used.
 
-Should the minimum range be 1 instead of 0? When CONFIG_CGROUP_LSM_NUM=0,
-the enum in include/linux/bpf-cgroup-defs.h calculates:
+If PHY WoL is used, i would expect interrupts to be used, otherwise
+how is the PHY waking the system?
 
-enum cgroup_bpf_attach_type {
-    ...
-    CGROUP_LSM_START,
-    CGROUP_LSM_END = CGROUP_LSM_START + CGROUP_LSM_NUM - 1,
-    ...
-};
-
-This results in CGROUP_LSM_END being less than CGROUP_LSM_START (END =
-START - 1), which contradicts C enum range conventions. While the runtime
-behavior stays safe since bpf_cgroup_atype_find returns -E2BIG for empty
-arrays, the enum definition is semantically incorrect.
-
-The Kconfig help text refers to "Maximum number of concurrently attachable
-per-cgroup LSM hooks" which suggests at least one hook should be
-attachable.
-
-> +	default 10
-> +	help
-> +	  Maximum number of concurrently attachable per-cgroup LSM hooks.
-> +	  Increasing this value has two memory costs:
-> +		- 8 bytes per added hook (due to growing
-> +		cgroup_lsm_atype[] array in kernel/bpf/cgroup.c)
-> +
-> +		- 25 bytes per added hook, because each hook adds a value to
-> +		MAX_CGROUP_BPF_ATTACH_TYPE and thus increases the
-> +		effective, progs, flags and revisions arrays in struct
-> +		cgroup_bpf
-> +
-> +	  If you are unsure, leave the default value.
-> +
->  endmenu # "BPF subsystem"
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25444641622
---===============1287482027544834248==--
+     Andrew
