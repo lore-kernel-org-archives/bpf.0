@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F973DC4CB
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 18:41:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD7330E0D5
+	for <bpf@vger.kernel.org>; Wed,  6 May 2026 18:50:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778092894; cv=none; b=BMnVHJbkvxtLQS2sLnk45AAxpvh3JTcIMb8o48/PRmLZTz9TC9v4rviWkdT8h6tA4j39czxdAaxXUG0o8cqxB3IhFYiZ2T9VaJ1xeVcILgX2+6c/ulG0pAwnxXRwv9JokR7BE1b5IbbQ579yQLNIUCBfMAs6tOfMTDHE1k4HIeA=
+	t=1778093441; cv=none; b=Beei7nQ2fpAbpcZtyKUDW2kiIwNi+Pis/Xh2GtakfVqeRJ0ewbX2SAZ5rYoXtbvpUMFjmBcdui7oIhMJLi5IRNbq+tH+Xvz2gAr8JHi0ilWEAfjcfA2olikbqFIr7TnnG3w1y4Ffi1nxRbdbzny2Dxo9L/trGxluXYclMQE9HyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778092894; c=relaxed/simple;
-	bh=OCcmTwb4NfMXI9JDyuCQLZzpgPVQ+drj+1unsdRT1sY=;
+	s=arc-20240116; t=1778093441; c=relaxed/simple;
+	bh=7Lju96bFqUm5R3L1CmwnzDMlukkEI3ssxu7dXLCVz44=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=jT7tN+ibkKBnnBx38M7R0s9Ld+4Ij5O64kcu98Y949cErnIj3LazQxbWK/oGllv0gCPMquLaoj+mxJe1gPR6/fIaM76i9SOTYGRS0E2W3yy1sRLZ+0kqIWqBgLi3ZetKMN/eEfwBr7wfUVxECFI/BuHUfdP/Gw8MtPtHZe4Ji9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bFp2cTYS; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=fJgCn8VpsEA7011pbIHyNYZAddtl+uy9LLeMbMZCnLUF7nyrpll9E97CwwXQkrpOKLutmtYENVazsFzEhv9Vjb1KuPbY6eWNHKgy/9S3qicnYXG8n6l9b2pxnevgJAFBPHvq9lEf1ufyrx3RMRYi2otheSTKdk4OBkRMCJ4IdTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QVF0wMlu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bFp2cTYS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70D37C2BCB8;
-	Wed,  6 May 2026 18:41:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QVF0wMlu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53895C2BCB0;
+	Wed,  6 May 2026 18:50:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778092893;
-	bh=OCcmTwb4NfMXI9JDyuCQLZzpgPVQ+drj+1unsdRT1sY=;
+	s=k20201202; t=1778093440;
+	bh=7Lju96bFqUm5R3L1CmwnzDMlukkEI3ssxu7dXLCVz44=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=bFp2cTYScdYl0A9a+3DObjGQcqwt5h87sJI1CksARfk0xkNG7B9JZOXA4d6+yZ2Yb
-	 YG/mqa3QNlHlm0XNwzVnUGCedyfBjnItDE2MVocV4HvzYk3HkOEk4nVqLIt4JEIurb
-	 jxhzZjQM2t9b7+DabuiDBV/aNRLtgxHmWwfT4oxTICEfhOy9pA3+fy5D4KGwYxg0Rj
-	 V6OYBDmJ0z2OxgCHZoWViAqnqup7SQl4er9uNQ+MoSRVL5usd0vK3DiYu0g5j5U4GP
-	 diKIncXGIn1/t566hMbim2ubMmksLrp+moURorr2ls8oKq4fTCUas6ui1UYLnmIhnw
-	 tUd5nZew5ll+A==
+	b=QVF0wMluGgCFly0vhp5hECUHn20aT7i4X5+rHlS++ByRIGXsqBZVgr4XhDVXl2rP6
+	 LhNTQKcOo82KDUSPp8b9A5y+dfuCc9vnhCeb5zbjxaC9wqwfnD1wjvGJEJa8XPl90a
+	 I7nPjCznMvmfGumqAONi+bpS67K2LVpjPzF8ey0PJyJoa1HFJoxzUHREJLJNEMyuU1
+	 ylG0kOp+pAFjYs2NZOvsK4LCOuXPaLOM8b+MCZ7kkySnS0fXO93g/RHg9r/cgAe01a
+	 0Mv7U6x9fcE9uzT1+s19y56bU3JZoyBMZe09lSR82wFPmmIWYG6eV3Q229ZNRKtaGE
+	 7C6JhBetOhE6g==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/2] selftests/bpf: add tests to verify the enforcement
- of CONFIG_CGROUP_LSM_NUM
+Subject: Re: [PATCH net-next v5 3/5] veth: implement Byte Queue Limits (BQL)
+ for latency reduction
 Reply-To: sashiko@lists.linux.dev
-To: "Paul Houssel" <paulhoussel2@gmail.com>
+To: hawk@kernel.org
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260506065048.592474-3-paulhoussel2@gmail.com>
-References: <20260506065048.592474-3-paulhoussel2@gmail.com>
+In-Reply-To: <20260505132159.241305-4-hawk@kernel.org>
+References: <20260505132159.241305-4-hawk@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 06 May 2026 18:41:32 +0000
-Message-Id: <20260506184133.70D37C2BCB8@smtp.kernel.org>
+Date: Wed, 06 May 2026 18:50:39 +0000
+Message-Id: <20260506185040.53895C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,91 +46,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Medium] Resource leak (Memory & File Descriptors) in test loop.
-- [Medium] Missing verification of the actual rejection error code.
-- [Medium] Test flakiness due to concurrent execution consuming global limi=
-ts.
+- [High] Resetting the peer's TX queue during NAPI deletion fails to explic=
+itly schedule the qdisc if it was stopped solely by BQL, potentially strand=
+ing buffered packets indefinitely.
+- [High] veth_napi_del_range() conditionally skips waking the peer's stoppe=
+d TX queue when the local device is going down, permanently leaking the DRV=
+_XOFF stop state on the peer.
+- [Medium] DRV_XOFF queue wakeups are bypassed for deactivated TX queues, l=
+eading to permanently stuck queues if reactivated.
 --
 
-commit 643ce21be8f485f762f000339f8443301983ef08
-Author: Paul Houssel <paulhoussel2@gmail.com>
+commit 1b05a5559481675536cd1059fcf1bd7e7b6e721c
+Author: Jesper Dangaard Brouer <hawk@kernel.org>
+Subject: veth: implement Byte Queue Limits (BQL) for latency reduction
 
-selftests/bpf: add tests to verify the enforcement of CONFIG_CGROUP_LSM_NUM
-   =20
-Add a selftest that verifies the kernel correctly enforces
-CONFIG_CGROUP_LSM_NUM as the maximum number of concurrently attachable
-per-cgroup LSM hook slots.
+This commit adds Byte Queue Limits (BQL) support to veth to give qdiscs=20
+visibility into the ptr_ring queue depth, reducing base latency. It charges=
+=20
+a fixed unit per packet under the producer lock and resets BQL state on=20
+NAPI deletion.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_lsm_num.c b/to=
-ols/testing/selftests/bpf/prog_tests/cgroup_lsm_num.c
-> new file mode 100644
-> index 0000000000000..1c5825c6c3d07
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_lsm_num.c
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index 0cfb19b760dd5..86b78900c48e3 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
+
 [ ... ]
-> +void test_cgroup_lsm_num(void)
 
-Should this test be forced to run sequentially by naming it
-serial_test_cgroup_lsm_num()?
-
-Since the kernel limits the maximum number of distinct, concurrently
-attachable per-cgroup LSM hooks globally based on CONFIG_CGROUP_LSM_NUM,
-if this test runs in parallel with other tests that attach to lsm_cgroup
-hooks, could they exhaust the global limit and cause this test to fail
-unpredictably?
-
-> +{
-> +	struct cgroup_lsm_num *skel =3D NULL;
-> +	struct bpf_program *prog;
-> +	int cgroup_fd =3D -1;
-> +	int attached =3D 0;
-> +	int failed =3D 0;
-[ ... ]
-> +	bpf_object__for_each_program(prog, skel->obj) {
-> +		struct bpf_link *link;
+> @@ -1074,6 +1118,7 @@ static int __veth_napi_enable(struct net_device *de=
+v)
+>  static void veth_napi_del_range(struct net_device *dev, int start, int e=
+nd)
+>  {
+>  	struct veth_priv *priv =3D netdev_priv(dev);
+> +	struct net_device *peer;
+>  	int i;
+> =20
+>  	for (i =3D start; i < end; i++) {
+> @@ -1092,6 +1137,24 @@ static void veth_napi_del_range(struct net_device =
+*dev, int start, int end)
+>  		ptr_ring_cleanup(&rq->xdp_ring, veth_ptr_free);
+>  	}
+> =20
+> +	/* Reset BQL and wake stopped peer txqs.  A concurrent veth_xmit()
+> +	 * may have set DRV_XOFF between rcu_assign_pointer(napi, NULL) and
+> +	 * synchronize_net(), and NAPI can no longer clear it.
+> +	 * Only wake when the device is still up.
+> +	 */
+> +	peer =3D rtnl_dereference(priv->peer);
+> +	if (peer) {
+> +		int peer_end =3D min_t(int, end, peer->real_num_tx_queues);
 > +
-> +		link =3D bpf_program__attach_cgroup(prog, cgroup_fd);
-> +		if (!link) {
-> +			if (errno =3D=3D EOPNOTSUPP) {
-> +				test__skip();
-> +				goto out;
-> +			}
-> +			failed++;
+> +		for (i =3D start; i < peer_end; i++) {
+> +			struct netdev_queue *txq =3D netdev_get_tx_queue(peer, i);
+> +
+> +			netdev_tx_reset_queue(txq);
+> +			if (netif_running(dev))
+> +				netif_tx_wake_queue(txq);
 
-When we expect attachment to fail because the slot limit is exhausted,
-shouldn't we also check that the error code is exactly what we expect
-(such as -E2BIG)?
+Does netdev_tx_reset_queue() clear STACK_XOFF without scheduling the qdisc?
 
-If the attachment fails for an unrelated reason, the failure counter still
-increments, which could obscure the true root cause.
+If netif_tx_wake_queue() only schedules the qdisc when DRV_XOFF was set,
+wouldn't a queue stopped solely by BQL (STACK_XOFF set, DRV_XOFF clear) be
+stalled indefinitely here?
 
-> +		} else {
-> +			attached++;
+By checking netif_running(dev), the wakeup is skipped when the local device
+is brought down. Does this permanently leak the DRV_XOFF state on the peer?
+If the local device is brought back up later, it appears the peer's TX queue
+would remain wedged.
+
+Additionally, if a user reduces the peer's active TX queues (e.g., via
+ethtool), the loop bound peer->real_num_tx_queues will skip deactivated
+queues.
+
+If those inactive queues had DRV_XOFF set, do they retain that state
+permanently when reactivated later, since BQL resets on real_num changes
+but DRV_XOFF does not?
+
 > +		}
-
-Does this code leak the link memory and its file descriptor?
-
-Since the attachment is done manually via bpf_program__attach_cgroup()
-instead of using the skeleton's auto-attach method,
-cgroup_lsm_num__destroy(skel) will not automatically clean up these links.
-
-Should we store the returned link pointer and explicitly call
-bpf_link__destroy() on it to prevent exhausting the file descriptor limit
-during a test run?
-
 > +	}
 > +
-> +	// CONFIG_CGROUP_LSM_NUM set to 10
-> +	// -> 10 programs shall be attached
-> +	ASSERT_EQ(attached, 10, "at least one attached");
-> +	// -> 2 programs shall be rejected
-> +	ASSERT_EQ(failed, 2, "limit was enforced");
-> +
-> +out:
-> +	close(cgroup_fd);
-> +	cgroup_lsm_num__destroy(skel);
-> +}
+>  	for (i =3D start; i < end; i++) {
+>  		page_pool_destroy(priv->rq[i].page_pool);
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260506065048.5924=
-74-1-paulhoussel2@gmail.com?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260505132159.2413=
+05-1-hawk@kernel.org?part=3D3
