@@ -1,62 +1,64 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7240E3ED5B5
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 15:05:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C2D44E045
+	for <bpf@vger.kernel.org>; Wed,  6 May 2026 15:05:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778079956; cv=none; b=Su2WKJiUWNo1mjd2pasmBTpCS/y1XeAmk/l+zlLfYnDQO4Mc7A56c5QKS/5KnSu80s+KQvkRNM8n6exoENP8LCOTvXt2TpjqDqCY91ywra5M25Vir+I+m8BWHIhwMhZSQBK0OTG59QusJshljEfJXp1zQanYv75WWBTj+yqyuIA=
+	t=1778079958; cv=none; b=O14a1xme2wXqR9nt9cj18TEUzNxFdb7WysTkZMV9hu5LIVcwM7FHlIJb6vhAP+/R269EtIK7ZAbyykh/ZKg5RSUrbW5tj3PtehsG0pjBe6iSxZgHv0rVQd8Te0bXftTqaBMhezDo7zt/6S9Cf54TUPhbDDzrDcOpkYgknLygOLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778079956; c=relaxed/simple;
-	bh=iyyIzhUZqKmogpHm8sYePct5eSWyKuXgC1vT/8cPyMg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=l5ThpcPCwTF6Eq3SxoNQEl9EzfmhWMQ9xH+ewnPo6FkFdcUhtt+P1ZOfbj6OZllY6G158GXmgx63iqL7H2X7Y85bSIjSP51U0MzAdrNIP4uRNcN+Y8RYb9DgrxnsC104+/1Qihzrw6ahc+59LUkZBZHE3UMtA+StB4NOSBMpNco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WHfEEuaG; arc=none smtp.client-ip=209.85.128.46
+	s=arc-20240116; t=1778079958; c=relaxed/simple;
+	bh=0POFkFFNVrMQryzUbD4UqQY6UMBhMrSFwGrGEgIC7C0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Fuz/ax89CyFZ86Dckgw2tlgj+7xZRRMHeOLhbcLruufIYogRcNTHs79q4sMZ9B+JlAO/EKhkoEDvsMKKwWFnXkhAEg+UeCf6dXyjHjj5FyrSkME8vxXNiSmKJDx6J/RzU0mkgC61oi+HKwAuf892fwnUzcHaCq7mZhMQlwjxak0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M3i/mXBN; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WHfEEuaG"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48896199cbaso57662415e9.1
-        for <bpf@vger.kernel.org>; Wed, 06 May 2026 08:05:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M3i/mXBN"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4852b81c73aso50152645e9.3
+        for <bpf@vger.kernel.org>; Wed, 06 May 2026 08:05:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778079954; x=1778684754; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hpuZpEJdSWnit6krf2QbgKq/6arpy+poajpzOKbixQU=;
-        b=WHfEEuaG+TA06ZPC2TxwwYW2T01ZRrNRCQpNHkoluF9Lz0NogJ9nYjYpVyLd+TAgY0
-         j/V15BwW+6xvdcHvVWrdozRJO/0bpjacP06hXE6T1KvNXlSDmPTwLvbqf8FV7ercdwIx
-         O3mPSx8Z4c3qYPkTqAicfuJB6gJnJVd/SeFZubjpv85XHP1XwbAvPnIUzIB+FuxcdLTd
-         E9GQvWUnLc1AO7ehWxnbxh3Ta8FWS08lgJJP+uUgOfPRtKyQ9XEoOLgsetqK5SoIedpU
-         oIAXSSc+pzg4BDHyP1Ep3v6A7oC82ebOwv2OkpfiZGBws2cmajFNJI0vPS3T7qQTE4HN
-         GKBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778079954; x=1778684754;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1778079956; x=1778684756; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hpuZpEJdSWnit6krf2QbgKq/6arpy+poajpzOKbixQU=;
-        b=d0X0gzEiQrA1TAXR1fXjBgKvzmefL5uh7H4JovUmWRDT2t1DZCdVikFQgvd5skgpOK
-         u8dPcSk5j8TOPxFhAFqv+anXoOq5WwVd3mcBeT4H/gUFdP1thAXhH5g6m+Xh9rkjwp75
-         RlVG0bLBFZyfeWI0EMzuIc8xRL/v5Uztc51qJKg4FAsiqqIcqDaDWQS884tKPQc33RAp
-         AOPIB7rwRlPgm6RDD+g8iqqQiE5lNJJhU+EbP2BVxLprv/iEh85oEZitOVBHVvRMvLpL
-         wjZTRqJfZTFMTP9VAIRYms2aoRnXNwsmFq9Wk8FL7V783mMeF1w+NigYemrZMCZdMR3+
-         jqyQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9ybX5l5Bd1nJbOYLECDGgGt2IA+uCXkRR+gFupLQA9nrdgvBq6GN/c1ChkqSdGWC+D9RE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxc6CfTW3vqBqw8hd5I8cQ9/U+GXBWxWZ4t+S39jNlBC8eLy5ef
-	KTZ0UDHnwWTGoav9RRZuRvuUbLZWYDVcdtUW5aQ1k8vZV0Sf6iH2hr81
-X-Gm-Gg: AeBDievhW0Rhc2vJu71OB5s3YEUq1xhuVTSZAj/mpcx6+Vdz0fcZk6kKpLXHeP61oLn
-	zPpHV1FvOXurK+8GsTGr4wQF1x4mhuCuavPCYY+uucwV+NRX3hwHLE+YApR2/PwyLGNgo1eyizB
-	O9Ef8mNjCgjQsp0KaTlU5JVyQcFL5zIuBSwkL8M5j71d06DhkiGzbSNCDsxiFJYVoIos9UXjif+
-	fpa4ICiqKOmj5enYjWbXUn2CnlSqrLbF5d1EfGwM5EhU6Fa9O/VcD5w8ZdZGm5D6Zjgpy00a8FB
-	HvDmuif0Z513nIcz1aWUtvmSdEoHFpUqi9qNGhi9P9ELcTNCcAMKioVbQgvpXcIf4M0G1kPpWuw
-	I0RuA/peVKMoipnqsjQrk0X0yRF12tQNz9M1pQWyYzM+8B/FamA4+LaI6lFRnhEb6BdvRyBEHLn
-	UbSLugT77gKQo5jIh1W9Fl9DoS/ist7hAqKq/m82U1KXp32xTLWjYb9QAw/OrdQ+bMhBrBhO+Ly
-	FBFo7RjFsmUisQfTRWJlw71IthOsMHPfcc9lg9q
-X-Received: by 2002:a05:600c:871b:b0:48a:592c:e655 with SMTP id 5b1f17b1804b1-48e51f45eddmr62173085e9.17.1778079953381;
-        Wed, 06 May 2026 08:05:53 -0700 (PDT)
+        bh=C0J3rpayuOKrnwwnnzbYMFwFi/582KvjsLozbp5uBHU=;
+        b=M3i/mXBNHF59CI3HdxL12hxHYheWoaqY7G5J7rH4m4WIzIo8HKCiseKSSdUi46Wah9
+         jzBKByQvq9JmZkAIIY97TR+uk6EmsOMkEQL1QNpeEIMjMzndttYPth0QYWXb/2k+9kil
+         9j9W/2vTtXIVDv/FROpLsvTxUmJxGR76m7FhS70vUd+Tnl+936KbHMX2hPOq6kKuIQt2
+         9KnoFp5zTMrA+LETrbMlxEu7nN14KWgjWIEXxV7xC4XwDQe1VLFNxH5g3WHR9HEekqQ7
+         bJeSqRAut09PgZmFVhGyY/XrByuchEQFe9IAY1omZYjiMJ/MGe/mE6+6ZyfKamZbxMMi
+         vp+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778079956; x=1778684756;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=C0J3rpayuOKrnwwnnzbYMFwFi/582KvjsLozbp5uBHU=;
+        b=Np4WA9rWrMfLS6nUBKV+VeGvphGqWDYrkyjB8wpQVzXnoMiIA3Tgq+kVnhqq8dZIJt
+         HLXecFjlaKEtvyetmotiYsI1/41ihMmZtP6eMpVd0LaQk5UkX0qlFpDgiv5ofDkzJznN
+         kFSQq5IFzeeKgW40eeror1gs+uN0ETsRNBPZvZ7uGRbaI7L57lVey7lGrdgoW9VrhiBw
+         4ohJhUtjtouvqCfjjni35PUTVnt0zRTGghBBl29xGuJTYIXPrMCIiyEiR9/poq5pfiyx
+         ciPlBxCvnHVPlGTLBVMh1GCQbGeV9Ugid1506ECCtF3ne2DXgu7O4XHTAmCRg3ewLYUx
+         aYLw==
+X-Forwarded-Encrypted: i=1; AFNElJ+K3S0wz7gBw3N0CAUHwfpcJ3lM6uxYy1e11dv8e1u0GNYRnxqTGux1alSyeHqeZRSCHcI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKikV11DLyXDzGds8IwX1IfySyDCiroQnsVgOQy8qmTOnyOXcC
+	nifHGsHL4FdrT01acbKVy/sLZObPFYZUHBUY1tXTgU/RyEpMl2aEC+hD
+X-Gm-Gg: AeBDieuTaGats9RC+mWlI79xMf607G7Qt2iImJMBFDc65AR6HJJoWfxwywE0Awa4QqC
+	32mo0NqCuBlK15FSnUsgF6q5B+PGAkEBthdbdvAyqBYLjcWC+ql+LBpdoWCMl+6liUgdQoKIJRf
+	2JMUECr4u/k3wIXCvQCxTpNpbHc2HN8OD/vW5atyDSO+MkcTcpgN4ZXAZ/QD/kzDgj15IHTLBl7
+	84qWe9kRFvf+eqx5oNL85OKIHQmtqQU/COj4seSdiM+OhXE60qQiqY6JPcpcG0oVZWhNAwWm8Xd
+	Bk9tFMloOgR4u4O1LFzs7kI/XSKMiL+ROo2KjZbxo1YFB7/JjiWXuLsabl4hOtPBit82ocOIk3B
+	CwCHgSax1nE374GGfZqzF/kFcLBqIjRKezT6yIq0jkOtGA1YoJnmd7bRD5Vcx9edkwJNKmRbF7H
+	3//hl001TD4oBYnY66+76Ly6e+K9Hf3fIMKdA1kTK7GUNO7neNmNEp+gnHotOTjXNCoV6o3hKLF
+	hsERTq0bV/zeoQy+G2ltvIm6DOWCPMAIfMBXaOa
+X-Received: by 2002:a05:600c:3548:b0:485:3abe:ab86 with SMTP id 5b1f17b1804b1-48e51e0a6a2mr65494075e9.4.1778079955640;
+        Wed, 06 May 2026 08:05:55 -0700 (PDT)
 Received: from paul-Precision-5770 (2a01cb0404624b007a7d1e818d0f651e.ipv6.abo.wanadoo.fr. [2a01:cb04:462:4b00:7a7d:1e81:8d0f:651e])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e5312de76sm18382985e9.21.2026.05.06.08.05.52
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e5312de76sm18382985e9.21.2026.05.06.08.05.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2026 08:05:52 -0700 (PDT)
+        Wed, 06 May 2026 08:05:55 -0700 (PDT)
 From: Paul Houssel <paulhoussel2@gmail.com>
 To: paul.houssel@orange.com,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -75,10 +77,12 @@ To: paul.houssel@orange.com,
 	Jakub Kicinski <kuba@kernel.org>
 Cc: "Stanislav Fomichev" <sdf@fomichev.me>,
 	bpf@vger.kernel.org
-Subject: [PATCH v3 0/2]  Introduce CONFIG_CGROUP_LSM_NUM to render BPF_LSM_CGROUP attachment limit configurable
-Date: Wed,  6 May 2026 17:05:45 +0200
-Message-ID: <20260506150547.767315-1-paulhoussel2@gmail.com>
+Subject: [PATCH v3 1/2] bpf: render CGROUP_LSM_NUM configurable as a KConfig
+Date: Wed,  6 May 2026 17:05:46 +0200
+Message-ID: <20260506150547.767315-2-paulhoussel2@gmail.com>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260506150547.767315-1-paulhoussel2@gmail.com>
+References: <20260506150547.767315-1-paulhoussel2@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -89,52 +93,64 @@ Content-Transfer-Encoding: 8bit
 
 In include/linux/bpf-cgroup-defs.h, CGROUP_LSM_NUM defines the maximum
 number of BPF_PROG_TYPE_LSM programs that can be simultaneously attached
-using the BPF_LSM_CGROUP attachment type. It is currently hardcoded to 10.
+using the `BPF_LSM_CGROUP` attachment type. We set the value to the newly
+introduced `CONFIG_CGROUP_LSM_NUM` Kconfig option, allowing users and
+distributions to tune this limit at build time rather than relying on a
+hardcoded value.
 
-This limit was introduced in 'commit c0e19f2c9a3e ("bpf: minimize number
-of allocated lsm slots per program")' in the first patch implementing
-BPF_LSM_CGROUP attachment, and has not been changed since. Rather than
-reserving one slot per LSM hook (a 1:1 static mapping across all 211
-possible available hooks at that time), it introduced a dynamic scheme
-where only 10 slots exist per cgroup allocated on demand.
+The option ranges from 0 to 300 and defaults to 10, preserving the
+existing behaviour. There are currently 273 LSM hooks but this number is
+subject to change. I coudn't find a MACRO counting the sum of LSM
+interfaces and therefore arbitrarily set the threshold to 300. I am open
+to suggestions on how to set this limit dynamically or not.
 
-In practice, eBPF-based tools may exceed this limit. I therefore propose
-making CGROUP_LSM_NUM a Kconfig option so that users can tune it to their
-requirements, rather than being constrained by static hardcoded default
-that has been arbitrarily decided on the first implementation of this
-attachment type. On the other hand some uses cases may be interest to
-limit the number of attachments to a lower value than 10 to prevent too
-much memory overhead.
+Signed-off-by: Paul Houssel <paulhoussel2@gmail.com>
+---
+ include/linux/bpf-cgroup-defs.h |  2 +-
+ kernel/bpf/Kconfig              | 19 +++++++++++++++++++
+ 2 files changed, 20 insertions(+), 1 deletion(-)
 
-Modifying this limit has been dicussed previously in
-https://lore.kernel.org/bpf/20220408225628.oog4a3qteauhqkdn@kafai-mbp.dhcp.thefacebook.com/,
-where the same thought on this limit being too small was being shared as
-well. Furthermore, this discussion seems to have yielded inconclusive
-about to render it dynamic, without a fixed array size.
-
-Changes since V3:
-	- refactor test eBPF programs by using a macro (patch 2)
-	- improve the kconfig help text by elaborating on the memory
-	  overhead (patch 1)
-	- link to V2:
-	https://lore.kernel.org/bpf/20260506131257.713895-1-paulhoussel2@gmail.com/
-
-
-
-Paul Houssel (2):
-  bpf: render CGROUP_LSM_NUM configurable as a KConfig
-  selftests/bpf: add tests to verify the enforcement of
-    CONFIG_CGROUP_LSM_NUM
-
- include/linux/bpf-cgroup-defs.h               |  2 +-
- kernel/bpf/Kconfig                            | 19 ++++++
- tools/testing/selftests/bpf/config            |  1 +
- .../selftests/bpf/prog_tests/cgroup_lsm_num.c | 60 +++++++++++++++++++
- .../selftests/bpf/progs/cgroup_lsm_num.c      | 46 ++++++++++++++
- 5 files changed, 127 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_lsm_num.c
- create mode 100644 tools/testing/selftests/bpf/progs/cgroup_lsm_num.c
-
+diff --git a/include/linux/bpf-cgroup-defs.h b/include/linux/bpf-cgroup-defs.h
+index c9e6b26abab6..9ab5ca3dbaba 100644
+--- a/include/linux/bpf-cgroup-defs.h
++++ b/include/linux/bpf-cgroup-defs.h
+@@ -12,7 +12,7 @@ struct bpf_prog_array;
+ 
+ #ifdef CONFIG_BPF_LSM
+ /* Maximum number of concurrently attachable per-cgroup LSM hooks. */
+-#define CGROUP_LSM_NUM 10
++#define CGROUP_LSM_NUM CONFIG_CGROUP_LSM_NUM
+ #else
+ #define CGROUP_LSM_NUM 0
+ #endif
+diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
+index eb3de35734f0..050af0b72651 100644
+--- a/kernel/bpf/Kconfig
++++ b/kernel/bpf/Kconfig
+@@ -101,4 +101,23 @@ config BPF_LSM
+ 
+ 	  If you are unsure how to answer this question, answer N.
+ 
++config CGROUP_LSM_NUM
++	int "Maximum number of per-cgroup LSM hooks"
++	depends on BPF_LSM
++	depends on CGROUP_BPF
++	range 0 300
++	default 10
++	help
++	  Maximum number of concurrently attachable per-cgroup LSM hooks.
++	  Increasing this value has two memory costs:
++		- 8 bytes per added hook (due to growing
++		cgroup_lsm_atype[] array in kernel/bpf/cgroup.c)
++
++		- 25 bytes per added hook, because each hook adds a value to
++		MAX_CGROUP_BPF_ATTACH_TYPE and thus increases the
++		effective, progs, flags and revisions arrays in struct
++		cgroup_bpf
++
++	  If you are unsure, leave the default value.
++
+ endmenu # "BPF subsystem"
 -- 
 2.54.0
 
