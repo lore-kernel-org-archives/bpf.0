@@ -1,75 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B25B2DAFA9;
-	Wed,  6 May 2026 15:06:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6E2548B36E
+	for <bpf@vger.kernel.org>; Wed,  6 May 2026 15:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778079963; cv=none; b=IMPCUJjcU7m9ZExABeGml3NUHI/ju/eAXNuMFGc3pYbHpPWPx3b3F1RjSpnh5aupGoUGznmecP5kn4zd6N02nCX7PFhi4lOIqXettoXrrmkGw8pEcXklWP5ova7J3zj45/V40kRbWlF3Ic0vCHjiA1nmvo78INc4oGz5oidfxaw=
+	t=1778080000; cv=none; b=qhA1+jidmJ1KLUZSNdvhuK/I58IVK5aAezrFTywavaiyeQWXa0tKyLrocfvjxKt80iGq5vhoPS2kTfJxN+o04g/u0wqBsPTJxQwXqjJnd1z/Dz36Cb6DlR3znijXknqzLBh0za9y7h6lXIV20O7VBuDLKo44va/TMveHNbtEViQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778079963; c=relaxed/simple;
-	bh=h7ovwbh5DlRDa4YYaPtkLrFaSuVERIz6AHUo+5l3Jiw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Sv3pd5D8qoH/2KD2jCSvje7yD06TNLwVTsOaJL/GWWsvwWo+tyVbW3QadzMamFH9IqFt5UxW5YwKfR8zqP77I0mmnZoeDRKNEsSsFrhuAEPVLkVUZ2aCOmt+XSCKxeUAk7qT1PJJbEHLhrzh2R4WVuFDNyxbPr5nqqVa9TaI9LI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=InidCxzR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778080000; c=relaxed/simple;
+	bh=30p2kdTZbNSFKr8Y/mUI5XYXoBBWoiYScms2rXza91Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=nSafkDnG1z8jLI6V5nsROhqKWXcaR5XwnO/6ppu1ftR1X/CFJSJhc29Ka5zEuyrr/gUNmpw/HVbpRut8i/o3eWA+HQo3+4Fyi2mJNDr/H1nCdtiRjulcLc9Yz7GbKAQm3oVZk/wAoWSxwrxN5ohuwJKxYLeJeHgRb5J1M8VKJkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=CO9rEdrr; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="InidCxzR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E83B5C2BCB0;
-	Wed,  6 May 2026 15:06:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778079963;
-	bh=h7ovwbh5DlRDa4YYaPtkLrFaSuVERIz6AHUo+5l3Jiw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=InidCxzRIrjNGULdEgBQCG41dn7eFdpPuS/Sr72cIGMHSYW1zKoGCTweajBzOK6YA
-	 c7mVOy4Zj8c1KOKOsEJwUdDxzFQLRgKLNsY8+T0nxeMmqMw3417QvjVokf2mECi3wL
-	 vpPDPwP+gbL5kC7vQCH+34oUw1Zq+Ltu+R5pGyU/XLCVfPuc9bOeWKTszw/2kOrv/9
-	 HDYUwfP2WhdQSab02aLcJ5+90KEcAgVea8NeQ4osb16BemVcQafxQvrXVCW2qEBehp
-	 1tBdeOpMxIO78HUwPyP09NL0XOjMBwiH6A+gLUaXlNrctmDyQM6ZdoArLBPiX7NKJk
-	 fquu7LwnfijIw==
-Date: Wed, 6 May 2026 11:05:57 -0400
-From: Steven Rostedt <rostedt@kernel.org>
-To: Jens Remus <jremus@linux.ibm.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, bpf@vger.kernel.org,
- sashiko@lists.linux.dev, Indu Bhagat <ibhagatgnu@gmail.com>
-Subject: Re: [PATCH v14 04/19] x86/uaccess: Add unsafe_copy_from_user()
- implementation
-Message-ID: <20260506110557.46ee72c3@fedora>
-In-Reply-To: <2946bcda-321d-4a17-88f2-02c5137676cf@linux.ibm.com>
-References: <20260505121718.3572346-5-jremus@linux.ibm.com>
-	<20260505182244.0A151C2BCB4@smtp.kernel.org>
-	<2946bcda-321d-4a17-88f2-02c5137676cf@linux.ibm.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="CO9rEdrr"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-bc23bebd345so186995166b.1
+        for <bpf@vger.kernel.org>; Wed, 06 May 2026 08:06:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1778079997; x=1778684797; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=30p2kdTZbNSFKr8Y/mUI5XYXoBBWoiYScms2rXza91Q=;
+        b=CO9rEdrrZNH0QxnJ4E7PkDd4BGiVment7mXArhn++fpyqEO5dAdI77os3QZ2hAF2Ej
+         iFeGM9hYxR78TKgethKHLr9o4XH9jWyUoIq4Rvc5fQT9Tht7tqzk0Osatrv7Jpqj6MTo
+         4mvx8vq9MTos4DgCgh2wX9pp42IRyqKIbj2nGi/NOpwo5bfKijO5J5Q3PezV1sxUzXLG
+         I40+L3Co8Q4Y3BvLo7r8Xspu0U/YxFbz6ocCMYod2xFw1TqdqgutwGC1xX/w6SNVUPU2
+         BIqI3aV7R8PfbjHNAJ3s6rWGbcr6r/AgqLQ6A9zK6ZjI+WygjHYyvvFMYgWVlrpjR8ub
+         /kiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778079997; x=1778684797;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=30p2kdTZbNSFKr8Y/mUI5XYXoBBWoiYScms2rXza91Q=;
+        b=o05CQdqjk2JcbVeZtlCWUOV+sXhdUF8vOdjSInFef9kwwYdjHB4eSfsoYfmF1TgbJT
+         +jPE9TrjbSoTpC5ePFklu2+7mD2OR9bpehlzxBKIjjynsF6gOWpKHjKR45JOfn/2NfmC
+         4TidZMRrEMmSBlbO1/F7oUuhDzEK95Z3XsTGbQpodz+NBz6N0e5syLUnWDVfsMiOzT1t
+         d9Zzb8DEyirZj5zqHYNNVR+8K0yEQjuvgL0j0qWRwtae1d2tes+tvjKILNI2D8NKcY7K
+         PzkRhnkbCl8byNSnjPKrlG+M6HferpSgOYbMY/Fx6TdkAS5nPWvnYPQn2F2N+Z1MJ2xH
+         Vtlg==
+X-Forwarded-Encrypted: i=1; AFNElJ+LD5cExRoVeEpF41cj4LNFN/+VuPbolGdLgW5Z8T6hMdp4wTJTinKbQFhnHfy3HocTI0Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzezkyV9Se2dLqLK5FS5sqwanIbgnHG4DKfepBz1fmdNqshwKBF
+	NOir2mG40rXH0Tsu/PWR30tkt7SfeQzg1v0Ns8ahH18uNhUu6hwQeOGZtAMjEqaP2nWAkBSESvN
+	253fd3TE=
+X-Gm-Gg: AeBDievg3r3FG3QlHkVpXtygSR++LCqujH/gOlrBl/FVD1M+V1FlNGGrtLfrMxL8hCj
+	yOd2rCoI95xa5dxGrSgcrRf7zLFMz+J54LmmUbDh6ZZRN94wVpr1pbGc6KyJRFm1wn1hmo+egCi
+	QyU8GvuPCzGxa8SJZlGmODgGDD+1OM32KU5WX5PxJhRXRsuZlRKTEMJ0VV1DQO/wYf2Gc4FLDDF
+	f2B2tqgxaaYTQvyPoAmSlZmwlxU0NRgXxnb/9Enx9kmc5UAGymOCv9LbGeurWSk9+r1l7EFAqPW
+	u7SGt8O9DEnG+818MY8zTHHDhHe4pEp+rORoBSZPTY132ErC/pFLl4cQaMAvY/+KIE+Q1XHGDyI
+	gQl6Jt0SQ9zd8yTnRnDpuxMiknG48NEAvE0afvk0Av6DL2b0AHp67z9n/bIw1w8fdGFjJ7/Qtqh
+	EXwCtGe81SOe3BAM6nac501f1hD1OPTKzNPbv+jnpd+1g/lDEDqsfHT3Kr/ae8sAmXCggnXt4=
+X-Received: by 2002:a17:907:a08a:b0:bc6:6af:f4ad with SMTP id a640c23a62f3a-bc606affe33mr99179466b.4.1778079996695;
+        Wed, 06 May 2026 08:06:36 -0700 (PDT)
+Received: from u94a (61-227-76-27.dynamic-ip.hinet.net. [61.227.76.27])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ba7bf2cd25sm30177395ad.22.2026.05.06.08.06.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 May 2026 08:06:35 -0700 (PDT)
+Date: Wed, 6 May 2026 23:06:28 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: lsf-bpf-track@lists.linux.dev
+Cc: lsf-pc@lists.linux-foundation.org, bpf@vger.kernel.org
+Subject: [LSF/MM/BPF TOPIC] BPF in Stable Kernels, an Update
+Message-ID: <aftYtW_R82qzRt18@u94a>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, 6 May 2026 16:13:25 +0200
-Jens Remus <jremus@linux.ibm.com> wrote:
+Slide deck can be found at
+<https://speakerdeck.com/shunghsiyu/bpf-in-stable-kernels-an-update>
 
-> > Regarding the variable naming in the updated unsafe_copy_to_user() and the
-> > new unsafe_copy_from_user() macros, is there a risk of variable shadowing?
-> > 
-> > The macros declare local variables with very common names, specifically __dst,
-> > __src, and __len. If a caller passes an argument that happens to share one of
-> > these names, the local variable declaration will shadow the caller's argument.
-> > For instance, if a caller passes __len, the initialization size_t __len =
-> > (_len); will evaluate the right-hand side as the newly declared uninitialized
-> > local variable itself. Could this lead to the loop copying a random length of
-> > memory based on stack garbage instead of the intended length? The previous
-> > implementation seemed to avoid this by using uniquely prefixed names like
-> > __ucu_len.  
-> 
-> Please advise.
-
-There is an effort to get rid of common variable names in macros that
-start with underscores. But honestly, that can be dealt with later, as
-it's a problem with other macros in this header.
-
-Feel free to ignore this suggestion.
-
--- Steve
+Shung-Hsi
