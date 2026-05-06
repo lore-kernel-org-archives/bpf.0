@@ -1,116 +1,115 @@
-Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 034723F9F4F;
-	Wed,  6 May 2026 09:56:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D1832A3C9
+	for <bpf@vger.kernel.org>; Wed,  6 May 2026 12:29:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778061405; cv=none; b=RZ3LkyE6HoQfW/BhEa5GF6DQCCSt0aG7siLumOJ93g4eCgYThnrIoz7xuYXFePiH8PnwdfYzoSDcsoLcU7zkdnOc1K4Yup5UPGEk65R85D92BahajLq577gfYbpYU5g5iGFMuXEA+Kh3bCrD8FjxsixgkOM9m1Z5uGrGELsHVqo=
+	t=1778070560; cv=none; b=ASJehELFuUhUl56qmWje5bnXGoI8f6V4ESkbVP3UPN2m/r4hXbacURNFHVH7Q4fEy678KplKEFCt80MhsqM0azivQe8y1PLCfmhvpKz9XFTtJoPaEeXre+D7UVNmT5QcXojJPiLEFWaLGNtICTxPlpXOC9SiBBTWQ7LFB831qPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778061405; c=relaxed/simple;
-	bh=i4b29kb5a/XMebP4vH5gtQdeyfZIpvycSMwV1kmFiYM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gBZHWHOtlaRa16Kqeig1DNT1gD6tRlT/ZJPLG65kyP5FzYqVSF0JUm9A2z3KVniMGiKonmhoybQLoNLbeGVnyIekX/LMDxBWEOWtzEnyjhrk0TcdWHLFQSqZNKlyqsL8u9c9gjS5//5246tx8myrRIKQ/5qte9WglkO3LfPzePs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=VdFNn7mO; arc=none smtp.client-ip=194.13.80.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
+	s=arc-20240116; t=1778070560; c=relaxed/simple;
+	bh=xH3UHSEF+kKer/2l+b4ykufyBAPYHPws5oRNcU+Qowc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t/lztSmFecuvB0R3UNEmPoDyTzcVYOO+wPP1bRPLRKP80P6wG/78/3BALs6HXIsAqAWyZoLIGi2XVFs7EAowZ4KjKXuyvcefNKdTuzJE0UGCTouJjPC8ikaAr0/ADbFJayZ40+BBu+x1KQcy5Ld9w5F+y0Hfz4I0fz1VfmLf9V4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jVr3Y0ES; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="VdFNn7mO"
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1F9CCA50CD;
-	Wed,  6 May 2026 11:56:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
-	t=1778061371; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=1gBHfWci9FiNcluIaLhYXqnpOD0nhtzCOMGm24dX1Ic=;
-	b=VdFNn7mOwU8hq9o4KWTKiS//BdbhYw5GatZTxFjYwk64TKL4OTgSpct3oJye0xbSkROatK
-	m60mJZPblsnmjbL+bbFXqabj71pZTqB819c6kLwnFgjJwennXtQxHxy3WtmoG1Xv7yKsMf
-	Mfi/r4Ig7oNpBjvbMf7xsaDgrTpFsM7mtsUnesuMhoibay3Seqhmeg2niP94RuVuHq0AYC
-	JLVa3DIAX1PNha05494CWKxHbnq9LT0R1QMzUMi+rs1DnwKfEHj2as2WCI6BvMdfelzPqI
-	+0KZskbIczCidUCx3F1NuFMwk/nfPiKlfq6PbdGqiIMcB1qyoR02N4HpOCvRKg==
-From: Nicolai Buchwitz <nb@tipi-net.de>
-To: netdev@vger.kernel.org
-Cc: Justin Chen <justin.chen@broadcom.com>,
-	Simon Horman <horms@kernel.org>,
-	Mohsin Bashir <mohsin.bashr@gmail.com>,
-	Doug Berger <opendmb@gmail.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Nicolai Buchwitz <nb@tipi-net.de>,
-	Mohsin Bashir <hmohsin@meta.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net-next v9 7/7] net: bcmgenet: reject MTU changes incompatible with XDP
-Date: Wed,  6 May 2026 11:55:50 +0200
-Message-ID: <20260506095553.55357-8-nb@tipi-net.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260506095553.55357-1-nb@tipi-net.de>
-References: <20260506095553.55357-1-nb@tipi-net.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jVr3Y0ES"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4852b81c73aso48799725e9.3
+        for <bpf@vger.kernel.org>; Wed, 06 May 2026 05:29:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778070557; x=1778675357; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Czs3D5A5wlLCB5HWOqbKm3KToTO4H/Ui2EEQd8UX9vA=;
+        b=jVr3Y0ESl7dIuOZ9FB8dng2v+1ZUBGkiF+cKIKcena7dRs49XqMl5hJbPZ1vS16Q7/
+         Cx9i76g6RDeF7d5TnuCx3/ctSE8cp9hcXh23Dv+vCZ35bwCmbMTceYtJndIlXgIApwpi
+         MZOQvAwtBeCbAQKW5IhoQ1Dv7ePsOq0zms/nERLtNtHBttRWu3u209bZ95PMqBZPjbgy
+         Kr7wJuXJ8B82JWZdrMGP+Vsaft1VHltklWd/UZI487sdQHIIsAtRje6Il0eRgo95XFDQ
+         dHxMQU4u5qC6rimrQE6r4oIhWOFCzTdaGIk+SGHX7Ha4aajZezPN0mzPadCTxs/uq5oV
+         lRPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778070557; x=1778675357;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Czs3D5A5wlLCB5HWOqbKm3KToTO4H/Ui2EEQd8UX9vA=;
+        b=lOvZemajc5m+Kk1vD/f07rR5cdP6uh0nUl7hAn2oJ1iAMNFbCqRE1ZxsFLPxqE3NOQ
+         wyh5jF776Uurnau9o1+SBHFsO3jMZIhRSaHrbbg3hYd8B1Wafxy0cipR2yRYwwwF/NbS
+         /RwDIULIb+OiiOQt5U1aQRuFPLMF7kB0Ezo9CUu0XSrn6lqp3i1m76EtP+HsQliPpyyx
+         HCLeTZR/frlUDSl25MwotsKbmH5+szV9F6ekZsZ+fES2+7Pz7hItxSv0TcH1DtQWa0IL
+         TxS69E657y2yeOkXUpKfZIYsj3Uf5xtPbQLokDPwv8X6Ho0PebxFL1dY8W+bNaAyWuXJ
+         T8hQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/3J/INrAjSDm3+oXZ4nupTMgMrBawZpSKQV+V4rUMbK8nQO1i5g34hqMZx7GIjg9F6gag=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwV9l9qcNtIxPt+4vyBAJi8DNCfM5Ht1wMj/lzZUE3WKjaxGc29
+	xp89eLec24Ax7zY6jGLlBm2ls0HbQ9m6zftsDE21GcACvevVmwriptWU
+X-Gm-Gg: AeBDievk2tvOy3eipXM3ovnE7g8n+NBFOUtn5D/Lb5vnK/mSS+mwuoRCslTO2sUv2jn
+	05nEOLdMzKWehjZLJyiPj0qI9Lyern22RosAf3cAtrXhuqWgFlq2OPkBVOVmk/TAha4gXTTu+oQ
+	H62hmn3xrCnMHXWzn+gkJJzZ0avqK4q4FvC4hjOcKBE0/BhHgvLtYLZHfpH5z7g3mP++Dv5uH7w
+	/zw0c+Gr8Fxc/wh9F6RD/fxqz08JTKAl49FxRotBPGjR5qzDPCwNq1mNNEGBcRg5xnumfa2GhtN
+	856GZ4nLJJXSZVD1GZAkI0B1J7b93vGnwcQsmRs/HHTUU8FOXbBYvOVNycSFHHtpaTNzCW2bn3C
+	yT8qaxyjH3OY/pXF7AyWczThwmOcZuSMfXJWjpnKfGa2Cd01+EM24xTV32RnJBoFg0xuzYJMyvq
+	t8qsoXIv3u5smi4IbBU4JIcmwe+mvklUM5cIHviTa4yZnou2ZFr0Z4ZgQ0XH8OquHj7215Qnt0A
+	e8LpO+P5maQnSwYfluG0zXpkx8Xb+NrmXRmOjHO8uwQJaPOkaICrHLkIvmkMTTvXcW3M4Qpt9Py
+	sseFO+IjhLZCXVDqmq5CKToEZeMEbUW/pJkrawvmkhMZah6O0h9qOw==
+X-Received: by 2002:a05:600c:8b0c:b0:48a:7a10:4f47 with SMTP id 5b1f17b1804b1-48e51e0a620mr59477595e9.3.1778070557139;
+        Wed, 06 May 2026 05:29:17 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e00b5a044c6307a465e.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:b5a0:44c6:307a:465e])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e538a50d0sm75518935e9.5.2026.05.06.05.29.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 May 2026 05:29:16 -0700 (PDT)
+Date: Wed, 6 May 2026 14:29:14 +0200
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Paul Houssel <paulhoussel2@gmail.com>
+Cc: paul.houssel@orange.com, Andrii Nakryiko <andrii@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Florian Westphal <fw@strlen.de>,
+	"T.J. Mercier" <tjmercier@google.com>,
+	Li RongQing <lirongqing@baidu.com>,
+	"D. Wythe" <alibuda@linux.alibaba.com>,
+	Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org
+Subject: Re: [PATCH 1/2] bpf: render CGROUP_LSM_NUM configurable as a KConfig
+Message-ID: <afs0GuNstGXQd2E6@mail.gmail.com>
+References: <20260506065048.592474-1-paulhoussel2@gmail.com>
+ <20260506065048.592474-2-paulhoussel2@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260506065048.592474-2-paulhoussel2@gmail.com>
 
-Add a minimal ndo_change_mtu that rejects MTU values too large for
-single-page XDP buffers when an XDP program is attached. Without this,
-users could change the MTU at runtime and break the XDP buffer layout.
+On Wed, May 06, 2026 at 08:50:47AM +0200, Paul Houssel wrote:
+> In include/linux/bpf-cgroup-defs.h, CGROUP_LSM_NUM defines the maximum
+> number of BPF_PROG_TYPE_LSM programs that can be simultaneously attached
+> using the `BPF_LSM_CGROUP` attachment type. We set the value to the newly
+> introduced `CONFIG_CGROUP_LSM_NUM` Kconfig option, allowing users and
+> distributions to tune this limit at build time rather than relying on a
+> hardcoded value.
+> 
+> The option ranges from 0 to 300 and defaults to 10, preserving the
+> existing behaviour. There are currently 273 LSM hooks but this number is
+> subject to change. I coudn't find a MACRO counting the sum of LSM
+> interfaces and therefore arbitrarily set the threshold to 300. I am open
+> to suggestions on how to set this limit dynamically or not.
 
-When no XDP program is attached, any MTU change is accepted, matching
-the existing behavior without ndo_change_mtu.
+For reference, there was a discussion on this previously at
+https://lore.kernel.org/bpf/20220408225628.oog4a3qteauhqkdn@kafai-mbp.dhcp.thefacebook.com/
 
-Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-Reviewed-by: Mohsin Bashir <hmohsin@meta.com>
----
- drivers/net/ethernet/broadcom/genet/bcmgenet.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+> 
+> ---
 
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-index 359a297a25e6..6ef76e93d9ad 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-@@ -4095,6 +4095,20 @@ static int bcmgenet_xdp_xmit(struct net_device *dev, int num_frames,
- 	return sent;
- }
- 
-+static int bcmgenet_change_mtu(struct net_device *dev, int new_mtu)
-+{
-+	struct bcmgenet_priv *priv = netdev_priv(dev);
-+
-+	if (priv->xdp_prog && new_mtu > PAGE_SIZE - GENET_RX_HEADROOM -
-+	    SKB_DATA_ALIGN(sizeof(struct skb_shared_info))) {
-+		netdev_warn(dev, "MTU too large for single-page XDP buffer\n");
-+		return -EINVAL;
-+	}
-+
-+	WRITE_ONCE(dev->mtu, new_mtu);
-+	return 0;
-+}
-+
- static const struct net_device_ops bcmgenet_netdev_ops = {
- 	.ndo_open		= bcmgenet_open,
- 	.ndo_stop		= bcmgenet_close,
-@@ -4105,6 +4119,7 @@ static const struct net_device_ops bcmgenet_netdev_ops = {
- 	.ndo_eth_ioctl		= phy_do_ioctl_running,
- 	.ndo_set_features	= bcmgenet_set_features,
- 	.ndo_get_stats64	= bcmgenet_get_stats64,
-+	.ndo_change_mtu		= bcmgenet_change_mtu,
- 	.ndo_change_carrier	= bcmgenet_change_carrier,
- 	.ndo_bpf		= bcmgenet_xdp,
- 	.ndo_xdp_xmit		= bcmgenet_xdp_xmit,
--- 
-2.51.0
+Your SOB isn't detected because of the above separation. Text between
+the "---" and the diff is ignored by git.
 
+It's probably also worth cc'ing Stanislav Fomichev when sending the v2.
+
+pw-bot: cr
