@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E2C1E511
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 00:29:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41082211A09
+	for <bpf@vger.kernel.org>; Wed,  6 May 2026 00:29:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778027347; cv=none; b=RfXrc+jjzyNSNiHzunHvnrNiduMNH6TQ8e2aGzMR/dUiU2Dam/swxxxjurtY0H8ech1JnQj78F9US88fNPvK4qZuBxJLi/0cbiJxLssPi7m2S1wMNN6K9v7jVHy9TlJiWB1XVWC4p1JHFKTZJMSkEYvBod8LKU68G2L2zeMh5Zg=
+	t=1778027348; cv=none; b=RVMwfCTefKCNsiVULdLpSvyO3xbDhnK/Pc+h1RDXFhEH+GeiSEEieSAm3wOmq7v8EkyYYFhF5bN0+4n6C9UO/Dwmu03aD0xYEkDd9Dco06/BwatLfSMZ+B5aoqB8utfRPQnl4l9/pRsTkmNX4F6K2Wye+cJRxgHtI/LYQh35cao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778027347; c=relaxed/simple;
-	bh=4ZgpZEZG2dd70diPlcs77dmGt83gQcQMnBRWwErxRJI=;
+	s=arc-20240116; t=1778027348; c=relaxed/simple;
+	bh=/22O00oV0cR0jP4TbB5wl+W6nRhjs9EeVoldHSYTCAw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=coSLU4PE1JVcY+rol1HpjMid6fHhZRwpdfwWui56AtN3kxUhLL3duN2X0Ec5rDL8il/Yv8xFYfMPcBIfgXzA1Ibyjbf0RqX8EJDV2XipyTS/adsJgHFAEQ7UDpMtDnTokPcoc0OIkE6DmhFAU+3sZgEh9pLtVSpT6JOxSYKIvVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r7Mz6Vl8; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=J5AGEPjz9JeGw7IhsFtvn/DMfTgIufqlNXFLC1IMxi/g41fbKuFCxMvYuVeleTUJwjRtDzLluuwj+rAFLWsXghuK02WZWLJEKXfrFzTGHMj4e4zni5Twxa8evY4c3pBib3ON6CxRK2UNnfa9X5lldoA1G11zp/RryV9DJaFMcdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rajs8tp5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r7Mz6Vl8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BA08C2BCB4;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rajs8tp5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06754C2BCB4;
 	Wed,  6 May 2026 00:29:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778027347;
-	bh=4ZgpZEZG2dd70diPlcs77dmGt83gQcQMnBRWwErxRJI=;
+	s=k20201202; t=1778027348;
+	bh=/22O00oV0cR0jP4TbB5wl+W6nRhjs9EeVoldHSYTCAw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=r7Mz6Vl8cA9MPsi09hJLfJPt0ZAyj4aSkMlutdfTRjeKBp7mWlf7Zgz0jClPbfTql
-	 W1AUSYnxB5BOzNZbQVfiX9gq0b7EuiiLovcZJPCiPuxCT0vK3YR5VdcQMsSwYLqFdS
-	 P5fJpIrUh5Tj0vrbxcdjk7O6NGKXPEv8yY2e9/iRnEMuM58ZLgLgj7+OssFRWuAvwM
-	 Dgdtw4S5ZEgigWQ34VdK/gb4PEF3T58wEeYHFEXWDT+1GjvdiXWytt/MXTbqA71k0d
-	 j6fQT0aG9N3b74EYijkdAHVD+dMG1q0tdkA4UtMthYd4eRm2auLaWpPyPA7eQZf2kJ
-	 kROSFl4J9I9/w==
+	b=Rajs8tp5EsnXe9EEPTtUOtINxcihg2XBjDGyFzOe3iEp6kBqqXKCyfhXXYmzi3Y3V
+	 JYZWNyXkk/NM2xPFS+AV5/8+XFXplNr0Z3QTo+20nqcbPkHXBQTtmK9oLCXgtbSH5e
+	 vhQlmhVldZoVeYwwfhRjDAwaCSCyyAIyOfJvI4RAgmMi7wTtqCPM+ocuGk2v+Y4o2h
+	 G844ASzTUv0E5LwWYVfnspC7JxsIPJhVK02HdsFG3AkwN7gAj2AmBa4O7th2oJwjoA
+	 0/c2o8tF+mTorGpQIoZNp08aMRi2eGWX9dyogstGyc0M0mWYplh8eJos45o02NF9hT
+	 IbMXrPcO3HiLw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v2 5/6] selftests: drv-net: add
- primary_rx_redirect support to NetDrvContEnv
+Subject: Re: [PATCH net-next v2 6/6] selftests: drv-net: add netkit devmem
+ tests
 Reply-To: sashiko@lists.linux.dev
 To: "Bobby Eshleman" <bobbyeshleman@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260504-tcp-dm-netkit-v2-5-56d52ac72fd4@meta.com>
-References: <20260504-tcp-dm-netkit-v2-5-56d52ac72fd4@meta.com>
+In-Reply-To: <20260504-tcp-dm-netkit-v2-6-56d52ac72fd4@meta.com>
+References: <20260504-tcp-dm-netkit-v2-6-56d52ac72fd4@meta.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 06 May 2026 00:29:06 +0000
-Message-Id: <20260506002907.4BA08C2BCB4@smtp.kernel.org>
+Date: Wed, 06 May 2026 00:29:07 +0000
+Message-Id: <20260506002908.06754C2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,61 +46,53 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Hardcoding `byteorder=3D'little'` when packing BPF map values br=
-eaks the test on big-endian architectures.
+- [Low] The path to the 'ncdevmem' binary is incorrectly constructed using =
+string concatenation instead of `os.path.join()`, which breaks script execu=
+tion when run without a path prefix.
 --
 
-commit 5fba7c06c7ed450ad321c1238af07a759467e25a
+commit 39598108535535c8a8daee8f3c206760a98e0c68
 Author: Bobby Eshleman <bobbyeshleman@meta.com>
 
-selftests: drv-net: add primary_rx_redirect support to NetDrvContEnv
+selftests: drv-net: add netkit devmem tests
 
-When sending from a namespace that has access to a netkit device with a
-leased queue, the nk primary in the host namespace needs to redirect its
-RX to the physical device. This patch adds that redirection bpf program
-and teaches the harness to install it.
+This commit adds a new Python script to test TCP devmem through a netkit
+device. It duplicates the original devmem tests with adjusted parameters
+for the netkit environment.
 
-> diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/te=
-sting/selftests/drivers/net/lib/py/env.py
-> index 24ce122abd9c..d569d01ef791 100644
-> --- a/tools/testing/selftests/drivers/net/lib/py/env.py
-> +++ b/tools/testing/selftests/drivers/net/lib/py/env.py
+> diff --git a/tools/testing/selftests/drivers/net/hw/nk_devmem.py b/tools/=
+testing/selftests/drivers/net/hw/nk_devmem.py
+> new file mode 100755
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/hw/nk_devmem.py
+
 [ ... ]
-> @@ -505,3 +520,31 @@ class NetDrvContEnv(NetDrvEpEnv):
-[ ... ]
-> +    def _attach_primary_rx_redirect_bpf(self):
-> +        """Attach BPF redirect program on the primary netkit ingress."""
-[ ... ]
-> +        bss_map_id =3D self._find_bss_map_id(redirect_prog_id)
-> +        phys_ifindex_bytes =3D self.ifindex.to_bytes(4, byteorder=3D'lit=
-tle')
 
-Does hardcoding byteorder=3D'little' here break the test on big-endian
-architectures?
+> +def main() -> None:
+> +    with NetDrvContEnv(__file__, rxqueues=3D2, primary_rx_redirect=3DTru=
+e) as cfg:
+> +        setup_test(cfg, path.abspath(path.dirname(__file__) + "/ncdevmem=
+"))
 
-Since .bss maps store integers in native byte order, and BPF programs execu=
-te
-using the host's native endianness, passing a 4-byte little-endian sequence
-on a big-endian system (like s390x) will cause the kernel to interpret the
-ifindex backwards.
+Will this path concatenation fail if the script is executed manually without
+a directory prefix?
 
-For example, an ifindex of 1 (01 00 00 00) becomes 16777216 (0x01000000).
-This would cause bpf_redirect_neigh() to fail because the byte-swapped ifin=
-dex
-does not exist on the system, silently dropping all packets.
+If __file__ evaluates to just the filename without a directory,
+path.dirname(__file__) returns an empty string. Concatenating an empty stri=
+ng
+with "/ncdevmem" results in the absolute path "/ncdevmem".
 
-While a similar pre-existing pattern exists in _attach_bpf(), this duplicat=
-es
-it into the newly added _attach_primary_rx_redirect_bpf() function.
+When this happens, the script will attempt to execute the binary from the
+system root directory instead of the test directory.
 
-Could this dynamically use byteorder=3Dsys.byteorder instead so the seriali=
-zation
-matches the host architecture's endianness?
+Would it be safer to use os.path.join(path.dirname(__file__), "ncdevmem")
+here to handle empty directory strings correctly?
 
-> +        value_hex =3D ' '.join(f'{b:02x}' for b in phys_ifindex_bytes)
-> +        bpftool(f"map update id {bss_map_id} key hex 00 00 00 00 value h=
-ex {value_hex}")
+> +        ksft_run([check_nk_rx, check_nk_tx, check_nk_tx_chunks, check_nk=
+_rx_hds],
+> +                 args=3D(cfg,))
+> +    ksft_exit()
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260504-tcp-dm-net=
-kit-v2-0-56d52ac72fd4@meta.com?part=3D5
+kit-v2-0-56d52ac72fd4@meta.com?part=3D6
