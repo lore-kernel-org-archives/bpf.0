@@ -1,116 +1,165 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4AC2E2850
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 21:08:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4CE3B3898
+	for <bpf@vger.kernel.org>; Wed,  6 May 2026 21:14:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778101737; cv=none; b=KmjN2UQoETUNt1k4XO2/QvsRsh3OwvtXoHewCP6LjgMgyyGC0mPGySdBZWx2ip4HAaagOjtkWMKmTBcWIjn9PFw5WiALu7fez1yeewbIAbrfsmXdlXDm9KReteiPCoCs4y8ZOASDPAZijaEP7ei9XbMxbEJkd+o1/MuTaEs68dA=
+	t=1778102044; cv=none; b=O2p2HIOnKTTFz3soWNzx/NcrAEPBk3lwRlcm/eH+2Bk6wfVxJ3TT3mFqMvp7rnOeVduSmVLMDE1xj6+Uknu9JEt3B4MX6ZMTdJREviuWoKM/5jQ++yXK74TRHnzC4UXzE3cpu2GehUvoNR5zn4ANrL6L1mwa9JXy7EfNI04UX90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778101737; c=relaxed/simple;
-	bh=KKRPFY0uMil2EQLCPD4N91+BEXNXLOCW+/lMKiUqZtU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=EQJldS8vXe+hdZRar4eZkczt1CJy4YUHAefM8C3LTzhkc4vJu151WII32K+EvWt9wPLbI7QvxYxtnNNgxyhiV5z1vKtmRkPCAIa9F9xMIIwuvt6pJRv9EnGWP/wdwkIzDSnljOv3tRIV0j1RQgMZWYUPolC4CRInjP1Cm5ra/MM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LwG3R5nK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778102044; c=relaxed/simple;
+	bh=mrs33gwyXYYksIamyxpT/skyjGMUYhds2gPM1h88ZjI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PuIGTHIAAXBRwh58thtVULn3OumGYKf7uJfMvIx1i/659oobXwhyZ1dkpHe+Z0v99Mn0x1DXYXIzTMVhghfQd3Idpuu/0WYoiJIUccENsL1CQ8cVd3Fd8VoG9geIIW+IXy1f5pDAWcz1A05nzGyMaXCTynD/v/HEveeRgksitqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M+oV3yvC; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LwG3R5nK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6C29C2BCB0;
-	Wed,  6 May 2026 21:08:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778101736;
-	bh=KKRPFY0uMil2EQLCPD4N91+BEXNXLOCW+/lMKiUqZtU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=LwG3R5nKF5kIdEU2qlGbrPr9n5zD3hVmBx7chuv/6gT2ielnDq1rP2SdePcJ37B6S
-	 jstfJ7/gi/8aiY06S08rh7H8i2oJ9hrt3OmRSwiC39N6APMYNMotOH/H7SYEF3FsNr
-	 RwvxR3h5xxlQcEcViX+peFnxM2NkZl1FKmqpahRAvVKxTToMw1plVRFChZNmWgklZQ
-	 tuWinJNI+0WnOq0lHWw5zPC59tha+n2oFs+c14NzmahNb3OVfragQha9MHB+jMsxeG
-	 jrWmdByOo13fhepe8E3kJkcdkwD40EeF1fojNUxM2GBLztxtvfRdMcplO1Aq4nS4Lk
-	 J8IIpdVS4fTZA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 1/2] bpf: render CGROUP_LSM_NUM configurable as a
- KConfig
-Reply-To: sashiko@lists.linux.dev
-To: "Paul Houssel" <paulhoussel2@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260506150547.767315-2-paulhoussel2@gmail.com>
-References: <20260506150547.767315-2-paulhoussel2@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 06 May 2026 21:08:56 +0000
-Message-Id: <20260506210856.C6C29C2BCB0@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M+oV3yvC"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-48374014a77so1591585e9.3
+        for <bpf@vger.kernel.org>; Wed, 06 May 2026 14:14:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778102041; x=1778706841; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X97wysjOr3lFu30H+gcrFHrWvOgZ1GUmxbYI7Sxyn5c=;
+        b=M+oV3yvC+DbwjHWMdh6KoH6BPTK9tcsiQZUmoYmA8AtkZWsfKWMFDUbzza+XCJ4Lqm
+         LZvl2IEbjpT8TgEb7uoI9PSoEslhtXKWoX/F/QyZ8OspxeWcoJCYcxfPjJ9ZKQPysLtr
+         QwiyZBrEiuM7OTEl0QlJ2e2LzDrA9w0cRn80oRkrE5iure/ZPesZfelHsvZwgLHpKMlV
+         YuWwoIYQJ9+lxdWanYvmmd8Ck9yeaE93hKqe6Fr1170++GysffX0qUmVuBBScKazYnX/
+         65Xq3fizV7LYVij1jPq8nIcvnLhuC2uBvDD9pf0YU7jATtTJlTnC2A0VwdDLKJ0EvLsk
+         P/vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778102041; x=1778706841;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=X97wysjOr3lFu30H+gcrFHrWvOgZ1GUmxbYI7Sxyn5c=;
+        b=kABb7nMyyBxoYL8a7GgVJLuPxKJZkloohrGXqSKI1/4nOqpXhqW9rxAhm1V1xpvYFE
+         Kk+QUyV41EXQjWe6N1JuGMsXcR0qo0QzKB1DzplkN6zDru0auvfpxCBRx6O7XT3ZYi5p
+         eAUMXiXlYt7jiMdnQNJpNle/08ReJQE2HOIBF0yyQ4e7upLad4EVCbY+YkjP6xQPX+Dp
+         8WRtrgl0Ydj+K0BlnL7Z54mhNXV3yuNE1qKVJVQKW5Em9q2Tg4i/EAsusOPRngsFJOSl
+         EH0ivgWtQ8WLrB3yvyQzx//YfORmt9O+Q0wSjMQb7EwNNbiq0yAB8bAT3M6TQdEkABLP
+         O9Qw==
+X-Forwarded-Encrypted: i=1; AFNElJ92WBqzqbYeMZIoGXI4L/ZWjnQY2Sw/w0TD/T/ls44vSZrYM/ymoeimqGoY6u4KevJA69k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPAKckeMz1P3fC+41okdACQGvU9lsfmtSNY8myqA9cTbYstrvZ
+	jO6L0TLv2qcbiLWm70HgdjNgkKgiAOlenAQwv2b4C1zZe0oYU/Cd8ZO6
+X-Gm-Gg: AeBDiet2QQMsnVpocxZbfFXHWfLlKKsdejOxn/f7PBZClGIrp9sGA2CaOsz5BCiTyLS
+	/Hxf8BoxLn5kBa86keFSmEWUqtK5PAc7ZHaSvHgKzCCeX9035Y7mkIuPK/t0nSn4SNk7LfLzUG0
+	NdU32igZQ2+pvMD61fjypizFXuKryHJtHIP9TXe0yuwmaQVgoDg4PwtVwEy8v/lS93KRDYbh8AJ
+	7CSGPwcaFaUqqPKtNokCJvN42JA3Wuus33RxpypvgUgqaVG5dW2upZd3OOBTrrMX/vPOQn69EN4
+	Qxd7N4m6ZKoZcRI6BdRArypakeOgWbX1qs5P8XPWEcLESzMjQJVEtIFhbcTiNZ/KtpE17JjNiiT
+	ElWoqmdG0i8rTE3FiWwOjpL0yJQn+QqXet69wIGYBCB0MnvACrD6lSPCGmmn3JFW7MP/d65b+VG
+	vAIP9dpdhYZQwjA1xKjfvdHvBctAo8+IvggqI0+1Xk/2pf6yhx9RzZFmjxEImeWyvG2TTlvEY=
+X-Received: by 2002:a05:600c:8b8b:b0:48a:97b6:7420 with SMTP id 5b1f17b1804b1-48e51f4143fmr85845735e9.24.1778102041063;
+        Wed, 06 May 2026 14:14:01 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e53826022sm78527045e9.0.2026.05.06.14.14.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 May 2026 14:14:00 -0700 (PDT)
+Date: Wed, 6 May 2026 22:13:58 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Jens Remus <jremus@linux.ibm.com>
+Cc: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter
+ Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, x86@kernel.org, bpf@vger.kernel.org,
+ linux-mm@kvack.org, Namhyung Kim <namhyung@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>, "Jose E. Marchesi" <jemarch@gnu.org>, Beau Belgrave
+ <beaub@linux.microsoft.com>, Florian Weimer <fweimer@redhat.com>, "Carlos
+ O'Donell" <codonell@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand
+ <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett"
+ <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport
+ <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
+ <mhocko@suse.com>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik
+ <gor@linux.ibm.com>, Ilya Leoshkevich <iii@linux.ibm.com>, "Steven Rostedt
+ (Google)" <rostedt@goodmis.org>, Indu Bhagat <ibhagatgnu@gmail.com>, Peter
+ Zijlstra <peterz@infradead.org>, Dylan Hatch <dylanbhatch@google.com>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav
+ Petkov <bp@alien8.de>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Kees Cook <kees@kernel.org>, Sam James <sam@gentoo.org>
+Subject: Re: [PATCH v14 04/19] x86/uaccess: Add unsafe_copy_from_user()
+ implementation
+Message-ID: <20260506221358.55ba5187@pumpkin>
+In-Reply-To: <9f85f092-c376-4350-9a12-479d7b70399a@linux.ibm.com>
+References: <20260505121718.3572346-1-jremus@linux.ibm.com>
+	<20260505121718.3572346-5-jremus@linux.ibm.com>
+	<9f85f092-c376-4350-9a12-479d7b70399a@linux.ibm.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Increasing CONFIG_CGROUP_LSM_NUM to its maximum value (300) causes=
- an excessive stack allocation in cgroup_bpf_inherit(), which will trigger =
-a FRAME_WARN build failure and risks stack overflow.
---
+On Wed, 6 May 2026 16:09:16 +0200
+Jens Remus <jremus@linux.ibm.com> wrote:
 
-commit 33800a93ec2833bc433c78926307347450251cdb
-Author: Paul Houssel <paulhoussel2@gmail.com>
+> On 5/5/2026 2:17 PM, Jens Remus wrote:
+> > From: Josh Poimboeuf <jpoimboe@kernel.org>
+> > 
+> > Add an x86 implementation of unsafe_copy_from_user() similar to the
+> > existing unsafe_copy_to_user().  
+> 
+> > diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h  
+> 
+> > -#define unsafe_copy_to_user(_dst,_src,_len,label)			\
+> > -do {									\
+> > -	char __user *__ucu_dst = (_dst);				\
+> > -	const char *__ucu_src = (_src);					\
+> > -	size_t __ucu_len = (_len);					\
+> > -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
+> > -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
+> > -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
+> > -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
+> > +#define unsafe_copy_to_user(_dst, _src, _len, label)				\
+> > +do {										\
+> > +	void __user *__dst = (_dst);						\
+> > +	const void *__src = (_src);						\
+> > +	size_t __len = (_len);							\
+> > +	unsafe_copy_to_user_loop(__dst, __src, __len, u64, label);		\
+> > +	unsafe_copy_to_user_loop(__dst, __src, __len, u32, label);		\
+> > +	unsafe_copy_to_user_loop(__dst, __src, __len, u16, label);		\
+> > +	unsafe_copy_to_user_loop(__dst, __src, __len, u8,  label);		\
+> > +} while (0)
+> > +
+> > +#define unsafe_copy_from_user_loop(dst, src, len, type, label)			\
+> > +	while (len >= sizeof(type)) {						\
+> > +		unsafe_get_user(*(type *)(dst), (type __user *)(src), label);	\
+> > +		dst += sizeof(type);						\
+> > +		src += sizeof(type);						\
+> > +		len -= sizeof(type);						\
+> > +	}
+> > +
+> > +#define unsafe_copy_from_user(_dst, _src, _len, label)				\
+> > +do {										\
+> > +	void *__dst = (_dst);							\
+> > +	void __user *__src = (_src);						\  
+> 
+> 	const void __user *__src = (_src);					\
+> 
+> This was suggested by Sashiko AI review.  Any objections?
 
-bpf: render CGROUP_LSM_NUM configurable as a KConfig
+Try compiling it :-)
 
-This commit makes the maximum number of concurrently attachable per-cgroup
-LSM hooks configurable at build time via the new CONFIG_CGROUP_LSM_NUM
-option. It allows the value to be tuned from 0 to 300, replacing the
-previous hardcoded limit of 10.
+-- David
 
-> diff --git a/include/linux/bpf-cgroup-defs.h b/include/linux/bpf-cgroup-d=
-efs.h
-> index c9e6b26abab6d..9ab5ca3dbaba3 100644
-> --- a/include/linux/bpf-cgroup-defs.h
-> +++ b/include/linux/bpf-cgroup-defs.h
+> 
+> > +	size_t __len = (_len);							\
+> > +	unsafe_copy_from_user_loop(__dst, __src, __len, u64, label);		\
+> > +	unsafe_copy_from_user_loop(__dst, __src, __len, u32, label);		\
+> > +	unsafe_copy_from_user_loop(__dst, __src, __len, u16, label);		\
+> > +	unsafe_copy_from_user_loop(__dst, __src, __len, u8,  label);		\
+> >  } while (0)
+> >  
+> >  #ifdef CONFIG_CC_HAS_ASM_GOTO_OUTPUT  
+> 
+> Thanks and regards,
+> Jens
 
-[ ... ]
-
->  #ifdef CONFIG_BPF_LSM
->  /* Maximum number of concurrently attachable per-cgroup LSM hooks. */
-> -#define CGROUP_LSM_NUM 10
-> +#define CGROUP_LSM_NUM CONFIG_CGROUP_LSM_NUM
->  #else
->  #define CGROUP_LSM_NUM 0
->  #endif
-
-> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-> index eb3de35734f09..050af0b72651d 100644
-> --- a/kernel/bpf/Kconfig
-> +++ b/kernel/bpf/Kconfig
-
-[ ... ]
-
-> +config CGROUP_LSM_NUM
-> +	int "Maximum number of per-cgroup LSM hooks"
-> +	depends on BPF_LSM
-> +	depends on CGROUP_BPF
-> +	range 0 300
-
-If this is configured to the maximum value of 300, could this cause a
-regression by overflowing the kernel stack in cgroup_bpf_inherit()?
-
-In include/linux/bpf-cgroup-defs.h, MAX_CGROUP_BPF_ATTACH_TYPE scales
-dynamically based on CGROUP_LSM_NUM. At 300, MAX_CGROUP_BPF_ATTACH_TYPE
-grows to 328 (28 base hooks + 300).
-
-In kernel/bpf/cgroup.c, cgroup_bpf_inherit() computes NR as
-ARRAY_SIZE(cgrp->bpf.effective) and declares a local stack array:
-
-kernel/bpf/cgroup.c:cgroup_bpf_inherit() {
-        ...
-        #define NR ARRAY_SIZE(cgrp->bpf.effective)
-        struct bpf_prog_array *arrays[NR] =3D {};
-        ...
-}
-
-On 64-bit architectures, this array of pointers would consume 2624 bytes
-(328 * 8) on the stack. Does this exceed the standard CONFIG_FRAME_WARN
-limits and risk build failures or runtime stack overflows?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260506150547.7673=
-15-1-paulhoussel2@gmail.com?part=3D1
