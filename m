@@ -1,145 +1,290 @@
-Received: from pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.1.125])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51F83E123A;
-	Wed,  6 May 2026 08:08:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.1.125
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B13D43EDADC
+	for <bpf@vger.kernel.org>; Wed,  6 May 2026 08:58:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778054902; cv=none; b=HR3WOs7Ja2eh1TvGbXchV5JIFq0KEV/8X2D979+F034arWQ6wqgREKDP4KEXw4Mt5sCNJcE61akfIfh9YlJutbLO6kZOcjAooo3ZkXLQ9mtUIxjNVJeSp0bEJPHiZftJYmW0WZUdAwS2u2tp+2cMIhEoUFlHC0AEAZbvcDGLRSo=
+	t=1778057925; cv=none; b=b2LeB3a4nJzOLydGeT226Q359gAcmeMeDvlVc3p5EPyQfgc+R/AbaUpCjUnJhupTLKho/junoJ/4W/vnDvBfUUbDrCza+3Nw3GOo81h7jSIut9T0DR+7J0Ya2XAv5Ai3IHpYdGPf/Dpz8r9x5hDr/DzqBe2T/JxgndJ5YTfEy1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778054902; c=relaxed/simple;
-	bh=LakSgXK9xZWfp62uOJDjuByvdgT3HOkvb9TfiFQGvLA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TVG39jySvJ/+3ee7DQECwTBZ09B3nHnwfKA1bs6/JCudtcE2X1XMsLcEeWjP9ohBlOFjIA+KoUEc8F62Jvg1Ai/80p1MHnuY0DBvvvsvz/z4kVCzTaRKFmLXL4g/iS7lSANmj4cxHMOL9vBqHOHjg66z2SzDNC66KUKP9jc6gsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=XmfCuIXA; arc=none smtp.client-ip=44.246.1.125
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	s=arc-20240116; t=1778057925; c=relaxed/simple;
+	bh=eD+Yz7GzQtMbbGfGGTFutD9Fa1k6iUTPX/y/AAqXEfI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=t8c7Q/4B/jCUulTrPlBsxKk6GaeNcqIj7i6XehpNI1RmBmS1MXRueuGpxe0bjxdwsnA7jHthzMkd4rJzi5tojquJGMryA2eWGUTWmE0v82AgDw9urTrEuWA2q1r40UzHDokwureFbT7oGnYMq+MK2CmD2WObIbYKAntGLVC9aTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N1R5A6j1; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="XmfCuIXA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N1R5A6j1"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-488b0046078so53695175e9.1
+        for <bpf@vger.kernel.org>; Wed, 06 May 2026 01:58:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1778054900; x=1809590900;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bfdMAsgvM6p8hWk2sdmIXhE1O1tOVF0HFNlReXBroqU=;
-  b=XmfCuIXAF6d7b2BBCfezzI6lhB2W3xRFdTJ58T7uFoDIjOQRXC/wdaZY
-   ThKAkg+TdefJtTnaGAg4Wu+hZk0qtvw3DpMIVGO7XTouuWs8WbfODJmtt
-   BxGb4uhnzZxBGiIPEPhiz6+LuQnrTTdtWBDPGCgje78IZBtJGAnXt30Nx
-   FBUmVOzjTRUr4uZDqVNBU7hqMbLE4D2TfkHcUDdaMGuHHfYBlvxnzrcL9
-   GY8aA5L3yMpDf0cqksUWxseGsaEG/g5O+G72uJLm6AP8BPfZd6sAhNLVK
-   UewJGEb4jl7vd3wAvmrnP5xMZ/hKYzU9VdAAleMG+HOszeHEouwQAyZ+H
-   g==;
-X-CSE-ConnectionGUID: MmMFvwZCQLewcyBwlWjNrw==
-X-CSE-MsgGUID: dKPa6oOPR+SZmZUz/KuDQg==
-X-IronPort-AV: E=Sophos;i="6.23,219,1770595200"; 
-   d="scan'208";a="18975878"
-Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
-  by internal-pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2026 08:08:18 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:20934]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.20.153:2525] with esmtp (Farcaster)
- id 4c3798b6-d4c5-412e-bccc-51de55c2e359; Wed, 6 May 2026 08:08:17 +0000 (UTC)
-X-Farcaster-Flow-ID: 4c3798b6-d4c5-412e-bccc-51de55c2e359
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Wed, 6 May 2026 08:08:17 +0000
-Received: from dev-dsk-itazur-1b-11e7fc0f.eu-west-1.amazon.com (172.19.66.53)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Wed, 6 May 2026 08:08:03 +0000
-From: Takahiro Itazuri <itazur@amazon.com>
-To: <seanjc@google.com>, <ljs@kernel.org>
-CC: <Liam.Howlett@oracle.com>, <ackerleytng@google.com>,
-	<agordeev@linux.ibm.com>, <ajones@ventanamicro.com>,
-	<akpm@linux-foundation.org>, <alex@ghiti.fr>, <andrii@kernel.org>,
-	<aou@eecs.berkeley.edu>, <ast@kernel.org>, <baolu.lu@linux.intel.com>,
-	<borntraeger@linux.ibm.com>, <bp@alien8.de>, <bpf@vger.kernel.org>,
-	<catalin.marinas@arm.com>, <chenhuacai@kernel.org>, <corbet@lwn.net>,
-	<coxu@redhat.com>, <daniel@iogearbox.net>, <dave.hansen@linux.intel.com>,
-	<david@kernel.org>, <derekmn@amazon.com>, <dev.jain@arm.com>,
-	<eddyz87@gmail.com>, <gerald.schaefer@linux.ibm.com>, <gor@linux.ibm.com>,
-	<haoluo@google.com>, <hca@linux.ibm.com>, <hpa@zytor.com>,
-	<itazur@amazon.co.uk>, <jackabt@amazon.co.uk>, <jackmanb@google.com>,
-	<jannh@google.com>, <jgg@ziepe.ca>, <jgross@suse.com>, <jhubbard@nvidia.com>,
-	<jiayuan.chen@shopee.com>, <jmattson@google.com>, <joey.gouly@arm.com>,
-	<john.fastabend@gmail.com>, <jolsa@kernel.org>, <jthoughton@google.com>,
-	<kalyazin@amazon.co.uk>, <kas@kernel.org>, <kernel@xen0n.name>,
-	<kpsingh@kernel.org>, <kvm@vger.kernel.org>, <kvmarm@lists.linux.dev>,
-	<lenb@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-mm@kvack.org>, <linux-pm@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <lorenzo.stoakes@oracle.com>, <luto@kernel.org>,
-	<maobibo@loongson.cn>, <martin.lau@linux.dev>, <maz@kernel.org>,
-	<mhocko@suse.com>, <mingo@redhat.com>, <mlevitsk@redhat.com>,
-	<nikita.kalyazin@linux.dev>, <oupton@kernel.org>, <palmer@dabbelt.com>,
-	<patrick.roy@linux.dev>, <pavel@kernel.org>, <pbonzini@redhat.com>,
-	<peterx@redhat.com>, <peterz@infradead.org>, <pfalcato@suse.de>,
-	<pjw@kernel.org>, <prsampat@amd.com>, <rafael@kernel.org>,
-	<riel@surriel.com>, <rppt@kernel.org>, <ryan.roberts@arm.com>,
-	<sdf@fomichev.me>, <shijie@os.amperecomputing.com>,
-	<skhan@linuxfoundation.org>, <song@kernel.org>, <surenb@google.com>,
-	<suzuki.poulose@arm.com>, <svens@linux.ibm.com>, <tabba@google.com>,
-	<tglx@kernel.org>, <thuth@redhat.com>, <urezki@gmail.com>,
-	<vannapurve@google.com>, <vbabka@kernel.org>, <will@kernel.org>,
-	<willy@infradead.org>, <wu.fei9@sanechips.com.cn>, <x86@kernel.org>,
-	<yang@os.amperecomputing.com>, <yangyicong@hisilicon.com>,
-	<yonghong.song@linux.dev>, <yosry@kernel.org>, <yu-cheng.yu@intel.com>,
-	<yuzenghui@huawei.com>, <zhengqi.arch@bytedance.com>
-Subject: Re: [PATCH v12 00/16] Direct Map Removal Support for guest_memfd
-Date: Wed, 6 May 2026 08:07:52 +0000
-Message-ID: <20260506080753.14517-1-itazur@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <aeennZlV60k81OBf@google.com>
-References: <aeennZlV60k81OBf@google.com>
+        d=gmail.com; s=20251104; t=1778057918; x=1778662718; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EhzB8ETmB1Gn6S1MA51/Lwkn0HDnlQZbCh2CXttfCBk=;
+        b=N1R5A6j1KHqEnuDzehRV6x+CkZA0wfw4LWwjh5newBX0VQKGkpuvZGxFkaP0+33IyO
+         d1swmpE/ROmeIEi3Y3p2mkIVM9RF9j7Q17sqOdkKDMcRFL7MqScv6SszLF6K+IX0zcxG
+         WCCiawKpINnNY9phFqnNtxm6jikCx3IptBLI8ntluz1RRyzOvmezphYb2SbONwSj3dpz
+         fAkD5Xc3uTaz29UELJnjA+n3B53lpg+YhP+I3pHczprCvGkmb67tS+q1UAShLaWGDa5k
+         68sFn6Mt1/Jw7Kpj2ssU3xGhMCwysaDAF/ztDoEwzCUYadBxGZsN5NMRTYe5K4Og6+RU
+         5y3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778057918; x=1778662718;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=EhzB8ETmB1Gn6S1MA51/Lwkn0HDnlQZbCh2CXttfCBk=;
+        b=WBnSmIC+IgeezHo6VXiVN9TDlLHMvGoBN7/4oKYoVgPaDXzAXSwW7E/T2om5HDK1cP
+         rBYiGtQSFjB0bwrZwR1OVOuOddZKFEPleQco9gtDMgypsGjMnLO3B8CaIXfXE1deB7At
+         BWQc2JZusAZtOjyueodHvxSteruVbft84D3xUCzh8ZHZXLRIQXb/bzMmYBXTEph/EHCG
+         zsZVM1qYqGI/tO80CteVLcq6LKMgcILLxsRzuZbr2+SlVnML7VwJmqiRi/75+jHKroi7
+         vjh1q3aXu5jcvvmERmvdlM0fdkmM0NRa9tlRMjUckbeOx7BNQKZzZNuCFQk4iI62kv9i
+         hLkg==
+X-Forwarded-Encrypted: i=1; AFNElJ8grmQVZ0LXeNxvdeGlWy6NrX4oFt7I3cLiommzAR2/ei+q0VYOXJBaD88U4m/MLmxDJ00=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEszZ6yFVXJzAzPbqkqLL1amGES72XBsiwOqSJ1HS23pdU4xgW
+	Y+LtTt8xnSS/eK2AgIzTTeE59ZYdX58eptVVZ0dN/xQzqtNG/paJZ3EL
+X-Gm-Gg: AeBDiesEmIBNprzTKyupasyBKzQYitC7XcYFDTM0bNY9Zal33TnOUvwu3GLGO5IaEPf
+	TGkmZL2ZRM/4gHg5LPc8CXteFpllm5drPWQmL5+zKVN2YUfT6fZrEaYOj6YMudgl2SjHJSat/vq
+	65YA4ESlop8K6x4VVYDuTdKnOzTnsdXMUZhVVU7rr/lkfo+nVgyR0Vn7TjxiIZDkQ4mCzMVunz0
+	+sZYnajr3muhG98kaGgDypKKQ/ULmtk00gQCJ4OaEdfbNkk/wwWY9AYiPkGDf42heD8+oMVGKdZ
+	jMeCG+V3qAuFLYgo/8zpUwtizITK1Of96E20gBOjRpdcJWC9x0R0U8zVtD0inPz/W8n8vf3HUe3
+	fxIgjXqu2EBVDIwY+/cBtoeurw9naYtdIcxQat2/bSU31sjWwJQWFCWeGUCvNoY0N5UuyQjHh53
+	VIcqgdUVeYbla6dQ5i4YyDmsneXX7UGoMiPOLv+/TcBIuPd26W732VMcRL5JM06Bky5emtPQ05f
+	Tg=
+X-Received: by 2002:a05:600d:6:b0:48a:8905:a500 with SMTP id 5b1f17b1804b1-48e51f1d04bmr31640885e9.12.1778057917950;
+        Wed, 06 May 2026 01:58:37 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e538a50d0sm55769975e9.5.2026.05.06.01.58.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 May 2026 01:58:37 -0700 (PDT)
+Date: Wed, 6 May 2026 09:58:36 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+ bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
+ will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
+ mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org, ast@kernel.org,
+ rafael@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com,
+ zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com, rdunlap@infradead.org,
+ joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
+ konrad.wilk@oracle.com, ashok.bhat@arm.com
+Subject: Re: [PATCH v11 01/14] asm-generic: barrier: Add
+ smp_cond_load_relaxed_timeout()
+Message-ID: <20260506095836.216d9cc5@pumpkin>
+In-Reply-To: <874iklm1uy.fsf@oracle.com>
+References: <20260408122538.3610871-1-ankur.a.arora@oracle.com>
+	<20260408122538.3610871-2-ankur.a.arora@oracle.com>
+	<874iklm1uy.fsf@oracle.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: EX19D037UWB002.ant.amazon.com (10.13.138.121) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Lorenzo and Sean,
+On Wed, 06 May 2026 00:30:29 -0700
+Ankur Arora <ankur.a.arora@oracle.com> wrote:
 
-Apologies for the delayed reply =E2=80=94 Nikita is leaving Amazon, and I'm
-taking over this series going forward. Thanks for your patience.
+> Ankur Arora <ankur.a.arora@oracle.com> writes:
+> 
+> > Add smp_cond_load_relaxed_timeout(), which extends
+> > smp_cond_load_relaxed() to allow waiting for a duration.
+> >
+> > We loop around waiting for the condition variable to change while
+> > peridically doing a time-check. The loop uses cpu_poll_relax() to slow
+> > down the busy-wait, which, unless overridden by the architecture
+> > code, amounts to a cpu_relax().
+> >
+> > Note that there are two ways for the time-check to fail: the timeout
+> > case or, @time_expr_ns returning an invalid value (negative or zero).
+> > The second failure mode allows for clocks attached to the clock-domain
+> > of @cond_expr --  which might cease to operate meaningfully once some
+> > state internal to @cond_expr has changed -- to fail.
+> >
+> > Evaluation of @time_expr_ns: in the fastpath we want to keep the
+> > performance close to smp_cond_load_relaxed(). So defer evaluation
+> > of the potentially costly @time_expr_ns to the slowpath.
+> >
+> > This also means that there will always be some hardware dependent
+> > duration that has passed in cpu_poll_relax() iterations at the time
+> > of first evaluation. Additionally cpu_poll_relax() is not guaranteed
+> > to return at timeout boundary. In sum, expect timeout overshoot when
+> > we exit due to expiration of the timeout.
+> >
+> > The number of spin iterations before time-check, SMP_TIMEOUT_POLL_COUNT
+> > is chosen to be 200 by default. With a cpu_poll_relax() iteration
+> > taking ~20-30 cycles (measured on a variety of x86 platforms), we
+> > expect a time-check every ~4000-6000 cycles.
+> >
+> > The outer limit of the overshoot is double that when working with the
+> > parameters above. This might be higher or lower depending on the
+> > implementation of cpu_poll_relax() across architectures.
+> >
+> > Lastly, config option ARCH_HAS_CPU_RELAX indicates availability of a
+> > cpu_poll_relax() that is cheaper than polling. This might be relevant
+> > for cases with a long timeout.
+> >
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Will Deacon <will@kernel.org>
+> > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: linux-arch@vger.kernel.org
+> > Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> > Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+> > ---
+> > Notes:
+> >    - add a comment mentioning that smp_cond_load_relaxed_timeout() might
+> >      be using architectural primitives that don't support MMIO.
+> >      (David Laight, Catalin Marinas)
+> >
+> >  include/asm-generic/barrier.h | 69 +++++++++++++++++++++++++++++++++++
+> >  1 file changed, 69 insertions(+)
+> >
+> > diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
+> > index d4f581c1e21d..e5a6a1c04649 100644
+> > --- a/include/asm-generic/barrier.h
+> > +++ b/include/asm-generic/barrier.h
+> > @@ -273,6 +273,75 @@ do {									\
+> >  })
+> >  #endif
+> >
+> > +/*
+> > + * Number of times we iterate in the loop before doing the time check.
+> > + * Note that the iteration count assumes that the loop condition is
+> > + * relatively cheap.
+> > + */
+> > +#ifndef SMP_TIMEOUT_POLL_COUNT
+> > +#define SMP_TIMEOUT_POLL_COUNT		200
+> > +#endif
+> > +
+> > +/*
+> > + * Platforms with ARCH_HAS_CPU_RELAX have a cpu_poll_relax() implementation
+> > + * that is expected to be cheaper (lower power) than pure polling.
+> > + */
+> > +#ifndef cpu_poll_relax
+> > +#define cpu_poll_relax(ptr, val, timeout_ns)	cpu_relax()
+> > +#endif
+> > +
+> > +/**
+> > + * smp_cond_load_relaxed_timeout() - (Spin) wait for cond with no ordering
+> > + * guarantees until a timeout expires.
+> > + * @ptr: pointer to the variable to wait on.
+> > + * @cond_expr: boolean expression to wait for.
+> > + * @time_expr_ns: expression that evaluates to monotonic time (in ns) or,
+> > + *  on failure, returns a negative value.
+> > + * @timeout_ns: timeout value in ns
+> > + * Both of the above are assumed to be compatible with s64; the signed
+> > + * value is used to handle the failure case in @time_expr_ns.
+> > + *
+> > + * Equivalent to using READ_ONCE() on the condition variable.
+> > + *
+> > + * Callers that expect to wait for prolonged durations might want
+> > + * to take into account the availability of ARCH_HAS_CPU_RELAX.
+> > + *
+> > + * Note that @ptr is expected to point to a memory address. Using this
+> > + * interface with MMIO will be slower (since SMP_TIMEOUT_POLL_COUNT is
+> > + * tuned for memory) and might also break in interesting architecture
+> > + * dependent ways.
+> > + */
+> > +#ifndef smp_cond_load_relaxed_timeout
+> > +#define smp_cond_load_relaxed_timeout(ptr, cond_expr,			\
+> > +				      time_expr_ns, timeout_ns)		\
+> > +({									\
+> > +	typeof(ptr) __PTR = (ptr);					\
+> > +	__unqual_scalar_typeof(*ptr) VAL;				\
+> > +	u32 __n = 0, __spin = SMP_TIMEOUT_POLL_COUNT;			\
+> > +	s64 __timeout = (s64)timeout_ns;				\
+> > +	s64 __time_now, __time_end = 0;					\
+> > +									\
+> > +	for (;;) {							\
+> > +		VAL = READ_ONCE(*__PTR);				\
+> > +		if (cond_expr)						\
+> > +			break;						\
+> > +		cpu_poll_relax(__PTR, VAL, (u64)__timeout);		\
+> > +		if (++__n < __spin)					\
+> > +			continue;					\
+> > +		__time_now = (s64)(time_expr_ns);			\
+> > +		if (unlikely(__time_end == 0))				\
+> > +			__time_end = __time_now + __timeout;		\
+> > +		__timeout = __time_end - __time_now;			\
+> > +		if (__time_now <= 0 || __timeout <= 0) {		\
+> > +			VAL = READ_ONCE(*__PTR);			\
+> > +			break;						\
+> > +		}							\
+> > +		__n = 0;						\
+> > +	}								\
+> > +	(typeof(*ptr))VAL;						\
+> > +})
+> > +#endif
+> > +  
+> 
+> A cluster of issues that got flagged by sashiko was around timeout_ns
+> being specified as s64 and a bunch of potential edge cases around
+> that.
+> 
+> These were mostly caused by an implicit assumption in the code that
+> the timeout specified by the caller is generally reasonable. So, way
+> below S64_MAX, not 0 etc.
 
-On Tue, Apr 21, 2026 at 01:40:00PM +0000, Lorenzo Stoakes wrote:
-> Hm, given this touches a fair bit of mm, I wonder if we shouldn't try to =
-do this
-> through the mm tree?
+There are plenty of ways kernel code can break things.
+Provided this code doesn't itself overwrite anywhere (rather than
+just loop forever or return immediately etc) I'd be tempted to
+just document the valid range rather than slow everything down
+with the extra tests.
 
-On Tue, Apr 21, 2026 at 04:36:00PM +0000, Sean Christopherson wrote:
-> Yeah, when the time comes, the mm pieces definitely need to go through th=
-e mm
-> tree.  Ideally, I think this would be merged in two separate parts, with =
-all mm
-> changes going through the mm tree, and then the KVM changes through the K=
-VM tree
-> using a stable topic branch/tag from Andrew.
+	David
 
-Thanks for the guidance. The split makes sense to me; I'm planning to
-follow this approach with patches 1-6 (mm) going through the mm tree
-and patches 7-16 (KVM) through the KVM tree on top of a stable
-branch/tag from mm. I'll confirm the exact boundary and coordination
-details as I prepare the repost.
-
-On Tue, Apr 21, 2026 at 01:40:00PM +0000, Lorenzo Stoakes wrote:
-> In any case, we definitely need a rebase on something not-next :) if not =
-mm then
-> Linus's tree at least maybe?
->
-> I'm seeing a lot of conflicts against mm-unstable, it can't b4 shazam eve=
-n patch
-> 1 and in Linus's tree it's failing at an mm patch (mm: introduce
-> AS_NO_DIRECT_MAP).
-
-I'll rebase onto v7.1-rc1 and resolve the conflicts as part of the split.
-
-Takahiro
+> 
+> I think this is worth cleaning up a bit. The change is mostly around
+> introducing a u32 __itertime and explicitly computing the waiting time.
+> And adding a check to ensure that we start with a valid value.
+> 
+> This does make the implementation a little more involved. So just wanted
+> to see if people have any opinions on this?
+> 
+> +#ifndef smp_cond_load_relaxed_timeout
+> +#define smp_cond_load_relaxed_timeout(ptr, cond_expr,          \
+> +                                     time_expr_ns, timeout_ns) \
+> +({                                                             \
+> +       typeof(ptr) __PTR = (ptr);                              \
+> +       __unqual_scalar_typeof(*(ptr)) VAL;                     \
+> +       u32 __count = 0, __spin = SMP_TIMEOUT_POLL_COUNT;       \
+> +       s64 __timeout = (s64)(timeout_ns);                      \
+> +       s64 __time_now, __time_end = 0;                         \
+> +       u32 __maybe_unused __itertime;                          \
+> +                                                               \
+> +       for (__itertime = NSEC_PER_USEC;                        \
+> +               VAL = READ_ONCE(*__PTR), __timeout > 0; ) {     \
+> +               if (cond_expr)                                  \
+> +                       break;                                  \
+> +               cpu_poll_relax(__PTR, VAL, __itertime);         \
+> +               if (++__count < __spin)                         \
+> +                       continue;                               \
+> +               __time_now = (s64)(time_expr_ns);               \
+> +               if (unlikely(__time_end == 0))                  \
+> +                       __time_end = __time_now + __timeout;    \
+> +               __timeout = __time_end - __time_now;            \
+> +               if (__time_now <= 0 || __timeout <= 0) {        \
+> +                       VAL = READ_ONCE(*__PTR);                \
+> +                       break;                                  \
+> +               }                                               \
+> +               __itertime = __timeout % NSEC_PER_MSEC +        \
+> +                               NSEC_PER_USEC;                  \
+> +               __count = 0;                                    \
+> +       }                                                       \
+> +       (typeof(*(ptr)))VAL;                                    \
+> +})
+> +#endif
+> 
+> Thanks
+> 
+> --
+> ankur
+> 
 
