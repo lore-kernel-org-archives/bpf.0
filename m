@@ -1,150 +1,163 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B12C43ECBE2
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 09:46:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+Received: from zg8tmja5ljk3lje4mi4ymjia.icoremail.net (zg8tmja5ljk3lje4mi4ymjia.icoremail.net [209.97.182.222])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E8542DC334
+	for <bpf@vger.kernel.org>; Wed,  6 May 2026 09:47:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.182.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778060768; cv=none; b=giuAgvbntTOxriOltpLzPacrpCzd9CTh4jk6iF9lbyISBnX/7HsJo4HaEBfhYMgTd6GgtbJLxa4RoOAw/zdvMDkDqv3I4EKwYj1ywAMTflnHESafKpe1FGQQSJsGlWUpLbMWuFf+TRp6oJWZe3sXB4S9gUz3pELBBmX2KFjMtkI=
+	t=1778060878; cv=none; b=O5Yl2D0ANukZIO0ogaB5d9RyVzxRxIjwlROBf4K4sm5cz0ZwnBjRpZKWCd1AlD8iEGEYKsV2zZF7fAR0lw5RUvASKieXiWpTYVxlm6ELy3kDRwALU+reJGohKvEi869hhOu/zoyTgvgVYFY5E+WDBbMuTKl+ofUyWJNPOE2EYzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778060768; c=relaxed/simple;
-	bh=UfLP1tUzO3A3YXd/nCpoke2Vqju/wUSSq/yG/FR+WW0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WD3PcdNXp4CCB9KJZAxrT7wlbfuaOrbBaqFZk9fFnP/Q1uFhEOHplTmFZrak9N2W8ejzT3DTCeroAwlPLL634UWX3mRTe0OvwuzVmIEUz2sfkfDkgX5VI8lNDPaDYNbS1cppOAuqwzyEOOR+Eq4Pyjc/9kgQVheLhRKv8ZXkLRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=qf95NCfx; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="qf95NCfx"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-488ab2db91aso73174295e9.3
-        for <bpf@vger.kernel.org>; Wed, 06 May 2026 02:46:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1778060765; x=1778665565; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jvO5cR5xwJ6Wruq4xsZ8UnvszQRGf9f2UYLH+AJmPFY=;
-        b=qf95NCfx8eT8q+22AmgDAhodGtcSDNymauOoWGWblOztJb5IKvE6NaVvy3K+b+D8i/
-         c9Y8lg72wraLqzTH0qEnVPAtIfQOJlUlSZCIq1gMShmOkMHVvMfQ0VQYeFpRAzmQssk9
-         vIerJMRrg66l8fQCySh2uxli7IpQszcZahsyJ/8YYthhm6qj1wkLXF1n8R3uCUXWFj5o
-         lkJlUgz5frR5fjSYlmyuQV/P96ZyqGmzZsPvfp64RCJ6JdKDd/HpNqBUTb0el0RcvyuW
-         Hia7rf2sTxsMoiE2s0SGV20z2+TzaHiSq+H4zCrxtAffDGsZeaO7KtkcgYhqTsNyRvps
-         9GlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778060765; x=1778665565;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jvO5cR5xwJ6Wruq4xsZ8UnvszQRGf9f2UYLH+AJmPFY=;
-        b=eb2QIiYQMkQ9aaFfdnYkJqIvEsBMuA1DLKJwxGII5vAbN+zJiIzGL/yBsUFeHLjm3O
-         GOmWYJbdqYz+Z2q2xCaFnRb1Ln4VxBx5yETAVptA5w+KlFtWSDxOxOMXIBl5MovN+6vs
-         3D/av+v7JAX56vAvjhUCpa0GyKpfguQ2bmAMlv5i9Ml/wq9RJ8JNCHFlfU02+HPaoEkp
-         871+A02OHdPngdVT5V/SI+NdQ2//RP/FdPphLaFGU3EPn4OTDHVulPfxxWkz6c2HS+5w
-         0N7y3AW25cttiRpE6gnbo5gOWQCWRYh0lqT1O/jhq3LsZ/B/Qm57KfiLbPEatarb7+K3
-         qIqw==
-X-Forwarded-Encrypted: i=1; AFNElJ+DKAX8Np4mLF2A++1BUtRaoEvemgoYfogTw2sOzkQgZUH/GzEsqVEdRM51hQYJLTqudIE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQhOEwLWrZ+4AmsrF+an7s2z44j8IVfnWBetwcbNuN1KP7TggH
-	pFHT9JUgRW97iq8LQ4k1hu6Z1yPa8sd6A7/SBQwEMvLDCPauVsj6MzuJLSrRXdwJtaw=
-X-Gm-Gg: AeBDietsdtGFTjzwOtvyNmWBX+MOPbzqY87uYdckcx8oMMdpGxRafC/mgKUw8eS/DAw
-	3V0TPUmq8XfQrrtyaIL3X5rnLESc8eROdmLMCvwRQUjNYoU6PVx6GIRobQMIkLFrHPGcpjL2xvA
-	yefxy++FwYQAO9P1RUvFpHKbuqx7iGD5Up6mj5M79xTh4g6l2FiRbIXRfZm9K7249jW8AXWmleh
-	+BS3AhVVkZdYI+Wjujt8xXmFVKIF85jytpVVOevcB2UiTlApsbIrFV6yr2oGRvZAxD4xQ92I9M/
-	JW7DLa70ygBP4EV1tMDixMtKHGXrWO14YASjpp76WzFTl2QUewnetmXQ1DjAon/y4Zt7GYRIyK1
-	O2SEFBeoTA+QzspC7DYR6aGAkWJeY5DjPjpCSTZXyrH1BiUDJd5q+QvVTJS4T8NgWMw+DonIYCI
-	eFUPmT8o+VKTf5K39hScmFr3hL8jqMbR2FD8KA5k/UaB5S1azy9exPYWVHLW2FPXP6r/cG/xRjH
-	1OJMbsfWyv4oFh7j8UegqMyIviTzEEZwJtB4ntkL/29WsNDpMCSNQy7mq1doZvDrVEiEjQMTeE/
-	rpX0A3SeJD4xqPkkLhs=
-X-Received: by 2002:a05:600c:a305:b0:48a:5970:2005 with SMTP id 5b1f17b1804b1-48e51e08362mr31054235e9.2.1778060764831;
-        Wed, 06 May 2026 02:46:04 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e5313b023sm19233185e9.5.2026.05.06.02.46.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2026 02:46:04 -0700 (PDT)
-Date: Wed, 6 May 2026 10:46:00 +0100
-From: Daniel Thompson <daniel@riscstar.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, maxime.chevallier@bootlin.com,
-	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
-	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
-	arnd@arndb.de, gregkh@linuxfoundation.org,
-	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
-	alexandre.torgue@foss.st.com, ast@kernel.org,
-	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
-	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
-	julianbraha@gmail.com, livelycarpet87@gmail.com,
-	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
-	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
-	rohan.g.thomas@altera.com, sdf@fomichev.me,
-	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
-	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 03/12] net: pcs: pcs-xpcs: Preserve BMCR_ANENBLE
- during link up
-Message-ID: <afsN2JrKNFw-PV-g@aspen.lan>
-References: <20260501155421.3329862-1-elder@riscstar.com>
- <20260501155421.3329862-4-elder@riscstar.com>
- <91332fc1-11ed-444e-a211-699420cf0108@lunn.ch>
+	s=arc-20240116; t=1778060878; c=relaxed/simple;
+	bh=6QWNiAloEKAm+fO38cYKr6+peVc8sZfOi1hYpNJ0WSI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=UDoIQFdLa4SlPvKO2vaO1PbvBmYZEDZoB8sRHmCYTGgtQcpWiggpdn1q9ukhh4xad/LUw/E3yX0H8wtVtnklOssTnHiyQdBBYZ8l6Gb0Dsqa/rY1G4oabpTveqhtRf9TY6HUjbBbTMGK0ufS1N2pwaLpdUHFnVCChy/Kn+xndRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=209.97.182.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [10.162.163.215])
+	by mtasvr (Coremail) with SMTP id _____wBHEUU4DvtpFeEWAQ--.4219S3;
+	Wed, 06 May 2026 17:47:36 +0800 (CST)
+Received: from lutetium.tail477849.ts.net (unknown [10.162.163.215])
+	by mail-app1 (Coremail) with SMTP id yy_KCgCX5p44Dvtpn2ffAA--.1513S2;
+	Wed, 06 May 2026 17:47:36 +0800 (CST)
+From: Yazhou Tang <tangyazhou@zju.edu.cn>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	eddyz87@gmail.com,
+	emil@etsalapatis.com,
+	puranjay@kernel.org,
+	xukuohai@huaweicloud.com,
+	qmo@kernel.org
+Cc: daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	tangyazhou518@outlook.com,
+	shenghaoyuan0928@163.com,
+	ziye@zju.edu.cn,
+	Xu Kuohai <xukuohai@huawei.com>
+Subject: [PATCH bpf-next v10 1/3] bpf: Fix out-of-bounds read in bpf_patch_call_args()
+Date: Wed,  6 May 2026 17:47:12 +0800
+Message-ID: <20260506094714.419842-2-tangyazhou@zju.edu.cn>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260506094714.419842-1-tangyazhou@zju.edu.cn>
+References: <20260506094714.419842-1-tangyazhou@zju.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <91332fc1-11ed-444e-a211-699420cf0108@lunn.ch>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:yy_KCgCX5p44Dvtpn2ffAA--.1513S2
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgcDCmn6SA9E3QAAsF
+X-CM-DELIVERINFO: =?B?QJ1d2QXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9HZcWNexokz5CY3K6SJERHdN0Tmt4VNgZ8ieigwkRA00S6SxeRQYRar7gvJ+KkX+0mHe
+	yDHn43qpG7y+46CP8EFj61G0KYw+QbEQtTEJbVImmRXNGBjYI1T5yEbe3OUvmQ==
+X-Coremail-Antispam: 1Uk129KBj93XoWxXF4fur4rury8ZFW5Wr4rWFX_yoW5Cw4xpF
+	1DJ3W2kFWrXw4Ik343GF47Zr15Jan5urW7KFWrJry0kr42qFs7Gwn0gFnrZFyfXrn2k3yx
+	Jr1I93ySk3y8W3cCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUU9Eb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAF
+	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
+	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC2
+	0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
+	0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
+	14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20x
+	vaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8
+	JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8FoGPUUUUU==
 
-On Fri, May 01, 2026 at 07:06:15PM +0200, Andrew Lunn wrote:
-> On Fri, May 01, 2026 at 10:54:11AM -0500, Alex Elder wrote:
-> > From: Daniel Thompson <daniel@riscstar.com>
-> >
-> > Currently the XCPS found on Toshiba TC9564 (a.k.a. Qualcomm QPS615)
-> > is unable to operate at 1000base-X and slower with a PHY connected
-> > using SGMII/2500base-X (in our case a Qualcomm QCA8081). The link
-> > negotiates speed correctly but the MAC can't get any packets out.
->
-> We need to break this down into its components.
->
-> I assume you are saying the PHY negotiates the media speed with the
-> link partner. That is PHY talking to PHY.
->
-> But we also have the PCS talking to the PHY. There can be inband
-> signalling here, for SGMII and 2500BaseX. But not for over clocked
-> SGMII, which is how some vendors implement 2500BaseX. SGMII signalling
-> does not work when overclocked to 2.5G.
->
-> > This attracted attention to the ANENABLE bit and we observed that the
-> > bit is currently set during config and cleared during link up.
->
-> Here we are talking about the PCS ANEBNABLE, not the PHY ANEBNABLE. So
-> this is negotiation between the PCS and the PHY.
->
-> > Preserving the bit during link up allows the system to work as expected.
->
-> >  	int ret;
-> >
-> >  	if (neg_mode == PHYLINK_PCS_NEG_INBAND_ENABLED)
-> >  		return;
->
-> Think about this.
->
-> >  	ret = xpcs_write(xpcs, MDIO_MMD_VEND2, MII_BMCR,
-> > -			 mii_bmcr_encode_fixed(speed, duplex));
-> > +			 mii_bmcr_encode_fixed(speed, duplex) | an_enable);
->
-> And mii_bmcr_encode_fixed().
+From: Yazhou Tang <tangyazhou518@outlook.com>
 
-Thanks for highlighting that... and for being gentle with the clue
-stick!
+The interpreters_args array only accommodates stack depths up to
+MAX_BPF_STACK (512 bytes). However, do_misc_fixups() may allow a larger
+stack depth if JIT is requested.
 
-This patch will be gone the next time this patchset is published and
-I'll get the phylink configured properly.
+If JIT compilation later fails and falls back to the interpreter, the
+verifier invokes bpf_patch_call_args() with this oversized stack depth.
+This causes a load-time out-of-bounds (OOB) read when calculating the
+interpreter function pointer index.
 
+Fix this by changing bpf_patch_call_args() to return an int and explicitly
+rejecting the JIT fallback (returning -EINVAL) if the stack depth exceeds
+MAX_BPF_STACK.
 
-Daniel.
+Fixes: 1ea47e01ad6e ("bpf: add support for bpf_call to interpreter")
+Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
+Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
+Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
+Acked-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ include/linux/bpf.h | 2 +-
+ kernel/bpf/core.c   | 6 +++++-
+ kernel/bpf/fixups.c | 7 ++++++-
+ 3 files changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 715b6df9c403..eb6b816bc8b5 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2922,7 +2922,7 @@ int bpf_check_uarg_tail_zero(bpfptr_t uaddr, size_t expected_size,
+ int bpf_check(struct bpf_prog **fp, union bpf_attr *attr, bpfptr_t uattr, u32 uattr_size);
+ 
+ #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+-void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
++int bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
+ #endif
+ 
+ struct btf *bpf_get_btf_vmlinux(void);
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index ae10b9ca018d..fcc881909969 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2394,13 +2394,17 @@ EVAL4(PROG_NAME_LIST, 416, 448, 480, 512)
+ #undef PROG_NAME_LIST
+ 
+ #ifdef CONFIG_BPF_SYSCALL
+-void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
++int bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
+ {
+ 	stack_depth = max_t(u32, stack_depth, 1);
++	/* Prevent out-of-bounds read to interpreters_args */
++	if (stack_depth > MAX_BPF_STACK)
++		return -EINVAL;
+ 	insn->off = (s16) insn->imm;
+ 	insn->imm = interpreters_args[(round_up(stack_depth, 32) / 32) - 1] -
+ 		__bpf_call_base_args;
+ 	insn->code = BPF_JMP | BPF_CALL_ARGS;
++	return 0;
+ }
+ #endif
+ #endif
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index fba9e8c00878..df8f48091321 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -1416,7 +1416,12 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
+ 		depth = get_callee_stack_depth(env, insn, i);
+ 		if (depth < 0)
+ 			return depth;
+-		bpf_patch_call_args(insn, depth);
++		err = bpf_patch_call_args(insn, depth);
++		if (err) {
++			verbose(env, "stack depth %d exceeds interpreter stack depth limit\n",
++				depth);
++			return err;
++		}
+ 	}
+ 	err = 0;
+ #endif
+-- 
+2.54.0
+
