@@ -1,115 +1,249 @@
-Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 754B144D682;
-	Wed,  6 May 2026 16:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33AEA49250F
+	for <bpf@vger.kernel.org>; Wed,  6 May 2026 16:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778083295; cv=none; b=iyd4xx3gXYcY2s7ep8qYJfwnaEVpkAKWdJxCYHuTeeOuX6rIXj22hb0OD96aW+Y/Fe4jxLAd9Z/kog8t17/yOHFlpMpLjB/YxhNWzdpU6P+Loew3yT8wHxv2lebBEGOjv6w5zwzX44sizJ4OAC/usMLd4mvkLYq8RIFKsul+Sbw=
+	t=1778083563; cv=none; b=M4te0xrdSAhP3lDfTjdHWVU+fQ83DX2jtRXXvpQvx7N5w6V1ANKownv/nERML9H5nHJK+QR6j7X63MLe4VzLXFulwXU2aFW53z4w5RuEytAP9X9qZ2+g7xAdDFa+mKASkQpcFo7CXk2zC/rj++yPqwkPUM4gwlKUy3pGFtLD3wM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778083295; c=relaxed/simple;
-	bh=Pdxjh+MVY+S12i6fbEKZTJUUsYrxu+Bd2Br0RkMq47U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l0Msx8eXSDrBN4AJmq8L71P/Wl0Jxk+NOas0yt+5+4dJsCKFuMNEHgL9gql0wwHdUkAbnVY/baUJtJCCNkW6oGTOQF12jEfMw+4QNby9k3C8SPeg6cZcTNp6pT4T/5AVQ21bbU1tDNTO1ti5sFRVB4IyibzACc/NRORdk2dJEUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=radxa.com; spf=pass smtp.mailfrom=radxa.com; arc=none smtp.client-ip=54.92.39.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=radxa.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=radxa.com
-X-QQ-mid: esmtpgz16t1778083257t46dc08ae
-X-QQ-Originating-IP: G9YZKnrl1p0wXA0Vy0+oySRdc1VRx/a+D0I73RMqFHw=
-Received: from [127.0.0.1] ( [116.234.74.217])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 07 May 2026 00:00:52 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8386846045021828038
-Message-ID: <EE8A30342A260FB4+57795644-675f-45b1-995d-48de28b14a34@radxa.com>
-Date: Thu, 7 May 2026 00:00:50 +0800
+	s=arc-20240116; t=1778083563; c=relaxed/simple;
+	bh=mewwZhswcQwqh7o4uuMTa7YHHrayMPY8MpXuYliBGww=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nH57Iiq7g6cwzSwJ5yygOxihJLC8Ehl1SNeIJ5cFOx3qa5eBlClYU43OMGcX1g2lePBMNVmr0ZwAghZ1kc8eWKWx9RtU32gPkhR6q2KcEi2xkXl7qWD/i2CwIDO1CDZT8iX9jXDEFAHrrkTewuokiGVmjvtdfgNPo0newBrNZ48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BUFU1VP5; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BUFU1VP5"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-43fe608cb92so3960446f8f.2
+        for <bpf@vger.kernel.org>; Wed, 06 May 2026 09:05:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778083551; x=1778688351; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NlLGLVG6rpf3xsr4LqdJXr2wFrUMiHHPEPRsZhGBHnI=;
+        b=BUFU1VP55dQi9KZ+ZbCjwXPQWYNATS39OQG+aAbegFM4qPeVYD+lIpCSUwDGJ8vGvw
+         ubpxLlNiI29G2u7222grUl3r/fLoZrQsL1jMyIYE4hFB4m++PP7Z5z1zduyNj6GaJrWy
+         lEozWaeqwXX98QgF9KYG/JRNOjlX6RgU/pq2WcLlkJKp35pR7wK9i9TmOrSt6FZlEHUQ
+         eGz4VAb+PLQjrgkg8PAypudDWVOnoy2DoKkXao0HGdDp+uyvySRsvCyi1zpkVpQizu/L
+         T7W9Nfu6yNawzdYSprs6MLVkdkrUB/IgkHDhQgQGJwpiHAYD8FrgLHr9+lDZQUcMjt/o
+         uAMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778083551; x=1778688351;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NlLGLVG6rpf3xsr4LqdJXr2wFrUMiHHPEPRsZhGBHnI=;
+        b=Pse7DSNN7AqEfCH2MJ6h2x0dv4OGrhuF9BcU/xfFA+uA66p06QiYO0sXyqJOMV7QyV
+         UZivVmPHjYmTcTzF40rxUlwCC//WIMbLDCCrxOyB2PDCiuKsEOMW+3RzIri/s7ls19qU
+         sZQphavo3udXyu9xyS2dkewnxBfBuXtlOMNYy4g1di+GbcPTTCMxalYxLrLPROgFum3I
+         HFb+MOqH+1/Pqa1EiPFpJBvakFxtJSmawtlbah12ZYaBeegsHK7mecI9D/x6+VOSQVvM
+         4Ibs3Zf6y/nZRw3BR1694eNVAzWyYUh4woAbaev9ab029ipYaUsngglYd5AcXSf/KAIB
+         6LVw==
+X-Forwarded-Encrypted: i=1; AFNElJ8xbgrrQtTWJ3dXZUkiJ/NFqXfG01XEj9yK9fsRwtIkGtF8tpQDs9vy+vRKksaBg85DuSg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzqlGN17JCPqACCIJu+4D1tw2SiaiaPTBkw1mAgfXGjBYOkCKX
+	PODO3M5dmG/GNl+6FOQ4d2y7apK/GvXXlkafMrE4W6Qoasm5IfMg4qs7
+X-Gm-Gg: AeBDiesaeqXPy+FI1vhwLXTdpS/dplUhflie/7kOy2hHuFNXuwZwRgl/j+oJwMMuYF0
+	rTm/1H0JQ1fAvZ5sA2Iz2ijgmxSBJD98VLzQRLgnHMs3xWc1W2/eIywSfoqvfHFfVpNpTkfhj2T
+	H//8eyd1sMR5W4SWGdpY3KouF80xCkVxdcSx5j5hB9dHiFC5xeg2B3+BdQOVDP/wUnh/1o2etR7
+	oy2NcRsZLFuQJdaMSsR7PE/0wX/rus/KYVeR6kUgrDAB86sGBQwHHmmlI6UZzVKkKYTo7tV+V3E
+	RO9aAbX7SMQL6wbqxTtU/4RXyBgMROSlHdL8UNs23n/l/pWQxhHzLqBtY2Ip78KdrL6ILTIM8hv
+	5rvSW1fS784PhSm63OuokBJozIgqmDF2CBNN4k1khyH9Skf5vf9op+il/ENRvtcCZ3MbIg59Qbf
+	tqjeEnxIu/ZU3/4UyEOffdCB9CeRiKjlwExMO5qso6s9GS0lrUtBuikmGChqyJsPEqjoR8zbAPV
+	kntnUjCkt1GDUBC6tmPIxCll/IrVbZ5PKyDGa5v8yUPrmFarLTwsXK3CDKGwXxmfq8EkGdJX5KX
+	qIg2bYE2KpYrjEWuK0xmCHeHQC3aAW2VmkZbd5G1LyTdUG+s6qdQtw==
+X-Received: by 2002:a05:6000:230a:b0:43e:b0f7:9ce9 with SMTP id ffacd0b85a97d-4515b61af48mr6971029f8f.14.1778083550879;
+        Wed, 06 May 2026 09:05:50 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e00b5a044c6307a465e.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:b5a0:44c6:307a:465e])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4505238e174sm13608738f8f.1.2026.05.06.09.05.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 May 2026 09:05:50 -0700 (PDT)
+Date: Wed, 6 May 2026 18:05:48 +0200
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Paul Houssel <paulhoussel2@gmail.com>
+Cc: paul.houssel@orange.com, Andrii Nakryiko <andrii@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Florian Westphal <fw@strlen.de>,
+	"T.J. Mercier" <tjmercier@google.com>,
+	Li RongQing <lirongqing@baidu.com>,
+	"D. Wythe" <alibuda@linux.alibaba.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] selftests/bpf: add tests to verify the
+ enforcement of CONFIG_CGROUP_LSM_NUM
+Message-ID: <aftm3Gu7e7joX9PA@mail.gmail.com>
+References: <20260506150547.767315-1-paulhoussel2@gmail.com>
+ <20260506150547.767315-3-paulhoussel2@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 10/12] net: stmmac: tc956x: add TC956x/QPS615
- support
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Daniel Thompson <daniel@riscstar.com>, Alex Elder <elder@riscstar.com>,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com,
- rmk+kernel@armlinux.org.uk, andersson@kernel.org, konradybcio@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, linusw@kernel.org,
- brgl@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
- mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
- alexandre.torgue@foss.st.com, ast@kernel.org, boon.khai.ng@altera.com,
- chenchuangyu@xiaomi.com, chenhuacai@kernel.org, daniel@iogearbox.net,
- hawk@kernel.org, hkallweit1@gmail.com, inochiama@gmail.com,
- john.fastabend@gmail.com, julianbraha@gmail.com, livelycarpet87@gmail.com,
- matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
- prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
- rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
- weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20260501155421.3329862-1-elder@riscstar.com>
- <20260501155421.3329862-11-elder@riscstar.com>
- <224E233C593EF171+8c8a43dd-5061-40f8-9eb7-f360eabf2ecc@radxa.com>
- <4015f47a-af62-441d-b1b8-a8598f963970@lunn.ch>
- <4C0D95BC59F1A4ED+53f3be85-2cdd-4058-8950-57970027d481@radxa.com>
- <aftgorkah-Hjrvq2@aspen.lan>
- <549BE66F62F1470F+a489d4fd-10ab-484c-9b55-6aecfd05d383@radxa.com>
- <a8b5d96b-3c8f-4ec5-b205-bbacafbf47aa@lunn.ch>
-Content-Language: en-US
-From: Xilin Wu <sophon@radxa.com>
-In-Reply-To: <a8b5d96b-3c8f-4ec5-b205-bbacafbf47aa@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpgz:radxa.com:qybglogicsvrsz:qybglogicsvrsz3b-0
-X-QQ-XMAILINFO: NYlggeZuI0UG5ceJbvnRxJWvN8cJfwrOSkmij5dH1qZMj0vYN4/mkdbk
-	Iqo46RtHaNQup3gfYG3N/fW/GEqEdBaJmBUv9f28xfLpysM4DWtxo2wV53MmIqhnJzgXnU7
-	PGk55JDkJ9LxlDwX60+kcTO+iv7TOZmstjBKNdHnsdhc4R6jXEREuX1eeGdUMMGGe4rYWmx
-	fO5TDyTaxdYIbcbpERvOCA3xuy0x43jM3inNC0C7ppGhILRI7dZP72q2fcj6Gr+rO7psQwx
-	/O5XIXQwHB0LG7VYHvCj8KSMiHXtzJY0eyR7qritmMcnuvSxhO0ERIznKVJ0g+m3tGrLf3A
-	EFdq5tVI/AIkjE3m6xSZUu3GoCzZZlrl1HYG8mrcvJy2OzlBkN/GeAkyJeR1R5D293NvVSz
-	mHb27v3iEEYS4MAnV3gy2xxCdV7ynPPUFiP+54/TVqAlJHDI8FK1c93Al4WBPNpdIl2dQ+o
-	2OPAYrIrSs9Jhmv65nhGHajAO85nccy+kdmBMjkw3Wh6v5U1mg1gnFvnX1Bo99kcT9WPHia
-	rylWDq4At4A0+xRk/uK/4QKlnipmo0151IlTv0ZSLEeTZRsvC2cgxinq6DdzjzfKrYaSLJb
-	0OtRlbAtYA0EkypuOkC+b3FquIdJwLGZ3hH2fC8+2T9vW/LZBNndwXZ4zB5oTmbTiuoKhNK
-	2QxDSOg8J0K9tOI0PDA2PDcO3UB3hqhSQVMzLvnh5qKSQ0yhi4L/bm0rAZYOzC5PR8WzQy9
-	HWWtccenfAiNTcfQOBpZ16w5unSa8zPNjhAYs5RCtouHfMuvFmpXh8yJ2kD5X13uJv3wOQx
-	jBjCdH2B7qfV7NfJtdYfdSXsO6KUqu+szmAS7OvRrjRPitzWxm7jh48Vo4zlkFwbMMW22lm
-	hVQXVrJ/TkOOaZ9KvkJ5SpFWhjwGXE21Uu//pEtQSIid0FwwOldiWmcL98vmeekB5HvoNYE
-	VaGcdYzrpnkPIMoezsM9GQVHz67Fj8MQsqJlRnD5vChR41Re1ZHmX2j2CYj49yfefvqD5XL
-	TGy7podOffB2BONmomlVKIcDSkYbw=
-X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260506150547.767315-3-paulhoussel2@gmail.com>
 
-On 5/6/2026 11:56 PM, Andrew Lunn wrote:
->>> Does that mean you don't get phy interrupts reported in /proc/interrupts
->>> before any suspend happens?
->>>
->>
->> No. The phy works in polling mode AFAIK.
+On Wed, May 06, 2026 at 05:05:47PM +0200, Paul Houssel wrote:
+> Add a selftest that verifies the kernel correctly enforces
+> CONFIG_CGROUP_LSM_NUM as the maximum number of concurrently attachable
+> per-cgroup LSM hook slots.
 > 
-> You should be able to tell from dmesg:
+> The BPF program side (progs/cgroup_lsm_num.c) defines 12 lsm_cgroup
+> programs, each attached to a distinct LSM hook. The test side
+> (prog_tests/cgroup_lsm_num.c) attempts to attach all 12 programs one by
+> one to a cgroup, and verifies that exactly 10 succeed and 2 are rejected,
+> matching the value of CONFIG_CGROUP_LSM_NUM set to 10 in the selftest
+> Kconfig fragment.
 > 
-> Generic FE-GE Realtek PHY r8169-0-600:00: attached PHY driver (mii_bus:phy_addr=r8169-0-600:00, irq=MAC)
+> Signed-off-by: Paul Houssel <paulhoussel2@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/config            |  1 +
+>  .../selftests/bpf/prog_tests/cgroup_lsm_num.c | 60 +++++++++++++++++++
+>  .../selftests/bpf/progs/cgroup_lsm_num.c      | 46 ++++++++++++++
+>  3 files changed, 107 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_lsm_num.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/cgroup_lsm_num.c
 > 
-> irq= can be MAC, POLL, or the interrupt number if interrupts are used.
-> 
-> If PHY WoL is used, i would expect interrupts to be used, otherwise
-> how is the PHY waking the system?
-> 
->       Andrew
-> 
+> diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+> index 24855381290d..e4c5dd86c640 100644
+> --- a/tools/testing/selftests/bpf/config
+> +++ b/tools/testing/selftests/bpf/config
+> @@ -11,6 +11,7 @@ CONFIG_BPF_STREAM_PARSER=y
+>  CONFIG_BPF_SYSCALL=y
+>  # CONFIG_BPF_UNPRIV_DEFAULT_OFF is not set
+>  CONFIG_CGROUP_BPF=y
+> +CONFIG_CGROUP_LSM_NUM=10
+>  CONFIG_CRYPTO_HMAC=y
+>  CONFIG_CRYPTO_SHA256=y
+>  CONFIG_CRYPTO_USER_API=y
+> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_lsm_num.c b/tools/testing/selftests/bpf/prog_tests/cgroup_lsm_num.c
+> new file mode 100644
+> index 000000000000..1c5825c6c3d0
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_lsm_num.c
+> @@ -0,0 +1,60 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Orange */
+> +
+> +/*
+> + * Test that the kernel enforces CONFIG_CGROUP_LSM_NUM as the maximum
+> + * number of concurrently used per-cgroup LSM hook slots.
+> + *
+> + *  - load a BPF object with 12 programs each on a distinct lsm_cgroup hook
+> + *  - attach them one by one via bpf_program__attach_cgroup()
+> + *  - at some point the slots are exhausted and attachment fails
+> + *  - verify that 10 succeed attachment and 2 fail
+> + */
+> +
+> +#include <test_progs.h>
+> +#include <bpf/bpf.h>
+> +
+> +#include "cgroup_lsm_num.skel.h"
+> +#include "cgroup_helpers.h"
+> +
+> +void test_cgroup_lsm_num(void)
+> +{
+> +	struct cgroup_lsm_num *skel = NULL;
+> +	struct bpf_program *prog;
+> +	int cgroup_fd = -1;
+> +	int attached = 0;
+> +	int failed = 0;
+> +
+> +	cgroup_fd = test__join_cgroup("/cgroup_lsm_num");
+> +	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
+> +		return;
+> +
+> +	skel = cgroup_lsm_num__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> +		goto out;
+> +
+> +	bpf_object__for_each_program(prog, skel->obj) {
+> +		struct bpf_link *link;
+> +
+> +		link = bpf_program__attach_cgroup(prog, cgroup_fd);
+> +		if (!link) {
+> +			if (errno == EOPNOTSUPP) {
+> +				test__skip();
+> +				goto out;
+> +			}
+> +			failed++;
+> +		} else {
+> +			attached++;
+> +		}
+> +	}
+> +
+> +	// CONFIG_CGROUP_LSM_NUM set to 10
+> +	// -> 10 programs shall be attached
+> +	ASSERT_EQ(attached, 10, "at least one attached");
+> +	// -> 2 programs shall be rejected
+> +	ASSERT_EQ(failed, 2, "limit was enforced");
+> +
+> +out:
+> +	close(cgroup_fd);
+> +	cgroup_lsm_num__destroy(skel);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/cgroup_lsm_num.c b/tools/testing/selftests/bpf/progs/cgroup_lsm_num.c
+> new file mode 100644
+> index 000000000000..662aee2283c2
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/cgroup_lsm_num.c
+> @@ -0,0 +1,46 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Orange */
+> +
+> +/*
+> + * 12 LSM programs with lsm_cgroup attachment type, each on a distinct LSM
+> + * hook. Used by prog_tests/cgroup_lsm_num.c to verify that the kernel
+> + * enforces the CONFIG_CGROUP_LSM_NUM limit on unique per-cgroup LSM hook
+> + * slots. With CONFIG_CGROUP_LSM_NUM set to 10, 10 shall be attached and 2
+> + * rejected.
+> + */
+> +
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +#define LSM_CGROUP_HOOK(name, hook)		\
+> +	SEC("lsm_cgroup/" #hook)		\
+> +	int BPF_PROG(name) { return 1; }
+> +
+> +
+> +LSM_CGROUP_HOOK(hook0, socket_create)
+> +
+> +LSM_CGROUP_HOOK(hook1, socket_post_create)
+> +
+> +LSM_CGROUP_HOOK(hook2, socket_socketpair)
+> +
+> +LSM_CGROUP_HOOK(hook3, socket_bind)
+> +
+> +LSM_CGROUP_HOOK(hook4, socket_connect)
+> +
+> +LSM_CGROUP_HOOK(hook5, socket_listen)
+> +
+> +LSM_CGROUP_HOOK(hook6, socket_accept)
+> +
+> +LSM_CGROUP_HOOK(hook7, socket_sendmsg)
+> +
+> +LSM_CGROUP_HOOK(hook8, socket_recvmsg)
+> +
+> +LSM_CGROUP_HOOK(hook9, socket_getsockname)
+> +
+> +LSM_CGROUP_HOOK(hook10, socket_getpeername)
+> +
+> +LSM_CGROUP_HOOK(hook11, socket_shutdown)
 
-Yeah I know, it's indeed POLL. The phy is now waking the system using 
-the INTN_WOL pin directly connected to the SoC GPIO, instead of the INTN 
-pin connected to the QPS615.
+Please remove all the unnecessary newlines. One empty line after the
+macro definition is enough :)
 
--- 
-Best regards,
-Xilin Wu <sophon@radxa.com>
+> +
+> -- 
+> 2.54.0
+> 
