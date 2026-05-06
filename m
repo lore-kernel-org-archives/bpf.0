@@ -1,160 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC553F1676;
-	Wed,  6 May 2026 15:36:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564F93EE1FD;
+	Wed,  6 May 2026 15:38:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778081772; cv=none; b=WNX7UxRSeoB5M2NZv3dsTrIlUfMSQvZMnfjf4n4qbxJ6JKuzuVMDa2ZVp6NbSnm45iFJ0SAbNIZgbXJOsMNBPAnt/OAzyOqcuO77VE78Zxd+x3/YdOpKej7rRTwckfOBEJHYxnZS/keEh4xBdSrUkxHxE7Z8QOhH0nbEjUHd/hI=
+	t=1778081931; cv=none; b=gBfzbcVSrw0gszrcW9xrlL8kser/M8khauOIghtcoTReynXhJTIUyIuKW0btyaOchCP7hlVcHSdL0aPo1FVDAujR887KUZJmmm41mjBq2e3bT5iI3ifJy0wRLDri+kHowSggO1nOtb0akOxYqycaIj9GYUtFtArf7VyWNw2iEaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778081772; c=relaxed/simple;
-	bh=YmH0VhuXg/cm69Ew1erWeLBAm2BbEeEYbjV9RLbDtY0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fWLy/nLcFSgwIeT3iJoOC4ydYhmM+ewTSv5IGlzX9Z1dvSAXOoJW5NRTqnqKv7p+AqyxFeMGuezF+BWgt6Cbsiqis4A/4IlPiqxg+HparY7vwF6Y4JglP0djV1//ReqVpP12RUEeQfCvs8pRa0On/1YWSnaUoUqXGU4tgU+f2Bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YgGLuL/r; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YgGLuL/r"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C575C2BCB0;
-	Wed,  6 May 2026 15:36:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778081771;
-	bh=YmH0VhuXg/cm69Ew1erWeLBAm2BbEeEYbjV9RLbDtY0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=YgGLuL/rdElTLLmUrsoJpCGY6fCCK9Li+RQ5uwQAFrI4x35ENBSqbvjAXLlQcG65P
-	 m2+x7WZNq/+WdZBGz5PzYYRSO7HDz90VqPds9OlL5qBTDYo+epCEhhIl9HHRvm4ksH
-	 IEzRNWtcIfVteKMZdOYNRq7AeSjLRMDzxIphRlK3avhfrwDxl5mEZpDWnZVk3LtU/+
-	 rchBxv/g5UEB/lNO61zeas2Ww8f484SzyV6a2E92rgG3It+p9xfnjVrQxCNUi/YKq8
-	 VtGJphhuLf47W7KqXzBtFEiwAi2kIaVRcy8sMDcP5w6ZKB/8cnwtRkG/9UMzW8lBO1
-	 4LLHRpc0SlJ5g==
-Date: Wed, 6 May 2026 11:36:05 -0400
-From: Steven Rostedt <rostedt@kernel.org>
-To: Jens Remus <jremus@linux.ibm.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Indu Bhagat
- <ibhagatgnu@gmail.com>, bpf@vger.kernel.org, sashiko@lists.linux.dev, "Jose
- E. Marchesi" <jemarch@gnu.org>
-Subject: Re: [PATCH v14 06/19] unwind_user/sframe: Detect .sframe sections
- in executables
-Message-ID: <20260506113605.5df32968@fedora>
-In-Reply-To: <29d28c6e-2909-444e-b22a-7429464056dd@linux.ibm.com>
-References: <20260505121718.3572346-7-jremus@linux.ibm.com>
-	<20260505125336.72A36C2BCB4@smtp.kernel.org>
-	<29d28c6e-2909-444e-b22a-7429464056dd@linux.ibm.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1778081931; c=relaxed/simple;
+	bh=6sQcvJ02EAB9Lz/kHFbKX/FUadBZAXtEZqWiVpfYz4E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IZ7chOJdLt5ErZt3+Y65KZpxiWWjKUwgaGmk1RypLw8Qgz/zTT/sCwq0vq/0kSAaaI4ZddUmYmG/IuONs4vwwmAxb0ZIsB/h7Z1W8oZW6VP5N+fCB7vh6d2Rcdtm0FfFOWF7TxL25LeRS5AGHEM4ae7gTdSvIWxM0ShTfGzzj2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=radxa.com; spf=pass smtp.mailfrom=radxa.com; arc=none smtp.client-ip=54.254.200.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=radxa.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=radxa.com
+X-QQ-mid: esmtpsz20t1778081905t5dc8af55
+X-QQ-Originating-IP: 66bIYIjIjPtDUf7ZMQLWTQPiTh7x0N6Cl1Fw8/bZasU=
+Received: from [127.0.0.1] ( [116.234.74.217])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 06 May 2026 23:38:19 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 4295684557063516514
+Message-ID: <859776B5671B36B9+577c19e4-3e66-4036-b26f-fe20287a1d43@radxa.com>
+Date: Wed, 6 May 2026 23:38:17 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 10/12] net: stmmac: tc956x: add TC956x/QPS615
+ support
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, maxime.chevallier@bootlin.com,
+ rmk+kernel@armlinux.org.uk, andersson@kernel.org, konradybcio@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, linusw@kernel.org,
+ brgl@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
+ Daniel Thompson <daniel@riscstar.com>, mohd.anwar@oss.qualcomm.com,
+ a0987203069@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+ boon.khai.ng@altera.com, chenchuangyu@xiaomi.com, chenhuacai@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, hkallweit1@gmail.com,
+ inochiama@gmail.com, john.fastabend@gmail.com, julianbraha@gmail.com,
+ livelycarpet87@gmail.com, matthew.gerlach@altera.com,
+ mcoquelin.stm32@gmail.com, me@ziyao.cc,
+ prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+ rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
+ weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-11-elder@riscstar.com>
+ <224E233C593EF171+8c8a43dd-5061-40f8-9eb7-f360eabf2ecc@radxa.com>
+ <4015f47a-af62-441d-b1b8-a8598f963970@lunn.ch>
+ <4C0D95BC59F1A4ED+53f3be85-2cdd-4058-8950-57970027d481@radxa.com>
+ <2af0fee3-d3d6-4434-847f-3fd2fbb841d3@lunn.ch>
+Content-Language: en-US
+From: Xilin Wu <sophon@radxa.com>
+In-Reply-To: <2af0fee3-d3d6-4434-847f-3fd2fbb841d3@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpsz:radxa.com:qybglogicsvrsz:qybglogicsvrsz3b-0
+X-QQ-XMAILINFO: NMth3b25qZ/y3GsZOZbTcTtn7ivxtNnfDwhten1J2cIhmuHszCIWDEp5
+	62vFagLVkDtj/ihAfFxqCDAkwPknNTQ8rt2JdPO3DntsuJvxTDZwhwn6v9Q2Zr3fexxrdav
+	Z8tOqhADpYyVy9j/gfNlM6y7qT+IPNVQIh9ISw9xH2humwR+0QuQgfl/S6YVNPcViexfzng
+	Tu0rFdlhN+wyFpLgg5vpKp26j9ufuc6yKDetrb4Ryuw7818jy3rdUpAnCorwW/EAkH7GC45
+	9sHsQ0R5GNdl9foXYGG8tVWqi46VBH2HlSGhx+89L9ZEqbHo1NLEErlzEuRkNG3xqWER7V5
+	xHAS00ExpjcrZcs2qHWpfE/7l1GfoyFa/+5zYjXotwBHkWlBP0uJxiOf01OCq9uFnyyXzpb
+	OeRyO4nGN5aYqgEjRrsxivJFb6rJNwBktM1YIPpoCA2CwJtV6zvB9XDvhjuDv5ZYgiwB29H
+	gGz3Qd1kYxiEFMNOgAJK2zvON05qEvjOLsSde0Vo+LL6YZHv4M+VlHospu6p2a+wEMuEmHF
+	Jc2st9+8GhXzqMowizoLQAL9VnQzdAOXMjWoyRvsXqT7B4Vc0LM4XecnPl0Ziru2BKirpPA
+	qHkI1zSenEcKZXkvc23ex+ZqmzUztSiU4e/RZIrZsvktRyV/SbBD38JEeWOcNI+nTpBNslx
+	iSwfov58UuPq6538i53SLFp+W5xh7QCd1qKPQXAOljWV5AvuAyaKKulKBGYDttswirvo6r0
+	0oNQl9z2qpNBc/OtuZcFmGLL4vpn7ILM/Y7dCPvMO85opK0XJce6YlVCCUTeh04dthfKACl
+	k+pLhAPReZWtmYTjow9htBMh3OFHZxmVd7cppGF6kZYVWO2OeK+mNL2+FOSTHHcxXshpWZb
+	vErub9eGThX/A8VngZnkNdzGFFh+kutCnJM/uiHn4Af2yNS/MOKLin5rNs1vHhv3TxdC4hu
+	PJzWLeXYsrFARDQrb66jMt7nTlS2mT9f+K/V7dpZw3LpyIDgi3kTgwqwerOn2yClL/iZKrv
+	DZbuWNVc60wjyJ2QSJx9V51Y+lE9LALFS636snRufTrAe5eLiCLWBoPPg2wB9ETWOt9C2EA
+	ghCObbyLYQElz+mAyIcubIu/ppF34Od5oZzNMZsR0f9
+X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
+X-QQ-RECHKSPAM: 0
 
-On Wed, 6 May 2026 16:56:01 +0200
-Jens Remus <jremus@linux.ibm.com> wrote:
+On 5/6/2026 10:45 PM, Andrew Lunn wrote:
+>> Hi Andrew,
+>>
+>> Yes, the PHY is doing the WoL. And I guess this makes sense as it allows the
+>> MAC to power down during suspend to save power.
+>>
+>> The INTN pin of QCA8081 is connected to the ETH_0_INT_N of QPS615. And the
+>> INTN_WOL pin is connected to a SoC GPIO.
+>>
+>> Without this change, I can't get WoL to work. I have a working branch for
+>> our board here:
+>> https://github.com/strongtz/linux-radxa-qcom/commits/v7.0.2-8280-wip/
+> 
+> Please take a look at commit
+> 
+> commit 6911308d7d111a9c367293b52f2dc265819f2b60
+> Author: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Date:   Thu Oct 23 10:16:50 2025 +0100
+> 
+>      net: stmmac: convert to phylink-managed Wake-on-Lan
+> 
+> In particular:
+> 
+>      When STMMAC_FLAG_USE_PHY_WOL is not set, we provide the MAC's WoL
+>      capabilities to phylink, which then allows phylink to choose between
+>      the PHY and MAC for WoL depending on their individual capabilities
+>      as described in the phylink commit. This only augments the WoL
+>      functionality with PHYs that declare to the driver model that they are
+>      wake-up capable. Currently, very few PHY drivers support this.
+>      
+> Could you actually patch the PHY driver to make it list its
+> capabilities. That is the direction we want to go in the long term,
+> and not use STMMAC_FLAG_USE_PHY_WOL.
+> 
+>      Andrew
+> 
 
-> >> --- a/fs/binfmt_elf.c
-> >> +++ b/fs/binfmt_elf.c  
-> > [ ... ]  
-> >> @@ -637,6 +638,21 @@ static inline int make_prot(u32 p_flags, struct arch_elf_state *arch_state,
-> >>  	return arch_elf_adjust_prot(prot, arch_state, has_interp, is_interp);
-> >>  }
-> >>  
-> >> +static void elf_add_sframe(struct elf_phdr *text, struct elf_phdr *sframe,
-> >> +			   unsigned long base_addr)
-> >> +{
-> >> +	unsigned long sframe_start, sframe_end, text_start, text_end;
-> >> +
-> >> +	sframe_start = base_addr + sframe->p_vaddr;
-> >> +	sframe_end   = sframe_start + sframe->p_memsz;
-> >> +
-> >> +	text_start   = base_addr + text->p_vaddr;
-> >> +	text_end     = text_start + text->p_memsz;  
-> > 
-> > Should text_end be calculated as text_start + text->p_memsz - 1?
-> > 
-> > Since the maple tree API strictly expects inclusive ranges [first, last] for 
-> > insertions, passing the exclusive text_end would cause the inserted range 
-> > to cover one byte beyond the actual segment.  
-> 
-> Shall we keep the text_end and sframe_end is pointing past the
-> respective section end semantic and just adjust the value passed on the
-> call to mtree_insert_range()?
+Thanks for pointing this out! You are right that I should patch the PHY 
+driver. I have made WoL work without the change in the tc956x driver.
 
-Let's keep the end exclusive, and add the "- 1" to text_end before
-passing it to the mtree_insert_range(). I did that to get it working for
-me.
-
-> 
-> > 
-> > If an ELF binary has adjacent executable PT_LOAD segments, could the first 
-> > segment's inclusive end overlap with the next segment's start and fail 
-> > subsequent insertions?
-> >   
-> >> +
-> >> +	/* Ignore return value, sframe section isn't critical */
-> >> +	sframe_add_section(sframe_start, sframe_end, text_start, text_end);
-> >> +}
-> >> +  
-> > [ ... ]  
-> >> @@ -712,6 +729,19 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
-> >>  				error = -ENOMEM;
-> >>  				goto out;
-> >>  			}
-> >> +			break;
-> >> +		}
-> >> +		case PT_GNU_SFRAME:
-> >> +			sframe_phdr = eppnt;
-> >> +			break;
-> >> +		}
-> >> +	}
-> >> +
-> >> +	if (sframe_phdr) {
-> >> +		eppnt = interp_elf_phdata;
-> >> +		for (i = 0; i < interp_elf_ex->e_phnum; i++, eppnt++) {
-> >> +			if (eppnt->p_flags & PF_X)  
-> 
-> 			if (eppnt->p_flags & PF_X && eppnt->p_type == PT_LOAD)
-> 
-> >> +				elf_add_sframe(eppnt, sframe_phdr, load_addr);  
-> > 
-> > Does this need to verify the segment is loadable (eppnt->p_type == PT_LOAD)?
-> > 
-> > If non-loadable segments like PT_GNU_STACK have the PF_X flag set, they
-> > typically have p_vaddr and p_memsz as 0. Processing these segments would
-> > compute bogus text boundaries and bypass VMA validation. If a legitimate
-> > PT_LOAD segment overlaps with these bogus ranges, could its insertion fail
-> > silently and break stack unwinding for the executable?  
-> 
-> Do you agree?
-
-Indu or Jose?
-
--- Steve
-
-> 
-> >   
-> >>  		}
-> >>  	}
-> >>    
-> > [ ... ]  
-> >> @@ -1242,6 +1276,14 @@ static int load_elf_binary(struct linux_binprm *bprm)
-> >>  			elf_brk = k;
-> >>  	}
-> >>  
-> >> +	if (sframe_phdr) {
-> >> +		for (i = 0, elf_ppnt = elf_phdata;
-> >> +		     i < elf_ex->e_phnum; i++, elf_ppnt++) {
-> >> +			if ((elf_ppnt->p_flags & PF_X))  
-> 
-> 			if (elf_ppnt->p_flags & PF_X && elf_ppnt->p_type == PT_LOAD)
-> 
-> >> +				elf_add_sframe(elf_ppnt, sframe_phdr, load_bias);  
-> > 
-> > Similarly, should this also check if the segment is a PT_LOAD segment before 
-> > adding it to the sframe sections?  
-> 
-> Likewise.
-> 
-> Regards,
-> Jens
+-- 
+Best regards,
+Xilin Wu <sophon@radxa.com>
 
