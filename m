@@ -1,169 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9351D372B58
-	for <bpf@vger.kernel.org>; Thu,  7 May 2026 18:43:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54FE63AB291
+	for <bpf@vger.kernel.org>; Thu,  7 May 2026 18:44:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778179410; cv=none; b=f2NGX1MVn4DNrx94LoKn8zyIEJmGoQyY2zxmwypuIfCMcbeOvyYs7jKabw+tWqz2gGmpihF4uixdqni1nCg44YMXeh3bElDGPwS2QGzu79DuTTePMRsYU6pfdqHT+ze/dibbdiNL2/xe6tSnfDsF9c6novWVJmw2Gb0c1aB1R6k=
+	t=1778179455; cv=none; b=Zj8faa2r8jsIBpzo/yqRG+oLUhuP3MWwIjQrmx6RNO5G0Avs+H4VtbmOpw1xDJDuzK7cD9euLP8Z8ve/vuh+CGGrKSbDUlipssLb4cfqhLVqZyOc/6bqJN1Oc44NipnnMbjQRF9v6a/QbE4cDlfRNTe4jQTvMT2kf4VEBQyPiRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778179410; c=relaxed/simple;
-	bh=7ShwUQBeDfB2CqUpWF1c0vV2uQ4zUMuBcahcXqr9kXA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=niik62zlzMg1IiHtRKs67m2FKVCs+84Gle2X6iSgOmafML+9sZeRZSZPGPDl13RChmuaUOBlUrlyZu20eAwjueqz9B48t9C3T0wu6pf00zyyiG8EjJsGErqeHJpfQzJmNVDGjMK7+QumAa7JZAbH0xAA81GModc6GdCvMDWhkWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O2Udz215; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778179455; c=relaxed/simple;
+	bh=OSzlYQw2h6gcRQVmUKR53Ckl2/E4R/U/cGa1oPYYTlM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hw++V2YIa3FrBy46ixke1djHhGZFtJ+TjYcCefcEc/GKHvJ5EJJtDYwXN5oZTvjbkYSTnU2r0joiSlEr7kc1wq4+vEPbxzOvoC21/w94oRX7M73DCIEm+Wf5xqbn/dZtJ/kIQRX4PPNRkYlSGE/BUVaRY9av8BFhJweDSnX2Rqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=XxFN21KK; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O2Udz215"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1E9CC2BCB2;
-	Thu,  7 May 2026 18:43:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778179410;
-	bh=7ShwUQBeDfB2CqUpWF1c0vV2uQ4zUMuBcahcXqr9kXA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=O2Udz2151qsrnc6F5WDJI+vsDCIcsUIVPZdVKr/A7qoStfxj0xJ07dnEyBhb2Z4Is
-	 oQV4u5Yk6w+9NP9SDQMLmw/Y5+Q57Qq/3XeIcEj1aFHfkuz+biGjsN9812eNsFulKF
-	 /kpOR+r5S5EfBgqnxoWh2zbG7W6nU+k54iU2AtvCQ7BBD0KxX4JjFDzC55VarB2iEN
-	 as7+pOpItsZPRrfDqQleAq25CqPs1JUqxdEZ8tBa5vIlzK7Pjcj9MGVhHEoj6q6Usx
-	 J+5DByMbHgR92TbQ7K58rZmiH6ZYkO0Mivs/p0BujhrODyVHBYhaU6gdiKpEw2dtRI
-	 nhONRxdLkhjvA==
-Content-Type: multipart/mixed; boundary="===============4967670250085774504=="
+	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="XxFN21KK"
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-506251815a3so8916521cf.0
+        for <bpf@vger.kernel.org>; Thu, 07 May 2026 11:44:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1778179453; x=1778784253; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1OHugVXwVYl4EIQGFzGx4AQVN+wMQGiAhztZolIIb7Q=;
+        b=XxFN21KKeIEUXbAGo/6Ib+7hUGTlZX/8XuZzfJbo4yl6PSap3BZOrtaZqZvc1Woa0x
+         0TvN9aEcZ4+js8z68j+MUt90r3LhtiXIbw6GBdwg9q24mniraMXZ0Vvge1WjQqtz8mQc
+         wnb4NwKJ2So0FhLQ4UU9Ej5D+YrrYrDhweEMM4rfVO5sA+1tuVk7/V+5x72FaCnYpwSY
+         xkoc5EHJoWePAMfv2RAHc4k2vsCVzgkDN8jl02GAzFudANcX7iezGiutl4yi5yWunYrI
+         9pNxEHt5AqTVXWNcfG7GvuP8sOJHtqUQbxIWRmTus46EYlpu0w9nrzY9OcsAahURAauT
+         CcyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778179453; x=1778784253;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1OHugVXwVYl4EIQGFzGx4AQVN+wMQGiAhztZolIIb7Q=;
+        b=pAPVqpcivVE5OsvpSRPMtzEgFufQsJAqT1XA5Feugu/yH+1r/qyKW8U6ViGYgboOsU
+         zkaHMaqLvKmvemGA4JuDq1c/bT7Th0LDQkJ3U3ftzME8Bjcw/g/49oilzy7Ks1f7FK+Y
+         bDPHuAvqOzqxKeJkSjJzoLbVRE9R1d4jTYQdAQRAqUPUB2GbzI8MRt9m65c/SHuOvKEI
+         yoDGALcfe1c7f3uOfJxIpjpyJqIxxj8XPn7L7xkDDLtM214fTmvrGjqNXUCIoma/LcYh
+         Ta5hIZBpsvgmnyMQDGM02oYJQqAoUutwMOpVO4uvSh7CP9ZORWKhXBgFwHEg1ca6kkbf
+         otTg==
+X-Forwarded-Encrypted: i=1; AFNElJ8jjKzS41WvifcWNxTWojRi+At78YxlAObzBvPTiSiIi1FTpaX3p473quZJbG5t6Oignqw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8uif6++braA9xpG+58sRWefIWHK4WyE2Z9tMQ6xGkoNTf4cP9
+	kPJoKx2jr5XyA1At7xy9J6xgWOXz82BHWE4306HBGuamgPenPz1kMLFvzqSfD0vKQXI=
+X-Gm-Gg: AeBDievbAfA/t1Gei/Mw1e3LqpvL4YsMqJ1VOUuPw4ly6YXZCxYpptfWUMbS1zQj/ZH
+	m/cSJY4UrUPvXrJvIR4Moj6cKMQW4LugvC3afSTygkCnXGahw/9GXwqIKvVp67a5cKyKD0zn1Qc
+	BzxY4FZfJzuya8ZbVHM6jgsHWrKqLVQOrEZZlvtBanXGkandg6A3fLZyJBt6fNP/6hqwZSQjNh7
+	vBmuMpBY4iil5B/KByclpDYnf/geAUBPE/Jfi/F0YEo+E0BbT5D1A8A3c+P5Q8jmeazGcjMMnN6
+	U6BhMnptroQO6QZeGwswI3c0Afxd5Tq2yQ2HUcfRQwBJHisAMjfxlAD54W6DEAvzrW8XQqIXUyA
+	esY0vM1hAUtbKHO5aYBfT8POA0vidTfiXbZ5J8Kp2EPDG1UPtujksOmZOMQ0Ld4/780aa5B48F5
+	5jXEUHCxmYaBtbHS2ewIPAohdovrlYkg/kLHavD6a56Qm3urzrT+/lvFimx74i9XRL4OU69d269
+	3o=
+X-Received: by 2002:a05:622a:8c7:b0:50e:5fe2:83a9 with SMTP id d75a77b69052e-51461bf0515mr133144421cf.5.1778179453134;
+        Thu, 07 May 2026 11:44:13 -0700 (PDT)
+Received: from [172.22.22.234] (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-514850d0d82sm5022531cf.5.2026.05.07.11.44.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 May 2026 11:44:12 -0700 (PDT)
+Message-ID: <ae90a4c9-f027-4373-a378-d0d4b7796ff3@riscstar.com>
+Date: Thu, 7 May 2026 13:44:09 -0500
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <77bd1e436e9b8a4679a4e60adf5971f93688ff28ad0a9b16a0adf2b8172dd116@mail.kernel.org>
-In-Reply-To: <20260507175453.1140400-2-utilityemal77@gmail.com>
-References: <20260507175453.1140400-2-utilityemal77@gmail.com>
-Subject: Re: [bpf-next v3 1/2] bpf: Offload kptr destructors that run from NMI
-From: bot+bpf-ci@kernel.org
-To: utilityemal77@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,bpf@vger.kernel.org,utilityemal77@gmail.com,mykyta.yatsenko5@gmail.com,alexei.starovoitov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  7 May 2026 18:43:29 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 10/12] net: stmmac: tc956x: add TC956x/QPS615
+ support
+To: Xilin Wu <sophon@radxa.com>, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ maxime.chevallier@bootlin.com, rmk+kernel@armlinux.org.uk,
+ andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
+ arnd@arndb.de, gregkh@linuxfoundation.org
+Cc: Daniel Thompson <daniel@riscstar.com>, mohd.anwar@oss.qualcomm.com,
+ a0987203069@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+ boon.khai.ng@altera.com, chenchuangyu@xiaomi.com, chenhuacai@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, hkallweit1@gmail.com,
+ inochiama@gmail.com, john.fastabend@gmail.com, julianbraha@gmail.com,
+ livelycarpet87@gmail.com, matthew.gerlach@altera.com,
+ mcoquelin.stm32@gmail.com, me@ziyao.cc,
+ prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+ rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
+ weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-11-elder@riscstar.com>
+ <224E233C593EF171+8c8a43dd-5061-40f8-9eb7-f360eabf2ecc@radxa.com>
+Content-Language: en-US
+From: Alex Elder <elder@riscstar.com>
+In-Reply-To: <224E233C593EF171+8c8a43dd-5061-40f8-9eb7-f360eabf2ecc@radxa.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
---===============4967670250085774504==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 5/6/26 7:59 AM, Xilin Wu wrote:
+> On 5/1/2026 11:54 PM, Alex Elder wrote:
+>> +    /* AXI Configuration */
+>> +    axi = &td->axi;
+>> +    axi->axi_lpi_en = 1;
+>> +    axi->axi_wr_osr_lmt = 31;
+>> +    axi->axi_rd_osr_lmt = 31;
+>> +    /* All sizes (2^2..2^8) are supported */
+>> +    axi->axi_blen_regval = DMA_AXI_BLEN_MASK;
+>> +    plat->axi = axi;
+>> +
+>> +    plat->mac_port_sel_speed = speed;
+>> +    plat->flags = STMMAC_FLAG_MULTI_MSI_EN | STMMAC_FLAG_TSO_EN;
+> 
+> I got WoL working only after adding STMMAC_FLAG_USE_PHY_WOL here. I 
+> guess it's required, since the driver clocks down the MAC/PMA/XPCS in 
+> its suspend hook?
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+I just want to respond to this with a summary of our plans.
 
-[ ... ]
+We will *not* be implementing wake-on-LAN (WoL) initially.  We
+will work to get support for the eMACs upstream for TC956x, and
+then as a separate step, we will enable WoL.
 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+It's great to know you have it working, and our plan is to
+implement it via the PHYs and not involve the MAC.  It seems
+it will be relatively easy, but we have no plans to add it to
+the current series.
 
-[ ... ]
-
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-
-[ ... ]
-
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-
-[ ... ]
-
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 3b1f0ba02f61..d34fdb99eb8a 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -7,6 +7,7 @@
->  #include <linux/bpf_trace.h>
->  #include <linux/bpf_lirc.h>
->  #include <linux/bpf_verifier.h>
-> +#include <linux/bpf_mem_alloc.h>
->  #include <linux/bsearch.h>
->  #include <linux/btf.h>
->  #include <linux/hex.h>
-> @@ -19,6 +20,7 @@
->  #include <linux/fdtable.h>
->  #include <linux/file.h>
->  #include <linux/fs.h>
-> +#include <linux/irq_work.h>
->  #include <linux/license.h>
->  #include <linux/filter.h>
->  #include <linux/kernel.h>
-> @@ -42,6 +44,8 @@
->  #include <linux/cookie.h>
->  #include <linux/verification.h>
->
-> +#include "percpu_freelist.h"
-> +
->  #include <net/netfilter/nf_bpf_link.h>
->  #include <net/netkit.h>
->  #include <net/tcx.h>
-> @@ -65,6 +69,111 @@ static DEFINE_SPINLOCK(map_idr_lock);
->  static DEFINE_IDR(link_idr);
->  static DEFINE_SPINLOCK(link_idr_lock);
->
-> +struct bpf_dtor_kptr_work {
-> +	struct pcpu_freelist_node fnode;
-> +	void *obj;
-> +	btf_dtor_kfunc_t dtor;
-> +};
-> +
-> +/* Queue pending dtors; the idle pool uses a global pcpu_freelist. */
-> +static struct pcpu_freelist bpf_dtor_kptr_jobs;
-> +static struct pcpu_freelist bpf_dtor_kptr_idle;
-> +/* Keep surplus = total - needed = idle - refs >= 0 so NMI frees never need to allocate. */
-> +static atomic_long_t bpf_dtor_kptr_surplus = ATOMIC_LONG_INIT(0);
-
-An unaddressed review comment from the v2 discussion raises a design
-concern about the complexity of this implementation. Mykyta Yatsenko
-suggested an alternative design where bpf_dtor_kptr_work is stored in the
-kptr map slot itself (a bpf_kptr_box approach) instead of using two lists
-(idle and armed) with 3 atomics and headroom/trimming management.
-
-From the lore discussion at:
-https://lore.kernel.org/bpf/51a054a0-e57f-49dc-9527-36da0535087c@gmail.com/
-
-Mykyta's suggestion was:
-
-"I think this still looks too complex:
- * 2 lists - idle list and armed list
- * 3 atomics, controlling demand/supply
- * headroom/trimming management
-
-The complexity introduced for performance reasons, but I'm not sure if
-the tradeoff is worth it.
-
-What about the next design:
-
-Instead of idle list, store bpf_dtor_kptr_work in the kptr map slot
-itself. Use kmalloc_nolock() to allocate bpf_dtor_kptr_work on the first
-xchg just once per map value, then reuse it across xchg in/out."
-
-While Justin responded with an explanation of ABBA ordering issues, and
-Mykyta provided a more detailed counter-proposal with RCU protection and
-atomic detach/attach, the v3 implementation does not adopt this
-suggestion and still uses the pcpu_freelist approach with a surplus
-counter.
-
-Was there a specific technical reason to continue with the two-list
-approach rather than exploring the bpf_kptr_box alternative, or would it
-be worth revisiting this design choice?
-
-[ ... ]
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-
-[ ... ]
-
-This commit fixes a deadlock bug but lacks a Fixes: tag. The bug was
-introduced in commit 14a324f6a67e ("bpf: Wire up freeing of referenced
-kptr") which added bpf_map_free_kptrs() that calls kptr destructors
-inline without checking for NMI context.
-
-When BPF programs attached to tp_btf/nmi_handler delete map entries,
-destructors like bpf_cpumask_release() that take RCU locks are called
-from NMI, causing system deadlock.
-
-Suggested: Fixes: 14a324f6a67e ("bpf: Wire up freeing of referenced kptr")
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25513277524
---===============4967670250085774504==--
+					-Alex
