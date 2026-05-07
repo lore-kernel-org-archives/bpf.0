@@ -1,133 +1,222 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E9E3E6DDB
-	for <bpf@vger.kernel.org>; Thu,  7 May 2026 13:21:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778160111; cv=none; b=Jrw+/O4zNkiblFfTFmAhcta/d1uJ8UPEtnA9VET69quQ7hnhDgW4w1HdUuC+Fk1IdVCsDaZPju3YrWwQMLDROBQh4LC4gAJO6sbzYZas3zdefEQJyXdZZKoDXd/znzAw8d1+J2NHHl+XWgV0uovNHdJHkjeLWjIqyUv4pcJHqYc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778160111; c=relaxed/simple;
-	bh=AzN9iJ/2PC2bJY/nNv5V/vSdE5sX7BktLp2vGiXYbxY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rIA7OwhmHCIJXzw5E/6P4XmKhWv5ZeYTDS+bWg8B+UPMkm/i/YxeBumvj4oHWhr053X5Z6H/JnXtuGT9GH2y0/iosNhPy4ua+1jIEMzyRiRrEFvKQD0h6Bm92nYjByLTXVFwwdKphmu2TR0t4npA13bffyR1nn7LU8CAzBNWaHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cEN+jsJK; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=IiiG5P0H; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738143F54A0
+	for <bpf@vger.kernel.org>; Thu,  7 May 2026 13:23:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.181
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778160223; cv=pass; b=MNPnkTOgInegUaG5dxdh9Iy51lNZur6HIUbTzvzhxbUac9jPYfG6E4DUhrBmoLwKBnL2tlPtvi9FMwpvEtlMY0Gka8YA7O7mkxIBJ9eCBTE2hvECMYWObKb2uh4t4Qhvw+6fzuxoqKOxcJlOy4oS9wC0/EkRwYnE+DD1bb2L+Fo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778160223; c=relaxed/simple;
+	bh=9Jgm2FO/o1Ngm5CMWr0tKMwtsRN5483k422YkFCi7/Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=opGL7GfdjDpFkvA5VXiOcrrq8BdWvlFKGiz3PLFUIxPX/+nCjzMNiL7alkqRmLIzlouFf1sNXHt+Qa0S/IGWbKKUOQFdBQXScnkPG+WE1Z8S3IZOkf98fWv74Ek5OSGfQ4O69erIhmrZ3yAhWgrRZYERF21+XB/3m0vvHSXY2RM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DlBUgvKt; arc=pass smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cEN+jsJK";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="IiiG5P0H"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778160109;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NA3uYduQ4Jm26gU9caKxlD3akBOvEc2T3FZacK7c4rY=;
-	b=cEN+jsJKF8+8IFRI9k/622k3sNprZayEKQxZTi69REp0VsVe2N7GBeO4fpsyWJQB0ZwNNj
-	6ZdWJ3YrFxFd5YAO1MPy2L0yIuzHKlh/yromTBGYIfMMOY8lt6RE432ZzKC9DYzRpE7+m5
-	+fLMOnZso/SOhVR+QvMx5oCg4zkSJVU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-654-HkRVPoLhMiagg079hIAlXA-1; Thu, 07 May 2026 09:21:47 -0400
-X-MC-Unique: HkRVPoLhMiagg079hIAlXA-1
-X-Mimecast-MFC-AGG-ID: HkRVPoLhMiagg079hIAlXA_1778160106
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-48a5952c635so8671285e9.2
-        for <bpf@vger.kernel.org>; Thu, 07 May 2026 06:21:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DlBUgvKt"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-7b4ee3a88e1so8140697b3.1
+        for <bpf@vger.kernel.org>; Thu, 07 May 2026 06:23:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778160218; cv=none;
+        d=google.com; s=arc-20240605;
+        b=WFIKnJRB5lkR5o/CUJu/7mzIOVMqvNSdNaXRRqSWVj2vLIGV5dHJGSQOrIKIU53nEr
+         RJ5+P60Fgpib3pONcChIufRQPbAYhj/5F4BaViX2UEoqpqUw0WNg+fYEKCdhV9XTtjOT
+         0L3ulMdI3Dv4yV1tW5LyJ1qlEsJFXjR3WO+DsSx1IYt5aBYJ5glvcOY/R4PUoOKuWk6J
+         Dsq2SVoJd7n3ztCG/4i/A8BiEjk0sY2nibfSGiVnNAEF82FODc8/G7VRK310uGRXltNX
+         z4jflCXEDKn9adZD58q4a6BQbv7V4wod6VMKyQmD+ALN7b4AiFukBkFNqJQ5l0hZxBzV
+         gjoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=W6smblTfezSJWX6RvWSVUMERv5fpI/QdrqhW+dClZI0=;
+        fh=7pQPbM1mTaKjUbZ75iTISJbipA72wUVZwkXXTYMxzFw=;
+        b=HbTWbb7JKk16BvdRf/9/ou2uzvEokMb+IbVfj2jMHeaLIjSByQIoNeLvSBqyztQ3BO
+         Bmxzuu6lNNCMJbvS+BF7fL4kEAabhqIpwc3Tov16ZamojG/IPzp7ia1B0QenUvcsVcw8
+         95fpNGMOjz2r2ig6iey+DZA/Al2wg6UA35bjUxpK3tFuQ3Q6KuzX5wnzaUzwvoW/P2vw
+         0msq6s2yiUxa3iPJMB2TxXDOojplsDXvbUeC2iuVjv4LWxcakLAnafVk0ANx5gfPgO1i
+         CFS63p2RZ1XkDA9IZ8ADO1WlLoo9l49LGFalHHE1UaaDxp55UqkaMRbdRHgfHVCxjatQ
+         asJQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1778160106; x=1778764906; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NA3uYduQ4Jm26gU9caKxlD3akBOvEc2T3FZacK7c4rY=;
-        b=IiiG5P0HdULlxQnCkMNzQd+zcpmCUqPwU4yiNtOiZt6vO4E1xAnr8j19ZVvwf9SOMg
-         ejqGNyByZaOnQNXr4fRTvG8xglaxjFR8+rA/AoEz8zNOq5mCCtEcdctB8L0tviW9yP5o
-         0gpgKXtFyJCUnb1ZbBdIGQM7GOVDO8OhtNzlH0NbIPpDQTbGoSYcnXDzgE91VYCuC/J2
-         uZtZg0juB6wkbej9W8HYYhRy4MJUWmOUGzHeuYMtq+KyHMNaGpM9VY/p4iIM4lNkaPrN
-         ePwpMbfnPCnvm/Uj2pcIPZZAItHvrtCVyBQthulRQyOx3DnVtSrrHLjfdXxq5c4sEnGL
-         T+4Q==
+        d=gmail.com; s=20251104; t=1778160218; x=1778765018; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W6smblTfezSJWX6RvWSVUMERv5fpI/QdrqhW+dClZI0=;
+        b=DlBUgvKtrbcMcWnhuR1OmfZM3D8wi0r6SkOOw52Llie9V7W6Qvtr3YbCeRx9xVgsAM
+         AwWixn5vTkzdYUtlD6VyeFYO59Y+pY24t+2TNoGOQ+lEBe0HML43/l5a/+ZhIbUjmRJr
+         yLVoazUw8oPUDIdoamtPts82eb40iqgbUXUlnRVJ7S5AHkn8q1B4Zie9wsaZ2I2/OhV4
+         HzaQo6WHT/7/JLJRsYn8iUt1HCLtThl/AJpG+TZ65NpOKFFUwNLU38WyL02qKav+bWwG
+         l3Q3KnkulGxCDljpzwFhAZEEXWcSzU2V4rBWxNRlG1dA1WNrZ7w0Q85oOdr8T6Gesshh
+         AU2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778160106; x=1778764906;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NA3uYduQ4Jm26gU9caKxlD3akBOvEc2T3FZacK7c4rY=;
-        b=GA9e6YVIVn36DkOPdMSfMj+QowFiFfAHoIBpCbGS3c0rKbqO5owkN5lCEU4I5HnqJ4
-         rIULXq7KXHrYtjuO1Nr8vQ55zs3vRJtG/TNDgvRxGasRrBYiIURRrQBcFsN9iYEsYcq+
-         DXHOeR/rzJwoDMN2TpmFJ+i9MVT2qxpzvUTOfkZw4HqEuS+jUJppPKh06LPR2stehYrU
-         UadoZcuQeuI1BJEJm1alEXhD6GpYURK1LK4DQljSe98owWVQCHNdiUJ7dLGYBWrkh4Q7
-         oq20H0P0xX9iEnfNC+M9qRBHWSbHH54HkIQuykd13JIUTxAal35cYjbD73UPGyCF38Vb
-         F+xQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/ei5JjG1RTP0r/+OlhyUjs3QLcVFzu4pCasX5CNKr2GS2iW2lkwg9++x6dkn8KV4M9ZqQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzaPFBck4bs9/7JjoCA1kDRjFgPFJx9H0NuOl/5klZo+hMlGUpB
-	5VLKbSkXibnHVZrvJLU6cgMTKYjJZSobpqPdGUQdsc/+5PKCT7pg/rZAVCbqzIN50AWzJOy8UA/
-	TvIDQpLulfFva4K1BVrvRAoh/tJy+FSyrHF09q/VzFKgk+gwooNgaCg==
-X-Gm-Gg: AeBDiesu/+dpuePpiOp2Y9ovxQXDZbXclTE30ux1Lp4PLm/OVgN4PRV2c3ekMYi2Prr
-	4YvTS96is1Qxi5WMVfiaUpYzjC5wUdm5q+iDulzEHbhdaOgz2nYFBdvY20YOUhrhLM4kTzmX1N+
-	0KwlRQ1OzvyA4ZnW6jfh8AjLOeFQ1LqozBKkhB2F56BJ/y4KT3kSaFlMbVi7rrzJlg+LKjjL7a3
-	kKEShj0qjeXHxo3cS9NGc8Gkc0HKJrz6Fw9zOXnpuN/R+5Fq/FgOwm0XPM0MWslE8wmmrZYzoVb
-	OPGBmuDnb1rNL9Da9tZ0dpNZ8JJm+srFIvExJnPWQGZ9RnKatkL30/GmkRan5eMBqCRxwdLYbJ9
-	o4D3Rf0Oc5Tgaio4o3ZfbJJD4nZxQuG0gcosBFCgdqYYPlNfvvdX2YeskxJ5loU8X2CChH98Rne
-	9c
-X-Received: by 2002:a05:600c:15d1:b0:48d:112c:f582 with SMTP id 5b1f17b1804b1-48e51e1e415mr72915465e9.11.1778160105847;
-        Thu, 07 May 2026 06:21:45 -0700 (PDT)
-X-Received: by 2002:a05:600c:15d1:b0:48d:112c:f582 with SMTP id 5b1f17b1804b1-48e51e1e415mr72914835e9.11.1778160105311;
-        Thu, 07 May 2026 06:21:45 -0700 (PDT)
-Received: from [192.168.88.32] ([150.228.93.82])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e59b74277sm82568905e9.3.2026.05.07.06.21.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 May 2026 06:21:44 -0700 (PDT)
-Message-ID: <4e9b5728-1a8b-466b-900a-935e5647a623@redhat.com>
-Date: Thu, 7 May 2026 15:21:42 +0200
+        d=1e100.net; s=20251104; t=1778160218; x=1778765018;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=W6smblTfezSJWX6RvWSVUMERv5fpI/QdrqhW+dClZI0=;
+        b=bX1IPfTE0FraghguCrp3ide1aE/86kEcnQuvjeal86vYb2SAxp7M5CDLH0/jiBjXGr
+         YvyX/MpMIeAwk4KQ25uS5gNk6d+XOF7LMzCBKhE741U6VpLYtKhkg7oa5ZNhSz/E7ZOz
+         2YgCfvz0UW1D32OKVgM/P5+vUDuMPUQxTKYkEwCL/Nws7zIUUu35T6QEnkcoRjVxJiER
+         vuar0S/49YJb1yLfdMFKQcFLM1mCN8jZ0b+P5qMN+BVtsh7oYSDq8WvsR6AU6qEEGEJR
+         lmma62hRfwe2sJjvEHw7zlX/x+pqNRgE0BnLvMaQKXlwWwZKeJ6bLdKI9sWZ8XKazHHx
+         3qIQ==
+X-Gm-Message-State: AOJu0YyxE1wAL3/T1va5fRgYNU7pkttakDsBRUqMVsdrFQMN5LKpHmtP
+	+1MlOcpSEOMvcTtUZIKB31DwJTIsrng+h34Qy3BVqkewXP3aB7crWFNqPOkYdZtLPHXQn0Wvdaq
+	e3Yj2GIBomjhLh/0bjqG2dimDl+G/xa0=
+X-Gm-Gg: Acq92OHauvoBDdukgoZTvo/JFuUbtYjo2KERdgI007R4ao9sJzW3/nA6cJOSdTbUGV0
+	F+cJTUCEcWNimz6ceo7BcXGz20yiL6/BSHn/XLE3B6KuGtF5FhGc4LByx5Xer8Wu+yKQP+gKvLr
+	+wkyWTo1Mcpm9MZirJijl72q8eyRan+Gv430tZA5EACt4Jn44pfxwYyCfXZ1oFeD+BUTFxruX9A
+	VaEw3khjEGHyqg4qcndqauAZW635/OaUieHlIBnvUUYhZOEd8PI17GfYNiqiOTd14cwP0WzjPrG
+	4jD8A9GY5+ovJvpgXvRVnMBmZbBobw==
+X-Received: by 2002:a05:690c:dd4:b0:7bd:7b55:ebdb with SMTP id
+ 00721157ae682-7bdf5db91b9mr82957967b3.5.1778160217790; Thu, 07 May 2026
+ 06:23:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v5 3/5] veth: implement Byte Queue Limits (BQL)
- for latency reduction
-To: Simon Schippers <simon@schippers-hamm.de>, hawk@kernel.org,
- netdev@vger.kernel.org
-Cc: kernel-team@cloudflare.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20260505132159.241305-1-hawk@kernel.org>
- <20260505132159.241305-4-hawk@kernel.org>
- <ee275aa6-af27-4dac-9afa-da88abde312b@schippers-hamm.de>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <ee275aa6-af27-4dac-9afa-da88abde312b@schippers-hamm.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260506142709.2298255-9-ameryhung@gmail.com> <20260506235915.687C5C2BCB0@smtp.kernel.org>
+In-Reply-To: <20260506235915.687C5C2BCB0@smtp.kernel.org>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Thu, 7 May 2026 15:23:26 +0200
+X-Gm-Features: AVHnY4IGekU0O8uTCO6uo7TaWUsiNxKEX4SPGMTBCHCQrpoUs3X0nGFPkKlwMTo
+Message-ID: <CAMB2axM9DM+6CD02sr7Qx56V-yp4Mr_=yRebC0PktthNTh227g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 08/12] bpf: Unify release handling for helpers
+ and kfuncs
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/7/26 8:54 AM, Simon Schippers wrote:
->> @@ -928,9 +968,13 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
->>  			}
->>  		} else {
->>  			/* ndo_start_xmit */
->> -			struct sk_buff *skb = ptr;
->> +			bool bql_charged = veth_ptr_is_bql(ptr);
->> +			struct sk_buff *skb = veth_ptr_to_skb(ptr);
->>  
->>  			stats->xdp_bytes += skb->len;
->> +			if (peer_txq && bql_charged)
->> +				netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_UNIT);
-> 
-> In the discussion with Jonas [1], I left a comment explaining why I think
-> this doesn’t work.
-> 
-> I still think first that adding an option to modify the hard-coded
-> VETH_RING_SIZE is the way to go.
-Isn't the veth_poll() (towards the end of the function) a more natural
-place to issue completion events?
+On Thu, May 7, 2026 at 12:59=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+e(s) to consider:
+> - [High] Hardcoding meta->release_regno =3D BPF_REG_1 for KF_RELEASE kfun=
+cs creates a Use-After-Free vulnerability for kfuncs releasing non-first ar=
+guments.
+> - [Medium] Incorrect evaluation of the release_dynptr flag leads to false=
+ rejection of valid BPF programs.
+> --
+>
+> commit e0e1bbafcfda45d42ce5635352bc4b69c0d713c6
+> Author: Amery Hung <ameryhung@gmail.com>
+>
+> bpf: Unify release handling for helpers and kfuncs
+>
+> Introduce release_reg() to consolidate the release logic shared by both
+> helpers and kfuncs. The patch determines release_regno from the function
+> prototype or metadata before argument checking.
+>
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 542912c7983f7..e40f09cefa291 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> [ ... ]
+> > @@ -9870,37 +9928,11 @@ static int check_helper_call(struct bpf_verifie=
+r_env *env, struct bpf_insn *insn
+> >       }
+> >
+> >       if (meta.release_regno) {
+> [ ... ]
+> > +             struct bpf_reg_state *reg =3D &regs[meta.release_regno];
+> > +             bool convert_rcu =3D (func_id =3D=3D BPF_FUNC_kptr_xchg) =
+&& in_rcu_cs(env) &&
+> > +                                (reg->type & MEM_ALLOC) && (reg->type =
+& MEM_PERCPU);
+> > +
+> > +             err =3D release_reg(env, reg, convert_rcu, !!meta.dynptr.=
+ref_obj_id);
+> >               if (err)
+> >                       return err;
+> >       }
+>
+> Does passing !!meta.dynptr.ref_obj_id as the release_dynptr flag cause va=
+lid
+> programs to be rejected?
+>
+> If a kfunc or helper accepts both a normal PTR_TO_BTF_ID to be released a=
+nd
+> a referenced dynptr as a normal (non-release) argument,
+> meta.dynptr.ref_obj_id would be set. This would cause release_reg() to
+> mistakenly invoke unmark_stack_slots_dynptr() on the non-dynptr release
+> register, returning -EINVAL.
+>
+> Could the release condition be strictly derived from the argument type of
+> the specific release register instead?
 
-/P
+No existing helper and kfunc releases a ref_obj that also has another
+dynptr argument.
 
+Kfunc already use this check and I choose to make helper align with
+kfunc to make it the same without overcomplicating things. In the
+future when there is a universal proto for heleprs and kfuncs, we can
+check meta->fn->arg_type[release_regno] to make it more robust.
+
+>
+> [ ... ]
+> > @@ -12083,6 +12107,9 @@ int bpf_fetch_kfunc_arg_meta(struct bpf_verifie=
+r_env *env,
+> >
+> >       meta->kfunc_flags =3D *kfunc.flags;
+> >
+> > +     if (is_kfunc_release(meta))
+> > +             meta->release_regno =3D BPF_REG_1;
+> > +
+> >       return 0;
+> >  }
+>
+> By unconditionally hardcoding BPF_REG_1 here, could this create a
+> use-after-free if a kernel module defines a release kfunc that frees an
+> argument other than the first?
+>
+> If a BPF program passes a dummy referenced object to R1 and the actual
+> target object to R2, the verifier might drop the reference for R1 while
+> retaining R2, even though the kfunc frees R2 at runtime.
+>
+> Should we still rely on dynamically discovering the release register base=
+d
+> on the argument type to avoid this?
+
+If anyone is developing a new kfunc whose ref_obj to be released is
+not BPF_REG_1, the verifier should scream "unreleased reference", so
+the bug is unlikely to make it into the kernel.
+
+Some reason for this approach: The longterm goal is to remove the
+dependency of bpf_reg_state from kfunc proto generation. In this case,
+I want to tag OBJ_RELEASE by looking at the proto. This is currently
+impossible since we haved enable decl_tag for kfunc arguments yet. I
+think hardcode to BPF_REG_1 is a reasonable workaround for now.
+
+If this sounds okay. I will add this temporary constraint to kfuncs.rst.
+
+>
+> [ ... ]
+> > @@ -12622,13 +12638,7 @@ static int check_kfunc_call(struct bpf_verifie=
+r_env *env, struct bpf_insn *insn,
+> [ ... ]
+> >       if (meta.release_regno) {
+> > -             struct bpf_reg_state *reg =3D &regs[meta.release_regno];
+> > -
+> > -             if (meta.dynptr.ref_obj_id) {
+> > -                     err =3D unmark_stack_slots_dynptr(env, reg);
+> > -             } else {
+> > -                     err =3D release_reference(env, reg->ref_obj_id);
+> > -             }
+> > +             err =3D release_reg(env, &regs[meta.release_regno], false=
+, !!meta.dynptr.ref_obj_id);
+> >               if (err)
+> >                       return err;
+> >       }
+>
+> Similar to the check_helper_call() case above, does this global dynptr
+> metadata check safely handle mixed arguments when releasing registers?
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260506142709.22=
+98255-1-ameryhung@gmail.com?part=3D8
