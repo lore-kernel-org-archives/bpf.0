@@ -1,92 +1,139 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6922134F275;
-	Thu,  7 May 2026 23:50:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CDE4314B72
+	for <bpf@vger.kernel.org>; Thu,  7 May 2026 23:51:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778197800; cv=none; b=cOEb1sJjJYJZACoscpuxd5XU/ka3FnhUctMIkSdfsSKXbYCz/kvk4JUlPfsJHWNpYCiGaBnZqTbk9Boc2jUR7X3TZyexNrCeUEWXf19G689qmnScvVqlbxd3gtyI/o+49wbp+af42yoswqRdfpqtAtaL2Lpji7/0WlK7bSSCuMU=
+	t=1778197881; cv=none; b=NJPHp4rogBafK0EjVi0PgVBPKiH3hKDEW/dRN5/SIS/dDzJoOuSO84HvId+ZYsROWanjtdaOsUv4d/YHgpXyV9fbILI1k/c/60rp+shHwTxNPE4yWpnoBpXBWjMHDeWckYUEGIU7hHKM1DVg5nYtHprbMuS/k1bRKHFBhRVGSQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778197800; c=relaxed/simple;
-	bh=Fo2mtxWghoqbvmGtAeT3pH7OJ/vZ/XHupeJLM776+LE=;
+	s=arc-20240116; t=1778197881; c=relaxed/simple;
+	bh=mWUZ1toYaNcaqfSAh7exeaJU44TKQxGxGtjNk7DXxXQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Ox6IhVetDKinZXflI5xKB8f/xd3ilHXYDvp91I3mTp3/AAhk2owVVq2HFgqpNdKqflVFGt8IiJR2dQS66RHQ8qmURLrzzDLSVuzixudz7ZDKYC50nbR7hjEdhi9YEtwTL+ix+V8t74Hc3cTz7xqscs6qiS4BofI7goP0o/vzQLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B69885Lw; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=os/COMYoc8+tAzDc2BJHAbZ2E7gPNr3++Y590hHB9zDKqIUZGItgkl55BT/2zXZQWKNKE6pKEnr24c6A0wOOGC/BuLdIH3ls0aQuhfcFnJcBI0OYl3LY6ClCQ6dATTl0f5rLz/Mues1xMT/vajDQUsoV1cPJZwQuj36O0c/hdi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J4fX/eYP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B69885Lw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEC5BC2BCB8;
-	Thu,  7 May 2026 23:49:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J4fX/eYP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0FA9C2BCF5;
+	Thu,  7 May 2026 23:51:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778197800;
-	bh=Fo2mtxWghoqbvmGtAeT3pH7OJ/vZ/XHupeJLM776+LE=;
+	s=k20201202; t=1778197880;
+	bh=mWUZ1toYaNcaqfSAh7exeaJU44TKQxGxGtjNk7DXxXQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=B69885Lwm5xzxpL5dkF9v82AShV4NPxfDjbcJGLANOSfLQgCFoth83PfoK7soFMDz
-	 hpqrSQ6sXNXInBaxvz186DW0aOCTc+wzDqLTvYhUL3zXLomr//tyWQ8F6NVwOdnBLl
-	 IIZGMVDqge80jSG7KbEmomOWFLCZCfNTnrmuUqq6VA+3w41bZoHyIuKXIQj/Bs/wfk
-	 kxsvk2a5gomSnCVnwX4RFPp3J6by/Ovfw6zxIQ1CvPyB1CW7vF9ybiqaFEgNFtPrBl
-	 JjqKP5qlTu1IDDrxra74sj1980estT1EgA6MkTv5Q5W6jHErsyTRTKYFe+s397uHbr
-	 Kkd/02PzHeD5g==
+	b=J4fX/eYPQ0YkApqyE3bDKQaDlco5SOwVsuESfpSESe/N4amUN/EiLzGFL0/xcop5O
+	 Ndk7SgBOd1U0dozylsc7NF/1FmDaNpkYOW0arnzof1NuNAmxtDhwkotNWwJGbEH1Kl
+	 FGmw5vOTpMPyZ9Yroz8YkeMOG9CfwBckhMirTSGfxGbo8+doNgSZvlAmoCEcJySi8i
+	 hPdq2/UmvxJGeliTMphORurncdRAbluJZeMT9bnhU579crPmb7tM1ytwZGEs/jNbhW
+	 JCQ86MgzBZjUdu54QdNQpTM09FCVe/YmYnyJ7xBlVMII52+XcWYVKEdcseGTC+jYYJ
+	 eJhYhJoGzTvSA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/2] perf build: compile BPF skeletons with -mcpu=v3
+Subject: Re: [PATCH v7 01/10] crypto: pkcs7: add flag for validated trust on
+ a signed info block
 Reply-To: sashiko@lists.linux.dev
-To: "Suchit Karunakaran" <suchitkarunakaran@gmail.com>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260507184238.65280-2-suchitkarunakaran@gmail.com>
-References: <20260507184238.65280-2-suchitkarunakaran@gmail.com>
+To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260507191416.2984054-2-bboscaccy@linux.microsoft.com>
+References: <20260507191416.2984054-2-bboscaccy@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 07 May 2026 23:49:59 +0000
-Message-Id: <20260507234959.EEC5BC2BCB8@smtp.kernel.org>
+Date: Thu, 07 May 2026 23:51:20 +0000
+Message-Id: <20260507235120.D0FA9C2BCF5@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
-- [High] Adding `-mcpu=3Dv3` to `CLANG_OPTIONS` forces all BPF skeletons to=
- use the BPF v3 ISA, breaking backward compatibility for perf tools designe=
-d to run on older kernels.
+- [High] Exporting `verify_pkcs7_message_sig` as `EXPORT_SYMBOL` creates a =
+non-GPL wrapper around strictly GPL-only PKCS7 APIs.
+- [High] The `verified` flags on `x509_certificate` and `pkcs7_signed_info`=
+ are not cleared between validations, causing severe state leakage and API =
+breakage on subsequent validations.
+- [Medium] The `sinfo->verified` flag is set to `true` for blacklisted sign=
+atures, creating a dangerous API hazard.
+- [Medium] Concurrency data race on internal flags in `pkcs7_message` when =
+`verify_pkcs7_message_sig` is called.
 --
 
-commit 2e8791aeccf694e1ae9ed9fda46e3a6f73332838
-Author: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+commit 4629d1adf43a0253ba7082b6c379d2bf57a8c8ce
+Author: James Bottomley <James.Bottomley@HansenPartnership.com>
+crypto: pkcs7: add flag for validated trust on a signed info block
 
-perf build: compile BPF skeletons with -mcpu=3Dv3
+This commit adds a flag to struct pkcs7_message to indicate if any sinfo
+fields have passed trust validation. It sets the verified flag during
+trust validation and exports verify_pkcs7_message_sig for module use.
 
-This commit adds -mcpu=3Dv3 to CLANG_OPTIONS to support the atomic
-cmpxchg instruction required by the lock_contention BPF program.
-This forces Clang to emit BPF ISA v3 instructions during skeleton
-compilation.
+> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+> index e0761436ec7f4..9bda49295bd02 100644
+> --- a/certs/system_keyring.c
+> +++ b/certs/system_keyring.c
+> @@ -380,6 +380,7 @@ int verify_pkcs7_message_sig(const void *data, size_t=
+ len,
+>  	pr_devel("<=3D=3D%s() =3D %d\n", __func__, ret);
+>  	return ret;
+>  }
+> +EXPORT_SYMBOL(verify_pkcs7_message_sig);
 
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index cee19c923c060..a9a8c84b6b006 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
+Since the underlying subsystem functions like pkcs7_verify and
+pkcs7_validate_trust, as well as the alternative wrapper
+verify_pkcs7_signature, are all explicitly exported as EXPORT_SYMBOL_GPL,
+does exporting verify_pkcs7_message_sig as EXPORT_SYMBOL allow proprietary
+modules to bypass the GPL requirement and access internal cryptographic
+evaluations?
+
+Should this use EXPORT_SYMBOL_GPL to match the rest of the subsystem?
+
+> diff --git a/crypto/asymmetric_keys/pkcs7_trust.c b/crypto/asymmetric_key=
+s/pkcs7_trust.c
+> index 9a87c34ed1733..78ebfb6373b61 100644
+> --- a/crypto/asymmetric_keys/pkcs7_trust.c
+> +++ b/crypto/asymmetric_keys/pkcs7_trust.c
 
 [ ... ]
 
-> @@ -1195,7 +1195,7 @@ ifneq ($(CROSS_COMPILE),)
->  CLANG_TARGET_ARCH =3D --target=3D$(notdir $(CROSS_COMPILE:%-=3D%))
->  endif
-> =20
-> -CLANG_OPTIONS =3D -Wall
-> +CLANG_OPTIONS =3D -Wall -mcpu=3Dv3
+> @@ -127,6 +127,7 @@ static int pkcs7_validate_trust_one(struct pkcs7_mess=
+age *pkcs7,
+>  		for (p =3D sinfo->signer; p !=3D x509; p =3D p->signer)
+>  			p->verified =3D true;
+>  	}
+> +	sinfo->verified =3D true;
 
-Does this change break backward compatibility for other perf tools running
-on older kernels?
+If a consumer validates a message successfully against a keyring, the verif=
+ied
+flags are permanently set to true since they are not cleared between
+validations.
 
-Since CLANG_OPTIONS is used in the pattern rule for compiling all BPF
-skeletons, this forces every BPF program in perf (such as
-augmented_raw_syscalls.bpf.c and off_cpu.bpf.c) to target the BPF ISA v3.
+If the same object is subsequently verified again, verify_pkcs7_message_sig
+first runs is_key_on_revocation_list using the blacklist_keyring. During th=
+is
+blacklist check, if the message has multiple sinfo blocks signed by the same
+key, the first block fails but sets seen to true.
 
-Kernels older than 5.1 do not support v3 instructions and will reject
-these programs during the verifier load phase.
+The second block observes seen as true and the stale verified flag as true
+from the previous run. Will this falsely evaluate to success, causing
+is_key_on_revocation_list to return -EKEYREJECTED and making a previously
+validated message fail subsequent verifications?
 
-Should the -mcpu=3Dv3 flag be restricted exclusively to the target that
-needs it, perhaps using a target-specific append for lock_contention.bpf.o?
+Additionally, when verify_pkcs7_message_sig checks the blacklist, it calls
+pkcs7_validate_trust with the blacklist_keyring. If a signature matches a
+revoked key, pkcs7_validate_trust returns success and sets sinfo->verified
+to true.
+
+Even though the outer function correctly returns -EKEYREJECTED, does this
+leave the parsed pkcs7 object with verified set to true for a revoked key?
+Could this confuse consumers inspecting the verified state after a failed
+call?
+
+Finally, if multiple threads concurrently call verify_pkcs7_message_sig on
+the same pkcs7_message object, will the unprotected modifications to intern=
+al
+flags like p->seen, x509->verified, and sinfo->verified cause data races?
+
+Could this lack of synchronization lead to random validation failures or
+incorrect trust bypasses?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260507184238.6528=
-0-1-suchitkarunakaran@gmail.com?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260507191416.2984=
+054-1-bboscaccy@linux.microsoft.com?part=3D1
