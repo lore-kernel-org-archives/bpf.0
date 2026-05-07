@@ -1,144 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4AF630EF63
-	for <bpf@vger.kernel.org>; Wed,  6 May 2026 23:59:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E87723D283;
+	Thu,  7 May 2026 01:41:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778111955; cv=none; b=qCl/b9kWl5jXynGIirXF2FNm4qXBFaIq7Qr0E+I5jRrqcopeDQKv4qqSEadcEyWztt5TECd8yz3mvq9KiAjlF2MulX/HOzl/kZt8PSPBYU12r4ZSzdfo92wopY3TaFyx9YRyzms5lyN8gFBtU+dO6AGPooiiiMqPhONtnFmeVeg=
+	t=1778118094; cv=none; b=ce3TYzsrvd/NMw3whe8Nq4XJXxpTjW1CSbiY0RVsEOs6SHG/Y12Q+y6tKvptmQ9ousWEsNxbmHEI1NX0zQMB/UcoatUZBMQSH3ab7ioogAnsNRxk+2ktgjM+Mq254ibEEZggpcgGUn7+D+LqbVJU2Bl01y3shoL1ZlgR/xaK4zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778111955; c=relaxed/simple;
-	bh=L8SMuth0aUxjuyaRSGrv54zhQoPyPDF7evq6ZCgc5Ew=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=GDntwdACvdtfdXCW3ZkKWpLAMgMqshI2mIlHWV6bbEx86pd3va0PuB7B+fE87jGkwyxaNyOFWoIpHrZ7zaYhRGyQXyRUBHlQXS4gVH4ai5UVICZRk+e0B3yi5ssAtWdZw1hxApuUbWNofK5/p3JMSjebV69R/OfpThmvJ4KK5Mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zpx2D34k; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778118094; c=relaxed/simple;
+	bh=wO5vhQqDka++NhEZmxe7dc618EjmbcBVTo0a3RXkeCY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nE/Xldg0alVI9szCKFZk8nv1QKF47z7qDZegB9VVuspRI4omyXS+4nbYlFkVYw7MlpWkXTO/ypv3x8JrVuMaLrFToxQ/845lWl+vhSs5iGZd7mkvhUBMZcnnxIxrYW+Tos8cpjumYcQvhOK0TcvItAoegp6uNJvFifM9I1ilKaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cLdGKeZk; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zpx2D34k"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 687C5C2BCB0;
-	Wed,  6 May 2026 23:59:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778111955;
-	bh=L8SMuth0aUxjuyaRSGrv54zhQoPyPDF7evq6ZCgc5Ew=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Zpx2D34kaURRHgLVqFp6sEizAv1/5Z/6iU9cBYU6drRRSAMpiD5ZZLl7FJDrXjYQO
-	 8vfIYMgMh9T2cKOdDLwDTnCwtZoq9gjrov+6mNdkVitQOxvw2Ta2H1AAC1+waCGcsR
-	 p7QLRiW2dJfe8aoUUwh2VPg7N9REWJC12TcHFkCahlTBK6mF+g8iBhKVPmZdJn+n88
-	 VXCc0ECWMvSN9BFbdBq8oi22DPGS95zulGrAoCKeIG6MdYWGrB8FV0ssrDyE2FjBuG
-	 BdlIIz9p1GoptQwg4/B8zCGQMPII2q3z919GDSS0DtKll2fCTBGxlNTUeHFIeoQHun
-	 ED0lW1rqzHuJw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 08/12] bpf: Unify release handling for
- helpers and kfuncs
-Reply-To: sashiko@lists.linux.dev
-To: "Amery Hung" <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260506142709.2298255-9-ameryhung@gmail.com>
-References: <20260506142709.2298255-9-ameryhung@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 06 May 2026 23:59:14 +0000
-Message-Id: <20260506235915.687C5C2BCB0@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cLdGKeZk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778118091; x=1809654091;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wO5vhQqDka++NhEZmxe7dc618EjmbcBVTo0a3RXkeCY=;
+  b=cLdGKeZkBYAnxARi4zYsTqOVKNkwMAHjUkFcOvAWenGYNRGdzwby0W0+
+   Airuqb55yApxZqHFMuHQ+YysqjZEYQKYC+NlGcNkWKujJUmq7ip9NCND6
+   ZohD0UEGXntLmdU41bOXEjm9m3UA+JQb65CmqhkJViVScThHH/zBpjWnm
+   tu6666cZcOczjF47nX2Mv/AOt+4uGCTnndWNzdKoPR2XebLW0dqNmDRLw
+   0ZFE4yXRCTHOhnlRsLAGl+lxRuhyMZSC3FgKWN21FBPXnfXUhgUSSnSRo
+   Dk9rRoySGfLImqS+jdhQWFboi3MwjM6YDD6oV+h4vj8r7+h1VqVAZL651
+   A==;
+X-CSE-ConnectionGUID: X6AehSwXTyKL29ZUD44/Wg==
+X-CSE-MsgGUID: 4VxoY5OERWyCGddq2UQeaA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11778"; a="78089462"
+X-IronPort-AV: E=Sophos;i="6.23,220,1770624000"; 
+   d="scan'208";a="78089462"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2026 18:41:31 -0700
+X-CSE-ConnectionGUID: 8Sg+47i/Q3WGFjDN+XXGKA==
+X-CSE-MsgGUID: T1z2AYfbTdCTuKErTLJmhw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,220,1770624000"; 
+   d="scan'208";a="266694515"
+Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
+  by orviesa002.jf.intel.com with ESMTP; 06 May 2026 18:41:28 -0700
+Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wKnjx-000000006ib-3o27;
+	Thu, 07 May 2026 01:41:25 +0000
+Date: Thu, 7 May 2026 03:40:30 +0200
+From: kernel test robot <lkp@intel.com>
+To: Kuniyuki Iwashima <kuniyu@google.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kuniyuki Iwashima <kuniyu@google.com>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, Eulgyu Kim <eulgyukim@snu.ac.kr>
+Subject: Re: [PATCH v1 bpf] bpf: Free reuseport cBPF prog after RCU grace
+ period.
+Message-ID: <202605070321.vVxQf7dU-lkp@intel.com>
+References: <20260424235247.1990272-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260424235247.1990272-1-kuniyu@google.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Hardcoding meta->release_regno =3D BPF_REG_1 for KF_RELEASE kfuncs=
- creates a Use-After-Free vulnerability for kfuncs releasing non-first argu=
-ments.
-- [Medium] Incorrect evaluation of the release_dynptr flag leads to false r=
-ejection of valid BPF programs.
+Hi Kuniyuki,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on bpf/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/bpf-Free-reuseport-cBPF-prog-after-RCU-grace-period/20260425-093050
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
+patch link:    https://lore.kernel.org/r/20260424235247.1990272-1-kuniyu%40google.com
+patch subject: [PATCH v1 bpf] bpf: Free reuseport cBPF prog after RCU grace period.
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260507/202605070321.vVxQf7dU-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260507/202605070321.vVxQf7dU-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605070321.vVxQf7dU-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/core/filter.c:1666:6: error: conflicting types for 'sk_reuseport_prog_free'
+    1666 | void sk_reuseport_prog_free(struct bpf_prog *prog, bool wait_rcu)
+         |      ^
+   include/linux/filter.h:1146:6: note: previous declaration is here
+    1146 | void sk_reuseport_prog_free(struct bpf_prog *prog);
+         |      ^
+   1 error generated.
+
+
+vim +/sk_reuseport_prog_free +1666 net/core/filter.c
+
+  1665	
+> 1666	void sk_reuseport_prog_free(struct bpf_prog *prog, bool wait_rcu)
+  1667	{
+  1668		if (!prog)
+  1669			return;
+  1670	
+  1671		if (bpf_prog_was_classic(prog))
+  1672			call_rcu(&prog->aux->rcu, sk_reuseport_prog_free_rcu);
+  1673		else
+  1674			bpf_prog_put(prog);
+  1675	}
+  1676	
+
 --
-
-commit e0e1bbafcfda45d42ce5635352bc4b69c0d713c6
-Author: Amery Hung <ameryhung@gmail.com>
-
-bpf: Unify release handling for helpers and kfuncs
-
-Introduce release_reg() to consolidate the release logic shared by both
-helpers and kfuncs. The patch determines release_regno from the function
-prototype or metadata before argument checking.
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 542912c7983f7..e40f09cefa291 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -9870,37 +9928,11 @@ static int check_helper_call(struct bpf_verifier_=
-env *env, struct bpf_insn *insn
->  	}
-> =20
->  	if (meta.release_regno) {
-[ ... ]
-> +		struct bpf_reg_state *reg =3D &regs[meta.release_regno];
-> +		bool convert_rcu =3D (func_id =3D=3D BPF_FUNC_kptr_xchg) && in_rcu_cs(=
-env) &&
-> +				   (reg->type & MEM_ALLOC) && (reg->type & MEM_PERCPU);
-> +
-> +		err =3D release_reg(env, reg, convert_rcu, !!meta.dynptr.ref_obj_id);
->  		if (err)
->  			return err;
->  	}
-
-Does passing !!meta.dynptr.ref_obj_id as the release_dynptr flag cause valid
-programs to be rejected?
-
-If a kfunc or helper accepts both a normal PTR_TO_BTF_ID to be released and
-a referenced dynptr as a normal (non-release) argument,
-meta.dynptr.ref_obj_id would be set. This would cause release_reg() to
-mistakenly invoke unmark_stack_slots_dynptr() on the non-dynptr release
-register, returning -EINVAL.
-
-Could the release condition be strictly derived from the argument type of
-the specific release register instead?
-
-[ ... ]
-> @@ -12083,6 +12107,9 @@ int bpf_fetch_kfunc_arg_meta(struct bpf_verifier_=
-env *env,
-> =20
->  	meta->kfunc_flags =3D *kfunc.flags;
-> =20
-> +	if (is_kfunc_release(meta))
-> +		meta->release_regno =3D BPF_REG_1;
-> +
->  	return 0;
->  }
-
-By unconditionally hardcoding BPF_REG_1 here, could this create a
-use-after-free if a kernel module defines a release kfunc that frees an
-argument other than the first?
-
-If a BPF program passes a dummy referenced object to R1 and the actual
-target object to R2, the verifier might drop the reference for R1 while
-retaining R2, even though the kfunc frees R2 at runtime.
-
-Should we still rely on dynamically discovering the release register based
-on the argument type to avoid this?
-
-[ ... ]
-> @@ -12622,13 +12638,7 @@ static int check_kfunc_call(struct bpf_verifier_=
-env *env, struct bpf_insn *insn,
-[ ... ]
->  	if (meta.release_regno) {
-> -		struct bpf_reg_state *reg =3D &regs[meta.release_regno];
-> -
-> -		if (meta.dynptr.ref_obj_id) {
-> -			err =3D unmark_stack_slots_dynptr(env, reg);
-> -		} else {
-> -			err =3D release_reference(env, reg->ref_obj_id);
-> -		}
-> +		err =3D release_reg(env, &regs[meta.release_regno], false, !!meta.dynp=
-tr.ref_obj_id);
->  		if (err)
->  			return err;
->  	}
-
-Similar to the check_helper_call() case above, does this global dynptr
-metadata check safely handle mixed arguments when releasing registers?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260506142709.2298=
-255-1-ameryhung@gmail.com?part=3D8
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
