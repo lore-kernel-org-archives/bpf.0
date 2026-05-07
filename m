@@ -1,74 +1,40 @@
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69096274B53
-	for <bpf@vger.kernel.org>; Thu,  7 May 2026 18:52:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3960930F924;
+	Thu,  7 May 2026 19:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778179938; cv=none; b=H+HkDMZ0vC5veAOD4SFcn/JG3KyJ5jIEMgg7u4Zjov7v99sA+P/XxdPsu4fnMMg1vhmZsOUaDU4ObY+2qX+CMBhB/VaemTYWArZGSb8qgNYnRVw78Ck9Vpa4zmKbv6l8yDMC6mFUGS45gbh9J7RkvUlANk68kXNQj7KE3eCH4rA=
+	t=1778180537; cv=none; b=Sw2UyknX+q+xKxNQucbcE0M5Xjh2z0PW+BcxHFYdRUOjgi0dds5+xStNovlmAj3K7/B8JQ2Bjj2TEbqdROWwmFV2Wz9LDaqrt3LKaFd66YTmXBQMb8cTJ/atiZycUve+RKJSHb4tfCwwj8EUYNH48udiqOdyNVM0WrnsBbjd+IE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778179938; c=relaxed/simple;
-	bh=zK5ncSguZdWcAaUKZBb56PMqy9oUwt1argimx1tSaWk=;
+	s=arc-20240116; t=1778180537; c=relaxed/simple;
+	bh=Fl7PR/0nciK8XX3tbGEReMooqoWzFb0UE4AdnoP3JwA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=shFfMvPeLtpy7d+O5WYatAshVf4mWVTcY+Jj+WezirnRnKoGevDazlFpgAfeIyJbMe7g++X5GK0EcpSiRm+mcIgvQVr/e2yux/GDu4WDGs4rBWgPgJalwANBepSs1mkiTwaPewxVe+ZNY82HixTEUbnbhD+ujvwDmSm0Y02SwN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G5SPhuY1; arc=none smtp.client-ip=209.85.128.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=IDvBnIyyel5X7sm1mSP+PY6PEbJomPSdIJy6txh5odjMC8IBbY89qtHmgVt7ZgC4YyT4+EKIMbpd1h/nkvaYMaWNMa2KxRUGCpTJ/LSV4vsrx32tPfGxuBeLY+M4SFyQTfxHdept4bozqawPYGBnV3QTK6T4E+7did0na+C9wQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gy6Aa8qS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G5SPhuY1"
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-7bd810cdc5dso13037187b3.1
-        for <bpf@vger.kernel.org>; Thu, 07 May 2026 11:52:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778179936; x=1778784736; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iuEHp6Cypc5z2ggicspGcmwWyOQWaTV1+mNT4ShGRhw=;
-        b=G5SPhuY1qzcOFEXeK/33I9zJgQakx9stvMRjWRIn9VH45PtX8un3lJc+T7iOwv7zQU
-         DgzI0NkeGfvMjg3daWzkB/TSt4kgka7/uQHlgXPmNg7R79CXS+eEHRVHdPnIcJsVa4OF
-         eNUy0RirORvsOzCh5Erlkz76zqJZXWJirGj+B1pxL3g6yU6gnekf86XOZtIc2STDo7dK
-         1aJqcIesbJSbOwkfzXN56IYrXCcuEiPjolAreur33aLkwjVwhSF91prC0d5N+gys2hpx
-         9b+oYp7LaDANFgenBbU95smFCIHRT6SLEPbQIXIjtq1Ss467Y+UDK4A1Ue+2AyJn4F/M
-         sE0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778179936; x=1778784736;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iuEHp6Cypc5z2ggicspGcmwWyOQWaTV1+mNT4ShGRhw=;
-        b=plKyBFskDbWNTBPYg1wjvRl6u21rG/hGHxy1ssSMOeJCcd00jG69O41dfnaS7E0t2m
-         +wLXeXE1KIgv3yaYd8Iw9kHaCUukZA10YumTdgiL1IFeCCfV9OuMnKG1Q7pcHNS4io3V
-         hYwdGv8TPuQbEZfCj1q6iASEwnpk68mw5lrjeDNAo5iNDh1j5tt2OAW6zh4/VSpdFq+l
-         RflKKC5GCxymUPFS0sBl///kZHKD2Kv9fO8PSCcG6fzXPLxSjSObiyRRnNFivYQMlRpY
-         S8gWZgUD3ACGs56zidImw1jKbQzJSR9Z45O0JMzVm7YvXALX9TauHi9n2r0XUVZHC1Zn
-         WGVQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/KmZSBZWcS7R1VmIRnA88tJk/xO/VrRjrJKQ28jWFasTjmrFtdT3mQOs1arn8yMPIBWNw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNpgstAWbqGDlW6EKBklT/XeS/kN6wNmk/nUHxAShxiriptJg9
-	G9s5o+VIHBove5S3hSoexxzZzsj4vEciiW3Chr8W57jBit7efyz/xx5K
-X-Gm-Gg: Acq92OHvA9GRsUNy4kwpiMEymbmjE8oV90lC6p0YIw+JAAPwlnCNAqoSVi4jojLgb8h
-	nIqwSaKzr725S9RyMTo9llsofyxrg2S5ZhelBhoBM+YSUOi/jRL4pH/G+AEOgxQ8W23wh1mmPxr
-	biQ9q9BPGBls00Ga44l+xJO1em4caDNK99RDCWhCtG7I2oHXllxBAUfqhF8XMdvG2Ymgjk9Z40K
-	TUdomR8VJGJ+bHOewi8TCfVHDpd+jbs7KAWefEMdhTrmasaf/yTkiwWMjtESvzUjHe7Wohwahi7
-	lmy4/q8EwIA277qLcfNT54FvFQq/pVZucQkvkbCgu5u22lN0KtqiNPoUoM3wpjiGO8uJTlP0ENx
-	JJ6KjgYL3Fm/ryw3ir0kFiY9ExJ8vVNV8GQo0zG3wygWyFU8LqiiZCxAzdqnv7SwwWJdBSMlmED
-	xblXwRf9fPRkCiafox0MuezwumGYHCeNqgrk/ZyOIrhlpgqTGlHGk00qYg
-X-Received: by 2002:a05:690c:c0d8:b0:79a:3655:9df5 with SMTP id 00721157ae682-7bdf5dc6e2cmr97229707b3.12.1778179936290;
-        Thu, 07 May 2026 11:52:16 -0700 (PDT)
-Received: from zenbox ([2600:1700:18fb:6011:491:bfe9:4001:a4da])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd6652742csm95077927b3.9.2026.05.07.11.52.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2026 11:52:15 -0700 (PDT)
-Date: Thu, 7 May 2026 14:52:15 -0400
-From: Justin Suess <utilityemal77@gmail.com>
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, bpf@vger.kernel.org, 
-	mykyta.yatsenko5@gmail.com, alexei.starovoitov@gmail.com, martin.lau@kernel.org, 
-	clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [bpf-next v3 1/2] bpf: Offload kptr destructors that run from NMI
-Message-ID: <afzeWzdWQ7eDJ-hP@zenbox>
-References: <20260507175453.1140400-2-utilityemal77@gmail.com>
- <77bd1e436e9b8a4679a4e60adf5971f93688ff28ad0a9b16a0adf2b8172dd116@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gy6Aa8qS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE457C2BCB2;
+	Thu,  7 May 2026 19:02:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778180537;
+	bh=Fl7PR/0nciK8XX3tbGEReMooqoWzFb0UE4AdnoP3JwA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gy6Aa8qS/nTKK3iyecWi7KQJjL7Z5aDPhweQ2v0x8FZIB+ZQPxgZY7C0SFZisENdw
+	 pLmOOu3aVRdTzGEDx0P5eWv1PwE60vQOXGvDH4Evkz3/7iACZwZWCvFetIy8wsMi/i
+	 xq7kL/7slcqTA6nUXLEQjdfAOryr9QswdDp21/Zirxsfq/0nRA/TH3KrL4x3/T19OY
+	 gOEUomHZiU3BM0DHamMMe4PD5m/ytnIZ0OuwvES5IfOdPkQmkl4XTtZ5+Mwms2rCjr
+	 V2l0fqmHQebvO60BRp+Wlqzne6/2rastpdZ+LJfGyuAO58dWjYRA6PB25xarVH/S8b
+	 LUFnXnp5F2SAQ==
+Date: Thu, 7 May 2026 14:02:15 -0500
+From: Rob Herring <robh@kernel.org>
+To: sashiko@lists.linux.dev
+Cc: Alex Elder <elder@riscstar.com>, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next 08/12] dt-bindings: net: toshiba,tc965x-dwmac:
+ add TC956x Ethernet bridge
+Message-ID: <20260507190215.GA2243588-robh@kernel.org>
+References: <20260501155421.3329862-9-elder@riscstar.com>
+ <20260502155615.AF378C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,136 +43,96 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <77bd1e436e9b8a4679a4e60adf5971f93688ff28ad0a9b16a0adf2b8172dd116@mail.kernel.org>
+In-Reply-To: <20260502155615.AF378C19425@smtp.kernel.org>
 
-On Thu, May 07, 2026 at 06:43:29PM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+On Sat, May 02, 2026 at 03:56:15PM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [Medium] The binding adds GPIO provider capabilities but omits `gpio-controller` and `#gpio-cells` from the `required` list.
+> - [Medium] The Ethernet endpoint is incorrectly modeled as a PCI bridge, applying bus properties to an endpoint.
+> --
+
+Please answer sashiko reports because if maintainers are, it's just more 
+work for us. While agreeing with maintainer comments don't need a reply, 
+I think we're still at the point any AI review does. Though sashiko is 
+2/2 here.
+
+> 
+> commit c5a5d0d7a89f5ad66c878c805902efc5e0bd117a
+> Author: Daniel Thompson <daniel@riscstar.com>
+> 
+> dt-bindings: net: toshiba,tc965x-dwmac: add TC956x Ethernet bridge
+> 
+> This commit adds devicetree bindings for the Toshiba TC956x family of
+> Ethernet-AVB/TSN bridges.
+> 
+> > diff --git a/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml b/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
+> > new file mode 100644
+> > index 000000000000..d95d22a3761d
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
+> > @@ -0,0 +1,111 @@
 > 
 > [ ... ]
 > 
-> > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> > +allOf:
+> > +  - $ref: /schemas/pci/pci-bus-common.yaml#
 > 
-> [ ... ]
+> Is it correct to reference pci-bus-common.yaml# here? Since the tc956x_emac0
+> node is a PCI endpoint (an Ethernet controller attached to an internal PCIe
+> switch) rather than a PCI bus or bridge, applying bridge-specific properties
+> could be semantically invalid.
+
+Correct, should be dropped.
+
 > 
-> > diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> 
-> [ ... ]
-> 
-> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> 
-> [ ... ]
-> 
-> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > index 3b1f0ba02f61..d34fdb99eb8a 100644
-> > --- a/kernel/bpf/syscall.c
-> > +++ b/kernel/bpf/syscall.c
-> > @@ -7,6 +7,7 @@
-> >  #include <linux/bpf_trace.h>
-> >  #include <linux/bpf_lirc.h>
-> >  #include <linux/bpf_verifier.h>
-> > +#include <linux/bpf_mem_alloc.h>
-> >  #include <linux/bsearch.h>
-> >  #include <linux/btf.h>
-> >  #include <linux/hex.h>
-> > @@ -19,6 +20,7 @@
-> >  #include <linux/fdtable.h>
-> >  #include <linux/file.h>
-> >  #include <linux/fs.h>
-> > +#include <linux/irq_work.h>
-> >  #include <linux/license.h>
-> >  #include <linux/filter.h>
-> >  #include <linux/kernel.h>
-> > @@ -42,6 +44,8 @@
-> >  #include <linux/cookie.h>
-> >  #include <linux/verification.h>
-> >
-> > +#include "percpu_freelist.h"
+> > +  - $ref: /schemas/pci/pci-device.yaml#
 > > +
-> >  #include <net/netfilter/nf_bpf_link.h>
-> >  #include <net/netkit.h>
-> >  #include <net/tcx.h>
-> > @@ -65,6 +69,111 @@ static DEFINE_SPINLOCK(map_idr_lock);
-> >  static DEFINE_IDR(link_idr);
-> >  static DEFINE_SPINLOCK(link_idr_lock);
-> >
-> > +struct bpf_dtor_kptr_work {
-> > +	struct pcpu_freelist_node fnode;
-> > +	void *obj;
-> > +	btf_dtor_kfunc_t dtor;
-> > +};
+> > +unevaluatedProperties: false
 > > +
-> > +/* Queue pending dtors; the idle pool uses a global pcpu_freelist. */
-> > +static struct pcpu_freelist bpf_dtor_kptr_jobs;
-> > +static struct pcpu_freelist bpf_dtor_kptr_idle;
-> > +/* Keep surplus = total - needed = idle - refs >= 0 so NMI frees never need to allocate. */
-> > +static atomic_long_t bpf_dtor_kptr_surplus = ATOMIC_LONG_INIT(0);
-> 
-> An unaddressed review comment from the v2 discussion raises a design
-> concern about the complexity of this implementation. Mykyta Yatsenko
-> suggested an alternative design where bpf_dtor_kptr_work is stored in the
-> kptr map slot itself (a bpf_kptr_box approach) instead of using two lists
-> (idle and armed) with 3 atomics and headroom/trimming management.
-> 
-> From the lore discussion at:
-> https://lore.kernel.org/bpf/51a054a0-e57f-49dc-9527-36da0535087c@gmail.com/
-> 
-> Mykyta's suggestion was:
-> 
-> "I think this still looks too complex:
->  * 2 lists - idle list and armed list
->  * 3 atomics, controlling demand/supply
->  * headroom/trimming management
-> 
-> The complexity introduced for performance reasons, but I'm not sure if
-> the tradeoff is worth it.
-> 
-> What about the next design:
-> 
-> Instead of idle list, store bpf_dtor_kptr_work in the kptr map slot
-> itself. Use kmalloc_nolock() to allocate bpf_dtor_kptr_work on the first
-> xchg just once per map value, then reuse it across xchg in/out."
-> 
-> While Justin responded with an explanation of ABBA ordering issues, and
-> Mykyta provided a more detailed counter-proposal with RCU protection and
-> atomic detach/attach, the v3 implementation does not adopt this
-> suggestion and still uses the pcpu_freelist approach with a surplus
-> counter.
-> 
-> Was there a specific technical reason to continue with the two-list
-> approach rather than exploring the bpf_kptr_box alternative, or would it
-> be worth revisiting this design choice?
-> 
-This was addressed.
-
-See https://lore.kernel.org/bpf/afy8yl1bleXmO78H@suesslenovo/
-
-storing a pointer to the bpf_kptr_box, or any other pointer that isn't
-the original kptr in the map slot would break direct load operations
-on ref kptrs in maps requiring patching the program and breaking
-bpf assumptions.
-
-> [ ... ]
-> 
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - pci1179,0220 # Toshiba TC9564 (a.k.a. Qualcomm QPS615)
+> > +
+> > +  "#gpio-cells":
+> > +    const: 2
+> > +
+> > +  gpio-controller: true
 > 
 > [ ... ]
 > 
-> This commit fixes a deadlock bug but lacks a Fixes: tag. The bug was
-> introduced in commit 14a324f6a67e ("bpf: Wire up freeing of referenced
-> kptr") which added bpf_map_free_kptrs() that calls kptr destructors
-> inline without checking for NMI context.
+> > +required:
+> > +  - compatible
+> > +  - reg
 > 
-> When BPF programs attached to tp_btf/nmi_handler delete map entries,
-> destructors like bpf_cpumask_release() that take RCU locks are called
-> from NMI, causing system deadlock.
+> Should gpio-controller and #gpio-cells be explicitly included in this
+> required list?
 > 
-> Suggested: Fixes: 14a324f6a67e ("bpf: Wire up freeing of referenced kptr")
+> The binding defines gpio-controller and #gpio-cells above, indicating the
+> hardware acts as a GPIO provider. Omitting them from the required list could
+> allow incomplete device tree nodes to silently pass schema validation.
 > 
->
-I'll add the Fixes: tag in next reroll.
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> > +examples:
+> > +  - |
+> > +    pcie {
+> > +      #address-cells = <3>;
+> > +      #size-cells = <2>;
+> > +
+> > +      tc956x_emac0: pci@0,0 {
+> > +        compatible = "pci1179,0220";
+> > +        reg = <0x50000 0x0 0x0 0x0 0x0>;
+> > +        #address-cells = <3>;
+> > +        #size-cells = <2>;
+> > +        device_type = "pci";
+> > +        ranges;
 > 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25513277524
+> Does this endpoint node need bridge properties like device_type = "pci",
+> #address-cells = <3>, #size-cells = <2>, and ranges?
+
+No, it doesn't.
+
+> The child of this node is an mdio bus, which does not use PCI addresses and
+> does not require PCI bridge translation. Using device_type = "pci" on an
+> endpoint might confuse OS PCI enumeration logic, which expects nodes with
+> this device_type to be actual PCI-to-PCI bridges.
 
