@@ -1,41 +1,60 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FEA03BD643;
-	Thu,  7 May 2026 14:52:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.126.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD5B15ECCC;
+	Thu,  7 May 2026 14:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778165570; cv=none; b=a59V8N7LZUYX9pAWziARNHP1lT1XLZEz7/wfTrFh1LF9nF60K+A1urChwo5zqJD5iijrcK7LfR6uhlzSFaqWPp7z9AFVZ4uES3mELdW1UneZWpH5Rk796Czt9AMen53C+gPk8uDMPe43LVeD+37lAfsb0bBbvt3TmHqV+OQ85zc=
+	t=1778165730; cv=none; b=qq43J2wGSx66T93hg2GgqKj00/Yka68gZqjMulydvCtwfUltRSZfQlvFXwLAfrjxQkAIHI7rM3XR0JeF9WJ00Wk/Fz9sDqbZVcEI1O130OrMW/i2+R6l6eQ67N1lRKJU8lKzwd7vlFtu2/K33NC+JRWsVoO7KxweY8/oMO0UQbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778165570; c=relaxed/simple;
-	bh=FpYeOAyis8m6Y2Clv0tM7NciA1U9CPYpox8KmfiFYIs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WmGFHEQGZDGdaZy43vP7/MfOeUzVQoXjysY38gNnTJ6DG68ohLKWI0ltLklutrsCMb3gidm9ChIopGoO6bWGuqW7OMlCJckiNWVkRlW4y9AIXJlHwZNkMhHNyhGsBRSn59Waqv7azOOTk9uTAeQtdfsrugIpEGYElbLpi+Rj3X8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schippers-hamm.de; spf=pass smtp.mailfrom=schippers-hamm.de; dkim=pass (2048-bit key) header.d=schippers-hamm.de header.i=simon@schippers-hamm.de header.b=xXKDUTPl; arc=none smtp.client-ip=212.227.126.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schippers-hamm.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schippers-hamm.de
+	s=arc-20240116; t=1778165730; c=relaxed/simple;
+	bh=2ZVajmPaSkGvuA/yHVKgEbcelNRw5s50vYsWkiOJxdE=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=nMfOVY1udn2P9k4ZsfYtBUjUbGuLJeaCQ4GaTQnccF0p7bRpfeOsT8DWQkubHOVwstOKr0lO2XdK97SfqnB22Mp/as3cvO/KHFhu6qT64C0xkKaZ8fR0cBCLKFCdB/tOTwc0C8px8KbEl5NHbV3Qm2tcI4dLFyx2Dp5ewBB6VYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=c/fkqRoA; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=schippers-hamm.de header.i=simon@schippers-hamm.de header.b="xXKDUTPl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=schippers-hamm.de;
-	s=s1-ionos; t=1778165561; x=1778770361; i=simon@schippers-hamm.de;
-	bh=SCuXleXqrC6ZPqhNX1oQ525cQB6TaYVm/6eDNN0AOKE=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=xXKDUTPlCmVLxFj77VKeKnWV0cEWpObauI28cfewl/N1mNCaWUXODqHy7VVdP8ze
-	 gbKOa6i69e/ctAYMhZQO+5EfyE5tkJUr07vUZ2JU/qqrXMfLjQFtylwxQoCtfXQX7
-	 rz1tOcEOKKbEYS1bbzQ1K5d3RCgsiYaN3kTKugdBvupmNsogihVWXOVCfguwfJ0Pq
-	 qmjILW+qFXEFeIdv4vuLS7HrFLxLQmsLn85L0SvouFLzD+8IZi0C6KsOFWSOomuiS
-	 iLETPG0uIK/jNGdT5LjZtBaOfXf+dG4mHmySjBoSGpI0gn748jzYJ2ExOp5uQjYt4
-	 zu9728NOlFW9pbmSEg==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from client.hidden.invalid by mrelayeu.kundenserver.de (mreue011
- [212.227.15.136]) with ESMTPSA (Nemesis) id 1MDQRy-1wBc503KOU-00Fay7; Thu, 07
- May 2026 16:46:40 +0200
-Message-ID: <e3a91545-13cd-4f87-8375-d707865bdbca@schippers-hamm.de>
-Date: Thu, 7 May 2026 16:46:33 +0200
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="c/fkqRoA"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6479vfh81496151;
+	Thu, 7 May 2026 14:55:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=lWiIA9
+	h8T8iXeuIwUqmNWo/xrWHHXLraLrEMf2skmsM=; b=c/fkqRoA9JDMeFkn6x8Lf0
+	dCdNz0ZzT+ghTtIGBSvD1rDmNdnoGSWmyLTakW37lw2ZBTy0fdzaRPGs/aK3SHNC
+	Dj1PZqVl9/Kd03cwI0ABek8ZzM12t6WnALI0ftJmuSdQnRVqW+NLFqxzMeQNGEXa
+	q4ejkaO7oKW5/j/P+BG93/WSHINkIyTVKVtrjxbfnjtb3tFIbiSJqF/+r/L5gLyz
+	eAvPFvuTRSeWaEvu4TyijRJhEdA1h3ZIefXyFz5J3yKiM2YKNnJVKjjW3Cr8I75n
+	YDPnVzghoSP4ILvkBS8NTI8wxDOT4tyhxitAKL7u+FaqjECKeSL7qPDuW19KLJ2g
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9x4y4w4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 May 2026 14:55:26 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 647EsfIx002160;
+	Thu, 7 May 2026 14:55:25 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dwwtgkxeq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 May 2026 14:55:25 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 647EtN0u62325000
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 7 May 2026 14:55:23 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BFD302004E;
+	Thu,  7 May 2026 14:55:23 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9EAE02004D;
+	Thu,  7 May 2026 14:55:23 +0000 (GMT)
+Received: from [9.52.200.195] (unknown [9.52.200.195])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  7 May 2026 14:55:23 +0000 (GMT)
+Message-ID: <8809f550-1dcf-4e47-96fe-74e85c522418@linux.ibm.com>
+Date: Thu, 7 May 2026 16:55:22 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -43,105 +62,115 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v5 3/5] veth: implement Byte Queue Limits (BQL)
- for latency reduction
-To: Paolo Abeni <pabeni@redhat.com>, hawk@kernel.org, netdev@vger.kernel.org
-Cc: kernel-team@cloudflare.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20260505132159.241305-1-hawk@kernel.org>
- <20260505132159.241305-4-hawk@kernel.org>
- <ee275aa6-af27-4dac-9afa-da88abde312b@schippers-hamm.de>
- <8f2f7f2e-6aa2-4e5b-b52d-0025b2525579@redhat.com>
+Subject: Re: [PATCH v14 02/19] unwind_user/sframe: Add support for reading
+ .sframe headers
+From: Jens Remus <jremus@linux.ibm.com>
+To: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev,
+        Indu Bhagat <ibhagatgnu@gmail.com>
+References: <20260505121718.3572346-3-jremus@linux.ibm.com>
+ <20260505124948.669E2C2BCB4@smtp.kernel.org>
+ <f106e4a1-4f60-4c65-97bc-2257005765e5@linux.ibm.com>
 Content-Language: en-US
-From: Simon Schippers <simon@schippers-hamm.de>
-In-Reply-To: <8f2f7f2e-6aa2-4e5b-b52d-0025b2525579@redhat.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <f106e4a1-4f60-4c65-97bc-2257005765e5@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:sNPBPySUhNmmnBE6atM+k+bbsLAB6+xRJMmtae7kiZ0Cntv9b8j
- IbGCzldlSRJ/+O2RdBvTsuM9cCjiZGFP4i3oXIssD6eVHIJRIGZ/qBYip82yK2MbXnw6uYf
- VjOz84ku0JPpbKDdaA8LbSN20DzvL4TU5FhGlA3JFUZ1CY5Q2G79QE98o5yxRgbbDyg7Haj
- 3R3ef0pT+EdEB5F/UXlZg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:GKx629lf1hA=;6wDalD/MxFjWiE/j36A6Pubvo16
- YttIWs59yaIyVewp1zpDclV65CFNe9Vyox0tZ1ATbXYjrC1uNYJ9+K9GdxlEq64kTi+CKpbUW
- uknbuz3PhKdUke+GUP6lvtwcaUeckC3x062SGz9gEtHIwZPQDu2GTzbBILoxAvz2QA+gPHiNo
- LYtCkbdc3ck25B+oHTiZdaZ65VOF/GbzeP2asOqMpgh2LLParcbUxW4sXFPkKCyP0SHh1s6xT
- kPnHjX3gWB/GX/QEQe+pLoN9P0RKJ3nIivtNq5QB2AABiJtO7x88UeWp+xHcSiLbFaA9dVY9i
- 71YCntoFJbxEQ8rHMrdBUcjLbEqdBmv0wIC4kccTVnJ30vJGbrNf2bgaMSflnl3yompl2XsIl
- DqRWwoDhwT6xB7cXG+70zod+gvHHA6ywinPHrekaXptx3QWarxlnV6ws2rACBm2AFCLBR9YKw
- Z+DQPz1LOIAdT7s5OSjiq/PFnSHiRn0Sr3wORp3GU9/A7Z+kB4VaxMNv7TcdCyvC8jLxJfAj+
- 65LGrAX1DEzRSKPSPXCKULIfS6l647yDcqgTdOw2Kei4sRWj28FEYY5WchC6LMTfss1UsEPez
- 17XOXCBwb3ziSn5qIHluRUMv1e/mq7HvPNrSeKFWQ5n/R5CyFRMgNd7ovZ5+3QlKMrbudsyFj
- eIDr8XblC89bR+LiKxy9uTNO5HwgxyqqrtaWJbkcrb8fuLyN9Xzj69mo4LUxApnTKyXKV+lvf
- qlupLQ5s6qlWqVBmgBqi5b4jvfQnqAlLxB6IFbHCdLSNAOE4qA9LQZZ05w5lWYNRy5shGyJQb
- CZw98wdwaA6JxaHyOjDdqVuM2l2DDcNPHehy9MeJuP7xOYqWxiEoEGhwZfe8WE2LfK+u+H9tE
- 8NKo/db/kZ09/T4oeo2N/xAE8+l2Dulx5DMJET4NSgV2e1zDv9Yd13YL3DsG+qJGkZ4+NQbLq
- Tj9jw5cMxmvL0XAUqJDQvvp6Ip1dViMs8ToL5ZLTV7Rn/kfKldnB4xpx7PA+Dvo8nnDls0Ukq
- OtvAvYXAVTneu7NIPHVU4FZLI2X93waMS3QgQUGUFIEgAiwYk5ZlrFqAaERPNPYpuFJqxzrfk
- bWmxsP1xZKGGdhdE6ByV6oheaKtSufvNa3yc4lLJdHEQFmyxkX+uL2pgpgkaUen2nbBqS9NSq
- mwBfSrJII0DCzajQ5Kbn9UoDS3QiutWpHXbeYzFLHzYqJ2Nt1AV8rJ/6PGMsBrX9l9g15giSG
- tPElwJ/lITFSKipex/4Cz/ssH7jaqRd4sso8HYXp9ROJZKLeutwHAqvvge/dyMC/0geObq0hr
- 0VeIkuSBAAtPl3WZHaBq6YUAu3B2UxrJpw5RWt3ACdLoDqGQ+w+ZdSlMr6XNjXgmKwUj7eshN
- zQY0yAEzjVkmwppvEaRwIlrMEBzsvWQgGoTijZUXySgEUjf1R/4a2taKvmulRwPz7eyHnXbKM
- BldecOjwFzWl87L6VSBH8cQibtx4TxwVKrOmZA1jom9JAjCiC3ycfBAmyNQy6tOGX9boR4NPF
- mzpyOP45M0AAoCvQs5apfRlXgwAkOeGMZnPn2Sn3dVN6tQASK55Y8DFRiUPeSXVVadCI8K104
- AmKOcokwZhQz/tNEiZk2xuRk5oIBfhL0eG/baLLN7o11HIOaNbglvMipTypNjVmjhyR8vQvKi
- GnsOrAtEnna88g67xfI1atpspI1LA+/DxjwhA3OB/2RMPQZcmeZcCa370tHrr4kEMHNbFGzF2
- RwR7QeRBVSCcDY0GusDck8FpiR86lXQBmovbbgJe730Xv3TxxwQ4QDb5TZrdkvNaI/P4DyO9C
- x1QaFQtk5+bobhxz4sLU4Gn8TCx8gM0ev0+tIjiSltENpn5Sg+NfBQgv670J5DSp6hVdXCXfs
- CYIVS0bj36BQwz+vUcMa8rFMI0XYVKwFRAUw7XFzl0ya7s1Dbzt+EAd22SEOA2ztUoRb5tG0h
- n4zZs6i5asnBdk//AyWbygHiSWn4cfaXy2CNZ1BbefgTT/RCtw+g3BkiPjZ+23MYRCmwHntx7
- 4RZwz5+UdyXzBF2NeKL86UNcjiP9GMlbPBFS0FnZYNINUp5tr+PVB7b4eTfOKUSXtceFcy63j
- nlDRg9ZEEbi8YF2Ihq2kemZV+CnXQSoC
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA3MDE0NiBTYWx0ZWRfXztIuCT/MGSyv
+ 6B9CI6Wy/FYuMZUwce4LeXnB5JL7KZkq8ltFbxD/r4KTLNijEvQ10BX1/sOAJZ772CdtCPkZPCZ
+ RitHY27A0xw0WB3L5Z6JXRUwdc8N5b88CHa0x7xRlvNyC9IwHd0lU/xCLLyqrKwpVLNiQPL2Qml
+ 0s+1vL39GhOqVWs/XiMbOYThOKtLRS6d17F62LYdSFmKv6E84NcQ1jUhZo78iU0Js06++cJmMfj
+ 7MlvtE3A2BAnHtZvAR7YeTg+LHXq9OVEpFHcd480yPA+w8f1HpYh1D69YX18Nv+RE8L7yorLYbf
+ VGiPr5MO1YzdrcK++tI10rwFQikGhOwnW54SBJcBaZ0ppFrwPPLlHSsAAnwX6fqirQOuD06aKwg
+ qBF4g95vKw+qypnkxX1qVZUHv+eBGNZh/rHBkOXYiuqoi9/6hZCIMFR4D9Rpb1MFMzblQrmWqtb
+ lbb9OK8+82PXeS8rslQ==
+X-Proofpoint-ORIG-GUID: AxTHEVNvyk6uLsp_uzrXGwTza0T2jt6y
+X-Proofpoint-GUID: zXMZSxucn2v49XcB23sObOmHP0dJA1RS
+X-Authority-Analysis: v=2.4 cv=W7UIkxWk c=1 sm=1 tr=0 ts=69fca7de cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VnNF1IyMAAAA:8
+ a=VwQbUJbxAAAA:8 a=LFt20mCCc4CE-LtB3JUA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-07_01,2026-05-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 adultscore=0 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 spamscore=0 clxscore=1015 phishscore=0 bulkscore=0
+ impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604200000
+ definitions=main-2605070146
 
+On 5/6/2026 3:42 PM, Jens Remus wrote:
+> On 5/5/2026 2:49 PM, sashiko-bot@kernel.org wrote:
 
-
-On 5/7/26 16:34, Paolo Abeni wrote:
-> On 5/7/26 8:54 AM, Simon Schippers wrote:
->> On 5/5/26 15:21, hawk@kernel.org wrote:
->>> @@ -928,9 +968,13 @@ static int veth_xdp_rcv(struct veth_rq *rq, int b=
-udget,
->>>  			}
->>>  		} else {
->>>  			/* ndo_start_xmit */
->>> -			struct sk_buff *skb =3D ptr;
->>> +			bool bql_charged =3D veth_ptr_is_bql(ptr);
->>> +			struct sk_buff *skb =3D veth_ptr_to_skb(ptr);
->>> =20
->>>  			stats->xdp_bytes +=3D skb->len;
->>> +			if (peer_txq && bql_charged)
->>> +				netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_UNIT);
+>> [ ... ]
+>>> +	sec = kzalloc(sizeof(*sec), GFP_KERNEL);
+>>> +	if (!sec)
+>>> +		return -ENOMEM;
+>>> +
+>>> +	sec->sframe_start	= sframe_start;
+>>> +	sec->sframe_end		= sframe_end;
+>>> +	sec->text_start		= text_start;
+>>> +	sec->text_end		= text_end;
+>>> +
+>>> +	ret = sframe_read_header(sec);
+>>> +	if (ret)
+>>> +		goto err_free;
 >>
->> In the discussion with Jonas [1], I left a comment explaining why I thi=
-nk
->> this doesn=E2=80=99t work.
+>> Is it acceptable to mix goto error handling with scoped_guard() cleanup
+>> helpers in the same function?
 >>
->> I still think first that adding an option to modify the hard-coded
->> VETH_RING_SIZE is the way to go.
+>> The kernel's cleanup subsystem guidelines generally suggest that usage of
+>> goto and cleanup helpers shouldn't be mixed in the same routine.
+> 
+> This references to the following comment in include/linux/cleanup.h:
+> 
+>   Lastly, given that the benefit of cleanup helpers is removal of
+>   "goto", and that the "goto" statement can jump between scopes, the
+>   expectation is that usage of "goto" and cleanup helpers is never
+>   mixed in the same function. I.e. for a given routine, convert all
+>   resources that need a "goto" cleanup to scope-based cleanup, or
+>   convert none of them.
+> 
 >>
->> Thanks!
->>
->> [1] Link: https://lore.kernel.org/netdev/e8cdba04-aa9a-45c6-9807-8274b6=
-2920df@tu-dortmund.de/
-> In the above discussion a 20% regression is reported, which IMHO can't
-> be ignored. Still the tput figures in the data are extremely low,
-> something is possibly off?!? I would expect a few Mpps with pktgen on
-> top of veth, while the reported data is ~20-30Kpps.
->=20
-> /P
->=20
+>> Could sec be allocated using __free(kfree) to avoid the goto entirely?
+> 
+> The goto error handling is used outside the scoped_guard().  So I think
+> it is fine.
 
-The ~20-30Kpps occur when thousands of iptables rules are applied and
-an UDP userspace application is sending.
+Let's do that.
 
-And there is a 20% pktgen regression (no iptables rules applied).
+> Do you see any value in converting it as follows (my naive attempt):
+> 
+> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+> @@ -722,13 +722,14 @@ static int sframe_read_header(struct sframe_section *sec)
+>         return 0;
+>  }
+> 
+> +DEFINE_FREE(free_section, struct sframe_section *, if (_T) free_section(_T))
+>  int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
+>                        unsigned long text_start, unsigned long text_end)
+>  {
+>         struct maple_tree *sframe_mt = &current->mm->sframe_mt;
+>         struct vm_area_struct *sframe_vma, *text_vma;
+>         struct mm_struct *mm = current->mm;
+> -       struct sframe_section *sec;
+> +       struct sframe_section *sec __free(free_section) = NULL;
 
-I am pretty sure the reason is because the BQL limit is stuck at 2
-packets (because the completed queue is always called with 1 packet
-and not in a interrupt/timer with multiple packets...).
+Obviously this whole approach does not work, as it causes the section
+to get freed once set goes out of scope.  Just learned the hard way,
+that I had not thought this through well enough...
+
+Regards,
+Jens
+-- 
+Jens Remus
+Linux on Z Development (D3303)
+jremus@de.ibm.com / jremus@linux.ibm.com
+
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
 
