@@ -1,21 +1,21 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E55346784
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D2B346791
 	for <bpf@vger.kernel.org>; Thu,  7 May 2026 21:30:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778189455; cv=none; b=qgADptjVG0/W5c0oQQ+IhRdulpBwMe0RCrCjqIUUQnMiuZfDBGz/wy5HNfUuu+tIGbKzc+SyBijSjF0g4mc3WS3IXmbhFR07ygZKxDT2A1x7k8kD6J3d+bdILDm1A6WH4YbvhVCN1IyBCh4BfXDOb76jq7s4nGOnDSbFpjHkOfA=
+	t=1778189455; cv=none; b=JHIwVYkardCxiwmjcQqVC4JfX+oiLgVeeLFjT72/cq+9BC75+rCRoEEqKZNL9M8uODXlMdyMIKgho+FVW2TM9eWYlOX2bc+47VqymhMHPQs6cP9dE0RexYpmq4gPajsOALccCL+pbyG/Op7q0gvazEUlcjP7NYbgza5jMFMys5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1778189455; c=relaxed/simple;
-	bh=5JvoczMaY0wKBBfieT/56bYEt9jyMXGN7f0Jacj/PfM=;
+	bh=Jqlu9UdVuuIIOu0y8iaGcJJWRbLLrm7D33Tv5XHBQTo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bH+AlambSMjl8WUPsGD88kE89FwDodZR1OZuxQVvjdzr2TN7675+UrZMZ3aNG8yYQMi6McogYobYeaMWGqGkV16eg8CO4PltNtQXlCKpwXnZA0SSUtkH892lpwCkfYkej/C79CTExQskzDF+4zYy7cStgu3CK4Sv9XIaNJYRpVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+	 MIME-Version; b=CfXO3iBtW4zBzB2DV4OUbRKmJ4BTOqJ+6mmWI0VoLWyCqJo4p5rj8Vu+f2GCa79pMt+wKgKVsL0EOFbYWDqtb2aSf7vAHvG+c1eqcJHo9i48zYHQCLCH7h/Emro4lTNXUHn3fYCabFDoQY4W5LHOcPS3gs0KAmYPeGgOwr40Lyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 8230492BAA51E; Thu,  7 May 2026 14:30:44 -0700 (PDT)
+	id 65E3892BAA4E9; Thu,  7 May 2026 14:30:39 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,10 +23,11 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v2 12/23] bpf: Enable r11 based insns
-Date: Thu,  7 May 2026 14:30:44 -0700
-Message-ID: <20260507213044.1130883-1-yonghong.song@linux.dev>
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>
+Subject: [PATCH bpf-next v2 11/23] bpf: Prepare architecture JIT support for stack arguments
+Date: Thu,  7 May 2026 14:30:39 -0700
+Message-ID: <20260507213039.1130658-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260507212942.1122000-1-yonghong.song@linux.dev>
 References: <20260507212942.1122000-1-yonghong.song@linux.dev>
@@ -38,45 +39,71 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-BPF_REG_PARAMS (r11) is used for stack argument accesses and
-the following are only insns with r11 presence:
-    - load incoming stack arg
-    - store register to outgoing stack arg
-    - store immediate to outgoing stack arg
+Add bpf_jit_supports_stack_args() as a weak function defaulting to
+false. Architectures that implement JIT support for stack arguments
+override it to return true.
 
-The detailed insn format can be found in is_stack_arg_ldx/st/stx()
-helpers. After this patch, stack arg ldx/st/stx insns become valid
-for kernel and these insns can be properly checked by verifier.
+Reject BPF functions with more than 5 parameters at verification
+time if the architecture does not support stack arguments.
 
-The LLVM compiler [1] implemented the above BPF_REG_PARAMS insns.
-
-  [1] https://github.com/llvm/llvm-project/pull/189060
-
+Acked-by: Puranjay Mohan <puranjay@kernel.org>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/verifier.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ include/linux/filter.h | 1 +
+ kernel/bpf/btf.c       | 8 +++++++-
+ kernel/bpf/core.c      | 5 +++++
+ 3 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 4827df9f817c..e208807e7995 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -18004,11 +18004,12 @@ static int check_and_resolve_insns(struct bpf_v=
-erifier_env *env)
- 		return err;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 918d9b34eac6..a515a9769078 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1184,6 +1184,7 @@ bool bpf_jit_inlines_helper_call(s32 imm);
+ bool bpf_jit_supports_subprog_tailcalls(void);
+ bool bpf_jit_supports_percpu_insn(void);
+ bool bpf_jit_supports_kfunc_call(void);
++bool bpf_jit_supports_stack_args(void);
+ bool bpf_jit_supports_far_kfunc_call(void);
+ bool bpf_jit_supports_exceptions(void);
+ bool bpf_jit_supports_ptr_xchg(void);
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index ec3fb8c8f4ee..bf83b737d55c 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -7886,8 +7886,14 @@ int btf_prepare_func_args(struct bpf_verifier_env =
+*env, int subprog)
+ 			MAX_BPF_FUNC_ARGS, tname, nargs);
+ 		return -EFAULT;
+ 	}
+-	if (nargs > MAX_BPF_FUNC_REG_ARGS)
++	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
++		if (!bpf_jit_supports_stack_args()) {
++			bpf_log(log, "JIT does not support function %s() with %d args\n",
++				tname, nargs);
++			return -ENOTSUPP;
++		}
+ 		sub->stack_arg_cnt =3D nargs - MAX_BPF_FUNC_REG_ARGS;
++	}
 =20
- 	for (i =3D 0; i < insn_cnt; i++, insn++) {
--		if (insn->dst_reg >=3D MAX_BPF_REG) {
-+		if (insn->dst_reg >=3D MAX_BPF_REG &&
-+		    !is_stack_arg_st(insn) && !is_stack_arg_stx(insn)) {
- 			verbose(env, "R%d is invalid\n", insn->dst_reg);
- 			return -EINVAL;
- 		}
--		if (insn->src_reg >=3D MAX_BPF_REG) {
-+		if (insn->src_reg >=3D MAX_BPF_REG && !is_stack_arg_ldx(insn)) {
- 			verbose(env, "R%d is invalid\n", insn->src_reg);
- 			return -EINVAL;
- 		}
+ 	if (is_global && nargs > MAX_BPF_FUNC_REG_ARGS) {
+ 		bpf_log(log, "global function %s has %d > %d args, stack args not supp=
+orted\n",
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 6f94b0ef3659..5d8932f5fb38 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -3217,6 +3217,11 @@ bool __weak bpf_jit_supports_kfunc_call(void)
+ 	return false;
+ }
+=20
++bool __weak bpf_jit_supports_stack_args(void)
++{
++	return false;
++}
++
+ bool __weak bpf_jit_supports_far_kfunc_call(void)
+ {
+ 	return false;
 --=20
 2.53.0-Meta
 
