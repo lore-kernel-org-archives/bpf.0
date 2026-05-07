@@ -1,125 +1,243 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B3D30171A
-	for <bpf@vger.kernel.org>; Thu,  7 May 2026 12:55:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044983F65FB
+	for <bpf@vger.kernel.org>; Thu,  7 May 2026 13:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778158549; cv=pass; b=PUORDwRq9qYDtpNtcwelyBLIywYTZcSGq0naAkXNSu/atMijZ1ON38FqfD5bdi+kDAcsma5E4+wqWZcgpQzF/cHMY5TtlkXD0d1ViYUNCAMBBJdCqDQU2E5dWtbKglwuvsJ+6nWPq4kIA8a2poxxdV7ror2MJBQaE8TWKvEHR6Y=
+	t=1778159969; cv=pass; b=RNJVjQL4EJYy2V39tcdzb/MdzN+KN7Hin7lB0MA0/SXpADIQtkZGaxNOKWwsmNA8ngPl+Elbpn2qgc4u6mVDb9bmiOW/RdLdVKXZjllghoEQP5CgC4bwWUY2gNFUT71D8CJ9ICO7rRmjD3I5NlpYWtXEnZHdclfperStJlgpqas=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778158549; c=relaxed/simple;
-	bh=4X6FHQLnWfxk2g//RhR5g1H/TpYP7f0F2v3qSNZn3ss=;
+	s=arc-20240116; t=1778159969; c=relaxed/simple;
+	bh=1F2+tW/N9SM7xS8wfCjqkfgFfUaRfsYxVVc2jH3J+AI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WhJf6I+Q4cCGVG7nvHMyV1QZgOt4ZgH13u1q9CG/DPODP4CAqEN643RdWsKxOugUeSamWViOAwGdRKtwPoIpuTBGpmEBGEZMhsd8PFZtLyPnD7jwBIsbc51yVmGxFNZStiMfx9t7uYbIStez08GEf14Wowia7mHfo6F5urufhIU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GRoz2nd1; arc=pass smtp.client-ip=209.85.128.169
+	 To:Cc:Content-Type; b=bUBNWMjFXkmFV9IztoByLgkGnJ4O+XuDfI+KaMXanFxK24bNy1b5Wvin0w/4GNC5Ux2DURLTriITLcg0kXpLquWQeOPZZXWm3RVkJn8rep0qmu0/K85yO7PKt1MKRp9Em0csRrlPS9JFwYBkxsxaFrO9C0e8LBXwHSB1A3LcN40=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nIAoWlF0; arc=pass smtp.client-ip=209.85.128.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GRoz2nd1"
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-7bf02533706so7494737b3.0
-        for <bpf@vger.kernel.org>; Thu, 07 May 2026 05:55:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778158547; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nIAoWlF0"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-7b37d84a6b3so7640027b3.2
+        for <bpf@vger.kernel.org>; Thu, 07 May 2026 06:19:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778159967; cv=none;
         d=google.com; s=arc-20240605;
-        b=N9jE1G1UKLAwOUmQcCilBnWSKobDE9yoTh87+M4FQW9zcbCCON+kMGWbUs6V/ZiRPv
-         NGlCgWeBKucF+QJXVroeiYAnJiAwlA4ZZjSaTmsgicSpvyr1N9DKyfMPi2CVOZl1OaFE
-         gPJNgxmtMvQu/VyZA59Etu2Vi0JmXUI/9aoxXnvTMgyzy+Z4OpHmRAJX3YqCNlXMcMnc
-         4QSbMWCxpOo59+uQvnfiyn6+l2L0VCteEO+299LwDGyovYgjgp76gRIXMEKOBA45mm6C
-         8YTP3EVLHjCQB9FGlYzUTlytytxOLWAHPRdQXMMuNNkmWvdwcamncJmSfg1PSWrJ0gLo
-         hhvQ==
+        b=FrmrgDcqVjippxj9ZY5FFsu+sE27oqxSayttqYFPu+B+xIslnRW8qymVlX2bvxuTll
+         ovJMwiQEr+JETW1nZLvSZUKn4nE1mpQdqkLIC5zfhJXsq0yuyXu2f5YzKIKeAPZIOV7O
+         gONXQoLdMu6rGOwzgJZDdbBXDgnXaghCHvNQ/NjxF4fVaFnOzqH30nDOiN/dJP5iAurH
+         NP8BpsClIFKX7H4ftJgp+yMOSyxMJxEjf/VIZ4qSh9pLTVvmQkP/id0y1cqRRQkRhUL3
+         vB4ZMRucc6pWlIeBiW3HtNyjOPcNn0AHYfVhyzpPOuO4/easU6nX8Ccp+pkK+4KmRDus
+         rpwA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=p3xGu5RBGL9IoizFlhBR8QgmO552FaQukua12pxcpWQ=;
-        fh=7pQPbM1mTaKjUbZ75iTISJbipA72wUVZwkXXTYMxzFw=;
-        b=CZ1C2A1gV8+v3Ytgo9Uy7LKv/pmyw++iVb6nNtNs8f9lna6xNL2nO7693M91Wh859+
-         TON4PE2v3WZwL0dll9xdXVZB9kTWi5zpl7IVCaEPLKKHLwUJJoTxGYQlBLc7KoJcEujv
-         T2cTzzsEz9nPuDqTMPYqvGyREM9aHA1CTBImDA1kjVMIr0rbj8oY3PQFOlmmayIF4qYk
-         Hb5afT7eLRVYUGEp8xpPfyk4SjacHqwdOkejN2rHi4m9MgePna0sFOlhBVdC3pbXyLTc
-         1g3xmZ3qodOOxhfNw+kuMGjyODtVi3NWmISiZyCNSct79QtIZaXqXohr2aYkw5DNxYFo
-         g4FQ==;
+        bh=uJsNWGNnboxuwp5GaleyBNu7wVTMMyud/VuzWCCNevo=;
+        fh=C9cUJVDXM2vMBWxDNvPaOJa0fxo4thp2O2GpWUH7MA0=;
+        b=g6wNFlCr/CN5MxRF4/h1YoRgVHNVD39R91jlTxOlaDmJY0lYFypQa3G7Rnb0iVRusw
+         2r+jl7FjgC4Mm2i7zKCVss0ajVnkKYrf3xmSz+KUg/ZMpJjWCuGVldgbnbArbv886lwt
+         898g3Jos0gWjRDP4E0Cp/8uNblGn3Rs5VY77LsPvCSwpV22KXDST5PxrN0xvqTPgTK8A
+         uHr2/qNLorobT+cIsnqDxe8ntpgchP6hudW2px6wkZJY1cSOZHU4OUovnULOC0czPlNh
+         Clw4kkiIE3ObHw1lBMFfsKJkm6uxqJQLmBut7A8kwM4t8EaP1hooildNQZmtAK02L7+p
+         9GhA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778158547; x=1778763347; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778159967; x=1778764767; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p3xGu5RBGL9IoizFlhBR8QgmO552FaQukua12pxcpWQ=;
-        b=GRoz2nd1IBxfeyrOMtRS8A/8fg4genz7Eudt5NQdPVH0SKv/ybR3PxgirJtwcY9Le2
-         30CX/zOhT561ZQH/v94/B3lAaHWcrOb7zWwi2imnTc5BJUtuMHT8QXjU3mAmPmtfmHEJ
-         3msW/c52/jos34xPOuMrGz52iSbfh4G8gmhkVdE09urYajW2HGS1Aif2qksIFAD+Db3i
-         Sm8jLuVq7OWwdbZF4l9BvBVs5bFlrrqkJQmoBHJIR2D4CJ8sDKD9AynE0ANwlH0Tstei
-         pyGvOHHk8GPeKCbawaD14/aQ9daPO/Jpm9a80xHL8eownm1zAfRtaSiR54r9PWxgzsst
-         Fxow==
+        bh=uJsNWGNnboxuwp5GaleyBNu7wVTMMyud/VuzWCCNevo=;
+        b=nIAoWlF0QAnkrmo+DbQuRx2v2fjPTRzX9f8t4+v8oTP8BbOAE7IFW9WHNi957d1xwv
+         4Q4Ik34I3B3FWY+Cgf/O8eiHbVfS9378YZq4Q7OrjWtOtZSNHrTeBX2zyedzvqvTTUNe
+         rBHnjQS6jBRWe4gmZbHgtuFJTu68GXZ+n8rctyxKqK6MlL7BJp9Co9rbh6+OsEpfgJp2
+         gHfqhxHqbpZ5VaWhENFZDFRos1m5pECJcCPjItAN6OHE4Mc0JvHZeedxFFv7ORpZuz+f
+         mkT/62N3oR2nD0YaRyL8TiZjsTf1L26Vx3Q9c00xeCO7oalFsJJdqTCbNSiX5txLDQC7
+         8Fmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778158547; x=1778763347;
+        d=1e100.net; s=20251104; t=1778159967; x=1778764767;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=p3xGu5RBGL9IoizFlhBR8QgmO552FaQukua12pxcpWQ=;
-        b=m4WA6SxnN2wITiLphT3cWMdfdX2+qrKaHQnXybIdn1Mj3yv7W0Sgw5sIpUfoShxBbF
-         cAIQQj3s9ucLTPm6evwOXCSEKWaRpiNiPiMM8KEYgS0q9wo8P1r+xF7CM2saS1CEeJHU
-         qK02+0DtwsjLLAQz868wBAw5RQa01RW2PA+fuCMk9vKjOwKoqCGpzmtrcpolyWcmdzvC
-         9t+SXVjziTFqQpJgeTYE60EQ+nGTMdM8ryvsvsu8Pb8ZxAJ3+2TxZpmg69vuK1PinfMY
-         w6n6spkOr1VfLSaQkkeW/7loIFgJC/48AwFGiDEfm0FOMlGamSwtb5CcVfdkt5Uauj87
-         Ymag==
-X-Gm-Message-State: AOJu0YwWfECZ8sjVgpl7SZsQ6LGf2F9quI35yzOaNWAYF0E42VwBk21k
-	q0OeAb+8JWQ7iOwblygYmkIYCyGyeMnwjXVTd2FzZzzEstOWdw4/M8efEv91zdGnptTVWpsnQnv
-	OQxxvKb57QpBiiGNFcBRhumvKByCSwDY=
-X-Gm-Gg: Acq92OE1FMIyED+QwN3Abn8eeoQuW5H/HDa3hOKx0+77ssggApAtDM8KD03E6SgLtnI
-	wPGeYyNJg93wV2QHD7BMw3AniOcLglXwMsNVYnvNL0upS1/O7CANJkgzdh1FMVugYqIHcuaI7A5
-	fMblchXdD2bnLvHU2JollUYcsnebFeWI348Lih7Wxa+zVXN18PIZVaQl55l5wbZgWoJ65cIQ4Yd
-	py7X2joPBHJX+w8xvOBQtUQ3rwtDGRG4YCSWKx4BTQevrv4n/+YD/frWEjqQ/o0qPRGzAXa9oL1
-	1bsQyvxDdlLsibr/JkY=
-X-Received: by 2002:a05:690c:6101:b0:7bd:95d1:ed51 with SMTP id
- 00721157ae682-7bdf5e9bf09mr83497147b3.28.1778158547307; Thu, 07 May 2026
- 05:55:47 -0700 (PDT)
+        bh=uJsNWGNnboxuwp5GaleyBNu7wVTMMyud/VuzWCCNevo=;
+        b=J9HJkWiSX0kl4k+bBnI3rx0q8ucig1ugSB3KV+PYAMsTsWXnks/S2r8yKFy4ii/9Fg
+         Lc7yg58hklWmC0g06paBK8aMFPKY6IrKc5v/zMwaYemRQodvc/HNFVFU7TVVig1S2HnF
+         g0E7vc3wl0IGMcFThZfUyDKqoHN49xkuuqnoalsyNHelFIIfsfN1d9ZFzsoQvaCvIKLr
+         eQLcAP1GyRgFeppcbZvYJCYij+jqpf5c+moddv8Fb2HQO0PX5FL9RFhDKi4eE3ejQvk/
+         D7b+bU3hSj6lS0dkYYjcICSOFoHrXF+gCHLRkRGUUkmpPcx/ahVfruaFQPJIZT0Pk7/I
+         3IcA==
+X-Forwarded-Encrypted: i=1; AFNElJ8jdnNM/YqKUT4gz4NXke1qfGPYyDOw1wjl1R4PqKy7nFJFvvPMTMCSlfI0F0Ev4JsLACM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxaZ68FZtn0rmDK/1AN91SI0/X3d4dBmUMZZjRcodas4LBuXkNI
+	iGc/L8wfW+89vJ0ve0bmmvMDlRSd0XNaa/A8g4yZeoDWHVrFNVOGLMeYV+rYPpTPY0MKQVWjhs5
+	dfB+/icvfOZrsuvE73anj4HyJVTe7CYs=
+X-Gm-Gg: Acq92OETqoY35wBw5GbXIth1sUHyeb2XTXrJc9h1vBK6rNHOZ/nh7mtIjy2zx5veY5u
+	tVcO5dp7LHBfiZimNTl7CrT5J8z5SbC5Z61kNB/U8WCiiTBiPeV2Df9oFh/kyUkp++x9g2eXC4N
+	1ZATzqeAzpX3T2NcT7M4PS1osZRK5M2Yo8G95y7lnoXsDY9MQ6SDUXUa8GqANDgSIRVE1MNT3lP
+	+XWJkibmf0g33nccO+iS5eqtL5LqXzFkcxrVeACsHAuakn0Fzi1y7do+w6/wfUk6H6sQv4JtQX6
+	CCeBCn4431se1oewNH0r3B54EnY7NndFSCAmLVAFywb6GbpZjIE=
+X-Received: by 2002:a05:690c:e3e9:b0:7bd:5af9:f0a2 with SMTP id
+ 00721157ae682-7bdf5da8d19mr85075527b3.14.1778159966849; Thu, 07 May 2026
+ 06:19:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260506142709.2298255-8-ameryhung@gmail.com> <20260506224833.71FC4C2BCB0@smtp.kernel.org>
-In-Reply-To: <20260506224833.71FC4C2BCB0@smtp.kernel.org>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Thu, 7 May 2026 14:55:35 +0200
-X-Gm-Features: AVHnY4LhQWpxqATck-XP8OifpQI6HAh1GPN_0ZQbGDq937QCrpiD455I4L60OU0
-Message-ID: <CAMB2axNQ+W7OUa8vkuedT7hGebn0TS=-aA9FJd+ZvsFCWE1+sQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 07/12] bpf: Unify referenced object tracking
- in verifier
-To: sashiko@lists.linux.dev
-Cc: bpf@vger.kernel.org
+References: <20260503165024.1526680-1-vernon2gm@gmail.com> <CALOAHbBx6GuZjj9_EdrAPCsiLJekAiqOVsWQ0muNJh18Nxaqtg@mail.gmail.com>
+ <CACZaFFPXo_f_2M7y4NfQ=sWddS4Kwo5guFTqZcLmm4Z8COWocQ@mail.gmail.com>
+In-Reply-To: <CACZaFFPXo_f_2M7y4NfQ=sWddS4Kwo5guFTqZcLmm4Z8COWocQ@mail.gmail.com>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Thu, 7 May 2026 21:18:50 +0800
+X-Gm-Features: AVHnY4LaEHa2dX9PW99UK0yFlSgEhPhckpxDi__PrvtTYbMZ_56jvjXDiqmJ4Sc
+Message-ID: <CALOAHbDQyUARbWudg3e94p7QyUF3Jgi3Y+NgPiSjfw=euENsjg@mail.gmail.com>
+Subject: Re: [PATCH 0/4] mm: introduce mthp_ext via cgroup-bpf to make mTHP
+ more transparent
+To: Vernon Yang <vernon2gm@gmail.com>
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+	roman.gushchin@linux.dev, inwardvessel@gmail.com, shakeel.butt@linux.dev, 
+	ast@kernel.org, daniel@iogearbox.net, surenb@google.com, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	baohua@kernel.org, lance.yang@linux.dev, dev.jain@arm.com, 
+	Vernon Yang <yanglincheng@kylinos.cn>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 6, 2026 at 11:48=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
-> >               }
-> >               /* Track parent's id if the parent is a referenced object=
- */
-> > +             if (ref_obj && ref_obj->ref_obj_id) {
-> > +                     if (ref_obj->cnt > 1) {
-> > +                             verifier_bug(env, "function expects only =
-one referenced object but got %d\n", ref_obj->cnt);
-> > +                             return -EFAULT;
-> > +                     }
-> > +                     parent_id =3D ref_obj->id;
-> > +             }
+On Thu, May 7, 2026 at 8:51=E2=80=AFPM Vernon Yang <vernon2gm@gmail.com> wr=
+ote:
 >
-> Since ref_obj->cnt is determined by the number of referenced arguments
-> provided by the BPF program, is it possible for a user to intentionally
-> trigger this verifier_bug() by passing multiple referenced objects?
+> On Thu, May 7, 2026 at 11:35=E2=80=AFAM Yafang Shao <laoar.shao@gmail.com=
+> wrote:
+> >
+> > On Mon, May 4, 2026 at 12:52=E2=80=AFAM Vernon Yang <vernon2gm@gmail.co=
+m> wrote:
+> > >
+> > > From: Vernon Yang <yanglincheng@kylinos.cn>
+> > >
+> > > Hi all,
+> > >
+> > > Background
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > >
+> > > As is well known, a system can simultaneously run multiple different
+> > > scenarios. However, THP is not beneficial in every scenario =E2=80=94=
+ it is only
+> > > most suitable for memory-intensive applications that are not sensitiv=
+e
+> > > to tail latency. For example, Redis, which is sensitive to tail laten=
+cy,
+> > > is not suitable for THP. But in practice, due to Redis issues, the
+> > > entire THP functionality is often turned off, preventing other scenar=
+ios
+> > > from benefiting from it.
+> > >
+> > > There are also some embedded scenarios (e.g. Android) that directly u=
+se
+> > > 2MB THP, where the granularity is too large. Therefore, we introduced
+> > > mTHP in v6.8, which supports multiple-size THP. In practice, however,=
+ we
+> > > still globally fix a single mTHP size and are unable to automatically
+> > > select different mTHP sizes based on different scenarios.
+> > >
+> > > After testing, it was found that
+> > >
+> > > - When the system has a lot of free memory, it is normal for Redis to
+> > >   use mTHP. performance degradation in Redis only occurs when the sys=
+tem
+> > >   is under high memory pressure.
+> > > - Additionally, when a large number of small-memory processes use mTH=
+P,
+> > >   memory waste is prone to occur, and performance degradation may als=
+o
+> > >   happen during fast memory allocation/release.
+> > >
+> > > Previously, "Cgroup-based THP control"[1] was proposed, but it had th=
+e
+> > > following issues.
+> > >
+> > > - It breaks the cgroup hierarchy property.
+> > > - Add new THP knobs, making sysadmin's job more complex
+> > >
+> > > Previously, "mm, bpf: BPF-MM, BPF-THP"[2] was proposed, but it had th=
+e
+> > > following issues.
+> > >
+> > > - It didn't address the issue on the per-process mode.
+> > > - For global mode, the prctl(PR_SET_THP_DISABLE) has already achieved
+> > >   the same objective, there is no need to add two mechanisms for the
+> > >   same purpose.
+> > > - Attaching st_ops to mm_struct, the same issues that cgroup-bpf once
+> >
+> > Hello,
+> >
+> > The primary hurdles preventing BPF-THP from being upstreamed are:
+> >
+> > - Uncertainty regarding the stable API
+> >
+> >   It remains unclear whether the following API is sufficient for
+> >   BPF-THP requirements:
 >
-> Since verifier_bug() expands to BPF_WARN_ONCE(), triggering a warning
-> via unprivileged or user-controlled input could be problematic if
-> panic_on_warn is enabled.
+> Thank you for pointing this out. I will add it to this issue list in
+> the next version.
 >
-> Would it be safer to gracefully reject the program using verbose() and
-> returning -EINVAL, similar to how it is handled for release kfuncs earlie=
-r
-> in this patch?
+> At the same time, I also encourage everyone to actively provide
+> relevant real workload scenarios. I will conduct related analyses and
+> develop the mthp_ext to address them, so we can determine which ABI
+> can satisfy the BPF-THP requirements.
+>
+> >   unsigned long
+> >   bpf_hook_thp_get_orders(struct vm_area_struct *vma, enum tva_type typ=
+e,
+> >                                             unsigned long orders)
+> >   {
+> >       return orders;
+> >   }
+> >
+> > - Ongoing integration of cgroups and struct-ops
+> >
+> >   Work is still in progress to integrate cgroup support with
+> > struct_ops (see also
+> > https://lore.kernel.org/linux-mm/87cy439x8a.fsf@linux.dev/).
+> > We should wait for this infrastructure to land before introducing
+> > new cgroup-based struct_ops.
+>
+> This work can be carried out in parallel with integrating cgroup
+> support with struct_ops. I will focus on addressing real workload
+> scenarios to further clear/stabilize the BPF-THP ABI.
+>
+> > >   faced are likely to arise again, e.g. lifetime of cgroup vs bpf, dy=
+ing
+> > >   cgroups, wq deadlock, etc. It is recommended to use cgroup-bpf for
+> > >   implementation.
+> > > - The test cases are too simplistic, lacking eBPF cases similar to re=
+al
+> > >   workloads such as sched_ext.
+> > >
+> > > If I miss some thing, please let me know. Thanks!
+> >
+> > BTW, it would be better to include the original authors in the CC
+> > list, especially since their work is cited in your commit message. ;)
+>
+> OK, I will CC the relevant authors in the next version.
 
-Ack. Will change to verbsoe().
+Hello Vernon,
 
->
-> This same pattern appears in a few other places introduced by this patch:
+I believe it would be best to hold off until David provides guidance
+on the future direction. While I am not currently active on BPF-THP,
+we are still looking for the right opportunity to upstream it. The
+primary difference is that your implementation is cgroup-based;
+however, we also plan to switch to that approach once Roman=E2=80=99s work
+lands.
+
+I don't mean to imply that BPF-THP is solely my project, but I suspect
+you will eventually arrive at a similar implementation to what I=E2=80=99ve
+developed. So far, I haven=E2=80=99t found a more efficient API than the
+following:
+
+  unsigned long
+  bpf_hook_thp_get_orders(struct vm_area_struct *vma, enum tva_type type,
+                                             unsigned long orders)
+  {
+       return orders;
+  }
+
+--=20
+Regards
+Yafang
