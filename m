@@ -1,160 +1,179 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DCA480DE4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048C847CC8C
 	for <bpf@vger.kernel.org>; Thu,  7 May 2026 19:17:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778181478; cv=none; b=lkte4W1U2geL+t4+NEul8BZQOgGvi5USnlzOKNXu/ANM9w1xGrQYet4QrVrjwbh8KHC8i5nPwr6Ys+mtsDmzX3ppF9qCtLpAhhy1V6fdocmwNIotbZAfN4NhjZ6S8pKBQh7ZMsAANCpDIINQLaoF2qdt156JL1/yhCr+rZiGvSg=
+	t=1778181479; cv=none; b=Vq+hsrmQ5cQfEOVv5MM0rRfHaDwUzkdMVOpLm6EMI18oVApA2GzP7eyCmTSe0h4yKrxz7TlmoGTrPIR2i3SDb5vtnRyV2HudOpfLBqCAv7WGMM/XyhnlHSaeft+lmrxZ0r5WVALpOLJWdjDxhdPgJUBo5W6TFg2ySaobG2TgCP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778181478; c=relaxed/simple;
-	bh=fEeOncEB/h6WZVee5J9vud19uEl0GME5CyLpW+8efvI=;
+	s=arc-20240116; t=1778181479; c=relaxed/simple;
+	bh=SxfNm5ObvKkgMCn8a2JRXHvc9MrfPXpX+YCd/QzvR3Y=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=FpeRknfz9Lpc6yQjKqpHqs0uHIx5k38WOiiF7wR+JT4t2SRh1UllufLYnoxOpQ2Z8lmQLEdwU6L+/a/S0VFGjVh+7BEsFyEVcP9FB/VP5JB2N1HbgLtafpp4gJwdmsjPgLUWUGA+BXihFwT6/s3jzM/Sa6dh0WlxM8fH+qPnQpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GlpJ6efs; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=P/RVE5jbbJ+QDbZMFUycpnZUHNESJxWucXE0rS3gCSJEXNCHch84GIvLnL3RoYdkJvUbudSwjeWzk01gIqdl/fyu0SsV3RoDyjFde/sbdLknNrE0St+3khbHeTEt9v6DfX/LvTWx1p4jFQAI7HPuc4B6kch8ClmKEWlb9FHvhc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LAuxuxUe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GlpJ6efs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9360C2BCB2;
-	Thu,  7 May 2026 19:17:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LAuxuxUe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A6ACC2BCB2;
+	Thu,  7 May 2026 19:17:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778181477;
-	bh=fEeOncEB/h6WZVee5J9vud19uEl0GME5CyLpW+8efvI=;
+	s=k20201202; t=1778181478;
+	bh=SxfNm5ObvKkgMCn8a2JRXHvc9MrfPXpX+YCd/QzvR3Y=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=GlpJ6efsk2zbpra/aTcta7SIrN9Zesxmlmh5aDaaErvzjhC/L0xsmq6ZfPrV34oRe
-	 3Wd/Vb7QWsnOdMmdy+Ga4n55sRc1xpqAqH8pKiwrvkPeabDSNVyApacMeAYBK6jtF5
-	 2jzXAfbNeSKTjrngrFhzOBRH3qrA8SVJtdHO9AnEj0BNdKtr/pvGimoscTOUPhtphO
-	 9VdZ74OwAgUKTPbKQkEMe7jWQ/NRHMdRctdTmQ4WODNujhskwE/ql9FXOr9o8RUmr1
-	 L3/PQgPNRGdkrfznx4fM8Sek/Nzye9CjP3CeLk5dks5KbwZqaIDS4AfleGkswRddGD
-	 LU1kN5qDh/OtQ==
+	b=LAuxuxUejGpOYb5QZEbCx+oZjMDRG+UGhykd3v6Z2zyFcM/JsBj40Pi30gHNTeygf
+	 DV6qKMIeSw4ZC8aOSNseQR8A2N84Kj+THvo+17xEy03ojbz8wdsFu8pGh3tj744hJv
+	 QatRRDkvMbaPMbnZfOeiz7J99VCLe2tBZuqXJ59dQ7m9z/gBuKIfOCPYwLKGccQMuD
+	 ppuyfmvzByqOoxfkfiHXhmsYPV1nac+Xz5sJGUx3+/01P69FWilqKEuf4yfGQ29hFf
+	 zkN0TNeX8Dv7dNbWSUgb09bVOYKRUf4KEjJn+lhzZuNHEC41fCnhGg3n6XVd1unIp3
+	 f/OQe6ef9jQkA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v9 3/7] net: bcmgenet: add basic XDP support
- (PASS/DROP)
+Subject: Re: [PATCH net-next v9 4/7] net: bcmgenet: add XDP_TX support
 Reply-To: sashiko@lists.linux.dev
 To: "Nicolai Buchwitz" <nb@tipi-net.de>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260506095553.55357-4-nb@tipi-net.de>
-References: <20260506095553.55357-4-nb@tipi-net.de>
+In-Reply-To: <20260506095553.55357-5-nb@tipi-net.de>
+References: <20260506095553.55357-5-nb@tipi-net.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 07 May 2026 19:17:57 +0000
-Message-Id: <20260507191757.C9360C2BCB2@smtp.kernel.org>
+Date: Thu, 07 May 2026 19:17:58 +0000
+Message-Id: <20260507191758.7A6ACC2BCB2@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
-- [High] Unconditionally applying CHECKSUM_COMPLETE using the original hard=
-ware checksum after an XDP program has executed.
-- [High] Calculation of pkt_len can underflow when receiving short frames w=
-ith crc_fwd_en enabled, leading to massive out-of-bounds SKB lengths.
+- [High] Deterministic packet drops on XDP_TX because the dedicated TX ring=
+ capacity (32) is smaller than the NAPI budget (64).
+- [High] XDP_TX corrupts XDP metadata and copies uninitialized memory into =
+the `xdp_frame`.
+- [Medium] XDP TX completions can stall indefinitely, leading to page pool =
+exhaustion.
+- [Medium] Severe lock and MMIO contention across multiple RX NAPI contexts=
+ sharing a single XDP TX ring.
 --
 
-commit a85e13efa285d96e84232f2f89b59157c43c2cf5
+commit 3ad0ff68731af021753c8986d28477830093832b
 Author: Nicolai Buchwitz <nb@tipi-net.de>
 
-net: bcmgenet: add basic XDP support (PASS/DROP)
-
-This commit adds basic XDP program attachment via ndo_bpf and executes
-XDP programs in the RX path. It handles building SKBs from the xdp_buff
-on XDP_PASS and returning pages to the page_pool on XDP_DROP.
-
-> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net=
-/ethernet/broadcom/genet/bcmgenet.c
-> index 5bedc18685b09..ee1d4ecc2b874 100644
-> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+    net: bcmgenet: add XDP_TX support
+   =20
+    Implement XDP_TX using ring 16 (DESC_INDEX), the hardware default
+    descriptor ring, dedicated to XDP TX for isolation from SKB TX queues.
 
 [ ... ]
 
-> @@ -2413,30 +2471,34 @@ static unsigned int bcmgenet_desc_rx(struct bcmge=
+> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net=
+/ethernet/broadcom/genet/bcmgenet.c
+> index ee1d4ecc2b874..f1e515526787a 100644
+> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> @@ -49,8 +49,10 @@
+> =20
+>  #define GENET_Q0_RX_BD_CNT	\
+>  	(TOTAL_DESC - priv->hw_params->rx_queues * priv->hw_params->rx_bds_per_=
+q)
+> +#define GENET_Q16_TX_BD_CNT	32
+
+Will this cause deterministic packet drops on XDP_TX? The NAPI budget is
+typically 64. Since the RX poll reclaims XDP TX completions only once at the
+beginning of the NAPI cycle, a burst of more than 32 XDP_TX actions would
+exhaust the TX ring and drop subsequent packets in that burst.
+
+>  #define GENET_Q0_TX_BD_CNT	\
+> -	(TOTAL_DESC - priv->hw_params->tx_queues * priv->hw_params->tx_bds_per_=
+q)
+> +	(TOTAL_DESC - priv->hw_params->tx_queues * priv->hw_params->tx_bds_per_=
+q \
+> +	 - GENET_Q16_TX_BD_CNT)
+
+[ ... ]
+
+> @@ -2315,14 +2432,42 @@ static unsigned int bcmgenet_run_xdp(struct bcmge=
 net_rx_ring *ring,
->  			goto next;
->  		} /* error packet */
-> =20
-> -		/* Build SKB from the page - data starts at hard_start,
-> -		 * frame begins after RSB(64) + pad(2) =3D 66 bytes.
-> -		 */
-> -		skb =3D napi_build_skb(hard_start, PAGE_SIZE - XDP_PACKET_HEADROOM);
-> -		if (unlikely(!skb)) {
-> -			BCMGENET_STATS64_INC(stats, dropped);
-> -			page_pool_put_full_page(ring->page_pool, rx_page,
-> -						true);
-> -			goto next;
-> -		}
-> +		pkt_len =3D len - GENET_RSB_PAD;
-> +		if (priv->crc_fwd_en)
-> +			pkt_len -=3D ETH_FCS_LEN;
-
-Can pkt_len underflow here if we receive a short frame?
-
-The RX validation earlier in bcmgenet_desc_rx() only ensures that
-len >=3D GENET_RSB_PAD. If len is less than GENET_RSB_PAD + 4 (ETH_FCS_LEN),
-subtracting ETH_FCS_LEN will result in a negative pkt_len.
-
-When this negative pkt_len is passed to xdp_prepare_buff(), xdp->data_end
-will be set before xdp->data. Later, bcmgenet_xdp_build_skb() calls
-__skb_put(skb, xdp->data_end - xdp->data), which lacks bounds checking and
-converts the negative difference into a very large unsigned integer, causing
-an out-of-bounds SKB length.
-
-> -		skb_mark_for_recycle(skb);
-> +		/* Save rx_csum before XDP runs - an XDP program
-> +		 * could overwrite the RSB via bpf_xdp_adjust_head.
+>  	switch (act) {
+>  	case XDP_PASS:
+>  		return XDP_PASS;
+> +	case XDP_TX:
+> +		/* Prepend a zeroed TSB (Transmit Status Block).  The GENET
+> +		 * MAC has TBUF_64B_EN set globally, so hardware expects every
+> +		 * TX buffer to begin with a 64-byte struct status_64.  Back
+> +		 * up xdp->data into the RSB area (which is no longer needed
+> +		 * after the BPF program ran) and zero it.
 > +		 */
-> +		if (dev->features & NETIF_F_RXCSUM)
-> +			rx_csum =3D (__force __be16)(status->rx_csum & 0xffff);
-> =20
-> -		/* Reserve the RSB + pad, then set the data length */
-> -		skb_reserve(skb, GENET_RSB_PAD);
-> -		__skb_put(skb, len - GENET_RSB_PAD);
-> +		xdp_init_buff(&xdp, PAGE_SIZE, &ring->xdp_rxq);
-> +		xdp_prepare_buff(&xdp, page_address(rx_page),
-> +				 GENET_RX_HEADROOM, pkt_len, true);
-> =20
-> -		if (priv->crc_fwd_en) {
-> -			skb_trim(skb, skb->len - ETH_FCS_LEN);
-> +		xdp_act =3D bcmgenet_run_xdp(ring, xdp_prog, &xdp, rx_page);
-> +		if (xdp_act !=3D XDP_PASS)
-> +			goto next;
-> =20
-> -		}
-> =20
-> -		/* Set up checksum offload */
-> -		if (dev->features & NETIF_F_RXCSUM) {
-> -			rx_csum =3D (__force __be16)(status->rx_csum & 0xffff);
-> +		skb =3D bcmgenet_xdp_build_skb(ring, &xdp);
-> +		if (unlikely(!skb)) {
-> +			BCMGENET_STATS64_INC(stats, dropped);
-> +			page_pool_put_full_page(ring->page_pool,
-> +						rx_page, true);
-> +			goto next;
+> +		if (xdp->data - xdp->data_hard_start <
+> +		    sizeof(struct status_64) + sizeof(struct xdp_frame)) {
+
+Does this headroom check need to account for the metadata size? If headroom
+is tight, shifting the pointers might cause xdp_update_frame_from_buff()
+to fail with -ENOSPC and drop the packet.
+
+> +			page_pool_put_full_page(ring->page_pool, rx_page,
+> +						true);
+> +			return XDP_DROP;
 > +		}
+> +		xdp->data -=3D sizeof(struct status_64);
+> +		xdp->data_meta -=3D sizeof(struct status_64);
+> +		memset(xdp->data, 0, sizeof(struct status_64));
+
+Could this corrupt XDP metadata and copy uninitialized memory?
+
+If the XDP program attached metadata, the physical metadata bytes immediate=
+ly
+precede the original xdp->data. The memset() here spans the exact memory ar=
+ea
+where the original metadata resides, overwriting it with zeros.
+
+Because xdp->data_meta is decremented, it now points to uninitialized
+headroom memory, which xdp_convert_buff_to_frame() would read as the frame's
+metadata.
+
 > +
-> +		/* Set up checksum offload */
-> +		if (dev->features & NETIF_F_RXCSUM) {
->  			if (rx_csum) {
->  				skb->csum =3D (__force __wsum)ntohs(rx_csum);
->  				skb->ip_summed =3D CHECKSUM_COMPLETE;
+> +		xdpf =3D xdp_convert_buff_to_frame(xdp);
+> +		if (unlikely(!xdpf)) {
+> +			page_pool_put_full_page(ring->page_pool, rx_page,
+> +						true);
+> +			return XDP_DROP;
+> +		}
 
-Is it safe to unconditionally apply CHECKSUM_COMPLETE using the original
-hardware checksum after an XDP program has executed?
+[ ... ]
 
-Since XDP programs are allowed to modify the packet headers and payload,
-if the program modifies the packet and returns XDP_PASS, the hardware-compu=
-ted
-1's complement sum saved in rx_csum will no longer match the packet content=
-s.
+> @@ -2548,9 +2693,15 @@ static int bcmgenet_rx_poll(struct napi_struct *na=
+pi, int budget)
+>  {
+>  	struct bcmgenet_rx_ring *ring =3D container_of(napi,
+>  			struct bcmgenet_rx_ring, napi);
+> +	struct bcmgenet_priv *priv =3D ring->priv;
+>  	struct dim_sample dim_sample =3D {};
+>  	unsigned int work_done;
+> =20
+> +	/* Reclaim completed XDP TX frames (ring 16 has no interrupt) */
+> +	if (priv->xdp_tx_ring.free_bds < priv->xdp_tx_ring.size)
+> +		bcmgenet_tx_reclaim(priv->dev,
+> +				    &priv->xdp_tx_ring, false);
 
-This could lead to the network stack detecting a checksum mismatch and
-incorrectly dropping a valid packet. Should the checksum status be cleared
-or set to CHECKSUM_NONE if an XDP program is present?
+If the NAPI budget is not fully consumed, napi_complete_done() is called and
+NAPI exits. Since there is no TX interrupt for ring 16, could XDP TX
+completions stall indefinitely if RX traffic stops? This might leave buffers
+in the TX ring, eventually leading to page pool exhaustion.
 
->  			}
->  		}
+Also, is there a risk of severe lock and MMIO contention here?
+
+Since the single XDP TX ring is shared across all RX queues, every active
+RX NAPI will concurrently evaluate this condition. Since hardware transmiss=
+ion
+takes time, this condition could remain true across multiple concurrent NAPI
+polls. As a result, all active RX queues could simultaneously call
+bcmgenet_tx_reclaim(), heavily contending for spin_lock_bh(&ring->lock) and
+performing expensive MMIO reads.
+
+> +
+>  	work_done =3D bcmgenet_desc_rx(ring, budget);
+> =20
+>  	if (work_done < budget && napi_complete_done(napi, work_done))
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260506095553.5535=
-7-1-nb@tipi-net.de?part=3D3
+7-1-nb@tipi-net.de?part=3D4
