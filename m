@@ -1,21 +1,21 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535E62F8EB6
-	for <bpf@vger.kernel.org>; Thu,  7 May 2026 21:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FFDF332ED0
+	for <bpf@vger.kernel.org>; Thu,  7 May 2026 21:30:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778189414; cv=none; b=kRJEMTcK2wRj0fAcygL9WIK8rl7OGFcB8FD6k/fO9si+MlKwa0h3068lx+GAy+fkitDiWWEp11lfLxNJ/pXGeXWbQ23QhdkUdEKXh1QSIAtIfw+5z9xhwlfJsBNgxwu2Stimp5iLykesUJcbTxLum346J83j7SFw84eMjIHnGSg=
+	t=1778189422; cv=none; b=DPosTCwxxd6q3JlWRg3yYIsvju32YPHds2+E8AhSNPnhYXOrF18Ebwyb9RUN519ePglRUCoKFFwsD7JdD/KPP6XzWFo8x9IwMxI0n+6TgsdzlS5eIKmHbB5O58xVg2Y/vsStpMweAiGCJSL5QNGnqI4EgQHif0e1s9UdLirLBQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778189414; c=relaxed/simple;
-	bh=HqTxb0pavhnBJVGpzFTmsf6vYG3O41G8GTyb39bQSHY=;
+	s=arc-20240116; t=1778189422; c=relaxed/simple;
+	bh=AH8RGFjYrOdYvNocxHqeG+y30wstkTTamfNVZiA7R5Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uFLlrULCruPO2/MOy1otrJniA63UaPY6vSD2+f5qCvtB1155SjBYHJU1SusJm+ld5TqsVMJAO86hBCB1PyMpHuOV96dDPE81wNXaPOuQmYklt1EsctPj4/bcyACBptep2OgJhjBrq97KBELnjXvUTRby4z41yCtt/nJ8OTm+Qxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+	 MIME-Version; b=haqbVUfF9mpE3j9xy5jDWP3pnXAuLxgxAuYqega4bWpB5cyrAvSPRUa9agrpTA0OiKKG8/doL2xc2zegfeuDRfdQ8I5RmHtHxFrjq5u2BRtiIiAPM+RYSS1GlXIucU80uMCYrZQgwo6Eo8TqiYPFnJ23Sx8G9wfE475iOk2Z6Ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id A5DBF92BAA2EB; Thu,  7 May 2026 14:30:08 -0700 (PDT)
+	id C3A8192BAA315; Thu,  7 May 2026 14:30:13 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v2 05/23] bpf: Support stack arguments for bpf functions
-Date: Thu,  7 May 2026 14:30:08 -0700
-Message-ID: <20260507213008.1127429-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 06/23] bpf: Refactor jmp history to use dedicated spi/frame fields
+Date: Thu,  7 May 2026 14:30:13 -0700
+Message-ID: <20260507213013.1128023-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260507212942.1122000-1-yonghong.song@linux.dev>
 References: <20260507212942.1122000-1-yonghong.song@linux.dev>
@@ -36,738 +36,297 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Currently BPF functions (subprogs) are limited to 5 register arguments.
-With [1], the compiler can emit code that passes additional arguments
-via a dedicated stack area through bpf register BPF_REG_PARAMS (r11),
-introduced in an earlier patch ([2]).
+Move stack slot index (spi) and frame number out of the flags field
+in bpf_jmp_history_entry into dedicated bitfields. This simplifies
+the encoding and makes room for new flags.
 
-The compiler uses positive r11 offsets for incoming (callee-side) args
-and negative r11 offsets for outgoing (caller-side) args, following the
-x86_64/arm64 calling convention direction. There is an 8-byte gap at
-offset 0 separating two regions:
-  Incoming (callee reads):   r11+8 (arg6), r11+16 (arg7), ...
-  Outgoing (caller writes):  r11-8 (arg6), r11-16 (arg7), ...
+Previously, spi and frame were packed into the lower 9 bits of the
+12-bit flags field (3 bits frame + 6 bits spi), with INSN_F_STACK_ACCESS
+at BIT(9) and INSN_F_DST/SRC_REG_STACK at BIT(10)/BIT(11).
+But this has no room for an INSN_F_* flag for stack arguments.
 
-The following is an example to show how stack arguments are saved
-and transferred between caller and callee:
+To resolve this issue, bpf_jmp_history_entry field idx is narrowed to
+20 bits (sufficient for insn indices up to 1M), and the freed bits hold
+spi (6 bits) and frame (3 bits) as dedicated struct fields. The flags
+enum is simplified accordingly:
+  INSN_F_STACK_ACCESS  -> BIT(0)
+  INSN_F_DST_REG_STACK -> BIT(1)
+  INSN_F_SRC_REG_STACK -> BIT(2)
+which allows more room for additional INSN_F_* flags.
 
-  int foo(int a1, int a2, int a3, int a4, int a5, int a6, int a7) {
-    ...
-    bar(a1, a2, a3, a4, a5, a6, a7, a8);
-    ...
-  }
+bpf_push_jmp_history() now takes explicit spi and frame parameters
+instead of encoding them into flags. The insn_stack_access_flags(),
+insn_stack_access_spi(), and insn_stack_access_frameno() helpers are
+removed.
 
-  Caller (foo)                           Callee (bar)
-  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D                           =3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
-  Incoming (positive offsets):           Incoming (positive offsets):
-
-  r11+8:  [incoming arg 6]               r11+8:  [incoming arg 6] <-+
-  r11+16: [incoming arg 7]               r11+16: [incoming arg 7] <-|+
-                                         r11+24: [incoming arg 8] <-||+
-  Outgoing (negative offsets):                                      |||
-  r11-8:  [outgoing arg 6 to bar] -------->-------------------------+||
-  r11-16: [outgoing arg 7 to bar] -------->--------------------------+|
-  r11-24: [outgoing arg 8 to bar] -------->---------------------------+
-
-If the bpf function has more than one call:
-
-  int foo(int a1, int a2, int a3, int a4, int a5, int a6, int a7) {
-    ...
-    bar1(a1, a2, a3, a4, a5, a6, a7, a8);
-    ...
-    bar2(a1, a2, a3, a4, a5, a6, a7, a8, a9);
-    ...
-  }
-
-  Caller (foo)                             Callee (bar2)
-  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D                             =3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-  Incoming (positive offsets):             Incoming (positive offsets):
-
-  r11+8:  [incoming arg 6]                 r11+8:  [incoming arg 6] <+
-  r11+16: [incoming arg 7]                 r11+16: [incoming arg 7] <|+
-                                           r11+24: [incoming arg 8] <||+
-  Outgoing for bar2 (negative offsets):    r11+32: [incoming arg 9] <|||+
-  r11-8:  [outgoing arg 6] ---->----------->-------------------------+|||
-  r11-16: [outgoing arg 7] ---->----------->--------------------------+||
-  r11-24: [outgoing arg 8] ---->----------->---------------------------+|
-  r11-32: [outgoing arg 9] ---->----------->----------------------------+
-
-The verifier tracks outgoing stack arguments in stack_arg_regs[] and
-out_stack_arg_cnt in bpf_func_state, separately from the regular
-r10 stack. The callee does not copy incoming args =E2=80=94 it reads them
-directly from the caller's outgoing slots at positive r11 offsets.
-Similar to stacksafe(), introduce stack_arg_safe() to do pruning
-check.
-
-Outgoing stack arg slots are invalidated when the callee returns
-(in prepare_func_exit), not at call time. This allows the callee to
-read incoming args from the caller's outgoing slots during
-verification. The following are a few examples.
-
-Example 1:
-  *(u64 *)(r11 - 8) =3D r6;
-  *(u64 *)(r11 - 16) =3D r7;
-  call bar1;                // arg6 =3D r6, arg7 =3D r7
-  call bar2;                // expected with 2 stack arguments, failed
-
-Example 2:
-To fix the Example 1:
-  *(u64 *)(r11 - 8) =3D r6;
-  *(u64 *)(r11 - 16) =3D r7;
-  call bar1;                // arg6 =3D r6, arg7 =3D r7
-  *(u64 *)(r11 - 8) =3D r8;
-  *(u64 *)(r11 - 16) =3D r9;
-  call bar2;                // arg6 =3D r8, arg7 =3D r9
-
-Example 3:
-The compiler can hoist the shared stack arg stores above the branch:
-  *(u64 *)(r11 - 16) =3D r7;
-  if cond goto else;
-    *(u64 *)(r11 - 8) =3D r8;
-    call bar1;               // arg6 =3D r8, arg7 =3D r7
-    goto end;
-  else:
-    *(u64 *)(r11 - 8) =3D r9;
-    call bar2;               // arg6 =3D r9, arg7 =3D r7
-  end:
-
-Example 4:
-Within a loop:
-  loop:
-    *(u64 *)(r11 - 8) =3D r6;  // arg6, before loop
-    call bar;                // reuses arg6 each iteration
-    if ... goto loop;
-
-A separate max_out_stack_arg_cnt field in bpf_subprog_info tracks
-the deepest outgoing slot actually written. This intends to
-reject programs that write to slots beyond what any callee expects.
-It is necessary for JIT.
-
-Similar to typical compiler generated code, enforce the following
-orderings:
-  - all stack arg reads must be ahead of any stack arg write
-  - all stack arg reads must be before any bpf func, kfunc and helpers
-This is needed as JIT may emit 'mov' insns for read/write with
-the same register and bpf function, kfunc and helper will invalidate
-all arguments immediately after the call.
-
-Callback functions with stack arguments need kernel setup parameter
-types (including stack parameters) properly and then callback function
-can retrieve such information for verification purpose.
-
-Global subprogs and freplace with >5 args are not yet supported.
-
-  [1] https://github.com/llvm/llvm-project/pull/189060
-  [2] https://lore.kernel.org/bpf/20260423033506.2542005-1-yonghong.song@=
-linux.dev/
+No functional change.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf.h          |   2 +
- include/linux/bpf_verifier.h |  37 ++++++-
- kernel/bpf/btf.c             |  14 ++-
- kernel/bpf/fixups.c          |  23 ++++-
- kernel/bpf/states.c          |  29 ++++++
- kernel/bpf/verifier.c        | 195 ++++++++++++++++++++++++++++++++++-
- 6 files changed, 288 insertions(+), 12 deletions(-)
+ include/linux/bpf_verifier.h | 34 ++++++++++++++--------------------
+ kernel/bpf/backtrack.c       | 23 +++++++++--------------
+ kernel/bpf/states.c          |  2 +-
+ kernel/bpf/verifier.c        | 22 +++++++++++-----------
+ 4 files changed, 35 insertions(+), 46 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 715b6df9c403..f9e57c49f1cb 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1669,6 +1669,8 @@ struct bpf_prog_aux {
- 	u32 max_pkt_offset;
- 	u32 max_tp_access;
- 	u32 stack_depth;
-+	u16 incoming_stack_arg_cnt;
-+	u16 stack_arg_cnt; /* both incoming and max outgoing of stack argument =
-slots */
- 	u32 id;
- 	u32 func_cnt; /* used by non-func prog as the number of func progs */
- 	u32 real_func_cnt; /* includes hidden progs, only used for JIT and free=
-ing progs */
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 321b9d69cf9c..1fba16fced28 100644
+index 1fba16fced28..2d5c8f36f451 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -427,6 +427,10 @@ struct bpf_func_state {
- 	 * `stack`. allocated_stack is always a multiple of BPF_REG_SIZE.
- 	 */
- 	int allocated_stack;
-+
-+	bool no_stack_arg_load;
-+	u16 out_stack_arg_cnt; /* Number of outgoing on-stack argument slots */
-+	struct bpf_reg_state *stack_arg_regs; /* Outgoing on-stack arguments */
- };
+@@ -435,31 +435,22 @@ struct bpf_func_state {
 =20
  #define MAX_CALL_FRAMES 8
-@@ -561,12 +565,27 @@ bpf_get_spilled_reg(int slot, struct bpf_func_state=
- *frame, u32 mask)
- 	return NULL;
- }
 =20
-+static inline struct bpf_reg_state *
-+bpf_get_spilled_stack_arg(int slot, struct bpf_func_state *frame, u32 ma=
-sk)
-+{
-+	if (slot < frame->out_stack_arg_cnt &&
-+	    frame->stack_arg_regs[slot].type !=3D NOT_INIT)
-+		return &frame->stack_arg_regs[slot];
-+	return NULL;
-+}
-+
- /* Iterate over 'frame', setting 'reg' to either NULL or a spilled regis=
-ter. */
- #define bpf_for_each_spilled_reg(iter, frame, reg, mask)			\
- 	for (iter =3D 0, reg =3D bpf_get_spilled_reg(iter, frame, mask);		\
- 	     iter < frame->allocated_stack / BPF_REG_SIZE;		\
- 	     iter++, reg =3D bpf_get_spilled_reg(iter, frame, mask))
+-/* instruction history flags, used in bpf_jmp_history_entry.flags field =
+*/
++/* instruction history flags, used in bpf_jmp_history_entry.flags field.
++ * Frame number and SPI are stored in dedicated fields of bpf_jmp_histor=
+y_entry.
++ */
+ enum {
+-	/* instruction references stack slot through PTR_TO_STACK register;
+-	 * we also store stack's frame number in lower 3 bits (MAX_CALL_FRAMES =
+is 8)
+-	 * and accessed stack slot's index in next 6 bits (MAX_BPF_STACK is 512=
+,
+-	 * 8 bytes per slot, so slot index (spi) is [0, 63])
+-	 */
+-	INSN_F_FRAMENO_MASK =3D 0x7, /* 3 bits */
+-
+-	INSN_F_SPI_MASK =3D 0x3f, /* 6 bits */
+-	INSN_F_SPI_SHIFT =3D 3, /* shifted 3 bits to the left */
++	INSN_F_STACK_ACCESS =3D BIT(0),
 =20
-+/* Iterate over 'frame', setting 'reg' to either NULL or a spilled stack=
- arg. */
-+#define bpf_for_each_spilled_stack_arg(iter, frame, reg, mask)         \
-+	for (iter =3D 0, reg =3D bpf_get_spilled_stack_arg(iter, frame, mask); =
-\
-+	     iter < frame->out_stack_arg_cnt;              \
-+	     iter++, reg =3D bpf_get_spilled_stack_arg(iter, frame, mask))
-+
- #define bpf_for_each_reg_in_vstate_mask(__vst, __state, __reg, __mask, _=
-_expr)   \
- 	({                                                               \
- 		struct bpf_verifier_state *___vstate =3D __vst;            \
-@@ -584,6 +603,11 @@ bpf_get_spilled_reg(int slot, struct bpf_func_state =
-*frame, u32 mask)
- 					continue;                        \
- 				(void)(__expr);                          \
- 			}                                                \
-+			bpf_for_each_spilled_stack_arg(___j, __state, __reg, __mask) { \
-+				if (!__reg)                              \
-+					continue;                        \
-+				(void)(__expr);                          \
-+			}						 \
- 		}                                                        \
- 	})
-=20
-@@ -799,12 +823,21 @@ struct bpf_subprog_info {
- 	bool keep_fastcall_stack: 1;
- 	bool changes_pkt_data: 1;
- 	bool might_sleep: 1;
--	u8 arg_cnt:3;
-+	u8 arg_cnt:4;
-=20
- 	enum priv_stack_mode priv_stack_mode;
--	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_REG_ARGS];
-+	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_ARGS];
-+	u16 stack_arg_cnt; /* incoming + max outgoing */
-+	u16 max_out_stack_arg_cnt;
+-	INSN_F_STACK_ACCESS =3D BIT(9),
+-
+-	INSN_F_DST_REG_STACK =3D BIT(10), /* dst_reg is PTR_TO_STACK */
+-	INSN_F_SRC_REG_STACK =3D BIT(11), /* src_reg is PTR_TO_STACK */
+-	/* total 12 bits are used now. */
++	INSN_F_DST_REG_STACK =3D BIT(1), /* dst_reg is PTR_TO_STACK */
++	INSN_F_SRC_REG_STACK =3D BIT(2), /* src_reg is PTR_TO_STACK */
  };
 =20
-+static inline u16 bpf_in_stack_arg_cnt(struct bpf_subprog_info *sub)
-+{
-+	if (sub->arg_cnt > MAX_BPF_FUNC_REG_ARGS)
-+		return sub->arg_cnt - MAX_BPF_FUNC_REG_ARGS;
-+	return 0;
-+}
+-static_assert(INSN_F_FRAMENO_MASK + 1 >=3D MAX_CALL_FRAMES);
+-static_assert(INSN_F_SPI_MASK + 1 >=3D MAX_BPF_STACK / 8);
+-
+ struct bpf_jmp_history_entry {
+-	u32 idx;
+ 	/* insn idx can't be bigger than 1 million */
++	u32 idx : 20;
++	u32 frame : 3;	/* stack access frame number */
++	u32 spi : 6;	/* stack slot index (0..63) */
++	u32 : 3;
+ 	u32 prev_idx : 20;
+ 	/* special INSN_F_xxx flags */
+ 	u32 flags : 12;
+@@ -469,6 +460,9 @@ struct bpf_jmp_history_entry {
+ 	u64 linked_regs;
+ };
+=20
++static_assert(MAX_CALL_FRAMES <=3D (1 << 3));
++static_assert(MAX_BPF_STACK / 8 <=3D (1 << 6));
 +
- struct bpf_verifier_env;
+ /* Maximum number of register states that can exist at once */
+ #define BPF_ID_MAP_SIZE ((MAX_BPF_REG + MAX_BPF_STACK / BPF_REG_SIZE) * =
+MAX_CALL_FRAMES)
+ struct bpf_verifier_state {
+@@ -1180,7 +1174,7 @@ struct list_head *bpf_explored_state(struct bpf_ver=
+ifier_env *env, int idx);
+ void bpf_free_verifier_state(struct bpf_verifier_state *state, bool free=
+_self);
+ void bpf_free_backedges(struct bpf_scc_visit *visit);
+ int bpf_push_jmp_history(struct bpf_verifier_env *env, struct bpf_verifi=
+er_state *cur,
+-			 int insn_flags, u64 linked_regs);
++			 int insn_flags, int spi, int frame, u64 linked_regs);
+ void bpf_bt_sync_linked_regs(struct backtrack_state *bt, struct bpf_jmp_=
+history_entry *hist);
+ void bpf_mark_reg_not_init(const struct bpf_verifier_env *env,
+ 			   struct bpf_reg_state *reg);
+diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
+index 854731dc93fe..93738a076c88 100644
+--- a/kernel/bpf/backtrack.c
++++ b/kernel/bpf/backtrack.c
+@@ -9,7 +9,7 @@
 =20
- struct backtrack_state {
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index a33a5b4122f8..ec3fb8c8f4ee 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -7881,10 +7881,16 @@ int btf_prepare_func_args(struct bpf_verifier_env=
- *env, int subprog)
- 	args =3D (const struct btf_param *)(t + 1);
- 	nargs =3D btf_type_vlen(t);
- 	sub->arg_cnt =3D nargs;
--	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
--		if (!is_global)
--			return -EINVAL;
--		bpf_log(log, "Global function %s() with %d > %d args. Buggy compiler.\=
-n",
-+	if (nargs > MAX_BPF_FUNC_ARGS) {
-+		bpf_log(log, "kernel supports at most %d parameters, function %s has %=
-d\n",
-+			MAX_BPF_FUNC_ARGS, tname, nargs);
-+		return -EFAULT;
-+	}
-+	if (nargs > MAX_BPF_FUNC_REG_ARGS)
-+		sub->stack_arg_cnt =3D nargs - MAX_BPF_FUNC_REG_ARGS;
-+
-+	if (is_global && nargs > MAX_BPF_FUNC_REG_ARGS) {
-+		bpf_log(log, "global function %s has %d > %d args, stack args not supp=
-orted\n",
- 			tname, nargs, MAX_BPF_FUNC_REG_ARGS);
- 		return -EINVAL;
- 	}
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index fba9e8c00878..0ff8cdf4394f 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -1123,6 +1123,9 @@ static int jit_subprogs(struct bpf_verifier_env *en=
-v)
+ /* for any branch, call, exit record the history of jmps in the given st=
+ate */
+ int bpf_push_jmp_history(struct bpf_verifier_env *env, struct bpf_verifi=
+er_state *cur,
+-			 int insn_flags, u64 linked_regs)
++			 int insn_flags, int spi, int frame, u64 linked_regs)
+ {
+ 	u32 cnt =3D cur->jmp_history_cnt;
+ 	struct bpf_jmp_history_entry *p;
+@@ -25,6 +25,8 @@ int bpf_push_jmp_history(struct bpf_verifier_env *env, =
+struct bpf_verifier_state
+ 				env, "insn history: insn_idx %d cur flags %x new flags %x",
+ 				env->insn_idx, env->cur_hist_ent->flags, insn_flags);
+ 		env->cur_hist_ent->flags |=3D insn_flags;
++		env->cur_hist_ent->spi =3D spi;
++		env->cur_hist_ent->frame =3D frame;
+ 		verifier_bug_if(env->cur_hist_ent->linked_regs !=3D 0, env,
+ 				"insn history: insn_idx %d linked_regs: %#llx",
+ 				env->insn_idx, env->cur_hist_ent->linked_regs);
+@@ -43,6 +45,8 @@ int bpf_push_jmp_history(struct bpf_verifier_env *env, =
+struct bpf_verifier_state
+ 	p->idx =3D env->insn_idx;
+ 	p->prev_idx =3D env->prev_insn_idx;
+ 	p->flags =3D insn_flags;
++	p->spi =3D spi;
++	p->frame =3D frame;
+ 	p->linked_regs =3D linked_regs;
+ 	cur->jmp_history_cnt =3D cnt;
+ 	env->cur_hist_ent =3D p;
+@@ -64,15 +68,6 @@ static bool is_atomic_fetch_insn(const struct bpf_insn=
+ *insn)
+ 	       (insn->imm & BPF_FETCH);
+ }
 =20
- 		func[i]->aux->name[0] =3D 'F';
- 		func[i]->aux->stack_depth =3D env->subprog_info[i].stack_depth;
-+		func[i]->aux->incoming_stack_arg_cnt =3D
-+			bpf_in_stack_arg_cnt(&env->subprog_info[i]);
-+		func[i]->aux->stack_arg_cnt =3D env->subprog_info[i].stack_arg_cnt;
- 		if (env->subprog_info[i].priv_stack_mode =3D=3D PRIV_STACK_ADAPTIVE)
- 			func[i]->aux->jits_use_priv_stack =3D true;
+-static int insn_stack_access_spi(int insn_flags)
+-{
+-	return (insn_flags >> INSN_F_SPI_SHIFT) & INSN_F_SPI_MASK;
+-}
+-
+-static int insn_stack_access_frameno(int insn_flags)
+-{
+-	return insn_flags & INSN_F_FRAMENO_MASK;
+-}
 =20
-@@ -1301,8 +1304,10 @@ int bpf_jit_subprogs(struct bpf_verifier_env *env)
- 	struct bpf_insn_aux_data *orig_insn_aux;
- 	u32 *orig_subprog_starts;
-=20
--	if (env->subprog_cnt <=3D 1)
-+	if (env->subprog_cnt <=3D 1) {
-+		env->prog->aux->stack_arg_cnt =3D env->subprog_info[0].stack_arg_cnt;
- 		return 0;
-+	}
-=20
- 	prog =3D orig_prog =3D env->prog;
- 	if (bpf_prog_need_blind(prog)) {
-@@ -1378,9 +1383,21 @@ int bpf_fixup_call_args(struct bpf_verifier_env *e=
-nv)
- 	struct bpf_prog *prog =3D env->prog;
- 	struct bpf_insn *insn =3D prog->insnsi;
- 	bool has_kfunc_call =3D bpf_prog_has_kfunc_call(prog);
--	int i, depth;
-+	int depth;
- #endif
--	int err =3D 0;
-+	int i, err =3D 0;
-+
-+	for (i =3D 0; i < env->subprog_cnt; i++) {
-+		struct bpf_subprog_info *subprog =3D &env->subprog_info[i];
-+		u16 outgoing =3D subprog->stack_arg_cnt - bpf_in_stack_arg_cnt(subprog=
-);
-+
-+		if (subprog->max_out_stack_arg_cnt > outgoing) {
-+			verbose(env,
-+				"func#%d writes %u stack arg slots, but calls only require %u\n",
-+				i, subprog->max_out_stack_arg_cnt, outgoing);
-+			return -EINVAL;
-+		}
-+	}
-=20
- 	if (env->prog->jit_requested &&
- 	    !bpf_prog_is_offloaded(env->prog->aux)) {
+ /* Backtrack one insn at a time. If idx is not at the top of recorded
+  * history then previous instruction came from straight line execution.
+@@ -353,8 +348,8 @@ static int backtrack_insn(struct bpf_verifier_env *en=
+v, int idx, int subseq_idx,
+ 		 * that [fp - off] slot contains scalar that needs to be
+ 		 * tracked with precision
+ 		 */
+-		spi =3D insn_stack_access_spi(hist->flags);
+-		fr =3D insn_stack_access_frameno(hist->flags);
++		spi =3D hist->spi;
++		fr =3D hist->frame;
+ 		bpf_bt_set_frame_slot(bt, fr, spi);
+ 	} else if (class =3D=3D BPF_STX || class =3D=3D BPF_ST) {
+ 		if (bt_is_reg_set(bt, dreg))
+@@ -366,8 +361,8 @@ static int backtrack_insn(struct bpf_verifier_env *en=
+v, int idx, int subseq_idx,
+ 		/* scalars can only be spilled into stack */
+ 		if (!hist || !(hist->flags & INSN_F_STACK_ACCESS))
+ 			return 0;
+-		spi =3D insn_stack_access_spi(hist->flags);
+-		fr =3D insn_stack_access_frameno(hist->flags);
++		spi =3D hist->spi;
++		fr =3D hist->frame;
+ 		if (!bt_is_frame_slot_set(bt, fr, spi))
+ 			return 0;
+ 		bt_clear_frame_slot(bt, fr, spi);
 diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index bd9c22945050..c249eb40c6d6 100644
+index c249eb40c6d6..45d86bfe3b68 100644
 --- a/kernel/bpf/states.c
 +++ b/kernel/bpf/states.c
-@@ -833,6 +833,32 @@ static bool stacksafe(struct bpf_verifier_env *env, =
-struct bpf_func_state *old,
- 	return true;
- }
-=20
-+/*
-+ * Compare stack arg slots between old and current states.
-+ * Outgoing stack args are path-local state and must agree for pruning.
-+ */
-+static bool stack_arg_safe(struct bpf_verifier_env *env, struct bpf_func=
-_state *old,
-+			   struct bpf_func_state *cur, struct bpf_idmap *idmap,
-+			   enum exact_level exact)
-+{
-+	int i, nslots;
-+
-+	nslots =3D max(old->out_stack_arg_cnt, cur->out_stack_arg_cnt);
-+	for (i =3D 0; i < nslots; i++) {
-+		struct bpf_reg_state *old_arg, *cur_arg;
-+		struct bpf_reg_state not_init =3D { .type =3D NOT_INIT };
-+
-+		old_arg =3D i < old->out_stack_arg_cnt ?
-+			  &old->stack_arg_regs[i] : &not_init;
-+		cur_arg =3D i < cur->out_stack_arg_cnt ?
-+			  &cur->stack_arg_regs[i] : &not_init;
-+		if (!regsafe(env, old_arg, cur_arg, idmap, exact))
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
- static bool refsafe(struct bpf_verifier_state *old, struct bpf_verifier_=
-state *cur,
- 		    struct bpf_idmap *idmap)
- {
-@@ -924,6 +950,9 @@ static bool func_states_equal(struct bpf_verifier_env=
- *env, struct bpf_func_stat
- 	if (!stacksafe(env, old, cur, &env->idmap_scratch, exact))
- 		return false;
-=20
-+	if (!stack_arg_safe(env, old, cur, &env->idmap_scratch, exact))
-+		return false;
-+
- 	return true;
- }
-=20
+@@ -1400,7 +1400,7 @@ int bpf_is_state_visited(struct bpf_verifier_env *e=
+nv, int insn_idx)
+ 			 */
+ 			err =3D 0;
+ 			if (bpf_is_jmp_point(env, env->insn_idx))
+-				err =3D bpf_push_jmp_history(env, cur, 0, 0);
++				err =3D bpf_push_jmp_history(env, cur, 0, 0, 0, 0);
+ 			err =3D err ? : propagate_precision(env, &sl->state, cur, NULL);
+ 			if (err)
+ 				return err;
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3bafb7ad2ba7..61d6663498f7 100644
+index 61d6663498f7..010efdb766ac 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -1362,6 +1362,18 @@ static int copy_stack_state(struct bpf_func_state =
-*dst, const struct bpf_func_st
- 		return -ENOMEM;
-=20
- 	dst->allocated_stack =3D src->allocated_stack;
-+
-+	/* copy stack args state */
-+	n =3D src->out_stack_arg_cnt;
-+	if (n) {
-+		dst->stack_arg_regs =3D copy_array(dst->stack_arg_regs, src->stack_arg=
-_regs, n,
-+						 sizeof(struct bpf_reg_state),
-+						 GFP_KERNEL_ACCOUNT);
-+		if (!dst->stack_arg_regs)
-+			return -ENOMEM;
-+	}
-+
-+	dst->out_stack_arg_cnt =3D src->out_stack_arg_cnt;
- 	return 0;
+@@ -3198,10 +3198,6 @@ static int check_reg_arg(struct bpf_verifier_env *=
+env, u32 regno,
+ 	return __check_reg_arg(env, state->regs, regno, t);
  }
 =20
-@@ -1403,6 +1415,23 @@ static int grow_stack_state(struct bpf_verifier_en=
-v *env, struct bpf_func_state
- 	return 0;
- }
+-static int insn_stack_access_flags(int frameno, int spi)
+-{
+-	return INSN_F_STACK_ACCESS | (spi << INSN_F_SPI_SHIFT) | frameno;
+-}
 =20
-+static int grow_stack_arg_slots(struct bpf_verifier_env *env,
-+				struct bpf_func_state *state, int cnt)
-+{
-+	size_t old_n =3D state->out_stack_arg_cnt;
-+
-+	if (old_n >=3D cnt)
-+		return 0;
-+
-+	state->stack_arg_regs =3D realloc_array(state->stack_arg_regs, old_n, c=
-nt,
-+					      sizeof(struct bpf_reg_state));
-+	if (!state->stack_arg_regs)
-+		return -ENOMEM;
-+
-+	state->out_stack_arg_cnt =3D cnt;
-+	return 0;
-+}
-+
- /* Acquire a pointer id from the env and update the state->refs to inclu=
-de
-  * this new pointer reference.
-  * On success, returns a valid pointer id to associate with the register
-@@ -1565,6 +1594,7 @@ static void free_func_state(struct bpf_func_state *=
-state)
+ static void mark_indirect_target(struct bpf_verifier_env *env, int idx)
  {
- 	if (!state)
- 		return;
-+	kfree(state->stack_arg_regs);
- 	kfree(state->stack);
- 	kfree(state);
+@@ -3517,7 +3513,8 @@ static int check_stack_write_fixed_off(struct bpf_v=
+erifier_env *env,
+ 	int i, slot =3D -off - 1, spi =3D slot / BPF_REG_SIZE, err;
+ 	struct bpf_insn *insn =3D &env->prog->insnsi[insn_idx];
+ 	struct bpf_reg_state *reg =3D NULL;
+-	int insn_flags =3D insn_stack_access_flags(state->frameno, spi);
++	int insn_flags =3D INSN_F_STACK_ACCESS;
++	int hist_spi =3D spi, hist_frame =3D state->frameno;
+=20
+ 	/* caller checked that off % size =3D=3D 0 and -MAX_BPF_STACK <=3D off =
+< 0,
+ 	 * so it's aligned access and [off, off + size) are within stack limits
+@@ -3613,7 +3610,8 @@ static int check_stack_write_fixed_off(struct bpf_v=
+erifier_env *env,
+ 	}
+=20
+ 	if (insn_flags)
+-		return bpf_push_jmp_history(env, env->cur_state, insn_flags, 0);
++		return bpf_push_jmp_history(env, env->cur_state, insn_flags,
++					    hist_spi, hist_frame, 0);
+ 	return 0;
  }
-@@ -4050,6 +4080,105 @@ static int check_stack_write(struct bpf_verifier_=
+=20
+@@ -3809,7 +3807,8 @@ static int check_stack_read_fixed_off(struct bpf_ve=
+rifier_env *env,
+ 	int i, slot =3D -off - 1, spi =3D slot / BPF_REG_SIZE;
+ 	struct bpf_reg_state *reg;
+ 	u8 *stype, type;
+-	int insn_flags =3D insn_stack_access_flags(reg_state->frameno, spi);
++	int insn_flags =3D INSN_F_STACK_ACCESS;
++	int hist_spi =3D spi, hist_frame =3D reg_state->frameno;
+=20
+ 	stype =3D reg_state->stack[spi].slot_type;
+ 	reg =3D &reg_state->stack[spi].spilled_ptr;
+@@ -3940,7 +3939,8 @@ static int check_stack_read_fixed_off(struct bpf_ve=
+rifier_env *env,
+ 		insn_flags =3D 0; /* we are not restoring spilled register */
+ 	}
+ 	if (insn_flags)
+-		return bpf_push_jmp_history(env, env->cur_state, insn_flags, 0);
++		return bpf_push_jmp_history(env, env->cur_state, insn_flags,
++					    hist_spi, hist_frame, 0);
+ 	return 0;
+ }
+=20
+@@ -15905,7 +15905,7 @@ static int check_cond_jmp_op(struct bpf_verifier_=
 env *env,
- 	return err;
- }
-=20
-+/*
-+ * Write a value to the outgoing stack arg area.
-+ * off is a negative offset from r11 (e.g. -8 for arg6, -16 for arg7).
-+ */
-+static int check_stack_arg_write(struct bpf_verifier_env *env, struct bp=
-f_func_state *state,
-+				 int off, struct bpf_reg_state *value_reg)
-+{
-+	int max_stack_arg_regs =3D MAX_BPF_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS;
-+	struct bpf_subprog_info *subprog =3D &env->subprog_info[state->subprogn=
-o];
-+	int spi =3D -off / BPF_REG_SIZE - 1;
-+	struct bpf_func_state *cur;
-+	struct bpf_reg_state *arg;
-+	int err;
-+
-+	if (spi >=3D max_stack_arg_regs) {
-+		verbose(env, "stack arg write offset %d exceeds max %d stack args\n",
-+			off, max_stack_arg_regs);
-+		return -EINVAL;
-+	}
-+
-+	err =3D grow_stack_arg_slots(env, state, spi + 1);
-+	if (err)
-+		return err;
-+
-+	/* Track the max outgoing stack arg slot count. */
-+	if (spi + 1 > subprog->max_out_stack_arg_cnt)
-+		subprog->max_out_stack_arg_cnt =3D spi + 1;
-+
-+	cur =3D env->cur_state->frame[env->cur_state->curframe];
-+	if (value_reg) {
-+		state->stack_arg_regs[spi] =3D *value_reg;
-+	} else {
-+		/* BPF_ST: store immediate, treat as scalar */
-+		arg =3D &state->stack_arg_regs[spi];
-+		arg->type =3D SCALAR_VALUE;
-+		__mark_reg_known(arg, env->prog->insnsi[env->insn_idx].imm);
-+	}
-+	state->no_stack_arg_load =3D true;
-+	return 0;
-+}
-+
-+/*
-+ * Read a value from the incoming stack arg area.
-+ * off is a positive offset from r11 (e.g. +8 for arg6, +16 for arg7).
-+ */
-+static int check_stack_arg_read(struct bpf_verifier_env *env, struct bpf=
-_func_state *state,
-+				int off, int dst_regno)
-+{
-+	struct bpf_subprog_info *subprog =3D &env->subprog_info[state->subprogn=
-o];
-+	struct bpf_verifier_state *vstate =3D env->cur_state;
-+	int spi =3D off / BPF_REG_SIZE - 1;
-+	struct bpf_func_state *caller, *cur;
-+	struct bpf_reg_state *arg;
-+
-+	if (state->no_stack_arg_load) {
-+		verbose(env, "r11 load must be before any r11 store or call insn\n");
-+		return -EINVAL;
-+	}
-+
-+	if (spi + 1 > bpf_in_stack_arg_cnt(subprog)) {
-+		verbose(env, "invalid read from stack arg off %d depth %d\n",
-+			off, bpf_in_stack_arg_cnt(subprog) * BPF_REG_SIZE);
-+		return -EACCES;
-+	}
-+
-+	caller =3D vstate->frame[vstate->curframe - 1];
-+	arg =3D &caller->stack_arg_regs[spi];
-+	cur =3D vstate->frame[vstate->curframe];
-+	cur->regs[dst_regno] =3D *arg;
-+	return 0;
-+}
-+
-+static int check_outgoing_stack_args(struct bpf_verifier_env *env, struc=
-t bpf_func_state *caller,
-+				     int nargs)
-+{
-+	int i, spi;
-+
-+	for (i =3D MAX_BPF_FUNC_REG_ARGS; i < nargs; i++) {
-+		spi =3D i - MAX_BPF_FUNC_REG_ARGS;
-+		if (spi >=3D caller->out_stack_arg_cnt ||
-+		    caller->stack_arg_regs[spi].type =3D=3D NOT_INIT) {
-+			verbose(env, "caller expects %d args, stack arg%d is not initialized\=
-n",
-+				nargs, spi + 1);
-+			return -EFAULT;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static struct bpf_reg_state *get_func_arg_reg(struct bpf_func_state *cal=
-ler,
-+					      struct bpf_reg_state *regs, int arg)
-+{
-+	if (arg < MAX_BPF_FUNC_REG_ARGS)
-+		return &regs[arg + 1];
-+
-+	return &caller->stack_arg_regs[arg - MAX_BPF_FUNC_REG_ARGS];
-+}
-+
- static int check_map_access_type(struct bpf_verifier_env *env, struct bp=
-f_reg_state *reg,
- 				 int off, int size, enum bpf_access_type type)
- {
-@@ -6217,10 +6346,20 @@ static int check_load_mem(struct bpf_verifier_env=
- *env, struct bpf_insn *insn,
- 			  bool strict_alignment_once, bool is_ldsx,
- 			  bool allow_trust_mismatch, const char *ctx)
- {
-+	struct bpf_verifier_state *vstate =3D env->cur_state;
-+	struct bpf_func_state *state =3D vstate->frame[vstate->curframe];
- 	struct bpf_reg_state *regs =3D cur_regs(env);
- 	enum bpf_reg_type src_reg_type;
- 	int err;
-=20
-+	/* Handle stack arg read */
-+	if (is_stack_arg_ldx(insn)) {
-+		err =3D check_reg_arg(env, insn->dst_reg, DST_OP_NO_MARK);
-+		if (err)
-+			return err;
-+		return check_stack_arg_read(env, state, insn->off, insn->dst_reg);
-+	}
-+
- 	/* check src operand */
- 	err =3D check_reg_arg(env, insn->src_reg, SRC_OP);
- 	if (err)
-@@ -6249,10 +6388,20 @@ static int check_load_mem(struct bpf_verifier_env=
- *env, struct bpf_insn *insn,
- static int check_store_reg(struct bpf_verifier_env *env, struct bpf_insn=
- *insn,
- 			   bool strict_alignment_once)
- {
-+	struct bpf_verifier_state *vstate =3D env->cur_state;
-+	struct bpf_func_state *state =3D vstate->frame[vstate->curframe];
- 	struct bpf_reg_state *regs =3D cur_regs(env);
- 	enum bpf_reg_type dst_reg_type;
- 	int err;
-=20
-+	/* Handle stack arg write */
-+	if (is_stack_arg_stx(insn)) {
-+		err =3D check_reg_arg(env, insn->src_reg, SRC_OP);
-+		if (err)
-+			return err;
-+		return check_stack_arg_write(env, state, insn->off, regs + insn->src_r=
-eg);
-+	}
-+
- 	/* check src1 operand */
- 	err =3D check_reg_arg(env, insn->src_reg, SRC_OP);
- 	if (err)
-@@ -8860,6 +9009,14 @@ static void clear_caller_saved_regs(struct bpf_ver=
-ifier_env *env,
- 	}
- }
-=20
-+static void invalidate_outgoing_stack_args(struct bpf_func_state *state)
-+{
-+	int i, nslots =3D state->out_stack_arg_cnt;
-+
-+	for (i =3D 0; i < nslots; i++)
-+		state->stack_arg_regs[i].type =3D NOT_INIT;
-+}
-+
- typedef int (*set_callee_state_fn)(struct bpf_verifier_env *env,
- 				   struct bpf_func_state *caller,
- 				   struct bpf_func_state *callee,
-@@ -8922,6 +9079,7 @@ static int btf_check_func_arg_match(struct bpf_veri=
-fier_env *env, int subprog,
- 				    struct bpf_reg_state *regs)
- {
- 	struct bpf_subprog_info *sub =3D subprog_info(env, subprog);
-+	struct bpf_func_state *caller =3D cur_func(env);
- 	struct bpf_verifier_log *log =3D &env->log;
- 	u32 i;
- 	int ret;
-@@ -8930,13 +9088,16 @@ static int btf_check_func_arg_match(struct bpf_ve=
-rifier_env *env, int subprog,
- 	if (ret)
- 		return ret;
-=20
-+	ret =3D check_outgoing_stack_args(env, caller, sub->arg_cnt);
-+	if (ret)
-+		return ret;
-+
- 	/* check that BTF function arguments match actual types that the
- 	 * verifier sees.
- 	 */
- 	for (i =3D 0; i < sub->arg_cnt; i++) {
- 		argno_t argno =3D argno_from_arg(i + 1);
--		u32 regno =3D i + 1;
--		struct bpf_reg_state *reg =3D &regs[regno];
-+		struct bpf_reg_state *reg =3D get_func_arg_reg(caller, regs, i);
- 		struct bpf_subprog_arg_info *arg =3D &sub->args[i];
-=20
- 		if (arg->arg_type =3D=3D ARG_ANYTHING) {
-@@ -9124,6 +9285,8 @@ static int check_func_call(struct bpf_verifier_env =
-*env, struct bpf_insn *insn,
- 			   int *insn_idx)
- {
- 	struct bpf_verifier_state *state =3D env->cur_state;
-+	struct bpf_subprog_info *caller_info;
-+	u16 callee_incoming, stack_arg_cnt;
- 	struct bpf_func_state *caller;
- 	int err, subprog, target_insn;
-=20
-@@ -9177,6 +9340,16 @@ static int check_func_call(struct bpf_verifier_env=
- *env, struct bpf_insn *insn,
- 		return 0;
  	}
 =20
-+	/*
-+	 * Track caller's total stack arg count (incoming + max outgoing).
-+	 * This is needed so the JIT knows how much stack arg space to allocate=
-.
-+	 */
-+	caller_info =3D &env->subprog_info[caller->subprogno];
-+	callee_incoming =3D bpf_in_stack_arg_cnt(&env->subprog_info[subprog]);
-+	stack_arg_cnt =3D bpf_in_stack_arg_cnt(caller_info) + callee_incoming;
-+	if (stack_arg_cnt > caller_info->stack_arg_cnt)
-+		caller_info->stack_arg_cnt =3D stack_arg_cnt;
-+
- 	/* for regular function entry setup new frame and continue
- 	 * from that frame.
- 	 */
-@@ -9534,6 +9707,7 @@ static int prepare_func_exit(struct bpf_verifier_en=
-v *env, int *insn_idx)
- 	 * bpf_throw, this will be done by copy_verifier_state for extra frames=
-. */
- 	free_func_state(callee);
- 	state->frame[state->curframe--] =3D NULL;
-+	invalidate_outgoing_stack_args(caller);
-=20
- 	/* for callbacks widen imprecise scalars to make programs like below ve=
-rify:
- 	 *
-@@ -16961,6 +17135,14 @@ static int do_check_insn(struct bpf_verifier_env=
- *env, bool *do_print_state)
- 		return check_store_reg(env, insn, false);
-=20
- 	case BPF_ST: {
-+		/* Handle stack arg write (store immediate) */
-+		if (is_stack_arg_st(insn)) {
-+			struct bpf_verifier_state *vstate =3D env->cur_state;
-+			struct bpf_func_state *state =3D vstate->frame[vstate->curframe];
-+
-+			return check_stack_arg_write(env, state, insn->off, NULL);
-+		}
-+
- 		enum bpf_reg_type dst_reg_type;
-=20
- 		err =3D check_reg_arg(env, insn->dst_reg, SRC_OP);
-@@ -16995,6 +17177,7 @@ static int do_check_insn(struct bpf_verifier_env =
-*env, bool *do_print_state)
- 				}
- 			}
- 			mark_reg_scratched(env, BPF_REG_0);
-+			cur_func(env)->no_stack_arg_load =3D true;
- 			if (insn->src_reg =3D=3D BPF_PSEUDO_CALL)
- 				return check_func_call(env, insn, &env->insn_idx);
- 			if (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL)
-@@ -18110,7 +18293,7 @@ static int do_check_common(struct bpf_verifier_en=
-v *env, int subprog)
- 				goto out;
- 			}
+ 	if (insn_flags) {
+-		err =3D bpf_push_jmp_history(env, this_branch, insn_flags, 0);
++		err =3D bpf_push_jmp_history(env, this_branch, insn_flags, 0, 0, 0);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -15969,7 +15969,7 @@ static int check_cond_jmp_op(struct bpf_verifier_=
+env *env,
+ 	if (dst_reg->type =3D=3D SCALAR_VALUE && dst_reg->id)
+ 		collect_linked_regs(env, this_branch, dst_reg->id, &linked_regs);
+ 	if (linked_regs.cnt > 1) {
+-		err =3D bpf_push_jmp_history(env, this_branch, 0, linked_regs_pack(&li=
+nked_regs));
++		err =3D bpf_push_jmp_history(env, this_branch, 0, 0, 0, linked_regs_pa=
+ck(&linked_regs));
+ 		if (err)
+ 			return err;
+ 	}
+@@ -17275,7 +17275,7 @@ static int do_check(struct bpf_verifier_env *env)
  		}
--		for (i =3D BPF_REG_1; i <=3D sub->arg_cnt; i++) {
-+		for (i =3D BPF_REG_1; i <=3D min_t(u32, sub->arg_cnt, MAX_BPF_FUNC_REG=
-_ARGS); i++) {
- 			arg =3D &sub->args[i - BPF_REG_1];
- 			reg =3D &regs[i];
 =20
-@@ -18153,6 +18336,12 @@ static int do_check_common(struct bpf_verifier_e=
-nv *env, int subprog)
- 				goto out;
- 			}
+ 		if (bpf_is_jmp_point(env, env->insn_idx)) {
+-			err =3D bpf_push_jmp_history(env, state, 0, 0);
++			err =3D bpf_push_jmp_history(env, state, 0, 0, 0, 0);
+ 			if (err)
+ 				return err;
  		}
-+		if (env->prog->type =3D=3D BPF_PROG_TYPE_EXT && sub->arg_cnt > MAX_BPF=
-_FUNC_REG_ARGS) {
-+			verbose(env, "freplace programs with >%d args not supported yet\n",
-+				MAX_BPF_FUNC_REG_ARGS);
-+			ret =3D -EINVAL;
-+			goto out;
-+		}
- 	} else {
- 		/* if main BPF program has associated BTF info, validate that
- 		 * it's matching expected signature, and otherwise mark BTF
 --=20
 2.53.0-Meta
 
