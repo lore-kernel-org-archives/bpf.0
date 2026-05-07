@@ -1,183 +1,133 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F0E17993;
-	Thu,  7 May 2026 16:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B87037269F;
+	Thu,  7 May 2026 16:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778171028; cv=none; b=ikIV/djIZSCb+Q3mcbkDfTpSxyO5A2dUn55gm0le4z2Ch2UrQ27GBfDg0k7nYSXVDZTJaP2KZLhTqA2aiUmwDn/H45r5WhRpam3F+isuOwUXqbmqBGDkUCNpAI/oW8z3tTO33SqCyGHmkDhFlxiCKl6jSzu5Qk++FugqJ+pZ0Ec=
+	t=1778171414; cv=none; b=p+O275LvhTwAFrvBhr8lc/pnzcBSwm5n2zDum2EJpj4cMGNKg7BNvnQG0YWGJwzOJqVfLR22q55w9pc48aQ2T+60fMy7kI5ZjpzWn3IFcZgFZF2I02WegptOm6UFqpG18+Cx7wUB4gIpQJKQEHSw1ebdZbVQBfHEk5wmFnNVKjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778171028; c=relaxed/simple;
-	bh=6cmMjhip9L3Mzg6DvVPiOH5HEJTFvpTcQdc5x8w4mFU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XZp/GTRvv1fH+jlomycZCnwIG4wMEvJhx2PUrbCgyAkImRkA62Sf2mgSGu0VlVAkTwqWgGmJNBZ7AfUj+Tl/XhFPEd86zaadUJFv/8pwBS+WMJ73+OWu3BzQdGyjT5hx4NBmvQPETsE1n/uAccREk/r7uex7BCj2TdDo/EdGTI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=RW5C3uv+; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1778171414; c=relaxed/simple;
+	bh=JF5H04WoSuU8ZS1WCukHF3QcigcJRhlCF8unmAcPvLQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GjlabwShmS5O7rDipjRxg+UKSrkwcZFp6fktdFYVnZW08bsrZuD1XhHgew5csPp6xLwkzlF52qTG7stW+uAC03TFypXNv51pEupw8+/oOyTrnim2Jz+3hhTGOz1f5wLwxV6c02sXQM7cKbmyB6KLiZZFf4CIgTcYBhqR9iKVPp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=iWVScX3t; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="RW5C3uv+"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 647F8eXw1080687;
-	Thu, 7 May 2026 16:23:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=V64+Om
-	/5UjYYJCtPD8VOG/OuP/P36hNIzOWiv9SBntg=; b=RW5C3uv+swLobeWuAeCp2/
-	D1foUG3WmJoiCEP4eoClNwkITT8yApaHmpsis4oyXDJeVy5L7wu7bApZ34be/MmL
-	epylLx1OTdl6neTZb0U90jG515XvVF+GKOBTFm5jGv+MH08+HH6ZHkW1sOmLEiix
-	V6YW/YEkawCluwXutWRreg7jYBHw+hZ8LAEVuea0ok8ylzYNB0lWOp0dMoK8qaKf
-	X8/bFDUo/vETTfswS5HD5HuhExswBHBxFuXRam+yedM3E79oyiOJFBggh4OAmK/T
-	+esmzN3uTpkM7eGI1ChFCh3qErAhXWXakaxREDMfbogaKBq7T8YDk3bDZwk1VV8Q
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9y1qkf0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 07 May 2026 16:23:44 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 647FsTRg032413;
-	Thu, 7 May 2026 16:23:43 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dwuywch8t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 07 May 2026 16:23:42 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 647GNf4w16187650
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 7 May 2026 16:23:41 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0650520043;
-	Thu,  7 May 2026 16:23:41 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D6A8220040;
-	Thu,  7 May 2026 16:23:40 +0000 (GMT)
-Received: from [9.52.200.195] (unknown [9.52.200.195])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  7 May 2026 16:23:40 +0000 (GMT)
-Message-ID: <232ddaec-2eb5-4210-ad5e-52d98f2449be@linux.ibm.com>
-Date: Thu, 7 May 2026 18:23:39 +0200
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="iWVScX3t"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=kYKaL1jQ8LGdN9smjIQLGtIx8ZielLRVj4GVygHNyZw=; b=iWVScX3t1Vr7jT65EBijDEZtTC
+	xR/IYFApXe/XCCjv6FXei/9xmMjJxEdUZzW87RUeUyhJcv+B3eVHQz9NAIK/eJD4bXgOtQg4e8bFF
+	6Q7shNjm3ibz3YIv1APpxKSOp0zLPRl0qLPCWLDITqKG+x6Yq2AcgJxHUp5giJaS4zUk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1wL1b9-001qT0-IB; Thu, 07 May 2026 18:29:15 +0200
+Date: Thu, 7 May 2026 18:29:15 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Daniel Thompson <daniel@riscstar.com>
+Cc: Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, maxime.chevallier@bootlin.com,
+	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
+	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
+	arnd@arndb.de, gregkh@linuxfoundation.org,
+	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
+	alexandre.torgue@foss.st.com, ast@kernel.org,
+	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
+	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
+	julianbraha@gmail.com, livelycarpet87@gmail.com,
+	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
+	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+	rohan.g.thomas@altera.com, sdf@fomichev.me,
+	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
+	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 10/12] net: stmmac: tc956x: add TC956x/QPS615
+ support
+Message-ID: <ef6df85f-11ac-404d-958a-8cf69b3b6bb6@lunn.ch>
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-11-elder@riscstar.com>
+ <2ce5897d-5bbb-486a-b0f0-0e30e54b451a@lunn.ch>
+ <afy34kj2hPxIlArO@aspen.lan>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 10/19] unwind_user/sframe: Remove .sframe section on
- detected corruption
-To: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev,
-        Indu Bhagat <ibhagatgnu@gmail.com>
-References: <20260505121718.3572346-11-jremus@linux.ibm.com>
- <20260505203942.98A3DC2BCB4@smtp.kernel.org>
-Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20260505203942.98A3DC2BCB4@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: vbQS723DTR1vsZEbePWdK4cogKbWiQvC
-X-Proofpoint-GUID: U8S3kf0qN4FOxtxcVxoQ6scp4wV2S424
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA3MDE2MSBTYWx0ZWRfX/5sNALpWYoug
- sTmBcLPlri4Ii3URThiXv+Mxsiy8/URXLmtU/KSpgT7hFbc6H6bwwSTKhlaa2QZsxYqRcQGAmma
- DKSJ3ya50Fr6ff3qg3k1zM64tcs/OB6ptpFXarhyY3RqlqCNETMHQXoI9Tt41VHQDfXVMZgyVUz
- H8RwbVg4L83KZ1k97eJ0n9s+bBvupuSAq2X8ju3aZYm0SJubC+pNjpVTHWEY7CoH1CKaKQkb6nS
- 1ri3A0Tlxqv/8KGc89x4L/DyCbt1Vs1x3a979dDJ1EaDpykW8qfZB3+pvF/IK2trt+T8umcOYdo
- jtwlYihFieFVsfIJoKQG2svx0g2HRpd/I9yjPWsPtb2TrXK5QUO+sWI8iiFfB8iKZpj0XfSuXO/
- Pi02AHHy6yJKuUIGkrTJCf9zZ3yG6IbsmcBMiqbiMgVbtU/TsqOj5U4WKGelwok+LL4OXFKB5cZ
- qn4K7+2KEbesUxgQ/qA==
-X-Authority-Analysis: v=2.4 cv=UbFhjqSN c=1 sm=1 tr=0 ts=69fcbc90 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8
- a=VwQbUJbxAAAA:8 a=HarvMFBOxm8M9-M_l90A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-07_02,2026-05-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 spamscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
- adultscore=0 priorityscore=1501 bulkscore=0 phishscore=0 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605070161
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <afy34kj2hPxIlArO@aspen.lan>
 
-On 5/5/2026 10:39 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] Concurrent stack unwinding on a corrupted `.sframe` section triggers a user-controllable `WARN_ON_ONCE()`, leading to a potential Denial of Service (DoS).
-> --
+On Thu, May 07, 2026 at 05:03:46PM +0100, Daniel Thompson wrote:
+> On Fri, May 01, 2026 at 09:04:58PM +0200, Andrew Lunn wrote:
+> > > +static struct tc956x_mac_speed mac_speed[] = {
+> > > +	{ PHY_INTERFACE_MODE_2500BASEX,	SPEED_2500,  SP_SEL_SGMII_2500M, },
+> > > +	{ PHY_INTERFACE_MODE_SGMII,	SPEED_2500,  SP_SEL_SGMII_2500M, },
+> > > +	{ PHY_INTERFACE_MODE_SGMII,	SPEED_1000,  SP_SEL_SGMII_1000M, },
+> >
+> > That looks odd. Some vendors implemented 2500BaseX using SGMII
+> > overclocked. But that is not strictly 2500BaseX. Having the 2500BASEX
+> > entry suggests you have real 2500BASEX, so why have an SGMII entry
+> > with SPEED_2500?
 > 
-> commit a00e313eeb121415a3ca3fe4ed3b15126f46c76a
-> Author: Josh Poimboeuf <jpoimboe@kernel.org>
+> This is a consequence of the code that uses this lookup table being
+> called both during initialization and from the fix_mac_speed() callback.
 > 
-> unwind_user/sframe: Remove .sframe section on detected corruption
-> 
-> This commit removes the .sframe section on demand when corruption is
-> detected during unwinding, to avoid continued attempted use of a bad
-> section.
-> 
->> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
->> index 9c755965ab837..8eed6a7d96256 100644
->> --- a/kernel/unwind/sframe.c
->> +++ b/kernel/unwind/sframe.c
->> @@ -358,6 +358,10 @@ int sframe_find(unsigned long ip, struct unwind_user_frame *frame)
->>  	ret = __find_fre(sec, &fde, ip, frame);
->>  end:
->>  	user_read_access_end();
->> +
->> +	if (ret == -EFAULT)
->> +		WARN_ON_ONCE(sframe_remove_section(sec->sframe_start));
->> +
->>  	return ret;
->>  }
-> 
-> Can this WARN_ON_ONCE() be triggered concurrently by userspace?
-> 
-> If two threads within the same process are being unwound simultaneously,
-> they could both encounter the same bad .sframe section and hit the
-> -EFAULT path.
-> 
-> Because sframe_find() is only protected by the sframe_srcu read lock,
-> both threads might call sframe_remove_section() at the same time. The first
-> thread will successfully remove the section and return 0.
-> 
-> The second thread will fail to find the section in mm->sframe_mt:
-> 
-> kernel/unwind/sframe.c:sframe_remove_section() {
->     ...
-> 	mt_for_each(&mm->sframe_mt, sec, index, ULONG_MAX) {
-> 		if (sec->sframe_start == sframe_start) {
-> 			found = true;
-> 			ret |= __sframe_remove_section(mm, sec);
-> 		}
-> 	}
-> 
-> 	if (!found || ret)
-> 		return -EINVAL;
->     ...
-> }
-> 
-> Since found is false, this returns -EINVAL. Because -EINVAL is non-zero,
-> WARN_ON_ONCE(-EINVAL) evaluates to true.
-> 
-> Could this allow an unprivileged user to intentionally trigger kernel
-> warnings (and panic the system if panic_on_warn is set) by unmapping a
-> registered .sframe section and triggering concurrent unwinds?
+> During initialization we only have the value in plat->phy_interface to
+> go on so we run the lookup table using plat->phy_interface (which is
+> typically PHY_INTERFACE_MODE_SGMII) and with the maximum permitted
+> speed.
 
-Please advise.
+Something sounds wrong here. SGMII only supports 10/100/1G. You should
+never be asked to do SGMII at 2500. It should ask for 2500BaseX.
 
-Should all WARN_ON_ONCE() in user unwind (sframe) be replaced with e.g.
-dbg_once() instead, defining it as follows in sframe_debug.h:
+> I haven't got detailed enough notes to allow me to double check but I
+> think there were problems completing the initial MAC reset if we didn't
+> write something sensible to the hardware during initialization.
 
-#define dbg_once(fmt, ...)							\
-	pr_debug_once("%s (%d): " fmt, current->comm, current->pid, ##__VA_ARGS__)
+> During fix_max_speed() we get told to adopt 2500base-x. Reviewing the
+> code I can see we don't propagate that and just use
+> plat->phy_interface for fix_mac_speed(). I will fix the code to that
+> the requested interface propagates properly to the lookup table but I
+> think we would still rely on the SGMII entry to get sane initial values
+> to write to the hardware.
 
-Thanks and regards,
-Jens
--- 
-Jens Remus
-Linux on Z Development (D3303)
-jremus@de.ibm.com / jremus@linux.ibm.com
+Getting sane values into the hardware is good, but 2500 SGMII is not
+sane :-(
 
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
+> > Doesn't that break any other dwxgmac301 in the system? Shouldn't you
+> > be making a copy of the global structure, and then making
+> > modifications to your copy? mac->dma then points to your copy?
+> 
+> That's exactly what this code does.
+> 
+> `*dma = dwxgmac301_dma_ops` is a structure copy, we never take a pointer
+> to dwxgmac301_dma_ops (and if we did, dwxgmac301_dma_ops is const so I
+> think we'd get a kernel oops if we tried to write to rodata).
+> 
+> Would to code be easier to read if we dropped the local `dma` variable
+> since that would make it clearer that td->dma is not a pointer? More
+> like:
 
+> +       /* dwxgmac301_dma_ops needs extending to provide DMA address translation */
+> +       td->dma = dwxgmac301_dma_ops;
+> +       td->dma.init_rx_chan = tc956x_dma_init_rx_chan;
+> +       td->dma.init_tx_chan = tc956x_dma_init_tx_chan;
+> +       mac->dma = &dma;
+
+Yes, that is better. I also think it is partially my problem. You
+don't often see structure assignments, just pointer assignments. So
+i'm somewhat blind to them.
+
+	Andrew
