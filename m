@@ -1,405 +1,220 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04E543C457A
-	for <bpf@vger.kernel.org>; Thu,  7 May 2026 09:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE073264C2
+	for <bpf@vger.kernel.org>; Thu,  7 May 2026 10:46:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778147847; cv=none; b=lzk9KJb1Gw4E+HoaoB91Ao0hqHe88aw8OXE3/oFWxstwuDr3NHyhiDKHOUKB/QLKMN/0LZK5A43Kd3UcwDkH1ZRWZc3SL5RM7fOsGFKvdk6mTmAGyznAoWEW/N31ZMNfPGasdvu8LNS1ekMG8JlRaAKmjAPqGCn9EEw1m1+rmFM=
+	t=1778150797; cv=none; b=rrJ0k1txpfskuqaItMUGFkyYGa5X80dgjIF2AnhtXABhFhHuP9ehCzwdjEH6oxgSmw7zJgWr3t+fztjxqwkeGDjNbV7xPRcs6uCinPig29Z52WF8uBMuAUTf6fsOACgd8YxGJ6M3/cHub27WLJNdi7X9w7OZsay0jCAoCrCTG/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778147847; c=relaxed/simple;
-	bh=hfGaOaB91E+XZBFp379GHs8PshD6s7Rlikxhrr5afig=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cL9QhcB6Oqx8rmvSTGCOBrL2JVBePVrKt2E88na725emoYYT1fBpYVkbF7laKrl2sQ3VhvKNzfU1uxVZqHnUUqX97AUfwUURo/mQ3Kw9SIQrE/NCU5EoHe710+uus1H8eiwWihEteZcSTb29rVpAgCaoDaTQkEg6+tgTe126iiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f9iGJjtG; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778150797; c=relaxed/simple;
+	bh=XLNA/3Hf6szgCmGtZxf+vIO5J3yddcWuAa9MX9Mt+Kc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KznoIFiC6s6So7fkgcPQHeVxABGW/6MfymDmvaPIxDN0kLP9gSD1P4BJBiH2Zv39f2pKlRGHclR2euUmbqmCCpHGzhrOQG1J/M1hwMklqekoBACyAS2QyAUHfluC0shU6A+RKNK/Z9OSHxfJUbxjgyqkzfy0HqloQPh8c/pc9yU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=v3rf+VJ+; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f9iGJjtG"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4891d7164ddso3804905e9.3
-        for <bpf@vger.kernel.org>; Thu, 07 May 2026 02:57:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778147843; x=1778752643; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vhLkLTolbyFKFrJFgOsn5aZNEw5iIaEfKoEnlONf3Ys=;
-        b=f9iGJjtGGW5OD/Z68PnTMAc5pa5IGJBpfme4iErpujL9IruYgzql5GlO+A4wJ103Xr
-         5COnQ7DVUtmvB/3MEYGEgCIOY/IwhB8ORUoOYMNEQcHQNgAWPkq7VGrk1FIwT9QtwRzp
-         7s48Yotw7pQ5izpZJYMJ1EirPvE1cE6wbXRRGKWeAlzRM3wZsrFosjyERRC71RovadUH
-         qjQLG0AivQh59Xssk6gQVZWMFhZgDSgcovqQ8W/XpXF6/aaTM/BUVgaiQBBooboWEg0C
-         tJ0LcMnetpMCP/y60FAJtH+0vPVcsUymFcdjL4kJXaDLlGuDpr1oxs4HEI7XzCfY2aqf
-         QP5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778147843; x=1778752643;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=vhLkLTolbyFKFrJFgOsn5aZNEw5iIaEfKoEnlONf3Ys=;
-        b=tNbksEKjpIcGqlJOZiTmtFc1JEQBdQnY3Qt7yLkiey1nyt+MaITKFSVDX92OyBQzm0
-         oSk4vempSLSM7JFamu2p2dszb+asnBu2P4/+keMmLoL3+nHcPMjarlto/8MRnL+Fh8yi
-         AfQFPP/e7atmCoIaLILvZ+B8kwufXFqCCZ8PN/Yc3AFFYDEEevTPlbOSKUxvx46C4Ge2
-         SAsVzheyiEKZ8qLfFuF6KZXduH3rIorK8nV1NlP/8W+ZEldGGG//cySO0Q4zxy818jf7
-         yPD3CukmSUF2V6UsoFdD1ep4ARWsI6VHlCqQNR0ZiADXOwlsrMjE8rQ8v8AbyIjaxJ+u
-         xxpQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9DbZlbLbifTJ3LtZ+bTvU2yQOe061yzu9Uhx2+UTcDudE9tUaeyjCu23PIURiIb8l2p2Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFw+l8DBsjv22auKgZWMsfKnjSy2sG/GYfyhlldipQnwR0SxhE
-	kGvmpQU90jeHui9uSOsE2yMhRWbiowSzmUeCxXwrjQynkm96idau+A4Q
-X-Gm-Gg: AeBDieuXp/JCESA59ybYq5EGHqXijtS15C4YYx7YsHW0C1eEYfKHLLAYhKSfRcd56jO
-	AAolueuYgJWywNl8ajFJoOEXj5EpKmqJ2SjjY6lOFPD4zEBZA4Fbws/eEDW56FcfCvOTtaNw/bY
-	ds9bejwLFOPY6xXy1WocmWIfmr6r5q1fD2h+OmD1PSS5xl4DHfgZQKQyw+jpS7FoRNHzecytUmV
-	NJj1QoJu7mxrUjrren2C7IxZYA7PbsG3IGGsHYNSXXulceWTUSMIjf0MG+yUHZ5S59TjvutJIsp
-	KXIdYM2aQ7nedQ4lW6z18pgFbI0NjSrEUFeplVOfd1I+G2sVbNhCNq7Fz1ahGtg7Si5N52jbCbD
-	Kzlsjr8nGeIE2CEJPWsVTisHZhDxAP8qPhCdKuqHnLWshb0l/IyW0g1wNXDxcIEpYEwIRfGmWI6
-	h0CxE7wJkEH4dJtd0M5rblGkWBHBU0yq21Cmxz5iAJwQvKInLh3hvXJU/oE+4ALrJq9ku11Uc=
-X-Received: by 2002:a05:600c:1e8a:b0:488:fd7e:1063 with SMTP id 5b1f17b1804b1-48e51f4cdcdmr114717615e9.29.1778147843159;
-        Thu, 07 May 2026 02:57:23 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e538ca8c0sm104145975e9.13.2026.05.07.02.57.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2026 02:57:22 -0700 (PDT)
-Date: Thu, 7 May 2026 10:57:21 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
- bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
- will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
- mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org, ast@kernel.org,
- rafael@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com,
- zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com, rdunlap@infradead.org,
- joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
- konrad.wilk@oracle.com, ashok.bhat@arm.com
-Subject: Re: [PATCH v11 01/14] asm-generic: barrier: Add
- smp_cond_load_relaxed_timeout()
-Message-ID: <20260507105721.66ba1e45@pumpkin>
-In-Reply-To: <87o6isl0nl.fsf@oracle.com>
-References: <20260408122538.3610871-1-ankur.a.arora@oracle.com>
-	<20260408122538.3610871-2-ankur.a.arora@oracle.com>
-	<874iklm1uy.fsf@oracle.com>
-	<20260506095836.216d9cc5@pumpkin>
-	<87o6isl0nl.fsf@oracle.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="v3rf+VJ+"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778150794;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=E1APVSt6yoCHd9lei1r3vKIVCjO48lcPt43gmyi2l6M=;
+	b=v3rf+VJ+x0nKhEaP3JzdEZyQrrXDcDdOH9bnxKvgaMMuH/Bb0QD2jQTUrvNqlhDrRaQX19
+	UdMr4M6DZWYTGbY+7DZ4R2pFeNMifi3F0HY3OWJfzx0lXoDpU9C/LlZrNsPgVUjnV2g0WK
+	RvalNRPLqn75niEWvt7YOnmdu1gZufo=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: netdev@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Joe Stringer <joe@wand.net.nz>,
+	Martin KaFai Lau <kafai@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH net v7] net: Validate protocol in skb_steal_sock() for BPF-assigned sockets
+Date: Thu,  7 May 2026 18:46:10 +0800
+Message-ID: <20260507104612.236253-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, 06 May 2026 13:54:06 -0700
-Ankur Arora <ankur.a.arora@oracle.com> wrote:
+bpf_sk_assign_tcp_reqsk() can assign a TCP reqsk to a non-TCP skb,
+causing a panic when the skb enters the wrong L4 receive path [1].
+An initial attempt tried to fix this in the BPF helper by checking
+iph->protocol, but Sashiko [2] revealed that BPF programs can bypass
+this check via a TOCTOU attack by modifying iph->protocol around the
+call:
 
-> David Laight <david.laight.linux@gmail.com> writes:
-> 
-> > On Wed, 06 May 2026 00:30:29 -0700
-> > Ankur Arora <ankur.a.arora@oracle.com> wrote:
-> >  
-> >> Ankur Arora <ankur.a.arora@oracle.com> writes:
-> >>  
-> >> > Add smp_cond_load_relaxed_timeout(), which extends
-> >> > smp_cond_load_relaxed() to allow waiting for a duration.
-> >> >
-> >> > We loop around waiting for the condition variable to change while
-> >> > peridically doing a time-check. The loop uses cpu_poll_relax() to slow
-> >> > down the busy-wait, which, unless overridden by the architecture
-> >> > code, amounts to a cpu_relax().
-> >> >
-> >> > Note that there are two ways for the time-check to fail: the timeout
-> >> > case or, @time_expr_ns returning an invalid value (negative or zero).
-> >> > The second failure mode allows for clocks attached to the clock-domain
-> >> > of @cond_expr --  which might cease to operate meaningfully once some
-> >> > state internal to @cond_expr has changed -- to fail.
-> >> >
-> >> > Evaluation of @time_expr_ns: in the fastpath we want to keep the
-> >> > performance close to smp_cond_load_relaxed(). So defer evaluation
-> >> > of the potentially costly @time_expr_ns to the slowpath.
-> >> >
-> >> > This also means that there will always be some hardware dependent
-> >> > duration that has passed in cpu_poll_relax() iterations at the time
-> >> > of first evaluation. Additionally cpu_poll_relax() is not guaranteed
-> >> > to return at timeout boundary. In sum, expect timeout overshoot when
-> >> > we exit due to expiration of the timeout.
-> >> >
-> >> > The number of spin iterations before time-check, SMP_TIMEOUT_POLL_COUNT
-> >> > is chosen to be 200 by default. With a cpu_poll_relax() iteration
-> >> > taking ~20-30 cycles (measured on a variety of x86 platforms), we
-> >> > expect a time-check every ~4000-6000 cycles.
-> >> >
-> >> > The outer limit of the overshoot is double that when working with the
-> >> > parameters above. This might be higher or lower depending on the
-> >> > implementation of cpu_poll_relax() across architectures.
-> >> >
-> >> > Lastly, config option ARCH_HAS_CPU_RELAX indicates availability of a
-> >> > cpu_poll_relax() that is cheaper than polling. This might be relevant
-> >> > for cases with a long timeout.
-> >> >
-> >> > Cc: Arnd Bergmann <arnd@arndb.de>
-> >> > Cc: Will Deacon <will@kernel.org>
-> >> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> >> > Cc: Peter Zijlstra <peterz@infradead.org>
-> >> > Cc: linux-arch@vger.kernel.org
-> >> > Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-> >> > Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> >> > ---
-> >> > Notes:
-> >> >    - add a comment mentioning that smp_cond_load_relaxed_timeout() might
-> >> >      be using architectural primitives that don't support MMIO.
-> >> >      (David Laight, Catalin Marinas)
-> >> >
-> >> >  include/asm-generic/barrier.h | 69 +++++++++++++++++++++++++++++++++++
-> >> >  1 file changed, 69 insertions(+)
-> >> >
-> >> > diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> >> > index d4f581c1e21d..e5a6a1c04649 100644
-> >> > --- a/include/asm-generic/barrier.h
-> >> > +++ b/include/asm-generic/barrier.h
-> >> > @@ -273,6 +273,75 @@ do {									\
-> >> >  })
-> >> >  #endif
-> >> >
-> >> > +/*
-> >> > + * Number of times we iterate in the loop before doing the time check.
-> >> > + * Note that the iteration count assumes that the loop condition is
-> >> > + * relatively cheap.
-> >> > + */
-> >> > +#ifndef SMP_TIMEOUT_POLL_COUNT
-> >> > +#define SMP_TIMEOUT_POLL_COUNT		200
-> >> > +#endif
-> >> > +
-> >> > +/*
-> >> > + * Platforms with ARCH_HAS_CPU_RELAX have a cpu_poll_relax() implementation
-> >> > + * that is expected to be cheaper (lower power) than pure polling.
-> >> > + */
-> >> > +#ifndef cpu_poll_relax
-> >> > +#define cpu_poll_relax(ptr, val, timeout_ns)	cpu_relax()
-> >> > +#endif
-> >> > +
-> >> > +/**
-> >> > + * smp_cond_load_relaxed_timeout() - (Spin) wait for cond with no ordering
-> >> > + * guarantees until a timeout expires.
-> >> > + * @ptr: pointer to the variable to wait on.
-> >> > + * @cond_expr: boolean expression to wait for.
-> >> > + * @time_expr_ns: expression that evaluates to monotonic time (in ns) or,
-> >> > + *  on failure, returns a negative value.
-> >> > + * @timeout_ns: timeout value in ns
-> >> > + * Both of the above are assumed to be compatible with s64; the signed
-> >> > + * value is used to handle the failure case in @time_expr_ns.
-> >> > + *
-> >> > + * Equivalent to using READ_ONCE() on the condition variable.
-> >> > + *
-> >> > + * Callers that expect to wait for prolonged durations might want
-> >> > + * to take into account the availability of ARCH_HAS_CPU_RELAX.
-> >> > + *
-> >> > + * Note that @ptr is expected to point to a memory address. Using this
-> >> > + * interface with MMIO will be slower (since SMP_TIMEOUT_POLL_COUNT is
-> >> > + * tuned for memory) and might also break in interesting architecture
-> >> > + * dependent ways.
-> >> > + */
-> >> > +#ifndef smp_cond_load_relaxed_timeout
-> >> > +#define smp_cond_load_relaxed_timeout(ptr, cond_expr,			\
-> >> > +				      time_expr_ns, timeout_ns)		\
-> >> > +({									\
-> >> > +	typeof(ptr) __PTR = (ptr);					\
+    iph->protocol = IPPROTO_TCP;
+    bpf_sk_assign_tcp_reqsk(udp_skb, tcp_sk);
+    iph->protocol = IPPROTO_UDP;
 
-		auto __PTR = ptr;
+Furthermore, bpf_sk_assign() has had the same class of vulnerability
+since its introduction — it can assign any socket type to any skb
+without protocol validation.  Since the BPF helper check alone cannot
+prevent a malicious BPF program from crashing the kernel, add protocol
+validation in skb_steal_sock() to reject mismatched sockets regardless
+of how they were assigned.
 
-> >> > +	__unqual_scalar_typeof(*ptr) VAL;				\
+The check is applied to all prefetched sockets.  Early demux paths
+already only assign matching protocols (e.g., UDP early demux only
+assigns UDP sockets to UDP skbs), so they pass the check naturally and
+the extra branch is negligible.
 
-It can't matter if integer promotions before assigning to VAL.
-So something like:
-		auto VAL = 1 ? 0 : *__PTR + 0;
-will generate a suitable writable variable.
-(The '+ 0' is needed because some versions of gcc incorrectly propagate
-'const'.)
+Pass the expected protocol from callers rather than extracting it from
+the IP header.  For IPv6, walking extension headers to find the L4
+protocol is complex and unnecessary since each caller already knows
+the protocol it handles.
 
-> >> > +	u32 __n = 0, __spin = SMP_TIMEOUT_POLL_COUNT;			\
-> >> > +	s64 __timeout = (s64)timeout_ns;				\
+[1] https://lore.kernel.org/bpf/20260403015851.148209-1-jiayuan.chen@linux.dev/
+[2] https://sashiko.dev/#/patchset/20260403015851.148209-1-jiayuan.chen%40linux.dev
 
-The (s64) cast can only hide errors.
+Fixes: cf7fbe660f2d ("bpf: Add socket assign support")
+Fixes: e472f88891ab ("bpf: tcp: Support arbitrary SYN Cookie.")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ include/net/inet6_hashtables.h |  7 ++++---
+ include/net/inet_hashtables.h  |  7 ++++---
+ include/net/request_sock.h     | 16 +++++++++++++++-
+ net/ipv4/udp.c                 |  2 +-
+ net/ipv6/udp.c                 |  2 +-
+ 5 files changed, 25 insertions(+), 9 deletions(-)
 
-> >> > +	s64 __time_now, __time_end = 0;					\
-> >> > +									\
-> >> > +	for (;;) {							\
-> >> > +		VAL = READ_ONCE(*__PTR);				\
-> >> > +		if (cond_expr)						\
-> >> > +			break;						\
-> >> > +		cpu_poll_relax(__PTR, VAL, (u64)__timeout);		\
-
-That doesn't look right, __timeout is relative; if the underlying code
-uses the timeout then the code delays for 200 * timeout_ns before even
-looking at the actual time.
-If you want to spin then you may not even want the cpu_relax() at all.
-(Or with a very short timeout as in the version below.)
-
-> >> > +		if (++__n < __spin)					\
-> >> > +			continue;					\
-> >> > +		__time_now = (s64)(time_expr_ns);			\
-
-Another cast that can only hide bugs.
-
-> >> > +		if (unlikely(__time_end == 0))				\
-> >> > +			__time_end = __time_now + __timeout;		\
-> >> > +		__timeout = __time_end - __time_now;			\
-> >> > +		if (__time_now <= 0 || __timeout <= 0) {		\
-> >> > +			VAL = READ_ONCE(*__PTR);			\
-> >> > +			break;						\
-> >> > +		}							\
-> >> > +		__n = 0;						\
-
-Resetting the spin count doesn't look right at all.
-In principle the code will delay for 200 * __timeout.
-Possibly the earlier check should be:
-			if (__n < __spin) {
-				__n++;
-				continue;
-			}
-(Or just don't worry that the code will spin again after 4M loops.
-The problem you have is that if cpu_poll_relay() ignores the timeout you
-probably want to spin 'for a bit' in code that only accesses local data
-(in particular avoiding evaluating cond_expr or time_expr_ns).
-
-> >> > +	}								\
-> >> > +	(typeof(*ptr))VAL;						\
-
-That cast is pointless; the return value will be subject to 'integer promotion'
-and converted to a rvalue - which removes any const/volatile qualifiers. 
-
-> >> > +})
-> >> > +#endif
-> >> > +  
-> >>
-> >> A cluster of issues that got flagged by sashiko was around timeout_ns
-> >> being specified as s64 and a bunch of potential edge cases around
-> >> that.
-> >>
-> >> These were mostly caused by an implicit assumption in the code that
-> >> the timeout specified by the caller is generally reasonable. So, way
-> >> below S64_MAX, not 0 etc.  
-> >
-> > There are plenty of ways kernel code can break things.
-> > Provided this code doesn't itself overwrite anywhere (rather than
-> > just loop forever or return immediately etc) I'd be tempted to
-> > just document the valid range rather than slow everything down
-> > with the extra tests.  
-> 
-> I don't disagree. In this case, however, it's somewhat borderline.
-> 
-> On the pro side, we get rid of some of the implicit type conversions
-> and assumptions around those.
-> 
-> On the negative, it adds an extra modulo operation in the slow path.
-> And, the for loop is structured a little differently from the usual
-> version.
-> 
-> On balance, I think this is a good change if only because it makes
-> the types a little more explicit.
-> 
-> Ankur
-> 
-> > 	David
-> >  
-> >>
-> >> I think this is worth cleaning up a bit. The change is mostly around
-> >> introducing a u32 __itertime and explicitly computing the waiting time.
-> >> And adding a check to ensure that we start with a valid value.
-> >>
-> >> This does make the implementation a little more involved. So just wanted
-> >> to see if people have any opinions on this?
-> >>
-> >> +#ifndef smp_cond_load_relaxed_timeout
-> >> +#define smp_cond_load_relaxed_timeout(ptr, cond_expr,          \
-> >> +                                     time_expr_ns, timeout_ns) \
-> >> +({                                                             \
-> >> +       typeof(ptr) __PTR = (ptr);                              \
-> >> +       __unqual_scalar_typeof(*(ptr)) VAL;                     \
-> >> +       u32 __count = 0, __spin = SMP_TIMEOUT_POLL_COUNT;       \
-> >> +       s64 __timeout = (s64)(timeout_ns);                      \
-> >> +       s64 __time_now, __time_end = 0;                         \
-> >> +       u32 __maybe_unused __itertime;                          \
-> >> +                                                               \
-> >> +       for (__itertime = NSEC_PER_USEC;                        \
-
-Ok, so that limits the initial 'spin' to 200 usecs.
-That gets added to any caller-specified timeout.
-
-> >> +               VAL = READ_ONCE(*__PTR), __timeout > 0; ) {     \
-
-Broken indentation.
-I'd change it back to a for (;;) loop.
-
-If __timeout <= 0 then the code goes through the 'timer expired'
-path (below) on the first iteration.
-So the extra check is just bloat.
-
-> >> +               if (cond_expr)                                  \
-> >> +                       break;                                  \
-> >> +               cpu_poll_relax(__PTR, VAL, __itertime);         \
-> >> +               if (++__count < __spin)                         \
-> >> +                       continue;                               \
-> >> +               __time_now = (s64)(time_expr_ns);               \
-> >> +               if (unlikely(__time_end == 0))                  \
-> >> +                       __time_end = __time_now + __timeout;    \
-> >> +               __timeout = __time_end - __time_now;            \
-> >> +               if (__time_now <= 0 || __timeout <= 0) {        \
-> >> +                       VAL = READ_ONCE(*__PTR);                \
-> >> +                       break;                                  \
-> >> +               }                                               \
-
-How about:
-			if (unlikely(__time_end == 0)) {
-				if (__time_now <= 0)
-					goto timed_out;
-				__time_end = __time_now + __timeout;
-			} else {
-				if (__time_now >= __time_end) {
-timed_out:
-					VAL = READ_ONCE(*__PTR);
-					break;
-				}
-				__timeout = __time_end - __time_now;
-			}
-				
-> >> +               __itertime = __timeout % NSEC_PER_MSEC +        \
-> >> +                               NSEC_PER_USEC;                  \
-
-That seems to just be putting a bound on the timeout.
-So the '% NSEC_PER_MSEC' could be '& ((1u << 20) - 1)'
-replacing an expensive signed divide with a cheap mask.
-
-But overall this is a lot of code to inline.
-It has to be possible to get it down to something like:
-	struct info info = { .tmo_ns = timeout_ns };
-	for (;;) {
-		VAL = READ_ONCE(PTR);
-		if (cond_expr)
-			break;
-		if (_smp_cond_load_relaxed_timeout(&info, PTR, VAL))
-			break;
-	}
-	VAL;
-(yes, I know it isn't that simple because the arm 'relax' code
-has a re-read in it so needs to know the size.)
-
--- David
-
-
-> >> +               __count = 0;                                    \
-> >> +       }                                                       \
-> >> +       (typeof(*(ptr)))VAL;                                    \
-> >> +})
-> >> +#endif
-> >>
-> >> Thanks
-> >>
-> >> --
-> >> ankur
-> >>  
-> 
-> 
-> --
-> ankur
-> 
+diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
+index 2cc5d416bbb5..218498373a9c 100644
+--- a/include/net/inet6_hashtables.h
++++ b/include/net/inet6_hashtables.h
+@@ -106,12 +106,13 @@ static inline
+ struct sock *inet6_steal_sock(struct net *net, struct sk_buff *skb, int doff,
+ 			      const struct in6_addr *saddr, const __be16 sport,
+ 			      const struct in6_addr *daddr, const __be16 dport,
+-			      bool *refcounted, inet6_ehashfn_t *ehashfn)
++			      bool *refcounted, inet6_ehashfn_t *ehashfn,
++			      int protocol)
+ {
+ 	struct sock *sk, *reuse_sk;
+ 	bool prefetched;
+ 
+-	sk = skb_steal_sock(skb, refcounted, &prefetched);
++	sk = skb_steal_sock(skb, refcounted, &prefetched, protocol);
+ 	if (!sk)
+ 		return NULL;
+ 
+@@ -153,7 +154,7 @@ static inline struct sock *__inet6_lookup_skb(struct sk_buff *skb, int doff,
+ 	struct sock *sk;
+ 
+ 	sk = inet6_steal_sock(net, skb, doff, &ip6h->saddr, sport, &ip6h->daddr, dport,
+-			      refcounted, inet6_ehashfn);
++			      refcounted, inet6_ehashfn, IPPROTO_TCP);
+ 	if (IS_ERR(sk))
+ 		return NULL;
+ 	if (sk)
+diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
+index 6e2fe186d0dc..a2a044f93cc4 100644
+--- a/include/net/inet_hashtables.h
++++ b/include/net/inet_hashtables.h
+@@ -446,12 +446,13 @@ static inline
+ struct sock *inet_steal_sock(struct net *net, struct sk_buff *skb, int doff,
+ 			     const __be32 saddr, const __be16 sport,
+ 			     const __be32 daddr, const __be16 dport,
+-			     bool *refcounted, inet_ehashfn_t *ehashfn)
++			     bool *refcounted, inet_ehashfn_t *ehashfn,
++			     int protocol)
+ {
+ 	struct sock *sk, *reuse_sk;
+ 	bool prefetched;
+ 
+-	sk = skb_steal_sock(skb, refcounted, &prefetched);
++	sk = skb_steal_sock(skb, refcounted, &prefetched, protocol);
+ 	if (!sk)
+ 		return NULL;
+ 
+@@ -494,7 +495,7 @@ static inline struct sock *__inet_lookup_skb(struct sk_buff *skb,
+ 	struct sock *sk;
+ 
+ 	sk = inet_steal_sock(net, skb, doff, iph->saddr, sport, iph->daddr, dport,
+-			     refcounted, inet_ehashfn);
++			     refcounted, inet_ehashfn, IPPROTO_TCP);
+ 	if (IS_ERR(sk))
+ 		return NULL;
+ 	if (sk)
+diff --git a/include/net/request_sock.h b/include/net/request_sock.h
+index 5a9c826a7092..3469e4903aed 100644
+--- a/include/net/request_sock.h
++++ b/include/net/request_sock.h
+@@ -89,9 +89,11 @@ static inline struct sock *req_to_sk(struct request_sock *req)
+  * @skb: sk_buff to steal the socket from
+  * @refcounted: is set to true if the socket is reference-counted
+  * @prefetched: is set to true if the socket was assigned from bpf
++ * @protocol: expected L4 protocol
+  */
+ static inline struct sock *skb_steal_sock(struct sk_buff *skb,
+-					  bool *refcounted, bool *prefetched)
++					  bool *refcounted, bool *prefetched,
++					  int protocol)
+ {
+ 	struct sock *sk = skb->sk;
+ 
+@@ -103,6 +105,18 @@ static inline struct sock *skb_steal_sock(struct sk_buff *skb,
+ 
+ 	*prefetched = skb_sk_is_prefetched(skb);
+ 	if (*prefetched) {
++		/* A non-full socket here is either a reqsk or a
++		 * timewait sock, both only contain sock_common and
++		 * lack sk_protocol. Since both can only be TCP,
++		 * use IPPROTO_TCP as the protocol.
++		 */
++		if ((sk_fullsock(sk) ? sk->sk_protocol : IPPROTO_TCP) != protocol) {
++			skb_orphan(skb);
++			*prefetched = false;
++			*refcounted = false;
++			return NULL;
++		}
++
+ #if IS_ENABLED(CONFIG_SYN_COOKIES)
+ 		if (sk->sk_state == TCP_NEW_SYN_RECV && inet_reqsk(sk)->syncookie) {
+ 			struct request_sock *req = inet_reqsk(sk);
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index 0ac2bf4f8759..ceb4d29a64ac 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -2618,7 +2618,7 @@ int udp_rcv(struct sk_buff *skb)
+ 		goto csum_error;
+ 
+ 	sk = inet_steal_sock(net, skb, sizeof(struct udphdr), saddr, uh->source, daddr, uh->dest,
+-			     &refcounted, udp_ehashfn);
++			     &refcounted, udp_ehashfn, IPPROTO_UDP);
+ 	if (IS_ERR(sk))
+ 		goto no_sk;
+ 
+diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+index 15e032194ecc..d9c12cce5ace 100644
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@ -1106,7 +1106,7 @@ INDIRECT_CALLABLE_SCOPE int udpv6_rcv(struct sk_buff *skb)
+ 
+ 	/* Check if the socket is already available, e.g. due to early demux */
+ 	sk = inet6_steal_sock(net, skb, sizeof(struct udphdr), saddr, uh->source, daddr, uh->dest,
+-			      &refcounted, udp6_ehashfn);
++			      &refcounted, udp6_ehashfn, IPPROTO_UDP);
+ 	if (IS_ERR(sk))
+ 		goto no_sk;
+ 
+-- 
+2.43.0
 
