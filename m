@@ -1,21 +1,21 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA450332906
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA105344DB5
 	for <bpf@vger.kernel.org>; Thu,  7 May 2026 21:30:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778189411; cv=none; b=aLHEn2NfBneq61V3yQt4dOIu8rucm0NDqxGH4ZleDjRp8QTnjzq9mbrT/1UniIvGYzUlBFhfZCG07ItPff775WRwF3RuA4xI9tAd1xvs+nX2tPnNh5gjeI0ipRH3C/Yw+dDDoBIgIgPiemiMlJPazvPxqgcBj+GV8afA2bMOHV0=
+	t=1778189411; cv=none; b=sqete9uA6t4UjcXonsDN/SbFSEJlT6BSho4ASr+CFvv/ja5U3xQtcumiC77Z7TheaEVkfEPCUilInj0CDIf/N+FIC8Pj7ebFgm9aPG0p0wKy0YrlH4z6AgeY4K19001VETLAU4bgzjQ+Ds7izD34TyQSXYzpBR3ZN32IP078Hs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1778189411; c=relaxed/simple;
-	bh=6RsnmSRGCuQNiePBEgLbO/R9IWjvmVB4fmWGVGr/dGs=;
+	bh=5Y1qqo8Z3RcJN/c781QmT4OAdzgI3T6MlHOj3aMIzKU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WLL7xOBlCDxgOFDruVLx/osA4KK2xQCwvqSxjtWU2498p/5C2cDgUG18UX7jtRnDhzSo6o02fC0osJFrtL0FxZpqXF0Tx53nNzqSz2QbmAQeluOgo5wuezpJYnPPp6i59dLJhDaEI6YT1GjXmHmNgzFDKjgr0fn2Ryw07jzEg88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+	 MIME-Version; b=QkcN6Ke0YMFVqqkDafJCy7htLd5wEifmMTxFVDW9Y+PJ/DFZC3nZi4UbDZUeFAv2W1xXjNYE03pWdE5ZCYMBUE2NFmbhap/ERRMzTV90S1P7YvLBgLUofdctC1m1xrgsQb7pqo/UUWPmncpLC/jDft+L+8LNi/jltf2wKNkiaFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 698C392BAA284; Thu,  7 May 2026 14:29:58 -0700 (PDT)
+	id 85E7692BAA2BB; Thu,  7 May 2026 14:30:03 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v2 03/23] bpf: Add helper functions for r11-based stack argument insns
-Date: Thu,  7 May 2026 14:29:58 -0700
-Message-ID: <20260507212958.1123333-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 04/23] bpf: Set sub->arg_cnt earlier in btf_prepare_func_args()
+Date: Thu,  7 May 2026 14:30:03 -0700
+Message-ID: <20260507213003.1125144-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260507212942.1122000-1-yonghong.song@linux.dev>
 References: <20260507212942.1122000-1-yonghong.song@linux.dev>
@@ -36,59 +36,49 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Add three static inline helper functions =E2=80=94 is_stack_arg_ldx(),
-is_stack_arg_st(), and is_stack_arg_stx() =E2=80=94 that identify r11-bas=
-ed
-(BPF_REG_PARAMS) instructions used for stack argument passing. These
-helpers encapsulate the detailed encoding requirements (operand size,
-register, offset alignment and sign) and hide raw BPF_REG_PARAMS usage
-from the verifier, making call sites more readable and explicit.
+Move the "sub->arg_cnt =3D nargs" assignment to immediately after
+nargs is computed from btf_type_vlen(), instead of at the end of
+btf_prepare_func_args().
 
-A later patch ("bpf: Enable r11 based insns") will wire these helpers
-into the verifier. Until then, check_and_resolve_insns() rejects any
-r11-based registers.
+btf_prepare_func_args() can return -EINVAL early in several cases,
+e.g. when a static function has some non-int/enum arguments.
+Since -EINVAL from btf_prepare_func_args() does not immediately
+reject verification, arg_cnt remains zero after the early return.
+This causes later stack argument based load/store insns to
+incorrectly assume the function has no arguments.
+
+Setting arg_cnt right after nargs ensures it is available regardless
+of which path btf_prepare_func_args() takes.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/filter.h | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ kernel/bpf/btf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index b77d0b06db6e..918d9b34eac6 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -749,6 +749,27 @@ static inline u32 bpf_prog_run_pin_on_cpu(const stru=
-ct bpf_prog *prog,
- 	return ret;
- }
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 77af44d8a3ad..a33a5b4122f8 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -7880,6 +7880,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
+env, int subprog)
+ 	}
+ 	args =3D (const struct btf_param *)(t + 1);
+ 	nargs =3D btf_type_vlen(t);
++	sub->arg_cnt =3D nargs;
+ 	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
+ 		if (!is_global)
+ 			return -EINVAL;
+@@ -8067,7 +8068,6 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
+env, int subprog)
+ 		return -EINVAL;
+ 	}
 =20
-+static inline bool is_stack_arg_ldx(const struct bpf_insn *insn)
-+{
-+	return insn->code =3D=3D (BPF_LDX | BPF_MEM | BPF_DW) &&
-+	       insn->src_reg =3D=3D BPF_REG_PARAMS &&
-+	       insn->off > 0 && insn->off % 8 =3D=3D 0;
-+}
-+
-+static inline bool is_stack_arg_st(const struct bpf_insn *insn)
-+{
-+	return insn->code =3D=3D (BPF_ST | BPF_MEM | BPF_DW) &&
-+	       insn->dst_reg =3D=3D BPF_REG_PARAMS &&
-+	       insn->off < 0 && insn->off % 8 =3D=3D 0;
-+}
-+
-+static inline bool is_stack_arg_stx(const struct bpf_insn *insn)
-+{
-+	return insn->code =3D=3D (BPF_STX | BPF_MEM | BPF_DW) &&
-+	       insn->dst_reg =3D=3D BPF_REG_PARAMS &&
-+	       insn->off < 0 && insn->off % 8 =3D=3D 0;
-+}
-+
- #define BPF_SKB_CB_LEN QDISC_CB_PRIV_LEN
+-	sub->arg_cnt =3D nargs;
+ 	sub->args_cached =3D true;
 =20
- struct bpf_skb_data_end {
+ 	return 0;
 --=20
 2.53.0-Meta
 
