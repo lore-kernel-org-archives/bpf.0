@@ -1,685 +1,254 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45E343ED5C8
-	for <bpf@vger.kernel.org>; Thu,  7 May 2026 14:59:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778165953; cv=none; b=slOZEZ0gt9zMqEiCKIOvN9YqRXxPRjWUBQykCoKJXt1EIVMVNkey4UxGbSuLrYpLNfcmrwRMlYPIORp/M9HkjiLpDG6F9Ih9QyRbFjmhQM6MGaMyGwGrAH3Uk5+Hd8iJPc5VTkNDY+pveCNM+mwyN5ObFlOyeIR6ZeU/FqAbtpg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778165953; c=relaxed/simple;
-	bh=00PWIm9sbVVSm/T3LwIzZRVdi28+abZ2zbBv1QMb/lc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DoGbA7k/fHDZokDxNZjW7bSxUW+EAUfu9I3YfFjFftDXhZMOKr2z8c0dyIqUQ9cga5DAoK6pIMz3l7vMVt1HdNPOCkaSRAegt1LmnPmqwdE8eTWBApTZ/EzveJpdPVw5haxNNZOfd0RuhqSMkjgRx+elMKcijrhAZ0FGOSUPHGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qMChCF1/; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 554DD44A70E
+	for <bpf@vger.kernel.org>; Thu,  7 May 2026 15:20:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778167203; cv=pass; b=mOiZzEtA9K1HJXjK8/eu3LH69rrrEgGkKWdqCk89Ek9GZyFsmUmEAJaVtYo6zUQ/lNIlIYReRqDJfY2rcWBxeJENdxoa1iiqITz144hsFsKPm/HY3E5nBq5eu3EaT/sg98bF6Am0SNLEFpr3C5pLUPFCcircPwDz58uMRH5jzBo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778167203; c=relaxed/simple;
+	bh=7SvODCkDb/PUktMcToXV+MZ//XeQ5qOuRTno5s3DkMY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=X39LZDldyE641Ym9vsv6VK0DwDMzeIi3GQGXWQP1w3Qq4OKUhotymuAAFvpGnNH0D6GWl9eaGCB7VPI40+p4Y/0+syi4wnMtney4nPWGMAY18olTNcLY1Y1Q3KhSU2L23VufChvjEs22j6k4jW8vjETzU9q1+o+hnTy+f/UsG8E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AhyFfQQ3; arc=pass smtp.client-ip=209.85.208.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qMChCF1/"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-488ad135063so9109715e9.0
-        for <bpf@vger.kernel.org>; Thu, 07 May 2026 07:59:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AhyFfQQ3"
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-38e7c3a2deaso7675921fa.2
+        for <bpf@vger.kernel.org>; Thu, 07 May 2026 08:19:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778167198; cv=none;
+        d=google.com; s=arc-20240605;
+        b=YZu72TzlnK+h9iUqrkSvQ2ESGD6UNgfs52pFf3bubXgXtxW7+z5wJuFVtpudBr4XfT
+         RDlHEr3AbOtZ3+gTRa7iSpDpJuOTksSuD3rv6uMSgVAkgI+vchpWgGt5MyFedsKsWJ4P
+         1P+GYkiao1RpgX3TBAS/pv0M5fIfY/XxUY6TrFaMGdNaixyQD5lcXErKCPpN+vCD/fNE
+         gEtbDajC14Yx66Hb3cDsJyxoq27EWGFmtt8xGGeq/8k0q5sylv0S2LNqi0en8V0u9irE
+         gg9XaocybAr0Guc61LKsdnPp9BqzzgYU0M2AbHof6OJSTWwYQ3kesdXOwdgRTUgvYf3k
+         0XDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=xvZ4FuEr6FesLFXFPQKMY7rVCvVG3A7RqmeTMe4SIiQ=;
+        fh=AQKWz5TOKLtVz3LmcW563P4PbW/MyCzZ9GQB1HSwgB8=;
+        b=CzWL94osYiGiZ6mDIeTndpROduoA/Kvu+5zxH6zwOknid0rn1VHfQmfglEF9UMKGVu
+         bfM1icV8LRhk+c1kHv5ql8JdyT4voB8nUuIXA+TtLuG05CoubDGw5MCSEAcQ6bquzZZy
+         IachndCK4mV+jZRQbFSVzr/f4VjzNELhMyZdGffoD3Ed0/8euG0zS06QEbnLtM2Pl49l
+         8KDc9pT7w+h9jFOG70/Sh/O+Wug0wzksuP35l47qiJlQxw1FDRxmYVKTe1nZ2F4pPs7F
+         sZF2SckEFSuHYAZVarTmqPtpYAzKdDGteZt0+8HnFQFwq6iHucQ9H3Z6vT82Yhw1ul4w
+         jTjA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778165947; x=1778770747; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=joUchXHdwL4gPqUmsmnH+0Ouwa27bK3vfdlsZKawZnA=;
-        b=qMChCF1/T3MALb16hG94f+cUMCWbJW1L4BwqLc+Ke3yO4Xqn2idXtQDIObnpey+Tu6
-         Y0NhZAFFSdWCcMD+Br5uUvN81Ukx88Xt+Vk/dXqV3RMIpQpIIHCQlqNTw4+v50OFvGo4
-         cNwoWaKEjg8jtBpMHlvVh4DbMLnN8eJ24iuwoBf0Z8uAHEO+ohyv7pX3W+q8dqj5A+zc
-         h/SpxO7sVtiBv+aMHJcgSA1ZULVmaUwCDF0g5DnUbDtKzQkiirL1ydl6G3vV3Mdgqay8
-         qZ0n09T0ZAFPjHRWiQG10yOd44wwG1PMXrT6D9BieGfHGQhXnqyLEauhFFA9WmMGxUCU
-         OFcg==
+        d=gmail.com; s=20251104; t=1778167198; x=1778771998; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xvZ4FuEr6FesLFXFPQKMY7rVCvVG3A7RqmeTMe4SIiQ=;
+        b=AhyFfQQ37mzc0ps42YgERjCLc9D/qVJ3BCDIw0ylsU53Os3uuTwwcMHnWInMPIXyJ8
+         GJomgmWy+VE1LlDQL/ZOVcML9I1MdJb+22kR3NSM/jKjwWfEfGksRzeYD2vmpWAg7Re2
+         zir9RILEjmVANMvHT7FrbbhJ9U5XCnaWGEtYot5pMLnVPfNxy6wQmvNoctE9+1fuHok2
+         brZC/TGOKoKooK2V5TVrytgdAqCNT49auv6ZCk6RWqVSRDe8c3KYsr42ROEdpAl69WrP
+         5x1cobKWw/lpriDqGJLg1K4BoxhLrhQBzRJxcKdA2noOkIQcH6KdE1+9rBDA3cyNO/Wt
+         rhPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778165947; x=1778770747;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=joUchXHdwL4gPqUmsmnH+0Ouwa27bK3vfdlsZKawZnA=;
-        b=K6j4UbfRtyusNjdhlx6bzrivcv4fMTIbwjJv+gGcBHoMrXZ9Zg3++VCAVkPpEeJtGn
-         DWjQtnqtvc0juqb5i9eZpL/ulEelHNPlyfY1eDCnjlb38xi89Cl13trUQ06JgzoxqtRF
-         ACqL8zH+nYAYun9iMUD4TMzdEv54gS/hNTl4Xj3MACOEorlwkeB6he8IO+Oq8pPJMIJT
-         lRG8b0lATpQ2kAYHtt10eDxqVyyMhDYp4dKIXOwO5mlosRobmx6oyonminuJYKfijGTK
-         8SR8bE61n3VNr25eOI3vaHjZTYXIMZ4P4Tih+8479jn7RrAkB3FB1mmhaiQcEmuqR7ko
-         PXbw==
-X-Forwarded-Encrypted: i=1; AFNElJ8XCeCMD6wFM1bQJnFdEz3ZwOzCb4cYBqC2L1taX4YHc8cYGbbD9y4MJ9NAGDKS+VkpzcQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOUfs1VZbCElKJn4cEwWIf+x+WJxqcxeW5AN7kazFvPvtABZFZ
-	uCwW+4X2kSXwCAVCmYTvN7vE4kjUq/IsaqP3d2C/qOU9+6sl3h6XE5lH
-X-Gm-Gg: AeBDievyLgBDCiHZNjv4R4BJK0GNr5fNfS/g03LD6BIbRRad9dU8meMavC6kOLMCEMc
-	f9Kk1SrOruZjpr0T1EKYAEMPYXG54wIEyJVpoHo8ytCNJs6J/ej7sKVtz+yFYhHYhGHpyms0GyP
-	8yCG+cF4ARnc4e/0XtS78dXl90jxl29hKq1tWX61O51jHmIdh3WNcrttYEpt5U6WiUJX4vgoBae
-	LAJP40gFpj4AT7UWYPNql4Nh87jfVGtr6kmENpBGjwe8H8hQKaVqcPhZtAcMttRguBHeh/iJEl3
-	KXQjv2byPz9/hebZcqDCNnFdWVdWjrPtwx1U95FiNgHKml4j8V2slaMGGns4MpOY6dV71sthlm5
-	NeNe5JbjBZkSnxI0uKwSmS2x9fNZpAtE1dfrCJWDccyUkLxVb1zc09V4h9FMtdL34LljNW9Hdvo
-	MNgCJd+y1iXjX0HEBBzqsF3hkWQjq9251IrR09tFLIFgyghvNwDpz14to4YJTTNwf4KSzYmiQN3
-	liaL7d6LxxtJ6psVVD8qMGoDBn9oIfq
-X-Received: by 2002:a05:600c:5304:b0:48e:51f8:eb38 with SMTP id 5b1f17b1804b1-48e51f8eb70mr139720395e9.27.1778165946282;
-        Thu, 07 May 2026 07:59:06 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e530c1d07sm40702005e9.9.2026.05.07.07.59.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 May 2026 07:59:05 -0700 (PDT)
-Message-ID: <6954a05d-15e0-4e16-8391-78115101547a@gmail.com>
-Date: Thu, 7 May 2026 15:59:04 +0100
+        d=1e100.net; s=20251104; t=1778167198; x=1778771998;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=xvZ4FuEr6FesLFXFPQKMY7rVCvVG3A7RqmeTMe4SIiQ=;
+        b=DPODg8pRhvgnNsr2pzHnLmMFkm/D+sTlQ6pS6Fbc8VvFTl+XaBRwDM+HA8ZwtoPZrA
+         8CtZv0sHMwjkM51xA55P5e0LbvQilNu6J1OYAvBO+HoeurYK2T6OpzVO+QE+TwqHU8AL
+         HxKAEVt0fTbYaAW2uBmE0WOaJNuKdN6y11kvTjCBOYr0soJI7h2FYHTz7a7M8zW6G0dF
+         PFUmN/96czJiV7kXkOTg+OPWakG7uYwboyWSeLcZV+UokidQsFRmB1g6efeMim6P8K8v
+         iH0EpzqyyYVN661tuJFvI2NYEsdc9gbQWjVBrx08/Y5C978qeSTpFVTfJsh4LLBWoOhe
+         ac4w==
+X-Forwarded-Encrypted: i=1; AFNElJ/ofviNtcQHQbo3xIRXQ9vDXOFpzwQvA7fOO5gCKqDh+sr9PW8HSuvo21aO7SF8/Sxxz8g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpIDKTy7Lxm8Ftls/UlloL3t4o11gnqSwghpeEQj3vqmNNmpYJ
+	8Z42QzEX8TIOAefkznO0wLFQMP1iKMw8QQVxg9B7UDnW9wx4f5R+OaKiS3ozLFklte4WEA9KQqY
+	wS9as0hNrAUMjvYnhJHG5xiBSeeLGd+8=
+X-Gm-Gg: AeBDietCcPQJJO6XuurkugiZ8vYdoLuxj5WYMk/IRuwLKI27WPOMlt8npsT1AOEDARm
+	Lhk/trsXnDp4uIhOiXaGfvdWAvjclMvK1DTx1C5P3ULT4yVyzR9CLu455OawRW2eAP8DkmM8AOT
+	eBSk3ya9CA6sCOkYSXAqfh87mA+W4pylzRmtFzSddt7INu6UA65B5BwsIzsHzXTivwro/5mrNky
+	c4vy9Jq+JQY+QqJJi3IbaK2CdXokWgLjXpiSvKUqhXCYNSboOTfxlPmTlwy0MYQkD5/UMP/XbYW
+	DMn2Sb5haNZAFzeUWp2/e+230Bk=
+X-Received: by 2002:a05:651c:35c6:b0:38a:6537:6f51 with SMTP id
+ 38308e7fff4ca-393c40a513fmr36502871fa.5.1778167197354; Thu, 07 May 2026
+ 08:19:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [bpf-next v2 1/2] bpf: Offload kptr destructors that run from NMI
-To: Justin Suess <utilityemal77@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, bpf@vger.kernel.org,
- mic@digikod.net, Alexei Starovoitov <alexei.starovoitov@gmail.com>
-References: <20260505150851.3090688-1-utilityemal77@gmail.com>
- <20260505150851.3090688-2-utilityemal77@gmail.com>
- <51a054a0-e57f-49dc-9527-36da0535087c@gmail.com> <afucGBvwXMkuU8sG@zenbox>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <afucGBvwXMkuU8sG@zenbox>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260503165024.1526680-1-vernon2gm@gmail.com> <CALOAHbBx6GuZjj9_EdrAPCsiLJekAiqOVsWQ0muNJh18Nxaqtg@mail.gmail.com>
+ <CACZaFFPXo_f_2M7y4NfQ=sWddS4Kwo5guFTqZcLmm4Z8COWocQ@mail.gmail.com> <CALOAHbDQyUARbWudg3e94p7QyUF3Jgi3Y+NgPiSjfw=euENsjg@mail.gmail.com>
+In-Reply-To: <CALOAHbDQyUARbWudg3e94p7QyUF3Jgi3Y+NgPiSjfw=euENsjg@mail.gmail.com>
+From: Vernon Yang <vernon2gm@gmail.com>
+Date: Thu, 7 May 2026 23:19:45 +0800
+X-Gm-Features: AVHnY4KHF6zAOGVDKs5Hct5iRRfpwWPlE8f88WUSoHr5Q9e_GpVW0c3a6W-w61w
+Message-ID: <CACZaFFMS0KcmBbEMc-ZC9C9VHaQtZbcGpujhfmKR4Yx=eGsFWg@mail.gmail.com>
+Subject: Re: [PATCH 0/4] mm: introduce mthp_ext via cgroup-bpf to make mTHP
+ more transparent
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+	roman.gushchin@linux.dev, inwardvessel@gmail.com, shakeel.butt@linux.dev, 
+	ast@kernel.org, daniel@iogearbox.net, surenb@google.com, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	baohua@kernel.org, lance.yang@linux.dev, dev.jain@arm.com, 
+	Vernon Yang <yanglincheng@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, May 7, 2026 at 9:19=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> w=
+rote:
+>
+> On Thu, May 7, 2026 at 8:51=E2=80=AFPM Vernon Yang <vernon2gm@gmail.com> =
+wrote:
+> >
+> > On Thu, May 7, 2026 at 11:35=E2=80=AFAM Yafang Shao <laoar.shao@gmail.c=
+om> wrote:
+> > >
+> > > On Mon, May 4, 2026 at 12:52=E2=80=AFAM Vernon Yang <vernon2gm@gmail.=
+com> wrote:
+> > > >
+> > > > From: Vernon Yang <yanglincheng@kylinos.cn>
+> > > >
+> > > > Hi all,
+> > > >
+> > > > Background
+> > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > >
+> > > > As is well known, a system can simultaneously run multiple differen=
+t
+> > > > scenarios. However, THP is not beneficial in every scenario =E2=80=
+=94 it is only
+> > > > most suitable for memory-intensive applications that are not sensit=
+ive
+> > > > to tail latency. For example, Redis, which is sensitive to tail lat=
+ency,
+> > > > is not suitable for THP. But in practice, due to Redis issues, the
+> > > > entire THP functionality is often turned off, preventing other scen=
+arios
+> > > > from benefiting from it.
+> > > >
+> > > > There are also some embedded scenarios (e.g. Android) that directly=
+ use
+> > > > 2MB THP, where the granularity is too large. Therefore, we introduc=
+ed
+> > > > mTHP in v6.8, which supports multiple-size THP. In practice, howeve=
+r, we
+> > > > still globally fix a single mTHP size and are unable to automatical=
+ly
+> > > > select different mTHP sizes based on different scenarios.
+> > > >
+> > > > After testing, it was found that
+> > > >
+> > > > - When the system has a lot of free memory, it is normal for Redis =
+to
+> > > >   use mTHP. performance degradation in Redis only occurs when the s=
+ystem
+> > > >   is under high memory pressure.
+> > > > - Additionally, when a large number of small-memory processes use m=
+THP,
+> > > >   memory waste is prone to occur, and performance degradation may a=
+lso
+> > > >   happen during fast memory allocation/release.
+> > > >
+> > > > Previously, "Cgroup-based THP control"[1] was proposed, but it had =
+the
+> > > > following issues.
+> > > >
+> > > > - It breaks the cgroup hierarchy property.
+> > > > - Add new THP knobs, making sysadmin's job more complex
+> > > >
+> > > > Previously, "mm, bpf: BPF-MM, BPF-THP"[2] was proposed, but it had =
+the
+> > > > following issues.
+> > > >
+> > > > - It didn't address the issue on the per-process mode.
+> > > > - For global mode, the prctl(PR_SET_THP_DISABLE) has already achiev=
+ed
+> > > >   the same objective, there is no need to add two mechanisms for th=
+e
+> > > >   same purpose.
+> > > > - Attaching st_ops to mm_struct, the same issues that cgroup-bpf on=
+ce
+> > >
+> > > Hello,
+> > >
+> > > The primary hurdles preventing BPF-THP from being upstreamed are:
+> > >
+> > > - Uncertainty regarding the stable API
+> > >
+> > >   It remains unclear whether the following API is sufficient for
+> > >   BPF-THP requirements:
+> >
+> > Thank you for pointing this out. I will add it to this issue list in
+> > the next version.
+> >
+> > At the same time, I also encourage everyone to actively provide
+> > relevant real workload scenarios. I will conduct related analyses and
+> > develop the mthp_ext to address them, so we can determine which ABI
+> > can satisfy the BPF-THP requirements.
+> >
+> > >   unsigned long
+> > >   bpf_hook_thp_get_orders(struct vm_area_struct *vma, enum tva_type t=
+ype,
+> > >                                             unsigned long orders)
+> > >   {
+> > >       return orders;
+> > >   }
+> > >
+> > > - Ongoing integration of cgroups and struct-ops
+> > >
+> > >   Work is still in progress to integrate cgroup support with
+> > > struct_ops (see also
+> > > https://lore.kernel.org/linux-mm/87cy439x8a.fsf@linux.dev/).
+> > > We should wait for this infrastructure to land before introducing
+> > > new cgroup-based struct_ops.
+> >
+> > This work can be carried out in parallel with integrating cgroup
+> > support with struct_ops. I will focus on addressing real workload
+> > scenarios to further clear/stabilize the BPF-THP ABI.
+> >
+> > > >   faced are likely to arise again, e.g. lifetime of cgroup vs bpf, =
+dying
+> > > >   cgroups, wq deadlock, etc. It is recommended to use cgroup-bpf fo=
+r
+> > > >   implementation.
+> > > > - The test cases are too simplistic, lacking eBPF cases similar to =
+real
+> > > >   workloads such as sched_ext.
+> > > >
+> > > > If I miss some thing, please let me know. Thanks!
+> > >
+> > > BTW, it would be better to include the original authors in the CC
+> > > list, especially since their work is cited in your commit message. ;)
+> >
+> > OK, I will CC the relevant authors in the next version.
+>
+> Hello Vernon,
+>
+> I believe it would be best to hold off until David provides guidance
+> on the future direction. While I am not currently active on BPF-THP,
+> we are still looking for the right opportunity to upstream it. The
+> primary difference is that your implementation is cgroup-based;
+> however, we also plan to switch to that approach once Roman=E2=80=99s wor=
+k
+> lands.
 
+LSF/MM/BPF has just concluded, I think David will soon share some new
+directions with us.
 
-On 5/6/26 8:52 PM, Justin Suess wrote:
-> On Wed, May 06, 2026 at 05:43:51PM +0100, Mykyta Yatsenko wrote:
->> On 5/5/26 4:08 PM, Justin Suess wrote:
->>> A BPF program attached to tp_btf/nmi_handler can delete map entries or
->>> swap out referenced kptrs from NMI context. Today that runs the kptr
->>> destructor inline. Destructors such as bpf_cpumask_release() can take
->>> RCU-related locks, so running them from NMI can deadlock the system.
->>>
->>> Preallocate offload jobs from the global BPF memory allocator, track the
->>> number of live destructor-backed references so the pool stays ahead of
->>> NMI frees, and let the worker invoke the destructor after NMI exits.
->>>
->>> The algorithm for preallocation is simple: The invariant is total >=
->>> refs + active, where refs = the ref kptrs installed in maps, active =
->>> jobs being executed in the irq_work worker, and total is the number of
->>> job structures allocated. To avoid excessive pre-allocation calls while
->>> maintaining the invariant, we allocate the needed slots, plus a small
->>> amount of extra, min(needed, BPF_DTOR_KPTR_RESERVE_HEADROOM), where
->>> BPF_DTOR_KPTR_RESERVE_HEADROOM is 64 in this patch.
->>>
->>> A small but harmless ordering subtlety: the active atomic is read before
->>> refs. This can result in a small amount of over allocation, but this
->>> won't be leaked and will properly be carried into the trim stage.
->>>
->>> The trim stage is simple. It uses a CAS loop to free excessive leftover
->>> idle job slots. It snapshots total refs and active, pops an idle job if
->>> the pool is excessively large, and attempts a cmpxhg to decrement it
->>> atomically. On a failure case, it will just push the job back into the
->>> idle list and retry.
->>>
->>> There are several best-effort mitigation methods to tackle the memory
->>> pressure problem, preserving integrity under this unlikely scenario.
->>>
->>> If reserving another offload slot fails while installing a new
->>> destructor-backed kptr through bpf_kptr_xchg(), leave the destination
->>> unchanged and return the incoming pointer so the caller keeps ownership.
->>>
->>> This is superior to leaking the pointer, and should only happen if the
->>> accounting is incorrect. Moreover, this is a condition the caller can
->>> check for and recover from.
->>>
->>> If NMI teardown still fails to grab an idle offload job despite that
->>> reserve accounting, warn once and run the destructor inline rather than
->>> leak the object permanently. Attempt to repair the counter safely with
->>> another CAS loop in that case, preserving concurrent increments.
->>>
->>> This fix does come with small performance tradeoffs for safety. xchg can
->>> no longer be inlined for referenced kptrs, as inlining would break the
->>> reference counting. The inlining fix is preserved for kptrs with no
->>> destructor defined.
->>>
->>> This keeps refcounted kptr teardown out of NMI context without slowing
->>> down raw kptr exchanges that never need destructor handling.
->>>
->>> Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>
->>> Reported-by: Justin Suess <utilityemal77@gmail.com>
->>> Closes: https://lore.kernel.org/bpf/20260421201035.1729473-1-utilityemal77@gmail.com/
->>> Signed-off-by: Justin Suess <utilityemal77@gmail.com>
->>> ---
->>>  include/linux/bpf.h          |  16 ++++
->>>  include/linux/bpf_verifier.h |   1 +
->>>  kernel/bpf/fixups.c          |  33 ++++---
->>>  kernel/bpf/helpers.c         |  24 ++++-
->>>  kernel/bpf/syscall.c         | 181 +++++++++++++++++++++++++++++++++++
->>>  kernel/bpf/verifier.c        |   2 +
->>>  6 files changed, 242 insertions(+), 15 deletions(-)
->>>
->>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->>> index 715b6df9c403..307de5caa646 100644
->>> --- a/include/linux/bpf.h
->>> +++ b/include/linux/bpf.h
->>> @@ -3454,6 +3454,22 @@ static inline struct bpf_prog *bpf_prog_get_type(u32 ufd,
->>>  
->>>  void __bpf_free_used_maps(struct bpf_prog_aux *aux,
->>>  			  struct bpf_map **used_maps, u32 len);
->>> +/* Direct-call target used by fixups for bpf_kptr_xchg() sites without dtors. */
->>> +u64 bpf_kptr_xchg_nodtor(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
->>> +
->>> +#ifdef CONFIG_BPF_SYSCALL
->>> +int bpf_kptr_offload_inc(void);
->>> +void bpf_kptr_offload_dec(void);
->>> +#else
->>> +static inline int bpf_kptr_offload_inc(void)
->>> +{
->>> +	return 0;
->>> +}
->>> +
->>> +static inline void bpf_kptr_offload_dec(void)
->>> +{
->>> +}
->>> +#endif
->>>  
->>>  bool bpf_prog_get_ok(struct bpf_prog *, enum bpf_prog_type *, bool);
->>>  
->>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->>> index 976e2b2f40e8..8e39ff92dd2c 100644
->>> --- a/include/linux/bpf_verifier.h
->>> +++ b/include/linux/bpf_verifier.h
->>> @@ -672,6 +672,7 @@ struct bpf_insn_aux_data {
->>>  	bool non_sleepable; /* helper/kfunc may be called from non-sleepable context */
->>>  	bool is_iter_next; /* bpf_iter_<type>_next() kfunc call */
->>>  	bool call_with_percpu_alloc_ptr; /* {this,per}_cpu_ptr() with prog percpu alloc */
->>> +	bool kptr_has_dtor;
->>>  	u8 alu_state; /* used in combination with alu_limit */
->>>  	/* true if STX or LDX instruction is a part of a spill/fill
->>>  	 * pattern for a bpf_fastcall call.
->>> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
->>> index fba9e8c00878..459e855e86a5 100644
->>> --- a/kernel/bpf/fixups.c
->>> +++ b/kernel/bpf/fixups.c
->>> @@ -2284,23 +2284,30 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
->>>  			goto next_insn;
->>>  		}
->>>  
->>> -		/* Implement bpf_kptr_xchg inline */
->>> -		if (prog->jit_requested && BITS_PER_LONG == 64 &&
->>> -		    insn->imm == BPF_FUNC_kptr_xchg &&
->>> -		    bpf_jit_supports_ptr_xchg()) {
->>> -			insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_2);
->>> -			insn_buf[1] = BPF_ATOMIC_OP(BPF_DW, BPF_XCHG, BPF_REG_1, BPF_REG_0, 0);
->>> -			cnt = 2;
->>> +		/* Implement bpf_kptr_xchg inline. */
->>> +		if (insn->imm == BPF_FUNC_kptr_xchg &&
->>> +		    !env->insn_aux_data[i + delta].kptr_has_dtor) {
->>> +			if (prog->jit_requested && BITS_PER_LONG == 64 &&
->>> +			    bpf_jit_supports_ptr_xchg()) {
->>> +				insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_2);
->>> +				insn_buf[1] = BPF_ATOMIC_OP(BPF_DW, BPF_XCHG,
->>> +						     BPF_REG_1, BPF_REG_0, 0);
->>> +				cnt = 2;
->>>  
->>> -			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
->>> -			if (!new_prog)
->>> -				return -ENOMEM;
->>> +				new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
->>> +				if (!new_prog)
->>> +					return -ENOMEM;
->>>  
->>> -			delta    += cnt - 1;
->>> -			env->prog = prog = new_prog;
->>> -			insn      = new_prog->insnsi + i + delta;
->>> +				delta    += cnt - 1;
->>> +				env->prog = prog = new_prog;
->>> +				insn      = new_prog->insnsi + i + delta;
->>> +				goto next_insn;
->>> +			}
->>> +
->>> +			insn->imm = bpf_kptr_xchg_nodtor - __bpf_call_base;
->>>  			goto next_insn;
->>>  		}
->>> +
->>>  patch_call_imm:
->>>  		fn = env->ops->get_func_proto(insn->imm, env->prog);
->>>  		/* all functions that have prototype and verifier allowed
->>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->>> index baa12b24bb64..cdc64ab83ef6 100644
->>> --- a/kernel/bpf/helpers.c
->>> +++ b/kernel/bpf/helpers.c
->>> @@ -1728,7 +1728,7 @@ void bpf_wq_cancel_and_free(void *val)
->>>  	bpf_async_cancel_and_free(val);
->>>  }
->>>  
->>> -BPF_CALL_2(bpf_kptr_xchg, void *, dst, void *, ptr)
->>> +BPF_CALL_2(bpf_kptr_xchg_nodtor, void *, dst, void *, ptr)
->>>  {
->>>  	unsigned long *kptr = dst;
->>>  
->>> @@ -1736,12 +1736,32 @@ BPF_CALL_2(bpf_kptr_xchg, void *, dst, void *, ptr)
->>>  	return xchg(kptr, (unsigned long)ptr);
->>>  }
->>>  
->>> +BPF_CALL_2(bpf_ref_kptr_xchg, void *, dst, void *, ptr)
->>> +{
->>> +	unsigned long *kptr = dst;
->>> +	void *old;
->>> +
->>> +	/*
->>> +	 * If the incoming pointer cannot be torn down safely from NMI later on,
->>> +	 * leave the destination untouched and return ptr so the caller keeps
->>> +	 * ownership.
->>> +	 */
->>> +	if (ptr && bpf_kptr_offload_inc())
->>> +		return (unsigned long)ptr;
->>> +
->>> +	old = (void *)xchg(kptr, (unsigned long)ptr);
->>> +	if (old)
->>> +		bpf_kptr_offload_dec();
->>> +	return (unsigned long)old;
->>> +}
->>> +
->>>  /* Unlike other PTR_TO_BTF_ID helpers the btf_id in bpf_kptr_xchg()
->>>   * helper is determined dynamically by the verifier. Use BPF_PTR_POISON to
->>>   * denote type that verifier will determine.
->>> + * No-dtor callsites are redirected to bpf_kptr_xchg_nodtor() from fixups.
->>>   */
->>>  static const struct bpf_func_proto bpf_kptr_xchg_proto = {
->>> -	.func         = bpf_kptr_xchg,
->>> +	.func         = bpf_ref_kptr_xchg,
->>>  	.gpl_only     = false,
->>>  	.ret_type     = RET_PTR_TO_BTF_ID_OR_NULL,
->>>  	.ret_btf_id   = BPF_PTR_POISON,
->>> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
->>> index 3b1f0ba02f61..162bfd4796ea 100644
->>> --- a/kernel/bpf/syscall.c
->>> +++ b/kernel/bpf/syscall.c
->>> @@ -7,6 +7,7 @@
->>>  #include <linux/bpf_trace.h>
->>>  #include <linux/bpf_lirc.h>
->>>  #include <linux/bpf_verifier.h>
->>> +#include <linux/bpf_mem_alloc.h>
->>>  #include <linux/bsearch.h>
->>>  #include <linux/btf.h>
->>>  #include <linux/hex.h>
->>> @@ -19,6 +20,8 @@
->>>  #include <linux/fdtable.h>
->>>  #include <linux/file.h>
->>>  #include <linux/fs.h>
->>> +#include <linux/irq_work.h>
->>> +#include <linux/llist.h>
->>>  #include <linux/license.h>
->>>  #include <linux/filter.h>
->>>  #include <linux/kernel.h>
->>> @@ -65,6 +68,131 @@ static DEFINE_SPINLOCK(map_idr_lock);
->>>  static DEFINE_IDR(link_idr);
->>>  static DEFINE_SPINLOCK(link_idr_lock);
->>>  
->>> +struct bpf_dtor_kptr_work {
->>> +	struct llist_node node;
->>> +	void *obj;
->>> +	btf_dtor_kfunc_t dtor;
->>> +};
->>> +
->>> +/* Queue pending dtors per CPU; the idle pool stays global. */
->>> +static DEFINE_PER_CPU(struct llist_head, bpf_dtor_kptr_jobs);
->>> +static LLIST_HEAD(bpf_dtor_kptr_idle);
->>> +/* Keep total >= refs + active so NMI frees never need to allocate. */
->>> +static atomic_long_t bpf_dtor_kptr_refs = ATOMIC_LONG_INIT(0);
->>> +static atomic_long_t bpf_dtor_kptr_active = ATOMIC_LONG_INIT(0);
->>> +static atomic_long_t bpf_dtor_kptr_total = ATOMIC_LONG_INIT(0);
->>> +
->>> +/* Bound reserve overshoot so the pool tracks demand instead of growing on itself. */
->>> +#define BPF_DTOR_KPTR_RESERVE_HEADROOM 64L
->>> +
->>> +static void bpf_dtor_kptr_worker(struct irq_work *work);
->>> +static DEFINE_PER_CPU(struct irq_work, bpf_dtor_kptr_irq_work) =
->>> +	IRQ_WORK_INIT_HARD(bpf_dtor_kptr_worker);
->>> +
->>
->> I think this still looks too complex:
->>  * 2 lists - idle list and armed list
->>  * 3 atomics, controlling demand/supply
->>  * headroom/trimming management
->>
->> The complexity introduced for performance reasons, but
->> I'm not sure if the tradeoff is worth it.
->>
->> What about the next design:
->>
->> Instead of idle list, store bpf_dtor_kptr_work in the kptr map slot itself.
->> Use kmalloc_nolock() to allocate bpf_dtor_kptr_work on the first 
->> xchg just once per map value, then reuse it across xchg in/out.
->>
-> Hello,
-> 
-> Thanks for the feedback.
-> 
-> I tried a different but related approach in [1], my v1, which also
-> stored the work in the map slot (struct bpf_kptr_dtor_aux).
-> 
->> Detach: When map value is deleted, atomically set kptr map field storing 
->> bpf_dtor_kptr_work to NULL (so the next xchg-in allocates new 
->> bpf_dtor_kptr_work.)
->> After detaching insert bpf_dtor_kptr_work to the global list and run irq_work. 
->> Free bpf_dtor_kptr_work in call_rcu_tasks_trace().
-> This would be nice to do but there's a sequence where you can delete and
-> insert stimultaniously. Basically an ABBA problem that is inconvienent to
-> deal with, especially in NMI.
-> 
-> Let's say
-> 
-> CPU0 = Deleting value from the map. xchg w/ null.
-> CPU1 = Exchanging new value into the map. xchg w/ something
-> 
-> So I give the two orders we can do it in, zeroing the map slot first or
-> zeroing the work first.
-> 
-> 1. Set obj to null, then null out work
-> 
-> CPU0
-> sets map obj field to null (dtor work is still != null)
-> CPU1
-> sets map obj field to something
-> CPU1 (again)
-> sees that dtor work is still != null, (does nothing, assumes a valid
-> slot was still allocated)
-> CPU0
-> sets dtor work to null and enqueues it in the irq_work.
-> 
-> Then a new dtor work is never allocated for the new slot.
-> 
-> 2. And doing in the other order (nulling out work before the obj)
-> 
-> CPU0
-> sets work to null and enqueues it.
-> CPU1
-> sets work to something (allocates new work)
-> CPU1
-> sets obj to something
-> CPU0
-> sets obj to null.
-> 
-> Then you end up leaking the object set by CPU1.
+If it is merely about converting to cgroup implementation for
+per-process version (I have already completed development based on
+cgroup-bpf), there is no need for you to start from scratch. You can
+directly test whether mthp_ext addresses your real workload scenarios.
 
-I'm not sure I'm following,
-the idea I suggest is next: you place kptr and work struct in the
-same structure:
+Based on the current patchset, we can collaborate on development, as
+our shared goal is to get this done right.
 
-  struct bpf_kptr_box {
-        void *kptr;
-        struct bpf_dtor_kptr_work work;
-        struct rcu_head rcu;
-  };
-
-Then you can atomically detach/attach it.
-Very schematic implementation:
-
-unsigned long bpf_ref_kptr_xchg(void *dst, void *ptr)
-{
-        struct bpf_kptr_box **slot = dst;
-        struct bpf_kptr_box *box;
-
-        box = READ_ONCE(*slot);
-	if (box)
-	/* Box can be detached already, but its lifetime and kptr destructor are
-	 * RCU protected, so it's safe to access it here.
-	 */
-		return xchg(&box->kptr, ptr);
-
-        if (!ptr)
-                return 0; /* xchg-out from empty: nothing to do */
-
-	/* slow path, when map value is not initialized */
-        box = kmalloc_nolock();
-        if (!box)
-                return (unsigned long)ptr;
-
-        box->kptr = ptr;
-        if (cmpxchg(slot, NULL, box) != NULL) {
-                kfree(new_box);
-                /* someone installed first, retry or error out */
-        }
-
-        return NULL;
-  }
-
-Run destructor in rcu tt callback, to make sure no concurrent BPF program 
-is installing kptr in the meantime:
-
-void box_rcu_free()
-{
-	dtor();
-	kfree(box);
-}
-
-static void box_kill_irq_work(struct irq_work* irq_work)
-{
-	/* guarantee no BPF program sees the box */
-        call_rcu_tasks_trace(&box->rcu, box_rcu_free);
-}
-
-Detach path is simply: box = xchg(slot, NULL).
-
-You can still use a single list where you link detached boxes and
-irq_work similarly as you have now, just make sure dtor and free
-are called after RCU GP.
-
-I may have missed some race conditions, though, does the idea
-make sense?
-
-> 
-> So either order we do it in 1 or 2, this is an ABBA problem.
-> And would require serialization and/or some sort of lock state
-> for every map slot.
-> 
-> Not to mention the complexity of adding extra data to the map slots
-> requires modifications to every map type. You can see the problem this
-> introduced in my v1, which took a related approach adding auxiliary data
-> to map slots.
-> 
-> ....
-> 
-> FWIW I do have a much less complex implementation for my v3
-> revision which brings it down to a single atomic and two
-> pcpu_freelists, cutting it to 215~ lines net for the whole fix.
-> 
-> Let me know if I missed anything or am misunderstanding something. I
-> really appreciate the feedback though this is a tougher problem than it
-> seemed and your thought was very similar to my initial approach :)
->>
->> This is based on the bpf_timer and bpf_task_work
->> implementations.
->>
-> Those were some of my initial inspiration as well!
-> 
-> Thanks again,
-> Justin
-> 
-> [1] https://lore.kernel.org/bpf/20260428201422.1518903-1-utilityemal77@gmail.com/
->>> +static void bpf_dtor_kptr_push_idle(struct bpf_dtor_kptr_work *job)
->>> +{
->>> +	llist_add(&job->node, &bpf_dtor_kptr_idle);
->>> +}
->>> +
->>> +static struct bpf_dtor_kptr_work *bpf_dtor_kptr_pop_idle(void)
->>> +{
->>> +	struct llist_node *node;
->>> +
->>> +	node = llist_del_first(&bpf_dtor_kptr_idle);
->>> +	if (!node)
->>> +		return NULL;
->>> +
->>> +	return llist_entry(node, struct bpf_dtor_kptr_work, node);
->>> +}
->>> +
->>> +static void bpf_dtor_kptr_trim(void)
->>> +{
->>> +	struct bpf_dtor_kptr_work *job;
->>> +	long total;
->>> +	long needed;
->>> +
->>> +	for (;;) {
->>> +		total = atomic_long_read(&bpf_dtor_kptr_total);
->>> +		needed = atomic_long_read(&bpf_dtor_kptr_refs) +
->>> +			 atomic_long_read(&bpf_dtor_kptr_active);
->>> +		if (total <= needed)
->>> +			return;
->>> +
->>> +		job = bpf_dtor_kptr_pop_idle();
->>> +		if (!job)
->>> +			return;
->>> +
->>> +		if (!atomic_long_try_cmpxchg(&bpf_dtor_kptr_total, &total, total - 1)) {
->>> +			bpf_dtor_kptr_push_idle(job);
->>> +			continue;
->>> +		}
->>> +
->>> +		bpf_mem_free(&bpf_global_ma, job);
->>> +	}
->>> +}
->>> +
->>> +static int bpf_dtor_kptr_reserve(long needed)
->>> +{
->>> +	struct bpf_dtor_kptr_work *job;
->>> +	long headroom;
->>> +	long target;
->>> +
->>> +	headroom = min_t(long, needed, BPF_DTOR_KPTR_RESERVE_HEADROOM);
->>> +	if (check_add_overflow(needed, headroom, &target))
->>> +		target = needed;
->>> +
->>> +	while (atomic_long_read(&bpf_dtor_kptr_total) < target) {
->>> +		job = bpf_mem_alloc(&bpf_global_ma, sizeof(*job));
->>> +		if (!job)
->>> +			return -ENOMEM;
->>> +		atomic_long_inc(&bpf_dtor_kptr_total);
->>> +		bpf_dtor_kptr_push_idle(job);
->>> +	}
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +int bpf_kptr_offload_inc(void)
->>> +{
->>> +	long needed;
->>> +	int err;
->>> +
->>> +	if (unlikely(!bpf_global_ma_set))
->>> +		return -ENOMEM;
->>> +
->>> +	/*
->>> +	 * Read active before incrementing refs so a free path moving one slot from
->>> +	 * refs to active cannot shrink the reservation snapshot below the steady
->>> +	 * state we need to cover. Racing results worst case in a larger reservation.
->>> +	 */
->>> +	needed = atomic_long_read(&bpf_dtor_kptr_active);
->>> +	needed += atomic_long_inc_return(&bpf_dtor_kptr_refs);
->>> +	err = bpf_dtor_kptr_reserve(needed);
->>> +	if (err)
->>> +		atomic_long_dec(&bpf_dtor_kptr_refs);
->>> +
->>> +	return err;
->>> +}
->>> +
->>> +void bpf_kptr_offload_dec(void)
->>> +{
->>> +	long val;
->>> +
->>> +	val = atomic_long_dec_return(&bpf_dtor_kptr_refs);
->>> +	if (!WARN_ON_ONCE(val < 0))
->>> +		return;
->>> +
->>> +	/*
->>> +	 * Clamp a mismatched decrement back to zero without overwriting a
->>> +	 * concurrent increment that already repaired the counter.
->>> +	 */
->>> +	do {
->>> +		val = atomic_long_read(&bpf_dtor_kptr_refs);
->>> +		if (val >= 0)
->>> +			break;
->>> +	} while (!atomic_long_try_cmpxchg(&bpf_dtor_kptr_refs, &val, 0));
->>> +}
->>> +
->>>  int sysctl_unprivileged_bpf_disabled __read_mostly =
->>>  	IS_BUILTIN(CONFIG_BPF_UNPRIV_DEFAULT_OFF) ? 2 : 0;
->>>  
->>> @@ -807,6 +935,46 @@ void bpf_obj_free_task_work(const struct btf_record *rec, void *obj)
->>>  	bpf_task_work_cancel_and_free(obj + rec->task_work_off);
->>>  }
->>>  
->>> +static void bpf_dtor_kptr_worker(struct irq_work *work)
->>> +{
->>> +	struct llist_node *jobs, *node, *next;
->>> +
->>> +	jobs = llist_del_all(this_cpu_ptr(&bpf_dtor_kptr_jobs));
->>> +	llist_for_each_safe(node, next, jobs) {
->>> +		struct bpf_dtor_kptr_work *job;
->>> +
->>> +		job = llist_entry(node, struct bpf_dtor_kptr_work, node);
->>> +		job->dtor(job->obj);
->>> +		atomic_long_dec(&bpf_dtor_kptr_active);
->>> +		bpf_dtor_kptr_push_idle(job);
->>> +	}
->>> +
->>> +	bpf_dtor_kptr_trim();
->>> +}
->>> +
->>> +static void bpf_dtor_kptr_offload(void *obj, btf_dtor_kfunc_t dtor)
->>> +{
->>> +	struct bpf_dtor_kptr_work *job;
->>> +
->>> +	atomic_long_inc(&bpf_dtor_kptr_active);
->>> +	job = bpf_dtor_kptr_pop_idle();
->>> +	if (WARN_ON_ONCE(!job)) {
->>> +		atomic_long_dec(&bpf_dtor_kptr_active);
->>> +		/*
->>> +		 * This should stay unreachable if reserve accounting is correct. If it
->>> +		 * ever breaks, running the destructor unsafely is still better than
->>> +		 * leaking the object permanently.
->>> +		 */
->>> +		dtor(obj);
->>> +		return;
->>> +	}
->>> +
->>> +	job->obj = obj;
->>> +	job->dtor = dtor;
->>> +	if (llist_add(&job->node, this_cpu_ptr(&bpf_dtor_kptr_jobs)))
->>> +		irq_work_queue(this_cpu_ptr(&bpf_dtor_kptr_irq_work));
->>> +}
->>> +
->>>  void bpf_obj_free_fields(const struct btf_record *rec, void *obj)
->>>  {
->>>  	const struct btf_field *fields;
->>> @@ -842,6 +1010,19 @@ void bpf_obj_free_fields(const struct btf_record *rec, void *obj)
->>>  			xchgd_field = (void *)xchg((unsigned long *)field_ptr, 0);
->>>  			if (!xchgd_field)
->>>  				break;
->>> +			if (in_nmi() && field->kptr.dtor) {
->>> +				bpf_dtor_kptr_offload(xchgd_field, field->kptr.dtor);
->>> +				bpf_kptr_offload_dec();
->>> +				break;
->>> +			}
->>> +			if (field->kptr.dtor)
->>> +				/*
->>> +				 * Dtor kptrs reach storage through bpf_ref_kptr_xchg(), which
->>> +				 * pairs installation with bpf_kptr_offload_inc(). Drop that
->>> +				 * reservation on non-NMI teardown once no active transition is
->>> +				 * needed.
->>> +				 */
->>> +				bpf_kptr_offload_dec();
->>>  
->>>  			if (!btf_is_kernel(field->kptr.btf)) {
->>>  				pointee_struct_meta = btf_find_struct_meta(field->kptr.btf,
->>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->>> index 11054ad89c14..2c7b21bda666 100644
->>> --- a/kernel/bpf/verifier.c
->>> +++ b/kernel/bpf/verifier.c
->>> @@ -9950,6 +9950,8 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
->>>  		if (err)
->>>  			return err;
->>>  	}
->>> +	env->insn_aux_data[insn_idx].kptr_has_dtor =
->>> +		func_id == BPF_FUNC_kptr_xchg && !!meta.kptr_field->kptr.dtor;
->>>  
->>>  	err = record_func_map(env, &meta, func_id, insn_idx);
->>>  	if (err)
->>
-
+--
+Cheers,
+Vernon
