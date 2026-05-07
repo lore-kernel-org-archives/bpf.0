@@ -1,189 +1,380 @@
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91BB82DECA1
-	for <bpf@vger.kernel.org>; Thu,  7 May 2026 03:35:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778124924; cv=pass; b=qtoa2m0GfNRFut2wXbz2olMvuyvCWYWEU3mLcsceuX+pMzsjhSg1NUSFFxAEfk66lqVJXyLmSFiO20q0/F1xJSOy+hn6nd8nIUMdV9a4OJ66VgvJ/jcd3fJbeI2z5jFDcoQqNXhK0c3mSru9vA3ADMNsHZybTE1cinlBATdQyoo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778124924; c=relaxed/simple;
-	bh=pbA9io0SzkBc/98EVnEzLNsgW1FolpjPWE5S+KN9P14=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sTn6UOQfsTr4JYW0HSG0z3AtkkRmLedKsDpluH7VxD9wuDsLq275DO/iqK4TpRFRB6SynukykhnWIyN1gVtvaQqSPxI2nR+BTEExbav5PLw1wF3dDHaU06ypZAcnGBSlaq1djCUA9jOnd89DnBtKPdqOkNU8ZaQWZ2YHtijBwp8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xs/EMucp; arc=pass smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD752F12DA;
+	Thu,  7 May 2026 06:54:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.75
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778136871; cv=none; b=Fcmx56ljmwJ+2DG/U8zVgLqoa8I3CW3nlsKIBEQZ5Eh1nK98ardalHcLFEChUVkxUMqLUzE5ouQa/d4UddA9KXjPGs+pHcEJSlcs7DI6IRvNo6ViEEGcs+d1cuNhlXJxuP6Sg24xT0eixOVLB2WkgKq4JBNzx0FyYx1hne9xn7Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778136871; c=relaxed/simple;
+	bh=8SAmx8Ok1JK3fepgR6uqWCUWeULEgKNuV0+B6q85Fj8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hUAQ48A/grOWKyST4pnolyjdAJ94XvfiLUkN+FMya9ngS6zGoyxcboCe6zy1cqnTMZkTMC5lHbwfgEuUarKpE8HAzqYy96oSETYHmbAYGXP+Brdq5N0/J6/v5i7nSDeTMMe8Phuq2xXnbxpqQp68AJSnPV8CXO7kOCcNj0icAjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schippers-hamm.de; spf=pass smtp.mailfrom=schippers-hamm.de; dkim=pass (2048-bit key) header.d=schippers-hamm.de header.i=simon@schippers-hamm.de header.b=iJnVQPgO; arc=none smtp.client-ip=217.72.192.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schippers-hamm.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schippers-hamm.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xs/EMucp"
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-7bdc947aaa3so3340617b3.0
-        for <bpf@vger.kernel.org>; Wed, 06 May 2026 20:35:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778124921; cv=none;
-        d=google.com; s=arc-20240605;
-        b=NHpCo95gbla+2mPxmNCfUp6OFli5Q7zBiYhKBA6fsB9J7f1iJO8NtpFh+Uv+99G4KC
-         AVjZrLJeYW001Qy+9l5wOe3FFh8biEp2alVxBX9vz+cyj5lcqTez9hW8R9y172u2EZeR
-         eJsQBJ2wTEQvWW2ylMQq0jXGJiAM/QHAWrtQQbFomnfjO9kubVZcmApadET0GhCDK2sK
-         sUIe7LvKHEIUDlWKOtpkdLtCDg4ZOFVsVl9EOZhCtH9+7f50u/rQ7PMU9nP/+fhDXEiF
-         4aUyl1ohOzU/R1f0jv68MoFgUAQSPa98upxDiyxCwuF7QfOyjDn/fs0kzm8iVjb8/Awk
-         wuRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=WsoDCCOTvCGKVlqoF36XX5WM89UtK6Mekm3tMCaOG0Y=;
-        fh=EceAX2KroPNANiIrfMOybjWeWPp0Jyjwba7DWCxs3F8=;
-        b=HvvQL+ed2u/B4OtRBkI+FCOa6vj4OQ/XedOIaf1j3lz8fTf//uoaZ6+4O3IxBeEEEs
-         GIn+N6cVKKfm+Aj3V+fgQCyzlzllmQJuRCJ4WPqgrI+CjvTS35cfcccSLYGw95bypOsw
-         6hwndNUoTcjblQZFg5UqyqEX6Y5kOXRstHBZzvOeBjNT1cOMcx7cGy0DcNRgtJx+pG+i
-         NupZl9e7WbaHGvqR9+1OUuQwxMq2mdVF6gEgyAogH69F8OkEkpiUN7odVVIBp0jUMeiO
-         Zo8P5TqzKkpvdLFeaP7trD/MUsJW0lrXHSgCAFFkf0WsCIwypktM9DSgDG6u75XL4sJL
-         hm5w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778124921; x=1778729721; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WsoDCCOTvCGKVlqoF36XX5WM89UtK6Mekm3tMCaOG0Y=;
-        b=Xs/EMucpDnwp453QNqJrTLgPqIOffgiciFHgbRfwv1oHHNNJunC3WjiUZBunE0zjxG
-         0uFIIiScJkdKaHHRojeVsdop749Zok0y+UjEbfOLXG77e9jm6psk6vYAI9PzdBTry1WT
-         Oy2vpMPWC+Wf6HWV38SqQzKYcVmWITRaxNGItZJK9bw6kTJ/bAXTvItytzaBLOVFWdiT
-         ivqKBh2aq3l9WHVncfwPmUhZ64Ql//Ha4uhCtqQ/xMYipmo5hwDWaf6fPCIydaqYvLLu
-         UCemKO5NzMFqMGPajI+NvqXqaxbtj21vmMYVWdQVH36L4pMcQ9vsT+U367zxzjRCrIXe
-         e+iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778124921; x=1778729721;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=WsoDCCOTvCGKVlqoF36XX5WM89UtK6Mekm3tMCaOG0Y=;
-        b=g/dCQCZMew8IS8yDx7DBLewkTu+D1GtMA3/c+UuRUrnpg4FnuFRrJS5vCK0BYvjryx
-         x9XN/Tpt3etPgfU39GnCsyyJbX2seqw3zivFfBYbTUYaf86eDnYONBe+dsUZlh+OMuXz
-         BW2f9ty3t4wx5UP+f6Jpd71m9q09V/kBYUIfVHWlGms7R4I/SBxZOJywzl1Wu4xmRMQ4
-         vpuDDI98ruW2FmkrNHGwLZdu84Y7HDqW9QkMYxUYDdMsiJCveDawqJ+8LIeMX5gEOR/o
-         r+9uEWfUTvagGit4McAn54LqxvMJcHZJArXYqv0HGmkDZsZc0VteAXn9a/sRzmIN3q4z
-         yBwQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9U2buWGsowcW9wRxR3fRFPB0KyW1bW/GKqxrPcusY3fQHnE2YpRDAT011Z47MVcD+sZ/s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSHrvkKDTFBVefapgELHRLMyiXDdoHyeA5QL8x6XC2fgOoIwcp
-	6zlaGHfik755+vz5SNHhO9N2qSaK8MBenioG1ui047xkTw8XTDhubMV28/sC677FcvXC+W5UBjM
-	5bRARxCQx2fb71nS5fYJsqTnSzTT16Znf+Q==
-X-Gm-Gg: AeBDieuYNvqqvrVXj4nUvlOnCuaeKNmKOlHaOtlASJoKTkG43/HhC/+YNAzCW3jjzXw
-	R8cZ1y6pI5zAUOXVlEc0wqc0P9IILguKcUOUub+mp5NhboSFggrNpSzSnjaDaJvDyXF1Br5FGRP
-	xPKxXl9woMwNoKIRx8u4Ez+SGfafDlbTvMqNpBH7cXBXHqGJLwrgXB0OjU7ILW1LFXjyeOjclMm
-	yKtXU99VTRZvuc3kqYHdQuaztuFznPIK1h4rCyDk1FwPS5Lib7lDQTHjTJfWGYR6UvOUwKo+zvM
-	SgYpikM1EsAs/rdvFwmIsrZfDxrX6XjkfGvBHiaHXhSqSLFjpHE=
-X-Received: by 2002:a05:690c:360a:b0:7ba:ee75:f115 with SMTP id
- 00721157ae682-7bdf5d8d6eamr75144787b3.4.1778124921401; Wed, 06 May 2026
- 20:35:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=schippers-hamm.de header.i=simon@schippers-hamm.de header.b="iJnVQPgO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=schippers-hamm.de;
+	s=s1-ionos; t=1778136860; x=1778741660; i=simon@schippers-hamm.de;
+	bh=0s0anbYrKCWTkGQXUN0hZBGeLkkRLnTSX3TgI/yhcOQ=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=iJnVQPgOqVgBmY1TqYIQPJ7Qz7pSX2b+qV7vzJaL8oE9j2opwz8e8BTC91H7zwb0
+	 6r3aLpRlbiGMZGODWfSV2B2jKvCOh+7kAN+UxSAQ4F3RBkRpS/yhvZKH98dd0LHfF
+	 liEOt6OFsE91fuqYjt8I7gtRTxx8kubj8od5gQwnTcwlleyup+TVV59mGAH/XoHNh
+	 e/Ee9eSe6Sxuoxdm2KK5sAob4EoovZ9Oyb/N7+GmyxMxpLMCAXiFU3alioZHhFlAU
+	 +zAKEom8eVsv7WL9DSTEYvLReURnvnxJO4TWvgOT+qDiksCwo4PUo1bHKcOdle/ia
+	 WR3TJAZa7JMhCXcIYQ==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from client.hidden.invalid by mrelayeu.kundenserver.de (mreue107
+ [212.227.15.152]) with ESMTPSA (Nemesis) id 1MJn4B-1w1QtZ2xtR-00MMe9; Thu, 07
+ May 2026 08:54:20 +0200
+Message-ID: <ee275aa6-af27-4dac-9afa-da88abde312b@schippers-hamm.de>
+Date: Thu, 7 May 2026 08:54:13 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260503165024.1526680-1-vernon2gm@gmail.com>
-In-Reply-To: <20260503165024.1526680-1-vernon2gm@gmail.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Thu, 7 May 2026 11:34:45 +0800
-X-Gm-Features: AVHnY4LDeDA3KXnwe-H_2b98P4hejFpflhbuT3yJizJRa8ybxM-qzZLe9Z0VQ9o
-Message-ID: <CALOAHbBx6GuZjj9_EdrAPCsiLJekAiqOVsWQ0muNJh18Nxaqtg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] mm: introduce mthp_ext via cgroup-bpf to make mTHP
- more transparent
-To: Vernon Yang <vernon2gm@gmail.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
-	roman.gushchin@linux.dev, inwardvessel@gmail.com, shakeel.butt@linux.dev, 
-	ast@kernel.org, daniel@iogearbox.net, surenb@google.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
-	baohua@kernel.org, lance.yang@linux.dev, dev.jain@arm.com, 
-	Vernon Yang <yanglincheng@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v5 3/5] veth: implement Byte Queue Limits (BQL)
+ for latency reduction
+To: hawk@kernel.org, netdev@vger.kernel.org
+Cc: kernel-team@cloudflare.com, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20260505132159.241305-1-hawk@kernel.org>
+ <20260505132159.241305-4-hawk@kernel.org>
+Content-Language: en-US
+From: Simon Schippers <simon@schippers-hamm.de>
+In-Reply-To: <20260505132159.241305-4-hawk@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:xLLwt4XY0mBO0B//rPm46MMNitIhIIuGJyuK0d+Zp3/COd9D3Yq
+ NsBVD6qoAjX3cSbdQIl74TEWkl7khC4qfI3/A1sY/9pUPJXCrNetbNNm3Ipd9xxE0OxW8PL
+ PVy18dwRVll2/hls2fcJiKzEU9X4yCrPGqalZKFNqElUd8iuqyDcY+Qv5bEl8eomGuh3sLu
+ 0h56njnwzcE0har0sI9NA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:+GwmJoW9sDc=;QLbKVJXyZlf0ZOP4Y51en+Ojso5
+ 0C2tXuvYorrEiUaiqFOFhuzYS2u/MIF4pHHB6Ipr2sMLiSOigL+egFBvPN9W4OgZny6fvz4ZB
+ R5gXwXP+eqN3yuiGrLwwvTtxA0db2c86yzxYTVUw9hpvSkdZrJvEsHAglp350sa/PL+pIuHYR
+ iwsmc3Y1UtNft7I7T8g45wq9QyBxWDU4rdJ72i5+3CNXl/ILf9qd/ruEiG9eiIuC0zmGpfO0H
+ NJMUAlsi1MDaR0JLjwk9roIKYuDcZQOPo5BoVoEF6iCgEgAAkPwSJqTjlPQ3vFZhnsYBQR9Jl
+ UUHC2alIJaYW94t5SrKxh6UXE9jtz2y34gclG2g0es6ku2JR1+db0/7WJjq92/ONsaw1pRfl7
+ bygHqX5rl84eTFWZqRNdsq/A/royGK81HS177mtv5yEWUAFgqPHsSTqAlfzpDmy8aIJvIy4BM
+ iQcMs11CEpgv5QIN6BNxJpAX/mw3tPrL/+WeghVyHNW/3Ewpil80g3ihnIoFG+HvcUTjIFHA1
+ DW52YQZGeiX5w/bPQ5PtLR1c7i2MZgzZmvUzTIdUuEseGa0PdXAKTl8Ms6mqMBr4d6k5mYi5R
+ ORo+jBgN/1rM/5Rz2Fsnj9J+yXYVA2YJKdNPJt4Dr1HDFRrjqoIm6OGb+wxlSBn05kMAQvv97
+ atkwrOcAfai7JhXc4TN8YnAE8YySKnxxVVgbbE25EXtjxje+gBz+audY4RVMsPXUIfNsvfMBB
+ H3Zg3OlbtLP4YOaFJGOYPN6+5R+Hb2UUqEa8/D4FnC7YEv7fX54TM56kj5HbN9IzFB7GGjXeB
+ AQu0hrN8D0r2p3V5qH36/MwBd7gnTpm7jD8674C4Qt6ikUIE+xkQQV90H3jz6sXWnDCu/cDaU
+ 6K1EslozLKV6OTg7hU5VNdipiG4AQLxERG3lwSardWuW8ey8GYOghkEhYzhs8kJ09f9azRgW7
+ icGyiXcUcgk1smQqMQL2THju4PjRWRZsc3oQaQYeRDwN5xgt2iY8m3tyuoxUEcmS9Mj5Qmkaw
+ Dg0afl9JvjXBTgC/ug7p0DSO0aTA3zNy8sMk37epw9PS/s0oTuSIKGWQ+jk9M7qoswEBIBEV+
+ j3DCcwvIcpruts3CB+0iER8ve5LnVt8rB/c0p7SzhCXt3h8oc5j7tnfECofAaM6rmlKN7kzCt
+ pera4U0G5AuBxy45cYFEGdq8jWXPwBpOsm4bD6qT2NCJB03u2f/q1KCa2UsEjVLK+vytWUu53
+ sP1O/kUS2B8Ww3tp8D7WMXeRfFXVz/IXkPzOniA1sxRDFnj5983HYppSyv5uN1H2DBOzLbm7W
+ RERZFSzCU3M3U0oNBOk8O34Tr8TKFnQx7wxL6bDOlX71t+1kaHtnvGJSGVyQrszFeYSTrr/PA
+ etdSbh5qL0lAtWVaYxNYmpCheWJlVyw8qkJwpNx2A8/qTseelB5R6qRNhB25rzU8S/edgcolX
+ KxVgRJLYBcvJf3/k8pIF14GqUbtKo66+tthz5qVlBNpEAunEq/1uQ6Inxpgu6IH7rgCVjqJnQ
+ uNJGVKIorAXMSWxEq2NX2eJiEY+Y6H22pS2N9kmrJ2lPddQ6iV9VazsI8/5CEF6YwVL89etiV
+ 5Jt/fFZUiwkjuh14z2vNS3E/Hupw4dHBUWTMe2hzEXkVx/x696t2E3EsQSf/fcGpwPAWIg+rQ
+ 2Kk0eSEXtyeXfoCI2x3EHOqHR9/XY81vurK3H4XWzXUf7OK8hQNImXeCL9JNenWVxflhynGaz
+ x0z5iffQgg1uCPEK2txfGncoadM/8UM5+tUgwhQVcqG2YOtLv6MNKzPtHizvBx0Xci7dhOWKG
+ HTDnI/6z+Yix5mFw0/CjuS7VHtAxTbcyMytKGEOsr7jqvCuUofv3NS2BaeUTKUVd7Ge07xmYh
+ J1OJyqlWaKdwzFXHSveZvQljXunJy6Bza9vNvMQIyhkwWp6pU7J8pvLJ4R7YjZh/TcO8JreXq
+ hKZTJyczTEGXTSydEhBzVFyvzqmky9XLG326EezMJj5QtrfDWUEHTeqGDP+LPeCCJEyQZyha3
+ uZDCATWeIelJQSA9hLPEm9rZLhjr4Wh9wcREqGci8fCPQ0TQrURxLfKgcmDK70AJlo29KTuzv
+ WDP4j21AFHuNykPlkCSqvLQfhKZwgFaR
 
-On Mon, May 4, 2026 at 12:52=E2=80=AFAM Vernon Yang <vernon2gm@gmail.com> w=
-rote:
->
-> From: Vernon Yang <yanglincheng@kylinos.cn>
->
-> Hi all,
->
-> Background
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> As is well known, a system can simultaneously run multiple different
-> scenarios. However, THP is not beneficial in every scenario =E2=80=94 it =
-is only
-> most suitable for memory-intensive applications that are not sensitive
-> to tail latency. For example, Redis, which is sensitive to tail latency,
-> is not suitable for THP. But in practice, due to Redis issues, the
-> entire THP functionality is often turned off, preventing other scenarios
-> from benefiting from it.
->
-> There are also some embedded scenarios (e.g. Android) that directly use
-> 2MB THP, where the granularity is too large. Therefore, we introduced
-> mTHP in v6.8, which supports multiple-size THP. In practice, however, we
-> still globally fix a single mTHP size and are unable to automatically
-> select different mTHP sizes based on different scenarios.
->
-> After testing, it was found that
->
-> - When the system has a lot of free memory, it is normal for Redis to
->   use mTHP. performance degradation in Redis only occurs when the system
->   is under high memory pressure.
-> - Additionally, when a large number of small-memory processes use mTHP,
->   memory waste is prone to occur, and performance degradation may also
->   happen during fast memory allocation/release.
->
-> Previously, "Cgroup-based THP control"[1] was proposed, but it had the
-> following issues.
->
-> - It breaks the cgroup hierarchy property.
-> - Add new THP knobs, making sysadmin's job more complex
->
-> Previously, "mm, bpf: BPF-MM, BPF-THP"[2] was proposed, but it had the
-> following issues.
->
-> - It didn't address the issue on the per-process mode.
-> - For global mode, the prctl(PR_SET_THP_DISABLE) has already achieved
->   the same objective, there is no need to add two mechanisms for the
->   same purpose.
-> - Attaching st_ops to mm_struct, the same issues that cgroup-bpf once
+On 5/5/26 15:21, hawk@kernel.org wrote:
+> From: Jesper Dangaard Brouer <hawk@kernel.org>
+>=20
+> Commit dc82a33297fc ("veth: apply qdisc backpressure on full ptr_ring to
+> reduce TX drops") gave qdiscs control over veth by returning
+> NETDEV_TX_BUSY when the ptr_ring is full (DRV_XOFF).  That commit noted
+> a known limitation: the 256-entry ptr_ring sits in front of the qdisc as
+> a dark buffer, adding base latency because the qdisc has no visibility
+> into how many bytes are already queued there.
+>=20
+> Add BQL support so the qdisc gets feedback and can begin shaping traffic
+> before the ring fills.  In testing with fq_codel, BQL reduces ping RTT
+> under UDP load from ~6.61ms to ~0.36ms (18x).
+>=20
+> Charge a fixed VETH_BQL_UNIT (1) per packet rather than skb->len, so
+> the DQL limit tracks packets-in-flight.  Unlike a physical NIC, veth
+> has no link speed -- the ptr_ring drains at CPU speed and is
+> packet-indexed, not byte-indexed, so bytes are not the natural unit.
+> With byte-based charging, small packets sneak many more entries into
+> the ring before STACK_XOFF fires, deepening the dark buffer under
+> mixed-size workloads.  Testing with a concurrent min-size packet flood
+> shows 3.7x ping RTT degradation with skb->len charging versus no
+> change with fixed-unit charging.
+>=20
+> Charge BQL inside veth_xdp_rx() under the ptr_ring producer_lock, after
+> confirming the ring is not full.  The charge must precede the produce
+> because the NAPI consumer can run on another CPU and complete the SKB
+> the instant it becomes visible in the ring.  Doing both under the same
+> lock avoids a pre-charge/undo pattern -- BQL is only charged when
+> produce is guaranteed to succeed.
+>=20
+> BQL is enabled only when a real qdisc is attached (guarded by
+> !qdisc_txq_has_no_queue), as HARD_TX_LOCK provides serialization
+> for TXQ modification like dql_queued(). For lltx devices, like veth,
+> this HARD_TX_LOCK serialization isn't provided.  The ptr_ring
+> producer_lock provides additional serialization that would allow
+> BQL to work correctly even with noqueue, though that combination
+> is not currently enabled, as the netstack will drop and warn.
+>=20
+> Track per-SKB BQL state via a VETH_BQL_FLAG pointer tag in the ptr_ring
+> entry.  This is necessary because the qdisc can be replaced live while
+> SKBs are in-flight -- each SKB must carry the charge decision made at
+> enqueue time rather than re-checking the peer's qdisc at completion.
+>=20
+> Complete per-SKB in veth_xdp_rcv() rather than in bulk, so STACK_XOFF
+> clears promptly when producer and consumer run on different CPUs.
+>=20
+> BQL introduces a second independent queue-stop mechanism (STACK_XOFF)
+> alongside the existing DRV_XOFF (ring full).  Both must be clear for
+> the queue to transmit.  Reset BQL state in veth_napi_del_range() after
+> synchronize_net() to avoid racing with in-flight veth_poll() calls.
+> Clamp the reset loop to the peer's real_num_tx_queues, since the peer
+> may have fewer TX queues than the local device has RX queues (e.g. when
+> veth is enslaved to a bond with XDP attached).
+>=20
+> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+> ---
+>  drivers/net/veth.c | 86 ++++++++++++++++++++++++++++++++++++++++------
+>  1 file changed, 75 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index 0cfb19b760dd..86b78900c48e 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
+> @@ -34,9 +34,13 @@
+>  #define DRV_VERSION	"1.0"
+> =20
+>  #define VETH_XDP_FLAG		BIT(0)
+> +#define VETH_BQL_FLAG		BIT(1)
+>  #define VETH_RING_SIZE		256
+>  #define VETH_XDP_HEADROOM	(XDP_PACKET_HEADROOM + NET_IP_ALIGN)
+> =20
+> +/* Fixed BQL charge: DQL limit tracks packets-in-flight, not bytes */
+> +#define VETH_BQL_UNIT		1
+> +
+>  #define VETH_XDP_TX_BULK_SIZE	16
+>  #define VETH_XDP_BATCH		16
+> =20
+> @@ -280,6 +284,21 @@ static bool veth_is_xdp_frame(void *ptr)
+>  	return (unsigned long)ptr & VETH_XDP_FLAG;
+>  }
+> =20
+> +static bool veth_ptr_is_bql(void *ptr)
+> +{
+> +	return (unsigned long)ptr & VETH_BQL_FLAG;
+> +}
+> +
+> +static struct sk_buff *veth_ptr_to_skb(void *ptr)
+> +{
+> +	return (void *)((unsigned long)ptr & ~VETH_BQL_FLAG);
+> +}
+> +
+> +static void *veth_skb_to_ptr(struct sk_buff *skb, bool bql)
+> +{
+> +	return bql ? (void *)((unsigned long)skb | VETH_BQL_FLAG) : skb;
+> +}
+> +
+>  static struct xdp_frame *veth_ptr_to_xdp(void *ptr)
+>  {
+>  	return (void *)((unsigned long)ptr & ~VETH_XDP_FLAG);
+> @@ -295,7 +314,7 @@ static void veth_ptr_free(void *ptr)
+>  	if (veth_is_xdp_frame(ptr))
+>  		xdp_return_frame(veth_ptr_to_xdp(ptr));
+>  	else
+> -		kfree_skb(ptr);
+> +		kfree_skb(veth_ptr_to_skb(ptr));
+>  }
+> =20
+>  static void __veth_xdp_flush(struct veth_rq *rq)
+> @@ -309,19 +328,33 @@ static void __veth_xdp_flush(struct veth_rq *rq)
+>  	}
+>  }
+> =20
+> -static int veth_xdp_rx(struct veth_rq *rq, struct sk_buff *skb)
+> +static int veth_xdp_rx(struct veth_rq *rq, struct sk_buff *skb, bool do=
+_bql,
+> +		       struct netdev_queue *txq)
+>  {
+> -	if (unlikely(ptr_ring_produce(&rq->xdp_ring, skb)))
+> +	struct ptr_ring *ring =3D &rq->xdp_ring;
+> +
+> +	spin_lock(&ring->producer_lock);
+> +	if (unlikely(!ring->size) || __ptr_ring_full(ring)) {
+> +		spin_unlock(&ring->producer_lock);
+>  		return NETDEV_TX_BUSY; /* signal qdisc layer */
+> +	}
+> +
+> +	/* BQL charge before produce; consumer cannot see entry yet */
+> +	if (do_bql)
+> +		netdev_tx_sent_queue(txq, VETH_BQL_UNIT);
+> +
+> +	__ptr_ring_produce(ring, veth_skb_to_ptr(skb, do_bql));
+> +	spin_unlock(&ring->producer_lock);
+> =20
+>  	return NET_RX_SUCCESS; /* same as NETDEV_TX_OK */
+>  }
+> =20
+>  static int veth_forward_skb(struct net_device *dev, struct sk_buff *skb=
+,
+> -			    struct veth_rq *rq, bool xdp)
+> +			    struct veth_rq *rq, bool xdp, bool do_bql,
+> +			    struct netdev_queue *txq)
+>  {
+>  	return __dev_forward_skb(dev, skb) ?: xdp ?
+> -		veth_xdp_rx(rq, skb) :
+> +		veth_xdp_rx(rq, skb, do_bql, txq) :
+>  		__netif_rx(skb);
+>  }
+> =20
+> @@ -348,10 +381,11 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, =
+struct net_device *dev)
+>  {
+>  	struct veth_priv *rcv_priv, *priv =3D netdev_priv(dev);
+>  	struct veth_rq *rq =3D NULL;
+> -	struct netdev_queue *txq;
+> +	struct netdev_queue *txq =3D NULL;
+>  	struct net_device *rcv;
+>  	int length =3D skb->len;
+>  	bool use_napi =3D false;
+> +	bool do_bql =3D false;
+>  	int ret, rxq;
+> =20
+>  	rcu_read_lock();
+> @@ -375,8 +409,12 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, s=
+truct net_device *dev)
+>  	}
+> =20
+>  	skb_tx_timestamp(skb);
+> -
+> -	ret =3D veth_forward_skb(rcv, skb, rq, use_napi);
+> +	if (rxq < dev->real_num_tx_queues) {
+> +		txq =3D netdev_get_tx_queue(dev, rxq);
+> +		/* BQL charge happens inside veth_xdp_rx() under producer_lock */
+> +		do_bql =3D use_napi && !qdisc_txq_has_no_queue(txq);
+> +	}
+> +	ret =3D veth_forward_skb(rcv, skb, rq, use_napi, do_bql, txq);
+>  	switch (ret) {
+>  	case NET_RX_SUCCESS: /* same as NETDEV_TX_OK */
+>  		if (!use_napi)
+> @@ -412,6 +450,7 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, st=
+ruct net_device *dev)
+>  		net_crit_ratelimited("%s(%s): Invalid return code(%d)",
+>  				     __func__, dev->name, ret);
+>  	}
+> +
+>  	rcu_read_unlock();
+> =20
+>  	return ret;
+> @@ -900,7 +939,8 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_=
+rq *rq,
+> =20
+>  static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>  			struct veth_xdp_tx_bq *bq,
+> -			struct veth_stats *stats)
+> +			struct veth_stats *stats,
+> +			struct netdev_queue *peer_txq)
+>  {
+>  	int i, done =3D 0, n_xdpf =3D 0;
+>  	void *xdpf[VETH_XDP_BATCH];
+> @@ -928,9 +968,13 @@ static int veth_xdp_rcv(struct veth_rq *rq, int bud=
+get,
+>  			}
+>  		} else {
+>  			/* ndo_start_xmit */
+> -			struct sk_buff *skb =3D ptr;
+> +			bool bql_charged =3D veth_ptr_is_bql(ptr);
+> +			struct sk_buff *skb =3D veth_ptr_to_skb(ptr);
+> =20
+>  			stats->xdp_bytes +=3D skb->len;
+> +			if (peer_txq && bql_charged)
+> +				netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_UNIT);
 
-Hello,
+In the discussion with Jonas [1], I left a comment explaining why I think
+this doesn=E2=80=99t work.
 
-The primary hurdles preventing BPF-THP from being upstreamed are:
+I still think first that adding an option to modify the hard-coded
+VETH_RING_SIZE is the way to go.
 
-- Uncertainty regarding the stable API
+Thanks!
 
-  It remains unclear whether the following API is sufficient for
-  BPF-THP requirements:
+[1] Link: https://lore.kernel.org/netdev/e8cdba04-aa9a-45c6-9807-8274b6292=
+0df@tu-dortmund.de/
 
-  unsigned long
-  bpf_hook_thp_get_orders(struct vm_area_struct *vma, enum tva_type type,
-                                            unsigned long orders)
-  {
-      return orders;
-  }
-
-- Ongoing integration of cgroups and struct-ops
-
-  Work is still in progress to integrate cgroup support with
-struct_ops (see also
-https://lore.kernel.org/linux-mm/87cy439x8a.fsf@linux.dev/).
-We should wait for this infrastructure to land before introducing
-new cgroup-based struct_ops.
-
->   faced are likely to arise again, e.g. lifetime of cgroup vs bpf, dying
->   cgroups, wq deadlock, etc. It is recommended to use cgroup-bpf for
->   implementation.
-> - The test cases are too simplistic, lacking eBPF cases similar to real
->   workloads such as sched_ext.
->
-> If I miss some thing, please let me know. Thanks!
-
-BTW, it would be better to include the original authors in the CC
-list, especially since their work is cited in your commit message. ;)
-
---
-Regards
-
-Yafang
+> +
+>  			skb =3D veth_xdp_rcv_skb(rq, skb, bq, stats);
+>  			if (skb) {
+>  				if (skb_shared(skb) || skb_unclone(skb, GFP_ATOMIC))
+> @@ -976,7 +1020,7 @@ static int veth_poll(struct napi_struct *napi, int =
+budget)
+>  		   netdev_get_tx_queue(peer_dev, queue_idx) : NULL;
+> =20
+>  	xdp_set_return_frame_no_direct();
+> -	done =3D veth_xdp_rcv(rq, budget, &bq, &stats);
+> +	done =3D veth_xdp_rcv(rq, budget, &bq, &stats, peer_txq);
+> =20
+>  	if (stats.xdp_redirect > 0)
+>  		xdp_do_flush();
+> @@ -1074,6 +1118,7 @@ static int __veth_napi_enable(struct net_device *d=
+ev)
+>  static void veth_napi_del_range(struct net_device *dev, int start, int =
+end)
+>  {
+>  	struct veth_priv *priv =3D netdev_priv(dev);
+> +	struct net_device *peer;
+>  	int i;
+> =20
+>  	for (i =3D start; i < end; i++) {
+> @@ -1092,6 +1137,24 @@ static void veth_napi_del_range(struct net_device=
+ *dev, int start, int end)
+>  		ptr_ring_cleanup(&rq->xdp_ring, veth_ptr_free);
+>  	}
+> =20
+> +	/* Reset BQL and wake stopped peer txqs.  A concurrent veth_xmit()
+> +	 * may have set DRV_XOFF between rcu_assign_pointer(napi, NULL) and
+> +	 * synchronize_net(), and NAPI can no longer clear it.
+> +	 * Only wake when the device is still up.
+> +	 */
+> +	peer =3D rtnl_dereference(priv->peer);
+> +	if (peer) {
+> +		int peer_end =3D min_t(int, end, peer->real_num_tx_queues);
+> +
+> +		for (i =3D start; i < peer_end; i++) {
+> +			struct netdev_queue *txq =3D netdev_get_tx_queue(peer, i);
+> +
+> +			netdev_tx_reset_queue(txq);
+> +			if (netif_running(dev))
+> +				netif_tx_wake_queue(txq);
+> +		}
+> +	}
+> +
+>  	for (i =3D start; i < end; i++) {
+>  		page_pool_destroy(priv->rq[i].page_pool);
+>  		priv->rq[i].page_pool =3D NULL;
+> @@ -1741,6 +1804,7 @@ static void veth_setup(struct net_device *dev)
+>  	dev->priv_flags |=3D IFF_PHONY_HEADROOM;
+>  	dev->priv_flags |=3D IFF_DISABLE_NETPOLL;
+>  	dev->lltx =3D true;
+> +	dev->bql =3D true;
+> =20
+>  	dev->netdev_ops =3D &veth_netdev_ops;
+>  	dev->xdp_metadata_ops =3D &veth_xdp_metadata_ops;
