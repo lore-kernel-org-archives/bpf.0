@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A6F481AA3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C496047ECC2
 	for <bpf@vger.kernel.org>; Thu,  7 May 2026 19:18:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778181480; cv=none; b=qxmRw07d0MUu4uZiDTe4v6F/PDwP4PMUjlQTBioiVxMe8SUNg4sjUv0aW5s5e8WcrwLvuSizU1ui9Q2pwkoPIwoKlv3PdqPMih0Rq4jZIu4K0yNTEuWLuSjJpzVdzUHtZbHeOrJqlecxeHxU9IibQ+eFVO8pMeK0h6yJjNnA5hI=
+	t=1778181480; cv=none; b=uwOKgdw8fVX342en8W/xUCUAx10LImRHqxZhqs+qbnQ9Q8ryegd73yNrFnkE8etN+m/3m0HEtGlB2bmpjbyNN8dUGwaEzVlGYr56U4f+ybTiYomwSxSdzvB09zkMs6wJ3KMK/he0gLcEa9COHyYAX3v8/ruSDs9zPE6JHoWUBsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1778181480; c=relaxed/simple;
-	bh=GQaTAbbNJ6PkNCwc32ZayIPwSeDV1+KRbeSqb7XLem0=;
+	bh=viQrCw1rzzhdybo8am8tQgrGlbVjHmNfBLEgbQut7Z4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=VeSZsNSwKxgCVcwL7sWjMG2jIPFhR8nGkYhlPELu1whIEpvTkEuqOfXL8ngun7GRAStMxbJaK3PpI+U6RKNeR88DX87DPXYBf6eNZSGaB1tEm8HajjslzaZaqw+YOCUdRk49FQLeNCLgjR3WrDdLmH1pABQzBnXX1qB6o/e17xA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mGILXtb2; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=jglsrrqEz8mApO7vi9xykk2z1eCTRcmcL9gLoW+Fc2nrZTb7+7C/8zf/6Sxm+6ks8lBZ3JAcXEhxJxAvFQP5hpTmzhjQSW9uC/zk/4mdzqv9XWWFOV0sltVEhDd1lQPVmMlmp7n52doapaZVzisGvzlel+hGZt02VKlCw4S/ox8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oq/QFBwu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mGILXtb2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D03CCC2BCC4;
-	Thu,  7 May 2026 19:17:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oq/QFBwu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82882C2BCB2;
+	Thu,  7 May 2026 19:18:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778181479;
-	bh=GQaTAbbNJ6PkNCwc32ZayIPwSeDV1+KRbeSqb7XLem0=;
+	s=k20201202; t=1778181480;
+	bh=viQrCw1rzzhdybo8am8tQgrGlbVjHmNfBLEgbQut7Z4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=mGILXtb27q2Q9VkjUXpe7pcTaRSkxci0kZMqNuwg/RQ6Ud/OpIyfrIFC2PrLBfFxm
-	 26/dgO/F2py1GRiYdFaiflSg8TIy3VJJFwSKKslDyd+Ck54bCHNvURUbVBrgZw9Asd
-	 Wcx5hfZ1EiOSsEztTo+RLakSHNvhsc5hvWnKX12ltwpQtmwtc4P2VkJBnaMiDHr9D0
-	 5tPst0TRJGFpnSk2Pgmb2o0C0q2gX0edGYpIRyUbxkWGN0caTPuuz1JdEMite3gKh6
-	 mOQiHCHXvhL4A3bTSLvIT2q6urpWrgCGZii42XbsR9iDC7eRcnzHuqqS7kOMOw21Lw
-	 JU/56F5nmkq1w==
+	b=Oq/QFBwugagHIRrAF6uL63bTzeimme4eXdHLdZ7X53XStfeFDT8xpPoWNO0Kb4r6Q
+	 2az5f13ybJGQOd9Pg5DR9S603z8FnImgNa1WLH5C5Z9azUYv8UHRO07spTxHhL8ttM
+	 pakYXq4BwA3X6FY33ZfO7iFG9tJJ64Fru5J6UG7Hu9ufvpYm0auOhpcnXOeAM0os75
+	 fUaD5fdMt1NraK9Gw65107QgUA7iY+4JNUWMCRhzKPr/ebRTvtthJ/4YKxC3RB/O/1
+	 UC0rU2qHmuL0ml0+WcnzVNiuhHoq8YHFEzQxMPlwEub7oYlmoaTUtlU+x0hmQWF6kI
+	 Ob9PNM/97aJlg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v9 6/7] net: bcmgenet: add XDP statistics
- counters
+Subject: Re: [PATCH net-next v9 7/7] net: bcmgenet: reject MTU changes
+ incompatible with XDP
 Reply-To: sashiko@lists.linux.dev
 To: "Nicolai Buchwitz" <nb@tipi-net.de>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260506095553.55357-7-nb@tipi-net.de>
-References: <20260506095553.55357-7-nb@tipi-net.de>
+In-Reply-To: <20260506095553.55357-8-nb@tipi-net.de>
+References: <20260506095553.55357-8-nb@tipi-net.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 07 May 2026 19:17:59 +0000
-Message-Id: <20260507191759.D03CCC2BCC4@smtp.kernel.org>
+Date: Thu, 07 May 2026 19:18:00 +0000
+Message-Id: <20260507191800.82882C2BCB2@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,54 +46,58 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Global XDP statistics are updated concurrently from multiple NAP=
-I contexts without synchronization, leading to data races, lost increments,=
- and rapid overflows.
+- [Low] The introduced `ndo_change_mtu` callback is entirely dead code base=
+d on a false premise.
 --
 
-commit 04cdeba59fa183a07b2fd6c8dba32b2dd262ae4d
+commit 4a63ea349d9dde80e552364564a8fc480bce7552
 Author: Nicolai Buchwitz <nb@tipi-net.de>
 
-net: bcmgenet: add XDP statistics counters
+net: bcmgenet: reject MTU changes incompatible with XDP
 
-Exposes per-action XDP counters via ethtool -S. These counters use the
-existing soft MIB infrastructure and are incremented alongside existing
-driver statistics in bcmgenet_run_xdp().
+Add a minimal ndo_change_mtu that rejects MTU values too large for
+single-page XDP buffers when an XDP program is attached.
 
+> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net=
+/ethernet/broadcom/genet/bcmgenet.c
 > --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
 > +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> @@ -4095,6 +4095,20 @@ static int bcmgenet_xdp_xmit(struct net_device *de=
+v, int num_frames,
 [ ... ]
-> @@ -2432,6 +2440,7 @@ static unsigned int bcmgenet_run_xdp(struct bcmgene=
-t_rx_ring *ring,
-> =20
->  	switch (act) {
->  	case XDP_PASS:
-> +		priv->mib.xdp_pass++;
+> +static int bcmgenet_change_mtu(struct net_device *dev, int new_mtu)
+> +{
+> +	struct bcmgenet_priv *priv =3D netdev_priv(dev);
+> +
+> +	if (priv->xdp_prog && new_mtu > PAGE_SIZE - GENET_RX_HEADROOM -
+> +	    SKB_DATA_ALIGN(sizeof(struct skb_shared_info))) {
 
-Since the driver supports multiple RX queues, bcmgenet_run_xdp() can be
-executed concurrently by independent NAPI polling instances on different
-CPUs.=20
+Is this check actually reachable?
 
-Will these non-atomic read-modify-write operations on the shared priv->mib
-structure lead to data races and lost increments?
+The networking core (dev_validate_mtu()) strictly enforces that any
+requested MTU cannot exceed dev->max_mtu. Because the bcmgenet driver
+does not manually override dev->max_mtu, it inherits the default value
+of ETH_DATA_LEN (1500 bytes) set by ether_setup().
 
->  		return XDP_PASS;
->  	case XDP_TX:
-[ ... ]
-> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.h
-> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.h
-> @@ -156,6 +156,13 @@ struct bcmgenet_mib_counters {
->  	u32	tx_dma_failed;
->  	u32	tx_realloc_tsb;
->  	u32	tx_realloc_tsb_failed;
-> +	u32	xdp_pass;
+On a system with the minimum 4KB page size, the right side of this
+condition evaluates to approximately 3400 bytes. Since new_mtu is
+strictly bounded to 1500, the condition new_mtu > ~3400 seems
+mathematically impossible to satisfy, rendering the check dead code.
 
-Because XDP processes packets at high rates, could these 32-bit packet
-counters overflow rapidly under heavy traffic?
+Additionally, the driver statically configures the hardware MAC to a
+maximum frame length of 1522 bytes (ENET_MAX_MTU_SIZE) and the DMA ring
+to a maximum receive buffer length of 2048 bytes (RX_BUF_LENGTH). Thus,
+a buffer overflow rewriting the skb_shared_info appears structurally
+impossible even if the MTU check were somehow bypassed.
 
-Would it be safer to maintain these XDP counters as 64-bit values on a
-per-queue basis, using u64_stats_t, and aggregate them when queried?
+> +		netdev_warn(dev, "MTU too large for single-page XDP buffer\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	WRITE_ONCE(dev->mtu, new_mtu);
+> +	return 0;
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260506095553.5535=
-7-1-nb@tipi-net.de?part=3D6
+7-1-nb@tipi-net.de?part=3D7
