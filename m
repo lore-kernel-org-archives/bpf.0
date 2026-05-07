@@ -1,137 +1,92 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F34702BEFFE
-	for <bpf@vger.kernel.org>; Thu,  7 May 2026 23:45:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6922134F275;
+	Thu,  7 May 2026 23:50:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778197521; cv=none; b=bLmKlIGt75Wo4g6CkUajzjC0yd5kYOywNFZGTrIcxP62hnOaokyU/wdy2YKNCK5VHbhliWf/t4CHbLgkCaO3cesH5620siK92fxrrYDZx3sP7s2kTW+q8LlDpMyaC0oiuwQ3jGUeS+M/GZQ+qWUaGahnEH4WEepBLEZ617CRj9M=
+	t=1778197800; cv=none; b=cOEb1sJjJYJZACoscpuxd5XU/ka3FnhUctMIkSdfsSKXbYCz/kvk4JUlPfsJHWNpYCiGaBnZqTbk9Boc2jUR7X3TZyexNrCeUEWXf19G689qmnScvVqlbxd3gtyI/o+49wbp+af42yoswqRdfpqtAtaL2Lpji7/0WlK7bSSCuMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778197521; c=relaxed/simple;
-	bh=ITfnZEQ3W/u3WhVx6Z0IDGccAinySSNqC/xhrPKjFOo=;
+	s=arc-20240116; t=1778197800; c=relaxed/simple;
+	bh=Fo2mtxWghoqbvmGtAeT3pH7OJ/vZ/XHupeJLM776+LE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=c+D0IXAY18DC31+F8m22dzDtkYyYOzF8sGXAfFeoAuvB6BHkPynWv+LDjBF4Eng3RkNezNtmyNyNisKYJNAhEeRLLMUhRQGEd/2VgGGLAkHsJDmbfTip/gFTZSDhllNSvgTZJ17pa/bcdfEk1RJ95HdOfaQNUoedn1C65aN+vp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WHSaatQA; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=Ox6IhVetDKinZXflI5xKB8f/xd3ilHXYDvp91I3mTp3/AAhk2owVVq2HFgqpNdKqflVFGt8IiJR2dQS66RHQ8qmURLrzzDLSVuzixudz7ZDKYC50nbR7hjEdhi9YEtwTL+ix+V8t74Hc3cTz7xqscs6qiS4BofI7goP0o/vzQLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B69885Lw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WHSaatQA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 646C4C2BCB2;
-	Thu,  7 May 2026 23:45:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B69885Lw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEC5BC2BCB8;
+	Thu,  7 May 2026 23:49:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778197520;
-	bh=ITfnZEQ3W/u3WhVx6Z0IDGccAinySSNqC/xhrPKjFOo=;
+	s=k20201202; t=1778197800;
+	bh=Fo2mtxWghoqbvmGtAeT3pH7OJ/vZ/XHupeJLM776+LE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=WHSaatQAyZt2QAyjpbUnT34LE7S/8C92s23jfoXHjGs4Som0hsbg8PFBXr2xTAZE+
-	 6hMDEq/EzhCzmewGAIlr1nnu9esWWWpV0dIRWA9DbK0SV3k+lCYRo7xwvQGJj1BLb9
-	 kN27hpVVZXuAU6sSWu+L3G53vBap9rAc7unXopgU+t7OxOOCJ69GehXWxM0C6F9FVT
-	 Bgo3HukpVlVRQa3kp//uPnh5SgwaBV0xK4bZ8nUacOjMorRPjm4wixJJ32ud2ZdqvA
-	 miOueZzivSZd80yJ3RiBjywV4Gfua6NdrlE1vuIZtNrcNaB/pnY3kpfWn1pxFkz8nz
-	 KGUAf1Tu6h0Pw==
+	b=B69885Lwm5xzxpL5dkF9v82AShV4NPxfDjbcJGLANOSfLQgCFoth83PfoK7soFMDz
+	 hpqrSQ6sXNXInBaxvz186DW0aOCTc+wzDqLTvYhUL3zXLomr//tyWQ8F6NVwOdnBLl
+	 IIZGMVDqge80jSG7KbEmomOWFLCZCfNTnrmuUqq6VA+3w41bZoHyIuKXIQj/Bs/wfk
+	 kxsvk2a5gomSnCVnwX4RFPp3J6by/Ovfw6zxIQ1CvPyB1CW7vF9ybiqaFEgNFtPrBl
+	 JjqKP5qlTu1IDDrxra74sj1980estT1EgA6MkTv5Q5W6jHErsyTRTKYFe+s397uHbr
+	 Kkd/02PzHeD5g==
 From: sashiko-bot@kernel.org
-Subject: Re: [bpf-next v3 1/2] bpf: Offload kptr destructors that run from
- NMI
+Subject: Re: [PATCH 2/2] perf build: compile BPF skeletons with -mcpu=v3
 Reply-To: sashiko@lists.linux.dev
-To: "Justin Suess" <utilityemal77@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260507175453.1140400-2-utilityemal77@gmail.com>
-References: <20260507175453.1140400-2-utilityemal77@gmail.com>
+To: "Suchit Karunakaran" <suchitkarunakaran@gmail.com>
+Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20260507184238.65280-2-suchitkarunakaran@gmail.com>
+References: <20260507184238.65280-2-suchitkarunakaran@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 07 May 2026 23:45:19 +0000
-Message-Id: <20260507234520.646C4C2BCB2@smtp.kernel.org>
+Date: Thu, 07 May 2026 23:49:59 +0000
+Message-Id: <20260507234959.EEC5BC2BCB8@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] TOCTOU race in `bpf_dtor_kptr_release_one()` can lead to NMI deadl=
-ocks.
-- [Low] Memory leak on initialization failure in `bpf_dtor_kptr_init()`.
+- [High] Adding `-mcpu=3Dv3` to `CLANG_OPTIONS` forces all BPF skeletons to=
+ use the BPF v3 ISA, breaking backward compatibility for perf tools designe=
+d to run on older kernels.
 --
 
-commit 488cdc390b90427a591d47211600c09addc95fcd
-Author: Justin Suess <utilityemal77@gmail.com>
-Date:   Thu May 7 17:54:52 2026 +0000
+commit 2e8791aeccf694e1ae9ed9fda46e3a6f73332838
+Author: Suchit Karunakaran <suchitkarunakaran@gmail.com>
 
-    bpf: Offload kptr destructors that run from NMI
+perf build: compile BPF skeletons with -mcpu=3Dv3
 
-This commit queues destructor-backed kptr teardowns to irq_work when
-running from NMI context. It maintains an idle-slot surplus counter to
-ensure offload slots are preallocated to prevent deadlocks.
+This commit adds -mcpu=3Dv3 to CLANG_OPTIONS to support the atomic
+cmpxchg instruction required by the lock_contention BPF program.
+This forces Clang to emit BPF ISA v3 instructions during skeleton
+compilation.
 
-Closes: https://lore.kernel.org/bpf/20260421201035.1729473-1-utilityemal77@=
-gmail.com/
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index cee19c923c060..a9a8c84b6b006 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 3b1f0ba02f613..d34fdb99eb8a9 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
 [ ... ]
-> @@ -65,6 +69,111 @@ static DEFINE_SPINLOCK(map_idr_lock);
-> +static void bpf_dtor_kptr_release_one(void)
-> +{
-> +	struct bpf_dtor_kptr_work *job;
-> +	long surplus;
-> +
-> +	for (;;) {
-> +		surplus =3D atomic_long_read(&bpf_dtor_kptr_surplus);
-> +		if (surplus <=3D 0)
-> +			return;
-> +
-> +		job =3D bpf_dtor_kptr_pop_idle();
 
-Could this sequence lead to a race condition that drains the idle pool
-too early?
+> @@ -1195,7 +1195,7 @@ ifneq ($(CROSS_COMPILE),)
+>  CLANG_TARGET_ARCH =3D --target=3D$(notdir $(CROSS_COMPILE:%-=3D%))
+>  endif
+> =20
+> -CLANG_OPTIONS =3D -Wall
+> +CLANG_OPTIONS =3D -Wall -mcpu=3Dv3
 
-If multiple threads read a positive surplus value here, they might all call
-bpf_dtor_kptr_pop_idle() before the cmpxchg executes. This could temporarily
-drain the idle pool below the required number of reserved slots.
+Does this change break backward compatibility for other perf tools running
+on older kernels?
 
-If an NMI fires during this window and attempts to tear down a kptr, would
-bpf_dtor_kptr_offload() find the idle pool empty? If so, it looks like it
-would trigger the fallback warning and run the destructor inline from the
-NMI context, which might reintroduce the deadlocks this patch aims to
-prevent.
+Since CLANG_OPTIONS is used in the pattern rule for compiling all BPF
+skeletons, this forces every BPF program in perf (such as
+augmented_raw_syscalls.bpf.c and off_cpu.bpf.c) to target the BPF ISA v3.
 
-> +		if (!job)
-> +			return;
-> +
-> +		if (!atomic_long_try_cmpxchg(&bpf_dtor_kptr_surplus, &surplus,
-> +						     surplus - 1)) {
-> +			pcpu_freelist_push(&bpf_dtor_kptr_idle, &job->fnode);
-> +			continue;
-> +		}
-> +
-> +		bpf_mem_free(&bpf_global_ma, job);
-> +		return;
-> +	}
-> +}
-[ ... ]
-> +static int __init bpf_dtor_kptr_init(void)
-> +{
-> +	int err;
-> +
-> +	err =3D pcpu_freelist_init(&bpf_dtor_kptr_idle);
-> +	if (err)
-> +		return err;
-> +
-> +	err =3D pcpu_freelist_init(&bpf_dtor_kptr_jobs);
-> +	if (err)
-> +		return err;
+Kernels older than 5.1 do not support v3 instructions and will reject
+these programs during the verifier load phase.
 
-Does this error path leak the per-cpu memory allocated for the idle list?
-
-If the second pcpu_freelist_init() fails, the function returns immediately.
-Should there be a cleanup path here to free the already initialized
-bpf_dtor_kptr_idle list?
-
-> +
-> +	return 0;
-> +}
-> +late_initcall(bpf_dtor_kptr_init);
+Should the -mcpu=3Dv3 flag be restricted exclusively to the target that
+needs it, perhaps using a target-specific append for lock_contention.bpf.o?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260507175453.1140=
-400-1-utilityemal77@gmail.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260507184238.6528=
+0-1-suchitkarunakaran@gmail.com?part=3D2
