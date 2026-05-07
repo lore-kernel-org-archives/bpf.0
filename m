@@ -1,123 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E87723D283;
-	Thu,  7 May 2026 01:41:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42C81E0DE8;
+	Thu,  7 May 2026 02:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778118094; cv=none; b=ce3TYzsrvd/NMw3whe8Nq4XJXxpTjW1CSbiY0RVsEOs6SHG/Y12Q+y6tKvptmQ9ousWEsNxbmHEI1NX0zQMB/UcoatUZBMQSH3ab7ioogAnsNRxk+2ktgjM+Mq254ibEEZggpcgGUn7+D+LqbVJU2Bl01y3shoL1ZlgR/xaK4zw=
+	t=1778121028; cv=none; b=WHtniuMuJ6cE9S3+ODO/yacuzIXKj9CS7X/2ZyUhvL9Dp5Z9a1hsZPN4/BeJdRnKKvnymKdaHJnoPUv8MyUkN2Cof0bXzFwzXYlSJL0mM2CSLKzE1AJA6LidcZBNZ1SUY0x6KgNTkkCt0UKHmq7gSOqj0Sdr7eHfPv0jLlX7Bi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778118094; c=relaxed/simple;
-	bh=wO5vhQqDka++NhEZmxe7dc618EjmbcBVTo0a3RXkeCY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nE/Xldg0alVI9szCKFZk8nv1QKF47z7qDZegB9VVuspRI4omyXS+4nbYlFkVYw7MlpWkXTO/ypv3x8JrVuMaLrFToxQ/845lWl+vhSs5iGZd7mkvhUBMZcnnxIxrYW+Tos8cpjumYcQvhOK0TcvItAoegp6uNJvFifM9I1ilKaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cLdGKeZk; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778121028; c=relaxed/simple;
+	bh=Xu/sb4xohkh/2ZBNeaA7TkCiXvEecSSvF061dFMhZ6c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BD4/le96UPw0manTEbeFUbzHr1xr7i3iPwoDkv9IZMJP6HsoR+7BWAIbHtsNeoqJpvdapQMXWt13Unmq5gocOxqJaGAkbvMheJ79+9y2kGSMuzwjf/8/BCBxk0e8BOFI2G2FwBmVTPzQuNA+CHKIl9WoPhfbZRQdxPS1PTACuzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X6gnKpLn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cLdGKeZk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778118091; x=1809654091;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wO5vhQqDka++NhEZmxe7dc618EjmbcBVTo0a3RXkeCY=;
-  b=cLdGKeZkBYAnxARi4zYsTqOVKNkwMAHjUkFcOvAWenGYNRGdzwby0W0+
-   Airuqb55yApxZqHFMuHQ+YysqjZEYQKYC+NlGcNkWKujJUmq7ip9NCND6
-   ZohD0UEGXntLmdU41bOXEjm9m3UA+JQb65CmqhkJViVScThHH/zBpjWnm
-   tu6666cZcOczjF47nX2Mv/AOt+4uGCTnndWNzdKoPR2XebLW0dqNmDRLw
-   0ZFE4yXRCTHOhnlRsLAGl+lxRuhyMZSC3FgKWN21FBPXnfXUhgUSSnSRo
-   Dk9rRoySGfLImqS+jdhQWFboi3MwjM6YDD6oV+h4vj8r7+h1VqVAZL651
-   A==;
-X-CSE-ConnectionGUID: X6AehSwXTyKL29ZUD44/Wg==
-X-CSE-MsgGUID: 4VxoY5OERWyCGddq2UQeaA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11778"; a="78089462"
-X-IronPort-AV: E=Sophos;i="6.23,220,1770624000"; 
-   d="scan'208";a="78089462"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2026 18:41:31 -0700
-X-CSE-ConnectionGUID: 8Sg+47i/Q3WGFjDN+XXGKA==
-X-CSE-MsgGUID: T1z2AYfbTdCTuKErTLJmhw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,220,1770624000"; 
-   d="scan'208";a="266694515"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by orviesa002.jf.intel.com with ESMTP; 06 May 2026 18:41:28 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wKnjx-000000006ib-3o27;
-	Thu, 07 May 2026 01:41:25 +0000
-Date: Thu, 7 May 2026 03:40:30 +0200
-From: kernel test robot <lkp@intel.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kuniyuki Iwashima <kuniyu@google.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, Eulgyu Kim <eulgyukim@snu.ac.kr>
-Subject: Re: [PATCH v1 bpf] bpf: Free reuseport cBPF prog after RCU grace
- period.
-Message-ID: <202605070321.vVxQf7dU-lkp@intel.com>
-References: <20260424235247.1990272-1-kuniyu@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X6gnKpLn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DD0AC2BCB0;
+	Thu,  7 May 2026 02:30:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778121027;
+	bh=Xu/sb4xohkh/2ZBNeaA7TkCiXvEecSSvF061dFMhZ6c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=X6gnKpLnM83cot+e2MIZ2NJ7IIQ0P+PmkNIXeUa2HYJm7mpxazwzgBOyQ6BwvtBCA
+	 hllGczx763fUwS9Ns0aqgU0/yw9/fw7nbVNQxHgQZULMm58PKKyivX3gY3RP9fDjYA
+	 vlXel1bQ5kBo1v1ztqdQNCOU/s9n/hfiOGJluDwU9rPPlEAIXKUydoGZmZeaPFparl
+	 Hd2fn8n/Xyz3O8MN6WdYUHKhdWw+UOk53akDJuMwiCJo5M8FQnxOBEHBi7siI3zSTm
+	 qaUzrB1c9iQtvpld2cOF/0JL7jU74QgV8OVfLIM7uEmhJ2a196D7U6X+RdgjENgE4s
+	 96L+Re1iVpqkw==
+Date: Wed, 6 May 2026 19:30:25 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Alex Shi
+ <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu
+ <dzm91@hust.edu.cn>, Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi
+ <pavan.chebbi@broadcom.com>, Joshua Washington <joshwash@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>, Saeed Mahameed
+ <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, Mark Bloch
+ <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Alexander Duyck
+ <alexanderduyck@fb.com>, kernel-team@meta.com, Daniel Borkmann
+ <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>, Shuah
+ Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, Stanislav Fomichev
+ <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, Bobby Eshleman
+ <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v2 1/6] net: add netmem_tx modes that indicate
+ dma capability
+Message-ID: <20260506193025.78aba2dc@kernel.org>
+In-Reply-To: <20260504-tcp-dm-netkit-v2-1-56d52ac72fd4@meta.com>
+References: <20260504-tcp-dm-netkit-v2-0-56d52ac72fd4@meta.com>
+	<20260504-tcp-dm-netkit-v2-1-56d52ac72fd4@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260424235247.1990272-1-kuniyu@google.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Kuniyuki,
+On Mon, 04 May 2026 17:27:48 -0700 Bobby Eshleman wrote:
+> --- a/drivers/net/netkit.c
+> +++ b/drivers/net/netkit.c
+> @@ -466,6 +466,7 @@ static void netkit_setup(struct net_device *dev)
+>  	dev->priv_flags |= IFF_NO_QUEUE;
+>  	dev->priv_flags |= IFF_DISABLE_NETPOLL;
+>  	dev->lltx = true;
+> +	dev->netmem_tx = NETMEM_TX_NO_DMA;
+>  
+>  	dev->netdev_ops     = &netkit_netdev_ops;
+>  	dev->ethtool_ops    = &netkit_ethtool_ops;
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index 0e1e581efc5a..11d68e75eb4f 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -1788,6 +1788,12 @@ enum netdev_stat_type {
+>  	NETDEV_PCPU_STAT_DSTATS, /* struct pcpu_dstats */
+>  };
+>  
+> +enum netmem_tx_mode {
+> +	NETMEM_TX_NONE,		/* no netmem TX support */
+> +	NETMEM_TX_DMA,		/* DMA-capable netmem TX (real HW) */
+> +	NETMEM_TX_NO_DMA,	/* no DMA, e.g. passthrough for virtual devs */
 
-kernel test robot noticed the following build errors:
+Now there's a little too much here, let's move the NO_DMA changes to
+another patch. Just convert the netmem_tx to an enum and change the
+existing drivers in patch 1.
 
-[auto build test ERROR on bpf/master]
+Next patch has:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/bpf-Free-reuseport-cBPF-prog-after-RCU-grace-period/20260425-093050
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
-patch link:    https://lore.kernel.org/r/20260424235247.1990272-1-kuniyu%40google.com
-patch subject: [PATCH v1 bpf] bpf: Free reuseport cBPF prog after RCU grace period.
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260507/202605070321.vVxQf7dU-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260507/202605070321.vVxQf7dU-lkp@intel.com/reproduce)
+> @@ -1164,16 +1197,30 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
+>  		goto err_unlock_netdev;
+>  	}
+>  
+> -	if (!netdev->netmem_tx) {
+> +	if (netdev->netmem_tx == NETMEM_TX_NONE) {
+>  		err = -EOPNOTSUPP;
+>  		NL_SET_ERR_MSG(info->extack,
+>  			       "Driver does not support netmem TX");
+>  		goto err_unlock_netdev;
+>  	}
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605070321.vVxQf7dU-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/core/filter.c:1666:6: error: conflicting types for 'sk_reuseport_prog_free'
-    1666 | void sk_reuseport_prog_free(struct bpf_prog *prog, bool wait_rcu)
-         |      ^
-   include/linux/filter.h:1146:6: note: previous declaration is here
-    1146 | void sk_reuseport_prog_free(struct bpf_prog *prog);
-         |      ^
-   1 error generated.
-
-
-vim +/sk_reuseport_prog_free +1666 net/core/filter.c
-
-  1665	
-> 1666	void sk_reuseport_prog_free(struct bpf_prog *prog, bool wait_rcu)
-  1667	{
-  1668		if (!prog)
-  1669			return;
-  1670	
-  1671		if (bpf_prog_was_classic(prog))
-  1672			call_rcu(&prog->aux->rcu, sk_reuseport_prog_free_rcu);
-  1673		else
-  1674			bpf_prog_put(prog);
-  1675	}
-  1676	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+which also should have been in patch 1.
