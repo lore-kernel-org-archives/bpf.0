@@ -1,21 +1,21 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97303346791
-	for <bpf@vger.kernel.org>; Thu,  7 May 2026 21:32:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E8C346E70
+	for <bpf@vger.kernel.org>; Thu,  7 May 2026 21:32:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778189525; cv=none; b=UoePY53VLqVMgVhtQr7nCBeNTVYexbYIKelYF+a/1rxeT5r6BppuTBeeQEE/F4T3ufz4YFFZVc7Tsxhxj6KEWXZr45QPIfql7+QNCdGFK8yKCFCvUBz8gJUJwIW9KR1iC2SRf/dJgNZ6qbI5IMk46ONcFgx16UuZDxDz+fTEksE=
+	t=1778189526; cv=none; b=D9/nDhFGS2Hbz29h+jIFR5gICefgeMOz00lgOrJU+Ibe4LGjozFdPxn9l01X9UZYpQ74keDCAny8ekT2jfcY6d1Z7bWTD9duIntypnpHCtuqTSkyDNPxxg6sosec8C6Mgl6fbRGF1uOszM6c8t24OwBBJL5PO5AEwdC+OBrSp10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778189525; c=relaxed/simple;
-	bh=tICgs89gwFedXCkQmUBAAvKS7pDmkYjnihvfoiZUUj0=;
+	s=arc-20240116; t=1778189526; c=relaxed/simple;
+	bh=ey1kCR6mlwlNMMTxVmY2xjN8y8SLZ0tKrsqERBmghAk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bwmzlQKhdd6dKjp1seQOAMbvcVV9i+jmchzt78xAoreTYUrvymUkaJ9GDItZlzuHFW0I5/a8q97gIZ8uO3alPfaDkJxJItZ0uUS8BDn/CdMjGXk6xGm1jj7UfIpnwKxSMcbTxWZxKDqwiwvrtrqvOEKBRb22GrPwBgRaT723QCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+	 MIME-Version; b=DBLAdlWhoGrpLBcWXL1aUs6zv0Zlpnb6QvgVeP5VSyFiFQHrvO+2w9b9S+97PcJLjleRWhObxkCVc3YVIggSB3J/Me9nrTicLSkFrFcTGxp8ejR8RfjwGTl0GYhm2nUvV9vc8f4GXL5MsOfFmLTqxrzuGX2X939iw5pjRz2hvnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 039B292BBF885; Thu,  7 May 2026 14:31:50 -0700 (PDT)
+	id 5858992BBF8B5; Thu,  7 May 2026 14:31:56 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,10 +23,11 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v2 20/23] selftests/bpf: Add precision backtracking test for stack arguments
-Date: Thu,  7 May 2026 14:31:50 -0700
-Message-ID: <20260507213150.1139244-1-yonghong.song@linux.dev>
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>
+Subject: [PATCH bpf-next v2 21/23] bpf, arm64: Map BPF_REG_0 to x8 instead of x7
+Date: Thu,  7 May 2026 14:31:56 -0700
+Message-ID: <20260507213156.1139442-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260507212942.1122000-1-yonghong.song@linux.dev>
 References: <20260507212942.1122000-1-yonghong.song@linux.dev>
@@ -38,249 +39,152 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Add a test that verifies precision backtracking works correctly
-across BPF-to-BPF calls when stack arguments are involved.
+From: Puranjay Mohan <puranjay@kernel.org>
 
-The test passes a size value as incoming stack arg (arg6) to a
-subprog, which bounds-checks it and forwards it as the mem__sz
-parameter (outgoing arg7) to bpf_kfunc_call_stack_arg_mem. The
-expected __msg annotations verify that precision propagates from
-the kfunc's mem__sz argument back through the subprog frame to the
-caller's outgoing stack arg store.
+Move the BPF return value register from x7 to x8, freeing x7 for use
+as an argument register. AAPCS64 designates x8 as the indirect result
+location register; it is caller-saved and not used for argument
+passing, making it a suitable home for BPF_REG_0.
 
-A companion BTF file (btf__stack_arg_precision.c) provides named
-parameter BTF for the __naked subprog via __btf_func_path.
+This is a prerequisite for stack argument support, which needs x5-x7
+to pass arguments 6-8 to native kfuncs following the AAPCS64 calling
+convention.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../bpf/prog_tests/stack_arg_precision.c      |  10 ++
- .../bpf/progs/btf__stack_arg_precision.c      |  23 +++
- .../selftests/bpf/progs/stack_arg_precision.c | 137 ++++++++++++++++++
- 3 files changed, 170 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/stack_arg_prec=
-ision.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__stack_arg_prec=
-ision.c
- create mode 100644 tools/testing/selftests/bpf/progs/stack_arg_precision=
-.c
+ arch/arm64/net/bpf_jit_comp.c                          |  4 ++--
+ arch/arm64/net/bpf_timed_may_goto.S                    |  8 ++++----
+ .../testing/selftests/bpf/progs/verifier_jit_inline.c  |  2 +-
+ tools/testing/selftests/bpf/progs/verifier_ldsx.c      |  6 +++---
+ .../selftests/bpf/progs/verifier_private_stack.c       | 10 +++++-----
+ 5 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/stack_arg_precision.c=
- b/tools/testing/selftests/bpf/prog_tests/stack_arg_precision.c
-new file mode 100644
-index 000000000000..1ab041d66de3
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/stack_arg_precision.c
-@@ -0,0 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <test_progs.h>
-+#include "stack_arg_precision.skel.h"
-+
-+void test_stack_arg_precision(void)
-+{
-+	RUN_TESTS(stack_arg_precision);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c=
- b/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
-new file mode 100644
-index 000000000000..296fddfe6804
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "../test_kmods/bpf_testmod_kfunc.h"
-+
-+#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
-+
-+long subprog_call_mem_kfunc(long a, long b, long c, long d, long e, long=
- size)
-+{
-+	char buf[8] =3D {};
-+
-+	return bpf_kfunc_call_stack_arg_mem(a, b, c, d, e, buf, size);
-+}
-+
-+#else
-+
-+long subprog_call_mem_kfunc(void)
-+{
-+	return 0;
-+}
-+
-+#endif
-diff --git a/tools/testing/selftests/bpf/progs/stack_arg_precision.c b/to=
-ols/testing/selftests/bpf/progs/stack_arg_precision.c
-new file mode 100644
-index 000000000000..c94905f07dcc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
-@@ -0,0 +1,137 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "../test_kmods/bpf_testmod_kfunc.h"
-+#include "bpf_misc.h"
-+
-+#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
-+
-+/* Force kfunc extern BTF generation for inline asm call below.
-+ * Uses its own SEC so it's not included as a .text subprog.
-+ * The '?' prefix sets autoload=3Dfalse so libbpf won't load it.
-+ */
-+SEC("?tc")
-+int __btf_kfunc_gen(struct __sk_buff *ctx)
-+{
-+	char buf[8] =3D {};
-+
-+	return bpf_kfunc_call_stack_arg_mem(0, 0, 0, 0, 0, buf, sizeof(buf));
-+}
-+
-+/*
-+ * Test precision backtracking across bpf-to-bpf call for kfunc stack ar=
-g.
-+ * subprog_call_mem_kfunc receives a size as incoming stack arg (arg6),
-+ * bounds-checks it, then passes it as mem__sz (arg7) to
-+ * bpf_kfunc_call_stack_arg_mem.
-+ *
-+ * 1+2+3+4+5+(1+2+3+4) =3D 25
-+ */
-+__naked __noinline __used
-+static long subprog_call_mem_kfunc(long a, long b, long c, long d, long =
-e, long size)
-+{
-+	asm volatile (
-+		"r1 =3D *(u64 *)(r11 + 8);"	/* r1 =3D incoming arg6 (size) */
-+		"r2 =3D 0x0807060504030201 ll;"	/* r2 =3D buf contents */
-+		"*(u64 *)(r10 - 8) =3D r2;"	/* store buf to stack */
-+		"r2 =3D r10;"
-+		"r2 +=3D -8;"			/* r2 =3D &buf */
-+		"*(u64 *)(r11 - 8) =3D r2;"	/* outgoing arg6 =3D buf */
-+		"*(u64 *)(r11 - 16) =3D r1;"	/* outgoing arg7 =3D size */
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call %[bpf_kfunc_call_stack_arg_mem];"
-+		"exit;"
-+		:
-+		: __imm(bpf_kfunc_call_stack_arg_mem)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: precision backtracking across bpf2bpf call for=
- kfunc")
-+__success __retval(25)
-+__log_level(2)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__btf_func_path("btf__stack_arg_precision.bpf.o")
-+__msg("mark_precise: frame1: last_idx 26 first_idx 13 subseq_idx -1")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 25: (b7) r5 =3D 5")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 24: (b7) r4 =3D 4")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 23: (b7) r3 =3D 3")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 22: (b7) r2 =3D 2")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 21: (b7) r1 =3D 1")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 20: (7b) *(u64 *)(r=
-11 -16) =3D r1")
-+__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 19: (7b) *(u64 *)=
-(r11 -8) =3D r2")
-+__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 18: (07) r2 +=3D =
--8")
-+__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 17: (bf) r2 =3D r=
-10")
-+__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 16: (7b) *(u64 *)=
-(r10 -8) =3D r2")
-+__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 14: (18) r2 =3D 0=
-x807060504030201")
-+__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 13: (79) r1 =3D *=
-(u64 *)(r11 +8)")
-+__msg("mark_precise: frame1: parent state regs=3D stack=3D:  frame1: R10=
-=3Dfp0")
-+__msg("mark_precise: frame0: parent state regs=3D stack=3D:  R10=3Dfp0")
-+__msg("mark_precise: frame1: last_idx 11 first_idx 11 subseq_idx 13")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 11: (85) call pc+1"=
-)
-+__msg("mark_precise: frame0: parent state regs=3D stack=3D:  R1=3D1 R2=3D=
-2 R3=3D3 R4=3D4 R5=3D5 R10=3Dfp0")
-+__msg("mark_precise: frame0: last_idx 9 first_idx 7 subseq_idx 11")
-+__msg("mark_precise: frame0: regs=3D stack=3D before 9: (05) goto pc+1")
-+__msg("mark_precise: frame0: regs=3D stack=3D before 8: (7a) *(u64 *)(r1=
-1 -8) =3D 4")
-+__msg("mark_precise: frame1: last_idx 26 first_idx 13 subseq_idx -1 ")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 25: (b7) r5 =3D 5")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 24: (b7) r4 =3D 4")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 23: (b7) r3 =3D 3")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 22: (b7) r2 =3D 2")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 21: (b7) r1 =3D 1")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 20: (7b) *(u64 *)(r=
-11 -16) =3D r1")
-+__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 19: (7b) *(u64 *)=
-(r11 -8) =3D r2")
-+__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 18: (07) r2 +=3D =
--8")
-+__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 17: (bf) r2 =3D r=
-10")
-+__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 16: (7b) *(u64 *)=
-(r10 -8) =3D r2")
-+__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 14: (18) r2 =3D 0=
-x807060504030201")
-+__msg("mark_precise: frame1: regs=3Dr1 stack=3D before 13: (79) r1 =3D *=
-(u64 *)(r11 +8)")
-+__msg("mark_precise: frame1: parent state regs=3D stack=3D:  frame1: R10=
-=3Dfp0")
-+__msg("mark_precise: frame0: parent state regs=3D stack=3D:  R10=3Dfp0")
-+__msg("mark_precise: frame1: last_idx 11 first_idx 11 subseq_idx 13 ")
-+__msg("mark_precise: frame1: regs=3D stack=3D before 11: (85) call pc+1"=
-)
-+__msg("mark_precise: frame0: parent state regs=3D stack=3D:  R1=3D1 R2=3D=
-2 R3=3D3 R4=3D4 R5=3D5 R10=3Dfp0")
-+__msg("mark_precise: frame0: last_idx 10 first_idx 10 subseq_idx 11 ")
-+__msg("mark_precise: frame0: regs=3D stack=3D before 10: (7a) *(u64 *)(r=
-11 -8) =3D 6")
-+__naked void stack_arg_precision_bpf2bpf(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"r6 =3D r0;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"if r6 < 2 goto l0_%=3D;"
-+		"*(u64 *)(r11 - 8) =3D 4;"
-+		"goto l1_%=3D;"
-+	"l0_%=3D:"
-+		"*(u64 *)(r11 - 8) =3D 6;"
-+	"l1_%=3D:"
-+		"call subprog_call_mem_kfunc;"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
-+#else
-+
-+SEC("socket")
-+__description("stack_arg_precision: not supported, dummy test")
-+__success
-+int dummy_test(void)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
-+char _license[] SEC("license") =3D "GPL";
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
+c
+index 0816c40fc7af..085e650662e3 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -47,7 +47,7 @@
+ /* Map BPF registers to A64 registers */
+ static const int bpf2a64[] =3D {
+ 	/* return value from in-kernel function, and exit value from eBPF */
+-	[BPF_REG_0] =3D A64_R(7),
++	[BPF_REG_0] =3D A64_R(8),
+ 	/* arguments from eBPF program to in-kernel function */
+ 	[BPF_REG_1] =3D A64_R(0),
+ 	[BPF_REG_2] =3D A64_R(1),
+@@ -1048,7 +1048,7 @@ static void build_epilogue(struct jit_ctx *ctx, boo=
+l was_classic)
+ 	/* Restore FP/LR registers */
+ 	emit(A64_POP(A64_FP, A64_LR, A64_SP), ctx);
+=20
+-	/* Move the return value from bpf:r0 (aka x7) to x0 */
++	/* Move the return value from bpf:r0 (aka x8) to x0 */
+ 	emit(A64_MOV(1, A64_R(0), r0), ctx);
+=20
+ 	/* Authenticate lr */
+diff --git a/arch/arm64/net/bpf_timed_may_goto.S b/arch/arm64/net/bpf_tim=
+ed_may_goto.S
+index 894cfcd7b241..a9a802711a7f 100644
+--- a/arch/arm64/net/bpf_timed_may_goto.S
++++ b/arch/arm64/net/bpf_timed_may_goto.S
+@@ -8,8 +8,8 @@ SYM_FUNC_START(arch_bpf_timed_may_goto)
+ 	stp     x29, x30, [sp, #-64]!
+ 	mov     x29, sp
+=20
+-	/* Save BPF registers R0 - R5 (x7, x0-x4)*/
+-	stp	x7, x0, [sp, #16]
++	/* Save BPF registers R0 - R5 (x8, x0-x4)*/
++	stp	x8, x0, [sp, #16]
+ 	stp	x1, x2, [sp, #32]
+ 	stp	x3, x4, [sp, #48]
+=20
+@@ -28,8 +28,8 @@ SYM_FUNC_START(arch_bpf_timed_may_goto)
+ 	/* BPF_REG_AX(x9) will be stored into count, so move return value to it=
+. */
+ 	mov	x9, x0
+=20
+-	/* Restore BPF registers R0 - R5 (x7, x0-x4) */
+-	ldp	x7, x0, [sp, #16]
++	/* Restore BPF registers R0 - R5 (x8, x0-x4) */
++	ldp	x8, x0, [sp, #16]
+ 	ldp	x1, x2, [sp, #32]
+ 	ldp	x3, x4, [sp, #48]
+=20
+diff --git a/tools/testing/selftests/bpf/progs/verifier_jit_inline.c b/to=
+ols/testing/selftests/bpf/progs/verifier_jit_inline.c
+index 4ea254063646..885ff69a3a62 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_jit_inline.c
++++ b/tools/testing/selftests/bpf/progs/verifier_jit_inline.c
+@@ -9,7 +9,7 @@ __success __retval(0)
+ __arch_x86_64
+ __jited("	addq	%gs:{{.*}}, %rax")
+ __arch_arm64
+-__jited("	mrs	x7, SP_EL0")
++__jited("	mrs	x8, SP_EL0")
+ int inline_bpf_get_current_task(void)
+ {
+ 	bpf_get_current_task();
+diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/te=
+sting/selftests/bpf/progs/verifier_ldsx.c
+index 1026524a1983..41340877dc9d 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+@@ -274,11 +274,11 @@ __jited("movslq	0x10(%rdi,%r12), %r15")
+ __jited("movswq	0x18(%rdi,%r12), %r15")
+ __jited("movsbq	0x20(%rdi,%r12), %r15")
+ __arch_arm64
+-__jited("add	x11, x7, x28")
++__jited("add	x11, x8, x28")
+ __jited("ldrsw	x21, [x11, #0x10]")
+-__jited("add	x11, x7, x28")
++__jited("add	x11, x8, x28")
+ __jited("ldrsh	x21, [x11, #0x18]")
+-__jited("add	x11, x7, x28")
++__jited("add	x11, x8, x28")
+ __jited("ldrsb	x21, [x11, #0x20]")
+ __jited("add	x11, x0, x28")
+ __jited("ldrsw	x22, [x11, #0x10]")
+diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b=
+/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+index 646e8ef82051..c5078face38d 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+@@ -170,12 +170,12 @@ __jited("	mrs	x10, TPIDR_EL{{[0-1]}}")
+ __jited("	add	x27, x27, x10")
+ __jited("	add	x25, x27, {{.*}}")
+ __jited("	bl	0x{{.*}}")
+-__jited("	mov	x7, x0")
++__jited("	mov	x8, x0")
+ __jited("	mov	x0, #0x2a")
+ __jited("	str	x0, [x27]")
+ __jited("	bl	0x{{.*}}")
+-__jited("	mov	x7, x0")
+-__jited("	mov	x7, #0x0")
++__jited("	mov	x8, x0")
++__jited("	mov	x8, #0x0")
+ __jited("	ldp	x25, x27, [sp], {{.*}}")
+ __naked void private_stack_callback(void)
+ {
+@@ -220,7 +220,7 @@ __jited("	mov	x0, #0x2a")
+ __jited("	str	x0, [x27]")
+ __jited("	mov	x0, #0x0")
+ __jited("	bl	0x{{.*}}")
+-__jited("	mov	x7, x0")
++__jited("	mov	x8, x0")
+ __jited("	ldp	x27, x28, [sp], #0x10")
+ int private_stack_exception_main_prog(void)
+ {
+@@ -258,7 +258,7 @@ __jited("	add	x25, x27, {{.*}}")
+ __jited("	mov	x0, #0x2a")
+ __jited("	str	x0, [x27]")
+ __jited("	bl	0x{{.*}}")
+-__jited("	mov	x7, x0")
++__jited("	mov	x8, x0")
+ __jited("	ldp	x27, x28, [sp], #0x10")
+ int private_stack_exception_sub_prog(void)
+ {
 --=20
 2.53.0-Meta
 
