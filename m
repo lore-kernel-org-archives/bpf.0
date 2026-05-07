@@ -1,210 +1,182 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC623ED131
-	for <bpf@vger.kernel.org>; Thu,  7 May 2026 12:51:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D045F3F1679
+	for <bpf@vger.kernel.org>; Thu,  7 May 2026 12:53:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778158272; cv=pass; b=FngmlU0j/NRf8E0YxLvJ58EXJrN3saWbTC7TxN2oMqAOwEAaM6ttj5tQXh1kHiRrl5wJdSXsoF/Gpv74SFETDutj/QTiTk4a9hm61cj1bKaWn0cRQOxEMNTlElZ6RKPyxrIjNWfR2hqaQPd+JkK8pJiv8avGZiKLJzOi9NkUMZ4=
+	t=1778158385; cv=pass; b=bpj0xsc4PH1iHEISvvbH2Pmk7/mDyt0UefUsm4toysGVX2xCyTmHxlNSXVo+e/loh2f+lTrXsIxtD2PzCcxRho29A9ViYICB1sgiloz/aCSF/zs/wKZo42IyqcE9m5SQhoX6gdsy97T6M+K9pawvwb5V2I0/+82r8tBMqFFUl0g=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778158272; c=relaxed/simple;
-	bh=s7OI6HHvsHxfWxRGFkKSojNp0di6rdJD2TS4haeyN80=;
+	s=arc-20240116; t=1778158385; c=relaxed/simple;
+	bh=x82l6NaRoY/SIZgBDU99w/LVd7FiucMtpTcSpiO2/1E=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V4G/ZKb9gmmyMd6CrWah96wCEHOJpDs8qGLLlrQ87n0QBAZ/wFSb8Mp/99p51z1Le4GGMIclXZ30Lh8rT6qRe1ggrmJPFviUkfA/wzm/6XeArp9l105l2TdfY+W5P4/ORwLANpVpyIm36xeG6koYvkX50Kn248qcuUGM7jjPdOA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KnnFCLSq; arc=pass smtp.client-ip=209.85.208.175
+	 To:Cc:Content-Type; b=J4WmoDS1IrfxpPHC33c+MtH+YKsX8rXnCyRd3LV6tDZTnRcSD+iEtj+Rt/R4zXhRzbYIXH5Dery8q75E92zlW93U0UdbGKPtg6Xsjw6tSDeniQWm9KSJTf/O5zNknT5glX7AP0c+iXAGwYrCR4TYPIsvM4ew7E6RnpdnZ/nKp8I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fKC3/A8v; arc=pass smtp.client-ip=209.85.128.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KnnFCLSq"
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-38e7d983f79so6698971fa.0
-        for <bpf@vger.kernel.org>; Thu, 07 May 2026 05:51:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778158269; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fKC3/A8v"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-7bd9f61458eso5980637b3.0
+        for <bpf@vger.kernel.org>; Thu, 07 May 2026 05:53:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778158381; cv=none;
         d=google.com; s=arc-20240605;
-        b=OJJMnyUi6ZeDs+xegE49iNxmFQsNL20lkfJS57+aumr3s9g7NFXfbpl08qKG2mgmRm
-         aURB+qs7I/LSXY8CJIC0iogceDIVHUykBqUC87p0TRQb8mJEkUraEVMmoWQ7EDONRVoS
-         VdZY29rr+rKm737o3VYmPxf+FucG2dGDLO6IbgIiw391TSognwbmZsOjhTwUcygo8/l/
-         +JLLNycRVI6sh+c4XcyXz8TPMP0zE14E8h5VJSDvg2CmQFdiTfkqnqKKYCFhqLLxwVRt
-         LPagtZD+LWWBBrgje6KCKa6FXILHLMWSjSsnIS/KFLxRIuvlWp/jUJWdeiCur4xWJUPL
-         bgqg==
+        b=HKBX6Jwl5NRJVWKpNmIiGDzHrystaE5rDCrHp3rUD92NEIujPUPOnpZfLCli5sE7Os
+         phWc8M9bG587r7V07pf94zHzsPm3pSkyXKo4Ycn44HnP0tpP+ksjwnaj8PAujElmAOC6
+         TAUXmcZ2TGivDMsJER70fE9aA3ePC7n6WnejOjz09OrmCtJm/MxHLqRwAkq0WYXHpzGf
+         8WG+B7Urb2OrarLzbPwSK0gb3KppXz4iai9uiWRZr+7LNWTGwseHT1Gwk8H+dRYbK8X/
+         irm/RRmBvELkwZcKrQS9svcW1Qfwj4o50Uu+5elL9HCKRj7V+BicwdOhscS+ZBV2JQBM
+         pjPg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Ds5Hpu/+KbdWRemu357hxe1/OrpLRLixtQ7C6d78k58=;
-        fh=T8cIjgFuaM/QWjTbAPWoAk2XfyhVXQaKLW2UXQQ0eEM=;
-        b=LOpbU4yiXW29HcrMK/Zn88kFpKyFrNotnJhLdBmoag8zEvsItdlHwQJo8GCf4AT4DN
-         2U4vLanhmV/PML7QZlhEC/X7plXT7Nk08mRddBFmIn9VyoHXQurOeh/22T8Mpg7aotSe
-         e/Gl6lbb/Koe0+ayu7xNcz5ivpQshXnm2QScPZfAhBKBEj9TwR9jhGxxSRhA9IEJ/7bQ
-         11+R+xst7AMRLqY4ojoXRwlB2P6oAorT5IvCR/Jnb4AUg71fVXqK0UQVe0yNmkj60KKB
-         XnwIADk14Uhk2gWs05wKhyJ8bXaBu8g+OiBdYKo1v6cwU6PpZwifjJAfF2ehMK7eOxNf
-         0ngg==;
+        bh=PrmNq2ynRuCEdYKNPCryM4xNScgxSx9BUckn5/WYdnM=;
+        fh=7pQPbM1mTaKjUbZ75iTISJbipA72wUVZwkXXTYMxzFw=;
+        b=FGPoNIM67k4REBtKsccj93y15niOr3ackb+YMWo5UJlm89TyHSYeYee4buveJ6DYFZ
+         1zxvONm36lfByLhKTVUmVw5qPPb0wYlk1wKeubMAcFuD9FimZFAlUTuyD8GkLIW6Pfem
+         n24yCTtsQrLGDFHcG8Ms11xDhQNAe2kK4dIv1Aaqy+xxva6HRHYr9BRSoDYsKcToXUw8
+         r0KvC7ie165ceaHnGhP+mZfEbVxFO5RODhoh3LO8A41iI1y6ubFZ7s7q7s//Y7azeecE
+         R/3wA6nIbllw/0K2IK4tZy97ecaXt6rF9xoW0jlFL+nDH2qYbClHaOQeO6hZUlLUXZqR
+         dawA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778158269; x=1778763069; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778158381; x=1778763181; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ds5Hpu/+KbdWRemu357hxe1/OrpLRLixtQ7C6d78k58=;
-        b=KnnFCLSqtLNRVKj7CjYItzW9lpMIGcQcBY+XI9uFuvHuAObupcFkpIOJs8XpBIb1zi
-         OhIQ9E5QlQbQ72CbR+zE3C1V1ImG4vX+dvKcbx2/awMl9eandpDuCIBYehm3FwAVv4mt
-         VTR8ee6Od6jt2gB62IJWmYJ85DLiCoXO/cizfLQMqPDeXnnnGOlhnnuFP95D/4Ypn7C0
-         Czeileqz54mCvuNaSy/TeRJ4L3KZGoXNJ2sDbHC33Cu1PG4QnTKj9gMG3jFlCDzh6Sjr
-         PC7klSHPld1hYirt2+9PoBRK4dNEujoHcKqE0yNtqxosnHipwfy+0Rs3yGBg7FSQdRTW
-         N8nQ==
+        bh=PrmNq2ynRuCEdYKNPCryM4xNScgxSx9BUckn5/WYdnM=;
+        b=fKC3/A8vpys1DezFe3N9dQXGE4mUhwz5KNr+8xP8qC8uWK8MHxL3iwiZqlcCDFygIx
+         cvIIzTB1y7jIgZfTMzs5oHhy2VSyZVkd0EL2NEogXDRIC2c8iBtnhd8X1pRc+gWiMVVl
+         vqV0jHL6QBH2Ued31XN7MjHZV13BF9RU5FyDWPlqiZA2gsnQ+fYI1AVk/aXms+K5ZLw8
+         xpANYH2x9v9EQ1TVaWuFJ540WhuXTH5xgnvvBoZX7WMeAoT//DBMMpU5ae/6DJydqnET
+         p92VmSj+zoXk5AiTYdoY+EbSlgv9kKAwwOI8NJ1L0N/nCJS8ERwF7Zbi0HyqZLwSlbMv
+         dXdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778158269; x=1778763069;
+        d=1e100.net; s=20251104; t=1778158381; x=1778763181;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Ds5Hpu/+KbdWRemu357hxe1/OrpLRLixtQ7C6d78k58=;
-        b=N6msB78d/5myCoxsqmmo5yvd8rjHivly54xXbP51aknvU55wF0vB9hN+NEG6zS29m5
-         sdicZnmlxkyQCZyeAUIvuT0Xh3ax5l3pWc4z31FB0kNLK+gU7aLbjtgb4tCH+EHGREsx
-         tvKCz47cQvLqRK3OUPcduQfnPnXFVBJrCF8lnaDonT8lHB6cDgTKff/in+F4PQU0eaaZ
-         EH28ERxSBpezSAfrAhG8TJ5AbUvfK/dF2NICI7WsliUd1FGTOmah54awQKpMMqMXbXvU
-         iCGA1aM5bXsMHvUgBLhSFi5vEetInzwdYNYVgZVq9t50luDsr5mnziCnF0q97/n9wj1k
-         B1vA==
-X-Forwarded-Encrypted: i=1; AFNElJ9nqU2xqyYMMJsmekNLJucWJyvHhq4XX1qrvjm7uCJ/pbJlHdpMALtlVYIGX/yMWsfdHFA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFPuUCgUydIpo5vxOejYfkTvnET4dAJYsvzW6ljtUSx8U5rWJt
-	EqdIMfNNqGuYiAlJVNMcrz/ohvmTQPPXD4sk8zLfbrbfmgtmWRGEqzhfSip9grzLuuYuCs0ls0y
-	37D/GZBoNKf6swOAfea4+Sw6eJEvrc5A=
-X-Gm-Gg: AeBDievvOl70JvU4HyAEj05gbvo7NgkrB9UdbB3rbmD6UzOJz1IYHmQHfz7KSt82Ej2
-	oEZEpmiT/nGzgx2jRIWNkNeohA9wa8rlNvS8wvf14o2Jmrxj4nzPRiaLgS4t2FrOsDpbCnuT8pb
-	1HJRN4ZYvKE76wd1Tvgjw/0Nz421Iy9xSrDlr2+QqmElkPEAUYgTSXDSnJaSXmau/wrJB0g7XvA
-	5iFqwUC/oRHCds9tUDatnDq+FlMFXfjRWUw5Pghyu8662KX0MDjY9AFVHm3/ej+xmbD83qo2F5g
-	4K8hQeLHJBcrMJM=
-X-Received: by 2002:a05:651c:3247:20b0:393:9ee6:1b7b with SMTP id
- 38308e7fff4ca-393c41e25d8mr22404801fa.22.1778158268499; Thu, 07 May 2026
- 05:51:08 -0700 (PDT)
+        bh=PrmNq2ynRuCEdYKNPCryM4xNScgxSx9BUckn5/WYdnM=;
+        b=Rox+AXBfDuJlB2OsJmbs3nmVoXNVXHCroGDVDF59Al1aKsSoZeQ0bAZuiSB36ii7uv
+         JucauZbAFu5Xt8B0vIOWzj2jSRvtb3l9IRKXLHCAWfwNXmrFEhG8bTpgH9yj3UMKnRHF
+         24xPFMS/wJKKZ6tS0SSZq+ixdnDNJOWjiPs/xqzfu3sR5wCJYIvRU7Pk/NWDcWgrEXvI
+         RQvXClE+XPg4qx3FhbHdHJnVOCSZ/641DL8alJdm49EsnQrVj132pBj5d5ds9VBgUVgW
+         7Z2X0Qb3Bm+AWIxOOMc9WvhRH6kTd6Cr5MmakzZZfBoeQNX/kC/1JbynlXc75SlhI12N
+         JUQw==
+X-Gm-Message-State: AOJu0YylKbk9PEjhXk8p/s7mvEKMi7e90Ig/X8MKCAqvDPtJ2YztV+yf
+	gCseYccHCNPnS7/kBpyMAWLyFs2bWEEuR260/zG/yKlAFxXK6fWLV0nnOmbHWP+V2xAAAJBWNXt
+	nhkHcF9Mf2UwIqKaZUZr4iDO2IRALpAbK4lChpYg=
+X-Gm-Gg: Acq92OETqLUwzZ7PyGntENdrOu1Izo4uSSJzkIhTGDmb0bNSYFwhiNFEPo3/bgqLk2o
+	3YVIGNoagD9z1APiIV6haDTu/TkybGk6Cr8SN4/1fQ8Kgg0FS0OAseNOclVaVI0dAxX0giELk69
+	0qYVMEuIJdOWGGMr9sPjoT+BIqT/ip+JKJJn5pWxzJQH/lmgNM/O+6M/tS1jBKbug6hJ3YBXu5c
+	1ZCWbnzqPhujjniiX9qbNCOceGlYExIQfPlZHjeJewv0zHO/zRTjY+CZzDaGRYdmOlvb0dP+/Nm
+	11nREqDctTA0lNEyFNk=
+X-Received: by 2002:a05:690c:8e14:b0:7bd:7c16:170e with SMTP id
+ 00721157ae682-7bdf5dfcaf5mr71836127b3.22.1778158381112; Thu, 07 May 2026
+ 05:53:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260503165024.1526680-1-vernon2gm@gmail.com> <CALOAHbBx6GuZjj9_EdrAPCsiLJekAiqOVsWQ0muNJh18Nxaqtg@mail.gmail.com>
-In-Reply-To: <CALOAHbBx6GuZjj9_EdrAPCsiLJekAiqOVsWQ0muNJh18Nxaqtg@mail.gmail.com>
-From: Vernon Yang <vernon2gm@gmail.com>
-Date: Thu, 7 May 2026 20:50:56 +0800
-X-Gm-Features: AVHnY4Jj1qd88WzmY0wwoWnVGCaZldc6eM9kX1Z-bW7EzXfkIO3E-JQPWwtzWk4
-Message-ID: <CACZaFFPXo_f_2M7y4NfQ=sWddS4Kwo5guFTqZcLmm4Z8COWocQ@mail.gmail.com>
-Subject: Re: [PATCH 0/4] mm: introduce mthp_ext via cgroup-bpf to make mTHP
- more transparent
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
-	roman.gushchin@linux.dev, inwardvessel@gmail.com, shakeel.butt@linux.dev, 
-	ast@kernel.org, daniel@iogearbox.net, surenb@google.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
-	baohua@kernel.org, lance.yang@linux.dev, dev.jain@arm.com, 
-	Vernon Yang <yanglincheng@kylinos.cn>
+References: <20260506142709.2298255-6-ameryhung@gmail.com> <20260506215438.45B98C2BCB0@smtp.kernel.org>
+In-Reply-To: <20260506215438.45B98C2BCB0@smtp.kernel.org>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Thu, 7 May 2026 14:52:49 +0200
+X-Gm-Features: AVHnY4I8dLh_GNOSbdb9n4dj8p957fKTD6_O6e-_45ZqHDnU2U17zK6YoYBLQic
+Message-ID: <CAMB2axO5ubguhhGTVRZ60odvHLHgyc+YggeiD8Fe7KDyP32YfA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 05/12] bpf: Refactor object relationship
+ tracking and fix dynptr UAF bug
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 7, 2026 at 11:35=E2=80=AFAM Yafang Shao <laoar.shao@gmail.com> =
-wrote:
+On Wed, May 6, 2026 at 10:54=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
-> On Mon, May 4, 2026 at 12:52=E2=80=AFAM Vernon Yang <vernon2gm@gmail.com>=
- wrote:
-> >
-> > From: Vernon Yang <yanglincheng@kylinos.cn>
-> >
-> > Hi all,
-> >
-> > Background
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> > As is well known, a system can simultaneously run multiple different
-> > scenarios. However, THP is not beneficial in every scenario =E2=80=94 i=
-t is only
-> > most suitable for memory-intensive applications that are not sensitive
-> > to tail latency. For example, Redis, which is sensitive to tail latency=
-,
-> > is not suitable for THP. But in practice, due to Redis issues, the
-> > entire THP functionality is often turned off, preventing other scenario=
-s
-> > from benefiting from it.
-> >
-> > There are also some embedded scenarios (e.g. Android) that directly use
-> > 2MB THP, where the granularity is too large. Therefore, we introduced
-> > mTHP in v6.8, which supports multiple-size THP. In practice, however, w=
-e
-> > still globally fix a single mTHP size and are unable to automatically
-> > select different mTHP sizes based on different scenarios.
-> >
-> > After testing, it was found that
-> >
-> > - When the system has a lot of free memory, it is normal for Redis to
-> >   use mTHP. performance degradation in Redis only occurs when the syste=
-m
-> >   is under high memory pressure.
-> > - Additionally, when a large number of small-memory processes use mTHP,
-> >   memory waste is prone to occur, and performance degradation may also
-> >   happen during fast memory allocation/release.
-> >
-> > Previously, "Cgroup-based THP control"[1] was proposed, but it had the
-> > following issues.
-> >
-> > - It breaks the cgroup hierarchy property.
-> > - Add new THP knobs, making sysadmin's job more complex
-> >
-> > Previously, "mm, bpf: BPF-MM, BPF-THP"[2] was proposed, but it had the
-> > following issues.
-> >
-> > - It didn't address the issue on the per-process mode.
-> > - For global mode, the prctl(PR_SET_THP_DISABLE) has already achieved
-> >   the same objective, there is no need to add two mechanisms for the
-> >   same purpose.
-> > - Attaching st_ops to mm_struct, the same issues that cgroup-bpf once
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [Critical] Dynptrs constructed from referenced objects are assigned a `=
+parent_id` of 0, breaking cascading invalidation and leading to Use-After-F=
+ree.
+> --
 >
-> Hello,
+> commit 5c82adaba693d44fcc105cb9d8d86e76a67e2a64
+> Author: Amery Hung <ameryhung@gmail.com>
 >
-> The primary hurdles preventing BPF-THP from being upstreamed are:
+> bpf: Refactor object relationship tracking and fix dynptr UAF bug
 >
-> - Uncertainty regarding the stable API
+> This commit refactors verifier object relationship tracking by replacing
+> the PTR_TO_MEM-specific dynptr_id with a general parent_id in bpf_reg_sta=
+te.
+> It updates release_reference() to use a DFS approach for cascading
+> invalidation when parent objects are freed.
 >
->   It remains unclear whether the following API is sufficient for
->   BPF-THP requirements:
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> [ ... ]
+> > @@ -11804,15 +11810,10 @@ static int check_kfunc_args(struct bpf_verifi=
+er_env *env, struct bpf_kfunc_call_
+> >                               }
+> >
+> >                               dynptr_arg_type |=3D (unsigned int)get_dy=
+nptr_type_flag(parent_type);
+> >                       }
+> >
+> >                       ret =3D process_dynptr_func(env, reg, argno, insn=
+_idx, dynptr_arg_type,
+> > -                                               clone_ref_obj_id, &meta=
+->dynptr);
+> > +                                               meta->ref_obj_id ? meta=
+->id : 0, &meta->dynptr);
+>
+> Does this code assign 0 to the dynptr's parent_id instead of the actual
+> parent's ID?
 
-Thank you for pointing this out. I will add it to this issue list in
-the next version.
+Yes. In this case, the parent is not a referenced object, so tracking
+is unnecessary.
 
-At the same time, I also encourage everyone to actively provide
-relevant real workload scenarios. I will conduct related analyses and
-develop the mthp_ext to address them, so we can determine which ABI
-can satisfy the BPF-THP requirements.
+While we can track parent_id unconditionally, we should avoid doing it
+now until every obj, referenced or not, has an id. Otherwise, it
+becomes hard to reason where the parent_id is valid or not.
 
->   unsigned long
->   bpf_hook_thp_get_orders(struct vm_area_struct *vma, enum tva_type type,
->                                             unsigned long orders)
->   {
->       return orders;
->   }
+I will clarify this in parent_id's comment:
+parent_id is only tracked when the parent object is referenced or is dynptr=
+.
+
+Although for a slice derived from a non-referenced dynptr, we don't
+need to track the parent (allowing it to be accessed even when the
+dynptr stack slot is destroyed). The slice should be destroyed when
+the parent dynptr is destroyed in the dyntpr's mental model.
+
 >
-> - Ongoing integration of cgroups and struct-ops
+> For referenced objects acquired with PTR_MAYBE_NULL, the BPF program must
+> perform a NULL check before passing the pointer to the constructor. Upon =
+a
+> successful NULL check, the verifier clears reg->id to 0 while preserving
+> reg->ref_obj_id.
+
+Not any more. See patch 4. Hence the following comments can be ignored.
+
 >
->   Work is still in progress to integrate cgroup support with
-> struct_ops (see also
-> https://lore.kernel.org/linux-mm/87cy439x8a.fsf@linux.dev/).
-> We should wait for this infrastructure to land before introducing
-> new cgroup-based struct_ops.
-
-This work can be carried out in parallel with integrating cgroup
-support with struct_ops. I will focus on addressing real workload
-scenarios to further clear/stabilize the BPF-THP ABI.
-
-> >   faced are likely to arise again, e.g. lifetime of cgroup vs bpf, dyin=
-g
-> >   cgroups, wq deadlock, etc. It is recommended to use cgroup-bpf for
-> >   implementation.
-> > - The test cases are too simplistic, lacking eBPF cases similar to real
-> >   workloads such as sched_ext.
-> >
-> > If I miss some thing, please let me know. Thanks!
+> Consequently, meta->id appears to be unconditionally 0 when the dynptr is
+> constructed here.
 >
-> BTW, it would be better to include the original authors in the CC
-> list, especially since their work is cited in your commit message. ;)
-
-OK, I will CC the relevant authors in the next version.
-
---
-Cheers,
-Vernon
+> When the parent object is subsequently released, the DFS traversal in
+> release_reference() searches for descendants matching reg->parent_id =3D=
+=3D id.
+> Because the dynptr's parent_id was initialized to 0, does this cause the
+> dynptr to evade invalidation and remain fully active, leading to a
+> use-after-free regression?
+>
+> Should this pass meta->ref_obj_id instead of meta->id?
+>
+> >                       if (ret < 0)
+> >                               return ret;
+> >                       break;
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260506142709.22=
+98255-1-ameryhung@gmail.com?part=3D5
