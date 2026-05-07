@@ -1,243 +1,133 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044983F65FB
-	for <bpf@vger.kernel.org>; Thu,  7 May 2026 13:19:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778159969; cv=pass; b=RNJVjQL4EJYy2V39tcdzb/MdzN+KN7Hin7lB0MA0/SXpADIQtkZGaxNOKWwsmNA8ngPl+Elbpn2qgc4u6mVDb9bmiOW/RdLdVKXZjllghoEQP5CgC4bwWUY2gNFUT71D8CJ9ICO7rRmjD3I5NlpYWtXEnZHdclfperStJlgpqas=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778159969; c=relaxed/simple;
-	bh=1F2+tW/N9SM7xS8wfCjqkfgFfUaRfsYxVVc2jH3J+AI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bUBNWMjFXkmFV9IztoByLgkGnJ4O+XuDfI+KaMXanFxK24bNy1b5Wvin0w/4GNC5Ux2DURLTriITLcg0kXpLquWQeOPZZXWm3RVkJn8rep0qmu0/K85yO7PKt1MKRp9Em0csRrlPS9JFwYBkxsxaFrO9C0e8LBXwHSB1A3LcN40=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nIAoWlF0; arc=pass smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E9E3E6DDB
+	for <bpf@vger.kernel.org>; Thu,  7 May 2026 13:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778160111; cv=none; b=Jrw+/O4zNkiblFfTFmAhcta/d1uJ8UPEtnA9VET69quQ7hnhDgW4w1HdUuC+Fk1IdVCsDaZPju3YrWwQMLDROBQh4LC4gAJO6sbzYZas3zdefEQJyXdZZKoDXd/znzAw8d1+J2NHHl+XWgV0uovNHdJHkjeLWjIqyUv4pcJHqYc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778160111; c=relaxed/simple;
+	bh=AzN9iJ/2PC2bJY/nNv5V/vSdE5sX7BktLp2vGiXYbxY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rIA7OwhmHCIJXzw5E/6P4XmKhWv5ZeYTDS+bWg8B+UPMkm/i/YxeBumvj4oHWhr053X5Z6H/JnXtuGT9GH2y0/iosNhPy4ua+1jIEMzyRiRrEFvKQD0h6Bm92nYjByLTXVFwwdKphmu2TR0t4npA13bffyR1nn7LU8CAzBNWaHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cEN+jsJK; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=IiiG5P0H; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nIAoWlF0"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-7b37d84a6b3so7640027b3.2
-        for <bpf@vger.kernel.org>; Thu, 07 May 2026 06:19:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778159967; cv=none;
-        d=google.com; s=arc-20240605;
-        b=FrmrgDcqVjippxj9ZY5FFsu+sE27oqxSayttqYFPu+B+xIslnRW8qymVlX2bvxuTll
-         ovJMwiQEr+JETW1nZLvSZUKn4nE1mpQdqkLIC5zfhJXsq0yuyXu2f5YzKIKeAPZIOV7O
-         gONXQoLdMu6rGOwzgJZDdbBXDgnXaghCHvNQ/NjxF4fVaFnOzqH30nDOiN/dJP5iAurH
-         NP8BpsClIFKX7H4ftJgp+yMOSyxMJxEjf/VIZ4qSh9pLTVvmQkP/id0y1cqRRQkRhUL3
-         vB4ZMRucc6pWlIeBiW3HtNyjOPcNn0AHYfVhyzpPOuO4/easU6nX8Ccp+pkK+4KmRDus
-         rpwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=uJsNWGNnboxuwp5GaleyBNu7wVTMMyud/VuzWCCNevo=;
-        fh=C9cUJVDXM2vMBWxDNvPaOJa0fxo4thp2O2GpWUH7MA0=;
-        b=g6wNFlCr/CN5MxRF4/h1YoRgVHNVD39R91jlTxOlaDmJY0lYFypQa3G7Rnb0iVRusw
-         2r+jl7FjgC4Mm2i7zKCVss0ajVnkKYrf3xmSz+KUg/ZMpJjWCuGVldgbnbArbv886lwt
-         898g3Jos0gWjRDP4E0Cp/8uNblGn3Rs5VY77LsPvCSwpV22KXDST5PxrN0xvqTPgTK8A
-         uHr2/qNLorobT+cIsnqDxe8ntpgchP6hudW2px6wkZJY1cSOZHU4OUovnULOC0czPlNh
-         Clw4kkiIE3ObHw1lBMFfsKJkm6uxqJQLmBut7A8kwM4t8EaP1hooildNQZmtAK02L7+p
-         9GhA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cEN+jsJK";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="IiiG5P0H"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778160109;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NA3uYduQ4Jm26gU9caKxlD3akBOvEc2T3FZacK7c4rY=;
+	b=cEN+jsJKF8+8IFRI9k/622k3sNprZayEKQxZTi69REp0VsVe2N7GBeO4fpsyWJQB0ZwNNj
+	6ZdWJ3YrFxFd5YAO1MPy2L0yIuzHKlh/yromTBGYIfMMOY8lt6RE432ZzKC9DYzRpE7+m5
+	+fLMOnZso/SOhVR+QvMx5oCg4zkSJVU=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-654-HkRVPoLhMiagg079hIAlXA-1; Thu, 07 May 2026 09:21:47 -0400
+X-MC-Unique: HkRVPoLhMiagg079hIAlXA-1
+X-Mimecast-MFC-AGG-ID: HkRVPoLhMiagg079hIAlXA_1778160106
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-48a5952c635so8671285e9.2
+        for <bpf@vger.kernel.org>; Thu, 07 May 2026 06:21:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778159967; x=1778764767; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uJsNWGNnboxuwp5GaleyBNu7wVTMMyud/VuzWCCNevo=;
-        b=nIAoWlF0QAnkrmo+DbQuRx2v2fjPTRzX9f8t4+v8oTP8BbOAE7IFW9WHNi957d1xwv
-         4Q4Ik34I3B3FWY+Cgf/O8eiHbVfS9378YZq4Q7OrjWtOtZSNHrTeBX2zyedzvqvTTUNe
-         rBHnjQS6jBRWe4gmZbHgtuFJTu68GXZ+n8rctyxKqK6MlL7BJp9Co9rbh6+OsEpfgJp2
-         gHfqhxHqbpZ5VaWhENFZDFRos1m5pECJcCPjItAN6OHE4Mc0JvHZeedxFFv7ORpZuz+f
-         mkT/62N3oR2nD0YaRyL8TiZjsTf1L26Vx3Q9c00xeCO7oalFsJJdqTCbNSiX5txLDQC7
-         8Fmg==
+        d=redhat.com; s=google; t=1778160106; x=1778764906; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NA3uYduQ4Jm26gU9caKxlD3akBOvEc2T3FZacK7c4rY=;
+        b=IiiG5P0HdULlxQnCkMNzQd+zcpmCUqPwU4yiNtOiZt6vO4E1xAnr8j19ZVvwf9SOMg
+         ejqGNyByZaOnQNXr4fRTvG8xglaxjFR8+rA/AoEz8zNOq5mCCtEcdctB8L0tviW9yP5o
+         0gpgKXtFyJCUnb1ZbBdIGQM7GOVDO8OhtNzlH0NbIPpDQTbGoSYcnXDzgE91VYCuC/J2
+         uZtZg0juB6wkbej9W8HYYhRy4MJUWmOUGzHeuYMtq+KyHMNaGpM9VY/p4iIM4lNkaPrN
+         ePwpMbfnPCnvm/Uj2pcIPZZAItHvrtCVyBQthulRQyOx3DnVtSrrHLjfdXxq5c4sEnGL
+         T+4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778159967; x=1778764767;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=uJsNWGNnboxuwp5GaleyBNu7wVTMMyud/VuzWCCNevo=;
-        b=J9HJkWiSX0kl4k+bBnI3rx0q8ucig1ugSB3KV+PYAMsTsWXnks/S2r8yKFy4ii/9Fg
-         Lc7yg58hklWmC0g06paBK8aMFPKY6IrKc5v/zMwaYemRQodvc/HNFVFU7TVVig1S2HnF
-         g0E7vc3wl0IGMcFThZfUyDKqoHN49xkuuqnoalsyNHelFIIfsfN1d9ZFzsoQvaCvIKLr
-         eQLcAP1GyRgFeppcbZvYJCYij+jqpf5c+moddv8Fb2HQO0PX5FL9RFhDKi4eE3ejQvk/
-         D7b+bU3hSj6lS0dkYYjcICSOFoHrXF+gCHLRkRGUUkmpPcx/ahVfruaFQPJIZT0Pk7/I
-         3IcA==
-X-Forwarded-Encrypted: i=1; AFNElJ8jdnNM/YqKUT4gz4NXke1qfGPYyDOw1wjl1R4PqKy7nFJFvvPMTMCSlfI0F0Ev4JsLACM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaZ68FZtn0rmDK/1AN91SI0/X3d4dBmUMZZjRcodas4LBuXkNI
-	iGc/L8wfW+89vJ0ve0bmmvMDlRSd0XNaa/A8g4yZeoDWHVrFNVOGLMeYV+rYPpTPY0MKQVWjhs5
-	dfB+/icvfOZrsuvE73anj4HyJVTe7CYs=
-X-Gm-Gg: Acq92OETqoY35wBw5GbXIth1sUHyeb2XTXrJc9h1vBK6rNHOZ/nh7mtIjy2zx5veY5u
-	tVcO5dp7LHBfiZimNTl7CrT5J8z5SbC5Z61kNB/U8WCiiTBiPeV2Df9oFh/kyUkp++x9g2eXC4N
-	1ZATzqeAzpX3T2NcT7M4PS1osZRK5M2Yo8G95y7lnoXsDY9MQ6SDUXUa8GqANDgSIRVE1MNT3lP
-	+XWJkibmf0g33nccO+iS5eqtL5LqXzFkcxrVeACsHAuakn0Fzi1y7do+w6/wfUk6H6sQv4JtQX6
-	CCeBCn4431se1oewNH0r3B54EnY7NndFSCAmLVAFywb6GbpZjIE=
-X-Received: by 2002:a05:690c:e3e9:b0:7bd:5af9:f0a2 with SMTP id
- 00721157ae682-7bdf5da8d19mr85075527b3.14.1778159966849; Thu, 07 May 2026
- 06:19:26 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778160106; x=1778764906;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NA3uYduQ4Jm26gU9caKxlD3akBOvEc2T3FZacK7c4rY=;
+        b=GA9e6YVIVn36DkOPdMSfMj+QowFiFfAHoIBpCbGS3c0rKbqO5owkN5lCEU4I5HnqJ4
+         rIULXq7KXHrYtjuO1Nr8vQ55zs3vRJtG/TNDgvRxGasRrBYiIURRrQBcFsN9iYEsYcq+
+         DXHOeR/rzJwoDMN2TpmFJ+i9MVT2qxpzvUTOfkZw4HqEuS+jUJppPKh06LPR2stehYrU
+         UadoZcuQeuI1BJEJm1alEXhD6GpYURK1LK4DQljSe98owWVQCHNdiUJ7dLGYBWrkh4Q7
+         oq20H0P0xX9iEnfNC+M9qRBHWSbHH54HkIQuykd13JIUTxAal35cYjbD73UPGyCF38Vb
+         F+xQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/ei5JjG1RTP0r/+OlhyUjs3QLcVFzu4pCasX5CNKr2GS2iW2lkwg9++x6dkn8KV4M9ZqQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaPFBck4bs9/7JjoCA1kDRjFgPFJx9H0NuOl/5klZo+hMlGUpB
+	5VLKbSkXibnHVZrvJLU6cgMTKYjJZSobpqPdGUQdsc/+5PKCT7pg/rZAVCbqzIN50AWzJOy8UA/
+	TvIDQpLulfFva4K1BVrvRAoh/tJy+FSyrHF09q/VzFKgk+gwooNgaCg==
+X-Gm-Gg: AeBDiesu/+dpuePpiOp2Y9ovxQXDZbXclTE30ux1Lp4PLm/OVgN4PRV2c3ekMYi2Prr
+	4YvTS96is1Qxi5WMVfiaUpYzjC5wUdm5q+iDulzEHbhdaOgz2nYFBdvY20YOUhrhLM4kTzmX1N+
+	0KwlRQ1OzvyA4ZnW6jfh8AjLOeFQ1LqozBKkhB2F56BJ/y4KT3kSaFlMbVi7rrzJlg+LKjjL7a3
+	kKEShj0qjeXHxo3cS9NGc8Gkc0HKJrz6Fw9zOXnpuN/R+5Fq/FgOwm0XPM0MWslE8wmmrZYzoVb
+	OPGBmuDnb1rNL9Da9tZ0dpNZ8JJm+srFIvExJnPWQGZ9RnKatkL30/GmkRan5eMBqCRxwdLYbJ9
+	o4D3Rf0Oc5Tgaio4o3ZfbJJD4nZxQuG0gcosBFCgdqYYPlNfvvdX2YeskxJ5loU8X2CChH98Rne
+	9c
+X-Received: by 2002:a05:600c:15d1:b0:48d:112c:f582 with SMTP id 5b1f17b1804b1-48e51e1e415mr72915465e9.11.1778160105847;
+        Thu, 07 May 2026 06:21:45 -0700 (PDT)
+X-Received: by 2002:a05:600c:15d1:b0:48d:112c:f582 with SMTP id 5b1f17b1804b1-48e51e1e415mr72914835e9.11.1778160105311;
+        Thu, 07 May 2026 06:21:45 -0700 (PDT)
+Received: from [192.168.88.32] ([150.228.93.82])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e59b74277sm82568905e9.3.2026.05.07.06.21.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 May 2026 06:21:44 -0700 (PDT)
+Message-ID: <4e9b5728-1a8b-466b-900a-935e5647a623@redhat.com>
+Date: Thu, 7 May 2026 15:21:42 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260503165024.1526680-1-vernon2gm@gmail.com> <CALOAHbBx6GuZjj9_EdrAPCsiLJekAiqOVsWQ0muNJh18Nxaqtg@mail.gmail.com>
- <CACZaFFPXo_f_2M7y4NfQ=sWddS4Kwo5guFTqZcLmm4Z8COWocQ@mail.gmail.com>
-In-Reply-To: <CACZaFFPXo_f_2M7y4NfQ=sWddS4Kwo5guFTqZcLmm4Z8COWocQ@mail.gmail.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Thu, 7 May 2026 21:18:50 +0800
-X-Gm-Features: AVHnY4LaEHa2dX9PW99UK0yFlSgEhPhckpxDi__PrvtTYbMZ_56jvjXDiqmJ4Sc
-Message-ID: <CALOAHbDQyUARbWudg3e94p7QyUF3Jgi3Y+NgPiSjfw=euENsjg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] mm: introduce mthp_ext via cgroup-bpf to make mTHP
- more transparent
-To: Vernon Yang <vernon2gm@gmail.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
-	roman.gushchin@linux.dev, inwardvessel@gmail.com, shakeel.butt@linux.dev, 
-	ast@kernel.org, daniel@iogearbox.net, surenb@google.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
-	baohua@kernel.org, lance.yang@linux.dev, dev.jain@arm.com, 
-	Vernon Yang <yanglincheng@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v5 3/5] veth: implement Byte Queue Limits (BQL)
+ for latency reduction
+To: Simon Schippers <simon@schippers-hamm.de>, hawk@kernel.org,
+ netdev@vger.kernel.org
+Cc: kernel-team@cloudflare.com, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20260505132159.241305-1-hawk@kernel.org>
+ <20260505132159.241305-4-hawk@kernel.org>
+ <ee275aa6-af27-4dac-9afa-da88abde312b@schippers-hamm.de>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <ee275aa6-af27-4dac-9afa-da88abde312b@schippers-hamm.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 7, 2026 at 8:51=E2=80=AFPM Vernon Yang <vernon2gm@gmail.com> wr=
-ote:
->
-> On Thu, May 7, 2026 at 11:35=E2=80=AFAM Yafang Shao <laoar.shao@gmail.com=
-> wrote:
-> >
-> > On Mon, May 4, 2026 at 12:52=E2=80=AFAM Vernon Yang <vernon2gm@gmail.co=
-m> wrote:
-> > >
-> > > From: Vernon Yang <yanglincheng@kylinos.cn>
-> > >
-> > > Hi all,
-> > >
-> > > Background
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > >
-> > > As is well known, a system can simultaneously run multiple different
-> > > scenarios. However, THP is not beneficial in every scenario =E2=80=94=
- it is only
-> > > most suitable for memory-intensive applications that are not sensitiv=
-e
-> > > to tail latency. For example, Redis, which is sensitive to tail laten=
-cy,
-> > > is not suitable for THP. But in practice, due to Redis issues, the
-> > > entire THP functionality is often turned off, preventing other scenar=
-ios
-> > > from benefiting from it.
-> > >
-> > > There are also some embedded scenarios (e.g. Android) that directly u=
-se
-> > > 2MB THP, where the granularity is too large. Therefore, we introduced
-> > > mTHP in v6.8, which supports multiple-size THP. In practice, however,=
- we
-> > > still globally fix a single mTHP size and are unable to automatically
-> > > select different mTHP sizes based on different scenarios.
-> > >
-> > > After testing, it was found that
-> > >
-> > > - When the system has a lot of free memory, it is normal for Redis to
-> > >   use mTHP. performance degradation in Redis only occurs when the sys=
-tem
-> > >   is under high memory pressure.
-> > > - Additionally, when a large number of small-memory processes use mTH=
-P,
-> > >   memory waste is prone to occur, and performance degradation may als=
-o
-> > >   happen during fast memory allocation/release.
-> > >
-> > > Previously, "Cgroup-based THP control"[1] was proposed, but it had th=
-e
-> > > following issues.
-> > >
-> > > - It breaks the cgroup hierarchy property.
-> > > - Add new THP knobs, making sysadmin's job more complex
-> > >
-> > > Previously, "mm, bpf: BPF-MM, BPF-THP"[2] was proposed, but it had th=
-e
-> > > following issues.
-> > >
-> > > - It didn't address the issue on the per-process mode.
-> > > - For global mode, the prctl(PR_SET_THP_DISABLE) has already achieved
-> > >   the same objective, there is no need to add two mechanisms for the
-> > >   same purpose.
-> > > - Attaching st_ops to mm_struct, the same issues that cgroup-bpf once
-> >
-> > Hello,
-> >
-> > The primary hurdles preventing BPF-THP from being upstreamed are:
-> >
-> > - Uncertainty regarding the stable API
-> >
-> >   It remains unclear whether the following API is sufficient for
-> >   BPF-THP requirements:
->
-> Thank you for pointing this out. I will add it to this issue list in
-> the next version.
->
-> At the same time, I also encourage everyone to actively provide
-> relevant real workload scenarios. I will conduct related analyses and
-> develop the mthp_ext to address them, so we can determine which ABI
-> can satisfy the BPF-THP requirements.
->
-> >   unsigned long
-> >   bpf_hook_thp_get_orders(struct vm_area_struct *vma, enum tva_type typ=
-e,
-> >                                             unsigned long orders)
-> >   {
-> >       return orders;
-> >   }
-> >
-> > - Ongoing integration of cgroups and struct-ops
-> >
-> >   Work is still in progress to integrate cgroup support with
-> > struct_ops (see also
-> > https://lore.kernel.org/linux-mm/87cy439x8a.fsf@linux.dev/).
-> > We should wait for this infrastructure to land before introducing
-> > new cgroup-based struct_ops.
->
-> This work can be carried out in parallel with integrating cgroup
-> support with struct_ops. I will focus on addressing real workload
-> scenarios to further clear/stabilize the BPF-THP ABI.
->
-> > >   faced are likely to arise again, e.g. lifetime of cgroup vs bpf, dy=
-ing
-> > >   cgroups, wq deadlock, etc. It is recommended to use cgroup-bpf for
-> > >   implementation.
-> > > - The test cases are too simplistic, lacking eBPF cases similar to re=
-al
-> > >   workloads such as sched_ext.
-> > >
-> > > If I miss some thing, please let me know. Thanks!
-> >
-> > BTW, it would be better to include the original authors in the CC
-> > list, especially since their work is cited in your commit message. ;)
->
-> OK, I will CC the relevant authors in the next version.
+On 5/7/26 8:54 AM, Simon Schippers wrote:
+>> @@ -928,9 +968,13 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
+>>  			}
+>>  		} else {
+>>  			/* ndo_start_xmit */
+>> -			struct sk_buff *skb = ptr;
+>> +			bool bql_charged = veth_ptr_is_bql(ptr);
+>> +			struct sk_buff *skb = veth_ptr_to_skb(ptr);
+>>  
+>>  			stats->xdp_bytes += skb->len;
+>> +			if (peer_txq && bql_charged)
+>> +				netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_UNIT);
+> 
+> In the discussion with Jonas [1], I left a comment explaining why I think
+> this doesn’t work.
+> 
+> I still think first that adding an option to modify the hard-coded
+> VETH_RING_SIZE is the way to go.
+Isn't the veth_poll() (towards the end of the function) a more natural
+place to issue completion events?
 
-Hello Vernon,
+/P
 
-I believe it would be best to hold off until David provides guidance
-on the future direction. While I am not currently active on BPF-THP,
-we are still looking for the right opportunity to upstream it. The
-primary difference is that your implementation is cgroup-based;
-however, we also plan to switch to that approach once Roman=E2=80=99s work
-lands.
-
-I don't mean to imply that BPF-THP is solely my project, but I suspect
-you will eventually arrive at a similar implementation to what I=E2=80=99ve
-developed. So far, I haven=E2=80=99t found a more efficient API than the
-following:
-
-  unsigned long
-  bpf_hook_thp_get_orders(struct vm_area_struct *vma, enum tva_type type,
-                                             unsigned long orders)
-  {
-       return orders;
-  }
-
---=20
-Regards
-Yafang
