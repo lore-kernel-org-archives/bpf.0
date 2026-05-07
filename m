@@ -1,161 +1,172 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A693C872E
-	for <bpf@vger.kernel.org>; Thu,  7 May 2026 11:39:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59B33EE1DC
+	for <bpf@vger.kernel.org>; Thu,  7 May 2026 12:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778153980; cv=none; b=sNiv0AfpBgkRXx7EvbVqVx7P3nxm7bWNKrHmwTosX6O+yXAB4MbG2ed5G8jHsVbet/+1foqlDs57x62YyfbdFVnTu7gELijRMkuV90MvdJ9S1JA4CV3sSi7pJ3YFNgTs51qMYpI5Slv7g/ODKr54REsM7TmgfTqN6cEc8UDBXUs=
+	t=1778156120; cv=none; b=DBODWryd9TxgMFihXbEa8WQQbDoVY5PO0Hw67HkC3Ct5+JBkp1a+8gmahlJe+DZXeoTmW3SZQoVagNH6NoBicOhXJC+9Gq7An/AtAMWbh/VXLKuwbdQXxWv4y42mnGPsuwYv9AVMfmRmNqjTQutNIgFGSw5S0cvRntkfhxYlrYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778153980; c=relaxed/simple;
-	bh=swSS9v3v3p8QKj7drLz8cjLKnnGpO5q/W1ZUbRKMjPo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TR95QB8vAS+jaN1pHoPFP0tHoBteRHiJUbvI/FAUbtvgBbkTIrdMkoSkoLoF0S0mJF4bK2Z9ASJQGMBrvB3zlodE0MgPL9IFYlCpgHMrhXtUO6ZPRY76FGsVR6q0Mpj0JM3+xQ75VtT5ulOu7f5anUQzTS0L/0cMwveI/cz1ErU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WbaCU7bH; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778156120; c=relaxed/simple;
+	bh=v9MtChy7yFcwVd1STYPJTObu0yj8sS2efOx3W51ciBw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LdRRm/RLbNSWlzW+7Z2pY4KKMRuUIPuIPxSXqEPc/RwuraQsqPXolwocirtPpkbDoMgUv+4J+gmEy+ccZp/x/Dp/f1xTwpuKHuz9zpK1QOZjnjhJIP4QY1IdOpVH1B0Z5+ANRZNTniMTBSpgb0otfOBRwNKP+sJGqHtnkltotwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ThcaNvn7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WbaCU7bH"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778153976;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=omKTkFdfT8UuMr5M8sNpbUoIKUaZpVe4MtuB1A7IN9E=;
-	b=WbaCU7bHAns8PYTjbxJNA8HGlzyuPg1C94Iq2CqXDZNHsZkK05CqAjvwpgVzTenuUHlxRG
-	K5lTS0UAHQjnMb1GUC8elihw/oIbgiEBeLmxIPF3skGmR4CmXLhxSx2uqyGWxb0ffLu8Eq
-	oC4NTwHH/9LKTjxcLHkJT5ysNsBE2DY=
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Thomas Gleixner <tglx@kernel.org>,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf v1] selftests/bpf: Use both hrtimer enqueue helpers in vmlinux test
-Date: Thu,  7 May 2026 13:39:15 +0200
-Message-ID: <20260507113915.24988-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ThcaNvn7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E32FFC2BCC4
+	for <bpf@vger.kernel.org>; Thu,  7 May 2026 12:15:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778156118;
+	bh=v9MtChy7yFcwVd1STYPJTObu0yj8sS2efOx3W51ciBw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ThcaNvn7yGtvgZtYUemCO053kbbLfR49WBK9wgThOlxdbsuMWEWP/WL64wTLdBk5v
+	 SS5aBGM4a1LaCC72EIq4Ml1jPRxv4Gu4Jkq32cK4p3n45tEcpdLAljIoSOTWIo9pjG
+	 KK6iaL9uxQNZqB1tW3a3r8GVs3utkL9JJg9RtKMiBom2qx8LEmfI5mkSDz7Tg6EJ8k
+	 LM8BynVy6w8qj+Miqd8T9+1VbrsDE4WZuEbCMMBUFz5QsFoKnad8mtZ891D8KLAwhn
+	 vOTsSPQ8SjGY37rYvboLjHFsP6Ekowc50ZNsMI8SIBuB5OwrYV5C/cTMMECdV3jR4s
+	 5uCvTMsh1NkxQ==
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-3938d17d6c5so5689541fa.1
+        for <bpf@vger.kernel.org>; Thu, 07 May 2026 05:15:18 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ/vSBKSQ+GP4d7bQRlHegugUg/QeRF9MRdqicAHIwgzygrDbgY508X5UkYZ43Tt+eE3XMs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7dHptFsyirApH94qBgiVFe7Kt5DpfzlZzUC17AdqMhZdQdAyX
+	1Y4lKQoAHz8GdpbIeNQUvwevCfTv+UVfidNCAOMv5eX2yNAKNK9LrdPUaq5z4ML3VXuIPdGcQAH
+	nyFSMRQcQjVtlarwk93iTYQzPIXojAkk=
+X-Received: by 2002:ac2:48b8:0:b0:5a7:4a60:1454 with SMTP id
+ 2adb3069b0e04-5a887ce6447mr2054591e87.33.1778156117576; Thu, 07 May 2026
+ 05:15:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260501155421.3329862-1-elder@riscstar.com> <20260501155421.3329862-10-elder@riscstar.com>
+In-Reply-To: <20260501155421.3329862-10-elder@riscstar.com>
+From: Linus Walleij <linusw@kernel.org>
+Date: Thu, 7 May 2026 14:15:05 +0200
+X-Gmail-Original-Message-ID: <CAD++jLkm4qn9hxQ9HjjnTWjvAiS+A+x1ATy7wamnm_YSP_qPEg@mail.gmail.com>
+X-Gm-Features: AVHnY4JVKfyZ1eZonYoPYtYcjqSl_ExL5rvF4dr4feVkyENggSODeF5VZKTXJe0
+Message-ID: <CAD++jLkm4qn9hxQ9HjjnTWjvAiS+A+x1ATy7wamnm_YSP_qPEg@mail.gmail.com>
+Subject: Re: [PATCH net-next 09/12] gpio: tc956x: add TC956x/QPS615 support
+To: Alex Elder <elder@riscstar.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com, 
+	andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, brgl@kernel.org, arnd@arndb.de, 
+	gregkh@linuxfoundation.org, daniel@riscstar.com, wens@kernel.org, 
+	netdev@vger.kernel.org, bpf@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The vmlinux selftest triggers nanosleep and checks that both kprobe
-and fentry programs observe the hrtimer enqueue path.
+Hi Alex,
 
-After the hrtimer_start_expires_user() conversion [1], nanosleep
-reaches hrtimer_start_range_ns_user() instead of
-hrtimer_start_range_ns(). Hard-coding either symbol makes the test
-fail either on bpf tree or on linux-next [2].
+thanks for your patch!
 
-Keep both hook variants as optional BPF programs and enable the pair
-matching the running kernel before loading the object. This is also a
-nice example of how to modify a BPF program to work on both older and
-newer kernel revision.
+On Fri, May 1, 2026 at 5:55=E2=80=AFPM Alex Elder <elder@riscstar.com> wrot=
+e:
 
-[1] https://lore.kernel.org/all/20260408114952.062400833@kernel.org/
-[2] https://github.com/kernel-patches/bpf/actions/runs/25485909958/job/74782902203
+> Toshiba TC956x is an Ethernet-AVB/TSN bridge and is essentially
+> a small and highly-specialized SoC.  TC956x includes a GPIO block that
+> can be accessed, alongside several other peripherals, via two PCIe
+> endpoint functions.  The PCIe function driver creates an auxiliary
+> device for the GPIO block, and that device gets bound to this auxiliary
+> device driver.
+>
+> Co-developed-by: Daniel Thompson <daniel@riscstar.com>
+> Signed-off-by: Daniel Thompson <daniel@riscstar.com>
+> Signed-off-by: Alex Elder <elder@riscstar.com>
+(...)
 
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
----
- .../selftests/bpf/prog_tests/vmlinux.c        | 26 +++++++++++++++++--
- .../selftests/bpf/progs/test_vmlinux.c        | 22 ++++++++++++++--
- 2 files changed, 44 insertions(+), 4 deletions(-)
+> +config GPIO_TC956X
+> +       tristate "Toshiba TC956X GPIO support"
+> +       depends on TOSHIBA_TC956X_PCI
+> +       default m if TOSHIBA_TC956X_PCI
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/vmlinux.c b/tools/testing/selftests/bpf/prog_tests/vmlinux.c
-index 6fb2217d940b..286feff31488 100644
---- a/tools/testing/selftests/bpf/prog_tests/vmlinux.c
-+++ b/tools/testing/selftests/bpf/prog_tests/vmlinux.c
-@@ -14,15 +14,37 @@ static void nsleep()
- 	(void)syscall(__NR_nanosleep, &ts, NULL);
- }
- 
-+static void enable_hrtimer_progs(struct test_vmlinux *skel)
-+{
-+	bool has_user_helper;
-+
-+	has_user_helper = libbpf_find_vmlinux_btf_id("hrtimer_start_range_ns_user",
-+						    BPF_TRACE_FENTRY) > 0;
-+	if (has_user_helper) {
-+		bpf_program__set_autoload(skel->progs.handle__kprobe_user, true);
-+		bpf_program__set_autoload(skel->progs.handle__fentry_user, true);
-+	} else {
-+		bpf_program__set_autoload(skel->progs.handle__kprobe, true);
-+		bpf_program__set_autoload(skel->progs.handle__fentry, true);
-+	}
-+}
-+
- void test_vmlinux(void)
- {
- 	int err;
- 	struct test_vmlinux* skel;
- 	struct test_vmlinux__bss *bss;
- 
--	skel = test_vmlinux__open_and_load();
--	if (!ASSERT_OK_PTR(skel, "test_vmlinux__open_and_load"))
-+	skel = test_vmlinux__open();
-+	if (!ASSERT_OK_PTR(skel, "test_vmlinux__open"))
- 		return;
-+
-+	enable_hrtimer_progs(skel);
-+
-+	err = test_vmlinux__load(skel);
-+	if (!ASSERT_OK(err, "test_vmlinux__load"))
-+		goto cleanup;
-+
- 	bss = skel->bss;
- 
- 	err = test_vmlinux__attach(skel);
-diff --git a/tools/testing/selftests/bpf/progs/test_vmlinux.c b/tools/testing/selftests/bpf/progs/test_vmlinux.c
-index 78b23934d9f8..c90f7ac63f91 100644
---- a/tools/testing/selftests/bpf/progs/test_vmlinux.c
-+++ b/tools/testing/selftests/bpf/progs/test_vmlinux.c
-@@ -69,7 +69,7 @@ int BPF_PROG(handle__tp_btf, struct pt_regs *regs, long id)
- 	return 0;
- }
- 
--SEC("kprobe/hrtimer_start_range_ns")
-+SEC("?kprobe/hrtimer_start_range_ns")
- int BPF_KPROBE(handle__kprobe, struct hrtimer *timer, ktime_t tim, u64 delta_ns,
- 	       const enum hrtimer_mode mode)
- {
-@@ -78,7 +78,7 @@ int BPF_KPROBE(handle__kprobe, struct hrtimer *timer, ktime_t tim, u64 delta_ns,
- 	return 0;
- }
- 
--SEC("fentry/hrtimer_start_range_ns")
-+SEC("?fentry/hrtimer_start_range_ns")
- int BPF_PROG(handle__fentry, struct hrtimer *timer, ktime_t tim, u64 delta_ns,
- 	     const enum hrtimer_mode mode)
- {
-@@ -87,4 +87,22 @@ int BPF_PROG(handle__fentry, struct hrtimer *timer, ktime_t tim, u64 delta_ns,
- 	return 0;
- }
- 
-+SEC("?kprobe/hrtimer_start_range_ns_user")
-+int BPF_KPROBE(handle__kprobe_user, struct hrtimer *timer, ktime_t tim,
-+	       u64 delta_ns, const enum hrtimer_mode mode)
-+{
-+	if (tim == MY_TV_NSEC)
-+		kprobe_called = true;
-+	return 0;
-+}
-+
-+SEC("?fentry/hrtimer_start_range_ns_user")
-+int BPF_PROG(handle__fentry_user, struct hrtimer *timer, ktime_t tim,
-+	     u64 delta_ns, const enum hrtimer_mode mode)
-+{
-+	if (tim == MY_TV_NSEC)
-+		fentry_called = true;
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.54.0
+I think this driver can
 
+select GPIO_REGMAP
+
+> +#include <linux/auxiliary_bus.h>
+> +#include <linux/dev_printk.h>
+> +#include <linux/gpio/driver.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+
+#include <linux/gpio/regmap.h>
+
+> +#define TC956X_GPIO_COUNT      37      /* Number of GPIOs (20-21 reserve=
+d) */
+
+I would just do 64 and flag > 37 as invalid.
+
+> +/*
+> + * struct tc956x_gpio - Information related to the embedded GPIO control=
+ler
+> + * @chip:              GPIO chip structure
+> + * @regmap:            MMIO register map for SFR GPIO region access
+> + * @input_only:                Bitmap indicating which GPIOs are input-o=
+nly
+> + */
+> +struct tc956x_gpio {
+> +       struct gpio_chip chip;
+> +       struct regmap *regmap;
+> +       DECLARE_BITMAP(input_only, TC956X_GPIO_COUNT);
+
+> +static int tc956x_gpio_get_direction(struct gpio_chip *gc, unsigned int =
+offset)
+> +static int tc956x_gpio_direction_input(struct gpio_chip *gc,
+> +                                      unsigned int offset)
+> +static int tc956x_gpio_direction_output(struct gpio_chip *gc,
+> +                                       unsigned int offset, int value)
+> +static int tc956x_gpio_get(struct gpio_chip *gc, unsigned int offset)
+> +static int tc956x_gpio_set(struct gpio_chip *gc, unsigned int offset, in=
+t value)
+
+REGMAP_GPIO can handle all of this for you with the right
+parameterization, study the drivers using this already such as
+those that appear when you type
+git grep 'gpio\/regmap\.h'
+
+
+> +static int tc956x_gpio_init_valid_mask(struct gpio_chip *gc,
+> +                                      unsigned long *valid_mask,
+> +                                      unsigned int ngpios)
+> +{
+> +       /*
+> +        * GPIOs 2 and 3 are used by the PCI power control driver, and
+> +        * we don't allow them to be used.  GPIOs 20 and 21 are reserved
+> +        * (and not usable).
+> +        */
+> +       bitmap_fill(valid_mask, ngpios);
+> +       bitmap_clear(valid_mask, 2, 2);
+> +       bitmap_clear(valid_mask, 20, 2);
+> +
+> +       return 0;
+> +}
+
+That's good use of this facility.
+
+I would say the chip has 64 lines and just
+bitmap_clear(valid_mask, 37, 64 - 37);
+but that's your pick. This probably works too.
+
+> +       /* Mark GPIOs 22, 23, 24, 27, 28, 31, and 34 as input only */
+> +       bitmap_set(gpio->input_only, 22, 3);
+> +       bitmap_set(gpio->input_only, 27, 2);
+> +       set_bit(31, gpio->input_only);
+> +       set_bit(34, gpio->input_only);
+
+regmap-gpio can't currently handle selective input-only or
+output-only lines, but we can
+very easily make it.
+
+So I sent a patch for that (now in your inbox).
+
+Check if this fixed_direction_sparse bitmap will do the trick
+for you and provide Tested-by if it does, thanks!
+
+Yours,
+Linus Walleij
