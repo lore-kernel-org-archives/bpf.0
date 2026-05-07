@@ -1,122 +1,166 @@
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 704D23EFD2E
-	for <bpf@vger.kernel.org>; Thu,  7 May 2026 15:39:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9FF2DA76A;
+	Thu,  7 May 2026 16:02:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778168347; cv=none; b=GsnnN3+LilQUxwtSBxXLM6A0gn+BcY62HnOa3x3dhsZOMvmhUxtlABxkSS9TDJVbjT2b6tvUVQP+Lp3gWudpM9YEOhX+R8eUw81f4hOLGRgtGYGvQ1f7ZgvOe+EZRUz5v9mYkAiXDafLfRKR+73oj/qx0EgcTsb4oJAgflc4BsI=
+	t=1778169725; cv=none; b=jimMlPTwYmMCAn5b4pIP70of9dYc3PSYA5RWCso52OGB9mNYLB8dKyoausmLlXnnKJZqEaYRkrLRXCxB8rsMKb59QCDukn67VLwSVHbTivwh63hD5asbagfaDXdTgv93l8PJe3r3KvQxZaPGGiDP8iLO/scpScIqrtYi5u4SE2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778168347; c=relaxed/simple;
-	bh=I7bHVcUPCbFavnPQE9NIAPWTbSlQISkdMWu7R9FX+Ss=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bZvYyCAF6QpVe6qR97mZIJ/ddFWd584bJbFN/tyoXrEemgOCH7JIQ4cO1Mi5TnbZFojbRCDQjMhbzyVNsiHWvGwiWjOr4zcc0sKRTsqAGNfvMJCozqmIE5fJZ28bQxn6k1v/HcfBMc0V8JBjwEa3L3NBMP/IGDZIvdgdXB234uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lELMVwd2; arc=none smtp.client-ip=209.85.222.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778169725; c=relaxed/simple;
+	bh=P5zRmB3JYIFynYu6LoS9Zfk/P7CV1XT2vnQwV+0KnWY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OT6bhYVvoFtVhoFehnRvZ1w+TuBiMsZnmiC2hZzIDnZUDMtNSpoVA3yF0gMdyi4ue2/mYWWatI4y4Wzcl8J1N7aV15Z2D643x9l4c08tE0AjxgFZKoxrYyoKEuj1ezMYQlhn7B1jY7klgnPvYPepOj9FjTY8kKEmsUEa3DGfzoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=I1jH7qSl; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lELMVwd2"
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-8ea8563c693so108524085a.2
-        for <bpf@vger.kernel.org>; Thu, 07 May 2026 08:39:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778168344; x=1778773144; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hQASz0K9bAEWsvTANOg3uGMuZOgruzesi2JgdTAVAkE=;
-        b=lELMVwd2v+v3Y2UjmN0rjzuYIZkTeRK8VqQUHf+rI68gGfgcG8NCRLWnzDSU7Ejg3a
-         Fkw6my+S6bAF/4E4hCUawNWJPvhr1TNcPhPRWjqkvLDfn3aOBNptDGyNH86WSvyJo283
-         sWtpk53zfbttBN4gwE+xdhjPtewc4RWBahS89D/lN22YvuzFwhbBxwkjAQV+wl+AgeCk
-         lXNzb4qXqs00gTDv0uytVS0ClClxoEGzxVnEniq0d3y4Gw9GHs0fmfn66iThHtOpR7TJ
-         l3wCy1J1YODPtn2r0c+N3ZstW4mN3WeMU4SFG3zlY2trp4eE2dESUXTSK8mMG8ZRqvme
-         3PWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778168344; x=1778773144;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hQASz0K9bAEWsvTANOg3uGMuZOgruzesi2JgdTAVAkE=;
-        b=rSuBLjSplXEONPq69zcZs31qcu1j90aAJx6e5g88KSgV8FtVYsMv3y1hUaYvfkM6Hb
-         KX00imrXfFdi5T7EYwV36OMbUmfsaRK76KnUiWzfGyC3rRCbVd/akFXFrQ6RN5rd+g+O
-         xjx0q3AO5AZHF8vNyRySuFbYdR5Oc4s4hHFfpTp7B+mpIQwqCMkawx7FQpvghNkP/D19
-         40gGplXfRR7HwysOyFy/SqLzE9LfsT/NIMNqJYWSC1dtD4FSIupQSheJmQ9tnTdlT0kI
-         1EzQoJDJweqebKuGi1HkTEviQ1Y13ADpFQKRG2Z/sEvHQJ9VdPtrTEBp3gQepTTqZqgD
-         kgUw==
-X-Forwarded-Encrypted: i=1; AFNElJ/oU8nRIIl7Nhy7O4/rBiQYoLMtuPanvZGPFDw/im/418EYD3WMys+ca8DovKB5vkN7Qi0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7ULOnQ1sUiv2aAwZuqsvehIDvpztxtvfPNXkeHeJSpG+u8k1B
-	9u/r1Kz0jPZNX5I0E7Af+egCUw3m2dx1RbmoLfHfcAZKM+uHQ+Wm+9j+
-X-Gm-Gg: AeBDievb3BH2jVKtVuNE5EzWxOPIkVd2KdQu8SfPflOYTzsOF4yQ0bnUcI73YYYaXkw
-	MwYX1oOBRrXPr3DzU8Kv/O23eJclDbC9aA7Q4Rg7y+AaXrN6vaG6q4m4dCbGsGp7s5NkG/JSNqN
-	ghMVvPtlzzrWMMmF9sH4qMyM3QmqSmO87DswJNlLfqFR+/XauzE2leQP8CZlMkkJc8ffKWh0Oz/
-	0Alch9CNtWCLBMr/OrNQmhM136EnYt0a9gtIw1rs1o0T8NLHN5kLuYq2e/2FRqwEQ9kpsiuB3Tm
-	mRlofuZDeRz9IcFgC9m7qVwDJB8dkwwng+PPhb7Z994WazaFjG0jlTh+LIotDILM/H5zzv7m/nm
-	LCJqHEpMIqYNchfD0H7BPrXfZJriwF+ox6dUkDWFaxskNOBOICBA48R5nW/9OmjyvJI+T4RPxbG
-	dHCZ7m3xPU3eefzhvIDgWfWcy097FrjukWQuejuyYY8B+6IvEuPJDFWS0O3Q==
-X-Received: by 2002:a05:620a:440f:b0:8ed:11b9:1ecb with SMTP id af79cd13be357-904d4b58929mr1205520185a.20.1778168344205;
-        Thu, 07 May 2026 08:39:04 -0700 (PDT)
-Received: from devvm29614.prn0.facebook.com ([2a03:2880:f800:13::])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8fc293837b5sm2153539785a.10.2026.05.07.08.38.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2026 08:39:02 -0700 (PDT)
-Date: Thu, 7 May 2026 08:38:56 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>,
-	Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Joshua Washington <joshwash@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Mina Almasry <almasrymina@google.com>,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v2 2/6] net: devmem: support TX over
- NETMEM_TX_NO_DMA devices
-Message-ID: <afyyEJNbrBem8igi@devvm29614.prn0.facebook.com>
-References: <20260504-tcp-dm-netkit-v2-0-56d52ac72fd4@meta.com>
- <20260504-tcp-dm-netkit-v2-2-56d52ac72fd4@meta.com>
- <20260506193420.575e1806@kernel.org>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="I1jH7qSl"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 647ENLRr813969;
+	Thu, 7 May 2026 16:02:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=EZLz10
+	Z089O/ouHp1YKLVeQHxQZCg8SYO46eHsUglfA=; b=I1jH7qSlcRN2lJXKhu+tZ3
+	QCGhXXT2bjw/1YbQ9052yaZB9jncu7d6yF3ePMRAPCnPcsnm6zdPS8XXMPjTkBwh
+	sqYT0Ty3zFUMVt1VPwsXAM6cDLHkqIjbxYmG9HySBdtI1cbW58kvTmLzshQoDfY5
+	reJaukwJUMag4XxO3TicrL1sM5acISmlaNvr94GdoZyze81arCK/o3e3pSJ/GZiM
+	L/bWUcSV/Q4S9FD3Wn2EAqr6mjihUNeMAFnCXfKRAAs92rXz/Xc7H3u2sZoSBzyY
+	B4Dvc0+eqg3kuzXKiZJwU1UgR6iZ/Ez1b/IAPcVoaYCMUoNMfTacPXiyKK8ilN5g
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9y1qfx1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 May 2026 16:02:01 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 647FsdNT005736;
+	Thu, 7 May 2026 16:02:00 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dwvkk4c02-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 May 2026 16:02:00 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 647G1uHg21627162
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 7 May 2026 16:01:56 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A72F620043;
+	Thu,  7 May 2026 16:01:56 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 83AAE20040;
+	Thu,  7 May 2026 16:01:56 +0000 (GMT)
+Received: from [9.52.200.195] (unknown [9.52.200.195])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  7 May 2026 16:01:56 +0000 (GMT)
+Message-ID: <eeb0bfe8-0651-48c0-90fc-d1ebc7ce031c@linux.ibm.com>
+Date: Thu, 7 May 2026 18:01:55 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260506193420.575e1806@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 17/19] unwind_user/sframe: Separate reading of FRE
+ from reading of FRE data words
+To: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf
+ <jpoimboe@kernel.org>,
+        Indu Bhagat <ibhagatgnu@gmail.com>
+Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev
+References: <20260505121718.3572346-18-jremus@linux.ibm.com>
+ <20260505190506.698BEC2BCB4@smtp.kernel.org>
+Content-Language: en-US
+From: Jens Remus <jremus@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20260505190506.698BEC2BCB4@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: wLqntoCJMrMMvatxu2ch3uqOJ4zW6PaU
+X-Proofpoint-GUID: HxlcmDf8flWVY7qxnl1PGQ0IaHbjRRRt
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA3MDE1NiBTYWx0ZWRfX5ByqI5+Aug3Z
+ Eo7j2ynxbpHMKUdZi8T1V2W6BGotog3exicFilzBHUuTqzkjBUgQDUCNd4dOCLsCSSXTcjYWKFf
+ vN/bP+VqAsUtrlq+EqfazVz6R4C3VC6NwbyTZjtvzbKQuaIq1bRF9WUK/zQI0jnOeb2HElQVZTu
+ JBzeWmxGDlliQF9cTNSuXabpF3WHCVAGRZ9vUcJbbTtlCxnaO0V3m2t2blYGR5DeG0LspRX+QfV
+ hLSmzlmkEyq8dP0SXeZIP5O3VudUnEmm+q7vfuhgnpMjAXAKZKmm4KNOQVK3ErstQl7t4KY1cco
+ /4BRDA0S+nOf8jIh/ys96s4X1jetUh4hzzxl+7VHcaPuqtn/eucooKqtv4tzniPIDI1of98jA1j
+ gH6+pZUwM1Co7uss2W6dGogTgag+C5ZZmEXlY5qnD7ueJz225yUqZw0CkKgha1GbkgZA0+OL2Wc
+ Blvx+Gq2eepCIqeQTxg==
+X-Authority-Analysis: v=2.4 cv=UbFhjqSN c=1 sm=1 tr=0 ts=69fcb779 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8
+ a=VwQbUJbxAAAA:8 a=bMbYIdgO7Ne2iVapFegA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-07_01,2026-05-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 spamscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ adultscore=0 priorityscore=1501 bulkscore=0 phishscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605070156
 
-On Wed, May 06, 2026 at 07:34:20PM -0700, Jakub Kicinski wrote:
-> On Mon, 04 May 2026 17:27:49 -0700 Bobby Eshleman wrote:
-> > +	if (bind_dev != netdev)
-> > +		netdev_lock(bind_dev);
-> > +	dma_dev = netdev_queue_get_dma_dev(bind_dev, 0, NETDEV_QUEUE_TYPE_TX);
-> > +	if (bind_dev != netdev)
-> > +		netdev_unlock(bind_dev);
-> > +	binding = net_devmem_bind_dmabuf(bind_dev,
-> > +					 bind_dev != netdev ? netdev : NULL,
-> > +					 dma_dev, DMA_TO_DEVICE, dmabuf_fd,
-> > +					 priv, info->extack);
+On 5/5/2026 9:05 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Critical] A malicious user can trigger a kernel panic by providing a crafted `.sframe` section with `rep_size` set to 0, which causes a division-by-zero when the kernel attempts to unwind the stack.
+> --
 > 
-> Not sure if it matters but are we intentionally releasing the bind_dev
-> lock before calling net_devmem_bind_dmabuf() ? Previously more code here
-> was covered by the physical netdev's lock.
+> commit 1aeb36f953ce26b15e30e2b228bfb48239924c2b
+> Author: Jens Remus <jremus@linux.ibm.com>
+> 
+> unwind_user/sframe: Separate reading of FRE from reading of FRE data words
+> 
+> This commit separates the reading of SFrame FRE structures from their
+> data words, which allows linear searches to skip data words until a
+> matching FRE is found. New fields are added to struct sframe_fre_internal
+> to cache the necessary information to read data words later.
+> 
+>> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+>> index 2ba2c8b385f96..98346412078b8 100644
+>> --- a/kernel/unwind/sframe.c
+>> +++ b/kernel/unwind/sframe.c
+> 
+> [ ... ]
+> 
+>> @@ -455,6 +450,7 @@ static __always_inline int __find_fre(struct sframe_section *sec,
+>>  	bool which = false;
+>>  	unsigned int i;
+>>  	u32 ip_off;
+>> +	int ret;
+>>  
+>>  	ip_off = ip - fde->func_addr;
+>>  
+> 
+> This isn't a regression introduced by this patch, but while looking at this
+> area, can a crafted sframe section cause a division-by-zero just after
+> this line?
 
-True, lock needs to be held at least until after binding. I have this
-fixed in the next rev.
+Fixed in [PATCH v14 05/19] unwind_user/sframe: Add support for reading
+.sframe contents.
 
-Best,
-Bobby
+> 
+> In __find_fre(), the code does:
+> 
+>     if (fde_pctype == SFRAME_FDE_PCTYPE_MASK)
+>         ip_off %= fde->rep_size;
+> 
+> Since fde->rep_size and fde->info are populated directly from the user-provided
+> sframe section, does anything ensure rep_size is non-zero before reaching
+> this code?
+> 
+> If a user provides an sframe section with rep_size set to 0 and the
+> SFRAME_FDE_PCTYPE_MASK bit set in the info field, will this lead to an
+> unhandled division-by-zero exception and crash the kernel during stack
+> unwinding?
+Regards,
+Jens
+-- 
+Jens Remus
+Linux on Z Development (D3303)
+jremus@de.ibm.com / jremus@linux.ibm.com
+
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
+
