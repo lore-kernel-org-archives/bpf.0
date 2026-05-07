@@ -1,132 +1,178 @@
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBAA84611CC
-	for <bpf@vger.kernel.org>; Thu,  7 May 2026 18:39:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1892E8B82
+	for <bpf@vger.kernel.org>; Thu,  7 May 2026 18:42:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778179160; cv=none; b=m/QPg25lidUiQ2gbZ5QCabpl+j6hLjnALbUcFww5O45064DdZ9nDRvr878ZC+KA/bQeGlB8KNeSrQAXfOiH6BHdYBfpCSu2VL9zMEJamuBSc1yZNksKVckWoPyXhAdrD7ivKTTyJ1PgGYEH0YN2qlyrQ3DT6A+nVTo3Lny3Jzg8=
+	t=1778179373; cv=none; b=Qdwg5XyU1LzEppUavt3jqAgIAz5CXJKV9DExK2CFldsp0Bs1x7ka8XUWCqmpYHsbERhg2EnXH5Qy1CXPUiA5l/v3UeDC6QU0HD/ZPaV120kNTr3wlgRr5kJDPHeCRvai9RlL5BRQwwaC76e9xz/6donNGOINfw/GkSBAhKLqinc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778179160; c=relaxed/simple;
-	bh=f/VYt86QfsV33lO5nWhjommtwvlcryeqI+nt7Vqb76c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ts/rMptovNoPkppczk2MbekEVbEiMyrgJF7FWa01fDAMJaN6BA9JEv3RiXM5x3bTh8HuG8Wu4TXJ0EG7PnsXKrRhRgevixLg77UIM57spHwMZ3Ftg6uPZnApET1iwq0Ovn+0ol90zho0qi1cnyXws98SWUd9aX6whIHDXpYDpDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=sETjafTP; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+	s=arc-20240116; t=1778179373; c=relaxed/simple;
+	bh=c+3opmxIH4DLfjXxSKulQKhrGuenddLurBJ2Uoc+vXE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e010QE+wmuWpbpXBljhakZ2C2WDDir38oaFxLk+mn7PAU3W9ZFTA3SOQTcnFQRMx35AtG2miC9ptQu5ATAoZzyh2MLUoZCz/FAr+iHCHcpjivKs2ht/P/Lr5a0xexaROvSf9v8xAaFEIHwxDEkLHGWMWW7DkxmgR1urlDaHyuUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lct7fJjZ; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="sETjafTP"
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-8ed4dd182efso78498185a.3
-        for <bpf@vger.kernel.org>; Thu, 07 May 2026 11:39:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lct7fJjZ"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-366087480d8so970044a91.3
+        for <bpf@vger.kernel.org>; Thu, 07 May 2026 11:42:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1778179158; x=1778783958; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xAxf1DNF2nC8sz42taPRq/pgsGcKQpqrWaLh7UNAXF0=;
-        b=sETjafTPdUg2ii93kH2SRdQpxIDwlHw++/Udnl0YvFhjKxo3mfpZymbm3zCbgKWwy1
-         ZZTG/CwjDVG41bxom74SCHnJU+/7a9q6J2hC8o83bgco6Dr+7ETgR8oAhevz4ocMQDFX
-         Ljcf7sSF83yMY1IdGcMdSDhhLa5F4ccPXRZr9o4kt7J8RlHc4eMCYebqQvQRTxtJPweY
-         CbSHWFRgCs3jlhl7Ba3jBV+nkiOcv778l8CV5M7TCIdT8z5yhZMO1VXKgy2ghAU+ztSA
-         rPjKoKJOaL9XsTVzUnI29jx+V0ofMTZcgeaBGW+QSjNrvNhH5sSNkCxFd4FPz2sDDIiR
-         oyMw==
+        d=gmail.com; s=20251104; t=1778179371; x=1778784171; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GLbDA5dUP8vgYaSGZyctZknfu5NA4leOLY3uMdguNYA=;
+        b=lct7fJjZBYJ31+qe5c//W+fNO8/RNynrYkgh9XV8MOOb9F54zfr9GR+wHs3T6iJDry
+         zS6GAApXBtsc92f3lnCfH8MtVUbx0WDoyZ0fimFeCO2AYUepGHmk0ifXJc7pJCXSlytD
+         C2fvCRgC2XP43NtBz/3q5Z4JON7PaxNzb+3eTdZtuac3Z3W/ammTveJ6AC3HBhte/fkq
+         5vwY4YvRVwAx9GwsTZ0ODDqBqa8o5h5Xsgvw96gpUsyi+1IuVHFwe3EQkksByq2r9vsN
+         VdF7B7+BApQHqk4R/a3IveJi4fxUpAskbx+sWxL5JNbSSW69UgR2m6DrazG5cQDMUcxz
+         Dltw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778179158; x=1778783958;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xAxf1DNF2nC8sz42taPRq/pgsGcKQpqrWaLh7UNAXF0=;
-        b=cwaF2YolAeZBrU+hdPVskV4ffDRo3Ff5MLOmn5kbh54H2aYp5JzsxwelnYV30ILmgn
-         CSYfzUC+L48i+7rPhVQ/HObc+bCjUyz8sVx2SQgSpgSUQOdmmU9g88jyaUO/4zL4cnyA
-         ZXEIRYeGX49b4Ow+5cETjlciheN4nnYVE9cUZ4d04bdx/9sgqjlfQFug/HwuG9pK4WnV
-         7LorL4vCI73uvIgumRWBrCtXZxXclatXKV7RL4yornd8PDbbGGpgaDpC5Y8J51NIl0Ri
-         15Tv5oF0FGM/hDK8NUjUEf/+MvvMvDZ1scLji76m+MEH0Us3dMBaKcoL6eVbQVVqvSXf
-         rQAQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9N26koySPQ0f4gKez+/vCpBVSO6e6jc5kJvCARJcUajfGbDoyeIMZqY37lneaEXOLvxEo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNGtD6afpi2IhSFoJJXBywEoI56pAeegqVZ3dEFdU1Y2H3xXs8
-	xPVNpIF4gc7PXpCkU2f1DVLRKyvUdJlz9Exy7Au3yquL8AC2/70qvTiy7FEhhUj3zvk=
-X-Gm-Gg: AeBDievmwI/6H5VxXmnDPBlIF9SLndODPn1KvrTCq9kA2aQpH2NjTSrDknLNh5iOYNZ
-	XXXim7HY7nHrUryth1MmNkWXe2dx9NtLbvHzjeJ+CZtNm9vMOjVG7zH2greoPMF29cKH1Sun/9k
-	EWN7R/f2OygEgH3NVxk0SBtMBmPGFsS4Om3K155j4hDbP+NBs1fKaK/0s0acBESTKWOXoFejRnj
-	D6uWkjZXOpF5FlR59gSL5IPE6xs13vrTwCDJ5zFAnDbKwrhyj6uHDtlPEaJALeghC5XnQ8Rft+T
-	FbJ5DciKr7Vp6qIswpAi9U6lX9MHnWmrvRaAbwxsCAMcqahTsbIHWqk8Nh4ZiPtw93RYIOltlcd
-	lKegEUq4oAidqPFwtIZokIHeg1I3hL4MxcWaA0oRkz1isOTqs66buwBkjBZX1X7KieB1VOGHbwk
-	pp76+qoxLqiXkCMYeacNeigPlZBCsDSip0hQ2Otii6opXA1K0Jw3Xe2J9OnvDCqU0O
-X-Received: by 2002:a05:620a:40c9:b0:8e9:13ea:a0e1 with SMTP id af79cd13be357-904d496d4abmr1387402085a.18.1778179157638;
-        Thu, 07 May 2026 11:39:17 -0700 (PDT)
-Received: from [172.22.22.234] (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8fc2c25324esm2298627185a.23.2026.05.07.11.39.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 May 2026 11:39:17 -0700 (PDT)
-Message-ID: <20903580-85af-4e7b-b3dc-b8de49bd32c1@riscstar.com>
-Date: Thu, 7 May 2026 13:39:13 -0500
+        d=1e100.net; s=20251104; t=1778179371; x=1778784171;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GLbDA5dUP8vgYaSGZyctZknfu5NA4leOLY3uMdguNYA=;
+        b=c0X9gXwBXeoNpnaJi+YdisfNIdKZvJ+ENH8D2AmgDQ13F9S03zbvbVPubwJ3o0CD79
+         A6fWnXeeGsc1LYC85fVaCUdkwEbZXYqaNImHdC+xF9Y7IFdJC+hIKBr3DjW+4E0GIytI
+         3oxbFGPaa791r0X90cud/c6wBzZ9RyhUBDM3ZQa4SO61aVVr+hEzI9HXmqnV9V+4tw/A
+         77klmxYgBfPW5GsqqhAUHkb4/Zl3Q6pHj/8tsziQGiKyujs95SLnnn70SqQOly6RshBf
+         XzQFGbBEChx9FDf5rYvLz2h6ulC1XGR1Jx2ZyArETRjf+F671UjYxxhBlx14qnFqmJ1j
+         vwLg==
+X-Forwarded-Encrypted: i=1; AFNElJ/Munp7lhv9Ttihz9C4ZR9pfPOqZz6pinU7AzrA1ND9VPqRIiWBoATR2eG5I6AToIHSBO4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTIAIzYiiF1JtxgaFzLp2jl9XiCQUsmYE0+z5CmznGfMUx85sv
+	mb0xXHT71eNm4673ieC9uSRqfaHM0Pt31T6vfGMxFzg/ggrW9QbtsR6N
+X-Gm-Gg: Acq92OF7zkqITvKj/cLSXGYMBxgd0GoAePbsEmUSbrt4+8mHr8dIkvpMkg2SfKl6BsK
+	Uq74zictoUKsgU1DCQKWhHopC33cXdB7OqX60V2tQURuSo7IvRpZBKqa2HTS1XRaJ1Frx+Ml3bW
+	hge3caln+fW2vIGwKUOswMolyiweWCmykw7KDZ2KC5fG7ZFL4/dmaB1hGzATPXAMyj4SPi16B8v
+	jkJ2Gz4ogna0E6rIIjZJkrKwxQuNtrU8XwMNPvFJUNUMEoUAxoE+Xreu02xbuntr9B+KThc9o7B
+	+NBsWS1j7wtwWc8ERhvRm4zDt+w9v8aDt0se3WosJ9gYqzjrtonTfLbA0PD8AxEpqwcd85yzkIx
+	fm8riTL1l/KSKwbUhEjBxlkNxKClfm5BWj0hpjweZRQN3t+i/yyCF/MFDdZSBRsaG9aN4SNHEF1
+	Rlm+vNAoHtTEKZgEbDgrG0l+7JWYeeLGAur1qCtWbfiA==
+X-Received: by 2002:a17:90b:3846:b0:366:33a6:9926 with SMTP id 98e67ed59e1d1-36633a69cfamr1834848a91.18.1778179371533;
+        Thu, 07 May 2026 11:42:51 -0700 (PDT)
+Received: from archlinux ([205.254.163.22])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-366478fb189sm118708a91.16.2026.05.07.11.42.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 May 2026 11:42:51 -0700 (PDT)
+From: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+To: peterz@infradead.org,
+	mingo@redhat.com,
+	acme@kernel.org,
+	namhyung@kernel.org,
+	mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org,
+	irogers@google.com,
+	adrian.hunter@intel.com,
+	james.clark@linaro.org
+Cc: linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Suchit Karunakaran <suchitkarunakaran@gmail.com>
+Subject: [PATCH 1/2] perf/lock: Fix non-atomic max/time and min_time updates in contention_data
+Date: Fri,  8 May 2026 00:12:37 +0530
+Message-ID: <20260507184238.65280-1-suchitkarunakaran@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 09/12] gpio: tc956x: add TC956x/QPS615 support
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com,
- rmk+kernel@armlinux.org.uk, andersson@kernel.org, konradybcio@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, linusw@kernel.org,
- brgl@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
- daniel@riscstar.com, mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
- alexandre.torgue@foss.st.com, ast@kernel.org, boon.khai.ng@altera.com,
- chenchuangyu@xiaomi.com, chenhuacai@kernel.org, daniel@iogearbox.net,
- hawk@kernel.org, hkallweit1@gmail.com, inochiama@gmail.com,
- john.fastabend@gmail.com, julianbraha@gmail.com, livelycarpet87@gmail.com,
- matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
- prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
- rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
- weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20260501155421.3329862-1-elder@riscstar.com>
- <20260501155421.3329862-10-elder@riscstar.com>
- <736fb3b7-c88a-4ec4-96ad-d1b79cc48d30@lunn.ch>
- <30cec7dd-ac3c-47ab-896a-c29992bd5ba5@riscstar.com>
- <3e5a42cc-53b8-4065-a32a-d754be40b4c7@lunn.ch>
-Content-Language: en-US
-From: Alex Elder <elder@riscstar.com>
-In-Reply-To: <3e5a42cc-53b8-4065-a32a-d754be40b4c7@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/2/26 9:48 PM, Andrew Lunn wrote:
->> It's possible gpio-regmap.c *could* be used.  We started with
->> vendor code and this code got separated at some point along
->> the way.  It was working, and I don't think I pursued other
->> options at that point.  I'll look at this possibility before we
->> send out the next version.
-> 
-> The GPIO subsystem has made a big effort to provide generic code,
-> since GPIOs are pretty simple things with a lot in common. So if the
-> generic code works, or can be made to work with minor changes, you
-> should use it.
+The update_contention_data() had a FIXME noting that max_time and
+min_time updates lacked atomicity. Two CPUs could simultaneously
+read a stale value, pass the comparison check and race on the
+write-back, with the smaller value potentially overwriting the
+larger one and silently corrupting the statistics.
 
-Yes, I can confirm this is what I will use.  As mentioned
-elsewhere, LinusW provided a patch that support the one
-unusual thing this does (input-only GPIO lines).
+Fix this by replacing the bare conditional assignments with a
+bpf_loop()-based CAS retry loop. Each field tracks its own
+convergence independently via max_done/min_done flags in cas_ctx,
+so a successful CAS on one field is never retried even if the
+other field needs more attempts.
 
->> What do you mean instantiate it twice?
-> 
-> I _think_ you need one instance for the first 32 GPIOs, and a second
-> one for the remaining GPIOs. But maybe config->reg_stride might allow
-> it to work with a single instance?
+Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+---
+ .../perf/util/bpf_skel/lock_contention.bpf.c  | 50 +++++++++++++++++--
+ 1 file changed, 45 insertions(+), 5 deletions(-)
 
-Oh I see.  Looking at it now, I presume the reg_stride will work here.
-
-Thanks.
-
-					-Alex
-
-
->     Andrew
+diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+index 96e7d853b9ed..5c8431be674a 100644
+--- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
++++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+@@ -175,6 +175,13 @@ struct mm_struct___new {
+ 	struct rw_semaphore mmap_lock;
+ } __attribute__((preserve_access_index));
+ 
++struct cas_ctx {
++	struct contention_data *data;
++	u64 duration;
++	int max_done;
++	int min_done;
++};
++
+ extern struct kmem_cache *bpf_get_kmem_cache(u64 addr) __ksym __weak;
+ 
+ /* control flags */
+@@ -486,16 +493,49 @@ static inline s32 get_owner_stack_id(u64 *stacktrace)
+ 	return -1;
+ }
+ 
++static long cas_min_max_cb(u64 idx, void *arg)
++{
++	struct cas_ctx *ctx = arg;
++
++	if (!ctx->max_done) {
++		u64 old_max = ctx->data->max_time;
++		if (old_max >= ctx->duration) {
++			ctx->max_done = 1;
++		} else {
++			u64 r = __sync_val_compare_and_swap(
++				&ctx->data->max_time, old_max, ctx->duration);
++			if (r == old_max)
++				ctx->max_done = 1;
++		}
++	}
++
++	if (!ctx->min_done) {
++		u64 old_min = ctx->data->min_time;
++		if (old_min <= ctx->duration) {
++			ctx->min_done = 1;
++		} else {
++			u64 r = __sync_val_compare_and_swap(
++				&ctx->data->min_time, old_min, ctx->duration);
++			if (r == old_min)
++				ctx->min_done = 1;
++		}
++	}
++
++	return (ctx->max_done && ctx->min_done) ? 1 : 0;
++}
++
+ static inline void update_contention_data(struct contention_data *data, u64 duration, u32 count)
+ {
+ 	__sync_fetch_and_add(&data->total_time, duration);
+ 	__sync_fetch_and_add(&data->count, count);
+ 
+-	/* FIXME: need atomic operations */
+-	if (data->max_time < duration)
+-		data->max_time = duration;
+-	if (data->min_time > duration)
+-		data->min_time = duration;
++	struct cas_ctx ctx = {
++		.data     = data,
++		.duration = duration,
++		.max_done = 0,
++		.min_done = 0,
++	};
++	bpf_loop(64, cas_min_max_cb, &ctx, 0);
+ }
+ 
+ static inline void update_owner_stat(u32 id, u64 duration, u32 flags)
+-- 
+2.54.0
 
