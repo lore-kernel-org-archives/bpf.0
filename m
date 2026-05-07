@@ -1,185 +1,147 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31CAB3FE37D
-	for <bpf@vger.kernel.org>; Thu,  7 May 2026 14:47:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FEA03BD643;
+	Thu,  7 May 2026 14:52:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.126.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778165234; cv=none; b=qbJHPFHlN6eRoR7M87HRPjZ2KSw9uASiQnngVRCZn2vjK2HZNCprKh5ShzML2x2z7YL2KDHeeMDCu9L3sExVDodSQ0uk4s82haTkhrJTNyj8B0XL8sEwZy/prk5hFFnwory97+hrNcAv/m6WlkUqf0XDcBtyujsfsSMnDFyO0yY=
+	t=1778165570; cv=none; b=a59V8N7LZUYX9pAWziARNHP1lT1XLZEz7/wfTrFh1LF9nF60K+A1urChwo5zqJD5iijrcK7LfR6uhlzSFaqWPp7z9AFVZ4uES3mELdW1UneZWpH5Rk796Czt9AMen53C+gPk8uDMPe43LVeD+37lAfsb0bBbvt3TmHqV+OQ85zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778165234; c=relaxed/simple;
-	bh=/OysdnbnOtECLkkSa00qUIDUT8c+z8rBTm0QaKE643Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gyTTxOGJ20zd+WLN86YdZJcs3YTJPBpmYKxZNa7SZqE0UJI+2/Ue5OriGW8tWznZ9NgVGXQz1bbd/0KyqJl6YDF6bkQO5u6Dr2bq3frDQwisPyKmxRbRqWn57G/4oxduNdrl7Os6M4xty7AFnRldViWczcVt0xR77EVidjTdbtQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=y6sHvENc; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+	s=arc-20240116; t=1778165570; c=relaxed/simple;
+	bh=FpYeOAyis8m6Y2Clv0tM7NciA1U9CPYpox8KmfiFYIs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WmGFHEQGZDGdaZy43vP7/MfOeUzVQoXjysY38gNnTJ6DG68ohLKWI0ltLklutrsCMb3gidm9ChIopGoO6bWGuqW7OMlCJckiNWVkRlW4y9AIXJlHwZNkMhHNyhGsBRSn59Waqv7azOOTk9uTAeQtdfsrugIpEGYElbLpi+Rj3X8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schippers-hamm.de; spf=pass smtp.mailfrom=schippers-hamm.de; dkim=pass (2048-bit key) header.d=schippers-hamm.de header.i=simon@schippers-hamm.de header.b=xXKDUTPl; arc=none smtp.client-ip=212.227.126.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schippers-hamm.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schippers-hamm.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="y6sHvENc"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-488ba840146so8821675e9.1
-        for <bpf@vger.kernel.org>; Thu, 07 May 2026 07:47:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1778165230; x=1778770030; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QZB38wJGIZd42iBI3srRP0pjjAxDTyyGTqCWJp8RgtQ=;
-        b=y6sHvENcFjVQHrSBavIoyq7oFwxMGglGYH82YKxB3rYUBU2WXPRYsxMkRmjaL8UJtJ
-         8qCHl9DPDYrsxc98WoBL2OVnRxquMXDR7DJkEJ9EsIq4AZGGHrWcAHRBS18gya1ZxKtR
-         EnlmuxisPmWVI/FCv2UT17Z2tvp0mlc86/WG39g8c3YrEIGrOiRRn5f3rGEvIAe9NK4M
-         G3PU4X1W2bs7CtqpYJU4OLJ9+/f8MTwSAHunB19JS2FigfTQbWc1FjXIgGDLFSsZnLYJ
-         srSccQtsHw2YSHp5ap4GUnDf1aUWOpktSnhkWm07DoTgrs60aRygAE7qvb6LOWLgEOL6
-         oFLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778165230; x=1778770030;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QZB38wJGIZd42iBI3srRP0pjjAxDTyyGTqCWJp8RgtQ=;
-        b=OUjQGbgywaGzQIAzPxHmGU1T56rMkmgZ17+n1xThrCuq26mj5bOPVqprfvrw4XMCZs
-         PIEHT/PlEjzbA7LRIabog7fmffIJZre4YUSTwwevzL/KwprxImGe71k8EWxhNfEQz5gg
-         R6djlbk6/cAVe4dGuNqZQjAB7dfG32WqYUwY2QgXEQdrvWa88bWAfCM8KNhL05CDRipu
-         7w8ujDwYBq9gPrGlUWJuT8MEzMYjxXDkuifshzi+5C++neFLn0kH0WjTVzOLR55SbQPf
-         8QnLddSQqFxXLxJBFDuszKBI8A18dSj/xjADwlnJZTho3yPHRFp8HgmnklVhMcaiL944
-         6QgA==
-X-Forwarded-Encrypted: i=1; AFNElJ8InQFHa79kNRFelQk/1M57/GrzpBYtVDXzXhg6cVUdQkO7qwuBNyICNWgtat7xi41evM0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUEiIGF7TmoWpnwzMzCUkzmKQsCiq3KHsybsLsqwBA9bdFEd6l
-	5B/KN5R1jtLEw1A2318wIpeyAYc6rCTmdvULHGh9U+YlAsKb1A7Up/Niw/yhySOwTuQ=
-X-Gm-Gg: AeBDiet8pSxc9ZGH8FKR9OQT8Q+aU+dVeWev9Xvj32FSvLFJM21s27RjgIZJy7lo2bu
-	SUfB8uDMveTcijsunN2+m41vuTGDDjPXjsp0UDYwDl/zEt84UNrdIVlI/W5LDeWJP9u83QfSLqK
-	5ESab1Qi9xQrKgEMkKBZ0WHqcxbdZsEp8luQ33a7ymDNZTetlZKo+vZxJc7T8fUwVaDW6SOFKCE
-	Y/Kp/26EIFdG5aUsN3/BMjGicP7WN4M+F2G4RBZWHEw0dXztIDOaX8aeZ8tCg9rxUOJILnRew+I
-	aUaJ2rAA7NelXfxY9fJ5y0s4Mf7hzPXUAM/++C7O8F4tIa5MSQNpk6h/7anAVf/f7GHlc4Uc6gQ
-	8Uj2dd6nlCvu1ULyFDHu6hy+y6Tj9Bi1Mf0H9l8AgGfcPVXBYl7BYlEMFgOG+v6rxuGk6y+HLoy
-	tiWwDWcdYcjDl37ZRuchMvTDAcTuWJsOvJePSf4S/lv2LU3YZr0WMeEclCv7K4FkXHB5ByQ4VNh
-	gThNV5yxf8+13zbDzCjw4Oi1/OTc+NazhAz+dmGbii110VCfk+XEgGtz55AFk63sErq/PSGe/VR
-	RxlMnxr0bxTn9onek4g=
-X-Received: by 2002:a05:600c:a317:b0:488:a977:8d6 with SMTP id 5b1f17b1804b1-48e52bd4f32mr100824405e9.19.1778165230150;
-        Thu, 07 May 2026 07:47:10 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e538a5486sm134813275e9.6.2026.05.07.07.47.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2026 07:47:09 -0700 (PDT)
-Date: Thu, 7 May 2026 15:47:06 +0100
-From: Daniel Thompson <daniel@riscstar.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, maxime.chevallier@bootlin.com,
-	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
-	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
-	arnd@arndb.de, gregkh@linuxfoundation.org,
-	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
-	alexandre.torgue@foss.st.com, ast@kernel.org,
-	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
-	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
-	julianbraha@gmail.com, livelycarpet87@gmail.com,
-	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
-	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
-	rohan.g.thomas@altera.com, sdf@fomichev.me,
-	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
-	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 08/12] dt-bindings: net: toshiba,tc965x-dwmac:
- add TC956x Ethernet bridge
-Message-ID: <afyl6gpHLlAnxir7@aspen.lan>
-References: <20260501155421.3329862-1-elder@riscstar.com>
- <20260501155421.3329862-9-elder@riscstar.com>
- <20260504-fascinating-teal-tarsier-b116c8@quoll>
+	dkim=pass (2048-bit key) header.d=schippers-hamm.de header.i=simon@schippers-hamm.de header.b="xXKDUTPl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=schippers-hamm.de;
+	s=s1-ionos; t=1778165561; x=1778770361; i=simon@schippers-hamm.de;
+	bh=SCuXleXqrC6ZPqhNX1oQ525cQB6TaYVm/6eDNN0AOKE=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=xXKDUTPlCmVLxFj77VKeKnWV0cEWpObauI28cfewl/N1mNCaWUXODqHy7VVdP8ze
+	 gbKOa6i69e/ctAYMhZQO+5EfyE5tkJUr07vUZ2JU/qqrXMfLjQFtylwxQoCtfXQX7
+	 rz1tOcEOKKbEYS1bbzQ1K5d3RCgsiYaN3kTKugdBvupmNsogihVWXOVCfguwfJ0Pq
+	 qmjILW+qFXEFeIdv4vuLS7HrFLxLQmsLn85L0SvouFLzD+8IZi0C6KsOFWSOomuiS
+	 iLETPG0uIK/jNGdT5LjZtBaOfXf+dG4mHmySjBoSGpI0gn748jzYJ2ExOp5uQjYt4
+	 zu9728NOlFW9pbmSEg==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from client.hidden.invalid by mrelayeu.kundenserver.de (mreue011
+ [212.227.15.136]) with ESMTPSA (Nemesis) id 1MDQRy-1wBc503KOU-00Fay7; Thu, 07
+ May 2026 16:46:40 +0200
+Message-ID: <e3a91545-13cd-4f87-8375-d707865bdbca@schippers-hamm.de>
+Date: Thu, 7 May 2026 16:46:33 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260504-fascinating-teal-tarsier-b116c8@quoll>
-
-On Mon, May 04, 2026 at 01:00:07PM +0200, Krzysztof Kozlowski wrote:
-> On Fri, May 01, 2026 at 10:54:16AM -0500, Alex Elder wrote:
-> > From: Daniel Thompson <daniel@riscstar.com>
-> >
-> > Add devicetree bindings for the Toshiba TC956x family of Ethernet-AVB/TSN
-> > bridges.
-> >
-> > Signed-off-by: Daniel Thompson <daniel@riscstar.com>
-> > Signed-off-by: Alex Elder <elder@riscstar.com>
-
-Alex already replied to most of your comments but on this one
-specifically...
-
-
-> > ---
-> >  .../bindings/net/toshiba,tc956x-dwmac.yaml    | 111 ++++++++++++++++++
-> >  1 file changed, 111 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml b/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
-> > new file mode 100644
-> > index 0000000000000..d95d22a3761da
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
-> > @@ -0,0 +1,111 @@
-> > <snip>
-> > +examples:
-> > +  - |
-> > +    pcie {
-> > +      #address-cells = <3>;
-> > +      #size-cells = <2>;
-> > +
-> > +      tc956x_emac0: pci@0,0 {
-> > +        compatible = "pci1179,0220";
-> > +        reg = <0x50000 0x0 0x0 0x0 0x0>;
-> > +        #address-cells = <3>;
-> > +        #size-cells = <2>;
-> > +        device_type = "pci";
-> > +        ranges;
-> > +
-> > +        gpio-controller;
-> > +        #gpio-cells = <2>;
-> > +
-> > +        phy-mode = "10gbase-r";
-> > +        phy-handle = <&tc956x_emac0_phy>;
-> > +
-> > +        mdio {
-> > +          compatible = "snps,dwmac-mdio";
-> > +          #address-cells = <1>;
-> > +          #size-cells = <0>;
-> > +
-> > +          tc956x_emac0_phy: ethernet-phy@1c {
-> > +            compatible = "ethernet-phy-id311c.1c12";
-> > +            reg = <0x1c>;
-> > +          };
-> > +        };
-> > +      };
->
-> Keep only one example, unless you have different properties (not their
-> values, but their presence),
-
-At some point I simplified the example by stripping out excess
-properties from each ethernet-phy. In the process it looks like I
-removed too much and eliminated reason I thought it important to
-include both PCI functions in the example!
-
-Each ethernet-phy will typically describe a reset gpio but we expect
-only eMAC0 to act as a gpio-controller. For that reason I wanted to
-show that. You can see part of that that in the current example because
-tc956x_emac1 is not a gpio-controller.
-
-In other words tc956x_emac**1**_phy will, in the real world, include a
-reset-gpios property that references tc956x_emac**0**. For example:
-
-    reset-gpios = <&tc956x_emac0 1 GPIO_ACTIVE_LOW>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v5 3/5] veth: implement Byte Queue Limits (BQL)
+ for latency reduction
+To: Paolo Abeni <pabeni@redhat.com>, hawk@kernel.org, netdev@vger.kernel.org
+Cc: kernel-team@cloudflare.com, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20260505132159.241305-1-hawk@kernel.org>
+ <20260505132159.241305-4-hawk@kernel.org>
+ <ee275aa6-af27-4dac-9afa-da88abde312b@schippers-hamm.de>
+ <8f2f7f2e-6aa2-4e5b-b52d-0025b2525579@redhat.com>
+Content-Language: en-US
+From: Simon Schippers <simon@schippers-hamm.de>
+In-Reply-To: <8f2f7f2e-6aa2-4e5b-b52d-0025b2525579@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:sNPBPySUhNmmnBE6atM+k+bbsLAB6+xRJMmtae7kiZ0Cntv9b8j
+ IbGCzldlSRJ/+O2RdBvTsuM9cCjiZGFP4i3oXIssD6eVHIJRIGZ/qBYip82yK2MbXnw6uYf
+ VjOz84ku0JPpbKDdaA8LbSN20DzvL4TU5FhGlA3JFUZ1CY5Q2G79QE98o5yxRgbbDyg7Haj
+ 3R3ef0pT+EdEB5F/UXlZg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:GKx629lf1hA=;6wDalD/MxFjWiE/j36A6Pubvo16
+ YttIWs59yaIyVewp1zpDclV65CFNe9Vyox0tZ1ATbXYjrC1uNYJ9+K9GdxlEq64kTi+CKpbUW
+ uknbuz3PhKdUke+GUP6lvtwcaUeckC3x062SGz9gEtHIwZPQDu2GTzbBILoxAvz2QA+gPHiNo
+ LYtCkbdc3ck25B+oHTiZdaZ65VOF/GbzeP2asOqMpgh2LLParcbUxW4sXFPkKCyP0SHh1s6xT
+ kPnHjX3gWB/GX/QEQe+pLoN9P0RKJ3nIivtNq5QB2AABiJtO7x88UeWp+xHcSiLbFaA9dVY9i
+ 71YCntoFJbxEQ8rHMrdBUcjLbEqdBmv0wIC4kccTVnJ30vJGbrNf2bgaMSflnl3yompl2XsIl
+ DqRWwoDhwT6xB7cXG+70zod+gvHHA6ywinPHrekaXptx3QWarxlnV6ws2rACBm2AFCLBR9YKw
+ Z+DQPz1LOIAdT7s5OSjiq/PFnSHiRn0Sr3wORp3GU9/A7Z+kB4VaxMNv7TcdCyvC8jLxJfAj+
+ 65LGrAX1DEzRSKPSPXCKULIfS6l647yDcqgTdOw2Kei4sRWj28FEYY5WchC6LMTfss1UsEPez
+ 17XOXCBwb3ziSn5qIHluRUMv1e/mq7HvPNrSeKFWQ5n/R5CyFRMgNd7ovZ5+3QlKMrbudsyFj
+ eIDr8XblC89bR+LiKxy9uTNO5HwgxyqqrtaWJbkcrb8fuLyN9Xzj69mo4LUxApnTKyXKV+lvf
+ qlupLQ5s6qlWqVBmgBqi5b4jvfQnqAlLxB6IFbHCdLSNAOE4qA9LQZZ05w5lWYNRy5shGyJQb
+ CZw98wdwaA6JxaHyOjDdqVuM2l2DDcNPHehy9MeJuP7xOYqWxiEoEGhwZfe8WE2LfK+u+H9tE
+ 8NKo/db/kZ09/T4oeo2N/xAE8+l2Dulx5DMJET4NSgV2e1zDv9Yd13YL3DsG+qJGkZ4+NQbLq
+ Tj9jw5cMxmvL0XAUqJDQvvp6Ip1dViMs8ToL5ZLTV7Rn/kfKldnB4xpx7PA+Dvo8nnDls0Ukq
+ OtvAvYXAVTneu7NIPHVU4FZLI2X93waMS3QgQUGUFIEgAiwYk5ZlrFqAaERPNPYpuFJqxzrfk
+ bWmxsP1xZKGGdhdE6ByV6oheaKtSufvNa3yc4lLJdHEQFmyxkX+uL2pgpgkaUen2nbBqS9NSq
+ mwBfSrJII0DCzajQ5Kbn9UoDS3QiutWpHXbeYzFLHzYqJ2Nt1AV8rJ/6PGMsBrX9l9g15giSG
+ tPElwJ/lITFSKipex/4Cz/ssH7jaqRd4sso8HYXp9ROJZKLeutwHAqvvge/dyMC/0geObq0hr
+ 0VeIkuSBAAtPl3WZHaBq6YUAu3B2UxrJpw5RWt3ACdLoDqGQ+w+ZdSlMr6XNjXgmKwUj7eshN
+ zQY0yAEzjVkmwppvEaRwIlrMEBzsvWQgGoTijZUXySgEUjf1R/4a2taKvmulRwPz7eyHnXbKM
+ BldecOjwFzWl87L6VSBH8cQibtx4TxwVKrOmZA1jom9JAjCiC3ycfBAmyNQy6tOGX9boR4NPF
+ mzpyOP45M0AAoCvQs5apfRlXgwAkOeGMZnPn2Sn3dVN6tQASK55Y8DFRiUPeSXVVadCI8K104
+ AmKOcokwZhQz/tNEiZk2xuRk5oIBfhL0eG/baLLN7o11HIOaNbglvMipTypNjVmjhyR8vQvKi
+ GnsOrAtEnna88g67xfI1atpspI1LA+/DxjwhA3OB/2RMPQZcmeZcCa370tHrr4kEMHNbFGzF2
+ RwR7QeRBVSCcDY0GusDck8FpiR86lXQBmovbbgJe730Xv3TxxwQ4QDb5TZrdkvNaI/P4DyO9C
+ x1QaFQtk5+bobhxz4sLU4Gn8TCx8gM0ev0+tIjiSltENpn5Sg+NfBQgv670J5DSp6hVdXCXfs
+ CYIVS0bj36BQwz+vUcMa8rFMI0XYVKwFRAUw7XFzl0ya7s1Dbzt+EAd22SEOA2ztUoRb5tG0h
+ n4zZs6i5asnBdk//AyWbygHiSWn4cfaXy2CNZ1BbefgTT/RCtw+g3BkiPjZ+23MYRCmwHntx7
+ 4RZwz5+UdyXzBF2NeKL86UNcjiP9GMlbPBFS0FnZYNINUp5tr+PVB7b4eTfOKUSXtceFcy63j
+ nlDRg9ZEEbi8YF2Ihq2kemZV+CnXQSoC
 
 
-So... is it better to strip it back the example to describe only a
-single PCI function or should I add back the reset-gpios that I
-accidentally removed?
 
+On 5/7/26 16:34, Paolo Abeni wrote:
+> On 5/7/26 8:54 AM, Simon Schippers wrote:
+>> On 5/5/26 15:21, hawk@kernel.org wrote:
+>>> @@ -928,9 +968,13 @@ static int veth_xdp_rcv(struct veth_rq *rq, int b=
+udget,
+>>>  			}
+>>>  		} else {
+>>>  			/* ndo_start_xmit */
+>>> -			struct sk_buff *skb =3D ptr;
+>>> +			bool bql_charged =3D veth_ptr_is_bql(ptr);
+>>> +			struct sk_buff *skb =3D veth_ptr_to_skb(ptr);
+>>> =20
+>>>  			stats->xdp_bytes +=3D skb->len;
+>>> +			if (peer_txq && bql_charged)
+>>> +				netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_UNIT);
+>>
+>> In the discussion with Jonas [1], I left a comment explaining why I thi=
+nk
+>> this doesn=E2=80=99t work.
+>>
+>> I still think first that adding an option to modify the hard-coded
+>> VETH_RING_SIZE is the way to go.
+>>
+>> Thanks!
+>>
+>> [1] Link: https://lore.kernel.org/netdev/e8cdba04-aa9a-45c6-9807-8274b6=
+2920df@tu-dortmund.de/
+> In the above discussion a 20% regression is reported, which IMHO can't
+> be ignored. Still the tput figures in the data are extremely low,
+> something is possibly off?!? I would expect a few Mpps with pktgen on
+> top of veth, while the reported data is ~20-30Kpps.
+>=20
+> /P
+>=20
 
-Daniel.
+The ~20-30Kpps occur when thousands of iptables rules are applied and
+an UDP userspace application is sending.
+
+And there is a 20% pktgen regression (no iptables rules applied).
+
+I am pretty sure the reason is because the BQL limit is stuck at 2
+packets (because the completed queue is always called with 1 packet
+and not in a interrupt/timer with multiple packets...).
+
