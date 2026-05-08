@@ -1,104 +1,300 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3D0346AC2;
-	Fri,  8 May 2026 07:36:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778225794; cv=none; b=cjPTqEUndN2fs0605peLYGMoUYbJ49QFKEEdgFIkyHS16AEjYrQnJ2WMlPDF5KOw4c5aaTQv9vRQfRfqlmmv7e5U+g2nH2LPfl8gd95xDS6Vc1qoDNcPZLnja167eojTOIJgYdgvths88wY7fpZM5INwuszu9U7DPwou1+U2c4Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778225794; c=relaxed/simple;
-	bh=wGxs+F/+5Vrhuyz2y5uEWLeuFrAw1YPbFSMnjR0PIic=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=Uw2nIhQKOGHTQO5fs4NOlX1R5mnFkEYosIb7PbISOGDyIiuXdMkxZxi3kiTmG6bNiIkSGt0smfKfFSVnnNTcZCM6jDbxrc52ywVm70XkzGEjDPrpxPbliWybQ64ftoZ8e+WvcrOhPN2waoDxz8Ee4kTG3Y3GKRtAofjOWczda88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=z3DRB6ty; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07D54364EB2
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 07:44:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778226258; cv=pass; b=GnmejxiVqeVdbXo0u+8SR7stq+FKgSUPwkvusPV3rsxBD4uAsWgrk2jBDl36621muCHe+tZP/LGkB9xaiSGFVLofz2O3EMDovVwIAl+0j7nBsodj4rdqB9mqdzOKUHfH5gQpgf9eVfl+hW5AYX3z33/YkZTsXYviOAZCmZf7OKs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778226258; c=relaxed/simple;
+	bh=sMkNhibmcIHRkremZT1q3Qua/h7GiOCly5spXEAKDT0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V20ugqQ3t7P+k6POLTUulCvUFqnN4hbcx4N+PCjqD71KIL2D9zc8sugt8EWCTUT51dLg3Te22eVOWnq1JMVUHNNjjuP8hV/Q2fKMkOl7rTdvE5S1tN1cLU2gaApKWrcy8AsmMgMGeOQm2kji/TZ4RiVD7MlxiVQkoIKWweiPKCg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QIloGflp; arc=pass smtp.client-ip=74.125.82.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="z3DRB6ty"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1778225792; x=1809761792;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:references:in-reply-to:to:cc;
-  bh=wGxs+F/+5Vrhuyz2y5uEWLeuFrAw1YPbFSMnjR0PIic=;
-  b=z3DRB6tyv8KeoZxm6uYn9DwwIS/C5DhkLctZhkSIXZQJ0bNcGR6lk8Pd
-   agqWYc8nYpr78VQPVJ2MYeUnsaup2KyieMYrD+sKcfKTEEF+lyHaQud2v
-   TewqVnTI3mbE/XDpTV3wSG43FQcqmon/gy/B+CW3UjL4v1ElnuoM9JK/c
-   hGZa2JA7oSdSxVfAhAYCv8FvgG1AprKS4dzlXQfywn2O7eKFaF8zvzoQu
-   EysLmZLxqvkLeRl9irDYpviIAoZfHinjXXpmB4hINg+DOq9RpzH9j1eOi
-   jiG/gvcJb0C+ln9ycWk8rm2e4SXy5piPedtv59in8xUv6R2/jxcoiiVEA
-   g==;
-X-CSE-ConnectionGUID: Si8tHD4XTWCeQ24m5HJjXg==
-X-CSE-MsgGUID: jKLFif6vSnGtMAwY3BSs3g==
-X-IronPort-AV: E=Sophos;i="6.23,223,1770620400"; 
-   d="scan'208";a="56432180"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 May 2026 00:36:31 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Fri, 8 May 2026 00:36:31 -0700
-Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Fri, 8 May 2026 00:36:27 -0700
-From: Daniel Machon <daniel.machon@microchip.com>
-Date: Fri, 8 May 2026 09:35:37 +0200
-Subject: [PATCH net-next v4 13/13] misc: lan966x-pci: dts: add fdma
- interrupt to overlay
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QIloGflp"
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-130c9dcbd25so2432603c88.1
+        for <bpf@vger.kernel.org>; Fri, 08 May 2026 00:44:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778226256; cv=none;
+        d=google.com; s=arc-20240605;
+        b=fzTEfE8He0z4g3NtVdHUt/DvW97jIj7Uy1OIxZCcTrAqz6Jbyas9x9LlYsVdyb9uZC
+         E35LhvDt9Cw/rRlyqVCytODSCtBEt9fYUWiRsW7+lj81fjBEY8Glb2i1/Z3LrVhZrJ1M
+         W6e/SERN3ag8RxR4vkgwsCC1kTdbDOb1B0btGCTxtr2/2t3rNHw4/C0dKwYCMKM3zErl
+         e9Ubm9pjwQwztWE6Pte/wRJ6DvkQluBPgYzCH5AccAdd+atk7JI7T0o4xMt5IWtHegCm
+         ilcIwbVDUfV0Q6wOKdag2aAREcK4xtRs87ZLQIb/UoZdBSDz/kaeOxSybvX4QQLYySyM
+         3Hbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=pi0joMkG2M93+42Ksix4AKGdNipw+mH9xoz9YwVjrAc=;
+        fh=XtoOfSoVn8e4HrMsXJFLL5qU6kvQQfoXvl8cVh5/6to=;
+        b=EG3eEzxVIKF/b4JJ9yOsz7H6Xzjj7MP+d7cfAEvn2A3U9BwRCBg7Z+2d4UB6MFke2Q
+         pSP+YoZin1nbso3CrZlZlj2yIB3GaVnAxbH0/5NUqik+9hGk/I5/i7l2xGJl2guxJRjg
+         wZFbz85L/twogrxoj3/jvMwden9Tn/CLJErR2tZtq1V6u5NRCJ5XUROfcYuqrAFrfvlw
+         KFm9Mi4r06nIdnCvr+0kjCXwud0LTQ3A72cBcSAlBE2A/xFg6bgB80IfxxMkOxfyoCN8
+         pWozx6m+nzv2rpNf6gzczCCR5h0R2G8suN9mMv9s9ITLZHNl73wEnSGIVLlnGN8pcMx4
+         ongw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778226256; x=1778831056; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pi0joMkG2M93+42Ksix4AKGdNipw+mH9xoz9YwVjrAc=;
+        b=QIloGflpnddVYrXyblUfpne1rXkvZJ7Ub+41ex0XRE0rqj5I8sK0afmQLL0oqYC26K
+         cl7zcNOQ/V2nIv5DOu/dDhWMTciBHtKV14kTK97CAjlMPwkqIhJvApWaPA+TFi33Dpmm
+         xHwG11uO4vxpHNYV9xrtPnCE1ZvQTIjV5cuzazwdC4SHi3IijI5cAj7JpdttePrTWKlI
+         Q6flMBcxDQxl12xYp4LKPS/+MRLAQkWopYhia53an2SWc818DWGYCHWwkTcW2JFO2Jji
+         FDjGmHU9KEub4+BoxQ5318tkaJeMbGrCRD5qnNlTtoeuFUOXhRVLHTR/NoZRfujsiRCH
+         Eblw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778226256; x=1778831056;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=pi0joMkG2M93+42Ksix4AKGdNipw+mH9xoz9YwVjrAc=;
+        b=s3ztnnjSUmf7wxPskwbKfuaRU9gK7Mra+BrVW52/XTxk3f9GdTYjF6LLIV6GFkBQsa
+         ynYcynsy0KVQy2AMf275390YTXvMIc68jS1o93OCFAhsYAyRZTd7CkqRBD6f2f1Do7rn
+         52LY9ApwrjRjwNnV7Be/MpnEi3QKqiiorbOii1htQn+qFxshUN4KzxBD7t6Zgo6XgQJe
+         3D4SoAqZt4w74nmzboaJB9q/Jlzq+/tWRyuMnxxIhCSQD6ds+hpG2Zn0vrIts0tQiGMD
+         amMq3cWpV19fvhYV0+lO3tqx5BmFtCdlriaFIIDUaX7zZywoKaw0Ypl+UKP5W0qL1YqY
+         ySQw==
+X-Forwarded-Encrypted: i=1; AFNElJ8pWIlOWlNMD0rh98siliw/gMGHHHBo1GITKwBlEbZdYVS7EHodZNAUWjBH275eyS5kuvA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUMfB4pi2BMRoy9DR6X2xTARfJx2tn5yj4HihQZMDveN3GIk/J
+	8UroULB6fTVD5DVkqRt9P5my32ncBaQsta4QTiAwTuDB+rL7YrLFoKIrxm8IEcqiTKyKxr5XJ+S
+	jIRArzvJrJfkRTB/tf8z+swjgqi/miA1f6UVJqnbt
+X-Gm-Gg: AeBDievxj8oHMZb2/KSQIXLlFpLb+02GBy4ky4lWPPB89u+bQzaKqpvDs1MzZIzdlwm
+	olwGA6CBRDLVK1/4AJkFfUb6uoGEpJ+F7Ium89+EkYFWd7FeZPnIt32eH1/QzBTxNX92rb0nsl6
+	ZimicLWKzV/y5IaTEDN5gStZFm9tOrch/z5MfTfH94w7i0RUB5tziSXcUjyA50tSgfaOuN4PQRw
+	7imH4n+/ECI2d/GSlllGJDwj8K04slaThfz2YQdXQoJQSk58VmvvBh8ULN2k5T6aODZVUxmi1F4
+	ZQLb5jPPfZKW8ey+Ziv4I4gWZkHUQgvhdjAyPH2r+ecivA+ZRGbC/HR/EyK9tWxNB/QsVIAuuZo
+	zirXL/Obbamf+BAEF2UtO/a9bmrC4L9k=
+X-Received: by 2002:a05:7022:b90:b0:12c:6ebe:b458 with SMTP id
+ a92af1059eb24-1323b0abc56mr2860980c88.17.1778226255338; Fri, 08 May 2026
+ 00:44:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20260508-lan966x-pci-fdma-v4-13-14e0c89d8d63@microchip.com>
-References: <20260508-lan966x-pci-fdma-v4-0-14e0c89d8d63@microchip.com>
-In-Reply-To: <20260508-lan966x-pci-fdma-v4-0-14e0c89d8d63@microchip.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
-	<horatiu.vultur@microchip.com>, Steen Hegelund
-	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
- Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Herve
- Codina <herve.codina@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Mohsin Bashir
-	<mohsin.bashr@gmail.com>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-X-Mailer: b4 0.14.3
+References: <20260507104612.236253-1-jiayuan.chen@linux.dev>
+In-Reply-To: <20260507104612.236253-1-jiayuan.chen@linux.dev>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Fri, 8 May 2026 00:44:04 -0700
+X-Gm-Features: AVHnY4Kf-tKGIUBHz4lbVIHn4sjHfFnnyWpgpskKoutXwyLUklAhJoc7UZz6kIA
+Message-ID: <CAAVpQUA6z4bZVReNDMToRVL1V7xmYg4Tq2YMnWyU8AYXWoeB5A@mail.gmail.com>
+Subject: Re: [PATCH net v7] net: Validate protocol in skb_steal_sock() for
+ BPF-assigned sockets
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	Joe Stringer <joe@wand.net.nz>, Martin KaFai Lau <kafai@fb.com>, Alexei Starovoitov <ast@kernel.org>, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add the fdma interrupt (OIC interrupt 14) to the lan966x PCI device
-tree overlay, enabling FDMA-based frame injection/extraction when
-the switch is connected over PCIe.
+On Thu, May 7, 2026 at 3:46=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.dev=
+> wrote:
+>
+> bpf_sk_assign_tcp_reqsk() can assign a TCP reqsk to a non-TCP skb,
+> causing a panic when the skb enters the wrong L4 receive path [1].
+> An initial attempt tried to fix this in the BPF helper by checking
+> iph->protocol, but Sashiko [2] revealed that BPF programs can bypass
+> this check via a TOCTOU attack by modifying iph->protocol around the
+> call:
+>
+>     iph->protocol =3D IPPROTO_TCP;
+>     bpf_sk_assign_tcp_reqsk(udp_skb, tcp_sk);
+>     iph->protocol =3D IPPROTO_UDP;
+>
+> Furthermore, bpf_sk_assign() has had the same class of vulnerability
+> since its introduction =E2=80=94 it can assign any socket type to any skb
+> without protocol validation.  Since the BPF helper check alone cannot
+> prevent a malicious BPF program from crashing the kernel, add protocol
+> validation in skb_steal_sock() to reject mismatched sockets regardless
+> of how they were assigned.
+>
+> The check is applied to all prefetched sockets.  Early demux paths
+> already only assign matching protocols (e.g., UDP early demux only
+> assigns UDP sockets to UDP skbs), so they pass the check naturally and
+> the extra branch is negligible.
+>
+> Pass the expected protocol from callers rather than extracting it from
+> the IP header.  For IPv6, walking extension headers to find the L4
+> protocol is complex and unnecessary since each caller already knows
+> the protocol it handles.
+>
+> [1] https://lore.kernel.org/bpf/20260403015851.148209-1-jiayuan.chen@linu=
+x.dev/
 
-Tested-by: Herve Codina <herve.codina@bootlin.com>
-Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
----
- drivers/misc/lan966x_pci.dtso | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Why did you drop selftest ?
+Also this patch should go to bpf.git instead of net.git.
 
-diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci.dtso
-index 7bb726550caf..5bb12dbc0843 100644
---- a/drivers/misc/lan966x_pci.dtso
-+++ b/drivers/misc/lan966x_pci.dtso
-@@ -141,8 +141,9 @@ switch: switch@e0000000 {
- 
- 					interrupt-parent = <&oic>;
- 					interrupts = <12 IRQ_TYPE_LEVEL_HIGH>,
-+						     <14 IRQ_TYPE_LEVEL_HIGH>,
- 						     <9 IRQ_TYPE_LEVEL_HIGH>;
--					interrupt-names = "xtr", "ana";
-+					interrupt-names = "xtr", "fdma", "ana";
- 
- 					resets = <&reset 0>;
- 					reset-names = "switch";
 
--- 
-2.34.1
+> [2] https://sashiko.dev/#/patchset/20260403015851.148209-1-jiayuan.chen%4=
+0linux.dev
+>
+> Fixes: cf7fbe660f2d ("bpf: Add socket assign support")
+> Fixes: e472f88891ab ("bpf: tcp: Support arbitrary SYN Cookie.")
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> ---
+>  include/net/inet6_hashtables.h |  7 ++++---
+>  include/net/inet_hashtables.h  |  7 ++++---
+>  include/net/request_sock.h     | 16 +++++++++++++++-
+>  net/ipv4/udp.c                 |  2 +-
+>  net/ipv6/udp.c                 |  2 +-
+>  5 files changed, 25 insertions(+), 9 deletions(-)
+>
+> diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtable=
+s.h
+> index 2cc5d416bbb5..218498373a9c 100644
+> --- a/include/net/inet6_hashtables.h
+> +++ b/include/net/inet6_hashtables.h
+> @@ -106,12 +106,13 @@ static inline
+>  struct sock *inet6_steal_sock(struct net *net, struct sk_buff *skb, int =
+doff,
+>                               const struct in6_addr *saddr, const __be16 =
+sport,
+>                               const struct in6_addr *daddr, const __be16 =
+dport,
+> -                             bool *refcounted, inet6_ehashfn_t *ehashfn)
+> +                             bool *refcounted, inet6_ehashfn_t *ehashfn,
+> +                             int protocol)
+>  {
+>         struct sock *sk, *reuse_sk;
+>         bool prefetched;
+>
+> -       sk =3D skb_steal_sock(skb, refcounted, &prefetched);
+> +       sk =3D skb_steal_sock(skb, refcounted, &prefetched, protocol);
+>         if (!sk)
+>                 return NULL;
+>
+> @@ -153,7 +154,7 @@ static inline struct sock *__inet6_lookup_skb(struct =
+sk_buff *skb, int doff,
+>         struct sock *sk;
+>
+>         sk =3D inet6_steal_sock(net, skb, doff, &ip6h->saddr, sport, &ip6=
+h->daddr, dport,
+> -                             refcounted, inet6_ehashfn);
+> +                             refcounted, inet6_ehashfn, IPPROTO_TCP);
+>         if (IS_ERR(sk))
+>                 return NULL;
+>         if (sk)
+> diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.=
+h
+> index 6e2fe186d0dc..a2a044f93cc4 100644
+> --- a/include/net/inet_hashtables.h
+> +++ b/include/net/inet_hashtables.h
+> @@ -446,12 +446,13 @@ static inline
+>  struct sock *inet_steal_sock(struct net *net, struct sk_buff *skb, int d=
+off,
+>                              const __be32 saddr, const __be16 sport,
+>                              const __be32 daddr, const __be16 dport,
+> -                            bool *refcounted, inet_ehashfn_t *ehashfn)
+> +                            bool *refcounted, inet_ehashfn_t *ehashfn,
+> +                            int protocol)
+>  {
+>         struct sock *sk, *reuse_sk;
+>         bool prefetched;
+>
+> -       sk =3D skb_steal_sock(skb, refcounted, &prefetched);
+> +       sk =3D skb_steal_sock(skb, refcounted, &prefetched, protocol);
+>         if (!sk)
+>                 return NULL;
+>
+> @@ -494,7 +495,7 @@ static inline struct sock *__inet_lookup_skb(struct s=
+k_buff *skb,
+>         struct sock *sk;
+>
+>         sk =3D inet_steal_sock(net, skb, doff, iph->saddr, sport, iph->da=
+ddr, dport,
+> -                            refcounted, inet_ehashfn);
+> +                            refcounted, inet_ehashfn, IPPROTO_TCP);
+>         if (IS_ERR(sk))
+>                 return NULL;
+>         if (sk)
+> diff --git a/include/net/request_sock.h b/include/net/request_sock.h
+> index 5a9c826a7092..3469e4903aed 100644
+> --- a/include/net/request_sock.h
+> +++ b/include/net/request_sock.h
+> @@ -89,9 +89,11 @@ static inline struct sock *req_to_sk(struct request_so=
+ck *req)
+>   * @skb: sk_buff to steal the socket from
+>   * @refcounted: is set to true if the socket is reference-counted
+>   * @prefetched: is set to true if the socket was assigned from bpf
+> + * @protocol: expected L4 protocol
+>   */
+>  static inline struct sock *skb_steal_sock(struct sk_buff *skb,
+> -                                         bool *refcounted, bool *prefetc=
+hed)
+> +                                         bool *refcounted, bool *prefetc=
+hed,
+> +                                         int protocol)
+>  {
+>         struct sock *sk =3D skb->sk;
+>
+> @@ -103,6 +105,18 @@ static inline struct sock *skb_steal_sock(struct sk_=
+buff *skb,
+>
+>         *prefetched =3D skb_sk_is_prefetched(skb);
+>         if (*prefetched) {
+> +               /* A non-full socket here is either a reqsk or a
+> +                * timewait sock, both only contain sock_common and
+> +                * lack sk_protocol. Since both can only be TCP,
+> +                * use IPPROTO_TCP as the protocol.
+> +                */
+> +               if ((sk_fullsock(sk) ? sk->sk_protocol : IPPROTO_TCP) !=
+=3D protocol) {
 
+Please add unlikely() here.
+
+
+> +                       skb_orphan(skb);
+> +                       *prefetched =3D false;
+> +                       *refcounted =3D false;
+> +                       return NULL;
+> +               }
+> +
+>  #if IS_ENABLED(CONFIG_SYN_COOKIES)
+>                 if (sk->sk_state =3D=3D TCP_NEW_SYN_RECV && inet_reqsk(sk=
+)->syncookie) {
+>                         struct request_sock *req =3D inet_reqsk(sk);
+> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> index 0ac2bf4f8759..ceb4d29a64ac 100644
+> --- a/net/ipv4/udp.c
+> +++ b/net/ipv4/udp.c
+> @@ -2618,7 +2618,7 @@ int udp_rcv(struct sk_buff *skb)
+>                 goto csum_error;
+>
+>         sk =3D inet_steal_sock(net, skb, sizeof(struct udphdr), saddr, uh=
+->source, daddr, uh->dest,
+> -                            &refcounted, udp_ehashfn);
+> +                            &refcounted, udp_ehashfn, IPPROTO_UDP);
+>         if (IS_ERR(sk))
+>                 goto no_sk;
+>
+> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+> index 15e032194ecc..d9c12cce5ace 100644
+> --- a/net/ipv6/udp.c
+> +++ b/net/ipv6/udp.c
+> @@ -1106,7 +1106,7 @@ INDIRECT_CALLABLE_SCOPE int udpv6_rcv(struct sk_buf=
+f *skb)
+>
+>         /* Check if the socket is already available, e.g. due to early de=
+mux */
+>         sk =3D inet6_steal_sock(net, skb, sizeof(struct udphdr), saddr, u=
+h->source, daddr, uh->dest,
+> -                             &refcounted, udp6_ehashfn);
+> +                             &refcounted, udp6_ehashfn, IPPROTO_UDP);
+>         if (IS_ERR(sk))
+>                 goto no_sk;
+>
+> --
+> 2.43.0
+>
