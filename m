@@ -1,63 +1,63 @@
-Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
+Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387773F7AA5
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 15:03:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE7913FCB3F
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 15:03:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778252599; cv=none; b=I+A6j4bBXCg89fgpaIQ4cZdnnPlz9ZdKhJ5Rwdi1WjDv+DIwR4z/Cl4imB2ENbJGPoq1aPr/nYhUygvoQQTxGdMqUSSLCMfQzPCL2hU5UvvW73N4lu7uUdh0zvAfgzqvPFKZar3CE9CTTvU2JFTsSJUMl9s49RI89fuEF8Wfrzc=
+	t=1778252617; cv=none; b=bpif26F14m2edHCnxVCd6dwGG1R+/4KwLcyEpU6ofmIOtasHxJ5XlsWSB7MHtzvOyzoDlPkaOVyfaGoNiaQe9u7EZnzBB63wBdPiH+WGDQf2fo0vK4LJ/dZVhOpt4iRb9aevus+hD8E3xLqo18POf9bkRogReWne7vn7xv9Ur9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778252599; c=relaxed/simple;
-	bh=Yc8G/OYaz0np5e+ifQwa6O1CU5HmHo+b4K8v6Tjxvs8=;
+	s=arc-20240116; t=1778252617; c=relaxed/simple;
+	bh=t0Nlu+VexUsTkUu/gem9W65q4/pks24oKx+COgMx/io=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qQ1G7nWZwsZ89vYRJbqObD3jQm/mQcFz19hM0dpg9aM9D8vayqehnrPvTuymE1J7dNn+4QsRyzEQVQqmajd300O4C1zQLA/MQpAdcOUkbq24mjiv4aGG3UPk3AYMivmDNuiNVopY2TvytnGT6nfpt4JH7Lz2zqvg0ubdBdf0sYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iwhlcuSE; arc=none smtp.client-ip=209.85.215.195
+	 Content-Type:Content-Disposition:In-Reply-To; b=JFgvpRwHEFdtuW6za7vIHwZ7rmqI1wS9xEjPdC61bPnQOw0/f5T8oe2pHwnS5FGg3deAMp4byHDOAbv4hPpu20iiSJlAUqwNYzw0xWBUg3/o80hpG1mBXLo4I+2IgU21CgTrWUJ3acE2nnqBz6OGxXjfZiwPfHtLAQQcuNu5m+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M1DV9bSP; arc=none smtp.client-ip=209.85.214.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iwhlcuSE"
-Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-c80148ae949so930979a12.2
-        for <bpf@vger.kernel.org>; Fri, 08 May 2026 08:03:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M1DV9bSP"
+Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2b4583f0a1aso13875595ad.3
+        for <bpf@vger.kernel.org>; Fri, 08 May 2026 08:03:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778252593; x=1778857393; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778252613; x=1778857413; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OCvkvD50FsVxDN97c8Hp0jXUGucP6UrrTJOe2Js6aRE=;
-        b=iwhlcuSE1RFQW2tMj7c6OHS86RYq0Cr8bopzDoWjdgEhNUOx91pEsF8qHLVtRoYcpX
-         toDk8UOGhdVxf9rWykP63/iEbJY0DCENeha6M0qNKzWdhB8uHse6vuj7omiMm1xbPzhf
-         diAn5UqdUa5AiqVush6Ex/+pFWzc3Hp6J2mvNO/KZa6jj930gJ0w4gSYuJVWFs5RAIMR
-         dGvAt4A1Cm06wdzEsAlmWhtrKhn0lK7euxhaaBB4EgQfcdMAMqN63yyYmfKs4L7s5rA/
-         lUkUdTkx52qH0L1z6gQ19mJJ/hFM/sdw/C8NEQFHJgXBy6qKO4bjXgylqqitjrKLaQVe
-         xrIw==
+        bh=v4XSckC+6HeNNAT2ObXLyFDVqOgPjF3vQM49fr0+IcA=;
+        b=M1DV9bSPdIpo1HCzS+chpKLRw9yZEaLHH4hWt/8vF7kwxIMdWiQ56TFDetp2fD3dHK
+         R0u+n+5f4iBWZtmqUudWXsg0H8PaVHkUHak4NyF4Yl/tD9W5Q83ulCRhidXVrpgwF1zy
+         OxnEv1kIXlzfCWOaLDPy/oadOs/Vnb/U/6AFDW6eOaaZEx/e9U2TiiVYVT0MOCDY7TlL
+         C5LkiulOrgIE+dbWiLgv+jXSyxNRbrdi7pje/7CMtnoub8nb+Fa/L6vaaBQZ9ozgoVvQ
+         9Ia6bUMPwXknOYTSdI9JX8ETBTps+Uue9bS/EYFde3ymahVl65AjQ81p4ufqD8Cn23Aq
+         FXjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778252593; x=1778857393;
+        d=1e100.net; s=20251104; t=1778252613; x=1778857413;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OCvkvD50FsVxDN97c8Hp0jXUGucP6UrrTJOe2Js6aRE=;
-        b=VSZ7WQEnIs9X22t+3ezDSRShhwgZU2Dgwr3t+/51q8O8WHQgR58Z68MlrIj9hYFO9k
-         pM98pGb44rNcSdOYPbhQFGE4zEab9t1i0TRNBghUHgN+1LIliUrum6oLKyoML2wFE0Ql
-         VRJhshBlZijJbSPXgPGIo3wvEZKoepHME5s6T1USVpkQAF2HmJHxP9UgR9atvZyN2dQc
-         8QVCiIcZbLbJNPQtlGwBr+UQcuE97iYNEYQno9xHyPuZrtqSuAiqN3M8hUd0ERQ8Ax2m
-         TYR1oj9Gvr/V84Ura9OSzV4dGQ5j3MKJeAKDImDCk4suQYxHyYQneB61ueElcx0Q460h
-         dxHQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8NMhb87zpZIkKYmB7XPffGGj+EuU/olRbYt4DidHMxiHtxtCmIrAoqrr9evFCKhqpAtVM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmTd2pOJQl9/nO+6UvIprEczgwe5gwi5wIyA279T27Ev5b8+NB
-	EOqa8sUokOiGDjCT1S+uYyoEwcCAivG0MMPBlXBIYEwgE8UOG3OyUvQO
-X-Gm-Gg: AeBDievFARdwOV1NtHh3CEa0Np/CrWKsriPiHbbTNkeBPTkmttP+fw+KmwY8X20vtTv
-	afUdAGoSiK3v0Gh1BPaMQVEgYXmGyTwY+8rnHMTJSrOSiyvZyU7Zv6RZcok78dyOcCPIQWnaAOa
-	CcIMdOZaFBRGm/1PSOqjYr9J4u4Cd0OINMHOGx5bEDzYNIb1dcVKeRSQ9cRhKkLSNX3+df2nzk/
-	XoPUU5tXbxd6ausMGr5Rg86BAhgqRFlGDfFfBflkWOZv3g3ondv3l7jaZJl1pZNwoJ1ejzog0Mj
-	uh5yGV0HOguqgCXU9Bgwj4FfvRh9SsxT1aDTzA5sMLNnaYrcS7yJSdaq75Zj9FqAJWf+hPecoWB
-	giwUiziW6uA2sPA78QOvvC2HwM5CdvKSeApHDgIVhQhvPXsX5gFS1zWwRmpu3KT3HeNEV3OdHN9
-	3jKeJ4r2SBne2tIQ1U
-X-Received: by 2002:a05:6a20:244d:b0:3a3:a69c:216e with SMTP id adf61e73a8af0-3aa5ac23e75mr14422053637.38.1778252592814;
-        Fri, 08 May 2026 08:03:12 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:48::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8396594645csm13180339b3a.14.2026.05.08.08.03.11
+        bh=v4XSckC+6HeNNAT2ObXLyFDVqOgPjF3vQM49fr0+IcA=;
+        b=UXJd1VuEEm3st6f86AjnGC9Ta9bg4j0O4ExcM0pqa+YzlFGYuYyCgNf2XsE5VIby4Z
+         E1R3qWo7pbkIFQSm7Nk8H05FAxVYHBM9d8go3n/6iMDDJ5Reqfp5fVC/xoT8QRYyceYg
+         hJrfeTRSab03zOcpxfpBxPtcwm5v6EXt7ECvGD54hA3hmCf1A+pnPVblootUjDYsVAGF
+         TKhI2b+AEWbhWhIc4JmeoSzyP0gox8Iiy7goO10EEMblaQmmaz5U+743Xs3rTIOCv6qM
+         TTHzvPgjYIxYH8hYcV+pOIaJb2Bi20TRghSxa9xeA9JsMUmo9f0jvyIr2DWK9cIMJZpB
+         dtKg==
+X-Forwarded-Encrypted: i=1; AFNElJ+0O1eDlEILTmCmB9yxRuMJYR2t9VslO1TOlSwGxelZ0vWbcEzIXJyDKtUCLesfTovFdbA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzddNxr79VIBfupbrWRHAyuXFqmCpx1HJmxuAoOSpY5BhSbZmI
+	mmvOGqkG6TYgRSTu+kNgrPu9PPagoMYIaHEbbMHQGHuJ0QoIxp+OFveR
+X-Gm-Gg: Acq92OG/0MoDnvS1qNrsuB/dqaTsMELe3/Gbk2rbaqqaCm9H1k/Wj4TbDZ8xVijuMqD
+	lMK6j4BzCpqPhAqhs7z4tppH5g7HyL11G3I6x+PZuuB9Af/NK6k03M1BEltn45wtcUyhhmunQ1Z
+	1X04o/ZupbWvHG8dg/xAFS2KZ0uMzRQMrSh96T7qSWhKPuLjUFFv4UPFLc9uEskXlu3uaa8U4Ii
+	qt9VaZTFiU6E87R8YWeBxE85M1uguUbEcXvk7lgD6J4+WqSSAE5AgB/Gpf2cJ9JX/6Gi4hvu8ye
+	dPj9crDDJN6zeoyAvRkBpXrCaq2eCOYnvUiD2e9W8IGcHQ32KqagCgJThZdtmWn4PcjXou7HxfA
+	tPwrJcJij737LcbzWh26KymPCqWwRddHQwiN4AxvDH4Vp4BE1UXTdt1rMOED5QmrYvqaUZrjCSZ
+	CR
+X-Received: by 2002:a17:903:4b0d:b0:2b0:bed1:46f7 with SMTP id d9443c01a7336-2ba799d5f4dmr143685845ad.37.1778252613411;
+        Fri, 08 May 2026 08:03:33 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:4::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1ecc4bbsm24477685ad.84.2026.05.08.08.03.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2026 08:03:11 -0700 (PDT)
-Date: Fri, 8 May 2026 08:03:11 -0700
+        Fri, 08 May 2026 08:03:32 -0700 (PDT)
+Date: Fri, 8 May 2026 08:03:32 -0700
 From: Stanislav Fomichev <sdf.kernel@gmail.com>
 To: Bobby Eshleman <bobbyeshleman@gmail.com>
 Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -77,11 +77,11 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
 	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	Stanislav Fomichev <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, 
 	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v3 6/8] selftests: drv-net: refactor devmem
- command builders into lib module
-Message-ID: <af37Eoq2TLjhI7kx@devvm7509.cco0.facebook.com>
+Subject: Re: [PATCH net-next v3 7/8] selftests: drv-net: add
+ primary_rx_redirect support to NetDrvContEnv
+Message-ID: <af37O7TXJm9wPl1h@devvm7509.cco0.facebook.com>
 References: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
- <20260507-tcp-dm-netkit-v3-6-52821445867c@meta.com>
+ <20260507-tcp-dm-netkit-v3-7-52821445867c@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -90,43 +90,27 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260507-tcp-dm-netkit-v3-6-52821445867c@meta.com>
+In-Reply-To: <20260507-tcp-dm-netkit-v3-7-52821445867c@meta.com>
 
 On 05/07, Bobby Eshleman wrote:
 > From: Bobby Eshleman <bobbyeshleman@meta.com>
 > 
-> Adding netkit-based devmem tests is a straight-forward copy of devmem
-> test commands plus some args for the nk cases, so this patch breaks out
-> these command builders into helpers used by both.
+> When sending from a namespace that has access to a netkit device with a
+> leased queue, the nk primary in the host namespace needs to redirect its
+> RX to the physical device. This patch adds that redirection bpf program
+> and teaches the harness to install it.
 > 
-> Though we tried to avoid libraries to avoid increasing the barrier of
-> entry/complexity (see selftests/drivers/net/README.md, section "Avoid
-> libraries and frameworks"), factoring out these functions seemed like
-> the lesser of two evils in this case of using the same commands, just
-> with slightly different args per environment.
+> Add primary_rx_redirect=False parameter to NetDrvContEnv.__init__().
+> When enabled, _attach_primary_rx_redirect_bpf() attaches a new BPF TC
+> program (nk_primary_rx_redirect.bpf.c) to the primary (host-side) netkit
+> interface. The program redirects non-ICMPv6 IPv6 packets to the physical
+> NIC via bpf_redirect_neigh(), with the physical ifindex configured via
+> the .bss map. ICMPv6 is left on the host's netkit primary so IPv6
+> neighbor discovery still work locally.
 > 
-> I experimented with just having all of the tests in the same file to
-> avoid having helpers in a library file, but because ksft_run() is
-> limited to a single call per file, and the new tests will require
-> different environments (NetDrvContEnv/NetDrvEpEnv), it would have been
-> necessary to have each test set up its own environment instead of
-> sharing one for the entire ksft_run() run. This came at the cost of
-> ballooning the test time (from under 5s to 30s on my test system), so to
-> strike a balance these tests were placed in separate files so they could
-> keep a shared environment across a single ksft_run() run shared across
-> all tests using the same env type (introduced in subsequent patches).
-> 
-> The helpers work transparently with both plain and netkit environments
-> by inspecting cfg for netkit-specific attributes (netns, nk_queue,
-> etc...).
+> Extract _find_bss_map_id() from _attach_bpf() into a reusable helper so
+> other BPF attachment methods can use it.
 > 
 > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> ---
-
-[..]
-
-> Changes in v4:
-
-This is a v3, but you already have changes for v4 :-p
 
 Acked-by: Stanislav Fomichev <sdf@fomichev.me>
