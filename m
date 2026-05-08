@@ -1,103 +1,257 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE6743CCFA8;
-	Fri,  8 May 2026 16:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1A330EF97
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 16:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778256353; cv=none; b=JGVtiVFFcsTCbNTJjtX7dft3ctZDR8YVLYKp3HiA8q1UEJq2P9htqIPeQenqB/Y2B42o9JH6Y8ljOcnLXsUlicN9rhRwNocF/8kiLw/m6S2LiIT7poBhRPLJU1rXFRjwwW2mQKOrRvOZDpZUwOQlvIdvmcSgIS+tBH6BAooGWOo=
+	t=1778256682; cv=none; b=ByamOYnt3sqyH7bAmHm7cpQKD8YksFhkDtmjDY1+/UBzwJb4TaJwO28mqwNMFft1Urmb78AO1ENGQo60d3Cc2bC+b/f/BFhtkt5NUg71205/FB5OgZeV5VNjSdMRiQUalNNvuk5glgmkE4l2x2p7DpLM6IHJ606eu0p+7aolxmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778256353; c=relaxed/simple;
-	bh=N6wtEE3PduSsyFFmtTroeuF5GQfkGRx/69RZSt8G8FU=;
+	s=arc-20240116; t=1778256682; c=relaxed/simple;
+	bh=H6Z+8CT3KjwWjNMFY6XYXNpX9S3GKUwrUsjc+V6VlCE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n2fNqTMMStwcH6dkloaBJrn0sTt2VEkbYW8k77xhlgltPgzhWOD8zeP3NmVmQsR9Iq17sRkODdcDlvp4rP2FW6ks36kKm25qaFpka0xAW15uS2odbslcqfaVz4csCAsoR0R8ncwL6bhMfVPiO47HGXzUONMxDMEa1cczzvrBX6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m3/pKqOi; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=lk+OX9umkJHZL0zeHRwQTo9/9CJJKBxhkZdZoLF0Qvhyohfzf7jaCiHC+PDpnqirIigvcEW/3M+d419YPTN+t0K0ua+20G9gmRCy0d5wSrpkqc7KQqpQX38WehWc8sGaTr5eO0WT2fsV3FIGNGDjlDaxH2+3KDW41W/RpBqjZuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GqbVe/7Y; arc=none smtp.client-ip=209.85.222.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m3/pKqOi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BC14C2BCB0;
-	Fri,  8 May 2026 16:05:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778256353;
-	bh=N6wtEE3PduSsyFFmtTroeuF5GQfkGRx/69RZSt8G8FU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m3/pKqOillhmU0om7DrpVyPKG/dmMI24o58/3HQ/JTFQMn9+LrT98y4BtDLo++vh2
-	 ghgQXni+HXAPmitwFMLTFVaiBVcH0uTuL6ePmoo3FCh3QhOQeUmfOJeWODnlvz/twm
-	 uDrfKf8VsUN93OjHCaxdeeWToshO7be1oCC+OThQCP1elhjn+18/uAmc+QOQzzGNRS
-	 9g4o4SsozH1OggXqDb6nuckfaYib/1TJf8vgF2okDqT6GzrO/VuOs782Emfo2sf2AC
-	 spGAfVI7JUBhQmWe6J0rVBKnHRZV3ZAepikc8s1qiTTwblJi+5w7uIvvhyln65x+x1
-	 hIN+YaU7zPvQw==
-Date: Fri, 8 May 2026 17:05:45 +0100
-From: Lorenzo Stoakes <ljs@kernel.org>
-To: Vernon Yang <vernon2gm@gmail.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, roman.gushchin@linux.dev, 
-	inwardvessel@gmail.com, shakeel.butt@linux.dev, ast@kernel.org, daniel@iogearbox.net, 
-	surenb@google.com, tz2294@columbia.edu, baohua@kernel.org, lance.yang@linux.dev, 
-	dev.jain@arm.com, laoar.shao@gmail.com, gutierrez.asier@huawei-partners.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
-	Vernon Yang <yanglincheng@kylinos.cn>
-Subject: Re: [PATCH v2 0/4] mm: introduce mthp_ext via cgroup-bpf to make
- mTHP more transparent
-Message-ID: <af4IEwbAAIYUH0z9@lucifer>
-References: <20260508150055.680136-1-vernon2gm@gmail.com>
- <af376QFXC36uf7kp@lucifer>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GqbVe/7Y"
+Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-95cd9bc6398so1335328241.3
+        for <bpf@vger.kernel.org>; Fri, 08 May 2026 09:11:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778256679; x=1778861479; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6vdBcradM8S03iinDWnSXeMPjIWLpbzTHbnVlnltxq4=;
+        b=GqbVe/7YgabRsfx+ARki2K+jqMFHzQAg5niJlng8/wpcze/h3pTF4SoatmMJPyHB7D
+         /qNTHu1lVyE7mH9yKgbdm4ooIC2WUCq3XMpaXC6iH4j5k/vDldGibNvEIqbVNdLxqiPi
+         YH9fqJiGwTGW11itHd7LpOvvPKE1KAXrZK+HUNX6ClakxuHMEw1TnirPzvAhClx7ngGa
+         QtNxIliGYzFR29HuAe1iYaPfpSiaUrMr4e92u35Ne0L/R9XWJpz7nJxbNXKfGFNmiofw
+         QuowoaDCgsZ7lo7H+UD3MPNCMkZKODcRWgr3UT8n2AnLaBFagpAprzK5tjrQKe1dT9Kj
+         d1Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778256679; x=1778861479;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6vdBcradM8S03iinDWnSXeMPjIWLpbzTHbnVlnltxq4=;
+        b=KMOdisdIOagZFjQynrdeva3bUGY2xlcBLDdlUXPWRwTjgMeYT1BBvpHzK7G7V6bXTt
+         8rW7/CiKvxxKY1H4B6mAaQY/kr3hFFvIpQxTkwl37G77QRfR/WlfAdp/ZKrZ6tDQh7aw
+         8Qz2fSku05nETNymSfP9EKW7CjDQoE9D1qhcoSiwOeGdPrQAvWWLnLQF778TyTAzFqXa
+         dbkELIHivX69g/+gPf8Ik4lD+aLlSsuTyvrCPum3y3JCEfR/qYFKGityyBOSInuUZUf7
+         HIWC0roriyRR+kzDtMWSb8b2Us8Fv+uZVG9yg+q0+yKjhR5posx3LT1OMzPwtG22gAPZ
+         xh0w==
+X-Forwarded-Encrypted: i=1; AFNElJ/ouemZ705XlB8P2HwEdvRtIoyu4GktarLklOAk8E48G10ShBXBcEty1+RMfZSL7RKCJQE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/wTkLWrxS6QF5CE6we5eOFcAqs++I2ts84H3EoIHB4YvTk4Dy
+	QLjTA8EhO1QZDzSlGWnkxoi15bXBDFiYZSNCjMejsUOm/95FekcY3sIB
+X-Gm-Gg: Acq92OFZoZUsGC/GU3ErqmWboBFuRp+45k0WIxG5Pp+iqxAy0v+wAuRGHwFkDQEyU4w
+	RBkFGu2wrg4L9nzMQYYUN9rL695eptgnrS3p/rNXYX3xtC53LC+BzwQLwrK1pg3arHVUmOLLD5N
+	zqRvtjJGFmM/xrstNmLP3yBRTcwe/hQRxYfOvyJBbVSCENEm9H5EdHwrJInwc1V/4V2reWv5EwZ
+	uw01y5Uvt2BykJaKGsomCYHOs3ut1+hykpAX6Li3P2kZ/VbB9FwEHCv1ikwvnaBkWibns2NdhD5
+	HIlsqLuhkYaGawZrkLv6Vg6+fs7QtDTTirWZCaYRw73rbGkiORgf7z7CNyhscRFM6asF6DDV1IX
+	9jTOFarRSXmMEOKJ9uT8V2zzEMyKFYcd42QK1RxIgUzRRkUzEo9Q3vQLQo3NTdN0nHtg0Wi++7m
+	/u9TAfd6MGYJaxbAPMOinki022qSKz8+7m9KQFkZm/k0dYtnY=
+X-Received: by 2002:a67:e114:0:b0:631:4e9a:ba3 with SMTP id ada2fe7eead31-6314e9a142fmr1065827137.21.1778256679486;
+        Fri, 08 May 2026 09:11:19 -0700 (PDT)
+Received: from devvm29614.prn0.facebook.com ([2a03:2880:f800:35::])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-907b8bae450sm239133785a.21.2026.05.08.09.11.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 May 2026 09:11:18 -0700 (PDT)
+Date: Fri, 8 May 2026 09:11:12 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>,
+	Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Joshua Washington <joshwash@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Shuah Khan <shuah@kernel.org>, dw@davidwei.uk,
+	mohsin.bashr@gmail.com, willemb@google.com, jiang.kun2@zte.com.cn,
+	xu.xin16@zte.com.cn, wang.yaxin@zte.com.cn, netdev@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Mina Almasry <almasrymina@google.com>,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v3 1/8] net: convert netmem_tx flag to enum
+Message-ID: <af4LILMY6qEav7Ul@devvm29614.prn0.facebook.com>
+References: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
+ <20260507-tcp-dm-netkit-v3-1-52821445867c@meta.com>
+ <af35ekIjYDXIDWVR@devvm7509.cco0.facebook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <af376QFXC36uf7kp@lucifer>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <af35ekIjYDXIDWVR@devvm7509.cco0.facebook.com>
 
-On Fri, May 08, 2026 at 04:15:04PM +0100, Lorenzo Stoakes wrote:
-> Thanks for the series, but overall it's got to be no to this until THP and mTHP
-> are in more stable shape.
->
-> And this is an RFC, you're trying to make really fundamental changes here, it's
-> almost... rude to do that out of the blue non-RFC'd (unless you're a maintainer
-> perhaps).
->
-> Right now the THP code base is a total mess and mTHP support is not even
-> properly merged yet (khugepaged support outstanding).
->
-> BPF interfaces are permanent, we've tried the 'experimental' thing before, it
-> doesn't work and we'll not be able to yank it later.
->
-> I've said it before, but we really truly need to get THP into better shape
-> before we can tolerate large new changes, let alone an user-exported interface.
->
-> So can we defer this until we're in better shape, and then send that as an RFC
-> first please?
+On Fri, May 08, 2026 at 07:56:42AM -0700, Stanislav Fomichev wrote:
+> On 05/07, Bobby Eshleman wrote:
+> > From: Bobby Eshleman <bobbyeshleman@meta.com>
+> > 
+> > Devices that support netmem TX previously set dev->netmem_tx = true.
+> > This was checked in validate_xmit_unreadable_skb() to drop unreadable
+> > skbs (skbs with dmabuf-backed frags) before they reach drivers that
+> > would mishandle them or devices that would not have the iommu mappings
+> > for them.
+> > 
+> > A subsequent patch will introduce a third state for virtual devices
+> > that forward unreadable skbs without ever performing DMA on them. To
+> > prepare for that, convert the boolean dev->netmem_tx into an enum:
+> > 
+> > NETMEM_TX_NONE   - no netmem TX support (drop unreadable skbs)
+> > NETMEM_TX_DMA    - full support, device does DMA
+> > 
+> > Update the existing NIC drivers (bnxt, gve, mlx5, fbnic) and the
+> > validators in net/core to use the new enum. No functional change.
+> > 
+> > Acked-by: Harshitha Ramamurthy <hramamurthy@google.com>
+> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> > ---
+> > Changes in v3:
+> > - Split NO_DMA changes into subsequent commit (Jakub)
+> > - Move !netdev->netmem_tx -> netdev->netmem_tx ==
+> >   NETMEM_TX_NONE conversions to this patch (Jakub)
+> > 
+> > Changes in v2:
+> > - Squash driver conversion patches (2-5) into patch 1 (Jakub)
+> > ---
+> >  Documentation/networking/netmem.rst                    | 5 ++++-
+> >  Documentation/translations/zh_CN/networking/netmem.rst | 4 +++-
+> >  drivers/net/ethernet/broadcom/bnxt/bnxt.c              | 2 +-
+> >  drivers/net/ethernet/google/gve/gve_main.c             | 2 +-
+> >  drivers/net/ethernet/mellanox/mlx5/core/en_main.c      | 2 +-
+> >  drivers/net/ethernet/meta/fbnic/fbnic_netdev.c         | 2 +-
+> >  include/linux/netdevice.h                              | 8 +++++++-
+> >  net/core/dev.c                                         | 2 +-
+> >  net/core/netdev-genl.c                                 | 2 +-
+> >  9 files changed, 20 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/Documentation/networking/netmem.rst b/Documentation/networking/netmem.rst
+> > index b63aded46337..5ccadba4f373 100644
+> > --- a/Documentation/networking/netmem.rst
+> > +++ b/Documentation/networking/netmem.rst
+> > @@ -95,4 +95,7 @@ Driver TX Requirements
+> >     netdev@, or reach out to the maintainers and/or almasrymina@google.com for
+> >     help adding the netmem API.
+> >  
+> > -2. Driver should declare support by setting `netdev->netmem_tx = true`
+> > +2. Driver should declare support by setting `netdev->netmem_tx` to the
+> > +   appropriate mode:
+> > +
+> > +   - `NETMEM_TX_DMA`: for physical devices that perform DMA.
+> > diff --git a/Documentation/translations/zh_CN/networking/netmem.rst b/Documentation/translations/zh_CN/networking/netmem.rst
+> > index fe351a240f02..9c84423b7528 100644
+> > --- a/Documentation/translations/zh_CN/networking/netmem.rst
+> > +++ b/Documentation/translations/zh_CN/networking/netmem.rst
+> > @@ -89,4 +89,6 @@ dma-mapping API 去处理。
+> >  使用某个还不存在的 netmem API，你可以自行添加并提交到 netdev@，也可以联系维护
+> >  人员或者发送邮件至 almasrymina@google.com 寻求帮助。
+> >  
+> > -2. 驱动程序应通过设置 netdev->netmem_tx = true 来表明自身支持 netmem 功能。
+> > +2. 驱动程序应将 `netdev->netmem_tx` 设置为适当的模式：
+> > +
+> > +   - `NETMEM_TX_DMA`：适用于执行 DMA 的物理设备。
+> > diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> > index 8c55874f44ca..ed9c22dc4a5a 100644
+> > --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> > +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> > @@ -17120,7 +17120,7 @@ static int bnxt_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+> >  	dev->queue_mgmt_ops = &bnxt_queue_mgmt_ops_unsupp;
+> >  	if (BNXT_SUPPORTS_QUEUE_API(bp))
+> >  		dev->queue_mgmt_ops = &bnxt_queue_mgmt_ops;
+> > -	dev->netmem_tx = true;
+> > +	dev->netmem_tx = NETMEM_TX_DMA;
+> >  
+> >  	rc = register_netdev(dev);
+> >  	if (rc)
+> > diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
+> > index 424d973c97f2..dd2b8f087163 100644
+> > --- a/drivers/net/ethernet/google/gve/gve_main.c
+> > +++ b/drivers/net/ethernet/google/gve/gve_main.c
+> > @@ -2894,7 +2894,7 @@ static int gve_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+> >  		goto abort_with_wq;
+> >  
+> >  	if (!gve_is_gqi(priv) && !gve_is_qpl(priv))
+> > -		dev->netmem_tx = true;
+> > +		dev->netmem_tx = NETMEM_TX_DMA;
+> >  
+> >  	err = register_netdev(dev);
+> >  	if (err)
+> > diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> > index 5a46870c4b74..fc49aae38807 100644
+> > --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> > +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> > @@ -5924,7 +5924,7 @@ static void mlx5e_build_nic_netdev(struct net_device *netdev)
+> >  
+> >  	netdev->priv_flags       |= IFF_UNICAST_FLT;
+> >  
+> > -	netdev->netmem_tx = true;
+> > +	netdev->netmem_tx = NETMEM_TX_DMA;
+> >  
+> >  	netif_set_tso_max_size(netdev, GSO_MAX_SIZE);
+> >  	mlx5e_set_xdp_feature(priv);
+> > diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
+> > index c406a3b56b37..138e522ef9b9 100644
+> > --- a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
+> > +++ b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
+> > @@ -752,7 +752,7 @@ struct net_device *fbnic_netdev_alloc(struct fbnic_dev *fbd)
+> >  	netdev->netdev_ops = &fbnic_netdev_ops;
+> >  	netdev->stat_ops = &fbnic_stat_ops;
+> >  	netdev->queue_mgmt_ops = &fbnic_queue_mgmt_ops;
+> > -	netdev->netmem_tx = true;
+> > +	netdev->netmem_tx = NETMEM_TX_DMA;
+> >  
+> >  	fbnic_set_ethtool_ops(netdev);
+> >  
+> > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> > index 0e1e581efc5a..580bccb118a0 100644
+> > --- a/include/linux/netdevice.h
+> > +++ b/include/linux/netdevice.h
+> > @@ -1788,6 +1788,11 @@ enum netdev_stat_type {
+> >  	NETDEV_PCPU_STAT_DSTATS, /* struct pcpu_dstats */
+> >  };
+> >  
+> > +enum netmem_tx_mode {
+> > +	NETMEM_TX_NONE,		/* no netmem TX support */
+> > +	NETMEM_TX_DMA,		/* DMA-capable netmem TX (real HW) */
+> > +};
+> > +
+> >  enum netdev_reg_state {
+> >  	NETREG_UNINITIALIZED = 0,
+> >  	NETREG_REGISTERED,	/* completed register_netdevice */
+> > @@ -1809,7 +1814,8 @@ enum netdev_reg_state {
+> >   *	@lltx:		device supports lockless Tx. Deprecated for real HW
+> >   *			drivers. Mainly used by logical interfaces, such as
+> >   *			bonding and tunnels
+> > - *	@netmem_tx:	device support netmem_tx.
+> > + *	@netmem_tx:	device netmem TX mode (NETMEM_TX_NONE or
+> > + *			NETMEM_TX_DMA).
+> 
+> 
+> nit: if you happen to repost, listing enum values here seems too much?
+> 
+> "device netmem TX mode" should be enough
 
-Yeah on second thoughts, NACK and don't send this series again please.
+Will do!
 
-I was already annoyed you'd send something this invasive and massive without an
-RFC, but you've also ignored the feedback we gave to the last THP BPF series
-while ostensibly claiming to have taken it into account.
-
-And then... I mean seriously... _shamelessly_ trying to take control away from
-THP maintainers and reviewers who work bloody hard for this community by parking
-code that changes mTHP behaviour in an entirely distinct and unrelated
-MAINTAINERS section...!
-
-There's a biweekly THP cabal meeting which you didn't raise this in, you didn't
-bring this up at any conference, you didn't send an RFC.
-
-You've sent it too before we even have mTHP khugepaged support merged... or have
-really stabilised on how mTHP is supposed to work overall.
-
-And also I have made it really abundantly clear that I want to see the technical
-debt _paid down_ before we add anything else major.
-
-And as if that wasn't enough, AI review is finding endless problems with this
-series on top of all that.
-
-This is NOT how to engage with upstream. Again, please don't send any more
-revisions of this.
-
-And next time _engage with the community_ before proposing something this big. A
-[DISCUSSION] email, or an RFC, or in a meeting or at a conference, or even
-off-list or on-list mail, something.
-
-Lorenzo
+Thanks,
+Bobby
