@@ -1,66 +1,65 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7ED13A8746
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 23:05:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B87D38F230
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 23:07:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778281545; cv=none; b=nwSXRBWX4B+1uB0IRMmJD5FZx05Q+Zz9N/PPmvew3mTbbuHV29abGnRmrC/qGNJqQLSIVtDE/pp+1P3PnUscqocJ6i8zNIgyLbwCPJhD35PIea5adkZ01I++V8wQPszAGtHohTGHAMzEzY0Kv8d4L1L1noZi8dRTi4YM3V8NqC8=
+	t=1778281650; cv=none; b=Dxih4sx6LacjEDGPPvFLFLICEmCLuEvvQ/lVqnPh+E8J1euaiv/0KkYVvVU+RS3cU0IC5dZkSWr/cpB8cZEC1mksHAG1oq8qdR7HhJ06NzSVPmj6KLhEL4SQjZVBp3BU2gdaABtgtATulAS0bPe2ObGHG05mjaeyg4Tom1ZGJWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778281545; c=relaxed/simple;
-	bh=BIZ2DEmxQNMSyJO0c3JrhwGrmW3VPJQHd2yM8ypX9H0=;
+	s=arc-20240116; t=1778281650; c=relaxed/simple;
+	bh=O66MVGU3QDL+Cy3akNBxytOM3P+XmOPScObecOW3hrg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZNaoiRCEutTdW2u8wU3J0g8RKmjKf8GJYK4Mxl238ot9j8WQIaMOGb1T5p5Y38HwGq5LK3ROBV0rVbrITWY/mCl/ismZ49jFbDBZMDsR94ZV6QHMPARHoUhOnUZMgh/yDry0JzMqkox3Ano3kTKCLoE4RdMJqpnz9sLZ5qSJ8f4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R6GyuS7N; arc=none smtp.client-ip=209.85.210.178
+	 In-Reply-To:Content-Type; b=oNpssJ/MRyhmLc/ovPm1Ee0Ys468bWyjp68CHYjVnTaw66uVU69f2FCzXVgTi6l0q5zDIk90IhBc2BVt45gmemnwiw4BMHv+rskwDXVpG4Fd803eKxEu4edolhRGYU6djL5umM1yEDytcOCmPsuCQItm+2CxeHNaJfREmYuR7+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Opt3hDoX; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R6GyuS7N"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-83537a80ab6so1636601b3a.1
-        for <bpf@vger.kernel.org>; Fri, 08 May 2026 16:05:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Opt3hDoX"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-834da62e52dso1153889b3a.3
+        for <bpf@vger.kernel.org>; Fri, 08 May 2026 16:07:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778281544; x=1778886344; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778281649; x=1778886449; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xeg4ZJJWFuOVqx92VARGZStirf6XOw1xwpYmdyHRQSw=;
-        b=R6GyuS7NH5w1tRK69EEPkCAZXu3zMimFJca11xMmMfI4uGjQBY0LHwv69zIUxZsASa
-         mfa4piX9WCP9l1slg+0Q3NB/MahXsn8Wn+Y+b2Ic0DMkjzP+FqfqnfjmE8otcpQ6Gg77
-         hE1FUwcWY4bbRdbOJV5ZK3DZ7H9eKI6rNeMcMjaaCxwWrxR7pwE7G0T+a7KluFOc6j20
-         yKc2nBxIZ5V8Xk+TH5y189AZx9TVvmE8S2699rswrJCYBZj0A5DiaWw0rmQiPZOR3YGw
-         6uFs1L7wDkjQChH4xRcM3mqscI3Th/tLHBY9DWCehc8I7j1QWOicFcMinq1G7HcSk4Wc
-         ovtQ==
+        bh=J/InWrOUOchm9lydjp+lzNN+EzfH6qLQxojHmTQooTE=;
+        b=Opt3hDoX/XAFfIw8ewzmF+CpDIEXJidFDYd6iImw+JICCtAhFcrqxE+1SVzwIdqch9
+         qg4WZ0mJEmdeiOSmf9n64ydILETDwpNcPCGdS4AGUjI2ARvQY2kWiEkWPIrHab5q+eli
+         Rd0Bmko6/AWr6fXZBHhfKbVbg3v0kYvXpoP90or0ua0/mzkTKza2EVM+49onPx4cv31a
+         r6kdTGoJ/2VdIHraqe/VJGOeV6Yf2TVUqr9ygPTxWBGoVWT+NwmIxJoDDEML9EPe5PGg
+         eKPYMhtFT7Fnm8xPoHQ5BnKquQCPIDKro2VRRAiaoxJjziTmV3ATFne5vPKlwsnb0n96
+         WFkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778281544; x=1778886344;
+        d=1e100.net; s=20251104; t=1778281649; x=1778886449;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Xeg4ZJJWFuOVqx92VARGZStirf6XOw1xwpYmdyHRQSw=;
-        b=IwFTfxN6jMuY/X5Ci0M37kKYxJ88oBdf5oil7X4uupFmS3tiJHKR+X/px43DI1dywB
-         GaAweuhrNnldDlmDRcsbvKARLx6Qb8cy3ILflVNVUhO0lC8wftT1WGm+pdIzsgLj/GMb
-         6dEvH1Odh/hTxwIn07gbpKcn5uXGrEuDqSiqQJDknB6//7i7vG6Lt1qFqNYnxb4iQT/k
-         StsVHkNU+FbrzlNalMq72nDgNIBc0Q/mfNJugHWUj7hFLmGTbuSKhwTsZvXL+LfKhNhe
-         v8xhfB448Uxy1fJ669VkyVrkPNufjJwcER7zFbpZDLgArAVJHkqsYZy/QZLWYpWo3j13
-         oEsQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9BIB2YSC4kjtQ1OjmRC/nlrxXMiZ4SWYBy/8iekahgQ9cxZ/Hv0v9lab8/SJgJA4s4qWI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDRn6c7cmfKrcWpo7x7BqY8tkj76dtc6CsGjlmUquP3Mz7Pf67
-	6v6dCd3sjCy+DYOEV0NPKWLPLBe+wmPnroJm7EiDb2PwK9fO/e3NC9Ur
-X-Gm-Gg: AeBDieuOehg0ZWUdbs+H4+ZOTMJ5ULBk/3pEIAChcWXMCxv8Y68OEYJJ5cI1S+oe+TL
-	B942th0fCg3A9KgJL1bj4HHQ56ydTXuugdw5PWyC1jJPOlOIRB/qsMnMRn4YC7PCgJ4p6iyrn2M
-	EFGoZe8vbkMwbPmLunWI8trppniUo05K6S4sdMs7dXC3oYJqmWhsyWEtN38MB3oXVRSYfDBZZVv
-	/3SRtilwKa4/vDQFdb8P4k6kdBtHMBmZJvwJ/UCB1ACe9H++jmHa7b6y8CE176zu4m4zZ83z1hE
-	tD48IK4on+mVJ7xSSnxmr6RRBLeq7cifPEHGVxrCJny3na6hS55QFDPo6SZ3pEk6x9lnOx5DDo7
-	Mki4Lnvv7wqPY0ghlUyRy38vBwnUIkWMm8XlRV11ZPmY7+7qmCAwRMf0bsxdc/whVE6uoJ7o05E
-	7F8SXzsypw/GwsHnFPk7KdDb2wH1R2FdwB+Hxwcw==
-X-Received: by 2002:a05:6a00:9a6:b0:837:e9cc:d474 with SMTP id d2e1a72fcca58-83e391509c7mr227285b3a.2.1778281543986;
-        Fri, 08 May 2026 16:05:43 -0700 (PDT)
+        bh=J/InWrOUOchm9lydjp+lzNN+EzfH6qLQxojHmTQooTE=;
+        b=Z/0VxAfG5LJDBxYi4Vjhbr3JrNktjVfIOZ5T6wbisQeXLQim6zcbzcRiwydmheJhIg
+         KvUKSlFjLKDOzaV3eBqy/fPKASad81yadBjRTrIGTTQpnts0zf8apCaL5PkFcggU7XtQ
+         4yIEkElsXWL1gd749x5peEwj929GYA/YuCpQC6VoSauJQ8lQGG8EK5I50qdLjB6WQCys
+         Ie25/I+QyGNm6aaP9zcOlJDHlQFsEnF+xsKc/iRjW6Aeuune5i0kYcSDMPOY9mcrYEmW
+         sIz9um7EZphQruSss8reHa2Vi40CB95cwI/3YjUlIu4ot6+o5es3vLHdSYNd14iYaVm9
+         j/ig==
+X-Gm-Message-State: AOJu0Yx+B6byCt5fif90f5IhCT+25KeBf0ccNo4GR9qqqgkuJssxbtXS
+	hzz43eGACzXbu7+5FB6m3qZ3bpLVB+ORIEh2ek2kShiYpcVF9Q3aDHIj
+X-Gm-Gg: Acq92OGylNqp4UeUjurlw6/D+J1KkHKJKWVIdYBRMiQgkuF+mWQP//nYVcrA79XQBbw
+	B0P7PV3D3xA9VoZWCTB1jrBk7LLwyiqFwXDAgplOcpDLKoM6qe7Mm6V9HEWzKjwDp73sfMBcNvF
+	YMDvJwOBAwmXKRtSruBNcWb7Uw+WB4JYkfMMG4x0VE8u2UQYp824sVEQe6qBu40DcghesPXgw5H
+	d5dScUrbLV+nGqQLst8P3w224Wr7IfWGpMoH8MqodNQH7CtGBdYd2uLORJkK08rzWk1fLbyIq3L
+	iaz8F+XqixZy5NUHP5FLzjYjw8GUJFnK9ACZgBWFsedbdFHtu0BH/CSBWrOWdNVI/evMs0VbpQp
+	vHv7pfhP16S9rkKZFRJgbUOeA5pS32g9pLANgQ36gQtf5JYNmZMwv1g1NJ5B1RLDHfzg9hdz8vk
+	dxL4E2pk4AKfzlLaWkEV9uC4K7B7NdHBpXv30CAg==
+X-Received: by 2002:a05:6a00:a8d:b0:82f:cfd2:6ca0 with SMTP id d2e1a72fcca58-83a5dd57ddemr13693442b3a.40.1778281648593;
+        Fri, 08 May 2026 16:07:28 -0700 (PDT)
 Received: from ?IPV6:2604:3d08:9582:1100::c7c9? ([2604:3d08:9582:1100::c7c9])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8396594645csm13979079b3a.14.2026.05.08.16.05.43
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8396563ac51sm13518919b3a.2.2026.05.08.16.07.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 May 2026 16:05:43 -0700 (PDT)
-Message-ID: <03b20e60-3249-4f6d-80a6-d21566b6f75f@gmail.com>
-Date: Fri, 8 May 2026 16:05:42 -0700
+        Fri, 08 May 2026 16:07:28 -0700 (PDT)
+Message-ID: <a51c45c1-852b-41a6-ab59-9da186350e36@gmail.com>
+Date: Fri, 8 May 2026 16:07:27 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,92 +67,85 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 06/19] unwind_user/sframe: Detect .sframe sections in
- executables
-To: Steven Rostedt <rostedt@kernel.org>, Jens Remus <jremus@linux.ibm.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, bpf@vger.kernel.org,
- sashiko@lists.linux.dev, "Jose E. Marchesi" <jemarch@gnu.org>
-References: <20260505121718.3572346-7-jremus@linux.ibm.com>
- <20260505125336.72A36C2BCB4@smtp.kernel.org>
- <29d28c6e-2909-444e-b22a-7429464056dd@linux.ibm.com>
- <20260506113605.5df32968@fedora>
+Subject: Re: [PATCH v14 07/19] unwind_user/sframe: Wire up unwind_user to
+ sframe
+To: Jens Remus <jremus@linux.ibm.com>, Steven Rostedt <rostedt@kernel.org>,
+ Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev
+References: <20260505121718.3572346-8-jremus@linux.ibm.com>
+ <20260505185528.8E529C2BCB4@smtp.kernel.org>
+ <05adaec0-c2cc-4a16-b2da-ba3ed7437e7d@linux.ibm.com>
 Content-Language: en-US
 From: Indu Bhagat <ibhagatgnu@gmail.com>
-In-Reply-To: <20260506113605.5df32968@fedora>
+In-Reply-To: <05adaec0-c2cc-4a16-b2da-ba3ed7437e7d@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 2026-05-06 08:36, Steven Rostedt wrote:
-> On Wed, 6 May 2026 16:56:01 +0200
-> Jens Remus<jremus@linux.ibm.com> wrote:
-> 
->>>> --- a/fs/binfmt_elf.c
->>>> +++ b/fs/binfmt_elf.c
->>> [ ... ]
->>>> @@ -637,6 +638,21 @@ static inline int make_prot(u32 p_flags, struct arch_elf_state *arch_state,
->>>>   	return arch_elf_adjust_prot(prot, arch_state, has_interp, is_interp);
->>>>   }
->>>>   
->>>> +static void elf_add_sframe(struct elf_phdr *text, struct elf_phdr *sframe,
->>>> +			   unsigned long base_addr)
->>>> +{
->>>> +	unsigned long sframe_start, sframe_end, text_start, text_end;
->>>> +
->>>> +	sframe_start = base_addr + sframe->p_vaddr;
->>>> +	sframe_end   = sframe_start + sframe->p_memsz;
->>>> +
->>>> +	text_start   = base_addr + text->p_vaddr;
->>>> +	text_end     = text_start + text->p_memsz;
->>> Should text_end be calculated as text_start + text->p_memsz - 1?
->>>
->>> Since the maple tree API strictly expects inclusive ranges [first, last] for
->>> insertions, passing the exclusive text_end would cause the inserted range
->>> to cover one byte beyond the actual segment.
->> Shall we keep the text_end and sframe_end is pointing past the
->> respective section end semantic and just adjust the value passed on the
->> call to mtree_insert_range()?
-> Let's keep the end exclusive, and add the "- 1" to text_end before
-> passing it to the mtree_insert_range(). I did that to get it working for
-> me.
-> 
->>> If an ELF binary has adjacent executable PT_LOAD segments, could the first
->>> segment's inclusive end overlap with the next segment's start and fail
->>> subsequent insertions?
->>>    
->>>> +
->>>> +	/* Ignore return value, sframe section isn't critical */
->>>> +	sframe_add_section(sframe_start, sframe_end, text_start, text_end);
->>>> +}
->>>> +
->>> [ ... ]
->>>> @@ -712,6 +729,19 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
->>>>   				error = -ENOMEM;
->>>>   				goto out;
->>>>   			}
->>>> +			break;
->>>> +		}
->>>> +		case PT_GNU_SFRAME:
->>>> +			sframe_phdr = eppnt;
->>>> +			break;
->>>> +		}
->>>> +	}
->>>> +
->>>> +	if (sframe_phdr) {
->>>> +		eppnt = interp_elf_phdata;
->>>> +		for (i = 0; i < interp_elf_ex->e_phnum; i++, eppnt++) {
->>>> +			if (eppnt->p_flags & PF_X)
->> 			if (eppnt->p_flags & PF_X && eppnt->p_type == PT_LOAD)
+On 2026-05-07 09:18, Jens Remus wrote:
+> On 5/5/2026 8:55 PM,sashiko-bot@kernel.org wrote:
+>> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+>> - [High] Unbounded linear scan of user-controlled sframe entries can cause a CPU hard lockup in NMI context.
+>> - [Medium] The commit message claims to refactor `unwind_user_next_common()` by removing an unused `pt_regs` parameter, but this change is entirely absent from the code modifications.
+>> --
 >>
->>>> +				elf_add_sframe(eppnt, sframe_phdr, load_addr);
->>> Does this need to verify the segment is loadable (eppnt->p_type == PT_LOAD)?
->>>
->>> If non-loadable segments like PT_GNU_STACK have the PF_X flag set, they
->>> typically have p_vaddr and p_memsz as 0. Processing these segments would
->>> compute bogus text boundaries and bypass VMA validation. If a legitimate
->>> PT_LOAD segment overlaps with these bogus ranges, could its insertion fail
->>> silently and break stack unwinding for the executable?
->> Do you agree?
-> Indu or Jose?
+>> commit 2e1e17bbaa1c0426d41d66ce7930a944f3e86ae7
+>> Author: Josh Poimboeuf<jpoimboe@kernel.org>
+>>
+>> unwind_user/sframe: Wire up unwind_user to sframe
+>>
+>> This commit hooks up the sframe infrastructure into the unwind_user interface
+>> to support user-space stack unwinding via sframe. It adds the
+>> UNWIND_USER_TYPE_SFRAME type and updates the unwind_user_next() logic to
+>> attempt sframe unwinding when available.
+>>
+>>>      [ Jens Remus: Remove unused pt_regs from unwind_user_next_common() and
+>>>      its callers.  Simplify unwind_user_next_sframe(). ]
+>> This isn't a bug, but does this commit message match the changes?
+>> Looking at the diff and the code, there are no modifications to
+>> unwind_user_next_common() or its callers to remove a pt_regs parameter.
+> Sashiko AI review failed to understand this commit message comment.
+> 
+>>> diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
+>>> index 90ab3c1a205ef..1fb2724197332 100644
+>>> --- a/kernel/unwind/user.c
+>>> +++ b/kernel/unwind/user.c
+>> [ ... ]
+>>> @@ -82,6 +83,16 @@ static int unwind_user_next_fp(struct unwind_user_state *state)
+>>>   	return unwind_user_next_common(state, &fp_frame);
+>>>   }
+>>>   
+>>> +static int unwind_user_next_sframe(struct unwind_user_state *state)
+>>> +{
+>>> +	struct unwind_user_frame frame;
+>>> +
+>>> +	/* sframe expects the frame to be local storage */
+>>> +	if (sframe_find(state->ip, &frame))
+>> Can this sequence cause a hard lockup in NMI context?
+>>
+>> Since this unwinder is often called from NMI context (like perf), sframe_find()
+>> eventually calls __find_fre() to search for Frame Row Entries. If __find_fre()
+>> performs a linear scan over an unbounded, user-controlled number of entries
+>> (fde->fres_num), it could spin for a long time without yielding.
+>>
+>> If a malicious userspace program maps a large VMA and provides hundreds of
+>> millions of FREs, would this loop calling unsafe_get_user() on every
+>> iteration tie up the CPU long enough in NMI context to trigger the hard
+>> lockup detector?
+> Please advise.
+> 
+> A user could craft .sframe with a large number of FDEs (up to UINT32_MAX)
+> and large number of FREs per FDE (up to UINT16_MAX).  Each FDE could point
+> at the same FDA and FREs to save section space.  Each FDE would require
+> 16 bytes in the FDE table. All FDEs could share a single FDA of 5 bytes
+> and share FREs of minimum 5 bytes each (when using the 16-bit start
+> address offset to have UINT16_MAX FREs) in the FRE table.
 
-I think checking for PT_LOAD makes sense as we want to detect the 
-executable text segments.
+For the case of malicious .sframe with large number of FDEs, wouldnt the 
+existing checks of the various offsets being less than sframe section 
+size suffice and the following in sframe_read_header suffice:
+
+    if (fres_start < fdes_end || fres_end > sec->sframe_end)
+
+For malicious num fres, should we add a check that a function's num fres 
+is less than or equal to func size (available in the FDE index entry)? 
+It is an approximate check, but should provide some boundary check.
