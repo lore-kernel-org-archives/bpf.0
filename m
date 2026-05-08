@@ -1,136 +1,243 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF5BB36215E
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 14:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC413EF676
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 14:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778251436; cv=none; b=nfslGM2HTL3P232nwjQQfiMQtk5CqLMTG2r837olKVDvCfZfce7Qje1w5L6NaxWNxgfcyEuEIyz/6QbSL6swLS/fBQ9srtb4rRkO7QzE/zgz5ti1qSCCFNIovPilKrkY5pW35uLmzXiTiOGJ17f9YqR0zBhcNV4dg4HnpBODOFs=
+	t=1778252206; cv=none; b=ikksAer83G3QPRllH7ABHjscsMc0MRZRNDGaaOtZyC4M05J55TwxhKj5PDiOk1SBwKtwPeCXyV/kLveLdloLUNom7c9EZirv3qfhFGXZPfbVmbGGnCBXV3PTjpkb3T8Q7LSuRpG3cTrpkYwu2s5zZ1HwlbRRrwPJDbWaJBdF1pA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778251436; c=relaxed/simple;
-	bh=EyXG+VwrAF+um4XflE0usQdCTWRvEq/i5fmd3Ev8uzE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eZtYqUmKMnLOZYebJZHCcLHYaHpUsE9jFBudanWrx8lKOuV0pbpKaDM7t/1ebNJmDPumDgKXWUfUsc0gd6m3mBIaEVaYwBJqaesNN+I21ClcIulglWcvSv4Dt1byQ7iAGuBASTDQvii+UZZldUzg+kc57SHoR7/QphGyrkHMhDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dg8HjAmb; arc=none smtp.client-ip=209.85.210.175
+	s=arc-20240116; t=1778252206; c=relaxed/simple;
+	bh=ST5lkWfuyXox1p/2s668Qu5NvhdlAzM4i+LjigyNGwY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R8J6diWQ7+TallD+VaHo7NSyhZ1Lz9Qb3hm9brGzbn16D8bHnbP598P3ltaPNrNPypLBc8SVJZOw9Osk0BWBSq8c8oYrgzMdCvXBNFNQgJGDKfENP4n+we1Rih9GgLzWacTjymvGVrA1zKIb6rZjDHKThB5Kh2eDnzMpofl3Pbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EJi9pnPw; arc=none smtp.client-ip=209.85.210.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dg8HjAmb"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-82748257f5fso2013749b3a.1
-        for <bpf@vger.kernel.org>; Fri, 08 May 2026 07:43:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EJi9pnPw"
+Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-83538fbd0b2so898672b3a.0
+        for <bpf@vger.kernel.org>; Fri, 08 May 2026 07:56:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778251434; x=1778856234; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=a2w1uSP/0twE+5ljaP1rCYoWbGtAjbga1hTtB1LlN6c=;
-        b=Dg8HjAmbjrTgvDXVnmvLLG25cAknvGCWOVEvIZpItXfQt+6YIWNUAP0jI1hNIXzX23
-         IA4TJzQ9LQRSEcfKZQIgE5RsNd1iV5LBMtBCvx33MWIZmuxOShb7FYvNfAex3lt/+7DL
-         SU4GoxlxwCb5srsbctjt5kYfB1AQLKL1FZWLtJ6z753owcHsQbG1RdpylocU6eofoIB/
-         8d5Ig1EvZsJ7B1HsYqNkdXiPPh4+yKll97a0sMeTCDIfsYcN3fJ802iFti7Vu38lMOht
-         VhHJ4+SYpyy5OjpMHI9xZNxZYljgSb3dXY/JncuRaL7kK+OoRPWCiJn0pzveQXJuUn21
-         bBYw==
+        d=gmail.com; s=20251104; t=1778252204; x=1778857004; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=eSWJGa1a8P8ytmqmY0bXOJYZ37jgE6xppZF6e45wgEA=;
+        b=EJi9pnPwCM0Fj4/nh1cAAEl+iwcxt9GixmhXKLamW2OWananPT03KhbOBCMgpXKmXq
+         cdfWlERyxEOgtA4fMzlroijZ3BA8fOpMKruFISgfqQnlV9B608RjULm7DoIBRzq6l9iz
+         hy2Pah6XuFZlrWWRu9OX/BxP4d6cGVQvuf+2jNMSfgcfvl++RNJ8bfV3IcgvUC/usl5C
+         z0MCTH0lGyRAAO3oJH+1cXs1c03p2+yidjCY/yWMlQgJcQdRso5Vbonv071/jwMs8vb1
+         WV37vHkZQ4CAPIHIy3SuI0QgGMUDtspNECNwOkRsXCcO1CKHyD6k2NHkZ5DrCT5q54Ig
+         uZJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778251434; x=1778856234;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a2w1uSP/0twE+5ljaP1rCYoWbGtAjbga1hTtB1LlN6c=;
-        b=jAkkkLBjEkP1WQuE5xVeolF6tkiD1LNQdz/RNRn/bF2Xytlj3g8uugQQ+7ypAN+O24
-         O/gGCLKIvrfxhwj2x3XBw052TYYeXAwLUvvqIokXmqefHibzk9gDEZSnDrcyChPUaEz4
-         LIYTrYzv22C0jrcUwh6enCRGwvTZ909PrhMrXKr9N2ZwIb9SxFxHvYeZmTIK6MZZ6K8F
-         0aj3C4s9L0Kept0mB4dPGqp+AupmPMSIKhI0I29rTlKEZsXYuaCNRqD6hrwVinYj4gf0
-         QCTW/bBF75mjVxaYysUbcn+d+VD9AMm5IVIDK7aSzCtscv0o55oOWwFFA4cJanHJeAtd
-         TKlg==
-X-Forwarded-Encrypted: i=1; AFNElJ/9CfgiWmXjZYQTyBBHmrw7Ro4L96tOsYwLrO1/On7kw3ju0RaOvifh3lLpRw/VuNaOhcU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuLwvydCpjuAGwuPyulPMMLdcNEjqkaKRkznGu1lKKFdJ3XnX+
-	jMQf7xnariS6Qw6QY/XFFxikXzi1I54l3zxQEJsI3TxwxQX7TApUrmoX
-X-Gm-Gg: Acq92OGjwn7Z3oMPOACSY/EsgVjD8nY29RNi+BRjeTX7Knlk4kBiyzN3eQOGsJ1rca4
-	omXWk8P7PNkKoU1itq+tvUHVCnJADFNtPECJyqPGwwsz8isO6CqpsVTPSIWOQdofIAd3aomSSM6
-	prDEybukit+6NuvwUE8f3t/pamj8iO1TtbVb05eR3Up2SuzFWRj/JYXa+dDRwqRmJ6QkIK7EYBq
-	Rbl9pTQZwwLWqEVUP/RysYCm8DOYyBxVAE59fy6W8oD0foVSZla5lkBbsUrphbMSMHIb8riTcF+
-	uAhgFPQ5fnpvYHz/1cizckV/BV0uT1i0l6HXY+Hh3oXaNHi+j/2f7DpB6Yxp7y7+t1joCU1iCQP
-	c91uYNdMCbfyPpaKqrTNDLDHXbOF3FFR1AqhGqc9QzbBUYcEZd+H+WjrVucwOWvNsiGXm/Irgpt
-	wMH1Kkzvna1B5QGmbvRK38mIvzSrrLuhXinA==
-X-Received: by 2002:a05:6a00:2304:b0:837:8a0c:8f70 with SMTP id d2e1a72fcca58-83bb8691c49mr6557122b3a.28.1778251434012;
-        Fri, 08 May 2026 07:43:54 -0700 (PDT)
-Received: from hyj0824TXAir ([110.65.147.186])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83967dbdda0sm12856887b3a.44.2026.05.08.07.43.48
+        d=1e100.net; s=20251104; t=1778252204; x=1778857004;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eSWJGa1a8P8ytmqmY0bXOJYZ37jgE6xppZF6e45wgEA=;
+        b=cdWMWEWgcs7qKnfoYTvlrnfhYIitqewPqfhOPDEpWHrEORWlbHP14IJkc53mVG9+dp
+         OE+y+A1fg7NdNTymJRV+wp7b8W/mJRatrj1Fs6Pek9BxmrAW4nxt9HVusqTRQoPfPOk+
+         VKmbCZMfZs6NlwBUbb3sMWQOW2QUo2QDbTvyAxYoepQM6yGVSUBpFHSJwNHgtvx/OtNw
+         gD2HHiwZsK9SyeIjCGNGSXF0N5wpXjIoJCZPpQS+k+RimI9RHnUWGS+UeteLtwLviSmh
+         vyAPQzgNikCryybLqO9BNi2zOg3Anw4eHbct+TQy+efSgaSNJgVoo7a8/U3aI+jyd2EW
+         RV8g==
+X-Forwarded-Encrypted: i=1; AFNElJ+ziimS2WyUujroyoyPM4IlVONslFzdU0RLsMd0grezesiDlG3Vgt190ycl70s0GZLKf5c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKw1A9V35XtQwdn/QiwR+orpldqLLS7YW5sRdag2lR8jdI7Yqy
+	M01kw7SSR4TpfbnBY1zDNJDGh6e3IEeQGwlWrUadBUmaoyab3OCXFnVs
+X-Gm-Gg: Acq92OGppRBI6b/Ius0duD7SK0B634L8GsdnrS4YoJ7T2j38eVQUmuQNbBQAHeN98oh
+	Pyzs+iYbkjp2meB1mgtk20DYfUwu8UiLNmki1yi2J8n1y2UmWqHh5VIx8SRgU0wvrN05WT5opDN
+	ynLoxsJbLdOwo43X1fXV2RiSFexw+cgOkySCn2L4fxovix4TGm+Okxu9DfZoCA0bq9k/K6X0jpB
+	4GJkb3XSc1Vc2T3yoa1S8QrJ0eitGetFIezZ6hRFx9T3/0gBROCM0eVmt5Tg3GkVFZpYCeqvl0v
+	5NoTQx8dgSfbPU4qbI1VqnVqV9ZjGs1H3hd/FD2En/9Y3Q5m5NMb50H0GRL2MoeL1O/QAGhEd92
+	Uvq5dWCP40opPi8Be4uAnAMMvNlT1u1OjjYR6NZ83bIkQ9zIJwyTbHYTbKspEnTZ5kjwmymXRzp
+	Khscws1ljV10zgD4SM
+X-Received: by 2002:a05:6a00:124d:b0:835:7c0e:b529 with SMTP id d2e1a72fcca58-83a5bcd244cmr12592060b3a.12.1778252204005;
+        Fri, 08 May 2026 07:56:44 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:50::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-839682a272asm12835763b3a.54.2026.05.08.07.56.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2026 07:43:53 -0700 (PDT)
-From: Linpu Yu <linpu5433@gmail.com>
-To: kerneljasonxing@gmail.com,
-	magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: sdf@fomichev.me,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	bjorn@kernel.org,
-	linux-kernel@vger.kernel.org,
-	tanyuan98@outlook.com,
-	yifanwucs@gmail.com
-Subject: [PATCH bpf v4] xskmap: reject TX-only AF_XDP sockets
-Date: Fri,  8 May 2026 22:43:43 +0800
-Message-ID: <20260508144344.694-1-linpu5433@gmail.com>
-X-Mailer: git-send-email 2.54.0
+        Fri, 08 May 2026 07:56:43 -0700 (PDT)
+Date: Fri, 8 May 2026 07:56:42 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Alex Shi <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>, 
+	Dongliang Mu <dzm91@hust.edu.cn>, Michael Chan <michael.chan@broadcom.com>, 
+	Pavan Chebbi <pavan.chebbi@broadcom.com>, Joshua Washington <joshwash@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, 
+	Leon Romanovsky <leon@kernel.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
+	Daniel Borkmann <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>, 
+	Shuah Khan <shuah@kernel.org>, dw@davidwei.uk, mohsin.bashr@gmail.com, willemb@google.com, 
+	jiang.kun2@zte.com.cn, xu.xin16@zte.com.cn, wang.yaxin@zte.com.cn, 
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Stanislav Fomichev <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, 
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v3 1/8] net: convert netmem_tx flag to enum
+Message-ID: <af35ekIjYDXIDWVR@devvm7509.cco0.facebook.com>
+References: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
+ <20260507-tcp-dm-netkit-v3-1-52821445867c@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260507-tcp-dm-netkit-v3-1-52821445867c@meta.com>
 
-XSKMAP entries are used as redirect targets for incoming XDP frames.
-A TX-only AF_XDP socket lacks an Rx ring and cannot handle redirected
-traffic, but xsk_map_update_elem() currently allows such sockets to
-be inserted into the map.
+On 05/07, Bobby Eshleman wrote:
+> From: Bobby Eshleman <bobbyeshleman@meta.com>
+> 
+> Devices that support netmem TX previously set dev->netmem_tx = true.
+> This was checked in validate_xmit_unreadable_skb() to drop unreadable
+> skbs (skbs with dmabuf-backed frags) before they reach drivers that
+> would mishandle them or devices that would not have the iommu mappings
+> for them.
+> 
+> A subsequent patch will introduce a third state for virtual devices
+> that forward unreadable skbs without ever performing DMA on them. To
+> prepare for that, convert the boolean dev->netmem_tx into an enum:
+> 
+> NETMEM_TX_NONE   - no netmem TX support (drop unreadable skbs)
+> NETMEM_TX_DMA    - full support, device does DMA
+> 
+> Update the existing NIC drivers (bnxt, gve, mlx5, fbnic) and the
+> validators in net/core to use the new enum. No functional change.
+> 
+> Acked-by: Harshitha Ramamurthy <hramamurthy@google.com>
+> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> ---
+> Changes in v3:
+> - Split NO_DMA changes into subsequent commit (Jakub)
+> - Move !netdev->netmem_tx -> netdev->netmem_tx ==
+>   NETMEM_TX_NONE conversions to this patch (Jakub)
+> 
+> Changes in v2:
+> - Squash driver conversion patches (2-5) into patch 1 (Jakub)
+> ---
+>  Documentation/networking/netmem.rst                    | 5 ++++-
+>  Documentation/translations/zh_CN/networking/netmem.rst | 4 +++-
+>  drivers/net/ethernet/broadcom/bnxt/bnxt.c              | 2 +-
+>  drivers/net/ethernet/google/gve/gve_main.c             | 2 +-
+>  drivers/net/ethernet/mellanox/mlx5/core/en_main.c      | 2 +-
+>  drivers/net/ethernet/meta/fbnic/fbnic_netdev.c         | 2 +-
+>  include/linux/netdevice.h                              | 8 +++++++-
+>  net/core/dev.c                                         | 2 +-
+>  net/core/netdev-genl.c                                 | 2 +-
+>  9 files changed, 20 insertions(+), 9 deletions(-)
+> 
+> diff --git a/Documentation/networking/netmem.rst b/Documentation/networking/netmem.rst
+> index b63aded46337..5ccadba4f373 100644
+> --- a/Documentation/networking/netmem.rst
+> +++ b/Documentation/networking/netmem.rst
+> @@ -95,4 +95,7 @@ Driver TX Requirements
+>     netdev@, or reach out to the maintainers and/or almasrymina@google.com for
+>     help adding the netmem API.
+>  
+> -2. Driver should declare support by setting `netdev->netmem_tx = true`
+> +2. Driver should declare support by setting `netdev->netmem_tx` to the
+> +   appropriate mode:
+> +
+> +   - `NETMEM_TX_DMA`: for physical devices that perform DMA.
+> diff --git a/Documentation/translations/zh_CN/networking/netmem.rst b/Documentation/translations/zh_CN/networking/netmem.rst
+> index fe351a240f02..9c84423b7528 100644
+> --- a/Documentation/translations/zh_CN/networking/netmem.rst
+> +++ b/Documentation/translations/zh_CN/networking/netmem.rst
+> @@ -89,4 +89,6 @@ dma-mapping API 去处理。
+>  使用某个还不存在的 netmem API，你可以自行添加并提交到 netdev@，也可以联系维护
+>  人员或者发送邮件至 almasrymina@google.com 寻求帮助。
+>  
+> -2. 驱动程序应通过设置 netdev->netmem_tx = true 来表明自身支持 netmem 功能。
+> +2. 驱动程序应将 `netdev->netmem_tx` 设置为适当的模式：
+> +
+> +   - `NETMEM_TX_DMA`：适用于执行 DMA 的物理设备。
+> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> index 8c55874f44ca..ed9c22dc4a5a 100644
+> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> @@ -17120,7 +17120,7 @@ static int bnxt_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+>  	dev->queue_mgmt_ops = &bnxt_queue_mgmt_ops_unsupp;
+>  	if (BNXT_SUPPORTS_QUEUE_API(bp))
+>  		dev->queue_mgmt_ops = &bnxt_queue_mgmt_ops;
+> -	dev->netmem_tx = true;
+> +	dev->netmem_tx = NETMEM_TX_DMA;
+>  
+>  	rc = register_netdev(dev);
+>  	if (rc)
+> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
+> index 424d973c97f2..dd2b8f087163 100644
+> --- a/drivers/net/ethernet/google/gve/gve_main.c
+> +++ b/drivers/net/ethernet/google/gve/gve_main.c
+> @@ -2894,7 +2894,7 @@ static int gve_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+>  		goto abort_with_wq;
+>  
+>  	if (!gve_is_gqi(priv) && !gve_is_qpl(priv))
+> -		dev->netmem_tx = true;
+> +		dev->netmem_tx = NETMEM_TX_DMA;
+>  
+>  	err = register_netdev(dev);
+>  	if (err)
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> index 5a46870c4b74..fc49aae38807 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> @@ -5924,7 +5924,7 @@ static void mlx5e_build_nic_netdev(struct net_device *netdev)
+>  
+>  	netdev->priv_flags       |= IFF_UNICAST_FLT;
+>  
+> -	netdev->netmem_tx = true;
+> +	netdev->netmem_tx = NETMEM_TX_DMA;
+>  
+>  	netif_set_tso_max_size(netdev, GSO_MAX_SIZE);
+>  	mlx5e_set_xdp_feature(priv);
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
+> index c406a3b56b37..138e522ef9b9 100644
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
+> @@ -752,7 +752,7 @@ struct net_device *fbnic_netdev_alloc(struct fbnic_dev *fbd)
+>  	netdev->netdev_ops = &fbnic_netdev_ops;
+>  	netdev->stat_ops = &fbnic_stat_ops;
+>  	netdev->queue_mgmt_ops = &fbnic_queue_mgmt_ops;
+> -	netdev->netmem_tx = true;
+> +	netdev->netmem_tx = NETMEM_TX_DMA;
+>  
+>  	fbnic_set_ethtool_ops(netdev);
+>  
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index 0e1e581efc5a..580bccb118a0 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -1788,6 +1788,11 @@ enum netdev_stat_type {
+>  	NETDEV_PCPU_STAT_DSTATS, /* struct pcpu_dstats */
+>  };
+>  
+> +enum netmem_tx_mode {
+> +	NETMEM_TX_NONE,		/* no netmem TX support */
+> +	NETMEM_TX_DMA,		/* DMA-capable netmem TX (real HW) */
+> +};
+> +
+>  enum netdev_reg_state {
+>  	NETREG_UNINITIALIZED = 0,
+>  	NETREG_REGISTERED,	/* completed register_netdevice */
+> @@ -1809,7 +1814,8 @@ enum netdev_reg_state {
+>   *	@lltx:		device supports lockless Tx. Deprecated for real HW
+>   *			drivers. Mainly used by logical interfaces, such as
+>   *			bonding and tunnels
+> - *	@netmem_tx:	device support netmem_tx.
+> + *	@netmem_tx:	device netmem TX mode (NETMEM_TX_NONE or
+> + *			NETMEM_TX_DMA).
 
-Redirecting packets to such a socket on the veth generic-XDP path
-causes a kernel crash in xsk_generic_rcv().
 
-This became possible after xsk_is_setup_for_bpf_map() was removed from
-the XSKMAP update path, which allowed bound TX-only sockets to be
-inserted into the map.
+nit: if you happen to repost, listing enum values here seems too much?
 
-Reject TX-only sockets during XSKMAP updates to avoid the crash.
-They remain fully operational for pure Tx purposes outside XSKMAP.
+"device netmem TX mode" should be enough
 
-Fixes: 968be23ceaca ("xsk: Fix possible segfault at xskmap entry insertion")
-Reported-by: Juefei Pu <tomapufckgml@gmail.com>
-Reported-by: Yuan Tan <yuantan098@gmail.com>
-Reported-by: Xin Liu <bird@lzu.edu.cn>
-Signed-off-by: Yifan Wu <yifanwucs@gmail.com>
-Signed-off-by: Linpu Yu <linpu5433@gmail.com>
----
-Changes in v4:
-- retarget the patch from bpf-next to bpf
-- resend after no feedback
-
- net/xdp/xskmap.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/net/xdp/xskmap.c b/net/xdp/xskmap.c
-index afa457506274..3bff346308d0 100644
---- a/net/xdp/xskmap.c
-+++ b/net/xdp/xskmap.c
-@@ -184,6 +184,10 @@ static long xsk_map_update_elem(struct bpf_map *map, void *key, void *value,
- 	}
- 
- 	xs = (struct xdp_sock *)sock->sk;
-+	if (!READ_ONCE(xs->rx)) {
-+		sockfd_put(sock);
-+		return -ENOBUFS;
-+	}
- 
- 	map_entry = &m->xsk_map[i];
- 	node = xsk_map_node_alloc(m, map_entry);
--- 
-2.54.0
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
