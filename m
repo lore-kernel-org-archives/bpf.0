@@ -1,168 +1,163 @@
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010027.outbound.protection.outlook.com [52.101.61.27])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE2D2EBBB9;
-	Fri,  8 May 2026 09:37:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.27
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778233061; cv=fail; b=REzGGlmrgge5iLVKTDrSpk10p65x0gCxrgfopAUN1yzHIjllmg9HoE5rVCJZaHLdA7o4Czdu7Tm9zYlNTHpmSrmf+8NtdvmpPUblz9XPbl5Q3WdVu+aX7VSbuXLcCLsg58ncpXSFl0bw5K72q8sMt8ah2Vco6oaiPSBev7O2MpA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778233061; c=relaxed/simple;
-	bh=m94agWOGkG2FLSvIxNm1JvYrfDAiFS+7LounjQewIe8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=pklpp67rfrieXvsxqjzxZeSRtUcCG6Hf8LK++b3t4eQpfN4z914lw+nTQ0ypcN7R13m9JHGas1kGTETLwqanftWgh6N5bRxI8rMOb+kW0UBOaeX7yGPR3gZT2QUv4AOUaKcaTAt5/bRGpZbNUZFjNffMGdcLK7VCuD7dDvND3W0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=GRxNP1MP; arc=fail smtp.client-ip=52.101.61.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F73236D9F6;
+	Fri,  8 May 2026 09:50:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778233810; cv=none; b=IEuczbP9I5VArezMpbm8DTlI7E48qcgwHCWY8BboD8Hc0Y4EiTFhLQmLZizZ7t60jP3WtQMg0HclthAWN8cm5KbMl7PKMQR5YzgDCnA3W9cvSgGV3nV3u42JmpgXESu0HBpVGxExnETEEI+msvWsZ2l2zTZNrdk63IzHwrdDM6Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778233810; c=relaxed/simple;
+	bh=4lXGHkoNae75ldpkNyhiF6ThayX9DHKq38BLerD+tiE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SMgk8DOMwWrcJ0qG9DaAYg5a0fW3y9omTb+NsrRXfKuRUPwRRLPYs41vKggXEky/GHymBWlrsm2BVCftsBt482VfRt8xqBV4Wwx2xY2NDFuuT0/Pz5spwtk2MwNVvdzpUhTBhHY3dJTxMCZQILAjDrjuV3LqbEn+CWkPFb3uo1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Q85I4ULI; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="GRxNP1MP"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ybzcq1NKMUI9AoOV7eOIzYa1tJCDR2iXmOl0ogXCOq+Nx7sL2eI3UywGbPaD7+lN/DdNbtggfF26tMYOopXXeSU+IY+AXew483+9qjp6tKMwhXj4+L63EQw4PTwnZrjBnc9jH7ULxnjfxo55BdQt/kJPJYYiyaldlEM/9xouUWL4ZRiCV6fB307s/aaSZm3drJQV9nIAcs0j0rnLL4X+ssXjLrLTfMwVLRYMNULrH1s95mts9lahhfvo5cOKCG3QHT3MBjA5ZWa1URr+IsKmO/G+R2flUO8M617biKj7hPehgYY+cyubsEuABsAYkXQHJbpHpkiSKWT+8Vy2Byo6Fg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=989uCxh9H4SVhW6iCxd5ssUbirCvVCDF8hgKWM8C/u8=;
- b=ProuuIYJSLA85ie+8tzjHg/sg4S7W+O38cVuyVi0qw19WxecnH5ffuaC6EDLuhzit1/Rc04xHXPCNSmzGaqE3Q24r8scYvnFA/nFEmmOjNpZgv5tcUz5VIc83R74sj2FXClARYZW38x5zCX+8uzAjBDzH3pJiBmjD0TynN/KUe1u7hC4+uW27eYTmvk+URwUZLI3qObVnEqEQQel8Y+RXkXqeebQgpr+OK0+9kS771YKwNSoyeY61gF5w5dI07r/1I4gl2iCIR6qgbFow21V97UMVSaRixQt8H6i3SuADkEzaIvgIUtsLD5nSUkuV6sspy2dp+KiBB/zSRYnSe63Ow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=989uCxh9H4SVhW6iCxd5ssUbirCvVCDF8hgKWM8C/u8=;
- b=GRxNP1MPDHXWvfLaQB1s8lJw5kHK1NMC9e19euGZwNNv6D2in+WnVvX7SxHpadDwKnWjQoONzZeArkqC0MvxkrwyOFRjf/HDM5+x3dOq2VkwxjDjSO7MbO307XPQRu8IQy0tJJFy33W8gqMsonVoGxeXUWdwsVyTCYEIpx34Q/O1Azxe720j7SdeDU4y/KEhGZ3SNFHYqtzoDCypMmUjSbgilqy0Lr/AVv+AzczRh+b0XJNBGowX79bifXcKSuZVw8NDuu8tvwbP1yuDyMqCaI7j79j96AsaZIp9/B5cCsbRyMoMBaMbhnJbuomy6JNWUHcs24RMVKFk5z8rP40a6Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
- by BL1PR12MB5876.namprd12.prod.outlook.com (2603:10b6:208:398::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.19; Fri, 8 May
- 2026 09:37:35 +0000
-Received: from LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
- ([fe80::299d:f5e0:3550:1528%5]) with mapi id 15.20.9891.017; Fri, 8 May 2026
- 09:37:34 +0000
-Date: Fri, 8 May 2026 11:37:23 +0200
-From: Andrea Righi <arighi@nvidia.com>
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: Qiliang Yuan <realwujing@gmail.com>, Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>, linux-kernel@vger.kernel.org,
-	sched-ext@lists.linux.dev, bpf@vger.kernel.org
-Subject: Re: [PATCH] sched_ext: Add scx_ai_numa scheduler example for AI
- workloads
-Message-ID: <af2u03T-pyvoDgYK@gpd4>
-References: <20260508-feat-scx_ai_example-v1-1-2b498af3514d@gmail.com>
- <af2XRpaX_rFh_GI9@gpd4>
- <26f2d829-1083-4cff-b737-a3701c7ddd85@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <26f2d829-1083-4cff-b737-a3701c7ddd85@arm.com>
-X-ClientProxiedBy: MI1P293CA0017.ITAP293.PROD.OUTLOOK.COM
- (2603:10a6:290:3::13) To LV8PR12MB9620.namprd12.prod.outlook.com
- (2603:10b6:408:2a1::19)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Q85I4ULI"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 648052mt144785;
+	Fri, 8 May 2026 09:50:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=HEF4FJ
+	HCCmuCv/8hH25sOS7/QyfcR0fy008p5SfDaLE=; b=Q85I4ULIhFEiluDozl+K/O
+	z8V7rEXfHD+HfRx2szzWAcCzpsbeJqeqOORIJLoG6bIBL0PUY7GtqDcjpz3lrF4+
+	9qgBsJntWnEYQfwTK8QPQDcCOE+GAPjDi2PVjIelmyOoNdLc8i2Dpv/Cd8yutIdj
+	4BFMfMGJH1bBT4dlYPKMCfUPFGaCNramgtSEDTIN58bB5NZ96T5xwnFa0UGPoaZg
+	YQaPLUYhxsYwZmotOsHNQ8bXK+T8WDcNKySR0KmvDwG/X4njZY8QhvK95z9oflMT
+	pVeKLvRhGu+H+KABW0EjGuncR72CXudGT4vnAfhH+SgNYRdmGpEOhnw7bJRUwdzQ
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9y51u46-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 08 May 2026 09:50:02 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6489dVQg004377;
+	Fri, 8 May 2026 09:50:02 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dwvkk7n1j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 08 May 2026 09:50:01 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6489o0ZL56230252
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 8 May 2026 09:50:00 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0615F20065;
+	Fri,  8 May 2026 09:50:00 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B442F2006C;
+	Fri,  8 May 2026 09:49:59 +0000 (GMT)
+Received: from [9.111.146.58] (unknown [9.111.146.58])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  8 May 2026 09:49:59 +0000 (GMT)
+Message-ID: <3158dc1a-26cb-4942-b05e-6c60c092e588@linux.ibm.com>
+Date: Fri, 8 May 2026 11:49:59 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|BL1PR12MB5876:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4accf06e-c100-4edc-7e10-08deace56eed
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|1800799024|18002099003|56012099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	LMIcaXN1YEA9aVZxd30ZVKp3JDfc/w2VjlmsdPu7BQrgdQfmksmw3xJI3FgVgQk8VYfWHHxcOqA6jsHsP6QxIJTHQhcHQ3rc3gKTR+ie2B4+vcd4hYwwFTPd+1D7adLA133wizY41CRHWbkubf9UXgZokQNCFJAciJtDdMRTHmN6XDiSc2cNaVVOhpnTFrkuFU2kUdkVEo9DIjHP9DBoVsub/I0C9h3Z9K7DtTP8hKzN9aywW39jN/qFZ0P35ekr1r6Z7BVWe8/jX0x4ADl9VUlqiCVp/yNyn0YCxXTECNLkFyw09gdyPHZWJcwwqHpRt+JawwI7aSXkhOvF8r/N+p9diKH8yQs31rv1b0Lz929AmVKyTg/BKgjUHxz7OXXxFF1TEeNlic9lZ2moUbd+TImRrOQSvu6X5zI9baXQwHlCdipliIvOvsi2B7GErGxhH7HJ9FhTyC6DXOfAfQoph52YHu1Z6SJplHnUxE16zPz4uXUSRNSFPxdcp9BBBf0Gu1PY3C309RelG17PlNGDX284Vxt57HtzewO0q3bChcxhiGs/c/lnxQ1wda43UZiSwQPayZ996L294wP5tiqWiKthb1s7PFdxlDmI2fc3rEl8a1CLaXRRvyIt7ocsFdVrxzvv65EJulMvIjKU6qxyzds7y+DEtyosfAnLdbhzKr9JWBOg6mV28r3g/Mrw77T4od2Mil7P9aZZqjz59yfygA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?vgiD5Pn3uZCZ1aeKupykZU4ZfiRsmvERAcNXYFbYTnRq3BYrLRsgxqVvdtLD?=
- =?us-ascii?Q?iHLey/2kY3LZneVN96EVSI3+8lqdTW3Ki77Kv5KcnxytuzQcrGBG6J5ModB8?=
- =?us-ascii?Q?bhZ26jhgkzSHuBhbz0cTCKLTZTrziL2cxEdwpQbA8sZhBA5lY3TP4TcZxY/x?=
- =?us-ascii?Q?bGmMLZGsx/YgXqsruqngee2Ry7eJJagAR+a3TZwTw24ieC26+6ywxF3OX9rz?=
- =?us-ascii?Q?pG1Xv9arGyuCup0vZ0HOW0UIMZX2njajSqRdG+8FKCMWLTa94mHXGGmjVhru?=
- =?us-ascii?Q?NBTj6Ijn64M+VV+ciZxmRK447zzYbhrQentB+nfaIBkO0E84DbOC1SjxaTp2?=
- =?us-ascii?Q?vtdlwPWPicbHKn7/1jcdqh5+i+hq9rLisVLhjtNAViYDET89uH+9DAtit03M?=
- =?us-ascii?Q?iNtKNxva8YzCG6uAtxUYQ/j+hqrDUYPDm9FSeffwKea4njbMdOQLY/Y6b3pG?=
- =?us-ascii?Q?Kp/1n0bf2G3z/xT19ONonHsbVGDB3q+thQO61e7xb446d3DQk5/4Mki4DJy2?=
- =?us-ascii?Q?aHYXWTFSNkqWxTjCsf4oyIyZZbYnqUa+sC5yizQ3oQvqbYqr1Tt3Z83BfJO4?=
- =?us-ascii?Q?WMAlHgYPzT53SvP1uaHya+Lugq933rbcYiGC1MsLXmEQfflwmTFxP/CCRukE?=
- =?us-ascii?Q?U4t8L6uQPR2vmA97gNoe6k/zXSYTj1JM1Wv35P4DpuW0+IYKGm5TW40SSY5L?=
- =?us-ascii?Q?ACy4rHgfEqhe1oPltIyLBK2sHD3LSRuPxIxc/W0uZptBKMktH9+JdahAV8PS?=
- =?us-ascii?Q?YJUuTtjBfa0zHRQfjRfFPZ5nh+ZsRqIr9nbc1PzR2EsDKtNwSS9yXEavaI/I?=
- =?us-ascii?Q?K15SaedIyezwVqpx87R96KlX+FLfV8hOgeuGCRFPLA6utkTRAR4SwRulB+0A?=
- =?us-ascii?Q?GSg1TsY7uM3cMb9iqsFKxT8ApLA+MuwcTBVMnPHlXkl6qvMmoMAfHNslzdQ0?=
- =?us-ascii?Q?6B0KjQF8SGFyhJ+NoEQIiVcGvJXu7+UKXvBTBjWlvCSYaumHkf9vQtQFCprn?=
- =?us-ascii?Q?NrklYQh00bAsQKeMHpmLi5x56feh0Bykg1wt4mgegb5pRHnoVQ1Tbpdj4qGp?=
- =?us-ascii?Q?ShCzomVRvsmjRBRPJm1LZ1fdanNKzOY//AT5NEYDU4/fL+G3E5xiT2V/Caeg?=
- =?us-ascii?Q?HmoPic34GxAg3WR+RGKEY/lzNdxDhWSMKhfdBUnXVV2fLa1r/4AyxIWLA74X?=
- =?us-ascii?Q?Dav0JREl0m1HbD1T92na/uu0amZKS122HXEWUI5yKQ6BengLtwKf7PukcrIU?=
- =?us-ascii?Q?vDjNoZSNRwq/UDvdxysh4/Rw8kiQsYLQbAKaRriWyQb0wOnyiXwy5/OSmVBv?=
- =?us-ascii?Q?c5OBabOStp5kVd6OH30cTPdRlQTBRM+/eXeDBBSpu85Uwkcvctn49PWzLUQp?=
- =?us-ascii?Q?LwW+hYPJteZMPcXxKh6T2PNI1g2gJg751KCqNRvXUinD9tmAu1F9GbfkheiC?=
- =?us-ascii?Q?zubTzHyg6BE8MwT4T1JpyjiNWa5/F84yXBT/9ia/4XtWr8hy8rZ7RR8dP+tv?=
- =?us-ascii?Q?LQKw8sLD99xA1kWSnaFl7/8XWL2H7sFY5LfuKKur2uDFKKrBpLBixSFtilgV?=
- =?us-ascii?Q?hE0cybllb/2Xbk49RjrSH31siAuP6g2jEcTG6AKNL2p1c1QKKR5/PAZmfGOG?=
- =?us-ascii?Q?20lILZRba0rOVluocwJgxsop4galvVS1OsJ9koRx9VazbcZUYULGnsCQ8kK3?=
- =?us-ascii?Q?+A+pWWrh5ND3WD2M5afnmZ0oJ1xtuYRwdxdJvH3HwnMJzm6RVjBLlkQXRIn1?=
- =?us-ascii?Q?SwDXhKF/Zg=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4accf06e-c100-4edc-7e10-08deace56eed
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2026 09:37:34.4271
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 47YDt/JKNyKT73Mpl+6CCqRJDBQ0q1xSMku+7NZZe4oY+e4AtsAsz2KKQiL36kWQ+01sbyl+uVux34s7us4kQg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5876
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 05/19] unwind_user/sframe: Add support for reading
+ .sframe contents
+To: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Indu Bhagat <ibhagatgnu@gmail.com>, bpf@vger.kernel.org,
+        sashiko@lists.linux.dev
+References: <20260505121718.3572346-6-jremus@linux.ibm.com>
+ <20260505185932.C708CC2BCB4@smtp.kernel.org>
+ <4e5d51f0-8f4c-4a07-9141-8b26d2c90fc6@linux.ibm.com>
+ <20260506110142.7b2943d7@fedora>
+Content-Language: en-US
+From: Jens Remus <jremus@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20260506110142.7b2943d7@fedora>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA4MDA5OCBTYWx0ZWRfX0rCEV1aP+TIk
+ +vtbaD5kVxXj1cmwdMzFNyQMfiYl+XZOeR+XyU4mabqjDaOlkDl1Ez7VbF2sedLJ0JMitoIKRG9
+ ++C3B/Ha0d/s1t1l+KalI2QpSeeAPB8FS6DEqoAD5UrtvBFWW9waEaUYfSNJjs4p7lRqg2hfOl1
+ MryfM+RFl8/ZlTiLS+KBNlSXNLdBnPZ1dR+wD2DO350or+zuSNKmZIxufxyb6PVz/C7aDnseYvu
+ xIax6ershH3cgFqU/WffAZDxrj2Z/UPXTZT9lOCyXP/iki7r/ncd/4zUfqE8qYdlCF4tE0arVla
+ 1/L2EfMRIb0i6p0mMsa3ZzdmlwnaA6RxnsJSYl5RFxgxIrPK/7/V1KWTIvCd63gVUgpltju9O29
+ Omqadz9fcHY5zvxdpFKVZQqE6yKfQ1oSttsZJj2WInOXcJhRC74qefqaWcJdqOrmWZVRV4pbpZH
+ aGyvOAQj5lQt1wPMmag==
+X-Authority-Analysis: v=2.4 cv=J4GaKgnS c=1 sm=1 tr=0 ts=69fdb1ca cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8
+ a=OuseVYRhBCIXfGPqWo0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: EdltQbYL5lq8UREIR5SgdBX3HliFUCta
+X-Proofpoint-ORIG-GUID: zPzQkwolSqx0DnwyUw1HGGQgPOGb29-s
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-07_02,2026-05-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 clxscore=1015 malwarescore=0 bulkscore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 phishscore=0 adultscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605080098
 
-Hi Christian,
+On 5/6/2026 5:01 PM, Steven Rostedt wrote:
+> On Wed, 6 May 2026 16:34:34 +0200
+> Jens Remus <jremus@linux.ibm.com> wrote:
 
-On Fri, May 08, 2026 at 10:29:24AM +0100, Christian Loehle wrote:
-> On 5/8/26 08:56, Andrea Righi wrote:
-> > Hi Qiliang,
-> > 
-> > On Fri, May 08, 2026 at 03:51:35PM +0800, Qiliang Yuan wrote:
-> >> Implement an AI-focused NUMA-aware scheduler that optimizes task dispatch for
-> >> GPU-accelerated AI training. The scheduler maintains per-NUMA-node dispatch
-> >> queues to preserve L3 cache warmth and minimize remote DRAM accesses that
-> >> would stall GPU kernel launches waiting on CPU preprocessing.
-> >>
-> >> Key features:
-> >> - Per-NUMA-node DSQs (dispatch queues) to maintain cache locality
-> >> - Idle fast path that bypasses DSQ for minimum latency
-> >> - Per-task NUMA affinity tracking to remember task placement
-> >> - Work stealing across nodes to prevent starvation during load imbalance
-> >>
-> >> The BPF component (scx_ai_numa.bpf.c) implements the core scheduler
-> >> callbacks, while the userspace loader (scx_ai_numa.c) detects NUMA
-> >> topology, installs the BPF program, and reports per-node dispatch
-> >> statistics every second.
-> >>
-> >> This scheduler is suitable for AI training workloads where GPU command
-> >> launches depend on rapid CPU preprocessing with minimal scheduling latency.
-> >>
-> >> Signed-off-by: Qiliang Yuan <realwujing@gmail.com>
-> > 
-> > I think this would be more appropriate for inclusion in
-> > https://github.com/sched-ext/scx.
+>>> If a malicious user provides a large fre_len in the header, fres_end
+>>> (calculated as fres_start + shdr.fre_len) could wrap around the 32-bit
+>>> address space. This would bypass the bounds check in sframe_read_header(),
+>>> allowing fres_start and fdes_start to point into kernel memory. Later, when
+>>> __read_fde() and __find_fre() use unsafe_get_user(), this could lead to
+>>> arbitrary kernel memory disclosure.  
+>>
+>> SFrame is currently only supported on 64-bit architectures (i.e. x86-64,
+>> arm64, s390 64-bit).  So unsigned long fres_end should always be 64-bit.
+>> Do we need to add the following to the header parsing?
+>>
+>> if (fdes_start >= fdes_end || fres_start >= fres_end) {
+>> 	dbg_sec("inconsistent FDE/FRE start/end address\n");
+>> 	return -EINVAL;
+>> }
 > 
-> That repo no longer hosts C schedulers though, no?
-> I guess it's trivial to convert this particular one to rust.
+> I guess this wouldn't hurt.
 
-Correct, it shouldn't be too difficult to convert it to Rust and the scx repo
-seems a better place for this scheduler.
+Reviewing my suggestion again I realize that this check would be
+superfluous.  The existing computation and check already ensures that
+the FDE table is within sframe section, the FRE table is within sframe
+section, and both tables do not overlap:
 
-In general, I think we don't want to add too many example schedulers in the
-kernel, those in tools/sched_ext shouldn't be focused on production goals, they
-are there to test certain specific sched_ext functionality and show how to use
-the framework.
+	num_fdes   = shdr.num_fdes;
+	fdes_start = header_end + shdr.fdes_off;
+	fdes_end   = fdes_start + (num_fdes * sizeof(struct sframe_fde_v3));
 
-Thanks,
--Andrea
+	fres_start = header_end + shdr.fres_off;
+	fres_end   = fres_start + shdr.fre_len;
+
+	if (fres_start < fdes_end || fres_end > sec->sframe_end) {
+		dbg_sec("inconsistent FDE/FRE offsets\n");
+		return -EINVAL;
+	}
+
+- fdes_start and fres_start are computed from header_start and thus must
+  be larger sframe_start
+- fdes_end and fres_end are computed from their fdes_start and
+  fres_start and thus must be larger than sframe_start
+- fres_start < fdes_end ensures that the FDE table and FRE table do not
+  overlap
+- fres_end > sec->sframe_end ensures that fres_end (and fdes_end and both
+  fdes_start and fres_start) are smaller or equal sframe_end
+
+Regards,
+Jens
+-- 
+Jens Remus
+Linux on Z Development (D3303)
+jremus@de.ibm.com / jremus@linux.ibm.com
+
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
+
