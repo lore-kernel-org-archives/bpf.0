@@ -1,184 +1,159 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pj1-f66.google.com (mail-pj1-f66.google.com [209.85.216.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A76742459E5
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 15:01:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E68433ADA7
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 15:01:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778252487; cv=none; b=jVE6IYHtD/R8uG1XZgc4IRZvTK3mqToTHZ/1zrnz6Vk6QcbApzZqvmEwBvreZKBxCXfrGprt7NDVARheSyqpNxcg9YvGMNq4LwDxQTxtZ3d7yvTZR6Jb8x0z4pfHEiCyYMbR1BH5Xm10ismmJA7yAms6pq8K1eHV7XkqCuQXQ/I=
+	t=1778252487; cv=none; b=reOTgpzRtgtUD43FJcy0NLqeR+ISjr4bLbq4wtzUqpBqo71nIWcC5KCsy8isGGCVcV2y8bh1kmkjvvHA1+UIioma/vPAnEiqo3hEmMg4zNEhXBq3ATbhsUrUmNBO22BtKj3l4z4r35f6Hp2y/hnxqR1XvDcnfkkaciYmqBTrVvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1778252487; c=relaxed/simple;
-	bh=jGeM0yncAreFGWSxvrJhUl2XzEwjtH2RSF4Lh7ouqhw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FNOrdDTzkj2LY2Gpg2514x1Z30I5A4WXwuvh+Jq9+1G/YBJRUO4aBVhoIguVWi4pvoLjxs4RkAYcZl4yK0T1emI98qsR/m+Gxf/Y29gUrJTkyrjkRNlTvbMSGcdoHREAOqdNrhOXhq8sYX0n5Iynwxa/VzLL7BJ3a1L2k7Tfe/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jy63HMjd; arc=none smtp.client-ip=209.85.210.173
+	bh=C4KEQYKYMt+jPGupFXeYgtyzFlnYTdxDs0//Owq2PWA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DTEF1qYSRxjatrpRg6N98jx50PqDVosXrbDLjs/MGl8fRVCwGeoFTgB4fSxEZDNDGiQA1MKX9Js1kg8Cre9OaBeEGg7Wkm/khI/jm/IE/3dRPP7J39AVfRvZG4vZKpRy32mMeGgeBEns8yapFz+dytMXnI7gQcr3I7nSk8kdaSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k0GSFJJr; arc=none smtp.client-ip=209.85.216.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jy63HMjd"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8353c9f24d2so1186484b3a.3
-        for <bpf@vger.kernel.org>; Fri, 08 May 2026 08:01:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k0GSFJJr"
+Received: by mail-pj1-f66.google.com with SMTP id 98e67ed59e1d1-3665a90bcd3so645042a91.1
+        for <bpf@vger.kernel.org>; Fri, 08 May 2026 08:01:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778252483; x=1778857283; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QueeMM+8Rtdi14b6LI2wohmsfdt2dh1GY7mMDDoIeZw=;
-        b=Jy63HMjdEH3LRh32D6yLv47E8yiK/+GhjDBlXvUNaRKMYz/0ljk1I+UbuyPZDP+9aR
-         L7LEqDFHKU9To9tLk/157nPESEkftoazEYzifd59jq6uG1eMZhCdK2x/W9anK2D2Bjnq
-         bxjlN+Mvx74wuTaRSXAv3Cle1cMTDBkuyr0rgqKnCf2pgjgcSF6T68rotCxv38RbbIqC
-         pyupXGBECDbNJnI0PcSndbsl+PFm+9u3dn6fegk145VXnTEtUVDlR3QXbx9PMA/zUiPl
-         XKQpr1a358syuXIHbP7xAKmtnwt5D8cC652axEg9+vX7lGQqxI+FvGo2HOkGsDVNEqqp
-         dLeQ==
+        d=gmail.com; s=20251104; t=1778252480; x=1778857280; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VVsAIDWuXutjxalCznuSZJzmb8d2/FmjsiE/YFxHP1o=;
+        b=k0GSFJJrD1to0PbG8ZmvC0Y9LJNb3QkjjoZtb7wK/ZDczTYm3uWjZBFFtRLsX9t/eq
+         +s8uZdFUFfdJz/tkhb9zkkihV4X9ZiK+TI0oRe16kpl8iYbUDquIXDqeqzOGTwJS2vVI
+         5S1Jl/u0MS862SupdkPlckRMaUYyuej8xckw5Vm/alUJ3RY3tQms3rPS9lmbi1bxzblN
+         KPr74+xMjODE1ognAQZHD2wDXQhDTyidKirrffNRx4FR9wX9o2Q/hxjbNO32U1L9fLgQ
+         mbMr5b6mg/4oZBUt1XgFSBaygNFogyF3lxCq9TVhNSwvfPFBQV8mvBlj1bS7NjnNqhLa
+         r0GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778252483; x=1778857283;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=QueeMM+8Rtdi14b6LI2wohmsfdt2dh1GY7mMDDoIeZw=;
-        b=lJ7i4arYC1QBZJU/2QtwU3Q/I9gVBL55EaJNr6qfBHw/RcDj8oozxI1/vju+5D+Ojm
-         gxZ6prTlScmWqffyH5ggP0mp1SySVvo1kDaWSo1lzkIKZz4PsHmPeRlM8GGGExiFLQvN
-         /IDobMrRZtK4sP1Rz7tdvd/yTmcbsCq4wVEzfFpx0CEh12cIBDGK1i/ILjNm6tT9pBaF
-         l7P+cU9KNo1yIqew8gZjGyck8VkB80TiXFdvbc/LkY+HvLZDneBs0xBiC5NdVnH51FA2
-         OwX901LBVXUVd8LrRSNoV0L9UTEvmkMsV57goMdFchS9WAwCPEOltExhUbetwfqWXKUf
-         8Ouw==
-X-Forwarded-Encrypted: i=1; AFNElJ9wPFpiexn2DGEX3WVYSwepN5wE7pPT0r2EWaFjTR/Ub5SDuB3EFIBeQX13ZMT8FC67dEI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmVESDb+cGYnAGIsVnTsNzDNU5vPsC8xAC0zkeVrI0+ldjLPMM
-	vAjw57d7P/W6oqm/cK7d14ku9AAGeBakVf4QrvJrox2EdYxTNulZoBqy
-X-Gm-Gg: Acq92OFl2fO1IL2aiF0FeG2kQrfb8jtm0IVtICll62uyRi1UQNqoBB8KOihczecN/nO
-	XQMS+sY6NskMcwNS66d0ZHom7t87dTsmyg570FO8/TraB4k06r/R4ZfbyaVz9mtPOCPOyhnC35A
-	GF3s8Os+oi4nzRRaCBBIS740+yMrxGYHmjovXj5Q8jU5RodxakejBRNrs2n8s4eV/ZOw+VFrWoF
-	3XkGRYFHSNeCg3AvGR6+Bz+bGuzFm1FkDYf8iGlbqLN07QnSQKRwmhJiElbxG93xiJKskU5fp4D
-	NlKYMNsSFE/1GQ7eTphBxW/1ZF804cbBicW8D1uXw6S2wF1BaL/jvkfXynf1H8Ze49cthTZVwgi
-	HQIp75VFBbl3A51zcMiQlTTTTV0CwXbOfx2pOMOlNKa7RFmV64sJcjufQd0o/xhUZgM0HSPPhYz
-	pxYKRxFHvUprz/7W0q6h4NFVKzrMhN6KUgfsOQ
-X-Received: by 2002:a05:6a00:aa08:b0:837:f79d:909 with SMTP id d2e1a72fcca58-83a5e13d6d5mr14036326b3a.39.1778252482867;
-        Fri, 08 May 2026 08:01:22 -0700 (PDT)
-Received: from localhost.localdomain ([114.231.84.174])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83965945c1bsm13110064b3a.15.2026.05.08.08.01.15
+        d=1e100.net; s=20251104; t=1778252480; x=1778857280;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VVsAIDWuXutjxalCznuSZJzmb8d2/FmjsiE/YFxHP1o=;
+        b=Kz+zQNrOlhpsEu6MPQgG0HBo91c0tkfl7RgAcbjXiwa5nQffSHrvYdEQDA3DE+xZG9
+         x5qkxTvN/5XtP2833fd2vsMYmQD0u9oplOy1zgtLPruaL5ZeU4O38KjWkcAkKoqizk7b
+         rz4NAJXGw3U8797Os0O3M4y3SG5kCWE87mZSDSoU3fnOp3B/03CfALZsfxQ7ilEPNnzy
+         Qz/k2Nz6tgMIS2ycE/1+ZIeA1JzgFDs8DeAzTOyPNpt+Zob5FbjOpoFW0YDP82WDyhx6
+         mvRAcm2AzPtH9HQYeVMpseNlEoEsTzuV8Gx/Spt8tFt9p8yqrvebYHKVN295Y596WYBR
+         s5Og==
+X-Forwarded-Encrypted: i=1; AFNElJ/4WDdWkuenqcEGpsvkRzcIeJsDboge29AEXw7WJKsEZkOd1fS1ardGNArWaiJnKUIiP0I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCdBuwRCSBtGVRRD2z9smYYm+clLeHNLSih8UWoAf9W6M1JLDK
+	G07wkmNq3vWtYHr//0kkY2Mut+w6NXBY+jvW3RTyg392uUQsEd5dDbS9
+X-Gm-Gg: Acq92OGxO5D7wsWywZaFZJO3Ki0rtxZZuJs1rBvJsS1F+LYcxJapSnT56VC5ckzvOa/
+	jqK9XIbAZnTT32UeogLuynPOFjc1CWU1K7ydJ5dDIxGGWay7zE/aWlE8YAjVP+Myv+4NJDIIOOe
+	u2zvUHCU/+tCjTcJgk7ojZwAZ9Zx/A2kv5s9EsMNbsZ932IcZDrDDbB98zvl3JwXtcftI5YOrWG
+	0kXI60kkm/qyi8ifDTwiTwGo2it4k35WczMDCIKyURWslfvWcMKZwfB5CMnwy9UhJ+vyeit2ttY
+	YA4pk7GL8bm8xzR/K98Kf7kT04GA6v3c/2q2I32M0cgpKeoL87vEfdrp0w/eYDVnkT3WhGwZgOV
+	sejzxpqvSKekZbrposHYs+NT3Lb3ElOw2kjVxexB9lVDRhAB11yBlfd1StQmm4bpHswVL2uWP2J
+	slUk++aV2000uu/a0tXVtrpV6uuT7tDF/XBlGR
+X-Received: by 2002:a17:90a:710:b0:366:159a:c228 with SMTP id 98e67ed59e1d1-36615b96cf0mr4284277a91.6.1778252479571;
+        Fri, 08 May 2026 08:01:19 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:3::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-367c119f372sm61912a91.2.2026.05.08.08.01.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2026 08:01:22 -0700 (PDT)
-From: Vernon Yang <vernon2gm@gmail.com>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	roman.gushchin@linux.dev,
-	inwardvessel@gmail.com,
-	shakeel.butt@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	surenb@google.com
-Cc: tz2294@columbia.edu,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	dev.jain@arm.com,
-	laoar.shao@gmail.com,
-	gutierrez.asier@huawei-partners.com,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	bpf@vger.kernel.org,
-	Vernon Yang <yanglincheng@kylinos.cn>
-Subject: [PATCH v2 2/4] bpf: add bpf_cgroup_{flush_stats,stall} function
-Date: Fri,  8 May 2026 23:00:53 +0800
-Message-ID: <20260508150055.680136-3-vernon2gm@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260508150055.680136-1-vernon2gm@gmail.com>
-References: <20260508150055.680136-1-vernon2gm@gmail.com>
+        Fri, 08 May 2026 08:01:18 -0700 (PDT)
+Date: Fri, 8 May 2026 08:01:17 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Alex Shi <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>, 
+	Dongliang Mu <dzm91@hust.edu.cn>, Michael Chan <michael.chan@broadcom.com>, 
+	Pavan Chebbi <pavan.chebbi@broadcom.com>, Joshua Washington <joshwash@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, 
+	Leon Romanovsky <leon@kernel.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
+	Daniel Borkmann <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>, 
+	Shuah Khan <shuah@kernel.org>, dw@davidwei.uk, mohsin.bashr@gmail.com, willemb@google.com, 
+	jiang.kun2@zte.com.cn, xu.xin16@zte.com.cn, wang.yaxin@zte.com.cn, 
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Stanislav Fomichev <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, 
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v3 3/8] net: devmem: support TX over
+ NETMEM_TX_NO_DMA devices
+Message-ID: <af3593dYeiEeMzC2@devvm7509.cco0.facebook.com>
+References: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
+ <20260507-tcp-dm-netkit-v3-3-52821445867c@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260507-tcp-dm-netkit-v3-3-52821445867c@meta.com>
 
-From: Vernon Yang <yanglincheng@kylinos.cn>
+On 05/07, Bobby Eshleman wrote:
+> From: Bobby Eshleman <bobbyeshleman@meta.com>
+> 
+> When a netkit virtual device leases queues from a physical NIC, devmem
+> TX bindings created on the netkit device must still result in the dmabuf
+> being mapped for dma by the physical device. This patch accomplishes
+> this by teaching the bind handler to search for the underlying
+> DMA-capable device by looking it up via leased rx queues. The function
+> netdev_find_netmem_tx_dev(), used for finding the underlying DMA-capable
+> device, can be extended to support other non-netkit NETMEM_TX_NO_DMA
+> devices in the future if needed.
+> 
+> Additionally, this patch extends validate_xmit_unreadable_skb() to
+> support the netkit case, where the skb is validated twice: once on the
+> netkit guest device and again on the physical NIC after BPF redirect or
+> ip forwarding.
+> 
+> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> ---
+> Changes in v3:
+> - Fix validate_xmit_unreadable_skb() bug for non-devmem
+>   unreadable niovs (should not be dropped)
+> - Major simplification of validate_xmit_unreadable_skb()
+> - Fix prematurely released lock in bind-tx handler (Jakub)
+> 
+> Changes in v2:
+> - In validate_xmit_unreadable_skb() to check netmem_tx mode before
+>   inspecting frags (Jakub)
+> - Lock bind_dev around netdev_queue_get_dma_dev() when bind_dev !=
+>   netdev to fix lockdep (Sashiko)
+> ---
+>  net/core/dev.c         |  3 +++
+>  net/core/devmem.c      |  6 +++--
+>  net/core/devmem.h      |  9 ++++++--
+>  net/core/netdev-genl.c | 63 ++++++++++++++++++++++++++++++++++++++++++++++----
+>  4 files changed, 72 insertions(+), 9 deletions(-)
+> 
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index fbe4c328a367..268417c9ef22 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -3999,6 +3999,9 @@ static struct sk_buff *validate_xmit_unreadable_skb(struct sk_buff *skb,
+>  	if (dev->netmem_tx == NETMEM_TX_NONE)
+>  		goto out_free;
+>  
+> +	if (dev->netmem_tx == NETMEM_TX_NO_DMA)
+> +		goto out;
+> +
 
-Add bpf_cgroup_{flush_stats,stall} function to prepare for the
-subsequent mthp_ext ebpf program.
+Since this is a good case, maybe fold it into skb_frags_readable check above?
 
-no function changes.
+	if (likely(skb_frags_readable() || netmem_tx == NETMEM_TX_NO_DMA))
 
-Signed-off-by: Vernon Yang <yanglincheng@kylinos.cn>
----
- include/linux/psi.h  |  4 ++++
- kernel/bpf/helpers.c | 34 ++++++++++++++++++++++++++++++++++
- 2 files changed, 38 insertions(+)
+Otherwise it's a bit confusing to have:
 
-diff --git a/include/linux/psi.h b/include/linux/psi.h
-index 7b4fd8190810..243dcf97bea4 100644
---- a/include/linux/psi.h
-+++ b/include/linux/psi.h
-@@ -52,6 +52,10 @@ static inline void psi_memstall_enter(unsigned long *flags) {}
- static inline void psi_memstall_leave(unsigned long *flags) {}
- 
- #ifdef CONFIG_CGROUPS
-+static inline struct psi_group *cgroup_psi(struct cgroup *cgrp)
-+{
-+	return NULL;
-+}
- static inline int psi_cgroup_alloc(struct cgroup *cgrp)
- {
- 	return 0;
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 2bb60200c266..1c353e0ff14f 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -29,6 +29,7 @@
- #include <linux/task_work.h>
- #include <linux/irq_work.h>
- #include <linux/buildid.h>
-+#include <linux/psi.h>
- 
- #include "../../lib/kstrtox.h"
- 
-@@ -2881,6 +2882,37 @@ bpf_task_get_cgroup1(struct task_struct *task, int hierarchy_id)
- 		return NULL;
- 	return cgrp;
- }
-+
-+/**
-+ * bpf_cgroup_stall - acquire the total stall time of cgroup
-+ * @cgrp: cgroup struct
-+ * @states: psi states
-+ *
-+ * Return the total stall time.
-+ */
-+__bpf_kfunc u64 bpf_cgroup_stall(struct cgroup *cgrp, enum psi_states states)
-+{
-+	struct psi_group *group = cgroup_psi(cgrp);
-+
-+	if (unlikely(!group || (u32)states >= NR_PSI_STATES - 1))
-+		return (u64)-1;
-+
-+	return div_u64(group->total[PSI_AVGS][states], NSEC_PER_MSEC);
-+}
-+
-+/**
-+ * bpf_cgroup_flush_stats - Flush cgroup's statistics
-+ * @cgrp: cgroup struct
-+ */
-+__bpf_kfunc void bpf_cgroup_flush_stats(struct cgroup *cgrp)
-+{
-+	struct psi_group *group = cgroup_psi(cgrp);
-+
-+	if (unlikely(!group))
-+		return;
-+
-+	psi_group_flush_stats(group);
-+}
- #endif /* CONFIG_CGROUPS */
- 
- /**
-@@ -4734,6 +4766,8 @@ BTF_ID_FLAGS(func, bpf_cgroup_ancestor, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_cgroup_from_id, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_task_under_cgroup, KF_RCU)
- BTF_ID_FLAGS(func, bpf_task_get_cgroup1, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_cgroup_stall)
-+BTF_ID_FLAGS(func, bpf_cgroup_flush_stats, KF_SLEEPABLE)
- #endif
- BTF_ID_FLAGS(func, bpf_task_from_pid, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_task_from_vpid, KF_ACQUIRE | KF_RET_NULL)
--- 
-2.53.0
+if (xxx)
+	goto out;
+if (yyy)
+	goto out_free;
+if (zzz)
+	goto out;
 
+(or, reorder to be out/out/out_free)
+
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
