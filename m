@@ -1,130 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A1CB2BD11;
-	Fri,  8 May 2026 20:55:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47782225413;
+	Fri,  8 May 2026 21:06:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778273707; cv=none; b=IlfsWhzti+We9rQ2IGVFdJJ9vX6LROZ6rdF2LvtdpCGp2s7oA+ZrMj0/TNabVDmAluOMPfZPqjaNh4cZ/FTH6C74LgOx9i8HWbENBYp2e0tkxmhTFFwLhi1pQ8hrUmvBbqnvU32pnGj7C3iFYLqvPV2rNff4jKaogF/f51tSRJQ=
+	t=1778274393; cv=none; b=iTnMbibu9ayS/aUKo9C40bAe3RSYj6gnEA1w6O09jebQy2OGQHE50y8pKfYtMr6c1sIZjXy9CWErE6oLILKEXoFjZwSQl5j8ltW8Fdcev6xl3hA2+05gToGpeBe6t/odxuML8VBTjxZDe70bhtoWehFF1k8b6pO6/olvdFAoujc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778273707; c=relaxed/simple;
-	bh=vLXuCV49JY/nCWOKRvNGfbOGdAU5yx67gHZWIVTMj/o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Avuaymw90EJNH3gfEElMsaUdFpFCJn99rPKk2CJ0ouIKq+EI4dEhhk3vI1knr7Z9fmaqN4c48h30xM5L/Fc0Todgp4Fxd1xxNnhxfWoFoOBifRgoXOTwMV3h5eTOF38sJDr+q3NyZJdczOvewK7ID7QMAtEjPAFlp60l6EE2Wc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qs5A9MTa; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778274393; c=relaxed/simple;
+	bh=T0eWHYvoB32q4/LjWG9pTPZE5yTNYbilqq9QRe3btmk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q4vFWUzTpNSMQvJnSrfaMkf50EKz0Bn+YIDJTJqEN/qyNIa8Mg8NoHZUAXhfbu/WN4yhJGxcvxLZKuo97vB/VOSIIssUCtUNaNChho2zhxbLfsgC87NUmlxJxBal1+EqqxUOFjdqXxygqOMJfNxY5LtH1pbpi3yzgFkZKB8po8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=hZ6JYsCY; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qs5A9MTa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29A93C2BCB0;
-	Fri,  8 May 2026 20:55:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778273706;
-	bh=vLXuCV49JY/nCWOKRvNGfbOGdAU5yx67gHZWIVTMj/o=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Qs5A9MTasyW/MZTWjl781rUA3+rm5IGMl3iJV9wo8sCOgpQQij+pQHJryBa+JNAud
-	 D2QW2QYqclrds4uDNw6HIJ2vaB8uXcbPQdaGyVluwUIjyDmWPEEqI9zc6G1LCuNFwY
-	 TttGY72hASAoBsL1ohRbrmPa33cscCuXZGpo/RyUv2iB5KXOcAUNLzVaaC2+kNwMyW
-	 9xGSK+px3UXlLb62VshQPhR3lmXnfidxqltYElOpH+j9sHEPmjkMIoJp21+3II0/GM
-	 bwYWkRq46ZRwfPt77aWH9b6v8OreD70Rc4+no2li6Ui5xmYUl3sjYF5WhYTFQ+SnV7
-	 s6I5DhLW1VJQg==
-Message-ID: <5987cdee-9174-44fb-8e2b-41e6ad969612@kernel.org>
-Date: Fri, 8 May 2026 22:54:58 +0200
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="hZ6JYsCY"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7680240E00C2;
+	Fri,  8 May 2026 21:06:28 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id hgMfzb9Q01z8; Fri,  8 May 2026 21:06:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1778274377; bh=THjyDfJHG7KW9npiqBHK3HlBg3FTqIowEJNRgPMlB/w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hZ6JYsCYHUgII6cO/Pj/xxaMkCexjTFlixqmNXNw918guUvdWQNt98LA2QtBpt8oh
+	 2G6VbNwCsf1GFoey3tSlMK+l2dB/3LEDfUOc6W7g7a0WEMxfy4oBTzFnWoa08TIvGM
+	 H/FeXQqiEkiH5Ac6wIly0j5pb8tqcXvWUYY9sF5P1NSiM/ijHl3gSbroqzXvr+MSxu
+	 tI3NpnfLfMmvZF1HmRuEYVqUye4oXpKPeO8hxkxTNUgIuCJ/Tpn3EBZ9qCX8frgC0w
+	 B1lIptOv7SA00tM6phu4KI6UahFQui8Ly0kNI+IriGaJAGO4qQhELbnGzoMv37xfKC
+	 B/AcsJTnS4HzUcG77+KdyUMG0maJZFvuI7xhlGLHbESKNSz8MFMXMR4l3OZFblsjZA
+	 0fN2qlB1egK7K2LAaqxPFw9pOSsiSkJ08ap0TzrcXha9IklHyx49UuhlbXz/J1N3hC
+	 kcwh8KR1xqkXVleNxkXmuA7FpWpZTkeUdqic8/Uwu9LBmwbW3ss2+Xn9d+RD0ya7ZA
+	 GqUcSfYtwystf/w7zBknjGt0ULLwYQcm1/cS2GkkqdxFA7GiR54QMv4zSjv3VUYnWP
+	 svxB3a4hPt8+UV52rUrfb71bKpwutQXDLkOL21b5q/EMV6wGTSk3kKjk+2eZL6LPNu
+	 EZLlRu8V3SW4Uupd9i5VmLZM=
+Received: from zn.tnic (pd953014d.dip0.t-ipconnect.de [217.83.1.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id E01BC40E014B;
+	Fri,  8 May 2026 21:05:34 +0000 (UTC)
+Date: Fri, 8 May 2026 23:05:27 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
+	Nikolay Borisov <nik.borisov@suse.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	David Kaplan <david.kaplan@amd.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Jason Baron <jbaron@akamai.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	Asit Mallick <asit.k.mallick@intel.com>,
+	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v11 02/12] x86/bhi: Make clear_bhb_loop() effective on
+ newer CPUs
+Message-ID: <20260508210527.GFaf5QFz61RmSRBqKT@fat_crate.local>
+References: <20260422-vmscape-bhb-v11-0-b18e0cf32af4@linux.intel.com>
+ <20260422-vmscape-bhb-v11-2-b18e0cf32af4@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/4] mm: introduce bpf_mthp_ops struct ops
-To: Vernon Yang <vernon2gm@gmail.com>, akpm@linux-foundation.org,
- ljs@kernel.org, roman.gushchin@linux.dev, inwardvessel@gmail.com,
- shakeel.butt@linux.dev, ast@kernel.org, daniel@iogearbox.net,
- surenb@google.com
-Cc: tz2294@columbia.edu, baohua@kernel.org, lance.yang@linux.dev,
- dev.jain@arm.com, laoar.shao@gmail.com, gutierrez.asier@huawei-partners.com,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
- Vernon Yang <yanglincheng@kylinos.cn>
-References: <20260508150055.680136-1-vernon2gm@gmail.com>
- <20260508150055.680136-4-vernon2gm@gmail.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
- dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
- QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
- XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
- Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
- PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
- WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
- UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
- jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
- B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzS5EYXZpZCBIaWxk
- ZW5icmFuZCAoQ3VycmVudCkgPGRhdmlkQGtlcm5lbC5vcmc+wsGQBBMBCAA6AhsDBQkmWAik
- AgsJBBUKCQgCFgICHgUCF4AWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaYJt/AIZAQAKCRBN
- 3hD3AP+DWriiD/9BLGEKG+N8L2AXhikJg6YmXom9ytRwPqDgpHpVg2xdhopoWdMRXjzOrIKD
- g4LSnFaKneQD0hZhoArEeamG5tyo32xoRsPwkbpIzL0OKSZ8G6mVbFGpjmyDLQCAxteXCLXz
- ZI0VbsuJKelYnKcXWOIndOrNRvE5eoOfTt2XfBnAapxMYY2IsV+qaUXlO63GgfIOg8RBaj7x
- 3NxkI3rV0SHhI4GU9K6jCvGghxeS1QX6L/XI9mfAYaIwGy5B68kF26piAVYv/QZDEVIpo3t7
- /fjSpxKT8plJH6rhhR0epy8dWRHk3qT5tk2P85twasdloWtkMZ7FsCJRKWscm1BLpsDn6EQ4
- jeMHECiY9kGKKi8dQpv3FRyo2QApZ49NNDbwcR0ZndK0XFo15iH708H5Qja/8TuXCwnPWAcJ
- DQoNIDFyaxe26Rx3ZwUkRALa3iPcVjE0//TrQ4KnFf+lMBSrS33xDDBfevW9+Dk6IISmDH1R
- HFq2jpkN+FX/PE8eVhV68B2DsAPZ5rUwyCKUXPTJ/irrCCmAAb5Jpv11S7hUSpqtM/6oVESC
- 3z/7CzrVtRODzLtNgV4r5EI+wAv/3PgJLlMwgJM90Fb3CB2IgbxhjvmB1WNdvXACVydx55V7
- LPPKodSTF29rlnQAf9HLgCphuuSrrPn5VQDaYZl4N/7zc2wcWM7BTQRVy5+RARAA59fefSDR
- 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
- VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
- /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
- iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
- 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
- zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
- azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
- FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
- sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
- 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
- EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
- IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
- 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
- Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
- sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
- yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
- 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
- r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
- 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
- CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
- qIws/H2t
-In-Reply-To: <20260508150055.680136-4-vernon2gm@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260422-vmscape-bhb-v11-2-b18e0cf32af4@linux.intel.com>
 
->  
->  #include <linux/fs.h> /* only for vma_is_dax() */
->  #include <linux/kobject.h>
-> @@ -296,6 +297,11 @@ unsigned long thp_vma_allowable_orders(struct vm_area_struct *vma,
->  				       enum tva_type type,
->  				       unsigned long orders)
->  {
-> +	/* The eBPF-specified orders overrides which order is selected. */
-> +	orders &= bpf_mthp_choose(vma->vm_mm, orders);
-> +	if (!orders)
-> +		return 0;
-> +
+On Wed, Apr 22, 2026 at 11:15:15PM -0700, Pawan Gupta wrote:
+> As a mitigation for BHI, clear_bhb_loop() executes branches that overwrite
+> the Branch History Buffer (BHB). On Alder Lake and newer parts this
+> sequence is not sufficient because it doesn't clear enough entries. This
+> was not an issue because these CPUs use the BHI_DIS_S hardware mitigation
+> in the kernel.
+> 
+> Now with VMSCAPE (BHI variant) it is also required to isolate branch
+> history between guests and userspace. Since BHI_DIS_S only protects the
+> kernel, the newer CPUs also use IBPB.
+> 
+> A cheaper alternative to the current IBPB mitigation is clear_bhb_loop().
+> But it currently does not clear enough BHB entries to be effective on newer
+> CPUs with larger BHB. At boot, dynamically set the loop count of
+> clear_bhb_loop() such that it is effective on newer CPUs too.
+> 
+> Introduce global loop counts, initializing them with appropriate value
+> based on the hardware feature X86_FEATURE_BHI_CTRL.
+> 
+> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
+> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> ---
+>  arch/x86/entry/entry_64.S            |  8 +++++---
+>  arch/x86/include/asm/nospec-branch.h |  2 ++
+>  arch/x86/kernel/cpu/bugs.c           | 13 +++++++++++++
+>  3 files changed, 20 insertions(+), 3 deletions(-)
 
-There was some discussion around this in the past: where should we hook into
-(e.g., deferred shrinker?), which information should we provide to the hook
-(e.g., vma properties?).
+Simple and clean - that's how I like 'em.
 
-We concluded mostly to "we don't know". I know that Rik van Riel wanted to look
-into doing this properly, but seems like he got distracted :)
-
-I assume there will be a lwn.net article covering the "BPF in MM" session we had
-at LSF/MM just this week.
-
-Conclusion: ABI stability is a headake.
-
-The simplistic approach of deciding an order for the whole MM is very likely not
-what we want.
+Acked-by: Borislav Petkov (AMD) <bp@alien8.de>
 
 -- 
-Cheers,
+Regards/Gruss,
+    Boris.
 
-David
+https://people.kernel.org/tglx/notes-about-netiquette
