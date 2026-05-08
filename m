@@ -1,215 +1,158 @@
-Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930913ACA5F
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 11:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778239845; cv=pass; b=X3bJMV+vOwHxzXwZr0mKsl7pjJxRl43HwmYX0a9JMfnj61HHk/tm6F8h8RK9Hqnh/M9o6oghW4PN3uApGpSesO/zgWB2TZMSGdyD54IpRHWVGcmG6ona/Y9V1/yo/7QEVPrJ5ZS61P/B4bn8yWMaq/8X4ysYckWslbCpoBaCElQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778239845; c=relaxed/simple;
-	bh=CBfD4iRTH3E14SN4QEqZr0RaBqNvQko8KctGms5BCcY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rF+rIW0GBgB0S2oGuhttHxp18YevTNgdwLcfRTgsB4yUHeULVWXFOyDwWOEg5TG0rRxPeK3//YTF4NP0cMPgaDI69MVq8prn3bS+vwZ35rtu9SaU7qIvZRv3X/6F1JsncVSELOx/uJ+ZDJmkL5fnDlKECBBiaKO1Dm0hmkGNIy8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EfxAoXh7; arc=pass smtp.client-ip=74.125.82.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2D13D090B
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 11:32:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778239959; cv=none; b=rqX+CA0XikxSzwAZqDz4VPaP7Gu/kOVDtzpN4kLYOiThDRG6JqYqna12LU4ZyT6cLVu+X+vmrBezK+LHrUYr0eLeIyHn+1gD1zeeS7fCG8hmVewZksKaAWQqbYdoWwgdSjoFfyVkibnBQne9YXDNphDJIZ9Gm06n67ImYHgEnvk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778239959; c=relaxed/simple;
+	bh=0hrQlW5FpcXozs6wxkIBzDktzohYeRr936w21ThvyGI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O5bfL54XtqFLIAP/5Ae5g/XJYVQqs/I2zojh+2mbo/1HpXzlR/jnliRH2dwgzZ05MTBCtsuHqH+CJFLJPfkvYfbwgznVIvU3onx61hbJC4l/gPSD4UnGj9bGlb5SB6jT5XTk2u1YzXJOZO6jAPGxbidHmmlyfRm+yEv0MciEgIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=GOK0bOic; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EfxAoXh7"
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-130b2295ed0so5574453c88.0
-        for <bpf@vger.kernel.org>; Fri, 08 May 2026 04:30:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778239843; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jS+n1AUrq3szSm9Ko3IMv0GnA6sIZ/MeMWfgkJhtjnfIpvZOIcqgy4/VVvdux5jw3a
-         u/fcP6Z+rrNsLuJNaPCQRM2yM4+nQga5zFbN9nn7PG3KakabjS080tQogvdk6TXuxdUs
-         Pwp6BoTc8DVUTEUDvn+NPESZgyfISfMJoUiyysVm9bkSHB4TBN9acaHHkReTPS39+C07
-         hW1AQ+vP70jESRaqQ3FPx+v9FLVtTjwSsbrCSiCyRdF4XW3drhHcGm8xlmTK/ejZ9Gb8
-         jI6xPLH+pP/AfhX8mkipZsUOMZ8O/SpHFn2XXE1JkJAJaAJnXu9S2RRkxqn1nqVv/0fr
-         Uq4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kv/cN9JZtLINOz191VE4jyOuiPMT2DphC53i8RZ2MOk=;
-        fh=rjdmRj+rDKzF/fCGUcuJ4P9hiwXZwpk8lCQJxTTyhfI=;
-        b=PJdo8OToqvjbLSxbhNreHYOh5B+iMaBNLgHyeZiHw1PsRlu4EpJkc5PVLSOg6ZIiWA
-         0KrWC5+jrdGFkvI/FB66M6xQ2o/6RtJ+wo+7Inl+z7TLB/fmuNL/IdOdg9InFQTMg90P
-         r34LzG7l2RI3h0xXJ+873qXZeIpJlyShsOfR4celHXoQiiiZD08SahH+Uai1qCPkXfze
-         qtue3NaOMk8AaCdmojE2LpBJqHFoGaOKNpf7anwkXdi1rStP6TBemqJ8f2jO68oEyCob
-         WJb/z1yTdodkRXZlcV8W/bF8axQ0BzfQFYEPfm+50QIYhokw6yLdO32QXHDmVS/sXnmY
-         rHtA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="GOK0bOic"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5a742b8b72eso1850719e87.1
+        for <bpf@vger.kernel.org>; Fri, 08 May 2026 04:32:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778239843; x=1778844643; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kv/cN9JZtLINOz191VE4jyOuiPMT2DphC53i8RZ2MOk=;
-        b=EfxAoXh7ZNOtZ6fsyUbKJw/95kCMKcIxREmjyJPpXIiq+mlMYp2pxPmOR6ZCo1HPRj
-         mLsQWvTT0Gzw5M1SkoogzpkXAWuzy8suTdtJ6aCaJEhj7xQvtzuRImY88cpioQ78Rr4T
-         Pfc2T3cBxktmn483+6lI+1mw895pJVD8ZCbF9KPCoQgr9EYPxNmpb+hRcZnnvz645EfF
-         ROYyMDKOuouoTr7ULEjsx9MC7A9ZGtaIRiAu01eW7VVx1ut2F+dMSxJOielhAVNotbvg
-         YfXOm40wyd4eX5SbBMjcpU3OV4m1kwp506glgSgxMmPTyUVW4golxWdHy16cvPt0/kAP
-         4o1g==
+        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1778239946; x=1778844746; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=i3oCf6JjY2k4f2DdZmgb+d8lKs1DeUt4qK3/lGPB5dQ=;
+        b=GOK0bOicP9EfTd1qBgFEldBXfDJ8FiWszClkdoFfP9kf5kk8R9fMDZ73KK/WrrnsXW
+         IjLcfQsAkhsM6p02OLTCDkmkbHrMChdUPlPWfk0HPW8Cq9+y78ajjCN/zfuwPWIAsr1q
+         nJahLN7dxmOzL6sDUdxYbNU68AT24x58wRCP2ToUSW52UAmh+mM+3eVIpazBivPec4U4
+         0NmHZRd9Zr4NQx7JVUbdKACpENzKTMHEeZg56nseAk00kAv3ZRsCrGMmTKbvVkcPwjIq
+         z7h7NE2pKfVJaeYJg3e+gDzt3B9vYeYxhHY1XppnrGHmUQxLcRhSbZfi8Yrmm+eJknsm
+         IQfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778239843; x=1778844643;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kv/cN9JZtLINOz191VE4jyOuiPMT2DphC53i8RZ2MOk=;
-        b=NTMsgPrdmXqKMOJVqlldTHUSgMoLP91hYAnLteKkpr4Wg20a+gBjTj5+zURBHNsZCL
-         YoY3lnT660YUxaH/Ih7ibxXFfwub4wgzPhmM9z27qpPs42WXWzuEJ7m+axPMAj548Z+x
-         xxsFOIAOyi3MYt+/3FsyZhxLGY1Ust3sLonRigGgsatbjwMPwumuujATr4pskZx4LMFb
-         Mt3PZXA02+TA1Z38qxkX5yCzgSAKvSbX5Xm7OHI/8iLN+4s+qrsePcGLFkbryEkQd6gg
-         nhfRyb4bNc0Jule1jZ2S0rshjWRr9iOhJXX+6aM0Vm+VPms5JdtQhmAZtZLHdTwpveyY
-         MYkA==
-X-Forwarded-Encrypted: i=1; AFNElJ9IUkSjfoGN66aUCgcQHdMPUOwbxyPEKDPHvFK5MWC/iqMSsPIyowh9x2ilQtSfmqcnwEE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz85uRbx1v/ySUgk1XDloQjclrlqAm62ZgUN5H8FYJowpcXy3jZ
-	Sg5uc8jp/t9vwFUasdsz9BVsUK14HDXQAR5hX8a+TbJpZEDor71bNq6XygViveNBX6YUH6MQgk0
-	xOmHwQ+2Qlq/m16BkH84fhp17eXCgNic8umA9hjjQ
-X-Gm-Gg: AeBDiesZM5AxTiUwRSYG1lzOL9P0De/o3yiw4m0Xo00S+w42vA5c3HvRY3/If4Z1QRz
-	6vQPlRd2m2UilwdgigmaLq3MUnW1L+kGN9U9D3zWsG+GoAk89RePa4WU3hBUZCty8ru8PZgZTlD
-	XHsEh2tE+iG+xs+cvlQMu1/PniGNRj7EHLJMdzKGAT5iBb40pRlkaEKU7r29+N7+9Ioe8sqr5r0
-	p7CKILUteMoZcNopiYRKelo2L9HJqjUWowafkIQnLVQ/RlTWbGJcQjW3H8VUx2C/ZNnOFNSeIsg
-	NnaHYzKasM+8KygVmOT9sj0VIAN78ELvVb3KUtdIyhK1doGn7BRZv+rW1AkktMyt/LziFEdKKgm
-	NNlLFjGDPm9wQZISEqVEtq84RsI0fg2Q=
-X-Received: by 2002:a05:7022:ea24:b0:12c:87f1:f41a with SMTP id
- a92af1059eb24-1318e91771bmr6366203c88.21.1778239842029; Fri, 08 May 2026
- 04:30:42 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778239946; x=1778844746;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i3oCf6JjY2k4f2DdZmgb+d8lKs1DeUt4qK3/lGPB5dQ=;
+        b=jMmS6153KiE4fDv9MkDaNtyUweW/a8ubMEL3PZS6d9vOfUVshZ/LDwOtJvhbE84hUT
+         16SezGpAqFTBrpCZANGcEKPJYfSyZJO+qqiduLtpzpFjgwUNu0aX2PPl55AiQbw9s5Yj
+         qSVyXgyUGRy6oiu7/yP5xfM8RpivOnCTBrE3aoTdsKlLSmGIbIi4wKS4XCJNCtyvuM24
+         QQ/Li9GwGK+Ibt/ABdcNgQjsVdF+RDZ4G1ee6YrzD/qb9Hm2crG6SSYDCJpxkdrKW6QO
+         bpdXnfkL8y59zQ+5HNd2DpSUU33fGtuQSa0uLgeZ8u9sEbiJWxE7Wrcne55VaKv5tiAg
+         j6Fg==
+X-Forwarded-Encrypted: i=1; AFNElJ/0S6hSJ8XD2JFum4YBQkVE9T/SzFW2dnwwcmq+tWENuY5/GARrCK0YGRZXyU4kovU1dDI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyiuf6ZL/HKKzygjeO1xqDTuxIotGdeSfKF5Z2WMxog2MbEPazx
+	7FW3tpR9SdN5wj0HbPs8s1K2mPWvHbyajr4iwNHS971U9YbcuqCnQ/DICn+XJe/2YsRgPhO3tKr
+	lceKltlE=
+X-Gm-Gg: Acq92OFOoODNZghV/j8LYJrdm9F2Q9ib7RP7XyppkoAHYjFNnXCe7ZTfD3XxzM8fLp8
+	tRnBtyW+ObLXSNn3FqJ3+TdXLEai75IZDFG21Ws7EoSlgMjIbAH9Yix/mm7PNNsfq0AzCfa4G1+
+	w9608h3iMSclZcKdacyyUggsV5Wc1UPBbdf059IikXcqnI+7WVGAvTouuvdp9Jh4i2jmNM15niL
+	gluB3eF1ekWYlszDEHsidv/3CdSCLtdM8E8dQFyoRv2NPkRpyXFRLCGShSKahIAiFcfP1RknOo+
+	OesvAAt9EmZPq3HvG+3vC+Xi5pTw8nBA4pvlhLF7BXINZfISYu25UvGHurq07IQG/tJdUWC2D2j
+	MplON0GLlgQ+VY4HF6UHH0MHWl1S15MArLek9G/2kmhxiVsLGjQLTqlgoY9tkHMlGMupWWz5sgp
+	pGPPLTdGedqXVR9k0DllONRzmqOuVjRW6XWTkkEaBPX5VRy00067Fr+ecUXxhrwlG9cIpYGNr0D
+	XXxsDiTiv1I43hDuKaX383S08xn1hNQbl2noMsW54quooiP1HFGnA5G0sVLYYz3cm4V+qFAHCW2
+	YGNfe4sG
+X-Received: by 2002:a05:6000:26c9:b0:43b:3b80:6776 with SMTP id ffacd0b85a97d-4515d3dc30emr18803689f8f.30.1778239532551;
+        Fri, 08 May 2026 04:25:32 -0700 (PDT)
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-454917d57aesm3814079f8f.26.2026.05.08.04.25.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 May 2026 04:25:31 -0700 (PDT)
+Date: Fri, 8 May 2026 12:25:28 +0100
+From: Daniel Thompson <daniel@riscstar.com>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, maxime.chevallier@bootlin.com,
+	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
+	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
+	arnd@arndb.de, gregkh@linuxfoundation.org,
+	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
+	alexandre.torgue@foss.st.com, ast@kernel.org,
+	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
+	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
+	julianbraha@gmail.com, livelycarpet87@gmail.com,
+	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
+	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+	rohan.g.thomas@altera.com, sdf@fomichev.me,
+	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
+	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 10/12] net: stmmac: tc956x: add TC956x/QPS615
+ support
+Message-ID: <af3IKKkjl0jK8GGB@aspen.lan>
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-11-elder@riscstar.com>
+ <2ce5897d-5bbb-486a-b0f0-0e30e54b451a@lunn.ch>
+ <afy34kj2hPxIlArO@aspen.lan>
+ <ef6df85f-11ac-404d-958a-8cf69b3b6bb6@lunn.ch>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260508073355.3916746-1-kuniyu@google.com> <20260508073355.3916746-8-kuniyu@google.com>
- <21ee2d5d-fc8c-497e-aa98-e5e4e3fbecf8@linux.dev>
-In-Reply-To: <21ee2d5d-fc8c-497e-aa98-e5e4e3fbecf8@linux.dev>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Fri, 8 May 2026 04:30:30 -0700
-X-Gm-Features: AVHnY4KkzSQ5bG2E11JHf5_h3yq1P29unHw-1nEvdIdkT055s-AbAypVF74WclI
-Message-ID: <CAAVpQUBv0Uc4Xi-4wK2S63FqtXHHkLqJTotOxxDyhqFknoZG_Q@mail.gmail.com>
-Subject: Re: [PATCH v1 bpf-next 7/8] bpf: tcp: Add SOCK_OPS rcvlowat hook.
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@google.com>, 
-	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Tenzin Ukyab <ukyab@berkeley.edu>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ef6df85f-11ac-404d-958a-8cf69b3b6bb6@lunn.ch>
 
-On Fri, May 8, 2026 at 3:37=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.dev=
-> wrote:
+On Thu, May 07, 2026 at 06:29:15PM +0200, Andrew Lunn wrote:
+> On Thu, May 07, 2026 at 05:03:46PM +0100, Daniel Thompson wrote:
+> > On Fri, May 01, 2026 at 09:04:58PM +0200, Andrew Lunn wrote:
+> > > > +static struct tc956x_mac_speed mac_speed[] = {
+> > > > +	{ PHY_INTERFACE_MODE_2500BASEX,	SPEED_2500,  SP_SEL_SGMII_2500M, },
+> > > > +	{ PHY_INTERFACE_MODE_SGMII,	SPEED_2500,  SP_SEL_SGMII_2500M, },
+> > > > +	{ PHY_INTERFACE_MODE_SGMII,	SPEED_1000,  SP_SEL_SGMII_1000M, },
+> > >
+> > > That looks odd. Some vendors implemented 2500BaseX using SGMII
+> > > overclocked. But that is not strictly 2500BaseX. Having the 2500BASEX
+> > > entry suggests you have real 2500BASEX, so why have an SGMII entry
+> > > with SPEED_2500?
+> >
+> > This is a consequence of the code that uses this lookup table being
+> > called both during initialization and from the fix_mac_speed() callback.
+> >
+> > During initialization we only have the value in plat->phy_interface to
+> > go on so we run the lookup table using plat->phy_interface (which is
+> > typically PHY_INTERFACE_MODE_SGMII) and with the maximum permitted
+> > speed.
 >
->
-> On 5/8/26 3:33 PM, Kuniyuki Iwashima wrote:
-> > Now, it is time to add the new hooks for BPF_SOCK_OPS_RCVLOWAT_CB.
-> >
-> > Let's invoke the BPF SOCK_OPS prog when
-> >
-> >    1. TCP stack enqueues skb to sk->sk_receive_queue
-> >       -> tcp_queue_rcv(), tcp_ofo_queue(), and tcp_fastopen_add_skb()
-> >
-> >    2. TCP recvmsg() completes
-> >       -> __tcp_cleanup_rbuf()
-> >
-> > This will allow the BPF prog to parse each skb and dynamically
-> > adjust sk->sk_rcvlowat to suppress unnecessary EPOLLIN wakeups
-> > until sufficient data (e.g., a full RPC frame) is available
-> > in the receive queue.
-> >
-> > Note that the direct access to bpf_sock_ops.data is intentionally
-> > disabled by passing 0 as end_offset.
-> >
-> > Instead, the BPF prog is supposed to use bpf_skb_load_bytes()
-> > with bpf_sock_ops because payload is not in the linear area
-> > with TCP header/data split on and skb may contain a RPC
-> > descriptor in skb frag.  This also simplifies the BPF prog.
-> >
-> > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> > ---
-> >   include/net/tcp.h       | 14 ++++++++++++++
-> >   net/ipv4/tcp.c          |  2 ++
-> >   net/ipv4/tcp_fastopen.c |  2 ++
-> >   net/ipv4/tcp_input.c    | 10 ++++++++++
-> >   4 files changed, 28 insertions(+)
-> >
-> > diff --git a/include/net/tcp.h b/include/net/tcp.h
-> > index 4e9e634e276b..003e46c9b500 100644
-> > --- a/include/net/tcp.h
-> > +++ b/include/net/tcp.h
-> > @@ -737,6 +737,20 @@ static inline struct request_sock *cookie_bpf_chec=
-k(struct net *net, struct sock
-> >   }
-> >   #endif
-> >
-> > +#ifdef CONFIG_CGROUP_BPF
-> > +void bpf_skops_rcvlowat(struct sock *sk, struct sk_buff *skb);
-> > +
-> > +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *s=
-kb)
-> > +{
-> > +     if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_RCVLOWAT_CB_F=
-LAG))
-> > +             bpf_skops_rcvlowat(sk, skb);
-> > +}
-> > +#else
-> > +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *s=
-kb)
-> > +{
-> > +}
-> > +#endif
-> > +
-> >   /* From net/ipv6/syncookies.c */
-> >   int __cookie_v6_check(const struct ipv6hdr *iph, const struct tcphdr =
-*th);
-> >   struct sock *cookie_v6_check(struct sock *sk, struct sk_buff *skb);
-> > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> > index 1d9e52fc454f..80144b97a87a 100644
-> > --- a/net/ipv4/tcp.c
-> > +++ b/net/ipv4/tcp.c
-> > @@ -1602,6 +1602,8 @@ void __tcp_cleanup_rbuf(struct sock *sk, int copi=
-ed)
-> >               tcp_mstamp_refresh(tp);
-> >               tcp_send_ack(sk);
-> >       }
-> > +
-> > +     tcp_bpf_rcvlowat(sk, NULL);
-> >   }
-> >
->
-> tcp_read_skb (process frame 1 and __skb_unlink)
-> =E2=94=94=E2=94=80 sk_psock_verdict_recv
->      =E2=94=94=E2=94=80 sk_psock_verdict_apply
->          =E2=94=94=E2=94=80 tcp_eat_skb
->              =E2=94=94=E2=94=80 tcp_cleanup_rbuf
->                  =E2=94=94=E2=94=80 __tcp_cleanup_rbuf
->                      =E2=94=94=E2=94=80 BPF RCVLOWAT_CB
->                          =E2=94=94=E2=94=80 bpf_sock_ops_tcp_set_rcvlowat=
- (wakeup=3Dtrue)
->                              =E2=94=94=E2=94=80 tcp_data_ready
->                                  =E2=94=94=E2=94=80 sk_psock_verdict_data=
-_ready
->                                      =E2=94=94=E2=94=80 tcp_read_skb (fra=
-me 2)
->                                          =E2=94=94=E2=94=80 ... =E2=86=92=
- tcp_read_skb (frame 3) ...
->
-> For strparser it use read_sock instead of read_skb and it will become
-> more complicated...
+> Something sounds wrong here. SGMII only supports 10/100/1G. You should
+> never be asked to do SGMII at 2500. It should ask for 2500BaseX.
 
-To be clear, this feature is NOT to use strparser/sockmap.
+We weren't being asked. It was just an internal driver trick to common
+up some code paths.
 
+However I did a few tests and the internal driver trick doesn't
+actually do much we can't achieve a different way. With that changed I
+can (and will) remove the PHY_INTERFACE_MODE_SGMII/SPEED_2500 entry
+from the table.
+
+
+> > I haven't got detailed enough notes to allow me to double check but I
+> > think there were problems completing the initial MAC reset if we didn't
+> > write something sensible to the hardware during initialization.
 >
-> I think this will cause stack overflow with amounts of skbs in receive
-> queue or infinite call(not tested) for sockmap/kTLS/strparser.
+> > During fix_max_speed() we get told to adopt 2500base-x. Reviewing the
+> > code I can see we don't propagate that and just use
+> > plat->phy_interface for fix_mac_speed(). I will fix the code to that
+> > the requested interface propagates properly to the lookup table but I
+> > think we would still rely on the SGMII entry to get sane initial values
+> > to write to the hardware.
 >
+> Getting sane values into the hardware is good, but 2500 SGMII is not
+> sane :-(
 
-BPF user is responsible for not doing silly things.
+BTW if you are bothered by SP_SEL_SGMII_2500M, that name comes directly
+from the TRM and I'd prefer to keep it if I can. The enumerated value
+we have to write into the SP_SEL for 2500base-X is "SGMII 2500M".
 
-tcp_bpf_strp_read_sock() can have loop detection logic,
-but it's only if really needed.
+
+Daniel.
