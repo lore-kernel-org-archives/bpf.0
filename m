@@ -1,151 +1,174 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B87D38F230
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 23:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778281650; cv=none; b=Dxih4sx6LacjEDGPPvFLFLICEmCLuEvvQ/lVqnPh+E8J1euaiv/0KkYVvVU+RS3cU0IC5dZkSWr/cpB8cZEC1mksHAG1oq8qdR7HhJ06NzSVPmj6KLhEL4SQjZVBp3BU2gdaABtgtATulAS0bPe2ObGHG05mjaeyg4Tom1ZGJWg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778281650; c=relaxed/simple;
-	bh=O66MVGU3QDL+Cy3akNBxytOM3P+XmOPScObecOW3hrg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oNpssJ/MRyhmLc/ovPm1Ee0Ys468bWyjp68CHYjVnTaw66uVU69f2FCzXVgTi6l0q5zDIk90IhBc2BVt45gmemnwiw4BMHv+rskwDXVpG4Fd803eKxEu4edolhRGYU6djL5umM1yEDytcOCmPsuCQItm+2CxeHNaJfREmYuR7+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Opt3hDoX; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DCE630BF4F
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 23:24:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778282697; cv=pass; b=j569CmX9m8Avgwh28XbLQq9/1yd+oK+eulvq9cRUSGHVXfB6PAU5TwJHCDNYjDSLD5dTSt718FNbnQV7H8rD7+LJ6x/h8HjEeHqp2VGtGAsMIB/ygKCxlBKe7dK5VtbZAgt/Hhj4ZqivPMt4ExhXRQ3JsjY4CXtyKPXTnYlRgCA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778282697; c=relaxed/simple;
+	bh=HlVBE1XsctgVr6b82c5k+mkRe0VoDUihGUN0wY812xo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Yy8cFoMiGpNghd0Z9KbacqzWHvpMtkesAOcLEOTEi8DVUHZhEffYrZTP0nxFXxS61qSO79eNCHPBgeunWjB0oJXeJfMKng0jKrQwYQl9D1bC8WJple7MtjyAnpKiQlyvvAcrYHG7bc8sFAerLkhU4CtayvbnQddV36PQ64KYifA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fADq5EwG; arc=pass smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Opt3hDoX"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-834da62e52dso1153889b3a.3
-        for <bpf@vger.kernel.org>; Fri, 08 May 2026 16:07:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fADq5EwG"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-44b052142e1so1446720f8f.1
+        for <bpf@vger.kernel.org>; Fri, 08 May 2026 16:24:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778282694; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Q0cdkwIPlSn50IVy1ftHsNx2nczXGVZru2oUkq1fr2AnoG2XorT4U+JCHT7A8Kx8J4
+         r+HG5XugEunjS0YhVuP+FGjfkcAIjYJGaro2oqMTNS96tTOBFWh/QiLEicBbkfLEqhQ7
+         nbj+hzk5cjHqLV88lPpLU0b933dNx0+ZodTSJxcH+oOdzQiMqIblMQI9hAs2+9TB1hcK
+         jxaWiDUwlXwyfbHtxBHZ/EEhwk47OPirh/KQfdc0H5SY2n5lYPcLnbmr6z3EofJtq+2m
+         t9HzjM0VtR5KpFc5ktGnFn0/SlK75UhBleHZAdRzevAK5NROTuaPwUWr2BCBisOAgS/u
+         NdIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3bLlnEl9t20Z5sL+HZ2tOTnJ5mpcNtk5eHN0Z9JSQso=;
+        fh=YepAt3BwLPdMrOrfFEB++Il2jSHrtaeHfUxGSB1Invw=;
+        b=I785UVRfQbE6ehS9K63mRY5bzb8Q7X4Jrjq4BmyYO2KzR9IysbaEIsnZjvWoT+ELpg
+         eyx/ilijlr+aXC5JoqP1NaUw6jlzjLzsi4rsJb0g/mzQGywrRUy6xJHiUfRCAZhJCsV1
+         IUDSAzXAg9YA0vswfOP9wuI5bRAMwg6H4MGrHHCIuPpGQ5x30TnbSE39nO7jJr/0og01
+         AIKymCpnzxp8ImAV3ZiujZRLrkLUNkZUhpEGe0sTVWL4GlZs+QNEovF0TWvK9Sjq6Bn1
+         ynuIB3dMI7SNukAZm2Lt1ycUtwg/lUyIzpkKWxzqHYKUxRqCMp2m8iSpcGwauicqHIp7
+         gcrw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778281649; x=1778886449; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J/InWrOUOchm9lydjp+lzNN+EzfH6qLQxojHmTQooTE=;
-        b=Opt3hDoX/XAFfIw8ewzmF+CpDIEXJidFDYd6iImw+JICCtAhFcrqxE+1SVzwIdqch9
-         qg4WZ0mJEmdeiOSmf9n64ydILETDwpNcPCGdS4AGUjI2ARvQY2kWiEkWPIrHab5q+eli
-         Rd0Bmko6/AWr6fXZBHhfKbVbg3v0kYvXpoP90or0ua0/mzkTKza2EVM+49onPx4cv31a
-         r6kdTGoJ/2VdIHraqe/VJGOeV6Yf2TVUqr9ygPTxWBGoVWT+NwmIxJoDDEML9EPe5PGg
-         eKPYMhtFT7Fnm8xPoHQ5BnKquQCPIDKro2VRRAiaoxJjziTmV3ATFne5vPKlwsnb0n96
-         WFkA==
+        d=gmail.com; s=20251104; t=1778282694; x=1778887494; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3bLlnEl9t20Z5sL+HZ2tOTnJ5mpcNtk5eHN0Z9JSQso=;
+        b=fADq5EwGOhjvLvHUU5nmCnPElMTxCIFeyWZD1C/OU8e9PXdJU0v8bTThJ3t55zC63x
+         sXxmDdDSyQ4e76ubfGvC24CLluddYkbC6ji2mHmdNJgNJgv7v0mmI7waIMCWQ1vZkH3U
+         YUoY0Z9p8SS6zgcdUCrqHvO+c3kjQN4atATGFuXlW0XvVVkPxrslgQSWbkNu2jgW1Ktf
+         6ktbrDT2vJzkXtKeakhgudWnEC44BgWSj87GAWWZfwRyVhM2FNGX6EKBqykYmLrCFy/B
+         wv1S3SoFeE74MEeNOzY3fldEk7ikTBD5pGlNo6edX7+zqrGExv8Z7TbUy4opN9irvCmO
+         WmuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778281649; x=1778886449;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=J/InWrOUOchm9lydjp+lzNN+EzfH6qLQxojHmTQooTE=;
-        b=Z/0VxAfG5LJDBxYi4Vjhbr3JrNktjVfIOZ5T6wbisQeXLQim6zcbzcRiwydmheJhIg
-         KvUKSlFjLKDOzaV3eBqy/fPKASad81yadBjRTrIGTTQpnts0zf8apCaL5PkFcggU7XtQ
-         4yIEkElsXWL1gd749x5peEwj929GYA/YuCpQC6VoSauJQ8lQGG8EK5I50qdLjB6WQCys
-         Ie25/I+QyGNm6aaP9zcOlJDHlQFsEnF+xsKc/iRjW6Aeuune5i0kYcSDMPOY9mcrYEmW
-         sIz9um7EZphQruSss8reHa2Vi40CB95cwI/3YjUlIu4ot6+o5es3vLHdSYNd14iYaVm9
-         j/ig==
-X-Gm-Message-State: AOJu0Yx+B6byCt5fif90f5IhCT+25KeBf0ccNo4GR9qqqgkuJssxbtXS
-	hzz43eGACzXbu7+5FB6m3qZ3bpLVB+ORIEh2ek2kShiYpcVF9Q3aDHIj
-X-Gm-Gg: Acq92OGylNqp4UeUjurlw6/D+J1KkHKJKWVIdYBRMiQgkuF+mWQP//nYVcrA79XQBbw
-	B0P7PV3D3xA9VoZWCTB1jrBk7LLwyiqFwXDAgplOcpDLKoM6qe7Mm6V9HEWzKjwDp73sfMBcNvF
-	YMDvJwOBAwmXKRtSruBNcWb7Uw+WB4JYkfMMG4x0VE8u2UQYp824sVEQe6qBu40DcghesPXgw5H
-	d5dScUrbLV+nGqQLst8P3w224Wr7IfWGpMoH8MqodNQH7CtGBdYd2uLORJkK08rzWk1fLbyIq3L
-	iaz8F+XqixZy5NUHP5FLzjYjw8GUJFnK9ACZgBWFsedbdFHtu0BH/CSBWrOWdNVI/evMs0VbpQp
-	vHv7pfhP16S9rkKZFRJgbUOeA5pS32g9pLANgQ36gQtf5JYNmZMwv1g1NJ5B1RLDHfzg9hdz8vk
-	dxL4E2pk4AKfzlLaWkEV9uC4K7B7NdHBpXv30CAg==
-X-Received: by 2002:a05:6a00:a8d:b0:82f:cfd2:6ca0 with SMTP id d2e1a72fcca58-83a5dd57ddemr13693442b3a.40.1778281648593;
-        Fri, 08 May 2026 16:07:28 -0700 (PDT)
-Received: from ?IPV6:2604:3d08:9582:1100::c7c9? ([2604:3d08:9582:1100::c7c9])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8396563ac51sm13518919b3a.2.2026.05.08.16.07.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 May 2026 16:07:28 -0700 (PDT)
-Message-ID: <a51c45c1-852b-41a6-ab59-9da186350e36@gmail.com>
-Date: Fri, 8 May 2026 16:07:27 -0700
+        d=1e100.net; s=20251104; t=1778282694; x=1778887494;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3bLlnEl9t20Z5sL+HZ2tOTnJ5mpcNtk5eHN0Z9JSQso=;
+        b=rN7eI1y7SnKoXxyJJbzQHhQ5yE4gWah6NHQPzoPOPcUqVKj3GsKUR23p6tKWL3uqP9
+         aNKepO/oAvIv5W3NZ0i0c49MMX/ezRgXOfShwiUHpvHxIxKcyKpqXlXmslHI+NsJd00G
+         GEplreJMetMPYpd/mSzCq8sT3Pe9B5NcsXcEdPCG7+WXHedbVLjyUx8dV7VhHXc0XntU
+         8De7fU71e89FhGwbj5sTLBQheW1DDA8Ec4Pf3jWlP+9TrOedN/EXzKVICmsCRvaaQn+A
+         D4Th8XlVb+yn8xJyA5qmcIMNdObE58+LeNBVdnAHCNpOKI0nD4cV1ul/uSbX5Yrm2boD
+         4Afg==
+X-Gm-Message-State: AOJu0Yw53pLMH3pykkC89MAqtpPK+yYlEnzGNlh/1kzJQuCwPoF/Y/KL
+	M7IffeURfLv7Gr0nHoTfgcd6mye/W6CfQsEvZX52mXljfMGgB5Tcq69hbYXpyOdP12lBWZZ7vve
+	85xX/n6lp3X4vJeiu9QCGVv4R45Pu4YU=
+X-Gm-Gg: Acq92OH4Aw7X5h/1n5TPL8A1IqrOIwKOYO7MLfcfv8yrq+BBwxzi3sx4DXIlab9On69
+	gOzP4ELuCbMwGVrYNiZXHqRazbGapxeiD39nmPALPnU11WJanLWw3ovEz8N7AllQL0DQoldDXfO
+	5Vujj9OIPWuqfUq32tUwNdePMxC5Osqt32wQ/ezBrLN8yWEjpxyLPF4aMgqHTdtaXBT5S9VSVOR
+	FX/O2AS9+puAKkO4Cuq6x6S7IT1mJMqLF7AmUKUavpOvhKrnYR6OkC9s7IQI+GScjgPzy6Lkh/g
+	hj88RAFfIxItMU7JCAR5ZiRX57v1K1L9EgRsampXN7ieptGDug965RtG2azQipHVKPsmvJvhkNO
+	OwcAKstgKiOi8DE0EZwDrO8Pgag==
+X-Received: by 2002:a5d:584c:0:b0:441:1c18:f779 with SMTP id
+ ffacd0b85a97d-4568e70690amr500656f8f.37.1778282693753; Fri, 08 May 2026
+ 16:24:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 07/19] unwind_user/sframe: Wire up unwind_user to
- sframe
-To: Jens Remus <jremus@linux.ibm.com>, Steven Rostedt <rostedt@kernel.org>,
- Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev
-References: <20260505121718.3572346-8-jremus@linux.ibm.com>
- <20260505185528.8E529C2BCB4@smtp.kernel.org>
- <05adaec0-c2cc-4a16-b2da-ba3ed7437e7d@linux.ibm.com>
-Content-Language: en-US
-From: Indu Bhagat <ibhagatgnu@gmail.com>
-In-Reply-To: <05adaec0-c2cc-4a16-b2da-ba3ed7437e7d@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <e4d7b53d4963ef520541a782f5fc8108a168877c.1778176504.git.paul.chaignon@gmail.com>
+In-Reply-To: <e4d7b53d4963ef520541a782f5fc8108a168877c.1778176504.git.paul.chaignon@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 8 May 2026 16:24:42 -0700
+X-Gm-Features: AVHnY4J_ZhxnvNrnlMYmyfLTUcttZ54EjQJtfdY1PwrOVkYRbWcmDQu-FRwvnBE
+Message-ID: <CAADnVQ+kM=Zg_pcY30QHFPu_16L8wa+DbgQqnidqo-QZphihFQ@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: Don't run arg-tracking analysis twice on main subprog
+To: Paul Chaignon <paul.chaignon@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026-05-07 09:18, Jens Remus wrote:
-> On 5/5/2026 8:55 PM,sashiko-bot@kernel.org wrote:
->> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
->> - [High] Unbounded linear scan of user-controlled sframe entries can cause a CPU hard lockup in NMI context.
->> - [Medium] The commit message claims to refactor `unwind_user_next_common()` by removing an unused `pt_regs` parameter, but this change is entirely absent from the code modifications.
->> --
->>
->> commit 2e1e17bbaa1c0426d41d66ce7930a944f3e86ae7
->> Author: Josh Poimboeuf<jpoimboe@kernel.org>
->>
->> unwind_user/sframe: Wire up unwind_user to sframe
->>
->> This commit hooks up the sframe infrastructure into the unwind_user interface
->> to support user-space stack unwinding via sframe. It adds the
->> UNWIND_USER_TYPE_SFRAME type and updates the unwind_user_next() logic to
->> attempt sframe unwinding when available.
->>
->>>      [ Jens Remus: Remove unused pt_regs from unwind_user_next_common() and
->>>      its callers.  Simplify unwind_user_next_sframe(). ]
->> This isn't a bug, but does this commit message match the changes?
->> Looking at the diff and the code, there are no modifications to
->> unwind_user_next_common() or its callers to remove a pt_regs parameter.
-> Sashiko AI review failed to understand this commit message comment.
-> 
->>> diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
->>> index 90ab3c1a205ef..1fb2724197332 100644
->>> --- a/kernel/unwind/user.c
->>> +++ b/kernel/unwind/user.c
->> [ ... ]
->>> @@ -82,6 +83,16 @@ static int unwind_user_next_fp(struct unwind_user_state *state)
->>>   	return unwind_user_next_common(state, &fp_frame);
->>>   }
->>>   
->>> +static int unwind_user_next_sframe(struct unwind_user_state *state)
->>> +{
->>> +	struct unwind_user_frame frame;
->>> +
->>> +	/* sframe expects the frame to be local storage */
->>> +	if (sframe_find(state->ip, &frame))
->> Can this sequence cause a hard lockup in NMI context?
->>
->> Since this unwinder is often called from NMI context (like perf), sframe_find()
->> eventually calls __find_fre() to search for Frame Row Entries. If __find_fre()
->> performs a linear scan over an unbounded, user-controlled number of entries
->> (fde->fres_num), it could spin for a long time without yielding.
->>
->> If a malicious userspace program maps a large VMA and provides hundreds of
->> millions of FREs, would this loop calling unsafe_get_user() on every
->> iteration tie up the CPU long enough in NMI context to trigger the hard
->> lockup detector?
-> Please advise.
-> 
-> A user could craft .sframe with a large number of FDEs (up to UINT32_MAX)
-> and large number of FREs per FDE (up to UINT16_MAX).  Each FDE could point
-> at the same FDA and FREs to save section space.  Each FDE would require
-> 16 bytes in the FDE table. All FDEs could share a single FDA of 5 bytes
-> and share FREs of minimum 5 bytes each (when using the 16-bit start
-> address offset to have UINT16_MAX FREs) in the FRE table.
+On Thu, May 7, 2026 at 11:22=E2=80=AFAM Paul Chaignon <paul.chaignon@gmail.=
+com> wrote:
+>
+> Because subprog 0, the main subprog, is considered a global function,
+> we end up running the arg-tracking dataflow analysis twice on it. That
+> results in slightly longer verification but mostly in more verbose
+> verifier logs. This patch fixes it by keeping only the iteration over
+> global subprogs.
+>
+> When running over all of Cilium's programs with BPF_LOG_LEVEL2, this
+> reduces verbosity by ~20% on average.
+>
+> Fixes: bf0c571f7feb6 ("bpf: introduce forward arg-tracking dataflow analy=
+sis")
+> Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
+> ---
+>  kernel/bpf/liveness.c | 11 ++---------
+>  1 file changed, 2 insertions(+), 9 deletions(-)
+>
+> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+> index 332e6e003f27..505250998f36 100644
+> --- a/kernel/bpf/liveness.c
+> +++ b/kernel/bpf/liveness.c
+> @@ -1914,15 +1914,6 @@ int bpf_compute_subprog_arg_access(struct bpf_veri=
+fier_env *env)
+>                 return -ENOMEM;
+>         }
+>
+> -       instance =3D call_instance(env, NULL, 0, 0);
+> -       if (IS_ERR(instance)) {
+> -               err =3D PTR_ERR(instance);
+> -               goto out;
+> -       }
+> -       err =3D analyze_subprog(env, NULL, info, instance, callsites);
+> -       if (err)
+> -               goto out;
+> -
+>         /*
+>          * Subprogs and callbacks that don't receive FP-derived arguments
+>          * cannot access ancestor stack frames, so they were skipped duri=
+ng
+> @@ -1934,6 +1925,8 @@ int bpf_compute_subprog_arg_access(struct bpf_verif=
+ier_env *env)
+>          * each subprog is analyzed before its callees, allowing the
+>          * recursive walk inside analyze_subprog() to naturally
+>          * reach nested callees that also lack FP-derived args.
+> +        *
+> +        * Note the main subprog is also analyzed as part of this loop.
+>          */
 
-For the case of malicious .sframe with large number of FDEs, wouldnt the 
-existing checks of the various offsets being less than sframe section 
-size suffice and the following in sframe_read_header suffice:
+Thanks for the report.
+I guess the fix is correct.
+This part of the comment needs to be adjusted:
+"they were skipped during
+         * the recursive walk above."
 
-    if (fres_start < fdes_end || fres_end > sec->sframe_end)
+I wonder whether something like this is cleaner?
+-               if (info[sub].at_in && !bpf_subprog_is_global(env, sub))
++               if (info[sub].at_in && (!bpf_subprog_is_global(env,
+sub) || sub =3D=3D 0))
 
-For malicious num fres, should we add a check that a function's num fres 
-is less than or equal to func size (available in the FDE index entry)? 
-It is an approximate check, but should provide some boundary check.
+This part of the comment:
+"Async callbacks (timer, workqueue) are
+* also not reachable from the main program's call graph."
+
+is also not quite correct.
+In here:
+                } else if (bpf_calls_callback(env, idx)) {
+                        callee =3D find_callback_subprog(env, insn, idx,
+&caller_reg, &cb_callee_reg);
+
+they could have been reached, but find_callback_subprog()
+will ignore timers because FP-derived args won't be passed
+into them.
+
+Eduard,
+wdyt?
