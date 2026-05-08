@@ -1,42 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BD2156CA
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 21:36:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A161A3165
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 21:46:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778276217; cv=none; b=X1wdntt0tHVUOVRCLcyNr4QPaLrRQwpy/7Wqyx5DzJm1gn0BjorAdIfk3pnVg7wka5toFGWjeN9C35igrEezzBJMt8YoQIQ6W8UHLly+fpEPpd0zx4BW1Is4tN0bAWDp/tGyT9ihJiaxtvxqRgsCp1u+jRLFEzafbQE2ITyBBA8=
+	t=1778276795; cv=none; b=WWPnOCjN5wGb/7Wnn97RYODRav4BDnYTc3cEu3si7PwWVn/W71OBMshVy83IGCwIoHlnzgUEP3X9wtnhno8/qxaQfuD0O103kbRoMbhCNUpEsEx/plab1G6C2LgWXLLbvHXYZEb/7r9S08JXL0YxuIMtkpGOcQzOB1MTtC7TIE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778276217; c=relaxed/simple;
-	bh=Vz2c9cUPMNISv2uKSq5VHNyBE2lBuMJREbXGpJjBm1o=;
+	s=arc-20240116; t=1778276795; c=relaxed/simple;
+	bh=xlvaJKipbHmqqS3BiYENQFy3ug5B0xP9nkZFBmddAag=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=B6Y402FJMO6W99lnGf4nRTztAHI3pNRrNr9l8BlbIpmeZUrROg+rEQxow6PsyUsUbjnFYMAXcI49yf5XSzWsx0NvlkYs58fIh9819oSsAMMqCrV1PFEVWPK2FMrnlKaS8CWmqI/dlMTOSwXGHghbY1fB80z814NAQ26nO2+Palg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uv13pKEd; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=FL2P71rQp/0R+FOS6Bak8WyMRL4kSGU9sxe/jN5KDOQhg2KNsL5EiSmMoLJHshy2jW1QBz5IcJXiXRn7ByQtIUMNJNI+/21kfuMP7Vwte/mrcQ92DJlE8C4h1fsfR+tX3b4EX08c4NiW8kaEeqXSsPIPWVmktpJHgTgv6EySEeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TQWS/Csi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uv13pKEd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94F6CC2BCB0;
-	Fri,  8 May 2026 21:36:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TQWS/Csi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0ABBC2BCB0;
+	Fri,  8 May 2026 21:46:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778276217;
-	bh=Vz2c9cUPMNISv2uKSq5VHNyBE2lBuMJREbXGpJjBm1o=;
+	s=k20201202; t=1778276794;
+	bh=xlvaJKipbHmqqS3BiYENQFy3ug5B0xP9nkZFBmddAag=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=uv13pKEdimIe7jBAfBQMQdT6yQYbq6FatcIakdFE3K49J2uz5eJ7C/Xpv/YIqi3Na
-	 ac2Rpz87ZDZbbCssmEIurs5zenhfVeQn4cTtgcDvat8QINFUh2xtVTjAEqFucmO9yZ
-	 JU/a4W3zkZo0OheEwBp5SLMaxsaNsvP6BeK35GEbE8RF3/nJFRm35z8Po6qp2j5Div
-	 GoZbpkA50vNKXKMt1LFC1wkDD0pAWu31E3j+Tut1xHm8PrzCXuJhJxQoGcD3M0dudK
-	 y94/cUdwkq4IZHXtQHbvhtaHK1prO0JuaYVAU+dx6MmgaEDskOHCkJjIGKCROrLf22
-	 EMf4HzirV80Xg==
+	b=TQWS/CsiUsjMSDeU1MxJ0vkW3faHtlhRPOHf+pfrhzdCyYDffZHWyDBDYaTn3w8M4
+	 yObgVc59ALM97LKbEptiN94/bXe5MYgTyG/UHaq8b5CqA09rCb+TqtYoRzTCz0EgxN
+	 FhCriGoVyOef59o5rl8bOXKHdWM8GviZce+rJTJZtetCM/77Z9vP5/3zATGUohU2hf
+	 QrpPT+ilE++E2YnWVHQvH1iKYW7NlN8ljnqgbZe84XtDfg+9KzZGbbwvWNwEcpaa5u
+	 QqaYlRulSVrkGpdsuqkA1LwyNbkCZMQIYh5q2SyPu3jlLMG0jBkJ/ATXHOPmZdWmUG
+	 B5NGo6WvM+OXQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/4] psi: add psi_group_flush_stats() function
+Subject: Re: [PATCH v1 bpf-next 7/8] bpf: tcp: Add SOCK_OPS rcvlowat hook.
 Reply-To: sashiko@lists.linux.dev
-To: "Vernon Yang" <vernon2gm@gmail.com>
+To: "Kuniyuki Iwashima" <kuniyu@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260508150055.680136-2-vernon2gm@gmail.com>
-References: <20260508150055.680136-2-vernon2gm@gmail.com>
+In-Reply-To: <20260508073355.3916746-8-kuniyu@google.com>
+References: <20260508073355.3916746-8-kuniyu@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 08 May 2026 21:36:57 +0000
-Message-Id: <20260508213657.94F6CC2BCB0@smtp.kernel.org>
+Date: Fri, 08 May 2026 21:46:34 +0000
+Message-Id: <20260508214634.A0ABBC2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,38 +45,67 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] Build failure when CONFIG_CGROUPS is enabled but CONFIG_PSI is disa=
-bled.
+- [High] The new BPF_SOCK_OPS_RCVLOWAT_CB hook is incorrectly rejected by i=
+s_locked_tcp_sock_ops(), preventing the BPF program from modifying callback=
+ flags.
 --
 
-commit 3c39f362bc58a25b857026542cbe7d4bb70721fd
-Author: Vernon Yang <yanglincheng@kylinos.cn>
+commit ef96e613bd920ae4e567781955c5e3d4f11f7f57
+Author: Kuniyuki Iwashima <kuniyu@google.com>
 
-psi: add psi_group_flush_stats() function
+bpf: tcp: Add SOCK_OPS rcvlowat hook.
 
-This commit adds the psi_group_flush_stats() function to prepare for
-the subsequent mthp_ext ebpf program.
+This commit introduces a new BPF_SOCK_OPS_RCVLOWAT_CB hook that is invoked
+when TCP enqueues an skb or completes recvmsg(). The hook allows BPF
+programs to dynamically adjust sk->sk_rcvlowat to suppress unnecessary
+wakeups.
 
-> diff --git a/include/linux/psi.h b/include/linux/psi.h
-> index e0745873e3f26..7b4fd8190810f 100644
-> --- a/include/linux/psi.h
-> +++ b/include/linux/psi.h
-> @@ -22,6 +22,7 @@ void psi_init(void);
->  void psi_memstall_enter(unsigned long *flags);
->  void psi_memstall_leave(unsigned long *flags);
-> =20
-> +void psi_group_flush_stats(struct psi_group *group);
+[ ... ]
 
-Will this cause a build failure if the kernel is configured with
-CONFIG_CGROUPS=3Dy but CONFIG_PSI=3Dn?
+> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+> index 7e26503fd96d4..a70a8f5830258 100644
+> --- a/net/ipv4/tcp_input.c
+> +++ b/net/ipv4/tcp_input.c
+> @@ -204,6 +204,12 @@ static void bpf_skops_established(struct sock *sk, i=
+nt bpf_op,
+>  	/* sk with TCP_REPAIR_ON does not have skb in tcp_finish_connect */
+>  	bpf_skops_common_locked(sk, bpf_op, skb, skb ? tcp_hdrlen(skb) : 0);
+>  }
+> +
+> +void bpf_skops_rcvlowat(struct sock *sk, struct sk_buff *skb)
+> +{
+> +	/* skb is NULL when called from __tcp_cleanup_rbuf(). */
+> +	bpf_skops_common_locked(sk, BPF_SOCK_OPS_RCVLOWAT_CB, skb, 0);
+> +}
 
-Because there is no fallback stub or empty definition for
-psi_group_flush_stats() when CONFIG_PSI is disabled, callers added in
-subsequent patches under CONFIG_CGROUPS might face undefined references.
+Does this regression prevent the BPF program from dynamically disabling the
+hook once the RPC boundaries are known?
 
-Would it make sense to add an empty inline stub in the #else branch
-for CONFIG_PSI?
+Since BPF_SOCK_OPS_RCVLOWAT_CB is greater than BPF_SOCK_OPS_WRITE_HDR_OPT_C=
+B,
+is_locked_tcp_sock_ops() will return false for this hook:
+
+net/core/filter.c:is_locked_tcp_sock_ops() {
+	return bpf_sock->op <=3D BPF_SOCK_OPS_WRITE_HDR_OPT_CB;
+}
+
+While this intentionally prevents bpf_setsockopt() from being used
+unnecessarily, bpf_sock_ops_cb_flags_set() also relies on this check:
+
+net/core/filter.c:bpf_sock_ops_cb_flags_set() {
+	if (!is_locked_tcp_sock_ops(bpf_sock))
+		return -EOPNOTSUPP;
+	...
+}
+
+This means any attempt to clear the callback flag using
+bpf_sock_ops_cb_flags_set() within the hook will fail with -EOPNOTSUPP.
+This could force the callback to run on every single SKB enqueue for the
+lifetime of the connection.
+
+Should is_locked_tcp_sock_ops() or bpf_sock_ops_cb_flags_set() be updated
+to allow disabling the callback flag for this new hook?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260508150055.6801=
-36-1-vernon2gm@gmail.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260508073355.3916=
+746-1-kuniyu@google.com?part=3D7
