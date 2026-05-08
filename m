@@ -1,115 +1,138 @@
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37203AA1A1
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 23:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D23C3A9D8C
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 23:04:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778281449; cv=none; b=av6o1QHNcuB5u4O4xt5MmeYKyNCJVkh9FiQTXsYSSZcWtdCpuQIZzpZUxwmdsQGrle2rsacnAsrz+VHxMZkpRbcIkSSHpnyeYi4EMGW9hmlKaXkZC72vlOAfUOGQvNfRDDt+bCGaPdUM3Ej89eHWMEccbpHg5jhJBdsyc1vNTUA=
+	t=1778281458; cv=none; b=TpUyW5c3Uyyss6sMfBDszq2vC6hslQ7njxpw6xClebfHCwYyYwMuSmaNoIP+Fd6eiFUd/PsSqw2uBJwsi4IS37LpUbXRUytCpVys+ohqLl1gc6AjAv4fvVRdFpjKSRf50qId6qJ2nmXKv1S3yDI9LgIkrKij6uHym5Xu0C55nmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778281449; c=relaxed/simple;
-	bh=q61aqXrgAcupB+Zifhih+seu6DMFA/Fw8pWwohOp1Nw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NIthGVXckvmgHnLN7+ykuO/LgZCXCIp4fUvX+tMf+6cmNJ9wKMa+rnoOgqDXQRO87J8xBhv3JKJn/U8BWaIhDSHJYAOVhw30RJd/jVZaUGLTiBYxaWV5iYZ6llsPgwdFUFmRRi9gyBzY8ua49JR0nNOKJdUjjF2ulM7tBgmePZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RfY2uaG0; arc=none smtp.client-ip=209.85.219.50
+	s=arc-20240116; t=1778281458; c=relaxed/simple;
+	bh=ZxW9oV4mSQXoLVz0dkwDl3+Ul0CcYs/G+6dWBZAgP8k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lQ53qAlrzRTHygLxc3WDgvpFj56lX2lN1/0aqdiNK7bKpVvaaCwNnFPoeBbsTjLsy803otB9uHYXwz12wGhEDSVd5UNS6U5jOLVVggXNO+ucawr4PH6UajASXsOOcJ/r06HgIgxna0K1fOOp8AZgTHoRI/XMcUh6eC3TXiDOc7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J5uR03Sa; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RfY2uaG0"
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-8b45dff1eebso23948936d6.2
-        for <bpf@vger.kernel.org>; Fri, 08 May 2026 16:04:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J5uR03Sa"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3664df30f53so698684a91.1
+        for <bpf@vger.kernel.org>; Fri, 08 May 2026 16:04:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778281447; x=1778886247; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ak6woxAtttxf/K0Pu5NsuJRxK4tCh/8r19p69HTWvdM=;
-        b=RfY2uaG0gQyw4iSckGI91hCQl9X0yEcfj9yWuSka/KOOudIM/2dB88FfMvNd3uLoTD
-         wajPs9uycinmW/jWBX0uq1nnetqD3/xU3SiZstjUHeLlLHsZGlWB+TbxAtGNhow2HUlx
-         qlNCI7yx9ExUPXoXmnw7h3F8xjzx0gcLusJBzpvPtxgqNvdEGSG4T6Illa2m7XoBDFzb
-         UvyYUu2vSRVeqglPGZJvQIVtlEgar66UkmVOVz0PiAbmHGDk7tJJ1I+9RQxEUVMOjrkN
-         Rmg1CZhOKS+wm99c/qqi4pIvqF3cWQwVenA9kFab2ldKCSDcRrC53V/WJxsqWgUIvwzA
-         2eTA==
+        d=gmail.com; s=20251104; t=1778281456; x=1778886256; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ReDyhUz1ajWxrkK7iCREC2Yh5oQFngk3yx26HUt19Iw=;
+        b=J5uR03Saq/7DsqD3DcGgwq9w+GatCgUDVJYbq158pYcYIJnDN0bJ2i1bzRUR/vA0Jf
+         B1bmCNcdzkD2MNziVjVjYMuiD7Wf4NTrBfMpbtKKUcKxaq2oRGzsFC0dj9s0iBNYeipY
+         SpMqYjSWW+qwdV0Zawvmkj3QQoYsptMbPNL44ZL6/8ieFaIJ7SwGWiZgdrhbminDYNIN
+         Zwmomi2d5E8he8Fh19CKOK/bGtF6DQ/lT8soWsQNwmB2+bE2+r6voNCRQC38ztgsz824
+         vI3iRjj5kzGvJ/V/RNG2nqndl8J3jPUsvT6aJP91IrLcF/ZKvVcpu5kBY7WjTepVr+Fe
+         itww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778281447; x=1778886247;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ak6woxAtttxf/K0Pu5NsuJRxK4tCh/8r19p69HTWvdM=;
-        b=OT/0tcStHcsosrclDIkFouvr/ToLhBzWFwonMP35n/R8sJoYHJ4pc3MlYIQWSoZE1e
-         MoGv1iYIwbeEPvKRJqBviUkap6u8zVmUAE+0vUaYgBWqUCp/dUZVEgZ6yKouQmXA/F1w
-         8M5sN+3iHBf+7F1xU7pSX/swzm+jEJGVYKG5plpdxuaHgyk/PmIytFMnNhBP8v9KBZLu
-         LmcLkekEKyATsimJ+lkTWYvhaly74M+FcOA4ZbihDPYTsHiRdQEOBT22UQkDoCmJkCmk
-         HQoAdK/9XYwt4QnLFwbGzxL3vaXdxEUJSMVfFCjwwFiClrj7ltJolzNSxic7pjgCL2aW
-         vOZg==
-X-Forwarded-Encrypted: i=1; AFNElJ+EfQdIzR9XZxpL2O7W5LLAf9EaGlwQUXQpzKreDZjC3kaXuretK9S9YJexspX46mQSqVc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUYlH4h12WrblZ4iBlaekad1TTf+1W2wrOm3RS1rurHz2VXhvN
-	DeRYMfuWOvBwQ0pDeTRqlCEAfh6EeCBH1wpzUHu/Ao5Gz761HbMSCiG5
-X-Gm-Gg: Acq92OFN8rtoIHp8fzbifpAZg23GLTnO1TjjvG8YcpKMI5t4hd60hD4dcSDLYOkOVIy
-	qISDsTjS4lQPzo/7TgBsdup5RCuYLu43356QGX66jXRx3WWzTJCGt2iW9k8YZXMytOTxfy9azU9
-	T46ZwHEVgTGutZSXPASK8w4Y4loZj8PYILvaIex1RZzUQvIc5ltkXqHAVfm+VosuMbiZcvpMQLw
-	wDae+XMEV0HWy7I2wdAJKEO2tVUn12GZ/X7zKelEOpfVvUfACfR6T81SVUCOzCkhkqY+glH6d/U
-	Ftq7g3KjGy7lLtiN3CGIiLuAUX3YxXq9Bsc6n2U4vb6kctI7ycfdqr92DJM1gUVB2Yy+MLo+Hqz
-	DD7EKWuaVX8kktnU1bzw+UlhtBLYtEdUxppg/ouR+9z15Q3841C8EefGfZJgHxxdBmHau1or38G
-	GG+bV6ePL6lrW5tAg38tazwEsm+b79am1VzbZv2jK5YIcivg==
-X-Received: by 2002:a05:6214:3d0f:b0:8a4:8b2c:428f with SMTP id 6a1803df08f44-8bc41cc2d2dmr219254366d6.2.1778281446534;
-        Fri, 08 May 2026 16:04:06 -0700 (PDT)
-Received: from devvm29614.prn0.facebook.com ([2a03:2880:f800:2::])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b53d35787esm247534496d6.44.2026.05.08.16.04.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2026 16:04:06 -0700 (PDT)
-Date: Fri, 8 May 2026 16:03:59 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>,
-	Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Joshua Washington <joshwash@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Shuah Khan <shuah@kernel.org>, dw@davidwei.uk, sdf.kernel@gmail.com,
-	mohsin.bashr@gmail.com, willemb@google.com, jiang.kun2@zte.com.cn,
-	xu.xin16@zte.com.cn, wang.yaxin@zte.com.cn, netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Mina Almasry <almasrymina@google.com>,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v3 3/8] net: devmem: support TX over
- NETMEM_TX_NO_DMA devices
-Message-ID: <af5r393EdNgGNh4o@devvm29614.prn0.facebook.com>
-References: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
- <20260507-tcp-dm-netkit-v3-3-52821445867c@meta.com>
- <20260508134717.4ef87ab6@kernel.org>
- <af5Vlwb5RctHym8D@devvm29614.prn0.facebook.com>
- <20260508152708.011a9687@kernel.org>
+        d=1e100.net; s=20251104; t=1778281456; x=1778886256;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ReDyhUz1ajWxrkK7iCREC2Yh5oQFngk3yx26HUt19Iw=;
+        b=TIzH45g0S/0Bh4QmvqWu2mejxcBlXZPfbXY4bO8NTJt8jCSGVLGjoll8bxBUsmPw1A
+         U3H1XZT5U7q9Na3QF2H/d8oQMMWkQqUaS7mszBIpXUg08yeXBH/TkvgSvi63tpPyovM9
+         K8MsP+UTqULqwbLW58gY8oZGBAA+G99XBZtewe4BK1NDknW2y6A5H7NuS8e9h8L2/b9H
+         /YfO9wRJAfLMXXKG0MrCfhgWuqEiq7b2hAuu2kVORMOg+pM7WUzQWAzHMeLpVc525DRQ
+         C9hJRPE2Pm835913kTXQSroWSbLcgdNZMuEtnuPGyYR3jn7nMRTgwXkTXVkn3RUE+ubM
+         96QQ==
+X-Gm-Message-State: AOJu0Yx4XIEy58hgOuwH92hjhikr2NjDtgc8/MLB07SX5NWsUpWj6IKA
+	G4aaTsHnQsmbJ6otDmK+ouGqmdQOTOne0gmiTQjpNb6Hhp72OygiL3Xg
+X-Gm-Gg: Acq92OH6gE9jKDHWc6XUGUsWWVAzo7ymsjcVXFxb8/JQPwGEE3nckoa1hA/eRQ58kVg
+	P80UVpKwTQa3kUo3/k07cPrMsxRnbuX/vmT8cwxsgBm0t1jgZc66SOcB3ePAqNDl3zfDmHcG4Ww
+	UrU59raR+B3g6FkmFnAT75ozuXezL4RHTWvZWRH3pPayHC0xFaOfQNRZfKbfQ6Wa54VCdLV+cbw
+	2cQ2cEM9g+ItSiCTDVVvzKm4QDC7xWNqomnBb2RzaTwk6+6XDE23s7mR6kWik5rdPTSWVaheg3X
+	TiosjvK2xrSQimkMc719nqQk4uBaS3k8zVDTPjB2Ge7aLKhHBCul+o/IeNTnob0scNRxMfiP3Ma
+	HUgDfC9W3Drszsu10qjrifbbtF/SzoTaKJOVo0SKHx0x3pZtwtk684ucps7cX68dv+g9hhwqjp1
+	RYBzYfukIRrh0OQEwFTm2wCR31hO2Pz8XyDIVU0Q==
+X-Received: by 2002:a17:90b:254d:b0:35e:57cf:c0ae with SMTP id 98e67ed59e1d1-365ab9c8160mr15448255a91.7.1778281456340;
+        Fri, 08 May 2026 16:04:16 -0700 (PDT)
+Received: from ?IPV6:2604:3d08:9582:1100::c7c9? ([2604:3d08:9582:1100::c7c9])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-367d64de478sm97524a91.13.2026.05.08.16.04.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 May 2026 16:04:16 -0700 (PDT)
+Message-ID: <da6d4a68-99ef-468d-b175-8c6dd164bfb7@gmail.com>
+Date: Fri, 8 May 2026 16:04:15 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260508152708.011a9687@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 05/19] unwind_user/sframe: Add support for reading
+ .sframe contents
+To: Jens Remus <jremus@linux.ibm.com>, Steven Rostedt <rostedt@kernel.org>,
+ Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev
+References: <20260505121718.3572346-6-jremus@linux.ibm.com>
+ <20260505185932.C708CC2BCB4@smtp.kernel.org>
+ <4e5d51f0-8f4c-4a07-9141-8b26d2c90fc6@linux.ibm.com>
+ <20260506110142.7b2943d7@fedora>
+ <3158dc1a-26cb-4942-b05e-6c60c092e588@linux.ibm.com>
+Content-Language: en-US
+From: Indu Bhagat <ibhagatgnu@gmail.com>
+In-Reply-To: <3158dc1a-26cb-4942-b05e-6c60c092e588@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 08, 2026 at 03:27:08PM -0700, Jakub Kicinski wrote:
-> On Fri, 8 May 2026 14:28:55 -0700 Bobby Eshleman wrote:
-> > My guess is this would probably be the simplest way?
+On 2026-05-08 02:49, Jens Remus wrote:
+> On 5/6/2026 5:01 PM, Steven Rostedt wrote:
+>> On Wed, 6 May 2026 16:34:34 +0200
+>> Jens Remus <jremus@linux.ibm.com> wrote:
 > 
-> IDK. Notifiers are so inelegant. Don't we have the same problem with
-> the main ->dev on Tx binding?
+>>>> If a malicious user provides a large fre_len in the header, fres_end
+>>>> (calculated as fres_start + shdr.fre_len) could wrap around the 32-bit
+>>>> address space. This would bypass the bounds check in sframe_read_header(),
+>>>> allowing fres_start and fdes_start to point into kernel memory. Later, when
+>>>> __read_fde() and __find_fre() use unsafe_get_user(), this could lead to
+>>>> arbitrary kernel memory disclosure.
+>>>
+>>> SFrame is currently only supported on 64-bit architectures (i.e. x86-64,
+>>> arm64, s390 64-bit).  So unsigned long fres_end should always be 64-bit.
+>>> Do we need to add the following to the header parsing?
+>>>
+>>> if (fdes_start >= fdes_end || fres_start >= fres_end) {
+>>> 	dbg_sec("inconsistent FDE/FRE start/end address\n");
+>>> 	return -EINVAL;
+>>> }
+>>
+>> I guess this wouldn't hurt.
+> 
+> Reviewing my suggestion again I realize that this check would be
+> superfluous.  The existing computation and check already ensures that
+> the FDE table is within sframe section, the FRE table is within sframe
+> section, and both tables do not overlap:
+> 
+> 	num_fdes   = shdr.num_fdes;
+> 	fdes_start = header_end + shdr.fdes_off;
+> 	fdes_end   = fdes_start + (num_fdes * sizeof(struct sframe_fde_v3));
+> 
+> 	fres_start = header_end + shdr.fres_off;
+> 	fres_end   = fres_start + shdr.fre_len;
+> 
+> 	if (fres_start < fdes_end || fres_end > sec->sframe_end) {
+> 		dbg_sec("inconsistent FDE/FRE offsets\n");
+> 		return -EINVAL;
+> 	}
+> 
+> - fdes_start and fres_start are computed from header_start and thus must
+>    be larger sframe_start
+> - fdes_end and fres_end are computed from their fdes_start and
+>    fres_start and thus must be larger than sframe_start
+> - fres_start < fdes_end ensures that the FDE table and FRE table do not
+>    overlap
+> - fres_end > sec->sframe_end ensures that fres_end (and fdes_end and both
+>    fdes_start and fres_start) are smaller or equal sframe_end
+> 
 
-Yes, true. For some reason, I thought I recalled the dma buf attachment
-causing some chain of reference holding that kept the device alive, but
-that is actually not true...
+
+Yes, I too think the existing check you note above suffices.
+
