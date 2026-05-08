@@ -1,120 +1,164 @@
-Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387773FD14C
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 15:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D7836E460;
+	Fri,  8 May 2026 15:40:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778254550; cv=none; b=IpjGZqcwF83bXYOJGc7/4gpKj5wk2hjrCGCxwh8pb3bH9SrCr9fL9IYzzPe/4uoDu8/XbONEl2p5Udu0OrLMqVyT/8QLMowvwK/blMAqaUn0cGhqKbval3ub7WBrzcrTUJBvTk66NC2rzU7OoO4K6KDNH+X7G3tdI5U5BsApTWw=
+	t=1778254810; cv=none; b=RMX4NtUVdOO98AanaVbKFPaJ9Gf4gHHkLHtnAhC41XY3aK9oSnHuaUnuyo1r+WMa/JDGWNylUxnx+nC43VDkQvcffklI9iJuD+UGD06DnHjyf6VcBz1saZMW+yTTM3UW0lMNCOf/exX/hLxpG4WGHASiiT5oD0pPuRgJ3LPTA20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778254550; c=relaxed/simple;
-	bh=+Sqrd3+qAMwXxnn7YbjPZUDRiBSpsfeWZG5do9th/6A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mmJbuNSWXN883SLdw/Ii109pKGB1gLdCgrodIWVtPPd6tFHyqd0DWPak09RQehpXYdsWHbAqIoa/o6x1e+Ic9LBXFBtvZ32Nk7k1q2TMP/z10kuIUPPu0wkg6Z8SObefesG7JYdSPAiVRNKaLimQBewfsj70HOlRlx3nvuj2dd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aIZoeBwj; arc=none smtp.client-ip=209.85.216.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778254810; c=relaxed/simple;
+	bh=E8G9MYegRpzWpWVKYNRRCGAxqMbVWlinVx/Om5EhD2c=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=cC3W+imIeRIYCVmjHJX7D99sw+jwC2mSon5CmLZRTu0F4IGSq0K8hLmbxisk5WrQ6nhVPE4CThx+960D5bJdrTo+13fW+6VSgFVB/6bAW2LNCrPhm/3Fu6KoAKicXCMd9HEYl/adxbuXCa5dIcz4yIRQjeq2bmYrsqtQnQfoAD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EBx3ej7f; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aIZoeBwj"
-Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-365d4d2f9c1so1458367a91.1
-        for <bpf@vger.kernel.org>; Fri, 08 May 2026 08:35:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778254548; x=1778859348; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=13lGB/qr9bIuYWgUEqIjZKpDgkXvR7yqgv79HDTtvfs=;
-        b=aIZoeBwjX7IC2U7N7E5A7mhosKQTaE+uamgxqB5LylqIFnmrXEnVXTNQWdRuzN7igc
-         WqTjKj3Kfa4HGRVfuq8f3cBEpltpdPt2RjOtc5FO0YLpbFG7sVULXD3nz0/Z8IqXxl+n
-         FgFrS8Wv4oJyZsyWk0gqsAof15hlrC33gXn0wBGIXQ+rmChFVyQGISdggWFGiovr9cUO
-         /YLvQlrtAAd3Ip82X4S+kVqwUvE0sclV7sg4GdYN2NhIRHCy7kkV5QIyJ3G6ZquBqloE
-         IhXjb2iR5TO1HrmU3BnOttRxp3VP2Xr48H+klu7pmFlKhHFt8xekBhhGK9paZhrE9XNb
-         Z/0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778254548; x=1778859348;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=13lGB/qr9bIuYWgUEqIjZKpDgkXvR7yqgv79HDTtvfs=;
-        b=q4hut//7AqQSCNoE4drvvCXyCA71m4mSsEH34ul2Nv9ZNnKTQqLGuMhgeEt+meU4sz
-         8HGE1P2fm1dzvsLa3CH0bNEEgTKPqKmlBc5TWOF8xq05a17EQFRKwbCwanOIbBE4Qt4W
-         CGnQODgx1ND0cgqkVyvWG0elDh6h9yvC2hpKf5fdq/EJHIazyT48Rx0UFuXpUEY7I4RF
-         FMvJSh7XnS9AYdB92vOzLQ2Tn0ClAFdZigqnoli7g/JPM/8ZyZIdD1WWcMCKCgu3S9zZ
-         5L7F5WJ5IVC+6iYI+ZdQ+oN5YxAcXBsaRmvuo4CMSBmXXsIqq0o8nEso+trxCx/tCY/+
-         SThQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8BobUnEozLv1UKZjlkXQX5Y9QIR+eVuNuih6OTRR9p6HCU/PpZA4GXFWWWr7qVtk3Gr+E=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3O40y/On4C0gTo+JauteEeHiqHXT027lFJAxGb5LO4Sn9y7G2
-	RleGDBUHgF52AqIbtzhbBCWZu7v0swcc2BtdX8Mw1fPHPDWQt8pg/VVZ
-X-Gm-Gg: Acq92OEehW2T95a+tZ6DKzDrKnK24paBRoWs2Q8f/m6AU5KD5UKcXBmovqbaHdWkbE8
-	YAE50TTkRfdlJC7tZJ54gVeFy5ZNhsMkfok1SY6o1hY0KE/4+JvV+smKv9auvtdOy9qkCfmncvV
-	6ECPJRaEas4eEXI21Dk66AHGJyq6UMjHfa00EYtw9z07TmyXbKE5iwxbhXz0QxTplWSttzeY8ai
-	2JEHCr46kI3E0t82IHp/u68dbb8T6isbR0XP/Lfwm7aS1J2VjRPkREQ5CY2gJKOs87gRa077XXH
-	+kP+xSbOjMv4N0/5QhZacnHIuE7mVJY8ugsZH4S7Oq6b7gniVwlAgMBDA3XYWpqCo1lXQ2q6emW
-	wtYAmL2tV8i8A08xoocnLmz6y42sWYT2/kl3pN+J4WJrmoCDboNLPnN4hx8p5niJAc+v61Ejo/n
-	HQvU3uCEAlw+C1rUA=
-X-Received: by 2002:a17:90b:3805:b0:35e:b017:da6a with SMTP id 98e67ed59e1d1-365aa73cc81mr13780678a91.0.1778254548466;
-        Fri, 08 May 2026 08:35:48 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:3::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-367c1b6851esm119724a91.8.2026.05.08.08.35.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2026 08:35:48 -0700 (PDT)
-Date: Fri, 8 May 2026 08:35:47 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Tenzin Ukyab <ukyab@berkeley.edu>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v1 bpf-next 8/8] selftest: bpf: Add test for
- BPF_SOCK_OPS_RCVLOWAT_CB.
-Message-ID: <af4CV5itdz5Dzwo7@devvm7509.cco0.facebook.com>
-References: <20260508073355.3916746-1-kuniyu@google.com>
- <20260508073355.3916746-9-kuniyu@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EBx3ej7f"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BC2DC2BCB0;
+	Fri,  8 May 2026 15:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778254810;
+	bh=E8G9MYegRpzWpWVKYNRRCGAxqMbVWlinVx/Om5EhD2c=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=EBx3ej7f2CmGFrRVSf/PpZzoO7LFjhpaWV9umAj6rdU1EIONp6mc9AFLNQxSgzNia
+	 Rnnb4HUSXO/aHv9MAUdA3Ad1L4OkRqid86QDxfRg5eqNI33FaHuOGv4+zCyb8WloRs
+	 3CRWPybgZFfXIgiLtA1WTCZbp4Vm8vGjTGx3bz8ZCfYRSlewzLfu6AFjb7cmH+39tD
+	 X56Us7/86EEZNnj0JG7woqgycponkkkul8HGZGfqv0iECDj/51/15D/F1KbtkQbtlp
+	 sF6+7fRlRVlCnIPBK+HdA/bpJnydd+bDxVPtgPR9G6oWy5OWlCWGZICmCGFaoRMpwQ
+	 MZdSV39sBPtyg==
+Content-Type: multipart/mixed; boundary="===============1780306519113491024=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260508073355.3916746-9-kuniyu@google.com>
+Message-Id: <c096deaccb513762aa50dbb59ccb0d18e6fb14a772fe37c428fb49fc550d9b1e@mail.kernel.org>
+In-Reply-To: <20260508150055.680136-3-vernon2gm@gmail.com>
+References: <20260508150055.680136-3-vernon2gm@gmail.com>
+Subject: Re: [PATCH v2 2/4] bpf: add bpf_cgroup_{flush_stats,stall} function
+From: bot+bpf-ci@kernel.org
+To: vernon2gm@gmail.com,akpm@linux-foundation.org,david@kernel.org,ljs@kernel.org,roman.gushchin@linux.dev,inwardvessel@gmail.com,shakeel.butt@linux.dev,ast@kernel.org,daniel@iogearbox.net,surenb@google.com
+Cc: tz2294@columbia.edu,baohua@kernel.org,lance.yang@linux.dev,dev.jain@arm.com,laoar.shao@gmail.com,gutierrez.asier@huawei-partners.com,linux-kernel@vger.kernel.org,linux-mm@kvack.org,bpf@vger.kernel.org,yanglincheng@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri,  8 May 2026 15:40:09 +0000 (UTC)
 
-On 05/08, Kuniyuki Iwashima wrote:
-> The test is roughly divided into two stages, and the sequence
-> is as follows:
-> 
->   I) Setup
-> 
->     1. Attach two BPF programs to a cgroup
->     2. Establish a TCP connection (@client <-> @child) within the cgroup
->     3. Enable BPF_SOCK_OPS_RCVLOWAT_CB on @child
-> 
->  II) RPC frame exchange in various patterns
-> 
->     4. Send a partial RPC descriptor from @client to @child
->     5. Verify that epoll does NOT wake up @child
->     6. Send the remaining data of the RPC frame
->     7. Verify that epoll finally wakes up @child
-> 
-> During setup, two BPF programs are attached to simulate
-> a real-world scenario; one is SOCK_OPS and the other is
-> CGROUP_SOCKOPT.
-> 
-> While the SOCK_OPS prog handles the dynamic adjustment of
-> sk->sk_rcvlowat, the CGROUP_SOCKOPT prog is used to enable
-> BPF_SOCK_OPS_RCVLOWAT_CB via userspace setsockopt() using
-> pseudo options:
-> 
->   #define SOL_BPF               0xdeadbeef
->   #define BPF_TCP_AUTOLOWAT     0x8badf00d
-> 
->   setsockopt(fd, SOL_BPF, BPF_TCP_AUTOLOWAT, &(int){1}, sizeof(int));
+--===============1780306519113491024==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Hmm, so you do want to have this enable-on-a-per-socket use case.. Then what
-happens to the skbs already sitting in the rx queue by the time
-we enable BPF_SOCK_OPS_RCVLOWAT_CB? Isn't there a race? Or am I missing
-something?
+> diff --git a/include/linux/psi.h b/include/linux/psi.h
+> index 7b4fd8190810..243dcf97bea4 100644
+> --- a/include/linux/psi.h
+> +++ b/include/linux/psi.h
+> @@ -52,6 +52,10 @@ static inline void psi_memstall_enter(unsigned long *flags) {}
+>  static inline void psi_memstall_leave(unsigned long *flags) {}
+>
+>  #ifdef CONFIG_CGROUPS
+> +static inline struct psi_group *cgroup_psi(struct cgroup *cgrp)
+> +{
+> +	return NULL;
+> +}
+>  static inline int psi_cgroup_alloc(struct cgroup *cgrp)
+>  {
+>  	return 0;
+
+[ ... ]
+
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index baa12b24bb64..5562a6c9d2f9 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -29,6 +29,7 @@
+>  #include <linux/task_work.h>
+>  #include <linux/irq_work.h>
+>  #include <linux/buildid.h>
+> +#include <linux/psi.h>
+>
+>  #include "../../lib/kstrtox.h"
+>
+
+[ ... ]
+
+> @@ -2881,6 +2882,37 @@ bpf_task_get_cgroup1(struct task_struct *task, int hierarchy_id)
+>  		return NULL;
+>  	return cgrp;
+>  }
+> +
+> +/**
+> + * bpf_cgroup_stall - acquire the total stall time of cgroup
+> + * @cgrp: cgroup struct
+> + * @states: psi states
+> + *
+> + * Return the total stall time.
+> + */
+> +__bpf_kfunc u64 bpf_cgroup_stall(struct cgroup *cgrp, enum psi_states states)
+> +{
+> +	struct psi_group *group = cgroup_psi(cgrp);
+> +
+> +	if (unlikely(!group || (u32)states >= NR_PSI_STATES - 1))
+> +		return (u64)-1;
+> +
+> +	return div_u64(group->total[PSI_AVGS][states], NSEC_PER_MSEC);
+> +}
+> +
+> +/**
+> + * bpf_cgroup_flush_stats - Flush cgroup's statistics
+> + * @cgrp: cgroup struct
+> + */
+> +__bpf_kfunc void bpf_cgroup_flush_stats(struct cgroup *cgrp)
+> +{
+> +	struct psi_group *group = cgroup_psi(cgrp);
+> +
+> +	if (unlikely(!group))
+> +		return;
+> +
+> +	psi_group_flush_stats(group);
+> +}
+>  #endif /* CONFIG_CGROUPS */
+
+Will these functions build when CONFIG_BPF_SYSCALL=y, CONFIG_CGROUPS=y,
+but CONFIG_PSI=n?
+
+The functions reference several PSI-only symbols:
+
+In bpf_cgroup_stall():
+- enum psi_states (parameter type) only exists in include/linux/psi_types.h
+  when CONFIG_PSI=y
+- NR_PSI_STATES and PSI_AVGS are enum members only defined when CONFIG_PSI=y
+- struct psi_group's total field doesn't exist when CONFIG_PSI=n (psi_types.h
+  defines an empty struct in that case)
+
+In bpf_cgroup_flush_stats():
+- psi_group_flush_stats() is only declared in include/linux/psi.h when
+  CONFIG_PSI=y with no stub for the !CONFIG_PSI case
+
+kernel/bpf/helpers.o is compiled whenever CONFIG_BPF_SYSCALL=y. Since PSI
+is an independent config option, the combination CONFIG_BPF_SYSCALL=y &&
+CONFIG_CGROUPS=y && CONFIG_PSI=n is valid and would hit undefined symbols.
+
+The cgroup_psi() stub added in include/linux/psi.h only handles the
+!CONFIG_PSI case for cgroup_psi() itself, but doesn't solve the unresolved
+PSI types and functions. Should these kfuncs be guarded with CONFIG_PSI,
+similar to how kernel/cgroup/cgroup.c handles cgroup_pressure_show()?
+
+>
+>  /**
+> @@ -4734,6 +4766,8 @@ BTF_ID_FLAGS(func, bpf_cgroup_ancestor, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_cgroup_from_id, KF_ACQUIRE | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_task_under_cgroup, KF_RCU)
+>  BTF_ID_FLAGS(func, bpf_task_get_cgroup1, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+> +BTF_ID_FLAGS(func, bpf_cgroup_stall)
+> +BTF_ID_FLAGS(func, bpf_cgroup_flush_stats, KF_SLEEPABLE)
+>  #endif
+
+These BTF_ID_FLAGS entries would also need CONFIG_PSI guards if the function
+definitions are moved inside CONFIG_PSI.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25563319416
+--===============1780306519113491024==--
