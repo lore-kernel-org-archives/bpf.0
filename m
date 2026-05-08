@@ -1,52 +1,52 @@
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C975736E49B;
-	Fri,  8 May 2026 07:36:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91DBD381B14;
+	Fri,  8 May 2026 07:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778225771; cv=none; b=m2aPQ3Pbcm4HPiWj/GyHsvw11mJW4jD6zHdZFbavJbvil5/sypT3reFp0wqwN9kRUFLLkRV4ty16pf4DihM/NLlHWXsWYIBssdqdMgOgS8uZSjtLg5AQzN2uQK/ZyrOA6yYr0CEUpykZoJOJ9g0HgtMxLtCn5/XqRppqCBeayJ4=
+	t=1778225775; cv=none; b=owir81tghwfVKhSnrwFlvM7RD9WJsROchKAytN/fkehCGNZfP6RUDG6zisLQ34/+c14tCY7A3LJRTjU/sqcxbImJXc7QXhvhcoS76k3/bRrHvODo68zr9F9DhnmRl6TTJVyAgvnn+FPzmuGQRsslaKeWIF5ZZjDCK/35r676sYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778225771; c=relaxed/simple;
-	bh=aEVxBzQijPj9PRsFyC76Lsq/Pj8h04R9UN1sWdxuvLM=;
+	s=arc-20240116; t=1778225775; c=relaxed/simple;
+	bh=4m9UwlMVsJgfdfVuYRQ5q8r0FAqsC574/KEoStxXQnU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=k4ErGm8Gjojs4VWw2HSYsQgn/UZjBa+SXfsKb66q7UQ01jboMnNBcOorf16RWrsxWdgF5v6DCgOgmZI1Yy2GZZ8az/tVucWPowUVDUxBvSHXLUHh0Cr57gilCSpl78oqVmemi1dEvpYeL7vC/HoeDtKu8894yQyP3FWZ/GPoNqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=x1YchZMb; arc=none smtp.client-ip=68.232.154.123
+	 In-Reply-To:To:CC; b=Mdq6FbvIQEV0DYAYQ7JUenc9Nt8lQuIN8xQcphlUNXwtR0qZ4vXZhRffxjCPcNeCC50GTbemblXdCKhFJB/ursiSizucD66d0TRyp12rByaJIA0QF+nBSHyQE2zehPmPH7j7uViX1i+ZA7ZF3MQxjOldo3o3DJO6LzU4GP+wc34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=yQ/j7i3E; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="x1YchZMb"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="yQ/j7i3E"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1778225769; x=1809761769;
+  t=1778225773; x=1809761773;
   h=from:date:subject:mime-version:content-transfer-encoding:
    message-id:references:in-reply-to:to:cc;
-  bh=aEVxBzQijPj9PRsFyC76Lsq/Pj8h04R9UN1sWdxuvLM=;
-  b=x1YchZMbJ5zKnF1e/UvbxCk3dVQVKG+JWPBIjgi9NyAe1XJtDtCYYx8H
-   QoWScjQTryfmsopDjLo7k3p9SUZVBxx1426kWt/unOTx5EWidmXJ/DIow
-   CeEGvjzt3mHIntDYoODPZbpRj311GxFKNJJien+sfFMr+Ma81sG9PHvqn
-   6J3h7FsKopwLJ65XbZUgfXnieTRJe8HJu2RSw4vU0gqVVriZg9OrWZadp
-   Y2jF+bq99AROI0GT83P3DfASlADVhHU5QC6wjLlosj0hBrbKuOWkVsFtZ
-   DNONDvmACbf0zgSH55lVeFte5u0VRIbyPACA7xdzcG+iCN/Jjb3Aa/iQh
-   w==;
-X-CSE-ConnectionGUID: 04CrYwjMRBu/p5E9vZKUNA==
-X-CSE-MsgGUID: /RHntvoyQ865QM2P2applA==
+  bh=4m9UwlMVsJgfdfVuYRQ5q8r0FAqsC574/KEoStxXQnU=;
+  b=yQ/j7i3EE8AwYpdsr8H9ESf/PtlgPp8L8hxWEW+bR5QKqPSB+Y47UI3N
+   0lVS6eDV8T80vNdi/tut3mMZvhVGQPJFYl5Fq2ajVkOZLg/qw9ya2aBgy
+   9AyBPZ8EHl6DtsV/zSH2vuKaPfS/6yHxVVDIpG8J46e6vPV2M+txpgl8A
+   rcZF5Pd2QASeW4rpqvxlEg8l23Jfy7LPmbPpsN7yb4yvNyi2LjZbrDHCO
+   1VTAoFbrosDaOh0lq07SIfo7HUNP2yA5JsWQU1Sgva2HeralWQOaEs4/1
+   oeAvwjQCj6ttVlfE5Zrrqvkt1l+ZeKaoAFSBqEE6x0AySZvNmCqtGD7Wa
+   A==;
+X-CSE-ConnectionGUID: uhwErX3+SCqStqzLcwsNXw==
+X-CSE-MsgGUID: nKGG/0jpQK+dDfbo4MhguQ==
 X-IronPort-AV: E=Sophos;i="6.23,223,1770620400"; 
-   d="scan'208";a="224455766"
+   d="scan'208";a="56432169"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2026 00:36:09 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2026 00:36:12 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
  chn-vm-ex3.mchp-main.com (10.10.87.32) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.37; Fri, 8 May 2026 00:36:08 -0700
+ 15.2.2562.37; Fri, 8 May 2026 00:36:12 -0700
 Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Fri, 8 May 2026 00:36:05 -0700
+ 15.1.2507.58 via Frontend Transport; Fri, 8 May 2026 00:36:08 -0700
 From: Daniel Machon <daniel.machon@microchip.com>
-Date: Fri, 8 May 2026 09:35:31 +0200
-Subject: [PATCH net-next v4 07/13] net: lan966x: clear FDMA interrupt
- stickies after switch reset
+Date: Fri, 8 May 2026 09:35:32 +0200
+Subject: [PATCH net-next v4 08/13] net: lan966x: add shutdown callback to
+ stop FDMA on reboot
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,8 +54,8 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-ID: <20260508-lan966x-pci-fdma-v4-7-14e0c89d8d63@microchip.com>
+Content-Transfer-Encoding: 7bit
+Message-ID: <20260508-lan966x-pci-fdma-v4-8-14e0c89d8d63@microchip.com>
 References: <20260508-lan966x-pci-fdma-v4-0-14e0c89d8d63@microchip.com>
 In-Reply-To: <20260508-lan966x-pci-fdma-v4-0-14e0c89d8d63@microchip.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
@@ -73,45 +73,102 @@ CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
 X-Mailer: b4 0.14.3
 
-When in PCI mode, the GCB soft reset issued by the reset controller
-can latch spurious bits in the FDMA error stickies. The latched bits
-sit in FDMA_INTR_ERR until the FDMA IRQ is requested later in probe,
-at which point the handler fires immediately and WARNs.
+When lan966x is used as a PCIe endpoint, the FDMA engine runs on the
+card and survives a host reboot. Without a shutdown callback, channels
+stay active and interrupt sources stay armed across the reset, causing
+the shared PCIe INTx to assert before the driver has re-probed.
 
-Clear FDMA_ERRORS, FDMA_INTR_ERR and FDMA_INTR_DB right after the
-switch reset so the FDMA comes out clean and the IRQ handler does not
-see ghost errors on probe.
+Add a shutdown callback, shared by the platform and PCI paths, that
+masks FDMA interrupts (FDMA_INTR_ENA and FDMA_INTR_DB_ENA) and disables
+the RX and TX channels.
 
-The clear runs on both the PCI and platform paths. On the platform
-path it has no effect — there are no spurious stickies to clear — but
-keeping it unconditional avoids a PCI-specific code path here.
+FDMA_INTR_ENA persists on the card across a warm reboot, so also
+restore the full enable in lan966x_fdma_rx_start() to re-arm interrupts
+after a previous shutdown(). rx_start() runs after both the RX and TX
+rings are allocated, so the same single-site re-arm works for both the
+platform and PCIe backends.
 
 Tested-by: Herve Codina <herve.codina@bootlin.com>
 Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
 ---
- drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c |  4 ++++
+ drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 18 ++++++++++++++++++
+ drivers/net/ethernet/microchip/lan966x/lan966x_regs.h | 15 +++++++++++++++
+ 3 files changed, 37 insertions(+)
 
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+index 9bb40383aa56..493aef5ba8d1 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+@@ -146,6 +146,10 @@ void lan966x_fdma_rx_start(struct lan966x_rx *rx)
+ 	struct fdma *fdma = &rx->fdma;
+ 	u32 mask;
+ 
++	lan_wr(FDMA_INTR_ENA_INTR_PORT_ENA_SET(GENMASK(1, 0)) |
++	       FDMA_INTR_ENA_INTR_CH_ENA_SET(GENMASK(7, 0)),
++	       lan966x, FDMA_INTR_ENA);
++
+ 	lan_wr(FDMA_CH_CFG_CH_DCB_DB_CNT_SET(fdma->n_dbs) |
+ 	       FDMA_CH_CFG_CH_INTR_DB_EOF_ONLY_SET(1) |
+ 	       FDMA_CH_CFG_CH_INJ_PORT_SET(0) |
 diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 9f69634ebb0a..b3701953b090 100644
+index b3701953b090..271c023900db 100644
 --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
 +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -1064,6 +1064,15 @@ static int lan966x_reset_switch(struct lan966x *lan966x)
+@@ -1311,9 +1311,27 @@ static void lan966x_remove(struct platform_device *pdev)
+ 	debugfs_remove_recursive(lan966x->debugfs_root);
+ }
  
- 	reset_control_reset(switch_reset);
- 
-+	/* When in PCI mode, the GCB soft reset issued by the reset
-+	 * controller can latch spurious bits in the FDMA error stickies.
-+	 * Clear them before request_irq hooks up the FDMA IRQ line,
-+	 * otherwise the handler fires immediately on probe.
-+	 */
-+	lan_wr(lan_rd(lan966x, FDMA_ERRORS),   lan966x, FDMA_ERRORS);
-+	lan_wr(lan_rd(lan966x, FDMA_INTR_ERR), lan966x, FDMA_INTR_ERR);
-+	lan_wr(lan_rd(lan966x, FDMA_INTR_DB),  lan966x, FDMA_INTR_DB);
++static void lan966x_shutdown(struct platform_device *pdev)
++{
++	struct lan966x *lan966x = platform_get_drvdata(pdev);
 +
- 	/* Don't reinitialize the switch core, if it is already initialized. In
- 	 * case it is initialized twice, some pointers inside the queue system
- 	 * in HW will get corrupted and then after a while the queue system gets
++	if (!lan966x->fdma)
++		return;
++
++	lan966x_fdma_rx_disable(&lan966x->rx);
++	lan966x_fdma_tx_disable(&lan966x->tx);
++
++	napi_synchronize(&lan966x->napi);
++	napi_disable(&lan966x->napi);
++
++	lan_wr(0, lan966x, FDMA_INTR_ENA);
++	lan_wr(0, lan966x, FDMA_INTR_DB_ENA);
++}
++
+ static struct platform_driver lan966x_driver = {
+ 	.probe = lan966x_probe,
+ 	.remove = lan966x_remove,
++	.shutdown = lan966x_shutdown,
+ 	.driver = {
+ 		.name = "lan966x-switch",
+ 		.of_match_table = lan966x_match,
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h b/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h
+index 4b553927d2e0..aba0d36ae6b5 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h
+@@ -1039,6 +1039,21 @@ enum lan966x_target {
+ /*      FDMA:FDMA:FDMA_INTR_ERR */
+ #define FDMA_INTR_ERR             __REG(TARGET_FDMA, 0, 1, 8, 0, 1, 428, 400, 0, 1, 4)
+ 
++/*      FDMA:FDMA:FDMA_INTR_ENA */
++#define FDMA_INTR_ENA             __REG(TARGET_FDMA, 0, 1, 8, 0, 1, 428, 404, 0, 1, 4)
++
++#define FDMA_INTR_ENA_INTR_PORT_ENA              GENMASK(9, 8)
++#define FDMA_INTR_ENA_INTR_PORT_ENA_SET(x)\
++	FIELD_PREP(FDMA_INTR_ENA_INTR_PORT_ENA, x)
++#define FDMA_INTR_ENA_INTR_PORT_ENA_GET(x)\
++	FIELD_GET(FDMA_INTR_ENA_INTR_PORT_ENA, x)
++
++#define FDMA_INTR_ENA_INTR_CH_ENA                GENMASK(7, 0)
++#define FDMA_INTR_ENA_INTR_CH_ENA_SET(x)\
++	FIELD_PREP(FDMA_INTR_ENA_INTR_CH_ENA, x)
++#define FDMA_INTR_ENA_INTR_CH_ENA_GET(x)\
++	FIELD_GET(FDMA_INTR_ENA_INTR_CH_ENA, x)
++
+ /*      FDMA:FDMA:FDMA_ERRORS */
+ #define FDMA_ERRORS               __REG(TARGET_FDMA, 0, 1, 8, 0, 1, 428, 412, 0, 1, 4)
+ 
 
 -- 
 2.34.1
