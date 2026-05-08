@@ -1,131 +1,198 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47782225413;
-	Fri,  8 May 2026 21:06:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406CA36F40D
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 21:16:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778274393; cv=none; b=iTnMbibu9ayS/aUKo9C40bAe3RSYj6gnEA1w6O09jebQy2OGQHE50y8pKfYtMr6c1sIZjXy9CWErE6oLILKEXoFjZwSQl5j8ltW8Fdcev6xl3hA2+05gToGpeBe6t/odxuML8VBTjxZDe70bhtoWehFF1k8b6pO6/olvdFAoujc=
+	t=1778274992; cv=none; b=TQxhOAlLpl/4EJt8P37EcbnZ5CzHvRNpZDIe3fH1BDzXyDUiYrLQjo8VUesDXeIVQWDAz9zjqEi5sPC+W6LbpLVGiDYZ0uMen8QjDB/J02vswIo+3fK8zbEV/R1hJEZZhW3iqMr0SAsL04043OsCD/GcpXB4CvwSOYKEVOKDh9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778274393; c=relaxed/simple;
-	bh=T0eWHYvoB32q4/LjWG9pTPZE5yTNYbilqq9QRe3btmk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q4vFWUzTpNSMQvJnSrfaMkf50EKz0Bn+YIDJTJqEN/qyNIa8Mg8NoHZUAXhfbu/WN4yhJGxcvxLZKuo97vB/VOSIIssUCtUNaNChho2zhxbLfsgC87NUmlxJxBal1+EqqxUOFjdqXxygqOMJfNxY5LtH1pbpi3yzgFkZKB8po8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=hZ6JYsCY; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1778274992; c=relaxed/simple;
+	bh=eMcEOZOj7EZhZlBZssxgm0II2gQreWcbRKzhfPRmNPM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=inbtcTMHuse9HpWQCzuNT9+e99GGDbUJ7X04H3uaZyb5DTHAUWudlx9bW0UNEEIWkr5piOgTRvSWwriFheobtnXyLO/9XF15dRKgi6/FGcNRhLyqPO/7ULYLiE+TC+exWeMXm3pBTMz9dBGH8Qf9e4GGhVXZ51IImGQBWUogTbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pHs3J0MJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="hZ6JYsCY"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7680240E00C2;
-	Fri,  8 May 2026 21:06:28 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id hgMfzb9Q01z8; Fri,  8 May 2026 21:06:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1778274377; bh=THjyDfJHG7KW9npiqBHK3HlBg3FTqIowEJNRgPMlB/w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hZ6JYsCYHUgII6cO/Pj/xxaMkCexjTFlixqmNXNw918guUvdWQNt98LA2QtBpt8oh
-	 2G6VbNwCsf1GFoey3tSlMK+l2dB/3LEDfUOc6W7g7a0WEMxfy4oBTzFnWoa08TIvGM
-	 H/FeXQqiEkiH5Ac6wIly0j5pb8tqcXvWUYY9sF5P1NSiM/ijHl3gSbroqzXvr+MSxu
-	 tI3NpnfLfMmvZF1HmRuEYVqUye4oXpKPeO8hxkxTNUgIuCJ/Tpn3EBZ9qCX8frgC0w
-	 B1lIptOv7SA00tM6phu4KI6UahFQui8Ly0kNI+IriGaJAGO4qQhELbnGzoMv37xfKC
-	 B/AcsJTnS4HzUcG77+KdyUMG0maJZFvuI7xhlGLHbESKNSz8MFMXMR4l3OZFblsjZA
-	 0fN2qlB1egK7K2LAaqxPFw9pOSsiSkJ08ap0TzrcXha9IklHyx49UuhlbXz/J1N3hC
-	 kcwh8KR1xqkXVleNxkXmuA7FpWpZTkeUdqic8/Uwu9LBmwbW3ss2+Xn9d+RD0ya7ZA
-	 GqUcSfYtwystf/w7zBknjGt0ULLwYQcm1/cS2GkkqdxFA7GiR54QMv4zSjv3VUYnWP
-	 svxB3a4hPt8+UV52rUrfb71bKpwutQXDLkOL21b5q/EMV6wGTSk3kKjk+2eZL6LPNu
-	 EZLlRu8V3SW4Uupd9i5VmLZM=
-Received: from zn.tnic (pd953014d.dip0.t-ipconnect.de [217.83.1.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id E01BC40E014B;
-	Fri,  8 May 2026 21:05:34 +0000 (UTC)
-Date: Fri, 8 May 2026 23:05:27 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	David Kaplan <david.kaplan@amd.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Jason Baron <jbaron@akamai.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	Asit Mallick <asit.k.mallick@intel.com>,
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v11 02/12] x86/bhi: Make clear_bhb_loop() effective on
- newer CPUs
-Message-ID: <20260508210527.GFaf5QFz61RmSRBqKT@fat_crate.local>
-References: <20260422-vmscape-bhb-v11-0-b18e0cf32af4@linux.intel.com>
- <20260422-vmscape-bhb-v11-2-b18e0cf32af4@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pHs3J0MJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 052D5C2BCB0;
+	Fri,  8 May 2026 21:16:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778274992;
+	bh=eMcEOZOj7EZhZlBZssxgm0II2gQreWcbRKzhfPRmNPM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=pHs3J0MJGfj6msaMRuSl5wlJtZ7UE7tfFtSsBfYWuB+okH6ZQl3vtUTDSDt0t8P0P
+	 rd+JFgR8uq3tvzZRAQOrLPLkfQyCoIuRf+blnWiwwDKZo3PppMOKuk3GWUjbr0pRaI
+	 aYltMKGkZv4ub0uw2QD/Io0fwnCDup7akTfATT81AaARjqO4f07wP9X0caDWWXJwOB
+	 XArJRqsrV0/UtFQ1Zo8xkSHaYPQUIMya4PuroPgqhSQlEAUyKQayXyaH7Wk47oWXvx
+	 /O6PdcZYzwratPBg6QtwpxGeANuizUu1iPH4hKdxFdiR2h+2kyf4Qw5zSvK95dyGbh
+	 xqX6DNdy1ZvcA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v8 2/2] net: mana: force full-page RX buffers via
+ ethtool private flag
+Reply-To: sashiko@lists.linux.dev
+To: "Dipayaan Roy" <dipayanroy@linux.microsoft.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260508115100.488506-3-dipayanroy@linux.microsoft.com>
+References: <20260508115100.488506-3-dipayanroy@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 08 May 2026 21:16:31 +0000
+Message-Id: <20260508211632.052D5C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260422-vmscape-bhb-v11-2-b18e0cf32af4@linux.intel.com>
 
-On Wed, Apr 22, 2026 at 11:15:15PM -0700, Pawan Gupta wrote:
-> As a mitigation for BHI, clear_bhb_loop() executes branches that overwrite
-> the Branch History Buffer (BHB). On Alder Lake and newer parts this
-> sequence is not sufficient because it doesn't clear enough entries. This
-> was not an issue because these CPUs use the BHI_DIS_S hardware mitigation
-> in the kernel.
-> 
-> Now with VMSCAPE (BHI variant) it is also required to isolate branch
-> history between guests and userspace. Since BHI_DIS_S only protects the
-> kernel, the newer CPUs also use IBPB.
-> 
-> A cheaper alternative to the current IBPB mitigation is clear_bhb_loop().
-> But it currently does not clear enough BHB entries to be effective on newer
-> CPUs with larger BHB. At boot, dynamically set the loop count of
-> clear_bhb_loop() such that it is effective on newer CPUs too.
-> 
-> Introduce global loop counts, initializing them with appropriate value
-> based on the hardware feature X86_FEATURE_BHI_CTRL.
-> 
-> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> ---
->  arch/x86/entry/entry_64.S            |  8 +++++---
->  arch/x86/include/asm/nospec-branch.h |  2 ++
->  arch/x86/kernel/cpu/bugs.c           | 13 +++++++++++++
->  3 files changed, 20 insertions(+), 3 deletions(-)
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [Critical] Faking `apc->port_is_up =3D true` on `mana_attach()` failure c=
+auses a guaranteed NULL pointer dereference in the asynchronous reset worke=
+r.
+- [High] Toggling the 'full-page-rx' flag OFF leaks memory when initial pac=
+kets are dropped because pre-allocated buffers are saved for reuse but neve=
+r consumed by the fragment refill path.
+- [High] `mana_pre_alloc_rxbufs` dangerously allocates huge arrays with `km=
+alloc` and thousands of pages with `GFP_ATOMIC` in process context, leading=
+ to allocation failures under load.
+--
 
-Simple and clean - that's how I like 'em.
+commit 57f161d214770cf8af214936230e6e5eeac378bc
+Author: Dipayaan Roy <dipayanroy@linux.microsoft.com>
 
-Acked-by: Borislav Petkov (AMD) <bp@alien8.de>
+net: mana: force full-page RX buffers via ethtool private flag
+   =20
+On some ARM64 platforms with 4K PAGE_SIZE, page_pool fragment
+allocation in the RX refill path can cause 15-20% throughput
+regression under high connection counts. This adds an ethtool private
+flag "full-page-rx" to force one RX buffer per page.
 
--- 
-Regards/Gruss,
-    Boris.
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers=
+/net/ethernet/microsoft/mana/mana_ethtool.c
+> index a28ca461c135f..dfd222de11d09 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+[ ... ]
+> @@ -590,6 +609,88 @@ static int mana_get_link_ksettings(struct net_device=
+ *ndev,
+>  	return 0;
+>  }
+> =20
+> +static u32 mana_get_priv_flags(struct net_device *ndev)
+> +{
+[ ... ]
+> +static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
+> +{
+> +	struct mana_port_context *apc =3D netdev_priv(ndev);
+> +	u32 changed =3D apc->priv_flags ^ priv_flags;
+> +	u32 old_priv_flags =3D apc->priv_flags;
+> +	bool schedule_port_reset =3D false;
+> +	int err =3D 0;
+> +
+> +	if (!changed)
+> +		return 0;
+> +
+> +	/* Reject unknown bits */
+> +	if (priv_flags & ~GENMASK(MANA_PRIV_FLAG_MAX - 1, 0))
+> +		return -EINVAL;
+> +
+> +	if (changed & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF)) {
+> +		apc->priv_flags =3D priv_flags;
+> +
+> +		if (!apc->port_is_up) {
+> +			/* Port is down, flag updated to apply on next up
+> +			 * so just return.
+> +			 */
+> +			return 0;
+> +		}
+> +
+> +		/* Pre-allocate buffers to prevent failure in mana_attach
+> +		 * later
+> +		 */
+> +		err =3D mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queues);
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Since mana_set_priv_flags() runs in process context under rtnl_lock, does
+calling mana_pre_alloc_rxbufs() risk memory exhaustion and fragmentation
+failures?
+
+mana_pre_alloc_rxbufs() loops num_rxb times using dev_alloc_pages(), which
+allocates using GFP_ATOMIC. Could mass-allocating thousands of atomic pages
+exhaust atomic memory reserves?
+
+It also uses kmalloc_array() for rxbufs_pre and das_pre, which might require
+megabytes of physically contiguous memory. Would it be safer to use
+kvmalloc_array() and alloc_pages(GFP_KERNEL) here instead?
+
+Additionally, if the full-page-rx flag is toggled OFF, does this leak memory
+when initial packets are dropped?
+
+When the flag is toggled, mana_pre_alloc_rxbufs() pre-allocates the RX ring
+and the buffers are injected with from_pool =3D false. If the flag is toggl=
+ed
+OFF, the standard MTU configuration sets rxq->frag_count > 1.
+
+If any initial packets are dropped (e.g. truncated packets), mana_rx_skb()
+executes the drop path and saves the buffer for reuse via
+rxq->xdp_save_va =3D buf_va.
+
+However, mana_get_rxfrag() only reuses rxq->xdp_save_va if
+rxq->frag_count =3D=3D 1. For frag_count > 1, it allocates new fragments fr=
+om the
+page pool and ignores the saved buffer. If multiple pre-allocated packets a=
+re
+dropped, could mana_rx_skb() repeatedly overwrite rxq->xdp_save_va, trigger=
+ing
+a WARN_ON_ONCE and leaking the pages?
+
+> +		if (err) {
+> +			netdev_err(ndev,
+> +				   "Insufficient memory for new allocations\n");
+> +			apc->priv_flags =3D old_priv_flags;
+> +			return err;
+> +		}
+> +
+> +		err =3D mana_detach(ndev, false);
+[ ... ]
+> +		err =3D mana_attach(ndev);
+> +		if (err) {
+> +			netdev_err(ndev, "mana_attach failed: %d\n", err);
+> +			apc->priv_flags =3D old_priv_flags;
+> +
+> +			/* Restore 'port_is_up' so the reset work handler
+> +			 * can properly detach/attach. Without this,
+> +			 * the handler sees port_is_up=3Dfalse and skips
+> +			 * queue allocation, leaving the port dead.
+> +			 */
+> +			apc->port_is_up =3D true;
+> +			schedule_port_reset =3D true;
+
+Does setting apc->port_is_up =3D true on mana_attach() failure cause a NULL
+pointer dereference in the async reset worker?
+
+If mana_attach() fails, its error path calls mana_cleanup_port_context(),
+which ultimately frees apc->tx_qp and sets it to NULL.
+
+When the scheduled mana_per_port_queue_reset_work_handler executes, it calls
+mana_detach(). Because we faked apc->port_is_up =3D true, mana_detach() inv=
+okes
+mana_dealloc_queues(), which blindly iterates over apc->num_queues and
+dereferences apc->tx_qp[i].txq.
+
+Since apc->tx_qp is NULL, will this result in a kernel panic?
+
+> +		}
+> +	}
+> +
+> +out:
+> +	mana_pre_dealloc_rxbufs(apc);
+> +
+> +	if (schedule_port_reset)
+> +		queue_work(apc->ac->per_port_queue_reset_wq,
+> +			   &apc->queue_reset_work);
+> +
+> +	return err;
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260508115100.4885=
+06-1-dipayanroy@linux.microsoft.com?part=3D2
