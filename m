@@ -1,189 +1,155 @@
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46033E5589
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 16:53:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D277262FD0
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 17:33:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778259230; cv=pass; b=LPUGjkCK4hBe0+vkubXLXOy0TD5oSvkYPIwj1Qt+GnnkrBZgbOZVYJ0qc5kHbtltUDvUeyw1xabg7cr1ssC3u0QCAFCS/Z8bB0IizTKqH+fczQ807hCyDKY0jOKtlCGIzhBrharveTEF/u0zjEvVwWLwxn/V6xC1ZOhvuki+WUo=
+	t=1778261637; cv=pass; b=LgxOcif7ljGqPYoAxTN3Z2IIybS6GrqAWahOVL+eRK0WQ7PNoMGHxGkB0P+Xqia8W/dWKx6vN80rO2ALyBiATfc3KAvifSJwfM0hHlktmmaslnW64hZKskAFzEaeh37gVPkVfGDTHIfe4ntkboBTZcjADsIT/kLuAAIcg6Dy+Uc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778259230; c=relaxed/simple;
-	bh=QaoHM0ZCmmMCsFlDINbW+hCiP+12jItyCcYa0Cn+33w=;
+	s=arc-20240116; t=1778261637; c=relaxed/simple;
+	bh=Zuzap/NeEJKgBkbnacndJucESuPLdGprQGVJ/QLToEM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BfvozyUsi3+PlCwQP1BxxH/+uPiLsVsEauIgtdfS0/v5krwXDgmyG3EaPAhTmFQIRLcN90CQAXdJuXXNH5rnxEfIihCSeH2h6I3LVWsdr5J6+iWbk+rj6iGzlC8/XWmISXJ5oNyHk7Sz0YKtg5th1l2e/YXvRW0kQ866EQ69rBY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RXKD62o1; arc=pass smtp.client-ip=209.85.208.170
+	 To:Cc:Content-Type; b=B6VzqC76u5Fuii4puWa6uGt39RWloecNWbNva9siBAxDftBxmndf8jvzKw02jyX+osCT4q91V6nKb0NKNthV/bFe9Dx1jTWVFACg+Yil4LatG1UsavAPKvckinWLAbdaPQZr9CNciUiAJVf587uymqJc+b8A0NIOcOvSK9kvwd0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n16aWDo4; arc=pass smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RXKD62o1"
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-39396f873adso25530891fa.3
-        for <bpf@vger.kernel.org>; Fri, 08 May 2026 09:53:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778259227; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n16aWDo4"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-488ab2db91aso24690765e9.3
+        for <bpf@vger.kernel.org>; Fri, 08 May 2026 10:33:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778261634; cv=none;
         d=google.com; s=arc-20240605;
-        b=j2p5wgqX2PiGRsj2qjrEIPbkyQl6Ozc+rbo+bqtshf5MgDP7156/LyCQPSHLeWux13
-         qRZ0Qu2FAJpsrRiyblmG/FrGd9J00jCULq+1vqm8yk0nfV+UeWEbojg0msvUk8PaYchk
-         Gb9uA1j+xjgP8/OrTioypaD4d778eThkGV9Ff+vOFaajw2Gd4+quxetN3H0NJod0DwT8
-         GpmRceo+JSZWF+7wmawtYgHV5sstJ0Uif310P/B7AEoYLKPonQB4XAK0/wJ9CzTa/eBK
-         XtCDuqiOFPFoRTIyF9w4AL6V9CYjtoRoCDgDevdLpp0vueZWofa6heDzR/H+aGkPfaOK
-         7T0w==
+        b=kc3rocDoe0mQMqA0CnHRvct8LPdK5WyuEmR98AXZDqXKl8/0WYXnVK+Cn4ln95BxcD
+         JnJiwVJ96WEQ6FJ2rSpyocJVdmFXWp6C9L5nIn/FyuDlTnFOH8Sn/Lqemtu4gDhsxYQ5
+         lif+CJSC/9z+OsWuB51Z/ZiLWIr1macYJ5+Xaq2mCDrCv6zCxR0yomxztLVvc8544ABH
+         cC0UNXeCR41xer1QSzqGkYnYmk5JLvQTTsL2vCu4lQJ0ZrKKqrCkhQXELAF8S+KTniCZ
+         1l/8mB4aA+U2JkCdT5RJaFrSE3XZdzER+3JQ2wCf5eIt10yrh8vlcHwFAM5gB/72kUxh
+         QF7g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=QaoHM0ZCmmMCsFlDINbW+hCiP+12jItyCcYa0Cn+33w=;
-        fh=+n6wohp3MsY0uwfOJyhn1yA+Go43b2+FMlU/d/gbFWU=;
-        b=fuMXU0d6dymYlcuIfO7QTaVO/7udiDj7/0YpuR2BUAxZbxJXIRZzpEKLnEekNZvxI6
-         q8zji3oN6Mjx+5Hr3KdNpHk12W3/IEy4k1EhJe1WSLdvVG06vJJ1JeJ+XRgS56VDeFmY
-         lWQjxqOkufiCVdgdElBDPtOHjMZcar8jcRM5FoWXEa4/bamNgWG562NsetS9e58T3vTy
-         Xcw5LZc8UdXdhk+x0yvpJlcIhRNHDaJ57BDYXKMmEhwlSyq+WCDoQ/5VBVuXcTXBfTfs
-         BNe3Csj/m83KGxlWNWBW7CucBqHG8qz+Tf7ceh7PP9WBNB0TjVe/PrQoTiz/3zrU8M5K
-         QMwA==;
+        bh=pYjQZP/Zb8wkT3ptwcSfDCc4VXR9i3KlcImFiXOhk38=;
+        fh=wi89WQjOF2HvnYB0v50Lj11/w784Fae/K3mXW7+OEdE=;
+        b=gjIt7x3lZ/pJzm2/1s+jMgJw/GakaZ1oJXtz9wC/nmR6YP6yoIy6tHWOlPPKF6SFDg
+         mkZ5jod0OuIqT5Tq/jiL1MwCJeHvFUK1QRRj+6xj3PsXotTbvviycp4wAWpnXnm9Sz+F
+         c75RVXgo21XaOLgcIfcBmBo7FaxL7n1NMhAHP+YnBCdfJ2gIYSZrwGvUcezG4WvOVB/+
+         8mJ6ymjsaDkhRKimwSPpcwX+MRB040mun+hT+2fCkBFk1FCOhJ3NPOnbe6Km3FqKGFZU
+         UcA58urMGCW2rZH1drtc8kojci2IODcla7mR20/PzCDBT9+3rAjiTaL9bwwHtk401Sov
+         nw9A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778259227; x=1778864027; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778261634; x=1778866434; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QaoHM0ZCmmMCsFlDINbW+hCiP+12jItyCcYa0Cn+33w=;
-        b=RXKD62o18LhZHkGbnIzpUxb/dRYeEMD99RzGGvGVhRtOBtqFubnCnP8YGw9b/I2ez+
-         wIgkLOH04RiUuF/btADWoSOXLb5Mj6xQGqMqKnhk0V3xWUJhoBxLyBQIFGFSlICwX4uX
-         GjyV5stabJm9O8geA3DDBdoxgfPO+MM5PJbd3gQR0FznOrBVeoCtX+l70Ij/BErnGfW/
-         aMRHXglphUgpFal8Q57JA5lcA7ZAGRYf82IlSTZlW5HmMsetr9B1WlbMvvADgQvACpg3
-         uf5CBcCD7jeh931GdRZWdBSwky77t9HGLgmOFOZL/Nn5EqifFGGvtBN6yg4WGlRZ2/Uo
-         HD3A==
+        bh=pYjQZP/Zb8wkT3ptwcSfDCc4VXR9i3KlcImFiXOhk38=;
+        b=n16aWDo4Se9jZ7Ex5Tmo9swMUtce00o57rcvWKP7vbwObnHCxi7OtzQcNoNO7915d9
+         gjuFwmhYutmYGCZcIxbKvvrWswIOEM52ekotvc+ZHFzwHYExNv5FdgFPzsSmbcLuSxaB
+         Tq69t6zJMADTtNSKff99Lyr+kCR46K2yRJIjfpzfQuMhfRtIZUqYvC1cx+eabZKuOB1v
+         KYsM8mmycSlLAk8F4Sde1CN7s3ivTBOgwdgqmIzGrE6sMuccNmA+Dq7K+ZLJ34+ifPOe
+         zK3KRY++uDz/ouVr6atcLqvGKGLXOZEsRGuBJ1h9u3ayNpwcnBjniQ+vc9SIMN1dffsg
+         3Tqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778259227; x=1778864027;
+        d=1e100.net; s=20251104; t=1778261634; x=1778866434;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=QaoHM0ZCmmMCsFlDINbW+hCiP+12jItyCcYa0Cn+33w=;
-        b=ThG/HabdzE72k7bsISGQXQqVZdkXvtH6KaYmZe3WhrfjMxblWnARvRvTM7snD17mf/
-         IWOxcnPTfBPtoxVYW3jPMKYhsytown35H+dVcrVJkM0pz/hYo4gDpem6NPayL3KpMlNq
-         ZfT1+/SYtVTc5MeSjdYkVYXuu1DI2ql+UZa64hONrxAu2VUPRI4EW5tvSI2TaJ0/1HGI
-         iQDR6Q2wu8FRm1xcsfuVlrAOU0asfX7C9dP/Bc72NDoRFgOMwEKETPDAP+cSnTgMJ4Kj
-         9BDtv8jRG3cqVyIm9yHK0Zef8QK5mxsHgEp5Iwt22Hg6bwHyz+tduhxDOFePkCqYO6Yu
-         TFiw==
-X-Forwarded-Encrypted: i=1; AFNElJ91fQ3xAr/hO/vEGP/D5d0pjmoe8OFCBaYm86E7yjyjYeXjlrNVF6QBwEqm1uFw+HQLCBE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVTKTIkZBLH/uZNBsoLqFySxmlfQJF6rsOA4wLt2i4sHAdrQir
-	bxHMAJrqZreN+wfKDXQmktOaknUqMGZvLCeubyHLjBhL7vNQTnO+HZf3SmGgqqRETvTwg5GK97J
-	udlQBkEC9dG+yDd6dw8Fqb5/fGL69WfE=
-X-Gm-Gg: Acq92OHUm4y+X5WHavnhqtCUL7UEtdbsjx58s+TvItyzBxyBKWX5WJI1NU49PlNVXng
-	YYEu6huO6gdAAT821Y284e5vu1SgkZbUmF9r5mTLU/NXS+H9VdlIGiEIdkiuApD90U/i1yFGRHf
-	ad5PXSz9LpzUR8yHW4yWxMxqLcCv2gYqmpgW6fkzr4QkcrcsOiKTqucklCEzDAbKE0uU5DOkmMa
-	/gzcOVuFxajqKOWcI665VmK3HKNG2QZIkz3BZmrVsCGINj5LOzAOA4c75wpQCnrGc9z7xqhz0wP
-	6rIaAw==
-X-Received: by 2002:a2e:9807:0:b0:38f:e9fa:266 with SMTP id
- 38308e7fff4ca-393c43492e6mr39138871fa.31.1778259226695; Fri, 08 May 2026
- 09:53:46 -0700 (PDT)
+        bh=pYjQZP/Zb8wkT3ptwcSfDCc4VXR9i3KlcImFiXOhk38=;
+        b=RKpyHX6bkewDvwHJXm5nV58O05BOsTGtIjyD+JTDUXkH3KpD4P4ul/QKaPH5SW8b71
+         aVMd+G7vVnmKVsIyCpkSIblc3uiXrx6FEimQrDcRL8lmfizcSLn2hyR9n5oW3dz12MDP
+         gUC1YRovD9yqJzacfjIELsEQM6xzgRGbCRV5qsMsDJIYAfwSs4EagU3wCw0eaaj6prmN
+         9SD00z/M3vRcnjHf90qoJN0AUA6o/DO5EPvPi9LgFudFBl8/Jl2WFeL4jJ+M/YDgLIvq
+         h85RbchUh75nPN0NssGG6eVKR0tH+g04BLTKc4qjKU3+uK9/1uvNtPQqiEFJn2MPXmKI
+         VYtg==
+X-Gm-Message-State: AOJu0YxOI3Oma/QcFWyKdrRsHPnCldJOJmTu77i6vZgw+9u7F8yJuTx3
+	GHIS4DJwH64NHvn3DKu6PiNzCIryw1zNv65e8OiWAJ7plgwPmZFjymbPvSAtL3IurVmd98Ptms6
+	CL3vBQzy0uJvyx0036AA4wc0Guat1t08=
+X-Gm-Gg: AeBDieumTOvtn+fYfcAaBEctBpdzQEwx7jemV1poTKJpo9eBoIbe45ZRb98KFxRYNXu
+	+kamSLCQ7w9O7HB6TQb1CoWPl2L3Nxgaw15lpPXzoqGhJBBizd7RhTkN4SLEHdbyJYzXXClrUTl
+	iBYofIw8TGpvzDsKpWNgUrxdIZC2Y0+iJOWn2htSDkBemDNzS9BZSqUqKzw5WkhXScrCmysT8Vq
+	hSAS8ryachYOuUDr+512sa97ez2ObzALhxPPxmd6kbe9xwEbXh7sRtssSVvDSkS2opQZqoBevLB
+	H2gGqYGF9DMBvGrp4p/MAuyjOki53JVQo+7ODVtsdZiLyfIAtZXbCSqzX8+7Ygg56Go55jzXsfd
+	JBacX7zdtki36en4XbN1ewKAYkw==
+X-Received: by 2002:a05:600c:a118:b0:48a:58e1:6d02 with SMTP id
+ 5b1f17b1804b1-48e51f35b3emr165636735e9.19.1778261634221; Fri, 08 May 2026
+ 10:33:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260508150055.680136-1-vernon2gm@gmail.com> <af376QFXC36uf7kp@lucifer>
- <af4IEwbAAIYUH0z9@lucifer>
-In-Reply-To: <af4IEwbAAIYUH0z9@lucifer>
-From: Vernon Yang <vernon2gm@gmail.com>
-Date: Sat, 9 May 2026 00:53:35 +0800
-X-Gm-Features: AVHnY4I9xn5qVPzznLhQUYYLZZAVQPP79rbvSZlePl1QwuMT9t3JE9qcslwsgOg
-Message-ID: <CACZaFFNdk5EfBxCTT0WOPGLiG_01wNESem_DKAu9SK1hrzBhow@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] mm: introduce mthp_ext via cgroup-bpf to make mTHP
- more transparent
-To: Lorenzo Stoakes <ljs@kernel.org>
-Cc: akpm@linux-foundation.org, david@kernel.org, roman.gushchin@linux.dev, 
-	inwardvessel@gmail.com, shakeel.butt@linux.dev, ast@kernel.org, 
-	daniel@iogearbox.net, surenb@google.com, tz2294@columbia.edu, 
-	baohua@kernel.org, lance.yang@linux.dev, dev.jain@arm.com, 
-	laoar.shao@gmail.com, gutierrez.asier@huawei-partners.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
-	Vernon Yang <yanglincheng@kylinos.cn>
+References: <20260424171433.2034470-1-yonghong.song@linux.dev>
+ <20260424171438.2034741-1-yonghong.song@linux.dev> <DI8CQDATE33J.30U4FNOVZY97R@gmail.com>
+ <7bfa2ead-3b2f-4ec3-be38-2146acc69eb2@linux.dev>
+In-Reply-To: <7bfa2ead-3b2f-4ec3-be38-2146acc69eb2@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 8 May 2026 10:33:42 -0700
+X-Gm-Features: AVHnY4KgOzQD0kHal2QcEi_ASvLkdgg2R3aUBYGAZCLhVWnQNJdZLhFbJbwNZEw
+Message-ID: <CAADnVQJ4ygETq5HfOy552pWSUHtRiH_M103rzNRm6B8sR-biJA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 01/18] bpf: Support stack arguments for bpf functions
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	"Jose E . Marchesi" <jose.marchesi@oracle.com>, Kernel Team <kernel-team@fb.com>, 
+	Martin KaFai Lau <martin.lau@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 9, 2026 at 12:05=E2=80=AFAM Lorenzo Stoakes <ljs@kernel.org> wr=
-ote:
+On Sat, May 2, 2026 at 2:55=E2=80=AFPM Yonghong Song <yonghong.song@linux.d=
+ev> wrote:
 >
-> On Fri, May 08, 2026 at 04:15:04PM +0100, Lorenzo Stoakes wrote:
-> > Thanks for the series, but overall it's got to be no to this until THP =
-and mTHP
-> > are in more stable shape.
+>
+>
+> On 5/2/26 6:03 PM, Alexei Starovoitov wrote:
+> > On Fri Apr 24, 2026 at 10:14 AM PDT, Yonghong Song wrote:
+> >> @@ -1669,6 +1669,8 @@ struct bpf_prog_aux {
+> >>      u32 max_pkt_offset;
+> >>      u32 max_tp_access;
+> >>      u32 stack_depth;
+> >> +    u16 incoming_stack_arg_depth;
+> >> +    u16 stack_arg_depth; /* both incoming and max outgoing of stack a=
+rguments */
+> >>      u32 id;
+> >>      u32 func_cnt; /* used by non-func prog as the number of func prog=
+s */
+> >>      u32 real_func_cnt; /* includes hidden progs, only used for JIT an=
+d freeing progs */
+> > ...
 > >
-> > And this is an RFC, you're trying to make really fundamental changes he=
-re, it's
-> > almost... rude to do that out of the blue non-RFC'd (unless you're a ma=
-intainer
-> > perhaps).
-> >
-> > Right now the THP code base is a total mess and mTHP support is not eve=
-n
-> > properly merged yet (khugepaged support outstanding).
-> >
-> > BPF interfaces are permanent, we've tried the 'experimental' thing befo=
-re, it
-> > doesn't work and we'll not be able to yank it later.
-> >
-> > I've said it before, but we really truly need to get THP into better sh=
-ape
-> > before we can tolerate large new changes, let alone an user-exported in=
-terface.
-> >
-> > So can we defer this until we're in better shape, and then send that as=
- an RFC
-> > first please?
+> >> @@ -739,10 +759,13 @@ struct bpf_subprog_info {
+> >>      bool keep_fastcall_stack: 1;
+> >>      bool changes_pkt_data: 1;
+> >>      bool might_sleep: 1;
+> >> -    u8 arg_cnt:3;
+> >> +    u8 arg_cnt:4;
+> >>
+> >>      enum priv_stack_mode priv_stack_mode;
+> >> -    struct bpf_subprog_arg_info args[MAX_BPF_FUNC_REG_ARGS];
+> >> +    struct bpf_subprog_arg_info args[MAX_BPF_FUNC_ARGS];
+> >> +    u16 incoming_stack_arg_depth;
+> >> +    u16 stack_arg_depth; /* incoming + max outgoing */
+> >> +    u16 max_out_stack_arg_depth;
+> >>   };
+> > I asked before but if there was an answer it got lost in all emails.
+> > So will ask again: why duplicate incoming_stack_arg_depth
+> > and stack_arg_depth in two places? One should be enough.
 >
-> Yeah on second thoughts, NACK and don't send this series again please.
+> We can remove 'incoming_stack_arg_depth' in bpf_subprog_info since
+> in bpf_subprog_info we have 'arg_cnt' field.
 >
-> I was already annoyed you'd send something this invasive and massive with=
-out an
-> RFC, but you've also ignored the feedback we gave to the last THP BPF ser=
-ies
-> while ostensibly claiming to have taken it into account.
->
-> And then... I mean seriously... _shamelessly_ trying to take control away=
- from
-> THP maintainers and reviewers who work bloody hard for this community by =
-parking
-> code that changes mTHP behaviour in an entirely distinct and unrelated
-> MAINTAINERS section...!
->
-> There's a biweekly THP cabal meeting which you didn't raise this in, you =
-didn't
-> bring this up at any conference, you didn't send an RFC.
->
-> You've sent it too before we even have mTHP khugepaged support merged... =
-or have
-> really stabilised on how mTHP is supposed to work overall.
->
-> And also I have made it really abundantly clear that I want to see the te=
-chnical
-> debt _paid down_ before we add anything else major.
->
-> And as if that wasn't enough, AI review is finding endless problems with =
-this
-> series on top of all that.
->
-> This is NOT how to engage with upstream. Again, please don't send any mor=
-e
-> revisions of this.
->
-> And next time _engage with the community_ before proposing something this=
- big. A
-> [DISCUSSION] email, or an RFC, or in a meeting or at a conference, or eve=
-n
-> off-list or on-list mail, something.
+> I am not sure whether we can remove stack_arg_depth.
+> stack_arg_depth is to accumulate the incoming + max_outgoing since
+> the subprog may have multiple functions inside.
+> At this verification point, we accumulate such infomation at bpf_subprog_=
+info.
+> At this point, we only have main program, so we cannot copy
+> subprog info stack_arg_depth to subprog. The subprog allocations
+> are in jit_subprogs(). Did I miss anything?
 
-Firstly, before mTHP stabilizes and enters better shape, I will not
-submit any new version.
-
-Let me clarify a few issues:
-1. This is an RFC. I forgot to add it. Sorry.
-2. There is only one issue in the AI review; the rest are false
-positives (the AI did not find the dependent patch "mm: BPF OOM").
-3. Regarding placing bpf_huge_memory.c under "MEMORY MANAGEMENT
-EXTENSIONS": I never intended to take control of THP away from
-maintainers and reviewers. However, it is still my fault for causing
-misunderstanding. Sorry.
-
-Also, I would like to ask: what work on mTHP still needs further
-refinement at present? I can help out.
+subprog_info is allocated early in add_subprog_and_kfunc().
+No need to copy it into bpf_prog_aux.
+JIT should be able to read it from subprog_info.
+Recently JIT got refactored to see 'env'.
