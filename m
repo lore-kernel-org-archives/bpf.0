@@ -1,170 +1,129 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626C530FF21
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 12:20:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 936C41F8691;
+	Fri,  8 May 2026 13:09:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778242812; cv=none; b=BNTRWLr8JSEO8Qxn1hnY90Njj1lmo2DEwGy67n7RrgkrZvTtEHdj3QtHkCHSou9AeSPz1J7dYsgz4a++bfjjaO79q2uWkdku8+KAzUvkyMKMSPlLsSWKUE1keYDU1iq6zS5fvdtwYA2hUXI4g0uMuvZAJXV7UdgNpBt8sPpN9JI=
+	t=1778245781; cv=none; b=cRID1vfVWmeytbb6zeY9cfEztyJbVK1ejFaS1jH57wpO+538JgrQAtKPefzfoqfP44NpZYTybX9Cr3OC+KHX2EB+Z7jHOd4k3qFa9cnIJUyz3EjpcQeFGVHJPDV1piDEppJGSzzeiNNe+WD66QiYg3PSlBkq0E6qozAl40MlodU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778242812; c=relaxed/simple;
-	bh=4vEE2/b1oZRMCPG+2K+JAtmDvlJBK0+IzvqatGl5v/E=;
+	s=arc-20240116; t=1778245781; c=relaxed/simple;
+	bh=6S4huXMF9Eta3Yguft6rRPtDlnuPmLRdDWOyNOIjQWk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aYz2VfgYPtT3XhAJzvKz6CUZ0yguhVgyRFvV1Q0vktTsEbOTFg42g2gdpJlHm5KPyLVBNx7C13w8BnVTLIDl0HS09Ag5aDNPc1YSCqnBRoS4EeD2DyIgzF9ELHkqWV1x6pUihxN3dcOoFX8wKDRZ7M36oPxGek922gbe3SwCHxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=j8aD0fHs; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="j8aD0fHs"
-Message-ID: <9362bf10-9ede-4005-8e63-a18dafd7fab0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778242808;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Y75SKeSevL3Yn/NaSSjIxUWA5aj0urOj6ugd6tGsN1Q=;
-	b=j8aD0fHs1OVoX/takMidKE59xaxURNObENZhacZCXt3DCqF1w+KCL77TsyXeY1xQ4xWjqg
-	bgxQ5xpcsDD8o6XI5Ly9NCE0vkkLRTYL83TbSipcwQ75Qo0zanyHuZe9Kw0YrKV/K6lxA8
-	5akbLqq1cuf6Q0EC9ZTZnPgfHWApK1A=
-Date: Fri, 8 May 2026 20:19:32 +0800
+	 In-Reply-To:Content-Type; b=Zly17A7dUA3i8SjBCZCD42yJB0qiqzBM/lcDacpaeSUAVI7MeywJg6v4DGWzAKt7RP+JmtPSQ1oC2nvxz/6+EsDm0iVmzUOFz9L0RFst8EgoE42cQHDQNfMwSBs+n1kK8X3cwSBrhy8l41RLDU/2kDoEQ6Smtxmo1kTmSu09q9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=radxa.com; spf=pass smtp.mailfrom=radxa.com; arc=none smtp.client-ip=54.206.16.166
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=radxa.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=radxa.com
+X-QQ-mid: esmtpsz21t1778245760te8ff9860
+X-QQ-Originating-IP: oDfTC3UmzXvWtX1d3MtBp/Xfjq9qMy3Zm4+IG/bmLQ4=
+Received: from [127.0.0.1] ( [116.234.74.217])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 08 May 2026 21:09:14 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 10512550886452153488
+Message-ID: <6744F8FEFD290FFD+4973b8ba-7d3b-45e4-8478-0b3334b81960@radxa.com>
+Date: Fri, 8 May 2026 21:09:12 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v1 bpf-next 7/8] bpf: tcp: Add SOCK_OPS rcvlowat hook.
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@google.com>,
- Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>,
- Tenzin Ukyab <ukyab@berkeley.edu>, Kuniyuki Iwashima <kuni1840@gmail.com>,
- bpf@vger.kernel.org, netdev@vger.kernel.org
-References: <20260508073355.3916746-1-kuniyu@google.com>
- <20260508073355.3916746-8-kuniyu@google.com>
- <21ee2d5d-fc8c-497e-aa98-e5e4e3fbecf8@linux.dev>
- <CAAVpQUBv0Uc4Xi-4wK2S63FqtXHHkLqJTotOxxDyhqFknoZG_Q@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <CAAVpQUBv0Uc4Xi-4wK2S63FqtXHHkLqJTotOxxDyhqFknoZG_Q@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 10/12] net: stmmac: tc956x: add TC956x/QPS615
+ support
+To: Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, maxime.chevallier@bootlin.com,
+ rmk+kernel@armlinux.org.uk, andersson@kernel.org, konradybcio@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, linusw@kernel.org,
+ brgl@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org
+Cc: Daniel Thompson <daniel@riscstar.com>, mohd.anwar@oss.qualcomm.com,
+ a0987203069@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+ boon.khai.ng@altera.com, chenchuangyu@xiaomi.com, chenhuacai@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, hkallweit1@gmail.com,
+ inochiama@gmail.com, john.fastabend@gmail.com, julianbraha@gmail.com,
+ livelycarpet87@gmail.com, matthew.gerlach@altera.com,
+ mcoquelin.stm32@gmail.com, me@ziyao.cc,
+ prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+ rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
+ weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-11-elder@riscstar.com>
+ <224E233C593EF171+8c8a43dd-5061-40f8-9eb7-f360eabf2ecc@radxa.com>
+ <ae90a4c9-f027-4373-a378-d0d4b7796ff3@riscstar.com>
+Content-Language: en-US
+From: Xilin Wu <sophon@radxa.com>
+In-Reply-To: <ae90a4c9-f027-4373-a378-d0d4b7796ff3@riscstar.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpsz:radxa.com:qybglogicsvrsz:qybglogicsvrsz3b-0
+X-QQ-XMAILINFO: Nt+z/y60tPnUntNr0h37IREVots3RaLwrPULh0GA79jGtOpfwKEdcvBB
+	vGDhDCFVCVDGkxyRE2OTvoJ3BAC5PxlqIDN/JJD4AXSK/ikl0jyX/GSVQGKFFkz4ENdEUSS
+	jVXeX8iIz18DyrTydrM2dT8KiFby0YfBminxUOL4J5AlH5kCMgkXuyKePKNiHWGlFK+yBQv
+	SRVy4V6iARJyXlvbI1rbJ1Dngayn4XErNHsXR0Kg6smHfZQdkinU29+j+A6LtvM6yZUbS4t
+	QVQptLZzaaJ4WQvRP74OndQJsbw1vv1nmsXyg0PvpJnR4E3kbenRf7lh2UQrWCAfnYWhxcG
+	hTAd64lSERlfpmuk9ijl7MHnkLFb+kT+JhDfn0EbwWHpNLpnzJlzMszqlfuaXd1hwc4nDs4
+	Ptr2Y85lsLV/akVhLZ1+rrmVHL5PiC3YijY+AWaatV34T0VxlBj6F8/QWgEBQSR7nOH8bXQ
+	XHo4x+A7+OOLAYUoEpxHHu2jQBnq4W40kBbHQZFQcx2uX3k9qxLStign4ItRLp83ezdKGG3
+	rXIy7z63D4JRXnth+L/LMCgCOPIZX6UbSeKhC9UhQunoQKllBcQEkKDh5ygpTooEHPICCWN
+	v0NJ3AVXTCKg6RKp5kRQji0h3ubCOuk69Ca/CWOhkExCsuc7W4Gt18DmMOI73hWUNVt/ZpJ
+	Xegb8FAgVlmlXrGb9znklqo0dwEPFirhVlvSBYtwqFD0A+8ja53Su/2ws9tOkRBaTVgwQ8y
+	9A52Vd9IzSmDXvRutmZ56mbDo0QML6AmH+JXOF1+N98BQ6kl+Oroy003IPxqdeoroKdzWoW
+	7ajNQ78e3UhIMmJwN0Vzj9r/TIEN0VSKF89diPqkVlE0OitsvnUNFQHnnw96hl+q0o7uSQx
+	qPUMp9N0FI5EOZQjZweOFJ9azZ8DPpS884uDoNmmdcnERsJD7LQeKa9uc/wF/706zGwfDfE
+	NvYT+qtbE9RcFiJA28y7jSs17ND2F9A/LO72INNmSpnullpo/DF8C5pCvK/V+oUxNUDaK1L
+	Pplxx2FKqdHoQ5JbP002M+X2JYw0kTRtD1WNuV8r1C1HA66FuZ
+X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
+X-QQ-RECHKSPAM: 0
 
-
-On 5/8/26 7:30 PM, Kuniyuki Iwashima wrote:
-> On Fri, May 8, 2026 at 3:37 AM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
->>
->> On 5/8/26 3:33 PM, Kuniyuki Iwashima wrote:
->>> Now, it is time to add the new hooks for BPF_SOCK_OPS_RCVLOWAT_CB.
->>>
->>> Let's invoke the BPF SOCK_OPS prog when
->>>
->>>     1. TCP stack enqueues skb to sk->sk_receive_queue
->>>        -> tcp_queue_rcv(), tcp_ofo_queue(), and tcp_fastopen_add_skb()
->>>
->>>     2. TCP recvmsg() completes
->>>        -> __tcp_cleanup_rbuf()
->>>
->>> This will allow the BPF prog to parse each skb and dynamically
->>> adjust sk->sk_rcvlowat to suppress unnecessary EPOLLIN wakeups
->>> until sufficient data (e.g., a full RPC frame) is available
->>> in the receive queue.
->>>
->>> Note that the direct access to bpf_sock_ops.data is intentionally
->>> disabled by passing 0 as end_offset.
->>>
->>> Instead, the BPF prog is supposed to use bpf_skb_load_bytes()
->>> with bpf_sock_ops because payload is not in the linear area
->>> with TCP header/data split on and skb may contain a RPC
->>> descriptor in skb frag.  This also simplifies the BPF prog.
->>>
->>> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
->>> ---
->>>    include/net/tcp.h       | 14 ++++++++++++++
->>>    net/ipv4/tcp.c          |  2 ++
->>>    net/ipv4/tcp_fastopen.c |  2 ++
->>>    net/ipv4/tcp_input.c    | 10 ++++++++++
->>>    4 files changed, 28 insertions(+)
->>>
->>> diff --git a/include/net/tcp.h b/include/net/tcp.h
->>> index 4e9e634e276b..003e46c9b500 100644
->>> --- a/include/net/tcp.h
->>> +++ b/include/net/tcp.h
->>> @@ -737,6 +737,20 @@ static inline struct request_sock *cookie_bpf_check(struct net *net, struct sock
->>>    }
->>>    #endif
->>>
->>> +#ifdef CONFIG_CGROUP_BPF
->>> +void bpf_skops_rcvlowat(struct sock *sk, struct sk_buff *skb);
+On 5/8/2026 2:44 AM, Alex Elder wrote:
+> On 5/6/26 7:59 AM, Xilin Wu wrote:
+>> On 5/1/2026 11:54 PM, Alex Elder wrote:
+>>> +    /* AXI Configuration */
+>>> +    axi = &td->axi;
+>>> +    axi->axi_lpi_en = 1;
+>>> +    axi->axi_wr_osr_lmt = 31;
+>>> +    axi->axi_rd_osr_lmt = 31;
+>>> +    /* All sizes (2^2..2^8) are supported */
+>>> +    axi->axi_blen_regval = DMA_AXI_BLEN_MASK;
+>>> +    plat->axi = axi;
 >>> +
->>> +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *skb)
->>> +{
->>> +     if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_RCVLOWAT_CB_FLAG))
->>> +             bpf_skops_rcvlowat(sk, skb);
->>> +}
->>> +#else
->>> +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *skb)
->>> +{
->>> +}
->>> +#endif
->>> +
->>>    /* From net/ipv6/syncookies.c */
->>>    int __cookie_v6_check(const struct ipv6hdr *iph, const struct tcphdr *th);
->>>    struct sock *cookie_v6_check(struct sock *sk, struct sk_buff *skb);
->>> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
->>> index 1d9e52fc454f..80144b97a87a 100644
->>> --- a/net/ipv4/tcp.c
->>> +++ b/net/ipv4/tcp.c
->>> @@ -1602,6 +1602,8 @@ void __tcp_cleanup_rbuf(struct sock *sk, int copied)
->>>                tcp_mstamp_refresh(tp);
->>>                tcp_send_ack(sk);
->>>        }
->>> +
->>> +     tcp_bpf_rcvlowat(sk, NULL);
->>>    }
->>>
->> tcp_read_skb (process frame 1 and __skb_unlink)
->> └─ sk_psock_verdict_recv
->>       └─ sk_psock_verdict_apply
->>           └─ tcp_eat_skb
->>               └─ tcp_cleanup_rbuf
->>                   └─ __tcp_cleanup_rbuf
->>                       └─ BPF RCVLOWAT_CB
->>                           └─ bpf_sock_ops_tcp_set_rcvlowat (wakeup=true)
->>                               └─ tcp_data_ready
->>                                   └─ sk_psock_verdict_data_ready
->>                                       └─ tcp_read_skb (frame 2)
->>                                           └─ ... → tcp_read_skb (frame 3) ...
+>>> +    plat->mac_port_sel_speed = speed;
+>>> +    plat->flags = STMMAC_FLAG_MULTI_MSI_EN | STMMAC_FLAG_TSO_EN;
 >>
->> For strparser it use read_sock instead of read_skb and it will become
->> more complicated...
-> To be clear, this feature is NOT to use strparser/sockmap.
->> I think this will cause stack overflow with amounts of skbs in receive
->> queue or infinite call(not tested) for sockmap/kTLS/strparser.
->>
-> BPF user is responsible for not doing silly things.
->
-> tcp_bpf_strp_read_sock() can have loop detection logic,
-> but it's only if really needed.
+>> I got WoL working only after adding STMMAC_FLAG_USE_PHY_WOL here. I 
+>> guess it's required, since the driver clocks down the MAC/PMA/XPCS in 
+>> its suspend hook?
+> 
+> I just want to respond to this with a summary of our plans.
+> 
+> We will *not* be implementing wake-on-LAN (WoL) initially.  We
+> will work to get support for the eMACs upstream for TC956x, and
+> then as a separate step, we will enable WoL.
+> 
+> It's great to know you have it working, and our plan is to
+> implement it via the PHYs and not involve the MAC.  It seems
+> it will be relatively easy, but we have no plans to add it to
+> the current series.
+> 
+>                      -Alex
+> 
+
+Hi Alex,
+
+Maybe I missed something, but I already have WoL working *without* 
+changes in the tc956x driver.
+
+https://lore.kernel.org/all/859776B5671B36B9+577c19e4-3e66-4036-b26f-fe20287a1d43@radxa.com/
 
 
-Similar infinite recursion problems for reference:
-  https://lore.kernel.org/r/20220929070407.965581-5-martin.lau@linux.dev
-  https://lore.kernel.org/bpf/20260421155804.135786-1-kafai.wan@linux.dev/
-
-They were not solved in TCP side but in ops side.
-
-
-Can we try to handle it on the BPF/OPS side first and only
-prevent it elsewhere if it's not feasible there ?
-
-
-Thanks
-
+-- 
+Best regards,
+Xilin Wu <sophon@radxa.com>
