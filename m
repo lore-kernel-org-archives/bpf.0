@@ -1,35 +1,35 @@
 Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22233351C20;
-	Fri,  8 May 2026 13:35:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B9C346FDA;
+	Fri,  8 May 2026 13:36:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778247340; cv=none; b=iF73xTxMiSDHX8AtB3J8BLkocA4Yy0XI1QjN62dhZzdXH1NYMar1z5mag0mDW/otTtNSD8Fl4cEBlb2SFUcE0FWLxj6iUTzZsjymI59EQY8SNHbRj16T4C/bjoDSf/ewDY6shUOGTcK8nXfmuX1aQOepsSeWlQy9CeR/tff335Y=
+	t=1778247418; cv=none; b=ZO5OgzHj6mJ6tKChLC0oM60P9C+g0ez5NqaHBGLDSTbNtaQoZDyNhSGjpHzQh/JDeY2kpnZ7q0WE6SQ3h3pttT5/UkyBEe3luKK5YxuTbizYUQBoelq0vq1NY7tgUKwFIfgG+IdutvWkSiTSuusvqWaLbemTxkpUVXB3rYr7sBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778247340; c=relaxed/simple;
-	bh=W5z+ZvjeraSq0lSpTjZEb81FwbkIx92nnUKXxoZ2Y9E=;
+	s=arc-20240116; t=1778247418; c=relaxed/simple;
+	bh=i50Vfwv1iTfIuXu0DUP6PeS+Eh6A64Cf/1UqNt+EBhg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=odcV2bX9+06ON+qPVdFnCN7oadKgVTZ2tUSYVejHrM2TjcN6vnR0gWMp+aFBCbQ0WEw1VnJDjgdLOkCl4FegI3h32jJsXG9FdMmyxf4zZdbr5AzkNsuc2Ks37zABswqbCrKnoZ9iWc+imuwtFrhkDa8vWoSdFfvDchmiFHk0HQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=dEsn2jJk; arc=none smtp.client-ip=156.67.10.101
+	 Content-Type:Content-Disposition:In-Reply-To; b=p2zz7wQGc4wYsn8o2gP8YMQZgr1eid4n9skq75IynU/6rfZIjL4LaaHrF3SUCVdJdgDKY+TvtDdwckLI5iFdOK40N2bNqTlvuZz8R1scXeN4ujAPbqFgAd/v4+GFjVDB7HyIjwMd3N2Q+bfRFqqlR91r7Ah2dovvkxXSxuf/MTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=rgMPQ7xm; arc=none smtp.client-ip=156.67.10.101
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="dEsn2jJk"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="rgMPQ7xm"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
 	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
 	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=uRlWfI16RymHotfKoKopTsF4SVqazk8teSam4cHD0H0=; b=dEsn2jJkfn0vWzDqmxpz/dpbvV
-	9/vq5HjVqavwgrmrWiobypSOnn3E2jm6DDa+Bi4CXBt5amdylGIbVxVkQACH2LcKGMBM+VrFtnd5O
-	DYHzi0irzD7tE0L8DU/LxjfhmbgByTU0+VR5bhkzErWpUKXV/KmeOrnFv5Kub5qE4Jp4=;
+	bh=DN4O0h+HP+4t4p879pcCyrpV4QGky4za+OSvHaDHf1Y=; b=rgMPQ7xmzpAXlMC2ZwX9x6BE1T
+	Q5rkaSkenFlVdvXYru+zGx29blSGqUdYG7XLMT5KAMgLayL/KEEJ5OcFkN4c7kztke//NT2f/SQL0
+	1VFSh8ON60HqX2HWqqFf8QmrKeEZR847R/ysXuX08tu3lZrWT3rydSQX4hcgiadFAexo=;
 Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
 	(envelope-from <andrew@lunn.ch>)
-	id 1wLLLm-001yZO-4f; Fri, 08 May 2026 15:34:42 +0200
-Date: Fri, 8 May 2026 15:34:42 +0200
+	id 1wLLNL-001yba-Gs; Fri, 08 May 2026 15:36:19 +0200
+Date: Fri, 8 May 2026 15:36:19 +0200
 From: Andrew Lunn <andrew@lunn.ch>
-To: Daniel Thompson <daniel@riscstar.com>
+To: Xilin Wu <sophon@radxa.com>
 Cc: Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
 	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
 	pabeni@redhat.com, maxime.chevallier@bootlin.com,
@@ -37,8 +37,8 @@ Cc: Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
 	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
 	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
 	arnd@arndb.de, gregkh@linuxfoundation.org,
-	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
-	alexandre.torgue@foss.st.com, ast@kernel.org,
+	Daniel Thompson <daniel@riscstar.com>, mohd.anwar@oss.qualcomm.com,
+	a0987203069@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
 	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
 	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
 	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
@@ -54,13 +54,12 @@ Cc: Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH net-next 10/12] net: stmmac: tc956x: add TC956x/QPS615
  support
-Message-ID: <f15e2fe2-88c9-409d-b953-cdc94aee4e16@lunn.ch>
+Message-ID: <fc5d14d5-c65d-445f-90c6-9659e284c0ca@lunn.ch>
 References: <20260501155421.3329862-1-elder@riscstar.com>
  <20260501155421.3329862-11-elder@riscstar.com>
- <2ce5897d-5bbb-486a-b0f0-0e30e54b451a@lunn.ch>
- <afy34kj2hPxIlArO@aspen.lan>
- <ef6df85f-11ac-404d-958a-8cf69b3b6bb6@lunn.ch>
- <af3IKKkjl0jK8GGB@aspen.lan>
+ <224E233C593EF171+8c8a43dd-5061-40f8-9eb7-f360eabf2ecc@radxa.com>
+ <ae90a4c9-f027-4373-a378-d0d4b7796ff3@riscstar.com>
+ <6744F8FEFD290FFD+4973b8ba-7d3b-45e4-8478-0b3334b81960@radxa.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,20 +68,16 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <af3IKKkjl0jK8GGB@aspen.lan>
+In-Reply-To: <6744F8FEFD290FFD+4973b8ba-7d3b-45e4-8478-0b3334b81960@radxa.com>
 
-> BTW if you are bothered by SP_SEL_SGMII_2500M, that name comes directly
-> from the TRM and I'd prefer to keep it if I can. The enumerated value
-> we have to write into the SP_SEL for 2500base-X is "SGMII 2500M".
+> Hi Alex,
+> 
+> Maybe I missed something, but I already have WoL working *without* changes
+> in the tc956x driver.
+> 
+> https://lore.kernel.org/all/859776B5671B36B9+577c19e4-3e66-4036-b26f-fe20287a1d43@radxa.com/
 
-We try to avoid anything to do with SGMII and 2500 because it is
-technically wrong. Cisco never defined SGMII for 2500, it is something
-silicon vendors have made up, without any foundation in any
-standardisation. We much prefer to refer to it as 2500BaseX with
-broken signalling, which is a much more accurate description.
-
-The TRM is also not a public document. If it was, i could see some
-value in keeping with the naming, but since ~0 developers have the
-document, this is less useful.
+Sorry, did i miss the patches for the PHY driver? Or was the code
+already there?
 
 	Andrew
