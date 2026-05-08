@@ -1,317 +1,170 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E2EB324718;
-	Fri,  8 May 2026 11:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626C530FF21
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 12:20:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778241082; cv=none; b=JpxW3az/5e7d8THmtias0O858U7huzvAbdgJ1c05PNnR1LOXozQWMI81TR7It0r7PdqyG5gNClJncfaVAwZCERyjmh9jpJx2sIk6NZu8/TAA6HzrITxrBg8OXDOcyPQuuXqxH/3csbR0dC8k4P0Ufb3CbRI/Z6YeRTK3ae/jx/I=
+	t=1778242812; cv=none; b=BNTRWLr8JSEO8Qxn1hnY90Njj1lmo2DEwGy67n7RrgkrZvTtEHdj3QtHkCHSou9AeSPz1J7dYsgz4a++bfjjaO79q2uWkdku8+KAzUvkyMKMSPlLsSWKUE1keYDU1iq6zS5fvdtwYA2hUXI4g0uMuvZAJXV7UdgNpBt8sPpN9JI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778241082; c=relaxed/simple;
-	bh=ixhGko3KP6MGbe+xFYPWKRjtnfXGBIWaB6JA+wdE5TY=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CQQ6U7aVgUDB2PEEwhMi12qIxebEQ+EbRWxxUkpO08B2sdVFYeClSvpr0hQpvOQLpbWgwBkwFpeY/V/onofMHdlq4KmEunIC+UjkDVDZI9R7N6/el+/tSE9L53vFqdqvd6GZhppYA+9rxwWOXerOghlCt0NDrS69+KUiJtA4Sjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Mzju2xmO; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1778242812; c=relaxed/simple;
+	bh=4vEE2/b1oZRMCPG+2K+JAtmDvlJBK0+IzvqatGl5v/E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aYz2VfgYPtT3XhAJzvKz6CUZ0yguhVgyRFvV1Q0vktTsEbOTFg42g2gdpJlHm5KPyLVBNx7C13w8BnVTLIDl0HS09Ag5aDNPc1YSCqnBRoS4EeD2DyIgzF9ELHkqWV1x6pUihxN3dcOoFX8wKDRZ7M36oPxGek922gbe3SwCHxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=j8aD0fHs; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Mzju2xmO"
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-	by linux.microsoft.com (Postfix) with ESMTPSA id CE95420B716A;
-	Fri,  8 May 2026 04:51:16 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CE95420B716A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1778241076;
-	bh=ExDrhCj01hpnB5CStN7nAd/gSXoBHqwEqTU42oOuFXI=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Mzju2xmOTyaCihTrZ0yojW9v0FEg7Ouh1AKPkhEgahxBRvP2feOkDmxqpnoIqjEXA
-	 BYRsQse7D/2yZ7fY4iK+hO7cxikS3Rxf9OUl5Z226VnPD9AolbsZ003Lq5wR+yn8vs
-	 CVJPjQYhTqdLvX/sZ5VmUh7jWv3DmI6tNZKVS14o=
-From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-To: kys@microsoft.com,
-	haiyangz@microsoft.com,
-	wei.liu@kernel.org,
-	decui@microsoft.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	leon@kernel.org,
-	longli@microsoft.com,
-	kotaranov@microsoft.com,
-	horms@kernel.org,
-	shradhagupta@linux.microsoft.com,
-	ssengar@linux.microsoft.com,
-	ernis@linux.microsoft.com,
-	shirazsaleem@microsoft.com,
-	linux-hyperv@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	stephen@networkplumber.org,
-	jacob.e.keller@intel.com,
-	dipayanroy@microsoft.com,
-	leitao@debian.org,
-	kees@kernel.org,
-	john.fastabend@gmail.com,
-	hawk@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	ast@kernel.org,
-	sdf@fomichev.me,
-	yury.norov@gmail.com
-Subject: [PATCH v8 2/2] net: mana: force full-page RX buffers via ethtool private flag
-Date: Fri,  8 May 2026 04:46:35 -0700
-Message-ID: <20260508115100.488506-3-dipayanroy@linux.microsoft.com>
-X-Mailer: git-send-email 2.43.7
-In-Reply-To: <20260508115100.488506-1-dipayanroy@linux.microsoft.com>
-References: <20260508115100.488506-1-dipayanroy@linux.microsoft.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="j8aD0fHs"
+Message-ID: <9362bf10-9ede-4005-8e63-a18dafd7fab0@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778242808;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Y75SKeSevL3Yn/NaSSjIxUWA5aj0urOj6ugd6tGsN1Q=;
+	b=j8aD0fHs1OVoX/takMidKE59xaxURNObENZhacZCXt3DCqF1w+KCL77TsyXeY1xQ4xWjqg
+	bgxQ5xpcsDD8o6XI5Ly9NCE0vkkLRTYL83TbSipcwQ75Qo0zanyHuZe9Kw0YrKV/K6lxA8
+	5akbLqq1cuf6Q0EC9ZTZnPgfHWApK1A=
+Date: Fri, 8 May 2026 20:19:32 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH v1 bpf-next 7/8] bpf: tcp: Add SOCK_OPS rcvlowat hook.
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@google.com>,
+ Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>,
+ Tenzin Ukyab <ukyab@berkeley.edu>, Kuniyuki Iwashima <kuni1840@gmail.com>,
+ bpf@vger.kernel.org, netdev@vger.kernel.org
+References: <20260508073355.3916746-1-kuniyu@google.com>
+ <20260508073355.3916746-8-kuniyu@google.com>
+ <21ee2d5d-fc8c-497e-aa98-e5e4e3fbecf8@linux.dev>
+ <CAAVpQUBv0Uc4Xi-4wK2S63FqtXHHkLqJTotOxxDyhqFknoZG_Q@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <CAAVpQUBv0Uc4Xi-4wK2S63FqtXHHkLqJTotOxxDyhqFknoZG_Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On some ARM64 platforms with 4K PAGE_SIZE, page_pool fragment
-allocation in the RX refill path can cause 15-20% throughput
-regression under high connection counts (>16 TCP streams).
 
-Add an ethtool private flag "full-page-rx" that allows the user to
-force one RX buffer per page, bypassing the page_pool fragment path.
-This restores line-rate (180+ Gbps) performance on affected platforms.
+On 5/8/26 7:30 PM, Kuniyuki Iwashima wrote:
+> On Fri, May 8, 2026 at 3:37 AM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
+>>
+>> On 5/8/26 3:33 PM, Kuniyuki Iwashima wrote:
+>>> Now, it is time to add the new hooks for BPF_SOCK_OPS_RCVLOWAT_CB.
+>>>
+>>> Let's invoke the BPF SOCK_OPS prog when
+>>>
+>>>     1. TCP stack enqueues skb to sk->sk_receive_queue
+>>>        -> tcp_queue_rcv(), tcp_ofo_queue(), and tcp_fastopen_add_skb()
+>>>
+>>>     2. TCP recvmsg() completes
+>>>        -> __tcp_cleanup_rbuf()
+>>>
+>>> This will allow the BPF prog to parse each skb and dynamically
+>>> adjust sk->sk_rcvlowat to suppress unnecessary EPOLLIN wakeups
+>>> until sufficient data (e.g., a full RPC frame) is available
+>>> in the receive queue.
+>>>
+>>> Note that the direct access to bpf_sock_ops.data is intentionally
+>>> disabled by passing 0 as end_offset.
+>>>
+>>> Instead, the BPF prog is supposed to use bpf_skb_load_bytes()
+>>> with bpf_sock_ops because payload is not in the linear area
+>>> with TCP header/data split on and skb may contain a RPC
+>>> descriptor in skb frag.  This also simplifies the BPF prog.
+>>>
+>>> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+>>> ---
+>>>    include/net/tcp.h       | 14 ++++++++++++++
+>>>    net/ipv4/tcp.c          |  2 ++
+>>>    net/ipv4/tcp_fastopen.c |  2 ++
+>>>    net/ipv4/tcp_input.c    | 10 ++++++++++
+>>>    4 files changed, 28 insertions(+)
+>>>
+>>> diff --git a/include/net/tcp.h b/include/net/tcp.h
+>>> index 4e9e634e276b..003e46c9b500 100644
+>>> --- a/include/net/tcp.h
+>>> +++ b/include/net/tcp.h
+>>> @@ -737,6 +737,20 @@ static inline struct request_sock *cookie_bpf_check(struct net *net, struct sock
+>>>    }
+>>>    #endif
+>>>
+>>> +#ifdef CONFIG_CGROUP_BPF
+>>> +void bpf_skops_rcvlowat(struct sock *sk, struct sk_buff *skb);
+>>> +
+>>> +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *skb)
+>>> +{
+>>> +     if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_RCVLOWAT_CB_FLAG))
+>>> +             bpf_skops_rcvlowat(sk, skb);
+>>> +}
+>>> +#else
+>>> +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *skb)
+>>> +{
+>>> +}
+>>> +#endif
+>>> +
+>>>    /* From net/ipv6/syncookies.c */
+>>>    int __cookie_v6_check(const struct ipv6hdr *iph, const struct tcphdr *th);
+>>>    struct sock *cookie_v6_check(struct sock *sk, struct sk_buff *skb);
+>>> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+>>> index 1d9e52fc454f..80144b97a87a 100644
+>>> --- a/net/ipv4/tcp.c
+>>> +++ b/net/ipv4/tcp.c
+>>> @@ -1602,6 +1602,8 @@ void __tcp_cleanup_rbuf(struct sock *sk, int copied)
+>>>                tcp_mstamp_refresh(tp);
+>>>                tcp_send_ack(sk);
+>>>        }
+>>> +
+>>> +     tcp_bpf_rcvlowat(sk, NULL);
+>>>    }
+>>>
+>> tcp_read_skb (process frame 1 and __skb_unlink)
+>> └─ sk_psock_verdict_recv
+>>       └─ sk_psock_verdict_apply
+>>           └─ tcp_eat_skb
+>>               └─ tcp_cleanup_rbuf
+>>                   └─ __tcp_cleanup_rbuf
+>>                       └─ BPF RCVLOWAT_CB
+>>                           └─ bpf_sock_ops_tcp_set_rcvlowat (wakeup=true)
+>>                               └─ tcp_data_ready
+>>                                   └─ sk_psock_verdict_data_ready
+>>                                       └─ tcp_read_skb (frame 2)
+>>                                           └─ ... → tcp_read_skb (frame 3) ...
+>>
+>> For strparser it use read_sock instead of read_skb and it will become
+>> more complicated...
+> To be clear, this feature is NOT to use strparser/sockmap.
+>> I think this will cause stack overflow with amounts of skbs in receive
+>> queue or infinite call(not tested) for sockmap/kTLS/strparser.
+>>
+> BPF user is responsible for not doing silly things.
+>
+> tcp_bpf_strp_read_sock() can have loop detection logic,
+> but it's only if really needed.
 
-Usage:
-  ethtool --set-priv-flags eth0 full-page-rx on
 
-There is no behavioral change by default. The flag must be explicitly
-enabled by the user or udev rule.
+Similar infinite recursion problems for reference:
+  https://lore.kernel.org/r/20220929070407.965581-5-martin.lau@linux.dev
+  https://lore.kernel.org/bpf/20260421155804.135786-1-kafai.wan@linux.dev/
 
-The existing single-buffer-per-page logic for XDP and jumbo frames is
-consolidated into a new helper mana_use_single_rxbuf_per_page() which
-is now the single decision point for both the automatic and
-user-controlled paths.
+They were not solved in TCP side but in ops side.
 
-Signed-off-by: Dipayaan Roy <dipayanroy@linux.microsoft.com>
----
- drivers/net/ethernet/microsoft/mana/mana_en.c |  22 +++-
- .../ethernet/microsoft/mana/mana_ethtool.c    | 103 ++++++++++++++++++
- include/net/mana/mana.h                       |   8 ++
- 3 files changed, 131 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
-index 462a457e7d53..c4bc8bf19d75 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-@@ -744,6 +744,25 @@ static void *mana_get_rxbuf_pre(struct mana_rxq *rxq, dma_addr_t *da)
- 	return va;
- }
- 
-+static bool
-+mana_use_single_rxbuf_per_page(struct mana_port_context *apc, u32 mtu)
-+{
-+	/* On some platforms with 4K PAGE_SIZE, page_pool fragment allocation
-+	 * in the RX refill path (~2kB buffer) can cause significant throughput
-+	 * regression under high connection counts. Allow user to force one RX
-+	 * buffer per page via ethtool private flag to bypass the fragment
-+	 * path.
-+	 */
-+	if (apc->priv_flags & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF))
-+		return true;
-+
-+	/* For xdp and jumbo frames make sure only one packet fits per page. */
-+	if (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 || mana_xdp_get(apc))
-+		return true;
-+
-+	return false;
-+}
-+
- /* Get RX buffer's data size, alloc size, XDP headroom based on MTU */
- static void mana_get_rxbuf_cfg(struct mana_port_context *apc,
- 			       int mtu, u32 *datasize, u32 *alloc_size,
-@@ -754,8 +773,7 @@ static void mana_get_rxbuf_cfg(struct mana_port_context *apc,
- 	/* Calculate datasize first (consistent across all cases) */
- 	*datasize = mtu + ETH_HLEN;
- 
--	/* For xdp and jumbo frames make sure only one packet fits per page */
--	if (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 || mana_xdp_get(apc)) {
-+	if (mana_use_single_rxbuf_per_page(apc, mtu)) {
- 		if (mana_xdp_get(apc)) {
- 			*headroom = XDP_PACKET_HEADROOM;
- 			*alloc_size = PAGE_SIZE;
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-index 7e79681634db..f22bbb325948 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-@@ -133,6 +133,10 @@ static const struct mana_stats_desc mana_phy_stats[] = {
- 	{ "hc_tc7_tx_pause_phy", offsetof(struct mana_ethtool_phy_stats, tx_pause_tc7_phy) },
- };
- 
-+static const char mana_priv_flags[MANA_PRIV_FLAG_MAX][ETH_GSTRING_LEN] = {
-+	[MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF] = "full-page-rx"
-+};
-+
- static int mana_get_sset_count(struct net_device *ndev, int stringset)
- {
- 	struct mana_port_context *apc = netdev_priv(ndev);
-@@ -144,6 +148,10 @@ static int mana_get_sset_count(struct net_device *ndev, int stringset)
- 		       ARRAY_SIZE(mana_phy_stats) +
- 		       ARRAY_SIZE(mana_hc_stats)  +
- 		       num_queues * (MANA_STATS_RX_COUNT + MANA_STATS_TX_COUNT);
-+
-+	case ETH_SS_PRIV_FLAGS:
-+		return MANA_PRIV_FLAG_MAX;
-+
- 	default:
- 		return -EINVAL;
- 	}
-@@ -192,6 +200,14 @@ static void mana_get_strings_stats(struct mana_port_context *apc, u8 **data)
- 	}
- }
- 
-+static void mana_get_strings_priv_flags(u8 **data)
-+{
-+	int i;
-+
-+	for (i = 0; i < MANA_PRIV_FLAG_MAX; i++)
-+		ethtool_puts(data, mana_priv_flags[i]);
-+}
-+
- static void mana_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
- {
- 	struct mana_port_context *apc = netdev_priv(ndev);
-@@ -200,6 +216,9 @@ static void mana_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
- 	case ETH_SS_STATS:
- 		mana_get_strings_stats(apc, &data);
- 		break;
-+	case ETH_SS_PRIV_FLAGS:
-+		mana_get_strings_priv_flags(&data);
-+		break;
- 	default:
- 		break;
- 	}
-@@ -590,6 +609,88 @@ static int mana_get_link_ksettings(struct net_device *ndev,
- 	return 0;
- }
- 
-+static u32 mana_get_priv_flags(struct net_device *ndev)
-+{
-+	struct mana_port_context *apc = netdev_priv(ndev);
-+
-+	return apc->priv_flags;
-+}
-+
-+static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
-+{
-+	struct mana_port_context *apc = netdev_priv(ndev);
-+	u32 changed = apc->priv_flags ^ priv_flags;
-+	u32 old_priv_flags = apc->priv_flags;
-+	bool schedule_port_reset = false;
-+	int err = 0;
-+
-+	if (!changed)
-+		return 0;
-+
-+	/* Reject unknown bits */
-+	if (priv_flags & ~GENMASK(MANA_PRIV_FLAG_MAX - 1, 0))
-+		return -EINVAL;
-+
-+	if (changed & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF)) {
-+		apc->priv_flags = priv_flags;
-+
-+		if (!apc->port_is_up) {
-+			/* Port is down, flag updated to apply on next up
-+			 * so just return.
-+			 */
-+			return 0;
-+		}
-+
-+		/* Pre-allocate buffers to prevent failure in mana_attach
-+		 * later
-+		 */
-+		err = mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queues);
-+		if (err) {
-+			netdev_err(ndev,
-+				   "Insufficient memory for new allocations\n");
-+			apc->priv_flags = old_priv_flags;
-+			return err;
-+		}
-+
-+		err = mana_detach(ndev, false);
-+		if (err) {
-+			netdev_err(ndev, "mana_detach failed: %d\n", err);
-+			apc->priv_flags = old_priv_flags;
-+
-+			/* Port is in an inconsistent state. Restore
-+			 * 'port_is_up' so that queue reset work handler
-+			 * can properly detach and re-attach.
-+			 */
-+			apc->port_is_up = true;
-+			schedule_port_reset = true;
-+			goto out;
-+		}
-+
-+		err = mana_attach(ndev);
-+		if (err) {
-+			netdev_err(ndev, "mana_attach failed: %d\n", err);
-+			apc->priv_flags = old_priv_flags;
-+
-+			/* Restore 'port_is_up' so the reset work handler
-+			 * can properly detach/attach. Without this,
-+			 * the handler sees port_is_up=false and skips
-+			 * queue allocation, leaving the port dead.
-+			 */
-+			apc->port_is_up = true;
-+			schedule_port_reset = true;
-+		}
-+	}
-+
-+out:
-+	mana_pre_dealloc_rxbufs(apc);
-+
-+	if (schedule_port_reset)
-+		queue_work(apc->ac->per_port_queue_reset_wq,
-+			   &apc->queue_reset_work);
-+
-+	return err;
-+}
-+
- const struct ethtool_ops mana_ethtool_ops = {
- 	.supported_coalesce_params = ETHTOOL_COALESCE_RX_CQE_FRAMES,
- 	.get_ethtool_stats	= mana_get_ethtool_stats,
-@@ -608,4 +709,6 @@ const struct ethtool_ops mana_ethtool_ops = {
- 	.set_ringparam          = mana_set_ringparam,
- 	.get_link_ksettings	= mana_get_link_ksettings,
- 	.get_link		= ethtool_op_get_link,
-+	.get_priv_flags		= mana_get_priv_flags,
-+	.set_priv_flags		= mana_set_priv_flags,
- };
-diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
-index aa90a858c8e3..1d44a78da520 100644
---- a/include/net/mana/mana.h
-+++ b/include/net/mana/mana.h
-@@ -30,6 +30,12 @@ enum TRI_STATE {
- 	TRI_STATE_TRUE = 1
- };
- 
-+/* MANA ethtool private flag bit positions */
-+enum mana_priv_flag_bits {
-+	MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF = 0,
-+	MANA_PRIV_FLAG_MAX,
-+};
-+
- /* Number of entries for hardware indirection table must be in power of 2 */
- #define MANA_INDIRECT_TABLE_MAX_SIZE 512
- #define MANA_INDIRECT_TABLE_DEF_SIZE 64
-@@ -531,6 +537,8 @@ struct mana_port_context {
- 	u32 rxbpre_headroom;
- 	u32 rxbpre_frag_count;
- 
-+	u32 priv_flags;
-+
- 	struct bpf_prog *bpf_prog;
- 
- 	/* Create num_queues EQs, SQs, SQ-CQs, RQs and RQ-CQs, respectively. */
--- 
-2.43.0
+Can we try to handle it on the BPF/OPS side first and only
+prevent it elsewhere if it's not feasible there ?
+
+
+Thanks
 
