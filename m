@@ -1,112 +1,138 @@
-Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E60B37BE70;
-	Fri,  8 May 2026 13:41:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC9213EC2EB
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 13:46:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778247715; cv=none; b=NqPCch++bToJYbEhD1hKz6rvLV4vVfYIIrgIsR0621xFWV6z/sRBSnNwcawSgEw6nEV0jNRV9hcfTrND6bmSaOaP55IKDRz67Bv6CnwkXa0VATqa+0oMhBDDnrdXqu+fhW3OGlXejCfuTpvqoNFQ9NfKg10x4zb7Ka7jts2hHcc=
+	t=1778247989; cv=none; b=aZdjUbiAhHziO/yAyamMnx6+mlzDUGoJTfoya7f9CZYVqg00bcAKvOE9jf8mfkVZfji+8kf05b9KP0lXbqDVkpWxBidYd5jToL0ywsZzJHTmBG3lsZlSAxfa+Uk3cNpI/2MZlzY5NvkJY3SF6iWIEWcoM2ahY5ERJ+IkemY6ptM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778247715; c=relaxed/simple;
-	bh=M01axkFi60PgsS5+yPl+h/GD+JWVJPr57X7IRcb625U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AP1MeOdIHRA2qmwql5WZjzPMQcEZCixtPn6sF1r/+gR5f/4yHrrbwUVCLr5DgPsyDQHXO8A1q7ylvsno2XJYc2srPNJjHF8ge3ynd1mv8J7gPYH0CLf3FbcmzEtLgYp38naP4sA58AXweXwZLoBChF2hLY68j+LQdjxzLSo5lnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=radxa.com; spf=pass smtp.mailfrom=radxa.com; arc=none smtp.client-ip=52.59.177.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=radxa.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=radxa.com
-X-QQ-mid: zesmtpsz9t1778247685t1369d6ed
-X-QQ-Originating-IP: Rwa7KskeJ2ohyMfXaBDQ3/23jeqhEAjyHFd1W0vcT44=
-Received: from [127.0.0.1] ( [116.234.74.217])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 08 May 2026 21:41:19 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 14886756243137966030
-Message-ID: <ED7EE77387FC4C2F+9b254eea-8598-4b34-876e-670fcef2d185@radxa.com>
-Date: Fri, 8 May 2026 21:41:17 +0800
+	s=arc-20240116; t=1778247989; c=relaxed/simple;
+	bh=MITDOAia5eJhfjXhLrqLbCq+ZSfqGPMEtPD8YXKKS4I=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pkJ/ONxZnXtXy0aleYXgio4+R1q7xmT4jMgZ9F8xWR++YqyMUAqhogp8riZ7YYOyaARYHHTwK7BADbetMbfNMUNjZMTliW3/UG17cPqMX+QB/1LdXrTUzJx5YmPmHiHS/hNC+YQaEOBfahf/j0y4R/VsSPAW+C8t0RJl396L/tU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gP7TF7ae; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gP7TF7ae"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3660b84347dso1106157a91.1
+        for <bpf@vger.kernel.org>; Fri, 08 May 2026 06:46:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778247987; x=1778852787; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MITDOAia5eJhfjXhLrqLbCq+ZSfqGPMEtPD8YXKKS4I=;
+        b=gP7TF7aej3JdJePfZs7xw9Z6LA7ZrfRq8RBYSgmkEuqe5fiJdypTYPP7M6GXfk2smu
+         XJCn3sIXQ+zzqie+QHbc3IEEM+XY+ccZOEz58uIVvRxKH6SoaIbF6IlsPRenNlh2DxDt
+         LQVuge26zdERTQkfWYGUuiTprIDH8vN+2Mqh2uDwZ/cBFjMuUlj6tGS6MKPBfM8QQfju
+         LLcQpjQYWNOezFWXSETYkhkg4ofkQ16imuEASvLH0sbcRceDJNAMeiqv1Xcr58XULd+C
+         YdCHJDCThAp3uhtYac7Ouj62v0bP77SAvpp+li5xm1lM6IVKXVU26cosKBo3NuXybiXa
+         U50w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778247987; x=1778852787;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MITDOAia5eJhfjXhLrqLbCq+ZSfqGPMEtPD8YXKKS4I=;
+        b=UMzKVHfPRfbYQIDgYjjUwZ4XUyYRa1rTSBDgMuMm4+83Jl7+E9xhYnYfoTi44RKuKP
+         pq/ru0kEUwZCpij4gjgjqsMf305u+Tw5FnyUKrmkO8scYbPsSVtU1BmMMUb/JAaiLGGF
+         7MCQJoBEyxrp0cf/f4SCeQZwIZgbQqQEg+b/kEAZqJrOAMD/OSg6AKY9DvMOtYc7y0Px
+         h7rkP/DqiTToj6bdg7Aw/ExfIPSZjN9KjlDavpTk+CQReLLCKxuBr08/tj6GWydUiEvS
+         7Qf3SkRNBDdLOEtmB5zRnzoNg4XbY68U4Vi5tJy0oSfOH55NMdx01UvhZ53YoBZwS/5V
+         TN3A==
+X-Gm-Message-State: AOJu0YyxXjCv4QBujsZOM56jrQYmsmTyt6L0v8b/UWENIeg9FBm2/z5S
+	IGj2HyJSNsUOH75gDkBZMhHTCPWcyM+XGaFCZP08YKOPrDzlpAGPMIi1
+X-Gm-Gg: Acq92OHUtHLhy+3YINPVq2SGKwhP/6jrKEq+DAF/kT43zd8IL/1+/RRqGwyyV/JWzJ9
+	rmUzMk7HN5Jdlp/P85v9gNULWm16faB6G39gF3yZzk4bma7DDia3rsn91o54W4n1BMvwTufBiGq
+	fgsEPQPKKQ1WNHRFPHiWcDOZSwMpIoNibtSBGahNeL21v40Ie6BRkN85fIykCqOW7pxk6N+8IOg
+	aOZ4ECar9g6ABBdS7qA1427neMOOpjMyTShiXzGmHT6sMo4eqF3QeLu23Re8Sgc7YphzZUZ1S4w
+	JTO+fFufraltREU4meqMYiNSu+Ktk+xsVVt9QlShO1ahowxJqsMtG1mdHEWJmTszoI6QOVgykrI
+	lvi84e/8s+d2deYfqNaPUdFs4VqkzAvUPFl1K6NA1ECyZu7eoWuCZRgcXLw18qjY25F2CbTfzUf
+	DoG0frYwOpTZeA2zz93bYoSAU57Any0nwNam1CgpTp1wkEcvByLxw=
+X-Received: by 2002:a17:90b:164d:b0:366:346a:6891 with SMTP id 98e67ed59e1d1-366346a6cf8mr5235008a91.16.1778247987050;
+        Fri, 08 May 2026 06:46:27 -0700 (PDT)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3664da5d5fcsm2318316a91.5.2026.05.08.06.46.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 May 2026 06:46:26 -0700 (PDT)
+Message-ID: <639f1b0f97330c98668c00244c0a7bae19e30e3c.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v4 10/14] bpf: change logging scheme for live
+ stack analysis
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Paul Chaignon <paul.chaignon@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, 	martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev
+Date: Fri, 08 May 2026 06:46:23 -0700
+In-Reply-To: <af0gXEqD3FPFYZDj@mail.gmail.com>
+References: <20260410-patch-set-v4-0-5d4eecb343db@gmail.com>
+	 <20260410-patch-set-v4-10-5d4eecb343db@gmail.com>
+	 <af0gXEqD3FPFYZDj@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 10/12] net: stmmac: tc956x: add TC956x/QPS615
- support
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, maxime.chevallier@bootlin.com,
- rmk+kernel@armlinux.org.uk, andersson@kernel.org, konradybcio@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, linusw@kernel.org,
- brgl@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
- Daniel Thompson <daniel@riscstar.com>, mohd.anwar@oss.qualcomm.com,
- a0987203069@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
- boon.khai.ng@altera.com, chenchuangyu@xiaomi.com, chenhuacai@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, hkallweit1@gmail.com,
- inochiama@gmail.com, john.fastabend@gmail.com, julianbraha@gmail.com,
- livelycarpet87@gmail.com, matthew.gerlach@altera.com,
- mcoquelin.stm32@gmail.com, me@ziyao.cc,
- prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
- rohan.g.thomas@altera.com, sdf@fomichev.me, siyanteng@cqsoftware.com.cn,
- weishangjuan@eswincomputing.com, wens@kernel.org, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20260501155421.3329862-1-elder@riscstar.com>
- <20260501155421.3329862-11-elder@riscstar.com>
- <224E233C593EF171+8c8a43dd-5061-40f8-9eb7-f360eabf2ecc@radxa.com>
- <ae90a4c9-f027-4373-a378-d0d4b7796ff3@riscstar.com>
- <6744F8FEFD290FFD+4973b8ba-7d3b-45e4-8478-0b3334b81960@radxa.com>
- <fc5d14d5-c65d-445f-90c6-9659e284c0ca@lunn.ch>
-Content-Language: en-US
-From: Xilin Wu <sophon@radxa.com>
-In-Reply-To: <fc5d14d5-c65d-445f-90c6-9659e284c0ca@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:radxa.com:qybglogicsvrsz:qybglogicsvrsz3b-0
-X-QQ-XMAILINFO: Mom5ezI3X1cDdstxr0dvEIZV443NBEYAfToYd8iPkwSlMrpUFKrexK8P
-	dTvWTgpqC6Skcw0ZRPuUSf3Wz7VpYWQwC9iH6yHq0bFCcJYPFPdk4miUDUngLuiFEe/oLMO
-	XvESpVBjhvLLQjFeGc4/SEgKqu9OYOrHE1gMC0mjnqRSeqgJmnLUvcBcCm+smi5QKexLhr5
-	CxwYvkoAzOjw4aMgudRQ8yGCJ/Gxsil4YNYEgNXjwqchA6H5ywfDG0StQmJvHaH0ac/3eO3
-	Y4gAPULSyC4lTo7wNhiLmOPwJfvREVDd9gH5eapN703xRJQEPIMsXvAN4ADGNqho0RV+Ojx
-	jGGwagzF4qK7kU5mZBOptSdYd8kFvS49tt1slIYJSbaPRJZuLhQrQgWk6nl0CGonh0vrQnQ
-	BWjX/CQPP2P7pIHcLnUFCCP44rKBHEtW8k7aQ2OK3Sv4Vg1yvwjelZkn3w/Ty/870rJttFS
-	OqBkH8/xYcYEqDnuHIJyt3mi3tc1wrHIvYehd5puuj0ieRZ2Cu2Y3BGxF6Hpqb3OmVQC5o7
-	eKBrQ2rv3Zkx+I9oQYXH7xa53o5dt3iwq0spnNOtnD5LTHhDbuuLV8os0emQ1BbLfkQs8Eg
-	P6/jWIVAL5jB7uiTF1o4qc72Q1N2noULu6hVAQ+rKU9cYYSdzflLHWFLiUFqExsOXFNtrT+
-	9sogoxbxW6xeVhVUTYjOCubqmG6q85LsyZQzi7O8W1dn0RQHJz8kEEWuDHNYtc/qSECDti2
-	wdKllmnodr3ZJ+AIu//SuRnitrcqNeE8ahOASgdSlX93R85FrVSvI6LHtnO5Ebcxwm7bIp2
-	akzyqKkz4b4fEzjRZRuRnZAaIS0jXTdMck9sUMOxo3lFqzdJXZIhB7Ql4HAwL0SlU84tJ1K
-	/XT6Z+n/gVx31J5bSD3iZELcqoseoLF8Z8HMPGgRhwanVvAnesUm76VLWLNDlWMfDutM2jD
-	qcFITzeAXCPUCfujhBbwj8/EMAbdu9Ry22tR2BGIzwb9lDfzbi+l87t5LWvVAxA2LibQXdy
-	I/YPPaVs/0XRwAimtGrqSt/RPEoWIgPWl/9cxxgXehFZCUdqqsnb3gKJWv6ySlAqnB7Mj0Z
-	g==
-X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
-X-QQ-RECHKSPAM: 0
 
-On 5/8/2026 9:36 PM, Andrew Lunn wrote:
->> Hi Alex,
->>
->> Maybe I missed something, but I already have WoL working *without* changes
->> in the tc956x driver.
->>
->> https://lore.kernel.org/all/859776B5671B36B9+577c19e4-3e66-4036-b26f-fe20287a1d43@radxa.com/
-> 
-> Sorry, did i miss the patches for the PHY driver? Or was the code
-> already there?
-> 
-> 	Andrew
-> 
+On Fri, 2026-05-08 at 01:29 +0200, Paul Chaignon wrote:
+> On Fri, Apr 10, 2026 at 01:56:01PM -0700, Eduard Zingerman wrote:
+> > Instead of breadcrumbs like:
+> >=20
+> > =C2=A0 (d2,cs15) frame 0 insn 18 +live -16
+> > =C2=A0 (d2,cs15) frame 0 insn 17 +live -16
+> >=20
+> > Print final accumulated stack use/def data per-func_instance
+> > per-instruction. printed func_instance's are ordered by callsite and
+> > depth. For example:
+>=20
+> Hi Eduard,
+>=20
+> Sorry to revive an old thread.
+>=20
+> We've started running a kernel with this patchset in Cilium's CI and
+> noticed a big increase of log verbosity for BPF_LOG_LEVEL2. To get an
+> idea, a full dump of all (uncompressed) verifier logs for our
+> tested programs used to take ~8.4G. With this patchset, it now takes
+> 15G. [1] helps a bit to reduce it, but still only getting to 12G.
+>=20
+> The increase seems to come from print_subprog_arg_access(), which prints
+> full functions with the results of the fixed-point analysis, from
+> print_instances(), which prints full functions with the use/def slots,
+> and to a lesser extent from compute_subprog_args(), which prints the
+> fixed-point iterations.
 
-No, I'm using an out-of-tree patch currently.
+Hi Paul,
 
-https://github.com/strongtz/linux-radxa-qcom/commit/4a085eb54115844be62bfaa9d0b3e905c22ee479
+Do you have a break-down? I'd expect most of the log to come from
+arg_track_log(), as it visits instructions multiple times
+(although, convergence might take only a few iterations).
+If it is a significant chunk, I think we can drop it completely.
 
+As for print_subprog_arg_access() and print_instances(), as you
+suggest the output can be combined, such that the full function is
+printed only once per call depth. This combined print-out can also
+include results of registers liveness analysis.
+=20
+> I'm wondering if maybe there are other opportunities to reduce
+> verbosity here (besides [1]). Maybe we don't need to print the
+> fixed-point iterations if we're already printing the results? Or maybe
+> we could put the more detailed liveness-related logs behind
+> BPF_LOG_LEVEL3 or BPF_LOG_LIVENESS?
 
--- 
-Best regards,
-Xilin Wu <sophon@radxa.com>
+Had this been a normal compiler or jit engine, I'd vote for
+BPF_LOG_LIVENESS log channel, I'm not sure what our stance regarding
+user visible ABI here.
 
+Regarding BPF_LOG_LEVEL3, I think that the original idea behind
+BPF_LOG_LEVEL2 is that it would serve as a "debug log" that regular
+users won't need to consume. What is the motivation behind collecting
+level 2 log on your CI? Is it to infer clues regarding programs
+hitting 1M instructions limit?
+
+[...]
