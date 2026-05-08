@@ -1,265 +1,238 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+Received: from pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.35.192.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3907D2D8796;
-	Fri,  8 May 2026 08:01:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E35336403A;
+	Fri,  8 May 2026 08:18:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.35.192.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778227317; cv=none; b=gF+J/Nw85J5zBZCP3lJcyS/zm+LBfnvFV7DrGSOaHrfnFQwIUaKuPBy3zBh+hfyCtMG/CvvMlpmBLWgcPCtTS8RmIlMd0ynDOogG5Qmnxi+zbnr/D1gg63Gqyt/ohLR5moI/JG6yAVGkw2JUuBpVzSksvkp5PNAmRtNUZlnkFkE=
+	t=1778228319; cv=none; b=c43kfh65tIJ0DrHDOcEoV5MKayoOfqYTMGOklFOMB5wjwT8t5L5/WcOKEH2xWt95J9tGscIuejjUPEazYxjw83J7417IOGU69P8ZqAeilP9l8RiEmzlfl3Y2tsZt6nIBdy5/bP+I4CGmi43Iz0xQ9YKDdw8PMhW9yTIGuCuRISg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778227317; c=relaxed/simple;
-	bh=DtM9ObPC2xf65aMGWDsoX5q+544+1qRuxHxJOa43uz4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fundcFGu8TYcswhKR90o1zB7L8bqzh4sPm5PDR6IxMFAPq5jO+lP5EDfLjvrD8Ya0Ty1+0JUKQyflwffz/hILLF2rZGenDzM/dh9uaWy7qN8r46Rg4anBwd1JfqmxlwtRmqx0XKC2Cslz82zT+GJTNyE959WY6mitTxUrUq97iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schippers-hamm.de; spf=pass smtp.mailfrom=schippers-hamm.de; dkim=pass (2048-bit key) header.d=schippers-hamm.de header.i=simon@schippers-hamm.de header.b=NzNMn9hc; arc=none smtp.client-ip=217.72.192.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schippers-hamm.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schippers-hamm.de
+	s=arc-20240116; t=1778228319; c=relaxed/simple;
+	bh=Jc3PpcNd3ZxX08IHUJtRP179UXyMvc29rNhuJm7NkoM=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iVqVnJ+RxrMKTf0e0WUu1dNoR72yBGnG4/417ywyKyYb3YvWSSgudHFXC7vusVZ+1DAEJ5+qKJtx0T8f6i4blYzDQJLH7UQOcoE7CV5hNxcerIMZN+H7oHcH5EQkxyY8vM4/iVgQJG2QLGCEg89f7zcmdi5P67s7lq0zqmNl82g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=mpDmhIDH; arc=none smtp.client-ip=52.35.192.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=schippers-hamm.de header.i=simon@schippers-hamm.de header.b="NzNMn9hc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=schippers-hamm.de;
-	s=s1-ionos; t=1778227298; x=1778832098; i=simon@schippers-hamm.de;
-	bh=wUz7wotJgjRTinklR0rNCAuguJaX0sqQoR8T0osUFxI=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=NzNMn9hcN0BAVIDNBlvy8B/0l8n3kQldBvh7Fvp4IYkXL/aZwla04n3QZH9OiBRe
-	 X+ja3oXGdcDlpjWr+WikHuxhBto9Toe91VruwHbO/b/6WVIMSeuhSJ9zGYJ/KZCHy
-	 1cNbWt7VxOM80/2R1v3PprcuXhppbfhADnBaUsDZW9ycV6ypaTwC/vzBc7/Wfu5/z
-	 c2C+9dsid36TF2shnlV74fHfPlozF1HqGNNSe+4a5gHizc07Kng5owR3tQgZWXeMb
-	 gv9a6NzLBXoaoFZ3FvkeRJQ7tw1Ygi3JjnluOZxvWHhehcWMtOeNCue5zqfYIYkcl
-	 qx8wkE5NBmILkpJUsQ==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from client.hidden.invalid by mrelayeu.kundenserver.de (mreue106
- [212.227.15.152]) with ESMTPSA (Nemesis) id 1MxEYY-1vNlkX2dQ0-00wv6U; Fri, 08
- May 2026 10:01:37 +0200
-Message-ID: <21d639fc-e244-486e-8368-8891b3c43215@schippers-hamm.de>
-Date: Fri, 8 May 2026 10:01:32 +0200
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="mpDmhIDH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1778228318; x=1809764318;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=he6DON9jfdhSLBt5e/vXn3CElWPL4k8qbH0NcK/2obw=;
+  b=mpDmhIDHD9Z9dIBy2Xr9/PGUfqlwPzQOsrVF1L+8dRzQXh4VWb6Lknfu
+   viYhguRusJq2uwxyhC7BLQ4Qer0k2W7yBTuSLHltw10UfN+LaTU/y2Yaw
+   N4VEBsUzGEQENERkloUMUDXEVmAocjvKMEt+toFlc3hbW5QoqC4Htw829
+   IpUSLopwAmAcPju6UHTPUIF7Rc9WMPZsbD6O0k2Qc3u1r2cr8Brp2fz2J
+   QoMIEU83/+OD4CmftCgWXiQEzMi96JyC1ZGJ36tAljgfgWosM3FMPP6Q6
+   vR18d8uiC9+3c16HSmqrgMYTNGrrhERX6iGxONV2frmr612c+VIJ7rmIB
+   A==;
+X-CSE-ConnectionGUID: T2XNpIqvShm0IOn66vQpwQ==
+X-CSE-MsgGUID: K+8ujvsvQ+aWk2f8+1q5Sw==
+X-IronPort-AV: E=Sophos;i="6.23,223,1770595200"; 
+   d="scan'208";a="18948631"
+Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
+  by internal-pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2026 08:18:34 +0000
+Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.111:1235]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.8.77:2525] with esmtp (Farcaster)
+ id 181a188e-b1e1-456f-b102-a9f2c8f54015; Fri, 8 May 2026 08:18:34 +0000 (UTC)
+X-Farcaster-Flow-ID: 181a188e-b1e1-456f-b102-a9f2c8f54015
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Fri, 8 May 2026 08:18:31 +0000
+Received: from dev-dsk-itazur-1b-11e7fc0f.eu-west-1.amazon.com (172.19.66.53)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Fri, 8 May 2026 08:18:18 +0000
+From: Takahiro Itazuri <itazur@amazon.com>
+To: <fvdl@google.com>, <seanjc@google.com>, <ljs@kernel.org>
+CC: <Liam.Howlett@oracle.com>, <ackerleytng@google.com>,
+	<agordeev@linux.ibm.com>, <ajones@ventanamicro.com>,
+	<akpm@linux-foundation.org>, <alex@ghiti.fr>, <andrii@kernel.org>,
+	<aou@eecs.berkeley.edu>, <ast@kernel.org>, <baolu.lu@linux.intel.com>,
+	<borntraeger@linux.ibm.com>, <bp@alien8.de>, <bpf@vger.kernel.org>,
+	<catalin.marinas@arm.com>, <chenhuacai@kernel.org>, <corbet@lwn.net>,
+	<coxu@redhat.com>, <daniel@iogearbox.net>, <dave.hansen@linux.intel.com>,
+	<david@kernel.org>, <derekmn@amazon.com>, <dev.jain@arm.com>,
+	<eddyz87@gmail.com>, <gerald.schaefer@linux.ibm.com>, <gor@linux.ibm.com>,
+	<haoluo@google.com>, <hca@linux.ibm.com>, <hpa@zytor.com>,
+	<itazur@amazon.co.uk>, <jackabt@amazon.co.uk>, <jackmanb@google.com>,
+	<jannh@google.com>, <jgg@ziepe.ca>, <jgross@suse.com>, <jhubbard@nvidia.com>,
+	<jiayuan.chen@shopee.com>, <jmattson@google.com>, <joey.gouly@arm.com>,
+	<john.fastabend@gmail.com>, <jolsa@kernel.org>, <jthoughton@google.com>,
+	<kalyazin@amazon.co.uk>, <kas@kernel.org>, <kernel@xen0n.name>,
+	<kpsingh@kernel.org>, <kvm@vger.kernel.org>, <kvmarm@lists.linux.dev>,
+	<lenb@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-pm@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <lorenzo.stoakes@oracle.com>, <luto@kernel.org>,
+	<maobibo@loongson.cn>, <martin.lau@linux.dev>, <maz@kernel.org>,
+	<mhocko@suse.com>, <mingo@redhat.com>, <mlevitsk@redhat.com>,
+	<nikita.kalyazin@linux.dev>, <oupton@kernel.org>, <palmer@dabbelt.com>,
+	<patrick.roy@linux.dev>, <pavel@kernel.org>, <pbonzini@redhat.com>,
+	<peterx@redhat.com>, <peterz@infradead.org>, <pfalcato@suse.de>,
+	<pjw@kernel.org>, <prsampat@amd.com>, <rafael@kernel.org>,
+	<riel@surriel.com>, <rppt@kernel.org>, <ryan.roberts@arm.com>,
+	<sdf@fomichev.me>, <shijie@os.amperecomputing.com>,
+	<skhan@linuxfoundation.org>, <song@kernel.org>, <surenb@google.com>,
+	<suzuki.poulose@arm.com>, <svens@linux.ibm.com>, <tabba@google.com>,
+	<tglx@kernel.org>, <thuth@redhat.com>, <urezki@gmail.com>,
+	<vannapurve@google.com>, <vbabka@kernel.org>, <will@kernel.org>,
+	<willy@infradead.org>, <wu.fei9@sanechips.com.cn>, <x86@kernel.org>,
+	<yang@os.amperecomputing.com>, <yangyicong@hisilicon.com>,
+	<yonghong.song@linux.dev>, <yosry@kernel.org>, <yu-cheng.yu@intel.com>,
+	<yuzenghui@huawei.com>, <zhengqi.arch@bytedance.com>, <zulinx86@gmai.com>
+Subject: Re: [PATCH v12 10/16] KVM: guest_memfd: Add flag to remove from direct map
+Date: Fri, 8 May 2026 08:18:10 +0000
+Message-ID: <20260508081812.12345-1-itazur@amazon.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <CAPTztWb67XZvfcMVnbegDNNW0LJa9UsaTGx3M898xJUJrekk0w@mail.gmail.com>
+References: <CAPTztWb67XZvfcMVnbegDNNW0LJa9UsaTGx3M898xJUJrekk0w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v5 3/5] veth: implement Byte Queue Limits (BQL)
- for latency reduction
-To: Jesper Dangaard Brouer <hawk@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc: kernel-team@cloudflare.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20260505132159.241305-1-hawk@kernel.org>
- <20260505132159.241305-4-hawk@kernel.org>
- <ee275aa6-af27-4dac-9afa-da88abde312b@schippers-hamm.de>
- <8f2f7f2e-6aa2-4e5b-b52d-0025b2525579@redhat.com>
- <e3a91545-13cd-4f87-8375-d707865bdbca@schippers-hamm.de>
- <6a597dbd-70bf-4b14-b495-2f7248fd3220@kernel.org>
- <68223314-1a44-4aee-8207-57437ef9f3ab@schippers-hamm.de>
- <3e43117f-356d-4086-a176-abd7fe2e6f0a@kernel.org>
-Content-Language: en-US
-From: Simon Schippers <simon@schippers-hamm.de>
-In-Reply-To: <3e43117f-356d-4086-a176-abd7fe2e6f0a@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:zDwADc0FGBLOBahFsQDxH8onU0V5mTOVVT8x93s3OIkPGtrk20g
- ZSbR4i7DY1CFUq2uEVLBRg1if2CGUiqLYchg4sPlFR+wARrpkWSXi7XHY0psmDlfHuNPyJD
- vLtVnzYwRE+DwCSjVYZ7TFKra8Z/cIIVBcmRCA1oP5DjX8i/Ag7swf/XmRkvkJ97t9fO7PS
- wk1JaheynjW3XEo6SZY5A==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:S0c4q/VFQ58=;YP+KTwseffOQyKg9GRt1/4Y4Hx5
- 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
- T/eh387HqCI7US2TRd+y0bp8HDBHuX6L
+X-ClientProxiedBy: EX19D033UWA002.ant.amazon.com (10.13.139.10) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-On 5/7/26 22:45, Jesper Dangaard Brouer wrote:
->=20
->=20
-> On 07/05/2026 22.12, Simon Schippers wrote:
->> On 5/7/26 21:09, Jesper Dangaard Brouer wrote:
->>>
->>>
->>> On 07/05/2026 16.46, Simon Schippers wrote:
->>>>
->>>>
->>>> On 5/7/26 16:34, Paolo Abeni wrote:
->>>>> On 5/7/26 8:54 AM, Simon Schippers wrote:
->>>>>> On 5/5/26 15:21, hawk@kernel.org wrote:
->>>>>>> @@ -928,9 +968,13 @@ static int veth_xdp_rcv(struct veth_rq *rq, i=
-nt budget,
->>>>>>>                }
->>>>>>>            } else {
->>>>>>>                /* ndo_start_xmit */
->>>>>>> -            struct sk_buff *skb =3D ptr;
->>>>>>> +            bool bql_charged =3D veth_ptr_is_bql(ptr);
->>>>>>> +            struct sk_buff *skb =3D veth_ptr_to_skb(ptr);
->>>>>>>                  stats->xdp_bytes +=3D skb->len;
->>>>>>> +            if (peer_txq && bql_charged)
->>>>>>> +                netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_U=
-NIT);
->>>>>>
->>>>>> In the discussion with Jonas [1], I left a comment explaining why I=
- think
->>>>>> this doesn=E2=80=99t work.
->>>>>>
->>>
->>> I've experimented with doing the "completion" at NAPI-end in
->>> veth_poll(), but that resulted in BQL limit being 128 packets, which
->>> leads to bad latency results (not acceptable).
->>> (See detailed report later)
->>>
->>>
->>>>>> I still think first that adding an option to modify the hard-coded
->>>>>> VETH_RING_SIZE is the way to go.
->>>>>>
->>>
->>> Not against being able to modify VETH_RING_SIZE, but I don't think it =
-is
->>> the solution here.
->>>
->>> The simply solution is the configure BQL limit_min:
->>>   `/sys/class/net/<dev>/queues/tx-N/byte_queue_limits/limit_min`
->>>
->>> My experiments (below) find that limit_min=3D8 is gives good performan=
-ce.
->>> We can simply set default to 8 as this still allows userspace to chang=
-e
->>> this later if lower latency is preferred.
->>>
->>>>>> Thanks!
->>>>>>
->>>>>> [1] Link: https://lore.kernel.org/netdev/e8cdba04-aa9a-45c6-9807-82=
-74b62920df@tu-dortmund.de/
->>>>>
->>>>> In the above discussion a 20% regression is reported, which IMHO can=
-'t
->>>>> be ignored. Still the tput figures in the data are extremely low,
->>>>> something is possibly off?!? I would expect a few Mpps with pktgen o=
-n
->>>>> top of veth, while the reported data is ~20-30Kpps.
->>>>>
->>>>> /P
->>>>>
->>>>
->>>> The ~20-30Kpps occur when thousands of iptables rules are applied and
->>>> an UDP userspace application is sending.
->>>>
->>>> And there is a 20% pktgen regression (no iptables rules applied).
->>>>
->>>
->>> The pktgen test is a little dubious/weird and Jonas had to modify pktg=
-en
->>> to test this.   John Fastabend added a config to pktgen that allows us
->>> to benchmarking egress qdisc path, this might be better to use this.
->>> The samples/pktgen/pktgen_bench_xmit_mode_queue_xmit.sh is a demo usag=
-e.
->>>
->>> If redoing the tests, can you adjust limit_min to see the effect?
->>>   /sys/class/net/<dev>/queues/tx-N/byte_queue_limits/limit_min
->>>
->>> 20% throughput performance regression is of-cause too much, but I will
->>> remind us, that adding a qdisc will "cost" some overhead, that is a
->>> configuration choice.  Our purpose here is to reduce bufferbloat and
->>> latency, not optimize for throughput.
->>>
->>>
->>>> I am pretty sure the reason is because the BQL limit is stuck at 2
->>>> packets (because the completed queue is always called with 1 packet
->>>> and not in a interrupt/timer with multiple packets...).
->>>>
->>>
->>> I've run a lot of experiments, which I made AI write a report over, se=
-e attachment.  The TL;DR is that best performance vs latency tradeoff is d=
-efaulting BQL/DQL limit_min to be 8 packets.
->>>
->>> I fear this patchset will stall forever, if we keep searching for a pe=
-rfect solution without any overhead.  The qdisc layer will be a baseline o=
-verhead.  The limit=3D2 packets is actually the optimal darkbuffer queue s=
-ize, but I acknowledge that this causes too many qdisc requeue events (lea=
-ding to overhead).  I suggest that I add another patch in V6, that default=
-s limit_min to 8 (separate patch to make it easier to revert/adjust later)=
-.
->>>
->>> I've talked with Jonas, and we want to experiment with different solut=
-ions to make BQL/DQL work better with virtual devices.
->>>
->>> This patchset helps our (production) use-case reduce mice-flow latency
->>> from approx 22ms to 1.3ms for latency under-load.  Due to the consumer
->>> namespace being the bottleneck the requeue overhead is negligible in
->>> comparison.
->>>
->>> -Jesper
->>
->> First of all thanks for you work and I really see the advantages of
->> avoiding bufferbloat :)
->>
->> But the key of the BQL algorithm, which is the *dynamic* adaption of th=
-e
->> limit, is not working. Always calling netdev_completed_queue() with
->> 1 packet results in a static limit of 2 packets (as seen by Jonas
->> measurements), which you force up to 8 packets.
->>
->> So in the end this patchset has the same effect as just setting
->> VETH_RING_SIZE to 8 (and giving an option to change this value).
->>
->=20
-> I've code up a time based BQL implementation, see attachment.
-> WDYT?
->=20
-> --Jesper
->=20
+Hi Sean, Frank, Lorenzo,
 
-A step in the right direction, but I dislike that you call
-netdev_sent_queue() with at least 1 packet (never 0 packets).
-I am not sure if it works, and I am not sure about the parameter.
+On Tue, Apr 21, 2026 at 10:08:48AM -0700, Frank van der Linden wrote:
+> On Tue, Apr 21, 2026 at 9:31 AM Sean Christopherson <seanjc@google.com> w=
+rote:
+> > Making guest_memfd responsible for zapping and restoring the direct map=
+ on a per-
+> > folio basis feels wrong given the addition of AS_NO_DIRECT_MAP.  I espe=
+cially don't
+> > like that the "rules" for when an AS_NO_DIRECT_MAP folio has a direct m=
+ap will vary
+> > based on the owner, and even within an owner (e.g. guest_memfd) will be=
+ ad hoc.
+> >
+> > E.g. as per the series to add guest_memfd write() support[*]:
+> >
+> >   When direct map removal is implemented [2]
+> >    - write() will not be allowed to access pages that have already
+> >      been removed from direct map
+> >    - on completion, write() will remove the populated pages from
+> >      direct map
+> >
+> > That's pretty gross ABI, because with KVM_GMEM_FOLIO_NO_DIRECT_MAP, use=
+rspace can
+> > write() exactly once.  To re-write memory, I assume userspace would nee=
+d to do a
+> > PUNCH_HOLE or truncate.
+> >
+> > What's preventing us from handling this automagically in e.g. filemap_a=
+dd_folio()
+> > and filemap_remove_folio()?  Then the usage rules are pretty straightfo=
+rward: the
+> > kernel must *always* assume the direct map is invalid for folios from
+> > AS_NO_DIRECT_MAP mappings.
+> >
+> > Then if KVM needs to utilize a kernel mapping, e.g. in kvm_gmem_populat=
+e(), KVM
+> > could use dedicated variants of kmap_local_xxx() to deal with a local m=
+apping for
+> > a folio/page without a direct map.  Or, KVM could simply disallow the s=
+pecific
+> > sequence that would require KVM to do the memcpy (I'm pretty sure we ca=
+n do that
+> > with in-place shared=3D>private conversion support).
+> >
+> > I realize that could throw a big wrench into write() performance, but I=
+MO, before
+> > merging either series, we need a complete story for exactly how this wi=
+ll all fit
+> > together, in a maintainable fashion and with sane ABI.
+>
+> I agree with this - this approach would also allow for memory that was
+> never in the direct map to begin with, or has been taken out already
+> (for which I happen to have a use case :-)). guest_memfd and other
+> code can then assume that AS_NO_DIRECT_MAP means they have to take
+> explicit action to map it if needed. It's a clean, simple ABI.
+>
+> With the current set of patches, it seems like this couldn't be done
+> in a clean manner.
+
+Agreed with both of you.  I'll adopt the filemap-level approach:
+
+- Move the zap/restore hooks from guest_memfd into filemap_add_folio()
+  / filemap_remove_folio().
+- Tighten AS_NO_DIRECT_MAP semantics so that, for folios in such a
+  mapping, the direct map is invalid for the entire time the folio
+  resides in the page cache.
+- Drop the per-folio KVM_GMEM_FOLIO_NO_DIRECT_MAP bookkeeping in
+  folio->private, since the existence of the folio in the mapping is
+  itself the state.
+
+On each guest memory population path,
+
+- memcpy-based population from userspace goes through the userspace
+  mapping of guest_memfd, not through the kernel direct map, so the
+  filemap-level invariant doesn't affect it.  But this is slow, which
+  is what motivated the write() syscall support.
+
+- write(): meant to speed up the userspace-memcpy case above by doing
+  the copy in the kernel.  I believe Brendan's __GFP_UNMAPPED/mermap
+  work [1] would give us a low-overhead way to get temporary kernel
+  access to an AS_NO_DIRECT_MAP.  Landing mermap may take a while, but
+  this series does not introduce the write() path, so mermap is not a
+  blocker for now.
+
+- kvm_gmem_populate(): this is a TDX/SNP-only path, and NO_DIRECT_MAP
+  is not available on those VM types =E2=80=94
+  kvm_arch_gmem_supports_no_direct_map() returns false for
+  KVM_X86_TDX_VM and KVM_X86_SNP_VM, which are its only callers
+  today.  So it doesn't interact with the filemap invariant IIUC.
+
+So, unless I'm missing any path, adopting the filemap-level approach in
+this series should be fine.
 
 
-I would propose doing it like other BQL implementations do
-(for example usbnet for which I adapted BQL [1] :) ):
+I'd like to consult with you folks on how to proceed in advance.  In a
+separate reply on the cover letter thread [2], Lorenzo and Sean
+suggested that the mm pieces should go through the mm subsystem:
 
-Call netdev_sent_queue() with n_bql in a periodic work. n_bql would
-still be counted in veth_xdp_rcv() like you currently do (synchronized
-with the work via ring.consumer_lock?).
+On Tue, Apr 21, 2026 at 04:36:00PM +0000, Sean Christopherson wrote:
+> Yeah, when the time comes, the mm pieces definitely need to go through th=
+e mm
+> tree.  Ideally, I think this would be merged in two separate parts, with =
+all mm
+> changes going through the mm tree, and then the KVM changes through the K=
+VM tree
+> using a stable topic branch/tag from Andrew.
 
-The only weird thing that remains is that BQL's inflight !=3D number of
-packets in the ring and BQL's limit !=3D "current ring size". Instead
-the BQL limit describes the number of maximal allowed packets between
-calls of netdev_sent_queue(), which occur periodically in a somewhat
-fixed time interval.
-I guess that could be fine, but it surely needs testing.
+I see two reasonable paths to get there, and would appreciate your
+input on which you prefer:
 
-[1] Link: https://lore.kernel.org/netdev/20251106175615.26948-1-simon.schi=
-ppers@tu-dortmund.de/
+Path A =E2=80=94 validate on KVM side first, then split:
+  - Post v13 as a single series on the KVM list, gather feedback and
+    make sure the design is acceptable to KVM reviewers.
+  - Once v13 looks good ("the time comes"), do the MM/KVM split,
+    rebase the MM part onto the appropriate MM branch, and post the
+    MM part to linux-mm to build consensus with MM maintainers.
+
+Path B =E2=80=94 split early and seek MM consensus in parallel:
+  - With the filemap rework already in place, do the MM/KVM split
+    now and post the MM part to linux-mm directly.  The KVM part follows
+    on top of a stable topic from MM.
+
+Which of the two would you rather see?  Happy to go either way.
+
+
+[1] https://lore.kernel.org/all/20260320-page_alloc-unmapped-v2-0-28bf1bd54=
+f41@google.com/
+[2] https://lore.kernel.org/all/20260506080753.14517-1-itazur@amazon.com/
+
+Takahiro
 
