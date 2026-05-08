@@ -1,174 +1,90 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DCE630BF4F
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 23:24:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778282697; cv=pass; b=j569CmX9m8Avgwh28XbLQq9/1yd+oK+eulvq9cRUSGHVXfB6PAU5TwJHCDNYjDSLD5dTSt718FNbnQV7H8rD7+LJ6x/h8HjEeHqp2VGtGAsMIB/ygKCxlBKe7dK5VtbZAgt/Hhj4ZqivPMt4ExhXRQ3JsjY4CXtyKPXTnYlRgCA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778282697; c=relaxed/simple;
-	bh=HlVBE1XsctgVr6b82c5k+mkRe0VoDUihGUN0wY812xo=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DF8F2DA75C
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 23:32:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778283161; cv=none; b=L+RPfcNmNXPqP8KOkobCneJTle2tJpIS8b4KrKUVzEEvuyI1m306sWWr9ace6zq9IlJOlNQY+53odmcdQ4CXnd8cnz8g5TUuOCpGI78Yd1HcDs9dTpXcfuk2DR8KepGLuKe7CTrSEATy+3+dC1r0SWeuNCCY7YAl+79g6x/VLh8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778283161; c=relaxed/simple;
+	bh=0I+fkCToHqIr2+f+LzKA2vRDbcF4Rd9EbtdBi7pBXfU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Yy8cFoMiGpNghd0Z9KbacqzWHvpMtkesAOcLEOTEi8DVUHZhEffYrZTP0nxFXxS61qSO79eNCHPBgeunWjB0oJXeJfMKng0jKrQwYQl9D1bC8WJple7MtjyAnpKiQlyvvAcrYHG7bc8sFAerLkhU4CtayvbnQddV36PQ64KYifA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fADq5EwG; arc=pass smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=TOa6G9L6vrpVhseWPRUnKiiaY+YMYuAoJhDwa5KNQiXKrLIbk6g5seS6tEiGiBCHHJBchrCDsDfYttxY4RlT+yjt7yZFKJ8dvhiCw3i2YEXhISvyhyggT3fqM+RIhMNJ51pahgqiyjFcyvnb6LtrOBx4+730IHpWpgP6WwQyHlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dZmKyuEl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fADq5EwG"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-44b052142e1so1446720f8f.1
-        for <bpf@vger.kernel.org>; Fri, 08 May 2026 16:24:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778282694; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Q0cdkwIPlSn50IVy1ftHsNx2nczXGVZru2oUkq1fr2AnoG2XorT4U+JCHT7A8Kx8J4
-         r+HG5XugEunjS0YhVuP+FGjfkcAIjYJGaro2oqMTNS96tTOBFWh/QiLEicBbkfLEqhQ7
-         nbj+hzk5cjHqLV88lPpLU0b933dNx0+ZodTSJxcH+oOdzQiMqIblMQI9hAs2+9TB1hcK
-         jxaWiDUwlXwyfbHtxBHZ/EEhwk47OPirh/KQfdc0H5SY2n5lYPcLnbmr6z3EofJtq+2m
-         t9HzjM0VtR5KpFc5ktGnFn0/SlK75UhBleHZAdRzevAK5NROTuaPwUWr2BCBisOAgS/u
-         NdIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=3bLlnEl9t20Z5sL+HZ2tOTnJ5mpcNtk5eHN0Z9JSQso=;
-        fh=YepAt3BwLPdMrOrfFEB++Il2jSHrtaeHfUxGSB1Invw=;
-        b=I785UVRfQbE6ehS9K63mRY5bzb8Q7X4Jrjq4BmyYO2KzR9IysbaEIsnZjvWoT+ELpg
-         eyx/ilijlr+aXC5JoqP1NaUw6jlzjLzsi4rsJb0g/mzQGywrRUy6xJHiUfRCAZhJCsV1
-         IUDSAzXAg9YA0vswfOP9wuI5bRAMwg6H4MGrHHCIuPpGQ5x30TnbSE39nO7jJr/0og01
-         AIKymCpnzxp8ImAV3ZiujZRLrkLUNkZUhpEGe0sTVWL4GlZs+QNEovF0TWvK9Sjq6Bn1
-         ynuIB3dMI7SNukAZm2Lt1ycUtwg/lUyIzpkKWxzqHYKUxRqCMp2m8iSpcGwauicqHIp7
-         gcrw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778282694; x=1778887494; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3bLlnEl9t20Z5sL+HZ2tOTnJ5mpcNtk5eHN0Z9JSQso=;
-        b=fADq5EwGOhjvLvHUU5nmCnPElMTxCIFeyWZD1C/OU8e9PXdJU0v8bTThJ3t55zC63x
-         sXxmDdDSyQ4e76ubfGvC24CLluddYkbC6ji2mHmdNJgNJgv7v0mmI7waIMCWQ1vZkH3U
-         YUoY0Z9p8SS6zgcdUCrqHvO+c3kjQN4atATGFuXlW0XvVVkPxrslgQSWbkNu2jgW1Ktf
-         6ktbrDT2vJzkXtKeakhgudWnEC44BgWSj87GAWWZfwRyVhM2FNGX6EKBqykYmLrCFy/B
-         wv1S3SoFeE74MEeNOzY3fldEk7ikTBD5pGlNo6edX7+zqrGExv8Z7TbUy4opN9irvCmO
-         WmuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778282694; x=1778887494;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3bLlnEl9t20Z5sL+HZ2tOTnJ5mpcNtk5eHN0Z9JSQso=;
-        b=rN7eI1y7SnKoXxyJJbzQHhQ5yE4gWah6NHQPzoPOPcUqVKj3GsKUR23p6tKWL3uqP9
-         aNKepO/oAvIv5W3NZ0i0c49MMX/ezRgXOfShwiUHpvHxIxKcyKpqXlXmslHI+NsJd00G
-         GEplreJMetMPYpd/mSzCq8sT3Pe9B5NcsXcEdPCG7+WXHedbVLjyUx8dV7VhHXc0XntU
-         8De7fU71e89FhGwbj5sTLBQheW1DDA8Ec4Pf3jWlP+9TrOedN/EXzKVICmsCRvaaQn+A
-         D4Th8XlVb+yn8xJyA5qmcIMNdObE58+LeNBVdnAHCNpOKI0nD4cV1ul/uSbX5Yrm2boD
-         4Afg==
-X-Gm-Message-State: AOJu0Yw53pLMH3pykkC89MAqtpPK+yYlEnzGNlh/1kzJQuCwPoF/Y/KL
-	M7IffeURfLv7Gr0nHoTfgcd6mye/W6CfQsEvZX52mXljfMGgB5Tcq69hbYXpyOdP12lBWZZ7vve
-	85xX/n6lp3X4vJeiu9QCGVv4R45Pu4YU=
-X-Gm-Gg: Acq92OH4Aw7X5h/1n5TPL8A1IqrOIwKOYO7MLfcfv8yrq+BBwxzi3sx4DXIlab9On69
-	gOzP4ELuCbMwGVrYNiZXHqRazbGapxeiD39nmPALPnU11WJanLWw3ovEz8N7AllQL0DQoldDXfO
-	5Vujj9OIPWuqfUq32tUwNdePMxC5Osqt32wQ/ezBrLN8yWEjpxyLPF4aMgqHTdtaXBT5S9VSVOR
-	FX/O2AS9+puAKkO4Cuq6x6S7IT1mJMqLF7AmUKUavpOvhKrnYR6OkC9s7IQI+GScjgPzy6Lkh/g
-	hj88RAFfIxItMU7JCAR5ZiRX57v1K1L9EgRsampXN7ieptGDug965RtG2azQipHVKPsmvJvhkNO
-	OwcAKstgKiOi8DE0EZwDrO8Pgag==
-X-Received: by 2002:a5d:584c:0:b0:441:1c18:f779 with SMTP id
- ffacd0b85a97d-4568e70690amr500656f8f.37.1778282693753; Fri, 08 May 2026
- 16:24:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dZmKyuEl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4ECAC2BCF6
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 23:32:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778283160;
+	bh=0I+fkCToHqIr2+f+LzKA2vRDbcF4Rd9EbtdBi7pBXfU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=dZmKyuElmGuyA/3oDvQmz9EgAMkjUutPOWdSs/N00pzwJNud4fB5ObIY58lGJq1u6
+	 5gM8YdFGpZx0646Zuk6CqiAZUyZruUWM03a6njDnKP7UyyppVoyXTbnXbvQsreEqJP
+	 Ykw5xyHeaTZMKtsOCLYqU1rjKag8p2M6rWP19k65IuFUZDdu9GUonIuKkQk8YmqX5U
+	 lyz3horAL8j+TJB1YOffh8A3Lz67PBZ8P9h5aKoknJCK5RzZke+cUv1kqn5ea75m+X
+	 dnRziY2c64d01qaQKCWItXTyGsnwI0dh4ws4yHqB3h20ZvxhaXr4YDC0kxx6tEJjXw
+	 RMSUtLSxDbtrQ==
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-8b6c9fdb68cso22387106d6.2
+        for <bpf@vger.kernel.org>; Fri, 08 May 2026 16:32:40 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yxzq1StZ8l6UrILNe7LVjLyVISTWaVhspxLbw4fEOvMh0qEdl78
+	lnmpuMqzAB7Q5nP7HxgG6PzbN5ugA51wLPA3OwT/hwbiMaB5LDcgWT6cHReGEwu7bC9+myoXjgR
+	wgY12Rbn7PD6/+s08TuY4FJqEJCrIUmU=
+X-Received: by 2002:a05:6214:458a:b0:8ac:7e8d:8599 with SMTP id
+ 6a1803df08f44-8bc43338135mr216982416d6.20.1778283160040; Fri, 08 May 2026
+ 16:32:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <e4d7b53d4963ef520541a782f5fc8108a168877c.1778176504.git.paul.chaignon@gmail.com>
-In-Reply-To: <e4d7b53d4963ef520541a782f5fc8108a168877c.1778176504.git.paul.chaignon@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 8 May 2026 16:24:42 -0700
-X-Gm-Features: AVHnY4J_ZhxnvNrnlMYmyfLTUcttZ54EjQJtfdY1PwrOVkYRbWcmDQu-FRwvnBE
-Message-ID: <CAADnVQ+kM=Zg_pcY30QHFPu_16L8wa+DbgQqnidqo-QZphihFQ@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: Don't run arg-tracking analysis twice on main subprog
-To: Paul Chaignon <paul.chaignon@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+References: <20250108010728.207536-1-houtao@huaweicloud.com>
+ <20250108010728.207536-2-houtao@huaweicloud.com> <CAPhsuW6hMX9LqnD-0tc=t+TDUFA7j8WUgNEshnYtUwwCDX-J5w@mail.gmail.com>
+In-Reply-To: <CAPhsuW6hMX9LqnD-0tc=t+TDUFA7j8WUgNEshnYtUwwCDX-J5w@mail.gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Sat, 9 May 2026 01:32:28 +0200
+X-Gmail-Original-Message-ID: <CAPhsuW7YYRD-AbJvhFEMyEGgui6Hxoasuhp7Bm1OdxP0iLNgFw@mail.gmail.com>
+X-Gm-Features: AVHnY4IYVrKN3_F6Ka1qodmDkhDqpOTHVwYgQvENWBogWoZ-8iNupslAgfu9_Sw
+Message-ID: <CAPhsuW7YYRD-AbJvhFEMyEGgui6Hxoasuhp7Bm1OdxP0iLNgFw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 01/16] bpf: Remove migrate_{disable|enable}
+ from LPM trie
+To: Hou Tao <houtao@huaweicloud.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Hao Luo <haoluo@google.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, houtao1@huawei.com, xukuohai@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 7, 2026 at 11:22=E2=80=AFAM Paul Chaignon <paul.chaignon@gmail.=
-com> wrote:
+On Fri, May 8, 2026 at 2:33=E2=80=AFPM Song Liu <song@kernel.org> wrote:
 >
-> Because subprog 0, the main subprog, is considered a global function,
-> we end up running the arg-tracking dataflow analysis twice on it. That
-> results in slightly longer verification but mostly in more verbose
-> verifier logs. This patch fixes it by keeping only the iteration over
-> global subprogs.
+> On Tue, Jan 7, 2025 at 4:55=E2=80=AFPM Hou Tao <houtao@huaweicloud.com> w=
+rote:
+> >
+> > From: Hou Tao <houtao1@huawei.com>
+> >
+> > Both bpf program and bpf syscall may invoke ->update or ->delete
+> > operation for LPM trie. For bpf program, its running context has alread=
+y
+> > disabled migration explicitly through (migrate_disable()) or implicitly
+> > through (preempt_disable() or disable irq). For bpf syscall, the
+> > migration is disabled through the use of bpf_disable_instrumentation()
+> > before invoking the corresponding map operation callback.
+> >
+> > Therefore, it is safe to remove the migrate_{disable|enable){} pair fro=
+m
+> > LPM trie.
 >
-> When running over all of Cilium's programs with BPF_LOG_LEVEL2, this
-> reduces verbosity by ~20% on average.
->
-> Fixes: bf0c571f7feb6 ("bpf: introduce forward arg-tracking dataflow analy=
-sis")
-> Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
-> ---
->  kernel/bpf/liveness.c | 11 ++---------
->  1 file changed, 2 insertions(+), 9 deletions(-)
->
-> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> index 332e6e003f27..505250998f36 100644
-> --- a/kernel/bpf/liveness.c
-> +++ b/kernel/bpf/liveness.c
-> @@ -1914,15 +1914,6 @@ int bpf_compute_subprog_arg_access(struct bpf_veri=
-fier_env *env)
->                 return -ENOMEM;
->         }
->
-> -       instance =3D call_instance(env, NULL, 0, 0);
-> -       if (IS_ERR(instance)) {
-> -               err =3D PTR_ERR(instance);
-> -               goto out;
-> -       }
-> -       err =3D analyze_subprog(env, NULL, info, instance, callsites);
-> -       if (err)
-> -               goto out;
-> -
->         /*
->          * Subprogs and callbacks that don't receive FP-derived arguments
->          * cannot access ancestor stack frames, so they were skipped duri=
-ng
-> @@ -1934,6 +1925,8 @@ int bpf_compute_subprog_arg_access(struct bpf_verif=
-ier_env *env)
->          * each subprog is analyzed before its callees, allowing the
->          * recursive walk inside analyze_subprog() to naturally
->          * reach nested callees that also lack FP-derived args.
-> +        *
-> +        * Note the main subprog is also analyzed as part of this loop.
->          */
+> We got some ENOMEM from bpf_map_update_batch() on LPM_TRIE.
+> I suspect, this is the trigger, as we are missing
+> bpf_disable_instrumentation() in bpf_map_do_batch(). IOW, I think we
+> need something like the following.
 
-Thanks for the report.
-I guess the fix is correct.
-This part of the comment needs to be adjusted:
-"they were skipped during
-         * the recursive walk above."
+Please ignore this... I misread the code.
 
-I wonder whether something like this is cleaner?
--               if (info[sub].at_in && !bpf_subprog_is_global(env, sub))
-+               if (info[sub].at_in && (!bpf_subprog_is_global(env,
-sub) || sub =3D=3D 0))
-
-This part of the comment:
-"Async callbacks (timer, workqueue) are
-* also not reachable from the main program's call graph."
-
-is also not quite correct.
-In here:
-                } else if (bpf_calls_callback(env, idx)) {
-                        callee =3D find_callback_subprog(env, insn, idx,
-&caller_reg, &cb_callee_reg);
-
-they could have been reached, but find_callback_subprog()
-will ignore timers because FP-derived args won't be passed
-into them.
-
-Eduard,
-wdyt?
+Sorry for the noise.
+Song
