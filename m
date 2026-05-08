@@ -1,60 +1,60 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135F3313E2B;
-	Fri,  8 May 2026 10:50:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448231F427C;
+	Fri,  8 May 2026 10:52:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778237460; cv=none; b=pCOpR7OjKSCxS0RJYQkqcDn8UmUoeohfC8kEDnJfKoAUK1+oauA4jYK7Z6WlqpNRg5llZH4RILSUOhyHJ4iZ2THUbwL8po0TuKAe31UYraOh62PraxU+zwTaghq/QiYsLAk0OrNqt2qkLdC4C/3oNeGic1M3uK4dObo0g+ZelnM=
+	t=1778237562; cv=none; b=i/MKTabL2UO8EnYS4hra1qOkW8yBtpYHNb0t9S9jBt8IIrSEEfR/Dpo9JrYXJNXva0vPNL4KPNc9eQlxwKecO1W34XDjAJ3VBvxlVvIq4KJSmGYlSCiMsPOkA1ucm51Q1aD68HyFIERB8sJsp57vCSm6p6Ft/HpoH76ZNEQong8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778237460; c=relaxed/simple;
-	bh=YFC8QwU/NhQYvNX+rX2DF+nP/wp/vjs7HVq+4jB6vP8=;
+	s=arc-20240116; t=1778237562; c=relaxed/simple;
+	bh=0eXiWAy4rN82dSvq360mPdStsaIril6W4nKSBetAO1k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gaMEkb6z6tTSXVTwYJHVchBy6c9CaBTSGw88GK2EmNbX60JOqidWYsWTxQuDOjwjHaWDhje4BPuMHFjqN+IDe0+0PJ1Ni4FhvpkX9BXuRVoi5zYcCJd2e2jSuH4PbjG25BUVT8vFjcTDH8WXrlMb3hOjOKZZbvReB2p8J5DBNjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gbU7u2kx; arc=none smtp.client-ip=148.163.158.5
+	 In-Reply-To:Content-Type; b=ZKhkHP+pSleeDl0QfACdDM3hkrUb5ZQ97/E6TXgn8QCGrItBAz4lwSyilL1WH8U9/6hG79t+E77B0x+chkWO10Sl/LX9OSSV9/vc5GbJEjehP/x3kzlkjlIcK4/nTHvEwh7DWva8YDV7HCpwdcOSd/Jf9PsDvA/PsLJqWjbT1Wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=V/Lb1iUf; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gbU7u2kx"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 647MbqBO3351555;
-	Fri, 8 May 2026 10:50:27 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="V/Lb1iUf"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 647Jf9S82830434;
+	Fri, 8 May 2026 10:52:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=4qyopV
-	bNDsK1nvVk0S0OZZmFZASUZ2QQfuwkr1wO2k4=; b=gbU7u2kxFU7SE3WQlBX+x6
-	Geq60OqOf2vJCnSKQhuZwiWbOZPqJ6M2pkRc9b4b+bNInIHDeIZOl5KyQCwSqQbx
-	swAi1AlrZiP4e7pvIV7aOibJq3PGiFBjPlacjajY/UboeJA2tFQdqE51i9mnlqgl
-	EbEB2HDDNxJ1q1n/medD/L8gZqavmJ2VbwfTSyfQjgFZ/E0Xqkzq8qphbzW+3Bs6
-	CCb3payu31WyvbJWEp2ed40DzZwVSN3c5h63QeN7xLtX0E7TjOeZjbCoI5iG69EM
-	rFjc7BT5R8NS4rz3KTx9mmyr+kaBrEuHo4wX6KNFXcP1SiyVRcXV83v8s2LePYwA
+	:message-id:mime-version:references:subject:to; s=pp1; bh=tMFcUg
+	6YI0uRs0oFeC5tG4Rvu7Ar3pTJNfqJiF659xo=; b=V/Lb1iUfWIu0JXHYBXssnr
+	/iIE/nvjj2aOJUE93RS3rXzL7gDsr/ZzBO/zrmoaf5pDd0ZngHZVYicUpNpiNp/Z
+	gPRP8EyUNZXFXS8TQI6mmRnfzR7feW07plzHgrPtMQ5XFfLdP+H9Zu9C3m1hNw0J
+	NnjsY1l8+PdXL6wfA54zBYJQsr7RwL2OFSUg4BKTGy/2QsnAtzIsLiKzfEc63x2m
+	tMI2QhPpPehjY+o0qYTtHNQd8bwls1SeQoFwt6+9QALNbaTT2aVk8y+QTKuy7cep
+	C3D8H/exX5uEia9T+kuwjnXGLs5K95WQw5/Cgq/X2N99gFacWkcG4K68BrYhEKvQ
 	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9w6t0sh-1
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9v7ubd4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 08 May 2026 10:50:26 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 648Addm6030050;
-	Fri, 8 May 2026 10:50:25 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e10072vwq-1
+	Fri, 08 May 2026 10:52:04 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 648AdaCW026903;
+	Fri, 8 May 2026 10:52:03 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dwuywfxya-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 08 May 2026 10:50:25 +0000 (GMT)
+	Fri, 08 May 2026 10:52:03 +0000 (GMT)
 Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 648AoMKx49218034
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 648ApxPQ61800952
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 8 May 2026 10:50:22 GMT
+	Fri, 8 May 2026 10:51:59 GMT
 Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 23FED2004E;
-	Fri,  8 May 2026 10:50:22 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 9B6572004D;
+	Fri,  8 May 2026 10:51:59 +0000 (GMT)
 Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A20CB2004B;
-	Fri,  8 May 2026 10:50:20 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 86F6820040;
+	Fri,  8 May 2026 10:51:56 +0000 (GMT)
 Received: from [9.111.207.158] (unknown [9.111.207.158])
 	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  8 May 2026 10:50:20 +0000 (GMT)
-Message-ID: <a420eb5d-06de-4600-8356-baa1dbf455f0@linux.ibm.com>
-Date: Fri, 8 May 2026 12:50:19 +0200
+	Fri,  8 May 2026 10:51:56 +0000 (GMT)
+Message-ID: <606aebad-d83f-4dd0-9316-9d6dad0cdcc0@linux.ibm.com>
+Date: Fri, 8 May 2026 12:51:55 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -62,13 +62,13 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 05/19] unwind_user/sframe: Add support for reading
- .sframe contents
-To: linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
+Subject: Re: [PATCH v14 12/19] unwind_user/sframe: Add .sframe validation
+ option
+To: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf
+ <jpoimboe@kernel.org>,
         Indu Bhagat <ibhagatgnu@gmail.com>,
         Dylan Hatch <dylanbhatch@google.com>
-Cc: bpf@vger.kernel.org, linux-mm@kvack.org,
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         linux-trace-kernel@vger.kernel.org, x86@kernel.org,
         Namhyung Kim <namhyung@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -94,239 +94,95 @@ Cc: bpf@vger.kernel.org, linux-mm@kvack.org,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Kees Cook <kees@kernel.org>, Sam James <sam@gentoo.org>
 References: <20260505121718.3572346-1-jremus@linux.ibm.com>
- <20260505121718.3572346-6-jremus@linux.ibm.com>
+ <20260505121718.3572346-13-jremus@linux.ibm.com>
 Content-Language: en-US
 From: Jens Remus <jremus@linux.ibm.com>
 Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20260505121718.3572346-6-jremus@linux.ibm.com>
+In-Reply-To: <20260505121718.3572346-13-jremus@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=XPQAjwhE c=1 sm=1 tr=0 ts=69fdbff3 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA4MDExMCBTYWx0ZWRfX2auMkqKWq9zH
+ Kavt7w6o+5VsedWe6iM0PPPzgQRh4KusiXlnezRf3zsYGS/AO1+pdCbi00e+jrqb4oj3eBWBvWV
+ uFfuZ3QmH6iquylpROzws0b7SgAsixvbXKJl/2XoCsQMiOcBzDZ4Sfxopeqpyf3FK5r1zbVIaFc
+ V2Jt/34vzxbCvyRZ9+2jxCD98J3PrUFo7OFtFzWy+CYPa8CMyJPgXylbL9E+lBhVIIta6svQ0LC
+ zZ9yPoSYIXlPir2H6EWqLJEZ4w5y3FgP/k9xswkHo6EFD+A6jap6eGBvGKpzN8WkHGk5sRLVrgj
+ 40MLKp7jdLJYQmD02rkYvUkAQOGfdq6sQ2AjAIggoA6O0/PCv9QccQEhZ2HdxYkMB7X6jb236Lo
+ sI8TWIY/ZYOgDVFiWfn+1gk8reKmStmBnQFIiIPrVAs7sV8BeDV3MS5LYxM/hAKi9+BloqOHFOw
+ MOtkDQlPIadYUtb9lFg==
+X-Proofpoint-GUID: MwWipGJ7KURaSVIuB_RtelIYOy5mE4YQ
+X-Proofpoint-ORIG-GUID: Ocagi59Tk5URWX8c5UV7KnL-pAuRJkoL
+X-Authority-Analysis: v=2.4 cv=eu/vCIpX c=1 sm=1 tr=0 ts=69fdc055 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
  a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=YuDcBBqGAAAA:8 a=f8iy6pEWjRDl6Rsn33oA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=V9_jqlfyBUA7Gw2gN5zN:22
-X-Proofpoint-ORIG-GUID: cMxqurcr_z7KRrmEq6LDwDaloYuDU_hQ
-X-Proofpoint-GUID: DVZllXSB0wfsGdZqR_3OWnuptH60tkEi
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA4MDExMCBTYWx0ZWRfX37YENEviiq0t
- bK7ypIgBvD4UujuUEIhlaw0h3qGO9xS/0tLcqxN50ASRgu+Wc9Y8nf0Cqck7yoSBl+fczXwAV+U
- 0MI+Y3qiuoHotO+0aJDLhcefJy0AsbzdNIPzPjVcHZ60Nh3CP1PSzFJf57kHIarwKhSZsN+KXxO
- THyfzdSJ7pgkTtCm11UseFdbO+LRA6AAoi8P+K/CT9OSElfrjZWitpu88xoSdTuIgbdO+m81q20
- Ha7gb2J3P+bTjvx15wRmyaU3bRGPPQLgNPKyUQmc6avZg7dhs8bHCvKQ4dGuzsCJW69EVBN+s2t
- 2eRwgz7sR+fJcjrsoxoH1ktMsAdDKeyCDNpZI9dMGJZaWU3yMhT+lraD3ir14gkiajvAffEjZSo
- 4U5V1NsGZ65pSOmgI6TSuc0UDfURcT/2rnlcO00pUCpmpB0WJiwp+oxi71ckziH294JqA1g9ahR
- poSCTh0rQn1+dsHzCGQ==
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8
+ a=VwQbUJbxAAAA:8 a=LFt20mCCc4CE-LtB3JUA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-05-07_02,2026-05-06_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0 spamscore=0
- priorityscore=1501 impostorscore=0 phishscore=0 malwarescore=0 clxscore=1015
+ priorityscore=1501 phishscore=0 lowpriorityscore=0 clxscore=1015 adultscore=0
+ suspectscore=0 malwarescore=0 bulkscore=0 impostorscore=0 spamscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605080110
 
 On 5/5/2026 2:17 PM, Jens Remus wrote:
 > From: Josh Poimboeuf <jpoimboe@kernel.org>
 > 
-> In preparation for using sframe to unwind user space stacks, add an
-> sframe_find() interface for finding the sframe information associated
-> with a given text address.
+> Add a debug feature to validate all .sframe sections when first loading
+> the file rather than on demand.
 > 
-> For performance, use user_read_access_begin() and the corresponding
-> unsafe_*() accessors.  Note that use of pr_debug() in uaccess-enabled
-> regions would break noinstr validation, so there aren't any debug
-> messages yet.  That will be added in a subsequent commit.
-> 
-> Link: https://lore.kernel.org/all/77c0d1ec143bf2a53d66c4ecb190e7e0a576fbfd.1737511963.git.jpoimboe@kernel.org/
-> Link: https://lore.kernel.org/all/b35ca3a3-8de5-4d32-8d30-d4e562f6b0de@linux.ibm.com/
-> 
-> [ Jens Remus: Add initial support for SFrame V3 (limited to regular
-> FDEs).  Add support for PC-relative FDE function start offset.  Simplify
-> logic by using an internal FDE representation.  Rename struct sframe_fre
-> to sframe_fre_internal to align with struct sframe_fde_internal.
-> Cleanup includes.  Fix checkpatch errors "spaces required around that
-> ':'". ]
+> [ Jens Remus: Add support for SFrame V3.  Add support for PC-relative
+> FDE function start offset.  Adjust to rename of struct sframe_fre to
+> sframe_fre_internal.  Use %#x/%#lx format specifiers. ]
 
 > diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
 
-> +static __always_inline int __read_fde(struct sframe_section *sec,
-> +				      unsigned int fde_num,
-> +				      struct sframe_fde_internal *fde)
+> +static int safe_read_fde(struct sframe_section *sec,
+> +			 unsigned int fde_num, struct sframe_fde_internal *fde)
 > +{
-> +	unsigned long fde_addr, fda_addr, func_addr;
-
-	unsigned long fde_addr, fda_addr, func_start, func_end;
-
-> +	struct sframe_fde_v3 _fde;
-> +	struct sframe_fda_v3 _fda;
+> +	int ret;
 > +
-> +	fde_addr = sec->fdes_start + (fde_num * sizeof(struct sframe_fde_v3));
-> +	unsafe_copy_from_user(&_fde, (void __user *)fde_addr,
-> +			      sizeof(struct sframe_fde_v3), Efault);
-> +
-> +	func_addr = fde_addr + _fde.func_start_off;
-> +	if (func_addr < sec->text_start || func_addr >= sec->text_end)
-> +		return -EINVAL;
-
-	func_start = fde_addr + _fde.func_start_off;
-	func_end = func_start + _fde.func_size;
-	if (func_start < sec->text_start || func_end > sec->text_end)
-		return -EINVAL;
-
-This would validate that the whole function described by the FDE is
-within the text section and not only the function start.
-
-
-Note that, unrelated to above change, this check in general causes
-sframe_validate_section() to fail, if one sframe section covers more
-than one text section (unrelated to whether it is actually registered
-for multiple text sections), for instance in case of Dylan's sframe
-kernel stacktracer on arm64.  Should the check therefore be made
-conditional on whether __read_fde() is called from __find_fde() or
-sframe_validate_section()?  Or shall we drop this check as it does not
-provide that much benefit during normal stacktracing use:
-- sframe_find() obtains the struct sframe_section *sec from the
-  mm->sframe_mt based on IP.  So IP must be within sec->text_start and
-  sec->text_end.
-- __find_fde() only returns a FDE, if the IP is within
-  [fde->func_addr, fde->func_addr + fde->func_size[.
-Dropping the check would allow the function start/end to be outside the
-text section.
-
-> +
-> +	fda_addr = sec->fres_start + _fde.fres_off;
-> +	if (fda_addr + sizeof(struct sframe_fda_v3) > sec->fres_end)
-> +		return -EINVAL;
-> +	unsafe_copy_from_user(&_fda, (void __user *)fda_addr,
-> +			      sizeof(struct sframe_fda_v3), Efault);
-
-Can unsafe_copy_from_user() be used for unaligned fda_addr, at least
-on x86-64, s390 64-bit, and amr64?
-
-
-Do the FDE type, FDE PC type, and FRE type values need to be validated
-here as well?
-
-	unsigned char fde_type = SFRAME_V3_FDE_TYPE(_fda.info2);
-	unsigned char fde_pctype = SFRAME_V3_FDE_PCTYPE(_fda.info);
-	unsigned char fre_type = SFRAME_V3_FDE_FRE_TYPE(_fda.info);
-
-The FDE type would get validatd by __read_fre_datawords(), which is
-called after __read_fde(), if the read FDE is the one of interest.
-So that does not neccessarily need to be checked here.  Do you agree?
-
-The FDE PC type is currently not checked for supported values anywhere.
-That one would make sense to be checked here:
-
-	if (fde_pctype != SFRAME_FDE_PCTYPE_INC &&
-	    fde_pctype != SFRAME_FDE_PCTYPE_MASK)
-		return -EINVAL;
-
-The FRE type would get validated by __read_fre(), which is called
-somewhere down the line after __read_fde().  So that does not
-neccesarily need to be checked here.   Do you agree?
-
-> +
-> +	fde->func_addr	= func_addr;
-
-	fde->func_addr	= func_start;
-
-> +	fde->func_size	= _fde.func_size;
-> +	fde->fda_off	= _fde.fres_off;
-> +	fde->fres_off	= _fde.fres_off + sizeof(struct sframe_fda_v3);
-> +	fde->fres_num	= _fda.fres_num;
-> +	fde->info	= _fda.info;
-> +	fde->info2	= _fda.info2;
-> +	fde->rep_size	= _fda.rep_size;
-> +
-> +	return 0;
-> +
-> +Efault:
-> +	return -EFAULT;
+> +	if (!user_read_access_begin((void __user *)sec->sframe_start,
+> +				    sec->sframe_end - sec->sframe_start))
+> +		return -EFAULT;
+> +	ret = __read_fde(sec, fde_num, fde);
+> +	user_read_access_end();
+> +	return ret;
 > +}
 
-> +static __always_inline int __read_fre(struct sframe_section *sec,
-> +				      struct sframe_fde_internal *fde,
-> +				      unsigned long fre_addr,
-> +				      struct sframe_fre_internal *fre)
+> +static int sframe_validate_section(struct sframe_section *sec)
 > +{
-> +	unsigned char fde_type = SFRAME_V3_FDE_TYPE(fde->info2);
-> +	unsigned char fde_pctype = SFRAME_V3_FDE_PCTYPE(fde->info);
-> +	unsigned char fre_type = SFRAME_V3_FDE_FRE_TYPE(fde->info);
-> +	unsigned char dataword_count, dataword_size;
-> +	s32 cfa_off, ra_off, fp_off;
-> +	unsigned long cur = fre_addr;
-> +	unsigned char addr_size;
-> +	u32 ip_off;
-> +	u8 info;
+> +	unsigned long prev_ip = 0;
+> +	unsigned int i;
 > +
-> +	addr_size = fre_type_to_size(fre_type);
-> +	if (!addr_size)
-> +		return -EFAULT;
+> +	for (i = 0; i < sec->num_fdes; i++) {
+> +		struct sframe_fre_internal *fre, *prev_fre = NULL;
+> +		unsigned long ip, fre_addr;
+> +		struct sframe_fde_internal fde;
+> +		struct sframe_fre_internal fres[2];
+> +		bool which = false;
+> +		unsigned int j;
+> +		int ret;
 > +
-> +	if (fre_addr + addr_size + 1 > sec->fres_end)
-> +		return -EFAULT;
-> +
-> +	UNSAFE_GET_USER_INC(ip_off, cur, addr_size, Efault);
-> +	if (fde_pctype == SFRAME_FDE_PCTYPE_INC && ip_off > fde->func_size)
+> +		ret = safe_read_fde(sec, i, &fde);
 
-	if ((fde_pctype == SFRAME_FDE_PCTYPE_INC && ip_off >= fde->func_size) ||
-	    (fde_pctype == SFRAME_FDE_PCTYPE_MASK && ip_off >= fde->rep_size))
+Iterating over all FDEs may cause __read_fde() and thus safe_read_fde()
+to fail if one sframe section covers multiple text sections (regardless
+of whether it is also registered for multiple text sections), as
+__read_fde() checks whether the read FDE function start address is
+within [sec->text_start, sec->text_end[.
 
-For PCTYPE_INC the FRE IP offset must be less than the FDE function size.
-For PCTYPE_MASK the FRE IP offset must be less than the FDE repetition size.
+See my related comments in my reply to [PATCH v14 05/19] unwind_user/
+sframe: Add support for reading .sframe contents.
 
-> +		return -EFAULT;
+> +		if (ret) {
+> +			dbg_sec("safe_read_fde(%u) failed\n", i);
+> +			return ret;
+> +		}
 > +
-> +	UNSAFE_GET_USER_INC(info, cur, 1, Efault);
-> +	dataword_count = SFRAME_V3_FRE_DATAWORD_COUNT(info);
-> +	dataword_size  = dataword_size_enum_to_size(SFRAME_V3_FRE_DATAWORD_SIZE(info));
-> +	if (!dataword_count || !dataword_size)
-> +		return -EFAULT;
-> +
-> +	if (cur + (dataword_count * dataword_size) > sec->fres_end)
-> +		return -EFAULT;
-> +
-> +	/* TODO: Support for flexible FDEs not implemented yet. */
-> +	if (fde_type != SFRAME_FDE_TYPE_DEFAULT)
-> +		return -EFAULT;
-> +
-> +	UNSAFE_GET_USER_INC(cfa_off, cur, dataword_size, Efault);
-> +	dataword_count--;
-> +
-> +	ra_off = sec->ra_off;
-> +	if (!ra_off) {
-> +		if (!dataword_count--)
-> +			return -EFAULT;
-> +
-> +		UNSAFE_GET_USER_INC(ra_off, cur, dataword_size, Efault);
-> +	}
-> +
-> +	fp_off = sec->fp_off;
-> +	if (!fp_off && dataword_count) {
-> +		dataword_count--;
-> +		UNSAFE_GET_USER_INC(fp_off, cur, dataword_size, Efault);
-> +	}
-> +
-> +	if (dataword_count)
-> +		return -EFAULT;
-> +
-> +	fre->size	= addr_size + 1 + (dataword_count * dataword_size);
-> +	fre->ip_off	= ip_off;
-> +	fre->cfa_off	= cfa_off;
-> +	fre->ra_off	= ra_off;
-> +	fre->fp_off	= fp_off;
-> +	fre->info	= info;
-> +
-> +	return 0;
-> +
-> +Efault:
-> +	return -EFAULT;
-> +}
-Thanks and regards,
+Regards,
 Jens
 -- 
 Jens Remus
