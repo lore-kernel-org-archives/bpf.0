@@ -1,140 +1,118 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3772B2F8EA7
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 00:14:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DB62F8E8C
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 00:35:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778199276; cv=none; b=shhsMMSHhp3MzxFJn8EV5UBGyrXuTuaQvtLL0nEibyJpyysvRHs5bpSGPDsiYyMLpPcoRywpXqKxR6+LgDCR1JCJiOL5dk9PK4k7pTBLvxFy8HzPfilSCMzmzSqWy57eEtAAdZSx5KFTY/TNyNMzFFr9asGV/giqWnz3cNuSOXI=
+	t=1778200514; cv=none; b=seFQOH4VVpEgWwfBU8e1bmVDKGVp7TyxCV7vaJjzngth4VH1H9CZfKvZ0CcRvbEsOwEZQOf5Wdi80JeA5cnN+/8Md631jr/IEoMLoVubaSvnyIDR3+/MTTZvy5+ZYMrM0vUgwDr3744KX6uqI1zzFpCPzHRikXrmGVTlFu8ns5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778199276; c=relaxed/simple;
-	bh=nfEu2DOyQ09PVfhkfMQIEZfXjk71TMpYN7o+YRgYcR0=;
+	s=arc-20240116; t=1778200514; c=relaxed/simple;
+	bh=B+gZ/Je76IHNHgfCXvLg2qpH14qkoyavbJ02vTDedRs=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=sBKEd8ik0vkj1LPO9NVMw4zXZz1Ur9gsqtGAL2mEKJXWNlKGYyOFeHd8kxjZK/6SHa/lNKz+nYfm3Lo5QS0V9+82b5uB0fcC7dnqWsD/UMeAwHSmnuaIVNGTHpeAkxYVBmIMSMdzRp0JyLEp/ZCr/MGlAIul6JWEsQUg3VkPRSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bXreIGhE; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=l+oNNSnR0jLXf/FAOclXVH+bDsBf53C7gJSiexnWDltz579jR+zoPTVy2K+2dTB0AvbFRfPt82YBzgbYnxrvbvWvD5Gt5mtngOZ80Kr3wBKKWOHGtezQtqSNGC9eCNrRzDE6chdKfnTKB8JVZ6AdTZFuGBVNaspWpNK5+s8anGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JYVx/+Ms; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bXreIGhE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F11BC2BCB2;
-	Fri,  8 May 2026 00:14:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JYVx/+Ms"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02A36C2BCB2;
+	Fri,  8 May 2026 00:35:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778199275;
-	bh=nfEu2DOyQ09PVfhkfMQIEZfXjk71TMpYN7o+YRgYcR0=;
+	s=k20201202; t=1778200514;
+	bh=B+gZ/Je76IHNHgfCXvLg2qpH14qkoyavbJ02vTDedRs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=bXreIGhEe2Vit5+wvwQR4Ra0edMDNFItGnzIVy7lI7qBJHzd03GYXGOPyundRTNLh
-	 yqbAMlQ3vBvbet3sY1XKbc0iHHvmuMekVWF/fiFg0PsZIEMEOwlhNKiOSDSbpBHyJ1
-	 5bPeUL47SBKnZr7pqMTk72VcgnFMAktmBqj1AXVNSQhw1KFsSSZ4c5nIQ2IHxmDAZx
-	 kCR09kQ9FkSMsanzBzZPlzn4JFUelCKqlcxqKWDxG8JDMVKPqDWqubA3dN2QAkYJre
-	 MvjmzUJu0lK+8SSdcKrkEkbt5/r8W3xwFcSjbHnIuyHGRVcweYgoGUlSNx8uEGt+AP
-	 yPvDrwWzHgQ7A==
+	b=JYVx/+MsVN/LOVs/Q0h4ejfkCg/45g6TpDMT/39lZE7so3ah0ft2UO+GihiwcOcwI
+	 qxKMQ7nhQT5fs8BhBQxBI6JFzROdgdv47qFc3YVTu1cCk9RfkJhDexW7duVejA8+f/
+	 speD2U99s+DQ0sPLcYhuSYPuraB6DHxM3GfnQNh8y9ktqAGLoE1BU11rYSJzclLKHE
+	 pyFDUrabbrRMnrBxn0T39pNPsCmD0fWa0qqS9LG1S81XjRSz0hEueMepoT1dc6Suri
+	 arfUgmI9okW6WUSEHWUMPd6Tfb9cLDE6QC9vobsHyNwUoUrcYA0SNelUOWynmelQHB
+	 dokVWFCeH8L/w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v7 02/10] crypto: pkcs7: add ability to extract signed
- attributes by OID
+Subject: Re: [PATCH v7 03/10] crypto: pkcs7: add tests for
+ pkcs7_get_authattr
 Reply-To: sashiko@lists.linux.dev
 To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260507191416.2984054-3-bboscaccy@linux.microsoft.com>
-References: <20260507191416.2984054-3-bboscaccy@linux.microsoft.com>
+In-Reply-To: <20260507191416.2984054-4-bboscaccy@linux.microsoft.com>
+References: <20260507191416.2984054-4-bboscaccy@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 08 May 2026 00:14:34 +0000
-Message-Id: <20260508001435.8F11BC2BCB2@smtp.kernel.org>
+Date: Fri, 08 May 2026 00:35:13 +0000
+Message-Id: <20260508003514.02A36C2BCB2@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Premature loop termination if a verified signer lacks authenticate=
-d attributes (`sinfo->authattrs =3D=3D NULL`).
-- [Medium] The function returns the last matching attribute value rather th=
-an the first one, contradicting its API documentation.
+- [Medium] Test failures in `pkcs7_preparse` are silently masked because th=
+e function unconditionally returns 0 instead of propagating the error code.
 --
 
-commit 8f64855e85aaa27bba380d666827191e50cceb99
+commit 49875871a24595817e686cb5ad55b01eebf05536
 Author: James Bottomley <James.Bottomley@HansenPartnership.com>
 
-crypto: pkcs7: add ability to extract signed attributes by OID
+crypto: pkcs7: add tests for pkcs7_get_authattr
 
-This commit adds an API, pkcs7_get_authattr(), to extract the value of an
-authenticated attribute by a specific OID. It parses the signed attributes
-and is intended to return the first matching value.
+Add example code to the test module pkcs7_key_type.c that verifies a message
+and then pulls out a known authenticated attribute.
 
-> diff --git a/crypto/asymmetric_keys/pkcs7_parser.c b/crypto/asymmetric_ke=
-ys/pkcs7_parser.c
-> index 6e3ffdac83ace..d467866f7d930 100644
-> --- a/crypto/asymmetric_keys/pkcs7_parser.c
-> +++ b/crypto/asymmetric_keys/pkcs7_parser.c
+> diff --git a/crypto/asymmetric_keys/pkcs7_key_type.c b/crypto/asymmetric_=
+keys/pkcs7_key_type.c
+> index b930d3bbf1af5..e0b1ce0202f6d 100644
+> --- a/crypto/asymmetric_keys/pkcs7_key_type.c
+> +++ b/crypto/asymmetric_keys/pkcs7_key_type.c
+
 [ ... ]
-> @@ -211,6 +212,86 @@ int pkcs7_get_content_data(const struct pkcs7_messag=
-e *pkcs7,
+
+> @@ -51,16 +52,57 @@ static int pkcs7_view_content(void *ctx, const void *=
+data, size_t len,
+>  static int pkcs7_preparse(struct key_preparsed_payload *prep)
+>  {
+
 [ ... ]
-> +int pkcs7_aa_note_attr(void *context, size_t hdrlen,
-> +		       unsigned char tag,
-> +		       const void *value, size_t vlen)
-> +{
-> +	struct pkcs7_aa_context *ctx =3D context;
-> +
-> +	if (ctx->found) {
-> +		ctx->data =3D value;
-> +		ctx->len =3D vlen;
+
+> +	/*
+> +	 * the parsed message has no trusted signer, so nothing should
+> +	 * be returned here
+> +	 */
+> +	ret =3D pkcs7_get_authattr(pkcs7, OID_messageDigest, &data, &len);
+> +	if (ret =3D=3D 0) {
+> +		pr_err("OID returned when no trust in signer\n");
+> +		goto out;
+
+If the test fails here, does this need to set ret to a negative error code
+like -EINVAL before jumping to the out label? Since ret is 0 here, returning
+ret at the end would still signal success.
+
 > +	}
+> +	/* add trust and check again */
+> +	ret =3D verify_pkcs7_message_sig(NULL, 0, pkcs7,
+> +				       VERIFY_USE_SECONDARY_KEYRING, usage,
+> +				       NULL, NULL);
+> +	if (ret) {
+> +		pr_err("verify_pkcs7_message_sig failed!!\n");
+> +		goto out;
+> +	}
+> +	/* now we should find the OID */
+> +	ret =3D pkcs7_get_authattr(pkcs7, OID_messageDigest, &data, &len);
+> +	if (ret) {
+> +		pr_err("Failed to get message digest\n");
+> +		goto out;
+> +	}
+> +	pr_info("Correctly Got message hash, size=3D%zu\n", len);
 > +
+> + out:
+> +	pkcs7_free_message(pkcs7);
 > +	return 0;
-> +}
 
-The documentation for pkcs7_get_authattr() mentions it returns the first ma=
-tch
-in parse order.
+Should this return ret instead of 0? If any of the earlier assertions fail
+and jump to the out label, returning 0 unconditionally discards the error
+state and signals a successful key instantiation to the keys subsystem.
 
-If an authenticated attribute contains multiple values within its SET OF AN=
-Y,
-or if multiple attributes share the same OID, won't this callback continuou=
-sly
-overwrite ctx->data and return the last matching value instead of the first
-one?
-
-Could we enforce capturing only the first value by checking if ctx->data is
-already set before assigning it?
-
-[ ... ]
-> +int pkcs7_get_authattr(const struct pkcs7_message *pkcs7,
-> +		       enum OID oid,
-> +		       const void **_data, size_t *_len)
-> +{
-> +	struct pkcs7_signed_info *sinfo =3D pkcs7->signed_infos;
-> +	struct pkcs7_aa_context ctx;
-> +
-> +	ctx.data =3D NULL;
-> +	ctx.oid_to_find =3D oid;
-> +
-> +	for (; sinfo; sinfo =3D sinfo->next) {
-> +		int ret;
-> +
-> +		/* only extract OIDs from validated signers */
-> +		if (!sinfo->verified)
-> +			continue;
-> +
-> +		ret =3D asn1_ber_decoder(&pkcs7_aa_decoder, &ctx,
-> +				       sinfo->authattrs, sinfo->authattrs_len);
-> +		if (ret < 0 || ctx.data !=3D NULL)
-> +			break;
-> +	}
-
-PKCS#7 allows authenticated attributes to be optional, meaning sinfo->autha=
-ttrs
-could legitimately be NULL with a length of 0.
-
-If a verified signer has no authenticated attributes, asn1_ber_decoder() wi=
-ll
-be called with datalen =3D=3D 0 and fail with a data overrun error, returni=
-ng a
-negative value.
-
-Because the loop breaks on ret < 0, won't this permanently abort the search
-across all subsequent signers instead of skipping to the next one?
+>  }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260507191416.2984=
-054-1-bboscaccy@linux.microsoft.com?part=3D2
+054-1-bboscaccy@linux.microsoft.com?part=3D3
