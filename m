@@ -1,87 +1,44 @@
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 015AE3F7864
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 15:03:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39124276058;
+	Fri,  8 May 2026 15:15:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778252633; cv=none; b=My/TEjcMNhG1H+J9OZnLfBMVoRhzYsmNqOA4TEsBnFsIrzY6ukENv097b5PanyPDoultRTd8xfdL82VRZThyXTRIRnWymqGPm7QdYGdv3+Nx3ZiyAHgcvzeqY9MWWjsr/JaF5J77veyCYtld1Zhv1FIpSRCgXL7PLmfY5YR5Ae8=
+	t=1778253306; cv=none; b=Z9xo0lZY7067eJPIQxOcvjyOCc+zt1YOMxikBjpZgcv5uOWVto83bl/lyuwtG6UUiiI6yNUeIX3HJjRYlSUnyxQQbAE7ipZerLYDa2RNjTdx7LqG7SDJr8DRrF3cyImu4Nqr1Z91VT2QNDibssff0tE7iPbV6pszGMQxP/E+/PA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778252633; c=relaxed/simple;
-	bh=KD3nw7Ltczkx1jI5uovKefPtMpE0/TaBF2VlVH6+8Tw=;
+	s=arc-20240116; t=1778253306; c=relaxed/simple;
+	bh=mhumYvyD+/uwFXTOvsTEGXrAqYN095YRK12Bho+zCN8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X021+TzXIAUy1w/iaxGGmg1Ih1+SU6KirbDaQpW/TVN0k1FUXtIDGjxXh8T9ACpfbiTzEWDxpdjzOgecxl2xNKnopifK6ObOSqm0TzZeKB3O3aHOXSeCr7rxlfNASyadfxuO5YgILtc5q1gwX8eWeXOw/k7VBpCkJv/I1LnVIqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZprT7Gbz; arc=none smtp.client-ip=209.85.214.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=s2TkKHpczZI1/vLiIvzB9wuGHrQ0cr6PTGq60iXJoSW7DInwwfPFE/UUaY5skJ/yEQpuaph6KENhmRjHUCtGAcfrROJVLNlL6PJu4TBzhcKjswKhHCCnqL2NfOwm5qRSWOj1eXyit+jlrgKRfxinjpNNzVAXgCobtufj6z8zVUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Un9RRV3z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZprT7Gbz"
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2ba6485d219so14093655ad.3
-        for <bpf@vger.kernel.org>; Fri, 08 May 2026 08:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778252631; x=1778857431; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=du2JzkQKqlNU0D+Gab0Zj7x2Js35Jp0EtokGh0n5n4I=;
-        b=ZprT7Gbz23RwV74LMuTjFmcaqjhFvlQTecnvgQAQLFEnUpd0aHMYunxGW4YNy0VxWr
-         HG5MKDlj52fiHFcmw6Tgx/T9QUKf+6i6SaeNE0yvX3x8xD53kOF7sxaItyX4yev9AeNC
-         22CH6q02MVLexWSx+nXSLfWTuxvsa34syJ1i7Tld9x97W95X7UK5oiWuuvbygP8wqZNl
-         on43jDx6CMT3zkR5RXESsBKizjtCzQH/Zy/aBpsqisGxcSWQaAHadH/JlYssp7zPwopt
-         2y0/bsWPBjgyPtea5ttmqhXa3ofs5cOXAF5CZfR5j0pqQ33ongsMZwtz5+VFYsrqaJAH
-         1yzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778252631; x=1778857431;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=du2JzkQKqlNU0D+Gab0Zj7x2Js35Jp0EtokGh0n5n4I=;
-        b=WAZv7oMcPQxvVDbXCdGK8sz1xj4FM/vnsdCLezCOc+rlE+IPzV8OtlOQvyyOMDFEpf
-         W57gYPxW/PqPokpK16IneuTbpUcqrWfStzXSRbKTgtURztAiQjEyK7YS1DDF44iEJ0/y
-         IfC99b5jTXxg/MGNc8dMUPHowxSMFXYThET9qRH4LENArxzEuVia/asLuywNyFE/n4Mi
-         VcUGA+HYELf1BC3RamuNC3BkNSNUEqzi2EgIQ94v9UyoEp2tp5JlMPUJglLbmJeqXoPO
-         AoUd8BnS7LXNmUPZmSlK9MjapDWwgUMEagLUGMbGjeY3Q3909Sbd372lZxwAAtMUSSzx
-         n8Iw==
-X-Forwarded-Encrypted: i=1; AFNElJ+7SMdGnGpftGdZTNYdGSJ4q5JTV9dtlSf45KJiJSeH13/aGtejyr4aQnA8ZSiJkObMfiA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9zh4fGFLWtQT6PsiEmxKG/BD48MkXBL0NNuAKAnP6ciGOFQbV
-	YuUpivvMeqLKRA1Lowe9lSwrS6C8oq7PPb7N62J+JPQsZVzsiweqffXF
-X-Gm-Gg: Acq92OFgCloCX+ASa8btWVgPemKJJ4LcMWANXIY4FSmJd6esJg9/ZOeXQKzREpUX5rt
-	TeV5nY4Rdn0CjZT2H5lOxVEyrXNLcuObwx+J+IGqW2Khsah5Nww6ROZ8YZtDV03eoF/DLmjQcC3
-	0HrcsIis5xqKUk9jJfwG4y5XKTxmMpM8pAL+mYWPlfIVJ1nlPSOkm7t271irdDL4rTCOtViD68b
-	lP8Ezv0cv5XHggLNAQzDtLLSwqese1Cjop3KR85Xm6keSajD+lvhwzWlTSud9q5Gexf8uqc2oe+
-	0r3GYaL+q9CGzQH75cvhET5qrm0NRdb1dtiipm7h6is6Gsc/V56dDGK5XEoH7oZuBs5OEjSBRSJ
-	Lo9q89zgHjZoGzUGGkPXk01rd20cth9Knbz4/HWnkqgfIIDwwOFc59zcwjt6TFNP1YOyzovw1zv
-	+29Rt8tHAB3b9VJuDXzpG832T8Zy8=
-X-Received: by 2002:a17:903:64f:b0:2b0:41bf:ca83 with SMTP id d9443c01a7336-2ba798c27a9mr92826425ad.23.1778252629752;
-        Fri, 08 May 2026 08:03:49 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:49::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1e9fd64sm22598665ad.69.2026.05.08.08.03.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2026 08:03:49 -0700 (PDT)
-Date: Fri, 8 May 2026 08:03:48 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Alex Shi <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>, 
-	Dongliang Mu <dzm91@hust.edu.cn>, Michael Chan <michael.chan@broadcom.com>, 
-	Pavan Chebbi <pavan.chebbi@broadcom.com>, Joshua Washington <joshwash@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, 
-	Leon Romanovsky <leon@kernel.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
-	Daniel Borkmann <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>, 
-	Shuah Khan <shuah@kernel.org>, dw@davidwei.uk, mohsin.bashr@gmail.com, willemb@google.com, 
-	jiang.kun2@zte.com.cn, xu.xin16@zte.com.cn, wang.yaxin@zte.com.cn, 
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Stanislav Fomichev <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, 
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v3 8/8] selftests: drv-net: add netkit devmem
- tests
-Message-ID: <af37TYtuxGHh7crM@devvm7509.cco0.facebook.com>
-References: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
- <20260507-tcp-dm-netkit-v3-8-52821445867c@meta.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Un9RRV3z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27D8BC2BCF5;
+	Fri,  8 May 2026 15:15:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778253305;
+	bh=mhumYvyD+/uwFXTOvsTEGXrAqYN095YRK12Bho+zCN8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Un9RRV3z524pe2eoobJaYqj8I0rbgPBi8jCkfV0/FD7vuSMI51oUvlD8v5afMZeBo
+	 W4SUCd87Y6C6V4/x7LHF0rnljemyShs9IsoV7iAZXZqke0Fcy/mhIyoo4qYSZbj0cM
+	 PJilKS8tHIXG3g9KnNVxWaWmX06cx543u7VmAY6YghHXbAAtsRVS8mInL/0Sx4edcC
+	 se5yZ1XB1rRBZMwBEFs2MT97gg5ifAwUHGXKCsg1FN9Owr0wtq1N3CySIUcv1q95n6
+	 EjB+QZxWd3hCvJjxnoRPWC61H/hDSk8CS768qMDT4iyPAp6hjLUIXOJPE+NdAACjeW
+	 28I32vPYaJPQQ==
+Date: Fri, 8 May 2026 16:14:56 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: Vernon Yang <vernon2gm@gmail.com>
+Cc: akpm@linux-foundation.org, david@kernel.org, roman.gushchin@linux.dev, 
+	inwardvessel@gmail.com, shakeel.butt@linux.dev, ast@kernel.org, daniel@iogearbox.net, 
+	surenb@google.com, tz2294@columbia.edu, baohua@kernel.org, lance.yang@linux.dev, 
+	dev.jain@arm.com, laoar.shao@gmail.com, gutierrez.asier@huawei-partners.com, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	Vernon Yang <yanglincheng@kylinos.cn>
+Subject: Re: [PATCH v2 0/4] mm: introduce mthp_ext via cgroup-bpf to make
+ mTHP more transparent
+Message-ID: <af376QFXC36uf7kp@lucifer>
+References: <20260508150055.680136-1-vernon2gm@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -90,25 +47,300 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260507-tcp-dm-netkit-v3-8-52821445867c@meta.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260508150055.680136-1-vernon2gm@gmail.com>
 
-On 05/07, Bobby Eshleman wrote:
-> From: Bobby Eshleman <bobbyeshleman@meta.com>
-> 
-> Add nk_devmem.py with four tests for TCP devmem through a netkit device:
-> 
-> These tests are just duplicates of the original devmem tests, with some
-> adjusted parameters such as telling ncdevmem to avoid device setup
-> (since it only has access to netkit, not a phys device).
-> 
-> Each test uses NetDrvContEnv with primary_rx_redirect=True to set up the
-> BPF redirect program on the primary netkit interface.
-> 
-> The NIC (HDS, RSS, queue lease) is configured once in main() before
-> ksft_run() and torn down in a finally block via cleanup_nic(), mirroring
-> the nk_qlease.py pattern. This avoids re-toggling NIC settings around
-> every test case.
-> 
-> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+Thanks for the series, but overall it's got to be no to this until THP and mTHP
+are in more stable shape.
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+And this is an RFC, you're trying to make really fundamental changes here, it's
+almost... rude to do that out of the blue non-RFC'd (unless you're a maintainer
+perhaps).
+
+Right now the THP code base is a total mess and mTHP support is not even
+properly merged yet (khugepaged support outstanding).
+
+BPF interfaces are permanent, we've tried the 'experimental' thing before, it
+doesn't work and we'll not be able to yank it later.
+
+I've said it before, but we really truly need to get THP into better shape
+before we can tolerate large new changes, let alone an user-exported interface.
+
+So can we defer this until we're in better shape, and then send that as an RFC
+first please?
+
+On Fri, May 08, 2026 at 11:00:51PM +0800, Vernon Yang wrote:
+> From: Vernon Yang <yanglincheng@kylinos.cn>
+>
+> Hi all,
+>
+> Background
+> ==========
+>
+> As is well known, a system can simultaneously run multiple different
+> scenarios. However, THP is not beneficial in every scenario — it is only
+> most suitable for memory-intensive applications that are not sensitive
+> to tail latency. For example, Redis, which is sensitive to tail latency,
+> is not suitable for THP. But in practice, due to Redis issues, the
+> entire THP functionality is often turned off, preventing other scenarios
+> from benefiting from it.
+>
+> There are also some embedded scenarios (e.g. Android) that directly use
+> 2MB THP, where the granularity is too large. Therefore, we introduced
+> mTHP in v6.8, which supports multiple-size THP. In practice, however, we
+> still globally fix a single mTHP size and are unable to automatically
+> select different mTHP sizes based on different scenarios.
+>
+> After testing, it was found that
+>
+> - When the system has a lot of free memory, it is normal for Redis to
+>   use mTHP. performance degradation in Redis only occurs when the system
+>   is under high memory pressure.
+> - Additionally, when a large number of small-memory processes use mTHP,
+>   memory waste is prone to occur, and performance degradation may also
+>   happen during fast memory allocation/release.
+>
+> Previously, "Cgroup-based THP control"[1] was proposed, but it had the
+> following issues.
+>
+> - It breaks the cgroup hierarchy property.
+> - Add new THP knobs, making sysadmin's job more complex
+>
+> Previously, "mm, bpf: BPF-MM, BPF-THP"[2] was proposed, but it had the
+> following issues.
+>
+> - It didn't address the issue on the per-process mode.
+> - For global mode, the prctl(PR_SET_THP_DISABLE) has already achieved
+>   the same objective, there is no need to add two mechanisms for the
+>   same purpose.
+> - Attaching st_ops to mm_struct, the same issues that cgroup-bpf once
+>   faced are likely to arise again, e.g. lifetime of cgroup vs bpf, dying
+>   cgroups, wq deadlock, etc. It is recommended to use cgroup-bpf for
+>   implementation.
+> - Unclear ABI stability guarantees.
+
+Not unclear, any BPF interface is permament.
+
+> - The test cases are too simplistic, lacking eBPF cases similar to real
+>   workloads such as sched_ext.
+>
+> If I miss some thing, please let me know. Thanks!
+>
+> Solution
+> ========
+>
+> This series will solve all the problems mentioned above.
+>
+> 1. Using cgroup-bpf to customize mTHP size for different scenarios
+> 2. Use a cgroup eBPF program to monitor all sub-cgroups. Sub-cgroups
+>    under the same parent-cgroup adopt the same eBPF program. Only multiple
+>    sibling-cgroups (where the parent-cgroup has no attached eBPF program)
+>    are supported to attach multiple different eBPF programs without
+>    breaking the hierarchy property of the cgroup.
+> 3. Automatically select different mTHP sizes for different cgroups,
+>    let's focus on making them truly transparent.
+
+I don't see how cgroup level control is transparent :) this overall seems like
+THP control at cgroup level by the back door, and I thought the cgroup people
+were adamently against that.
+
+Personally I think we should actually allow less 'transparent' THP but that's a
+debatable subject obviously.
+
+> 4. Design mthp_ext case to address real workload issues and further
+>    clear/stabilize the ABI.
+>
+> The main functions of the mthp_ext are as follows:
+>
+> - When sub-cgroup is under high memory pressure (default, full 100ms 1s),
+>   it will automatically fallback to using 4KB.
+> - When the anon+shmem memory usage of sub-cgroup falls below the minimum
+>   memory (default 16MB), small-memory processes will automatically
+>   fallback to using 4KB.
+> - Under normal conditions, when there is no memory pressure and the
+>   anon+shmem memory usage exceeds the minimum memory, all mTHP sizes
+>   shall be utilized by kernel.
+> - Monitor the root-cgroup (/sys/fs/cgroup) directory by default, with
+>   support for specifying any cgroup directory.
+
+This seems like something prescriptive rather than 'bpf lets you make a
+decision' and cgroup-level THP behaviour changes? It seems really out of scope.
+
+>
+> Performance
+> ===========
+>
+> The below is some performance test results, testing on x86_64 machine
+> (AMD Ryzen9 9950X 16C32T, 32G memory, 8G zram).
+>
+> NOTE: The following always/never labels indicate setting all mTHP sizes
+> to always/never. Detailed test script reference[4].
+>
+> redis results
+> ~~~~~~~~~~~~~
+>
+> command: redis-benchmark --csv -r 3000000 -n 3000000 -d 1024 -c 16 -P 32 -t set
+>
+> When cgroup memory.high=max, no memory pressure, seems only noise level
+> changes, mthp_ext no regression.
+>
+> | redis-noBGSAVE | always      | never                | always+mthp_ext     |
+> |----------------|-------------|----------------------|---------------------|
+> | rps            | 1431307.083 | 1224004.250 (-14.5%) | 1420053.873 (-0.8%) |
+> | avg_latency_ms | 0.216       | 0.256       (-18.5%) | 0.218       (-0.9%) |
+> | p95_latency_ms | 0.612       | 0.708       (-15.7%) | 0.615       (-0.5%) |
+> | p99_latency_ms | 0.682       | 0.812       (-19.1%) | 0.692       (-1.5%) |
+>
+> | redis-BGSAVE   | always      | never                | always+mthp_ext    |
+> |----------------|-------------|----------------------|--------------------|
+> | rps            | 1429093.707 | 1231569.587 (-13.8%) | 1431075.330 (0.1%) |
+> | avg_latency_ms | 0.216       | 0.255       (-18.1%) | 0.216       (0.0%) |
+> | p95_latency_ms | 0.618       | 0.706       (-14.2%) | 0.615       (0.5%) |
+> | p99_latency_ms | 0.684       | 0.823       (-20.3%) | 0.684       (0.0%) |
+>
+> When cgroup memory.high=2G, high memory pressure, mthp_ext RPS improve by
+> 3450%, while significantly reducing the tail latency by 99%.
+>
+> | redis-noBGSAVE | always    | never                | always+mthp_ext      |
+> |----------------|-----------|----------------------|----------------------|
+> | rps            | 24932.790 | 976610.893 (3817.0%) | 885337.250 (3450.9%) |
+> | avg_latency_ms | 13.173    | 0.326        (97.5%) | 0.367        (97.2%) |
+> | p95_latency_ms | 23.028    | 0.786        (96.6%) | 1.511        (93.4%) |
+> | p99_latency_ms | 366.762   | 1.183        (99.7%) | 2.975        (99.2%) |
+>
+> | redis-BGSAVE   | always    | never                 | always+mthp_ext      |
+> |----------------|-----------|-----------------------|----------------------|
+> | rps            | 50551.567 | 1026720.293 (1931.0%) | 892643.707 (1665.8%) |
+> | avg_latency_ms | 6.581     | 0.310         (95.3%) | 0.365        (94.5%) |
+> | p95_latency_ms | 16.730    | 0.772         (95.4%) | 1.447        (91.4%) |
+> | p99_latency_ms | 311.551   | 1.140         (99.6%) | 2.988        (99.0%) |
+>
+> unixbench results
+> ~~~~~~~~~~~~~~~~~
+>
+> command: ./Run -c 1 shell8
+>
+> mthp_ext improved by 5.99%.
+>
+> | unixbench shell8 | always  | never           | always+mthp_ext |
+> |------------------|---------|-----------------|-----------------|
+> | Score            | 22916.8 | 24304.0 (6.05%) | 24289.9 (5.99%) |
+>
+> kernbench results
+> ~~~~~~~~~~~~~~~~~
+>
+> When cgroup memory.high=max, no memory pressure, seems only noise level
+> changes, mthp_ext no regression.
+>
+>                             always                 never               always+mthp_ext
+> Amean     user-32    19702.39 (   0.00%)    18428.90 *   6.46%*    19706.73 (  -0.02%)
+> Amean     syst-32     1159.55 (   0.00%)     2252.43 * -94.25%*     1177.48 *  -1.55%*
+> Amean     elsp-32      703.28 (   0.00%)      699.10 *   0.59%*      703.99 *  -0.10%*
+> BAmean-95 user-32    19701.79 (   0.00%)    18425.01 (   6.48%)    19704.78 (  -0.02%)
+> BAmean-95 syst-32     1159.43 (   0.00%)     2251.86 ( -94.22%)     1177.03 (  -1.52%)
+> BAmean-95 elsp-32      703.24 (   0.00%)      698.99 (   0.61%)      703.88 (  -0.09%)
+> BAmean-99 user-32    19701.79 (   0.00%)    18425.01 (   6.48%)    19704.78 (  -0.02%)
+> BAmean-99 syst-32     1159.43 (   0.00%)     2251.86 ( -94.22%)     1177.03 (  -1.52%)
+> BAmean-99 elsp-32      703.24 (   0.00%)      698.99 (   0.61%)      703.88 (  -0.09%)
+>
+> When cgroup memory.high=2G, high memory pressure, mthp_ext improved by 26%.
+>
+>                             always                 never               always+mthp_ext
+> Amean     user-32    20250.65 (   0.00%)    18368.91 *   9.29%*    18681.27 *   7.75%*
+> Amean     syst-32    12778.56 (   0.00%)     9636.99 *  24.58%*     9392.65 *  26.50%*
+> Amean     elsp-32     1377.55 (   0.00%)     1026.10 *  25.51%*     1019.40 *  26.00%*
+> BAmean-95 user-32    20233.75 (   0.00%)    18353.57 (   9.29%)    18678.01 (   7.69%)
+> BAmean-95 syst-32    12543.21 (   0.00%)     9612.28 (  23.37%)     9386.83 (  25.16%)
+> BAmean-95 elsp-32     1367.82 (   0.00%)     1023.75 (  25.15%)     1018.17 (  25.56%)
+> BAmean-99 user-32    20233.75 (   0.00%)    18353.57 (   9.29%)    18678.01 (   7.69%)
+> BAmean-99 syst-32    12543.21 (   0.00%)     9612.28 (  23.37%)     9386.83 (  25.16%)
+> BAmean-99 elsp-32     1367.82 (   0.00%)     1023.75 (  25.15%)     1018.17 (  25.56%)
+>
+> TODO
+> ====
+>
+> - mthp_ext handles different "enum tva_type" values. For example, for
+>   small-memory processes, only 4KB is used in TVA_PAGEFAULT, while
+>   TVA_KHUGEPAGED/TVA_FORCED_COLLAPSE continues to collapse all mthp
+>   size. Under high memory pressure, only 4KB is used for
+>   TVA_PAGEFAULT/TVA_KHUGEPAGED, while TVA_FORCED_COLLAPSE continues to
+>   collapse all mthp size.
+> - selftest
+>
+> If there are additional scenarios, please let me know as well, so I can
+> conduct further prototype verification tests to make mTHP more
+> transparent and further clear/stabilize the BPF-THP ABI.
+>
+> If any of the above the strategies can be integrated into the kernel,
+> please let me know. I would be delighted to incorporate these strategies
+> into the kernel.
+>
+> This series is based on mm-new + "mm: BPF OOM"[3] first four patches.
+
+Again, this really should have been an RFC, a 'TODO' section shouldn't exist in
+a non-RFC series.
+
+>
+> Thank you very much for your comments and discussions.
+>
+> [1] https://lore.kernel.org/linux-mm/20241030083311.965933-1-gutierrez.asier@huawei-partners.com
+> [2] https://lore.kernel.org/linux-mm/20251026100159.6103-1-laoar.shao@gmail.com
+> [3] https://lore.kernel.org/linux-mm/20260127024421.494929-1-roman.gushchin@linux.dev
+> [4] https://github.com/vernon2gh/app_and_module/tree/main/mthp_ext
+>
+> V1 -> V2:
+> - Rebase on mm-new, run all performance tests again.
+> - Register eBPF programs only when no mthp_ops exists in all sub-cgroup, do not
+>   destroy the cgroup hierarchy property.
+> - Fix newly created cgroups silently bypass the hierarchical BPF mTHP policy.
+> - Fix bpf_mthp_choose() UAF due to improper SRCU locking.
+> - Add bounds check in bpf_cgroup_stall() and fix return type to u64.
+> - Check cgroup_psi() return value.
+> - Fix spurious mTHP fallback during initial cgroup scan due to zero-init
+>   info->stall.
+> - Fix info->order being set to 0 when no processes are running in the cgroup.
+> - Fix Compilation fails when CONFIG_CGROUPS=y && CONFIG_PSI=n.
+> - Fix NULL pointer dereference of st_link.
+> - FIx infinite loop in trigger_scan() when read() returns an error.
+> - Fix integer overflow in FROM_MB() macro.
+> - Fix setup_psi_trigger() fail, but masks the error code.
+>
+> V1 : https://lore.kernel.org/linux-mm/20260503165024.1526680-1-vernon2gm@gmail.com/
+
+All well and good, but I don't see any actual review there, another reason to
+send this kind of thing as an RFC first please :)
+
+
+>
+> Vernon Yang (4):
+>   psi: add psi_group_flush_stats() function
+>   bpf: add bpf_cgroup_{flush_stats,stall} function
+>   mm: introduce bpf_mthp_ops struct ops
+>   samples: bpf: add mthp_ext
+>
+>  MAINTAINERS                     |   3 +
+>  include/linux/bpf_huge_memory.h |  52 +++++
+>  include/linux/cgroup-defs.h     |   1 +
+>  include/linux/huge_mm.h         |   6 +
+>  include/linux/psi.h             |   5 +
+>  kernel/bpf/helpers.c            |  34 ++++
+>  kernel/cgroup/cgroup.c          |   2 +
+>  kernel/sched/psi.c              |  34 +++-
+>  mm/Kconfig                      |  14 ++
+>  mm/Makefile                     |   1 +
+>  mm/bpf_huge_memory.c            | 168 ++++++++++++++++
+>  samples/bpf/.gitignore          |   1 +
+>  samples/bpf/Makefile            |   7 +-
+>  samples/bpf/mthp_ext.bpf.c      | 148 ++++++++++++++
+>  samples/bpf/mthp_ext.c          | 339 ++++++++++++++++++++++++++++++++
+>  samples/bpf/mthp_ext.h          |  30 +++
+>  16 files changed, 836 insertions(+), 9 deletions(-)
+>  create mode 100644 include/linux/bpf_huge_memory.h
+>  create mode 100644 mm/bpf_huge_memory.c
+>  create mode 100644 samples/bpf/mthp_ext.bpf.c
+>  create mode 100644 samples/bpf/mthp_ext.c
+>  create mode 100644 samples/bpf/mthp_ext.h
+>
+> --
+> 2.53.0
+>
