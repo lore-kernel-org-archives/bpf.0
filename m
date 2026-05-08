@@ -1,194 +1,215 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448231F427C;
-	Fri,  8 May 2026 10:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778237562; cv=none; b=i/MKTabL2UO8EnYS4hra1qOkW8yBtpYHNb0t9S9jBt8IIrSEEfR/Dpo9JrYXJNXva0vPNL4KPNc9eQlxwKecO1W34XDjAJ3VBvxlVvIq4KJSmGYlSCiMsPOkA1ucm51Q1aD68HyFIERB8sJsp57vCSm6p6Ft/HpoH76ZNEQong8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778237562; c=relaxed/simple;
-	bh=0eXiWAy4rN82dSvq360mPdStsaIril6W4nKSBetAO1k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZKhkHP+pSleeDl0QfACdDM3hkrUb5ZQ97/E6TXgn8QCGrItBAz4lwSyilL1WH8U9/6hG79t+E77B0x+chkWO10Sl/LX9OSSV9/vc5GbJEjehP/x3kzlkjlIcK4/nTHvEwh7DWva8YDV7HCpwdcOSd/Jf9PsDvA/PsLJqWjbT1Wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=V/Lb1iUf; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930913ACA5F
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 11:30:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778239845; cv=pass; b=X3bJMV+vOwHxzXwZr0mKsl7pjJxRl43HwmYX0a9JMfnj61HHk/tm6F8h8RK9Hqnh/M9o6oghW4PN3uApGpSesO/zgWB2TZMSGdyD54IpRHWVGcmG6ona/Y9V1/yo/7QEVPrJ5ZS61P/B4bn8yWMaq/8X4ysYckWslbCpoBaCElQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778239845; c=relaxed/simple;
+	bh=CBfD4iRTH3E14SN4QEqZr0RaBqNvQko8KctGms5BCcY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rF+rIW0GBgB0S2oGuhttHxp18YevTNgdwLcfRTgsB4yUHeULVWXFOyDwWOEg5TG0rRxPeK3//YTF4NP0cMPgaDI69MVq8prn3bS+vwZ35rtu9SaU7qIvZRv3X/6F1JsncVSELOx/uJ+ZDJmkL5fnDlKECBBiaKO1Dm0hmkGNIy8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EfxAoXh7; arc=pass smtp.client-ip=74.125.82.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="V/Lb1iUf"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 647Jf9S82830434;
-	Fri, 8 May 2026 10:52:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=tMFcUg
-	6YI0uRs0oFeC5tG4Rvu7Ar3pTJNfqJiF659xo=; b=V/Lb1iUfWIu0JXHYBXssnr
-	/iIE/nvjj2aOJUE93RS3rXzL7gDsr/ZzBO/zrmoaf5pDd0ZngHZVYicUpNpiNp/Z
-	gPRP8EyUNZXFXS8TQI6mmRnfzR7feW07plzHgrPtMQ5XFfLdP+H9Zu9C3m1hNw0J
-	NnjsY1l8+PdXL6wfA54zBYJQsr7RwL2OFSUg4BKTGy/2QsnAtzIsLiKzfEc63x2m
-	tMI2QhPpPehjY+o0qYTtHNQd8bwls1SeQoFwt6+9QALNbaTT2aVk8y+QTKuy7cep
-	C3D8H/exX5uEia9T+kuwjnXGLs5K95WQw5/Cgq/X2N99gFacWkcG4K68BrYhEKvQ
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9v7ubd4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 08 May 2026 10:52:04 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 648AdaCW026903;
-	Fri, 8 May 2026 10:52:03 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dwuywfxya-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 08 May 2026 10:52:03 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 648ApxPQ61800952
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 8 May 2026 10:51:59 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9B6572004D;
-	Fri,  8 May 2026 10:51:59 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 86F6820040;
-	Fri,  8 May 2026 10:51:56 +0000 (GMT)
-Received: from [9.111.207.158] (unknown [9.111.207.158])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  8 May 2026 10:51:56 +0000 (GMT)
-Message-ID: <606aebad-d83f-4dd0-9316-9d6dad0cdcc0@linux.ibm.com>
-Date: Fri, 8 May 2026 12:51:55 +0200
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EfxAoXh7"
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-130b2295ed0so5574453c88.0
+        for <bpf@vger.kernel.org>; Fri, 08 May 2026 04:30:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778239843; cv=none;
+        d=google.com; s=arc-20240605;
+        b=jS+n1AUrq3szSm9Ko3IMv0GnA6sIZ/MeMWfgkJhtjnfIpvZOIcqgy4/VVvdux5jw3a
+         u/fcP6Z+rrNsLuJNaPCQRM2yM4+nQga5zFbN9nn7PG3KakabjS080tQogvdk6TXuxdUs
+         Pwp6BoTc8DVUTEUDvn+NPESZgyfISfMJoUiyysVm9bkSHB4TBN9acaHHkReTPS39+C07
+         hW1AQ+vP70jESRaqQ3FPx+v9FLVtTjwSsbrCSiCyRdF4XW3drhHcGm8xlmTK/ejZ9Gb8
+         jI6xPLH+pP/AfhX8mkipZsUOMZ8O/SpHFn2XXE1JkJAJaAJnXu9S2RRkxqn1nqVv/0fr
+         Uq4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=kv/cN9JZtLINOz191VE4jyOuiPMT2DphC53i8RZ2MOk=;
+        fh=rjdmRj+rDKzF/fCGUcuJ4P9hiwXZwpk8lCQJxTTyhfI=;
+        b=PJdo8OToqvjbLSxbhNreHYOh5B+iMaBNLgHyeZiHw1PsRlu4EpJkc5PVLSOg6ZIiWA
+         0KrWC5+jrdGFkvI/FB66M6xQ2o/6RtJ+wo+7Inl+z7TLB/fmuNL/IdOdg9InFQTMg90P
+         r34LzG7l2RI3h0xXJ+873qXZeIpJlyShsOfR4celHXoQiiiZD08SahH+Uai1qCPkXfze
+         qtue3NaOMk8AaCdmojE2LpBJqHFoGaOKNpf7anwkXdi1rStP6TBemqJ8f2jO68oEyCob
+         WJb/z1yTdodkRXZlcV8W/bF8axQ0BzfQFYEPfm+50QIYhokw6yLdO32QXHDmVS/sXnmY
+         rHtA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778239843; x=1778844643; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kv/cN9JZtLINOz191VE4jyOuiPMT2DphC53i8RZ2MOk=;
+        b=EfxAoXh7ZNOtZ6fsyUbKJw/95kCMKcIxREmjyJPpXIiq+mlMYp2pxPmOR6ZCo1HPRj
+         mLsQWvTT0Gzw5M1SkoogzpkXAWuzy8suTdtJ6aCaJEhj7xQvtzuRImY88cpioQ78Rr4T
+         Pfc2T3cBxktmn483+6lI+1mw895pJVD8ZCbF9KPCoQgr9EYPxNmpb+hRcZnnvz645EfF
+         ROYyMDKOuouoTr7ULEjsx9MC7A9ZGtaIRiAu01eW7VVx1ut2F+dMSxJOielhAVNotbvg
+         YfXOm40wyd4eX5SbBMjcpU3OV4m1kwp506glgSgxMmPTyUVW4golxWdHy16cvPt0/kAP
+         4o1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778239843; x=1778844643;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=kv/cN9JZtLINOz191VE4jyOuiPMT2DphC53i8RZ2MOk=;
+        b=NTMsgPrdmXqKMOJVqlldTHUSgMoLP91hYAnLteKkpr4Wg20a+gBjTj5+zURBHNsZCL
+         YoY3lnT660YUxaH/Ih7ibxXFfwub4wgzPhmM9z27qpPs42WXWzuEJ7m+axPMAj548Z+x
+         xxsFOIAOyi3MYt+/3FsyZhxLGY1Ust3sLonRigGgsatbjwMPwumuujATr4pskZx4LMFb
+         Mt3PZXA02+TA1Z38qxkX5yCzgSAKvSbX5Xm7OHI/8iLN+4s+qrsePcGLFkbryEkQd6gg
+         nhfRyb4bNc0Jule1jZ2S0rshjWRr9iOhJXX+6aM0Vm+VPms5JdtQhmAZtZLHdTwpveyY
+         MYkA==
+X-Forwarded-Encrypted: i=1; AFNElJ9IUkSjfoGN66aUCgcQHdMPUOwbxyPEKDPHvFK5MWC/iqMSsPIyowh9x2ilQtSfmqcnwEE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz85uRbx1v/ySUgk1XDloQjclrlqAm62ZgUN5H8FYJowpcXy3jZ
+	Sg5uc8jp/t9vwFUasdsz9BVsUK14HDXQAR5hX8a+TbJpZEDor71bNq6XygViveNBX6YUH6MQgk0
+	xOmHwQ+2Qlq/m16BkH84fhp17eXCgNic8umA9hjjQ
+X-Gm-Gg: AeBDiesZM5AxTiUwRSYG1lzOL9P0De/o3yiw4m0Xo00S+w42vA5c3HvRY3/If4Z1QRz
+	6vQPlRd2m2UilwdgigmaLq3MUnW1L+kGN9U9D3zWsG+GoAk89RePa4WU3hBUZCty8ru8PZgZTlD
+	XHsEh2tE+iG+xs+cvlQMu1/PniGNRj7EHLJMdzKGAT5iBb40pRlkaEKU7r29+N7+9Ioe8sqr5r0
+	p7CKILUteMoZcNopiYRKelo2L9HJqjUWowafkIQnLVQ/RlTWbGJcQjW3H8VUx2C/ZNnOFNSeIsg
+	NnaHYzKasM+8KygVmOT9sj0VIAN78ELvVb3KUtdIyhK1doGn7BRZv+rW1AkktMyt/LziFEdKKgm
+	NNlLFjGDPm9wQZISEqVEtq84RsI0fg2Q=
+X-Received: by 2002:a05:7022:ea24:b0:12c:87f1:f41a with SMTP id
+ a92af1059eb24-1318e91771bmr6366203c88.21.1778239842029; Fri, 08 May 2026
+ 04:30:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 12/19] unwind_user/sframe: Add .sframe validation
- option
-To: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf
- <jpoimboe@kernel.org>,
-        Indu Bhagat <ibhagatgnu@gmail.com>,
-        Dylan Hatch <dylanbhatch@google.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Jose E. Marchesi" <jemarch@gnu.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "Carlos O'Donell" <codonell@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
-        "Liam R. Howlett" <liam@infradead.org>,
-        Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
-        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Kees Cook <kees@kernel.org>, Sam James <sam@gentoo.org>
-References: <20260505121718.3572346-1-jremus@linux.ibm.com>
- <20260505121718.3572346-13-jremus@linux.ibm.com>
-Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20260505121718.3572346-13-jremus@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA4MDExMCBTYWx0ZWRfX2auMkqKWq9zH
- Kavt7w6o+5VsedWe6iM0PPPzgQRh4KusiXlnezRf3zsYGS/AO1+pdCbi00e+jrqb4oj3eBWBvWV
- uFfuZ3QmH6iquylpROzws0b7SgAsixvbXKJl/2XoCsQMiOcBzDZ4Sfxopeqpyf3FK5r1zbVIaFc
- V2Jt/34vzxbCvyRZ9+2jxCD98J3PrUFo7OFtFzWy+CYPa8CMyJPgXylbL9E+lBhVIIta6svQ0LC
- zZ9yPoSYIXlPir2H6EWqLJEZ4w5y3FgP/k9xswkHo6EFD+A6jap6eGBvGKpzN8WkHGk5sRLVrgj
- 40MLKp7jdLJYQmD02rkYvUkAQOGfdq6sQ2AjAIggoA6O0/PCv9QccQEhZ2HdxYkMB7X6jb236Lo
- sI8TWIY/ZYOgDVFiWfn+1gk8reKmStmBnQFIiIPrVAs7sV8BeDV3MS5LYxM/hAKi9+BloqOHFOw
- MOtkDQlPIadYUtb9lFg==
-X-Proofpoint-GUID: MwWipGJ7KURaSVIuB_RtelIYOy5mE4YQ
-X-Proofpoint-ORIG-GUID: Ocagi59Tk5URWX8c5UV7KnL-pAuRJkoL
-X-Authority-Analysis: v=2.4 cv=eu/vCIpX c=1 sm=1 tr=0 ts=69fdc055 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8
- a=VwQbUJbxAAAA:8 a=LFt20mCCc4CE-LtB3JUA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-07_02,2026-05-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 phishscore=0 lowpriorityscore=0 clxscore=1015 adultscore=0
- suspectscore=0 malwarescore=0 bulkscore=0 impostorscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605080110
+References: <20260508073355.3916746-1-kuniyu@google.com> <20260508073355.3916746-8-kuniyu@google.com>
+ <21ee2d5d-fc8c-497e-aa98-e5e4e3fbecf8@linux.dev>
+In-Reply-To: <21ee2d5d-fc8c-497e-aa98-e5e4e3fbecf8@linux.dev>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Fri, 8 May 2026 04:30:30 -0700
+X-Gm-Features: AVHnY4KkzSQ5bG2E11JHf5_h3yq1P29unHw-1nEvdIdkT055s-AbAypVF74WclI
+Message-ID: <CAAVpQUBv0Uc4Xi-4wK2S63FqtXHHkLqJTotOxxDyhqFknoZG_Q@mail.gmail.com>
+Subject: Re: [PATCH v1 bpf-next 7/8] bpf: tcp: Add SOCK_OPS rcvlowat hook.
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@google.com>, 
+	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Tenzin Ukyab <ukyab@berkeley.edu>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/5/2026 2:17 PM, Jens Remus wrote:
-> From: Josh Poimboeuf <jpoimboe@kernel.org>
-> 
-> Add a debug feature to validate all .sframe sections when first loading
-> the file rather than on demand.
-> 
-> [ Jens Remus: Add support for SFrame V3.  Add support for PC-relative
-> FDE function start offset.  Adjust to rename of struct sframe_fre to
-> sframe_fre_internal.  Use %#x/%#lx format specifiers. ]
+On Fri, May 8, 2026 at 3:37=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.dev=
+> wrote:
+>
+>
+> On 5/8/26 3:33 PM, Kuniyuki Iwashima wrote:
+> > Now, it is time to add the new hooks for BPF_SOCK_OPS_RCVLOWAT_CB.
+> >
+> > Let's invoke the BPF SOCK_OPS prog when
+> >
+> >    1. TCP stack enqueues skb to sk->sk_receive_queue
+> >       -> tcp_queue_rcv(), tcp_ofo_queue(), and tcp_fastopen_add_skb()
+> >
+> >    2. TCP recvmsg() completes
+> >       -> __tcp_cleanup_rbuf()
+> >
+> > This will allow the BPF prog to parse each skb and dynamically
+> > adjust sk->sk_rcvlowat to suppress unnecessary EPOLLIN wakeups
+> > until sufficient data (e.g., a full RPC frame) is available
+> > in the receive queue.
+> >
+> > Note that the direct access to bpf_sock_ops.data is intentionally
+> > disabled by passing 0 as end_offset.
+> >
+> > Instead, the BPF prog is supposed to use bpf_skb_load_bytes()
+> > with bpf_sock_ops because payload is not in the linear area
+> > with TCP header/data split on and skb may contain a RPC
+> > descriptor in skb frag.  This also simplifies the BPF prog.
+> >
+> > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+> > ---
+> >   include/net/tcp.h       | 14 ++++++++++++++
+> >   net/ipv4/tcp.c          |  2 ++
+> >   net/ipv4/tcp_fastopen.c |  2 ++
+> >   net/ipv4/tcp_input.c    | 10 ++++++++++
+> >   4 files changed, 28 insertions(+)
+> >
+> > diff --git a/include/net/tcp.h b/include/net/tcp.h
+> > index 4e9e634e276b..003e46c9b500 100644
+> > --- a/include/net/tcp.h
+> > +++ b/include/net/tcp.h
+> > @@ -737,6 +737,20 @@ static inline struct request_sock *cookie_bpf_chec=
+k(struct net *net, struct sock
+> >   }
+> >   #endif
+> >
+> > +#ifdef CONFIG_CGROUP_BPF
+> > +void bpf_skops_rcvlowat(struct sock *sk, struct sk_buff *skb);
+> > +
+> > +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *s=
+kb)
+> > +{
+> > +     if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_RCVLOWAT_CB_F=
+LAG))
+> > +             bpf_skops_rcvlowat(sk, skb);
+> > +}
+> > +#else
+> > +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *s=
+kb)
+> > +{
+> > +}
+> > +#endif
+> > +
+> >   /* From net/ipv6/syncookies.c */
+> >   int __cookie_v6_check(const struct ipv6hdr *iph, const struct tcphdr =
+*th);
+> >   struct sock *cookie_v6_check(struct sock *sk, struct sk_buff *skb);
+> > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> > index 1d9e52fc454f..80144b97a87a 100644
+> > --- a/net/ipv4/tcp.c
+> > +++ b/net/ipv4/tcp.c
+> > @@ -1602,6 +1602,8 @@ void __tcp_cleanup_rbuf(struct sock *sk, int copi=
+ed)
+> >               tcp_mstamp_refresh(tp);
+> >               tcp_send_ack(sk);
+> >       }
+> > +
+> > +     tcp_bpf_rcvlowat(sk, NULL);
+> >   }
+> >
+>
+> tcp_read_skb (process frame 1 and __skb_unlink)
+> =E2=94=94=E2=94=80 sk_psock_verdict_recv
+>      =E2=94=94=E2=94=80 sk_psock_verdict_apply
+>          =E2=94=94=E2=94=80 tcp_eat_skb
+>              =E2=94=94=E2=94=80 tcp_cleanup_rbuf
+>                  =E2=94=94=E2=94=80 __tcp_cleanup_rbuf
+>                      =E2=94=94=E2=94=80 BPF RCVLOWAT_CB
+>                          =E2=94=94=E2=94=80 bpf_sock_ops_tcp_set_rcvlowat=
+ (wakeup=3Dtrue)
+>                              =E2=94=94=E2=94=80 tcp_data_ready
+>                                  =E2=94=94=E2=94=80 sk_psock_verdict_data=
+_ready
+>                                      =E2=94=94=E2=94=80 tcp_read_skb (fra=
+me 2)
+>                                          =E2=94=94=E2=94=80 ... =E2=86=92=
+ tcp_read_skb (frame 3) ...
+>
+> For strparser it use read_sock instead of read_skb and it will become
+> more complicated...
 
-> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+To be clear, this feature is NOT to use strparser/sockmap.
 
-> +static int safe_read_fde(struct sframe_section *sec,
-> +			 unsigned int fde_num, struct sframe_fde_internal *fde)
-> +{
-> +	int ret;
-> +
-> +	if (!user_read_access_begin((void __user *)sec->sframe_start,
-> +				    sec->sframe_end - sec->sframe_start))
-> +		return -EFAULT;
-> +	ret = __read_fde(sec, fde_num, fde);
-> +	user_read_access_end();
-> +	return ret;
-> +}
+>
+> I think this will cause stack overflow with amounts of skbs in receive
+> queue or infinite call(not tested) for sockmap/kTLS/strparser.
+>
 
-> +static int sframe_validate_section(struct sframe_section *sec)
-> +{
-> +	unsigned long prev_ip = 0;
-> +	unsigned int i;
-> +
-> +	for (i = 0; i < sec->num_fdes; i++) {
-> +		struct sframe_fre_internal *fre, *prev_fre = NULL;
-> +		unsigned long ip, fre_addr;
-> +		struct sframe_fde_internal fde;
-> +		struct sframe_fre_internal fres[2];
-> +		bool which = false;
-> +		unsigned int j;
-> +		int ret;
-> +
-> +		ret = safe_read_fde(sec, i, &fde);
+BPF user is responsible for not doing silly things.
 
-Iterating over all FDEs may cause __read_fde() and thus safe_read_fde()
-to fail if one sframe section covers multiple text sections (regardless
-of whether it is also registered for multiple text sections), as
-__read_fde() checks whether the read FDE function start address is
-within [sec->text_start, sec->text_end[.
-
-See my related comments in my reply to [PATCH v14 05/19] unwind_user/
-sframe: Add support for reading .sframe contents.
-
-> +		if (ret) {
-> +			dbg_sec("safe_read_fde(%u) failed\n", i);
-> +			return ret;
-> +		}
-> +
-Regards,
-Jens
--- 
-Jens Remus
-Linux on Z Development (D3303)
-jremus@de.ibm.com / jremus@linux.ibm.com
-
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
-
+tcp_bpf_strp_read_sock() can have loop detection logic,
+but it's only if really needed.
