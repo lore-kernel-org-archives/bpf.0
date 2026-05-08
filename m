@@ -1,433 +1,285 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D013603FB
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 08:32:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D813A0B3B;
+	Fri,  8 May 2026 09:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778229134; cv=none; b=APtnDATZvrvJRR3yxik82rozMFLsIWBmvmogtlwqxxhmbmuijxUgZUt/QMs8WKT8xW+N37WmdhWkdiKIX1aHmvgEIkbHTz+BrJoCli9n1QnaI5jPtiBFJk+4yTSwbzAWkNt0y71cFuON+SF3KSZijsFyH1tXaLrACwLeO3WUpEg=
+	t=1778232054; cv=none; b=SAT7/3LJb7bxnO49k/F4EcKOx2669T0wHk3Cvx6RO6z+brqRG6TwEU08wMzweoSzBChANzffR2EYQQYV9cqoa41vV8Ub/kmmSbo46o/1RvpjX7bpywo0ZZONKdsWggS+cm9eYKOLmoq04h0+0T65OF5swsQxtNdlFo9u0NFHgeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778229134; c=relaxed/simple;
-	bh=WCiA+7utCacQFgzJ8tiXSHFYh0uUZ6mMktYRNgx1ZS4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=N8Uc28qtlYEOoGYkK7WHQe7wdpLtRao1k505l5ayhFewF3IveMSXXSiG9Nd2fAihWtvxU96OMGsl20sIC4qDiSdmwbsSdwacv/nXtfeP6mAC+wxUVTtOKIOAchvtbOBBT44rNhSnSB2cYArIToRGBz3VtfYGAIOKF1YGxyxL+lU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NW1nVRxw; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778232054; c=relaxed/simple;
+	bh=oenf9co85HWC6U6Z6yxE2cSzQKfneZ36M1pV4jxCyT8=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=t3m3n9MV0CAq3EwTcK1EZDOo+9vw/0UWzv1uPxmjtWorZJ0WShR8gUyYlzqwpqDRptxsJZ/HAyAz1R9LfmHICH4ZfXLTv6Vu9hQm/5Qd0C4YvPwWdF4d2U8imu6mbmKb4eAIYkU+J8ssIBT2hGiaiVbk0sumPbqZ9WMbRF+JAWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schippers-hamm.de; spf=pass smtp.mailfrom=schippers-hamm.de; dkim=pass (2048-bit key) header.d=schippers-hamm.de header.i=simon@schippers-hamm.de header.b=Xu9LrzYS; arc=none smtp.client-ip=212.227.17.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schippers-hamm.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schippers-hamm.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NW1nVRxw"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48a563e4ef7so15947265e9.0
-        for <bpf@vger.kernel.org>; Fri, 08 May 2026 01:32:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778229131; x=1778833931; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AWwFa4pj4HdftCfFhlpM5f3biTFRHPg+OaCJzQMTcbM=;
-        b=NW1nVRxw4euprXmY1ykOvrrxh+RMp8QCV6KICOOkPYRjPYU7uPHUQVPaVn4Q3T3Djx
-         lWe/LWEebAqKQOc6BznQTPuYYhjJ81iDCT+CnqveUBNwDpGLpvEYOTSHKsJ6WcXenimV
-         DVC4DMURdF5bRytNXTGhMxoJQbqfRu4aa0W71pYv1ZYRHZi88pEW81KDQto7VDD3vW8B
-         mQ/c9WvxIvDQcF3o3PTtRBcmtUztEYejA8dJvfdc5fOoZ7CA1zBfBkdiWxJmCO6Shr5r
-         s7zkVWJejxIN2wBQaI4LpbkPXwdr05W5Rxw9txEr5apmOoEhtM0c5CdxgN/LrzTpgmDk
-         XJeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778229131; x=1778833931;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=AWwFa4pj4HdftCfFhlpM5f3biTFRHPg+OaCJzQMTcbM=;
-        b=EzkKMQ+y1eUNmsvcB5W41Ke8SSIakQicVY4efUhQVIqXL2uMneeZ/Cc7vk66s+mS+d
-         Zr7ppb3pYiipQEaKEAYRUbPbjD7I6+D5XF0p77TgV5WSR9I0pdkmKTiDVE27lfGTIDzr
-         Wl7UfvpgA1BTPw9I4s7GMgSo5njL3J8n+KYzAoMz4bh5/38EUcCzORqyvQcS/acFV94g
-         XThTXGO7N9DUZjuF99dB8iXO93XUAzL7n3jbMGFwRv2zUI/b/37AzrmATkzV6GI/BRcs
-         2aLWbhjrm3T6Cep1b3DQt3fTfmFuvsjsWL7Ac2jcRbf3p4FbEWgFQfVWpXGo2aa7Q6b0
-         jLPw==
-X-Forwarded-Encrypted: i=1; AFNElJ8EusMqPK66JIB0XFdcTRLTthN5T6vq4QVelAHq/wPth/iOQOlBcs/vT485EJAJ6ehHGKo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXrMgeLQDLmrAoK94eGV1JyvMQr000UhAkojuf8hrA/d5Zovi9
-	uczFFOH19nNaJ6ZCGCbmmaC0gBQxl5IXCwX3GudOrIKMLLa4ifLp9zvS
-X-Gm-Gg: AeBDietbkCoq6yyeUwWWGQaRWQJbdDih/hPvahQDWqRF67Gu9EILy6Sn2lddo5R327q
-	XYgF5uKNhEd3LxOZOhPV4H1hpqELgVz8GPSU+gousBBROb4MCle1SuRUyY/MSWxmzuGGUZOeBF/
-	DHlS4EyF2+EF+oy/rX89c93qcZnCVKwOorij+an6I8VRAdcy2Uwgfd4DLXXTfZc8YjIz0FvCOFx
-	lw+jTsMoGZp0oxQORCIjQumCz+Z4122+RImsT3ZUxtAaaPPxKHCYRHWXit+u+oQhI5CQ9AF6Ttg
-	TBc3Q/ApZp9D6dbQ0DyU32iRiFG4ng0TEmKQ4f4DMeYYtEnTXaQNYvGe+HA85bQcuSM30LnXf9C
-	EQiyPSORH+Yx3fMHtnOzMC7o/h+Qay9qXUWUtOi/4gYZkKuX4lEW1slO2SNphkDgjtzJp+U1DS6
-	JZuF+aMVafAK/oZkNi4qqluTZ02QLejr0CubVm1TirN5qswocFT+V3iaQnQyXINq5h
-X-Received: by 2002:a05:600c:1d11:b0:48a:7f90:2231 with SMTP id 5b1f17b1804b1-48e51f364f3mr189545395e9.19.1778229129820;
-        Fri, 08 May 2026 01:32:09 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e68ef5209sm20514445e9.15.2026.05.08.01.32.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2026 01:32:08 -0700 (PDT)
-Date: Fri, 8 May 2026 09:32:06 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
- bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
- will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
- mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org, ast@kernel.org,
- rafael@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com,
- zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com, rdunlap@infradead.org,
- joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
- konrad.wilk@oracle.com, ashok.bhat@arm.com
-Subject: Re: [PATCH v11 01/14] asm-generic: barrier: Add
- smp_cond_load_relaxed_timeout()
-Message-ID: <20260508093206.389d9af2@pumpkin>
-In-Reply-To: <87lddujttz.fsf@oracle.com>
-References: <20260408122538.3610871-1-ankur.a.arora@oracle.com>
-	<20260408122538.3610871-2-ankur.a.arora@oracle.com>
-	<874iklm1uy.fsf@oracle.com>
-	<20260506095836.216d9cc5@pumpkin>
-	<87o6isl0nl.fsf@oracle.com>
-	<20260507105721.66ba1e45@pumpkin>
-	<87lddujttz.fsf@oracle.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=schippers-hamm.de header.i=simon@schippers-hamm.de header.b="Xu9LrzYS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=schippers-hamm.de;
+	s=s1-ionos; t=1778232008; x=1778836808; i=simon@schippers-hamm.de;
+	bh=Hc0GCEPa4JhrvnKii+m3Lykf1LE1GIBL0gGV95D/z88=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:From:To:
+	 Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=Xu9LrzYSxbVNYH/KQzwfwj5bV0VNLuoAFZTDfCVZgcEtaUOs3nX/o6i/tlYuPrkl
+	 SVWhSaA+f+KyHAjkSYedMuZUBBbpXrMMPQKF8e47a/sJmjGUh9ZjxRtAFfcHiAgb2
+	 spHONZdtEkpXEhenISaIU8i6Yj0PQdP/aYQJKq42ZHR30qN6wTCZ/ppqMEgOn/P7N
+	 wAxthuYeM2HSi+x5qKBdzdSYYwqV1W6xaxf+Rk8jd+J5mCaXX3FgoWxfZyLykm23P
+	 XVR5DXO2piW4BSpSSZeYUYH2YcX96uR5ImOJz9nsJLSIMqBc5lVbJg0uPCyobMbFV
+	 XlqOfl4zCcXsxGZVxw==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from client.hidden.invalid by mrelayeu.kundenserver.de (mreue108
+ [212.227.17.181]) with ESMTPSA (Nemesis) id 1MCsHm-1wCRgm1iIS-00Dqn7; Fri, 08
+ May 2026 11:20:08 +0200
+Message-ID: <ab56d050-33c9-4f65-94e6-64e1bc2b03b4@schippers-hamm.de>
+Date: Fri, 8 May 2026 11:20:05 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v5 3/5] veth: implement Byte Queue Limits (BQL)
+ for latency reduction
+From: Simon Schippers <simon@schippers-hamm.de>
+To: Jesper Dangaard Brouer <hawk@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc: kernel-team@cloudflare.com, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20260505132159.241305-1-hawk@kernel.org>
+ <20260505132159.241305-4-hawk@kernel.org>
+ <ee275aa6-af27-4dac-9afa-da88abde312b@schippers-hamm.de>
+ <8f2f7f2e-6aa2-4e5b-b52d-0025b2525579@redhat.com>
+ <e3a91545-13cd-4f87-8375-d707865bdbca@schippers-hamm.de>
+ <6a597dbd-70bf-4b14-b495-2f7248fd3220@kernel.org>
+ <68223314-1a44-4aee-8207-57437ef9f3ab@schippers-hamm.de>
+ <3e43117f-356d-4086-a176-abd7fe2e6f0a@kernel.org>
+ <21d639fc-e244-486e-8368-8891b3c43215@schippers-hamm.de>
+Content-Language: en-US
+In-Reply-To: <21d639fc-e244-486e-8368-8891b3c43215@schippers-hamm.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:WAXVRmfQ06nU85T0VZPtSVGg7wsnYtNUbsSf7t56ghLd8asTuKq
+ SHuNw52IRNqz3QxBsJ1+wtMtPSug/zIsUmutNan0DvKqWhoRn0dwq6D7x3NK1mNz8CVBvoT
+ iesOpBf/cEXVEU2MSByE9rKQ0xm2dBxDKG6mRl18aPEz92FHnX0cvrP9+jz5cxbA7hFn5Wh
+ eW0UoTTiwT9qFWWN3hjeA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:/xrhJ6c1wLo=;wy0A1q7QtPHjyGzaRqW8oZlrR3P
+ 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
+ fovKqiTsxbs=
 
-On Thu, 07 May 2026 23:31:20 -0700
-Ankur Arora <ankur.a.arora@oracle.com> wrote:
 
-> David Laight <david.laight.linux@gmail.com> writes:
-> 
-> > On Wed, 06 May 2026 13:54:06 -0700
-> > Ankur Arora <ankur.a.arora@oracle.com> wrote:
-> >  
-> >> David Laight <david.laight.linux@gmail.com> writes:
-> >>  
-> >> > On Wed, 06 May 2026 00:30:29 -0700
-> >> > Ankur Arora <ankur.a.arora@oracle.com> wrote:
-> >> >  
-> >> >> Ankur Arora <ankur.a.arora@oracle.com> writes:
-> >> >>  
-> >> >> > Add smp_cond_load_relaxed_timeout(), which extends
-> >> >> > smp_cond_load_relaxed() to allow waiting for a duration.
-> >> >> >
-> >> >> > We loop around waiting for the condition variable to change while
-> >> >> > peridically doing a time-check. The loop uses cpu_poll_relax() to slow
-> >> >> > down the busy-wait, which, unless overridden by the architecture
-> >> >> > code, amounts to a cpu_relax().
-> >> >> >
-> >> >> > Note that there are two ways for the time-check to fail: the timeout
-> >> >> > case or, @time_expr_ns returning an invalid value (negative or zero).
-> >> >> > The second failure mode allows for clocks attached to the clock-domain
-> >> >> > of @cond_expr --  which might cease to operate meaningfully once some
-> >> >> > state internal to @cond_expr has changed -- to fail.
-> >> >> >
-> >> >> > Evaluation of @time_expr_ns: in the fastpath we want to keep the
-> >> >> > performance close to smp_cond_load_relaxed(). So defer evaluation
-> >> >> > of the potentially costly @time_expr_ns to the slowpath.
-> >> >> >
-> >> >> > This also means that there will always be some hardware dependent
-> >> >> > duration that has passed in cpu_poll_relax() iterations at the time
-> >> >> > of first evaluation. Additionally cpu_poll_relax() is not guaranteed
-> >> >> > to return at timeout boundary. In sum, expect timeout overshoot when
-> >> >> > we exit due to expiration of the timeout.
-> >> >> >
-> >> >> > The number of spin iterations before time-check, SMP_TIMEOUT_POLL_COUNT
-> >> >> > is chosen to be 200 by default. With a cpu_poll_relax() iteration
-> >> >> > taking ~20-30 cycles (measured on a variety of x86 platforms), we
-> >> >> > expect a time-check every ~4000-6000 cycles.
-> >> >> >
-> >> >> > The outer limit of the overshoot is double that when working with the
-> >> >> > parameters above. This might be higher or lower depending on the
-> >> >> > implementation of cpu_poll_relax() across architectures.
-> >> >> >
-> >> >> > Lastly, config option ARCH_HAS_CPU_RELAX indicates availability of a
-> >> >> > cpu_poll_relax() that is cheaper than polling. This might be relevant
-> >> >> > for cases with a long timeout.
-> >> >> >
-> >> >> > Cc: Arnd Bergmann <arnd@arndb.de>
-> >> >> > Cc: Will Deacon <will@kernel.org>
-> >> >> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> >> >> > Cc: Peter Zijlstra <peterz@infradead.org>
-> >> >> > Cc: linux-arch@vger.kernel.org
-> >> >> > Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-> >> >> > Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> >> >> > ---
-> >> >> > Notes:
-> >> >> >    - add a comment mentioning that smp_cond_load_relaxed_timeout() might
-> >> >> >      be using architectural primitives that don't support MMIO.
-> >> >> >      (David Laight, Catalin Marinas)
-> >> >> >
-> >> >> >  include/asm-generic/barrier.h | 69 +++++++++++++++++++++++++++++++++++
-> >> >> >  1 file changed, 69 insertions(+)
-> >> >> >
-> >> >> > diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> >> >> > index d4f581c1e21d..e5a6a1c04649 100644
-> >> >> > --- a/include/asm-generic/barrier.h
-> >> >> > +++ b/include/asm-generic/barrier.h
-> >> >> > @@ -273,6 +273,75 @@ do {									\
-> >> >> >  })
-> >> >> >  #endif
-> >> >> >
-> >> >> > +/*
-> >> >> > + * Number of times we iterate in the loop before doing the time check.
-> >> >> > + * Note that the iteration count assumes that the loop condition is
-> >> >> > + * relatively cheap.
-> >> >> > + */
-> >> >> > +#ifndef SMP_TIMEOUT_POLL_COUNT
-> >> >> > +#define SMP_TIMEOUT_POLL_COUNT		200
-> >> >> > +#endif
-> >> >> > +
-> >> >> > +/*
-> >> >> > + * Platforms with ARCH_HAS_CPU_RELAX have a cpu_poll_relax() implementation
-> >> >> > + * that is expected to be cheaper (lower power) than pure polling.
-> >> >> > + */
-> >> >> > +#ifndef cpu_poll_relax
-> >> >> > +#define cpu_poll_relax(ptr, val, timeout_ns)	cpu_relax()
-> >> >> > +#endif
-> >> >> > +
-> >> >> > +/**
-> >> >> > + * smp_cond_load_relaxed_timeout() - (Spin) wait for cond with no ordering
-> >> >> > + * guarantees until a timeout expires.
-> >> >> > + * @ptr: pointer to the variable to wait on.
-> >> >> > + * @cond_expr: boolean expression to wait for.
-> >> >> > + * @time_expr_ns: expression that evaluates to monotonic time (in ns) or,
-> >> >> > + *  on failure, returns a negative value.
-> >> >> > + * @timeout_ns: timeout value in ns
-> >> >> > + * Both of the above are assumed to be compatible with s64; the signed
-> >> >> > + * value is used to handle the failure case in @time_expr_ns.
-> >> >> > + *
-> >> >> > + * Equivalent to using READ_ONCE() on the condition variable.
-> >> >> > + *
-> >> >> > + * Callers that expect to wait for prolonged durations might want
-> >> >> > + * to take into account the availability of ARCH_HAS_CPU_RELAX.
-> >> >> > + *
-> >> >> > + * Note that @ptr is expected to point to a memory address. Using this
-> >> >> > + * interface with MMIO will be slower (since SMP_TIMEOUT_POLL_COUNT is
-> >> >> > + * tuned for memory) and might also break in interesting architecture
-> >> >> > + * dependent ways.
-> >> >> > + */
-> >> >> > +#ifndef smp_cond_load_relaxed_timeout
-> >> >> > +#define smp_cond_load_relaxed_timeout(ptr, cond_expr,			\
-> >> >> > +				      time_expr_ns, timeout_ns)		\
-> >> >> > +({									\
-> >> >> > +	typeof(ptr) __PTR = (ptr);					\  
-> >
-> > 		auto __PTR = ptr;
-> >  
-> >> >> > +	__unqual_scalar_typeof(*ptr) VAL;				\  
-> >
-> > It can't matter if integer promotions before assigning to VAL.
-> > So something like:
-> > 		auto VAL = 1 ? 0 : *__PTR + 0;
-> > will generate a suitable writable variable.
-> > (The '+ 0' is needed because some versions of gcc incorrectly propagate
-> > 'const'.)  
-> 
-> Thanks. This is useful to know. However, we use the unqualified typeof
-> dictum all over barrier.h. I didn't really see the need to depart from
-> that.
 
-The have been discussions in other threads, my interpretation of the result
-is that the use of __unqual_scalar_typeof() should be limited to a few places
-where there really is no other option.
-If you've ever looked at the preprocessor output you'll understand part of the
-problem.
+On 5/8/26 10:01, Simon Schippers wrote:
+> On 5/7/26 22:45, Jesper Dangaard Brouer wrote:
+>>
+>>
+>> On 07/05/2026 22.12, Simon Schippers wrote:
+>>> On 5/7/26 21:09, Jesper Dangaard Brouer wrote:
+>>>>
+>>>>
+>>>> On 07/05/2026 16.46, Simon Schippers wrote:
+>>>>>
+>>>>>
+>>>>> On 5/7/26 16:34, Paolo Abeni wrote:
+>>>>>> On 5/7/26 8:54 AM, Simon Schippers wrote:
+>>>>>>> On 5/5/26 15:21, hawk@kernel.org wrote:
+>>>>>>>> @@ -928,9 +968,13 @@ static int veth_xdp_rcv(struct veth_rq *rq, =
+int budget,
+>>>>>>>>                }
+>>>>>>>>            } else {
+>>>>>>>>                /* ndo_start_xmit */
+>>>>>>>> -            struct sk_buff *skb =3D ptr;
+>>>>>>>> +            bool bql_charged =3D veth_ptr_is_bql(ptr);
+>>>>>>>> +            struct sk_buff *skb =3D veth_ptr_to_skb(ptr);
+>>>>>>>>                  stats->xdp_bytes +=3D skb->len;
+>>>>>>>> +            if (peer_txq && bql_charged)
+>>>>>>>> +                netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_=
+UNIT);
+>>>>>>>
+>>>>>>> In the discussion with Jonas [1], I left a comment explaining why =
+I think
+>>>>>>> this doesn=E2=80=99t work.
+>>>>>>>
+>>>>
+>>>> I've experimented with doing the "completion" at NAPI-end in
+>>>> veth_poll(), but that resulted in BQL limit being 128 packets, which
+>>>> leads to bad latency results (not acceptable).
+>>>> (See detailed report later)
+>>>>
+>>>>
+>>>>>>> I still think first that adding an option to modify the hard-coded
+>>>>>>> VETH_RING_SIZE is the way to go.
+>>>>>>>
+>>>>
+>>>> Not against being able to modify VETH_RING_SIZE, but I don't think it=
+ is
+>>>> the solution here.
+>>>>
+>>>> The simply solution is the configure BQL limit_min:
+>>>>   `/sys/class/net/<dev>/queues/tx-N/byte_queue_limits/limit_min`
+>>>>
+>>>> My experiments (below) find that limit_min=3D8 is gives good performa=
+nce.
+>>>> We can simply set default to 8 as this still allows userspace to chan=
+ge
+>>>> this later if lower latency is preferred.
+>>>>
+>>>>>>> Thanks!
+>>>>>>>
+>>>>>>> [1] Link: https://lore.kernel.org/netdev/e8cdba04-aa9a-45c6-9807-8=
+274b62920df@tu-dortmund.de/
+>>>>>>
+>>>>>> In the above discussion a 20% regression is reported, which IMHO ca=
+n't
+>>>>>> be ignored. Still the tput figures in the data are extremely low,
+>>>>>> something is possibly off?!? I would expect a few Mpps with pktgen =
+on
+>>>>>> top of veth, while the reported data is ~20-30Kpps.
+>>>>>>
+>>>>>> /P
+>>>>>>
+>>>>>
+>>>>> The ~20-30Kpps occur when thousands of iptables rules are applied an=
+d
+>>>>> an UDP userspace application is sending.
+>>>>>
+>>>>> And there is a 20% pktgen regression (no iptables rules applied).
+>>>>>
+>>>>
+>>>> The pktgen test is a little dubious/weird and Jonas had to modify pkt=
+gen
+>>>> to test this.   John Fastabend added a config to pktgen that allows u=
+s
+>>>> to benchmarking egress qdisc path, this might be better to use this.
+>>>> The samples/pktgen/pktgen_bench_xmit_mode_queue_xmit.sh is a demo usa=
+ge.
+>>>>
+>>>> If redoing the tests, can you adjust limit_min to see the effect?
+>>>>   /sys/class/net/<dev>/queues/tx-N/byte_queue_limits/limit_min
+>>>>
+>>>> 20% throughput performance regression is of-cause too much, but I wil=
+l
+>>>> remind us, that adding a qdisc will "cost" some overhead, that is a
+>>>> configuration choice.  Our purpose here is to reduce bufferbloat and
+>>>> latency, not optimize for throughput.
+>>>>
+>>>>
+>>>>> I am pretty sure the reason is because the BQL limit is stuck at 2
+>>>>> packets (because the completed queue is always called with 1 packet
+>>>>> and not in a interrupt/timer with multiple packets...).
+>>>>>
+>>>>
+>>>> I've run a lot of experiments, which I made AI write a report over, s=
+ee attachment.  The TL;DR is that best performance vs latency tradeoff is =
+defaulting BQL/DQL limit_min to be 8 packets.
+>>>>
+>>>> I fear this patchset will stall forever, if we keep searching for a p=
+erfect solution without any overhead.  The qdisc layer will be a baseline =
+overhead.  The limit=3D2 packets is actually the optimal darkbuffer queue =
+size, but I acknowledge that this causes too many qdisc requeue events (le=
+ading to overhead).  I suggest that I add another patch in V6, that defaul=
+ts limit_min to 8 (separate patch to make it easier to revert/adjust later=
+).
+>>>>
+>>>> I've talked with Jonas, and we want to experiment with different solu=
+tions to make BQL/DQL work better with virtual devices.
+>>>>
+>>>> This patchset helps our (production) use-case reduce mice-flow latenc=
+y
+>>>> from approx 22ms to 1.3ms for latency under-load.  Due to the consume=
+r
+>>>> namespace being the bottleneck the requeue overhead is negligible in
+>>>> comparison.
+>>>>
+>>>> -Jesper
+>>>
+>>> First of all thanks for you work and I really see the advantages of
+>>> avoiding bufferbloat :)
+>>>
+>>> But the key of the BQL algorithm, which is the *dynamic* adaption of t=
+he
+>>> limit, is not working. Always calling netdev_completed_queue() with
+>>> 1 packet results in a static limit of 2 packets (as seen by Jonas
+>>> measurements), which you force up to 8 packets.
+>>>
+>>> So in the end this patchset has the same effect as just setting
+>>> VETH_RING_SIZE to 8 (and giving an option to change this value).
+>>>
+>>
+>> I've code up a time based BQL implementation, see attachment.
+>> WDYT?
+>>
+>> --Jesper
+>>
+>=20
+> A step in the right direction, but I dislike that you call
+> netdev_sent_queue() with at least 1 packet (never 0 packets).
+> I am not sure if it works, and I am not sure about the parameter.
+>=20
 
-> 
-> >> >> > +	u32 __n = 0, __spin = SMP_TIMEOUT_POLL_COUNT;			\
-> >> >> > +	s64 __timeout = (s64)timeout_ns;				\  
-> >
-> > The (s64) cast can only hide errors.
-> >  
-> >> >> > +	s64 __time_now, __time_end = 0;					\
-> >> >> > +									\
-> >> >> > +	for (;;) {							\
-> >> >> > +		VAL = READ_ONCE(*__PTR);				\
-> >> >> > +		if (cond_expr)						\
-> >> >> > +			break;						\
-> >> >> > +		cpu_poll_relax(__PTR, VAL, (u64)__timeout);		\  
-> >
-> > That doesn't look right, __timeout is relative; if the underlying code
-> > uses the timeout then the code delays for 200 * timeout_ns before even
-> > looking at the actual time.
-> >
-> > If you want to spin then you may not even want the cpu_relax() at all.
-> > (Or with a very short timeout as in the version below.)  
-> 
-> Yeah, BPF uses this in the fastpath where we want to avoid looking at
-> the clock in the fastpath.
-> Overshooting the deadline was a minor problem in comparison.
-> 
-> But I agree the version below with the shorter timeout works better.
-> Unfortunately it doesn't help on arm64 if we are using WFE.
+Rethinking of it this could be fine, but really needs testing because:
 
-Yes, the code is ok if cpu_poll_relax() ignores the timeout.
-But for WFE it is all broken.
+The weird thing is that is that BQL's inflight !=3D number of packets
+in the ring and BQL's limit !=3D "current ring size". Instead the BQL
+limit describes the number of maximal allowed packets between
+calls of netdev_sent_queue().
 
-Perhaps refactoring/optimising the WFE code might help.
-IIRC it converts the relative timeout_ns into an absolute 'end time'
-(of some other clock).
-So if you do that conversion once, returning 0 (usually compile-time)
-when WFE isn't in use then it should be possible to make this code work.
 
-Actually, if you assume/require that the converted time is either 0 or
-greater than 200 then it can be used as the initialiser for __n.
 
-Even if the timeout passed to cpu_poll_relax() is relative, it doesn't
-necessarily need reducing.
-I'd expect that the timeout is only a 'guard' timeout to detect lockups.
-So just documenting that the timeout might be double the specified value
-would solve that problem.
+I messed up in my approach below. Forget it :P
 
-> 
-> >> >> > +		if (++__n < __spin)					\
-> >> >> > +			continue;					\
-> >> >> > +		__time_now = (s64)(time_expr_ns);			\  
-> >
-> > Another cast that can only hide bugs.
-> >  
-> >> >> > +		if (unlikely(__time_end == 0))				\
-> >> >> > +			__time_end = __time_now + __timeout;		\
-> >> >> > +		__timeout = __time_end - __time_now;			\
-> >> >> > +		if (__time_now <= 0 || __timeout <= 0) {		\
-> >> >> > +			VAL = READ_ONCE(*__PTR);			\
-> >> >> > +			break;						\
-> >> >> > +		}							\
-> >> >> > +		__n = 0;						\  
-> >
-> > Resetting the spin count doesn't look right at all.
-> > In principle the code will delay for 200 * __timeout.
-> > Possibly the earlier check should be:
-> > 			if (__n < __spin) {
-> > 				__n++;
-> > 				continue;
-> > 			}
-> > (Or just don't worry that the code will spin again after 4M loops.
-> > The problem you have is that if cpu_poll_relay() ignores the timeout you
-> > probably want to spin 'for a bit' in code that only accesses local data
-> > (in particular avoiding evaluating cond_expr or time_expr_ns).  
-> 
-> Yeah we do avoid evaluating the time_expr_ns. And I agree we don't want
-> to hammer the cond_expr but the cpu_relax() should help with that.
-> (In my measurements I see an IPC of ~0.05 in a cpu_relax() loop of this
-> kind.)
-
-I'm not sure what cpu_relax() really does.
-I suspect it helps if hyperthreading is in use, and may reduce power a bit
-(and may be quite slow).
-But the cpu will still be hammering cond_expr.
-This is probably fine most of the time - since it will just hit the local
-d-cache. Even if the line is evicted I'd expect the cost to mainly be load
-on the inter-cpu bus (slowing down cond_expr won't matter).
-
-I have a feeling that one of the reasons that WFE was better than just
-spinning was that the expressions read a per-cpu variable; and doing that
-on arm64 required locked bus cycles so affected system performance.
-I'm sure that using mwait (or equivalent) will almost always increase latency
-over just reading the variable, it is lower power - but that is different.
-
-...
-
-> >> >> I think this is worth cleaning up a bit. The change is mostly around
-> >> >> introducing a u32 __itertime and explicitly computing the waiting time.
-> >> >> And adding a check to ensure that we start with a valid value.
-> >> >>
-> >> >> This does make the implementation a little more involved. So just wanted
-> >> >> to see if people have any opinions on this?
-> >> >>
-> >> >> +#ifndef smp_cond_load_relaxed_timeout
-> >> >> +#define smp_cond_load_relaxed_timeout(ptr, cond_expr,          \
-> >> >> +                                     time_expr_ns, timeout_ns) \
-> >> >> +({                                                             \
-> >> >> +       typeof(ptr) __PTR = (ptr);                              \
-> >> >> +       __unqual_scalar_typeof(*(ptr)) VAL;                     \
-> >> >> +       u32 __count = 0, __spin = SMP_TIMEOUT_POLL_COUNT;       \
-> >> >> +       s64 __timeout = (s64)(timeout_ns);                      \
-> >> >> +       s64 __time_now, __time_end = 0;                         \
-> >> >> +       u32 __maybe_unused __itertime;                          \
-> >> >> +                                                               \
-> >> >> +       for (__itertime = NSEC_PER_USEC;                        \  
-> >
-> > Ok, so that limits the initial 'spin' to 200 usecs.
-> > That gets added to any caller-specified timeout.
-> >  
-> >> >> +               VAL = READ_ONCE(*__PTR), __timeout > 0; ) {     \  
-> >
-> > Broken indentation.
-> > I'd change it back to a for (;;) loop.
-> >
-> > If __timeout <= 0 then the code goes through the 'timer expired'
-> > path (below) on the first iteration.
-> > So the extra check is just bloat.  
-> 
-> Yes, but by the time of the first check we've done this
-> computation with it:
-> >> >> +               if (unlikely(__time_end == 0))                  \
-> >> >> +                       __time_end = __time_now + __timeout;    \
-> >> >> +               __timeout = __time_end - __time_now;            \  
-
-Yep, but you don't expect 0 so there is no point optimising for it.
-
-> >> >> +               if (cond_expr)                                  \
-> >> >> +                       break;                                  \
-> >> >> +               cpu_poll_relax(__PTR, VAL, __itertime);         \
-> >> >> +               if (++__count < __spin)                         \
-> >> >> +                       continue;                               \
-> >> >> +               __time_now = (s64)(time_expr_ns);               \
-> >> >> +               if (unlikely(__time_end == 0))                  \
-> >> >> +                       __time_end = __time_now + __timeout;    \
-> >> >> +               __timeout = __time_end - __time_now;            \
-> >> >> +               if (__time_now <= 0 || __timeout <= 0) {        \
-> >> >> +                       VAL = READ_ONCE(*__PTR);                \
-> >> >> +                       break;                                  \
-> >> >> +               }                                               \  
-> >
-> > How about:
-> > 			if (unlikely(__time_end == 0)) {
-> > 				if (__time_now <= 0)
-> > 					goto timed_out;
-> > 				__time_end = __time_now + __timeout;
-> > 			} else {
-> > 				if (__time_now >= __time_end) {
-> > timed_out:
-> > 					VAL = READ_ONCE(*__PTR);
-> > 					break;
-> > 				}
-> > 				__timeout = __time_end - __time_now;
-> > 			}  
-> 
-> I had a version like that for one of the iterations. One of the problems
-> with it was that needed a named goto (because the whole thing is wrapped
-> in a macro). I don't tihnk the extra check is expensive enough in the
-> slowpath that it's worth rewriting this code.
-
-It is probably possible to write it all in one condition - but it would
-be unreadable :-)
-
-Actually if you require that time_expr_ns be -1 on failure and use u64
-(not s64) then you can do:
-	if (!__time_end)
-		__time_end = __time_now + __timeout;
-	if (__time_now >= __time_end) {
-		VAL = READ_ONCE(*__PTR);
-		break;
-	}
-That relies on the '+' wrapping when the initial time_expr_ns fails.
-
-> 
-> >> >> +               __itertime = __timeout % NSEC_PER_MSEC +        \
-> >> >> +                               NSEC_PER_USEC;                  \  
-> >
-> > That seems to just be putting a bound on the timeout.
-> > So the '% NSEC_PER_MSEC' could be '& ((1u << 20) - 1)'
-> > replacing an expensive signed divide with a cheap mask.  
-> 
-> I think this is a good idea. Let me do something like that instead.
-> 
-> > But overall this is a lot of code to inline.  
-> 
-> Sure. But it's a small number of callsites (and it's a relatively niche
-> interface) so I don't think inlining it is a huge problem.
-
-Until 'next week' :-)
-
-	David
+>=20
+> I would propose doing it like other BQL implementations do
+> (for example usbnet for which I adapted BQL [1] :) ):
+>=20
+> Call netdev_sent_queue() with n_bql in a periodic work. n_bql would
+> still be counted in veth_xdp_rcv() like you currently do (synchronized
+> with the work via ring.consumer_lock?).
+>=20
+> The only weird thing that remains is that BQL's inflight !=3D number of
+> packets in the ring and BQL's limit !=3D "current ring size". Instead
+> the BQL limit describes the number of maximal allowed packets between
+> calls of netdev_sent_queue(), which occur periodically in a somewhat
+> fixed time interval.
+> I guess that could be fine, but it surely needs testing.
+>=20
+> [1] Link: https://lore.kernel.org/netdev/20251106175615.26948-1-simon.sc=
+hippers@tu-dortmund.de/
+>=20
