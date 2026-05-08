@@ -1,171 +1,107 @@
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2000A3D6471
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 21:29:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 177FC274B53
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 21:33:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778275744; cv=none; b=qS/SABjpjj42J8JEwOIiqSTngoSbPvZ1ttGCDvHFvMZK8NQmwMB8VQvcemx0l4MbdCq90g6STQRSMHH8xooo7+qgUGMi9+tZCtZGP3wjAuOvFDtKL/GLgrxXJoAu/zsRFpSv9IDOpRb3ZzjBCaOg3cnMLE7y29jM+bo6DhMl1HA=
+	t=1778276000; cv=none; b=B19iNR4fXe5ELhKnGV4l3O19iihU8iIvMbXIpP8yTI3DgL0BLYVdDLDAdtJUa9bg67Odt8BCHCSTkLPNet8jeC/JH0wZsSfbavRUbLqYXxfYBPwnL+xVSpk17ju8qO0pCc3K0SxbzM8gOkLMDc36VhteEF4iATqFcZODY4j8ZtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778275744; c=relaxed/simple;
-	bh=lm4ZsFpNUgwpK3YnX3D6FcdAELUM2A+q69wdbtD9hng=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mnoz7nn0qb8CVU+1uygdchmYls0p2BRa3Z0HQy9aYNNQAquTAU5sGFhV+0PAMyfFzF+1oP7vO24DriO3vuFbA0p+3+8kKd5C10PVsS1YSn0g6KHW7m97JqPh598Bswc7729yS2kv7kDsrnEp3H0oIAlLSqHwW7eXhFknNvgFPnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dB1NAApR; arc=none smtp.client-ip=209.85.222.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778276000; c=relaxed/simple;
+	bh=Fpv8vqcTDP2OD325rdpzUCJg2tHK1JG8n9fGJE8gGjY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Vrfxqxzw8EfmREx0QsCkzSHiamXW0+tVIjwm1STaqaGtwMi27UxoseU957V19GXCx+Ddb0J/W7FP/D0R1T4VyqlZhy9HRv+KW4+D1+mCTzrhI8uL6UDs1qoT6jhOtGZBiFP6X9eLGCoGmMl60isW3XfLp1cssUWlRsenSEH7OT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fw94ObXJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dB1NAApR"
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-8ec37d52c0dso341057985a.0
-        for <bpf@vger.kernel.org>; Fri, 08 May 2026 14:29:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778275742; x=1778880542; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/LAF18jiWTLJl8Jwx6HS2JQdllgi/a4OQyHfJwaQg84=;
-        b=dB1NAApRVCzA/GJ3Zsj63KroNB3QF16jAEzm+2Y5Z4Jd6dJRojdXOImqLa5jsJ03kR
-         oM/vSwYadVwGRFXbPLOt3JG+qV+ygFOV00YT6B5e4Fu20iTuJdcv+qvm9D7yn4TZQDzo
-         3lsUguU7SvDpNkkDK6cKzT4c2pYtv9rVlqvRF6OZqJP7pbuNfdoMwpAq4czB6xxAHT8H
-         917O/5/cvnid69CWTYlJ3+TNduUJxqIpCx1HHiigYYR7S3fEbAcwboEx8qCQ6cT0KwYY
-         6k8wF0lJVBkEO+2gBk7UV/0ivXlmvaqhu3wlQhVuzHjXvPqeqhbkQN89BOg7fu3pW1kN
-         bUhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778275742; x=1778880542;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/LAF18jiWTLJl8Jwx6HS2JQdllgi/a4OQyHfJwaQg84=;
-        b=nboH0xtJkHAMogH8vv/QCJ1bsZj+JPp7dRIRdOV6OjlDjDRhk7J37ULiTSBZo6wPTV
-         dAy9ec22BEX7cpZASLHWqnA/a1rP5zrJpCGk2WnzC7GAhgmbJD6b9btF48A7e1JMjNNM
-         ayYlGyrH1B7DveXs3+aV0mjsKZbnHSm6uah6M10l0wrhYW33EegRc9xpx5ZKks1sYzZD
-         Zhf99NsBnAU4Iw5cyCgw3VMqI/tltmKpHfXrhDR+JDeIhkYckrjJLSmxOh4/lLygJFkd
-         5DmCB8HQf7i7r94tuR06z3cedaakqqQP4Pkqj3TqNVWJjBaJ8QGzGQqEUPfqt53MFqSw
-         ThLA==
-X-Forwarded-Encrypted: i=1; AFNElJ8Wm2ALxFS7g1skfAJjevlAHCbOBxaJ+mYIOX0TKbM22wS6RQ0Xrvw96SZZDg3PCTVDGbE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMQqulcyCQBDQBBkwS0OfCTaA8/qSz/aS04ARFecIHPcV//8eb
-	A3qgUKHj8FLeNGr8LbsdQJoNrxxTrsLtCleODAngIYm+OE3I5btOy6bz
-X-Gm-Gg: AeBDiev4268FLgMqUXmZa5sQQPCHGtzVltW10kWUNlhcb+MmVgA1zvk0NXynPSyw2a7
-	lFMOFeFaM56OPd1qi0M5Y2/2laa6p7bXwGP/oBcc/d7CaD0gwfrWY3z9RTEYZOcauif+BZI0urE
-	ouYyrL0kLR/OLMTwPAIgHqLqNgW1xu6G9me97r47oDc/aeT1u7e5BXsnGQ+9NZE5ZdpzOgi3rXk
-	Mr/siX9rMg6bydaw2tsiiPty7k+ODs1R9B7WokQ0oG+OtV+VO5V7KZUFWgou9f/uCNjgswhUiHn
-	VR2TY095D20ArETOUhBCbRxlwCRGAguKNfPlm+nW600C/UuVKj3aM9z7v7OZnqDv40vmHlkft6V
-	SkJCw1kASfB3cm/wn3TU49ajJU0icMuSSpYPWB7wuIXYNn3yqGfeSXaARfpUFSBOu+RHpINL5bU
-	ipBRbgKBtXkaZtJvF5gwxvv+3I30BO5/B5ZYhg21seuyFo8XjdWYfF2AuRviZ9XI3Us3s=
-X-Received: by 2002:a05:620a:40d0:b0:8dd:b4fc:d561 with SMTP id af79cd13be357-904d438db5dmr2198955585a.10.1778275741832;
-        Fri, 08 May 2026 14:29:01 -0700 (PDT)
-Received: from devvm29614.prn0.facebook.com ([2a03:2880:f800:1::])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8fc2cd057acsm2596938185a.47.2026.05.08.14.28.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2026 14:29:01 -0700 (PDT)
-Date: Fri, 8 May 2026 14:28:55 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>,
-	Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Joshua Washington <joshwash@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Shuah Khan <shuah@kernel.org>, dw@davidwei.uk, sdf.kernel@gmail.com,
-	mohsin.bashr@gmail.com, willemb@google.com, jiang.kun2@zte.com.cn,
-	xu.xin16@zte.com.cn, wang.yaxin@zte.com.cn, netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Mina Almasry <almasrymina@google.com>,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v3 3/8] net: devmem: support TX over
- NETMEM_TX_NO_DMA devices
-Message-ID: <af5Vlwb5RctHym8D@devvm29614.prn0.facebook.com>
-References: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
- <20260507-tcp-dm-netkit-v3-3-52821445867c@meta.com>
- <20260508134717.4ef87ab6@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fw94ObXJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB479C2BCF6
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 21:33:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778275997;
+	bh=Fpv8vqcTDP2OD325rdpzUCJg2tHK1JG8n9fGJE8gGjY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=fw94ObXJF64zyCYMhBC9f8t/4NKxlxnxfhaSJtOz1LgVoZYhm/R2irJI3jmmXBWg0
+	 wIiXtgyzxWlpP7DzGVGoe3UwwppWEQdBQ2XNIFwy1NdWudM7xLi5jfvfcmaOoYQtz9
+	 SXLeAzTu6zw0LHQnD3eN8ID8PBF6+8HLXGFnf1RfcYpk0q7NvToEzK+pjuoc2ThRIl
+	 Ycy0l86JCAT9Z6tXFMxfLfLHJTu4FthUrBJACbCuQXen0QAwxBzIWZEIgFFXGHX54c
+	 geuxXxt54z6ZAyMwZ08FGB2l8Kx3lOjkdUBF1Je2pA+j2T4rrVPH2Y7IZGAYRn5VLC
+	 aKp15bcANxLGw==
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8b8e98fd885so21672086d6.0
+        for <bpf@vger.kernel.org>; Fri, 08 May 2026 14:33:17 -0700 (PDT)
+X-Gm-Message-State: AOJu0Ywg8hV/GYOChcNo+JTlB9PsTQivQKmCO2pCmGaE+zvcJJ/mrCgL
+	9PqgxXNhRlNvNkQH8CMP2wQeWw9lVb+DHKgxcW41c4ckcBqEGjpThv63avoXivXrjgKpSPA2GEU
+	rs3pYnn8y5oWVi0SHaNAx1cHuy9vcVCE=
+X-Received: by 2002:a05:6214:3f88:b0:8bc:15b:aa6 with SMTP id
+ 6a1803df08f44-8bc46bc64d8mr211395376d6.44.1778275996984; Fri, 08 May 2026
+ 14:33:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260508134717.4ef87ab6@kernel.org>
+References: <20250108010728.207536-1-houtao@huaweicloud.com> <20250108010728.207536-2-houtao@huaweicloud.com>
+In-Reply-To: <20250108010728.207536-2-houtao@huaweicloud.com>
+From: Song Liu <song@kernel.org>
+Date: Fri, 8 May 2026 23:33:05 +0200
+X-Gmail-Original-Message-ID: <CAPhsuW6hMX9LqnD-0tc=t+TDUFA7j8WUgNEshnYtUwwCDX-J5w@mail.gmail.com>
+X-Gm-Features: AVHnY4Knk9WhdOnOaKS4fye1tq5_PhBoNxLXm78yAE1krFiPnKdL9lJR161UyE0
+Message-ID: <CAPhsuW6hMX9LqnD-0tc=t+TDUFA7j8WUgNEshnYtUwwCDX-J5w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 01/16] bpf: Remove migrate_{disable|enable}
+ from LPM trie
+To: Hou Tao <houtao@huaweicloud.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Hao Luo <haoluo@google.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, houtao1@huawei.com, xukuohai@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 08, 2026 at 01:47:17PM -0700, Jakub Kicinski wrote:
-> On Thu, 07 May 2026 19:27:48 -0700 Bobby Eshleman wrote:
-> > +	/* Virtual device (e.g. netkit) the user called bind-tx on. Must be
-> > +	 * NETMEM_TX_NO_DMA.
-> > +	 */
-> > +	struct net_device *vdev;
-> 
-> AI keeps complaining that we don't hold a reference to this dev which 
-> I think is fine, we're just comparing pointers. Could we maybe make this
-> a void pointer and mention in the comment that we treat it as "best
-> effort cookie" (better phrasing welcome).
-> 
-> Or we should wipe these vdev pointers when vdevs disappear, not sure
-> how hard that'd be (or whether it's worth the extra state).
+On Tue, Jan 7, 2025 at 4:55=E2=80=AFPM Hou Tao <houtao@huaweicloud.com> wro=
+te:
+>
+> From: Hou Tao <houtao1@huawei.com>
+>
+> Both bpf program and bpf syscall may invoke ->update or ->delete
+> operation for LPM trie. For bpf program, its running context has already
+> disabled migration explicitly through (migrate_disable()) or implicitly
+> through (preempt_disable() or disable irq). For bpf syscall, the
+> migration is disabled through the use of bpf_disable_instrumentation()
+> before invoking the corresponding map operation callback.
+>
+> Therefore, it is safe to remove the migrate_{disable|enable){} pair from
+> LPM trie.
 
-My guess is this would probably be the simplest way?
+We got some ENOMEM from bpf_map_update_batch() on LPM_TRIE.
+I suspect, this is the trigger, as we are missing
+bpf_disable_instrumentation() in bpf_map_do_batch(). IOW, I think we
+need something like the following.
 
-diff --git a/net/core/devmem.c b/net/core/devmem.c
-index 644c286b778f..e28fae14c687 100644
---- a/net/core/devmem.c
-+++ b/net/core/devmem.c
-@@ -533,3 +533,38 @@ static const struct memory_provider_ops dmabuf_devmem_ops = {
- 	.nl_fill		= mp_dmabuf_devmem_nl_fill,
- 	.uninstall		= mp_dmabuf_devmem_uninstall,
- };
-+
-+static int net_devmem_netdev_event(struct notifier_block *nb,
-+				   unsigned long event, void *ptr)
-+{
-+	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
-+	struct net_devmem_dmabuf_binding *binding;
-+	unsigned long id;
-+
-+	if (event != NETDEV_UNREGISTER)
-+		return NOTIFY_DONE;
-+
-+	xa_for_each(&net_devmem_dmabuf_bindings, id, binding) {
-+		if (!net_devmem_dmabuf_binding_get(binding))
-+			continue;
-+		mutex_lock(&binding->lock);
-+		if (READ_ONCE(binding->vdev) == dev) {
-+			ASSERT_EXCLUSIVE_WRITER(binding->vdev);
-+			WRITE_ONCE(binding->vdev, NULL);
-+		}
-+		mutex_unlock(&binding->lock);
-+		net_devmem_dmabuf_binding_put(binding);
-+	}
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static struct notifier_block net_devmem_netdev_nb = {
-+	.notifier_call = net_devmem_netdev_event,
-+};
-+
-+static int __init net_devmem_init(void)
-+{
-+	return register_netdevice_notifier(&net_devmem_netdev_nb);
-+}
-+subsys_initcall(net_devmem_init);
+Thanks,
+Song
 
+diff --git i/kernel/bpf/syscall.c w/kernel/bpf/syscall.c
+index 3b1f0ba02f61..a8d5959a96bb 100644
+--- i/kernel/bpf/syscall.c
++++ w/kernel/bpf/syscall.c
+@@ -5686,6 +5686,7 @@ static int bpf_map_do_batch(const union bpf_attr *att=
+r,
+                goto err_put;
+        }
 
-I'm open to either approach. The void* + comment is good too, IMHO.  For
-the notifier, I'd probably want to add a test too ensure sendmsg() kicks
-back after the device is removed.
-
-Best,
-Bobby
++       bpf_disable_instrumentation();
+        if (cmd =3D=3D BPF_MAP_LOOKUP_BATCH)
+                BPF_DO_BATCH(map->ops->map_lookup_batch, map, attr, uattr);
+        else if (cmd =3D=3D BPF_MAP_LOOKUP_AND_DELETE_BATCH)
+@@ -5694,6 +5695,7 @@ static int bpf_map_do_batch(const union bpf_attr *att=
+r,
+                BPF_DO_BATCH(map->ops->map_update_batch, map,
+fd_file(f), attr, uattr);
+        else
+                BPF_DO_BATCH(map->ops->map_delete_batch, map, attr, uattr);
++       bpf_enable_instrumentation();
+ err_put:
+        if (has_write) {
+                maybe_wait_bpf_programs(map);
