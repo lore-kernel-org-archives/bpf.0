@@ -1,135 +1,110 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2BB1373BEC;
-	Fri,  8 May 2026 10:37:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A18330AD00;
+	Fri,  8 May 2026 10:48:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778236670; cv=none; b=EMN+n8Dh6UGqNGheHQiNU6I+K43VnLPzt/P8/qXKX/Qwrj/HOFNLF5acUkdujuNplGs52o88jyBBOrFh868LU0P0ifyBghnGx/HDwO5fd7EOP5FM8/VokNDltDEILLougzSvYJtDDK4ZZy8HdmtgtbFK7D4m+yXMumuzbyXmcOk=
+	t=1778237289; cv=none; b=cOmUww3BXkoYwN/PVLqm5qXmvoTQNHStUB1f+pk7SpPLuZP562T2BfLYIw5qC8RaqHjBDhIS+zJhpOdDNKIUb9DlwZR4Vq1X2mwGyXM65qBD1537CR5aZql9WjTi1sHXAtK09zXamdsP20wSSbzkQi2esy1mizDsvD5GBUJJRNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778236670; c=relaxed/simple;
-	bh=PBLzax5+O8KVt78kjB99U2xa1drvmseggjVC2lifs3g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ikg/H0GCiP3XLu7G7boElydGaHkXZc2IMlEMK+tBaTwezw1rvf4LZwogVDWHXOtEg2Jg18Z45Hwq6BAo4cPMFzieZgvoEh32S3oUAcw/atFysPcGPv8lauICoB9SmoWI6LwMmyAak3IWYx1LldTHAZFKDnQuCCSib9g5BZ01Mus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <21ee2d5d-fc8c-497e-aa98-e5e4e3fbecf8@linux.dev>
-Date: Fri, 8 May 2026 18:37:35 +0800
+	s=arc-20240116; t=1778237289; c=relaxed/simple;
+	bh=704LoShnBhfc4BOzl7uMnrCuDGCmToqjLul+3GBrosI=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HCjgMSTkCdF42s15qEBWqioZNwFAXLhrqO2UtqTssckYRxsx47Pi0qfFRewakoT+wJSouCTLUMXwKff/ML7u4CecZfBxOjv4APyz6XVWpKG9Ciz48ucs31SyNPWOq9avnQS2tw3mxLVsFcYfI99jBrlHTHCNuLcs5JZMRzXP6zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=KTYPKjJE; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="KTYPKjJE"
+Received: by linux.microsoft.com (Postfix, from userid 1204)
+	id 7D59320B7165; Fri,  8 May 2026 03:48:04 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7D59320B7165
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1778237284;
+	bh=EMRzlxwa2F6A2f1IpuIIEERVsdP9/sX2AoRibGQygb8=;
+	h=Date:From:To:Subject:References:In-Reply-To:From;
+	b=KTYPKjJESkeQ8FE2LpbeH2mjIlTxN/mT+WiPvLxIT5KgK2EgEFn7fuOjP461H3eFK
+	 MDqwqMgBPfIEH0vfIwpAruEZeMHNRgHRIK4co42UFI7hlYuuaq1sKXY3X6J/uSAofe
+	 fAl64+1kHWnScMOS0HlM0wXeFgZO/jWGJsrquskI=
+Date: Fri, 8 May 2026 03:48:04 -0700
+From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+To: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	leon@kernel.org, longli@microsoft.com, kotaranov@microsoft.com,
+	horms@kernel.org, shradhagupta@linux.microsoft.com,
+	ssengar@linux.microsoft.com, ernis@linux.microsoft.com,
+	shirazsaleem@microsoft.com, linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rdma@vger.kernel.org, stephen@networkplumber.org,
+	jacob.e.keller@intel.com, dipayanroy@microsoft.com,
+	leitao@debian.org, kees@kernel.org, john.fastabend@gmail.com,
+	hawk@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+	ast@kernel.org, sdf@fomichev.me, yury.norov@gmail.com
+Subject: Re: [PATCH net-next v7 0/2] net: mana: add ethtool private flag for
+ full-page RX buffers
+Message-ID: <af2/ZPVtR0OrUwom@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20260506170034.327907-1-dipayanroy@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v1 bpf-next 7/8] bpf: tcp: Add SOCK_OPS rcvlowat hook.
-To: Kuniyuki Iwashima <kuniyu@google.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@google.com>,
- Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>,
- Tenzin Ukyab <ukyab@berkeley.edu>, Kuniyuki Iwashima <kuni1840@gmail.com>,
- bpf@vger.kernel.org, netdev@vger.kernel.org
-References: <20260508073355.3916746-1-kuniyu@google.com>
- <20260508073355.3916746-8-kuniyu@google.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260508073355.3916746-8-kuniyu@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260506170034.327907-1-dipayanroy@linux.microsoft.com>
 
+On Wed, May 06, 2026 at 09:58:56AM -0700, Dipayaan Roy wrote:
+> On some ARM64 platforms with 4K PAGE_SIZE, utilizing page_pool 
+> fragments for allocation in the RX refill path (~2kB buffer per fragment)
+> causes 15-20% throughput regression under high connection counts
+> (>16 TCP streams at 180+ Gbps). Using full-page buffers on these
+> platforms shows no regression and restores line-rate performance.
+> 
+> This behavior is observed on a single platform; other platforms
+> perform better with page_pool fragments, indicating this is not a
+> page_pool issue but platform-specific.
+> 
+> This series adds an ethtool private flag "full-page-rx" to let the
+> user opt in to one RX buffer per page:
+> 
+>   ethtool --set-priv-flags eth0 full-page-rx on
+> 
+> There is no behavioral change by default. The flag can be persisted
+> via udev rule for affected platforms.
+> 
+> Changes in v7:
+>   - Rebased onto net-next.
+>   - Retained private flag approach after David Wei's testing on
+>     Grace (ARM64) confirmed that fragment mode outperforms
+>     full-page mode on other platforms, validating this is a
+>     single-platform workaround rather than a generic issue.
+> Changes in v6:
+>   - Added missed maintainers.
+> Changes in v5:
+>   - Split prep refactor into separate patch (patch 1/2)
+> Changes in v4:
+>   - Dropping the smbios string parsing and add ethtool priv flag
+>     to reconfigure the queues with full page rx buffers.
+> Changes in v3:
+>   - changed u8* to char*
+> Changes in v2:
+>   - separate reading string index and the string, remove inline.
+> 
+> Dipayaan Roy (2):
+>   net: mana: refactor mana_get_strings() and mana_get_sset_count() to
+>     use switch
+>   net: mana: force full-page RX buffers via ethtool private flag
+> 
+>  drivers/net/ethernet/microsoft/mana/mana_en.c |  22 ++-
+>  .../ethernet/microsoft/mana/mana_ethtool.c    | 164 ++++++++++++++----
+>  include/net/mana/mana.h                       |   8 +
+>  3 files changed, 163 insertions(+), 31 deletions(-)
+> 
+> -- 
+> 2.43.0
+>
 
-On 5/8/26 3:33 PM, Kuniyuki Iwashima wrote:
-> Now, it is time to add the new hooks for BPF_SOCK_OPS_RCVLOWAT_CB.
->
-> Let's invoke the BPF SOCK_OPS prog when
->
->    1. TCP stack enqueues skb to sk->sk_receive_queue
->       -> tcp_queue_rcv(), tcp_ofo_queue(), and tcp_fastopen_add_skb()
->
->    2. TCP recvmsg() completes
->       -> __tcp_cleanup_rbuf()
->
-> This will allow the BPF prog to parse each skb and dynamically
-> adjust sk->sk_rcvlowat to suppress unnecessary EPOLLIN wakeups
-> until sufficient data (e.g., a full RPC frame) is available
-> in the receive queue.
->
-> Note that the direct access to bpf_sock_ops.data is intentionally
-> disabled by passing 0 as end_offset.
->
-> Instead, the BPF prog is supposed to use bpf_skb_load_bytes()
-> with bpf_sock_ops because payload is not in the linear area
-> with TCP header/data split on and skb may contain a RPC
-> descriptor in skb frag.  This also simplifies the BPF prog.
->
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> ---
->   include/net/tcp.h       | 14 ++++++++++++++
->   net/ipv4/tcp.c          |  2 ++
->   net/ipv4/tcp_fastopen.c |  2 ++
->   net/ipv4/tcp_input.c    | 10 ++++++++++
->   4 files changed, 28 insertions(+)
->
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> index 4e9e634e276b..003e46c9b500 100644
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-> @@ -737,6 +737,20 @@ static inline struct request_sock *cookie_bpf_check(struct net *net, struct sock
->   }
->   #endif
->   
-> +#ifdef CONFIG_CGROUP_BPF
-> +void bpf_skops_rcvlowat(struct sock *sk, struct sk_buff *skb);
-> +
-> +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *skb)
-> +{
-> +	if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_RCVLOWAT_CB_FLAG))
-> +		bpf_skops_rcvlowat(sk, skb);
-> +}
-> +#else
-> +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *skb)
-> +{
-> +}
-> +#endif
-> +
->   /* From net/ipv6/syncookies.c */
->   int __cookie_v6_check(const struct ipv6hdr *iph, const struct tcphdr *th);
->   struct sock *cookie_v6_check(struct sock *sk, struct sk_buff *skb);
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index 1d9e52fc454f..80144b97a87a 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ -1602,6 +1602,8 @@ void __tcp_cleanup_rbuf(struct sock *sk, int copied)
->   		tcp_mstamp_refresh(tp);
->   		tcp_send_ack(sk);
->   	}
-> +
-> +	tcp_bpf_rcvlowat(sk, NULL);
->   }
->   
+Sashiko pointed out a valid point,I will reshare a v8 adressing that.
+https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260506170034.327907-1-dipayanroy%40linux.microsoft.com
 
-tcp_read_skb (process frame 1 and __skb_unlink)
-└─ sk_psock_verdict_recv
-     └─ sk_psock_verdict_apply
-         └─ tcp_eat_skb
-             └─ tcp_cleanup_rbuf
-                 └─ __tcp_cleanup_rbuf
-                     └─ BPF RCVLOWAT_CB
-                         └─ bpf_sock_ops_tcp_set_rcvlowat (wakeup=true)
-                             └─ tcp_data_ready
-                                 └─ sk_psock_verdict_data_ready
-                                     └─ tcp_read_skb (frame 2)
-                                         └─ ... → tcp_read_skb (frame 3) ...
-
-For strparser it use read_sock instead of read_skb and it will become 
-more complicated...
-
-I think this will cause stack overflow with amounts of skbs in receive 
-queue or infinite call(not tested) for sockmap/kTLS/strparser.
-
+Thank you 
