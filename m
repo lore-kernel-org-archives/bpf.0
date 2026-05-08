@@ -1,64 +1,73 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45F59410D14
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 20:43:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C981A3101A7;
+	Fri,  8 May 2026 20:44:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778272988; cv=none; b=Hwx4iBJm/SFht/4YoyB0sIp99HtcwonID+MzpoZ60YkzetoldbJPGrsxCB1iL++I2J3GtT4tlivPFsWC4vs9imyhrqEu42JzDc70JVjhr5PB4jmg82Y7z41ZglEwjj93pVRBEoCoNSklWW7NCOwX3PBTs28StJkp6zctvfqYp94=
+	t=1778273057; cv=none; b=IGemLGJ9coEUg9Cktq4KEzj21Fhpqi+yTs01D93HJb0Ov1GidqpAw7xtUXpzoD4dsWvgYXhIEm8EN/C+2wtyRmbv6lxKStKu0d7ckXelpF7Jk4MxAKvmO+39c/5ZMlCuIZtscqxKNq8r5hvi9V51lUy2dNoMNifJ5JSpFANnB0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778272988; c=relaxed/simple;
-	bh=ivXT9953qRXUnNR72EFfc69TUCwH3DgIaPQqYHoZ9/k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m4ONLD9jy5heDWTfaIjE3iOXkyX+dOiyWJAi092pZMFnoMuuFIt93YKzD9zzq+LOt/QVHOALbYtu6MoRUBItfdS8CLVnBCWFylpL4nRdhbGm14h/0korIWeks/2jp//qbMD3M6aYB97V6Lh62XZyC/clSEuKTJHjMaMYRQhl2g4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xgs5Ts13; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778273057; c=relaxed/simple;
+	bh=Hwl5TVdR6YBfYZdvpr32S5jgEwKk59J2yeMAGvE6Jvs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DOqP5tz4qhpkb7irmZlVcoxYShhX8ySfQ5+jiyEdZElt3EoWTvTLDxU4J9MPqfXEvwptiWsuUA2XxlGaCg/mRr0pTY8NE38/076OGF9oLhQrWwjjxexTS/5tycdK4H/r8aqodOgSVBMdjLtEfW75zZdCoGQBYjAMfQ8nbiwwRsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uFmBEaYT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xgs5Ts13"
-Date: Fri, 8 May 2026 13:42:33 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778272975;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Uph/LdlKI3jMM/IrNxJnJdlf8a6sDaMEU9S1D5To3Iw=;
-	b=xgs5Ts13CVKbiFWIzLK6dGbJGfgg7RcsjabV1QQ0kMwv2/ESBC0vxRgYmyWanHmWxvQARk
-	xStlcBE0qhp8VvJyCZjCoT2iqQPzJPv3KmJP3k9kwjU6v0hVsTFSKm8CSYq5D250zN5KWn
-	uAR6XToFDnRJlH3NfuWJcbE7PhT5tsw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Eulgyu Kim <eulgyukim@snu.ac.kr>
-Subject: Re: [PATCH v2 bpf] bpf: Free reuseport cBPF prog after RCU grace
- period.
-Message-ID: <20265820377.lHsx.martin.lau@linux.dev>
-References: <20260426012647.3233119-1-kuniyu@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uFmBEaYT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB3A0C2BCB0;
+	Fri,  8 May 2026 20:44:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778273057;
+	bh=Hwl5TVdR6YBfYZdvpr32S5jgEwKk59J2yeMAGvE6Jvs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=uFmBEaYTpUJgR93Cy6mf+t2YLhXlM5nsKoml7W6bTeDUs/ld+5uCvkrOWtC+JjwXT
+	 vRPruZZ3MftzpA0brOqITPUoMeXv/D1D2FX51rSn7pb6Y1vAd/UfhuIDPN4B6m7q72
+	 U//gZLDcA3cH+21/WGSSmVvVKNWJkhTTcsIlXZ8ZrCo+g4icaRQschaXkwxapN+yih
+	 ZfZRPNJReJDSAdIMByCRKunrJqT8dE4YHvQejSU8E1J2uajufTA7wloyJ9CE09WK8m
+	 Ag/Hi/M9AyTZJpX8jBSA/w5LfOc4tWstx9AhOc7aTs3EmTp33iBsJv7Cg7I7SGN+bL
+	 sS6/57fhNbn4g==
+Date: Fri, 8 May 2026 13:44:14 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: Bobby Eshleman <bobbyeshleman@gmail.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>, Yanteng Si
+ <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>, Michael Chan
+ <michael.chan@broadcom.com>, Pavan Chebbi <pavan.chebbi@broadcom.com>,
+ Joshua Washington <joshwash@google.com>, Harshitha Ramamurthy
+ <hramamurthy@google.com>, Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan
+ <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky
+ <leon@kernel.org>, Alexander Duyck <alexanderduyck@fb.com>,
+ kernel-team@meta.com, Daniel Borkmann <daniel@iogearbox.net>, Nikolay
+ Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>,
+ dw@davidwei.uk, mohsin.bashr@gmail.com, willemb@google.com,
+ jiang.kun2@zte.com.cn, xu.xin16@zte.com.cn, wang.yaxin@zte.com.cn,
+ netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, Stanislav Fomichev
+ <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, Bobby Eshleman
+ <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v3 3/8] net: devmem: support TX over
+ NETMEM_TX_NO_DMA devices
+Message-ID: <20260508134414.206391c0@kernel.org>
+In-Reply-To: <af3593dYeiEeMzC2@devvm7509.cco0.facebook.com>
+References: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
+	<20260507-tcp-dm-netkit-v3-3-52821445867c@meta.com>
+	<af3593dYeiEeMzC2@devvm7509.cco0.facebook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260426012647.3233119-1-kuniyu@google.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sun, Apr 26, 2026 at 01:26:43AM +0000, Kuniyuki Iwashima wrote:
-> +static void sk_reuseport_prog_free_rcu(struct rcu_head *rcu)
-> +{
-> +	struct bpf_prog_aux *aux = container_of(rcu, struct bpf_prog_aux, rcu);
-> +	struct bpf_prog *prog = aux->prog;
-> +
-> +	bpf_release_orig_filter(prog);
-> +	bpf_prog_free(prog);
+On Fri, 8 May 2026 08:01:17 -0700 Stanislav Fomichev wrote:
+> Since this is a good case, maybe fold it into skb_frags_readable check above?
+> 
+> 	if (likely(skb_frags_readable() || netmem_tx == NETMEM_TX_NO_DMA))
 
-afaict, __bpf_prog_release() is the canonical way to free a classic prog.
-How about __bpf_prog_release(aux->prog)?
-
-If it makes sense to you, I can make the change before applying.
+FWIW I had the same feeling on v2, so probably worth fixing.
