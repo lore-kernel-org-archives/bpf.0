@@ -1,216 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4D93FE347;
-	Fri,  8 May 2026 15:40:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4172D30DEB2
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 15:54:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778254814; cv=none; b=Gb49zrNGzoTnwO4L8wp2G3Ct1488u4sXH58hD8Gtwd1+AYp1x6gMCaxmzwhc8xqxD/SRQs1/lfx13IbiSHR/SYFF/BdYR/9bw5MeEWW83yR8Ce5YsXacuCNbqw+OwNzwBa65TKTBBQB4blE28ztL2+BIp1xO1gK9SUaNB6Qy7t4=
+	t=1778255700; cv=none; b=VqlNKQ6NwrvIt9HpAauWnj0IAOWRobBdEL7u057zjrAlWsS4SRQAKaiYgKJRPGRKh+LQBq0lzz9SP2Gfit6IlWENxbBohI3Zv69g3i5Sw8IaGk857B1D1XcmdvMDUojdZWQmyONsSkMlA6oaUMxpfXllfJYFtiTDPDPhetHYFvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778254814; c=relaxed/simple;
-	bh=5eIp3bwp4cQp8tg23m4rYRdOZqX+WIiuLyvtwPi+PH0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=RDFdvQOgta2wb4sfAkwLICkwRPrvpjlIS78I2DLKVslrreKX0OWUluD8wzbJNDUBQfUywWk4Gzf29464q5DLcm9EZdhMCWRP1kn2Yo5UKm73jR15wi3FulYMq+zSQH83Z/lggRt+HKvJjpjVuQKRIbEUTL9V0dNS8JDD6xRqKjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g3/gBa0c; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778255700; c=relaxed/simple;
+	bh=beGQbSohbqovdwuat6nKIVAFYzmFCR8PUrxcs94i44o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FGN25t4IyuBt2EZPlspRBfZk3/+FgBmH145ixqwfUC74hoeNEBqcFwrIuNY/ALIURlW4nI3zw1xLRTYg1uDyR/wF/OjDUPe901BLoC9t+oeGDhXvFGxJzmblPorT8HM7MvPnqYPFjipgwW1HR2hkt5yPmCADGBb7Kmzodvm38DI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=r+qYdjAF; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g3/gBa0c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4A15C2BCB0;
-	Fri,  8 May 2026 15:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778254813;
-	bh=5eIp3bwp4cQp8tg23m4rYRdOZqX+WIiuLyvtwPi+PH0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=g3/gBa0cf9OwjQWFJ9vGe/TZWi/Xv4i+zd0jitU/4ginCWmWARUgMgccQRP1SCzCA
-	 Vr32iTk0ixcL0tI+mygVv9hZuSJq/WYAQLW0s8zS4JUwzqPD5EdR/2F6YgbPmHzieq
-	 Ac/gO3rLy7NXECVdQ8EMLY88VVLS2dLs6YZdSu7mfQu7wlL+uvZaglBLvLgNsB16rt
-	 LqaIX8UuafPjEj1qKQ95twBOPWaKycexMADMh3v0f0eSANMxfdoSQkvcuhT/aAktZa
-	 Gp4K4g+JQ5ac7//GdSQP+WjW4467vADUIupjUHGod2gdNG0lGdcXAzQyH91Y5TTnCz
-	 wTGcG3mtwW4WQ==
-Content-Type: multipart/mixed; boundary="===============2613262717962070956=="
+	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="r+qYdjAF"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-453903ee4adso1605761f8f.3
+        for <bpf@vger.kernel.org>; Fri, 08 May 2026 08:54:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1778255698; x=1778860498; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=beGQbSohbqovdwuat6nKIVAFYzmFCR8PUrxcs94i44o=;
+        b=r+qYdjAFZkJSnq1CvRGaZ/LI0eK8QVoWEZ9b1iPl9bQ4fUagPkJ5pED9ioSpKvlsoO
+         DrvL7Bh6e3tvTGaMBZXU0PYwKOPjbw7Sxw8y8vdeE77aWvjecDLGUuyegp7slaeFmOFc
+         m8b3MlNirSpcUJr7Z89UYmFHcLpaWwjHk3JoHle6AcfeIevgB9PUjiGrTg/M1Lqj8hxx
+         PjZvZhERjKUMRpg7w0l/re/UGKYWkC3uMKgNovGFMng5MGmX24mwGtoGrEHnwpwLAyrb
+         /RbxexjnFUp6MOGJNDbI6hH+pNv1l2PtOczm5KPhE+ZYhNqqtd0WXLpNUXVKFjvbIaXe
+         H2ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778255698; x=1778860498;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=beGQbSohbqovdwuat6nKIVAFYzmFCR8PUrxcs94i44o=;
+        b=GnIT4rSA68xcojug3rrSZ9v+dymgsbEmI3jfjv78N3PfBzeTzoB+0BZ1m6VKY3WYtS
+         FcEZ8HVeJEzAfGezdvdv1qx1Bz9ijrJuYO6/sOlp7ASgLRunPyPUb8AyoR6ulsj2Ckxl
+         ZNjMZHSzHyZu6/36aTJAI6ueIArFV01g4UnDGA3yN1g2L9y6JgFn5TajZseepf1/3A35
+         CW0I4hTB0bIHWAhqx27qlFtAVypktdSZ2u9oKGtrNhAQGXat8wkK6lileQ1DRBayHtCp
+         b2xpiCNVDHhqj2FUvvI9wbst1jVrtt4OMtgzp1bb3LenXRedfUOpcGFKkxezrtBuLvH5
+         fXyg==
+X-Forwarded-Encrypted: i=1; AFNElJ/QoNpSEKsaFKxgl3tgw9hEw5j2IZn7xCMWoGQWI2ivbmZ8gnpwg1a9WTpOIHNhKDYjiFQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwS04IipZNkr6pWeJObtPi40zH51HiwTn+kE8d2WZGAF2hZRXhf
+	/FaRG5Bu22qz3+pxrhjYnJSz5uuCAo5NnPHUYy/OXcWvRPVRoVMqkATeaN9//Y6+Uvk=
+X-Gm-Gg: Acq92OFnS4Ex3MckohMCVAPTLkjJYTuACyFnOvpIxBXxpRKnt5E6OfBppZyMeS6sYfq
+	Un07gyiUfd1qfQDAQEokaDJPN/+f5VF72r5cBgXCdVbAJNRjV7my4QrUHKUwmt2BzWpjck40iMq
+	TZXEd+jr9IX7FT7CI0O/q5xumqz4e8tTcG68zLbyVgBUxT0/QBXPVahwDvxyCEhX3FBeeVaFHO9
+	uKsTZNHVxX57p63/MsRfrXS5zHyism5nw3cBWz/Nv5MFxmg75MPgaVGT1E5beez1Ja8Ka6T9Q93
+	9f89DAcjK55XWVXmyKSr/JfO5SGi2R8wntsampNsBFkUR11WclrUCKsMrLVeYf8Ku2EVCB7RsGQ
+	sD+jybqvsICvDwvf2QO2U7NFjcY7d8tOpetig/j7LTGrHED2tkVZqDzjLox8Tv5aXLC/9BSvFc2
+	ZJEg2qJQnTIg2BzY0PB3x+EE0ZE8eymMGsE7EK33HLRMWEn3u2qsghK34CHv6JQPEHcBR2bSYCR
+	afw3e0N9ByoGRGVMY9EgMJBVHBR2NPeAMOGd2Y3x7NQ9pok3BwCiPbp98wawrkoRTXpgGKl6Q6O
+	F+pAeoYf
+X-Received: by 2002:a05:6000:22c4:b0:43d:1c21:ead5 with SMTP id ffacd0b85a97d-4515ce1c6bcmr21753628f8f.22.1778255697345;
+        Fri, 08 May 2026 08:54:57 -0700 (PDT)
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4548eb75c29sm5680163f8f.9.2026.05.08.08.54.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 May 2026 08:54:56 -0700 (PDT)
+Date: Fri, 8 May 2026 16:54:54 +0100
+From: Daniel Thompson <daniel@riscstar.com>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, maxime.chevallier@bootlin.com,
+	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
+	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
+	arnd@arndb.de, gregkh@linuxfoundation.org,
+	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
+	alexandre.torgue@foss.st.com, ast@kernel.org,
+	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
+	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
+	julianbraha@gmail.com, livelycarpet87@gmail.com,
+	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
+	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
+	rohan.g.thomas@altera.com, sdf@fomichev.me,
+	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
+	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 10/12] net: stmmac: tc956x: add TC956x/QPS615
+ support
+Message-ID: <af4HTg5P3j0GsNvt@aspen.lan>
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-11-elder@riscstar.com>
+ <2ce5897d-5bbb-486a-b0f0-0e30e54b451a@lunn.ch>
+ <afy34kj2hPxIlArO@aspen.lan>
+ <ef6df85f-11ac-404d-958a-8cf69b3b6bb6@lunn.ch>
+ <af3IKKkjl0jK8GGB@aspen.lan>
+ <f15e2fe2-88c9-409d-b953-cdc94aee4e16@lunn.ch>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <669cdfc48ce0e37c6985d33d7f649e93eb599611a0cbe51b79defa52949580a5@mail.kernel.org>
-In-Reply-To: <20260508150055.680136-4-vernon2gm@gmail.com>
-References: <20260508150055.680136-4-vernon2gm@gmail.com>
-Subject: Re: [PATCH v2 3/4] mm: introduce bpf_mthp_ops struct ops
-From: bot+bpf-ci@kernel.org
-To: vernon2gm@gmail.com,akpm@linux-foundation.org,david@kernel.org,ljs@kernel.org,roman.gushchin@linux.dev,inwardvessel@gmail.com,shakeel.butt@linux.dev,ast@kernel.org,daniel@iogearbox.net,surenb@google.com
-Cc: tz2294@columbia.edu,baohua@kernel.org,lance.yang@linux.dev,dev.jain@arm.com,laoar.shao@gmail.com,gutierrez.asier@huawei-partners.com,linux-kernel@vger.kernel.org,linux-mm@kvack.org,bpf@vger.kernel.org,yanglincheng@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri,  8 May 2026 15:40:12 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f15e2fe2-88c9-409d-b953-cdc94aee4e16@lunn.ch>
 
---===============2613262717962070956==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 13f49378b157..cad3a87d9873 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-
-[ ... ]
-
-> diff --git a/include/linux/bpf_huge_memory.h b/include/linux/bpf_huge_memory.h
-> new file mode 100644
-> index 000000000000..ffda445c9572
-> --- /dev/null
-> +++ b/include/linux/bpf_huge_memory.h
-
-[ ... ]
-
-> diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
-> index f42563739d2e..78854d0e06ab 100644
-> --- a/include/linux/cgroup-defs.h
-> +++ b/include/linux/cgroup-defs.h
-
-[ ... ]
-
-> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> index 2949e5acff35..80ec622213df 100644
-> --- a/include/linux/huge_mm.h
-> +++ b/include/linux/huge_mm.h
-
-[ ... ]
-
-> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> index 1f084ee71443..7db83ca81e6e 100644
-> --- a/kernel/cgroup/cgroup.c
-> +++ b/kernel/cgroup/cgroup.c
-
-[ ... ]
-
-> diff --git a/mm/Kconfig b/mm/Kconfig
-> index 0a43bb80df4f..f3309376bcc5 100644
-> --- a/mm/Kconfig
-> +++ b/mm/Kconfig
-> @@ -962,6 +962,20 @@ config NO_PAGE_MAPCOUNT
+On Fri, May 08, 2026 at 03:34:42PM +0200, Andrew Lunn wrote:
+> > BTW if you are bothered by SP_SEL_SGMII_2500M, that name comes directly
+> > from the TRM and I'd prefer to keep it if I can. The enumerated value
+> > we have to write into the SP_SEL for 2500base-X is "SGMII 2500M".
 >
->  	  EXPERIMENTAL because the impact of some changes is still unclear.
+> We try to avoid anything to do with SGMII and 2500 because it is
+> technically wrong. Cisco never defined SGMII for 2500, it is something
+> silicon vendors have made up, without any foundation in any
+> standardisation. We much prefer to refer to it as 2500BaseX with
+> broken signalling, which is a much more accurate description.
 >
-> +config BPF_TRANSPARENT_HUGEPAGE
-> +	bool "BPF-based transparent hugepage (EXPERIMENTAL)"
-> +	depends on TRANSPARENT_HUGEPAGE && CGROUP_BPF
-> +	help
-> +	  Using cgroup-bpf to customize mTHP size for different scenarios,
-> +	  automatically select different mTHP sizes for different cgroups,
-> +	  let's focus on making them truly transparent.
-> +
-> +	  This is an experimental feature, that might go away at any time,
-> +	  Please do not rely any production environment.
-                                  ^^^
+> The TRM is also not a public document. If it was, i could see some
+> value in keeping with the naming, but since ~0 developers have the
+> document, this is less useful.
 
-This isn't a bug, but there's a grammar issue in the Kconfig help text.
-The sentence is missing a preposition and pronoun. It should probably be
-"Please do not rely on this in any production environment."
+This is a pretty obscure register buried on some of the TC956x glue
+logic (e.g. it's not part of the DWMAC's register set). I take the view
+that if someone is debugging the hardware interactions deeply enough to
+care what this is called then the odds of them having access to the TRM
+are actually pretty good.
 
-> +
-> +	  EXPERIMENTAL because the BPF interface is unstable and may be removed
-> +	  at any time.
-> +
-
-[ ... ]
-
-> diff --git a/mm/bpf_huge_memory.c b/mm/bpf_huge_memory.c
-> new file mode 100644
-> index 000000000000..851c6ebe2933
-> --- /dev/null
-> +++ b/mm/bpf_huge_memory.c
-> @@ -0,0 +1,168 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Huge memory related BPF code
-> + *
-> + * Author: Vernon Yang <yanglincheng@kylinos.cn>
-> + */
-> +
-> +#include <linux/bpf.h>
-> +#include <linux/srcu.h>
-
-[ ... ]
-
-> +static int bpf_mthp_ops_reg(void *kdata, struct bpf_link *link)
-> +{
-> +	struct bpf_struct_ops_link *st_link = (struct bpf_struct_ops_link *)link;
-> +	struct bpf_mthp_ops *ops = kdata;
-> +	struct cgroup_subsys_state *child;
-> +	struct cgroup *cgrp;
-> +
-> +	if (!link)
-> +		return -EOPNOTSUPP;
-> +
-> +	cgrp = st_link->cgroup;
-            ^^^^^^^^^^^^^^^^^^^^
-
-Does struct bpf_struct_ops_link have a cgroup field? Looking at
-kernel/bpf/bpf_struct_ops.c, the structure is defined as:
-
-    struct bpf_struct_ops_link {
-        struct bpf_link link;
-        struct bpf_map __rcu *map;
-        wait_queue_head_t wait_hup;
-    };
-
-There is no cgroup member. The same issue occurs in bpf_mthp_ops_unreg()
-where st_link->cgroup is accessed. This would cause a compilation error
-when CONFIG_BPF_TRANSPARENT_HUGEPAGE is enabled.
-
-Were you intending to extend struct bpf_struct_ops_link to support
-cgroup-scoped struct_ops, or is there a different mechanism planned for
-associating the link with a specific cgroup?
-
-> +	if (!cgrp)
-> +		return -EINVAL;
-> +
-> +	cgroup_lock();
-> +	css_for_each_descendant_pre(child, &cgrp->self) {
-> +		if (READ_ONCE(child->cgroup->mthp_ops)) {
-> +			pr_warn("sub-cgroup has already registered.\n");
-> +			cgroup_unlock();
-> +			return -EBUSY;
-> +		}
-> +	}
-> +	css_for_each_descendant_pre(child, &cgrp->self)
-> +		WRITE_ONCE(child->cgroup->mthp_ops, ops);
-> +	cgroup_unlock();
-> +
-> +	return 0;
-> +}
-> +
-> +static void bpf_mthp_ops_unreg(void *kdata, struct bpf_link *link)
-> +{
-> +	struct bpf_struct_ops_link *st_link = (struct bpf_struct_ops_link *)link;
-> +	struct cgroup_subsys_state *child;
-> +	struct cgroup *cgrp;
-> +
-> +	if (!link)
-> +		return;
-> +
-> +	cgrp = st_link->cgroup;
-            ^^^^^^^^^^^^^^^^^^^^
-
-Same issue here - the cgroup field doesn't exist in the struct.
-
-> +	if (!cgrp)
-> +		return;
-> +
-> +	cgroup_lock();
-> +	css_for_each_descendant_pre(child, &cgrp->self)
-> +		WRITE_ONCE(child->cgroup->mthp_ops, NULL);
-> +	cgroup_unlock();
-> +
-> +	synchronize_srcu(&mthp_bpf_srcu);
-> +}
-
-[ ... ]
+However having a different name would be only a minor irritant to the
+poor soul trying to debug the thing! I'll rename to SP_SEL_2500BASEX
+in the next rev of the patchset.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25563319416
---===============2613262717962070956==--
+Daniel.
