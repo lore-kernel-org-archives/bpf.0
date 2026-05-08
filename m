@@ -1,43 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2A8E194C96
-	for <bpf@vger.kernel.org>; Fri,  8 May 2026 21:35:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BD2156CA
+	for <bpf@vger.kernel.org>; Fri,  8 May 2026 21:36:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778276146; cv=none; b=p6KvofhbNHH8eaBaTgnSCIFqK1baN9+SwcGNjS6zdqQRxwiEsWBA1lWVN4/iGkYUKHiZe8WgWvPv9kqlFsU3vqJ+G8fje/jP/ERf4Ym3g3+pZ8WV1oAtoXZuAa2btaHwpMxRs0lDFzfuOD/pKRLt8+Xj6OPo8h3oaUjYqQAMRmg=
+	t=1778276217; cv=none; b=X1wdntt0tHVUOVRCLcyNr4QPaLrRQwpy/7Wqyx5DzJm1gn0BjorAdIfk3pnVg7wka5toFGWjeN9C35igrEezzBJMt8YoQIQ6W8UHLly+fpEPpd0zx4BW1Is4tN0bAWDp/tGyT9ihJiaxtvxqRgsCp1u+jRLFEzafbQE2ITyBBA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778276146; c=relaxed/simple;
-	bh=7993DJHV93Vx55/Rf+P/gpLbSOfjAJpRe9lGpUBlq4o=;
+	s=arc-20240116; t=1778276217; c=relaxed/simple;
+	bh=Vz2c9cUPMNISv2uKSq5VHNyBE2lBuMJREbXGpJjBm1o=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ZcaD4KRNDEkqexYlcf+PQvFNWFWva+t/Jc/q0UiXFhdAee4XHZDAoWjWwsAy9OWYIH6Q+FAVxkJYxr+q3BhkP/fp/klMlxmGR05oBbsG4dWfIYvuuwC17/HHLKgEZueGe1OpG8HCOT9uMzZsncY050Rz/4aIi2s9iR+kSATvwvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=taH5YgzF; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=B6Y402FJMO6W99lnGf4nRTztAHI3pNRrNr9l8BlbIpmeZUrROg+rEQxow6PsyUsUbjnFYMAXcI49yf5XSzWsx0NvlkYs58fIh9819oSsAMMqCrV1PFEVWPK2FMrnlKaS8CWmqI/dlMTOSwXGHghbY1fB80z814NAQ26nO2+Palg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uv13pKEd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="taH5YgzF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60980C2BCB0;
-	Fri,  8 May 2026 21:35:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uv13pKEd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94F6CC2BCB0;
+	Fri,  8 May 2026 21:36:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778276145;
-	bh=7993DJHV93Vx55/Rf+P/gpLbSOfjAJpRe9lGpUBlq4o=;
+	s=k20201202; t=1778276217;
+	bh=Vz2c9cUPMNISv2uKSq5VHNyBE2lBuMJREbXGpJjBm1o=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=taH5YgzFqYVSwvnGQgXEVhsN0MGMWzMsvsXmpRRc5fm6uRWZitd86uTXAxIotqc1O
-	 p1/YlMsOZQ9U41NtTi7yQa6lhi7/CN1l6k9Uz4A1LSApU5otBY+uDZ0KGFX78np3W6
-	 nzuLpbpqNxEwn/s1o34VbkSf9HWsH1+tdKjDO6O65qwyB5kaJznyYBcyHeMylbxuzt
-	 LULDkebIdslCkYFj6a4XWHcTU9AVwjkYuFdaRp275gnUPepB0V1k/heJj52Fng5AHg
-	 ZpDc+hnJyaS+Pou31+egfYZUtcbjLMylzhwV4LcsmxsfyG2dUtYzy2toXX+5Ozhi3h
-	 91MHCoCAiiSaA==
+	b=uv13pKEdimIe7jBAfBQMQdT6yQYbq6FatcIakdFE3K49J2uz5eJ7C/Xpv/YIqi3Na
+	 ac2Rpz87ZDZbbCssmEIurs5zenhfVeQn4cTtgcDvat8QINFUh2xtVTjAEqFucmO9yZ
+	 JU/a4W3zkZo0OheEwBp5SLMaxsaNsvP6BeK35GEbE8RF3/nJFRm35z8Po6qp2j5Div
+	 GoZbpkA50vNKXKMt1LFC1wkDD0pAWu31E3j+Tut1xHm8PrzCXuJhJxQoGcD3M0dudK
+	 y94/cUdwkq4IZHXtQHbvhtaHK1prO0JuaYVAU+dx6MmgaEDskOHCkJjIGKCROrLf22
+	 EMf4HzirV80Xg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next,v9 2/2] net: mana: force full-page RX buffers
- via ethtool private flag
+Subject: Re: [PATCH v2 1/4] psi: add psi_group_flush_stats() function
 Reply-To: sashiko@lists.linux.dev
-To: "Dipayaan Roy" <dipayanroy@linux.microsoft.com>
+To: "Vernon Yang" <vernon2gm@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260508142921.497921-3-dipayanroy@linux.microsoft.com>
-References: <20260508142921.497921-3-dipayanroy@linux.microsoft.com>
+In-Reply-To: <20260508150055.680136-2-vernon2gm@gmail.com>
+References: <20260508150055.680136-2-vernon2gm@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 08 May 2026 21:35:44 +0000
-Message-Id: <20260508213545.60980C2BCB0@smtp.kernel.org>
+Date: Fri, 08 May 2026 21:36:57 +0000
+Message-Id: <20260508213657.94F6CC2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,75 +45,38 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Forcing `apc->port_is_up =3D true` in the `mana_attach` error path=
- causes a guaranteed NULL pointer dereference in the reset worker.
+- [Low] Build failure when CONFIG_CGROUPS is enabled but CONFIG_PSI is disa=
+bled.
 --
 
-commit d36beb9b51f56b9797284c9fa1dd515410680980
-Author: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-Subject: net: mana: force full-page RX buffers via ethtool private flag
+commit 3c39f362bc58a25b857026542cbe7d4bb70721fd
+Author: Vernon Yang <yanglincheng@kylinos.cn>
 
-This patch adds an ethtool private flag full-page-rx that allows the
-user to force one RX buffer per page, bypassing the page_pool fragment path
-on ARM64 platforms with 4K PAGE_SIZE.
+psi: add psi_group_flush_stats() function
 
-> diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers=
-/net/ethernet/microsoft/mana/mana_ethtool.c
-> index 7e79681634db3..f22bbb3259489 100644
-> --- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-> +++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-[ ... ]
-> @@ -590,6 +609,88 @@ static int mana_get_link_ksettings(struct net_device=
- *ndev,
-[ ... ]
-> +static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
-> +{
-[ ... ]
-> +		err =3D mana_attach(ndev);
-> +		if (err) {
-> +			netdev_err(ndev, "mana_attach failed: %d\n", err);
-> +			apc->priv_flags =3D old_priv_flags;
-> +
-> +			/* Restore 'port_is_up' so the reset work handler
-> +			 * can properly detach/attach. Without this,
-> +			 * the handler sees port_is_up=3Dfalse and skips
-> +			 * queue allocation, leaving the port dead.
-> +			 */
-> +			apc->port_is_up =3D true;
-> +			schedule_port_reset =3D true;
-> +		}
+This commit adds the psi_group_flush_stats() function to prepare for
+the subsequent mthp_ext ebpf program.
 
-Can this cause a NULL pointer dereference in the reset worker?
+> diff --git a/include/linux/psi.h b/include/linux/psi.h
+> index e0745873e3f26..7b4fd8190810f 100644
+> --- a/include/linux/psi.h
+> +++ b/include/linux/psi.h
+> @@ -22,6 +22,7 @@ void psi_init(void);
+>  void psi_memstall_enter(unsigned long *flags);
+>  void psi_memstall_leave(unsigned long *flags);
+> =20
+> +void psi_group_flush_stats(struct psi_group *group);
 
-If mana_attach() fails, its error path cleans up the partially allocated st=
-ate.
-Specifically, if mana_alloc_queues() fails, it calls mana_cleanup_port_cont=
-ext(),
-which frees the tx_qp array and sets apc->tx_qp =3D NULL.
+Will this cause a build failure if the kernel is configured with
+CONFIG_CGROUPS=3Dy but CONFIG_PSI=3Dn?
 
-When apc->port_is_up is forced to true and the reset work is scheduled here:
+Because there is no fallback stub or empty definition for
+psi_group_flush_stats() when CONFIG_PSI is disabled, callers added in
+subsequent patches under CONFIG_CGROUPS might face undefined references.
 
-mana_set_priv_flags()
-  err =3D mana_attach(ndev);
-  if (err) {
-      ...
-      apc->port_is_up =3D true;
-      schedule_port_reset =3D true;
-  }
-
-The reset worker will eventually call mana_detach(). Because apc->port_is_up
-is true, mana_detach() will attempt to deallocate the queues:
-
-mana_detach()
-  apc->port_st_save =3D apc->port_is_up;
-  ...
-  if (apc->port_st_save) {
-      err =3D mana_dealloc_queues(ndev);
-
-If mana_dealloc_queues() unconditionally iterates over apc->num_queues and
-accesses apc->tx_qp[i], does this lead to an immediate kernel panic since
-apc->tx_qp was already set to NULL during the earlier cleanup?
+Would it make sense to add an empty inline stub in the #else branch
+for CONFIG_PSI?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260508142921.4979=
-21-1-dipayanroy@linux.microsoft.com?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260508150055.6801=
+36-1-vernon2gm@gmail.com?part=3D1
