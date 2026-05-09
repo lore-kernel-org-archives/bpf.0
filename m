@@ -1,183 +1,258 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D9B2836A6
-	for <bpf@vger.kernel.org>; Sat,  9 May 2026 11:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3B934DCC7
+	for <bpf@vger.kernel.org>; Sat,  9 May 2026 12:53:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778327427; cv=none; b=YuyI9y6Ri+sNVx6L7BBKa+d/tVknptf3666adrrj5sFrgobJB/cVTvIcPutj2Xqsoc6tNNcMtmhr4+C4j7c6cgFT2dzsYrbqVGtcBllOHbyxXkxGlGWrfOkCHUDdqLwUsU9XR/0bgULDMHZjz72Uv4N80nplJqIJ6OxorVPuyw0=
+	t=1778331184; cv=none; b=qPp+0azdN2Aj9pxzBwjPo1M2boEAyd99bzG5CWgxYh/H8PSodjim/h3C5Oib/M9ulLm5zKTFQ3Bx4i2Cx6478MghRRYf/R7pwnyeinPJStgle/lzywIRSCspE/4H1NdjhrVRXtGEgqh3lvDghtLlgmApqHD/ErvOIAHi09z5UZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778327427; c=relaxed/simple;
-	bh=J/EL3Y2oCRAog8cN3VJvIbSDvWtrO4uPWJuHm1ccVnw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QJU7+GmYJltmF0CrSnoSvEqtIF2j8BLuiFyXnh9GQXHeG0jIpoK42qxSSX1BR8AeVhU4yA5vwAGFxj4Gs0DRoGHe9wNobVt9T2af6RcYMDee7SI0/tO44np9aPzAp9Rnp1/1YpGrw2L3T6Z9xB2yugRIlvVRX0Mz0yAIkotCghU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vu4Mb/Mw; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778331184; c=relaxed/simple;
+	bh=zEHcF8UGh6iBzjoccOZzsct1oj4aSpJ1aER21JPaAig=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hKBEwA0hkDSFyNLCQm2zFHa4+HRKNRc/zJeVXKxHgwyTEWIZ/3wiANOAHPSig1zG4syyrTDzfCFz3l75+jjs53PEP0rx0QvUaRM+uyxv32abaBOyBxqDICVTQPnQY3wqAgWuZ761HG0O14rHpqQs+DkPnOuOYbWDN/bSH2LjkiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Rz2TBa2A; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vu4Mb/Mw"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c827313dac0so162341a12.1
-        for <bpf@vger.kernel.org>; Sat, 09 May 2026 04:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778327425; x=1778932225; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=J/EL3Y2oCRAog8cN3VJvIbSDvWtrO4uPWJuHm1ccVnw=;
-        b=Vu4Mb/MwaXNYPxTUDE8R8vj0H3iZHrF1JU0F1Wl/JidhUyu5gWMHXV3cuoEnowEOQV
-         mQqLS9I+uPL76UWnfP2V6gSc2HVuwZBx3dqJpqiH9qfR1Jvz1FBcNX/zyKVBmJn1HLhH
-         L/xsuvkKQl8fvqlY8vAw7pRZ9EKNZxbOjBBRDPrWKJz6r1psyHcwK+gQ1lzvxnXMiq4k
-         8z5LRvjaE7gjfHbBmsF23pEomg/z1f98TegNTal+iQe+Su2ylG+ZNM/+uOgI7ChIjo1F
-         ad5c3S+Yn9m35id73GAwN9a+CfAso6Y31uz5l9LKxPQjYlrBishgZCrDzsRMkYn4U91U
-         PaNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778327425; x=1778932225;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J/EL3Y2oCRAog8cN3VJvIbSDvWtrO4uPWJuHm1ccVnw=;
-        b=QT88pCWUj56B0ocQ2U/q8PcF0PYfYBpJbJWBX/Yad7Dkb6IkXzukfwQ0AEPh9fmqU4
-         VdiBvnN7jaHPUIn/TkFcKzEVO2QuP15G0lHNINgBNcdlkcOwC86YNkS/WifLDwVh5tRZ
-         xzWpTU7wzP123CBptNZkylzMuk1RaKRn6MUkMUATay+X0MePsD1xd0KN30ojLf7bxhGW
-         +aB1HJKEyAFZmqqfNIkdSYlCDaSEDcaH2zCLhifBnXD+1f2UZmnxgu8D/lIkIMdLWKQE
-         Qqs3czODXbraDVA5V2ZkInOeG2tgXcJcvJE6PYt8i07MwHbmwn6xHsGGswgH5LRHPWk+
-         ZEfg==
-X-Gm-Message-State: AOJu0YxVzpk0AO8nKElWEfJhdORIdFrG3y6v0xYgtMX69CN3xq2dYuvO
-	baBxoj/Cv/SPXtiei0mrNq1DyKEc9a2+tdgM9QhuiM64AY+2UkZY8q6efOULkg==
-X-Gm-Gg: Acq92OEVqKAP4s2jt5AGHbrpu/dreBV4obcNoS2MWi3ISuGckwRmGrvZ+GAWqJiYdSc
-	PvL6s759bjvj/9IeO3acyw+I2tRMvj8GO8CfpZGumPlTYbeApB7DqhLHJT/6etp2NwzL2moSdmV
-	6wKSAdZyn3BpyK6Avp0j2UHBBEU8cLLVW/G6lkwNrdKh12yI7orFh5vbtjLHwSo6qIFykdoM1O3
-	xYQXX0KtdtgZ7NgeFgfQYWCTlX4qmo7S0AE67HDrPtEfSD/BwgRfg+w8z24xbC599wk5MHZ+0wl
-	fbUYEDerJUe62lWHmIHVWwfIrKIAOU3vAXrarUkeAv+NeCn9woLSexjvFg/weLf5gAJhBPEKDMg
-	t7nDNEM21CyRQ5iksF4nalLl1p2Bpm6jo2kOid+ON5osQOFKLcIA35p+vL/A6pwtcJOX2Iri+EL
-	AgtVx1ykR3kxYk03UDU79soOvySEYwzclvHxhJhYc4QkHE6wcAIfbOI+Tfc+HRsA==
-X-Received: by 2002:a17:903:3890:b0:2ae:4ad5:b76c with SMTP id d9443c01a7336-2babcbac030mr97476995ad.10.1778327425106;
-        Sat, 09 May 2026 04:50:25 -0700 (PDT)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1e365a1sm47776865ad.44.2026.05.09.04.50.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 May 2026 04:50:24 -0700 (PDT)
-Message-ID: <3e3a145bfb6c17535c5c921c60f405d56d32bf7d.camel@gmail.com>
-Subject: Re: [PATCH bpf] bpf: Don't run arg-tracking analysis twice on main
- subprog
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Paul Chaignon
-	 <paul.chaignon@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Kumar
- Kartikeya Dwivedi	 <memxor@gmail.com>
-Date: Sat, 09 May 2026 04:50:21 -0700
-In-Reply-To: <CAADnVQ+kM=Zg_pcY30QHFPu_16L8wa+DbgQqnidqo-QZphihFQ@mail.gmail.com>
-References: 
-	<e4d7b53d4963ef520541a782f5fc8108a168877c.1778176504.git.paul.chaignon@gmail.com>
-	 <CAADnVQ+kM=Zg_pcY30QHFPu_16L8wa+DbgQqnidqo-QZphihFQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Rz2TBa2A"
+Message-ID: <0b36de5b-63a3-4694-9981-431b4e703e09@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778331179;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tr3OIEvULxXbPBC1UI6czzrg66lNBZvRF8A6TGS9wtM=;
+	b=Rz2TBa2AQIcQwi/Abftsq5TlAjeYhezSTJF2LjDW03OsLeI9VoCbFSy5q0APV+QF42QXuP
+	j+wKFvmmlX9ECxt1/6PzVjqppQCbnrvZaK/9kHYWYF9iqQrR9YH6QYVAiFqudLRstC7ka7
+	49hUZLFuzQC6XPZlaWo+2KxRc7RUkBk=
+Date: Sat, 9 May 2026 13:52:51 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v2 05/23] bpf: Support stack arguments for bpf
+ functions
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ jose.marchesi@oracle.com, kernel-team@fb.com, martin.lau@kernel.org,
+ eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev
+References: <20260507213008.1127429-1-yonghong.song@linux.dev>
+ <11c51daec78a68837f719172ae1c21db8b3e98e0a76aa5bcd59c8b089760c40d@mail.kernel.org>
+Content-Language: en-GB
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <11c51daec78a68837f719172ae1c21db8b3e98e0a76aa5bcd59c8b089760c40d@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, 2026-05-08 at 16:24 -0700, Alexei Starovoitov wrote:
-> On Thu, May 7, 2026 at 11:22=E2=80=AFAM Paul Chaignon <paul.chaignon@gmai=
-l.com> wrote:
-> >=20
-> > Because subprog 0, the main subprog, is considered a global function,
-> > we end up running the arg-tracking dataflow analysis twice on it. That
-> > results in slightly longer verification but mostly in more verbose
-> > verifier logs. This patch fixes it by keeping only the iteration over
-> > global subprogs.
-> >=20
-> > When running over all of Cilium's programs with BPF_LOG_LEVEL2, this
-> > reduces verbosity by ~20% on average.
-> >=20
-> > Fixes: bf0c571f7feb6 ("bpf: introduce forward arg-tracking dataflow ana=
-lysis")
-> > Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
-> > ---
-> > =C2=A0kernel/bpf/liveness.c | 11 ++---------
-> > =C2=A01 file changed, 2 insertions(+), 9 deletions(-)
-> >=20
-> > diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> > index 332e6e003f27..505250998f36 100644
-> > --- a/kernel/bpf/liveness.c
-> > +++ b/kernel/bpf/liveness.c
-> > @@ -1914,15 +1914,6 @@ int bpf_compute_subprog_arg_access(struct bpf_ve=
-rifier_env *env)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 return -ENOMEM;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> >=20
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 instance =3D call_instance(env, N=
-ULL, 0, 0);
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ERR(instance)) {
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 err =3D PTR_ERR(instance);
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 goto out;
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 err =3D analyze_subprog(env, NULL=
-, info, instance, callsites);
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (err)
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 goto out;
-> > -
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Subprogs and callbac=
-ks that don't receive FP-derived arguments
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * cannot access ancest=
-or stack frames, so they were skipped during
-> > @@ -1934,6 +1925,8 @@ int bpf_compute_subprog_arg_access(struct bpf_ver=
-ifier_env *env)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * each subprog is anal=
-yzed before its callees, allowing the
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * recursive walk insid=
-e analyze_subprog() to naturally
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * reach nested callees=
- that also lack FP-derived args.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Note the main subprog is =
-also analyzed as part of this loop.
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->=20
-> Thanks for the report.
-> I guess the fix is correct.
-> This part of the comment needs to be adjusted:
-> "they were skipped during
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * the recursive walk abo=
-ve."
->=20
-> I wonder whether something like this is cleaner?
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 if (info[sub].at_in && !bpf_subprog_is_global(env, sub))
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 if (info[sub].at_in && (!bpf_subprog_is_global(env,
-> sub) || sub =3D=3D 0))
->=20
-> This part of the comment:
-> "Async callbacks (timer, workqueue) are
-> * also not reachable from the main program's call graph."
->=20
-> is also not quite correct.
-> In here:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 } else if (bpf_calls_callback(env, idx)) {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 callee =
-=3D find_callback_subprog(env, insn, idx,
-> &caller_reg, &cb_callee_reg);
->=20
-> they could have been reached, but find_callback_subprog()
-> will ignore timers because FP-derived args won't be passed
-> into them.
->=20
-> Eduard,
-> wdyt?
 
-This is a nice catch. Idk if 'sub =3D=3D 0' part is necessary, tbh.
-Paul, please add my acked-by when you respin with fixed comments.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+On 5/7/26 12:26 AM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+>> index 321b9d69cf9c..1fba16fced28 100644
+>> --- a/include/linux/bpf_verifier.h
+>> +++ b/include/linux/bpf_verifier.h
+>> @@ -427,6 +427,10 @@ struct bpf_func_state {
+>>   	 * `stack`. allocated_stack is always a multiple of BPF_REG_SIZE.
+>>   	 */
+>>   	int allocated_stack;
+>> +
+>> +	bool no_stack_arg_load;
+>> +	u16 out_stack_arg_cnt; /* Number of outgoing on-stack argument slots */
+>> +	struct bpf_reg_state *stack_arg_regs; /* Outgoing on-stack arguments */
+>>   };
+> The new field no_stack_arg_load is placed after allocated_stack, but
+> copy_stack_state() never assigns it.
+>
+> The comment at line 417 says 'The following fields should be last. See
+> copy_func_state()', and copy_func_state() does this:
+>
+>      memcpy(dst, src, offsetof(struct bpf_func_state, stack));
+>
+> so any field after stack is not memcpy'd. copy_stack_state() copies
+> stack, allocated_stack, out_stack_arg_cnt, and stack_arg_regs, but
+> not no_stack_arg_load.
+>
+> Consequence: whenever a state is cloned (e.g., via push_stack() at
+> conditional jumps), the pushed state inherits no_stack_arg_load=0
+> regardless of the source state's value.
+>
+> This breaks the invariant the commit message describes: 'all stack arg
+> reads must be ahead of any stack arg write' and 'all stack arg reads must
+> be before any bpf func, kfunc and helpers'.
+>
+> A BPF program can write to an outgoing stack arg (which sets
+> cur->no_stack_arg_load=true in check_stack_arg_write), then execute a
+> conditional jump which calls push_stack(). The pushed state's
+> no_stack_arg_load is reset to 0, so a subsequent stack arg read would be
+> accepted by check_stack_arg_read() when it should be rejected.
+>
+> The same issue applies to state pruning: func_states_equal/stack_arg_safe
+> does not compare no_stack_arg_load either, so a state with
+> no_stack_arg_load=true can be pruned to an old state with
+> no_stack_arg_load=false incorrectly.
+>
+> Should no_stack_arg_load be placed before stack (to be memcpy'd) or should
+> copy_stack_state() explicitly assign it?
+
+This is my fault. In this version, I tried to make code better to understand,
+e.g. putting related fields together. But in this particular case, I should
+not do this as I forgot this is for state copying. Will fix in the next revision.
+
+>
+> [ ... ]
+>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 3bafb7ad2ba7..61d6663498f7 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -1362,6 +1362,18 @@ static int copy_stack_state(struct bpf_func_state *dst, const struct bpf_func_st
+>>   		return -ENOMEM;
+>>
+>>   	dst->allocated_stack = src->allocated_stack;
+>> +
+>> +	/* copy stack args state */
+>> +	n = src->out_stack_arg_cnt;
+>> +	if (n) {
+>> +		dst->stack_arg_regs = copy_array(dst->stack_arg_regs, src->stack_arg_regs, n,
+>> +						 sizeof(struct bpf_reg_state),
+>> +						 GFP_KERNEL_ACCOUNT);
+>> +		if (!dst->stack_arg_regs)
+>> +			return -ENOMEM;
+>> +	}
+>> +
+>> +	dst->out_stack_arg_cnt = src->out_stack_arg_cnt;
+>>   	return 0;
+>>   }
+> copy_stack_state() copies stack, allocated_stack, stack_arg_regs, and
+> out_stack_arg_cnt, but no_stack_arg_load is missing.
+>
+> The field is declared in struct bpf_func_state after allocated_stack, so
+> it lives in the region that copy_func_state's memcpy excludes:
+>
+>      static int copy_func_state(struct bpf_func_state *dst,
+>                                 const struct bpf_func_state *src)
+>      {
+>          memcpy(dst, src, offsetof(struct bpf_func_state, stack));
+>          return copy_stack_state(dst, src);
+>      }
+>
+> The memcpy stops at stack, so no_stack_arg_load is never copied. Every
+> state copy path through bpf_copy_verifier_state(), push_stack(), and
+> pop_stack() silently resets the flag.
+>
+> The commit enforces the invariant 'all stack arg reads must precede any
+> stack arg write or any call within a frame' by setting
+> state->no_stack_arg_load = true in check_stack_arg_write() and in
+> do_check_insn()'s call branch, and checking the flag in
+> check_stack_arg_read().
+>
+> When the verifier encounters a branch, push_stack() calls
+> bpf_copy_verifier_state() which loses no_stack_arg_load. A BPF program can
+> perform a write or call, conditionally branch, and after the branch perform
+> a stack arg read that should be rejected. The read passes verification
+> because the flag was reset to false on the restored state.
+>
+> The commit message says this invariant is required because 'JIT may emit
+> mov insns for read/write with the same register and bpf function, kfunc and
+> helper will invalidate all arguments immediately after the call'. Bypassing
+> the flag allows JIT-generated code that reads stale or clobbered stack
+> argument slots at runtime.
+>
+> Should copy_stack_state() add 'dst->no_stack_arg_load =
+> src->no_stack_arg_load;'?
+
+Again, will fix no_stack_arg_load issue in the next revision.
+
+>
+> [ ... ]
+>
+>> @@ -4050,6 +4080,105 @@ static int check_stack_write(struct bpf_verifier_env *env,
+>>   	return err;
+>>   }
+>>
+>> +/*
+>> + * Write a value to the outgoing stack arg area.
+>> + * off is a negative offset from r11 (e.g. -8 for arg6, -16 for arg7).
+>> + */
+>> +static int check_stack_arg_write(struct bpf_verifier_env *env, struct bpf_func_state *state,
+>> +				 int off, struct bpf_reg_state *value_reg)
+>> +{
+>> +	int max_stack_arg_regs = MAX_BPF_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS;
+>> +	struct bpf_subprog_info *subprog = &env->subprog_info[state->subprogno];
+>> +	int spi = -off / BPF_REG_SIZE - 1;
+>> +	struct bpf_func_state *cur;
+>> +	struct bpf_reg_state *arg;
+>> +	int err;
+>> +
+>> +	if (spi >= max_stack_arg_regs) {
+>> +		verbose(env, "stack arg write offset %d exceeds max %d stack args\n",
+>> +			off, max_stack_arg_regs);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	err = grow_stack_arg_slots(env, state, spi + 1);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	/* Track the max outgoing stack arg slot count. */
+>> +	if (spi + 1 > subprog->max_out_stack_arg_cnt)
+>> +		subprog->max_out_stack_arg_cnt = spi + 1;
+>> +
+>> +	cur = env->cur_state->frame[env->cur_state->curframe];
+> This isn't a bug, but the local variable cur is assigned but never read.
+> Both call sites already pass state = env->cur_state->frame[curframe], so
+> cur is always identical to the state parameter. Should this line be
+> removed?
+
+Right, 'cur = ...' should be removed.
+
+>
+> [ ... ]
+>
+>> @@ -16961,6 +17135,14 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+> The register validation in check_and_resolve_insns() allows r11/BPF_REG_PARAMS
+> through for all instruction classes, but only BPF_LDX, BPF_STX, and BPF_ST
+> have explicit handling.
+>
+> In v4 of this series (April 11), bot+bpf-ci@kernel.org raised a concern:
+>
+>    If a BPF program uses r11 as src_reg or dst_reg in an ALU or JMP
+>    instruction, it would cause an out-of-bounds access to regs[11] (array
+>    is only regs[0-10]).
+>
+>    Would it make sense to restrict the r11 exemption here to only the
+>    instruction classes that actually handle it (BPF_LDX, BPF_STX, BPF_ST),
+>    rather than allowing it globally?
+>
+> The author acknowledged this was a bug and agreed to restrict the r11
+> exemption to only BPF_LDX, BPF_STX, BPF_ST. However, the current code does
+> not have any exemption for r11.
+>
+> Looking at check_and_resolve_insns(), it checks 'insn->dst_reg >=
+> MAX_BPF_REG' without exception. Since BPF_REG_PARAMS == MAX_BPF_REG == 11,
+> this will reject all uses of r11 including legitimate LDX/STX/ST operations
+> on stack arguments.
+>
+> Should check_and_resolve_insns() allow r11 for the specific instruction
+> classes that handle stack arguments (BPF_LDX, BPF_STX, BPF_ST)?
+
+This actually handled in later patch "bpf: Enable r11 based insns",
+so we should be fine for this one.
+
+>
+> Reference:
+> https://lore.kernel.org/bpf/bcd1b7033de7f597d73b3991f8fc4d8b502fce451fc288d909ae72a717578a0d@mail.kernel.org/
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25523765323
+
