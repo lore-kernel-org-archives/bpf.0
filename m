@@ -1,119 +1,153 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 681C7207DF7
-	for <bpf@vger.kernel.org>; Sat,  9 May 2026 02:15:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D81F48C1F
+	for <bpf@vger.kernel.org>; Sat,  9 May 2026 02:19:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778292924; cv=none; b=ckZLuVILoEgS1lljNMfwPzRm3XQbon7pb7SFeUPA5mLl09eVketILzzvfVGPi9A15SE7/8wiZWHkgFUwrnI9U2HJnIKkXy9jXNgbOqoznh/rcbNDdvSLMPbKLLueO+8XO7fyTEYfXCNkkhtaNX0lFkkM3j9xSvYb73rDbdznqKc=
+	t=1778293180; cv=none; b=CL4TYTI1bJTg+SvsV+QIfQPCMIExf596rJRFhs/qf38W9aBgVZvNdQbW+SjacW+6CHFKqYUh2Fj4FJvv7wT/EWr0Z+sQvMRlNcuZBQ0lrBJdg3mRy4hIZqEhYDmjvbuVvFMIg+eDUj/AIVhpdbI7/vARPChpSoTWGs+tRiiyDi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778292924; c=relaxed/simple;
-	bh=LhT5SYKpHjhrAAl9NfwEtPED0brOO9Rj6SolAHcYFT4=;
+	s=arc-20240116; t=1778293180; c=relaxed/simple;
+	bh=cfX4ycBAIo8SXAnKJED11lFJ5Xa9Uh5/YJvZ0jMwpU0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fI0VePG9CdJoJQzqBduKPTqeTh+0fC1ICjCHxhyR8zFjWR1PMr3Q07BRAi5IuLQtKONZHKR7ONDDIijFP4FXptclYpLM0yG2m4Bjq3n2dHcMGi9x3FlptR4iLhc0HhyBfeYmTmIwYx8Mm2Ss9iGCAJU613kiB7q9qRWBhWLQ6yo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ez3jDaE2; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=AvlyRlOkfVC6pnVokO9B/RIjCYp/oDHMU4mJ+iSqf5Dxgl2OOQ7AvpSu5t4o9R7JDauTRWqTHO8uYaT8on6Kb3+04qLwtf5z2sIHjXCTMkXenO+OgRyQ5JCNTvXaaTDZEh752vIbc0bFHODkOAE+wA9SbskPDlizqBUUq4uo4j0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+qg5sMY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ez3jDaE2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4469C2BCB0;
-	Sat,  9 May 2026 02:15:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+qg5sMY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 680C0C2BCB0;
+	Sat,  9 May 2026 02:19:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778292924;
-	bh=LhT5SYKpHjhrAAl9NfwEtPED0brOO9Rj6SolAHcYFT4=;
+	s=k20201202; t=1778293180;
+	bh=cfX4ycBAIo8SXAnKJED11lFJ5Xa9Uh5/YJvZ0jMwpU0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Ez3jDaE2yZlj/VfRuadOi70p+Qbvu7vobRXbR02/RJxWft0O890P0h9WtWI3Y/xeY
-	 lt5HniZ5O/xPziROMnE1Jm2rHfxMuM0IKhP38eFdpMGbTtmVQaUH3bbrOL+smmn18v
-	 +dyCkeBQdqUJIhc1wmIVYC+bk4eUSzxxFn+SmKsXkCVZUfNmjhgZFkgNWAf180OvoA
-	 MFgCsZPrskjnrNIz1u0qFVcxchsPwE+BlDM+Nxbp7tgWUmQDMGHcMTcBzHWZpzyD27
-	 LPsIhWweGHZ9o69Dm2V++WoJM1krCZu8lJV+oGavJtcVrIpL93k8XuzvQshESEgsQZ
-	 80uwcTyQCucmQ==
+	b=M+qg5sMYVU9R1A3XutH6gqsBP/Zgq3embGlPt5roNCIBHzTb5spYf5PgsRpkjFPJ0
+	 splV8fkne05zEJNNnKhsZ3XkTHOWD2CmxDZECaugEvrQiC8ht4LyWaH3Dun1GEMnfD
+	 stwzqvAuKh6oowGjFJBi5025a+OgIMVaX5iRc1F0X8ovs2tntLnHtZn9r3kxl2O0+w
+	 6YiOJxqkQj7iAlM5ue3SzsArlj8rHz1bkFQP2wz4xu+uoxPKs62jF+aKWvQ6EVlaqG
+	 Oi5tJHeg6vI6VOSjrChKehM2DITH3nWhivbK24mu5ec2WqDUt0RfyoRfJ4H+g8BmHZ
+	 dCAoaYnboO5Qg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 22/23] bpf, arm64: Add JIT support for stack
- arguments
+Subject: Re: [PATCH bpf-next v2 11/23] bpf: Prepare architecture JIT support
+ for stack arguments
 Reply-To: sashiko@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260507213201.1140284-1-yonghong.song@linux.dev>
-References: <20260507213201.1140284-1-yonghong.song@linux.dev>
+In-Reply-To: <20260507213039.1130658-1-yonghong.song@linux.dev>
+References: <20260507213039.1130658-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 09 May 2026 02:15:23 +0000
-Message-Id: <20260509021523.D4469C2BCB0@smtp.kernel.org>
+Date: Sat, 09 May 2026 02:19:39 +0000
+Message-Id: <20260509021940.680C0C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] In `emit_stack_arg_load()`, `bpf_off` is not negated, causing a ne=
-gative index that fails array bounds checks and results in the JIT embeddin=
-g an invalid instruction (BRK), leading to a kernel panic.
+- [Critical] Static functions with more than 5 parameters are not actually =
+rejected when the JIT does not support stack arguments. This bypasses verif=
+ier stack initialization checks and allows the program to run, leading to a=
+rbitrary kernel memory access at runtime.
+- [Low] The patch returns the kernel-internal error code -ENOTSUPP instead =
+of the standard -EOPNOTSUPP, causing generic 'Unknown error 524' messages i=
+n user-space.
 --
 
-commit 6ccf042549a3902757c6335313c905e99fb41292
-Author: Puranjay Mohan <puranjay@kernel.org>
+commit e571d76e56fcb6ad5c6cc343d3221d66e6aec024
+Author: Yonghong Song <yonghong.song@linux.dev>
 
-bpf, arm64: Add JIT support for stack arguments
+bpf: Prepare architecture JIT support for stack arguments
 
-This commit implements stack argument passing for BPF-to-BPF and kfunc
-calls with more than 5 parameters on arm64, following the AAPCS64 calling
-convention.
+This commit introduces a weak function bpf_jit_supports_stack_args() to all=
+ow
+architectures to indicate support for BPF stack arguments. It also updates
+the BTF preparation code to reject functions with more than 5 arguments if
+the JIT does not support stack arguments.
 
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index 085e650662e3d..9b9d2501d2d36 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index ec3fb8c8f4eef..bf83b737d55cb 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
 [ ... ]
+> @@ -7886,8 +7886,14 @@ int btf_prepare_func_args(struct bpf_verifier_env =
+*env, int subprog)
+>  			MAX_BPF_FUNC_ARGS, tname, nargs);
+>  		return -EFAULT;
+>  	}
+> -	if (nargs > MAX_BPF_FUNC_REG_ARGS)
+> +	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
+> +		if (!bpf_jit_supports_stack_args()) {
+> +			bpf_log(log, "JIT does not support function %s() with %d args\n",
+> +				tname, nargs);
+> +			return -ENOTSUPP;
 
-> @@ -1191,6 +1207,41 @@ static int add_exception_handler(const struct bpf_=
-insn *insn,
->  	return 0;
->  }
+Should this return -EOPNOTSUPP instead of -ENOTSUPP?
+
+-ENOTSUPP is a kernel-internal error code (524). If this error bubbles up
+to user-space (for example, when loading a global BPF program), it might
+result in a confusing "Unknown error 524" message rather than a standard
+error.
+
+Also, does returning an error here actually reject static functions with
+more than 5 arguments?
+
+Looking at the code just above this diff, sub->arg_cnt is set to nargs
+before the check:
+
+kernel/bpf/btf.c:btf_prepare_func_args() {
+	...
+	sub->arg_cnt =3D nargs;
+	...
+	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
+		if (!bpf_jit_supports_stack_args()) {
+			...
+			return -ENOTSUPP;
+		}
+	...
+}
+
+If this returns -ENOTSUPP, it propagates to btf_check_subprog_call(),
+which returns the error. However, check_func_call() ignores non-EFAULT
+errors for static functions:
+
+kernel/bpf/verifier.c:check_func_call() {
+	...
+	err =3D btf_check_subprog_call(env, subprog, caller, ...);
+	if (err =3D=3D -EFAULT)
+		return err;
+	...
+}
+
+Since the error is ignored, verification continues without rejecting the
+program. Because the error was returned early, btf_check_func_arg_match()
+skips check_outgoing_stack_args(), meaning the caller is never forced to
+properly initialize the stack slots according to BTF types.
+
+Since sub->arg_cnt was already set to nargs, bpf_in_stack_arg_cnt() will
+calculate that the function takes stack arguments. If the caller manually
+initializes the stack argument slots by writing to r11, the verifier tracks
+the register types and might accept the program.
+
+At runtime, since the JIT does not support stack arguments, BPF_REG_PARAMS
+(r11) is likely missing from the JIT's register translation maps.
+Uninitialized entries default to 0, which often maps to the return value
+register (like rax on x86 or x0 on arm64).
+
+Could this cause reads or writes against r11 + offset to be translated
+into memory operations against rax/x0 + offset? Since the return register
+is easily controllable by the BPF program, might this allow arbitrary
+kernel memory reads and writes?
+
+> +		}
+>  		sub->stack_arg_cnt =3D nargs - MAX_BPF_FUNC_REG_ARGS;
+> +	}
 > =20
-> +static const u8 stack_arg_reg[] =3D { A64_R(5), A64_R(6), A64_R(7) };
-> +
-> +#define NR_STACK_ARG_REGS	ARRAY_SIZE(stack_arg_reg)
-> +
-> +static void emit_stack_arg_load(u8 dst, s16 bpf_off, struct jit_ctx *ctx)
-> +{
-> +	int idx =3D bpf_off / sizeof(u64) - 1;
-
-Does this missing negation for bpf_off lead to an invalid instruction being
-emitted?
-
-Since BPF stack arguments use negative offsets from BPF_REG_PARAMS (such as
--8 for arg 6), the calculation bpf_off / sizeof(u64) - 1 will result in a
-negative idx.
-
-Because NR_STACK_ARG_REGS uses ARRAY_SIZE, it evaluates to an unsigned
-size_t. Comparing a negative idx to it will result in a false condition,
-falling through to the else block.
-
-In the else block, the negative idx generates a negative offset for
-A64_LDR64I. Since A64_LDR64I expects an unsigned 12-bit scaled immediate,
-could this cause the instruction encoder to fail and embed an
-AARCH64_BREAK_FAULT into the JIT image?
-
-> +
-> +	if (idx < NR_STACK_ARG_REGS)
-> +		emit(A64_MOV(1, dst, stack_arg_reg[idx]), ctx);
-> +	else
-> +		emit(A64_LDR64I(dst, A64_FP, (idx - NR_STACK_ARG_REGS) * sizeof(u64) +=
- 16), ctx);
-> +}
-> +
-> +static void emit_stack_arg_store(u8 src_a64, s16 bpf_off, struct jit_ctx=
- *ctx)
-> +{
-> +	int idx =3D -bpf_off / sizeof(u64) - 1;
-
-For comparison, emit_stack_arg_store() correctly negates bpf_off here.
-
-> +
-> +	if (idx < NR_STACK_ARG_REGS)
+>  	if (is_global && nargs > MAX_BPF_FUNC_REG_ARGS) {
+>  		bpf_log(log, "global function %s has %d > %d args, stack args not supp=
+orted\n",
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260507212942.1122=
-000-1-yonghong.song@linux.dev?part=3D22
+000-1-yonghong.song@linux.dev?part=3D11
