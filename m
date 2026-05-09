@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1432384231
-	for <bpf@vger.kernel.org>; Sat,  9 May 2026 08:27:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 402E738AC7D
+	for <bpf@vger.kernel.org>; Sat,  9 May 2026 08:27:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778315238; cv=none; b=jw179ieE+iUwtALcEhOWbsKu03b6XLoyEaEP0o26z9LW0xthPlbC/31UrDZAxaPV5hEv8wR7OCNUjRG+ki4SszVwMLh8EFduCs8dcTms+YPR+343DI5iFGevyBet+SEPjRIARzH+I+wg3w8VsaIvcFJZKFEA7DjC0I3DLeLNtCM=
+	t=1778315239; cv=none; b=X7kpuNB9HvLLlJYAq2mThviyzdbpvqvPDHg+ECWGJdhyqnSROUUXVCFnSXlANQFxYAa+ICthiLfxtopv8NXPORcWrXmyhgQF2MZFAMV9JuCY4lKq58R3UIqjOkGMxo1RbW1HFWW5JywYBEhi6TFE/73xBLE1lz6B54RSWemjUk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778315238; c=relaxed/simple;
-	bh=Hy9d+Vc0PLyya/fVUh9x8+I2w+ZiZJC/7x38q3PL3io=;
+	s=arc-20240116; t=1778315239; c=relaxed/simple;
+	bh=XFwjAHXMKnGLKLb9jXdjpm/lZQFTtsQFFvrNU1D5F+0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mTgDZwPK7eAZGzLRjfFUFWdpQaXZ8TLnmCDBWBO6prGccwzm05ak47D1OsistxgYaTtC3s0LpKyLb81hVI14Ac70vHwV7NuRy77w3Fd92eOyv5Qj9krsTHN/akhDd9v5Lo2XvT4FcdGhjsx5hQr1G7QFil6Q+8RspM3oT9/0AoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BuVl6fuj; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=mscKNdm/u1polMB9igg5Se5v2Fx7Wjfcfmr2qFQZDPgaYc0XkDdbzBor98KvF96oqbandGwP+axgUE+8DLhSzuEGJMW538Od6bfVRH+PvO4xiQza7pmgfLqwNADOnMY3l2Dsf42pS4jynyBVrGR+C8oRQ6JOfnR9kOQWWzGcsvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FUnLTXxn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BuVl6fuj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33278C2BCB2;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FUnLTXxn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D70F6C2BCB2;
 	Sat,  9 May 2026 08:27:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778315238;
-	bh=Hy9d+Vc0PLyya/fVUh9x8+I2w+ZiZJC/7x38q3PL3io=;
+	s=k20201202; t=1778315239;
+	bh=XFwjAHXMKnGLKLb9jXdjpm/lZQFTtsQFFvrNU1D5F+0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=BuVl6fujA+d4rk5/OCf/EzYA45kRtaOApB97fRTcqcOPfYWWVqTKjzz5vt/xo5fIo
-	 4Udty+7VlAxA6LSqzg25JjH15o75Ux0H1SV1+lFwSsS86CQRevEL4VhfLTdXXc55JF
-	 h7fOe5zr5A+JImmONUhSLEBMw2Kl7cZys7JD8MivGHAzdbWOjK4o6VCL2B91bTWb5u
-	 SuMbmbcIA3ISsWy2Kid/hmItoC7ymHHfDpePMtEPihGAWtE8dTfsgbw2Avm0UNOXHX
-	 eJXazDtkraUdGRfzYjHEDJ8Ber/VY1Iet3yBXWk3gYCAC5OpfsuJ/gW79luZC8+hOu
-	 /1fKn57nr0rvg==
+	b=FUnLTXxnFmTpcEWo3xBI46e775D/B79/bCxppc1aG1qiMYHdUrF7OFmwnTzzuO6iT
+	 TcJ/wGEivXDcufVmceyaJipKxlvDLJOif8GjFaKuMN92tAqcAodAgIPbkCspfOEj+J
+	 1KsrtFF32cWZ6USylOu/npwCquoXJfv6IKfKpGwG8STYPnGI/SPVeb88rU1RDhDmNd
+	 nWgSLx5LeZvcfE3Ber8q6TbvshBs7rnbEhlIcim1PLPoLVhZKVF4KC8dLV+U7321K1
+	 iARkumOkL602c3JDZvMBH3RpyrP0PqLt6yRDuQHVg+TLtzRK3tqeZx9lAYZlRoCk/T
+	 4R2ah2Y0OQ3/A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v4 03/13] net: microchip: fdma: add PCIe ATU
- support
+Subject: Re: [PATCH net-next v4 04/13] net: lan966x: add FDMA LLP register
+ write helper
 Reply-To: sashiko@lists.linux.dev
 To: "Daniel Machon" <daniel.machon@microchip.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260508-lan966x-pci-fdma-v4-3-14e0c89d8d63@microchip.com>
-References: <20260508-lan966x-pci-fdma-v4-3-14e0c89d8d63@microchip.com>
+In-Reply-To: <20260508-lan966x-pci-fdma-v4-4-14e0c89d8d63@microchip.com>
+References: <20260508-lan966x-pci-fdma-v4-4-14e0c89d8d63@microchip.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 09 May 2026 08:27:17 +0000
-Message-Id: <20260509082718.33278C2BCB2@smtp.kernel.org>
+Date: Sat, 09 May 2026 08:27:18 +0000
+Message-Id: <20260509082718.D70F6C2BCB2@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,200 +46,145 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
-- [High] Race condition and unsafe unmap ordering in the shared ATU region =
-pool.
-- [High] Missing ATU hardware initialization and REGION_CTRL1 configuration.
-- [Medium] ATU translation window is hardcoded to the maximum region size, =
-bypassing DMA isolation.
-- [Medium] Dangling pointers left after DMA teardown risk double-free memor=
-y corruption.
+- [High] Moving LLP register initialization out of `lan966x_fdma_rx_start()=
+` breaks the MTU change error recovery path.
+- [High] The return value of `fdma_dcbs_init()` is ignored in `lan966x_fdma=
+_rx_alloc()`, causing page leaks and the activation of uninitialized DMA de=
+scriptors on failure.
+- [High] Destroying the page pool on the error path in `lan966x_fdma_rx_all=
+oc()` without unregistering it from the XDP RX queues leaves dangling point=
+ers.
+- [High] The `restore:` error path in `lan966x_fdma_reload()` contains a se=
+vere hardware/software ring desync bug.
 --
 
-commit 22984db44c5308e0df119c7e94e5241b187dad51
+commit 2fddff57a8bf4d213ae07c8fe84e8040a60982cb
 Author: Daniel Machon <daniel.machon@microchip.com>
 
-net: microchip: fdma: add PCIe ATU support
+net: lan966x: add FDMA LLP register write helper
 
-When operating as a PCIe endpoint, the lan966x/lan969x FDMA engine needs to
-map outbound DMA addresses through a PCIe Address Translation Unit (ATU).
-This patch adds functions to allocate FDMA memory and map it into one of
-six equally-sized ATU outbound regions.
+The patch introduces a helper lan966x_fdma_llp_configure() and moves the
+FDMA Link List Pointer (LLP) register initialization from the start/activate
+functions into the allocation functions.
 
-> diff --git a/drivers/net/ethernet/microchip/fdma/fdma_api.c b/drivers/net=
-/ethernet/microchip/fdma/fdma_api.c
-> index e78c3590da9e6..e0c2b137afef7 100644
-> --- a/drivers/net/ethernet/microchip/fdma/fdma_api.c
-> +++ b/drivers/net/ethernet/microchip/fdma/fdma_api.c
-
-[ ... ]
-
-> +#if IS_ENABLED(CONFIG_MCHP_LAN966X_PCI)
-> +/* Allocate coherent DMA memory and map it in the ATU. */
-> +int fdma_alloc_coherent_and_map(struct device *dev, struct fdma *fdma,
-> +				struct fdma_pci_atu *atu)
-> +{
-> +	struct fdma_pci_atu_region *region;
-> +	int err;
-> +
-> +	err =3D fdma_alloc_coherent(dev, fdma);
-> +	if (err)
-> +		return err;
-> +
-> +	region =3D fdma_pci_atu_region_map(atu, fdma->dma, fdma->size);
-> +	if (IS_ERR(region)) {
-> +		fdma_free_coherent(dev, fdma);
-
-Could leaving fdma->dcbs populated after calling fdma_free_coherent() cause
-a double-free if the caller has a teardown routine that checks for non-NULL
-pointers?
-
-> +		return PTR_ERR(region);
-> +	}
-> +
-> +	fdma->atu_region =3D region;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(fdma_alloc_coherent_and_map);
-> +
-> +/* Free coherent DMA memory and unmap the memory in the ATU. */
-> +void fdma_free_coherent_and_unmap(struct device *dev, struct fdma *fdma)
-> +{
-> +	fdma_pci_atu_region_unmap(fdma->atu_region);
-> +	fdma_free_coherent(dev, fdma);
-
-Similarly, should fdma->atu_region and fdma->dcbs be cleared after being
-freed to prevent dangling pointers?
-
-> +}
-> +EXPORT_SYMBOL_GPL(fdma_free_coherent_and_unmap);
-> +#endif
+> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/driv=
+ers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> index f8ce735a7fc09..6c5761e886d47 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
 
 [ ... ]
 
-> diff --git a/drivers/net/ethernet/microchip/fdma/fdma_pci.c b/drivers/net=
-/ethernet/microchip/fdma/fdma_pci.c
-> new file mode 100644
-> index 0000000000000..1bd41eaa58a4b
-> --- /dev/null
-> +++ b/drivers/net/ethernet/microchip/fdma/fdma_pci.c
+> @@ -127,6 +134,9 @@ static int lan966x_fdma_rx_alloc(struct lan966x_rx *r=
+x)
+>  	fdma_dcbs_init(fdma, FDMA_DCB_INFO_DATAL(fdma->db_size),
+>  		       FDMA_DCB_STATUS_INTR);
+> =20
+> +	lan966x_fdma_llp_configure(lan966x, (u64)fdma->dma,
+> +				   fdma->channel_id);
+> +
+>  	return 0;
+>  }
+
+This isn't a bug introduced by this patch, but does lan966x_fdma_rx_alloc()
+leak pages and activate uninitialized DMA descriptors on failure?
+
+During lan966x_fdma_rx_alloc(), fdma_dcbs_init() invokes the callback
+lan966x_fdma_rx_dataptr_cb() to populate the DMA buffer rings. This callback
+dynamically allocates pages using page_pool_dev_alloc_pages() and returns
+-ENOMEM on failure, which causes fdma_dcbs_init() to return -ENOMEM.
+
+However, lan966x_fdma_rx_alloc() completely ignores this return value and
+returns 0.
+
+Will this cause all successfully allocated pages up to the failure point to
+be leaked, and trick the caller into activating the hardware DMA engine with
+partially uninitialized DCBs, leading to IOMMU faults or memory corruption?
+
+This isn't a bug introduced by this patch either, but does the error path in
+lan966x_fdma_rx_alloc() leave dangling pointers in the XDP RX queues?
+
+In lan966x_fdma_rx_alloc(), lan966x_fdma_rx_alloc_page_pool() registers the
+newly created page pool with the XDP memory model across all physical ports
+via xdp_rxq_info_reg_mem_model(), overwriting the old registration.
+
+If the subsequent fdma_alloc_coherent() fails, the error path invokes
+page_pool_destroy(rx->page_pool) but fails to restore the old page pool
+registration:
+
+	err =3D fdma_alloc_coherent(lan966x->dev, fdma);
+	if (err) {
+		page_pool_destroy(rx->page_pool);
+		return err;
+	}
+
+When lan966x_fdma_reload() falls back to the restore: path, it resumes
+network operations.
+
+Could this leave a dangling pointer to the destroyed page pool in the
+xdp_rxq structures, leading to a use-after-free when XDP processes the next
+packet?
+
+> @@ -136,14 +146,6 @@ static void lan966x_fdma_rx_start(struct lan966x_rx =
+*rx)
+>  	struct fdma *fdma =3D &rx->fdma;
+>  	u32 mask;
+> =20
+> -	/* When activating a channel, first is required to write the first DCB
+> -	 * address and then to activate it
+> -	 */
+> -	lan_wr(lower_32_bits((u64)fdma->dma), lan966x,
+> -	       FDMA_DCB_LLP(fdma->channel_id));
+> -	lan_wr(upper_32_bits((u64)fdma->dma), lan966x,
+> -	       FDMA_DCB_LLP1(fdma->channel_id));
+> -
+
+Will moving the LLP register configuration into lan966x_fdma_rx_alloc() bre=
+ak
+the MTU change error recovery path?
+
+In lan966x_fdma_reload(), if the new lan966x_fdma_rx_alloc() fails, the code
+jumps to the restore: label, copies back the old software state, and calls
+lan966x_fdma_rx_start() to reactivate the channel:
+
+drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:lan966x_fdma_reload()=
+ {
+    ...
+	err =3D lan966x_fdma_rx_alloc(&lan966x->rx);
+	if (err)
+		goto restore;
+    ...
+restore:
+	lan966x->rx.page_pool =3D page_pool;
+	memcpy(&lan966x->rx.fdma, &fdma_rx_old, sizeof(struct fdma));
+	lan966x_fdma_rx_start(&lan966x->rx);
+    ...
+}
+
+Because lan966x_fdma_rx_alloc() is bypassed for the restored state, the
+hardware channel is activated without configuring the LLP.
+
+Since the LLP must be written before the channel is activated, won't
+activating the channel after a disable and discard cycle without
+reprogramming the LLP result in a DMA fault or system hang?
+
+This isn't a bug introduced by this patch, but does the restore: error path
+in lan966x_fdma_reload() contain a hardware/software ring desync issue?
+
+When MTU allocation fails, the driver restores the fdma_rx_old software
+state, which contains the old non-zero dcb_index and db_index from when the
+ring was active.
+
+However, before this patch, lan966x_fdma_rx_start() unconditionally set the
+hardware LLP register to fdma->dma (index 0).
+
+Does this cause the hardware DMA engine to start writing at DCB 0, while the
+software's napi_poll routine resumes polling from the restored non-zero
+dcb_index? Could this complete desync between hardware and software ring
+indices lead to a dead RX path or the processing of stale memory?
 
 [ ... ]
-
-> +/* Configure the address translation in the ATU. */
-> +static void
-> +fdma_pci_atu_configure_translation(struct fdma_pci_atu_region *region)
-> +{
-> +	struct fdma_pci_atu *atu =3D region->atu;
-> +	int idx =3D region->idx;
-
-Does the ATU require REGION_CTRL1 (TLP Type at offset 0x0) to be configured
-here?
-
-If a bootloader previously configured an ATU region for Configuration or I/O
-accesses, could the register retain that type and cause memory accesses to
-be translated into invalid TLP types?
-
-> +
-> +	writel(lower_32_bits(region->base_addr),
-> +	       fdma_pci_atu_addr_get(atu->addr,
-> +				     FDMA_PCI_ATU_LWR_BASE_ADDR, idx));
-> +
-> +	writel(upper_32_bits(region->base_addr),
-> +	       fdma_pci_atu_addr_get(atu->addr,
-> +				     FDMA_PCI_ATU_UPP_BASE_ADDR, idx));
-> +
-> +	/* Upper limit register only needed with REGION_SIZE > 4GB. */
-> +	writel(region->limit_addr,
-> +	       fdma_pci_atu_addr_get(atu->addr, FDMA_PCI_ATU_LIMIT_ADDR, idx));
-
-Since the LIMIT_ADDR register is always programmed to the maximum static
-region size, does this allow the FDMA engine to read or write beyond its
-intended buffer into adjacent host memory?
-
-Should the limit register be dynamically programmed using the requested size
-passed to fdma_pci_atu_region_map() instead?
-
-> +
-> +	writel(lower_32_bits(region->target_addr),
-> +	       fdma_pci_atu_addr_get(atu->addr,
-> +				     FDMA_PCI_ATU_LWR_TARGET_ADDR, idx));
-> +
-> +	writel(upper_32_bits(region->target_addr),
-> +	       fdma_pci_atu_addr_get(atu->addr,
-> +				     FDMA_PCI_ATU_UPP_TARGET_ADDR, idx));
-> +}
-> +
-> +/* Find an unused ATU region. */
-> +static struct fdma_pci_atu_region *
-> +fdma_pci_atu_region_get_free(struct fdma_pci_atu *atu)
-> +{
-> +	struct fdma_pci_atu_region *regions =3D atu->regions;
-> +
-> +	for (int i =3D 0; i < FDMA_PCI_ATU_REGION_MAX; i++) {
-> +		if (regions[i].in_use)
-> +			continue;
-
-Is there a race condition when accessing the shared atu->regions array?
-
-Since there appears to be no locking, could concurrent allocations claim the
-same region and overwrite each other's hardware registers?
-
-> +
-> +		return &regions[i];
-> +	}
-> +
-> +	return ERR_PTR(-ENOSPC);
-> +}
-> +
-> +/* Unmap an ATU region, clearing its translation and disabling it. */
-> +void fdma_pci_atu_region_unmap(struct fdma_pci_atu_region *region)
-> +{
-> +	if (IS_ERR_OR_NULL(region))
-> +		return;
-> +
-> +	region->target_addr =3D 0;
-> +	region->in_use =3D false;
-> +
-> +	fdma_pci_atu_region_disable(region);
-
-By setting region->in_use =3D false before disabling the region in hardware,
-could a concurrent thread allocate and enable this region, only for this
-unmap thread to proceed and clear the hardware translations, leaving the
-new allocation disabled?
-
-> +	fdma_pci_atu_configure_translation(region);
-> +}
-> +EXPORT_SYMBOL_GPL(fdma_pci_atu_region_unmap);
-
-[ ... ]
-
-> +/* Initialize ATU, dividing the OB space into equally sized regions. */
-> +void fdma_pci_atu_init(struct fdma_pci_atu *atu, void __iomem *addr)
-> +{
-> +	struct fdma_pci_atu_region *regions =3D atu->regions;
-> +	u32 region_size =3D fdma_pci_atu_region_size();
-> +
-> +	atu->addr =3D addr;
-> +
-> +	for (int i =3D 0; i < FDMA_PCI_ATU_REGION_MAX; i++) {
-> +		regions[i].base_addr =3D
-> +			FDMA_PCI_ATU_OB_START + (i * region_size);
-> +		regions[i].limit_addr =3D
-> +			regions[i].base_addr + region_size - 1;
-> +		regions[i].idx =3D i;
-> +		regions[i].atu =3D atu;
-> +	}
-
-Should the hardware regions be explicitly disabled during initialization?
-
-If the bootloader left any regions enabled that overlap with the Outbound
-space, could they silently intercept DMA traffic before the driver maps
-them?
-
-> +}
-> +EXPORT_SYMBOL_GPL(fdma_pci_atu_init);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260508-lan966x-pc=
-i-fdma-v4-0-14e0c89d8d63@microchip.com?part=3D3
+i-fdma-v4-0-14e0c89d8d63@microchip.com?part=3D4
