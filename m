@@ -1,123 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6DCA38BF61
-	for <bpf@vger.kernel.org>; Sat,  9 May 2026 08:27:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80FC38E129;
+	Sat,  9 May 2026 08:49:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778315241; cv=none; b=TV5I8Z1B25rLsXpmYNou8ke0ol/tta49WyqsQ39mneiYUEjHY0UoeczBl6O6EitG4n5lHu0M0OU+QDXJ76IpBLwc6FLklKo1GjxMYLufYcbp4R5tMUfWLb8+00UYuvQMFeNe7hrYFMHw76PPyLbZvB0Fh3FNw8gmKP7kytPvXFI=
+	t=1778316547; cv=none; b=oKPupwIcJKYfblUOzOgk34MnmXRalLKJXZeUIQJtVid244z/pcub1TZWrVzWQ4sOD5I+M3kKEdHU/WpJ4PPLM5yxCFZoGyos1PpV2Ce7QPmq7e1vT/XbTt1CRbzd7HEocInZo9F9+dh+JILll5GjqEvtC/ZGeIdYIMbcUqTpQsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778315241; c=relaxed/simple;
-	bh=8UIjzFXhYe/emk4Junehx/+4VqmOGq0LiHLzNO4FUHA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ARW7KiDcx8g2BClU+i5n08BBiDoIS86LBtpvdGgOKq+ML6kkIcb8Wd2itKjFQnWDdqAqO3q2XI9diHVgXjtI3Br9vvro6haMYh60O/pn0fhbMvLp3OnkoJ3yVmgRAIA0rg/gD36ZMepduRZ8jsbVaoBH4zTJU6+n2Iws+PmqZZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WNhyc7iL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778316547; c=relaxed/simple;
+	bh=KmF/eESqYKfpvP59g3razwO7Poct99/F3H336ZNABs8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=X19arJ5G28CRfivemebdGliJ1Ze8wKGGXmOaMB0XtCcaIa/gkOZAYymaNR+TiQj6QT+jyn7inHIakkWFsWrJLVkfpn+ptqYQFua8CNOuwl05VgvlV7e6u/o0GXaj9PNO5yxDXDkVoTXrRpGpwS6Ban9+qtya9t6VkJIv6rmMuoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kOQtexjy; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WNhyc7iL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90866C2BCB4;
-	Sat,  9 May 2026 08:27:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778315241;
-	bh=8UIjzFXhYe/emk4Junehx/+4VqmOGq0LiHLzNO4FUHA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=WNhyc7iLy5NkTAf7nEt7U8cvpRgTqkQJb/f2SINXRf75Lr92wikRjbNDhbsft4qCG
-	 pvq9VqKFBAbl4QE0vhGrWORhVote7RIV6DUtoo73WSC26gIcmSTM7LfypaK606tFYk
-	 YnATT+cS1xkKHm2vxxYlOURyBLRb2f7j87Ns9pFjbc6GUdcoPsrG2olFYlJtQ2Gtlx
-	 2z+NV5Ez9F9VZe/kLhghEh0UH/yyoTPHwr0BNnZUo8SST9gEk1PaL5jwzNzXKZ1ncd
-	 UltAY2DeDfqF4w/2WBiPQl3b2xk0aH0Mu504DtRGa4wZzf0GN7bhiBwnY0etIXe1rd
-	 mbOfMoTxYutQw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v4 11/13] net: lan966x: add PCIe FDMA XDP
- support
-Reply-To: sashiko@lists.linux.dev
-To: "Daniel Machon" <daniel.machon@microchip.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260508-lan966x-pci-fdma-v4-11-14e0c89d8d63@microchip.com>
-References: <20260508-lan966x-pci-fdma-v4-11-14e0c89d8d63@microchip.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 09 May 2026 08:27:21 +0000
-Message-Id: <20260509082721.90866C2BCB4@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kOQtexjy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778316546; x=1809852546;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KmF/eESqYKfpvP59g3razwO7Poct99/F3H336ZNABs8=;
+  b=kOQtexjy9oscuX8Wz1fZCVrNaT01BUH43e5AMkj8TUuZMo6tVKQonq/2
+   dTiq1E9FWxCdbl7jKLZ6tcBZKaRXWhbVwBSiQdW3bPfA5jgw6xW6pt+0r
+   4jKFU6AS2WXOlD5fNf7VvOKVfscDX27XaUsC03MiOJ01pAjBO2AWm7j9R
+   knVTWwMrfg2oArPzzfMZHMKFFH6MT+aPg/sGEcEjl4ewx7bWlxVdIgHjZ
+   yqCjmmD9lC/fsRUbJayhlOJiTvq63VT+/xu+REsRA+cyfqDh7foDOHsw7
+   79M97VcTmWmGJvr0jU1PzZkHZwJeq+poHt1EzNeeAFkyM2YzavnVAUkzp
+   g==;
+X-CSE-ConnectionGUID: JhEiua0fQdaebdqmlyCwew==
+X-CSE-MsgGUID: gEjmnGp7RXyS4/2PyR/lnw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11780"; a="90748725"
+X-IronPort-AV: E=Sophos;i="6.23,225,1770624000"; 
+   d="scan'208";a="90748725"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2026 01:49:05 -0700
+X-CSE-ConnectionGUID: EIYZNrQdSlmM594ZbgzZJQ==
+X-CSE-MsgGUID: Kt5/sM4iRD2VFLBTCA6A/w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,225,1770624000"; 
+   d="scan'208";a="237088147"
+Received: from boxer.igk.intel.com ([10.102.20.173])
+  by orviesa009.jf.intel.com with ESMTP; 09 May 2026 01:49:02 -0700
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	magnus.karlsson@intel.com,
+	stfomichev@gmail.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	bjorn@kernel.org,
+	lorenzo@kernel.org,
+	hawk@kernel.org,
+	toke@redhat.com,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH RFC net-next 0/4] xdp: reuse generic skb XDP handling for veth
+Date: Sat,  9 May 2026 10:48:54 +0200
+Message-Id: <20260509084858.773921-1-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.38.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] NAPI poll loop exits prematurely on SKB allocation failure or FDMA=
- error, causing permanent RX queue stalls.
---
+Hi,
 
-commit 2fc7864e7fb714463211e299fb04e9b91f05d012
-Author: Daniel Machon <daniel.machon@microchip.com>
+this series is an attempt to make skb-backed XDP handling in veth use
+the generic skb XDP machinery instead of converting skb-backed packets
+into xdp_frames for XDP_TX and XDP_REDIRECT. This was brought up by
+Jakub during review of previous work, which was focused on addressing
+splats from AF_XDP selftests shrinking multi-buffer packet:
 
-net: lan966x: add PCIe FDMA XDP support
+  https://lore.kernel.org/bpf/20251029221315.2694841-1-maciej.fijalkowski@intel.com/
 
-This commit adds XDP support for the PCIe FDMA path. The implementation
-operates on contiguous ATU-mapped buffers with memcpy-based XDP_TX, unlike
-the platform path which uses page_pool.
+veth currently has two different XDP input paths:
+  - xdp_frame input, coming through ndo_xdp_xmit(), for example from
+    devmap redirects; and
+  - skb input, coming through ndo_start_xmit(), for example from the
+    regular networking stack, pktgen, or other skb producers.
 
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/=
-drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> index 0568251a95d92..cf3d3afbcc8a4 100644
-> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
+The xdp_frame path is naturally frame-based and this series keeps it on
+the existing veth xdp_frame handling path. The skb path, however, is
+still fundamentally skb-backed, but today veth converts it into an
+xdp_frame for XDP_TX/XDP_REDIRECT. That conversion is awkward and has
+been pointed out as undesirable before, because veth has to pin skb data,
+construct an xdp_frame view of it, and then restore/massage XDP memory
+metadata around that conversion.
 
-[ ... ]
+This series takes a different approach: skb-backed veth XDP now reuses
+the generic skb XDP execution path. veth provides its own xdp_buff,
+xdp_rxq_info and page_pool to the generic XDP helper, so the generic code
+can still perform the required skb COW using veth's page_pool when the
+skb head/frags cannot be used directly. XDP_TX then uses generic_xdp_tx()
+and XDP_REDIRECT uses xdp_do_generic_redirect(), while the xdp_frame
+input path keeps using the existing veth xdp_frame TX/redirect handling.
 
-> @@ -282,14 +392,26 @@ static int lan966x_fdma_pci_napi_poll(struct napi_s=
-truct *napi, int weight)
->  		/* Order DONE read before DCB/frame reads below. */
->  		dma_rmb();
->  		counter++;
-> -		switch (lan966x_fdma_pci_rx_check_frame(rx, &src_port)) {
-> +		switch (lan966x_fdma_pci_rx_check_frame(rx,
-> +							&src_port,
-> +							&data,
-> +							&data_len)) {
->  		case FDMA_PASS:
->  			break;
->  		case FDMA_ERROR:
->  			fdma_dcb_advance(fdma);
->  			goto allocate_new;
+The problem this series tries to address more generally is that
+skb-backed generic XDP can end up with memory whose provenance is not
+described correctly by a single queue-level MEM_TYPE_PAGE_SHARED value.
+When skb is COWed the underlying memory is page_pool backed but current
+logic does not respect it.
 
-This existing code jumps to allocate_new when encountering an error. If the=
-re
-are still frames pending in the hardware queue, could breaking out of the l=
-oop
-early leave NAPI completed while the hardware has already generated an
-interrupt for the remaining frames?
+For that reason the series introduces MEM_TYPE_PAGE_POOL_OR_SHARED. This
+type is not bound to a single registered page_pool allocator. Instead,
+the return path inspects the individual netmem and dispatches either to
+the page_pool return path or to page_frag_free(). This lets generic
+skb-backed XDP handle mixed page_pool/page-shared memory without
+mutating rxq->mem.type per packet.
 
-Since the driver's interrupt handler has likely already cleared the interru=
-pt
-status bit, and hardware might only set it on new frame completion, could
-this lead to a permanent RX queue stall if the queue is completely full?
+The veth part also removes the old rq->xdp_mem juggling. For incoming
+xdp_frames, veth now uses a local rxq view whose mem.type is taken from
+frame->mem_type. This preserves the frame's original memory type for
+XDP_TX/XDP_REDIRECT without overwriting the persistent rq->xdp_rxq memory
+model used by skb-backed generic XDP.
 
-> +		case FDMA_TX:
-> +			fdma_dcb_advance(fdma);
-> +			continue;
-> +		case FDMA_DROP:
-> +			fdma_dcb_advance(fdma);
-> +			continue;
+One visible datapath change is that skb-backed veth XDP_TX no longer
+uses veth's xdp_frame bulk queue. It now follows the generic skb XDP_TX
+path. The xdp_frame-originated path is unchanged and still uses the
+existing veth bulk path. The old skb-backed path had batching, but it
+also paid the cost of converting skb-backed packets into xdp_frames. The
+new path removes that conversion and keeps skb-backed packets on the
+generic skb XDP path. From my local tests that consisted of
+pktgen + xdp_bench I did not notice any major performance regressions,
+however Lorenzo and Jesper might disagree here, hence the RFC status. I
+am fed up of internal wars with Sashiko so I would be pleased to get
+some human feedback.
 
-Since these new XDP actions use continue, should FDMA_ERROR be updated
-to drop the packet and continue as well, rather than aborting the poll loop?
+In particular, let's discuss:
 
->  		}
-> -		skb =3D lan966x_fdma_pci_rx_get_frame(rx, src_port);
-> +		skb =3D lan966x_fdma_pci_rx_get_frame(rx,
-> +						    src_port,
-> +						    data,
-> +						    data_len);
->  		fdma_dcb_advance(fdma);
->  		if (!skb)
->  			goto allocate_new;
+  - whether MEM_TYPE_PAGE_POOL_OR_SHARED is an acceptable way to describe
+    skb-backed generic XDP memory that may be page_pool-backed after COW
+    or ordinary page-shared memory otherwise;
 
-Similarly, if SKB allocation fails here, could jumping to allocate_new
-abandon remaining pending frames and cause the same RX queue stall?
+  - whether passing caller-provided xdp_buff/rxq/page_pool context into
+    the generic skb XDP helper is the right API shape;
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260508-lan966x-pc=
-i-fdma-v4-0-14e0c89d8d63@microchip.com?part=3D11
+  - whether letting veth provide its own page_pool to generic XDP is
+    acceptable for avoiding the old skb->xdp_frame conversion; could
+    veth just piggy-back on system's page_pool? even though it could,
+    we still need xdp_buff being passed (metadata) and other refactors
+    that allow veth to bump stats and do the redirect flush;
+
+  - whether skb-backed veth XDP_TX using generic_xdp_tx(), while keeping
+    xdp_frame-originated traffic on the existing veth bulk path, is an
+    acceptable split;
+
+  - the INDIRECT_CALL for taking the COW path; I wanted to preserve
+    existing behavior, but is it really needed or maybe it would be
+    possible to come up with conditions that would cover both generic
+    XDP path and veth?
+
+FWIW I do like the end result on veth side. If I missed CCing someone,
+mea culpa.
+
+Thanks,
+Maciej
+
+Maciej Fijalkowski (4):
+  xdp: add mixed page_pool/page_shared memory type
+  xdp: return status from generic_xdp_tx()
+  xdp: split generic XDP skb handling
+  veth: use generic skb XDP handling
+
+ drivers/net/veth.c        | 179 ++++++++------------------------------
+ include/linux/netdevice.h |  33 ++++++-
+ include/net/xdp.h         |   1 +
+ kernel/bpf/devmap.c       |   2 +-
+ net/core/dev.c            | 124 ++++++++++++++++++++------
+ net/core/filter.c         |   2 +-
+ net/core/xdp.c            |  54 ++++++++++--
+ 7 files changed, 216 insertions(+), 179 deletions(-)
+
+-- 
+2.43.0
+
