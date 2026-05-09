@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5A213DDAE
-	for <bpf@vger.kernel.org>; Sat,  9 May 2026 01:52:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5A128C037
+	for <bpf@vger.kernel.org>; Sat,  9 May 2026 02:02:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778291524; cv=none; b=riJ/xj9FBz6YrIphV706RaDJUE8gmOOqZ7FKrC1fuaT8H/HgdztU5UFH5x8w2ING300KohD2aSBHXXwGxOR6XZsVkBwjbGnpEYHZW1gCOR/JHy15/wVjkSDUnZFAf/36/Tv6hsEBdQ3na6BgLSa9Yn3jebmT9uTLERO78RQLseU=
+	t=1778292163; cv=none; b=se9CVFLGOJeTjFB97WeL60rzLJEyKX8NDun9MVs4Q43NE3sxgcj5pM7oxdl9CjJIBvPsktNhNTuTF2NjdgPwN1jO9zKKD6t+dVnoBIBeXY7ZlF9gLU9DhfguK1lg5xTDWyY+1U+lpXExnsiu9IJqZrUy2ahpyXtaUiEMYrk/X1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778291524; c=relaxed/simple;
-	bh=Ysyu03uoH4tw5ugBzMLJ/nDMA0lFzUe3jZJkuSdmk8c=;
+	s=arc-20240116; t=1778292163; c=relaxed/simple;
+	bh=UJ18lo+bvxWt+TSWPHYWhMXn9bN9EuK4xtcDTlKp3ek=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=oMFWaNdA/lII5uD2SGg/nGwz2Ggu1YEKVFkxAXBERd3JTwfJusq+Y9YACrNilh+FrV7l4PXUvtVZ7whe5vxUp1CXwlgkvMbi3PECBZw0tuZYFcQxMJwWWxeXOSOZGS1QKesOoxTt6oVEX5LrT142G99G6+FAu3/SsjOBBIl0Ndc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TcRoHRug; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=kQjBW4j4XzyKQns5wplgBYHStFVQoczWuOHz/nKLAdC9vpF4qlxKlVAml3uTfladjN197mYLeWrwkVe5BPpSKJjsNzhUk+wxzOF7iriOXJUGg5sxeiJQLngudKkfnJ/DrfuHED9n9Kh78Co5HVn0FkLXlr4mH2Y9KXCQGbAqAZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bNfKAjl4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TcRoHRug"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1324AC2BCB0;
-	Sat,  9 May 2026 01:52:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bNfKAjl4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 223B1C2BCB0;
+	Sat,  9 May 2026 02:02:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778291524;
-	bh=Ysyu03uoH4tw5ugBzMLJ/nDMA0lFzUe3jZJkuSdmk8c=;
+	s=k20201202; t=1778292163;
+	bh=UJ18lo+bvxWt+TSWPHYWhMXn9bN9EuK4xtcDTlKp3ek=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=TcRoHRuguYfUFDE8xzf7tyHmXNpJmeQ/AwzTRs62p3XnM7w3ylJZJ+rIed/Yq+pyz
-	 qK6bxlWmL4boIjzmnmoOWoUt0Xe1b9bGA3Z64TvFZ0DUm0oHigoNN2OIxlQRkWDE6r
-	 pHl2hmXvoxM/xlQgVqvy/bjkrz+lpQ1c3mLwt5k/qUHhKkB0w8kgkbO5fRDRvfRyIn
-	 Ap0c2f4xW8iJtcl5DJSi83lRVB9O+W9PL9huIe2k/kid1SREpD0PUGCsgoccVBbNyf
-	 AIBqI+W11hFDadZkZWY//F+nHPR+UlxHSSt0VKqwHprLbi+j7b6rQvi6J5OkfYQaJz
-	 ZcQbsKCtCvsgg==
+	b=bNfKAjl42LF5+GCkKA647qLnuFq4wQC9uZHTfgmJeUISuyjlMyVPgmMb4AuVmfjBn
+	 zimTmLUt5Vzi0mGPHo726R+fLXGFpKD+LzsigEnEMrbbq4kfkcFlmprFt/XtGo6e90
+	 4f2TQ0ZHRCcGMOzW0b2AUjngKXF8/JVE5TxwDrcVt2N1HutHdSCHEh4NgvEeCrkE9d
+	 pnu992D9SrP+WYNqXNlAqYnQ/S7/YuXcVQTg7Ad4nUoXBX2TK6w5Vw6wStL8+9lbMK
+	 lDPPr+qrXjzoUxoYiOAuUgXZ6tkLD+3M1f0hXxlPGp/yZOjyOqXQDhF4MZNw3Lqymy
+	 lr1at1IsixqGQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 20/23] selftests/bpf: Add precision
- backtracking test for stack arguments
+Subject: Re: [PATCH bpf 1/2] uprobes/x86: Fix red zone clobbering in nop5
+ optimization
 Reply-To: sashiko@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>
+To: "Andrii Nakryiko" <andrii@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260507213150.1139244-1-yonghong.song@linux.dev>
-References: <20260507213150.1139244-1-yonghong.song@linux.dev>
+In-Reply-To: <20260509003146.976844-1-andrii@kernel.org>
+References: <20260509003146.976844-1-andrii@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 09 May 2026 01:52:03 +0000
-Message-Id: <20260509015204.1324AC2BCB0@smtp.kernel.org>
+Date: Sat, 09 May 2026 02:02:42 +0000
+Message-Id: <20260509020243.223B1C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,109 +46,109 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Commit message and code comment incorrectly claim that the subpr=
-ogram performs a bounds check.
-- [Medium] Non-deterministic branching in the test program can lead to inte=
-rmittent flaky failures by returning 36 instead of the asserted 25.
+- [Critical] `resolve_uprobe_addr()` unconditionally uses `current->mm`, ca=
+using `is_optimized()` to fail when called from tracer context, which leads=
+ to target instruction stream corruption and potential kernel panics.
+- [High] Exhausting a process's trampoline page slots permanently disables =
+nop5 optimization for that uprobe across the entire system.
 --
 
-commit 953824567df7ff801d99eb6df49d76d95736325d
-Author: Yonghong Song <yonghong.song@linux.dev>
+commit 2c63c19710be8b050bc0e126d84e52c24209e062
+Author: Andrii Nakryiko <andrii@kernel.org>
+Date:   Sat May 9 00:30:56 2026 +0000
 
-selftests/bpf: Add precision backtracking test for stack arguments
+uprobes/x86: Fix red zone clobbering in nop5 optimization
 
-This commit adds a test to verify precision backtracking across BPF-to-BPF
-calls involving stack arguments. The test aims to ensure precision propagat=
-es
-from a kfunc's size argument back through a subprogram frame.
+The x86 uprobe nop5 optimization currently replaces a 5-byte NOP at the
+probe site with a CALL into a uprobe trampoline. This commit changes the
+optimization to use JMP instead, introducing a trampoline page with slots
+to handle register state saving and jumping to the syscall.
 
-> The test passes a size value as incoming stack arg (arg6) to a
-> subprog, which bounds-checks it and forwards it as the mem__sz
-> parameter (outgoing arg7) to bpf_kfunc_call_stack_arg_mem.
-
-Is the description about bounds-checking accurate?=20
-
-Looking at the inline assembly for subprog_call_mem_kfunc, it appears the
-subprogram simply reads the size from the incoming stack slot and immediate=
-ly
-writes it to the outgoing stack slot without any bounds checking logic.
-
-> diff --git a/tools/testing/selftests/bpf/progs/stack_arg_precision.c b/to=
-ols/testing/selftests/bpf/progs/stack_arg_precision.c
-> new file mode 100644
-> index 0000000000000..c94905f07dcc1
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
-> @@ -0,0 +1,137 @@
+> diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+> index ebb1baf1eb1d0..7e1f14200bbbf 100644
+> --- a/arch/x86/kernel/uprobes.c
+> +++ b/arch/x86/kernel/uprobes.c
 
 [ ... ]
 
-> +/*
-> + * Test precision backtracking across bpf-to-bpf call for kfunc stack ar=
-g.
-> + * subprog_call_mem_kfunc receives a size as incoming stack arg (arg6),
-> + * bounds-checks it, then passes it as mem__sz (arg7) to
-> + * bpf_kfunc_call_stack_arg_mem.
-> + *
-> + * 1+2+3+4+5+(1+2+3+4) =3D 25
-> + */
+> @@ -761,147 +785,153 @@ void arch_uprobe_clear_state(struct mm_struct *mm)
+[ ... ]
+> +static bool resolve_uprobe_addr(unsigned long ip, unsigned long *probe_a=
+ddr)
+>  {
+> -	struct vm_area_struct *vma =3D vma_lookup(current->mm, ip);
+> +	struct uprobes_state *state =3D &current->mm->uprobes_state;
 
-This isn't a bug, but should the comment be updated to match the
-implementation? As mentioned above, the bounds check seems to be missing fr=
-om
-the assembly below.
+Can this cause a NULL pointer dereference or instruction corruption when
+executed outside the target task's context?
 
-> +__naked __noinline __used
-> +static long subprog_call_mem_kfunc(long a, long b, long c, long d, long =
-e, long size)
-> +{
-> +	asm volatile (
-> +		"r1 =3D *(u64 *)(r11 + 8);"	/* r1 =3D incoming arg6 (size) */
-> +		"r2 =3D 0x0807060504030201 ll;"	/* r2 =3D buf contents */
-> +		"*(u64 *)(r10 - 8) =3D r2;"	/* store buf to stack */
-> +		"r2 =3D r10;"
-> +		"r2 +=3D -8;"			/* r2 =3D &buf */
-> +		"*(u64 *)(r11 - 8) =3D r2;"	/* outgoing arg6 =3D buf */
-> +		"*(u64 *)(r11 - 16) =3D r1;"	/* outgoing arg7 =3D size */
+resolve_uprobe_addr() unconditionally uses current->mm. However, it is
+called by __is_optimized() via is_optimized() during uprobe registration
+and unregistration.
+
+If a tracer closes a BPF link file descriptor, triggering uprobe_unregister=
+()
+in the tracer's context, current->mm will point to the tracer rather than t=
+he
+target. This causes resolve_uprobe_addr() to fail, making is_optimized()
+return false. As a result, set_orig_insn() might write only 1 byte over
+the 5-byte JMP instruction, leaving 4 garbage bytes in the target's
+instruction stream.
+
+Furthermore, if unregistration runs from a kernel workqueue, current->mm
+is NULL, and dereferencing current->mm->uprobes_state will cause a kernel
+panic.
+
+Could we pass the correct mm struct down from is_optimized() to
+resolve_uprobe_addr() instead of relying on current->mm?
 
 [ ... ]
 
-> +__naked void stack_arg_precision_bpf2bpf(void)
-> +{
-> +	asm volatile (
-> +		"call %[bpf_get_prandom_u32];"
-> +		"r6 =3D r0;"
-> +		"r1 =3D 1;"
-> +		"r2 =3D 2;"
-> +		"r3 =3D 3;"
-> +		"r4 =3D 4;"
-> +		"r5 =3D 5;"
-> +		"if r6 < 2 goto l0_%=3D;"
-> +		"*(u64 *)(r11 - 8) =3D 4;"
-> +		"goto l1_%=3D;"
-> +	"l0_%=3D:"
-> +		"*(u64 *)(r11 - 8) =3D 6;"
-> +	"l1_%=3D:"
-> +		"call subprog_call_mem_kfunc;"
-> +		"exit;"
-> +		:: __imm(bpf_get_prandom_u32)
-> +		: __clobber_all
-> +	);
-> +}
+> @@ -1113,8 +1149,9 @@ static int __arch_uprobe_optimize(struct arch_uprob=
+e *auprobe, struct mm_struct
+>  {
+>  	struct uprobe_trampoline *tramp;
+>  	struct vm_area_struct *vma;
+> +	unsigned long slot_vaddr;
+>  	bool new =3D false;
+> -	int err =3D 0;
+> +	int slot, err;
+> =20
+>  	vma =3D find_vma(mm, vaddr);
+>  	if (!vma)
+> @@ -1122,8 +1159,17 @@ static int __arch_uprobe_optimize(struct arch_upro=
+be *auprobe, struct mm_struct
+>  	tramp =3D get_uprobe_trampoline(vaddr, &new);
+>  	if (!tramp)
+>  		return -EINVAL;
+> -	err =3D swbp_optimize(auprobe, vma, vaddr, tramp->vaddr);
+> -	if (WARN_ON_ONCE(err) && new)
+> +
+> +	slot =3D tramp_alloc_slot(tramp, vaddr);
+> +	if (slot < 0) {
+> +		if (new)
+> +			destroy_uprobe_trampoline(tramp);
+> +		return slot;
+> +	}
 
-Could this lead to intermittent test failures?
+If a process exhausts its trampoline page slots, will this permanently
+disable the nop5 optimization for this uprobe across the entire system?
 
-The test asserts a strict return value of 25:
+If get_uprobe_trampoline() returns a reachable trampoline that is completely
+full (all 256 slots used), tramp_alloc_slot() returns -ENOSPC. This error
+propagates up to arch_uprobe_optimize(), which handles failures by setting
+the ARCH_UPROBE_FLAG_OPTIMIZE_FAIL bit on auprobe->flags.
 
-__success __retval(25)
+Since struct arch_uprobe is shared across all processes tracing the same
+inode and offset, hitting the 256-slot limit in any single process seems
+to permanently blacklist the probe from being optimized system-wide for
+all other processes, even if those processes have completely empty
+trampolines.
 
-If bpf_get_prandom_u32() happens to return 0 or 1, the size argument is set=
- to
-6 instead of 4. In that case, bpf_kfunc_call_stack_arg_mem() will sum up 6
-bytes instead of 4, returning 36 instead of 25, which would cause the test =
-to
-fail.
+Should get_uprobe_trampoline() also check if the trampoline has available
+slots before returning it, or can the failure be handled without setting
+the global failure flag?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260507212942.1122=
-000-1-yonghong.song@linux.dev?part=3D20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260509003146.9768=
+44-1-andrii@kernel.org?part=3D1
