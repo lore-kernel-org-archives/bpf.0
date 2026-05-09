@@ -1,35 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D1C3D6CDA;
-	Sat,  9 May 2026 23:21:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8914632D0D8
+	for <bpf@vger.kernel.org>; Sat,  9 May 2026 23:34:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778368861; cv=none; b=nE3VExpUXohbGjamw7IdvMj5SGo/N8NIBKcMKE+ip5CctDrqb+iwjMRJvAyMnsfaVdRs0V4Vd2VbaQMxsmO8vBU4hzacBxY/T9v2F+kxTZyjuHUpOpu9ir4kK7zYpbZI6/RQZZ7H1b3YLGtFktbKszVy4LKHhkBihG7Jdd3sMaI=
+	t=1778369700; cv=none; b=K/c/HW8vCYPtJ9di02W4Kqj9bwY9TA9oMxEDSB/O5OoO+05h+K5bnyOP588SYduxdj87Qk7ahLeCo1o5hGo7UV5pU1XuuXrKl1gzNtqmUV+L0efBfpq9uq1Eqtz8cEtkgE1JqNqz4au30d/7c4v8K8GztYGjvGFP0wtWv1kOtUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778368861; c=relaxed/simple;
-	bh=wWZeMYwsqEvDA7PMlccFsaY96+YJMwE1z6o84K3OZ9o=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=c4rioIoXsfdJmRr4gM7LbvuUZQUro8ggAyVlCkpzwIGBYkn5PvTFlKK5S5uCehdEIr8RFtI5S7PxtT6x7hn9Taz6/m8mbM+iZnp32mChk38gNieso/Yoh9sXzaLVCx27BxEUl1Os8T69TgdzPpBxJ/0eeajl2qsrIYRklxiEiuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mWNSRIqd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778369700; c=relaxed/simple;
+	bh=JAYJ5MK6iRducm9mWgZFRrVhxXE//jwxDFTteuMVW98=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lvlnRz0qE3j+pO/kgA7oGGhFKk1N8iQLC+vo0BHpfsY+lAZQSQBGNqpeiyiJJSLqMU/DCmhDK463EgsCq5QNB0sxWZ2PQLp+okajwzQPtzgR5GvxqfCFKmrBUtow44WbaPQo9M7AURD3n541CpTwqWw7EHERr9guOrVr3Yo0jVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WkE7xPXV; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mWNSRIqd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB8E3C2BCC7;
-	Sat,  9 May 2026 23:21:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778368861;
-	bh=wWZeMYwsqEvDA7PMlccFsaY96+YJMwE1z6o84K3OZ9o=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=mWNSRIqddcNZaCIlH+Q8pEO0YXoz0tvbIjjePA+kwofAiMYwH8Fp4q06wGUGFpgGH
-	 mjGLqjsfii70X+7OAZsiUsZaCFXFqU2ilumiMEfB2RP1abZ+/2RCjDtA3DA4LCj4bK
-	 c3RXKyYfIK4O/EKp89w+FBqlxV4odnCTSUpDaFlvJACceF8uSxhNCHjTCnI1IMNtMc
-	 fpRbg3tvF+2EUR+XnLKlPSuVxHqzhz8DYe176vvCIvxpkysNM2RlWBqL2Tu4Tfbrcf
-	 ZuQJhXqPeaVj9/k5eFJ51YqROkyf3/q9RnaTeUu2bju6S55NV+7iJy3W/9FT8Cnoeh
-	 GesHIvzt5nA8w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02DB33811A7B;
-	Sat,  9 May 2026 23:20:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WkE7xPXV"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8353dfdad62so2344291b3a.1
+        for <bpf@vger.kernel.org>; Sat, 09 May 2026 16:34:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778369699; x=1778974499; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aQI247T5wbObzCF3WwIl+l5yBfadYry9qpXCePD3xRk=;
+        b=WkE7xPXVuCI2hUPEsJjbq4mBbmFJdHaA0lY5jGCDT+hfMu2wEdH46b9M+F6Z+TVfHU
+         VERzdh+XG3sM1ahMaTSDlVlBENhNDyecrwFV1jKn5k22zupfQhIHOWNSeGIGpU2R02vh
+         zPCW2WAqaVKXAI7WqSBRrQAF1oIu9Mh/mK5DTeBxyTTKMNGD0zM6Na+ytXTgiOhzbHrw
+         /szm8sXF/YvbHhGi5aNdADIDzsiZOUkvFI/OOzI7fHmk4qIepvjcPnaJJ0xTC8pO1L2z
+         unap5bRseQgb9PuVcICljgMUoKRlHNLYwnhu9UEwRzo0tJgBhDofcWYSHRNBE4GnB09R
+         Iyzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778369699; x=1778974499;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aQI247T5wbObzCF3WwIl+l5yBfadYry9qpXCePD3xRk=;
+        b=jc63V1S97/DyP3bNaYP2CJJ6273U1OKFLMyBPAAnC7IzgoOHj+ZpfG15A3c43lPU/0
+         0np4BBhiyHfhYdrLAccK3OH4HFfd/KBLTJm7QSbdvGTcqDy7b0foBEdHbL8u7ACbFtoV
+         wLj+o7SfrdwfdXT1AmY/GTbDsU8VaPEsr1aa1KKWSBrF57N7TYYwl7tWsKuMjgwLREJI
+         6e6rE8vOVQ6pnIpsMhUvGhxqUM0UGLwO8HOCKodIrDLYEXCftkCUD4DFOtCsKyGmMrru
+         0Nt+xVITv6UolB+qZRezg+2CqI+bxqrLA11360O7H6JWZIljRx4o+GpmzCMtVFtqZBJU
+         pYcQ==
+X-Gm-Message-State: AOJu0YyuApRR4T8WWX65hH1h2qxOK7TE+ie6Z+fSM/9Fe+l8SoN1A3ux
+	RddQT3lCHoG9YV8v0VSNq7wWtPtHnxnQ/biSBBQhZmhcy11YlK/mU1rL
+X-Gm-Gg: Acq92OFtyJoEUJ+c40jFh/o0YFcpMsbOufxmJqG3a+4uNF+K4g0/zKJDS6NweeGabp0
+	e1aMqbDKQ9/weGq2vFknIKq4FgH2G4qUFgXRIL/EQnClwVoY3HJzGASklgUoLDsJjziKeV1pU/5
+	B5zUN9mragoNd9MZYZ3gADnS4ql2QcHY8jGw9dmMQ+MLp1T7X6sdQ0kNPKiFNRDTQxTS9itOnAU
+	MYxyELKWlyuPCY/0GL+f3KYGajoCSjUl0KfypqBTYDkHZTqtgTAHg5H5khWtA2VSSb2RX1r/zru
+	R1pTD9TPOyUVzlyiJWc2gY0LMhSr6RUevyyEdUZRYcS0WjhXlRi/glQ7yb7nTSwWDERB1zUdruV
+	nGkhvIrMhpyIhfRAggWNwUf/QqRw4ZK6V/e3xdjo/6XFNvLNEERH26G5J+RQfi+dsq948IKvjFW
+	y/KbZGzTObdA2tp13KSfc4FBBIGpqoy8UYvjO9us/zeVe8r8lzxkp6g1H+t55pbc91rqLcqepij
+	1VBIMwaI/C7WSzJ4VuqbB9GAV3Ek22BZoIt9YGiIhMmZhjzNpe3iIPsU3jlpQ==
+X-Received: by 2002:a05:6a20:9392:b0:398:ac0d:9a0b with SMTP id adf61e73a8af0-3aa5ac27026mr19067689637.50.1778369698743;
+        Sat, 09 May 2026 16:34:58 -0700 (PDT)
+Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c8267710262sm5326504a12.18.2026.05.09.16.34.57
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 09 May 2026 16:34:58 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: torvalds@linux-foundation.org
+Cc: bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	eddyz87@gmail.com
+Subject: [GIT PULL] BPF fixes for 7.1-rc3
+Date: Sat,  9 May 2026 16:34:56 -0700
+Message-ID: <20260509233456.39703-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,43 +74,92 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2] bpf: Fix off-by-one boundary validation in arena
- direct-value access
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177836880856.1203938.3770231489587618588.git-patchwork-notify@kernel.org>
-Date: Sat, 09 May 2026 23:20:08 +0000
-References: <20260426172505.1947915-1-graypanda.inzag@gmail.com>
-In-Reply-To: <20260426172505.1947915-1-graypanda.inzag@gmail.com>
-To: Junyoung Jang <graypanda.inzag@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, greg@kroah.com, security@kernel.org
 
-Hello:
+Hi Linus,
 
-This patch was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+The following changes since commit eb5249b12507246dc959945454cd1be8d7dc3795:
 
-On Mon, 27 Apr 2026 02:25:05 +0900 you wrote:
-> BPF_MAP_TYPE_ARENA accepts BPF_PSEUDO_MAP_VALUE offsets at exactly
-> the end of the arena mapping (off == arena_size). The boundary check
-> in arena_map_direct_value_addr() uses `>` instead of `>=`, which
-> incorrectly allows a one-past-end pointer to be accepted.
-> 
-> Change the condition to `>=` to correctly reject offsets that fall
-> outside the valid arena user_vm range.
-> 
-> [...]
+  Merge tag 'parisc-for-7.1-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux (2026-04-18 11:37:36 -0700)
 
-Here is the summary with links:
-  - [bpf,v2] bpf: Fix off-by-one boundary validation in arena direct-value access
-    https://git.kernel.org/bpf/bpf/c/3ac1a467e376
+are available in the Git repository at:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
 
+for you to fetch changes up to 3ac1a467e37683f602221e243fa3c59b0de81165:
 
+  bpf: Fix off-by-one boundary validation in arena direct-value access (2026-05-09 16:18:39 -0700)
+
+----------------------------------------------------------------
+- Fix sk_local_storage diag dump via netlink (Amery Hung)
+
+- Fix off-by-one in arena direct-value access (Junyoung Jang)
+
+- Reject TCP_NODELAY in bpf-tcp congestion control (KaFai Wan)
+
+- Fix type confusion in bpf_*_sock() (Kuniyuki Iwashima)
+
+- Reject TX-only AF_XDP sockets (Linpu Yu)
+
+- Don't run arg-tracking analysis twice on main subprog (Paul Chaignon)
+
+- Fix NULL pointer dereference in bpf_sk_storage_clone and fib lookup
+  (Weiming Shi)
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+----------------------------------------------------------------
+Amery Hung (1):
+      bpf: Fix sk_local_storage diag dumping uninitialized special fields
+
+Junyoung Jang (1):
+      bpf: Fix off-by-one boundary validation in arena direct-value access
+
+KaFai Wan (4):
+      bpf: Reject TCP_NODELAY in TCP header option callbacks
+      bpf: Reject TCP_NODELAY in bpf-tcp-cc
+      selftests/bpf: Test TCP_NODELAY in TCP hdr opt callbacks
+      selftests/bpf: Verify bpf-tcp-cc rejects TCP_NODELAY
+
+Kuniyuki Iwashima (7):
+      sockmap: Fix sk_psock_drop() race vs sock_map_{unhash,close,destroy}().
+      bpf: tcp: Fix type confusion in bpf_tcp_sock().
+      selftest: bpf: Add test for bpf_tcp_sock() and RAW socket.
+      bpf: tcp: Fix type confusion in bpf_skc_to_tcp_sock().
+      bpf: tcp: Fix type confusion in bpf_skc_to_tcp6_sock().
+      bpf: tcp: Fix type confusion in sol_tcp_sockopt().
+      bpf: Free reuseport cBPF prog after RCU grace period.
+
+Linpu Yu (1):
+      xskmap: reject TX-only AF_XDP sockets
+
+Martin KaFai Lau (2):
+      Merge branch 'bpf-reject-tcp_nodelay-in-tcp-header-option'
+      Merge branch 'bpf-tcp-fix-type-confusion-in-bpf-helper-functions'
+
+Matthieu Baerts (NGI0) (1):
+      mptcp: bpf: Fix type confusion in bpf_mptcp_sock_from_subflow()
+
+Paul Chaignon (2):
+      tools/headers: Regenerate stddef.h to fix BPF selftests
+      bpf: Don't run arg-tracking analysis twice on main subprog
+
+Weiming Shi (2):
+      bpf: Fix NULL pointer dereference in bpf_sk_storage_clone and diag paths
+      bpf: Fix NULL pointer dereference in bpf_skb_fib_lookup()
+
+ include/linux/bpf.h                                |  1 +
+ kernel/bpf/arena.c                                 |  2 +-
+ kernel/bpf/liveness.c                              | 25 +++-------
+ net/core/bpf_sk_storage.c                          | 14 +++---
+ net/core/filter.c                                  | 55 +++++++++++++++++++---
+ net/core/sock_map.c                                | 39 +++++++++------
+ net/ipv4/bpf_tcp_ca.c                              |  2 +-
+ net/mptcp/bpf.c                                    |  2 +-
+ net/xdp/xskmap.c                                   |  4 ++
+ tools/include/uapi/linux/stddef.h                  | 26 +++++++++-
+ .../testing/selftests/bpf/prog_tests/bpf_tcp_ca.c  |  4 ++
+ .../testing/selftests/bpf/prog_tests/sockopt_sk.c  | 17 ++++++-
+ .../selftests/bpf/prog_tests/tcp_hdr_options.c     |  4 ++
+ tools/testing/selftests/bpf/progs/bpf_cubic.c      | 14 ++++++
+ tools/testing/selftests/bpf/progs/sockopt_sk.c     | 16 +++++++
+ .../bpf/progs/test_misc_tcp_hdr_options.c          | 15 +++++-
+ 16 files changed, 189 insertions(+), 51 deletions(-)
