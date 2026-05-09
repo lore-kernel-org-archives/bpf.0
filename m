@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359D0140E5F
-	for <bpf@vger.kernel.org>; Sat,  9 May 2026 02:12:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 681C7207DF7
+	for <bpf@vger.kernel.org>; Sat,  9 May 2026 02:15:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778292759; cv=none; b=cKumA9jnnWdTTAfYwhhIJ7La6prYdoIXb2IEoh6foRZ/S6dpS0suQUDwxqBSPjMQ75AFFlTXoVsCTT2zN1ysFw8nL0Q7eW7iybpgrlWdydQh76y6Xr3S6Qnje7vte9hDqJvEyZARVc7XFJj5A6/K09vq5FIutqa9o7ac5dadiHI=
+	t=1778292924; cv=none; b=ckZLuVILoEgS1lljNMfwPzRm3XQbon7pb7SFeUPA5mLl09eVketILzzvfVGPi9A15SE7/8wiZWHkgFUwrnI9U2HJnIKkXy9jXNgbOqoznh/rcbNDdvSLMPbKLLueO+8XO7fyTEYfXCNkkhtaNX0lFkkM3j9xSvYb73rDbdznqKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778292759; c=relaxed/simple;
-	bh=0Mdhq0jLbqqK/fCaAuU0cU845jvz3knpVGjRDB3GCz8=;
+	s=arc-20240116; t=1778292924; c=relaxed/simple;
+	bh=LhT5SYKpHjhrAAl9NfwEtPED0brOO9Rj6SolAHcYFT4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=QOOVfPwn0u2kd8pEqOqVyaeFi+JCiykIMf9iK/2mUQpAGU6vBO+JBYp69RnM4R+RTYCJaw9FDZWW7K0dQUNhxL7qlKCq3gqYBFIjLJLw6cXfalDkuguvYqR4rv4sPshK1rlLTDLQDvGhPu3TDvPp7/zsLVuf3lP6arizs0n4bDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C1wgtUOv; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=fI0VePG9CdJoJQzqBduKPTqeTh+0fC1ICjCHxhyR8zFjWR1PMr3Q07BRAi5IuLQtKONZHKR7ONDDIijFP4FXptclYpLM0yG2m4Bjq3n2dHcMGi9x3FlptR4iLhc0HhyBfeYmTmIwYx8Mm2Ss9iGCAJU613kiB7q9qRWBhWLQ6yo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ez3jDaE2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C1wgtUOv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE98FC2BCB0;
-	Sat,  9 May 2026 02:12:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ez3jDaE2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4469C2BCB0;
+	Sat,  9 May 2026 02:15:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778292758;
-	bh=0Mdhq0jLbqqK/fCaAuU0cU845jvz3knpVGjRDB3GCz8=;
+	s=k20201202; t=1778292924;
+	bh=LhT5SYKpHjhrAAl9NfwEtPED0brOO9Rj6SolAHcYFT4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=C1wgtUOvpg5KBHJq2ZWSiaCYuje0A56HPC/tPV8ZMXMcGRZRVv3eTsdtYKb3xC0eO
-	 0Jw+uN74WBfen/YU2GcIaZJ5OdkF//uGu8XR1e/z14G6ZNDLZfvUfVkJF1ZcGGiZws
-	 Lfpmx+f9W0T3V0dF+1hIShAPYaCu4xONLiRSMpUbWaANS5IZm0rYhkbskPMnJy+1MM
-	 BY67py+H90uZc4TrlRhfbQALUQl/jraRxXWr3p1MLO6MHQ7pSTp2p7+PyIPlb+hRMB
-	 2i2HlCFc+MvFqtgkWUt9eIy8a/tQ1E+DFO6G3t7UNnhq3RhMnpXbLcW3pnqFgIxn4T
-	 U+H46Ezi4052Q==
+	b=Ez3jDaE2yZlj/VfRuadOi70p+Qbvu7vobRXbR02/RJxWft0O890P0h9WtWI3Y/xeY
+	 lt5HniZ5O/xPziROMnE1Jm2rHfxMuM0IKhP38eFdpMGbTtmVQaUH3bbrOL+smmn18v
+	 +dyCkeBQdqUJIhc1wmIVYC+bk4eUSzxxFn+SmKsXkCVZUfNmjhgZFkgNWAf180OvoA
+	 MFgCsZPrskjnrNIz1u0qFVcxchsPwE+BlDM+Nxbp7tgWUmQDMGHcMTcBzHWZpzyD27
+	 LPsIhWweGHZ9o69Dm2V++WoJM1krCZu8lJV+oGavJtcVrIpL93k8XuzvQshESEgsQZ
+	 80uwcTyQCucmQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Add tests for uprobe nop5 red
- zone clobbering
+Subject: Re: [PATCH bpf-next v2 22/23] bpf, arm64: Add JIT support for stack
+ arguments
 Reply-To: sashiko@lists.linux.dev
-To: "Andrii Nakryiko" <andrii@kernel.org>
+To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260509003146.976844-2-andrii@kernel.org>
-References: <20260509003146.976844-2-andrii@kernel.org>
+In-Reply-To: <20260507213201.1140284-1-yonghong.song@linux.dev>
+References: <20260507213201.1140284-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 09 May 2026 02:12:38 +0000
-Message-Id: <20260509021238.AE98FC2BCB0@smtp.kernel.org>
+Date: Sat, 09 May 2026 02:15:23 +0000
+Message-Id: <20260509021523.D4469C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,68 +46,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The `optimized_red_zone` USDT subtest is brittle and may produce=
- false positive passes because it relies on the compiler arbitrarily placin=
-g operands in the stack's red zone.
+- [High] In `emit_stack_arg_load()`, `bpf_off` is not negated, causing a ne=
+gative index that fails array bounds checks and results in the JIT embeddin=
+g an invalid instruction (BRK), leading to a kernel panic.
 --
 
-commit 1fbbd69b145cd2d80be83d6482e65179431782ac
-Author: Andrii Nakryiko <andrii@kernel.org>
+commit 6ccf042549a3902757c6335313c905e99fb41292
+Author: Puranjay Mohan <puranjay@kernel.org>
 
-selftests/bpf: Add tests for uprobe nop5 red zone clobbering
+bpf, arm64: Add JIT support for stack arguments
 
-This commit adds tests to verify that the uprobe nop5 CALL optimization does
-not clobber the x86-64 stack red zone. It introduces an assembly-level test
-and a USDT subtest which intends to trigger a probe in a function where the
-compiler places operands in the red zone.
+This commit implements stack argument passing for BPF-to-BPF and kfunc
+calls with more than 5 parameters on arm64, following the AAPCS64 calling
+convention.
 
-> diff --git a/tools/testing/selftests/bpf/usdt_2.c b/tools/testing/selftes=
-ts/bpf/usdt_2.c
-> index 789883aaca4c3..fc7e6d220a38b 100644
-> --- a/tools/testing/selftests/bpf/usdt_2.c
-> +++ b/tools/testing/selftests/bpf/usdt_2.c
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> index 085e650662e3d..9b9d2501d2d36 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
 
 [ ... ]
 
-> @@ -13,4 +13,17 @@ void usdt_2(void)
->  	USDT(optimized_attach, usdt_2);
+> @@ -1191,6 +1207,41 @@ static int add_exception_handler(const struct bpf_=
+insn *insn,
+>  	return 0;
 >  }
 > =20
-> +static volatile unsigned long usdt_red_zone_arg1 =3D 0xDEADBEEF;
-> +static volatile unsigned long usdt_red_zone_arg2 =3D 0xCAFEBABE;
-> +static volatile unsigned long usdt_red_zone_arg3 =3D 0xFEEDFACE;
+> +static const u8 stack_arg_reg[] =3D { A64_R(5), A64_R(6), A64_R(7) };
 > +
-> +void __attribute__((noinline)) usdt_red_zone_trigger(void)
+> +#define NR_STACK_ARG_REGS	ARRAY_SIZE(stack_arg_reg)
+> +
+> +static void emit_stack_arg_load(u8 dst, s16 bpf_off, struct jit_ctx *ctx)
 > +{
-> +	unsigned long a1 =3D usdt_red_zone_arg1;
-> +	unsigned long a2 =3D usdt_red_zone_arg2;
-> +	unsigned long a3 =3D usdt_red_zone_arg3;
+> +	int idx =3D bpf_off / sizeof(u64) - 1;
+
+Does this missing negation for bpf_off lead to an invalid instruction being
+emitted?
+
+Since BPF stack arguments use negative offsets from BPF_REG_PARAMS (such as
+-8 for arg 6), the calculation bpf_off / sizeof(u64) - 1 will result in a
+negative idx.
+
+Because NR_STACK_ARG_REGS uses ARRAY_SIZE, it evaluates to an unsigned
+size_t. Comparing a negative idx to it will result in a false condition,
+falling through to the else block.
+
+In the else block, the negative idx generates a negative offset for
+A64_LDR64I. Since A64_LDR64I expects an unsigned 12-bit scaled immediate,
+could this cause the instruction encoder to fail and embed an
+AARCH64_BREAK_FAULT into the JIT image?
+
 > +
-> +	USDT(optimized_attach, usdt_red_zone, a1, a2, a3);
-
-Is this test reliable across different compiler versions and optimizations?
-
-The x86-64 USDT macro uses the "nor" inline assembly constraint, which allo=
-ws
-the compiler to allocate these operands to CPU registers. Because there is =
-no
-register pressure in usdt_red_zone_trigger(), modern compilers might alloca=
-te
-the local variables a1, a2, and a3 directly to registers rather than the
-stack's red zone.
-
-If the operands are placed in registers, the uprobe CALL optimization
-clobbering [rsp-8] will not corrupt them. This could cause the test to pass
-even on buggy kernels, creating a false positive.
-
-Would it be safer to explicitly force these operands into the red zone
-using inline assembly constraints, rather than depending on the compiler's
-register allocator?
-
+> +	if (idx < NR_STACK_ARG_REGS)
+> +		emit(A64_MOV(1, dst, stack_arg_reg[idx]), ctx);
+> +	else
+> +		emit(A64_LDR64I(dst, A64_FP, (idx - NR_STACK_ARG_REGS) * sizeof(u64) +=
+ 16), ctx);
 > +}
 > +
->  #endif
+> +static void emit_stack_arg_store(u8 src_a64, s16 bpf_off, struct jit_ctx=
+ *ctx)
+> +{
+> +	int idx =3D -bpf_off / sizeof(u64) - 1;
+
+For comparison, emit_stack_arg_store() correctly negates bpf_off here.
+
+> +
+> +	if (idx < NR_STACK_ARG_REGS)
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260509003146.9768=
-44-1-andrii@kernel.org?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260507212942.1122=
+000-1-yonghong.song@linux.dev?part=3D22
