@@ -1,163 +1,245 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0688378838
-	for <bpf@vger.kernel.org>; Sat,  9 May 2026 07:18:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778311118; cv=pass; b=fHMatCvybm172fKsNDxheLEil4G3vUjBSOyf7aDK2SfDeZ4xrdV1ApYAKPH+MojG6SKN9dDHWJKeH0Sy62S0op8aL39Rdc3pY5HnUJT5bOAXk8mCIBwb8I4Lo7BfNlWCEpobaET/V2/RVUtV18WucpED9ZRaNE04lRUC+YDgCOQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778311118; c=relaxed/simple;
-	bh=pbICpdMRCZvZ50IHhxVma1ZkYUoOVniItWErjrjKK/w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iSGgB3j4XB7tktt+uAY0doPuzfefgGPlZ8b6txurNshGd8iFAL4GNtdlkMJ2I1+h7JQTz/Oh4A7OQM+VJGHKU4fKdmPEItRvBSSR+Lb4cIH75r4c7HWac2chwtg2vInCpm9shPyz2wB3GHfm/dcG4V72v2EyzZqcMLP9M86lzmM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mPd9L6Cs; arc=pass smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1432384231
+	for <bpf@vger.kernel.org>; Sat,  9 May 2026 08:27:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778315238; cv=none; b=jw179ieE+iUwtALcEhOWbsKu03b6XLoyEaEP0o26z9LW0xthPlbC/31UrDZAxaPV5hEv8wR7OCNUjRG+ki4SszVwMLh8EFduCs8dcTms+YPR+343DI5iFGevyBet+SEPjRIARzH+I+wg3w8VsaIvcFJZKFEA7DjC0I3DLeLNtCM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778315238; c=relaxed/simple;
+	bh=Hy9d+Vc0PLyya/fVUh9x8+I2w+ZiZJC/7x38q3PL3io=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=mTgDZwPK7eAZGzLRjfFUFWdpQaXZ8TLnmCDBWBO6prGccwzm05ak47D1OsistxgYaTtC3s0LpKyLb81hVI14Ac70vHwV7NuRy77w3Fd92eOyv5Qj9krsTHN/akhDd9v5Lo2XvT4FcdGhjsx5hQr1G7QFil6Q+8RspM3oT9/0AoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BuVl6fuj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mPd9L6Cs"
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5a0ff30b240so3856917e87.0
-        for <bpf@vger.kernel.org>; Sat, 09 May 2026 00:18:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778311114; cv=none;
-        d=google.com; s=arc-20240605;
-        b=UksgLaOd+3DQez9m0tr1YA0vX1xX+644kjveijMkYxlIm+gFln6dXpLcgxA/je6ENT
-         MGUxgUYHICiDIJLv09wjtjTUlKFdBPTfFDfdbg8htIotz9KqG3xUQBcuDeN70XHAB78a
-         KnT8HxEkJ3lCUOfBR7XsAComo5Yq4mrGGrd5Jwex5G8SiAIkAu6mTtJ41Obeo8CFpDB8
-         heCRa5e6X/O3OI4bHPO3rnuvCKVahmZx4b+hKEBwRieoc9UvaSrJGhlwvmY93lvQpg5R
-         ZtbOl+mvr655Fq1W8tqUXOmLxVWxsfoJx5XQpv9UpT5MJXV+Su9ZTUeek2jEkcsUuJBV
-         xDGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=OGTzXJA9ES0mx7H989TSSSZHimLRqgQzpIBVyzdPw84=;
-        fh=jfkxpjcSMiD4olrCPaTPmcnEZ6tUWAbAE6I3oHcqXAc=;
-        b=e2P7MFVh4fVod27MP+JZFbb5LlGoDJqvuCCSqXU4bc9uYvBqUhXJSYsOgcQTLli6gc
-         fop5gdHgBRd/OfPKSUlkUY/pguXnoQMLfbJKFtkfSl39QO4CUqeVTJv+4KT9SNtdMWZ0
-         zEf3f0BgX0TNWA85WhdX+oGDD4RCXHKijnZFso+YwODyjk1dAAK93xzf3eb3rCAlnm/l
-         JkI8MN3pwc2FqOLyPeoOQGNnpkGkvT617gWYNvRVTtTm2I3SQ7NuqAV5k2id56KjWZrp
-         KKe2qinIxq8sJhHOXK7mOgqdgUuTD64yNk+NiyMMPPYV0TulVq1XolRSAcxKO+amM0ME
-         AMTQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778311114; x=1778915914; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OGTzXJA9ES0mx7H989TSSSZHimLRqgQzpIBVyzdPw84=;
-        b=mPd9L6CsCGyGRSbcNGVrlJ3sy+4xS9eySw2QE9TXc5X2AEZbEGMeqto0DHlcbVxkwU
-         RamhYpmQE3/yKAId6wnO7PvPWtpEKoxIDkh+aYo6IIU2tS5zohzkfBFWYydswVHyI5aj
-         g5zu1ngY7sxQhKqsLA4nqZIUIMB4mRI9qh58XYtQ5khWAjnTK0/lpL/9snwvDmkRV2YX
-         Bm+5SLygw45vD2/HMgv9nXWe5jxFKOlza5anSvvjH4vASSZkAEeFpkP8aayikTPUPlKT
-         3v9ryBCMH5zp/xkk+d2pFtnvSxqSlSDfKVyCq8FHbbwpAk5sSz22Sea+ms7hSKRPPeSj
-         QycA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778311114; x=1778915914;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=OGTzXJA9ES0mx7H989TSSSZHimLRqgQzpIBVyzdPw84=;
-        b=TCQ8NjvYUHIpfMxWLWDlrm3BDJu/8YTvk66kz66qajoVBLOSj4CyJET65YFfzNdIen
-         JFjTt1cW3fnGI8lNtoxIG2FFHTAysBEfXDbI+UkipSDfy86LAXHwbGTyv8ix/Ut5zslm
-         mtlRW/TYM6uSRbabLix0J/kzPOu6qA7cd4swtd5ReycFNvdUz1Y/G9PWUMViD++emC2Y
-         j5iG9YGPH81GvSD6VTzBUeI0KnE/luzUiNb1Se29mivgOg/8Gx0PSh9xiSaW9tko+XiL
-         4ggFfWpQV/ICojOpqitMpTVCmuxK7F4TH9moX/vq01qUG/E7zbgJ5TEkvbjbOpbbTQNb
-         k5bw==
-X-Forwarded-Encrypted: i=1; AFNElJ9+U9wC9kRG0qYxslWOsfXXnTyIXw7kTJhCmjIpZopg2DoKxj/p4wccIRKJdcaNx7RqN/o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeEzIUvNo5MnR1x3MOvJx/Lbyz1UFe0gna4HLrBYgUtZ4RG/oI
-	B/IZeyReNZ3Nblt1huqS3zBpzRCjVofONuNZ6UDWOuk9fUsjinqDeLbNv3m3KXo2MTwemsdUmBr
-	JjDdZyTvpabLFNd8//VaaWVnx1iUKrmo=
-X-Gm-Gg: Acq92OHvTk7WgmtWAAAMuA9GI2EZq79Tf+1d7j6J0vP6lpHFJfkxj2yLlB8CylB6L3R
-	4K7hQtLyQajt96WnrGCNYvO0GNBv6cwb2nf5/FtOv5eH7HMiGxfg7rC5dHKmTm5w+ID5nigKki6
-	WTAzlqzkf6OUqowrxCIULq3Dh7bHfTUNTtW0Z+FxLE9WNNQ2FODgns58h9WBeKQxrq8Ch2IcOUK
-	pZaBrKiubkaApfjJEI3mzo9eXw4jjXvjtMNWdOSEtD16eKcs8fVbM29I7yvEUGVTfsTC1SFaXiq
-	KSDSHJTf9blm7kNyNgWvGLdGWTt1bQiv8MkE47u3
-X-Received: by 2002:a05:6512:3a88:b0:5a7:470c:daed with SMTP id
- 2adb3069b0e04-5a8b6ca6e5bmr601388e87.16.1778311113737; Sat, 09 May 2026
- 00:18:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BuVl6fuj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33278C2BCB2;
+	Sat,  9 May 2026 08:27:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778315238;
+	bh=Hy9d+Vc0PLyya/fVUh9x8+I2w+ZiZJC/7x38q3PL3io=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=BuVl6fujA+d4rk5/OCf/EzYA45kRtaOApB97fRTcqcOPfYWWVqTKjzz5vt/xo5fIo
+	 4Udty+7VlAxA6LSqzg25JjH15o75Ux0H1SV1+lFwSsS86CQRevEL4VhfLTdXXc55JF
+	 h7fOe5zr5A+JImmONUhSLEBMw2Kl7cZys7JD8MivGHAzdbWOjK4o6VCL2B91bTWb5u
+	 SuMbmbcIA3ISsWy2Kid/hmItoC7ymHHfDpePMtEPihGAWtE8dTfsgbw2Avm0UNOXHX
+	 eJXazDtkraUdGRfzYjHEDJ8Ber/VY1Iet3yBXWk3gYCAC5OpfsuJ/gW79luZC8+hOu
+	 /1fKn57nr0rvg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v4 03/13] net: microchip: fdma: add PCIe ATU
+ support
+Reply-To: sashiko@lists.linux.dev
+To: "Daniel Machon" <daniel.machon@microchip.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260508-lan966x-pci-fdma-v4-3-14e0c89d8d63@microchip.com>
+References: <20260508-lan966x-pci-fdma-v4-3-14e0c89d8d63@microchip.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 09 May 2026 08:27:17 +0000
+Message-Id: <20260509082718.33278C2BCB2@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260508144344.694-1-linpu5433@gmail.com>
-In-Reply-To: <20260508144344.694-1-linpu5433@gmail.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Sat, 9 May 2026 15:17:55 +0800
-X-Gm-Features: AVHnY4JlMp6MnmwMwsLAGRRLfDaSg7w4dUAGrqXeTvNSXYdNN12sv-gwcBYGaKw
-Message-ID: <CAL+tcoD4QARiHjwyW4RPBAQT-XmnLPPnathHfTSz6Uy2qJcAVQ@mail.gmail.com>
-Subject: Re: [PATCH bpf v4] xskmap: reject TX-only AF_XDP sockets
-To: Linpu Yu <linpu5433@gmail.com>
-Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, 
-	netdev@vger.kernel.org, bpf@vger.kernel.org, sdf@fomichev.me, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	horms@kernel.org, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
-	john.fastabend@gmail.com, bjorn@kernel.org, linux-kernel@vger.kernel.org, 
-	tanyuan98@outlook.com, yifanwucs@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 8, 2026 at 10:43=E2=80=AFPM Linpu Yu <linpu5433@gmail.com> wrot=
-e:
->
-> XSKMAP entries are used as redirect targets for incoming XDP frames.
-> A TX-only AF_XDP socket lacks an Rx ring and cannot handle redirected
-> traffic, but xsk_map_update_elem() currently allows such sockets to
-> be inserted into the map.
->
-> Redirecting packets to such a socket on the veth generic-XDP path
-> causes a kernel crash in xsk_generic_rcv().
->
-> This became possible after xsk_is_setup_for_bpf_map() was removed from
-> the XSKMAP update path, which allowed bound TX-only sockets to be
-> inserted into the map.
->
-> Reject TX-only sockets during XSKMAP updates to avoid the crash.
-> They remain fully operational for pure Tx purposes outside XSKMAP.
->
-> Fixes: 968be23ceaca ("xsk: Fix possible segfault at xskmap entry insertio=
-n")
-> Reported-by: Juefei Pu <tomapufckgml@gmail.com>
-> Reported-by: Yuan Tan <yuantan098@gmail.com>
-> Reported-by: Xin Liu <bird@lzu.edu.cn>
-> Signed-off-by: Yifan Wu <yifanwucs@gmail.com>
-> Signed-off-by: Linpu Yu <linpu5433@gmail.com>
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
+- [High] Race condition and unsafe unmap ordering in the shared ATU region =
+pool.
+- [High] Missing ATU hardware initialization and REGION_CTRL1 configuration.
+- [Medium] ATU translation window is hardcoded to the maximum region size, =
+bypassing DMA isolation.
+- [Medium] Dangling pointers left after DMA teardown risk double-free memor=
+y corruption.
+--
 
-Even though AI suggested using EOPNOTSUPP instead, prior to this
-thread, I pointed out ENOBUFS makes more sense because it is identical
-to how xsk_recvmsg() detects the failure of the rx ring. If needed, we
-can cook a follow-up patch to replace that in __xsk_recvmsg().
+commit 22984db44c5308e0df119c7e94e5241b187dad51
+Author: Daniel Machon <daniel.machon@microchip.com>
 
-It looks good to me:
-Reviewed-by: Jason Xing <kerneljasonxing@gmail.com>
+net: microchip: fdma: add PCIe ATU support
 
-Thanks,
-Jason
+When operating as a PCIe endpoint, the lan966x/lan969x FDMA engine needs to
+map outbound DMA addresses through a PCIe Address Translation Unit (ATU).
+This patch adds functions to allocate FDMA memory and map it into one of
+six equally-sized ATU outbound regions.
 
-> ---
-> Changes in v4:
-> - retarget the patch from bpf-next to bpf
-> - resend after no feedback
->
->  net/xdp/xskmap.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/net/xdp/xskmap.c b/net/xdp/xskmap.c
-> index afa457506274..3bff346308d0 100644
-> --- a/net/xdp/xskmap.c
-> +++ b/net/xdp/xskmap.c
-> @@ -184,6 +184,10 @@ static long xsk_map_update_elem(struct bpf_map *map,=
- void *key, void *value,
->         }
->
->         xs =3D (struct xdp_sock *)sock->sk;
-> +       if (!READ_ONCE(xs->rx)) {
-> +               sockfd_put(sock);
-> +               return -ENOBUFS;
-> +       }
->
->         map_entry =3D &m->xsk_map[i];
->         node =3D xsk_map_node_alloc(m, map_entry);
-> --
-> 2.54.0
+> diff --git a/drivers/net/ethernet/microchip/fdma/fdma_api.c b/drivers/net=
+/ethernet/microchip/fdma/fdma_api.c
+> index e78c3590da9e6..e0c2b137afef7 100644
+> --- a/drivers/net/ethernet/microchip/fdma/fdma_api.c
+> +++ b/drivers/net/ethernet/microchip/fdma/fdma_api.c
+
+[ ... ]
+
+> +#if IS_ENABLED(CONFIG_MCHP_LAN966X_PCI)
+> +/* Allocate coherent DMA memory and map it in the ATU. */
+> +int fdma_alloc_coherent_and_map(struct device *dev, struct fdma *fdma,
+> +				struct fdma_pci_atu *atu)
+> +{
+> +	struct fdma_pci_atu_region *region;
+> +	int err;
+> +
+> +	err =3D fdma_alloc_coherent(dev, fdma);
+> +	if (err)
+> +		return err;
+> +
+> +	region =3D fdma_pci_atu_region_map(atu, fdma->dma, fdma->size);
+> +	if (IS_ERR(region)) {
+> +		fdma_free_coherent(dev, fdma);
+
+Could leaving fdma->dcbs populated after calling fdma_free_coherent() cause
+a double-free if the caller has a teardown routine that checks for non-NULL
+pointers?
+
+> +		return PTR_ERR(region);
+> +	}
+> +
+> +	fdma->atu_region =3D region;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(fdma_alloc_coherent_and_map);
+> +
+> +/* Free coherent DMA memory and unmap the memory in the ATU. */
+> +void fdma_free_coherent_and_unmap(struct device *dev, struct fdma *fdma)
+> +{
+> +	fdma_pci_atu_region_unmap(fdma->atu_region);
+> +	fdma_free_coherent(dev, fdma);
+
+Similarly, should fdma->atu_region and fdma->dcbs be cleared after being
+freed to prevent dangling pointers?
+
+> +}
+> +EXPORT_SYMBOL_GPL(fdma_free_coherent_and_unmap);
+> +#endif
+
+[ ... ]
+
+> diff --git a/drivers/net/ethernet/microchip/fdma/fdma_pci.c b/drivers/net=
+/ethernet/microchip/fdma/fdma_pci.c
+> new file mode 100644
+> index 0000000000000..1bd41eaa58a4b
+> --- /dev/null
+> +++ b/drivers/net/ethernet/microchip/fdma/fdma_pci.c
+
+[ ... ]
+
+> +/* Configure the address translation in the ATU. */
+> +static void
+> +fdma_pci_atu_configure_translation(struct fdma_pci_atu_region *region)
+> +{
+> +	struct fdma_pci_atu *atu =3D region->atu;
+> +	int idx =3D region->idx;
+
+Does the ATU require REGION_CTRL1 (TLP Type at offset 0x0) to be configured
+here?
+
+If a bootloader previously configured an ATU region for Configuration or I/O
+accesses, could the register retain that type and cause memory accesses to
+be translated into invalid TLP types?
+
+> +
+> +	writel(lower_32_bits(region->base_addr),
+> +	       fdma_pci_atu_addr_get(atu->addr,
+> +				     FDMA_PCI_ATU_LWR_BASE_ADDR, idx));
+> +
+> +	writel(upper_32_bits(region->base_addr),
+> +	       fdma_pci_atu_addr_get(atu->addr,
+> +				     FDMA_PCI_ATU_UPP_BASE_ADDR, idx));
+> +
+> +	/* Upper limit register only needed with REGION_SIZE > 4GB. */
+> +	writel(region->limit_addr,
+> +	       fdma_pci_atu_addr_get(atu->addr, FDMA_PCI_ATU_LIMIT_ADDR, idx));
+
+Since the LIMIT_ADDR register is always programmed to the maximum static
+region size, does this allow the FDMA engine to read or write beyond its
+intended buffer into adjacent host memory?
+
+Should the limit register be dynamically programmed using the requested size
+passed to fdma_pci_atu_region_map() instead?
+
+> +
+> +	writel(lower_32_bits(region->target_addr),
+> +	       fdma_pci_atu_addr_get(atu->addr,
+> +				     FDMA_PCI_ATU_LWR_TARGET_ADDR, idx));
+> +
+> +	writel(upper_32_bits(region->target_addr),
+> +	       fdma_pci_atu_addr_get(atu->addr,
+> +				     FDMA_PCI_ATU_UPP_TARGET_ADDR, idx));
+> +}
+> +
+> +/* Find an unused ATU region. */
+> +static struct fdma_pci_atu_region *
+> +fdma_pci_atu_region_get_free(struct fdma_pci_atu *atu)
+> +{
+> +	struct fdma_pci_atu_region *regions =3D atu->regions;
+> +
+> +	for (int i =3D 0; i < FDMA_PCI_ATU_REGION_MAX; i++) {
+> +		if (regions[i].in_use)
+> +			continue;
+
+Is there a race condition when accessing the shared atu->regions array?
+
+Since there appears to be no locking, could concurrent allocations claim the
+same region and overwrite each other's hardware registers?
+
+> +
+> +		return &regions[i];
+> +	}
+> +
+> +	return ERR_PTR(-ENOSPC);
+> +}
+> +
+> +/* Unmap an ATU region, clearing its translation and disabling it. */
+> +void fdma_pci_atu_region_unmap(struct fdma_pci_atu_region *region)
+> +{
+> +	if (IS_ERR_OR_NULL(region))
+> +		return;
+> +
+> +	region->target_addr =3D 0;
+> +	region->in_use =3D false;
+> +
+> +	fdma_pci_atu_region_disable(region);
+
+By setting region->in_use =3D false before disabling the region in hardware,
+could a concurrent thread allocate and enable this region, only for this
+unmap thread to proceed and clear the hardware translations, leaving the
+new allocation disabled?
+
+> +	fdma_pci_atu_configure_translation(region);
+> +}
+> +EXPORT_SYMBOL_GPL(fdma_pci_atu_region_unmap);
+
+[ ... ]
+
+> +/* Initialize ATU, dividing the OB space into equally sized regions. */
+> +void fdma_pci_atu_init(struct fdma_pci_atu *atu, void __iomem *addr)
+> +{
+> +	struct fdma_pci_atu_region *regions =3D atu->regions;
+> +	u32 region_size =3D fdma_pci_atu_region_size();
+> +
+> +	atu->addr =3D addr;
+> +
+> +	for (int i =3D 0; i < FDMA_PCI_ATU_REGION_MAX; i++) {
+> +		regions[i].base_addr =3D
+> +			FDMA_PCI_ATU_OB_START + (i * region_size);
+> +		regions[i].limit_addr =3D
+> +			regions[i].base_addr + region_size - 1;
+> +		regions[i].idx =3D i;
+> +		regions[i].atu =3D atu;
+> +	}
+
+Should the hardware regions be explicitly disabled during initialization?
+
+If the bootloader left any regions enabled that overlap with the Outbound
+space, could they silently intercept DMA traffic before the driver maps
+them?
+
+> +}
+> +EXPORT_SYMBOL_GPL(fdma_pci_atu_init);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260508-lan966x-pc=
+i-fdma-v4-0-14e0c89d8d63@microchip.com?part=3D3
