@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F6A24B28
-	for <bpf@vger.kernel.org>; Sat,  9 May 2026 01:40:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F3315B0EC
+	for <bpf@vger.kernel.org>; Sat,  9 May 2026 01:42:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778290842; cv=none; b=UfLhw4Q+L6HzzS3TYSEZoUOh8xmde85anNkK1axWs6RIdztsCzs6cjXgH2a5m+P152PTYRtQOHzZJ6s9Gd+vCgOdp4hv7/3fkj4JXnuqlO1cCE/Oo85mhXFNcKmNjSDuFXrgbIFOtinID1QKmNfWlPSY259vVG34LVEJZ4u1E68=
+	t=1778290928; cv=none; b=EQhC2e1D9+gBHblmgsqdkiVC7FdkLH0kWKiRkp3D6PSouBW9keGIgSdKS378vJpqo5/rezF1EwoQ8Vf2OfnE0vdPR4Yld0lcsqh+nRAOQS2JO0YEL4zNnHlVNV3qlEuhKeF6evrj/v2te14DiKz2EM9bIuTSU7iv+o7FIUAK1ik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778290842; c=relaxed/simple;
-	bh=Xzn1S2txrhvM7JgRtNtYkUjdOKDS5BVmmxsAeiyy37U=;
+	s=arc-20240116; t=1778290928; c=relaxed/simple;
+	bh=UlQvFmwoLr/CHDN8VP5pHyeX75dJgfSNEVhI+qxlVvo=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fc4jkpe+S3a8Xf2H8giP87uQocZe7fErbuJvRotpqOZ39co31kh+8olGnzVctYDczwS+Jq0VaL13GeagfKCD/A/3vHuIJYjt9Redz6d4stiX/bJHs9viSKx31BcAhn0KYXkG5k8PX7kUYjhzf+qmJm+R0vfen5p/T3WbzgMQJHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r4CfeVf7; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=kcYjPlKahr5SVPxsMZ4mgSrz9wGlPjQjZmyA+37rEdpG1/l0agku99hVuZXter5Fztk6fKpYPJsrPxEYcVTttEmFLWb2pReFMepNbhWJzunXI98zU98A5kp8UbMl5XCalNtJES7isZ5CL2ouSqOEYx0lSzynjBwAbQca+n8klaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tWAzdtx3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r4CfeVf7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03A3DC2BCB0;
-	Sat,  9 May 2026 01:40:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tWAzdtx3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6D2DC2BCB0;
+	Sat,  9 May 2026 01:42:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778290842;
-	bh=Xzn1S2txrhvM7JgRtNtYkUjdOKDS5BVmmxsAeiyy37U=;
+	s=k20201202; t=1778290928;
+	bh=UlQvFmwoLr/CHDN8VP5pHyeX75dJgfSNEVhI+qxlVvo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=r4CfeVf78CJOme6rXdU5PHXMN/4S8LnmTWvjEHLutRVHr+bVcJ98jjqGnLQfXP6Y5
-	 yj3WMtzuk4PSiQHR7KCoIGmKxDUO8EbF+mQ7C2+M4b9dHn+uMdaT2to2fmxvgvJeCD
-	 oe9eL2wK0/n+TepJLzV5w2sAe3Bhj2qLgEcTlOCkuMuA9bK4hOCLXJarOnIsXsUeYo
-	 lsPmY6OZKYz74ugsTo5DGho+meq25Z11zmvk/JS/XJASlC+SuhxhrI77IddijqhgpR
-	 whvrBA9IHkkUYA4N0KMz3MYsffNF7hjtL4jw/YcersO9rvvvPCGIvZm8H/FpzeG14u
-	 hBpzE3MA9QX+A==
+	b=tWAzdtx340dPs0YbLTnFdwiaR2rH6MgdUjO2wrwwHZQUihEMNg+sLCWbamUaPgkkX
+	 UTP6yn20wlEvvAzWpcGfxqkFZRAiUZXPz5U3TaMQCZamZjl6IVJLu0bl7tGi9OfacL
+	 /3t9YNdHpmKz2eNKuA8Fb5qiNNO3ns40uhd3ZGSoztN/KpHFSX3HH2dUOosgLrYGXL
+	 GQYwO956XPZMdk9T71gVBT6xtsL95wJcF2vA1nDVr+nP3Gvk821g64q3i6RvLm4YIn
+	 oImY4fF9CcjdR1L5RhG32KKcXPN3gWz/uCxCCt8P9zme+FoheYiB8J1JEJwMwKCmys
+	 RAy70NcE19TVQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 18/23] selftests/bpf: Add BTF fixup for
- __naked subprog parameter names
+Subject: Re: [PATCH bpf-next v2 14/23] bpf: Reject stack arguments if tail
+ call reachable
 Reply-To: sashiko@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260507213140.1138756-1-yonghong.song@linux.dev>
-References: <20260507213140.1138756-1-yonghong.song@linux.dev>
+In-Reply-To: <20260507213054.1131645-1-yonghong.song@linux.dev>
+References: <20260507213054.1131645-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 09 May 2026 01:40:41 +0000
-Message-Id: <20260509014042.03A3DC2BCB0@smtp.kernel.org>
+Date: Sat, 09 May 2026 01:42:06 +0000
+Message-Id: <20260509014207.A6D2DC2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,57 +46,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The BPF object 'tobj' is leaked when 'fixup_btf_from_path()' fai=
-ls.
+- [High] Order-dependent DFS logic and incomplete fallback checks allow byp=
+assing the stack arguments restriction and cause false rejections.
 --
 
-commit af529dd65e68c8ac479551b0ac6332c3b5f56771
+commit d6cf15a73bfea82a8d40934257b79e361027a9b1
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-selftests/bpf: Add BTF fixup for __naked subprog parameter names
+bpf: Reject stack arguments if tail call reachable
 
-This commit adds a mechanism to fix up missing parameter names in the BTF
-FUNC_PROTO entries of __naked subprogs by reading them from a separate BTF
-file. This allows the verifier to resolve stack argument slots by name.
+Tail calls are deprecated and will be replaced by indirect calls
+in the future. Reject programs that combine tail calls with stack
+arguments rather than adding complexity for a deprecated feature.
 
-> diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/se=
-lftests/bpf/test_loader.c
-> --- a/tools/testing/selftests/bpf/test_loader.c
-> +++ b/tools/testing/selftests/bpf/test_loader.c
-
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index b6d07f7a52cdf..95fe21d05c100 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 [ ... ]
+> @@ -5270,14 +5275,23 @@ static int check_max_stack_depth_subprog(struct b=
+pf_verifier_env *env, int idx,
+>  	 * this info will be utilized by JIT so that we will be preserving the
+>  	 * tail call counter throughout bpf2bpf calls combined with tailcalls
+>  	 */
+> -	if (tail_call_reachable)
+> +	if (tail_call_reachable) {
+>  		for (tmp =3D idx; tmp >=3D 0; tmp =3D dinfo[tmp].caller) {
+>  			if (subprog[tmp].is_exception_cb) {
+>  				verbose(env, "cannot tail call within exception cb\n");
+>  				return -EINVAL;
+>  			}
+> +			if (subprog_has_stack_args(&subprog[tmp])) {
+> +				verbose(env, "tail_calls are not allowed in programs with stack args=
+\n");
+> +				return -EINVAL;
+> +			}
 
-> @@ -1231,13 +1351,27 @@ void run_subtest(struct test_loader *tester,
+Does this create an order dependence where the verifier might falsely reject
+valid programs?
+
+If the main program calls a subprogram with a tail call, the
+tail_call_reachable flag becomes true. If the main program subsequently cal=
+ls
+an independent subprogram that uses stack arguments, the flag can leak into
+that branch, causing the program to be rejected. Would reversing the call
+order cause the same program to pass?
+
+>  			subprog[tmp].tail_call_reachable =3D true;
 >  		}
->  	}
-> =20
-> -	/* Implicitly reset to NULL if next test case doesn't specify */
-> +	/* Implicitly reset to NULL if next test case doesn't specify.
-> +	 * btf_custom_func_path also serves as btf_custom_path for kfunc resolu=
-tion.
-> +	 */
->  	open_opts->btf_custom_path =3D spec->btf_custom_path;
-> +	if (!open_opts->btf_custom_path)
-> +		open_opts->btf_custom_path =3D spec->btf_custom_func_path;
-> =20
->  	tobj =3D bpf_object__open_mem(obj_bytes, obj_byte_cnt, open_opts);
->  	if (!ASSERT_OK_PTR(tobj, "obj_open_mem")) /* shouldn't happen */
->  		goto subtest_cleanup;
-> =20
-> +	/* Fix up __naked subprog BTF using a separate file with named params */
-> +	if (spec->btf_custom_func_path) {
-> +		err =3D fixup_btf_from_path(tobj, spec->btf_custom_func_path);
-> +		if (err) {
-> +			PRINT_FAIL("failed to fixup BTF from %s: %d\n",
-> +				   spec->btf_custom_func_path, err);
-> +			goto subtest_cleanup;
+> +	} else if (!idx && subprog[0].has_tail_call && subprog_has_stack_args(&=
+subprog[0])) {
+> +		verbose(env, "tail_calls are not allowed in programs with stack args\n=
+");
+> +		return -EINVAL;
+> +	}
 
-Does this error path leak tobj?
+Does this fallback check miss nested stack arguments?
 
-If fixup_btf_from_path() fails, the code jumps to subtest_cleanup, which
-appears to bypass the tobj_cleanup label where tobj would normally be
-closed and freed. Should this be goto tobj_cleanup instead?
+If the main program directly contains a tail call, the tail_call_reachable
+variable remains false. If it then calls a wrapper function that passes >5
+arguments to another subprogram, won't the nested stack arguments be missed
+because the fallback only checks subprog[0]?
+
+Can this also bypass restrictions for callback roots?
+
+Since the fallback hardcodes !idx and subprog[0], if an exception callback
+(which is verified with idx > 0) contains a direct tail call and uses outgo=
+ing
+stack arguments, it bypasses the main check loop because tail_call_reachable
+is false. Will it also bypass this fallback block because !idx is false?
+
+Could we decouple this restriction from the call graph traversal and global=
+ly
+check env->subprog_info for the presence of both features in the program
+instead?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260507212942.1122=
-000-1-yonghong.song@linux.dev?part=3D18
+000-1-yonghong.song@linux.dev?part=3D14
