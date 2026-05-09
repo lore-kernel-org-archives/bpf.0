@@ -1,176 +1,149 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F4C246BC0
-	for <bpf@vger.kernel.org>; Sat,  9 May 2026 00:57:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D3B18A92F
+	for <bpf@vger.kernel.org>; Sat,  9 May 2026 00:59:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778288263; cv=none; b=Svr59j84TF6kR/xmYqYiRJA6TQkqcAmivqBoOtq0uNbiLDYJCsIbldrxP/TrkLRp6RsPzIs4oAmGMy20CG7FmVf9DWAfFwbApNL2B4qRM6zxkcdlUg/g6Zit8zoDeQE8GV4tDga+Jk8QjYpFHc/g2JPy+/DrdtfYaRpKbfoSDrU=
+	t=1778288357; cv=none; b=qpoxWCCaIYuodrqjudnrVo3TYduzNEal1AA88B6RzTb2JdGWWJ8hIlN9kSbpvB24M/z9lA4rrbZzOzW7bMrE2RQmUV5ttSsf3UKOpIFkF/H1rlL1OdNGy7Eph6p0VluAHnAc1nfM4H6FLXWxXsqdeHyE0qB4Y1HwreB5utFvRw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778288263; c=relaxed/simple;
-	bh=OTeFCk920OiWmXAFGTyMwS7Yyiv3aDVCqtVqRs5s55U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OlNE5DeE0Vpk8Vw4AMVufbxAEPNGJbovSDfjdEvwkoY4OcAQc2+3lyg1e5P/vqyLEP9ZoIDRVO5evcyfXh0Xn1J5T9Sl+wEEBA1U5SbIgZwdJgw5RVIomAmU2oJt+oXdz/dxRsFGMqlqaZoG9dqsbEDbEyRrXzqlEIQ8ENwS9vU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Mq7Ocq9r; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778288357; c=relaxed/simple;
+	bh=7l2Vuy3GPzzSs8n/+P5Pf0tuvTCIXC4uR1xTrg/HHmc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=mwB42YPzErRqBZNuevPi+NW6Ltgyv5l7lm5xtniYTaBjHVeSUaBqHLrhu62Ha+/Aj0YEnKGeRuubtCrzQ5nxoZT9UiJ6/53svpTlEjt8cyg4bZsbsHYC8UCn738RoqlFWF8IPTF/cQgDfA+J59jq0J/BV/CabbCVFj2ZN2L4XN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WD02RPtV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Mq7Ocq9r"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778288259;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=PkGLwvyM0d+IYKkhoPjrDeI5P2WDVvEb9Q031e7l8hg=;
-	b=Mq7Ocq9rlxGaUd8sgnh1tW2hS6Pa5NQYp5w5ajn1TS1HgnROjnSK1RIZuJNGa0jIKIU5Rh
-	N+5e/wnqj3vRS26SgSs+0t6szDGcG39p7a1gDJqOQBlNtO7AWJt6t1QLKsHdpV1Gi2Y9Vy
-	cLJ4DUvz7BhyIK+a93IaHk+L4Nw3BQE=
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Thomas Gleixner <tglx@kernel.org>,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf v2] selftests/bpf: Use both hrtimer enqueue helpers in vmlinux test
-Date: Fri,  8 May 2026 17:57:30 -0700
-Message-ID: <20260509005730.250956-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WD02RPtV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E22DAC2BCB4;
+	Sat,  9 May 2026 00:59:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778288357;
+	bh=7l2Vuy3GPzzSs8n/+P5Pf0tuvTCIXC4uR1xTrg/HHmc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=WD02RPtVlOBXGNfzY8Yl92qfObpCXN9+pR1KArKyoByoib8wX3DU4ont9WDJA+1jx
+	 OiZBjIybQ0RExSUrHwGgS/SXHftCw91hC4kllKROCUKAa4hlKLpB0C6PL/fXNqeMVi
+	 sVl/R4lmXG9d6/DiFje0+/tJOvapcqU2Qm+0dfGaDpz0vmCPgDK2ypyq+FvSiSCVzK
+	 BSodeo3HkV5QQ2Gx8Ui2cII4xsU20fOet6meXZJffP3uKMNYxfidKsvi8rslbOHDLC
+	 uvViSDrPVwaJsajhfFQawd5BRQcKqD1F4xLkz7B2Wa4C+lBWKW6CDn4ukMY0WuyDpk
+	 m38no5aYdKTvA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 09/23] bpf: Extend liveness analysis to
+ track stack argument slots
+Reply-To: sashiko@lists.linux.dev
+To: "Yonghong Song" <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260507213029.1130085-1-yonghong.song@linux.dev>
+References: <20260507213029.1130085-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 09 May 2026 00:59:16 +0000
+Message-Id: <20260509005916.E22DAC2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-The vmlinux selftest triggers nanosleep and checks that both kprobe
-and fentry programs observe the hrtimer enqueue path.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] record_load_store_access() mistakenly uses the tracking state of s=
+tack argument slot 0 as the base pointer for R11-based memory accesses, lea=
+ding to spurious liveness marks.
+- [Low] Missing verifier logging for stack argument liveness state transiti=
+ons.
+--
 
-After the hrtimer_start_expires_user() conversion [1], nanosleep
-reaches hrtimer_start_range_ns_user() instead of
-hrtimer_start_range_ns(). Hard-coding either symbol makes the test
-fail either on bpf tree or on linux-next [2].
+commit 00a5fce117daa13f26c61ec5ffa3622241608fc1
+Author: Yonghong Song <yonghong.song@linux.dev>
 
-Update the test to resolve the target symbol at runtime via
-libbpf_find_vmlinux_btf_id(). This is a nice example of how to modify
-a BPF program to work on both older and newer kernel revision.
+bpf: Extend liveness analysis to track stack argument slots
 
-[1] https://lore.kernel.org/all/20260408114952.062400833@kernel.org/
-[2] https://github.com/kernel-patches/bpf/actions/runs/25485909958/job/74782902203
+This commit extends liveness analysis to handle stack argument slots, preve=
+nting
+pointers passed through stack args from incorrectly poisoning the pointed-to
+stack slots. It explicitly handles BPF_REG_PARAMS (R11) to avoid out-of-bou=
+nds
+accesses and extends tracking arrays.
 
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+> index de0b4c6263ff2..eed7260f2bb0a 100644
+> --- a/kernel/bpf/liveness.c
+> +++ b/kernel/bpf/liveness.c
+> @@ -610,6 +610,24 @@ enum arg_track_state {
+>  /* Track callee stack slots fp-8 through fp-512 (64 slots of 8 bytes eac=
+h) */
+>  #define MAX_ARG_SPILL_SLOTS 64
+> =20
+> +/* Track stack arg slots: outgoing starts at -(i+1)*8, incoming at +(i+1=
+)*8 */
+> +#define MAX_STACK_ARG_SLOTS (MAX_BPF_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS)
+> +
+> +/*
+> + * Combined register + stack arg tracking: R0-R10 at indices 0-10,
+> + * outgoing stack arg slots at indices MAX_BPF_REG..MAX_BPF_REG+6.
+> + */
+> +#define MAX_AT_TRACK_REGS (MAX_BPF_REG + MAX_STACK_ARG_SLOTS)
 
----
+Could this repurposed index cause a spurious liveness mark in
+record_load_store_access()?
 
-v1->v2:
-  * Use bpf_program__set_attach_target() and bpf_program__attach_kprobe()
-    to avoid duplicating BPF programs (Amery)
-v1: https://lore.kernel.org/all/20260507113915.24988-1-ihor.solodrai@linux.dev/
+Because at[MAX_BPF_REG] is repurposed to track the value stored in outgoing
+stack argument slot 0, what happens when record_load_store_access() process=
+es
+stack argument instructions like is_stack_arg_stx()?
 
----
- .../selftests/bpf/prog_tests/vmlinux.c        | 45 ++++++++++++++++++-
- .../selftests/bpf/progs/test_vmlinux.c        |  4 +-
- 2 files changed, 45 insertions(+), 4 deletions(-)
+record_load_store_access() does this:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/vmlinux.c b/tools/testing/selftests/bpf/prog_tests/vmlinux.c
-index 6fb2217d940b..b5fdd593910d 100644
---- a/tools/testing/selftests/bpf/prog_tests/vmlinux.c
-+++ b/tools/testing/selftests/bpf/prog_tests/vmlinux.c
-@@ -14,21 +14,61 @@ static void nsleep()
- 	(void)syscall(__NR_nanosleep, &ts, NULL);
- }
- 
-+static const char *hrtimer_func = "hrtimer_start_range_ns";
-+
-+static int setup_hrtimer_progs(struct test_vmlinux *skel)
-+{
-+	int err;
-+
-+	if (libbpf_find_vmlinux_btf_id("hrtimer_start_range_ns_user", BPF_TRACE_FENTRY) > 0)
-+		hrtimer_func = "hrtimer_start_range_ns_user";
-+
-+	err = bpf_program__set_attach_target(skel->progs.handle__fentry, 0, hrtimer_func);
-+	if (err)
-+		return err;
-+
-+	/*
-+	 * Bare SEC("kprobe") has no target function, so attach it manually
-+	 * later after selecting the hrtimer function to probe.
-+	 */
-+	bpf_program__set_autoattach(skel->progs.handle__kprobe, false);
-+
-+	return 0;
-+}
-+
- void test_vmlinux(void)
- {
- 	int err;
- 	struct test_vmlinux* skel;
- 	struct test_vmlinux__bss *bss;
-+	struct bpf_link *kprobe_link = NULL;
- 
--	skel = test_vmlinux__open_and_load();
--	if (!ASSERT_OK_PTR(skel, "test_vmlinux__open_and_load"))
-+	skel = test_vmlinux__open();
-+	if (!ASSERT_OK_PTR(skel, "test_vmlinux__open"))
- 		return;
-+
-+	err = setup_hrtimer_progs(skel);
-+	if (!ASSERT_OK(err, "setup_hrtimer_progs"))
-+		goto cleanup;
-+
-+	err = test_vmlinux__load(skel);
-+	if (!ASSERT_OK(err, "test_vmlinux__load"))
-+		goto cleanup;
-+
- 	bss = skel->bss;
- 
- 	err = test_vmlinux__attach(skel);
- 	if (!ASSERT_OK(err, "test_vmlinux__attach"))
- 		goto cleanup;
- 
-+	/* manually attach kprobe with the selected function */
-+	if (hrtimer_func) {
-+		kprobe_link = bpf_program__attach_kprobe(skel->progs.handle__kprobe,
-+							 false /* retprobe */, hrtimer_func);
-+		if (!ASSERT_OK_PTR(kprobe_link, "bpf_program__attach_kprobe"))
-+			goto cleanup;
-+	}
-+
- 	/* trigger everything */
- 	nsleep();
- 
-@@ -39,5 +79,6 @@ void test_vmlinux(void)
- 	ASSERT_TRUE(bss->fentry_called, "fentry");
- 
- cleanup:
-+	bpf_link__destroy(kprobe_link);
- 	test_vmlinux__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_vmlinux.c b/tools/testing/selftests/bpf/progs/test_vmlinux.c
-index 78b23934d9f8..eea556940df6 100644
---- a/tools/testing/selftests/bpf/progs/test_vmlinux.c
-+++ b/tools/testing/selftests/bpf/progs/test_vmlinux.c
-@@ -69,7 +69,7 @@ int BPF_PROG(handle__tp_btf, struct pt_regs *regs, long id)
- 	return 0;
- }
- 
--SEC("kprobe/hrtimer_start_range_ns")
-+SEC("kprobe")
- int BPF_KPROBE(handle__kprobe, struct hrtimer *timer, ktime_t tim, u64 delta_ns,
- 	       const enum hrtimer_mode mode)
- {
-@@ -78,7 +78,7 @@ int BPF_KPROBE(handle__kprobe, struct hrtimer *timer, ktime_t tim, u64 delta_ns,
- 	return 0;
- }
- 
--SEC("fentry/hrtimer_start_range_ns")
-+SEC("fentry")
- int BPF_PROG(handle__fentry, struct hrtimer *timer, ktime_t tim, u64 delta_ns,
- 	     const enum hrtimer_mode mode)
- {
--- 
-2.54.0
+	case BPF_STX:
+		if (BPF_MODE(insn->code) =3D=3D BPF_ATOMIC) {
+			...
+		} else {
+			ptr =3D &at[insn->dst_reg];
+			sz =3D -sz;
+		}
 
+If the instruction is a stack argument access, insn->dst_reg is BPF_REG_PAR=
+AMS
+(which equals MAX_BPF_REG). It will fetch &at[MAX_BPF_REG]. If a BPF program
+previously stored a frame pointer (FP) into slot 0, at[MAX_BPF_REG] will re=
+flect
+that FP.
+
+Does this mean record_load_store_access() will spuriously treat this FP as =
+the
+base pointer and incorrectly mark the resulting local stack frame slot as
+accessed, corrupting the local stack liveness mask?
+
+[ ... ]
+> @@ -1616,7 +1663,8 @@ static int compute_subprog_args(struct bpf_verifier=
+_env *env,
+>  		memcpy(at_out, at_in[i], sizeof(at_out));
+>  		memcpy(at_stack_out, at_stack_in[i], MAX_ARG_SPILL_SLOTS * sizeof(*at_=
+stack_out));
+> =20
+> -		arg_track_xfer(env, insn, idx, at_out, at_stack_out, instance, callsit=
+es);
+> +		arg_track_xfer(env, insn, idx, at_out, at_stack_out,
+> +			       at_stack_arg_entry, instance, callsites);
+>  		arg_track_log(env, insn, idx, at_in[i], at_stack_in[i], at_out, at_sta=
+ck_out);
+
+Are the state transitions for stack arguments logged here?
+
+In arg_track_log(), the loop for logging register transitions is strictly
+bounded by MAX_BPF_REG:
+
+	for (i =3D 0; i < MAX_BPF_REG; i++) {
+		if (arg_track_eq(&at_out[i], &at_in[i]))
+			continue;
+
+Since the tracking arrays at_in and at_out were extended to MAX_AT_TRACK_RE=
+GS to
+include state for outgoing stack arguments at indices MAX_BPF_REG through
+MAX_AT_TRACK_REGS - 1, does arg_track_log() silently omit logging their sta=
+te
+transitions?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260507212942.1122=
+000-1-yonghong.song@linux.dev?part=3D9
