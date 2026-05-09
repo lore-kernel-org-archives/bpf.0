@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C4464AA4
-	for <bpf@vger.kernel.org>; Sat,  9 May 2026 01:38:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F6A24B28
+	for <bpf@vger.kernel.org>; Sat,  9 May 2026 01:40:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778290689; cv=none; b=m1FeRC6KIRG7JmCuRtI5pymk3fUr85tV8OWJRjfsJYWe3PUKhsn+QsL+LimUG9EUkGEkSYfaqUmbHwo5AiZgNx0Lk5IIyGyvTJLr3H2AqdUi53ZYK++QOL5HGskDFLBrSg2/8VYNvv9S7nRZvwA5rW2ZlWkapaXJu/OuZ6HYRGQ=
+	t=1778290842; cv=none; b=UfLhw4Q+L6HzzS3TYSEZoUOh8xmde85anNkK1axWs6RIdztsCzs6cjXgH2a5m+P152PTYRtQOHzZJ6s9Gd+vCgOdp4hv7/3fkj4JXnuqlO1cCE/Oo85mhXFNcKmNjSDuFXrgbIFOtinID1QKmNfWlPSY259vVG34LVEJZ4u1E68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778290689; c=relaxed/simple;
-	bh=xaMrsgLn1mGJvnKD+Uw8OG71lAWaPMfIM9vGiuHbHTU=;
+	s=arc-20240116; t=1778290842; c=relaxed/simple;
+	bh=Xzn1S2txrhvM7JgRtNtYkUjdOKDS5BVmmxsAeiyy37U=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=bsvDF18AwzkbFevTKvseQXlTJLwMmH1EaJze++jUmkRUxaXQHP7XqJtNOAhhL9To/JV4US8XcrG4+SwA76gzQHG+i+2o5ZPQoaJSaR+fe1UqzeKoPb5dFXT6OXKviiQlzAJ+7GyJXOFKfgNTo372hXHy/Mrg7E/CxRttcjlvTj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZa+TqoQ; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=fc4jkpe+S3a8Xf2H8giP87uQocZe7fErbuJvRotpqOZ39co31kh+8olGnzVctYDczwS+Jq0VaL13GeagfKCD/A/3vHuIJYjt9Redz6d4stiX/bJHs9viSKx31BcAhn0KYXkG5k8PX7kUYjhzf+qmJm+R0vfen5p/T3WbzgMQJHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r4CfeVf7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PZa+TqoQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18E7DC2BCB0;
-	Sat,  9 May 2026 01:38:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r4CfeVf7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03A3DC2BCB0;
+	Sat,  9 May 2026 01:40:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778290689;
-	bh=xaMrsgLn1mGJvnKD+Uw8OG71lAWaPMfIM9vGiuHbHTU=;
+	s=k20201202; t=1778290842;
+	bh=Xzn1S2txrhvM7JgRtNtYkUjdOKDS5BVmmxsAeiyy37U=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=PZa+TqoQ89+kH/o5jYswFw5m0lWmCbPhRvFsoR8HZMW8iNtuJfX4p6DvUBCSMBLy3
-	 QTHJBu6qNliHL9GXtLmMspwjI7XpBMUhsjpWdaiFKjSHmQFiNYNflZYmKWdaoT7vUn
-	 5YCt1W8yGmCZeZms/BScMCbuLyPzT3Q+2PYdp9Btsh1J3hj1TPfokuV2iyu0U8x6WN
-	 TtaAnT5SQQx7SIUnTVp5WlL6Dip/HZ6MYEwaFTObnvhlOOZi2UEfWYOL7UHgOBYkMi
-	 AtW5Kx7sGJ586ROJmhHxaK/62JyTAShG6WHd9uV3jmaRLBn39rmSrhM09s6QalsYmB
-	 8OTbqwyeS9ZNw==
+	b=r4CfeVf78CJOme6rXdU5PHXMN/4S8LnmTWvjEHLutRVHr+bVcJ98jjqGnLQfXP6Y5
+	 yj3WMtzuk4PSiQHR7KCoIGmKxDUO8EbF+mQ7C2+M4b9dHn+uMdaT2to2fmxvgvJeCD
+	 oe9eL2wK0/n+TepJLzV5w2sAe3Bhj2qLgEcTlOCkuMuA9bK4hOCLXJarOnIsXsUeYo
+	 lsPmY6OZKYz74ugsTo5DGho+meq25Z11zmvk/JS/XJASlC+SuhxhrI77IddijqhgpR
+	 whvrBA9IHkkUYA4N0KMz3MYsffNF7hjtL4jw/YcersO9rvvvPCGIvZm8H/FpzeG14u
+	 hBpzE3MA9QX+A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 19/23] selftests/bpf: Add verifier tests for
- stack argument validation
+Subject: Re: [PATCH bpf-next v2 18/23] selftests/bpf: Add BTF fixup for
+ __naked subprog parameter names
 Reply-To: sashiko@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260507213145.1139004-1-yonghong.song@linux.dev>
-References: <20260507213145.1139004-1-yonghong.song@linux.dev>
+In-Reply-To: <20260507213140.1138756-1-yonghong.song@linux.dev>
+References: <20260507213140.1138756-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 09 May 2026 01:38:08 +0000
-Message-Id: <20260509013809.18E7DC2BCB0@smtp.kernel.org>
+Date: Sat, 09 May 2026 01:40:41 +0000
+Message-Id: <20260509014042.03A3DC2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,64 +46,57 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The tests in `verifier_stack_arg_order.c` are never executed bec=
-ause the file is not registered in the selftests runner.
+- [Medium] The BPF object 'tobj' is leaked when 'fixup_btf_from_path()' fai=
+ls.
 --
 
-commit 6834becc44d439e99d840e596d30164699006d53
+commit af529dd65e68c8ac479551b0ac6332c3b5f56771
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-selftests/bpf: Add verifier tests for stack argument validation
+selftests/bpf: Add BTF fixup for __naked subprog parameter names
 
-This commit adds new BPF selftests using inline assembly to validate the
-verifier's logic for stack arguments. It covers positive tests and various
-negative tests for verifier rejection and pointer/reference tracking.
+This commit adds a mechanism to fix up missing parameter names in the BTF
+FUNC_PROTO entries of __naked subprogs by reading them from a separate BTF
+file. This allows the verifier to resolve stack argument slots by name.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
-sting/selftests/bpf/prog_tests/verifier.c
-> index a96b25ebff234..aef21cf2987be 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-> @@ -91,6 +91,7 @@
->  #include "verifier_sockmap_mutate.skel.h"
->  #include "verifier_spill_fill.skel.h"
->  #include "verifier_spin_lock.skel.h"
-> +#include "verifier_stack_arg.skel.h"
-
-Did you intend to include verifier_stack_arg_order.skel.h here as well?
-
->  #include "verifier_stack_ptr.skel.h"
->  #include "verifier_store_release.skel.h"
->  #include "verifier_subprog_precision.skel.h"
-> @@ -238,6 +239,7 @@ void test_verifier_sock_addr(void)            { RUN(v=
-erifier_sock_addr); }
->  void test_verifier_sockmap_mutate(void)       { RUN(verifier_sockmap_mut=
-ate); }
->  void test_verifier_spill_fill(void)           { RUN(verifier_spill_fill)=
-; }
->  void test_verifier_spin_lock(void)            { RUN(verifier_spin_lock);=
- }
-> +void test_verifier_stack_arg(void)            { RUN(verifier_stack_arg);=
- }
-
-Could this be missing a RUN(verifier_stack_arg_order) entry?
-
-The patch introduces the new tests for load ordering validation below,
-but without registering them in the selftests runner, it looks like
-they will not be executed.
+> diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/se=
+lftests/bpf/test_loader.c
+> --- a/tools/testing/selftests/bpf/test_loader.c
+> +++ b/tools/testing/selftests/bpf/test_loader.c
 
 [ ... ]
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c=
- b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-> new file mode 100644
-> index 0000000000000..671c79969c6cd
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-> @@ -0,0 +1,86 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+> @@ -1231,13 +1351,27 @@ void run_subtest(struct test_loader *tester,
+>  		}
+>  	}
+> =20
+> -	/* Implicitly reset to NULL if next test case doesn't specify */
+> +	/* Implicitly reset to NULL if next test case doesn't specify.
+> +	 * btf_custom_func_path also serves as btf_custom_path for kfunc resolu=
+tion.
+> +	 */
+>  	open_opts->btf_custom_path =3D spec->btf_custom_path;
+> +	if (!open_opts->btf_custom_path)
+> +		open_opts->btf_custom_path =3D spec->btf_custom_func_path;
+> =20
+>  	tobj =3D bpf_object__open_mem(obj_bytes, obj_byte_cnt, open_opts);
+>  	if (!ASSERT_OK_PTR(tobj, "obj_open_mem")) /* shouldn't happen */
+>  		goto subtest_cleanup;
+> =20
+> +	/* Fix up __naked subprog BTF using a separate file with named params */
+> +	if (spec->btf_custom_func_path) {
+> +		err =3D fixup_btf_from_path(tobj, spec->btf_custom_func_path);
+> +		if (err) {
+> +			PRINT_FAIL("failed to fixup BTF from %s: %d\n",
+> +				   spec->btf_custom_func_path, err);
+> +			goto subtest_cleanup;
+
+Does this error path leak tobj?
+
+If fixup_btf_from_path() fails, the code jumps to subtest_cleanup, which
+appears to bypass the tobj_cleanup label where tobj would normally be
+closed and freed. Should this be goto tobj_cleanup instead?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260507212942.1122=
-000-1-yonghong.song@linux.dev?part=3D19
+000-1-yonghong.song@linux.dev?part=3D18
