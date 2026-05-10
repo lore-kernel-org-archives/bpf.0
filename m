@@ -1,308 +1,80 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F213036166E
-	for <bpf@vger.kernel.org>; Sun, 10 May 2026 23:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF092F8E99;
+	Sun, 10 May 2026 23:32:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778454551; cv=none; b=r6UeOLjeXA6OrLTGNv6odCUH5xPAhoVzicbm64cGrHxaKUJETFl74wlVr3zHgFDqnb1wcLogGzrsTeHYsak3LSrfccgtZxRUekEuvwXeTAqMAjunw9Daabx2vwui/rvdnywrTzE6kZBgZGYrsgAPJ8ow4rNRB+VMrzHLHBEM/WE=
+	t=1778455959; cv=none; b=ncX7gMcU0PAGH/Vf9lr3DOz5wpskOX0O/m+MGKYud/CKN0/OzJViWPYg3SIB3yKTWZYEGQ9A24Sls7FqdYntWf/VyF5R5lBqLW/Br0vAppyARg5lPK5IePvXUdW5zBLLjEZ70vvCcReN1nErktrTyGCcBwSKVKWcCMYB+UM+Dag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778454551; c=relaxed/simple;
-	bh=aHkXnb2OKVF3ZzHhEGgrjspE33t66deY8NhGKGzKq8M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WTUd2r0hdsfP7QhY4lo5RsJ1Qr60kuq1o8IwFPcGk3/kvlvJjh7l8KcghsLXQ7z5tuyiw8gt9c02+0cyeEM7Ce6D5XH8I8N4EdXg5FSjAYnqimSBaLITEGj1JbDNxwO1yxFmww0URk86i2g7gNBruYrqz0XJIzsOU7c20LgIL7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=otPBmIWw; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778455959; c=relaxed/simple;
+	bh=a68Kr/AMewu0vcd+FDKmbWfD+xwXrDPN2WU4lJN9+WI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ktMGfjC7mLZT21YY75w/4MXrZrGie4mKl4fVNAg6qXYBG2mZaTDeRGibxA54TtPYLdvYPlRYpyfymILbv/qs7WEYRaHuMpuglz/ozCGX+U9hjpbS3eqNtzZidhmsZLozrg6CeENAnwCE3W0jX3WSeuLgml6L0ya2b9DOsTZc6Gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mJwffKnu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="otPBmIWw"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4891c0620bcso25346955e9.1
-        for <bpf@vger.kernel.org>; Sun, 10 May 2026 16:09:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778454548; x=1779059348; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HZyFCF4GPlM3GT3Tj0IfjbAYoaJDP02dnOBVUskPFZY=;
-        b=otPBmIWwak1M2zRU1StET4fitjE8rPGsnMegRQeHzh6cGhp0aG3Nepu8whSOYPquKK
-         ZG/CQ8Q+owOI2bKb12OCpKPg1Fn+3SLx2LBQU9fcwAwgY+u4pTOeBQu34BolPtH2D4he
-         MnxYVkRBaaK2rLcimmSW5w/PwWKPVeV5nmpXR0+as2Oa8zsDLH5n4tQDHdssL6QV4/XL
-         8K+AC1H93AVKUvkJ6+yb7I90O3MiKgebB+onRNTcHXQoLAh4zN3xeOK1weEgGXvNaRkV
-         vz7Y9SOJYbU1MQux7ij2U9m50Ke1Qb+yVOpoGYtwsikZiS7sgGupX2VPiLuvNXU9mq1U
-         /5ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778454548; x=1779059348;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HZyFCF4GPlM3GT3Tj0IfjbAYoaJDP02dnOBVUskPFZY=;
-        b=ofNJw/ja7VjFtNno0AyZs92U4He9Lowqpbc7sOCYfe5RoLWwCUGDb8AX2td6EX5ub7
-         vBTknJAZ6RLndGn3LOgd8jPSDkW44p6c8Z7D8ZYnRfp+1GR8jh0m407Gg1vaZRfDAAlY
-         8QptCjJRpiEfxa84IT1eD/L3QsCxme7R25emc/FnHfaJzOORW03YCIPlNF8X5LY1S0tO
-         502ecVy1Q3LIY6DZgql+blKF8tgxIJLXu0KYFNghN4f6+2gUIJ2qFZOf07b7r3S94/Kx
-         7CqF+U3j9Gx9vl33klErlKz6P7g+r1OSgUHq2VJtfZi4DCuM0gW7ePEu/A+TrwQj/eYC
-         4zMQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+JXpopAMNOShmze+dxwBl2pPBSOlKkrhpf+/o7kAtKuQbVxyu8OXKTtbrWHnWc9VsTpS4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfIWGpmLMRm3LagO4pYbSFjfWTSG+tattHCkmh098v2cqImCqr
-	2Wei+agnbicMcCzRfNVn+092sTRf7UP4QAFX1wKFS2zhS6OOEbt214Kv
-X-Gm-Gg: Acq92OGT7ubyf2XICrUCozDW4dS59LfAhvwn5Y/hX5I+0i5bMjncFOsMiWtXihb6+hh
-	3e8qxYldaGL3/54pYdNPVeDsqYVDa6nQ0dKTPc/gR5Q/cimkuBc8iyxx3UcLx0GAoo1r71QvWMg
-	9bfGqkUNW8sAZsUDPjrUilrV/Xh92T2SeteO38So50v2vq4JZ5xdEiWkkB2hsljdsAyMNhTnDTR
-	gBPBNfMhPB0s/oAHrtcmjPUAhBg4UIJ9iztpLwL4QX7FV6ncIImFnZ+RPiTZbuU+4jbJ0+68Phi
-	CbEGCIxveZlq9hslBpd8l/mp8B6Jnz/GHkijOxfpxLWqSq738RusvlQvs0NX3BBvFhmvxzkx282
-	85ApW9Ya/p3GZsrQqlhpWh1KeCJss8HejgxPTqwgSaLUyP9wqRglj4tAFv/khwipRfZnpRaKKfX
-	+NiQ/pvSNIBYbNhHzDqjMV0TcWbFRf8AJgiTNpR+THBvUW+3g=
-X-Received: by 2002:a05:600c:c10b:b0:489:1f3e:5f69 with SMTP id 5b1f17b1804b1-48e676ab390mr142419715e9.18.1778454548186;
-        Sun, 10 May 2026 16:09:08 -0700 (PDT)
-Received: from registry.mehben.fr ([2a01:cb1c:8441:2b00:c694:3c2c:878b:f4c0])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e6db09cb6sm49897405e9.22.2026.05.10.16.09.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 May 2026 16:09:06 -0700 (PDT)
-From: Alexandre Knecht <knecht.alexandre@gmail.com>
-To: herbert@gondor.apana.org.au,
-	"David S . Miller" <davem@davemloft.net>
-Cc: ebiggers@kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Alexandre Knecht <knecht.alexandre@gmail.com>
-Subject: [PATCH] crypto: ctr - Convert from skcipher to lskcipher
-Date: Mon, 11 May 2026 01:09:01 +0200
-Message-ID: <20260510230901.1772949-1-knecht.alexandre@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mJwffKnu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FCAEC2BCB8;
+	Sun, 10 May 2026 23:32:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778455959;
+	bh=a68Kr/AMewu0vcd+FDKmbWfD+xwXrDPN2WU4lJN9+WI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mJwffKnu+P10MuheJAJ3W1qHUKc1zsfFmxPvkqkK3M3X0g4EGJO2GnNijakF2T5yu
+	 Gx+UEDFrKZ1Bysk8P2H/hIsk0dyB2pc3V1dEOLcICHh2a6GDxbZoslUdyHUCoEDnvK
+	 8lMBAUYVeGJco0HmCPZxcie5IHpugSJGjY0DJXup5otxElJR8Zl5RP+jPm9hWNI55X
+	 1CathkIhCdjZ9sriXu+YLysaZQ7z7SbsQYEveqqJ02ArTseUs4Dk8V8q7RMxTDI94J
+	 wTnBBbTj3L9yIJiz0jLh4Om7gRkY/MYAMr+pT2gyn+WqkNcgyO7HdRoHroZ8sObtyr
+	 A4lnHBL3eeGFg==
+Date: Sun, 10 May 2026 16:32:37 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Alexandre Knecht <knecht.alexandre@gmail.com>
+Cc: herbert@gondor.apana.org.au, "David S . Miller" <davem@davemloft.net>,
+	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH] crypto: ctr - Convert from skcipher to lskcipher
+Message-ID: <20260510233237.GA60510@quark>
+References: <20260510230901.1772949-1-knecht.alexandre@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260510230901.1772949-1-knecht.alexandre@gmail.com>
 
-Replace the existing skcipher CTR template with an lskcipher version,
-following the pattern established by the CBC conversion (705b52fef3c7).
+On Mon, May 11, 2026 at 01:09:01AM +0200, Alexandre Knecht wrote:
+> Replace the existing skcipher CTR template with an lskcipher version,
+> following the pattern established by the CBC conversion (705b52fef3c7).
+> 
+> This enables BPF programs using the bpf_crypto kfuncs to use CTR mode
+> ciphers like ctr(aes), which previously failed because
+> crypto_alloc_lskcipher() could not find an lskcipher implementation.
+> ECB and CBC already have lskcipher support; CTR was the missing piece.
+> 
+> The rfc3686 template remains as an skcipher and continues to work
+> through the automatic lskcipher-to-skcipher bridge.
+> 
+> Tested with NIST SP 800-38A test vectors (AES-128/192/256-CTR),
+> partial block handling, and rfc3686 compatibility. Kernel self-tests
+> pass on instantiation (selftest: passed in /proc/crypto).
+> 
+> Signed-off-by: Alexandre Knecht <knecht.alexandre@gmail.com>
+> Assisted-by: Claude:claude-opus-4-6 checkpatch
 
-This enables BPF programs using the bpf_crypto kfuncs to use CTR mode
-ciphers like ctr(aes), which previously failed because
-crypto_alloc_lskcipher() could not find an lskcipher implementation.
-ECB and CBC already have lskcipher support; CTR was the missing piece.
+I'm confused.  Why was that BPF crypto feature even added with ECB mode
+as the only supported encryption mode?  Who is using that, and why?
 
-The rfc3686 template remains as an skcipher and continues to work
-through the automatic lskcipher-to-skcipher bridge.
+CTR isn't necessarily much better, either.
 
-Tested with NIST SP 800-38A test vectors (AES-128/192/256-CTR),
-partial block handling, and rfc3686 compatibility. Kernel self-tests
-pass on instantiation (selftest: passed in /proc/crypto).
+What is the use case for the BPF crypto?  The first step should be to
+decide what *specific* algorithm(s) it needs.  It doesn't seem like that
+has ever happened, and I'm not sure this patch helps much.
 
-Signed-off-by: Alexandre Knecht <knecht.alexandre@gmail.com>
-Assisted-by: Claude:claude-opus-4-6 checkpatch
----
- crypto/ctr.c | 143 +++++++++++++++++++--------------------------------
- 1 file changed, 54 insertions(+), 89 deletions(-)
+That needs to be done anyway.  But that would also be helpful for a
+potential future switch to lib/crypto/, which would avoid all the weird
+issues with lskcipher etc.
 
-diff --git a/crypto/ctr.c b/crypto/ctr.c
-index a388f0ceb3a0..5fceaf47bedc 100644
---- a/crypto/ctr.c
-+++ b/crypto/ctr.c
-@@ -7,7 +7,6 @@
- 
- #include <crypto/algapi.h>
- #include <crypto/ctr.h>
--#include <crypto/internal/cipher.h>
- #include <crypto/internal/skcipher.h>
- #include <linux/err.h>
- #include <linux/init.h>
-@@ -25,139 +24,105 @@ struct crypto_rfc3686_req_ctx {
- 	struct skcipher_request subreq CRYPTO_MINALIGN_ATTR;
- };
- 
--static void crypto_ctr_crypt_final(struct skcipher_walk *walk,
--				   struct crypto_cipher *tfm)
-+static int crypto_ctr_crypt_segment(struct crypto_lskcipher *cipher,
-+				    const u8 *src, u8 *dst, unsigned int nbytes,
-+				    u8 *iv)
- {
--	unsigned int bsize = crypto_cipher_blocksize(tfm);
--	unsigned long alignmask = crypto_cipher_alignmask(tfm);
--	u8 *ctrblk = walk->iv;
--	u8 tmp[MAX_CIPHER_BLOCKSIZE + MAX_CIPHER_ALIGNMASK];
--	u8 *keystream = PTR_ALIGN(tmp + 0, alignmask + 1);
--	const u8 *src = walk->src.virt.addr;
--	u8 *dst = walk->dst.virt.addr;
--	unsigned int nbytes = walk->nbytes;
--
--	crypto_cipher_encrypt_one(tfm, keystream, ctrblk);
--	crypto_xor_cpy(dst, keystream, src, nbytes);
--
--	crypto_inc(ctrblk, bsize);
--}
-+	unsigned int bsize = crypto_lskcipher_blocksize(cipher);
- 
--static int crypto_ctr_crypt_segment(struct skcipher_walk *walk,
--				    struct crypto_cipher *tfm)
--{
--	void (*fn)(struct crypto_tfm *, u8 *, const u8 *) =
--		   crypto_cipher_alg(tfm)->cia_encrypt;
--	unsigned int bsize = crypto_cipher_blocksize(tfm);
--	u8 *ctrblk = walk->iv;
--	const u8 *src = walk->src.virt.addr;
--	u8 *dst = walk->dst.virt.addr;
--	unsigned int nbytes = walk->nbytes;
--
--	do {
--		/* create keystream */
--		fn(crypto_cipher_tfm(tfm), dst, ctrblk);
-+	while (nbytes >= bsize) {
-+		/* Encrypt counter block to produce keystream */
-+		crypto_lskcipher_encrypt(cipher, iv, dst, bsize, NULL);
- 		crypto_xor(dst, src, bsize);
--
--		/* increment counter in counterblock */
--		crypto_inc(ctrblk, bsize);
-+		crypto_inc(iv, bsize);  /* Increment counter */
- 
- 		src += bsize;
- 		dst += bsize;
--	} while ((nbytes -= bsize) >= bsize);
-+		nbytes -= bsize;
-+	}
- 
- 	return nbytes;
- }
- 
--static int crypto_ctr_crypt_inplace(struct skcipher_walk *walk,
--				    struct crypto_cipher *tfm)
-+static int crypto_ctr_crypt_inplace(struct crypto_lskcipher *cipher,
-+				    u8 *dst, unsigned int nbytes, u8 *iv)
- {
--	void (*fn)(struct crypto_tfm *, u8 *, const u8 *) =
--		   crypto_cipher_alg(tfm)->cia_encrypt;
--	unsigned int bsize = crypto_cipher_blocksize(tfm);
--	unsigned long alignmask = crypto_cipher_alignmask(tfm);
--	unsigned int nbytes = walk->nbytes;
--	u8 *dst = walk->dst.virt.addr;
--	u8 *ctrblk = walk->iv;
--	u8 tmp[MAX_CIPHER_BLOCKSIZE + MAX_CIPHER_ALIGNMASK];
--	u8 *keystream = PTR_ALIGN(tmp + 0, alignmask + 1);
--
--	do {
--		/* create keystream */
--		fn(crypto_cipher_tfm(tfm), keystream, ctrblk);
--		crypto_xor(dst, keystream, bsize);
-+	unsigned int bsize = crypto_lskcipher_blocksize(cipher);
-+	u8 keystream[MAX_CIPHER_BLOCKSIZE];
- 
--		/* increment counter in counterblock */
--		crypto_inc(ctrblk, bsize);
-+	while (nbytes >= bsize) {
-+		/* Encrypt counter block to produce keystream */
-+		crypto_lskcipher_encrypt(cipher, iv, keystream, bsize, NULL);
-+		crypto_xor(dst, keystream, bsize);
-+		crypto_inc(iv, bsize);  /* Increment counter */
- 
- 		dst += bsize;
--	} while ((nbytes -= bsize) >= bsize);
-+		nbytes -= bsize;
-+	}
- 
-+	memzero_explicit(keystream, sizeof(keystream));
- 	return nbytes;
- }
- 
--static int crypto_ctr_crypt(struct skcipher_request *req)
-+static int crypto_ctr_crypt(struct crypto_lskcipher *tfm, const u8 *src,
-+			    u8 *dst, unsigned int len, u8 *iv, u32 flags)
- {
--	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
--	struct crypto_cipher *cipher = skcipher_cipher_simple(tfm);
--	const unsigned int bsize = crypto_cipher_blocksize(cipher);
--	struct skcipher_walk walk;
-+	struct crypto_lskcipher **ctx = crypto_lskcipher_ctx(tfm);
-+	struct crypto_lskcipher *cipher = *ctx;
-+	unsigned int bsize = crypto_lskcipher_blocksize(cipher);
-+	bool final = flags & CRYPTO_LSKCIPHER_FLAG_FINAL;
- 	unsigned int nbytes;
--	int err;
--
--	err = skcipher_walk_virt(&walk, req, false);
- 
--	while (walk.nbytes >= bsize) {
--		if (walk.src.virt.addr == walk.dst.virt.addr)
--			nbytes = crypto_ctr_crypt_inplace(&walk, cipher);
--		else
--			nbytes = crypto_ctr_crypt_segment(&walk, cipher);
--
--		err = skcipher_walk_done(&walk, nbytes);
--	}
--
--	if (walk.nbytes) {
--		crypto_ctr_crypt_final(&walk, cipher);
--		err = skcipher_walk_done(&walk, 0);
-+	if (src == dst)
-+		nbytes = crypto_ctr_crypt_inplace(cipher, dst, len, iv);
-+	else
-+		nbytes = crypto_ctr_crypt_segment(cipher, src, dst, len, iv);
-+
-+	/* Handle final partial block. */
-+	if (nbytes && final) {
-+		u8 keystream[MAX_CIPHER_BLOCKSIZE];
-+
-+		crypto_lskcipher_encrypt(cipher, iv, keystream, bsize, NULL);
-+		crypto_xor_cpy(dst + len - nbytes, src + len - nbytes,
-+			       keystream, nbytes);
-+		crypto_inc(iv, bsize);
-+		memzero_explicit(keystream, sizeof(keystream));
-+		nbytes = 0;
- 	}
- 
--	return err;
-+	return nbytes;
- }
- 
- static int crypto_ctr_create(struct crypto_template *tmpl, struct rtattr **tb)
- {
--	struct skcipher_instance *inst;
--	struct crypto_alg *alg;
-+	struct lskcipher_instance *inst;
- 	int err;
- 
--	inst = skcipher_alloc_instance_simple(tmpl, tb);
-+	inst = lskcipher_alloc_instance_simple(tmpl, tb);
- 	if (IS_ERR(inst))
- 		return PTR_ERR(inst);
- 
--	alg = skcipher_ialg_simple(inst);
--
- 	/* Block size must be >= 4 bytes. */
- 	err = -EINVAL;
--	if (alg->cra_blocksize < 4)
-+	if (inst->alg.co.base.cra_blocksize < 4)
- 		goto out_free_inst;
- 
- 	/* If this is false we'd fail the alignment of crypto_inc. */
--	if (alg->cra_blocksize % 4)
-+	if (inst->alg.co.base.cra_blocksize % 4)
- 		goto out_free_inst;
- 
--	/* CTR mode is a stream cipher. */
--	inst->alg.base.cra_blocksize = 1;
--
- 	/*
--	 * To simplify the implementation, configure the skcipher walk to only
--	 * give a partial block at the very end, never earlier.
-+	 * CTR mode is a stream cipher.  Set chunksize to the underlying
-+	 * cipher block size so partial blocks only occur at the end.
- 	 */
--	inst->alg.chunksize = alg->cra_blocksize;
-+	inst->alg.co.chunksize = inst->alg.co.base.cra_blocksize;
-+	inst->alg.co.base.cra_blocksize = 1;
- 
-+	/* CTR encrypt and decrypt are the same XOR-based operation. */
- 	inst->alg.encrypt = crypto_ctr_crypt;
- 	inst->alg.decrypt = crypto_ctr_crypt;
- 
--	err = skcipher_register_instance(tmpl, inst);
-+	err = lskcipher_register_instance(tmpl, inst);
- 	if (err) {
- out_free_inst:
- 		inst->free(inst);
--- 
-2.51.1
-
+- Eric
