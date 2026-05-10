@@ -1,119 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C06263CB;
-	Sun, 10 May 2026 02:25:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A760A265CD9;
+	Sun, 10 May 2026 03:02:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778379925; cv=none; b=VYNBMYSQ5yCZIX+afyPaDhFPED4GwsworXwI7soW4z2isHHpgA9Gr49zwwJF3FMi4t+2tKYpnyi7ss8dykUJyNVpOtVb/pEcf6tp8T7LP2sxOcP+EaM23UpgvbKAV8DZmP5epr7FIPUs3yCA/JcM6gV4M8MzTPD0kSRIeb/yta8=
+	t=1778382183; cv=none; b=ro+nE1+jvuWHPiN0RbQ6oS0M/5P3W6KAyBlGPDsDPxDfGcHD7brZN/2e7h39PeF0RONJRhSvQTrdjcQdDt1+k+T+VJmqWGzXBBCGOFs2P1vptFZaJgxJklmiZ70q5i/DrtCjiqLlyary1gb03SyXxoMqVzxADmzm+2XAhAK9ZCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778379925; c=relaxed/simple;
-	bh=DuPHI1LqOFfQCPwSGvE4XxVWrva8Uk84ODEwZHi72xU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qDthOCx1hjB4wtUbH7QD+lhf7laJs3isYUsV3b3L1hoeQEgpV433gt0fFA2if/beEMC2+EmfPzx7fcPnLVYaR1+okP72/SU3Jyo+fxZ6A+uEVz+oPVhZFfM3tcOdBIhp0geQGDdWmQOmKEHxKFeJmJqJyk9RMi7sKhntecFsmX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e79y6hL/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778382183; c=relaxed/simple;
+	bh=fCWAZtPLwXDYJcqCoBIUgakH314RwHBbtXEOR9b00i4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uXnzmJrJxAG4FXwjZMDjyEMuuCe1H/xTyz5pKxsNCJohfyZhoIigRg1XfgxF4gMRBQRwSRg+sj1jzGbOkEpYvAajQxLYrfobPIJBYMaaE1FkODJkWin0VfFz1VP7ew7Br6qp+gSEvLcnXlRAlEFGmULaxLKw261aI3UFKDoJqGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=TNJUyEUH; arc=none smtp.client-ip=220.197.31.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e79y6hL/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DAE5C2BCC7;
-	Sun, 10 May 2026 02:25:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778379924;
-	bh=DuPHI1LqOFfQCPwSGvE4XxVWrva8Uk84ODEwZHi72xU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e79y6hL/mgDvOZD8UHrjx/yvvGE14Vi42uRup1vVa+BwGGuz0tI3FboKrX6KCcHYW
-	 RzREP9nAcxXgbOLsICt59PEujBZfc43refGEy/MqJqsWO96s+Q3AgEvXjdaDOJlAAS
-	 iXt5onlnEIiRTPA221E7iqjKkNnVa/ou5prZT51yvrxvmamwRnnTONClO46LkwR6wZ
-	 t2IFlN52kGo0lvKsca1tHoXbtX8d3ZNYB/HRYPyRw5jkTtawLddwbKxR+1rJEj3vIi
-	 eoZSgqm4WxQI4AKYACjQH26b7yHJFcZfpkAvmuGCkgkL1k/4LZuGB+A3395nol8DbQ
-	 i0nDH3HyM9r4g==
-Date: Sat, 9 May 2026 21:25:16 -0500
-From: Bjorn Andersson <andersson@kernel.org>
-To: Alex Elder <elder@riscstar.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com, 
-	rmk+kernel@armlinux.org.uk, konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org, arnd@arndb.de, 
-	gregkh@linuxfoundation.org, Daniel Thompson <daniel@riscstar.com>, 
-	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com, alexandre.torgue@foss.st.com, 
-	ast@kernel.org, boon.khai.ng@altera.com, chenchuangyu@xiaomi.com, 
-	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org, hkallweit1@gmail.com, 
-	inochiama@gmail.com, john.fastabend@gmail.com, julianbraha@gmail.com, 
-	livelycarpet87@gmail.com, matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, 
-	me@ziyao.cc, prabhakar.mahadev-lad.rj@bp.renesas.com, 
-	richardcochran@gmail.com, rohan.g.thomas@altera.com, sdf@fomichev.me, 
-	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com, wens@kernel.org, 
-	netdev@vger.kernel.org, bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 08/12] dt-bindings: net: toshiba,tc965x-dwmac:
- add TC956x Ethernet bridge
-Message-ID: <af_sarCs9E5M7NLE@baldur>
-References: <20260501155421.3329862-1-elder@riscstar.com>
- <20260501155421.3329862-9-elder@riscstar.com>
- <afycOwz5TpkegkZd@baldur>
- <3c78f48c-6478-46d0-87c2-581bb58637dd@riscstar.com>
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="TNJUyEUH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=+8
+	6Dzy10uVzSvNyA0ux8agEg4kL6VPjyGsJA7Z8CANQ=; b=TNJUyEUH53QLIweB7R
+	etfpSyp7v9INELst9vM4GghfEotSEr6Bh6zoxv8vCxS07Eywdiq2zAZzw7zp3jiZ
+	q9j7X1HRY/vYUqnHsQN96xl9FFOqcklVf9w8SrklCbo3+W3nvxoQ3LBPPKageUQx
+	n0WlpmA4GA4rCWDAfmTDbYKsY=
+Received: from song-MS-7E28.. (unknown [])
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wD3vzcc9f9pqXvKBA--.54835S2;
+	Sun, 10 May 2026 11:01:49 +0800 (CST)
+From: Song Chen <chensong_2000@126.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	alexei.starovoitov@gmail.com
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Song Chen <chensong_2000@126.com>
+Subject: [PATCH V2 2/2] kernel/bpf/verifier: Support module kfunc resolution via instruction offset
+Date: Sun, 10 May 2026 11:01:47 +0800
+Message-ID: <20260510030147.27900-1-chensong_2000@126.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c78f48c-6478-46d0-87c2-581bb58637dd@riscstar.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3vzcc9f9pqXvKBA--.54835S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7AFyDuFyrXF43uF13WF17KFg_yoW8uF4fpF
+	48GFZI9F40vw43uanrAF40vFy7Ga1ktw47Kas8C3yakryaqr1DZF40kryYv3s0yryjyw1I
+	yFWIvay2qa4jvFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zEGYLJUUUUU=
+X-CM-SenderInfo: xfkh02prqjsjqqqqqiyswou0bp/xtbBpR3eXmn-9R1ObAAA3k
 
-On Thu, May 07, 2026 at 01:37:09PM -0500, Alex Elder wrote:
-> On 5/7/26 9:12 AM, Bjorn Andersson wrote:
-> > On Fri, May 01, 2026 at 10:54:16AM -0500, Alex Elder wrote:
-> > > diff --git a/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml b/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
-> > [..]
-> > > +
-> > > +  gpio-controller: true
-> > 
-> > I don't have any concern with the use of a proper gpio driver to model
-> > the implementation, but if I understand correctly this relationship
-> > between gpio controller and gpio consumer is strictly internal to "the
-> > PCI device".
-> 
-> (I think you're already cool with this but I still wanted to respond.)
-> 
+Use the instruction's 'off' field to indicate the source of a kfunc.
+When libbpf resolves a kfunc, it sets insn->off to 0 for vmlinux
+kfuncs or a non-zero module ID for module kfuncs.
 
-Thank you for the further clarifications, and added details, Alex. This
-does look reasonable to me.
+The verifier now checks insn->off to determine where to look up the
+kfunc address: off == 0 searches in vmlinux, while off > 0 searches
+in the corresponding module BTF. This enables proper resolution of
+module kfuncs that may override vmlinux kfuncs with the same name.
 
-Regards,
-Bjorn
+This works in conjunction with the libbpf change that prioritizes
+module kfuncs during BTF resolution.
 
-> That is not correct.  These GPIO lines are used two ways for the
-> RB3gen2:
-> - drivers/pci/pwrctrl/pci-pwrctrl-tc9563.c uses GPIOs 2 and 3 to
->   assert/deassert the reset lines associated with the two exposed
->   downstream PCIe ports on the PCIe switch within the TC956x.
-> 
-> - Each of the Ethernet PHYs has a reset GPIO.  On the RB3gen2, the
->   GPIOs used for the purpose come from the GPIO controller embedded
->   in the TC9564 (00 and 01).
-> 
-> These are therefore "exposed" (they are *not* strictly internal).
-> 
-> > Is this connection variable or is the link merely expressed in
-> > DeviceTree to mitigate the fact that you choose to implement the
-> > responsibilities of the two parts split into two device drivers?
-> 
-> It is variable.  These resets might be implemented by other GPIO
-> controllers on other platforms.
-> 
-> > Are there other consumers of these TC956x gpios which would result in a
-> > board designer (and hence dts author) to ever reference this
-> > gpio-controller in a different way?
-> 
-> They could.  Nine of these GPIOs are exposed by the TC956x pins
-> (GPIO00-06, GPIO12, GPIO35 and GPIO36).  The RB3gen2 uses 00-03
-> (and possibly 04 but that's for a PHY we haven't tested yet).
-> 
-> 					-Alex
-> 
-> > Regards,
-> > Bjorn
-> 
+Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Signed-off-by: Song Chen <chensong_2000@126.com>
+
+---
+changelog:
+v1 --- v2:
+libbpf has already specified which module this kfunc belongs to as
+ebpf code onwer's expectation, then verifier uses
+find_kallsyms_symbol_value to search kfunc's addr.
+---
+ kernel/bpf/verifier.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+ mode change 100644 => 100755 kernel/bpf/verifier.c
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+old mode 100644
+new mode 100755
+index 159b25f8269d..3b2e4552a3d4
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3303,6 +3303,7 @@ static struct btf *__find_kfunc_desc_btf(struct bpf_verifier_env *env,
+ 		 */
+ 		sort(tab->descs, tab->nr_descs, sizeof(tab->descs[0]),
+ 		     kfunc_btf_cmp_by_off, NULL);
++
+ 	} else {
+ 		btf = b->btf;
+ 	}
+@@ -3498,7 +3499,16 @@ static int add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, s16 offset)
+ 	if (err)
+ 		return err;
+ 
+-	addr = kallsyms_lookup_name(kfunc.name);
++	if (offset) {
++		struct bpf_kfunc_btf kf_btf = { .offset = offset };
++		struct module *mod;
++		struct bpf_kfunc_btf *b;
++		b = bsearch(&kf_btf, btf_tab->descs, btf_tab->nr_descs,
++            sizeof(btf_tab->descs[0]), kfunc_btf_cmp_by_off);
++		mod = b->module;
++		addr = find_kallsyms_symbol_value(mod, kfunc.name);
++	} else
++		addr = kallsyms_lookup_name(kfunc.name);
+ 	if (!addr) {
+ 		verbose(env, "cannot find address for kernel function %s\n", kfunc.name);
+ 		return -EINVAL;
+-- 
+2.43.0
+
