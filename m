@@ -1,198 +1,117 @@
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F6B2F8E94
-	for <bpf@vger.kernel.org>; Sun, 10 May 2026 20:33:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950332FC876;
+	Sun, 10 May 2026 21:10:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778445232; cv=none; b=p07vy2mOKLLvpAic9rzcEVgzY2hQXozPeMaJoG32fcSsPPqvLsQIHyVZzP/jdW+Lta0VdSL+Nbb6N+mrHTRDbU3z2Az1pNte9dx4BFiP8zAM4v//WAzJwydAAdGjHPkgfcfHMDP0EXRvBFtC4iO9QyjZGbw3XCEekxKP5L0uwVU=
+	t=1778447433; cv=none; b=WIo3D3fTG5s+k5iHpJCruBq2twFms3Ycc7t+WY+rpr+9G3DKtPCgGzcacx5w+m737kz2SigiFv2uoiUvss6Ipuof5bROWtIbmQgcOkYQ6VaE+HIizJrzY/vMTvoQfCcLKoSpkbm1r1bEM4npzYXuSYG/n9aViChYoBEOyZDA6Rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778445232; c=relaxed/simple;
-	bh=2wUKSUSHE9scw9qUgXRw9l/unI/4n7ehob9Z2USC7nM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ectqCW2UOSe64V2a1fAXxZ8gdXQ2IqRs/Wm30yIcxk8Hbg5Yx+F7XXG3aZWPLYjJsqOdRm+n3pCzBTKQWXRRaop7rk9THl8avgYe9l/5+fkMV6q5RUgGxaSkYX0iedKeBiwqlkiWgG1frc+cBZQ6lOt91cUPIFqem8iKhUuDLnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ncJkTBM8; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778447433; c=relaxed/simple;
+	bh=36TDj0H198uPcPamdynX4I3wnVAWMsIwlHa/kNW0eQE=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Y8crLIVsmrHniFoOOi/7c4rsKZWlGc12INz3XzKj6ySXxisVqMWlasDn2qnjyNVy2F/70Y9zI34XF9UOS1JcJflxPnbGVa7zBOdeMbkhpO+3UtuZ/LFianAquDC9wMUXpaVdOOoFw8r5NupJ357lBTIIkt8CtBtTW96G6jWekl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g1bk7JPu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ncJkTBM8"
-Message-ID: <d7de2f17-af2d-4b6a-be65-f009d78e3d20@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778445218;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mfKcMPHY9ZAK6g9Oz7/PqAZZMUwyLIAqYyCYd/6iX70=;
-	b=ncJkTBM8dnCNpZlfbou7tRQnvzbA5UHpRuL6tjhpE8qRJElAZt+w4X/jfwsa+TPwXOg7d3
-	k6ZFIC1gZ36v/S33lAXeBRU9+khsKtxurPyC3l46D4P+ppuriVat8xTa0i2qwxUqTlzujK
-	I/2d/vw9sboE6jITMTS+qCOnfoXsNl4=
-Date: Sun, 10 May 2026 13:33:18 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g1bk7JPu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C17A9C2BCB8;
+	Sun, 10 May 2026 21:10:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778447433;
+	bh=36TDj0H198uPcPamdynX4I3wnVAWMsIwlHa/kNW0eQE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=g1bk7JPu1yJd+Q8lVHQhFY5ET6X2r24V7gzzuS+ECU8lgGmjEjsXftcvst2VXK75L
+	 J9af+JnLoxEVwkaLgdLlGKQKqnl1RJ3RQXr1xEJheJ0uUi+u/udxMSmS2DGj3VNIFp
+	 KXPdau1qmet8QsJGC0B40vbo6kK/R+R3zgv2kyJ2tZ06HOjdNHGdw5cQKoxs5A19sG
+	 lSYT34SV36GC7uJp/LOy+kYBh8LJtsKB9rOFjf74S/gD7Ej/SuuFOF2yFWCYN+OyHi
+	 neTD/DCAVLbqRmcz1ycFr/u/wqlNWh2Xr/5c8shjnnJ0Nit9k+0hRQzKIDsjvbbdTG
+	 JaW95f51Fjwzg==
+Content-Type: multipart/mixed; boundary="===============7115998424420120491=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net-next v3 0/8] net: devmem: support devmem with netkit
- devices
-To: Bobby Eshleman <bobbyeshleman@gmail.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>,
- Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>,
- Michael Chan <michael.chan@broadcom.com>,
- Pavan Chebbi <pavan.chebbi@broadcom.com>,
- Joshua Washington <joshwash@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>,
- Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
- Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com,
- Daniel Borkmann <daniel@iogearbox.net>,
- Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>,
- "yanjun.zhu@linux.dev" <yanjun.zhu@linux.dev>
-Cc: dw@davidwei.uk, sdf.kernel@gmail.com, mohsin.bashr@gmail.com,
- willemb@google.com, jiang.kun2@zte.com.cn, xu.xin16@zte.com.cn,
- wang.yaxin@zte.com.cn, netdev@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Stanislav Fomichev <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>,
- Bobby Eshleman <bobbyeshleman@meta.com>
-References: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <c4d24cb0de0cf600ddaba4fa89cf7cb6031f73df60141915ad3753f03c96e3a2@mail.kernel.org>
+In-Reply-To: <20260503211835.16103-3-dwindsor@gmail.com>
+References: <20260503211835.16103-3-dwindsor@gmail.com>
+Subject: Re: [PATCH v2 2/2] selftests/bpf: add tests for bpf_init_inode_xattr kfunc
+From: bot+bpf-ci@kernel.org
+To: dwindsor@gmail.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,shuah@kernel.org
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun, 10 May 2026 21:10:32 +0000 (UTC)
 
-在 2026/5/7 19:27, Bobby Eshleman 写道:
-> This series enables TCP devmem TX through netkit devices.
-> 
-> Netkit now supports queue leasing. A physical NIC's RX queue can be
-> leased to a netkit guest interface inside a container namespace. This
-> gives the container a devmem-capable data path on the RX side (bind-rx,
-> etc...). On the TX side, the container process binds to its netkit guest
-> interface and sends traffic that netkit redirects (via BPF or ip
-> forwarding) to the physical NIC for DMA.
-> 
-> Two things in the existing devmem TX path prevent this from working:
-> 
-> 1. validate_xmit_unreadable_skb() requires dev->netmem_tx before it will
->     forward a dmabuf-backed (unreadable) skb. This protects skbs from
->     landing on devices that don't have the IOMMU mappings for the backing
->     dmabuf or that don't speak netmem. Netkit, however, does not support
->     DMA, doesn't attempt to read unreadable skb pages and so doesn't
->     break netmem (it is pure skb routing and redirection). It is
->     functionally capable of routing unreadable skbs, but there is no way
->     for the TX validation pathway to distinguish between a device that
->     will actually attempt DMA-ing the skb and another device
->     (like netkit) that does not DMA but also does not break
->     netmem.
-> 
-> 2. bind_tx_doit uses the bound device as the DMA device.  When the user
->     binds devmem TX to the netkit guest, the bind handler attempts to
->     create DMA mappings against netkit, which has no DMA capability and
->     no IOMMU mappings.
-> 
-> This series solves these problems as follows:
-> 
-> 1. Extend netmem_tx to two bits, assigned to one of three values:
-> 
->     NETMEM_TX_NONE   - netmem not supported
->     NETMEM_TX_DMA    - netmem supported and performs DMA
->     NETMEM_TX_NO_DMA - netmem supported, but does not DMA
-> 
->     With these bits, phys devices can set NETMEM_TX_DMA and devices like
->     netkit set NETMEM_TX_NO_DMA. The validation TX path ensures that any
->     DMA-capable netdev exactly matches the bound device, guaranteeing the
->     correct mapping of the bound dmabuf. The validation TX path also
->     allows devices with NETMEM_TX_NO_DMA to pass, knowing these devices
->     will not misuse netmem or run into IOMMU faults. After redirection or
->     routing and the skb finally makes its way through the stack to a
->     physical device's TX path, the above NETMEM_TX_DMA check is performed
->     again to guarantee the device has the appropriate binding/mappings.
-> 
-> 2. On TX bind, the bind handler recognizes NETMEM_TX_NO_DMA devices and
->     finds the phys TX device and binds to that instead. For the netkit
->     case, if it has been leased a queue from a DMA-capable device
->     already, then the bind action is performed on the DMA-capable device
->     instead and the dmabuf is mapped correctly.
-> 
-> ---
-> Changes in v3:
-> - Fix validate_xmit_unreadable_skb() logic for non-devmem
->    unreadable niovs (should not be dropped) (Sashiko)
-> - Simplify lock handling in bind_tx, no premature release (Jakub)
-> - split NO_DMA changes into separate patch (Jakub)
-> - fixed some pylint issues, one required an additional patch ("selftests:
->    drv-net: make attr _nk_guest_ifname public") to rename a variable from
->    private to public
-> - see per-patch changelist for more detailed changes
-> - Link to v2: https://lore.kernel.org/r/20260504-tcp-dm-netkit-v2-0-56d52ac72fd4@meta.com
-> 
-> Changes in v2:
-> - Squash driver conversion patches (2-5) into patch 1 (Jakub)
-> - In validate_xmit_unreadable_skb() to check netmem_tx mode before inspecting
->    frags (Jakub)
-> - Lock bind_dev around netdev_queue_get_dma_dev() when bind_dev != netdev to
->    fix lockdep (Sashiko)
-> - Move require_devmem() into individual test functions so KsftSkipEx goes up to
->    ksft_run() (Sashiko)
-> - Add nk_devmem.py to TEST_PROGS in Makefile (Sashiko)
-> - Link to v1:
->    https://lore.kernel.org/all/20260428-tcp-dm-netkit-v1-0-719280eba4d2@meta.com/
-> 
-> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> 
-> ---
-> Bobby Eshleman (8):
->        net: convert netmem_tx flag to enum
->        net: netkit: declare NETMEM_TX_NO_DMA mode
->        net: devmem: support TX over NETMEM_TX_NO_DMA devices
+--===============7115998424420120491==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
 
-I applied this patchset in my local kernel tree and built a new kernel 
-image. I loaded this new kernel image in my test environment. It seems 
-that all the testcases can pass.
+PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL2JwZl9rZnVuY3MuaCBi
+L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9icGZfa2Z1bmNzLmgKPiBpbmRleCA3ZGFkMDE0
+MzkzOTEuLmZkMmRhNTQ4NzUwNiAxMDA2NDQKPiAtLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
+cy9icGYvYnBmX2tmdW5jcy5oCj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL2Jw
+Zl9rZnVuY3MuaAoKWyAuLi4gXQoKPiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVz
+dHMvYnBmL3Byb2dfdGVzdHMvZnNfa2Z1bmNzLmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9i
+cGYvcHJvZ190ZXN0cy9mc19rZnVuY3MuYwo+IGluZGV4IDQzYTI2ZWM2OWE4ZS4uMjZkYWVmMTE2
+ZWUyIDEwMDY0NAo+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3Rz
+L2ZzX2tmdW5jcy5jCj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVz
+dHMvZnNfa2Z1bmNzLmMKClsgLi4uIF0KCj4gK3N0YXRpYyB2b2lkIHRlc3RfaW5pdF9pbm9kZV94
+YXR0cih2b2lkKQo+ICt7Cj4gKwlzdHJ1Y3QgdGVzdF9pbml0X2lub2RlX3hhdHRyICpza2VsID0g
+TlVMTDsKPiArCWludCBmZCA9IC0xLCBlcnI7Cj4gKwljaGFyIHZhbHVlX291dFszMl07Cj4gKwlj
+b25zdCBjaGFyICp0ZXN0ZmlsZV9uZXcgPSAiL3RtcC90ZXN0X3Byb2dzX2ZzX2tmdW5jc19uZXci
+OwoKQ291bGQgdmFsdWVfb3V0IGJlIHJlYWQgd2hpbGUgdW5pbml0aWFsaXplZD8gSWYgZ2V0eGF0
+dHIoKSBzdWNjZWVkcyBidXQKcmV0dXJucyBmZXdlciBieXRlcyB0aGFuIGV4cGVjdGVkLCB0aGUg
+c2l6ZSBBU1NFUlRfRVEgY2hlY2sgd2lsbCBmYWlsIGJ1dApleGVjdXRpb24gd2lsbCBjb250aW51
+ZS4gVGhlIHN1YnNlcXVlbnQgc3RybmNtcCgpIG1pZ2h0IHRoZW4gcmVhZAp1bmluaXRpYWxpemVk
+IHN0YWNrIG1lbW9yeS4KClJlZmVyZW5jZWQgaW4gdjEvdjIgcmV2aWV3IGNvbW1lbnRzIGF0Cmh0
+dHBzOi8vbG9yZS5rZXJuZWwub3JnL2JwZi8yMDI2MDQyNzAxMTAyNC43QTVEOUMyQkNBRkBzbXRw
+Lmtlcm5lbC5vcmcvCgo+ICsKPiArCXNrZWwgPSB0ZXN0X2luaXRfaW5vZGVfeGF0dHJfX29wZW5f
+YW5kX2xvYWQoKTsKPiArCWlmICghQVNTRVJUX09LX1BUUihza2VsLCAidGVzdF9pbml0X2lub2Rl
+X3hhdHRyX19vcGVuX2FuZF9sb2FkIikpCj4gKwkJcmV0dXJuOwo+ICsKPiArCXNrZWwtPmJzcy0+
+bW9uaXRvcmVkX3BpZCA9IGdldHBpZCgpOwo+ICsJZXJyID0gdGVzdF9pbml0X2lub2RlX3hhdHRy
+X19hdHRhY2goc2tlbCk7Cj4gKwlpZiAoIUFTU0VSVF9PSyhlcnIsICJ0ZXN0X2luaXRfaW5vZGVf
+eGF0dHJfX2F0dGFjaCIpKQo+ICsJCWdvdG8gb3V0Owo+ICsKPiArCS8qIENyZWF0ZSBhIG5ldyBm
+aWxlIOKAlCB0aGlzIHRyaWdnZXJzIGlub2RlX2luaXRfc2VjdXJpdHkgKi8KPiArCWZkID0gb3Bl
+bih0ZXN0ZmlsZV9uZXcsIE9fQ1JFQVQgfCBPX1JEV1IsIDA2NDQpOwoKSWYgdGhlIHRlc3QgZmls
+ZSBhbHJlYWR5IGV4aXN0cyBmcm9tIGEgcHJldmlvdXMgZmFpbGVkIHJ1biwgd2lsbCBvcGVuKCkK
+anVzdCBvcGVuIHRoZSBleGlzdGluZyBmaWxlIHdpdGhvdXQgdHJpZ2dlcmluZyB0aGUgaW5vZGVf
+aW5pdF9zZWN1cml0eQpob29rPyBTaW5jZSB0aGUgaG9vayBvbmx5IGZpcmVzIHdoZW4gYSBuZXcg
+aW5vZGUgaXMgaW5zdGFudGlhdGVkLCB0aGlzCndvdWxkIGNhdXNlIHRoZSB0ZXN0IHRvIHBlcnNp
+c3RlbnRseSBmYWlsLgoKQWxzbywgc2luY2UgdGhpcyBydW5zIGFzIHJvb3QgaW4gdGhlIHdvcmxk
+LXdyaXRhYmxlIC90bXAgZGlyZWN0b3J5LCBjb3VsZAp0aGlzIHByZWRpY3RhYmxlIHBhdGggYmUg
+dnVsbmVyYWJsZSB0byBhIHN5bWxpbmsgYXR0YWNrPwoKUmVmZXJlbmNlZCBpbiB2MS92MiByZXZp
+ZXcgY29tbWVudHMgYXQKaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYnBmLzIwMjYwNDI3MDExMDI0
+LjdBNUQ5QzJCQ0FGQHNtdHAua2VybmVsLm9yZy8KCj4gKwlpZiAoIUFTU0VSVF9HRShmZCwgMCwg
+ImNyZWF0ZV9maWxlIikpCj4gKwkJZ290byBvdXQ7Cj4gKwo+ICsJQVNTRVJUX0VRKHNrZWwtPmRh
+dGEtPmluaXRfcmVzdWx0LCAwLCAiaW5pdF9yZXN1bHQiKTsKPiArCj4gKwkvKiBUaGUgaW5pdHhh
+dHRycyBjYWxsYmFjayBwcmVwZW5kcyAic2VjdXJpdHkuIiB0byB0aGUgbmFtZSAqLwo+ICsJZXJy
+ID0gZ2V0eGF0dHIodGVzdGZpbGVfbmV3LCAic2VjdXJpdHkuYnBmLnRlc3RfbGFiZWwiLCB2YWx1
+ZV9vdXQsCj4gKwkJICAgICAgIHNpemVvZih2YWx1ZV9vdXQpKTsKPiArCWlmIChlcnIgPCAwICYm
+IGVycm5vID09IEVOT0RBVEEpIHsKCklmIHRoZSB1bmRlcmx5aW5nIC90bXAgZmlsZXN5c3RlbSBk
+b2VzIG5vdCBzdXBwb3J0IGV4dGVuZGVkIGF0dHJpYnV0ZXMgYXQKYWxsLCBnZXR4YXR0cigpIHJl
+dHVybnMgLTEgd2l0aCBlcnJubyBzZXQgdG8gRU9QTk9UU1VQUCAob3IgRU5PVFNVUCkuClNob3Vs
+ZCB0aGlzIGNvbmRpdGlvbiBhbHNvIGJlIGhhbmRsZWQgdG8gY29ycmVjdGx5IHNraXAgdGhlIHRl
+c3QgaW5zdGVhZCBvZgpmYWlsaW5nIG9uIHRoZSBuZXh0IEFTU0VSVF9HRSBjaGVjaz8KClJlZmVy
+ZW5jZWQgaW4gdjEvdjIgcmV2aWV3IGNvbW1lbnRzIGF0Cmh0dHBzOi8vbG9yZS5rZXJuZWwub3Jn
+L2JwZi8yMDI2MDQyNzAxMTAyNC43QTVEOUMyQkNBRkBzbXRwLmtlcm5lbC5vcmcvCgo+ICsJCXBy
+aW50ZigiJXM6U0tJUDpmaWxlc3lzdGVtIGRpZCBub3QgYXBwbHkgTFNNIHhhdHRyc1xuIiwKPiAr
+CQkgICAgICAgX19mdW5jX18pOwo+ICsJCXRlc3RfX3NraXAoKTsKPiArCQlnb3RvIG91dDsKPiAr
+CX0KPiArCWlmICghQVNTRVJUX0dFKGVyciwgMCwgImdldHhhdHRyIikpCj4gKwkJZ290byBvdXQ7
+Cj4gKwo+ICsJQVNTRVJUX0VRKGVyciwgKGludClzaXplb2Yoc2tlbC0+ZGF0YS0+eGF0dHJfdmFs
+dWUpLCAieGF0dHJfc2l6ZSIpOwo+ICsJQVNTRVJUX0VRKHN0cm5jbXAodmFsdWVfb3V0LCAidGVz
+dF92YWx1ZSIsCj4gKwkJCSAgc2l6ZW9mKCJ0ZXN0X3ZhbHVlIikpLCAwLCAieGF0dHJfdmFsdWUi
+KTsKPiArCj4gK291dDoKPiArCWNsb3NlKGZkKTsKCklmIGFuIGVycm9yIG9jY3VycyBiZWZvcmUg
+dGhlIGZpbGUgaXMgb3BlbmVkIChlLmcuIGR1cmluZyBza2VsZXRvbiBsb2FkIG9yCmF0dGFjaCks
+IGZkIHdpbGwgYmUgLTEuIERvZXMgdGhpcyByZXN1bHQgaW4gYW4gdW5uZWNlc3NhcnkgY2xvc2Uo
+LTEpIHdoaWNoCnJldHVybnMgLUVCQURGPyBTaG91bGQgdGhpcyBiZSBndWFyZGVkIHdpdGggaWYg
+KGZkID49IDApPwoKUmVmZXJlbmNlZCBpbiB2MSByZXZpZXcgY29tbWVudHMgYXQKaHR0cHM6Ly9s
+b3JlLmtlcm5lbC5vcmcvYnBmLzIwMjYwNDI3MDExMDI0LjdBNUQ5QzJCQ0FGQHNtdHAua2VybmVs
+Lm9yZy8KCj4gKwl0ZXN0X2luaXRfaW5vZGVfeGF0dHJfX2Rlc3Ryb3koc2tlbCk7Cj4gKwlyZW1v
+dmUodGVzdGZpbGVfbmV3KTsKPiArfQoKWyAuLi4gXQoKCi0tLQpBSSByZXZpZXdlZCB5b3VyIHBh
+dGNoLiBQbGVhc2UgZml4IHRoZSBidWcgb3IgZW1haWwgcmVwbHkgd2h5IGl0J3Mgbm90IGEgYnVn
+LgpTZWU6IGh0dHBzOi8vZ2l0aHViLmNvbS9rZXJuZWwtcGF0Y2hlcy92bXRlc3QvYmxvYi9tYXN0
+ZXIvY2kvY2xhdWRlL1JFQURNRS5tZAoKQ0kgcnVuIHN1bW1hcnk6IGh0dHBzOi8vZ2l0aHViLmNv
+bS9rZXJuZWwtcGF0Y2hlcy9icGYvYWN0aW9ucy9ydW5zLzI1NjM5Mzg4NTU1
 
-I think that this patchset would not cause any regression problem in my 
-test environment.
-
-Zhu Yanjun
-
->        selftests: drv-net: ncdevmem: add -n flag to skip NIC configuration
->        selftests: drv-net: make attr _nk_guest_ifname public
->        selftests: drv-net: refactor devmem command builders into lib module
->        selftests: drv-net: add primary_rx_redirect support to NetDrvContEnv
->        selftests: drv-net: add netkit devmem tests
-> 
->   .../networking/net_cachelines/net_device.rst       |   2 +-
->   Documentation/networking/netmem.rst                |   8 +-
->   .../translations/zh_CN/networking/netmem.rst       |   7 +-
->   drivers/net/ethernet/broadcom/bnxt/bnxt.c          |   2 +-
->   drivers/net/ethernet/google/gve/gve_main.c         |   2 +-
->   drivers/net/ethernet/mellanox/mlx5/core/en_main.c  |   2 +-
->   drivers/net/ethernet/meta/fbnic/fbnic_netdev.c     |   2 +-
->   drivers/net/netkit.c                               |   1 +
->   include/linux/netdevice.h                          |  11 +-
->   net/core/dev.c                                     |   5 +-
->   net/core/devmem.c                                  |   6 +-
->   net/core/devmem.h                                  |   9 +-
->   net/core/netdev-genl.c                             |  65 +++++-
->   tools/testing/selftests/drivers/net/hw/Makefile    |   1 +
->   tools/testing/selftests/drivers/net/hw/devmem.py   |  77 ++------
->   .../selftests/drivers/net/hw/lib/py/devmem.py      | 218 +++++++++++++++++++++
->   tools/testing/selftests/drivers/net/hw/ncdevmem.c  |  58 +++---
->   .../testing/selftests/drivers/net/hw/nk_devmem.py  |  55 ++++++
->   .../drivers/net/hw/nk_primary_rx_redirect.bpf.c    |  39 ++++
->   .../testing/selftests/drivers/net/hw/nk_qlease.py  |   8 +-
->   tools/testing/selftests/drivers/net/lib/py/env.py  | 109 ++++++++---
->   21 files changed, 549 insertions(+), 138 deletions(-)
-> ---
-> base-commit: 790ead9394860e7d70c5e0e50a35b243e909a618
-> change-id: 20260423-tcp-dm-netkit-2bd78b638d30
-> 
-> Best regards,
-
+--===============7115998424420120491==--
