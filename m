@@ -1,135 +1,308 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4FD364EB0
-	for <bpf@vger.kernel.org>; Sun, 10 May 2026 22:38:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778452705; cv=pass; b=RD9tRHRYYQHLmnfplUcxxjDNu5G0Xot1r50h3nCUw9tHmSapy4OoI5RH1mKHexnr6FUAJZx9pub8/Mdmqsm0cAln50+es41P61teVs2ZHRDOCe/Q+IBIhQjhE0jT44egJReuAK4/Owm6GozUQggazvF1CxjNXR/3IZx1sKPkrzU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778452705; c=relaxed/simple;
-	bh=+RCvzX3O/zZVOe06+QEUzmxxLt4XHCNKPDCKitF87/E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ThMwOdW0zzZw02/IyDWO7DYXb/sxqiLnmnudNm5QD3jvFHS6bGRur/LWnV8jYY5ExNQgL4sl52He9vwS6JFnjZRmc0cBe4lOl0GaIoGViyA04E14pxBelitI9Iby7D3Xd37hPz4UuNXtywkt7NK4Niber0zBSiXhmeFC8bAXIkg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e0cOHOzj; arc=pass smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F213036166E
+	for <bpf@vger.kernel.org>; Sun, 10 May 2026 23:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778454551; cv=none; b=r6UeOLjeXA6OrLTGNv6odCUH5xPAhoVzicbm64cGrHxaKUJETFl74wlVr3zHgFDqnb1wcLogGzrsTeHYsak3LSrfccgtZxRUekEuvwXeTAqMAjunw9Daabx2vwui/rvdnywrTzE6kZBgZGYrsgAPJ8ow4rNRB+VMrzHLHBEM/WE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778454551; c=relaxed/simple;
+	bh=aHkXnb2OKVF3ZzHhEGgrjspE33t66deY8NhGKGzKq8M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WTUd2r0hdsfP7QhY4lo5RsJ1Qr60kuq1o8IwFPcGk3/kvlvJjh7l8KcghsLXQ7z5tuyiw8gt9c02+0cyeEM7Ce6D5XH8I8N4EdXg5FSjAYnqimSBaLITEGj1JbDNxwO1yxFmww0URk86i2g7gNBruYrqz0XJIzsOU7c20LgIL7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=otPBmIWw; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e0cOHOzj"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-452169ae568so2838959f8f.3
-        for <bpf@vger.kernel.org>; Sun, 10 May 2026 15:38:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778452699; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Am893Hkytw01Cc0RPVHsknQX7LptKGKAC7ApPa5OozAohXOYG5BiRk1/443EO3fJBF
-         HjwIQ9wVQ+vs5kT6QTKm7PXDtgzGvvS9DX7A1KK9ZOv+snK22i5xtFVgbQFRqMObG912
-         VUBzGtUNZz8P3uGagsAmNBKr/4hXcjNiwmAxYh4OIt3/JarSQizZc2m+00QLKtMz+gV/
-         DmpnBwqit1NcJAUTrLYn4uW4bzf1Rd2ntmYZBBjYSYWdbnGovD1yZ9Yrk5xWh6Uqejpb
-         rDCNzxcK5+EWp9RgWC9fR9HRb6EB4G31rf1CtjoLU+cfCCW+MVRlW+stk5MGlQRwX9IE
-         CtXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Q742UBUVfHxlrrxIFoluJHcHiucEjbpkj0zuBBjRUjA=;
-        fh=+2ZgCftoiHBZyy7A1Aleo8/eefr9WGBz4L25NWN5RFk=;
-        b=Vg0fFJeGEC5j7VVAXlFwqzHSb/OiXqWeIT30pUbWTVl0JKu3s+BwDke3HNFQ//eEUT
-         isD3Orfjfj8FXVx/9iTALsP93DHZvaQsO01zJ44VGR/UbLdWSW48hlbEa9n6AA1ivSqV
-         NYC3yaswIrXVdPGAaVF/blDsstivlFWH1SjuIj4QA/+XvHLElkkF1aL8emdP/JhyyOdo
-         gxcPYVGEpjHgJSifwZbWtJfgTEolHbdhrDRPFQhKYHZMMZ0D6SI4offXUfa4gRzgtsAY
-         MpQGjF0WW1g7RlWDZbwI6SGGqUB6cbVNzOz9HgzkBPyirHionvV8A/ZNknXX0xTZ6LHp
-         RSwg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="otPBmIWw"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4891c0620bcso25346955e9.1
+        for <bpf@vger.kernel.org>; Sun, 10 May 2026 16:09:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778452699; x=1779057499; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q742UBUVfHxlrrxIFoluJHcHiucEjbpkj0zuBBjRUjA=;
-        b=e0cOHOzjfzdXjKYYA6X20/z5Qz4fjrSY5dSxZ31rQTfisd+s8+VB4KZoXDy/7VyFCW
-         3r4LWCD3oub3z7uTXTCnvyxj96AiT/jRQ8tOTx+6YAtUVYc/EB/AUBnhC3SQUOA0jCws
-         nkuW72WtXiON520F9SyButzWz+w8lvOxDpFWJP02SX8P2AbziokRDHCb8AtK5K5DYmGl
-         HbuVmQWMeTONTTScJNyVBZdnco4g1kleXuZiTQQEw7otUfm+RH3dNWP0DfTlMfOsI90f
-         zbUIOzGP/eRqmfx2BUdzYP8LghwY2k3xvg/BKYEsf8YY6vERFUEw2V9V2nIs5BCoNBDU
-         nVBA==
+        d=gmail.com; s=20251104; t=1778454548; x=1779059348; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HZyFCF4GPlM3GT3Tj0IfjbAYoaJDP02dnOBVUskPFZY=;
+        b=otPBmIWwak1M2zRU1StET4fitjE8rPGsnMegRQeHzh6cGhp0aG3Nepu8whSOYPquKK
+         ZG/CQ8Q+owOI2bKb12OCpKPg1Fn+3SLx2LBQU9fcwAwgY+u4pTOeBQu34BolPtH2D4he
+         MnxYVkRBaaK2rLcimmSW5w/PwWKPVeV5nmpXR0+as2Oa8zsDLH5n4tQDHdssL6QV4/XL
+         8K+AC1H93AVKUvkJ6+yb7I90O3MiKgebB+onRNTcHXQoLAh4zN3xeOK1weEgGXvNaRkV
+         vz7Y9SOJYbU1MQux7ij2U9m50Ke1Qb+yVOpoGYtwsikZiS7sgGupX2VPiLuvNXU9mq1U
+         /5ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778452699; x=1779057499;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Q742UBUVfHxlrrxIFoluJHcHiucEjbpkj0zuBBjRUjA=;
-        b=paN68of1EZlJq3zBqux2QOgqO1yt84pGMZqw62vpyNp6wwXf9iBoBx/k2d53FxN1DL
-         FVv+qNekFz3HeH5LNPJkqtNs/mb6YojKFO+iuC56ek6wZ0j3+36HaIcopAybdh5rfQjH
-         AobqOjIqXRqqiARZ13H9tsRL3V6FG8V4m06jPbNtPucSrtYzN9cKppdmaKiRuv3hD51A
-         6oVqfudBONkhk01kyJFaDQyTXQcK3ExeGsTOpGe7Ff9fIe7f+NZ4aOn5mP6Epdm4o7S8
-         qMQmv1PzvGBj2zL4oy2mbjN4ZdBIwmAf/mHvIznOPG6YG535crNuYb29Xvja23TNcLvq
-         TwWw==
-X-Forwarded-Encrypted: i=1; AFNElJ/mr6viSng1iV0BicdFNvHcMB+Xmpej7cc256WO5iMtMSH6N6/pZr9AuMIEls72tTjqzxw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRcbGkqbn98EYCrmbBasYV7MBCY++hj5X4oseDaJw3Sk51zOgW
-	a1Ap6n8+NDDYKRU5IEab/W2t1rAgsXYraht8Qkk735tX+8RdwcY/0+oVvGMdMZqr7hTuTE59Omw
-	mzHNPpoiV916BS2FDSmNPaA/+gxEV3BYOjwXG
-X-Gm-Gg: Acq92OGjzQump42/l1gJOQz9oUBiuXoMt6IOX9Dpugl6Wq4GJAxkLIFtgeLhZ42G9gC
-	FL5MakUlujzVkSjCLVxtHFoJiObMh0Zu9NviGkuInQ1S8tTo+gcwNbGaKu7wj8zZh20gZMjOBpJ
-	lodU+vdLXeH+EuJOxfC24FCmMO/Diwc7AcQRuuVnaHVM/sXWBxJPtfTQuf/dN8kUSdVLii9Dtzr
-	kc6adZ5fWcdCpbgckSMgpxDhI6EGxbDa1+8bDCwJVkmwIrXQhPHj+G/43QgVwXyDcKtT4i1WO7W
-	8JoU5JTtH5KMIJDfOGxwgVvSvpdp2YtciV2+BIpz2S1oeEcE0geUoamVttjgPJ9fz4+GDtfupVv
-	AZgO8Nk74Oen/b44r50hlaCTpKlzFsIGYgjZ1j2zj1c99X6s=
-X-Received: by 2002:a05:6000:144b:b0:43d:714:34e5 with SMTP id
- ffacd0b85a97d-4515ce1bd58mr33450874f8f.24.1778452699023; Sun, 10 May 2026
- 15:38:19 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778454548; x=1779059348;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HZyFCF4GPlM3GT3Tj0IfjbAYoaJDP02dnOBVUskPFZY=;
+        b=ofNJw/ja7VjFtNno0AyZs92U4He9Lowqpbc7sOCYfe5RoLWwCUGDb8AX2td6EX5ub7
+         vBTknJAZ6RLndGn3LOgd8jPSDkW44p6c8Z7D8ZYnRfp+1GR8jh0m407Gg1vaZRfDAAlY
+         8QptCjJRpiEfxa84IT1eD/L3QsCxme7R25emc/FnHfaJzOORW03YCIPlNF8X5LY1S0tO
+         502ecVy1Q3LIY6DZgql+blKF8tgxIJLXu0KYFNghN4f6+2gUIJ2qFZOf07b7r3S94/Kx
+         7CqF+U3j9Gx9vl33klErlKz6P7g+r1OSgUHq2VJtfZi4DCuM0gW7ePEu/A+TrwQj/eYC
+         4zMQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+JXpopAMNOShmze+dxwBl2pPBSOlKkrhpf+/o7kAtKuQbVxyu8OXKTtbrWHnWc9VsTpS4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfIWGpmLMRm3LagO4pYbSFjfWTSG+tattHCkmh098v2cqImCqr
+	2Wei+agnbicMcCzRfNVn+092sTRf7UP4QAFX1wKFS2zhS6OOEbt214Kv
+X-Gm-Gg: Acq92OGT7ubyf2XICrUCozDW4dS59LfAhvwn5Y/hX5I+0i5bMjncFOsMiWtXihb6+hh
+	3e8qxYldaGL3/54pYdNPVeDsqYVDa6nQ0dKTPc/gR5Q/cimkuBc8iyxx3UcLx0GAoo1r71QvWMg
+	9bfGqkUNW8sAZsUDPjrUilrV/Xh92T2SeteO38So50v2vq4JZ5xdEiWkkB2hsljdsAyMNhTnDTR
+	gBPBNfMhPB0s/oAHrtcmjPUAhBg4UIJ9iztpLwL4QX7FV6ncIImFnZ+RPiTZbuU+4jbJ0+68Phi
+	CbEGCIxveZlq9hslBpd8l/mp8B6Jnz/GHkijOxfpxLWqSq738RusvlQvs0NX3BBvFhmvxzkx282
+	85ApW9Ya/p3GZsrQqlhpWh1KeCJss8HejgxPTqwgSaLUyP9wqRglj4tAFv/khwipRfZnpRaKKfX
+	+NiQ/pvSNIBYbNhHzDqjMV0TcWbFRf8AJgiTNpR+THBvUW+3g=
+X-Received: by 2002:a05:600c:c10b:b0:489:1f3e:5f69 with SMTP id 5b1f17b1804b1-48e676ab390mr142419715e9.18.1778454548186;
+        Sun, 10 May 2026 16:09:08 -0700 (PDT)
+Received: from registry.mehben.fr ([2a01:cb1c:8441:2b00:c694:3c2c:878b:f4c0])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e6db09cb6sm49897405e9.22.2026.05.10.16.09.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 May 2026 16:09:06 -0700 (PDT)
+From: Alexandre Knecht <knecht.alexandre@gmail.com>
+To: herbert@gondor.apana.org.au,
+	"David S . Miller" <davem@davemloft.net>
+Cc: ebiggers@kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Alexandre Knecht <knecht.alexandre@gmail.com>
+Subject: [PATCH] crypto: ctr - Convert from skcipher to lskcipher
+Date: Mon, 11 May 2026 01:09:01 +0200
+Message-ID: <20260510230901.1772949-1-knecht.alexandre@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260507175453.1140400-2-utilityemal77@gmail.com>
- <20260507234520.646C4C2BCB2@smtp.kernel.org> <agCXEJKJh-JGMhjG@zenbox>
-In-Reply-To: <agCXEJKJh-JGMhjG@zenbox>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 10 May 2026 15:38:08 -0700
-X-Gm-Features: AVHnY4JtWp5-wHurTbGbNe4pndwrP5XL9-KsYnPlCg2TVbgg5WbvM4DrSuh5aYM
-Message-ID: <CAADnVQJdFCFJcg0Pqdnx=D2h5vHj_q4mrwSJYxRC5RW0NTFNvQ@mail.gmail.com>
-Subject: Re: [bpf-next v3 1/2] bpf: Offload kptr destructors that run from NMI
-To: Justin Suess <utilityemal77@gmail.com>
-Cc: sashiko@lists.linux.dev, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, May 10, 2026 at 8:14=E2=80=AFAM Justin Suess <utilityemal77@gmail.c=
-om> wrote:
->
->
-> Any help or guidance on this would be appreciated!
+Replace the existing skcipher CTR template with an lskcipher version,
+following the pattern established by the CBC conversion (705b52fef3c7).
 
-sorry for the delay. Everyone was at lsfmmbpf for a week+.
+This enables BPF programs using the bpf_crypto kfuncs to use CTR mode
+ciphers like ctr(aes), which previously failed because
+crypto_alloc_lskcipher() could not find an lskcipher implementation.
+ECB and CBC already have lskcipher support; CTR was the missing piece.
 
-All of the solutions so far are way too complicated.
-bpf_kptr_xchg() has to remain inlined as single atomic xchg
-without slowpath otherwise it ruins the concept
-and makes usage unpredictable.
+The rfc3686 template remains as an skcipher and continues to work
+through the automatic lskcipher-to-skcipher bridge.
 
-Let's step back.
-What is the issue you're trying to solve?
+Tested with NIST SP 800-38A test vectors (AES-128/192/256-CTR),
+partial block handling, and rfc3686 compatibility. Kernel self-tests
+pass on instantiation (selftest: passed in /proc/crypto).
 
-the commit log say:
+Signed-off-by: Alexandre Knecht <knecht.alexandre@gmail.com>
+Assisted-by: Claude:claude-opus-4-6 checkpatch
+---
+ crypto/ctr.c | 143 +++++++++++++++++++--------------------------------
+ 1 file changed, 54 insertions(+), 89 deletions(-)
 
-> A BPF program attached to tp_btf/nmi_handler can delete map entries or
-> swap out referenced kptrs from NMI context. Today that runs the kptr
-> destructor inline. Destructors such as bpf_cpumask_release() can take
-> RCU-related locks, so running them from NMI can deadlock the system.
+diff --git a/crypto/ctr.c b/crypto/ctr.c
+index a388f0ceb3a0..5fceaf47bedc 100644
+--- a/crypto/ctr.c
++++ b/crypto/ctr.c
+@@ -7,7 +7,6 @@
+ 
+ #include <crypto/algapi.h>
+ #include <crypto/ctr.h>
+-#include <crypto/internal/cipher.h>
+ #include <crypto/internal/skcipher.h>
+ #include <linux/err.h>
+ #include <linux/init.h>
+@@ -25,139 +24,105 @@ struct crypto_rfc3686_req_ctx {
+ 	struct skcipher_request subreq CRYPTO_MINALIGN_ATTR;
+ };
+ 
+-static void crypto_ctr_crypt_final(struct skcipher_walk *walk,
+-				   struct crypto_cipher *tfm)
++static int crypto_ctr_crypt_segment(struct crypto_lskcipher *cipher,
++				    const u8 *src, u8 *dst, unsigned int nbytes,
++				    u8 *iv)
+ {
+-	unsigned int bsize = crypto_cipher_blocksize(tfm);
+-	unsigned long alignmask = crypto_cipher_alignmask(tfm);
+-	u8 *ctrblk = walk->iv;
+-	u8 tmp[MAX_CIPHER_BLOCKSIZE + MAX_CIPHER_ALIGNMASK];
+-	u8 *keystream = PTR_ALIGN(tmp + 0, alignmask + 1);
+-	const u8 *src = walk->src.virt.addr;
+-	u8 *dst = walk->dst.virt.addr;
+-	unsigned int nbytes = walk->nbytes;
+-
+-	crypto_cipher_encrypt_one(tfm, keystream, ctrblk);
+-	crypto_xor_cpy(dst, keystream, src, nbytes);
+-
+-	crypto_inc(ctrblk, bsize);
+-}
++	unsigned int bsize = crypto_lskcipher_blocksize(cipher);
+ 
+-static int crypto_ctr_crypt_segment(struct skcipher_walk *walk,
+-				    struct crypto_cipher *tfm)
+-{
+-	void (*fn)(struct crypto_tfm *, u8 *, const u8 *) =
+-		   crypto_cipher_alg(tfm)->cia_encrypt;
+-	unsigned int bsize = crypto_cipher_blocksize(tfm);
+-	u8 *ctrblk = walk->iv;
+-	const u8 *src = walk->src.virt.addr;
+-	u8 *dst = walk->dst.virt.addr;
+-	unsigned int nbytes = walk->nbytes;
+-
+-	do {
+-		/* create keystream */
+-		fn(crypto_cipher_tfm(tfm), dst, ctrblk);
++	while (nbytes >= bsize) {
++		/* Encrypt counter block to produce keystream */
++		crypto_lskcipher_encrypt(cipher, iv, dst, bsize, NULL);
+ 		crypto_xor(dst, src, bsize);
+-
+-		/* increment counter in counterblock */
+-		crypto_inc(ctrblk, bsize);
++		crypto_inc(iv, bsize);  /* Increment counter */
+ 
+ 		src += bsize;
+ 		dst += bsize;
+-	} while ((nbytes -= bsize) >= bsize);
++		nbytes -= bsize;
++	}
+ 
+ 	return nbytes;
+ }
+ 
+-static int crypto_ctr_crypt_inplace(struct skcipher_walk *walk,
+-				    struct crypto_cipher *tfm)
++static int crypto_ctr_crypt_inplace(struct crypto_lskcipher *cipher,
++				    u8 *dst, unsigned int nbytes, u8 *iv)
+ {
+-	void (*fn)(struct crypto_tfm *, u8 *, const u8 *) =
+-		   crypto_cipher_alg(tfm)->cia_encrypt;
+-	unsigned int bsize = crypto_cipher_blocksize(tfm);
+-	unsigned long alignmask = crypto_cipher_alignmask(tfm);
+-	unsigned int nbytes = walk->nbytes;
+-	u8 *dst = walk->dst.virt.addr;
+-	u8 *ctrblk = walk->iv;
+-	u8 tmp[MAX_CIPHER_BLOCKSIZE + MAX_CIPHER_ALIGNMASK];
+-	u8 *keystream = PTR_ALIGN(tmp + 0, alignmask + 1);
+-
+-	do {
+-		/* create keystream */
+-		fn(crypto_cipher_tfm(tfm), keystream, ctrblk);
+-		crypto_xor(dst, keystream, bsize);
++	unsigned int bsize = crypto_lskcipher_blocksize(cipher);
++	u8 keystream[MAX_CIPHER_BLOCKSIZE];
+ 
+-		/* increment counter in counterblock */
+-		crypto_inc(ctrblk, bsize);
++	while (nbytes >= bsize) {
++		/* Encrypt counter block to produce keystream */
++		crypto_lskcipher_encrypt(cipher, iv, keystream, bsize, NULL);
++		crypto_xor(dst, keystream, bsize);
++		crypto_inc(iv, bsize);  /* Increment counter */
+ 
+ 		dst += bsize;
+-	} while ((nbytes -= bsize) >= bsize);
++		nbytes -= bsize;
++	}
+ 
++	memzero_explicit(keystream, sizeof(keystream));
+ 	return nbytes;
+ }
+ 
+-static int crypto_ctr_crypt(struct skcipher_request *req)
++static int crypto_ctr_crypt(struct crypto_lskcipher *tfm, const u8 *src,
++			    u8 *dst, unsigned int len, u8 *iv, u32 flags)
+ {
+-	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
+-	struct crypto_cipher *cipher = skcipher_cipher_simple(tfm);
+-	const unsigned int bsize = crypto_cipher_blocksize(cipher);
+-	struct skcipher_walk walk;
++	struct crypto_lskcipher **ctx = crypto_lskcipher_ctx(tfm);
++	struct crypto_lskcipher *cipher = *ctx;
++	unsigned int bsize = crypto_lskcipher_blocksize(cipher);
++	bool final = flags & CRYPTO_LSKCIPHER_FLAG_FINAL;
+ 	unsigned int nbytes;
+-	int err;
+-
+-	err = skcipher_walk_virt(&walk, req, false);
+ 
+-	while (walk.nbytes >= bsize) {
+-		if (walk.src.virt.addr == walk.dst.virt.addr)
+-			nbytes = crypto_ctr_crypt_inplace(&walk, cipher);
+-		else
+-			nbytes = crypto_ctr_crypt_segment(&walk, cipher);
+-
+-		err = skcipher_walk_done(&walk, nbytes);
+-	}
+-
+-	if (walk.nbytes) {
+-		crypto_ctr_crypt_final(&walk, cipher);
+-		err = skcipher_walk_done(&walk, 0);
++	if (src == dst)
++		nbytes = crypto_ctr_crypt_inplace(cipher, dst, len, iv);
++	else
++		nbytes = crypto_ctr_crypt_segment(cipher, src, dst, len, iv);
++
++	/* Handle final partial block. */
++	if (nbytes && final) {
++		u8 keystream[MAX_CIPHER_BLOCKSIZE];
++
++		crypto_lskcipher_encrypt(cipher, iv, keystream, bsize, NULL);
++		crypto_xor_cpy(dst + len - nbytes, src + len - nbytes,
++			       keystream, nbytes);
++		crypto_inc(iv, bsize);
++		memzero_explicit(keystream, sizeof(keystream));
++		nbytes = 0;
+ 	}
+ 
+-	return err;
++	return nbytes;
+ }
+ 
+ static int crypto_ctr_create(struct crypto_template *tmpl, struct rtattr **tb)
+ {
+-	struct skcipher_instance *inst;
+-	struct crypto_alg *alg;
++	struct lskcipher_instance *inst;
+ 	int err;
+ 
+-	inst = skcipher_alloc_instance_simple(tmpl, tb);
++	inst = lskcipher_alloc_instance_simple(tmpl, tb);
+ 	if (IS_ERR(inst))
+ 		return PTR_ERR(inst);
+ 
+-	alg = skcipher_ialg_simple(inst);
+-
+ 	/* Block size must be >= 4 bytes. */
+ 	err = -EINVAL;
+-	if (alg->cra_blocksize < 4)
++	if (inst->alg.co.base.cra_blocksize < 4)
+ 		goto out_free_inst;
+ 
+ 	/* If this is false we'd fail the alignment of crypto_inc. */
+-	if (alg->cra_blocksize % 4)
++	if (inst->alg.co.base.cra_blocksize % 4)
+ 		goto out_free_inst;
+ 
+-	/* CTR mode is a stream cipher. */
+-	inst->alg.base.cra_blocksize = 1;
+-
+ 	/*
+-	 * To simplify the implementation, configure the skcipher walk to only
+-	 * give a partial block at the very end, never earlier.
++	 * CTR mode is a stream cipher.  Set chunksize to the underlying
++	 * cipher block size so partial blocks only occur at the end.
+ 	 */
+-	inst->alg.chunksize = alg->cra_blocksize;
++	inst->alg.co.chunksize = inst->alg.co.base.cra_blocksize;
++	inst->alg.co.base.cra_blocksize = 1;
+ 
++	/* CTR encrypt and decrypt are the same XOR-based operation. */
+ 	inst->alg.encrypt = crypto_ctr_crypt;
+ 	inst->alg.decrypt = crypto_ctr_crypt;
+ 
+-	err = skcipher_register_instance(tmpl, inst);
++	err = lskcipher_register_instance(tmpl, inst);
+ 	if (err) {
+ out_free_inst:
+ 		inst->free(inst);
+-- 
+2.51.1
 
-and looking at selftest from patch 2 you do:
-
-old =3D bpf_kptr_xchg(&value->mask, old);
-if (old)
-  bpf_cpumask_release(old);
-
-so?
-bpf_cpumask_release() is fine to call from any context,
-because bpf_mem_cache_free_rcu() is safe everywhere including NMI.
-
-hashtab introduced dtor in bpf_mem_alloc,
-so bpf_obj_free_fields() and corresponding dtor's of kptr-s
-are called from valid context.
-
-What is the problematic sequence?
