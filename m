@@ -1,130 +1,119 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A393AC00
-	for <bpf@vger.kernel.org>; Sun, 10 May 2026 01:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C06263CB;
+	Sun, 10 May 2026 02:25:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778376228; cv=none; b=rACK4tlQl5u3FSEbh9gk8AzzF7lvNAoedv0DiSWCRo9LFyKpjLY4Ckd9zQv1xU8oZevF0CCBP5ARXOnu5wzjmigpFJONNSZlaS7Q1CQBE233aWQ2NFOHsLDYZMy1VIlbNVfr4hIzt6YpyKwTq4MsjPNYnoo8K8jP1Gj+rfYBkpc=
+	t=1778379925; cv=none; b=VYNBMYSQ5yCZIX+afyPaDhFPED4GwsworXwI7soW4z2isHHpgA9Gr49zwwJF3FMi4t+2tKYpnyi7ss8dykUJyNVpOtVb/pEcf6tp8T7LP2sxOcP+EaM23UpgvbKAV8DZmP5epr7FIPUs3yCA/JcM6gV4M8MzTPD0kSRIeb/yta8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778376228; c=relaxed/simple;
-	bh=4iX6eJkexz53dxVsq9AYaEzTNy8W+QRRol5UMw9qdiw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VFLzaQbhHXGGnsE5e46hTvCPtcK2qRZmavkK7s9399SSJb3825xiRiTRMRqw04iFD2SKQ75KozNAkcn6wfpk+Ahx90ne7X0OJMBFaxOS1/3etkLAtGG+L/3Ca6pI40boJQKLcDNaPIrqU72VL76o1A28X0y3KiG/s7poGpM4sBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d+/UGRyP; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778379925; c=relaxed/simple;
+	bh=DuPHI1LqOFfQCPwSGvE4XxVWrva8Uk84ODEwZHi72xU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qDthOCx1hjB4wtUbH7QD+lhf7laJs3isYUsV3b3L1hoeQEgpV433gt0fFA2if/beEMC2+EmfPzx7fcPnLVYaR1+okP72/SU3Jyo+fxZ6A+uEVz+oPVhZFfM3tcOdBIhp0geQGDdWmQOmKEHxKFeJmJqJyk9RMi7sKhntecFsmX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e79y6hL/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d+/UGRyP"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2ba928852a5so21161065ad.1
-        for <bpf@vger.kernel.org>; Sat, 09 May 2026 18:23:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778376226; x=1778981026; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k83FvsWSelsobvUl25t3vFW44Bj//lrGN1EzdGDWel4=;
-        b=d+/UGRyPLgXnShSLPMfl2NoZdUCnty1AtzGW6ZS0sUYUi3yeamfusnUGi5Jc4DsGNA
-         UiRRCA4fq3x+I9Ie9kjfTjYwJb6wnITu3s7W0sxaw46voEtdh+s6z1iGdeEzK+KZsNVy
-         aPCdoDqDsk3qh+njwYPya2RcZSU+soLsvE0jGArEVRg3i6hPtkREnJGLWjwFuiF1Xg15
-         xQ7FHURxm+nWLRcwOp0+WQg9aG72rAvdqcrn6HZseS1EfPP678/gPVSXrvME/Sy78cOk
-         bLbfhwzCRrif48F11Nyjyoc6EHmvIowQ6TaYH+o8w1UXkIu2PsEBDzMoY6OGMPrdg8Jx
-         /80Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778376226; x=1778981026;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=k83FvsWSelsobvUl25t3vFW44Bj//lrGN1EzdGDWel4=;
-        b=rh7fNUQomwnEJQyXYqT0cbyq3ex0r/FL6ydmljwzjkIGVhHkiylcMuDZHKb8wz2CC9
-         Xo8aEg3TVcMk9OCbf5YUs47koVcr1NZMbs2y7a+1ghFpjC5h+9jwAlB5hCXz6ug84MQl
-         4iOHi+tCF0/b9wMwJqx2h+eE8AlTm5ccNAOHnuO4nXKSsGA4XfXf+ejzbBEUaV1HYh6S
-         ucQ6Gq60yHHU0SlU1QmvPB9nuuffbVo9YZyJwdM4Aeob6vp1dcDaW5J3Ivsls/UF+kYK
-         mD9npXPgEUdDXe7lQcTAzPhppQrsypta2YMLbvO8PcbYpU2PdGA9DdXBZCwDN4I8sZbL
-         +NIw==
-X-Gm-Message-State: AOJu0YxjKRgJdq/c43qyJWpYh7YqCMkYKm1yr3nsm7p9nSueMeVtdtzv
-	r9kVamHoCDIGm/iq9sGovBIvmamNTGVpypR/lYiAKoMkFxXoAKlGXNNH
-X-Gm-Gg: Acq92OHlBZ39hQGKyOwU83acPGEUxWCuM/nysZhH3gxALuxkOSlO8bap5OF90rnmoB3
-	S/vIvPYFC7aQvGMI7eD9wGjELOkZFJSpbiE+RRIg5wYYUTm3PKSeQlHQjD960LCVLITeiNZ4+Jj
-	xHna3sswXR4BYAQTnR1iORuk2EA/dBsfOgx072YLY5AI5WlMMzHM3n4eNzJRAl3EibDzDygQ0XJ
-	NwHb1L42VPdoAomfsXfjMd9KK4Har48NJm/LpYH3RH9WaKi2vtgwxsNY4jg2IV9Bq/ZEK/1JW+C
-	KrH8YgdCDz4fs9pDnbQfqngC/Lz+EcAmwl8ytWpR79NzHh7eriRjlu+6aQ6c4H2DtkLiywvENZN
-	pCccN3NzaOJbIRTbw0JWfv9zcS0GaN7+QF4lSlMB6dElVqdjOxxfIMQ77yKHdyO9xLTZvjf4Zt4
-	r+Z+zRL0VQE6BMOTDn95TVntGlTW1eE/UNBUvww5wj2M9tBOE/6RFmUjRz4lw3DZXwXKjB2aDMg
-	n3pbu+mEKHZwDLXwc5UIwCyXbRvlOM=
-X-Received: by 2002:a17:903:1a28:b0:2b9:f8e9:70e2 with SMTP id d9443c01a7336-2bc7a990b6emr41452625ad.8.1778376226401;
-        Sat, 09 May 2026 18:23:46 -0700 (PDT)
-Received: from KERNELXING-MC1.tencent.com ([2408:8207:1923:2c20:1949:c5e0:289c:ab19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1d269fcsm64648875ad.15.2026.05.09.18.23.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 May 2026 18:23:45 -0700 (PDT)
-From: Jason Xing <kerneljasonxing@gmail.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	bjorn@kernel.org,
-	magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	jonathan.lemon@gmail.com,
-	sdf@fomichev.me,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	horms@kernel.org,
-	andrew+netdev@lunn.ch
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Jason Xing <kernelxing@tencent.com>
-Subject: [PATCH net 4/4] xsk: drain continuation descs on invalid descriptor in __xsk_generic_xmit()
-Date: Sun, 10 May 2026 09:23:10 +0800
-Message-Id: <20260510012310.88570-5-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20260510012310.88570-1-kerneljasonxing@gmail.com>
-References: <20260510012310.88570-1-kerneljasonxing@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e79y6hL/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DAE5C2BCC7;
+	Sun, 10 May 2026 02:25:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778379924;
+	bh=DuPHI1LqOFfQCPwSGvE4XxVWrva8Uk84ODEwZHi72xU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e79y6hL/mgDvOZD8UHrjx/yvvGE14Vi42uRup1vVa+BwGGuz0tI3FboKrX6KCcHYW
+	 RzREP9nAcxXgbOLsICt59PEujBZfc43refGEy/MqJqsWO96s+Q3AgEvXjdaDOJlAAS
+	 iXt5onlnEIiRTPA221E7iqjKkNnVa/ou5prZT51yvrxvmamwRnnTONClO46LkwR6wZ
+	 t2IFlN52kGo0lvKsca1tHoXbtX8d3ZNYB/HRYPyRw5jkTtawLddwbKxR+1rJEj3vIi
+	 eoZSgqm4WxQI4AKYACjQH26b7yHJFcZfpkAvmuGCkgkL1k/4LZuGB+A3395nol8DbQ
+	 i0nDH3HyM9r4g==
+Date: Sat, 9 May 2026 21:25:16 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Alex Elder <elder@riscstar.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, maxime.chevallier@bootlin.com, 
+	rmk+kernel@armlinux.org.uk, konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org, arnd@arndb.de, 
+	gregkh@linuxfoundation.org, Daniel Thompson <daniel@riscstar.com>, 
+	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com, alexandre.torgue@foss.st.com, 
+	ast@kernel.org, boon.khai.ng@altera.com, chenchuangyu@xiaomi.com, 
+	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org, hkallweit1@gmail.com, 
+	inochiama@gmail.com, john.fastabend@gmail.com, julianbraha@gmail.com, 
+	livelycarpet87@gmail.com, matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, 
+	me@ziyao.cc, prabhakar.mahadev-lad.rj@bp.renesas.com, 
+	richardcochran@gmail.com, rohan.g.thomas@altera.com, sdf@fomichev.me, 
+	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com, wens@kernel.org, 
+	netdev@vger.kernel.org, bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 08/12] dt-bindings: net: toshiba,tc965x-dwmac:
+ add TC956x Ethernet bridge
+Message-ID: <af_sarCs9E5M7NLE@baldur>
+References: <20260501155421.3329862-1-elder@riscstar.com>
+ <20260501155421.3329862-9-elder@riscstar.com>
+ <afycOwz5TpkegkZd@baldur>
+ <3c78f48c-6478-46d0-87c2-581bb58637dd@riscstar.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3c78f48c-6478-46d0-87c2-581bb58637dd@riscstar.com>
 
-From: Jason Xing <kernelxing@tencent.com>
+On Thu, May 07, 2026 at 01:37:09PM -0500, Alex Elder wrote:
+> On 5/7/26 9:12 AM, Bjorn Andersson wrote:
+> > On Fri, May 01, 2026 at 10:54:16AM -0500, Alex Elder wrote:
+> > > diff --git a/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml b/Documentation/devicetree/bindings/net/toshiba,tc956x-dwmac.yaml
+> > [..]
+> > > +
+> > > +  gpio-controller: true
+> > 
+> > I don't have any concern with the use of a proper gpio driver to model
+> > the implementation, but if I understand correctly this relationship
+> > between gpio controller and gpio consumer is strictly internal to "the
+> > PCI device".
+> 
+> (I think you're already cool with this but I still wanted to respond.)
+> 
 
-When the TX loop in __xsk_generic_xmit() encounters an invalid
-descriptor mid-packet (e.g. an out-of-bounds address), the partial
-skb is dropped and the offending descriptor is released. However,
-remaining continuation descriptors belonging to the same multi-buffer
-packet still sit in the TX ring. Since xs->skb becomes NULL after the
-drop, the next iteration treats the leftover continuation fragment as
-a brand-new packet, corrupting the packet stream.
+Thank you for the further clarifications, and added details, Alex. This
+does look reasonable to me.
 
-Fix this by setting the drain_cont flag when the released descriptor
-has XDP_PKT_CONTD set. On the next call to __xsk_generic_xmit(), the
-drain logic introduced in the previous patch handles the remaining
-fragments with normal CQ backpressure.
+Regards,
+Bjorn
 
-Fixes: cf24f5a5feea ("xsk: add support for AF_XDP multi-buffer on Tx path")
-Signed-off-by: Jason Xing <kernelxing@tencent.com>
----
- net/xdp/xsk.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 232dd7126905..b41ed44e3192 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -1045,6 +1045,8 @@ static int __xsk_generic_xmit(struct sock *sk)
- 		if (xs->skb)
- 			xsk_drop_skb(xs->skb);
- 		xskq_cons_release(xs->tx);
-+		if (xp_mb_desc(&desc))
-+			xs->drain_cont = true;
- 	}
- 
- out:
--- 
-2.41.3
-
+> That is not correct.  These GPIO lines are used two ways for the
+> RB3gen2:
+> - drivers/pci/pwrctrl/pci-pwrctrl-tc9563.c uses GPIOs 2 and 3 to
+>   assert/deassert the reset lines associated with the two exposed
+>   downstream PCIe ports on the PCIe switch within the TC956x.
+> 
+> - Each of the Ethernet PHYs has a reset GPIO.  On the RB3gen2, the
+>   GPIOs used for the purpose come from the GPIO controller embedded
+>   in the TC9564 (00 and 01).
+> 
+> These are therefore "exposed" (they are *not* strictly internal).
+> 
+> > Is this connection variable or is the link merely expressed in
+> > DeviceTree to mitigate the fact that you choose to implement the
+> > responsibilities of the two parts split into two device drivers?
+> 
+> It is variable.  These resets might be implemented by other GPIO
+> controllers on other platforms.
+> 
+> > Are there other consumers of these TC956x gpios which would result in a
+> > board designer (and hence dts author) to ever reference this
+> > gpio-controller in a different way?
+> 
+> They could.  Nine of these GPIOs are exposed by the TC956x pins
+> (GPIO00-06, GPIO12, GPIO35 and GPIO36).  The RB3gen2 uses 00-03
+> (and possibly 04 but that's for a PHY we haven't tested yet).
+> 
+> 					-Alex
+> 
+> > Regards,
+> > Bjorn
+> 
