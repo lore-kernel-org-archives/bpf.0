@@ -1,35 +1,58 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30096128395
-	for <bpf@vger.kernel.org>; Sun, 10 May 2026 18:53:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21FA2253B42;
+	Sun, 10 May 2026 18:55:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778439207; cv=none; b=Ko3afAB8KU3IdzKSJJWDyg825aukGxrnd5hPn7A/w30TG8CjLX7AK1q+CCBOrBcDaWYENQNOL/4LH14qhUOfTr/8MooZqmShrX5RTnTW4VEbE3V7aw84mgpuGRSyW6yLnHevplXbLpEKsqvrFOwoBUIEKEXMWGEf3u8FPpYyOSU=
+	t=1778439300; cv=none; b=R6SH5xFE7DCLCIeSTd4cQOuo1PW8O3zCPILemW7UFfNHsr3iTPACCKTsmGI8JC6R7vl+Fqn5A6hjQdSh6lwl1U1kgncBa0gt1ZBv6rlnviXgJkmjZXqcZZHucWj59d6GUxpr/kB3oZcMTaEGTAVou74KrXqrx8Rhz7kGi0EfRVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778439207; c=relaxed/simple;
-	bh=xEvpe4bV6XOWKWy/6xWxcbug1DOtl79KlQWemphgwcQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=UvVbW5bim5/EPPEFGgsxlXBnMGr4FvqeJ2CbiZ+GPxZDr7AAJIFnvzxldHjRBzoqbeGK1GveNN63nwzgb10KTYqexqtf3mjCicLhxApl3VT3lW3lEw8Nfv6/aOt8/m2R8VqgWLrNFKS5s5iEl8JuKRWf4CNabVwBZMfBVhIt/AA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BG95BpF8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778439300; c=relaxed/simple;
+	bh=JlE1vn872snGxe5CIqBp4/RQqX0O9OHxCwmfqNARZjI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=A8mVZrVCr9LrOyP8VkvV3vpdN/Om2y61L7IRQ2t47F5P1uTBbmflhGo5GvPC3m5HBODexgd34obvpKNgDzXuvhz1w9yIUZ5Tz8H0r3vW2thx2NcvvsgVt0fmN07SJpAREOceKFle9aR0UrunaWr41IjR/1clMrwdmKhygduL6cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mqz5ozX7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BG95BpF8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 087F6C2BCB8;
-	Sun, 10 May 2026 18:53:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mqz5ozX7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4497BC2BCB8;
+	Sun, 10 May 2026 18:54:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778439207;
-	bh=xEvpe4bV6XOWKWy/6xWxcbug1DOtl79KlQWemphgwcQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=BG95BpF8MOuNks4eGqwM1m4qaYm6Lze9fOnBQdJbv2BJJ55Ci2+AWOyTRxDouVhb3
-	 nB1GldgwhTiB/5TfwkXgbQ5V9Et7ivHl88+XCyIwLp06JxdKyapUE59s1qfE6rZVM8
-	 BLyo4eFY2sUZNqJ0m7HOXMp+mC5qXFZWFH5H3Cjs6KK1W7p70I3b95PhIAh6yLc+w5
-	 ahk4GmgEWv99YzniG8pAE/1c6SHLfOHtx1/SA9mk9h6gYDedJsWKMxaDbU7Y9fN2pR
-	 uJXi+S4Q8GRF56pff/ieKifG/V1a5MpPUNlPvfD4FU804dCWQiP6E/pDNDZKejiupW
-	 lwDnd566Po0RQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CDBC380A977;
-	Sun, 10 May 2026 18:52:35 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1778439300;
+	bh=JlE1vn872snGxe5CIqBp4/RQqX0O9OHxCwmfqNARZjI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=mqz5ozX7p4TrZCX2h3tfsD39NuwZhwQXTDVYyHe679gDwbYy6NfM8j8azWxYfhq+v
+	 h8j2G2p4LfqRxWJ3A4KkcsjbCgFzcgwpmPUWGa2mshTv5WnH5TKQ/RNmOsliEUcSGz
+	 disldo+LRShXI/FQfcALHtA8GCTzVBWvPoD69h9WHYQatowJaydYqoa/1m3/7CfGtf
+	 b7Fq1vULms28SdxxTinJT2HqcW4X/zdh473vHqt7j3Ccq0mw4VkqxRvyv4t3dGLN86
+	 to3JKx9cvj1R1AUr2v17PmN3DywaDzbWem/9hKrnwhTzmwyMH5/RT5HwcxhFIptbTW
+	 sYv5HAnV0mILw==
+From: Jakub Kicinski <kuba@kernel.org>
+To: nb@tipi-net.de
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	netdev@vger.kernel.org,
+	justin.chen@broadcom.com,
+	horms@kernel.org,
+	mohsin.bashr@gmail.com,
+	opendmb@gmail.com,
+	florian.fainelli@broadcom.com,
+	bcm-kernel-feedback-list@broadcom.com,
+	andrew+netdev@lunn.ch,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	davem@davemloft.net,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v9 4/7] net: bcmgenet: add XDP_TX support
+Date: Sun, 10 May 2026 11:52:56 -0700
+Message-ID: <20260510185255.3958629-2-kuba@kernel.org>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260506095553.55357-5-nb@tipi-net.de>
+References: <20260506095553.55357-5-nb@tipi-net.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,40 +60,118 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] BPF fixes for 7.1-rc3
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177843915430.1446496.1247056062987413743.git-patchwork-notify@kernel.org>
-Date: Sun, 10 May 2026 18:52:34 +0000
-References: <20260509233456.39703-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20260509233456.39703-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: torvalds@linux-foundation.org, bpf@vger.kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, memxor@gmail.com, eddyz87@gmail.com
 
-Hello:
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+---
+    net: bcmgenet: add XDP_TX support
+    
+    Implement XDP_TX using ring 16 (DESC_INDEX), the hardware default
+    descriptor ring, dedicated to XDP TX for isolation from SKB TX queues.
 
-This pull request was applied to bpf/bpf.git (master)
-by Linus Torvalds <torvalds@linux-foundation.org>:
+[ ... ]
 
-On Sat,  9 May 2026 16:34:56 -0700 you wrote:
-> Hi Linus,
-> 
-> The following changes since commit eb5249b12507246dc959945454cd1be8d7dc3795:
-> 
->   Merge tag 'parisc-for-7.1-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux (2026-04-18 11:37:36 -0700)
-> 
-> are available in the Git repository at:
-> 
-> [...]
+> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> index ee1d4ecc2b874..f1e515526787a 100644
+> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> @@ -49,8 +49,10 @@
+>  
+>  #define GENET_Q0_RX_BD_CNT	\
+>  	(TOTAL_DESC - priv->hw_params->rx_queues * priv->hw_params->rx_bds_per_q)
+> +#define GENET_Q16_TX_BD_CNT	32
 
-Here is the summary with links:
-  - [GIT,PULL] BPF fixes for 7.1-rc3
-    https://git.kernel.org/bpf/bpf/c/515186b7be48
+Will this cause deterministic packet drops on XDP_TX? The NAPI budget is
+typically 64. Since the RX poll reclaims XDP TX completions only once at the
+beginning of the NAPI cycle, a burst of more than 32 XDP_TX actions would
+exhaust the TX ring and drop subsequent packets in that burst.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+>  #define GENET_Q0_TX_BD_CNT	\
+> -	(TOTAL_DESC - priv->hw_params->tx_queues * priv->hw_params->tx_bds_per_q)
+> +	(TOTAL_DESC - priv->hw_params->tx_queues * priv->hw_params->tx_bds_per_q \
+> +	 - GENET_Q16_TX_BD_CNT)
 
+[ ... ]
 
+> @@ -2315,14 +2432,42 @@ static unsigned int bcmgenet_run_xdp(struct bcmgenet_rx_ring *ring,
+>  	switch (act) {
+>  	case XDP_PASS:
+>  		return XDP_PASS;
+> +	case XDP_TX:
+> +		/* Prepend a zeroed TSB (Transmit Status Block).  The GENET
+> +		 * MAC has TBUF_64B_EN set globally, so hardware expects every
+> +		 * TX buffer to begin with a 64-byte struct status_64.  Back
+> +		 * up xdp->data into the RSB area (which is no longer needed
+> +		 * after the BPF program ran) and zero it.
+> +		 */
+> +		if (xdp->data - xdp->data_hard_start <
+> +		    sizeof(struct status_64) + sizeof(struct xdp_frame)) {
+
+Does this headroom check need to account for the metadata size? If headroom
+is tight, shifting the pointers might cause xdp_update_frame_from_buff()
+to fail with -ENOSPC and drop the packet.
+
+Jakub: it may be cleaner to invalidate XDP metadata instead of half-hangling it.
+       AFAIU it doesn't get used past this point anyway.
+
+> +			page_pool_put_full_page(ring->page_pool, rx_page,
+> +						true);
+> +			return XDP_DROP;
+> +		}
+> +		xdp->data -= sizeof(struct status_64);
+> +		xdp->data_meta -= sizeof(struct status_64);
+> +		memset(xdp->data, 0, sizeof(struct status_64));
+
+Could this corrupt XDP metadata and copy uninitialized memory?
+
+If the XDP program attached metadata, the physical metadata bytes immediately
+precede the original xdp->data. The memset() here spans the exact memory area
+where the original metadata resides, overwriting it with zeros.
+
+Because xdp->data_meta is decremented, it now points to uninitialized
+headroom memory, which xdp_convert_buff_to_frame() would read as the frame's
+metadata.
+
+> +
+> +		xdpf = xdp_convert_buff_to_frame(xdp);
+> +		if (unlikely(!xdpf)) {
+> +			page_pool_put_full_page(ring->page_pool, rx_page,
+> +						true);
+> +			return XDP_DROP;
+> +		}
+
+[ ... ]
+
+> @@ -2548,9 +2693,15 @@ static int bcmgenet_rx_poll(struct napi_struct *napi, int budget)
+>  {
+>  	struct bcmgenet_rx_ring *ring = container_of(napi,
+>  			struct bcmgenet_rx_ring, napi);
+> +	struct bcmgenet_priv *priv = ring->priv;
+>  	struct dim_sample dim_sample = {};
+>  	unsigned int work_done;
+>  
+> +	/* Reclaim completed XDP TX frames (ring 16 has no interrupt) */
+> +	if (priv->xdp_tx_ring.free_bds < priv->xdp_tx_ring.size)
+> +		bcmgenet_tx_reclaim(priv->dev,
+> +				    &priv->xdp_tx_ring, false);
+
+If the NAPI budget is not fully consumed, napi_complete_done() is called and
+NAPI exits. Since there is no TX interrupt for ring 16, could XDP TX
+completions stall indefinitely if RX traffic stops? This might leave buffers
+in the TX ring, eventually leading to page pool exhaustion.
+
+Also, is there a risk of severe lock and MMIO contention here?
+
+Since the single XDP TX ring is shared across all RX queues, every active
+RX NAPI will concurrently evaluate this condition. Since hardware transmission
+takes time, this condition could remain true across multiple concurrent NAPI
+polls. As a result, all active RX queues could simultaneously call
+bcmgenet_tx_reclaim(), heavily contending for spin_lock_bh(&ring->lock) and
+performing expensive MMIO reads.
+
+Jakub: also, you can't reclaim XDP Tx if budget is 0
+
+> +
+>  	work_done = bcmgenet_desc_rx(ring, budget);
+>  
+>  	if (work_done < budget && napi_complete_done(napi, work_done))
