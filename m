@@ -1,100 +1,204 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47BACDDCD;
-	Sun, 10 May 2026 06:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189D4355F54
+	for <bpf@vger.kernel.org>; Sun, 10 May 2026 15:13:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778395667; cv=none; b=Wk8c3I2YArIgqK1FNf2LqoD3HEcoxXQxWozqwig1s2cHk6IgQfyzeNeK7aN4WqoG2pHZxfbpCqFch4lqG7wSTkvMzHYA2Cw6xzLT7K/Zdaic3mr+uIvosmob6SW6GAeD4q6vN794jK1kLhIzGYwXSuP1QrMNOUIBNGKTuHpHe94=
+	t=1778426020; cv=none; b=ezVL0abZGYfuJGwQ3wcdDAZofHrAz0eXH6wWNalIr6N2XzKS2d/ooGAXkRBshoUnV83Wy4Tjn4K3DXv3SB9jw7xpQbEewSkIjqIExEQP7f7wj1p7OX9ZFaCfEsBWnTHKUH8WokTZxDZFYrZ6mCIz5yAN/Fa6MJLssZkUNAuMs8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778395667; c=relaxed/simple;
-	bh=KNZIrYpGwNRftJiQ9A0g2ltDh6kfdL2YCDTt9NO0NkA=;
+	s=arc-20240116; t=1778426020; c=relaxed/simple;
+	bh=r/WOnTGUEtMH6yCZoAP+YqqwKeh7rprH5FfTfFGcFdU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b6Q+I2a6Qri4q1oCk8iHA7prMRH151AjkpoMh2qvOLPpcNiigRwbS1jw6C+XNSfkWEU3YvXxkn9p0vmnuHsyhy6M5rDFkHDrbuk/KqC9lEOMiFNhJfX2OIR8gVTxkecfylqsbCGHWkI/JOqSoQqAAw8LKTrLl6bc9p3p9fZ4DQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pBdwCGyT; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=XOjijuPVGWg89bOgtR6KVsSeePkrjhBaD3yghXPdIfitBGX62XWSgy8eNdzrH0STz5kA9eXqSo35kF/8Ez1ZM3ccXPs/VnUCuYuv1xqW2P0izaNosk9sLgrQesqL6UcuslvwkvC/t9KtxKdDyLfrjNuBxo1p/LrkMM7oFeIXFSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hHFhudWl; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pBdwCGyT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E833C2BCB8;
-	Sun, 10 May 2026 06:47:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778395666;
-	bh=KNZIrYpGwNRftJiQ9A0g2ltDh6kfdL2YCDTt9NO0NkA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pBdwCGyTToNBAcUx8TOBNk1kRZa9YCtGzMaRydwswIehU4y5RhSokEZgQ4q2rBNo/
-	 CdSqVExPzI7+Cf7pOcNnPM+RoEJLcAz1g5siBr1PBqk1WkOEF9r+2Pe7P+nedKeDVV
-	 A2IDTRsfpzCuJQN3DsvM9qXljVPqrQ9ZBEdTAg3DrHrN/RUuWhttW2WRaZudpLWRZH
-	 ZgWxrpgke488/qhDwM0DP1KiR6rOym2KL7MJRu5q9Fd5bYUeJNo0V4lenzlGtk/UQw
-	 KF7drDERX97sxkZq2wxLENMmPpgbWqH2omT4JVmu1Y30W5OqeBPkDF/5n6UdgeL6z2
-	 U6mzhlqwD1Y1Q==
-Date: Sat, 9 May 2026 23:47:45 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: acme@kernel.org
-Cc: Suchit Karunakaran <suchitkarunakaran@gmail.com>,
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 2/2] perf build: compile BPF skeletons with -mcpu=v3
-Message-ID: <agAqESWvLdIJBErN@google.com>
-References: <20260507184238.65280-2-suchitkarunakaran@gmail.com>
- <20260507234959.EEC5BC2BCB8@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hHFhudWl"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-7bd8c55c885so34111257b3.2
+        for <bpf@vger.kernel.org>; Sun, 10 May 2026 08:13:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778426018; x=1779030818; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=N6YM/AAXzn9J0aZ953Dqra2iVWJmXRfyE6DQF3nGAEs=;
+        b=hHFhudWlAhv3AiSlp0PqgEOZrHKiJxfJo5MSqI0vw+TR6sCcEBG3J1vr43jIIfhQBL
+         aGBw6kDk+BzIBWh04FvIuadCKXLBg1+npWuyZRapgdcuyhVUNzPUHCIpqqxd+XPehNaV
+         jlR0Bfkm5kMv83F/48gzjZenNXAln3rYipeVhaN9TlRDS5KyuGnCPGN9+DtRFGUYO3uK
+         NVguAv3ssHQMAevn9dVa+LjoXGH+Puh7fR2LaqB27BAq/3yS8i2RoMAfBycWTJCSNPiY
+         +kfNHdERZ3VwhOyJJfIaWRncfYgI/Ez+RQmXmcbkM6Boyllu6wx9O3wrU79DAnomFTOw
+         0usw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778426018; x=1779030818;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N6YM/AAXzn9J0aZ953Dqra2iVWJmXRfyE6DQF3nGAEs=;
+        b=TeoDaBCdUa9ffAC6dXF8I38HgF34DGs9+9j86UfwegWiT4GIGNoP4V+2SQ/JBjd1vr
+         haU3qYliZbFuNVOSY+NmZdes8ToubhcOOoEc37dIHwUvf/xKUmD0RprMTdqUD29Sqytf
+         vXHsZSDvJA2jbWl3bIt6lIb0S1uV56YIplMTEfRH+EL8dWhBDcvTg9WNNlwZ9d+ZZZXl
+         F9TmW0vVn2YiymU6HuhfZZWP6jVWxqJZGjUQJMQI2cvISdJ+mbtiZq3SujKSH9x4wpe+
+         d3gImUBsGy9WAI4OgGzc2vCyL/KjcPNj6BtLkbpuJWmCgL0XXHkTUjfyx8A2PXOQI5QM
+         rJnA==
+X-Gm-Message-State: AOJu0YwS/mgx3NoEVg6Gi37PZV82bnTKS+MrHIH/LpsgF6u/wYbkdEWB
+	fYIHVgCjEM4xDJrw0xi/DlPbhVAMF/JqgWy8sXuwjZk01E310wGxzdKEWF8e2sya
+X-Gm-Gg: Acq92OHdGM14jz0QCGVqoAujGag9fZkd8XKwpVTri56Xf52XyoNoDg0avARjoQgd76k
+	mSy2A+NBoviLJsoULOjHvm1hA6X2iatjygENnJwAaIbBYT73iwBjclncO+VdhWnqa4BlYvNBCfh
+	17CZlCYgqTwMan2qM6fi86RJAyR9RGd37ehtuKUu0LaqAAxtFhGOfEuAhzUyfVM8L6pJlrfaPlU
+	q02WsbU57FxNWZh2Geczeg2AqGF0ymBazJH4EnSpEeyZM9+rMl1BjUfEUWqrzHquQug6DogBDLZ
+	cI5oFxkrEi7hllqueSCvOlE0ytrPG8IiWqp2yrlR0gjDEp5WkqYMy/3fHWghef7gYe8a6/MfuFA
+	Ut15qu8flMSx7hmi7XEHj1dxvFNv2ZtovoeCcRCLbc97y9vtckDxk54GiQIDzD3wUhY9HCOZzq1
+	bw5dwM+rvNAb/UThkYH7fLTX2yl7msUJneMT6JyUBnOKAJfgHcBsXvAL9t7g==
+X-Received: by 2002:a05:690c:4b0c:b0:799:2b4c:1d49 with SMTP id 00721157ae682-7bdf5eef7e4mr218836357b3.36.1778426018026;
+        Sun, 10 May 2026 08:13:38 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:4060:ee75:92ff:98db])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd6685d37fsm135045457b3.36.2026.05.10.08.13.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 May 2026 08:13:37 -0700 (PDT)
+Date: Sun, 10 May 2026 11:13:36 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [bpf-next v3 1/2] bpf: Offload kptr destructors that run from NMI
+Message-ID: <agCXEJKJh-JGMhjG@zenbox>
+References: <20260507175453.1140400-2-utilityemal77@gmail.com>
+ <20260507234520.646C4C2BCB2@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260507234959.EEC5BC2BCB8@smtp.kernel.org>
+In-Reply-To: <20260507234520.646C4C2BCB2@smtp.kernel.org>
 
-Hi Arnaldo,
-
-On Thu, May 07, 2026 at 11:49:59PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] Adding `-mcpu=v3` to `CLANG_OPTIONS` forces all BPF skeletons to use the BPF v3 ISA, breaking backward compatibility for perf tools designed to run on older kernels.
+On Thu, May 07, 2026 at 11:45:19PM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [High] TOCTOU race in `bpf_dtor_kptr_release_one()` can lead to NMI deadlocks.
+> - [Low] Memory leak on initialization failure in `bpf_dtor_kptr_init()`.
 > --
 > 
-> commit 2e8791aeccf694e1ae9ed9fda46e3a6f73332838
-> Author: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+> commit 488cdc390b90427a591d47211600c09addc95fcd
+> Author: Justin Suess <utilityemal77@gmail.com>
+> Date:   Thu May 7 17:54:52 2026 +0000
 > 
-> perf build: compile BPF skeletons with -mcpu=v3
+>     bpf: Offload kptr destructors that run from NMI
 > 
-> This commit adds -mcpu=v3 to CLANG_OPTIONS to support the atomic
-> cmpxchg instruction required by the lock_contention BPF program.
-> This forces Clang to emit BPF ISA v3 instructions during skeleton
-> compilation.
+> This commit queues destructor-backed kptr teardowns to irq_work when
+> running from NMI context. It maintains an idle-slot surplus counter to
+> ensure offload slots are preallocated to prevent deadlocks.
 > 
-> > diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> > index cee19c923c060..a9a8c84b6b006 100644
-> > --- a/tools/perf/Makefile.perf
-> > +++ b/tools/perf/Makefile.perf
+> Closes: https://lore.kernel.org/bpf/20260421201035.1729473-1-utilityemal77@gmail.com/
 > 
+> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > index 3b1f0ba02f613..d34fdb99eb8a9 100644
+> > --- a/kernel/bpf/syscall.c
+> > +++ b/kernel/bpf/syscall.c
 > [ ... ]
+> > @@ -65,6 +69,111 @@ static DEFINE_SPINLOCK(map_idr_lock);
+> > +static void bpf_dtor_kptr_release_one(void)
+> > +{
+> > +	struct bpf_dtor_kptr_work *job;
+> > +	long surplus;
+> > +
+> > +	for (;;) {
+> > +		surplus = atomic_long_read(&bpf_dtor_kptr_surplus);
+> > +		if (surplus <= 0)
+> > +			return;
+> > +
+> > +		job = bpf_dtor_kptr_pop_idle();
 > 
-> > @@ -1195,7 +1195,7 @@ ifneq ($(CROSS_COMPILE),)
-> >  CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
-> >  endif
-> >  
-> > -CLANG_OPTIONS = -Wall
-> > +CLANG_OPTIONS = -Wall -mcpu=v3
+> Could this sequence lead to a race condition that drains the idle pool
+> too early?
 > 
-> Does this change break backward compatibility for other perf tools running
-> on older kernels?
+> If multiple threads read a positive surplus value here, they might all call
+> bpf_dtor_kptr_pop_idle() before the cmpxchg executes. This could temporarily
+> drain the idle pool below the required number of reserved slots.
 > 
-> Since CLANG_OPTIONS is used in the pattern rule for compiling all BPF
-> skeletons, this forces every BPF program in perf (such as
-> augmented_raw_syscalls.bpf.c and off_cpu.bpf.c) to target the BPF ISA v3.
-> 
-> Kernels older than 5.1 do not support v3 instructions and will reject
-> these programs during the verifier load phase.
+> If an NMI fires during this window and attempts to tear down a kptr, would
+> bpf_dtor_kptr_offload() find the idle pool empty? If so, it looks like it
+> would trigger the fallback warning and run the destructor inline from the
+> NMI context, which might reintroduce the deadlocks this patch aims to
+> prevent.
+>
+Yes this is real.
 
-I think it's old enough and we can move on to ensure v3 instructions.
+But there's a bigger problem: the push side of pcpu_freelist is not
+interruptible.
 
-Thanks,
-Namhyung
+If we jump to NMI during this stage then the pcpu_freelist will be
+locked up because we were pushing to it, thus preventing us from
+popping. Thus we just deadlock again.
 
+I think we technically have exclusivity here on our percpu head
+(we can't be in NMI and process context stimultaniously on the cpu).
+
+So maybe it is safe to forcibly acquire that specific lock? I'm not 100%
+sure.
+
+llist won't work since we can't have multiple llist_del_first consumers,
+and llist_del_all would render the list null and unusable if we jump to
+it from NMI while we're borrowing it. 
+
+Making percpu llists won't work either, since the cpu we allocate the
+job one might not be the one the dtor runs on, so we need percpu
+stealing, which then runs into the same multiple consumers problem if
+threads steal from same cpu head.
+
+So this code is not ready either way.
+
+I think 128 bit cmpxchg could technically solve this problem, but don't
+think we can rely on it for all architectures BPF supports.
+
+If anyone has any guidance on this it would be much appreciated. Been
+stuck on this for several weeks...
+
+Construct I need is a data structure with atomic push, pop, and move
+between sets. No specific ordering needed, but updates from producers 
+must be immediately visible to all consumers. I've looked into Treiber
+stacks.
+
+Any help or guidance on this would be appreciated!
+> > +		if (!job)
+> > +			return;
+> > +
+> > +		if (!atomic_long_try_cmpxchg(&bpf_dtor_kptr_surplus, &surplus,
+> > +						     surplus - 1)) {
+> > +			pcpu_freelist_push(&bpf_dtor_kptr_idle, &job->fnode);
+> > +			continue;
+> > +		}
+> > +
+> > +		bpf_mem_free(&bpf_global_ma, job);
+> > +		return;
+> > +	}
+> > +}
+> [ ... ]
+> > +static int __init bpf_dtor_kptr_init(void)
+> > +{
+> > +	int err;
+> > +
+> > +	err = pcpu_freelist_init(&bpf_dtor_kptr_idle);
+> > +	if (err)
+> > +		return err;
+> > +
+> > +	err = pcpu_freelist_init(&bpf_dtor_kptr_jobs);
+> > +	if (err)
+> > +		return err;
 > 
-> Should the -mcpu=v3 flag be restricted exclusively to the target that
-> needs it, perhaps using a target-specific append for lock_contention.bpf.o?
+> Does this error path leak the per-cpu memory allocated for the idle list?
+> 
+> If the second pcpu_freelist_init() fails, the function returns immediately.
+> Should there be a cleanup path here to free the already initialized
+> bpf_dtor_kptr_idle list?
+> 
+> > +
+> > +	return 0;
+> > +}
+> > +late_initcall(bpf_dtor_kptr_init);
 > 
 > -- 
-> Sashiko AI review Â· https://sashiko.dev/#/patchset/20260507184238.65280-1-suchitkarunakaran@gmail.com?part=2
+> Sashiko AI review · https://sashiko.dev/#/patchset/20260507175453.1140400-1-utilityemal77@gmail.com?part=1
