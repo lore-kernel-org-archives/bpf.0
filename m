@@ -1,170 +1,152 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA127083C
-	for <bpf@vger.kernel.org>; Sun, 10 May 2026 16:59:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610692727FD
+	for <bpf@vger.kernel.org>; Sun, 10 May 2026 17:05:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778432389; cv=none; b=MpPclwvPoxtKrb8gWj18HPbJNbzmxnPQC8ZHcaw6x9j7z1CiVo6V+lZnTcsbluHkGalA7OiaHeFyTax8Oa+9+XNFlPSUvtr7YE1dXwNqQ28TRF/tTcx8Gc7goFLir4QLp6ou55PazscYoKXKJwbOQXVr9NrUvg3uZCIpljmAJJI=
+	t=1778432747; cv=none; b=lhl2Z9LvHDD29baa3uJBSAav2Ie2yMPTrO21ieLMzO1RVWW2fWw8IjSQxyFPkBLY/S7Pvnl6hJYq5tK2chqgLlvXV0VLBPFEgadH+Ojk3UVtBmZCa7rKH4pM3TBmaarUbD0rmrE1BiQ/fZWX9tOgPXi9CNn9opkIRuaDzww9zn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778432389; c=relaxed/simple;
-	bh=wETI/iYqob9fkIb4mHhKxEcnenADbiMO06v2rPRjRAs=;
+	s=arc-20240116; t=1778432747; c=relaxed/simple;
+	bh=UCkOgVeofJL7dUPQt9pwF0wexdxVfpgQYmBFpq4Nwi4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MdpDbLbsU7qv/Jiz1WRK8GpPW5h3Itm2FknlNV3HZNzhFgWlBqvvG7y2kXeJ43u1LiyJpHjxw6M518+7mB0J1CL8fYbvnHyxrB026R2DHcuMRFh1h3XjxNn5+yXhs4OFHiWDo28eGwLRJ4BP80F8pX3SN0PPgFTCBjo5x8MnRR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wEpgjdO8; arc=none smtp.client-ip=91.218.175.180
+	 In-Reply-To:Content-Type; b=RhvUI7Zmy1YgSlxaynP8xLsoXgmNw27tJH38GMVIyISU3xapksH7v7jx6Ub1Ku0g9dEQUGyyT9DlwmQf6oQ1En6dbq8+i8G17nEG+7SwvcPa69tw9QmIkNHfAZdQMNqUvtXaT2KKLH1qbwHBcSAreq22AlB1gcBCotOCeybAq6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vwY0xrzX; arc=none smtp.client-ip=91.218.175.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wEpgjdO8"
-Message-ID: <53bab373-86dc-4f53-8b24-2ec41b356988@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vwY0xrzX"
+Message-ID: <a4851c0b-d735-4bde-a09c-74de9aec11a0@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778432384;
+	t=1778432734;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=q0kcWZjEYBFdgGc4FOP6W2OOOGdOOxeLvCH+TOr0OGo=;
-	b=wEpgjdO8VYCThj1o3+yl34vkgSYM/GgLthGWppDtI7lp3VaxNYychi+LYDYtXuG8TnSbi3
-	QSspHzkM2A3Z5CSBTT+rBPnNNzYbi58YokEKkLGCNHK6164VNdBChMHWr6b94hqP3j9daj
-	5iDE6TC2oMc5XcESY9NoHmryJ4tuw2c=
-Date: Sun, 10 May 2026 09:59:39 -0700
+	bh=CRzaui2r5Ptxo+c6EDyBkYWlSq4gBkxPB1YKEibpd9w=;
+	b=vwY0xrzXkXQ7y9gLSzhtzePT4VRKEdk2rPWud7671W+6Y4XwShIWXghwxCLIJRSoinvxHX
+	qmBuZvWjGjzrWvzIbExmJO3cL0EUq+5TwR6dXq3l2sRZac2ISXf95gSNjeJnQKsyFyyt5V
+	Yh3h5cwoo2htItXLqLsvkPoH/hjEjn0=
+Date: Sun, 10 May 2026 10:05:31 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 10/23] bpf: Reject stack arguments in
- non-JITed programs
+Subject: Re: [PATCH bpf-next v2 11/23] bpf: Prepare architecture JIT support
+ for stack arguments
 Content-Language: en-GB
 To: sashiko@lists.linux.dev
 Cc: bpf@vger.kernel.org
-References: <20260507213034.1130443-1-yonghong.song@linux.dev>
- <20260509021019.9F580C2BCB0@smtp.kernel.org>
+References: <20260507213039.1130658-1-yonghong.song@linux.dev>
+ <20260509021940.680C0C2BCB0@smtp.kernel.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260509021019.9F580C2BCB0@smtp.kernel.org>
+In-Reply-To: <20260509021940.680C0C2BCB0@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 5/9/26 4:10 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] The BPF verifier fails to reject the interpreter for a main program (i = 0) with stack arguments, leading to an uninitialized memory read of R11.
+On 5/9/26 4:19 AM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [Critical] Static functions with more than 5 parameters are not actually rejected when the JIT does not support stack arguments. This bypasses verifier stack initialization checks and allows the program to run, leading to arbitrary kernel memory access at runtime.
+> - [Low] The patch returns the kernel-internal error code -ENOTSUPP instead of the standard -EOPNOTSUPP, causing generic 'Unknown error 524' messages in user-space.
 > --
 >
-> commit 4a48796d8e4e4607bc163fc6b59a84f3495c3d5c
+> commit e571d76e56fcb6ad5c6cc343d3221d66e6aec024
 > Author: Yonghong Song <yonghong.song@linux.dev>
 >
-> bpf: Reject stack arguments in non-JITed programs
+> bpf: Prepare architecture JIT support for stack arguments
 >
-> This commit aims to prevent non-JITed programs from running if they use
-> stack arguments, since the BPF interpreter does not populate the register
-> used for stack arguments (R11). It updates the runtime selection and fixups
-> phases to reject such programs.
+> This commit introduces a weak function bpf_jit_supports_stack_args() to allow
+> architectures to indicate support for BPF stack arguments. It also updates
+> the BTF preparation code to reject functions with more than 5 arguments if
+> the JIT does not support stack arguments.
 >
->> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
->> index ae10b9ca018df..6f94b0ef3659f 100644
->> --- a/kernel/bpf/core.c
->> +++ b/kernel/bpf/core.c
+>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+>> index ec3fb8c8f4eef..bf83b737d55cb 100644
+>> --- a/kernel/bpf/btf.c
+>> +++ b/kernel/bpf/btf.c
 > [ ... ]
->> @@ -2599,7 +2599,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
->>   		goto finalize;
->>   
->>   	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
->> -	    bpf_prog_has_kfunc_call(fp))
->> +	    bpf_prog_has_kfunc_call(fp) || fp->aux->stack_arg_cnt)
-> Is fp->aux->stack_arg_cnt guaranteed to be initialized at this stage?
-
-I would say yes. The main program is coverred in bpf_jit_subprogs():
-
-         if (env->subprog_cnt <= 1) {
-                 env->prog->aux->stack_arg_cnt = env->subprog_info[0].stack_arg_cnt;
-                 return 0;
-         }
-
-For >= 2 number of subprogs, the stack_arg_cnt will set up in jit_subprogs().
-
->
-> If JIT is disabled system-wide (e.g. sysctl net.core.bpf_jit_enable=0),
-> bpf_jit_subprogs() is skipped, leaving the count at 0. Furthermore, even if
-> JIT is enabled but the program has multiple subprograms, bpf_jit_subprogs()
-> only populates the cloned subprograms' auxiliary data, leaving the main
-> program's prog->aux->stack_arg_cnt as 0.
->
-> Could this allow the check to be bypassed for the main program?
-
-If JIT is disabled, we have
-
-         for (i = 1; i < env->subprog_cnt; i++) {
-                 if (bpf_in_stack_arg_cnt(&env->subprog_info[i])) {
-                         verbose(env, "stack args are not supported in non-JITed programs\n");
-                         return -EINVAL;
-                 }
-         }
-
-So for any subprog having >5 arguments, interpreter will not run.
-
-For main program, the above env->prog->aux->stack_arg_cnt later will
-be used in core.c to decide whether interpreter can run or not.
-
->
->>   		jit_needed = true;
->>   
->>   	if (!bpf_prog_select_interpreter(fp))
->> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
->> index 0ff8cdf4394f4..4c630d97eaade 100644
->> --- a/kernel/bpf/fixups.c
->> +++ b/kernel/bpf/fixups.c
-> [ ... ]
->> @@ -1412,6 +1412,12 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
->>   		verbose(env, "calling kernel functions are not allowed in non-JITed programs\n");
->>   		return -EINVAL;
+>> @@ -7886,8 +7886,14 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
+>>   			MAX_BPF_FUNC_ARGS, tname, nargs);
+>>   		return -EFAULT;
 >>   	}
->> +	for (i = 1; i < env->subprog_cnt; i++) {
-> This loop explicitly starts at i = 1, which skips checking the main program.
+>> -	if (nargs > MAX_BPF_FUNC_REG_ARGS)
+>> +	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
+>> +		if (!bpf_jit_supports_stack_args()) {
+>> +			bpf_log(log, "JIT does not support function %s() with %d args\n",
+>> +				tname, nargs);
+>> +			return -ENOTSUPP;
+> Should this return -EOPNOTSUPP instead of -ENOTSUPP?
 >
-> If an extension program (BPF_PROG_TYPE_EXT) attaches to a function with more
-> than 5 arguments and has BTF_FUNC_STATIC linkage, it will inherit the incoming
-> stack arguments. Since the check in core.c might fail to catch the main
-> program due to the uninitialized stack_arg_cnt, can this extension program
-> bypass both rejection mechanisms and fall back to the interpreter?
+> -ENOTSUPP is a kernel-internal error code (524). If this error bubbles up
+> to user-space (for example, when loading a global BPF program), it might
+> result in a confusing "Unknown error 524" message rather than a standard
+> error.
+>
+> Also, does returning an error here actually reject static functions with
+> more than 5 arguments?
+>
+> Looking at the code just above this diff, sub->arg_cnt is set to nargs
+> before the check:
+>
+> kernel/bpf/btf.c:btf_prepare_func_args() {
+> 	...
+> 	sub->arg_cnt = nargs;
+> 	...
+> 	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
+> 		if (!bpf_jit_supports_stack_args()) {
+> 			...
+> 			return -ENOTSUPP;
+> 		}
+> 	...
+> }
+>
+> If this returns -ENOTSUPP, it propagates to btf_check_subprog_call(),
+> which returns the error. However, check_func_call() ignores non-EFAULT
+> errors for static functions:
+>
+> kernel/bpf/verifier.c:check_func_call() {
+> 	...
+> 	err = btf_check_subprog_call(env, subprog, caller, ...);
+> 	if (err == -EFAULT)
+> 		return err;
+> 	...
+> }
+>
+> Since the error is ignored, verification continues without rejecting the
+> program. Because the error was returned early, btf_check_func_arg_match()
+> skips check_outgoing_stack_args(), meaning the caller is never forced to
+> properly initialize the stack slots according to BTF types.
 
-Currently, BPF_PROG_TYPE_EXT programs does not support more than 5 arguments.
+I will use -EFAULT error code, so the prog with potential stack arguments
+will be rejected due to -EFAULT. This applies to below analysis where
+they will not really work as -EFAULT will prevent that.
 
 >
->> +		if (bpf_in_stack_arg_cnt(&env->subprog_info[i])) {
->> +			verbose(env, "stack args are not supported in non-JITed programs\n");
->> +			return -EINVAL;
+> Since sub->arg_cnt was already set to nargs, bpf_in_stack_arg_cnt() will
+> calculate that the function takes stack arguments. If the caller manually
+> initializes the stack argument slots by writing to r11, the verifier tracks
+> the register types and might accept the program.
+>
+> At runtime, since the JIT does not support stack arguments, BPF_REG_PARAMS
+> (r11) is likely missing from the JIT's register translation maps.
+> Uninitialized entries default to 0, which often maps to the return value
+> register (like rax on x86 or x0 on arm64).
+>
+> Could this cause reads or writes against r11 + offset to be translated
+> into memory operations against rax/x0 + offset? Since the return register
+> is easily controllable by the BPF program, might this allow arbitrary
+> kernel memory reads and writes?
+>
 >> +		}
+>>   		sub->stack_arg_cnt = nargs - MAX_BPF_FUNC_REG_ARGS;
 >> +	}
-> If the main program bypasses these checks and is run by the interpreter, it
-> will attempt to read incoming stack arguments from regs[11]. Because the
-> interpreter's setup in ___bpf_prog_run() only initializes R1-R5 and the frame
-> pointer, would reading regs[11] leak uninitialized kernel stack memory or
-> cause a crash if the uninitialized value is dereferenced as a pointer?
-
-In the new revision, we will have
-
-@@ -18160,8 +18347,11 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog)
-                  */
-                 if (env->prog->aux->func_info_aux) {
-                         ret = btf_prepare_func_args(env, 0);
--                       if (ret || sub->arg_cnt != 1 || sub->args[0].arg_type != ARG_PTR_TO_CTX)
-+                       if (ret || sub->arg_cnt != 1 || sub->args[0].arg_type != ARG_PTR_TO_CTX) {
-                                 env->prog->aux->func_info_aux[0].unreliable = true;
-+                               sub->arg_cnt = 1;
-+                               sub->stack_arg_cnt = 0;
-+                       }
-                 }
-
-In this case, stack_arg_cnt = 0 means incoming stack argumnet cnt is 0, so
-any reading incoming stack arguments will cause verification failure.
-
->
->>   	if (env->subprog_cnt > 1 && env->prog->aux->tail_call_reachable) {
->>   		/* When JIT fails the progs with bpf2bpf calls and tail_calls
->>   		 * have to be rejected, since interpreter doesn't support them yet.
+>>   
+>>   	if (is_global && nargs > MAX_BPF_FUNC_REG_ARGS) {
+>>   		bpf_log(log, "global function %s has %d > %d args, stack args not supported\n",
 
