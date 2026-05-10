@@ -1,33 +1,33 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083BA3B27F6
-	for <bpf@vger.kernel.org>; Sun, 10 May 2026 17:21:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803721A08A3
+	for <bpf@vger.kernel.org>; Sun, 10 May 2026 17:22:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778433676; cv=none; b=NLTxfJHaHTL2+UlwaQ+yvrK2xcCgF9leHsCwE/h0oe9ozobjKEHQlIFIza12r2FT18xsO5tl5pDBFuieLCB7u2NjXQWRItOzys+AD0b2ilY1OeHaj2yl31XcEmMf6Vv2MLeIgQ4iH/IrYXkDGXAWdlGgKjYh9O8kZUeweoqxRwg=
+	t=1778433778; cv=none; b=lpRu33exEynmDOvqckzw/Fk3+bPQAVZdoPMKwHWjjtn2RdVqcu6Nk8DZwoqpQq3CK8PsWST3m1xLwrP/TahpS2HaHO40GnzK3FrpSpnKPb6uns27V6U14W/Q4Ni1+POlFl0tjx4DaWtF94pclf1sNRYeiFT1kzHYgLDLcbPhcR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778433676; c=relaxed/simple;
-	bh=yuH6unK76TBxrxr0+M7raPR5j+G+FABW9PuoYb/Z62I=;
+	s=arc-20240116; t=1778433778; c=relaxed/simple;
+	bh=ZoMewrWE9b0coK2xq1RUfJPx/mGG+sQBu7cvLeh1zcg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YaLnms6qv75KBltkNVOVb39B3ttiqlo6hN7p9qBUfvU+IXX8TEwK27U1+q/QSflecC2GKXgUvAGEnwziy/4zlDh6rohBBt71v16knSabXYYlqF/yjteAgS90OQB3dcvy19WBFGelVv1Q1ghsWiw75VBWkA+ZbFKmpUN2PQhVQLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HlytHAdR; arc=none smtp.client-ip=91.218.175.172
+	 In-Reply-To:Content-Type; b=DlJQM4TQ2e/qZVPTJgfG2QLlgkNQEoaXVpJgGiM0RmaCyI5Ncliwm2PGPV5YBzsznniJBDhlB2ilcL7Jkp6dRGGO9i3gT8NFC+5P/H5Q0UB7IbXg5NYvmOTET/y+NHW9qLkcEojDpCA2afQgecwzgyic8RIX8Rs2ZMTPXfZl3Sc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RRVOfWWz; arc=none smtp.client-ip=95.215.58.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HlytHAdR"
-Message-ID: <ace11898-eb29-4239-a095-94507dd60935@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RRVOfWWz"
+Message-ID: <f210561f-c8c9-4e86-9338-f68ab86bfad3@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778433673;
+	t=1778433774;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=yWtdGKW+p+zyiZKJoqmO6ZWC84ikcl3/40lcLR82bH8=;
-	b=HlytHAdRax2G0brUtlkceDnXI9FWFEbiQdm+uBDxW9gwFGprGLShEzbeVJb9b/P2iIPTh4
-	GyNOnuGkvCoE50qDzIdSTgHsXdCrFLM5zHZONNxBKToTIlLJXDS6Tf9eX85mczhRDqYI82
-	RkBPCbe5Z/q4ZctqVcA2ByxXqGUTVFQ=
-Date: Sun, 10 May 2026 10:21:07 -0700
+	bh=DEzV0ZCztw7zMxfGGeW+4RDpES0lntrYPZz2n2pEhyM=;
+	b=RRVOfWWz60wvZIAIMNa9qYNjplDYbqYWbhum+xvOsUCVzavcT5ldOqXvuH6zAnzQSMPsUB
+	1rje2+k9EhURDfYCzCREyAjQFMkwTNyGBnQAMs5QiNhFAReLD8JidPVIXtrnz3cfVnum2m
+	uYBEwpLxhqilNPacY5E7GqKo/fFEe10=
+Date: Sun, 10 May 2026 10:22:45 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,95 +37,122 @@ MIME-Version: 1.0
 Subject: Re: [PATCH bpf-next v2 15/23] bpf,x86: Implement JIT support for
  stack arguments
 Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- jose.marchesi@oracle.com, kernel-team@fb.com, martin.lau@kernel.org,
- puranjay@kernel.org, eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
 References: <20260507213124.1132088-1-yonghong.song@linux.dev>
- <b1d493872b8f17c88b57d437bdeb6b228085a672d70892a853eef970f265b464@mail.kernel.org>
+ <20260509022147.D0F50C2BCB0@smtp.kernel.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <b1d493872b8f17c88b57d437bdeb6b228085a672d70892a853eef970f265b464@mail.kernel.org>
+In-Reply-To: <20260509022147.D0F50C2BCB0@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 5/7/26 12:26 AM, bot+bpf-ci@kernel.org wrote:
+On 5/9/26 4:21 AM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 4 potential issue(s) to consider:
+> - [Critical] The offset translation formula for outgoing stack arguments (Args 7+) negates the BPF offset, reversing the memory layout and causing partial accesses to corrupt the stack.
+> - [Critical] Immediate stores (`BPF_ST`) of 8, 16, or 32 bits to Arg 6 bypass the register routing check, writing out-of-bounds to the stack and leaving Arg 6 uninitialized.
+> - [Critical] Partial loads and stores (`BPF_LDX` / `BPF_STX`) to Arg 6 unconditionally emit 64-bit register moves, ignoring size semantics and breaking verifier bounds tracking.
+> - [Critical] Sub-register accesses to Arg 6 bypass exact-offset interception, falling through to memory operations that leak the kernel return address or corrupt the stack.
+> --
+>
+> commit ee1dd512e669afb6db2ee6c05d9e78b43305dc79
+> Author: Yonghong Song <yonghong.song@linux.dev>
+>
+>      bpf,x86: Implement JIT support for stack arguments
+>
+> This patch adds x86_64 JIT support for BPF functions and kfuncs with more
+> than 5 arguments. The extra arguments are passed through a stack area
+> addressed by the R11 register (BPF_REG_PARAMS), with argument 6 being routed
+> to the R9 register.
+>
 >> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> index ea9e707e8abf..67c2f4a3b9cc 100644
+>> index ea9e707e8abff..67c2f4a3b9cc3 100644
 >> --- a/arch/x86/net/bpf_jit_comp.c
 >> +++ b/arch/x86/net/bpf_jit_comp.c
 > [ ... ]
->
->> @@ -1664,16 +1692,45 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
->>   	int i, excnt = 0;
->>   	int ilen, proglen = 0;
->>   	u8 *ip, *prog = temp;
->> +	u16 stack_arg_depth, incoming_stack_arg_depth, outgoing_stack_arg_depth; /* in bytes */
->> +	u16 outgoing_rsp;
->>   	u32 stack_depth;
->> +	int callee_saved_size;
->> +	s32 outgoing_arg_base;
->>   	int err;
->>
->>   	stack_depth = bpf_prog->aux->stack_depth;
->> +	stack_arg_depth = bpf_prog->aux->stack_arg_cnt * 8;
->> +	incoming_stack_arg_depth = bpf_prog->aux->incoming_stack_arg_cnt * 8;
->> +	outgoing_stack_arg_depth = stack_arg_depth - incoming_stack_arg_depth;
-> Can this u16 subtraction underflow for leaf subprograms? When a leaf
+>> @@ -2134,12 +2227,27 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>>   				EMIT1(0xC7);
+>>   			goto st;
+>>   		case BPF_ST | BPF_MEM | BPF_DW:
+>> +			if (dst_reg == BPF_REG_PARAMS && insn->off == -8) {
+>> +				/* Arg 6: store immediate in r9 register */
+>> +				emit_mov_imm64(&prog, X86_REG_R9, imm32 >> 31, (u32)imm32);
+>> +				break;
+>> +			}
+> Are stores of 8, 16, or 32 bits to Arg 6 missing the register routing check?
+> Because BPF_B, BPF_H, and BPF_W sizes jump directly to the st: label, they
+> appear to skip this R9 check. Could this cause them to mistakenly apply the
+> stack argument translation and write out-of-bounds, leaving R9 uninitialized?
 
-The maximum number of stack arguments in 7. The total depth is 56,
-so underflow is not possible.
-
-> function receives stack arguments but makes no calls with stack arguments,
-> incoming_stack_arg_depth would be non-zero (e.g., 16 bytes for 2 args),
-> but stack_arg_depth would be zero since the verifier never updates it
-> for functions that don't make calls.
->
-> The subtraction would wrap around modulo 65536:
->    outgoing_stack_arg_depth = 0 - 16 = 0xFFF0 (about 65520 bytes)
-
-This is fixed in this patch set. sub->stack_arg_cnt is set in
-bpf_prepare_func_args(), which captures the number of incoming arg's.
+Currently, all r11 based ldx/stx/st insns only support 8 byte value. So we
+do not have the above or below issues.
 
 >
-> Later in do_jit():
+>>   			EMIT2(add_1mod(0x48, dst_reg), 0xC7);
+>>   
+>> -st:			if (is_imm8(insn->off))
+>> -				EMIT2(add_1reg(0x40, dst_reg), insn->off);
+>> +st:			insn_off = insn->off;
+>> +			if (dst_reg == BPF_REG_PARAMS) {
+>> +				/*
+>> +				 * Args 7+: reverse BPF negative offsets to
+>> +				 * x86 positive rsp offsets.
+>> +				 * BPF off=-16 → [rsp+0], off=-24 → [rsp+8], ...
+>> +				 */
+>> +				insn_off = outgoing_arg_base - outgoing_rsp - insn_off - 16;
+>> +				dst_reg = BPF_REG_FP;
+>> +			}
+> Does subtracting the BPF offset reverse the memory layout within a stack slot?
 >
->> @@ -1700,6 +1757,42 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
->>   		push_r12(&prog);
->>   	push_callee_regs(&prog, callee_regs_used);
->>   }
->> +
->> +	/* Compute callee-saved register area size. */
+> If a BPF program accesses the upper 4 bytes of Arg 7 (offset -12), the formula
+> evaluates to BASE - (-12) - 16 = BASE - 4. This points out-of-bounds below
+> the stack pointer. Similarly, writing to the upper 4 bytes of Arg 8 (-20)
+> would evaluate to BASE + 4, overwriting the upper half of Arg 7.
+>
 > [ ... ]
+>> @@ -2149,7 +2257,17 @@ st:			if (is_imm8(insn->off))
+>>   		case BPF_STX | BPF_MEM | BPF_H:
+>>   		case BPF_STX | BPF_MEM | BPF_W:
+>>   		case BPF_STX | BPF_MEM | BPF_DW:
+>> -			emit_stx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn->off);
+>> +			if (dst_reg == BPF_REG_PARAMS && insn->off == -8) {
+>> +				/* Arg 6: store register value in r9 */
+>> +				EMIT_mov(X86_REG_R9, src_reg);
+>> +				break;
+>> +			}
+> Will sub-register stores to Arg 6 bypass this check? If a program writes to
+> the upper 4 bytes of outgoing Arg 6 (insn->off == -4), the exact check fails
+> and it will fall through to memory translation, potentially writing
+> out-of-bounds.
 >
->> +	/*
->> +	 * Allocate outgoing stack arg area for args 7+ only.
->> +	 * Arg 6 goes into r9 register, not on stack.
->> +	 */
->> +	outgoing_rsp = outgoing_stack_arg_depth > 8 ? outgoing_stack_arg_depth - 8 : 0;
->> +	emit_sub_rsp(&prog, outgoing_rsp);
-> This would compute outgoing_rsp = 0xFFF0 - 8 = 0xFFE8 (about 65512 bytes),
-> and emit_sub_rsp() would generate:
->    sub rsp, 0xFFE8
+> Also, does EMIT_mov() unconditionally emit a 64-bit move, ignoring the BPF_B,
+> BPF_H, and BPF_W sizes? If a 1-byte store is performed, this might write 64
+> bits to R9 instead of the intended size.
 >
-> allocating a 65 KB stack frame that overflows the kernel stack
-> (THREAD_SIZE is only 16 KB on x86_64).
+> [ ... ]
+>> @@ -2248,6 +2366,19 @@ st:			if (is_imm8(insn->off))
+>>   		case BPF_LDX | BPF_PROBE_MEMSX | BPF_H:
+>>   		case BPF_LDX | BPF_PROBE_MEMSX | BPF_W:
+>>   			insn_off = insn->off;
+>> +			if (src_reg == BPF_REG_PARAMS) {
+>> +				if (insn_off == 8) {
+>> +					/* Incoming arg 6: read from r9 */
+>> +					EMIT_mov(dst_reg, X86_REG_R9);
+>> +					break;
+>> +				}
+>> +				src_reg = BPF_REG_FP;
+> What happens if a program reads a sub-register of incoming Arg 6?
+> If insn_off == 12 (the upper 4 bytes), the exact check fails, and src_reg
+> becomes BPF_REG_FP (rbp). The resulting memory read from [rbp + 12]
+> corresponds to the upper 4 bytes of the kernel return address, which could
+> be leaked to the BPF program.
 >
-> This issue was identified by bot+bpf-ci@kernel.org in v1 (Fri, 24 Apr
-> 2026 18:00:42 +0000) at
-> https://lore.kernel.org/bpf/e1b7281b2a52b18ae2a9f7d41091994eec0bba81e96e64adbe4c072d915acfc2@mail.kernel.org/
+> Similarly, if the program performs a partial load of Arg 6 (insn_off == 8),
+> EMIT_mov() moves the full 64-bit value from R9. Could this bypass the
+> verifier's bounds tracking if the verifier assumes the upper 56 bits are
+> properly zeroed for a 1-byte read?
 >
-> The author acknowledged this bug and promised to fix it with a selftest
-> in the next revision, but the current code still contains the vulnerable
-> subtraction without underflow protection.
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25523765323
 
