@@ -1,182 +1,198 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E04C93164C3;
-	Sun, 10 May 2026 18:55:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F6B2F8E94
+	for <bpf@vger.kernel.org>; Sun, 10 May 2026 20:33:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778439349; cv=none; b=Nmi6tcpVhJWK66GYMmQr9FluGydsLdHcNZfc/8uHtG09aQIOTnOTHW6nd2wrKXpoheYfyKHItP9z2c7E/9lB9xiCwa8/mqIt5h13MgYZqKD71H7fflrPN1ASdEj1wZIm3R4oT/Y9WF6eui2RiSjXlGYgwa00K+leCMDtJ0VILDE=
+	t=1778445232; cv=none; b=p07vy2mOKLLvpAic9rzcEVgzY2hQXozPeMaJoG32fcSsPPqvLsQIHyVZzP/jdW+Lta0VdSL+Nbb6N+mrHTRDbU3z2Az1pNte9dx4BFiP8zAM4v//WAzJwydAAdGjHPkgfcfHMDP0EXRvBFtC4iO9QyjZGbw3XCEekxKP5L0uwVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778439349; c=relaxed/simple;
-	bh=G9GToOtS3isqcC/YtQR+Ee64Ud4v2fghkptAbDZiq08=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=d48NSJJVgZVN4n7TXjSzvqGxbvVaXagdYuTNmUSzYJSAKFQgjXEXD0s5hZcXiAQPk6jmGjiydj5NXti9uF0xU9qEfhlPEpQws9+cxayci3x7Vrz6yuPvWfqrsviWwpGel18fkqPiY5cuqkqIgKInoNIXa7X+pHFPdzfAMPkdxds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MzkVbNnu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778445232; c=relaxed/simple;
+	bh=2wUKSUSHE9scw9qUgXRw9l/unI/4n7ehob9Z2USC7nM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ectqCW2UOSe64V2a1fAXxZ8gdXQ2IqRs/Wm30yIcxk8Hbg5Yx+F7XXG3aZWPLYjJsqOdRm+n3pCzBTKQWXRRaop7rk9THl8avgYe9l/5+fkMV6q5RUgGxaSkYX0iedKeBiwqlkiWgG1frc+cBZQ6lOt91cUPIFqem8iKhUuDLnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ncJkTBM8; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MzkVbNnu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1131C2BCB8;
-	Sun, 10 May 2026 18:55:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778439348;
-	bh=G9GToOtS3isqcC/YtQR+Ee64Ud4v2fghkptAbDZiq08=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MzkVbNnuxTVneo62loO/EcB4gwkRIOl4mD8102tjcEW0PhxyBmYZV4CKRzQBq6+kp
-	 IlmdZ7IsH014qL2fuOwBubkP69Hf9Hejrp7KBN5Du0tyzPW1ONBBftDhU6plPErW+C
-	 E+gNL/8juYFTwVQaZ1tIMzTiKefFeUu5UvvpSC34e8Avit+G8NaCP+90Wg5M9bRQsF
-	 obWraTLSttu40ma0GPDJjyRRLlXVAZ0e2JY9zHNdS9hUXgJm6FUokPO4HEttOfMvFY
-	 O3MF0ZkAv7+tn0YCNeujBzQbjtzr+RfrRmFc85/lJmBsY6KRF82egQkH5HXgloVRIG
-	 3vd4L+BL5xLKQ==
-From: Jakub Kicinski <kuba@kernel.org>
-To: nb@tipi-net.de
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	netdev@vger.kernel.org,
-	justin.chen@broadcom.com,
-	horms@kernel.org,
-	mohsin.bashr@gmail.com,
-	opendmb@gmail.com,
-	florian.fainelli@broadcom.com,
-	bcm-kernel-feedback-list@broadcom.com,
-	andrew+netdev@lunn.ch,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	hmohsin@meta.com,
-	davem@davemloft.net,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v9 5/7] net: bcmgenet: add XDP_REDIRECT and ndo_xdp_xmit support
-Date: Sun, 10 May 2026 11:55:46 -0700
-Message-ID: <20260510185546.3960482-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260506095553.55357-6-nb@tipi-net.de>
-References: <20260506095553.55357-6-nb@tipi-net.de>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ncJkTBM8"
+Message-ID: <d7de2f17-af2d-4b6a-be65-f009d78e3d20@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778445218;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mfKcMPHY9ZAK6g9Oz7/PqAZZMUwyLIAqYyCYd/6iX70=;
+	b=ncJkTBM8dnCNpZlfbou7tRQnvzbA5UHpRuL6tjhpE8qRJElAZt+w4X/jfwsa+TPwXOg7d3
+	k6ZFIC1gZ36v/S33lAXeBRU9+khsKtxurPyC3l46D4P+ppuriVat8xTa0i2qwxUqTlzujK
+	I/2d/vw9sboE6jITMTS+qCOnfoXsNl4=
+Date: Sun, 10 May 2026 13:33:18 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH net-next v3 0/8] net: devmem: support devmem with netkit
+ devices
+To: Bobby Eshleman <bobbyeshleman@gmail.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>,
+ Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>,
+ Michael Chan <michael.chan@broadcom.com>,
+ Pavan Chebbi <pavan.chebbi@broadcom.com>,
+ Joshua Washington <joshwash@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>,
+ Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
+ Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>,
+ "yanjun.zhu@linux.dev" <yanjun.zhu@linux.dev>
+Cc: dw@davidwei.uk, sdf.kernel@gmail.com, mohsin.bashr@gmail.com,
+ willemb@google.com, jiang.kun2@zte.com.cn, xu.xin16@zte.com.cn,
+ wang.yaxin@zte.com.cn, netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Stanislav Fomichev <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>,
+ Bobby Eshleman <bobbyeshleman@meta.com>
+References: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+In-Reply-To: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
----
-net: bcmgenet: add XDP_REDIRECT and ndo_xdp_xmit support
+在 2026/5/7 19:27, Bobby Eshleman 写道:
+> This series enables TCP devmem TX through netkit devices.
+> 
+> Netkit now supports queue leasing. A physical NIC's RX queue can be
+> leased to a netkit guest interface inside a container namespace. This
+> gives the container a devmem-capable data path on the RX side (bind-rx,
+> etc...). On the TX side, the container process binds to its netkit guest
+> interface and sends traffic that netkit redirects (via BPF or ip
+> forwarding) to the physical NIC for DMA.
+> 
+> Two things in the existing devmem TX path prevent this from working:
+> 
+> 1. validate_xmit_unreadable_skb() requires dev->netmem_tx before it will
+>     forward a dmabuf-backed (unreadable) skb. This protects skbs from
+>     landing on devices that don't have the IOMMU mappings for the backing
+>     dmabuf or that don't speak netmem. Netkit, however, does not support
+>     DMA, doesn't attempt to read unreadable skb pages and so doesn't
+>     break netmem (it is pure skb routing and redirection). It is
+>     functionally capable of routing unreadable skbs, but there is no way
+>     for the TX validation pathway to distinguish between a device that
+>     will actually attempt DMA-ing the skb and another device
+>     (like netkit) that does not DMA but also does not break
+>     netmem.
+> 
+> 2. bind_tx_doit uses the bound device as the DMA device.  When the user
+>     binds devmem TX to the netkit guest, the bind handler attempts to
+>     create DMA mappings against netkit, which has no DMA capability and
+>     no IOMMU mappings.
+> 
+> This series solves these problems as follows:
+> 
+> 1. Extend netmem_tx to two bits, assigned to one of three values:
+> 
+>     NETMEM_TX_NONE   - netmem not supported
+>     NETMEM_TX_DMA    - netmem supported and performs DMA
+>     NETMEM_TX_NO_DMA - netmem supported, but does not DMA
+> 
+>     With these bits, phys devices can set NETMEM_TX_DMA and devices like
+>     netkit set NETMEM_TX_NO_DMA. The validation TX path ensures that any
+>     DMA-capable netdev exactly matches the bound device, guaranteeing the
+>     correct mapping of the bound dmabuf. The validation TX path also
+>     allows devices with NETMEM_TX_NO_DMA to pass, knowing these devices
+>     will not misuse netmem or run into IOMMU faults. After redirection or
+>     routing and the skb finally makes its way through the stack to a
+>     physical device's TX path, the above NETMEM_TX_DMA check is performed
+>     again to guarantee the device has the appropriate binding/mappings.
+> 
+> 2. On TX bind, the bind handler recognizes NETMEM_TX_NO_DMA devices and
+>     finds the phys TX device and binds to that instead. For the netkit
+>     case, if it has been leased a queue from a DMA-capable device
+>     already, then the bind action is performed on the DMA-capable device
+>     instead and the dmabuf is mapped correctly.
+> 
+> ---
+> Changes in v3:
+> - Fix validate_xmit_unreadable_skb() logic for non-devmem
+>    unreadable niovs (should not be dropped) (Sashiko)
+> - Simplify lock handling in bind_tx, no premature release (Jakub)
+> - split NO_DMA changes into separate patch (Jakub)
+> - fixed some pylint issues, one required an additional patch ("selftests:
+>    drv-net: make attr _nk_guest_ifname public") to rename a variable from
+>    private to public
+> - see per-patch changelist for more detailed changes
+> - Link to v2: https://lore.kernel.org/r/20260504-tcp-dm-netkit-v2-0-56d52ac72fd4@meta.com
+> 
+> Changes in v2:
+> - Squash driver conversion patches (2-5) into patch 1 (Jakub)
+> - In validate_xmit_unreadable_skb() to check netmem_tx mode before inspecting
+>    frags (Jakub)
+> - Lock bind_dev around netdev_queue_get_dma_dev() when bind_dev != netdev to
+>    fix lockdep (Sashiko)
+> - Move require_devmem() into individual test functions so KsftSkipEx goes up to
+>    ksft_run() (Sashiko)
+> - Add nk_devmem.py to TEST_PROGS in Makefile (Sashiko)
+> - Link to v1:
+>    https://lore.kernel.org/all/20260428-tcp-dm-netkit-v1-0-719280eba4d2@meta.com/
+> 
+> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> 
+> ---
+> Bobby Eshleman (8):
+>        net: convert netmem_tx flag to enum
+>        net: netkit: declare NETMEM_TX_NO_DMA mode
+>        net: devmem: support TX over NETMEM_TX_NO_DMA devices
 
-This commit adds XDP_REDIRECT handling in the RX path and implements
-ndo_xdp_xmit so other devices can redirect frames into bcmgenet via
-ring 16. It also advertises NETDEV_XDP_ACT_REDIRECT and
-NETDEV_XDP_ACT_NDO_XMIT in xdp_features.
+I applied this patchset in my local kernel tree and built a new kernel 
+image. I loaded this new kernel image in my test environment. It seems 
+that all the testcases can pass.
 
-> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> index f1e515526787..4e4fe785f0bf 100644
-> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+I think that this patchset would not cause any regression problem in my 
+test environment.
 
-[ ... ]
+Zhu Yanjun
 
-> @@ -4027,6 +4048,36 @@ static int bcmgenet_xdp(struct net_device *dev, struct netdev_bpf *xdp)
->  	}
->  }
->  
-> +static int bcmgenet_xdp_xmit(struct net_device *dev, int num_frames,
-> +			     struct xdp_frame **frames, u32 flags)
-> +{
-> +	struct bcmgenet_priv *priv = netdev_priv(dev);
-> +	struct bcmgenet_tx_ring *ring = &priv->xdp_tx_ring;
-> +	int sent = 0;
-> +	int i;
-> +
-> +	if (unlikely(flags & ~XDP_XMIT_FLAGS_MASK))
-> +		return -EINVAL;
-> +
-> +	if (unlikely(!netif_running(dev)))
-> +		return -ENETDOWN;
-> +
-> +	spin_lock(&ring->lock);
-> +
-> +	for (i = 0; i < num_frames; i++) {
-> +		if (!bcmgenet_xdp_xmit_frame(priv, ring, frames[i], true))
-> +			break;
-> +		sent++;
-> +	}
-> +
-> +	if (sent)
-> +		bcmgenet_xdp_ring_doorbell(priv, ring);
-> +
-> +	spin_unlock(&ring->lock);
-> +
-> +	return sent;
-> +}
+>        selftests: drv-net: ncdevmem: add -n flag to skip NIC configuration
+>        selftests: drv-net: make attr _nk_guest_ifname public
+>        selftests: drv-net: refactor devmem command builders into lib module
+>        selftests: drv-net: add primary_rx_redirect support to NetDrvContEnv
+>        selftests: drv-net: add netkit devmem tests
+> 
+>   .../networking/net_cachelines/net_device.rst       |   2 +-
+>   Documentation/networking/netmem.rst                |   8 +-
+>   .../translations/zh_CN/networking/netmem.rst       |   7 +-
+>   drivers/net/ethernet/broadcom/bnxt/bnxt.c          |   2 +-
+>   drivers/net/ethernet/google/gve/gve_main.c         |   2 +-
+>   drivers/net/ethernet/mellanox/mlx5/core/en_main.c  |   2 +-
+>   drivers/net/ethernet/meta/fbnic/fbnic_netdev.c     |   2 +-
+>   drivers/net/netkit.c                               |   1 +
+>   include/linux/netdevice.h                          |  11 +-
+>   net/core/dev.c                                     |   5 +-
+>   net/core/devmem.c                                  |   6 +-
+>   net/core/devmem.h                                  |   9 +-
+>   net/core/netdev-genl.c                             |  65 +++++-
+>   tools/testing/selftests/drivers/net/hw/Makefile    |   1 +
+>   tools/testing/selftests/drivers/net/hw/devmem.py   |  77 ++------
+>   .../selftests/drivers/net/hw/lib/py/devmem.py      | 218 +++++++++++++++++++++
+>   tools/testing/selftests/drivers/net/hw/ncdevmem.c  |  58 +++---
+>   .../testing/selftests/drivers/net/hw/nk_devmem.py  |  55 ++++++
+>   .../drivers/net/hw/nk_primary_rx_redirect.bpf.c    |  39 ++++
+>   .../testing/selftests/drivers/net/hw/nk_qlease.py  |   8 +-
+>   tools/testing/selftests/drivers/net/lib/py/env.py  | 109 ++++++++---
+>   21 files changed, 549 insertions(+), 138 deletions(-)
+> ---
+> base-commit: 790ead9394860e7d70c5e0e50a35b243e909a618
+> change-id: 20260423-tcp-dm-netkit-2bd78b638d30
+> 
+> Best regards,
 
-Can this path make forward progress when bcmgenet is used purely as an
-XDP_REDIRECT destination (for example, redirecting from a USB NIC or
-Wi-Fi adapter into the on-SoC bcmgenet)?
-
-The xdp_tx_ring (ring DESC_INDEX) has no dedicated TX interrupt and no
-TX NAPI.  bcmgenet_init_tx_ring() explicitly skips the TX NAPI for this
-ring:
-
-    /* Initialize Tx NAPI for priority queues only; ring DESC_INDEX
-     * (XDP TX) has its completions handled inline in RX NAPI.
-     */
-    if (index != DESC_INDEX)
-        netif_napi_add_tx(priv->dev, &ring->napi, bcmgenet_tx_poll);
-
-The only place that reclaims completed descriptors on this ring is
-bcmgenet_rx_poll():
-
-    static int bcmgenet_rx_poll(struct napi_struct *napi, int budget)
-    {
-        ...
-        /* Reclaim completed XDP TX frames (ring 16 has no interrupt) */
-        if (priv->xdp_tx_ring.free_bds < priv->xdp_tx_ring.size)
-            bcmgenet_tx_reclaim(priv->dev,
-                                &priv->xdp_tx_ring, false);
-        ...
-    }
-
-Before this patch, the only producer on this ring was XDP_TX from
-bcmgenet's own RX path, so reclaim and production were always paired
-with RX NAPI.
-
-With ndo_xdp_xmit, a remote device becomes a producer on the same
-ring.  If bcmgenet itself has no (or very sparse) RX traffic, its RX
-NAPI is never scheduled, bcmgenet_tx_reclaim() on xdp_tx_ring is never
-called, free_bds drains to 0, and:
-
-> +	for (i = 0; i < num_frames; i++) {
-> +		if (!bcmgenet_xdp_xmit_frame(priv, ring, frames[i], true))
-> +			break;
-> +		sent++;
-> +	}
-
-bcmgenet_xdp_xmit_frame() returns false on the free_bds < 1 check and
-bcmgenet_xdp_xmit() returns 0, so bq_xmit_all() in the redirect caller
-counts every frame as a drop.
-
-There does not appear to be a TX completion IRQ, a watchdog, or a
-napi_schedule() kick from bcmgenet_xdp_xmit() to trigger reclaim
-independently of RX traffic.  Is there something else that drains the
-ring in this configuration, or does ndo_xdp_xmit need to schedule the
-RX NAPI (or an independent reclaim path) when it enqueues frames?
-
-> @@ -4341,7 +4393,8 @@ static int bcmgenet_probe(struct platform_device *pdev)
->  			 NETIF_F_RXCSUM;
->  	dev->hw_features |= dev->features;
->  	dev->vlan_features |= dev->features;
-> -	dev->xdp_features = NETDEV_XDP_ACT_BASIC;
-> +	dev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
-> +			    NETDEV_XDP_ACT_NDO_XMIT;
-
-Relatedly, advertising NETDEV_XDP_ACT_NDO_XMIT tells user space and
-redirect maps that this device is a usable xmit target.  Should this
-bit only be advertised once ring 16 has an independent completion
-source, or is the expectation that users of this feature will always
-have concurrent RX traffic on bcmgenet to drive the reclaim?
--- 
-pw-bot: cr
