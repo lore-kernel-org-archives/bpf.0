@@ -1,72 +1,84 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8914632D0D8
-	for <bpf@vger.kernel.org>; Sat,  9 May 2026 23:34:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBEEF54768
+	for <bpf@vger.kernel.org>; Sun, 10 May 2026 01:23:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778369700; cv=none; b=K/c/HW8vCYPtJ9di02W4Kqj9bwY9TA9oMxEDSB/O5OoO+05h+K5bnyOP588SYduxdj87Qk7ahLeCo1o5hGo7UV5pU1XuuXrKl1gzNtqmUV+L0efBfpq9uq1Eqtz8cEtkgE1JqNqz4au30d/7c4v8K8GztYGjvGFP0wtWv1kOtUI=
+	t=1778376206; cv=none; b=XIHUGLiccHILdUFN0dkxfo0NmRhFwO6jDGR+xjBzM8IDLQ8BSPwHzMLkx1+r639tSPwQfOz0hcSOJdUanD53ouemaNQkswSMSSweeCm0GuV+BqwIQnnEqIPsjMrLzu+fF8Cv9p2XAGpQbPMalpCuAiHrqt7zAfjFj+jYubqIBCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778369700; c=relaxed/simple;
-	bh=JAYJ5MK6iRducm9mWgZFRrVhxXE//jwxDFTteuMVW98=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lvlnRz0qE3j+pO/kgA7oGGhFKk1N8iQLC+vo0BHpfsY+lAZQSQBGNqpeiyiJJSLqMU/DCmhDK463EgsCq5QNB0sxWZ2PQLp+okajwzQPtzgR5GvxqfCFKmrBUtow44WbaPQo9M7AURD3n541CpTwqWw7EHERr9guOrVr3Yo0jVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WkE7xPXV; arc=none smtp.client-ip=209.85.210.175
+	s=arc-20240116; t=1778376206; c=relaxed/simple;
+	bh=FFPjyzw+RuI0OtLjHzbIuafeyUusmLvjLTnZyj+4y5A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Wh3sakk2wVSKtBr6Eksu9mVw51w30E6ZXpnxVvPMRwVfJKALaG+iOuZUdKF+5on9lOKfMK38M0zzWPfeVCCyxP7pxFCTUqTovqXOlG6IiiF/E9mokMf49517eoPc1fIUdoJgf4L4LpyVoWQnaXUE5FHYmsa/SZCHBnyTOVoMvpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G5GErs3m; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WkE7xPXV"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8353dfdad62so2344291b3a.1
-        for <bpf@vger.kernel.org>; Sat, 09 May 2026 16:34:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G5GErs3m"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2b4650d5f5cso12127175ad.0
+        for <bpf@vger.kernel.org>; Sat, 09 May 2026 18:23:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778369699; x=1778974499; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778376205; x=1778981005; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aQI247T5wbObzCF3WwIl+l5yBfadYry9qpXCePD3xRk=;
-        b=WkE7xPXVuCI2hUPEsJjbq4mBbmFJdHaA0lY5jGCDT+hfMu2wEdH46b9M+F6Z+TVfHU
-         VERzdh+XG3sM1ahMaTSDlVlBENhNDyecrwFV1jKn5k22zupfQhIHOWNSeGIGpU2R02vh
-         zPCW2WAqaVKXAI7WqSBRrQAF1oIu9Mh/mK5DTeBxyTTKMNGD0zM6Na+ytXTgiOhzbHrw
-         /szm8sXF/YvbHhGi5aNdADIDzsiZOUkvFI/OOzI7fHmk4qIepvjcPnaJJ0xTC8pO1L2z
-         unap5bRseQgb9PuVcICljgMUoKRlHNLYwnhu9UEwRzo0tJgBhDofcWYSHRNBE4GnB09R
-         Iyzw==
+        bh=I4I0UKgKu/0EBuCqC1bvuc341Yrim8Vb0KgR6RbKLp4=;
+        b=G5GErs3makVCj0ajKpGGlIMJKRbBfG4fWuN2dtq3JdFIWhnpbNP83wTMU1ifSOr3Aj
+         B45U/cYkbWnsF78wvOTj0S+r0fpFsP/vAyD3R9BqsHnYB1V/WV6m2fkwmDh1z886tcZe
+         L0sp5qopfsEUoqsZH9bIG7ClFcULs9coS+uonCnVye2rBWH/rXn5/WcR27LnBfswA1s7
+         DbMk1YX6tmwsEDQ3LiwtN7TwvKuRCFtXil7q6nI57EOQhSKfDegbub6x3fN0FUZ7vp6I
+         I86oEREXhNcQG9EqByBMZ961kitIorq6m1T670utZhdO6SxGk3ixEoF0toLErIpmscNl
+         899w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778369699; x=1778974499;
+        d=1e100.net; s=20251104; t=1778376205; x=1778981005;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aQI247T5wbObzCF3WwIl+l5yBfadYry9qpXCePD3xRk=;
-        b=jc63V1S97/DyP3bNaYP2CJJ6273U1OKFLMyBPAAnC7IzgoOHj+ZpfG15A3c43lPU/0
-         0np4BBhiyHfhYdrLAccK3OH4HFfd/KBLTJm7QSbdvGTcqDy7b0foBEdHbL8u7ACbFtoV
-         wLj+o7SfrdwfdXT1AmY/GTbDsU8VaPEsr1aa1KKWSBrF57N7TYYwl7tWsKuMjgwLREJI
-         6e6rE8vOVQ6pnIpsMhUvGhxqUM0UGLwO8HOCKodIrDLYEXCftkCUD4DFOtCsKyGmMrru
-         0Nt+xVITv6UolB+qZRezg+2CqI+bxqrLA11360O7H6JWZIljRx4o+GpmzCMtVFtqZBJU
-         pYcQ==
-X-Gm-Message-State: AOJu0YyuApRR4T8WWX65hH1h2qxOK7TE+ie6Z+fSM/9Fe+l8SoN1A3ux
-	RddQT3lCHoG9YV8v0VSNq7wWtPtHnxnQ/biSBBQhZmhcy11YlK/mU1rL
-X-Gm-Gg: Acq92OFtyJoEUJ+c40jFh/o0YFcpMsbOufxmJqG3a+4uNF+K4g0/zKJDS6NweeGabp0
-	e1aMqbDKQ9/weGq2vFknIKq4FgH2G4qUFgXRIL/EQnClwVoY3HJzGASklgUoLDsJjziKeV1pU/5
-	B5zUN9mragoNd9MZYZ3gADnS4ql2QcHY8jGw9dmMQ+MLp1T7X6sdQ0kNPKiFNRDTQxTS9itOnAU
-	MYxyELKWlyuPCY/0GL+f3KYGajoCSjUl0KfypqBTYDkHZTqtgTAHg5H5khWtA2VSSb2RX1r/zru
-	R1pTD9TPOyUVzlyiJWc2gY0LMhSr6RUevyyEdUZRYcS0WjhXlRi/glQ7yb7nTSwWDERB1zUdruV
-	nGkhvIrMhpyIhfRAggWNwUf/QqRw4ZK6V/e3xdjo/6XFNvLNEERH26G5J+RQfi+dsq948IKvjFW
-	y/KbZGzTObdA2tp13KSfc4FBBIGpqoy8UYvjO9us/zeVe8r8lzxkp6g1H+t55pbc91rqLcqepij
-	1VBIMwaI/C7WSzJ4VuqbB9GAV3Ek22BZoIt9YGiIhMmZhjzNpe3iIPsU3jlpQ==
-X-Received: by 2002:a05:6a20:9392:b0:398:ac0d:9a0b with SMTP id adf61e73a8af0-3aa5ac27026mr19067689637.50.1778369698743;
-        Sat, 09 May 2026 16:34:58 -0700 (PDT)
-Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c8267710262sm5326504a12.18.2026.05.09.16.34.57
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 09 May 2026 16:34:58 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: torvalds@linux-foundation.org
-Cc: bpf@vger.kernel.org,
+        bh=I4I0UKgKu/0EBuCqC1bvuc341Yrim8Vb0KgR6RbKLp4=;
+        b=NdJrfBfvAYMW3Vxdqdk/aWYDzefb5DOwBmHyYrhk8iLhoG+3xGuXQdPnu9P7y3IwZW
+         MeIZZ4TvVTctMWAvFH4y5OBAamQOlUaPjqrGwgIE5O4ZZhkVhKBSrn3TXIJT5yGZ6MqI
+         mirz9qkX+39+xRFi8h8f3TzGdKb4BXsBodWOIBLr4EeWFTlw9JrZuR7YkEvO1c7uPvGe
+         CcKkH9Yk/zqJxPt9PEeKm+SHYu6XWuzKsWu4apCDNwzm5msTiGdm1jkeIc9OSj2Y3Dy+
+         rNVC+uI9JW3rBxyneAo92APJK4H8EtSjlD/kIQd3OaTXbODUTXSZD7DB19jLtbScb44F
+         T0Cw==
+X-Gm-Message-State: AOJu0Yz92kyfhcJl4T8owW8nKP7Q0juUSLVEkqI4mGNvlHSTrsfaivic
+	+EdaTcnYin8KyO3QMByygwt8XL9Y1T6/NiSZkfKefifntQlzKi2IUZm9
+X-Gm-Gg: Acq92OHadFDoW/l+Fnmge7CjYZGiVbk+AwmGJ1W4i1tI9cH4AIp3i5Mb5uAUNCXoy/J
+	9PUQ+WMmImhBtNQENl0tzk/B7M8V695xDZUzFjFuBcZfN/hXP3s960zcX6hwkApO4Fn1WiYot5K
+	0PM1aycTuM6viPP1BCD+e/Ph0RvWzKJpO9gEE6cqJtEtXrL46CJIqbkfvg2qHqZEB9kKQVTyZch
+	4U2VChJrtOe9vumoJB36F77V8CP5Yy1AvNXVme+Tmt6l/tTmNVQ3ymfVcv4JHB/UmvcPOwxwFrF
+	yrq5yqTUQ8NV/wRgumrmBVkafgQrdEpuWOOuD6xFa2ZfuwwwCFZjvV0eJxrqd/96ctRTOFyqOsZ
+	kvSQqpwqiKPoCT1n7ZiZFH71BGkJGO6tR71IyVbLyd5mRY458jsFvvDyQShnJXr8uiKfpl3ASI4
+	uMt7kgbUZ2+knid0qwvNWhgwD3aunwA9maUNReuKsB91QGdXyDMdR87U1wCJwaB/epVKm0jPGdG
+	Fn7vuP2lAlXDmgyJmGCUykNTaguYyp2CrWjE9YL6A==
+X-Received: by 2002:a17:903:289:b0:2bc:7eee:200d with SMTP id d9443c01a7336-2bc7eee20c3mr39290125ad.33.1778376205093;
+        Sat, 09 May 2026 18:23:25 -0700 (PDT)
+Received: from KERNELXING-MC1.tencent.com ([2408:8207:1923:2c20:1949:c5e0:289c:ab19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1d269fcsm64648875ad.15.2026.05.09.18.23.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 May 2026 18:23:24 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	bjorn@kernel.org,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	jonathan.lemon@gmail.com,
+	sdf@fomichev.me,
+	ast@kernel.org,
 	daniel@iogearbox.net,
-	andrii@kernel.org,
-	memxor@gmail.com,
-	eddyz87@gmail.com
-Subject: [GIT PULL] BPF fixes for 7.1-rc3
-Date: Sat,  9 May 2026 16:34:56 -0700
-Message-ID: <20260509233456.39703-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	horms@kernel.org,
+	andrew+netdev@lunn.ch
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH net 0/4] xsk: fix meta and publish of cq issues
+Date: Sun, 10 May 2026 09:23:06 +0800
+Message-Id: <20260510012310.88570-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -75,91 +87,33 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+From: Jason Xing <kernelxing@tencent.com>
 
-The following changes since commit eb5249b12507246dc959945454cd1be8d7dc3795:
+The series is the product of previous review from sashiko[1].
 
-  Merge tag 'parisc-for-7.1-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux (2026-04-18 11:37:36 -0700)
+1) META
+patch 1: address TOCTOU around metadata.
 
-are available in the Git repository at:
+2) PUBLISH of CQ
+patch 2: make sure xsk_addr->addrs[] can be published to cq when
+         overflow occurs.
+patch 3: keep cleaning up the continuation descs (more than 17) and
+         publish its address when overflow occurs.
+patch 4: like patch 3, but only handles the invalid descs cases.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
+[1]: https://lore.kernel.org/all/20260502200722.53960-1-kerneljasonxing@gmail.com/
 
-for you to fetch changes up to 3ac1a467e37683f602221e243fa3c59b0de81165:
+Jason Xing (4):
+  xsk: cache csum_start/csum_offset to fix TOCTOU in xsk_skb_metadata()
+  xsk: fix buffer leak in xsk_drop_skb() for AF_XDP multi-buffer Tx
+  xsk: drain continuation descs after overflow in xsk_build_skb()
+  xsk: drain continuation descs on invalid descriptor in
+    __xsk_generic_xmit()
 
-  bpf: Fix off-by-one boundary validation in arena direct-value access (2026-05-09 16:18:39 -0700)
+ include/net/xdp_sock.h |  1 +
+ net/xdp/xsk.c          | 48 ++++++++++++++++++++++++++++++++++--------
+ 2 files changed, 40 insertions(+), 9 deletions(-)
 
-----------------------------------------------------------------
-- Fix sk_local_storage diag dump via netlink (Amery Hung)
+-- 
+2.41.3
 
-- Fix off-by-one in arena direct-value access (Junyoung Jang)
-
-- Reject TCP_NODELAY in bpf-tcp congestion control (KaFai Wan)
-
-- Fix type confusion in bpf_*_sock() (Kuniyuki Iwashima)
-
-- Reject TX-only AF_XDP sockets (Linpu Yu)
-
-- Don't run arg-tracking analysis twice on main subprog (Paul Chaignon)
-
-- Fix NULL pointer dereference in bpf_sk_storage_clone and fib lookup
-  (Weiming Shi)
-
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-----------------------------------------------------------------
-Amery Hung (1):
-      bpf: Fix sk_local_storage diag dumping uninitialized special fields
-
-Junyoung Jang (1):
-      bpf: Fix off-by-one boundary validation in arena direct-value access
-
-KaFai Wan (4):
-      bpf: Reject TCP_NODELAY in TCP header option callbacks
-      bpf: Reject TCP_NODELAY in bpf-tcp-cc
-      selftests/bpf: Test TCP_NODELAY in TCP hdr opt callbacks
-      selftests/bpf: Verify bpf-tcp-cc rejects TCP_NODELAY
-
-Kuniyuki Iwashima (7):
-      sockmap: Fix sk_psock_drop() race vs sock_map_{unhash,close,destroy}().
-      bpf: tcp: Fix type confusion in bpf_tcp_sock().
-      selftest: bpf: Add test for bpf_tcp_sock() and RAW socket.
-      bpf: tcp: Fix type confusion in bpf_skc_to_tcp_sock().
-      bpf: tcp: Fix type confusion in bpf_skc_to_tcp6_sock().
-      bpf: tcp: Fix type confusion in sol_tcp_sockopt().
-      bpf: Free reuseport cBPF prog after RCU grace period.
-
-Linpu Yu (1):
-      xskmap: reject TX-only AF_XDP sockets
-
-Martin KaFai Lau (2):
-      Merge branch 'bpf-reject-tcp_nodelay-in-tcp-header-option'
-      Merge branch 'bpf-tcp-fix-type-confusion-in-bpf-helper-functions'
-
-Matthieu Baerts (NGI0) (1):
-      mptcp: bpf: Fix type confusion in bpf_mptcp_sock_from_subflow()
-
-Paul Chaignon (2):
-      tools/headers: Regenerate stddef.h to fix BPF selftests
-      bpf: Don't run arg-tracking analysis twice on main subprog
-
-Weiming Shi (2):
-      bpf: Fix NULL pointer dereference in bpf_sk_storage_clone and diag paths
-      bpf: Fix NULL pointer dereference in bpf_skb_fib_lookup()
-
- include/linux/bpf.h                                |  1 +
- kernel/bpf/arena.c                                 |  2 +-
- kernel/bpf/liveness.c                              | 25 +++-------
- net/core/bpf_sk_storage.c                          | 14 +++---
- net/core/filter.c                                  | 55 +++++++++++++++++++---
- net/core/sock_map.c                                | 39 +++++++++------
- net/ipv4/bpf_tcp_ca.c                              |  2 +-
- net/mptcp/bpf.c                                    |  2 +-
- net/xdp/xskmap.c                                   |  4 ++
- tools/include/uapi/linux/stddef.h                  | 26 +++++++++-
- .../testing/selftests/bpf/prog_tests/bpf_tcp_ca.c  |  4 ++
- .../testing/selftests/bpf/prog_tests/sockopt_sk.c  | 17 ++++++-
- .../selftests/bpf/prog_tests/tcp_hdr_options.c     |  4 ++
- tools/testing/selftests/bpf/progs/bpf_cubic.c      | 14 ++++++
- tools/testing/selftests/bpf/progs/sockopt_sk.c     | 16 +++++++
- .../bpf/progs/test_misc_tcp_hdr_options.c          | 15 +++++-
- 16 files changed, 189 insertions(+), 51 deletions(-)
