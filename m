@@ -1,144 +1,153 @@
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739DD47CC64
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 16:33:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9407F43D4FA
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 16:34:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778517193; cv=none; b=BSx6Aey/KUmqwclpwWh+H3ivfvGK+jnxoFYYWPOwQxG5nT88oEEpQ/VnCNAg6Y8B/DSr8DsY4T4dDL/OuwVdn1b6JX4Uy0ffT1PmXgPJAuQ+dcTKeNyaKc37go9eTi834iimh5P3Moz/et7Q8lw/+2FO8RLiaT5T5hkbOngQZIk=
+	t=1778517244; cv=none; b=i5EOHpZftc5GDJEMvfFgPJNip20PLCY2H6RE5nAQ5H8JydxYxSJtl3oB/ejvaMN160k20Knfu5pgk4ocZ4daqtEesP4vS9xVvwhugF1TbQjK/+BlWbdv8Up92HCVQ+jX8OmsU5CYStFHeE+r9FQUB4DQG/2jc+WQthekSMFgFvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778517193; c=relaxed/simple;
-	bh=ybnlZpPjoOWPZrPehfQVWpLEAYCoCwwbP4xydzOBmlE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mcDrEfUEyXe8NkG3CTfghtZyG0WLpPkgipZnfzBiJgsS+iyEbZ1UCQg0NCbMd/7bE5i1pDigmxx2MO3L0zJOe5dzE98dA0SIZvavVhP2qvB9SUn7gJxOpK8SeYaz2XVUU6sDTgHw0FI/kw4Aq+r4NblzYOwjXKfpCdynlTAQ/4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=M+l0elol; arc=none smtp.client-ip=95.215.58.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778517244; c=relaxed/simple;
+	bh=G5r4YW6EK4mB3T+WYJ63kK4isI2xyCdaH8r8zNOiQ8E=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=jiXtRTFEGc2UcnG3ttUYsat9E5d0LCupb+TsegD+JKWUp5XgdlXrR+LxuSpkXwvoKc2dyCC4CFRAAKlR+mmi1B1ScPkFrJMAgHDRu/wgOyRJWwOxrUOpp4kjpCf0aCuJIus0CuUQcPkcXMGdpE915aVggs5ppCMzBrgynKOKGi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VLQK9BXn; arc=none smtp.client-ip=209.85.167.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="M+l0elol"
-Message-ID: <35a091e5-49cb-4890-a5e1-0de3a96b5d97@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778517189;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4uplCsF1SM0jtzlwmEZpydQlDRcHYDqRQoiUSonAJCE=;
-	b=M+l0elolf37627ANCOqHYS+xEhkWNusN4b21hfZv+N6Eqz13iXaISAFPSRkR1RQgEQimpN
-	HarFG18qhCs8pzl1h4p9yZlvZ9NmEOATYjhF0BcTCJ8OXkWRopdloC7D9cmAyDsh51pYHZ
-	UYOSmd/zaljnkzayeZMOZC69Wqo78DQ=
-Date: Mon, 11 May 2026 09:33:05 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VLQK9BXn"
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-48270f099d5so932620b6e.0
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 09:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778517241; x=1779122041; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yh56JEXIueZyjtYRGdInmWMmuqZuTGL0S8MyJigvGF8=;
+        b=VLQK9BXnX8yWyeGuWdlbgoULFpQRJbgIHbEADiDtkKoL97/JT4Q3XkVekxQkpX03uq
+         U/HqBFFdKsLMuErXrj560uM1r4mc+1AjTIKjwAsxTQ0y142mDt5MF1o+5Jhmh6GuRpo0
+         sqhq4QXcudLaP4cwdE4bcayTSwesoDIUNYpCZU5Zvd0PX3T2WZgRwmBGFCurvfxMOHiE
+         JTGANp3+3GALmd107czDyQ1WsFopx9tXs2sWGSZGj7vg42XSjLQz0u3XnpdvQ5C8ZN2T
+         ecZNjLNdOcr1OhttBEwC1S3ZTXf5t/dxGKgVJsr7atvBIdIis3NMpqJ1x90fQyLx4x6Q
+         D1bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778517241; x=1779122041;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yh56JEXIueZyjtYRGdInmWMmuqZuTGL0S8MyJigvGF8=;
+        b=Qlp246L6vv9cns30CzgtpGZWJ7yx4qar6VNaLAcHQbZUQlJSoO1kjiRbTtIWXiu2el
+         GoX97l8f+Q3gjaiAjXKTSws48xOH97RkXFC90HSedQhscRu6GjyXFIzF4eyRmlQDfoNz
+         G54DY7hE69ULEGdeW4T0w1kacwpExXmdXtsSsfV6FEmzEj9pq81qSso3y5LTc7uH8UNd
+         i4K6RIXsmldNiYlUAZZ3qJNzNil3HPV6mKW6bueEYkamS68JQVs2cbeTVTx89fvvjW6C
+         Ik6Z7wW6U7C2uFFZEQX2uh219nS3t9rzwoskm0eXppHO4p3lWqOBgSgEnClejmsYIciY
+         1dcA==
+X-Forwarded-Encrypted: i=1; AFNElJ/nrOJzZ5AmfVauQPGpVVl5JJZzBPoi9pAiAv/GvFDK91OAHenkKkYp7iVyg4MjJOjeVIg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJjrzlwNI/jOjKsPjikdmkEV9f2GsWVo+g7oqux23XKqmHSIN+
+	ktaU5g3R12GICoKoOBGx31Yzv2SwhVh1gr7RdJjTgUA1sZ3sHR9OhKbb
+X-Gm-Gg: Acq92OHcNY/ss9KXpDjcvCsrXM1gklAv3F8rr3BIED12bgF9A5Qra4AqtuSGxGbIWxQ
+	gv61VU/I5pCvjyW85gURStl8Ms4VJhH8TBED8P6au5uC4hbhkoiW3TLKumZjZkV2ifwTMI2LBN6
+	AxBPGjbbsmoZF1VynNS+hoNGu5ellxyixEPUXiYkLDyPPCmTRYQ/Im0+83iZFSS4ZT2Fxtqf0gb
+	NnzOVlM7potTUevT6VIYxqPsLMHQm89ExldhkW61b51ER7oKvnhfXxYPLJXTX3ZkvakxJDSJko7
+	hNduDOJKfi9QNET0J85jQ17y2O3e8/oRqWNydIPknSFLsEB2i78/vTIpVQkFdQcImf+roC+iE0Q
+	iUk65LJpPHl0qmyz/kLQjp7kM3ydE7taYZboCpV6j4d10QnOamlJt6rWeFcQtofhOMEChuElZTP
+	g4Lz6mXAhQHsLEbsvkR4uL9RUBhrktGWoaSuVhjP3c+4sPO0t1lzTkSbnBtZ48lqAS9FnYGcVXc
+	rYHNo9J5oWYlTmgs4zEV2/vNUzFj2PnpHDERQ==
+X-Received: by 2002:a05:6808:2222:b0:467:e7b:6fd5 with SMTP id 5614622812f47-48042503bbemr15550423b6e.41.1778517241391;
+        Mon, 11 May 2026 09:34:01 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:1::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e367c0bc16sm7154971a34.12.2026.05.11.09.34.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 May 2026 09:34:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 06/24] bpf: Refactor jmp history to use
- dedicated spi/frame fields
-Content-Language: en-GB
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- "Jose E . Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com,
- Martin KaFai Lau <martin.lau@kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 11 May 2026 09:34:00 -0700
+Message-Id: <DIFZQSR5B66I.26PF8V3P74KSK@gmail.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Jose E .
+ Marchesi" <jose.marchesi@oracle.com>, <kernel-team@fb.com>, "Martin KaFai
+ Lau" <martin.lau@kernel.org>
+Subject: Re: [PATCH bpf-next v3 09/24] bpf: Extend liveness analysis to
+ track stack argument slots
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
+X-Mailer: aerc
 References: <20260511053301.1878610-1-yonghong.song@linux.dev>
- <20260511053332.1884123-1-yonghong.song@linux.dev>
- <DIFZDSS2F9P4.9J051GNVD30G@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <DIFZDSS2F9P4.9J051GNVD30G@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+ <20260511053348.1885300-1-yonghong.song@linux.dev>
+In-Reply-To: <20260511053348.1885300-1-yonghong.song@linux.dev>
 
+On Sun May 10, 2026 at 10:33 PM PDT, Yonghong Song wrote:
+> @@ -1071,8 +1105,24 @@ static void arg_track_xfer(struct bpf_verifier_env=
+ *env, struct bpf_insn *insn,
+>  	struct arg_track *dst =3D &at_out[insn->dst_reg];
+>  	struct arg_track *src =3D &at_out[insn->src_reg];
+>  	struct arg_track none =3D { .frame =3D ARG_NONE };
+> -	int r;
+> -
+> +	int r, slot;
+> +
+> +	/* Handle stack arg stores and loads. */
+> +	if (is_stack_arg_st(insn) || is_stack_arg_stx(insn)) {
+> +		slot =3D stack_arg_off_to_slot(insn->off);
+> +		if (slot >=3D 0) {
+> +			if (is_stack_arg_stx(insn))
+> +				at_out[MAX_BPF_REG + slot] =3D at_out[insn->src_reg];
+> +			else
+> +				at_out[MAX_BPF_REG + slot] =3D none;
+> +		}
+> +		return;
+> +	}
+> +	if (is_stack_arg_ldx(insn)) {
+> +		slot =3D stack_arg_off_to_slot(insn->off);
+> +		at_out[insn->dst_reg] =3D (slot >=3D 0) ? at_stack_arg_entry[slot] : n=
+one;
+> +		return;
+> +	}
+>  	if (class =3D=3D BPF_ALU64 && BPF_SRC(insn->code) =3D=3D BPF_K) {
 
+claude doesn't have a taste.
+Please use 'else if' like the rest of the function and remove both 'return'=
+.
 
-On 5/11/26 6:17 PM, Alexei Starovoitov wrote:
-> On Sun May 10, 2026 at 10:33 PM PDT, Yonghong Song wrote:
->> Move stack slot index (spi) and frame number out of the flags field
->> in bpf_jmp_history_entry into dedicated bitfields. This simplifies
->> the encoding and makes room for new flags.
->>
->> Previously, spi and frame were packed into the lower 9 bits of the
->> 12-bit flags field (3 bits frame + 6 bits spi), with INSN_F_STACK_ACCESS
->> at BIT(9) and INSN_F_DST/SRC_REG_STACK at BIT(10)/BIT(11).
->> But this has no room for an INSN_F_* flag for stack arguments.
->>
->> To resolve this issue, bpf_jmp_history_entry field idx is narrowed to
->> 20 bits (sufficient for insn indices up to 1M), and the freed bits hold
->> spi (6 bits) and frame (3 bits) as dedicated struct fields. The flags
->> enum is simplified accordingly:
->>    INSN_F_STACK_ACCESS  -> BIT(0)
->>    INSN_F_DST_REG_STACK -> BIT(1)
->>    INSN_F_SRC_REG_STACK -> BIT(2)
->> which allows more room for additional INSN_F_* flags.
->>
->> bpf_push_jmp_history() now takes explicit spi and frame parameters
->> instead of encoding them into flags. The insn_stack_access_flags(),
->> insn_stack_access_spi(), and insn_stack_access_frameno() helpers are
->> removed.
->>
->> No functional change.
->>
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->> ---
->>   include/linux/bpf_verifier.h | 34 ++++++++++++++--------------------
->>   kernel/bpf/backtrack.c       | 24 +++++++++---------------
->>   kernel/bpf/states.c          |  2 +-
->>   kernel/bpf/verifier.c        | 23 +++++++++++------------
->>   4 files changed, 35 insertions(+), 48 deletions(-)
->>
->> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->> index f9020a4ea005..adf00585a627 100644
->> --- a/include/linux/bpf_verifier.h
->> +++ b/include/linux/bpf_verifier.h
->> @@ -435,31 +435,22 @@ struct bpf_func_state {
->>   
->>   #define MAX_CALL_FRAMES 8
->>   
->> -/* instruction history flags, used in bpf_jmp_history_entry.flags field */
->> +/* instruction history flags, used in bpf_jmp_history_entry.flags field.
->> + * Frame number and SPI are stored in dedicated fields of bpf_jmp_history_entry.
->> + */
->>   enum {
->> -	/* instruction references stack slot through PTR_TO_STACK register;
->> -	 * we also store stack's frame number in lower 3 bits (MAX_CALL_FRAMES is 8)
->> -	 * and accessed stack slot's index in next 6 bits (MAX_BPF_STACK is 512,
->> -	 * 8 bytes per slot, so slot index (spi) is [0, 63])
->> -	 */
->> -	INSN_F_FRAMENO_MASK = 0x7, /* 3 bits */
->> -
->> -	INSN_F_SPI_MASK = 0x3f, /* 6 bits */
->> -	INSN_F_SPI_SHIFT = 3, /* shifted 3 bits to the left */
->> +	INSN_F_STACK_ACCESS = BIT(0),
->>   
->> -	INSN_F_STACK_ACCESS = BIT(9),
->> -
->> -	INSN_F_DST_REG_STACK = BIT(10), /* dst_reg is PTR_TO_STACK */
->> -	INSN_F_SRC_REG_STACK = BIT(11), /* src_reg is PTR_TO_STACK */
->> -	/* total 12 bits are used now. */
->> +	INSN_F_DST_REG_STACK = BIT(1), /* dst_reg is PTR_TO_STACK */
->> +	INSN_F_SRC_REG_STACK = BIT(2), /* src_reg is PTR_TO_STACK */
->>   };
->>   
->> -static_assert(INSN_F_FRAMENO_MASK + 1 >= MAX_CALL_FRAMES);
->> -static_assert(INSN_F_SPI_MASK + 1 >= MAX_BPF_STACK / 8);
->> -
->>   struct bpf_jmp_history_entry {
->> -	u32 idx;
->>   	/* insn idx can't be bigger than 1 million */
->> +	u32 idx : 20;
->> +	u32 frame : 3;	/* stack access frame number */
->> +	u32 spi : 6;	/* stack slot index (0..63) */
->> +	u32 : 3;
->>   	u32 prev_idx : 20;
->>   	/* special INSN_F_xxx flags */
->>   	u32 flags : 12;
-> If so, should 'flags' width be reduced as well?
-> We don't need to burn 12 bits after this conversion ?
-> 3 bits for flags will do?
+>  		if (code =3D=3D BPF_MOV) {
+>  			*dst =3D none;
+> @@ -1297,6 +1347,14 @@ static int record_load_store_access(struct bpf_ver=
+ifier_env *env,
+>  	struct arg_track resolved, *ptr;
+>  	int oi;
+> =20
+> +	/*
+> +	 * Stack arg insns use dst_reg=3DBPF_REG_PARAMS(11), but at[11] tracks
+> +	 * the value stored in stack arg slot 0, not a memory base pointer.
+> +	 * Skip to avoid misinterpreting that value as an FP-derived pointer.
 
-Right, the next patch will add a flag for STACK_ARG. So
-total 4 bits for flags. Will make the change.
+The comment is confusing. 'not a memory base pointer'? what does it mean?
 
+> +	 */
+> +	if (is_stack_arg_stx(insn) || is_stack_arg_st(insn) || is_stack_arg_ldx=
+(insn))
+> +		return 0;
+> +
+
+> -/* Return true if any of R1-R5 is derived from a frame pointer. */
+> +/* Return true if any of R1-R5 or stack args is derived from a frame poi=
+nter. */
+>  static bool has_fp_args(struct arg_track *args)
+>  {
+>  	for (int r =3D BPF_REG_1; r <=3D BPF_REG_5; r++)
+>  		if (args[r].frame !=3D ARG_NONE)
+
+let's make it consisten with below and use arg_is_fp here?
+
+>  			return true;
+> +	for (int r =3D 0; r < MAX_STACK_ARG_SLOTS; r++)
+> +		if (arg_is_fp(&args[MAX_BPF_REG + r]))
+> +			return true;
+>  	return false;
+>  }
