@@ -1,222 +1,174 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 926C42FFDE3;
-	Mon, 11 May 2026 10:10:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.126.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1806A3C3448
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 10:19:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778494242; cv=none; b=sxn8v92D0vXbXbARt3tL54I7GXyA5BtcUlKBiuPppVLabrdERoH/bg91kO23D5gcKXtOwC1HENxnlefHJU9jKo0e6WKUHXb/EOnmPQBCpo7A4M793DzOTnOnkx8jFP5ekDy6MFFGk3IVH/UYKwSsjUcg3iAIIBu/FcpYOw2J0Pw=
+	t=1778494793; cv=none; b=IZjGSdL1DEfjzGCLkm65Wo0aAWxNdt+dmnJeDhWBIFSml2bopWOQS/9LzGUMwAXKUJC7DQ33aUYdYR3djBovCRklEzijR6DggFCSzgQ3Y8pJyHUg3Pu1pCjD+1W8W7uq+zJ4fffADRIvX+4r4ZKMgQ3028l0NZj7sOMlg3CHTV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778494242; c=relaxed/simple;
-	bh=Qz9kpg/HS0cFlZE/TwFxVNmoXERLtHXlJY68fxjj6qA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EbIw102oXrjN/BE94TcFd1Gb8rUi5iW7aC6kuLlmFWEEFJQdYPcuG8WaKD/qVkMvwHJ9f05RPli6qScgyKfu3uMXD5RKPitpuhTAPGUFy3UzSmGOCX7MBcSmdxExA3LQ0Z3DK0fgH/Yoid9t3FscvBsjfjv6v0m0cNCw4ZDXiHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schippers-hamm.de; spf=pass smtp.mailfrom=schippers-hamm.de; dkim=pass (2048-bit key) header.d=schippers-hamm.de header.i=simon@schippers-hamm.de header.b=tcPPCTrc; arc=none smtp.client-ip=212.227.126.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=schippers-hamm.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schippers-hamm.de
+	s=arc-20240116; t=1778494793; c=relaxed/simple;
+	bh=ks7ehWn0UhqW4rk4JLDGsqK9mOdKkpROxg8rbvdFVTU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TdkGXtjTCSdFuVS4MxVHElT3OwEeKFdIXIaWtbSxT56qvGow6eigQJu8DdVcjFBPrhf0NWaoHQWQrSUL3wgvMXRQoB7rAac8tqOsLw572sMGRFx2Sh0ef1fFpQZaTB5sXt6nHC0m9JvwC83belYm/HWgh9ZSgnxAZusxNyXaROI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ap5uKObf; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=schippers-hamm.de header.i=simon@schippers-hamm.de header.b="tcPPCTrc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=schippers-hamm.de;
-	s=s1-ionos; t=1778494222; x=1779099022; i=simon@schippers-hamm.de;
-	bh=UkLOFwSIv0ZeMA04rMv1O9GYe4NK09leTU5z8PTBxOU=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=tcPPCTrcSfTJgiq3ZVeonnCyXGftoGWAOmpOOL7S9698YfkKOlO2kyn5TDKRXEpq
-	 bsMdhnbUJ2Z1/xUAsgHgyrtsNRfeo7tDqPEcIeyERpryxvMufsOIDVE/+/sk995c9
-	 A1hdE2aXdvuItcWPOKyWw08hHm2P3+MMmyJZg4vWmY5m6ujK+ewtB02L/5iLPqOf/
-	 /8SAAehlhfhvwRsLkIMFXn8w9NNgjMMnKUTfw3LpNiHknTiowTeAnJdcv24DuJq1m
-	 M2x7aN8a+nn9yKqphT72aPvJ48vqcLGUPkNqk4vfyqRLIbsI4ZdcwaztM+ztPrbn2
-	 H0u8f9hfYGDtj4cG3w==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from client.hidden.invalid by mrelayeu.kundenserver.de (mreue012
- [212.227.15.136]) with ESMTPSA (Nemesis) id 1Mq1GE-1x9AJB0U9C-00pEe9; Mon, 11
- May 2026 11:55:51 +0200
-Message-ID: <41023c34-87a3-4e4f-b3ab-3ed53d171910@schippers-hamm.de>
-Date: Mon, 11 May 2026 11:55:46 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ap5uKObf"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48e8132c6d0so7742635e9.1
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 03:19:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778494790; x=1779099590; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=r0JHrPlA1DfO00D58uuDhg6hCJil6vaxkPYydwdL2oQ=;
+        b=Ap5uKObfUWRZkqyppgo5/5Kc+OjgGMz6Fy0if41zoJsz/80AgRxeoDM1sj4kSNHU5M
+         2FaQN47OPdSNqpc1PMnJKZ1JHPBnIDwC08E6iuEHYjIKWzDJ+VMPUKuzm5b8adrw7o7n
+         d4mhTFb1JuMQMQRcEslgEmkihiTVUyM1hSmTYZigS5HZDddCwyirQ8XiHN1ZXn/VO0Nb
+         OGFLsFEFc+cXMtB9oD/VeQBiIFa/5OFQNKBnc1unMqN9yiiUtzSItRcuScE0h2vfzpF3
+         qwAxinBxju0DZJ4D+RZF2rQ9jclECHHpJOeyX2EIrKL6FALFvvvt7EFJzx0tk/OrahAZ
+         UA2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778494790; x=1779099590;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r0JHrPlA1DfO00D58uuDhg6hCJil6vaxkPYydwdL2oQ=;
+        b=ne+i0iLUzf0FScNX98H7bFFAVcQTUdw9j652TXkfYpEcBQ3YTBBcYnaXJnQhAyuw8Z
+         DCtz0/bx6IYJO4WDFUP3/CdayFOtxj0pwNeqT6s08+HTo/52TY1vHwq8CnCDSdDTN3LT
+         LmxXCXxHsLZ0Zudf/by/jh5cmb5BkhCwgUdD2N0YISnUM7zkTmvabvFlfUV3IvJpqpIp
+         ppOOWJJfWNg9bBjzr38Ow5YRzn9zZBQuNT57NFKHe1wkxVSURdTEu7bwRmzUcFQ5xm4E
+         iaMFN/aiqz9osBLq4X1fJiYZFE1G7G6CxG7lV+3qOjjr23jVC87QcIHgkp1ol2OWC2Cw
+         qhZA==
+X-Forwarded-Encrypted: i=1; AFNElJ9+M5Dskyu15mpykyC4hXW24llp+/gwqXTwX2ingjlNYL8q6sEl/Rzhi7hzfgN3KTj1vCc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPltv53x11TRoNG3B6xPzcj9xa4NPswwDVpILv70iRbhrvyQ2y
+	qGA2kRbgEUMSr8X5/qV29Zld7VpyGWwbS2goGbUbu2WdvqHQEJeC8g2O
+X-Gm-Gg: Acq92OFJscNyyzM2wm+zdqwM9sPCnMI/7AN9/gnH59E9zBVY5j6Z7JAEaK/NyfGY/J5
+	AfyZU9d+w9s3DcBZsZ6i2b2cX0mYDur5inKA/2uP9O6nNIcDlKN//5UDDWk9xkSER/8LabrfqTP
+	PKQzdUcuoLkslAUo7b6iYRadnP4a75J6bfPJivZuajFCiLtAMlVZIJilt3F5LS187Kx+6a6aolj
+	ZSiWZgcjazxLpdt1LyPBgnlzy07p9mSeEtsv0HL3L5I1YL3IYd8f0yqO0PtIdR4F6txBk7AzQwG
+	khpzH21YvgngkTxeJIH3UKxmKkiPHLUner5TctdFeXB68pBDQKGso67O6wiyyRFziXmmUbbnnPD
+	TetdJAhN6dWA0LEMfgS5dwSYKzqizmT82EggEs5zE5+xZBFRl6DHGOjtVwE7iyuY9+onemgZrFw
+	KtK52PzfbzA/l+N9y1q2hbFtsxyz4IxKNXAz3xmKAewL0ppC5RD1vP/tfA9Xkg7UOXeXqQOFTNq
+	xoHvzrMwmsHHwIo4FtmJ/X8kOzP+KlIrLLTuDS5xNn0kq9mxJ/Da+sIiJ1i4rw4HyqrVNWvTDJh
+	w8lGGKIEJk2D+6AtCbpjgDYcPwCSCVkjCuoVWTj0ip8=
+X-Received: by 2002:a05:600c:33a9:b0:487:2439:b7c8 with SMTP id 5b1f17b1804b1-48e51e0bb9amr240043685e9.1.1778494790084;
+        Mon, 11 May 2026 03:19:50 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e00f76596008310132d.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:f765:9600:8310:132d])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e702ec426sm169695515e9.10.2026.05.11.03.19.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2026 03:19:49 -0700 (PDT)
+Date: Mon, 11 May 2026 12:19:47 +0200
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, bpf <bpf@vger.kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: Re: [PATCH bpf] bpf: Don't run arg-tracking analysis twice on main
+ subprog
+Message-ID: <agGtQ0PY3ziCoFsn@mail.gmail.com>
+References: <e4d7b53d4963ef520541a782f5fc8108a168877c.1778176504.git.paul.chaignon@gmail.com>
+ <CAADnVQ+kM=Zg_pcY30QHFPu_16L8wa+DbgQqnidqo-QZphihFQ@mail.gmail.com>
+ <3e3a145bfb6c17535c5c921c60f405d56d32bf7d.camel@gmail.com>
+ <CAADnVQLpbXdoqo11c1a4mS5XYPG+5WXrd+MP9EFoDGj1_B0uaQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v5 3/5] veth: implement Byte Queue Limits (BQL)
- for latency reduction
-To: Jesper Dangaard Brouer <hawk@kernel.org>, Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
- kernel-team@cloudflare.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20260505132159.241305-1-hawk@kernel.org>
- <20260505132159.241305-4-hawk@kernel.org>
- <ee275aa6-af27-4dac-9afa-da88abde312b@schippers-hamm.de>
- <8f2f7f2e-6aa2-4e5b-b52d-0025b2525579@redhat.com>
- <e3a91545-13cd-4f87-8375-d707865bdbca@schippers-hamm.de>
- <6a597dbd-70bf-4b14-b495-2f7248fd3220@kernel.org>
- <20260508190626.4285fac0@kernel.org>
- <f459b95c-80d5-4e05-84b2-f574c92724de@kernel.org>
- <20260510085602.57c7a081@kernel.org>
- <daa05c21-dcfc-4cc4-aa22-9e25c7f6c743@kernel.org>
-Content-Language: en-US
-From: Simon Schippers <simon@schippers-hamm.de>
-In-Reply-To: <daa05c21-dcfc-4cc4-aa22-9e25c7f6c743@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ooYqc/zrl1aUI/C0NK5cJ8I5Ix6X2RKup/9iRqBAMhsFc2c1ciN
- d06pIv4q+1GQtF1C7815sHLqpU44X5Zi0YZp94iibLKFHR6MR/lOnAyBFwNasYzoi0CQUK8
- xwQU6Bsrd3i3jHGIxBkk5Lu0+gJfx1gCJ0pytst4zdLP5vkq5DG/CqK6692hLh5v1HDMVrx
- LG2HJ/7NpmqNujlliiQAg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:x9YASn3Q0N8=;pRVWsaTwVHJbKS4ZMMM+1J75ABr
- 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
- d8NRx/zGRhhrS3AvMS+iXqSH57WvGx0j
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQLpbXdoqo11c1a4mS5XYPG+5WXrd+MP9EFoDGj1_B0uaQ@mail.gmail.com>
 
-On 5/11/26 10:11, Jesper Dangaard Brouer wrote:
->=20
->=20
-> On 10/05/2026 17.56, Jakub Kicinski wrote:
->> On Sat, 9 May 2026 11:09:51 +0200 Jesper Dangaard Brouer wrote:
->>> On 09/05/2026 04.06, Jakub Kicinski wrote:
->>>> On Thu, 7 May 2026 21:09:09 +0200 Jesper Dangaard Brouer wrote:
->>>>> Not against being able to modify VETH_RING_SIZE, but I don't think i=
-t is
->>>>> the solution here.
->>>>
->>>> Was it evaluated, tho?
->>>>
->>>> It's obviously super easy these days have AI spew no end of complex
->>>> code. So it'd be great to have some solid, ideally production-like
->>>> data to back this all up.
->>>>
->>>> VETH_RING_SIZE seems trivial, ethtool set ringparam
->>>
->>> No, unfortunately we cannot just decrease the VETH_RING_SIZE.
->>
->> To be clear - I said may it configurable with ethtool -G
->> not change the default.
->>
->=20
-> Sure, I understand the desire to make VETH_RING_SIZE configurable.
-> If doing so we are making Linux network stack harder to tune and setup
-> correctly. E.g. adding a qdisc to veth would also require changing the
-> ring size, but if system also uses XDP then tuning below 64 (likely 128)
-> will lead to hard-to-find packet drops.
+On Sat, May 09, 2026 at 04:16:10PM -0700, Alexei Starovoitov wrote:
+> On Sat, May 9, 2026 at 4:50 AM Eduard Zingerman <eddyz87@gmail.com> wrote:
+> >
+> > On Fri, 2026-05-08 at 16:24 -0700, Alexei Starovoitov wrote:
+> > > On Thu, May 7, 2026 at 11:22 AM Paul Chaignon <paul.chaignon@gmail.com> wrote:
+> > > >
+> > > > Because subprog 0, the main subprog, is considered a global function,
+> > > > we end up running the arg-tracking dataflow analysis twice on it. That
+> > > > results in slightly longer verification but mostly in more verbose
+> > > > verifier logs. This patch fixes it by keeping only the iteration over
+> > > > global subprogs.
+> > > >
+> > > > When running over all of Cilium's programs with BPF_LOG_LEVEL2, this
+> > > > reduces verbosity by ~20% on average.
+> > > >
+> > > > Fixes: bf0c571f7feb6 ("bpf: introduce forward arg-tracking dataflow analysis")
+> > > > Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
+> > > > ---
+> > > >  kernel/bpf/liveness.c | 11 ++---------
+> > > >  1 file changed, 2 insertions(+), 9 deletions(-)
+> > > >
+> > > > diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+> > > > index 332e6e003f27..505250998f36 100644
+> > > > --- a/kernel/bpf/liveness.c
+> > > > +++ b/kernel/bpf/liveness.c
+> > > > @@ -1914,15 +1914,6 @@ int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env)
+> > > >                 return -ENOMEM;
+> > > >         }
+> > > >
+> > > > -       instance = call_instance(env, NULL, 0, 0);
+> > > > -       if (IS_ERR(instance)) {
+> > > > -               err = PTR_ERR(instance);
+> > > > -               goto out;
+> > > > -       }
+> > > > -       err = analyze_subprog(env, NULL, info, instance, callsites);
+> > > > -       if (err)
+> > > > -               goto out;
+> > > > -
+> > > >         /*
+> > > >          * Subprogs and callbacks that don't receive FP-derived arguments
+> > > >          * cannot access ancestor stack frames, so they were skipped during
+> > > > @@ -1934,6 +1925,8 @@ int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env)
+> > > >          * each subprog is analyzed before its callees, allowing the
+> > > >          * recursive walk inside analyze_subprog() to naturally
+> > > >          * reach nested callees that also lack FP-derived args.
+> > > > +        *
+> > > > +        * Note the main subprog is also analyzed as part of this loop.
+> > > >          */
+> > >
+> > > Thanks for the report.
+> > > I guess the fix is correct.
+> > > This part of the comment needs to be adjusted:
+> > > "they were skipped during
+> > >          * the recursive walk above."
+> > >
+> > > I wonder whether something like this is cleaner?
+> > > -               if (info[sub].at_in && !bpf_subprog_is_global(env, sub))
+> > > +               if (info[sub].at_in && (!bpf_subprog_is_global(env,
+> > > sub) || sub == 0))
+> > >
+> > > This part of the comment:
+> > > "Async callbacks (timer, workqueue) are
+> > > * also not reachable from the main program's call graph."
+> > >
+> > > is also not quite correct.
+> > > In here:
+> > >                 } else if (bpf_calls_callback(env, idx)) {
+> > >                         callee = find_callback_subprog(env, insn, idx,
+> > > &caller_reg, &cb_callee_reg);
+> > >
+> > > they could have been reached, but find_callback_subprog()
+> > > will ignore timers because FP-derived args won't be passed
+> > > into them.
+> > >
+> > > Eduard,
+> > > wdyt?
+> >
+> > This is a nice catch. Idk if 'sub == 0' part is necessary, tbh.
+> > Paul, please add my acked-by when you respin with fixed comments.
+> >
+> > Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> 
+> Reworded myself and applied.
 
-I mean 64 still could be a 4x improvement at least.
+Thanks!
 
->=20
-> I prefer adding something (like BQL) that auto-tune how much of the ring
-> queue we are using.  Good queues function as shock absorbers when
-> concurrent processes in the OS have scheduling noise.
->=20
-> I acknowledge that Simon Schippers found that the BQL implementation was
-> actually not auto-tuning.  We need to work on this, my prototype
-> implementation [1] [2] works surprisingly well.
->=20
->=20
-> - [1] https://lore.kernel.org/all/3e43117f-356d-4086-a176-abd7fe2e6f0a@k=
-ernel.org/2-09-veth-time-based-bql-coalescing.patch
-> - [2] https://lore.kernel.org/all/3e43117f-356d-4086-a176-abd7fe2e6f0a@k=
-ernel.org/
->=20
->=20
->>> The reason is that XDP-redirect into veth don't have any
->>> back-pressure and would simply drop packets if queue size becomes
->>> less than the NAPI budget (64). (Yes, we use both normal path and
->>> XDP-redirect in production).
->>
->> Doesn't this mean you have a queue which is not under BQL control?
->>
->=20
-> It is a matter of perspective. BQL needs between 17-55 elements in the
-> 256 queue.  At the same time we handle if the ring runs full, e.g. due
-> to a sudden burst of XDP redirected packets, which pushes packets into
-> the qdisc layer.
-
-You are checking inflight/limit in /sys directory to get the 17-55
-number, right?
-
-I think those elements are not really in the queue.
-
-As written before:
-The weird thing in this implementation is that is that BQL's inflight
-!=3D number of packets in the ring and BQL's limit !=3D "current ring size=
-".
-Instead the BQL limit describes the number of maximal allowed packets
-between calls of netdev_sent_queue().
-And in our case here we do not complete (in our case forward) the
-packets when calling netdev_sent_queue() but instead immediately and
-therefore they are not in the queue anymore when netdev_sent_queue() is
-called.
-
-Also that means that the number strongly depends on the
-VETH_BQL_COAL_TX_USECS parameter.
-For a fixed PPS the limit should be approx.:
-
-Limit =3D VETH_BQL_COAL_TX_USECS * PPS
-
-Assuming the default 10us coal and a fixed 1 MPPS:
-
-Limit =3D 0.00001s * 1_000_000 =3D 10 packet
-
-Can you follow my theory?
-
-Judging from that I personally think VETH_BQL_COAL_TX_USECS needs to
-bigger. More like 100us/1ms. With 10us the bql limit gets adjusted
-very often I think..
-
-Thanks.
-
->=20
->=20
->>> My benchmarking shows that an optimal BQL limit is dynamically
->>> adjusted between 17-55 depending on veth consumer namespace
->>> overhead/speed, when balancing throughput and latency.
->>
->> Testing with prod-approximating traffic pattern and load would be great=
-.
->=20
-> That is what I'm doing.  I'm testing with prod-approximating traffic
-> pattern and changing the number of iptables rules to simulate the
-> overhead I measured from production.  I think I explained this in the
-> cover letter. We are going to use this in a production environment (to
-> be clear).
->=20
-> Simon found an issue testing the overload scenario.
->=20
-> --Jesper
->=20
