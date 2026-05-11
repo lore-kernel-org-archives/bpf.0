@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA75C43634C;
-	Mon, 11 May 2026 17:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D42547798C;
+	Mon, 11 May 2026 17:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778521767; cv=none; b=D8IMF0qcQI6bxbdvr3WdGWAWDj1Z9HbDM3RLZPRoID2cmk9t6jMBdaA/omglqrS8whXxV8A/8obDohtY40AYfbIfXiD8jfMz+9MsJ9EQRyWnZ1DCAgF6GgZoeNtkV4FivwY31CJqNlmXs3OJcfceUvJeO9N7fI806plctGmfTAI=
+	t=1778521768; cv=none; b=X51XbNJlRh0wA3aGB9i8xfPuLr6CQd79fSkBRMDqHUfH2zGMqnJV2cCw+mq+YHo3G6B7ulEc/DL4xqWtdLR8OIeZ5zN08b8Dz/h8BtyUWCoPZzJvTZvbdyLwQS5xMkyeTbErR6n92eYPY6cI5iY10ZEgNkP9gwAxljIYz0grqZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778521767; c=relaxed/simple;
-	bh=sVpNHmHY32bH01BNR2hNIwAhnNkkRwbJzCOag02xyH4=;
+	s=arc-20240116; t=1778521768; c=relaxed/simple;
+	bh=OeNTDOfgXSxAod/UsF3bpBrIfkmyQkJU5nchPU3STWs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QedBSLvDwqdeWeacGmjWlELosB4/OUWm9ifnoyDTw9x43Oxc5l8YT/N7/wTfYU7nEpQnzG/ZGWMggAbbLN32EKHT/b2lC+A5q/GHGu7F5EDJKtp/aKe62d81eQHygU/CvWSv5JqHLL4jtY0nupI9c13Pgh+IrcIbPiunjcRmA9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JYgPdg8l; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=KXY7kVyrtNycvw84Zb0jJOe9Tu+EUJk0rV4NNnzpbqhpgNUPXcpG9DvvMuo35lU10Bg6S8kDqTfJArLjCVEqK8MW1lRtEK2bQzxIM0VUcsO4zAiWZJNlL7DPD4I+RnVh0ycxK32qw4MNrEZWySxFQ6qk8tzfUmU+5MR/khns7SM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oGYuIqGl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JYgPdg8l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2286BC2BCC9;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oGYuIqGl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4198C2BCF5;
 	Mon, 11 May 2026 17:49:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778521767;
-	bh=sVpNHmHY32bH01BNR2hNIwAhnNkkRwbJzCOag02xyH4=;
+	s=k20201202; t=1778521768;
+	bh=OeNTDOfgXSxAod/UsF3bpBrIfkmyQkJU5nchPU3STWs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JYgPdg8lbsszT15F7p5BAQlmrEnEQVPRA4xqJpz61iF9dn6I9lixC/lbBlBS8jUeh
-	 PJuzqNDC+hfXiKem+oksdNRJw4TW5qlgytifDWzqlN8EpKRO1FTXdXdUHvySU9Omd0
-	 qhD3QatwaMJFewg6sdkc1T1suyWR9rF/UudNtWAwgPP5I6fmQE4Dh7EioFArrZaNKO
-	 NEyW6e3gMfgCleO9RnUXb9+roeZKkBg3r3a3Do5vR03ge9lzIZlkVprM7qW4lqpuIq
-	 9fvFZmK3pmldJ5YNqlPFW8Dm9GZ2dXDh1lkGUyHT4gbf1iPiN+hwevzB05q5uUpsVL
-	 PHd0104iAc7tg==
+	b=oGYuIqGlZ9a3WVBAbwyR5CgKnCDKaY3PP49J0hWHCzy4r75GojdRwPpoNWooetsCJ
+	 38QrrQeH/i5DtrCjanl9FEBNh/wdNwq6wOtBZvvMzXtbB1gTe150hyoGX7+6d0oreU
+	 WmVo7lYrXUwB/QwVlvkToPicO0LVH44i4CTtSAhwoDbPcpVhJvWWmEz1o6H+ahJaYD
+	 Z7zRBtPqRZLWujM5dGivrrmTRW5i+iH8eSVYe22T1oOKKHQPH4VTLGPF6LWOJpI04S
+	 OyOYvWE7L32DBxMzVs6F0Sq0jzB2CEUbdnf12GDDIcTvdwFuWavxEkzE/6qv1dWQq8
+	 hEeW9YoKmGn2Q==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -37,12 +37,10 @@ Cc: netdev@vger.kernel.org,
 	john.fastabend@gmail.com,
 	bpf@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>,
-	Sashiko <sashiko-bot@kernel.org>,
-	daniel@iogearbox.net,
-	jonathan.lemon@gmail.com
-Subject: [PATCH net v2 2/4] net: tls: prevent chain-after-chain in plain text SG
-Date: Mon, 11 May 2026 10:49:18 -0700
-Message-ID: <20260511174920.433155-3-kuba@kernel.org>
+	Sashiko <sashiko-bot@kernel.org>
+Subject: [PATCH net v2 3/4] net: tls: fix use-after-free in tls_sw_sendmsg_locked after bpf verdict
+Date: Mon, 11 May 2026 10:49:19 -0700
+Message-ID: <20260511174920.433155-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260511174920.433155-1-kuba@kernel.org>
 References: <20260511174920.433155-1-kuba@kernel.org>
@@ -54,89 +52,50 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Sashiko points out that if end = 0 (start != 0) the current
-code will create a chain link to content type right after
-the wrap link:
+bpf_exec_tx_verdict() may return having modified the record
+and the plaintext/encrypted sk_msg pointers. We must always
+reload those pointers after calling bpf_exec_tx_verdict().
 
-  This would create a chain where the wrap link points directly
-  to another chain link. The scatterlist API sg_next iterator
-  does not recursively resolve consecutive chain links.
+On the wait_for_memory path after sk_stream_wait_memory() returns,
+the post-wait contains a shortcut:
 
-meaning this is illegal input to crypto.
+	if (ctx->open_rec && msg_en->sg.size < required_size)
+		goto alloc_encrypted;
 
-The wrapping link is unnecessary if end = 0. end is the entry after
-the last one used so end = 0 means there's nothing pushed after
-the wrap:
-
-   end         start            i
-    v            v              v
-  [   ]...[   ][ d ][ d ][ d ][ d ][rsv for wrap]
-
-Skip the wrapping in this case.
-
-TLS 1.3 can use the "wrapping slot" for it's chaining if end = 0.
-This avoids the chain-after-chain.
-
-Move the wrap chaining before marking END and chaining off content
-type, that feels like more logical ordering to me, but should not
-matter from functional perspective.
+which dereferences the cached msg_en, which can equally point at
+a freed record if the prior bpf_exec_tx_verdict() split the open
+rec before returning -ENOMEM. Drop the shortcut it seems to have
+only been an optimization to skip trivial intro of the loop.
 
 Reported-by: Sashiko <sashiko-bot@kernel.org>
-Fixes: 9aaaa56845a0 ("bpf: Sockmap/tls, skmsg can have wrapped skmsg that needs extra chaining")
+Fixes: 54a3ecaeeeae ("bpf: fix ktls panic with sockmap")
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
-CC: john.fastabend@gmail.com
-CC: sd@queasysnail.net
-CC: daniel@iogearbox.net
-CC: jonathan.lemon@gmail.com
----
- net/tls/tls_sw.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+ net/tls/tls_sw.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 2608b0c01849..3bfdaf5e64f5 100644
+index 3bfdaf5e64f5..360f71fd7884 100644
 --- a/net/tls/tls_sw.c
 +++ b/net/tls/tls_sw.c
-@@ -789,21 +789,33 @@ static int tls_push_record(struct sock *sk, int flags,
- 	i = msg_pl->sg.end;
- 	sk_msg_iter_var_prev(i);
+@@ -1112,7 +1112,6 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
+ 		if (!sk_stream_memory_free(sk))
+ 			goto wait_for_sndbuf;
  
-+	/* msg_pl->sg.data is a ring; data[MAX+1] is reserved for the wrap
-+	 * link (frags won't use it). 'i' is now the last filled entry:
-+	 *
-+	 *         i   end              start
-+	 *         v    v                 v            [ rsv ]
-+	 *  [ d ][ d ][   ][   ]...[   ][ d ][ d ][ d ][chain]
-+	 *    ^   END                                     v
-+	 *     `-----------------------------------------'
-+	 *
-+	 * Note that SGL does not allow chain-after-chain, so for TLS 1.3,
-+	 * we must make sure we don't create the wrap entry and then chain
-+	 * link to content_type immediately at index 0.
-+	 */
-+	if (i < msg_pl->sg.start)
-+		sg_chain(msg_pl->sg.data, ARRAY_SIZE(msg_pl->sg.data),
-+			 msg_pl->sg.data);
-+
- 	rec->content_type = record_type;
- 	if (prot->version == TLS_1_3_VERSION) {
- 		/* Add content type to end of message.  No padding added */
- 		sg_set_buf(&rec->sg_content_type, &rec->content_type, 1);
- 		sg_mark_end(&rec->sg_content_type);
--		sg_chain(msg_pl->sg.data, msg_pl->sg.end + 1,
--			 &rec->sg_content_type);
-+		sg_chain(msg_pl->sg.data, i + 2, &rec->sg_content_type);
- 	} else {
- 		sg_mark_end(sk_msg_elem(msg_pl, i));
+-alloc_encrypted:
+ 		ret = tls_alloc_encrypted_msg(sk, required_size);
+ 		if (ret) {
+ 			if (ret != -ENOSPC)
+@@ -1255,9 +1254,6 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
+ 				tls_trim_both_msgs(sk, orig_size);
+ 			goto send_end;
+ 		}
+-
+-		if (ctx->open_rec && msg_en->sg.size < required_size)
+-			goto alloc_encrypted;
  	}
  
--	if (msg_pl->sg.end < msg_pl->sg.start)
--		sg_chain(msg_pl->sg.data, ARRAY_SIZE(msg_pl->sg.data),
--			 msg_pl->sg.data);
--
- 	i = msg_pl->sg.start;
- 	sg_chain(rec->sg_aead_in, 2, &msg_pl->sg.data[i]);
- 
+ send_end:
 -- 
 2.54.0
 
