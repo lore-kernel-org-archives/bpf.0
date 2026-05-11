@@ -1,201 +1,178 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF78442E01F
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 16:50:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE944266A0
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 16:53:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778518213; cv=none; b=O5UVTuYQMA/X8ceCHcm0T1TJhX9oiLAhLR65TTPw3wgBDkagYcgknYPGuumDg6TwNiOp26TxZcIpE7iLRNMlUYCWy1MPObYn7gUTtDMD2yfN+4IM22euXNAo7/WPW5W2wUNm9YsO9m/ZovCjqBvigZpVMJrwzAfNNnUNr9LK38Y=
+	t=1778518402; cv=none; b=V3BPvFgeVJyp83sjoAr7OhQVmyNxvacPKisYJil6/TtOF9GhzPHma7ixFKXBxnz54T0SM9M19xLrpqJbMCLlJBsV2FOujAShTyB6EZOk5aTEyc9vTXt3KmsVWQ02da1JhtlosAa3E5dMTj3QYkvdYbK24MZuarIdhdhcWqELRU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778518213; c=relaxed/simple;
-	bh=lsUNyBMAhWl7PxeVuwr4i6hPGNgnOx/y5r6T8Y/iK98=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oAV/sQMuHQiaPRwrQnh1NN+FNaLIcyDetJDVK6zXt9WLGLK/5hzKBmpQSa+0Jqzep6o4p9a3WK4Qo8uo7JExwGiLc+HUxZauOq5LQMb8biesvxTK7YAbLhQu5eEBvim9T91kdt8pQatcLXzSjdLQgYxubpfbOt5bmVVTfioyta8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IuksUMD6; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778518402; c=relaxed/simple;
+	bh=NDr89ZHqjMmSAUjSSYDe/cY3Eiu1jte8P7RxS6azPjU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=W0Wk2zUCGM6m3b4zm0U2DqG6QZ6vHVVxCvkWjFrylfpLLzYC9UMinAh8J/Iqct/NidyCyMpYvLueGGWxJ556Dr7UERcyELXlLCIeyt+iysGHh7IfqVrNrqeVIkYCLXS8gwgAIH9/zx1QeHvOqFvsvGTEvV1y/TdzETboJecTb5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ljDLeVW/; arc=none smtp.client-ip=209.85.161.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IuksUMD6"
-Message-ID: <56ea19e7-36e6-4101-a6ac-8f309e8a72ff@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778518209;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WIeLOG5Ns1mWJtRZK7S6dkqndjwyfye4iXJiIRbeyCw=;
-	b=IuksUMD6XmYAQXNUET0J8p1iKnv9K8ivAdFxbrTMTKAAmpS4zVAnj7t7KYIU2Yauu+BPLd
-	fCt8DnAvISqgKk91AjpqgCLgiITWOQthRkBEflf81TUFP29s2AThe4iznsQSx+r8ystKqe
-	Gd9sKGnlpECYaJYPY22jx0bvYV4B/HQ=
-Date: Mon, 11 May 2026 09:49:45 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ljDLeVW/"
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-685017d0fbcso2495184eaf.3
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 09:53:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778518400; x=1779123200; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JavA89CInqrRT0axMkoFaX73nwP/5TwmJupoBxqRvFM=;
+        b=ljDLeVW/UM0cgDttn8g3cTL06JrkMAr9PVMUHZx9PVOpYUxTGeS/Mi3jvg38dkJy45
+         H+HsLHXM+MLVLybFkrw1EqYr53HcoUa3OEI9KsIbEeLB9EYzRGEuxMVzrTWaOGPVK6wu
+         e69zT8HiyPrO1q6kPTejnZJ8gWq4SXVZeAvEoZCZbNsfMu2gC934/RPGwvaW2OjcREpC
+         lOf1sujSjWYhwHEwz2JgzV1TeHIhCpCWUrFN2c8YljUpQtn8ABDCCut1FBnKr2i5SNTH
+         +BnZuRBFDTtkFx876Q9gAMSHmjPi8YU+/IhwbMehVPyFsGOcLT0vRSIARBvS6MXqmWYZ
+         oiLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778518400; x=1779123200;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JavA89CInqrRT0axMkoFaX73nwP/5TwmJupoBxqRvFM=;
+        b=g2bvlZ0Jji/JbGwVWt9R7uyWVGOHgSVDw2+XNZ5VmnxqATtvvN9BOH6pYI49R+XOy9
+         ttJDW5ptF7RueffG14J70bcKIgr2unmPpjbXCVYr38QdWC1H1tjeIWW2bQo2gZ5s4uU3
+         ojkvibhB2D7O9zz4+AIzhqQzQ4b5IIYIdyPTgeApV1D7NVimSbpiobiNtX2/Ce9Y+9tc
+         k3TPoo2EK4i5AbegJYbkL7LRfg0ntnoCmtl5O4jzfsSsgRFm5/T7zW57igtgNtcmex6a
+         PCmwhqYpZqNy6MFqxuA69upNwup6XMm2TMk60vh5gwPWHN6m6RFYRuOJcJtFNtjELXSp
+         7dFA==
+X-Forwarded-Encrypted: i=1; AFNElJ/XV7bI4Trvnsgg41FehLDNizVh9rR/xMy/l3mHHUU48N3XXmbBrmtWmv5oEdFzh4Le3R8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0j6Q608H7tC+vxG2y4hmJmffR3V9rTogTDoiWfxlVRlkkpRM2
+	dgqOz879BNNpJx2NoL0l9YzacJ42tMFtn38v0y9rm9FQPAXfPW3L1S7j
+X-Gm-Gg: Acq92OHLjFfE68vb2ypfEYBbSmcc7d9sfQ2RnBfVQp+VdSLdT/X8LixXRa8IgpYfFpO
+	w/9onbNpriSZA34mG9eTXj4n+0iEP0ErSZ+Bqzt1IQFoD3GDLwSnC3vAwK1d6owUqDxFcXe5+wz
+	rXtizFORWeEBspMounujvVNrugqeNL8M8978VjOOAo/qfxnPPCTNPh6XB4WCX0xGEebxnjDWtc2
+	orqTr4RQDykiDi1nDJKTqHpK1nNquR9raA697AWYr5a4H6LzUX9r50gvTFOO5THdRpS7yaYqxIH
+	zhbeqRExWAjGASz3tPYJmutqY8afaXmqyvl9ftDmGBqZ4hRbk8IVOwdCZ6/uMjjrph2DWV8LlZo
+	suMjcDvBTCzQ5aKvIP4zwb4Oc6HPPKYogPWOlxq4Juc211WQW868cZAQs8hOkfyNlmem0ZM81/k
+	BDRLoPTsyOTB1WlqOdqiYYqv1Rn5EN4niiLDUt15buzFyySFKkQj9SMmqkB6WHmWgJ2/6X0OnUC
+	TKdrvmnBlbDgT3X052sGeTWy24MYuZ4oLA6R5g=
+X-Received: by 2002:a05:6820:986:b0:694:8b08:b916 with SMTP id 006d021491bc7-69b25c88aecmr8116691eaf.35.1778518399975;
+        Mon, 11 May 2026 09:53:19 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:49::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69b25c75d08sm6137740eaf.4.2026.05.11.09.53.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 May 2026 09:53:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 20/24] selftests/bpf: Add verifier tests for
- stack argument validation
-Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- jose.marchesi@oracle.com, kernel-team@fb.com, martin.lau@kernel.org,
- eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260511053452.1892038-1-yonghong.song@linux.dev>
- <67190ccd5d895a0070fd876109ee9fd9d0ce3db42324ba07d942b5e25278d6fb@mail.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <67190ccd5d895a0070fd876109ee9fd9d0ce3db42324ba07d942b5e25278d6fb@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 11 May 2026 09:53:17 -0700
+Message-Id: <DIG05KI4QZ2H.3JE4OWSK6KC29@gmail.com>
+Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
+ <andrii@kernel.org>, <martin.lau@linux.dev>, <eddyz87@gmail.com>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <kpsingh@kernel.org>,
+ <sdf@fomichev.me>, <haoluo@google.com>, <jolsa@kernel.org>,
+ <shuah@kernel.org>, <brauner@kernel.org>, <sforshee@kernel.org>,
+ <yuichtsu@amazon.com>, <aalbersh@redhat.com>, <willemb@google.com>,
+ <kerneljasonxing@gmail.com>, <chen.dylane@linux.dev>, <yatsenko@meta.com>,
+ <memxor@gmail.com>, <a.s.protopopov@gmail.com>, <ameryhung@gmail.com>,
+ <rongtao@cestc.cn>, <linux-kernel@vger.kernel.org>,
+ <linux-api@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <kernel-patches-bot@fb.com>, <martin.lau@kernel.org>, <clm@meta.com>,
+ <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v13 1/8] bpf: Extend BPF syscall with common
+ attributes support
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: <bot+bpf-ci@kernel.org>, <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
+X-Mailer: aerc
+References: <20260511152817.89191-2-leon.hwang@linux.dev>
+ <810f123d14450d09d147d90dea25ddf5091e636542fcc5729d0594bfbd622757@mail.kernel.org>
+In-Reply-To: <810f123d14450d09d147d90dea25ddf5091e636542fcc5729d0594bfbd622757@mail.kernel.org>
 
-
-
-On 5/11/26 8:19 AM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
->> index a96b25ebff23..ee3d929fac8a 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
->> @@ -91,6 +91,8 @@
->>   #include "verifier_sockmap_mutate.skel.h"
->>   #include "verifier_spill_fill.skel.h"
->>   #include "verifier_spin_lock.skel.h"
->> +#include "verifier_stack_arg.skel.h"
->> +#include "verifier_stack_arg_order.skel.h"
->>   #include "verifier_stack_ptr.skel.h"
->>   #include "verifier_store_release.skel.h"
->>   #include "verifier_subprog_precision.skel.h"
->> @@ -238,6 +240,8 @@ void test_verifier_sock_addr(void)            { RUN(verifier_sock_addr); }
->>   void test_verifier_sockmap_mutate(void)       { RUN(verifier_sockmap_mutate); }
->>   void test_verifier_spill_fill(void)           { RUN(verifier_spill_fill); }
->>   void test_verifier_spin_lock(void)            { RUN(verifier_spin_lock); }
->> +void test_verifier_stack_arg(void)            { RUN(verifier_stack_arg); }
->> +void test_verifier_stack_arg_order(void)      { RUN(verifier_stack_arg_order); }
->>   void test_verifier_stack_ptr(void)            { RUN(verifier_stack_ptr); }
->>   void test_verifier_store_release(void)        { RUN(verifier_store_release); }
->>   void test_verifier_subprog_precision(void)    { RUN(verifier_subprog_precision); }
-> In v2 (May 7), sashiko-bot raised a concern about whether the tests in
-> verifier_stack_arg_order.c are actually being executed:
->
->    The tests in verifier_stack_arg_order.c are never executed because
->    the file is not registered in the selftests runner. [...] Did you
->    intend to include verifier_stack_arg_order.skel.h here as well?
->    [...] Could this be missing a RUN(verifier_stack_arg_order) entry?
->
-> Reference: https://lore.kernel.org/bpf/20260509013809.18E7DC2BCB0@smtp.kernel.org/
->
-> You responded in v3 (May 10) saying "Will fix," but this commit includes
-> both verifier_stack_arg_order.skel.h and RUN(verifier_stack_arg_order),
-> which appears to address the concern. Was the registration added after the
-> discussion, or is there still something missing?
-
-The new code is added after the discussion. So it is covered.
-
+On Mon May 11, 2026 at 9:19 AM PDT, bot+bpf-ci wrote:
+>> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+>> index f5639d5ac331..50055ab73649 100644
+>> --- a/include/linux/syscalls.h
+>> +++ b/include/linux/syscalls.h
+>> @@ -936,7 +936,8 @@ asmlinkage long sys_seccomp(unsigned int op, unsigne=
+d int flags,
+>>  asmlinkage long sys_getrandom(char __user *buf, size_t count,
+>>  			      unsigned int flags);
+>>  asmlinkage long sys_memfd_create(const char __user *uname_ptr, unsigned=
+ int flags);
+>> -asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned =
+int size);
+>> +asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned =
+int size,
+>> +			struct bpf_common_attr __user *attr_common, unsigned int size_common=
+);
+>>  asmlinkage long sys_execveat(int dfd, const char __user *filename,
+>>  			const char __user *const __user *argv,
+>>  			const char __user *const __user *envp, int flags);
 >
 > [ ... ]
 >
->> diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
->> new file mode 100644
->> index 000000000000..d38beba6b5e9
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+>> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/b=
+pf.h
+>> index 677be9a47347..16ff0968fc21 100644
+>> --- a/tools/include/uapi/linux/bpf.h
+>> +++ b/tools/include/uapi/linux/bpf.h
+>> @@ -994,6 +994,7 @@ enum bpf_cmd {
+>>  	BPF_PROG_STREAM_READ_BY_FD,
+>>  	BPF_PROG_ASSOC_STRUCT_OPS,
+>>  	__MAX_BPF_CMD,
+>> +	BPF_COMMON_ATTRS =3D 1 << 16, /* Indicate carrying syscall common attr=
+s. */
+>>  };
+>
 > [ ... ]
 >
->> +__noinline __used
->> +static long subprog_deref_arg6(long a, long b, long c, long d, long e, long *f)
->> +{
->> +	return *f;
->> +}
-> [ ... ]
+>> @@ -1500,6 +1501,13 @@ struct bpf_stack_build_id {
+>>  	};
+>>  };
+>>
+>> +struct bpf_common_attr {
+>> +	__u64 log_buf;
+>> +	__u32 log_size;
+>> +	__u32 log_level;
+>> +	__u32 log_true_size;
+>> +};
+>> +
 >
->> +SEC("tc")
->> +__description("stack_arg: pruning with different stack arg types")
->> +__failure
->> +__flag(BPF_F_TEST_STATE_FREQ)
->> +__msg("R{{[0-9]}} invalid mem access 'scalar'")
->> +__naked void stack_arg_pruning_type_mismatch(void)
->> +{
->> +	asm volatile (
->> +		"call %[bpf_get_prandom_u32];"
->> +		"r6 = r0;"
->> +		/* local = 0 on program stack */
->> +		"r7 = 0;"
->> +		"*(u64 *)(r10 - 8) = r7;"
->> +		/* Branch based on random value */
->> +		"if r6 s> 3 goto l0_%=;"
->> +		/* Path 1: store stack pointer to outgoing arg6 */
->> +		"r1 = r10;"
->> +		"r1 += -8;"
->> +		"*(u64 *)(r11 - 8) = r1;"
->> +		"goto l1_%=;"
->> +	"l0_%=:"
->> +		/* Path 2: store scalar to outgoing arg6 */
->> +		"*(u64 *)(r11 - 8) = 42;"
->> +	"l1_%=:"
->> +		/* Call subprog that dereferences arg6 */
->> +		"r1 = r6;"
->> +		"r2 = 0;"
->> +		"r3 = 0;"
->> +		"r4 = 0;"
->> +		"r5 = 0;"
->> +		"call subprog_deref_arg6;"
->> +		"exit;"
->> +		:: __imm(bpf_get_prandom_u32)
->> +		: __clobber_all
->> +	);
->> +}
-> [ ... ]
+> Should log_buf use __aligned_u64 instead of plain __u64?
 >
->> +SEC("tc")
->> +__description("stack_arg: release_reference invalidates stack arg slot")
->> +__failure
->> +__msg("R{{[0-9]}} invalid mem access 'scalar'")
->> +__naked void stack_arg_release_ref(void)
-> [ ... ]
+> Looking at other pointer-bearing fields in the BPF UAPI, they consistentl=
+y
+> use __aligned_u64. For example, the existing BPF_PROG_LOAD log_buf in uni=
+on
+> bpf_attr is declared as:
 >
->> +SEC("tc")
->> +__description("stack_arg: pkt pointer in stack arg slot invalidated after pull_data")
->> +__failure
->> +__msg("R{{[0-9]}} invalid mem access 'scalar'")
->> +__naked void stack_arg_stale_pkt_ptr(void)
-> [ ... ]
+>     __aligned_u64 log_buf;  /* user supplied buffer */
 >
->> +SEC("tc")
->> +__description("stack_arg: null propagation rejects deref on null branch")
->> +__failure
->> +__msg("R{{[0-9]}} invalid mem access 'scalar'")
->> +__naked void stack_arg_null_propagation_fail(void)
-> Multiple reviewers (sashiko-bot in v6, bpf-ci bot in April 24 and v2)
-> raised concerns about test fragility in these tests
-> (stack_arg_pruning_type_mismatch, stack_arg_release_ref,
-> stack_arg_stale_pkt_ptr, and stack_arg_null_propagation_fail).
+> The __aligned_u64 attribute forces 8-byte alignment on all architectures,
+> including 32-bit systems where native unsigned long long alignment is onl=
+y
+> 4 bytes. Without this attribute, struct bpf_common_attr will have differe=
+nt
+> layouts between 32-bit and 64-bit ABIs:
 >
-> Since subprog_deref_arg6 is standard C (not __naked), LLVM determines which
-> register is used for dereferencing. The reviewers noted that if a future
-> LLVM version chooses a different register, the verifier error will mention
-> that register instead, causing the test to fail.
+> - 32-bit: 20 bytes, 4-byte aligned
+> - 64-bit: 24 bytes (4 bytes of tail padding), 8-byte aligned
 >
-> Reference: https://lore.kernel.org/bpf/b03ce38af2e3d574b5a79963da1a4db70e896e6712b2bf2e9fce69178433540d@mail.kernel.org/
+> While the current __sys_bpf() implementation with bpf_check_uarg_tail_zer=
+o()
+> and min_t() capped copying handles this gracefully, deviating from the
+> established BPF UAPI convention could create problems for future extensio=
+ns.
+> If another __u64 field is added later, the inter-field offsets would dive=
+rge
+> between ABIs.
 >
-> You responded in v6 that you would use a regex pattern like
-> R{{[0-9]}}, and in v2 (May 7) you stated you prefer to remove the register
-> prefix entirely. The current tests use __msg("R{{[0-9]}} invalid mem access
-> 'scalar'"), which matches any register number.
->
-> Is the regex pattern R{{[0-9]}} sufficient to address the fragility
-> concern, or would it be safer to make subprog_deref_arg6 a __naked
-> function with explicit register usage?
+> Would it be better to use __aligned_u64 log_buf to match union bpf_attr a=
+nd
+> preserve identical struct layouts across 32/64-bit ABIs?
 
-I think R{{[0-9]}} is sufficient.
+bot has a point.
 
->
-> [ ... ]
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25652623893
-
+pw-bot: cr
