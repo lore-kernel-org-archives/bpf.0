@@ -1,150 +1,153 @@
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1DA837A4AF;
-	Mon, 11 May 2026 21:54:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377262FE04E;
+	Mon, 11 May 2026 22:12:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778536470; cv=none; b=i6LdXMvtg4cU4huAUfO7lbGR4tIqsDjXy1B+H8C3qf1fV2Tm31N16B7FkXZ+Y0Z/V3IHUeZr2gwSlwdLM8uh1NZowyuxLWvEkmtd8ropCP8JOb0ZUy/PF2PFC+gEUEvFK+9P6YYtwYZdNxZbTbM9rqSt231UlcfCL2Ut8YVFcmg=
+	t=1778537554; cv=none; b=YLoqvspvLjVGRP5XKj8BRIqaAl6MNILnmVRrG/rdNJSKr2yeqncTW8Vr0yTWy0g7lpEe64LoWyPOsYegmH4Bnhs0cr7wiZxpo4CFM4mEEWzKxz8zHa+60BPrdudFV/F2lE9j3H36XhcockVHcsJO3Td1BIJB+sT59ahBrjncl+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778536470; c=relaxed/simple;
-	bh=3AhKlNDDQ/HwUN5zPeQkcVNvZsfqn1q30zDMhfXnI2A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LS7tX/nXw2Xhgty0LRgAGbZfE7qq00qwHWGQ0evI3fcOvCEx5lVBOl16WuS6mmWYRpTgXRTpbu7O6nlR5JhWm/YAaeuuBCvKGEf7M3YkHZvyOoxuwzJipCUeES1CIUvIj+JzDxwu44P8k+gYb2CdmuYap+EsiDcdPiI85w0d54Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-	by vmicros1.altlinux.org (Postfix) with ESMTP id AF6A972C8CC;
-	Tue, 12 May 2026 00:54:21 +0300 (MSK)
-Received: from altlinux.org (unknown [193.43.10.9])
-	by imap.altlinux.org (Postfix) with ESMTPSA id 988CE36D016E;
-	Tue, 12 May 2026 00:54:21 +0300 (MSK)
-Date: Tue, 12 May 2026 00:54:21 +0300
-From: Vitaly Chikunov <vt@altlinux.org>
-To: Paul Moore <paul@paul-moore.com>
-Cc: linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
-	selinux@vger.kernel.org, KP Singh <kpsingh@kernel.org>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [BUG] lsm= with bpf before selinux breaks fscreate with EINVAL
-Message-ID: <agJPqiSKvHrrg6Qn@altlinux.org>
-References: <agDuCdGIeM-6z-j-@altlinux.org>
- <CAHC9VhQ4VyAvG-z2h2NFpPx9PcJP4Ot2Ap=MPbCRk2TosJWOTA@mail.gmail.com>
- <agI9Rdi-72f8dNbB@altlinux.org>
- <CAHC9VhRWNEzYx3Xxtxv_0BBkM7skisVdnKXx3CGn3S=aoBCiyQ@mail.gmail.com>
+	s=arc-20240116; t=1778537554; c=relaxed/simple;
+	bh=O7KZZ/VQ/no/hjQ0J+ZC+pLvaMrnMEKgm6YZd4E745k=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=ARN20hnEBo/LhmazLsJTRvHs2LB016nC3jQ1jFPgFbREsBZ5Vcw3yYBE1B/k8KWYdDgZZG0uVctHkYDF18CHZz3+g4f3Q139AIprXjf3tdSsKDLClVXOe9iaxccIP/WBSy+M+umcMmvjCgcv8NRls64UgVLT+aM1EcPKlfQYDSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oem8Ym9p; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oem8Ym9p"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 103B7C2BCB0;
+	Mon, 11 May 2026 22:12:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778537553;
+	bh=O7KZZ/VQ/no/hjQ0J+ZC+pLvaMrnMEKgm6YZd4E745k=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=Oem8Ym9pQ0OHTg1aLtHJ+PEHz/nYRBybqBVd3AhZLiNMHO3fJ+PUqBlUeah9dEn7U
+	 U+706zGz4vjC25gkO2Ve8tq3WuKGCZ2bJusNWW/qZehCLVzHG8BJyxnx7DvBki6zYh
+	 dkGFVyAOaDewkaAd08XXoEn/tgpQZwz5+YmQP16AVdAXtjdQTOX/9TnwgGLhiNXKvs
+	 7keAwyzuyEPuEe2wJCfWN670iO19OO2b+4Wl8G+52cM/pbsxnWzcddEvow8vZvsww1
+	 Bsm8mRqVgN5R0P/fpD0SzuEFiubRyZYRdn0yW0CjAFGTq+tdATRTXcOZobwu4Olk6U
+	 rY69mPKicYagw==
+Content-Type: multipart/mixed; boundary="===============7240238835478354730=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhRWNEzYx3Xxtxv_0BBkM7skisVdnKXx3CGn3S=aoBCiyQ@mail.gmail.com>
+Message-Id: <85662b75ba1f428629fcb97491d0abe8f3fd93b257cd90766cb4604144dfc331@mail.kernel.org>
+In-Reply-To: <20260511212756.3163955-1-visitorckw@gmail.com>
+References: <20260511212756.3163955-1-visitorckw@gmail.com>
+Subject: Re: [PATCH bpf-next v3] m68k, bpf: Add initial BPF JIT compiler support
+From: bot+bpf-ci@kernel.org
+To: visitorckw@gmail.com,geert@linux-m68k.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,jserv@ccns.ncku.edu.tw,eleanor15x@gmail.com,marscheng@google.com,linux-kernel@vger.kernel.org,linux-m68k@lists.linux-m68k.org,bpf@vger.kernel.org,visitorckw@gmail.com,daniel@thingy.jp,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 11 May 2026 22:12:31 +0000 (UTC)
 
-Paul,
+--===============7240238835478354730==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-On Mon, May 11, 2026 at 05:49:39PM -0400, Paul Moore wrote:
-> On Mon, May 11, 2026 at 5:03 PM Vitaly Chikunov <vt@altlinux.org> wrote:
-> > On Mon, May 11, 2026 at 04:19:34PM -0400, Paul Moore wrote:
-> > > On Sun, May 10, 2026 at 5:17 PM Vitaly Chikunov <vt@altlinux.org> wrote:
-> > > >
-> > > > Hi,
-> > > >
-> > > > We have boot failure when CONFIG_LSM has "bpf" listed before "selinux"
-> > > > (without bpf lsm scripts loaded). (This also happens with a boot with
-> > > > "security=selinux" if selinux was not in LSM= list but bpf is.)
-> > > >
-> > > > systemd reports on the failing boot attempt:
-> > > >
-> > > >   Failed to set SELinux security context generic_u:object_r:device:s0 for /dev/shm: Invalid argument
-> > > >   Mounting tmpfs to /dev/shm of type tmpfs with options mode=01777.
-> > > >   Mounting tmpfs (tmpfs) on /dev/shm (MS_NOSUID|MS_NODEV|MS_STRICTATIME "mode=01777")...
-> > > >   Failed to mount tmpfs (type tmpfs) on /dev/shm (MS_NOSUID|MS_NODEV|MS_STRICTATIME "mode=01777"): No such file or directory
-> > > >   Failed to set SELinux security context generic_u:object_r:device:s0 for /dev/pts: Invalid argument
-> > > >   Mounting devpts to /dev/pts of type devpts with options mode=0620,gid=5.
-> > > >   Mounting devpts (devpts) on /dev/pts (MS_NOSUID|MS_NOEXEC "mode=0620,gid=5")...
-> > > >   Failed to mount devpts (type devpts) on /dev/pts (MS_NOSUID|MS_NOEXEC "mode=0620,gid=5"): No such file or directory
-> > > >   No filesystem is currently mounted on /sys/fs/cgroup.
-> > > >   Failed to set SELinux security context generic_u:object_r:def_t:s0 for /sys/fs/cgroup: Invalid argument
-> > > >   Mounting cgroup2 to /sys/fs/cgroup of type cgroup2 with options nsdelegate,memory_recursiveprot.
-> > > >   Mounting cgroup2 (cgroup2) on /sys/fs/cgroup (MS_NOSUID|MS_NODEV|MS_NOEXEC "nsdelegate,memory_recursiveprot")...
-> > > >   Failed to set SELinux security context generic_u:object_r:def_t:s0 for /sys/fs/pstore: Invalid argument
-> > > >   Mounting pstore to /sys/fs/pstore of type pstore with options n/a.
-> > > >   Mounting pstore (pstore) on /sys/fs/pstore (MS_NOSUID|MS_NODEV|MS_NOEXEC "")...
-> > > >   Failed to set SELinux security context generic_u:object_r:def_t:s0 for /sys/fs/bpf: Invalid argument
-> > > >   Mounting bpf to /sys/fs/bpf of type bpf with options mode=0700.
-> > > >   Mounting bpf (bpf) on /sys/fs/bpf (MS_NOSUID|MS_NODEV|MS_NOEXEC "mode=0700")...
-> > > >   [!!!!!!] Failed to mount API filesystems.
-> > > >   Freezing execution
-> > > >
-> > > > 'Invalid arguments' seems from setfscreatecon_raw.
-> > > >
-> > > > Reproducer:
-> > > >
-> > > >   Boot with lsm=lockdown,capability,landlock,yama,safesetid,bpf,selinux,ima,evm
-> > > >
-> > > >   (none):~# cat /proc/thread-self/attr/current
-> > > >   cat: /proc/thread-self/attr/current: Invalid argument
-> > > >   (none):~# echo > /proc/thread-self/attr/fscreate
-> > > >   bash: echo: write error: Invalid argument
-> > > >
-> > > > This appears to be caused by security_getprocattr / security_setprocattr
-> > > > iterating until the first hook defined (which is bpf) and returning with
-> > > > default value -EINVAL before selinux even sees them.
-> > >
-> > > Thanks for the problem report, the general recommendation is to place
-> > > the BPF LSM towards the end of the list (see the CONFIG_LSM Kconfig
-> > > help text), but we're trying to ensure that the BPF LSM works properly
-> > > when placed anywhere in that list.
-> >
-> > I think if the order is important it should be handled in the code like
-> > for capabilities and ima/evm LSMs, not by forcing the user to discover
-> > the correct order with trial and error.
-> 
-> Patches are always welcome, although as I mentioned to you previously
-> we are working towards supporting arbitrary ordering for BPF LSMs.
-> 
-> > > My apologies if you're abilities are well beyond this, but if you are
-> > > familiar with patching and building your own kernel, have you tried
-> > > changing the LSM_RET_DEFAULT value for those functions to zero/0?
-> > > Assuming userspace is happy with that, I believe it may solve this
-> > > problem.
-> >
-> > I can patch and test if this is useful to find the correct solution, but
-> > the description is a bit vague. Did you mean
-> >
-> >   include/linux/lsm_hook_defs.h:301:LSM_HOOK(int, -EINVAL, getprocattr, struct task_struct *p, const char *name,
-> >   include/linux/lsm_hook_defs.h:303:LSM_HOOK(int, -EINVAL, setprocattr, const char *name, void *value, size_t size)
-> >
-> > In these lines to replace -EINVAL with 0?
-> 
-> The patch below is what I had in mind (although be warned that was
-> just a cut-n-paste into this email so it is likely whitespace
-> damaged).  If you are able to give that a test it would be great, if
-> not, I can throw it on the todo pile.
-> 
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> index 2b8dfb35caed..12724e259900 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -298,9 +298,9 @@ LSM_HOOK(int, -EOPNOTSUPP, getselfattr, unsigned int attr,
->         struct lsm_ctx __user *ctx, u32 *size, u32 flags)
-> LSM_HOOK(int, -EOPNOTSUPP, setselfattr, unsigned int attr,
->         struct lsm_ctx *ctx, u32 size, u32 flags)
-> -LSM_HOOK(int, -EINVAL, getprocattr, struct task_struct *p, const char *name,
-> +LSM_HOOK(int, 0, getprocattr, struct task_struct *p, const char *name,
->         char **value)
-> -LSM_HOOK(int, -EINVAL, setprocattr, const char *name, void *value, size_t size)
-> +LSM_HOOK(int, 0, setprocattr, const char *name, void *value, size_t size)
-> LSM_HOOK(int, 0, ismaclabel, const char *name)
-> LSM_HOOK(int, -EOPNOTSUPP, secid_to_secctx, u32 secid, struct lsm_context *cp)
-> LSM_HOOK(int, -EOPNOTSUPP, lsmprop_to_secctx, struct lsm_prop *prop,
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index b2040011a386..261cc1124685 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4699,6 +4699,12 @@ L:	bpf@vger.kernel.org
+>  S:	Maintained
+>  F:	arch/loongarch/net/
+>
+> +BPF JIT for M68K
 
-We will test it and report, but this may take some time.
+This isn't a bug, but the surrounding BPF JIT entries all use lowercase
+'for': 'BPF JIT for ARM', 'BPF JIT for ARM64', 'BPF JIT for LOONGARCH',
+'BPF JIT for MIPS', etc. For consistency, should this be
+'BPF JIT for M68K'?
 
-Thanks,
+Reference: https://lore.kernel.org/bpf/20260429133910.6F6DCC19425@smtp.kernel.org/
 
-> 
-> -- 
-> paul-moore.com
+> +M:	Kuan-Wei Chiu <visitorckw@gmail.com>
+> +L:	bpf@vger.kernel.org
+> +S:	Maintained
+> +F:	arch/m68k/net/
+> +
+>  BPF JIT for MIPS (32-BIT AND 64-BIT)
+>  M:	Johan Almbladh <johan.almbladh@anyfinetworks.com>
+>  M:	Paul Burton <paulburton@kernel.org>
+
+[ ... ]
+
+> diff --git a/arch/m68k/net/bpf_jit_comp.c b/arch/m68k/net/bpf_jit_comp.c
+> new file mode 100644
+> index 000000000000..1531b321410a
+> --- /dev/null
+> +++ b/arch/m68k/net/bpf_jit_comp.c
+
+[ ... ]
+
+> +static int emit_call(const struct bpf_insn *insn, struct jit_ctx *ctx)
+> +{
+> +	const s8 arg_regs[] = { BPF_REG_5, BPF_REG_4, BPF_REG_3, BPF_REG_2, BPF_REG_1 };
+> +	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
+> +	bool extra_pass = ctx->target != NULL;
+> +	u64 func_addr;
+> +	bool fixed;
+> +	int i, err;
+> +
+> +	err = bpf_jit_get_func_addr(ctx->prog, insn, extra_pass, &func_addr, &fixed);
+> +	if (err)
+> +		return err;
+> +
+> +	for (i = 0; i < 5; i++) {
+> +		const s8 *reg = bpf2m68k[arg_regs[i]];
+> +		s8 d_lo = bpf_get_reg32(reg[1], tmp1[1], ctx);
+> +		s8 d_hi = bpf_get_reg32(reg[0], tmp1[0], ctx);
+> +
+> +		emit_16(ctx, 0x2f00 | d_lo);			/* move.l d_lo, -(%sp) */
+> +		emit_16(ctx, 0x2f00 | d_hi);			/* move.l d_hi, -(%sp) */
+> +	}
+> +
+> +	emit_16(ctx, 0x207c);					/* movea.l #func_addr, %a0 */
+> +	emit_32(ctx, (u32)func_addr);
+> +
+> +	emit_16(ctx, 0x4e90);					/* jsr (%a0) */
+> +
+> +	emit_16(ctx, 0x4fef);					/* lea 40(%sp), %sp */
+> +	emit_16(ctx, 40);
+> +
+> +	emit_16(ctx, 0xc340);					/* exg %d0, %d1 */
+> +
+> +	return 0;
+> +}
+
+Does the exg %d0, %d1 swap the halves of the return value incorrectly
+for BPF-to-BPF subprogram calls (BPF_PSEUDO_CALL)?
+
+The emit_call() function unconditionally swaps %d0 and %d1 after all
+calls, which appears correct for C ABI helper functions (where high 32
+bits are in %d0, low in %d1). However, BPF subprograms place their 64-bit
+return value in BPF_REG_0, which is mapped to %d1 and %d0.
+
+If a BPF subprogram returns a value via BPF_REG_0:
+    BPF subprogram: BPF_REG_0 -> %d1:%d0 (high:low)
+    After exg:      %d0:%d1 (swapped - incorrect ordering)
+
+Additionally, the prologue assumes C ABI and reads a context pointer
+from 8(%fp):
+
+arch/m68k/net/bpf_jit_comp.c:build_prologue() {
+    emit_16(ctx, 0x202e);       /* move.l 8(%fp), %d0 */
+    emit_16(ctx, 8);
+}
+
+But BPF-to-BPF calls pass arguments via the stack (pushed by emit_call),
+not via the C calling convention. Wouldn't this cause the prologue to
+read an incorrect context pointer for BPF subprogram entry points?
+
+Reference: https://lore.kernel.org/bpf/6736ffb5.050a0220.11da83.0029.GAE@google.com/
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25698934894
+--===============7240238835478354730==--
