@@ -1,62 +1,62 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE983C3C0B
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 08:54:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B40D3BED32
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 08:54:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778489644; cv=none; b=aY9fdfszxEDlaZZY4lj6K/2bgnhv/7wOheQNhgo8VPrrWYKdYtbbuvtR+JUl2mPeMvBviT6XVraq4nxCKJtW3VHI2LROZQVsRo99+oOlDkXFOolCnu5/e8aqJVeCn3pkNaNAVwSMHdenNaQlwse5PJFL2IYJ/5XkL9XpJK5i0SY=
+	t=1778489645; cv=none; b=hFDqS50Ph14ke4lasl/R6hIr6Clr8v5nVcwJHQduTHi+LriwuwhBPOsLYigenjPO4haeaGyrN8IUkO6h5c5n0nwfoM3jDocMejVMsl4cXP71c3jgriU1ZGG5iaqUadOonTq36RofeYPDRNZHmFxXmVgkWBhT3JHe37G4h5q0oUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778489644; c=relaxed/simple;
-	bh=KaVvP7Fku3ZBQFJjvan0PbxGj5HzZrIs7BJKp6tZKb4=;
+	s=arc-20240116; t=1778489645; c=relaxed/simple;
+	bh=ZlCylw6AtlO5/HnzC05Ww8PfKrw0MpZQH1w4LqUgCm8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=LkfSusOfwUStDUlvlfRK1RAfrXXZFW4UeGGqKznairucJ6YYNZ08q0OWcxksm7lPiDs63CYuJMTa4kIa2gZulJTTNWubYKx9BwCjJ1kEB6LSAz01gjGtdgNGeJXNM/5awAM8A8Fi+3UfkBHmxYmo3gBt45HjTuSMo5DmOxkolEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LEC29L2Q; arc=none smtp.client-ip=209.85.221.47
+	 MIME-Version; b=sWdzYBDNA4RDFMBTeF2IT8xfdzSIETrvpRKj90Rh/kO4gidSW2wcBEX3c8CfQbcpAu/sJa6qh1a8MYB3ZV+WaPZbq4pTzTAOjIETjKBEiruYZfzrptnI2VcUln2Tz8oA3csGdno82BJ6DBm8x10WyZvyxSG/x7LUPo6yqAkSOVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H+3Xb3Y8; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LEC29L2Q"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-45562c41ec7so1167418f8f.1
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 01:54:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H+3Xb3Y8"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-459bf19e87bso232642f8f.1
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 01:54:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778489641; x=1779094441; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778489642; x=1779094442; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eKuMf21IOd9M0Ywzoug7NeLqXYWH4QJ3jExgQ6XGwH8=;
-        b=LEC29L2QEXwcOKVh5Zg9H+vNbTYgqOxnSBwtcBR1MbJrfpU2s95tLZXm7EAUgtmVq4
-         fVJKXZabS/pBs15+s65tVoZSQPnUtM/PQOXmRe2rsSRXO/8PycwYAp8llz7foeqPaB/R
-         2mPfFbAwhpUFBPAWVEzLfU1+XZM5JElTWg0zoXQKlkqyoTf5UbJX4P266CbOz4J6QH7I
-         U5FixLGJEeCNhqSd2/TYUI0G71EvCQjTgWOkXICT9d2onZn3HZ1Hr3BWFTrsFY5pWEz7
-         R5e/IfNsXYQbmnphrXTXAWKKu0bfNOJJ8RFWhOIJfRDGN57xEwLoCYNfr1V7RxFt4bWY
-         Spxg==
+        bh=DbpdNkZtBh3lho4HVKBSl4XJuyTVjox0WRA0Zouwj70=;
+        b=H+3Xb3Y8RpdJnPO++NtMDGri86gOSDsjK00cB0LmC0VnTPHfzUVgGvZ6qq89hzDd82
+         H+cuIIsxkW4JqZ0uSe8TZCQKR8aulfmpM2vsO1bK6lQ5bHFn+bVzh/3oGAhT8udZrxoE
+         w+Hd3Z2WCmN2bnZiUIqj8veHrDPATsIjxsu7ggyzKFvT+2+dtrCZXFtfe0dl4GgW2fzq
+         A+Bvdz1XhMfcUrmM0tXBLxZ6SywRxAsgAZzslU+PidjCr9WFQW4YGBZseNosNkQkpE7s
+         X4GJiAdF4DltL8FGxf5akHtY2zkhBNOB8GpjFRhgdCcsCTwP01WdB7EEv9ZGj7oXq0mL
+         DEMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778489641; x=1779094441;
+        d=1e100.net; s=20251104; t=1778489642; x=1779094442;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=eKuMf21IOd9M0Ywzoug7NeLqXYWH4QJ3jExgQ6XGwH8=;
-        b=oQEQav6OBd7l8sXL6c6zj6mwWwqvI4UB4fC7/2HS+PeHzbkmnpfoWR/2yI0eooseQV
-         rvyMudFPwxzh/3S+m0gvkwKR4opVNZpbKklxvQ5L3Dnj26/zbBGAPnol9c/u/2aZu9p5
-         VRtdbFCRn6Rcr8vNj4WpY4PT//DzX5PGSQAPtDfx+LM1WEj4TYwRVrdHuaOl48MREinn
-         OalFDn687gE5Enc/tLnrl8k80vybHk9/8/9eA+KvSrQmjOZthMsowIe23U+oE7Ztjjlf
-         90KiR16u6EjKPQU/6BfZFGAKa24OwAO0H26icrPk4CBNZAj7N3tkqTZsI802qccQEd4e
-         diBg==
-X-Gm-Message-State: AOJu0YxhrnsUI/xv6RH7lzSRSCcY0qJebhVIASAlQRpuOizrTIZPNkRk
-	tDVsXXTvEH0OaxAchOeXlMbhBfVJwFLmmBLxUPJGlbLYSn+cHNgJD3J8u0CNKHTI
-X-Gm-Gg: Acq92OHagNVFGsKBQHS6MreBoEj1Ra8ad/Kd/buzevGqwciA7tOGZjpeReRQRkkhQ/P
-	sO+HMG8yzxt6DLFUrRnAUMw103IWfVqLTRsQMmvKWzYDJzoLXoR9KGvEAI5bU+pcDuWn/1KhAso
-	CQJtOPqEIo5MpfZtzZWcDF6SLN09KJLObV95fPeAMwfSZEJda/V932zlP4lJd7/eD9JNfeJOlbE
-	TdKgiikzMjJilXTU58PX+BHIDAJHtepHnBFV4/2K8gzSUB6vziJMsHKEGsBybmXQD4S5YgsXGiS
-	H714GKeZUQu0UFA+YobkZwOgD7DABSDm8YnOzFg+TulsSANPc273w3eHT1tUn/FOp4F9Aze3ZIz
-	YNrk+IUZ/6nPggW3I91N/Vh9hCNl6mYqzZFM2/NJdwkRCiC1K0qgmGa8QwXdXQyRPsj6zbVCPxR
-	IAQjWk5/SmFPZpi4AjudYMz7BcINY=
-X-Received: by 2002:a05:6000:420c:b0:43d:7508:c9c9 with SMTP id ffacd0b85a97d-4515c5752d8mr37402360f8f.27.1778489640957;
-        Mon, 11 May 2026 01:54:00 -0700 (PDT)
+        bh=DbpdNkZtBh3lho4HVKBSl4XJuyTVjox0WRA0Zouwj70=;
+        b=JTuKSJm/iIMLThPTMarlI/Aoy/v3iR6ayTrbrsZwfHFpq07kpRUk+Uyb3FUPNFJlm+
+         IdQP8Wj6nuFNiPJegQcDAFx1GlHQeaAqj+pDXs7UBMFfnGCo+fjBVMJUimbQPQl+iz5c
+         XE/PutbJoKLi/s6ktQs192OIChuCXiKhCoAvHJJn25Oonl+PuAul+iBsIpWY1843e7YG
+         N+w+N3H/C92Xttnbly/R8q/sxYnkYFe6tVZNbiRY2wvPWb8gSsYdNCdsgD1PYBANAwY/
+         MiUaLOyjD1IkTJuDXPB4LdDT78Htp0MBKfQBkRhKe1saWycWcHpZra4YXEyf9R0BsKMU
+         EvlA==
+X-Gm-Message-State: AOJu0YytKYiXEeWfgAKtBp4niysU73B8LaKG19wGpUIBWNrFueQpAgGW
+	+0KcBuVae3oWX7b4IYD7WP5bkiZRPtsDflVmdjtUoXh6W97KFHgx3NXDVRfoiDubd48=
+X-Gm-Gg: Acq92OGXT6vSUuqyeMannzE8C1co/EnAz0mZ5vrOA03UBrW3nZ9aYCWCpJVzP4JGVOv
+	3TbmiCg6zdEpcBOHzqc3NvKmhjBg6xBoAYdxwGDWINR9mO4KBdCLyiklzjGv/n1Vq96Edy6Ww6K
+	uDGA8vAhCU6Ck1ADIXAh70wRleSKTPtu2wBuf6kgEGbRtGtTSnuso8zASQpIeMM0eAEDiQW+M92
+	DIn/vkt9gZu0mmToyKnRLgGrPchX4DuDpCcxEO6nNJjVnGioeZ3tzQMbeExJEZGQhasVI6esTYE
+	SXaF0SzeGTjN3dFvLU6+EWqp/n5w/ChGFUchtncp0zzSJ575SCekpDSgvYoh1bDSOmdEyilaDBm
+	/FZbashdjTIsX37kf0kE9oMw7S0gD6fAz8Wowh8XHDV+IpmYc2VQu0OzrVUx0ULXKw4ZnsdMV+c
+	CdmscH45wy0IIAc0D8LjDl6v27Dv0=
+X-Received: by 2002:a05:6000:4304:b0:43d:1cec:4766 with SMTP id ffacd0b85a97d-45462c35512mr22926843f8f.23.1778489641644;
+        Mon, 11 May 2026 01:54:01 -0700 (PDT)
 Received: from mtardy-friendly-lvh-runner.local ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-454919c13c9sm23817156f8f.27.2026.05.11.01.54.00
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-454919c13c9sm23817156f8f.27.2026.05.11.01.54.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 01:54:00 -0700 (PDT)
+        Mon, 11 May 2026 01:54:01 -0700 (PDT)
 From: Mahe Tardy <mahe.tardy@gmail.com>
 To: bpf@vger.kernel.org
 Cc: andrew+netdev@lunn.ch,
@@ -73,9 +73,9 @@ Cc: andrew+netdev@lunn.ch,
 	song@kernel.org,
 	liamwisehart@meta.com,
 	Mahe Tardy <mahe.tardy@gmail.com>
-Subject: [PATCH v1 1/4] bpf: Add netpoll kfuncs for sending UDP packets
-Date: Mon, 11 May 2026 08:53:41 +0000
-Message-Id: <20260511085344.3302-2-mahe.tardy@gmail.com>
+Subject: [PATCH v1 2/4] selftests/bpf: Add netpoll kfunc sanity test
+Date: Mon, 11 May 2026 08:53:42 +0000
+Message-Id: <20260511085344.3302-3-mahe.tardy@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260511085344.3302-1-mahe.tardy@gmail.com>
 References: <20260511085344.3302-1-mahe.tardy@gmail.com>
@@ -89,348 +89,341 @@ Content-Transfer-Encoding: 8bit
 
 From: Song Liu <song@kernel.org>
 
-Add BPF kfuncs that allow BPF programs to send UDP packets via the
-netpoll infrastructure. This provides a mechanism for BPF programs
-(e.g., LSM hooks) to emit telemetry over UDP without depending on
-the regular networking stack.
+Add a selftest that exercises the bpf_netpoll kfuncs end-to-end:
 
-The API consists of four kfuncs:
+  1. A SYSCALL BPF program creates a netpoll context on a dummy
+     network device and stores it in a kptr map.
+  2. A fentry program is attached to dummy_xmit, the driver function
+     that will receive the netpoll sent packet.
+  3. An LSM program attached to security_file_open retrieves the
+     context from the map and calls bpf_netpoll_send_udp().
 
-  bpf_netpoll_create()   - Allocate and set up a netpoll context
-                           (sleepable, SYSCALL prog type only)
-  bpf_netpoll_acquire()  - Acquire a reference to a netpoll context
-  bpf_netpoll_release()  - Release a reference (cleanup via
-                           queue_rcu_work since netpoll_cleanup sleeps)
-  bpf_netpoll_send_udp() - Send a UDP packet (any context, LSM prog
-                           type only for now)
+The userspace harness creates a network namespace with a dummy device,
+runs the setup program, attach the fentry hook then triggers the LSM
+hook by opening /dev/null. The dummy device accepts all packets, so
+send_status == 0 confirms success and the packet content is verified by
+reading the skb from the dummy driver xmit function.
 
-The implementation follows the established kfunc lifecycle pattern
-(create/acquire/release with refcounting, kptr map storage, dtor
-registration). The netpoll context is wrapped in a refcounted
-bpf_netpoll struct. Cleanup is deferred via queue_rcu_work() because
-netpoll_cleanup() takes rtnl_lock.
+The code was partially generated by AI and each line was manually
+reviewed.
 
-AI was used to generate the code and each line was manually reviewed.
-
-Reviewed-by: Mahe Tardy <mahe.tardy@gmail.com>
 Signed-off-by: Song Liu <song@kernel.org>
+Co-developed-by: Mahe Tardy <mahe.tardy@gmail.com>
+Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
 ---
- drivers/net/Kconfig         |  11 ++
- include/linux/bpf_netpoll.h |  38 +++++++
- kernel/bpf/verifier.c       |   3 +
- net/core/Makefile           |   1 +
- net/core/bpf_netpoll.c      | 209 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 262 insertions(+)
- create mode 100644 include/linux/bpf_netpoll.h
- create mode 100644 net/core/bpf_netpoll.c
+ tools/testing/selftests/bpf/config            |   1 +
+ .../selftests/bpf/prog_tests/netpoll.c        |  92 ++++++++++++++
+ .../selftests/bpf/progs/netpoll_common.h      |  64 ++++++++++
+ .../selftests/bpf/progs/netpoll_sanity.c      | 118 ++++++++++++++++++
+ 4 files changed, 275 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/netpoll.c
+ create mode 100644 tools/testing/selftests/bpf/progs/netpoll_common.h
+ create mode 100644 tools/testing/selftests/bpf/progs/netpoll_sanity.c
 
-diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
-index edaab759dc50..8d94c9d58f32 100644
---- a/drivers/net/Kconfig
-+++ b/drivers/net/Kconfig
-@@ -364,6 +364,17 @@ config NETCONSOLE_PREPEND_RELEASE
- 	  message.  See <file:Documentation/networking/netconsole.rst> for
- 	  details.
-
-+config BPF_NETPOLL
-+	bool "BPF netpoll UDP support"
-+	depends on BPF_SYSCALL && NET
-+	select NETPOLL
-+	help
-+	  Enable BPF kfuncs for sending UDP packets via netpoll.
-+	  This allows BPF programs to send UDP packets from any
-+	  context using the netpoll infrastructure.
-+
-+	  If unsure, say N.
-+
- config NETPOLL
- 	def_bool NETCONSOLE
-
-diff --git a/include/linux/bpf_netpoll.h b/include/linux/bpf_netpoll.h
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 24855381290d..bd6d0a4e5239 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -7,6 +7,7 @@ CONFIG_BPF_JIT=y
+ CONFIG_BPF_KPROBE_OVERRIDE=y
+ CONFIG_BPF_LIRC_MODE2=y
+ CONFIG_BPF_LSM=y
++CONFIG_BPF_NETPOLL=y
+ CONFIG_BPF_STREAM_PARSER=y
+ CONFIG_BPF_SYSCALL=y
+ # CONFIG_BPF_UNPRIV_DEFAULT_OFF is not set
+diff --git a/tools/testing/selftests/bpf/prog_tests/netpoll.c b/tools/testing/selftests/bpf/prog_tests/netpoll.c
 new file mode 100644
-index 000000000000..b738032548c7
+index 000000000000..1cfac4b13e7d
 --- /dev/null
-+++ b/include/linux/bpf_netpoll.h
-@@ -0,0 +1,38 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
++++ b/tools/testing/selftests/bpf/prog_tests/netpoll.c
+@@ -0,0 +1,92 @@
++// SPDX-License-Identifier: GPL-2.0
 +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 +
-+#ifndef _BPF_NETPOLL_H
-+#define _BPF_NETPOLL_H
++#include <arpa/inet.h>
++#include <net/if.h>
 +
-+#include <linux/types.h>
++#include "test_progs.h"
++#include "network_helpers.h"
++#include "netpoll_sanity.skel.h"
 +
-+#define BPF_NETPOLL_DEV_NAME_LEN 16	/* IFNAMSIZ */
++#define NS_TEST "netpoll_sanity_ns"
++#define DUMMY_DEV "dummy0"
++#define DUMMY_IP "10.0.0.1"
++#define REMOTE_IP "10.0.0.2"
 +
-+/**
-+ * struct bpf_netpoll_opts - BPF netpoll initialization parameters
-+ * @dev_name:	Network device name (e.g. "eth0"), null-terminated.
-+ * @local_ip:	Local IPv4 address in network byte order. 0 = auto-detect.
-+ * @remote_ip:	Remote IPv4 address in network byte order.
-+ * @local_port:	Local UDP port in host byte order.
-+ * @remote_port: Remote UDP port in host byte order.
-+ * @remote_mac:	Remote MAC address (6 bytes).
-+ * @ipv6:	Set to 1 for IPv6, 0 for IPv4.
-+ * @reserved:	Must be zero. Reserved for future use.
-+ * @local_ip6:	Local IPv6 address (16 bytes). Used when ipv6=1.
-+ *		Zero = auto-detect.
-+ * @remote_ip6:	Remote IPv6 address (16 bytes). Used when ipv6=1.
-+ */
-+struct bpf_netpoll_opts {
-+	char dev_name[BPF_NETPOLL_DEV_NAME_LEN];
-+	__be32 local_ip;
-+	__be32 remote_ip;
-+	__u16 local_port;
-+	__u16 remote_port;
-+	__u8 remote_mac[6];
-+	__u8 ipv6;
-+	__u8 reserved;
-+	__u8 local_ip6[16];
-+	__u8 remote_ip6[16];
-+};
-+
-+#endif /* _BPF_NETPOLL_H */
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 185210b73385..2dc8d2fb4a01 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4641,6 +4641,9 @@ BTF_ID(struct, task_struct)
- #ifdef CONFIG_CRYPTO
- BTF_ID(struct, bpf_crypto_ctx)
- #endif
-+#ifdef CONFIG_BPF_NETPOLL
-+BTF_ID(struct, bpf_netpoll)
-+#endif
- BTF_SET_END(rcu_protected_types)
-
- static bool rcu_protected_object(const struct btf *btf, u32 btf_id)
-diff --git a/net/core/Makefile b/net/core/Makefile
-index dc17c5a61e9a..6484eb595698 100644
---- a/net/core/Makefile
-+++ b/net/core/Makefile
-@@ -26,6 +26,7 @@ obj-$(CONFIG_PAGE_POOL) += page_pool.o page_pool_user.o
- obj-$(CONFIG_PROC_FS) += net-procfs.o
- obj-$(CONFIG_NET_PKTGEN) += pktgen.o
- obj-$(CONFIG_NETPOLL) += netpoll.o
-+obj-$(CONFIG_BPF_NETPOLL) += bpf_netpoll.o
- obj-$(CONFIG_FIB_RULES) += fib_rules.o
- obj-$(CONFIG_TRACEPOINTS) += net-traces.o
- obj-$(CONFIG_NET_DROP_MONITOR) += drop_monitor.o
-diff --git a/net/core/bpf_netpoll.c b/net/core/bpf_netpoll.c
-new file mode 100644
-index 000000000000..05f4dcbd95f3
---- /dev/null
-+++ b/net/core/bpf_netpoll.c
-@@ -0,0 +1,209 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <linux/bpf.h>
-+#include <linux/bpf_netpoll.h>
-+#include <linux/btf.h>
-+#include <linux/btf_ids.h>
-+#include <linux/netpoll.h>
-+#include <linux/refcount.h>
-+#include <linux/slab.h>
-+#include <linux/workqueue.h>
-+
-+#define BPF_NETPOLL_MAX_UDP_CHUNK 1460
-+
-+/**
-+ * struct bpf_netpoll - refcounted BPF netpoll context
-+ * @np:		The underlying netpoll structure.
-+ * @usage:	Reference counter.
-+ * @rwork:	RCU work for deferred cleanup (netpoll_cleanup sleeps).
-+ */
-+struct bpf_netpoll {
-+	struct netpoll np;
-+	refcount_t usage;
-+	struct rcu_work rwork;
-+};
-+
-+static void netpoll_release_work_fn(struct work_struct *work)
++void test_netpoll_sanity(void)
 +{
-+	struct bpf_netpoll *bnp = container_of(to_rcu_work(work),
-+					       struct bpf_netpoll, rwork);
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	struct nstoken *nstoken = NULL;
++	struct netpoll_sanity *skel;
++	int err, pfd, fd;
 +
-+	netpoll_cleanup(&bnp->np);
-+	kfree(bnp);
++	skel = netpoll_sanity__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel open_and_load"))
++		return;
++
++	/* Create a network namespace with a dummy device */
++	SYS(fail, "ip netns add %s", NS_TEST);
++	SYS(fail, "ip -net %s link add %s type dummy", NS_TEST, DUMMY_DEV);
++	SYS(fail, "ip -net %s addr add %s/24 dev %s", NS_TEST, DUMMY_IP, DUMMY_DEV);
++	SYS(fail, "ip -net %s link set %s up", NS_TEST, DUMMY_DEV);
++
++	nstoken = open_netns(NS_TEST);
++	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
++		goto fail;
++
++	/* Configure the BPF program globals */
++	snprintf(skel->bss->dev_name, sizeof(skel->bss->dev_name), "%s", DUMMY_DEV);
++	skel->bss->remote_ip = inet_addr(REMOTE_IP);
++	skel->bss->local_port = 5555;
++	skel->bss->remote_port = 6666;
++	skel->bss->remote_mac[0] = 0xaa;
++	skel->bss->remote_mac[1] = 0xbb;
++	skel->bss->remote_mac[2] = 0xcc;
++	skel->bss->remote_mac[3] = 0xdd;
++	skel->bss->remote_mac[4] = 0xee;
++	skel->bss->remote_mac[5] = 0xff;
++
++	/* Step 1: Run the setup SYSCALL prog */
++	pfd = bpf_program__fd(skel->progs.netpoll_setup_test);
++	if (!ASSERT_GT(pfd, 0, "netpoll_setup_test fd"))
++		goto fail;
++
++	err = bpf_prog_test_run_opts(pfd, &opts);
++	if (!ASSERT_OK(err, "netpoll_setup_test run"))
++		goto fail;
++
++	if (!ASSERT_OK(skel->bss->status, "netpoll_setup_test status"))
++		goto fail;
++
++	/* Step 2: Attach the dummy xmit hook */
++	skel->links.netpoll_dummy_xmit = bpf_program__attach(skel->progs.netpoll_dummy_xmit);
++	if (!ASSERT_OK_PTR(skel->links.netpoll_dummy_xmit, "attach netpoll_dummy_xmit"))
++		goto fail;
++
++	/* Step 3: Attach the LSM prog and trigger via file_open */
++	skel->links.netpoll_send_test = bpf_program__attach(skel->progs.netpoll_send_test);
++	if (!ASSERT_OK_PTR(skel->links.netpoll_send_test, "attach netpoll_send_test"))
++		goto fail;
++
++	skel->bss->trigger_send = 1;
++
++	fd = open("/dev/null", O_RDONLY);
++	if (!ASSERT_GE(fd, 0, "open /dev/null"))
++		goto fail;
++	close(fd);
++
++	/* send_status should be 0 (NETDEV_TX_OK) -- dummy device accepts
++	 * all packets.
++	 */
++	ASSERT_OK(skel->bss->send_status, "netpoll_send_udp status");
++	/* dummy_xmit hooks the dummy driver ndo_start_xmit method called by
++	 * netpoll and fetches the UDP payload.
++	 */
++	ASSERT_STREQ(skel->bss->driver_xmit, skel->data->send_data, "dummy_xmit received");
++
++fail:
++	if (nstoken)
++		close_netns(nstoken);
++	SYS_NOFAIL("ip netns del " NS_TEST " &> /dev/null");
++	netpoll_sanity__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/netpoll_common.h b/tools/testing/selftests/bpf/progs/netpoll_common.h
+new file mode 100644
+index 000000000000..d1e4b2a58adb
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/netpoll_common.h
+@@ -0,0 +1,64 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#ifndef _NETPOLL_COMMON_H
++#define _NETPOLL_COMMON_H
++
++#include "errno.h"
++#include <stdbool.h>
++
++struct bpf_netpoll *bpf_netpoll_create(const struct bpf_netpoll_opts *opts,
++				       u32 opts__sz, int *err) __ksym;
++struct bpf_netpoll *bpf_netpoll_acquire(struct bpf_netpoll *bnp) __ksym;
++void bpf_netpoll_release(struct bpf_netpoll *bnp) __ksym;
++int bpf_netpoll_send_udp(struct bpf_netpoll *bnp,
++			 const void *data, u32 data__sz) __ksym;
++
++struct __netpoll_ctx_value {
++	struct bpf_netpoll __kptr * ctx;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__type(key, int);
++	__type(value, struct __netpoll_ctx_value);
++	__uint(max_entries, 1);
++} __netpoll_ctx_map SEC(".maps");
++
++static inline struct __netpoll_ctx_value *netpoll_ctx_value_lookup(void)
++{
++	u32 key = 0;
++
++	return bpf_map_lookup_elem(&__netpoll_ctx_map, &key);
 +}
 +
-+__bpf_kfunc_start_defs();
-+
-+/**
-+ * bpf_netpoll_create() - Create a BPF netpoll context for sending UDP.
-+ *
-+ * Allocates and sets up a netpoll context that can be used to send UDP
-+ * packets from BPF programs. The returned context must either be stored
-+ * in a map as a kptr, or freed with bpf_netpoll_release().
-+ *
-+ * This function calls netpoll_setup() which takes rtnl_lock and may
-+ * sleep, so it can only be used in sleepable BPF programs (SYSCALL).
-+ *
-+ * @opts:	Pointer to struct bpf_netpoll_opts with connection parameters.
-+ * @opts__sz:	Size of the opts struct.
-+ * @err:	Integer to store error code when NULL is returned.
-+ */
-+__bpf_kfunc struct bpf_netpoll *
-+bpf_netpoll_create(const struct bpf_netpoll_opts *opts, u32 opts__sz, int *err)
++static inline int netpoll_ctx_insert(struct bpf_netpoll *ctx)
 +{
++	struct __netpoll_ctx_value local, *v;
++	struct bpf_netpoll *old;
++	u32 key = 0;
++	int err;
++
++	local.ctx = NULL;
++	err = bpf_map_update_elem(&__netpoll_ctx_map, &key, &local, 0);
++	if (err) {
++		bpf_netpoll_release(ctx);
++		return err;
++	}
++
++	v = bpf_map_lookup_elem(&__netpoll_ctx_map, &key);
++	if (!v) {
++		bpf_netpoll_release(ctx);
++		return -ENOENT;
++	}
++
++	old = bpf_kptr_xchg(&v->ctx, ctx);
++	if (old) {
++		bpf_netpoll_release(old);
++		return -EEXIST;
++	}
++
++	return 0;
++}
++
++#endif /* _NETPOLL_COMMON_H */
+diff --git a/tools/testing/selftests/bpf/progs/netpoll_sanity.c b/tools/testing/selftests/bpf/progs/netpoll_sanity.c
+new file mode 100644
+index 000000000000..9e1e595eff2c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/netpoll_sanity.c
+@@ -0,0 +1,118 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++/* Copyright (c) 2026 Isovalent. */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_endian.h>
++#include "bpf_tracing_net.h"
++#include "netpoll_common.h"
++
++/* Globals for passing config from userspace */
++char dev_name[16] = {};
++__be32 remote_ip;
++__u16 local_port;
++__u16 remote_port;
++__u8 remote_mac[6] = {};
++
++/* Results */
++int status;
++int send_status;
++int trigger_send;
++char driver_xmit[64];
++
++char send_data[64] = "hello from bpf netpoll";
++
++/* SYSCALL prog: set up the netpoll context */
++SEC("syscall")
++int netpoll_setup_test(void *ctx)
++{
++	struct bpf_netpoll_opts opts = {};
++	struct bpf_netpoll *bnp;
++	int err = 0;
++
++	status = 0;
++
++	__builtin_memcpy(opts.dev_name, dev_name, 16);
++	opts.remote_ip = remote_ip;
++	opts.local_port = local_port;
++	opts.remote_port = remote_port;
++	__builtin_memcpy(opts.remote_mac, remote_mac, 6);
++
++	bnp = bpf_netpoll_create(&opts, sizeof(opts), &err);
++	if (!bnp) {
++		status = err;
++		return 0;
++	}
++
++	err = netpoll_ctx_insert(bnp);
++	if (err && err != -EEXIST)
++		status = err;
++	return 0;
++}
++
++/* LSM prog: send UDP via the stored netpoll context */
++SEC("lsm/file_open")
++int BPF_PROG(netpoll_send_test, struct file *file)
++{
++	struct __netpoll_ctx_value *v;
 +	struct bpf_netpoll *bnp;
 +
-+	if (!opts || opts__sz != sizeof(struct bpf_netpoll_opts)) {
-+		*err = -EINVAL;
-+		return NULL;
-+	}
++	if (!trigger_send)
++		return 0;
 +
-+	if (opts->reserved) {
-+		*err = -EINVAL;
-+		return NULL;
-+	}
++	trigger_send = 0;
++	send_status = -ENOENT;
 +
-+	bnp = kzalloc_obj(*bnp);
++	v = netpoll_ctx_value_lookup();
++	if (!v)
++		return 0;
++
++	bpf_rcu_read_lock();
++	bnp = v->ctx;
 +	if (!bnp) {
-+		*err = -ENOMEM;
-+		return NULL;
++		bpf_rcu_read_unlock();
++		return 0;
 +	}
 +
-+	bnp->np.name = "bpf_netpoll";
-+	strscpy(bnp->np.dev_name, opts->dev_name, IFNAMSIZ);
-+	bnp->np.local_port = opts->local_port;
-+	bnp->np.remote_port = opts->remote_port;
-+	memcpy(bnp->np.remote_mac, opts->remote_mac, ETH_ALEN);
-+
-+	bnp->np.ipv6 = !!opts->ipv6;
-+	if (opts->ipv6) {
-+		memcpy(&bnp->np.local_ip.in6, opts->local_ip6,
-+		       sizeof(struct in6_addr));
-+		memcpy(&bnp->np.remote_ip.in6, opts->remote_ip6,
-+		       sizeof(struct in6_addr));
-+	} else {
-+		bnp->np.local_ip.ip = opts->local_ip;
-+		bnp->np.remote_ip.ip = opts->remote_ip;
-+	}
-+
-+	*err = netpoll_setup(&bnp->np);
-+	if (*err) {
-+		kfree(bnp);
-+		return NULL;
-+	}
-+
-+	refcount_set(&bnp->usage, 1);
-+	return bnp;
++	send_status = bpf_netpoll_send_udp(bnp, send_data, sizeof(send_data));
++	bpf_rcu_read_unlock();
++	return 0;
 +}
 +
-+/**
-+ * bpf_netpoll_acquire() - Acquire a reference to a BPF netpoll context.
-+ * @bnp:	The BPF netpoll context to acquire. Must be a trusted pointer.
-+ *
-+ * The acquired context must either be stored in a map as a kptr, or
-+ * freed with bpf_netpoll_release().
-+ */
-+__bpf_kfunc struct bpf_netpoll *
-+bpf_netpoll_acquire(struct bpf_netpoll *bnp)
++/* Fentry prog: hook the dummy driver xmit */
++SEC("fentry/dummy_xmit")
++int BPF_PROG(netpoll_dummy_xmit, struct sk_buff *skb, struct net_device *dev)
 +{
-+	if (!refcount_inc_not_zero(&bnp->usage))
-+		return NULL;
-+	return bnp;
++	unsigned char *data;
++	struct ethhdr eth;
++	struct iphdr ip;
++	struct udphdr udp;
++
++	if (bpf_probe_read_kernel(&data, sizeof(data), &skb->data) < 0)
++		return 0;
++	if (!data)
++		return 0;
++
++	if (bpf_probe_read_kernel(&eth, sizeof(eth), data) < 0)
++		return 0;
++	if (eth.h_proto != bpf_htons(ETH_P_IP))
++		return 0;
++
++	if (bpf_probe_read_kernel(&ip, sizeof(ip), data + sizeof(struct ethhdr)) < 0)
++		return 0;
++	if (ip.protocol != IPPROTO_UDP)
++		return 0;
++
++	if (bpf_probe_read_kernel(&udp, sizeof(udp), data + sizeof(struct ethhdr) + (ip.ihl * 4)) < 0)
++		return 0;
++	if (udp.dest != bpf_htons(remote_port))
++		return 0;
++	if (bpf_probe_read_kernel(&driver_xmit, sizeof(driver_xmit), data + sizeof(struct ethhdr) + (ip.ihl * 4) + sizeof(struct udphdr)) < 0)
++		return 0;
++
++	return 0;
 +}
 +
-+/**
-+ * bpf_netpoll_release() - Release a BPF netpoll context.
-+ * @bnp:	The BPF netpoll context to release.
-+ *
-+ * When the final reference is released, the netpoll context is cleaned
-+ * up via queue_rcu_work() (since netpoll_cleanup takes rtnl_lock and
-+ * must run in process context).
-+ */
-+__bpf_kfunc void bpf_netpoll_release(struct bpf_netpoll *bnp)
-+{
-+	if (refcount_dec_and_test(&bnp->usage)) {
-+		INIT_RCU_WORK(&bnp->rwork, netpoll_release_work_fn);
-+		queue_rcu_work(system_wq, &bnp->rwork);
-+	}
-+}
-+
-+__bpf_kfunc void bpf_netpoll_release_dtor(void *bnp)
-+{
-+	bpf_netpoll_release(bnp);
-+}
-+CFI_NOSEAL(bpf_netpoll_release_dtor);
-+
-+/**
-+ * bpf_netpoll_send_udp() - Send a UDP packet via netpoll.
-+ * @bnp:	The BPF netpoll context. Must be an RCU-protected pointer.
-+ * @data:	Pointer to the data to send.
-+ * @data__sz:	Size of the data to send (max 1460 bytes).
-+ *
-+ * Sends a UDP packet using the netpoll infrastructure. Can be called
-+ * from any context (process, softirq, hardirq).
-+ *
-+ * Return: 0 on success, 1 (NET_XMIT_DROP) on drop, negative errno on error.
-+ */
-+__bpf_kfunc int bpf_netpoll_send_udp(struct bpf_netpoll *bnp,
-+				     const void *data, u32 data__sz)
-+{
-+	unsigned long flags;
-+	int ret;
-+
-+	if (data__sz > BPF_NETPOLL_MAX_UDP_CHUNK)
-+		return -E2BIG;
-+
-+	local_irq_save(flags);
-+	ret = netpoll_send_udp(&bnp->np, data, data__sz);
-+	local_irq_restore(flags);
-+
-+	return ret;
-+}
-+
-+__bpf_kfunc_end_defs();
-+
-+BTF_KFUNCS_START(netpoll_init_kfunc_btf_ids)
-+BTF_ID_FLAGS(func, bpf_netpoll_create, KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, bpf_netpoll_release, KF_RELEASE)
-+BTF_ID_FLAGS(func, bpf_netpoll_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
-+BTF_KFUNCS_END(netpoll_init_kfunc_btf_ids)
-+
-+static const struct btf_kfunc_id_set netpoll_init_kfunc_set = {
-+	.owner = THIS_MODULE,
-+	.set   = &netpoll_init_kfunc_btf_ids,
-+};
-+
-+BTF_KFUNCS_START(netpoll_kfunc_btf_ids)
-+BTF_ID_FLAGS(func, bpf_netpoll_send_udp, KF_RCU)
-+BTF_KFUNCS_END(netpoll_kfunc_btf_ids)
-+
-+static const struct btf_kfunc_id_set netpoll_kfunc_set = {
-+	.owner = THIS_MODULE,
-+	.set   = &netpoll_kfunc_btf_ids,
-+};
-+
-+BTF_ID_LIST(bpf_netpoll_dtor_ids)
-+BTF_ID(struct, bpf_netpoll)
-+BTF_ID(func, bpf_netpoll_release_dtor)
-+
-+static int __init bpf_netpoll_kfunc_init(void)
-+{
-+	int ret;
-+	const struct btf_id_dtor_kfunc bpf_netpoll_dtors[] = {
-+		{
-+			.btf_id       = bpf_netpoll_dtor_ids[0],
-+			.kfunc_btf_id = bpf_netpoll_dtor_ids[1],
-+		},
-+	};
-+
-+	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
-+					&netpoll_init_kfunc_set);
-+	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
-+					       &netpoll_kfunc_set);
-+	return ret ?: register_btf_id_dtor_kfuncs(bpf_netpoll_dtors,
-+						  ARRAY_SIZE(bpf_netpoll_dtors),
-+						  THIS_MODULE);
-+}
-+
-+late_initcall(bpf_netpoll_kfunc_init);
++char __license[] SEC("license") = "GPL";
 --
 2.34.1
 
