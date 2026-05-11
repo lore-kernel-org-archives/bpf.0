@@ -1,212 +1,223 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2056D3B6352
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 21:49:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778536163; cv=none; b=rpUkTVrEEj7Tco/eNdsnxGl19ScxpAYvUOoENaS/mVAUvatM9+N8b2rnQXyywh+4qx8DdGRSHot8b9sMIhO+l94Dt/fceQvR0Eavx16QtFlraPj2EXbyjFaxNrKY5QpGq8c4guoHzNuXjOF4glZihAkq3mCA4QFyVE5R6AyVA+s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778536163; c=relaxed/simple;
-	bh=/uwFRyr0e70vsLfP5Z7ZjZd6g/vbSjiMUdls5IeyXqQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RnOv23Ks2RGlJ5owH9eT83ZtTY3FpEvqnWPwh+8hDxrLvSZqStCNPebGr3TzwtW+26xfY0t8g2ppiNrwVDC/PKu9xKtsFAs7DI5CBvvbAWCWOWYp6wd53Xe73KGm2Mv5HcsG01lw0RK2S8KoEx2W1RSHMUl7hhYFbTzZ3r6xccs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lGGFQuXa; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B944D2EF7
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 21:49:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778536195; cv=pass; b=i/3fujFrzk31IvSL7Tak2uzaCDLg6JUjP1/YuaqVQVRE8tW45/JqD7PkZEz2UxbkO/aRcVYUjxj0nEYPrd/6DXkpYS6R9OvYUDceC8JeOUaB5NlGSVlmA8zqtbsEtQ47YuydPcWaOkXLgpUpprFobSCuJyHycmSWAjaHwXtM5OM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778536195; c=relaxed/simple;
+	bh=XdHPTUaon4qMKhfV+GkVLIq6iUv15qkFI3hbCXwnh+4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=R02GVAsFGcEzWTiYzPphx8eRbL0u/c6vJpXy4+IGqDlVYk70yN21hIZKBKK+b5Qb6lkX6lcklvc4ruKE3hwxw5ZFFy4bltLH6e13ptkBpOcdOYpb0T24+o8MfOCrESdDJUhwC0X9Lj7KDPa9yP5YGLYOSHIWgzULIYnQy8eAo5s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=d+piT+16; arc=pass smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lGGFQuXa"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-367d88b9940so1739927a91.1
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 14:49:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="d+piT+16"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2aaed195901so23496065ad.0
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 14:49:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778536193; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ELeOH8buDF+pfPR8KQxdglMHH2+T8GUsCHCr2Wezt9EMWpX/RqMrtZApJ4RzZlVgNM
+         bln0EC6IuAVKSMpfuAP19TUd0JvDwJU+4TFyFgzNI49cVt9JvTSmyqqWgaqBBcn3h2my
+         sYbLAnBuvbFLI1OovzEPptEPBeJL6dZ3jjBdOWjHRJjjL9MZIIgmdcK9M58T9rT33cqu
+         64UxZ62ZXsrq1rOhttNyM1WVWSRrlR7NyQLk/4FEu7ZzgsaNwxqlkI2NfHuNJHRPxfq6
+         BAXqlADZMmIsF8dje04/0b9QIMWaMNyiQSxhUrCqXuNu7RNjANYdVOmu/P5Ej2zGtSb4
+         ssPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=OUo4L4WIPQHPOig8wBsHK8psuw6OsB6Z+20wUPEg6uQ=;
+        fh=tpFSyPE7x4z7uxWvQ2/pF6Goz+7HKjMzgDTwN0rei28=;
+        b=RO6ow1tEm4RX3NF0FMLHrQ8s/C1SjjVTgklADK9gOfCqH76cU7fKJbGDIXdBBm+C6i
+         UFtp2/FPxXn8fRS8slN1CoqgRm6J7tHxzJPpsFkvKm88m5inx89SjumR3E8J6DsSjogA
+         Y1ojDcFfHiRCiu7Vo7Je2bEuTq11P2T2V7MfGXHBvA3htGCrEC43ZwYJC9+hy9epdkhH
+         W2seRIu7sya9AjKcEqrD5x4R+KhfijPEZyP3H8BKD7Y5qx/qmhe3UT5BTJQH8yamz/Tk
+         +e75lRYTTS7XTI++1rp6wG92OsCbXVrYfdJ9XG6KCch7PQ/vCWp/ljXQZK+JxdFK8Nod
+         Amsg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778536160; x=1779140960; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=KzbOTDWUIcvbxViZESEou8Tslep7e7aQLC8OW+VAMeM=;
-        b=lGGFQuXaRz3858kCFf03Bpn/nnX763kpIxNPME/9zYLV6dLUzGkabl3Xk4CaK4v1wN
-         SuKrfmfYj+J9woOz9utSgrIx768ahXHWsxnTUXWMrbJTTGZ9bhfqEFy29W+knE2Ou5fU
-         J4mnmzuScJJ/sTSi1e3XEHZqvfpnmrNayYWq2hmmVwiiiAUb5ntMMlP8SN4Cl5w3qkxt
-         KjOdQIY0V1JdwEV+gw7Nis9c1iJ/SAYZt4tcanMqhDN1leoN1kjT23KqOvKWGci4SRa3
-         ZLlHuGyy8b1o+n3w8r6hT2kBTLYKkVx8yxyATvvhKTTnDsm5zyNBWVO57RLKZUzWGnQI
-         aK8Q==
+        d=paul-moore.com; s=google; t=1778536193; x=1779140993; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OUo4L4WIPQHPOig8wBsHK8psuw6OsB6Z+20wUPEg6uQ=;
+        b=d+piT+166KTh11CzzCnG4+5N0K1/YavckPMcdG0/S8KtpHSbON7V6L4eoGSh4qD+PX
+         YoNUUB9z2E0pGUkerB28PTeKlQ6meewUicg/zD3ki9YbReVMhqvVOCFhnFy+8xx7wSMI
+         sLDJ62VH9XJe1d+X77hq8gWJdzKxgGA9rImJekiRzc7PanVPEYRJ3nLjEqcMlLnr8w/8
+         My9JxF/5OWQIhxXO12yXmeEq780AL7wts3SezHWhuY1IkuWJ+QtqgpbYw2Txlip+5z6x
+         dws6Hoiql7JeYTmtAX50YOD43V/ZjanRCH3lozV4HfDk+bEi+tFJrcd/xbaGxq3IVJT+
+         uYcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778536160; x=1779140960;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KzbOTDWUIcvbxViZESEou8Tslep7e7aQLC8OW+VAMeM=;
-        b=cbQtUYFvCW8HBH15ICvMdaQ0fYdW0dltTJp8oxu5XL+R+FOhdKUscPf3v2tPBkhRls
-         BusQrJzrkeIsxf/Foj32V02BgYTq6d683r2ewg/SSIUPtGpVeSS69yHF/2f9JtGUZwxh
-         yPTl2LXrbuwH9RHeJLhY7qew/2jPN9rAxoxjMSzU2ZQb+yvOI5fFO/Pbf7845QXbHkKR
-         xiDrdbkEMTrpAQKO4uei10hO2SXjvL+t+O+hIoQsnKLRU3vu7McdmI3jTooEZJDPXCHO
-         IJC6NtZzRI+z4SA9riJoHh79Qym9xW4XgpAho6YAZj20whi9pM7FAu8+vsEHEXnhUm6A
-         Zcbg==
-X-Forwarded-Encrypted: i=1; AFNElJ8v5lorADdtH5gC3OKh0S7MLdYxN+XtkPPUVvN/eiGYAGWVQsrpyIph1LT4ehZ6LoTv7n0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2B+bBUmTSkUQgreVqunOB1mu929EEx9095LmbJIucIns9WsiT
-	8x6sdxDPQz6grDSfNvJFug7nn6yJE1f+MGJL8qEOdCvwk8WMR0tRVjuW
-X-Gm-Gg: Acq92OGNv0XTmVo9lxyIE4aZ8KnAfqNs4G49t5kDIYW5bunjoemvm90ND3uouWFnrnd
-	cQfcbfzHahWiybjAKmVnk+yEemXMGPRpYcZHtlTvzmQTgNQLzd0SZerSoxnqGxXssLsvVKylLwL
-	loG//Htpjca+v3Tgl7zprK1wsEn5pF2j55Z2Smpq0UdVbKoshNaEsNY+aqt07UznZbz4/xN6rEe
-	Azmmq89uNkVRJzfMm1Uf7LTQjPTrgDK27sbAOwwUtiG1XQEmlGAZxU7blTUZ7BUUCgQZhbDBGyM
-	H/bzsnfXlops4s06FL90UYI8PC0WGVp+LG2rEL0ZnJi2pmQOHP2oycJEdgGb5oKEVYZKJN87sAe
-	sZ0T5/ZbsglpDB6VALCaI7YfDiDnjUpxKwbBnXF0C+kFbc3/J+QVkPWHtmvGeROCSAuKoi8f41c
-	/MqH7nZvFQzyi84nR2HMzLGL4XLDhFZRsnSZ2oPddfvrDAgB2cX+PuNHqr+KVNa0E=
-X-Received: by 2002:a17:90b:2884:b0:366:159a:c1ba with SMTP id 98e67ed59e1d1-3664c8db9acmr17291161a91.3.1778536160485;
-        Mon, 11 May 2026 14:49:20 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-367d64de478sm8776231a91.13.2026.05.11.14.49.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 14:49:20 -0700 (PDT)
-Message-ID: <7cffd25282e426002edc4a371b17816bcb862d41.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 04/12] bpf: Preserve reg->id of pointer
- objects after null-check
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
- 	daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org, 
-	mykyta.yatsenko5@gmail.com, kernel-team@meta.com
-Date: Mon, 11 May 2026 14:48:47 -0700
-In-Reply-To: <20260506142709.2298255-5-ameryhung@gmail.com>
-References: <20260506142709.2298255-1-ameryhung@gmail.com>
-	 <20260506142709.2298255-5-ameryhung@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+        d=1e100.net; s=20251104; t=1778536193; x=1779140993;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=OUo4L4WIPQHPOig8wBsHK8psuw6OsB6Z+20wUPEg6uQ=;
+        b=JEwKPw2wAOsRk7eL8yG0GXjhXTIQuHJVpId3mcmnEa1m64o0dHJuHBd6e8XwIBxbHm
+         QZ6tP0QmggSZbz8B9XVg+zwanpvoWrMDkAN3U8ZiRyqJcmJsVzNcoLVOkgYxuzR0XrNV
+         kkeQVaoMvzx3/fcXq3JvAJBXMj/WOY55crT6tfkXf2RM3SLRtHkUqF0C2cTleJ2x9S/e
+         dot0+Umjut0F5cCk6figdt8GYGPQrn9Kgy6jKIkR1OvvCJAlxlzmSP9wZh0F8UlyzAhX
+         4TmtE6VGQqvM0/BVvj5YxRl38FYZq7Ql7Kopv8VimgqwRQiM5be9yKj6cYIqPkvQuA+F
+         VD8g==
+X-Forwarded-Encrypted: i=1; AFNElJ+j9abe4o2l7O4tZ+ThY/DWjBk1ruwETt8QWLTkwy+lo6ceyODxpg/1w2WhxsJrh/zElp8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvSHGW4o/StEf3uxZL8WZ3/ZCBxY+HJ7Tb0qH94dvTgspH3qpy
+	5hEoiIF8YmoO44CV7IuDNdwk4lUpxkMWuPnSDhSYObDOSfNFI50g+ath8BfOgCLsTStFFVC4QHK
+	Qs0wcW/JSeSbkiBzbQAF7r7cZS46f15daXhYHZgN8
+X-Gm-Gg: Acq92OEqcDfaN6iSrjPP3lT2RbEHxtHuJRKzxbYJS/XYL7xaBfkL/kC1aZYgHJ7urO/
+	oQNH0iyXIKWQGwqqM2N0RCNq8TLPSfkD3BFATJbYWvIRpuohkcpO8tVqIfhy2Ecm4s66OZj3FMg
+	zR3VaUKoC1JjVyHvDYNgDUQ97NXEEVxEMibgSwITjMiopvYrPLwp9lVemySgZUddj5i1Cndm92n
+	qZTuuUwxrpbqyXyP3zmdobAnJxszCakYQHhnLbcXnGExDzJgxjDsMjdYFVXZD7RwwcshwQGqLbe
+	7CuzJjcQFKaRAdM9Zg==
+X-Received: by 2002:a17:902:7c82:b0:2b9:fb9a:1103 with SMTP id
+ d9443c01a7336-2bc7ac8b06amr80747045ad.38.1778536193220; Mon, 11 May 2026
+ 14:49:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <agDuCdGIeM-6z-j-@altlinux.org> <CAHC9VhQ4VyAvG-z2h2NFpPx9PcJP4Ot2Ap=MPbCRk2TosJWOTA@mail.gmail.com>
+ <agI9Rdi-72f8dNbB@altlinux.org>
+In-Reply-To: <agI9Rdi-72f8dNbB@altlinux.org>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 11 May 2026 17:49:39 -0400
+X-Gm-Features: AVHnY4Ja7h2T0iiBovZjmBZ_dd3oYXhTgK2-VnHqO-CqDAWECmhpgQlAIJ5QMl0
+Message-ID: <CAHC9VhRWNEzYx3Xxtxv_0BBkM7skisVdnKXx3CGn3S=aoBCiyQ@mail.gmail.com>
+Subject: Re: [BUG] lsm= with bpf before selinux breaks fscreate with EINVAL
+To: Vitaly Chikunov <vt@altlinux.org>
+Cc: linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
+	selinux@vger.kernel.org, KP Singh <kpsingh@kernel.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 2026-05-06 at 07:27 -0700, Amery Hung wrote:
-> Preserve reg->id of pointer objects after null-checking the register so
-> that children objects derived from it can still refer to it in the new
-> object relationship tracking mechanism introduced in a later patch. This
-> change incurs a slight increase in the number of states in one selftest
-> bpf object, rbtree_search.bpf.o. For Meta bpf objects, the increase of
-> states is also negligible.
->=20
-> Selftest BPF objects with insns_diff > 0
->=20
-> Program                   Insns (A)  Insns (B)  Insns   (DIFF)  States (A=
-)  States (B)  States (DIFF)
-> ------------------------  ---------  ---------  --------------  ---------=
--  ----------  -------------
-> rbtree_search                  6820       7326   +506 (+7.42%)         37=
-9         398   +19 (+5.01%)
->=20
-> Meta BPF objects with insns_diff > 0
->=20
-> Program                   Insns (A)  Insns (B)  Insns   (DIFF)  States (A=
-)  States (B)  States (DIFF)
-> ------------------------  ---------  ---------  --------------  ---------=
--  ----------  -------------
-> ned_imex_be_tclass               52         57     +5 (+9.62%)           =
-5           6   +1 (+20.00%)
-> ned_imex_be_tclass               52         57     +5 (+9.62%)           =
-5           6   +1 (+20.00%)
-> ned_skop_auto_flowlabel         523        526     +3 (+0.57%)          3=
-9          40    +1 (+2.56%)
-> ned_skop_mss                    289        292     +3 (+1.04%)          2=
-0          20    +0 (+0.00%)
-> ned_skopt_bet_classifier         78         82     +4 (+5.13%)           =
-8           8    +0 (+0.00%)
-> dctcp_update_alpha              252        320   +68 (+26.98%)          2=
-1          27   +6 (+28.57%)
-> dctcp_update_alpha              252        320   +68 (+26.98%)          2=
-1          27   +6 (+28.57%)
-> ned_ts_func                     119        126     +7 (+5.88%)           =
-6           7   +1 (+16.67%)
-> tw_egress                      1119       1128     +9 (+0.80%)          9=
-5          96    +1 (+1.05%)
-> tw_ingress                     1128       1137     +9 (+0.80%)          9=
-5          96    +1 (+1.05%)
-> tw_tproxy_router               4380       4465    +85 (+1.94%)         11=
-4         118    +4 (+3.51%)
-> tw_tproxy_router4              3093       3170    +77 (+2.49%)          8=
-3          88    +5 (+6.02%)
-> ttls_tc_ingress               34656      35717  +1061 (+3.06%)         93=
-6         970   +34 (+3.63%)
-> tw_twfw_egress               222327     222338    +11 (+0.00%)       1056=
-3       10564    +1 (+0.01%)
-> tw_twfw_ingress               78295      78299     +4 (+0.01%)        382=
-5        3826    +1 (+0.03%)
-> tw_twfw_tc_eg                222839     222859    +20 (+0.01%)       1058=
-4       10585    +1 (+0.01%)
-> tw_twfw_tc_in                 78295      78299     +4 (+0.01%)        382=
-5        3826    +1 (+0.03%)
-> tw_twfw_egress                 8080       8085     +5 (+0.06%)         45=
-6         456    +0 (+0.00%)
-> tw_twfw_ingress                8053       8056     +3 (+0.04%)         45=
-4         454    +0 (+0.00%)
-> tw_twfw_tc_eg                  8154       8174    +20 (+0.25%)         45=
-6         457    +1 (+0.22%)
-> tw_twfw_tc_in                  8060       8063     +3 (+0.04%)         45=
-5         455    +0 (+0.00%)
-> tw_twfw_egress               222327     222338    +11 (+0.00%)       1056=
-3       10564    +1 (+0.01%)
-> tw_twfw_ingress               78295      78299     +4 (+0.01%)        382=
-5        3826    +1 (+0.03%)
-> tw_twfw_tc_eg                222839     222859    +20 (+0.01%)       1058=
-4       10585    +1 (+0.01%)
-> tw_twfw_tc_in                 78295      78299     +4 (+0.01%)        382=
-5        3826    +1 (+0.03%)
-> tw_twfw_egress                 8080       8085     +5 (+0.06%)         45=
-6         456    +0 (+0.00%)
-> tw_twfw_ingress                8053       8056     +3 (+0.04%)         45=
-4         454    +0 (+0.00%)
-> tw_twfw_tc_eg                  8154       8174    +20 (+0.25%)         45=
-6         457    +1 (+0.22%)
-> tw_twfw_tc_in                  8060       8063     +3 (+0.04%)         45=
-5         455    +0 (+0.00%)
->=20
-> Looking into rbtree_search, the reason for such increase is that the
-> verifier has to explore the main loop shown below for one more iteration
-> until state pruning decides the current state is safe.
->=20
-> long rbtree_search(void *ctx)
-> {
-> 	...
-> 	bpf_spin_lock(&glock0);
-> 	rb_n =3D bpf_rbtree_root(&groot0);
-> 	while (can_loop) {
-> 		if (!rb_n) {
-> 			bpf_spin_unlock(&glock0);
-> 			return __LINE__;
-> 		}
->=20
-> 		n =3D rb_entry(rb_n, struct node_data, r0);
-> 		if (lookup_key =3D=3D n->key0)
-> 			break;
-> 		if (nr_gc < NR_NODES)
-> 			gc_ns[nr_gc++] =3D rb_n;
-> 		if (lookup_key < n->key0)
-> 			rb_n =3D bpf_rbtree_left(&groot0, rb_n);
-> 		else
-> 			rb_n =3D bpf_rbtree_right(&groot0, rb_n);
-> 	}
-> 	...
-> }
->=20
-> Below is what the verifier sees at the start of each iteration
-> (65: may_goto) after preserving id of rb_n. Without id of rb_n, the
-> verifier stops exploring the loop at iter 16.
->=20
->            rb_n  gc_ns[15]
-> iter 15    257   257
->=20
-> iter 16    290   257    rb_n: idmap add 257->290
->                         gc_ns[15]: check 257 !=3D 290 --> state not equal
->=20
-> iter 17    325   257    rb_n: idmap add 290->325
->                         gc_ns[15]: idmap add 257->257 --> state safe
->=20
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> ---
+On Mon, May 11, 2026 at 5:03=E2=80=AFPM Vitaly Chikunov <vt@altlinux.org> w=
+rote:
+> On Mon, May 11, 2026 at 04:19:34PM -0400, Paul Moore wrote:
+> > On Sun, May 10, 2026 at 5:17=E2=80=AFPM Vitaly Chikunov <vt@altlinux.or=
+g> wrote:
+> > >
+> > > Hi,
+> > >
+> > > We have boot failure when CONFIG_LSM has "bpf" listed before "selinux=
+"
+> > > (without bpf lsm scripts loaded). (This also happens with a boot with
+> > > "security=3Dselinux" if selinux was not in LSM=3D list but bpf is.)
+> > >
+> > > systemd reports on the failing boot attempt:
+> > >
+> > >   Failed to set SELinux security context generic_u:object_r:device:s0=
+ for /dev/shm: Invalid argument
+> > >   Mounting tmpfs to /dev/shm of type tmpfs with options mode=3D01777.
+> > >   Mounting tmpfs (tmpfs) on /dev/shm (MS_NOSUID|MS_NODEV|MS_STRICTATI=
+ME "mode=3D01777")...
+> > >   Failed to mount tmpfs (type tmpfs) on /dev/shm (MS_NOSUID|MS_NODEV|=
+MS_STRICTATIME "mode=3D01777"): No such file or directory
+> > >   Failed to set SELinux security context generic_u:object_r:device:s0=
+ for /dev/pts: Invalid argument
+> > >   Mounting devpts to /dev/pts of type devpts with options mode=3D0620=
+,gid=3D5.
+> > >   Mounting devpts (devpts) on /dev/pts (MS_NOSUID|MS_NOEXEC "mode=3D0=
+620,gid=3D5")...
+> > >   Failed to mount devpts (type devpts) on /dev/pts (MS_NOSUID|MS_NOEX=
+EC "mode=3D0620,gid=3D5"): No such file or directory
+> > >   No filesystem is currently mounted on /sys/fs/cgroup.
+> > >   Failed to set SELinux security context generic_u:object_r:def_t:s0 =
+for /sys/fs/cgroup: Invalid argument
+> > >   Mounting cgroup2 to /sys/fs/cgroup of type cgroup2 with options nsd=
+elegate,memory_recursiveprot.
+> > >   Mounting cgroup2 (cgroup2) on /sys/fs/cgroup (MS_NOSUID|MS_NODEV|MS=
+_NOEXEC "nsdelegate,memory_recursiveprot")...
+> > >   Failed to set SELinux security context generic_u:object_r:def_t:s0 =
+for /sys/fs/pstore: Invalid argument
+> > >   Mounting pstore to /sys/fs/pstore of type pstore with options n/a.
+> > >   Mounting pstore (pstore) on /sys/fs/pstore (MS_NOSUID|MS_NODEV|MS_N=
+OEXEC "")...
+> > >   Failed to set SELinux security context generic_u:object_r:def_t:s0 =
+for /sys/fs/bpf: Invalid argument
+> > >   Mounting bpf to /sys/fs/bpf of type bpf with options mode=3D0700.
+> > >   Mounting bpf (bpf) on /sys/fs/bpf (MS_NOSUID|MS_NODEV|MS_NOEXEC "mo=
+de=3D0700")...
+> > >   [!!!!!!] Failed to mount API filesystems.
+> > >   Freezing execution
+> > >
+> > > 'Invalid arguments' seems from setfscreatecon_raw.
+> > >
+> > > Reproducer:
+> > >
+> > >   Boot with lsm=3Dlockdown,capability,landlock,yama,safesetid,bpf,sel=
+inux,ima,evm
+> > >
+> > >   (none):~# cat /proc/thread-self/attr/current
+> > >   cat: /proc/thread-self/attr/current: Invalid argument
+> > >   (none):~# echo > /proc/thread-self/attr/fscreate
+> > >   bash: echo: write error: Invalid argument
+> > >
+> > > This appears to be caused by security_getprocattr / security_setproca=
+ttr
+> > > iterating until the first hook defined (which is bpf) and returning w=
+ith
+> > > default value -EINVAL before selinux even sees them.
+> >
+> > Thanks for the problem report, the general recommendation is to place
+> > the BPF LSM towards the end of the list (see the CONFIG_LSM Kconfig
+> > help text), but we're trying to ensure that the BPF LSM works properly
+> > when placed anywhere in that list.
+>
+> I think if the order is important it should be handled in the code like
+> for capabilities and ima/evm LSMs, not by forcing the user to discover
+> the correct order with trial and error.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Patches are always welcome, although as I mentioned to you previously
+we are working towards supporting arbitrary ordering for BPF LSMs.
 
-[...]
+> > My apologies if you're abilities are well beyond this, but if you are
+> > familiar with patching and building your own kernel, have you tried
+> > changing the LSM_RET_DEFAULT value for those functions to zero/0?
+> > Assuming userspace is happy with that, I believe it may solve this
+> > problem.
+>
+> I can patch and test if this is useful to find the correct solution, but
+> the description is a bit vague. Did you mean
+>
+>   include/linux/lsm_hook_defs.h:301:LSM_HOOK(int, -EINVAL, getprocattr, s=
+truct task_struct *p, const char *name,
+>   include/linux/lsm_hook_defs.h:303:LSM_HOOK(int, -EINVAL, setprocattr, c=
+onst char *name, void *value, size_t size)
+>
+> In these lines to replace -EINVAL with 0?
+
+The patch below is what I had in mind (although be warned that was
+just a cut-n-paste into this email so it is likely whitespace
+damaged).  If you are able to give that a test it would be great, if
+not, I can throw it on the todo pile.
+
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+index 2b8dfb35caed..12724e259900 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -298,9 +298,9 @@ LSM_HOOK(int, -EOPNOTSUPP, getselfattr, unsigned int at=
+tr,
+        struct lsm_ctx __user *ctx, u32 *size, u32 flags)
+LSM_HOOK(int, -EOPNOTSUPP, setselfattr, unsigned int attr,
+        struct lsm_ctx *ctx, u32 size, u32 flags)
+-LSM_HOOK(int, -EINVAL, getprocattr, struct task_struct *p, const char *nam=
+e,
++LSM_HOOK(int, 0, getprocattr, struct task_struct *p, const char *name,
+        char **value)
+-LSM_HOOK(int, -EINVAL, setprocattr, const char *name, void *value, size_t =
+size)
++LSM_HOOK(int, 0, setprocattr, const char *name, void *value, size_t size)
+LSM_HOOK(int, 0, ismaclabel, const char *name)
+LSM_HOOK(int, -EOPNOTSUPP, secid_to_secctx, u32 secid, struct lsm_context *=
+cp)
+LSM_HOOK(int, -EOPNOTSUPP, lsmprop_to_secctx, struct lsm_prop *prop,
+
+--=20
+paul-moore.com
