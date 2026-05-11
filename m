@@ -1,207 +1,91 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8843C3D649D
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 16:38:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778517501; cv=pass; b=N4l2vm0ufUEYCdnObEwmyrA8Zv3s/BcfApkPXc05NhZ5SI2gX7U62SK7HFA6BiuzfzKWvZTibpKmYivd7rIxSIgvodzhIRxz7q5dj742TtNBkAfuYMcpgymDREiKi9zayX0BJ/zQTROVgE06yxI6C8rqYysnBrzjH4JsGJqwFqM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778517501; c=relaxed/simple;
-	bh=Qkun2XB8543Jt6EiX1m2Cuzld5FktqIVy1nShMEqOyM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OKpqCRFFkSUN7RdQJ2qfo1zM9vK7yoXTbVNZteahs0NHaThU9CzWBm8pkZ8w7j0MkTaaDVXwY6ffjUbgizNrdRmD2m0SRKnR1NImr1MOScDA2JqxfXfaEjykwBpmARc8QOpjsXUpb5nOR0HllqamAGjtNmFSd+bhHmB+E7a0wso=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TAXCX1e5; arc=pass smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33ECC33F589
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 16:38:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778517515; cv=none; b=JJ9dQQ/UJHuEjjE2kPLN9quwJiU3/c+SVVGzt4acxHleUx2UtHwa4gZVCiA7dWqxIsyyHkcbkpZQokSJAPfdT7uUZMz34cydHrE+xSOr6TaE2+3UE9B+J/45+U4DOBqVCClaPXmb+qm8ysobXqhZU5i+bFztSwQHCGqITDOH0+Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778517515; c=relaxed/simple;
+	bh=W8+uraJ36aN5Wh9Tfma8uvw1D12emmPgIKXCAb9pwP0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=tOFtYrT/XGl3eTSY3BsaTtLX5LSG2q509DLGTwlbiLfoWd29ypctMXuF0edNgBfBwd7/fA1b6VpZP34g5JKm5eYPjkTagc2HUFkIkh3MG+gMXTk7s/2Sog5zsx7LjTbx00hN+HRlStk8Nx+lXc6W7vlRk1svBpjj0azA7KEznu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oatap8NY; arc=none smtp.client-ip=209.85.167.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TAXCX1e5"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c70e27e2b74so1774481a12.0
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 09:38:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778517500; cv=none;
-        d=google.com; s=arc-20240605;
-        b=GLQxJWnKJS6CBjRMNf+bfGxEp2FwK6g2gvpuS/B5mZbvY9hAjpf2by5FoXEY4ToJNH
-         0hQQZvJImaOR52ZVk1ZuyLBBzEGS5roM9ewm+KpnFbax+2dB+nKFZi2CN7OqkSWknlao
-         EloCbkGzro+QWjgGre/IrTL8LsQ6xmUfte6g0K0w8ADUrwx4bc8OKchsyNCGLouMkqoF
-         nzV1qYGEItwf6NRC1vXicWV/VH16VgjOK9J2niKI4AY+BwYDs1UvD+JBfjlICrCRAuQx
-         JOgnWJup09tEbEH25j6fVotAgL7RLjHDpiYaJqFtqzA3Fugpmb4oBoKk2KrgWCKFKnxy
-         b+0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=jWZm/pn4FsyWFvcjyRMSpyt5xAcwS65Tr7Uc4rQ3R4I=;
-        fh=6x+zeIINYGJaH+Ck6Lv2AMKtqNs3vTDgOss2jBBhMZ4=;
-        b=bNswgZthJiA7HBOvJ4cUFKpWJjSiUo8p7VxpZr26ITszoKvOe2jzjo39aiUJhlKv6c
-         upHzMsBr0P0mWp8LRdPO/ymbIjy0UqaQKqtWj96qUqykwSyLbzJKxOWLOc6wC7+9Sebp
-         YVM65V0lR2SHkwiKpm+AWPkToRdK5x/Zj8LdNCTk0GpEIeZmYKkOn68C0wS9z1j58DK2
-         Ns9A1B3NGy33uEuIF2okNcQNjt800FiAwU+2HxK9Xoy56DkT6LhfZQUsb8wW0MYz32ba
-         TQiFxxL4pUQRM65SVGgfbA2iuZTikCGcmkHpN2X39z6OdBVeONXIss/gG76RUgofkcnu
-         MTFw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oatap8NY"
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-48270f099d5so936994b6e.0
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 09:38:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778517500; x=1779122300; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1778517513; x=1779122313; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jWZm/pn4FsyWFvcjyRMSpyt5xAcwS65Tr7Uc4rQ3R4I=;
-        b=TAXCX1e5JLPTsq2hs44rBJONULfEhmHyDTAGqBt9OEbryq6JcP3QQzSXmzGYshl0CJ
-         Snrckgc9VxjgTd2qi9CPBbt1++d3biCbLt5MquIQk9nj8rh84lTDHMzA9Q/Jx6X8wzob
-         heHyIuYwiN94vmHlE9irseHS+7+2sa4sf1fG3t61BRHmNlP26OHICPwEvyemhFOFVzg+
-         aWm3PvHVeSiVAAkKjkt1AgsEBXdbQz0YLlKIgMn4KUdmGPrDqJ82cXAB74TnL5H6fGPe
-         r+JhQZLcCxJc2SfS7yQfqqbQhoayWDshKazevbak+qdV8t38fNcpnGzqIufk/Pi0mXrQ
-         wtIg==
+        bh=WTSvgwj6yn3FEpgL8rfphWMetFJdjyouN3lrWKpKTKQ=;
+        b=oatap8NYeN78AEuwSOtbLF2RxrW1bQbhiNxp5IKTxhvVnh4TShVo4cNK7FmfIjzmWP
+         CeQo+CEVIiK9NZfpZetsNwHVVs9qMvM+kkiFkE+LkXGVAzq+l+UvDa6J4nLn9WDBxIpD
+         dqiD3jQQucfjeEQcnCWzYCxNnB4k78NEpWxvseNl9seTMnd4sJulF4no+OmZhgjpm8gc
+         Z11+giVdF+4gQ1LRVG7aKs84EPFyKl8qXm08uga0O5B+q6syQdqY23IDTfxq5G3/Gxzy
+         BZRSDkjXQc4aw/qv0d7gsnVGZxXCgV/pLliEwKLLmmWbFPpR1xFN53Qodc97a1ZsJ8aO
+         HfWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778517500; x=1779122300;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jWZm/pn4FsyWFvcjyRMSpyt5xAcwS65Tr7Uc4rQ3R4I=;
-        b=QEOnoux0FPMsOfIYsTr/PojP+6FpS03TtfxGcNjl7+EvDYEONnzdYlA3Zc7xG0Qieb
-         2xjd/xnjLJyfNSp+WjYq0mqsjndmJZUMnyqz2ClIIzF38dKFHvmcHQ6p4wdEQPiICMho
-         7dDDQV2cZcGatO2qTDMUdKn5KU7X+h8hcF8fmtkzB95xMxSwIzCspSRZ60MrCTloSt8j
-         qi94F2s5IgpJQS0OZCYU7QOqBcteDMDrzQ7bqnPeWGliuTbol1rdYgqZy0rTbvrcv9Kd
-         u1/HQf2MmvSUbFraRi7CQBcXnIchldf+t3iD3EnE/PuFBqzl4geo8pMazj9rJfv+E1X4
-         jpKw==
-X-Forwarded-Encrypted: i=1; AFNElJ8O9dDfXw/taWlneHRxfDTxtKYonwztUndD+1J66Ao1UZMJa8UShbaL63iuwZcPL0/HFPE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOArTHeqre8GJeMkWnUmMEkGcrUVLhKGXdQLkEb4zwhBjvjZw3
-	u66KG16wNJaQK68mBgCUOHSurL61o0Ynx4yhYcarPfMOf3ViP8K8Wq2RDnwKwEKO2oPhxjdWn45
-	33E/MjD+P8ZbJMryu6VCdarHoUcjlT8M=
-X-Gm-Gg: Acq92OGTkQwczDS/xkxx9N/0gyCZLGss+M/QXDv9ZL1h/lvZxRUnC27PSeJW8pZ62kT
-	d+ML+Z8pRq/0voBkHkBlxITUI9RfJZMM40dFE6VSf9ofA13OlJPNSP1ubG7YPaQGoxklZcIBLd0
-	Ht1AgoK9aX+11b5pnHlwueXqnR0XgYT2ICeVUfvoAKOumDu00VI2zzuqmoIYuRlzUPam5S7qJdn
-	FWlkl1/IKe9tGt9PrKVTN0+ur11hJiMzNqI1q+dPDSVKGIbtTf7SwpGOp2k340nuJzKjf0KToX2
-	lEU5x6yuZK7y7xKQunamA68=
-X-Received: by 2002:a05:6a21:328b:b0:39b:f026:6f8e with SMTP id
- adf61e73a8af0-3aab16eb247mr17743487637.34.1778517499593; Mon, 11 May 2026
- 09:38:19 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778517513; x=1779122313;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WTSvgwj6yn3FEpgL8rfphWMetFJdjyouN3lrWKpKTKQ=;
+        b=TE4W2VgarcHrzkYKa6bvzHMeYAqPSxmgAFawIaWL6zp4+CX7ht3SMfG/p762pZlsoZ
+         b04Ij81S5Eg94JbyHuSFOQ5+6R3OFKGpV5r05yE/TNufCA2tu+DIIXs1LN1chY3kftPb
+         O/DHRqc3caOsoRfZHCi9vfQXP2pbDFSIE9hAE/uUqP3HBrNRk+iLrsCnWj5NX534R8q+
+         IVtaj2zJhMKQef77mShiEJkCSOru7xKFdnOvIvSjrZDG6AvXZ5sLB7dupSbgfVzhldzA
+         qZ3RF04D2KO/D5PA2v5IWXl/3WJQU9TcYlKaNm0BUXPNOzHi9/bbkgl4E9Y0rYJW8L22
+         RtaQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/MXXoBbTwNNqDQSa0iXoLqWinNmekQL6hBXCUmh2pUfz+5vC8GdfScNXL60BHeQKWtlkA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmLeVkt7ftWLdvREQfog8D0vQc2QGUXUd7N9OG3zZ/wc5P3L9I
+	QxF6MjhgCABjAPKRh2D061RSGmzW0dfwY4nXgkh26/viUe9nhujThqL2
+X-Gm-Gg: Acq92OFNV2TI7iCYF0m/PVkh9jV7lCXVqjW093JPx9OyCVQilXmO/kiTm/W1y/RTYdD
+	aShpjUBQGMNM37FZZAZRT1BA0ynGVpa+U2HKeWikW5Ot4j9pZ/O+Fa8HkK394t/woKcclV2HKxr
+	TmFx5ROmKlnQaUHA47RnuEmBDy/1gOolbNZIOPW0bJncC454EngLM/5xAbo6wp86B5vK4Amm4oU
+	hPGKGLG/OLnbpvwVLOi6CmrwsLBeZdb4IBQoFOBuBQgh3Rqv9O9A7Y4CMlthrrn2oqLgqVUx/mI
+	fjDmiBynCMYC4+zVIsJy8PQ3sU4v/7vLYg+KXkNIO4ZdV4HvMDyu0PR/IdKEWNt5lVyMNUD4IUx
+	Z2QK3X0Ircs+q70xBp20r8N/zimHhRFej2sE+ZFRqrnKKp9173UPRrG5i4yVBULA2WSCh8w6mDy
+	yTP3r1A1IbFvQU4+XOBrurVwXkfwL14JGdufnaxSF5pVSVwM4FYoVvlETN7kEztkIf6Fc3a6Ejb
+	Qv98NRUGTFR4w==
+X-Received: by 2002:a05:6808:50aa:b0:479:da60:7dd4 with SMTP id 5614622812f47-4804247aa0emr16145772b6e.30.1778517512989;
+        Mon, 11 May 2026 09:38:32 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-47c76936220sm20579592b6e.10.2026.05.11.09.38.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 May 2026 09:38:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260509003146.976844-1-andrii@kernel.org> <20260509020243.223B1C2BCB0@smtp.kernel.org>
-In-Reply-To: <20260509020243.223B1C2BCB0@smtp.kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 11 May 2026 18:38:07 +0200
-X-Gm-Features: AVHnY4K1PGFzP1mFf471xzd0eIhUEeWHeOaZ86Y8osvuCHJ97l3GMSG-JBfn3Bc
-Message-ID: <CAEf4BzbS0512oBcnPsPKrLiVWtDoevqS1Yvv-DHwCsDX0vANig@mail.gmail.com>
-Subject: Re: [PATCH bpf 1/2] uprobes/x86: Fix red zone clobbering in nop5 optimization
-To: sashiko@lists.linux.dev
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 11 May 2026 09:38:31 -0700
+Message-Id: <DIFZU9BF7H2L.2C6L1A58XG5B3@gmail.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Jose E .
+ Marchesi" <jose.marchesi@oracle.com>, <kernel-team@fb.com>, "Martin KaFai
+ Lau" <martin.lau@kernel.org>
+Subject: Re: [PATCH bpf-next v3 15/24] bpf: Pass bpf_subprog_info to
+ bpf_int_jit_compile()
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
+X-Mailer: aerc
+References: <20260511053301.1878610-1-yonghong.song@linux.dev>
+ <20260511053418.1888759-1-yonghong.song@linux.dev>
+In-Reply-To: <20260511053418.1888759-1-yonghong.song@linux.dev>
 
-On Fri, May 8, 2026 at 7:02=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 2 potential issu=
-e(s) to consider:
-> - [Critical] `resolve_uprobe_addr()` unconditionally uses `current->mm`, =
-causing `is_optimized()` to fail when called from tracer context, which lea=
-ds to target instruction stream corruption and potential kernel panics.
-> - [High] Exhausting a process's trampoline page slots permanently disable=
-s nop5 optimization for that uprobe across the entire system.
-> --
->
-> commit 2c63c19710be8b050bc0e126d84e52c24209e062
-> Author: Andrii Nakryiko <andrii@kernel.org>
-> Date:   Sat May 9 00:30:56 2026 +0000
->
-> uprobes/x86: Fix red zone clobbering in nop5 optimization
->
-> The x86 uprobe nop5 optimization currently replaces a 5-byte NOP at the
-> probe site with a CALL into a uprobe trampoline. This commit changes the
-> optimization to use JMP instead, introducing a trampoline page with slots
-> to handle register state saving and jumping to the syscall.
->
-> > diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
-> > index ebb1baf1eb1d0..7e1f14200bbbf 100644
-> > --- a/arch/x86/kernel/uprobes.c
-> > +++ b/arch/x86/kernel/uprobes.c
->
-> [ ... ]
->
-> > @@ -761,147 +785,153 @@ void arch_uprobe_clear_state(struct mm_struct *=
-mm)
-> [ ... ]
-> > +static bool resolve_uprobe_addr(unsigned long ip, unsigned long *probe=
-_addr)
-> >  {
-> > -     struct vm_area_struct *vma =3D vma_lookup(current->mm, ip);
-> > +     struct uprobes_state *state =3D &current->mm->uprobes_state;
->
-> Can this cause a NULL pointer dereference or instruction corruption when
-> executed outside the target task's context?
->
+On Sun May 10, 2026 at 10:34 PM PDT, Yonghong Song wrote:
+> -		func[i] =3D bpf_int_jit_compile(env, func[i]);
+> +		func[i] =3D bpf_int_jit_compile(env, func[i], &env->subprog_info[i]);
 
-...
-
->
-> Could we pass the correct mm struct down from is_optimized() to
-> resolve_uprobe_addr() instead of relying on current->mm?
-
-yes, good observation, I'll change resolve_uprobe_addr() to accept
-mm_struct directly
-
->
-> [ ... ]
->
-> > @@ -1113,8 +1149,9 @@ static int __arch_uprobe_optimize(struct arch_upr=
-obe *auprobe, struct mm_struct
-> >  {
-> >       struct uprobe_trampoline *tramp;
-> >       struct vm_area_struct *vma;
-> > +     unsigned long slot_vaddr;
-> >       bool new =3D false;
-> > -     int err =3D 0;
-> > +     int slot, err;
-> >
-> >       vma =3D find_vma(mm, vaddr);
-> >       if (!vma)
-> > @@ -1122,8 +1159,17 @@ static int __arch_uprobe_optimize(struct arch_up=
-robe *auprobe, struct mm_struct
-> >       tramp =3D get_uprobe_trampoline(vaddr, &new);
-> >       if (!tramp)
-> >               return -EINVAL;
-> > -     err =3D swbp_optimize(auprobe, vma, vaddr, tramp->vaddr);
-> > -     if (WARN_ON_ONCE(err) && new)
-> > +
-> > +     slot =3D tramp_alloc_slot(tramp, vaddr);
-> > +     if (slot < 0) {
-> > +             if (new)
-> > +                     destroy_uprobe_trampoline(tramp);
-> > +             return slot;
-> > +     }
->
-> If a process exhausts its trampoline page slots, will this permanently
-> disable the nop5 optimization for this uprobe across the entire system?
->
-> If get_uprobe_trampoline() returns a reachable trampoline that is complet=
-ely
-> full (all 256 slots used), tramp_alloc_slot() returns -ENOSPC. This error
-> propagates up to arch_uprobe_optimize(), which handles failures by settin=
-g
-> the ARCH_UPROBE_FLAG_OPTIMIZE_FAIL bit on auprobe->flags.
->
-> Since struct arch_uprobe is shared across all processes tracing the same
-> inode and offset, hitting the 256-slot limit in any single process seems
-> to permanently blacklist the probe from being optimized system-wide for
-> all other processes, even if those processes have completely empty
-> trampolines.
->
-> Should get_uprobe_trampoline() also check if the trampoline has available
-> slots before returning it, or can the failure be handled without setting
-> the global failure flag?
-
-It's a trade off. If we don't set ARCH_UPROBE_FLAG_OPTIMIZE_FAIL,
-we'll keep wasting time trying to find and use uprobe trampoline for
-each uprobe execution in that process, which is wasteful. So, given
-this is a performance optimization, I think we'll just live with this.
-The alternative would be a per-mm+per-uprobe extra information, which
-seems like an overkill, so probably a no-go.
-
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260509003146.97=
-6844-1-andrii@kernel.org?part=3D1
+Touching all JITs is too much churn. env already holds subprog_info.
+Figure out how JITs should see which subprog they're processing.
+See bpf_is_subprog(), for example.
