@@ -1,208 +1,207 @@
-Received: from rcdn-iport-3.cisco.com (rcdn-iport-3.cisco.com [173.37.86.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20855366DB5
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 14:50:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=173.37.86.74
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778511037; cv=fail; b=Jqr8p6/cINvXmOxDVRHCALUeI2TxvEsmFwA1Pwtu0MbkPuMGDC0ZRPO2iCHgHnMMH1K8qQsiMe7kvmtjOXjuPzZaeKKa1v4k1BHqfXPbo0+z1V7N1AFq3MCR7D3t0FFwXkV4aOK6PrMlhQly7JmgU3ZQXnHY6LQTIGJJiTddGKg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778511037; c=relaxed/simple;
-	bh=Lu74lX5SFPe3xJpZMGhkeHpF+YifexiQylHFuFUt3uA=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=W5YiTfBHAry6auG10LEh1b3ZN3dNcZO12U7zzvQWkIHv0Ot9rWlPyjOJKGOjpqCOJ8mMR+rWbZ02bHiWQPyNrJUibGcHl8v+86skStJfLcDdp1+kQBPIXUEOpMg1RcDcj7Zk/77ANmf3kvVp01BXXOS1fW3CRxdwMh3lQcxMIWU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b=fVtVwu0M; arc=fail smtp.client-ip=173.37.86.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cisco.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58AD2371043
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 14:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.68
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778511351; cv=none; b=QpA5qaq3tP5uCgPJjPL6cvfJIbiAGDPgOhloRfPS+yGQr9LqeXx2S1OuQ5po3Y/efJElp3HoU88/KvY7uZA88oVN/wlYt0AxAc9k6xmr7LtUTgGfe0u3p3Pv/e7Hv/IhnVThqiIQ5n3kdtMBPu7iPX9qpjx6wdb/iSxjwijSS5c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778511351; c=relaxed/simple;
+	bh=KDcP1mIxyjc3WE2ChlMOYepGWkKFHZmtQU0cPtkBrgs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qz23aVITUMRW/cP8/W1CnPztsAt0qjfgf5a8m9NSDBvTC5j7PKsMKNERL2h2uidDJsj6AwA9Tp68CBJYixMSED6aD2oy8FjM5mgnFfvnh/d7xuUYC+XJMG95nI1LoTCjES2bbp5jM/RMwMch3/FbWYzAYQmfsSPuheaU9LKb1zA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NYEuVt6g; arc=none smtp.client-ip=209.85.216.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b="fVtVwu0M"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NYEuVt6g"
+Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-3665b67ed66so1853724a91.1
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 07:55:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=cisco.com; i=@cisco.com; l=1026; q=dns/txt;
-  s=iport01; t=1778511036; x=1779720636;
-  h=from:to:subject:date:message-id:
-   content-transfer-encoding:mime-version;
-  bh=ke42QRvrReYdFQbG22e6NlgIUTBR8JnwxDWQt4ZcGcM=;
-  b=fVtVwu0Mlu+PW+DpoQeHQkFZ+m93ITFcL7Hbdrwk63GCHLnJI/4xIeBm
-   Cs5rlvQ4Rlhifz53W5GjNKRJ+Lal16HzxmAkRywo7tQ2S54Er5zB0WiJu
-   jRTGasFuz2HK5GfzqFq5A89o5+p5kFiWVIkIhoW/wiKMUpQekcO4NZDdB
-   u7bGh2WjAUudnlBhQJFdCHn866Sy/WBZA7TCBpsY3GWrcikncnhatJIoi
-   zJDGuYt5hwbRnDAz/B2fp0QTiuxjI/4escx52MvBNU9VxfRuQX8NblLO+
-   fEubdE1HecEmX5WM8HpSlUIP7S3UbxhJpylwwyQA3c/ExYrqwIl618f9S
-   g==;
-X-CSE-ConnectionGUID: a4PZGHx3Tv267MKlMHZ5AQ==
-X-CSE-MsgGUID: E+YnrYFrSdKAZ0gNB44dIA==
-X-IPAS-Result: =?us-ascii?q?A0CDAwAX7AFq/4wQJK1agS6BK4FuU4EGgRESiGwDhSyGW?=
- =?us-ascii?q?JpghV6Bfw8BAQENAlEEAQGFBgKNMgImNAkOAQIEAwIDAQEBAQEBAQEBAQELA?=
- =?us-ascii?q?QEFAQEBAgEHBYEOE4ZQDIZzFWQBfycEGxMHhVQDAQKpDwGBPQKKKniBATOBA?=
- =?us-ascii?q?eAxgU2IWQGGLoRDJxuCDYFXh2uEE4IvBIMwjmmBShwDWSwBVRMXCwcFgWYDK?=
- =?us-ascii?q?i8tMjwyHYEjPhczWBsHBYFLgg5yaoEEhF94Iy8DToEFAwttPTcUGwMEgTUFj?=
- =?us-ascii?q?HgdXzWBbqVWoXoKhByiDheqagEuh2WQcyKjGz+FGgIEAgQFAhABAQaBaDyBW?=
- =?us-ascii?q?XAVgyNSGQ/XQIE2AgcCBw0DC5NlAQE?=
-IronPort-PHdr: A9a23:LDx3OBPeMKhzdr27/eQl6nc2WUAX0o4cdiYP4ZYhzrVWfbvmo9LpP
- VfU4rNmi1qaFYnY6vcRk+PNqOigQm0P55+drWoPOIJBTR4LiMga3kQgDceJBFe9LavCZC0hF
- 8MEX1hgl0w=
-IronPort-Data: A9a23:thiGAK+LuglSoZPoV7gIDrUDw3+TJUtcMsCJ2f8bNWPcYEJGY0x3z
- mYXCzyHOvmCYWX0etgnYIu0pxxUu8SEztFlTVZo/HtEQiMRo6IpJzg2wmQcns+2BpeeJK6yx
- 5xGMrEsFOhtEDmE4EzrauS9xZVF/fngbqLmD+LZMTxGSwZhSSMw4TpugOdRbrRA2bBVOCvT/
- 4mpyyHjEAX9gWAsbztNs/vrRC5H5ZwehhtJ5jTSWtgT1LPuvyF9JI4SI6i3M0z5TuF8dsamR
- /zOxa2O5WjQ+REgELuNyt4XpWVTH9Y+lSDX4pZnc/DKbipq/0Te4Y5nXBYoUnq7vh3S9zxHJ
- HqhgrTrIeshFvWkdO3wyHC0GQkmVUFN0OevzXRSLaV/wmWeG0YAzcmCA2k/YbUq1cZnWl1Qr
- 6JHDRMJSzCx2suPlefTpulE3qzPLeHiOIcZ/3UlxjbDALN+GtbIQr7B4plT2zJYasJmRKmFI
- ZFHL2MxKk2cO3WjOX9PYH46tOytgWPhfhVTqUmeouw85G27IAlZjOi1YICOJoTXLSlTtmvbl
- 2TczkrjOR05He7Hxhyvri6gp8aayEsXX6pXTtVU7MVCikWd7nIcBQdQVlahp/S9zEmkVLpix
- 1c88y4qq+02sUesVNS4B0b+q3+ftRlaUN1VewEn1DywJmPvy1/xLkAPTyVKb5ots8peeNDg/
- gThcw/BbdC3jICodA==
-IronPort-HdrOrdr: A9a23:tZHjYKCKJha+2XnlHei/sseALOsnbusQ8zAXPh9KOH9om52j9/
- xGws576fatskdtZJhBo7y90dq7MA/hHPlOkMQs1NaZLUPbUQSTXfpfBOfZslnd8k7Fh6JgPM
- VbAtJD4bTLZDAQ47eZkWyF+r0bsb+6GdWT9J/jJgBWPHhXgs9bnmBEIzfeOHdbACNBAp00Ho
- ed4M1omxqMEE58Uu2LQlM+c6zmvdPkqLLKCCRqOzcXrCWehzKh77D3VyOfwgofVD13x7Ij+3
- jukgDy5Kmv2svLhSM00VW9071m3P/ajvdTDs2FjcYYbh/2jByzWYhnU7qe+BgoveCG8j8R4Z
- jxiiZlG/42x2Laf2mzrxeo8RLnyiwS53jrzkLdqWf/oPb+WCkxB6N69MJkm1rimgkdVeNHoe
- d2NlGixt5q5NT77WPADu3zJlNXf4yP0DwfeKAo/iViuMAlGcBsRMQkjT1o+dE7bWzHwbFiNv
- VyB8fB4/sTW1abY3fF+lRL+rWXLywO9tPseDlZhiRTuAImx0yQwyYjtb0it2ZF+5QnR5Ze4e
- PYdqxuibFVV8cTKblwHeEbXKKMeyXwqD/3QRWvyG7cZdc6EmOIr4Sy7KQ+5emsdpBNxJwumI
- 7ZWFcdsWIpYUrhBcCHwZUOq3n2MS6AdCWoztsb64lyu7X6SrauOSqfSEo2m8/lp/kEGMXUV/
- u6JZoTCf7+KmnlH5pPwmTFKtFvAGhbVNdQtscwWlqIrM6OIor2tvbDePKWP7bpGSZMYBKKPp
- LCZkmHGCxt1DHYZpajummgZ5rEQD2Nwa5N
-X-Talos-CUID: =?us-ascii?q?9a23=3A5pPS1GhJdZNdPh3tOhMdmsFsbTJueyHl/ljwMxS?=
- =?us-ascii?q?EFzw3F5i2TXqwyv5Nqp87?=
-X-Talos-MUID: 9a23:wbfDJgY50cCjW+BTmnzdgitTGt1T74eHOhgCt79a58WlHHkl
-X-IronPort-Anti-Spam-Filtered: true
-Received: from alln-l-core-03.cisco.com ([173.36.16.140])
-  by rcdn-iport-3.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 11 May 2026 14:49:28 +0000
-Received: from rcdn-opgw-4.cisco.com (rcdn-opgw-4.cisco.com [72.163.7.165])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by alln-l-core-03.cisco.com (Postfix) with ESMTPS id 03B5518000438
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 14:49:28 +0000 (GMT)
-X-CSE-ConnectionGUID: CfnkGnBUSMGYY4kJqLi9HQ==
-X-CSE-MsgGUID: sBqB0fSET/uggorpkJixqw==
-Authentication-Results: rcdn-opgw-4.cisco.com; dkim=pass (signature verified) header.i=@cisco.com
-X-IronPort-AV: E=Sophos;i="6.23,229,1770595200"; 
-   d="scan'208";a="80834992"
-Received: from mail-cy3pr08cu00100.outbound.protection.outlook.com (HELO CY3PR08CU001.outbound.protection.outlook.com) ([40.93.6.104])
-  by rcdn-opgw-4.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 11 May 2026 14:49:27 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XHA5APPTYGmKSE0/PwEAE+nk3loskAPoxZIH+meiPRNx9kIeKo5hWgq0grNdVr2+F58bIZ25TXzjzH/UC2cmMzbkaMs+4W2RZJmkE+h6cv4PWetxS2I22CFWl6ZbEOMDXxTKO1X1x5LfQQ4cxtYOpX6pVkS/J9GoYvG2Ud7Z0mDKXK87lO5IdUbaBjH3kfRsoviq7ck/2PkfyIf3lnQog8tOpGNKjq8/VVZZOp4MldcGqnp7uQ2Tc+nFPbP1GLe6BbL6fy5QkTZgyrxmLB9KFKIdAOQbd6Wi+O4Eslq6Mbh034gwaLRUCyJ+C+dI5PODT2Jraze/JoF/5jD4ZNCcSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ke42QRvrReYdFQbG22e6NlgIUTBR8JnwxDWQt4ZcGcM=;
- b=G7JPSVqpKh5smIRfHIsAkAVYDzbiMCx97938fJCSQ1PUkC3BV4CKvDVxWep+amXCeWUc/j/OG8FG9hzmclYN/oWTc89LgfqCkvcppb/AvJ5PnUuTR+tu4Wu/UvyvdL7q+qg/3Ka2TYc0d9sqGIBCgtno8OSBC6ZqaEsOSWdVIex0GAMSRF/dZgP8nibaJ3wv5GrJ8O8owdaNyV7xGrElTRrWsA5a9jqlsV5oaHZRI3yP3XC1jtk80eLsFigUK5OSvr6qPLmTgI3zdf9DchCzqocBfap2zuGCx+tsqwXwq1IrN081598a6FKfqrBeCJeECQli3bqrEifY8HG1ewFnnA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cisco.com; dmarc=pass action=none header.from=cisco.com;
- dkim=pass header.d=cisco.com; arc=none
-Received: from SA1PR11MB6848.namprd11.prod.outlook.com (2603:10b6:806:29c::14)
- by IA0PR11MB7912.namprd11.prod.outlook.com (2603:10b6:208:3dd::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.23; Mon, 11 May
- 2026 14:49:25 +0000
-Received: from SA1PR11MB6848.namprd11.prod.outlook.com
- ([fe80::1e26:8f73:29d4:cf05]) by SA1PR11MB6848.namprd11.prod.outlook.com
- ([fe80::1e26:8f73:29d4:cf05%3]) with mapi id 15.20.9891.021; Mon, 11 May 2026
- 14:49:25 +0000
-From: "Cristian Morales Vega (cmorve)" <cmorve@cisco.com>
-To: "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: [QUESTION] BPF_SK_SKB_STREAM_PARSER cannot observe strparser
- orig_offset?
-Thread-Topic: [QUESTION] BPF_SK_SKB_STREAM_PARSER cannot observe strparser
- orig_offset?
-Thread-Index: AQHc4UzcdZrP+t27EUuP1HlEy6a7Nw==
-Date: Mon, 11 May 2026 14:49:25 +0000
-Message-ID:
- <SA1PR11MB68483E0B4C78DA91FF8DCE7AC0382@SA1PR11MB6848.namprd11.prod.outlook.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR11MB6848:EE_|IA0PR11MB7912:EE_
-x-ms-office365-filtering-correlation-id: 54458214-0853-480a-40d5-08deaf6c7ebb
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|376014|366016|11063799003|38070700021|56012099003|18002099003;
-x-microsoft-antispam-message-info:
- AqqqPx1c/AM4emrBcDhwe6v8s88H1qPepRo1sGaM5rDKZ8TgleF728+xbIvX3/NabV4UcIit5dIw47//JcsZwvdTN8JB3+OAUjY2jeknIq3uJ7w/yL0cvbmUxEgZ2R9wozsLAjD5VcyaUru1g60EAIt1iBBdrHOl66TaYrrOWlIVHi0l/chXwJ7oZKzaRnLNT7r654WWs/Nt0oAGeszGsqzbG0mjPIfEpKl/2vvZIfHilY5KCZE6+MSE6WOYPrAg499JCVWEY+01c+KhIbkMLD1AA4qTLJi+GQ7CHC4s0HlbXssYXsxTtgnVlqTeOxp5TJHdOMzWlGgmiLwD8YHaTJaJRMOWUPY/cRFQrN3AGsjsW/fI3gaq9YO9KuTbJv4i/P+tY7nZ3SrE0X2qpQgvGyMro6GrMZyp4NKstzXVVZ098mu9xB/gf0fAlqlIlnE+kxM7PW6ONol3bfayM2dGGHIE8wEWLFBXIATMCwT1JzLrYMjlRsaciZUFGO7pxF/ZIyWx33iuFmc2MQvoxmd7auqfSYQGguFthMAYNGWxuLfakuhT4MX92BBKfqLyWkf3abwuNRZ7r+RQww7M4l0BBwR/Ou5VTE0+9k9VcuASdqJM5iVdcAJpSpssBDWUalYdoHELyO5ghdiJFdJUcw6N2jJofsmO7u4Na5SdM+XpmJOsUY0gfFbgcQDP6ryBL+mc3t72eDRVFqUAmcO2KrkT0cr5dO8w9ULzmxpG/TVEK80mEbza2crxO1kFOBnaZmdH
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6848.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(11063799003)(38070700021)(56012099003)(18002099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?+6lYShsQcsxdiCNRTX/VppQpiQx/3OY6EUIVjDf4HZuZl7IrswHTblLHnT?=
- =?iso-8859-1?Q?UDrCbObAjHBH7sjYI2zSu0yNt3r9E/LZ+T1PvSXBjhXC8vj970+jBTnElo?=
- =?iso-8859-1?Q?YZpEeMEaQ1RKm6Wz7RFdz9YkPXHQPCAhxQUw+JMt1QK889tXXbkOkgm99C?=
- =?iso-8859-1?Q?k5BFVxzMAh0st/q1ytqAfP/9YwkiVIi7kw1KSvPoYceQkDfauLkvppcfYm?=
- =?iso-8859-1?Q?ojhDyzls54rNaBMhI/3rKmTLrbeKCx0QYbHOPPlPburTvbHZ7VMExidhqk?=
- =?iso-8859-1?Q?hhvJeV+QH025wJefD7h1gYSOnzQSvbGxssU97yydaMJYtv9bC9Z8QaXMqk?=
- =?iso-8859-1?Q?AMNNAtJGitMhGCoHfYDEp4gKKMOixmRMTEcU/nODDGtgeHdqKqV/mBjdhZ?=
- =?iso-8859-1?Q?uXAQ5rpnQcm/X0+NJ5UKbKyctAPqUBKBnjXRQ5L30nGWE/r899nyDOPHZT?=
- =?iso-8859-1?Q?LFJE2YjMRvgXz+cCvjzYE+cvDE2LZUbIoq7wTP3/d9APtJlYu+992JFe/q?=
- =?iso-8859-1?Q?GjZ4ppfSJZBRTo2fC0fgfdr2CHlTw/OLXMW9Z96E6XgceDAD/6NqJyiMP4?=
- =?iso-8859-1?Q?CNYjR8JuxOEaWAZ0bB3t27P97g7C8M2JZP7CcUTRCn2GOggdT1mav1B/Sn?=
- =?iso-8859-1?Q?DaamazXF9ZXF9QxKjyPuQlPpsi/pOwR8iGx1d3OzeTT8QYFubp5IWcjUBe?=
- =?iso-8859-1?Q?khqyMPm+cZV7fyhqhdeMW5aQTPb1NecDzYPrV6xLVlKMCLY0qE7wziCI0O?=
- =?iso-8859-1?Q?xD/DxNiyONXG2L0hdxqwbbYpqHsbkrpjv033bckKvTkxVQV16N2RGxeVPG?=
- =?iso-8859-1?Q?wTOeY7FVA7IefVH6WZ8/2hhvqb+LWHH7j35jhYOIFzOqihGsoeeq0sb8AB?=
- =?iso-8859-1?Q?/5y75tZwTCc0Q3a3DcLy2/gyWEH65SaKeO4yQwIUmEq6s4sppyRKCc0pjB?=
- =?iso-8859-1?Q?OELAzCS5yzdSQ+CBumEv8BqGT3Fze9ytu5JvwJ+b/vxjnIxr+lC0nOM3wr?=
- =?iso-8859-1?Q?5o03V+MSCyNLJCHrGamJ0olUA5ALueytz3mDWB/IpY7H8muoTQSsQSMAHh?=
- =?iso-8859-1?Q?uCHTx006Fv+uW/GA0Ca+DfSItXWfpffa0b+JIdwbM+S3vbcj8f4NsK4Hz+?=
- =?iso-8859-1?Q?PtnIqxP00UC6CuEPaAiqZ2g/dlYgr+t9qzvIKMEzdZPNvSItdizVlzuZR7?=
- =?iso-8859-1?Q?RfLFEWYDWrfSN7F3D6Dh9p8oWMvX5MHFHhoTibCmAu5R1YI7u5uE28jymw?=
- =?iso-8859-1?Q?FS6RIH6WYXRCxx4ijwzhT9MPR0L60kDZAZd3KeCVcyLcvO4tYw92iACLsx?=
- =?iso-8859-1?Q?hmS9+8qzIAaKZj/FlCXzXf2j7lQfNkTJFuS6DFhj6PKYTGdKXDBkscT+Xm?=
- =?iso-8859-1?Q?rBWo45k3knzxLphuXAAnCjU4crm+dAayS6Nj7MUryCyXrhVh/GiBSHdnQi?=
- =?iso-8859-1?Q?qkFjG8PIERBxe9CDqaXxrhJga6ZYm7k3ysS6h3T0WiS9ZxVA0YyN1T5m6A?=
- =?iso-8859-1?Q?WQWAdqvXo2Za4Sx9lshK85NKxtch43scJ7FbRcZ6X8azczz2hvChgUdfEU?=
- =?iso-8859-1?Q?MJHP8TUJkneXSte81HahLqT7E4ge6yGfwEi4zw10ebzZhAtandYbPvZsKv?=
- =?iso-8859-1?Q?lFxZaoTaGsnTOT7DuyQVQnwhj1ktG0u5sZ8WrR0TwW1Q49iH0+p+LXalxR?=
- =?iso-8859-1?Q?9WBxbbTMi0GFqfrtlg7Zsk4WEDsr928exStpVzT6P9knapuqlY+QbrtdVy?=
- =?iso-8859-1?Q?lzY3tA2ualJsDQOW4C0MVSytdgX9j44nPjS0+wlJ/0Vahi?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20251104; t=1778511350; x=1779116150; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=d7IqJggZrwHqytcUiR9O/Gr2W4bZC/PK+mrUhm5A2Io=;
+        b=NYEuVt6gHMpcNSUqzIfZouOCBWrAVZ4RN0GWRc+OEmEd+nuHthSiGIyOs3x0KSF5gD
+         SrU5Bmq/RRqBYExeWQhuAxMWOdg//p0qfKuFWCpf3BSqrelGyf4rTjzrJ0tKfSg9hU6L
+         iO6pqKlnGgJa7nJFVjdRP+WMp6mVPknH9zoGYu7xeM5VDq0JHs/WrV84XOcjXGc70L5J
+         SIsiTMtV0IMO9UitfFXDbj0IgynsuTSv9ArkWtfdovvUjXsfLcSQmKvpJkldF70ZtPXw
+         X0BZsrOqlIgEGpkhWwFlB/o2gQhpSOv7ZFu++MJrkixwNRK0lx3wmQJmibvEmJmmehnN
+         nvbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778511350; x=1779116150;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d7IqJggZrwHqytcUiR9O/Gr2W4bZC/PK+mrUhm5A2Io=;
+        b=b1svZ11CtlFmH+apnBBsfdzLB7yy+QokkFq8qhTPIjpyIcJtXueMsO3zUhk2/zLQX+
+         EAnzNLrz1srzvL3cKCiECdb3fmt6N1W3VGhTmevP7WiSccWCHKA4UcgP+XkV6LOHh0uz
+         1/5je66dOYEr9xKts5svkGhj1rcSmVvvuYioWnCg/9oHY/KsG/ydHWL0EVOjTmOEnfy6
+         qxJ6ne6emUfXWv9/ZJxSfJNpLteZt94z7wCsc5ffZ/6/SrKM1l8SKDqpZHWOSMlqX1Y7
+         iFKEoGgkOiGfizglEJSuWHO6aMBwM+++SYdfYu+5M7JCr7tdYn0RcWU5U9II7xaiF66Y
+         C48A==
+X-Forwarded-Encrypted: i=1; AFNElJ9MviZVKrSOCvFKA5qJ0VYvjESJHGDatBuZOHdMvvHtgOQTcRxC/MidCaS7tfEqEnTHGmI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YySTqvAsE+90/+oy7dmcHGuqRIOuNzgBMc+TvbZ2GiLVBHohlTs
+	u39qSDtxkxUaWyV1dnKQhSAMU2B0ayU9nEq4DOSl7QxA1z5YG7dbGs2G
+X-Gm-Gg: Acq92OG5Qr1Z67KiQs2K9RvIfrrV+R3YukTRzmqbz7FuAdaQ3IodDGLXNySNLiasoZT
+	hhhXJAknXROxk0eI6Jbd6eC311Rs/9rRGl0n9XDpmz3vOygVFxK8DrD8grTEMJNJmyZVDUC4LaW
+	eTPjvCbDTa7+40FoPaFMEVV41S+DjiEMk6CTeMCB4OWXcLEdaPKvR7onitzbK6rEyqQVf8wyeLi
+	vqm1VDqP039zl7AVlSL1/B1YszIEmml1rGcDL27WEQGXw3dcscq+YAycCm3Krt+/crK9a0Xw93D
+	DiLnMGigR6ushRs0wcgfO50iJH9j2uuZsC8WL0awL/8e7UoTVwD9w/Z/BMzCW9MbZMD4+N6tDnn
+	mSqO37rKwF6dGBCYcIqWRg4GCpQITFM3Ovqb/WGRz3v1En4vEvnxK7w+aVObDv1E0aIUYh34BhN
+	5C3SgfvHlXGraN
+X-Received: by 2002:a17:902:f54f:b0:2b2:4d36:7ba with SMTP id d9443c01a7336-2bc7a847f38mr101597595ad.0.1778511349533;
+        Mon, 11 May 2026 07:55:49 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1e8eef3sm107168145ad.65.2026.05.11.07.55.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2026 07:55:49 -0700 (PDT)
+Date: Mon, 11 May 2026 07:55:48 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, 
+	Willem de Bruijn <willemb@google.com>, Tenzin Ukyab <ukyab@berkeley.edu>, 
+	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v1 bpf-next 7/8] bpf: tcp: Add SOCK_OPS rcvlowat hook.
+Message-ID: <agHtUHUEMis-p5Aw@devvm7509.cco0.facebook.com>
+References: <20260508073355.3916746-1-kuniyu@google.com>
+ <20260508073355.3916746-8-kuniyu@google.com>
+ <af4AO2-9jwluWuik@devvm7509.cco0.facebook.com>
+ <CAAVpQUBTbcpf+kNOqXj-2=Qjx86TeZ-sHVGKT-Vwj=GVXz4hEA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked:
-	PPmnQoZ/awWnU3BzptbmsU95qQEhtECZNxI7Xx5INHqQQZhW7NlteWgOVQwOKhYHpj0mw+zEtjezO4rbDzbWhkgETQe5Iv4R95VgUWvSjVLO1WlBkqXKKO0jzZbQmtxpOpKJ7kaRvY+c2HZhQY3w1SPZgPQGbONaS8+q6wgvkG+p/HXXpMyiLnysA+Y3uen3mg4XTmFvnTo0nndUIMHoMHh/c8EHk0aBwsji2rwvDGVpwoBvwjmNAKl5+JuRT596q1zTGcHWYNEug1WD17s5IzwYUF4E31xJdvvrRoFe+GAzjLRDDLHjRJ2gmrhhlOxj0mBKbAJUI3q5JR7o05jC6A==
-X-OriginatorOrg: cisco.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6848.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54458214-0853-480a-40d5-08deaf6c7ebb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 May 2026 14:49:25.0353
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5ae1af62-9505-4097-a69a-c1553ef7840e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: i4OGZC0Dn068RL3xyZj4NRWM1Qlq3w+QWsz94hUf3RtipHF1tqJVCl4vFCLbVjQZeeH2JFssYcD3aE73DOa2oA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7912
-X-Outbound-Client-TLS: ANONYMOUS;rcdn-opgw-4.cisco.com [72.163.7.165];TLSv1.3;TLS_AES_256_GCM_SHA384;256
-X-Outbound-SMTP-Client: 72.163.7.165, rcdn-opgw-4.cisco.com
-X-Outbound-Node: alln-l-core-03.cisco.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAVpQUBTbcpf+kNOqXj-2=Qjx86TeZ-sHVGKT-Vwj=GVXz4hEA@mail.gmail.com>
 
-I am trying to use=A0BPF_SK_SKB_STREAM_VERDICT in an old kernel (I don't ha=
-ve control over the version), so I need to also use BPF_SK_SKB_STREAM_PARSE=
-R. I though to just do "return skb->len;" in it, as a no-op, since I don't =
-really have an use for the parser.=0A=
-=0A=
-So far so good. But I can see that, from time to time, __strp_recv() receiv=
-es a non-zero orig_offset as "first skb" (i.e. strp->skb_head is null). In =
-such a case, I should not be returning skb->len but "skb->len - orig_offset=
-" (i.e. orig_len), right? Otherwise I would enter=0A=
-=0A=
-		extra =3D (ssize_t)(stm->accum_len + cand_len) -=0A=
-			stm->strp.full_len;=0A=
-=0A=
-		if (extra < 0) {=0A=
-			/* Message not complete yet. */=0A=
-=0A=
-But AFAICT BPF_SK_SKB_STREAM_PARSER doesn't have access to that offset. It =
-seems it had it until e0dc3b93bd7bcff8c3813d1df43e0908499c7cf0 (which was b=
-ackported), but not any more?=0A=
-=0A=
-Is my understanding correct? If not, what am I missing? And, if yes, there =
-is any solution?=0A=
+On 05/08, Kuniyuki Iwashima wrote:
+> On Fri, May 8, 2026 at 8:28 AM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
+> >
+> > On 05/08, Kuniyuki Iwashima wrote:
+> > > Now, it is time to add the new hooks for BPF_SOCK_OPS_RCVLOWAT_CB.
+> > >
+> > > Let's invoke the BPF SOCK_OPS prog when
+> > >
+> > >   1. TCP stack enqueues skb to sk->sk_receive_queue
+> > >      -> tcp_queue_rcv(), tcp_ofo_queue(), and tcp_fastopen_add_skb()
+> > >
+> > >   2. TCP recvmsg() completes
+> > >      -> __tcp_cleanup_rbuf()
+> > >
+> > > This will allow the BPF prog to parse each skb and dynamically
+> > > adjust sk->sk_rcvlowat to suppress unnecessary EPOLLIN wakeups
+> > > until sufficient data (e.g., a full RPC frame) is available
+> > > in the receive queue.
+> > >
+> > > Note that the direct access to bpf_sock_ops.data is intentionally
+> > > disabled by passing 0 as end_offset.
+> > >
+> > > Instead, the BPF prog is supposed to use bpf_skb_load_bytes()
+> > > with bpf_sock_ops because payload is not in the linear area
+> > > with TCP header/data split on and skb may contain a RPC
+> > > descriptor in skb frag.  This also simplifies the BPF prog.
+> > >
+> > > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+> >
+> > I was reading the series expecting to find some skb_queue_walk-like
+> > implementation, but since it's a cgroup hook we obviously don't
+> > need to do that.. So at this point BPF_SOCK_OPS_RCVLOWAT_CB_FLAG
+> > is basically a "rx queue skb" hook, right?
+> 
+> If recvmsg() hook w/o skb is not confusing, yes.
+> 
+> > So should we make
+> > the name more generic? There is really nothing lowat-specific
+> > here besides your new kfunc to read the payload?
+> 
+> Do you have any suggestions?  BPF_SOCK_OPS_RCVQ ?
+
+Yeah, idk, maybe something like this :-)
+
+> 
+> 
+> >
+> > > ---
+> > >  include/net/tcp.h       | 14 ++++++++++++++
+> > >  net/ipv4/tcp.c          |  2 ++
+> > >  net/ipv4/tcp_fastopen.c |  2 ++
+> > >  net/ipv4/tcp_input.c    | 10 ++++++++++
+> > >  4 files changed, 28 insertions(+)
+> > >
+> > > diff --git a/include/net/tcp.h b/include/net/tcp.h
+> > > index 4e9e634e276b..003e46c9b500 100644
+> > > --- a/include/net/tcp.h
+> > > +++ b/include/net/tcp.h
+> > > @@ -737,6 +737,20 @@ static inline struct request_sock *cookie_bpf_check(struct net *net, struct sock
+> > >  }
+> > >  #endif
+> > >
+> > > +#ifdef CONFIG_CGROUP_BPF
+> > > +void bpf_skops_rcvlowat(struct sock *sk, struct sk_buff *skb);
+> > > +
+> > > +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *skb)
+> > > +{
+> > > +     if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_RCVLOWAT_CB_FLAG))
+> > > +             bpf_skops_rcvlowat(sk, skb);
+> > > +}
+> > > +#else
+> > > +static inline void tcp_bpf_rcvlowat(struct sock *sk, struct sk_buff *skb)
+> > > +{
+> > > +}
+> > > +#endif
+> > > +
+> > >  /* From net/ipv6/syncookies.c */
+> > >  int __cookie_v6_check(const struct ipv6hdr *iph, const struct tcphdr *th);
+> > >  struct sock *cookie_v6_check(struct sock *sk, struct sk_buff *skb);
+> > > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> > > index 1d9e52fc454f..80144b97a87a 100644
+> > > --- a/net/ipv4/tcp.c
+> > > +++ b/net/ipv4/tcp.c
+> > > @@ -1602,6 +1602,8 @@ void __tcp_cleanup_rbuf(struct sock *sk, int copied)
+> > >               tcp_mstamp_refresh(tp);
+> > >               tcp_send_ack(sk);
+> > >       }
+> > > +
+> > > +     tcp_bpf_rcvlowat(sk, NULL);
+> > >  }
+> > >
+> > >  void tcp_cleanup_rbuf(struct sock *sk, int copied)
+> > > diff --git a/net/ipv4/tcp_fastopen.c b/net/ipv4/tcp_fastopen.c
+> > > index 471c78be5513..91bf421fc5b6 100644
+> > > --- a/net/ipv4/tcp_fastopen.c
+> > > +++ b/net/ipv4/tcp_fastopen.c
+> > > @@ -281,6 +281,8 @@ void tcp_fastopen_add_skb(struct sock *sk, struct sk_buff *skb)
+> > >       TCP_SKB_CB(skb)->seq++;
+> > >       TCP_SKB_CB(skb)->tcp_flags &= ~TCPHDR_SYN;
+> > >
+> > > +     tcp_bpf_rcvlowat(sk, skb);
+> > > +
+> >
+> > I'm also not sure about the particular placement of some of these..
+> > For example here, why do it before updating tp? Why not after?
+> >
+> > (and same for tcp_ofo_queue)
+> 
+> Basically, it's to give the same snapshot with tcp_queue_rcv().
+> 
+> For example, if you call tcp_bpf_rcvlowat() before updating
+> TCP_SKB_CB(skb)->seq in tcp_fastopen_add_skb(), BPF
+> prog will need to implement an unlikely if branch to strip SYN.
+> 
+> Also, TCP stack can queue overlapping skb into recvq.
+> Once you update rcv_nxt with a new skb, you cannot infer
+> the previous one from skb->len.
+
+I see, makes sense, thanks!
