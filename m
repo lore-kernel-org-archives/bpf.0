@@ -1,173 +1,292 @@
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EC35425CE6
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 16:17:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05781281530;
+	Mon, 11 May 2026 16:17:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778516225; cv=none; b=S6EJbCOCYIztUQpHMdqZUm5ikRKYhlpf8vMfQ2+zPhUUZgOiyEX956/QA/lcDy6v7dQRMlNZURw71N+IYKSzvsvmKI2DwuDN/HMD3pYu2eBqpWB2pTShxCQpQcFeazuAzGv+klDCi5az9It1L7dGcE1PEucUQQqV6GshMjSzrAY=
+	t=1778516275; cv=none; b=U+3sAF8KkM+0yOZr5q6qOXfH9UTiLJlnJRuXwnlBk7EE61NAuLDqSbcXZXX6YSxImJgSb7DzAp/GY5bIkbsQm5BhDC+114dTAfwAlvhoKNy7hTodj9Gw+BF/RpFf0vWAGRVjy8vMVj/w79RI3UQur/sztl/5+zjOZTieMhWCWSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778516225; c=relaxed/simple;
-	bh=bKIT5QYp522o3eA8Shrb5E1ccNYI0Upv9/JZnA0dv2s=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=ny6p0aNKdBPE7+zlTh918YOk7D1i+7EVzMnPwgnH0Oy/XPKPdicWQWowdV/MyV9DqFTibJYet9R+6mRCtxBummpQ2nyFjb07KVB9XYcR5bTpCCpQ2ygmSo7SI7/7ULEmnlY4UtAI2mpf7i2xE6hBm2X5gefDFeWGLbGDdhxp05Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LC6wXRn+; arc=none smtp.client-ip=209.85.167.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778516275; c=relaxed/simple;
+	bh=59oO2nZYLm/eTOhE2D0GMMEe9kjy6S+6k5I/fldcuDg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Jqz0TzIdTxA/uKJZR1Bh0sBKzIKKMgmdxxmxhGwTH/Wj5SMgIrJCJgBfvhArGXVAvddHLQAlzenOP9rcMIQhU5buEqwmFKOZYbMOJgcC3Oaktlps/SBrz6Hws+5AonbJgQQ1EsTH9CtixBwWysLkOpnPJ7tmGsAIlP7pjgP0Qk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=dcrn+XQg; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LC6wXRn+"
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-479dc6d26e3so2576963b6e.0
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 09:17:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778516223; x=1779121023; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a/2KcY2QUgwYTB7Wj9CkoIhwwArdYatRrkS5KECgOCI=;
-        b=LC6wXRn+SFZlmJ850mN72XO3gk4SpM3acWhOUCOFZ8sPquNhbcLxV43SkC++M8cXfV
-         /+fgPb/4CPcQnrwp9ZApuLCBLXlklh/bUdtMvr5PI7TYKAyy0ll5BQWBpqoal6FxtVRT
-         8UqYlOLjcBQEjjxBA4wN1Dbyv6CxmmFYWwbHCP8Nxpl3SFBRluR6zTZt3N+yJoOoofs6
-         8tu6hBrEIuyP6J4oPrurTljobZS36WmfhEumdVk5WoQftjaWJVqgsK8DwUnXl6hjKMmL
-         3vtSG/nsJjqItN7PxKzC8liWqExSQ4aaiBvT6xqUfbFUXnB5RDGgx4t0LuUVdQa5KusT
-         mw6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778516223; x=1779121023;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a/2KcY2QUgwYTB7Wj9CkoIhwwArdYatRrkS5KECgOCI=;
-        b=pT3ZmV+gfPgmFii/ZhCnQFb46bzLggj24LujEsMeIfdafZCyzy97E+ZP09CW0Ezlsq
-         EswHY8fN3Hf5afOqpROl8+2kKlVyB9WVlqqk0pFMCI0/IieRe+A3J322XQmHIcHnlBHT
-         JmdSt+HJSjIXsRnq7nPM9hdCVNxqVrNLaAc484n1uW1paA4DXfhxsJ1JxyOaMqgHfE/C
-         NfZKiCrNXPocKkvRBN5kFPU8XozJMRBLKdWDOdOoWMTXmcqyWE+BVNpu8eeR5+LRckSt
-         /kfyjusszMUp2VzqH4aO+GGCHfWXrsIFRsK4xqiNp4t403e8arJqx7x7QP3GQvCdk3f0
-         JUdQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+LsMjzb3O3SnFRIaota4foOZq/xxEjsvNleEeAdmvdo+kgII/RsQREKizfGq941mRBDkQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyEqZJ7wD5uf0MYEnlfpSp9rcYNzKnQsZmeoxs+MOVtX8eXiyZ
-	PS21NoGdLDQdrbgMM4U2yb6Tk/RXio7BXrbRABH0PXUGOZRvWJNxk963
-X-Gm-Gg: Acq92OHiR+wJ+2q7xWolHZMgiX+WaImVPxLmLoSfGzvVwXNGyt24rqzGAhdhLoKhRNa
-	UpEBB7ouJNMlC1YWsA9BFOJWZYaPmcXb7loKn4hxrwUsBYVPRXWat6U+s9QWl8JHkNxOUaPV3sY
-	rJ5MXddPbhF7l1r0wf7qpgTNURCZ3Wd5OvjRiXQKkH4cSbEvTThnTtP3WdWg2rOS5VYpr24c8wW
-	9ACEl+hXnJQGqd+JNnVjlb0zBEORdhuakSutdUWuU6M528ATsx+s9ej4iYTfDJevIe+hB74NwvO
-	S/Sj94yWuL44PE1e6heNjcqor8DmLlXXcWWliBMHZj6cYU5Uw6OQlssfYjS8eW4hhzuNfVK4TXR
-	bVSqucG+oxYGwvX/3JOSWGc3HnQRAkBygyVS4rlW3ngWsKTB9/21vgK4Qia6uRA2yqGJPurmvdH
-	cjn2IfWMNbXOdW6SwnXHXSmBF/QfKQrO4EruSgDnS4Zh1pMbJdGjkNvEq0CS4eSUYTmYJRCMmFO
-	L8qbDiVOcaM5QKL6Q==
-X-Received: by 2002:a05:6808:e658:b0:47a:8c2:a55b with SMTP id 5614622812f47-480424e555dmr10827589b6e.42.1778516222893;
-        Mon, 11 May 2026 09:17:02 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:70::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-47c76936220sm20544389b6e.10.2026.05.11.09.17.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 May 2026 09:17:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="dcrn+XQg"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64B9S2AT2762269;
+	Mon, 11 May 2026 16:16:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=PljQfX
+	jEQJkTJMcKcqWTViVGwQCuUAG7K0M3qjxMCfQ=; b=dcrn+XQgB/bj2r8nDP4tBW
+	wgZ591e5O17u/t+ejyYaLZ5GCZd5TbaFDGzeymY5H8nD5Ea16xNZaMTYLkpcO8wE
+	shkDQsQllNiOxFCpoxoOHjAvbveQtUM8zyNE7MH38kox6zYgEYOfKjZiyoUU9MDl
+	5u7IBIN2yjlaE2TwVxkVjkI0wJeMeZhxnyb0sYKa0F3gbsXZhnOuFQPBH7hxaYhE
+	n30Ec0gxHuYNuEUZqVhTmfNUhgPbOcPjBfoo+cNY00ZFM2gber++p068emUFWIeU
+	NzXW6Vi0iefdCffwAP5WKEu2nT9VeJgwIs3/a/2U9LBNyLCgy5yW8DV4jDEMdscw
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e1vkqs531-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 11 May 2026 16:16:13 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64BG9ZNV023420;
+	Mon, 11 May 2026 16:16:12 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e2f8q65d9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 11 May 2026 16:16:10 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64BGG6gT35127710
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 11 May 2026 16:16:06 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8EBC720040;
+	Mon, 11 May 2026 16:16:06 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D19F520043;
+	Mon, 11 May 2026 16:16:04 +0000 (GMT)
+Received: from [9.111.205.47] (unknown [9.111.205.47])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 11 May 2026 16:16:04 +0000 (GMT)
+Message-ID: <8d72a8da-945a-4f73-8549-db6d8f2f1a46@linux.ibm.com>
+Date: Mon, 11 May 2026 18:16:04 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 05/19] unwind_user/sframe: Add support for reading
+ .sframe contents
+To: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf
+ <jpoimboe@kernel.org>,
+        Indu Bhagat <ibhagatgnu@gmail.com>,
+        Dylan Hatch <dylanbhatch@google.com>
+Cc: bpf@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "Jose E. Marchesi" <jemarch@gnu.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "Carlos O'Donell" <codonell@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+        "Liam R. Howlett" <liam@infradead.org>,
+        Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Kees Cook <kees@kernel.org>, Sam James <sam@gentoo.org>
+References: <20260505121718.3572346-1-jremus@linux.ibm.com>
+ <20260505121718.3572346-6-jremus@linux.ibm.com>
+Content-Language: en-US
+From: Jens Remus <jremus@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20260505121718.3572346-6-jremus@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 11 May 2026 09:17:01 -0700
-Message-Id: <DIFZDSS2F9P4.9J051GNVD30G@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Jose E .
- Marchesi" <jose.marchesi@oracle.com>, <kernel-team@fb.com>, "Martin KaFai
- Lau" <martin.lau@kernel.org>
-Subject: Re: [PATCH bpf-next v3 06/24] bpf: Refactor jmp history to use
- dedicated spi/frame fields
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc
-References: <20260511053301.1878610-1-yonghong.song@linux.dev>
- <20260511053332.1884123-1-yonghong.song@linux.dev>
-In-Reply-To: <20260511053332.1884123-1-yonghong.song@linux.dev>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTExMDE3NCBTYWx0ZWRfXwzDif66fkrfh
+ Q8WZ/54cGOIc1otkBfbOIq905Yg00jeO3y8YLB1SZQLgisaeGZwo86NdiRxetvynSM6V9ayWzq2
+ HzF4dnSa6jiwyMxwg5lTGGdoihD9MfyJC8A2Fs7NX+U+JmLEE5zB0uC83xWGubQHX2OV+D4/M5V
+ eHunX0JIijfO9PsypQ6Xqa0C6CqLLpvRtVkcEohotQ0dKnzCdzXZBNprAizcqWaHJU+sJhgPOJK
+ lXhFDYZGrUAmU6xz3nREIDDdjDyI3swvjbQesTHYGQTbpiSzD49q9YLeuPOi7+dNWsg41XzfsK0
+ BphNMoepS21cfzucK0MGwnGZ7efPF47amD+CghrCIFMgxjA8UyeioD1DsdQn4fkeywU3f3yn9r1
+ 7kIMy8HHb2tNyGYt7l8zrIYFZqTXS0bAOimuoUbo7UzZa5vXgPMUr2+ZUmV9qGJUx4xoDDfP7pe
+ d30xEPRxdyRxEtWflaw==
+X-Authority-Analysis: v=2.4 cv=OaWoyBTY c=1 sm=1 tr=0 ts=6a0200cd cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=YuDcBBqGAAAA:8 a=DW19hxsEfaWoqxOqFrcA:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10 a=V9_jqlfyBUA7Gw2gN5zN:22
+X-Proofpoint-ORIG-GUID: v7oyYq_1EeTb2SEXuDNJ0wNJCl2cjr3V
+X-Proofpoint-GUID: H50GDy6yegsuV98nwCBWYnMMVcIUVI2L
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-11_04,2026-05-08_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 suspectscore=0 spamscore=0 clxscore=1015 bulkscore=0
+ phishscore=0 lowpriorityscore=0 priorityscore=1501 impostorscore=0
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604200000
+ definitions=main-2605110174
 
-On Sun May 10, 2026 at 10:33 PM PDT, Yonghong Song wrote:
-> Move stack slot index (spi) and frame number out of the flags field
-> in bpf_jmp_history_entry into dedicated bitfields. This simplifies
-> the encoding and makes room for new flags.
->
-> Previously, spi and frame were packed into the lower 9 bits of the
-> 12-bit flags field (3 bits frame + 6 bits spi), with INSN_F_STACK_ACCESS
-> at BIT(9) and INSN_F_DST/SRC_REG_STACK at BIT(10)/BIT(11).
-> But this has no room for an INSN_F_* flag for stack arguments.
->
-> To resolve this issue, bpf_jmp_history_entry field idx is narrowed to
-> 20 bits (sufficient for insn indices up to 1M), and the freed bits hold
-> spi (6 bits) and frame (3 bits) as dedicated struct fields. The flags
-> enum is simplified accordingly:
->   INSN_F_STACK_ACCESS  -> BIT(0)
->   INSN_F_DST_REG_STACK -> BIT(1)
->   INSN_F_SRC_REG_STACK -> BIT(2)
-> which allows more room for additional INSN_F_* flags.
->
-> bpf_push_jmp_history() now takes explicit spi and frame parameters
-> instead of encoding them into flags. The insn_stack_access_flags(),
-> insn_stack_access_spi(), and insn_stack_access_frameno() helpers are
-> removed.
->
-> No functional change.
->
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->  include/linux/bpf_verifier.h | 34 ++++++++++++++--------------------
->  kernel/bpf/backtrack.c       | 24 +++++++++---------------
->  kernel/bpf/states.c          |  2 +-
->  kernel/bpf/verifier.c        | 23 +++++++++++------------
->  4 files changed, 35 insertions(+), 48 deletions(-)
->
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index f9020a4ea005..adf00585a627 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -435,31 +435,22 @@ struct bpf_func_state {
-> =20
->  #define MAX_CALL_FRAMES 8
-> =20
-> -/* instruction history flags, used in bpf_jmp_history_entry.flags field =
-*/
-> +/* instruction history flags, used in bpf_jmp_history_entry.flags field.
-> + * Frame number and SPI are stored in dedicated fields of bpf_jmp_histor=
-y_entry.
-> + */
->  enum {
-> -	/* instruction references stack slot through PTR_TO_STACK register;
-> -	 * we also store stack's frame number in lower 3 bits (MAX_CALL_FRAMES =
-is 8)
-> -	 * and accessed stack slot's index in next 6 bits (MAX_BPF_STACK is 512=
-,
-> -	 * 8 bytes per slot, so slot index (spi) is [0, 63])
-> -	 */
-> -	INSN_F_FRAMENO_MASK =3D 0x7, /* 3 bits */
-> -
-> -	INSN_F_SPI_MASK =3D 0x3f, /* 6 bits */
-> -	INSN_F_SPI_SHIFT =3D 3, /* shifted 3 bits to the left */
-> +	INSN_F_STACK_ACCESS =3D BIT(0),
-> =20
-> -	INSN_F_STACK_ACCESS =3D BIT(9),
-> -
-> -	INSN_F_DST_REG_STACK =3D BIT(10), /* dst_reg is PTR_TO_STACK */
-> -	INSN_F_SRC_REG_STACK =3D BIT(11), /* src_reg is PTR_TO_STACK */
-> -	/* total 12 bits are used now. */
-> +	INSN_F_DST_REG_STACK =3D BIT(1), /* dst_reg is PTR_TO_STACK */
-> +	INSN_F_SRC_REG_STACK =3D BIT(2), /* src_reg is PTR_TO_STACK */
->  };
-> =20
-> -static_assert(INSN_F_FRAMENO_MASK + 1 >=3D MAX_CALL_FRAMES);
-> -static_assert(INSN_F_SPI_MASK + 1 >=3D MAX_BPF_STACK / 8);
-> -
->  struct bpf_jmp_history_entry {
-> -	u32 idx;
->  	/* insn idx can't be bigger than 1 million */
-> +	u32 idx : 20;
-> +	u32 frame : 3;	/* stack access frame number */
-> +	u32 spi : 6;	/* stack slot index (0..63) */
-> +	u32 : 3;
->  	u32 prev_idx : 20;
->  	/* special INSN_F_xxx flags */
->  	u32 flags : 12;
+On 5/5/2026 2:17 PM, Jens Remus wrote:
+> From: Josh Poimboeuf <jpoimboe@kernel.org>
+> 
+> In preparation for using sframe to unwind user space stacks, add an
+> sframe_find() interface for finding the sframe information associated
+> with a given text address.
+> 
+> For performance, use user_read_access_begin() and the corresponding
+> unsafe_*() accessors.  Note that use of pr_debug() in uaccess-enabled
+> regions would break noinstr validation, so there aren't any debug
+> messages yet.  That will be added in a subsequent commit.
+> 
+> Link: https://lore.kernel.org/all/77c0d1ec143bf2a53d66c4ecb190e7e0a576fbfd.1737511963.git.jpoimboe@kernel.org/
+> Link: https://lore.kernel.org/all/b35ca3a3-8de5-4d32-8d30-d4e562f6b0de@linux.ibm.com/
+> 
+> [ Jens Remus: Add initial support for SFrame V3 (limited to regular
+> FDEs).  Add support for PC-relative FDE function start offset.  Simplify
+> logic by using an internal FDE representation.  Rename struct sframe_fre
+> to sframe_fre_internal to align with struct sframe_fde_internal.
+> Cleanup includes.  Fix checkpatch errors "spaces required around that
+> ':'". ]
 
-If so, should 'flags' width be reduced as well?
-We don't need to burn 12 bits after this conversion ?
-3 bits for flags will do?
+> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+
+It just occurred to me that that the use of the return values -EINVAL
+and -EFAULT is inconsistent across __read_fde() and __read_fre():
+-EINVAL is to be used when a lookup for an IP fails (i.e. cannot be
+        satisfied) and
+-EFAULT is to be used when the .sframe is corrupted/inconsistent and
+        should be unregistered.
+
+> +static __always_inline int __read_fde(struct sframe_section *sec,
+> +				      unsigned int fde_num,
+> +				      struct sframe_fde_internal *fde)
+> +{
+> +	unsigned long fde_addr, fda_addr, func_addr;
+> +	struct sframe_fde_v3 _fde;
+> +	struct sframe_fda_v3 _fda;
+> +
+> +	fde_addr = sec->fdes_start + (fde_num * sizeof(struct sframe_fde_v3));
+> +	unsafe_copy_from_user(&_fde, (void __user *)fde_addr,
+> +			      sizeof(struct sframe_fde_v3), Efault);
+> +
+> +	func_addr = fde_addr + _fde.func_start_off;
+> +	if (func_addr < sec->text_start || func_addr >= sec->text_end)
+> +		return -EINVAL;
+
+		return -EFAULT;
+
+> +
+> +	fda_addr = sec->fres_start + _fde.fres_off;
+> +	if (fda_addr + sizeof(struct sframe_fda_v3) > sec->fres_end)
+> +		return -EINVAL;
+
+		return -EFAULT;
+
+> +	unsafe_copy_from_user(&_fda, (void __user *)fda_addr,
+> +			      sizeof(struct sframe_fda_v3), Efault);
+> +
+> +	fde->func_addr	= func_addr;
+> +	fde->func_size	= _fde.func_size;
+> +	fde->fda_off	= _fde.fres_off;
+> +	fde->fres_off	= _fde.fres_off + sizeof(struct sframe_fda_v3);
+> +	fde->fres_num	= _fda.fres_num;
+> +	fde->info	= _fda.info;
+> +	fde->info2	= _fda.info2;
+> +	fde->rep_size	= _fda.rep_size;
+> +
+> +	return 0;
+> +
+> +Efault:
+> +	return -EFAULT;
+> +}
+
+
+
+> +static __always_inline int __read_fre(struct sframe_section *sec,
+> +				      struct sframe_fde_internal *fde,
+> +				      unsigned long fre_addr,
+> +				      struct sframe_fre_internal *fre)
+> +{
+> +	unsigned char fde_type = SFRAME_V3_FDE_TYPE(fde->info2);
+> +	unsigned char fde_pctype = SFRAME_V3_FDE_PCTYPE(fde->info);
+> +	unsigned char fre_type = SFRAME_V3_FDE_FRE_TYPE(fde->info);
+> +	unsigned char dataword_count, dataword_size;
+> +	s32 cfa_off, ra_off, fp_off;
+> +	unsigned long cur = fre_addr;
+> +	unsigned char addr_size;
+> +	u32 ip_off;
+> +	u8 info;
+> +
+> +	addr_size = fre_type_to_size(fre_type);
+> +	if (!addr_size)
+> +		return -EFAULT;
+> +
+> +	if (fre_addr + addr_size + 1 > sec->fres_end)
+> +		return -EFAULT;
+> +
+> +	UNSAFE_GET_USER_INC(ip_off, cur, addr_size, Efault);
+> +	if (fde_pctype == SFRAME_FDE_PCTYPE_INC && ip_off > fde->func_size)
+> +		return -EFAULT;
+> +
+> +	UNSAFE_GET_USER_INC(info, cur, 1, Efault);
+> +	dataword_count = SFRAME_V3_FRE_DATAWORD_COUNT(info);
+> +	dataword_size  = dataword_size_enum_to_size(SFRAME_V3_FRE_DATAWORD_SIZE(info));
+> +	if (!dataword_count || !dataword_size)
+> +		return -EFAULT;
+> +
+> +	if (cur + (dataword_count * dataword_size) > sec->fres_end)
+> +		return -EFAULT;
+> +
+> +	/* TODO: Support for flexible FDEs not implemented yet. */
+> +	if (fde_type != SFRAME_FDE_TYPE_DEFAULT)
+> +		return -EFAULT;
+> +
+> +	UNSAFE_GET_USER_INC(cfa_off, cur, dataword_size, Efault);
+> +	dataword_count--;
+> +
+> +	ra_off = sec->ra_off;
+> +	if (!ra_off) {
+> +		if (!dataword_count--)
+> +			return -EFAULT;
+> +
+> +		UNSAFE_GET_USER_INC(ra_off, cur, dataword_size, Efault);
+> +	}
+> +
+> +	fp_off = sec->fp_off;
+> +	if (!fp_off && dataword_count) {
+> +		dataword_count--;
+> +		UNSAFE_GET_USER_INC(fp_off, cur, dataword_size, Efault);
+> +	}
+> +
+> +	if (dataword_count)
+> +		return -EFAULT;
+> +
+> +	fre->size	= addr_size + 1 + (dataword_count * dataword_size);
+> +	fre->ip_off	= ip_off;
+> +	fre->cfa_off	= cfa_off;
+> +	fre->ra_off	= ra_off;
+> +	fre->fp_off	= fp_off;
+> +	fre->info	= info;
+> +
+> +	return 0;
+> +
+> +Efault:
+> +	return -EFAULT;
+> +}
+
+Similar for sframe_init_cfa_rule_data() (and sframe_init_rule_data())
+that get introduced with subsequent commits.
+
+Regards,
+Jens
+-- 
+Jens Remus
+Linux on Z Development (D3303)
+jremus@de.ibm.com / jremus@linux.ibm.com
+
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
 
