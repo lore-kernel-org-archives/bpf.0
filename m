@@ -1,128 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BA434D90A9
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 22:12:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D06029D26E
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 22:17:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778537568; cv=none; b=rdqXXLu/QE8Wg5UyOfdBdHLULdsHBMkjKVsMZA7hTTfJyfT2/HJYE6me63RdVeyFNXMZc/Soopba8fMMnlf3u7htLBBU9ekabZCDeh6SNT9lnXWfsL3y8ovN7Ekxvjtd5SbqGbSivCtSLkIgUoMtOiUHJrP2Aeo1h8wxFDBzstE=
+	t=1778537823; cv=none; b=Kkthb1Pfj+hvnrr4pI1653bcpobaEr0LGKiMWVj/U0mI0QhqjpD/Vyjb9zKFM1SxhEEjATRnShtw+5j8CiJ/DLPFFLwJT/ascki6KNRIMqOz1a9PFdk1z0WJ9OqY0apN3tMc//jpaD+jvbDz61QTcYGNMDPBvbmV86eN5XFu0Dc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778537568; c=relaxed/simple;
-	bh=JAMUnCdmHaJM8xN4EfhAsOmc9DzbXKJLsPpV/Guz5Jw=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=PBzkTybbMwBXEyuvGLC0ZgJq7FQX++AC56QdGLvhWCwA9IROJTKNZo0wPbqOJTriV1EYOqwEmrdWd6SU5zInvABU8+hoJaKASnEzDA8ngUMlXvlRS6EM0jDyTs3E8naf7lzqxuLstDnuCv+eaCapov6tHMxLv6NtY6Dg/D8WgTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gdxDpNZc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778537823; c=relaxed/simple;
+	bh=/OlPOqQ78v3AZHljtHewrojxMtfDrFtFPaoK3TdAVf4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=di70lZf9BrqjWrwJIG6DdSszMK8HzVpIaaQMJuHQknMN7F/QxpK7rDjEhNwiutJYQApwUVZ2H8xZzLtSGcgQx+L0+N6355nb4gQtq5XcYLfKLvhWoj4z1SFkdKEzKF0H3G5G/lT+dalv0j3SjqYZuuPz5m+nL0GWAk0XzgcpzoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zv3Mx3Ih; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gdxDpNZc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4CFDC2BCB0;
-	Mon, 11 May 2026 22:12:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778537568;
-	bh=JAMUnCdmHaJM8xN4EfhAsOmc9DzbXKJLsPpV/Guz5Jw=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=gdxDpNZc4hYH2LGVMiQwL1MS6MeCak0FZK7p7LOurwxD6jWGR17BS8h7CAiRowpcX
-	 AC4Zn+azMD6xwNS0x25vypVCCXXIob/eSJ9XiEBs3zTkLqsrzvOkq2qDICQ56AuQLa
-	 mV+yxFm6j5qqORlBAFRONWJErSTZSZvDDs6T+aUdDm5u3o6VosUmPqoR9tw8owLVGu
-	 VoYewivpq2Dcr2w2YCEfEZHn5R0iaUrYqY5XeD8gNZYHgMnWsnqZAJoyjElOoht39o
-	 3FJACapcTDyVV16t3CEaepjZwaiKqZWZcHyftPl/NGibuoWjPRtrA8JqM/46O7uuDZ
-	 dqsENl4YznLFQ==
-Content-Type: multipart/mixed; boundary="===============4453318093253301914=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zv3Mx3Ih"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-836ed29d1e5so2067420b3a.2
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 15:17:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778537822; x=1779142622; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=h4KQfTAAZ5oqTEXttxPs+3ZZUZfSXw+XpaZVnMOUj/I=;
+        b=Zv3Mx3IheQ//b9o3ezhy9b6eR8jaT5jNSMbTvLCkvNLN24ELoaHDw5layY2gLHy2DJ
+         Jy4/FTGft2rtdtu6OXPPQd51sN/y31oX52toaC4a5xTQ5Xtm31dEOPxcy9BoXuB4XocQ
+         38Aa/xp1cKGzpcmNnRJgmGihEb+/gtJyKYS/cTrV+7rVi/rdSWvfMZWzXJco0GKLPHRB
+         XRmT9ifqnXVQKwjwqTj5DlQiPI+1oazabUq4LPDYnmCjqtNZ2cgEup5Tbs2XLhx4mhke
+         eW9qHWCK6ZDGMQzaWZh0RXlvlECO9FuhmnOgR744/F2s4viZ2i8x9DAP5jFLIOhJ9KDp
+         nmuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778537822; x=1779142622;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h4KQfTAAZ5oqTEXttxPs+3ZZUZfSXw+XpaZVnMOUj/I=;
+        b=Ab5Sx6OxRc/9YbZV5pm78lOgSukHGo0caYBeK8ZX8po0hgVNUvjdCkmqHKm8XESHRY
+         luPG9DsusfftwxKmXBk2i7OvvUk3X6ECCBLO6BZqlFyL6LxMikGfGcAVE2rW2cHFK7js
+         rxoZxeeiDxu1Ot8FwjIR1dj6TblGNX5oYJ6kLE8NAYqvthO76tfwmGrIS/k1iHeOY6a7
+         idjPcNo6MbNtXMDCXUmLsH4OxUwOyAya5QxjjzbvTqRVbtZVBCgFHS5WzyiHtmq6HWE5
+         wx1TVGApE19fhU+EZEN6XhokHpA7ZXLBfMbtIskP/lr27XWvNYFdaixwSYn5r1k4Syi8
+         s6zA==
+X-Forwarded-Encrypted: i=1; AFNElJ+uBqRbqTKtIpbTUIW4eHp09v4WDas+zItEbYQfMleO8HlChJGtniD+hJjc61aj765CQ1s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhGjITrhKLInAutJ/tkXp5wfUSNr7PamFN4av20xiQgYMRuUvz
+	eF3DreLV5WfrXa9lPYGvNX/r9r3Mk0EtpPy7N0rc3qdQdysn5fcbQZj0
+X-Gm-Gg: Acq92OHFj+kpw0sRCB7Z5ITmHsOgAcL9WgkzzMelwUQM5Mhl2Ref+tqkQ6Ia2qtVs/E
+	RlbPtcxINdEs1O/6mntuWIFxO10OioSnSSbGtf8igMA2r1ST8LMw9S/Q5MNj7yLVFzNWDbyoir/
+	3t+E5+tlnMScPnolcGZP0zxm+FR/0lVJVIz6QOnPvWNdhNEFirhxZXQ4l/h/O0IONt4NmFZlRnP
+	DJ53cAEmqg8Nwl2m5MrLi84bh4MRuTrr21QsUogszlAkp9+yBiK3lexYBhc8Dw6h/2blcyyJwv2
+	Hc1VkiPwF/apitFuy9VJB5IAwO7g+YsNGA8Ue9jeNzxBWPIZKX/q5ZTGzSBDYznSiRx+SzjBRnF
+	TRiMF5A68BWfm0v0bkyqX5PPHpHeh7dgwC2GvuRP60I0mX5Q4QYiGdKpGThRzzhPqPvbDv9Avot
+	gU8sM17tjnbfKUaNYBLBq+o4P/XnuKtTwKduYMaiMbhcHZpA0rEz0dVVxueSDG8nR2VVxaVMjMs
+	L8kCSYjzLP3Ixs6LWc6JohHlBudy4bBkg==
+X-Received: by 2002:a05:6a00:b82:b0:82c:e60c:f36d with SMTP id d2e1a72fcca58-83eebfb399fmr276070b3a.48.1778537821952;
+        Mon, 11 May 2026 15:17:01 -0700 (PDT)
+Received: from visitorckw-work01.c.googlers.com.com (32.237.80.34.bc.googleusercontent.com. [34.80.237.32])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83965a3e3ecsm21943329b3a.19.2026.05.11.15.16.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2026 15:17:01 -0700 (PDT)
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	luke.r.nels@gmail.com,
+	xi.wang@gmail.com,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu
+Cc: martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	alex@ghiti.fr,
+	jserv@ccns.ncku.edu.tw,
+	eleanor15x@gmail.com,
+	marscheng@google.com,
+	bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Kuan-Wei Chiu <visitorckw@gmail.com>
+Subject: [PATCH bpf-next v2 0/3] riscv, bpf: Fix signed operations and add 32 bit atomics
+Date: Mon, 11 May 2026 22:16:45 +0000
+Message-ID: <20260511221648.3251464-1-visitorckw@gmail.com>
+X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c4601c9bc4a124aaaa0c981923fb415af769be9d59ab9a9acf5505426ebbc130@mail.kernel.org>
-In-Reply-To: <20260511214100.9487-3-emil@etsalapatis.com>
-References: <20260511214100.9487-3-emil@etsalapatis.com>
-Subject: Re: [RESEND PATCH bpf-next 2/2] selftests/bpf: libarena: Add Lev-Chase queue data structure
-From: bot+bpf-ci@kernel.org
-To: emil@etsalapatis.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,memxor@gmail.com,daniel@iogearbox.net,eddyz87@gmail.com,song@kernel.org,mattbobrowski@google.com,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 11 May 2026 22:12:46 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============4453318093253301914==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Fix miscompiled signed operations and expands 32 bit atomic support in
+the RV32 BPF JIT.
 
-> The data structure exposes three main calls. two of them are available to
-> the thread owning the queue and one available to all threads in the program:
->
-> lvqueue_owner_push(): Push an item to the top of the lvqueue.
-> lvqueue_owner_pop(): Pop an item from the top of the lvqueue.
-> lvqueue_steal(): Steal a thread from the bottom of the lvqueue from
-> any thread.
+The current implementation ignores the instruction offset field used by
+the bpf instruction set to specify BPF_SDIV/BPF_SMOD and BPF_MOVSX.
+This causes these operations to be treated as unsigned or
+zero-extended, leading to test_bpf failures. Fix this by checking the
+offset and emitting the correct instructions.
 
-The API names in the commit message don't match the actual functions.
-Looking at tools/testing/selftests/bpf/libarena/include/libarena/lvqueue.h:
+Additionally, we leverage the mandatory A extension to natively support
+32 bit bpf atomics (and, or, xor, xchg) by mapping them directly to
+amo*.w instructions. BPF_CMPXCHG continues to fall back to the
+interpreter.
 
-    int lvq_owner_push(lv_queue_t *lvq, u64 val);
-    int lvq_owner_pop(lv_queue_t *lvq, u64 *val);
-    int lvq_steal(lv_queue_t *lvq, u64 *val);
-
-The functions use 'lvq_' prefix, not 'lvqueue_'.
-
-Also, the commit message describes push/pop as operating on the 'top' and
-steal as operating on the 'bottom', while the code follows the standard
-Chase-Lev convention where the owner operates at 'bottom' and stealers at
-'top'. In lvq_owner_push():
-
-    b = smp_load_acquire(&lvq->bottom);
-    ...
-    lv_arr_put(lvq->cur, b, val);
-    smp_store_release(&lvq->bottom, b + 1);
-
-And in lvq_steal():
-
-    t = smp_load_acquire(&lvq->top);
-    ...
-    if (cmpxchg(&lvq->top, t, t + 1) != t)
-
-Could the commit message use the correct API names and clarify the
-terminology to match the variable names in the code?
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/libarena/src/lvqueue.bpf.c b/tools/testing/selftests/bpf/libarena/src/lvqueue.bpf.c
-> new file mode 100644
-> index 000000000000..b93c4f9d1c92
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/libarena/src/lvqueue.bpf.c
-> @@ -0,0 +1,241 @@
-
-[ ... ]
-
-> +static inline
-> +int lvq_order_init(lv_queue_t *lvq __arg_arena, int order)
-> +{
-> +	lv_arr_t *arr = &lvq->arr[order];
-> +
-> +	if (unlikely(!lvq))
-> +		return -EINVAL;
-> +
-> +	if (order >= LV_ARR_ORDERS)
-> +		return -E2BIG;
-
-The pointer 'arr' is computed from '&lvq->arr[order]' before both the NULL
-check and the bounds check. Although this pointer is never dereferenced on
-the failure paths, forming a pointer more than one past the end of an array
-is undefined behavior per C17 6.5.6p8.
-
-This can occur when lvq_owner_push() calls lvq_order_init(lvq, arr->order + 1)
-with arr->order + 1 == LV_ARR_ORDERS.
-
-Since this function is marked '__arg_arena' and invoked by BPF programs, the
-verifier may reject the out-of-bounds pointer arithmetic. Should the 'arr'
-assignment be moved after both checks?
-
-[ ... ]
-
-
+As a result, test_bpf.ko now runs with 0 failures, and the total number
+of successfully JIT'ed test cases increases from 843 to 902.
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+- Add missing Fixes tags.
+- Fix memory ordering by emitting aq=1, rl=1
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25699461713
---===============4453318093253301914==--
+Kuan-Wei Chiu (3):
+  riscv, bpf: Fix support for BPF_SDIV and BPF_SMOD in RV32 JIT
+  riscv, bpf: Fix support for BPF_MOVSX in RV32 JIT
+  riscv, bpf: Add 32 bit atomic operations to RV32 JIT
+
+ arch/riscv/net/bpf_jit_comp32.c | 101 +++++++++++++++++++++++++++-----
+ 1 file changed, 85 insertions(+), 16 deletions(-)
+
+-- 
+2.54.0.563.g4f69b47b94-goog
+
