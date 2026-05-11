@@ -1,63 +1,63 @@
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5463B4D98FD
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 21:41:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 727034D90D3
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 21:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778535674; cv=none; b=gvQNDbil+gcZw1+hXNI9SyLBS1jtXxDsV03zyeD15eeniqIg6OTNCbfMw415K9Hxo5ovQPiNQAvltQdpxgvnYK067qB5c52CWYq1LzDRhN1NgO1DTFGYc4RaWwfBv4JtMjacbrSgEkdiMRlPIuRsOA6v+PvIk+yzZZJI8mYXNv8=
+	t=1778535675; cv=none; b=qZVZxhp20ce0YbKDSJUZwcLKgoXnIqa6+pk/DbsWfvLVtQMCNPPVdFL8qIRnWmQm4bbn79OapAru0SlfhKYQ46xOOac1M3QkwArizOg2YNj6X30O/S6wscDPGvHNtA85BMk2w719plOAsU069kcEFV7xrlqR+2KHc73qtn+cOVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778535674; c=relaxed/simple;
-	bh=PSzpKdtxGcnf3ouoTkCYT+Hz3825M/5dEKU3H6rFtew=;
+	s=arc-20240116; t=1778535675; c=relaxed/simple;
+	bh=7NeISZzt4oQa/2US5xwYYFU2PzMRIbNNjkcyx5Z1C8s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Rnn3+insbNFrVQ2KrQeqMM1sUt3jEiCJSpCJgI4JZBHDj1e2Z+y9TNNF8neZdnFluEeTfZxsoHOIfDH3thbjQSlO68zhyZbAQWZAOkVwebeEPp90XaHa5ckEJ5mIrCwe1demk23FaSed+dIw6gARGA2+5D5QtALJCFz9c98BsXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Z5bxzHl4; arc=none smtp.client-ip=74.125.82.177
+	 MIME-Version; b=QzK0HQNcO7wlu/1SaQXNNdMRqGIzE5208V3O+xVSXcFBGlPb/s9iXXavFFKEcDrfHvBFgpDaBmJzve4nPaWvtpAszervU2F08ql9q8tN6rKiywLFnQQ4GiDjANrYo1lKzMiUXl6pF1fSMLUxohWhsvYuNV3o3I7oGJ0KQygCGk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=lUZt6v16; arc=none smtp.client-ip=74.125.82.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Z5bxzHl4"
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2f36da5c8fbso4727476eec.0
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 14:41:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="lUZt6v16"
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2f0d3e07e30so11784940eec.0
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 14:41:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1778535667; x=1779140467; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1778535668; x=1779140468; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3B7LFdLGjn7l86o51fIKB6PZOjEPmjuO8XhrfiuOD+0=;
-        b=Z5bxzHl4QPo5FTRdwLVAODIiIOsFLSPjszVmsmxi1T1UDX12KD/LtuAYxgMU3dw+bi
-         dDL3QEc+6IoTZ6s3wU2y3zNowYmhXX+nXt+U1XEmn9yZ59aNIXRqGUkiL+swC1pdQvhp
-         VEL/CC5ZGFFKPjQGoE0BD5qc9+llDME6khJ7EosE6TVuoloASN6ZzRm5GE/4w4vi/KB/
-         ZqNJML03kYfllrND+HUmtOVsczqnRs6UX/TAIsBcgnELrIhNfM3r69HZuBh3V0wtO9iH
-         Bz7GgbGtUODgp6e8/O+NE05EAitWlY33Unx1vBQaNRtfmfAINDcoG218bv9XP54wDkof
-         Bm8Q==
+        bh=BJUDpNAJF6rDSeL7fcX6+x7cWsNvUlGl92a2dW3I9ro=;
+        b=lUZt6v16dHJtn8rqRO9goBupCI4ih6VNsWQfiELHYflCq1q8hmSBImLQ+JHn5hH6L/
+         MReddpxOgzBuDwGHWb4kQUr0g8sT6BIoukp2qKs52XEoXDTXTqUXCclByAl3w3XnHJyC
+         TZyp391pdtdCkOOyV+uF1os99Srf1mfdoN34h8UlGcInjkc7hX6IB/pId5Mxg6mW7nlO
+         VRjV9q20slwQ5W+bqEaIqHkqGHPvrq/DpURhGHEs0QTs6PLjBGxYPy6SnF0gCdDS65sg
+         uaz4D6pJXrrqopxXNQsfoqie9/PoPVFYhQAZ9rDONfTD3izjytU6f5LUxqs44P/rZG0C
+         LGLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778535667; x=1779140467;
+        d=1e100.net; s=20251104; t=1778535668; x=1779140468;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=3B7LFdLGjn7l86o51fIKB6PZOjEPmjuO8XhrfiuOD+0=;
-        b=ABs9RRhBh2AyglXpiwpC11VrBJ/ktbNM+6geuX20U+KHKDlrYbh4HdvEvpmAZJt+td
-         s/J6KtGG1jmFSFejE2pry0EGelustlkfrIuwjqmGZvnU4JB0Q/4rfzakVMDiZDTYk8Tw
-         9lYEPDaXUZBVfq74yWpTZzUYwvcTNKjDWkxnlcH5yUAYvRGQZ4mniGHVarktJr0oHsWk
-         thCNFnZpgoTCC4M43BEqYVCC1uEfbH+3B5p7zM7PG2Tas5MIaBKi/6ku3cTdNqSvUxrN
-         lzMYRRUqsao9GIV+4Xp5vwRLDhkcRaWtyZl1kR1PPHdddbg3CDiiv7LiFRmTYz6MtxQG
-         CBbw==
-X-Gm-Message-State: AOJu0YzZf7TBHFnUbd+ZH567dVdZRmy4aeH+rnPT+vG0q5u0GU7d5uPC
-	bhqo+kG6vzica3BTkKpScB6BT0GuooS8Yzs4PY/Rv492HA5wYDzaMsRiqc3IXLSgfbQGDfSlrv+
-	QbV1cVXKKKndJ
-X-Gm-Gg: Acq92OFU1PyZQ18D9HKsK2oJ07wfj6Hk5vRHFg6PVlOhq0OYPQptOcMqZIH5LlVvU3o
-	RDH+AniQ2mHVrhELLF9rNdq9IhnFONByrOf8Q5M5giZggfSiXT00g5LDNvqMgT/mGjY4WZYy+K/
-	San9r+bs9lfTxmpmAzC24m+npWAlZ6amhsBVyJPnfXh2UxI9sG91WOkF3fc+nyEo64MZfjz3ttb
-	vPdEDQqxj4Ogmzc5bkAAAmJ3uXZ6sLPmKWhD67pIMhSkilxisH3Ui3AAtcfDWXyumomWxkOIuRK
-	uqZx8um10WWwVJfFLACFrPoLH2z9x4PxrSxebfJ3T5A6vDn7O1fATagNy8I1S1Aii5FlNqs4qcY
-	1JJ8KgAO8n0BlIrqteemcAm/pL3xMlJG6cV44hYQNDuPPFMc9obcqsfAItx7OjxX8d/EQvacDCs
-	WlaC4eUUOdz/c6UZrT6iw=
-X-Received: by 2002:a05:7300:fd0b:b0:2c4:dd55:ffc1 with SMTP id 5a478bee46e88-2fb4b82cd05mr5261856eec.2.1778535666903;
-        Mon, 11 May 2026 14:41:06 -0700 (PDT)
+        bh=BJUDpNAJF6rDSeL7fcX6+x7cWsNvUlGl92a2dW3I9ro=;
+        b=UbFTkdUJ2Oz8v7JP+3KYAx3e4K0hXAISuMVbtbcT+mMJr9WlTE9fyvkGjeiLOaovoi
+         ABz0UFRraD1mac+H5XBexdcCSlTeAfdroUS5BKByAldvgBpdj/oT78SrXs9nnrPSPZSo
+         tvdIQVCmwGQsDj0E270q3Ft8RMlmUtrZoPfGi09tOhGOpWV/0h32zgzena8QYmCYKnSN
+         i41c8za3Z+luS2Hz6oFqBkuVwybIyQq1B+7GAj2fPWZz1CBIygLA8HISEg/jrilP8QIa
+         Sq7ABRlshT/L0+H6En4phUZD7wiRFOSMgkoeRF1khQx3Bj4FgvXdd8B4Z5eFVC7e16RU
+         WH2Q==
+X-Gm-Message-State: AOJu0YyWr9SB3UQljinrrCXs4rRoPye8qVSAcqYg6uz0u3vFEE/Ds2K1
+	viYJHThOut74pIwmn7+kpNkpLYFAIrXTDOrXHZ9qGCf+LGj+2jIEzY5G/z3/ws7SamrnBiZOHUQ
+	MT4IEUAqMlcjY
+X-Gm-Gg: Acq92OGfpr83tl1ZeukBxn4MAuqXZrrVDQZU+FUgVvfFjQ4MiPoxT8cJ6nU6pSUO0Qt
+	nTjOLgs+dy3A4By5slT/ZPaJ2aojCwdI7NXzFD7OAZzOwNHmNCgRUID5/xpKLr5pv7GLncfd1ne
+	0yiE4xrJHMG+O8GT4gMNSWSJjERl8g2EiNbXDALHQOZzavnS7JavvIuBgQ2EANB+PVyVsUw67mw
+	2yy47T5sjfUCE2NI+DGln1cv3A03C6Rt7wxx7EiTjg89QNCH/Ndy0SCj3dYMQXoU477ZCXsngM9
+	liWhiumcVUwxrxvy2AOqKL/A9xbq3AkwXs0wk1hR0DNkf0hyE7AluNJJl+cWW9UQClUMmhreG8T
+	OZC5P7bPHMQam8hgvMTx+LQho1TzE/EqwMKgnoVgiBEhRZTl4hqr+kOqBy24MwGOOptZsdJNluw
+	nDQWFYKmR1uSsxeaQ8aA8=
+X-Received: by 2002:a05:7300:dc88:b0:2c5:b23e:48a9 with SMTP id 5a478bee46e88-2ffd78e2352mr184052eec.25.1778535668406;
+        Mon, 11 May 2026 14:41:08 -0700 (PDT)
 Received: from krios.corp.tfbnw.net ([2620:10d:c090:600::4b34])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f885edb83fsm15052473eec.7.2026.05.11.14.41.05
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f885edb83fsm15052473eec.7.2026.05.11.14.41.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 14:41:06 -0700 (PDT)
+        Mon, 11 May 2026 14:41:08 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -68,9 +68,9 @@ Cc: ast@kernel.org,
 	song@kernel.org,
 	mattbobrowski@google.com,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [RESEND PATCH bpf-next 1/2] selftests/bpf: libarena: Add rbtree data structure
-Date: Mon, 11 May 2026 17:40:59 -0400
-Message-ID: <20260511214100.9487-2-emil@etsalapatis.com>
+Subject: [RESEND PATCH bpf-next 2/2] selftests/bpf: libarena: Add Lev-Chase queue data structure
+Date: Mon, 11 May 2026 17:41:00 -0400
+Message-ID: <20260511214100.9487-3-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260511214100.9487-1-emil@etsalapatis.com>
 References: <20260511214100.9487-1-emil@etsalapatis.com>
@@ -82,2131 +82,512 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a native red-black tree data structure to libarena.
-The data structure supports multiple APIs (key-value based,
-node based) with which users can query and modify it. The
-tree uses the libarena memory allocator to manage its data.
+Expand libarena with a Lev-Chase deque data structure. This is a single
+producer, multiple consumer lockless queue that permits efficient
+work stealing. The structure is lock-free and wait-free to minimize
+overhead.
+
+The data structure exposes three main calls. two of them are available to
+the thread owning the queue and one available to all threads in the program:
+
+lvqueue_owner_push(): Push an item to the top of the lvqueue.
+lvqueue_owner_pop(): Pop an item from the top of the lvqueue.
+lvqueue_steal(): Steal a thread from the bottom of the lvqueue from
+any thread.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- .../bpf/libarena/include/libarena/rbtree.h    |   89 ++
- .../bpf/libarena/selftests/st_rbtree.bpf.c    |  974 ++++++++++++++++
- .../selftests/bpf/libarena/src/rbtree.bpf.c   | 1032 +++++++++++++++++
- 3 files changed, 2095 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
- create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_rbtree.bpf.c
- create mode 100644 tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
+ .../bpf/libarena/include/libarena/lvqueue.h   |  33 +++
+ .../bpf/libarena/selftests/st_lvqueue.bpf.c   | 194 ++++++++++++++
+ .../selftests/bpf/libarena/src/lvqueue.bpf.c  | 241 ++++++++++++++++++
+ 3 files changed, 468 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/lvqueue.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_lvqueue.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/lvqueue.bpf.c
 
-diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h b/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
+diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/lvqueue.h b/tools/testing/selftests/bpf/libarena/include/libarena/lvqueue.h
 new file mode 100644
-index 000000000000..b5d35646d8d4
+index 000000000000..c4091387c7a1
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
-@@ -0,0 +1,89 @@
++++ b/tools/testing/selftests/bpf/libarena/include/libarena/lvqueue.h
+@@ -0,0 +1,33 @@
 +/* SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause */
 +
 +#pragma once
 +
-+#define RB_MAXLVL_PRINT (16)
++struct lv_arr;
 +
-+struct rbnode;
++#define LV_ARR_BASESZ 128
++#define LV_ARR_ORDERS 10
 +
-+typedef struct rbnode __arena rbnode_t;
-+
-+struct rbnode {
-+	rbnode_t *parent;
-+	union {
-+		struct {
-+			rbnode_t *left;
-+			rbnode_t *right;
-+		};
-+
-+		rbnode_t *child[2];
-+	};
-+	uint64_t key;
-+	/* Used as a linked list or to store KV pairs. */
-+	union {
-+		rbnode_t *next;
-+		uint64_t value;
-+	};
-+	bool is_red;
++struct lv_arr {
++	u64 __arena *data;
++	u64 order;
 +};
 +
-+/*
-+ * Does the rbtree allocate its own nodes, or do they get
-+ * allocated by the caller?
-+ */
-+enum rbtree_alloc {
-+	RB_ALLOC,
-+	RB_NOALLOC,
++typedef volatile struct lv_arr __arena lv_arr_t;
++
++struct lv_queue {
++	lv_arr_t *cur;
++	volatile u64 top;
++	volatile u64 bottom;
++	struct lv_arr arr[LV_ARR_ORDERS];
 +};
 +
-+/*
-+ * Specify the behavior of rbtree insertions when the key is
-+ * already present in the tree.
-+ *
-+ * RB_DEFAULT: Default behavior, reject the new insert.
-+ *
-+ * RB_UPDATE: Update the existing value in the rbtree.
-+ * This updates the node itself, not just the value in
-+ * the existing node.
-+ *
-+ * RB_DUPLICATE: Allow nodes with identical keys in the rbtree.
-+ * Finding/popping/removing a key acts on any of the nodes
-+ * with the appropriate key - there is no ordering by time
-+ * of insertion.
-+ */
-+enum rbtree_insert_mode {
-+	RB_DEFAULT,
-+	RB_UPDATE,
-+	RB_DUPLICATE,
-+};
++typedef struct lv_queue __arena lv_queue_t;
 +
-+struct rbtree {
-+	rbnode_t *root;
-+	rbnode_t *freelist;
-+	enum rbtree_alloc alloc;
-+	enum rbtree_insert_mode insert;
-+};
++int lvq_owner_push(lv_queue_t *lvq, u64 val);
++int lvq_owner_pop(lv_queue_t *lvq, u64 *val);
++int lvq_steal(lv_queue_t *lvq, u64 *val);
 +
-+typedef struct rbtree __arena rbtree_t;
++u64 lvq_create_internal(void);
++#define lvq_create() ((lv_queue_t *)lvq_create_internal())
 +
-+#ifdef __BPF__
-+u64 rb_create_internal(enum rbtree_alloc alloc, enum rbtree_insert_mode insert);
-+#define rb_create(alloc, insert) ((rbtree_t *)rb_create_internal((alloc), (insert)))
-+
-+int rb_destroy(rbtree_t *rbtree __arg_arena);
-+int rb_insert(rbtree_t *rbtree, u64 key, u64 value);
-+int rb_remove(rbtree_t *rbtree, u64 key);
-+int rb_find(rbtree_t *rbtree, u64 key, u64 *value);
-+int rb_print(rbtree_t *rbtree);
-+int rb_least(rbtree_t *rbtree, u64 *key, u64 *value);
-+int rb_pop(rbtree_t *rbtree, u64 *key, u64 *value);
-+
-+int rb_insert_node(rbtree_t *rbtree, rbnode_t *node);
-+int rb_remove_node(rbtree_t *rbtree, rbnode_t *node);
-+u64 rb_node_alloc_internal(rbtree_t *rbtree, u64 key, u64 value);
-+#define rb_node_alloc(rbtree, key, value) ((rbnode_t *)rb_node_alloc_internal((rbtree), (key), (value)))
-+int rb_node_free(rbtree_t *rbtree, rbnode_t *rbnode);
-+
-+int rb_integrity_check(rbtree_t *rbtree);
-+
-+#endif /* __BPF__ */
-diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_rbtree.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/st_rbtree.bpf.c
++int lvq_destroy(lv_queue_t *lvq);
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_lvqueue.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/st_lvqueue.bpf.c
 new file mode 100644
-index 000000000000..17d46c4af332
+index 000000000000..d53416d22f0a
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/selftests/st_rbtree.bpf.c
-@@ -0,0 +1,974 @@
++++ b/tools/testing/selftests/bpf/libarena/selftests/st_lvqueue.bpf.c
+@@ -0,0 +1,194 @@
 +// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
 +
 +#include <libarena/common.h>
 +
 +#include <libarena/asan.h>
-+#include <libarena/rbtree.h>
++#include <libarena/lvqueue.h>
 +
-+typedef struct node_ctx __arena node_ctx;
-+
-+struct node_ctx {
-+	struct rbnode rbnode;
-+	node_ctx *next;
-+};
-+
-+static const u64 keys[] = { 51, 43,  37, 3, 301,  46, 383, 990, 776, 729, 871, 96, 189, 213,
-+	376, 167, 131, 939, 626, 119, 374, 700, 772, 154, 883, 620, 641, 5,
-+	428, 516, 105, 622, 988, 811, 931, 973, 246, 690, 934, 744, 210, 311,
-+	32, 255, 960, 830, 523, 429, 541, 738, 705, 774, 715, 446, 98, 578,
-+	777, 191, 279, 91, 767 };
-+
-+static const u64 morekeys[] = { 173, 636, 1201, 8642, 5957, 3617, 4586, 8053, 6551, 7592, 1748, 1589, 8644, 9918, 6977,
-+	4448, 5852, 4640, 9717, 2303, 7424, 7695, 2334, 8876, 8618, 5745, 7134, 2178, 5280, 2140, 1138,
-+	5083, 8922, 1516, 2437, 2488, 4307, 4329, 5088, 8456, 5938, 1441, 1684, 5750, 721, 1107, 2089,
-+	9737, 4687, 5016, 4849, 8193, 9603, 9147, 5992, 166, 6721, 812, 4144, 6237, 6509, 3466, 9255,
-+	7767, 3960, 6759, 2968, 6046, 9784, 8395, 2619, 1711, 528, 6424, 9084, 3179, 1342, 5676, 9445,
-+	5691, 6678, 8487, 1627, 998, 6178, 2229, 1987, 3319, 572, 169, 2161, 3018, 5439, 7287, 7265, 5995,
-+	5003, 5857, 2836, 5634, 4735, 9261, 8287, 5359, 533, 1406, 9573, 4026, 714, 3956, 1722, 6395,
-+	9648, 3887, 7185, 470, 4482, 4997, 841, 8913, 9946, 3999, 9357, 9847, 277, 8184, 8704, 6766, 3323,
-+	5468, 8638, 7905, 8858, 6142, 3685, 3452, 4689, 8878, 8836, 158, 831, 7914, 3031, 8374, 4921,
-+	4207, 3460, 5547, 3358, 1083, 4619, 7818, 2962, 4879, 4583, 2172, 8819, 9830, 1194, 2666, 9812,
-+	5704, 8432, 5916, 6007, 6609, 4791, 1985, 3226, 2478, 9605, 5236, 8079, 3042, 1965, 3539, 9704,
-+	4267, 6416, 760, 9968, 2983, 1190, 1964, 3211, 2870, 3106, 2794, 1542, 6916, 5986, 9096, 441,
-+	5894, 8353, 7765, 3757, 5732, 88, 3091, 5637, 6042, 8447, 4073, 6923, 5491, 7010, 3663, 5029,
-+	6162, 822, 4874, 7491, 5100, 3461, 6983, 2170, 1458, 1856, 648, 6272, 4887, 976, 2369, 5909, 4274,
-+	3324, 6968, 2312, 2271, 8891, 6268, 6581, 1610, 8880, 6194, 6144, 9764, 6915, 829, 3774, 2265,
-+	1752, 1314, 6377, 8760, 8004, 501, 4912, 9278, 1425, 9578, 7337, 307, 1885, 3151, 9617, 1647,
-+	2458, 3702, 6091, 8902, 5663, 9378, 7640, 3336, 557, 1644, 6848, 1559, 8821, 266, 4330, 9790,
-+	5920, 4222, 1143, 6248, 5792, 4847, 9726, 6303, 821, 6839, 6062, 7133, 3649, 9888, 2528, 1966,
-+	5456, 4914, 3615, 1543, 3206, 3353, 6097, 2800, 1424, 9094, 7920, 7243, 1394, 5464, 1707, 576,
-+	6524, 4261, 4187, 7889, 5336, 3377, 2921, 7244, 2766, 6584, 5514, 1387, 2957, 2258, 1077, 9979,
-+	1128, 876, 4056, 4668, 4532, 1982, 7093, 4184, 5460, 7588, 4704, 6717, 61, 3959, 1826, 2294, 18,
-+	8170, 9394, 8796, 7288, 7285, 7143, 148, 6676, 6603, 1051, 8225, 4169, 3230, 7697, 6971, 3454,
-+	7501, 9514, 394, 2339, 4993, 5606, 6060, 1297, 8273, 3012, 157, 8181, 6765, 7207, 1005, 8833, 1914,
-+	7456, 1846, 8375, 2741, 2074, 1712, 5286 };
++/*
++ * NOTE: These selftests only test for the single-threaded use case, which for
++ * Lev-Chase queues is obviously the simplest one. Still, it is important to
++ * exercise the API to ensure it passes verification and basic checks.
++ */
 +
 +SEC("syscall")
-+__weak int test_rbtree_find_nonexistent(void)
++int test_lvqueue_pop_empty(void)
 +{
-+	u64 key = 0xdeadbeef;
-+	u64 value = 0;
++	u64 val;
 +	int ret;
 +
-+	rbtree_t *rbtree;
++	lv_queue_t *lvq = lvq_create();
 +
-+	rbtree = rb_create(RB_ALLOC, RB_DEFAULT);
-+	if (!rbtree)
++	if (!lvq)
 +		return 1;
 +
-+	/* Should return -EINVAL */
-+	ret = rb_find(rbtree, key, &value);
-+	if (!ret)
-+		return 2;
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_insert_existing(void)
-+{
-+	u64 key = 525252;
-+	u64 value = 24;
-+	int ret;
-+
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(RB_ALLOC, RB_DEFAULT);
-+	if (!rbtree)
++	ret = lvq_owner_pop(lvq, &val);
++	if (ret != -ENOENT)
 +		return 1;
 +
-+	ret = rb_insert(rbtree, key, value);
-+	if (ret)
-+		return 2;
-+
-+	/* Should return -EALREADY. */
-+	ret = rb_insert(rbtree, key, value);
-+	if (ret != -EALREADY) {
-+		return 3;
-+	}
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_update_existing(void)
-+{
-+	u64 key = 33333;
-+	u64 value;
-+	int ret;
-+
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(RB_ALLOC, RB_UPDATE);
-+	if (!rbtree)
-+		return 1;
-+
-+	value = 52;
-+	ret = rb_insert(rbtree, key, value);
-+	if (ret)
-+		return 2;
-+
-+	ret = rb_find(rbtree, key, &value);
-+	if (ret)
-+		return 3;
-+
-+	if (value != 52)
-+		return 4;
-+
-+	value = 65;
-+
-+	/* Should succeed. */
-+	ret = rb_insert(rbtree, key, value);
-+	if (ret)
-+		return 5;
-+
-+	/* Should be updated. */
-+	ret = rb_find(rbtree, key, &value);
-+	if (ret)
-+		return 6;
-+
-+	if (value != 65)
-+		return 7;
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_insert_one(void)
-+{
-+	u64 key = 202020;
-+	u64 value = 0xbadcafe;
-+	int ret;
-+
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(RB_ALLOC, RB_UPDATE);
-+	if (!rbtree)
-+		return 1;
-+
-+	ret = rb_insert(rbtree, key, value);
-+	if (ret)
-+		return 2;
-+
-+	ret = rb_find(rbtree, key, &value);
-+	if (ret)
-+		return 3;
-+
-+	if (value != 0xbadcafe)
-+		return 4;
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_insert_ten(void)
-+{
-+	u64 key, value;
-+	int ret, i;
-+
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(RB_ALLOC, RB_UPDATE);
-+	if (!rbtree)
-+		return 1;
-+
-+	for (i = 0; i < 10 && can_loop; i++) {
-+		key = keys[i];
-+		ret = rb_insert(rbtree, key, 2 * key);
-+		if (ret)
-+			return 2 + 3 * i;
-+
-+		/* Read it back. */
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return 2 + 3 * i + 1;
-+
-+		if (value != 2 * key)
-+			return 2 + 3 * i + 2;
-+	}
-+
-+	/* Go find all inserted pairs. */
-+	for (i = 0; i < 10 && can_loop; i++) {
-+		key = keys[i];
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return 35 + 2 * i;
-+
-+		if (value != 2 * key)
-+			return 35 + 2 * i + 1;
-+	}
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_duplicate(void)
-+{
-+	u64 key = 0x121212;
-+	u64 value;
-+	int ret, i;
-+
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(RB_ALLOC, RB_DUPLICATE);
-+	if (!rbtree)
-+		return 1;
-+
-+	for (i = 0; i < 10 && can_loop; i++) {
-+		ret = rb_insert(rbtree, key, 2 * key);
-+		if (ret)
-+			return 2 + 3 * i;
-+
-+		/* Read it back. */
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return 2 + 3 * i + 1;
-+
-+		if (value != 2 * key)
-+			return 2 + 3 * i + 2;
-+	}
-+
-+	/* Go find all inserted copies and remove them. */
-+	for (i = 0; i < 10 && can_loop; i++) {
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret) {
-+			rb_print(rbtree);
-+			return 35 + 3 * i;
-+		}
-+
-+		if (value != 2 * key)
-+			return 35 + 3 * i + 1;
-+
-+		ret = rb_remove(rbtree, key);
-+		if (ret)
-+			return 35 + 3 * i + 2;
-+	}
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+static inline int
-+clean_up_noalloc_tree(rbtree_t *rbtree)
-+{
-+	node_ctx *nodec;
-+	int ret;
-+
-+	if (rbtree->alloc != RB_NOALLOC)
-+		return -EINVAL;
-+
-+	/* Can't destroy an RB_NOALLOC tree that still has nodes. */
-+	if (rb_destroy(rbtree) != -EBUSY)
-+		return -EINVAL;
-+
-+	while (rbtree->root && can_loop) {
-+		nodec = container_of(rbtree->root, node_ctx, rbnode);
-+		ret = rb_remove_node(rbtree, &nodec->rbnode);
-+		if (ret)
-+			return ret;
-+
-+		free(nodec);
-+	}
++	lvq_destroy(lvq);
 +
 +	return 0;
 +}
 +
-+int insert_many(enum rbtree_alloc alloc, enum rbtree_insert_mode insert)
-+{
-+	const size_t numkeys = sizeof(keys) / sizeof(keys[0]);
-+	node_ctx *nodec;
-+	u64 key, value;
-+	int ret;
-+	int i;
-+
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(alloc, insert);
-+	if (!rbtree)
-+		return 1;
-+
-+	for (i = 0; i < numkeys && can_loop; i++) {
-+		key = keys[i];
-+		if (rbtree->alloc != RB_ALLOC) {
-+			nodec = malloc(sizeof(*nodec));
-+			if (!nodec) {
-+				arena_stderr("out of memory\n");
-+				return -ENOMEM;
-+			}
-+			nodec->rbnode.key = key;
-+			nodec->rbnode.value = 2 * key;
-+			ret = rb_insert_node(rbtree, &nodec->rbnode);
-+		} else {
-+			ret = rb_insert(rbtree, key, 2 * key);
-+		}
-+		if (ret)
-+			return 2 + 3 * i;
-+
-+		/* Read it back. */
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return 2 + 3 * i + 1;
-+
-+		if (value != 2 * key)
-+			return 2 + 3 * i + 2;
-+	}
-+
-+	/* Go find all inserted pairs. */
-+	for (i = 0; i < numkeys && can_loop; i++) {
-+		key = keys[i];
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return 302 + 2 * i;
-+
-+		if (value != 2 * key)
-+			return 302 + 2 * i + 1;
-+	}
-+
-+	/* RB_ALLOC trees are destroyed while still having elements. */
-+	if (rbtree->alloc == RB_ALLOC)
-+		return rb_destroy(rbtree);
-+
-+	/* Otherwise manually clean up the tree. */
-+	if (clean_up_noalloc_tree(rbtree))
-+		return 5;
-+
-+	return rb_destroy(rbtree);
-+}
-+
 +SEC("syscall")
-+__weak int test_rbtree_remove_one(void)
++int test_lvqueue_steal_empty(void)
 +{
-+	u64 key = 20, value = 5, newvalue;
++	u64 val;
 +	int ret;
 +
-+	rbtree_t *rbtree;
++	lv_queue_t *lvq = lvq_create();
 +
-+	rbtree = rb_create(RB_ALLOC, RB_DEFAULT);
-+	if (!rbtree)
++	if (!lvq)
 +		return 1;
 +
-+	ret = rb_find(rbtree, key, &newvalue);
-+	if (!ret)
-+		return 2;
++	ret = lvq_steal(lvq, &val);
++	if (ret != -ENOENT)
++		return 1;
 +
-+	ret = rb_insert(rbtree, key, value);
-+	if (ret)
-+		return 3;
-+
-+	ret = rb_find(rbtree, key, &newvalue);
-+	if (ret || value != newvalue)
-+		return 4;
-+
-+	ret = rb_remove(rbtree, key);
-+	if (ret)
-+		return 5;
-+
-+	ret = rb_find(rbtree, key, &newvalue);
-+	if (!ret)
-+		return 6;
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+static __always_inline int remove_many_verify_all_present(rbtree_t *rbtree)
-+{
-+	const size_t numkeys = sizeof(morekeys) / sizeof(morekeys[0]);
-+	u64 value;
-+	int ret;
-+	int i;
-+
-+	for (i = 0; i < numkeys && can_loop; i++) {
-+		u64 key = morekeys[i];
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return -1;
-+
-+		if (value != 2 * key)
-+			return -1;
-+	}
++	lvq_destroy(lvq);
 +
 +	return 0;
 +}
 +
-+static __always_inline int remove_many_verify_remaining(rbtree_t *rbtree)
-+{
-+	const size_t numkeys = sizeof(morekeys) / sizeof(morekeys[0]);
-+	u64 value;
-+	int ret;
-+	int i;
-+
-+	for (i = 0; i < numkeys && can_loop; i += 2) {
-+		u64 key = morekeys[i];
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (!ret)
-+			return -1;
-+
-+		if (i + 1 >= numkeys)
-+			break;
-+
-+		key = morekeys[i + 1];
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return -1;
-+
-+		if (value != 2 * key)
-+			return -1;
-+	}
-+
-+	for (i = 1; i < numkeys && can_loop; i += 2) {
-+		u64 key = morekeys[i];
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return -1;
-+
-+		if (value != 2 * key)
-+			return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static __noinline int remove_many_alloc(rbtree_t *rbtree)
-+{
-+	const size_t numkeys = sizeof(morekeys) / sizeof(morekeys[0]);
-+	u64 value;
-+	int ret;
-+	int i;
-+
-+	for (i = 0; i < numkeys && can_loop; i++) {
-+		u64 key = morekeys[i];
-+
-+		ret = rb_insert(rbtree, key, 2 * key);
-+		if (ret)
-+			return -1;
-+
-+		if (rb_integrity_check(rbtree)) {
-+			arena_stderr("iteration %d\n", i);
-+			return -EINVAL;
-+		}
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return -1;
-+
-+		if (value != 2 * key)
-+			return -1;
-+	}
-+
-+	ret = remove_many_verify_all_present(rbtree);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < numkeys && can_loop; i += 2) {
-+		u64 key = morekeys[i];
-+
-+		ret = rb_remove(rbtree, key);
-+		if (ret) {
-+			arena_stderr("Failed to remove %ld\n", key);
-+			return -1;
-+		}
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (!ret)
-+			return -1;
-+	}
-+
-+	return remove_many_verify_remaining(rbtree);
-+}
-+
-+static __noinline int remove_many_noalloc(rbtree_t *rbtree)
-+{
-+	const size_t numkeys = sizeof(morekeys) / sizeof(morekeys[0]);
-+	node_ctx *first = NULL, *last = NULL;
-+	u64 value;
-+	int ret;
-+	int i;
-+
-+	for (i = 0; i < numkeys && can_loop; i++) {
-+		u64 key = morekeys[i];
-+		node_ctx *nodec = malloc(sizeof(*nodec));
-+
-+		if (!nodec) {
-+			arena_stderr("out of memory\n");
-+			return -ENOMEM;
-+		}
-+		nodec->rbnode.key = key;
-+		nodec->rbnode.value = 2 * key;
-+		nodec->next = NULL;
-+
-+		if (!first)
-+			first = nodec;
-+
-+		if (last)
-+			last->next = nodec;
-+		last = nodec;
-+
-+		ret = rb_insert_node(rbtree, &nodec->rbnode);
-+		if (ret)
-+			return -1;
-+
-+		if (rb_integrity_check(rbtree)) {
-+			arena_stderr("iteration %d\n", i);
-+			return -EINVAL;
-+		}
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return -1;
-+
-+		if (value != 2 * key)
-+			return -1;
-+	}
-+
-+	ret = remove_many_verify_all_present(rbtree);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < numkeys && can_loop; i += 2) {
-+		u64 key = morekeys[i];
-+		node_ctx *nodec = first;
-+
-+		if (!nodec || key != nodec->rbnode.key)
-+			return -1;
-+
-+		first = nodec->next ? nodec->next->next : NULL;
-+		ret = rb_remove_node(rbtree, &nodec->rbnode);
-+		if (ret) {
-+			arena_stderr("Failed to remove %ld\n", key);
-+			return -1;
-+		}
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (!ret)
-+			return -1;
-+	}
-+
-+	return remove_many_verify_remaining(rbtree);
-+}
-+
-+static inline int remove_many(enum rbtree_alloc alloc,
-+			      enum rbtree_insert_mode insert)
-+{
-+	int ret;
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(alloc, insert);
-+	if (!rbtree)
-+		return -ENOMEM;
-+
-+	ret = (alloc == RB_ALLOC) ? remove_many_alloc(rbtree)
-+				: remove_many_noalloc(rbtree);
-+	if (ret)
-+		return ret;
-+
-+	if (alloc == RB_ALLOC)
-+		return rb_destroy(rbtree);
-+
-+	ret = clean_up_noalloc_tree(rbtree);
-+	if (ret)
-+		return ret;
-+
-+	return rb_destroy(rbtree);
-+}
-+
 +SEC("syscall")
-+__weak int test_rbtree_insert_many_update(void)
++int test_lvqueue_steal_one(void)
 +{
-+	return insert_many(RB_ALLOC, RB_UPDATE);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_insert_many_noalloc(void)
-+{
-+	return insert_many(RB_NOALLOC, RB_DUPLICATE);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_remove_many_update(void)
-+{
-+	return remove_many(RB_ALLOC, RB_UPDATE);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_remove_many_noalloc(void)
-+{
-+	return remove_many(RB_NOALLOC, RB_DUPLICATE);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_add_remove_circular(void)
-+{
-+	const size_t iters = 60;
-+	const size_t prefill = 10;
-+	const size_t numkeys = 50;
-+	const size_t prefix = 400000;
-+	u64 value, rmval;
-+	int errval = 1;
-+	u64 key;
-+	int ret;
-+	int i;
-+
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(RB_ALLOC, RB_UPDATE);
-+	if (!rbtree)
-+		return 1;
-+
-+	for (i = 0; i < prefill && can_loop; i++) {
-+		ret = rb_insert(rbtree, prefix + (i % numkeys), i);
-+		if (ret)
-+			return errval;
-+
-+		errval += 1;
-+	}
-+
-+	errval = 2 * 1000 * 1000;
-+
-+	for (i = 0; i < prefill && can_loop; i++) {
-+		/* Read it back. */
-+		ret = rb_find(rbtree, prefix + (i % numkeys), &value);
-+		if (ret)
-+			return errval;
-+
-+		if (value != i)
-+			return errval;
-+	}
-+
-+	errval = 3 * 1000 * 1000;
-+
-+	for (i = prefill; i < iters && can_loop; i++) {
-+		key = prefix + (i % numkeys);
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (!ret) {
-+			arena_stderr("Key %d already present\n", key);
-+			return errval;
-+		}
-+
-+		errval += 1;
-+
-+		ret = rb_insert(rbtree, key, i);
-+		if (ret) {
-+			arena_stderr("ITERATION %d\n", i);
-+			rb_print(rbtree);
-+			return errval;
-+		}
-+
-+		rmval = i - prefill;
-+
-+		errval += 1;
-+
-+		ret = rb_find(rbtree, prefix + (rmval % numkeys), &value);
-+		if (ret)
-+			return errval;
-+
-+		errval += 1;
-+
-+		if (value != rmval)
-+			return errval;
-+
-+		errval += 1;
-+
-+		ret = rb_remove(rbtree, prefix + (rmval % numkeys));
-+		if (ret) {
-+			arena_stderr("ITERATION %d\n", i);
-+			return errval;
-+		}
-+
-+		errval += 1;
-+	}
-+
-+	for (i = 0; i < numkeys && can_loop; i++) {
-+		rb_remove(rbtree, prefix + i);
-+	}
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_add_remove_circular_reverse(void)
-+{
-+	const size_t iters = 110;
-+	const size_t prefill = 10;
-+	const size_t numkeys = 50;
-+	const size_t prefix = 500000;
-+	u64 value, rmval;
-+	int errval = 1;
-+	u64 key;
-+	int ret;
-+	int i;
-+
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(RB_ALLOC, RB_UPDATE);
-+	if (!rbtree)
-+		return 1;
-+
-+	for (i = 0; i < prefill && can_loop; i++) {
-+		ret = rb_insert(rbtree, prefix - (i % numkeys), i);
-+		if (ret)
-+			return errval;
-+
-+		errval += 1;
-+	}
-+
-+	errval = 2 * 1000 * 1000;
-+
-+	for (i = 0; i < prefill && can_loop; i++) {
-+		/* Read it back. */
-+		ret = rb_find(rbtree, prefix - (i % numkeys), &value);
-+		if (ret)
-+			return errval;
-+
-+		if (value != i)
-+			return errval;
-+	}
-+
-+	errval = 3 * 1000 * 1000;
-+
-+	for (i = prefill; i < iters && can_loop; i++) {
-+		key = prefix - (i % numkeys);
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (!ret) {
-+			arena_stderr("Key %d already present\n", key);
-+			return errval;
-+		}
-+
-+		errval += 1;
-+
-+		ret = rb_insert(rbtree, key, i);
-+		if (ret) {
-+			arena_stderr("error %d on insert\n", ret);
-+			rb_print(rbtree);
-+			return errval;
-+		}
-+
-+		rmval = i - prefill;
-+
-+		errval += 1;
-+
-+		ret = rb_find(rbtree, prefix - (rmval % numkeys), &value);
-+		if (ret)
-+			return errval;
-+
-+		errval += 1;
-+
-+		if (value != rmval)
-+			return errval;
-+
-+		errval += 1;
-+
-+		ret = rb_remove(rbtree, prefix - (rmval % numkeys));
-+		if (ret)
-+			return errval;
-+
-+		errval += 1;
-+	}
-+
-+
-+	errval = 4 * 1000 * 1000;
-+	for (i = 0; i < prefill && can_loop; i++) {
-+		ret = rb_remove(rbtree, prefix - i);
-+		if (ret) {
-+			arena_stderr("Did not remove %d, error %d\n", prefix - i, ret);
-+			return errval + i;
-+		}
-+	}
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_least_pop(void)
-+{
-+	const size_t keys = 10;
-+	u64 key, value;
-+	int errval = 1;
++	u64 val, newval;
 +	int ret, i;
 +
-+	rbtree_t *rbtree;
++	lv_queue_t *lvq = lvq_create();
 +
-+	rbtree = rb_create(RB_ALLOC, RB_DEFAULT);
-+	if (!rbtree)
-+		return errval;
-+
-+	errval += 1;
-+
-+	for (i = 0; i < keys / 2 && can_loop; i++) {
-+		ret = rb_insert(rbtree, i, i);
-+		if (ret)
-+			return errval;
-+
-+		errval += 1;
-+
-+		ret = rb_insert(rbtree, keys - 1 - i, keys - 1 - i);
-+		if (ret)
-+			return errval;
-+
-+		errval += 1;
-+
-+		ret = rb_least(rbtree, &key, &value);
-+		if (ret)
-+			return errval;
-+
-+		errval += 1;
-+
-+		if (key != 0 || value != 0)
-+			return errval;
-+
-+		errval += 1;
-+	}
-+
-+	errval = 1000;
-+
-+	for (i = 0; i < keys && can_loop; i++) {
-+		ret = rb_least(rbtree, &key, &value);
-+		if (ret) {
-+			arena_stderr("rb_least failed with %d\n", ret);
-+			return errval;
-+		}
-+
-+		errval += 1;
-+
-+		if (key != i || value != i) {
-+			arena_stderr("Got KV %ld/%ld expected %d\n", key, value, i);
-+			return errval;
-+		}
-+
-+		errval += 1;
-+
-+		ret = rb_pop(rbtree, &key, &value);
-+		if (ret) {
-+			arena_stderr("Error %d during pop on iter %d\n", ret, i);
-+			return errval;
-+		}
-+
-+		errval += 1;
-+
-+		if (key != i || value != i)
-+			return errval;
-+	}
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+/* Reject rb_pop() for RB_NOALLOC trees. */
-+SEC("syscall")
-+__weak int test_rbtree_noalloc_pop(void)
-+{
-+	const u64 expect_value = 1;
-+	const u64 expect_key = 0;
-+	rbtree_t *rbtree;
-+	rbnode_t *node;
-+	u64 value = 0;
-+	int ret;
-+
-+	rbtree = rb_create(RB_NOALLOC, RB_DEFAULT);
-+	if (!rbtree)
++	if (!lvq)
 +		return 1;
 +
-+	node = rb_node_alloc(rbtree, expect_key, expect_value);
-+	if (!node) {
-+		rb_destroy(rbtree);
-+		return 2;
++	for (i = 0; i < 10 && can_loop; i++) {
++		val = i;
++
++		ret = lvq_owner_push(lvq, val);
++		if (ret)
++			return 1;
++
++		ret = lvq_steal(lvq, &newval);
++		if (ret)
++			return 2;
++
++		if (val != newval)
++			return 3;
 +	}
 +
-+	ret = rb_insert_node(rbtree, node);
-+	if (ret) {
-+		rb_node_free(rbtree, node);
-+		rb_destroy(rbtree);
-+		return 3;
-+	}
++	lvq_destroy(lvq);
 +
-+	ret = rb_pop(rbtree, NULL, &value);
-+	if (ret != -EINVAL)
-+		return 4;
-+
-+	ret = rb_find(rbtree, expect_key, &value);
-+	if (ret)
-+		return 5;
-+
-+	if (value != expect_value)
-+		return 6;
-+
-+	ret = rb_remove_node(rbtree, node);
-+	if (ret)
-+		return 7;
-+
-+	ret = rb_node_free(rbtree, node);
-+	if (ret)
-+		return 8;
-+
-+	return rb_destroy(rbtree);
++	return 0;
 +}
 +
 +SEC("syscall")
-+__weak int test_rbtree_alloc_check(void)
++int test_lvqueue_pop_one(void)
 +{
-+	rbtree_t *alloc, *noalloc;
-+	rbnode_t *node;
-+	int ret;
++	u64 val, newval;
++	int ret, i;
 +
-+	alloc = rb_create(RB_ALLOC, RB_DEFAULT);
-+	if (!alloc)
++	lv_queue_t *lvq = lvq_create();
++
++	if (!lvq)
 +		return 1;
 +
-+	noalloc = rb_create(RB_NOALLOC, RB_DEFAULT);
-+	if (!noalloc)
-+		return 2;
++	for (i = 0; i < 10 && can_loop; i++) {
++		val = i;
 +
-+	/*
-+	 * Can't allocate a node for a tree that allocates it itself.
-+	 * Ditto for noalloc.
-+	 */
-+	node = rb_node_alloc(alloc, 0, 0);
-+	if (node)
-+		return 3;
++		ret = lvq_owner_push(lvq, val);
++		if (ret)
++			return 1;
 +
-+	node = rb_node_alloc(noalloc, 0, 0);
-+	if (!node)
-+		return 4;
++		ret = lvq_owner_pop(lvq, &newval);
++		if (ret)
++			return 2;
 +
-+	/*
-+	 * RB_ALLOC trees can use rb_insert, RB_NOALLOC trees can
-+	 * use rb_insert_node. RB_ALLOC and RB_NOALLOC trees cannot
-+	 * use each other's APIs.
-+	 *
-+	 * NOTE: This begs the question, why not different types? We
-+	 * want to partially share the API and that would require us
-+	 * to duplicate it.
-+	 */
-+	if (rb_insert(alloc, 0, 0))
-+		return 5;
++		if (val != newval)
++			return 3;
++	}
 +
-+	if (!rb_insert_node(alloc, node))
-+		return 6;
++	lvq_destroy(lvq);
 +
-+	if (!rb_remove_node(alloc, node))
-+		return 7;
-+
-+	if (rb_remove(alloc, 0))
-+		return 8;
-+
-+	if (rb_insert_node(noalloc, node))
-+		return 9;
-+
-+	if (!rb_insert(noalloc, 0, 0))
-+		return 10;
-+
-+	if (!rb_remove(noalloc, 0))
-+		return 11;
-+
-+	if (rb_remove_node(noalloc, node))
-+		return 12;
-+
-+	ret = rb_destroy(alloc);
-+	if (ret)
-+		return ret;
-+	return rb_destroy(noalloc);
++	return 0;
 +}
-diff --git a/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c b/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
++
++SEC("syscall")
++int test_lvqueue_pop_many(void)
++{
++	u64 val, newval;
++	int ret, i;
++	u64 expected;
++
++	lv_queue_t *lvq = lvq_create();
++
++	if (!lvq)
++		return 1;
++
++	for (i = 0; i < 500 && can_loop; i++) {
++		val = i;
++
++		ret = lvq_owner_push(lvq, val);
++		if (ret) {
++			arena_stderr("%s:%d error %d\n", __func__, __LINE__, ret);
++			return 1;
++		}
++	}
++
++	for (i = 0; i < 500 && can_loop; i++) {
++		ret = lvq_owner_pop(lvq, &newval);
++		if (ret) {
++			arena_stderr("%s:%d error %d\n", __func__, __LINE__, ret);
++			return 1;
++		}
++
++		expected = 500 - 1 - i;
++		if (newval != expected) {
++			arena_stderr("%s:%d expected %lu found %lu\n", __func__, __LINE__, expected, newval);
++			return 1;
++		}
++	}
++
++	lvq_destroy(lvq);
++
++	return 0;
++}
++
++SEC("syscall")
++int test_lvqueue_steal_many(void)
++{
++	u64 val, newval;
++	int ret, i;
++
++	lv_queue_t *lvq = lvq_create();
++
++	if (!lvq)
++		return 1;
++
++	for (i = 0; i < 500 && can_loop; i++) {
++		val = i;
++
++		ret = lvq_owner_push(lvq, val);
++		if (ret) {
++			arena_stderr("%s:%d error %d\n", __func__, __LINE__, ret);
++			return 1;
++		}
++	}
++
++	for (i = 0; i < 500 && can_loop; i++) {
++		ret = lvq_steal(lvq, &newval);
++		if (ret) {
++			arena_stderr("%s:%d error %d\n", __func__, __LINE__, ret);
++			return 1;
++		}
++
++		if (newval != i) {
++			arena_stderr("%s:%d expected %lu found %lu\n", __func__, __LINE__, i, newval);
++			return 1;
++		}
++	}
++
++	lvq_destroy(lvq);
++
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/libarena/src/lvqueue.bpf.c b/tools/testing/selftests/bpf/libarena/src/lvqueue.bpf.c
 new file mode 100644
-index 000000000000..2ce2dfe5a223
+index 000000000000..b93c4f9d1c92
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
-@@ -0,0 +1,1032 @@
++++ b/tools/testing/selftests/bpf/libarena/src/lvqueue.bpf.c
+@@ -0,0 +1,241 @@
 +// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
 +/*
 + * Copyright (c) 2025-2026 Meta Platforms, Inc. and affiliates.
-+ * Copyright (c) 2025-2026 Emil Tsalapatis <emil@etsalapatis.com>
++ * Copyright (c) 2025-2026 Emil Tsalapatis <etsal@meta.com>
 + */
++
++#include <bpf_atomic.h>
 +
 +#include <libarena/common.h>
 +
 +#include <libarena/asan.h>
-+#include <libarena/rbtree.h>
++#include <libarena/lvqueue.h>
 +
-+int rb_integrity_check(rbtree_t *rbtree __arg_arena);
-+void rbnode_print(size_t depth, rbnode_t *rbn);
-+static int rbnode_replace(rbtree_t *rbtree, rbnode_t *existing, rbnode_t *replacement);
-+
-+u64 rb_create_internal(enum rbtree_alloc alloc, enum rbtree_insert_mode insert)
++static inline
++u64 lv_arr_size(lv_arr_t *lv_arr)
 +{
-+	rbtree_t *rbtree;
-+
-+	rbtree = malloc(sizeof(*rbtree));
-+	if (unlikely(!rbtree))
-+		return (u64)(NULL);
-+
-+	/*
-+	 * RB_UPDATE overwrites existing values in the nodes, but RB_NOALLOC
-+	 * trees manage the tree nodes directly (including holding pointers
-+	 * to them). Disallow mixing the two modes to avoid dealing with
-+	 * unintuitive semantics.
-+	 */
-+	if (alloc == RB_NOALLOC && insert == RB_UPDATE) {
-+		arena_stderr("WARNING: Cannot combine RB_NOALLOC and RB_UPDATE");
-+		free(rbtree);
-+		return (u64)NULL;
-+	}
-+
-+	rbtree->alloc = alloc;
-+	rbtree->insert = insert;
-+	rbtree->root = NULL;
-+	rbtree->freelist = NULL;
-+
-+	return (u64)rbtree;
++	return LV_ARR_BASESZ << READ_ONCE(lv_arr->order);
 +}
 +
-+__weak
-+int rb_destroy(rbtree_t *rbtree __arg_arena)
++static inline
++u64 lv_arr_get(lv_arr_t *lv_arr, u64 ind)
 +{
-+	rbnode_t *node, *next;
-+	int ret;
++	u64 ret = READ_ONCE(lv_arr->data[ind % lv_arr_size(lv_arr)]);
 +
-+	arena_subprog_init();
-+
-+	if (rbtree->alloc == RB_NOALLOC) {
-+		/*
-+		 * We cannot do anything about RB_NOALLOC nodes. The whole
-+		 * point of RB_NOALLOC is that the nodes are directly owned
-+		 * by the caller that allocates and inserts them. We could
-+		 * unilaterally grab all nodes and free them anyway, but that
-+		 * would almost certainly cause UAF as the callers keep accessing
-+		 * the now freed nodes. Throw an error instead.
-+		 */
-+		if (rbtree->root) {
-+			arena_stderr("WARNING: Trying to destroy RB_NOALLOC tree "
-+					"without removing all nodes");
-+			return -EBUSY;
-+		}
-+
-+		goto drain_freelist;
-+	}
-+
-+	while (rbtree->root && can_loop) {
-+		ret = rb_remove(rbtree, rbtree->root->key);
-+		if (ret)
-+			return ret;
-+	}
-+
-+drain_freelist:
-+	node = rbtree->freelist;
-+	while (node && can_loop) {
-+		next = node->parent;
-+		free(node);
-+		node = next;
-+	}
-+
-+	free(rbtree);
-+	return 0;
++	return ret;
 +}
 +
-+static inline int rbnode_dir(rbnode_t *node)
++static inline
++void lv_arr_put(lv_arr_t *lv_arr, u64 ind, u64 value)
 +{
-+	/* Arbitrarily choose a direction for the root. */
-+	if (unlikely(!node->parent))
++	WRITE_ONCE(lv_arr->data[ind % lv_arr_size(lv_arr)], value);
++}
++
++static inline
++void lv_arr_copy(lv_arr_t *dst, lv_arr_t *src, u64 b, u64 t)
++{
++	u64 i;
++
++	for (i = t; i < b && can_loop; i++)
++		lv_arr_put(dst, i, lv_arr_get(src, i));
++}
++
++static inline
++int lvq_order_init(lv_queue_t *lvq __arg_arena, int order)
++{
++	lv_arr_t *arr = &lvq->arr[order];
++
++	if (unlikely(!lvq))
++		return -EINVAL;
++
++	if (order >= LV_ARR_ORDERS)
++		return -E2BIG;
++
++	/* Already allocated? */
++	if (arr->data)
 +		return 0;
 +
-+	return (node->parent->left == node) ? 0 : 1;
-+}
-+
-+int rbnode_rotate(rbtree_t *rbtree __arg_arena, rbnode_t *node __arg_arena, int dir)
-+{
-+	rbnode_t *tmp, *parent;
-+	int parentdir;
-+
-+	parent = node->parent;
-+	if (parent)
-+		parentdir = rbnode_dir(node);
-+
-+	/* If we're doing a root change, are we the root? */
-+	if (unlikely(!parent && rbtree->root != node))
-+		return -EINVAL;
-+
-+	/*
-+	 * Does the node we're turning into the root into exist?
-+	 * Note that the new root is on the opposite side of the
-+	 * rotation's direction.
-+	 */
-+	tmp = node->child[1 - dir];
-+	if (unlikely(!tmp))
-+		return -EINVAL;
-+
-+	/* Steal the closest child of the new root. */
-+	node->child[1 - dir] = tmp->child[dir];
-+	if (node->child[1 - dir])
-+		node->child[1 - dir]->parent = node;
-+
-+	/* Put the node below the new root.*/
-+	tmp->child[dir] = node;
-+	node->parent = tmp;
-+
-+	tmp->parent = parent;
-+	if (parent)
-+		parent->child[parentdir] = tmp;
-+	else
-+		rbtree->root = tmp;
-+
-+	return 0;
-+}
-+
-+/*
-+ * We support both regular lookups and "least upper bound" lookups,
-+ * i.e. finding the "leftmost" node smaller than or equal to a key.
-+ */
-+enum rbnode_find_mode {
-+	RBN_FIND_DFL	= 0,
-+	RBN_FIND_LUB	= 1,
-+};
-+
-+static
-+rbnode_t *rbnode_find(rbnode_t *subtree, u64 key, enum rbnode_find_mode mode)
-+{
-+	rbnode_t *node = subtree;
-+	int dir;
-+
-+	if (!subtree)
-+		return NULL;
-+
-+	while (can_loop) {
-+		/*
-+		 * If we are not looking for the least upper bound,
-+		 * we have found the only key. Otherwise keep going
-+		 * until we find the "leftmost" instance of the key.
-+		 */
-+		if (mode == RBN_FIND_DFL && node->key == key)
-+			break;
-+
-+		dir = (key <= node->key) ? 0 : 1;
-+
-+		if (!node->child[dir])
-+			break;
-+
-+		/*
-+		 * For least upper bound lookups, ensure that we
-+		 * stop searching once we find the rightmost key.
-+		 */
-+		if (node->key == key && node->child[dir]->key != key)
-+			break;
-+
-+		node = node->child[dir];
-+	}
-+
-+	return node;
-+}
-+
-+__weak
-+int rb_find(rbtree_t *rbtree __arg_arena, u64 key, u64 *value)
-+{
-+	rbnode_t *node;
-+
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
-+
-+	if (unlikely(!value))
-+		return -EINVAL;
-+
-+	node = rbnode_find(rbtree->root, key, RBN_FIND_DFL);
-+	if (!node || node->key != key)
-+		return -ENOENT;
-+
-+	*value = node->value;
-+
-+	return 0;
-+}
-+
-+static inline rbnode_t *rb_node_alloc_common(rbtree_t *rbtree __arg_arena, u64 key, u64 value)
-+{
-+	rbnode_t *rbnode = NULL;
-+
-+	if (unlikely(!rbtree))
-+		return NULL;
-+
-+	/* Use the built-in node cache for the rbtree to avoid going to the allocator. */
-+	do  {
-+		rbnode = rbtree->freelist;
-+		if (!rbnode)
-+			break;
-+
-+	} while (cmpxchg(&rbtree->freelist, rbnode, rbnode->parent) != rbnode && can_loop);
-+
-+	if (!rbnode)
-+		rbnode = malloc(sizeof(*rbnode));
-+
-+	if (!rbnode)
-+		return NULL;
-+
-+	rbnode->left = NULL;
-+	rbnode->right = NULL;
-+	rbnode->parent = NULL;
-+
-+	rbnode->key = key;
-+	rbnode->value = value;
-+	rbnode->is_red = true;
-+	return rbnode;
-+}
-+
-+__weak
-+u64 rb_node_alloc_internal(rbtree_t *rbtree __arg_arena, u64 key, u64 value)
-+{
-+	if (!rbtree) {
-+		arena_stderr("WARNING: Attempting to allocate a node "
-+				"for a NULL rbtree\n");
-+		return (u64)NULL;
-+	}
-+
-+	if (rbtree->alloc == RB_ALLOC)
-+		return (u64)NULL;
-+
-+	return (u64)rb_node_alloc_common(rbtree, key, value);
-+}
-+
-+__weak
-+int rb_node_free(rbtree_t *rbtree __arg_arena, rbnode_t *rbnode __arg_arena)
-+{
-+	rbnode_t *old;
-+
-+	do {
-+		old = rbtree->freelist;
-+		rbnode->parent = old;
-+	} while (cmpxchg(&rbtree->freelist, old, rbnode) != old && can_loop);
-+
-+	return 0;
-+}
-+
-+static
-+int rb_node_insert(rbtree_t *rbtree __arg_arena, rbnode_t *node __arg_arena)
-+{
-+	rbnode_t *grandparent, *parent = rbtree->root;
-+	enum rbnode_find_mode mode;
-+	u64 key = node->key;
-+	rbnode_t *uncle;
-+	int dir;
-+	int ret;
-+
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
-+
-+	if (!parent) {
-+		rbtree->root = node;
-+		return 0;
-+	}
-+
-+	mode = RBN_FIND_DFL;
-+	/* Always find the first node with the key when allowing duplicates. */
-+	if (rbtree->insert == RB_DUPLICATE)
-+		mode = RBN_FIND_LUB;
-+	parent = rbnode_find(parent, key, mode);
-+
-+	if (key == parent->key && rbtree->insert != RB_DUPLICATE) {
-+		if (rbtree->insert == RB_UPDATE) {
-+			/*
-+			 * Replace the old node with the new one.
-+			 * Free up the old node.
-+			 */
-+			ret = rbnode_replace(rbtree, parent, node);
-+			if (ret)
-+				return ret;
-+
-+			if (rbtree->alloc == RB_ALLOC)
-+				rb_node_free(rbtree, parent);
-+
-+			return 0;
-+		}
-+
-+		/* Otherwise it's RB_DEFAULT. */
-+		return -EALREADY;
-+	}
-+
-+	node->parent = parent;
-+	/* Also works if key == parent->key. */
-+	if (key <= parent->key)
-+		parent->left = node;
-+	else
-+		parent->right = node;
-+
-+	while (can_loop) {
-+		parent = node->parent;
-+		if (!parent)
-+			return 0;
-+
-+		if (!parent->is_red)
-+			return 0;
-+
-+		grandparent = parent->parent;
-+		if (!grandparent) {
-+			parent->is_red = false;
-+			return 0;
-+		}
-+
-+		dir = rbnode_dir(parent);
-+		uncle = grandparent->child[1 - dir];
-+
-+		if (!uncle || !uncle->is_red) {
-+			if (node == parent->child[1 - dir]) {
-+				rbnode_rotate(rbtree, parent, dir);
-+				node = parent;
-+				parent = grandparent->child[dir];
-+			}
-+
-+			rbnode_rotate(rbtree, grandparent, 1 - dir);
-+			parent->is_red = false;
-+			grandparent->is_red = true;
-+
-+			return 0;
-+		}
-+
-+		/* Uncle is red. */
-+
-+		parent->is_red = false;
-+		uncle->is_red = false;
-+		grandparent->is_red = true;
-+
-+		node = grandparent;
-+	}
-+
-+	return 0;
-+}
-+
-+int rb_insert_node(rbtree_t *rbtree __arg_arena, rbnode_t *node __arg_arena)
-+{
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
-+
-+	if (unlikely(rbtree->alloc == RB_ALLOC))
-+		return -EINVAL;
-+
-+	node->is_red = true;
-+
-+	node->left = NULL;
-+	node->right = NULL;
-+	node->parent = NULL;
-+
-+	return rb_node_insert(rbtree, node);
-+}
-+
-+__weak
-+int rb_insert(rbtree_t *rbtree __arg_arena, u64 key, u64 value)
-+{
-+	rbnode_t *node;
-+	int ret;
-+
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
-+
-+	if (unlikely(rbtree->alloc != RB_ALLOC))
-+		return -EINVAL;
-+
-+	node = rb_node_alloc_common(rbtree, key, value);
-+	if (!node)
++	arr->data = (u64 __arena *)malloc((LV_ARR_BASESZ << order) * sizeof(*arr->data));
++	if (!arr->data)
 +		return -ENOMEM;
 +
-+	ret = rb_node_insert(rbtree, node);
-+	if (ret) {
-+		rb_node_free(rbtree, node);
++	return 0;
++}
++
++__weak
++int lvq_owner_push(lv_queue_t *lvq __arg_arena, u64 val)
++{
++	volatile u64 b, t;
++	lv_arr_t *newarr;
++	lv_arr_t *arr;
++	ssize_t sz;
++	int ret;
++
++	if (unlikely(!lvq))
++		return -EINVAL;
++
++	b = smp_load_acquire(&lvq->bottom);
++
++	/*
++	 * In this call, loads from bottom and top should be
++	 * in this order specifically (also see lvq_steal()).
++	 */
++	smp_rmb();
++
++	t = READ_ONCE(lvq->top);
++	arr = READ_ONCE(lvq->cur);
++
++	sz = b - t;
++	if (sz >= lv_arr_size(arr) - 1) {
++		ret = lvq_order_init(lvq, arr->order + 1);
++		if (ret)
++			return ret;
++
++		newarr = &lvq->arr[arr->order + 1];
++
++		lv_arr_copy(newarr, arr, b, t);
++		smp_store_release(&lvq->cur, newarr);
++	}
++
++	lv_arr_put(lvq->cur, b, val);
++	smp_store_release(&lvq->bottom, b + 1);
++
++	return 0;
++}
++
++
++__weak
++int lvq_owner_pop(lv_queue_t *lvq __arg_arena, u64 *val)
++{
++	lv_arr_t *arr;
++	volatile u64 b, t;
++	int ret = 0;
++	ssize_t sz;
++	u64 value;
++
++	if (unlikely(!lvq || !val))
++		return -EINVAL;
++
++	arr = smp_load_acquire(&lvq->cur);
++
++	b = READ_ONCE(lvq->bottom);
++	b -= 1;
++
++	WRITE_ONCE(lvq->bottom, b);
++
++	smp_mb();
++
++	t = READ_ONCE(lvq->top);
++	sz = b - t;
++	if (sz < 0) {
++		smp_store_release(&lvq->bottom, t);
++		return -ENOENT;
++	}
++
++	value = lv_arr_get(arr, b);
++	if (sz > 0) {
++		*val = value;
++		return 0;
++	}
++
++	if (cmpxchg(&lvq->top, t, t + 1) != t)
++		ret = -EAGAIN;
++
++	smp_store_release(&lvq->bottom, t + 1);
++
++	if (ret)
 +		return ret;
-+	}
++
++	*val = value;
 +
 +	return 0;
 +}
 +
-+static inline rbnode_t *rbnode_least(rbnode_t *subtree)
++__weak
++int lvq_steal(lv_queue_t *lvq __arg_arena, u64 *val)
 +{
-+	while (subtree->left && can_loop)
-+		subtree = subtree->left;
++	volatile u64 b, t;
++	lv_arr_t *arr;
++	ssize_t sz;
++	u64 value;
 +
-+	return subtree;
-+}
++	if (unlikely(!lvq || !val))
++		return -EINVAL;
 +
-+__weak int rb_least(rbtree_t *rbtree __arg_arena, u64 *key, u64 *value)
-+{
-+	rbnode_t *least;
-+	if (!rbtree->root)
++	t = smp_load_acquire(&lvq->top);
++
++	/*
++	 * It is important that t is read before b for
++	 * stealers to avoid racing with the owner.
++	 * Races between stealers are dealt with using
++	 * CAS to increment the top value below.
++	 */
++	smp_rmb();
++
++	b = READ_ONCE(lvq->bottom);
++	arr = READ_ONCE(lvq->cur);
++
++	sz = b - t;
++	if (sz <= 0)
 +		return -ENOENT;
 +
-+	least = rbnode_least(rbtree->root);
-+	if (key)
-+		*key = least->key;
-+	if (value)
-+		*value = least->value;
++	value = lv_arr_get(arr, t);
++
++	if (cmpxchg(&lvq->top, t, t + 1) != t)
++		return -EAGAIN;
++
++	smp_store_release(val, value);
 +
 +	return 0;
 +}
 +
 +
-+/*
-+ * If we are referencing ourselves, a and b have a parent-child relation,
-+ * and we should be pointing at the other node instead.
-+ */
-+static inline void rbnode_fixup_pointers(rbnode_t *a, rbnode_t *b)
++__weak
++u64 lvq_create_internal(void)
 +{
-+#define fixup(n1, n2, member) do { if (n1->member == n1) n1->member = n2; } while (0)
-+	fixup(a, b, left);
-+	fixup(a, b, right);
-+	fixup(a, b, parent);
-+#undef fixup
-+}
-+
-+static inline void rbnode_swap_values(rbnode_t *a, rbnode_t *b)
-+{
-+#define swap(n1, n2, tmp) do { (tmp) = (n1); (n1) = (n2); (n2) = (tmp); } while (0)
-+	rbnode_t *tmpnode;
-+	u64 tmp;
-+
-+	/* Swap the pointers. */
-+	swap(a->is_red, b->is_red, tmp);
-+
-+	swap(a->left, b->left, tmpnode);
-+	swap(a->right, b->right, tmpnode);
-+	swap(a->parent, b->parent, tmpnode);
-+#undef swap
-+
-+	/* Account for the nodes being parent and child. */
-+	rbnode_fixup_pointers(b, a);
-+	rbnode_fixup_pointers(a, b);
-+}
-+
-+static inline void rbnode_adjust_neighbors(rbtree_t *rbtree, rbnode_t *node, int dir)
-+{
-+	if (node->left)
-+		node->left->parent = node;
-+	if (node->right)
-+		node->right->parent = node;
-+
-+	if (node->parent) {
-+		node->parent->child[dir] = node;
-+		return;
-+	}
-+
-+	rbtree->root = node;
-+}
-+
-+/*
-+ * Directly replace an existing node with a replacement. The replacement node
-+ * should not already be in the tree.
-+ */
-+static int rbnode_replace(rbtree_t *rbtree, rbnode_t *existing, rbnode_t *replacement)
-+{
-+	int dir = 0;
-+
-+	if (unlikely(replacement->parent || replacement->left || replacement->right))
-+		return -EINVAL;
-+
-+	if (existing->parent)
-+		dir = rbnode_dir(existing);
-+
-+	replacement->is_red = existing->is_red;
-+	replacement->left = existing->left;
-+	replacement->right = existing->right;
-+	replacement->parent = existing->parent;
-+
-+	/* Fix up the new node's neighbors. */
-+	rbnode_adjust_neighbors(rbtree, replacement, dir);
-+
-+	return 0;
-+}
-+
-+/*
-+ * Switch two nodes in the tree in place. This is useful during node deletion.
-+ * This is more involved than switching the values of the two nodes because we
-+ * must update all tree pointers.
-+ */
-+static void rbnode_switch(rbtree_t *rbtree, rbnode_t *a, rbnode_t *b)
-+{
-+	int adir = 0, bdir = 0;
-+
 +	/*
-+	 * Store the direction in the parent because we will not
-+	 * be able to recompute it once we start swapping values.
++	 * Marked as volatile because otherwise the array
++	 * reference in the internal loop gets demoted to
++	 * scalar and the program fails verification.
 +	 */
-+	if (a->parent)
-+		adir = rbnode_dir(a);
++	volatile lv_queue_t *lvq;
++	int ret, i;
 +
-+	if (b->parent)
-+		bdir = rbnode_dir(b);
++	lvq = malloc(sizeof(*lvq));
++	if (!lvq)
++		return (u64)NULL;
 +
-+	rbnode_swap_values(a, b);
++	WRITE_ONCE(lvq->bottom, 0);
++	WRITE_ONCE(lvq->top, 0);
 +
-+	/*
-+	 * Fix up the pointers from the children/parent to the
-+	 * new nodes.
-+	 */
-+	rbnode_adjust_neighbors(rbtree, a, bdir);
-+	rbnode_adjust_neighbors(rbtree, b, adir);
-+}
-+
-+static inline int rbnode_remove_node_single_child(rbtree_t *rbtree, rbnode_t *node, bool free)
-+{
-+	rbnode_t *child;
-+	int dir;
-+
-+	if (unlikely(node->is_red)) {
-+		arena_stderr("Node unexpectedly red\n");
-+		return -EINVAL;
++	for (i = 0; i < LV_ARR_ORDERS && can_loop; i++) {
++		lvq->arr[i].data = NULL;
++		lvq->arr[i].order = i;
 +	}
 +
-+	child = node->left ? node->left : node->right;
-+	if (unlikely(!child->is_red)) {
-+		arena_stderr("Only child is black\n");
-+		return -EINVAL;
++	ret = lvq_order_init((lv_queue_t *)lvq, 0);
++	if (ret) {
++		free(lvq);
++		return (u64)NULL;
 +	}
 +
-+	/*
-+	 * Since it's the immediate child, we can just
-+	 * remove the parent.
-+	 */
-+	child->parent = node->parent;
++	smp_store_release(&lvq->cur, &lvq->arr[0]);
 +
-+	if (node->parent) {
-+		dir = rbnode_dir(node);
-+		node->parent->child[dir] = child;
-+	} else {
-+		rbtree->root = child;
-+	}
-+
-+	/* Color the child black. */
-+	child->is_red = false;
-+
-+	/* Only free if called from rb_remove. */
-+	if (free)
-+		rb_node_free(rbtree, node);
-+
-+	return 0;
-+}
-+
-+static inline bool rbnode_has_red_children(rbnode_t *node)
-+{
-+	if (node->left && node->left->is_red)
-+		return true;
-+
-+	return node->right && node->right->is_red;
-+}
-+
-+static
-+int rb_node_remove(rbtree_t *rbtree __arg_arena, rbnode_t *node __arg_arena)
-+{
-+	rbnode_t *parent, *sibling, *close_nephew, *distant_nephew;
-+	bool free = (rbtree->alloc == RB_ALLOC);
-+	rbnode_t *replace, *initial;
-+	bool is_red;
-+	int dir;
-+
-+	/* Both children present, replace with next largest key. */
-+	if (node->left && node->right) {
-+		/*
-+		 * Swap the node itself instead of just the
-+		 * key/value pair to account for nodes embedded
-+		 * in other structs.
-+		 */
-+
-+		replace = rbnode_least(node->right);
-+		rbnode_switch(rbtree, replace, node);
-+
-+		/*
-+		 * FALLTHROUGH: We moved the node we are removing to
-+		 * the leftmost position of the subtree. We can now
-+		 * remove it as if it was always where we moved it to.
-+		 */
-+	}
-+
-+	initial = node;
-+
-+	/* Only one child present, replace with child and paint it black. */
-+	if (!node->left != !node->right)
-+		return rbnode_remove_node_single_child(rbtree, node, free);
-+
-+	/* (!node->left && !node->right) */
-+
-+	parent = node->parent;
-+	if (!parent) {
-+		/* Check that we're _actually_ the root. */
-+		if (rbtree->root == node)
-+			rbtree->root = NULL;
-+		else
-+			arena_stderr("WARNING: Attempting to remove detached node from rbtree\n");
-+
-+		if (free)
-+			rb_node_free(rbtree, node);
-+		return 0;
-+	}
-+
-+	dir = rbnode_dir(node);
-+	parent->child[dir] = NULL;
-+	is_red = node->is_red;
-+
-+	if (free)
-+		rb_node_free(rbtree, node);
-+
-+	/* If we removed a red node, we did not unbalance the tree.*/
-+	if (is_red)
-+		return 0;
-+
-+	sibling = parent->child[1 - dir];
-+	if (unlikely(!sibling)) {
-+		arena_stderr("rbtree: removed black node has no sibling\n");
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * We removed a black node, causing a change in path
-+	 * weight. Start rebalancing. The invariant is that
-+	 * all paths going through the node are shortened
-+	 * by one, and the current node is black.
-+	 */
-+	while (can_loop) {
-+
-+		/* Balancing reached the root, there can be no imbalance. */
-+		if (!parent)
-+			return 0;
-+
-+		/*
-+		 * We already determined the dir, either above or
-+		 * at the end of the loop.
-+		 */
-+
-+		/*
-+		 * If we have no sibling, the tree was
-+		 * already unbalanced.
-+		 */
-+		sibling = parent->child[1 - dir];
-+		if (unlikely(!sibling)) {
-+			arena_stderr("rbtree: removed black node has no sibling\n");
-+			return -EINVAL;
-+		}
-+
-+		/* Sibling is red, turn it into the grandparent. */
-+		if (sibling->is_red) {
-+			/*
-+			 * Sibling is red. Transform the tree to turn
-+			 * the sibling into the parent's position, and
-+			 * repaint them. This does not balance the tree
-+			 * but makes it so we know the sibling is black
-+			 * and so can use the transformations to balance.
-+			 */
-+			rbnode_rotate(rbtree, parent, dir);
-+			parent->is_red = true;
-+			sibling->is_red = false;
-+
-+			/* Our new sibling is now the close nephew. */
-+			sibling = parent->child[1 - dir];
-+			/* If sibling has any red siblings, break out. */
-+			if (rbnode_has_red_children(sibling))
-+				break;
-+
-+			/* We can repaint the sibling and parent, we're done. */
-+			sibling->is_red = true;
-+			parent->is_red = false;
-+
-+			return 0;
-+		}
-+
-+		/* Sibling guaranteed to be black. If it has red children, break out. */
-+		if (rbnode_has_red_children(sibling))
-+			break;
-+
-+		/*
-+		 * Both sibling and children are black. If parent is red, swap
-+		 * colors with the sibling. Otherwise
-+		 */
-+		if (parent->is_red) {
-+			parent->is_red = false;
-+			sibling->is_red = true;
-+			return 0;
-+		}
-+
-+		/*
-+		 * Parent, sibling, and all its children are black. Repaint the sibling.
-+		 * This shortens the paths through it, so pop up a level in the
-+		 * tree and repeat the balancing.
-+		 */
-+		sibling->is_red = true;
-+		node = parent;
-+		parent = node->parent;
-+		dir = rbnode_dir(node);
-+	}
-+
-+	if (node != initial) {
-+		dir = rbnode_dir(node);
-+		parent = node->parent;
-+		sibling = parent->child[1-dir];
-+	}
-+	/*
-+	 * Almost there. We know between the parent, sibling,
-+	 * and nephews only one or two of the nephews are red. If
-+	 * it is the close one, rotate it to the sibling position,
-+	 * paint it black, and paint the previous sibling red.
-+	 */
-+
-+	close_nephew = sibling->child[dir];
-+	distant_nephew = sibling->child[1 - dir];
-+
-+	/*
-+	 * If the distant red nephew is not red, rotate
-+	 * and repaint. We need the distant nephew
-+	 * to be red. We know the close nephew is red
-+	 * because at least one of them are, so the
-+	 * distant one is black if it exists.
-+	 */
-+	if (!distant_nephew || !distant_nephew->is_red) {
-+		rbnode_rotate(rbtree, sibling, 1 - dir);
-+		sibling->is_red = true;
-+		close_nephew->is_red = false;
-+		distant_nephew = sibling;
-+		sibling = close_nephew;
-+	}
-+
-+	/*
-+	 * We now know it's the distant nephew that's red.
-+	 * Rotate the sibling into our parent's position
-+	 * and paint both black.
-+	 */
-+
-+	rbnode_rotate(rbtree, parent, dir);
-+	sibling->is_red = parent->is_red;
-+	parent->is_red = false;
-+	distant_nephew->is_red = false;
-+
-+	return 0;
++	return (u64)(lvq);
 +}
 +
 +__weak
-+int rb_remove_node(rbtree_t *rbtree __arg_arena, rbnode_t *node __arg_arena)
++int lvq_destroy(lv_queue_t *lvq __arg_arena)
 +{
-+	if (unlikely(!rbtree))
++	int i;
++
++	if (unlikely(!lvq))
 +		return -EINVAL;
 +
-+	if (unlikely(rbtree->alloc == RB_ALLOC))
-+		return -EINVAL;
++	for (i = 0; i < LV_ARR_ORDERS && can_loop; i++)
++		free(lvq->arr[i].data);
 +
-+	return rb_node_remove(rbtree, node);
-+}
-+
-+__weak
-+int rb_remove(rbtree_t *rbtree __arg_arena, u64 key)
-+{
-+	rbnode_t *node;
-+
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
-+
-+	if (unlikely(rbtree->alloc != RB_ALLOC))
-+		return -EINVAL;
-+
-+	if (!rbtree->root)
-+		return -ENOENT;
-+
-+	node = rbnode_find(rbtree->root, key, RBN_FIND_DFL);
-+	if (!node || node->key != key)
-+		return -ENOENT;
-+
-+	return rb_node_remove(rbtree, node);
-+}
-+
-+__weak
-+int rb_pop(rbtree_t *rbtree __arg_arena, u64 *key, u64 *value)
-+{
-+	rbnode_t *node;
-+
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
-+
-+	if (!rbtree->root)
-+		return -ENOENT;
-+
-+	if (rbtree->alloc != RB_ALLOC)
-+		return -EINVAL;
-+
-+	node = rbnode_least(rbtree->root);
-+	if (unlikely(!node))
-+		return -ENOENT;
-+
-+	if (key)
-+		*key = node->key;
-+	if (value)
-+		*value = node->value;
-+
-+	return rb_node_remove(rbtree, node);
-+}
-+
-+inline void rbnode_print(size_t depth, rbnode_t *rbn)
-+{
-+	arena_stderr("[DEPTH %d] %p (%s)\n PARENT %p", depth, rbn, rbn->is_red ? "red" : "black", rbn->parent);
-+	arena_stderr("\tKV (%ld, %ld)\n LEFT %p RIGHT %p]\n", rbn->key, rbn->value, rbn->left, rbn->right);
-+}
-+
-+enum rb_print_state {
-+	RB_NONE_VISITED,
-+	RB_LEFT_VISITED,
-+	RB_RIGHT_VISITED,
-+};
-+
-+__weak
-+enum rb_print_state rb_print_next_state(rbnode_t *rbnode __arg_arena, enum rb_print_state state, rbnode_t **next)
-+{
-+	if (unlikely(!next))
-+		return RB_NONE_VISITED;
-+
-+	switch (state) {
-+	case RB_NONE_VISITED:
-+		if (rbnode->left) {
-+			*next = rbnode->left;
-+			state = RB_LEFT_VISITED;
-+			break;
-+		}
-+
-+		/* FALLTHROUGH */
-+
-+	case RB_LEFT_VISITED:
-+		if (rbnode->right) {
-+			*next = rbnode->right;
-+			state = RB_RIGHT_VISITED;
-+			break;
-+		}
-+
-+		/* FALLTHROUGH */
-+
-+	default:
-+		*next = NULL;
-+		state = RB_RIGHT_VISITED;
-+	}
-+
-+	return state;
-+}
-+
-+/*
-+ * Pass everything by reference. This is to avoid arcane verification failures
-+ * caused by embedding this code in the main rb_print call.
-+ */
-+__weak
-+int rb_print_pop_up(rbnode_t **rbnode, u8 *depthp, enum rb_print_state (*stack)[RB_MAXLVL_PRINT], enum rb_print_state *state)
-+{
-+	volatile u8 depth;
-+	int j;
-+
-+	if (unlikely(!rbnode || !depthp || !stack || !state))
-+		return -EINVAL;
-+
-+	WRITE_ONCE(depth, *depthp);
-+
-+	for (j = 0; j < RB_MAXLVL_PRINT && can_loop; j++) {
-+		if (*state != RB_RIGHT_VISITED)
-+			break;
-+
-+		depth -= 1;
-+		if (depth < 0 || depth >= RB_MAXLVL_PRINT)
-+			break;
-+
-+		*state = (*stack)[depth % RB_MAXLVL_PRINT];
-+		*rbnode = (*rbnode)->parent;
-+	}
-+
-+	*depthp = depth;
-+
-+	return 0;
-+}
-+
-+__weak
-+int rb_print(rbtree_t *rbtree __arg_arena)
-+{
-+	enum rb_print_state stack[RB_MAXLVL_PRINT];
-+	rbnode_t *rbnode = rbtree->root;
-+	enum rb_print_state state;
-+	rbnode_t *next;
-+	u8 depth;
-+	int ret;
-+
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
-+
-+	depth = 0;
-+	state = RB_NONE_VISITED;
-+
-+	arena_stderr("=== RB TREE START ===\n");
-+
-+	/* Even with can_loop, the verifier doesn't like infinite loops. */
-+	while (can_loop) {
-+		if (state == RB_NONE_VISITED)
-+			rbnode_print(depth, rbnode);
-+
-+		/* Find which child to traverse next. */
-+		state = rb_print_next_state(rbnode, state, &next);
-+
-+		/* Child found. Store the node state and go on. */
-+		if (next) {
-+			if (depth < 0 || depth >= RB_MAXLVL_PRINT)
-+				return 0;
-+
-+			stack[depth++] = state;
-+
-+			rbnode = next;
-+			state = RB_NONE_VISITED;
-+
-+			continue;
-+		}
-+
-+		/* Otherwise, go as far up as possible. */
-+		ret = rb_print_pop_up(&rbnode, &depth, &stack, &state);
-+		if (ret)
-+			return -EINVAL;
-+
-+		if (depth < 0 || depth >= RB_MAXLVL_PRINT) {
-+			arena_stderr("=== RB TREE END (depth %d\n)===", depth);
-+			return 0;
-+		}
-+
-+	}
-+
-+	arena_stderr("=== RB TREE END ===\n");
-+
-+	return 0;
-+}
-+
-+__weak
-+int rb_integrity_check(rbtree_t *rbtree __arg_arena)
-+{
-+	enum rb_print_state stack[RB_MAXLVL_PRINT];
-+	rbnode_t *rbnode = rbtree->root;
-+	enum rb_print_state state;
-+	rbnode_t *next;
-+	u8 depth;
-+	int ret;
-+
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
-+
-+	if (!rbtree->root)
-+		return 0;
-+
-+	depth = 0;
-+	state = RB_NONE_VISITED;
-+
-+	/* Even with can_loop, the verifier doesn't like infinite loops. */
-+	while (can_loop) {
-+		if (rbnode->parent && rbnode->parent->left != rbnode
-+			&& rbnode->parent->right != rbnode) {
-+			arena_stderr("WARNING: Inconsistent tree. Parent %p has no child %p\n", rbnode->parent, rbnode);
-+			return -EINVAL;
-+		}
-+
-+		if (rbnode->parent == rbnode) {
-+			arena_stderr("WARNING: Inconsistent tree, node %p is its own parent\n", rbnode);
-+			return -EINVAL;
-+		}
-+
-+		if (rbnode->left == rbnode) {
-+			arena_stderr("WARNING: Inconsistent tree, node %p is its own left child\n", rbnode);
-+			return -EINVAL;
-+		}
-+
-+		if (rbnode->right == rbnode) {
-+			arena_stderr("WARNING: Inconsistent tree, node %p is its own right child\n", rbnode);
-+			return -EINVAL;
-+		}
-+
-+		if (rbnode->is_red) {
-+			if (rbnode->left && rbnode->left->is_red) {
-+				arena_stderr("WARNING: Inconsistent tree. Parent has %p has red child %p\n", rbnode, rbnode->left);
-+				return -EINVAL;
-+			}
-+			if (rbnode->right && rbnode->right->is_red) {
-+				arena_stderr("WARNING: Inconsistent tree. Parent has %p has red child %p\n", rbnode, rbnode->right);
-+				return -EINVAL;
-+			}
-+		} else if (rbnode->parent && rbnode->parent->child[1 - rbnode_dir(rbnode)] == NULL) {
-+			arena_stderr("WARNING: Inconsistent tree. Black node %p has no sibling\n", rbnode);
-+			return -EINVAL;
-+		}
-+
-+		/* Find which child to traverse next. */
-+		state = rb_print_next_state(rbnode, state, &next);
-+
-+		/* Child found. Store the node state and go on. */
-+		if (next) {
-+			if (depth < 0 || depth >= RB_MAXLVL_PRINT)
-+				return 0;
-+
-+			stack[depth++] = state;
-+
-+			rbnode = next;
-+			state = RB_NONE_VISITED;
-+
-+			continue;
-+		}
-+
-+		/* Otherwise, go as far up as possible. */
-+		ret = rb_print_pop_up(&rbnode, &depth, &stack, &state);
-+		if (ret)
-+			return -EINVAL;
-+
-+		if (depth < 0 || depth >= RB_MAXLVL_PRINT) {
-+			return 0;
-+		}
-+
-+	}
++	free(lvq);
 +
 +	return 0;
 +}
