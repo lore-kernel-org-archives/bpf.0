@@ -1,228 +1,109 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795613385B2
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 12:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A31AB37BE87
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 12:10:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778501156; cv=none; b=QTFVF8F4CshYN4L9Shhnz2+P36MKXkMViRvdtupU+b+pmKG8qaQFbVKCxcBocAXrCjHBwtsM+OLTu68xpe2GJVYIZj1F6GFkkccigF1Yi1tPYpUPyO4tUuNcYnIpid9dXqPBjtdzBKNUVIHno26bjOET8QosqMmnuCB3xWLAT1s=
+	t=1778501436; cv=none; b=N55wIph4z9f8GpdlFCVZckU2Lkc6OTV7zI3wNu8Nf6xccWB03dLAjBzUGXPhmsKxsxBxq6IFICwKeU8KdL3QYbqshmxL5gPO7zgCs7yvf2amTwAe31zlYy6E5mxarGQhDLZ5D+ZHWyq/HgRrvGsZe+Zdqtx8fOLzGxjOfjb2/MM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778501156; c=relaxed/simple;
-	bh=c8/SRZCJ5uGxAkH3s7SfDETGeS5qDsQrGb0XJggV2WM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Egy5l/VaHpHQ0xjXkahhtpDbqvGSUmFh/BMGW13qfiotzSJ6LGZdlP8MsZVpM3JdsH/ag2X6rmLkUtC91+HTOI0BD8/7NXqHdFJ4MGFCZIgVzEgX1+perRAzSfQdIHc7kQlMDFP56FOx/uKECDTc2aEkuZnVA8iBACrc/TbLukE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=kCtS3j0i; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1778501436; c=relaxed/simple;
+	bh=0wrarbMRDUbdwBEeOHsYgAFvKs3k/7gMMCjvHrGHYSM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=CXyTov2LLecdPf40SdiypiYDMU99OmzzrqoCMNmMeWi5+YKxaTCLZDyGrYTbObqR93euZq/IsKQKrZk3ypv249q4LmZU6D/NfV/uPhP4hSgm1XF+6Tk178tiA10WYyx/v80Dc5jIHgSALj6B4ymcCa8MGKAaP3tipWH9hMoUoVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=dI/PWa+i; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="kCtS3j0i"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=300dYBc+K80+eqCP1j40jz7SrXIJ/gZPKJ2ppWO3HH0=; b=kCtS3j0iT420bHAaLdqQQ9qsFJ
-	blM0tHy+eBLX7svRAHjkkSHQsY09a6GhS5p3Y0dxc3skohDt+cTaYimgwEL/JS4URV9L81nLVfAfM
-	sI2DEkAgEr4lucB77IzHkLTGuAQSqs0CNl3pE3fydFRrfkZZgjTGAx1MyzO2h2B8CidrhoH7+hWgg
-	JHIP6CmQcUPJan2lsKw5eHXAmSIrhfqAcyBjNwNvMsPhq2XdpdQrcVCsReg7VxCJf8JZQlIuFuHG4
-	KfAnGzFXKbOOJnTF7MEMN5DY/jHzpNx71h4YU1DCGvkHvU82RNhHFhJidDy44oNfmQ5L3+EY95tzQ
-	4cms0kJg==;
-Received: from sslproxy08.your-server.de ([78.47.166.52])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wMPO3-0008Bz-1b;
-	Mon, 11 May 2026 14:05:28 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wMPO3-000KWc-0P;
-	Mon, 11 May 2026 14:05:27 +0200
-Message-ID: <4b64ecd8-eade-4676-822e-da73abe2421d@iogearbox.net>
-Date: Mon, 11 May 2026 14:05:26 +0200
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="dI/PWa+i"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-67cd93d8affso5172701a12.2
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 05:10:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1778501433; x=1779106233; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3eLhIDY9V0OBlizIXHPhz9K2mw9WlB2YhNjneNtrUmU=;
+        b=dI/PWa+iYl4+ZRnUWkLQEsRuQHj1TYerTOKx6ut6JsEfzzV/okNKOynuYRPUESIWi4
+         BGGuyQKuttIH2lhgEq3JR50m7OUtmPnwybqfdBiscCsLOZptnNKO0w0Ro86uSpTLyv94
+         6gVMn+iDnmmCXU9hlgc4QuCkXEDL7bHS+S/W70qc0AXLAwROZ59I1SAucFDxDams7tEV
+         IMUsu6DXMnjuVFx+0PC/3pJWrEqjRLRbwiltN5aRbz8MmVaSukPC25dFl0MgLooIi0Rn
+         j7b2Y3X7DM38Hl7TtLLi4EFn58sA0ELyEbI5s1k+aPI9/WpJu5n6d0uePX+FU8KmJN/T
+         Hqsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778501433; x=1779106233;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3eLhIDY9V0OBlizIXHPhz9K2mw9WlB2YhNjneNtrUmU=;
+        b=FpiU2MerIUNsqtjHleOCKVBIY5c3ok+jhBodUIaeqb0e/3cCAAU4yRKPKeay4jWOnJ
+         m7YFFlC1UNkroOfC9ssw8otneXU/ejkRSF1dcUixH12KaLMXbRmho8D80nfFMtnOQNuO
+         8Z+BuxEyyDOuCJyCrAL19dnU/Ib7p3QqQMdfNNNJm6a/gl4gY+iPQTxvsv2rgvXeJsGe
+         qtf31ZYr3NIcngTKLyFlVwzBsSLoF/30CB2sPvLJWmKNUxr8x0/XQuu4QnqRkH1bwvDN
+         Iypl4k6C3xvUrwzqwRalr22MPSYoEY8WPuFLC5xoGdBOOnsYCHWZPSObWkMIvwDU3Ps5
+         Ymxg==
+X-Gm-Message-State: AOJu0Yxs0BOZjQ539IcTIawz4DPK1ofPp12VtpSZbkDdXKHvkhRwt2k7
+	kJ6O8vimLdUn3g/Nh6r1So2LRQKwvpFRnBElu7UvQvWz8MtT1QDqP085h4D4RU466yD/fKgqOtt
+	q8obNbVY=
+X-Gm-Gg: Acq92OGbkDrfpxPSbfb9UUThNJUuab6l+xbXrRezpTn43JpmT6MO9FicSTTvrBIzwPs
+	Wo5Se86UOMzX+UJC7/Ie/o3js/sJGZ+xhcOHDx7nKeYMfMNvngMHzPfD5RyYOY/oH/OKsnINvJi
+	lsO4VfU94epjLPBPgt8UBvcehQe2rkQkaOejHWnoe6IVhA4N2jKlTIIOwdAISR9ukGdl0uPAzJs
+	HAUpmYtlfB/ay8kS+VW8oY1PZ2/I2RwDDqZoBMDQ46pxUmMXUIHnYGm/790qdHufEh+xqyNRl9i
+	wweg2Ts4E9laM099iPyLA57fVs4ECuUaSAk7i+xJoiAm6FbsDWMi/f1XVUUmEI9CPOTo+WXO00h
+	6g3o9xRVz84aYUhFZVmHKs7RKPWE0XMzeLLmxl/54OWuWVGUn2EY3T6Vvk8xkBX998hXXiP+aEb
+	W1F5TrdzBY9cGKb11jiDXtzaLX7/wE4JbwHJEVuVhfFMGvlXceDgQzTzS7buc7k0f7Pknxiw==
+X-Received: by 2002:a17:907:1c0f:b0:bcf:f777:7f5b with SMTP id a640c23a62f3a-bcff7778bd5mr201805466b.27.1778501432625;
+        Mon, 11 May 2026 05:10:32 -0700 (PDT)
+Received: from cloudflare.com (79.184.84.124.ipv4.supernova.orange.pl. [79.184.84.124])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bcc5f0b9decsm334130666b.9.2026.05.11.05.10.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2026 05:10:32 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+Date: Mon, 11 May 2026 14:10:22 +0200
+Subject: [PATCH bpf] bpf: Add Jiayuan Chen to sockmap maintainers
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/4] bpf: Add netpoll kfuncs for sending UDP packets
-To: Mahe Tardy <mahe.tardy@gmail.com>, bpf@vger.kernel.org
-Cc: andrew+netdev@lunn.ch, andrii@kernel.org, ast@kernel.org,
- davem@davemloft.net, eddyz87@gmail.com, edumazet@google.com,
- john.fastabend@gmail.com, kuba@kernel.org, martin.lau@linux.dev,
- pabeni@redhat.com, song@kernel.org, liamwisehart@meta.com
-References: <20260511085344.3302-1-mahe.tardy@gmail.com>
- <20260511085344.3302-2-mahe.tardy@gmail.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260511085344.3302-2-mahe.tardy@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27997/Mon May 11 08:24:57 2026)
+Message-Id: <20260511-sockmap-ktls-fix-1-v1-1-96ff8c1906e4@cloudflare.com>
+X-B4-Tracking: v=1; b=H4sIAC3HAWoC/x2M2wpAQBBAf0XzbMqOEL8iD3YNJrdtR1Ly7zaPp
+ 9M5DygHYYUmeSDwJSrHHsGkCbi53ydGGSIDZVRmhTGoh1u23uNyroqj3Giw4tKSpYJyV0MMfeA
+ o/mkL1o/Qve8HPLPpDWkAAAA=
+X-Change-ID: 20260511-sockmap-ktls-fix-1-7e6b2b2523c9
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jiayuan Chen <jiayuan.chen@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>
+X-Mailer: b4 0.14.3
 
-On 5/11/26 10:53 AM, Mahe Tardy wrote:
-> From: Song Liu <song@kernel.org>
-> 
-> Add BPF kfuncs that allow BPF programs to send UDP packets via the
-> netpoll infrastructure. This provides a mechanism for BPF programs
-> (e.g., LSM hooks) to emit telemetry over UDP without depending on
-> the regular networking stack.
-> 
-> The API consists of four kfuncs:
-> 
->    bpf_netpoll_create()   - Allocate and set up a netpoll context
->                             (sleepable, SYSCALL prog type only)
->    bpf_netpoll_acquire()  - Acquire a reference to a netpoll context
->    bpf_netpoll_release()  - Release a reference (cleanup via
->                             queue_rcu_work since netpoll_cleanup sleeps)
->    bpf_netpoll_send_udp() - Send a UDP packet (any context, LSM prog
->                             type only for now)
-> 
-> The implementation follows the established kfunc lifecycle pattern
-> (create/acquire/release with refcounting, kptr map storage, dtor
-> registration). The netpoll context is wrapped in a refcounted
-> bpf_netpoll struct. Cleanup is deferred via queue_rcu_work() because
-> netpoll_cleanup() takes rtnl_lock.
-> 
-> AI was used to generate the code and each line was manually reviewed.
-> 
-> Reviewed-by: Mahe Tardy <mahe.tardy@gmail.com>
-> Signed-off-by: Song Liu <song@kernel.org>
-> ---
->   drivers/net/Kconfig         |  11 ++
->   include/linux/bpf_netpoll.h |  38 +++++++
->   kernel/bpf/verifier.c       |   3 +
->   net/core/Makefile           |   1 +
->   net/core/bpf_netpoll.c      | 209 ++++++++++++++++++++++++++++++++++++
->   5 files changed, 262 insertions(+)
->   create mode 100644 include/linux/bpf_netpoll.h
->   create mode 100644 net/core/bpf_netpoll.c
-> 
-> diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
-> index edaab759dc50..8d94c9d58f32 100644
-> --- a/drivers/net/Kconfig
-> +++ b/drivers/net/Kconfig
-> @@ -364,6 +364,17 @@ config NETCONSOLE_PREPEND_RELEASE
->   	  message.  See <file:Documentation/networking/netconsole.rst> for
->   	  details.
-> 
-> +config BPF_NETPOLL
-> +	bool "BPF netpoll UDP support"
-> +	depends on BPF_SYSCALL && NET
-> +	select NETPOLL
-> +	help
-> +	  Enable BPF kfuncs for sending UDP packets via netpoll.
-> +	  This allows BPF programs to send UDP packets from any
-> +	  context using the netpoll infrastructure.
-> +
-> +	  If unsure, say N.
+Nominate Jiayuan Chen for the sockmap co-maintainer. Jiayuan has been a
+regular contributor and reviewer for the sockmap and networking code.
 
-Do we need the extra Kconfig knob? For most other BPF functionality we don't
-have such convention. BPF_NETPOLL could be a hidden config enabled when both
-BPF_SYSCALL && NETPOLL is enabled?
+Since we are now down to just two maintainers, and John has to split his
+time between BPF core, BPF networking, and sockmap, having three
+maintainers again will help with the review load.
 
->   config NETPOLL
->   	def_bool NETCONSOLE
-> 
-> diff --git a/include/linux/bpf_netpoll.h b/include/linux/bpf_netpoll.h
-> new file mode 100644
-> index 000000000000..b738032548c7
-> --- /dev/null
-> +++ b/include/linux/bpf_netpoll.h
-> @@ -0,0 +1,38 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-> +
-> +#ifndef _BPF_NETPOLL_H
-> +#define _BPF_NETPOLL_H
-> +
-> +#include <linux/types.h>
-> +
-> +#define BPF_NETPOLL_DEV_NAME_LEN 16	/* IFNAMSIZ */
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Do we need this, can't we just reuse IFNAMSIZ?
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b2040011a386..dfc621ff629d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4861,6 +4861,7 @@ F:	kernel/bpf/*iter.c
+ BPF [L7 FRAMEWORK] (sockmap)
+ M:	John Fastabend <john.fastabend@gmail.com>
+ M:	Jakub Sitnicki <jakub@cloudflare.com>
++M:	Jiayuan Chen <jiayuan.chen@linux.dev>
+ L:	netdev@vger.kernel.org
+ L:	bpf@vger.kernel.org
+ S:	Maintained
 
-> +/**
-> + * struct bpf_netpoll_opts - BPF netpoll initialization parameters
-> + * @dev_name:	Network device name (e.g. "eth0"), null-terminated.
-> + * @local_ip:	Local IPv4 address in network byte order. 0 = auto-detect.
-> + * @remote_ip:	Remote IPv4 address in network byte order.
-> + * @local_port:	Local UDP port in host byte order.
-> + * @remote_port: Remote UDP port in host byte order.
-> + * @remote_mac:	Remote MAC address (6 bytes).
-> + * @ipv6:	Set to 1 for IPv6, 0 for IPv4.
-> + * @reserved:	Must be zero. Reserved for future use.
-> + * @local_ip6:	Local IPv6 address (16 bytes). Used when ipv6=1.
-> + *		Zero = auto-detect.
-> + * @remote_ip6:	Remote IPv6 address (16 bytes). Used when ipv6=1.
-> + */
-> +struct bpf_netpoll_opts {
-> +	char dev_name[BPF_NETPOLL_DEV_NAME_LEN];
-> +	__be32 local_ip;
-> +	__be32 remote_ip;
-> +	__u16 local_port;
-> +	__u16 remote_port;
-> +	__u8 remote_mac[6];
-> +	__u8 ipv6;
-> +	__u8 reserved;
-> +	__u8 local_ip6[16];
-> +	__u8 remote_ip6[16];
-> +};
 
-Could we detangle this a bit and structure the design similar to what was
-done for the bpf fib lookup helpers? __u8 family and then union.
 
-Is the remote_mac strictly needed? Feels a bit like a burden, maybe for the
-selftest, we should first do a bpf_fib_lookup before the bpf_netpoll_create
-so that the use case where the user only cares about giving remote_ip/remote_port
-and maybe local_port (e.g. to as indicator for different event types and/or
-RSS hashing) works, but everything else is derived via kernel fib lookup.
-
-Thanks,
-Daniel
