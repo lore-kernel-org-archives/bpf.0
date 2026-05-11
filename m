@@ -1,177 +1,186 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8372E8DEC
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 20:03:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778529833; cv=none; b=PM1Fw3DaLGUertG4WPl/6nqr1Dfs5HfV14bm3SHzvhUS9VBhgQKMR628NS0jUomBqUc/S2J7imcr3lBnpQm6V5nI9odTPrQQM1Qx3qWG3I3cYHxJu3zHQ/o8vqAbxK+TqpCxElkSiNO5O7SlxoiJ6K7WXdCIvstSXc4G8S0M6Mk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778529833; c=relaxed/simple;
-	bh=uvoT7KywqNP+V02uvCecmLtPoPNcDrG6DOvQJQ+l9Qk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RsS2vHWP7IX+N3+MjmIYT7HeTrCmRAkvvHs8PFxFm9HLtYMoCVNsHjFEvJ1R4nTi38ebaWoNSWu84XFDyvAQ0foYAqGxAUX1DRw/XG7fG1slvz08ZzcCBORqlPUktgyUFAVvQ8a264eXKzrbUnpeO4fX3+QTa0Rk0ei1Hu1H+y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QkYZa5BM; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D0F379EFE
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 20:06:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778530006; cv=pass; b=F37ti6zlQRsvb/vbkTMbYl5i9pOEt+waz2InNSQBZ+nOzXtw0bQh9yYxdR2QkqGCy1DzQHMgnWDTCphcfSHTn/t5Q5hQGt9fLXVZXkeVt0MHreHU6RXLWIy4wlRAfqmXfNYu0S0q9gIx41sY2x/fT8A0EjV4cOcIqqrCylRlMGE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778530006; c=relaxed/simple;
+	bh=yO/EmkVIHkBBMRUcngEKNItvEXSsSe+RskyQw5Jk4BM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=R/7yIgPqOVyqnO0gOvbwsdygya7bsIVcA1b5+vq+XWBcX9pYktKKRyfOwzjT5Wyx0mo0dM58pZBRsRwHs3k5tmNV3U8R4tvG4kydYgzUYytL8W3T2MHJGtjhS6TFNOee8RrCGusvc4Wp0/e0sKotceetiCTlWEeRnYbY3/cf0VQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Drx9z37t; arc=pass smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QkYZa5BM"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8379e010b01so1945985b3a.1
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 13:03:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Drx9z37t"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ba7a1cc0380so849970966b.2
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 13:06:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778530003; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ebMKoNqiEHBH6ip4xhHK7/u/4kgA2FNShwiWXgsoleDy2gbFzcNFG2DZTh1NM2mmaF
+         ge2CyQeQzp7GuEaXE7B91SdbQiIY2mshZ731jEdMZ1drPdx2aWh3ku0VdimmKbZoa0zM
+         xI+tLPmgnpGrUrS7Rgp8la675pUxacmahEeUSFlL68z67ZuOzUxTFoisFVdagpFHmRZk
+         f2+ym+MtLeZT0Xa9W70/iekThf6cWSW7/HFJ+by4NV/qySzIjbYvCpXMd5OZqbzaH3a6
+         /lMI+6mDE+4NEtNyddiosOFGxnqIC825QNEKVNIeglMRh+2V4CwC2ocJ3cGFbT2uzv30
+         Q3LQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=iaAiWK/jlnXrBb2kmro41iMZ5g6bVIAs0Q/KvlSqcaU=;
+        fh=ab2t4L7a6mVzGwA69xWXBYH8TiCfATgkPJyeWVypoB0=;
+        b=Ef1PHyur0fXFpf7cMATtXMSXTBJCYAxKjCQRrixPf7W2pcoa4nS/McfjL/VnOKItNx
+         Xwht/siV7b2EVEqW8QmTd4imeOikxTqt1NnFP7Iew/LNzEZFWhm93SQ0W/xgByU7LIpC
+         i86b1J3j5IjoMEemiqmkR/qW5v63nxTg5xw2787LxSsMzgYVQMOqD0WiKM9SJFXjbQ9i
+         aXF05BVvW5RiP/lpl9i4DCzBTj9e5G+VOXpmev+Q2HlUg4DkYYWyYqT6xo5E1wRYTsZv
+         4vPe1vpRXNgS7JBW2D42Zg+1lt63GTiFGISYSGhaZz7DCGKXiSvRxszYn/lhy4lsAOc5
+         3efA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778529831; x=1779134631; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=KDiRP/+kkoH0Z40Pl5IRdbDYWccpFBsqt+YMfO8tx44=;
-        b=QkYZa5BMHdzfqgZzfaXDA7socdDszASub78vEdRE5hbmwdOg3y9E9mbQMXDDMBPWq6
-         vZOa2LRcjAkiedKkcyi3Sj30yk3Jpmecjs4oq1TEEVMXCFlvx+Sg2M1nCcWmcjDvDM81
-         VHh1y8hxdEx9AW2/OvUux3qXiu+CRfOfGlGlKuiTfk6yBX1QUpiZTS13eMQBidLCXuYg
-         Zj1N9JjWf5iyc2Yfllwr8NPSobbxk9JrzXeUja5Mg8Dpr9swHLdvOxEQdKZr+wGJQ+2O
-         IWy4ijkStx5H3RMikQf1auQddB00K/YnvpDgxyKvOiV41BsfZp1qioiah/o1mhT1lnx8
-         wX5w==
+        d=google.com; s=20251104; t=1778530003; x=1779134803; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iaAiWK/jlnXrBb2kmro41iMZ5g6bVIAs0Q/KvlSqcaU=;
+        b=Drx9z37tjgAgivR2RVKT/H9Sv7ixVQlN/KhAusGYtP8LlQtitsR0dawdRsNY+3HqVD
+         kpnu/PXEvgimkVea2I0ypN5vq28TMWq+Mn/O6eoVfJ2kkQlY4gY6kBeu1V0j+sbfvFiR
+         a7Aweo1x0EhgwSP0jaKts73VS59U4we+dp/vyDDzzmaJ1lo/AMHgQ1umHM3n2vkYyBV3
+         XSaRbaLZ08UWe/JCkHK+r6FBHYEYMZrtYvf+vXXeUmyOLBVQinc/9HdfMxp4ZBjcMsZm
+         R9HugjF0NI8YA9yVroNjNWgDUm0G8hV51svKgKEVNhMnz+r9v1xQTtoiIDyIRGd5ONCS
+         Rqbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778529831; x=1779134631;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KDiRP/+kkoH0Z40Pl5IRdbDYWccpFBsqt+YMfO8tx44=;
-        b=C4blsnPqlH30ODM0ylkJBpkT0IenLDO6VraSGj1+ii9AE1p7cJP61VChyC1AxL6mq0
-         qiyxp42Pi52KE3Bm6fX9egyrn8IyJuF2cwTG+cPBXEReAoPshokoelHna8TfNfVc6RSS
-         JJVy/3WMSIXWmawUZWigZVChK4rBl0+JFLfIQNcWvQjSE9d87psIKzV5pVvjX7J35BSH
-         VGZYL7j20UgVxNyg3I3yFjPL7jP7w2wilKtU7cCaNF9iNTFLK8+eVWjacfvQUm76Wwp+
-         LrJqIak8fGqt+7TdeYJCWihVtBTSKuaioOGh5CJSbDfwdDHABOSxYOE0NGd07HScUEl7
-         GeLA==
-X-Forwarded-Encrypted: i=1; AFNElJ+vyU2jftjH64xeQlBnUDvC/RNUYb6WuA8M37dbxcCG6+t8cDhy2kZcVnvV0x6PUYIlwnQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAj06J8XI/B451hvYutZ2pUeVvv4AEOxH+4MqKJoFyMjMrIo9d
-	cS+/mcWvvunxh8CA23/iADgCd01HnStCO2CaRoUJ+PfcOy3kcySWkmyN
-X-Gm-Gg: Acq92OGfOlJXXYRWi3sTDbtgkwJ+UX0pC4+nBEzChtHts75buWfNe8qCoUPWs+oGSab
-	R4CHBKLGajsj0t632A54HFytjx7phso/gPjcxZz8HJxP4PrYYXNeesW6RSm+LuocDoTfWA4Otrv
-	5ymhGPwz0kSVbJOYHBCKbZFY8d2/p5aPDi5oA7Tg5O82yhqo42K7TNQCoTWGn1fPBJ+Sc5CMWA0
-	I17t8QPoQD7PppBIh8iwLzdWxNzxX9hV32nBZCYcnCllDf5ya3TcaSovfluVmh39DgxoGB78pFP
-	GUogKog5IYQ2GdwZ0Hn/CdLm+VN7+m2X3y9MGhAEVXtGLWiJTPC7FDQzYk2safJ5lbpvS6l7S9s
-	4opEQDB8BtR4LhHwa/YQwqaGIMPosED+UYy6D4SDsKRDT8QC1F20eKwXvqveqRNDdDzuGB/Lac4
-	lrCph49NrSvwo6YHUopdhPSre2ABrLTAdDaXwcQ8BP/FVwA5OBr3id
-X-Received: by 2002:a05:6a00:12c7:b0:835:3f51:72f8 with SMTP id d2e1a72fcca58-83a5bae01d5mr25059102b3a.18.1778529831417;
-        Mon, 11 May 2026 13:03:51 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83965646254sm21998536b3a.10.2026.05.11.13.03.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 13:03:50 -0700 (PDT)
-Message-ID: <966863ca988cff74c06702c26d318e8d6e2327f9.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 10/14] bpf: change logging scheme for live
- stack analysis
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org, 
-	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- martin.lau@linux.dev, 	kernel-team@fb.com, yonghong.song@linux.dev
-Date: Mon, 11 May 2026 13:03:17 -0700
-In-Reply-To: <CAP01T76nb17=8eugBG9tPgTY5p-_G4Y9=cq16eiCkFdVujChKw@mail.gmail.com>
-References: <20260410-patch-set-v4-0-5d4eecb343db@gmail.com>
-	 <20260410-patch-set-v4-10-5d4eecb343db@gmail.com>
-	 <af0gXEqD3FPFYZDj@mail.gmail.com>
-	 <639f1b0f97330c98668c00244c0a7bae19e30e3c.camel@gmail.com>
-	 <agIVpXzC_bXgJ44N@mail.gmail.com>
-	 <b063ec89e7ab548d93a892c44ede2824040ebf10.camel@gmail.com>
-	 <CAP01T76nb17=8eugBG9tPgTY5p-_G4Y9=cq16eiCkFdVujChKw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+        d=1e100.net; s=20251104; t=1778530003; x=1779134803;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=iaAiWK/jlnXrBb2kmro41iMZ5g6bVIAs0Q/KvlSqcaU=;
+        b=m6rUNgCyyC/0xouGb+RQmTgyymmWk+SVeawQFpL4war/237vNng8cf2SLSqGcTpHxD
+         FST5OccEuTgZBiBRT4j1m2nb/4a0iu3ivJR8gF5xEDMTW2DJ6nuGZ3Il3cw04X2CrmUj
+         FGfLU1jFrcolI9/UcUN9BKDQ7Me4J1yWJMcfuS9SbVDbsG1LjF+snlI1Wk37LzRG8cLA
+         4/aCbJie4+aBUJ9mDhA0KSE+d3m5tUFxDb4HXcE7V4Sp8m950pZg1/qzU3nPGhgXkK6v
+         WXW7nVoThdd8deq8AtqZW+Il/UzABhklmz2RLyh5sevutDIZP5AUMtDfgxvslANWwY3m
+         nY+g==
+X-Forwarded-Encrypted: i=1; AFNElJ/6DjVr16IDd6sxgHfvaVWO+uy+kJIQKLwtTUrS1vAJr1ePJTUVtJD6xX6FkzbSu1386hE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfzNnpttj9+z7R/ZgFK9spuGQ16HBPm9Ge2m3alVksTuJqHAYG
+	XpGIsscJL+aomvxHaCaYltX32BoVaFQFGmT74MvXAIzQCR323nrRk/qj8T30LBDVd/+dqK3Gwsf
+	NZo8r/fJ/vsX4IWJftrmUinYoefDj1J6i+jU6Nze2
+X-Gm-Gg: Acq92OF4Z4koMQXbYMKpKzt2EMM5/U/Mmguyo2LX1sw7Levch2XrBFkO0KAf5KjfkUy
+	FbOwDkWzgriQnC7cBTGY2gfrAjIm5MdRNVKCtk1H7zrM+fEqmC9SoxSGkHOdqfnUwqdgCcOe9sz
+	IOTfEJrkb2gapGBxvdxJi1SGtzD+Ph91ZkMoZQLjPKwzzYZ8kQrgH4TZl+ZQyAo1Qu6xEu457ef
+	l/1w74cmEUCJW9IyzFENRmTFLwvaRBK7YAqim2okX+9ki1vKytQnAUJikWH6V4RD2KHrveKq3li
+	NLKYdhMXEj6homHFYcP4jWRCVLPsny9CVQz/NJWOOn1u60uXnn/U
+X-Received: by 2002:a17:906:7944:b0:bc4:c901:20fc with SMTP id
+ a640c23a62f3a-bc56e5fea09mr1393779066b.30.1778530002409; Mon, 11 May 2026
+ 13:06:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260511174559.659782-2-wusamuel@google.com> <8ca6f748be9913a2ced3e9f821153bfa914c206e089626e37e32d7d27c83be09@mail.kernel.org>
+In-Reply-To: <8ca6f748be9913a2ced3e9f821153bfa914c206e089626e37e32d7d27c83be09@mail.kernel.org>
+From: Samuel Wu <wusamuel@google.com>
+Date: Mon, 11 May 2026 13:06:30 -0700
+X-Gm-Features: AVHnY4KeO5w6YEpmsSlgr9DnnAi-F6xgJF0AMvkGoo5f5Q_Eg8n5b2_v89jUAVM
+Message-ID: <CAG2KctqDYmVORfikxr=NJbyMS-RVq_ZRhStJ00Y8vioXCSmUxw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] PM: wakeup: Add kfuncs to traverse over wakeup_sources
+To: bot+bpf-ci@kernel.org
+Cc: rafael@kernel.org, pavel@kernel.org, lenb@kernel.org, 
+	gregkh@linuxfoundation.org, dakr@kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, shuah@kernel.org, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	driver-core@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com, 
+	ihor.solodrai@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2026-05-11 at 21:20 +0200, Kumar Kartikeya Dwivedi wrote:
-> On Mon, 11 May 2026 at 20:54, Eduard Zingerman <eddyz87@gmail.com> wrote:
-> >=20
-> > On Mon, 2026-05-11 at 19:45 +0200, Paul Chaignon wrote:
-> >=20
-> > [...]
-> >=20
-> > > > > I'm wondering if maybe there are other opportunities to reduce
-> > > > > verbosity here (besides [1]). Maybe we don't need to print the
-> > > > > fixed-point iterations if we're already printing the results? Or =
-maybe
-> > > > > we could put the more detailed liveness-related logs behind
-> > > > > BPF_LOG_LEVEL3 or BPF_LOG_LIVENESS?
-> > > >=20
-> > > > Had this been a normal compiler or jit engine, I'd vote for
-> > > > BPF_LOG_LIVENESS log channel, I'm not sure what our stance regardin=
-g
-> > > > user visible ABI here.
-> > >=20
-> > > IIUC, it was only released in an RC and the logs themselves are not
-> > > really part of the ABI, no? Or is there some other concern I'm missin=
-g?
-> >=20
-> > I mean the valid flag values themselves. I hope log is not an ABI,
-> > given the number of times we changed it. If BPF_LOG_LEVEL2 is considere=
-d
-> > a kernel development only thing, then splitting it into multiple channe=
-ls
-> > would actually help the developer, imo.
-> >=20
-> > > > Regarding BPF_LOG_LEVEL3, I think that the original idea behind
-> > > > BPF_LOG_LEVEL2 is that it would serve as a "debug log" that regular
-> > > > users won't need to consume. What is the motivation behind collecti=
+On Mon, May 11, 2026 at 11:27=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
+
+ [ ... ]
+
+> > +/**
+> > + * bpf_wakeup_sources_get_head - Get the head of the wakeup sources li=
+st
+> > + *
+> > + * Return: The head of the wakeup sources list.
+> > + */
+> > +__bpf_kfunc void *bpf_wakeup_sources_get_head(void)
+> > +{
+> > +     return &wakeup_sources;
+> > +}
+>
+> What stops a BPF program from using bpf_wakeup_sources_get_head() to get
+> the wakeup_sources pointer and iterating this list without taking the SRC=
+U
+> lock?
+>
+> The current API design requires BPF programs to manually call the lock/un=
+lock
+> functions, but there's no enforcement that they must do so before accessi=
 ng
-> > > > level 2 log on your CI? Is it to infer clues regarding programs
-> > > > hitting 1M instructions limit?
-> > >=20
-> > > At the moment, we collect this (1) in case of failures due to the 1M
-> > > limit and (2) to compute the maximum combined stack depth using the
-> > > per-subprog stack depths and the callgraph. (1) is not expected to be
-> > > happening often and isn't much of an issue. For (2), I'm planning to
-> > > send a patch to have the verifier report the max stack depth itself.
-> > >=20
-> > > Overall, this isn't an issue for us. We're just using a bit more memo=
-ry
-> > > and disk space. I just though the sudden increase was unexpected and
-> > > thought I'd have a look :)
-> >=20
-> > For 1M instructions, I have the code to identify loop headers, so
-> > error reporting here can be changed as follows:
-> > - count the number of times each loop header is visited
-> > - when 1M instructions limit is hit, identify the "hottest" loop
-> > - print info about the loop
-> > - if loop is supposed to converge (e.g. it is an iterator based loop)
-> >   print out the samples from states cache, noting which registers
-> >   differ between samples.
-> >=20
-> > Alongside your future patch to printout stack depth this should make
-> > log level 3 not needed for now, I think.
-> >=20
-> > Kartikeya, do we plan to do something about 1M reporting or are we now
-> > pivoting towards rust2bpf vision?
->=20
-> The main thing I'm changing is more context around an error (by
-> relating it to the source), categorization, and mitigation
-> information. For now all of this will just be appended to the existing
-> logs at the end, once I share something we can discuss specifics.
->=20
-> I do think convergence failures can use more summarized output, right
-> now, the huge volume of information makes it difficult for most users
-> to figure out why the loop fails to converge. If you have something
-> lying around for that, you should go ahead and share it. I was
-> wondering if we could avoid emitting a huge volume of info upfront by
-> identifying cases of failed loop convergence, instead of logging a lot
-> by default and then pruning it later only when the 1M limit is hit.
+> the list. A program could call bpf_wakeup_sources_get_head() and directly
+> iterate the list without proper SRCU protection, which could lead to race
+> conditions or crashes.
+>
+> An open-coded iterator would solve this by internalizing the lock:
+>
+>   Iterator new() acquires SRCU lock
+>   Iterator next() returns next wakeup_source
+>   Iterator destroy() releases SRCU lock
+>
+> This design pattern ensures that the list can never be traversed without
+> proper locking. Puranjay Mohan raised this concern in v2, but it was not
+> addressed in v3 or v4.
+>
+> Reference: https://lore.kernel.org/all/m2y0jeg5sg.fsf@kernel.org/
 
-I don't have anything specifically for error reporting, just the code
-to detect the loop structure. But I think that 1M error summarization
-should be easy to bolt on top of it. And this is an avenue to start
-landing scev related things gradually. I'll take a look.
+This was already discussed; the response is at [1] and the BPF
+iterator attempt is at [2]. In short, BPF iterators and their
+tradeoffs were explored, but the current form was chosen as the best
+option.
 
-> Rust-BPF stuff is orthogonal; we will have and still need useful
-> verification errors from the in-kernel verifier with or without the
-> Rust frontend. It is just likely a lot of the errors will be caught
-> ahead of time by encoding a lot of invariants into the Rust type
-> system, but the specifics of the solutions there are too speculative
-> right now.
+[1]: https://lore.kernel.org/all/CAP01T74KNVT2SVRR+XPbFb1vy85W=3DJkp4_yD6xv=
+TSg2avQo8AQ@mail.gmail.com/
+[2]: https://lore.kernel.org/all/20260225210820.177674-1-wusamuel@google.co=
+m/
 
-The reason I am asking is that Alexei wanted to eventually forgo 1M
-instructions limit completely.
+> > +
+> > +__bpf_kfunc_end_defs();
+> > +
+> > +BTF_KFUNCS_START(wakeup_source_kfunc_ids)
+> > +BTF_ID_FLAGS(func, bpf_wakeup_sources_read_lock, KF_ACQUIRE)
+> > +BTF_ID_FLAGS(func, bpf_wakeup_sources_read_unlock, KF_RELEASE)
+>
+> Should bpf_wakeup_sources_read_lock have the KF_RET_NULL flag?
+>
+> The function returns an SRCU index cast to a pointer (incremented by 1).
+> If wakeup_sources_read_lock() were to fail, the result would need to be
+> checked for null. Without KF_RET_NULL, the BPF verifier won't require
+> null checks on the returned pointer.
+>
+> Looking at bpf_wakeup_sources_read_lock():
+>
+> __bpf_kfunc struct bpf_ws_lock *bpf_wakeup_sources_read_lock(void)
+> {
+>     return (struct bpf_ws_lock *)(long)(wakeup_sources_read_lock() + 1);
+> }
+>
+> If the underlying wakeup_sources_read_lock() could return a value that,
+> when incremented, equals zero, or if there's any error path, BPF programs
+> would need to check for NULL before using the lock pointer.
+>
+> Puranjay Mohan raised this in v2, but it was not addressed in v3 or v4.
+>
+> Reference: https://lore.kernel.org/all/m2y0jeg5sg.fsf@kernel.org/
+>
+
+This is fine, the underlying srcu index return value is guaranteed to
+be non-negative, so the return value of bpf_wakeup_sources_read_lock()
+will be positive and not need the NULL check.
