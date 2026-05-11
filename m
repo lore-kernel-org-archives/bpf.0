@@ -1,81 +1,76 @@
-Received: from mail-pg1-f196.google.com (mail-pg1-f196.google.com [209.85.215.196])
+Received: from mail-pf1-f195.google.com (mail-pf1-f195.google.com [209.85.210.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935EF3815EA
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 14:56:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6737E2609C5
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 15:03:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778511401; cv=none; b=sLn3hZOKOj1y8Vp0HKsEEMRwGiHGVE0a4GNKyV6wRqbb5SKjo12wOJ1eNmDxFXpzIgP7s9ECQNlwcWZcyFD9v8peYpRtQe5xKKbZZje3qvdf8z0TmGIQwDw/fQkma0WtF7QFbC4IF4RY7wqnc2it0Fo6qPNpSIaCILOYqC0OSgo=
+	t=1778511811; cv=none; b=nmCcHEYu9f0AUPYHt9REuRvXaCXKh8+fIwE1uUN3ymewsEbf/sie+szytr14CsMATNQ0pAKEekAvjS+p6wg9S7hPmZipY6MmuMJMMrSwLYUnXCDyXe6YfVJedNHAhVOlMbAcRx1226qN4yWGYXnnQC+wieJU4mGiZ1Qd2z7WX+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778511401; c=relaxed/simple;
-	bh=nozqZkYqnKNHxP3Iu3Sop6z/onajxYXf0IYlzL4iAmM=;
+	s=arc-20240116; t=1778511811; c=relaxed/simple;
+	bh=FcCFzrHu4yPb9ChdGb3IYZ67Iw+sGK/r/8NLA62dU8Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f6Y6RjNNmdRoI3ed/RiRv7VCIzeRUDnfTENr5aInYtnkK6I087BGqApavXXYWnNYDHqUuOtyZg8KqpqDnjnmbN41nINf+Re+iq2f0q5v361xsueKdV4CoiTkQ+qCo5syIwIanRjR0SrVoM1UD9i2q4wn5KpCaiqhOx05i4PBh94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F1tLH/Bp; arc=none smtp.client-ip=209.85.215.196
+	 Content-Type:Content-Disposition:In-Reply-To; b=OCdwY8+yioGfrw6SHgNhYHH7nsHPzv0Jh40ibX+iMgVqbzkAtH6MEMqQmPhhrH5jml6i48zC+kItDXJUT+axFXhqCW9jgdlu3c16gr/FEUk/7rulhv0mtfn+BnVMK/6pMh0RC6QJYBBsxRJg0uoFv+urCmg9AJr2MQHk5ckyS2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eODpyZXB; arc=none smtp.client-ip=209.85.210.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F1tLH/Bp"
-Received: by mail-pg1-f196.google.com with SMTP id 41be03b00d2f7-c80291e6237so2995014a12.0
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 07:56:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eODpyZXB"
+Received: by mail-pf1-f195.google.com with SMTP id d2e1a72fcca58-82fbdd60b64so3296070b3a.3
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 08:03:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778511397; x=1779116197; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1/2XYunZZhJOj9243Vaf4F12iOGTyYZHD3g6BpnS6cA=;
-        b=F1tLH/BpqP68bSawJG2Tgwo+t1/bm+oLSP6Ns7lbYuREEBXr856W97T9rWZT12D7H2
-         pa9RMqg6X5sXFO/VTo3BZEpsbXNYtrM/H5NLNnJvkGsnVO1Kg9CBYyIgtCK3bWUKgIpa
-         BQHgjRNXKHF7YxaNtzM9vfa/r9zTisDU8vZKNfFgvA7k4UDJLjgaNTBlpqek3dmyBg8L
-         RSOAYThEDYa+1ojHwZGfKxPKp1EpQt1PJfGZ9AFJcqX9WzV6SXOAUBFLLMRTFR8YXTly
-         /ULVtA91MllQt9BFpWFhRRuufX6RaUPLHRD6g47IPnF/+kpgEX2BPuxASJ0jJeSlDRet
-         N2Hg==
+        d=gmail.com; s=20251104; t=1778511810; x=1779116610; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tXqTBRULBy1BYm3Ife8V4Q/X4vLGr/NnZVXSc/9oY2E=;
+        b=eODpyZXB+piAdEsaL164XWOwf/5wl7HT4x42iT5dRtlpnJL4hQ2AuMC2E8ODxxmXbT
+         VNuGTbCNngVmowss5J40i8UgBF2cFZGOa1aIJCVzLSS47YPjDa5kQTBJ2HqM+qI/RrT+
+         3SiPFspCMpJbWKpnpAnR/syFsirVYEi0h5paF5SB9NnPBxPP/1FVxIVORpNrY9FXjzNN
+         S6p4rkS/zATokSQqpNBHTmE7fUqMGW5VLt36A0rtTFSAO96c64FBWd58R456ImN+AIBS
+         CYIYfVfGXCwEpmjW9fNuQj9LwXoSDRnD6trBMN3dPcjr9T5syOF5UApyZ98CdqcBpEhb
+         jfhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778511397; x=1779116197;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1/2XYunZZhJOj9243Vaf4F12iOGTyYZHD3g6BpnS6cA=;
-        b=ryc90gfkWb1AqTe3+ZUKqsrOGEd1Bc32AEkDdXB9YfDG+Xlu5K001I7X5wIhG7ROk4
-         5fqGo10/SRaX4FGLl8Stf5bHjUHFjETFTZgtsr3aRtzOQMXIle1njhHW5L3SrteCVGpc
-         4mWVK0XwSv0DGS8DCIrB2MKKOnqjNhBhrDuGBjcp8maxejMG3J3ek++dhAdtPM7Ot9dN
-         Aj5+uFxEPB8/KRUGGZ95jAaeyFecZrN4NV3MS/xlyLxkRL9jo8jtjE6CbaHu9uzQ4KS1
-         nbYe9Qa3+PHDdIYYE+5yBU2yemM+rs4w5OaHHU6D5x/N5OB5gWa4WT9q3yEiU/I0y0rC
-         K9qw==
-X-Forwarded-Encrypted: i=1; AFNElJ/SDBzaeFQ8nHpyn88q0d9Zy/HtnkRpj1DsPBwTqxNVtvQgyV9vhCvhBtvXCImwzTGacPY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxY1FK3uBrPHqruSbC1i/I4lxv6tGh/CWhlQQ51RxVtfjBoSfUS
-	aybkybBnwWLyxZCgqrq2h/Kk0ffljA/vtH/oN/9oS+TWz1qSrAbgaYGuOLiKZeE/
-X-Gm-Gg: Acq92OGQoO57fqX0q1g00NAuGLlCDOSz6lcggp7Ydi92SRiEKsbfIbfwkUnTwd7ff8M
-	WImDxmp5+M0llDQwFeOlv7L8sdsIjOxrlClUoDAoA9eot5Rp0Km6O5I8vJNMWWDsaAA3Q8vYgj9
-	n2IawI99MhDVYma40LdNklhGJLqZbpRMC96qlCa5U+FgFzrQxI+AR8gP09bt9Ga4aHM2kzl8B/S
-	Podz9gYXjZOpACwjeSg5wDkWkStSQQ6cFniQ0LQWDxVBIIG5KfeK68hlZd8rXoQwiU5isuxkrew
-	d29RrsdC5nPm9exwhI9O7IkPDt2bR37StXsJmYAkdaTGfCjAP+AY7npPAg5j/szV5lpuEoNawzr
-	rPEAQ5RaGeTW0LOewQl1KNwddtlUDDTBVkySWPyndyh/8QAhxyIGtH4ZOwTtykyYp8OImAhp3bE
-	FAhK7l7E5mptilK/F+
-X-Received: by 2002:a17:903:22c4:b0:2ba:e66b:ce34 with SMTP id d9443c01a7336-2bae66bd563mr171723165ad.21.1778511396945;
-        Mon, 11 May 2026 07:56:36 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:45::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1d4057fsm103030355ad.21.2026.05.11.07.56.36
+        d=1e100.net; s=20251104; t=1778511810; x=1779116610;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tXqTBRULBy1BYm3Ife8V4Q/X4vLGr/NnZVXSc/9oY2E=;
+        b=saMalfXoXgtrnpOvmsymOXIcScEEWACKJjVbl+eKTt9ZI647QGD3JoHqAXwFfGJ0Jx
+         rKnyAKlzqTW60EAyQwCDt4VI1Jvb4DLKvEIQLv656qMPjxaIFoMja0kWcEyXUcZLsxyT
+         3HmL6P2idyJ/DiqTE9Et8Y1zXuclmkWWVZkVJpNOqJ3CrWxYmuXo5yhkxhHSLNLg5phP
+         6EmIwW/PD+i1TE66nqEkUlhDI589SZRf6dEcsJi6jiJaTqU7IJAM3qzRZ3l3FrBO55Mt
+         jaXloThLcx8IxWaedQQZaZkytU9vjD/Mn86cWjUlvinaABo+R9oudcvZXumGYXt/fIWq
+         DWuQ==
+X-Forwarded-Encrypted: i=1; AFNElJ84CgKRFlt89y+/atqNW+U6J311Epz2LWSPJnFy38N/K+SToQ+31YUGV0IS3PAVlHTNIjA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXiux6kkMD/kYZxhMQAti+AhpYQhaaiHRVhZVyfklVRDyf31E1
+	+NuDKsQ+memIjqkC7XwCMsVmB35DLc+aBUPD/xElpxpUAhukHyBEW7Jq
+X-Gm-Gg: Acq92OHLzukMYhodRLS5h7U/T0RyTefFmykkRwuFvZpF25EF6txgeL6uQ2a4vfh8QIJ
+	zATU4lCjnKd7PszOSm+jwV8mc2bVMT2RvynPuc2yGx//8ClCxOUFOgNZZYekgrnz09B4B8Os/bS
+	5upqSnySkTy/RGFGwv5ffxZxCkaPLO4bO9i8Uqx4mooB8Zbu1QsRPU4cL3no1v8cJwhG7I3uBhx
+	Iu7T9bQhrk6FSSdnCNvmBmKwZMSXlJGvkMMciM2wuvz8CwPIQbHvU4OM7qJfsVSGyoGCrgXLC2H
+	d4XkvrHWt/XviU+WVqnFYufvXEYdINjyZfEQchvTp/AQpv4bftP3kAQpL9qe2rQPr6jJ8ouf1FY
+	FwK0pDwtr84egwX7D3dWBdF6UpDirQ7p01yVKEHaNey0RSsalY9iEUTZoGwzjmqVmV8Hz0oLRES
+	td79+NPaQEQ+dALyq/
+X-Received: by 2002:a05:6a00:4c81:b0:81f:5037:a317 with SMTP id d2e1a72fcca58-83e3974c22bmr9701574b3a.11.1778511809130;
+        Mon, 11 May 2026 08:03:29 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:5b::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-839685a8125sm20717422b3a.61.2026.05.11.08.03.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 07:56:36 -0700 (PDT)
-Date: Mon, 11 May 2026 07:56:35 -0700
+        Mon, 11 May 2026 08:03:28 -0700 (PDT)
+Date: Mon, 11 May 2026 08:03:27 -0700
 From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Tenzin Ukyab <ukyab@berkeley.edu>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v1 bpf-next 3/8] bpf: tcp: Support bpf_skb_load_bytes()
- for BPF_SOCK_OPS_RCVLOWAT_CB.
-Message-ID: <agHuDeKLLUDdWXuS@devvm7509.cco0.facebook.com>
-References: <20260508073355.3916746-1-kuniyu@google.com>
- <20260508073355.3916746-4-kuniyu@google.com>
- <af390TgIj5sDABvi@devvm7509.cco0.facebook.com>
- <CAAVpQUA_HHEbcRxEVbuxtnyz_5ibvOSxO2wVx16ZQ0kKHQM7NQ@mail.gmail.com>
+To: Jason Xing <kerneljasonxing@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
+	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, ast@kernel.org, 
+	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, horms@kernel.org, 
+	andrew+netdev@lunn.ch, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Jason Xing <kernelxing@tencent.com>
+Subject: Re: [PATCH net 1/4] xsk: cache csum_start/csum_offset to fix TOCTOU
+ in xsk_skb_metadata()
+Message-ID: <agHurBlnAgjVNq-u@devvm7509.cco0.facebook.com>
+References: <20260510012310.88570-1-kerneljasonxing@gmail.com>
+ <20260510012310.88570-2-kerneljasonxing@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -84,75 +79,54 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAVpQUA_HHEbcRxEVbuxtnyz_5ibvOSxO2wVx16ZQ0kKHQM7NQ@mail.gmail.com>
+In-Reply-To: <20260510012310.88570-2-kerneljasonxing@gmail.com>
 
-On 05/08, Kuniyuki Iwashima wrote:
-> On Fri, May 8, 2026 at 8:15 AM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
-> >
-> > On 05/08, Kuniyuki Iwashima wrote:
-> > > When a TCP skb is queued to sk->sk_receive_queue, BPF SOCK_OPS
-> > > prog can be called with BPF_SOCK_OPS_RCVLOWAT_CB.
-> > >
-> > > In this hook, we want to parse the RPC descriptor in the skb
-> > > and adjust sk->sk_rcvlowat based on the RPC frame size.
-> > >
-> > > However, we cannot access payload via bpf_sock_ops.data on
-> > > modern NICs with TCP header/data split on as the payload is
-> > > not placed in the linear area.
-> > >
-> > > Let's support bpf_skb_load_bytes() for BPF_SOCK_OPS_RCVLOWAT_CB.
-> > >
-> > > Two notes:
-> > >
-> > >   1) bpf_sock_ops_kern.skb will be NULL when the BPF prog is
-> > >       invoked from recvmsg().
-> > >
-> > >   2) Access to bpf_sock_ops.data will be disabled by passing
-> > >       0 end_offset to bpf_skops_init_skb().
-> > >
-> > > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> > > ---
-> > >  net/core/filter.c | 34 ++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 34 insertions(+)
-> > >
-> > > diff --git a/net/core/filter.c b/net/core/filter.c
-> > > index 5fa9189eb772..94d07a15b2ab 100644
-> > > --- a/net/core/filter.c
-> > > +++ b/net/core/filter.c
-> > > @@ -7718,6 +7718,38 @@ static const struct bpf_func_proto bpf_sk_assign_proto = {
-> > >       .arg3_type      = ARG_ANYTHING,
-> > >  };
-> > >
-> > > +BPF_CALL_4(bpf_sock_ops_skb_load_bytes, struct bpf_sock_ops_kern *, bpf_sock,
-> > > +        u32, offset, void *, to, u32, len)
-> > > +{
-> > > +     int err;
-> > > +
-> > > +     if (bpf_sock->op != BPF_SOCK_OPS_RCVLOWAT_CB) {
-> > > +             err = -EOPNOTSUPP;
-> > > +             goto err_clear;
-> > > +     }
-> > > +
-> > > +     if (!bpf_sock->skb) {
-> > > +             err = -EPERM;
-> > > +             goto err_clear;
-> > > +     }
-> > > +
-> > > +     return ____bpf_skb_load_bytes(bpf_sock->skb, offset, to, len);
-> >
-> > nit: wondering whether it's better to use __bpf_skb_load_bytes (which
-> > wraps BPF_CALL_4's ____bpf_skb_load_bytes) here? Seems a bit less
-> > magic and used already by dynptr?
+On 05/10, Jason Xing wrote:
+> From: Jason Xing <kernelxing@tencent.com>
 > 
-> I guess dynptr used it because dynptr is in a different file under kernel/.
+> The TX metadata area resides in the UMEM buffer which is memory-mapped
+> and concurrently writable by userspace. In xsk_skb_metadata(),
+> csum_start and csum_offset are read from shared memory for bounds
+> validation, then read again for skb assignment. A malicious userspace
+> application can race to overwrite these values between the two reads,
+> bypassing the bounds check and causing out-of-bounds memory access
+> during checksum computation in the transmit path.
 > 
-> Users in the same file (sk_reuseport_load_bytes() and
-> sk_reuseport_load_bytes_relative()) call ____bpf_skb_load_bytes()
-> directly and clang inlined it there (including __bpf_skb_load_bytes())
-> while dynptr tail-called __bpf_skb_load_bytes().
+> Fix this by reading csum_start and csum_offset into local variables
+> once, then using the local copies for both validation and assignment.
 > 
-> I see the point (I had to read BPF_CALL_4() macro for ____), but
-> ____bpf_skb_load_bytes() looks better.
+> Note that other metadata fields (flags, launch_time) and the cached
+> csum fields may be mutually inconsistent due to concurrent userspace
+> writes, but this is benign: the only security-critical invariant is
+> that each field's validated value is the same one used, which local
+> caching guarantees.
+> 
+> Closes: https://lore.kernel.org/all/20260503200927.73EA1C2BCB4@smtp.kernel.org/
+> Fixes: 48eb03dd2630 ("xsk: Add TX timestamp and TX checksum offload support")
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> ---
+>  net/xdp/xsk.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 6bcd77068e52..cd039e397018 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -722,6 +722,7 @@ static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
+>  			    u32 hr)
+>  {
+>  	struct xsk_tx_metadata *meta = NULL;
+> +	u16 csum_start, csum_offset;
+>  
+>  	if (unlikely(pool->tx_metadata_len == 0))
+>  		return -EINVAL;
+> @@ -731,13 +732,15 @@ static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
+>  		return -EINVAL;
+>  
+>  	if (meta->flags & XDP_TXMD_FLAGS_CHECKSUM) {
+> -		if (unlikely(meta->request.csum_start +
+> -			     meta->request.csum_offset +
+> +		csum_start = meta->request.csum_start;
+> +		csum_offset = meta->request.csum_offset;
 
-SG!
+Wondering if it's better to READ_ONCE(x) these?
