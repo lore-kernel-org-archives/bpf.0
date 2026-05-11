@@ -1,89 +1,154 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C81A3BADAA
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 09:23:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D97F3BD63D
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 09:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778491414; cv=none; b=Hdm98iovka36lieXxHPzRVKG86Imfb6z+ofJlYLlEzCe03impOuP+IsILRSIZB6a86HObgVcbBivnE+wEBNQfh6M6t4CJIOtl0d6/uJOwlAXBzMWKfMF1zd6FEdoUAqBfc8xfm/YbSzLe64LmGtk2+D7CtlmQNBlP5MPJCHqVyQ=
+	t=1778492433; cv=none; b=NzZoJnFKHZn/smQXzCw2u5107GOx77NY9e0V8nnfuHWRDLPsI+D+6PUQr4rcI91rgAEgG4fc8bbgz0WLna/iFdTX71LxGxt82Z86UpQq+OzW5FsHsuvUqCZcEXM+cbyZGZM3yCHdR2O4jxV6+7WxY6Ks9f704R01tcRJEgJAZAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778491414; c=relaxed/simple;
-	bh=oF4xWteD18oSvLHkF9DNNOX9tlRtpwmGkZWvQDji0ug=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gMHy/dIwKan5oIcpS6LH2IMPzyF+9Gso7USQ3hm5JFRxM8YTiFEjJhH3w/UJgKbs3sDGu3a8Z9n1UtxL+hesgCRvABkqOBemvVlEAByyMH1QO9DsttzG3Z0DVyhJyGY8tamTaONNvu+gsE3teXGpGS3gyMOZ0rop0VvEDY/9hE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sZMHXIyZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778492433; c=relaxed/simple;
+	bh=GZ4NrDNTzCbRg7T2sHGbvZtWMZOez+5OwOOwcrRukTE=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=O1DxJ1UWguhfxJQpzVOwEqEnuDLvN9vPTDsjLqFuA7//z/bF2T6HJQZpkZvbgW/o64fxkxvJfo4uS7V9E6zbNjrWsTa3A2JDN++iG2cuT7qPnXCsfHKifpZHI8o4uX+0rfGb3LoBVgNJithM3xoeLbYofv2BMvpRd8+y3X9NZXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sgIA4ISj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sZMHXIyZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E04B1C2BCC9;
-	Mon, 11 May 2026 09:23:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sgIA4ISj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7A0FC2BCB0;
+	Mon, 11 May 2026 09:40:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778491414;
-	bh=oF4xWteD18oSvLHkF9DNNOX9tlRtpwmGkZWvQDji0ug=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sZMHXIyZBSIrWs4FFt/ZKbD2FciMLY2jteXOphO9UpMerDpFPeSngoijYCqBe9yrD
-	 g1e9noqHHnKclRBaEObvNIAco82H+aLRaZCVhyr8cHh7G8krxEn9kaEg07HrTPtyJl
-	 t2YQu9BxP40hw+tmFS+NSizIiwL9my6bfPRyovebrcZ0W8RCWcyBJ/9fv6rv4ccQir
-	 /OdzDrM3lhOGRKcWRi+I7mRCojDVaDoMewwX8+EFbYc1APZVX3XCPs7hEDML67ROat
-	 mg+itkOqg8n8HgRWvjRULOkLsW2WeQ1H7zPiS1DZSmzDvemPdCIWOgaiClCjSXDMKx
-	 6MponkVkg7xYg==
-From: Christian Brauner <brauner@kernel.org>
-To: Matt Bobrowski <mattbobrowski@google.com>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Jan Kara <jack@suse.cz>,
-	Quan Sun <2022090917019@std.uestc.edu.cn>,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2] bpf: fix crash in bpf_[set|remove]_dentry_xattr for negative dentries
-Date: Mon, 11 May 2026 11:23:09 +0200
-Message-ID: <20260511-anziehen-kringeln-26b280c04ce9@brauner>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260430073836.2894001-1-mattbobrowski@google.com>
-References: <20260430073836.2894001-1-mattbobrowski@google.com>
+	s=k20201202; t=1778492433;
+	bh=GZ4NrDNTzCbRg7T2sHGbvZtWMZOez+5OwOOwcrRukTE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=sgIA4ISjIOOG2WVBoRfpWpWSCKtc49kSso+lc65pASWSWXThyUH3FZAsTWjckNutu
+	 V2nUuBZOSAaFDOGarhAui4//89ytcMgwASveCDDp9m1LWT+M9C3AxV3Ista6lLdTxm
+	 bTMFtJG6zSliAK+OKfSeHy1ag1kzFcV0Q0F9yaaN6+CpMuf091TVai5Bl/l8IUAooD
+	 YdfNcTJZp+zrcH07Qhaczupgg2KPJAbEf55XNqH8JqwfjSDn0W1QONSM6bXWbUgl1y
+	 7Nd0bHmHzDcMxPuU3N3p82RuMqS/hqXKTUXeV+OpG8sYungwOWbaTKDmgVpkw0kByK
+	 qrMhhTk0p4B+Q==
+Content-Type: multipart/mixed; boundary="===============3901398826449329569=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1306; i=brauner@kernel.org; h=from:subject:message-id; bh=oF4xWteD18oSvLHkF9DNNOX9tlRtpwmGkZWvQDji0ug=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQxLuB7P5mh+oxH9OrORb9OP33dwre18q5lFOMW02yG+ w828ssndpSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEwktJPhn33bYeW7dxI85WrW T84REpIW4CtfKvFkq5botcnn6nfyxDMyvLBvSDv6PNh+17oHMYorFrOeOvYoeHrjFmGJu082FMx W4AcA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+Message-Id: <a310c8a6fbd8442e4976bb9b80156376bc6c1fe668ddcf94052822924835949c@mail.kernel.org>
+In-Reply-To: <20260511085344.3302-2-mahe.tardy@gmail.com>
+References: <20260511085344.3302-2-mahe.tardy@gmail.com>
+Subject: Re: [PATCH v1 1/4] bpf: Add netpoll kfuncs for sending UDP packets
+From: bot+bpf-ci@kernel.org
+To: mahe.tardy@gmail.com,bpf@vger.kernel.org
+Cc: andrew+netdev@lunn.ch,andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,davem@davemloft.net,eddyz87@gmail.com,edumazet@google.com,john.fastabend@gmail.com,kuba@kernel.org,martin.lau@linux.dev,pabeni@redhat.com,song@kernel.org,liamwisehart@meta.com,mahe.tardy@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 11 May 2026 09:40:32 +0000 (UTC)
 
-On Thu, 30 Apr 2026 07:38:36 +0000, Matt Bobrowski wrote:
-> bpf_set_dentry_xattr and bpf_remove_dentry_xattr BPF kfuncs attempt to
-> lock the inode of the supplied dentry without checking if it is
-> NULL. If a negative dentry is passed (e.g. from
-> security_inode_create), d_inode(dentry) returns NULL, and
-> inode_lock(inode) will cause a NULL pointer dereference.
-> 
-> Trivially fix this by adding a NULL check for inode before attempting
-> to lock it, returning -EINVAL if it is NULL.
-> 
-> [...]
+--===============3901398826449329569==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Applied to the vfs-7.2.kfunc branch of the vfs/vfs.git tree.
-Patches in the vfs-7.2.kfunc branch should appear in linux-next soon.
+> The API consists of four kfuncs:
+>
+>   bpf_netpoll_create()   - Allocate and set up a netpoll context
+>                            (sleepable, SYSCALL prog type only)
+>   bpf_netpoll_acquire()  - Acquire a reference to a netpoll context
+>   bpf_netpoll_release()  - Release a reference (cleanup via
+>                            queue_rcu_work since netpoll_cleanup sleeps)
+>   bpf_netpoll_send_udp() - Send a UDP packet (any context, LSM prog
+>                            type only for now)
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+The commit message states bpf_netpoll_send_udp() is "LSM prog type only
+for now," but looking at the implementation in bpf_netpoll_kfunc_init(),
+the function registers netpoll_kfunc_set using BPF_PROG_TYPE_UNSPEC:
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+net/core/bpf_netpoll.c:bpf_netpoll_kfunc_init() {
+    ...
+    ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
+                                           &netpoll_kfunc_set);
+    ...
+}
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
+Per bpf_prog_type_to_kfunc_hook() in kernel/bpf/btf.c, BPF_PROG_TYPE_UNSPEC
+maps to BTF_KFUNC_HOOK_COMMON, which makes the kfunc available to ALL BPF
+program types, not just LSM.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-7.2.kfunc
+The check in btf_kfunc_is_allowed() tests BTF_KFUNC_HOOK_COMMON first and
+returns true if the kfunc is present there, so any program type (tracing,
+kprobe, XDP, sched-cls, etc.) can call bpf_netpoll_send_udp().
 
-[1/1] bpf: fix crash in bpf_[set|remove]_dentry_xattr for negative dentries
-      https://git.kernel.org/vfs/vfs/c/07410646f6ff
+Is the commit message stale, or should the registration be
+BPF_PROG_TYPE_LSM instead of BPF_PROG_TYPE_UNSPEC to match the stated
+design?
+
+> diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
+> --- a/drivers/net/Kconfig
+> +++ b/drivers/net/Kconfig
+
+[ ... ]
+
+> diff --git a/include/linux/bpf_netpoll.h b/include/linux/bpf_netpoll.h
+> --- /dev/null
+> +++ b/include/linux/bpf_netpoll.h
+
+[ ... ]
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> diff --git a/net/core/Makefile b/net/core/Makefile
+> --- a/net/core/Makefile
+> +++ b/net/core/Makefile
+
+[ ... ]
+
+> diff --git a/net/core/bpf_netpoll.c b/net/core/bpf_netpoll.c
+> --- /dev/null
+> +++ b/net/core/bpf_netpoll.c
+> @@ -0,0 +1,209 @@
+
+[ ... ]
+
+> +BTF_KFUNCS_START(netpoll_kfunc_btf_ids)
+> +BTF_ID_FLAGS(func, bpf_netpoll_send_udp, KF_RCU)
+> +BTF_KFUNCS_END(netpoll_kfunc_btf_ids)
+> +
+> +static const struct btf_kfunc_id_set netpoll_kfunc_set = {
+> +	.owner = THIS_MODULE,
+> +	.set   = &netpoll_kfunc_btf_ids,
+> +};
+> +
+> +BTF_ID_LIST(bpf_netpoll_dtor_ids)
+> +BTF_ID(struct, bpf_netpoll)
+> +BTF_ID(func, bpf_netpoll_release_dtor)
+> +
+> +static int __init bpf_netpoll_kfunc_init(void)
+> +{
+> +	int ret;
+> +	const struct btf_id_dtor_kfunc bpf_netpoll_dtors[] = {
+> +		{
+> +			.btf_id       = bpf_netpoll_dtor_ids[0],
+> +			.kfunc_btf_id = bpf_netpoll_dtor_ids[1],
+> +		},
+> +	};
+> +
+> +	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
+> +					&netpoll_init_kfunc_set);
+> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
+> +					       &netpoll_kfunc_set);
+> +	return ret ?: register_btf_id_dtor_kfuncs(bpf_netpoll_dtors,
+> +						  ARRAY_SIZE(bpf_netpoll_dtors),
+> +						  THIS_MODULE);
+> +}
+> +
+> +late_initcall(bpf_netpoll_kfunc_init);
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25660780250
+--===============3901398826449329569==--
