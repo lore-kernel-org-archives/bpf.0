@@ -1,178 +1,226 @@
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE944266A0
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 16:53:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778518402; cv=none; b=V3BPvFgeVJyp83sjoAr7OhQVmyNxvacPKisYJil6/TtOF9GhzPHma7ixFKXBxnz54T0SM9M19xLrpqJbMCLlJBsV2FOujAShTyB6EZOk5aTEyc9vTXt3KmsVWQ02da1JhtlosAa3E5dMTj3QYkvdYbK24MZuarIdhdhcWqELRU0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778518402; c=relaxed/simple;
-	bh=NDr89ZHqjMmSAUjSSYDe/cY3Eiu1jte8P7RxS6azPjU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=W0Wk2zUCGM6m3b4zm0U2DqG6QZ6vHVVxCvkWjFrylfpLLzYC9UMinAh8J/Iqct/NidyCyMpYvLueGGWxJ556Dr7UERcyELXlLCIeyt+iysGHh7IfqVrNrqeVIkYCLXS8gwgAIH9/zx1QeHvOqFvsvGTEvV1y/TdzETboJecTb5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ljDLeVW/; arc=none smtp.client-ip=209.85.161.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5348E43CEE3
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 16:53:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778518408; cv=pass; b=EOTaiXbOP+bi2VyJbyd62U/SZpv9yTNvB/hH3flBxDV+fj8emGWhMsW16uLttXPdsppsPq1Um5fgFte5Z9wj4Djhmx44Lt+0N23/1Rwo4apdf9+5KfgLZa7p+z8GJUVLdDq5BFQ42pcPOqAjcjmBpnCGinWGesKzWbllxFNtCBc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778518408; c=relaxed/simple;
+	bh=WK5T5JfvYsoXwLxh3vVykUD2mRLGy3+mpvWaIBQy8/o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p/ww/bJi8bW4/4Ar2xgx19XQJRlZ+p4S2VvSN3qixY4QOQiAsKw71areqGdOEs0mq5UE/zkXOGqophCdnh1u2YVV3OkXLVkSMNjTsR8/roBzw+0Ug2szOOTZEvFvWpOg8HB470kdR57Ew4/slxCmRQkK33Tr52nUKCtz8FOYalE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NFbPJWQs; arc=pass smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ljDLeVW/"
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-685017d0fbcso2495184eaf.3
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 09:53:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NFbPJWQs"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-36608b2f2dcso3011765a91.2
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 09:53:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778518407; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Tbn6H5ZxIazyiGlhaih10J2d/YVxVPZlLEM37FKRCUY0e/j0HjX5pbRQ7B1qTCpdTG
+         L+K522GZYszG0lOgjhIIbajgQhjs9qRoW0OBoQv7Rd3qAFxM0728uFxJIHVse1aZ1N5g
+         h6IOoahksRAS/dtthUk2u49Qf9usMAmJBOtDfdVagUP3cmDYlvfY40LKmOsaxqb8hqQ3
+         13eKJCIOyIfjN5szvR5dH3PcAydhomtN9KgGkQm6WQi09H1StR9CSPn7GAAM475IVeAW
+         G1+w0M0581wT9zRZvxKv14sTeb/k5vAJuSl98RyZSw43nCyrO8aZ8CgrSle4GHTIr/s3
+         00cA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=pum98GMtwdOZuFVkPRuk8QjOK36LqVQS2DrUcasrMj0=;
+        fh=WeaNIRDJTCNp6pe3IxIEcp7GLibgX6biTAFzx3y7Zbc=;
+        b=WvdvbYmtCxjrrRuRuV10JiZDg/dSjmjhuOXfNdmYf/4lsGpURd231o4aVXBqiqHgXk
+         05QNGFk4lvYS/2Esj2bxa1XCnH2LVCJhL34nFBNsJ+zfBCuGvlyib3ImhZtc5BIQAvIg
+         F+PnaH2P0czof11+1K6cOcHugng7SAskb370z1Yv8NSMsk0MyLYdcrFQaBHrKnExaQOR
+         IhLNki6IYSpMIBClFNQ7djYkCa8a1WdSsYCjFwn7I9QKlBtV23n7+5O4HBOKy64TJ7a2
+         JPg/QrQn3zqLyMh1hQ6ed8oVyiXsxI/qjCotKNyp3OFmBZl1ngSb/R04mJNzL+E8EIbt
+         Zgbw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778518400; x=1779123200; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1778518407; x=1779123207; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JavA89CInqrRT0axMkoFaX73nwP/5TwmJupoBxqRvFM=;
-        b=ljDLeVW/UM0cgDttn8g3cTL06JrkMAr9PVMUHZx9PVOpYUxTGeS/Mi3jvg38dkJy45
-         H+HsLHXM+MLVLybFkrw1EqYr53HcoUa3OEI9KsIbEeLB9EYzRGEuxMVzrTWaOGPVK6wu
-         e69zT8HiyPrO1q6kPTejnZJ8gWq4SXVZeAvEoZCZbNsfMu2gC934/RPGwvaW2OjcREpC
-         lOf1sujSjWYhwHEwz2JgzV1TeHIhCpCWUrFN2c8YljUpQtn8ABDCCut1FBnKr2i5SNTH
-         +BnZuRBFDTtkFx876Q9gAMSHmjPi8YU+/IhwbMehVPyFsGOcLT0vRSIARBvS6MXqmWYZ
-         oiLA==
+        bh=pum98GMtwdOZuFVkPRuk8QjOK36LqVQS2DrUcasrMj0=;
+        b=NFbPJWQs60hn/YdSFhL8piqnhuXq6eBvGgBvGa831blaN2aAe91Wx8MCfl/3E8Q8II
+         DCYhPbeXPZjF0+MvDkFfpWX1bEDwnFelUqZ2DzuUTD26TzvM4XIV7obpOqHbR7BM50ti
+         3gQRnaIBpGPeo+R+Kh8ehjUtAY7aSVFtGkMh4ubHZZUKNAS3sADWEwOaw6VrD6PHCNtB
+         HJimAJj9Nrs6ZUU+2iI4ykGzL6npkf9Rzd2BeEFJFfekK+sqfXxJRGW8MCFoNIz2sRVy
+         kNq13FfD7j/JELl+Ab8SUsEgp/zYsc2bCLyAV0JKomUnt4ipZqegtk7X+FJUA3PvrB0Y
+         ncIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778518400; x=1779123200;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JavA89CInqrRT0axMkoFaX73nwP/5TwmJupoBxqRvFM=;
-        b=g2bvlZ0Jji/JbGwVWt9R7uyWVGOHgSVDw2+XNZ5VmnxqATtvvN9BOH6pYI49R+XOy9
-         ttJDW5ptF7RueffG14J70bcKIgr2unmPpjbXCVYr38QdWC1H1tjeIWW2bQo2gZ5s4uU3
-         ojkvibhB2D7O9zz4+AIzhqQzQ4b5IIYIdyPTgeApV1D7NVimSbpiobiNtX2/Ce9Y+9tc
-         k3TPoo2EK4i5AbegJYbkL7LRfg0ntnoCmtl5O4jzfsSsgRFm5/T7zW57igtgNtcmex6a
-         PCmwhqYpZqNy6MFqxuA69upNwup6XMm2TMk60vh5gwPWHN6m6RFYRuOJcJtFNtjELXSp
-         7dFA==
-X-Forwarded-Encrypted: i=1; AFNElJ/XV7bI4Trvnsgg41FehLDNizVh9rR/xMy/l3mHHUU48N3XXmbBrmtWmv5oEdFzh4Le3R8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0j6Q608H7tC+vxG2y4hmJmffR3V9rTogTDoiWfxlVRlkkpRM2
-	dgqOz879BNNpJx2NoL0l9YzacJ42tMFtn38v0y9rm9FQPAXfPW3L1S7j
-X-Gm-Gg: Acq92OHLjFfE68vb2ypfEYBbSmcc7d9sfQ2RnBfVQp+VdSLdT/X8LixXRa8IgpYfFpO
-	w/9onbNpriSZA34mG9eTXj4n+0iEP0ErSZ+Bqzt1IQFoD3GDLwSnC3vAwK1d6owUqDxFcXe5+wz
-	rXtizFORWeEBspMounujvVNrugqeNL8M8978VjOOAo/qfxnPPCTNPh6XB4WCX0xGEebxnjDWtc2
-	orqTr4RQDykiDi1nDJKTqHpK1nNquR9raA697AWYr5a4H6LzUX9r50gvTFOO5THdRpS7yaYqxIH
-	zhbeqRExWAjGASz3tPYJmutqY8afaXmqyvl9ftDmGBqZ4hRbk8IVOwdCZ6/uMjjrph2DWV8LlZo
-	suMjcDvBTCzQ5aKvIP4zwb4Oc6HPPKYogPWOlxq4Juc211WQW868cZAQs8hOkfyNlmem0ZM81/k
-	BDRLoPTsyOTB1WlqOdqiYYqv1Rn5EN4niiLDUt15buzFyySFKkQj9SMmqkB6WHmWgJ2/6X0OnUC
-	TKdrvmnBlbDgT3X052sGeTWy24MYuZ4oLA6R5g=
-X-Received: by 2002:a05:6820:986:b0:694:8b08:b916 with SMTP id 006d021491bc7-69b25c88aecmr8116691eaf.35.1778518399975;
-        Mon, 11 May 2026 09:53:19 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:49::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69b25c75d08sm6137740eaf.4.2026.05.11.09.53.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 May 2026 09:53:19 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778518407; x=1779123207;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=pum98GMtwdOZuFVkPRuk8QjOK36LqVQS2DrUcasrMj0=;
+        b=HZpPdcLZk/JJ+/BUh2Chn65KumOGUK5HgujDNx4JJ/ZuKjtSFjYiSTHfZIAIyCJEkU
+         2/klbpr/cw6bXOb0Op+m2pj9c6D4XAMH+KIPWbw5OW1bCtjqWpvYfd/elsiGpvaKYewJ
+         q3KViOnU1ZRbH0TDBYXbKpL4MqP9ZY+6w4nHAIsjhJM+RRlFk4WWiBydpQN0xr8IdIaQ
+         Ep1od5JW8rIAVxCib2GyaIpWQ3lwOTUuedKgFB+9wj7F9l0L4z9Wpc6Sx4P6XBn770zU
+         zXBhLqZNjpcG77ykExD02nXsB3DjhKpWkF9k7qBylD4L2IFD1HX/8RsFZ3YEOzjqliHV
+         e6Mg==
+X-Forwarded-Encrypted: i=1; AFNElJ8aSZcm6ZGyy8LkOqg4Y8Htun/t4F8yJjx92gOEULEflHuo72iSAWNtaNrdExd6gKi1op8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFOLd4+bf0RaPuuydr+Zk7TJKEfzZr5G912dAsj+m1fBqpbILW
+	JeULCAoBG6/7T9y8KmMaeC07YetqEYLw264tTDKiWRLxaKu8xUmh/MAlM9Df/RkTdBkckZmjY5l
+	FGcSpRn1hIVV4lRpq1aLZfDbrnb1yCn8=
+X-Gm-Gg: Acq92OHc1FKbpa47xRvISYgpHwls2XAzusu7+lCXykU0sZvJqls89vk47KbBggoiTOS
+	I0i8ydxkvDEXQyb7LtLNhie8VG0aFlAegLVYDUnzerSV/8+gaZtD6J9fgGwrZSRyqwGyZ/GJXvJ
+	2NPSvsTMwPnLhsgB36z4j+mUzEpzkezVZeUccaFSNzhtfg6sxa0bqc/49Sv+BZ3tGMoCGbfmThR
+	H08MaG1up0eND7tWUuGy4qcSnfBGYu+KXmJJWMByaU9xE16BaDcgi/eEqU7W+H/Dk+x5dP6h1AO
+	/IHUpAml+Nwnror1fazGLzQ=
+X-Received: by 2002:a17:90b:590f:b0:368:5367:d679 with SMTP id
+ 98e67ed59e1d1-3685368061emr4750343a91.9.1778518406654; Mon, 11 May 2026
+ 09:53:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260509003146.976844-1-andrii@kernel.org> <20260509020243.223B1C2BCB0@smtp.kernel.org>
+ <CAEf4BzbS0512oBcnPsPKrLiVWtDoevqS1Yvv-DHwCsDX0vANig@mail.gmail.com>
+In-Reply-To: <CAEf4BzbS0512oBcnPsPKrLiVWtDoevqS1Yvv-DHwCsDX0vANig@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 11 May 2026 18:53:14 +0200
+X-Gm-Features: AVHnY4Lhchp7Sb50uPy0gGXFoX3gjQq3-1IcZFAkpdI-p4Og-OGlBKDCAI9-jP8
+Message-ID: <CAEf4BzaLU_VaA7R3fUuPkk9QMF4rLYKKzrr8Z5F2MJJMPb+6qw@mail.gmail.com>
+Subject: Re: [PATCH bpf 1/2] uprobes/x86: Fix red zone clobbering in nop5 optimization
+To: sashiko@lists.linux.dev
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 11 May 2026 09:53:17 -0700
-Message-Id: <DIG05KI4QZ2H.3JE4OWSK6KC29@gmail.com>
-Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
- <andrii@kernel.org>, <martin.lau@linux.dev>, <eddyz87@gmail.com>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <kpsingh@kernel.org>,
- <sdf@fomichev.me>, <haoluo@google.com>, <jolsa@kernel.org>,
- <shuah@kernel.org>, <brauner@kernel.org>, <sforshee@kernel.org>,
- <yuichtsu@amazon.com>, <aalbersh@redhat.com>, <willemb@google.com>,
- <kerneljasonxing@gmail.com>, <chen.dylane@linux.dev>, <yatsenko@meta.com>,
- <memxor@gmail.com>, <a.s.protopopov@gmail.com>, <ameryhung@gmail.com>,
- <rongtao@cestc.cn>, <linux-kernel@vger.kernel.org>,
- <linux-api@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <kernel-patches-bot@fb.com>, <martin.lau@kernel.org>, <clm@meta.com>,
- <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v13 1/8] bpf: Extend BPF syscall with common
- attributes support
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <bot+bpf-ci@kernel.org>, <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc
-References: <20260511152817.89191-2-leon.hwang@linux.dev>
- <810f123d14450d09d147d90dea25ddf5091e636542fcc5729d0594bfbd622757@mail.kernel.org>
-In-Reply-To: <810f123d14450d09d147d90dea25ddf5091e636542fcc5729d0594bfbd622757@mail.kernel.org>
 
-On Mon May 11, 2026 at 9:19 AM PDT, bot+bpf-ci wrote:
->> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
->> index f5639d5ac331..50055ab73649 100644
->> --- a/include/linux/syscalls.h
->> +++ b/include/linux/syscalls.h
->> @@ -936,7 +936,8 @@ asmlinkage long sys_seccomp(unsigned int op, unsigne=
-d int flags,
->>  asmlinkage long sys_getrandom(char __user *buf, size_t count,
->>  			      unsigned int flags);
->>  asmlinkage long sys_memfd_create(const char __user *uname_ptr, unsigned=
- int flags);
->> -asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned =
-int size);
->> +asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned =
-int size,
->> +			struct bpf_common_attr __user *attr_common, unsigned int size_common=
-);
->>  asmlinkage long sys_execveat(int dfd, const char __user *filename,
->>  			const char __user *const __user *argv,
->>  			const char __user *const __user *envp, int flags);
+On Mon, May 11, 2026 at 9:38=E2=80=AFAM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> [ ... ]
+> On Fri, May 8, 2026 at 7:02=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+> >
+> > Thank you for your contribution! Sashiko AI review found 2 potential is=
+sue(s) to consider:
+> > - [Critical] `resolve_uprobe_addr()` unconditionally uses `current->mm`=
+, causing `is_optimized()` to fail when called from tracer context, which l=
+eads to target instruction stream corruption and potential kernel panics.
+> > - [High] Exhausting a process's trampoline page slots permanently disab=
+les nop5 optimization for that uprobe across the entire system.
+> > --
+> >
+> > commit 2c63c19710be8b050bc0e126d84e52c24209e062
+> > Author: Andrii Nakryiko <andrii@kernel.org>
+> > Date:   Sat May 9 00:30:56 2026 +0000
+> >
+> > uprobes/x86: Fix red zone clobbering in nop5 optimization
+> >
+> > The x86 uprobe nop5 optimization currently replaces a 5-byte NOP at the
+> > probe site with a CALL into a uprobe trampoline. This commit changes th=
+e
+> > optimization to use JMP instead, introducing a trampoline page with slo=
+ts
+> > to handle register state saving and jumping to the syscall.
+> >
+> > > diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+> > > index ebb1baf1eb1d0..7e1f14200bbbf 100644
+> > > --- a/arch/x86/kernel/uprobes.c
+> > > +++ b/arch/x86/kernel/uprobes.c
+> >
+> > [ ... ]
+> >
+> > > @@ -761,147 +785,153 @@ void arch_uprobe_clear_state(struct mm_struct=
+ *mm)
+> > [ ... ]
+> > > +static bool resolve_uprobe_addr(unsigned long ip, unsigned long *pro=
+be_addr)
+> > >  {
+> > > -     struct vm_area_struct *vma =3D vma_lookup(current->mm, ip);
+> > > +     struct uprobes_state *state =3D &current->mm->uprobes_state;
+> >
+> > Can this cause a NULL pointer dereference or instruction corruption whe=
+n
+> > executed outside the target task's context?
+> >
 >
->> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/b=
-pf.h
->> index 677be9a47347..16ff0968fc21 100644
->> --- a/tools/include/uapi/linux/bpf.h
->> +++ b/tools/include/uapi/linux/bpf.h
->> @@ -994,6 +994,7 @@ enum bpf_cmd {
->>  	BPF_PROG_STREAM_READ_BY_FD,
->>  	BPF_PROG_ASSOC_STRUCT_OPS,
->>  	__MAX_BPF_CMD,
->> +	BPF_COMMON_ATTRS =3D 1 << 16, /* Indicate carrying syscall common attr=
-s. */
->>  };
+> ...
 >
-> [ ... ]
+> >
+> > Could we pass the correct mm struct down from is_optimized() to
+> > resolve_uprobe_addr() instead of relying on current->mm?
 >
->> @@ -1500,6 +1501,13 @@ struct bpf_stack_build_id {
->>  	};
->>  };
->>
->> +struct bpf_common_attr {
->> +	__u64 log_buf;
->> +	__u32 log_size;
->> +	__u32 log_level;
->> +	__u32 log_true_size;
->> +};
->> +
+> yes, good observation, I'll change resolve_uprobe_addr() to accept
+> mm_struct directly
 >
-> Should log_buf use __aligned_u64 instead of plain __u64?
+> >
+> > [ ... ]
+> >
+> > > @@ -1113,8 +1149,9 @@ static int __arch_uprobe_optimize(struct arch_u=
+probe *auprobe, struct mm_struct
+> > >  {
+> > >       struct uprobe_trampoline *tramp;
+> > >       struct vm_area_struct *vma;
+> > > +     unsigned long slot_vaddr;
+> > >       bool new =3D false;
+> > > -     int err =3D 0;
+> > > +     int slot, err;
+> > >
+> > >       vma =3D find_vma(mm, vaddr);
+> > >       if (!vma)
+> > > @@ -1122,8 +1159,17 @@ static int __arch_uprobe_optimize(struct arch_=
+uprobe *auprobe, struct mm_struct
+> > >       tramp =3D get_uprobe_trampoline(vaddr, &new);
+> > >       if (!tramp)
+> > >               return -EINVAL;
+> > > -     err =3D swbp_optimize(auprobe, vma, vaddr, tramp->vaddr);
+> > > -     if (WARN_ON_ONCE(err) && new)
+> > > +
+> > > +     slot =3D tramp_alloc_slot(tramp, vaddr);
+> > > +     if (slot < 0) {
+> > > +             if (new)
+> > > +                     destroy_uprobe_trampoline(tramp);
+> > > +             return slot;
+> > > +     }
+> >
+> > If a process exhausts its trampoline page slots, will this permanently
+> > disable the nop5 optimization for this uprobe across the entire system?
+> >
+> > If get_uprobe_trampoline() returns a reachable trampoline that is compl=
+etely
+> > full (all 256 slots used), tramp_alloc_slot() returns -ENOSPC. This err=
+or
+> > propagates up to arch_uprobe_optimize(), which handles failures by sett=
+ing
+> > the ARCH_UPROBE_FLAG_OPTIMIZE_FAIL bit on auprobe->flags.
+> >
+> > Since struct arch_uprobe is shared across all processes tracing the sam=
+e
+> > inode and offset, hitting the 256-slot limit in any single process seem=
+s
+> > to permanently blacklist the probe from being optimized system-wide for
+> > all other processes, even if those processes have completely empty
+> > trampolines.
+> >
+> > Should get_uprobe_trampoline() also check if the trampoline has availab=
+le
+> > slots before returning it, or can the failure be handled without settin=
+g
+> > the global failure flag?
 >
-> Looking at other pointer-bearing fields in the BPF UAPI, they consistentl=
-y
-> use __aligned_u64. For example, the existing BPF_PROG_LOAD log_buf in uni=
-on
-> bpf_attr is declared as:
->
->     __aligned_u64 log_buf;  /* user supplied buffer */
->
-> The __aligned_u64 attribute forces 8-byte alignment on all architectures,
-> including 32-bit systems where native unsigned long long alignment is onl=
-y
-> 4 bytes. Without this attribute, struct bpf_common_attr will have differe=
-nt
-> layouts between 32-bit and 64-bit ABIs:
->
-> - 32-bit: 20 bytes, 4-byte aligned
-> - 64-bit: 24 bytes (4 bytes of tail padding), 8-byte aligned
->
-> While the current __sys_bpf() implementation with bpf_check_uarg_tail_zer=
-o()
-> and min_t() capped copying handles this gracefully, deviating from the
-> established BPF UAPI convention could create problems for future extensio=
-ns.
-> If another __u64 field is added later, the inter-field offsets would dive=
-rge
-> between ABIs.
->
-> Would it be better to use __aligned_u64 log_buf to match union bpf_attr a=
-nd
-> preserve identical struct layouts across 32/64-bit ABIs?
+> It's a trade off. If we don't set ARCH_UPROBE_FLAG_OPTIMIZE_FAIL,
+> we'll keep wasting time trying to find and use uprobe trampoline for
+> each uprobe execution in that process, which is wasteful. So, given
+> this is a performance optimization, I think we'll just live with this.
+> The alternative would be a per-mm+per-uprobe extra information, which
+> seems like an overkill, so probably a no-go.
 
-bot has a point.
+We can have per-mm flag inside uprobes_state common to all uprobes,
+but that will make reattachment to previously attached uprobe with
+allocated slot not work, if I understand correctly.
 
-pw-bot: cr
+Jiri, any thoughts or ideas?
+
+>
+> >
+> > --
+> > Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260509003146.=
+976844-1-andrii@kernel.org?part=3D1
