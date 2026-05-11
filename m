@@ -1,79 +1,85 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE293B7B7A
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 21:07:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7492C4D8D96
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 21:28:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778533669; cv=none; b=mk8DOknM9aHY7IlvO+Nzx0+rf5PFYu6P4JFeKpxX6z7MIg7Fol9K1WopC/fiY5cUxa8XT1oTgqvwMKJVpZYZPzTbtueXu6/2qmY931hI/VTqEQeqC47p0saQ8oTf1/9Mic/wt3llHbyJSgGRj/QryrQTHIIRfpkFt7yjLzT0Yi4=
+	t=1778534892; cv=none; b=ey3rvDjIrYKBqd8qw1YGLKQrDtAkag8OlMq/KW/Lisi+sQqNIdEws1sm+F86AylC0iCI6ctA+YS+LeyP2vuGDMN5UaAsOCgmNo+L2vuVyzsPLZphu0GBZzFGsX3OhMY8qpeoFxaK/zEsTcDJAD29e6cQiGhDmw544x9NsystMqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778533669; c=relaxed/simple;
-	bh=PSzpKdtxGcnf3ouoTkCYT+Hz3825M/5dEKU3H6rFtew=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dLzHRvvmLqSJgsRdRjOenqyuftMKSK6r+x+4+uzvJZygz05x0wyx0W61AcA7RsFLg9LplIUK3YhbWNu2NYXOyreKawFyTpi86yVmTCCB6ZwSUTa9PN0uWkrjTnUQnZ9W9ZRo3zVq8tjlgSO37oVrQOItOo2Hm0mGb1rZS4LCgok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=DvCd3yaR; arc=none smtp.client-ip=74.125.82.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1778534892; c=relaxed/simple;
+	bh=Mjj7x9vh6UmcnIOkvCTG57YrKM1ifG38SJoHpUxCApg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VKOPIJClzj1wkd/OzvFKc+V2T0br51knmCAsKY3cMQe4RBaUCoTTau4fPQit582D2G36qx2Z+MdQYw4sm66gV+5dJ5Ii3EtBnLpBKU6AL7JKPUKsmFBTxAyfFh/a+WN7lrmCdsq66WuKa3cwUfGgFDA5/ZpyrmF2TFCx4qnjXIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TQlEPq3s; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="DvCd3yaR"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2c15849aa2cso6281698eec.0
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 14:07:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TQlEPq3s"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-837cd669be0so3770355b3a.0
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 14:28:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1778533666; x=1779138466; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3B7LFdLGjn7l86o51fIKB6PZOjEPmjuO8XhrfiuOD+0=;
-        b=DvCd3yaRV6pMkIGBt0FXqgzk4IOYSqFB9lgNvaB182yBk/lAmP6m3qRnNvtZ9lzR0S
-         doDcZtzoepacreDHAOcfHq05NH/N/Qmmry7J2O64FDuVhd+OrmRsrVG5ArPR+8Pq4KA9
-         8nmfzTNGCH6RZpoWg8OKDVQBReviRhyEsEi2PFvALC+IOKIOnpzyCbHczSWq3wscYIsf
-         wzjdiBZI9UfWhZMajPWoMwAUKwlABBDfbLDL4DBeX5D/elQN+GXfFMQONfcAnOgsF+Pl
-         5Q0FU9DkrFFeRM9tHh+A00nZ7QlQRjS17vqAU9G5L7YPUABFwNhcK1IOzQ0qWAZUmL9m
-         9vag==
+        d=gmail.com; s=20251104; t=1778534889; x=1779139689; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nxTXY5T02JpYE+sf2u2a/h8EoEHk2DuomQlk4anzqbU=;
+        b=TQlEPq3st4MoDTF0F33mepQ/SULid9rPKXAwbPYBePjSMIYEPM9CYBFR7tXjuen+dg
+         tzzpJ/O8ZuLSkpizd6LnzYr9E5zk4PeMb5k4rhykWmUmhSQCrr4wQK1vkWxPMo+1xGyi
+         r2jHKTgf/4KFyQTa+6psR02Q5gX4ChRUJX9/0tcskRBfs/zi/5YfwlWmcf+A+L/ZIBIa
+         RFsFc0U4qljovdZWPZ7sYK60/JRe53YREd8SsCg5KC2ho4QE11R8ksNLyo9m+9rrI+0q
+         s4eScwY7co8/wTVreDqjE6sad2ZAMEgGe0NGvgZbuNN6mOccLeizfx+rhG58loBXDChS
+         KjWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778533666; x=1779138466;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3B7LFdLGjn7l86o51fIKB6PZOjEPmjuO8XhrfiuOD+0=;
-        b=GT8/MX7nErOk3wp+dGCgpg8lPMtwGghZjuwwaJcKDBg6syZ6q/eLihNuFehiWBtbr1
-         Kn2SmZi0j5hXoSJ/Pl39gh/aaGAkdzJm7FDUP9YmXvNGtB5U0qEdSs3xkswDeQMnE21L
-         pZ42d6A8N8YR8BQIB1CmfrwLBRA0ivsWJm6Pv1X6N1sf0ygXQZ53vE82ZcjgQnaTtJhZ
-         Ia5/BFYmn1nXc8y2GIifIskIxUqit/T46bdDPkMQIXAfUlQTaFmLQfzNKym6j4rEkx2l
-         JBZLD8qT0Kgw4cem15CcCUc35Y6gI1zbTUSYAWHWoCJjTkpHRnOz7aGK5fE5BDnGc7RG
-         OBXg==
-X-Gm-Message-State: AOJu0YzgrqMwACFAfcy8B8csJlxTSG7wx+I+KYVRrQRaUISZdZxY9tox
-	B0nai0Wmrl42NEiV641Y4/5H1fnmSLAlXUI9siU92Cfq5XunCtV0mt6JriQZmg0vhHF4Oeckt/3
-	Vf3hHR4tc94kl
-X-Gm-Gg: Acq92OHl9EVrsgDSqpwfdu5o+cekvbThlCbF8B1geA10bndZex4Zv7rsSwr4RvmnhqD
-	yp7QVjnpSjVPGjO0WxRvTQbgfywqvdojSWKrVP1R/sF9VdQ7xQCtR0eaMymjf1JL1vNd+RvOMjL
-	by6WiTP4Dx8EgCZ2zsVLOkCX8+cgLoBWCVJi/iLfM0FWeu6WkqjZENF8mUvaqQUEhFErWlTdF3K
-	WyPbuhO89ypN91+IKPDYJvSLQW1FBLdCAoN4OPSR+PnMJxFGMyGzpVTB749ISB2Te/69WZMCUgS
-	poWlEAzLz6YO008zFpxHhJD3Vb0I/eriv/ycAkA5tJMwsPIYL22vFB3KcAjGRAdYr73igQrgTKp
-	A82PkwuhTt6ENTgIELWGJXmb92xTXP8pYAkuwOO/ACQCjcH93fMxU+Q3aFwl72RJyA04XSbZ4q9
-	83AcRLnAAhDZed4ynDhyU=
-X-Received: by 2002:a05:7300:5352:b0:2da:a813:a5fd with SMTP id 5a478bee46e88-2ffd75efc9cmr154491eec.22.1778533665241;
-        Mon, 11 May 2026 14:07:45 -0700 (PDT)
-Received: from krios.corp.tfbnw.net ([2620:10d:c090:600::7a4c])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f8893441absm20177293eec.31.2026.05.11.14.07.43
+        d=1e100.net; s=20251104; t=1778534889; x=1779139689;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nxTXY5T02JpYE+sf2u2a/h8EoEHk2DuomQlk4anzqbU=;
+        b=jjTN2V/Aa8RZJJXJG+J8JnLr3Dz/QjUcGn4jsHKhxNUk9QEtoXmy87WtoWJEcBgI2c
+         HG5LcxYbMQ4tDuYr5sVJkjNX2/Kk0qU+IXzMzeCi0OO4wOANrD239Ko4uv87xP8sQKdb
+         IlHcOxnMRP/oBFSvLwoy3omLPyCYLqKROtdfUH9MqOrnmsUlG2IS0duvNwWW2/9Lg8ZP
+         7R0DTUyoZ52Q3aCBcqOLg495u+V1xGiRQKC4Qr0LCm/oPrexAJEsvJMacKcm24LWlVeP
+         HksZkuIkmf6ZBqYJUsbgkJ4dTW49svlfwe7d+iBGc6fBAWxB1WxvoKk/4bO0Ec2BBP5i
+         iwmg==
+X-Forwarded-Encrypted: i=1; AFNElJ8Gq96GIserFm7QbXYhYuPrGnj5qZRVMIWu8ZB0O/tvDe2iTILqWMMR2jxy4uZ+gC2bx7Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzouV5kH19lBlCluTN9j/Gw955Q6uliOM6RYEQWnP/ftWW9cN9z
+	zj0DiddKiBVj2dd1+QeEASB59hCpvARkxQoj8dBDI14h+crLWTPMrdYb
+X-Gm-Gg: Acq92OFBKFmrrkb00zs2Tdhv8mq+lfygXlRHUz1EzB+1es0gu0LT1L+6HSwBLZ7L0Ed
+	HQ/viac+OmlfwURy+Q0jJZR1y6Pxl39Hkdj7LozBKKVKOX0IBBWBFs1YhaoLg+x5glMATA/lrfy
+	fIcCEt2/tcwvsyRKCaeldyHIbVZIVULe8jjTOeiEw/AurfOdof7tdxpexejAnwCw2FcDSHaJ+ic
+	ikbIyf5awg96Y6WLB2pCNkWxo7uoq5+2QbTzeY6El0m2u1TUC4G1XCDlgX5lyIygPa8QuowtSG1
+	bDrf7/prOyrd5qcxWcjvsLh0DwucKrLs5AbNoZSTSffNWgClcpAlNqFyOrSzIDjEXxZJkzlfMLR
+	/GyglGBAM8osCJ8bgJfMacMDmDZ+Au6Kz6T8esa5phtQsaG8puQD9kSHMQ+h2soOcBCJHefmSx2
+	Hu2ELhjq20aqyOMB6yxJX/dcFh3e8gi4rOHKoS1VUsGkSWqWXqfCtDjtKq2k2+4fdIRjE3ZHHbg
+	a5z7gijj8J/wSA1VKUECYf3GQ741LBmKEj6Nevgel5N
+X-Received: by 2002:a05:6a00:3d4b:b0:82f:9de6:3b2a with SMTP id d2e1a72fcca58-83a5b6d0a56mr25743975b3a.8.1778534888472;
+        Mon, 11 May 2026 14:28:08 -0700 (PDT)
+Received: from visitorckw-work01.c.googlers.com.com (32.237.80.34.bc.googleusercontent.com. [34.80.237.32])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83965d36c10sm26234774b3a.25.2026.05.11.14.28.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 14:07:44 -0700 (PDT)
-From: Emil Tsalapatis <emil@etsalapatis.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	andrii@kernel.org,
-	memxor@gmail.com,
+        Mon, 11 May 2026 14:28:07 -0700 (PDT)
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: geert@linux-m68k.org,
+	ast@kernel.org,
 	daniel@iogearbox.net,
+	andrii@kernel.org,
 	eddyz87@gmail.com,
+	memxor@gmail.com
+Cc: martin.lau@linux.dev,
 	song@kernel.org,
-	mattbobfrowski@google.com,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next 1/2] selftests/bpf: libarena: Add rbtree data structure
-Date: Mon, 11 May 2026 17:07:39 -0400
-Message-ID: <20260511210740.5395-2-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260511210740.5395-1-emil@etsalapatis.com>
-References: <20260511210740.5395-1-emil@etsalapatis.com>
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	jserv@ccns.ncku.edu.tw,
+	eleanor15x@gmail.com,
+	marscheng@google.com,
+	linux-kernel@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
+	bpf@vger.kernel.org,
+	Kuan-Wei Chiu <visitorckw@gmail.com>,
+	Daniel Palmer <daniel@thingy.jp>
+Subject: [PATCH bpf-next v3] m68k, bpf: Add initial BPF JIT compiler support
+Date: Mon, 11 May 2026 21:27:56 +0000
+Message-ID: <20260511212756.3163955-1-visitorckw@gmail.com>
+X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,2134 +88,1635 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a native red-black tree data structure to libarena.
-The data structure supports multiple APIs (key-value based,
-node based) with which users can query and modify it. The
-tree uses the libarena memory allocator to manage its data.
+Add a BPF JIT compiler for the m68k architecture.
 
-Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+The JIT generates m68k machine code targeting m68020+ processors. It
+currently excludes 68000/68010 and coldfire processors, as it relies on
+32 bit branch displacements (b<cc>.l) to handle large bpf programs.
+
+Tested with the test_bpf.ko:
+test_bpf: Summary: 1053 PASSED, 0 FAILED, [1041/1041 JIT'ed]
+test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
+
+Tested-by: Daniel Palmer <daniel@thingy.jp>
+Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
 ---
- .../bpf/libarena/include/libarena/rbtree.h    |   89 ++
- .../bpf/libarena/selftests/st_rbtree.bpf.c    |  974 ++++++++++++++++
- .../selftests/bpf/libarena/src/rbtree.bpf.c   | 1032 +++++++++++++++++
- 3 files changed, 2095 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
- create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_rbtree.bpf.c
- create mode 100644 tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
+Changes in v3:
+Fix BPF_XOR comment in emit_alu64_k()
 
-diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h b/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
+ MAINTAINERS                  |    6 +
+ arch/m68k/Kbuild             |    2 +-
+ arch/m68k/Kconfig            |    1 +
+ arch/m68k/net/Makefile       |    2 +
+ arch/m68k/net/bpf_jit_comp.c | 1550 ++++++++++++++++++++++++++++++++++
+ 5 files changed, 1560 insertions(+), 1 deletion(-)
+ create mode 100644 arch/m68k/net/Makefile
+ create mode 100644 arch/m68k/net/bpf_jit_comp.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2fb1c75afd16..530551834c16 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4701,6 +4701,12 @@ L:	bpf@vger.kernel.org
+ S:	Maintained
+ F:	arch/loongarch/net/
+ 
++BPF JIT for M68K
++M:	Kuan-Wei Chiu <visitorckw@gmail.com>
++L:	bpf@vger.kernel.org
++S:	Maintained
++F:	arch/m68k/net/
++
+ BPF JIT for MIPS (32-BIT AND 64-BIT)
+ M:	Johan Almbladh <johan.almbladh@anyfinetworks.com>
+ M:	Paul Burton <paulburton@kernel.org>
+diff --git a/arch/m68k/Kbuild b/arch/m68k/Kbuild
+index 7762af9f6def..058ad41a728c 100644
+--- a/arch/m68k/Kbuild
++++ b/arch/m68k/Kbuild
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-obj-y				+= kernel/ mm/
++obj-y				+= kernel/ mm/ net/
+ obj-$(CONFIG_Q40)		+= q40/
+ obj-$(CONFIG_AMIGA)		+= amiga/
+ obj-$(CONFIG_ATARI)		+= atari/
+diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
+index 11835eb59d94..da43d6660c5c 100644
+--- a/arch/m68k/Kconfig
++++ b/arch/m68k/Kconfig
+@@ -8,6 +8,7 @@ config M68K
+ 	select ARCH_HAS_CPU_FINALIZE_INIT if MMU
+ 	select ARCH_HAS_CURRENT_STACK_POINTER
+ 	select ARCH_HAS_DMA_PREP_COHERENT if M68K_NONCOHERENT_DMA && !COLDFIRE
++	select HAVE_EBPF_JIT if (!COLDFIRE && !M68000)
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE if M68K_NONCOHERENT_DMA
+ 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if RMW_INSNS
+ 	select ARCH_MIGHT_HAVE_PC_PARPORT if ISA
+diff --git a/arch/m68k/net/Makefile b/arch/m68k/net/Makefile
 new file mode 100644
-index 000000000000..b5d35646d8d4
+index 000000000000..ec5b14763316
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
-@@ -0,0 +1,89 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause */
-+
-+#pragma once
-+
-+#define RB_MAXLVL_PRINT (16)
-+
-+struct rbnode;
-+
-+typedef struct rbnode __arena rbnode_t;
-+
-+struct rbnode {
-+	rbnode_t *parent;
-+	union {
-+		struct {
-+			rbnode_t *left;
-+			rbnode_t *right;
-+		};
-+
-+		rbnode_t *child[2];
-+	};
-+	uint64_t key;
-+	/* Used as a linked list or to store KV pairs. */
-+	union {
-+		rbnode_t *next;
-+		uint64_t value;
-+	};
-+	bool is_red;
-+};
-+
-+/*
-+ * Does the rbtree allocate its own nodes, or do they get
-+ * allocated by the caller?
-+ */
-+enum rbtree_alloc {
-+	RB_ALLOC,
-+	RB_NOALLOC,
-+};
-+
-+/*
-+ * Specify the behavior of rbtree insertions when the key is
-+ * already present in the tree.
-+ *
-+ * RB_DEFAULT: Default behavior, reject the new insert.
-+ *
-+ * RB_UPDATE: Update the existing value in the rbtree.
-+ * This updates the node itself, not just the value in
-+ * the existing node.
-+ *
-+ * RB_DUPLICATE: Allow nodes with identical keys in the rbtree.
-+ * Finding/popping/removing a key acts on any of the nodes
-+ * with the appropriate key - there is no ordering by time
-+ * of insertion.
-+ */
-+enum rbtree_insert_mode {
-+	RB_DEFAULT,
-+	RB_UPDATE,
-+	RB_DUPLICATE,
-+};
-+
-+struct rbtree {
-+	rbnode_t *root;
-+	rbnode_t *freelist;
-+	enum rbtree_alloc alloc;
-+	enum rbtree_insert_mode insert;
-+};
-+
-+typedef struct rbtree __arena rbtree_t;
-+
-+#ifdef __BPF__
-+u64 rb_create_internal(enum rbtree_alloc alloc, enum rbtree_insert_mode insert);
-+#define rb_create(alloc, insert) ((rbtree_t *)rb_create_internal((alloc), (insert)))
-+
-+int rb_destroy(rbtree_t *rbtree __arg_arena);
-+int rb_insert(rbtree_t *rbtree, u64 key, u64 value);
-+int rb_remove(rbtree_t *rbtree, u64 key);
-+int rb_find(rbtree_t *rbtree, u64 key, u64 *value);
-+int rb_print(rbtree_t *rbtree);
-+int rb_least(rbtree_t *rbtree, u64 *key, u64 *value);
-+int rb_pop(rbtree_t *rbtree, u64 *key, u64 *value);
-+
-+int rb_insert_node(rbtree_t *rbtree, rbnode_t *node);
-+int rb_remove_node(rbtree_t *rbtree, rbnode_t *node);
-+u64 rb_node_alloc_internal(rbtree_t *rbtree, u64 key, u64 value);
-+#define rb_node_alloc(rbtree, key, value) ((rbnode_t *)rb_node_alloc_internal((rbtree), (key), (value)))
-+int rb_node_free(rbtree_t *rbtree, rbnode_t *rbnode);
-+
-+int rb_integrity_check(rbtree_t *rbtree);
-+
-+#endif /* __BPF__ */
-diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_rbtree.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/st_rbtree.bpf.c
++++ b/arch/m68k/net/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_BPF_JIT) += bpf_jit_comp.o
+diff --git a/arch/m68k/net/bpf_jit_comp.c b/arch/m68k/net/bpf_jit_comp.c
 new file mode 100644
-index 000000000000..17d46c4af332
+index 000000000000..1531b321410a
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/selftests/st_rbtree.bpf.c
-@@ -0,0 +1,974 @@
-+// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
++++ b/arch/m68k/net/bpf_jit_comp.c
+@@ -0,0 +1,1550 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * BPF JIT compiler for m68k
++ *
++ * Copyright (C) 2026 Kuan-Wei Chiu <visitorckw@gmail.com>
++ */
 +
-+#include <libarena/common.h>
++#include <linux/bpf.h>
++#include <linux/filter.h>
++#include <linux/irqflags.h>
++#include <linux/slab.h>
++#include <asm/cacheflush.h>
++#include <linux/math64.h>
 +
-+#include <libarena/asan.h>
-+#include <libarena/rbtree.h>
++#define STACK_OFFSET(k) (-4 - (4 * (k)))
 +
-+typedef struct node_ctx __arena node_ctx;
-+
-+struct node_ctx {
-+	struct rbnode rbnode;
-+	node_ctx *next;
++enum {
++	BPF_R1_HI, BPF_R1_LO,
++	BPF_R2_HI, BPF_R2_LO,
++	BPF_R3_HI, BPF_R3_LO,
++	BPF_R4_HI, BPF_R4_LO,
++	BPF_R5_HI, BPF_R5_LO,
++	BPF_R6_HI, BPF_R6_LO,
++	BPF_R7_HI, BPF_R7_LO,
++	BPF_R8_HI, BPF_R8_LO,
++	BPF_R9_HI, BPF_R9_LO,
++	BPF_R10_HI, BPF_R10_LO,
++	BPF_AX_HI, BPF_AX_LO,
++	BPF_TC_HI, BPF_TC_LO,
++	BPF_JIT_SCRATCH_REGS,
 +};
 +
-+static const u64 keys[] = { 51, 43,  37, 3, 301,  46, 383, 990, 776, 729, 871, 96, 189, 213,
-+	376, 167, 131, 939, 626, 119, 374, 700, 772, 154, 883, 620, 641, 5,
-+	428, 516, 105, 622, 988, 811, 931, 973, 246, 690, 934, 744, 210, 311,
-+	32, 255, 960, 830, 523, 429, 541, 738, 705, 774, 715, 446, 98, 578,
-+	777, 191, 279, 91, 767 };
++#define SCRATCH_SIZE (BPF_JIT_SCRATCH_REGS * 4)
 +
-+static const u64 morekeys[] = { 173, 636, 1201, 8642, 5957, 3617, 4586, 8053, 6551, 7592, 1748, 1589, 8644, 9918, 6977,
-+	4448, 5852, 4640, 9717, 2303, 7424, 7695, 2334, 8876, 8618, 5745, 7134, 2178, 5280, 2140, 1138,
-+	5083, 8922, 1516, 2437, 2488, 4307, 4329, 5088, 8456, 5938, 1441, 1684, 5750, 721, 1107, 2089,
-+	9737, 4687, 5016, 4849, 8193, 9603, 9147, 5992, 166, 6721, 812, 4144, 6237, 6509, 3466, 9255,
-+	7767, 3960, 6759, 2968, 6046, 9784, 8395, 2619, 1711, 528, 6424, 9084, 3179, 1342, 5676, 9445,
-+	5691, 6678, 8487, 1627, 998, 6178, 2229, 1987, 3319, 572, 169, 2161, 3018, 5439, 7287, 7265, 5995,
-+	5003, 5857, 2836, 5634, 4735, 9261, 8287, 5359, 533, 1406, 9573, 4026, 714, 3956, 1722, 6395,
-+	9648, 3887, 7185, 470, 4482, 4997, 841, 8913, 9946, 3999, 9357, 9847, 277, 8184, 8704, 6766, 3323,
-+	5468, 8638, 7905, 8858, 6142, 3685, 3452, 4689, 8878, 8836, 158, 831, 7914, 3031, 8374, 4921,
-+	4207, 3460, 5547, 3358, 1083, 4619, 7818, 2962, 4879, 4583, 2172, 8819, 9830, 1194, 2666, 9812,
-+	5704, 8432, 5916, 6007, 6609, 4791, 1985, 3226, 2478, 9605, 5236, 8079, 3042, 1965, 3539, 9704,
-+	4267, 6416, 760, 9968, 2983, 1190, 1964, 3211, 2870, 3106, 2794, 1542, 6916, 5986, 9096, 441,
-+	5894, 8353, 7765, 3757, 5732, 88, 3091, 5637, 6042, 8447, 4073, 6923, 5491, 7010, 3663, 5029,
-+	6162, 822, 4874, 7491, 5100, 3461, 6983, 2170, 1458, 1856, 648, 6272, 4887, 976, 2369, 5909, 4274,
-+	3324, 6968, 2312, 2271, 8891, 6268, 6581, 1610, 8880, 6194, 6144, 9764, 6915, 829, 3774, 2265,
-+	1752, 1314, 6377, 8760, 8004, 501, 4912, 9278, 1425, 9578, 7337, 307, 1885, 3151, 9617, 1647,
-+	2458, 3702, 6091, 8902, 5663, 9378, 7640, 3336, 557, 1644, 6848, 1559, 8821, 266, 4330, 9790,
-+	5920, 4222, 1143, 6248, 5792, 4847, 9726, 6303, 821, 6839, 6062, 7133, 3649, 9888, 2528, 1966,
-+	5456, 4914, 3615, 1543, 3206, 3353, 6097, 2800, 1424, 9094, 7920, 7243, 1394, 5464, 1707, 576,
-+	6524, 4261, 4187, 7889, 5336, 3377, 2921, 7244, 2766, 6584, 5514, 1387, 2957, 2258, 1077, 9979,
-+	1128, 876, 4056, 4668, 4532, 1982, 7093, 4184, 5460, 7588, 4704, 6717, 61, 3959, 1826, 2294, 18,
-+	8170, 9394, 8796, 7288, 7285, 7143, 148, 6676, 6603, 1051, 8225, 4169, 3230, 7697, 6971, 3454,
-+	7501, 9514, 394, 2339, 4993, 5606, 6060, 1297, 8273, 3012, 157, 8181, 6765, 7207, 1005, 8833, 1914,
-+	7456, 1846, 8375, 2741, 2074, 1712, 5286 };
++#define TMP_REG_1 14
++#define TMP_REG_2 15
 +
-+SEC("syscall")
-+__weak int test_rbtree_find_nonexistent(void)
++#define M68K_D0 0
++#define M68K_D1 1
++#define M68K_D2 2
++#define M68K_D3 3
++#define M68K_D4 4
++#define M68K_D5 5
++
++static const s8 bpf2m68k[16][2] = {
++	[BPF_REG_0]  = {M68K_D1, M68K_D0},
++	[BPF_REG_1]  = {STACK_OFFSET(BPF_R1_HI),  STACK_OFFSET(BPF_R1_LO)},
++	[BPF_REG_2]  = {STACK_OFFSET(BPF_R2_HI),  STACK_OFFSET(BPF_R2_LO)},
++	[BPF_REG_3]  = {STACK_OFFSET(BPF_R3_HI),  STACK_OFFSET(BPF_R3_LO)},
++	[BPF_REG_4]  = {STACK_OFFSET(BPF_R4_HI),  STACK_OFFSET(BPF_R4_LO)},
++	[BPF_REG_5]  = {STACK_OFFSET(BPF_R5_HI),  STACK_OFFSET(BPF_R5_LO)},
++	[BPF_REG_6]  = {STACK_OFFSET(BPF_R6_HI),  STACK_OFFSET(BPF_R6_LO)},
++	[BPF_REG_7]  = {STACK_OFFSET(BPF_R7_HI),  STACK_OFFSET(BPF_R7_LO)},
++	[BPF_REG_8]  = {STACK_OFFSET(BPF_R8_HI),  STACK_OFFSET(BPF_R8_LO)},
++	[BPF_REG_9]  = {STACK_OFFSET(BPF_R9_HI),  STACK_OFFSET(BPF_R9_LO)},
++	[BPF_REG_10] = {STACK_OFFSET(BPF_R10_HI), STACK_OFFSET(BPF_R10_LO)},
++	[BPF_REG_AX] = {STACK_OFFSET(BPF_AX_HI),  STACK_OFFSET(BPF_AX_LO)},
++	[TMP_REG_1]  = {M68K_D3, M68K_D2},
++	[TMP_REG_2]  = {M68K_D5, M68K_D4},
++};
++
++struct jit_ctx {
++	const struct bpf_prog *prog;
++	u16 *target;
++	unsigned int idx;
++	int *offsets;
++};
++
++static noinline u32 jit_mul32(u32 a, u32 b) { return a * b; }
++static noinline u32 jit_div32(u32 a, u32 b) { return b ? a / b : 0; }
++static noinline u32 jit_mod32(u32 a, u32 b) { return b ? a % b : a; }
++static noinline s32 jit_sdiv32(s32 a, s32 b) { return b ? a / b : 0; }
++static noinline s32 jit_smod32(s32 a, s32 b) { return b ? a % b : a; }
++
++static noinline u64 jit_mul64(u64 a, u64 b) { return a * b; }
++static noinline u64 jit_div64(u64 a, u64 b) { return b ? div64_u64(a, b) : 0; }
++static noinline s64 jit_sdiv64(s64 a, s64 b) { return b ? div64_s64(a, b) : 0; }
++
++static noinline u64 jit_mod64(u64 a, u64 b)
 +{
-+	u64 key = 0xdeadbeef;
-+	u64 value = 0;
-+	int ret;
++	u64 rem = a;
 +
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(RB_ALLOC, RB_DEFAULT);
-+	if (!rbtree)
-+		return 1;
-+
-+	/* Should return -EINVAL */
-+	ret = rb_find(rbtree, key, &value);
-+	if (!ret)
-+		return 2;
-+
-+	return rb_destroy(rbtree);
++	if (b)
++		div64_u64_rem(a, b, &rem);
++	return rem;
 +}
 +
-+SEC("syscall")
-+__weak int test_rbtree_insert_existing(void)
++static noinline s64 jit_smod64(s64 a, s64 b)
 +{
-+	u64 key = 525252;
-+	u64 value = 24;
-+	int ret;
++	if (!b)
++		return a;
++	return a - div64_s64(a, b) * b;
++}
 +
-+	rbtree_t *rbtree;
++static u32 jit_atomic32(u32 *ptr, u32 val, u32 op, u32 cmp)
++{
++	unsigned long flags;
++	u32 old;
 +
-+	rbtree = rb_create(RB_ALLOC, RB_DEFAULT);
-+	if (!rbtree)
-+		return 1;
-+
-+	ret = rb_insert(rbtree, key, value);
-+	if (ret)
-+		return 2;
-+
-+	/* Should return -EALREADY. */
-+	ret = rb_insert(rbtree, key, value);
-+	if (ret != -EALREADY) {
-+		return 3;
++	local_irq_save(flags);
++	old = *ptr;
++	switch (op) {
++	case BPF_ADD:
++	case BPF_ADD | BPF_FETCH:
++		*ptr += val;
++		break;
++	case BPF_AND:
++	case BPF_AND | BPF_FETCH:
++		*ptr &= val;
++		break;
++	case BPF_OR:
++	case BPF_OR | BPF_FETCH:
++		*ptr |= val;
++		break;
++	case BPF_XOR:
++	case BPF_XOR | BPF_FETCH:
++		*ptr ^= val;
++		break;
++	case BPF_XCHG:
++		*ptr = val;
++		break;
++	case BPF_CMPXCHG:
++		if (old == cmp)
++			*ptr = val;
++		break;
 +	}
++	local_irq_restore(flags);
 +
-+	return rb_destroy(rbtree);
++	return old;
 +}
 +
-+SEC("syscall")
-+__weak int test_rbtree_update_existing(void)
++static u64 jit_atomic64(u32 *ptr, u32 val_hi, u32 val_lo, u32 op, u32 cmp_hi, u32 cmp_lo)
 +{
-+	u64 key = 33333;
-+	u64 value;
-+	int ret;
++	unsigned long flags;
++	u64 old, val, cmp;
++	u64 *ptr64 = (u64 *)ptr;
 +
-+	rbtree_t *rbtree;
++	val = ((u64)val_hi << 32) | val_lo;
++	cmp = ((u64)cmp_hi << 32) | cmp_lo;
 +
-+	rbtree = rb_create(RB_ALLOC, RB_UPDATE);
-+	if (!rbtree)
-+		return 1;
-+
-+	value = 52;
-+	ret = rb_insert(rbtree, key, value);
-+	if (ret)
-+		return 2;
-+
-+	ret = rb_find(rbtree, key, &value);
-+	if (ret)
-+		return 3;
-+
-+	if (value != 52)
-+		return 4;
-+
-+	value = 65;
-+
-+	/* Should succeed. */
-+	ret = rb_insert(rbtree, key, value);
-+	if (ret)
-+		return 5;
-+
-+	/* Should be updated. */
-+	ret = rb_find(rbtree, key, &value);
-+	if (ret)
-+		return 6;
-+
-+	if (value != 65)
-+		return 7;
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_insert_one(void)
-+{
-+	u64 key = 202020;
-+	u64 value = 0xbadcafe;
-+	int ret;
-+
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(RB_ALLOC, RB_UPDATE);
-+	if (!rbtree)
-+		return 1;
-+
-+	ret = rb_insert(rbtree, key, value);
-+	if (ret)
-+		return 2;
-+
-+	ret = rb_find(rbtree, key, &value);
-+	if (ret)
-+		return 3;
-+
-+	if (value != 0xbadcafe)
-+		return 4;
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_insert_ten(void)
-+{
-+	u64 key, value;
-+	int ret, i;
-+
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(RB_ALLOC, RB_UPDATE);
-+	if (!rbtree)
-+		return 1;
-+
-+	for (i = 0; i < 10 && can_loop; i++) {
-+		key = keys[i];
-+		ret = rb_insert(rbtree, key, 2 * key);
-+		if (ret)
-+			return 2 + 3 * i;
-+
-+		/* Read it back. */
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return 2 + 3 * i + 1;
-+
-+		if (value != 2 * key)
-+			return 2 + 3 * i + 2;
++	local_irq_save(flags);
++	old = *ptr64;
++	switch (op) {
++	case BPF_ADD:
++	case BPF_ADD | BPF_FETCH:
++		*ptr64 += val;
++		break;
++	case BPF_AND:
++	case BPF_AND | BPF_FETCH:
++		*ptr64 &= val;
++		break;
++	case BPF_OR:
++	case BPF_OR | BPF_FETCH:
++		*ptr64 |= val;
++		break;
++	case BPF_XOR:
++	case BPF_XOR | BPF_FETCH:
++		*ptr64 ^= val;
++		break;
++	case BPF_XCHG:
++		*ptr64 = val;
++		break;
++	case BPF_CMPXCHG:
++		if (old == cmp)
++			*ptr64 = val;
++		break;
 +	}
++	local_irq_restore(flags);
 +
-+	/* Go find all inserted pairs. */
-+	for (i = 0; i < 10 && can_loop; i++) {
-+		key = keys[i];
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return 35 + 2 * i;
-+
-+		if (value != 2 * key)
-+			return 35 + 2 * i + 1;
-+	}
-+
-+	return rb_destroy(rbtree);
++	return old;
 +}
 +
-+SEC("syscall")
-+__weak int test_rbtree_duplicate(void)
++static inline void emit_16(struct jit_ctx *ctx, u16 inst)
 +{
-+	u64 key = 0x121212;
-+	u64 value;
-+	int ret, i;
-+
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(RB_ALLOC, RB_DUPLICATE);
-+	if (!rbtree)
-+		return 1;
-+
-+	for (i = 0; i < 10 && can_loop; i++) {
-+		ret = rb_insert(rbtree, key, 2 * key);
-+		if (ret)
-+			return 2 + 3 * i;
-+
-+		/* Read it back. */
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return 2 + 3 * i + 1;
-+
-+		if (value != 2 * key)
-+			return 2 + 3 * i + 2;
-+	}
-+
-+	/* Go find all inserted copies and remove them. */
-+	for (i = 0; i < 10 && can_loop; i++) {
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret) {
-+			rb_print(rbtree);
-+			return 35 + 3 * i;
-+		}
-+
-+		if (value != 2 * key)
-+			return 35 + 3 * i + 1;
-+
-+		ret = rb_remove(rbtree, key);
-+		if (ret)
-+			return 35 + 3 * i + 2;
-+	}
-+
-+	return rb_destroy(rbtree);
++	if (ctx->target)
++		ctx->target[ctx->idx] = inst;
++	ctx->idx++;
 +}
 +
-+static inline int
-+clean_up_noalloc_tree(rbtree_t *rbtree)
++static inline void emit_32(struct jit_ctx *ctx, u32 val)
 +{
-+	node_ctx *nodec;
-+	int ret;
-+
-+	if (rbtree->alloc != RB_NOALLOC)
-+		return -EINVAL;
-+
-+	/* Can't destroy an RB_NOALLOC tree that still has nodes. */
-+	if (rb_destroy(rbtree) != -EBUSY)
-+		return -EINVAL;
-+
-+	while (rbtree->root && can_loop) {
-+		nodec = container_of(rbtree->root, node_ctx, rbnode);
-+		ret = rb_remove_node(rbtree, &nodec->rbnode);
-+		if (ret)
-+			return ret;
-+
-+		free(nodec);
-+	}
-+
-+	return 0;
++	emit_16(ctx, val >> 16);
++	emit_16(ctx, val & 0xffff);
 +}
 +
-+int insert_many(enum rbtree_alloc alloc, enum rbtree_insert_mode insert)
++static inline bool is_stacked(s8 reg)
 +{
-+	const size_t numkeys = sizeof(keys) / sizeof(keys[0]);
-+	node_ctx *nodec;
-+	u64 key, value;
-+	int ret;
-+	int i;
++	return reg < 0;
++}
 +
-+	rbtree_t *rbtree;
++static s8 bpf_get_reg32(s8 bpf_reg, s8 tmp_reg, struct jit_ctx *ctx)
++{
++	if (is_stacked(bpf_reg)) {
++		emit_16(ctx, 0x202e | (tmp_reg << 9));		/* move.l d16(%fp), reg */
++		emit_16(ctx, (u16)bpf_reg);
++		return tmp_reg;
++	}
++	return bpf_reg;
++}
 +
-+	rbtree = rb_create(alloc, insert);
-+	if (!rbtree)
-+		return 1;
++static void bpf_put_reg32(s8 bpf_reg, s8 src_reg, struct jit_ctx *ctx)
++{
++	if (is_stacked(bpf_reg)) {
++		emit_16(ctx, 0x2d40 | src_reg);			/* move.l reg, d16(%fp) */
++		emit_16(ctx, (u16)bpf_reg);
++	} else if (bpf_reg != src_reg) {
++		emit_16(ctx, 0x2000 | (bpf_reg << 9) | src_reg); /* move.l src, dst */
++	}
++}
 +
-+	for (i = 0; i < numkeys && can_loop; i++) {
-+		key = keys[i];
-+		if (rbtree->alloc != RB_ALLOC) {
-+			nodec = malloc(sizeof(*nodec));
-+			if (!nodec) {
-+				arena_stderr("out of memory\n");
-+				return -ENOMEM;
-+			}
-+			nodec->rbnode.key = key;
-+			nodec->rbnode.value = 2 * key;
-+			ret = rb_insert_node(rbtree, &nodec->rbnode);
++static void emit_alu32_neg(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	s8 d_reg = bpf_get_reg32(dst[1], tmp1[1], ctx);
++
++	emit_16(ctx, 0x4480 | d_reg);				/* neg.l d_reg */
++
++	bpf_put_reg32(dst[1], d_reg, ctx);
++	emit_16(ctx, 0x7000 | (tmp1[0] << 9));			/* moveq #0, tmp1 */
++	bpf_put_reg32(dst[0], tmp1[0], ctx);
++}
++
++static void emit_alu64_neg(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	s8 d_lo = bpf_get_reg32(dst[1], tmp1[1], ctx);
++	s8 d_hi = bpf_get_reg32(dst[0], tmp1[0], ctx);
++
++	emit_16(ctx, 0x4480 | d_lo);				/* neg.l d_lo */
++	emit_16(ctx, 0x4080 | d_hi);				/* negx.l d_hi */
++
++	bpf_put_reg32(dst[1], d_lo, ctx);
++	bpf_put_reg32(dst[0], d_hi, ctx);
++}
++
++static void emit_alu32_x(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *src = bpf2m68k[insn->src_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++	s8 d_reg, s_reg;
++
++	d_reg = bpf_get_reg32(dst[1], tmp1[1], ctx);
++	s_reg = bpf_get_reg32(src[1], tmp2[1], ctx);
++
++	switch (BPF_OP(insn->code)) {
++	case BPF_MOV:
++		if (insn->off == 8 || insn->off == 16) {
++			if (d_reg != s_reg)
++				emit_16(ctx, 0x2000 | (d_reg << 9) | s_reg); /* move.l src, dst */
++			if (insn->off == 8)
++				emit_16(ctx, 0x49c0 | d_reg);	/* extb.l d_reg */
++			else
++				emit_16(ctx, 0x48c0 | d_reg);	/* ext.l d_reg */
 +		} else {
-+			ret = rb_insert(rbtree, key, 2 * key);
++			if (d_reg != s_reg)
++				emit_16(ctx, 0x2000 | (d_reg << 9) | s_reg); /* move.l src, dst */
 +		}
-+		if (ret)
-+			return 2 + 3 * i;
++		break;
++	case BPF_ADD:
++		emit_16(ctx, 0xd080 | (d_reg << 9) | s_reg);	/* add.l src, dst */
++		break;
++	case BPF_SUB:
++		emit_16(ctx, 0x9080 | (d_reg << 9) | s_reg);	/* sub.l src, dst */
++		break;
++	case BPF_AND:
++		emit_16(ctx, 0xc080 | (d_reg << 9) | s_reg);	/* and.l src, dst */
++		break;
++	case BPF_OR:
++		emit_16(ctx, 0x8080 | (d_reg << 9) | s_reg);	/* or.l src, dst */
++		break;
++	case BPF_XOR:
++		emit_16(ctx, 0xb180 | (s_reg << 9) | d_reg);	/* eor.l src, dst */
++		break;
++	case BPF_LSH:
++	case BPF_RSH:
++	case BPF_ARSH: {
++		s8 count_reg = tmp2[1];
 +
-+		/* Read it back. */
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return 2 + 3 * i + 1;
++		if (s_reg != count_reg)
++			emit_16(ctx, 0x2000 | (count_reg << 9) | s_reg); /* move.l src, count */
 +
-+		if (value != 2 * key)
-+			return 2 + 3 * i + 2;
++		emit_16(ctx, 0x0280 | count_reg);		/* andi.l #imm, count */
++		emit_32(ctx, 0x1f);
++
++		if (BPF_OP(insn->code) == BPF_LSH)
++			emit_16(ctx, 0xe1a8 | (count_reg << 9) | d_reg); /* lsl.l count, dst */
++		else if (BPF_OP(insn->code) == BPF_RSH)
++			emit_16(ctx, 0xe0a8 | (count_reg << 9) | d_reg); /* lsr.l count, dst */
++		else
++			emit_16(ctx, 0xe0a0 | (count_reg << 9) | d_reg); /* asr.l count, dst */
++		break;
++	}
 +	}
 +
-+	/* Go find all inserted pairs. */
-+	for (i = 0; i < numkeys && can_loop; i++) {
-+		key = keys[i];
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return 302 + 2 * i;
-+
-+		if (value != 2 * key)
-+			return 302 + 2 * i + 1;
-+	}
-+
-+	/* RB_ALLOC trees are destroyed while still having elements. */
-+	if (rbtree->alloc == RB_ALLOC)
-+		return rb_destroy(rbtree);
-+
-+	/* Otherwise manually clean up the tree. */
-+	if (clean_up_noalloc_tree(rbtree))
-+		return 5;
-+
-+	return rb_destroy(rbtree);
++	bpf_put_reg32(dst[1], d_reg, ctx);
++	emit_16(ctx, 0x7000 | (tmp1[0] << 9));			/* moveq #0, tmp1 */
++	bpf_put_reg32(dst[0], tmp1[0], ctx);
 +}
 +
-+SEC("syscall")
-+__weak int test_rbtree_remove_one(void)
++static void emit_alu32_k(const struct bpf_insn *insn, struct jit_ctx *ctx)
 +{
-+	u64 key = 20, value = 5, newvalue;
-+	int ret;
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++	s8 d_reg;
 +
-+	rbtree_t *rbtree;
++	d_reg = bpf_get_reg32(dst[1], tmp1[1], ctx);
 +
-+	rbtree = rb_create(RB_ALLOC, RB_DEFAULT);
-+	if (!rbtree)
-+		return 1;
++	switch (BPF_OP(insn->code)) {
++	case BPF_MOV:
++		emit_16(ctx, 0x203c | (d_reg << 9));		/* move.l #imm, dst */
++		emit_32(ctx, insn->imm);
++		break;
++	case BPF_ADD:
++		emit_16(ctx, 0x0680 | d_reg);			/* addi.l #imm, dst */
++		emit_32(ctx, insn->imm);
++		break;
++	case BPF_SUB:
++		emit_16(ctx, 0x0480 | d_reg);			/* subi.l #imm, dst */
++		emit_32(ctx, insn->imm);
++		break;
++	case BPF_AND:
++		emit_16(ctx, 0x0280 | d_reg);			/* andi.l #imm, dst */
++		emit_32(ctx, insn->imm);
++		break;
++	case BPF_OR:
++		emit_16(ctx, 0x0080 | d_reg);			/* ori.l #imm, dst */
++		emit_32(ctx, insn->imm);
++		break;
++	case BPF_XOR:
++		emit_16(ctx, 0x0a80 | d_reg);			/* eori.l #imm, dst */
++		emit_32(ctx, insn->imm);
++		break;
++	case BPF_LSH:
++	case BPF_RSH:
++	case BPF_ARSH:
++		emit_16(ctx, 0x203c | (tmp2[1] << 9));		/* move.l #imm, count */
++		emit_32(ctx, insn->imm & 0x1f);
 +
-+	ret = rb_find(rbtree, key, &newvalue);
-+	if (!ret)
-+		return 2;
-+
-+	ret = rb_insert(rbtree, key, value);
-+	if (ret)
-+		return 3;
-+
-+	ret = rb_find(rbtree, key, &newvalue);
-+	if (ret || value != newvalue)
-+		return 4;
-+
-+	ret = rb_remove(rbtree, key);
-+	if (ret)
-+		return 5;
-+
-+	ret = rb_find(rbtree, key, &newvalue);
-+	if (!ret)
-+		return 6;
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+static __always_inline int remove_many_verify_all_present(rbtree_t *rbtree)
-+{
-+	const size_t numkeys = sizeof(morekeys) / sizeof(morekeys[0]);
-+	u64 value;
-+	int ret;
-+	int i;
-+
-+	for (i = 0; i < numkeys && can_loop; i++) {
-+		u64 key = morekeys[i];
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return -1;
-+
-+		if (value != 2 * key)
-+			return -1;
++		if (BPF_OP(insn->code) == BPF_LSH)
++			emit_16(ctx, 0xe1a8 | (tmp2[1] << 9) | d_reg);	/* lsl.l count, dst */
++		else if (BPF_OP(insn->code) == BPF_RSH)
++			emit_16(ctx, 0xe0a8 | (tmp2[1] << 9) | d_reg);	/* lsr.l count, dst */
++		else
++			emit_16(ctx, 0xe0a0 | (tmp2[1] << 9) | d_reg);	/* asr.l count, dst */
++		break;
 +	}
 +
-+	return 0;
++	bpf_put_reg32(dst[1], d_reg, ctx);
++	emit_16(ctx, 0x7000 | (tmp1[0] << 9));			/* moveq #0, tmp1 */
++	bpf_put_reg32(dst[0], tmp1[0], ctx);
 +}
 +
-+static __always_inline int remove_many_verify_remaining(rbtree_t *rbtree)
++static void emit_alu64_x(const struct bpf_insn *insn, struct jit_ctx *ctx)
 +{
-+	const size_t numkeys = sizeof(morekeys) / sizeof(morekeys[0]);
-+	u64 value;
-+	int ret;
-+	int i;
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *src = bpf2m68k[insn->src_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++	s8 d_lo, d_hi, s_lo, s_hi;
 +
-+	for (i = 0; i < numkeys && can_loop; i += 2) {
-+		u64 key = morekeys[i];
++	d_lo = bpf_get_reg32(dst[1], tmp1[1], ctx);
++	d_hi = bpf_get_reg32(dst[0], tmp1[0], ctx);
++	s_lo = bpf_get_reg32(src[1], tmp2[1], ctx);
++	s_hi = bpf_get_reg32(src[0], tmp2[0], ctx);
 +
-+		ret = rb_find(rbtree, key, &value);
-+		if (!ret)
-+			return -1;
++	switch (BPF_OP(insn->code)) {
++	case BPF_MOV:
++		if (insn->off == 8 || insn->off == 16 || insn->off == 32) {
++			if (d_lo != s_lo)
++				emit_16(ctx, 0x2000 | (d_lo << 9) | s_lo); /* move.l src, dst */
 +
-+		if (i + 1 >= numkeys)
-+			break;
++			if (insn->off == 8)
++				emit_16(ctx, 0x49c0 | d_lo);		/* extb.l d_lo */
++			else if (insn->off == 16)
++				emit_16(ctx, 0x48c0 | d_lo);		/* ext.l d_lo */
 +
-+		key = morekeys[i + 1];
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return -1;
-+
-+		if (value != 2 * key)
-+			return -1;
-+	}
-+
-+	for (i = 1; i < numkeys && can_loop; i += 2) {
-+		u64 key = morekeys[i];
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return -1;
-+
-+		if (value != 2 * key)
-+			return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static __noinline int remove_many_alloc(rbtree_t *rbtree)
-+{
-+	const size_t numkeys = sizeof(morekeys) / sizeof(morekeys[0]);
-+	u64 value;
-+	int ret;
-+	int i;
-+
-+	for (i = 0; i < numkeys && can_loop; i++) {
-+		u64 key = morekeys[i];
-+
-+		ret = rb_insert(rbtree, key, 2 * key);
-+		if (ret)
-+			return -1;
-+
-+		if (rb_integrity_check(rbtree)) {
-+			arena_stderr("iteration %d\n", i);
-+			return -EINVAL;
++			emit_16(ctx, 0x4a80 | d_lo);			/* tst.l d_lo */
++			emit_16(ctx, 0x6b04);				/* bmi.s .+6 */
++			emit_16(ctx, 0x7000 | (d_hi << 9));		/* moveq #0, d_hi */
++			emit_16(ctx, 0x6002);				/* bra.s .+4 */
++			emit_16(ctx, 0x70ff | (d_hi << 9));		/* moveq #-1, d_hi */
++		} else {
++			if (d_lo != s_lo)
++				emit_16(ctx, 0x2000 | (d_lo << 9) | s_lo); /* move.l s_lo, d_lo */
++			if (d_hi != s_hi)
++				emit_16(ctx, 0x2000 | (d_hi << 9) | s_hi); /* move.l s_hi, d_hi */
 +		}
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return -1;
-+
-+		if (value != 2 * key)
-+			return -1;
++		break;
++	case BPF_ADD:
++		emit_16(ctx, 0xd080 | (d_lo << 9) | s_lo);		/* add.l s_lo, d_lo */
++		emit_16(ctx, 0xd180 | (d_hi << 9) | s_hi);		/* addx.l s_hi, d_hi */
++		break;
++	case BPF_SUB:
++		emit_16(ctx, 0x9080 | (d_lo << 9) | s_lo);		/* sub.l s_lo, d_lo */
++		emit_16(ctx, 0x9180 | (d_hi << 9) | s_hi);		/* subx.l s_hi, d_hi */
++		break;
++	case BPF_AND:
++		emit_16(ctx, 0xc080 | (d_lo << 9) | s_lo);		/* and.l s_lo, d_lo */
++		emit_16(ctx, 0xc080 | (d_hi << 9) | s_hi);		/* and.l s_hi, d_hi */
++		break;
++	case BPF_OR:
++		emit_16(ctx, 0x8080 | (d_lo << 9) | s_lo);		/* or.l s_lo, d_lo */
++		emit_16(ctx, 0x8080 | (d_hi << 9) | s_hi);		/* or.l s_hi, d_hi */
++		break;
++	case BPF_XOR:
++		emit_16(ctx, 0xb180 | (s_lo << 9) | d_lo);		/* eor.l s_lo, d_lo */
++		emit_16(ctx, 0xb180 | (s_hi << 9) | d_hi);		/* eor.l s_hi, d_hi */
++		break;
 +	}
 +
-+	ret = remove_many_verify_all_present(rbtree);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < numkeys && can_loop; i += 2) {
-+		u64 key = morekeys[i];
-+
-+		ret = rb_remove(rbtree, key);
-+		if (ret) {
-+			arena_stderr("Failed to remove %ld\n", key);
-+			return -1;
-+		}
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (!ret)
-+			return -1;
-+	}
-+
-+	return remove_many_verify_remaining(rbtree);
++	bpf_put_reg32(dst[1], d_lo, ctx);
++	bpf_put_reg32(dst[0], d_hi, ctx);
 +}
 +
-+static __noinline int remove_many_noalloc(rbtree_t *rbtree)
++static void emit_alu64_k(const struct bpf_insn *insn, struct jit_ctx *ctx)
 +{
-+	const size_t numkeys = sizeof(morekeys) / sizeof(morekeys[0]);
-+	node_ctx *first = NULL, *last = NULL;
-+	u64 value;
-+	int ret;
-+	int i;
-+
-+	for (i = 0; i < numkeys && can_loop; i++) {
-+		u64 key = morekeys[i];
-+		node_ctx *nodec = malloc(sizeof(*nodec));
-+
-+		if (!nodec) {
-+			arena_stderr("out of memory\n");
-+			return -ENOMEM;
-+		}
-+		nodec->rbnode.key = key;
-+		nodec->rbnode.value = 2 * key;
-+		nodec->next = NULL;
-+
-+		if (!first)
-+			first = nodec;
-+
-+		if (last)
-+			last->next = nodec;
-+		last = nodec;
-+
-+		ret = rb_insert_node(rbtree, &nodec->rbnode);
-+		if (ret)
-+			return -1;
-+
-+		if (rb_integrity_check(rbtree)) {
-+			arena_stderr("iteration %d\n", i);
-+			return -EINVAL;
-+		}
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (ret)
-+			return -1;
-+
-+		if (value != 2 * key)
-+			return -1;
-+	}
-+
-+	ret = remove_many_verify_all_present(rbtree);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < numkeys && can_loop; i += 2) {
-+		u64 key = morekeys[i];
-+		node_ctx *nodec = first;
-+
-+		if (!nodec || key != nodec->rbnode.key)
-+			return -1;
-+
-+		first = nodec->next ? nodec->next->next : NULL;
-+		ret = rb_remove_node(rbtree, &nodec->rbnode);
-+		if (ret) {
-+			arena_stderr("Failed to remove %ld\n", key);
-+			return -1;
-+		}
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (!ret)
-+			return -1;
-+	}
-+
-+	return remove_many_verify_remaining(rbtree);
-+}
-+
-+static inline int remove_many(enum rbtree_alloc alloc,
-+			      enum rbtree_insert_mode insert)
-+{
-+	int ret;
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(alloc, insert);
-+	if (!rbtree)
-+		return -ENOMEM;
-+
-+	ret = (alloc == RB_ALLOC) ? remove_many_alloc(rbtree)
-+				: remove_many_noalloc(rbtree);
-+	if (ret)
-+		return ret;
-+
-+	if (alloc == RB_ALLOC)
-+		return rb_destroy(rbtree);
-+
-+	ret = clean_up_noalloc_tree(rbtree);
-+	if (ret)
-+		return ret;
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_insert_many_update(void)
-+{
-+	return insert_many(RB_ALLOC, RB_UPDATE);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_insert_many_noalloc(void)
-+{
-+	return insert_many(RB_NOALLOC, RB_DUPLICATE);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_remove_many_update(void)
-+{
-+	return remove_many(RB_ALLOC, RB_UPDATE);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_remove_many_noalloc(void)
-+{
-+	return remove_many(RB_NOALLOC, RB_DUPLICATE);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_add_remove_circular(void)
-+{
-+	const size_t iters = 60;
-+	const size_t prefill = 10;
-+	const size_t numkeys = 50;
-+	const size_t prefix = 400000;
-+	u64 value, rmval;
-+	int errval = 1;
-+	u64 key;
-+	int ret;
-+	int i;
-+
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(RB_ALLOC, RB_UPDATE);
-+	if (!rbtree)
-+		return 1;
-+
-+	for (i = 0; i < prefill && can_loop; i++) {
-+		ret = rb_insert(rbtree, prefix + (i % numkeys), i);
-+		if (ret)
-+			return errval;
-+
-+		errval += 1;
-+	}
-+
-+	errval = 2 * 1000 * 1000;
-+
-+	for (i = 0; i < prefill && can_loop; i++) {
-+		/* Read it back. */
-+		ret = rb_find(rbtree, prefix + (i % numkeys), &value);
-+		if (ret)
-+			return errval;
-+
-+		if (value != i)
-+			return errval;
-+	}
-+
-+	errval = 3 * 1000 * 1000;
-+
-+	for (i = prefill; i < iters && can_loop; i++) {
-+		key = prefix + (i % numkeys);
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (!ret) {
-+			arena_stderr("Key %d already present\n", key);
-+			return errval;
-+		}
-+
-+		errval += 1;
-+
-+		ret = rb_insert(rbtree, key, i);
-+		if (ret) {
-+			arena_stderr("ITERATION %d\n", i);
-+			rb_print(rbtree);
-+			return errval;
-+		}
-+
-+		rmval = i - prefill;
-+
-+		errval += 1;
-+
-+		ret = rb_find(rbtree, prefix + (rmval % numkeys), &value);
-+		if (ret)
-+			return errval;
-+
-+		errval += 1;
-+
-+		if (value != rmval)
-+			return errval;
-+
-+		errval += 1;
-+
-+		ret = rb_remove(rbtree, prefix + (rmval % numkeys));
-+		if (ret) {
-+			arena_stderr("ITERATION %d\n", i);
-+			return errval;
-+		}
-+
-+		errval += 1;
-+	}
-+
-+	for (i = 0; i < numkeys && can_loop; i++) {
-+		rb_remove(rbtree, prefix + i);
-+	}
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_add_remove_circular_reverse(void)
-+{
-+	const size_t iters = 110;
-+	const size_t prefill = 10;
-+	const size_t numkeys = 50;
-+	const size_t prefix = 500000;
-+	u64 value, rmval;
-+	int errval = 1;
-+	u64 key;
-+	int ret;
-+	int i;
-+
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(RB_ALLOC, RB_UPDATE);
-+	if (!rbtree)
-+		return 1;
-+
-+	for (i = 0; i < prefill && can_loop; i++) {
-+		ret = rb_insert(rbtree, prefix - (i % numkeys), i);
-+		if (ret)
-+			return errval;
-+
-+		errval += 1;
-+	}
-+
-+	errval = 2 * 1000 * 1000;
-+
-+	for (i = 0; i < prefill && can_loop; i++) {
-+		/* Read it back. */
-+		ret = rb_find(rbtree, prefix - (i % numkeys), &value);
-+		if (ret)
-+			return errval;
-+
-+		if (value != i)
-+			return errval;
-+	}
-+
-+	errval = 3 * 1000 * 1000;
-+
-+	for (i = prefill; i < iters && can_loop; i++) {
-+		key = prefix - (i % numkeys);
-+
-+		ret = rb_find(rbtree, key, &value);
-+		if (!ret) {
-+			arena_stderr("Key %d already present\n", key);
-+			return errval;
-+		}
-+
-+		errval += 1;
-+
-+		ret = rb_insert(rbtree, key, i);
-+		if (ret) {
-+			arena_stderr("error %d on insert\n", ret);
-+			rb_print(rbtree);
-+			return errval;
-+		}
-+
-+		rmval = i - prefill;
-+
-+		errval += 1;
-+
-+		ret = rb_find(rbtree, prefix - (rmval % numkeys), &value);
-+		if (ret)
-+			return errval;
-+
-+		errval += 1;
-+
-+		if (value != rmval)
-+			return errval;
-+
-+		errval += 1;
-+
-+		ret = rb_remove(rbtree, prefix - (rmval % numkeys));
-+		if (ret)
-+			return errval;
-+
-+		errval += 1;
-+	}
-+
-+
-+	errval = 4 * 1000 * 1000;
-+	for (i = 0; i < prefill && can_loop; i++) {
-+		ret = rb_remove(rbtree, prefix - i);
-+		if (ret) {
-+			arena_stderr("Did not remove %d, error %d\n", prefix - i, ret);
-+			return errval + i;
-+		}
-+	}
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_least_pop(void)
-+{
-+	const size_t keys = 10;
-+	u64 key, value;
-+	int errval = 1;
-+	int ret, i;
-+
-+	rbtree_t *rbtree;
-+
-+	rbtree = rb_create(RB_ALLOC, RB_DEFAULT);
-+	if (!rbtree)
-+		return errval;
-+
-+	errval += 1;
-+
-+	for (i = 0; i < keys / 2 && can_loop; i++) {
-+		ret = rb_insert(rbtree, i, i);
-+		if (ret)
-+			return errval;
-+
-+		errval += 1;
-+
-+		ret = rb_insert(rbtree, keys - 1 - i, keys - 1 - i);
-+		if (ret)
-+			return errval;
-+
-+		errval += 1;
-+
-+		ret = rb_least(rbtree, &key, &value);
-+		if (ret)
-+			return errval;
-+
-+		errval += 1;
-+
-+		if (key != 0 || value != 0)
-+			return errval;
-+
-+		errval += 1;
-+	}
-+
-+	errval = 1000;
-+
-+	for (i = 0; i < keys && can_loop; i++) {
-+		ret = rb_least(rbtree, &key, &value);
-+		if (ret) {
-+			arena_stderr("rb_least failed with %d\n", ret);
-+			return errval;
-+		}
-+
-+		errval += 1;
-+
-+		if (key != i || value != i) {
-+			arena_stderr("Got KV %ld/%ld expected %d\n", key, value, i);
-+			return errval;
-+		}
-+
-+		errval += 1;
-+
-+		ret = rb_pop(rbtree, &key, &value);
-+		if (ret) {
-+			arena_stderr("Error %d during pop on iter %d\n", ret, i);
-+			return errval;
-+		}
-+
-+		errval += 1;
-+
-+		if (key != i || value != i)
-+			return errval;
-+	}
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+/* Reject rb_pop() for RB_NOALLOC trees. */
-+SEC("syscall")
-+__weak int test_rbtree_noalloc_pop(void)
-+{
-+	const u64 expect_value = 1;
-+	const u64 expect_key = 0;
-+	rbtree_t *rbtree;
-+	rbnode_t *node;
-+	u64 value = 0;
-+	int ret;
-+
-+	rbtree = rb_create(RB_NOALLOC, RB_DEFAULT);
-+	if (!rbtree)
-+		return 1;
-+
-+	node = rb_node_alloc(rbtree, expect_key, expect_value);
-+	if (!node) {
-+		rb_destroy(rbtree);
-+		return 2;
-+	}
-+
-+	ret = rb_insert_node(rbtree, node);
-+	if (ret) {
-+		rb_node_free(rbtree, node);
-+		rb_destroy(rbtree);
-+		return 3;
-+	}
-+
-+	ret = rb_pop(rbtree, NULL, &value);
-+	if (ret != -EINVAL)
-+		return 4;
-+
-+	ret = rb_find(rbtree, expect_key, &value);
-+	if (ret)
-+		return 5;
-+
-+	if (value != expect_value)
-+		return 6;
-+
-+	ret = rb_remove_node(rbtree, node);
-+	if (ret)
-+		return 7;
-+
-+	ret = rb_node_free(rbtree, node);
-+	if (ret)
-+		return 8;
-+
-+	return rb_destroy(rbtree);
-+}
-+
-+SEC("syscall")
-+__weak int test_rbtree_alloc_check(void)
-+{
-+	rbtree_t *alloc, *noalloc;
-+	rbnode_t *node;
-+	int ret;
-+
-+	alloc = rb_create(RB_ALLOC, RB_DEFAULT);
-+	if (!alloc)
-+		return 1;
-+
-+	noalloc = rb_create(RB_NOALLOC, RB_DEFAULT);
-+	if (!noalloc)
-+		return 2;
-+
-+	/*
-+	 * Can't allocate a node for a tree that allocates it itself.
-+	 * Ditto for noalloc.
-+	 */
-+	node = rb_node_alloc(alloc, 0, 0);
-+	if (node)
-+		return 3;
-+
-+	node = rb_node_alloc(noalloc, 0, 0);
-+	if (!node)
-+		return 4;
-+
-+	/*
-+	 * RB_ALLOC trees can use rb_insert, RB_NOALLOC trees can
-+	 * use rb_insert_node. RB_ALLOC and RB_NOALLOC trees cannot
-+	 * use each other's APIs.
-+	 *
-+	 * NOTE: This begs the question, why not different types? We
-+	 * want to partially share the API and that would require us
-+	 * to duplicate it.
-+	 */
-+	if (rb_insert(alloc, 0, 0))
-+		return 5;
-+
-+	if (!rb_insert_node(alloc, node))
-+		return 6;
-+
-+	if (!rb_remove_node(alloc, node))
-+		return 7;
-+
-+	if (rb_remove(alloc, 0))
-+		return 8;
-+
-+	if (rb_insert_node(noalloc, node))
-+		return 9;
-+
-+	if (!rb_insert(noalloc, 0, 0))
-+		return 10;
-+
-+	if (!rb_remove(noalloc, 0))
-+		return 11;
-+
-+	if (rb_remove_node(noalloc, node))
-+		return 12;
-+
-+	ret = rb_destroy(alloc);
-+	if (ret)
-+		return ret;
-+	return rb_destroy(noalloc);
-+}
-diff --git a/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c b/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
-new file mode 100644
-index 000000000000..2ce2dfe5a223
---- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
-@@ -0,0 +1,1032 @@
-+// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
-+/*
-+ * Copyright (c) 2025-2026 Meta Platforms, Inc. and affiliates.
-+ * Copyright (c) 2025-2026 Emil Tsalapatis <emil@etsalapatis.com>
-+ */
-+
-+#include <libarena/common.h>
-+
-+#include <libarena/asan.h>
-+#include <libarena/rbtree.h>
-+
-+int rb_integrity_check(rbtree_t *rbtree __arg_arena);
-+void rbnode_print(size_t depth, rbnode_t *rbn);
-+static int rbnode_replace(rbtree_t *rbtree, rbnode_t *existing, rbnode_t *replacement);
-+
-+u64 rb_create_internal(enum rbtree_alloc alloc, enum rbtree_insert_mode insert)
-+{
-+	rbtree_t *rbtree;
-+
-+	rbtree = malloc(sizeof(*rbtree));
-+	if (unlikely(!rbtree))
-+		return (u64)(NULL);
-+
-+	/*
-+	 * RB_UPDATE overwrites existing values in the nodes, but RB_NOALLOC
-+	 * trees manage the tree nodes directly (including holding pointers
-+	 * to them). Disallow mixing the two modes to avoid dealing with
-+	 * unintuitive semantics.
-+	 */
-+	if (alloc == RB_NOALLOC && insert == RB_UPDATE) {
-+		arena_stderr("WARNING: Cannot combine RB_NOALLOC and RB_UPDATE");
-+		free(rbtree);
-+		return (u64)NULL;
-+	}
-+
-+	rbtree->alloc = alloc;
-+	rbtree->insert = insert;
-+	rbtree->root = NULL;
-+	rbtree->freelist = NULL;
-+
-+	return (u64)rbtree;
-+}
-+
-+__weak
-+int rb_destroy(rbtree_t *rbtree __arg_arena)
-+{
-+	rbnode_t *node, *next;
-+	int ret;
-+
-+	arena_subprog_init();
-+
-+	if (rbtree->alloc == RB_NOALLOC) {
-+		/*
-+		 * We cannot do anything about RB_NOALLOC nodes. The whole
-+		 * point of RB_NOALLOC is that the nodes are directly owned
-+		 * by the caller that allocates and inserts them. We could
-+		 * unilaterally grab all nodes and free them anyway, but that
-+		 * would almost certainly cause UAF as the callers keep accessing
-+		 * the now freed nodes. Throw an error instead.
-+		 */
-+		if (rbtree->root) {
-+			arena_stderr("WARNING: Trying to destroy RB_NOALLOC tree "
-+					"without removing all nodes");
-+			return -EBUSY;
-+		}
-+
-+		goto drain_freelist;
-+	}
-+
-+	while (rbtree->root && can_loop) {
-+		ret = rb_remove(rbtree, rbtree->root->key);
-+		if (ret)
-+			return ret;
-+	}
-+
-+drain_freelist:
-+	node = rbtree->freelist;
-+	while (node && can_loop) {
-+		next = node->parent;
-+		free(node);
-+		node = next;
-+	}
-+
-+	free(rbtree);
-+	return 0;
-+}
-+
-+static inline int rbnode_dir(rbnode_t *node)
-+{
-+	/* Arbitrarily choose a direction for the root. */
-+	if (unlikely(!node->parent))
-+		return 0;
-+
-+	return (node->parent->left == node) ? 0 : 1;
-+}
-+
-+int rbnode_rotate(rbtree_t *rbtree __arg_arena, rbnode_t *node __arg_arena, int dir)
-+{
-+	rbnode_t *tmp, *parent;
-+	int parentdir;
-+
-+	parent = node->parent;
-+	if (parent)
-+		parentdir = rbnode_dir(node);
-+
-+	/* If we're doing a root change, are we the root? */
-+	if (unlikely(!parent && rbtree->root != node))
-+		return -EINVAL;
-+
-+	/*
-+	 * Does the node we're turning into the root into exist?
-+	 * Note that the new root is on the opposite side of the
-+	 * rotation's direction.
-+	 */
-+	tmp = node->child[1 - dir];
-+	if (unlikely(!tmp))
-+		return -EINVAL;
-+
-+	/* Steal the closest child of the new root. */
-+	node->child[1 - dir] = tmp->child[dir];
-+	if (node->child[1 - dir])
-+		node->child[1 - dir]->parent = node;
-+
-+	/* Put the node below the new root.*/
-+	tmp->child[dir] = node;
-+	node->parent = tmp;
-+
-+	tmp->parent = parent;
-+	if (parent)
-+		parent->child[parentdir] = tmp;
-+	else
-+		rbtree->root = tmp;
-+
-+	return 0;
-+}
-+
-+/*
-+ * We support both regular lookups and "least upper bound" lookups,
-+ * i.e. finding the "leftmost" node smaller than or equal to a key.
-+ */
-+enum rbnode_find_mode {
-+	RBN_FIND_DFL	= 0,
-+	RBN_FIND_LUB	= 1,
-+};
-+
-+static
-+rbnode_t *rbnode_find(rbnode_t *subtree, u64 key, enum rbnode_find_mode mode)
-+{
-+	rbnode_t *node = subtree;
-+	int dir;
-+
-+	if (!subtree)
-+		return NULL;
-+
-+	while (can_loop) {
-+		/*
-+		 * If we are not looking for the least upper bound,
-+		 * we have found the only key. Otherwise keep going
-+		 * until we find the "leftmost" instance of the key.
-+		 */
-+		if (mode == RBN_FIND_DFL && node->key == key)
-+			break;
-+
-+		dir = (key <= node->key) ? 0 : 1;
-+
-+		if (!node->child[dir])
-+			break;
-+
-+		/*
-+		 * For least upper bound lookups, ensure that we
-+		 * stop searching once we find the rightmost key.
-+		 */
-+		if (node->key == key && node->child[dir]->key != key)
-+			break;
-+
-+		node = node->child[dir];
-+	}
-+
-+	return node;
-+}
-+
-+__weak
-+int rb_find(rbtree_t *rbtree __arg_arena, u64 key, u64 *value)
-+{
-+	rbnode_t *node;
-+
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
-+
-+	if (unlikely(!value))
-+		return -EINVAL;
-+
-+	node = rbnode_find(rbtree->root, key, RBN_FIND_DFL);
-+	if (!node || node->key != key)
-+		return -ENOENT;
-+
-+	*value = node->value;
-+
-+	return 0;
-+}
-+
-+static inline rbnode_t *rb_node_alloc_common(rbtree_t *rbtree __arg_arena, u64 key, u64 value)
-+{
-+	rbnode_t *rbnode = NULL;
-+
-+	if (unlikely(!rbtree))
-+		return NULL;
-+
-+	/* Use the built-in node cache for the rbtree to avoid going to the allocator. */
-+	do  {
-+		rbnode = rbtree->freelist;
-+		if (!rbnode)
-+			break;
-+
-+	} while (cmpxchg(&rbtree->freelist, rbnode, rbnode->parent) != rbnode && can_loop);
-+
-+	if (!rbnode)
-+		rbnode = malloc(sizeof(*rbnode));
-+
-+	if (!rbnode)
-+		return NULL;
-+
-+	rbnode->left = NULL;
-+	rbnode->right = NULL;
-+	rbnode->parent = NULL;
-+
-+	rbnode->key = key;
-+	rbnode->value = value;
-+	rbnode->is_red = true;
-+	return rbnode;
-+}
-+
-+__weak
-+u64 rb_node_alloc_internal(rbtree_t *rbtree __arg_arena, u64 key, u64 value)
-+{
-+	if (!rbtree) {
-+		arena_stderr("WARNING: Attempting to allocate a node "
-+				"for a NULL rbtree\n");
-+		return (u64)NULL;
-+	}
-+
-+	if (rbtree->alloc == RB_ALLOC)
-+		return (u64)NULL;
-+
-+	return (u64)rb_node_alloc_common(rbtree, key, value);
-+}
-+
-+__weak
-+int rb_node_free(rbtree_t *rbtree __arg_arena, rbnode_t *rbnode __arg_arena)
-+{
-+	rbnode_t *old;
-+
-+	do {
-+		old = rbtree->freelist;
-+		rbnode->parent = old;
-+	} while (cmpxchg(&rbtree->freelist, old, rbnode) != old && can_loop);
-+
-+	return 0;
-+}
-+
-+static
-+int rb_node_insert(rbtree_t *rbtree __arg_arena, rbnode_t *node __arg_arena)
-+{
-+	rbnode_t *grandparent, *parent = rbtree->root;
-+	enum rbnode_find_mode mode;
-+	u64 key = node->key;
-+	rbnode_t *uncle;
-+	int dir;
-+	int ret;
-+
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
-+
-+	if (!parent) {
-+		rbtree->root = node;
-+		return 0;
-+	}
-+
-+	mode = RBN_FIND_DFL;
-+	/* Always find the first node with the key when allowing duplicates. */
-+	if (rbtree->insert == RB_DUPLICATE)
-+		mode = RBN_FIND_LUB;
-+	parent = rbnode_find(parent, key, mode);
-+
-+	if (key == parent->key && rbtree->insert != RB_DUPLICATE) {
-+		if (rbtree->insert == RB_UPDATE) {
-+			/*
-+			 * Replace the old node with the new one.
-+			 * Free up the old node.
-+			 */
-+			ret = rbnode_replace(rbtree, parent, node);
-+			if (ret)
-+				return ret;
-+
-+			if (rbtree->alloc == RB_ALLOC)
-+				rb_node_free(rbtree, parent);
-+
-+			return 0;
-+		}
-+
-+		/* Otherwise it's RB_DEFAULT. */
-+		return -EALREADY;
-+	}
-+
-+	node->parent = parent;
-+	/* Also works if key == parent->key. */
-+	if (key <= parent->key)
-+		parent->left = node;
-+	else
-+		parent->right = node;
-+
-+	while (can_loop) {
-+		parent = node->parent;
-+		if (!parent)
-+			return 0;
-+
-+		if (!parent->is_red)
-+			return 0;
-+
-+		grandparent = parent->parent;
-+		if (!grandparent) {
-+			parent->is_red = false;
-+			return 0;
-+		}
-+
-+		dir = rbnode_dir(parent);
-+		uncle = grandparent->child[1 - dir];
-+
-+		if (!uncle || !uncle->is_red) {
-+			if (node == parent->child[1 - dir]) {
-+				rbnode_rotate(rbtree, parent, dir);
-+				node = parent;
-+				parent = grandparent->child[dir];
-+			}
-+
-+			rbnode_rotate(rbtree, grandparent, 1 - dir);
-+			parent->is_red = false;
-+			grandparent->is_red = true;
-+
-+			return 0;
-+		}
-+
-+		/* Uncle is red. */
-+
-+		parent->is_red = false;
-+		uncle->is_red = false;
-+		grandparent->is_red = true;
-+
-+		node = grandparent;
-+	}
-+
-+	return 0;
-+}
-+
-+int rb_insert_node(rbtree_t *rbtree __arg_arena, rbnode_t *node __arg_arena)
-+{
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
-+
-+	if (unlikely(rbtree->alloc == RB_ALLOC))
-+		return -EINVAL;
-+
-+	node->is_red = true;
-+
-+	node->left = NULL;
-+	node->right = NULL;
-+	node->parent = NULL;
-+
-+	return rb_node_insert(rbtree, node);
-+}
-+
-+__weak
-+int rb_insert(rbtree_t *rbtree __arg_arena, u64 key, u64 value)
-+{
-+	rbnode_t *node;
-+	int ret;
-+
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
-+
-+	if (unlikely(rbtree->alloc != RB_ALLOC))
-+		return -EINVAL;
-+
-+	node = rb_node_alloc_common(rbtree, key, value);
-+	if (!node)
-+		return -ENOMEM;
-+
-+	ret = rb_node_insert(rbtree, node);
-+	if (ret) {
-+		rb_node_free(rbtree, node);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static inline rbnode_t *rbnode_least(rbnode_t *subtree)
-+{
-+	while (subtree->left && can_loop)
-+		subtree = subtree->left;
-+
-+	return subtree;
-+}
-+
-+__weak int rb_least(rbtree_t *rbtree __arg_arena, u64 *key, u64 *value)
-+{
-+	rbnode_t *least;
-+	if (!rbtree->root)
-+		return -ENOENT;
-+
-+	least = rbnode_least(rbtree->root);
-+	if (key)
-+		*key = least->key;
-+	if (value)
-+		*value = least->value;
-+
-+	return 0;
-+}
-+
-+
-+/*
-+ * If we are referencing ourselves, a and b have a parent-child relation,
-+ * and we should be pointing at the other node instead.
-+ */
-+static inline void rbnode_fixup_pointers(rbnode_t *a, rbnode_t *b)
-+{
-+#define fixup(n1, n2, member) do { if (n1->member == n1) n1->member = n2; } while (0)
-+	fixup(a, b, left);
-+	fixup(a, b, right);
-+	fixup(a, b, parent);
-+#undef fixup
-+}
-+
-+static inline void rbnode_swap_values(rbnode_t *a, rbnode_t *b)
-+{
-+#define swap(n1, n2, tmp) do { (tmp) = (n1); (n1) = (n2); (n2) = (tmp); } while (0)
-+	rbnode_t *tmpnode;
-+	u64 tmp;
-+
-+	/* Swap the pointers. */
-+	swap(a->is_red, b->is_red, tmp);
-+
-+	swap(a->left, b->left, tmpnode);
-+	swap(a->right, b->right, tmpnode);
-+	swap(a->parent, b->parent, tmpnode);
-+#undef swap
-+
-+	/* Account for the nodes being parent and child. */
-+	rbnode_fixup_pointers(b, a);
-+	rbnode_fixup_pointers(a, b);
-+}
-+
-+static inline void rbnode_adjust_neighbors(rbtree_t *rbtree, rbnode_t *node, int dir)
-+{
-+	if (node->left)
-+		node->left->parent = node;
-+	if (node->right)
-+		node->right->parent = node;
-+
-+	if (node->parent) {
-+		node->parent->child[dir] = node;
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++	s8 d_lo, d_hi, s_lo, s_hi;
++	u32 imm_lo = insn->imm;
++	u32 imm_hi = insn->imm < 0 ? 0xffffffff : 0;
++
++	d_lo = bpf_get_reg32(dst[1], tmp1[1], ctx);
++	d_hi = bpf_get_reg32(dst[0], tmp1[0], ctx);
++
++	if (BPF_OP(insn->code) == BPF_MOV) {
++		emit_16(ctx, 0x203c | (d_lo << 9));			/* move.l #imm, d_lo */
++		emit_32(ctx, imm_lo);
++		emit_16(ctx, 0x203c | (d_hi << 9));			/* move.l #imm, d_hi */
++		emit_32(ctx, imm_hi);
++		bpf_put_reg32(dst[1], d_lo, ctx);
++		bpf_put_reg32(dst[0], d_hi, ctx);
 +		return;
 +	}
 +
-+	rbtree->root = node;
-+}
++	s_lo = tmp2[1];
++	s_hi = tmp2[0];
 +
-+/*
-+ * Directly replace an existing node with a replacement. The replacement node
-+ * should not already be in the tree.
-+ */
-+static int rbnode_replace(rbtree_t *rbtree, rbnode_t *existing, rbnode_t *replacement)
-+{
-+	int dir = 0;
++	emit_16(ctx, 0x203c | (s_lo << 9));				/* move.l #imm, s_lo */
++	emit_32(ctx, imm_lo);
++	emit_16(ctx, 0x203c | (s_hi << 9));				/* move.l #imm, s_hi */
++	emit_32(ctx, imm_hi);
 +
-+	if (unlikely(replacement->parent || replacement->left || replacement->right))
-+		return -EINVAL;
-+
-+	if (existing->parent)
-+		dir = rbnode_dir(existing);
-+
-+	replacement->is_red = existing->is_red;
-+	replacement->left = existing->left;
-+	replacement->right = existing->right;
-+	replacement->parent = existing->parent;
-+
-+	/* Fix up the new node's neighbors. */
-+	rbnode_adjust_neighbors(rbtree, replacement, dir);
-+
-+	return 0;
-+}
-+
-+/*
-+ * Switch two nodes in the tree in place. This is useful during node deletion.
-+ * This is more involved than switching the values of the two nodes because we
-+ * must update all tree pointers.
-+ */
-+static void rbnode_switch(rbtree_t *rbtree, rbnode_t *a, rbnode_t *b)
-+{
-+	int adir = 0, bdir = 0;
-+
-+	/*
-+	 * Store the direction in the parent because we will not
-+	 * be able to recompute it once we start swapping values.
-+	 */
-+	if (a->parent)
-+		adir = rbnode_dir(a);
-+
-+	if (b->parent)
-+		bdir = rbnode_dir(b);
-+
-+	rbnode_swap_values(a, b);
-+
-+	/*
-+	 * Fix up the pointers from the children/parent to the
-+	 * new nodes.
-+	 */
-+	rbnode_adjust_neighbors(rbtree, a, bdir);
-+	rbnode_adjust_neighbors(rbtree, b, adir);
-+}
-+
-+static inline int rbnode_remove_node_single_child(rbtree_t *rbtree, rbnode_t *node, bool free)
-+{
-+	rbnode_t *child;
-+	int dir;
-+
-+	if (unlikely(node->is_red)) {
-+		arena_stderr("Node unexpectedly red\n");
-+		return -EINVAL;
++	switch (BPF_OP(insn->code)) {
++	case BPF_ADD:
++		emit_16(ctx, 0xd080 | (d_lo << 9) | s_lo);		/* add.l s_lo, d_lo */
++		emit_16(ctx, 0xd180 | (d_hi << 9) | s_hi);		/* addx.l s_hi, d_hi */
++		break;
++	case BPF_SUB:
++		emit_16(ctx, 0x9080 | (d_lo << 9) | s_lo);		/* sub.l s_lo, d_lo */
++		emit_16(ctx, 0x9180 | (d_hi << 9) | s_hi);		/* subx.l s_hi, d_hi */
++		break;
++	case BPF_AND:
++		emit_16(ctx, 0xc080 | (d_lo << 9) | s_lo);		/* and.l s_lo, d_lo */
++		emit_16(ctx, 0xc080 | (d_hi << 9) | s_hi);		/* and.l s_hi, d_hi */
++		break;
++	case BPF_OR:
++		emit_16(ctx, 0x8080 | (d_lo << 9) | s_lo);		/* or.l s_lo, d_lo */
++		emit_16(ctx, 0x8080 | (d_hi << 9) | s_hi);		/* or.l s_hi, d_hi */
++		break;
++	case BPF_XOR:
++		emit_16(ctx, 0xb180 | (s_lo << 9) | d_lo);		/* eor.l s_lo, d_lo */
++		emit_16(ctx, 0xb180 | (s_hi << 9) | d_hi);		/* eor.l s_hi, d_hi */
++		break;
 +	}
 +
-+	child = node->left ? node->left : node->right;
-+	if (unlikely(!child->is_red)) {
-+		arena_stderr("Only child is black\n");
-+		return -EINVAL;
-+	}
++	bpf_put_reg32(dst[1], d_lo, ctx);
++	bpf_put_reg32(dst[0], d_hi, ctx);
++}
 +
-+	/*
-+	 * Since it's the immediate child, we can just
-+	 * remove the parent.
-+	 */
-+	child->parent = node->parent;
++static void emit_alu64_shift(const struct bpf_insn *insn, struct jit_ctx *ctx, bool is_imm)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++	s8 d_lo, d_hi, count_reg;
++	int loop_start, done_idx;
 +
-+	if (node->parent) {
-+		dir = rbnode_dir(node);
-+		node->parent->child[dir] = child;
++	d_lo = bpf_get_reg32(dst[1], tmp1[1], ctx);
++	d_hi = bpf_get_reg32(dst[0], tmp1[0], ctx);
++	count_reg = tmp2[1];
++
++	if (is_imm) {
++		emit_16(ctx, 0x203c | (count_reg << 9));		/* move.l #imm, count_reg */
++		emit_32(ctx, insn->imm);
 +	} else {
-+		rbtree->root = child;
++		const s8 *src = bpf2m68k[insn->src_reg];
++		s8 s_lo = bpf_get_reg32(src[1], tmp2[1], ctx);
++
++		if (count_reg != s_lo)
++			emit_16(ctx, 0x2000 | (count_reg << 9) | s_lo);	/* move.l s_lo, count_reg */
 +	}
 +
-+	/* Color the child black. */
-+	child->is_red = false;
++	emit_16(ctx, 0x0280 | count_reg);			/* andi.l #0x3f, count_reg */
++	emit_32(ctx, 0x3f);
 +
-+	/* Only free if called from rb_remove. */
-+	if (free)
-+		rb_node_free(rbtree, node);
++	emit_16(ctx, 0x4a80 | count_reg);				/* tst.l count_reg */
++	emit_16(ctx, 0x6700);						/* beq.w done_idx */
++	done_idx = ctx->idx;
++	emit_16(ctx, 0);
++
++	loop_start = ctx->idx;
++
++	if (BPF_OP(insn->code) == BPF_LSH) {
++		emit_16(ctx, 0xe388 | d_lo);				/* lsll #1, d_lo */
++		emit_16(ctx, 0xe390 | d_hi);				/* roxl.l #1, d_hi */
++	} else if (BPF_OP(insn->code) == BPF_RSH) {
++		emit_16(ctx, 0xe288 | d_hi);				/* lsrl #1, d_hi */
++		emit_16(ctx, 0xe290 | d_lo);				/* roxr.l #1, d_lo */
++	} else if (BPF_OP(insn->code) == BPF_ARSH) {
++		emit_16(ctx, 0xe280 | d_hi);				/* asrl #1, d_hi */
++		emit_16(ctx, 0xe290 | d_lo);				/* roxr.l #1, d_lo */
++	}
++
++	emit_16(ctx, 0x5380 | count_reg);				/* subq.l #1, count_reg */
++	emit_16(ctx, 0x6600);						/* bne.w loop_start */
++	emit_16(ctx, (loop_start - (int)ctx->idx) * 2);
++
++	if (ctx->target)
++		ctx->target[done_idx] = (ctx->idx - done_idx) * 2;
++
++	bpf_put_reg32(dst[1], d_lo, ctx);
++	bpf_put_reg32(dst[0], d_hi, ctx);
++}
++
++static void emit_bpf_end(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	s8 d_lo, d_hi;
++	bool to_le = BPF_SRC(insn->code) == BPF_TO_LE;
++	int imm = insn->imm;
++
++	d_lo = bpf_get_reg32(dst[1], tmp1[1], ctx);
++	d_hi = bpf_get_reg32(dst[0], tmp1[0], ctx);
++
++	if (to_le) {
++		switch (imm) {
++		case 16:
++			emit_16(ctx, 0x0280 | d_lo);			/* andi.l #0xffff, d_lo */
++			emit_32(ctx, 0xffff);
++			emit_16(ctx, 0xe058 | d_lo);			/* ror.w #8, d_lo */
++			emit_16(ctx, 0x7000 | (d_hi << 9));		/* moveq #0, d_hi */
++			break;
++		case 32:
++			emit_16(ctx, 0xe058 | d_lo);			/* ror.w #8, d_lo */
++			emit_16(ctx, 0x4840 | d_lo);			/* swap d_lo */
++			emit_16(ctx, 0xe058 | d_lo);			/* ror.w #8, d_lo */
++			emit_16(ctx, 0x7000 | (d_hi << 9));		/* moveq #0, d_hi */
++			break;
++		case 64:
++			emit_16(ctx, 0xe058 | d_lo);			/* ror.w #8, d_lo */
++			emit_16(ctx, 0x4840 | d_lo);			/* swap d_lo */
++			emit_16(ctx, 0xe058 | d_lo);			/* ror.w #8, d_lo */
++
++			emit_16(ctx, 0xe058 | d_hi);			/* ror.w #8, d_hi */
++			emit_16(ctx, 0x4840 | d_hi);			/* swap d_hi */
++			emit_16(ctx, 0xe058 | d_hi);			/* ror.w #8, d_hi */
++
++			emit_16(ctx, 0xc140 | (d_hi << 9) | d_lo);	/* exg d_lo, d_hi */
++			break;
++		}
++	} else {
++		switch (imm) {
++		case 16:
++			emit_16(ctx, 0x0280 | d_lo);			/* andi.l #0xffff, d_lo */
++			emit_32(ctx, 0xffff);
++			emit_16(ctx, 0x7000 | (d_hi << 9));		/* moveq #0, d_hi */
++			break;
++		case 32:
++			emit_16(ctx, 0x7000 | (d_hi << 9));		/* moveq #0, d_hi */
++			break;
++		case 64:
++			break;
++		}
++	}
++
++	bpf_put_reg32(dst[1], d_lo, ctx);
++	bpf_put_reg32(dst[0], d_hi, ctx);
++}
++
++static void emit_math_call(const struct bpf_insn *insn, struct jit_ctx *ctx, bool is_64)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *src = bpf2m68k[insn->src_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++	s8 d_lo, d_hi, s_lo, s_hi = 0;
++	void *func = NULL;
++	u8 op = BPF_OP(insn->code);
++
++	d_lo = bpf_get_reg32(dst[1], tmp1[1], ctx);
++	d_hi = bpf_get_reg32(dst[0], tmp1[0], ctx);
++
++	if (BPF_SRC(insn->code) == BPF_X) {
++		s_lo = bpf_get_reg32(src[1], tmp2[1], ctx);
++		if (is_64)
++			s_hi = bpf_get_reg32(src[0], tmp2[0], ctx);
++	} else {
++		s_lo = tmp2[1];
++		emit_16(ctx, 0x203c | (s_lo << 9));			/* move.l #imm, s_lo */
++		emit_32(ctx, insn->imm);
++		if (is_64) {
++			s_hi = tmp2[0];
++			emit_16(ctx, 0x203c | (s_hi << 9));		/* move.l #imm, s_hi */
++			emit_32(ctx, insn->imm < 0 ? 0xffffffff : 0);
++		}
++	}
++
++	if (is_64) {
++		switch (op) {
++		case BPF_MUL:
++			func = (void *)jit_mul64;
++			break;
++		case BPF_DIV:
++			func = (void *)jit_div64;
++			break;
++		case BPF_MOD:
++			func = (void *)jit_mod64;
++			break;
++		}
++		if (BPF_CLASS(insn->code) == BPF_ALU64 && op == BPF_DIV && insn->off == 1)
++			func = (void *)jit_sdiv64;
++		if (BPF_CLASS(insn->code) == BPF_ALU64 && op == BPF_MOD && insn->off == 1)
++			func = (void *)jit_smod64;
++	} else {
++		switch (op) {
++		case BPF_MUL:
++			func = (void *)jit_mul32;
++			break;
++		case BPF_DIV:
++			func = (void *)jit_div32;
++			break;
++		case BPF_MOD:
++			func = (void *)jit_mod32;
++			break;
++		}
++		if (BPF_CLASS(insn->code) == BPF_ALU && op == BPF_DIV && insn->off == 1)
++			func = (void *)jit_sdiv32;
++		if (BPF_CLASS(insn->code) == BPF_ALU && op == BPF_MOD && insn->off == 1)
++			func = (void *)jit_smod32;
++	}
++
++	if (is_64) {
++		emit_16(ctx, 0x48e7);					/* movem.l d0-d1, -(%sp) */
++		emit_16(ctx, 0xc000);
++
++		emit_16(ctx, 0x2f00 | s_lo);				/* move.l s_lo, -(%sp) */
++		emit_16(ctx, 0x2f00 | s_hi);				/* move.l s_hi, -(%sp) */
++		emit_16(ctx, 0x2f00 | d_lo);				/* move.l d_lo, -(%sp) */
++		emit_16(ctx, 0x2f00 | d_hi);				/* move.l d_hi, -(%sp) */
++
++		emit_16(ctx, 0x207c);					/* movea.l #func, %a0 */
++		emit_32(ctx, (u32)func);
++		emit_16(ctx, 0x4e90);					/* jsr (%a0) */
++
++		emit_16(ctx, 0x4fef);					/* lea 16(%sp), %sp */
++		emit_16(ctx, 16);
++
++		emit_16(ctx, 0x2601);					/* move.l %d1, %d3 */
++		emit_16(ctx, 0x2400);					/* move.l %d0, %d2 */
++
++		emit_16(ctx, 0x4cdf);					/* movem.l (%sp)+, d0-d1 */
++		emit_16(ctx, 0x0003);
++	} else {
++		emit_16(ctx, 0x48e7);					/* movem.l d0-d1, -(%sp) */
++		emit_16(ctx, 0xc000);
++
++		emit_16(ctx, 0x2f00 | s_lo);				/* move.l s_lo, -(%sp) */
++		emit_16(ctx, 0x2f00 | d_lo);				/* move.l d_lo, -(%sp) */
++
++		emit_16(ctx, 0x207c);					/* movea.l #func, %a0 */
++		emit_32(ctx, (u32)func);
++		emit_16(ctx, 0x4e90);					/* jsr (%a0) */
++
++		emit_16(ctx, 0x4fef);					/* lea 8(%sp), %sp */
++		emit_16(ctx, 8);
++
++		emit_16(ctx, 0x2600);					/* move.l %d0, %d3 */
++		emit_16(ctx, 0x7400);					/* moveq #0, %d2 */
++
++		emit_16(ctx, 0x4cdf);					/* movem.l (%sp)+, d0-d1 */
++		emit_16(ctx, 0x0003);
++	}
++
++	bpf_put_reg32(dst[1], M68K_D3, ctx);
++	bpf_put_reg32(dst[0], M68K_D2, ctx);
++}
++
++static void emit_ldx(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *src = bpf2m68k[insn->src_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	s8 d_lo, d_hi;
++	bool is_mem_sx = BPF_MODE(insn->code) == BPF_MEMSX;
++
++	if (is_stacked(src[1])) {
++		emit_16(ctx, 0x206e);				/* movea.l d16(%fp), %a0 */
++		emit_16(ctx, (u16)src[1]);
++	} else {
++		emit_16(ctx, 0x2040 | src[1]);			/* movea.l src, %a0 */
++	}
++
++	d_lo = is_stacked(dst[1]) ? tmp1[1] : dst[1];
++	d_hi = is_stacked(dst[0]) ? tmp1[0] : dst[0];
++
++	switch (BPF_SIZE(insn->code)) {
++	case BPF_B:
++		if (!is_mem_sx)
++			emit_16(ctx, 0x7000 | (d_lo << 9));	/* moveq #0, d_lo */
++		emit_16(ctx, 0x1028 | (d_lo << 9));		/* move.b d16(%a0), d_lo */
++		emit_16(ctx, insn->off);
++		if (is_mem_sx)
++			emit_16(ctx, 0x49c0 | d_lo);	/* extb.l d_lo */
++		break;
++	case BPF_H:
++		if (!is_mem_sx)
++			emit_16(ctx, 0x7000 | (d_lo << 9));	/* moveq #0, d_lo */
++		emit_16(ctx, 0x3028 | (d_lo << 9));		/* move.w d16(%a0), d_lo */
++		emit_16(ctx, insn->off);
++		if (is_mem_sx)
++			emit_16(ctx, 0x48c0 | d_lo);	/* ext.l d_lo */
++		break;
++	case BPF_W:
++		emit_16(ctx, 0x2028 | (d_lo << 9));		/* move.l d16(%a0), d_lo */
++		emit_16(ctx, insn->off);
++		break;
++	case BPF_DW:
++		emit_16(ctx, 0x2028 | (d_hi << 9));		/* move.l d16(%a0), d_hi */
++		emit_16(ctx, insn->off);
++		emit_16(ctx, 0x41e8);				/* lea 4(%a0), %a0 */
++		emit_16(ctx, 4);
++		emit_16(ctx, 0x2028 | (d_lo << 9));		/* move.l d16(%a0), d_lo */
++		emit_16(ctx, insn->off);
++		break;
++	}
++
++	if (BPF_SIZE(insn->code) != BPF_DW) {
++		if (is_mem_sx) {
++			emit_16(ctx, 0x4a80 | d_lo);		/* tst.l d_lo */
++			emit_16(ctx, 0x6b04);			/* bmi.s .+6 */
++			emit_16(ctx, 0x7000 | (d_hi << 9));	/* moveq #0, d_hi */
++			emit_16(ctx, 0x6002);			/* bra.s .+4 */
++			emit_16(ctx, 0x70ff | (d_hi << 9));	/* moveq #-1, d_hi */
++		} else {
++			emit_16(ctx, 0x7000 | (d_hi << 9));	/* moveq #0, d_hi */
++		}
++	}
++
++	bpf_put_reg32(dst[1], d_lo, ctx);
++	bpf_put_reg32(dst[0], d_hi, ctx);
++}
++
++static void emit_stx(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *src = bpf2m68k[insn->src_reg];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++	s8 s_lo, s_hi;
++
++	if (is_stacked(dst[1])) {
++		emit_16(ctx, 0x206e);				/* movea.l d16(%fp), %a0 */
++		emit_16(ctx, (u16)dst[1]);
++	} else {
++		emit_16(ctx, 0x2040 | dst[1]);			/* movea.l dst, %a0 */
++	}
++
++	s_lo = bpf_get_reg32(src[1], tmp2[1], ctx);
++
++	switch (BPF_SIZE(insn->code)) {
++	case BPF_B:
++		emit_16(ctx, 0x1140 | s_lo);			/* move.b s_lo, d16(%a0) */
++		emit_16(ctx, insn->off);
++		break;
++	case BPF_H:
++		emit_16(ctx, 0x3140 | s_lo);			/* move.w s_lo, d16(%a0) */
++		emit_16(ctx, insn->off);
++		break;
++	case BPF_W:
++		emit_16(ctx, 0x2140 | s_lo);			/* move.l s_lo, d16(%a0) */
++		emit_16(ctx, insn->off);
++		break;
++	case BPF_DW:
++		s_hi = bpf_get_reg32(src[0], tmp2[0], ctx);
++		emit_16(ctx, 0x2140 | s_hi);			/* move.l s_hi, d16(%a0) */
++		emit_16(ctx, insn->off);
++		emit_16(ctx, 0x41e8);				/* lea 4(%a0), %a0 */
++		emit_16(ctx, 4);
++		emit_16(ctx, 0x2140 | s_lo);			/* move.l s_lo, d16(%a0) */
++		emit_16(ctx, insn->off);
++		break;
++	}
++}
++
++static void emit_st(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *tmp = bpf2m68k[TMP_REG_1];
++
++	if (is_stacked(dst[1])) {
++		emit_16(ctx, 0x206e);				/* movea.l d16(%fp), %a0 */
++		emit_16(ctx, (u16)dst[1]);
++	} else {
++		emit_16(ctx, 0x2040 | dst[1]);			/* movea.l dst, %a0 */
++	}
++
++	emit_16(ctx, 0x203c | (tmp[1] << 9));			/* move.l #imm, tmp */
++	emit_32(ctx, insn->imm);
++
++	switch (BPF_SIZE(insn->code)) {
++	case BPF_B:
++		emit_16(ctx, 0x1140 | tmp[1]);			/* move.b tmp, d16(%a0) */
++		emit_16(ctx, insn->off);
++		break;
++	case BPF_H:
++		emit_16(ctx, 0x3140 | tmp[1]);			/* move.w tmp, d16(%a0) */
++		emit_16(ctx, insn->off);
++		break;
++	case BPF_W:
++		emit_16(ctx, 0x2140 | tmp[1]);			/* move.l tmp, d16(%a0) */
++		emit_16(ctx, insn->off);
++		break;
++	case BPF_DW:
++		emit_16(ctx, 0x203c | (tmp[0] << 9));		/* move.l #imm, tmp */
++		emit_32(ctx, insn->imm < 0 ? 0xffffffff : 0);
++
++		emit_16(ctx, 0x2140 | tmp[0]);			/* move.l tmp, d16(%a0) */
++		emit_16(ctx, insn->off);
++		emit_16(ctx, 0x41e8);				/* lea 4(%a0), %a0 */
++		emit_16(ctx, 4);
++		emit_16(ctx, 0x2140 | tmp[1]);			/* move.l tmp, d16(%a0) */
++		emit_16(ctx, insn->off);
++		break;
++	}
++}
++
++static void emit_atomic(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *src = bpf2m68k[insn->src_reg];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++
++	if (is_stacked(dst[1])) {
++		emit_16(ctx, 0x206e);				/* movea.l d16(%fp), %a0 */
++		emit_16(ctx, (u16)dst[1]);
++	} else {
++		emit_16(ctx, 0x2040 | dst[1]);			/* movea.l dst, %a0 */
++	}
++
++	if (insn->off) {
++		emit_16(ctx, 0x41e8);				/* lea d16(%a0), %a0 */
++		emit_16(ctx, insn->off);
++	}
++
++	if (BPF_SIZE(insn->code) == BPF_W) {
++		s8 s_lo = bpf_get_reg32(src[1], tmp2[1], ctx);
++
++		if (insn->imm != BPF_CMPXCHG) {
++			emit_16(ctx, 0x48e7);			/* movem.l d0-d1, -(%sp) */
++			emit_16(ctx, 0xc000);
++		}
++
++		emit_16(ctx, 0x2f00 | M68K_D0);			/* move.l %d0, -(%sp) */
++		emit_16(ctx, 0x2f3c);				/* move.l #imm, -(%sp) */
++		emit_32(ctx, insn->imm);
++		emit_16(ctx, 0x2f00 | s_lo);			/* move.l s_lo, -(%sp) */
++		emit_16(ctx, 0x2f08);				/* move.l %a0, -(%sp) */
++
++		emit_16(ctx, 0x207c);				/* movea.l #func, %a0 */
++		emit_32(ctx, (u32)jit_atomic32);
++		emit_16(ctx, 0x4e90);				/* jsr (%a0) */
++
++		emit_16(ctx, 0x4fef);				/* lea 16(%sp), %sp */
++		emit_16(ctx, 16);
++
++		if (insn->imm == BPF_CMPXCHG) {
++			emit_16(ctx, 0x7200);			/* moveq #0, %d1 */
++		} else {
++			bool is_fetch = (insn->imm & BPF_FETCH) || insn->imm == BPF_XCHG;
++
++			if (is_fetch)
++				emit_16(ctx, 0x2600);		/* move.l %d0, %d3 */
++
++			emit_16(ctx, 0x4cdf);			/* movem.l (%sp)+, d0-d1 */
++			emit_16(ctx, 0x0003);
++
++			if (is_fetch) {
++				bpf_put_reg32(src[1], M68K_D3, ctx);
++				emit_16(ctx, 0x7400);		/* moveq #0, %d2 */
++				bpf_put_reg32(src[0], M68K_D2, ctx);
++			}
++		}
++
++	} else if (BPF_SIZE(insn->code) == BPF_DW) {
++		s8 s_lo = bpf_get_reg32(src[1], tmp2[1], ctx);
++		s8 s_hi = bpf_get_reg32(src[0], tmp2[0], ctx);
++
++		if (insn->imm != BPF_CMPXCHG) {
++			emit_16(ctx, 0x48e7);			/* movem.l d0-d1, -(%sp) */
++			emit_16(ctx, 0xc000);
++		}
++
++		emit_16(ctx, 0x2f00 | M68K_D0);			/* move.l %d0, -(%sp) */
++		emit_16(ctx, 0x2f00 | M68K_D1);			/* move.l %d1, -(%sp) */
++		emit_16(ctx, 0x2f3c);				/* move.l #imm, -(%sp) */
++		emit_32(ctx, insn->imm);
++		emit_16(ctx, 0x2f00 | s_lo);			/* move.l s_lo, -(%sp) */
++		emit_16(ctx, 0x2f00 | s_hi);			/* move.l s_hi, -(%sp) */
++		emit_16(ctx, 0x2f08);				/* move.l %a0, -(%sp) */
++
++		emit_16(ctx, 0x207c);				/* movea.l #func, %a0 */
++		emit_32(ctx, (u32)jit_atomic64);
++		emit_16(ctx, 0x4e90);				/* jsr (%a0) */
++
++		emit_16(ctx, 0x4fef);				/* lea 24(%sp), %sp */
++		emit_16(ctx, 24);
++
++		if (insn->imm == BPF_CMPXCHG) {
++			emit_16(ctx, 0xc141);			/* exg %d0, %d1 */
++		} else {
++			bool is_fetch = (insn->imm & BPF_FETCH) || insn->imm == BPF_XCHG;
++
++			if (is_fetch) {
++				emit_16(ctx, 0x2600);		/* move.l %d0, %d3 */
++				emit_16(ctx, 0x2401);		/* move.l %d1, %d2 */
++			}
++
++			emit_16(ctx, 0x4cdf);			/* movem.l (%sp)+, d0-d1 */
++			emit_16(ctx, 0x0003);
++
++			if (is_fetch) {
++				bpf_put_reg32(src[1], M68K_D2, ctx);
++				bpf_put_reg32(src[0], M68K_D3, ctx);
++			}
++		}
++	}
++}
++
++static void emit_tail_call(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 *r2 = bpf2m68k[BPF_REG_2];
++	const s8 *r3 = bpf2m68k[BPF_REG_3];
++	int jmp_out_1, jmp_out_2, jmp_out_3;
++
++	if (is_stacked(r2[1])) {
++		emit_16(ctx, 0x206e);				/* movea.l d16(%fp), %a0 */
++		emit_16(ctx, (u16)r2[1]);
++	} else {
++		emit_16(ctx, 0x2040 | r2[1]);			/* movea.l r2, %a0 */
++	}
++
++	if (is_stacked(r3[1])) {
++		emit_16(ctx, 0x242e);				/* move.l d16(%fp), %d2 */
++		emit_16(ctx, (u16)r3[1]);
++	} else {
++		emit_16(ctx, 0x2400 | r3[1]);			/* move.l r3, %d2 */
++	}
++
++	emit_16(ctx, 0xb4a8);					/* cmp.l d16(%a0), %d2 */
++	emit_16(ctx, offsetof(struct bpf_array, map.max_entries));
++	emit_16(ctx, 0x6400);					/* bcc.w jmp_out_1 */
++	jmp_out_1 = ctx->idx;
++	emit_16(ctx, 0);
++
++	emit_16(ctx, 0x262e);					/* move.l d16(%fp), %d3 */
++	emit_16(ctx, (u16)STACK_OFFSET(BPF_TC_LO));
++	emit_16(ctx, 0x4a83);					/* tst.l %d3 */
++	emit_16(ctx, 0x6700);					/* beq.w jmp_out_2 */
++	jmp_out_2 = ctx->idx;
++	emit_16(ctx, 0);
++
++	emit_16(ctx, 0x5383);					/* subq.l #1, %d3 */
++	emit_16(ctx, 0x2d43);					/* move.l %d3, d16(%fp) */
++	emit_16(ctx, (u16)STACK_OFFSET(BPF_TC_LO));
++
++	emit_16(ctx, 0xd482);					/* add.l %d2, %d2 */
++	emit_16(ctx, 0xd482);					/* add.l %d2, %d2 */
++	emit_16(ctx, 0x43e8);					/* lea d16(%a0), %a1 */
++	emit_16(ctx, offsetof(struct bpf_array, ptrs));
++	emit_16(ctx, 0xd3c2);					/* adda.l %d2, %a1 */
++
++	emit_16(ctx, 0x2051);					/* movea.l (%a1), %a0 */
++
++	emit_16(ctx, 0x2408);					/* move.l %a0, %d2 */
++	emit_16(ctx, 0x4a82);					/* tst.l %d2 */
++	emit_16(ctx, 0x6700);					/* beq.w jmp_out_3 */
++	jmp_out_3 = ctx->idx;
++	emit_16(ctx, 0);
++
++	emit_16(ctx, 0x2068);					/* movea.l d16(%a0), %a0 */
++	emit_16(ctx, offsetof(struct bpf_prog, bpf_func));
++
++	emit_16(ctx, 0x4ee8);					/* jmp d16(%a0) */
++	emit_16(ctx, 44);
++
++	if (ctx->target) {
++		ctx->target[jmp_out_1] = (ctx->idx - jmp_out_1) * 2;
++		ctx->target[jmp_out_2] = (ctx->idx - jmp_out_2) * 2;
++		ctx->target[jmp_out_3] = (ctx->idx - jmp_out_3) * 2;
++	}
++}
++
++static int emit_jmp(const struct bpf_insn *insn, struct jit_ctx *ctx, int curr_i)
++{
++	const s8 *dst = bpf2m68k[insn->dst_reg];
++	const s8 *src = bpf2m68k[insn->src_reg];
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	const s8 *tmp2 = bpf2m68k[TMP_REG_2];
++	s8 d_lo, d_hi = 0, s_lo, s_hi = 0;
++	bool is_jmp32 = BPF_CLASS(insn->code) == BPF_JMP32;
++	u8 op = BPF_OP(insn->code);
++	int target_insn;
++
++	if (is_jmp32 && op == BPF_JA)
++		target_insn = curr_i + 1 + insn->imm;
++	else
++		target_insn = curr_i + 1 + insn->off;
++
++	if (target_insn < 0 || target_insn > ctx->prog->len)
++		return -EOPNOTSUPP;
++
++	#define EMIT_JMP32(op_base) \
++		do { \
++			int disp = (ctx->offsets[target_insn] - (ctx->idx + 1)) * 2; \
++			emit_16(ctx, (op_base) | 0x00ff); \
++			emit_32(ctx, disp); \
++		} while (0)
++
++	if (op == BPF_JA) {
++		EMIT_JMP32(0x6000);				/* bra.l */
++		return 0;
++	}
++
++	d_lo = bpf_get_reg32(dst[1], tmp1[1], ctx);
++	if (!is_jmp32)
++		d_hi = bpf_get_reg32(dst[0], tmp1[0], ctx);
++
++	if (BPF_SRC(insn->code) == BPF_X) {
++		s_lo = bpf_get_reg32(src[1], tmp2[1], ctx);
++		if (!is_jmp32)
++			s_hi = bpf_get_reg32(src[0], tmp2[0], ctx);
++	} else {
++		s_lo = tmp2[1];
++		emit_16(ctx, 0x203c | (s_lo << 9));		/* move.l #imm, s_lo */
++		emit_32(ctx, insn->imm);
++		if (!is_jmp32) {
++			s_hi = tmp2[0];
++			emit_16(ctx, 0x203c | (s_hi << 9));	/* move.l #imm, s_hi */
++			emit_32(ctx, insn->imm < 0 ? 0xffffffff : 0);
++		}
++	}
++
++	if (op == BPF_JSET) {
++		emit_16(ctx, 0x2000 | (tmp1[1] << 9) | d_lo);	/* move.l d_lo, tmp1_lo */
++		emit_16(ctx, 0xc080 | (tmp1[1] << 9) | s_lo);	/* and.l s_lo, tmp1_lo */
++
++		if (!is_jmp32) {
++			EMIT_JMP32(0x6600);			/* bne.l */
++			emit_16(ctx, 0x2000 | (tmp1[0] << 9) | d_hi); /* move.l d_hi, tmp1_hi */
++			emit_16(ctx, 0xc080 | (tmp1[0] << 9) | s_hi); /* and.l s_hi, tmp1_hi */
++		}
++		EMIT_JMP32(0x6600);				/* bne.l */
++		return 0;
++	}
++
++	if (is_jmp32) {
++		emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo);	/* cmp.l s_lo, d_lo */
++		switch (op) {
++		case BPF_JEQ:
++			EMIT_JMP32(0x6700);			/* beq.l */
++			break;
++		case BPF_JNE:
++			EMIT_JMP32(0x6600);			/* bne.l */
++			break;
++		case BPF_JGT:
++			EMIT_JMP32(0x6200);			/* bhi.l */
++			break;
++		case BPF_JGE:
++			EMIT_JMP32(0x6400);			/* bcc.l */
++			break;
++		case BPF_JLT:
++			EMIT_JMP32(0x6500);			/* bcs.l */
++			break;
++		case BPF_JLE:
++			EMIT_JMP32(0x6300);			/* bls.l */
++			break;
++		case BPF_JSGT:
++			EMIT_JMP32(0x6e00);			/* bgt.l */
++			break;
++		case BPF_JSGE:
++			EMIT_JMP32(0x6c00);			/* bge.l */
++			break;
++		case BPF_JSLT:
++			EMIT_JMP32(0x6d00);			/* blt.l */
++			break;
++		case BPF_JSLE:
++			EMIT_JMP32(0x6f00);			/* ble.l */
++			break;
++		}
++	} else {
++		emit_16(ctx, 0xb080 | (d_hi << 9) | s_hi);	/* cmp.l s_hi, d_hi */
++
++		switch (op) {
++		case BPF_JEQ:
++			emit_16(ctx, 0x6608);			/* bne.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6700);			/* beq.l */
++			break;
++		case BPF_JNE:
++			EMIT_JMP32(0x6600);			/* bne.l */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6600);			/* bne.l */
++			break;
++		case BPF_JGT:
++			EMIT_JMP32(0x6200);			/* bhi.l */
++			emit_16(ctx, 0x6508);			/* bcs.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6200);			/* bhi.l */
++			break;
++		case BPF_JGE:
++			EMIT_JMP32(0x6200);			/* bhi.l */
++			emit_16(ctx, 0x6508);			/* bcs.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6400);			/* bcc.l */
++			break;
++		case BPF_JLT:
++			EMIT_JMP32(0x6500);			/* bcs.l */
++			emit_16(ctx, 0x6208);			/* bhi.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6500);			/* bcs.l */
++			break;
++		case BPF_JLE:
++			EMIT_JMP32(0x6500);			/* bcs.l */
++			emit_16(ctx, 0x6208);			/* bhi.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6300);			/* bls.l */
++			break;
++		case BPF_JSGT:
++			EMIT_JMP32(0x6e00);			/* bgt.l */
++			emit_16(ctx, 0x6d08);			/* blt.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6200);			/* bhi.l */
++			break;
++		case BPF_JSGE:
++			EMIT_JMP32(0x6e00);			/* bgt.l */
++			emit_16(ctx, 0x6d08);			/* blt.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6400);			/* bcc.l */
++			break;
++		case BPF_JSLT:
++			EMIT_JMP32(0x6d00);			/* blt.l */
++			emit_16(ctx, 0x6e08);			/* bgt.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6500);			/* bcs.l */
++			break;
++		case BPF_JSLE:
++			EMIT_JMP32(0x6d00);			/* blt.l */
++			emit_16(ctx, 0x6e08);			/* bgt.s .+8 */
++			emit_16(ctx, 0xb080 | (d_lo << 9) | s_lo); /* cmp.l s_lo, d_lo */
++			EMIT_JMP32(0x6300);			/* bls.l */
++			break;
++		}
++	}
++	#undef EMIT_JMP32
++	return 0;
++}
++
++static int emit_call(const struct bpf_insn *insn, struct jit_ctx *ctx)
++{
++	const s8 arg_regs[] = { BPF_REG_5, BPF_REG_4, BPF_REG_3, BPF_REG_2, BPF_REG_1 };
++	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++	bool extra_pass = ctx->target != NULL;
++	u64 func_addr;
++	bool fixed;
++	int i, err;
++
++	err = bpf_jit_get_func_addr(ctx->prog, insn, extra_pass, &func_addr, &fixed);
++	if (err)
++		return err;
++
++	for (i = 0; i < 5; i++) {
++		const s8 *reg = bpf2m68k[arg_regs[i]];
++		s8 d_lo = bpf_get_reg32(reg[1], tmp1[1], ctx);
++		s8 d_hi = bpf_get_reg32(reg[0], tmp1[0], ctx);
++
++		emit_16(ctx, 0x2f00 | d_lo);			/* move.l d_lo, -(%sp) */
++		emit_16(ctx, 0x2f00 | d_hi);			/* move.l d_hi, -(%sp) */
++	}
++
++	emit_16(ctx, 0x207c);					/* movea.l #func_addr, %a0 */
++	emit_32(ctx, (u32)func_addr);
++
++	emit_16(ctx, 0x4e90);					/* jsr (%a0) */
++
++	emit_16(ctx, 0x4fef);					/* lea 40(%sp), %sp */
++	emit_16(ctx, 40);
++
++	emit_16(ctx, 0xc340);					/* exg %d0, %d1 */
 +
 +	return 0;
 +}
 +
-+static inline bool rbnode_has_red_children(rbnode_t *node)
++static void build_prologue(struct jit_ctx *ctx)
 +{
-+	if (node->left && node->left->is_red)
-+		return true;
++	int bpf_stack = 512;
++	int total_stack = SCRATCH_SIZE + bpf_stack;
 +
-+	return node->right && node->right->is_red;
++	emit_16(ctx, 0x7021);					/* moveq #33, %d0 */
++
++	emit_16(ctx, 0x4e56);					/* link %a6, #-total_stack */
++	emit_16(ctx, -total_stack);
++
++	emit_16(ctx, 0x48e7);					/* movem.l d2-d5, -(%sp) */
++	emit_16(ctx, 0x3c00);
++
++	emit_16(ctx, 0x2d40);					/* move.l %d0, off(%fp) */
++	emit_16(ctx, (u16)STACK_OFFSET(BPF_TC_LO));
++
++	emit_16(ctx, 0x202e);					/* move.l 8(%fp), %d0 */
++	emit_16(ctx, 8);
++
++	bpf_put_reg32(bpf2m68k[BPF_REG_1][1], M68K_D0, ctx);
++	emit_16(ctx, 0x7000 | (M68K_D0 << 9));			/* moveq #0, %d0 */
++	bpf_put_reg32(bpf2m68k[BPF_REG_1][0], M68K_D0, ctx);
++
++	emit_16(ctx, 0x41ee);					/* lea -SCRATCH_SIZE(%fp), %a0 */
++	emit_16(ctx, -SCRATCH_SIZE);
++	emit_16(ctx, 0x2008);					/* move.l %a0, %d0 */
++
++	bpf_put_reg32(bpf2m68k[BPF_REG_10][1], M68K_D0, ctx);
++	emit_16(ctx, 0x7000 | (M68K_D0 << 9));			/* moveq #0, %d0 */
++	bpf_put_reg32(bpf2m68k[BPF_REG_10][0], M68K_D0, ctx);
 +}
 +
-+static
-+int rb_node_remove(rbtree_t *rbtree __arg_arena, rbnode_t *node __arg_arena)
++static void build_epilogue(struct jit_ctx *ctx)
 +{
-+	rbnode_t *parent, *sibling, *close_nephew, *distant_nephew;
-+	bool free = (rbtree->alloc == RB_ALLOC);
-+	rbnode_t *replace, *initial;
-+	bool is_red;
-+	int dir;
++	emit_16(ctx, 0x4cdf);					/* movem.l (%sp)+, d2-d5 */
++	emit_16(ctx, 0x003c);
 +
-+	/* Both children present, replace with next largest key. */
-+	if (node->left && node->right) {
-+		/*
-+		 * Swap the node itself instead of just the
-+		 * key/value pair to account for nodes embedded
-+		 * in other structs.
-+		 */
-+
-+		replace = rbnode_least(node->right);
-+		rbnode_switch(rbtree, replace, node);
-+
-+		/*
-+		 * FALLTHROUGH: We moved the node we are removing to
-+		 * the leftmost position of the subtree. We can now
-+		 * remove it as if it was always where we moved it to.
-+		 */
-+	}
-+
-+	initial = node;
-+
-+	/* Only one child present, replace with child and paint it black. */
-+	if (!node->left != !node->right)
-+		return rbnode_remove_node_single_child(rbtree, node, free);
-+
-+	/* (!node->left && !node->right) */
-+
-+	parent = node->parent;
-+	if (!parent) {
-+		/* Check that we're _actually_ the root. */
-+		if (rbtree->root == node)
-+			rbtree->root = NULL;
-+		else
-+			arena_stderr("WARNING: Attempting to remove detached node from rbtree\n");
-+
-+		if (free)
-+			rb_node_free(rbtree, node);
-+		return 0;
-+	}
-+
-+	dir = rbnode_dir(node);
-+	parent->child[dir] = NULL;
-+	is_red = node->is_red;
-+
-+	if (free)
-+		rb_node_free(rbtree, node);
-+
-+	/* If we removed a red node, we did not unbalance the tree.*/
-+	if (is_red)
-+		return 0;
-+
-+	sibling = parent->child[1 - dir];
-+	if (unlikely(!sibling)) {
-+		arena_stderr("rbtree: removed black node has no sibling\n");
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * We removed a black node, causing a change in path
-+	 * weight. Start rebalancing. The invariant is that
-+	 * all paths going through the node are shortened
-+	 * by one, and the current node is black.
-+	 */
-+	while (can_loop) {
-+
-+		/* Balancing reached the root, there can be no imbalance. */
-+		if (!parent)
-+			return 0;
-+
-+		/*
-+		 * We already determined the dir, either above or
-+		 * at the end of the loop.
-+		 */
-+
-+		/*
-+		 * If we have no sibling, the tree was
-+		 * already unbalanced.
-+		 */
-+		sibling = parent->child[1 - dir];
-+		if (unlikely(!sibling)) {
-+			arena_stderr("rbtree: removed black node has no sibling\n");
-+			return -EINVAL;
-+		}
-+
-+		/* Sibling is red, turn it into the grandparent. */
-+		if (sibling->is_red) {
-+			/*
-+			 * Sibling is red. Transform the tree to turn
-+			 * the sibling into the parent's position, and
-+			 * repaint them. This does not balance the tree
-+			 * but makes it so we know the sibling is black
-+			 * and so can use the transformations to balance.
-+			 */
-+			rbnode_rotate(rbtree, parent, dir);
-+			parent->is_red = true;
-+			sibling->is_red = false;
-+
-+			/* Our new sibling is now the close nephew. */
-+			sibling = parent->child[1 - dir];
-+			/* If sibling has any red siblings, break out. */
-+			if (rbnode_has_red_children(sibling))
-+				break;
-+
-+			/* We can repaint the sibling and parent, we're done. */
-+			sibling->is_red = true;
-+			parent->is_red = false;
-+
-+			return 0;
-+		}
-+
-+		/* Sibling guaranteed to be black. If it has red children, break out. */
-+		if (rbnode_has_red_children(sibling))
-+			break;
-+
-+		/*
-+		 * Both sibling and children are black. If parent is red, swap
-+		 * colors with the sibling. Otherwise
-+		 */
-+		if (parent->is_red) {
-+			parent->is_red = false;
-+			sibling->is_red = true;
-+			return 0;
-+		}
-+
-+		/*
-+		 * Parent, sibling, and all its children are black. Repaint the sibling.
-+		 * This shortens the paths through it, so pop up a level in the
-+		 * tree and repeat the balancing.
-+		 */
-+		sibling->is_red = true;
-+		node = parent;
-+		parent = node->parent;
-+		dir = rbnode_dir(node);
-+	}
-+
-+	if (node != initial) {
-+		dir = rbnode_dir(node);
-+		parent = node->parent;
-+		sibling = parent->child[1-dir];
-+	}
-+	/*
-+	 * Almost there. We know between the parent, sibling,
-+	 * and nephews only one or two of the nephews are red. If
-+	 * it is the close one, rotate it to the sibling position,
-+	 * paint it black, and paint the previous sibling red.
-+	 */
-+
-+	close_nephew = sibling->child[dir];
-+	distant_nephew = sibling->child[1 - dir];
-+
-+	/*
-+	 * If the distant red nephew is not red, rotate
-+	 * and repaint. We need the distant nephew
-+	 * to be red. We know the close nephew is red
-+	 * because at least one of them are, so the
-+	 * distant one is black if it exists.
-+	 */
-+	if (!distant_nephew || !distant_nephew->is_red) {
-+		rbnode_rotate(rbtree, sibling, 1 - dir);
-+		sibling->is_red = true;
-+		close_nephew->is_red = false;
-+		distant_nephew = sibling;
-+		sibling = close_nephew;
-+	}
-+
-+	/*
-+	 * We now know it's the distant nephew that's red.
-+	 * Rotate the sibling into our parent's position
-+	 * and paint both black.
-+	 */
-+
-+	rbnode_rotate(rbtree, parent, dir);
-+	sibling->is_red = parent->is_red;
-+	parent->is_red = false;
-+	distant_nephew->is_red = false;
-+
-+	return 0;
++	emit_16(ctx, 0x4e5e);					/* unlk %fp */
++	emit_16(ctx, 0x4e75);					/* rts */
 +}
 +
-+__weak
-+int rb_remove_node(rbtree_t *rbtree __arg_arena, rbnode_t *node __arg_arena)
++static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, int i)
 +{
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
++	u8 code = insn->code;
 +
-+	if (unlikely(rbtree->alloc == RB_ALLOC))
-+		return -EINVAL;
++	switch (code) {
++	case BPF_ALU | BPF_NEG:
++		emit_alu32_neg(insn, ctx);
++		break;
++	case BPF_ALU64 | BPF_NEG:
++		emit_alu64_neg(insn, ctx);
++		break;
 +
-+	return rb_node_remove(rbtree, node);
-+}
++	case BPF_ALU | BPF_MOV | BPF_X:
++	case BPF_ALU | BPF_ADD | BPF_X:
++	case BPF_ALU | BPF_SUB | BPF_X:
++	case BPF_ALU | BPF_AND | BPF_X:
++	case BPF_ALU | BPF_OR  | BPF_X:
++	case BPF_ALU | BPF_XOR | BPF_X:
++	case BPF_ALU | BPF_LSH | BPF_X:
++	case BPF_ALU | BPF_RSH | BPF_X:
++	case BPF_ALU | BPF_ARSH | BPF_X:
++		emit_alu32_x(insn, ctx);
++		break;
 +
-+__weak
-+int rb_remove(rbtree_t *rbtree __arg_arena, u64 key)
-+{
-+	rbnode_t *node;
++	case BPF_ALU | BPF_MOV | BPF_K:
++	case BPF_ALU | BPF_ADD | BPF_K:
++	case BPF_ALU | BPF_SUB | BPF_K:
++	case BPF_ALU | BPF_AND | BPF_K:
++	case BPF_ALU | BPF_OR  | BPF_K:
++	case BPF_ALU | BPF_XOR | BPF_K:
++	case BPF_ALU | BPF_LSH | BPF_K:
++	case BPF_ALU | BPF_RSH | BPF_K:
++	case BPF_ALU | BPF_ARSH | BPF_K:
++		emit_alu32_k(insn, ctx);
++		break;
 +
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
++	case BPF_ALU64 | BPF_MOV | BPF_X:
++	case BPF_ALU64 | BPF_ADD | BPF_X:
++	case BPF_ALU64 | BPF_SUB | BPF_X:
++	case BPF_ALU64 | BPF_AND | BPF_X:
++	case BPF_ALU64 | BPF_OR  | BPF_X:
++	case BPF_ALU64 | BPF_XOR | BPF_X:
++		emit_alu64_x(insn, ctx);
++		break;
 +
-+	if (unlikely(rbtree->alloc != RB_ALLOC))
-+		return -EINVAL;
++	case BPF_ALU64 | BPF_MOV | BPF_K:
++	case BPF_ALU64 | BPF_ADD | BPF_K:
++	case BPF_ALU64 | BPF_SUB | BPF_K:
++	case BPF_ALU64 | BPF_AND | BPF_K:
++	case BPF_ALU64 | BPF_OR  | BPF_K:
++	case BPF_ALU64 | BPF_XOR | BPF_K:
++		emit_alu64_k(insn, ctx);
++		break;
 +
-+	if (!rbtree->root)
-+		return -ENOENT;
++	case BPF_ALU64 | BPF_LSH | BPF_X:
++	case BPF_ALU64 | BPF_RSH | BPF_X:
++	case BPF_ALU64 | BPF_ARSH | BPF_X:
++		emit_alu64_shift(insn, ctx, false);
++		break;
 +
-+	node = rbnode_find(rbtree->root, key, RBN_FIND_DFL);
-+	if (!node || node->key != key)
-+		return -ENOENT;
++	case BPF_ALU64 | BPF_LSH | BPF_K:
++	case BPF_ALU64 | BPF_RSH | BPF_K:
++	case BPF_ALU64 | BPF_ARSH | BPF_K:
++		emit_alu64_shift(insn, ctx, true);
++		break;
 +
-+	return rb_node_remove(rbtree, node);
-+}
++	case BPF_ALU | BPF_MUL | BPF_X:
++	case BPF_ALU | BPF_DIV | BPF_X:
++	case BPF_ALU | BPF_MOD | BPF_X:
++	case BPF_ALU | BPF_MUL | BPF_K:
++	case BPF_ALU | BPF_DIV | BPF_K:
++	case BPF_ALU | BPF_MOD | BPF_K:
++		emit_math_call(insn, ctx, false);
++		break;
 +
-+__weak
-+int rb_pop(rbtree_t *rbtree __arg_arena, u64 *key, u64 *value)
-+{
-+	rbnode_t *node;
++	case BPF_ALU64 | BPF_MUL | BPF_X:
++	case BPF_ALU64 | BPF_DIV | BPF_X:
++	case BPF_ALU64 | BPF_MOD | BPF_X:
++	case BPF_ALU64 | BPF_MUL | BPF_K:
++	case BPF_ALU64 | BPF_DIV | BPF_K:
++	case BPF_ALU64 | BPF_MOD | BPF_K:
++		emit_math_call(insn, ctx, true);
++		break;
 +
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
++	case BPF_ALU | BPF_END | BPF_TO_BE:
++	case BPF_ALU | BPF_END | BPF_TO_LE:
++	case BPF_ALU64 | BPF_END | BPF_TO_BE:
++	case BPF_ALU64 | BPF_END | BPF_TO_LE:
++		emit_bpf_end(insn, ctx);
++		break;
 +
-+	if (!rbtree->root)
-+		return -ENOENT;
++	case BPF_LD | BPF_IMM | BPF_DW: {
++		const struct bpf_insn *insn1 = insn + 1;
++		const s8 *dst = bpf2m68k[insn->dst_reg];
++		const s8 *tmp1 = bpf2m68k[TMP_REG_1];
++		s8 d_lo = bpf_get_reg32(dst[1], tmp1[1], ctx);
++		s8 d_hi = bpf_get_reg32(dst[0], tmp1[0], ctx);
 +
-+	if (rbtree->alloc != RB_ALLOC)
-+		return -EINVAL;
++		emit_16(ctx, 0x203c | (d_lo << 9));			/* move.l #imm, d_lo */
++		emit_32(ctx, insn->imm);
++		emit_16(ctx, 0x203c | (d_hi << 9));			/* move.l #imm, d_hi */
++		emit_32(ctx, insn1->imm);
 +
-+	node = rbnode_least(rbtree->root);
-+	if (unlikely(!node))
-+		return -ENOENT;
++		bpf_put_reg32(dst[1], d_lo, ctx);
++		bpf_put_reg32(dst[0], d_hi, ctx);
++		break;
++	}
 +
-+	if (key)
-+		*key = node->key;
-+	if (value)
-+		*value = node->value;
++	case BPF_LDX | BPF_MEM | BPF_B:
++	case BPF_LDX | BPF_MEM | BPF_H:
++	case BPF_LDX | BPF_MEM | BPF_W:
++	case BPF_LDX | BPF_MEM | BPF_DW:
++	case BPF_LDX | BPF_MEMSX | BPF_B:
++	case BPF_LDX | BPF_MEMSX | BPF_H:
++	case BPF_LDX | BPF_MEMSX | BPF_W:
++		emit_ldx(insn, ctx);
++		break;
 +
-+	return rb_node_remove(rbtree, node);
-+}
++	case BPF_STX | BPF_MEM | BPF_B:
++	case BPF_STX | BPF_MEM | BPF_H:
++	case BPF_STX | BPF_MEM | BPF_W:
++	case BPF_STX | BPF_MEM | BPF_DW:
++		emit_stx(insn, ctx);
++		break;
 +
-+inline void rbnode_print(size_t depth, rbnode_t *rbn)
-+{
-+	arena_stderr("[DEPTH %d] %p (%s)\n PARENT %p", depth, rbn, rbn->is_red ? "red" : "black", rbn->parent);
-+	arena_stderr("\tKV (%ld, %ld)\n LEFT %p RIGHT %p]\n", rbn->key, rbn->value, rbn->left, rbn->right);
-+}
++	case BPF_ST | BPF_MEM | BPF_B:
++	case BPF_ST | BPF_MEM | BPF_H:
++	case BPF_ST | BPF_MEM | BPF_W:
++	case BPF_ST | BPF_MEM | BPF_DW:
++		emit_st(insn, ctx);
++		break;
 +
-+enum rb_print_state {
-+	RB_NONE_VISITED,
-+	RB_LEFT_VISITED,
-+	RB_RIGHT_VISITED,
-+};
++	case BPF_STX | BPF_ATOMIC | BPF_W:
++	case BPF_STX | BPF_ATOMIC | BPF_DW:
++		emit_atomic(insn, ctx);
++		break;
 +
-+__weak
-+enum rb_print_state rb_print_next_state(rbnode_t *rbnode __arg_arena, enum rb_print_state state, rbnode_t **next)
-+{
-+	if (unlikely(!next))
-+		return RB_NONE_VISITED;
++	case BPF_JMP | BPF_TAIL_CALL:
++		emit_tail_call(insn, ctx);
++		break;
 +
-+	switch (state) {
-+	case RB_NONE_VISITED:
-+		if (rbnode->left) {
-+			*next = rbnode->left;
-+			state = RB_LEFT_VISITED;
-+			break;
-+		}
++	case BPF_JMP | BPF_JA:
++	case BPF_JMP32 | BPF_JA:
++	case BPF_JMP | BPF_JEQ | BPF_X:
++	case BPF_JMP | BPF_JEQ | BPF_K:
++	case BPF_JMP | BPF_JNE | BPF_X:
++	case BPF_JMP | BPF_JNE | BPF_K:
++	case BPF_JMP | BPF_JGT | BPF_X:
++	case BPF_JMP | BPF_JGT | BPF_K:
++	case BPF_JMP | BPF_JGE | BPF_X:
++	case BPF_JMP | BPF_JGE | BPF_K:
++	case BPF_JMP | BPF_JLT | BPF_X:
++	case BPF_JMP | BPF_JLT | BPF_K:
++	case BPF_JMP | BPF_JLE | BPF_X:
++	case BPF_JMP | BPF_JLE | BPF_K:
++	case BPF_JMP | BPF_JSGT | BPF_X:
++	case BPF_JMP | BPF_JSGT | BPF_K:
++	case BPF_JMP | BPF_JSGE | BPF_X:
++	case BPF_JMP | BPF_JSGE | BPF_K:
++	case BPF_JMP | BPF_JSLT | BPF_X:
++	case BPF_JMP | BPF_JSLT | BPF_K:
++	case BPF_JMP | BPF_JSLE | BPF_X:
++	case BPF_JMP | BPF_JSLE | BPF_K:
++	case BPF_JMP | BPF_JSET | BPF_X:
++	case BPF_JMP | BPF_JSET | BPF_K:
++	case BPF_JMP32 | BPF_JEQ | BPF_X:
++	case BPF_JMP32 | BPF_JEQ | BPF_K:
++	case BPF_JMP32 | BPF_JNE | BPF_X:
++	case BPF_JMP32 | BPF_JNE | BPF_K:
++	case BPF_JMP32 | BPF_JGT | BPF_X:
++	case BPF_JMP32 | BPF_JGT | BPF_K:
++	case BPF_JMP32 | BPF_JGE | BPF_X:
++	case BPF_JMP32 | BPF_JGE | BPF_K:
++	case BPF_JMP32 | BPF_JLT | BPF_X:
++	case BPF_JMP32 | BPF_JLT | BPF_K:
++	case BPF_JMP32 | BPF_JLE | BPF_X:
++	case BPF_JMP32 | BPF_JLE | BPF_K:
++	case BPF_JMP32 | BPF_JSGT | BPF_X:
++	case BPF_JMP32 | BPF_JSGT | BPF_K:
++	case BPF_JMP32 | BPF_JSGE | BPF_X:
++	case BPF_JMP32 | BPF_JSGE | BPF_K:
++	case BPF_JMP32 | BPF_JSLT | BPF_X:
++	case BPF_JMP32 | BPF_JSLT | BPF_K:
++	case BPF_JMP32 | BPF_JSLE | BPF_X:
++	case BPF_JMP32 | BPF_JSLE | BPF_K:
++	case BPF_JMP32 | BPF_JSET | BPF_X:
++	case BPF_JMP32 | BPF_JSET | BPF_K:
++		return emit_jmp(insn, ctx, i);
 +
-+		/* FALLTHROUGH */
++	case BPF_JMP | BPF_CALL:
++		return emit_call(insn, ctx);
 +
-+	case RB_LEFT_VISITED:
-+		if (rbnode->right) {
-+			*next = rbnode->right;
-+			state = RB_RIGHT_VISITED;
-+			break;
-+		}
-+
-+		/* FALLTHROUGH */
++	case BPF_JMP | BPF_EXIT:
++		build_epilogue(ctx);
++		break;
 +
 +	default:
-+		*next = NULL;
-+		state = RB_RIGHT_VISITED;
++		return -EOPNOTSUPP;
 +	}
-+
-+	return state;
-+}
-+
-+/*
-+ * Pass everything by reference. This is to avoid arcane verification failures
-+ * caused by embedding this code in the main rb_print call.
-+ */
-+__weak
-+int rb_print_pop_up(rbnode_t **rbnode, u8 *depthp, enum rb_print_state (*stack)[RB_MAXLVL_PRINT], enum rb_print_state *state)
-+{
-+	volatile u8 depth;
-+	int j;
-+
-+	if (unlikely(!rbnode || !depthp || !stack || !state))
-+		return -EINVAL;
-+
-+	WRITE_ONCE(depth, *depthp);
-+
-+	for (j = 0; j < RB_MAXLVL_PRINT && can_loop; j++) {
-+		if (*state != RB_RIGHT_VISITED)
-+			break;
-+
-+		depth -= 1;
-+		if (depth < 0 || depth >= RB_MAXLVL_PRINT)
-+			break;
-+
-+		*state = (*stack)[depth % RB_MAXLVL_PRINT];
-+		*rbnode = (*rbnode)->parent;
-+	}
-+
-+	*depthp = depth;
 +
 +	return 0;
 +}
 +
-+__weak
-+int rb_print(rbtree_t *rbtree __arg_arena)
++static int build_body(struct jit_ctx *ctx)
 +{
-+	enum rb_print_state stack[RB_MAXLVL_PRINT];
-+	rbnode_t *rbnode = rbtree->root;
-+	enum rb_print_state state;
-+	rbnode_t *next;
-+	u8 depth;
-+	int ret;
++	const struct bpf_prog *prog = ctx->prog;
++	int i;
 +
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
++	for (i = 0; i < prog->len; i++) {
++		const struct bpf_insn *insn = &prog->insnsi[i];
++		int ret;
 +
-+	depth = 0;
-+	state = RB_NONE_VISITED;
++		if (!ctx->target)
++			ctx->offsets[i] = ctx->idx;
 +
-+	arena_stderr("=== RB TREE START ===\n");
++		ret = build_insn(insn, ctx, i);
++		if (ret < 0)
++			return ret;
 +
-+	/* Even with can_loop, the verifier doesn't like infinite loops. */
-+	while (can_loop) {
-+		if (state == RB_NONE_VISITED)
-+			rbnode_print(depth, rbnode);
-+
-+		/* Find which child to traverse next. */
-+		state = rb_print_next_state(rbnode, state, &next);
-+
-+		/* Child found. Store the node state and go on. */
-+		if (next) {
-+			if (depth < 0 || depth >= RB_MAXLVL_PRINT)
-+				return 0;
-+
-+			stack[depth++] = state;
-+
-+			rbnode = next;
-+			state = RB_NONE_VISITED;
-+
-+			continue;
++		if (insn->code == (BPF_LD | BPF_IMM | BPF_DW)) {
++			i++;
++			if (!ctx->target)
++				ctx->offsets[i] = ctx->idx;
 +		}
-+
-+		/* Otherwise, go as far up as possible. */
-+		ret = rb_print_pop_up(&rbnode, &depth, &stack, &state);
-+		if (ret)
-+			return -EINVAL;
-+
-+		if (depth < 0 || depth >= RB_MAXLVL_PRINT) {
-+			arena_stderr("=== RB TREE END (depth %d\n)===", depth);
-+			return 0;
-+		}
-+
 +	}
 +
-+	arena_stderr("=== RB TREE END ===\n");
++	if (!ctx->target)
++		ctx->offsets[prog->len] = ctx->idx;
 +
 +	return 0;
 +}
 +
-+__weak
-+int rb_integrity_check(rbtree_t *rbtree __arg_arena)
++bool bpf_jit_needs_zext(void)
 +{
-+	enum rb_print_state stack[RB_MAXLVL_PRINT];
-+	rbnode_t *rbnode = rbtree->root;
-+	enum rb_print_state state;
-+	rbnode_t *next;
-+	u8 depth;
-+	int ret;
++	return true;
++}
 +
-+	if (unlikely(!rbtree))
-+		return -EINVAL;
++static void jit_fill_hole(void *area, unsigned int size)
++{
++	u16 *ptr;
 +
-+	if (!rbtree->root)
-+		return 0;
++	for (ptr = area; size >= 2; size -= 2)
++		*ptr++ = 0x4afc;
++}
 +
-+	depth = 0;
-+	state = RB_NONE_VISITED;
++struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_prog *prog)
++{
++	struct bpf_binary_header *header;
++	struct jit_ctx ctx;
++	unsigned int image_size;
++	u8 *image_ptr;
 +
-+	/* Even with can_loop, the verifier doesn't like infinite loops. */
-+	while (can_loop) {
-+		if (rbnode->parent && rbnode->parent->left != rbnode
-+			&& rbnode->parent->right != rbnode) {
-+			arena_stderr("WARNING: Inconsistent tree. Parent %p has no child %p\n", rbnode->parent, rbnode);
-+			return -EINVAL;
-+		}
++	if (!prog->jit_requested)
++		return prog;
 +
-+		if (rbnode->parent == rbnode) {
-+			arena_stderr("WARNING: Inconsistent tree, node %p is its own parent\n", rbnode);
-+			return -EINVAL;
-+		}
++	memset(&ctx, 0, sizeof(ctx));
++	ctx.prog = prog;
 +
-+		if (rbnode->left == rbnode) {
-+			arena_stderr("WARNING: Inconsistent tree, node %p is its own left child\n", rbnode);
-+			return -EINVAL;
-+		}
++	ctx.offsets = kcalloc(prog->len + 1, sizeof(int), GFP_KERNEL);
++	if (!ctx.offsets)
++		return prog;
 +
-+		if (rbnode->right == rbnode) {
-+			arena_stderr("WARNING: Inconsistent tree, node %p is its own right child\n", rbnode);
-+			return -EINVAL;
-+		}
++	build_prologue(&ctx);
++	if (build_body(&ctx) < 0)
++		goto out_off;
++	build_epilogue(&ctx);
 +
-+		if (rbnode->is_red) {
-+			if (rbnode->left && rbnode->left->is_red) {
-+				arena_stderr("WARNING: Inconsistent tree. Parent has %p has red child %p\n", rbnode, rbnode->left);
-+				return -EINVAL;
-+			}
-+			if (rbnode->right && rbnode->right->is_red) {
-+				arena_stderr("WARNING: Inconsistent tree. Parent has %p has red child %p\n", rbnode, rbnode->right);
-+				return -EINVAL;
-+			}
-+		} else if (rbnode->parent && rbnode->parent->child[1 - rbnode_dir(rbnode)] == NULL) {
-+			arena_stderr("WARNING: Inconsistent tree. Black node %p has no sibling\n", rbnode);
-+			return -EINVAL;
-+		}
++	image_size = ctx.idx * 2;
++	header = bpf_jit_binary_alloc(image_size, &image_ptr, 2, jit_fill_hole);
++	if (!header)
++		goto out_off;
 +
-+		/* Find which child to traverse next. */
-+		state = rb_print_next_state(rbnode, state, &next);
++	ctx.target = (u16 *)image_ptr;
++	ctx.idx = 0;
 +
-+		/* Child found. Store the node state and go on. */
-+		if (next) {
-+			if (depth < 0 || depth >= RB_MAXLVL_PRINT)
-+				return 0;
++	build_prologue(&ctx);
++	if (build_body(&ctx) < 0) {
++		bpf_jit_binary_free(header);
++		goto out_off;
++	}
++	build_epilogue(&ctx);
 +
-+			stack[depth++] = state;
++	flush_icache_range((u32)header, (u32)(ctx.target + ctx.idx));
 +
-+			rbnode = next;
-+			state = RB_NONE_VISITED;
++	if (bpf_jit_enable > 1)
++		bpf_jit_dump(prog->len, image_size, 2, ctx.target);
 +
-+			continue;
-+		}
-+
-+		/* Otherwise, go as far up as possible. */
-+		ret = rb_print_pop_up(&rbnode, &depth, &stack, &state);
-+		if (ret)
-+			return -EINVAL;
-+
-+		if (depth < 0 || depth >= RB_MAXLVL_PRINT) {
-+			return 0;
-+		}
-+
++	if (bpf_jit_binary_lock_ro(header)) {
++		bpf_jit_binary_free(header);
++		goto out_off;
 +	}
 +
-+	return 0;
++	prog->bpf_func = (void *)ctx.target;
++	prog->jited = 1;
++	prog->jited_len = image_size;
++
++out_off:
++	kfree(ctx.offsets);
++	return prog;
 +}
 -- 
-2.54.0
+2.54.0.563.g4f69b47b94-goog
 
