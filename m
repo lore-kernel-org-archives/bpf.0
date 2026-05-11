@@ -1,209 +1,262 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D9E82D7804
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 22:17:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C74238333A
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 22:24:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778537846; cv=none; b=irNgGiZafi/Uk7KCWh67K0ur9+HbAKZcw7IO44UOAzeFkIJqgjfxaC0b7dv4L5W20GwxzfRWXxnQvpiFPLQLSmxienERxz15oltHZKII7SHwZBzZwk+rVX8O/IUdmK7L1BKDGC5lD/MkKLze1WpQC+ULLPcnJIifG9xMAtbByM0=
+	t=1778538283; cv=none; b=K709bvW3C5ihiaQ3Ok0oMsAodv9IeJg5tC9PhNHQj0xqZb5vzBNGC2IV2evpbOhNHpqdsfk7Xk3ZarJElSUgeBoZ+yrtScBPRMmD7vV37hncvtVyxF9OAK52dQJNGWB4AoopcRmmr1ajtA+FK+GSP0qdwcFVJBpEdAZFac3Lwco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778537846; c=relaxed/simple;
-	bh=GV1SY4c2fzlzo6fX5tbPqwpSIJrRqDyNam3nkfGtQJQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SPr0/dZZKLw5x2EBSE2oVB4max4WHWtHQtdPP22oNGvxwKw9WCNZnuwPFLrbatMg6r77+FxtrEZBKw5qdnW0oMUt+sspTMhxyGzbGv5LCc4JRC7lv6hgobhYvk0f6FCiJ3dtuiCHH86x8wfJs1Z3S1k6V4+axh1kPrzez2Sdp7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IlxWJxJx; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778538283; c=relaxed/simple;
+	bh=ptyk4lUImyA6k3GhCQH+NYOCzuuUFOXX3h8wLCsjAVA=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=fljShyjW1+qk8NiBsQXt+JS5JT6fmmYnorJNK6EPC/t+U+ksxDJ2DgDYC3VzlIPzn4qx3E+cxFyLsStdj1fch3rPCuECBKN1w4SME33Mkf+219XKKR2LEKUXE6loIQG43DsIwctjYtISlZ6AIniHgRx8Ei4zi23waIU5xHEnhJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TZgynCXt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IlxWJxJx"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c6dd5b01e14so1996083a12.0
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 15:17:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778537845; x=1779142645; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n7mbGY8zUp4Stmyf9OXEpNnChS/Bjn8U2B0Qfpbuf84=;
-        b=IlxWJxJxd4N6MP7xRRCJLG65H9J/UXB9Zpec4B9LdiEAj/39l4a1kiglCXkJ0h0okJ
-         3wKBAvDaaBHXNZKO4XjLpAU4tmgzErWZ74fQwoG0ju338Z5eJlhRkNrWf5q6izIrSHZD
-         AZyLT49KFLLmTHiUp3QKkKUX/4qM2mC+8P8CTQTNJ/8U07OfAYF0K/It92ufH68esErf
-         OO8bXoLA4qorJ6o2+V1Zs+cDnZgEsA6ShqZk9wdcbRwE4iMzrAQVb+bKecFZXCdUxsA2
-         xmbJaktI5gC7Yz3IPp+6Pqg6eu0dSSvbz5BwaR4qhFvTGlmoCPlnpgz8PKwFA6lDK28o
-         YT2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778537845; x=1779142645;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=n7mbGY8zUp4Stmyf9OXEpNnChS/Bjn8U2B0Qfpbuf84=;
-        b=Mp2JDjATBpppeml5Efiu8bd2e+JdQ7qKKTXss9QBN7oROdiR51asIHhmwI4X4lB3fz
-         c1W+qHVSaF9H16Zfe/korogXH9h718xRbPhYll/JCMReWk2Kz1oasyg6Cy7bwJXwihNz
-         5sxtl2nI//m3LQlU/4JbmXFcoQrMZacAXkipjHl3mI8+V9NymrBknlpR2RtS29AMVp6G
-         iziUKejHRNV64uO7HxZEIvh9GHT2xLlZZ9H8TdcBctkNbyYJbz4leqAX1Rqnh9edyubD
-         LaaoaiUSbP0E4iGaRsRwes+TdrMkba7ICMvJiiGwItlZkxKDqX9ByU62xqHwvA+FX5Rl
-         2NPQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/QwSrATGPPRVs3r1tEEl7QECG+Wghr4pnc+Kz8wmuTaH7NtG2QmlzswohD8tlg4ej8ccQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydZOAUT+CFbLpVw3iuBUxHspcBczDUzqWuKts2MuSwvL4TFa1K
-	oJNdSpq2WvVnM/Qed0CHVy8l/NC33wycTBmOoFrBDv07r+fikOwtynq+Cy8vtA==
-X-Gm-Gg: Acq92OETIQpUb5CBNhMKxlVQTLj3nrChF+dRdx5k+2hoe620xpWajKr4GBOhqB6BHS4
-	Y9J5aHvQC/jHFgOvjoHFrAkjp1KkvymfxYz2f7fp220FBgXZQO/0Ov3PH7wjREGEx3Ec+GJnWzM
-	U+9Tx+/xe4Mh8/CN+LQFr4nz1ZBOJM5pcVKmfhFqwoKIwonLec191k09sctxD0bf/7FOzBUpzy3
-	YmJHtFzRYuhH8PRZJeNU6eFv50C6isAJsqu8iOYc0xqKqXYnAyY7Rf7RTMzeFA926BZuBEBYQUU
-	2vdVLhNgL8J0Kc3JNFI4NZJhoM1q/ptN23q0vwbXOx1A4LJjkRR+mzEY1HCcK/x4vWln/a1fWhT
-	sJG/yAJ2Cvf2GvsP5QRV6sRmqjeC+5aWfmFyqS1zt1JZz0rxFX1rOAswcDQiEp+2g1yV89Xk0p1
-	g5FCBw4/8rUeLGLogNqnNGrhEPxEZszk6zE0MY1nkYID9WLCVEZeImOo/Dmp3aqp0czUead31zz
-	Iyo0deo/T3KVSZgtfpFiJaZGm1nlo278A==
-X-Received: by 2002:a05:6a20:6a09:b0:3a2:f14a:4290 with SMTP id adf61e73a8af0-3aa5aa7a02dmr27720750637.38.1778537844766;
-        Mon, 11 May 2026 15:17:24 -0700 (PDT)
-Received: from visitorckw-work01.c.googlers.com.com (32.237.80.34.bc.googleusercontent.com. [34.80.237.32])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83965a3e3ecsm21943329b3a.19.2026.05.11.15.17.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 15:17:24 -0700 (PDT)
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	luke.r.nels@gmail.com,
-	xi.wang@gmail.com,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	alex@ghiti.fr,
-	jserv@ccns.ncku.edu.tw,
-	eleanor15x@gmail.com,
-	marscheng@google.com,
-	bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Kuan-Wei Chiu <visitorckw@gmail.com>
-Subject: [PATCH bpf-next v2 3/3] riscv, bpf: Add 32 bit atomic operations to RV32 JIT
-Date: Mon, 11 May 2026 22:16:48 +0000
-Message-ID: <20260511221648.3251464-4-visitorckw@gmail.com>
-X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-In-Reply-To: <20260511221648.3251464-1-visitorckw@gmail.com>
-References: <20260511221648.3251464-1-visitorckw@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TZgynCXt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94B95C2BCF7;
+	Mon, 11 May 2026 22:24:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778538282;
+	bh=ptyk4lUImyA6k3GhCQH+NYOCzuuUFOXX3h8wLCsjAVA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=TZgynCXty8m6nC4J8DVQG/H8Mgbn4csLtZZKvNizm48ec3pXNEnNNsLg9ekfawgKy
+	 FJHamuE3eD4mw70ZYy1xxb4H9W5d9TAyEFxA/c47HZtm30Os5WMUbjZlGVMmAyu0dO
+	 kJzQwRd4EuG0ZveiBWyW8kN2eBLh27SwsUde9moBgi9UQNley0UhZK2RL4zpZc7onN
+	 FL/cJ5DH3N9GTvvMwC6bnEiMep4DAzYjIsfHAPsf8evEkjg6ShD8shTZQ0DlC+133r
+	 8X9tapajoO7pNlCHLVHBeLlFZc7xt9tKRLFCI5p0uWoLUkeJZuCCkUdVsPy+mQfbtj
+	 7dWV1Erg5iJNw==
+Content-Type: multipart/mixed; boundary="===============1603180960552303213=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <5c0b69fc93d31fa42e47ee102dfd9b88fbcc8c7d0431e617c02a0e5f27025d36@mail.kernel.org>
+In-Reply-To: <20260511214100.9487-2-emil@etsalapatis.com>
+References: <20260511214100.9487-2-emil@etsalapatis.com>
+Subject: Re: [RESEND PATCH bpf-next 1/2] selftests/bpf: libarena: Add rbtree data structure
+From: bot+bpf-ci@kernel.org
+To: emil@etsalapatis.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,memxor@gmail.com,daniel@iogearbox.net,eddyz87@gmail.com,song@kernel.org,mattbobrowski@google.com,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 11 May 2026 22:24:41 +0000 (UTC)
 
-The RV32 BPF JIT compiler currently only supports the BPF_ADD atomic
-operation. Other 32 bit atomic operations (and, or, xor, xchg) and
-their BPF_FETCH variants are not supported and gracefully fall back to
-the interpreter.
+--===============1603180960552303213==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Since the RISC-V A extension is required for Linux on RV32, we can
-natively support these 32-bit BPF atomic operations by mapping them
-directly to the corresponding RISC-V amo*.w instructions.
+> diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_rbtree.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/st_rbtree.bpf.c
+> new file mode 100644
+> index 000000000000..17d46c4af332
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/libarena/selftests/st_rbtree.bpf.c
+> @@ -0,0 +1,974 @@
 
-Implement BPF_ADD, BPF_AND, BPF_OR, BPF_XOR, and BPF_XCHG with and
-without BPF_FETCH. BPF_CMPXCHG requires a more complex lr.w/sc.w
-loop and is left to fall back to the interpreter.
+[ ... ]
 
-Before this patch:
-[  138.862161] test_bpf: Summary: 1054 PASSED, 0 FAILED, [843/1042 JIT'ed]
+> +SEC("syscall")
+> +__weak int test_rbtree_find_nonexistent(void)
+> +{
+> +	u64 key = 0xdeadbeef;
+> +	u64 value = 0;
+> +	int ret;
+> +
+> +	rbtree_t *rbtree;
+> +
+> +	rbtree = rb_create(RB_ALLOC, RB_DEFAULT);
+> +	if (!rbtree)
+> +		return 1;
+> +
+> +	/* Should return -EINVAL */
+> +	ret = rb_find(rbtree, key, &value);
+> +	if (!ret)
+> +		return 2;
+> +
+> +	return rb_destroy(rbtree);
+> +}
 
-After this patch:
-[  157.024124] test_bpf: Summary: 1054 PASSED, 0 FAILED, [902/1042 JIT'ed]
+The comment says rb_find should return -EINVAL when looking for a
+non-existent key in an empty tree, but looking at rb_find in
+rbtree.bpf.c:
 
-Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+int rb_find(rbtree_t *rbtree, u64 key, u64 *value)
+{
+    rbnode_t *node;
+
+    if (unlikely(!rbtree))
+        return -EINVAL;
+
+    if (unlikely(!value))
+        return -EINVAL;
+
+    node = rbnode_find(rbtree->root, key, RBN_FIND_DFL);
+    if (!node || node->key != key)
+        return -ENOENT;
+        ^^^^
+
+rb_find returns -EINVAL only when rbtree or value is NULL. For a valid
+rbtree with no matching node, rbnode_find returns NULL and rb_find
+returns -ENOENT. Should the comment say "Should return -ENOENT" instead?
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c b/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
+> new file mode 100644
+> index 000000000000..2ce2dfe5a223
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
+> @@ -0,0 +1,1032 @@
+
+[ ... ]
+
+> +static
+> +rbnode_t *rbnode_find(rbnode_t *subtree, u64 key, enum rbnode_find_mode mode)
+> +{
+> +	rbnode_t *node = subtree;
+> +	int dir;
+> +
+> +	if (!subtree)
+> +		return NULL;
+> +
+> +	while (can_loop) {
+> +		/*
+> +		 * If we are not looking for the least upper bound,
+> +		 * we have found the only key. Otherwise keep going
+> +		 * until we find the "leftmost" instance of the key.
+> +		 */
+> +		if (mode == RBN_FIND_DFL && node->key == key)
+> +			break;
+> +
+> +		dir = (key <= node->key) ? 0 : 1;
+> +
+> +		if (!node->child[dir])
+> +			break;
+> +
+> +		/*
+> +		 * For least upper bound lookups, ensure that we
+> +		 * stop searching once we find the rightmost key.
+> +		 */
+> +		if (node->key == key && node->child[dir]->key != key)
+> +			break;
+> +
+> +		node = node->child[dir];
+> +	}
+> +
+> +	return node;
+> +}
+
+[ ... ]
+
+> +static
+> +int rb_node_insert(rbtree_t *rbtree __arg_arena, rbnode_t *node __arg_arena)
+> +{
+> +	rbnode_t *grandparent, *parent = rbtree->root;
+> +	enum rbnode_find_mode mode;
+> +	u64 key = node->key;
+> +	rbnode_t *uncle;
+> +	int dir;
+> +	int ret;
+> +
+> +	if (unlikely(!rbtree))
+> +		return -EINVAL;
+> +
+> +	if (!parent) {
+> +		rbtree->root = node;
+> +		return 0;
+> +	}
+> +
+> +	mode = RBN_FIND_DFL;
+> +	/* Always find the first node with the key when allowing duplicates. */
+> +	if (rbtree->insert == RB_DUPLICATE)
+> +		mode = RBN_FIND_LUB;
+> +	parent = rbnode_find(parent, key, mode);
+> +
+> +	if (key == parent->key && rbtree->insert != RB_DUPLICATE) {
+> +		if (rbtree->insert == RB_UPDATE) {
+> +			/*
+> +			 * Replace the old node with the new one.
+> +			 * Free up the old node.
+> +			 */
+> +			ret = rbnode_replace(rbtree, parent, node);
+> +			if (ret)
+> +				return ret;
+> +
+> +			if (rbtree->alloc == RB_ALLOC)
+> +				rb_node_free(rbtree, parent);
+> +
+> +			return 0;
+> +		}
+> +
+> +		/* Otherwise it's RB_DEFAULT. */
+> +		return -EALREADY;
+> +	}
+> +
+> +	node->parent = parent;
+> +	/* Also works if key == parent->key. */
+> +	if (key <= parent->key)
+> +		parent->left = node;
+> +	else
+> +		parent->right = node;
+
+Can this overwrite an existing left subtree in RB_DUPLICATE mode?
+
+When rbnode_find is called with RBN_FIND_LUB mode, it has a third break
+condition that stops the search when it finds a node with a matching key
+whose next-direction child has a different key:
+
+rbnode_find() {
+    ...
+    if (node->key == key && node->child[dir]->key != key)
+        break;
+    ...
+}
+
+With key == node->key, dir is computed as (key <= node->key) ? 0 : 1 = 0.
+The search stops at a matching node that has a non-NULL left child with a
+smaller key.
+
+Back in rb_node_insert, the code skips the RB_DEFAULT check when
+rbtree->insert == RB_DUPLICATE, and falls through to:
+
+    node->parent = parent;
+    /* Also works if key == parent->key. */
+    if (key <= parent->key)
+        parent->left = node;
+
+Since key == parent->key, the condition is true and parent->left is
+overwritten with the new node. But parent->left already points to an
+existing subtree (the smaller node that triggered the third break
+condition). That existing left child is overwritten, orphaning its entire
+subtree.
+
+Reproduction:
+  1) rb_insert(rbtree, 5, v1) in RB_DUPLICATE mode -> tree: {5}
+  2) rb_insert(rbtree, 3, v2)                       -> tree: {5->left = 3}
+  3) rb_insert(rbtree, 5, v3)
+
+In step 3, rbnode_find returns the root node 5 via the third break
+condition (because child 3 has key != 5). Then rb_node_insert sets
+parent->left = new_node, overwriting the pointer to node 3. Node 3 is now
+orphaned and leaked.
+
+The comment claims "Also works if key == parent->key", but this only holds
+when rbnode_find returns a node with an empty left slot, as in the typical
+duplicate-chain case where all keys are identical. As soon as a duplicate
+insertion meets a matching node that has a pre-existing smaller left child,
+the assignment corrupts the tree.
+
+The tree integrity check in rb_integrity_check walks only nodes reachable
+from the root, so it does not detect orphaned nodes. The existing test
+test_rbtree_duplicate uses a single key value for all insertions, so it
+never exercises the interleaved case where a smaller key exists between
+duplicates.
+
+
 ---
- arch/riscv/net/bpf_jit_comp32.c | 50 +++++++++++++++++++++++++--------
- 1 file changed, 39 insertions(+), 11 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/arch/riscv/net/bpf_jit_comp32.c b/arch/riscv/net/bpf_jit_comp32.c
-index f8509950fed4..7fd726a09b26 100644
---- a/arch/riscv/net/bpf_jit_comp32.c
-+++ b/arch/riscv/net/bpf_jit_comp32.c
-@@ -877,7 +877,7 @@ static int emit_load_r64(const s8 *dst, const s8 *src, s16 off,
- 
- static int emit_store_r64(const s8 *dst, const s8 *src, s16 off,
- 			  struct rv_jit_context *ctx, const u8 size,
--			  const u8 mode)
-+			  const u8 mode, s32 imm)
- {
- 	const s8 *tmp1 = bpf2rv32[TMP_REG_1];
- 	const s8 *tmp2 = bpf2rv32[TMP_REG_2];
-@@ -902,11 +902,43 @@ static int emit_store_r64(const s8 *dst, const s8 *src, s16 off,
- 		case BPF_MEM:
- 			emit(rv_sw(RV_REG_T0, 0, lo(rs)), ctx);
- 			break;
--		case BPF_ATOMIC: /* Only BPF_ADD supported */
--			emit(rv_amoadd_w(RV_REG_ZERO, lo(rs), RV_REG_T0, 0, 0),
--			     ctx);
-+		case BPF_ATOMIC:
-+		{
-+			bool is_fetch = (imm & BPF_FETCH) || (imm == BPF_XCHG);
-+			s8 fetch_reg = is_fetch ? lo(rs) : RV_REG_ZERO;
-+			int aq = is_fetch ? 1 : 0;
-+			int rl = is_fetch ? 1 : 0;
-+
-+			switch (imm) {
-+			case BPF_ADD:
-+			case BPF_ADD | BPF_FETCH:
-+				emit(rv_amoadd_w(fetch_reg, lo(rs), RV_REG_T0, aq, rl), ctx);
-+				break;
-+			case BPF_AND:
-+			case BPF_AND | BPF_FETCH:
-+				emit(rv_amoand_w(fetch_reg, lo(rs), RV_REG_T0, aq, rl), ctx);
-+				break;
-+			case BPF_OR:
-+			case BPF_OR | BPF_FETCH:
-+				emit(rv_amoor_w(fetch_reg, lo(rs), RV_REG_T0, aq, rl), ctx);
-+				break;
-+			case BPF_XOR:
-+			case BPF_XOR | BPF_FETCH:
-+				emit(rv_amoxor_w(fetch_reg, lo(rs), RV_REG_T0, aq, rl), ctx);
-+				break;
-+			case BPF_XCHG:
-+				emit(rv_amoswap_w(fetch_reg, lo(rs), RV_REG_T0, aq, rl), ctx);
-+				break;
-+			default:
-+				return -1;
-+			}
-+			if (is_fetch) {
-+				emit(rv_addi(hi(rs), RV_REG_ZERO, 0), ctx);
-+				bpf_put_reg64(src, rs, ctx);
-+			}
- 			break;
- 		}
-+		}
- 		break;
- 	case BPF_DW:
- 		emit(rv_sw(RV_REG_T0, 0, lo(rs)), ctx);
-@@ -1308,20 +1340,16 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		}
- 
- 		if (emit_store_r64(dst, src, off, ctx, BPF_SIZE(code),
--				   BPF_MODE(code)))
-+				   BPF_MODE(code), 0))
- 			return -1;
- 		break;
- 
- 	case BPF_STX | BPF_ATOMIC | BPF_W:
--		if (insn->imm != BPF_ADD) {
--			pr_info_once(
--				"bpf-jit: not supported: atomic operation %02x ***\n",
--				insn->imm);
-+		if (insn->imm == BPF_CMPXCHG)
- 			return -EFAULT;
--		}
- 
- 		if (emit_store_r64(dst, src, off, ctx, BPF_SIZE(code),
--				   BPF_MODE(code)))
-+				   BPF_MODE(code), insn->imm))
- 			return -1;
- 		break;
- 
--- 
-2.54.0.563.g4f69b47b94-goog
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25699461713
+--===============1603180960552303213==--
