@@ -1,142 +1,117 @@
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B8E344CAF5;
-	Mon, 11 May 2026 21:03:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
+Received: from mail-dy1-f193.google.com (mail-dy1-f193.google.com [74.125.82.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEDFD3B530A
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 21:07:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778533423; cv=none; b=lsOUdsmSmbLSkEmmhlsh7RkiMzMhhdtOGW+F5GFjbaDzlf+bQtii42Lcs9n0Ilw6g3MmDoJhY30f8nIIYIHCulqLkiOPxADVd1i0vGmeZEODiQOlW0Hj61qK8jKzquhkOc7hUKrWMKvj2XZ9RAOn5O9kuPlJtVx8JDGIj7uOSsM=
+	t=1778533666; cv=none; b=PNngksBWN5VqnJhU+A2AKa5xr70XJYpk61jP3I4kYzGyNmsrX5MZ+llPFXoA+bTL+XPOuca4AQ+CWj2RAHyOyUm5ktgyN3c4iRxO+dD8dKLdaHuwm3kNj9JmJfgaZhYcnZI0PtHOJVQxd+M1CCfAsyk/8dUP+kTyWtM5roRsyRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778533423; c=relaxed/simple;
-	bh=zJR7QUF62fOMwGKwP0yZMjVddXtveyN2DucV9GaUjVs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EH7udsFJM0LQtNshnlkh6QC6ptrOECjZkjVJvJto8KSJK/ahlMUneJCDsMvsonOlDTFQSHVcyHTJtkfvJN7CtfcPXh6cREikHN3pKgHNPH4xrd35lCn4rlPWB/euiTgRmnzjFgaRUnGZzxerh0fa7iBEmwyJaEF09ZCgq2tT2SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-	by vmicros1.altlinux.org (Postfix) with ESMTP id A1F1272C8CC;
-	Tue, 12 May 2026 00:03:38 +0300 (MSK)
-Received: from altlinux.org (unknown [193.43.10.9])
-	by imap.altlinux.org (Postfix) with ESMTPSA id 8B92836D016E;
-	Tue, 12 May 2026 00:03:38 +0300 (MSK)
-Date: Tue, 12 May 2026 00:03:38 +0300
-From: Vitaly Chikunov <vt@altlinux.org>
-To: Paul Moore <paul@paul-moore.com>
-Cc: linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
-	selinux@vger.kernel.org, KP Singh <kpsingh@kernel.org>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [BUG] lsm= with bpf before selinux breaks fscreate with EINVAL
-Message-ID: <agI9Rdi-72f8dNbB@altlinux.org>
-References: <agDuCdGIeM-6z-j-@altlinux.org>
- <CAHC9VhQ4VyAvG-z2h2NFpPx9PcJP4Ot2Ap=MPbCRk2TosJWOTA@mail.gmail.com>
+	s=arc-20240116; t=1778533666; c=relaxed/simple;
+	bh=dQTMWkHZ+61+diF2Mv67Y7t1A8a50F5etclM7SiqmzE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=udtRIjue45gAO5s69LXCSBQtL2n7vAyUXcyVw/NO0ZGTHBdj+WTlYjXx90bNRfJQ3pz4gAu+IY99/78gmsGalOZzCdLRsaK15st47GEyLYH3SWsDrBpDWjXJ6A+++gwsvwdx+z3Yau6iLiZGeT5Sywfhs3SjXt5viK3q0eMmk1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=rJ1XBAxW; arc=none smtp.client-ip=74.125.82.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="rJ1XBAxW"
+Received: by mail-dy1-f193.google.com with SMTP id 5a478bee46e88-2b4520f6b32so8352529eec.0
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 14:07:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1778533664; x=1779138464; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ANkclkgJQIYrrBTnf7RM0dL7FCmVzN2wIW9q87YaMYM=;
+        b=rJ1XBAxWuVuuduH3NI2akF35qlJF5ipLRfBcTN7+RAEVBNu0yYCqCR3U+MK2lJahmh
+         M5DdANykGI2/UOKWKIvChHamW7jcuyOWcUL6LsZAN8mo7oY6b2sW31dukZ14umZuALMS
+         Wot/K+q/1u4NmzSWFsCfTQUPZE/bc+o6IOL/W/8yr5u0sxApIzg/5GiCAfPQyfq7lN9z
+         rHDB8P3aCXAExd3oxZnqDRxks6uSq74j1C1r5Ul05myk8xeXxpkTOIJZdqOQqyNH+UG/
+         oK4e+1t/Upo7PmtonORNmQ4KH0ES3RBjqP77mxVX4aV8hm9re9caPhvUU88HPkmCCl7p
+         nnBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778533664; x=1779138464;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ANkclkgJQIYrrBTnf7RM0dL7FCmVzN2wIW9q87YaMYM=;
+        b=i+BRmIg6aaI+QY2WBR1QgAHy6YvE0PFHXFneU8z6czplL/RCVD6DW/o0Dtapq41oRo
+         D5B5y4KyD4xDKEvV+nD2cpS+r9vMeBTFsC/Zaei1m3WcKexicckB/CF3WcCOIq/Brw3g
+         S5/vGgVrWiO7wEhaeDMYRw5zZcOUbfnZW4PtrKCrYQ4OzrQC5cmNC/pUvvvviBQjvBhx
+         y13ePARaRkVX4jkO3W1mWZhP/FQCL8edWY4zcUFg1Hq4MPz4k5nus4Y/62Mo9AA9RFZE
+         JGgPr3fJ1S9Ci2GA3Esm+bAJhQzV8afSNNSa0ukRvO5tQ/n3bK0YpFuP4ODYkO8JRtu8
+         JEWg==
+X-Gm-Message-State: AOJu0YyoNeH175IoK3F/yv7fwxyMsRLVPEgDYJo6Tis64OKqT9yGmTPZ
+	j9nyOO4hYDjUkL5hG8JHfALcqmywE7EwAFprQRwZElV52X6KIUrVNoMPBLCEFN74B+RyTQgUZNX
+	j7i7WFK0/wG/diw4=
+X-Gm-Gg: Acq92OFQt7BEFsLOMYNf9F69xeKzf/Gi6tfmFjStr4oN/rqHbJNUCV6igivR9ogCCud
+	XFFli0AVe5gc19ET14QELRbQDEb4CysbXFq5Gwtx1r7/Q8ATrZMLJ+LEqI9ilx69K0Kl46aIXkO
+	wQ+gp2SRQPqHqOhWCbD4QA263BoveGW+t7oIsylRDQrQPL8mTILv9ojabhaSTfIJx99DTW8rd6F
+	RjCcRXK5h2Xz7oHocgBSZAGXwBJ5H7fY08Hf8UwjMOsDcKUUBieu0kOWePy41gCl0jzmCAoAXYi
+	w26ra0/aqSPslpUqNsnCG9GY2z2uiRG9BMrzZuQPvpzVW2WnqbX2reCJclgdTiS3x63Ho+UdcJw
+	xzUwMUQGJrVGdUxEdTsuQm94O895mUMJNHYYK32ASn5VLUxbeevTMrW7ScOarSevCKcFQNHho/W
+	UGSvAH/p1YNlOxm+Gksng=
+X-Received: by 2002:a05:7300:7c17:b0:2de:2f38:a7cb with SMTP id 5a478bee46e88-2f54f94487emr12171701eec.18.1778533663518;
+        Mon, 11 May 2026 14:07:43 -0700 (PDT)
+Received: from krios.corp.tfbnw.net ([2620:10d:c090:600::7a4c])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f8893441absm20177293eec.31.2026.05.11.14.07.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2026 14:07:43 -0700 (PDT)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	mattbobfrowski@google.com,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next 0/2] selftests/bpf: libarena: Add initial data structures
+Date: Mon, 11 May 2026 17:07:38 -0400
+Message-ID: <20260511210740.5395-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhQ4VyAvG-z2h2NFpPx9PcJP4Ot2Ap=MPbCRk2TosJWOTA@mail.gmail.com>
 
-Paul,
+Add two new data structures to libarena. These data structures initially
+resided in the sched-ext repo (https://github.com/sched-ext/scx) and
+have been adapted to the internal libarena build system. The data
+structures are:
 
-On Mon, May 11, 2026 at 04:19:34PM -0400, Paul Moore wrote:
-> On Sun, May 10, 2026 at 5:17 PM Vitaly Chikunov <vt@altlinux.org> wrote:
-> >
-> > Hi,
-> >
-> > We have boot failure when CONFIG_LSM has "bpf" listed before "selinux"
-> > (without bpf lsm scripts loaded). (This also happens with a boot with
-> > "security=selinux" if selinux was not in LSM= list but bpf is.)
-> >
-> > systemd reports on the failing boot attempt:
-> >
-> >   Failed to set SELinux security context generic_u:object_r:device:s0 for /dev/shm: Invalid argument
-> >   Mounting tmpfs to /dev/shm of type tmpfs with options mode=01777.
-> >   Mounting tmpfs (tmpfs) on /dev/shm (MS_NOSUID|MS_NODEV|MS_STRICTATIME "mode=01777")...
-> >   Failed to mount tmpfs (type tmpfs) on /dev/shm (MS_NOSUID|MS_NODEV|MS_STRICTATIME "mode=01777"): No such file or directory
-> >   Failed to set SELinux security context generic_u:object_r:device:s0 for /dev/pts: Invalid argument
-> >   Mounting devpts to /dev/pts of type devpts with options mode=0620,gid=5.
-> >   Mounting devpts (devpts) on /dev/pts (MS_NOSUID|MS_NOEXEC "mode=0620,gid=5")...
-> >   Failed to mount devpts (type devpts) on /dev/pts (MS_NOSUID|MS_NOEXEC "mode=0620,gid=5"): No such file or directory
-> >   No filesystem is currently mounted on /sys/fs/cgroup.
-> >   Failed to set SELinux security context generic_u:object_r:def_t:s0 for /sys/fs/cgroup: Invalid argument
-> >   Mounting cgroup2 to /sys/fs/cgroup of type cgroup2 with options nsdelegate,memory_recursiveprot.
-> >   Mounting cgroup2 (cgroup2) on /sys/fs/cgroup (MS_NOSUID|MS_NODEV|MS_NOEXEC "nsdelegate,memory_recursiveprot")...
-> >   Failed to set SELinux security context generic_u:object_r:def_t:s0 for /sys/fs/pstore: Invalid argument
-> >   Mounting pstore to /sys/fs/pstore of type pstore with options n/a.
-> >   Mounting pstore (pstore) on /sys/fs/pstore (MS_NOSUID|MS_NODEV|MS_NOEXEC "")...
-> >   Failed to set SELinux security context generic_u:object_r:def_t:s0 for /sys/fs/bpf: Invalid argument
-> >   Mounting bpf to /sys/fs/bpf of type bpf with options mode=0700.
-> >   Mounting bpf (bpf) on /sys/fs/bpf (MS_NOSUID|MS_NODEV|MS_NOEXEC "mode=0700")...
-> >   [!!!!!!] Failed to mount API filesystems.
-> >   Freezing execution
-> >
-> > 'Invalid arguments' seems from setfscreatecon_raw.
-> >
-> > Reproducer:
-> >
-> >   Boot with lsm=lockdown,capability,landlock,yama,safesetid,bpf,selinux,ima,evm
-> >
-> >   (none):~# cat /proc/thread-self/attr/current
-> >   cat: /proc/thread-self/attr/current: Invalid argument
-> >   (none):~# echo > /proc/thread-self/attr/fscreate
-> >   bash: echo: write error: Invalid argument
-> >
-> > This appears to be caused by security_getprocattr / security_setprocattr
-> > iterating until the first hook defined (which is bpf) and returning with
-> > default value -EINVAL before selinux even sees them.
-> 
-> Thanks for the problem report, the general recommendation is to place
-> the BPF LSM towards the end of the list (see the CONFIG_LSM Kconfig
-> help text), but we're trying to ensure that the BPF LSM works properly
-> when placed anywhere in that list.
+- Red black tree: Fundamental tree data structure that can also serve
+  as a base for more domain-specific data structures.
 
-I think if the order is important it should be handled in the code like
-for capabilities and ima/evm LSMs, not by forcing the user to discover
-the correct order with trial and error.
+- Lev-Chase deque: Queue data structure that allows efficient work
+  stealing, useful in scheduling scenarios.
 
-> 
-> My apologies if you're abilities are well beyond this, but if you are
-> familiar with patching and building your own kernel, have you tried
-> changing the LSM_RET_DEFAULT value for those functions to zero/0?
-> Assuming userspace is happy with that, I believe it may solve this
-> problem.
+The data structures are accompanied by selftests that are automatically
+discovered by the existing libarena test_progs selftest and incorporated
+in the CI.
 
-I can patch and test if this is useful to find the correct solution, but
-the description is a bit vague. Did you mean
 
-  include/linux/lsm_hook_defs.h:301:LSM_HOOK(int, -EINVAL, getprocattr, struct task_struct *p, const char *name,
-  include/linux/lsm_hook_defs.h:303:LSM_HOOK(int, -EINVAL, setprocattr, const char *name, void *value, size_t size)
+Emil Tsalapatis (2):
+  selftests/bpf: libarena: Add rbtree data structure
+  selftests/bpf: libarena: Add Lev-Chase queue data structure
 
-In these lines to replace -EINVAL with 0?
+ .../bpf/libarena/include/libarena/lvqueue.h   |   33 +
+ .../bpf/libarena/include/libarena/rbtree.h    |   89 ++
+ .../bpf/libarena/selftests/st_lvqueue.bpf.c   |  194 ++++
+ .../bpf/libarena/selftests/st_rbtree.bpf.c    |  974 ++++++++++++++++
+ .../selftests/bpf/libarena/src/lvqueue.bpf.c  |  241 ++++
+ .../selftests/bpf/libarena/src/rbtree.bpf.c   | 1032 +++++++++++++++++
+ 6 files changed, 2563 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/lvqueue.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/libarena/rbtree.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_lvqueue.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_rbtree.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/lvqueue.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
 
-I would never try this on my own, because it looks like -EINVAL is a
-meaningful value, and I would never claim to understand all the
-intricacies of LSMs.
+-- 
+2.54.0
 
-  3892 int security_setprocattr(int lsmid, const char *name, void *value, size_t size)
-  3893 {
-  3894         struct lsm_static_call *scall;
-  3895
-  3896         lsm_for_each_hook(scall, setprocattr) {
-  3897                 if (lsmid != 0 && lsmid != scall->hl->lsmid->id)
-  3898                         continue;
-  3899                 return scall->hl->hook.setprocattr(name, value, size);
-  3900         }
-  3901         return LSM_RET_DEFAULT(setprocattr);
-  3902 }
-
-If my first hypothesis is correct, and the lsm_for_each_hook goes into
-bpf before selinux, setting the default to 0 will make selinux hook
-unreachable.
-
-With all this, I conclude that I perhaps misunderstood your request.
-
-Thanks,
-
-> 
-> -- 
-> paul-moore.com
