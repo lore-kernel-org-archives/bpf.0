@@ -1,152 +1,147 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A778242EEA3;
-	Mon, 11 May 2026 18:08:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA6B41C2FD;
+	Mon, 11 May 2026 18:27:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778522892; cv=none; b=sVWEvTaqZZcm6sZkbi9WamQ6Cq8yy/g68faGrv4DPDv/V+sx1hDBqsOpL5UmG8C/MfTMQsXNjkF2sz2Sqi0itlaepLQ/mYdhpK7Sdp7sWaosVZEFhZqmPtOKmC/DeecfaHt6dBPCXC28Yf83ly0Fj2PfrgpPoOaufsi+cdEasOk=
+	t=1778524064; cv=none; b=cNKraIhnUdTMMSe0Mzwj78aC9cbX9EX5pYrazcJlFngXsoQuG2V6os60Ik/ykEJgqChwc0USBt//TCsU0lOT9xuWK/2icph0iPJkKG5c7a/fhWeniU83/gfr6m1tBdVkdJ24kTAwXYYcyJOQfdFGFFBEAtE9m9x9IBle8+e8MQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778522892; c=relaxed/simple;
-	bh=zGxdkZySaTWxihWT7HicM0TgM1njYZbnMUe3rO0FjhE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ULrzH0f+wu2reCuYEhvrE8ppF6Ij8AmZQ2ST0BjkySNFs+AxOgKbdCSYOMFgO6HVKsQeiwJgeipOWqESLtdWTPKEHdJfqP1onuLeSqTysdbSxE0kdPWBkF0L2+ip7/cYoEe0n7TVLNJVmEQsl/z9ohPBpn4YEdk96w8k7BEWiY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SQx7Bk9F; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778524064; c=relaxed/simple;
+	bh=1VhyYWMXf1MdI0oDMS6rROfcRY/h/JSnJfdAOswvOjg=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Ixzn/NFAVG1xLx0FxbV8yPagqvHebV1VhPS0gRWr/p4mRpdpj59e2/qruKpgrRK6ZvrpQu5+2YnUrJ4pKV/Ofn76RRQbR1JQb48plLcMsajYdHp4+wpJ/5L5LQo2Ya0o4yyiL9E8n+JF1LMsgBKGcPXYUX1fvu3uhnESbtKskyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BoDqseLl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SQx7Bk9F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E79CBC2BCB0;
-	Mon, 11 May 2026 18:08:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BoDqseLl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 375AEC2BCB0;
+	Mon, 11 May 2026 18:27:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778522892;
-	bh=zGxdkZySaTWxihWT7HicM0TgM1njYZbnMUe3rO0FjhE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SQx7Bk9Fi1NvlUS/w8qhcF6fyU6fHcZeQX60zznPGX2h6sYsESE3hDTd8mYTZShEd
-	 hIBkcZpFUIPaF9Wqt88UjaDXmtJ8Kv6rc3IpynlLJWp6sh9zwyv02bwa9GImfHdqiO
-	 OTqYkaFkkd1YUlGKfqb1x7PhyPCjLpWvUBu1uXxWn21aArWeHvg9ar4/IXc4EGxgsq
-	 4076+fiqrRed3JEQFf6UE88Xw2woRifJ9pG8VQ4MqxbuWoECJJKfmbDd4GC8d7YGvE
-	 OlPSM2wo98z0gOJ8BMSFS3JLCQG5EHiydpL8StMoFdvk89ajN2QGHIf1ysgG2ovQF9
-	 Os2CsCTzN2ZhQ==
-Message-ID: <b78f002a-8cb9-4857-bf8f-0137e790f644@kernel.org>
-Date: Mon, 11 May 2026 20:08:07 +0200
+	s=k20201202; t=1778524064;
+	bh=1VhyYWMXf1MdI0oDMS6rROfcRY/h/JSnJfdAOswvOjg=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=BoDqseLl1sVgxrAY0GgPQaOKqgpv8ge5/hzVSlGv1uE9W8p2O4ZbbZjcvc2O5oRtb
+	 TnGF+HTHh+CV+aMO1huEuOKigQC5/2Kn104Be/d2PAUVJaN4ctnYZNhiReaOI9KZgk
+	 RowBnMGVLXTJavIFHtM1qDDo3XKySjD0eEwlLps5fNCB2veLaYnCg4Aymi60NTLzr9
+	 RmZtiKLi4+76esX1Suj8BZCin+9o6q8jQbB4bHy0fKrtbddYNWZQaNGXLrZWQ0zhNf
+	 F0kg6Oidj8DYSPEqyOdbttamtb7VU5M5oabouciUdy3sc4fiaZ/cpzSAiLnUjuywjc
+	 EaJ82Qtjewvow==
+Content-Type: multipart/mixed; boundary="===============2895428846348820657=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v5 3/5] veth: implement Byte Queue Limits (BQL)
- for latency reduction
-To: Simon Schippers <simon@schippers-hamm.de>,
- Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
- kernel-team@cloudflare.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20260505132159.241305-1-hawk@kernel.org>
- <20260505132159.241305-4-hawk@kernel.org>
- <ee275aa6-af27-4dac-9afa-da88abde312b@schippers-hamm.de>
- <8f2f7f2e-6aa2-4e5b-b52d-0025b2525579@redhat.com>
- <e3a91545-13cd-4f87-8375-d707865bdbca@schippers-hamm.de>
- <6a597dbd-70bf-4b14-b495-2f7248fd3220@kernel.org>
- <20260508190626.4285fac0@kernel.org>
- <f459b95c-80d5-4e05-84b2-f574c92724de@kernel.org>
- <20260510085602.57c7a081@kernel.org>
- <daa05c21-dcfc-4cc4-aa22-9e25c7f6c743@kernel.org>
- <41023c34-87a3-4e4f-b3ab-3ed53d171910@schippers-hamm.de>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <41023c34-87a3-4e4f-b3ab-3ed53d171910@schippers-hamm.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <8ca6f748be9913a2ced3e9f821153bfa914c206e089626e37e32d7d27c83be09@mail.kernel.org>
+In-Reply-To: <20260511174559.659782-2-wusamuel@google.com>
+References: <20260511174559.659782-2-wusamuel@google.com>
+Subject: Re: [PATCH v4 1/2] PM: wakeup: Add kfuncs to traverse over wakeup_sources
+From: bot+bpf-ci@kernel.org
+To: wusamuel@google.com,rafael@kernel.org,pavel@kernel.org,lenb@kernel.org,gregkh@linuxfoundation.org,dakr@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org
+Cc: wusamuel@google.com,kernel-team@android.com,linux-kernel@vger.kernel.org,linux-pm@vger.kernel.org,driver-core@lists.linux.dev,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 11 May 2026 18:27:42 +0000 (UTC)
+
+--===============2895428846348820657==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
+> diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
+> index 922ed457db19..8823aceeac8b 100644
+> --- a/drivers/base/power/power.h
+> +++ b/drivers/base/power/power.h
+
+[ ... ]
+
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index b8e48a023bf0..80b497de2deb 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+
+[ ... ]
+
+> @@ -1168,11 +1168,78 @@ static const struct file_operations wakeup_sources_stats_fops = {
+>  	.release = seq_release_private,
+>  };
+>
+> +#ifdef CONFIG_BPF_SYSCALL
+> +#include <linux/btf.h>
+> +
+> +__bpf_kfunc_start_defs();
+
+[ ... ]
+
+> +/**
+> + * bpf_wakeup_sources_get_head - Get the head of the wakeup sources list
+> + *
+> + * Return: The head of the wakeup sources list.
+> + */
+> +__bpf_kfunc void *bpf_wakeup_sources_get_head(void)
+> +{
+> +	return &wakeup_sources;
+> +}
+
+What stops a BPF program from using bpf_wakeup_sources_get_head() to get
+the wakeup_sources pointer and iterating this list without taking the SRCU
+lock?
+
+The current API design requires BPF programs to manually call the lock/unlock
+functions, but there's no enforcement that they must do so before accessing
+the list. A program could call bpf_wakeup_sources_get_head() and directly
+iterate the list without proper SRCU protection, which could lead to race
+conditions or crashes.
+
+An open-coded iterator would solve this by internalizing the lock:
+
+  Iterator new() acquires SRCU lock
+  Iterator next() returns next wakeup_source
+  Iterator destroy() releases SRCU lock
+
+This design pattern ensures that the list can never be traversed without
+proper locking. Puranjay Mohan raised this concern in v2, but it was not
+addressed in v3 or v4.
+
+Reference: https://lore.kernel.org/all/m2y0jeg5sg.fsf@kernel.org/
+
+> +
+> +__bpf_kfunc_end_defs();
+> +
+> +BTF_KFUNCS_START(wakeup_source_kfunc_ids)
+> +BTF_ID_FLAGS(func, bpf_wakeup_sources_read_lock, KF_ACQUIRE)
+> +BTF_ID_FLAGS(func, bpf_wakeup_sources_read_unlock, KF_RELEASE)
+
+Should bpf_wakeup_sources_read_lock have the KF_RET_NULL flag?
+
+The function returns an SRCU index cast to a pointer (incremented by 1).
+If wakeup_sources_read_lock() were to fail, the result would need to be
+checked for null. Without KF_RET_NULL, the BPF verifier won't require
+null checks on the returned pointer.
+
+Looking at bpf_wakeup_sources_read_lock():
+
+__bpf_kfunc struct bpf_ws_lock *bpf_wakeup_sources_read_lock(void)
+{
+    return (struct bpf_ws_lock *)(long)(wakeup_sources_read_lock() + 1);
+}
+
+If the underlying wakeup_sources_read_lock() could return a value that,
+when incremented, equals zero, or if there's any error path, BPF programs
+would need to check for NULL before using the lock pointer.
+
+Puranjay Mohan raised this in v2, but it was not addressed in v3 or v4.
+
+Reference: https://lore.kernel.org/all/m2y0jeg5sg.fsf@kernel.org/
+
+> +BTF_ID_FLAGS(func, bpf_wakeup_sources_get_head)
+> +BTF_KFUNCS_END(wakeup_source_kfunc_ids)
+
+[ ... ]
 
 
-On 11/05/2026 11.55, Simon Schippers wrote:
-> On 5/11/26 10:11, Jesper Dangaard Brouer wrote:
->>
->>
->> On 10/05/2026 17.56, Jakub Kicinski wrote:
->>> On Sat, 9 May 2026 11:09:51 +0200 Jesper Dangaard Brouer wrote:
->>>> On 09/05/2026 04.06, Jakub Kicinski wrote:
->>>>> On Thu, 7 May 2026 21:09:09 +0200 Jesper Dangaard Brouer wrote:
->>>>>> Not against being able to modify VETH_RING_SIZE, but I don't think it is
->>>>>> the solution here.
->>>>>
->>>>> Was it evaluated, tho?
->>>>>
->>>>> It's obviously super easy these days have AI spew no end of complex
->>>>> code. So it'd be great to have some solid, ideally production-like
->>>>> data to back this all up.
->>>>>
->>>>> VETH_RING_SIZE seems trivial, ethtool set ringparam
->>>>
->>>> No, unfortunately we cannot just decrease the VETH_RING_SIZE.
->>>
->>> To be clear - I said may it configurable with ethtool -G
->>> not change the default.
->>>
->>
->> Sure, I understand the desire to make VETH_RING_SIZE configurable.
->> If doing so we are making Linux network stack harder to tune and setup
->> correctly. E.g. adding a qdisc to veth would also require changing the
->> ring size, but if system also uses XDP then tuning below 64 (likely 128)
->> will lead to hard-to-find packet drops.
-> 
-> I mean 64 still could be a 4x improvement at least.
-> 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-No not really, setting it to 64 will give same (bad) latency from "BQL
-off" which that patchset is trying to address.
-
->>
->> I prefer adding something (like BQL) that auto-tune how much of the ring
->> queue we are using.  Good queues function as shock absorbers when
->> concurrent processes in the OS have scheduling noise.
->>
->> I acknowledge that Simon Schippers found that the BQL implementation was
->> actually not auto-tuning.  We need to work on this, my prototype
->> implementation [1] [2] works surprisingly well.
->>
->>
->> - [1] https://lore.kernel.org/all/3e43117f-356d-4086-a176-abd7fe2e6f0a@kernel.org/2-09-veth-time-based-bql-coalescing.patch
->> - [2] https://lore.kernel.org/all/3e43117f-356d-4086-a176-abd7fe2e6f0a@kernel.org/
->>
->>
->>>> The reason is that XDP-redirect into veth don't have any
->>>> back-pressure and would simply drop packets if queue size becomes
->>>> less than the NAPI budget (64). (Yes, we use both normal path and
->>>> XDP-redirect in production).
->>>
->>> Doesn't this mean you have a queue which is not under BQL control?
->>>
->>
->> It is a matter of perspective. BQL needs between 17-55 elements in the
->> 256 queue.  At the same time we handle if the ring runs full, e.g. due
->> to a sudden burst of XDP redirected packets, which pushes packets into
->> the qdisc layer.
-> 
-> You are checking inflight/limit in /sys directory to get the 17-55
-> number, right?
-> 
-
-Nope, I'm using a bpftrace program to keep track of the inflight/limit
-in a BPF hashmap.  Reading from /sys will not be accurate.
-
-I moved the selftests into a github repo [1] to allow us to collaborate
-and evaluate the changes more easily.  I explicitly kept the new BPF
-based BQL tracking as a commit[2] for your benefit.
-
-  [1] 
-https://github.com/netoptimizer/veth-backpressure-performance-testing/tree/main/selftests
-
-  [2] 
-https://github.com/netoptimizer/veth-backpressure-performance-testing/commit/f25c5dc92977
-
-Sorry for cutting the remaining of the message, but I ran out of time,
-as things are a bit challenging/hectic here at Cloudflare at the moment.
-
---Jesper
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25688185901
+--===============2895428846348820657==--
