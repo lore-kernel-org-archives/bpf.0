@@ -1,109 +1,115 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8195944B666
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 17:17:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6052255F57
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 17:18:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778519872; cv=none; b=BQv0DwSc2Kd9Kjc3xkofds6L9pBw6btPEphSwm5fiyWkqJBRQVNwbviFfj9i0fZr8TQIICi3213y63mC6y/8syVmLTkDtlSvZ08gJku3f4jGNSJ+RxdPBq3gwCxujJPu/TKS+LvOqQvIFJv9vuBq7tNKdIHqhFP5g5ULiqwFdh0=
+	t=1778519897; cv=none; b=WCbmwBcm6NjVybUDqO26XHTMeGIh+Bu5Qmu03BYhj5/kgQFB8g+OEMjebk6hcMfYOe01loRfA7EeTrLODKzaZyfcRrNrVhr5lYoCL/+x++yDn9AXu+NW7Jc1l64DsPasRc7SwK1ifgkCC0BvNZoxXr8fwDvvbY1n5Dg7MZz8AVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778519872; c=relaxed/simple;
-	bh=hFY7DZz2dPp8r+14dtw6/8VgSlUQgJuN+xeWAm4e7PI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RImbMwgsNkZirZ4zaLJhiw2Przu7gD3lkVFtO5z3kahZZOoVrsXQS7eHT+riCdD0xsRY0/T/Iq5KRCL7dB/nugzE++hVRyDPKv4UofbRE/28dwyLtTnKHG+zGDcMwxpOg7/ugVGnCztLUGf5P8sRSjLNepcIE7PvaIGfyQto8KQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V8vvJHix; arc=none smtp.client-ip=209.85.216.50
+	s=arc-20240116; t=1778519897; c=relaxed/simple;
+	bh=z3kOpY9ViUaUyJU3gdXhJD52Ymct6W+YUbAiOGuCXgg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=HR+2Inli3RWJwAHEjiHKhXAi/8aOQG3XpkUYGHPNHsPtxd/9tMrBIzHP0yLiBAWqcqdmZ4DMzwU0DimNil/lEMcvIJtEEKndYlSfCVqt2IisiaQrDJ2PSsnzuyTlxIMxk6XeHRxc7zt47Vq02Vb5B0z98GeLWu6OtmL03lEaUHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pTzVZS46; arc=none smtp.client-ip=209.85.210.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V8vvJHix"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-365cae89bf5so1961552a91.3
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 10:17:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pTzVZS46"
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7dbe437b072so2604686a34.2
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 10:18:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778519869; x=1779124669; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gPhuaAbxwetzboeNCx+LRxGrGydKpCVrVHpu2bOzJRk=;
-        b=V8vvJHixYDaozBdFHVRbRexy5+YgceZn4o39xMH8WDAG3sASFiRz51Ic3CtQBIBohq
-         jTp5/zb2onT4c5lpQY3jug0Kst33llla9yznQFMnC3ZrcA5R69S7asZ6q+FOxXWrTtNQ
-         uScHNmZ13JZpQ95dmLmxHJM5bmgHOOHaFFL/ZGf68Nvtz7LUKFpEOhNEFIs4OrrKJWDt
-         sPm723Y88tVyc9l0+6TtteTaSS497ZOuPUG3r4qrFZWoawMEgGR3xRNyCVjDAj57IfgL
-         6QbQYLwElsLws3IwkaEEzmhmAqfu/tHG5nguh00ew2Z6AIsUXwrVNroidxy0T/JIWZ8Y
-         lUHQ==
+        d=gmail.com; s=20251104; t=1778519894; x=1779124694; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2PJULk4XF26NffsCR/AJr8MgFQb7EUc2SMqGgA5Onac=;
+        b=pTzVZS467mOANBa3qjwIaq90kUtDBRXa+BC1irGVPY4ZuZJ+AGso3Q8Blg9mHG1eLG
+         zeI6Oa03szbQO9pMSTamoWBXf0ZwdrXzTb6zacKSoigUS+hEOX48zxGJtnYAgl1emaTF
+         /74NiqpNrvLxb9R+ciasDDhRu6PkLmCaulLzuCbwR+QKDbjbSyEAYBDbsiPI594Kkdsm
+         JWTxlPNBQerKJl8FWTdGPNSvJHu8hYSOSpgphEbg8cO4xLs9ZPG0uN17D+kLOrJNRmjd
+         WD5nnIZitYv3fseu8shFrkqouhFDlxUnf/HzhyC6IbI4cT9Gm2GPXDlL2ffOlw7nh1ps
+         aZRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778519869; x=1779124669;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gPhuaAbxwetzboeNCx+LRxGrGydKpCVrVHpu2bOzJRk=;
-        b=IMHdOIkaY8a47vKmRPRgZ/kFPIJL6t+5UvsvdtpdfNJifa4+mBcj4MH+2bG/UKX/sc
-         eEQx4ELy1vZbqU4HeEzilrMnDc9CoZoq+Wj/1hdcaQu6x04sZCEdeAzuPI6DUcV/Xn9d
-         1XnTe3rwjOIURzVdAPYtYUruwHCyV0v1VAsId3GuGQmQQQFjNePLkdjI+UpAEWd38LPG
-         3+lcVgZ0fonFvSlbABCPG6RRy1gy4Fft6DiY61i0zwCjg9ABqaL1qrCt048lELeP0j9h
-         bylXue/pJlLaaKcCQDHpLW0PG5/W6n6Ut1PLUom0L+ATGo2xRWf3W6PbUV/Aojw9jL5v
-         IzkA==
-X-Forwarded-Encrypted: i=1; AFNElJ+hMLrK5tKMJba3YfxxpNtdUQ0icj125ERIOtug/19lIIEXAXZOu97C4FNUn9a7OfBVMHM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwdOIAZaTW85YC2ixiKbtUjZBxIkNiwP3gHknHwLUM1uf5/d7P
-	zSS0iHoOr+8gnKgOHvycvZG2mSuJQkwz0A2srA0KyLCsCndhs5SO2x54
-X-Gm-Gg: Acq92OG2HapC4cp8pFHm9VFSADozjf6OVB3GfNqjI8KH0zYO5Lxrpfjru1ByRO7RPBV
-	VYa+/y3uoEKXLBcQzXuFDyrIQLLlt88x7iJv4khzrxm0WBGbHcrCU09weRMy0PIO1Asdv15lENn
-	79nbSe4IunYmoQQUUyMu6o0RSzYgEjZGqBuyZmgOzLLMYj9beQkGkaHRlp2Sep9Nyxuis2LtC9S
-	8a+k5QYh5BbM4upiMbSpwjat5dO4shf79A6tow45HumTVh6Y1krF/LOJKT/5aOmxsR+RF0Db2Az
-	u+gPEa029s3lJ5Lrk/0heOf7pQLb/ZzBvWtyOvrNJjsI4SQ1Uc3CCIqXsn8+zcb27WYC/a0Hzlm
-	hu5kTRMjxhWT7QUsQVz/Mdry7jCmj+V5/JrZxys1k4SidrS/8rn0ZeW6EaXyeYOVDmTmwoCmjeG
-	rh9y7zJNegQlHMBo5u6fkc5ILcYKpdq6UnVP9rNgsRt3L447REAZtt
-X-Received: by 2002:a17:90b:1850:b0:368:6ff3:6678 with SMTP id 98e67ed59e1d1-3686ff36d15mr3942399a91.20.1778519869103;
-        Mon, 11 May 2026 10:17:49 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-367d65ed459sm10983837a91.14.2026.05.11.10.17.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 10:17:48 -0700 (PDT)
-Message-ID: <7f0d8cf18e3e0d60751b2453815a1f0ea62ca928.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 01/12] bpf: Simplify
- mark_stack_slot_obj_read() and callers
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
- 	daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org, 
-	mykyta.yatsenko5@gmail.com, kernel-team@meta.com
-Date: Mon, 11 May 2026 10:17:15 -0700
-In-Reply-To: <20260506142709.2298255-2-ameryhung@gmail.com>
-References: <20260506142709.2298255-1-ameryhung@gmail.com>
-	 <20260506142709.2298255-2-ameryhung@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+        d=1e100.net; s=20251104; t=1778519894; x=1779124694;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2PJULk4XF26NffsCR/AJr8MgFQb7EUc2SMqGgA5Onac=;
+        b=kjwdXW4yaRPyuIjHejZ5kOjgx9/d1e2+FTbt8fE33KcMBujoKw3lMK3I9OIKl9TP2O
+         YX/60hlvpivWUfV5xbY8+sgpmVuh2/PdnnYcPTj/mF63I5odJxaPaMFIttQdAwSc2OIf
+         dXF1o9gZrC0exK+COmSjeJsCzaAiDngf+vtzALZ7pvHYDYJ8MBCKlRf4fcx5FKD8xchi
+         PPiYpE004eg2P/osuoBwTNEYz6RP6cNSfWeFmtetBoen4g7jNMTrhLireP1sastfhMA5
+         KzUrK/mX+5s+m+skrDCq5jbvLQpKLz4OVhqfeDUDU9LprP7QWahzjMdZT7JZ5jjHSSUE
+         tF1A==
+X-Forwarded-Encrypted: i=1; AFNElJ9dPoZwBvsW4GeIfO2GoodLf87EaMmHlrWtwyeswaVoYXYRJv+Lio0f5W45QVNKxSO71wQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFBg8bPsocbC1qB1wzsEVnVBE4dtPT+VO9cyL+ebQCx2RLok+e
+	+TcL4SROiqlmy6IEXenJ/YI600S+2WB6NEFPX23CMI4MFh+jIosTBwuw90dXtw==
+X-Gm-Gg: Acq92OE3LPf8nNvWlNicR4jjWaIhpCxFaYWEjYLoRDGVwlDEIQR2ymdTWqB7aRABaLI
+	DxOZyANQ/yOB+8X7QS0ZSIy+uDO2+PmsCyi8XeR1irVWpOHSbYIJFucG8ykd54uUY1BBi0f1LEP
+	S4eL87Qs5zmQ5kTr3DTp8iNmNAo/7G0HGGJjLYCMnQ2VTXLJjK446BLTm1+WkLhWCXZrxDVr1BK
+	nXbhW50gtw1qjIMyMeEpCXtODdbmMasfL+frKTTY/E6dVRs3dpuWpHw1/yHzcggQ1eH2pghfxZP
+	nnfMA2zzTWqX9NVgExNjfGk5fcCu/NXbMXj6IyA3+o1F2/cVRUBndvwuxOTLCMSdAjTDSpazpLM
+	7nq8RCyWB6I6/1yak2RJ6TO27FKXyRL3qtwesCYFr3AP3J2j2dZ0ydQpzuc9Z2pN3/4jb72hRRL
+	LfCH3hYLQj/V9YzPs1zo+4E2QAFMrtAsbXEtnfnbxHSKeEr16mcN3VH7fMVDtIKV1pdywGKfmTD
+	Hc0bcciA60J3wO5qg==
+X-Received: by 2002:a05:6820:161f:b0:696:1860:8baf with SMTP id 006d021491bc7-69998cc094bmr12581594eaf.20.1778519894549;
+        Mon, 11 May 2026 10:18:14 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:48::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69b25c9a23fsm6023546eaf.7.2026.05.11.10.18.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 May 2026 10:18:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 11 May 2026 10:18:13 -0700
+Message-Id: <DIG0ONMVOP0L.3QFYUPWFSKWI4@gmail.com>
+Cc: <sashiko@lists.linux.dev>, "bpf" <bpf@vger.kernel.org>
+Subject: Re: [bpf-next v3 1/2] bpf: Offload kptr destructors that run from
+ NMI
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Justin Suess" <utilityemal77@gmail.com>
+X-Mailer: aerc
+References: <20260507175453.1140400-2-utilityemal77@gmail.com>
+ <20260507234520.646C4C2BCB2@smtp.kernel.org> <agCXEJKJh-JGMhjG@zenbox>
+ <CAADnVQJdFCFJcg0Pqdnx=D2h5vHj_q4mrwSJYxRC5RW0NTFNvQ@mail.gmail.com>
+ <agEnc0aYMhuIeDlq@zenbox> <DIFYUK5DKGAT.189D9YYSQFCUZ@gmail.com>
+ <agH_0MEw4b0pB11-@suesslenovo>
+In-Reply-To: <agH_0MEw4b0pB11-@suesslenovo>
 
-On Wed, 2026-05-06 at 07:26 -0700, Amery Hung wrote:
-> Directly call mark_stack_slot_obj_read() from function processing
-> iter, dynptr and irq_flag. To prepare for unifying dynptr handling,
-> dynptr_get_spi() will be moved out of mark_dynptr_read(),
-> As mark_dynptr_read() would join mark_iter_read() as a thin wrapper of
-> mark_stack_slot_obj_read(), just open code the helpers.
->=20
-> In addition, since 6762e3a0bce5 ("bpf: simplify liveness to use
-> (callsite, depth) keyed func_instances") has made
-> mark_stack_slot_obj_read() always succeed. Return void and drop the now
-> unused bpf_reg_state argument.
->=20
-> Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> ---
+On Mon May 11, 2026 at 9:38 AM PDT, Justin Suess wrote:
+>   [   21.604660] Call Trace:
+>   [   21.604662]  <TASK>
+>   [   21.604663]  dump_stack_lvl+0x5d/0x80
+>   [   21.604666]  print_usage_bug.part.0+0x22b/0x2c0
+>   [   21.604669]  lock_acquire+0x295/0x2e0
+>   [   21.604671]  ? terminate_walk+0x33/0x160
+>   [   21.604674]  ? __call_rcu_common.constprop.0+0x309/0x730
+>   [   21.604679]  _raw_spin_lock+0x30/0x40
+>   [   21.604680]  ? __call_rcu_common.constprop.0+0x309/0x730
+>   [   21.604682]  __call_rcu_common.constprop.0+0x309/0x730
+>   [   21.604686]  bpf_obj_free_fields+0x118/0x250
+>   [   21.604691]  free_htab_elem+0x85/0xd0
+>   [   21.604694]  htab_map_delete_elem+0x168/0x230
+>   [   21.604698]  bpf_prog_f6a7136050cb5431_clear_task_kptrs_from_nmi+0xe=
+b/0x144
+>   [   21.604700]  bpf_trace_run3+0x126/0x430
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+that's better.
+Looks like we moved bpf_obj_free_fields() into htab_mem_dtor(),
+but left check_and_free_fields() in free_htab_elem().
 
-[...]
+I think the fix is to remove check_and_free_fields() from ma path in free_h=
+tab_elem()
+and fallback to bpf_mem_alloc at map create time when map has kptrs
+with dtors. Even when BPF_F_NO_PREALLOC is not specified.
 
-> +static void mark_stack_slot_obj_read(struct bpf_verifier_env *env,
-> +				     int spi, int nr_slots)
+Kumar,
 
-Nit: this is probably a leftover from the stack liveness commit,
-     but I think that a better name for this function would now be
-     mark_stack_slots_scratched.
+thoughts?
 
-[...]
