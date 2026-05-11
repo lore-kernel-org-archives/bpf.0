@@ -1,21 +1,21 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ACF8357A25
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 05:34:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 066193750DB
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 05:34:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778477641; cv=none; b=IoIBHOj1Coc/CWBvLLyfZUtLKexaF34NNxS//flpBD5qlvhziYTzAizjp6DT+VfMuay4xr4Uo9hj3JLcS7woJlWjAGCMQBvi79+1tVn5My6rFAoIVDOVs4erMwgpNOStf9cevCmceE/yPzroq7bopyRrbCtk0BI1LAfNTz/cUtM=
+	t=1778477651; cv=none; b=Txah/PkZaV0MQFujzNrCBkrOvemCz6aTpqIHM/zo9MlzIl8Fsj8WzljPOeb195NepBhcxgtzt6G2yphe7hq3AC1+vomy0VdgXRf7i4G6MuQXxNm12s6asd8knKLkPN1tRbUiIbysAQb5sL2l3BHreylZdVoPunkKTDBUW6RtsAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778477641; c=relaxed/simple;
-	bh=nRX7iUGfDGeFXyMBrZVHrVjar7rlcCLouWk3hyTSlqY=;
+	s=arc-20240116; t=1778477651; c=relaxed/simple;
+	bh=ZBBr+9CtXRb4t87+Cq9XfYjwBqvIsTpTaJD0JoeMJx8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dswHzC++HdYZgB/UxTUfN3pF5DVr8YnHfeQwc3SAOA9NJQa4dtOj2n1QpwjUnR0XJVv9FKDgB2RnW0Wl7FkXQuqBg2ZUnMl3PxyLzPQ+vr/o1G42mcArJ9RCSHZQREzHKEEHh7pLoLf8TGH/0ySYSATPhrwnHWs0dfq6X2LYTsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+	 MIME-Version; b=Gms5pBkRGO79wxzgvFmiMvDDzF/Zb/Z3UUgyTsZ4v3mN20WW2d9RDCRmcq/wplFiMmnVkxKYMEeaA7VZmKBBGnrQ6b91xPA/aVIn+mPQ3zyPCr68YEHYUrtHSmG6KYvPP0+w7gw2zH+Eame482YFp8cNjm4/XUcwFIaJMz56oOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 3C8B5A59DBF05; Sun, 10 May 2026 22:33:53 -0700 (PDT)
+	id 7AAE1A59DBF4C; Sun, 10 May 2026 22:34:03 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v3 10/24] bpf: Reject stack arguments in non-JITed programs
-Date: Sun, 10 May 2026 22:33:53 -0700
-Message-ID: <20260511053353.1885466-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 12/24] bpf: Enable r11 based insns
+Date: Sun, 10 May 2026 22:34:03 -0700
+Message-ID: <20260511053403.1886118-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260511053301.1878610-1-yonghong.song@linux.dev>
 References: <20260511053301.1878610-1-yonghong.song@linux.dev>
@@ -38,51 +38,45 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The interpreter does not understand the bpf register r11
-(BPF_REG_PARAMS) used for stack arguments. So reject interpreter
-usage if stack arguments are used either in the main program or
-any subprogram.
+BPF_REG_PARAMS (r11) is used for stack argument accesses and
+the following are only insns with r11 presence:
+    - load incoming stack arg
+    - store register to outgoing stack arg
+    - store immediate to outgoing stack arg
+
+The detailed insn format can be found in is_stack_arg_ldx/st/stx()
+helpers. After this patch, stack arg ldx/st/stx insns become valid
+for kernel and these insns can be properly checked by verifier.
+
+The LLVM compiler [1] implemented the above BPF_REG_PARAMS insns.
+
+  [1] https://github.com/llvm/llvm-project/pull/189060
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/core.c   | 2 +-
- kernel/bpf/fixups.c | 6 ++++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index ae10b9ca018d..958d86f0beac 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2599,7 +2599,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct b=
-pf_verifier_env *env, struct
- 		goto finalize;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0a0157b0972a..5c07f54679fe 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -18001,11 +18001,12 @@ static int check_and_resolve_insns(struct bpf_v=
+erifier_env *env)
+ 		return err;
 =20
- 	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
--	    bpf_prog_has_kfunc_call(fp))
-+	    bpf_prog_has_kfunc_call(fp) || (env && env->subprog_info[0].stack_a=
-rg_cnt))
- 		jit_needed =3D true;
-=20
- 	if (!bpf_prog_select_interpreter(fp))
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index ba86039789fd..19056016eed8 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -1407,6 +1407,12 @@ int bpf_fixup_call_args(struct bpf_verifier_env *e=
-nv)
- 		verbose(env, "calling kernel functions are not allowed in non-JITed pr=
-ograms\n");
- 		return -EINVAL;
- 	}
-+	for (i =3D 1; i < env->subprog_cnt; i++) {
-+		if (bpf_in_stack_arg_cnt(&env->subprog_info[i])) {
-+			verbose(env, "stack args are not supported in non-JITed programs\n");
-+			return -EINVAL;
-+		}
-+	}
- 	if (env->subprog_cnt > 1 && env->prog->aux->tail_call_reachable) {
- 		/* When JIT fails the progs with bpf2bpf calls and tail_calls
- 		 * have to be rejected, since interpreter doesn't support them yet.
+ 	for (i =3D 0; i < insn_cnt; i++, insn++) {
+-		if (insn->dst_reg >=3D MAX_BPF_REG) {
++		if (insn->dst_reg >=3D MAX_BPF_REG &&
++		    !is_stack_arg_st(insn) && !is_stack_arg_stx(insn)) {
+ 			verbose(env, "R%d is invalid\n", insn->dst_reg);
+ 			return -EINVAL;
+ 		}
+-		if (insn->src_reg >=3D MAX_BPF_REG) {
++		if (insn->src_reg >=3D MAX_BPF_REG && !is_stack_arg_ldx(insn)) {
+ 			verbose(env, "R%d is invalid\n", insn->src_reg);
+ 			return -EINVAL;
+ 		}
 --=20
 2.53.0-Meta
 
