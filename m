@@ -1,93 +1,127 @@
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E4FB43E4B9
-	for <bpf@vger.kernel.org>; Mon, 11 May 2026 16:39:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8529843E4B9
+	for <bpf@vger.kernel.org>; Mon, 11 May 2026 16:40:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778517587; cv=none; b=WUrOGCkgiV4s+UEmztde6gSCEodwcniQWG/W1d79Sm006Zo9istiH445BWVnQuRd6ZcUxNi0pwvgE9DPK0haufADhk8xnrb1jrXAKuO04VnqtUACh1TORlWyzS572wUny2jsW11FdUCPwF/x+93Z5LPui1ZKe928cin0YL8th/M=
+	t=1778517637; cv=none; b=p5s34EHV0K9gIRe2I4DkbMyUeMoW3k8Km/PxMW3I8t+Nz7YarCCKX50gr5V4P/Vlh2gOzqhGykEhFXALdOeQ0kl/1f9PjXFaXNLX8ArmXFqMCKVw91lNgjDZZHdH607Q+D9Gl14OL6LSWX3Tgu42YEXTK5aogZCWYHBqBZBxppU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778517587; c=relaxed/simple;
-	bh=I74pkUGkKTnXWU28hOrOnFhFCscFShUOVNUJwOIUeew=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=VCXF79IXOLeS2RGdy0EgQKCJc8IoBPmkhBFeOgDtNbEVcPW/KwRpFOSiLsFJqocJ9enaVdau4qtG+qwwNtkVduulgL5VZ2/R8Nf3IIJIVkTivXmaPmrClj01ESaHdEqFvTKFEdCw2O9cslAvaqqCkMB7/xaZHf1iF9ie7tkeX6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RzlK6tnx; arc=none smtp.client-ip=209.85.210.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778517637; c=relaxed/simple;
+	bh=2pC0IeKaFlErtKbBaf57pAfOsPphHNrSGTbOEY0Izcw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BxIdrbtpAGe4JNUKpSHcwT+cXt7cvq4Dmjn0iDMFS6M/4lmFYs07KOIFw5EDkszoX84ufCWAPkql148snWGD5TzKupri4kYANGhkLFS4Ge2fIdfAkulEj1LmNIAZG9xnETjcGbJIajV9olgP4HeiyR2DbmmqqaiByaCF4joR6Wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JRbsaRDN; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RzlK6tnx"
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-7dbe437b072so2568696a34.2
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 09:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778517585; x=1779122385; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XuCIQ8ghli2tGJzIn6xp8IYFfXlot5IknQfVcooPHIc=;
-        b=RzlK6tnx3jl0EulNDWbekg9zKaAn7CCh2Uo1iO8ZKwE59lSFz5NZxE8yCORYIQt1nb
-         LpJhSaU3M+WNzciDcqFfXf+37JL0FupOBZc6N8xaG+HMLd0kD2JGmqrJooV+hrqTmqdd
-         aE9hybqnggxNRctPuL/0pS1L+iwHa9VA9H27Tu6JJ6mg15JjTnclPFKFiJcGDpn9+Bzl
-         k1wOR3npmT2Kf2p9CPKtlimFm3VlCKy97UQarypaXKh1f7Ev0+dDdsfJ+GyHsGeIbdOe
-         dCZgD5mfqW5HFF+8zvUS5h1u3JiVFHNwaxf/lCD1KoX0U9tkY7ncH5yyeqwwjpeFVf+l
-         AfKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778517585; x=1779122385;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XuCIQ8ghli2tGJzIn6xp8IYFfXlot5IknQfVcooPHIc=;
-        b=Dgq6oqT3NhaZPTWh4HA8aUYmsq9xfPRNrY/ohqsJCQp5W5Rd360RFvIxwT4UcJ7on3
-         rz2qyozC9lsYo+sLblqLtoHzCUn3xAUGzJdIS9XUnyKsUEgnZAvT3lSkEINKsbEQKZEt
-         1KKE5THaRD2z5fnqHwv3L12LgMzwKVuf86eAs8Gwg0rZAM+hRcmtTMQPtR1LqCenqxoE
-         vQU0R8sSuP/OU4SQ9WJDaSTzo3nI54Wv3wWc6dQ+5nTltOniCPl4ntZDEJ5NoQlDi1kE
-         2bhRQVpZzvVh1d2ZGD0o2n0HQ8wcUOoNOlXATbCrp4oYWuRRudXfw3iee9L7lHSAqoWX
-         5QNw==
-X-Forwarded-Encrypted: i=1; AFNElJ9ZZbdw37CwUQa7zCKWUFaqvoGDCsaR4POL2UI68yO6THd3DOSgd+XzKDbJi7abgE4tYCM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzumlZn7K8Zh0hKVhppF6vGuT0MnLQhiljobLXPWDQDL7hJXKzD
-	fEX2O4IT/pIMf5k4g6xftXnwDsCMNWtZdC95+0RwX+OR/i66R7tvZt79
-X-Gm-Gg: Acq92OE1SmF4i/Uvg376Q8xxgqUuqn1LIGc6ayKJBMnwtWiIhl13YnG+Y6fxdcJscTL
-	lV+JHShhJGzWny0e79wYp2D28iOxvGxtu4NQQIbg9AfmiqhpKCxLo5pKVmaqBfZYAgz5po4hTwS
-	IAMZKS2Ktp7EuHwTiaHSpHCcHDNKs/urYprOei9p0wAN1OHLgBddALTtKO6jQS5V120A/YltG5b
-	jwO5S+OvdEhCzyoQZIypBNN2mWkbEGpOXKFR5jT6Iya25v8AaubAT3WSYP7cxW1rc4zEKvpUHbK
-	U0KlVoNe4d13TGVR1riYV8rBbtXr4lZ/8Y+nlvUpmOgs4LUQFJCOcw3ipvwFRFpJh8a9aInw1xl
-	5FPeHKbNnFwBFEyqhfCPXXtLjvqLBx6XVg/ohrcM+k9Zf3Uu/STXOkQS5hJkUODeO53N1Aadhv6
-	3rHiILRwV8BRDGldAdpO8Xl6/txG2ZH0TwTwPnCHU7wTfxDskBB6Rq+xoJm9WFbA0vN35DA15cD
-	D6cypTIYVtyMpPUjOjTQs5nIihi
-X-Received: by 2002:a05:6830:f81:b0:7d7:fcac:6374 with SMTP id 46e09a7af769-7e1dee817a4mr12681894a34.8.1778517584987;
-        Mon, 11 May 2026 09:39:44 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:40::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e367c05393sm7450778a34.9.2026.05.11.09.39.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 May 2026 09:39:44 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JRbsaRDN"
+Message-ID: <1d94f7ea-03e1-4739-b2e9-08e8903a1ac6@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778517633;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9naalMX3xIOQxcFrbJKf/SxMlpzUS1bJ586DtaHLINI=;
+	b=JRbsaRDN7Ib/2NK9iNVv5A6ImRGhKl5J+R3t5SGYG7KaAphnWsz+2LI3OiDdLcwmoBABu7
+	JeF5qKiJInqbmLsC4kh4eYLZgrDPBg+tHJm5tP+uYjGO3sK4mpeZKx+2K8s7343ktcFPNo
+	wYb+b9b91cK2PwhoQB2vLB637zit0eo=
+Date: Mon, 11 May 2026 09:40:08 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 11 May 2026 09:39:43 -0700
-Message-Id: <DIFZV6EYXKW7.220V3470QWX01@gmail.com>
-To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Jose E .
- Marchesi" <jose.marchesi@oracle.com>, <kernel-team@fb.com>, "Martin KaFai
- Lau" <martin.lau@kernel.org>, "Puranjay Mohan" <puranjay@kernel.org>
-Subject: Re: [PATCH bpf-next v3 16/24] bpf,x86: Implement JIT support for
- stack arguments
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v3 09/24] bpf: Extend liveness analysis to track
+ stack argument slots
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ "Jose E . Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com,
+ Martin KaFai Lau <martin.lau@kernel.org>
 References: <20260511053301.1878610-1-yonghong.song@linux.dev>
- <20260511053432.1889692-1-yonghong.song@linux.dev>
-In-Reply-To: <20260511053432.1889692-1-yonghong.song@linux.dev>
+ <20260511053348.1885300-1-yonghong.song@linux.dev>
+ <DIFZQSR5B66I.26PF8V3P74KSK@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <DIFZQSR5B66I.26PF8V3P74KSK@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sun May 10, 2026 at 10:34 PM PDT, Yonghong Song wrote:
-> -static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_pro=
-g, int *addrs, u8 *image,
-> +static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_pro=
-g,
-> +		  struct bpf_subprog_info *subprog_info, int *addrs, u8 *image,
 
-Same issue. Do not add subprog_info.
-env and bpf_prog is enough.
+
+On 5/11/26 6:34 PM, Alexei Starovoitov wrote:
+> On Sun May 10, 2026 at 10:33 PM PDT, Yonghong Song wrote:
+>> @@ -1071,8 +1105,24 @@ static void arg_track_xfer(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>   	struct arg_track *dst = &at_out[insn->dst_reg];
+>>   	struct arg_track *src = &at_out[insn->src_reg];
+>>   	struct arg_track none = { .frame = ARG_NONE };
+>> -	int r;
+>> -
+>> +	int r, slot;
+>> +
+>> +	/* Handle stack arg stores and loads. */
+>> +	if (is_stack_arg_st(insn) || is_stack_arg_stx(insn)) {
+>> +		slot = stack_arg_off_to_slot(insn->off);
+>> +		if (slot >= 0) {
+>> +			if (is_stack_arg_stx(insn))
+>> +				at_out[MAX_BPF_REG + slot] = at_out[insn->src_reg];
+>> +			else
+>> +				at_out[MAX_BPF_REG + slot] = none;
+>> +		}
+>> +		return;
+>> +	}
+>> +	if (is_stack_arg_ldx(insn)) {
+>> +		slot = stack_arg_off_to_slot(insn->off);
+>> +		at_out[insn->dst_reg] = (slot >= 0) ? at_stack_arg_entry[slot] : none;
+>> +		return;
+>> +	}
+>>   	if (class == BPF_ALU64 && BPF_SRC(insn->code) == BPF_K) {
+> claude doesn't have a taste.
+> Please use 'else if' like the rest of the function and remove both 'return'.
+
+Ack.
+
+>
+>>   		if (code == BPF_MOV) {
+>>   			*dst = none;
+>> @@ -1297,6 +1347,14 @@ static int record_load_store_access(struct bpf_verifier_env *env,
+>>   	struct arg_track resolved, *ptr;
+>>   	int oi;
+>>   
+>> +	/*
+>> +	 * Stack arg insns use dst_reg=BPF_REG_PARAMS(11), but at[11] tracks
+>> +	 * the value stored in stack arg slot 0, not a memory base pointer.
+>> +	 * Skip to avoid misinterpreting that value as an FP-derived pointer.
+> The comment is confusing. 'not a memory base pointer'? what does it mean?
+
+at[11] intends to track stack arg slot 0, but at '11' also corresponds to
+r11. I will rewrite to make it clear.
+
+>
+>> +	 */
+>> +	if (is_stack_arg_stx(insn) || is_stack_arg_st(insn) || is_stack_arg_ldx(insn))
+>> +		return 0;
+>> +
+>> -/* Return true if any of R1-R5 is derived from a frame pointer. */
+>> +/* Return true if any of R1-R5 or stack args is derived from a frame pointer. */
+>>   static bool has_fp_args(struct arg_track *args)
+>>   {
+>>   	for (int r = BPF_REG_1; r <= BPF_REG_5; r++)
+>>   		if (args[r].frame != ARG_NONE)
+> let's make it consisten with below and use arg_is_fp here?
+
+Sure.
+
+>
+>>   			return true;
+>> +	for (int r = 0; r < MAX_STACK_ARG_SLOTS; r++)
+>> +		if (arg_is_fp(&args[MAX_BPF_REG + r]))
+>> +			return true;
+>>   	return false;
+>>   }
+
