@@ -1,45 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A997081A;
-	Tue, 12 May 2026 16:03:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 643643C819E;
+	Tue, 12 May 2026 16:04:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778601825; cv=none; b=H9TLjP9w8G3gqvBCg/FMpYr4SZMnaUStgiupgrkU8Na38P3PLKQm5PtXx+eHvpUMs4LzW8p3zGKxpXeDU3QEbyMoh51eau8J/eHsigPPoys88r3KBRJSR0PSTs+b2VR4gBg2JKAjqak24t+iHzdwBtSF4ikimXCilTHLX6TUY9c=
+	t=1778601881; cv=none; b=L9ocwoUslg0jjrmnbLc1aXhE3H8rinJhL4G7TAlE5hekB9r0XgjC8RqmdAnok+tL2HrROrubdhmFuaLNb3AzVLJ/iWAiSUaG0+Qb0JualxAYi6xNANovVhB4MmNOYFmsGLgaCTeoD+vJNryziVRzLwITSbg/7dH9xmAih3nzMis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778601825; c=relaxed/simple;
-	bh=hN8ptaNvSOxU6v4Xfdr3YqfTxz2H8Z45w+RCfymBy6E=;
+	s=arc-20240116; t=1778601881; c=relaxed/simple;
+	bh=+gRijnzxRtu6tbAngyZTD2Te3JxUdAdL4stmmmU2bZg=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DJvpNL6o1WRqFl3ISRUXLcO361S/rNsuxVBiakygNTyEid6UNRco1nK06OUpKzCKQbNDDsDZ3V/usGfgD4UEl9NpyLQfzAoyEVrht5MvMU2M3cjuknCOVgDgPYo0BNDf9g9YQ3WoLMMHTobWOIbXcufFOCX9S/p6xuYIvO5VLcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z5/1cDWG; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=Z/Bs/T5PBSFOvaCnmkEPoxYLjfKGO3dOJ9IFLO9OJe7nB3ZY5mI/yczL28zFNOenRkqPyaJ5RkvnaepQv9xyN2Gk1huMeNZdMb08UJ2sXg+/zlC5VWbSNBPQA4tBFmhsSIe7YftsxsUZtHCefhWKY/Rf69c554LnGnFycvNe7wI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZMinE4vT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z5/1cDWG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3E81C2BCB0;
-	Tue, 12 May 2026 16:03:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZMinE4vT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 763F5C2BCB0;
+	Tue, 12 May 2026 16:04:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778601824;
-	bh=hN8ptaNvSOxU6v4Xfdr3YqfTxz2H8Z45w+RCfymBy6E=;
+	s=k20201202; t=1778601881;
+	bh=+gRijnzxRtu6tbAngyZTD2Te3JxUdAdL4stmmmU2bZg=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Z5/1cDWGdzrK0q2TXSNVKVDSwRY1lJWE/V+/TqqMqmiuzM10S6USpy1hhOdzJ98fW
-	 I4vStU//h4Ewv21SBlEvE2FAhTLj6R9Y6rWOlQCTDJZtrOyUvdYcw1nMlo8b4E/qXT
-	 Pi49Itb+wkdnDonCxkCar0maTzTll6hH5suEQz+NytndoGOimRamUkgmi7/+3AMxqC
-	 fApZuB3Fp0iRYYKywsr5Lz2B5iz1w4ri+Jqs6iK7rfDsViTmwo6GVWccMZzTCnPmBb
-	 eEy2+SD3rxIcpA6+r8kunNB24J8OfpS6rAe0utvyKO+OKNawC1Gwnz9cJSMVPIdBxN
-	 b5RtRBtTW1RDg==
-Date: Tue, 12 May 2026 09:03:42 -0700
+	b=ZMinE4vTKT6goPysB8X3k9rnZYFx620q8gp7ZoPlkodpfp7zxJxluoquHOAuMVr80
+	 ZNxyHhy/huQ8tQbY/Kkt0GWH9QD16WlyWat3aSNrAkzrmHibWKX57gGVDTtiIHL3Ka
+	 DK2yonNZ26bGe3/2AZr+6fK11FI2ewUX6O6Jcx0cfAVw5uxKWXSjGMA2aXNR8/t0J0
+	 h5HnGI6G0O2hakWGtD7ESJUnr9w5M36HM+7ZifMjcfxoiuFrWTO8j8kCsDnsCndkF/
+	 l3gXT56+NF57fKT3zWGvKYzuRY9qLnfCrD82VkopyQu0mHXfxwhV47JuQJTPGV4/XW
+	 09545f1WHGPiA==
+Date: Tue, 12 May 2026 09:04:39 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Sabrina Dubroca <sd@queasysnail.net>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
 Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
  pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- john.fastabend@gmail.com, bpf@vger.kernel.org, Sashiko
- <sashiko-bot@kernel.org>, daniel@iogearbox.net, jonathan.lemon@gmail.com
-Subject: Re: [PATCH net v2 2/4] net: tls: prevent chain-after-chain in plain
- text SG
-Message-ID: <20260512090342.15779c9a@kernel.org>
-In-Reply-To: <agMKcBrJYK5UIcsZ@krikkit>
+ sd@queasysnail.net, john.fastabend@gmail.com, bpf@vger.kernel.org, Sashiko
+ <sashiko-bot@kernel.org>
+Subject: Re: [PATCH net v2 3/4] net: tls: fix use-after-free in
+ tls_sw_sendmsg_locked after bpf verdict
+Message-ID: <20260512090439.6a91bb92@kernel.org>
+In-Reply-To: <e683a7db-b465-4b34-b002-8f22031c77ce@linux.dev>
 References: <20260511174920.433155-1-kuba@kernel.org>
-	<20260511174920.433155-3-kuba@kernel.org>
-	<agMKcBrJYK5UIcsZ@krikkit>
+	<20260511174920.433155-4-kuba@kernel.org>
+	<e683a7db-b465-4b34-b002-8f22031c77ce@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,60 +49,11 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 12 May 2026 13:09:36 +0200 Sabrina Dubroca wrote:
-> 2026-05-11, 10:49:18 -0700, Jakub Kicinski wrote:
-> > diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-> > index 2608b0c01849..3bfdaf5e64f5 100644
-> > --- a/net/tls/tls_sw.c
-> > +++ b/net/tls/tls_sw.c
-> > @@ -789,21 +789,33 @@ static int tls_push_record(struct sock *sk, int flags,
-> >  	i = msg_pl->sg.end;
-> >  	sk_msg_iter_var_prev(i);
-> >  
-> > +	/* msg_pl->sg.data is a ring; data[MAX+1] is reserved for the wrap
-> > +	 * link (frags won't use it). 'i' is now the last filled entry:
-> > +	 *
-> > +	 *         i   end              start
-> > +	 *         v    v                 v            [ rsv ]
-> > +	 *  [ d ][ d ][   ][   ]...[   ][ d ][ d ][ d ][chain]
-> > +	 *    ^   END                                     v
-> > +	 *     `-----------------------------------------'
-> > +	 *
-> > +	 * Note that SGL does not allow chain-after-chain, so for TLS 1.3,
-> > +	 * we must make sure we don't create the wrap entry and then chain
-> > +	 * link to content_type immediately at index 0.
-> > +	 */  
+On Tue, 12 May 2026 17:47:13 +0800 Jiayuan Chen wrote:
+> > Reported-by: Sashiko <sashiko-bot@kernel.org>
+> > Fixes: 54a3ecaeeeae ("bpf: fix ktls panic with sockmap")  
 > 
-> All this wrapping with extra "hidden" slots is so confusing...
+> Is the blamed commit correct? I don't think I touched the following code 
+> in this commit.
 
-Yes, always takes me an hour to swap the context back in.
-I was hoping the diagram would help.
-
-> > +	if (i < msg_pl->sg.start)
-> > +		sg_chain(msg_pl->sg.data, ARRAY_SIZE(msg_pl->sg.data),
-> > +			 msg_pl->sg.data);
-> > +
-> >  	rec->content_type = record_type;
-> >  	if (prot->version == TLS_1_3_VERSION) {
-> >  		/* Add content type to end of message.  No padding added */
-> >  		sg_set_buf(&rec->sg_content_type, &rec->content_type, 1);
-> >  		sg_mark_end(&rec->sg_content_type);
-> > -		sg_chain(msg_pl->sg.data, msg_pl->sg.end + 1,
-> > -			 &rec->sg_content_type);
-> > +		sg_chain(msg_pl->sg.data, i + 2, &rec->sg_content_type);  
-> 
-> Probably a silly question: why do we need to chain the content type?
-> Could we just drop it directly into the right slot of msg_pl?
-
-Good question, IDK either. Maybe anticipating the need for padding?
-Do you prefer that as the fix, or follow up in net-next is fine?
-
-> (I'm also a bit puzzled by the "last_filled + 2"/"end + 1", because
-> that would leave an empty slot between the last_filled slot and the
-> content_type? and maybe even overwrite the first actual message chunk
-> if we had filled the message?)
-
-Incredibly confusingly the value passed to sg_chain is the arrays size.
-So it's entry target + 1. IDK if that answer your question but it always
-confuses me. I even added it to the comment above but looks like I ended
-up removing it.
+Fair, will update.
