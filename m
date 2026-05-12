@@ -1,132 +1,432 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D7673E1718
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 13:53:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E64B839D3CE;
+	Tue, 12 May 2026 13:54:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778594017; cv=none; b=AedI1YVubW/4WIaB6g6VOozD2uJgAmfXapYpGR08Fjx6fX7UVYtrd7GwAgjuYCu9oa5WZz7okY6mvuy4grRSR/TB+XzFerI/WPoztDZtsqaeEjK6caKWf3gFA5hFH9GY3uvbrCp7l0Ik3n4ZRfRvib+Muf5bIPU2CYY6bn3yyjY=
+	t=1778594096; cv=none; b=Jb5buI8Xw3R0JI+wKPOiaSTFGBRdxS23aNu5mSWGBm/qx0hmPwuuyuTs2W9EKEkpwavEdcc1gFxtBZ83XZUcOJEwhZIzzRdxnMdsc4ChcwO528DHVgW/Rv2AE8L5Lb/8+ieKjvrS2ZjjHs8m9WmAzWfCUwqzA3bUUkO+FSh6fRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778594017; c=relaxed/simple;
-	bh=WVQVqOHx45Hb+fkOrD8x3d6A8JYikal+oe0C1T07wVs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KLjqnscG3NurLCJ9BU6hJ4/Zig8WPwvudAcI31uMEfQNZ7IRVl+hhMbxatLgLIPTtQWXWH2eoxKVkT9aU604qMzPGZuYtrr4q1E5zsNI6tsXBmqAl5wxoqYZ7uviAiVpMHOp5xWS05cxInYLJPp/SSQFdcirY4jdPvIgiC3bsQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uq4cQJyP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778594096; c=relaxed/simple;
+	bh=8FUrlrnlV2S6IbQzISn71o21kS6vMOb4QyGxMRKQLhQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=POUG+i4b+xsB3VTMID05607FM/WAn2DT+GsDnn1OuCVQ0Jq7H0DR6C2mjSWUNHVskKU+dOmP8kKBn0wamkTGNEboQ5etH/m+iZekFdUxiK0Onp0XCXKxbLfIHW2aLMXNOTHdl3uyMotwQpdNb0S2JyLYhxK9CzGVKjEwsndmMFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EMOAil2L; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uq4cQJyP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70D5EC2BCF5;
-	Tue, 12 May 2026 13:53:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EMOAil2L"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 626DAC2BCFA;
+	Tue, 12 May 2026 13:54:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778594017;
-	bh=WVQVqOHx45Hb+fkOrD8x3d6A8JYikal+oe0C1T07wVs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Uq4cQJyPgu57RNQpTP4yOYEFqeAD4ZnkxgbpLnsUfrIIJhBTCUJz/5gSflsP6Twj5
-	 wpsHMk3Kg8HxiQvPJ10e13X7n/62DjFcq6Z/bTVpWdXNKjHPtRagD9xxEahBCTM8he
-	 ZasJMG5bUUFFuFx9Ev8doo54uK32wQKqnppwkODekEmabHl/rGQZT8X4wYBeU5ZHP5
-	 gWgacYs/uD01kctD7KQvG3/mwB0Ah+NNzZnH/mSwxE/E08uie4l+nJ9+HYJRZhWsHI
-	 MyDEgG2sdUCJFfMXO3OormM9tdQmhK3jDiI0/sotNUn06zAKPynUsaYF0g7LSiN0Fw
-	 zSUcRotlSjGQg==
-Date: Tue, 12 May 2026 06:53:35 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc: "Mahe Tardy" <mahe.tardy@gmail.com>, <bpf@vger.kernel.org>,
- <andrew+netdev@lunn.ch>, <andrii@kernel.org>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <davem@davemloft.net>, <eddyz87@gmail.com>,
- <edumazet@google.com>, <john.fastabend@gmail.com>, <martin.lau@linux.dev>,
- <pabeni@redhat.com>, <song@kernel.org>, <liamwisehart@meta.com>
-Subject: Re: [PATCH v1 1/4] bpf: Add netpoll kfuncs for sending UDP packets
-Message-ID: <20260512065335.50647ee9@kernel.org>
-In-Reply-To: <DIGD21MXE0XM.3CLUL6BVK74PK@gmail.com>
-References: <20260511085344.3302-1-mahe.tardy@gmail.com>
-	<20260511085344.3302-2-mahe.tardy@gmail.com>
-	<20260511182019.69ebc7c6@kernel.org>
-	<DIGBS3WKQN94.1YYMZM0K6CETY@gmail.com>
-	<20260511193603.3ef00cee@kernel.org>
-	<DIGD21MXE0XM.3CLUL6BVK74PK@gmail.com>
+	s=k20201202; t=1778594095;
+	bh=8FUrlrnlV2S6IbQzISn71o21kS6vMOb4QyGxMRKQLhQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=EMOAil2LP3RXQaSYLvOdjEAcx/+vWF7UQieKCZ5bPd/Na731IVp7R5WdbFCTdJfrR
+	 LQGs79cWxu4/tNwNO2oodluAbFxGPwWzWwfUX+sFeIaWUN6YWAwRmO7rNtdtQnHXWd
+	 rxvY3FD1ZSDzwnWeSXhseqojhdGaYuYsiz+VnoPJBk67zhRqCtVTEuywfkAl6bLxm7
+	 zO33mjvVKeARllNi6NgiK7psUJWZ/YjsXz2cOCBLsMh9EJnqfqvowJPrLulH10ZeRc
+	 T0Uf2/SKDLH+PG5CvelGBwIXtOn8Wf3sOXSeSWpLkFgePWoMS9dSrms2iX/9XBHdfs
+	 sniWXNatMgiEg==
+Message-ID: <18855e57-f050-411f-9958-d4babcc81ba3@kernel.org>
+Date: Tue, 12 May 2026 15:54:50 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v5 3/5] veth: implement Byte Queue Limits (BQL)
+ for latency reduction
+To: Simon Schippers <simon@schippers-hamm.de>,
+ Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+ kernel-team@cloudflare.com, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20260505132159.241305-1-hawk@kernel.org>
+ <20260505132159.241305-4-hawk@kernel.org>
+ <ee275aa6-af27-4dac-9afa-da88abde312b@schippers-hamm.de>
+ <8f2f7f2e-6aa2-4e5b-b52d-0025b2525579@redhat.com>
+ <e3a91545-13cd-4f87-8375-d707865bdbca@schippers-hamm.de>
+ <6a597dbd-70bf-4b14-b495-2f7248fd3220@kernel.org>
+ <20260508190626.4285fac0@kernel.org>
+ <f459b95c-80d5-4e05-84b2-f574c92724de@kernel.org>
+ <20260510085602.57c7a081@kernel.org>
+ <daa05c21-dcfc-4cc4-aa22-9e25c7f6c743@kernel.org>
+ <41023c34-87a3-4e4f-b3ab-3ed53d171910@schippers-hamm.de>
+ <b78f002a-8cb9-4857-bf8f-0137e790f644@kernel.org>
+ <873511fa-4316-4411-a76b-ec4c5805abd3@schippers-hamm.de>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <873511fa-4316-4411-a76b-ec4c5805abd3@schippers-hamm.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Mon, 11 May 2026 19:59:55 -0700 Alexei Starovoitov wrote:
-> On Mon May 11, 2026 at 7:36 PM PDT, Jakub Kicinski wrote:
-> > On Mon, 11 May 2026 18:59:56 -0700 Alexei Starovoitov wrote:  
-> >> unusable toys? What are you talking about?  
-> >
-> > Please refer to the comments on the RFC. netpoll bypasses most of 
-> > the networking stack. And there either has to be some user space 
-> > to negotiate crypto or this is unusable for anyone serious.  
+
+
+
+On 11/05/2026 22.37, Simon Schippers wrote:
+> On 5/11/26 20:08, Jesper Dangaard Brouer wrote:
+>>
+>>
+>> On 11/05/2026 11.55, Simon Schippers wrote:
+>>> On 5/11/26 10:11, Jesper Dangaard Brouer wrote:
+>>>>
+>>>>
+>>>> On 10/05/2026 17.56, Jakub Kicinski wrote:
+>>>>> On Sat, 9 May 2026 11:09:51 +0200 Jesper Dangaard Brouer wrote:
+>>>>>> On 09/05/2026 04.06, Jakub Kicinski wrote:
+>>>>>>> On Thu, 7 May 2026 21:09:09 +0200 Jesper Dangaard Brouer wrote:
+>>>>>>>> Not against being able to modify VETH_RING_SIZE, but I don't think it is
+>>>>>>>> the solution here.
+>>>>>>>
+>>>>>>> Was it evaluated, tho?
+>>>>>>>
+>>>>>>> It's obviously super easy these days have AI spew no end of complex
+>>>>>>> code. So it'd be great to have some solid, ideally production-like
+>>>>>>> data to back this all up.
+>>>>>>>
+>>>>>>> VETH_RING_SIZE seems trivial, ethtool set ringparam
+>>>>>>
+>>>>>> No, unfortunately we cannot just decrease the VETH_RING_SIZE.
+>>>>>
+>>>>> To be clear - I said may it configurable with ethtool -G
+>>>>> not change the default.
+>>>>>
+>>>>
+>>>> Sure, I understand the desire to make VETH_RING_SIZE configurable.
+>>>> If doing so we are making Linux network stack harder to tune and setup
+>>>> correctly. E.g. adding a qdisc to veth would also require changing the
+>>>> ring size, but if system also uses XDP then tuning below 64 (likely 128)
+>>>> will lead to hard-to-find packet drops.
+>>>
+>>> I mean 64 still could be a 4x improvement at least.
+>>>
+>>
+>> No not really, setting it to 64 will give same (bad) latency from "BQL
+>> off" which that patchset is trying to address.
+>>
+>>>>
+>>>> I prefer adding something (like BQL) that auto-tune how much of the ring
+>>>> queue we are using.  Good queues function as shock absorbers when
+>>>> concurrent processes in the OS have scheduling noise.
+>>>>
+>>>> I acknowledge that Simon Schippers found that the BQL implementation was
+>>>> actually not auto-tuning.  We need to work on this, my prototype
+>>>> implementation [1] [2] works surprisingly well.
+>>>>
+>>>>
+>>>> - [1] https://lore.kernel.org/all/3e43117f-356d-4086-a176-abd7fe2e6f0a@kernel.org/2-09-veth-time-based-bql-coalescing.patch
+>>>> - [2] https://lore.kernel.org/all/3e43117f-356d-4086-a176-abd7fe2e6f0a@kernel.org/
+>>>>
+>>>>
+>>>>>> The reason is that XDP-redirect into veth don't have any
+>>>>>> back-pressure and would simply drop packets if queue size becomes
+>>>>>> less than the NAPI budget (64). (Yes, we use both normal path and
+>>>>>> XDP-redirect in production).
+>>>>>
+>>>>> Doesn't this mean you have a queue which is not under BQL control?
+>>>>>
+>>>>
+>>>> It is a matter of perspective. BQL needs between 17-55 elements in the
+>>>> 256 queue.  At the same time we handle if the ring runs full, e.g. due
+>>>> to a sudden burst of XDP redirected packets, which pushes packets into
+>>>> the qdisc layer.
+>>>
+>>> You are checking inflight/limit in /sys directory to get the 17-55
+>>> number, right?
+>>>
+>>
+>> Nope, I'm using a bpftrace program to keep track of the inflight/limit
+>> in a BPF hashmap.  Reading from /sys will not be accurate.
 > 
-> encryption inside UDP packet is orthogonal.
-> netpoll as-is is usable and useful to send plain text
-> best effort messages.
+> Ah nice.
+
+Add the option --hist to have both NAPI and BQL histograms printed when
+script ends.  This will give you an accurate pattern of how inflight and
+limit evolves.
+
+>>
+>> I moved the selftests into a github repo [1] to allow us to collaborate
+>> and evaluate the changes more easily.  I explicitly kept the new BPF
+>> based BQL tracking as a commit[2] for your benefit.
+>>
+>>   [1] https://github.com/netoptimizer/veth-backpressure-performance-testing/tree/main/selftests
+>>
+>>   [2] https://github.com/netoptimizer/veth-backpressure-performance-testing/commit/f25c5dc92977
 > 
-> >> netpoll is already called from everywhere.  
-> >
-> > You mean all contexts because it's used by console?  
+> Thanks for sharing. After minor issues I was able to set it up
+> (currently I am just using plain v5, will look at the coalescing patch
+> when I find the time):
 > 
-> yes
+> Can confirm the latency reduction with the default settings, in my case
+> 4.888ms to 0.241ms.
 > 
-> >> bpf_netpoll_send_udp() won't add any more bugs.  
-> >
-> > Same as TLS + sockmap didn't? I spend enough time mopping up after
-> > people.  
+> With the same script I was also able to see a performance slow down:
+> veth_bql_test_virtme.sh --qdisc fq_codel --nrules 0
+> --> ~510 Kpps
+> Same with --bql-disable
+> --> ~570 Kpps
+> --> 12% faster
 > 
-> huh? comparing this to sockmap is apples and oranges.
 
-There's code which has a lot of users and barely any bugs.
-And then there's code which has more bugs than users.
-IMO this will be firmly in the later group.
+Thanks for running these benchmarks.
 
-> >> I like this netpoll approach way more then creating and keeping proper socket
-> >> within bpf and all head aches of keeping it around and doing send from
-> >> good context. With netpoll all of these issues are gone.
-> >> Just bpf_netpoll_send_udp() from anywhere and it works just like it does
-> >> for dmesg.  
-> >
-> > No, netpoll is high risk / brittle and tightly integrated with NAPI.
-> >
-> > "I don't want to run a tiny user space program" is nowhere near strong
-> > enough justification to expose this API. SMH.  
+Notice that --nrules 0 can easily result in no-queuing (on average),
+because the veth NAPI consumer is faster than the producer.  You will
+likely see BQL inflight=1 and sink reported avg latency very low
+(remember it okay that sink get high latency penalty as long at ping
+latency remains low, as that show AQM is working).
+
+There is an important gotcha. We actually have micro-burst of queuing
+(likely due to scheduling noise). Reading BQL stats from /sys will show
+BQL inflight=1, but when using the option --hist is it visible that
+@inflight have a long tail (see below signature).  The "qdisc" output
+line also shows this happening via requeues increasing (approx 17/sec in
+a test with 567Kpps). (this was with the time-based BQL impl).
+
+
+>>
+>> Sorry for cutting the remaining of the message, but I ran out of time,
+>> as things are a bit challenging/hectic here at Cloudflare at the moment.
+>>
+>> --Jesper
 > 
-> No. Nothing to do with 'user space prog'.
+> All good, just ignore it. I think I misunderstood something anyway.
 
-I'm sorry, are you saying that the motivation in the cover letter is
-not the motivation? It'd be great if someone could reveal the real
-motivation then.
+Okay, I'll ignore it as I couldn't make sense of it ;-)
+--Jesper
 
-> What's brittle in netpoll? It works today in any context and
-> that's the main point. All the gotchas were resolved over the years
-> by heavy netconsole usage. Sure, it only works in mainstream
-> drivers like mlx, brcm and likely broken in niche drivers.
-> That's not obstacle at all.
-> netpoll_send_udp() is a perfect building block for best effort
-> try_to_sendmsg.
 
-It's not a generic building block for random subsystems to use.
-netconsole is very important so we suffer its needs.
 
-> I don't see the reason to reinvent the whole thing.
-> Because alternatives are much worse.
-> bpf progs would need to create UDP socket, split udp_sendmsg
-> into who knows what. Lots of design questions, code reviews, etc.
+--- BQL inflight histogram (VETH_BQL_UNIT=1, values = packets) ---
+@inflight:
+[0, 1)            306565 |@ 
+      |
+[1, 2)           9250454 
+|@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+[2, 3)           5561919 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 
+      |
+[3, 4)            354341 |@ 
+      |
+[4, 5)             50137 | 
+      |
+[5, 6)             16771 | 
+      |
+[6, 7)              6001 | 
+      |
+[7, 8)              3076 | 
+      |
+[8, 9)              1949 | 
+      |
+[9, 10)             1965 | 
+      |
+[10, 11)            1954 | 
+      |
+[11, 12)            1914 | 
+      |
+[12, 13)            1732 | 
+      |
+[13, 14)            1559 | 
+      |
+[14, 15)            1405 | 
+      |
+[15, 16)            1269 | 
+      |
+[16, 17)            1194 | 
+      |
+[17, 18)            1190 | 
+      |
+[18, 19)            1148 | 
+      |
+[19, 20)            1079 | 
+      |
+[20, 21)            1008 | 
+      |
+[21, 22)             951 | 
+      |
+[22, 23)             870 | 
+      |
+[23, 24)             826 | 
+      |
+[24, 25)             775 | 
+      |
+[25, 26)             764 | 
+      |
+[26, 27)             740 | 
+      |
+[27, 28)             714 | 
+      |
+[28, 29)             665 | 
+      |
+[29, 30)             626 | 
+      |
+[30, 31)             607 | 
+      |
+[31, 32)             601 | 
+      |
+[32, 33)             583 | 
+      |
+[33, 34)             593 | 
+      |
+[34, 35)             574 | 
+      |
+[35, 36)             562 | 
+      |
+[36, 37)             554 | 
+      |
+[37, 38)             538 | 
+      |
+[38, 39)             528 | 
+      |
+[39, 40)             525 | 
+      |
+[40, 41)             512 | 
+      |
+[41, 42)             542 | 
+      |
+[42, 43)             529 | 
+      |
+[43, 44)             526 | 
+      |
+[44, 45)             513 | 
+      |
+[45, 46)             503 | 
+      |
+[46, 47)             485 | 
+      |
+[47, 48)             480 | 
+      |
+[48, 49)             473 | 
+      |
+[49, 50)             474 | 
+      |
+[50, 51)             476 | 
+      |
+[51, 52)             476 | 
+      |
+[52, 53)             465 | 
+      |
+[53, 54)             454 | 
+      |
+[54, 55)             446 | 
+      |
+[55, 56)             430 | 
+      |
+[56, 57)             425 | 
+      |
+[57, 58)             425 | 
+      |
+[58, 59)             422 | 
+      |
+[59, 60)             407 | 
+      |
+[60, 61)             390 | 
+      |
+[61, 62)             370 | 
+      |
+[62, 63)             354 | 
+      |
+[63, 64)             343 | 
+      |
+[64, 65)             325 | 
+      |
+[65, 66)             303 | 
+      |
+[66, 67)             158 | 
+      |
+[67, 68)             136 | 
+      |
+[68, 69)             124 | 
+      |
+[69, 70)             110 | 
+      |
+[70, 71)              99 | 
+      |
+[71, 72)              94 | 
+      |
+[72, 73)              82 | 
+      |
+[73, 74)              74 | 
+      |
+[74, 75)              58 | 
+      |
+[75, 76)              52 | 
+      |
+[76, 77)              45 | 
+      |
+[77, 78)              40 | 
+      |
+[78, 79)              39 | 
+      |
+[79, 80)              38 | 
+      |
+[80, 81)              21 | 
+      |
+[81, 82)               4 | 
+      |
+[82, 83)               4 | 
+      |
+[83, 84)               4 | 
+      |
+[84, 85)               2 | 
+      |
+[85, 86)               2 | 
+      |
+[86, 87)               2 | 
+      |
+[87, 88)               2 | 
+      |
+[88, 89)               1 | 
+      |
 
-In kernel sockets are used broadly. I accept that it's more work
-for you but it's also the correct way to go about this if you want 
-to send traffic from BPF.
 
-> Way more headaches for everyone involved.
-> Doing full networking with dst,fib,nh from kernel context is complicated.
+--- BQL limit histogram (auto-tuned, values = packets) ---
+@limit_val:
+[61, 62)          221346 |@ 
+      |
+[62, 63)               0 | 
+      |
+[63, 64)          772169 |@@@ 
+      |
+[64, 65)        10053949 
+|@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+[65, 66)               0 | 
+      |
+[66, 67)               0 | 
+      |
+[67, 68)               0 | 
+      |
+[68, 69)               0 | 
+      |
+[69, 70)               0 | 
+      |
+[70, 71)          457838 |@@ 
+      |
+[71, 72)               0 | 
+      |
+[72, 73)          610198 |@@@ 
+      |
+[73, 74)               0 | 
+      |
+[74, 75)               0 | 
+      |
+[75, 76)               0 | 
+      |
+[76, 77)               0 | 
+      |
+[77, 78)               0 | 
+      |
+[78, 79)         2328284 |@@@@@@@@@@@@ 
+      |
+[79, 80)         1150181 |@@@@@ 
+      |
 
-Why would you have to worry about any of the low level details with
-sockets?
+@inflight_stats: count 15593965, average 1, total 23078061
 
-> Works for NFS, but it's an uncharted territory for bpf.
-> While netpoll_send_udp() is available, easy to use and proven to work.
+@limit_stats: count 15593965, average 67, total 1054054856
 
-It's not "available", the only reason it's exported is because
-netconsole is a module.
+
