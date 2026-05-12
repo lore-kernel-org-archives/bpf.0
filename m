@@ -1,54 +1,54 @@
 Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67ED13CBE80
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 05:36:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 229943CAE6E
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 05:36:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778564182; cv=none; b=HBrtOMDHTRbTx7wQFBFcYhxixk0MOo14bSEPLPluwArJnIks849R65iGynnhFgUgmdNLnFFfATyWu4MTg6RwqdTRh/2Elrn/AFTxbEn0M3X351rfz4V+BQdXb2PgGxT+ZLtnS/XyHZnyEeDl+1NMFflJjD9BixqwasuxvVW/Ljo=
+	t=1778564186; cv=none; b=Neoqe56x+1oRgDwlCBhGjSbnBoPIEHWKFF0278EfwEicYoMB3aMZZbm9cy31D/gRKR3mJNkFNr/76qV/LzbI2Demi7KimsfvNJAzNrktvwzlUsGsktOBT0+MRbp0D2Bk3x1C03fuWZuwflp0/m17Tx5jVShI5FuHKoqbko+CySc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778564182; c=relaxed/simple;
-	bh=DnEclBwpdzBTw5vTtiZjQ60kQ6Jorn8eTsd6baNkr6s=;
+	s=arc-20240116; t=1778564186; c=relaxed/simple;
+	bh=Xs0QKg7ZFGHCgpb39xNtKbutgLWpIgoU5BMBYce+utQ=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=dwh6s+D3soi60ZyiDB3PE+wqJmJFOSz9ywiIO7B3kFS/klcTyPaU3nSbfDHntiYwTm4w5CvQdlzOJy9evK6vV+jRtDzHxYEhjJrjm4JIToTDfXu6dwxEMLe+/WM5IaIZ22W5kM4eivOTa6D6wEB5+mC/v2XMseXpmcZfxGgCafg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IQmPDZW+; arc=none smtp.client-ip=74.125.82.74
+	 To:Cc:Content-Type; b=itY66K3mAdPfN8CooyD0Fcqh4ytiWJhmvAukfZUIP0PZvVEWl4/YQJK7Ll2TRKyhHH+dA3XppNP0kf59b4SUiGktTlXWSzX0dKpWUe6V7jPmkkLpKzeFyMiGmWIjSjcohPDGTK1xnDD+iG3M2OAgA1J7rd+rsyPQXok6J64fctY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Wnrzdy0q; arc=none smtp.client-ip=74.125.82.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IQmPDZW+"
-Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-132a9b34697so9292041c88.1
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 22:36:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Wnrzdy0q"
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-13312be8a31so6429696c88.1
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 22:36:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778564174; x=1779168974; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1778564176; x=1779168976; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vUvNwmxnbu0E2pCLD2DT2jtlgys704GwN1n3MsVULAU=;
-        b=IQmPDZW+D+uQhsEHUJfb4Fm6PJztVdXPimiPWmQ4XtbDcej8WtXxeAxuz10bovmmgW
-         TVhJ9VwnTdnbaDr7O/YovzO/ae3PMdoeZ3uIgupDswuP4kCIzNupkC+BVQSkRPiG753y
-         iChY71pby5SNCbRRUOdx1Muw356qdpDSH855A41umlsAv9hHnSKLepSGMvnrtyDhA8Na
-         jrkO43fktFAUP4E/fQVJkBi4Aho30r+YQFk+3NhvN93yTyNtdCbn2WzcCtFIH7FB8J03
-         VCGFiyWRlrB1K09nXeVHFdnNwJKUWUb7m+TBsQfRHcLY7xOyXI5uC7za1xOFAdO4RfKx
-         GY1A==
+        bh=sv+fBrgnLHWDPJNXQeJxnE6YmYGegAklGdTMc3S6cgE=;
+        b=Wnrzdy0qyc+MQdZmlZ1AwxNNeuSwkYtnEoK5/I7+m9tVjoCuLVkWqHCizvO/xKof2T
+         KKy17+vf7uwQu8kEbi9hFBKcRV3pbxnCJrRxmtbg963jHL1cP607RPpxxxMyBmAV5/2a
+         F93k0Mp/b0nR72rQqxFg3xo0TSuTAGaRXNaWebixQ3l5okIQhHEAAS6DVbgGrH+jXBa1
+         C2EJUTPNAnkjMDaHLx66aCgETkBksJestWSFPcY9W4a1zZxSi5MmPWFjbShHrZ+kpEda
+         j7SAJ0pBMMY+wrMrnwJWYWxeClTUKZjVwJOuMNj6vQds2CV0lpXZCbVBNZFUABrFuThY
+         CJJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778564174; x=1779168974;
+        d=1e100.net; s=20251104; t=1778564176; x=1779168976;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vUvNwmxnbu0E2pCLD2DT2jtlgys704GwN1n3MsVULAU=;
-        b=pVI0Xp/pfVKAh0hG7NodUh16+/4vVtBr3mh3utaiAp4jAKWSu9V7fqkoeUAF1gygcZ
-         zKyxKEkFv8bJ/MH6anq4i221hFS1CGt5HFFDTrvJYGXCpeWIizkZookfwHIAFduOI034
-         p2Yb3DSIRCkKG4Fm1V0ow+M+opZhzNEbNkCKFmtI+gd2iJTvIEBFFvM8xn4sfOQ9yS8C
-         jy1DKIO5enURad9dN4wFTYY8eMYebM/6fpfFnyhJIZJP4QPqv0vrqgg60xdm/OWKna8a
-         mpPXTCAOI1g67lZjJXOEagquTckKfCYhePR4rqO3zzllSMzdW5Pelq/i6BHUiDQY3ve1
-         oiRw==
-X-Forwarded-Encrypted: i=1; AFNElJ8v5yfpryZX9w7yXDmq1GdqWLL8KZpEM/+vqCuvtN9mWi2s1e9/4WvYNDDjQRgaNu99Ll4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKLeMR5d2prISoxRqpbu6WQwhzmrVEc/Od/TjWysgpRZviurEo
-	6ISgIU2DMxhqvq5pwxSk50PogCTe0X+opumxWFbsB++oaAytxcYzi/53vZF/9Xs+/L0UG7QU0Wl
-	Yg8LAyqv1wg==
-X-Received: from dlbvv13.prod.google.com ([2002:a05:7022:5f0d:b0:128:cfd6:a3c6])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:6714:b0:128:ce44:be8f
- with SMTP id a92af1059eb24-131965af197mr14924954c88.2.1778564173426; Mon, 11
- May 2026 22:36:13 -0700 (PDT)
-Date: Mon, 11 May 2026 22:35:37 -0700
+        bh=sv+fBrgnLHWDPJNXQeJxnE6YmYGegAklGdTMc3S6cgE=;
+        b=d+3PAme1kZKGpb4PRTgQ/LcgvAVz+osoOCmZxS+xsYs56iFr8U+8DU6pZvzxxTSjdY
+         zIxiCcqA5YS7IfMLieVzRADRT66xobuDwL8WPYGMIpzf86d4QxJU4jMaJlPDPdxcQYXS
+         Gtssxpy0dbL7bILFbI/JW/VlkYOtkflkWqnIr4/5zEQQ7haE787Sb/nG6hFInauDIrwH
+         e4xecK2Nhz35/lDcMLL1hk4d+sZ/ZGZ667KqzUcAnVaSOaHSGZ1pPDgmBKRehMn3xvpR
+         X+XZ6bO17UXcDmjkuYsMdPSdAzDVGIVldZYiM7yL8zdZazagk57DIKdm4A3YJnaDcPEY
+         uOYA==
+X-Forwarded-Encrypted: i=1; AFNElJ+7fyusM3YcmtcjINoCc7wx/w6MsO3smQ56veCJbZhuTNniH0VZjeSJb6kNykd1hNSb7VA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxuPFu6lQ/Pumd4YfRCShO3vn9ux1xxKfbbTFWpbQ0Q2jCNqzBO
+	7Yf2jJUleLP07B4bVQplMPN31qE9JzyZZfaGmbxkdXGlSQ1cFNqtegPliJJdRACWLzXohzLHjLQ
+	AX/0GAe3MHQ==
+X-Received: from dlbuy7.prod.google.com ([2002:a05:7022:1e07:b0:12d:b319:ccc4])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701b:2219:b0:133:1be4:a357
+ with SMTP id a92af1059eb24-1331be4a563mr1743979c88.1.1778564175356; Mon, 11
+ May 2026 22:36:15 -0700 (PDT)
+Date: Mon, 11 May 2026 22:35:38 -0700
 In-Reply-To: <20260512053539.3410189-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,9 +58,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260512053539.3410189-1-irogers@google.com>
 X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260512053539.3410189-13-irogers@google.com>
-Subject: [PATCH v1 12/14] perf pmu-events: Split big_c_string storage into
- standalone compilation unit
+Message-ID: <20260512053539.3410189-14-irogers@google.com>
+Subject: [PATCH v1 13/14] perf pmu-events: Parallelize JSON and metric
+ pre-computation in jevents.py
 From: Ian Rogers <irogers@google.com>
 To: Quentin Monnet <qmo@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -83,125 +83,99 @@ To: Quentin Monnet <qmo@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
 Cc: Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Currently, jevents.py emits both the massive 2.8 MB big_c_string literal
-and tens of thousands of compact_pmu_event struct arrays into a single
-pmu-events.c compilation unit. Compiling this giant file takes ~2.2 seconds
-on a single CPU core during Kbuild startup.
+Currently, jevents.py parses hundreds of JSON event and metric files
+sequentially across all CPU architectures during Kbuild startup, taking
+~3.3 seconds of pure single-core execution time.
 
-Refactor jevents.py to emit big_c_string into a dedicated
-pmu-events-string.c compilation unit. This allows Kbuild to compile
-pmu-events.o and pmu-events-string.o simultaneously in parallel across
-two separate CPU cores, preserving 100% string deduplication and zero
-dynamic ELF relocations while cutting C compilation latency in half.
+Refactor jevents.py to pre-populate its internal JSON AST cache in parallel
+across all available CPU cores using ProcessPoolExecutor. Configure worker
+process initializers to guarantee standard event mapping inheritance under
+spawn multiprocessing semantics, and apply depth filtering to prevent
+redundant worker tasks. This accelerates jevents.py execution by over 11x
+(from 3.3s down to ~290ms), fully reclaiming multi-core concurrency during
+the build generation phase.
 
 Assisted-by: Gemini:gemini-3.1-pro-preview
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.perf         |  4 ++--
- tools/perf/pmu-events/Build      | 15 ++++++++++++++-
- tools/perf/pmu-events/jevents.py | 20 ++++++++++++++++----
- 3 files changed, 32 insertions(+), 7 deletions(-)
+ tools/perf/pmu-events/jevents.py | 36 ++++++++++++++++++++++++++++----
+ 1 file changed, 32 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index d2e673d5e5be..98b6f9fda8d1 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -921,7 +921,7 @@ bpf-skel-clean:
- pmu-events-clean:
- ifeq ($(OUTPUT),)
- 	$(call QUIET_CLEAN, pmu-events) $(RM) \
--		pmu-events/pmu-events.c \
-+		pmu-events/pmu-events*.c \
- 		pmu-events/metric_test.log \
- 		pmu-events/test-empty-pmu-events.c \
- 		pmu-events/empty-pmu-events.log
-@@ -929,7 +929,7 @@ ifeq ($(OUTPUT),)
- 		-name 'extra-metricgroups.json' -delete
- else # When an OUTPUT directory is present, clean up the copied pmu-events/arch directory.
- 	$(call QUIET_CLEAN, pmu-events) $(RM) -r $(OUTPUT)pmu-events/arch \
--		$(OUTPUT)pmu-events/pmu-events.c \
-+		$(OUTPUT)pmu-events/pmu-events*.c \
- 		$(OUTPUT)pmu-events/metric_test.log \
- 		$(OUTPUT)pmu-events/test-empty-pmu-events.c \
- 		$(OUTPUT)pmu-events/empty-pmu-events.log
-diff --git a/tools/perf/pmu-events/Build b/tools/perf/pmu-events/Build
-index dc1df2d57ddc..f8f5ec7daa5f 100644
---- a/tools/perf/pmu-events/Build
-+++ b/tools/perf/pmu-events/Build
-@@ -1,7 +1,13 @@
- EMPTY_PMU_EVENTS_C = pmu-events/empty-pmu-events.c
- # pmu-events.c will be generated by jevents.py or copied from EMPTY_PMU_EVENTS_C
- PMU_EVENTS_C	=  $(OUTPUT)pmu-events/pmu-events.c
-+PMU_EVENTS_STRING_C = $(OUTPUT)pmu-events/pmu-events-string.c
-+
-+ifeq ($(NO_JEVENTS),1)
- pmu-events-y	+= pmu-events.o
-+else
-+pmu-events-y	+= pmu-events.o pmu-events-string.o
-+endif
- 
- # pmu-events.c file is generated in the OUTPUT directory so it needs a
- # separate rule to depend on it properly
-@@ -9,6 +15,10 @@ $(OUTPUT)pmu-events/pmu-events.o: $(PMU_EVENTS_C)
- 	$(call rule_mkdir)
- 	$(call if_changed_dep,cc_o_c)
- 
-+$(OUTPUT)pmu-events/pmu-events-string.o: $(PMU_EVENTS_STRING_C)
-+	$(call rule_mkdir)
-+	$(call if_changed_dep,cc_o_c)
-+
- # Message for $(call echo-cmd,cp), possibly remove the src file from
- # the destination to save space in the build log.
- quiet_cmd_cp   = COPY    $(patsubst %$<,%,$@) <- $<
-@@ -224,6 +234,9 @@ endif
- # and inputs are dependencies.
- $(PMU_EVENTS_C): $(JEVENTS_DEPS)
- 	$(call rule_mkdir)
--	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) $(JEVENTS_MODEL) $(OUT_DIR) $@
-+	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) $(JEVENTS_MODEL) $(OUT_DIR) $@ $(PMU_EVENTS_STRING_C)
-+
-+$(PMU_EVENTS_STRING_C): $(PMU_EVENTS_C)
-+	@:
- 
- endif # ifeq ($(NO_JEVENTS),1)
 diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index 3a1bcdcdc685..70a45e62f5d1 100755
+index 70a45e62f5d1..eb72c154f946 100755
 --- a/tools/perf/pmu-events/jevents.py
 +++ b/tools/perf/pmu-events/jevents.py
-@@ -1422,6 +1422,8 @@ such as "arm/cortex-a34".''',
-   )
-   ap.add_argument(
-       'output_file', type=argparse.FileType('w', encoding='utf-8'), nargs='?', default=sys.stdout)
-+  ap.add_argument(
-+      'output_string_file', type=argparse.FileType('w', encoding='utf-8'), nargs='?', default=None)
-   _args = ap.parse_args()
+@@ -457,8 +457,8 @@ class JsonEvent:
+     return f'{{ { _bcs.offsets[s] } }}, /* {fix_comment(s)} */\n'
  
-   _args.output_file.write(f"""
-@@ -1463,10 +1465,20 @@ struct pmu_table_entry {
+ 
+-@lru_cache(maxsize=None)
+-def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
++_json_cache = {}
++def _read_json_events_impl(path: str, topic: str) -> Sequence[JsonEvent]:
+   """Read json events from the specified file."""
+   try:
+     events = json.load(open(path), object_hook=JsonEvent)
+@@ -474,12 +474,16 @@ def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
+   if updates:
+     for event in events:
+       if event.metric_name in updates:
+-        # print(f'Updated {event.metric_name} from\n"{event.metric_expr}"\n'
+-        #       f'to\n"{updates[event.metric_name]}"')
+         event.metric_expr = updates[event.metric_name]
+ 
+   return events
+ 
++def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
++  key = (path, topic)
++  if key not in _json_cache:
++    _json_cache[key] = _read_json_events_impl(path, topic)
++  return _json_cache[key]
++
+ def preprocess_arch_std_files(archpath: str) -> None:
+   """Read in all architecture standard events."""
+   global _arch_std_events
+@@ -1381,6 +1385,10 @@ const char *describe_metricgroup(const char *group)
+ }
+ """)
+ 
++def _parallel_read_json_events(task: Tuple[str, str]) -> Tuple[str, str, Sequence[JsonEvent]]:
++  path, topic = task
++  return path, topic, _read_json_events_impl(path, topic)
++
+ def main() -> None:
+   global _args
+ 
+@@ -1459,9 +1467,29 @@ struct pmu_table_entry {
+     raise IOError(f'Missing architecture directory \'{_args.arch}\'')
+ 
+   archs.sort()
++  import concurrent.futures
++  tasks = []
++  def collect_json(parents: Sequence[str], item: os.DirEntry) -> None:
++    if len(parents) == 0:
++      return
++    if item.is_file() and item.name.endswith('.json') and not item.name.endswith('metricgroups.json'):
++      tasks.append((item.path, get_topic(item.name)))
++
+   for arch in archs:
+     arch_path = f'{_args.starting_dir}/{arch}'
+     preprocess_arch_std_files(arch_path)
++    ftw(arch_path, [], collect_json)
++
++  def _init_worker(std_events: dict) -> None:
++    global _arch_std_events
++    _arch_std_events = std_events
++
++  with concurrent.futures.ProcessPoolExecutor(initializer=_init_worker, initargs=(_arch_std_events,)) as executor:
++    for path, topic, events in executor.map(_parallel_read_json_events, tasks):
++      _json_cache[(path, topic)] = events
++
++  for arch in archs:
++    arch_path = f'{_args.starting_dir}/{arch}'
      ftw(arch_path, [], preprocess_one_file)
  
    _bcs.compute()
--  _args.output_file.write('static const char *const big_c_string =\n')
--  for s in _bcs.big_string:
--    _args.output_file.write(s)
--  _args.output_file.write(';\n\n')
-+  if not _args.output_string_file:
-+    _args.output_file.write('static const char *const big_c_string =\n')
-+    for s in _bcs.big_string:
-+      _args.output_file.write(s)
-+    _args.output_file.write(';\n\n')
-+  else:
-+    _args.output_string_file.write('/* SPDX-License-Identifier: GPL-2.0 */\n')
-+    _args.output_string_file.write('/* Autogenerated by jevents.py */\n')
-+    _args.output_string_file.write('const char big_c_string[] =\n')
-+    for s in _bcs.big_string:
-+      _args.output_string_file.write(s)
-+    _args.output_string_file.write(';\n')
-+    _args.output_string_file.close()
-+    _args.output_file.write('extern const char big_c_string[];\n\n')
-   for arch in archs:
-     arch_path = f'{_args.starting_dir}/{arch}'
-     ftw(arch_path, [], process_one_file)
 -- 
 2.54.0.563.g4f69b47b94-goog
 
