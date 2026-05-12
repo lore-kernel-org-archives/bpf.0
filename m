@@ -1,134 +1,132 @@
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24A325FA29
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 03:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.67
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778557770; cv=pass; b=oSD/BcGPg1qRJUCYzHom1YNqXkdOE4W1AR3zh1Sa6eU1v6CmdtlN6wqfek9Qrqrls3Pc5ouBaXowBSYws/ut5YbURBx4r7aXfk9Y5cKJDpn5biZ0RjiboVFYO5x4cn0gZVW23tWsu9heHEu+n+GMGSip1grQalrbVTeR6uoYMUQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778557770; c=relaxed/simple;
-	bh=cNpkDX0BDVaZgYsQOwr0W9tB0PAwYQjSLdRrLI1T4LQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Bwj5q1tHYv4JbDPpGr8F8VewU07m0UNj5l0f+OEtNU2MS4NWiFgoddyr6iadgC6MgQtoLsuMVoV45oVaako0tRxBXhIHFRaYa+Y123Y85cii16/HxdhbbzBlPDBgvfgKo+JheHDqWDB6Z2kiulYYua8SZ8iI9wSjWlhXiDAokTI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZPOURane; arc=pass smtp.client-ip=209.85.221.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3A525A359
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 03:57:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778558257; cv=none; b=YiHvIC91AjKpSTzseHgBt4h2qyDx0hXfC/3I/B3xl2GQOMhStsHvOHQM2T4QHdtRm3q28+z15sh6VWtlzy/Btz5k2IJXSTaRdMDdfIJgBoLNDUPMYRxYxbdDn9pdks5AkYAAj7ll08jg9IOCDfJedbq/K3VZoHMTN/mbN8KdtmE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778558257; c=relaxed/simple;
+	bh=ryUhE62dj8O7kq7HedNTionw8EZhk8ovnUug1hgL2yM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a0iTa0OPC+7TGJdgZ8dbhJBYeW7zr6jXy6qXZ2gPegNlY/wvui3F8wvb+E+R7Tl66wB0S8aBjLtOrfR1agddVvbYbJMfSdgZTq+tF5yL8YYg9QQTHoK9NvweFHuCTR2Q7oTeutsC7c43ZDJUeYYscv6BMp/3JDRaGFKUTkhAqyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=w3442UHY; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZPOURane"
-Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-44ce78ab5feso4358190f8f.0
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 20:49:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778557767; cv=none;
-        d=google.com; s=arc-20240605;
-        b=hT05fjaTZHSynY1+jOMl2j+suOrX5U+jVSPbxbf/7QyVDl9MkWUz9JHw1r0RSzyMNE
-         ZANx2qtvLDCRPyhaX2ucdMGXQ34NIiyGF97Q7FNHWKrzCrtuYip3mYSUkDdIaK/z64xb
-         /+AKk9kC3NTems58mlUHAlN5uuITflvXnPsN2pTuqNUOmfxiil1yyYLqgHbhE9QtGk3P
-         mJZ3spfT3TOqcvJJLuCGbrTFd3WXARppQc4n7Q/CklqkL7WJrbVMxwyM3CMgnr2klDCv
-         2PTyDOsFC5MMDmEwm3FALg5kjrtDb782ekDtLR8Z6rHUjRXNdxR/hEvK59yEG4Y5Tzkw
-         tzBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=cNpkDX0BDVaZgYsQOwr0W9tB0PAwYQjSLdRrLI1T4LQ=;
-        fh=q2nMWWvhAnerMKk1bwn+JzYjbndq6O+62/4hDkMnQvg=;
-        b=aTEXZtbWJgpIdsxMxTlBCs6b/cHzJSMhiGM4U7cQPM3KkIMsc2+3exJIYBjpFMhWqY
-         zdMAQF6NHa2BivpFasLR21b2qh+AR9ldx1KnL2rKBiYsMa0EGqEFc7MXJrHWBHd3g/Gj
-         JPnvP9z+/iUWJ0tpWHUrVOULlkJ1i3aTFxQ89WVfIjVv2hB9B7CEBpe14MF2mt03Vlhv
-         95asGu6qb89xDjL840KQT6q8Osko6AzZueWUqD74OnRNeG2J+H5tNdlX28At426CFW/A
-         k/TgVeORcppFXYjdo10bRFpb9P2Ft4sQg717+lNwEPUxxE5v1YQ3AB7p9x/HEjJmp2jO
-         UeOw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778557767; x=1779162567; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cNpkDX0BDVaZgYsQOwr0W9tB0PAwYQjSLdRrLI1T4LQ=;
-        b=ZPOURaneG4hLJ1tc5Ztgo6vRlqeu8YL4xyTIwFNc2Qm+qRAo1RRNC5V9ZHhQUMCppo
-         YahjHiOtKFBHgJsSGhCYpc4Y0RRJeKMiavq5WfHe8JWz4oCCGkHaMVph2qFdSy4zFcSS
-         wJiwTGk6auRCjbJl14qTZ1SYyjH0yLsRJex02HFDlUDwi13OGx3w3duVmL5iNfy2TpZV
-         A3oxgUNhF4WIkZ7Kj3JgiKV0msEc62cmZZWTStVl30duPMSIip+MhCLLKULKTQhwWUxx
-         PgXTaHtOZyxvQ9yklKUqLyV2gCRIHKb1iYU77m/e2z+andjcytmLE+Y0Eg2qBl+KS7JI
-         HhYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778557767; x=1779162567;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cNpkDX0BDVaZgYsQOwr0W9tB0PAwYQjSLdRrLI1T4LQ=;
-        b=R8wtQNXoCo2rFMriv2S8Spa1302HSvVP2NI6M8PEkPgEs5JonI4W/8LnvVQOZDmjAz
-         dODVtDVtNgB+bIkiP2afLSQ0xgS1n5sEsttmcGQwsYhuGAxlKaJaDG6PRHqJPaswUeBF
-         EfGeglwjDmEYW8Tg30QM8U0Nk49D6RRGDYsejnskoiSqY/rUxxWebt9AtiswQSwRY3xQ
-         gkVsFPzzREWdOfRRImDhow7KPHlWBKezl8o9knga9WRytva9q72vsT+moelPg18gXUAR
-         qYFAiWklJj9czSDgpZiqt3jqaAeQioIY3Fn5DXOmaWglPoMtUxc12iJEC+I5Ng1Ouvh0
-         cbag==
-X-Forwarded-Encrypted: i=1; AFNElJ+1Tr0d1aKb+wSSNcFJjHAueki6kSCkUsXW/stgnGesbargUGFFblik/USvSQjQx1YXLUs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJDUqaOTYbL8MNsqONpKno8lwSvxmXdqkBKYB87wurNc6C9kGS
-	JsO+2VMTQz6JgxWF2AxZ07GH00Wrru2RtNYPVXmbPjnvXfroF0Gtntw+VzoQnGyVGd+Jj7xwNPC
-	tGHZncvVp91KxWGXA0O0cGwe7DuA8udY=
-X-Gm-Gg: Acq92OFo30VLLzNxLyFcYP3f/n9sTJNIQuXq9FJK4IrYQ0DEcH+LvwmlvqIvyxi4fW/
-	r5U8fi3OK1sFjy2BTXwhNmev5v6VDAR8SLD9+pXrfra24dn5O+lN0OJoD5/gSwSF0TclK9jKc6h
-	eRkXrrSUt7ohvDABuxa0n1XIUW90IhLDfI0KoXZz3dak0LW1dJHz7kATdg4aTTQ0yylTrtwlcER
-	4vE124r/FVfq2IKO46ixgb+oYHyr6XgdQg1oAm0I8zvi9fKDMIujBxFIIu7nqQomPfb7MJ421DS
-	tQq6tmFygnPQi9dsoKRxe1O0gu7EJW4n/hShxxon7WD7HX8YZ2jsYYhIsg51cKabRtoLMe+1GeS
-	eD13eXCOmarTcAlhqlSVL3AC3wFLb4wqdqT4S1KYJcCl2uSnsUCnnAToV
-X-Received: by 2002:a05:6000:2405:b0:43d:6a0c:9571 with SMTP id
- ffacd0b85a97d-45b11a9c4c0mr1208157f8f.11.1778557767056; Mon, 11 May 2026
- 20:49:27 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="w3442UHY"
+Message-ID: <0ab234d3-ed23-40c3-82aa-d93fa5900386@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778558252;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nrJS8tKQM0az0LGWTgbF5v0nFYUb89ACheIaZvOjUBk=;
+	b=w3442UHYOi9RxJksp6Dzt8KDY29Tlci04oFusMcK3LrhRb/NG/3I82hun5mK6LTg+Bn2C0
+	5C1vhd6J4nBKRyyD4MSbOp+0K2SmBq9wcciYfs4HpPZbQVzEIcxRTX515BvjUtkr9QMcXM
+	x2NPSBnGyd+t2KJKw7y647JX7hVKmHU=
+Date: Tue, 12 May 2026 11:56:39 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260427105109.2554518-1-tj@kernel.org> <20260427105109.2554518-3-tj@kernel.org>
- <CAP01T76jRW0sjkzebSvDKy+AK-fh7hq+0zhDcP7oLGcg_qxOfA@mail.gmail.com>
- <DIGBW43UUKDX.1H7FT7A9JDOOT@etsalapatis.com> <CAP01T77_Lgfj8yX6JtErGES9icebqygDUZT-wzXq9UV6JGugYA@mail.gmail.com>
- <DIGDLA5275AR.128FTQMU7Z8S3@gmail.com>
-In-Reply-To: <DIGDLA5275AR.128FTQMU7Z8S3@gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Tue, 12 May 2026 05:48:50 +0200
-X-Gm-Features: AVHnY4JjCiOQf4uv2FRXJ9tMO-x6_X7DpY9r7ppXx4IuXM86_v94QiBUk_uOOH0
-Message-ID: <CAP01T74MP6+igNsqhDinYXbk2mFB2zW6Kk6Lb7srrWM8ANojvA@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/9] bpf/arena: Add BPF_F_ARENA_MAP_ALWAYS for direct
- kernel access
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Emil Tsalapatis <emil@etsalapatis.com>, Tejun Heo <tj@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
-	Changwoo Min <changwoo@igalia.com>, bpf@vger.kernel.org, sched-ext@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH V2 2/2] kernel/bpf/verifier: Support module kfunc
+ resolution via instruction offset
+To: Song Chen <chensong_2000@126.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, andrii@kernel.org,
+ ast@kernel.org, eddyz87@gmail.com, daniel@iogearbox.net,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, alexei.starovoitov@gmail.com
+References: <20260510030147.27900-1-chensong_2000@126.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+In-Reply-To: <20260510030147.27900-1-chensong_2000@126.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 12 May 2026 at 05:25, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon May 11, 2026 at 7:43 PM PDT, Kumar Kartikeya Dwivedi wrote:
-> >
-> > If not, the best course to me seems to be to make the flag behavior
-> > default, and just rely on ASan (and Rust in the future) to prevent any
-> > memory safety issues, and drop the stream based feedback on fault,
-> > etc.
->
-> Agree that this needs to be new default without new uapi flags.
-> How about we tweak the idea further.
-> Let all arena pages be unmapped initially. bpf progs will fault
-> on them and will be reported via bpf_streams.
-> But we also prepare one "scratch page". Let's use this name,
-> since "garbage page" reads too dirty.
-> When kernel faults we populate pte with that scratch page
-> and let the kernel code retry.
-> To implement it the page_fault_oops() can have a callback
-> into bpf/arena helper similar to kfence_handle_page_fault.
-> If fault address is in arena, do kfence_unprotect()-like.
+在 2026/5/10 11:01, Song Chen 写道:
+> Use the instruction's 'off' field to indicate the source of a kfunc.
+> When libbpf resolves a kfunc, it sets insn->off to 0 for vmlinux
+> kfuncs or a non-zero module ID for module kfuncs.
+> 
+> The verifier now checks insn->off to determine where to look up the
+> kfunc address: off == 0 searches in vmlinux, while off > 0 searches
+> in the corresponding module BTF. This enables proper resolution of
+> module kfuncs that may override vmlinux kfuncs with the same name.
+> 
+> This works in conjunction with the libbpf change that prioritizes
+> module kfuncs during BTF resolution.
+> 
+> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Signed-off-by: Song Chen <chensong_2000@126.com>
+> 
+> ---
+> changelog:
+> v1 --- v2:
+> libbpf has already specified which module this kfunc belongs to as
+> ebpf code onwer's expectation, then verifier uses
+> find_kallsyms_symbol_value to search kfunc's addr.
+> ---
+>  kernel/bpf/verifier.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+>  mode change 100644 => 100755 kernel/bpf/verifier.c
 
-Interesting idea. So I guess this page remains mapped once kernel
-faults on it. I guess we can still reset it to NULL if we alloc and
-free a page at the same address, so it's just a drop-in to prevent
-further faults inside the kernel, since emulating instructions is ugly
-and we're not using asm wrappers that have fixup labels etc. If we end
-up allocating and freeing something at the same address it will likely
-get reset to NULL (that would be ideal). But even if this happens in
-parallel we may fault again and then will just fix up the NULL pte
-with scratch page again. We can likely also preserve fault reporting
-into streams when such scratch pages are brought in.
+In general, the second and following parts of a multi-part patch should be
+sent as a reply to the first part so that they all thread together at the
+receiving end.  Tools like git and quilt have commands to mail out a set of
+patches with the proper threading. 
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> old mode 100644
+> new mode 100755
+> index 159b25f8269d..3b2e4552a3d4
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -3303,6 +3303,7 @@ static struct btf *__find_kfunc_desc_btf(struct bpf_verifier_env *env,
+>  		 */
+>  		sort(tab->descs, tab->nr_descs, sizeof(tab->descs[0]),
+>  		     kfunc_btf_cmp_by_off, NULL);
+> +
+
+Unnecessary change.
+
+>  	} else {
+>  		btf = b->btf;
+>  	}
+> @@ -3498,7 +3499,16 @@ static int add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, s16 offset)
+>  	if (err)
+>  		return err;
+>  
+> -	addr = kallsyms_lookup_name(kfunc.name);
+> +	if (offset) {
+> +		struct bpf_kfunc_btf kf_btf = { .offset = offset };
+> +		struct module *mod;
+> +		struct bpf_kfunc_btf *b;
+> +		b = bsearch(&kf_btf, btf_tab->descs, btf_tab->nr_descs,
+> +            sizeof(btf_tab->descs[0]), kfunc_btf_cmp_by_off);
+
+Tip: before submission, you can run scripts/checkpatch.pl to check for formatting issues.
+
+> +		mod = b->module;
+> +		addr = find_kallsyms_symbol_value(mod, kfunc.name);
+
+struct bpf_kfunc_btf b, kf_btf = { .offset = offset };
+    ......
+addr = find_kallsyms_symbol_value(b->module, kfunc.name);
+
+> +	} else
+> +		addr = kallsyms_lookup_name(kfunc.name);
+>  	if (!addr) {
+>  		verbose(env, "cannot find address for kernel function %s\n", kfunc.name);
+>  		return -EINVAL;
+
+-- 
+Thanks
+Kaitao Cheng
+
