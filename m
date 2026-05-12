@@ -1,219 +1,153 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C09372041;
-	Tue, 12 May 2026 12:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CB5437EFFF
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 12:29:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778588730; cv=none; b=cqtKfd2cy6FkIBjR7051L+8bi2lM4p1tDYX+0nKhW9JshSS3PAfNlCC8Wawaq8nAqQa7beKuGHqAt+7/OWladaI/H5uk2zt2R+GfWnrKT1O/DVL04i2Xj77jYeKr2DSPXyRdFwrKw0VCEBetyABDQPFVpwjGReExPX6v/pBmksg=
+	t=1778588962; cv=none; b=V/QkAa83qANcVJk/4+xgZEUwLtm2BdZkPM2lLH6orTHC3Spt6JwRisjPC8Ppz08tAqD787jskaYm3mHqua9KFmO15u9QgD+yH5XX7iCnPErKAXKn85KYicf5kM+NE0uAn6xrArOrlAxj5WuzbWIPYahyYs9pe9SABGHZAGKtZqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778588730; c=relaxed/simple;
-	bh=0RXUz7YJtUgH3NHoplRgNBgOPpNfBk69RhQj1tBwiL4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HZPkBw7KzSUiL+7fCfrFyz/Ievc0CbTEcJxmNrav1zvZlKHQZF24hgjrvN5LsX+OzA527XLBD98ND5D4lJGsLxWBtRa9mWB8Z9dLifSldxV2870lAZFICbY2LxlivXNAiA+9TouDHDO3sR9W+/QNKj6Agjcoo2PHKV9jsdqmsys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SNXZ9iwY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778588962; c=relaxed/simple;
+	bh=umVNWktZmfkRdQrYKl483CR+VTehRJFRdPI74iAAm9M=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=mqtDwmLQooAIHpAbpqsrm0F7iXwV+YIkSF/zVX+vj2HNzCMMP4oOHxaSB8+YLqqChMmPFfOZEARyQxpkYrrS7O/qyQBLf6BWLjpxoHPIiqbMBVmsluxVYncBGwl2qrcSMtSNzzBAN7R+AysiBJowhUAqOLkB2PwpxE8511StibU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=kL+MbbYd; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SNXZ9iwY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56EE0C2BCB0;
-	Tue, 12 May 2026 12:25:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778588729;
-	bh=0RXUz7YJtUgH3NHoplRgNBgOPpNfBk69RhQj1tBwiL4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=SNXZ9iwYKiRfJE0ZYpee+yMlFOprVutfjh3JfVHjpSN6YsYT6CwOAARrZbKwHOxsM
-	 YAjBEQ1pyiz2Duweujpa1G36NwoK/P+MPTtybLDyKz3DTbFbEuM7+GpWUFf1QAa3vQ
-	 AOVFx7IX96tBjIfthl6CQPow3LsR+HAJwXifA14886jwba26Bjkr9EjQtVRIFuCZSQ
-	 h1acq5r9QCVvvrklFeTye1cFxB4fvBbyug+NpzxhTTl42gRztcUSo8Zrt02h0nutfa
-	 WxT1/qGB/vF4hpT8roaTmEwLpAXoj9jnoba73s6uLu6csgAvT/KrJNbyT0W5nq+Eja
-	 ZlY6nplvEguFw==
-Date: Tue, 12 May 2026 21:25:27 +0900
-From: "Harry Yoo (Oracle)" <harry@kernel.org>
-To: linux-mm@kvack.org, rcu@vger.kernel.org, bpf@vger.kernel.org
-Cc: Vlastimil Babka <vbabka@kernel.org>, Hao Li <hao.li@linux.dev>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Uladzislau Rezki <urezki@gmail.com>, 
-	Joel Fernandes <joelagnelf@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Amery Hung <ameryhung@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: kmalloc_nolock() follow-ups, including kfree_rcu_nolock()
-Message-ID: <esepccfhqg7m6jo76ns2znj2cnuaepx2xvw5zaygtwohq4psma@563ypprp6rr3>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="kL+MbbYd"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2bc85eda6b6so13820045ad.1
+        for <bpf@vger.kernel.org>; Tue, 12 May 2026 05:29:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1778588950; x=1779193750; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=umVNWktZmfkRdQrYKl483CR+VTehRJFRdPI74iAAm9M=;
+        b=kL+MbbYdUoipXk+/kkGNJwR3Z5BP5hBA3Ag88Oh3AWc73QBLyo5fGGKrC1VoRkMZKR
+         ofIOVkU0dXQ069a/3XIpzX/EHHGbsLAmMliU2qqqRlrprSfqNLJsiHwNvLiO4IvababF
+         Iiw7RRwyg4vCcHe4COPNPi1/78p05m+PZqVvBw+FKf8q5Z+I0kCAAkWJVZGP+CS9ekAW
+         uwWzH4l5JqGq4xicQGZwAT1Fe/WH61cAbSTGu/8Rzx0HT6ZjZ9Xi8TrA1hwD/3gnThjT
+         +RRzMlv0+aeS7PRiVJoOyRbXPtuOwBDx80xmsestrUXe7hLT8jxUReXMXuPNGHaGq4wE
+         TvZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778588950; x=1779193750;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=umVNWktZmfkRdQrYKl483CR+VTehRJFRdPI74iAAm9M=;
+        b=Bab6of4NNKZK33yTBsodmefuKUyhbGl72qP3xHiilDk2XlAAEaUocD5aL5MjXEEt5t
+         26BQrJ4fRjLv0BVJeJmd8fehdqLHF/0gA9RPhIaMB6mNyctVlcaHZvI7iAkgIkoieMEd
+         FrnKhQXKCVxbNBsGb0YD3KbLB9sHDAw9M32R4rQuxylD5iUIrhg0d9+DDUSL+kaulfLr
+         DknLPKqIZ8qEvOAoEHSwTDP6dEyPeg6NYeObQkQJ9OyGlZU5CUtGyPcckZR80CK/ozUV
+         rEFOp6VrLNJl8rk4k0PCeD16nKxrTCW05yMhhacx1jNKe748QZNyrrwSZuKFUBqHcUGY
+         WA1A==
+X-Forwarded-Encrypted: i=1; AFNElJ8tEaZBNNZw7aU3OUnGxXcdH4J49xZZHMFX82cyiRzJaOoZpbpF+REdg+nvo4aC2suVUKc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxquwb/jIAMbHo+SDnOU2NIJ9hszU18Faztp/swhsZl8iAuyZUA
+	nkmXLSaJOae5d+Y7TulNhTihAeG3cfRVUf8OTGqnwCs2GVL8twylU8QhollofcccSnU=
+X-Gm-Gg: Acq92OEKDOPOAXTcYE0LD5e0HWrLMAOUIU+9uRVqsojfUqhsqW1oannIYfcUz1h7Gm3
+	Ia9CYDaplEvh6o/Mmv1MJgh7XqyhPvOsC4RpRAJw81oGw35864r1EOc9J91RK6yD9TD7m503grY
+	gVtr+KxPYF6sWRU26Cc5XIUmnHqMnme/MEtTv8iPgAgBwrzrvgqPrPrl+OxXAEhZqOvVJ9t1djB
+	wSbm7Gqzly2QVeQcZthgaKDG5q0dBdE1egEm+rYUsVvEKzqrNFePujmIdcdkVRI05zdss4A9kkM
+	vvhOUHWsfL4Ju1lHqJXU6j8F9stJEBDISw4aSi9numNrbYMa4Hclww8cX6MetyBWeY4+WQ88vK5
+	JDczbD/3j+fdMhZ6k7ZVi7DT02ONzo2Pk4R/NJ5o0fzU23lKOlfXd/VmWiOZdohntnuZqNPi0g8
+	AXGdGJJJ4piHVPXTPN16Asuljq
+X-Received: by 2002:a17:903:2d2:b0:2b9:4941:7f6e with SMTP id d9443c01a7336-2baf0cf399emr200710255ad.2.1778588950278;
+        Tue, 12 May 2026 05:29:10 -0700 (PDT)
+Received: from localhost ([2001:569:58a0:da00:a5c8:c4ce:f7c1:40c1])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1d405adsm137845385ad.28.2026.05.12.05.29.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 May 2026 05:29:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 12 May 2026 08:29:09 -0400
+Message-Id: <DIGP5VDNWMJ9.2HXDCVLOPWAMT@etsalapatis.com>
+Cc: "Emil Tsalapatis" <emil@etsalapatis.com>, "Tejun Heo" <tj@kernel.org>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "David Vernet"
+ <void@manifault.com>, "Andrea Righi" <arighi@nvidia.com>, "Changwoo Min"
+ <changwoo@igalia.com>, "bpf" <bpf@vger.kernel.org>,
+ <sched-ext@lists.linux.dev>, "LKML" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 2/9] bpf/arena: Add BPF_F_ARENA_MAP_ALWAYS for
+ direct kernel access
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, "Kumar Kartikeya
+ Dwivedi" <memxor@gmail.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260427105109.2554518-1-tj@kernel.org>
+ <20260427105109.2554518-3-tj@kernel.org>
+ <CAP01T76jRW0sjkzebSvDKy+AK-fh7hq+0zhDcP7oLGcg_qxOfA@mail.gmail.com>
+ <DIGBW43UUKDX.1H7FT7A9JDOOT@etsalapatis.com>
+ <CAP01T77_Lgfj8yX6JtErGES9icebqygDUZT-wzXq9UV6JGugYA@mail.gmail.com>
+ <DIGDLA5275AR.128FTQMU7Z8S3@gmail.com>
+ <CAP01T74MP6+igNsqhDinYXbk2mFB2zW6Kk6Lb7srrWM8ANojvA@mail.gmail.com>
+ <CAADnVQKfMHUZ8YzLkWW--f1G_+mx6bKdvVHUMArYsb+6-esWCA@mail.gmail.com>
+In-Reply-To: <CAADnVQKfMHUZ8YzLkWW--f1G_+mx6bKdvVHUMArYsb+6-esWCA@mail.gmail.com>
 
-Hello everybody. This is a follow-up discussion of
-"kmalloc_nolock() follow-ups, including kfree_rcu_nolock()" topic at
-LSFMMBPF 2026 last week. Unfortunately, many RCU folks were not there,
-but we can still discuss over email ;)
+On Tue May 12, 2026 at 12:24 AM EDT, Alexei Starovoitov wrote:
+> On Mon, May 11, 2026 at 8:49=E2=80=AFPM Kumar Kartikeya Dwivedi
+> <memxor@gmail.com> wrote:
+>>
+>> On Tue, 12 May 2026 at 05:25, Alexei Starovoitov
+>> <alexei.starovoitov@gmail.com> wrote:
+>> >
+>> > On Mon May 11, 2026 at 7:43 PM PDT, Kumar Kartikeya Dwivedi wrote:
+>> > >
+>> > > If not, the best course to me seems to be to make the flag behavior
+>> > > default, and just rely on ASan (and Rust in the future) to prevent a=
+ny
+>> > > memory safety issues, and drop the stream based feedback on fault,
+>> > > etc.
+>> >
+>> > Agree that this needs to be new default without new uapi flags.
+>> > How about we tweak the idea further.
+>> > Let all arena pages be unmapped initially. bpf progs will fault
+>> > on them and will be reported via bpf_streams.
+>> > But we also prepare one "scratch page". Let's use this name,
+>> > since "garbage page" reads too dirty.
+>> > When kernel faults we populate pte with that scratch page
+>> > and let the kernel code retry.
+>> > To implement it the page_fault_oops() can have a callback
+>> > into bpf/arena helper similar to kfence_handle_page_fault.
+>> > If fault address is in arena, do kfence_unprotect()-like.
+>>
+>> Interesting idea. So I guess this page remains mapped once kernel
+>> faults on it. I guess we can still reset it to NULL if we alloc and
+>> free a page at the same address, so it's just a drop-in to prevent
+>> further faults inside the kernel, since emulating instructions is ugly
+>> and we're not using asm wrappers that have fixup labels etc. If we end
+>> up allocating and freeing something at the same address it will likely
+>> get reset to NULL (that would be ideal). But even if this happens in
+>> parallel we may fault again and then will just fix up the NULL pte
+>> with scratch page again. We can likely also preserve fault reporting
+>> into streams when such scratch pages are brought in.
+>
+> Yep. All makes sense.
+> The hope is that faults from kfuncs should be rare
+> compared to faults from regular arena bugs.
+> So the stuck scratch page shouldn't happen often and
+> faults on unmapped will still be seen most of the time.
 
-The slides: https://docs.google.com/presentation/d/1kpaLd7D1dwRvIqRwQfSjJVVJL0CC2gwb-AV56yCMqXw/edit?usp=sharing
+This sounds great, it pretty much retains all arena behavior that we
+care about. The most important part is that it reliably reports the
+first memory access error, which even now is the only one that is
+meaningful. The delta with current behavior is that subsequent accesses
+are not caught, but we don't care about those because they are very
+likely caused by reading zeros during the initial buggy access.
 
-I'm copying the slides here to make it easier to reply.
+Would the scratch page be actually mapped into the arena radix tree, or=20
+just the pte? Because if it doesn't then I think we don't even need to
+worry about resetting it from the arena side. Just allocating it at
+a later time will overwrite the scratch page PTE with new valid page,
+Until then the page is accessing the scratch page, but again we only
+care about the first buggy access.
 
-kmalloc_nolock() follow-ups, including kfree_rcu_nolock()
-=========================================================
-
-Today's goal
-============
-
-1. Present why and what we're doing
-2. Demystify BPF's requirements for memory allocation
-3. Discuss solutions
-
-Motivation
-==========
-
-BPF map preallocation wastes memory for correctness
-- preallocate all elements by default, unless opted out explicitly
-  (BPF_F_NO_PREALLOC)
-- Typically not all elements are used, wasting memory
-
-The BPF memory allocator was invented to avoid that
-- Allocate elements on demand at BPF runtime
-- kmalloc isn't safe in some BPF contexts (in NMI, or in a critical
-  section), so a new allocator was invented
-
-Challenges with the BPF memory allocator
-- Memory is tied to the BPF subsystem and can't be used elsewhere
-- A burst of allocations can cause failures until async refill catches up
-- Trade-off between memory waste and allocation failures at large sizes
-- Reinventing every memory allocator feature is a maintenance burden
-
-The end goal
-============
-
-- Drop the BPF memory allocator
-- Avoid preallocation as much as possible in BPF
-- Use kmalloc_nolock() and kfree_{,rcu_}nolock() (and friends) instead
-
-To achieve that, we need to define requirements & expectations from BPF
-
-Background - RCU and BPF programs
-=================================
-
-- Non-sleepable BPF progs run in an RCU critical section
-- Sleepable BPF progs run in an RCU Tasks Trace critical section
-- Freeing by RCU for both non-sleepable (RCU) and sleepable
-  (RCU-tt) progs means we need to wait both GPs before releasing memory
-- RCU Tasks Trace (RCU-tt) is an RCU flavor designed for sleepable
-  BPF progs, lighter than SRCU
-- Since v7.0, RCU Tasks Trace is implemented using SRCU-fast
-- Since v7.1-rc1, RCU Tasks Trace GP is contractually guaranteed to
-  imply an RCU GP
-  - Yes, that means waiting for an SRCU-fast GP automatically covers RCU
-    readers
-
-Background - BPF memory lifetime
-================================
-
-Objects allocated for BPF may be referenced by either 1) non-sleepable
-or 2) sleepable BPF programs, or both
-
-Memory allocated for BPF may be:
-1. Freed immediately <- This is supported today via kfree_nolock()
-2. Freed immediately, but can be recycled with typesafety-by-rcu
-   semantics (for both RCU, RCU-tt)
-  - bpf_mem{,_cache}_free()
-3. Freed after RCU GP
-  - sleepable progs not allowed
-4. Freed after RCU GP + RCU-tt GP
-  - sleepable progs allowed
-  - bpf_mem{,_cache}_free_rcu()
-
-If you need something not listed here, please let us know!
-
-The big picture (today, within the BPF memory allocator)
-========================================================
-
-- bpf_mem{,_cache}_free()
-- Analogous to SLAB_TYPESAFE_BY_RCU, but for BPF
-- Insert objects to free_llist or free_llist_extra
-- When high watermark is hit, move objects to free_by_rcu_ttrace
-  and then return objects to slab after RCU-tt GP
-- However, they can be reused before returned to slab (again,
-  analogous to SLAB_TYPESAFE_BY_RCU)
-- bpf_mem{,_cache}_free_rcu()
-- Analogous to kfree_rcu(), but for BPF
-- Objects are inserted to free_by_rcu
-- Moved to waiting_for_gp list, then wait for RCU GP
-- Moved to waiting_for_gp_ttrace list, then wait for RCU-tt GP,
-  then returned to slab
-- Objects remain intact for RCU GP and RCU-tt GP
-
-The big picture (today, outside the BPF memory allocator)
-=========================================================
-
-- This slide is intentionally left blank :)
-
-The big picture (in the future - with kmalloc_nolock() follow-ups)
-==================================================================
-
-Let's drop the BPF memory allocator completely!
-
-Case A: Free immediately
-- Cache: existing kmalloc-<size> family
-- Alloc: kmalloc_nolock() -> alloc_pages_nolock()
-- Free immediately: kfree_nolock() -> free_pages_nolock()
-
-Case B: Non-sleepable readers only, free by RCU
-- Cache: existing kmalloc-<size> family
-- Alloc: kmalloc_nolock() -> alloc_pages_nolock()
-- Free by RCU: kfree_rcu_nolock(obj, rf) -> call_rcu_nolock()
-
-Case C: Both sleepable and non-sleepable readers, with free by RCU
-- Cache: existing kmalloc-<size> family
-- Alloc: kmalloc_nolock()
-- Free by RCU: kfree_srcu_fast_nolock() -> call_srcu_fast_nolock()
-
-Case D: Both sleepable and non-sleepable readers*, with typesafety-
-by-rcu semantics
-- Cache: a fixed-size kmem_cache with SLAB_TYPESAFE_BY_SRCU_FAST
-- Slab freeing deferred until SRCU-fast GP but objects can be
-  reused (analogous to SLAB_TYPESAFE_BY_RCU)
-- Alloc: kmem_cache_alloc_nolock()
-- Free immediately: kmem_cache_free_nolock() ->
-  call_srcu_fast_nolock() (to free slabs)
-- Need slab dtor support to release resources when freeing slabs
-  after SRCU-fast GP
-
-Unlike kmalloc_nolock(), "try the next bucket" trick doesn't work.
-Instead, create two caches: one for normal allocations, the other for
-fallback. Free objects with kfree_nolock() without passing the cache
-pointer.
-
-*Even when only non-sleepable readers are allowed, you can still
-use this!
-
-Progress since last year
-========================
-
-- alloc_pages_nolock() / free_pages_nolock() merged in v6.15
-- kmalloc_nolock() / kfree_nolock() merged in v6.18
-- RCU Tasks Trace re-implemented on top of SRCU-fast in v7.0
-- Transition to SRCU-fast was not smooth, ended up fixing bugs
-- RCU Tasks Trace GP now explicitly implies RCU GP
-- implicit since SRCU-fast was introduced in v6.15
-- explicit contractual guarantee in v7.1-rc1
-
-Things to do
-============
-
-- Define clear requirements/expectations from BPF (for memory allocation)
-- Introduce kfree_rcu_nolock() (in RFC)
-- Introduce kfree_srcu_fast_nolock()
-- Add SLAB_TYPESAFE_BY_SRCU_FAST support
-  - Need slab destructor support to clean up when freeing slabs
-  - Need call_srcu_fast_nolock() to submit free slabs to RCU
-- Migrate remaining bpf_mem_alloc users to kmalloc_nolock()
-- Introduce call_rcu_nolock() and call_srcu_fast_nolock()
-- Allow kmalloc_nolock() with large kmalloc sizes via
-  alloc_pages_nolock()
-
--- 
-Cheers,
-Harry / Hyeonggon
+Small nit: Maybe default page instead of scratch page? Scratch page
+sounds a bit like scratch space but we don't actually use the page to
+store any data.
