@@ -1,130 +1,78 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 712DC3C81B3
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 17:19:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A6983E0745;
+	Tue, 12 May 2026 17:41:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.18.0.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778606383; cv=none; b=iFGvYXHTmR0QwB50wD9mSnjuTZb5IV3XgBZSqeeU2ER5yhs2Agkoipw9byMhbqz1PqJCx8Y/ui/GJQEuDUE4vop9Iuoz40dEUvGiOGBlGGlVyR0ZeSe7s3oZO55s7aXwo+1aCoeOzicIvixN8lA7CTkaYYdekHvrNkVLM4tb770=
+	t=1778607724; cv=none; b=o157j9FLh1ADVNH9cIgOVnA2viYkDIsmgMFP/eFykVDfYBnPxBTiROFjLW23VILB3r6GwuRWsoaPZaV/2DOPSieNBob2zMwoJxFFA16dXnlOaeekO0Zozqu+r+cZzHrkN/zcw4AkqN9I6K03D04gl/T30Lst+YWO7GwKSteAyBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778606383; c=relaxed/simple;
-	bh=NgPRoZ8IXWwYkLAa/nHsfmIJ4SXsr+02c2nkNpoPXik=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s1T+7WAN/MTNv5FWwVmSctJKHIqSz7ytu1w3vJvum6oZFamsWc6pPdeeGay0591CwUchePnoi+5Oeii9c5tlKCxRpGRd7guCCB5Ow9/FybhllYAEHMWqmOGCWUIU34X2m1jdr0wSR8r8oKAFkV0sfoxjgUbhgWaRSUjZhtygl8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CzOuJuko; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CzOuJuko"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-488a9033b2cso53311685e9.2
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 10:19:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778606381; x=1779211181; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qSYJlBauomFh9oqoN25nD7dcuF49GuDhVg/e/vdGzNw=;
-        b=CzOuJuko763kh16bY3MF15VTFvk1KxLNmKpxEfYNyhWxNAKTHL6x8OLjx5LGRIkGaP
-         8S5+y8PYVQMD5YFWsx+4MkKGOHDjkCwmS616EB9qLRm+SxGigkd0Gx3lePNm0WeDiTDd
-         w7lUj91QS1qVPpiP6lPzBrZdC2o9FD+Z15/AtmHVqRToVoLAvIQWf6/Yr/XTQK6R+KKH
-         BnyPbsNyqZygQEFScGzOTtgXbWeJ8zEfCvr9l9OmU91iZkFXJsRob6H4imwMf/aIwviK
-         hv4YvqVFp6Zfi6kJ9qyr8hROzJ+1z6o4CAwtjLZO+C7aygqk/YHOWPUSAnYjSc/uchj8
-         7COg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778606381; x=1779211181;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qSYJlBauomFh9oqoN25nD7dcuF49GuDhVg/e/vdGzNw=;
-        b=FwHVKAo4VNK3vfUPDFZbLQKfQri3QoTsMze/Yxhy3K0iJ+b5W3QcX/w1lMP2NLVP1H
-         z6ozmyBspRvqXF9N4ZkaAn57A85zK2W4Y2ni6U01nmprW1IEyvmh1gPJinDsqSJgw4zb
-         TouzYYUsrHdkMWt5Lrt6brLCt1FzHVoSmjb+FhVOVMhhIv19LJ2kuJXJnSuiRdVe1pah
-         EHiXJ7pBIncbv2QLaXOhmHKjd32WIZphZFF176O1qE6t9hWIjk7Q3Ca9z7zBg0DzcQuV
-         pBfS92QHHlZBPxgrlEvicN7OqkJaInApuTXMcHTONkFDCIA3TnTTdvGoNYSk9TMeQq9H
-         Aj/A==
-X-Gm-Message-State: AOJu0YwTEgsxkfjXNmf7hCiVPOiUURHVkZotyY5ci0JosZSzquUzclkm
-	OrpgJmY63QE/hn4VcG5Yxobz9mjhFto19LR5ZLN8pcz/4O0VR51IrKcwOUmpxMmw
-X-Gm-Gg: Acq92OH7lYwkgCzqBHJco7I8b6RKvZ9KQdjRjPaNlvehaVH/dSu0D1IF815ZkQkvBOZ
-	WazvI34C0TbNPlyPqMf/MuIp6rgkcNYOz8EB+Cpkih/G5ffSm9fZ6sKGcaoEbEdQx7JE1P8aVm7
-	kII2NhKeMcAv512jCdQ/DzeZg5rlAybKDFbGB6DtpUjwdv266QBR9ak7qPVV+owVnHckTJVM+y3
-	qbnYkIwvFCZOUQ4ZeJ0WVfgAuO0eP1ruVIeyKo3uVi8kWe4SL8MoPQ/iCl5dnKU9rsAN7jwbemr
-	YIjzI81HPDA1h4GqIZe5Je1wY/feLVrTE+W71nde3Wss8L16FaFxkfl5op5ojDsrkFJpG3knX12
-	aURm0gzWEva4Kz5VTKw1boN76ad2cOItjqACVGscIVdvVzw7PXG4J4I5GonrVVoc1x8pNkTCcww
-	i1a/4G5sywfMizOZFSxzb/C7Oe31Me3Cofhwraw7NphMBJzs72CT36pNI3wROLzoA3yZPTBIPFF
-	YeICM2Vr9mmloUk33gDfyaDX7wiJ8tsa0tt7HzMUuVu9/DNrw3j6ln5fgGSujYip2A1gqkM+R7b
-	zyVCBiKMWAPaHs6Irj3i5wm/J7HlMK/tLsUSlA95Atw=
-X-Received: by 2002:a05:600c:5248:b0:48a:906a:9050 with SMTP id 5b1f17b1804b1-48e7069175fmr246113795e9.10.1778606380616;
-        Tue, 12 May 2026 10:19:40 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e00850765ba98b5d107.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:8507:65ba:98b5:d107])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e8f542e56sm21947105e9.34.2026.05.12.10.19.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2026 10:19:40 -0700 (PDT)
-Date: Tue, 12 May 2026 19:19:38 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Test reported max stack depth
-Message-ID: <7d18fcbe5d96a9e164aed1746e75eb25b0d8d8f9.1778604369.git.paul.chaignon@gmail.com>
-References: <05f82d1180b68e856bb0cc03a5cd86305f5b7669.1778604369.git.paul.chaignon@gmail.com>
+	s=arc-20240116; t=1778607724; c=relaxed/simple;
+	bh=bHJQQakcgRK9x5Bk1VgmWWyxJeKAlPReOPRvVi4pLCw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=uEXQCqOvCvoLJx8mQeebq38yCIDTIBRCuDZ5YOGfBcLXX2MVqBMUSwaR0p5YAwGr+LD8DrmC++BnC8WT1eYZPpOXiZaLr+pXKkmrvjcHQsyzrWmHxy0S5I0Hy/KaoojKREz8FIbcZ1+pI1lOUOJCp+1N82CDRNhlF6apvPeSiSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=nefkom.net; arc=none smtp.client-ip=212.18.0.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nefkom.net
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.9])
+	by mail-out.m-online.net (Postfix) with ESMTP id 4gFNwK4FWjz1r6nc;
+	Tue, 12 May 2026 19:33:05 +0200 (CEST)
+Received: from frontend03.mail.m-online.net (unknown [192.168.6.182])
+	by mail-out.m-online.net (Postfix) with ESMTP id 4gFNwJ6FwLz1r6nY;
+	Tue, 12 May 2026 19:32:58 +0200 (CEST)
+Received: from localhost (dynscan3.mnet-online.de [192.168.6.87])
+	by mail.m-online.net (Postfix) with ESMTP id 4gFNw94TFrz1qqll;
+	Tue, 12 May 2026 19:32:57 +0200 (CEST)
+X-Virus-Scanned: amavis at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.6.182])
+ by localhost (dynscan3.mail.m-online.net [192.168.6.87]) (amavis, port 10024)
+ with ESMTP id SDtDtvMBHnpi; Tue, 12 May 2026 19:32:46 +0200 (CEST)
+X-Auth-Info: 6VMpQhVO1tb+L6MNEpw/9EhU9iLsKYo0+HVczNGV9hgFjN/Z1rDNQ/qDUeIL76Z3
+Received: from igel.home (aftr-82-135-83-211.dynamic.mnet-online.de [82.135.83.211])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.mnet-online.de (Postfix) with ESMTPSA;
+	Tue, 12 May 2026 19:32:44 +0200 (CEST)
+Received: by igel.home (Postfix, from userid 1000)
+	id 206A42C1727; Tue, 12 May 2026 19:32:44 +0200 (CEST)
+From: Andreas Schwab <schwab@linux-m68k.org>
+To: Kuan-Wei Chiu <visitorckw@gmail.com>
+Cc: geert@linux-m68k.org,  ast@kernel.org,  daniel@iogearbox.net,
+  andrii@kernel.org,  eddyz87@gmail.com,  memxor@gmail.com,
+  martin.lau@linux.dev,  song@kernel.org,  yonghong.song@linux.dev,
+  jolsa@kernel.org,  jserv@ccns.ncku.edu.tw,  eleanor15x@gmail.com,
+  marscheng@google.com,  linux-kernel@vger.kernel.org,
+  linux-m68k@lists.linux-m68k.org,  bpf@vger.kernel.org,  Daniel Palmer
+ <daniel@thingy.jp>
+Subject: Re: [PATCH bpf-next v3] m68k, bpf: Add initial BPF JIT compiler
+ support
+In-Reply-To: <20260511212756.3163955-1-visitorckw@gmail.com> (Kuan-Wei Chiu's
+	message of "Mon, 11 May 2026 21:27:56 +0000")
+References: <20260511212756.3163955-1-visitorckw@gmail.com>
+Date: Tue, 12 May 2026 19:32:44 +0200
+Message-ID: <87h5oc4jpf.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <05f82d1180b68e856bb0cc03a5cd86305f5b7669.1778604369.git.paul.chaignon@gmail.com>
+Content-Type: text/plain
 
-This patch tests the maximum stack depth reporting in verifier logs,
-with a couple special cases covered: fastcall, private stacks, and
-rounding up to 16 bytes. For that last one, we need to skip the test
-when JIT compilation is disabled as the rounding is then to 32 bytes.
+On Mai 11 2026, Kuan-Wei Chiu wrote:
 
-Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
----
- tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c  | 3 +--
- tools/testing/selftests/bpf/progs/verifier_private_stack.c | 3 +++
- 2 files changed, 4 insertions(+), 2 deletions(-)
+> +
+> +			emit_16(ctx, 0x4a80 | d_lo);			/* tst.l d_lo */
+> +			emit_16(ctx, 0x6b04);				/* bmi.s .+6 */
+> +			emit_16(ctx, 0x7000 | (d_hi << 9));		/* moveq #0, d_hi */
+> +			emit_16(ctx, 0x6002);				/* bra.s .+4 */
+> +			emit_16(ctx, 0x70ff | (d_hi << 9));		/* moveq #-1, d_hi */
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-index 0d9e167555b5..8d7ff38e4c06 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-@@ -799,8 +799,7 @@ __naked int bpf_loop_interaction2(void)
- 
- SEC("raw_tp")
- __arch_x86_64
--__log_level(4)
--__msg("stack depth 512+0")
-+__log_level(4) __msg("stack depth 512+0 max 512")
- /* just to print xlated version when debugging */
- __xlated("r0 = &(void __percpu *)(r0)")
- __success
-diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-index 646e8ef82051..4167d3a09252 100644
---- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-@@ -86,6 +86,7 @@ __naked static void cumulative_stack_depth_subprog(void)
- SEC("kprobe")
- __description("Private stack, subtree > MAX_BPF_STACK")
- __success
-+__log_level(4) __msg("stack depth 512+32 max 512")
- __arch_x86_64
- /* private stack fp for the main prog */
- __jited("	movabsq	$0x{{.*}}, %r9")
-@@ -324,6 +325,8 @@ int private_stack_async_callback_1(void)
- SEC("fentry/bpf_fentry_test9")
- __description("Private stack, async callback, potential nesting")
- __success __retval(0)
-+__load_if_JITed()
-+__log_level(4) __msg("stack depth 8+0+256+0 max 272")
- __arch_x86_64
- __jited("	subq	$0x100, %rsp")
- __arch_arm64
+I think this could be "tst.l d_lo; smi d_hi; extb.l d_hi".
+
 -- 
-2.43.0
-
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."
