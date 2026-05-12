@@ -1,188 +1,307 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C4B284883;
-	Tue, 12 May 2026 14:52:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 704F53B440E
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 15:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778597550; cv=none; b=BWkX3YRnzGzK39VdKvooLerbU3eIErO8JmcKDttnhGtyxM3PrOsD2+U8nU8DWZjEkq8znh3RJjSje1yOTa1NXkbRhZzafKUeaKuYNAAIzPnWPr1noqE2/Oh8QZrPkb2i5Dv5DBxgYXQcZSgBXZ0BeXfQ1JmFcgIQ04NroIwggks=
+	t=1778599624; cv=none; b=Xj29/P+6Ze/vBcEa/ZrOY9IPoM0yRcETOJKdZxaA6MMVKfnJaDWKjJ3GciRwQt8FLOO6tdcec+S1Z107Wx/Lg6iB0DruD6k5+Mi1irhR9M0oXlD9eomzAVQq+/tgt33OLFsAER+cYDPWWu5wnGtGxfOdUC0wpSIry0LkPXyrhTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778597550; c=relaxed/simple;
-	bh=B3A2yAykcS1ympm2V9MGsO72iKngEppRZ5Kh5k/09e8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hgh0Z1VZwVNV5uyCxI/ADhgdXwpP2NkE0OxbkSHrCABVRst1YXduhu5CdMhCql2uM/UG8WxRxvMg8DRxEQDqKzSieTdWKHojII8ed1aEjP2DrUN5NJaoqDKMYcRtlkIhtP5YyprPvw5owAWn8S6l/AGXLbSogkFt1hIPTue7B7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=EWHAOq3T; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1778599624; c=relaxed/simple;
+	bh=AbU3s2361m2WA/869CalrXUBM53xZtwAPLzZXsVmTus=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n86CEvCead1V40G057J6u7nC1Am4eGBlVcPp0rR5tEAxOCD49xB6MAv4EQhE9egP+OGFuB3QmJadALxCh12UBuBcDCvAxRlBCfmKcwoPta/cpS4md3wK1mx9LHPCoa/C/V2egtFhz+YNfJVzmHa1ld/OI5dKLG+vopJYgtlbOOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=monogon.tech; spf=pass smtp.mailfrom=monogon.tech; dkim=pass (2048-bit key) header.d=monogon-tech.20251104.gappssmtp.com header.i=@monogon-tech.20251104.gappssmtp.com header.b=wHP16DnW; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=monogon.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=monogon.tech
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="EWHAOq3T"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64CCiufJ2760182;
-	Tue, 12 May 2026 14:52:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=3lhary
-	eCq7o/H4UmZvHjApFmPwLwb1UOopGyuR6mmxo=; b=EWHAOq3TDcdm0QxI8q0cSC
-	3ao4vWwuJ2Vk2ofjYfa2Doy47ViVsZ6RV3QERcODC5j6tH8nLK7PE3kRKBAWtf/H
-	vXFnPpyXAqLtcbQo6wUIRL9natH8YSi2h3UnlYRvFsDC66xeteIvR85v1ajAQ/QH
-	SdyXCc3WAaPxsHcL4PpA0C0jRn303uaGzEQBAIwhyyrV6ev0KSbF6rr4RgumR/7i
-	VsdamitE9/J8Cz8NAWyl9bFIAFgiNHsF9jW0vXaf2RAP40OOB5qPmnnVAG9hO1rS
-	4GifT1GdnvzDz/fMPECoOxCWmLLOINRhmnCo3fLC9hAsthpHcpK0mCJj6BjOwdFA
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e3nv6kegg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 May 2026 14:52:25 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64CEdWBC019005;
-	Tue, 12 May 2026 14:52:25 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e3nfgbju8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 May 2026 14:52:25 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64CEqN8Q61014500
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 12 May 2026 14:52:23 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 649B82004F;
-	Tue, 12 May 2026 14:52:23 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 428FF20043;
-	Tue, 12 May 2026 14:52:23 +0000 (GMT)
-Received: from [9.52.200.195] (unknown [9.52.200.195])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 12 May 2026 14:52:23 +0000 (GMT)
-Message-ID: <edd04d6c-3cdc-43da-9cf2-44cccc353658@linux.ibm.com>
-Date: Tue, 12 May 2026 16:52:21 +0200
+	dkim=pass (2048-bit key) header.d=monogon-tech.20251104.gappssmtp.com header.i=@monogon-tech.20251104.gappssmtp.com header.b="wHP16DnW"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-44e5624c053so3191660f8f.2
+        for <bpf@vger.kernel.org>; Tue, 12 May 2026 08:27:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monogon-tech.20251104.gappssmtp.com; s=20251104; t=1778599621; x=1779204421; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vBLaLy9cz7siWYOspXYDH6TBQZgbRZIgkLsPqUvuuZY=;
+        b=wHP16DnWMQI0zd6k7uwWIXds80ApqoHTxjIMTt2+ekgyjZPrSswqckq6w1YjVn4S68
+         dTxGpHlLJfej4p/4aocPnUge+XDADsF2lXZFoTBuhaudyEyS7gGoSw++l9gAeblTvbUW
+         ShhpoIVPmmuhO4PHsu9TOtjbhFSdthe1+8VZ/bI/YAdvdgz7nhlsADUzSWwv9x275pv9
+         YUzDFu2OijqauRW2hUPWVAd7rC+a5mR5j7aDZK67INnJy6JqucGnD5PBv779SDolhQU5
+         ysyz6Ydfi4NvXIM8dYZw2lbFaYBSA2CIUPnbnU8vPmJLecc+UHwnJWpS/Pd8KhAERZcX
+         rVDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778599621; x=1779204421;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vBLaLy9cz7siWYOspXYDH6TBQZgbRZIgkLsPqUvuuZY=;
+        b=dw9k2FlCzWifD8ZV47aLFL3rM1FPIB+EYCnBsks+MxPLl+Nor1IXHGR6dCjkP0dEy7
+         Zuk7NNiTK91sc+xVa0C+z7/kJOZoBr+H4CahidIu91bR8wfnSoQ79fBBauMUG10kUXjz
+         kSFHmvE/agLmjDfoNcnJCrWKrKeBNdxQT2BokXFW7D/i9Xo9lKnRhZTRKPi6Dc56nl5L
+         wcWfsxOWK13/SeRvwSKiX2p78nvlosdUgdW3JjsdM/rF8LEOIhls2wStdKHsFNdAkseQ
+         BN7dSm+cN1ZXESX6vOqWkzCi9RomT4GIAo9iDhAY27wQuklV6fAk7cLCkOhBozclQI9X
+         Aq4w==
+X-Forwarded-Encrypted: i=1; AFNElJ+vYksmcTKgebJs2kuxK8iT6r6iv/f27NKo6u1JflRDljt/LRwqrEKs8sBM1AoV1iXxA9I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGv73RLIHTW78fc9KI61wzaEzMCE1F3NsjlQPneG5yONPaR/mp
+	ftwTodbnDP1t4uvX3CxmDMqxzp7VCn2td2qg1ULc0xgQRKrfFbMFQUwkkEmZskdfG1w=
+X-Gm-Gg: Acq92OE+VXOkPQ6uFInzqQNebMIliu1hf7ZqPbe0bAY5+KKB1j21KDxZ1ZkkuOEoJue
+	YNWhsLZn/IqDsEQe4A/LJEImfBBABu5iqzregH3LzaajN9TqnRUwcrEYcTR6TbG1CMklgJi6TY/
+	E6NJtFkfVfPweGzbKMKYkNoANAIhAUs2Jw+nXKRu+eoauLhv6dhNUyvF4nMCOf5p3rZJTiJsvik
+	po+OGJNzXsFm93DlagrDKJRSA+YFcIP9W0yLK+J2KCqbnv9kxM4fu/D/8AadrGegyFZQCPeUQrI
+	TcUHX2asIXWMZT5xu1YGCdOdBee+7J+slpzQPhkoHSOIM44m+gyTzyDOQZJu7xenE/VDjE1JguV
+	SbcPykO4UgUpY22NEBv9vsYwfCsSOqE2StHDcVjcYoY9iZltgQiB7gpdnzKZ3OQIwg3Ia9rd29x
+	KOHi19DkjenFHXsrf8OMhvotOnZqzJUmoK0XutTWdBpg==
+X-Received: by 2002:a05:6000:611:b0:44a:247e:67b4 with SMTP id ffacd0b85a97d-4515b9f31camr45918391f8f.18.1778599620798;
+        Tue, 12 May 2026 08:27:00 -0700 (PDT)
+Received: from localhost ([213.239.141.92])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-45491304505sm33531123f8f.22.2026.05.12.08.26.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 May 2026 08:27:00 -0700 (PDT)
+From: Lorenz Brun <lorenz@monogon.tech>
+To: Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: stable@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH] xsk: switch xdp_build_skb_from_zc() to napi_alloc_skb()
+Date: Tue, 12 May 2026 17:26:56 +0200
+Message-ID: <20260512152658.2818805-1-lorenz@monogon.tech>
+X-Mailer: git-send-email 2.51.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 11/19] unwind_user/sframe: Show file name in debug
- output
-To: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev,
-        Indu Bhagat <ibhagatgnu@gmail.com>, Heiko Carstens <hca@linux.ibm.com>
-References: <20260505121718.3572346-12-jremus@linux.ibm.com>
- <20260505184638.5648DC2BCB4@smtp.kernel.org>
-Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20260505184638.5648DC2BCB4@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: A8nRzhep2oz0aBvY1XZxhj6sYJJN2533
-X-Proofpoint-GUID: HiUlC5L0Drwbz9cpG-NPDpkUPgYJ1QiK
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTEyMDE1MyBTYWx0ZWRfX18lFaAw/k0QI
- hbOJ2u1DnsU309WWvIoX84APON+0xGsUhYP1HStky2mVDW332qGEJcyfkqYmTUNR9ZWGcJ/kEvz
- YYuvUubKQuHsVtQeAEbER+t3V/JAF/oOA6pvaBlFq7ur5zQwUm+LvaEYGbZWLBQoBZVropHSQlo
- j/p8C2tdBb5d2IUDe0+M4Ztu2e8QoKATLadW1y5U4IxUJ0RfA6Xc5jKP7dA2HTGxAw2kqV27CKT
- WFdSitpKk6SmczSnYGDyx2eQ2VQk3H3ZnHDEWtjug2YSw9bUY22IproUiqpAYRI3dLTOrdnQ3/b
- nt+40JJHNnwd2bUUckWnBV4qWZ9KufXUperjzMn0kMUSRHKwO1mUSP/BBW9lf4/VNdbGqnk+uUj
- Db0jB7zpX4V5F2UaDc8m2YQEAq/fo/vPGhv/p+2WWrsZhxWnMuuOz0D37wk8Re3p+g37syBO78w
- L0TzKl+lB8ayG3pfU6w==
-X-Authority-Analysis: v=2.4 cv=P8UKQCAu c=1 sm=1 tr=0 ts=6a033eaa cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8
- a=VwQbUJbxAAAA:8 a=njC-hnyFwTIKUP6h0CMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-11_05,2026-05-08_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 phishscore=0 bulkscore=0 clxscore=1015
- malwarescore=0 spamscore=0 lowpriorityscore=0 suspectscore=0 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605050000 definitions=main-2605120153
 
-On 5/5/2026 8:46 PM, sashiko-bot@kernel.org wrote:
+xdp_build_skb_from_zc() allocated xdp->frame_sz bytes from the per-cpu
+system_page_pool and built the skb head with napi_build_skb(). The
+latter places skb_shared_info at the tail of the buffer, but the
+helper sized the allocation as if the whole frame_sz were usable for
+data. Whenever the packet plus reserved headroom approached frame_sz,
+the head memcpy overran shinfo with packet content, corrupting
+->flags (SKBFL_ZEROCOPY_ENABLE) and ->nr_frags, which then drove
+skb_copy_ubufs() off the end of frags[] on the RX path:
 
-> [ ... ]
->> @@ -496,7 +501,7 @@ static int __sframe_remove_section(struct mm_struct *mm,
->>  				   struct sframe_section *sec)
->>  {
->>  	if (!mtree_erase(&mm->sframe_mt, sec->text_start)) {
->> -		dbg("mtree_erase failed: text=%lx\n", sec->text_start);
->> +		dbg_sec("mtree_erase failed: text=%lx\n", sec->text_start);
-> 
-> Does accessing sec->filename in dbg_sec() risk a use-after-free here? If
-> mtree_erase() fails, it indicates the section might have been concurrently
-> removed. The SRCU grace period could expire, causing sec to be freed before
-> dbg_sec() is called.
+  UBSAN: array-index-out-of-bounds in include/linux/skbuff.h:2541
+  index 113 is out of range for type 'skb_frag_t [17]'
+   skb_copy_ubufs+0x7da/0x960
+   ip_local_deliver_finish+0xcd/0x110
+   ice_napi_poll+0xe4/0x2a0 [ice]
 
-IIUC this is a valid concern.  Should this change be simply be reverted
-or should __sframe_remove_section() create a temporary copy of the
-filename and use dbg() for this rather unlikely case?
+The overrun bytes come from the packet, so an on-wire sender can
+corrupt kernel memory remotely whenever the XDP program returns
+XDP_PASS.
 
-> [ ... ]
->> diff --git a/kernel/unwind/sframe_debug.h b/kernel/unwind/sframe_debug.h
->> index 36352124cde81..e568be4172b1b 100644
->> --- a/kernel/unwind/sframe_debug.h
->> +++ b/kernel/unwind/sframe_debug.h
-> [ ... ]
->> +static inline void dbg_init(struct sframe_section *sec)
->> +{
->> +	struct mm_struct *mm = current->mm;
->> +	struct vm_area_struct *vma;
->> +
->> +	guard(mmap_read_lock)(mm);
->> +	vma = vma_lookup(mm, sec->sframe_start);
+Rather than patch the sizing math, switch to the pattern used by other
+in-tree AF_XDP zero-copy drivers like mlx5 and i40e which use
+napi_alloc_skb() sized to the actual packet plus skb_put_data().
+This sizes the head exactly for the data being copied, drops the
+system_page_pool local_lock from this path, and removes the
+structural mismatch between frame_sz and the skb head buffer. Frags
+are allocated with alloc_page() per frag, matching the other drivers.
 
-Should below be changed as follows based on Sashikos AI review feedback?
+Fixes: 560d958c6c68 ("xsk: add generic XSk &xdp_buff -> skb conversion")
+Cc: stable@vger.kernel.org
+Signed-off-by: Lorenz Brun <lorenz@monogon.tech>
+---
+ drivers/net/ethernet/intel/ice/ice_xsk.c |  2 +-
+ include/net/libeth/xsk.h                 |  2 +-
+ include/net/xdp.h                        |  3 +-
+ net/core/xdp.c                           | 72 ++++++++----------------
+ 4 files changed, 29 insertions(+), 50 deletions(-)
 
->> +	if (!vma)
->> +		sec->filename = kstrdup("(vma gone???)", GFP_KERNEL);
-
-	else if (vma_is_anonymous(vma))
-		sec->filename = kstrdup("(anonymous)", GFP_KERNEL);
-
->> +	else if (vma->vm_file)
->> +		sec->filename = kstrdup_quotable_file(vma->vm_file, GFP_KERNEL);
-> 
-> Does checking vma->vm_file directly skip proper classification for some
-> anonymous VMAs? According to the VMA guidelines, certain anonymous VMAs like
-> private mappings of /dev/zero have vma->vm_file set. Should this use
-> !vma_is_anonymous(vma) instead?
-> 
-> Do these string allocations need __GFP_ACCOUNT? Since they are triggered by
-> user space and persist until the section is removed, could a user allocate
-> large amounts of uncharged memory and bypass memory cgroup limits?
-> 
->> +	else if (vma->vm_ops && vma->vm_ops->name)
-
-	else if (vma->vm_ops && vma->vm_ops->name && vma->vm_ops->name(vma))
-
->> +		sec->filename = kstrdup(vma->vm_ops->name(vma), GFP_KERNEL);
-> 
-> If vma->vm_ops->name(vma) returns NULL, will kstrdup() return NULL and skip
-> the subsequent fallback naming methods? Does this leave sec->filename as
-> NULL, causing debug logs to print (null)?
-> 
->> +	else if (arch_vma_name(vma))
->> +		sec->filename = kstrdup(arch_vma_name(vma), GFP_KERNEL);
->> +	else if (!vma->vm_mm)
->> +		sec->filename = kstrdup("(vdso)", GFP_KERNEL);
->> +	else
->> +		sec->filename = kstrdup("(anonymous)", GFP_KERNEL);
-
-		sec->filename = kstrdup("(unknown vma???)", GFP_KERNEL);
-
->> +}
-> 
-
-Thanks and regards,
-Jens
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index 0643017541c35..6c01a14fde150 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -653,7 +653,7 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring,
+ 
+ construct_skb:
+ 		/* XDP_PASS path */
+-		skb = xdp_build_skb_from_zc(first);
++		skb = xdp_build_skb_from_zc(&rx_ring->q_vector->napi, first);
+ 		if (!skb) {
+ 			xsk_buff_free(first);
+ 			first = NULL;
+diff --git a/include/net/libeth/xsk.h b/include/net/libeth/xsk.h
+index 82b5d21aae878..922b4587acd3f 100644
+--- a/include/net/libeth/xsk.h
++++ b/include/net/libeth/xsk.h
+@@ -468,7 +468,7 @@ __libeth_xsk_run_pass(struct libeth_xdp_buff *xdp,
+ 	if (act != LIBETH_XDP_PASS)
+ 		return act != LIBETH_XDP_ABORTED;
+ 
+-	skb = xdp_build_skb_from_zc(&xdp->base);
++	skb = xdp_build_skb_from_zc(napi, &xdp->base);
+ 	if (unlikely(!skb)) {
+ 		libeth_xsk_buff_free_slow(xdp);
+ 		return true;
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index aa742f413c358..fb2452243fd36 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -375,7 +375,8 @@ void xdp_warn(const char *msg, const char *func, const int line);
+ #define XDP_WARN(msg) xdp_warn(msg, __func__, __LINE__)
+ 
+ struct sk_buff *xdp_build_skb_from_buff(const struct xdp_buff *xdp);
+-struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp);
++struct sk_buff *xdp_build_skb_from_zc(struct napi_struct *napi,
++				      struct xdp_buff *xdp);
+ struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp);
+ struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
+ 					   struct sk_buff *skb,
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 9890a30584ba7..54005b64e6cbb 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -677,16 +677,14 @@ EXPORT_SYMBOL_GPL(xdp_build_skb_from_buff);
+  * xdp_copy_frags_from_zc - copy frags from XSk buff to skb
+  * @skb: skb to copy frags to
+  * @xdp: XSk &xdp_buff from which the frags will be copied
+- * @pp: &page_pool backing page allocation, if available
+  *
+  * Copy all frags from XSk &xdp_buff to the skb to pass it up the stack.
+- * Allocate a new buffer for each frag, copy it and attach to the skb.
++ * Allocate a new page for each frag, copy it and attach to the skb.
+  *
+- * Return: true on success, false on netmem allocation fail.
++ * Return: true on success, false on page allocation fail.
+  */
+ static noinline bool xdp_copy_frags_from_zc(struct sk_buff *skb,
+-					    const struct xdp_buff *xdp,
+-					    struct page_pool *pp)
++					    const struct xdp_buff *xdp)
+ {
+ 	struct skb_shared_info *sinfo = skb_shinfo(skb);
+ 	const struct skb_shared_info *xinfo;
+@@ -699,20 +697,18 @@ static noinline bool xdp_copy_frags_from_zc(struct sk_buff *skb,
+ 	for (u32 i = 0; i < nr_frags; i++) {
+ 		const skb_frag_t *frag = &xinfo->frags[i];
+ 		u32 len = skb_frag_size(frag);
+-		u32 offset, truesize = len;
+ 		struct page *page;
+ 
+-		page = page_pool_dev_alloc(pp, &offset, &truesize);
++		page = alloc_page(GFP_ATOMIC | __GFP_NOWARN);
+ 		if (unlikely(!page)) {
+ 			sinfo->nr_frags = i;
+ 			return false;
+ 		}
+ 
+-		memcpy(page_address(page) + offset, skb_frag_address(frag),
+-		       LARGEST_ALIGN(len));
+-		__skb_fill_page_desc_noacc(sinfo, i, page, offset, len);
++		memcpy(page_address(page), skb_frag_address(frag), len);
++		__skb_fill_page_desc_noacc(sinfo, i, page, 0, len);
+ 
+-		tsize += truesize;
++		tsize += PAGE_SIZE;
+ 		if (page_is_pfmemalloc(page))
+ 			flags |= XDP_FLAGS_FRAGS_PF_MEMALLOC;
+ 	}
+@@ -725,49 +721,34 @@ static noinline bool xdp_copy_frags_from_zc(struct sk_buff *skb,
+ 
+ /**
+  * xdp_build_skb_from_zc - create an skb from XSk &xdp_buff
++ * @napi: NAPI instance the buffer was received on (provides the skb cache)
+  * @xdp: source XSk buff
+  *
+  * Similar to xdp_build_skb_from_buff(), but for XSk frames. Allocate an skb
+- * head, new buffer for the head, copy the data and initialize the skb fields.
+- * If there are frags, allocate new buffers for them and copy.
+- * Buffers are allocated from the system percpu pools to try recycling them.
+- * If new skb was built successfully, @xdp is returned to XSk pool's freelist.
+- * On error, it remains untouched and the caller must take care of this.
++ * sized to the packet from the NAPI cache, copy the head data, and copy
++ * any frags into freshly allocated pages.
++ *
++ * If a new skb was built successfully, @xdp is returned to the XSk pool's
++ * freelist. On error, it remains untouched and the caller must take care
++ * of this.
+  *
+  * Return: new &sk_buff on success, %NULL on error.
+  */
+-struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp)
++struct sk_buff *xdp_build_skb_from_zc(struct napi_struct *napi,
++				      struct xdp_buff *xdp)
+ {
+ 	const struct xdp_rxq_info *rxq = xdp->rxq;
+-	u32 len = xdp->data_end - xdp->data_meta;
+-	u32 truesize = xdp->frame_sz;
+-	struct sk_buff *skb = NULL;
+-	struct page_pool *pp;
+-	int metalen;
+-	void *data;
++	u32 totallen = xdp->data_end - xdp->data_meta;
++	u32 metalen = xdp->data - xdp->data_meta;
++	struct sk_buff *skb;
+ 
+-	if (!IS_ENABLED(CONFIG_PAGE_POOL))
++	skb = napi_alloc_skb(napi, totallen);
++	if (unlikely(!skb))
+ 		return NULL;
+ 
+-	local_lock_nested_bh(&system_page_pool.bh_lock);
+-	pp = this_cpu_read(system_page_pool.pool);
+-	data = page_pool_dev_alloc_va(pp, &truesize);
+-	if (unlikely(!data))
+-		goto out;
+-
+-	skb = napi_build_skb(data, truesize);
+-	if (unlikely(!skb)) {
+-		page_pool_free_va(pp, data, true);
+-		goto out;
+-	}
+-
+-	skb_mark_for_recycle(skb);
+-	skb_reserve(skb, xdp->data_meta - xdp->data_hard_start);
++	skb_put_data(skb, xdp->data_meta, totallen);
+ 
+-	memcpy(__skb_put(skb, len), xdp->data_meta, LARGEST_ALIGN(len));
+-
+-	metalen = xdp->data - xdp->data_meta;
+-	if (metalen > 0) {
++	if (metalen) {
+ 		skb_metadata_set(skb, metalen);
+ 		__skb_pull(skb, metalen);
+ 	}
+@@ -775,18 +756,15 @@ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp)
+ 	skb_record_rx_queue(skb, rxq->queue_index);
+ 
+ 	if (unlikely(xdp_buff_has_frags(xdp)) &&
+-	    unlikely(!xdp_copy_frags_from_zc(skb, xdp, pp))) {
++	    unlikely(!xdp_copy_frags_from_zc(skb, xdp))) {
+ 		napi_consume_skb(skb, true);
+-		skb = NULL;
+-		goto out;
++		return NULL;
+ 	}
+ 
+ 	xsk_buff_free(xdp);
+ 
+ 	skb->protocol = eth_type_trans(skb, rxq->dev);
+ 
+-out:
+-	local_unlock_nested_bh(&system_page_pool.bh_lock);
+ 	return skb;
+ }
+ EXPORT_SYMBOL_GPL(xdp_build_skb_from_zc);
 -- 
-Jens Remus
-Linux on Z Development (D3303)
-jremus@de.ibm.com / jremus@linux.ibm.com
-
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
+2.51.2
 
