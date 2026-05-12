@@ -1,54 +1,54 @@
-Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
+Received: from mail-dl1-f73.google.com (mail-dl1-f73.google.com [74.125.82.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799C63BE147
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 05:35:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3703BE144
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 05:36:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778564159; cv=none; b=QZE6O4aCa7D/aGLGz0aiCqzk8LqRH0k5EORB7fsjXBZDcOpTYUyuNMFTEeB4OgGi2DpfTy42xVBgaBec0pMMS//Q328RS2ep0lELMUd218rKush4ZqrHh9ZdSB6kp6nCqKjsyBLjcbNpv5H4TgU0jl+eMjdTZWXm1UWAAwWRJ0c=
+	t=1778564166; cv=none; b=QPbILOk6Az7xmImqwYNpuSGtlii/L0rhjunOSai5sDwQ2gun0vD8+fbJGbr4ndghElRgYTLa3Rm+hwZFTeT703pspKOsiURJuY+dOJTWz9DD6mm8PGq2xg08qlhGgO+5r5dkB4ct6vobtWbs7onBZIhT+tqwGacuZpcbAnXria4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778564159; c=relaxed/simple;
-	bh=OgiEHTDvlnjDwAnt8D7vN3GVVcgaWORi0mYYfrGwUPQ=;
+	s=arc-20240116; t=1778564166; c=relaxed/simple;
+	bh=4IFG868/6JHvA0p0jcKGtKYfpyMyLtoR19Xi4djBeOc=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Y6g6dtSm4mm2XZ2O9Xk/J0D3w6WYoMYV6zrY5y/KKP7DsCGr40+FZxpTC+llP4226a7edR5eqjjHOwkYT5vwLBfUnHeFloMTUCPmGB9+whytCnDpHRcpWc2NvpgToW9lkSE3twnOYyUsW1PJ1DwltrZT4Vxdr8lp+MvBrtn0dL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=USYTXy3M; arc=none smtp.client-ip=74.125.82.201
+	 To:Cc:Content-Type; b=pGKHBovI/YH13x04vZhcEQDAMCEZQ15F7jhfxYGwFtzYG4ZPhHn63kaRZ4n7glfWL1fgwESqAAGlK0BVnvvu28zFgqvsm4RQ4eHQubzDg/G8k1XZj9PTp8zNQ9CijrxdZWrZo93CDjnfytKQCv5V8YKjdQwcT7vPVoWUhb41mpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Px9vdOg+; arc=none smtp.client-ip=74.125.82.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="USYTXy3M"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2bda35eab74so4182309eec.0
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 22:35:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Px9vdOg+"
+Received: by mail-dl1-f73.google.com with SMTP id a92af1059eb24-132a9b34697so9291328c88.1
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 22:36:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778564154; x=1779168954; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1778564159; x=1779168959; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6KfIzB2u4c7CPeAYRPyQWtREqIUzywUqx09MBuzY/eE=;
-        b=USYTXy3MhGJqCNzDj+x6N66V1R3na95Wye55Oi8sQtGR6Y/RbTO+xwJTfZb99aTja/
-         zqWDMeCNxqX7BARZlcgSL+c52L6iVaAzw9L27IfIbqPzsS6RYjJ5Tj2yTLsk7tD6kd0C
-         72+/nvbjJ1sPJ61yO8JpOT77qqCyZ0RHErFxkfEsdrD9AzLX6D1wZGkP5kW9FY9XbFls
-         GMFI3hU0CgmW70IZC5N3RlGO1uXd0901ipNRet5v//bXvft6apGUbJaIuLn2NVfyO3Se
-         oMf5dqfOScjuE842ld6349rpTjhBfNmM2TFwh/ksWUUU3sYlJcCHhJsjd4mWlDIAWms0
-         0lCw==
+        bh=rw5Nz69HEAvLl7hnisIiKYJkHKdAFDDtbfFS8C1qvgw=;
+        b=Px9vdOg+pIm42QGNNqKd+0AoyePjs5roMct/vl5IR9ye7HI9POghBXfpMFjLDlwmoz
+         r9EAKoI4cbYHKMaBck/vaE0XosyYRgeK+jLsBoyeEfTP/84eE+/ihULRwjflJWC3xepW
+         A6oSrjkp/N/ARXhZV8CAhcW5dsZpYo67rK9TKETt/QdWTRPEohK1uZZ1fJIOHWWtQAAx
+         Ld1I8NOw0ieacOFoar9cakFIzf167MoCW8SLvgreFXKjimw8s/c8mQnXh/vNt5BwNjEY
+         AOudtH+Lt3JzMolB5BJayNc0SCoXySjt/j2Q9Rq6Ge7qGmuZPEDrsVoIY/zxJbuWSOVo
+         HaLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778564154; x=1779168954;
+        d=1e100.net; s=20251104; t=1778564159; x=1779168959;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6KfIzB2u4c7CPeAYRPyQWtREqIUzywUqx09MBuzY/eE=;
-        b=MGnX4WR3IN++/UXVjhX2DTPIYSACQ46UpLaSYDRoD78Cnx63XuFenY/esFViVZaV31
-         LX1rHmwFG0rrCYcUekLF/aEf9Mbg5Z/mAtzNvGCYh4jj+j2IZQqR8XW4pUM1AwwIFLdQ
-         n8g7cBaOht1hOOTeAmRMOh9bVsy1Z0c5Z/U9T12OtpXRHefTtA8ibGBY8fBVF/38ccn7
-         Pxc0ycj0CJKcPdDkAtj1h7qaq3wV0jUnacdPtnB4FRE39qw0tFqX+skHBK95d3LlWJBy
-         2/bb9+9KcwZcJhO8EvzHlwDRdhMgCaPCEbOJY6XDWf9GOw/9tDq07vxe5mdrHfSsSr1+
-         nuBw==
-X-Forwarded-Encrypted: i=1; AFNElJ/Z0b81Ca5H8UVSRG26dJo+cMbKSYVFJ2yznlNQuJ+PLajob1SVg/JkcPTeU0jpLiZfcHY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4NUrBm8lwzGaaZGqjr+V4QKRwz5RoZmX0qrLW5szfDHwhR7PG
-	GVJWnaJw5Yr+tFpP/cYEy1Hz6T+EbP15cxBESZ048ESV2221RG1k5T/Er3Kh2KRVPd1CnEJ0DdB
-	izua1Jo8PjQ==
-X-Received: from dyt2.prod.google.com ([2002:a05:693c:8082:b0:2f9:af7:503a])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:687:b0:2c5:c532:1fe1
- with SMTP id 5a478bee46e88-2ff9362f9d6mr1342788eec.3.1778564153362; Mon, 11
- May 2026 22:35:53 -0700 (PDT)
-Date: Mon, 11 May 2026 22:35:26 -0700
+        bh=rw5Nz69HEAvLl7hnisIiKYJkHKdAFDDtbfFS8C1qvgw=;
+        b=ZktqXUoekraZKDikG9HWsJiQLJ9Uu25XbmGSuDJ6Ri0occMlHUZJx47pE9/azJLrT6
+         MgmBLeHPW3FywXuleFQQgsxYvxV865zQiGzlYGc82KhclCd+t67TZs/pq+NBX8SZS0S0
+         znVj+2/y4nat2QndcMFHtgtqGOHD1/iH2K5/WDXLnwmx4w6ePgrklikYDyFc1AQOtWlj
+         QE/reQqDbx7SMvaV6y0cx3OL1ilDZyBo12MICUb7QhpJ3vJNZDSC7XDZa4kHj9s7pmd/
+         KMMbrnmyLEx/6sdcTTnIFjhrGHVnUn2uRqLNMAEl2v0XpAo3fB204TI577gaqD28Ndjr
+         TUkQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9D1rv3zjpL8FPfdUFfp4UrQ/cnsxw7deshGAnoq42d0wReemWzVyB/KtN7pxPIqVbAXjM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzvf8173gV09Drcz/QB45+ocZpfkEVgxbWWatb14bltrP+fFGpI
+	jlx6A3cRxXQE5zuOLitb+2L3YeRwR/ybOSs7xcixlDwHheqmhZmpwfT0+tFcm2c2eh6J5FvRIeA
+	1NpfgDe+LeA==
+X-Received: from dlbts20-n2.prod.google.com ([2002:a05:7022:b054:20b0:133:52da:4092])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:207:b0:12d:de3f:d842
+ with SMTP id a92af1059eb24-1319ce482c7mr15316661c88.37.1778564158886; Mon, 11
+ May 2026 22:35:58 -0700 (PDT)
+Date: Mon, 11 May 2026 22:35:29 -0700
 In-Reply-To: <20260512053539.3410189-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,9 +58,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260512053539.3410189-1-irogers@google.com>
 X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260512053539.3410189-2-irogers@google.com>
-Subject: [PATCH v1 01/14] bpftool build: Restrict feature tests during
- bootstrap compilation
+Message-ID: <20260512053539.3410189-5-irogers@google.com>
+Subject: [PATCH v1 04/14] perf build: Remove empty archheaders target
 From: Ian Rogers <irogers@google.com>
 To: Quentin Monnet <qmo@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -83,46 +82,36 @@ To: Quentin Monnet <qmo@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
 Cc: Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-When bpf_skel.mak executes 'make -C ../bpf/bpftool bootstrap', bpftool's
-Makefile unconditionally evaluated feature checks for llvm, libcap, libbfd,
-and disassembler libraries because the bootstrap target was not exempted.
-
-Since the bootstrap bpftool strictly compiles minimal AST parsing and C
-code generation logic without linking LLVM or disassembler libraries, these
-feature check sub-makes are completely redundant.
-
-Exempt the bootstrap target from non-essential feature tests to eliminate
-unneeded sub-make fork overhead during Kbuild startup.
+Remove empty target that doesn't do anything.
 
 Assisted-by: Gemini:gemini-3.1-pro-preview
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/bpf/bpftool/Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/perf/Makefile.perf | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 0febf60e1b64..8f50bc163bb2 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -106,6 +106,10 @@ ifneq ($(SKIP_CRYPTO),1)
-   CRYPTO_LIBS := -lcrypto
- endif
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index c66af4c825fd..24581941e912 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -627,7 +627,7 @@ endif
+ __build-dir = $(subst $(OUTPUT),,$(dir $@))
+ build-dir   = $(or $(__build-dir),.)
  
-+ifeq ($(MAKECMDGOALS),bootstrap)
-+FEATURE_TESTS := libelf-zstd
-+FEATURE_DISPLAY :=
-+else
- FEATURE_TESTS := clang-bpf-co-re
- FEATURE_TESTS += llvm
- FEATURE_TESTS += libcap
-@@ -122,6 +126,7 @@ FEATURE_DISPLAY += libcap
- FEATURE_DISPLAY += libbfd
- FEATURE_DISPLAY += libbfd-liberty
- FEATURE_DISPLAY += libbfd-liberty-z
-+endif
+-prepare: $(OUTPUT)PERF-VERSION-FILE archheaders \
++prepare: $(OUTPUT)PERF-VERSION-FILE \
+ 	arm64-sysreg-defs \
+ 	$(LIBAPI) \
+ 	$(LIBPERF) \
+@@ -1070,7 +1070,7 @@ FORCE:
+ .PHONY: all install clean config-clean strip install-gtk
+ .PHONY: shell_compatibility_test please_set_SHELL_PATH_to_a_more_modern_shell
+ .PHONY: .FORCE-PERF-VERSION-FILE TAGS tags cscope FORCE prepare
+-.PHONY: archheaders python_perf_target
++.PHONY: python_perf_target
  
- check_feat := 1
- NON_CHECK_FEAT_TARGETS := clean uninstall doc doc-clean doc-install doc-uninstall
+ endif # force_fixdep
+ 
 -- 
 2.54.0.563.g4f69b47b94-goog
 
