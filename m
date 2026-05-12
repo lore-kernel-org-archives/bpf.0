@@ -1,168 +1,188 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 630253B4435
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 14:33:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778596410; cv=pass; b=uKTvLzdLy8oIbM7M66fJlT1GCMeZWhTIvfyFDjrFsaUy5g25BizNAfmiTt4Na0Hm0pSBAqYDLuQ1Tgk30Hjedq1LdIubPsYwHzUz5MzLeRpLXstYHULm7KXMR885Ax/4gzt4vPCJ9Ae8TtMKp8yHtW4CDHIcK62dLZV4+FOpPy4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778596410; c=relaxed/simple;
-	bh=tGgX0l6ytIx698dvDPac8KCkKialk7vhswDMJfEF6Io=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OBH1RbT9lSqt+utVUmaU5LxlMl6+6wjdGMNm4wZ5W3cer7OXINAaUG8mzWyBgf03R7FUV3HP3zi0Un9/cMWfEkcS3iMfd5jOTCXMYHJ99mgbF6WNa/hfObcVs/e7qRj0cbMX60VYbpPIFgWLQB1vWO5RwChQruAQA4DK0aYItb0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U6m41eCO; arc=pass smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C4B284883;
+	Tue, 12 May 2026 14:52:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778597550; cv=none; b=BWkX3YRnzGzK39VdKvooLerbU3eIErO8JmcKDttnhGtyxM3PrOsD2+U8nU8DWZjEkq8znh3RJjSje1yOTa1NXkbRhZzafKUeaKuYNAAIzPnWPr1noqE2/Oh8QZrPkb2i5Dv5DBxgYXQcZSgBXZ0BeXfQ1JmFcgIQ04NroIwggks=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778597550; c=relaxed/simple;
+	bh=B3A2yAykcS1ympm2V9MGsO72iKngEppRZ5Kh5k/09e8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Hgh0Z1VZwVNV5uyCxI/ADhgdXwpP2NkE0OxbkSHrCABVRst1YXduhu5CdMhCql2uM/UG8WxRxvMg8DRxEQDqKzSieTdWKHojII8ed1aEjP2DrUN5NJaoqDKMYcRtlkIhtP5YyprPvw5owAWn8S6l/AGXLbSogkFt1hIPTue7B7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=EWHAOq3T; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U6m41eCO"
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5a8d1f43432so3218178e87.3
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 07:33:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778596406; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ebMNpojjGUJCfhTeTnQZeTk7/PepU6GTIlpV1Tv7jWZUVHFb2FhK79eKt5xdut/M59
-         XgEC//4g/6AIykiKdaovzqM0kn7Q8On+kwtvOkm2C7MtujqrjE6BNG1Mf4awqebfFq9h
-         7nka/tusamkvX7xfEIYcE1GZBr0kvCGZtx6U8bldzUTgQ3tUkK4Y+IxTYKNObvLXHlA2
-         I72s4ik4ymviAxFqfz1X1VF1sq84rDlmvkIYgTWsaIiW6ASl+L2fkawp5R0593T+1oQe
-         bYuR1ALUggyQJiF333gdLdN0mf+LNlyXXS8+pHww+yawwGg+9S1Wsi3etHXumNTL1HrO
-         V+Qg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=EXUv7LZ3hil13DS+1vWxEoJG7EI40S6boiJv/fJ2an8=;
-        fh=2FQ0f61bmuycnM9x3NKD9by/biaxH76CIExTOFBGMyA=;
-        b=Mgd+DH6rTVGIisHbWz6S1ovy4gmHNsrJ/iXPaqpGruSOOswyqJUM26X7y9GSrvSkn9
-         vnQDT+VGBX7NmgBg9iDn1WlwPTuis/D+Bo8grXP5/05b5V4MB/JyFvedgXdd8i/DAFzH
-         yX0BshHcX9GyJjcPHDu8DBpwqaubEvloIF9T3S9p18VFJmD2eclnp0ZGqaRZqGLaRLkJ
-         /9DVXs5KOOh+CYcSro636uyyVpM04dh3/M+tPX1OLLjRTMpGVxStcJ3kut5kEogX94uH
-         rzhfxVVsPcUzqfArxXBM8vDSPUWaIpCQLINUPkeNqELzeo4wvhUakkelpr1/8NZRV4DR
-         sfEg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778596406; x=1779201206; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EXUv7LZ3hil13DS+1vWxEoJG7EI40S6boiJv/fJ2an8=;
-        b=U6m41eCOsygw2T7/afuG1MX35qhXbh8UCAWxWC9H3xdWOiqThEn6NCtS8QACCwZo4D
-         ClqFdrEsj8BneboRIF9rqsyZJ6h6aKsIx66dJvg0dNcQfLgCcuu3vG/eBTNACcvPOxgL
-         Mqe4AXpgKoHPCb+/Kbqt6QJQMD/EOjbzONU4rm1NgWJbVOh502Dp5W2AIVttdivMmvG6
-         4AAEbhxEwuYpkSB2vp1S+iwCRm5+SYGG9qBeMR8VMVHigbRnTT2weQTRjPF1Lu3RQYsh
-         uARJPmrjD+AAVzWtrP6WLjTli1SH+8D6LS5b6yYdIPoTPNBdpBkbShB8dcL0cDDm+PPE
-         lH4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778596406; x=1779201206;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=EXUv7LZ3hil13DS+1vWxEoJG7EI40S6boiJv/fJ2an8=;
-        b=HPiHwgrbpTW7meHK+JRr7lT+kdQSyBXtFsa4cw5SO3d5/BuZj/bi9llwG8dE9wNhhD
-         uFVZKhdWzDZBM9K8k2PJYgy16zDUbVo6qj9p/o5wjuUrNk3InEIJf63WOf9WQYeZT+WC
-         jHpCICft3F7QifWmBbb2owiueeEuxq72CjaSUzCOHHh8VEegG+FUJzUF293tSZjGm3GK
-         pz0Pjwzg2cUoTBbg8HQFpBKKEEMkcXfHs8Eo0jC88Y7O6Edj7zYbpQZwWooEzJvweH9m
-         73/59nwZ0RNTk1bCMHVbpRERbCBspleR/XC4qmpcaUdfuhP/+GIPB7kZyv8bVCOeNnHt
-         5Ezg==
-X-Forwarded-Encrypted: i=1; AFNElJ+UV/urcUnLftDGrRxU0jmXYY8CHAfQ6LKl9EYj8tZ+uWjwJ0v1mrqEjQP/ssnc2hnGWJo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwR4iI4+ioOTsfp1y7Ca/RxdJPmC6DlwzrwwtxEN8MkAhxdYvWo
-	OANRqpqUdvjQ3uNBDv8LZ1dtElvFg/HF4lKMdwo7iIRRJqn4sH1TUkywyxzSxdMHwwkSaxhoh/V
-	gsLGyxFSW7ibWtxfl3d5Wjb/v0ND7yck=
-X-Gm-Gg: Acq92OEKCgoyYu3p2FRmP5+LD+AU45QdpbSan6HqhDODSAieGwe7cKxEkCAkHvAsn1R
-	t0zDQL+u1uLmANxQ1sNtXuNGqCZEdGbCf+ho0mu/8OR2Vvv5lk3mBNyKr1SrUYbzjjY7MXKy2K/
-	rcyxZVZloHRziM7V0hUOeAwwnrjTSg/eIC78HaOhYepW4P9b4z7HxLCS4xIkRCixeXGd0KST1Ui
-	hSr3iVehq2lxyfp83p/Cap3UysDkIX81PRQUQBy9MigMGzTiu49DqTbecxLCI59ktx7aDYtusgr
-	5qJQX5u5ReAM/528nWt3kUZJ8XC72ZDJ8k1A5qw=
-X-Received: by 2002:a05:6512:a8b:b0:5a8:6d09:483c with SMTP id
- 2adb3069b0e04-5a887cde8b0mr9177414e87.22.1778596406090; Tue, 12 May 2026
- 07:33:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="EWHAOq3T"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64CCiufJ2760182;
+	Tue, 12 May 2026 14:52:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=3lhary
+	eCq7o/H4UmZvHjApFmPwLwb1UOopGyuR6mmxo=; b=EWHAOq3TDcdm0QxI8q0cSC
+	3ao4vWwuJ2Vk2ofjYfa2Doy47ViVsZ6RV3QERcODC5j6tH8nLK7PE3kRKBAWtf/H
+	vXFnPpyXAqLtcbQo6wUIRL9natH8YSi2h3UnlYRvFsDC66xeteIvR85v1ajAQ/QH
+	SdyXCc3WAaPxsHcL4PpA0C0jRn303uaGzEQBAIwhyyrV6ev0KSbF6rr4RgumR/7i
+	VsdamitE9/J8Cz8NAWyl9bFIAFgiNHsF9jW0vXaf2RAP40OOB5qPmnnVAG9hO1rS
+	4GifT1GdnvzDz/fMPECoOxCWmLLOINRhmnCo3fLC9hAsthpHcpK0mCJj6BjOwdFA
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e3nv6kegg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 May 2026 14:52:25 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64CEdWBC019005;
+	Tue, 12 May 2026 14:52:25 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e3nfgbju8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 May 2026 14:52:25 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64CEqN8Q61014500
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 12 May 2026 14:52:23 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 649B82004F;
+	Tue, 12 May 2026 14:52:23 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 428FF20043;
+	Tue, 12 May 2026 14:52:23 +0000 (GMT)
+Received: from [9.52.200.195] (unknown [9.52.200.195])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 12 May 2026 14:52:23 +0000 (GMT)
+Message-ID: <edd04d6c-3cdc-43da-9cf2-44cccc353658@linux.ibm.com>
+Date: Tue, 12 May 2026 16:52:21 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260510012310.88570-1-kerneljasonxing@gmail.com>
- <20260510012310.88570-2-kerneljasonxing@gmail.com> <agHurBlnAgjVNq-u@devvm7509.cco0.facebook.com>
-In-Reply-To: <agHurBlnAgjVNq-u@devvm7509.cco0.facebook.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Tue, 12 May 2026 22:32:48 +0800
-X-Gm-Features: AVHnY4LzRy-kEe49ipIAtXqtdtfngArZKEyPOI6lhrhr2J7k4GL9DmZHDRGpq_s
-Message-ID: <CAL+tcoDrjJ8iHzSGz_Orf7iH-1WJ2H_LZd6BMKTnDS3MVN8daA@mail.gmail.com>
-Subject: Re: [PATCH net 1/4] xsk: cache csum_start/csum_offset to fix TOCTOU
- in xsk_skb_metadata()
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
-	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, 
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
-	john.fastabend@gmail.com, horms@kernel.org, andrew+netdev@lunn.ch, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 11/19] unwind_user/sframe: Show file name in debug
+ output
+To: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev,
+        Indu Bhagat <ibhagatgnu@gmail.com>, Heiko Carstens <hca@linux.ibm.com>
+References: <20260505121718.3572346-12-jremus@linux.ibm.com>
+ <20260505184638.5648DC2BCB4@smtp.kernel.org>
+Content-Language: en-US
+From: Jens Remus <jremus@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20260505184638.5648DC2BCB4@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: A8nRzhep2oz0aBvY1XZxhj6sYJJN2533
+X-Proofpoint-GUID: HiUlC5L0Drwbz9cpG-NPDpkUPgYJ1QiK
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTEyMDE1MyBTYWx0ZWRfX18lFaAw/k0QI
+ hbOJ2u1DnsU309WWvIoX84APON+0xGsUhYP1HStky2mVDW332qGEJcyfkqYmTUNR9ZWGcJ/kEvz
+ YYuvUubKQuHsVtQeAEbER+t3V/JAF/oOA6pvaBlFq7ur5zQwUm+LvaEYGbZWLBQoBZVropHSQlo
+ j/p8C2tdBb5d2IUDe0+M4Ztu2e8QoKATLadW1y5U4IxUJ0RfA6Xc5jKP7dA2HTGxAw2kqV27CKT
+ WFdSitpKk6SmczSnYGDyx2eQ2VQk3H3ZnHDEWtjug2YSw9bUY22IproUiqpAYRI3dLTOrdnQ3/b
+ nt+40JJHNnwd2bUUckWnBV4qWZ9KufXUperjzMn0kMUSRHKwO1mUSP/BBW9lf4/VNdbGqnk+uUj
+ Db0jB7zpX4V5F2UaDc8m2YQEAq/fo/vPGhv/p+2WWrsZhxWnMuuOz0D37wk8Re3p+g37syBO78w
+ L0TzKl+lB8ayG3pfU6w==
+X-Authority-Analysis: v=2.4 cv=P8UKQCAu c=1 sm=1 tr=0 ts=6a033eaa cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8
+ a=VwQbUJbxAAAA:8 a=njC-hnyFwTIKUP6h0CMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-11_05,2026-05-08_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 priorityscore=1501 phishscore=0 bulkscore=0 clxscore=1015
+ malwarescore=0 spamscore=0 lowpriorityscore=0 suspectscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605050000 definitions=main-2605120153
 
-On Mon, May 11, 2026 at 11:03=E2=80=AFPM Stanislav Fomichev
-<sdf.kernel@gmail.com> wrote:
->
-> On 05/10, Jason Xing wrote:
-> > From: Jason Xing <kernelxing@tencent.com>
-> >
-> > The TX metadata area resides in the UMEM buffer which is memory-mapped
-> > and concurrently writable by userspace. In xsk_skb_metadata(),
-> > csum_start and csum_offset are read from shared memory for bounds
-> > validation, then read again for skb assignment. A malicious userspace
-> > application can race to overwrite these values between the two reads,
-> > bypassing the bounds check and causing out-of-bounds memory access
-> > during checksum computation in the transmit path.
-> >
-> > Fix this by reading csum_start and csum_offset into local variables
-> > once, then using the local copies for both validation and assignment.
-> >
-> > Note that other metadata fields (flags, launch_time) and the cached
-> > csum fields may be mutually inconsistent due to concurrent userspace
-> > writes, but this is benign: the only security-critical invariant is
-> > that each field's validated value is the same one used, which local
-> > caching guarantees.
-> >
-> > Closes: https://lore.kernel.org/all/20260503200927.73EA1C2BCB4@smtp.ker=
-nel.org/
-> > Fixes: 48eb03dd2630 ("xsk: Add TX timestamp and TX checksum offload sup=
-port")
-> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > ---
-> >  net/xdp/xsk.c | 11 +++++++----
-> >  1 file changed, 7 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > index 6bcd77068e52..cd039e397018 100644
-> > --- a/net/xdp/xsk.c
-> > +++ b/net/xdp/xsk.c
-> > @@ -722,6 +722,7 @@ static int xsk_skb_metadata(struct sk_buff *skb, vo=
-id *buffer,
-> >                           u32 hr)
-> >  {
-> >       struct xsk_tx_metadata *meta =3D NULL;
-> > +     u16 csum_start, csum_offset;
-> >
-> >       if (unlikely(pool->tx_metadata_len =3D=3D 0))
-> >               return -EINVAL;
-> > @@ -731,13 +732,15 @@ static int xsk_skb_metadata(struct sk_buff *skb, =
-void *buffer,
-> >               return -EINVAL;
-> >
-> >       if (meta->flags & XDP_TXMD_FLAGS_CHECKSUM) {
-> > -             if (unlikely(meta->request.csum_start +
-> > -                          meta->request.csum_offset +
-> > +             csum_start =3D meta->request.csum_start;
-> > +             csum_offset =3D meta->request.csum_offset;
->
-> Wondering if it's better to READ_ONCE(x) these?
+On 5/5/2026 8:46 PM, sashiko-bot@kernel.org wrote:
 
-I still chose not to use it after reading the suggestion from local
-AI. The reason is there is no WRITE_ONCE pair to make sure everything
-is no data-race. I also checked some existing implementations around
-the shared buffer (between userspace and kernel) and didn't manage to
-see the usage of XXXX_ONCE(). Does it make any sense to you :) ?
+> [ ... ]
+>> @@ -496,7 +501,7 @@ static int __sframe_remove_section(struct mm_struct *mm,
+>>  				   struct sframe_section *sec)
+>>  {
+>>  	if (!mtree_erase(&mm->sframe_mt, sec->text_start)) {
+>> -		dbg("mtree_erase failed: text=%lx\n", sec->text_start);
+>> +		dbg_sec("mtree_erase failed: text=%lx\n", sec->text_start);
+> 
+> Does accessing sec->filename in dbg_sec() risk a use-after-free here? If
+> mtree_erase() fails, it indicates the section might have been concurrently
+> removed. The SRCU grace period could expire, causing sec to be freed before
+> dbg_sec() is called.
 
-Thanks,
-Jason
+IIUC this is a valid concern.  Should this change be simply be reverted
+or should __sframe_remove_section() create a temporary copy of the
+filename and use dbg() for this rather unlikely case?
+
+> [ ... ]
+>> diff --git a/kernel/unwind/sframe_debug.h b/kernel/unwind/sframe_debug.h
+>> index 36352124cde81..e568be4172b1b 100644
+>> --- a/kernel/unwind/sframe_debug.h
+>> +++ b/kernel/unwind/sframe_debug.h
+> [ ... ]
+>> +static inline void dbg_init(struct sframe_section *sec)
+>> +{
+>> +	struct mm_struct *mm = current->mm;
+>> +	struct vm_area_struct *vma;
+>> +
+>> +	guard(mmap_read_lock)(mm);
+>> +	vma = vma_lookup(mm, sec->sframe_start);
+
+Should below be changed as follows based on Sashikos AI review feedback?
+
+>> +	if (!vma)
+>> +		sec->filename = kstrdup("(vma gone???)", GFP_KERNEL);
+
+	else if (vma_is_anonymous(vma))
+		sec->filename = kstrdup("(anonymous)", GFP_KERNEL);
+
+>> +	else if (vma->vm_file)
+>> +		sec->filename = kstrdup_quotable_file(vma->vm_file, GFP_KERNEL);
+> 
+> Does checking vma->vm_file directly skip proper classification for some
+> anonymous VMAs? According to the VMA guidelines, certain anonymous VMAs like
+> private mappings of /dev/zero have vma->vm_file set. Should this use
+> !vma_is_anonymous(vma) instead?
+> 
+> Do these string allocations need __GFP_ACCOUNT? Since they are triggered by
+> user space and persist until the section is removed, could a user allocate
+> large amounts of uncharged memory and bypass memory cgroup limits?
+> 
+>> +	else if (vma->vm_ops && vma->vm_ops->name)
+
+	else if (vma->vm_ops && vma->vm_ops->name && vma->vm_ops->name(vma))
+
+>> +		sec->filename = kstrdup(vma->vm_ops->name(vma), GFP_KERNEL);
+> 
+> If vma->vm_ops->name(vma) returns NULL, will kstrdup() return NULL and skip
+> the subsequent fallback naming methods? Does this leave sec->filename as
+> NULL, causing debug logs to print (null)?
+> 
+>> +	else if (arch_vma_name(vma))
+>> +		sec->filename = kstrdup(arch_vma_name(vma), GFP_KERNEL);
+>> +	else if (!vma->vm_mm)
+>> +		sec->filename = kstrdup("(vdso)", GFP_KERNEL);
+>> +	else
+>> +		sec->filename = kstrdup("(anonymous)", GFP_KERNEL);
+
+		sec->filename = kstrdup("(unknown vma???)", GFP_KERNEL);
+
+>> +}
+> 
+
+Thanks and regards,
+Jens
+-- 
+Jens Remus
+Linux on Z Development (D3303)
+jremus@de.ibm.com / jremus@linux.ibm.com
+
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
+
