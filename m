@@ -1,134 +1,99 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56C41368D40
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 19:38:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778614731; cv=pass; b=kp5OH2W0FwmmF+Damc4vxXXag6Sl/CNFrPzs1RTjEiWIPzMfJOadYYz8TJSTZ/0YJy4UPNtGEU2Wx3f+HeYKcVQdSnpKrMZijpV5JA/NV0HKTePXqRx79hjkD3vMzS0CEOkPA0BI/oTikB/y7SW+e1ZI+C5E1TF+55dbeNfIj8c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778614731; c=relaxed/simple;
-	bh=z/n4l+tnD0xY6u8oFv5FhpmWDe1bwms0P4exdidL/5I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M7hGfAalo+pSCgdr4CDfeNkearjA63T3r9P0dHi6yHiiT+a4LKxN7+I8OHWeuoe92hqY0YLOKj6oJ6jXhCKHGMEJ5383lrcO+CFgBKy9T5gZr7hpVJblI/N31kFbhZ8EJAJz99vFvV7vdSVmzwcb7v0kaMiCoEh16O0sssZ3eA0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VXxcKabm; arc=pass smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F153025B085;
+	Tue, 12 May 2026 19:51:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778615471; cv=none; b=NwK4gywGp+ELwNbBpayNq50ZjM0tJb3ic386FdeXaA+Ni+WO8DQxu24l/jxcGPcuR3x4HQP0Lh/ijdHFbnFJZthZfhClz5JiI+D0+1NfVSK6AnHSrE0qPhIOrZ+oSjnQrt6XFu8aziNmav0pJ4dF+rhsh8nNxCv0ZUoI6591wqA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778615471; c=relaxed/simple;
+	bh=b1KoHPaKFuGQ4klYDDLOw5CHCxr9eqLnjpUbFtjJ5Vg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=rFOcEsXm60V0re/8c25EV3sh+Ly9qkIp+yvSvEuhn7L9qFW52Kvm9aJ/544OWb69oaw5W0Tr9PwJd6NMh+lKVexhhLhsEPW+fN7R3HZ3OsnYox4tAdAjZJv3tv5icEKf2yTmTuLxhwNkpB75Kt0VVtxRfygxL37sAaNqkq0LG8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N7couW5c; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VXxcKabm"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3653cb9c6f8so4883459a91.0
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 12:38:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778614729; cv=none;
-        d=google.com; s=arc-20240605;
-        b=KCbO15Dw2dV438ezU7YprFFM001gwDl+lBPj71ux4SP66TIBqRDMzsgWZasmQU5LKx
-         FO5zPIu4Pfu8LrILFJexo9k+smwveEWFTCZWhIFcLqZ35AgPm6xPWzYB7rCJE7Q5MlhC
-         wqiyuCnYXZzwVJvm8zkGO3z9ul8ROpFiRlVaGfaJmyPMW49tJR07c6aHQrC5NR1pJz8Q
-         fGgofLKdlK1BaViou19DR5UfNHJCW5PfQSIlxEd1Gz4QABklKwxiPVZYMu8x7T8Q5+Ll
-         /suZEayVnijPOWlsSEh2DhyC1A6Vd6e9t8+iY1qw5+U60gDhfPF8rVW08oxwx21Bl42t
-         fNvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=lV5/9Lh09aeZxFXscjoWXpJTticrrygDaBuVo3TZXZU=;
-        fh=/zjp4Zs7HOODi/3OaH85TomlkS0nVpQq3WCP2LnKR34=;
-        b=CKrbqJUyZDQSRSgyganu7bi/JkHfatiTtvoso0+oZs+/AtgqOzbJOQnQXJWOegl64P
-         x8N2WkC54VmIY8iUaP+zSVlu1P72l57s86xGYp+yDl8/P3IQFenfbzbHJsHJ/61niLTB
-         +7QZh53t9Z2WMv99GGsOnZQHVMwxfjBmiwpD/W0x/5b3ykTnsaVncy8GOK9ormJ9/IDj
-         r+AboBn5LP2aUygsA2qYDHKG+cwaHTJS2GOpnKPSI9NdO084OFgQAGNr0WCIB/pRota5
-         aBxXH9OUR6otMqEF5wbEG8r0iTxZkSZ7EnjkgaJQPvZR/NIFeA0p7dX5uucRL08Zi8vG
-         8hZQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778614729; x=1779219529; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lV5/9Lh09aeZxFXscjoWXpJTticrrygDaBuVo3TZXZU=;
-        b=VXxcKabmkhYf/D8c646ZYuaq+gg5ofk/6I6DclgC0KbsaFaV+gUajmQega5u3MRTe2
-         TophAmO94DYOaU0e8YVdlZ3znf+KXvuc5SfH2Qc8Q+8KV446Jg9onRo+89D0uW3pKAua
-         jYzn5cKQA1mhR8Lk+2vEtJTFUFXOBYiASP6NCXakSVb9lshNKaqDi3h1oCaKt3GL8yGY
-         OG+o6Gl3DMG/0A3pAsVgfoBkbVDeqj3Tvr9GKqqDXw46lKUOiO9Y2VHGt9s+TF0xjNJk
-         LOKvaHgZiIld/0Q3pA435P2i//kVbprtzw50LLVzGQFYczrPlUZ4vdaJpXqSTercn2J+
-         v6lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778614729; x=1779219529;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lV5/9Lh09aeZxFXscjoWXpJTticrrygDaBuVo3TZXZU=;
-        b=pL2GqGsSQ8AL3yiqyruMY46hf91pqr2+C0AfTNrShTyr2XD1xe1dxULHKdY1GUw1vq
-         7kiSovgKJBTGc8M1fYNF1+CxsC0H2g0qdSo+0vj94sWqKZo+xWgcxHsCic3dCV+zH4a4
-         A+b1UnZHLrdirEnptRdo+eNnXEfQzjcYlFW9tqd/guQ8mn3W2aKwDM2SOkRKq5fZmPFB
-         OQrDd6NYAzk80UMLuyBGm67QSLTd095+dFn6kkLA6Gn9CsOXWzBdeBHZ6ZGQ5/U9D7FS
-         /7Ab6a4fsjsCcK9tewiaBVYBZh9D2ZySnNKjajGPbbf3o6rWFoR6MdLVrrvxDrkMR4rE
-         rFqQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/1eWrv1nCcipbuhUYji5Q0PWNfGAKJcY7i2bCi/nisszTggCyjIWGXD9pn1a3ynmOF5es=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuYqEgHgiybnD16qdrvmCWHhFWMGeBSXn9NRxOEA6x5Ng4U4/3
-	yU+AY9NURwnT10xzcnElH0ZJfvA3iTxSPb/EHs3RHwkJJRE88MdtiZV/mmgNycMhA3LSlVydklC
-	VxW2D0/q7K5JVzbsfFmqftHn2dAdXyyI=
-X-Gm-Gg: Acq92OEyZRNhrcYYPVFBkrXN2VhnneI/X7NvfyjmjXlSWRG8O6VfK9Z3qdjf66psi/8
-	2h+PrD3pSrrIVOY60x360wIdVlqjEJ4nQLFU84JUQbrzK5a+je+BNe7wCZX5LuSyxCm/ZHzkmKZ
-	aM4MEBsFN2nQKjj2gvLE0Xf9zJNfyT1YLriaTtJ7Pjfkkt4k1kYhuwjTqJm9S+XfQzghN4lcl2J
-	zHzVIBgUdq/cT5wRU7UJlriRz45nbwMQ2QFV0fpDeGGxiPDlXwk580R7+0CzxtusfrIncIhWtvm
-	qx2CC+GSDVmNmtdgwwLmSiU=
-X-Received: by 2002:a17:90b:4983:b0:368:147b:536c with SMTP id
- 98e67ed59e1d1-368f3d183femr373798a91.13.1778614729550; Tue, 12 May 2026
- 12:38:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N7couW5c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBD1FC2BCB0;
+	Tue, 12 May 2026 19:51:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778615470;
+	bh=b1KoHPaKFuGQ4klYDDLOw5CHCxr9eqLnjpUbFtjJ5Vg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=N7couW5cLLd1JIz5/38P6NjHACO6RntSN6Yq/eApAe8yYJfLFN7EAJ9sTW+v4hBHE
+	 E/rAR/fdQeL8twrXSRWW4WYaMTLxKqZTNPTD/13JTJKfxKIWacjN9Eznq55vCeYnF3
+	 wM4+9XXvrStxyakPDohej6BnLW84eagxP2aSocyePDPYG3mlRSGKhds1S3Lp6Q0p4O
+	 z/pFFoS61KRJ87lXwt/B5tKW5K9WEXsgTubzQ1A8JMs7U5O1zEFBJm2Y6jMy2Ix2e2
+	 9q8XifxZYAordJr4Q+nqpi06VXRlCCVHNxHSrVhgGNXeD85JIDQIUGzH3MkLWfRIoH
+	 xG2hI9FeqQvkA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02D563811A59;
+	Tue, 12 May 2026 19:50:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260509003146.976844-1-andrii@kernel.org> <agD3xq2MUyskd7X-@krava>
- <20260512141431.a70375744fdae263bda5b722@kernel.org> <agNeEzjiThzmJHiP@krava> <CAADnVQLfgxEzpSTLhsxN2BYWpSxJ+RYku03UMfrSTi4Abu5SBw@mail.gmail.com>
-In-Reply-To: <CAADnVQLfgxEzpSTLhsxN2BYWpSxJ+RYku03UMfrSTi4Abu5SBw@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 12 May 2026 12:38:34 -0700
-X-Gm-Features: AVHnY4KOZOgesKLsiEao1QlpFEyAIoutj7tuM-2Hyb1lGjbSX6Zp8KuwqBV9yV8
-Message-ID: <CAEf4Bza4sqLw8GHoq+MFBgsnhiJ_s91UUrMcA-paYeBr7=bz0A@mail.gmail.com>
-Subject: Re: [PATCH bpf 1/2] uprobes/x86: Fix red zone clobbering in nop5 optimization
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v14 0/8] bpf: Extend BPF syscall with common
+ attributes support
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177861541680.3056308.7326619347008693525.git-patchwork-notify@kernel.org>
+Date: Tue, 12 May 2026 19:50:16 +0000
+References: <20260512153157.28382-1-leon.hwang@linux.dev>
+In-Reply-To: <20260512153157.28382-1-leon.hwang@linux.dev>
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ shuah@kernel.org, brauner@kernel.org, sforshee@kernel.org,
+ yuichtsu@amazon.com, aalbersh@redhat.com, willemb@google.com,
+ kerneljasonxing@gmail.com, chen.dylane@linux.dev, yatsenko@meta.com,
+ memxor@gmail.com, a.s.protopopov@gmail.com, ameryhung@gmail.com,
+ rongtao@cestc.cn, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
 
-On Tue, May 12, 2026 at 12:27=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, May 12, 2026 at 10:07=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> w=
-rote:
-> >
-> > +       /*
-> > +        * We have nop10 (with first byte overwritten to int3),
-> > +        * change it to:
-> > +        *   lea 0x80(%rsp), %rsp
-> > +        *   call tramp
-> > +        *
-> > +        * The first lea instruction skips the stack redzone so the cal=
-l
-> > +        * instruction can safely push return address on stack.
-> > +        */
->
-> typo: lea -128(%rsp), %rsp
->
-> you can also do:
->
-> add $-128, %rsp + call tramp =3D 4 + 5 =3D 9 bytes instead of 10.
+Hello:
 
-When I asked AI about this it explained that add instruction modifies
-flags, so it's not a good fit here. lea doesn't touch flags.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
->
-> Initially I didn't like this approach, since we just introduced
-> usdt nop5 and now need to recompile everything again,
-> but looking at the fix it's definitely simpler than alternatives
-> and doesn't have annoying limitations.
+On Tue, 12 May 2026 23:31:49 +0800 you wrote:
+> This patch series builds upon the discussion in
+> "[PATCH bpf-next v4 0/4] bpf: Improve error reporting for freplace attachment failure" [1].
+> 
+> This patch series introduces support for *common attributes* in the BPF
+> syscall, providing a unified mechanism for passing shared metadata across
+> all BPF commands, initially used by BPF_PROG_LOAD, BPF_BTF_LOAD, and
+> BPF_MAP_CREATE.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v14,1/8] bpf: Extend BPF syscall with common attributes support
+    https://git.kernel.org/bpf/bpf-next/c/f28771c0691b
+  - [bpf-next,v14,2/8] libbpf: Add support for extended BPF syscall
+    https://git.kernel.org/bpf/bpf-next/c/b1bff4080942
+  - [bpf-next,v14,3/8] bpf: Refactor reporting log_true_size for prog_load
+    https://git.kernel.org/bpf/bpf-next/c/503c039ffeca
+  - [bpf-next,v14,4/8] bpf: Add syscall common attributes support for prog_load
+    https://git.kernel.org/bpf/bpf-next/c/ac89d33fdd81
+  - [bpf-next,v14,5/8] bpf: Add syscall common attributes support for btf_load
+    https://git.kernel.org/bpf/bpf-next/c/ceeb7eda94a3
+  - [bpf-next,v14,6/8] bpf: Add syscall common attributes support for map_create
+    https://git.kernel.org/bpf/bpf-next/c/49f9b2b2a18c
+  - [bpf-next,v14,7/8] libbpf: Add syscall common attributes support for map_create
+    https://git.kernel.org/bpf/bpf-next/c/702259006f93
+  - [bpf-next,v14,8/8] selftests/bpf: Add tests to verify map create failure log
+    https://git.kernel.org/bpf/bpf-next/c/f675483cac1d
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-yeah, limitations are annoying, especially with those global "DO NOT
-OPTIMIZE" flags... Jiri, let's polish your version and land it?
