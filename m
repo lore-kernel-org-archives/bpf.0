@@ -1,176 +1,252 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C993C5836;
-	Tue, 12 May 2026 15:53:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C6A3A71B0
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 15:59:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778601187; cv=none; b=pjppP+jr/kblo6FeE8ppc2t9Nf8L4wto/SC2DosWvpAqIWZdxAUVtMoTUgyvasB4u4SC40B88qZdKOs2h8FY/BJ0L4616MOVMwoRWYJyGBY6Z4+MVwrX0RSpqAxBKp0hqeaDcc8T0aPBYKhmWsPvtXTu8udV6cHPlQeMyqrLoS4=
+	t=1778601556; cv=none; b=m44WRZ5Oh0rUDzQ/7BubW/rFTer/W15jt1F5KO3zZcO+QI4HSTH0OQ0q1FxKHNOYxD+ywv3O8zgNLTzkga/4kEV5L66Kp0ifkAF/E6mOTe5jM/ifrqZErz5CxfHhH9I+cflduIDLYZc5RlQFD6DfEEiJPULd06E5z9TfLQj8KEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778601187; c=relaxed/simple;
-	bh=6h1PmebQ4gC5kwBY+VHZyFvTuatm4tGgQawMKNpJDv0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bci4sPHGP754TRKO3cqcOAcg/s+2sPeixeStrzqKvQ/Vaa+k4sNJP+SzC86SRHv95U6McUM8cqMuwPTjSE5Ak4BgFP2F8/W+5q7HawfP/uzA3QrgKPEo5Qo9gWRkj76bWtym8JpXK2Ss73YBbC1Q391WCpmvXOH7pkouGZi/WZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=VwrGEcVi; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1778601556; c=relaxed/simple;
+	bh=wE9Q/6WWdubauPCakaQ0JNkzDgh6/IQtAstvOGjo7dU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=X+jntA6y5EV01DrVi2Luw4S40CsF5K2TaVkCTiPkcProhY6KTxCxl7X2Qii5OSVcU154LVOuPw2KEmucW1pHVtglnTPWD+mD70QR5BXIgxsgGphZrNSEHJnSjxQQIG30LKYZSAUuzWDCFcC55Z3Jop5TL0GfwM4B51xpJC1aVjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=CUWXES0/; arc=none smtp.client-ip=74.125.82.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="VwrGEcVi"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64CCiukE2760182;
-	Tue, 12 May 2026 15:53:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=IOzakD
-	+PiSzcdRzArJxoCalB/4gSl8M/qYcaEAZmRSA=; b=VwrGEcViqBTOUiP4EyHVi5
-	Sha7cakL7MZKXU1CnYB1FQxvdGR3N1ffXcnBNnRKs4ZZqmQJuo0G2m32acuxHYd1
-	/50EI5WGk0AJyolwx4IfMFrkh0kJRr5vHNnIDNMfl5GBPkfklNsTquZ8yskCIhNX
-	9sZaln7X0Bh6Sd+9zjROaW6Jb/fzbSut+2TmVffBI+WAzWvbw7iQR7M9+cdkfhwM
-	I0Cyz4aH8YabL7SXhMGsMrK7mQlSjpbM/nrX0V4iWJ+IE9TXEGzblgJsgBaXKbp7
-	NBvFIqoqzeuZ+jWaFpHVHGNIifXJvPAS1YMNrNTm4FNPCsvB+8+3qWz2vIkQF7Iw
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e3nv6kp22-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 May 2026 15:53:02 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64CFdg9Y031207;
-	Tue, 12 May 2026 15:53:02 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e3nfgksmm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 May 2026 15:53:02 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64CFr0PT48038392
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 12 May 2026 15:53:00 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 149DF2004D;
-	Tue, 12 May 2026 15:53:00 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DA9C220040;
-	Tue, 12 May 2026 15:52:59 +0000 (GMT)
-Received: from [9.52.200.195] (unknown [9.52.200.195])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 12 May 2026 15:52:59 +0000 (GMT)
-Message-ID: <358d8d2a-e604-418d-8245-36ee0413f190@linux.ibm.com>
-Date: Tue, 12 May 2026 17:52:58 +0200
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="CUWXES0/"
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2ef2a1cc06dso10421984eec.0
+        for <bpf@vger.kernel.org>; Tue, 12 May 2026 08:59:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1778601552; x=1779206352; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OzccMi0jfh8WsDeEjT1RgCTAJfy/I7PM7CFCPGSxJ0U=;
+        b=CUWXES0/zQEB0OHVKln0bMuhv/loPXy90gsN59uRqlN6QHGfSEScTGHxD4LY+OGPpX
+         /Nsf75mvQKud3xEEVD3ijXSg5dbR3TaGoW/FscfQ4CqRESX2z66BC1SIRmTLa/H1LNU0
+         r719h9oif8vRjJsntBO9qhkgzzFkohJ5WO0ZMOdXfaPkBXQWzrzTNmz4GqpEKB6nl2uS
+         ROGezobR4a9xnEWA8Sjyj4nmHFW3SG66tifX3Lx8gavxI6gahjNhwQ3Vw+wBSnHxhu27
+         uwxujSRSiYx/T2TtpGkeXBj9rwKDg6JoJGtQQpw5RBKQ05KJ4Ee9dgoH/VziRBbgOvKq
+         csOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778601552; x=1779206352;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OzccMi0jfh8WsDeEjT1RgCTAJfy/I7PM7CFCPGSxJ0U=;
+        b=di4qvNeRzjnHOsd/A8W16bnDWmlhBGVwEItNmOxeMDuaCxcOwIieebLjQsnQje9sQ+
+         2TajQ6ah6YwY+awB7fIJ4WtgngjuzVlS91/MIiLx0CPu/ipSUNMsQUfuI1TZmmCMtBQC
+         LFZxgRydP7T8L9f+L3MLklpcfi3RmrIOn2jvdXfJh/vQZ5MvtTiyDIbvp4cv+QnWuUC5
+         SEphz4Z77Vn8BvxOATW+IMoMilVnA74zuxJi7PY32CHxs7COyo+4rFwO9NzORBrn1CK0
+         fi99k45fP8aUgI54Abzpl8bK+I2ylWbN9eKi0Sxb9gOo/YbqbDNPhTSfT+Lejcga8/+a
+         A1mA==
+X-Forwarded-Encrypted: i=1; AFNElJ+jmi+mtHRBk3FzFX6UYqxnmsywz6JF0m+jy9nUBkS+kK9eqALzArvzkbzWEj7PZSiLedM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZqGTLAqcHLWY7zB5pOJ3kupEWwzQP1ORFUocZCt4rM+a0tYPG
+	uabG64cf5SMJqvxexozALotEH9t6mcs0b51/fx9b9kaPybO4d1RAhgW2OyjA4eqmkac=
+X-Gm-Gg: Acq92OGPg09wwDWRoMC8YGFldP5mipNYmbXAZZMEcSjY9qcaa+HYUTSQFgk1spuwiiN
+	PWFuyBOr7PI9ba4HuHc0gSHKgMlI84zw+75tybZCz+fnA0Wq90makTB5eUcCZ2bGRgseufEasEE
+	uVMfBJc74l8l57RxkB74VLsY7A8kTIhIFFGW55G8+IETEuPcFD29WLx7ZXctKsyF+dL4UNz8E80
+	dkWJ05M9JAVqablIHG/6k6xSVN55BL4gSBXwxGEHgHzYpm9ehfNg1ITqH0VVQLMjXQt5t8axBJa
+	ZAA1lP3kqqQpJ16EsBx+F0Na64KGgroOM33S9sdjBR/dssrgaoa3josusEFXpNZS+fa6GeLXBpR
+	xejQpVUQZgF24xWRzxl8awhDSVdVU3PUamiiYBQbTK3waJjBxzOcTdat0PkfZjER6m0MIuiFc+v
+	dRpYOw
+X-Received: by 2002:a05:7301:1008:b0:2d9:b466:5e19 with SMTP id 5a478bee46e88-2fb4b733d76mr7577165eec.21.1778601552348;
+        Tue, 12 May 2026 08:59:12 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::97b8])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f888c469b6sm18474934eec.24.2026.05.12.08.59.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 May 2026 08:59:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 03/19] unwind_user/sframe: Store .sframe section data
- in per-mm maple tree
-To: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev,
-        Indu Bhagat <ibhagatgnu@gmail.com>, Heiko Carstens <hca@linux.ibm.com>
-References: <20260505121718.3572346-4-jremus@linux.ibm.com>
- <20260505185158.39F35C2BCB4@smtp.kernel.org>
- <49318ed5-8668-43fe-880d-b91bd7c3a7a9@linux.ibm.com>
- <20260506112135.554ca88c@fedora>
-Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20260506112135.554ca88c@fedora>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: Oof1CxiRXoDWimNDX0N7JfC0FH_nvDTS
-X-Proofpoint-GUID: NI-MO8iQraRhssxeA0txhc-HWZLyehrd
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTEyMDE2MyBTYWx0ZWRfXw0qBy3UKf2Nc
- vK4lwUs4IzN8Ks2ZlaGiDxq3+oWmJWx9Mn85FmNGbm6zNmYJ+qBtHswwLs1orXTOcq9QO8UIsjQ
- 4O2MuiOgKvFUDSeAejjIBE+IwIxIKUHfa4wB72zSMYiCqGtWgkqhA2O4reviLg3eC5cXbtp1vZF
- U2f5awpoWrGnvn/wgbYud6+Ib5IJaSJxPvhbT1bJ7tvSNODPG6O8SybiE3aLYnhYQfT4XIbn5Kr
- Agaa0lslUtrT37fjRf9xiTs9kF7Evvm6NywjrFLBm3s4kuPkyVNdfNdyOdWF6G6uPdeq1R2bBpF
- J9NFWv++V9TOQos2VLJku8bMCMuz81MlqqNNTXlfWFSbPhiZNaR22Y5Of34cxBe79i+Z4iDeuWM
- tKOlOsCD6v+tnYy9SDJL5Qw5lL+CEI5yycTp7YGPmiJQL16CFg4OvSpvMpTF4OMIdwEdnJ20BAk
- A6Ye0cBV+QWXDhdDp4w==
-X-Authority-Analysis: v=2.4 cv=P8UKQCAu c=1 sm=1 tr=0 ts=6a034cdf cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8
- a=d2iCtUAqFsupRfna_mMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-11_05,2026-05-08_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 phishscore=0 bulkscore=0 clxscore=1015
- malwarescore=0 spamscore=0 lowpriorityscore=0 suspectscore=0 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605050000 definitions=main-2605120163
+Date: Tue, 12 May 2026 11:59:09 -0400
+Message-Id: <DIGTMO08GLD5.1TRLRCGA8OW2D@etsalapatis.com>
+Subject: Re: [RFC PATCH 2/9] bpf/arena: Add BPF_F_ARENA_MAP_ALWAYS for
+ direct kernel access
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>, "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+Cc: "Tejun Heo" <tj@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "David Vernet" <void@manifault.com>, "Andrea Righi"
+ <arighi@nvidia.com>, "Changwoo Min" <changwoo@igalia.com>, "bpf"
+ <bpf@vger.kernel.org>, <sched-ext@lists.linux.dev>, "LKML"
+ <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260427105109.2554518-1-tj@kernel.org>
+ <20260427105109.2554518-3-tj@kernel.org>
+ <CAP01T76jRW0sjkzebSvDKy+AK-fh7hq+0zhDcP7oLGcg_qxOfA@mail.gmail.com>
+ <DIGBW43UUKDX.1H7FT7A9JDOOT@etsalapatis.com>
+ <CAP01T77_Lgfj8yX6JtErGES9icebqygDUZT-wzXq9UV6JGugYA@mail.gmail.com>
+ <DIGDLA5275AR.128FTQMU7Z8S3@gmail.com>
+ <CAP01T74MP6+igNsqhDinYXbk2mFB2zW6Kk6Lb7srrWM8ANojvA@mail.gmail.com>
+ <CAADnVQKfMHUZ8YzLkWW--f1G_+mx6bKdvVHUMArYsb+6-esWCA@mail.gmail.com>
+ <DIGP5VDNWMJ9.2HXDCVLOPWAMT@etsalapatis.com>
+ <DIGR8WQ9B6JQ.13C5FY863IJ3V@gmail.com>
+In-Reply-To: <DIGR8WQ9B6JQ.13C5FY863IJ3V@gmail.com>
 
-On 5/6/2026 5:21 PM, Steven Rostedt wrote:
-> On Wed, 6 May 2026 15:50:45 +0200
-> Jens Remus <jremus@linux.ibm.com> wrote:
-
->>>> +static int __sframe_remove_section(struct mm_struct *mm,
->>>> +				   struct sframe_section *sec)
->>>> +{
->>>> +	if (!mtree_erase(&mm->sframe_mt, sec->text_start)) {
->>>> +		dbg("mtree_erase failed: text=%lx\n", sec->text_start);
->>>> +		return -EINVAL;
->>>> +	}
->>>> +
->>>> +	free_section(sec);
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +
->>>>  int sframe_remove_section(unsigned long sframe_start)
->>>>  {
->>>> -	return -ENOSYS;
->>>> +	struct mm_struct *mm = current->mm;
->>>> +	struct sframe_section *sec;
->>>> +	unsigned long index = 0;
->>>> +	bool found = false;
->>>> +	int ret = 0;
-
-	guard(srcu)(&sframe_srcu);
-
->>>> +
->>>> +	mt_for_each(&mm->sframe_mt, sec, index, ULONG_MAX) {
->>>> +		if (sec->sframe_start == sframe_start) {  
+On Tue May 12, 2026 at 10:07 AM EDT, Kumar Kartikeya Dwivedi wrote:
+> On Tue May 12, 2026 at 2:29 PM CEST, Emil Tsalapatis wrote:
+>> On Tue May 12, 2026 at 12:24 AM EDT, Alexei Starovoitov wrote:
+>>> On Mon, May 11, 2026 at 8:49=E2=80=AFPM Kumar Kartikeya Dwivedi
+>>> <memxor@gmail.com> wrote:
+>>>>
+>>>> On Tue, 12 May 2026 at 05:25, Alexei Starovoitov
+>>>> <alexei.starovoitov@gmail.com> wrote:
+>>>> >
+>>>> > On Mon May 11, 2026 at 7:43 PM PDT, Kumar Kartikeya Dwivedi wrote:
+>>>> > >
+>>>> > > If not, the best course to me seems to be to make the flag behavio=
+r
+>>>> > > default, and just rely on ASan (and Rust in the future) to prevent=
+ any
+>>>> > > memory safety issues, and drop the stream based feedback on fault,
+>>>> > > etc.
+>>>> >
+>>>> > Agree that this needs to be new default without new uapi flags.
+>>>> > How about we tweak the idea further.
+>>>> > Let all arena pages be unmapped initially. bpf progs will fault
+>>>> > on them and will be reported via bpf_streams.
+>>>> > But we also prepare one "scratch page". Let's use this name,
+>>>> > since "garbage page" reads too dirty.
+>>>> > When kernel faults we populate pte with that scratch page
+>>>> > and let the kernel code retry.
+>>>> > To implement it the page_fault_oops() can have a callback
+>>>> > into bpf/arena helper similar to kfence_handle_page_fault.
+>>>> > If fault address is in arena, do kfence_unprotect()-like.
+>>>>
+>>>> Interesting idea. So I guess this page remains mapped once kernel
+>>>> faults on it. I guess we can still reset it to NULL if we alloc and
+>>>> free a page at the same address, so it's just a drop-in to prevent
+>>>> further faults inside the kernel, since emulating instructions is ugly
+>>>> and we're not using asm wrappers that have fixup labels etc. If we end
+>>>> up allocating and freeing something at the same address it will likely
+>>>> get reset to NULL (that would be ideal). But even if this happens in
+>>>> parallel we may fault again and then will just fix up the NULL pte
+>>>> with scratch page again. We can likely also preserve fault reporting
+>>>> into streams when such scratch pages are brought in.
 >>>
->>> Can concurrent calls to sframe_remove_section() cause a use-after-free and
->>> subsequent double free?
->>>
->>> mt_for_each() locklessly iterates mm->sframe_mt, and internally acquires and
->>> drops the RCU read lock, meaning the returned sec pointer has no lifetime
->>> protection in the loop body.
->>>
->>> If two threads concurrently invoke sframe_remove_section(), both could
->>> receive the exact same sec pointer from the tree. Thread A could then call
->>> __sframe_remove_section(), erasing the entry and freeing sec via
->>> free_section(). Thread B would then evaluate the if statement using the
->>> freed sec pointer, causing a use-after-free read, and potentially proceeding
->>> to free it again.  
+>>> Yep. All makes sense.
+>>> The hope is that faults from kfuncs should be rare
+>>> compared to faults from regular arena bugs.
+>>> So the stuck scratch page shouldn't happen often and
+>>> faults on unmapped will still be seen most of the time.
 >>
->> Please advise.
-> 
-> I guess it's asking if we should have a read_srcu_lock()?
+>> This sounds great, it pretty much retains all arena behavior that we
+>> care about. The most important part is that it reliably reports the
+>> first memory access error, which even now is the only one that is
+>> meaningful. The delta with current behavior is that subsequent accesses
+>> are not caught, but we don't care about those because they are very
+>> likely caused by reading zeros during the initial buggy access.
+>>
+>> Would the scratch page be actually mapped into the arena radix tree, or
+>> just the pte? Because if it doesn't then I think we don't even need to
+>
+> Just the PTE.
+>
+>> worry about resetting it from the arena side. Just allocating it at
+>> a later time will overwrite the scratch page PTE with new valid page,
+>
+> Which is fine IMO, and how it should be. Alloc and free cycle sets it to =
+NULL,
+> so be it. Users can also do it in parallel, that case will just cause a f=
+ault in
+> the kernel again and we'll reset the PTE to the scratch page again.
 
-Given __sframe_remove_section() does not schedule freeing of the section
-and returns with -EINVAL if mtree_erase() fails there is no possibility
-for a double-free.  Only one thread can succeed to mtree_erase().
+Yeah this is why this solution does not interfere with any BPF arena code.
+The allocator does not need to know about the scratch PTEs at all, it
+can just allocate over them and automatically turns the address valid.
 
-Above change ensures that if two threads concurrently iterate the
-sframe_mt in sframe_remove_section() they can both safely access
-sec->sframe_start, as none of the sections will get freed until
-return from sframe_remove_section().
+>
+>> Until then the page is accessing the scratch page, but again we only
+>> care about the first buggy access.
+>
+> Right.
+>
+>>
+>> Small nit: Maybe default page instead of scratch page? Scratch page
+>> sounds a bit like scratch space but we don't actually use the page to
+>> store any data.
+>
+> It likely should also be zeroed out, to preserve the idea that reading
+> 'faulting' regions returns zeroes. Let's just go with scratch page term.
+>
+> I think the main idea is we install a page fault handler after the KCSAN =
+one,
+> from the fault handler, use bpf_prog_find_from_stack() to obtain the firs=
+t
+> program in the stack trace, which will be the one originating the fault i=
+nside
+> the kernel. Then make sure the faulting address lies in the prog->aux->ar=
+ena,
+> (likely including guard pages in its range), and just install the PTE for=
+ the
+> zeroed out scratch page at that point and continue.
+>
+> I thought about various races, to me it seems it should be ok. If paralle=
+l
+> installation wins over us, it either installed a valid page replacing scr=
+atch
+> PTE, at which point we just let the kernel retry, or installed a scratch =
+page.
+> If it races and replaces existing scratch or valid page with NULL after w=
+e
+> checked, we fault again and retry. In any case, either the kernel continu=
+es or
+> it ends up faulting again, at which point we can handle the fault again a=
+nd
+> attempt to fix it up.
+>
+> We likely need to make sure the existing thing is pte_none()  only instal=
+l if
+> pte_none(), otherwise leave things as is. If racy attempts unmap and set =
+scratch
+> or valid page to none, we will fault again and reinstall. If racy attempt=
+s
+> install scratch page or valid page, we let it be as is. More importantly =
+we
+> shouldn't install scratch page over a valid page, I think.
+>
+> Our PTE installation likely takes the form try_cmpxchg(pte, NULL, scratch=
+_page).
+>
+> One corner case is that we may have cached scratch page TLB translations =
+for a
+> range we are trying to alloc pages over. Typically the way to eliminate s=
+tale
+> TLBs would be to just do flush_tlb_kernel_range(). In this case I wonder =
+whether
+> we just skip it to avoid the cost and let the stale TLB stay, since it li=
+kely
+> came due to program passing faultable memory into kernel.
+>
+> That said, a cheaper fix would be to install PTEs under the lock not with
+> WRITE_ONCE() but xchg() so that we can inspect if we overwrote an entry t=
+hat
+> had scratch page and only do the extra TLB flush in that case. I would be=
+ fine
+> with either option (leaving it as is, or the above), as long as we docume=
+nt it
+> somewhere (either in the commit log or a comment in the code), just so we=
+ don't
+> forget.
+>
 
-Does that make sense?
+Let's skip the flush. When we hit races like that during the kfunc we shoul=
+d
+care more about completing the call than about the result since the
+program is already buggy.
 
-Regards,
-Jens
--- 
-Jens Remus
-Linux on Z Development (D3303)
-jremus@de.ibm.com / jremus@linux.ibm.com
+> The main question is, what are the next steps? Do you want to take a stab=
+ at
+> implementing this?
 
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
+Can do, I will send a patch.
 
