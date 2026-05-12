@@ -1,250 +1,167 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77463379C52
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 09:36:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13CE339A047
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 09:37:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778578600; cv=none; b=YyB7rHf1PrvXEzCW1BZMIcgwWCy+gIeFhf8pjtAFOQZ2Y4v6MlAkcwoG/pqh1S6l1Cn3g16cZ2yL1L0kqSckazhf90PaTw1tR8xsJX6bfLBiLj3oRJ03n3N83GLatYTyT0yHfcdfKu1rlmc0yOKguf/Dwyq9VMEeNtoDX5lyCAU=
+	t=1778578625; cv=none; b=fAwWBXdlB+2DeBOBl9QTj0ZpVyilusXXOc4K9LXqDvVQrdQOgcnlgC1a64LWeeL6lnvLsua2Br+KSdIam1jJ+oF1G5QDyx1wUS1KcZnHnd6tevep51doATg3rSMq/yHEQ7yoPEkosnWK7kNmaN8Ar1LmNDyrHKorVNWimKSHSAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778578600; c=relaxed/simple;
-	bh=tm0NVwwbouUOW/ov7c8L4ich1p+zJor/SPJKdx8NRLU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=FSCApOkGn+omQWcZlKYXbUgWwBotVY8f60iPG7ojNTgdFy5nz/H1YWDXsA6NHPlCJqB0cEM76lT1tPbDOEMOOUW/iqnGw2cXbed0u6rPEQaC0tnCg9GIEbxeTcRIj0I3jK/UH+OY7vga4x3xUdXdAFyMpgWEnU2SdaPj/O+q0ZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gT3Ayfnt; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1778578625; c=relaxed/simple;
+	bh=h1c7WlF0eO4XFsRi+bXuKWCQloLuvGFJm5M3Yr7QuFQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DPnubXSB3XHbCyWp9Eki2w60qHCgbtBTA1Nt9Mq8+GY/fMM2WtrzqISo7NwU9UnsEuYTKjbW7CczclPpo5zf7RtSBW0bJ8E8wpgVaV5k/pHe+SRcduCW20Whhr+I2W51awEsilMTWgMMsvYzbvw885373l9DSjZXv/vJI/O2sI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=avQvWjHi; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gT3Ayfnt"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-488a8ca4aadso48660255e9.3
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 02:36:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1778578597; x=1779183397; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=4TuJODOI+QkiUVtzRDrKwuK4f3bx4sDE+Z5ULvd9uEM=;
-        b=gT3Ayfnt9c90ULVLYRvtPOvQl6BYM64/KPpNKLrkx/nTVsWttxhNwi/ryJbcEONbTs
-         i79d6J8EMnICeYSK1FrQNpK3dBTDj1k5s/aIRuSiKZp6QTEQr9TAUHv4pxDuaLG+oDpt
-         bBXshMDBNllkdU4wTf+5RFECGMk5lbFJT5P2ZP6EKWLZiCZ48hhJoBF/+oWsilZPhD+X
-         IzX9sBwIG/gfitV6iMZwcaiZIIZEP2BfNsRkVO0BPfVmNhokXc+mKYXO03Mptg1r/f6R
-         B9FEoQ4MdbqvgKEaw7hgKaT79SGrVZoco33ONgmwKPGN+sCIe8dQcK9uTutfvVr7PJge
-         GesA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778578597; x=1779183397;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4TuJODOI+QkiUVtzRDrKwuK4f3bx4sDE+Z5ULvd9uEM=;
-        b=kl1smrM9EZ//TIpOfJU//q0HFJz2tWKrEjgbuJwKK7eyL09EgVBnZE9KHIWGbEqzM9
-         Fq4XRh5NoDwA2H7CRraHC1A4AKwOUUTdnFCy14ZGUOsw++7iYcsq5efihLaf++GDCukG
-         pL6R3r50jtjzwRKH7qKzrguZGEyE+C9ewByot+cn9CpqQgYIKUePWe/HdyXEyti/wMXg
-         tsAQIgA6EFBR0jJ+BwntMURf/Ef6VTTCw6zgj/blmOpuQdzc3zBYgRDX/ypxjBqxcxTj
-         vad7103eMAhh1LPmZxwcwl/XxLc/UpBa+cZpo8zw2dwQ79g7UawQYtlKy7A4NC3yPYrO
-         K44g==
-X-Forwarded-Encrypted: i=1; AFNElJ+UTZq0Y/LFv0ODLKcTRx7S7yLQTWKULd1bUMsB7AsAbaDpfTXDb7A60m1dM5Ahy/Hb678=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+4JqyhTkgw20/u6dWDEyKeRtkkqKzgnvQ/FZ/LBi4B4tyUW4G
-	9wkpM5H9xQf03ZvF/5rFEyxHfeZkSsGrbuIlDSaMj3ZEUX9OULB0i1pTZhvTglw62Nc=
-X-Gm-Gg: Acq92OFa4Oh0kzYUXq78+DEoRhKqHlx3IXG+8+FE2HYLxjQeHQFGWFjG4WxcQzzd9bD
-	w+NfUih0HNV6AC6tlkA6QS2V14wTkKkNAFIj63QaACbj9Prx0j1VscKaBIauIyPOzkoTSEiAsuj
-	tRjUiREDixfGOfStddnaAfCKZwuwjvpNUuWewODj/TwZvoVB5OPp83gClN9/2M8XP7PlAa4rVr7
-	AReFBc5NuviGp6EGvdmCuN1pm4/2w9gQWg/qh9Ck8GipM3j/KvBhfemNpKXGgY9MhVi+rtbYD5x
-	EJASW+u/v6/cfRcZAGTQ+NFy3xfmB/r2twy8PUjXnrax9+B0c8aLSv8Qs44Z/QF0tfCwxh8fO1M
-	qlrPCMMTxiDLgAaKYiu7OMJ7xC9kGje25APW3GykFnYnARyTKDMJiOo/BpSNkED55xW32rrKIim
-	MYnzdlZUFDh6BKteGuBryJqSQLw7HCkQv5pfeEosg=
-X-Received: by 2002:a05:600c:c494:b0:485:46fd:7887 with SMTP id 5b1f17b1804b1-48e51f32c35mr435745135e9.13.1778578596689;
-        Tue, 12 May 2026 02:36:36 -0700 (PDT)
-Received: from [192.168.1.3] ([185.48.77.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e9052c9fesm68487945e9.1.2026.05.12.02.36.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 May 2026 02:36:36 -0700 (PDT)
-Message-ID: <3c42ab2a-7698-4459-b1e1-9441a0bf4d9b@linaro.org>
-Date: Tue, 12 May 2026 10:36:34 +0100
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="avQvWjHi"
+Message-ID: <6cf003cb-f39c-4362-9b24-e479b988ecd3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778578610;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=T20NslB0IYADqB7NaB6OdKMLIjFa/Li1Y4ec0dAtHc4=;
+	b=avQvWjHigzU7HCJ8Pa09LGj+MI4xauLUbWi8dFaZc97TpLhA1cXTC2VwTRjLyqkvI1/6wV
+	ZMUkhZ/oKcP9HMcHl8naUkL2gD4JGSPnUbmBFgAoZ7eN+a1njaZ+l1m3Ijs/NIODAP4U36
+	Z6VOJraCL731kL6vV+Htq1duzAWoYYg=
+Date: Tue, 12 May 2026 17:36:07 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 00/14] perf build: Reduce build time by one third
-To: Ian Rogers <irogers@google.com>
-References: <20260512053539.3410189-1-irogers@google.com>
-Content-Language: en-US
-Cc: Quentin Monnet <qmo@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>,
- Nathan Chancellor <nathan@kernel.org>, Tomas Glozar <tglozar@redhat.com>,
- Dmitrii Dolgov <9erthalion6@gmail.com>,
- Costa Shulyupin <costa.shul@redhat.com>,
- Alexandre Chartre <alexandre.chartre@oracle.com>,
- Yuzhuo Jing <yuzhuo@google.com>, Leo Yan <leo.yan@arm.com>,
- Ankur Arora <ankur.a.arora@oracle.com>, Markus Mayer <mmayer@broadcom.com>,
- Collin Funk <collin.funk1@gmail.com>, Howard Chu <howardchu95@gmail.com>,
- Dapeng Mi <dapeng1.mi@linux.intel.com>,
- Swapnil Sapkal <swapnil.sapkal@amd.com>,
- Thomas Falcon <thomas.falcon@intel.com>,
- Ricky Ringler <ricky.ringler@proton.me>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <20260512053539.3410189-1-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH RESEND bpf-next v10 3/8] bpf: Introduce the bpf_list_del
+ kfunc.
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
+ martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ chengkaitao@kylinos.cn, skhan@linuxfoundation.org, memxor@gmail.com,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, vmalik@redhat.com,
+ linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260512055919.95716-4-kaitao.cheng@linux.dev>
+ <297a19ac8fb5fc8ab279a932137bf39604f2f3637521ff6d7d4b39c364a52e07@mail.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+In-Reply-To: <297a19ac8fb5fc8ab279a932137bf39604f2f3637521ff6d7d4b39c364a52e07@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
+I have clarified this issue in the [PATCH bpf-next v10 3/8] patch,
+with the link provided below:
 
+https://lore.kernel.org/bpf/0637c1ce-0e73-4505-8a0c-e77339f4aefb@linux.dev/
 
-On 12/05/2026 6:35 am, Ian Rogers wrote:
-> This patch series refactors many aspects of the perf build aiming to
-> better encapsulate BPF code generation, remove serial build code and
-> gain build parallelism. The prepare step that blocks the parallel
-> build is reduced to a core 6 smaller dependencies. BPF skeletons are
-> made regular dependencies on the targets that use them. Feature tests
-> and dependencies are reorgnized. The jevents.py script processes json
-> files in parallel and allows the big_c_string to be compiled
-> separately.
+在 2026/5/12 14:41, bot+bpf-ci@kernel.org 写道:
+>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>> index 1e8754877dd1..51b6ea4bb8cb 100644
+>> --- a/kernel/bpf/helpers.c
+>> +++ b/kernel/bpf/helpers.c
+>> @@ -2593,6 +2593,15 @@ __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
+>>  	return __bpf_list_del(head, h->prev);
+>>  }
+>>
+>> +__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_head *head,
+>> +					       struct bpf_list_node *node)
+>> +{
+>> +	struct bpf_list_node_kern *kn = (void *)node;
+>> +
+>> +	/* verifier guarantees node is a list node rather than list head */
+>> +	return __bpf_list_del(head, &kn->list_head);
+>> +}
+>> +
 > 
-> On a 28-core build workstation (make -j28 all from scratch), clean build
-> latency improves by over 36%:
+> Looking at bpf_list_pop_front() and bpf_list_pop_back() in the same
+> file, both functions read from the list_head (h->next or h->prev)
+> before passing it to __bpf_list_del(). If the list is uninitialized,
+> they end up passing potentially invalid pointer values to __bpf_list_del(),
+> which then has to handle this by initializing the list and returning NULL.
 > 
->    Before:
->      real    0m29.006s
->      user    2m46.019s
->      sys     0m30.610s
+> While __bpf_list_del() handles this correctly, would it be clearer to
+> move the initialization check into the top-level kfuncs (like
+> bpf_list_pop_front/back) so that __bpf_list_del() always receives a
+> valid list_head pointer rather than potentially garbage values that
+> get ignored later?
 > 
->    After:
->      real    0m18.498s
->      user    2m32.922s
->      sys     0m27.623s
+> Reference: https://lore.kernel.org/bpf/af50d188f6bc2de81fe3c321b26a645a9425ba9f2644cb6f8525d5bb637385f9@mail.kernel.org/
 > 
+>> @@ -4725,6 +4734,7 @@ BTF_ID_FLAGS(func, bpf_list_push_back, KF_IMPLICIT_ARGS)
+>>  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
+>>  BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
+>>  BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
+>> +BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
+>>  BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
+>>  BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
+>>  BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+> 
+> [ ... ]
+> 
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 11054ad89c14..a6bcbe68cd72 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -10744,6 +10744,7 @@ enum special_kfunc_type {
+>>  	KF_bpf_list_push_back,
+>>  	KF_bpf_list_pop_front,
+>>  	KF_bpf_list_pop_back,
+>> +	KF_bpf_list_del,
+>>  	KF_bpf_list_front,
+>>  	KF_bpf_list_back,
+>>  	KF_bpf_cast_to_kern_ctx,
+> 
+> [ ... ]
+> 
+>> @@ -11456,7 +11459,8 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
+>>
+>>  	switch (node_field_type) {
+>>  	case BPF_LIST_NODE:
+>> -		ret = is_bpf_list_push_kfunc(kfunc_btf_id);
+>> +		ret = is_bpf_list_push_kfunc(kfunc_btf_id) ||
+>> +		      kfunc_btf_id == special_kfunc_list[KF_bpf_list_del];
+>>  		break;
+>>  	case BPF_RB_NODE:
+>>  		ret = (is_bpf_rbtree_add_kfunc(kfunc_btf_id) ||
+> 
+> Can bpf_list_del actually be called from BPF programs? Looking at the
+> verifier's handling of KF_ARG_PTR_TO_LIST_NODE arguments in
+> check_kfunc_args():
+> 
+> 	case KF_ARG_PTR_TO_LIST_NODE:
+> 		...
+> 		if (!reg->ref_obj_id) {
+> 			verbose(env, "allocated object must be referenced\n");
+> 			return -EINVAL;
+> 		}
+> 
+> This code path unconditionally requires an owning reference (ref_obj_id
+> must be non-zero). However, once a node is added to the list via
+> bpf_list_push_front/back, the owning reference is converted to a
+> non-owning reference (ref_obj_id becomes 0). This means bpf_list_del
+> cannot be called on nodes that are actually in the list.
+> 
+> The sister kfunc bpf_rbtree_remove handles this by having a special
+> branch in check_kfunc_args() that accepts non-owning references for
+> that specific kfunc. Does bpf_list_del need similar handling to allow
+> removing nodes that are actually in the list?
+> 
+> Reference: https://lore.kernel.org/bpf/294242698d576e4fedf243ab055c6f9a984e55033933a9bd09808f62a7018e9d@mail.kernel.org/
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25716874656
 
-I also get similar numbers, even when using ccache:
-
-Before:
-
-   real    0m29.584s
-   user    0m48.993s
-   sys     0m20.466s
-
-After:
-
-   real    0m18.322s
-   user    0m49.995s
-   sys     0m17.077s
-
-Tested-by: James Clark <james.clark@linaro.org>
-
-> Summary of Patches:
-> 
-> 1: bpftool Bootstrap Optimization
->    - Exempts bpftool bootstrap from non-essential feature tests (LLVM, libbfd,
->      libcap), saving 1.1s of sub-make fork overhead during Kbuild startup.
-> 
-> 2-4: Flattening Umbrella Prepare Barriers
->    - builtin-trace embedded inclusions and pmu-events generation are completely
->      decoupled from the sequential "prepare" umbrella target, eliminating Make
->      AST double-parsing overhead and unchoking parallel compilation barriers.
-> 
-> 5-8: Decoupling & Pre-generating BPF Skeletons
->    - BPF skeleton rules are extracted out of Makefile.perf into bpf_skel.mak.
->    - Decouples bpftool bootstrap from top-level static libbpf dependencies,
->      attaching bpf-skel-prepare directly to the umbrella prepare target. This
->      allows Make to pre-compile bpftool and dump vmlinux.h in the background at
->      build startup, removing the 7-second serialization bottleneck before BPF
->      object compilation.
-> 
-> 9-11: Foundational Linkage & Fast-Path Feature Detection
->    - Eliminates redundant libbpf sub-make feature checks during static builds.
->    - Integrates libdebuginfod directly into test-all.c, allowing Make to skip
->      individual feature check sub-make forks during AST parsing on fully
->      configured workstations.
-> 
-> 12-13: jevents.py Concurrency & Deduplication
->    - Splits the massive 2.8 MB big_c_string literal out of pmu-events.c into a
->      dedicated pmu-events-string.c compilation unit. This slices C compilation
->      latency in half by compiling string and struct tables simultaneously across
->      separate CPU cores while preserving zero dynamic ELF relocations.
->    - Pre-populates jevents.py JSON ASTs and metric formulas in parallel across
->      all available CPU cores using ProcessPoolExecutor (accelerating Python
->      execution by 11x, from 3.3s down to ~290ms).
-> 
-> 14: Out-of-Tree Incremental Rebuild Fix
->    - Prefixes SCRIPTS (perf-archive, perf-iostat) with $(OUTPUT) to prevent
->      Make from continuously re-executing script installation rules on already
->      built out-of-tree builds.
-> 
-> Ian Rogers (14):
->    bpftool build: Restrict feature tests during bootstrap compilation
->    perf trace beauty: Make beauty generated C code standalone .o files
->    perf build: Decouple pmu-events from prepare umbrella target
->    perf build: Remove empty archheaders target
->    perf build: Move BPF skeleton generation out of Makefile.perf
->    perf build: Encapsulate vmlinux.h and bpftool in bpf_skel.mak
->    perf build: Move static libbpf dependency out of prepare step
->    perf build: Pre-generate BPF skeletons during umbrella prepare phase
->    perf build: Move libsymbol dependency out of prepare step
->    perf build: Remove redundant libbpf feature check for static builds
->    tools build: Integrate libdebuginfod into test-all fast path
->    perf pmu-events: Split big_c_string storage into standalone
->      compilation unit
->    perf pmu-events: Parallelize JSON and metric pre-computation in
->      jevents.py
->    perf build: Prefix SCRIPTS with output directory to fix continuous
->      rebuilds
-> 
->   tools/bpf/bpftool/Makefile                    |   5 +
->   tools/build/Makefile.feature                  |   6 +-
->   tools/build/feature/Makefile                  |   2 +-
->   tools/build/feature/test-all.c                |   5 +
->   tools/perf/Build                              |   2 +
->   tools/perf/Makefile.config                    |   6 +-
->   tools/perf/Makefile.perf                      | 427 +-----------------
->   tools/perf/bench/Build                        |   6 +
->   .../bpf_skel/bench_uprobe.bpf.c               |   0
->   tools/perf/bench/uprobe.c                     |   2 +-
->   tools/perf/bpf_skel.mak                       | 110 +++++
->   tools/perf/builtin-trace.c                    |  30 +-
->   tools/perf/pmu-events/Build                   |  15 +-
->   tools/perf/pmu-events/jevents.py              |  56 ++-
->   tools/perf/trace/beauty/Build                 | 280 ++++++++++++
->   tools/perf/trace/beauty/arch_errno_names.c    |   2 +
->   tools/perf/trace/beauty/arch_errno_names.sh   |   2 +-
->   tools/perf/trace/beauty/beauty.h              |  60 +++
->   tools/perf/trace/beauty/eventfd.c             |   6 +-
->   tools/perf/trace/beauty/fsconfig.c            |   5 +
->   tools/perf/trace/beauty/futex_op.c            |   6 +-
->   tools/perf/trace/beauty/futex_val3.c          |   6 +-
->   tools/perf/trace/beauty/mmap.c                |  24 +-
->   tools/perf/trace/beauty/mode_t.c              |   6 +-
->   tools/perf/trace/beauty/msg_flags.c           |   8 +-
->   tools/perf/trace/beauty/open_flags.c          |   1 +
->   tools/perf/trace/beauty/perf_event_open.c     |  22 +-
->   tools/perf/trace/beauty/pid.c                 |   5 +-
->   tools/perf/trace/beauty/sched_policy.c        |   8 +-
->   tools/perf/trace/beauty/seccomp.c             |  12 +-
->   tools/perf/trace/beauty/signum.c              |   6 +-
->   tools/perf/trace/beauty/socket_type.c         |   6 +-
->   .../perf/{util => trace/beauty}/syscalltbl.c  |   0
->   .../perf/{util => trace/beauty}/syscalltbl.h  |   0
->   tools/perf/trace/beauty/tracepoints/Build     |  22 +
->   tools/perf/trace/beauty/waitid_options.c      |   8 +-
->   tools/perf/util/Build                         |  17 +-
->   tools/perf/util/bpf-trace-summary.c           |   2 +-
->   tools/perf/util/env.c                         |   4 +-
->   tools/perf/util/env.h                         |   1 +
->   40 files changed, 700 insertions(+), 491 deletions(-)
->   rename tools/perf/{util => bench}/bpf_skel/bench_uprobe.bpf.c (100%)
->   create mode 100644 tools/perf/bpf_skel.mak
->   create mode 100644 tools/perf/trace/beauty/fsconfig.c
->   rename tools/perf/{util => trace/beauty}/syscalltbl.c (100%)
->   rename tools/perf/{util => trace/beauty}/syscalltbl.h (100%)
-> 
+-- 
+Thanks
+Kaitao Cheng
 
