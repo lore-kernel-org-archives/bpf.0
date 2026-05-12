@@ -1,62 +1,66 @@
-Received: from mail-dl1-f73.google.com (mail-dl1-f73.google.com [74.125.82.73])
+Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E00B3BAD99
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 05:35:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799C63BE147
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 05:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778564157; cv=none; b=jgBBEwD8C5dy6rdlgMjokblBuO5Pdeo/lt9m2CJfgh0A2p7N0yHxu/BqqKkXdEVntEF3auvML6mmaicfk8HMX6O5hLMJEDXRyCPwvjEpbq6CLNRtfX+4tR+/x9S+a67yNoUH9Ocr0SAfEOfj0UIbGSzpKbRjLMU29mqRLh9/ROQ=
+	t=1778564159; cv=none; b=QZE6O4aCa7D/aGLGz0aiCqzk8LqRH0k5EORB7fsjXBZDcOpTYUyuNMFTEeB4OgGi2DpfTy42xVBgaBec0pMMS//Q328RS2ep0lELMUd218rKush4ZqrHh9ZdSB6kp6nCqKjsyBLjcbNpv5H4TgU0jl+eMjdTZWXm1UWAAwWRJ0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778564157; c=relaxed/simple;
-	bh=prhUEXNy700MP/6RYR7a1fmxZ4ZM6XmgWI1WEJahGws=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=RCPeKD+C4zSJVu2hnBFDo0w0qbw0qau0tAzsxTqHEkogEOtW0Zaiw9iDqK160bxcZ/RtUF6MD6S6D/UFXQyOdcB0L9SRANovs1WxB56NH3oLhg6vD/zOw5EAW5S4Yz666byR/tbwlXome+R4M1zWOO05caeYiuW+It9VQ7Tr79g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CRiwUeTI; arc=none smtp.client-ip=74.125.82.73
+	s=arc-20240116; t=1778564159; c=relaxed/simple;
+	bh=OgiEHTDvlnjDwAnt8D7vN3GVVcgaWORi0mYYfrGwUPQ=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Y6g6dtSm4mm2XZ2O9Xk/J0D3w6WYoMYV6zrY5y/KKP7DsCGr40+FZxpTC+llP4226a7edR5eqjjHOwkYT5vwLBfUnHeFloMTUCPmGB9+whytCnDpHRcpWc2NvpgToW9lkSE3twnOYyUsW1PJ1DwltrZT4Vxdr8lp+MvBrtn0dL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=USYTXy3M; arc=none smtp.client-ip=74.125.82.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CRiwUeTI"
-Received: by mail-dl1-f73.google.com with SMTP id a92af1059eb24-132d5ad9c32so10620528c88.0
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 22:35:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="USYTXy3M"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2bda35eab74so4182309eec.0
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 22:35:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778564151; x=1779168951; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=pNhqTiBRGI2NE+albQbZMGfXtOIXIbZHu6e7et5R7l4=;
-        b=CRiwUeTIqCWa768o0foVB6U7h1ZcwmWGTUTr44ST6CkJom7bK/+bz3EdO2r7vUES7M
-         5fjnWNQNvfKeVX8Mvt927/lJ47nOduVWCuT4P/ZpSLEHEGg3MSXzeEtVSDr8byNbPOTM
-         EwDmqX+BMXAmXniyKDDrVwUKcAuVFtnj5Zc2HDVNyi+0wl1rgIiP1BVTUxbRXqKlXPgf
-         jSG60h12fXjH3Nlqt99kxnVWcTleSOF4HCSlNYpthDtoeFrRN6UiW8tjiLGUsog3Xwiz
-         grM14wUmCv3O3plaaAJbrITUCfBCgaYdcW2A1PPMqyNkVH30wehTV8M3E0dcmbveoByZ
-         g7qw==
+        d=google.com; s=20251104; t=1778564154; x=1779168954; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6KfIzB2u4c7CPeAYRPyQWtREqIUzywUqx09MBuzY/eE=;
+        b=USYTXy3MhGJqCNzDj+x6N66V1R3na95Wye55Oi8sQtGR6Y/RbTO+xwJTfZb99aTja/
+         zqWDMeCNxqX7BARZlcgSL+c52L6iVaAzw9L27IfIbqPzsS6RYjJ5Tj2yTLsk7tD6kd0C
+         72+/nvbjJ1sPJ61yO8JpOT77qqCyZ0RHErFxkfEsdrD9AzLX6D1wZGkP5kW9FY9XbFls
+         GMFI3hU0CgmW70IZC5N3RlGO1uXd0901ipNRet5v//bXvft6apGUbJaIuLn2NVfyO3Se
+         oMf5dqfOScjuE842ld6349rpTjhBfNmM2TFwh/ksWUUU3sYlJcCHhJsjd4mWlDIAWms0
+         0lCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778564151; x=1779168951;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pNhqTiBRGI2NE+albQbZMGfXtOIXIbZHu6e7et5R7l4=;
-        b=Lj3ARI/JUOqD9LppyjTbljaOu5zFPlL4d1cNl+NVwAJBuNqtgFQOXrcyoOTP7CS5cL
-         z/qeGwsydBplFl+KGrFsFJX56M5NM9pyTRqOeqU69GvW3qJpHOY8381py6XuFRN++pRz
-         P4JPWqkMtEEbPEHeCQx5UF7Op4J+tLTqVgzKWpQfvdynsXD1xaGviMoyEFknRfuPVlZF
-         tsqINb37IBv+r3IQnA+EXE8iQu7zBEbkQCjcaaIzKgcVQe1rb1UGnWLqYP3B0GgpVC58
-         RgW31TuiEmv4yQNctjFgIMyUVl0do8lwtZnqil9rmehV21zXxSCGUAGomAIzRvh5UT7X
-         7VKw==
-X-Forwarded-Encrypted: i=1; AFNElJ9r8pcMvV1hrlmvYxs3ay9YaMqW/nvz1aJzxa4aFVYDRbZ2CBAbIDBClqHXQUa9SCG9nXk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzor/6hPBRhYpduJvMNRJAehi8i4Dsc+DiHTvpTQzhBzbcE/x8N
-	/4cSjo5AgQQfYnAX6AvH/tlBRMvGwN/q63G0ueL1pG6uychtuz3gyf+We0ra09GiYBiEncHprhV
-	hF711BR7rbA==
-X-Received: from dlah16.prod.google.com ([2002:a05:701b:2610:b0:130:ca6f:6c3e])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:2509:b0:130:9bce:c60f
- with SMTP id a92af1059eb24-13271377e33mr9926157c88.14.1778564151203; Mon, 11
- May 2026 22:35:51 -0700 (PDT)
-Date: Mon, 11 May 2026 22:35:25 -0700
+        d=1e100.net; s=20251104; t=1778564154; x=1779168954;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6KfIzB2u4c7CPeAYRPyQWtREqIUzywUqx09MBuzY/eE=;
+        b=MGnX4WR3IN++/UXVjhX2DTPIYSACQ46UpLaSYDRoD78Cnx63XuFenY/esFViVZaV31
+         LX1rHmwFG0rrCYcUekLF/aEf9Mbg5Z/mAtzNvGCYh4jj+j2IZQqR8XW4pUM1AwwIFLdQ
+         n8g7cBaOht1hOOTeAmRMOh9bVsy1Z0c5Z/U9T12OtpXRHefTtA8ibGBY8fBVF/38ccn7
+         Pxc0ycj0CJKcPdDkAtj1h7qaq3wV0jUnacdPtnB4FRE39qw0tFqX+skHBK95d3LlWJBy
+         2/bb9+9KcwZcJhO8EvzHlwDRdhMgCaPCEbOJY6XDWf9GOw/9tDq07vxe5mdrHfSsSr1+
+         nuBw==
+X-Forwarded-Encrypted: i=1; AFNElJ/Z0b81Ca5H8UVSRG26dJo+cMbKSYVFJ2yznlNQuJ+PLajob1SVg/JkcPTeU0jpLiZfcHY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4NUrBm8lwzGaaZGqjr+V4QKRwz5RoZmX0qrLW5szfDHwhR7PG
+	GVJWnaJw5Yr+tFpP/cYEy1Hz6T+EbP15cxBESZ048ESV2221RG1k5T/Er3Kh2KRVPd1CnEJ0DdB
+	izua1Jo8PjQ==
+X-Received: from dyt2.prod.google.com ([2002:a05:693c:8082:b0:2f9:af7:503a])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:687:b0:2c5:c532:1fe1
+ with SMTP id 5a478bee46e88-2ff9362f9d6mr1342788eec.3.1778564153362; Mon, 11
+ May 2026 22:35:53 -0700 (PDT)
+Date: Mon, 11 May 2026 22:35:26 -0700
+In-Reply-To: <20260512053539.3410189-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20260512053539.3410189-1-irogers@google.com>
 X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260512053539.3410189-1-irogers@google.com>
-Subject: [PATCH v1 00/14] perf build: Reduce build time by one third
+Message-ID: <20260512053539.3410189-2-irogers@google.com>
+Subject: [PATCH v1 01/14] bpftool build: Restrict feature tests during
+ bootstrap compilation
 From: Ian Rogers <irogers@google.com>
 To: Quentin Monnet <qmo@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -79,133 +83,46 @@ To: Quentin Monnet <qmo@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
 Cc: Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-This patch series refactors many aspects of the perf build aiming to
-better encapsulate BPF code generation, remove serial build code and
-gain build parallelism. The prepare step that blocks the parallel
-build is reduced to a core 6 smaller dependencies. BPF skeletons are
-made regular dependencies on the targets that use them. Feature tests
-and dependencies are reorgnized. The jevents.py script processes json
-files in parallel and allows the big_c_string to be compiled
-separately.
+When bpf_skel.mak executes 'make -C ../bpf/bpftool bootstrap', bpftool's
+Makefile unconditionally evaluated feature checks for llvm, libcap, libbfd,
+and disassembler libraries because the bootstrap target was not exempted.
 
-On a 28-core build workstation (make -j28 all from scratch), clean build
-latency improves by over 36%:
+Since the bootstrap bpftool strictly compiles minimal AST parsing and C
+code generation logic without linking LLVM or disassembler libraries, these
+feature check sub-makes are completely redundant.
 
-  Before:
-    real    0m29.006s
-    user    2m46.019s
-    sys     0m30.610s
+Exempt the bootstrap target from non-essential feature tests to eliminate
+unneeded sub-make fork overhead during Kbuild startup.
 
-  After:
-    real    0m18.498s
-    user    2m32.922s
-    sys     0m27.623s
+Assisted-by: Gemini:gemini-3.1-pro-preview
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/bpf/bpftool/Makefile | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Summary of Patches:
-
-1: bpftool Bootstrap Optimization
-  - Exempts bpftool bootstrap from non-essential feature tests (LLVM, libbfd,
-    libcap), saving 1.1s of sub-make fork overhead during Kbuild startup.
-
-2-4: Flattening Umbrella Prepare Barriers
-  - builtin-trace embedded inclusions and pmu-events generation are completely
-    decoupled from the sequential "prepare" umbrella target, eliminating Make
-    AST double-parsing overhead and unchoking parallel compilation barriers.
-
-5-8: Decoupling & Pre-generating BPF Skeletons
-  - BPF skeleton rules are extracted out of Makefile.perf into bpf_skel.mak.
-  - Decouples bpftool bootstrap from top-level static libbpf dependencies,
-    attaching bpf-skel-prepare directly to the umbrella prepare target. This
-    allows Make to pre-compile bpftool and dump vmlinux.h in the background at
-    build startup, removing the 7-second serialization bottleneck before BPF
-    object compilation.
-
-9-11: Foundational Linkage & Fast-Path Feature Detection
-  - Eliminates redundant libbpf sub-make feature checks during static builds.
-  - Integrates libdebuginfod directly into test-all.c, allowing Make to skip
-    individual feature check sub-make forks during AST parsing on fully
-    configured workstations.
-
-12-13: jevents.py Concurrency & Deduplication
-  - Splits the massive 2.8 MB big_c_string literal out of pmu-events.c into a
-    dedicated pmu-events-string.c compilation unit. This slices C compilation
-    latency in half by compiling string and struct tables simultaneously across
-    separate CPU cores while preserving zero dynamic ELF relocations.
-  - Pre-populates jevents.py JSON ASTs and metric formulas in parallel across
-    all available CPU cores using ProcessPoolExecutor (accelerating Python
-    execution by 11x, from 3.3s down to ~290ms).
-
-14: Out-of-Tree Incremental Rebuild Fix
-  - Prefixes SCRIPTS (perf-archive, perf-iostat) with $(OUTPUT) to prevent
-    Make from continuously re-executing script installation rules on already
-    built out-of-tree builds.
-
-Ian Rogers (14):
-  bpftool build: Restrict feature tests during bootstrap compilation
-  perf trace beauty: Make beauty generated C code standalone .o files
-  perf build: Decouple pmu-events from prepare umbrella target
-  perf build: Remove empty archheaders target
-  perf build: Move BPF skeleton generation out of Makefile.perf
-  perf build: Encapsulate vmlinux.h and bpftool in bpf_skel.mak
-  perf build: Move static libbpf dependency out of prepare step
-  perf build: Pre-generate BPF skeletons during umbrella prepare phase
-  perf build: Move libsymbol dependency out of prepare step
-  perf build: Remove redundant libbpf feature check for static builds
-  tools build: Integrate libdebuginfod into test-all fast path
-  perf pmu-events: Split big_c_string storage into standalone
-    compilation unit
-  perf pmu-events: Parallelize JSON and metric pre-computation in
-    jevents.py
-  perf build: Prefix SCRIPTS with output directory to fix continuous
-    rebuilds
-
- tools/bpf/bpftool/Makefile                    |   5 +
- tools/build/Makefile.feature                  |   6 +-
- tools/build/feature/Makefile                  |   2 +-
- tools/build/feature/test-all.c                |   5 +
- tools/perf/Build                              |   2 +
- tools/perf/Makefile.config                    |   6 +-
- tools/perf/Makefile.perf                      | 427 +-----------------
- tools/perf/bench/Build                        |   6 +
- .../bpf_skel/bench_uprobe.bpf.c               |   0
- tools/perf/bench/uprobe.c                     |   2 +-
- tools/perf/bpf_skel.mak                       | 110 +++++
- tools/perf/builtin-trace.c                    |  30 +-
- tools/perf/pmu-events/Build                   |  15 +-
- tools/perf/pmu-events/jevents.py              |  56 ++-
- tools/perf/trace/beauty/Build                 | 280 ++++++++++++
- tools/perf/trace/beauty/arch_errno_names.c    |   2 +
- tools/perf/trace/beauty/arch_errno_names.sh   |   2 +-
- tools/perf/trace/beauty/beauty.h              |  60 +++
- tools/perf/trace/beauty/eventfd.c             |   6 +-
- tools/perf/trace/beauty/fsconfig.c            |   5 +
- tools/perf/trace/beauty/futex_op.c            |   6 +-
- tools/perf/trace/beauty/futex_val3.c          |   6 +-
- tools/perf/trace/beauty/mmap.c                |  24 +-
- tools/perf/trace/beauty/mode_t.c              |   6 +-
- tools/perf/trace/beauty/msg_flags.c           |   8 +-
- tools/perf/trace/beauty/open_flags.c          |   1 +
- tools/perf/trace/beauty/perf_event_open.c     |  22 +-
- tools/perf/trace/beauty/pid.c                 |   5 +-
- tools/perf/trace/beauty/sched_policy.c        |   8 +-
- tools/perf/trace/beauty/seccomp.c             |  12 +-
- tools/perf/trace/beauty/signum.c              |   6 +-
- tools/perf/trace/beauty/socket_type.c         |   6 +-
- .../perf/{util => trace/beauty}/syscalltbl.c  |   0
- .../perf/{util => trace/beauty}/syscalltbl.h  |   0
- tools/perf/trace/beauty/tracepoints/Build     |  22 +
- tools/perf/trace/beauty/waitid_options.c      |   8 +-
- tools/perf/util/Build                         |  17 +-
- tools/perf/util/bpf-trace-summary.c           |   2 +-
- tools/perf/util/env.c                         |   4 +-
- tools/perf/util/env.h                         |   1 +
- 40 files changed, 700 insertions(+), 491 deletions(-)
- rename tools/perf/{util => bench}/bpf_skel/bench_uprobe.bpf.c (100%)
- create mode 100644 tools/perf/bpf_skel.mak
- create mode 100644 tools/perf/trace/beauty/fsconfig.c
- rename tools/perf/{util => trace/beauty}/syscalltbl.c (100%)
- rename tools/perf/{util => trace/beauty}/syscalltbl.h (100%)
-
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index 0febf60e1b64..8f50bc163bb2 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -106,6 +106,10 @@ ifneq ($(SKIP_CRYPTO),1)
+   CRYPTO_LIBS := -lcrypto
+ endif
+ 
++ifeq ($(MAKECMDGOALS),bootstrap)
++FEATURE_TESTS := libelf-zstd
++FEATURE_DISPLAY :=
++else
+ FEATURE_TESTS := clang-bpf-co-re
+ FEATURE_TESTS += llvm
+ FEATURE_TESTS += libcap
+@@ -122,6 +126,7 @@ FEATURE_DISPLAY += libcap
+ FEATURE_DISPLAY += libbfd
+ FEATURE_DISPLAY += libbfd-liberty
+ FEATURE_DISPLAY += libbfd-liberty-z
++endif
+ 
+ check_feat := 1
+ NON_CHECK_FEAT_TARGETS := clean uninstall doc doc-clean doc-install doc-uninstall
 -- 
 2.54.0.563.g4f69b47b94-goog
 
