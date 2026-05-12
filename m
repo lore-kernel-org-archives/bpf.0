@@ -1,54 +1,56 @@
-Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
+Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18DAB44BC8E
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 17:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39B724C77AB
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 17:46:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778608016; cv=none; b=NBgtTKoUq+jinWeotrX1+rm+kSblr+gIqcLKnRKuTqqTmWh2nSsPg/ZVNTmWSs+rwlG2tcYOYLz6uGfHXb0ruUnCU+L5L3ZeQFPPpEUuai7uUfk/rXkElzJa+LzMtjyAC+fpLWw1w0GIber+HL6Mol5NZpOJxQw1T35xqV+Oz8w=
+	t=1778608017; cv=none; b=b3S5wMcKO0veof2Rfe4mc4M5/77fWfXPZZprLUrJiFyVvjjXpIc8eL5Tqq5gIueL+pVgCflwd25oOQAzVIwkVOd1xyGMa30OmglHw7IjExnzjmAoTgjrGsFZtTNzEggi5tCg9vu4DlXRYiNeZF81bQ3SovVLhGLmt4v3U4RWLx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778608016; c=relaxed/simple;
-	bh=wwRoZKbj654sz4VrwUcykwLsN4Mk4H6ny+P/lIWtoWI=;
+	s=arc-20240116; t=1778608017; c=relaxed/simple;
+	bh=+nYwJiA0bJhsQqP8J103mMLWgw1LSQxAQSclczxtcVI=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=SV/8OFT16NIcOs+5Iz97DuTwSoQIsGDsq9/0J/eF/pqvl3vRI+VrzqXAxUj0NO3criycMuqNcYfPqVLjIpU2MP/dg3+JZitx35/gagpttG5J7JrBs6DDmEZF7m60pcO+I2QT+1+RLWNVAWuOpBGguKiopZrvH8LpleQClDVix0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UWnz/L5C; arc=none smtp.client-ip=74.125.82.74
+	 To:Cc:Content-Type; b=XyjDe5gRh52kgTXvgAW9GZ6TuUkHTToVPZ0fNxbpyoHo4e3HWH7jQNbUf/O73Px48P/4Cilq2rtQ6C15mPT8PzcyQATFAecvFSQ08SehME0U5XUW5L4AdSRDmfPDPO2Lu9IyL5e6txztQNL5KUGQ1Vh7rX4PtT1DwvOPHLRJWSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M/sq6PXA; arc=none smtp.client-ip=74.125.82.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UWnz/L5C"
-Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-132c3280e03so138888c88.1
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 10:46:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M/sq6PXA"
+Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2ba9a744f7dso4692665eec.0
+        for <bpf@vger.kernel.org>; Tue, 12 May 2026 10:46:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778608013; x=1779212813; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5i6lHdemblE/gP7H567PkD83N+A+98X3bUfvUWyr9JU=;
-        b=UWnz/L5CHs56nuL4flzdXORm60vsxhec3WMPdsoOkZdqGq/7sbXmmtH2T7USAsWYmM
-         YdG25Mx97Nfyef2jTpuZVk9MGHTDppxtEl2OIkmxc6jxnkgexNyR07Y8YsIEqKr8fGVH
-         y+ZwO1m5rZY35yMw8a++Xt28T94D+MQGqhwhhyIc2ChbBEkv3ZnyAU/5TulV72llDmP0
-         CEedv1UPNVnz0ylLySAYypRSSL200f7IWN2odcKG1hrEdz1Z8S3OP/qaWaZCG1eBZ2NU
-         60+CtxPYnfR600xur0udksYXqIKiBQu9r7TAjTw/+5NXX1/2ZfMhi/9K0sFc6e1qJmlO
-         5OcQ==
+        d=google.com; s=20251104; t=1778608015; x=1779212815; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=48Gda8O0cS2ktC9kVwU4XlytikI6HiStHpxBe0cBwCQ=;
+        b=M/sq6PXAGAr388AEV3OXdYhA2MGXd1ddCqYmYeqrGHtwSvr4eq3mif/77BFpkv9j6q
+         1NF7on9CxHaKb/FjSPtmAqIyk7LdwLTZMZ6lc/qk07u/qRL9IbPhu3brSXVOwkQ36f/z
+         2oF1Bmu4BHoilWakMP85YJRB2B/dkXyIt67KtkaSX7a7c3R6Idd0TyGUqIH33sw86RnW
+         kVXpydH+HHx4/hlgh2z8AZESzenFHkvA781SCuv8Cq4HpNpjajUxdppLJufmb1HBkZLo
+         M9Nb0fHBNpq85VhZRGUit4PyK+xknHV5GUvc2bvJ7oHha1gBftjVvQBiFTlMB5F1P39L
+         T32Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778608013; x=1779212813;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5i6lHdemblE/gP7H567PkD83N+A+98X3bUfvUWyr9JU=;
-        b=CMpcrp6I3nG7QSvHZ5MiK/ZoydBh2OtnViu09QzkZ8WHMIKtq/XsnAkUGfPyh40EsQ
-         esyzjIz/V1W5B0KIcgkPqhPIIM43kdk764bRcGFsiz9QMkJiCA4WFek55fVLzf3fZ1on
-         zwkoCougpexIME49rkhEl7mp/Hvko0IKApRF38QBmTYZL/YVE9bqUYi01/ulBBwM2GlG
-         fAMPTatISYGW4s70bImto/Q9+knVIXyTt9qW6frQBsaAAqE6tyqh7n+z7uWFgxzQFOdH
-         fOYmE2wEeojIt9Ec+v9QBaLdRoe6hzaADJm0mES45xQk+mYx7JiWfxhCbx7mmvXJXuAu
-         P1tw==
-X-Forwarded-Encrypted: i=1; AFNElJ9RP6TaPmDjzCYNx1J9LNKwkdOHZuTVT22IQnlywoApKCALvIgqJielyiLuxe66NUPnfxE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlSVe4ur5FcB0MvDK0oDAqxAM09ne34ge+/1OJ+H18MetuJK94
-	4INolQ1pmIl859hDpsBsvQnqTIpraC/7BqJoSr3mZVtVwl+E52PMaW1FgIU0VlnGIeHnnWVJwwB
-	9I4KVdDvPLA==
-X-Received: from dlzz19.prod.google.com ([2002:a05:7022:493:b0:12d:b27b:7405])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:45a9:b0:12c:6e75:bb1
- with SMTP id a92af1059eb24-132a7edc8a8mr7939294c88.4.1778608012963; Tue, 12
- May 2026 10:46:52 -0700 (PDT)
-Date: Tue, 12 May 2026 10:46:21 -0700
+        d=1e100.net; s=20251104; t=1778608015; x=1779212815;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=48Gda8O0cS2ktC9kVwU4XlytikI6HiStHpxBe0cBwCQ=;
+        b=YiyuO1p31tpTwrqel9Q4T133ncJcO/TMbOrSHdQwc8SqeTAb3fz2IGAv+UQdXDwmyK
+         iqjRjrUdcz1U5onkBnuWdG4S1WU7ayLo9vEEVxgZvwqnzjTOraaLt0+0Bzc6g9cedQyP
+         GUUgdcnq71U6quUMC5lm5uME5p/wvGMKbCuZSCM/vmypfXqKb0cAyDIp9LbJJCQjseA/
+         xdpjVVpp4MlUXPfF7jcfhQmNvCjpj9b0LhJQviEE+oF+4RDxshzIrw5s0pcH6Lb2wzsr
+         j6lDSrJuxspM//rfaTWtlH9gw1X/S2cAzpTd6xE9iIgKgA+Su6fijRrh3XpjcM4xMoOO
+         cMcw==
+X-Forwarded-Encrypted: i=1; AFNElJ8H92heOeTQEpgHcaHJ5LpwQWSnGDejPxW/VjI6LkxSoRqAGBh3b0gGN33tWky+eZs9Nwo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWMFKWZH81dS7DX4IsdePZWTT0SqVsSTWpNf9sg+ilCqAZLCqO
+	IM2+IK/OcCROZanK9tZY4wySsEMLDkwou1kEkQuXcSRKTHkwz51glkdn+X/w+nSNt6t9h1Tx4Q9
+	tKL1TstgxnA==
+X-Received: from dyz23.prod.google.com ([2002:a05:693c:4097:b0:2d8:d251:f7ba])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:e78d:b0:2fc:9aa8:83da
+ with SMTP id 5a478bee46e88-3011a369aa2mr27082eec.29.1778608014915; Tue, 12
+ May 2026 10:46:54 -0700 (PDT)
+Date: Tue, 12 May 2026 10:46:22 -0700
 In-Reply-To: <20260512174638.120445-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,9 +60,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260512053539.3410189-15-irogers@google.com> <20260512174638.120445-1-irogers@google.com>
 X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260512174638.120445-2-irogers@google.com>
-Subject: [PATCH v2 01/18] bpftool build: Restrict feature tests during
- bootstrap compilation
+Message-ID: <20260512174638.120445-3-irogers@google.com>
+Subject: [PATCH v2 02/18] tools build: Integrate libdebuginfod into test-all
+ fast path
 From: Ian Rogers <irogers@google.com>
 To: irogers@google.com, acme@kernel.org, james.clark@linaro.org, 
 	namhyung@kernel.org
@@ -76,48 +78,110 @@ Cc: 9erthalion6@gmail.com, adrian.hunter@intel.com, alex@ghiti.fr,
 	song@kernel.org, swapnil.sapkal@amd.com, terrelln@fb.com, tglozar@redhat.com, 
 	thomas.falcon@intel.com, yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When bpf_skel.mak executes 'make -C ../bpf/bpftool bootstrap', bpftool's
-Makefile unconditionally evaluated feature checks for llvm, libcap, libbfd,
-and disassembler libraries because the bootstrap target was not exempted.
+Bundling libdebuginfod into test-all.c allows Make to avoid an individual
+feature check sub-make fork during AST parsing. Short-circuit feature_check
+in Makefile.feature to instantly skip sub-make evaluations when a feature
+was already pre-detected by test-all.
 
-Since the bootstrap bpftool strictly compiles minimal AST parsing and C
-code generation logic without linking LLVM or disassembler libraries, these
-feature check sub-makes are completely redundant.
-
-Exempt the bootstrap target from non-essential feature tests to eliminate
-unneeded sub-make fork overhead during Kbuild startup.
+Trade-offs:
+On some Linux distributions (e.g., Debian/Ubuntu), libdebuginfod-dev is
+packaged separately from libelf-dev and libdw-dev. If a user installs
+libdw-dev but omits libdebuginfod-dev, adding -ldebuginfod to BUILD_ALL
+causes test-all to fail, falling back to individual feature tests. However,
+on fully configured developer workstations, this successfully reclaims
+sequential startup latency.
 
 Tested-by: James Clark <james.clark@linaro.org>
 Assisted-by: Gemini:gemini-3.1-pro-preview
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/bpf/bpftool/Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/build/Makefile.feature   | 6 ++++--
+ tools/build/feature/Makefile   | 2 +-
+ tools/build/feature/test-all.c | 5 +++++
+ 3 files changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 0febf60e1b64..8f50bc163bb2 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -106,6 +106,10 @@ ifneq ($(SKIP_CRYPTO),1)
-   CRYPTO_LIBS := -lcrypto
- endif
- 
-+ifeq ($(MAKECMDGOALS),bootstrap)
-+FEATURE_TESTS := libelf-zstd
-+FEATURE_DISPLAY :=
-+else
- FEATURE_TESTS := clang-bpf-co-re
- FEATURE_TESTS += llvm
- FEATURE_TESTS += libcap
-@@ -122,6 +126,7 @@ FEATURE_DISPLAY += libcap
- FEATURE_DISPLAY += libbfd
- FEATURE_DISPLAY += libbfd-liberty
- FEATURE_DISPLAY += libbfd-liberty-z
-+endif
- 
- check_feat := 1
- NON_CHECK_FEAT_TARGETS := clean uninstall doc doc-clean doc-install doc-uninstall
--- 
+diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
+index 2f192d3bf61b..d8febe5d5800 100644
+--- a/tools/build/Makefile.feature
++++ b/tools/build/Makefile.feature
+@@ -8,7 +8,9 @@ endif
+=20
+ feature_check =3D $(eval $(feature_check_code))
+ define feature_check_code
+-  feature-$(1) :=3D $(shell $(MAKE) OUTPUT=3D$(OUTPUT_FEATURES) CC=3D"$(CC=
+)" CXX=3D"$(CXX)" CFLAGS=3D"$(EXTRA_CFLAGS) $(FEATURE_CHECK_CFLAGS-$(1))" C=
+XXFLAGS=3D"$(EXTRA_CXXFLAGS) $(FEATURE_CHECK_CXXFLAGS-$(1))" LDFLAGS=3D"$(L=
+DFLAGS) $(FEATURE_CHECK_LDFLAGS-$(1))" -C $(feature_dir) $(OUTPUT_FEATURES)=
+test-$1.bin >/dev/null 2>/dev/null && echo 1 || echo 0)
++  ifeq ($(feature-$(1)),)
++    feature-$(1) :=3D $(shell $(MAKE) OUTPUT=3D$(OUTPUT_FEATURES) CC=3D"$(=
+CC)" CXX=3D"$(CXX)" CFLAGS=3D"$(EXTRA_CFLAGS) $(FEATURE_CHECK_CFLAGS-$(1))"=
+ CXXFLAGS=3D"$(EXTRA_CXXFLAGS) $(FEATURE_CHECK_CXXFLAGS-$(1))" LDFLAGS=3D"$=
+(LDFLAGS) $(FEATURE_CHECK_LDFLAGS-$(1))" -C $(feature_dir) $(OUTPUT_FEATURE=
+S)test-$1.bin >/dev/null 2>/dev/null && echo 1 || echo 0)
++  endif
+ endef
+=20
+ feature_set =3D $(eval $(feature_set_code))
+@@ -100,6 +102,7 @@ FEATURE_TESTS_BASIC :=3D                  \
+         disassembler-four-args		\
+         disassembler-init-styled	\
+         file-handle			\
++        libdebuginfod			\
+         libopenssl
+=20
+ # FEATURE_TESTS_BASIC + FEATURE_TESTS_EXTRA is the complete list
+@@ -125,7 +128,6 @@ FEATURE_TESTS_EXTRA :=3D                  \
+          clang                          \
+          libbpf                         \
+          libpfm4                        \
+-         libdebuginfod			\
+          clang-bpf-co-re		\
+          bpftool-skeletons
+=20
+diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+index 704c687ed3ad..dc828523b50a 100644
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -115,7 +115,7 @@ __BUILD =3D $(CC) $(CFLAGS) -MD -Wall -Werror -o $@ $(p=
+atsubst %.bin,%.c,$(@F)) $(
+   BUILD_BFD =3D $(BUILD) -DPACKAGE=3D'"perf"' -lbfd -ldl
+   BUILD_ALL =3D $(BUILD) -fstack-protector-all -O2 -D_FORTIFY_SOURCE=3D2 -=
+ldw -lelf -lnuma -lelf -lslang \
+ 	      $(FLAGS_PERL_EMBED) $(FLAGS_PYTHON_EMBED) -ldl -lz -llzma -lzstd \
+-	      $(shell $(PKG_CONFIG) --libs --cflags openssl 2>/dev/null)
++	      $(shell $(PKG_CONFIG) --libs --cflags openssl 2>/dev/null) -ldebugi=
+nfod
+=20
+ __BUILDXX =3D $(CXX) $(CXXFLAGS) -MD -Wall -Werror -o $@ $(patsubst %.bin,=
+%.cpp,$(@F)) $(LDFLAGS)
+   BUILDXX =3D $(__BUILDXX) > $(@:.bin=3D.make.output) 2>&1
+diff --git a/tools/build/feature/test-all.c b/tools/build/feature/test-all.=
+c
+index 1488bf6e6078..b6984236859f 100644
+--- a/tools/build/feature/test-all.c
++++ b/tools/build/feature/test-all.c
+@@ -146,6 +146,10 @@
+ # include "test-libopenssl.c"
+ #undef main
+=20
++#define main main_test_libdebuginfod
++# include "test-libdebuginfod.c"
++#undef main
++
+ int main(int argc, char *argv[])
+ {
+ 	main_test_libpython();
+@@ -178,6 +182,7 @@ int main(int argc, char *argv[])
+ 	main_test_libzstd();
+ 	main_test_libtraceevent();
+ 	main_test_libopenssl();
++	main_test_libdebuginfod();
+=20
+ 	return 0;
+ }
+--=20
 2.54.0.563.g4f69b47b94-goog
 
