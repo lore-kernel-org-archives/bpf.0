@@ -1,202 +1,78 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD41E25228C
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 02:28:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75BBC383304
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 02:36:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778552922; cv=none; b=UcBTbP9ZRq2up9QhJ006vJJz/wc+6loofR4JuVDZk3e/d2JNitplYreMQYbwBwmLQ5qwdrFLpO1e+Bx4KdZoP6UgkkclWoEiTO1LOC8nb/aVgdzqflhSbP3goOkl3hyRUBU2jCVusXKgXLgK1Um9aL7s5mnQHJ6QLieNW1wM25Q=
+	t=1778553365; cv=none; b=m2/oHGe3L55Jl8TVgt2HUBWoMI0vOvuQdyISB87KpP8wDIO+//9lJeUsZWjoUgBgXKfKAau983+huZzmsFFrVh1ttGmLeShBK/YcIbr1dwphSm6KNOl8g9vovlXQXWnTLBzmy+JKWNRVbpN8QlUOXnA1lm+msKmSgXk+Iljo++0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778552922; c=relaxed/simple;
-	bh=yvgC1FnjjoMtlutF/hjAmwuqu5sE1LUXUBLSbX5eXkM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bHThICQQTwfwgSUEOJkyh2m8/AIh3xG6mL9l2flW/29OrAb9To5I/Bp89W7sswlUhexJA2MaLgaD1s/VpvWtG3klEwundLHch4Hpz1py3kYqmgF8olcjefZmv4n6OJD50MI95bZL+kqIEYqkZ/wns2VBP8zqiuhPh00U+0kuQTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H7qb5utl; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778553365; c=relaxed/simple;
+	bh=1WslB9UEKKDX1uSJtp8q1keI80QEBI+YCG3k4moOh2k=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cGj/RhyVf/017ABl244GQe9h9Fjj1zJsRjj1tn7uQ+qR0lKQ/NnrI6H5J95irDmJAsIgn5A1jhpIsynGYQUuDSWtiCNPDE8QMG3y7/wDbLMuPOHZ3rvfOyREV+5Dt0fVsIsVKp5a3+ktOApf3NdEJ6gFDYnQUIlMJKhyDN4palk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iKTXRBEg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H7qb5utl"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3665b67ed66so2197742a91.1
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 19:28:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778552920; x=1779157720; darn=vger.kernel.org;
-        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
-         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ayM4rO9yjDKyVwkABXp8ERuvhdOetbMp4rrjg9pQj5Q=;
-        b=H7qb5utlWifk5YEe2BGAFpDccoG0/tibAgSeQ+46KkY7IZdmUIOUOKnbKrHxiJi+FE
-         75up96vnsVsC7rU52/xfNRnreJLftdLIeNRZVftNVgOvKiTaQltPUfrherSpie7LcENZ
-         MvLI8V+zv8kaRTVBA15SHctwNptNJQx7IIHxIFPaTn3KlJL1prpT5nO4NmAYsA1+JdYY
-         5o0z/kRKcznOXWYXbBLxw7yB0RBPOy8rHYo1rI2CSeNWkb7BMs0LVR1g0XHUIu1QLrNC
-         UeQ03S/7TdxfeMnfY0zPXnbA98MrYDw8LcwgD9Mw1+ltOe/hb+kn7lEekS9s+rTtaHnZ
-         JcNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778552920; x=1779157720;
-        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
-         :subject:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ayM4rO9yjDKyVwkABXp8ERuvhdOetbMp4rrjg9pQj5Q=;
-        b=k+uFGRw6k27NOxMnPge0AJBWglTnfZm9K/rJuFDL480nV259tFSGKovQVoQL/5RzTN
-         rLj8XXqUZGZhtefIqPZEvgfZal0kJ4YSUC5p7VdaJg+B/20phBgJ5W4YSCAi3wWCRwI8
-         YYfbeFfYT9r8XXRWMP9kpAC1atFHu2ejFtNwFvO9FjaBCazv1WVuz61JBVCAJJ9hI4oH
-         1SFJC8dEsK57JPzYEKBqC0s1SRBiQp+bWRFxHDHDS0gZsT9EUjLAWIfheNLK8p/SBfhp
-         2KsbrLNqs1U4BoQ+PBsJ4aK2fQfObn5R0/n1OlvdugjpbD691Hpxy9ctpaLhL41udS28
-         WHtA==
-X-Forwarded-Encrypted: i=1; AFNElJ/kJPJnPYB8QMx8eug/6Bw+Te5wjWjA/lIXe1jwNTv8V9l5pZRW3DJk0e22d41Mh0rWF3g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcHfRdZ+SPgKjhb1nGDkBw6Ilg3LEQFWPd1HRmZ/WwV3iRyihe
-	0ZmGBwFq1eVvyo6AUYhZLrT5J58w6QmPvpRuGqHVpzpWfRqJvHIaeLK6
-X-Gm-Gg: Acq92OGOGSY3uHhTz99BdZCU4MDC7f2OabOnV2wAVcGpuoqEbQwwWoR4mSShToQcJdr
-	fe7oAqoWqaOvb8i9t9pJ0S91Sl8xfLxo7vquXxMkAthRGEcQzV7WVUtk27bGjVDTjwMypC3aWnv
-	TBMcLtZ6ctIYoJqgwc4EwCOCUiMb4HAvVQX5Hh/DwnknxXn31T7UO3rlJY1BRrsknfoJg3JWqB/
-	Hqd9ZK/YDz+dsvuYA6/uImhwPJfrwQTw2U5eua+awxRltAmgZs7Dgfdt0kRUquAnawhWj4YAZl8
-	XZtrS/hlMHxAv3UlrKHtqH3p8CcsXXDVXvOfnOgG10KfhL8gQRfWCFqFnPDNS8z1376x13hA3aR
-	GqoLomoITNXtKvZ1YvDMrnlVX1qL7FiTaDOQg/+qQWuMNhIegoFH+YH2GDycmrtcA3+M1uXRv+L
-	RggfZBtSNHEJHwDQSwOdnlhR37zz+0CNYxAOmT9V6usu5xVfmSdXVm
-X-Received: by 2002:a17:903:196d:b0:2b9:ecb4:a3dd with SMTP id d9443c01a7336-2bc7ac55031mr122095205ad.34.1778552919943;
-        Mon, 11 May 2026 19:28:39 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1e8df57sm120681275ad.64.2026.05.11.19.28.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 19:28:39 -0700 (PDT)
-Message-ID: <ae5f8053bfc94fb02abdf78d5a452a7baae5c35e.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 05/12] bpf: Refactor object relationship
- tracking and fix dynptr UAF bug
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
- 	daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org, 
-	mykyta.yatsenko5@gmail.com, kernel-team@meta.com
-Date: Mon, 11 May 2026 19:28:06 -0700
-In-Reply-To: <20260506142709.2298255-6-ameryhung@gmail.com>
-References: <20260506142709.2298255-1-ameryhung@gmail.com>
-	 <20260506142709.2298255-6-ameryhung@gmail.com>
-Content-Type: multipart/mixed; boundary="=-Pv11CFF05eTOwbwEw9lY"
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iKTXRBEg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 891E9C2BCB0;
+	Tue, 12 May 2026 02:36:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778553365;
+	bh=1WslB9UEKKDX1uSJtp8q1keI80QEBI+YCG3k4moOh2k=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=iKTXRBEgibesk6xnXuiJh2CFv3190CoqJjYUn4eSDIcYHMR4hdLCMNmEc9ZLycNKY
+	 JWahpekU0hIQKdSAg1AnfcNXz8tV9jDrIzLlVl9JUQ+MzvxlpAdXQIYZipoAgYEjpX
+	 2un3S5bx2Z6cL+RCD9SDGUCHlj03wSVOd8c4HRaBgBMWEPBWEOh7xwhK+rZY1k29Qz
+	 W3bnqew3NIhBt6Tutw4IRSQCeIMGa0oqsUvHohysrhwJ2m2J8KB2coiBx/UdFFe4Pq
+	 FxKPbjNJLu6lDbxysgkQDPKVg7Lni1u15cUamFn+lg87fbDYdyjinO4L58SVrIgjNh
+	 wj2/9MkhqmnnQ==
+Date: Mon, 11 May 2026 19:36:03 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+Cc: "Mahe Tardy" <mahe.tardy@gmail.com>, <bpf@vger.kernel.org>,
+ <andrew+netdev@lunn.ch>, <andrii@kernel.org>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <davem@davemloft.net>, <eddyz87@gmail.com>,
+ <edumazet@google.com>, <john.fastabend@gmail.com>, <martin.lau@linux.dev>,
+ <pabeni@redhat.com>, <song@kernel.org>, <liamwisehart@meta.com>
+Subject: Re: [PATCH v1 1/4] bpf: Add netpoll kfuncs for sending UDP packets
+Message-ID: <20260511193603.3ef00cee@kernel.org>
+In-Reply-To: <DIGBS3WKQN94.1YYMZM0K6CETY@gmail.com>
+References: <20260511085344.3302-1-mahe.tardy@gmail.com>
+	<20260511085344.3302-2-mahe.tardy@gmail.com>
+	<20260511182019.69ebc7c6@kernel.org>
+	<DIGBS3WKQN94.1YYMZM0K6CETY@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
---=-Pv11CFF05eTOwbwEw9lY
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Mon, 11 May 2026 18:59:56 -0700 Alexei Starovoitov wrote:
+> unusable toys? What are you talking about?
 
-On Wed, 2026-05-06 at 07:27 -0700, Amery Hung wrote:
+Please refer to the comments on the RFC. netpoll bypasses most of 
+the networking stack. And there either has to be some user space 
+to negotiate crypto or this is unusable for anyone serious.
 
-[...]
+> netpoll is already called from everywhere.
 
-> +/* Release id and objects referencing the id iteratively in a DFS manner=
- */
-> +static int release_reference(struct bpf_verifier_env *env, int id)
-> +{
-> +	u32 mask =3D (1 << STACK_SPILL) | (1 << STACK_DYNPTR);
->  	struct bpf_verifier_state *vstate =3D env->cur_state;
-> +	struct bpf_idmap *idstack =3D &env->idmap_scratch;
-> +	struct bpf_stack_state *stack;
->  	struct bpf_func_state *state;
->  	struct bpf_reg_state *reg;
-> -	int err;
-> +	int root_id =3D id, err;
-> =20
-> -	err =3D release_reference_nomark(vstate, ref_obj_id);
-> -	if (err)
-> -		return err;
-> +	idstack->cnt =3D 0;
-> +	idstack_push(idstack, id);
-> =20
-> -	bpf_for_each_reg_in_vstate(vstate, state, reg, ({
-> -		if (reg->ref_obj_id =3D=3D ref_obj_id)
-> -			mark_reg_invalid(env, reg);
-> -	}));
-> +	if (find_reference_state(vstate, id))
-> +		WARN_ON_ONCE(release_reference_nomark(vstate, id));
-> +
-> +	while ((id =3D idstack_pop(idstack))) {
-> +		bpf_for_each_reg_in_vstate_mask(vstate, state, reg, stack, mask, ({
-> +			int ref_obj_cnt =3D 1;
-> +
-> +			if (reg->id !=3D id && reg->parent_id !=3D id && reg->ref_obj_id !=3D=
- id)
-> +				continue;
-> +
-> +			/*
-> +			 * A referenced dynptr can be overwritten only if there is at
-> +			 * least one other dynptr sharing the same ref_obj_id,
-> +			 * ensuring the reference can still be properly released.
-> +			 */
-> +			if (stack && stack->slot_type[BPF_REG_SIZE - 1] =3D=3D STACK_DYNPTR &=
-&
-> +			    dynptr_type_referenced(reg->dynptr.type))
-> +				ref_obj_cnt =3D dynptr_get_refcnt(state, reg->ref_obj_id);
+You mean all contexts because it's used by console?
 
-Note that dynptr_get_refcnt() only looks for objects in the state's frame,
-dynptrs in other frames are ignored. This can lead to false rejections,
-as in the attached test cases, which verifier refuses to load with the
-following error message:
+> bpf_netpoll_send_udp() won't add any more bugs.
 
-; *(volatile __u8 *)&clone =3D 0; @ dynptr_fail.c:2160
-19: (73) *(u8 *)(r10 -16) =3D r1
-Leaking reference id=3D2 alloc_insn=3D7. Release it first.
-processed 14 insns (limit 1000000) max_states_per_insn 1 total_states 1 pea=
-k_states 1 mark_read 0
+Same as TLS + sockmap didn't? I spend enough time mopping up after
+people.
 
-> +
-> +			if (reg->ref_obj_id && reg->ref_obj_id !=3D root_id && ref_obj_cnt <=
-=3D 1) {
-> +				struct bpf_reference_state *ref_state;
-> +
-> +				ref_state =3D find_reference_state(env->cur_state, reg->ref_obj_id);
-> +				verbose(env, "Leaking reference id=3D%d alloc_insn=3D%d. Release it =
-first.\n",
-> +					ref_state->id, ref_state->insn_idx);
-> +				return -EINVAL;
-> +			}
-> +
-> +			/* Free objects derived from the current object */
-> +			if (reg->id !=3D id) {
-> +				err =3D idstack_push(idstack, reg->id);
-> +				if (err)
-> +					return err;
-> +			}
-> +
-> +			if (!stack || stack->slot_type[BPF_REG_SIZE - 1] =3D=3D STACK_SPILL)
-> +				mark_reg_invalid(env, reg);
-> +			else if (stack->slot_type[BPF_REG_SIZE - 1] =3D=3D STACK_DYNPTR)
-> +				invalidate_dynptr(env, stack);
-> +		}));
-> +	}
-> =20
->  	return 0;
->  }
+> I like this netpoll approach way more then creating and keeping proper socket
+> within bpf and all head aches of keeping it around and doing send from
+> good context. With netpoll all of these issues are gone.
+> Just bpf_netpoll_send_udp() from anywhere and it works just like it does
+> for dmesg.
 
-[...]
+No, netpoll is high risk / brittle and tightly integrated with NAPI.
 
---=-Pv11CFF05eTOwbwEw9lY
-Content-Disposition: attachment; filename="false-positivie-test.patch"
-Content-Type: text/x-patch; name="false-positivie-test.patch"; charset="UTF-8"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9ncy9keW5wdHJfZmFp
-bC5jIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL2R5bnB0cl9mYWlsLmMKaW5k
-ZXggMzE5NjIyMzNiZWExLi5lMzA4YjA0MDk1MzAgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcv
-c2VsZnRlc3RzL2JwZi9wcm9ncy9keW5wdHJfZmFpbC5jCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2Vs
-ZnRlc3RzL2JwZi9wcm9ncy9keW5wdHJfZmFpbC5jCkBAIC0yMTUwLDMgKzIxNTAsMzMgQEAgaW50
-IGR5bnB0cl9vdmVyd3JpdGVfcmVmX2Nsb25lX3NsaWNlX3ZhbGlkKHZvaWQgKmN0eCkKIAogCXJl
-dHVybiAwOwogfQorCitzdGF0aWMgX19ub2lubGluZSB2b2lkIG92ZXJ3cml0ZV9jbG9uZV9pbl9j
-YWxsZWUoc3RydWN0IGJwZl9keW5wdHIgKnBhcmVudCkKK3sKKwlzdHJ1Y3QgYnBmX2R5bnB0ciBj
-bG9uZTsKKworCWJwZl9keW5wdHJfY2xvbmUocGFyZW50LCAmY2xvbmUpOworCS8qIE92ZXJ3cml0
-ZSB0aGUgY2xvbmUgLSBwYXJlbnQgaW4gY2FsbGVyIGZyYW1lIHN0aWxsIGhvbGRzIHRoZSByZWYg
-Ki8KKwkqKHZvbGF0aWxlIF9fdTggKikmY2xvbmUgPSAwOworfQorCisvKgorICogT3ZlcndyaXRp
-bmcgYSBjbG9uZSBpbiBhIGNhbGxlZSBmcmFtZSBzaG91bGQgYmUgYWxsb3dlZCB3aGVuIHRoZSBw
-YXJlbnQKKyAqIGluIHRoZSBjYWxsZXIgZnJhbWUgc3RpbGwgaG9sZHMgdGhlIHJlZi4gZHlucHRy
-X2dldF9yZWZjbnQoKSBjdXJyZW50bHkKKyAqIG9ubHkgY291bnRzIGR5bnB0cnMgaW4gdGhlIGN1
-cnJlbnQgZnJhbWUsIG1pc3NpbmcgdGhlIHBhcmVudCBpbiB0aGUKKyAqIGNhbGxlciBmcmFtZS4K
-KyAqLworU0VDKCI/cmF3X3RwIikKK19fc3VjY2VzcworaW50IGR5bnB0cl9vdmVyd3JpdGVfY2xv
-bmVfY3Jvc3NfZnJhbWUodm9pZCAqY3R4KQoreworCXN0cnVjdCBicGZfZHlucHRyIHB0cjsKKwor
-CWJwZl9yaW5nYnVmX3Jlc2VydmVfZHlucHRyKCZyaW5nYnVmLCA2NCwgMCwgJnB0cik7CisKKwlv
-dmVyd3JpdGVfY2xvbmVfaW5fY2FsbGVlKCZwdHIpOworCisJYnBmX3JpbmdidWZfZGlzY2FyZF9k
-eW5wdHIoJnB0ciwgMCk7CisKKwlyZXR1cm4gMDsKK30K
-
-
---=-Pv11CFF05eTOwbwEw9lY--
+"I don't want to run a tiny user space program" is nowhere near strong
+enough justification to expose this API. SMH.
