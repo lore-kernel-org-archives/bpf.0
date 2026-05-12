@@ -1,66 +1,67 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4307F266B72
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 01:18:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB3C2874F8
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 01:18:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778548698; cv=none; b=lY05NG1JiLNPoC1n+1m7q20z6HM84TY9vJprVm9Pyt9fFJaEf5AesbhPvlNywPa4CFza2YKod6E3CY/JEHkdlAy3brDRGA9VZK0P8iazZu5r0V67MuH00ZIxx93zWxhDaWS6Pkc5Sbt5C8WpVRbLSwZS2y+8wlcLfdpflsYTQBM=
+	t=1778548704; cv=none; b=cVSTlldCjkeE+LEhUIS6ZlkVWVUsCIZZ3sGLCGj1bmoxpmJGd/yjBPULrw9EkdE6Xk3o2mR988h98JStQ6XUVGdp3iKrmaAEF3GHTMGHayOkgf3BkaIAenQkNcTsJqfE8cHTCC6mHUivTS+jGbKx7kVnqrQWis1METQXUED2zZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778548698; c=relaxed/simple;
-	bh=FkpSFBB/bX+rp9bKDxdBiyERkKc6SlIj+UXp0PrCs9o=;
+	s=arc-20240116; t=1778548704; c=relaxed/simple;
+	bh=1QC4PkD36OXhmrBejw/9qqlS5pST0Kv6rS1HYH/Wsr4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FImuNvs9H4+e2lnbUfvpgMhp/nE9NetnGTmO7L1V2PZ6/7X+6b2QtYUVt0qt0JK7Z1yc/qyDu2e2JLlb+XSKmpR7ri0Tf79xmonAxpOGg6Ip/jQnvCo3OT8jZ6lPJguQchZDlcjYB+dVGsvzUYW/FSBWfuubpGPmWO4zg6qDCso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O6OLNnaJ; arc=none smtp.client-ip=209.85.128.174
+	 In-Reply-To:To:Cc; b=Qy7wTZBTA9FpvBQJ1bl0qdReIe1+6B4po2CwQafRocOKVrNjj0yfckA51eYkq1dEo2ymiYxjnStVGEKHZVUnqG+35jCTp60tQNl87gRa/GyN8fNa88nzMAiyD8UEJcESQ+hKbzIEyGPWs2D0fU8ZB9D/4y42TF6UIpDm+wzYO7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NGB1/HiY; arc=none smtp.client-ip=209.85.222.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O6OLNnaJ"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-7bf1433b80cso34002807b3.1
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 18:18:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NGB1/HiY"
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-8d7e7f48499so540581485a.1
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 18:18:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778548695; x=1779153495; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778548698; x=1779153498; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HLDMf75sSoZOlrolBDWd/AGNeQyGKtHDPvvwXPguYtg=;
-        b=O6OLNnaJx+MlTLz/ACEqApos1UX6Lf8jPn6qF2GzWoOG7H3kLU2kMTVP9RetkuoDXw
-         m2sov/ke7KXA/8S7iQnIWncNcOezzK0uPuMA9T1RGmbqSufQV8snuc5vzWruiJCtQa3O
-         bsTPCZyPhtqtbf1CteG8pmrqXdFvguGGZB+dbdkGr4Sx4o0bUooZEYks0zmyK3gRN2Cl
-         Dq6eQKCERmJphsLVqMHcFSz/DnY9+M9bsVQPXZV3udWhJiQ8TPJ7ZPLPXVF3zFiuVvB/
-         WF5M8HakH6sIHLNCJYcC1XpY+Tzka2RS0koVy+SPnFBkGEBGTB0DQcV86Ja7q71vuL5B
-         R3Hw==
+        bh=rXRLmOaeN9M4AwY3iBISX01P3DWw0uS/LnGVtbElBLg=;
+        b=NGB1/HiYzPr5PkViOS+y5Yd85YYRNxoJK7krJlOqjGqkO9w02kF24VXWwMayogw1oa
+         RiozLEcOU7BGga+IoXQO5y+jLfP9hLZeqic+zw6Enl7iEk8j8b0XJT8bmkxcsFKLFVra
+         rS1mj5VlsrWFKfeUzQfzQmlNbPkubIKGrRCLUGJFjhZl+QBR8bhQTf2jS/d/Jej1tp3s
+         6VFnTPzkWtBJY8r8ZzdA34mgeQaE9fUU5P+Vd2KUxlWoPfA2DKFf38ROa+dVbgPTlqRA
+         qd1ZCg/Jor2/XYoTxBFY5X9TY3NTh3yMw86G03R5MJBNeZchf7o34KfGzdocUYp53IXA
+         CfHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778548695; x=1779153495;
+        d=1e100.net; s=20251104; t=1778548698; x=1779153498;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=HLDMf75sSoZOlrolBDWd/AGNeQyGKtHDPvvwXPguYtg=;
-        b=VuDJmlB8sNKqoLo0qH5OcJiuVurww4FQYeyrTMgE6i0xkH7duKDKXvTFTqSncG1PqL
-         VjpTQuaBX1FM+hF6IW6WUyyVOKG4m7s/IUvZ1AaakCH8PWf7ehCU3H18bBK2R1X9uLeA
-         aNt03ShR8z0NOiTgdaeYRK4PL3QFij19m0hyIWgRARypA4i2B3xX810sjjgYfb0yl4r7
-         mqIed/tBQNBrNtJbCGuur2H+W0vKC31ZK1VO1+/doUO5C+WmM2Wp6fC1NyWA9KQXdWvl
-         QdsoDz6P4haxvyXSH7k66fnccXh7reE+LvOf+gDQqBJhmf6OmmUX7Ojj4aDHjDRXIYFy
-         X+LQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+KEgJIF6eKIDHoKdg4S9hh63KMqUfinSKJ20bd/Nin3QIrfEmNt/w5X+OCZJDQUjXF100=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOcZaEDVNVlH4HmUQtfG6vX3NqlV+eTOSPinAR3reK14zFhBjB
-	r9ZETA8l40ixf8IdXY368ZLsfwsyupFT1zSTN4ku43voYki+QY6BRdSh
-X-Gm-Gg: Acq92OGXPuHI/Oknjc/sBm1OrJGPyEAXoQRnQaYAM3RQbyQXcNiYIUQ6u3W+EIIPl8n
-	yg2lrikck5JATdOjIEuXioE9brBc8doKDgtELjETJblrcuukFuXuPKcSWntWDQqvb/7e5jEEcSM
-	m927yvLbeOfJKREv2EliMgF8w2+c39NWEVnXMujLVQhccN5rdqE8a17feejw7S0RCGs1O9hyT42
-	Y5nGGKG7h84TyjBpNrTkYEy7/MkzQdkwdftHsfu/86J+GVJ5De3AvpJyzr1XFLqUXrAAzpom+eQ
-	Vs1FDM8rD6jl2novmZ1YdtLnimcWl7Z/FY4j65fzGu6kuqbbuRy+UwEdZJfbi+OGRzarugiB3Ea
-	E0Kfmxnxvcp7NUTXioRhTpOTxdd/XmjEZ2oaxaJD0W2F7o2XPCRNz3N3o4UJ1xC4O+8DDPGLBTV
-	N9/BLP56IGXrZOeWvcodUTJg==
-X-Received: by 2002:a05:690c:389:b0:7bd:6a98:58d7 with SMTP id 00721157ae682-7c1059649cbmr113947997b3.38.1778548694820;
-        Mon, 11 May 2026 18:18:14 -0700 (PDT)
-Received: from localhost ([2a03:2880:f806:16::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7c535f8e757sm5443377b3.34.2026.05.11.18.18.14
+        bh=rXRLmOaeN9M4AwY3iBISX01P3DWw0uS/LnGVtbElBLg=;
+        b=SJOnMw+6c/qcaQmKeIAjAW4ArQt1h7Bvtzp7P2Fx9EV0StQpZoJM8IVTTLDTrAs1gq
+         sB35CaNQM3U6qQcqcuJYRU4ZvrWwKyyBBSRR3K8HsnEOfAJ0Km8ee3N0ZVzkwB9f21q1
+         vfeGlQUfjwSYZGPhE8CD7B+tV6OrXS8HFr14Ic08pwywcfWY86K8H37sjJS+nqIRXRxa
+         h8YIDJplFp2wvz147ocdDYtxSguf3rymmAchMbGmWTeOG+cGFoqX2tuYUCHPv4zPGUbt
+         RCvLwYnYh8BcHf41JbNUMFIbsrgrilm5f9dXOi4POpO83bU8CcHU2QZ6K62xdyjUr/wo
+         FCzA==
+X-Forwarded-Encrypted: i=1; AFNElJ+juKoEaOBdjtYEghNFq0g/umztRShQ8l8KWe791N8QX7k2xPN9nEOsW2U8SQ9U9b5pQTo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHLuL75j+RRcLa8QFgTf5aOWgexn2MiIfLzyySYQo5ns6U03sd
+	vpqKrzGAB/BtjWMSWD1hN9tI5+CR6W+4FWWvhgXfTjZUBxQr2Ialu97R
+X-Gm-Gg: Acq92OEG9wvc/3dILCB+O8fhxRJTHuVJDK3qMq50ZOy299Vxj+spL10C2F0wXn59dRR
+	BysARUJMAP8g5MoozKEqLANeERsSfgNN97SspNCO03adwW9wbXy8WgpEsmtahACFiaJBkqHkaNE
+	GVgeH6IOJc32+NOJ6kc4yJ/EYPlO1UksqogDMawuAl78PHO63M6ae6PXnWhAEHMY937fNZwhQhy
+	BhnmQQn+dTzSxZxI3zpbsfsYQwB6gF21hs1AiqCpWIB3keQx8qTyxMZxOvrBvHKfNTFeuQUBHnW
+	7yqxYY3VcUAHGMFaO/CAIw2bPx3VziODSYYa3UzxO1yjORlegILjZjzCEB7jCFqM83e6z2NrCIm
+	jjaJvGXu6t1u/ocuRQ5MdoRAJVXnwjUMPnPiMeYe1jH6hgkRwkelAUn9H127TO7afh/RNutlxOl
+	pKR2LToQNvh7m4a+V/Vdw=
+X-Received: by 2002:a05:620a:3713:b0:8cd:80f1:f460 with SMTP id af79cd13be357-904d66eeaf8mr3772364685a.45.1778548698188;
+        Mon, 11 May 2026 18:18:18 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:70::])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8fc2cd04de9sm3313682185a.44.2026.05.11.18.18.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 18:18:14 -0700 (PDT)
+        Mon, 11 May 2026 18:18:17 -0700 (PDT)
 From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Mon, 11 May 2026 18:17:56 -0700
-Subject: [PATCH net-next v4 2/8] net: netkit: declare NETMEM_TX_NO_DMA mode
+Date: Mon, 11 May 2026 18:17:58 -0700
+Subject: [PATCH net-next v4 4/8] selftests: drv-net: ncdevmem: add -n flag
+ to skip NIC configuration
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,8 +69,8 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260511-tcp-dm-netkit-v4-2-841b78b99d74@meta.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260511-tcp-dm-netkit-v4-4-841b78b99d74@meta.com>
 References: <20260511-tcp-dm-netkit-v4-0-841b78b99d74@meta.com>
 In-Reply-To: <20260511-tcp-dm-netkit-v4-0-841b78b99d74@meta.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -116,107 +117,132 @@ X-Mailer: b4 0.14.3
 
 From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Some virtual devices like netkit (or ifb) never DMA and never touch frag
-contents, they just forward the skb to another device. They are unable
-to forward unreadable skbs, however, because they fail to pass TX
-validation checks on dev->netmem_tx. The existing two-state
-NETMEM_TX_NONE / NETMEM_TX_DMA doesn't give the TX validator enough
-information to differentiate devices that will attempt DMA on the
-unreadable skb from those that will simply route it untouched.
+Add a -n (skip_config) flag that causes ncdevmem to skip NIC
+configuration when operating as an RX server. When -n is passed,
+ncdevmem skips configuring header split, RSS, and flow steering, as well
+as their teardown on exit.
 
-Add a third mode to the enum so drivers can indicate 1) if they have
-netmem TX support, and 2) if they do, whether they are DMA-capable:
-
-NETMEM_TX_NO_DMA - pass-through, device never DMAs
-
-Widen dev->netmem_tx from a 1-bit field to 2 bits to fit the new value,
-and declare netkit as NETMEM_TX_NO_DMA. Devmem TX support over these
-devices comes in a follow-up patch.
+This allows ksft tests to pre-configure the NIC in the host namespace
+before launching ncdevmem in the guest namespace. This is needed for
+netkit devmem tests where the test harness namespace has direct access
+to the NIC and the ncdevmem namespace does not.
 
 Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
-Changes in v3:
-- net_cachelines/net_device.rst: align the netmem_tx row's type column
-  with the rest of the table by using "unsigned_long:2" instead of
-  "unsigned long:2"
-- Split this into a distinct patch (Jakub)
----
- Documentation/networking/net_cachelines/net_device.rst | 2 +-
- Documentation/networking/netmem.rst                    | 3 +++
- Documentation/translations/zh_CN/networking/netmem.rst | 3 +++
- drivers/net/netkit.c                                   | 1 +
- include/linux/netdevice.h                              | 3 ++-
- 5 files changed, 10 insertions(+), 2 deletions(-)
+ tools/testing/selftests/drivers/net/hw/ncdevmem.c | 58 +++++++++++++----------
+ 1 file changed, 34 insertions(+), 24 deletions(-)
 
-diff --git a/Documentation/networking/net_cachelines/net_device.rst b/Documentation/networking/net_cachelines/net_device.rst
-index 1c19bb7705df..7b3392553fd6 100644
---- a/Documentation/networking/net_cachelines/net_device.rst
-+++ b/Documentation/networking/net_cachelines/net_device.rst
-@@ -10,7 +10,7 @@ Type                                Name                        fastpath_tx_acce
- =================================== =========================== =================== =================== ===================================================================================
- unsigned_long:32                    priv_flags                  read_mostly                             __dev_queue_xmit(tx)
- unsigned_long:1                     lltx                        read_mostly                             HARD_TX_LOCK,HARD_TX_TRYLOCK,HARD_TX_UNLOCK(tx)
--unsigned long:1                     netmem_tx:1;                read_mostly
-+unsigned_long:2                     netmem_tx:2;                read_mostly
- char                                name[16]
- struct netdev_name_node*            name_node
- struct dev_ifalias*                 ifalias
-diff --git a/Documentation/networking/netmem.rst b/Documentation/networking/netmem.rst
-index 5ccadba4f373..217869d1108d 100644
---- a/Documentation/networking/netmem.rst
-+++ b/Documentation/networking/netmem.rst
-@@ -99,3 +99,6 @@ Driver TX Requirements
-    appropriate mode:
+diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+index e098d6534c3c..d96e8a3b5a65 100644
+--- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
++++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
+@@ -93,6 +93,7 @@ static char *port;
+ static size_t do_validation;
+ static int start_queue = -1;
+ static int num_queues = -1;
++static int skip_config;
+ static char *ifname;
+ static unsigned int ifindex;
+ static unsigned int dmabuf_id;
+@@ -828,7 +829,7 @@ static struct netdev_queue_id *create_queues(void)
  
-    - `NETMEM_TX_DMA`: for physical devices that perform DMA.
-+
-+   - `NETMEM_TX_NO_DMA`: for virtual or passthrough devices that do
-+     not DMA, but still support handling of netmem-backed skbs.
-diff --git a/Documentation/translations/zh_CN/networking/netmem.rst b/Documentation/translations/zh_CN/networking/netmem.rst
-index 9c84423b7528..320f3eacf51b 100644
---- a/Documentation/translations/zh_CN/networking/netmem.rst
-+++ b/Documentation/translations/zh_CN/networking/netmem.rst
-@@ -92,3 +92,6 @@ dma-mapping API 去处理。
- 2. 驱动程序应将 `netdev->netmem_tx` 设置为适当的模式：
+ static int do_server(struct memory_buffer *mem)
+ {
+-	struct ethtool_rings_get_rsp *ring_config;
++	struct ethtool_rings_get_rsp *ring_config = NULL;
+ 	char ctrl_data[sizeof(int) * 20000];
+ 	size_t non_page_aligned_frags = 0;
+ 	struct sockaddr_in6 client_addr;
+@@ -851,27 +852,29 @@ static int do_server(struct memory_buffer *mem)
+ 		return -1;
+ 	}
  
-    - `NETMEM_TX_DMA`：适用于执行 DMA 的物理设备。
-+
-+   - `NETMEM_TX_NO_DMA`：适用于不执行 DMA 的虚拟或透传设备，但仍支持
-+     处理 netmem 支持的 skb。
-diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-index 5e2eecc3165d..0ad6a806d7d5 100644
---- a/drivers/net/netkit.c
-+++ b/drivers/net/netkit.c
-@@ -466,6 +466,7 @@ static void netkit_setup(struct net_device *dev)
- 	dev->priv_flags |= IFF_NO_QUEUE;
- 	dev->priv_flags |= IFF_DISABLE_NETPOLL;
- 	dev->lltx = true;
-+	dev->netmem_tx = NETMEM_TX_NO_DMA;
+-	ring_config = get_ring_config();
+-	if (!ring_config) {
+-		pr_err("Failed to get current ring configuration");
+-		return -1;
+-	}
++	if (!skip_config) {
++		ring_config = get_ring_config();
++		if (!ring_config) {
++			pr_err("Failed to get current ring configuration");
++			return -1;
++		}
  
- 	dev->netdev_ops     = &netkit_netdev_ops;
- 	dev->ethtool_ops    = &netkit_ethtool_ops;
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index a54a37fab8d9..8ece36815ff9 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -1791,6 +1791,7 @@ enum netdev_stat_type {
- enum netmem_tx_mode {
- 	NETMEM_TX_NONE,		/* no netmem TX support */
- 	NETMEM_TX_DMA,		/* DMA-capable netmem TX (real HW) */
-+	NETMEM_TX_NO_DMA,	/* no DMA, e.g. passthrough for virtual devs */
- };
+-	if (configure_headersplit(ring_config, 1)) {
+-		pr_err("Failed to enable TCP header split");
+-		goto err_free_ring_config;
+-	}
++		if (configure_headersplit(ring_config, 1)) {
++			pr_err("Failed to enable TCP header split");
++			goto err_free_ring_config;
++		}
  
- enum netdev_reg_state {
-@@ -2137,7 +2138,7 @@ struct net_device {
- 	struct_group(priv_flags_fast,
- 		unsigned long		priv_flags:32;
- 		unsigned long		lltx:1;
--		unsigned long		netmem_tx:1;
-+		unsigned long		netmem_tx:2;
- 	);
- 	const struct net_device_ops *netdev_ops;
- 	const struct header_ops *header_ops;
+-	/* Configure RSS to divert all traffic from our devmem queues */
+-	if (configure_rss()) {
+-		pr_err("Failed to configure rss");
+-		goto err_reset_headersplit;
+-	}
++		/* Configure RSS to divert all traffic from our devmem queues */
++		if (configure_rss()) {
++			pr_err("Failed to configure rss");
++			goto err_reset_headersplit;
++		}
+ 
+-	/* Flow steer our devmem flows to start_queue */
+-	if (configure_flow_steering(&server_sin)) {
+-		pr_err("Failed to configure flow steering");
+-		goto err_reset_rss;
++		/* Flow steer our devmem flows to start_queue */
++		if (configure_flow_steering(&server_sin)) {
++			pr_err("Failed to configure flow steering");
++			goto err_reset_rss;
++		}
+ 	}
+ 
+ 	if (bind_rx_queue(ifindex, mem->fd, create_queues(), num_queues, &ys)) {
+@@ -1052,13 +1055,17 @@ static int do_server(struct memory_buffer *mem)
+ err_unbind:
+ 	ynl_sock_destroy(ys);
+ err_reset_flow_steering:
+-	reset_flow_steering();
++	if (!skip_config)
++		reset_flow_steering();
+ err_reset_rss:
+-	reset_rss();
++	if (!skip_config)
++		reset_rss();
+ err_reset_headersplit:
+-	restore_ring_config(ring_config);
++	if (!skip_config)
++		restore_ring_config(ring_config);
+ err_free_ring_config:
+-	ethtool_rings_get_rsp_free(ring_config);
++	if (!skip_config)
++		ethtool_rings_get_rsp_free(ring_config);
+ 	return err;
+ }
+ 
+@@ -1404,7 +1411,7 @@ int main(int argc, char *argv[])
+ 	int is_server = 0, opt;
+ 	int ret, err = 1;
+ 
+-	while ((opt = getopt(argc, argv, "Lls:c:p:v:q:t:f:z:")) != -1) {
++	while ((opt = getopt(argc, argv, "Lls:c:p:v:q:t:f:z:n")) != -1) {
+ 		switch (opt) {
+ 		case 'L':
+ 			fail_on_linear = true;
+@@ -1436,6 +1443,9 @@ int main(int argc, char *argv[])
+ 		case 'z':
+ 			max_chunk = atoi(optarg);
+ 			break;
++		case 'n':
++			skip_config = 1;
++			break;
+ 		case '?':
+ 			fprintf(stderr, "unknown option: %c\n", optopt);
+ 			break;
 
 -- 
 2.53.0-Meta
