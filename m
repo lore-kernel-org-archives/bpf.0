@@ -1,234 +1,148 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527AC3C09E0
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 20:20:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D173A872A
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 20:25:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778617242; cv=none; b=vAjbZwdVKTHs7tjirY0yn++9V6TLpZ89dmOcUxTdTmeVuv48GgB+DPJhKN5Jksf2GCpo85AtEl/H6ge5SQ+BZyB/LV10qj747lnvh6+j4J0yhGa37T4O+4BwHUzbTpLx7QHiWEW8qpKMw/9zjGF0Mgv61bfDuuWWrVShAOu8WR4=
+	t=1778617508; cv=none; b=fiz/CsFuyDmaX+zLVc58+ouZJW+vLuavZX8z+FTj2o6lVt/CfwpMo7lcbWDBYKkbWVMqiPQCbObgffISmsZH/HqNX2ZKO7E9bfOu9Sow/n9j5bm4OSuSJXtMshZGtT7TB2E8mhcbk+PR/4nLZvAcaEEhe1CLKwmJNqH1jSVH9MI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778617242; c=relaxed/simple;
-	bh=06Ut2b9dvZs1v+RSw5hLsGRQubpCyWhXGoGpYe0/huo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CmD9rTn5yz2hHf0Hwx74X515lmu342nM8R96Ug/V0Xd0rJpQ60fQUO/eX+OpzLK8wXEbueLv/h+2u5HQvTuaWtf6ny8OIhgNBIFggOmuYDlwCq+rIw/1Arr/KtsjCUgUDypTOvNdUm9m44LVU+Td7OpJGzQ2gZ+rKH4ACpM+0I4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ltbq6GPe; arc=none smtp.client-ip=209.85.210.174
+	s=arc-20240116; t=1778617508; c=relaxed/simple;
+	bh=m0ESfkmOsyPlUrIt3fsGQo2uJhcnp73827mKcOAnU4I=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=fCN3nKXsGSdxSRV4ZU8AtF1WG/ANDZSLjhSbaY+IGB7wmpst6aamCptXMjBLREDGKRQIhNvLtJtd1gbIrwdUQX0NiZAEeWkb1xkcExBnsYRJ+SA1BAxP07nvFQ+sKXdjzWWOlTl26BXYUmtfSU64wDkQ90vQ0JB0kpl2AAb6PHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BSPFhKiF; arc=none smtp.client-ip=209.85.210.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ltbq6GPe"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8383fb7143aso2877028b3a.3
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 13:20:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BSPFhKiF"
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7dea1272943so3192783a34.0
+        for <bpf@vger.kernel.org>; Tue, 12 May 2026 13:25:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778617233; x=1779222033; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gQzjdm8eFv/sznJvgMXu/FTaTbhPBF2kbyubytRDFJs=;
-        b=ltbq6GPe0a9lKdTDFbrdF2KmxQ2mNrIT15f9ngyoEgr4T/M9v+HGtZyGL6Q3KqiMMW
-         Jjw23f4OBoXAi4G+U/DEutupX4uqwrnJPE9XPRPG6KJjAq1dBTmItXiJoAfMcJtyfciQ
-         1dPMqkbDvPzyT0dfGFZh/jwhT2tM4b8TmydYLwpV+hP0w5+FVu83D1cpxr+gVaffjaNT
-         aAjp2ave2wqww+aeGm1KjLio5c8L35O91teCISrJCUzYNCJKukF1EUttO8AEPoPytRk6
-         kZHTn6a9qd2byJQUe02J/Z7lSDKKD0qoBK72WHIYtNPx1hlk8rvCaMzOIY4VlFNSFbIw
-         SEow==
+        d=gmail.com; s=20251104; t=1778617506; x=1779222306; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m0ESfkmOsyPlUrIt3fsGQo2uJhcnp73827mKcOAnU4I=;
+        b=BSPFhKiF2MuZDv4KuDYw6t6ooj5ZT8vbvAmNfuCRrBuTswnjDiKbSpHHJe4SJTgsqi
+         jvkuQQxiTzhpokJBH1HQt2wWAhMROgWbj+M7qgDf9DWFNS1IWUp6iNldEOx6w+W5Hx2c
+         vARIGvk79d2EBmnAa8A7M0fGs3pgkmAIsceMUgaKXFTbtDz9EtNwLTB4IghuPo26aQ9Q
+         AUbquVatt6/NvDxunHRUVMNjzPVcplcNf8Z+UdtaXZurt9dvON+zDtetPJV0jd9yJsUS
+         jNySSaUabNYqDoizPk33jQvlVBnYyPaMJ4EhWkBNdcYPPq0zuM5bqBlblSVCU1LprmEo
+         jLYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778617233; x=1779222033;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gQzjdm8eFv/sznJvgMXu/FTaTbhPBF2kbyubytRDFJs=;
-        b=pMLAvnKom9xl+t7AOFNhTCM5CfEdlAF4K+BF0210kiA1AjLe7ZSF3KSD66dOCNz2te
-         tUpledUw7d5gNk4gTebCOO32kOcuotL5XzzEaVJVyvYCMbE3qixd9ILJ11/EqgbpVKt/
-         thrs94bluE0EgvdwxchPXLve4hXL59HocyIkJT7aVJathcwykZgJXv9iYqt0/RVPouTu
-         t9hT+NeIDWl25emWbi+paaBOdDV7nvq1MI0Meb69o2UhOLBD8NI5kwtK52usPoVZ1cpL
-         i4Ops739xa3LxeKhVZpOByDdYE2Mk9HcF7UCuMSUMqH2ZNZutGEdS9DietUc8liWz9mq
-         tjsA==
-X-Forwarded-Encrypted: i=1; AFNElJ9YjulUiIXdpDBqgPobA7SVYW9dNaESNPKBrMA+IyViZdTu8d0LxZasO4glZxvGvyk9bb0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyl0HGuNsGadbLvmC9hccYJk+VIe9cP2xwQu6yicJwf7Kwbpt7w
-	vHhJaxpCUxh158s04mhsbZ2IAUziDs54rdKj4kEArXqzFI8Z/Si2yxkU
-X-Gm-Gg: Acq92OFHuBfkANXi56fleN/HdayBhVGtAu/0tzj66S0wz4mN8NZom0oLuCrtZULQoqi
-	E/rdJogrLF7szni6hmIxl0fx21mB+ZxE01HeGUPKBTx40hZiq1OOfvcIBxtpV2WJQIa33BsnVgj
-	3CiNRU6bCUmFo9F8rQ/zNXM9wUgTn4ahYZLvvk1wqTMRiVlth/gI2SZxYZOqJC2291AsEPVNZG9
-	Iuqjewbe+SuAdiCsfR0OiYXAnIuYMCVGarkUVt9vXW9RErTdja561sZFZjnZPihoM2izGV+Ya1z
-	kznAyGKRAX/SMEUw6FAdqLsqPjNr1+pyNryj29NEDq7QR8++VWAqNzCWSS+XSxmkH+9w3Oe+ZMK
-	ruViSil8ysQjA9BwCfKMYtFVy6rK1sfSJyWUwSZ19Rzdp6maJUoa3dD6m1RQZOdHFjUs+s1kkvV
-	CSf97rKtXt1vcA9K+m6UBjqW3KoS74qezBxbkeEcScT1KCNQfFAv6Q
-X-Received: by 2002:a05:6a00:328c:b0:83e:cc27:9af7 with SMTP id d2e1a72fcca58-83f04279863mr159190b3a.31.1778617232647;
-        Tue, 12 May 2026 13:20:32 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-839682abd39sm24975053b3a.52.2026.05.12.13.20.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2026 13:20:32 -0700 (PDT)
-Message-ID: <cfdb2d4af893d70bcb15bcc22d6467f800b7291f.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 08/12] bpf: Unify release handling for
- helpers and kfuncs
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
- 	daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org, 
-	mykyta.yatsenko5@gmail.com, kernel-team@meta.com
-Date: Tue, 12 May 2026 13:19:57 -0700
-In-Reply-To: <20260506142709.2298255-9-ameryhung@gmail.com>
-References: <20260506142709.2298255-1-ameryhung@gmail.com>
-	 <20260506142709.2298255-9-ameryhung@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+        d=1e100.net; s=20251104; t=1778617506; x=1779222306;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m0ESfkmOsyPlUrIt3fsGQo2uJhcnp73827mKcOAnU4I=;
+        b=LVI6QXovTs/RTPqxeoZVl0L2gHSvOy1B8M7+LlLPsfPgr3ERpLmDhS7Uh2HksKSc+h
+         CiVAPUWayXg7IJHjS3BuhjoJ+HRQpUX6jK1tv13+TybZ/nhovfAW4TQR3YGlWcezbm3P
+         m6bqcox6g+4OfwJXrpP391J3b1P+7dUg1SSvwZrIM+dHUZylg3j4RNznixTqdoSB1h3q
+         klaB/OE3LtAR9NxO5NRcYYgFP9Fdia01HMkL7Qsq+HReDqdPoUVX/IOHwR4R2BnvI6Km
+         PoBv0Lh2DRz24NktEwlQCvArEDpA263EgB1nnY1RfQtmNXZhx70FCoZCr0mrjiJs5cI7
+         6CEQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/bLPPZFcd7ohXrk5GmbinBY6W1zFK+rRJRIEfudTQQ19n1dPjqhJaHt9S+lq9sYPp+NNs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTsuaxEvbzfarP2aT5fFg0d4utIqemd85wS/tiE+x58Xnc7KI6
+	9H8xHIP7yQm/E8yboXHaey4rHEnQiseMEAeoqsofwhQgEhxIqUNVIttQ
+X-Gm-Gg: Acq92OE8SNSJdH5nEJ2lTo3nGT/gles/V4kS7SqXYaPebLUz8laiBnoFL+b1/4+Ln84
+	axrArVga1Y6Xcc5GLV2dl7MRrgw1NM6h4Z7XF/j+oV+tlyS2tpmankBfdfd3k34g7Syl6fsWNeF
+	6tYAH1k1MB0FdjgzqKmmZbuKgcQkYKMuDKh9+msTDy0/8RJ6WNc9b4lng9GIiZVf6sA4MSxtLaT
+	BLrkLiL/mpifTD0eFm/pbYY8pCes7fkjKJmgKBQzFWVE1AZU7v1Mx4CK6kyCdlQAWQ/BFWy+jTC
+	NlRSAd7tQM3+kQkNaCJjAdTtuiNzVt6pZSqBMegtvVNetjw16DQ+C7sHKTzYQlVyuI93pZQD6gO
+	K+oOjtvJPoUjLekCzAdb3QC2sg3Q7iQOpkcms/bJgNGs/l//EYbuNtFVa+11lwnOFO7oaTLKu6W
+	U+YmbMfbXUFCjhP1h0bmevGceyE7byA5I0R4VXEC+Up4aqpwxdXnptNh2bftHa7QfbH32zYAhRC
+	i84gVdNogRfbK2HzA==
+X-Received: by 2002:a05:6830:44ab:b0:7d7:5b78:ef31 with SMTP id 46e09a7af769-7e3da0d1f5amr198517a34.12.1778617506540;
+        Tue, 12 May 2026 13:25:06 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:73::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e367c04e66sm9540853a34.8.2026.05.12.13.25.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 May 2026 13:25:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 12 May 2026 13:25:04 -0700
+Message-Id: <DIGZA9DICBXO.2QQ1V7T186JW2@gmail.com>
+Cc: "Mahe Tardy" <mahe.tardy@gmail.com>, <bpf@vger.kernel.org>,
+ <andrew+netdev@lunn.ch>, <andrii@kernel.org>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <davem@davemloft.net>, <eddyz87@gmail.com>,
+ <edumazet@google.com>, <john.fastabend@gmail.com>, <martin.lau@linux.dev>,
+ <pabeni@redhat.com>, <song@kernel.org>, <liamwisehart@meta.com>
+Subject: Re: [PATCH v1 1/4] bpf: Add netpoll kfuncs for sending UDP packets
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Jakub Kicinski" <kuba@kernel.org>
+X-Mailer: aerc
+References: <20260511085344.3302-1-mahe.tardy@gmail.com>
+ <20260511085344.3302-2-mahe.tardy@gmail.com>
+ <20260511182019.69ebc7c6@kernel.org> <DIGBS3WKQN94.1YYMZM0K6CETY@gmail.com>
+ <20260511193603.3ef00cee@kernel.org> <DIGD21MXE0XM.3CLUL6BVK74PK@gmail.com>
+ <20260512065335.50647ee9@kernel.org>
+In-Reply-To: <20260512065335.50647ee9@kernel.org>
 
-On Wed, 2026-05-06 at 07:27 -0700, Amery Hung wrote:
+On Tue May 12, 2026 at 6:53 AM PDT, Jakub Kicinski wrote:
+>> >> I like this netpoll approach way more then creating and keeping prope=
+r socket
+>> >> within bpf and all head aches of keeping it around and doing send fro=
+m
+>> >> good context. With netpoll all of these issues are gone.
+>> >> Just bpf_netpoll_send_udp() from anywhere and it works just like it d=
+oes
+>> >> for dmesg. =20
+>> >
+>> > No, netpoll is high risk / brittle and tightly integrated with NAPI.
+>> >
+>> > "I don't want to run a tiny user space program" is nowhere near strong
+>> > enough justification to expose this API. SMH. =20
+>>=20
+>> No. Nothing to do with 'user space prog'.
+>
+> I'm sorry, are you saying that the motivation in the cover letter is
+> not the motivation? It'd be great if someone could reveal the real
+> motivation then.
 
-LGTM, one question below.
+AI makes commit logs sound very convincing, so I don't read them anymore
+to avoid bias. Only looking at the code.
+And what I see in this set is a facility for emergency notifications
+that is safe to use in any context.
 
-> @@ -8010,28 +8010,15 @@ static int check_func_arg(struct bpf_verifier_env=
- *env, u32 arg,
->  		return err;
-> =20
->  skip_type_check:
-> -	if (arg_type_is_release(arg_type)) {
-> -		if (!arg_type_is_dynptr(arg_type) && !reg->ref_obj_id && !bpf_register=
-_is_null(reg)) {
-> -			verbose(env, "R%d must be referenced when passed to release function\=
-n",
-> -				regno);
-> -			return -EINVAL;
-> -		}
-> -		if (meta->release_regno) {
-> -			verifier_bug(env, "more than one release argument");
-> -			return -EFAULT;
-> -		}
-> -		meta->release_regno =3D regno;
-> +	if (arg_type_is_release(arg_type) && !arg_type_is_dynptr(arg_type) &&
-> +	    !reg->ref_obj_id && !bpf_register_is_null(reg)) {
-> +		verbose(env, "release helper %s expects referenced PTR_TO_BTF_ID passe=
-d to %s\n",
-> +			func_id_name(meta->func_id), reg_arg_name(env, argno));
-> +		return -EINVAL;
+If people bolt crypto on top and make a toy prototype out of it
+it doesn't take away from usefulness of sending UDP packets out.
 
-Nit: a similar check is added in check_kfunc_args(),
-     can these be wrapped in some utility function?
+I want to use it out of bpf core to notify of things like divide by zero,
+arena fault, etc. Currently they are sent via bpf_stream, but
+user space has to be there to pick up from the stream.
+We cannot use printk, since it's not safe.
+So netcons is the only option available today for 'bad things happen'
+notifications.
+Theoretically con->write_atomic() can be wrapped in such helper/kfunc
+that both bpf core and bpf progs can call.
+progs also need emergency notifications.
+Like sched-ext might detect something bad and notify.
+But at the end netconsole_write() is netpoll_send_udp(),
+so more natural and simpler to just use that.
 
->  	}
-> =20
-> -	if (reg->ref_obj_id && base_type(arg_type) !=3D ARG_KPTR_XCHG_DEST) {
-> -		if (meta->release_regno && meta->ref_obj.cnt) {
-> -			verbose(env, "more than one arg with ref_obj_id %s %u %u",
-> -				reg_arg_name(env, argno), reg->ref_obj_id,
-> -				meta->ref_obj.ref_obj_id);
-> -			return -EACCES;
-> -		}
-> +	if (reg->ref_obj_id)
->  		update_ref_obj(&meta->ref_obj, reg);
-> -	}
-> =20
->  	switch (base_type(arg_type)) {
->  	case ARG_CONST_MAP_PTR:
+> In kernel sockets are used broadly. I accept that it's more work
+> for you but it's also the correct way to go about this if you want=20
+> to send traffic from BPF.
 
-[...]
-
-> @@ -9825,7 +9883,7 @@ static int check_helper_call(struct bpf_verifier_en=
-v *env, struct bpf_insn *insn
->  	memset(&meta, 0, sizeof(meta));
->  	meta.pkt_access =3D fn->pkt_access;
-> =20
-> -	err =3D check_func_proto(fn);
-> +	err =3D check_func_proto(fn, &meta);
->  	if (err) {
->  		verifier_bug(env, "incorrect func proto %s#%d", func_id_name(func_id),=
- func_id);
->  		return err;
-> @@ -9870,37 +9928,11 @@ static int check_helper_call(struct bpf_verifier_=
-env *env, struct bpf_insn *insn
->  	}
-> =20
->  	if (meta.release_regno) {
-> -		err =3D -EINVAL;
-> -		if (arg_type_is_dynptr(fn->arg_type[meta.release_regno - BPF_REG_1])) =
-{
-> -			err =3D unmark_stack_slots_dynptr(env, &regs[meta.release_regno]);
-> -		} else if (func_id =3D=3D BPF_FUNC_kptr_xchg && meta.ref_obj.ref_obj_i=
-d) {
-> -			u32 ref_obj_id =3D meta.ref_obj.ref_obj_id;
-> -			bool in_rcu =3D in_rcu_cs(env);
-> -			struct bpf_func_state *state;
-> -			struct bpf_reg_state *reg;
-> -
-> -			err =3D release_reference_nomark(env->cur_state, ref_obj_id);
-> -			if (!err) {
-> -				bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
-> -					if (reg->ref_obj_id =3D=3D ref_obj_id) {
-> -						if (in_rcu && (reg->type & MEM_ALLOC) && (reg->type & MEM_PERCPU))=
- {
-> -							reg->ref_obj_id =3D 0;
-> -							reg->type &=3D ~MEM_ALLOC;
-> -							reg->type |=3D MEM_RCU;
-> -						} else {
-> -							mark_reg_invalid(env, reg);
-
-Note: release_reg() does not have this 'else' path, but it seem to be not a=
- problem,
-      assuming that MEM_ALLOC | MEM_PERCPU registers are generated only fro=
-m some
-      other cmp_xchg call. Is that the case?
-
-> -						}
-> -					}
-> -				}));
-> -			}
-> -		} else if (meta.ref_obj.ref_obj_id) {
-> -			err =3D release_reference(env, meta.ref_obj.ref_obj_id);
-> -		} else if (bpf_register_is_null(&regs[meta.release_regno])) {
-> -			/* meta.ref_obj.ref_obj_id can only be 0 if register that is meant to=
- be
-> -			 * released is NULL, which must be > R0.
-> -			 */
-> -			err =3D 0;
-> -		}
-> +		struct bpf_reg_state *reg =3D &regs[meta.release_regno];
-> +		bool convert_rcu =3D (func_id =3D=3D BPF_FUNC_kptr_xchg) && in_rcu_cs(=
-env) &&
-> +				   (reg->type & MEM_ALLOC) && (reg->type & MEM_PERCPU);
-> +
-> +		err =3D release_reg(env, reg, convert_rcu, !!meta.dynptr.ref_obj_id);
->  		if (err)
->  			return err;
->  	}
-
-[...]
-
-> @@ -11609,18 +11640,16 @@ static int check_kfunc_args(struct bpf_verifier=
-_env *env, struct bpf_kfunc_call_
->  			return -EACCES;
->  		}
-> =20
-> -		if (reg->ref_obj_id) {
-> -			if (is_kfunc_release(meta) && meta->ref_obj.cnt) {
-> -				verbose(env, "more than one arg with ref_obj_id %s %u %u",
-> -					reg_arg_name(env, argno), reg->ref_obj_id,
-> -					meta->ref_obj.ref_obj_id);
-> -				return -EFAULT;
-> -			}
-> -			update_ref_obj(&meta->ref_obj, reg);
-> -			if (is_kfunc_release(meta))
-> -				meta->release_regno =3D regno;
-> +		if (regno =3D=3D meta->release_regno && !is_kfunc_arg_dynptr(meta->btf=
-, &args[i]) &&
-> +		    !reg->ref_obj_id && !bpf_register_is_null(reg)) {
-> +			verbose(env, "release kfunc %s expects referenced PTR_TO_BTF_ID passe=
-d to %s\n",
-> +				func_name, reg_arg_name(env, argno));
-> +			return -EINVAL;
->  		}
-> =20
-> +		if (reg->ref_obj_id)
-> +			update_ref_obj(&meta->ref_obj, reg);
-> +
->  		ref_t =3D btf_type_skip_modifiers(btf, t->type, &ref_id);
->  		ref_tname =3D btf_name_by_offset(btf, ref_t->name_off);
-> =20
-
-[...]
+proper sockets and full TCP/UDP back and forth is a different use case.
+Maybe it will work for Mahe/Liam. I don't know.
+I'm arguing that emergency UDP is necessary too.
+We can skip netpoll_send_udp() and let bpf core prepare skb
+earlier in a good context, then at div-by-0 time populate it
+with a message and call netpoll_send_skb().
+Looks like netcons, bridge, vlan are using it, so why not let
+bpf core use it too?
+__netpoll_send_skb() is the main value here because
+it's all trylock based at every step.
+The div-by-0 notification using normal sockets would have to be
+done async and that's the main downside.
+We'd need to irq_work, then schedule_work and then send it via socket.
+Way too many steps to do in emergency. If sched-ext messed it up
+kthread may or may not wakeup.
