@@ -1,108 +1,238 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54961392829;
-	Tue, 12 May 2026 08:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B055E3932D8
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 08:51:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778575885; cv=none; b=AfEthh0db28xeLBHK1oYREWvwB66jBjyakufVFh8GtXR0+Mi8cjgEwkd2vzwtfOvMtbGfOG6U3Nw7cH6VQokxEiraOii900lSV72kAmdshQ9jh1zhQrWYTLhZ4/NUMeC+poF0YNXlglq4IdukrDPB+PKxMqjmn0Zgl7WELeBeoA=
+	t=1778575924; cv=none; b=obVBCLlD5TuSO/NcVrwBYzT/h54zIRXZSswzA2r8238HgivPez3eZlABeQYxsxOd1UVWnnaTnTP4B2O88ObWa55HV10rUh6U3RSWiRivVHYk6RIL3g5FV5xq0fI3S8IUdNdLHs+ZGwLNmbF+Op8T1Z86ebvKDcrnSvnng+UsWsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778575885; c=relaxed/simple;
-	bh=Wt32r9HqTnmChyHNUvyBHP0cnR5+BSMvmBHSczvrJoc=;
+	s=arc-20240116; t=1778575924; c=relaxed/simple;
+	bh=wokWFNz7bI63AAOLseU/bbt0uw6Z1LwPBKX32U58g8k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=StqXp7FxXpFY0/LnprFnqSDphyOiPAOkuXqY6GnoZQ86Ct5xu1VmqM93r4FqM2VdT1CK86WzpNEzv6HJ7PX9wDQZB1hHHJe2Qq2u4SHZJp60WRyOq/x1dQ2xiaOQLSuckz+WGQUFx4sIeWy/I/BJ0dgSqfsdO9sjWeiVS33TEPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gpVwbLMw; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=swHSVmy5Cm2eOQQqxuusSeeeASZPAzFO1b3Nke/dbyPGOBKPx4H667a6FyJKMaxMi/qz12D3R5PI8GWT4pia8yS+ZzFgkwVbL0bsRkSdYiede1hOiAduRCOGKQCrOLIBeaMRV39Ld8dle7ys7ojHQCo7J1e20NS6P2WX1LLlXxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c2jZ1sI2; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gpVwbLMw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B5CC2BCB0;
-	Tue, 12 May 2026 08:51:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778575884;
-	bh=Wt32r9HqTnmChyHNUvyBHP0cnR5+BSMvmBHSczvrJoc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gpVwbLMwNfdLpdSY7fNpWhpdW/X5XTGl0Oeb8wUNbwBSpkUthjBoWYQeNh48cWMZ5
-	 goDoE0i3QnfiRzR+2MJq6c0MQIWWK3xM7ROSMekRm12lBmvaXyE43pZih47ptZ9R+S
-	 PDdULsdVV7kwx9lNWNz5zMgwdTBQHdY/5cmqr1BjPvxXIiMDyqNd/Mq1PXlbAx0MfV
-	 Mk6uHGyhGluXCTdftSM1NPR5c7VN+aW/QekePdpHiEHsmHReAbVmshmE/Jj5WmkffZ
-	 rxnDddH520MD51johZ9H444ms3wVVgMAIy039yiMXyqYoznak8DKUlwQJieJM4ablg
-	 tUzJyKrgr7+5w==
-Date: Tue, 12 May 2026 11:51:18 +0300
-From: Leon Romanovsky <leon@kernel.org>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>,
-	Roberto Sassu <roberto.sassu@huaweicloud.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Itay Avraham <itayavr@nvidia.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
-	Maher Sanalla <msanalla@nvidia.com>,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-Message-ID: <20260512085118.GP15586@unreal>
-References: <20260413231920.GS3694781@ziepe.ca>
- <CAHC9VhTLamfe4C81ZNRVT=H32x+KLxSqH3o0eBfrHsWAgAqxCA@mail.gmail.com>
- <20260415134705.GG2577880@ziepe.ca>
- <CAHC9VhSECYihup=tURo_Qk__xUdYYPkHgnz5CWA0BrRAkvwbog@mail.gmail.com>
- <20260417191749.GK2577880@ziepe.ca>
- <CAHC9VhQbpS9XpO6dWu7gOiX=ppjtAxnNBOFe6s5wjEZNpMRjgw@mail.gmail.com>
- <20260424143603.GB3611611@ziepe.ca>
- <CAHC9VhR++21SD+v4Bb16SQmYHgJYZ0ytQ+BecGPNK+fEOe4G7g@mail.gmail.com>
- <20260424221310.GA804026@ziepe.ca>
- <CAHC9VhTsx6cpKMP8nVgK4F=drXTFJtK3_D9k9pmKr56+ZFUu9w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c2jZ1sI2"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-44c4cc7c1cfso4236438f8f.0
+        for <bpf@vger.kernel.org>; Tue, 12 May 2026 01:51:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778575907; x=1779180707; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UdKS6wt7hvbXtMDkCbUOAbdHuESGleb4r7UDdCk3stc=;
+        b=c2jZ1sI2Gs7G+Ce3RMTMzMtX9UiYIIFrMizPfwJE3fKSNyqwrH+oY96379HQBqS1B4
+         Nvg/RG0Thi3zhDpRTPTHtW7qBn0eyNdiuu4mAh9rjG7G0VRN1FT7KGdCTva84CFp8d1i
+         lxQdhdJ/brD4ybg/6UQ1ZR+PlNbdqx5jPKoSC5xapp0iOmdtUYNeBoY3ZOEiNXt5Pe9a
+         3aYfRsgtcqaZq7iCnnqPWOPPuIQYmPFKQXtQaLhm6Qm2VwIClV8tBhSob3++V3lLv3Io
+         7Bz3UAz29OX72glUrL4Pa9ag3VDhUziTiRUmzU+vZB10Pq9zYFOnEQ/Wneb0f1uSN1wR
+         ZnMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778575907; x=1779180707;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UdKS6wt7hvbXtMDkCbUOAbdHuESGleb4r7UDdCk3stc=;
+        b=eozWGHkABZtVUajyA9KNEX2zwDPysqc81dR3X8Sd6K64HLkHvPqJENkDAgJU9kqF2h
+         je55lYuWAVUvsIlUfoh2LdpZgXuDbtA5YOEI2oBcXwao0p6ys6NvXR3uU1j0CQ1nFuID
+         hflEehVd3qb6iNxwI4FBU2M/EcZSNfl0A1lx+Fyh4Xj/WbRMyXmWVmocr0qVQ+vpYC37
+         PJN4kuxvDtZIxMnMT3xuLkUypc8fWwS6v2ZonggYG2JDMejM7SNYDhFJppIWI9x10eIL
+         0BkkFy4VLwHEVUe2mXYj9IjESrMB3D2mP/QhWm4xi0bibIAFrDpQOYfCAqNs/NSpvIPJ
+         nwwA==
+X-Gm-Message-State: AOJu0YxijmVsrN0gIxcNpGUAIMgHFaOHMnXGZYXbJ8JUq3NuPPJ7rQNx
+	/wxr17rtsBqZTQY5QzYQMgrNTQn3a5C/QlpF3gUTOQHpyLG7hwbyVaGz
+X-Gm-Gg: Acq92OGOCYqAXUKRYc3qgFDVzvhkeQNkmnXWAzOFx89MhL+1zmqzQ7Lh0ZhDo4vht8M
+	Grx5uZqSpbztMYZdSL9ymELgnZJRuNhPjECNhZcOWwOxFrmRoGnaMvSiYcDKurBtAomcLqZ/YlR
+	0JtYpgBWI+NKkfRywZPwaAu3OkP5smuzHHm/Ao3Jp051/YIueoWWACtzy7w28eWqoYT7z35Kwif
+	+d1t3Ap91n4sDbYx7brjkkdFCtRQiMVcBkKzA9vgBiHv0bHlaNGr42hPKvwjFwrr47hO9JhTOV9
+	/DcWhVtgTK0zDDS1IEREEIHb12haoeyv3ge8GuRQ8VEIPVfStacAT5ZS8mKolSI6Ry/Ta8HQ8UA
+	d+hbKkHn4t7a4PjIVFSD+obGThxFuOG99pYQ+ulOXNJHqnwUn5tXmS06Uyu8yV4d13aaZCd1s+k
+	5/yPVOWH/BZ+XNMxDX5h53ENK0ueTupd83Kin1YmE=
+X-Received: by 2002:a05:6000:22c3:b0:43e:a70d:763c with SMTP id ffacd0b85a97d-4515df65cc1mr43842070f8f.42.1778575906668;
+        Tue, 12 May 2026 01:51:46 -0700 (PDT)
+Received: from gmail.com ([2a01:e0a:488:3510:cd04:3ec4:fb74:7d51])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-458b3664e3esm15570952f8f.3.2026.05.12.01.51.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2026 01:51:45 -0700 (PDT)
+Date: Tue, 12 May 2026 10:51:39 +0200
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org,
+	ast@kernel.org, davem@davemloft.net, eddyz87@gmail.com,
+	edumazet@google.com, john.fastabend@gmail.com, kuba@kernel.org,
+	martin.lau@linux.dev, pabeni@redhat.com, song@kernel.org,
+	liamwisehart@meta.com
+Subject: Re: [PATCH v1 1/4] bpf: Add netpoll kfuncs for sending UDP packets
+Message-ID: <agLqG31sgzvBN3Sl@gmail.com>
+References: <20260511085344.3302-1-mahe.tardy@gmail.com>
+ <20260511085344.3302-2-mahe.tardy@gmail.com>
+ <4b64ecd8-eade-4676-822e-da73abe2421d@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhTsx6cpKMP8nVgK4F=drXTFJtK3_D9k9pmKr56+ZFUu9w@mail.gmail.com>
+In-Reply-To: <4b64ecd8-eade-4676-822e-da73abe2421d@iogearbox.net>
 
-On Mon, May 04, 2026 at 06:33:45PM -0400, Paul Moore wrote:
-> On Fri, Apr 24, 2026 at 6:13 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> >
-> > ... I wonder if we are even speaking the same language.
+On Mon, May 11, 2026 at 02:05:26PM +0200, Daniel Borkmann wrote:
+> On 5/11/26 10:53 AM, Mahe Tardy wrote:
+> > From: Song Liu <song@kernel.org>
+> > 
+> > Add BPF kfuncs that allow BPF programs to send UDP packets via the
+> > netpoll infrastructure. This provides a mechanism for BPF programs
+> > (e.g., LSM hooks) to emit telemetry over UDP without depending on
+> > the regular networking stack.
+> > 
+> > [...]
+> > 
+> > +config BPF_NETPOLL
+> > +	bool "BPF netpoll UDP support"
+> > +	depends on BPF_SYSCALL && NET
+> > +	select NETPOLL
+> > +	help
+> > +	  Enable BPF kfuncs for sending UDP packets via netpoll.
+> > +	  This allows BPF programs to send UDP packets from any
+> > +	  context using the netpoll infrastructure.
+> > +
+> > +	  If unsure, say N.
 > 
-> Let's reset the conversation.
+> Do we need the extra Kconfig knob? For most other BPF functionality we don't
+> have such convention. BPF_NETPOLL could be a hidden config enabled when both
+> BPF_SYSCALL && NETPOLL is enabled?
+
+Okay I changed it to:
+
++config BPF_NETPOLL
++       def_bool BPF_SYSCALL && NETPOLL
+
+So now we need to explicitely enable NETCONSOLE since NETPOL is also a
+hidden config defined by:
+
+config NETPOLL
+	def_bool NETCONSOLE
+
+I somehow initially wanted to define NETPOL by having def_bool
+NETCONSOLE || BPF_NETPOLL but then we have a circular dependency...
+
+> >   config NETPOLL
+> >   	def_bool NETCONSOLE
+> > 
+> > diff --git a/include/linux/bpf_netpoll.h b/include/linux/bpf_netpoll.h
+> > new file mode 100644
+> > index 000000000000..b738032548c7
+> > --- /dev/null
+> > +++ b/include/linux/bpf_netpoll.h
+> > @@ -0,0 +1,38 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+> > +
+> > +#ifndef _BPF_NETPOLL_H
+> > +#define _BPF_NETPOLL_H
+> > +
+> > +#include <linux/types.h>
+> > +
+> > +#define BPF_NETPOLL_DEV_NAME_LEN 16	/* IFNAMSIZ */
 > 
-> As I understand it, based on our discussion in this thread and Leon's
-> previous patchsets, the basic idea is to enable LSMs to enforce access
-> control over fwctl requests/commands sent from userspace.  I'm going
-> to start with that as a basis.
+> Do we need this, can't we just reuse IFNAMSIZ?
 
-Yes, we proposed two users: FWCTL and RDMA DevX. Both are relevant, but
-FWCTL is the higher priority.
+We don't really need it, done!
 
+> > +/**
+> > + * struct bpf_netpoll_opts - BPF netpoll initialization parameters
+> > + * @dev_name:	Network device name (e.g. "eth0"), null-terminated.
+> > + * @local_ip:	Local IPv4 address in network byte order. 0 = auto-detect.
+> > + * @remote_ip:	Remote IPv4 address in network byte order.
+> > + * @local_port:	Local UDP port in host byte order.
+> > + * @remote_port: Remote UDP port in host byte order.
+> > + * @remote_mac:	Remote MAC address (6 bytes).
+> > + * @ipv6:	Set to 1 for IPv6, 0 for IPv4.
+> > + * @reserved:	Must be zero. Reserved for future use.
+> > + * @local_ip6:	Local IPv6 address (16 bytes). Used when ipv6=1.
+> > + *		Zero = auto-detect.
+> > + * @remote_ip6:	Remote IPv6 address (16 bytes). Used when ipv6=1.
+> > + */
+> > +struct bpf_netpoll_opts {
+> > +	char dev_name[BPF_NETPOLL_DEV_NAME_LEN];
+> > +	__be32 local_ip;
+> > +	__be32 remote_ip;
+> > +	__u16 local_port;
+> > +	__u16 remote_port;
+> > +	__u8 remote_mac[6];
+> > +	__u8 ipv6;
+> > +	__u8 reserved;
+> > +	__u8 local_ip6[16];
+> > +	__u8 remote_ip6[16];
+> > +};
 > 
-> Using the kernel's docs on fwctl, the userspace API appears to consist
-> mostly of ioctls with some basic sysfs interfaces.  It looks like we
-> can mostly ignore the sysfs interface and focus on the ioctl side of
-> the API, do you agree?
+> Could we detangle this a bit and structure the design similar to what was
+> done for the bpf fib lookup helpers? __u8 family and then union.
 
-Yes, all FW commands are routed through ioctls.
+Yeah I think initially it was heavily inspired by the struct netpoll for
+IPv6 boolean but they have the union, let's do it, I wrote this one that
+is similar to the fib lookup params:
 
-> 
-> https://docs.kernel.org/userspace-api/fwctl/fwctl.html
-> 
-> While normally I would suggest simply using the existing
-> security_file_ioctl() hook, Leon previously mentioned that the hook is
-> too early for fwctl as the userspace copy happens much later.
+struct bpf_netpoll_opts {
+	char dev_name[IFNAMSIZ];
+	__u8 family;
+	__u8 reserved;
+	__u16 local_port;
+	__u16 remote_port;
+	__u8 remote_mac[ETH_ALEN];
 
-I talked about general verbs interface in RDMA.
+	union {
+		__be32 ipv4_local;
+		__u32 ipv6_local[4];  /* in6_addr; network order */
+	};
 
-Thanks
+	union {
+		__be32 ipv4_remote;
+		__u32 ipv6_remote[4];  /* in6_addr; network order */
+	};
+};
+
+Also used family instead of the bool with this in the kfunc:
+
+switch (opts->family) {
+case AF_INET:
+	bnp->np.local_ip.ip = opts->ipv4_local;
+	bnp->np.remote_ip.ip = opts->ipv4_remote;
+	break;
+case AF_INET6:
+	memcpy(&bnp->np.local_ip.in6, opts->ipv6_local,
+	       sizeof(struct in6_addr));
+	memcpy(&bnp->np.remote_ip.in6, opts->ipv6_remote,
+	       sizeof(struct in6_addr));
+	bnp->np.ipv6 = true;
+	break;
+default:
+	*err = -EAFNOSUPPORT;
+	return NULL;
+}
+
+> Is the remote_mac strictly needed? 
+
+I think it's indeed needed since netpoll is pushing the MAC address in
+the skb at the send step. It's not reusing the network stack for lookup.
+I think netconsole is using the broadcast address by default, maybe the
+kfunc could default to it as well.
+
+> Feels a bit like a burden, maybe for the
+> selftest, we should first do a bpf_fib_lookup before the bpf_netpoll_create
+> so that the use case where the user only cares about giving remote_ip/remote_port
+> and maybe local_port (e.g. to as indicator for different event types and/or
+> RSS hashing) works, but everything else is derived via kernel fib lookup.
+
+Yeah that would be nice but then it would mean we need to call fib
+lookup from the SYSCALL programs without any network context so I'm not
+sure how it would look like.
+
+> Thanks,
+> Daniel
+
+Thanks for the review!
+Mahe
