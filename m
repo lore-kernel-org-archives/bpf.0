@@ -1,122 +1,221 @@
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8702874F8
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 01:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778551201; cv=none; b=pq+4gE3hZpZFab7TxyQIouBNj6yfPDKXUmNlujMfypQe1Kq4iLF8TnmzQfyNlRez3HZ3zQdHemoc0e8Ei+VekWFzg7mqgQF2n7YHuYAc11ngIyuMq2hEDXIb4W4RjF7KuWNG5R/xqEhNZzquU8SIsoeJxog1g5RAG1CK4JRYpGo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778551201; c=relaxed/simple;
-	bh=uiO1yCBgohBje3bzV3+nO46y0cFjkNzwq825fpz3HW4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=jZiSji6Edd51fEzh7jdZ1EEFj7gzl4aOkruhxjBbKdfx2tymiTjKijd4RooKR1HUmkRIq6qygtoHKEcQd0j1S4AWkidVR1BNR8zhJBKc682INKwqq+gAYOu19ZDDIYyodmSpxau0W/STXFCMIGjuM2iP4Lo89NDHTp16lUIzba8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V9+yTIa8; arc=none smtp.client-ip=209.85.160.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CCE019CC14
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 02:04:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.67
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778551457; cv=pass; b=cxVkNumP5CX4ClVXkt3TNcXn4RsFlpk21VT69xbgui3/kys7raUT5222Ws78GIQFiIZLk/9x9QOh5ZnVun1KVj1/5yCB/k6MXBZ5evgX81SLLBN3W5Hnbc1N4Ytuu2xPEHusR26TzzL4b2e61QlHHhK59GvR/rOb5VLtZPM3tRA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778551457; c=relaxed/simple;
+	bh=4NeX8+MH64UDuXf7smQyeQqhDeRmzD4GgNcM+hszQsw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Sdv1nAhwvPPKKTzlzSzkN6u2CVfrU8CUb6WXYKli1/7eXd+mA2TqwBPtwJzWUCbRTz9cMUM+MlO0PTA2dDJ2HN9oeV/9AEcEdISaCivZz5PkSb8fUz3veZZcrPp4TzuUHbNxx91wq7lXXi6jf4qNZDK8FZkFdQr8oorAIwGBzJ4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XC5Cva8h; arc=pass smtp.client-ip=209.85.128.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V9+yTIa8"
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-4233e152457so3419271fac.1
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 18:59:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XC5Cva8h"
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-488b0e1b870so83725545e9.2
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 19:04:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778551454; cv=none;
+        d=google.com; s=arc-20240605;
+        b=N0xNDhuoR4uc5L6zKM0WS7N7XrSSEk/xg98LJC3qIGGVRhlFc4mbs76/olhbfDCVbt
+         uxRBThNZO6M5JT8m0FfNhDmmeArUff0vobHC4k5fsuev7r0wF7TVqiU+0q+6loG67LhM
+         AUIgB2ugAM1H+DynReZ6AuM5+RjGtOw5P5m2egtOEn2PMKO5Oqelr9z0wJLByCiygJs/
+         ZnDpKumY1koZZzX6CqW6HLQR9QjFWrGr8/2pgsLMieb7lzKb9mUqmApZqms6yiWANBeS
+         wmftM3ZwpTG9PqAS09mph5BW84FQtfxCqf/zKXDoS8CJbM7AfHLRpxEkUk4VNHSwDenW
+         dalg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=pi6UeXeeuhJXPitUPDrY3aHYuocNazWLnSV3iwa36yE=;
+        fh=+7lMUt9LvkLzcTI3njwb4uQsPG/NndzQOmKF39UlJZw=;
+        b=ZQGFD8AmKMOHbYNrejT5LH9fOJ0wacXL1g6FjUQBULXJqzzdzwX2+fkgkht1SNCgIA
+         60wqnNCA8sZQSzzDNyOE8fBGnHPTmoJ8yN9rRrao8FxDhS8ILAssYqzqSXau9jT6ML0K
+         362inV+MAcSmbf5XmCMpeG3bPQyDvWG9qQpMPz6g7FdRDHVfcFOfKCLufh2lfN60zL3J
+         5ufYZ0LVMnL+nwB6JeKnmwiETwMDiW07uN3ahNbIetdOmXOEOWicsP2KfQDvil6DfBwd
+         nEmWvZYb8vr/1pZgbpTpUh+xG8mkRJhIHvov1+pvkCFzLdWz9a5cNE7wBm27/t9IGZbC
+         oUCA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778551198; x=1779155998; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=abwiV8FAj3WFXudebX7tZFapFqnPdETLgcUK/xD1jr0=;
-        b=V9+yTIa80w28g4B/DauJ1JqPYTxsfxMQ8AzehHlRGQl/h47H5XkBvh8PDNcAbEKZIL
-         hHXWIkWj/QgSVMb25I4dEeni+l8q9J+6RYgZMBBESz/o5TURzk4Cqo6JqmJWhpm9D3yI
-         w+Fy/stCZkEmSGtUX495/c8A0Xpbc2a43Z3T/vX0f+1hrAsIpcOO2H5t37OB6smgcNkX
-         mhT9BFE4FRafX03p37qlxkw22mswAQfHG5FK7jU5aGWvXChUmzJ37F0dVto5ptpOTmG4
-         T1MICOvJL2ItHiCl23nCK5Xk+BoFafwS/I9imX8Q4OCFyNLQgv1XlrlPLtyCBxpQihZZ
-         +jAg==
+        d=gmail.com; s=20251104; t=1778551454; x=1779156254; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pi6UeXeeuhJXPitUPDrY3aHYuocNazWLnSV3iwa36yE=;
+        b=XC5Cva8hlfxwtynYjy+SehYA+BPr5luUpjvHKxz408RcmGjt5Zorm+WicZEUyx1rss
+         YSdIjNd8U11f4mpik3TxNdLQ0NDWrTujedx487vxHtXIdYpcmicObltxZNrj2FzFWdz3
+         j5emMXygKhv7NFeqQuehBQ98d1y+QP+H4hwuoGsB/zqu5625PugLcTQWgStvhzem8JYr
+         +vrlEZS/RkabbZBUyoPHIm2ekfeIW3sxX66/uV4qNTQJJevc50BgDUWO/ak2wRouEW1S
+         xARuSVOfKGG2Hh1OcEbamiYrqKI+EYI6NseDQkc1lNrSp5UO1N6xksCeKO+tqRkvIZnf
+         S6qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778551198; x=1779155998;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=abwiV8FAj3WFXudebX7tZFapFqnPdETLgcUK/xD1jr0=;
-        b=oPlZWFzGiiFU45NWqoLsGphFT8oWQBN01diKqNo5RR5gdHA2sho0JITpZwiZ1unZMl
-         mhINe+4ES2IWLU+Elyr8kqdxMY0JNx7fQlC3OmKEvqpPtW9XT9ralRuflEPPcdxKZrID
-         ztfE7OEWMH7e6OimIi/sfcnemffD4073ZmUTZgOvDlxEcjj5vaM4WVvKOL6u+L2PrR3V
-         8UyCfKeb8I+O1mTAWIbbiFjtlu24zijV/Y3u0ya/YSIGHQ5l7VQI9a4K8kTLeW+pBbJR
-         GClvAl0pQQ4ZA2rj8Y3SQ6rIRkXEb8betL8j81TvVdqS8C62LrKc5MMwayj1bzFkfCFT
-         ejkw==
-X-Gm-Message-State: AOJu0YwZu9r7roDQoPDD/dXkE9dynHGtNstSHVHi5AFDaMuuJ5fSfura
-	y9XbPDMP+QgoLljYDu+z/xHx4vm6PC/uVdBH7qWKlMQj6c2BydKwjLdm
-X-Gm-Gg: Acq92OEhJbUjUOl32EW6DhnjYq5RKYO4lu3KNhPIvfbg9L7GMGr7yUYf7p3/xBxO/GU
-	mtjIgTkViOXHCWtQeaeBu6Ss6dF2jCxzus7RYDUUCZTHTD+/cgiBbG/glwx2pqE4fJatJj72YTo
-	UmMWiIKnw6J7HgXumHQFB8Le8G8VvR39HFuIxJ5SizbThaD4Bcxw4RTjvXlVNSXJ+Oheb+KQGU9
-	CmhBRkbGVcc1TiaEM2QwU6PSMDeZfm065sqvlcpLa/24H5YrpQXYbt0JZDoOIl1T4DsIGcHcNOS
-	90F8rczMjh19oV6hru1AGbDdn9iKsF9s77fZUf3YmlZ1je4Wcu4CWUjuB1pqXcc/0WqqxvvsXvw
-	bdPIjJJj1zc55FFjI0FOnuzdcJSTfKACn6KpyHx8H+7G+o59oeMMcyben/omJS0U483wZIqv8Rc
-	fy9oQnkDOoWHbTC4CHDuVBvBOb+dlN7vFewruYkteSTSssttCA6Mee3nerd4J9J6SvbmaetGnY7
-	bA96XFOpbHqIVxf/LLtjP8UrGM=
-X-Received: by 2002:a05:6871:80c5:b0:417:a283:9c81 with SMTP id 586e51a60fabf-4358928ba76mr7224298fac.35.1778551198284;
-        Mon, 11 May 2026 18:59:58 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:7::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4355710cfccsm11979795fac.8.2026.05.11.18.59.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 May 2026 18:59:57 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778551454; x=1779156254;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pi6UeXeeuhJXPitUPDrY3aHYuocNazWLnSV3iwa36yE=;
+        b=VWS7QqNN6PsKC2emziWrbtvkLubPSS8icjZ43yzX1zMhU6YeSFD7V1g/BuuTVmYTGO
+         7Hho616KdoiAAqV4sSTICcVY3ImzglZ/lBqNz7yjWEkRIRkP0XTXZqhTx3hRk5m/9VON
+         wUAlKaVtFsl5hM/RML7/lrzGWHdtnPJ00rU+blQp6IX9OwaXVTfZ5aP8pjfweuObofsR
+         IDEbzpUnnIErx19HxjC6xUIKWhC8Z1oCkbLNMcMoBl/bcSSHvEchlBzlg/fEE49+YvK8
+         c2bkU88xE9JPiPgHG7SU3dOqkHfqR/oW281opDmtOgJBwPIwktQ65EXUFbFVGtLjuGvA
+         Y5bw==
+X-Forwarded-Encrypted: i=1; AFNElJ/ScH6jOplRrMb1Xi3JATcVJkIeX5eprrLHThtAMgazPCuZXeyPoCVoXdARkaehK9BuCvE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5uJz3m4GHtENPC/u9VeRdNfNA3puK2LNjntScYGjGhjfZ4+3o
+	gBP9RqNk3tcoTop5X8q3Is5cofASDoxGsxsgg0q52G3ttE6MA0XtTedfcAfXZcsxoAgQcV4fzgr
+	mggzocKI+L34bCFTuSquXWpRFvHBTlhxxtTBr
+X-Gm-Gg: Acq92OH0XqxCysKAv8AaZ+UEKkGLYJHLCGc0HDhmyc1hbx/07DVfis9SAaNPoI8vRbI
+	0Kjj3lwSNW9Gis3+wcDsYRtPQuT4ETP2j37DRiOfx7deBi/6Y/VQq1rHxTNAOrC/abt0l0DXEFy
+	HNRZbK+U1m+tHpoybxpAQ+gTBUUf9Ekrx13rTztHYUBXzmFWWcaFbk6iOnXHq1QVeZ7q3X8roH4
+	osX41iOlAe05kBN+pKQVSNcZo29n0IrLQ7Z4kGcVr8SQFPrx6YFg2xQ9d/WdsELRXYmYq00Emtk
+	C5NC70BLmn5YDBr6zkjcVKdbERUwqJYKZ2V5gP9BpP8wJfCOyK95s6hdFYRvw1o/RDdMxmhBujS
+	MAomaGpz3SzDdRzl6EHoIf11GMxeJmScaUPnq2AWA3b0SL0TC7N8haPhL
+X-Received: by 2002:a05:600c:37c6:b0:48e:7f22:d90 with SMTP id
+ 5b1f17b1804b1-48e7f7de432mr126415115e9.4.1778551453688; Mon, 11 May 2026
+ 19:04:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 11 May 2026 18:59:56 -0700
-Message-Id: <DIGBS3WKQN94.1YYMZM0K6CETY@gmail.com>
-Cc: <bpf@vger.kernel.org>, <andrew+netdev@lunn.ch>, <andrii@kernel.org>,
- <ast@kernel.org>, <daniel@iogearbox.net>, <davem@davemloft.net>,
- <eddyz87@gmail.com>, <edumazet@google.com>, <john.fastabend@gmail.com>,
- <martin.lau@linux.dev>, <pabeni@redhat.com>, <song@kernel.org>,
- <liamwisehart@meta.com>
-Subject: Re: [PATCH v1 1/4] bpf: Add netpoll kfuncs for sending UDP packets
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Jakub Kicinski" <kuba@kernel.org>, "Mahe Tardy" <mahe.tardy@gmail.com>
-X-Mailer: aerc
-References: <20260511085344.3302-1-mahe.tardy@gmail.com>
- <20260511085344.3302-2-mahe.tardy@gmail.com>
- <20260511182019.69ebc7c6@kernel.org>
-In-Reply-To: <20260511182019.69ebc7c6@kernel.org>
+MIME-Version: 1.0
+References: <20260507175453.1140400-2-utilityemal77@gmail.com>
+ <20260507234520.646C4C2BCB2@smtp.kernel.org> <agCXEJKJh-JGMhjG@zenbox>
+ <CAADnVQJdFCFJcg0Pqdnx=D2h5vHj_q4mrwSJYxRC5RW0NTFNvQ@mail.gmail.com>
+ <agEnc0aYMhuIeDlq@zenbox> <DIFYUK5DKGAT.189D9YYSQFCUZ@gmail.com>
+ <agH_0MEw4b0pB11-@suesslenovo> <DIG0ONMVOP0L.3QFYUPWFSKWI4@gmail.com>
+ <CAP01T75942V+wKJD0yhs8yb7U5vj+y9s6efJ+UdpTMfzP31CWg@mail.gmail.com>
+ <agKBE4Ci4_LmJ1Dc@zenbox> <CAP01T76i3S93kvXnQvK+NU1ee82s+ka2jQfmf-yL86r9AS2tuQ@mail.gmail.com>
+ <DIGBOYWXZ95S.3GAGVQGUJNQD4@gmail.com>
+In-Reply-To: <DIGBOYWXZ95S.3GAGVQGUJNQD4@gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Tue, 12 May 2026 04:03:36 +0200
+X-Gm-Features: AVHnY4K1wmJEXjd98BpUWgRql-KtSFsNveosERGCnbAxSH6F9u3CD74J3am_-ak
+Message-ID: <CAP01T75y1CuPQ9af9SgYqY=c+3q7ZXTKJJu=znAE3HtEEBMwOw@mail.gmail.com>
+Subject: Re: [bpf-next v3 1/2] bpf: Offload kptr destructors that run from NMI
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Justin Suess <utilityemal77@gmail.com>, sashiko@lists.linux.dev, 
+	bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon May 11, 2026 at 6:20 PM PDT, Jakub Kicinski wrote:
-> On Mon, 11 May 2026 08:53:41 +0000 Mahe Tardy wrote:
->> Add BPF kfuncs that allow BPF programs to send UDP packets via the
->> netpoll infrastructure. This provides a mechanism for BPF programs
->> (e.g., LSM hooks) to emit telemetry over UDP without depending on
->> the regular networking stack.
->>=20
->> The API consists of four kfuncs:
->>=20
->>   bpf_netpoll_create()   - Allocate and set up a netpoll context
->>                            (sleepable, SYSCALL prog type only)
->>   bpf_netpoll_acquire()  - Acquire a reference to a netpoll context
->>   bpf_netpoll_release()  - Release a reference (cleanup via
->>                            queue_rcu_work since netpoll_cleanup sleeps)
->>   bpf_netpoll_send_udp() - Send a UDP packet (any context, LSM prog
->>                            type only for now)
->>=20
->> The implementation follows the established kfunc lifecycle pattern
->> (create/acquire/release with refcounting, kptr map storage, dtor
->> registration). The netpoll context is wrapped in a refcounted
->> bpf_netpoll struct. Cleanup is deferred via queue_rcu_work() because
->> netpoll_cleanup() takes rtnl_lock.
+On Tue, 12 May 2026 at 03:55, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> We have enough bug reports as is, let's not merge unusable toys.
-> For any use of netpoll by BPF:
+> On Mon May 11, 2026 at 6:46 PM PDT, Kumar Kartikeya Dwivedi wrote:
+> > On Tue, 12 May 2026 at 03:43, Justin Suess <utilityemal77@gmail.com> wrote:
+> >>
+> >> On Mon, May 11, 2026 at 10:10:07PM +0200, Kumar Kartikeya Dwivedi wrote:
+> >> > On Mon, 11 May 2026 at 19:29, Alexei Starovoitov
+> >> > <alexei.starovoitov@gmail.com> wrote:
+> >> > >
+> >> > > On Mon May 11, 2026 at 9:38 AM PDT, Justin Suess wrote:
+> >> > > >   [   21.604660] Call Trace:
+> >> > > >   [   21.604662]  <TASK>
+> >> > > >   [   21.604663]  dump_stack_lvl+0x5d/0x80
+> >> > > >   [   21.604666]  print_usage_bug.part.0+0x22b/0x2c0
+> >> > > >   [   21.604669]  lock_acquire+0x295/0x2e0
+> >> > > >   [   21.604671]  ? terminate_walk+0x33/0x160
+> >> > > >   [   21.604674]  ? __call_rcu_common.constprop.0+0x309/0x730
+> >> > > >   [   21.604679]  _raw_spin_lock+0x30/0x40
+> >> > > >   [   21.604680]  ? __call_rcu_common.constprop.0+0x309/0x730
+> >> > > >   [   21.604682]  __call_rcu_common.constprop.0+0x309/0x730
+> >> > > >   [   21.604686]  bpf_obj_free_fields+0x118/0x250
+> >> > > >   [   21.604691]  free_htab_elem+0x85/0xd0
+> >> > > >   [   21.604694]  htab_map_delete_elem+0x168/0x230
+> >> > > >   [   21.604698]  bpf_prog_f6a7136050cb5431_clear_task_kptrs_from_nmi+0xeb/0x144
+> >> > > >   [   21.604700]  bpf_trace_run3+0x126/0x430
+> >> > >
+> >> > > that's better.
+> >> > > Looks like we moved bpf_obj_free_fields() into htab_mem_dtor(),
+> >> > > but left check_and_free_fields() in free_htab_elem().
+> >> > >
+> >> > > I think the fix is to remove check_and_free_fields() from ma path in free_htab_elem()
+> >> > > and fallback to bpf_mem_alloc at map create time when map has kptrs
+> >> > > with dtors. Even when BPF_F_NO_PREALLOC is not specified.
+> >> > >
+> >> > > Kumar,
+> >> > >
+> >> > > thoughts?
+> >> > >
+> >> > >
+> >> >
+> >> > Yeah, removing it from the path that helpers can invoke seems simpler.
+> >> > Remember though, this splat is just for hashtab, we have similar
+> >> > bpf_obj_free_fields() in array map on update. I think fundamentally
+> >> > the main issue here is that we logically free special fields when a
+> >> > map value is freed or deleted. When updating array maps we logically
+> >> > 'free' and then 'update' the same map value together. For hashtab, it
+> >> > happens on update/delete.
+> >> >
+> >> > We could relax this behavior to avoid eagerly freeing these special
+> >> > fields on update or deletion. The only worry is how this would impact
+> >> > programs that have come to rely on the existing behavior. There are
+> >> > patterns where people expect kptr to be NULL on some new map value,
+> >> > which causes programs to return errors when that expectation is not
+> >> > met. Just doing the skip when irqs_disabled() doesn't save us from the
+> >> > surprise side-effect. We need to decide upon this first before
+> >> > discussing the shape of the solution.
+> >> >
+> >> > This is the theoretical concern; In practice, I think most people who
+> >> > depend on such behavior use kptr in local storage maps (in
+> >> > schedulers). So it probably won't be a problem in practice, even
+> >> > though we can't judge this ahead of time. Also, we eagerly reuse map
+> >> > values when using memalloc, so the guarantees are already pretty weak
+> >> > I guess.
+> >> >
+> >> > So, if we are not going to go through a grace period (like local
+> >> > storage) and free back to kernel allocator before reuse, we should
+> >> > relax field freeing behavior. At best, we should cancel work for
+> >> > timer, wq, task_work, and task_work, leaving other items as-is. E.g.
+> >> > BPF_UPTR is used in task storage which I think is accessible to
+> >> > tracing programs, I am not sure how safe unpin_user_page() is when
+> >> > called from random reentrant contexts. We might have more cases in the
+> >> > future, we cannot guarantee we can handle everything in NMIs
+> >> > universally.
+> >> >
+> >> > So the best course of action seems to be relaxing
+> >> > bpf_obj_free_fields() to bpf_obj_cancel_fields() that just does cancel
+> >> > on async work (timer, wq, task_work) for delete / update and let other
+> >> > fields be as-is. We likely need to do bpf_obj_free_fields()
+> >> > additionally before prealloc_destroy() now, but that should be simple.
+> >> > Whether or not to use bpf_ma when kptrs are used in prealloc map is a
+> >> > separate change.
+> >> >
+> >> > This should hopefully resolve the issue, unless I missed other cases.
+> >> This does sound good, so you'd set the bpf_obj_free_fields up in the
+> >> htab allocator dtor for the final free and rely on the allocators
+> >> existing nmi deferral?
+> >
+> > It is already set, except for prealloc maps. But we can call it before
+> > destroying the pcpu freelist etc.
 >
-> Nacked-by: Jakub Kicinski <kuba@kernel.org>
+> htab_map_free->htab_free_prealloced_fields does bpf_obj_free_fields already.
+> So scratch my suggestion to force bpf_mem_alloc on preallocated hash maps.
+>
+> >>
+> >> The missing piece is whether to handle this differently in NMI or just
+> >> always do it with the deferral. Also the prealloc question needs
+> >> answering.
+> >
+> > There is no deferral here. I'm saying that we just cancel for timer,
+> > wq, task work, and leave other fields as is. So we don't have active
+> > work pending for async items.
+> >
+> > So as long as the item keeps getting recycled in the allocator, we
+> > don't free these fields. Once the memalloc is destroyed, the dtor runs
+> > in a known safe context where we can assume bpf_obj_free_fields won't
+> > deadlock or run into any problems.
+>
+> So the plan is to do
+> if (in_nmi()) && case BPF_KPTR* | BPF_LIST_HEAD | BPF_RB_ROOT
+> just ignore it?
+> And no other changes anywhere at all?
+>
+> That would be too good to be true :)
 
-unusable toys? What are you talking about?
-netpoll is already called from everywhere.
-bpf_netpoll_send_udp() won't add any more bugs.
-
-I like this netpoll approach way more then creating and keeping proper sock=
-et
-within bpf and all head aches of keeping it around and doing send from
-good context. With netpoll all of these issues are gone.
-Just bpf_netpoll_send_udp() from anywhere and it works just like it does
-for dmesg.
+I don't know whether in_nmi() would be sufficient, we likely need
+irqs_disabled()? At that point, why not always ignore it, since
+freeing the fields is dependent on where you're running. I would still
+cancel async fields, since they're already any-context safe.
