@@ -1,67 +1,213 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1174E1D63E4;
-	Tue, 12 May 2026 02:20:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9BAC1A680C;
+	Tue, 12 May 2026 02:21:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778552421; cv=none; b=Z+u9gotOCnNiBr51Os7vg8NI1E51IRxFgcv4hDrNeaeiOelYYkANgqsd3Ruk2Lrp/Ao3KZuQQwIRNudPQHMWgXa++kLRISGkGbyYlT3GUdd5j3QGnkjRgmn6orxuTWIzyzd8dCUKbcYaBQkAp3ezsmfVdOhYcnIIdqJNkeDpCUM=
+	t=1778552497; cv=none; b=Wfj7qU2Y79Txb1w/MNqUhxqOz5RDXUZV2D2f7eaVJlZTM3wxA0d25/fpkq7AmsUtVTJz0TWnBKVVbzyPpdFBPSq9gbDIs/KWSxVMp12SwbxESg0imCFrzAk1Qe505sY+ugsieelFLc1rJvgIhUtUa6wHLRPRDP8vEGlI+h9IxM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778552421; c=relaxed/simple;
-	bh=qCpmwOBMO2WUkTkzHq+nS/FnpxquV63bE+Zm5s0BjQ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Vxm4TVn7jZzw65HqqGK1wmCfTYio2TNJUAgi1brr5QmUOBBVCBr1DMUER2ml8Dt5BWTs6atTLa0ZrcpIM20eoMYb1lI67tYiUbDUgCvKt79g/BwMrk2hMEUPWmzE3IroW/+7VVkFOuyrFZ1vVeMXFkjjBp7KJbdJjnkl/eG5ZXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qGxfJUCl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778552497; c=relaxed/simple;
+	bh=T+0Nef/1KS8+15UPaVvnoK25b9jw3Qq81QPRwdPZQYc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ON15t93W1RXTI2GQJ7bQVTOi6zudA5I4Rp5Roy83p+SIe1dUhZiQuRMhYwSwAfql47Wl9R8bZNaYTVa4DF6rZmfG2J/F/bLVlZyfIoC54Ihn07qRfcQGXHuGUB3sdRd0klYPkHAVx+0iuMjeX9ekSDTQu7F7CLeitkfh9U8IxZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g+ZNzb8x; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qGxfJUCl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2FEFC2BCF5;
-	Tue, 12 May 2026 02:20:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g+ZNzb8x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C70AC2BCF5;
+	Tue, 12 May 2026 02:21:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778552420;
-	bh=qCpmwOBMO2WUkTkzHq+nS/FnpxquV63bE+Zm5s0BjQ8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=qGxfJUCl4H7hCiKozqcohLBmSz2UGHjAUAnhFnbCkokN/8U5+DNCy3gkdREIPy5lT
-	 FcuKyjngJ4CLIq0CowDYsBvmOjYrJRSQ/fcF4fZheIk5E9BeebiHbOg+5bpzhegKpM
-	 /KDCxxemrJV0rjqXJnckd7dkSlKt6+E3hdojzLsWWTFF3wj41TvRqlfubpWfGfinyI
-	 2GEAYue+fArQRJQBENFSnlCcU0Qmx+0fd3NtT7Lj5QnSadh4lBHWrnX2s18U4nAv+O
-	 YWfd8QL3KimEIygt1/6FVwEaPCoANw85ANpVmOXB/P/sdTA6ocdQxV68U16KQQaVlQ
-	 BVg7iY1KhqMkA==
-Date: Mon, 11 May 2026 19:20:18 -0700
+	s=k20201202; t=1778552496;
+	bh=T+0Nef/1KS8+15UPaVvnoK25b9jw3Qq81QPRwdPZQYc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=g+ZNzb8xj6Rp4yY/07754ewJ407kQs9VG7mxAtf+AbcxcvXzPR2THpc+eUjyyCSeb
+	 DomBi0XfG321XOM8wlEnDXeIsxHrsImaGk0DDcHTBnY7cPTP3q41NcKEgz1Av4Ii6Y
+	 wwJKqPqgklKg+mzVcFUaDOFEnvSxnsz5jGZl4fIKSbUyDplNJh2xDlZ3TKCuPQ73lC
+	 onkzFmQXESTrVP9yO7ksHshCS6eKXxCbjKTKstTw0zThg3JhhSpWTPL3QKfgNI0aPe
+	 xVtO7UVsnDVMQHDOuTrbKSBO9jUzX7oMEs+essH8t4s2h4NAONpCLbIellTKr9Zzkd
+	 I5d5LIwXpZQGA==
 From: Jakub Kicinski <kuba@kernel.org>
-To: Daniel Machon <daniel.machon@microchip.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Horatiu Vultur <horatiu.vultur@microchip.com>, Steen
- Hegelund <steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
- "Alexei Starovoitov" <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, "Jesper Dangaard Brouer" <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
- Herve Codina <herve.codina@bootlin.com>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Mohsin Bashir
- <mohsin.bashr@gmail.com>, <netdev@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
- <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH net-next v4 00/13] net: lan966x: add support for PCIe
- FDMA
-Message-ID: <20260511192018.49dfcd7b@kernel.org>
-In-Reply-To: <20260508-lan966x-pci-fdma-v4-0-14e0c89d8d63@microchip.com>
-References: <20260508-lan966x-pci-fdma-v4-0-14e0c89d8d63@microchip.com>
+To: dipayanroy@linux.microsoft.com
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	kys@microsoft.com,
+	haiyangz@microsoft.com,
+	wei.liu@kernel.org,
+	decui@microsoft.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	leon@kernel.org,
+	longli@microsoft.com,
+	kotaranov@microsoft.com,
+	horms@kernel.org,
+	shradhagupta@linux.microsoft.com,
+	ssengar@linux.microsoft.com,
+	ernis@linux.microsoft.com,
+	shirazsaleem@microsoft.com,
+	linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	stephen@networkplumber.org,
+	jacob.e.keller@intel.com,
+	dipayanroy@microsoft.com,
+	leitao@debian.org,
+	kees@kernel.org,
+	john.fastabend@gmail.com,
+	hawk@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	ast@kernel.org,
+	sdf@fomichev.me,
+	yury.norov@gmail.com
+Subject: Re: [PATCH v8 2/2] net: mana: force full-page RX buffers via ethtool private flag
+Date: Mon, 11 May 2026 19:21:33 -0700
+Message-ID: <20260512022133.856196-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260508115100.488506-3-dipayanroy@linux.microsoft.com>
+References: <20260508115100.488506-3-dipayanroy@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Fri, 8 May 2026 09:35:24 +0200 Daniel Machon wrote:
-> When lan966x operates as a PCIe endpoint, the driver currently uses
-> register-based I/O for frame injection and extraction. This approach is
-> functional but slow, topping out at around 33 Mbps on an Intel x86 host
-> with a lan966x PCIe card.
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+---
+net: mana: force full-page RX buffers via ethtool private flag
 
-Looks like sashiko-bot responded but only CCed bpf@
-Please let us know if all the issues are false positives,
-I'm going to assume for now that at least one of the issues
-is real :)
+This patch adds an ethtool private flag "full-page-rx" that forces one
+RX buffer per page, bypassing the page_pool fragment path, to address
+a 15-20% throughput regression seen on some 4K PAGE_SIZE ARM64
+platforms under high connection counts.  Toggling the flag triggers
+mana_detach() + mana_attach() to apply the new RX buffer layout.
+
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+> index a28ca461c135..dfd222de11d0 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+
+[ ... ]
+
+> @@ -590,6 +609,88 @@ static int mana_get_link_ksettings(struct net_device *ndev,
+>  	return 0;
+>  }
+>  
+
+[ ... ]
+
+> +static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
+> +{
+> +	struct mana_port_context *apc = netdev_priv(ndev);
+> +	u32 changed = apc->priv_flags ^ priv_flags;
+> +	u32 old_priv_flags = apc->priv_flags;
+> +	bool schedule_port_reset = false;
+> +	int err = 0;
+> +
+> +	if (!changed)
+> +		return 0;
+> +
+> +	/* Reject unknown bits */
+> +	if (priv_flags & ~GENMASK(MANA_PRIV_FLAG_MAX - 1, 0))
+> +		return -EINVAL;
+> +
+> +	if (changed & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF)) {
+> +		apc->priv_flags = priv_flags;
+> +
+> +		if (!apc->port_is_up) {
+> +			/* Port is down, flag updated to apply on next up
+> +			 * so just return.
+> +			 */
+> +			return 0;
+> +		}
+> +
+> +		/* Pre-allocate buffers to prevent failure in mana_attach
+> +		 * later
+> +		 */
+> +		err = mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queues);
+> +		if (err) {
+> +			netdev_err(ndev,
+> +				   "Insufficient memory for new allocations\n");
+> +			apc->priv_flags = old_priv_flags;
+> +			return err;
+> +		}
+> +
+> +		err = mana_detach(ndev, false);
+> +		if (err) {
+> +			netdev_err(ndev, "mana_detach failed: %d\n", err);
+> +			apc->priv_flags = old_priv_flags;
+> +
+> +			/* Port is in an inconsistent state. Restore
+> +			 * 'port_is_up' so that queue reset work handler
+> +			 * can properly detach and re-attach.
+> +			 */
+> +			apc->port_is_up = true;
+> +			schedule_port_reset = true;
+> +			goto out;
+> +		}
+> +
+> +		err = mana_attach(ndev);
+> +		if (err) {
+> +			netdev_err(ndev, "mana_attach failed: %d\n", err);
+> +			apc->priv_flags = old_priv_flags;
+> +
+> +			/* Restore 'port_is_up' so the reset work handler
+> +			 * can properly detach/attach. Without this,
+> +			 * the handler sees port_is_up=false and skips
+> +			 * queue allocation, leaving the port dead.
+> +			 */
+> +			apc->port_is_up = true;
+> +			schedule_port_reset = true;
+> +		}
+> +	}
+> +
+> +out:
+> +	mana_pre_dealloc_rxbufs(apc);
+> +
+> +	if (schedule_port_reset)
+> +		queue_work(apc->ac->per_port_queue_reset_wq,
+> +			   &apc->queue_reset_work);
+> +
+> +	return err;
+> +}
+
+[High]
+Can this failure path oops inside the reset work handler?
+
+When mana_attach() fails after mana_detach() has already torn the vport
+down, apc->tx_qp has been set to NULL by mana_destroy_txq() and apc->rxqs
+has been cleared by mana_cleanup_port_context().  This code then forces
+apc->port_is_up back to true and queues apc->queue_reset_work:
+
+    apc->port_is_up = true;
+    schedule_port_reset = true;
+
+When mana_per_port_queue_reset_work_handler runs it calls
+mana_detach(ndev, false), which latches port_st_save = port_is_up = true
+and, because port_st_save is true, invokes mana_dealloc_queues().  The TX
+drain loop there does:
+
+    txq = &apc->tx_qp[i].txq;
+    atomic_read(&txq->pending_sends);
+
+with no NULL check on apc->tx_qp, and mana_destroy_vport further down
+iterates apc->rxqs[rxq_idx] while rxqs is NULL.  Would that produce a
+NULL pointer dereference in the workqueue worker whenever mana_attach()
+fails here (for example on an allocation failure in
+mana_init_port_context or mana_create_txq, or a transient HW command
+failure in mana_query_vport_cfg / mana_cfg_vport)?
+
+The mana_detach() failure path above (goto out) reaches
+mana_dealloc_queues() through the same chain and looks to have the same
+exposure.
+
+For comparison, mana_change_mtu() handles a mana_attach() failure by
+returning the error without scheduling a reset.  Would a similar
+treatment here avoid the asynchronous oops, or is there a reason the
+reset must be scheduled in this specific failure case?
+-- 
+pw-bot: cr
