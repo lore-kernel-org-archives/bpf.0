@@ -1,91 +1,90 @@
 Received: from fhigh-b4-smtp.messagingengine.com (fhigh-b4-smtp.messagingengine.com [202.12.124.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72104395ADA;
-	Tue, 12 May 2026 10:21:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924A7349CD1;
+	Tue, 12 May 2026 11:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778581305; cv=none; b=JaFVC9hzYPHgyiBT+WNXnj40rRguksB5odrEarp6nO5U1UzYVuWMgv/C/f2j6dCqkrfrE5hFXeVGDXTiGBs+JvdCOhTyikHqUULXFY3D1x7PQGqUxkxE/y9mpI7oC8m/1mCczFKUU515q3vVwrbGMQYwLX4gWOcVrzvACEWn2ew=
+	t=1778584183; cv=none; b=QjB4dVeuFbopNrZFgTGIfvOVTYQ7Km17UzMesVYYb33rTRl22KuyJw+XJ4XXdbG5xMsVgZpPMk19k5i8hGhBi5FC8G+2TfMNdSD9w1Xp0dY3UqvOm2Gv8U8nHRLg5pbPQ1EQuCkZUyWIBTlHeSGNgD7gd5K0siNYQohl+jfjw6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778581305; c=relaxed/simple;
-	bh=AfU7dk2bJmBu9bniAEQBtTwUkW59X6XTQIpcV7H1Xuc=;
+	s=arc-20240116; t=1778584183; c=relaxed/simple;
+	bh=H5Z9EQZQ2bDuVesIEqvRRn2unIwDk8pfBoJgs7vyKrY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=esxgLopaSkcZiWS0J3jsgyyK0biK/XwRzPB1mQKZZnWYj59TI0do5QBlEKNN9L5fd3NqZ98vrvigI0nJjJcC9pEGrvIG0y+GaR5Ou3IqCLBpmkMcjC1F2ZH8glb1R/l5Ut0ExBx53oKesdXsW4HZImfBN/jZDIDrJwSfz6wU6eg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=MoABu1bj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=d5GCDq/Y; arc=none smtp.client-ip=202.12.124.155
+	 Content-Type:Content-Disposition:In-Reply-To; b=olHP13J8TM44XSIGutYRHN9nfqHQGyNffR0YZ4VmybE9ELeBLOVNLpsqlqhQMDwdr++PEh59Zb3JGV9VEPPyuR56w+B792BiugRaaR2TNq7mE0ZN70Ff6jwdDGbE08QomQLEtLRFWxtcEYMngc66M5/e7ZfEntR7rY3VzXTshpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=CVdKx6OE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CtJKnvtu; arc=none smtp.client-ip=202.12.124.155
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="MoABu1bj";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="d5GCDq/Y"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 2E73F7A0067;
-	Tue, 12 May 2026 06:21:42 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Tue, 12 May 2026 06:21:42 -0400
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="CVdKx6OE";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CtJKnvtu"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 276317A00EB;
+	Tue, 12 May 2026 07:09:39 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Tue, 12 May 2026 07:09:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:date:from:from:in-reply-to:in-reply-to:message-id
-	:mime-version:references:reply-to:subject:subject:to:to; s=fm1;
-	 t=1778581302; x=1778667702; bh=xVxq0sObjHoBRr65RLCzBiSoE8Y4hOAJ
-	8upIvYky/UA=; b=MoABu1bjDUYPNSd0B3DDvw/HaCXa93BP4Ac2Jp4lFGFag6J0
-	PswgvZGQh2lbNoAOwwfWyKbPZ1OdV7uQFkLz6Ek4TjfNyofuqdihjobjBLo848DC
-	5i+GMM2iCnZq5EB0AONlCOCmaQwAoyr47Xzn+qvszOoS1z4vIIMWwuOpSGMFmYhN
-	VWivqomPhbTglePHLZwyj89xCl1Zp+2YQody9liRGiRKJnubVG3Bd3Y+NQ3ITdNb
-	jstbd96ifPpOwmfbxNYB6rCBnnJC2XBXljE4a6oj3ZgO6iVG86gC0W6hJAWXRq4O
-	FScQpAsoDQvAefgVqlUQZduIsuF+QjPpsprEZg==
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1778584178; x=
+	1778670578; bh=ZjAPBkG3sfWpNIv+detbzhioPPQ2rmkdh6Hoytav/7U=; b=C
+	VdKx6OE3BT4wby4U037bBHkfHJu64PNM1BShxw+HWGU6cKaOE0F6Tget2BmpH5T/
+	mQOm9+1AE+AB3KOeHwJqLnbopPO51+KVZ4mnpy2uilaW73AY6GB45D90oNnxPXTb
+	v0zfFjYDwsDas7a76VZO4meuILg3GkdLNznMYv+Yy2ac6ImCxPo8/K6jDaRLKvm3
+	cbBE5TCt05Jyx/INtOw7FQBOsqml30SgPtRQp3N2EdEqGrGQzqSGH2sfSOekMRSi
+	Xw8iQw4ySWxESmf4tB4lFyNBMMGZjVTuPJZpJKzc2tVUqKHypX0gfTonOkKR6QTD
+	gaNKFk2kBPT0LvaT3KQvg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1778581302; x=
-	1778667702; bh=xVxq0sObjHoBRr65RLCzBiSoE8Y4hOAJ8upIvYky/UA=; b=d
-	5GCDq/YRMAvIlz46XfuUahX4y5xuaJXAmb0XJbp5l3VEYjfF5ItuQ62quDda34Eb
-	nhzVXOpjYkZIYKezpXckH1P9/wpQkcPh7JVgxgbw3QIi8mgO5xJKI1Upo9g4RJD3
-	yeUCXot0VRVU6BuvJIjtRvPNnNHql6uTqOa1lJ9BaDEl70VoEI1y8quw1CxHOeIT
-	S1Ohh2fK1n60CCcw+2C+mydeMeAZWg8s2xP6JgV3DI77wbHvNgMVs5ds12LfEc4B
-	WOUft+jEL2Zd3sZSnkJidw0J4loyLIhXZNIMZKMeB7J5eL7CLuDC6Mn6Y32o+wZ0
-	VSuy32bLSut7kDN0oQWBw==
-X-ME-Sender: <xms:Nf8CahiZKTgZgUqOI1RSFrFYIxov76-mj-eVMuXDWG56PJkL_Qo9NA>
-    <xme:Nf8Cann8D26Z_Db43wICp8Aj_AXlvKtmjaNtd0nfXcmIU1YC9SFeU7M6GXF-HYwZE
-    UooNXA7AvdPvgCtD2qgBJUDOkyTifa_3aiIPmuOdEk3umr0bQm2vQ>
-X-ME-Received: <xmr:Nf8CagXMuS0R6cTvKwthRIGV2X3Y_gHXkbquL_DPlpH1-Q9_y_XVJ2RDBcPzZG5m-XP0V1KaswTMy1a1Ns22GWE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdduvdduheehucetufdoteggodetrf
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1778584178; x=1778670578; bh=ZjAPBkG3sfWpNIv+detbzhioPPQ2rmkdh6H
+	oytav/7U=; b=CtJKnvtuHnRwV77ma/hGxey0qhGwQId0GGEE1SGaAT+sbCFPO6W
+	R0Xo31j2+vS5XMElVlGpDHIC8Klc49ienftPtfepsUnffOvAkbRVQwWHM1u5ieR/
+	Ct0LSF8Zw7maKoCN+pMgxYty9i8iJpwFw1kvYWiq15ufZHjMDbbrXVwJBsxC3CVr
+	VUJvP2pnnmtqYnPI13O3KrP7DJSQ7JiQ4YVMlh8K53EejeTJWWXu1NLSqecS3Dsl
+	GRAzDqwZWnG4G9VtakWtG06icTKf5W8YZCELPEP+mvwI/ERHRpy2Ux1t5TNUWP/f
+	t0SkdgE78QvSq2Y5RYvQCetGy0jQAb3gAdA==
+X-ME-Sender: <xms:cgoDapSHnHBTMftz7cGyJUyW2lDeYuy-sLZKq-c4tr1Xe5WuOJDELw>
+    <xme:cgoDakXvkhuTP5i2kZcvJbY-sEOMJRF5KSDvF_5zN7ScgooP0DWyvtz56YrAdMBru
+    9sDQ56Ml85Z9teykC_X1vwSbM7krDOlYzbbAgaBO4uuS05CPWadkw>
+X-ME-Received: <xmr:cgoDauF0rnBM8gp-IdXlbRiScT4eixXFXouFwAK3njpJ9QhbMNA5T0k73IbWaIlYUcqP_T_uJeBACFBWccSld9A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdduvdduieegucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtugfgjgesthekre
-    dttddtjeenucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggr
-    shihshhnrghilhdrnhgvtheqnecuggftrfgrthhtvghrnhepgfdvgeeitefffedvgfdutd
-    elgeeihfegueehteevveegveejudelfeffieehledvnecuvehluhhsthgvrhfuihiivgep
-    tdenucfrrghrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvg
-    htpdhnsggprhgtphhtthhopeduvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohep
-    khhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghvvghmsegurghvvghmlh
-    hofhhtrdhnvghtpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdho
-    rhhgpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtth
-    hopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtoheprghnughrvgifodhn
-    vghtuggvvheslhhunhhnrdgthhdprhgtphhtthhopehhohhrmhhssehkvghrnhgvlhdroh
-    hrghdprhgtphhtthhopehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdp
-    rhgtphhtthhopegsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:Nf8CasstA_vNXnFAN61f4W2AHrlXzr6NAOMNHCNimcrhUG9dX-czmQ>
-    <xmx:Nf8Caj7vO8auUsKf13KzsYwFJTzL0VsDjjzuC_oSkURbdgJYC2LCXw>
-    <xmx:Nf8CavQPCeTd4wXlVhEb6j3QzP-iRF3yIChKk5Tdw3dW_986YHucoQ>
-    <xmx:Nf8CamskEQZvizfWyFk9oD_kTqhkXRc7SjUNXAhpYzyerfw_tWrRkw>
-    <xmx:Nv8Cag2FCHH6ILPV6aWP3lf67HxbfJYHP4GQCu-46j9IUKMfJhc2tdDE>
+    rghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttdertd
+    dttdejnecuhfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghs
+    hihsnhgrihhlrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhffhfffgfffhfeeuieduge
+    dtfefhkeegteehgeehieffgfeuvdeuffefgfduffenucevlhhushhtvghrufhiiigvpedt
+    necurfgrrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvth
+    dpnhgspghrtghpthhtohepuddvpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehk
+    uhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhloh
+    hfthdrnhgvthdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhr
+    ghdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtoh
+    epphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopegrnhgurhgvfidonhgv
+    thguvghvsehluhhnnhdrtghhpdhrtghpthhtohephhhorhhmsheskhgvrhhnvghlrdhorh
+    hgpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdhr
+    tghpthhtohepsghpfhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:cgoDane7tL-LdOcGVDUBdiqPCW6AEDmpHKYv8Rv_qY5APu3lsjQU_Q>
+    <xmx:cgoDanrJrc3y4XS-qLbWWZ3vOvpkTEuRVF9p6phOOl06nlB2JCR7cQ>
+    <xmx:cgoDaoDj5JAQFT9_MOs7N0U-9MeD9aNu5oPDT0QKm4MFWUvMFaVWSg>
+    <xmx:cgoDagf_yYwEEQsWyrFRzdbfrMujGkddTzGuFaMEzMwPxy20tgv52g>
+    <xmx:cgoDamllhoGDF8eqXfM3JiXpZCZXvou172fGPbL8pYNRena1JyR-nPJ4>
 Feedback-ID: i934648bf:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 12 May 2026 06:21:41 -0400 (EDT)
-Date: Tue, 12 May 2026 12:21:40 +0200
+ 12 May 2026 07:09:38 -0400 (EDT)
+Date: Tue, 12 May 2026 13:09:36 +0200
 From: Sabrina Dubroca <sd@queasysnail.net>
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
 	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
 	john.fastabend@gmail.com, bpf@vger.kernel.org,
-	=?utf-8?B?6ZKx5LiA6ZOt?= <yimingqian591@gmail.com>,
-	daniel@iogearbox.net, jonathan.lemon@gmail.com
-Subject: Re: [PATCH net v2 1/4] net: tls: fix off-by-one in sg_chain entry
- count for wrapped sk_msg ring
-Message-ID: <agL_NNcOAVGyWb2K@krikkit>
+	Sashiko <sashiko-bot@kernel.org>, daniel@iogearbox.net,
+	jonathan.lemon@gmail.com
+Subject: Re: [PATCH net v2 2/4] net: tls: prevent chain-after-chain in plain
+ text SG
+Message-ID: <agMKcBrJYK5UIcsZ@krikkit>
 References: <20260511174920.433155-1-kuba@kernel.org>
- <20260511174920.433155-2-kuba@kernel.org>
+ <20260511174920.433155-3-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -94,50 +93,56 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260511174920.433155-2-kuba@kernel.org>
+In-Reply-To: <20260511174920.433155-3-kuba@kernel.org>
 
-2026-05-11, 10:49:17 -0700, Jakub Kicinski wrote:
-> When an sk_msg scatterlist ring wraps (sg.end < sg.start),
-> tls_push_record() chains the tail portion of the ring to the head
-> using sg_chain(). An extra entry in the sg array is reserved for
-> this:
-> 
->   struct sk_msg_sg {
->         [...]
->         /* The extra two elements:
->          * 1) used for chaining the front and sections when the list becomes
->          *    partitioned (e.g. end < start). The crypto APIs require the
->          *    chaining;
->          * 2) to chain tailer SG entries after the message.
->          */
->         struct scatterlist              data[MAX_MSG_FRAGS + 2];
-> 
-> The current code uses MAX_SKB_FRAGS + 1 as the ring size:
-> 
->     sg_chain(&msg_pl->sg.data[msg_pl->sg.start],
->              MAX_SKB_FRAGS - msg_pl->sg.start + 1,
->              msg_pl->sg.data);
-> 
-> This places the chain pointer at
-> 
->   sg_chain(data[start], (MAX_SKB_FRAGS - msg_start + 1) .. =
->   &data[start] + (MAX_SKB_FRAGS - msg_start + 1) - 1 =
->   data[start + (MAX_SKB_FRAGS - start + 1) - 1] =
->   data[MAX_SKB_FRAGS]
-> 
-> instead of the true last entry. This is likely due to a "race" of
-> the commit under Fixes landing close to
-> commit 031097d9e079 ("bpf: sk_msg, zap ingress queue on psock down")
-> 
-> Convert to ARRAY_SIZE and drop the data[start] / - start (as suggested
-> by Sabrina).
-> 
-> Reported-by: 钱一铭 <yimingqian591@gmail.com>
-> Fixes: 9aaaa56845a0 ("bpf: Sockmap/tls, skmsg can have wrapped skmsg that needs extra chaining")
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+2026-05-11, 10:49:18 -0700, Jakub Kicinski wrote:
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index 2608b0c01849..3bfdaf5e64f5 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+> @@ -789,21 +789,33 @@ static int tls_push_record(struct sock *sk, int flags,
+>  	i = msg_pl->sg.end;
+>  	sk_msg_iter_var_prev(i);
+>  
+> +	/* msg_pl->sg.data is a ring; data[MAX+1] is reserved for the wrap
+> +	 * link (frags won't use it). 'i' is now the last filled entry:
+> +	 *
+> +	 *         i   end              start
+> +	 *         v    v                 v            [ rsv ]
+> +	 *  [ d ][ d ][   ][   ]...[   ][ d ][ d ][ d ][chain]
+> +	 *    ^   END                                     v
+> +	 *     `-----------------------------------------'
+> +	 *
+> +	 * Note that SGL does not allow chain-after-chain, so for TLS 1.3,
+> +	 * we must make sure we don't create the wrap entry and then chain
+> +	 * link to content_type immediately at index 0.
+> +	 */
 
-Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
+All this wrapping with extra "hidden" slots is so confusing...
+
+> +	if (i < msg_pl->sg.start)
+> +		sg_chain(msg_pl->sg.data, ARRAY_SIZE(msg_pl->sg.data),
+> +			 msg_pl->sg.data);
+> +
+>  	rec->content_type = record_type;
+>  	if (prot->version == TLS_1_3_VERSION) {
+>  		/* Add content type to end of message.  No padding added */
+>  		sg_set_buf(&rec->sg_content_type, &rec->content_type, 1);
+>  		sg_mark_end(&rec->sg_content_type);
+> -		sg_chain(msg_pl->sg.data, msg_pl->sg.end + 1,
+> -			 &rec->sg_content_type);
+> +		sg_chain(msg_pl->sg.data, i + 2, &rec->sg_content_type);
+
+Probably a silly question: why do we need to chain the content type?
+Could we just drop it directly into the right slot of msg_pl?
+
+(I'm also a bit puzzled by the "last_filled + 2"/"end + 1", because
+that would leave an empty slot between the last_filled slot and the
+content_type? and maybe even overwrite the first actual message chunk
+if we had filled the message?)
+
+[all this could quite possibly be bogus, which I think isn't a good
+sign for the maintainability of this code]
 
 -- 
 Sabrina
