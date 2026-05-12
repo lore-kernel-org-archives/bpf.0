@@ -1,152 +1,219 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8143E3CE48F
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 12:06:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C09372041;
+	Tue, 12 May 2026 12:25:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778587592; cv=none; b=cMoFkwJiaIDTKIIue0UP11BBYq+Oz2wxi52xSkjVUEjndCL/LZZlaSQuJdvvKQuyZUZ+CfkF+Tdb+1StJ/7REYE155WsXVWLljbY9lnPFrNMqXKCATAdXXnmHVZi1QBwMJocRF+QXPchiFJusi7gQQDAzaP5HKpyBJ76bbS2udM=
+	t=1778588730; cv=none; b=cqtKfd2cy6FkIBjR7051L+8bi2lM4p1tDYX+0nKhW9JshSS3PAfNlCC8Wawaq8nAqQa7beKuGHqAt+7/OWladaI/H5uk2zt2R+GfWnrKT1O/DVL04i2Xj77jYeKr2DSPXyRdFwrKw0VCEBetyABDQPFVpwjGReExPX6v/pBmksg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778587592; c=relaxed/simple;
-	bh=p/tHk3Ki7ukILe77/bmVvcIMX8dUCZhWCuNG0mGDJjY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IP6ljZPd90z+nclkduJfWonozDs4jwWz3RcWJkHIFBXirL3JaoPwQRsA8eRhqyIGd8VssDGCYCVQViE6rVDpa8llvWGJBO2d70tLRkVX/nGO2YR3nmwjZzBjRKZ1VB32TnjjVJuoGLFC9XZ/kT5LvU/0E3eIi1Xjo1PGPXAOlgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I+M8YmPX; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778588730; c=relaxed/simple;
+	bh=0RXUz7YJtUgH3NHoplRgNBgOPpNfBk69RhQj1tBwiL4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=HZPkBw7KzSUiL+7fCfrFyz/Ievc0CbTEcJxmNrav1zvZlKHQZF24hgjrvN5LsX+OzA527XLBD98ND5D4lJGsLxWBtRa9mWB8Z9dLifSldxV2870lAZFICbY2LxlivXNAiA+9TouDHDO3sR9W+/QNKj6Agjcoo2PHKV9jsdqmsys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SNXZ9iwY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I+M8YmPX"
-Message-ID: <1e3e5461-76cb-4e69-81f8-fb2220bf797c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778587577;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ap2nfY1WZm6T5NE1j7FvcA+Rbuv0o1NHLF2th8iyNUI=;
-	b=I+M8YmPXQjQDW/l4DymajI9lHONPQvH/p43t4tlzHtFeU9DBE5bi0PJBgeo3tVXpo2Xvwz
-	3PvQKsUX01TNh9+d6MawmNdT2f+P83j3QgbFOsKIOYLE3UH3kJ3SmlKEc6ZLXeWhtIK7rv
-	2F6A2S2YBrcbnM8zP8J+n8o0Nlm0z58=
-Date: Tue, 12 May 2026 20:05:15 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SNXZ9iwY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56EE0C2BCB0;
+	Tue, 12 May 2026 12:25:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778588729;
+	bh=0RXUz7YJtUgH3NHoplRgNBgOPpNfBk69RhQj1tBwiL4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=SNXZ9iwYKiRfJE0ZYpee+yMlFOprVutfjh3JfVHjpSN6YsYT6CwOAARrZbKwHOxsM
+	 YAjBEQ1pyiz2Duweujpa1G36NwoK/P+MPTtybLDyKz3DTbFbEuM7+GpWUFf1QAa3vQ
+	 AOVFx7IX96tBjIfthl6CQPow3LsR+HAJwXifA14886jwba26Bjkr9EjQtVRIFuCZSQ
+	 h1acq5r9QCVvvrklFeTye1cFxB4fvBbyug+NpzxhTTl42gRztcUSo8Zrt02h0nutfa
+	 WxT1/qGB/vF4hpT8roaTmEwLpAXoj9jnoba73s6uLu6csgAvT/KrJNbyT0W5nq+Eja
+	 ZlY6nplvEguFw==
+Date: Tue, 12 May 2026 21:25:27 +0900
+From: "Harry Yoo (Oracle)" <harry@kernel.org>
+To: linux-mm@kvack.org, rcu@vger.kernel.org, bpf@vger.kernel.org
+Cc: Vlastimil Babka <vbabka@kernel.org>, Hao Li <hao.li@linux.dev>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Uladzislau Rezki <urezki@gmail.com>, 
+	Joel Fernandes <joelagnelf@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Amery Hung <ameryhung@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: kmalloc_nolock() follow-ups, including kfree_rcu_nolock()
+Message-ID: <esepccfhqg7m6jo76ns2znj2cnuaepx2xvw5zaygtwohq4psma@563ypprp6rr3>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH RESEND bpf-next v10 5/8] bpf: Add bpf_list_add to insert
- node after a given list node
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
- martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- chengkaitao@kylinos.cn, skhan@linuxfoundation.org, memxor@gmail.com,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, vmalik@redhat.com,
- linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260512055919.95716-6-kaitao.cheng@linux.dev>
- <f573f7e0a5140fe6254d2ddfd3f69add455fa25c67c020c0312e2c2ceeca7c69@mail.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kaitao Cheng <kaitao.cheng@linux.dev>
-In-Reply-To: <f573f7e0a5140fe6254d2ddfd3f69add455fa25c67c020c0312e2c2ceeca7c69@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+Hello everybody. This is a follow-up discussion of
+"kmalloc_nolock() follow-ups, including kfree_rcu_nolock()" topic at
+LSFMMBPF 2026 last week. Unfortunately, many RCU folks were not there,
+but we can still discuss over email ;)
 
+The slides: https://docs.google.com/presentation/d/1kpaLd7D1dwRvIqRwQfSjJVVJL0CC2gwb-AV56yCMqXw/edit?usp=sharing
 
-在 2026/5/12 14:41, bot+bpf-ci@kernel.org 写道:
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -2570,6 +2570,16 @@ __bpf_kfunc int bpf_list_push_back_impl(struct bpf_list_head *head,
->>  	return bpf_list_push_back(head, node, meta__ign, off);
->>  }
->>
->> +__bpf_kfunc int bpf_list_add(struct bpf_list_head *head, struct bpf_list_node *new,
->> +			     struct bpf_list_node *prev, struct btf_struct_meta *meta,
->> +			     u64 off)
-> 
-> The commit message states that 'prev' must already be in the list. How can a
-> BPF program obtain such a reference and pass it to this kfunc?
-> 
-> A node already in the list is tracked by the verifier as a non-owning
-> reference (PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF with ref_obj_id == 0).
-> The typical way to obtain this is via bpf_list_front() or bpf_list_back(),
-> which return non-owning references.
-> 
-> However, check_kfunc_args() in kernel/bpf/verifier.c handles
-> KF_ARG_PTR_TO_LIST_NODE by requiring owning references and rejects non-owning
-> references.
-> 
-> Without a similar distinction for KF_ARG_PTR_TO_LIST_NODE (as exists for
-> KF_ARG_PTR_TO_RB_NODE), is there any valid BPF register state that satisfies
-> both the verifier check and the runtime semantics stated in the commit
-> message?
-> 
-> The BPF CI bot reported this issue in v10. The author responded that this was
-> fixed in [PATCH bpf-next v10 7/8], which introduces the __nonown_allowed
-> annotation and corresponding verifier logic. However, patch 7/8 is not
-> present in this commit (feed006fb969), so the parameter lacks the
-> __nonown_allowed suffix and the verifier lacks the is_kfunc_arg_nonown_allowed()
-> check.
+I'm copying the slides here to make it easier to reply.
 
-If this is an issue that must be fixed, I will move [PATCH bpf-next v10 7/8]
-earlier in the next version.
+kmalloc_nolock() follow-ups, including kfree_rcu_nolock()
+=========================================================
 
-> Reference: https://lore.kernel.org/bpf/cb7368c6062232b6ad5f9ab1c6a97bc8530566a8b3db5c4deefdd5ea63d31538@mail.kernel.org/
-> 
->> +{
->> +	struct bpf_list_node_kern *n = (void *)new, *p = (void *)prev;
->> +	struct list_head *prev_ptr = &p->list_head;
->> +
->> +	return __bpf_list_add(n, head, &prev_ptr, meta ? meta->record : NULL, off);
->> +}
->> +
-> 
-> [ ... ]
-> 
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> 
-> [ ... ]
-> 
->> @@ -19235,8 +19238,11 @@ struct bpf_insn addr[2] = { BPF_LD_IMM64(BPF_REG_2, (long)kptr_struct_meta) };
->>  		int struct_meta_reg = BPF_REG_3;
->>  		int node_offset_reg = BPF_REG_4;
->>
->> -		/* rbtree_add has extra 'less' arg, so args-to-fixup are in diff regs */
->> -		if (is_bpf_rbtree_add_kfunc(desc->func_id)) {
->> +		/* list_add/rbtree_add have an extra arg (prev/less),
->> +		 * so args-to-fixup are in diff regs.
->> +		 */
-> 
-> This isn't a bug, but the multi-line comment format doesn't follow the BPF
-> subsystem style. The preferred form in kernel/bpf/ has the opening /* on its
-> own line:
-> 
->     /*
->      * list_add/rbtree_add have an extra arg (prev/less),
->      * so args-to-fixup are in diff regs.
->      */
-> 
->> +		if (desc->func_id == special_kfunc_list[KF_bpf_list_add] ||
->> +		    is_bpf_rbtree_add_kfunc(desc->func_id)) {
->>  			struct_meta_reg = BPF_REG_4;
->>  			node_offset_reg = BPF_REG_5;
->>  		}
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25716874656
+Today's goal
+============
+
+1. Present why and what we're doing
+2. Demystify BPF's requirements for memory allocation
+3. Discuss solutions
+
+Motivation
+==========
+
+BPF map preallocation wastes memory for correctness
+- preallocate all elements by default, unless opted out explicitly
+  (BPF_F_NO_PREALLOC)
+- Typically not all elements are used, wasting memory
+
+The BPF memory allocator was invented to avoid that
+- Allocate elements on demand at BPF runtime
+- kmalloc isn't safe in some BPF contexts (in NMI, or in a critical
+  section), so a new allocator was invented
+
+Challenges with the BPF memory allocator
+- Memory is tied to the BPF subsystem and can't be used elsewhere
+- A burst of allocations can cause failures until async refill catches up
+- Trade-off between memory waste and allocation failures at large sizes
+- Reinventing every memory allocator feature is a maintenance burden
+
+The end goal
+============
+
+- Drop the BPF memory allocator
+- Avoid preallocation as much as possible in BPF
+- Use kmalloc_nolock() and kfree_{,rcu_}nolock() (and friends) instead
+
+To achieve that, we need to define requirements & expectations from BPF
+
+Background - RCU and BPF programs
+=================================
+
+- Non-sleepable BPF progs run in an RCU critical section
+- Sleepable BPF progs run in an RCU Tasks Trace critical section
+- Freeing by RCU for both non-sleepable (RCU) and sleepable
+  (RCU-tt) progs means we need to wait both GPs before releasing memory
+- RCU Tasks Trace (RCU-tt) is an RCU flavor designed for sleepable
+  BPF progs, lighter than SRCU
+- Since v7.0, RCU Tasks Trace is implemented using SRCU-fast
+- Since v7.1-rc1, RCU Tasks Trace GP is contractually guaranteed to
+  imply an RCU GP
+  - Yes, that means waiting for an SRCU-fast GP automatically covers RCU
+    readers
+
+Background - BPF memory lifetime
+================================
+
+Objects allocated for BPF may be referenced by either 1) non-sleepable
+or 2) sleepable BPF programs, or both
+
+Memory allocated for BPF may be:
+1. Freed immediately <- This is supported today via kfree_nolock()
+2. Freed immediately, but can be recycled with typesafety-by-rcu
+   semantics (for both RCU, RCU-tt)
+  - bpf_mem{,_cache}_free()
+3. Freed after RCU GP
+  - sleepable progs not allowed
+4. Freed after RCU GP + RCU-tt GP
+  - sleepable progs allowed
+  - bpf_mem{,_cache}_free_rcu()
+
+If you need something not listed here, please let us know!
+
+The big picture (today, within the BPF memory allocator)
+========================================================
+
+- bpf_mem{,_cache}_free()
+- Analogous to SLAB_TYPESAFE_BY_RCU, but for BPF
+- Insert objects to free_llist or free_llist_extra
+- When high watermark is hit, move objects to free_by_rcu_ttrace
+  and then return objects to slab after RCU-tt GP
+- However, they can be reused before returned to slab (again,
+  analogous to SLAB_TYPESAFE_BY_RCU)
+- bpf_mem{,_cache}_free_rcu()
+- Analogous to kfree_rcu(), but for BPF
+- Objects are inserted to free_by_rcu
+- Moved to waiting_for_gp list, then wait for RCU GP
+- Moved to waiting_for_gp_ttrace list, then wait for RCU-tt GP,
+  then returned to slab
+- Objects remain intact for RCU GP and RCU-tt GP
+
+The big picture (today, outside the BPF memory allocator)
+=========================================================
+
+- This slide is intentionally left blank :)
+
+The big picture (in the future - with kmalloc_nolock() follow-ups)
+==================================================================
+
+Let's drop the BPF memory allocator completely!
+
+Case A: Free immediately
+- Cache: existing kmalloc-<size> family
+- Alloc: kmalloc_nolock() -> alloc_pages_nolock()
+- Free immediately: kfree_nolock() -> free_pages_nolock()
+
+Case B: Non-sleepable readers only, free by RCU
+- Cache: existing kmalloc-<size> family
+- Alloc: kmalloc_nolock() -> alloc_pages_nolock()
+- Free by RCU: kfree_rcu_nolock(obj, rf) -> call_rcu_nolock()
+
+Case C: Both sleepable and non-sleepable readers, with free by RCU
+- Cache: existing kmalloc-<size> family
+- Alloc: kmalloc_nolock()
+- Free by RCU: kfree_srcu_fast_nolock() -> call_srcu_fast_nolock()
+
+Case D: Both sleepable and non-sleepable readers*, with typesafety-
+by-rcu semantics
+- Cache: a fixed-size kmem_cache with SLAB_TYPESAFE_BY_SRCU_FAST
+- Slab freeing deferred until SRCU-fast GP but objects can be
+  reused (analogous to SLAB_TYPESAFE_BY_RCU)
+- Alloc: kmem_cache_alloc_nolock()
+- Free immediately: kmem_cache_free_nolock() ->
+  call_srcu_fast_nolock() (to free slabs)
+- Need slab dtor support to release resources when freeing slabs
+  after SRCU-fast GP
+
+Unlike kmalloc_nolock(), "try the next bucket" trick doesn't work.
+Instead, create two caches: one for normal allocations, the other for
+fallback. Free objects with kfree_nolock() without passing the cache
+pointer.
+
+*Even when only non-sleepable readers are allowed, you can still
+use this!
+
+Progress since last year
+========================
+
+- alloc_pages_nolock() / free_pages_nolock() merged in v6.15
+- kmalloc_nolock() / kfree_nolock() merged in v6.18
+- RCU Tasks Trace re-implemented on top of SRCU-fast in v7.0
+- Transition to SRCU-fast was not smooth, ended up fixing bugs
+- RCU Tasks Trace GP now explicitly implies RCU GP
+- implicit since SRCU-fast was introduced in v6.15
+- explicit contractual guarantee in v7.1-rc1
+
+Things to do
+============
+
+- Define clear requirements/expectations from BPF (for memory allocation)
+- Introduce kfree_rcu_nolock() (in RFC)
+- Introduce kfree_srcu_fast_nolock()
+- Add SLAB_TYPESAFE_BY_SRCU_FAST support
+  - Need slab destructor support to clean up when freeing slabs
+  - Need call_srcu_fast_nolock() to submit free slabs to RCU
+- Migrate remaining bpf_mem_alloc users to kmalloc_nolock()
+- Introduce call_rcu_nolock() and call_srcu_fast_nolock()
+- Allow kmalloc_nolock() with large kmalloc sizes via
+  alloc_pages_nolock()
 
 -- 
-Thanks
-Kaitao Cheng
-
+Cheers,
+Harry / Hyeonggon
