@@ -1,155 +1,130 @@
-Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97B939BFF5
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 22:34:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF372F12AD
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 23:32:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778625288; cv=none; b=ndDYrttVW0rJcUNwFV4zFLy4QacMOzqND/NMY6Tpu9ZpN9/qaGkRel/ayquM3GonZHscwg+k4daxnGmhqUVipNf8XkvW2yL/Z86y5CkbasousqMvxS6hkwjzKmo8lVy8fjjaCBAhaOa+vdBGDJQ5B7ACu8jfgCcF6kfcsYtrzvE=
+	t=1778628777; cv=none; b=dCh1ifq22y6Z4qiojhBWabG2kyeOCVIZNWjPIwvPyOiMKD/bk+IPEgLXnrZJ9Aj3823DwEdADNQH0NZftaVK9GsPMIW9Z8wfRD0p3rep7JJ11TGsBoUt3g0MKLHrbfCVdPrSejHlD4GAbbP8cBA6mlXN9477nvA5X/oueeu4kHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778625288; c=relaxed/simple;
-	bh=WyGA54gcSfEwPmBZ1yT22s2i71gVY9h4KQNOJn9VllM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oOtR3QH7m0TyYfZRoY1HxvOhbdtmBl6yt1XJbCdJgmAGN5aTXBtiKBqtV3fyKCp1PyfQQ4rkJer0vmblH6OYaHUPiV/0BTE9M9XXr/yAmRZitXq9lkr81IfPDMzM6YmqQZg5rOxMn/fhGy4AP+uBmNtiMF8Fwbt3nftW/Qc7p4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dstRc5MI; arc=none smtp.client-ip=209.85.210.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778628777; c=relaxed/simple;
+	bh=UCaiIf5zxhMaH5Tysgpm+dB9Itbqzrff5fhLDOcoY7w=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ABIR4ZZF72vFj5jjilHtFMAPTwO7TJbcVkHjKwP5Ei+n8BEDLOiyl3pnUTT78n2iPxXCAzu40/Csrio2hjk/iGbw+bciISpSNGzyV7TGDrJa/QvBsusjV9/Ld+YPdhY0ks+sZ0eya/iycozrvLc6VBS69NHYidwuG15R2bFEkBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gfX2XGOU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dstRc5MI"
-Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-82f8893bff3so2819994b3a.2
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 15:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778625286; x=1779230086; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=BO3odHd40A1icJZvGy9LfmlOcg6Cjiu8d7ytO7Oe88c=;
-        b=dstRc5MIHPeqEOxtmlAy5cv8RGA6tElsCDjM7mo+o9GHtBgHbGlFwWzu24V52HwjEC
-         SQnuqnptEG8XGLwEp40vE4N4L2n7zza2xRNBAPXv48LlwfSLUuQ4f6dkbDs2BJIspfCp
-         Xc5OfUI7RxQlzCvcDGsglvQX3nfYtI3d1tKe+Um8S+o0Nrjlkijwn4qh8vJAyWa83SuE
-         UtSsTFAeE5F9vjkD2SdAxLT5CdraU0LWzifTXQc+2t+G+kZrd2tYL7v3h9/JFLDHZX0l
-         mbfVAq6JSrjw2NSuW1kBelbCGf0NxeAlisIy2fHOIardpVLxi9GKAo4mXzQvyS99Iog8
-         1AOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778625286; x=1779230086;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BO3odHd40A1icJZvGy9LfmlOcg6Cjiu8d7ytO7Oe88c=;
-        b=WTAg5JOsOR4oH9G+eGy7HkLbN5twORx6fWeSXT/0whxwoOyT12sWj/sKJL+X8Xa7Ep
-         GJ+tpZVBYysPrxfkpj8Wcj//BrnowTtgh9wcwrkAxrqfHBXLALw8VhI/Mzg6peYqCHQJ
-         n2ZrkQ6s4176+b9PXvNwqhZGTeN9iX1cQC3o88VQB8NRzQTDHmQEN+pQHO7f2NVuNGHQ
-         6mFsd5jfxm6gT3PEaQzsptonMhDRtA1Tl9LweEkr1HUsEN2upTRwmXYvhJUets5np70N
-         p+DhwXWmloAIZysLdMpRAY9+YztCHz/PbCuFKiC0gDPOeni1oMyClTW5C1zs65zTV/j5
-         ilYA==
-X-Forwarded-Encrypted: i=1; AFNElJ83LsdYFTTePaFBcCSRePsBGL5c2wFi/60NiAs9NxqHE9L6okDbxtS4yZ2a+3niaViCgdw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6W1oNnTo7VcC6HtfJi6xkP9ChuE+uBIZg0OFAiIO9MOPCHhet
-	QCsx8+nDajx9s9kuXHrEidQWcfrQE9tH03W7Exj4omdDa91DH5MajOTV
-X-Gm-Gg: Acq92OF1mL9TrwW88QOKlkzXAh4RXfT/b6SHpgI8DQ6eu5zsX46xVBxHE4Vz2wIKVgl
-	EkjwHiBFfsxQCovYR4LPSSrfCwkhFXOfTC/+r9hhMN5eklwxfA5fc9EU3n2VDz8bdFhEcKc3Miz
-	4uEeLWc9ndo5oPrUsGFQJhwsUf7E9Qxgkf18NsmBQHufZzzDMf3O7mU7he62k4xVDq+cqmtpe+K
-	TVjdgp1BTyHhWIsC5t7M/DYCYgkmRZzErM4HhmVqW5hjIIRL4ZqZwSN1HH2/yGQzG4fOcbI2BfV
-	qfrS6rLylzQ/rWdZE5Y7D+Mxu0yPV7ZlH42w0WyW/YYnWvB175XeQslhPYWSAQHDoGuXAETQLpD
-	3Y7DHTN9+a/A9gQYHQjEHQKPGACrZCO2IpPtfAm8PlDFsbdfzkiEL6NmJaEGyidlEk2F7mnpWCj
-	JF+TSFw5WWSgR4aqc3
-X-Received: by 2002:a05:6a20:9184:b0:398:aea8:a9c0 with SMTP id adf61e73a8af0-3af7f875fa2mr578019637.19.1778625285821;
-        Tue, 12 May 2026 15:34:45 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:5f::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8396563f049sm28583190b3a.7.2026.05.12.15.34.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2026 15:34:45 -0700 (PDT)
-Date: Tue, 12 May 2026 15:34:44 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
-	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, horms@kernel.org, 
-	andrew+netdev@lunn.ch, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH net 1/4] xsk: cache csum_start/csum_offset to fix TOCTOU
- in xsk_skb_metadata()
-Message-ID: <agOozH29XU6KQUTy@devvm7509.cco0.facebook.com>
-References: <20260510012310.88570-1-kerneljasonxing@gmail.com>
- <20260510012310.88570-2-kerneljasonxing@gmail.com>
- <agHurBlnAgjVNq-u@devvm7509.cco0.facebook.com>
- <CAL+tcoDrjJ8iHzSGz_Orf7iH-1WJ2H_LZd6BMKTnDS3MVN8daA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gfX2XGOU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8A82C2BCB0;
+	Tue, 12 May 2026 23:32:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778628776;
+	bh=UCaiIf5zxhMaH5Tysgpm+dB9Itbqzrff5fhLDOcoY7w=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=gfX2XGOUVmOefAWoVXAPam3UBvMEB4/IF98M75USd3uVRtFNoZ691FwS7PMNyZ8B0
+	 7orj1nf6vdDIVAKA1WRZibMkquEsUUF+p9PKwksT2/fhNKfWsn4ifB2bFwwfRMrKzu
+	 9RWgW6ZAZ1FxJhmN+BEP9KE9UOOQYnEUmRX0rXV/8MRQHG8AAhSSqz7InQJbALiuWp
+	 LpEzm6y0EcqGliAY3HRjFHZNyWWmDIcHOf6ln4QiovgEEXSYxO3vCvU7Pr0LvNoZtK
+	 kApjH/Ijbh6js+apbrOqv7V97Mf8r8zn/+NwJ85i61oYBLt3GOjvnlpwsSLERlnP0V
+	 s9fHbEpWOaGtw==
+Date: Tue, 12 May 2026 16:32:55 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+Cc: "Mahe Tardy" <mahe.tardy@gmail.com>, <bpf@vger.kernel.org>,
+ <andrew+netdev@lunn.ch>, <andrii@kernel.org>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <davem@davemloft.net>, <eddyz87@gmail.com>,
+ <edumazet@google.com>, <john.fastabend@gmail.com>, <martin.lau@linux.dev>,
+ <pabeni@redhat.com>, <song@kernel.org>, <liamwisehart@meta.com>
+Subject: Re: [PATCH v1 1/4] bpf: Add netpoll kfuncs for sending UDP packets
+Message-ID: <20260512163255.34162f1a@kernel.org>
+In-Reply-To: <DIGZA9DICBXO.2QQ1V7T186JW2@gmail.com>
+References: <20260511085344.3302-1-mahe.tardy@gmail.com>
+	<20260511085344.3302-2-mahe.tardy@gmail.com>
+	<20260511182019.69ebc7c6@kernel.org>
+	<DIGBS3WKQN94.1YYMZM0K6CETY@gmail.com>
+	<20260511193603.3ef00cee@kernel.org>
+	<DIGD21MXE0XM.3CLUL6BVK74PK@gmail.com>
+	<20260512065335.50647ee9@kernel.org>
+	<DIGZA9DICBXO.2QQ1V7T186JW2@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL+tcoDrjJ8iHzSGz_Orf7iH-1WJ2H_LZd6BMKTnDS3MVN8daA@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 05/12, Jason Xing wrote:
-> On Mon, May 11, 2026 at 11:03 PM Stanislav Fomichev
-> <sdf.kernel@gmail.com> wrote:
+On Tue, 12 May 2026 13:25:04 -0700 Alexei Starovoitov wrote:
+> On Tue May 12, 2026 at 6:53 AM PDT, Jakub Kicinski wrote:
+> >> No. Nothing to do with 'user space prog'.  
 > >
-> > On 05/10, Jason Xing wrote:
-> > > From: Jason Xing <kernelxing@tencent.com>
-> > >
-> > > The TX metadata area resides in the UMEM buffer which is memory-mapped
-> > > and concurrently writable by userspace. In xsk_skb_metadata(),
-> > > csum_start and csum_offset are read from shared memory for bounds
-> > > validation, then read again for skb assignment. A malicious userspace
-> > > application can race to overwrite these values between the two reads,
-> > > bypassing the bounds check and causing out-of-bounds memory access
-> > > during checksum computation in the transmit path.
-> > >
-> > > Fix this by reading csum_start and csum_offset into local variables
-> > > once, then using the local copies for both validation and assignment.
-> > >
-> > > Note that other metadata fields (flags, launch_time) and the cached
-> > > csum fields may be mutually inconsistent due to concurrent userspace
-> > > writes, but this is benign: the only security-critical invariant is
-> > > that each field's validated value is the same one used, which local
-> > > caching guarantees.
-> > >
-> > > Closes: https://lore.kernel.org/all/20260503200927.73EA1C2BCB4@smtp.kernel.org/
-> > > Fixes: 48eb03dd2630 ("xsk: Add TX timestamp and TX checksum offload support")
-> > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > > ---
-> > >  net/xdp/xsk.c | 11 +++++++----
-> > >  1 file changed, 7 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > > index 6bcd77068e52..cd039e397018 100644
-> > > --- a/net/xdp/xsk.c
-> > > +++ b/net/xdp/xsk.c
-> > > @@ -722,6 +722,7 @@ static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
-> > >                           u32 hr)
-> > >  {
-> > >       struct xsk_tx_metadata *meta = NULL;
-> > > +     u16 csum_start, csum_offset;
-> > >
-> > >       if (unlikely(pool->tx_metadata_len == 0))
-> > >               return -EINVAL;
-> > > @@ -731,13 +732,15 @@ static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
-> > >               return -EINVAL;
-> > >
-> > >       if (meta->flags & XDP_TXMD_FLAGS_CHECKSUM) {
-> > > -             if (unlikely(meta->request.csum_start +
-> > > -                          meta->request.csum_offset +
-> > > +             csum_start = meta->request.csum_start;
-> > > +             csum_offset = meta->request.csum_offset;
-> >
-> > Wondering if it's better to READ_ONCE(x) these?
+> > I'm sorry, are you saying that the motivation in the cover letter is
+> > not the motivation? It'd be great if someone could reveal the real
+> > motivation then.  
 > 
-> I still chose not to use it after reading the suggestion from local
-> AI. The reason is there is no WRITE_ONCE pair to make sure everything
-> is no data-race. I also checked some existing implementations around
-> the shared buffer (between userspace and kernel) and didn't manage to
-> see the usage of XXXX_ONCE(). Does it make any sense to you :) ?
+> AI makes commit logs sound very convincing, so I don't read them anymore
+> to avoid bias. Only looking at the code.
+> And what I see in this set is a facility for emergency notifications
+> that is safe to use in any context.
 
-Without READ_ONCE your patch relies on the compiler honoring exactly the
-loads and stores as written. Which I don't think it does (hence that
-whole WRITE_ONCE/READ_ONCE mess). IOW, it can pretty much generate
-the same code (and read csum_start twice) even with your patch applied. Happy
-to argue with your local AI if you give me the output :-D
+True, but I hope a real use case does exist for this given it's posted?
 
-I grepped io_uring/ and I see similar pattern for reading user supplied
-entries (via READ_ONCE).
+> If people bolt crypto on top and make a toy prototype out of it
+> it doesn't take away from usefulness of sending UDP packets out.
+> 
+> I want to use it out of bpf core to notify of things like divide by zero,
+> arena fault, etc. Currently they are sent via bpf_stream, but
+> user space has to be there to pick up from the stream.
+> We cannot use printk, since it's not safe.
+
+printk is unsafe but netconsole is safe?
+
+> So netcons is the only option available today for 'bad things happen'
+> notifications.
+> Theoretically con->write_atomic() can be wrapped in such helper/kfunc
+> that both bpf core and bpf progs can call.
+> progs also need emergency notifications.
+> Like sched-ext might detect something bad and notify.
+> But at the end netconsole_write() is netpoll_send_udp(),
+> so more natural and simpler to just use that.
+
+This sounds very scary. I mean it sounds exacting and technically
+challenging, but I really don't want this to hinge on netpoll.
+netpoll is not a good solution to synchronization problems.
+
+> > In kernel sockets are used broadly. I accept that it's more work
+> > for you but it's also the correct way to go about this if you want 
+> > to send traffic from BPF.  
+> 
+> proper sockets and full TCP/UDP back and forth is a different use case.
+> Maybe it will work for Mahe/Liam. I don't know.
+> I'm arguing that emergency UDP is necessary too.
+> We can skip netpoll_send_udp() and let bpf core prepare skb
+> earlier in a good context, then at div-by-0 time populate it
+> with a message and call netpoll_send_skb().
+> Looks like netcons, bridge, vlan are using it, so why not let
+> bpf core use it too?
+
+Those drivers are not really using it, they are just trying to pass thru
+the skb to the lower dev. And I'd be surprised if most of that stuff
+even works, don't think it has any users. Most people try to pipe
+netcons to eth0.
+
+> __netpoll_send_skb() is the main value here because
+> it's all trylock based at every step.
+> The div-by-0 notification using normal sockets would have to be
+> done async and that's the main downside.
+> We'd need to irq_work, then schedule_work and then send it via socket.
+> Way too many steps to do in emergency. If sched-ext messed it up
+> kthread may or may not wakeup.
+
+I think you may be overly optimistic on the dependability of netpoll.
+Rik has added support for serial scraping at Meta because netconsole 
+misses a lot of crucial alerts. And I can confirm there's a bunch of
+errors that appear in that dataset that are missed by netcons.
+
+Then there are little nuggets like some generations of bnxt NICs
+having to discard all Rx frames when netcons is trying to send
+and Tx is full (bnxt_force_rx_discard()). netpoll is really meant
+for very narrow use cases, please trust me, opening it up for broader
+use is not going to end well.
