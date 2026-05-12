@@ -1,97 +1,106 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB813750D6
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 02:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA5F383325
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 02:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778554077; cv=none; b=jEv/OIHwyCLTxWuc4e8qGBuKzukQDT7LncW9ZeP4tHMEo7HxINlvdn9+zWpa5MELlFaFfj76J9HJqZPsLmyJgf63QrRVdaOOGFGtm0Lb6KxW6zNmq8DyoAHk04QGaJwEY9zc8MQt8ZH5GZk5zIf+XBUztw4aMS64YsWZ7Bxb2HI=
+	t=1778554791; cv=none; b=uJxzTmqlupHKS/L+Ifx0Zo07EhkYzTE12tUdFJOrcUg9X1T2vkrTRQYaw0pCdNLOVUXWri1mmClwcHqjDwKguJ7jVIlCxithgg/1S8TZgciqR4KZYVR295aRoinSg8f/sxhyrWz/HPBKAmP+PC7ye5EmvmKFInFiff8z8Dgl+o0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778554077; c=relaxed/simple;
-	bh=4ffVlS2Av/OzEfrGsAauKtEeTMB+/WTUA0YEhBV65DE=;
+	s=arc-20240116; t=1778554791; c=relaxed/simple;
+	bh=JhpW2oLnsp+cHZSVAOb2zeeYn5TQyM7DdQhGOiyM1po=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OKxVG549xBtu8zbvDHGhQbBG0gJXYqCGA88BLvhJzJzjGs5GYUvv2YLCpuQkugVHsjv5ucw27URR1n7WqXIRW5TVPmyo0gZhHTMGnNF1SxYoXNSZsGmtdqqgl012LCim0HMk6onFIeyzQJ1WTlTN+56xWDiyKtSf6wY0hANCdpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qe3qmQNV; arc=none smtp.client-ip=91.218.175.180
+	 In-Reply-To:Content-Type; b=ITAd0LWK16YzmA/+z+xDUsWTL4JEtiMtM/rfTi/wCJpTT6a6mRQ695JJ8OYNMvwISWXhWfIBfUR24QcEr5vb8XaUDJKdwJ2CZoz/WvJ29r8PSr1P+2af+WwtHgfo3ZOCo613qy2MWYmWpc+t4jYy4uTyRH9JSLx8Bi0PlamzBsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Qn48XRVi; arc=none smtp.client-ip=91.218.175.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qe3qmQNV"
-Message-ID: <6d264be9-23fb-47a0-8a0c-7976737cb0a8@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Qn48XRVi"
+Message-ID: <47b7dc3c-7092-49fe-b849-6847b73df86d@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778554064;
+	t=1778554787;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=YJWfgU1D9MFUvgeM9YT8SM2K4wML6kqPYSeWvZTdA00=;
-	b=qe3qmQNVbQiUxLZr+MmBapm/1G42Iu60zb8SqZ/6Gr+OPypshACUUC9+M225yHS8PnsgD5
-	huqSMqaSH1gJeqms7/4EX0NfPnlmq4HoaTy62J6KYRD7fy5p1jMm8HIpStVqXIWDnnX0mS
-	jH38FQ7+w+aszIBNJCnzH7OGRJZocTU=
-Date: Tue, 12 May 2026 10:47:25 +0800
+	bh=IGNV/YJpEn+sge8vj57aYddAEttZNzqCrydxjg3s/MA=;
+	b=Qn48XRViZV3QR/2bV55pzmxbfYlU4fpwsUevkFv0aG/p1C4tc0ZbOMPUgvwLxI5Q/kbFBE
+	/cOK2D4Op6Iid4DewpSVIW/kNzjJ0o+ShH7U4Yum+fMdZJgsEeErHGWU3uQ4i6TnTXzWLo
+	ZeENjlI4qWB/lO1k/6dr2C7vLorlkGA=
+Date: Tue, 12 May 2026 10:59:35 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v13 6/8] bpf: Add syscall common attributes
- support for map_create
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bot+bpf-ci@kernel.org,
- bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, brauner@kernel.org,
- sforshee@kernel.org, yuichtsu@amazon.com, aalbersh@redhat.com,
- willemb@google.com, kerneljasonxing@gmail.com, chen.dylane@linux.dev,
- yatsenko@meta.com, memxor@gmail.com, a.s.protopopov@gmail.com,
- ameryhung@gmail.com, rongtao@cestc.cn, linux-kernel@vger.kernel.org,
- linux-api@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-patches-bot@fb.com, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260511152817.89191-7-leon.hwang@linux.dev>
- <fad54bcc2f9363f61cda44680e7189ad7a510d81dc52f444a4c30a3fcd37df1d@mail.kernel.org>
- <DIG0G9IFXF42.3O4K6XV8RGQBG@gmail.com>
+Subject: Re: [PATCH net v4 0/2] net/tls: fix UAF when TLS_RX is set on sockmap
+ socket
+To: Jakub Kicinski <kuba@kernel.org>, xw x <v3rdant.xiang@gmail.com>
+Cc: jakub@cloudflare.com, sd@queasysnail.net, davem@davemloft.net,
+ pabeni@redhat.com, horms@kernel.org, netdev@vger.kernel.org,
+ Jiayuan Chen <mrpre@163.com>, Daniel Borkmann <daniel@iogearbox.net>,
+ john.fastabend@gmail.com, bpf@vger.kernel.org
+References: <20260511155210.32926-1-v3rdant.xiang@gmail.com>
+ <20260511161320.358cfaad@kernel.org>
+ <CAFFJMPzw8pcwX9g7iv3F=FpHQyovUgZZ28P7XfH3gmiay-JfpA@mail.gmail.com>
+ <CAFFJMPwtWZDrD0=hANXk2cdZGt2ArQEWROGRswKPyiZ+FrG1XQ@mail.gmail.com>
+ <20260511190644.23334e6d@kernel.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <DIG0G9IFXF42.3O4K6XV8RGQBG@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260511190644.23334e6d@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On 12/5/26 01:07, Alexei Starovoitov wrote:
-> On Mon May 11, 2026 at 9:19 AM PDT, bot+bpf-ci wrote:
-[...]
->>
->> Looking at bpf_check() in kernel/bpf/verifier.c (around the verifier log
->> finalization), it uses similar logic with 'err = ret;' reassignment. However,
->> that doesn't appear to have the preserve-original-error comment that would
->> clarify the intended behavior for this scenario.
-> 
-> I guess sinle line comment wouldn't hurt.
-> 
 
-Will add a single line comment.
+On 5/12/26 10:06 AM, Jakub Kicinski wrote:
+> On Tue, 12 May 2026 08:10:03 +0800 xw x wrote:
+>> On Tue, May 12, 2026 at 7:13 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>>> Just to check - how much of this code or the patch do you understand?
+>> I think I understand the root cause. Based on Jiayuan Chen’s
+>> feedback—that we should deny TLS_RX attachments for sockets already in
+>> a sockmap—I've prepared my patch to do exactly that. Do you see any
+>> issues with this approach?
+> I mean.. I have no proof that real users of the TLS + sockmap exist
+> but I thought that they did.
 
->>
->>> +	}
->>> +
->>> +free:
->>
->> Does anything use this free: label? The only exit path before it is the early
->> return for IS_ERR(log), which correctly returns directly since log is an error
->> pointer and doesn't need cleanup. There doesn't seem to be any 'goto free;'
->> statement in the function.
->>
->> With -Wunused-label enabled by default in the kernel build (part of -Wall),
->> this will generate a compiler warning. When building with -Werror (common in
->> CI configurations and allmodconfig builds), this would break the build.
-> 
-> good point. pls fix.
 
-Will fix.
+Sorry, my earlier advice was wrong on this point. TLS_RX + sockmap is
+intentional.
 
-Thanks,
-Leon
+And there are public discussions about combination of KTLS with SOCKMAP, 
+e.g.
+https://lpc.events/event/2/contributions/105/attachments/103/126/ktls_bpf.pdf
 
+
+>> On Mon, May 11, 2026 at 10:13 PM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
+>>> I think sockmap + TLS_RX has no useful semantics(fix me if i'm wrong).
+>>> sk_skb sees ciphertext and the TLS keys are pinned to this socket, so
+>>> redirect is meaningless. And both sides racing on sk_receive_queue is
+>>> what produces the UAF.
+>>>
+>>> The fix should be to reject TLS_RX when the socket is already in a sockmap.
+>>>
+>>> Note TLS_TX + sockmap remains useful and unaffected.
+>> Additionally, my changes seem to trigger a failure in the
+>> test_sockmap_ktls_tx_no_buf test. Specifically, it attempts to set
+>> TLS_RX on a socket that is already in a sockmap within
+>> init_ktls_pairs. Since I didn't author this test, I’m not sure if the
+>> TLS_RX requirement there is essential for what’s being tested. I could
+>> use some guidance on whether the test should be updated or if my
+>> approach needs adjustment.
+> Your report is narrowly for the verdict-only case in sockmap.
+> But you're banning all TLS + sockmap.
+>
+> I think we need a similar workaround in sk_psock_verdict_data_ready()
+> as what e91de6afa81c ("bpf: Fix running sk_skb program types with ktls")
+> added for the full sockmap path. Or selectively ban the verdict only
+
+
+Agreed, sk_psock_verdict_data_ready should process tls like sk_psock_strp_data_ready.
+
+> format. But that feels a little less clean. Dunno.
+>
+> Please, do not repost this until 24h have passed. Maybe Jiayuan Chen
+> or sockmap folks (who you apparently didn't CC?) have some comments.
