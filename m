@@ -1,154 +1,299 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD7F3388E5A
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 21:09:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778620180; cv=none; b=jLnwQlTUTM3SOYZkAB3kWuL9iNzlBhIzg7UU7UxER+Uw+iF8JJMLwXXh9oLSeBwPKgCAivAEfDuzfu6dWMnm07kEiK36Eia7kMTHYl7mYxDKuaGrvdRJHS1a/LbgIceX3/ufY/p3IfIu0Inu6r8ipsEzbXYDsvCq4uZMI6MOI50=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778620180; c=relaxed/simple;
-	bh=r5NfCaDR8XuBdLS5aQzoPlC0IDF+9iTlBaiLPWCz8/I=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UPlErFKwlbwdDdPydgUTMTT3myKi+in9TmFc4kcplAgthvRCjfRMG1Td9KWnJ7yKli4ViAubEtPVCc4mI+TYXAPR73c7Y0sADZ/F10M+faMH6cEeL9cjGHBKdjRCwfdA4/op+WgYO9SVFoNmUC1mWwvzVFNRLqGgLK7qfi+ZwMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IJR6lpjj; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC332381B0D
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 21:22:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778620956; cv=pass; b=cwghMuEdo2SEIPlChXFdb6wHBeYxcKRAgb94nncrkENqgtXzT/tOO3AGSk1nYnfZWcUWM52FBXlJM6lcEdac7SdkQGESNu+GRvR0iEhi1DdQkEtNvqcRcadgrNH7ewfe0bLxhMPw0084/MPWzs/Y7D2b2x6GxVk1tXRTAq4tRlM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778620956; c=relaxed/simple;
+	bh=PiDYevi2kgVcvyRTmr06usMvTBl/SGOPbnIPQRlvqb8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KeLxivplUgvr/rY0+7LyTbea9lSQI2uHkaTVmrKLCmBwz6DHX8VUk+NMJIwRH535hkpNes5CC3WbNebAyZJMU9uB1YVzftlJjYqcOM8/vOwKLx24X5RnBkQhCS/3QyOHN/SF76cXe59ciWB/KrQuhgvzA640g8qC3+/p9gkDH6U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s1PvxHyi; arc=pass smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IJR6lpjj"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c8021c8c42fso2515229a12.3
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 14:09:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s1PvxHyi"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-7bb0d18c7f9so56965607b3.0
+        for <bpf@vger.kernel.org>; Tue, 12 May 2026 14:22:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778620953; cv=none;
+        d=google.com; s=arc-20240605;
+        b=fH8q5QVX+si07Xz9dpxfQDKhDZXeK/9ixNkMbsk+lZ7HldOI4IBbYwectEvx7z8esX
+         mogkSO/ZN+kiuG6rLqJTs39MAwCPtxRKEhhgk471SjqXThvEEnW++NvNZwosBi/WHOi7
+         7JT2C21iUQF+FzGnrz39EaXqZ+bi/QkyWpqMtTlAatuylXFWL0gws5sxCOVeysOhBKTf
+         SJgOwmZiwCkbOvNlCn0getBO4Vg6pM5jhOqJ9IP+MDPdJZUul5h+XlmMjFuOzqJ3b+W5
+         XkvFObWgbsIQK0i8fjb7hMtBmp52SO9YmHLmXpVjcOOjrwld4dkRVrcEAaVQkFH99TWk
+         m5Yw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3KuydEKLLJrXqUzzkqH1Oq4poBO4K1OP1ji2kRqJ9uI=;
+        fh=bCoLUvtAu1D3hCyKghQ3VLRStVvdR9Sgh3Xhk/87lZg=;
+        b=bGhyxZqcHZJYbwOIlsMJuoKI0DeqZoc/fGwn8piqMOD4fyC4tZjARxdDOFtZ+dRPbe
+         Q4YobrxfD93VIrCtp5rxJjal06ya+/N6E96D07xDR8iK0rl2eM7WHvJPzoI0ePCXEgvL
+         IY0tbE1Ys14uIrevhfAdj3w4nCDXucuDAwodxgn3DVyLEda31HTgWuu/bNvWaPaggFWB
+         A+tl0fbEo4oczZiP529+1jeWp4wt9GcDhO1UgEbc52Z0jESD/h+Q00+geSgxkpwdaEa8
+         84JIRDUvbAwJLzwEVBLWNeQ6pcm4f8xpIq4Eq/c4Jq1N0spo+XQ15mzx2foV0IhwbgX5
+         TZZw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778620179; x=1779224979; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tldKA9Y19SPav5iRpI+W8dNtnr9IWxgUOCs/Hfp0DfE=;
-        b=IJR6lpjjdyCKSQhGXJojJzAYSPFt+HZQp/mKQ768XaBBdWMP63J3KECcu8gv08iAYP
-         LeZes9hImkVzJmXtzhtB6jv+cgO5YyDmG4e+1gRXux4F3phOrdZ3vkIk6aUq0KwBDMc6
-         O0vPGaZB/QoB9eqaWIvhSuTaRiWNpjw8H65MyNa6AJ0WpYjlu8beZnQwwtdmu+kj8q/c
-         Hv5sabYfyp8Yuqq0v5hMjZm2mWj+TUkDPib4gZN4QVADQFT2dq84oKrhtFdWt4o3jHum
-         pPXirSu2bjdwP4SeDShgXbrvaPrqNqhq2Vve4OYqkN48RxKkHwhqBdoAQb6DBPHJqIXg
-         9Btg==
+        d=gmail.com; s=20251104; t=1778620953; x=1779225753; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3KuydEKLLJrXqUzzkqH1Oq4poBO4K1OP1ji2kRqJ9uI=;
+        b=s1PvxHyiAacYS+SqmWtq0dqNrDJnHfhs6NH1lQ6Bjx51gHrgAlSNIhkd9Djcy9PdgX
+         pVj/FGBfk6EC7zXiORaL5hzwkwhMc60gLd42DorXVC1/IT9XbKcS0bvlZNjz0cSsN86s
+         HW8T0hdplYXuI8VocEgnH63KG9uG9f5MJvIh63D+F9DvgtDwigVhmW2P1Y9oDWvvyqLX
+         RQf3AB7QN86vgLVN0W6C4O5IwQzdnKuna/WVvDlcMr3mgUxpTiZ1hkVRVqgNRf7LEc2x
+         hE60ft1n7WlrF9hpocG0ZNu5eJZ0E6WV11akcPTQ/3dg9SQ1MA8MRHoA4fPVd8DuhQ/4
+         j32Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778620179; x=1779224979;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tldKA9Y19SPav5iRpI+W8dNtnr9IWxgUOCs/Hfp0DfE=;
-        b=KXxqxzMavN3e8hRHInuBGrq5iaS1hfPzbcWZEYSPLSRnl2CBRPmygdJsRt1O+By7Ue
-         g4n/gjMUBreYBQZcZvXZwXQlu5iuScoa6YhiGKq81alqQ8I0TmjbOxuUV8CnOH53jlnp
-         iDbN4gj1Tzi3KmFXCH3rNNpYXaGYuQ8cmXGK2hSS660GoP7ppjtuAkFdIRMAl1BV/pGX
-         OJvh2pOC6f58cbzveqUd62pWKutM9Ey84bqLhlgZ4ILMXPWHQ7dValmPn1k6xE9On+zI
-         bTLfgVu+v0tev97TrxYYWkXX0dS7OfYac0zm9Km4+ffk77xzk9zgj38ILQcoZVy/0aXy
-         kjXA==
-X-Gm-Message-State: AOJu0Yzelg2QY9swop4re9luc4gB9UxFK60HsHnUCxBkyZ26wZNVPosK
-	Jalq8G/7Zy+Rv59XsdMIAzuPeJVs0lz7V4+TwTQJ9tOS24g5WMXOcxjE
-X-Gm-Gg: Acq92OG1SGm5WPQbkjAnPiaZqihudFwY0OAcjAVSHIDa2HdPHJdzTRzmNCpfZH0EvKx
-	y6x5NKUeG+y4nkbqeS3Do5x1fAnozqsjLgKHPBls16yntypiz0rE4PKkYGroX7n2DV8IoVOBz92
-	itYWvgHw4R0vGcBsni8X+eebgPlHyu+ZNFca9Rwl0/6bPqFHESmynzG0uXgSuXvgic0SUZgsWWj
-	uG71NhkpsBp5PpjyXk8fUn44wqH08ilP462K9K3aLtNSdxnSQsD1sTMv06dkAEzVOV473j8j2R0
-	8NIoXS2uZr8rgaq7Z++K/rCjhAVEeTV12NU+ncXGfYaOO0hGFass9VgUDh2yhML+P20uypdqFij
-	YKPQu/iJy6dgLESP/OZ6QWFKHq7ZPGY63v/16g3E/0sRDyExuA4epS+DDA/CNkEmr+TDl4a1tDc
-	BHXsU0EHAqMSNJUzl5HS4VuOQHn6Gib+ysWBsOCSQr0x+XfCUNYkze
-X-Received: by 2002:a05:6a20:748f:b0:3a3:21db:8ee8 with SMTP id adf61e73a8af0-3af7fb6dd28mr311449637.1.1778620178922;
-        Tue, 12 May 2026 14:09:38 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c82675fb236sm13144528a12.0.2026.05.12.14.09.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2026 14:09:38 -0700 (PDT)
-Message-ID: <701f9924ff6d13cf948c4ce4527eb866a26950e2.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 07/12] bpf: Unify referenced object tracking
- in verifier
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
- alexei.starovoitov@gmail.com, 	andrii@kernel.org, daniel@iogearbox.net,
- memxor@gmail.com, martin.lau@kernel.org, 	mykyta.yatsenko5@gmail.com,
- kernel-team@meta.com
-Date: Tue, 12 May 2026 14:09:02 -0700
-In-Reply-To: <CAMB2axM8hR=OVqbkbTMJw_ej2pfnEm9Cm-quuoFPqsVhmJxO0g@mail.gmail.com>
-References: <20260506142709.2298255-1-ameryhung@gmail.com>
-	 <20260506142709.2298255-8-ameryhung@gmail.com>
-	 <23140ed4c48babfa8af91f3b67f379773bdc04c1.camel@gmail.com>
-	 <CAMB2axM8hR=OVqbkbTMJw_ej2pfnEm9Cm-quuoFPqsVhmJxO0g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+        d=1e100.net; s=20251104; t=1778620953; x=1779225753;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3KuydEKLLJrXqUzzkqH1Oq4poBO4K1OP1ji2kRqJ9uI=;
+        b=OLo621s6lGtnYHEUzvnM9dQ26oPGZ2mqVimUkjwZHypruIsTaRH+jhgOF0DC9OJN0O
+         z7Igi2gp7CvX3zL6gNaTnRWAo86P/gemmgtnSbpackA9OPSjPYlFvvLTNf/jNRF3Bck4
+         Qf20jQf6D5iWWFmvYPnpohrzvKyi57Fs0uEpILnOIod/ywukkFef10U2KRsC7AOImgIQ
+         oWeTGHmfEHstFxd0lBtNkXHXe9N/Dtxr8ibjSNds0KPMJfsdp8Cc3C9dNH4uFRq1b7GF
+         knem5VWUQ9ujr+U7+UWMaUSPIKHNNHlel5yZQGjcerSoCThRZL03fBscRtUygNZlIMzL
+         El3A==
+X-Gm-Message-State: AOJu0YwM6PdyeT6phzvit9BEmN0hupnDJea0dkprNbf418g+SYXIkhcf
+	7WXkAQOp+ndE18YYnIuKu8YQmfC3aUqM38CuVXlxwdhjkRUOF358vlRaUrTW+RtK3w7nk3MsWps
+	LcHXF7oAeaY8V1HWZ8SsYS0HH2Mwz/9k=
+X-Gm-Gg: Acq92OG27emOT3KwzNO7sy6G2d3qt/wtI0sUMkTXy0q6MG37rLCJ+1SdKBIdTdcfllF
+	X9LZQMEmPcwOyVTDeDfx1UeZvi4WvBkdjUPxtgR2QuKjxq5Tcgc5niyi6FiENEtTd8pInlVxWBV
+	1O4dwxnmh/f3p1uM2803XQttcMqW/tjansTwyS8V+9Y7lkXZucxNp+NwUOJi7IvzsmIy97upan5
+	9+fuS2zLysDlC7lhtvQCqktU0zKaxnl7oN4y6cFexmbGi9fKHW93XZC4WIFfUx2c+bfgAGrA9XG
+	dgDME5KsQF6BBnK/iBrEBUg=
+X-Received: by 2002:a05:690c:e1d8:20b0:7bf:424:bf6b with SMTP id
+ 00721157ae682-7c6a9f2df4dmr5357877b3.14.1778620953441; Tue, 12 May 2026
+ 14:22:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260506142709.2298255-1-ameryhung@gmail.com> <20260506142709.2298255-9-ameryhung@gmail.com>
+ <cfdb2d4af893d70bcb15bcc22d6467f800b7291f.camel@gmail.com>
+In-Reply-To: <cfdb2d4af893d70bcb15bcc22d6467f800b7291f.camel@gmail.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Tue, 12 May 2026 23:22:20 +0200
+X-Gm-Features: AVHnY4KL5O_WnB5HWg9pGPB5V8Psv_hjQSNaVwa-FNe_x5m6XeUyNhDo48F-8aQ
+Message-ID: <CAMB2axO3pL5uCLL-=Ov7Nnyf7_=8tL+j0vUNHRV=Z8EFg66hyQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 08/12] bpf: Unify release handling for helpers
+ and kfuncs
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
+	andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com, 
+	martin.lau@kernel.org, mykyta.yatsenko5@gmail.com, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2026-05-12 at 22:37 +0200, Amery Hung wrote:
-> On Tue, May 12, 2026 at 12:04=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.=
-com> wrote:
-> >=20
-> > On Wed, 2026-05-06 at 07:27 -0700, Amery Hung wrote:
-> >=20
-> > LGTM, a nit below.
-> >=20
-> > [...]
-> >=20
-> > > @@ -8028,14 +8024,13 @@ static int check_func_arg(struct bpf_verifier=
-_env *env, u32 arg,
-> > >       }
-> > >=20
-> > >       if (reg->ref_obj_id && base_type(arg_type) !=3D ARG_KPTR_XCHG_D=
-EST) {
-> > > -             if (meta->ref_obj_id) {
-> > > -                     verbose(env, "more than one arg with ref_obj_id=
- R%d %u %u",
-> > > -                             regno, reg->ref_obj_id,
-> > > -                             meta->ref_obj_id);
-> > > +             if (meta->release_regno && meta->ref_obj.cnt) {
-> > > +                     verbose(env, "more than one arg with ref_obj_id=
- %s %u %u",
-> > > +                             reg_arg_name(env, argno), reg->ref_obj_=
-id,
-> > > +                             meta->ref_obj.ref_obj_id);
-> >=20
-> > I think this should be reported from update_ref_obj() itself,
-> > it is more consistent logically and also avoids reporting code
-> > duplication in check_kfunc_args() and check_kfunc_call().
-> > Also, technically the reg_arg_name() is an independent fix.
->=20
-> We have kfuncs that have more than one ref_obj. This is not a problem
-> unless ref_obj is referenced in the verification and is ambiguous
-> (e.g., used it to tie the lifetime of the allocated memory with
-> ref_obj). Therefore, it is kept at the location of use instead of
-> update_ref_obj() to prevent breaking existing kfuncs.
+On Tue, May 12, 2026 at 1:20=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
+>
+> On Wed, 2026-05-06 at 07:27 -0700, Amery Hung wrote:
+>
+> LGTM, one question below.
+>
+> > @@ -8010,28 +8010,15 @@ static int check_func_arg(struct bpf_verifier_e=
+nv *env, u32 arg,
+> >               return err;
+> >
+> >  skip_type_check:
+> > -     if (arg_type_is_release(arg_type)) {
+> > -             if (!arg_type_is_dynptr(arg_type) && !reg->ref_obj_id && =
+!bpf_register_is_null(reg)) {
+> > -                     verbose(env, "R%d must be referenced when passed =
+to release function\n",
+> > -                             regno);
+> > -                     return -EINVAL;
+> > -             }
+> > -             if (meta->release_regno) {
+> > -                     verifier_bug(env, "more than one release argument=
+");
+> > -                     return -EFAULT;
+> > -             }
+> > -             meta->release_regno =3D regno;
+> > +     if (arg_type_is_release(arg_type) && !arg_type_is_dynptr(arg_type=
+) &&
+> > +         !reg->ref_obj_id && !bpf_register_is_null(reg)) {
+> > +             verbose(env, "release helper %s expects referenced PTR_TO=
+_BTF_ID passed to %s\n",
+> > +                     func_id_name(meta->func_id), reg_arg_name(env, ar=
+gno));
+> > +             return -EINVAL;
+>
+> Nit: a similar check is added in check_kfunc_args(),
+>      can these be wrapped in some utility function?
 
-Ack, thank you for explaining.
+Make sense.
 
-> >=20
-> > > Drop the selftest introduced in 7ec899ac90a2 (=E2=80=9Cselftests/bpf:=
- Negative
-> > > test case for ref_obj_id in args=E2=80=9D) since the verifier no long=
-er
-> > > complains about ambiguous ref_obj if it is not used.
-> >=20
-> > On the other hand, if you think that this property is worth having,
-> > then maybe wrap the check with in some utility function?
->=20
-> A utility function like below makes sense if we fold ref_obj_id into
-> id. It would be too cumbersome for v3 as we may need two of this for
-> ref_obj->ref_obj_id and ref_obj->id.
->=20
-> static int get_ref_obj_id()
-> {
->         if (ref_obj->cnt > 1) {
->                 verifier_bug(env, "function expects only one
-> referenced object but got %d\n", ref_obj->cnt);
->                 return -EFAULT;
->         }
->         return ref_obj->id;
-> }
+>
+> >       }
+> >
+> > -     if (reg->ref_obj_id && base_type(arg_type) !=3D ARG_KPTR_XCHG_DES=
+T) {
+> > -             if (meta->release_regno && meta->ref_obj.cnt) {
+> > -                     verbose(env, "more than one arg with ref_obj_id %=
+s %u %u",
+> > -                             reg_arg_name(env, argno), reg->ref_obj_id=
+,
+> > -                             meta->ref_obj.ref_obj_id);
+> > -                     return -EACCES;
+> > -             }
+> > +     if (reg->ref_obj_id)
+> >               update_ref_obj(&meta->ref_obj, reg);
+> > -     }
+> >
+> >       switch (base_type(arg_type)) {
+> >       case ARG_CONST_MAP_PTR:
+>
+> [...]
+>
+> > @@ -9825,7 +9883,7 @@ static int check_helper_call(struct bpf_verifier_=
+env *env, struct bpf_insn *insn
+> >       memset(&meta, 0, sizeof(meta));
+> >       meta.pkt_access =3D fn->pkt_access;
+> >
+> > -     err =3D check_func_proto(fn);
+> > +     err =3D check_func_proto(fn, &meta);
+> >       if (err) {
+> >               verifier_bug(env, "incorrect func proto %s#%d", func_id_n=
+ame(func_id), func_id);
+> >               return err;
+> > @@ -9870,37 +9928,11 @@ static int check_helper_call(struct bpf_verifie=
+r_env *env, struct bpf_insn *insn
+> >       }
+> >
+> >       if (meta.release_regno) {
+> > -             err =3D -EINVAL;
+> > -             if (arg_type_is_dynptr(fn->arg_type[meta.release_regno - =
+BPF_REG_1])) {
+> > -                     err =3D unmark_stack_slots_dynptr(env, &regs[meta=
+.release_regno]);
+> > -             } else if (func_id =3D=3D BPF_FUNC_kptr_xchg && meta.ref_=
+obj.ref_obj_id) {
+> > -                     u32 ref_obj_id =3D meta.ref_obj.ref_obj_id;
+> > -                     bool in_rcu =3D in_rcu_cs(env);
+> > -                     struct bpf_func_state *state;
+> > -                     struct bpf_reg_state *reg;
+> > -
+> > -                     err =3D release_reference_nomark(env->cur_state, =
+ref_obj_id);
+> > -                     if (!err) {
+> > -                             bpf_for_each_reg_in_vstate(env->cur_state=
+, state, reg, ({
+> > -                                     if (reg->ref_obj_id =3D=3D ref_ob=
+j_id) {
+> > -                                             if (in_rcu && (reg->type =
+& MEM_ALLOC) && (reg->type & MEM_PERCPU)) {
+> > -                                                     reg->ref_obj_id =
+=3D 0;
+> > -                                                     reg->type &=3D ~M=
+EM_ALLOC;
+> > -                                                     reg->type |=3D ME=
+M_RCU;
+> > -                                             } else {
+> > -                                                     mark_reg_invalid(=
+env, reg);
+>
+> Note: release_reg() does not have this 'else' path, but it seem to be not=
+ a problem,
+>       assuming that MEM_ALLOC | MEM_PERCPU registers are generated only f=
+rom some
+>       other cmp_xchg call. Is that the case?
 
-Maybe just like this:
+AFAIK, percpu allocated objects (i.e., MEM_ALLOC | MEM_PERCPU
+registers) only come from bpf_kptr_xchg() and bpf_percpu_obj_new(). We
+don't have a mechanism to derive registers from percpu allocated
+objects such that we need to mark_reg_invalid when calling
+bpf_kptr_xchg().
 
-  static void validate_ref_obj(struct ref_obj_desc *d) { ... }
+If there is such case in the future, maybe we can do the following in
+release_reg() then
 
-?
+        if (convert_rcu)
+                err =3D ref_convert_alloc_rcu_protected(env, reg->ref_obj_i=
+d);
+
+        if (release_dynptr)
+                err =3D unmark_stack_slots_dynptr(env, reg);
+        else if (reg->ref_obj_id)
+                err =3D release_reference(env, reg->ref_obj_id);
+        else if (bpf_register_is_null(reg))
+                err =3D 0;
+
+
+>
+> > -                                             }
+> > -                                     }
+> > -                             }));
+> > -                     }
+> > -             } else if (meta.ref_obj.ref_obj_id) {
+> > -                     err =3D release_reference(env, meta.ref_obj.ref_o=
+bj_id);
+> > -             } else if (bpf_register_is_null(&regs[meta.release_regno]=
+)) {
+> > -                     /* meta.ref_obj.ref_obj_id can only be 0 if regis=
+ter that is meant to be
+> > -                      * released is NULL, which must be > R0.
+> > -                      */
+> > -                     err =3D 0;
+> > -             }
+> > +             struct bpf_reg_state *reg =3D &regs[meta.release_regno];
+> > +             bool convert_rcu =3D (func_id =3D=3D BPF_FUNC_kptr_xchg) =
+&& in_rcu_cs(env) &&
+> > +                                (reg->type & MEM_ALLOC) && (reg->type =
+& MEM_PERCPU);
+> > +
+> > +             err =3D release_reg(env, reg, convert_rcu, !!meta.dynptr.=
+ref_obj_id);
+> >               if (err)
+> >                       return err;
+> >       }
+>
+> [...]
+>
+> > @@ -11609,18 +11640,16 @@ static int check_kfunc_args(struct bpf_verifi=
+er_env *env, struct bpf_kfunc_call_
+> >                       return -EACCES;
+> >               }
+> >
+> > -             if (reg->ref_obj_id) {
+> > -                     if (is_kfunc_release(meta) && meta->ref_obj.cnt) =
+{
+> > -                             verbose(env, "more than one arg with ref_=
+obj_id %s %u %u",
+> > -                                     reg_arg_name(env, argno), reg->re=
+f_obj_id,
+> > -                                     meta->ref_obj.ref_obj_id);
+> > -                             return -EFAULT;
+> > -                     }
+> > -                     update_ref_obj(&meta->ref_obj, reg);
+> > -                     if (is_kfunc_release(meta))
+> > -                             meta->release_regno =3D regno;
+> > +             if (regno =3D=3D meta->release_regno && !is_kfunc_arg_dyn=
+ptr(meta->btf, &args[i]) &&
+> > +                 !reg->ref_obj_id && !bpf_register_is_null(reg)) {
+> > +                     verbose(env, "release kfunc %s expects referenced=
+ PTR_TO_BTF_ID passed to %s\n",
+> > +                             func_name, reg_arg_name(env, argno));
+> > +                     return -EINVAL;
+> >               }
+> >
+> > +             if (reg->ref_obj_id)
+> > +                     update_ref_obj(&meta->ref_obj, reg);
+> > +
+> >               ref_t =3D btf_type_skip_modifiers(btf, t->type, &ref_id);
+> >               ref_tname =3D btf_name_by_offset(btf, ref_t->name_off);
+> >
+>
+> [...]
