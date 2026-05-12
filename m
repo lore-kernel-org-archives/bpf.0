@@ -1,123 +1,96 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0093EDE46
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 17:47:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E12125B081
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 18:32:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778608048; cv=none; b=TzSb/TGgZ9Yw4+avoKIv6ymP8sAyV5HbdPj8TlCRqJtW0OIyXg3reBZR5xv/tselyTptSVmvKBzFVlPohEFtx/N6l0pGI2lXct0Rwx7Epy776Bbnw5Z9kytlxPlUwr5ROJqLvSSVkB1+lmcCG+LG7TwwCxVIAM2+acirtAQuiC0=
+	t=1778610763; cv=none; b=QsCDG214tgi/yBvLGwJnJABVG58CAlKXfZZeumaCZgWIdChSITUSm3kjx1N3M9L6Y+RWMHSqO/sD6q3STNDspt5DYkOg1K+eESkbsqyO3gVlKxrhlhu7oSQ6E6zFJ127IEUxRhqFCNKuxSShvHxGPR5VetLui4hEhzY6seNR9TU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778608048; c=relaxed/simple;
-	bh=cXobzdS8IKelKwX3du7Jn4Xo/cwPgqr6uVkMRMJ3L+Q=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=sXy45ZbwoiESVlODGSD7HIqB5/o6DpCL5sQ8Y1fQK/d+KmNHretwEnDgowK/BHAT7Qvg9JVyzt2jFtNBHze9KgPaz4WB5q5Cub+qzwe0aK4owjpt9V7HHFbcDlgwyPHO1pF+qpbhzaqWPUpZXUJEOUXF2xFE9hP/PFwiCwGyI+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=syENb1OA; arc=none smtp.client-ip=74.125.82.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	s=arc-20240116; t=1778610763; c=relaxed/simple;
+	bh=788A2bdcpOBapdqNI4/QSoomT4A1912/zFYTBA+/vOc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=S3aaHgBrneePPENB8189epGzRm83Qhw1VkX0x0Av+RBFkm2W+H36/YTkKi+PUT+Zlcsv/VY2AblRRNUEUaj1EX5/8azgcSa/mL4MMcJemqOWG0yaJa0JST7iyj7twg18jdtw0dYIGndwNKd7qrlNcdot4nOJ7/bpW8zUEbJvNtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SfjPCIM5; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="syENb1OA"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2ef37c3f773so7003435eec.1
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 10:47:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SfjPCIM5"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c8025500cc7so4266095a12.1
+        for <bpf@vger.kernel.org>; Tue, 12 May 2026 11:32:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778608047; x=1779212847; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QUCs++vVYNhQEfRcxQUIPcuntgMnfvBVScnOJKZmjZo=;
-        b=syENb1OA9L4L7+s+RKrD0jUL2wZx7kaHkkBJdd14s71g6nwd5jUpeNm2V2ZJCbgIjn
-         Crbbny/DHn6i8hs7FPJD8ZulCcHymE6RKYAmM/HrBEkjCtpQToNTky5l/AjGaN4gR+9T
-         BAngpqdRvINr7EZBLGCaaajX9WxL/zF5uqOoHTl5XiPq9P9aiQne0SobklUwsqsniQP+
-         8Ge9/JOnAkwIRPtnOgXGQIwPXFkvjjNAMcF6Lh4mTMAcsEnxhBj0M70Jq9gxvvJMlpKq
-         0a4bgcxvNOckrh6QtejZdta9VLpQOZ5IFYRn8rW5bS04qRU9ZKYjXJAfTriA47jyK5aw
-         Sdpg==
+        d=gmail.com; s=20251104; t=1778610762; x=1779215562; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=788A2bdcpOBapdqNI4/QSoomT4A1912/zFYTBA+/vOc=;
+        b=SfjPCIM5cJ6+xHAu0booYkkcVzq6W+iocCZhZqhWtYyT+LVm9O0xRSdQ7TzlUn133l
+         d8nlmfDsO8t0eq6/oT+7wt5fV4mrIRpfViVCoYWzsTMNlgYjpL2fblsNLmNVUGm20PlM
+         qQuDLiq48mxo1ZTwIEZWDDccJzKs/ZIO2B3X3i9tOf+NZCEpVC39eeq7GO3MxAseMWtT
+         lbYgAXMSeTgBZmW1Jt6XIVxm8HjXOMA0wKYklcG3F9mLjgFunpjSxW48SBAyX4IobRf2
+         IyYpfePzTMx2qjpoLbT5mdgsNR0WPVaFt8bWvA9KTSv3v18wUMoimIJU2QOyJDLTxezG
+         JQkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778608047; x=1779212847;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QUCs++vVYNhQEfRcxQUIPcuntgMnfvBVScnOJKZmjZo=;
-        b=omXSVry0XdIN0XUNGhFQcG1NdTJMHi3yVkDw2eQahSQZQb3ve8BKzxr2kzAsmBdu7f
-         t/FM2i7xBlDFr3nk4RJaIROtxJKlKSjOb7hy1RPy3bP6d/4tBIrikaMNl7OC6vbAR29D
-         k+vaPBHgYELCoFpolj7RoilVo3XF6j2Cv48Qa5Dp6XTWRdQzCh7bLRj/GP1fXn3TKX33
-         GuwhPkkb3OzTwCjf9vVzmxBE/3TnMxIS9tBtDD1T+AWOVs9SLHHEa1FONKxBh51Pkpsr
-         h04o9aOuG6jpLTVqEZkPF3L/BviXVDPhrzzNWdbPvIWsaKnGD5zDvkXqkav4OuX5Xx0A
-         NkgQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/No3JeLt4ZSI4c+zb8lkdtZi3awJedpPqVYw7vF4zmRUhCVH655cZGliaMk8+xpXTWATs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyuawlex7JzY9n76MV5Gsn2uPUw5ThO8eUMvyop4a+X45Sq36qp
-	l45MPoBfY5S9yCqEYHYfIu14I1ikEfizNGKXmxh4yHJUoTvCym4b1Lns5uRrGkCRA0n24rAhv08
-	cnZ7N2qcAVA==
-X-Received: from dybia10.prod.google.com ([2002:a05:7301:30a:b0:2da:3d44:ddce])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:5793:b0:2f2:6dde:df54
- with SMTP id 5a478bee46e88-3011977f73fmr47297eec.33.1778608046462; Tue, 12
- May 2026 10:47:26 -0700 (PDT)
-Date: Tue, 12 May 2026 10:46:38 -0700
-In-Reply-To: <20260512174638.120445-1-irogers@google.com>
+        d=1e100.net; s=20251104; t=1778610762; x=1779215562;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=788A2bdcpOBapdqNI4/QSoomT4A1912/zFYTBA+/vOc=;
+        b=T+CYm6FBfMXS2qoBKEU+nvh+r5sCIqY/t4IukqRdovqvjMt4hBBx7JRjMaIbWPuvwr
+         0S6qsN0Hrr4dugytE2pdGkrf1m7omuEEesqJGiiWVYuHA+woyYMN29jUOxkKe64sWPLM
+         yeXdh2V3RoIZA4EF7hfWh1eJI1xmdfSG9k3d2yiae1Y1BQqhITcrTnzuo3PynW313jOH
+         3wjkietqquQfOBt6DZdaTO/yl64IKjvtz9dEzbmuKHhs9OLAB3qmp/lLzdIum7uhSt6F
+         PwKs7es4kovuO7+bNUQ7pu5n2z0sbXLbge+6AeL2BtapweXdq0EH1iD5D1rav/vzY/yM
+         8esw==
+X-Forwarded-Encrypted: i=1; AFNElJ/lsZbfkTrTeY4zDSc7d7E8j9tTqq42G4H8E47F1Xs2mhJ3VHrV4HNWjXIKIppSKzUwwKw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFmNGdPnBK8T1K4fFvhTm3ue+cjV5P50LSziTp2Y2Nisp41WOH
+	wBilqHoSCoJXDntaYLrf6KXYBjn3fadPqevIXlgIK9/9RNnYu2ekfOFz
+X-Gm-Gg: Acq92OGHEy4HGPt7XWwxk8Em+snQvZRyDMLq9XatEEz3AO/4nZ5J4ESq9/EnqSFu0y6
+	li0oQwRmvS76U/7nc9iAl0ZWKcFN917OoJxr5ztoC18GhM5Jd/1pzYBMzzFocPHQiqsJj6tlQ+r
+	gYQtgtl0o0Fs5vQ40FvW9YybC8QlOUazLDRyplWIvdLir6VJKTaj8u3XK5z8mKO7FskL2v7lcTK
+	ze/+f5m/BXAydWrhP4tE3RMV3cRbK4KT1bVyCzrSUnOfCIXksEP3VyzgF+jyu1ihCqn25URXDWT
+	x5c0zlLHDheEyMr/0RXAm2Cph2fkrR/3oefU5FyTQ3prqiGKP1pkCfXC2/XEbcdMWPhuheCtvZD
+	Zfw+O1bFTrofR2yIcB+ubejY1VoB2EygKR9x1fBIqFA6H2g5Q94jU8pEYC7tqfYXrV0BC+/Zp/U
+	nHjhvt4GEpHMelgYdP7iTFu2FMn3cN0kiE1JlK5Q6sIRnkMnGVn1vZ
+X-Received: by 2002:a17:902:c405:b0:2b7:a3bf:b2a0 with SMTP id d9443c01a7336-2bd271283bbmr2687245ad.5.1778610761632;
+        Tue, 12 May 2026 11:32:41 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1ec232esm148513515ad.81.2026.05.12.11.32.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2026 11:32:41 -0700 (PDT)
+Message-ID: <f89db2ee4911db2d8bb1da5b44e318d98bece0e2.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v4 06/12] bpf: Remove redundant dynptr arg
+ check for helper
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
+ 	daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org, 
+	mykyta.yatsenko5@gmail.com, kernel-team@meta.com
+Date: Tue, 12 May 2026 11:32:06 -0700
+In-Reply-To: <20260506142709.2298255-7-ameryhung@gmail.com>
+References: <20260506142709.2298255-1-ameryhung@gmail.com>
+	 <20260506142709.2298255-7-ameryhung@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260512053539.3410189-15-irogers@google.com> <20260512174638.120445-1-irogers@google.com>
-X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260512174638.120445-19-irogers@google.com>
-Subject: [PATCH v2 18/18] perf build: Convert llvm-config shell queries to
- simply expanded variables
-From: Ian Rogers <irogers@google.com>
-To: irogers@google.com, acme@kernel.org, james.clark@linaro.org, 
-	namhyung@kernel.org
-Cc: 9erthalion6@gmail.com, adrian.hunter@intel.com, alex@ghiti.fr, 
-	alexandre.chartre@oracle.com, andrii@kernel.org, ankur.a.arora@oracle.com, 
-	aou@eecs.berkeley.edu, bpf@vger.kernel.org, collin.funk1@gmail.com, 
-	costa.shul@redhat.com, daniel@iogearbox.net, dapeng1.mi@linux.intel.com, 
-	dsterba@suse.com, eddyz87@gmail.com, howardchu95@gmail.com, jolsa@kernel.org, 
-	leo.yan@arm.com, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, martin.lau@linux.dev, memxor@gmail.com, 
-	mingo@redhat.com, mmayer@broadcom.com, nathan@kernel.org, palmer@dabbelt.com, 
-	peterz@infradead.org, pjw@kernel.org, qmo@kernel.org, ricky.ringler@proton.me, 
-	song@kernel.org, swapnil.sapkal@amd.com, terrelln@fb.com, tglozar@redhat.com, 
-	thomas.falcon@intel.com, yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
 
-In Makefile.config, CFLAGS, CXXFLAGS, LIBLLVM, and EXTLIBS were assigned using
-recursive expansion or appended with raw $(shell $(LLVM_CONFIG) ...) calls.
-Because these variables were expanded during dependency evaluation across
-every single object file compilation rule, Kbuild continuously re-executed
-llvm-config forks nearly 200 times during incremental builds.
+On Wed, 2026-05-06 at 07:27 -0700, Amery Hung wrote:
+> unmark_stack_slots_dynptr() already makes sure that CONST_PTR_TO_DYNPTR
+> cannot be released. process_dynptr_func() also prevents passing
+> uninitialized dynptr to helpers expecting initialized dynptr. Now that
+> unmark_stack_slots_dynptr() also error returned from
+> release_reference(), there should be no reason to keep these redundant
+> checks.
+>=20
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> ---
 
-Convert llvm-config shell queries to simply expanded variables (:=) to ensure
-Make evaluates LLVM compiler flags and library paths exactly once when
-Makefile.config is parsed, eliminating ~185 redundant sub-processes during
-build startup.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-Assisted-by: Gemini:gemini-3.1-pro-preview
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.config | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index fbe7fa83b0bb..7a61da082c0b 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -951,11 +951,14 @@ ifndef NO_LIBLLVM
-   $(call feature_check,llvm-perf)
-   ifeq ($(feature-llvm-perf), 1)
-     CFLAGS += -DHAVE_LIBLLVM_SUPPORT
--    CFLAGS += $(shell $(LLVM_CONFIG) --cflags)
--    CXXFLAGS += -DHAVE_LIBLLVM_SUPPORT
--    CXXFLAGS += $(shell $(LLVM_CONFIG) --cxxflags)
--    LIBLLVM = $(shell $(LLVM_CONFIG) --libs all) $(shell $(LLVM_CONFIG) --system-libs)
--    EXTLIBS += -L$(shell $(LLVM_CONFIG) --libdir) $(LIBLLVM)
-+    LLVM_CFLAGS := $(shell $(LLVM_CONFIG) --cflags 2>/dev/null)
-+    LLVM_CXXFLAGS := $(shell $(LLVM_CONFIG) --cxxflags 2>/dev/null)
-+    LLVM_LIBLLVM := $(shell $(LLVM_CONFIG) --libs all 2>/dev/null) $(shell $(LLVM_CONFIG) --system-libs 2>/dev/null)
-+    LLVM_LIBDIR := $(shell $(LLVM_CONFIG) --libdir 2>/dev/null)
-+    CFLAGS += $(LLVM_CFLAGS)
-+    CXXFLAGS += -DHAVE_LIBLLVM_SUPPORT $(LLVM_CXXFLAGS)
-+    LIBLLVM := $(LLVM_LIBLLVM)
-+    EXTLIBS += -L$(LLVM_LIBDIR) $(LIBLLVM)
-     EXTLIBS += -lstdc++
-     $(call detected,CONFIG_LIBLLVM)
-   else
--- 
-2.54.0.563.g4f69b47b94-goog
-
+[...]
