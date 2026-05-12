@@ -1,154 +1,173 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C9E38237C
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 21:41:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778622076; cv=pass; b=RiDGTeKQq5Z9JZSFO2nflpiAU5TYTXAeBm/S+Pk1jdvgP6wq2B6K8rYeuf0+Mcl9jRKo2C9WTo+wIJ2h04F/GNroj0AXnmC5PkNDDRi0U5JnOsdXa3fSNUsRxiCURsdrM/dAtLbiGXFMldRYur3q0/QlWOhTao37POwyLLmDjD0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778622076; c=relaxed/simple;
-	bh=OL0tJWQA9nR9g1pJiMuT+stdzGeBCi82MdUJmT1n4mo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fCXhflE4/PLeYWiH6Zfr21VR2J7iAEcUy23G1PZg40j2r98Uyt/x05tNQIOjBiROnfsvp5LvMfrSQE/yxoMrdGNgCkeg2P/yR3GAh7BIE8J4SY8s//5eWBEjehDYJe1HOlO+ZCRylEoa81W3dkCCj46gx1Mpe1QWxeOMKn+G0ec=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FGpINWEl; arc=pass smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 970B9382385
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 21:54:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778622850; cv=none; b=ClIdcgZbhWpSiZvZS2Qtb3pbKZm9idvbf1TwsQPDmG3h5Uu6feW3YbxPfuRJ+zVFZSFMBO6lA1SLR9t2NRN9qB55Tg/ugT0DQVK9NSf/bvYvbKkZ296X1cXUK62SPDFE6G2IlqKKHw6OFeBrLRX35H+Z01/sUe1uOin9zIq2yhc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778622850; c=relaxed/simple;
+	bh=/8vlfvNrvR1aGFuSSFfQLcmfmdbizQk0Lpg9eACEkCM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=PfSH6iK5MWGBGqAWg09sXcrBHSv3qyiSnMfjfhvPMGzFWrnUCJr3rv4SYOGr+wUR2QQ/VGkwqMrF1Oc1h+Ll1N0M/Aj7H0cAEVpJ1xufhyq3ZbmiTRmj3hcyZ0YxRITpxC0SpuCiLFamB3f6VddbQoDdmGi4PUTLfWbjxW2rrFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mRWx1eeJ; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FGpINWEl"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-48984d29fe3so63919805e9.0
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 14:41:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778622073; cv=none;
-        d=google.com; s=arc-20240605;
-        b=NBJANkgsgOGD4Kxk7J2+J2e33ikdq2sIDCyk8nvgShXBK9vTYGb0OGKNtkW6xYU7o6
-         irvcc4OI/l2+nmDxuMB7snL6dmSnFv2Y8/6sVrqZXQs/7yy8XZM7dj7Bqv1fTrAcLs58
-         rBlP6S4ORkWo4eW95D4RgDYEhmCGhvLi0zO6Yzq88/R8TyFK2/4wiaGOV9Shwvm49GyH
-         O90XERAs4ziLI9UnV0dM1FQ/4mJMITbh+yV+unhjxULFaMFylE3rQszHGxRQ3u2nZbWE
-         xT/13dYiMez7NUTyEz1GQqBiq4PLoMhCXtchTovVYzmnlgPMy7l/TlpHJekzl5HTdOOn
-         Pe9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=CnJRcPv3anhQleJX1h9scyF+CUFzYP9DYRqjifTE3MA=;
-        fh=YKdUUT3q1GWwy+eGKCBfK/46DgnOgUlgQIsADNa66I0=;
-        b=XXfex3FaRVko7ruZ6NV3DPfeMUiKSMAaTkn2O9co0/d46pd/yE2gf+s2CS1bgoAc7/
-         J4LYtpA9RA+k0yv6SeC227ya1PrgpcSIN6x3cziIz+fcHj4Vg9vxbpMkky+OltUivER+
-         MmUZV2VeafQAksh7lhZ5Unua1eyr3DpT848BMVZXM6lNrTZ++o6a7YPLbpOH2tB+j03A
-         DO/+nKnFgWwK1nWhAEQN6R4hfUA9b2tFZhyqocIxtlAZSSOhG3U19UT7jtR/4f3dghnd
-         Xi+XOkPIbSTQmb6+YNCNagpvYTwHJZxTiURnvIOIiMCPfDvhyTHYkudghKmmndRGkHUv
-         ZbFQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mRWx1eeJ"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-83ea84df1d0so1213114b3a.2
+        for <bpf@vger.kernel.org>; Tue, 12 May 2026 14:54:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778622073; x=1779226873; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CnJRcPv3anhQleJX1h9scyF+CUFzYP9DYRqjifTE3MA=;
-        b=FGpINWElPtKoFLRY2FckDIMBrDyzWZPMw4BUTcgnZmJjyRGIC7BfHXkuyzw7gro0oe
-         /lplmxMBaYJ77kfMvX2NPtlfjnnXejSn80Om23usnMYCsooicAJgv5U/+gaA9Y56ZgbU
-         qyiGKaW/sM3LFFfTOBYIwakisBzNllKXzoB135Hka5q7meJ/OOkhhtq0rQI1zlxa4ol7
-         2w23N1tUpr/5G9XTlUbFAKg6e3Mfif+jvyPYFarq+7jI7AuO/vSaodwcAwy3qF31VDJY
-         OgooGZM7Bff6MIX0HDCd4EcOFEgWBcyTxp27SgZx/4SR/4yanaQTwcjub3H6YMPBJjT1
-         /g5g==
+        d=gmail.com; s=20251104; t=1778622849; x=1779227649; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=A1P/ffNTC/uTmWQnj8+NsiRNWozKHpYui9I+/xOHTR8=;
+        b=mRWx1eeJ/RrBTNVuzctyQhQhn8WFKqtUP7/j5HjtkklU4+knznXCMD+ZdFMulT1JYJ
+         eEH4HwTVsUWrVHdFTWE4rM+BzruXZ67F9cHKyeZPQevUh1hH2H3UcCSTreZFyuGDSUUG
+         PnPwIYbv/Iw74zSbNak5TElVfJLJtOqoQJpU2IylCwa+Vtkm8GhCL9ETIvEoTiuwyzD6
+         SW6RuKkmFSWhu6RV5dcACGElYrf4MK6B50K022uIUR+ybGnenv4VOoFaAKOvddeC+MgR
+         +WHGIaCtTpWpQWnohTRVrXPlIY+eLSBS+sXdw9s8bvyDlJMwHYHncj74JpfMwDPO4z4c
+         GS1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778622073; x=1779226873;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CnJRcPv3anhQleJX1h9scyF+CUFzYP9DYRqjifTE3MA=;
-        b=E2d14mVzJhHZX0mluQKP8c1xUAXniDApgHAm5vLCmgB6bjMYtGS0XSet9PwPFxmUub
-         hsaSKwLlpS9UGtLDMtMcMYyByKveiPA1gDj6kRXr2PHS2ZxPc9chMLiuCDyzGV1I8GLF
-         Wg3NpvYLxQ8/dIaw3fWUsaglFXPibMDSQYyeYD6kRAzEqmEEO4ri5Nc2bPCN/KuO5fi6
-         DbvkQkwAkSihLGBVUEPwMLETiR7GBdLXklY0evnIjuwCdSzGFxzUKWDuxJhL7rtxgcSe
-         RFj9dwY/8wZKHPt9KqB25RPhRjrh/Xrqj/fYjLqeA3W2Wa9OpTTPb8Ki9UiT1UPBQ5O1
-         wxZA==
-X-Forwarded-Encrypted: i=1; AFNElJ8kkadrlRYq6oLCdfApQuR3FI+kkmh1PylZkrRF2V41l0pcMF5zTMTuwNAw6PYK227d//c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWCHI7aamd+STSxjRA/Xu1VwiMQ+SHvjnnKe8laSnrO4O4afrN
-	wmUrkgkLx3dNNkGtBVta+pdYO6byyF4AfeGL39chdEWK9zImYUG+gtEtyntqGiZgQH0Ckft6Bxu
-	zQBjP9irGWaogD5+BZQJKrm9h3sZpIYc=
-X-Gm-Gg: Acq92OFiCJXGcT8xNua4FVxB1AWuINbq+uc2U0/STwpRs6kygOU8eVMqi7Sna7m7Wzf
-	YQlySCPiLu3JMb73vDK5FQa4Y4iZ+Oa0xcehDIR7heqB6jWJ5QFg9cXe6LVz8wXSK4Uiv490UIR
-	Zpru5BHJ9wIOiPt+TPlaWML4hqlnvaJtslV8P49ImCyfkkF4CNbT58sWZUOP49eriBy5zIsVwRt
-	gVwxuRn4jBav3F7ZUNovD65XteBZLcSwfPNCUN6ouNdgJxDu3S9cyLVQGUbLkFngI4iettiRXM9
-	S/m02hVk6tnHg+SREFYTUyPSfV5nVffulGQZSH9g2VTkvvI0oHQtqP7hR5fdH7otg8f5tXvRDrN
-	FLJU1MvLSsoNsZvZRBBWBbLEtmg==
-X-Received: by 2002:a05:600c:8b12:b0:48e:978f:c45a with SMTP id
- 5b1f17b1804b1-48fc9a3ba11mr7323355e9.19.1778622072979; Tue, 12 May 2026
- 14:41:12 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778622849; x=1779227649;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A1P/ffNTC/uTmWQnj8+NsiRNWozKHpYui9I+/xOHTR8=;
+        b=OUP7zJUlJJ49eDm+b7H1ejK+ouRWhDBqwt0PPfxs/mPbLu2BrbREUBTQLnjHZte6NB
+         BcuvmRNMoLqRY3PmbIRy2ZoSFivRFz4gsjLl6pt1MsnNXfls1InJE+ZH65UJRRvoV5it
+         1LxHEWebgrmRAVMhWiFee3Fcs4ukOYX0l30q6V4YGXP6/xfjn/Y8G+Pvu+vk/4g5pnFV
+         DtwVNGqX+SlXg/H/MoE2NPnk67cFWt80df6+arIUL+Iyt8ZQiZ9yop6NFClTI7+hA2V/
+         KinmhkRk0gVcyus8wRBx+GeLC9/Mw3KHw30QUzJHd4kPPkbHv2fBhrOqwdMbEmBbW+X+
+         qWZA==
+X-Forwarded-Encrypted: i=1; AFNElJ+mWZbBq1MHlZZ5kIgUptphkFHz1HBELTH1BgLOEIKDk+wLDRzHB5h/zglS/PBkYGgXowI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyR4eSNlCN5oXb8sJ2hWv5p9CJakQJB1GvGwWJoSuyJ5qG1mGET
+	pDLwewTP83WcpU3hTb1ohH46ijyx+w566dAurfR2j1Vh++ZuA6LHStTPSe0gdbRc
+X-Gm-Gg: Acq92OE1DJgIbjABicchVP6GXxDLpSo0dNqveDEJIvnNSeleo0IgGENK5WzNr3BMJbN
+	+6f0Wg5wq+SFZlQa3dUeH0vvZdAwC2+LSKIg4tdWGsPpnT0Aeky1pGoc5UYtqZ5qJievv6WER5I
+	UG9kd4W8aOio3wgWdM3MI4z2rXJJ76ztaEbyiX9K78TOrR/mNgpML4+SlpyOdMugZ28/viqniK1
+	2BWdCEaPOYhrdFEBTttptzoD+DpSiox9EzWGCWAeMh1/cFEgEdkJIzgJYJEi8NmXhWSUJPVizco
+	Q/LTTwWdIvFgAmuf7ZXLbUxyelJWKCPvcjfcfRNrCxDcSAQp4WmjJvSt/FkW7jjINMRULwdgER1
+	6aIHuzpJiNorp+XayxxEM0yjuxf5IerAqUOCDn7FLI6tcAkvthfN8XICSddiSCyEtBKlLNuzUls
+	wsjvVzkB91lfukYhSZROQVbrfo2HuotKZSrCYVb/+KhPPaztizgEao
+X-Received: by 2002:a05:6a00:b483:b0:81f:3fbd:ccf with SMTP id d2e1a72fcca58-83f058b68cfmr96544b3a.23.1778622848695;
+        Tue, 12 May 2026 14:54:08 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83965645140sm25292016b3a.12.2026.05.12.14.54.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2026 14:54:08 -0700 (PDT)
+Message-ID: <2a6d16baade6d1d22ebda367c67f49ad9aeb4dc5.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Report maximum combined stack depth
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>
+Date: Tue, 12 May 2026 14:53:33 -0700
+In-Reply-To: <05f82d1180b68e856bb0cc03a5cd86305f5b7669.1778604369.git.paul.chaignon@gmail.com>
+References: 
+	<05f82d1180b68e856bb0cc03a5cd86305f5b7669.1778604369.git.paul.chaignon@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260510030136.27876-1-chensong_2000@126.com> <a439f19e-1a47-46ce-8a2c-c53c9f038b8d@linux.dev>
-In-Reply-To: <a439f19e-1a47-46ce-8a2c-c53c9f038b8d@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 12 May 2026 14:41:02 -0700
-X-Gm-Features: AVHnY4Ll8E-0Y0MARZjSnurDHCpF3Z0mdURWN0DP9-EQbxc1KT5-WLkoRfNUfok
-Message-ID: <CAADnVQLNLd7kV+pBV1i7YvPoQGMVzJusS71iPs6oc_K0Qpd9fA@mail.gmail.com>
-Subject: Re: [PATCH V2 1/2] tools/lib/bpf/libbpf: Prioritize module kfuncs
- over vmlinux kfuncs
-To: Kaitao Cheng <kaitao.cheng@linux.dev>
-Cc: Song Chen <chensong_2000@126.com>, bpf <bpf@vger.kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Hao Luo <haoluo@google.com>, 
-	KP Singh <kpsingh@kernel.org>, Song Liu <song@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 11, 2026 at 8:19=E2=80=AFPM Kaitao Cheng <kaitao.cheng@linux.de=
-v> wrote:
->
-> It seems that there are two problems to solve here:
->
-> 1. Allowing kernel modules to override vmlinux kfuncs with the same
->    name.
->
->    This should be relatively straightforward to implement by matching
->    names in kernel modules first, and then falling back to vmlinux.
->
-> 2. Handling the case where different kernel modules have kfuncs with
->    the same name.
->
->    Could we use a new libbpf API to establish the mapping manually?
->    for example:
->        bpf_object__set_ksym_btf(obj, "kfunc_name", "module_name")
->
->    Or define a new attribute, for example:
->        extern void kfunc_name(void) __ksym __module("module_name");
->
->    We probably need to hear suggestions from other developers on this.
+On Tue, 2026-05-12 at 19:19 +0200, Paul Chaignon wrote:
+> We've hit the 512 bytes limit on stack depth a few times in Cilium
+> recently. As a result, we started reporting in CI our current maximum
+> stack depth across all configurations for each BPF program.
+>=20
+> Unfortunately, that is not trivial to compute in userspace. The
+> verifier reports the stack depths of individual subprogs at the end of
+> the logs. However the maximum combined stack depth also depends on the
+> callgraph of those subprogs (the max combined stack depth is the height
+> of the callgraph weighted by per-subprog stack depths). We can compute
+> a callgraph in userspace from the loaded instructions, but it often
+> doesn't match the verifier's own callgraph because of dead code
+> elimination. Our current approach relies on dumping the BPF_LOG_LEVEL2
+> logs, but this feels overkill considering the verifier already has the
+> information we need.
+>=20
+> The patch lets the verifier dump the maximum combined stack depth in
+> the logs, on the same line as the per-subprog stack depths:
+>=20
+>     stack depth 16+256 max 272
+>=20
+> The per-subprog stack depths and the new max stack depth are not
+> directly comparable. The former is sometimes updated during fixups,
+> while the latter is not. As a result, even with a single subprog, we
+> may end up with two slightly different values. The aim of the new max
+> value is to be closest to what is actually enforced by the verifier.
+>=20
+> Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
+> ---
+>  include/linux/bpf_verifier.h | 2 ++
+>  kernel/bpf/verifier.c        | 6 +++++-
+>  2 files changed, 7 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 976e2b2f40e8..d91843994c82 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -936,6 +936,8 @@ struct bpf_verifier_env {
+>  	u32 prev_insn_processed, insn_processed;
+>  	/* number of jmps, calls, exits analyzed so far */
+>  	u32 prev_jmps_processed, jmps_processed;
+> +	/* maximum combined stack depth */
+> +	u32 max_stack_depth;
+>  	/* total verification time */
+>  	u64 verification_time;
+>  	/* maximum number of verifier states kept in 'branching' instructions *=
+/
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 11054ad89c14..896dbb4515d7 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -5045,6 +5045,8 @@ static int check_max_stack_depth_subprog(struct bpf=
+_verifier_env *env, int idx,
+>  		}
+>  	} else {
+>  		depth +=3D subprog_depth;
+> +		if (depth > env->max_stack_depth)
+> +			env->max_stack_depth =3D depth;
+>  		if (depth > MAX_BPF_STACK) {
+>  			total =3D 0;
+>  			for (tmp =3D idx; tmp >=3D 0; tmp =3D dinfo[tmp].caller)
+> @@ -5185,6 +5187,8 @@ static int check_max_stack_depth(struct bpf_verifie=
+r_env *env)
+>  	if (priv_stack_mode =3D=3D PRIV_STACK_UNKNOWN)
+>  		priv_stack_mode =3D bpf_enable_priv_stack(env->prog);
+> =20
+> +	env->max_stack_depth =3D env->subprog_info[0].stack_depth;
+> +
 
-I'm not excited about 2.
-Two different modules are not allowed to have two different functions
-with the same name.
-The kernel has only one global namespace.
-Hence I don't think we should be introducing such namespacing concept
-into kfuncs.
+I think this line is redundant, the loop below would call
+check_max_stack_depth_subprog() for the main subprogram anyway.
+Additionally it does not round the value same way
+check_max_stack_depth_subprog() does. Also note that if main
+subprogram uses private stack it's depth is omitted in cumulative
+depth computation.
 
-But 1, I feel, is useful for experiments and mitigations,
-but it probably should be done transparently to libbpf.
+>  	/* All async_cb subprogs use normal kernel stack. If a particular
+>  	 * subprog appears in both main prog and async_cb subtree, that
+>  	 * subprog will use normal kernel stack to avoid potential nesting.
+> @@ -18289,7 +18293,7 @@ static void print_verification_stats(struct bpf_v=
+erifier_env *env)
+>  		verbose(env, "stack depth %d", env->subprog_info[0].stack_depth);
+>  		for (i =3D 1; i < subprog_cnt; i++)
+>  			verbose(env, "+%d", env->subprog_info[i].stack_depth);
+> -		verbose(env, "\n");
+> +		verbose(env, " max %d\n", env->max_stack_depth);
+>  		verbose(env, "insns processed %d", env->subprog_info[0].insn_processed=
+);
+>  		for (i =3D 1; i < subprog_cnt; i++)
+>  			if (bpf_subprog_is_global(env, i))
 
-register_btf_kfunc_id_set() should be changed to return an error
-when a module attempts to register a kfunc with a name that already
-exists in the kernel.
-We also introduce override_btf_kfunc_set() that would register
-a replacement kfunc.
-override_btf_kfunc_set() would check that all overriding kfuncs
-have the exact same kfunc already in vmlinux BTF: proto and name should mat=
-ch.
-Then the kernel will just remember that the address of that kfunc
-is in the module.
-libbpf doesn't need to be aware of this substitution.
-It will find kfunc in the vmlinux BTF, but the verifier will supply
-implementation from the module to bpf prog.
-2nd module should be able to override_btf_kfunc_set() from vmlinux
-and from 1st module that replaced some kfuncs.
-All that only for bpf progs that are loaded after override.
-Already loaded progs don't need to be live patched.
-Thoughts?
+Maybe also add a veristat metric for this value?
