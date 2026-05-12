@@ -1,59 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 643643C819E;
-	Tue, 12 May 2026 16:04:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6223B1022;
+	Tue, 12 May 2026 16:23:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778601881; cv=none; b=L9ocwoUslg0jjrmnbLc1aXhE3H8rinJhL4G7TAlE5hekB9r0XgjC8RqmdAnok+tL2HrROrubdhmFuaLNb3AzVLJ/iWAiSUaG0+Qb0JualxAYi6xNANovVhB4MmNOYFmsGLgaCTeoD+vJNryziVRzLwITSbg/7dH9xmAih3nzMis=
+	t=1778602996; cv=none; b=k957SbPd/qDw+8nfNuJeu5u6F1ec+y1XN7PlnxG6OmASQp7k1ppMuE8iAupwECk6Etm6l/WnofAxuEMNXPRe66lm4FBROGNvTolelYMRRjNBRqseo78lNWzoUUZg5/eVMtO0El7hwwKgw+cfa2qWOREu48XU4E6BoWxt8b2Uoq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778601881; c=relaxed/simple;
-	bh=+gRijnzxRtu6tbAngyZTD2Te3JxUdAdL4stmmmU2bZg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Z/Bs/T5PBSFOvaCnmkEPoxYLjfKGO3dOJ9IFLO9OJe7nB3ZY5mI/yczL28zFNOenRkqPyaJ5RkvnaepQv9xyN2Gk1huMeNZdMb08UJ2sXg+/zlC5VWbSNBPQA4tBFmhsSIe7YftsxsUZtHCefhWKY/Rf69c554LnGnFycvNe7wI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZMinE4vT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778602996; c=relaxed/simple;
+	bh=vYDNHoFu5KGezYeSr31ivJsn2rFbeSkn+mNV5uEwneM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=GJ6dI5MgJDjPJJs+ZPaXcaHU0U5QZOr9GBWekTdY2w7r29xhOjTSeu9GRwyRybhLRZNgrE1GAoNBRK/uxqWzq2sGKApcDlaXiXxZH0EMN6s7rV+8QsxUQQCQsKHJdoABoOpuyrRHg8zbLnZfp2wBbibhwR4dpJGuNH9pbxyc10w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g/jLp9ep; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZMinE4vT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 763F5C2BCB0;
-	Tue, 12 May 2026 16:04:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g/jLp9ep"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A43E1C2BCB0;
+	Tue, 12 May 2026 16:23:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778601881;
-	bh=+gRijnzxRtu6tbAngyZTD2Te3JxUdAdL4stmmmU2bZg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ZMinE4vTKT6goPysB8X3k9rnZYFx620q8gp7ZoPlkodpfp7zxJxluoquHOAuMVr80
-	 ZNxyHhy/huQ8tQbY/Kkt0GWH9QD16WlyWat3aSNrAkzrmHibWKX57gGVDTtiIHL3Ka
-	 DK2yonNZ26bGe3/2AZr+6fK11FI2ewUX6O6Jcx0cfAVw5uxKWXSjGMA2aXNR8/t0J0
-	 h5HnGI6G0O2hakWGtD7ESJUnr9w5M36HM+7ZifMjcfxoiuFrWTO8j8kCsDnsCndkF/
-	 l3gXT56+NF57fKT3zWGvKYzuRY9qLnfCrD82VkopyQu0mHXfxwhV47JuQJTPGV4/XW
-	 09545f1WHGPiA==
-Date: Tue, 12 May 2026 09:04:39 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- sd@queasysnail.net, john.fastabend@gmail.com, bpf@vger.kernel.org, Sashiko
- <sashiko-bot@kernel.org>
-Subject: Re: [PATCH net v2 3/4] net: tls: fix use-after-free in
- tls_sw_sendmsg_locked after bpf verdict
-Message-ID: <20260512090439.6a91bb92@kernel.org>
-In-Reply-To: <e683a7db-b465-4b34-b002-8f22031c77ce@linux.dev>
-References: <20260511174920.433155-1-kuba@kernel.org>
-	<20260511174920.433155-4-kuba@kernel.org>
-	<e683a7db-b465-4b34-b002-8f22031c77ce@linux.dev>
+	s=k20201202; t=1778602996;
+	bh=vYDNHoFu5KGezYeSr31ivJsn2rFbeSkn+mNV5uEwneM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=g/jLp9eplTyhbaoHBeRl7S+zwt3ZPUlKoEAL5lZOzrck8PGPQNtOaMZ+5q0R7VzK9
+	 1pVOob1Pfh83TUo9mo0B7nfcFDwvBuMgNaPA+UIqYioE0uxPplso+ou3p9NDh5QKUH
+	 OW2P/zy+/ZMNGY0qTu3eVBRQfME1N4C2OFUyzEADhVrURvUYsGFyYX+8bEjqDvhdEk
+	 ON7ZSgS7SnBoRqYljSyJ2IwoP32Zk4kp7sJzAlImLrW2Af4IJwIHP64sihN8tzlR/K
+	 IHvaG+W3Ip5dlGsz4ft+46/PAWd7CRYqlwLg+k+IL/3SnGrIGn/BFB3ysICGxGLLs4
+	 pnTfGLqKA07Ug==
+Content-Type: multipart/mixed; boundary="===============6389190805276887042=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-Id: <44819125e8a416353eb3e314e7804d2c762ea87331f98f1396eaa8b86421d950@mail.kernel.org>
+In-Reply-To: <20260512153157.28382-3-leon.hwang@linux.dev>
+References: <20260512153157.28382-3-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next v14 2/8] libbpf: Add support for extended BPF syscall
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,brauner@kernel.org,sforshee@kernel.org,yuichtsu@amazon.com,aalbersh@redhat.com,leon.hwang@linux.dev,willemb@google.com,kerneljasonxing@gmail.com,chen.dylane@linux.dev,yatsenko@meta.com,memxor@gmail.com,a.s.protopopov@gmail.com,ameryhung@gmail.com,rongtao@cestc.cn,linux-kernel@vger.kernel.org,linux-api@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 12 May 2026 16:23:15 +0000 (UTC)
+
+--===============6389190805276887042==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On Tue, 12 May 2026 17:47:13 +0800 Jiayuan Chen wrote:
-> > Reported-by: Sashiko <sashiko-bot@kernel.org>
-> > Fixes: 54a3ecaeeeae ("bpf: fix ktls panic with sockmap")  
-> 
-> Is the blamed commit correct? I don't think I touched the following code 
-> in this commit.
+> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> index 5846de364209..9d8740761b7a 100644
+> --- a/tools/lib/bpf/bpf.c
+> +++ b/tools/lib/bpf/bpf.c
 
-Fair, will update.
+[ ... ]
+
+> +int probe_sys_bpf_ext(void)
+> +{
+> +	const size_t attr_sz = offsetofend(union bpf_attr, prog_token_fd);
+> +	union bpf_attr attr;
+> +	int fd;
+> +
+> +	memset(&attr, 0, attr_sz);
+> +	fd = syscall(__NR_bpf, BPF_PROG_LOAD | BPF_COMMON_ATTRS, &attr, attr_sz, NULL,
+> +		     sizeof(struct bpf_common_attr));
+> +	if (fd >= 0) {
+> +		close(fd);
+> +		return -EINVAL;
+                        ^^^^^^
+
+Should probe_sys_bpf_ext() return 1 instead of -EINVAL when fd >= 0?
+
+The probe function detects kernel support for extended BPF syscall
+attributes by calling the BPF syscall with the BPF_COMMON_ATTRS flag
+and a NULL pointer for common attributes.
+
+The expected outcomes are:
+- New kernel with support: errno=EFAULT (can't copy from NULL) -> return 1
+- Old kernel without support: errno!=EFAULT (invalid command) -> return 0
+
+If the syscall succeeds (fd >= 0), that definitively proves the kernel
+accepts the extended syscall format and supports BPF_COMMON_ATTRS. The
+function should return 1 (supported) rather than -EINVAL (error).
+
+Returning -EINVAL causes feat_supported() in features.c to print a
+warning "Detection of kernel BPF syscall common attributes support
+support failed: Invalid argument" and mark the feature as MISSING,
+incorrectly reporting that the kernel doesn't support the feature when
+the successful syscall proves it does.
+
+> +	}
+> +	return errno == EFAULT ? 1 : 0;
+> +}
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25745661172
+--===============6389190805276887042==--
