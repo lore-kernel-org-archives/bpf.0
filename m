@@ -1,144 +1,172 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B9F39BFF8
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 22:18:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E353A4F3A;
+	Tue, 12 May 2026 22:30:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778624300; cv=none; b=ESKsWCAViR8IpSBN99fLpO+WhcljN9uN0aN5uhBBZJU99LpGHtPwvqys+8v95oerbsKb1ITHLWLmCbqCXXyBzxcrbrebSak+/VuPCSSklyoMbMy2pKOEr0C12V0Xvpd60y7Zw8jtyxYYFiAH6Ex/HE2Q+ffkeS5I/iLqIc0jp18=
+	t=1778625040; cv=none; b=XDNJ5lwMzSKcjxQf1vN1oUiQkpW7BT7vkXUmaGyeARtqteyG6KY36+gY+828P6WrH9fJN03DV/olN0WydLqiuVdq44D97PBRqTGjWItbKT3acx/ZE81y67fKXZ1p2ME9amQ9O9Dwi1+ZTTR2LqXCS9N8GkBqKsicxOHg5ZveN8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778624300; c=relaxed/simple;
-	bh=fpilsVP/zXtLvh1VFXKSb4ejfbDdrGld8Lhfj9lNnFI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=nRCwLpS4HxQYQnOxfUu/fKZkjoqNXwn6sCiwWn4SNNO/Sq/CTPv2Fa4SjL0vdkP26fk9wlc+0HlM4pjvIZO+Qlt0sAO9cXYI2nxgVGYv7fUZKxZxU3e4qNoh/MmESb0PWtTU+B00ciNJO5qBzyCJcG6K1WSnPIAntLl0dg8VYsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fNfxLYTR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778625040; c=relaxed/simple;
+	bh=ouh/3IkuTVth6iPTaBCVibQ/K23G8lJXGlEzu8iAxzw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z6r8F202TGRd1Yf7zqRvMKp+rvYo5zj6zdKmutzE2zPDtza3bsLOVol6xI5pcHgYHRxWIMduURxalpIp5AqeMyqriro1/CDwatcFp/OzZmdVH+JCkWEN8TRfTK5YkCCFLec0P0xuuad/Hlghy8RjXnMplbEPgIfbgHSD+kvxQ4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=i/I63BnH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=tDlsu8m6; arc=none smtp.client-ip=202.12.124.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fNfxLYTR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EA2FC2BCB0;
-	Tue, 12 May 2026 22:18:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778624299;
-	bh=fpilsVP/zXtLvh1VFXKSb4ejfbDdrGld8Lhfj9lNnFI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=fNfxLYTRQXNf3C7pG0lUwzhpxUCcmfFYZRL1t7XnU4HzWWHPvgmHyRXLv5W3M+1wE
-	 PNr8hyPgLCs+9YA20Xa8OSbz5Ut7gqs7euLbmAFIwtFh2iHJBsHN6Wrl6His+sIQ8b
-	 80eJSnlBQP47QmlUTJ4/L7P4B9rPiwCsnzesszH9X/5r4QTHyQ+P+tug+TYTExgQ1R
-	 T+pvVqyK7PJCQ+GkgSNTp2So59Ql2F9J7P02j0lmMUNHkrbp++7tXJwqP1nromzUJG
-	 8soGY6ak4lnyzEZOoJX+9uUZLlakcvQquJIXkrFRnlf4ucr96qJBGKQOGBB0r+TOwa
-	 Ex9lzilbEWKjA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v13 4/8] bpf: Add syscall common attributes
- support for prog_load
-Reply-To: sashiko@lists.linux.dev
-To: "Leon Hwang" <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260511152817.89191-5-leon.hwang@linux.dev>
-References: <20260511152817.89191-5-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 12 May 2026 22:18:19 +0000
-Message-Id: <20260512221819.7EA2FC2BCB0@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="i/I63BnH";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="tDlsu8m6"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 95C407A0125;
+	Tue, 12 May 2026 18:30:35 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Tue, 12 May 2026 18:30:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1778625035; x=
+	1778711435; bh=S2TZUe3kivvQUfT3f+FWPu+63xgMztReJ8CH0fDXXTQ=; b=i
+	/I63BnHTF7AlrxZXyQOupfq4iC+omEUoDsGVMrw7GdXClGiMTmNQpToHNj+OBHBU
+	nPFcJ8xNhAJTrDeZ28DzZhARRUcBTbfvPpCnnCXk9ezFoEFvEzqI9GlXBKDKOTEM
+	z4nBT6GnW3x9sC6EVv/cK+5T6cRlnM4yHCepATcba67GPFMViQiEzqzDiy/VYiQf
+	o1+8p5iGKO1BafTqj64f5bvlox5gCSrYrs8WF6obEdP2cpwhjliFtEumPwpdbaxZ
+	bqng+zv1NUP2Q9mKMakkTfrD8JEMpGE3fphWtO1ljjj/xg1ek2H66zCymaL8xdHe
+	5p7+vWzutBwDL9AWmY1ZQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1778625035; x=1778711435; bh=S2TZUe3kivvQUfT3f+FWPu+63xgMztReJ8C
+	H0fDXXTQ=; b=tDlsu8m6NN/XLIugNGjQ4UFzrxtiRxNgTKLsU8D2EnRlm6xXigD
+	46L4jQwn4EEOcTdKJUO84PIz7b/D0ueyZckHE+oqlG2vuPT4IGFDS81tt9SQvHUh
+	JnD1tkW4D48UixcnNIlW1FC0CXg/eK/bZxfINGk92KiWzYayVJcb6dZfjOxbJItk
+	J3QcjHXi0ABqYBSeKT5E6JVrMNq4vDBfbQjT1zSttmJUaGtFofAV9xs3Sl8NaaOp
+	RRK5O/XlNp0Wvezj7ukoY0sgAxYW/6L2EVjcRR/3eYkVp7FCvE8zbyGfDKREEOMH
+	Q+CpSt+fWUqtbXClL+4RoenQ9vZm9bkkBJQ==
+X-ME-Sender: <xms:CqoDaj2CWjPrOlTAJJOozt2XpQJVaOVaqUXCckqzJ3lvD08eG3cWaA>
+    <xme:CqoDajp_dlen6iRLSzUORZvuXKWwMYVjtrmCmBROCVnK986ItKREAyrLzjPZUkuR9
+    4fXGgOq8XTqYRLjU6zUkrwTp-hSvejSUn2_1CgDobnaNJeTRR4q9yU>
+X-ME-Received: <xmr:CqoDajLexI9AGH2Ms5EABHTnkXmsPMYIWaQdDD8hTgkA1EgHMkh6wViBgWaUMotjffikb8qT9HxuFiX4reoCPoc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdduvdeftddtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttdortd
+    dttdejnecuhfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghs
+    hihsnhgrihhlrdhnvghtqeenucggtffrrghtthgvrhhnpeejkeelveelkeefgfeuheevje
+    eukedvhedvueegvdekleeghfelgeeivefftdeuudenucevlhhushhtvghrufhiiigvpedt
+    necurfgrrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvth
+    dpnhgspghrtghpthhtohepuddvpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehk
+    uhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhloh
+    hfthdrnhgvthdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhr
+    ghdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtoh
+    epphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopegrnhgurhgvfidonhgv
+    thguvghvsehluhhnnhdrtghhpdhrtghpthhtohephhhorhhmsheskhgvrhhnvghlrdhorh
+    hgpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdhr
+    tghpthhtohepsghpfhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:CqoDavRYinOo1Cjd16u0ODbg8okWo0Nz0gC08z_srqQwcyStlPDhhA>
+    <xmx:CqoDarMlXOBEh3XgEcWlLDbSmvjnaiYyW-c8myEJXHYOaV8BvyAsVQ>
+    <xmx:CqoDasVdiZ4AzBL090UcqboJylCQ6xkNaNLvZaBZRcWtZINk29x8vA>
+    <xmx:CqoDamgMSK8-KnKSVJk-VGY9gW4Tw3WOxkFcF6J1V9orp5BRG4rXFw>
+    <xmx:C6oDatr5BaJKcwGMl3LoU-bj-5YfLRqz_PnqsG2G4OmDQ809vc1aPhNi>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 12 May 2026 18:30:33 -0400 (EDT)
+Date: Wed, 13 May 2026 00:30:32 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+	john.fastabend@gmail.com, bpf@vger.kernel.org,
+	Sashiko <sashiko-bot@kernel.org>, daniel@iogearbox.net,
+	jonathan.lemon@gmail.com
+Subject: Re: [PATCH net v2 2/4] net: tls: prevent chain-after-chain in plain
+ text SG
+Message-ID: <agOqCETGrzQccEGn@krikkit>
+References: <20260511174920.433155-1-kuba@kernel.org>
+ <20260511174920.433155-3-kuba@kernel.org>
+ <agMKcBrJYK5UIcsZ@krikkit>
+ <20260512090342.15779c9a@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260512090342.15779c9a@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] The log parameters merge logic incorrectly equates the presence of=
- log parameters with non-NULL log buffers, silently ignoring valid `log_lev=
-el` configurations and bypassing conflict checks.
-- [Medium] When both specific and common attributes provide identical log p=
-arameters, `log_true_size` writeback may be lost if the specific `attr` is =
-undersized.
---
+2026-05-12, 09:03:42 -0700, Jakub Kicinski wrote:
+> On Tue, 12 May 2026 13:09:36 +0200 Sabrina Dubroca wrote:
+> > 2026-05-11, 10:49:18 -0700, Jakub Kicinski wrote:
+> > > diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> > > index 2608b0c01849..3bfdaf5e64f5 100644
+> > > --- a/net/tls/tls_sw.c
+> > > +++ b/net/tls/tls_sw.c
+> > > @@ -789,21 +789,33 @@ static int tls_push_record(struct sock *sk, int flags,
+> > >  	i = msg_pl->sg.end;
+> > >  	sk_msg_iter_var_prev(i);
+> > >  
+> > > +	/* msg_pl->sg.data is a ring; data[MAX+1] is reserved for the wrap
+> > > +	 * link (frags won't use it). 'i' is now the last filled entry:
+> > > +	 *
+> > > +	 *         i   end              start
+> > > +	 *         v    v                 v            [ rsv ]
+> > > +	 *  [ d ][ d ][   ][   ]...[   ][ d ][ d ][ d ][chain]
+> > > +	 *    ^   END                                     v
+> > > +	 *     `-----------------------------------------'
+> > > +	 *
+> > > +	 * Note that SGL does not allow chain-after-chain, so for TLS 1.3,
+> > > +	 * we must make sure we don't create the wrap entry and then chain
+> > > +	 * link to content_type immediately at index 0.
+> > > +	 */  
+> > 
+> > All this wrapping with extra "hidden" slots is so confusing...
+> 
+> Yes, always takes me an hour to swap the context back in.
+> I was hoping the diagram would help.
 
-commit b3df7b18c0d52179a3ed4e0c0f6906e0cee721ff
-Author: Leon Hwang <leon.hwang@linux.dev>
+I've more or less managed to wrap my head around it due to the
+previous patch, but it still takes me way too long just to check the
+logic makes sense.
 
-bpf: Add syscall common attributes support for prog_load
+> > > +	if (i < msg_pl->sg.start)
+> > > +		sg_chain(msg_pl->sg.data, ARRAY_SIZE(msg_pl->sg.data),
+> > > +			 msg_pl->sg.data);
+> > > +
+> > >  	rec->content_type = record_type;
+> > >  	if (prot->version == TLS_1_3_VERSION) {
+> > >  		/* Add content type to end of message.  No padding added */
+> > >  		sg_set_buf(&rec->sg_content_type, &rec->content_type, 1);
+> > >  		sg_mark_end(&rec->sg_content_type);
+> > > -		sg_chain(msg_pl->sg.data, msg_pl->sg.end + 1,
+> > > -			 &rec->sg_content_type);
+> > > +		sg_chain(msg_pl->sg.data, i + 2, &rec->sg_content_type);  
+> > 
+> > Probably a silly question: why do we need to chain the content type?
+> > Could we just drop it directly into the right slot of msg_pl?
+> 
+> Good question, IDK either. Maybe anticipating the need for padding?
+> Do you prefer that as the fix, or follow up in net-next is fine?
 
-BPF_PROG_LOAD can now take log parameters from both union bpf_attr and
-struct bpf_common_attr. The merge rules are: match, use one, or return
--EINVAL.
+I'd go with "make it a bit more straightforward" and remove the
+chaining. If you want to retain the hunk moving the other chaining
+(for wrapping) around, go ahead. Not sure it would still make sense.
 
-> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-> index 1b1efe75398b7..fd12ad5a0338d 100644
-> --- a/kernel/bpf/log.c
-> +++ b/kernel/bpf/log.c
-[ ... ]
-> @@ -827,16 +827,36 @@ void print_insn_state(struct bpf_verifier_env *env,=
- const struct bpf_verifier_st
->  }
-> =20
->  int bpf_log_attr_init(struct bpf_log_attr *log, u64 log_buf, u32 log_siz=
-e, u32 log_level,
-> -		      u32 offsetof_log_true_size, bpfptr_t uattr)
-> +		      u32 offsetof_log_true_size, bpfptr_t uattr, struct bpf_common_at=
-tr *common,
-> +		      bpfptr_t uattr_common, u32 size_common)
->  {
-> +	char __user *ubuf_common =3D u64_to_user_ptr(common->log_buf);
->  	char __user *ubuf =3D u64_to_user_ptr(log_buf);
-> =20
-> +	if (!bpf_verifier_log_attr_valid(common->log_level, ubuf_common, common=
-->log_size) ||
-> +	    !bpf_verifier_log_attr_valid(log_level, ubuf, log_size))
-> +		return -EINVAL;
-> +
-> +	if (ubuf && ubuf_common && (ubuf !=3D ubuf_common || log_size !=3D comm=
-on->log_size ||
-> +				    log_level !=3D common->log_level))
-> +		return -EINVAL;
+> > (I'm also a bit puzzled by the "last_filled + 2"/"end + 1", because
+> > that would leave an empty slot between the last_filled slot and the
+> > content_type? and maybe even overwrite the first actual message chunk
+> > if we had filled the message?)
+> 
+> Incredibly confusingly the value passed to sg_chain is the arrays size.
+> So it's entry target + 1. IDK if that answer your question but it always
+> confuses me. I even added it to the comment above but looks like I ended
+> up removing it.
 
-If a user specifies log_level !=3D 0 but leaves log_buf =3D=3D NULL to prob=
-e for
-log_true_size, will these checks bypass conflicts?
+Ugh, right. I read all this stuff last time you sent those patches,
+and a bit earlier as I was reviewing patch 1 again... and I had
+already forgotten when I got to this. Thanks.
 
-If one side provides a complete tuple and the other provides only log_level,
-or if both provide mismatched log_levels without buffers, it appears the
-conflict checks are skipped and no -EINVAL is returned.
-
-> +
->  	memset(log, 0, sizeof(*log));
->  	log->ubuf =3D ubuf;
->  	log->size =3D log_size;
->  	log->level =3D log_level;
->  	log->offsetof_true_size =3D offsetof_log_true_size;
->  	log->uattr =3D uattr;
-> +
-> +	if (!ubuf && ubuf_common) {
-
-Does this condition silently ignore valid common->log_level configurations?
-
-If the user provides only common->log_level via bpf_common_attr for a log
-size dry-run, ubuf_common evaluates to NULL. The condition here would
-evaluate to false, and common->log_level would be ignored instead of
-applied.
-
-Also, if both specific and common attributes provide identical log
-parameters, the code appears to unconditionally use uattr for the
-log_true_size writeback since ubuf is not NULL.
-
-If the original uattr uses an older layout without space for log_true_size,
-log->offsetof_true_size will be set to 0. Does this mean log_true_size
-writeback will be lost even if the user provided a modern attr_common
-struct with sufficient space to receive it?
-
-> +		log->ubuf =3D ubuf_common;
-> +		log->size =3D common->log_size;
-> +		log->level =3D common->log_level;
-> +		log->uattr =3D uattr_common;
-> +		log->offsetof_true_size =3D 0;
-> +		if (size_common >=3D offsetofend(struct bpf_common_attr, log_true_size=
-))
-> +			log->offsetof_true_size =3D offsetof(struct bpf_common_attr, log_true=
-_size);
-> +	}
->  	return 0;
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260511152817.8919=
-1-1-leon.hwang@linux.dev?part=3D4
+-- 
+Sabrina
