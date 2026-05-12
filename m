@@ -1,143 +1,87 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 557BC3A4F33
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 08:57:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F1CE3A6EEF
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 09:29:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778576238; cv=none; b=eXBtnhn5qXNZJW0zh4ooI9U/hQ7OkxlES5siqOsAN7u634/QsGHPUm3rqa1C4aq33oDrktjg3oiCXhuAULb80oYoYuimiC+fVY0lkpJhbYeZfg8d+3eVKbCPfhMttpep/wPX1pk2gIDe28HZM1tTaZK8+izyUBxbyFDbAzsk7y0=
+	t=1778578147; cv=none; b=b0U94Jlh1V64GPrjoGiRjKI4RY1iyLwkMsA2IQDBhDdGm+QlrQfSBV+nwqb4WoSnQJttcpQ2Z6tov99U1DaxwEaiUaWTSXqP9gyA8Oei7/UGh5AYWimYzGlbkDE4Nvm8LdXYqP1yjbP8tMQYrS6yyuG4JqCo3842I+xEaHG+RqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778576238; c=relaxed/simple;
-	bh=Rlk7APYLUhRDFXVDwVWk3a09kszEYGfYDGOrXzHLDbI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=amRuC29z7dDS+agHoQPWNwvYZjXhEzyniCYsEo5bSzgZI8yw6GTjjk/tPMiNubHYXG7o0FYTgnr+f/U78oUWmBw1ndQijmTP9MNkmbJ/XheTtOyRTV1wyWc3hF2dAQBp8LAlwxriCW3Ps7+QLli+Bg3oU3ZSAYqkylVId6ITFWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jzUXdEt6; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778578147; c=relaxed/simple;
+	bh=XNF7s9LHREcd5HQA7aPEH5IiSz2Z5X4Y8+T33U09Ddw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=mZXIqnWRErxa/QEC8q12pLT7dq0gmUHmP8rkwO6S6lOAw5zOzvXOJbNdz3MokWpYB+nvZFSR2x1RLcprEHIi8N8ulD7EsHeAnAZKDPal16KsJlpUSNWoAwvYSNk+lWtpPMroSeHLzv0J0d3GahuqNFG0onuiSDZq3PBYz/whERE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Jtq/nUwZ; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jzUXdEt6"
-Message-ID: <4e1d29b5-38d5-4419-9f2b-1b421486ab46@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778576218;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5i+1kkpA2Ee08JGHavIhKppUEEy/+Cg51zFy81CfIe4=;
-	b=jzUXdEt6zqwwYcBlI0smv5otUDttm+oRSftGru12EDpf9GHYcMnaCjaWY7NoJvJFVaCbQR
-	8JciHSfsAVzhs7nt7D0uKPRmYLJlMPaM5q/JJi7zyXuSdxLqrn44JwkgroMSjrTN39S40P
-	Lw0RKjANJxPjuWB8OBXjP/YbBoN97UI=
-Date: Tue, 12 May 2026 16:55:59 +0800
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Jtq/nUwZ"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-bd24f466598so136731166b.3
+        for <bpf@vger.kernel.org>; Tue, 12 May 2026 02:29:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1778578141; x=1779182941; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XNF7s9LHREcd5HQA7aPEH5IiSz2Z5X4Y8+T33U09Ddw=;
+        b=Jtq/nUwZa1dPGa6NdaFja2YDd5HRL0trc5c0sOxgfrJHYjUjPiogmL5pT/7zEEz5MY
+         CYscMEdq0xpwqz8QE4rAoxrMID/6hRp42gobodZBzGezA5YdOc6iuqLNkGxRHCihNO61
+         TnCavyjdppXkV27lKbq8dBc5nMT+XPFbbpqPdd48dBkYn68G0MECcSzhamvplEVMWwlX
+         2HZHElMWIJZ2HzW3eBlxORauw4uZ+Hfk8HDFAdldUFySs/4RPWpBFhB0yu4cSS8LG0wH
+         GncMV3HnzeDFw+Y4vtymPJrIzIiGoBStcbZtbHibgyCLEN0caKb1h1xnDdU2AcnwX+SU
+         wsXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778578141; x=1779182941;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XNF7s9LHREcd5HQA7aPEH5IiSz2Z5X4Y8+T33U09Ddw=;
+        b=kqsBg5fdpVTrre8YisYGrlUcEgQC4/Rrp2P6C4vJc8z8r8rgUkKedbIe7jXxie3BJ9
+         XUGDJivBPeDcOB+IYZh9qsgQ3fS0CcLNE+AzjT0c7DBvrlIvood1t9xWysy/8/JLFwM1
+         Qd1MWD93YwD9dpxETlC6IAD05wwr6jb6zv+fSka+NOFjp73blSajOrMEQPFyrPZrMlAx
+         mEJwQf0F3aCcs2K3LLwk4A4Qlcodg3nV387JoRFIPzzMsvMq/SXrPZzMxAbbehlzEtqj
+         qZhAiSHaTJ46FolsfS/Qvtqvq6UufETu7JcX5+BrqAR520JzBduCBAUV59lwR5DDf7oq
+         NQOQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+J3gD77wne5eCd0zeYAR7JVdgkYUmlMQ1LAxkEIsULdJCg6RrB0J2Ln+4WYz5rX+V2MEg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmrgXz5Wb481IFblLBBBJHlGMc+UtJSnA5qk6ZdTF1zM3grcmh
+	mGabt15dY5mb1Pw0mVxJ44tPxN+afJyZudVspxom1aK2uiTPMOLDLuviVUOZsApVfqo=
+X-Gm-Gg: Acq92OHEJsJZkY+xtCqNeQ+HhSt3lMDlHa9mtJrv0/vSYMv0BQdkjH1Qkgu4mBoCPPp
+	dbgsj6rFL5AmSQkkln8s808aODLh8gUnqwoMzImKyHW3ooOewEUO1weabVyNedFI6DF3x2TpRCP
+	ZmeI6rbXiU/y6T5H9P88FzcepNI/pP023dqOS5cMnFmXcqcFmfwHvdfnCawInIJPXfOKz4qEC++
+	HMjjaKrcJFa3I3YO0JCm7Dy7MNLs9Nj45P+sFgXkZASTGc/QQyUb//n/qUp9L3Z55L38bypZ018
+	Sxt8y+TjbQWXspo8hQRFk2sTnAfcRuT3JH7xtdLZCXAI6+FsHWllWPiGOqScz9RaNX8Li/jmqi8
+	/frzw9+PUE4knPV/I4wYxBlAEzsquTACWfMfrA9q2oW6q6EYpHI4vk2roAE7yWDtNMfkOcURd1d
+	UEPe7VT3uHqhOndOlmBf/WeYhaWg==
+X-Received: by 2002:a17:907:8b87:b0:bcd:2dbd:8241 with SMTP id a640c23a62f3a-bcd2dbd8f82mr684678166b.5.1778578140766;
+        Tue, 12 May 2026 02:29:00 -0700 (PDT)
+Received: from cloudflare.com ([104.28.21.182])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bcfac35c47asm311438366b.1.2026.05.12.02.29.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2026 02:29:00 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net,  netdev@vger.kernel.org,  edumazet@google.com,
+  pabeni@redhat.com,  andrew+netdev@lunn.ch,  horms@kernel.org,
+  sd@queasysnail.net,  john.fastabend@gmail.com,  bpf@vger.kernel.org,
+ Jiayuan Chen <jiayuan.chen@linux.dev>
+Subject: Re: [PATCH net v2 0/4] net: tls: net: tls: fix a few random bugs
+In-Reply-To: <20260511174920.433155-1-kuba@kernel.org> (Jakub Kicinski's
+	message of "Mon, 11 May 2026 10:49:16 -0700")
+References: <20260511174920.433155-1-kuba@kernel.org>
+Date: Tue, 12 May 2026 11:28:59 +0200
+Message-ID: <87se7x7z8k.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH RESEND bpf-next v10 1/8] bpf: refactor __bpf_list_del to
- take list node pointer
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
- martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- chengkaitao@kylinos.cn, skhan@linuxfoundation.org, memxor@gmail.com,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, vmalik@redhat.com,
- linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260512055919.95716-2-kaitao.cheng@linux.dev>
- <6eb07d559a41965a3a9b186b4c28c0942cf1bfb982d539b92c76c27b08db0b04@mail.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kaitao Cheng <kaitao.cheng@linux.dev>
-In-Reply-To: <6eb07d559a41965a3a9b186b4c28c0942cf1bfb982d539b92c76c27b08db0b04@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain
 
-I have clarified this issue in the [PATCH bpf-next v10 1/8] patch,
-with the link provided below:
+General question - do we know about any kTLS with sockmap-redirects
+users out there? I've been asking around at conferences for a couple
+years now and haven't heard about any consumers of this feature.
 
-https://lore.kernel.org/bpf/e908cd1a-a0ee-49b1-8528-c455bbd4c432@linux.dev/
+If there are no known users, maybe we can have kTLS+sockmap glue code
+behind a build-time config option and put it on a path to deprecation?
 
-在 2026/5/12 14:41, bot+bpf-ci@kernel.org 写道:
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> index baa12b24bb64..9cd7b028592c 100644
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -2550,22 +2550,24 @@ __bpf_kfunc int bpf_list_push_back_impl(struct bpf_list_head *head,
->>  	return bpf_list_push_back(head, node, meta__ign, off);
->>  }
->>
->> -static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head, bool tail)
->> +static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head,
->> +					    struct list_head *n)
->>  {
->> -	struct list_head *n, *h = (void *)head;
->> +	struct list_head *h = (void *)head;
->>  	struct bpf_list_node_kern *node;
->>
->>  	/* If list_head was 0-initialized by map, bpf_obj_init_field wasn't
->>  	 * called on its fields, so init here
->>  	 */
->> -	if (unlikely(!h->next))
->> +	if (unlikely(!h->next)) {
->>  		INIT_LIST_HEAD(h);
->> +		return NULL;
->> +	}
->>  	if (list_empty(h))
->>  		return NULL;
->>
->> -	n = tail ? h->prev : h->next;
->>  	node = container_of(n, struct bpf_list_node_kern, list_head);
->> -	if (WARN_ON_ONCE(READ_ONCE(node->owner) != head))
->> +	if (unlikely(READ_ONCE(node->owner) != head))
->>  		return NULL;
->>
->>  	list_del_init(n);
->> @@ -2575,12 +2577,16 @@ static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head, bool tai
->>
->>  __bpf_kfunc struct bpf_list_node *bpf_list_pop_front(struct bpf_list_head *head)
->>  {
->> -	return __bpf_list_del(head, false);
->> +	struct list_head *h = (void *)head;
->> +
->> +	return __bpf_list_del(head, h->next);
->>  }
-> 
-> The new code reads h->next before __bpf_list_del checks if the list is
-> initialized. If the list is uninitialized (h->next is NULL), a NULL pointer
-> is passed to __bpf_list_del.
-> 
-> While __bpf_list_del eventually initializes the list and returns NULL without
-> dereferencing the NULL pointer, this is counterintuitive - passing a
-> potentially garbage value that is later ignored.
-> 
-> Can you move the initialization check into the top-level kfuncs
-> (bpf_list_pop_front and bpf_list_pop_back) to ensure the list_head passed to
-> __bpf_list_del is always valid? You could initialize the list and return NULL
-> in that case - we know it's empty.
-> 
-> This concern was raised by Emil Tsalapatis in v8:
-> https://lore.kernel.org/bpf/DH6W7K2SLPYB.PCO7FQ6CR1YZ@etsalapatis.com/
-> 
->>
->>  __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
->>  {
->> -	return __bpf_list_del(head, true);
->> +	struct list_head *h = (void *)head;
->> +
->> +	return __bpf_list_del(head, h->prev);
->>  }
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25716874656
-
--- 
-Thanks
-Kaitao Cheng
-
+WDYT?
