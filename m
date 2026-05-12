@@ -1,100 +1,102 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BED213635E
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 02:05:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F17383306;
+	Tue, 12 May 2026 02:06:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778551548; cv=none; b=O0OQzjKSkIXRGM4WEG0m6WWMW8SkRtDV9zwFak5zJMHzTJzMLkv6Okp2o7Pb/5cvJGmMsIFxc6wtYctRLT92e8kEnyW+wigsbasXv0tFeAU4spXiHvqX4ZYjXJ+mdgWJqL5Gosyz5WUHb5ewchgGwsKbxjPMYQpCkXGeyIz6UAo=
+	t=1778551606; cv=none; b=CkekSBYr0iZTYeYdl++Q4C5kM1yDPeaofukC0qcJLLomlGgORizCjk1YO9znku0Ma0dDcBvb+6kRwqzmOaptb3DDWLzBBg4noYYDfHL/7OROMCEzZd26nB+d8KeJPUzyuX4hJk9/+y31e3/Pn6BlNGhKkFDH2SLTBq3fTDImJGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778551548; c=relaxed/simple;
-	bh=+cTI2NiIAP41IKA/xg3zJwWYiljzUgcxObRtbpU3/BU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=NKn1YXfnQ/EhTeL/xKtE2rrvNI28/Cp6TVkO6ZsChB2soEnFY2j/D0eiUkl0nzZwk9G9YQQ904WOXgtrFnUxr2YzIpjqqIVn7G76Vvfy1nz0hDhf2MbIoBS+zBXMAf8cyyhkcHO3v5s0YznUzQaKHK5gWslXwpdeooLzEVeFsA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KcDjdiHf; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778551606; c=relaxed/simple;
+	bh=BpLGV2IDDxHKkqsJa+hf67v3+/szAmmH16JzI5sEPks=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GG7bIshQP94PZCkpgtN1XZ8m4ADTU0FJclcCAtPORqn6JfhN/AjHmAeVkxhNMrCGhxocJ8m0KaeqSVezhZwZiGwPJgrafoc4NzfX9M+/2UCQ1n3i+SVbhy+/wZu3sm9xrJJNlrDmWKS0wHVyALiMgVbhgPEUpbvwy+YcgPKGuQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sWTUt/PD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KcDjdiHf"
-Message-ID: <e6c1463a-c2de-4cf6-8036-d38a945f9363@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778551542;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pkdR7BqOfxJn+iAX51miDaH2v7BbkS20p86edp+Lfg8=;
-	b=KcDjdiHflbFFNQj9XNUyk6fRXoVz77EOcOHhxziceBg5/R46h9O2mmj4VM8YgEPcx7NQJO
-	COg0oHcimRl6hEz0ynlf8iWQSt2yI7AvUBjf9pSmrmQQRbZ3gJAKLqql+exmwYuCYFAErq
-	IIqPJM/ixFAvwxieWXSVEzks6M2MDhU=
-Date: Tue, 12 May 2026 10:05:14 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sWTUt/PD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 970F5C2BCB0;
+	Tue, 12 May 2026 02:06:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778551606;
+	bh=BpLGV2IDDxHKkqsJa+hf67v3+/szAmmH16JzI5sEPks=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=sWTUt/PD3R+SLthnc8kI8voPh2alsy5pjxEtISaIOHKNGnuvgLdqQFaITHVJ48Wdx
+	 2+ofy9Nae7T9RkFTvpJwTPypCBOdyPPhOoMlmLvLN5317q8frNTa8z/MZ5YQNG6rBE
+	 D2qJu3a9MMjGqKAmeU7qZusH+z/y4YBx5Ln2HBPUXWkFLjno8o3FUKOnTtFi3GV1ij
+	 uijeanyamlpJUs5f0AzpCk0E6bPorBFy6Y/YJM2pczgTJaXZB5Uz0uzmB3rzFkFK6M
+	 +8JDcpYDpD3CiinPCcU6IytsSd+IRzl1IBl9ZXcKg+txWNVs69rKFT7qUzf91873/a
+	 DElIojfZmj4vg==
+Date: Mon, 11 May 2026 19:06:44 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: xw x <v3rdant.xiang@gmail.com>
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, jakub@cloudflare.com,
+ sd@queasysnail.net, davem@davemloft.net, pabeni@redhat.com,
+ horms@kernel.org, netdev@vger.kernel.org, Jiayuan Chen <mrpre@163.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, john.fastabend@gmail.com,
+ bpf@vger.kernel.org
+Subject: Re: [PATCH net v4 0/2] net/tls: fix UAF when TLS_RX is set on
+ sockmap socket
+Message-ID: <20260511190644.23334e6d@kernel.org>
+In-Reply-To: <CAFFJMPwtWZDrD0=hANXk2cdZGt2ArQEWROGRswKPyiZ+FrG1XQ@mail.gmail.com>
+References: <20260511155210.32926-1-v3rdant.xiang@gmail.com>
+	<20260511161320.358cfaad@kernel.org>
+	<CAFFJMPzw8pcwX9g7iv3F=FpHQyovUgZZ28P7XfH3gmiay-JfpA@mail.gmail.com>
+	<CAFFJMPwtWZDrD0=hANXk2cdZGt2ArQEWROGRswKPyiZ+FrG1XQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [QUESTION] BPF_SK_SKB_STREAM_PARSER cannot observe strparser
- orig_offset?
-To: "Cristian Morales Vega (cmorve)" <cmorve@cisco.com>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-References: <SA1PR11MB68483E0B4C78DA91FF8DCE7AC0382@SA1PR11MB6848.namprd11.prod.outlook.com>
- <ec18cff8-a760-4bcb-b5bc-604924ff81ec@linux.dev>
- <SA1PR11MB6848CE0D74476DA27BCA6091C0382@SA1PR11MB6848.namprd11.prod.outlook.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <SA1PR11MB6848CE0D74476DA27BCA6091C0382@SA1PR11MB6848.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, 12 May 2026 08:10:03 +0800 xw x wrote:
+> On Tue, May 12, 2026 at 7:13=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> =
+wrote:
+> > Just to check - how much of this code or the patch do you understand? =
+=20
+>=20
+> I think I understand the root cause. Based on Jiayuan Chen=E2=80=99s
+> feedback=E2=80=94that we should deny TLS_RX attachments for sockets alrea=
+dy in
+> a sockmap=E2=80=94I've prepared my patch to do exactly that. Do you see a=
+ny
+> issues with this approach?
 
-On 5/12/26 12:18 AM, Cristian Morales Vega (cmorve) wrote:
->>> On 5/11/26 10:49 PM, Cristian Morales Vega (cmorve) wrote:
->>> I am trying to use BPF_SK_SKB_STREAM_VERDICT in an old kernel (I don't have control over the version), so I need to also use BPF_SK_SKB_STREAM_PARSER. I though to just do "return skb->len;" in it, as a no-op, since I don't really have an use for the parser.
->> Since v5.18 BPF_SK_SKB_STREAM_VERDICT can be used without
->> BPF_SK_SKB_STREAM_PARSER.
->>
->> Which kernel version you use now?
-> I think it's since 5.10? But I have to make it run on a big range of kernel versions, right now I'm looking at a 5.4.213 system.
->
->
->>> So far so good. But I can see that, from time to time, __strp_recv() receives a non-zero orig_offset as "first skb" (i.e. strp->skb_head is null). In such a case, I should not be returning skb->len but "skb->len - orig_offset" (i.e. orig_len), right? Otherwise I would enter
->>>
->>>                  extra = (ssize_t)(stm->accum_len + cand_len) -
->>>                          stm->strp.full_len;
->>>
->>>                  if (extra < 0) {
->>>                          /* Message not complete yet. */
->>>
->>> But AFAICT BPF_SK_SKB_STREAM_PARSER doesn't have access to that offset. It seems it had it until e0dc3b93bd7bcff8c3813d1df43e0908499c7cf0 (which was backported), but not any more?
->>>
->> Is my understanding correct? If not, what am I missing? And, if yes, there is any solution?
->>
->>
->> If you just return skb->len only in your parser , the 'issue' should not
->> happen.
-> But if the parser returns skb->len, even in a modern system (in theory, I'm struggling to reproduce getting orig_offset != 0 in any system I can properly debug). Let's say orig_skb->len is 1500, orig_offset 1000 and orig_len 500.
+I mean.. I have no proof that real users of the TLS + sockmap exist
+but I thought that they did.
 
+> On Mon, May 11, 2026 at 10:13=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux=
+.dev> wrote:
+> >
+> > I think sockmap + TLS_RX has no useful semantics(fix me if i'm wrong).
+> > sk_skb sees ciphertext and the TLS keys are pinned to this socket, so
+> > redirect is meaningless. And both sides racing on sk_receive_queue is
+> > what produces the UAF.
+> >
+> > The fix should be to reject TLS_RX when the socket is already in a sock=
+map.
+> >
+> > Note TLS_TX + sockmap remains useful and unaffected. =20
+>=20
+> Additionally, my changes seem to trigger a failure in the
+> test_sockmap_ktls_tx_no_buf test. Specifically, it attempts to set
+> TLS_RX on a socket that is already in a sockmap within
+> init_ktls_pairs. Since I didn't author this test, I=E2=80=99m not sure if=
+ the
+> TLS_RX requirement there is essential for what=E2=80=99s being tested. I =
+could
+> use some guidance on whether the test should be updated or if my
+> approach needs adjustment.
 
-   I think non-zero orig_offset only happens when __tcp_read_sock
-   is mid-skb and recv_actor returns an error after consuming part
-   of the data -- next call comes back with orig_offset != 0.
+Your report is narrowly for the verdict-only case in sockmap.
+But you're banning all TLS + sockmap.
 
+I think we need a similar workaround in sk_psock_verdict_data_ready()
+as what e91de6afa81c ("bpf: Fix running sk_skb program types with ktls")
+added for the full sockmap path. Or selectively ban the verdict only
+format. But that feels a little less clean. Dunno.
 
-> - cand_len will be set to 500 here ->https://github.com/torvalds/linux/blob/master/net/strparser/strparser.c#L186
-> - len will be set to 1500 here -> https://github.com/torvalds/linux/blob/master/net/strparser/strparser.c#L221
-> - stm->strp.full_len will be set to 1500 here -> https://github.com/torvalds/linux/blob/master/net/strparser/strparser.c#L258
-> - extra will be set to 0 + 500 - 1500 = -1000 here -> https://github.com/torvalds/linux/blob/master/net/strparser/strparser.c#L261
->
-> So it will enter "/* Message not complete yet. */" inside "if (extra < 0)", no?
-To your earlier point: yes, what you really want is the skb
-offset, especially for protocol framing. That scenario is real
-and can be worked around using a map to carry state across
-
-parser invocations.
-
-
-But none of this fires as long as your parser keeps returning
-skb->len.
-
+Please, do not repost this until 24h have passed. Maybe Jiayuan Chen
+or sockmap folks (who you apparently didn't CC?) have some comments.
