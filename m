@@ -1,121 +1,103 @@
-Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 817273859D2;
-	Tue, 12 May 2026 09:37:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9812C08BC
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 09:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778578650; cv=none; b=Xiu1MeF9z1504VF2wIYWtkboOVpAfOE916kZH7NRY8N7xOOfXvy3cxqr6MWU1cdFMCPk++2eVzsRRifEKbwHuF3Sdj+zFYFObEBEYHnF2HdQXW/MxuP/iQ6sCx7Yk4VEqTLgQMz31uxdv4qrVwM54/p6J1VkNaucI//hBJO6PXA=
+	t=1778579267; cv=none; b=XumGB/G47LEZA69R8ffGNkVovAlVjvssYkeAaCs2kO9xtCTZw1DhOE01D104dw1/KKfbjuP2k8oZFcx8egGSKvAfbCl5tZipIoyjPuZVg43FEIju6axwIJKidQll5FuDXp8rwz7kTb1t5Dnd827guDiBSSZVoYvKQk7iZDkXKwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778578650; c=relaxed/simple;
-	bh=0hm3cPekJMMQolV82Yt1HCxdHPmcvpWJufglPSy9bBM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a/CDpT/t+0WPSuaXOx3mBnfSD8KRz0m3sQ905ladXrgz3ruT7ULCWphFB7MRysbI/0Gt1gS5+dFURzUdga+B7hqvW2wEm/pCrJMQlqbVuoE77dMmvAI7Fsaf4/cAxc/bp9hmXDRWumQvFvcqC2YJa+4e1OlUdwIksy0c5yQmyQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=Ykfdx9BH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=rR1fDih6; arc=none smtp.client-ip=202.12.124.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	s=arc-20240116; t=1778579267; c=relaxed/simple;
+	bh=oP+lMTpCs/MmCwIYHBt69Rx7OGgXh1o1Niw4wj3xXv8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KkKT1gXfEE9tMirbpmRoxpFDeGNvjrPcBJar0rgOGQ6YFDM33tKsPYLTLn0PALTGPZTCntqQIsNfNSfgezru60PO0ah4KSmttaPUsSh2l5BpjW2GUaL97dfx6ZiQM/5IQBAdQLkoEP0LkBGi7unMpnKMU7bHz2hOudQOzf29r5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AgHAkiT7; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="Ykfdx9BH";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="rR1fDih6"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 18B427A00DB;
-	Tue, 12 May 2026 05:37:26 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Tue, 12 May 2026 05:37:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1778578645; x=
-	1778665045; bh=KZtompXgFSACAAOw8haMO9lseia0fCbyR29abWb4baI=; b=Y
-	kfdx9BHaDD8vhlYzb43v4k4ro7f+rprHcajBSvQmWAeXBDROXXlnDMlOMVfqQ64x
-	DfggUY/bBCIouwvhHLGx0+WKwSaY2nH/S5GcCbPB23LOfYZMNC29hKRoptuRHFhx
-	VqHEBvzAdWxpNROqgEBqA6x8UVdKhHUnsTSn/SpmJIkCigo4aHyw3FMVIXI3fW3J
-	zzdFemSL82a3EBs1J29Yz0JkLzNjvW7p4la94bunH9w3WeDS3REQDZlBHN3NCjbI
-	W747c0sEU8gxZiWocmyo3Dn2yFBONWBTFEL5I7mrTAK73l+srywlTIJ6/Dboq/qd
-	2pk8L+wJs4rlU6FVrlCbQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1778578645; x=1778665045; bh=KZtompXgFSACAAOw8haMO9lseia0fCbyR29
-	abWb4baI=; b=rR1fDih6cX0XPQm6gbA+MIhesJJsAliscSlvjuHrmdUIKZkYm54
-	D2I09B+4eWxwaCvX2STdOVAxTwM5YCMnmT7yOazPValGcjOjjNHYynkgliP3+HOV
-	S73S1JVu4LJzKdpBCjqsr0YXXZcSjpa4qFLzetkGXCZ86zESwGfogiu9NcIQB5xs
-	BzMMqwmbXFA7pFJ/yHXpZziGOgebvOpvnCQ6aWMyVShP0xNLNMUCc0WsxIPh6Qcw
-	nSv3DBMpzA1jE6XkjwGxfcF5OFkRxjP8HbnZowy8c4ooWk0+38goSC1Uk9iamyn8
-	0JP47w2B04Om7ZyO2UFantGOVdAhVjtJx1w==
-X-ME-Sender: <xms:1fQCalEvN1D071S6eQU4DvKmvyhCGZHEeVQ7koJzaxr7zgnPsoJTnw>
-    <xme:1fQCar4oXMvhQDagaNrRxBzs6C0Zp2qlVMUrinb7mLqxTG78LpZb-j0h24ZECCH6j
-    LGyMZ0FQvWmJdm-zFpdVAd1ZWsY_QFNQ8JutLpInUg4mkCEqKGEhw>
-X-ME-Received: <xmr:1fQCamajivxRjOLnhn2ek4SWJ9cKIvKMTNOmKn_0D532zGVbdMT5-D3aBCyNS6fSbjq_J5xtem8VbEdVeEH5Ezs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdduvddugeeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
-    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
-    grthhtvghrnhepgefhffdtvedugfekffejvdeiieelhfetffeffefghedvvefhjeejvdek
-    feelgefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdr
-    nhgvthdpnhgspghrtghpthhtohepuddvpdhmohguvgepshhmthhpohhuthdprhgtphhtth
-    hopehjrghkuhgssegtlhhouhgufhhlrghrvgdrtghomhdprhgtphhtthhopegurghnihgv
-    lhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopehjohhhnhdrfhgrshhtrggsvg
-    hnugesghhmrghilhdrtghomhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhg
-    pdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhope
-    hnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegvughumhgr
-    iigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepphgrsggvnhhisehrvgguhhgrth
-    drtghomhdprhgtphhtthhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghh
-X-ME-Proxy: <xmx:1fQCahgI3FZOBz830Q-XGj1a1JPafTloBAwNpEXvOqBZv8vYXWUqfw>
-    <xmx:1fQCagcQrrpAS9tmZzVyIFWTD3xsP9bIK8Om-jGjgaTWe35Wrr0YUQ>
-    <xmx:1fQCaombYQmensgQaadfK_lYFygRVS7cCeesAUHOD7RmoKXu-ncfWw>
-    <xmx:1fQCatxwiF3qSVmj3Dm3mhngpGYdFjFKzKmpCl-g0ZFQ-iphCipgMA>
-    <xmx:1fQCaikE-Msn7iroFEwDfvQWPokJxkp00r9-w7HLrDmwNSvwpPAWpNpM>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 12 May 2026 05:37:24 -0400 (EDT)
-Date: Tue, 12 May 2026 11:37:23 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Jakub Sitnicki <jakub@cloudflare.com>,
-	Daniel Borkmann <daniel@iogearbox.net>, john.fastabend@gmail.com
-Cc: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
-	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
-	andrew+netdev@lunn.ch, horms@kernel.org, bpf@vger.kernel.org,
-	Jiayuan Chen <jiayuan.chen@linux.dev>
-Subject: Re: [PATCH net v2 0/4] net: tls: net: tls: fix a few random bugs
-Message-ID: <agL004kpTMjsaJJO@krikkit>
-References: <20260511174920.433155-1-kuba@kernel.org>
- <87se7x7z8k.fsf@cloudflare.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AgHAkiT7"
+Message-ID: <e683a7db-b465-4b34-b002-8f22031c77ce@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778579253;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IvrH+Ii9BjHSgJDxxEyJuHR+FWTHspsLDdnJSbT4jsE=;
+	b=AgHAkiT7KixQP/FeD0poHKsx5Dep01WrHLXHY434tmofh2griLBM+z7tLjN/RTd0qLAdee
+	SOAUP0TwZ2xxb/j75elDqp8wnaAsozzfA8zqPSsAOV2wUO2jUgQPYKqqiL0KIOJN9DYTdy
+	bhpJniS6bqnmABez6b8u8oMg2Y3WjpE=
+Date: Tue, 12 May 2026 17:47:13 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87se7x7z8k.fsf@cloudflare.com>
+Subject: Re: [PATCH net v2 3/4] net: tls: fix use-after-free in
+ tls_sw_sendmsg_locked after bpf verdict
+To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
+Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+ andrew+netdev@lunn.ch, horms@kernel.org, sd@queasysnail.net,
+ john.fastabend@gmail.com, bpf@vger.kernel.org,
+ Sashiko <sashiko-bot@kernel.org>
+References: <20260511174920.433155-1-kuba@kernel.org>
+ <20260511174920.433155-4-kuba@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260511174920.433155-4-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-2026-05-12, 11:28:59 +0200, Jakub Sitnicki wrote:
-> General question - do we know about any kTLS with sockmap-redirects
-> users out there? I've been asking around at conferences for a couple
-> years now and haven't heard about any consumers of this feature.
-> 
-> If there are no known users, maybe we can have kTLS+sockmap glue code
-> behind a build-time config option and put it on a path to deprecation?
-> 
-> WDYT?
 
-I was also thinking about this recently (well, more about ripping it
-out directly, without a "polite" deprecation path). It's a lot of
-complexity (on the same level as the async crypto code, which is also
-causing us some pain).
+On 5/12/26 1:49 AM, Jakub Kicinski wrote:
+> bpf_exec_tx_verdict() may return having modified the record
+> and the plaintext/encrypted sk_msg pointers. We must always
+> reload those pointers after calling bpf_exec_tx_verdict().
+>
+> On the wait_for_memory path after sk_stream_wait_memory() returns,
+> the post-wait contains a shortcut:
+>
+> 	if (ctx->open_rec && msg_en->sg.size < required_size)
+> 		goto alloc_encrypted;
+>
+> which dereferences the cached msg_en, which can equally point at
+> a freed record if the prior bpf_exec_tx_verdict() split the open
+> rec before returning -ENOMEM. Drop the shortcut it seems to have
+> only been an optimization to skip trivial intro of the loop.
+>
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Fixes: 54a3ecaeeeae ("bpf: fix ktls panic with sockmap")
 
-In
-https://lore.kernel.org/netdev/47b7dc3c-7092-49fe-b849-6847b73df86d@linux.dev/
-Jiayuan Chen linked to a 2018 LPC presentation, which is... not strong
-evidence of current use :)
 
-Daniel, John?
+Is the blamed commit correct? I don't think I touched the following code 
+in this commit.
 
--- 
-Sabrina
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+>   net/tls/tls_sw.c | 4 ----
+>   1 file changed, 4 deletions(-)
+>
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index 3bfdaf5e64f5..360f71fd7884 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+> @@ -1112,7 +1112,6 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
+>   		if (!sk_stream_memory_free(sk))
+>   			goto wait_for_sndbuf;
+>   
+> -alloc_encrypted:
+>   		ret = tls_alloc_encrypted_msg(sk, required_size);
+>   		if (ret) {
+>   			if (ret != -ENOSPC)
+> @@ -1255,9 +1254,6 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
+>   				tls_trim_both_msgs(sk, orig_size);
+>   			goto send_end;
+>   		}
+> -
+> -		if (ctx->open_rec && msg_en->sg.size < required_size)
+> -			goto alloc_encrypted;
+>   	}
+>   
+>   send_end:
