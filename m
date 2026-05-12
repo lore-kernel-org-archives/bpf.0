@@ -1,125 +1,188 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0733115A5
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 19:04:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778612646; cv=none; b=aFEQnCRtpK1r/eZZ5iaI7A6U2bTr/kgPrhxoddQHr6QSKeCFNALuTxYCB55q4gYgfEYE2b1NPxQkk/QNuaiybs63YskiPd8bybLjxNMksm8Cte8+LL+gLj5ZFXYE6VVy4AOQfrI08DNdfrPypI8WxYA3ZYP2T2OMNqJhjTrZM0M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778612646; c=relaxed/simple;
-	bh=mTY+R3VxQExeKt46CYiR65Ep6AB1M3Cgr5Vft7aQvRQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=TwKJxDQFwrbb6yqdQ9qAfWZmu4ha8n9gDnvto/UqdrLnHdVZttpZljiY17lH0s37pHZWiC8ukNiK2GtLiyKDIsJZviZlOHAt0JaV1idMZrDlUp6sAmqKcCbErvNJZLgTeL98IQAqykCP5VURml0LKJ9mAs9TFM7ak2okDAogvO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SHex4lU5; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6CE6361663
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 19:18:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778613494; cv=pass; b=eh5sdYe9E4jB3F+SepovvGZKYgwxUOWwdf8AO/zVLD+N/3ONbVRIzqQbTHyvdh6DUZPBeOGNU2zVET4np2w+N6SyUMNr7XDXOU29t46znA5e3oBon26kqX0mqLEy8PpxaNsd0kvQUjG/R2A7HHp5wHpNyHPzQmgO850rmkuzQwA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778613494; c=relaxed/simple;
+	bh=x0EJ9IIQlmLp0s2Di6cqa87rcp0GEiNnoqauM01YemM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uWwBlNyzg5PnUdl0sexx18uhrmQhMwJ3TCSAsW+QIR6ti6//l/+yxPIgb3JHEfo2qSeVaRyLzFftGqlKsodgeHkNWBKzr6+0o4stIGhH3BepR3Bh+BrpCJslyI9puDjRQRl6y7ppg1A85jKWhy9y7XsUYvqYX1QJdkBgF3Rez7c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=VzaSG/zY; arc=pass smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SHex4lU5"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3660ab73adbso3893287a91.1
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 12:04:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="VzaSG/zY"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2b4650d5f5cso23575195ad.0
+        for <bpf@vger.kernel.org>; Tue, 12 May 2026 12:18:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778613491; cv=none;
+        d=google.com; s=arc-20240605;
+        b=l1oCtonIgwVuovLmnNZzk59ZOR6TLJlzoKoMLTYAtUpnwOWE0vv0w1dZ+hBXTCINIk
+         K4caI28uGHpg5E8AK4dFu21Eqw8F11u7UTm29hgLwBmUWSYOxiVGnEiq+zp/gAtStFzw
+         aVkX/wdh/3S8Fo3YX9342PlpLa8H6UnjBuysP9uQlN6MrH2RtFLyJ0+FzxrhKGKNb5TN
+         wAnBn3zYKFPjgCtysnT5lSbHOTlWe1CjwfZg8YlMwGXPlCehI+i6K3eb84i6kleGilXb
+         wZPPKl8xhoJcBhwMlNRfLe5kdTgDZf9QcFVAKjtQwwmum/qU3jPQUXMDYZfhg5uNPkNv
+         T2XA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=EvRcW1Qh/576NOLilmJxxhESnWbBM64hf3VFbtNvDPg=;
+        fh=33xbOHzAcXuocl/gf9sBuog4xD6zbJhUd7pcQwxSPoY=;
+        b=BM2iXv0h5beFmCvCVhYMw956GD8l3HvuQBciy8dAeZ9+nkMzxrZPT9e19ur579+Vkx
+         df4pJSl8fkWioL/9qlYkcJePJzMqoq3eX9u7SdjjGEVRPpx4Hjf+bICLuo+MLnlTOk8N
+         fRzgPBnstolKKwVWZbWm3eeBY4OnGFlVL8JXj6YswHIZqVGjDXjnQUyvsabgh9+7tva0
+         AXORQDJOSiwKihY9tLWDoCDZdOnwwaPCEVz521Sj2fWlRSWP4U6yY7+/y7DzUmtwau+e
+         iNb1ri6Bck65kmv4or+5hz62kCFZytK2EODN2WRv6eOTNLrXcoJ3wwhm3+CwRMnWU2WD
+         nKJA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778612644; x=1779217444; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hLrOPfSWJbKfvY5t7b50lNIFV8G5y1Vr3EZ68WeaQHU=;
-        b=SHex4lU5H4sS7VZUOkKVOT2/Lzjd/PhaUJ/Ka7dZBiwHWaycGKRiVijvWaePb4XKov
-         Q5rwG/LOdBMU23YQj2hGatl/sRBpC2UaYzKK6FM3k02sJZGJdlDQUSmAFoNMLiUxXk1L
-         RO+27Ne1LKJGlM20u2xIeUE+0NVHPImH1JCDYrr96TX9h3xaBc1UVMVsXyiiYnDCps90
-         BLfsBBNcQRb7ZKQIENPtYmKzO45n54pA/saC90KQjdb+wTXu+zQmZEz/Ohj0pIDFSfjt
-         vKT+GkCQ8ei+nL2pbMKFPrnGa4de1+nMK0ERKn1PnJWa4Yn7z58QnJcqW3xdv3zGvJjC
-         hx4A==
+        d=paul-moore.com; s=google; t=1778613491; x=1779218291; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EvRcW1Qh/576NOLilmJxxhESnWbBM64hf3VFbtNvDPg=;
+        b=VzaSG/zY21rzktdtMYdicKzLpl/YoFm7iv3uzlED+W1CLf0OX7D9vnHpRbX8v/JN8O
+         0QO7LwC2GJ/CqzCCfVtawFHkZplgFF/LgAe65N/MQSGAczPaFltFEbxseJrGd5CW5W89
+         rAdQJj0e/w42EuDkCHdNePJV/wlZZfSB5NjaRAkx2XXTA7lp4WXvHiUvFpsBTVbxio+/
+         tSxgNoli+vuOOfFJZeAceCHCoPthBWLCqDu1NTh2y3a1RgsgOUD/AtkoDdwIHEGZndvN
+         j4WtdPqsKhk7Dt8z8XNFaQ0MKF2uKSDeIa8+7uC1ZTVE1s8ZzgiK5kuAMKgZMvhAKfzC
+         QPLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778612644; x=1779217444;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hLrOPfSWJbKfvY5t7b50lNIFV8G5y1Vr3EZ68WeaQHU=;
-        b=V9vyrLH9M4ESANSONIF4apLGWUtqQDR5NSWjqCfcIFwpItl2la7Uo+AQm1wpJpi51m
-         vUvad8wTXv8niLtBE8kLp+A6byr9l/bqCituDLkfjZYIjCRUe6XnJue+kzqehMVJTXmS
-         ej50JQRWVTL2nCY1ZhFp9oXEJUATS+lXq4gU1Xn50GigHjzvy1EjdknHOIodOksEwwuk
-         9vsU6rC5q2MHjaBotLJuGoojy507GGU2uIdkmh9XqiWLspMa2GAMnH7C/+5413vbqICL
-         fulLCfvTDojEhe/tbd+NqYRiJIyPhXXZWogJkXKe7KHjaizKCZT5vsRO7kL+G9oXQ2Sr
-         6YLA==
-X-Forwarded-Encrypted: i=1; AFNElJ+QkIkb6s4vqmttDL4tTlWV5Si23zwwwB3AZbCmWWGUqziBiRxVp390Lmyg0CY4RspJWVM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwydD6jVCem3ukrU5/Xno2kOSp+gYVtLfN75l7WPigR4wOp2FCz
-	qyf4/Dild0Sp9qobgY4SSadIvzXIkpoL8j4jBFKs4AAIQNNo4Q8BQ8ca
-X-Gm-Gg: Acq92OG3H/Sv8cFlTmlPkvcvYuzr2+Wdlk/6wPNc0ncpLoUXp/HtLfghCfrN6y5HC7N
-	MnS8C34TZtdAKVh5LGQymMEmn+XG3FFBblkmoMUGuB/b+Lu0m2EOzsY+ppBBO1s33XaeHEBvWvN
-	cag/VNq/0B3LMyAyvnXu+C1dRbigkq1HRJL07+WSK8MLrTNSyDcFYFg2BI6UqZU/LKuHD/hSR56
-	7FN7eGtCby+EiZbJXjK/pPuJOSYK68X3UqNZsAj5wxPb7ZOHMdp62lHvy9xA2ghqLJeBEOkp4fy
-	9nrrdDpv7cFBPOV+lR3EAD7mHr9az2SULZDQdSLodEn4oeozshXu0HsbOk9BHkcvUPMzJrD+3ft
-	oegdQgA/ysXnVbit4Hf2V83a1JjahB0b/aWi05AlRG5pbLrFxOO1nlFeRG7IDY1/b2nLp/ieAWp
-	hKtJT7soL8qv5SOsH6jcmCkG9xzFBTykzl0vRFm3LAz+olTzpSG1sD
-X-Received: by 2002:a17:90b:5625:b0:368:4a6f:28f8 with SMTP id 98e67ed59e1d1-368f3a97ce1mr223838a91.1.1778612644560;
-        Tue, 12 May 2026 12:04:04 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-368ed962120sm601698a91.0.2026.05.12.12.04.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2026 12:04:04 -0700 (PDT)
-Message-ID: <23140ed4c48babfa8af91f3b67f379773bdc04c1.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 07/12] bpf: Unify referenced object tracking
- in verifier
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
- 	daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org, 
-	mykyta.yatsenko5@gmail.com, kernel-team@meta.com
-Date: Tue, 12 May 2026 12:03:29 -0700
-In-Reply-To: <20260506142709.2298255-8-ameryhung@gmail.com>
-References: <20260506142709.2298255-1-ameryhung@gmail.com>
-	 <20260506142709.2298255-8-ameryhung@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+        d=1e100.net; s=20251104; t=1778613491; x=1779218291;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=EvRcW1Qh/576NOLilmJxxhESnWbBM64hf3VFbtNvDPg=;
+        b=ezYX24rxhAeq8DxQigu3sUY2gOmI85RtzPPtT1Su/OCQE4aJF9EEKaH3qsdrvHo5S4
+         bZrCG6G2ULOsP2c1Zpx47dicjgAJjZ7qX8fwybtqbsdi6aERf/cKTYeY32wHhaSa4p4/
+         yGI7lUWUZI8xKTLor2BL0p11D2rka7z5cNynpXHinbAG8reWm0W2frAAFmdUPOSuk5Fv
+         oChbiXRaedmsgFs03UACrGWRDuJ3x5HXsMrhlEkcvxsrGFiruUAVct19fyq2jK5FdB2a
+         d5VRX5ZYyGL0M4Occp10JtfMMwUWdmu3O5jMY/eQZQ628SfwKHa0KaoO16cMzaAA0csz
+         2qrg==
+X-Forwarded-Encrypted: i=1; AFNElJ+NuXTstKyBVX24sEMH9Rn8Hkq+CPVU0wm+XYqh/6JKpK9TZMa5BXvBfjpgRBhU47dx04o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywode+XyTpJ/jwJfU2CQWMTEiqMCUPHGSlnjyd5fa/6nEcLMyLt
+	bHwl73rdUS2jJTNz+Y0yvk3bJUiWWnhroC/R7wYPHHZrnxT1BHyqJfIM3ku3KsaG7mBEYT4oEVn
+	5E/JHe5KzyWEECC819fRW+zkJe0fZzkPpoOliGaFg
+X-Gm-Gg: Acq92OFKzxGHuYy89rzoyh+0CbXfcXVtm3uP9ESqXjFbrKKn33/Nx9NEfvHa9C701pR
+	VWznREtreP6fF/xX2bbPJMnfhdwinH9qqPvBTn4k3VZrJ2fMVouWr4Ks+Fuqx9I9FRYwk91X9F1
+	17K5isDrkkiY60DeSLEzwaBZAb6bpb7TBZh/kKBKSuxQ91kvWPFnqT79EsfdpLC5/3+xxLK+ntj
+	hAx5cHxnmENZwFYh6TaqenIQ7ybUs/PkiOyyUPG+q+4l+mC0FtIeqjhWqyx5jkdeEVO9fjxzUoN
+	0oeettE=
+X-Received: by 2002:a17:902:ea0b:b0:2bc:6784:525f with SMTP id
+ d9443c01a7336-2bd2711a4e2mr3804045ad.15.1778613491141; Tue, 12 May 2026
+ 12:18:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <agDuCdGIeM-6z-j-@altlinux.org> <CAHC9VhQ4VyAvG-z2h2NFpPx9PcJP4Ot2Ap=MPbCRk2TosJWOTA@mail.gmail.com>
+ <agI9Rdi-72f8dNbB@altlinux.org> <CAHC9VhRWNEzYx3Xxtxv_0BBkM7skisVdnKXx3CGn3S=aoBCiyQ@mail.gmail.com>
+ <agJPqiSKvHrrg6Qn@altlinux.org> <agJajS11YK1XGB-y@altlinux.org>
+In-Reply-To: <agJajS11YK1XGB-y@altlinux.org>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 12 May 2026 15:17:59 -0400
+X-Gm-Features: AVHnY4IItDSDQ_dFikFYv9ElTowZ6XiRLaS1GWsgcMI4Py0or-SaDs883yt9alk
+Message-ID: <CAHC9VhT1d6xSboPErjrNqx41YefJ-fzs+FKnF5hDAhCWCGMfdw@mail.gmail.com>
+Subject: Re: [BUG] lsm= with bpf before selinux breaks fscreate with EINVAL
+To: Vitaly Chikunov <vt@altlinux.org>
+Cc: linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
+	selinux@vger.kernel.org, KP Singh <kpsingh@kernel.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 2026-05-06 at 07:27 -0700, Amery Hung wrote:
+On Mon, May 11, 2026 at 6:43=E2=80=AFPM Vitaly Chikunov <vt@altlinux.org> w=
+rote:
+> On Tue, May 12, 2026 at 12:54:21AM +0300, Vitaly Chikunov wrote:
+> > On Mon, May 11, 2026 at 05:49:39PM -0400, Paul Moore wrote:
+> > > On Mon, May 11, 2026 at 5:03=E2=80=AFPM Vitaly Chikunov <vt@altlinux.=
+org> wrote:
+> > > > On Mon, May 11, 2026 at 04:19:34PM -0400, Paul Moore wrote:
+> > > > > On Sun, May 10, 2026 at 5:17=E2=80=AFPM Vitaly Chikunov <vt@altli=
+nux.org> wrote:
 
-LGTM, a nit below.
+...
 
-[...]
+> > > The patch below is what I had in mind (although be warned that was
+> > > just a cut-n-paste into this email so it is likely whitespace
+> > > damaged).  If you are able to give that a test it would be great, if
+> > > not, I can throw it on the todo pile.
+> > >
+> > > diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_d=
+efs.h
+> > > index 2b8dfb35caed..12724e259900 100644
+> > > --- a/include/linux/lsm_hook_defs.h
+> > > +++ b/include/linux/lsm_hook_defs.h
+> > > @@ -298,9 +298,9 @@ LSM_HOOK(int, -EOPNOTSUPP, getselfattr, unsigned =
+int attr,
+> > >         struct lsm_ctx __user *ctx, u32 *size, u32 flags)
+> > > LSM_HOOK(int, -EOPNOTSUPP, setselfattr, unsigned int attr,
+> > >         struct lsm_ctx *ctx, u32 size, u32 flags)
+> > > -LSM_HOOK(int, -EINVAL, getprocattr, struct task_struct *p, const cha=
+r *name,
+> > > +LSM_HOOK(int, 0, getprocattr, struct task_struct *p, const char *nam=
+e,
+> > >         char **value)
+> > > -LSM_HOOK(int, -EINVAL, setprocattr, const char *name, void *value, s=
+ize_t size)
+> > > +LSM_HOOK(int, 0, setprocattr, const char *name, void *value, size_t =
+size)
+> > > LSM_HOOK(int, 0, ismaclabel, const char *name)
+> > > LSM_HOOK(int, -EOPNOTSUPP, secid_to_secctx, u32 secid, struct lsm_con=
+text *cp)
+> > > LSM_HOOK(int, -EOPNOTSUPP, lsmprop_to_secctx, struct lsm_prop *prop,
+> >
+> > We will test it and report, but this may take some time.
+>
+> Before trying the full system boot test, I tried to reproducer I posted
+> before. With this patch applied (just ensure it's correct) over v6.12.87:
+>
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.=
+h
+> index 9eca013aa5e1..b38f6194699b 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -288,9 +288,9 @@ LSM_HOOK(int, -EOPNOTSUPP, getselfattr, unsigned int =
+attr,
+>           struct lsm_ctx __user *ctx, u32 *size, u32 flags)
+>  LSM_HOOK(int, -EOPNOTSUPP, setselfattr, unsigned int attr,
+>           struct lsm_ctx *ctx, u32 size, u32 flags)
+> -LSM_HOOK(int, -EINVAL, getprocattr, struct task_struct *p, const char *n=
+ame,
+> +LSM_HOOK(int, 0, getprocattr, struct task_struct *p, const char *name,
+>           char **value)
+> -LSM_HOOK(int, -EINVAL, setprocattr, const char *name, void *value, size_=
+t size)
+> +LSM_HOOK(int, 0, setprocattr, const char *name, void *value, size_t size=
+)
+>  LSM_HOOK(int, 0, ismaclabel, const char *name)
+>  LSM_HOOK(int, -EOPNOTSUPP, secid_to_secctx, u32 secid, char **secdata,
+>           u32 *seclen)
+>
+> 1. `cat /proc/thread-self/attr/current` does not report `kernel` as befor=
+e.
+> 2. `echo > /proc/thread-self/attr/fscreate` process hangs in R state, wit=
+h strace
+> showing infinite loop of
+>   write(1, "\n", 1)                       =3D 0
+>   write(1, "\n", 1)                       =3D 0
+>   write(1, "\n", 1)                       =3D 0
 
-> @@ -8028,14 +8024,13 @@ static int check_func_arg(struct bpf_verifier_env=
- *env, u32 arg,
->  	}
-> =20
->  	if (reg->ref_obj_id && base_type(arg_type) !=3D ARG_KPTR_XCHG_DEST) {
-> -		if (meta->ref_obj_id) {
-> -			verbose(env, "more than one arg with ref_obj_id R%d %u %u",
-> -				regno, reg->ref_obj_id,
-> -				meta->ref_obj_id);
-> +		if (meta->release_regno && meta->ref_obj.cnt) {
-> +			verbose(env, "more than one arg with ref_obj_id %s %u %u",
-> +				reg_arg_name(env, argno), reg->ref_obj_id,
-> +				meta->ref_obj.ref_obj_id);
+Bummer, I was worried userspace would be expecting something, but wasn't su=
+re.
 
-I think this should be reported from update_ref_obj() itself,
-it is more consistent logically and also avoids reporting code
-duplication in check_kfunc_args() and check_kfunc_call().
-Also, technically the reg_arg_name() is an independent fix.
+Thanks for giving that a test, it looks like we'll need some special
+handling for these hooks (which is okay, you'll see they already have
+special handling if you look at the code).  In the meantime the
+workaround would be to place the BPF LSM after SELinux in your LSM
+ordering.
 
-> Drop the selftest introduced in 7ec899ac90a2 (=E2=80=9Cselftests/bpf: Neg=
-ative
-> test case for ref_obj_id in args=E2=80=9D) since the verifier no longer
-> complains about ambiguous ref_obj if it is not used.
-
-On the other hand, if you think that this property is worth having,
-then maybe wrap the check with in some utility function?
-
->  			return -EACCES;
->  		}
-> -		meta->ref_obj_id =3D reg->ref_obj_id;
-> -		meta->id =3D reg->id;
-> +		update_ref_obj(&meta->ref_obj, reg);
->  	}
-> =20
->  	switch (base_type(arg_type)) {
-
-[...]
+--=20
+paul-moore.com
