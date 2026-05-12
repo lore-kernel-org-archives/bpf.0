@@ -1,197 +1,154 @@
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575112DFA25
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 21:31:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C9E38237C
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 21:41:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778621485; cv=pass; b=KqDxk1erLL6HGJHrcjK0xYQu8XGGjYbFc7WeNTUrhUzh0mZu2A0UEJIsJKQI4F1X9MQ5ru5/aO/PIFbHQW+7M0MAiCNvqzJtk+Rx4jw92K+RxTzna1y/Lapnow/lGuLAexryvNrYYIZjDiFD1mIWM8Qu+ya3PojXF273opo4Cq8=
+	t=1778622076; cv=pass; b=RiDGTeKQq5Z9JZSFO2nflpiAU5TYTXAeBm/S+Pk1jdvgP6wq2B6K8rYeuf0+Mcl9jRKo2C9WTo+wIJ2h04F/GNroj0AXnmC5PkNDDRi0U5JnOsdXa3fSNUsRxiCURsdrM/dAtLbiGXFMldRYur3q0/QlWOhTao37POwyLLmDjD0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778621485; c=relaxed/simple;
-	bh=PkC5s/4Uy0m2CN2hO3KoNCLTqq0UuYmaEjzo9fWkdZY=;
+	s=arc-20240116; t=1778622076; c=relaxed/simple;
+	bh=OL0tJWQA9nR9g1pJiMuT+stdzGeBCi82MdUJmT1n4mo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=crDWQWX5y1helBN0HPmniS0DdtKkIChJlWykqxSkhqF9hkPqedbWjqzsZmFJM8vHxq50VbN7AmAvkkdgY27prKXupeykcz0aWWzGoCiBjizOldCs+XTJeGnrH/4CC2Z62v+lbaG2ezPDbO3Jq5TZNVB4hL2qaP6mGReDZU9S3CQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ggN3G67r; arc=pass smtp.client-ip=209.85.128.170
+	 To:Cc:Content-Type; b=fCXhflE4/PLeYWiH6Zfr21VR2J7iAEcUy23G1PZg40j2r98Uyt/x05tNQIOjBiROnfsvp5LvMfrSQE/yxoMrdGNgCkeg2P/yR3GAh7BIE8J4SY8s//5eWBEjehDYJe1HOlO+ZCRylEoa81W3dkCCj46gx1Mpe1QWxeOMKn+G0ec=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FGpINWEl; arc=pass smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ggN3G67r"
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-7bf0b47d2f1so58170497b3.3
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 14:31:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778621482; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FGpINWEl"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-48984d29fe3so63919805e9.0
+        for <bpf@vger.kernel.org>; Tue, 12 May 2026 14:41:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778622073; cv=none;
         d=google.com; s=arc-20240605;
-        b=D2d3tn6+RtAbUa06AoY35quNQwzNINa2F/ijHH5Ql4naWj+xrKM4iSJ4cYvTLgHRRL
-         qQf6pVUP7JiKUkDAstdaNFZlsO3kJok2qaEuvs4koy/rfbLGlqgR+hP+lxy6hnMPBAt5
-         UuXssvIgqd/tAwYlm3u34nP4QNrdYDANDfjDI3nktH3bDsHjedYVcE/TcfRUHAaaOMEO
-         2wuJahRwvLsjP8+Gt1UG/ZpjNNM4HbEKbbqNL+hiITURJzj/es042j5IpEicvamS93lc
-         Ily/qMGCeoe4BpvSNe0R1hrt40UinFgKsVdnwt3MbH/ih9/krDxLfUAZkDEM++laVM5r
-         xzqQ==
+        b=NBJANkgsgOGD4Kxk7J2+J2e33ikdq2sIDCyk8nvgShXBK9vTYGb0OGKNtkW6xYU7o6
+         irvcc4OI/l2+nmDxuMB7snL6dmSnFv2Y8/6sVrqZXQs/7yy8XZM7dj7Bqv1fTrAcLs58
+         rBlP6S4ORkWo4eW95D4RgDYEhmCGhvLi0zO6Yzq88/R8TyFK2/4wiaGOV9Shwvm49GyH
+         O90XERAs4ziLI9UnV0dM1FQ/4mJMITbh+yV+unhjxULFaMFylE3rQszHGxRQ3u2nZbWE
+         xT/13dYiMez7NUTyEz1GQqBiq4PLoMhCXtchTovVYzmnlgPMy7l/TlpHJekzl5HTdOOn
+         Pe9w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=7W6y2t+nJOe9TUUMwUkhxdnxRPcdVhvGuxKswbifoKM=;
-        fh=bCoLUvtAu1D3hCyKghQ3VLRStVvdR9Sgh3Xhk/87lZg=;
-        b=dKWUnV3jr7vepHjJZAJ/ALqPbzUI0IdtlpnrZWteYkOvITcq8X541Uk1hhN7c/fcnx
-         40TP2l0Mk+vvyn5jhnX5M6S9hnXwhPxoJt/UgYNqmCdkasAtRV4NSlYW5hyue68R9F0X
-         wbvJznpKcNam5AxH9lQYvnCylFFU1HnlOkB3RZfeP8jbrQoG7ayJ9BNbUH8h2Lwo5YCF
-         DGEzBbVb5qA9ZSDzJzwG0Nqi1wHukOTp8eKSRKHjcb/aofEEB9rpLSChkuedsb34oQwt
-         hq/49AQSrWbXZN7rqo8UrGFt1HdpKw6BWj9QlK888yVcIscKBuSZqpv2QdUTw+s+Vqn/
-         FThQ==;
+        bh=CnJRcPv3anhQleJX1h9scyF+CUFzYP9DYRqjifTE3MA=;
+        fh=YKdUUT3q1GWwy+eGKCBfK/46DgnOgUlgQIsADNa66I0=;
+        b=XXfex3FaRVko7ruZ6NV3DPfeMUiKSMAaTkn2O9co0/d46pd/yE2gf+s2CS1bgoAc7/
+         J4LYtpA9RA+k0yv6SeC227ya1PrgpcSIN6x3cziIz+fcHj4Vg9vxbpMkky+OltUivER+
+         MmUZV2VeafQAksh7lhZ5Unua1eyr3DpT848BMVZXM6lNrTZ++o6a7YPLbpOH2tB+j03A
+         DO/+nKnFgWwK1nWhAEQN6R4hfUA9b2tFZhyqocIxtlAZSSOhG3U19UT7jtR/4f3dghnd
+         Xi+XOkPIbSTQmb6+YNCNagpvYTwHJZxTiURnvIOIiMCPfDvhyTHYkudghKmmndRGkHUv
+         ZbFQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778621482; x=1779226282; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778622073; x=1779226873; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7W6y2t+nJOe9TUUMwUkhxdnxRPcdVhvGuxKswbifoKM=;
-        b=ggN3G67rWqVlp5MMgZoOlp+RR467rJEeDqWMIg4duWAlSoD0l8HB5D7A/hmnSNV30S
-         oEvYtAGgYbdPhJh5oEP95It8BlNRuptO/+ry/5x1sdIicwG/8ZxSfVXEG1wpr+H9NUUh
-         s6NnUqoti0MfCG/1CLVJYHu4n5etI2T+NwXO1naJc+IPSAQyJCXtVTrGvCJuwGM4FT3W
-         d9aCMit7z966MLIBv5XvZd3oIUHUWxts1t0CBcAWo2tw4vCgAvfMRXo1DQFqzbhQfp0D
-         ZjNsuDn+KqpVF2mf9mBSKK8LaY5lCONdYP1zIuor8wCNftPTP08vmXTDVOeQ5XPap4cC
-         dugg==
+        bh=CnJRcPv3anhQleJX1h9scyF+CUFzYP9DYRqjifTE3MA=;
+        b=FGpINWElPtKoFLRY2FckDIMBrDyzWZPMw4BUTcgnZmJjyRGIC7BfHXkuyzw7gro0oe
+         /lplmxMBaYJ77kfMvX2NPtlfjnnXejSn80Om23usnMYCsooicAJgv5U/+gaA9Y56ZgbU
+         qyiGKaW/sM3LFFfTOBYIwakisBzNllKXzoB135Hka5q7meJ/OOkhhtq0rQI1zlxa4ol7
+         2w23N1tUpr/5G9XTlUbFAKg6e3Mfif+jvyPYFarq+7jI7AuO/vSaodwcAwy3qF31VDJY
+         OgooGZM7Bff6MIX0HDCd4EcOFEgWBcyTxp27SgZx/4SR/4yanaQTwcjub3H6YMPBJjT1
+         /g5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778621482; x=1779226282;
+        d=1e100.net; s=20251104; t=1778622073; x=1779226873;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=7W6y2t+nJOe9TUUMwUkhxdnxRPcdVhvGuxKswbifoKM=;
-        b=N8l2yf3iM4V5SHpREnFNO3CpqRNsOHn9v/LDOTKCniDWgutpdODnewSaa0Y/O2UWbi
-         8OZPgVw1OO+ZSSERjvQvBTJWWIw0fW3BmvRsSO/6mRpD4Q1R2HXWERA52ZEMA8k8Nt8q
-         Y3NHxrIp1HYVX4IAIWJgI/p5U9cpN2wu4Fj7zVclmcaSomyVCzcWFMALWdpLuNL1WA8T
-         0+2IlqinvZftEKtJJUoIdsC8hbeoLCAYS2Cgq3UHBdxbGdcwlBTNUwRMtOTMembOyQ2E
-         sJjKsvMQnzJlRrybXu4+Qrltp6+WipZXupqjxUlKazLG7dBlatYYVKPg1CdtFO59ZUya
-         DAkw==
-X-Gm-Message-State: AOJu0YyaMWddi7v8HQ+jN2t9IEqREobAfGpaTV2+PF2XWEKShm7LrEnq
-	Hv2TheUxaCdLGJfR2oHKQIfsSSvwiz4tDRu+1fayaG3YJ016a9nFWh8+DvCmd0TpMpufLdJEoG/
-	xlrgLLnFltOPioWLk59qrnBPx9tvzIBM=
-X-Gm-Gg: Acq92OFXpLtuDwYsWjvz/vUYYBsxKWdUjAE9FUpX75cf+mjjELhfv3bVD1vTrqbbjlN
-	KkXVqLY0eDG4nj6fnfpG/oxjmtUFmMVjCJGYZM7ANg4oypei2KpZNJ66uopXLwGoMG3Hay4iGoX
-	7pKQ0zsxXQrXwk/hmwkfVyt5pIpTj+Py6THx71Jaunf2oY2lsWAuG6RYMthw0X9EYKqj03SmgS5
-	YgekHZb75EM7EiYM0wcnnyHS/nQryB+45l4jR26N6TNZt4roLx+UP0SIEmehhKk5PMOTgaIOREY
-	HOgBw7nRb5pgVlttdq7VYBc=
-X-Received: by 2002:a05:690c:9e:b0:7ba:ef98:9712 with SMTP id
- 00721157ae682-7c6a9b31e3bmr6451997b3.11.1778621482311; Tue, 12 May 2026
- 14:31:22 -0700 (PDT)
+        bh=CnJRcPv3anhQleJX1h9scyF+CUFzYP9DYRqjifTE3MA=;
+        b=E2d14mVzJhHZX0mluQKP8c1xUAXniDApgHAm5vLCmgB6bjMYtGS0XSet9PwPFxmUub
+         hsaSKwLlpS9UGtLDMtMcMYyByKveiPA1gDj6kRXr2PHS2ZxPc9chMLiuCDyzGV1I8GLF
+         Wg3NpvYLxQ8/dIaw3fWUsaglFXPibMDSQYyeYD6kRAzEqmEEO4ri5Nc2bPCN/KuO5fi6
+         DbvkQkwAkSihLGBVUEPwMLETiR7GBdLXklY0evnIjuwCdSzGFxzUKWDuxJhL7rtxgcSe
+         RFj9dwY/8wZKHPt9KqB25RPhRjrh/Xrqj/fYjLqeA3W2Wa9OpTTPb8Ki9UiT1UPBQ5O1
+         wxZA==
+X-Forwarded-Encrypted: i=1; AFNElJ8kkadrlRYq6oLCdfApQuR3FI+kkmh1PylZkrRF2V41l0pcMF5zTMTuwNAw6PYK227d//c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWCHI7aamd+STSxjRA/Xu1VwiMQ+SHvjnnKe8laSnrO4O4afrN
+	wmUrkgkLx3dNNkGtBVta+pdYO6byyF4AfeGL39chdEWK9zImYUG+gtEtyntqGiZgQH0Ckft6Bxu
+	zQBjP9irGWaogD5+BZQJKrm9h3sZpIYc=
+X-Gm-Gg: Acq92OFiCJXGcT8xNua4FVxB1AWuINbq+uc2U0/STwpRs6kygOU8eVMqi7Sna7m7Wzf
+	YQlySCPiLu3JMb73vDK5FQa4Y4iZ+Oa0xcehDIR7heqB6jWJ5QFg9cXe6LVz8wXSK4Uiv490UIR
+	Zpru5BHJ9wIOiPt+TPlaWML4hqlnvaJtslV8P49ImCyfkkF4CNbT58sWZUOP49eriBy5zIsVwRt
+	gVwxuRn4jBav3F7ZUNovD65XteBZLcSwfPNCUN6ouNdgJxDu3S9cyLVQGUbLkFngI4iettiRXM9
+	S/m02hVk6tnHg+SREFYTUyPSfV5nVffulGQZSH9g2VTkvvI0oHQtqP7hR5fdH7otg8f5tXvRDrN
+	FLJU1MvLSsoNsZvZRBBWBbLEtmg==
+X-Received: by 2002:a05:600c:8b12:b0:48e:978f:c45a with SMTP id
+ 5b1f17b1804b1-48fc9a3ba11mr7323355e9.19.1778622072979; Tue, 12 May 2026
+ 14:41:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260506142709.2298255-1-ameryhung@gmail.com> <20260506142709.2298255-8-ameryhung@gmail.com>
- <23140ed4c48babfa8af91f3b67f379773bdc04c1.camel@gmail.com>
- <CAMB2axM8hR=OVqbkbTMJw_ej2pfnEm9Cm-quuoFPqsVhmJxO0g@mail.gmail.com>
- <701f9924ff6d13cf948c4ce4527eb866a26950e2.camel@gmail.com>
- <CAMB2axOsnVj=PBuMU8utqKsSj7DsVhWNi9Vddytx6BKfFGs0JQ@mail.gmail.com> <073fd24d1220adccec5248b094f4f80fd5e66f93.camel@gmail.com>
-In-Reply-To: <073fd24d1220adccec5248b094f4f80fd5e66f93.camel@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Tue, 12 May 2026 23:31:09 +0200
-X-Gm-Features: AVHnY4L9IEgzBtCBDye1dKv4hRa9WilvXqRGKK6a36Cij0o4gsGIpgpGL2yqSGQ
-Message-ID: <CAMB2axMSBOxpUkSPr9JtD2KT4FVvwKho-G8HKJp0DP+WEK0aEQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 07/12] bpf: Unify referenced object tracking
- in verifier
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
-	andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com, 
-	martin.lau@kernel.org, mykyta.yatsenko5@gmail.com, kernel-team@meta.com
+References: <20260510030136.27876-1-chensong_2000@126.com> <a439f19e-1a47-46ce-8a2c-c53c9f038b8d@linux.dev>
+In-Reply-To: <a439f19e-1a47-46ce-8a2c-c53c9f038b8d@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 12 May 2026 14:41:02 -0700
+X-Gm-Features: AVHnY4Ll8E-0Y0MARZjSnurDHCpF3Z0mdURWN0DP9-EQbxc1KT5-WLkoRfNUfok
+Message-ID: <CAADnVQLNLd7kV+pBV1i7YvPoQGMVzJusS71iPs6oc_K0Qpd9fA@mail.gmail.com>
+Subject: Re: [PATCH V2 1/2] tools/lib/bpf/libbpf: Prioritize module kfuncs
+ over vmlinux kfuncs
+To: Kaitao Cheng <kaitao.cheng@linux.dev>
+Cc: Song Chen <chensong_2000@126.com>, bpf <bpf@vger.kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Hao Luo <haoluo@google.com>, 
+	KP Singh <kpsingh@kernel.org>, Song Liu <song@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 12, 2026 at 2:29=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
+On Mon, May 11, 2026 at 8:19=E2=80=AFPM Kaitao Cheng <kaitao.cheng@linux.de=
+v> wrote:
 >
-> On Tue, 2026-05-12 at 23:27 +0200, Amery Hung wrote:
-> > On Tue, May 12, 2026 at 2:09=E2=80=AFPM Eduard Zingerman <eddyz87@gmail=
-.com> wrote:
-> > >
-> > > On Tue, 2026-05-12 at 22:37 +0200, Amery Hung wrote:
-> > > > On Tue, May 12, 2026 at 12:04=E2=80=AFPM Eduard Zingerman <eddyz87@=
-gmail.com> wrote:
-> > > > >
-> > > > > On Wed, 2026-05-06 at 07:27 -0700, Amery Hung wrote:
-> > > > >
-> > > > > LGTM, a nit below.
-> > > > >
-> > > > > [...]
-> > > > >
-> > > > > > @@ -8028,14 +8024,13 @@ static int check_func_arg(struct bpf_ve=
-rifier_env *env, u32 arg,
-> > > > > >       }
-> > > > > >
-> > > > > >       if (reg->ref_obj_id && base_type(arg_type) !=3D ARG_KPTR_=
-XCHG_DEST) {
-> > > > > > -             if (meta->ref_obj_id) {
-> > > > > > -                     verbose(env, "more than one arg with ref_=
-obj_id R%d %u %u",
-> > > > > > -                             regno, reg->ref_obj_id,
-> > > > > > -                             meta->ref_obj_id);
-> > > > > > +             if (meta->release_regno && meta->ref_obj.cnt) {
-> > > > > > +                     verbose(env, "more than one arg with ref_=
-obj_id %s %u %u",
-> > > > > > +                             reg_arg_name(env, argno), reg->re=
-f_obj_id,
-> > > > > > +                             meta->ref_obj.ref_obj_id);
-> > > > >
-> > > > > I think this should be reported from update_ref_obj() itself,
-> > > > > it is more consistent logically and also avoids reporting code
-> > > > > duplication in check_kfunc_args() and check_kfunc_call().
-> > > > > Also, technically the reg_arg_name() is an independent fix.
-> > > >
-> > > > We have kfuncs that have more than one ref_obj. This is not a probl=
-em
-> > > > unless ref_obj is referenced in the verification and is ambiguous
-> > > > (e.g., used it to tie the lifetime of the allocated memory with
-> > > > ref_obj). Therefore, it is kept at the location of use instead of
-> > > > update_ref_obj() to prevent breaking existing kfuncs.
-> > >
-> > > Ack, thank you for explaining.
-> > >
-> > > > >
-> > > > > > Drop the selftest introduced in 7ec899ac90a2 (=E2=80=9Cselftest=
-s/bpf: Negative
-> > > > > > test case for ref_obj_id in args=E2=80=9D) since the verifier n=
-o longer
-> > > > > > complains about ambiguous ref_obj if it is not used.
-> > > > >
-> > > > > On the other hand, if you think that this property is worth havin=
-g,
-> > > > > then maybe wrap the check with in some utility function?
-> > > >
-> > > > A utility function like below makes sense if we fold ref_obj_id int=
-o
-> > > > id. It would be too cumbersome for v3 as we may need two of this fo=
-r
-> > > > ref_obj->ref_obj_id and ref_obj->id.
-> > > >
-> > > > static int get_ref_obj_id()
-> > > > {
-> > > >         if (ref_obj->cnt > 1) {
-> > > >                 verifier_bug(env, "function expects only one
-> > > > referenced object but got %d\n", ref_obj->cnt);
-> > > >                 return -EFAULT;
-> > > >         }
-> > > >         return ref_obj->id;
-> > > > }
-> > >
-> > > Maybe just like this:
-> > >
-> > >   static void validate_ref_obj(struct ref_obj_desc *d) { ... }
-> > >
-> >
-> > Do you mean:
-> > static int validate_ref_obj(struct ref_obj_desc *d) { ... }
-> >
-> > Then to use it:
-> > err =3D validate_ref_obj(meta.ref_obj);
-> > if (err)
-> >         return err;
-> >
-> > regs[BPF_REG_0].ref_obj_id =3D meta.ref_obj.ref_obj_id;
-> >
-> > > ?
+> It seems that there are two problems to solve here:
 >
-> Yes, like that, sorry.
+> 1. Allowing kernel modules to override vmlinux kfuncs with the same
+>    name.
+>
+>    This should be relatively straightforward to implement by matching
+>    names in kernel modules first, and then falling back to vmlinux.
+>
+> 2. Handling the case where different kernel modules have kfuncs with
+>    the same name.
+>
+>    Could we use a new libbpf API to establish the mapping manually?
+>    for example:
+>        bpf_object__set_ksym_btf(obj, "kfunc_name", "module_name")
+>
+>    Or define a new attribute, for example:
+>        extern void kfunc_name(void) __ksym __module("module_name");
+>
+>    We probably need to hear suggestions from other developers on this.
 
-Np. Thanks for the suggestion. I will add the utility function.
+I'm not excited about 2.
+Two different modules are not allowed to have two different functions
+with the same name.
+The kernel has only one global namespace.
+Hence I don't think we should be introducing such namespacing concept
+into kfuncs.
+
+But 1, I feel, is useful for experiments and mitigations,
+but it probably should be done transparently to libbpf.
+
+register_btf_kfunc_id_set() should be changed to return an error
+when a module attempts to register a kfunc with a name that already
+exists in the kernel.
+We also introduce override_btf_kfunc_set() that would register
+a replacement kfunc.
+override_btf_kfunc_set() would check that all overriding kfuncs
+have the exact same kfunc already in vmlinux BTF: proto and name should mat=
+ch.
+Then the kernel will just remember that the address of that kfunc
+is in the module.
+libbpf doesn't need to be aware of this substitution.
+It will find kfunc in the vmlinux BTF, but the verifier will supply
+implementation from the module to bpf prog.
+2nd module should be able to override_btf_kfunc_set() from vmlinux
+and from 1st module that replaced some kfuncs.
+All that only for bpf progs that are loaded after override.
+Already loaded progs don't need to be live patched.
+Thoughts?
