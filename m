@@ -1,170 +1,154 @@
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E005372051
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 20:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778618271; cv=pass; b=I4LJ1lDKUOIKQoplL4+fA3deRrJeWkK7e/TIQqrcGQWeS4WFhfV1EJh+YE+6kHeqRCyCXCR38APeF3ywxNypuq/TvRy7jPNDR5X+5sg0l/f2MLh1GRPCV5q1L9IfjS+3aa8l4roXCmnF9lS9yhQHFIUVdpC2zbwqVJdOlxALJRc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778618271; c=relaxed/simple;
-	bh=INKRh2r5TxtEA0CusznPy9TbIEWkCxEu7I/5d62aR5s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Cp2hKiIIju+0XjXpsb9tg8I6II9Ae1Wm9j85W7cGX6JAh4mVl+yTO9WHWwioe0noQK0DEW/kyRQXdVqqAdkb91nn33UzzSmgkOmTrFeG10Mg2IVzsV0IZqpGfwMxAVTxiBbMH3XQWEgDkZRC7U3XTh/6V8aJN3BEHlYCVCVY4v4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=akbh/fBo; arc=pass smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD7F3388E5A
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 21:09:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778620180; cv=none; b=jLnwQlTUTM3SOYZkAB3kWuL9iNzlBhIzg7UU7UxER+Uw+iF8JJMLwXXh9oLSeBwPKgCAivAEfDuzfu6dWMnm07kEiK36Eia7kMTHYl7mYxDKuaGrvdRJHS1a/LbgIceX3/ufY/p3IfIu0Inu6r8ipsEzbXYDsvCq4uZMI6MOI50=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778620180; c=relaxed/simple;
+	bh=r5NfCaDR8XuBdLS5aQzoPlC0IDF+9iTlBaiLPWCz8/I=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=UPlErFKwlbwdDdPydgUTMTT3myKi+in9TmFc4kcplAgthvRCjfRMG1Td9KWnJ7yKli4ViAubEtPVCc4mI+TYXAPR73c7Y0sADZ/F10M+faMH6cEeL9cjGHBKdjRCwfdA4/op+WgYO9SVFoNmUC1mWwvzVFNRLqGgLK7qfi+ZwMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IJR6lpjj; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="akbh/fBo"
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-7c0dea734b8so33532687b3.3
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 13:37:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778618269; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Wfb+e+oSouPK05f+2cMSrFB2VlUPdIJGfHjHDGJIjjPJ2ZpEkRG2UX1zd3F6jDRPZ7
-         mZAVIDibqJKbvIzxDiL0u2Sh95b/ZU/j4tr4aZgSTwmBI/WVCL9tBL7l+Vt3ct3xqNdu
-         GNjz3oTL/fVTpSkhtGjcI0xSNKaPOW7H4MuGed0IpQteRm+VjeInLoJ4TGU2JnQC3VJL
-         HSef1Kt0HLKC8XzCTmXDBBSyo9c38BtDod4P+crwMPpMHOHMFDerEKwh4T9pIoOAVDZo
-         /syXLRDRHcSHP8O4MPdKLbyxhYfxDoR1e9aQ2sFJ7WhpCr3Lrh+zPYEIPeZxl7MpZKf7
-         4ubg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=aQcZV7DJIyQpUIFVZVp01UmNF7qQBH5otnKV69pByp0=;
-        fh=bCoLUvtAu1D3hCyKghQ3VLRStVvdR9Sgh3Xhk/87lZg=;
-        b=NXpRxif63TNF8UXAOpZIyapGqWuLuysapOz0DnCsu10o5bhnH6P+N86Ii8QoVdY/Eg
-         RA9cv75ctVC40DPLTuHr08FEQWE8SiyiS+SghbIY01PbK4dH3Tp2z1SujOIfx3CrnIwo
-         BZCBft4Nl1Y6xZ+UugQbSYT55SZVnQwyIpaTD75XXgxo7i3P6gOQalXeLNEeIGrt66Iu
-         QLa/10rfqQHVADVulFwL4rDWwQGcU+UpMF4IlPN7yTWzSqKpv6G4iNUBeFKLgI7ilc1F
-         ClylAz0hD3ajwEyfjlYO2dA4iLJKxOsaeJMHCc03j+aOyTK4r/puYMfKRkIVk7YsBHzC
-         6JKQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IJR6lpjj"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c8021c8c42fso2515229a12.3
+        for <bpf@vger.kernel.org>; Tue, 12 May 2026 14:09:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778618269; x=1779223069; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aQcZV7DJIyQpUIFVZVp01UmNF7qQBH5otnKV69pByp0=;
-        b=akbh/fBoxxD0OISH3XkwXyu0apo/saYneCSbCr1gaZtaWHMJvYYR+IoRL8uHNdsgPO
-         KpWTC/ip6FaW6r937AHlpWG0pxqDXae7lNZsqcYNIgYIUpXshdILjoP6U1j7KQiqVt6V
-         jVpM8+hTJd9dKps+mshn42xMv3KLuh4+Synm3tpNN034zoAkSdc6HLozSYoREO9TFWj0
-         dgDUzw09x+9YayfZes+XL+nUwBJnosYH1lL2HTaOXLygSL5HJl1GiZNPKNFoBl3lsSYy
-         4bKRsH+uzFmTz7y6/7xWYehNWHyyIYGZpnCysO7ttE7UmwKzkK6I0K9jcXzDfF2QgIBQ
-         tWeQ==
+        d=gmail.com; s=20251104; t=1778620179; x=1779224979; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tldKA9Y19SPav5iRpI+W8dNtnr9IWxgUOCs/Hfp0DfE=;
+        b=IJR6lpjjdyCKSQhGXJojJzAYSPFt+HZQp/mKQ768XaBBdWMP63J3KECcu8gv08iAYP
+         LeZes9hImkVzJmXtzhtB6jv+cgO5YyDmG4e+1gRXux4F3phOrdZ3vkIk6aUq0KwBDMc6
+         O0vPGaZB/QoB9eqaWIvhSuTaRiWNpjw8H65MyNa6AJ0WpYjlu8beZnQwwtdmu+kj8q/c
+         Hv5sabYfyp8Yuqq0v5hMjZm2mWj+TUkDPib4gZN4QVADQFT2dq84oKrhtFdWt4o3jHum
+         pPXirSu2bjdwP4SeDShgXbrvaPrqNqhq2Vve4OYqkN48RxKkHwhqBdoAQb6DBPHJqIXg
+         9Btg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778618269; x=1779223069;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=aQcZV7DJIyQpUIFVZVp01UmNF7qQBH5otnKV69pByp0=;
-        b=mr5i74FslraRWn+xO9Wilzbi2ufTCcVbFGvaqQBz0E+avL0QDBzRwuDhAu6MfvvABK
-         MZnHI9pudAPf7n+cr76FsFhtcbPBpmsYOrs/VmsDOtj/xQSrBijTdSY6QvULOl2n1bJt
-         gP8cqwjXenbRgWL3m1pHVTZZEcnLnx1cLHrVZexjVxqGSaSnLkfeU+7z1Bjj03VnTBCt
-         ho0JQ4vjfIr/3i+RZPY5vCnV+qILWbwVMQTHIi84lg90mvpRx1SPFoBIp+vTcoeb5RwP
-         CO57hX2i4aY9PUfmK/AGXU2FD+DlYhreFzr1dfKRbdjUUc1QJtxPCPi0Q6SFhMTvRXci
-         cl3Q==
-X-Gm-Message-State: AOJu0Yxbl4qSiLd2WzrsZTa0gAOQ8popuwCxCa75ncscfxvUKZTbD97t
-	8L9YwF7mUvv0Uvdqht11g9m1EBaXbpfJZdx+u8pE2A3kBaAOwRq/rEkgjm0iYFHB9g18Cli3yV/
-	AbJ5zVYDyHpxuLBp4zlXR3/rV94Rt7Ds=
-X-Gm-Gg: Acq92OGnises9fKqeHGuW5jeOO/26I5F+6iqUO40CJrdjFyHcy9C0SVVldrE/YUJiMi
-	pOFjx77Gvv71SdmTnQDZST9mMeMtuJB3caUKbgRLpI7SeAvW8UFhbE+r/LM3Q1cboXeAhmvmv+B
-	osCZzkdmq8gdiY/k8V/tZMzt7jDq8ZW7Vw14acJIWxGqqvWJulmr8VJzzxE0IYsQaKNxfw2ZnEB
-	JU9tl4Qw0e9Viz2U44CQ2hhbCgohT5qwQ+z0l0mmsd7XNV1leQNoMKZGNCzmpNWca3Qxu0h83lg
-	FbUlTrd4BAhV07khdLY6ga8=
-X-Received: by 2002:a05:690c:660f:b0:7b7:5f48:d9aa with SMTP id
- 00721157ae682-7c6ad761263mr4513107b3.50.1778618269545; Tue, 12 May 2026
- 13:37:49 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778620179; x=1779224979;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tldKA9Y19SPav5iRpI+W8dNtnr9IWxgUOCs/Hfp0DfE=;
+        b=KXxqxzMavN3e8hRHInuBGrq5iaS1hfPzbcWZEYSPLSRnl2CBRPmygdJsRt1O+By7Ue
+         g4n/gjMUBreYBQZcZvXZwXQlu5iuScoa6YhiGKq81alqQ8I0TmjbOxuUV8CnOH53jlnp
+         iDbN4gj1Tzi3KmFXCH3rNNpYXaGYuQ8cmXGK2hSS660GoP7ppjtuAkFdIRMAl1BV/pGX
+         OJvh2pOC6f58cbzveqUd62pWKutM9Ey84bqLhlgZ4ILMXPWHQ7dValmPn1k6xE9On+zI
+         bTLfgVu+v0tev97TrxYYWkXX0dS7OfYac0zm9Km4+ffk77xzk9zgj38ILQcoZVy/0aXy
+         kjXA==
+X-Gm-Message-State: AOJu0Yzelg2QY9swop4re9luc4gB9UxFK60HsHnUCxBkyZ26wZNVPosK
+	Jalq8G/7Zy+Rv59XsdMIAzuPeJVs0lz7V4+TwTQJ9tOS24g5WMXOcxjE
+X-Gm-Gg: Acq92OG1SGm5WPQbkjAnPiaZqihudFwY0OAcjAVSHIDa2HdPHJdzTRzmNCpfZH0EvKx
+	y6x5NKUeG+y4nkbqeS3Do5x1fAnozqsjLgKHPBls16yntypiz0rE4PKkYGroX7n2DV8IoVOBz92
+	itYWvgHw4R0vGcBsni8X+eebgPlHyu+ZNFca9Rwl0/6bPqFHESmynzG0uXgSuXvgic0SUZgsWWj
+	uG71NhkpsBp5PpjyXk8fUn44wqH08ilP462K9K3aLtNSdxnSQsD1sTMv06dkAEzVOV473j8j2R0
+	8NIoXS2uZr8rgaq7Z++K/rCjhAVEeTV12NU+ncXGfYaOO0hGFass9VgUDh2yhML+P20uypdqFij
+	YKPQu/iJy6dgLESP/OZ6QWFKHq7ZPGY63v/16g3E/0sRDyExuA4epS+DDA/CNkEmr+TDl4a1tDc
+	BHXsU0EHAqMSNJUzl5HS4VuOQHn6Gib+ysWBsOCSQr0x+XfCUNYkze
+X-Received: by 2002:a05:6a20:748f:b0:3a3:21db:8ee8 with SMTP id adf61e73a8af0-3af7fb6dd28mr311449637.1.1778620178922;
+        Tue, 12 May 2026 14:09:38 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c82675fb236sm13144528a12.0.2026.05.12.14.09.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2026 14:09:38 -0700 (PDT)
+Message-ID: <701f9924ff6d13cf948c4ce4527eb866a26950e2.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v4 07/12] bpf: Unify referenced object tracking
+ in verifier
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
+ alexei.starovoitov@gmail.com, 	andrii@kernel.org, daniel@iogearbox.net,
+ memxor@gmail.com, martin.lau@kernel.org, 	mykyta.yatsenko5@gmail.com,
+ kernel-team@meta.com
+Date: Tue, 12 May 2026 14:09:02 -0700
+In-Reply-To: <CAMB2axM8hR=OVqbkbTMJw_ej2pfnEm9Cm-quuoFPqsVhmJxO0g@mail.gmail.com>
+References: <20260506142709.2298255-1-ameryhung@gmail.com>
+	 <20260506142709.2298255-8-ameryhung@gmail.com>
+	 <23140ed4c48babfa8af91f3b67f379773bdc04c1.camel@gmail.com>
+	 <CAMB2axM8hR=OVqbkbTMJw_ej2pfnEm9Cm-quuoFPqsVhmJxO0g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260506142709.2298255-1-ameryhung@gmail.com> <20260506142709.2298255-8-ameryhung@gmail.com>
- <23140ed4c48babfa8af91f3b67f379773bdc04c1.camel@gmail.com>
-In-Reply-To: <23140ed4c48babfa8af91f3b67f379773bdc04c1.camel@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Tue, 12 May 2026 22:37:36 +0200
-X-Gm-Features: AVHnY4KnwsBMhnS_vPcREhSf-Ap5IvPHQJczvldmbXJF_pKdl5DnYDe8W042Crg
-Message-ID: <CAMB2axM8hR=OVqbkbTMJw_ej2pfnEm9Cm-quuoFPqsVhmJxO0g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 07/12] bpf: Unify referenced object tracking
- in verifier
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
-	andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com, 
-	martin.lau@kernel.org, mykyta.yatsenko5@gmail.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 12, 2026 at 12:04=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.co=
-m> wrote:
->
-> On Wed, 2026-05-06 at 07:27 -0700, Amery Hung wrote:
->
-> LGTM, a nit below.
->
-> [...]
->
-> > @@ -8028,14 +8024,13 @@ static int check_func_arg(struct bpf_verifier_e=
-nv *env, u32 arg,
-> >       }
-> >
-> >       if (reg->ref_obj_id && base_type(arg_type) !=3D ARG_KPTR_XCHG_DES=
-T) {
-> > -             if (meta->ref_obj_id) {
-> > -                     verbose(env, "more than one arg with ref_obj_id R=
-%d %u %u",
-> > -                             regno, reg->ref_obj_id,
-> > -                             meta->ref_obj_id);
-> > +             if (meta->release_regno && meta->ref_obj.cnt) {
-> > +                     verbose(env, "more than one arg with ref_obj_id %=
-s %u %u",
-> > +                             reg_arg_name(env, argno), reg->ref_obj_id=
-,
-> > +                             meta->ref_obj.ref_obj_id);
->
-> I think this should be reported from update_ref_obj() itself,
-> it is more consistent logically and also avoids reporting code
-> duplication in check_kfunc_args() and check_kfunc_call().
-> Also, technically the reg_arg_name() is an independent fix.
+On Tue, 2026-05-12 at 22:37 +0200, Amery Hung wrote:
+> On Tue, May 12, 2026 at 12:04=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.=
+com> wrote:
+> >=20
+> > On Wed, 2026-05-06 at 07:27 -0700, Amery Hung wrote:
+> >=20
+> > LGTM, a nit below.
+> >=20
+> > [...]
+> >=20
+> > > @@ -8028,14 +8024,13 @@ static int check_func_arg(struct bpf_verifier=
+_env *env, u32 arg,
+> > >       }
+> > >=20
+> > >       if (reg->ref_obj_id && base_type(arg_type) !=3D ARG_KPTR_XCHG_D=
+EST) {
+> > > -             if (meta->ref_obj_id) {
+> > > -                     verbose(env, "more than one arg with ref_obj_id=
+ R%d %u %u",
+> > > -                             regno, reg->ref_obj_id,
+> > > -                             meta->ref_obj_id);
+> > > +             if (meta->release_regno && meta->ref_obj.cnt) {
+> > > +                     verbose(env, "more than one arg with ref_obj_id=
+ %s %u %u",
+> > > +                             reg_arg_name(env, argno), reg->ref_obj_=
+id,
+> > > +                             meta->ref_obj.ref_obj_id);
+> >=20
+> > I think this should be reported from update_ref_obj() itself,
+> > it is more consistent logically and also avoids reporting code
+> > duplication in check_kfunc_args() and check_kfunc_call().
+> > Also, technically the reg_arg_name() is an independent fix.
+>=20
+> We have kfuncs that have more than one ref_obj. This is not a problem
+> unless ref_obj is referenced in the verification and is ambiguous
+> (e.g., used it to tie the lifetime of the allocated memory with
+> ref_obj). Therefore, it is kept at the location of use instead of
+> update_ref_obj() to prevent breaking existing kfuncs.
 
-We have kfuncs that have more than one ref_obj. This is not a problem
-unless ref_obj is referenced in the verification and is ambiguous
-(e.g., used it to tie the lifetime of the allocated memory with
-ref_obj). Therefore, it is kept at the location of use instead of
-update_ref_obj() to prevent breaking existing kfuncs.
+Ack, thank you for explaining.
 
->
-> > Drop the selftest introduced in 7ec899ac90a2 (=E2=80=9Cselftests/bpf: N=
-egative
-> > test case for ref_obj_id in args=E2=80=9D) since the verifier no longer
-> > complains about ambiguous ref_obj if it is not used.
->
-> On the other hand, if you think that this property is worth having,
-> then maybe wrap the check with in some utility function?
+> >=20
+> > > Drop the selftest introduced in 7ec899ac90a2 (=E2=80=9Cselftests/bpf:=
+ Negative
+> > > test case for ref_obj_id in args=E2=80=9D) since the verifier no long=
+er
+> > > complains about ambiguous ref_obj if it is not used.
+> >=20
+> > On the other hand, if you think that this property is worth having,
+> > then maybe wrap the check with in some utility function?
+>=20
+> A utility function like below makes sense if we fold ref_obj_id into
+> id. It would be too cumbersome for v3 as we may need two of this for
+> ref_obj->ref_obj_id and ref_obj->id.
+>=20
+> static int get_ref_obj_id()
+> {
+>         if (ref_obj->cnt > 1) {
+>                 verifier_bug(env, "function expects only one
+> referenced object but got %d\n", ref_obj->cnt);
+>                 return -EFAULT;
+>         }
+>         return ref_obj->id;
+> }
 
-A utility function like below makes sense if we fold ref_obj_id into
-id. It would be too cumbersome for v3 as we may need two of this for
-ref_obj->ref_obj_id and ref_obj->id.
+Maybe just like this:
 
-static int get_ref_obj_id()
-{
-        if (ref_obj->cnt > 1) {
-                verifier_bug(env, "function expects only one
-referenced object but got %d\n", ref_obj->cnt);
-                return -EFAULT;
-        }
-        return ref_obj->id;
-}
+  static void validate_ref_obj(struct ref_obj_desc *d) { ... }
 
->
-> >                       return -EACCES;
-> >               }
-> > -             meta->ref_obj_id =3D reg->ref_obj_id;
-> > -             meta->id =3D reg->id;
-> > +             update_ref_obj(&meta->ref_obj, reg);
-> >       }
-> >
-> >       switch (base_type(arg_type)) {
->
-> [...]
+?
