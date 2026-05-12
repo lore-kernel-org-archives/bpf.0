@@ -1,54 +1,54 @@
 Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B80D3C13FF
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 05:36:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E857A3B6C03
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 05:36:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778564173; cv=none; b=HeiTJV+1Go+AixuFKNYSY6ue6P9rpJf3QAlC5D9/vJVE0gWok36fLoLDB1WcuVfJLwnWUnR6EF8L4UGZZNed0P7D+9QaHEBnvd0e+itZAaqzv3sCZw8VJWU2QqYKT5HGIN838Jku/Xz2zibclGlt85rla/QwGHEm98Q451mx0YE=
+	t=1778564174; cv=none; b=k3zSMrOIvhD6oU3rgFFxZf5cxnDr1IMpWx7PVvljo2bdMfUoFN317/+20CXJI7pv5Y+x1fou99M4m0p8OO3FsPiQ/fUJqKEC7JjxqcY40VvJ3wlE7T6jbp7BVs0FC4hPe0I9yHiYhkixq6IIdzl4gk2SBIMr7A1V0jpha9cXSv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778564173; c=relaxed/simple;
-	bh=dXwLegb16bAA2QZUdEs8E+I+y3aG8fUQ/IeCoSTD22w=;
+	s=arc-20240116; t=1778564174; c=relaxed/simple;
+	bh=WzDIAj5ts6rXROpkwRIYNgahYvSgyAOMZLI2YVAtrrc=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XvV5kkiUQXaI375j+i8rd/mSI1Vs/6V6LS9eteyT0ZKr56OwNJjh2nJdceZJGFFkFQbdCVN4SRymExsOe1dBJkbpugFeVmA8hZjhxVRnZ+PX8ZnsV4NeGGOpeG8fSgGO1+uWiIMckdusbb2aoAadMp11ZHW8Eqo46Ui1KagHTVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GqHQBo0d; arc=none smtp.client-ip=74.125.82.201
+	 To:Cc:Content-Type; b=P6EEHmkNsWsXIqRpasFDbJ8j0R1wq+2hbTuJGOAc9ptKMJCaMAP1uk/+9r4lyMcJGqwKx3ofxINnTUVMSbiDALk0WMsCpxApL7Fd86+VkI5NQpwI5AkuhcMES7PcORb3UiMZN2buqGycGaf+9Pek6vr7/03mbeKXBKGXYcIOb6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cYI+o7c8; arc=none smtp.client-ip=74.125.82.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GqHQBo0d"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2fded513994so5609958eec.1
-        for <bpf@vger.kernel.org>; Mon, 11 May 2026 22:36:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cYI+o7c8"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2f3ec2e8d07so7999578eec.1
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 22:36:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778564166; x=1779168966; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1778564168; x=1779168968; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7eMv9vVl9kPkB1b964FI4KWr9nwoYDhI53YZ3Ct1D2E=;
-        b=GqHQBo0dK3PX8AxisIHGBNmT2aWE7RczvrjEolLcIFNdFxocDteGB20+KzOr1XMzXE
-         67/uONgNt0FcglpAmqhdFObt7zo36wC8RnCqFjEWxDkE+NxoEfQlS5YnOLa6Fx4dLsoa
-         rnzdxcr/K6KB8gBiLPyR4PoPfP3JYzL73gf4tOGU4e8I30sSLP7PSxwkrZEoVR3uiORU
-         ONBkRGvfiYpX8BviYxq0YiBrEsShMcOhfN3EGXOGQd4JbUvnS35Z5HWfI//QScrkCJi9
-         6hi3txeW2OrdV4DL8SpGw/TP8wvDWCODvBbBJIPhQ68UNLOFm4XcFwAZhRzEy7YopmWb
-         hrOA==
+        bh=L9dBs+WDjU005ooWLdgCY5o651CTBGhH8LJU6DbXqZc=;
+        b=cYI+o7c8IihlMnK/oipDmVJV/e+71M+JL0Hu+pIz/yKAwGYBD5Xy+aIsPJyDDTMnw3
+         UOrMRlW/zlWvUbdlcRyWDaEGzzZeJMkX5N4SkJYLUzbn0GS5KdGi/Ma1YSVEAKSOn4VW
+         AyruAJY/JdmqMH5SWbxeBAaJ+9BYjKhvXl2jVbmGyhtHR+3dsg9J8kfiL8o0tjFlg2wo
+         JAf7pEh8VprgDTxgiTIZvF39MUTyuOmKtgafSq3ZbZgtgtpDapLUiumFf09Xn5UIDSXl
+         4aHV2cvElRXKkaWX1Nd1ZPFnc+QibR0mS+l/m8QDmzY5XuGIR78IB3+OTaJWERplLkKS
+         wm1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778564166; x=1779168966;
+        d=1e100.net; s=20251104; t=1778564168; x=1779168968;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7eMv9vVl9kPkB1b964FI4KWr9nwoYDhI53YZ3Ct1D2E=;
-        b=Gt95FMrlyXgzpL/RNdhr2uRhWN9pxaRJ7DRLzvLc3u9YItyuZPs0NGrSP213SHpuTg
-         sE537tQlFvIN3SUS7aEcZrqaYzKoJaCkcu6EtDv/OpAqpbl4aOzFpA5F8rDKu1nhosUz
-         3uoCLqNUBosvwdMEMOw7T2D1wDl5LzoFOLH2xJgCfTSSLcdeiAVfUQp/5iWBI1TbQC2X
-         gBwUII6hDS6LJcW417g/YSx55rMAf44wc9T6GG80Qo5sEbuuSi+OOMXC7IxlYJb7mppP
-         v1qPkIc5RYphlNZsvSC+NTrEMI9nzT9E0RW34yK017iYDP0GqcNDmJw1Pf/QEqwQCPV9
-         irng==
-X-Forwarded-Encrypted: i=1; AFNElJ9LnvzDXRPSpPK04fBUxbwW99jm7NC3eSmUq4tt4REy/Kx0HvNOBUM2weHgUrFyGlWZWic=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAEYMemPva5l+uDXvBL4O2dfhF+C+tSeYEwnFC/v9ceTwvh1AB
-	TcEICi5p0LcyZHMz6JN54W3EKldriRgXqj+f2rB7bK7AXD2YPSxIfcRR/GEsfR41cRDDYw2DJsJ
-	iUBQRYXdipg==
-X-Received: from dybgz3.prod.google.com ([2002:a05:7301:2603:b0:2cc:a1bf:2dd9])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:2c01:b0:2ce:f3d7:221
- with SMTP id 5a478bee46e88-2f54c97183cmr15002168eec.17.1778564166099; Mon, 11
- May 2026 22:36:06 -0700 (PDT)
-Date: Mon, 11 May 2026 22:35:33 -0700
+        bh=L9dBs+WDjU005ooWLdgCY5o651CTBGhH8LJU6DbXqZc=;
+        b=gmeseg/foYrD0uxKltsgsX/CUhW7dlwrlnmoOG0mdTwrr/SB4WSjrVzDX+9+89co5s
+         Cvrep4gaBs/hFEchh3kPzPifqamwL5SmAAQWNLD6potctD6SdsYDLVx74XpYVdGh8ERF
+         7jDdRY5kGPgA7MmBhi3X28dC+rApdHyWkjuFF4BQZyecB2yKvb6LfbEJGpWSSMvyMA4M
+         uv1QOc2ALHFUXnt3Dj3MSk6rgwegrUqxTNBU8ASdaO1CGkmhdJEfPomtE/sHtClvXaCQ
+         ZWNLPoLGrp5ENP5Hx/GB5S3QlrKmW/rCLkSzHLIj1PUsEv2tiP7lgdXYjso5vOvJjgIF
+         q6/w==
+X-Forwarded-Encrypted: i=1; AFNElJ9L4eZFy3x/6a+/A2G3ByaJQJoa8hmlJ1iFEXJz0BghLef5lrvz4AjJlXNfelkgIAAhWcQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZbnACc3TWt+FGgqvhw9scpWXnuHeaT+bvr9H+9eh8jLFxTGTF
+	jIfnz+wqE7+hz9ZquNo8J/CARmsAvc0L/aTiMIMk4QdEf6FWp8MYXWWTxmYk10q/mWHdO23Z/Ay
+	KiA76jltlTA==
+X-Received: from dlan22-n1.prod.google.com ([2002:a05:7022:eb56:10b0:12d:bcd0:59a4])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:ba3:b0:12d:de3e:86ad
+ with SMTP id a92af1059eb24-13271ec7606mr9491101c88.43.1778564167774; Mon, 11
+ May 2026 22:36:07 -0700 (PDT)
+Date: Mon, 11 May 2026 22:35:34 -0700
 In-Reply-To: <20260512053539.3410189-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,9 +58,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260512053539.3410189-1-irogers@google.com>
 X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260512053539.3410189-9-irogers@google.com>
-Subject: [PATCH v1 08/14] perf build: Pre-generate BPF skeletons during
- umbrella prepare phase
+Message-ID: <20260512053539.3410189-10-irogers@google.com>
+Subject: [PATCH v1 09/14] perf build: Move libsymbol dependency out of prepare step
 From: Ian Rogers <irogers@google.com>
 To: Quentin Monnet <qmo@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -83,83 +82,50 @@ To: Quentin Monnet <qmo@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
 Cc: Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Currently, BPF skeleton generation rules (bpf_skel.mak) are evaluated as
-part of util/Build. However, because LIBPERF_UTIL_IN explicitly depends
-on the top-level static libbpf archive, Make completely blocked the
-execution of bpftool bootstrap and skeleton generation until libbpf
-finished compiling midway through the build.
-
-Since bpftool bootstrap compiles its own independent copy of libbpf.a, it
-does not depend on the top-level libbpf target.
-
-Decouple early skeleton tooling generation by attaching bpf-skel-prepare
-to the umbrella prepare target, exporting CONFIG_PERF_BPF_SKEL to ensure
-accurate feature propagation. This allows Make to compile bpftool and
-dump vmlinux.h in the background at build startup, eliminating the initial
-sub-make startup bottleneck before BPF object compilation while keeping
-100% of tooling rules perfectly encapsulated in bpf_skel.mak. Provide an
-empty fallback target to ensure builds succeed when BPF skeletons are
-disabled.
+The prepare step is a large serialization point before parallel
+sub-makes build the perf tool. The libsymbol headers are used in the
+bench and util libraries. Move the libsymbol dependency out of the
+prepare step and into the dependencies for those targets to avoid it
+being a source of serialization in the prepare step.
 
 Assisted-by: Gemini:gemini-3.1-pro-preview
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.perf | 6 +++++-
- tools/perf/bpf_skel.mak  | 8 ++++++++
- 2 files changed, 13 insertions(+), 1 deletion(-)
+ tools/perf/Makefile.perf | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 5af767415c11..df68d29ecab7 100644
+index df68d29ecab7..d2e673d5e5be 100644
 --- a/tools/perf/Makefile.perf
 +++ b/tools/perf/Makefile.perf
-@@ -275,7 +275,7 @@ ifeq ($(PYLINT),1)
- endif
+@@ -558,7 +558,7 @@ $(LIBPMU_EVENTS): $(LIBPMU_EVENTS_IN)
  
- export srctree OUTPUT RM CC CXX RUSTC CLANG LD AR CFLAGS CXXFLAGS RUST_FLAGS V BISON FLEX AWK LIBBPF READELF
--export HOSTCC HOSTLD HOSTAR HOSTCFLAGS SHELLCHECK MYPY PYLINT
-+export HOSTCC HOSTLD HOSTAR HOSTCFLAGS SHELLCHECK MYPY PYLINT CONFIG_PERF_BPF_SKEL
+ # The $(LIBPERF_UTIL) dependency is to ensure bpftool and vmlinux.h
+ # aren't racily built for bench/bpf_skel/bench_uprobe.bpf.c
+-$(LIBPERF_BENCH_IN): FORCE prepare $(LIBBPF) | $(LIBPERF_UTIL)
++$(LIBPERF_BENCH_IN): FORCE prepare $(LIBBPF) $(LIBSYMBOL) | $(LIBPERF_UTIL)
+ 	$(Q)$(MAKE) $(build)=perf-bench
  
- include $(srctree)/tools/build/Makefile.include
+ $(LIBPERF_BENCH): $(LIBPERF_BENCH_IN)
+@@ -576,7 +576,7 @@ $(LIBPERF_UI_IN): FORCE prepare
+ $(LIBPERF_UI): $(LIBPERF_UI_IN)
+ 	$(QUIET_AR)$(RM) $@ && $(AR) rcs $@ $<
  
-@@ -629,8 +629,12 @@ endif
- __build-dir = $(subst $(OUTPUT),,$(dir $@))
- build-dir   = $(or $(__build-dir),.)
+-$(LIBPERF_UTIL_IN): FORCE prepare $(LIBBPF)
++$(LIBPERF_UTIL_IN): FORCE prepare $(LIBBPF) $(LIBSYMBOL)
+ 	$(Q)$(MAKE) $(build)=perf-util
  
-+bpf-skel-prepare:
-+	$(Q)$(MAKE) -f bpf_skel.mak bpf-skel-prepare
-+
- prepare: $(OUTPUT)PERF-VERSION-FILE \
- 	arm64-sysreg-defs \
-+	bpf-skel-prepare \
+ $(LIBPERF_UTIL): $(LIBPERF_UTIL_IN)
+@@ -637,8 +637,7 @@ prepare: $(OUTPUT)PERF-VERSION-FILE \
+ 	bpf-skel-prepare \
  	$(LIBAPI) \
  	$(LIBPERF) \
- 	$(LIBSUBCMD) \
-diff --git a/tools/perf/bpf_skel.mak b/tools/perf/bpf_skel.mak
-index ded578b9570c..c4340a218323 100644
---- a/tools/perf/bpf_skel.mak
-+++ b/tools/perf/bpf_skel.mak
-@@ -16,6 +16,10 @@ BPFTOOL := $(SKEL_TOOL_TMP_OUT)/bootstrap/bpftool
- VMLINUX_H := $(SKEL_TOOL_OUT)/vmlinux.h
- bpf_skel_deps := $(BPFTOOL) $(VMLINUX_H)
+-	$(LIBSUBCMD) \
+-	$(LIBSYMBOL)
++	$(LIBSUBCMD)
  
-+.PHONY: bpf-skel-prepare
-+bpf-skel-prepare: $(bpf_skel_deps)
-+	@:
-+
- define get_sys_includes
- $(shell $(1) $(2) -v -E - </dev/null 2>&1 \
-        | sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
-@@ -94,6 +98,10 @@ $(SKEL_OUT)/%.skel.h: $(SKEL_TMP_OUT)/%.bpf.o $(BPFTOOL)
- 
- .PRECIOUS: $(SKEL_TMP_OUT)/%.bpf.o
- 
-+else # CONFIG_PERF_BPF_SKEL
-+.PHONY: bpf-skel-prepare
-+bpf-skel-prepare:
-+	@:
- endif # CONFIG_PERF_BPF_SKEL
- 
- clean:
+ $(OUTPUT)%.o: %.c prepare FORCE
+ 	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=$(build-dir) $@
 -- 
 2.54.0.563.g4f69b47b94-goog
 
