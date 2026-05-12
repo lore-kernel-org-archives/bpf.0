@@ -1,207 +1,108 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4DE9224AF2
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 03:19:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A675330BF4F
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 03:25:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778555985; cv=none; b=cCAiRdSDYD+PGGHyJm4LYSlMJtGCe/uTvR5W8Je4NIAhg0Onh1rG49mjn9AvfcBYHBa+7zPTJOWDYDejpWTB2ofEXzfUhHAzQNM9WsDozcGAsqYZlU72aGSkss1M42RU9J9pdHrnu/a0VGK2PpB6yDXZUZsVtgDawPEhqef2+Nw=
+	t=1778556308; cv=none; b=kD9+q3uehXuTLqjky7q7l9wjErcbcbd8rXUmxDrfuKxyEk9UIPHNBp066ItOLQbf0/CCKBu06dZS4/05lBt5ln0515oj9h21FM2ks9zqnlAGeAXPK6yovtb5d2AAb+q3MO1DkVsOUdPGWjrVh72MtXQV7138gBvE5N45FbF0VU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778555985; c=relaxed/simple;
-	bh=medTpp1+ubZpLW7u98bqsr2y6jOcsxNAzaUI1c08Iuc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TYbgYV90NjdahrgoLFU8BGGjJsWPfO3KEU4WHva0EMncHs+jkBwYnBM3wpuPMQvGxPNhQo/RH+7FrAe/e5PG3R4oumFwIIOr6cT6XT9JwY/8iJCtPBXifsJlkRn09WFKgLUHTp8m5R7lDRQtpN6LG89rrEugYLcylv9Bh+hEvjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vBnVpV0C; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778556308; c=relaxed/simple;
+	bh=lUvCSX7+f/zvgszpi8kv9Vx76od+XjPpIa3nZHTbWlk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=HKSRx+VdQlQ6e1UWwNOOTtFLnm1rFiUDJGD4/aMR7MRwjGBrqOzBdyGPfMato5KL36TggRVirxe2uSUxARGxXFz9cNDj+MhELzYw+haQn+mvdB9JAr7aqN3lQZ83CfuOsV8EVgNBhypORgmNivJ/+lchaSQ2Ukq5F8V5hWtS+y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nMe15h3K; arc=none smtp.client-ip=209.85.160.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vBnVpV0C"
-Message-ID: <a439f19e-1a47-46ce-8a2c-c53c9f038b8d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778555982;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FD4CnqGDwmMzl090mnvOF6QJvwtEtyPI+rqx4RMQuS4=;
-	b=vBnVpV0C/HQfSTpHPp6vWgYOyaPQWy568oiEyuU9XGlcd1bSfOnbzE2bzH9t9dBfwXlqnV
-	lY+a5vwrw/1F6O2/OdHzgWBw7I3kPExvu9Pdbp8Ho2wxKaDGxReMkIPLkxNLyAUBXFjm7X
-	PA11qhizZkc9mwYPet0s6OXFbsbyMa0=
-Date: Tue, 12 May 2026 11:18:49 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nMe15h3K"
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-439acb393f7so64428fac.1
+        for <bpf@vger.kernel.org>; Mon, 11 May 2026 20:25:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778556306; x=1779161106; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lUvCSX7+f/zvgszpi8kv9Vx76od+XjPpIa3nZHTbWlk=;
+        b=nMe15h3Kt/F1xKQNjMUk6LObJ5LuFYo5QiY/NkyxxEYuylqMPZx/SkvmaIJKbxPEmV
+         gxr0XYumy5XuLF+ehZB9xiddLFaH2qhNa7U354IFnA117426oG8AwEzC2pMirc2Y7L2U
+         P2Co3+7XzwLll1Hk0ebQ/OuJo1UYTtiL5RmumQTAGEeQ0d+ef0Rc+QRFI+XI+wQiNUKw
+         M3dbFrplInf4HzFVPf3y6YGpGIHOOIBcZ6zlwSR5vfPjo1y+znvrchAJ6yj1b/CHzB2W
+         +BgDDl1pmSvNW3kbqE6mfROqUbceJS1NeeahDOFNU+CWe5RHenud7XDUAHp0ejel65Bl
+         mAGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778556306; x=1779161106;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lUvCSX7+f/zvgszpi8kv9Vx76od+XjPpIa3nZHTbWlk=;
+        b=rJKRcQ7ayyXcupFlzSe45OJY58CLabH++W1ziuHk/RsFgpFbnInMvbT5fOLHYfTV5r
+         EQwZldj0qhnI9z2oNZ6+Sl12qQOzAXYilCU/xUQlLx9NJAlXwX63mciqUbC3VuLhg7/H
+         6PQ7k1L7TqMOTUwPjZgzqh9phIVGL1XJRwaILoUf7wgK9oz6GU5i8c+29S47Ifhoi6Be
+         1mnH9N9c+o8i3NKnl99mhedR7Be1PrMgM7vInxD4oPViiQAOy4qFSkfVp7SFheJss8PS
+         PZImbFUyxuDe9QWJQTrLtGd8U6Fn3oQXczhHW8duZVJazUtezSI38HYwBLjujV5686W6
+         9+HA==
+X-Forwarded-Encrypted: i=1; AFNElJ8HWlqwkPy37jVseZY3p0LdbAwjz4FhDOqkQkdkDLczGl+06KDVrxLaaFpaJFKhArLSuHI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYSjkTnSYaNyPRiy+Yhf/lcI63+aTzQWwOOfeWDE9w7NTncjbV
+	ARaylts2sUHrC0CXQRyTA4JPmmj/PF664FEhG1NuISlcabJnTmsrTcIF
+X-Gm-Gg: Acq92OGKMh0a8LwPBLm/7mA9XNpo0VgFUU4aAl5kIH2s7xz7i8U1j06JY2HgM44W+mB
+	6tl5f1cCtM1j0oahSthy3lhrRu3kyRuFxvrl1ZGvYcnLCo55/Mug7L7mn4AFLpbzxGiY2YkcyYt
+	xfeeCQELDMqQpM4fVJXbCQTtZ4kQbWjFxFuOHrVwRytOXufgyM6RLCiaxhZEReSPIZRy16x3iJp
+	gQVDdKVhbQ47DrV1QqZLoWCexaE4eBOXS2EvNeIVCWT3EW0VIMMsPQKtI4xfM4cHeXP875yCXAF
+	HnuYNvGpbhOffHp21XiNT9bA07PsQyYNtWzsDZD2nYU/z9QF8Rlh6XudfW876w27Vz3lEvUG9rA
+	QJVxJkIOiboNyhuPaoXMK0BNQQQaOdSEH3BjScL3Dv3659f1w22ph+BDMq1YbSYPbmKQ90nmxAL
+	xcimYW1QwMLMM5+JQoSrTsNKcI0GMVzZOp2GV9CJRUlIeOZh9HmJMI3C/6DFvjxEeMsyQutns1o
+	tFqESCG5+7xfaztqA==
+X-Received: by 2002:a05:6820:2212:b0:694:8bfa:7819 with SMTP id 006d021491bc7-69998cafb9emr14905097eaf.13.1778556306125;
+        Mon, 11 May 2026 20:25:06 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:43::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-435570ad92dsm11696175fac.2.2026.05.11.20.25.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 May 2026 20:25:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH V2 1/2] tools/lib/bpf/libbpf: Prioritize module kfuncs
- over vmlinux kfuncs
-To: Song Chen <chensong_2000@126.com>
-Cc: bpf@vger.kernel.org, martin.lau@linux.dev, alexei.starovoitov@gmail.com,
- jolsa@kernel.org, haoluo@google.com, kpsingh@kernel.org, song@kernel.org,
- linux-kernel@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
- andrii@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
- john.fastabend@gmail.com, sdf@fomichev.me
-References: <20260510030136.27876-1-chensong_2000@126.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kaitao Cheng <kaitao.cheng@linux.dev>
-In-Reply-To: <20260510030136.27876-1-chensong_2000@126.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Date: Mon, 11 May 2026 20:25:03 -0700
+Message-Id: <DIGDLA5275AR.128FTQMU7Z8S3@gmail.com>
+Cc: "Tejun Heo" <tj@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "David Vernet" <void@manifault.com>, "Andrea Righi"
+ <arighi@nvidia.com>, "Changwoo Min" <changwoo@igalia.com>,
+ <bpf@vger.kernel.org>, <sched-ext@lists.linux.dev>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 2/9] bpf/arena: Add BPF_F_ARENA_MAP_ALWAYS for
+ direct kernel access
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>
+X-Mailer: aerc
+References: <20260427105109.2554518-1-tj@kernel.org>
+ <20260427105109.2554518-3-tj@kernel.org>
+ <CAP01T76jRW0sjkzebSvDKy+AK-fh7hq+0zhDcP7oLGcg_qxOfA@mail.gmail.com>
+ <DIGBW43UUKDX.1H7FT7A9JDOOT@etsalapatis.com>
+ <CAP01T77_Lgfj8yX6JtErGES9icebqygDUZT-wzXq9UV6JGugYA@mail.gmail.com>
+In-Reply-To: <CAP01T77_Lgfj8yX6JtErGES9icebqygDUZT-wzXq9UV6JGugYA@mail.gmail.com>
 
+On Mon May 11, 2026 at 7:43 PM PDT, Kumar Kartikeya Dwivedi wrote:
+>
+> If not, the best course to me seems to be to make the flag behavior
+> default, and just rely on ASan (and Rust in the future) to prevent any
+> memory safety issues, and drop the stream based feedback on fault,
+> etc.
 
-
-在 2026/5/10 11:01, Song Chen 写道:
-> Change the kfunc resolution order in find_ksym_btf_id() to search
-> module BTFs before vmlinux BTF. This allows kernel modules to override
-> vmlinux kfuncs with the same name, enabling a form of live-patching
-> for kfuncs.
-> 
-> Previously, vmlinux kfuncs were always preferred, making it impossible
-> for modules to provide enhanced or fixed versions of existing kfuncs.
-> With this change, modules can now override kernel kfuncs, while
-> programs that don't use module BTFs remain unaffected.
-> 
-> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> Signed-off-by: Song Chen <chensong_2000@126.com>
-> 
-> ---
-> changelog:
-> v1 -->  v2:
-> 1, introduce namespace to specify which module the kfunc belongs to, like:
-> modulea__foo
-> moduleb__foo
-> foo
-> As a result, kfunc foo can co-exist in modulea, moduleb and vmlinux, ebpf
-> code owner can specify which one he wants to call.
-> ---
->  tools/lib/bpf/libbpf.c | 60 +++++++++++++++++++++++++++++++-----------
->  1 file changed, 45 insertions(+), 15 deletions(-)
-> 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 0be7017800fe..9c9e5ff4d754 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -8532,35 +8532,65 @@ static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
->  	return libbpf_kallsyms_parse(kallsyms_cb, obj);
->  }
->  
-> +static void split_module_from_ksym(const char *ksym_name,
-> +			const char **module_name,
-> +			size_t *module_name_len,
-> +			const char **kfunc_name)
-> +{
-> +	const char *sep = strstr(ksym_name, "__");
-> +
-> +	if (!sep) {
-> +		*module_name = NULL;
-> +		*module_name_len = 0;
-> +		*kfunc_name = ksym_name;
-> +	} else {
-> +		*module_name = ksym_name;
-> +		*module_name_len = sep - ksym_name;
-> +		*kfunc_name = sep + strlen("__");
-> +	}
-> +}
-
-I don't think overloading "__" in ksym_name is safe.
-
-1. "__" itself is very common in kernel symbol names. Forcibly
-   treating the first "__" as the separator between the module name
-   and the kfunc name is seriously ambiguous. We cannot rule out
-   existing kfuncs, either defined by a module or by the core kernel,
-   whose names already contain "__".
-
-2. ksym_name is not used only locally inside find_ksym_btf_id(). If
-   ext->name / ext->essent_name becomes inconsistent with the actual
-   kfunc name, it may affect other code paths as well.
-
-It seems that there are two problems to solve here:
-
-1. Allowing kernel modules to override vmlinux kfuncs with the same
-   name.
-
-   This should be relatively straightforward to implement by matching
-   names in kernel modules first, and then falling back to vmlinux.
-
-2. Handling the case where different kernel modules have kfuncs with
-   the same name.
-
-   Could we use a new libbpf API to establish the mapping manually?
-   for example:
-       bpf_object__set_ksym_btf(obj, "kfunc_name", "module_name")
-
-   Or define a new attribute, for example:
-       extern void kfunc_name(void) __ksym __module("module_name");
-
-   We probably need to hear suggestions from other developers on this.
-
-Note: Adding the module name as a prefix to the kfunc name is
-technically feasible, but it has significant historical compatibility
-issues, which are hard to solve.
-
->  static int find_ksym_btf_id(struct bpf_object *obj, const char *ksym_name,
-> -			    __u16 kind, struct btf **res_btf,
-> -			    struct module_btf **res_mod_btf)
-> +			__u16 kind, struct btf **res_btf,
-> +			struct module_btf **res_mod_btf)
->  {
->  	struct module_btf *mod_btf;
->  	struct btf *btf;
-> -	int i, id, err;
-> +	int i, id = 0, err;
-> +	const char *module_name;
-> +	const char *kfunc_name;
-> +	size_t module_name_len;
-> +
-> +	split_module_from_ksym(ksym_name, &module_name, &module_name_len, &kfunc_name);
-> +	if (module_name_len == 0)
-> +		goto search_vmlinux;
->  
-> -	btf = obj->btf_vmlinux;
->  	mod_btf = NULL;
-> -	id = btf__find_by_name_kind(btf, ksym_name, kind);
->  
-> -	if (id == -ENOENT) {
-> -		err = load_module_btfs(obj);
-> -		if (err)
-> -			return err;
-> +	err = load_module_btfs(obj);
-> +	if (err)
-> +		goto search_vmlinux;
->  
-> -		for (i = 0; i < obj->btf_module_cnt; i++) {
-> -			/* we assume module_btf's BTF FD is always >0 */
-> -			mod_btf = &obj->btf_modules[i];
-> +	for (i = 0; i < obj->btf_module_cnt; i++) {
-> +		/* we assume module_btf's BTF FD is always >0 */
-> +		mod_btf = &obj->btf_modules[i];
-> +		if (strlen(mod_btf->name) == module_name_len &&
-> +			!strncmp(mod_btf->name, module_name, module_name_len)) {
->  			btf = mod_btf->btf;
-> -			id = btf__find_by_name_kind_own(btf, ksym_name, kind);
-> +			id = btf__find_by_name_kind_own(btf, kfunc_name, kind);
->  			if (id != -ENOENT)
-> -				break;
-> +				goto found;
->  		}
->  	}
-> -	if (id <= 0)
-> +
-> +search_vmlinux:
-> +	btf = obj->btf_vmlinux;
-> +	mod_btf = NULL;
-> +	id = btf__find_by_name_kind(btf, ksym_name, kind);
-> +	if (id == -ENOENT)
->  		return -ESRCH;
->  
-> +found:
->  	*res_btf = btf;
->  	*res_mod_btf = mod_btf;
->  	return id;
-
--- 
-Thanks
-Kaitao Cheng
-
+Agree that this needs to be new default without new uapi flags.
+How about we tweak the idea further.
+Let all arena pages be unmapped initially. bpf progs will fault
+on them and will be reported via bpf_streams.
+But we also prepare one "scratch page". Let's use this name,
+since "garbage page" reads too dirty.
+When kernel faults we populate pte with that scratch page
+and let the kernel code retry.
+To implement it the page_fault_oops() can have a callback
+into bpf/arena helper similar to kfence_handle_page_fault.
+If fault address is in arena, do kfence_unprotect()-like.
