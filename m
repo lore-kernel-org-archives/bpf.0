@@ -1,32 +1,32 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B8A406290
-	for <bpf@vger.kernel.org>; Tue, 12 May 2026 05:59:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 244BE41B374
+	for <bpf@vger.kernel.org>; Tue, 12 May 2026 06:00:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778565603; cv=none; b=dirOcudhfaLKo/w5KDTQawg5VTYKK4EsqSikjNoqVtrjoxAalN8ZeqlKmTMufHbvI4CtYXGEY9aqwlLaJ8Vv2IV1zJcTs/Ex1Epo+XoZwhn8+41uiCflpRry4bJ85GfPaYBK3aMm0n9Cfux5dgap3BQpT3sQ7/GIAJ/fCVrLN0U=
+	t=1778565607; cv=none; b=GqjvkCjqFBka5ZuxFbZ7D2g9QTBqEIC9s8/EhAn3DHRMK5PzlZwxHICgN8JK+yNzbUiqaO+XuqKNQ53/s5V0hVyMoyWT47i/6eC8H380U0U45htCzPpiQyD/+bn1Ufw8sg15TZNwSe42FTDghBzZsTMFRNpfddxa02TiG8Iai04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778565603; c=relaxed/simple;
-	bh=MOXXlwv5+jPHoFenwU0Df/VSUFEVmpOCvtOJ2sq+C0A=;
+	s=arc-20240116; t=1778565607; c=relaxed/simple;
+	bh=5p64GKPG5304730wA3md9aMwwm3p5LHhf4Lb7/Btios=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sEI6oPL9/8KczhRcpyNlI1ua9KFxxQ8bfVZexdcdMMrXoI+kDSSIe9XNC8nnVjc4TJN5cBqnPC6wmDwwy0MzUPscLt4YYR1A0J6/etOhDm+Ucjy/upwzf9XBWwult7WvsULtuSKG0z1ng15qkkLobMXWkseNnSl6Y+LsM/4K1DY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=D6Atz+E7; arc=none smtp.client-ip=91.218.175.179
+	 MIME-Version; b=DfPLmi2nBg9xGFnMXxyT72iE9D3dWfnSvuULDQdOiHpqERLJaOGm0HVgSwJ1vjGLsyLuFjSpFjR74sz++JJTZ/IgZ05YAzjdDiutI2XXmZ3MPhCTPSeEhDG0+fFUGEt4qB8l1Roo1L9JgrvH80HsnRioGYVZRjn5FjV2+8t73Wo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=d9U7gtdP; arc=none smtp.client-ip=91.218.175.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="D6Atz+E7"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="d9U7gtdP"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778565586;
+	t=1778565600;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pCpRvT4uR2xbcKg4iuq0VJjzAy9PY+FmlCoNRTQS6mc=;
-	b=D6Atz+E72y/TXC6e0lOQNHzZwA2GKySFNMXqOoxxsTalmaRRb0Ebs3KjT+0Zl/44bS4YSh
-	u81afk/E93ByxiZPD1PtcG25NheEezEMAo9mbG4EN0dRESz3IeAjIYSoB4Y0G5481LEjn4
-	Tf/ebBXaRcxFGUHeSh8AQduJilv+s8k=
+	bh=WUwkb+rVEVAyaI4tzJled16qKyxWqmXsFV4GgQBJAAI=;
+	b=d9U7gtdPQe3MaUuT7FdIdky8oB6KYMLPQEoCT+V7jSCI5PMoDFbfCR8bxfM0SYWoQP3C/i
+	R2souKj7JPydRPG91BHoZEDuQczG96WjQH1Md0WZiP1LXvickLzikhpXR10Pe1cGQm4reo
+	tH4U8osKMq3KmlM+zPe3HkMInNHzNoQ=
 From: Kaitao cheng <kaitao.cheng@linux.dev>
 To: ast@kernel.org,
 	corbet@lwn.net,
@@ -50,9 +50,9 @@ Cc: bpf@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	vmalik@redhat.com,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH RESEND bpf-next v10 2/8] bpf: clear list node owner and unlink before drop
-Date: Tue, 12 May 2026 13:59:13 +0800
-Message-ID: <20260512055919.95716-3-kaitao.cheng@linux.dev>
+Subject: [PATCH RESEND bpf-next v10 5/8] bpf: Add bpf_list_add to insert node after a given list node
+Date: Tue, 12 May 2026 13:59:16 +0800
+Message-ID: <20260512055919.95716-6-kaitao.cheng@linux.dev>
 In-Reply-To: <20260512055919.95716-1-kaitao.cheng@linux.dev>
 References: <20260512055919.95716-1-kaitao.cheng@linux.dev>
 Precedence: bulk
@@ -66,67 +66,99 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-When draining a BPF list_head, clear each node's owner pointer while still
-holding the spinlock, so concurrent readers always see a consistent owner.
+Add a new kfunc bpf_list_add(head, new, prev, meta, off) that
+inserts 'new' after 'prev' in the BPF linked list. Both must be in
+the same list; 'prev' must already be in the list. The new node must
+be an owning reference (e.g. from bpf_obj_new); the kfunc consumes
+that reference and the node becomes non-owning once inserted.
 
-Delink each node with list_del_init() before calling __bpf_obj_drop_impl(),
-preventing subsequent users who hold a reference count to the node from
-acquiring an invalid next node.
+We have added an additional parameter bpf_list_head *head to
+bpf_list_add, as the verifier requires the head parameter to
+check whether the lock is being held.
+
+Returns 0 on success, -EINVAL if 'prev' is not in a list or 'new'
+is already in a list (or duplicate insertion). On failure, the
+kernel drops the passed-in node.
 
 Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
 ---
- kernel/bpf/helpers.c | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+ kernel/bpf/helpers.c  | 11 +++++++++++
+ kernel/bpf/verifier.c | 12 +++++++++---
+ 2 files changed, 20 insertions(+), 3 deletions(-)
 
 diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 9cd7b028592c..1e8754877dd1 100644
+index 5388078f3171..2b8e8d4284a5 100644
 --- a/kernel/bpf/helpers.c
 +++ b/kernel/bpf/helpers.c
-@@ -2247,10 +2247,11 @@ EXPORT_SYMBOL_GPL(bpf_base_func_proto);
- void bpf_list_head_free(const struct btf_field *field, void *list_head,
- 			struct bpf_spin_lock *spin_lock)
- {
--	struct list_head *head = list_head, *orig_head = list_head;
-+	struct list_head *head = list_head, drain, *pos, *n;
- 
- 	BUILD_BUG_ON(sizeof(struct list_head) > sizeof(struct bpf_list_head));
- 	BUILD_BUG_ON(__alignof__(struct list_head) > __alignof__(struct bpf_list_head));
-+	INIT_LIST_HEAD(&drain);
- 
- 	/* Do the actual list draining outside the lock to not hold the lock for
- 	 * too long, and also prevent deadlocks if tracing programs end up
-@@ -2261,20 +2262,23 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
- 	__bpf_spin_lock_irqsave(spin_lock);
- 	if (!head->next || list_empty(head))
- 		goto unlock;
--	head = head->next;
-+	list_for_each_safe(pos, n, head) {
-+		WRITE_ONCE(container_of(pos,
-+			struct bpf_list_node_kern, list_head)->owner, NULL);
-+		list_move_tail(pos, &drain);
-+	}
- unlock:
--	INIT_LIST_HEAD(orig_head);
-+	INIT_LIST_HEAD(head);
- 	__bpf_spin_unlock_irqrestore(spin_lock);
- 
--	while (head != orig_head) {
--		void *obj = head;
--
--		obj -= field->graph_root.node_offset;
--		head = head->next;
-+	while (!list_empty(&drain)) {
-+		pos = drain.next;
-+		list_del_init(pos);
- 		/* The contained type can also have resources, including a
- 		 * bpf_list_head which needs to be freed.
- 		 */
--		__bpf_obj_drop_impl(obj, field->graph_root.value_rec, false);
-+		__bpf_obj_drop_impl((char *)pos - field->graph_root.node_offset,
-+				    field->graph_root.value_rec, false);
- 	}
+@@ -2570,6 +2570,16 @@ __bpf_kfunc int bpf_list_push_back_impl(struct bpf_list_head *head,
+ 	return bpf_list_push_back(head, node, meta__ign, off);
  }
  
++__bpf_kfunc int bpf_list_add(struct bpf_list_head *head, struct bpf_list_node *new,
++			     struct bpf_list_node *prev, struct btf_struct_meta *meta,
++			     u64 off)
++{
++	struct bpf_list_node_kern *n = (void *)new, *p = (void *)prev;
++	struct list_head *prev_ptr = &p->list_head;
++
++	return __bpf_list_add(n, head, &prev_ptr, meta ? meta->record : NULL, off);
++}
++
+ static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head,
+ 					    struct list_head *n)
+ {
+@@ -4748,6 +4758,7 @@ BTF_ID_FLAGS(func, bpf_list_push_front, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_list_push_front_impl)
+ BTF_ID_FLAGS(func, bpf_list_push_back, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_list_push_back_impl)
++BTF_ID_FLAGS(func, bpf_list_add, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 3c0e0076bd69..50f8732aa065 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10742,6 +10742,7 @@ enum special_kfunc_type {
+ 	KF_bpf_list_push_front,
+ 	KF_bpf_list_push_back_impl,
+ 	KF_bpf_list_push_back,
++	KF_bpf_list_add,
+ 	KF_bpf_list_pop_front,
+ 	KF_bpf_list_pop_back,
+ 	KF_bpf_list_del,
+@@ -10811,6 +10812,7 @@ BTF_ID(func, bpf_list_push_front_impl)
+ BTF_ID(func, bpf_list_push_front)
+ BTF_ID(func, bpf_list_push_back_impl)
+ BTF_ID(func, bpf_list_push_back)
++BTF_ID(func, bpf_list_add)
+ BTF_ID(func, bpf_list_pop_front)
+ BTF_ID(func, bpf_list_pop_back)
+ BTF_ID(func, bpf_list_del)
+@@ -10923,7 +10925,8 @@ static bool is_bpf_list_push_kfunc(u32 func_id)
+ 	return func_id == special_kfunc_list[KF_bpf_list_push_front] ||
+ 	       func_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
+ 	       func_id == special_kfunc_list[KF_bpf_list_push_back] ||
+-	       func_id == special_kfunc_list[KF_bpf_list_push_back_impl];
++	       func_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
++	       func_id == special_kfunc_list[KF_bpf_list_add];
+ }
+ 
+ static bool is_bpf_rbtree_add_kfunc(u32 func_id)
+@@ -19228,8 +19231,11 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		int struct_meta_reg = BPF_REG_3;
+ 		int node_offset_reg = BPF_REG_4;
+ 
+-		/* rbtree_add has extra 'less' arg, so args-to-fixup are in diff regs */
+-		if (is_bpf_rbtree_add_kfunc(desc->func_id)) {
++		/* list_add/rbtree_add have an extra arg (prev/less),
++		 * so args-to-fixup are in diff regs.
++		 */
++		if (desc->func_id == special_kfunc_list[KF_bpf_list_add] ||
++		    is_bpf_rbtree_add_kfunc(desc->func_id)) {
+ 			struct_meta_reg = BPF_REG_4;
+ 			node_offset_reg = BPF_REG_5;
+ 		}
 -- 
 2.50.1 (Apple Git-155)
 
