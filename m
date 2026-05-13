@@ -1,89 +1,124 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992D03783CB
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 01:31:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2515333E35C
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 01:39:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778635900; cv=none; b=Vl7QsEXXb87RJqD2flZWKw+NjWOyjs7thmGwPp2vGPYTs5YXkyW+qKsSu90Ftvojb4HlvJlYd/upRXnVgd/9jOCNGm6Q+4jBLKv87ykhMjCGocwb9FulzyxmTVOkKBLCl5O2UPVylKJIFaTSZeMzRoD06rq9RrjeqA1oriiSMoE=
+	t=1778636357; cv=none; b=c9pY2QZQT9lr8zBZniPaaULf15yp2NiBmKBx7LbKYfIaJVIL8iUa7gkXMOyXwD3yzZqWHRJiM6q/qGNf/Do/NW+NMDhxEBePN+Azy+LK3VMyTcD9TRSbOV3DYGTo80WaVo5uyz/X+ab2riKMMrx3lAdAzNu6C+LUrchc+PVs/2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778635900; c=relaxed/simple;
-	bh=uTgZo2rbYIIiMbYn9F8Ie/XS5usfTV8rdiJBhJRL7YQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cVfh8xv5sjfJ8h34iYuI9dbSrUQbtvEg0xyrl77Y9XRVbddWeHEVW/+fd1lm/raxtwfkwlcE7eXFW+ualoFNdo1BFSuDkcvQh2J59U0ASkRzu3ysh+B7YLK7ygEUS0ylpsm2MKNN2EELxr9Adn0bp0m+KgyQuf8aUwfdZLrKZD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DfesjAD+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778636357; c=relaxed/simple;
+	bh=QaX5Q5EUyiXFOqB1SfRSfi0jT97+h8iTn1pZH5G+Kbo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=B08zINChMznKIZT9zcMQzu+YQYtTvvfIFjalKRlWrU6clfBb0es065+17TBg55gQcjou/OT/o4IWS8nnD5iYI5+aAzlNn6knrhQknAlv/b2r6SXdDalUiMcd97P1Q/x/ivW2AVRMLTSCGNIK4aszJJ0eDWuWAOmAczfdHc+k7GI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n3Rct9KX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DfesjAD+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04105C2BCFF
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 01:31:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n3Rct9KX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37E1FC2BCB8;
+	Wed, 13 May 2026 01:39:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778635900;
-	bh=uTgZo2rbYIIiMbYn9F8Ie/XS5usfTV8rdiJBhJRL7YQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=DfesjAD+Keq2p1qtCro3hfSZNNhwYbOmoApL/5ceKQVqdk2AoqZOTDJUl0iBdxJE3
-	 iuaw+5EIVLR74L0tc+cWQ2LuGeHNm5xsCevbfJnQkRq8wYHjVu8UTG488voOgaIsa3
-	 VOw/BHu4kgoJTiP3CjWMH5AhVcytx7hW/yFC/rl8SyhaxNQnXbE7vOGfJ2r2C1nvuh
-	 ZWqJcRpwYulWCMeJQ51Q/oRuH/y3AJCQdAlmlY3ktmfkPoGRRKBNolAkBohg+2bCEh
-	 QD0E1UWCYUYc0BH+8K9QKwQv2KXiqleiDMhT+pSCWa+24Rj1JzVENW9lszh6c1Pp1U
-	 sanF00vT/8+YQ==
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-50d87c138e1so60356461cf.1
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 18:31:39 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ8tKM7mMJhIimW/gcGAUYb/021brSA2o9KyT2rwoT4iPrbRkv2v5YxTMoiswU3/J6N4EhI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz++njgtl8rp64Lx0ZN7ASAO0vE+t6COtcjgcNcQYj7fWt0fgbj
-	YZhdAaAi+vtdhZKU49Vdy4jPBMUQ/n4tjqfHfTWrpXZFtW9e8da9439jlQC+MEUEIahaZZQx0xn
-	0SLwjuV4OTr+iMc9oC+zfkkiJcFk5Re4=
-X-Received: by 2002:ac8:5750:0:b0:50f:b4c0:630f with SMTP id
- d75a77b69052e-5162f6603d5mr17430591cf.54.1778635899150; Tue, 12 May 2026
- 18:31:39 -0700 (PDT)
+	s=k20201202; t=1778636356;
+	bh=QaX5Q5EUyiXFOqB1SfRSfi0jT97+h8iTn1pZH5G+Kbo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=n3Rct9KXndBGExW9KtLASeJh6oUEbfAfTGeGZl8JfvEE2x42G6wTadF+yF4FqmA59
+	 HD2kG+sMe89FjFhw2StrYfULTkGT119n53uQVBG93YSdzSEA/Ht2gzD2n/0IyAF849
+	 9vgQCpq39gEt+PAbOR66WsayG35W7p3nyzXItO6IVLTBIEYWh5Ac1Nn952bMfrTDOL
+	 0t/0YudeVsLghS11EgqEEl8P6fIwE4ZvIJx/Tfhctve8ta9cRVZUAJL/Vy6JPz1V42
+	 uZrtq7GWOVNjJDnPqSxLNIGTS6z5cchtIaNzmfcNpll76eroq994h7YphGXp+q23h6
+	 B3xEo8VxphTlA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net v2 4/4] net: tls: remove bad rollback and UAF on
+ ENOSPC
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jakub Kicinski" <kuba@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260511174920.433155-5-kuba@kernel.org>
+References: <20260511174920.433155-5-kuba@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 13 May 2026 01:39:15 +0000
+Message-Id: <20260513013916.37E1FC2BCB8@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260511085344.3302-1-mahe.tardy@gmail.com> <20260511085344.3302-2-mahe.tardy@gmail.com>
- <20260511182019.69ebc7c6@kernel.org> <DIGBS3WKQN94.1YYMZM0K6CETY@gmail.com>
- <20260511193603.3ef00cee@kernel.org> <DIGD21MXE0XM.3CLUL6BVK74PK@gmail.com>
- <20260512065335.50647ee9@kernel.org> <DIGZA9DICBXO.2QQ1V7T186JW2@gmail.com>
- <20260512163255.34162f1a@kernel.org> <DIH5HQ54TYJF.2LNWVZJ50B5L0@gmail.com>
-In-Reply-To: <DIH5HQ54TYJF.2LNWVZJ50B5L0@gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Tue, 12 May 2026 18:31:27 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW71P58XqsXrLbqsShgnozg66TA=T_c=fYrqSSzvL1tTWA@mail.gmail.com>
-X-Gm-Features: AVHnY4JCL81buvEeAfsCsYLCYSVQ96D_XFiVK9VZZgUIjXOAHxyK71jlM_PVSUE
-Message-ID: <CAPhsuW71P58XqsXrLbqsShgnozg66TA=T_c=fYrqSSzvL1tTWA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] bpf: Add netpoll kfuncs for sending UDP packets
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, Mahe Tardy <mahe.tardy@gmail.com>, bpf@vger.kernel.org, 
-	andrew+netdev@lunn.ch, andrii@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com, 
-	edumazet@google.com, john.fastabend@gmail.com, martin.lau@linux.dev, 
-	pabeni@redhat.com, liamwisehart@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Jakub and Alexei,
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Critical] Silent data loss and stale state usage (UAF) in the -ENOMEM er=
+ror path.
+- [High] BPF policy bypass due to uncleared psock->eval state on -ENOMEM.
+--
 
-On Tue, May 12, 2026 at 6:17=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue May 12, 2026 at 4:32 PM PDT, Jakub Kicinski wrote:
-> >
-> > I think you may be overly optimistic on the dependability of netpoll.
-> > Rik has added support for serial scraping at Meta because netconsole
-> > misses a lot of crucial alerts. And I can confirm there's a bunch of
-> > errors that appear in that dataset that are missed by netcons.
-> >
-> > Then there are little nuggets like some generations of bnxt NICs
-> > having to discard all Rx frames when netcons is trying to send
-> > and Tx is full (bnxt_force_rx_discard()).
->
-> horrors. since bnxt is doing that then indeed it's not something
-> to rely on. I thought that over the years major vendors cleaned up
-> the driver side well. Looks like it's still not the case.
-> Sigh. Moving to sock_create_kern() and friends then.
+commit 9867dad26c6eb929c35af6ad7b485aac95c01aef
+Author: Jakub Kicinski <kuba@kernel.org>
 
-Thanks for sharing these thoughts and background with netpoll.
-We will look into sock_create_kern() based solutions.
+net: tls: remove bad rollback and UAF on ENOSPC
 
-Song
+This commit removes the attempt to roll back the iterator when BPF
+encounters an ENOSPC error. Since BPF may have modified the message,
+variables like orig_size and other pointers become stale, so rolling
+them back leads to use-after-free or corruption.
+
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index 360f71fd78842..22b77840e35ae 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+> @@ -1164,11 +1164,8 @@ static int tls_sw_sendmsg_locked(struct sock *sk, =
+struct msghdr *msg,
+>  				else if (ret =3D=3D -ENOMEM)
+>  					goto wait_for_memory;
+
+The commit message notes that BPF may have modified the message, making
+pointers and state stale. Does this same stale state issue still exist in
+the -ENOMEM path?
+
+If bpf_exec_tx_verdict() executes BPF (which may push or pop data) and then
+fails with -ENOMEM, execution jumps to wait_for_memory:
+
+wait_for_memory:
+        ret =3D sk_stream_wait_memory(sk, &timeo);
+        if (ret) {
+trim_sgl:
+            if (ctx->open_rec)
+                tls_trim_both_msgs(sk, orig_size);
+            goto send_end;
+        }
+
+If sk_stream_wait_memory() fails, the code calls tls_trim_both_msgs(sk,
+orig_size). Can trimming to the pre-BPF orig_size corrupt the scatterlist
+if BPF changed the size?
+
+Additionally, copied was already incremented by try_to_copy. Since the
+function returns copied, might it falsely indicate to userspace that the
+discarded bytes were successfully sent, causing silent data corruption?
+
+What happens if sk_stream_wait_memory() succeeds instead? The loop in
+tls_sw_sendmsg_locked() restarts, appending more data from userspace to
+the open record.
+
+If tls_push_record() inside the bpf_exec_tx_verdict() path returns -ENOMEM,
+does it return early without resetting psock->eval to __SK_NONE?
+
+If so, when bpf_exec_tx_verdict() is called again, could it see psock->eval
+evaluating to __SK_PASS and skip the BPF evaluation entirely, allowing
+the newly appended data to be sent without verification?
+
+>  				else if (ctx->open_rec && ret =3D=3D -ENOSPC) {
+> -					if (msg_pl->cork_bytes) {
+> -						ret =3D 0;
+> -						goto send_end;
+> -					}
+> -					goto rollback_iter;
+> +					ret =3D 0;
+> +					goto send_end;
+>  				} else if (ret !=3D -EAGAIN)
+>  					goto send_end;
+>  			}
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260511174920.4331=
+55-1-kuba@kernel.org?part=3D4
