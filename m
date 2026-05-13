@@ -1,101 +1,221 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3815439D6CC
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 17:20:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9905B44B696
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 17:42:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778692859; cv=none; b=Ye0hpXhMDwLc0dLjiYHM3QFUoDUEvXx0mFx2FE12NFHetBrkwF8Z2d+tkyleAuozCfrYDlE4Jf+Ub5ZZkgUQ5PRdbOzvlKUbrpEcbi/KZXx0vCB/xW2sC1ta1u1FLU/AYdRFxFvJQ5d2+VehGaqkEmFFxqWlvYRYBM810zzNzC4=
+	t=1778694145; cv=none; b=jK4UM065Gj59JBeQFMO/l72BRJGJUrGkfGmximKXHCzjqfSLOIppweeiz7QTIzHfigHvc6X2kEfI4IOSwl/vVs7iM0NeorRYdeVYuklIYSBTG6GsVp7kSuYl5F1QQA4+lRFf8vjAUrYaEtSDteNVC1AOp9zMqKHP1JN/nGCs7sY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778692859; c=relaxed/simple;
-	bh=ZDYwuT+pRztunnTtdznsc9Jv1uOAp6s3iDrPZDr272Q=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=FaR1yFgVNXuVd/EH6A+ObJoIzCNBaEdBYX1qWi6aAZ76fOLUhUJvVreXh625SF3A+XjSKbKybQGE3S3wHJqp0GEYI1U5qiWovqYHpkvyhHPGbDPUMhd528naJMuOaIaPzOGWFzCFqtw26ZqXRy7h+IDggYh3slpsep8T83GfdG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CMwR+UKm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778694145; c=relaxed/simple;
+	bh=5qT1HELfiNtH3yJPrODbxQdEaIaE9mb1MDlPmdbm5s4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bA6BEhZ2VFHiUYQagtJZmG+nbeieH4O3ijHar27MWtpDJRGTvX9GPrXDIcCSZnHpBvcU0kcgROmusXFQYyoR53T9/SLm2WlX4Fx/9ZPK9F3GZS3KSwcRSPBaHNa02yjoDwf8fk2TaLqU6idtmhLdVShh9D8g5KdUggs1ArRb5fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tFec3y1s; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CMwR+UKm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5003C19425;
-	Wed, 13 May 2026 17:20:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778692859;
-	bh=ZDYwuT+pRztunnTtdznsc9Jv1uOAp6s3iDrPZDr272Q=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=CMwR+UKm8akt7cWTbiqtUK5sJwuuRdW/6+AhKobj6TW4mnyf84Zz9mdhDvE7Q5pti
-	 vI5Lct+2gZ/WTKo6UWhUsQ6otAuhBxsCsrVAKd5WyInDFzFaDOsugC1We6DGhwslfz
-	 JPic3Df9Acj5IQ2TmQVEDhD57Fu2STIJOKTS6c1tKOTIe8xrXz757lNj/eczKPEQ8R
-	 KyYXG+VMi0BU1BnTAN0OZELCT81MWx5vCC1GOn+L8ij7Yhj4rVK1UfczvywUulPVle
-	 UWOf++9HwXdMdNV8A/k3VdICRtM98kfrVxS55GIgdd/IcCIbjpawTn2Ap63hg2cF1e
-	 lV4aSMtKmCLkQ==
-Content-Type: multipart/mixed; boundary="===============0774855344180501410=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tFec3y1s"
+Message-ID: <0b02e692-1ee1-42e3-a437-97a3a9ca2481@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778694139;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7pW5+vVaUKpFUQjfSSshc0rJkeBTIj62VGe+zMypxPc=;
+	b=tFec3y1srhx+RvUKvUlway36Oetbi/ItQlTDdSVa4dI8Gbgp1CX1UWfDzlfmloTHBtLady
+	aYJ6BWI0k1k+vdNSLv/n9bEEdTebo6niMYmg+o7aHWZTAQQRLE0huOU0ppo4QMfEd25uLy
+	4MFd/PRui/4igNO2pKFCIofnGnND/x4=
+Date: Wed, 13 May 2026 10:41:53 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <4381e877be9406065cb02b0257a9b4dadf94abab5a72d36fe93e2d2f6eee2aaf@mail.kernel.org>
-In-Reply-To: <b3459e61c408daef30d82272f1eacc6399844896.1778689025.git.paul.chaignon@gmail.com>
-References: <b3459e61c408daef30d82272f1eacc6399844896.1778689025.git.paul.chaignon@gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/3] veristat: Report max stack depth
-From: bot+bpf-ci@kernel.org
-To: paul.chaignon@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 13 May 2026 17:20:58 +0000 (UTC)
+Subject: Re: [PATCH bpf-next v4 00/25] bpf: Support stack arguments for BPF
+ functions and kfuncs
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ "Jose E . Marchesi" <jose.marchesi@oracle.com>,
+ Kernel Team <kernel-team@fb.com>, Martin KaFai Lau <martin.lau@kernel.org>
+References: <20260513044949.2382019-1-yonghong.song@linux.dev>
+ <CAADnVQKjVKG8cfMBpWpmbtPToGPSyD13aXLNOzb2PTQm_bS_2w@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAADnVQKjVKG8cfMBpWpmbtPToGPSyD13aXLNOzb2PTQm_bS_2w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
---===============0774855344180501410==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
-> index 5c82950e6978..9a2275d19ee1 100644
-> --- a/tools/testing/selftests/bpf/veristat.c
-> +++ b/tools/testing/selftests/bpf/veristat.c
-> @@ -48,6 +48,7 @@ enum stat_id {
->  	SIZE,
->  	JITED_SIZE,
->  	STACK,
-> +	MAX_STACK,
->  	PROG_TYPE,
->  	ATTACH_TYPE,
->  	MEMORY_PEAK,
 
-[ ... ]
-
-> @@ -795,7 +796,7 @@ static const struct stat_specs default_csv_output_spec = {
->  		TOTAL_INSNS, TOTAL_STATES, PEAK_STATES,
->  		MAX_STATES_PER_INSN, MARK_READ_MAX_LEN,
->  		SIZE, JITED_SIZE, PROG_TYPE, ATTACH_TYPE,
-> -		STACK, MEMORY_PEAK,
-> +		STACK, MAX_STACK, MEMORY_PEAK,
->  	},
->  };
-
-Does this need .spec_cnt updated to 16? The ids array now contains 16
-elements (FILE_NAME, PROG_NAME, VERDICT, DURATION, TOTAL_INSNS,
-TOTAL_STATES, PEAK_STATES, MAX_STATES_PER_INSN, MARK_READ_MAX_LEN, SIZE,
-JITED_SIZE, PROG_TYPE, ATTACH_TYPE, STACK, MAX_STACK, MEMORY_PEAK), but
-.spec_cnt is still 15. All consumers of this struct (output_stats,
-output_comp_stats, output_header_underlines and the parse_stats_csv
-column-count check) iterate from 0 to spec_cnt-1, so MEMORY_PEAK won't be
-included in the default CSV output.
-
+On 5/13/26 6:33 PM, Alexei Starovoitov wrote:
+> On Tue, May 12, 2026 at 9:50 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+>> Currently, bpf function calls and kfunc's are limited by 5 reg-level
+>> parameters. For function calls with more than 5 parameters,
+>> developers can use always inlining or pass a struct pointer
+>> after packing more parameters in that struct although it may have
+>> some inconvenience. But there is no workaround for kfunc if more
+>> than 5 parameters is needed.
+>>
+>> This patch set lifts the 5-argument limit by introducing stack-based
+>> argument passing for BPF functions and kfunc's, coordinated with
+>> compiler support in LLVM [1]. The compiler emits loads/stores through
+>> a new bpf register r11 (BPF_REG_PARAMS), to pass arguments beyond
+>> the 5th, keeping the stack arg area separate from the r10-based program
+>> stack. The current maximum number of arguments is capped at
+>> MAX_BPF_FUNC_ARGS (12), which is sufficient for the vast majority of
+>> use cases.
+>>
+>> All kfunc/bpf-function arguments are caller saved, including stack
+>> arguments. For register arguments (r1-r5), the verifier already marks
+>> them as clobbered after each call. For stack arguments, the verifier
+>> invalidates all outgoing stack arg slots immediately after a call,
+>> requiring the compiler to re-store them before any subsequent call.
+>> This follows the native calling convention where all function
+>> parameters are caller saved.
+>>
+>> The x86_64 JIT translates r11-relative accesses to RBP-relative
+>> native instructions. Each function's stack allocation is extended
+>> by 'max_outgoing' bytes to hold the outgoing arg area below the
+>> callee-saved registers. This makes implementation easier as the r10
+>> can be reused for stack argument access. At both BPF-to-BPF and kfunc
+>> calls, outgoing args are pushed onto the expected calling convention
+>> locations directly. The incoming parameters can directly get the value
+>> from caller.
+>>
+>> Global subprogs and freplace progs with >5 args are not yet supported.
+>> Only x86_64 and arm64 are supported for now. Same selftests are tested
+>> by both x86_64 and arm64. Please see each individual patch for details.
+>>
+>>    [1] https://github.com/llvm/llvm-project/pull/189060
+>>
+>> Changelogs:
+>>    v3 -> v4:
+> Applied, but see veristat failures:
 >
-> @@ -834,6 +835,7 @@ static struct stat_def {
->  	[SIZE] = { "Program size", {"prog_size"}, },
->  	[JITED_SIZE] = { "Jited size", {"prog_size_jited"}, },
->  	[STACK] = {"Stack depth", {"stack_depth", "stack"}, },
-> +	[MAX_STACK] = {"Max stack depth", {"max_stack_depth"}, },
->  	[PROG_TYPE] = { "Program type", {"prog_type"}, },
->  	[ATTACH_TYPE] = { "Attach type", {"attach_type", }, },
->  	[MEMORY_PEAK] = { "Peak memory (MiB)", {"mem_peak", }, },
+> |strobelight-server-monitors-gpu_mem_snapshot-gpu_mem_snapshot_bpf-gpu_mem_snapshot_bpf.o|handle_cu_mem_address_reserve_ret
+> |success -> failure (!!)|-100.00 % |
+> |strobelight-server-monitors-gpu_mem_snapshot-gpu_mem_snapshot_bpf-gpu_mem_snapshot_bpf.o|handle_cu_mem_create_ret
+> |success -> failure (!!)|-100.00 % |
+> |strobelight-server-monitors-gpu_mem_snapshot-gpu_mem_snapshot_bpf-gpu_mem_snapshot_bpf.o|handle_malloc_ret
+> |success -> failure (!!)|-100.00 % |
+> |strobelight-server-monitors-gpu_mem_snapshot-gpu_mem_snapshot_bpf-gpu_mem_snapshot_bpf.o|handle_mtia_allocate_exit
+> |success -> failure (!!)|-83.67 %
+>
+> I couldn't see what might have caused it. Hopefully something minor.
+> Pls follow up.
 
-[ ... ]
+I found the reason, for gpu_mem_snapshot/bpf/gpu_mem_snapshot.bpf.c,
+the source code:
+
+static int alloc_exit(
+     struct pt_regs* ctx,
+     uint8_t alloc_type,
+     uint64_t direct_addr,
+     uint16_t extra_arg_cnt,
+     uint64_t extra_arg0,
+     uint64_t extra_arg1) {
+   uint64_t pid_tgid = bpf_get_current_pid_tgid();
+   ...
+} // 6 arguments
+
+SEC("uretprobe")
+int BPF_KPROBE(handle_malloc_ret) {
+   return alloc_exit(ctx, STROBELIGHT_GPU_MEM_ALLOC_SAMPLE, 0, 0, 0, 0);
+}
+
+But actually, the 'struct pt_regs* ctx' argument is a dead argument
+and llvm compiler removed it. So for final code, the alloc_exit()
+has 5 arguments and this is what bpf backend see.
+
+Note that function call signature still has 6 arguments.
+
+I am using llvm21 to test which is CI current using.
+
+Without kernel stack argument support
+=====================================
+
+we have
+
+btf_check_func_arg_match()
+    btf_prepare_func_args()
+      ...
+      nargs = btf_type_vlen(t); // nargs = 6
+      if (nargs > MAX_BPF_FUNC_REG_ARGS) {
+         if (!is_global)
+              return -EINVAL;
+         bpf_log(log, "Global function %s() with %d > %d args. Buggy compiler.\n",
+              tname, nargs, MAX_BPF_FUNC_REG_ARGS);
+         return -EINVAL;
+      }
+
+So bpf_prepare_func_args() return -EINVAL.
+Eventually error code propagated back to check_func_call:
+
+         err = btf_check_subprog_call(env, subprog, caller->regs);
+         if (err == -EFAULT)
+                 return err;
+         ...
+Since the return value is not -EFAULT, verification continues
+although btf type does not agree with the actual parameter number.
+
+With kernel stack argument support
+==================================
+
+we have
+
+btf_check_func_arg_match()
+   btf_prepare_func_args()
+     ...
+     nargs = btf_type_vlen(t); // nargs = 6
+     ... // all arguments validated properly
+   
+   return 0
+
+// error message: callee expects 6 args, stack arg1 is not initialized
+
+This is expected since optimized function signature only has 5 parameters
+in llvm bpf backend.
+
+How to resolve this issue
+=========================
+
+I have merged a patch internally with the following manual change:
+
+  static int alloc_exit(
+-    struct pt_regs* ctx,
+      uint8_t alloc_type,
+      uint64_t direct_addr,
+      uint16_t extra_arg_cnt,
+@@ -728,7 +727,7 @@
+  
+  SEC("uretprobe")
+  int BPF_KPROBE(handle_malloc_ret) {
+-  return alloc_exit(ctx, STROBELIGHT_GPU_MEM_ALLOC_SAMPLE, 0, 0, 0, 0);
++  return alloc_exit(STROBELIGHT_GPU_MEM_ALLOC_SAMPLE, 0, 0, 0, 0);
+  }
+  
+  SEC("uprobe")
+@@ -768,7 +767,7 @@
+  
+  SEC("uretprobe")
+  int BPF_KPROBE(handle_cu_mem_create_ret) {
+-  return alloc_exit(ctx, STROBELIGHT_CU_MEM_CREATE_SAMPLE, 0, 0, 0, 0);
++  return alloc_exit(STROBELIGHT_CU_MEM_CREATE_SAMPLE, 0, 0, 0, 0);
+  }
+
+...
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+This should fix the issue and next CI gets meta bpf progs and the error
+should be gone.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25813246860
---===============0774855344180501410==--
+To really fix this issue, we should encode btf with true signatures, i.e.,
+btf should match the actual function parameters. This should be done
+in llvm.
+
