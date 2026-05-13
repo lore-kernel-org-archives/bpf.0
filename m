@@ -1,87 +1,125 @@
-Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EAC841C310;
-	Wed, 13 May 2026 16:41:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80D549550A
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 16:41:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778690476; cv=none; b=ghNyaUNu19vp9KPV0KgMfZllUmX3Bco7a1lF4QES53FSW0h/QwlJsgfw2zurJBdTa+RA8i9jcDUOIzdrmcaN+NgjzIur5ob3upc7J79O7l1N2ygRIFfAi/oVyt+J4nu7+CtIjetP/ihY5UUNDiwhRzzZXo/xKY4TqTH7HQtUtOg=
+	t=1778690493; cv=none; b=V14RvehhefR2TUT9LAr7AGoVjoHagEJXkugljn35OLLyT76W7WA71kbdhsfz+HaxERpXU3TO2lhZeo2SnmaofgSTNPRYtyeWyzgD16pv3qNEvys4+lCF/9ShRQU4C406DG2UsHcsICFxMnrRa1mxmL9ejY4qFMad6OCNYEFA7Ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778690476; c=relaxed/simple;
-	bh=s9fYP+qY0LZpCTN4Q7vKTRfdKJMfrvho8omGyB3eS5g=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YKFXigbp4EBzF0bmOcmfREhVAoVMpUqRk1uFRYlZQLuHftkS6BgHb55V2LZe5vq/Tj+MuiTb+OV6RxpJbMuSSatyrpEpUbCEJfiTS0Yic0r5tB3lLPI5n5ZC+zD7ScnhTEL8tma5ZTIC8Q7lDNWyrSCkS4iFpZ8DlmNrdP28OXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf20.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay06.hostedemail.com (Postfix) with ESMTP id B7CDC1C02D2;
-	Wed, 13 May 2026 16:41:10 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf20.hostedemail.com (Postfix) with ESMTPA id E522920026;
-	Wed, 13 May 2026 16:41:04 +0000 (UTC)
-Date: Wed, 13 May 2026 12:41:07 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>,
- Song Liu <song@kernel.org>, KP Singh <kpsingh@kernel.org>, Matt Bobrowski
- <mattbobrowski@google.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Shuah Khan
- <skhan@linuxfoundation.org>, Jiri Olsa <jolsa@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, Mathieu
- Desnoyers <mathieu.desnoyers@efficios.com>, Randy Dunlap
- <rdunlap@infradead.org>, neelx@suse.com, sean@ashe.io, chjohnst@gmail.com,
- steve@abita.co, mproche@gmail.com, nick.lange@gmail.com, "open
- list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML
- <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
- linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v3] bpf: introduce TAINT_UNSAFE_BPF for mutating
- helpers
-Message-ID: <20260513124107.437431f0@gandalf.local.home>
-In-Reply-To: <CAADnVQLw+_NaOVeaKabuf085wNo_-6MAv8w0EDO3fBz3KCQT5g@mail.gmail.com>
-References: <20260503164700.548164-1-atomlin@atomlin.com>
-	<CAADnVQJ5fatNF4auH+a8E39zWMfja3rm4BM_xGcTnLX8uuCQ9Q@mail.gmail.com>
-	<20260513111331.7bede512@gandalf.local.home>
-	<CAADnVQL_sWznA+JJLdzP_ZdUgQeO7p-AGnOtx9=fXjH+PnRJBA@mail.gmail.com>
-	<20260513112307.53e77312@gandalf.local.home>
-	<CAADnVQLw+_NaOVeaKabuf085wNo_-6MAv8w0EDO3fBz3KCQT5g@mail.gmail.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1778690493; c=relaxed/simple;
+	bh=mmDwlMB3V7gV3dbxmcyv2Gd9qMFoKFoVz+XhmyhfAc0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=UYzmKYkw4ZGTkMNjb3G1XbQF7pRrjk8gKdh/0pouqPECfOjAS/dswCtLEu0ojPFuc+4FcgujoHaoF7w3nPWIktgmIi9N8FJkGtCAwPpLpDqpn24CBnq3Cfi6GRkF93Y5XW1/mT3pngaZ/2VVnlKUCse7FSdbbrysYLwzE5qLs28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TXF6arhK; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TXF6arhK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A7F4C2BCB7;
+	Wed, 13 May 2026 16:41:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778690493;
+	bh=mmDwlMB3V7gV3dbxmcyv2Gd9qMFoKFoVz+XhmyhfAc0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=TXF6arhKsC9mRp6f74VyNfuusUdI+YBznSjeuGVyy44AvNPWy0FavINHoHNIai+/p
+	 EpkYNGQZEwUF3+Yv4GZZwoLoimUZJTPwuGexrfZIC+U7vD3CB5WU+2Y7zQhJGrcJrS
+	 DSzMB0ybor0A7M2koFUkmYY+Ix3ysQCG5h4s5TSwIR8Qbof8HIC6nFVF2QLsQrZwCn
+	 /eWWYALrBFcS9bC9vzuLif5oFqygpHiqSHV3cTeTkb586qFBi13N2suFf9UyGu/aTj
+	 QoAablgXAQxPX/2sxyEpn9BptJatZaoLuo3b73dGhaIcOtLJzHL51xQ83y++FgvDbw
+	 V2+oFulCDUYpw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02DF3393021B;
+	Wed, 13 May 2026 16:40:40 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: E522920026
-X-Stat-Signature: fg3i9cunj58jazg91jw7fxhf6rjuzr1t
-X-Rspamd-Server: rspamout01
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/vlIIxtheuPq6Yf9zUCAmaImOQIxA+vjQ=
-X-HE-Tag: 1778690464-121100
-X-HE-Meta: U2FsdGVkX1/y8lI1aHXZZgaOrrPr0GIPYKwzSJkHfS8iNP88ZMeiSieyt1fIozfVTcDewb8vfRsjt9C0BHfEkz1RXXx1/hCApMKwnvvGF/SrwZtEqlwMo0MmjZ43bbJ3u6LNnrkekV4TA7NuPbsXoVZmD6WtJFgTrAVVzycfc/50B8hlzcXmT9XLyqATqm6RPzzsgEGpEOa9M2I5b5wtCmOw105zBeuFmt8YqzPZTBwSG+PT8msrsRMihJM0fDSJUZWHONK2MQQPpb4d/crfisCRB7fnZXjlCJ0NtY8HtXUUpji0JJkdBj36vGrAxobrBpv8L55TkepC/bIUfz2J6zl2SeCKa9jGi30T0xLtsAHs8MEVYkosTecwWGqERxXQZWylqJ19jTxA9y9/hjfIsg==
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v4 00/25] bpf: Support stack arguments for BPF
+ functions and kfuncs
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177869043880.3729534.11654394350073284356.git-patchwork-notify@kernel.org>
+Date: Wed, 13 May 2026 16:40:38 +0000
+References: <20260513044949.2382019-1-yonghong.song@linux.dev>
+In-Reply-To: <20260513044949.2382019-1-yonghong.song@linux.dev>
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, jose.marchesi@oracle.com, kernel-team@fb.com,
+ martin.lau@kernel.org
 
-On Wed, 13 May 2026 09:35:29 -0700
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+Hello:
 
-> On Wed, May 13, 2026 at 8:23=E2=80=AFAM Steven Rostedt <rostedt@goodmis.o=
-rg> wrote:
-> >
-> > On Wed, 13 May 2026 08:16:07 -0700
-> > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> > =20
-> > > It's impossible to track all modifications.
-> > > See what sched-ext is doing.
-> > > What does it modify? Everything. =20
-> >
-> > What about just having a list of what BPF programs are loaded, what they
-> > may be attached to, and what kfuncs they are calling? =20
->=20
-> Ohh. These have been available forever.
-> Just bpftool prog, bpftool link, bpftool prog dump xlated
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Ah thanks. That is useful.
+On Tue, 12 May 2026 21:49:49 -0700 you wrote:
+> Currently, bpf function calls and kfunc's are limited by 5 reg-level
+> parameters. For function calls with more than 5 parameters,
+> developers can use always inlining or pass a struct pointer
+> after packing more parameters in that struct although it may have
+> some inconvenience. But there is no workaround for kfunc if more
+> than 5 parameters is needed.
+> 
+> [...]
 
--- Steve
+Here is the summary with links:
+  - [bpf-next,v4,01/25] bpf: Convert bpf_get_spilled_reg macro to static inline function
+    https://git.kernel.org/bpf/bpf-next/c/ede2dc5c6b57
+  - [bpf-next,v4,02/25] bpf: Remove copy_register_state wrapper function
+    https://git.kernel.org/bpf/bpf-next/c/1cb229a54af1
+  - [bpf-next,v4,03/25] bpf: Add helper functions for r11-based stack argument insns
+    https://git.kernel.org/bpf/bpf-next/c/78bbe61632f1
+  - [bpf-next,v4,04/25] bpf: Set sub->arg_cnt earlier in btf_prepare_func_args()
+    https://git.kernel.org/bpf/bpf-next/c/3ab5bd317ee2
+  - [bpf-next,v4,05/25] bpf: Support stack arguments for bpf functions
+    https://git.kernel.org/bpf/bpf-next/c/0f6bd5e7a804
+  - [bpf-next,v4,06/25] bpf: Refactor jmp history to use dedicated spi/frame fields
+    https://git.kernel.org/bpf/bpf-next/c/3a656670fd6d
+  - [bpf-next,v4,07/25] bpf: Add precision marking and backtracking for stack argument slots
+    https://git.kernel.org/bpf/bpf-next/c/0a0fdc64b68c
+  - [bpf-next,v4,08/25] bpf: Refactor record_call_access() to extract per-arg logic
+    https://git.kernel.org/bpf/bpf-next/c/84dd7df76efe
+  - [bpf-next,v4,09/25] bpf: Use arg_is_fp() in has_fp_args()
+    https://git.kernel.org/bpf/bpf-next/c/f44e815e65a3
+  - [bpf-next,v4,10/25] bpf: Extend liveness analysis to track stack argument slots
+    https://git.kernel.org/bpf/bpf-next/c/2af4e792773f
+  - [bpf-next,v4,11/25] bpf: Reject stack arguments in non-JITed programs
+    https://git.kernel.org/bpf/bpf-next/c/dc8f1cf6787c
+  - [bpf-next,v4,12/25] bpf: Prepare architecture JIT support for stack arguments
+    https://git.kernel.org/bpf/bpf-next/c/848d624acf66
+  - [bpf-next,v4,13/25] bpf: Enable r11 based insns
+    https://git.kernel.org/bpf/bpf-next/c/9fae4cba3bfd
+  - [bpf-next,v4,14/25] bpf: Support stack arguments for kfunc calls
+    https://git.kernel.org/bpf/bpf-next/c/e0b7b91c72db
+  - [bpf-next,v4,15/25] bpf: Reject stack arguments if tail call reachable
+    https://git.kernel.org/bpf/bpf-next/c/35b78733160c
+  - [bpf-next,v4,16/25] bpf: Disable private stack for x86_64 if stack arguments used
+    https://git.kernel.org/bpf/bpf-next/c/cb6af5314056
+  - [bpf-next,v4,17/25] bpf,x86: Implement JIT support for stack arguments
+    https://git.kernel.org/bpf/bpf-next/c/324c3ca6eed6
+  - [bpf-next,v4,18/25] selftests/bpf: Add tests for BPF function stack arguments
+    https://git.kernel.org/bpf/bpf-next/c/79e7ec00634e
+  - [bpf-next,v4,19/25] selftests/bpf: Add tests for stack argument validation
+    https://git.kernel.org/bpf/bpf-next/c/9f42204c62d5
+  - [bpf-next,v4,20/25] selftests/bpf: Add BTF fixup for __naked subprog parameter names
+    https://git.kernel.org/bpf/bpf-next/c/5b31de88920b
+  - [bpf-next,v4,21/25] selftests/bpf: Add verifier tests for stack argument validation
+    https://git.kernel.org/bpf/bpf-next/c/00c3ac4292a6
+  - [bpf-next,v4,22/25] selftests/bpf: Add precision backtracking test for stack arguments
+    https://git.kernel.org/bpf/bpf-next/c/6e277efbb19d
+  - [bpf-next,v4,23/25] bpf, arm64: Map BPF_REG_0 to x8 instead of x7
+    https://git.kernel.org/bpf/bpf-next/c/68e5627579d7
+  - [bpf-next,v4,24/25] bpf, arm64: Add JIT support for stack arguments
+    https://git.kernel.org/bpf/bpf-next/c/235b2fe772f5
+  - [bpf-next,v4,25/25] selftests/bpf: Enable stack argument tests for arm64
+    https://git.kernel.org/bpf/bpf-next/c/90e43f1b4753
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
