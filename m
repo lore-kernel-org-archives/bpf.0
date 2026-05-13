@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABE042A9D
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 04:03:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05ED42A9D
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 04:05:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778645035; cv=none; b=sWjCBwicRucBTCAiugetyyiKJGEgnFi6BphervOgDOd5j0M67ykEMU4BLfdJ9amS1qzrd2PCs9vEvj342qPtfTBxE/IXKEPNqhdgbqUhbF76yx2lRQetMT8337QtqGxqqLnCPz0n0rL/v59mML3e6BKTtNuTAA4TEIReYV6JpgE=
+	t=1778645117; cv=none; b=rlzAFtCLchFwJtpK9RwrQw4B1eRKYg7Y7GtUOVzvCRP0lZJ663S9MWhLjgC3LMmQEV03ImyyAxFlex33WoJUYpJ+nWaV3KqN2CwUPYzxv9Jcmx0dwmHLqYMPBEXSoidhCtQyQUuBKp+BeEk8mIX5FjB7j2MTreaLGSC2cr0t88o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778645035; c=relaxed/simple;
-	bh=lUnjOhlnqQGqftunmfKEl3mhfDHz4M8mWYfiaVUtrdg=;
+	s=arc-20240116; t=1778645117; c=relaxed/simple;
+	bh=un48sQJWWn4nydlgphR82QDF54XqWL3M1MsxUa+FS6A=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=q1e5MpxfMfuzVCb2EO3hh42VIFCdUi1675UMXiWngdjLPcc5bREG5NApBB/bAKE9pA6LozDrzKFdbZffIIys4eKjv3Lnrf5d8afuQuc6T8TCMW5dDFCKLw1plOq2ASEwaugqDq3l/tuj9AmLbUDOSJpF9W52abK/oPu0kA9St6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tF+bdNHK; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=YOVDO8fk1xe+hjnAclamAgdJBrsKV1uCt5x70nG0uEPI9kWqozB1A6JUsCsedvVdXD8ZARUq9NJlcl2FnRIbcdBqkEtjiF8fjSsA0fJGsZRg5PI7m4FdMMArgXL+s+YE/SQxeeAF+GrRBEBOgnpUZe3WE3eMhZBCt43jwKMQL34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=THbcYMMw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tF+bdNHK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED092C2BCC7;
-	Wed, 13 May 2026 04:03:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="THbcYMMw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4914EC2BCC7;
+	Wed, 13 May 2026 04:05:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778645035;
-	bh=lUnjOhlnqQGqftunmfKEl3mhfDHz4M8mWYfiaVUtrdg=;
+	s=k20201202; t=1778645116;
+	bh=un48sQJWWn4nydlgphR82QDF54XqWL3M1MsxUa+FS6A=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=tF+bdNHKt2orWdppQEwdn8UguzYbc6kNwU/JM6mtyLL0oUrMW5lBa5Gz8qxAvOOBA
-	 gEWHVioKlpvFc+pPm0RMcnzIr5pmWiWCavtmq4EpL/oETZEMn+7cVBvQZQaJT5NoXB
-	 WbKtvhnGv+5CuAxyTwRiJxpKdMtn3bfjynmQoFkQXmwGeRh9Nha8syk+Wn9OFWnRFx
-	 0jbHCWeV1/iJzuAJKU4Q1gSK7w20cnXNsyR/bYIw0xFjWO+X/i4T1hE7Kkn3DJZdlW
-	 H1tmmZLUFGJZyIspZd31/fJQ483ieIIQLw8HWbin/4Rc2ze9rPNbf3Euf+peB8gn0v
-	 KlTAy/CHOrpzg==
+	b=THbcYMMwAYA6IdmjGabf19MisLmVbI77Ji2DjGgxLn/4XLBrLXlVSxrhMedGDngiy
+	 wLnxMNjYV+2ProWMzgj8fMRqGYjNnV0yd7dXEHdj0KAxl33qIAGn+5k0bRWnFugdaK
+	 E14s9WXgxNms1PViODk36Hc5MTM8L4XNvXfCAv7GzgLivtbypHVOjKJJAqQb0ZI09W
+	 Q8p6FG2b2m7AdrQGuAcFkWlXjmvL4GoYjKuyOgrqU14H1JhizgOgueaPwN0QI7utc6
+	 hORlghC4Z+8n7uz91ne1U8W7baZU/WxzO9LGfMnFM+qJ4RmuIIG9ifUWxD9h/SsghJ
+	 LtIBJriOgi8uw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v3 2/3] bpf: Avoid faultable build ID reads under mm
- locks
+Subject: Re: [PATCH net-next v4 3/8] net: devmem: support TX over
+ NETMEM_TX_NO_DMA devices
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>
+To: "Bobby Eshleman" <bobbyeshleman@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260512032906.2670326-3-ihor.solodrai@linux.dev>
-References: <20260512032906.2670326-3-ihor.solodrai@linux.dev>
+In-Reply-To: <20260511-tcp-dm-netkit-v4-3-841b78b99d74@meta.com>
+References: <20260511-tcp-dm-netkit-v4-3-841b78b99d74@meta.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 13 May 2026 04:03:54 +0000
-Message-Id: <20260513040354.ED092C2BCC7@smtp.kernel.org>
+Date: Wed, 13 May 2026 04:05:15 +0000
+Message-Id: <20260513040516.4914EC2BCC7@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,139 +46,127 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] Sleepable build ID parsing unconditionally fails on systems where =
-CONFIG_PER_VMA_LOCK is disabled.
-- [High] Incorrect VMA classification using `!vma->vm_file` violates MM API=
- and risks unsafe driver reads.
-- [High] Missing caching causes a severe performance regression due to redu=
-ndant file I/O for IPs within the same VMA.
+- [Critical] Dangling net_device pointers in TX bindings cause a Critical U=
+se-After-Free during socket destruction.
+- [High] Unrefcounted binding->vdev and binding->dev pointers create an ABA=
+ vulnerability allowing DMA domain bypass.
+- [Medium] Missing error rollback in netdev_nl_bind_tx_doit() leads to dmab=
+uf binding leak.
 --
 
-commit 8402e095f9b6a82fa06a32af10007e005d6c5e76
-Author: Ihor Solodrai <ihor.solodrai@linux.dev>
-bpf: Avoid faultable build ID reads under mm locks
+commit 20d630c8bbbcb31ad867556dab2a588deb3faa88
+Author: Bobby Eshleman <bobbyeshleman@meta.com>
 
-This commit updates the stackmap sleepable path to avoid calling
-build_id_parse_file() while holding mmap_lock or a per-VMA read lock. It
-achieves this by acquiring a stable read-side reference to the backing file,
-dropping the VMA lock, and then parsing the build ID.
+    net: devmem: support TX over NETMEM_TX_NO_DMA devices
+   =20
+    When a netkit virtual device leases queues from a physical NIC, devmem
+    TX bindings created on the netkit device must still result in the dmabuf
+    being mapped for dma by the physical device. This patch accomplishes
+    this by teaching the bind handler to search for the underlying
+    DMA-capable device by looking it up via leased rx queues.
 
-Link: https://lore.kernel.org/all/20251218005818.614819-1-shakeel.butt@linu=
-x.dev/
-Link: https://lore.kernel.org/all/20260128183232.2854138-1-andrii@kernel.or=
-g/
-
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index 4ef0fd06cea58..c1e96df360c3f 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-
-[ ... ]
-
-> @@ -158,6 +159,105 @@ static inline void stack_map_build_id_set_ip(struct=
- bpf_stack_build_id *id)
->  	memset(id->build_id, 0, BUILD_ID_SIZE_MAX);
->  }
+> diff --git a/net/core/devmem.c b/net/core/devmem.c
+> index cde4c89bc146a..1c67e7524246c 100644
+> --- a/net/core/devmem.c
+> +++ b/net/core/devmem.c
+> @@ -212,6 +212,7 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+>  	}
 > =20
-> +struct stack_map_vma_lock {
-> +	bool vma_locked;
-> +	struct vm_area_struct *vma;
-> +	struct mm_struct *mm;
-> +};
-> +
-> +static struct vm_area_struct *
-> +stack_map_lock_vma(struct stack_map_vma_lock *lock, unsigned long ip)
-> +{
+>  	binding->dev =3D dev;
+> +	binding->vdev =3D vdev;
+>  	xa_init_flags(&binding->bound_rxqs, XA_FLAGS_ALLOC);
+
+Since binding->dev and binding->vdev are stored without holding a reference
+count, what happens if the underlying physical or virtual net_device is
+unregistered and freed while the binding is still active?
+
+For RX bindings, mp_dmabuf_devmem_uninstall() safely clears binding->dev
+when the device unregisters. However, TX bindings have an empty bound_rxqs
+list and never receive this callback.
+
+If a user application keeps the netlink socket open after the device is
+removed, and later closes it, could netdev_nl_sock_priv_destroy() access
+the stale binding->dev pointer and cause a use-after-free?
 
 [ ... ]
 
-> +	vma =3D vma_lookup(mm, ip);
-> +	if (!vma) {
-> +		mmap_read_unlock(mm);
-> +		return NULL;
-> +	}
-> +
-> +#ifdef CONFIG_PER_VMA_LOCK
-> +	if (!vma_start_read_locked(vma)) {
-> +		mmap_read_unlock(mm);
-> +		return NULL;
-> +	}
-> +	mmap_read_unlock(mm);
-> +#else
-> +	mmap_read_unlock(mm);
-> +	return NULL;
-> +#endif
+> @@ -397,7 +398,8 @@ struct net_devmem_dmabuf_binding *net_devmem_get_bind=
+ing(struct sock *sk,
+>  	 */
+>  	dst_dev =3D dst_dev_rcu(dst);
+>  	if (unlikely(!dst_dev) ||
+> -	    unlikely(dst_dev !=3D READ_ONCE(binding->dev))) {
+> +	    unlikely(dst_dev !=3D READ_ONCE(binding->dev) &&
+> +		     dst_dev !=3D READ_ONCE(binding->vdev))) {
 
-Does this unconditionally fail on systems where CONFIG_PER_VMA_LOCK is
-disabled?
+If the devices are unregistered and the slab allocator reuses the memory
+address for a newly created, unrelated net_device, could this pointer
+comparison falsely pass due to aliasing (the ABA problem)?
 
-Looking at the fallback block, it unlocks the mmap_read_lock and returns
-NULL. Will this cause stack_map_get_build_id_offset_sleepable() to always
-receive a NULL VMA and fail to extract any build IDs on architectures lacki=
-ng
-per-VMA lock support?
+Could this trick the kernel into authorizing the new device to transmit
+using a DMABUF mapped exclusively for the original device's IOMMU domain?
+
+>  		err =3D -ENODEV;
+>  		goto out_unlock;
+>  	}
 
 [ ... ]
 
-> +static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_bui=
-ld_id *id_offs,
-> +						    u32 trace_nr)
-> +{
-> +	struct mm_struct *mm =3D current->mm;
-> +	struct stack_map_vma_lock lock =3D {
-> +		.vma_locked =3D false,
-> +		.vma =3D NULL,
-> +		.mm =3D mm,
-> +	};
-> +	unsigned long vm_pgoff, vm_start;
-> +	struct vm_area_struct *vma;
-> +	struct file *file;
-> +	u64 ip;
+> diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+> index 4d2c49371cdb4..b4d48f3672a5b 100644
+> --- a/net/core/netdev-genl.c
+> +++ b/net/core/netdev-genl.c
+
+[ ... ]
+
+> @@ -1171,22 +1205,41 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, s=
+truct genl_info *info)
+>  		goto err_unlock_netdev;
+>  	}
+> =20
+> -	dma_dev =3D netdev_queue_get_dma_dev(netdev, 0, NETDEV_QUEUE_TYPE_TX);
+> -	binding =3D net_devmem_bind_dmabuf(netdev, dma_dev, DMA_TO_DEVICE,
+> -					 dmabuf_fd, priv, info->extack);
+> +	bind_dev =3D netdev_find_netmem_tx_dev(netdev);
+> +	if (!bind_dev) {
+> +		err =3D -EOPNOTSUPP;
+> +		NL_SET_ERR_MSG(info->extack,
+> +			       "No DMA-capable device found for netmem TX");
+> +		goto err_unlock_netdev;
+> +	}
 > +
-> +	for (u32 i =3D 0; i < trace_nr; i++) {
-
-I see this is addressed in a later commit in the series ("bpf: Cache build
-IDs in sleepable stackmap path"), but is there a risk of a performance
-regression here?
-
-The original non-sleepable path cached the previous VMA and build ID. Since
-that caching logic is missing here, will adjacent stack frames from the same
-binary repeatedly trigger file reference acquisitions and blocking reads for
-every single IP?
-
-> +		ip =3D READ_ONCE(id_offs[i].ip);
-> +		vma =3D stack_map_lock_vma(&lock, ip);
-> +		if (!vma || !vma->vm_file) {
-
-Is checking vma->vm_file sufficient to determine if the mapping is
-file-backed?
-
-Anonymous VMAs, such as private mappings of /dev/zero or driver mappings
-calling vma_set_anonymous(), can legitimately have vm_file set.
-
-Could passing these anonymous VMAs to build_id_parse_file() invoke
-__kernel_read() on a driver's read handler, leading to unintended side
-effects or hangs?
-
-Would it be safer to use !vma_is_anonymous(vma) instead?
-
-> +			stack_map_build_id_set_ip(&id_offs[i]);
-> +			stack_map_unlock_vma(&lock);
-> +			continue;
-> +		}
+> +	if (bind_dev !=3D netdev)
+> +		netdev_lock(bind_dev);
 > +
-> +		file =3D get_file(vma->vm_file);
-> +		vm_pgoff =3D vma->vm_pgoff;
-> +		vm_start =3D vma->vm_start;
-> +		stack_map_unlock_vma(&lock);
+> +	dma_dev =3D netdev_queue_get_dma_dev(bind_dev, 0, NETDEV_QUEUE_TYPE_TX);
 > +
-> +		/* build_id_parse_file() may block on filesystem reads */
-> +		if (build_id_parse_file(file, id_offs[i].build_id, NULL)) {
-> +			stack_map_build_id_set_ip(&id_offs[i]);
-> +			fput(file);
-> +			continue;
-> +		}
+> +	binding =3D net_devmem_bind_dmabuf(bind_dev,
+> +					 bind_dev !=3D netdev ? netdev : NULL,
+> +					 dma_dev, DMA_TO_DEVICE, dmabuf_fd,
+> +					 priv, info->extack);
+>  	if (IS_ERR(binding)) {
+>  		err =3D PTR_ERR(binding);
+> -		goto err_unlock_netdev;
+> +		goto err_unlock_bind_dev;
+>  	}
+> =20
+>  	nla_put_u32(rsp, NETDEV_A_DMABUF_ID, binding->id);
+>  	genlmsg_end(rsp, hdr);
+> =20
+> +	if (bind_dev !=3D netdev)
+> +		netdev_unlock(bind_dev);
+>  	netdev_unlock(netdev);
+>  	mutex_unlock(&priv->lock);
+> =20
+>  	return genlmsg_reply(rsp, info);
+
+If genlmsg_reply() fails here, is the dmabuf binding leaked?
+
+The RX path (netdev_nl_bind_rx_doit) correctly rolls back by calling
+net_devmem_unbind_dmabuf() on reply failure. However, it looks like the
+TX path returns the error to the user but leaves the orphaned binding
+attached to the netlink socket.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260512032906.2670=
-326-1-ihor.solodrai@linux.dev?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260511-tcp-dm-net=
+kit-v4-0-841b78b99d74@meta.com?part=3D3
