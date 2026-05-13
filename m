@@ -1,140 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D023B2FC6;
-	Wed, 13 May 2026 21:56:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE0C38D016;
+	Wed, 13 May 2026 22:18:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778709381; cv=none; b=O5e0ldvXDWYLskN/foOg+Yy868x6ZstXe3h+/Ws3Net+ZkwnVgp6B6TQGlOCeojsnZndiWjEisYce/7q/h3YRUlXjr6mQeuLQAGYhoR5pqCq7JUaeOauJGpWCzYJyEAF+FeoF58HPJu/jeD4/bZ8Vhs1eTlGGqRzXX9R2rQL3X4=
+	t=1778710704; cv=none; b=TTBwuyM5RgdyoJZOPdNY8E/d9LQzIpCfh2IZyDJ9OmwZu84QW9COZPJrOb2UHURp6d7oGnHax8H46jGDspQtgyAiwR7O1/R8kx5SyXeh96QZgNMbzqCcn3oZilN9pYZwjUSAyDLH9N5MP3tgkieYA+UyQsevrLOtV6PS6/wZGm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778709381; c=relaxed/simple;
-	bh=q8Cf0P1DAD1ZUob8BaZVBhkMZaoKPdp9LOW6UExyZW0=;
+	s=arc-20240116; t=1778710704; c=relaxed/simple;
+	bh=jAH5trAGjcAHUkecqgGL2PY7cPqAzuJcaRVc2i7ta4A=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=rjFkz679F08mypbBy+mAYgE2xjmYc3bY1Yi5SXdpmfbkSDyQvwMCrFc/B+hjmzu7C+DCvX9JWXUneq7XskAChJU9yJkVyIl3bu/XOkUaSpLCitcH6kSxN/reMtlCIu+1YpDzyenZG88Y6dBy5YO3ciZPfEPJ+fE+qUUEMWnYTt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oS8xH92X; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=ebPmewOwBbad2NQpo3FA9FSJEhuL6ac3SwJCQeloBvRaaBHLwsBOlY5+GqHbNpxDswUaqFj6QEmWW4iV8LtmWmq2gZH1ePHXjopcc4z1+nKFTYY5xS9WroOoXbuTBsZkZE2yKLaPpMASXU3fb/3+5Gsp/Lf1gUqTwbNWWdtaKUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LeQP0DA4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oS8xH92X"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0ACDC19425;
-	Wed, 13 May 2026 21:56:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LeQP0DA4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0368C19425;
+	Wed, 13 May 2026 22:18:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778709381;
-	bh=q8Cf0P1DAD1ZUob8BaZVBhkMZaoKPdp9LOW6UExyZW0=;
+	s=k20201202; t=1778710704;
+	bh=jAH5trAGjcAHUkecqgGL2PY7cPqAzuJcaRVc2i7ta4A=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=oS8xH92XSOLzHYrRAMRMIg3VV0WEntP3W9ClTVUKtuw439RbZ9MPZIoWUjYxgmW2U
-	 +TDCG/pI4p8Vd84+3GOBNKSd5U4cmO7ISMU9k6yEkvQrQXPBr0yEIb7nsy7AuF04iT
-	 G113sqzm55aSJNsArU/vLbNiK/4INhgM3Ze9DvB1Fv6HAqBWpHCOsCJput5tJDCgZf
-	 MU+dauoniH2j3G+FtIYd6gRVEpyOJ3zkloSd1vaVR0PB/Rhd7wd3BsBkcBbajMYT04
-	 P4JlFaKlq298V4TtHBvUMPwqZmWIBy/946vK60yDKBc+4umSbDa4fLyZo/w/xKwTKP
-	 +BMdhQ+ufxynw==
+	b=LeQP0DA4Qf4xFdsDddALL/Yyi1Pfhkdy9lBdYpJzTOTBHPKr6gAfDcedpi5UeN3gW
+	 rIbn7OGOO9Gmvc2xtikn7dxj7DymmvCll2xj5GVzpBM3a5DnFq/tQ9glilpStCk4JE
+	 4p2OPXYAZ9/nvfK0pVR6tNyfkp0LJsbaXnKD5AYiZGaqR/LcrS+XPtKb7Ms7I7nUz8
+	 vNZlRx3mufjL167LuI4pp3+qswzPtqmMxKqNU3Zg4jKNIkTB+z8aVVqu0Q/M77A8Di
+	 J80h7dj7rqXjjPVCeAs6p9XaLyVSlMS/Yl3lFx1U/ap9hlBj6+vZ40fvhcvwH9Sjvs
+	 HJYminJ50iIsA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v1 12/14] perf pmu-events: Split big_c_string storage
- into standalone compilation unit
+Subject: Re: [PATCH v1 13/14] perf pmu-events: Parallelize JSON and metric
+ pre-computation in jevents.py
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ian Rogers" <irogers@google.com>
 Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-In-Reply-To: <20260512053539.3410189-13-irogers@google.com>
-References: <20260512053539.3410189-13-irogers@google.com>
+In-Reply-To: <20260512053539.3410189-14-irogers@google.com>
+References: <20260512053539.3410189-14-irogers@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 13 May 2026 21:56:20 +0000
-Message-Id: <20260513215620.E0ACDC19425@smtp.kernel.org>
+Date: Wed, 13 May 2026 22:18:23 +0000
+Message-Id: <20260513221823.D0368C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Low] Missing header declaration for global variable `big_c_string`.
-- [Low] Flawed multiple-output Make rule causes build failures on configura=
-tion changes.
+- [High] The nested `_init_worker` function causes a fatal `PicklingError` =
+under `spawn` multiprocessing semantics.
+- [High] Parallelizing the JSON parsing breaks architecture isolation for s=
+tandard events, leading to state contamination across architectures.
+- [Medium] The depth filtering logic is missing from the `collect_json` cal=
+lback, causing redundant parallel parsing of deeply nested files.
 --
 
-commit 5d2e7b3d9410693c44dfde4428eb25c3e52c21d2
+commit 90db323cf161fc6e18235c0d700851677b283082
 Author: Ian Rogers <irogers@google.com>
 
-perf pmu-events: Split big_c_string storage into standalone compilation unit
+perf pmu-events: Parallelize JSON and metric pre-computation in jevents.py
 
-This commit modifies jevents.py to emit the large big_c_string literal
-into a dedicated pmu-events-string.c file instead of pmu-events.c. This
-allows the build system to compile both files in parallel to reduce
-compilation latency.
-
-> diff --git a/tools/perf/pmu-events/Build b/tools/perf/pmu-events/Build
-> index dc1df2d57ddc1..f8f5ec7daa5f1 100644
-> --- a/tools/perf/pmu-events/Build
-> +++ b/tools/perf/pmu-events/Build
-
-[ ... ]
-
-> @@ -224,6 +234,9 @@ endif
->  # and inputs are dependencies.
->  $(PMU_EVENTS_C): $(JEVENTS_DEPS)
->  	$(call rule_mkdir)
-> -	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) $(JEVEN=
-TS_MODEL) $(OUT_DIR) $@
-> +	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) $(JEVEN=
-TS_MODEL) $(OUT_DIR) $@ $(PMU_EVENTS_STRING_C)
-> +
-> +$(PMU_EVENTS_STRING_C): $(PMU_EVENTS_C)
-> +	@:
-
-Does this dummy recipe correctly handle configuration changes?
-
-If switching from NO_JEVENTS=3D1 to NO_JEVENTS=3D0, pmu-events.c might alre=
-ady
-exist from a copy of empty-pmu-events.c and have a timestamp newer than
-JEVENTS_DEPS.
-
-Make could consider pmu-events.c up to date, execute this dummy recipe
-for the missing pmu-events-string.c, and then fail to compile
-pmu-events-string.o with a missing file error.
+This commit refactors jevents.py to pre-populate its internal JSON AST cache
+in parallel using ProcessPoolExecutor. It aims to accelerate execution by
+parallelizing the parsing of JSON event and metric files across available
+cores.
 
 > diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jev=
 ents.py
-> index 3a1bcdcdc685f..70a45e62f5d16 100755
+> index 70a45e62f5d16..eb72c154f946e 100755
 > --- a/tools/perf/pmu-events/jevents.py
 > +++ b/tools/perf/pmu-events/jevents.py
 
 [ ... ]
 
-> @@ -1463,10 +1465,20 @@ struct pmu_table_entry {
->      ftw(arch_path, [], preprocess_one_file)
+> @@ -1459,9 +1467,29 @@ struct pmu_table_entry {
+>      raise IOError(f'Missing architecture directory \'{_args.arch}\'')
 > =20
->    _bcs.compute()
-> -  _args.output_file.write('static const char *const big_c_string =3D\n')
-> -  for s in _bcs.big_string:
-> -    _args.output_file.write(s)
-> -  _args.output_file.write(';\n\n')
-> +  if not _args.output_string_file:
-> +    _args.output_file.write('static const char *const big_c_string =3D\n=
-')
-> +    for s in _bcs.big_string:
-> +      _args.output_file.write(s)
-> +    _args.output_file.write(';\n\n')
-> +  else:
-> +    _args.output_string_file.write('/* SPDX-License-Identifier: GPL-2.0 =
-*/\n')
-> +    _args.output_string_file.write('/* Autogenerated by jevents.py */\n')
-> +    _args.output_string_file.write('const char big_c_string[] =3D\n')
+>    archs.sort()
+> +  import concurrent.futures
+> +  tasks =3D []
+> +  def collect_json(parents: Sequence[str], item: os.DirEntry) -> None:
+> +    if len(parents) =3D=3D 0:
+> +      return
+> +    if item.is_file() and item.name.endswith('.json') and not item.name.=
+endswith('metricgroups.json'):
+> +      tasks.append((item.path, get_topic(item.name)))
 
-Since big_c_string is now emitted as a non-static global variable in a
-separate compilation unit, does it need a shared header declaration?
+Is the depth filtering logic missing from collect_json()?
 
-Without a prior declaration included in the generated pmu-events-string.c,
-compilers may emit -Wmissing-variable-declarations warnings during the
-build.
+The commit message mentions applying depth filtering to prevent redundant
+worker tasks. However, collect_json does not seem to limit the directory
+depth.
 
-Also, is big_c_string too generic of a name to place in the global namespac=
-e?
+This could cause the main thread to queue worker tasks for deeply nested
+files, which are fully parsed by the worker pool but subsequently ignored
+during the actual generation phase.
 
-> +    for s in _bcs.big_string:
-> +      _args.output_string_file.write(s)
-> +    _args.output_string_file.write(';\n')
-> +    _args.output_string_file.close()
-> +    _args.output_file.write('extern const char big_c_string[];\n\n')
+> +
+>    for arch in archs:
+>      arch_path =3D f'{_args.starting_dir}/{arch}'
+>      preprocess_arch_std_files(arch_path)
+> +    ftw(arch_path, [], collect_json)
+
+Does this loop break architecture isolation for standard events?
+
+By looping over all architectures to populate a single global _arch_std_eve=
+nts
+dictionary before parsing the JSON files, standard events with identical
+names from later architectures might overwrite definitions from earlier
+architectures.
+
+When the parallel worker processes evaluate the earlier architecture JSON
+files, they may use this polluted global dictionary and inherit fields from
+the later architectures, leading to incorrect PMU tables.
+
+> +
+> +  def _init_worker(std_events: dict) -> None:
+> +    global _arch_std_events
+> +    _arch_std_events =3D std_events
+> +
+> +  with concurrent.futures.ProcessPoolExecutor(initializer=3D_init_worker=
+, initargs=3D(_arch_std_events,)) as executor:
+
+Could defining _init_worker locally cause a pickling error under spawn
+multiprocessing semantics?
+
+_init_worker is defined as a local function inside main(). Under spawn
+multiprocessing semantics, Python uses pickle to serialize objects to child
+processes, but pickle cannot serialize local functions.
+
+This regression might result in an attribute error when initializing the
+executor, which seems to contradict the commit message's claim of supporting
+spawn semantics.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260512053539.3410=
-189-1-irogers@google.com?part=3D12
+189-1-irogers@google.com?part=3D13
