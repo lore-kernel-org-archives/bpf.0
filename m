@@ -1,115 +1,134 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 263013B893C;
-	Wed, 13 May 2026 19:52:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45185397329
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 19:52:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778701943; cv=none; b=LZwhlCHq4QBicER+lktnVbxIR9WyU6KSL532o/TY85F3G3oizpatPQpBav4T5L9+xVPsLcgWvl0eX/ZirvWlmZQF27AemQVrqz74X7BKKcbJMmavnAnRTQLf+7tY44y4/DN6OxYHDXz2mL/3B/aMgiX5wERnJlhi+7LQ59D7tTU=
+	t=1778701965; cv=none; b=t85E23GkpamOHq+43FP68BHFJ+bADrif1IHQ2Wwasx6tdJFqZ//2dOJfgU72Ht70xP/zDXfKMPX5KkoV5ug0nxh0I7BiWfp+JYxT5p6UX4Vbb9K3K6j4cJs2cjvquZhjqwsrJbINtRNbVHbD1a7ekgiD5RxUFTkvtG4u4sz9K5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778701943; c=relaxed/simple;
-	bh=DU7P2xoGBj+NDCzBfpteGc1keySqh/LGc49XPI7HXwQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=WTMaB6GGsASqM6GSSQXSPq3HYwNdtMAtzYleIP0X0+ZUZ7lpFgYcjevvZ3+FauEKrLS7ZL3MDV7GNXcKpeJs9N5dzDDWR1JPF0342XB3WAXXIASKUm7V3bumBoVlOtkoBxwd2q7ZDMdQGVK4UzAUHc/7Ph9YU6nKJITJH6i7mzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NSdSHb/0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778701965; c=relaxed/simple;
+	bh=xBRPX/Dfojxagl7fZvimMhfqlgUmbDz+PjfCGyhfbT0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qwZXY6SJWAv57mZ16WijpkyU/lxzv0V5vhaK4UzfUUtvDXLjmkVvFp7i9p05u4eoHAqET61rmfZqJtBLhMU4uFlwvQvw20Uw7hbxBXZpgHn38N9u2YYXdVGXAwaxqgjahOK2fDD42ScJ1FRsC8vmJIE7SqS2bPtQVGFQN/JUIf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AhXiTBfD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NSdSHb/0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21FEBC19425;
-	Wed, 13 May 2026 19:52:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AhXiTBfD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2A2FC2BCF5
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 19:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778701942;
-	bh=DU7P2xoGBj+NDCzBfpteGc1keySqh/LGc49XPI7HXwQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=NSdSHb/0vnBwIKfq3YALaIL/6dOwO+q59wALbvmDNk/503iv0Aie29UVtcUfvjXny
-	 /Gvzpe1LgJOJJU5mASI0he783+3D1zm6txKb9XndS9qSQWstfUauKDxAnZNtVJ7hNM
-	 btXD5SXF4c2w2EB6y04ymm8KqHAYsbTGiR25ZQwvQ7eS9XR9QBPy7fR8KKnpgGZWfW
-	 kFOyfdFhgKpw6Ig/KMESMUrcWZtYmx0PIY9XVkuHhKNShT+c0dbK6ysUd5bT7cwUXk
-	 hef5wtIn10hmhnndcSPFuJWRHOD0PJ3Xije/JgsyQoeiS9KCCF21PnLs39PvrMzRbr
-	 xgq2LQyVJ1wXg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v1 05/14] perf build: Move BPF skeleton generation out
- of Makefile.perf
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ian Rogers" <irogers@google.com>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260512053539.3410189-6-irogers@google.com>
-References: <20260512053539.3410189-6-irogers@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 13 May 2026 19:52:21 +0000
-Message-Id: <20260513195222.21FEBC19425@smtp.kernel.org>
+	s=k20201202; t=1778701964;
+	bh=xBRPX/Dfojxagl7fZvimMhfqlgUmbDz+PjfCGyhfbT0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=AhXiTBfDu63RgeX0ZPQZp5HzQtNlaR96YvSwQeHom3/3OZISPFHKHez4ljM4ldAp3
+	 msN4zoZvt84NAn8P8WrIIqFjp44nF6PjNnO5RYfdjA5aH3xEnTvPj5JeiKSP2HFEFD
+	 78BkYoM0pKTt9vsgVamMI3J47nTWRUzO27IB+BSHFdNcLwyHS59t9PrZee22E+PDxm
+	 TLOf1EBKNXzC6yF95cOULO3cuBKM0iP4tEWODWwr/F1CJZLYjStxSzau/N0tJZ5SOz
+	 HhWKyF+ndSUXJKtmyWVQ8+IPMSi05d2dzEmSyQljXu81XjMNQb4UvO3g4v9DOX5bSP
+	 qN3WXqGDrWM5Q==
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5a74ac8b40aso6582082e87.1
+        for <bpf@vger.kernel.org>; Wed, 13 May 2026 12:52:44 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ/g4zH8yYdaUgLYSOpBUQ4QdxnFWW6eLzIOaOYxGp6eEDq/DNc+8bINPKpLxnLyuJVn5fE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yya68Cnh4lCzPPLyAGQ99YdJn9UDVf7bt8reGl4Or/gJhL7mz/8
+	+5YNUg/F8QAe7HoaLluDUvqCEmS2fKfeYRWRVsWzePoWCHbQvo2c5XaNh6TCLTcGfpdyJfk9ueu
+	CbA99NmIc5yTetJ7vpfhE22/rte77Z0I=
+X-Received: by 2002:a05:6512:2397:b0:5a7:470c:daed with SMTP id
+ 2adb3069b0e04-5a8ef979ad1mr1519384e87.16.1778701962988; Wed, 13 May 2026
+ 12:52:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260511174559.659782-1-wusamuel@google.com> <CAP01T74KQ6bie5o++i_gHM19J+s2RzDyM6=w87=oUZgPagPejw@mail.gmail.com>
+ <CAADnVQJtuKQh-bpDDeqWCQRM1zb2sSgo0qET_+1+JFOL-6cpDg@mail.gmail.com>
+In-Reply-To: <CAADnVQJtuKQh-bpDDeqWCQRM1zb2sSgo0qET_+1+JFOL-6cpDg@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 13 May 2026 21:52:29 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hqdyMnBtvvo7RwUkh5saLvAHkTEVz8Ln09UaKMqoP=Dg@mail.gmail.com>
+X-Gm-Features: AVHnY4LmM8Vv_OoKGu6J_Ex4o-83kMNCI18g9TG-3cwnjduMTe-j6feES7nw_ic
+Message-ID: <CAJZ5v0hqdyMnBtvvo7RwUkh5saLvAHkTEVz8Ln09UaKMqoP=Dg@mail.gmail.com>
+Subject: Re: [PATCH v4 0/2] Support BPF traversal of wakeup sources
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Samuel Wu <wusamuel@google.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Android Kernel Team <kernel-team@android.com>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	Linux Power Management <linux-pm@vger.kernel.org>, driver-core@lists.linux.dev, 
+	bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Low] The `prepare` target evaluates the `$(BPFTOOL)` variable before it =
-is defined, causing it to silently expand to an empty string.
-- [Low] The `bpf-skel-clean` target fails to clean the intermediate `.tmp` =
-directory for bench skeletons, causing a build artifact leak after `make cl=
-ean`.
---
+On Wed, May 13, 2026 at 2:51=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Mon, May 11, 2026 at 1:44=E2=80=AFPM Kumar Kartikeya Dwivedi
+> <memxor@gmail.com> wrote:
+> >
+> > On Mon, 11 May 2026 at 19:50, Samuel Wu <wusamuel@google.com> wrote:
+> > >
+> > > This patchset adds requisite kfuncs for BPF programs to safely traver=
+se
+> > > wakeup_sources, and puts a config flag around the sysfs interface.
+> > >
+> > > Currently, a traversal of wakeup sources require going through
+> > > /sys/class/wakeup/* or /d/wakeup_sources/*. The repeated syscalls to =
+query
+> > > sysfs is inefficient, as there can be hundreds of wakeup_sources, wit=
+h each
+> > > wakeup source also having multiple attributes. debugfs is unstable an=
+d
+> > > insecure.
+> > >
+> > > Adding kfuncs to lock/unlock wakeup sources allows BPF program to saf=
+ely
+> > > traverse the wakeup sources list, and a kfunc to get head of wakeup
+> > > sources list is needed to start traversing the list.
+> > >
+> > > On a quiescent Pixel 6 traversing 150 wakeup_sources, I am seeing ~34=
+x
+> > > speedup (sampled 75 times in table below). For a device under load, t=
+he
+> > > speedup is greater.
+> > > +-------+----+----------+----------+
+> > > |       | n  | AVG (ms) | STD (ms) |
+> > > +-------+----+----------+----------+
+> > > | sysfs | 75 | 44.9     | 12.6     |
+> > > +-------+----+----------+----------+
+> > > | BPF   | 75 | 1.3      | 0.7      |
+> > > +-------+----+----------+----------+
+> > >
+> > > The initial attempts for BPF traversal of wakeup_sources was with BPF
+> > > iterators [1]. However, BPF already allows for traversing of a simple=
+ list
+> > > with bpf_for(), and this current patchset has the added benefit of be=
+ing
+> > > ~2-3x more performant than BPF iterators.
+> >
+> > This looks good to me, you can add for the set:
+> > Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+>
+> Rafael,
+> how do you want to route it?
+>
+> If you ack it we can take it into bpf-next.
 
-commit ba0748386f00351749ad3ff0cb9d88e512a55543
-Author: Ian Rogers <irogers@google.com>
+I guess if someone really wants this, I have no particular reason to
+object, so please feel free to add
 
-perf build: Move BPF skeleton generation out of Makefile.perf
+Acked-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
 
-This commit refactors BPF skeleton generation by extracting the infrastruct=
-ure
-out of Makefile.perf into a shared bpf_skel.mak file. It isolates the direc=
-tory
-structure and prevents unrelated sub-makes from serializing behind bpftool =
-and
-clang BPF target evaluations.
+to the first patch.
 
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index 24581941e912e..d4fc10f36781f 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-[ ... ]
-> @@ -914,44 +913,13 @@ python-clean:
-> =20
->  SKEL_OUT :=3D $(abspath $(OUTPUT)util/bpf_skel)
->  SKEL_TMP_OUT :=3D $(abspath $(SKEL_OUT)/.tmp)
-[ ... ]
->  ifeq ($(CONFIG_PERF_BPF_SKEL),y)
-> +prepare: $(BPFTOOL) $(SKEL_OUT)/vmlinux.h
->  BPFTOOL :=3D $(SKEL_TMP_OUT)/bootstrap/bpftool
+> I'd think patch 1 shouldn't conflict with other 'wakeup' changes.
 
-Does the prepare target evaluate the $(BPFTOOL) variable before it is defin=
-ed?
+Sure, there are none ATM anyway.
 
-In GNU Make, variables in target prerequisites are expanded immediately.
-Because the prepare target precedes the BPFTOOL assignment, $(BPFTOOL)
-silently expands to an empty string. The build seems to succeed only
-circumstantially because vmlinux.h has a transitive dependency on bpftool.
-
-I note this regression is fixed later in the series by commit e42b6c2f3098a
-("perf build: Encapsulate vmlinux.h and bpftool in bpf_skel.mak").
-
-[ ... ]
->  bpf-skel-clean:
-> -	$(call QUIET_CLEAN, bpf-skel) $(RM) -r $(SKEL_TMP_OUT) $(SKELETONS) $(S=
-KEL_OUT)/vmlinux.h
-> +	$(call QUIET_CLEAN, bpf-skel) $(RM) -r $(SKEL_TMP_OUT) $(SKEL_OUT)/*.sk=
-el.h $(SKEL_OUT)/vmlinux.h $(OUTPUT)bench/bpf_skel/*.skel.h
-
-Is the intermediate .tmp directory for bench skeletons left behind during
-cleanup?
-
-While the target explicitly removes the generated headers from bench/bpf_sk=
-el/,
-it misses the temporary object directory $(OUTPUT)bench/bpf_skel/.tmp where
-intermediate .bpf.o files are generated, causing a build artifact leak after
-running make clean.
-
-This regression is also fixed later in the series by commit e42b6c2f3098a
-("perf build: Encapsulate vmlinux.h and bpftool in bpf_skel.mak").
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260512053539.3410=
-189-1-irogers@google.com?part=3D5
+Thanks!
