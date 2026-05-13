@@ -1,122 +1,184 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A4D4DB569
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 17:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778691737; cv=pass; b=drx9zzgYPRjnE5phygLy6oJmHzPN7mnePWflMepMGPXrb2CLnhrMBdy+guBtoMKJlf0SK5LArPag4XhK7A9n5P4U9DZjuD1eIm7XQhWg7C1UBcnOITS+UqZ/H2NbuHCU2s9pGb5ebhMAad1ftazPmzUmXaWwN6G1hip0VyVCP8w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778691737; c=relaxed/simple;
-	bh=G3BGz1JY36/f65EsXPbcHpzUvA0Vvm09vuJzP0AFG1Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MlQTYhRcGSe/GeHyc7NuCcluX0zsTNkj1gYhj4V2MNxsQpyr0QCAgstHOXPvLMTqouELNjRb/17oX7baSnDuh8dTt+VxQFc0bRU+ZX6iqRSEOtImtkJrgzVE1lLowOlmXQHc+gh4SsNNeRdRQIlI8tV5odD2Q6LPBbMmFQPTPcg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j3lUhw8w; arc=pass smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50AC9212548
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 17:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778692801; cv=none; b=EmxAzOqLQMHbWy5HpuvzENCKwV1dYjFxP/eGuQ0rkkpGjHHNG9DIIwwXl4avfPsPMmhiAwTpXcIKDrbIq0tcQ1K5DU3g+zV3/Euxln/ZE+4jZoNi3iTL11xicF01GFiioyE3bML7zhx2K55pOrqffIepUt0i1SW7X4a+xc0WLHo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778692801; c=relaxed/simple;
+	bh=C/omiLM/r7V93VaTAIE+KF7mnPxoyr9AFcoTKaoSLac=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IAQP8V8iIl68Gz5OUbkRRZBqSj9+bj1usHzVjeMP5Tnr9AOvN8CWMtGE/e7Rm/s7qRF2lctRFXoe0p6TrC+LMuab4DXrDtIY4XBmSdFx15Hi40gZicuajrkPEj/SC9eFQujdaJk+gnT4oTbuDU2CLAM56Cvuetk50gY7UFULCEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FALyrhD8; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j3lUhw8w"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-441209fb77eso4315345f8f.1
-        for <bpf@vger.kernel.org>; Wed, 13 May 2026 10:02:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778691734; cv=none;
-        d=google.com; s=arc-20240605;
-        b=aYowFegN7l7No7dvo3GF+HBC7AcM3C0t03ve5xFm6HaXyTl+eOkxD1q8r8p0+sZAgR
-         RZDHyyZrXP08hvANXcoRN6rYQ9+D6TYx/Xsb+RvfhIhcVRm/ygnz8mmiXe9FjUPTMgHg
-         JaHcyqitNBK+UdWPZvcQcdn8Ghi0PPirtrv1EMAxGvsqF1QvOJUzLkjZgUqiqQsnVFN5
-         K1vB/+BACxVzZBQhEGi7ZolUtCApPQcpGbGdOvhF50FRR+0heDGNLaHyoFpkir5wepAu
-         yMatNNueCGS0PwYnjjtO9tVLUErYzHQ1NhA1dighXMw34gZmawBfoKC3Vf9F37fjCETz
-         zg0A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Pm/7AQT70Af1uVrKb0OGWSpkbiaJBc8xDYGjxSqDigQ=;
-        fh=7Y7kjDajHaTzBl/+VqUPR0YJemq5MXcAPE5C5SkvH1s=;
-        b=BU4xGcg4vmwEGJrLoymjnpULk/muFp/3jetYXZtDUmat512YyFDIZyp+1LapjFcTyG
-         +TFgNJOrQbWKN+fgjebBJgDoslpI7R+u1bsjLZJH1oNAwjGLek/R/0CvrlgvJOjJXKLs
-         YTIxB9rMVKIcuIOOF4wo247JSzaJf9+SNqubE7Pd7qS0euHqmRg85pxZGAgVsTiwAvAS
-         d4WJvdPwL7b/Gv3joJ4Gk0urM7a5S8zmBhhrSV3Zj7//JweEaTOpfrUvqJ2uxh6pYJDe
-         2Lc8JmLm9msD1FaaRYOJMbNAw98VlF8SciFgGO9MhufbPJzqsCsJNM1522zQnWnaK456
-         0xKg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778691734; x=1779296534; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pm/7AQT70Af1uVrKb0OGWSpkbiaJBc8xDYGjxSqDigQ=;
-        b=j3lUhw8wJlppQ4zed8hBb+VKcoE4PFC73vq4FcfJoW/4otVVFqOX18NXNHsV7nZ/BG
-         gJya2pC2rB6178UQrlaJafZWbw8cSj0AUZ0hcAkfSP8wpdCtRA+oJf1vd66/j9kWzfQ4
-         7UmvClSvmcKLbZQV0QO+Ab742Ou99Y5COXtQBtUJh4hybMcuJjRZ+kX/da1QTprNLOqN
-         IHR4hIYWbydceRjOi3zgIaNIWCfs0HAIdOFxJGmj9wvFBs7T0JZPcHt692fqeYRrUql2
-         HZqK1o7mcqB5rbwwOajqPG0drHk9OS7bwm0pTlSCzZk0/bYcH3Tz++zFZlQJvqLqrtTf
-         Qfng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778691734; x=1779296534;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Pm/7AQT70Af1uVrKb0OGWSpkbiaJBc8xDYGjxSqDigQ=;
-        b=j0ExT8fLFX/pFdnSKSRPDiuJnvk38uNVq4Vy3m5UdhVeODRFD9ge6C1Vw2VwO/M5vN
-         DeEVuL/Kqfv2UtBgcK/vMu8frArMLS0EEIOFFI6t6+F281cPBsHn1QDvpZoBo1NvJShK
-         Chzwtlk/we1Acw09+RAdp3MioDSnHBraFE1aNowj4cJQU+8oKVtR9KLDxMKpptY91IX0
-         EHCPBf/xPPQddFlHd1bvlcqhU+qOoHNGXsGjUxbgxSM1aJ5UwcVk1hkCmL9YDBtKA5OX
-         tkyZdljvlhr59ypV0gMSE3mmXQ4p6dxOLms1TzeaGg8X54I52NeQ0y1fwug9MSk0HMMF
-         0AkA==
-X-Forwarded-Encrypted: i=1; AFNElJ8oPnz1ALWtS5S5VW7Gcj40xKYEu/iYkn5IS/qwkyGKACl37kmbepU6WD4moJ+O1cenTZA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQldEciO5hsImiKgdfxM9T6zV1NqnSf4jGIgY4RDaPyGu6Wbyy
-	77cSjy9X946rHFVo5DQ7gNKJQm08tB3bHD7Vvc2z6Ob8s0QmPp/+w87Oi0+O+vJ6ivIW+kF61q0
-	ELgh6gyZR/ixi003w9+6lneIMCYaQ7i8=
-X-Gm-Gg: Acq92OGjx208hGNLxK2P46EinHQQO6Z2MaRkNRDkUpwzI8+lkDo9yIMF3bMvoXDNGQO
-	0qT02fgtoQj21jBR3SyImCz62QtK8sZeGYpVoRHqU4dZ2acNfdYh+TTzph9H+pgmCZ9woIy/XmS
-	HSYn9M+QM/3qw0QInZ7N0ERq/mNgm7j19/F9FrdVLB3dqrHzmSAhg2Utpp80FLD/L+Uu4/oMTRJ
-	yRHubhhpwW2i0A8wMaFYDL8ugsYVBHrHb1sA7OZlUpI4piKptS+r924qvB7iGEmHEEgltoKcNAn
-	gvlIyiMJdQrKZzEb+PYg42n87nZxI92aEHfHITk/hSNfaKPAFyBLRiJPqZ8C7+SqArc8BKVois0
-	uRYmIuBwif/2pD1nk4kDHP4VNug==
-X-Received: by 2002:a5d:5f47:0:b0:457:ff13:b2a4 with SMTP id
- ffacd0b85a97d-45d8fe08569mr610172f8f.3.1778691733599; Wed, 13 May 2026
- 10:02:13 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FALyrhD8"
+Message-ID: <8cabc830-7aa1-4830-bc97-8756145d45f8@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778692795;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YHy9TjdQ1GyBjJIO3lOl0MZgD404LiUSrXXuRuDKq9U=;
+	b=FALyrhD8efWX1wYEaET+8Rt0RfIVLebNwd8gwNBVwEi5UUu37oIOCayhZ1cZycpvblRXgl
+	C7dBf0vpgZA6t5XtFb2QsgEwCk8aaJeYGh6H6vcxhMOx5kuxP2GnRoNCydhrhZFM2dBwwr
+	tqeQ8MNsdeqrSRM98SbTPcB4/d2SizE=
+Date: Wed, 13 May 2026 10:19:50 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260511152817.89191-7-leon.hwang@linux.dev> <20260512233658.CEED7C2BCB0@smtp.kernel.org>
- <3c9b4ff0-7a62-4053-83c7-23151905c742@linux.dev>
-In-Reply-To: <3c9b4ff0-7a62-4053-83c7-23151905c742@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 13 May 2026 10:02:01 -0700
-X-Gm-Features: AVHnY4IGmVwWcavbw6OvXdhM0kl3pI1g8o_zFUpbYMtujiX0hcFEhJgHmWBpXKk
-Message-ID: <CAADnVQ+XR3kyqizGgGhtG5xiBu3oK3O+COUMfPDQDBSJbm=56A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v13 6/8] bpf: Add syscall common attributes
- support for map_create
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: sashiko-reviews@lists.linux.dev, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf v3 2/3] bpf: Avoid faultable build ID reads under mm
+ locks
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260512032906.2670326-3-ihor.solodrai@linux.dev>
+ <20260513040354.ED092C2BCC7@smtp.kernel.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260513040354.ED092C2BCC7@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, May 13, 2026 at 3:50=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
-> On 13/5/26 07:36, sashiko-bot@kernel.org wrote:
-> [...]
-> >> +
-> >> +    err =3D __map_create(attr, uattr, log);
-> >> +
-> >> +    ret =3D bpf_log_attr_finalize(&attr_log, log);
-> >> +    if (ret) {
-> >> +            if (err >=3D 0)
-> >> +                    close_fd(err);
-> >
-> > Is it safe to call close_fd() here? Since __map_create() uses
-> > bpf_map_new_fd() to allocate and publish the file descriptor via
-> > fd_install(), the file descriptor is already visible to userspace.
-> >
->
-> I think it is acceptable to close_fd() here, that the duration between
-> fd_install() and close_fd() is short.
+On 5/12/26 9:03 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
+> - [High] Sleepable build ID parsing unconditionally fails on systems where CONFIG_PER_VMA_LOCK is disabled.
+> - [High] Incorrect VMA classification using `!vma->vm_file` violates MM API and risks unsafe driver reads.
+> - [High] Missing caching causes a severe performance regression due to redundant file I/O for IPs within the same VMA.
 
-bot is correct. Let's avoid these races.
-Pls move bpf_log_attr_finalize() into map_create and do it
-before security_bpf_map_create.
+Sashiko essentially repeated the issues flagged by BPF CI bot,
+which I already replied to. Same in the second message.
+
+Ignoring these for now.
+
+> --
+> 
+> commit 8402e095f9b6a82fa06a32af10007e005d6c5e76
+> Author: Ihor Solodrai <ihor.solodrai@linux.dev>
+> bpf: Avoid faultable build ID reads under mm locks
+> 
+> This commit updates the stackmap sleepable path to avoid calling
+> build_id_parse_file() while holding mmap_lock or a per-VMA read lock. It
+> achieves this by acquiring a stable read-side reference to the backing file,
+> dropping the VMA lock, and then parsing the build ID.
+> 
+> Link: https://lore.kernel.org/all/20251218005818.614819-1-shakeel.butt@linux.dev/
+> Link: https://lore.kernel.org/all/20260128183232.2854138-1-andrii@kernel.org/
+> 
+>> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+>> index 4ef0fd06cea58..c1e96df360c3f 100644
+>> --- a/kernel/bpf/stackmap.c
+>> +++ b/kernel/bpf/stackmap.c
+> 
+> [ ... ]
+> 
+>> @@ -158,6 +159,105 @@ static inline void stack_map_build_id_set_ip(struct bpf_stack_build_id *id)
+>>  	memset(id->build_id, 0, BUILD_ID_SIZE_MAX);
+>>  }
+>>  
+>> +struct stack_map_vma_lock {
+>> +	bool vma_locked;
+>> +	struct vm_area_struct *vma;
+>> +	struct mm_struct *mm;
+>> +};
+>> +
+>> +static struct vm_area_struct *
+>> +stack_map_lock_vma(struct stack_map_vma_lock *lock, unsigned long ip)
+>> +{
+> 
+> [ ... ]
+> 
+>> +	vma = vma_lookup(mm, ip);
+>> +	if (!vma) {
+>> +		mmap_read_unlock(mm);
+>> +		return NULL;
+>> +	}
+>> +
+>> +#ifdef CONFIG_PER_VMA_LOCK
+>> +	if (!vma_start_read_locked(vma)) {
+>> +		mmap_read_unlock(mm);
+>> +		return NULL;
+>> +	}
+>> +	mmap_read_unlock(mm);
+>> +#else
+>> +	mmap_read_unlock(mm);
+>> +	return NULL;
+>> +#endif
+> 
+> Does this unconditionally fail on systems where CONFIG_PER_VMA_LOCK is
+> disabled?
+> 
+> Looking at the fallback block, it unlocks the mmap_read_lock and returns
+> NULL. Will this cause stack_map_get_build_id_offset_sleepable() to always
+> receive a NULL VMA and fail to extract any build IDs on architectures lacking
+> per-VMA lock support?
+> 
+> [ ... ]
+> 
+>> +static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *id_offs,
+>> +						    u32 trace_nr)
+>> +{
+>> +	struct mm_struct *mm = current->mm;
+>> +	struct stack_map_vma_lock lock = {
+>> +		.vma_locked = false,
+>> +		.vma = NULL,
+>> +		.mm = mm,
+>> +	};
+>> +	unsigned long vm_pgoff, vm_start;
+>> +	struct vm_area_struct *vma;
+>> +	struct file *file;
+>> +	u64 ip;
+>> +
+>> +	for (u32 i = 0; i < trace_nr; i++) {
+> 
+> I see this is addressed in a later commit in the series ("bpf: Cache build
+> IDs in sleepable stackmap path"), but is there a risk of a performance
+> regression here?
+> 
+> The original non-sleepable path cached the previous VMA and build ID. Since
+> that caching logic is missing here, will adjacent stack frames from the same
+> binary repeatedly trigger file reference acquisitions and blocking reads for
+> every single IP?
+> 
+>> +		ip = READ_ONCE(id_offs[i].ip);
+>> +		vma = stack_map_lock_vma(&lock, ip);
+>> +		if (!vma || !vma->vm_file) {
+> 
+> Is checking vma->vm_file sufficient to determine if the mapping is
+> file-backed?
+> 
+> Anonymous VMAs, such as private mappings of /dev/zero or driver mappings
+> calling vma_set_anonymous(), can legitimately have vm_file set.
+> 
+> Could passing these anonymous VMAs to build_id_parse_file() invoke
+> __kernel_read() on a driver's read handler, leading to unintended side
+> effects or hangs?
+> 
+> Would it be safer to use !vma_is_anonymous(vma) instead?
+> 
+>> +			stack_map_build_id_set_ip(&id_offs[i]);
+>> +			stack_map_unlock_vma(&lock);
+>> +			continue;
+>> +		}
+>> +
+>> +		file = get_file(vma->vm_file);
+>> +		vm_pgoff = vma->vm_pgoff;
+>> +		vm_start = vma->vm_start;
+>> +		stack_map_unlock_vma(&lock);
+>> +
+>> +		/* build_id_parse_file() may block on filesystem reads */
+>> +		if (build_id_parse_file(file, id_offs[i].build_id, NULL)) {
+>> +			stack_map_build_id_set_ip(&id_offs[i]);
+>> +			fput(file);
+>> +			continue;
+>> +		}
+> 
+
