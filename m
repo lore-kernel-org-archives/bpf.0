@@ -1,181 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6FEF3019AA;
-	Wed, 13 May 2026 09:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 017B5389E07
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 09:35:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778664861; cv=none; b=CMJG+BrX3dOxG3IR6DEBv+4H99uHtXwpmdUdqq6GVUR0m6QaWRegGyXgwJdcrQrqxPQ8d+0nlXQXU2MxfSQN3RGfpIYstoc/4Q1BtDiyfVFUYyt8p23/mAGcinDEAWYpZ7/gXgmeLG8s/T3/5xsk/Xbfyya8o23i/csL8e232eI=
+	t=1778664910; cv=none; b=iSH/kE4DuDeVsihRqCo7iC5L5BZgVpbrTAzB1jBFHtT+7dhwp4qQFZp1Nr1z+lvLujkysQeVrSv6RnWVN+a7XEzeNjG63ldTh0b+ZDWk+Xew/MUaaOLLCb1ESx6i5HU2iO4hSR6HE/gNYX9+A69ooeDI39Br0iSpJNYw8x2pa6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778664861; c=relaxed/simple;
-	bh=cwBcOAhw7XRGs1cBgzSo6PxgfXRn8QQsB24E7xZ/gvg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Fu+6k/0VIYxGs22RnbPmsJttM0U3nBwsBU8Wv6b9VDmAHvVdFf161tqFhN/S6ZU3LpVCFLFCURQ6Gsu2Bsd+O/ydyKsTYAymzWesMyk5mgZBdZeigmQ/QwD3Pv+AIHGhfxwPMm4AfvsAidEwqXVd+juWZMdPqLnglO8i3fOP28c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GLg+0KzZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778664910; c=relaxed/simple;
+	bh=v2TKsJ9g6yqynpmNmF6iTE1gweYzKODzAgklF4MSXqc=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KgcJfcj1To2EwOJTDGpDNnMZs5+uqdVcQJ0l4v3T4nyW3Zn/MmLbO6TDSAMtQXrDnBf88YblVr57W1kZGlTwl0LIEQ6g1bRrSpwWNlGrB6D+kfpGMUf4EJ1S8pdV+VNXJNv5TeFRT17LVcJNVsx9QlkGbEKhy8b6xBiinPymVqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OKsB9J0G; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GLg+0KzZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3135EC2BCB7;
-	Wed, 13 May 2026 09:34:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778664860;
-	bh=cwBcOAhw7XRGs1cBgzSo6PxgfXRn8QQsB24E7xZ/gvg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GLg+0KzZ6dVntq3/8ZFIx74+WBMQ00O4/y9y2xAt2h8GaaLD9B6Xjx/+quGrtiqQV
-	 YDpXVFEw3KFl/Pa/oGwSbzBONLgUKCD/Fi+BljLlMKpGqVWyILNaa6ywRQGDnVxg21
-	 QbfbLViqD8MiMJj/CYaXPpFQY6wsrklhRcJ+ke10SAQKpHgypqQftKnwaAtHPgQFPz
-	 UHs/WovtV9kL+uqoXn42RYuVrQqNiMnt7/PeFfbyJHLiicqoQfrmMF/LGYEQx5zkGV
-	 rPuB3HE3WAeqJbVs5cDeG181sardfUQoco+U4/KitEQYXr6ogxdND6eBgyWfiavlni
-	 SzcZRDT1I9cLg==
-Message-ID: <6f8793d2-80a9-4c8d-8154-5ec56a26499a@kernel.org>
-Date: Wed, 13 May 2026 11:34:08 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OKsB9J0G"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-44ccbd3290aso5225726f8f.2
+        for <bpf@vger.kernel.org>; Wed, 13 May 2026 02:35:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778664907; x=1779269707; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=uHpDb7RVxLFe2jhd0K3eMWmK7Bsx9xHAwjTVhvNRpAc=;
+        b=OKsB9J0G2uBMR0PAmwxxNnnxHucNsB+Ij1i3OWBpWyg/odQ+v3gJuYEn4bdAHvqNtF
+         CkljrdRSxv6nWcsjVkChXpMoqs8sStM6k599j312zOCq9K16jGOWqMUw4hCM1fVD+rb3
+         kxV+i4QieXhAGwVV/x8RcInYVAPFijCvZmT1NsVa/kOAiFmLzcAzWcGmBc6I0SteNyxQ
+         G+ZIgirTpTeMqwszq0QYOT7EUYeWsc6CTPkuitsbmTuCJhYoPVkd0Tt/8HIgZ7dYlGH5
+         GYGoMHQPKyXgmgrLbAgDwVqTjAm+F4SKTu6XXp2yrpFRk2c+BrL1CMhEKH8Czg9WDdsk
+         otjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778664907; x=1779269707;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uHpDb7RVxLFe2jhd0K3eMWmK7Bsx9xHAwjTVhvNRpAc=;
+        b=Lr8wqBq5p26knjV/Sk7ueYIy2aoSHCwzrfI3hXb6ogS/BOXYFwQood6MREXb4gf/57
+         F+m1OyNwwNueZH4Fd+tH1qKs7AKGE8SW3PxBYpTkNEo+oXUeTGzXplU9cWwuSbHHfjiQ
+         5AotOB5qp1+zIYG84Nwu15uXqQLbc0LADa9Z/IBFvGfHOFCpFa3fZM6YMqITbok6fqFJ
+         l8aVifauAYjcwsardVBi9d0STmWN57KfFBV6BQucIE0xv4jA5EoVxxQWn57xNqRBONMq
+         qsfEEPCenHViVSxnzGcJSd/76nOw+PNgOJiCSbE+ZITyN/47klt1cZC4yX9LVSByqxiI
+         03AA==
+X-Forwarded-Encrypted: i=1; AFNElJ88FXJwAAspqYp5lJu0lyk/uyf8YNpXeXkY6u0iL/MkuT9SGtVbMyPcs3AHxrVpMYTnaNY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzreCpfXhIuZXfTzFyedWz52ySb7XvxT82e7patBuQTGbC9kEei
+	KB92qod619Ksf2pa0TfW16XKL9/F5JcAsl0QZgY+7rZWUMVZhiBdiUud
+X-Gm-Gg: Acq92OFbmRPNaJoI0Wp0sCigTt+T6ocks7uwvF0E8mEvZrzp4JGBJytJCQZ9W2viAz1
+	CA0ejBmhpngxAng+H+uQQlItSt/tR860Lc3lkzT1+NnkuaVf0gvdmZ7EsmhZn9Sg2s7ohIHtTS9
+	Cczw955q5K/VtK5Z8Jw7xDWKsOa4SlNutTzbX9k4sOoiNcuPFIOG4h/mu/Jea8CudfRHmKQprSY
+	r6Gs+ru2UvbUvbBOgT0krWw3Zi1aniWxQtt9PDCKoqnmj/5xCjqlPS62bloX15T5QVe9P7dj4cl
+	DyWMSs/nN2dUfsGfaXawkbgCXQoQIzFG6Tef/J1Xjtl3mSUISIABAqh40Tp9l4xdWRXX3P6f4CW
+	u5JdvDlsw7WZc4l1Auzk9x01EtJCHj2ojezlcPaxv3GnkhvQzo5BJlSGY7mC54yR1NRZqR8Rv
+X-Received: by 2002:a05:6000:1789:b0:44a:47a4:ce91 with SMTP id ffacd0b85a97d-45c5a0b17b3mr3705255f8f.25.1778664907126;
+        Wed, 13 May 2026 02:35:07 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200::e257])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45491ca383asm38154500f8f.28.2026.05.13.02.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 May 2026 02:35:06 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 13 May 2026 11:35:05 +0200
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Jiri Olsa <olsajiri@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>
+Subject: Re: [PATCH bpf 1/2] uprobes/x86: Fix red zone clobbering in nop5
+ optimization
+Message-ID: <agRFyY-iLk_7CKd_@krava>
+References: <20260509003146.976844-1-andrii@kernel.org>
+ <agD3xq2MUyskd7X-@krava>
+ <20260512141431.a70375744fdae263bda5b722@kernel.org>
+ <agNeEzjiThzmJHiP@krava>
+ <CAADnVQLfgxEzpSTLhsxN2BYWpSxJ+RYku03UMfrSTi4Abu5SBw@mail.gmail.com>
+ <CAEf4Bza4sqLw8GHoq+MFBgsnhiJ_s91UUrMcA-paYeBr7=bz0A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] mm: introduce a new page type for page pool in page
- type
-To: Dragos Tatulea <dtatulea@nvidia.com>, Byungchul Park <byungchul@sk.com>,
- linux-mm@kvack.org, akpm@linux-foundation.org, netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
- harry.yoo@oracle.com, ast@kernel.org, daniel@iogearbox.net,
- davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, saeedm@nvidia.com,
- leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
- andrew+netdev@lunn.ch, edumazet@google.com, pabeni@redhat.com,
- lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, horms@kernel.org,
- jackmanb@google.com, hannes@cmpxchg.org, ziy@nvidia.com,
- ilias.apalodimas@linaro.org, willy@infradead.org, brauner@kernel.org,
- kas@kernel.org, yuzhao@google.com, usamaarif642@gmail.com,
- baolin.wang@linux.alibaba.com, almasrymina@google.com, toke@redhat.com,
- asml.silence@gmail.com, bpf@vger.kernel.org, linux-rdma@vger.kernel.org,
- sfr@canb.auug.org.au, dw@davidwei.uk, ap420073@gmail.com
-References: <20260224051347.19621-1-byungchul@sk.com>
- <982b9bc1-0a0a-4fc5-8e3a-3672db2b29a1@nvidia.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <982b9bc1-0a0a-4fc5-8e3a-3672db2b29a1@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4Bza4sqLw8GHoq+MFBgsnhiJ_s91UUrMcA-paYeBr7=bz0A@mail.gmail.com>
 
-On 5/13/26 11:00, Dragos Tatulea wrote:
-> 
-> 
-> On 24.02.26 06:13, Byungchul Park wrote:
->> Currently, the condition 'page->pp_magic == PP_SIGNATURE' is used to
->> determine if a page belongs to a page pool.  However, with the planned
->> removal of @pp_magic, we should instead leverage the page_type in struct
->> page, such as PGTY_netpp, for this purpose.
->>
->> Introduce and use the page type APIs e.g. PageNetpp(), __SetPageNetpp(),
->> and __ClearPageNetpp() instead, and remove the existing APIs accessing
->> @pp_magic e.g. page_pool_page_is_pp(), netmem_or_pp_magic(), and
->> netmem_clear_pp_magic().
->>
->> Plus, add @page_type to struct net_iov at the same offset as struct page
->> so as to use the page_type APIs for struct net_iov as well.  While at it,
->> reorder @type and @owner in struct net_iov to avoid a hole and
->> increasing the struct size.
->>
->> This work was inspired by the following link:
->>
->>   https://lore.kernel.org/all/582f41c0-2742-4400-9c81-0d46bf4e8314@gmail.com/
->>
->> While at it, move the sanity check for page pool to on the free path.
->>
->> Suggested-by: David Hildenbrand <david@redhat.com>
->> Co-developed-by: Pavel Begunkov <asml.silence@gmail.com>
->> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
->> Signed-off-by: Byungchul Park <byungchul@sk.com>
->> Acked-by: David Hildenbrand <david@redhat.com>
->> Acked-by: Zi Yan <ziy@nvidia.com>
->> Acked-by: Vlastimil Babka <vbabka@suse.cz>
->> Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
->> ---
-> 
-> Seems like this patch broke tcp_mmap because
-> validate_page_before_insert() returns -EINVAL due
-> to a page having a type. Here's the full flow:
-> 
-> getsockopt(TCP_ZEROCOPY_RECEIVE) returns -EINVAL because of the
-> below flow in the kernel:
-> 
-> tcp_zerocopy_receive()
-> -> tcp_zerocopy_vm_insert_batch()
->   -> vm_insert_pages()
->     -> insert_pages()
->       -> insert_page_in_batch_locked()
->         -> validate_page_before_insert() returns -EINVAL
->            because page_has_type(page) is now true.
-> 
-> The patch below fixes the issue. But is this a valid fix?
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index ea6568571131..4cb12673f450 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -2326,7 +2326,7 @@ static int validate_page_before_insert(struct vm_area_struct *vma,
->                         return -EINVAL;
->                 return 0;
->         }
-> -       if (folio_test_anon(folio) || page_has_type(page))
-> +       if (folio_test_anon(folio) || (page_has_type(page) && !PageNetpp(page)))
->                 return -EINVAL;
+On Tue, May 12, 2026 at 12:38:34PM -0700, Andrii Nakryiko wrote:
+> On Tue, May 12, 2026 at 12:27 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Tue, May 12, 2026 at 10:07 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > >
+> > > +       /*
+> > > +        * We have nop10 (with first byte overwritten to int3),
+> > > +        * change it to:
+> > > +        *   lea 0x80(%rsp), %rsp
+> > > +        *   call tramp
+> > > +        *
+> > > +        * The first lea instruction skips the stack redzone so the call
+> > > +        * instruction can safely push return address on stack.
+> > > +        */
+> >
+> > typo: lea -128(%rsp), %rsp
 
-That's wrong. The type is stored in page->_mapcount, and rmap code would corrupt
-that type.
+ugh, thanks
 
-So if the pages should be mapped to user space, it wouldn't be possible like
-this. Today ...
+> >
+> > you can also do:
+> >
+> > add $-128, %rsp + call tramp = 4 + 5 = 9 bytes instead of 10.
+> 
+> When I asked AI about this it explained that add instruction modifies
+> flags, so it's not a good fit here. lea doesn't touch flags.
+> 
+> >
+> > Initially I didn't like this approach, since we just introduced
+> > usdt nop5 and now need to recompile everything again,
+> > but looking at the fix it's definitely simpler than alternatives
+> > and doesn't have annoying limitations.
+> 
+> 
+> yeah, limitations are annoying, especially with those global "DO NOT
+> OPTIMIZE" flags... Jiri, let's polish your version and land it?
 
--- 
-Cheers,
+ok, will send it out
 
-David
+jirka
