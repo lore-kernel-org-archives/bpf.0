@@ -1,121 +1,117 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3DC2FE071
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 23:47:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940C938D400;
+	Wed, 13 May 2026 23:55:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778716034; cv=none; b=Nnp6QzxQ8UnQ9nKEMiYCzP3jaOT+Hu+WQTFDkWA7oHQGYYxYPVntgk6LpNlaDke6DYsbbzwvXHazA6bW3UkqQXKdH5Bw5xjjUEZtXOICCcD82iFEW//+04RmTCUv31DHiQ40B8KS7rAURAgvBdAiyajNSKq4ogAmY4IuB/y3sZM=
+	t=1778716554; cv=none; b=r+z9Bg6mE4ZTNIjlsfQNx+mkMn06MS2N8QH6xbPx32YlvLavLBe+EJfSWpPh6AsMbXJquU9A6UX3a+bzauTkJlgfyxgnhqxVZ4gfP7MKpKFDAvQqxQoV2MSSmbcq2lMnc74RtCMOaegCKxr8BTMnJ8+i8gG5QxGn65uP9ZdLyzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778716034; c=relaxed/simple;
-	bh=/KoL5Qt6DLipUu4452HdjS9XnZFtti55yYo9zqvPye0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=QiKQQJly51ogBR1Hp6bv7yjYscLrFePN7bdmYDT50GiX+rzDqDAJsWpDGb0uTiKpypLDsUb13bYdemfXIOSOAKtLxamsOmpNUXsaW2xulkGShsAo5LI5RBsL/Bl353cg0xgAcYottqOpCuKVjBw0YRWnjeNelzzE2n8B/gG5rhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SBRA7oZQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778716554; c=relaxed/simple;
+	bh=wji2MdgcTyHZfE/7Bjx5jqsRridfdB/rTzrCaSZVFQ8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=C6VQZcQg1H9J1gHBsStcW706QW48HWcwz/kYA36reUPT7jpHNQBeNA/zizdXcO3hiLhBx6VDgjdq0R3ruykLWXoyADXHgVAUw29zZKooWU/7mEp+NaH9d34oYbzgXKhIHSckZnMSIKti4jwRZfnqUz1tXwQHvYUaKswNPkAY2Mw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rBkS+qDm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SBRA7oZQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82658C19425;
-	Wed, 13 May 2026 23:47:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rBkS+qDm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE921C19425;
+	Wed, 13 May 2026 23:55:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778716033;
-	bh=/KoL5Qt6DLipUu4452HdjS9XnZFtti55yYo9zqvPye0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=SBRA7oZQyo1FHQY4j5VKvdbCVUbyXbTWtNu30KCtIx1xFMwyfqM5uNawESseaKvxK
-	 prt5RNYAxJJ1fKtzpfdRpe/CuXmzA60APOfXfVae4wrsUV3Xh8zI7H4iyQxALGHphr
-	 ypTBUdIV8mPvFitaW2+fyee5V4FLhVUt57QieTl+49RJMaah8C919KgZdVLGbcbcXJ
-	 4a3tEpe73UwF/GGLqzhwdEuhNx+xQyAipW1mk5L2gA1/fJ8CbfZpJd46POEwa7J0ux
-	 w/Vjhpl0+QA61j/gqBCacYK0PHgiEk89YkhFX0peSolVBDssxD538gt1rzpbJkAhVU
-	 cLFPnNIliw7Eg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 1/2] bpf: Report maximum combined stack depth
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Paul Chaignon" <paul.chaignon@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <05f82d1180b68e856bb0cc03a5cd86305f5b7669.1778604369.git.paul.chaignon@gmail.com>
-References: <05f82d1180b68e856bb0cc03a5cd86305f5b7669.1778604369.git.paul.chaignon@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 13 May 2026 23:47:13 +0000
-Message-Id: <20260513234713.82658C19425@smtp.kernel.org>
+	s=k20201202; t=1778716554;
+	bh=wji2MdgcTyHZfE/7Bjx5jqsRridfdB/rTzrCaSZVFQ8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=rBkS+qDmpKZ5HUKCjGWZTHBSgF6aVQVPJPQb6t7GQcnjJEXCviq7cx4erW6TiVBoa
+	 3TQfeG/KYQEuLMpP0kKlY0Qbagvfh3NRsUwMp5iG3zeiJp/5Sl9Lbt1P/1jQMVmdto
+	 kP8WTxeBFo4GbnDC+wc6wTaUHNZihGstEV9wII1aFKEj6fTj+cAqxD9MT50FA5cFtw
+	 cbqNg53+7agjVkewQQwFrGTbwEix+/o3N8BcZQtN7oGm1Wsev3X54DAkEvLDq2TTua
+	 IbBd0TXS6ich/xYX2gwM4gsMGpuMGSRAQeuBd/8mzb+oIr8OZ8jQnaLEKMo29mhJRh
+	 Bank9P2ULxJTA==
+Content-Type: multipart/mixed; boundary="===============5681978247099584604=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <a183ee082f0d56ee7664ad0d13cf7b7169ed2b6da743cb332f619fb360689ada@mail.kernel.org>
+In-Reply-To: <20260513232055.1681859-1-cmllamas@google.com>
+References: <20260513232055.1681859-1-cmllamas@google.com>
+Subject: Re: [PATCH] libbpf: fix UAF in strset__add_str()
+From: bot+bpf-ci@kernel.org
+To: cmllamas@google.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com
+Cc: kernel-team@android.com,linux-kernel@vger.kernel.org,cmllamas@google.com,andriin@fb.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 13 May 2026 23:55:53 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] Incorrect max stack depth statistics for programs using adaptive=
- private stacks
-- [Low] Misleading max stack depth reported on verification failure
---
+--===============5681978247099584604==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 26f9ea7ef0d72a21cea912b2cbf8938c9d23389b
-Author: Paul Chaignon <paul.chaignon@gmail.com>
+> strset_add_str_mem() might reallocate the strset data buffer in order to
+> accommodate the provided string 's'. However, if 's' points to a string
+> already present in the buffer, it becomes dangling after the realloc.
+> This leads to a use-after-free when attempting to memcpy() the string
+> into the new buffer.
+>
+> One scenario that triggers this problematic path is when resolve_btfids
+> attempts to patch kfunc prototypes using existing BTF parameter names:
+>
+>  | resolve_btfids: function bpf_list_push_back_impl already exists in BTF
+>  | Segmentation fault (core dumped)
+>
+> Compiling resolve_btfids with fsanitize=address generates a detailed
+> report of the UAF:
+>
+>  | =================================================================
+>  | ERROR: AddressSanitizer: heap-use-after-free on address 0x7f4c4a500bd4
+>  | ==1507892==ERROR: AddressSanitizer: heap-use-after-free on address 0x7f4c4a500bd4 at pc 0x55d25155a2a8 bp 0x7ffcef879060 sp 0x7ffcef878818
+>  | READ of size 5 at 0x7f4c4a500bd4 thread T0
+>  |     #0 0x55d25155a2a7 in memcpy (tools/bpf/resolve_btfids/resolve_btfids+0xcf2a7)
+>  |     #1 0x55d2515d708e in strset__add_str tools/lib/bpf/strset.c:162:2
+>  |     #2 0x55d2515c730b in btf__add_str tools/lib/bpf/btf.c:2109:8
+>  |     #3 0x55d2515c9020 in btf__add_func_param tools/lib/bpf/btf.c:3108:14
+>  |     #4 0x55d25159f0b5 in process_kfunc_with_implicit_args tools/bpf/resolve_btfids/main.c:1196:9
+>  |     #5 0x55d25159e004 in btf2btf tools/bpf/resolve_btfids/main.c:1229:9
+>  |     #6 0x55d25159cee7 in main tools/bpf/resolve_btfids/main.c:1535:6
+>  |     #7 0x7f4c78e29f76 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+>  |     #8 0x7f4c78e2a026 in __libc_start_main csu/../csu/libc-start.c:360:3
+>  |     #9 0x55d2514bb860 in _start (tools/bpf/resolve_btfids/resolve_btfids+0x30860)
+>  |
+>  | 0x7f4c4a500bd4 is located 13268 bytes inside of 2829000-byte region [0x7f4c4a4fd800,0x7f4c4a7b02c8)
+>  | freed by thread T0 here:
+>  |     #0 0x55d25155b700 in realloc (tools/bpf/resolve_btfids/resolve_btfids+0xd0700)
+>  |     #1 0x55d2515c426c in libbpf_reallocarray tools/lib/bpf/./libbpf_internal.h:220:9
+>  |     #2 0x55d2515c426c in libbpf_add_mem tools/lib/bpf/btf.c:224:13
+>  |
+>  | previously allocated by thread T0 here:
+>  |     #0 0x55d25155b2e3 in malloc (tools/bpf/resolve_btfids/resolve_btfids+0xd02e3)
+>  |     #1 0x55d2515d6e7d in strset__new tools/lib/bpf/strset.c:58:20
+>
+> While resolve_btfids could be refactored to avoid this call path, let's
+> instead fix this issue at the source in strset__add_str() and avoid
+> similar scenarios. Let's simply check whether 's' is already within the
+> strset data buffer boundaries, and return the offset directly if so.
+>
+> Fixes: 919d2b1dbb07 ("libbpf: Allow modification of BTF and add btf__add_str API")
+> Signed-off-by: Carlos Llamas <cmllamas@google.com>
 
-bpf: Report maximum combined stack depth
+The existing Fixes: tag points to commit 919d2b1dbb07, but the bug is
+actually in strset__add_str() which was introduced by commit 90d76d3ececc
+("libbpf: Extract internal set-of-strings datastructure APIs").
 
-This patch modifies the BPF verifier to report the maximum combined stack
-depth in its logs alongside the per-subprogram stack depths. It introduces
-a new max_stack_depth field to track the worst-case stack usage during
-callgraph analysis.
+While the vulnerable pattern originated in btf__add_str() from 919d2b1dbb07,
+the code being fixed resides in tools/lib/bpf/strset.c which was created by
+90d76d3ececc when the string set functionality was extracted into a separate
+module.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -5045,6 +5045,8 @@ static int check_max_stack_depth_subprog(struct bpf=
-_verifier_env *env, int idx,
->  		}
->  	} else {
->  		depth +=3D subprog_depth;
-> +		if (depth > env->max_stack_depth)
-> +			env->max_stack_depth =3D depth;
->  		if (depth > MAX_BPF_STACK) {
->  			total =3D 0;
->  			for (tmp =3D idx; tmp >=3D 0; tmp =3D dinfo[tmp].caller)
+Should this use:
 
-[ ... ]
+  Fixes: 90d76d3ececc ("libbpf: Extract internal set-of-strings datastructure APIs")
 
-> @@ -5185,6 +5187,8 @@ static int check_max_stack_depth(struct bpf_verifie=
-r_env *env)
->  	if (priv_stack_mode =3D=3D PRIV_STACK_UNKNOWN)
->  		priv_stack_mode =3D bpf_enable_priv_stack(env->prog);
-> =20
-> +	env->max_stack_depth =3D env->subprog_info[0].stack_depth;
-> +
->  	/* All async_cb subprogs use normal kernel stack. If a particular
->  	 * subprog appears in both main prog and async_cb subtree, that
 
-If a BPF program uses an adaptive private stack, the else block in
-check_max_stack_depth_subprog() isn't executed. Since env->max_stack_depth
-is unconditionally initialized here to the main subprogram's stack depth,
-could this result in incorrect reporting for private stacks?
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-For example, if the main program uses 16 bytes and calls a subprogram
-using 500 bytes on a private stack, could this cause the verifier to
-incorrectly log a maximum stack depth of 16 (e.g., stack depth 16+500
-max 16)?
-
-[ ... ]
-
-> @@ -18289,7 +18293,7 @@ static void print_verification_stats(struct bpf_v=
-erifier_env *env)
->  		verbose(env, "stack depth %d", env->subprog_info[0].stack_depth);
->  		for (i =3D 1; i < subprog_cnt; i++)
->  			verbose(env, "+%d", env->subprog_info[i].stack_depth);
-> -		verbose(env, "\n");
-> +		verbose(env, " max %d\n", env->max_stack_depth);
->  		verbose(env, "insns processed %d", env->subprog_info[0].insn_processed=
-);
->  		for (i =3D 1; i < subprog_cnt; i++)
->  			if (bpf_subprog_is_global(env, i))
-
-If verification fails early in the process (for instance, during
-do_check_main()), check_max_stack_depth() might be bypassed entirely.
-Because env->max_stack_depth is zero-initialized by default, would this
-result in misleading log output like stack depth 32+256 max 0 when the
-stats are printed for the failed run?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/05f82d1180b68e856bb=
-0cc03a5cd86305f5b7669.1778604369.git.paul.chaignon@gmail.com?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25832614669
+--===============5681978247099584604==--
