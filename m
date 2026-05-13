@@ -1,124 +1,87 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DF84CA262
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 16:35:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778690144; cv=pass; b=ZyBvCAzLujKq30p5XdDcnYI0ePdj/7ELjwMoflnquLe3M/Y5p6y67eJ8EYQiaiAqix7dAAYsbPyXRBXNyDkna8CUAqQS0gOgdcESeKRIVObgeoBpwBCigsWG9/cpgszIeKtTNGiZht/Xn7hZT/GQ7M8aj395NUEMmwtnAZOhoGQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778690144; c=relaxed/simple;
-	bh=szTmaxP23lVkEVq/RlBkdxcb8V6CMoKd6fObh9S4BLA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tEcI7k3icD8jyncs2eO8jWyNvhaPOxyLBNrlOXBQI7DeAm1dzn6UdEpZN96ZxKH5XZSPfp1j3KX6lmXiuyv6LkujPR0pwMRu6pu3tPplRZrII2aALrCQehdgfzqHSVhWVdjYysENjnDOiFBdOsX+RHiNxhAcK0c510Ex2NbQwcc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mnz0ReYQ; arc=pass smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mnz0ReYQ"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-44a74032ff8so5256192f8f.1
-        for <bpf@vger.kernel.org>; Wed, 13 May 2026 09:35:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778690141; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ZOrycpYrclhzhPoV+bTuDzI7p/omnhKNRYNHs1wlk1+tEj/1B3JGrgM99/Lw9SDAHv
-         UHd8bLRLVyEG2oUGRGpIi4n3ya/0gHZzAp6pIpJVUub3lMwAlo/gdZ0EGE86dVpuUgP2
-         u3V79zUCu/63ejC3W6joHSWB+nBnxp0tSLYkVyO2eY2PqAl920RmOdC5h6I2/vuTAF/A
-         jYL/qOYF1TR9oV/WU6RjYOZiqhumbGSbfD/yFo4W6z6zd/NOB1wcSfl5vtrgRX2GNHc1
-         iPatydFkmjPAhDNEjzZEOdkWNVEBBFWo9LdFAoOE7PW44zZ5l+YSAybJtE5X59o9DUIu
-         16YA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=szTmaxP23lVkEVq/RlBkdxcb8V6CMoKd6fObh9S4BLA=;
-        fh=syrw3PIZcTrqHgWTbh0zqF/5mDFHtyQHCX4lrrZYUWc=;
-        b=gPTKC8RR+Xnttaolk4N845E1WxQwiPNzW7CIaJ56s1nouRmBs1mLsmUVKHZHkias+w
-         nXLIiLo3z/2VJjLqhuJ+/kObBxSgKRWkdvL85z3VkNMOuEUsyDyscgmifveTHsIooAwd
-         sJdn/V8MfBqBQvpfSvbnm2lQwiAbAaojo/eXW6Cq/ZBx+FWOsy1vxVdzlJqS1yzpBarS
-         tLdk1QOB1vtX/82zcbEfHWOdo83r3driofg2sGfjdAFCNee9ncGRaZyfVZ/vfEYyf+ok
-         8Ln3Lsl/qjYU1UtsVNaVMhVcQWnoQfztweKgby8UW8NpjstsFeewquHQz2obH99k1FT/
-         +JYQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778690141; x=1779294941; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=szTmaxP23lVkEVq/RlBkdxcb8V6CMoKd6fObh9S4BLA=;
-        b=Mnz0ReYQKxqtSGLn3aICTB8GIlcb+ejq6ZwbKM4a3OUMjot/T1uuBurp4GLGybwL67
-         Rb/B/qxdy1v4CZx+l1zBz/nHAKRHHRXcbm8hkrDQq8CPcDWrihdqOHFxtoDaC67BKOIX
-         JWLpcwoD3iDmIOLYv88btopPuluD3uue5f2qEtZ9khgGAROt4kJtrkrMP5cee5aDt0JH
-         /2kdmlm44Mhf3Vk3N8xyb6V0IwxgR8oY5ancyKc4zdLtrK/A9oDCsMNsk86VahGnou0R
-         tThTlKSFTv3SnccWMdyF/bARMgNVJOPBD38yLXsae0XT6IFINMdWwyuSJ1TJX0816x/h
-         SAVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778690141; x=1779294941;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=szTmaxP23lVkEVq/RlBkdxcb8V6CMoKd6fObh9S4BLA=;
-        b=mmQZj474offWCoRZ+7IKGuIARCTgPbWSvCV8YfzFEczilBv3HklondsxR4D7I3ZI/c
-         Jp33DmhUEl7tFP7C1JHutXj5+tabsZ2gscRhMSWn66nbEBWUBGZqAg++MDx6zU3i1I2T
-         ccju0kXhQunEVtV+9SH3Bg7I2efSIzo/NrK3QvRw4F//SVxOf8oYQb4EbN4aH7a+VpxI
-         Dyco+teDWEyqLSUJrDpv+DxdJf75YXjd8HSoqrg32QsFymLbUItvQb0Nf1CbYydDkmsN
-         SflBAW+8H/u1vS2HzfOD8DInpduguQ3KfvR5uqGbbCkWQRc/KgtFEFPo1fRExyBYsJn+
-         VJdQ==
-X-Forwarded-Encrypted: i=1; AFNElJ//XDu/FbG/Wb68x/8mVMYG2k5Efa8+j5/m9BrgguP6FeSROGcizs0AgJBS/4KmJbdg3nw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxW15cQ8qJV7sGoIQlzwhclEJ+hfx62bgOf028zHHSf6RJGOwzn
-	aCNhhLI79hj49EPr+bBH4jY+F4E1ACtgD2x30vQT8ujy2gZx/6MnBFOUHN01UdLq6L1aTWwHUF+
-	f1QHrOcJk0vek44616lCX2d6bORActnw=
-X-Gm-Gg: Acq92OFvX95n6Tz2+CcAUL8SW5E2Q+/LyGZE03S5BeYYf+vHbIvTBHy6T2oYJexnsIZ
-	uYqH/fVoL3HQHv72lLh8dhDE968jdCxfgvMIMi7y7hWn5okxj3fLyslx0KHG5d1H7iphu+Bgw6b
-	tz9Co3CvGdfHfhTrSNLMjAlM+y8/57UciyEZc67D+b9G8AHN2rccXf0yKoF9QxMy15I5NZ4VPUt
-	OTQIH18zNSpGE63NDGBMUO8J5opIian4HMK/n6bwgFah7wLHXYVJuRqSahWbwQpRykLT9nEj82f
-	a2HaMgyRbg0SiiE7SY6OiRyqpP58MpHd2vHGlRDYUXhEFedRblmz82BjV1+R0a7aNcnY9MnEM4L
-	ezhp2/7Tlz1nyGDPXMyZAWjGzsIzfSdZw0KjB
-X-Received: by 2002:a05:6000:40da:b0:441:36b7:725f with SMTP id
- ffacd0b85a97d-45c790b29d5mr5681775f8f.5.1778690140854; Wed, 13 May 2026
- 09:35:40 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EAC841C310;
+	Wed, 13 May 2026 16:41:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778690476; cv=none; b=ghNyaUNu19vp9KPV0KgMfZllUmX3Bco7a1lF4QES53FSW0h/QwlJsgfw2zurJBdTa+RA8i9jcDUOIzdrmcaN+NgjzIur5ob3upc7J79O7l1N2ygRIFfAi/oVyt+J4nu7+CtIjetP/ihY5UUNDiwhRzzZXo/xKY4TqTH7HQtUtOg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778690476; c=relaxed/simple;
+	bh=s9fYP+qY0LZpCTN4Q7vKTRfdKJMfrvho8omGyB3eS5g=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YKFXigbp4EBzF0bmOcmfREhVAoVMpUqRk1uFRYlZQLuHftkS6BgHb55V2LZe5vq/Tj+MuiTb+OV6RxpJbMuSSatyrpEpUbCEJfiTS0Yic0r5tB3lLPI5n5ZC+zD7ScnhTEL8tma5ZTIC8Q7lDNWyrSCkS4iFpZ8DlmNrdP28OXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf20.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay06.hostedemail.com (Postfix) with ESMTP id B7CDC1C02D2;
+	Wed, 13 May 2026 16:41:10 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf20.hostedemail.com (Postfix) with ESMTPA id E522920026;
+	Wed, 13 May 2026 16:41:04 +0000 (UTC)
+Date: Wed, 13 May 2026 12:41:07 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>,
+ Song Liu <song@kernel.org>, KP Singh <kpsingh@kernel.org>, Matt Bobrowski
+ <mattbobrowski@google.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Shuah Khan
+ <skhan@linuxfoundation.org>, Jiri Olsa <jolsa@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>, Randy Dunlap
+ <rdunlap@infradead.org>, neelx@suse.com, sean@ashe.io, chjohnst@gmail.com,
+ steve@abita.co, mproche@gmail.com, nick.lange@gmail.com, "open
+ list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML
+ <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+ linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v3] bpf: introduce TAINT_UNSAFE_BPF for mutating
+ helpers
+Message-ID: <20260513124107.437431f0@gandalf.local.home>
+In-Reply-To: <CAADnVQLw+_NaOVeaKabuf085wNo_-6MAv8w0EDO3fBz3KCQT5g@mail.gmail.com>
+References: <20260503164700.548164-1-atomlin@atomlin.com>
+	<CAADnVQJ5fatNF4auH+a8E39zWMfja3rm4BM_xGcTnLX8uuCQ9Q@mail.gmail.com>
+	<20260513111331.7bede512@gandalf.local.home>
+	<CAADnVQL_sWznA+JJLdzP_ZdUgQeO7p-AGnOtx9=fXjH+PnRJBA@mail.gmail.com>
+	<20260513112307.53e77312@gandalf.local.home>
+	<CAADnVQLw+_NaOVeaKabuf085wNo_-6MAv8w0EDO3fBz3KCQT5g@mail.gmail.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260503164700.548164-1-atomlin@atomlin.com> <CAADnVQJ5fatNF4auH+a8E39zWMfja3rm4BM_xGcTnLX8uuCQ9Q@mail.gmail.com>
- <20260513111331.7bede512@gandalf.local.home> <CAADnVQL_sWznA+JJLdzP_ZdUgQeO7p-AGnOtx9=fXjH+PnRJBA@mail.gmail.com>
- <20260513112307.53e77312@gandalf.local.home>
-In-Reply-To: <20260513112307.53e77312@gandalf.local.home>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 13 May 2026 09:35:29 -0700
-X-Gm-Features: AVHnY4K_hlbgG6Weelv9JfOoNVR8uOv-dykIa4nZRH_llhP3bTFiLQRGwYl2Ss4
-Message-ID: <CAADnVQLw+_NaOVeaKabuf085wNo_-6MAv8w0EDO3fBz3KCQT5g@mail.gmail.com>
-Subject: Re: [RFC PATCH v3] bpf: introduce TAINT_UNSAFE_BPF for mutating helpers
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>, Song Liu <song@kernel.org>, 
-	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Randy Dunlap <rdunlap@infradead.org>, neelx@suse.com, 
-	sean@ashe.io, chjohnst@gmail.com, steve@abita.co, mproche@gmail.com, 
-	nick.lange@gmail.com, "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: E522920026
+X-Stat-Signature: fg3i9cunj58jazg91jw7fxhf6rjuzr1t
+X-Rspamd-Server: rspamout01
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/vlIIxtheuPq6Yf9zUCAmaImOQIxA+vjQ=
+X-HE-Tag: 1778690464-121100
+X-HE-Meta: U2FsdGVkX1/y8lI1aHXZZgaOrrPr0GIPYKwzSJkHfS8iNP88ZMeiSieyt1fIozfVTcDewb8vfRsjt9C0BHfEkz1RXXx1/hCApMKwnvvGF/SrwZtEqlwMo0MmjZ43bbJ3u6LNnrkekV4TA7NuPbsXoVZmD6WtJFgTrAVVzycfc/50B8hlzcXmT9XLyqATqm6RPzzsgEGpEOa9M2I5b5wtCmOw105zBeuFmt8YqzPZTBwSG+PT8msrsRMihJM0fDSJUZWHONK2MQQPpb4d/crfisCRB7fnZXjlCJ0NtY8HtXUUpji0JJkdBj36vGrAxobrBpv8L55TkepC/bIUfz2J6zl2SeCKa9jGi30T0xLtsAHs8MEVYkosTecwWGqERxXQZWylqJ19jTxA9y9/hjfIsg==
 
-On Wed, May 13, 2026 at 8:23=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org=
-> wrote:
->
-> On Wed, 13 May 2026 08:16:07 -0700
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
->
-> > It's impossible to track all modifications.
-> > See what sched-ext is doing.
-> > What does it modify? Everything.
->
-> What about just having a list of what BPF programs are loaded, what they
-> may be attached to, and what kfuncs they are calling?
+On Wed, 13 May 2026 09:35:29 -0700
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-Ohh. These have been available forever.
-Just bpftool prog, bpftool link, bpftool prog dump xlated
+> On Wed, May 13, 2026 at 8:23=E2=80=AFAM Steven Rostedt <rostedt@goodmis.o=
+rg> wrote:
+> >
+> > On Wed, 13 May 2026 08:16:07 -0700
+> > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> > =20
+> > > It's impossible to track all modifications.
+> > > See what sched-ext is doing.
+> > > What does it modify? Everything. =20
+> >
+> > What about just having a list of what BPF programs are loaded, what they
+> > may be attached to, and what kfuncs they are calling? =20
+>=20
+> Ohh. These have been available forever.
+> Just bpftool prog, bpftool link, bpftool prog dump xlated
+
+Ah thanks. That is useful.
+
+-- Steve
