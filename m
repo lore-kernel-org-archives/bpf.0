@@ -1,131 +1,97 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30CCD4DA55D
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 15:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778685382; cv=pass; b=Sbv9fhgmvdN8u8TC5vfNJH/FzmOMQh+gdgaqqWDVn0mCFZK7sAk8z5QbAvrdAnC95zXBw4VukBMJKxEF4j+YN53JtGAI9yaxx6K16UgcVlJ7ZXUYahj5RYobd4lIwxiFbSUlx3pqDoJ/7OxVIWTSyBqyE5L9UMMPbpP8yDbT7iA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778685382; c=relaxed/simple;
-	bh=ZTWd08QYLDoCVU3wPjbZfH0wB1JeDMyEm30KX5aLTcg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QjX0rREoVF2jmEnMjL25lZNnngN8+5P/wCkCPIYvZtwTkzFbTYKfMEItWukTOdkJ3EJJXqQl2Ic/+ExFG7CNkKnDWC+7CdokDpz76U3Ea/eQgF/I5vbwoGZrV3qjTyRo8boCg00HnUde4FOkSuAu3AhIegnPpmLx8vun52n1K/I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RYf9ReZR; arc=pass smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ACDB38CFE1
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 15:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778685618; cv=none; b=iNCBGOolkS37VqAKX+oNQH3EI8Y589mzv5CyysVN8BnPZbOikpjsImz/cWTUMAm+aEmBySRBfwPE05Ov+WztgB4GZoG6H/tl/cSxQQEUBHeLuzYl4XX1i+LjyrkY3Ywmmpperjc2X1eo6tAqBSWzbqnqjTquV23ojy7pWwE20h0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778685618; c=relaxed/simple;
+	bh=AXfXChZrE/u5AGveTn9O3Au9gGQCslusfmdQGvQhdcs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EuzcbjYFGuLSbWtGcVBD3IK5aacv6KOELUdTw/D0FoYt++kKOxfVy3g0TifSRa05Xng9TKnOUA71FHsBwdLMGErHucduWYHq3B6jWKZ06tE3Db+rXpHwn0dvM+HBHEdmL7U5+qncuVMGohoATvrjz5AXNm0+UFMouZn+QC8/pjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Qs4MKe0m; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RYf9ReZR"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-441209fb77eso4242039f8f.1
-        for <bpf@vger.kernel.org>; Wed, 13 May 2026 08:16:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778685380; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Z8I+bM02OxceM46bZKJqPOMGlP4tW+PBzHuBa4Os7Zhe9Gzg/5uTDhwxTgL25hly9t
-         zuJs1RC7NGklxcb14YCXGd2DLIzSI7CFGGeIkQuAuKGQl0RYVzb4m5fT/IBwtV3XaxMf
-         rDWHq65FdyAcMws4eROG3DJZmNyQHi8g+4bk4UVa6ySvLTC6aYdE32wsAF6J2Rt6OUkv
-         lVyYxzIBxn2u+vBWLZJPsmw6s4Z/JhmEq1vF3H0RtbZkTkHe9MCAEOnoQ2/3tKqFP0yM
-         Zr2AvA9x0Ft7XtyHETPi6w17uG8cpeNcXuXU/XhMBq7AYzCcUpgP2rSiGOmipSGB3Y4V
-         iuqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZTWd08QYLDoCVU3wPjbZfH0wB1JeDMyEm30KX5aLTcg=;
-        fh=eRjrAkNr0CYTUOKKhtMYseKOzu7zZ+8UDMYw634CztU=;
-        b=MKvyvTMWOCQzXbRffh5fJRkt9lC+m1ip3SE44uKa+lbrq0lc6CGF29fL7yipTndCtH
-         1p4uwQyjSX9uluHtwoCzbW8Wn+zFZRwq9ddWEdoPGVc57DAxJQVIOVRiF7b9CmmhwmlU
-         FBBOGwqeCnXw0cyuOsFVZFNoKr7kCfTfeTxai63/2uT+jgakGkbTkY1QlRF4oePnPy+z
-         bOxIi24fxAWWSDlrjkbcTGNDHLpqf+segGzMHTT3Fqi1u2jux/1qsL7XTFQ/JJST4cJk
-         zZDVuQ5weaLu1FbODnAQLAW7+5ZCc5FT2v/4HO5lWkduxk9MOkuqbGq9A+cIqm3f1f9b
-         gDDA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Qs4MKe0m"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b936331786dso879232466b.3
+        for <bpf@vger.kernel.org>; Wed, 13 May 2026 08:20:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778685380; x=1779290180; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZTWd08QYLDoCVU3wPjbZfH0wB1JeDMyEm30KX5aLTcg=;
-        b=RYf9ReZRO1TZr91D6SdFQhXfIE1FZMq7OYS4DO+Qz4bUwBiNTOANNBMCuNOHAqvfqp
-         ystNKvsLnaFyhDhfeiBLnEVYQSuFLO/lBZ+kolsZI9bbyGdKA2HjzhgSkSIALcDTq95p
-         TdE/Tjksk53u+JSxNgCdqU5S6QW3fkmraOv/5Slb3f5r4uzjhR9pZBxI1Ixfm+nxcHDQ
-         DHWNoTxDhJCT1CC7C5KyLAWUAlIk1zTkQYgX00KToUj9QX47aVUq7F16gg+pBkbkn1Rn
-         3TPrdMm3jsVs8RGtpMg5vPwnXP2GOPMpVdtM72onjYZUvCAFPs4FRuVqEWmjtjcFSgVF
-         0Yqw==
+        d=cloudflare.com; s=google09082023; t=1778685615; x=1779290415; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qdF+2d6NpV3PDWOr7PsDZMiK+EcjYF0L2JEntACtpPc=;
+        b=Qs4MKe0mNpu4yOOp6tN9iHf34uS911jkZkOXBSKKeb4xjHstyOGbfIb7SRoIIXjrcc
+         oKpU3vnqKd+GGIpRHaCHDEH1iJRBLmEk5BibCITWqXa+E4erPV8OsegueXcsCvJyAcva
+         GH/Iy3HosJDbTxJ4kg18WwfYvtJL7g7+EvsqY1DcbBZopJaBpkhH9RpyWN9bjkvcuFK7
+         6y5Ov52VZ+TFdqmmt+8I/eYYdLkrvWkW7Sw4xPeR8fzJJV9Vb3uCUpCWSPK3RNmUKUeQ
+         mD+PJXDhIYvWyM8Hodm5NP0XnLdlEMN4IJjTqkClOtqfpVEQcan/F6EZVPAIANxPr7rI
+         7nSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778685380; x=1779290180;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZTWd08QYLDoCVU3wPjbZfH0wB1JeDMyEm30KX5aLTcg=;
-        b=aCirZONxv8XZfWFVT5Ts2iprJ6tggjheQiCefwgMMvVGlQ5aVksWxk1uK3aIrdKW/X
-         AVJgLTByfQsQMif8jI6SZsq4OV1TQz89QjL4hTP5pO/5uqVmTKeaCKIe/aVRB+nFsOdL
-         pyOl2Wwu39WZG7zRZ2ra8N8hdXtuxoTo5JkddxxEI9wgxdFPyIa+IOBMiPoxcD7XOheN
-         RCqDR9RDQYpI8x/ZkXu1BZTPeYxjmBSKgD0zHMT5AwX/VsKEdr3UUTpgMIluhOX+sNIt
-         XmbG0471Bv4v3RWPP3tcL0y/Qn3bDTnM/72njvGr7pmvgrKVI27dlQpwOcwUZZ43113E
-         O86Q==
-X-Forwarded-Encrypted: i=1; AFNElJ/s5rQ8QriHcgkv+o8qyd+WRdP7VT9cNP79AY84bVJviX1IjBRvfaIoHHje8mCy9CN6tVw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZkB3kCfpHvJCrcdRwlPqhlwP8hXsd9qw+EO4xnJI7zs+yeukT
-	m6fP4yDsv+/myQQVqdxRKNkonqP0nIaUuCqJyjq/phYbs68tYfLsqKaEShv64a4u9lWl/HodaBf
-	ETYe07N5IVHLyRKImBG+Kl4pv+Af4TwY=
-X-Gm-Gg: Acq92OE7tH/yiG8D5veovTftX7hUOsBtvVb7UxYRZk74NcXXwZ9i8mHf9NsxuxbVbzS
-	PBDa/H3bPovD+AZWrwlWiY4qJ43KvZ9WESBAFUVBUe83Pfz2rTtRjOC1Ia+IKUPNtXuuyNWr5NI
-	sYqxiJj2F1pJzy4W2CUNbHQG9GeM+MTLoI7XCQuWNEMz0xD7wnQzs6EJMn+3wu8YD+B4Kp5rQeT
-	DAvaq6V6deijpJGbvr0nQXL3yxI8Yx7dCHby/nb6co6cJLJDBCPmUo17LnUTXQzndSyykCJBtdi
-	ddT/SdqUWVdI2DcctDAkXfsTOMq6xfGAkiA3LK0wOJr7lxTTL8I7IztO0nzVlQRJsvbQOCym43j
-	SLGFHmOsk7B67P891jn5fCx9YL7bXDHqpZiGm
-X-Received: by 2002:a05:6000:230c:b0:45d:7fdc:2e99 with SMTP id
- ffacd0b85a97d-45d7fdc3157mr418669f8f.12.1778685379310; Wed, 13 May 2026
- 08:16:19 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778685615; x=1779290415;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qdF+2d6NpV3PDWOr7PsDZMiK+EcjYF0L2JEntACtpPc=;
+        b=Ew9o28Y8n8UY5dXjqQElie2USrjog7vJ/iw2TXICSQIejyogNCSbCMu7BoTGJHIh1p
+         6fGb8bnI55LHQTD20IjXT9iYztJ8p8n6SnbqHuGzkPXlECMsi2k6aVlkoNFrAW43EdC6
+         uoSNrnvZwueFpmgYtKvCMhgT81na3t/jhRf7wqikvSL873a0KUGwstrEkaKhtaiKCEpi
+         RJNkkP2br3L3MGmCexyljvkh+4iTuSAbIigvKUeNy85jXLd2jfQOo27raKaP35zHW9Ik
+         DdoW6O20blUkkc+2HjPVUWBqBvXUkggNCUpjvIoS0Ow1zHz4IcaQk3+7H4j9tXLBeYHK
+         rRFQ==
+X-Gm-Message-State: AOJu0YytZ0cjYLhk04OSiF5p5mnizXrxmQIkjqTIedh2qApD0rzbLmsp
+	W9L1pfTZSXTZ+WKrOWWMtmQN8I2OlNPfHk0gRmiYVoWdWORGfO/6WhMw8p7CllGH4/w=
+X-Gm-Gg: Acq92OHjWVWkJlz7S5M3iqmZcmaB29nwbqz4wpvIZjTGVh2DUsyUnJuhzX0lIH7Xa8a
+	qQAXyo+RPNoFQ6/jCNnL/GSQODmNTSFrwzDER5dk460Ho2VUBNkXr1EN4A7bKdjFezicZu0Jks3
+	6HhSnBezNIhKhZF5Pc+LpbYt7xOvt1i142IRXKvSbWIre4mMZwzLzW+Iv02sOES/HXHjfDautpV
+	E48/x6mE/WEH/D2MgeGUl+1rLQogeb6bjTkwh/Kv+0rtxOiTwH6foURERBhiwrucJi3jZcvKwHh
+	tHj27RvteeuBdwRvXEiKLEs/lpB9baap2MZPWez8oPgrz26rMvLeR0Nw2E61m0nb8zh6DOQkpuv
+	oUuvmwXmqLWNRFAm+ixg7jisGI7Ga8YBkcWOIOZc6+Evbr0gY2dq6ybu/pvYeF1n3WoA8ONVMFt
+	NfHpbzARQOxjtc0Egt
+X-Received: by 2002:a17:907:1c8d:b0:bd4:72c8:140b with SMTP id a640c23a62f3a-bd472c830b6mr129588966b.10.1778685615400;
+        Wed, 13 May 2026 08:20:15 -0700 (PDT)
+Received: from 2NNP224 ([104.28.21.182])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bcac09c856asm855323966b.14.2026.05.13.08.20.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 May 2026 08:20:15 -0700 (PDT)
+Date: Wed, 13 May 2026 17:20:12 +0200
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Paul Chaignon <paul.chaignon@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Alexis =?utf-8?Q?Lothor=C3=A9?= <alexis.lothore@bootlin.com>, Quentin Monnet <qmo@kernel.org>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Override EXTRA_LDFLAGS for
+ static builds
+Message-ID: <5kxaobdtanyqtvvz4scjxqmgqn5lqecredccs2ac4ju74yoxyk@plc7wc2fhd5c>
+References: <714556da329c812988010ffe53173d9152570a78.1778669303.git.paul.chaignon@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260503164700.548164-1-atomlin@atomlin.com> <CAADnVQJ5fatNF4auH+a8E39zWMfja3rm4BM_xGcTnLX8uuCQ9Q@mail.gmail.com>
- <20260513111331.7bede512@gandalf.local.home>
-In-Reply-To: <20260513111331.7bede512@gandalf.local.home>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 13 May 2026 08:16:07 -0700
-X-Gm-Features: AVHnY4LJfmK-dE4pIdLQKgR6OWhmqcSutGy2bdmOOCvWq48N6k373-5ZSYGW1q0
-Message-ID: <CAADnVQL_sWznA+JJLdzP_ZdUgQeO7p-AGnOtx9=fXjH+PnRJBA@mail.gmail.com>
-Subject: Re: [RFC PATCH v3] bpf: introduce TAINT_UNSAFE_BPF for mutating helpers
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>, Song Liu <song@kernel.org>, 
-	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Randy Dunlap <rdunlap@infradead.org>, neelx@suse.com, 
-	sean@ashe.io, chjohnst@gmail.com, steve@abita.co, mproche@gmail.com, 
-	nick.lange@gmail.com, "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <714556da329c812988010ffe53173d9152570a78.1778669303.git.paul.chaignon@gmail.com>
 
-On Wed, May 13, 2026 at 8:13=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org=
-> wrote:
->
-> On Sun, 3 May 2026 21:51:49 +0200
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
->
-> > Nack.
-> >
-> > Please stop this spam.
-> > We're not doing it. These helpers have been around for a long time.
-> > There was no need to taint then. There is no need to taint now.
->
-> Hi Alexei,
->
-> I'm wondering if there's a way to see what modifications BPF programs are
-> doing to the kernel? I try to make it easy to see what modifications ftra=
-ce
-> has done (like the enabled_functions file), because I like to know how my
-> kernel is modified since boot up.
+On Wed, May 13, 2026 at 01:24:37PM +0200, Paul Chaignon wrote:
+> When running vmtest.sh with static linking, the bpftool_map_access
+> selftests fail. These selftests are calling the bpftool binary in
+> tools/sbin/ directly, which results in the following error:
+> 
+>     error while loading shared libraries: libLLVM.so.21.1:
+>       cannot open shared object file: No such file or directory
+> 
+> To fix this, we need to also build bpftool statically. That can be done
+> by setting EXTRA_LDFLAGS=-static.
+> 
+> Fixes: 2d96bbdfd3b5 ("selftests/bpf: convert test_bpftool_map_access.sh into test_progs framework")
+> Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
+> ---
 
-It's impossible to track all modifications.
-See what sched-ext is doing.
-What does it modify? Everything.
+That seems to do the trick.
+
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
