@@ -1,114 +1,109 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C7B2C21FD
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 11:24:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628383E9C10;
+	Wed, 13 May 2026 11:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778671483; cv=none; b=gFsXsA+F0rcnUEQpcgl9l9+LBPwgm+zqUAPFzOMyOl2PA8z4n7vzUSjh9fxklaw4J8dBjcy8aH+fnY7rhLMUWMcM9X6gLic5kUVSJEUyMXZePh5jr9TU+xtwfextDBi9LMTt9+pXh+IPUn0PTnIIG9W4mzEZWD5kL3fBrpvdGVc=
+	t=1778671901; cv=none; b=I0pdbKkvl8a0k+q0+01/e2awmEHPSXNXNqUzZfgwOP7hyL6XmUNwQDml7E6E5aSYeZOlIOJQlj3hALVZ9T0Jm/uF2nENFhHucof+2MND2v75YiQcwNl5kr/BM+qH8Vpr2pJRW67TFbZacNDVhyleGvNTvNSgbyYsyPwtISwT7Wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778671483; c=relaxed/simple;
-	bh=hZuSHRUGAYgqrgHEZWJV6ET7MQlNplTA7eSKy928nEA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jkMr8IeVfWdOLPvSg6rv6md6FpKoV68oeqniLgMbkKDuBSWe2YkyhloYo15icPUJ+9JOFW6WNw/c+VOo7I5R5myeZrzsQygYPbysJQH5unBu6ayJyPdt5ok477riMmVDOXMqL7xtRn8XlsvYG2W5krd3nqh7UQ4PB0LF7nAn3Wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sWKVDjzf; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778671901; c=relaxed/simple;
+	bh=79nmjwvOuYGxlrHN2bZK1RkI8jZYVpwWr+HjSbP/FmY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=C8asbJZgksOe+MRViT7YESmZnMilNUQoa/BBhGM2wLG96VM2s+qKN7aX6xblJoi45BjXir7fxYBobLeBDTYjaY1O5gzEXYhzZrZugkz2t+7QeJ1arPnhkjrt/bH8+NsgIKFINL6VJlIcGc93JplV1W7yp6wUXH4DWi0AyL5t7kM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V+GMv4JU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sWKVDjzf"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48e82c23840so29938355e9.3
-        for <bpf@vger.kernel.org>; Wed, 13 May 2026 04:24:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778671480; x=1779276280; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XO40f/OA6RHf1TyE58duUa7vxILaUx/jjsluFq7aAwY=;
-        b=sWKVDjzf11aE290rlxAqY9DHzmiB18PYAtnvEhQ6wl2ozaWGGAe7NyxUdPaKW8q37/
-         HlfLckDuJD4PsjEYme/hY0rp9RRZ6bZnLurfhUKT8De2vCVgu7nUD+X0G4htSnjybAmS
-         Q1o9yH2kx2RTZ5dJ0YxGt5j0LYCDORAGRkp2TzEQMtqLNSov61LZkNhDBN+lkKyKwY9V
-         btZAzAuNxhp+J8ET9xW77j1l2IF4O5JDdc4W7xmYJAktbckZ1iDNvMQQFgCQ/+XOYtGp
-         N75LMbUXyGNAWvZLD9Ctwiy8FL7MIZHOew25BUwSKsmusQJ8RTlpzC8fqHJxZ8RP4x8W
-         YpTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778671480; x=1779276280;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XO40f/OA6RHf1TyE58duUa7vxILaUx/jjsluFq7aAwY=;
-        b=T7cLAbm/mDUKcvidwzioLsar+/ztDcR56mhR1rUJcjlu8UANxe05uF1p9bNz8ILhO3
-         VLqzaPW4Zcds3MsguFWp8TY9H15DNacm1HofUz4RiOlMF/nIlvoCzbxTEpOvnDy2/cHI
-         6SopzT7Rvya48jZGaHsdCoFQJ56GjqsVsh7iE1yjeEnREXH8jFsy9F5AgG8cPi8xD9I7
-         GTXjiCOfrXtzTNhoMvGEeSfJ/hnarYg7uA69trirwZLgfV3Mo3zrN/3WTtkH1jZPI3BR
-         QRkv5rAWIYZ3/SpGVlsc1zD+oEkuqb/IMVtK32C+86cNI0B2GgesX/cpf8s98T42OPJA
-         eUeQ==
-X-Gm-Message-State: AOJu0Yz2uhoTHUpFa6Dyf/jUK+9hm00HuZNa8StiHSpl41sibj1a+ON0
-	hY6plPBlxwmu61vqNO9lTiUTvnqT2fmEG/A5/9iFL6xQh/R19lfRIUvhAQ2RuA==
-X-Gm-Gg: Acq92OG4WIzFIfXWM7nwPKm965zCUlkVBGW3lokQXXwmWoN+1olg4HJWlzci/lXMeIf
-	m7aqI0lRnke9XBCLZzqyOC4t0cXyZg7bQgGkaBegmKfgSeC6GJ4bbPE57zxLLwbo/ey/qPIbjct
-	tDjbrQPTPYq0Ct5w+oRvVEG+d0kaEHp5oPAY3Vm5buWBN1rT50JgfqhVmgIUokORzqIY3PN8mk2
-	62hZ7N79y/7WfAZmkKSSRe9iuLNg9Skvp5BXy5BM4IPnhDnU+uWUJqq6LFiBWt8JvoByyGr4WLp
-	cxjZDWhucQsZfdjjctN3HcPDJiQIMt6slfSy/rAUlxU+r92/AAZAvWa6I3tJXvubiLRbOmNAT1G
-	IR1iDTlvNLWZS9F+90Zgo1+cRLHgNDeeqAwKYfWtBPRSNhDS79BtY1FcdK+DCTgOmh7Sew6SZtZ
-	oglipYa9z6yGRtYNnhSYTThcx0lmiMYm6Ny3Hoi7yJGb307Y4McBvCVktJspVK1+ixaFNKTL/Gi
-	0ueHaprslkrPBtfuA9h/3DZVnSbVOpLDrsXh4JyWH/PRHc87xwnp7r/r7Kt52DPoIBNtiBnQ3k1
-	CtQ6RM93aGkTk859KbByz7PaR3HeND/+JljN0Sw5MNk=
-X-Received: by 2002:a05:600c:811b:b0:489:1f08:91b with SMTP id 5b1f17b1804b1-48fc9a2cae7mr39550405e9.16.1778671479886;
-        Wed, 13 May 2026 04:24:39 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e0055c0fd718e6af73d.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:55c0:fd71:8e6a:f73d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fce37b182sm69650685e9.9.2026.05.13.04.24.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 04:24:39 -0700 (PDT)
-Date: Wed, 13 May 2026 13:24:37 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Alexis =?iso-8859-1?Q?Lothor=E9?= <alexis.lothore@bootlin.com>,
-	Quentin Monnet <qmo@kernel.org>
-Subject: [PATCH bpf-next] selftests/bpf: Override EXTRA_LDFLAGS for static
- builds
-Message-ID: <714556da329c812988010ffe53173d9152570a78.1778669303.git.paul.chaignon@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V+GMv4JU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94875C2BCB7;
+	Wed, 13 May 2026 11:31:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778671901;
+	bh=79nmjwvOuYGxlrHN2bZK1RkI8jZYVpwWr+HjSbP/FmY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=V+GMv4JUBmUpTHBMoAOuiSxgb9sMccjwDXyK+z6bfBc0YIkvQMou8ZeUXLxPI1Hdu
+	 +TWrojsAdrHucdJZCBMZ2+JB+z6FFt/oMTlPxVSLaoXIIApSfC2pfL5BW0Ai0XAEaj
+	 jPukqilcbZDGR5crQR2X+OLnWYd3mGsiIirDBXYZam1TyPcIcr/ipjAlnqphykY46q
+	 BY9/gzLysJNoNBBotCM+4M6tf9mG0U34HAyKNbMNSVXWGWHQw0uAbDD6L0daXLRcur
+	 /Ia5w8BuHkS9gUttjIXPEIwOE/H9ja/zEl4yQJSzrJQ7tK9hkwkCG80H2ZZX6/qg9d
+	 6TZDfMHZFUHlg==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
+ stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, lorenzo@kernel.org, hawk@kernel.org, toke@redhat.com
+Subject: Re: [PATCH RFC net-next 4/4] veth: use generic skb XDP handling
+In-Reply-To: <agNeGjzEsYRaqqFf@boxer>
+References: <20260509084858.773921-1-maciej.fijalkowski@intel.com>
+ <20260509084858.773921-5-maciej.fijalkowski@intel.com>
+ <878q9ok8ac.fsf@all.your.base.are.belong.to.us> <agNeGjzEsYRaqqFf@boxer>
+Date: Wed, 13 May 2026 13:31:37 +0200
+Message-ID: <87zf23im06.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-When running vmtest.sh with static linking, the bpftool_map_access
-selftests fail. These selftests are calling the bpftool binary in
-tools/sbin/ directly, which results in the following error:
+Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
 
-    error while loading shared libraries: libLLVM.so.21.1:
-      cannot open shared object file: No such file or directory
+> On Tue, May 12, 2026 at 04:32:43PM +0200, Bj=C3=B6rn T=C3=B6pel wrote:
+>> Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
+>>=20
+>> > veth currently runs XDP for skb-backed packets by constructing an
+>> > xdp_buff and then, for XDP_TX and XDP_REDIRECT, converting that
+>> > skb-backed xdp_buff into an xdp_frame. The backing memory is still
+>> > skb-owned, so veth has to pin the skb data and frags manually before
+>> > consuming the skb.
+>> >
+>> > Use the generic skb XDP helper for skb-backed packets instead. This
+>> > keeps skb-backed packets on the skb generic XDP path: XDP_REDIRECT uses
+>> > xdp_do_generic_redirect() and XDP_TX uses generic_xdp_tx(). Packets th=
+at
+>> > already arrive as xdp_frames keep using the existing veth xdp_frame pa=
+th.
+>> >
+>> > veth still provides its own page_pool and xdp_rxq_info through struct
+>> > xdp_generic_ctx. It also keeps using struct veth_xdp_buff storage so
+>> > metadata kfuncs that need the skb continue to work after a possible skb
+>> > COW.
+>>=20
+>>=20
+>> Hmm, so now if veth with native XDP redirects to a native XDP NIC, we'll
+>> end up in the generic path? We'll loose some bulking capabilities as
+>> well, but maybe that's OK.
+>
+> Hi Bjorn - thanks a lot for taking a look at these changes!
+>
+> This touches a path where receiver has XDP prog loaded but sender used
+> ndo_start_xmit() to produce skbs onto another end of veth pair; these skbs
+> are then stored within ptr_ring where receiver picks them up. Native XDP
+> still has bulking, however the skb path has a little bit of back-and-forth
+> juggle between skb<->xdp_frame conversion. Now I got rid of these
+> conversions but also of home-grown generic XDP path as well as bulking and
+> the end result seems to land in the same performance results.
+>
+> Does it make sense to you?
 
-To fix this, we need to also build bpftool statically. That can be done
-by setting EXTRA_LDFLAGS=-static.
+Hmm! Thanks! ...but doesn't this change the semantics of redirect, for
+skb-input/native case?
 
-Fixes: 2d96bbdfd3b5 ("selftests/bpf: convert test_bpftool_map_access.sh into test_progs framework")
-Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
----
- tools/testing/selftests/bpf/README.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+target of redirect    before (skb-input)                     after (skb-inp=
+ut)
 
-diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
-index 776fbe3cb8f9..37164322a102 100644
---- a/tools/testing/selftests/bpf/README.rst
-+++ b/tools/testing/selftests/bpf/README.rst
-@@ -77,7 +77,7 @@ In case of linker errors when running selftests, try using static linking:
- 
- .. code-block:: console
- 
--  $ LDLIBS=-static PKG_CONFIG='pkg-config --static' vmtest.sh
-+  $ LDLIBS=-static EXTRA_LDFLAGS=-static PKG_CONFIG='pkg-config --static' vmtest.sh
- 
- .. note:: Some distros may not support static linking.
- 
--- 
-2.43.0
+real NIC via devmap   ndo_xdp_xmit(), bulked, XDP TX queue   netdev_start_x=
+mit(), regular qdisc/TX path=20=20=20=20
+cpumap                xdp_frame on remote CPU's ptr_ring     skb on remote =
+CPU's softnet backlog=20=20=20=20=20=20=20=20=20=20=20
+AF_XDP socket         native (potentially ZC)                xsk_generic_rc=
+v (copy, generic)=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
+veth peer (devmap)    xdp_frame into peer's xdp_ring         skb into peer'=
+s xdp_ring (same ring, skb tag)=20
 
+
+(Let me re-read it!)
+
+
+Bj=C3=B6rn
