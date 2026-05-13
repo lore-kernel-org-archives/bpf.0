@@ -1,113 +1,144 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 037003876C7
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 22:55:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303383655F1
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 23:20:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778712936; cv=none; b=ljnBBJ0WJTVeQGbZV/rmXVzTIWak4aZdmK4+HjomondrBkheFIEiDP62C7JZFIcDzJMH+N0vzcTV7OQ9cvJ5fi+3+CZp6lRb2ysX+PD3faN0jC0bnfpyt4YcKb7UqzV4cMsI5p09svfzYLalerlYabp5vWYz2Y0Jp802vbsstzI=
+	t=1778714462; cv=none; b=QWZi0R3gwxiCIk/8WsXVDhBxoRPML2DjeFZXkHwPybTDwGmDHpQXr5uly5vFQBulTYNnmuA1XFrQuyQCS/3Nsw+uyE0mn4gG4xDOCGe3NZk7g0zJNRWGXT0gpRohMg/g2nI7Nf4YDAQ6fEZN4cSoX3qebNjMZPmiYys0xgCMwYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778712936; c=relaxed/simple;
-	bh=Iaq3hF+DVkA5zlYIbzXnnu60gGVm3O/byi28Rs9qmws=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qfhGTmlZnc9i/vTybN4J2c9FMdCNT1y+aYEZwmRJO78CTAw0KjjNIuoAvYySjB6WoawsMXEy2DhKHuTkSY3dBrZRCl/uhfJwK1q72ri7Nvf1FsaZupbJxXs5D9oiF6vcwmvjdWdGRnVbnXh+gSCe3AafeTGvPoZG5Sq3d/6hp60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CKBl6IgI; arc=none smtp.client-ip=74.125.82.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778714462; c=relaxed/simple;
+	bh=157LL/t9eeZ/pgrP0TXqxaQ/Lk/DSrR163aWNC+F9WU=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=kPWSRSIuMY040gGlhWnXLk1kkTEPqerR28GSpDJyUzPSzCw12wA7jV7/yNzMrQoQ/xLekYa2qo4bSFJTogkiA+TPGie8v7gw/deFwfISQqnt0LqQxaalXZ0AFbUD0ZWG4ubsFpWNObr8OUAAAGDA+IK8Fkaj0bLofajBWG4IAjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--cmllamas.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sNY2JJA+; arc=none smtp.client-ip=74.125.82.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--cmllamas.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CKBl6IgI"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2c156c4a9efso10080656eec.1
-        for <bpf@vger.kernel.org>; Wed, 13 May 2026 15:55:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sNY2JJA+"
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-132a8f93432so1762002c88.0
+        for <bpf@vger.kernel.org>; Wed, 13 May 2026 16:20:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778712934; x=1779317734; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+        d=google.com; s=20251104; t=1778714459; x=1779319259; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=Iaq3hF+DVkA5zlYIbzXnnu60gGVm3O/byi28Rs9qmws=;
-        b=CKBl6IgIwflYfOp5OX9WdEdtXkYMlJcaUqDHTxyEJyUPmC/GCimF39IH56CkZ6cljV
-         Kri1xd+YOe/Y6vj9vBuZ+3nEemcbj+pKhRsmLo+R9ArlJSBJkFLHR3OQDAOeff895ZPs
-         nNsbg+BSKwnpZlSZ66sEDpHli1dS6v1lym5ITPdJGT863TCGabwtKNs2uqwhLMmD1RXx
-         1Qu/gtKgyof8r9gK2Yfw7F/kK9i+qkHl1Wd3tJluEa1fqvVVfUCDXa4pIIDi3QWH0k2V
-         N+MrZsXtegP4oMQwdfxhfY2GzqokayViB2x/TjSl4ekHxrSdpY6++6rtjSjkf8WhmloK
-         zINw==
+        bh=uSJnULhbkIDKrwGHNFIHrScxGoINGLJNTDxkyd47QQE=;
+        b=sNY2JJA+mpaMR/owb//X9CoPgSko0Q0xnkvq+Ef3qIGfEw4emyhBXR39iEhASzbGPC
+         P9ylwJOJ+9V2xbCnTi9TRxfMM66EnATbjx1gZZRxOjM43PCvEtorC60FXn5v0+4Azo3E
+         giprFgjrbrj/VquuFvMZI4BwdbyyA34TieKCLCN8PBNvrFpE12umKBEmCH3IPsW7dRKP
+         yoP2TZKSdDFYafFPaUH4+7hwUPQ6kanu0Yu4tb+MQcJyN/9T0w8mbSHHLMw8AK8XnTmk
+         tdAi/wNF8TndhEWJDxadMnYaj35XCQdUi4XA6HdEM6wFAmxOPuWP8WYtqaTOiXobw9eD
+         fLuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778712934; x=1779317734;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Iaq3hF+DVkA5zlYIbzXnnu60gGVm3O/byi28Rs9qmws=;
-        b=DRzY60BbyFTLTOJJmAzSOk8OrGPeBVaIO8v96CFvw/Om95ZnUmOFf9ExGUnZR1gjuh
-         xIi5wDAu6QlmJlAnVxb6F2KmUd/Hxqi+xhhL/RphAXTzUphMXOp9Yxxa7IdUnAdMPqQ3
-         6siUhh2iskScF/pCokuZFfvsjgwFeMjqfcUIy6EOcovb3c0AEg9+91rzQxdSZoUCV0rw
-         BD246gzjOwM9y66JMIfshxMrvLcXBjBfj2vghomUx+3WdTwUyutzflXVgHmi6fckt0b8
-         yJj22554xfwg1RWrJpPi0iWpRjOJ6ZrMrppyb35tbWKuJaz/Du8yEafUievgFyp10GZ0
-         wc5A==
-X-Gm-Message-State: AOJu0YzoNH0nHZeTmtZBowAY636YJwjRG9xPyQOzBeldOpHMRlgtr6+4
-	WVMZbA90C+b2UHn+XENpuL7FRalX3KZwqAl6FyNEdSuQFHOrLbx5tq0S
-X-Gm-Gg: Acq92OGzKD++iSsPMkDj5CNtpMJbehFldgHV9LFRDSWX3MEQG7CVKYvCLuLYDiMMHpI
-	aO7Yu0wPSI/9wjh4/3KRPG27isyde/f0qmOBsfkaM0iK0gXzlcfSIe+6JOyWGbtxUlO0MJ1VpcX
-	7NTJw4YkAa8B3ad0BSSTSG9hpwxzrfs6HgIed1LbN6F7tuJHYs6Vmk6R63HJ61B9XW8B0Y9PdSm
-	dBjdfPGIAQ/pZSvfmvYrEZE26Df+Ujw7mHQyXaV645rWdH7ZOrz9DxXqi8kPq8ESu7yw3CysDX7
-	2k+5eQ+qFk6SCIAIxb9v6LDUA5qlg2xsPnSi2N1shRODtLwCiuBNRFupDQuYMIpBcjKEBQ6+bAV
-	yMDuEotRJ8OMXy6DovCxZz5ekfjk6mFY14YwfqOHcUAJxbKrwDyt9EQugXdV7vpj/wO+5cv4nLW
-	oxsjIUupK635GtME//ZS1UoW4UcVsTGdom4dvzC9RcQOeNhzHhA6eNTEuFJh+jtkD5q5GDXyOfj
-	tEOSWw=
-X-Received: by 2002:a05:7300:7244:b0:2de:c5ca:c1e8 with SMTP id 5a478bee46e88-301541af891mr2987879eec.4.1778712933997;
-        Wed, 13 May 2026 15:55:33 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:5152:641f:f5ef:6c7b? ([2620:10d:c090:500::2:8a9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30296dcb6f6sm956046eec.17.2026.05.13.15.55.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 15:55:33 -0700 (PDT)
-Message-ID: <66355df814a639c463b5f51e96fd539aa30f0679.camel@gmail.com>
-Subject: Re: [PATCH RESEND bpf-next v10 7/8] bpf: allow non-owning list-node
- args via __nonown_allowed
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kaitao cheng <kaitao.cheng@linux.dev>, ast@kernel.org, corbet@lwn.net, 
-	martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
- song@kernel.org, 	yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, 	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- shuah@kernel.org, 	chengkaitao@kylinos.cn, skhan@linuxfoundation.org,
- memxor@gmail.com
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, vmalik@redhat.com,
- linux-kselftest@vger.kernel.org
-Date: Wed, 13 May 2026 15:55:31 -0700
-In-Reply-To: <0419643c9a04bf0824066742e52e3f197b43909b.camel@gmail.com>
-References: <20260512055919.95716-1-kaitao.cheng@linux.dev>
-		 <20260512055919.95716-8-kaitao.cheng@linux.dev>
-	 <0419643c9a04bf0824066742e52e3f197b43909b.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+        d=1e100.net; s=20251104; t=1778714459; x=1779319259;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uSJnULhbkIDKrwGHNFIHrScxGoINGLJNTDxkyd47QQE=;
+        b=F6t+OPHEw16YX7li36UMfcQbInkSGPp4vWWiUK9bY/fz89ZcCT87tpafWwYwkRddWr
+         H70npmZVkBJ6iUh9L90HbpjkgY8sCa7Vjn5FIJhIb8GDlFQY7eWSzEutH4BjERkPVwD5
+         jDgde0aFqwGzypf+Pxfz6oyoGCpUjrZLbFbgUXZsQevyEN2oS6Z2vommFiqoK9/6LGlu
+         t9HYISiml07/fdyVRn3bniFJlqDoemlE5ofa9/krNe+GCYijwOR3+5DJz6IELfVmtf3d
+         MmvXK7O13FVHOrHbrGfLHhK1vbOfIeRqdw8Flu3QKrpDylg8GDaT3MQUVQ1iMMTmHi4Z
+         HRRw==
+X-Forwarded-Encrypted: i=1; AFNElJ/ECMHQS+N7EaeKD+SV2LgSa4iUoO4gCqJ+RVhnrMu79kFjrw8fc72DJhYCE8H3ynQRDm4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPswU20HuFtB/VYwgvB108Qcsk3I1OyLkvCGNDmacGVKMRDSiT
+	/xb6z3+kaQNwRAp8Y+HFOK6z4RXSpW91FT0e0raUDnfkJ20hhYddzv+1db9Hl7fkEHiT1MEgJO3
+	tVmV4uYeZLXVgow==
+X-Received: from dycqb10.prod.google.com ([2002:a05:7300:fe8a:b0:302:67a7:5890])
+ (user=cmllamas job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:7022:43a4:b0:12a:713b:8964 with SMTP id a92af1059eb24-1349a808236mr3152721c88.11.1778714458906;
+ Wed, 13 May 2026 16:20:58 -0700 (PDT)
+Date: Wed, 13 May 2026 23:20:54 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
+Message-ID: <20260513232055.1681859-1-cmllamas@google.com>
+Subject: [PATCH] libbpf: fix UAF in strset__add_str()
+From: Carlos Llamas <cmllamas@google.com>
+To: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>
+Cc: kernel-team@android.com, linux-kernel@vger.kernel.org, 
+	Carlos Llamas <cmllamas@google.com>, Andrii Nakryiko <andriin@fb.com>, 
+	"open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 2026-05-13 at 15:37 -0700, Eduard Zingerman wrote:
-> On Tue, 2026-05-12 at 13:59 +0800, Kaitao cheng wrote:
-> > From: Kaitao Cheng <chengkaitao@kylinos.cn>
-> >=20
-> > KF_ARG_PTR_TO_LIST_NODE normally requires an owning reference
-> > (PTR_TO_BTF_ID | MEM_ALLOC with ref_obj_id). Introduce and use
-> > the __nonown_allowed annotation on selected list-node arguments
-> > so non-owning references with ref_obj_id=3D=3D0 are accepted as well.
-> >=20
-> > This enables passing bpf_list_front() / bpf_list_back() results to:
-> >=20
-> > bpf_list_add() as insertion point (prev)
-> > bpf_list_del() as deletion target (node)
-> > bpf_list_is_first/last() as query target (node)
-> >=20
-> > Verifier keeps existing owning-ref checks by default; only arguments
-> > annotated with __nonown_allowed bypass MEM_ALLOC/ref_obj_id checks
-> > and then follow the same list-node validation path.
-> >=20
-> > Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
-> > ---
+strset_add_str_mem() might reallocate the strset data buffer in order to
+accommodate the provided string 's'. However, if 's' points to a string
+already present in the buffer, it becomes dangling after the realloc.
+This leads to a use-after-free when attempting to memcpy() the string
+into the new buffer.
 
-Also, I think it is worthwhile to move this patch before the patches
-that introduce kfuncs that use the __nonown_allowed annotation.
-(In case if this series goes to v11).
+One scenario that triggers this problematic path is when resolve_btfids
+attempts to patch kfunc prototypes using existing BTF parameter names:
+
+ | resolve_btfids: function bpf_list_push_back_impl already exists in BTF
+ | Segmentation fault (core dumped)
+
+Compiling resolve_btfids with fsanitize=address generates a detailed
+report of the UAF:
+
+ | =================================================================
+ | ERROR: AddressSanitizer: heap-use-after-free on address 0x7f4c4a500bd4
+ | ==1507892==ERROR: AddressSanitizer: heap-use-after-free on address 0x7f4c4a500bd4 at pc 0x55d25155a2a8 bp 0x7ffcef879060 sp 0x7ffcef878818
+ | READ of size 5 at 0x7f4c4a500bd4 thread T0
+ |     #0 0x55d25155a2a7 in memcpy (tools/bpf/resolve_btfids/resolve_btfids+0xcf2a7)
+ |     #1 0x55d2515d708e in strset__add_str tools/lib/bpf/strset.c:162:2
+ |     #2 0x55d2515c730b in btf__add_str tools/lib/bpf/btf.c:2109:8
+ |     #3 0x55d2515c9020 in btf__add_func_param tools/lib/bpf/btf.c:3108:14
+ |     #4 0x55d25159f0b5 in process_kfunc_with_implicit_args tools/bpf/resolve_btfids/main.c:1196:9
+ |     #5 0x55d25159e004 in btf2btf tools/bpf/resolve_btfids/main.c:1229:9
+ |     #6 0x55d25159cee7 in main tools/bpf/resolve_btfids/main.c:1535:6
+ |     #7 0x7f4c78e29f76 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+ |     #8 0x7f4c78e2a026 in __libc_start_main csu/../csu/libc-start.c:360:3
+ |     #9 0x55d2514bb860 in _start (tools/bpf/resolve_btfids/resolve_btfids+0x30860)
+ |
+ | 0x7f4c4a500bd4 is located 13268 bytes inside of 2829000-byte region [0x7f4c4a4fd800,0x7f4c4a7b02c8)
+ | freed by thread T0 here:
+ |     #0 0x55d25155b700 in realloc (tools/bpf/resolve_btfids/resolve_btfids+0xd0700)
+ |     #1 0x55d2515c426c in libbpf_reallocarray tools/lib/bpf/./libbpf_internal.h:220:9
+ |     #2 0x55d2515c426c in libbpf_add_mem tools/lib/bpf/btf.c:224:13
+ |
+ | previously allocated by thread T0 here:
+ |     #0 0x55d25155b2e3 in malloc (tools/bpf/resolve_btfids/resolve_btfids+0xd02e3)
+ |     #1 0x55d2515d6e7d in strset__new tools/lib/bpf/strset.c:58:20
+
+While resolve_btfids could be refactored to avoid this call path, let's
+instead fix this issue at the source in strset__add_str() and avoid
+similar scenarios. Let's simply check whether 's' is already within the
+strset data buffer boundaries, and return the offset directly if so.
+
+Fixes: 919d2b1dbb07 ("libbpf: Allow modification of BTF and add btf__add_str API")
+Signed-off-by: Carlos Llamas <cmllamas@google.com>
+---
+ tools/lib/bpf/strset.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tools/lib/bpf/strset.c b/tools/lib/bpf/strset.c
+index 2464bcbd04e0..7d2b2784172e 100644
+--- a/tools/lib/bpf/strset.c
++++ b/tools/lib/bpf/strset.c
+@@ -141,10 +141,15 @@ int strset__find_str(struct strset *set, const char *s)
+  */
+ int strset__add_str(struct strset *set, const char *s)
+ {
++	const char *strs = strset__data(set);
+ 	long old_off, new_off, len;
+ 	void *p;
+ 	int err;
+ 
++	/* Check whether 's' is already in the strset data buffer */
++	if (strs && s >= strs && s < strs + set->strs_data_len)
++		return s - strs;
++
+ 	/* Hashmap keys are always offsets within set->strs_data, so to even
+ 	 * look up some string from the "outside", we need to first append it
+ 	 * at the end, so that it can be addressed with an offset. Luckily,
+-- 
+2.54.0.563.g4f69b47b94-goog
+
