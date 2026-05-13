@@ -1,100 +1,140 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC863D75AA
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 09:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0BFA3E6DDD;
+	Wed, 13 May 2026 09:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778663838; cv=none; b=XVD2EQ1ruAT1FEIZ6PhYqGPJcywnNVEkmVhK4wbnbvcxUBXhGj34PBtzGWoO5CKJ2cJSnZvZjhW8Sfs8mxLaMnhEyPy/xgmvGoMvnSJpTi4B995yZLeGMQiCR185khKNgbCKHnzZEFFZ6JyFhGZAMdEG/CDJyO9MqtyRYZm5BB8=
+	t=1778664053; cv=none; b=fbGaKM+SCGk47iErNVV3LtmkuG2fB9Nr1o3Ypmq/AtelVXB7y3AexjVD+Mc5UeUFw2W0nwCgdqZD8nCz7HssTza0LPjG0AATff63PONo936OCdWSPetPSHBcQxr5FPEqgU3p3SNAUGSC3n+8Afh/ujqpl/FTLMDuNaLGkwmIBNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778663838; c=relaxed/simple;
-	bh=SIg35o41z1LZVAKC3fAi3BASks1XM5AoHSYceWAirFk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=EDfATO4tjWCrmNlEcFV75ZCKtk07PejenXElDh5JNQRh8bcvNqb910Zfp9lqAZBY/n9iemH59CRIGaeJYY8Lp8YfctOh9dLa7AjRDxluchSYiHQAQ3Rl7m82zYJRt5lozcF28ardii+RAtNJ691GxUJQIwl+XCcvONfF5FKilNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=duPfeiNF; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1778664053; c=relaxed/simple;
+	bh=voKyE5RZ6JydcnsVAPGVmM88R7mBpWV6dEqnB2yU1cc=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=MfFR14dyJ12e++L3dCS6EdlIAyYI+tGLe4YW1EcTIReG2bZGIbnwmCFON76rP8Bg7zzXtnsW5gqINiP+Pm0/3yvNmc5DB3XDjav0hafDmcF91HnQqo3cqwH76xTdXv/7/qxSVpEQOj9JjnxUWI0MYdiPHlFnahksMuI1cGWYyoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tCvflfaN; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="duPfeiNF"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-bcb5370bb0dso944977766b.1
-        for <bpf@vger.kernel.org>; Wed, 13 May 2026 02:17:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1778663835; x=1779268635; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SIg35o41z1LZVAKC3fAi3BASks1XM5AoHSYceWAirFk=;
-        b=duPfeiNFAprAJGBmpdyVnMnxkvfy6NFXEnzHRzsG3hy0jXvgYke45Fwv+RJ9MEnR8+
-         xhrf5Isu2/isFEai/mvr6H3P6k++JhXzMo7JWy5vcY09qG/1ts16giIy1lryE6IvJez+
-         dnlCJC3PAFHw6Qsj5PWBlGUq7/YeFLPKpEtt8w3a9d8WfzhmFFdR6v50rVwUh2n5ifDm
-         lS801S0uPgCyir2mZJsyqreP0J7wCHQhxHkE6tV26H7PdZQ51YXdaPyOJ6DkQR8E/4Ls
-         Aj+t45Ovpp21Wwpq9CmRv8diSrQbNI5RERt8wGJT5/AlMGi8CXvYvA7bjPBEd8cYjEDV
-         wf8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778663835; x=1779268635;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SIg35o41z1LZVAKC3fAi3BASks1XM5AoHSYceWAirFk=;
-        b=ehnOc6z7HgTi0w+liFZRntjhJ82/CWiGVsT+OoIyWMm8Q/9Wu++XgIs9qTPxkISt/m
-         ETl8/v9gJqAJ/iRrb5vw+eZQijxTcG6P3egTEwtca/+B9zn0DTIzkbw8vaw/mBFqP28d
-         gxuvt1W6rRrGT3OMzKXKumhBNjErTfk7LQYv6aU+fdwecU7w45YGD4P9aNXotRxMPlVO
-         xHPfoyE8luWTLu6yGUiY/09umVf+BSgALbl4JnErllBqAoMjcGq68Wigjr6nI+DCaHzx
-         jBfr8vY3oM4ETG5+oWc+ncmiuBKS4SuXgbN7TEnYhkPJd4kwly124X+bN+9bHtesbQX8
-         5MXg==
-X-Forwarded-Encrypted: i=1; AFNElJ8Zmzu4hZER8mWtqgEbiCn0jl/0z3QfJQyKDU9aVWAh1yZi8CwYQzXuSMoUd234c4l2jno=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywv2wqLr4gD6hT77glMb1qvteQRiiPrFcyr2K4R7PupBlVIwmFB
-	hWapOVEnynfCcqhJstfJFqQaDVbPIqo3C7L/ghhHqjibFLUunzFK6ZFPR9HsuR4QsGY=
-X-Gm-Gg: Acq92OFrkfBNoHe5QEdex2diI8Gi1IGY3Agu/fwEixVDFSIyAH+l2Uo9/PCuIBgk+U1
-	k3iyGWmzLY9zxflg7xSUTzhPuGPSsE4iL7u7I7UZ8gmphlboB9LfEUreMi326rw/pvDV1xRYFDs
-	rdJCsOAfIDRCR2tIF2VtFAoh9ERHmZ4juKFi4n8V3eebSae5z4vLN+5YQ3kUmEC0kDvfJ32cxg9
-	Pc/83lJaVtZPz2cFZXZ7/qrYmFyZsrCwVITjJqS8HEMoXdYBbMKZRi7HUepZqtS0Gol2Ca+3BvL
-	LeLxEsZmVWqCBJFHumN5aUd+tLDlYv+ONKvKeThHm5sYlM2k33g7DmdEwujb6gxGGeVN4OJu9hx
-	+goomExgYsW0ggN9nWLRe5J+emtvYzsSlfTIJytPkxEArkf2OIH7D7u1DmsaFSqAdPJ9J7/Nv0/
-	hfAHfYhXpqw/nyCy32qB/wtVbQMA==
-X-Received: by 2002:a17:907:72c9:b0:bd2:3623:dab4 with SMTP id a640c23a62f3a-bd3c0edec93mr165052266b.28.1778663834927;
-        Wed, 13 May 2026 02:17:14 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bcd60f726desm584093366b.25.2026.05.13.02.17.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 02:17:14 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Jakub Kicinski <kuba@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
-Cc: "David S. Miller" <davem@davemloft.net>,  David Ahern
- <dsahern@kernel.org>,  Eric Dumazet <edumazet@google.com>,  Paolo Abeni
- <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Martin KaFai Lau
- <martin.lau@kernel.org>,  netdev@vger.kernel.org,  bpf@vger.kernel.org,
-  kernel-team@cloudflare.com
-Subject: Re: [PATCH net] net: Clear skb metadata before LWT xmit
-In-Reply-To: <20260430173153.5cd1d348@kernel.org> (Jakub Kicinski's message of
-	"Thu, 30 Apr 2026 17:31:53 -0700")
-References: <20260428-wip-skb-local-storage-from-scratch-v1-1-8f7ca9b378ce@cloudflare.com>
-	<20260430173153.5cd1d348@kernel.org>
-Date: Wed, 13 May 2026 11:17:12 +0200
-Message-ID: <87jyt78y93.fsf@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tCvflfaN"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64D3EBp83049159;
+	Wed, 13 May 2026 09:20:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=OwwYCU
+	FV8IC7PJ+SwxrCJWMwcLyhDqU2CKCyoIp9u9Y=; b=tCvflfaNy90crswhQ9vlp4
+	3/KL468JkhZ88h1fBbsIpIh/GO3edj0JNZMJ9/x+da0mV4xxYulxRK4G1mbdnkdo
+	UPT1IPrwHe5MdscEyjMk+8LpDfddgkFx8r76q35zzJuXewPPJQg33+d0qecQPTu/
+	HVmf3gEuISV5Et9NSeKG4HEgrrd79Fz217JDHk1JobNaCLKOtncFygAKatyR64yV
+	NXvRCTKjk+prnxemf+TR849Ly+Fn6pAwi+WHbBig8bN6q4HJgNjdQbr0trgwq7Cj
+	MkKcjZpmw4N2v3U/i/pkaQnQYa7I4bjoXBUB1DshjV1WVScB2nUtlC+j1QT6UDiA
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e3nv6pnx1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 13 May 2026 09:20:42 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64D99PnP025166;
+	Wed, 13 May 2026 09:20:42 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e3nfgq3vu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 13 May 2026 09:20:42 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64D9Ke3o34537800
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 13 May 2026 09:20:40 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2F0C82004E;
+	Wed, 13 May 2026 09:20:40 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0A8AB2004B;
+	Wed, 13 May 2026 09:20:40 +0000 (GMT)
+Received: from [9.52.200.195] (unknown [9.52.200.195])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 13 May 2026 09:20:39 +0000 (GMT)
+Message-ID: <d12caa4a-e54f-422b-92b1-b2f51bf7ea20@linux.ibm.com>
+Date: Wed, 13 May 2026 11:20:39 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 11/19] unwind_user/sframe: Show file name in debug
+ output
+From: Jens Remus <jremus@linux.ibm.com>
+To: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev,
+        Indu Bhagat <ibhagatgnu@gmail.com>, Heiko Carstens <hca@linux.ibm.com>
+References: <20260505121718.3572346-12-jremus@linux.ibm.com>
+ <20260505184638.5648DC2BCB4@smtp.kernel.org>
+ <edd04d6c-3cdc-43da-9cf2-44cccc353658@linux.ibm.com>
+Content-Language: en-US
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <edd04d6c-3cdc-43da-9cf2-44cccc353658@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=Us1T8ewB c=1 sm=1 tr=0 ts=6a04426b cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VnNF1IyMAAAA:8
+ a=VwQbUJbxAAAA:8 a=0MvmVg10__VCTnNSAJcA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: eajoxDX7UYy6UqVBMykyXRGTaSxANpgM
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTEzMDA5NCBTYWx0ZWRfX96Wp664p85tg
+ AljJKvZrKZkGrUEuT0bc6tj/yYhN9NJdnr7IsCsHCUFRlNMDchdLAIzyMpXSJjX75r87Pj9zvkl
+ At3bxNECBln9CGoWxOdQJqMolqqgaIVSizUuBozAiELJCAerT/eSuqYoBmIbvyiI/FoHMJqPO+Y
+ xOGuG7L61iVSKZeAQc5JGVYZX6s5uI3KuH13eFO/OigGVqxaSgDa9bePcqcbKFyzcWjQNCSZjlH
+ m3JquUe5saniMdAlXVIsLlP3TDCdB+Y83uXyQfBYa0Bw+mzQncfObiRSc1zsXv1i+4VZjL84F+A
+ /IHwTFgWXmxLE3ylNXJ7vDLEAnae/fWmya91+u0U/qbU9mdp3rBjxeHgoGBZievnFOxieAgIXMi
+ +s5546XCPE4zsO0FY2cuhIN6uV/6sWFqLC2K3dOuwUWpZHBFExEjNLmJQYuYhAcXwXF/ovhW0hN
+ iXHXb0JaPtCkoyfrghg==
+X-Proofpoint-ORIG-GUID: dEsWO2sHdweVIFkg_oyCXmxZh8d5U2Gi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-11_05,2026-05-08_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 priorityscore=1501 impostorscore=0 lowpriorityscore=0
+ bulkscore=0 suspectscore=0 spamscore=0 malwarescore=0 clxscore=1015
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605050000
+ definitions=main-2605130094
 
-On Thu, Apr 30, 2026 at 05:31 PM -07, Jakub Kicinski wrote:
-> On Tue, 28 Apr 2026 21:44:37 +0200 Jakub Sitnicki wrote:
->> skb metadata is meant for passing information between XDP and TC.
->> LWT programs cannot access the __sk_buff->data_meta pseudo-pointer.
->
-> netdev wasn't CCed on the sashiko reply but I think it now auto-marks
-> the patches as Changes Requested :| The Sashiko comments didn't seem
-> actionable to me. WDYT?
+On 5/12/2026 4:52 PM, Jens Remus wrote:
+> On 5/5/2026 8:46 PM, sashiko-bot@kernel.org wrote:
+> 
+>> [ ... ]
+>>> @@ -496,7 +501,7 @@ static int __sframe_remove_section(struct mm_struct *mm,
+>>>  				   struct sframe_section *sec)
+>>>  {
+>>>  	if (!mtree_erase(&mm->sframe_mt, sec->text_start)) {
+>>> -		dbg("mtree_erase failed: text=%lx\n", sec->text_start);
+>>> +		dbg_sec("mtree_erase failed: text=%lx\n", sec->text_start);
+>>
+>> Does accessing sec->filename in dbg_sec() risk a use-after-free here? If
+>> mtree_erase() fails, it indicates the section might have been concurrently
+>> removed. The SRCU grace period could expire, causing sec to be freed before
+>> dbg_sec() is called.
+> 
+> IIUC this is a valid concern.  Should this change be simply be reverted
+> or should __sframe_remove_section() create a temporary copy of the
+> filename and use dbg() for this rather unlikely case?
 
-Apologies, I completely missed your message in the chaos of the
-conference.
+On my way home it occurred to me that adding guard(srcu)(&sframe_srcu);
+to sframe_remove_section() (see my feedback on "[PATCH v14 03/19]
+unwind_user/sframe: Store .sframe section data in per-mm maple tree")
+should also resolve this use-after-free without any need for changes.
 
-I actually wanted to double-check with you and Daniel - is consuming
-metadata from TC egress supposed to be supported?
+Regards,
+Jens
+-- 
+Jens Remus
+Linux on Z Development (D3303)
+jremus@de.ibm.com / jremus@linux.ibm.com
 
-If not, then I agree - nothing left to do about the Sashiko feedback
-[1].
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
 
-[1] https://sashiko.dev/#/patchset/20260428-wip-skb-local-storage-from-scratch-v1-1-8f7ca9b378ce@cloudflare.com?part=1
