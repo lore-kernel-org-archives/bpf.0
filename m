@@ -1,117 +1,141 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940C938D400;
-	Wed, 13 May 2026 23:55:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C339A175A68
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 23:56:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778716554; cv=none; b=r+z9Bg6mE4ZTNIjlsfQNx+mkMn06MS2N8QH6xbPx32YlvLavLBe+EJfSWpPh6AsMbXJquU9A6UX3a+bzauTkJlgfyxgnhqxVZ4gfP7MKpKFDAvQqxQoV2MSSmbcq2lMnc74RtCMOaegCKxr8BTMnJ8+i8gG5QxGn65uP9ZdLyzg=
+	t=1778716611; cv=none; b=LcQd3ih+O6EBK8C/aL9PDXKeVHHIluo1ozrVE1cO3UYNcNeGp97yHw7ESjXSicTtiZqvMOYhpLo1qalm59vUogyqQe0IEUijOpOc2g7rGcNm0dedDVNCxUUrhGn0RrxaRcU8NmJiFS9AXzcf5C++78iImp+KILtJTCQjSYZJehQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778716554; c=relaxed/simple;
-	bh=wji2MdgcTyHZfE/7Bjx5jqsRridfdB/rTzrCaSZVFQ8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=C6VQZcQg1H9J1gHBsStcW706QW48HWcwz/kYA36reUPT7jpHNQBeNA/zizdXcO3hiLhBx6VDgjdq0R3ruykLWXoyADXHgVAUw29zZKooWU/7mEp+NaH9d34oYbzgXKhIHSckZnMSIKti4jwRZfnqUz1tXwQHvYUaKswNPkAY2Mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rBkS+qDm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778716611; c=relaxed/simple;
+	bh=nlZMr1gpUTtPJyugqWyzw6M+m+J01GltKN2OMPSKbuU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=N/CsSPbgyr7RxGaTcNNTeeMScFySKhVI7jhrT4FMd+NXCYtvJQiGuL0FBWT0n4cPCgF77xfSkYq+F3qxghgwQn+3W8RVnX0xjntuJJ27Xhhm3FENF7Hm739zQFOcLX7Hae9sr55oQa2lcYbNJFxKwQhGtvXshkQQJpQeqwNwFHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bHdipIcu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rBkS+qDm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE921C19425;
-	Wed, 13 May 2026 23:55:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bHdipIcu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40146C19425;
+	Wed, 13 May 2026 23:56:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778716554;
-	bh=wji2MdgcTyHZfE/7Bjx5jqsRridfdB/rTzrCaSZVFQ8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=rBkS+qDmpKZ5HUKCjGWZTHBSgF6aVQVPJPQb6t7GQcnjJEXCviq7cx4erW6TiVBoa
-	 3TQfeG/KYQEuLMpP0kKlY0Qbagvfh3NRsUwMp5iG3zeiJp/5Sl9Lbt1P/1jQMVmdto
-	 kP8WTxeBFo4GbnDC+wc6wTaUHNZihGstEV9wII1aFKEj6fTj+cAqxD9MT50FA5cFtw
-	 cbqNg53+7agjVkewQQwFrGTbwEix+/o3N8BcZQtN7oGm1Wsev3X54DAkEvLDq2TTua
-	 IbBd0TXS6ich/xYX2gwM4gsMGpuMGSRAQeuBd/8mzb+oIr8OZ8jQnaLEKMo29mhJRh
-	 Bank9P2ULxJTA==
-Content-Type: multipart/mixed; boundary="===============5681978247099584604=="
+	s=k20201202; t=1778716611;
+	bh=nlZMr1gpUTtPJyugqWyzw6M+m+J01GltKN2OMPSKbuU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=bHdipIcuSLL80tExQ9jB0LQkfw1AI4Gi7cquwWlhGfqPuzXlVJGA/s70yaSqNNTJ6
+	 25VArj86Apf3vSboCQQMe5xmJfTFNAIk56H+CBMcjUfxElV41xHSULLn5UfLDUQGS5
+	 oAyiD4B2YNBqeLArlIrEbeNx6zlwRZKNcd2ESOpmdfYqzm4kbs8oDGX9vv+I0AhWyP
+	 mH+o0fPrNuay/4YJ13bLdYSfb7DbUqnyiAUOAjeXrg4DAroqb7QJ0mjH0PyTIPPxTr
+	 NoZKWqhUf1ZUJZhImRqCig5q6UCpB1L4YleowrPGfee0N6QJqNhN5VqnVNRTS+xM8i
+	 b32o9QNjd73aw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v14 4/8] bpf: Add syscall common attributes
+ support for prog_load
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Leon Hwang" <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260512153157.28382-5-leon.hwang@linux.dev>
+References: <20260512153157.28382-5-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 13 May 2026 23:56:50 +0000
+Message-Id: <20260513235651.40146C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <a183ee082f0d56ee7664ad0d13cf7b7169ed2b6da743cb332f619fb360689ada@mail.kernel.org>
-In-Reply-To: <20260513232055.1681859-1-cmllamas@google.com>
-References: <20260513232055.1681859-1-cmllamas@google.com>
-Subject: Re: [PATCH] libbpf: fix UAF in strset__add_str()
-From: bot+bpf-ci@kernel.org
-To: cmllamas@google.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com
-Cc: kernel-team@android.com,linux-kernel@vger.kernel.org,cmllamas@google.com,andriin@fb.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 13 May 2026 23:55:53 +0000 (UTC)
 
---===============5681978247099584604==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The log attribute merge logic in bpf_log_attr_init() incorrectly=
+ relies solely on the presence of log_buf to detect log parameters, ignorin=
+g valid requests from bpf_common_attr and bypassing conflict checks.
+--
 
-> strset_add_str_mem() might reallocate the strset data buffer in order to
-> accommodate the provided string 's'. However, if 's' points to a string
-> already present in the buffer, it becomes dangling after the realloc.
-> This leads to a use-after-free when attempting to memcpy() the string
-> into the new buffer.
->
-> One scenario that triggers this problematic path is when resolve_btfids
-> attempts to patch kfunc prototypes using existing BTF parameter names:
->
->  | resolve_btfids: function bpf_list_push_back_impl already exists in BTF
->  | Segmentation fault (core dumped)
->
-> Compiling resolve_btfids with fsanitize=address generates a detailed
-> report of the UAF:
->
->  | =================================================================
->  | ERROR: AddressSanitizer: heap-use-after-free on address 0x7f4c4a500bd4
->  | ==1507892==ERROR: AddressSanitizer: heap-use-after-free on address 0x7f4c4a500bd4 at pc 0x55d25155a2a8 bp 0x7ffcef879060 sp 0x7ffcef878818
->  | READ of size 5 at 0x7f4c4a500bd4 thread T0
->  |     #0 0x55d25155a2a7 in memcpy (tools/bpf/resolve_btfids/resolve_btfids+0xcf2a7)
->  |     #1 0x55d2515d708e in strset__add_str tools/lib/bpf/strset.c:162:2
->  |     #2 0x55d2515c730b in btf__add_str tools/lib/bpf/btf.c:2109:8
->  |     #3 0x55d2515c9020 in btf__add_func_param tools/lib/bpf/btf.c:3108:14
->  |     #4 0x55d25159f0b5 in process_kfunc_with_implicit_args tools/bpf/resolve_btfids/main.c:1196:9
->  |     #5 0x55d25159e004 in btf2btf tools/bpf/resolve_btfids/main.c:1229:9
->  |     #6 0x55d25159cee7 in main tools/bpf/resolve_btfids/main.c:1535:6
->  |     #7 0x7f4c78e29f76 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
->  |     #8 0x7f4c78e2a026 in __libc_start_main csu/../csu/libc-start.c:360:3
->  |     #9 0x55d2514bb860 in _start (tools/bpf/resolve_btfids/resolve_btfids+0x30860)
->  |
->  | 0x7f4c4a500bd4 is located 13268 bytes inside of 2829000-byte region [0x7f4c4a4fd800,0x7f4c4a7b02c8)
->  | freed by thread T0 here:
->  |     #0 0x55d25155b700 in realloc (tools/bpf/resolve_btfids/resolve_btfids+0xd0700)
->  |     #1 0x55d2515c426c in libbpf_reallocarray tools/lib/bpf/./libbpf_internal.h:220:9
->  |     #2 0x55d2515c426c in libbpf_add_mem tools/lib/bpf/btf.c:224:13
->  |
->  | previously allocated by thread T0 here:
->  |     #0 0x55d25155b2e3 in malloc (tools/bpf/resolve_btfids/resolve_btfids+0xd02e3)
->  |     #1 0x55d2515d6e7d in strset__new tools/lib/bpf/strset.c:58:20
->
-> While resolve_btfids could be refactored to avoid this call path, let's
-> instead fix this issue at the source in strset__add_str() and avoid
-> similar scenarios. Let's simply check whether 's' is already within the
-> strset data buffer boundaries, and return the offset directly if so.
->
-> Fixes: 919d2b1dbb07 ("libbpf: Allow modification of BTF and add btf__add_str API")
-> Signed-off-by: Carlos Llamas <cmllamas@google.com>
+commit 1f52aae509f179f0117e37fa0cdfc161beb16d35
+Author: Leon Hwang <leon.hwang@linux.dev>
 
-The existing Fixes: tag points to commit 919d2b1dbb07, but the bug is
-actually in strset__add_str() which was introduced by commit 90d76d3ececc
-("libbpf: Extract internal set-of-strings datastructure APIs").
+bpf: Add syscall common attributes support for prog_load
 
-While the vulnerable pattern originated in btf__add_str() from 919d2b1dbb07,
-the code being fixed resides in tools/lib/bpf/strset.c which was created by
-90d76d3ececc when the string set functionality was extracted into a separate
-module.
+This commit allows BPF_PROG_LOAD to accept log parameters from either union
+bpf_attr or struct bpf_common_attr. The merge rules are designed to use
+complete log tuples from either side or return an error if they differ.
 
-Should this use:
+> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+> index 1b1efe75398b7..fd12ad5a0338d 100644
+> --- a/kernel/bpf/log.c
+> +++ b/kernel/bpf/log.c
 
-  Fixes: 90d76d3ececc ("libbpf: Extract internal set-of-strings datastructure APIs")
+[ ... ]
 
+> @@ -827,16 +827,36 @@ void print_insn_state(struct bpf_verifier_env *env,=
+ const struct bpf_verifier_st
+>  }
+> =20
+>  int bpf_log_attr_init(struct bpf_log_attr *log, u64 log_buf, u32 log_siz=
+e, u32 log_level,
+> -		      u32 offsetof_log_true_size, bpfptr_t uattr)
+> +		      u32 offsetof_log_true_size, bpfptr_t uattr, struct bpf_common_at=
+tr *common,
+> +		      bpfptr_t uattr_common, u32 size_common)
+>  {
+> +	char __user *ubuf_common =3D u64_to_user_ptr(common->log_buf);
+>  	char __user *ubuf =3D u64_to_user_ptr(log_buf);
+> =20
+> +	if (!bpf_verifier_log_attr_valid(common->log_level, ubuf_common, common=
+->log_size) ||
+> +	    !bpf_verifier_log_attr_valid(log_level, ubuf, log_size))
+> +		return -EINVAL;
+> +
+> +	if (ubuf && ubuf_common && (ubuf !=3D ubuf_common || log_size !=3D comm=
+on->log_size ||
+> +				    log_level !=3D common->log_level))
+> +		return -EINVAL;
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+The commit message states that if both sides provide complete tuples but
+they differ, it should return -EINVAL.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25832614669
---===============5681978247099584604==--
+If a user wants to query the true log size, they can set log_level > 0
+with log_buf =3D NULL and log_size =3D 0. This is explicitly permitted by
+bpf_verifier_log_attr_valid().
+
+If both attr and attr_common omit the log buffer but provide conflicting
+log_level values, will this bypass the conflict check since both ubuf and
+ubuf_common evaluate to NULL?
+
+>  	memset(log, 0, sizeof(*log));
+>  	log->ubuf =3D ubuf;
+>  	log->size =3D log_size;
+>  	log->level =3D log_level;
+>  	log->offsetof_true_size =3D offsetof_log_true_size;
+>  	log->uattr =3D uattr;
+> +
+> +	if (!ubuf && ubuf_common) {
+
+If the user sets common->log_level > 0 to query the true log size but
+omits common->log_buf, ubuf_common evaluates to NULL.
+
+Does this cause the condition !ubuf && ubuf_common to evaluate to false,
+silently ignoring the valid attr_common request and falling back to the
+legacy attr?
+
+Additionally, if both sides provide perfectly matching log buffers, but
+the legacy attr is too small to receive log_true_size (where
+offsetof_log_true_size is 0), would the code fail to utilize the
+attr_common capacity and silently drop the log_true_size output?
+
+> +		log->ubuf =3D ubuf_common;
+> +		log->size =3D common->log_size;
+> +		log->level =3D common->log_level;
+> +		log->uattr =3D uattr_common;
+> +		log->offsetof_true_size =3D 0;
+> +		if (size_common >=3D offsetofend(struct bpf_common_attr, log_true_size=
+))
+> +			log->offsetof_true_size =3D offsetof(struct bpf_common_attr, log_true=
+_size);
+> +	}
+>  	return 0;
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260512153157.2838=
+2-1-leon.hwang@linux.dev?part=3D4
