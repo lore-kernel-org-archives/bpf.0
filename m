@@ -1,83 +1,83 @@
-Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC9D37DE85
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 22:54:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 037003876C7
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 22:55:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778712845; cv=none; b=deL9oVPZHRcowNGDe/wO4b5tbK0KAUJkrNBalRY9gHz89G73Sfqszjo/4V5PvQNN7ksOtJmqZvfp8sj6Sw6vcPnLexWRpC+0ClHVw9nRgRTO4akLBsu2mSj19WJcNNZx8bcs1M6UF+Is+xLj2mP6Rjp40HFLfaYjHk4geXTEdXQ=
+	t=1778712936; cv=none; b=ljnBBJ0WJTVeQGbZV/rmXVzTIWak4aZdmK4+HjomondrBkheFIEiDP62C7JZFIcDzJMH+N0vzcTV7OQ9cvJ5fi+3+CZp6lRb2ysX+PD3faN0jC0bnfpyt4YcKb7UqzV4cMsI5p09svfzYLalerlYabp5vWYz2Y0Jp802vbsstzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778712845; c=relaxed/simple;
-	bh=aa6l7b+APFWz/5UdNV5Q7GOrbwD0gYuiQ9o7noutUhg=;
+	s=arc-20240116; t=1778712936; c=relaxed/simple;
+	bh=Iaq3hF+DVkA5zlYIbzXnnu60gGVm3O/byi28Rs9qmws=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=H/17AHA6fqpdTNuEW0ycguDPe9pg42dehT7JGqZAjv/lSjxXJFCtxQXisAID3hDAI9EJsVowD88yoAcgES8sDoTIV6/gRS0N2ATPimiZG+yZeAqZl7Ed2yJoZeZSbRnQHYr85xUsRmBdm7LLdQ79VPoakpkjNQHuYnrVvuQjzn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j8Ybhon5; arc=none smtp.client-ip=74.125.82.54
+	 Content-Type:MIME-Version; b=qfhGTmlZnc9i/vTybN4J2c9FMdCNT1y+aYEZwmRJO78CTAw0KjjNIuoAvYySjB6WoawsMXEy2DhKHuTkSY3dBrZRCl/uhfJwK1q72ri7Nvf1FsaZupbJxXs5D9oiF6vcwmvjdWdGRnVbnXh+gSCe3AafeTGvPoZG5Sq3d/6hp60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CKBl6IgI; arc=none smtp.client-ip=74.125.82.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j8Ybhon5"
-Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-1329fc4bf77so5675528c88.1
-        for <bpf@vger.kernel.org>; Wed, 13 May 2026 15:54:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CKBl6IgI"
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2c156c4a9efso10080656eec.1
+        for <bpf@vger.kernel.org>; Wed, 13 May 2026 15:55:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778712843; x=1779317643; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778712934; x=1779317734; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=aa6l7b+APFWz/5UdNV5Q7GOrbwD0gYuiQ9o7noutUhg=;
-        b=j8Ybhon50iNTQHN4Xu4aOCf5VI+NTxIWF/q7L8EbUVy3HOBjoLyTBJEqO88GVGMrS3
-         JuXDV9Dc1YyN4h/dG/GOFXxxYSEAYT7joGGWrOzpuhlcKxm5kK6bdr6VqLwpEE+Z6eVd
-         6iCk0xcITCCQjBi6xsSXVNOb6Ortr+b2kqPOWLyEDr/AMzvm5LRfQC7Gc3JzavEyJkrg
-         iPg/JM9xkTc6y271uIZF1dlG9A6nV5Ph0vEhgwHE6LNNvY/dElEt4OS4W1VF/zb3A0LF
-         oGhUIF+wUFbIcztygZYeaRUY5cWTYywDVSwiMyWifPtZNPZD16H+vegaaQIQG+ODeeBf
-         QWdQ==
+        bh=Iaq3hF+DVkA5zlYIbzXnnu60gGVm3O/byi28Rs9qmws=;
+        b=CKBl6IgIwflYfOp5OX9WdEdtXkYMlJcaUqDHTxyEJyUPmC/GCimF39IH56CkZ6cljV
+         Kri1xd+YOe/Y6vj9vBuZ+3nEemcbj+pKhRsmLo+R9ArlJSBJkFLHR3OQDAOeff895ZPs
+         nNsbg+BSKwnpZlSZ66sEDpHli1dS6v1lym5ITPdJGT863TCGabwtKNs2uqwhLMmD1RXx
+         1Qu/gtKgyof8r9gK2Yfw7F/kK9i+qkHl1Wd3tJluEa1fqvVVfUCDXa4pIIDi3QWH0k2V
+         N+MrZsXtegP4oMQwdfxhfY2GzqokayViB2x/TjSl4ekHxrSdpY6++6rtjSjkf8WhmloK
+         zINw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778712843; x=1779317643;
+        d=1e100.net; s=20251104; t=1778712934; x=1779317734;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aa6l7b+APFWz/5UdNV5Q7GOrbwD0gYuiQ9o7noutUhg=;
-        b=pWJrqA+wUfhxstlA2V5J37oASw0BC1T57FARYy2INPCh/uLpcPtBpJLxMpSjOgRPRv
-         q+aly5oRrKm68rPspSN6hDPHdBp2hm+xUWvqgCuC6m673vW6O9JkjGKdWGT8UCz5iTUd
-         a3PJDTzv5TZE9dqjXVn2Oe0SrIRwS7gkOtOzwuM1YCCJQqkI0oIbfZV307e4JZ7GpY1+
-         S6jHr99mQImlrBB1vqqsBkVr0Hd1txIsE3rAMGcO8KUixntUDgEDCyD851Pv6Ttjy7df
-         21h8zMNnX6SmuEc/GjWO1ANvBQOL1j2Oyx6tra2tLVOwNq5y1Lp+PeVPfcZmlpFJnvyE
-         baVQ==
-X-Gm-Message-State: AOJu0Ywv5MXqlqnLkbZEK+4tnZ0Gv52vHvI2ZZpySxQ5+N7Q/ENj/OGN
-	eSl84feNgNKzWPcBp9y7ZLDQ4NoZR4r6ovoHMPO/rdwHIc+byIXOCDJW
-X-Gm-Gg: Acq92OFDnB6bJ64n6CWmEjrI0nae9OapNjA88upW4FGE1Omum39vRcA/iv3ajXlK7+M
-	R8jTFWgMYevi9KTE9jGqHZ2B8oK+k5pLB89TwX2/4Kqno5BowjQAAsVm5x1sRzWv6QQRRaTqHNs
-	cu6k6GdwjjBTyCvzw3hpiuX5vcHmM21gw1bSmqQsodd2gyYEZvZMe6yUDXWjuc/RYVaD7emxAlA
-	CFycV5k58WbVnJ3BMc8h76lj7o8uGSd4E9E7y1vN57vFuGpFfN9wjKU8ZYxltf83J+RXNmwfLLZ
-	yScNPqH/nNQEtEUbUTsRM41kNiXqY4BSdhdny+XmAhNQ2aipspBjmQQ1ZFWONuGla56j/8HW5c5
-	bSk7vTgw6D0gCfKaKoLPC5bfDBBASOs5MemWIhmd5d+B0k5BJA+tn6QbLzj7ZbypSryV80D2BFL
-	g8pblocl6wOtym4aanUFhUkmsT5SDXYwzp5tuP5aVjozkANfBF9MJxQpVxiayb+DMPrPHADbep4
-	LRjwW8=
-X-Received: by 2002:a05:7022:6611:b0:12d:de3e:cc02 with SMTP id a92af1059eb24-13436bb037cmr3404126c88.41.1778712843089;
-        Wed, 13 May 2026 15:54:03 -0700 (PDT)
+        bh=Iaq3hF+DVkA5zlYIbzXnnu60gGVm3O/byi28Rs9qmws=;
+        b=DRzY60BbyFTLTOJJmAzSOk8OrGPeBVaIO8v96CFvw/Om95ZnUmOFf9ExGUnZR1gjuh
+         xIi5wDAu6QlmJlAnVxb6F2KmUd/Hxqi+xhhL/RphAXTzUphMXOp9Yxxa7IdUnAdMPqQ3
+         6siUhh2iskScF/pCokuZFfvsjgwFeMjqfcUIy6EOcovb3c0AEg9+91rzQxdSZoUCV0rw
+         BD246gzjOwM9y66JMIfshxMrvLcXBjBfj2vghomUx+3WdTwUyutzflXVgHmi6fckt0b8
+         yJj22554xfwg1RWrJpPi0iWpRjOJ6ZrMrppyb35tbWKuJaz/Du8yEafUievgFyp10GZ0
+         wc5A==
+X-Gm-Message-State: AOJu0YzoNH0nHZeTmtZBowAY636YJwjRG9xPyQOzBeldOpHMRlgtr6+4
+	WVMZbA90C+b2UHn+XENpuL7FRalX3KZwqAl6FyNEdSuQFHOrLbx5tq0S
+X-Gm-Gg: Acq92OGzKD++iSsPMkDj5CNtpMJbehFldgHV9LFRDSWX3MEQG7CVKYvCLuLYDiMMHpI
+	aO7Yu0wPSI/9wjh4/3KRPG27isyde/f0qmOBsfkaM0iK0gXzlcfSIe+6JOyWGbtxUlO0MJ1VpcX
+	7NTJw4YkAa8B3ad0BSSTSG9hpwxzrfs6HgIed1LbN6F7tuJHYs6Vmk6R63HJ61B9XW8B0Y9PdSm
+	dBjdfPGIAQ/pZSvfmvYrEZE26Df+Ujw7mHQyXaV645rWdH7ZOrz9DxXqi8kPq8ESu7yw3CysDX7
+	2k+5eQ+qFk6SCIAIxb9v6LDUA5qlg2xsPnSi2N1shRODtLwCiuBNRFupDQuYMIpBcjKEBQ6+bAV
+	yMDuEotRJ8OMXy6DovCxZz5ekfjk6mFY14YwfqOHcUAJxbKrwDyt9EQugXdV7vpj/wO+5cv4nLW
+	oxsjIUupK635GtME//ZS1UoW4UcVsTGdom4dvzC9RcQOeNhzHhA6eNTEuFJh+jtkD5q5GDXyOfj
+	tEOSWw=
+X-Received: by 2002:a05:7300:7244:b0:2de:c5ca:c1e8 with SMTP id 5a478bee46e88-301541af891mr2987879eec.4.1778712933997;
+        Wed, 13 May 2026 15:55:33 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:5152:641f:f5ef:6c7b? ([2620:10d:c090:500::2:8a9])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cbed531esm1473485c88.8.2026.05.13.15.54.00
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30296dcb6f6sm956046eec.17.2026.05.13.15.55.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 15:54:02 -0700 (PDT)
-Message-ID: <e141699dab70282d811ec30bbf2aa8279706817b.camel@gmail.com>
-Subject: Re: [PATCH RESEND bpf-next v10 2/8] bpf: clear list node owner and
- unlink before drop
+        Wed, 13 May 2026 15:55:33 -0700 (PDT)
+Message-ID: <66355df814a639c463b5f51e96fd539aa30f0679.camel@gmail.com>
+Subject: Re: [PATCH RESEND bpf-next v10 7/8] bpf: allow non-owning list-node
+ args via __nonown_allowed
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: bot+bpf-ci@kernel.org, kaitao.cheng@linux.dev, ast@kernel.org,
- corbet@lwn.net, 	martin.lau@linux.dev, daniel@iogearbox.net,
- andrii@kernel.org, song@kernel.org, 	yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, 	sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, 
-	chengkaitao@kylinos.cn, skhan@linuxfoundation.org, memxor@gmail.com
+To: Kaitao cheng <kaitao.cheng@linux.dev>, ast@kernel.org, corbet@lwn.net, 
+	martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
+ song@kernel.org, 	yonghong.song@linux.dev, john.fastabend@gmail.com,
+ kpsingh@kernel.org, 	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ shuah@kernel.org, 	chengkaitao@kylinos.cn, skhan@linuxfoundation.org,
+ memxor@gmail.com
 Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, vmalik@redhat.com,
- linux-kselftest@vger.kernel.org, 	martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-Date: Wed, 13 May 2026 15:53:59 -0700
-In-Reply-To: <da95f45b43d94d17796b19abc4c555e35daafab7d5e1cdca3714fe0f54ab8cce@mail.kernel.org>
-References: <20260512055919.95716-3-kaitao.cheng@linux.dev>
-	 <da95f45b43d94d17796b19abc4c555e35daafab7d5e1cdca3714fe0f54ab8cce@mail.kernel.org>
+ linux-kselftest@vger.kernel.org
+Date: Wed, 13 May 2026 15:55:31 -0700
+In-Reply-To: <0419643c9a04bf0824066742e52e3f197b43909b.camel@gmail.com>
+References: <20260512055919.95716-1-kaitao.cheng@linux.dev>
+		 <20260512055919.95716-8-kaitao.cheng@linux.dev>
+	 <0419643c9a04bf0824066742e52e3f197b43909b.camel@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -86,44 +86,28 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-T24gVHVlLCAyMDI2LTA1LTEyIGF0IDA2OjQxICswMDAwLCBib3QrYnBmLWNpQGtlcm5lbC5vcmcg
-d3JvdGU6CgpbLi4uXQoKPiBXaGVuIGEgQlBGIHByb2dyYW0gaG9sZHMgYW4gb3duaW5nIG9yIHJl
-ZmNvdW50LWFjcXVpcmVkIHJlZmVyZW5jZSB0bwo+IG9uZSBvZiB0aGVzZSBub2RlcyAobm9kZSBY
-KSwgd2hpY2ggaXMgc3RydWN0dXJhbGx5IHN1cHBvcnRlZCBiZWNhdXNlCj4gX19icGZfb2JqX2Ry
-b3BfaW1wbCgpIHVzZXMgcmVmY291bnRfZGVjX2FuZF90ZXN0KCkgYW5kIG9ubHkgZnJlZXMgYXQK
-PiByZWZjb3VudCAwLCBhIGNvbmN1cnJlbnQgcHVzaCB0byBhIERJRkZFUkVOVCBicGZfbGlzdF9o
-ZWFkIGJlY29tZXMgYQo+IGNvcnJ1cHRpb246Cj4gCj4gQ1BVIDAgKGJwZl9saXN0X2hlYWRfZnJl
-ZSwgbG9jayByZWxlYXNlZCkgIENQVSAxIChCUEYgcHJvZywgcmVmY291bnQgWCkKPiAtLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSAgIC0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0KPiAob3duZXIgb2YgWCA9PSBOVUxMLCBYIGxpbmtlZCBpbiBkcmFpbikKPiDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgYnBmX2xpc3RfcHVzaF9iYWNrKG90aGVyLCBYKQo+
-IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgX19icGZfbGlzdF9hZGQ6IHNwaW5f
-bG9jaygpCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjbXB4Y2hnKFgtPm93
-bmVyLCBOVUxMLAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoFBPSVNPTikgLT4gT0sKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oGxpc3RfYWRkX3RhaWwoJlgtPmxpc3RfaGVhZCwKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBvdGhlcl9oZWFkKQo+IMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC0+IG92ZXJ3cml0ZXMgWC0+bmV4dCwK
-PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBYLT5wcmV2LCBj
-b3JydXB0cwo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG90
-aGVyX2hlYWQncyBjaGFpbgo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoGJlY2F1c2UgWCBpcyBzdGlsbAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoHN0aXRjaGVkIGludG8gZHJhaW4KPiBwb3MgPSBkcmFpbi5uZXh0OyAg
-ICAgIChtYXkgYmUgWCBvciBuZWlnaGJvciB1c2luZyBYJ3Mgc3RhbGUgbmV4dCkKPiBsaXN0X2Rl
-bF9pbml0KHBvcyk7ICAgIHJlYWRzIFgtPm5leHQvcHJldiBub3cgcG9pbnRpbmcgaW50byBvdGhl
-cl9oZWFkLAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBj
-b3JydXB0cyBvdGhlcl9oZWFkJ3MgbGlzdCBhbmQvb3IgZHJhaW4KCgpLYWl0YW8sIHRoaXMgc2Nl
-bmFyaW8gc2VlbSBwbGF1c2libGUsIGNvdWxkIHlvdSBwbGVhc2UgY29tbWVudCBvbiBpdD8KClsu
-Li5dCg==
+On Wed, 2026-05-13 at 15:37 -0700, Eduard Zingerman wrote:
+> On Tue, 2026-05-12 at 13:59 +0800, Kaitao cheng wrote:
+> > From: Kaitao Cheng <chengkaitao@kylinos.cn>
+> >=20
+> > KF_ARG_PTR_TO_LIST_NODE normally requires an owning reference
+> > (PTR_TO_BTF_ID | MEM_ALLOC with ref_obj_id). Introduce and use
+> > the __nonown_allowed annotation on selected list-node arguments
+> > so non-owning references with ref_obj_id=3D=3D0 are accepted as well.
+> >=20
+> > This enables passing bpf_list_front() / bpf_list_back() results to:
+> >=20
+> > bpf_list_add() as insertion point (prev)
+> > bpf_list_del() as deletion target (node)
+> > bpf_list_is_first/last() as query target (node)
+> >=20
+> > Verifier keeps existing owning-ref checks by default; only arguments
+> > annotated with __nonown_allowed bypass MEM_ALLOC/ref_obj_id checks
+> > and then follow the same list-node validation path.
+> >=20
+> > Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+> > ---
 
+Also, I think it is worthwhile to move this patch before the patches
+that introduce kfuncs that use the __nonown_allowed annotation.
+(In case if this series goes to v11).
