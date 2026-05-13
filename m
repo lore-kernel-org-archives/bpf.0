@@ -1,153 +1,187 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 045DE29AAEA
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 00:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778633487; cv=pass; b=NAWWzbX+WCF66TehNb3yqRIT0vNBe/sj09jaZtmLdmHnLt+5iMFk/Wap6MAYp74Dk7s4/nGik4bT/uJkpl4l/4ePEs4nesYY5CRqmQRXEl95jjIG0fcCLZvXhUovyDAsdDLih6j54IjIuswEiJ5j/Ca8T5eoeVKSRHrd5l8vCHE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778633487; c=relaxed/simple;
-	bh=izyNufNv3l0EJK2+rtZ1T7rBl3b1uNLGp9DIpmbczBM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tc9TNPcp6Zt464WQHSWc9cqIfc6IMI9GMoNtqQnvTmvVb5Yd0C/ItFYiEA6H3C8MdzteLjUkHRH5XPL+LFUIaQgHPPF5TZjHEzaEmgKZP8suvvatg6VS6IngpCz4hmMUB8JDGuMkNmwjDbR76D8oHAt7SH1jMz2DElRMzzVsLRA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pC71eVXu; arc=pass smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B6C31A07F
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 01:03:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778634220; cv=none; b=Yjz1VYo0w0NAVfLjSsN3AHEOIfCxnfRzmh8gslzgzUtXx+FJrh0BHHdEF0uFiCTAukUymmlznPLd3hhovy4ETcblKBffkvYufrLvwtlN5hTypxcxNXIHyrxr00BNeiqFq93QUJrfPlPwlTSYNQfntS7Hsw2PodUtghKfEgZNyok=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778634220; c=relaxed/simple;
+	bh=MLC5jvUb/esTjBs6NX1zkD5BggFcMIIcjOp+fr8HAJE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=BYpLyWJ36sNiWWqgrg0GYvtOJsINxdKOJ8NPpuFEkdYMpYJy0mR8d313yAM6vnnIZFIaWR6yMplbWur5CjLgudRoexz0wgj1ny3wAGxpfz/SBgubpYEhWvZQfggnTrYizOf8OjFxkbu3+TCMZ/dChE+SIfAzWEZSXHKhVbyVBGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XR5dxZbh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pC71eVXu"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-44b052142e1so3418535f8f.1
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 17:51:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778633484; cv=none;
-        d=google.com; s=arc-20240605;
-        b=L3zRzksvOWH0fS6bB7qHlmreY72ShnHzMlLBLFgSWKmeYIMp0wL6PxEMVKqdFTCO79
-         zPjh1ySPi0ao16aSqr3osX/XFy9bhyVn7OsESazENW3X8bH4eFNi2z8CFedHOGQ9zlkx
-         qeZKCjJMxUT90YK2qv1k7rJGldgb18133LEKmaE2O9NZlscRCDIK2Mybbf6oDWL+aaPF
-         J54DklAnlb2IHLefHd3K+egy6LG5Q8JstsJRacnZAPf6tkNpkF1Mv54zSLAJVorKzn9Z
-         rGb5R8XqfxK8cl6gnqpiCoFY77i9A3TC9teXmRRWvOBJiun0QlEjUa2lhhWZQ9rWUW9w
-         MB1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=A0yqDbK591ypC5eJWQGsP1nPlMWdMRq98a5gApsWXZY=;
-        fh=YBh0UWSmic20FoZQUVh5rBLcCvoPucO5o5HwpmzjAf0=;
-        b=eYKGQmb4pwzvm3CXKYhR3sK8DqWPAVbfENvqf2AWyxIvZjerlIB1UMSaCu/7QKM8ZG
-         EkXLAz+wyox0zCPASwj3D2jXTqmTVvIps1Bej3E5lOe+2fSVG4HdsUiPB8YpBXds4P63
-         nw0464VvFafil/XZt8LtvkOXIphMWPYmsHjba/amyCJk8La1jEiEEn3mt6jjJ7M/Ui0V
-         RIZ+YefLcV2eyqSECf9VX0FvPuZvUjdzCnuL2I3n7mX2Hm4goXKB2MlbEzx8I0TE0DGr
-         fNOIh85rpneg1GV9YhWFrhbS1zfDbJXHXIviuZmUDmBEENrnddzNG2KMmpZ+yZMOQ8gu
-         vepQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778633484; x=1779238284; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A0yqDbK591ypC5eJWQGsP1nPlMWdMRq98a5gApsWXZY=;
-        b=pC71eVXurgf8caoIXfmSy14jVsV6DMbcG3ZpiY3KbFvMTBWgSBb0V0Ev8LJ3eUx85z
-         wb3FpsxuYOjXuky3A/MVX3+s3HnipsymhSvhNtKXddtSWPKT45kmbxrQPOClpE08eS9k
-         Fs8Z4a2y6C1CRwMedrrVbj8bCjJr5XGagYLgyh0KacbQPlKzMJ6Ewzn/wq7B1SpbUls/
-         5GrpGwLl9OASDSpYmyTqMAQ1RtM/ZlIcjGAmZHluO5cWODf3PtmlYCa6sNOxO9ZFTDqS
-         tOWjy2Bpdx+dFcsUZ5V7D+M5pJYH+tV20PYEJSPs97Met6N06ELVEl2HOhVPzlpdzrXI
-         y4kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778633484; x=1779238284;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=A0yqDbK591ypC5eJWQGsP1nPlMWdMRq98a5gApsWXZY=;
-        b=OWkONE+XS5jfcTRgyTQBJD/RX3v1Q6GHjtn9gQwYs1mvjRN2cDwToCatgj4LmYrUC+
-         zRDYsmcu4LOII5/KNQ+g6QR1chQp1SNK1e0wzcW360fmpIo2ttW7RhQmQr1a4dlWvpWL
-         9LEzEAy8ZHQtV0W3YTqtJ66OmSqQD8zm5+hChehF/XOzMwQIvVriMJS6seuWtPpAE8ro
-         u2GNR97oAJVk/w3sDWxaJVI4NuAqITCSL8jYOChTi/zfVaW9iP8Vx1Q+wzgrGNUlnOxF
-         3Rf98gWlG/ARGNZCzmg+q2gyrFnKhnZrMRtjh+q1Fs8jD0vLLts8afsIH8vi/0bXU1XE
-         rV0g==
-X-Forwarded-Encrypted: i=1; AFNElJ/4OavB1IzJ3beiY3HsdEJUcW6oycuT4/JJHKJ+kQeunsS0VTR9HB1TL9A9m0/+7p0j548=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/tH1FLjAU7mrff+8g8xtYl7ttKzfIZ3o25e6nu6hXeX9T+z6n
-	sCV18t8tT5BJLCpcsdpq89cPeCNTFMvI8mJ0DLJpWaERo6yecWABV7l5Y6qA4xKfrO+Otu0BnPb
-	bCEF43M3ClGvR2aTVi34QEqbMm40YRzQ=
-X-Gm-Gg: Acq92OHcwtzXWWLfdUFA8xZpgKIh/Z9leYFcw19MRuFn223356MP3nTYFhMGgJSdKAQ
-	2lJ6zuSrAJHJWMFPGwtLtMoK+btlwYrKozOXp+4OuL06IIluFV24BaTHpAFcO5W5RQSF8icemV8
-	L/5mjeongoR/kdVQX/ZSgyMIw1hhfqfonNEOY/cwslo8acgL298ws7083JOjjsQOP7mS22ifXe7
-	A2r2EzLCz3dSyYqDQpPMW+BRSisYgT170qDZpfD+Sn7nexbGtL2AMoovzr8DFskO378qxPp6m7L
-	ndHMgFuQZN62rLarWCaqBlQDZZajVirXE4UFw1ZUSFTxXPpXD0YzmHHSDUXA1st4NBCAiBiFJrq
-	JwdQbcrCQmcjrf3C4vrDcMFuHkg==
-X-Received: by 2002:a05:6000:3109:b0:43d:6f0f:32fe with SMTP id
- ffacd0b85a97d-45c59702e8fmr1423029f8f.31.1778633484225; Tue, 12 May 2026
- 17:51:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XR5dxZbh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81EDEC2BCB0;
+	Wed, 13 May 2026 01:03:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778634219;
+	bh=MLC5jvUb/esTjBs6NX1zkD5BggFcMIIcjOp+fr8HAJE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=XR5dxZbhbP3RbaeNYCgB+nNtla5D9mI3vEbv7QU29W6mPziHkmC3r3O5B2nA41j2T
+	 hSgcF9XcMOxXqUrzxQm5eRDO+x9/UOK3infPwG1TnDs8OEPKQ161pF7vrwnZZJnxmI
+	 vA0P/+SgXRSibqK4rRyWLiAXyyU3ODmkauyHf8/jLptC6JFxv06GlnYh+SUGGtGiHN
+	 r5J6vP398R2qcbcZTljEk0S09XQZjx/92pe2rdIwerkOl738iI64LNvlMj1JoJ1kw3
+	 EsTOJ+AGm/bwGs/+4moRa0LBMZjVYHHOM9jGBGPSpD0ZoN56QzO1Bfh+v1AKFXqEHN
+	 nsbgS8FWCze+A==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3] m68k, bpf: Add initial BPF JIT compiler
+ support
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kuan-Wei Chiu" <visitorckw@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260511212756.3163955-1-visitorckw@gmail.com>
+References: <20260511212756.3163955-1-visitorckw@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 13 May 2026 01:03:39 +0000
+Message-Id: <20260513010339.81EDEC2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260511174559.659782-1-wusamuel@google.com> <CAP01T74KQ6bie5o++i_gHM19J+s2RzDyM6=w87=oUZgPagPejw@mail.gmail.com>
-In-Reply-To: <CAP01T74KQ6bie5o++i_gHM19J+s2RzDyM6=w87=oUZgPagPejw@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 12 May 2026 17:51:12 -0700
-X-Gm-Features: AVHnY4K10O6Mxpl9QjZAt4PGuFBG9tJtHHyQLjkej2TGD7aWVby8-50dFABh7DA
-Message-ID: <CAADnVQJtuKQh-bpDDeqWCQRM1zb2sSgo0qET_+1+JFOL-6cpDg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/2] Support BPF traversal of wakeup sources
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Samuel Wu <wusamuel@google.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Android Kernel Team <kernel-team@android.com>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	Linux Power Management <linux-pm@vger.kernel.org>, driver-core@lists.linux.dev, 
-	bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 11, 2026 at 1:44=E2=80=AFPM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
->
-> On Mon, 11 May 2026 at 19:50, Samuel Wu <wusamuel@google.com> wrote:
-> >
-> > This patchset adds requisite kfuncs for BPF programs to safely traverse
-> > wakeup_sources, and puts a config flag around the sysfs interface.
-> >
-> > Currently, a traversal of wakeup sources require going through
-> > /sys/class/wakeup/* or /d/wakeup_sources/*. The repeated syscalls to qu=
-ery
-> > sysfs is inefficient, as there can be hundreds of wakeup_sources, with =
-each
-> > wakeup source also having multiple attributes. debugfs is unstable and
-> > insecure.
-> >
-> > Adding kfuncs to lock/unlock wakeup sources allows BPF program to safel=
-y
-> > traverse the wakeup sources list, and a kfunc to get head of wakeup
-> > sources list is needed to start traversing the list.
-> >
-> > On a quiescent Pixel 6 traversing 150 wakeup_sources, I am seeing ~34x
-> > speedup (sampled 75 times in table below). For a device under load, the
-> > speedup is greater.
-> > +-------+----+----------+----------+
-> > |       | n  | AVG (ms) | STD (ms) |
-> > +-------+----+----------+----------+
-> > | sysfs | 75 | 44.9     | 12.6     |
-> > +-------+----+----------+----------+
-> > | BPF   | 75 | 1.3      | 0.7      |
-> > +-------+----+----------+----------+
-> >
-> > The initial attempts for BPF traversal of wakeup_sources was with BPF
-> > iterators [1]. However, BPF already allows for traversing of a simple l=
-ist
-> > with bpf_for(), and this current patchset has the added benefit of bein=
-g
-> > ~2-3x more performant than BPF iterators.
->
-> This looks good to me, you can add for the set:
-> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] BPF-to-BPF calls (BPF_PSEUDO_CALL) are broken, corrupting argument=
+s, return values, and tail call tracking.
+- [High] Missing protection against signed division overflow (`S32_MIN / -1=
+` and `S64_MIN / -1`), leading to undefined behavior and potential kernel p=
+anics.
+- [Medium] Using `kcalloc` for potentially large array allocations leads to=
+ JIT failures under memory fragmentation.
+--
 
-Rafael,
-how do you want to route it?
+commit 1a2c23f18e30a4b931f962e5e35eed83ff42f6a2
+Author: Kuan-Wei Chiu <visitorckw@gmail.com>
 
-If you ack it we can take it into bpf-next.
-I'd think patch 1 shouldn't conflict with other 'wakeup' changes.
+m68k, bpf: Add initial BPF JIT compiler support
+
+Add a BPF JIT compiler for the m68k architecture.
+
+> diff --git a/arch/m68k/net/bpf_jit_comp.c b/arch/m68k/net/bpf_jit_comp.c
+> new file mode 100644
+> index 0000000000000..1531b321410ae
+> --- /dev/null
+> +++ b/arch/m68k/net/bpf_jit_comp.c
+
+[ ... ]
+
+> +static noinline s32 jit_sdiv32(s32 a, s32 b) { return b ? a / b : 0; }
+> +static noinline s32 jit_smod32(s32 a, s32 b) { return b ? a % b : a; }
+> +
+> +static noinline u64 jit_mul64(u64 a, u64 b) { return a * b; }
+> +static noinline u64 jit_div64(u64 a, u64 b) { return b ? div64_u64(a, b)=
+ : 0; }
+> +static noinline s64 jit_sdiv64(s64 a, s64 b) { return b ? div64_s64(a, b=
+) : 0; }
+
+What happens if signed division or modulo is performed by -1 with the minim=
+um
+representable value (e.g., S32_MIN / -1)?
+
+In C, evaluating INT_MIN / -1 results in signed integer overflow (undefined
+behavior), which can trigger a CPU division exception on m68k and crash the
+kernel.
+
+Should explicit bounds checking be added to handle these edge cases and ret=
+urn
+the dividend as required by the eBPF specification?
+
+[ ... ]
+
+> +static int emit_call(const struct bpf_insn *insn, struct jit_ctx *ctx)
+> +{
+> +	const s8 arg_regs[] =3D { BPF_REG_5, BPF_REG_4, BPF_REG_3, BPF_REG_2, B=
+PF_REG_1 };
+> +	const s8 *tmp1 =3D bpf2m68k[TMP_REG_1];
+> +	bool extra_pass =3D ctx->target !=3D NULL;
+> +	u64 func_addr;
+> +	bool fixed;
+> +	int i, err;
+> +
+> +	err =3D bpf_jit_get_func_addr(ctx->prog, insn, extra_pass, &func_addr, =
+&fixed);
+> +	if (err)
+> +		return err;
+> +
+> +	for (i =3D 0; i < 5; i++) {
+> +		const s8 *reg =3D bpf2m68k[arg_regs[i]];
+> +		s8 d_lo =3D bpf_get_reg32(reg[1], tmp1[1], ctx);
+> +		s8 d_hi =3D bpf_get_reg32(reg[0], tmp1[0], ctx);
+> +
+> +		emit_16(ctx, 0x2f00 | d_lo);			/* move.l d_lo, -(%sp) */
+> +		emit_16(ctx, 0x2f00 | d_hi);			/* move.l d_hi, -(%sp) */
+> +	}
+> +
+> +	emit_16(ctx, 0x207c);					/* movea.l #func_addr, %a0 */
+> +	emit_32(ctx, (u32)func_addr);
+> +
+> +	emit_16(ctx, 0x4e90);					/* jsr (%a0) */
+> +
+> +	emit_16(ctx, 0x4fef);					/* lea 40(%sp), %sp */
+> +	emit_16(ctx, 40);
+> +
+> +	emit_16(ctx, 0xc340);					/* exg %d0, %d1 */
+
+Does this code break BPF-to-BPF calls (BPF_PSEUDO_CALL)?
+
+It appears to treat the subprogram exactly like a standard C helper by push=
+ing
+BPF registers R1-R5 to the stack and then executing exg %d0, %d1 to swap the
+64-bit return value.
+
+However, the subprogram's JIT-compiled code unconditionally uses the standa=
+rd
+build_prologue(), which lacks a check for ctx->prog->is_func.
+
+Consequently, doesn't the subprogram act like a root BPF program, initializ=
+ing
+BPF_REG_1 from 8(%fp), zeroing its upper 32 bits, and completely ignoring t=
+he
+stacked R2-R5 arguments?
+
+Additionally, it seems the global tail call counter (BPF_TC_LO) is improper=
+ly
+reset to 33 on every subprogram entry, and the return value of BPF subprogr=
+ams
+(which already populate BPF_REG_0 properly) gets corrupted by the swap.
+
+[ ... ]
+
+> +struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struc=
+t bpf_prog *prog)
+> +{
+> +	struct bpf_binary_header *header;
+> +	struct jit_ctx ctx;
+> +	unsigned int image_size;
+> +	u8 *image_ptr;
+> +
+> +	if (!prog->jit_requested)
+> +		return prog;
+> +
+> +	memset(&ctx, 0, sizeof(ctx));
+> +	ctx.prog =3D prog;
+> +
+> +	ctx.offsets =3D kcalloc(prog->len + 1, sizeof(int), GFP_KERNEL);
+
+Is it safe to use kcalloc() here for potentially large array allocations?
+
+Since the BPF verifier allows up to 1,000,000 instructions per program, this
+could request up to 4MB of contiguous physical memory.
+
+On systems with memory fragmentation, this large physically contiguous
+allocation is highly likely to fail, unnecessarily aborting JIT compilation.
+
+Would it be better to use kvcalloc() instead, consistent with other BPF JIT=
+s?
+
+> +	if (!ctx.offsets)
+> +		return prog;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260511212756.3163=
+955-1-visitorckw@gmail.com?part=3D1
