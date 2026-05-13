@@ -1,476 +1,263 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013008.outbound.protection.outlook.com [40.107.201.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7E73D3498
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 06:26:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778653592; cv=none; b=OLfrlr+kWtRpS1DjkCi+T/hUOZ3RDXSwegUQU9y3gtzi313tbaOe4DfjXPszeBlDYbsi78QZcdOUYC05ouLbaDKhNk7P3um5/EIJPBJj+Y9c9zyEQVQ/i5c9kHMh9RUeqtvxSaDb186tiTy+/gtRLu4+83DmbzScmdXIzbwyfC8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778653592; c=relaxed/simple;
-	bh=L1meuBnTATeCE7naJLP4jSqrIb78/RPPU43L+0CmyJk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WPs/pmOy1BRpsr6rbDP/7n2AD/U1fXg3JFfQti5pYd3JSydwsAqFVD2oMioggZTgny0Nk1wXxghNq7tTU40wOXRKWruKCXANB1zhxrmNCWMpw5hmAyhn3h/WM9uRv6V0e/rsXbaodAWd0xjjIgZtVIF48qXQCOanS6ATBVlqA7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VIBO6/0r; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5012F39A063;
+	Wed, 13 May 2026 07:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778657051; cv=fail; b=tSLhUhIJebbMgYbOIMbUCUzRzkBDAxnoR5xr+rGkCfz+SWZCfgwNbr5QBi+MnAP1RndUXADW/gYRe3HSpOU3uJi8wrF93BMiTWPXANmh/Grb9Bw6+BI+QYZA8C8BasHyOKKsEu5+SQTOackahDstarMzqrTgSm5qwXMVQOqXJNU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778657051; c=relaxed/simple;
+	bh=Bpa0qyMi0x+wGb9sUV+c89i0DVx5Cx9P2OoAXbwc6j8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SY0Av4pVDlOYGWKonoyGJqKPpQgVpEJSKhkF2osNR+pkMdUPOIPqagwLif4jBwUcMjQz8H2499p01k9ac+DOS5cbxbSMs1CIpmBudF9Eiy3Gd1a4ROWkiLS39TGTrxbz+XHh+rAdks4IFtNgP1UeZMIYszL+D3TX3ULXWrgqyhw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=W+qEYULj; arc=fail smtp.client-ip=40.107.201.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VIBO6/0r"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2b788a98557so47948385ad.2
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 23:26:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778653589; x=1779258389; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ep83jt+OM8P/+jtbt5r2tBIY+pKdA2ouS001Dlu0TG8=;
-        b=VIBO6/0r2qXmmKbG+axkolR1+BEs6cKmxhranGKRIGXtSp8x6d6HOA/1AOjti5L3Xo
-         RT3xH5J+pB/Ukbw546f7BAoua/BCqkA7KIucYLqHb0zD/ooCrTgUBNHVdsf5L9XBdbfs
-         iVtOXxtWg+ccEObTxrJXN+xTirvZ7zv2fhE4SCzjveAVAc7g7WDYaEnfT/57ovSAWU8F
-         OmIdgvf7c0mIaMsxWcipuyT+eRpvb2t9fUOWYEDgS2M8dK/iafEort4NHMiiX4hCDkDP
-         3S5w5stiufQMrdJ0pschVT27/CPKhFp0H8UqyB15xbjZJLc3u91xXb7bYj3wYhWrmdnY
-         o61g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778653589; x=1779258389;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ep83jt+OM8P/+jtbt5r2tBIY+pKdA2ouS001Dlu0TG8=;
-        b=mlG+vKJ9loadMXp2YUEsEwAkDsdp6zbgjhUrHfeh8lB0h78BsD0W0fg8HlbBnS4UPb
-         Ec6yvNHA99OO2GVe63K+wesh+IPky76n1fx2/D+wJdFVDYbbvwTVfT95CkK5XK4rN4Vh
-         MzZbxkA6+NKkDB1E6a3gxm3u7S7xQK9Kg7Mii4oQQt2DstC+PWzffDNARF4kTjtroMT2
-         ksUfm3R2b5LAQMTTQ0m/V3Gmy7YPvL9IPDCkZj2z1Yt+ecKfBQFfOpWZvHNrP38Cek8N
-         4yPHpkgPuADo+Cf9y3ZveT9HSrN/chsj01lPk2gb/SqwChecJ+KYl0CkueSmFT8MTKG9
-         fkvA==
-X-Gm-Message-State: AOJu0YzkH8Qq9Jeq5dWTW/k+O2k4TtpFeC4m95urlZDajZ9rHNLNe3qg
-	4Y6pCrOMFnZx6Eo+X7OT9FE9WMTDzabzkT4RZRktoML/crWx1qB9AK13
-X-Gm-Gg: Acq92OG3djlHuKyO6Qdz1+tPvRfUUoJ7kNWh5Nd5DmkW+3Pbyy6Go7EVFzfw+li5Eby
-	4WpnBMTL2d4hFOu2UinZgP+Ohxq1MGO77KqkMYWaPYb1CYJGlIoOwpiOx0AQa6+LpxKrBwcNYc6
-	fTt4yytiGuOc6eh1LuFAlSFKZI1QTgo8wDbtELfRqBlxNr9NEE4b9cBvmGt0+m3eH7KUBg0asS2
-	Cjsr1dUs+ELiykD6HciD5Jlb3vDnGskIb8zjOdz8+cmBhLw+gk+kREDUAcPhRI15r3FZKi3J2jP
-	q+ZzgYpmQOu8Yyq5pDEzAclyduwJ4RplHMSIxTQHhIgM6jBwbJr99S4uDfUv5OL4hbjlRnlzb+j
-	mcncTuGlVFDoQRIS8E94YTnFhTSbiVCLWYsgeGAxeXV20x/sqCuoxJnymkA8GaT+sE1M0maRSmq
-	v6W5mANNJbqwGtYIMGKqPUJTn3bqZoGDGwckrB8w==
-X-Received: by 2002:a17:903:bc2:b0:2b0:c45a:bc2 with SMTP id d9443c01a7336-2bd27139901mr17598235ad.16.1778653588704;
-        Tue, 12 May 2026 23:26:28 -0700 (PDT)
-Received: from ?IPV6:2604:3d08:9582:1100::c7c9? ([2604:3d08:9582:1100::c7c9])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1ec6e7dsm159310935ad.82.2026.05.12.23.26.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 May 2026 23:26:28 -0700 (PDT)
-Message-ID: <b76a0b89-3cef-4f72-90b1-7029b989cb63@gmail.com>
-Date: Tue, 12 May 2026 23:26:27 -0700
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="W+qEYULj"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UIc5hxYnHV20oPCNxGXfSF9d98RaBWP2GTf/Q3Huq9jBZtxZxBgLvgjwyBQtsP+qpLUBAfEvWUm4TJGWB+wJQiRaMWLHrc9Pp7i8kQ0B1K+1CnDzeJgUejUxspMWA/8+yDlrvqI4pcy7W7sALjwwU234YKsf+6BjrF/bb9k1CQGIyHXI+6fmH2Oq8MPX33Olq7Oa0G1hhP3glhjAzCt8ziI/LzCx1FuL7a3mhbgx+vB+elKFizvxKGTV7qlV+A8+HcYxkl5/YEVw65v/zG7yopCofWcHSv6HeToAYm+yx78S/ojL8fj47c7bG9hPAgv3aolmeYe9VxBkPR/RrazjQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HKqbeFM/fxn82sZeoKMSZKrjEBvo+DbAc7+95doLiQw=;
+ b=Lj/2R0o+/JgHJ6lHB/vemYkbA3/Vl7dYxuu+cbsYsrhIwWY/6JksDWfAjCZ1/ENGA2xEXRnwezF2CnG+E6Wknh/wNmMnDM9WggQrZomzII2vPRQaQnQzHGykIBustGb7TNWKozPaznL+JswOYOwt0QrLAn0mAB82ja8ROqniUHnRkB/EER7aDnyt63GSKk61M1ez3N1kW3gdB1dsNtywcd/32+hp65Ca5BCHxeY8m6kd/TfdspDzi/WqszsKUsFBxv9VTYW2a5s8e+5ffMdjT6XeFJb34bgVw+Qmtc1vxvVIgQFRU0rdUqRFitQgH02U277QLzP93xtI/xk+rwtGSw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HKqbeFM/fxn82sZeoKMSZKrjEBvo+DbAc7+95doLiQw=;
+ b=W+qEYULjBZepKaQxEzVjqtElyZd+TZC7C0tZyx9XIX7GWLwdFC5fELSWW00i0FI7EdBJw7412FO1rPd7NjNzR94V9G+H7elPC9OJ3e2sZRrUuAxDJA63cxcERO0XO7UBsE7d1OzG1inE8b7omSvOL2JgISj7yk7NrsogZUlWN2j1SE1CpqonchFei34fyPyVdjqNLUL2+nORrAv5ctilExpLiRdAUorYdHjTGGxN0gUus86eZ3DyltiypMAkT7KNcV1kEeV9jaseNTxtbA9Lt0jvumvlp2U/XqPiY4BPGqLubo2QHqGp/y0U52tSO6DUiay4LdUBTMw7mGw+aAdpAA==
+Received: from BY3PR03CA0030.namprd03.prod.outlook.com (2603:10b6:a03:39a::35)
+ by CY8PR12MB8243.namprd12.prod.outlook.com (2603:10b6:930:78::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9913.11; Wed, 13 May
+ 2026 07:24:05 +0000
+Received: from SJ1PEPF000023CC.namprd02.prod.outlook.com
+ (2603:10b6:a03:39a:cafe::c3) by BY3PR03CA0030.outlook.office365.com
+ (2603:10b6:a03:39a::35) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9913.12 via Frontend Transport; Wed,
+ 13 May 2026 07:24:05 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SJ1PEPF000023CC.mail.protection.outlook.com (10.167.244.6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.25.13 via Frontend Transport; Wed, 13 May 2026 07:24:04 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 13 May
+ 2026 00:23:45 -0700
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 13 May
+ 2026 00:23:45 -0700
+Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server id 15.2.2562.20 via Frontend Transport; Wed, 13
+ May 2026 00:23:39 -0700
+From: Nimrod Oren <noren@nvidia.com>
+To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan
+	<shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
+ Fastabend" <john.fastabend@gmail.com>
+CC: Stanislav Fomichev <sdf@fomichev.me>, Mohsin Bashir
+	<mohsin.bashr@gmail.com>, Amery Hung <ameryhung@gmail.com>, Martin KaFai Lau
+	<martin.lau@kernel.org>, Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
+	Nimrod Oren <noren@nvidia.com>, <netdev@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>, Carolina Jubran <cjubran@nvidia.com>, Dragos Tatulea
+	<dtatulea@nvidia.com>
+Subject: [PATCH net] selftests: net: Fix checksums in xdp_native
+Date: Wed, 13 May 2026 10:23:55 +0300
+Message-ID: <20260513072355.1083381-1-noren@nvidia.com>
+X-Mailer: git-send-email 2.45.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 16/19] unwind_user/sframe: Add support for SFrame V3
- flexible FDEs
-To: Jens Remus <jremus@linux.ibm.com>, Steven Rostedt <rostedt@kernel.org>,
- Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev
-References: <20260505121718.3572346-17-jremus@linux.ibm.com>
- <20260505185502.CB501C2BCB4@smtp.kernel.org>
- <fc085657-a79c-422d-afd5-4b5f2c55cec2@linux.ibm.com>
-Content-Language: en-US
-From: Indu Bhagat <ibhagatgnu@gmail.com>
-In-Reply-To: <fc085657-a79c-422d-afd5-4b5f2c55cec2@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF000023CC:EE_|CY8PR12MB8243:EE_
+X-MS-Office365-Filtering-Correlation-Id: 743389ea-446e-43c0-677e-08deb0c09cb1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|36860700016|376014|82310400026|1800799024|56012099003|18002099003|921020|11063799003;
+X-Microsoft-Antispam-Message-Info:
+	50MjZ8BoJsIa4wTDfKYkTr8i6SUGq/IIaYEDnjZHzqFFha3RwRA6tTTZixxcXV++gUhiE0irZZnUeonFK9KtCkJo0TBo/yaFd7QMIYpBhFHBcoYIyt7v9xyt1OgzTwW2BMDC0lmHIOPivA2dKZyE0+/ohXLQw5h99ooP/0xosDFdlPv6o2Z5am0r4FKByyZuaEb/+aOPWBEnmHSSikYiqxKoaeBZGcqRhr5/9R9ThFsS2UbRWOXq5deup1pD1zzRJYkCmJ1eqRTMjbX/ucJSLQtVKPEQ+wFwSAdZR1tgPoFVqkV+LTHrDU1zrnXx3mzNeD3vCwILFZdRrSTyp1T0qdAx/a23Uc36ZoyRFElHtsQ/GjnSzhMRZJ+k0KuQlB0XfUJ9lUU2VjvL9CcKx1kQAvPEwK0ki3YruY/NZos6RYI4MyD+nC4iP9VYT6MtRdF3Lwqg/g8zyogUGuQtG24A5PGtPKNCcjgpW85Z1+DCQPtQ36FQ2c4gY9gf1FofA/PFrW/Hr9EbCR/PwCXsPbeTaHuk82uKGpK93IpH0Enm8jc/l9VOEqrYnDdL8LKYV4Rci4PITUIpf52sUeTDRbXjNRRta61tonLz6ULnU99QHsXvzSQNYJevBOlxblbsXfShLWfg3nKEqSRsn+DeRfQHSXAe705IU0o1zHfksmfQkWBqhTfqZFroR+42g3VMV663O+BrnrLcxCn7d8TGkQyHoFNaiPxrW516umBeTUKXGCQlfqOMZLaTiCvCgnVrgGUMAak384HUAnNkNQ5HiULxKA==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(36860700016)(376014)(82310400026)(1800799024)(56012099003)(18002099003)(921020)(11063799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	xHhvUJ9fq6gdFJtFDjsemsHf43E52Y8u1WQKJU5eVy35RBH1aRpk13DuKCQWJFUiy7rUtwcnzFdDpKfBqNSmMxr4soXvgCojgjjicsrP5zG4HFCqhDvpWdhW2UoTxosgLTNbhpaPZzTEBxla4hkp5bMnNTr3kSd49o34YLUVpuFk8agtKqMrE/gDoG7C00ifHpd9URFwPyjMici+IdzKCtsD9MqCQnWp4RSyH8bK1HLQlCPIxRQWOuVbEJe99bxA19Kz6jUgtejulcxyPRhnK0S1u8lXzcwiF+RJx37cXuQm2FwxdEGeqtI81aNxLHCS5gDSv1kFCB2nxuCnsdl80naCRMw/iUSXpHuhCzrSBtRAm0bKoy6tUOgQlO0udKUXvuKk0yfYc8TqWa5UXW65xAW/duJP2Go5jnSkkJtN6tYodr5xJmlZa4OjSKrka1IN
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2026 07:24:04.1916
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 743389ea-446e-43c0-677e-08deb0c09cb1
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF000023CC.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8243
 
-On 2026-05-07 08:30, Jens Remus wrote:
-> On 5/5/2026 8:55 PM, sashiko-bot@kernel.org wrote:
->> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
->> - [High] Valid flexible FREs ending in a single padding data word are incorrectly rejected.
-> 
-> Those are invalid as per SFrame spec.
-> 
->> - [High] Valid flexible FRE rules for CFA and FP/RA produce unhandled enums, triggering user-controlled WARN_ON_ONCE().
-> 
-> Fix below.
-> 
->> - [High] Outermost frame unwinding is unconditionally broken, causing unintended fallback to frame pointers.
-> 
-> Fix below.
-> 
->> --
->>
->> commit 7d3289b2e756d08c38877458400ce276ff3f5994
->> Author: Jens Remus <jremus@linux.ibm.com>
->>
->> unwind_user/sframe: Add support for SFrame V3 flexible FDEs
->>
->> SFrame V3 introduces flexible FDEs in addition to the regular FDEs.
->> The key difference is that flexible FDEs encode the CFA, RA, and FP
->> tracking information using two FRE data words, a control word and an
->> offset, or a single padding data word of zero.
->>
->>> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
->>> index 2721f4af53fd3..2ba2c8b385f96 100644
->>> --- a/kernel/unwind/sframe.c
->>> +++ b/kernel/unwind/sframe.c
->> [ ... ]
->>> @@ -189,16 +193,147 @@ static __always_inline int __find_fde(struct sframe_section *sec,
->> [ ... ]
->>> +static __always_inline int
->>> +__read_flex_fde_fre_datawords(struct sframe_section *sec,
->>> +			      struct sframe_fde_internal *fde,
->>> +			      unsigned long cur,
->>> +			      unsigned char dataword_count,
->>> +			      unsigned char dataword_size,
->>> +			      struct sframe_fre_internal *fre)
->>> +{
->>> +	u32 cfa_ctl, ra_ctl, fp_ctl;
->>> +	s32 cfa_off, ra_off, fp_off;
->>> +
->>> +	if (dataword_count < 2)
->>> +		return -EFAULT;
->>> +	UNSAFE_GET_USER_INC(cfa_ctl, cur, dataword_size, Efault);
->>> +	UNSAFE_GET_USER_INC(cfa_off, cur, dataword_size, Efault);
->>> +	dataword_count -= 2;
->>> +
-> 
-> 	/*
-> 	 * Each RA/FP location info consumes either two datawords
-> 	 * (control word + offset) or one padding word substituting
-> 	 * for that pair.  Padding is only valid as substitution if
-> 	 * followed by further non-padding location info.  Therefore
-> 	 * decoding only proceeds with at least two datawords.  Any
-> 	 * leftover trailing datawords are invalid and rejected by
-> 	 * the final check.
-> 	 */
-> 
->>> +	ra_off = sec->ra_off;
->>> +	ra_ctl = ra_off ? 2 : 0; /* regnum=0, deref_p=(ra_off != 0), reg_p=0 */
->>> +	if (dataword_count >= 2) {
->>
->> The commit message mentions that flexible FDEs can use a single padding
->> data word of zero. However, this code checks dataword_count >= 2 for both
->> the RA and FP blocks.
-> 
-> That is ok, as a padding dataword for RA is only valid if followed by
-> two datawords (control and offset) for FP.  In case of a valid padding
-> dataword for RA only one dataword is consumed.  In case of an invalid
-> trailing padding dataword for RA it is not consumed.  The same logic is
-> then used for FP, as that ensures that a leftover trailing padding for
-> for both RA or FP is not consumed (and then rejected by the final check)
-> and that any future extension e.g. to convey SP location info can use
-> the same logic.  This helps reducing the number of checks at the cost
-> of a slow error path.  Otherwise the checks would be:
-> 
-> 	/* RA */
-> 	if (!dataword_count)
-> 		goto done;
-> 	if (dataword_count == 1)
-> 		return -EFAULT; /* Trailing RA padding */
-> 	... consume RA dataword(s) ...
-> 
-> 	/* FP */
-> 	if (!dataword_count)
-> 		goto done;
-> 	if (dataword_count == 1)
-> 		return -EFAULT; /* Trailing FP padding */
-> 	... consume FP dataword(s) ...
-> 
-> 	if (dataword_count)
-> 		return -EFAULT; /* Trailing extra dataword(s) */
-> 
-> done:
-> 	fre->cfa_ctl	= cfa_ctl;
-> 	...
-> 
->>
->> If an FRE ends with a single padding data word, it will bypass both of these
->> blocks and reach the check below:
->>
->>> +		UNSAFE_GET_USER_INC(ra_ctl, cur, dataword_size, Efault);
->>> +		dataword_count--;
->>> +		if (ra_ctl) {
->>> +			UNSAFE_GET_USER_INC(ra_off, cur, dataword_size, Efault);
->>> +			dataword_count--;
->>> +		} else {
->>> +			/* Padding RA location info */
->>> +			ra_ctl = ra_off ? 2 : 0; /* re-deduce (see above) */
->>> +		}
->>> +	}
->>> +
->>> +	fp_off = sec->fp_off;
->>> +	fp_ctl = fp_off ? 2 : 0; /* regnum=0, deref_p=(fp_off != 0), reg_p=0 */
->>> +	if (dataword_count >= 2) {
->>> +		UNSAFE_GET_USER_INC(fp_ctl, cur, dataword_size, Efault);
->>> +		dataword_count--;
->>> +		if (fp_ctl) {
->>> +			UNSAFE_GET_USER_INC(fp_off, cur, dataword_size, Efault);
->>> +			dataword_count--;
->>> +		} else {
->>> +			/* Padding FP location info */
->>> +			fp_ctl = fp_off ? 2 : 0; /* re-deduce (see above) */
->>> +		}
->>> +	}
->>> +
-> 	/* Reject trailing padding or unknown extra datawords */
-> 
->>> +	if (dataword_count)
->>> +		return -EFAULT;
->>
->> Could this incorrectly reject valid FREs ending in a single padding data word
->> since dataword_count would be 1 here?
->>
->>> +
->>> +	fre->cfa_ctl	= cfa_ctl;
->>> +	fre->cfa_off	= cfa_off;
->>> +	fre->ra_ctl	= ra_ctl;
->>> +	fre->ra_off	= ra_off;
->>> +	fre->fp_ctl	= fp_ctl;
->>> +	fre->fp_off	= fp_off;
->>> +
->>> +	return 0;
->>> +
->>> +Efault:
->>> +	return -EFAULT;
->>> +}
->> [ ... ]
->>>   static __always_inline int __read_fre(struct sframe_section *sec,
->>>   				      struct sframe_fde_internal *fde,
->>>   				      unsigned long fre_addr,
->>>   				      struct sframe_fre_internal *fre)
->>>   {
->> [ ... ]
->>>   	if (!dataword_count) {
->>>   		/*
->>>   		 * A FRE without data words indicates RA undefined /
->>>   		 * outermost frame.
->>>   		 */
->>> -		cfa_off	= 0;
->>> -		ra_off	= 0;
->>> -		fp_off	= 0;
->>> -		goto done;
->>> -	}
->>> +		fre->cfa_ctl	= 0;
-> 
-> 	/*
-> 	 * A FRE without datawords indicates an outermost
-> 	 * frame.  Zero-initialize CFA, RA, and FP location
-> 	 * info, except for the CFA control word, which
-> 	 * must not cause sframe_init_cfa_rule_data() to fail.
-> 	 */
-> 	fre->cfa_ctl    = (SFRAME_REG_SP << 3) | 1; /* regnum=SP, deref_p=0, reg_p=1 */
-> 
->>> +		fre->cfa_off	= 0;
->>> +		fre->ra_ctl	= 0;
->>> +		fre->ra_off	= 0;
->>> +		fre->fp_ctl	= 0;
->>> +		fre->fp_off	= 0;
->>>   
->>> -	UNSAFE_GET_USER_INC(cfa_off, cur, dataword_size, Efault);
->>
->> When __read_fre() processes an outermost frame, it zeroes out fre->cfa_ctl.
->> In __find_fre(), this is later passed to sframe_init_cfa_rule_data():
->>
->>> -static __always_inline void
->>> +static __always_inline int
->>>   sframe_init_cfa_rule_data(struct unwind_user_cfa_rule_data *cfa_rule_data,
->>> -			  unsigned char fre_info,
->>> -			  s32 offset)
->>> +			  u32 ctlword, s32 offset)
->>>   {
->>> -	if (SFRAME_V3_FRE_CFA_BASE_REG_ID(fre_info) == SFRAME_BASE_REG_FP)
->>> -		cfa_rule_data->rule = UNWIND_USER_CFA_RULE_FP_OFFSET;
->>> -	else
->>> -		cfa_rule_data->rule = UNWIND_USER_CFA_RULE_SP_OFFSET;
->>> +	bool deref_p = SFRAME_V3_FLEX_FDE_CTRLWORD_DEREF_P(ctlword);
->>> +	bool reg_p = SFRAME_V3_FLEX_FDE_CTRLWORD_REG_P(ctlword);
->>> +
->>> +	if (reg_p) {
->>> +		unsigned int regnum = SFRAME_V3_FLEX_FDE_CTRLWORD_REGNUM(ctlword);
->>> +
->>> +		switch (regnum) {
->>> +		case SFRAME_REG_SP:
->>> +			cfa_rule_data->rule = UNWIND_USER_CFA_RULE_SP_OFFSET;
->>> +			break;
->>> +		case SFRAME_REG_FP:
->>> +			cfa_rule_data->rule = UNWIND_USER_CFA_RULE_FP_OFFSET;
->>> +			break;
->>> +		default:
->>> +			cfa_rule_data->rule = UNWIND_USER_CFA_RULE_REG_OFFSET;
->>> +			cfa_rule_data->regnum = regnum;
->>> +		}
->>> +	} else {
->>> +		return -EINVAL;
->>> +	}
->>
->> Because ctlword is 0 for an outermost frame, reg_p will evaluate to false,
->> and this unconditionally returns -EINVAL.
->>
->> Does this unintentionally break outermost frame unwinding? Returning an
->> error here will cause __find_fre() to fail before it can reach the
->> frame->outermost check, resulting in a fallback to frame pointer unwinding
->> instead of stopping gracefully.
-> 
-> Good catch!  That was broken.  I did not notice during my testing on
-> s390, as the fallback to FP-based (back chain on s390) unwinding then
-> also detected an outermost frame.  Suggested fix see above.
-> 
->>
->>> +
->>> +	if (deref_p)
->>> +		cfa_rule_data->rule |= UNWIND_USER_RULE_DEREF;
->>> +
->>
->> Also, does this append UNWIND_USER_RULE_DEREF to CFA rules in a way that is
->> not supported by the unwinder?
->>
->> If a CFA rule uses SP/FP with deref_p=1, this creates a combined enum like
->> UNWIND_USER_CFA_RULE_SP_OFFSET | UNWIND_USER_RULE_DEREF. Because .sframe
->> sections are user-supplied, could an attacker use this to trigger an
->> unhandled enum path and hit a WARN_ON_ONCE() during unwinding?
-> 
-> Good catch!  The generic unwinding logic in unwind_user_next_common()
-> actually needs to support both UNWIND_USER_CFA_RULE_SP_OFFSET_DEREF and
-> UNWIND_USER_CFA_RULE_FP_OFFSET_DEREF, as those are valid to be encoded
-> in SFrame flexible FDE and sframe_init_cfa_rule_data() converts
-> deref_p=1, reg_p=1, regnum=SP/FP into those.  The reason for the
-> conversion is that arbitrary registers are only available in the topmost
-> frame, whereas SP and FP are available in any frame.
-> 
->>
->>>   	cfa_rule_data->offset = offset;
->>> +
->>> +	return 0;
->>>   }
->>>   
->>>   static __always_inline void
-> 
-> static __always_inline int
-> 
->>>   sframe_init_rule_data(struct unwind_user_rule_data *rule_data,
->>> -		      s32 offset)
->>> +		      u32 ctlword, s32 offset)
->>>   {
->>> -	if (offset) {
->>> -		rule_data->rule = UNWIND_USER_RULE_CFA_OFFSET_DEREF;
->>> -		rule_data->offset = offset;
->>> -	} else {
->>> +	bool deref_p = SFRAME_V3_FLEX_FDE_CTRLWORD_DEREF_P(ctlword);
-> i>> +	bool reg_p = SFRAME_V3_FLEX_FDE_CTRLWORD_REG_P(ctlword);
-> 
-> 	bool reserved_p = SFRAME_V3_FLEX_FDE_CTRLWORD_RESERVED_P(ctlword);
-> 	unsigned int regnum = SFRAME_V3_FLEX_FDE_CTRLWORD_REGNUM(ctlword);
-> 
->>> +
->>> +	if (!ctlword && !offset) {
->>>   		rule_data->rule = UNWIND_USER_RULE_RETAIN;
->>> +		return;
-> 
-> 		return 0;
-> 
->>> +	}
-> 
-> 	if (reserved_p)
-> 		return -EINVAL;
-> 
-> @Indu:  Although the SFrame spec does only state "unused Unused bit." I
-> think it would be good for the logic to reject any value other than zero
-> as that could be used in future extensions of the SFrame format.  Do you
-> agree?
-> 
+Data adjustment cases failed with "Data exchange failed" when using IPv4
+because the program did not update the IP and UDP checksums in the IPv4
+branch. The issue was masked when both IPv4 and IPv6 were configured,
+since the test harness prefers IPv6.
 
-For unused bits, it will be ideal to not associate any "observable" 
-behaviour on the consumer side, before the bits find their use.  So I 
-suggest the recommended way is to ignore the unused bits completely, 
-i.e., mask them out and not report any error (if they are set).
+Fixes: 0b65cfcef9c5 ("selftests: drv-net: Test tail-adjustment support")
+Reviewed-by: Carolina Jubran <cjubran@nvidia.com>
+Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
+Signed-off-by: Nimrod Oren <noren@nvidia.com>
+---
+ .../selftests/net/lib/xdp_native.bpf.c        | 54 ++++++++++---------
+ 1 file changed, 29 insertions(+), 25 deletions(-)
 
-On the producer side, unused bits should be set to zero (which I think 
-we are doing).
-
->>> +	if (reg_p) {
->>> +		unsigned int regnum = SFRAME_V3_FLEX_FDE_CTRLWORD_REGNUM(ctlword);
-> 
-> Drop line above.
-> 
->>> +
->>> +		rule_data->rule = UNWIND_USER_RULE_REG_OFFSET;
->>> +		rule_data->regnum = regnum;
->>> +	} else {
-> 
-> 		if (regnum)
-> 			return -EINVAL;
-> 
-> @Indu:  Is that too strict?  The SFrame spec does only state that regnum
-> is "Effective only if reg_p is 1.".  Shall I better ignore any non-zero
-> value if reg_p=0?
-> 
-
-Yes, ignoring the bits if reg_p = 0 is better behaviour.
-
-Thanks
-
->>> +		rule_data->rule = UNWIND_USER_RULE_CFA_OFFSET;
->>>   	}
->>> +
->>> +	if (deref_p)
->>> +		rule_data->rule |= UNWIND_USER_RULE_DEREF;
->>> +
->>> +	rule_data->offset = offset;
-> 
-> 	return 0;
-> 
->>>   }
-> 
-> Likewise checks of reserved_p and regnum in sframe_init_cfa_rule_data().
-> 
->>
->> Similarly, if a rule for FP/RA is set to *(CFA + offset) with reg_p=0
->> and deref_p=0, this assigns UNWIND_USER_RULE_CFA_OFFSET without the
->> UNWIND_USER_RULE_DEREF flag.
-> 
-> Huh?  *(CFA + offset) is reg_p=0 and deref_p=1 and thus with the
-> UNWIND_USER_RULE_DEREF flag (i.e. *() denotes dereference).
-> 
->>
->> Is this combination handled by the rest of the unwinding logic, or will
->> it fall through to an unsupported state and abort unwinding?
-> 
-> The unwinding logic only handles UNWIND_USER_RULE_CFA_OFFSET_DEREF for
-> RA and FP.  It does not handle UNWIND_USER_RULE_CFA_OFFSET (that is
-> without the UNWIND_USER_RULE_DEREF flag).  The reason is that SFrame
-> cannot represent the rule CFA + offset for RA/FP.  Additionally it
-> would not be valid for RA, as a return address cannot legitimately be
-> a stack address.
-> 
-> sframe_init_rule_data() can be improved to reject the invalid encodings
-> reg_p==0 with regnum!=0 as well as reserved_p!=0 (unused control word
-> bit 2) as shown above.
-> 
->>
->>>   
->>>   static __always_inline int __find_fre(struct sframe_section *sec,
->>> @@ -344,9 +492,10 @@ static __always_inline int __find_fre(struct sframe_section *sec,
->>>   		return -EINVAL;
->>>   	fre = prev_fre;
->>>   
->>> -	sframe_init_cfa_rule_data(&frame->cfa, fre->info, fre->cfa_off);
->>> -	sframe_init_rule_data(&frame->ra, fre->ra_off);
->>> -	sframe_init_rule_data(&frame->fp, fre->fp_off);
->>> +	if (sframe_init_cfa_rule_data(&frame->cfa, fre->cfa_ctl, fre->cfa_off))
->>> +		return -EINVAL;
->>> +	sframe_init_rule_data(&frame->ra, fre->ra_ctl, fre->ra_off);
-> 
-> 	if (sframe_init_rule_data(&frame->ra, fre->ra_ctl, fre->ra_off))
-> 		return -EINVAL;
-> 
->>> +	sframe_init_rule_data(&frame->fp, fre->fp_ctl, fre->fp_off);
-> 
-> Likewise.
-> 
->>>   	frame->outermost = SFRAME_V3_FRE_RA_UNDEFINED_P(fre->info);
->>>   
->>>   	return 0;
->>
-> 
-> Regards,
-> Jens
+diff --git a/tools/testing/selftests/net/lib/xdp_native.bpf.c b/tools/testing/selftests/net/lib/xdp_native.bpf.c
+index 64f05229ab24..eaecfa58b967 100644
+--- a/tools/testing/selftests/net/lib/xdp_native.bpf.c
++++ b/tools/testing/selftests/net/lib/xdp_native.bpf.c
+@@ -268,6 +268,16 @@ static int xdp_mode_tx_handler(struct xdp_md *ctx, __u16 port)
+ 	return XDP_PASS;
+ }
+ 
++static __always_inline __u16 csum_fold_helper(__u32 csum)
++{
++	return ~((csum & 0xffff) + (csum >> 16));
++}
++
++static __always_inline __u16 csum_fold_udp_helper(__u32 csum)
++{
++	return csum_fold_helper(csum) ? : 0xffff;
++}
++
+ static void *update_pkt(struct xdp_md *ctx, __s16 offset, __u32 *udp_csum)
+ {
+ 	void *data_end = (void *)(long)ctx->data_end;
+@@ -281,21 +291,22 @@ static void *update_pkt(struct xdp_md *ctx, __s16 offset, __u32 *udp_csum)
+ 
+ 	if (eth->h_proto == bpf_htons(ETH_P_IP)) {
+ 		struct iphdr *iph = data + sizeof(*eth);
+-		__u16 total_len;
+ 
+ 		if (iph + 1 > (struct iphdr *)data_end)
+ 			return NULL;
+ 
+-		iph->tot_len = bpf_htons(bpf_ntohs(iph->tot_len) + offset);
+-
+ 		udph = (void *)eth + sizeof(*iph) + sizeof(*eth);
+ 		if (!udph || udph + 1 > (struct udphdr *)data_end)
+ 			return NULL;
+ 
+-		len_new = bpf_htons(bpf_ntohs(udph->len) + offset);
++		len = iph->tot_len;
++		len_new = bpf_htons(bpf_ntohs(len) + offset);
++		iph->tot_len = len_new;
++		iph->check = csum_fold_helper(
++			bpf_csum_diff(&len, sizeof(len), &len_new,
++				      sizeof(len_new), ~((__u32)iph->check)));
+ 	} else if (eth->h_proto  == bpf_htons(ETH_P_IPV6)) {
+ 		struct ipv6hdr *ipv6h = data + sizeof(*eth);
+-		__u16 payload_len;
+ 
+ 		if (ipv6h + 1 > (struct ipv6hdr *)data_end)
+ 			return NULL;
+@@ -304,33 +315,27 @@ static void *update_pkt(struct xdp_md *ctx, __s16 offset, __u32 *udp_csum)
+ 		if (!udph || udph + 1 > (struct udphdr *)data_end)
+ 			return NULL;
+ 
+-		*udp_csum = ~((__u32)udph->check);
+-
+ 		len = ipv6h->payload_len;
+ 		len_new = bpf_htons(bpf_ntohs(len) + offset);
+ 		ipv6h->payload_len = len_new;
+-
+-		*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
+-					  sizeof(len_new), *udp_csum);
+-
+-		len = udph->len;
+-		len_new = bpf_htons(bpf_ntohs(udph->len) + offset);
+-		*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
+-					  sizeof(len_new), *udp_csum);
+ 	} else {
+ 		return NULL;
+ 	}
+ 
++	len = udph->len;
++	len_new = bpf_htons(bpf_ntohs(len) + offset);
++
++	*udp_csum = ~((__u32)udph->check);
++	*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
++				  sizeof(len_new), *udp_csum);
++	*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
++				  sizeof(len_new), *udp_csum);
++
+ 	udph->len = len_new;
+ 
+ 	return udph;
+ }
+ 
+-static __u16 csum_fold_helper(__u32 csum)
+-{
+-	return ~((csum & 0xffff) + (csum >> 16)) ? : 0xffff;
+-}
+-
+ static int xdp_adjst_tail_shrnk_data(struct xdp_md *ctx, __u16 offset,
+ 				     unsigned long hdr_len)
+ {
+@@ -359,7 +364,7 @@ static int xdp_adjst_tail_shrnk_data(struct xdp_md *ctx, __u16 offset,
+ 		return -1;
+ 
+ 	udp_csum = bpf_csum_diff((__be32 *)tmp_buff, offset, 0, 0, udp_csum);
+-	udph->check = (__u16)csum_fold_helper(udp_csum);
++	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
+ 
+ 	if (bpf_xdp_adjust_tail(ctx, 0 - offset) < 0)
+ 		return -1;
+@@ -403,7 +408,7 @@ static int xdp_adjst_tail_grow_data(struct xdp_md *ctx, __u16 offset)
+ 		return -1;
+ 
+ 	udp_csum = bpf_csum_diff(0, 0, (__be32 *)tmp_buff, offset, udp_csum);
+-	udph->check = (__u16)csum_fold_helper(udp_csum);
++	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
+ 
+ 	buff_len = bpf_xdp_get_buff_len(ctx);
+ 
+@@ -484,8 +489,7 @@ static int xdp_adjst_head_shrnk_data(struct xdp_md *ctx, __u64 hdr_len,
+ 		return -1;
+ 
+ 	udp_csum = bpf_csum_diff((__be32 *)tmp_buff, offset, 0, 0, udp_csum);
+-
+-	udph->check = (__u16)csum_fold_helper(udp_csum);
++	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
+ 
+ 	if (bpf_xdp_load_bytes(ctx, 0, tmp_buff, MAX_ADJST_OFFSET) < 0)
+ 		return -1;
+@@ -542,7 +546,7 @@ static int xdp_adjst_head_grow_data(struct xdp_md *ctx, __u64 hdr_len,
+ 		return -1;
+ 
+ 	udp_csum = bpf_csum_diff(0, 0, (__be32 *)data_buff, offset, udp_csum);
+-	udph->check = (__u16)csum_fold_helper(udp_csum);
++	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
+ 
+ 	if (hdr_len > MAX_ADJST_OFFSET || hdr_len == 0)
+ 		return -1;
+-- 
+2.45.0
 
