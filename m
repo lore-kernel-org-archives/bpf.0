@@ -1,75 +1,75 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6315D3890F7
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 23:23:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7999B390990
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 23:24:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778714632; cv=none; b=jR4K3GeM/7KBnT8yClVtmyRBcBkwELWqWEXjXc2QUDgpqV+ajOCFAsXLBXbrYyh7aCfHIW5TMmmXEFYfP06yil+zs7aUaV5g2hUlwcCZ805kpFN459mQ4HyUXwrOGQxjBMFamWvN8VwbGyc7IN5TnYOPQleo9XrDq7DPfFE8NQg=
+	t=1778714660; cv=none; b=N3JeUg67zlOsva/EW9aULtmgwSdjPp3cQsXrXiyJ7lXEVi3ZRcYSM0P6Sx3YGi01cJjnEjBmFejQhAw6PwJRGw77xy+jE7tn6hQt9iBtm13Z8kYyqbR/wNhzridNWkjAEb91N8TXOX5l8G09N6It5GgJ31I85TnY5bJ25YTU8z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778714632; c=relaxed/simple;
-	bh=4I22Bdw5feozE1w3IkUCauRaA4BWSUlskbxtRRDl0yY=;
+	s=arc-20240116; t=1778714660; c=relaxed/simple;
+	bh=gQfLuToUwG3/DfKQGob0k6BIvAEPEo3/GUrsIzcnvkI=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AUpW+l/QQIltI0NTuz5BHXUg1/sLD5Ra1Cnf3+eCc/mp5jL62nsd4aShpeb0hP7ucCV2P0otD3iLOxjo5I+Pmk9PrKyICYd4oIbZ9r1hFTA9k6d6qVcbaX+ErTGymFISYe45Jr7f3f4r2hRzY97mInX4qtTBwQq54Oq/1WOSPlk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b0H0nu18; arc=none smtp.client-ip=74.125.82.42
+	 Content-Type:MIME-Version; b=FsfdIOcgADe700VNLxjFU+a2L2LShWuTXDLlrFQGs/RfU7M6qSZyP3hqmsaGy/M9lWaHi8nWlYghDmIuZZe5PeTC2YtoZ54h13E5xy169KjTC/CcsVQ20YCldqIioUs1Qog0JCylO8UUzWpORrk0XYrkRMVSdGLm9F+h8KFhcA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o2zzW9jZ; arc=none smtp.client-ip=74.125.82.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b0H0nu18"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-1334825de43so2939430c88.0
-        for <bpf@vger.kernel.org>; Wed, 13 May 2026 16:23:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o2zzW9jZ"
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2c15849aa2cso9951658eec.0
+        for <bpf@vger.kernel.org>; Wed, 13 May 2026 16:24:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778714630; x=1779319430; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778714659; x=1779319459; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=11doEEY+kOTChPueO2pp1ReKbp1yZ6d6L7Lsv6EFxGQ=;
-        b=b0H0nu18X2gnl+m9lDLxjAV/LC4ISc0DW9BCO0U9r72D/qjeP+Pj9JrW5TUsP4oujK
-         sV28f76y6qh4GLhedszlxFpePaUykBJaMpyJsUFXxLfWhgArvK7U2XHqh9c+SRKMbHwY
-         f90lDmFikj/nRvwYKrDbXnln1C79VzmhjaqG5xLIo+Q2oMmcWE4CKYuiYa+SiP6NoXVA
-         vJsbRRi6mHAz9/qgr8+XKYNbUNryWPN25CxeaEHxCGmu49K3kCHzPKR74DrbzbWXczL8
-         RMyIXw4LVdhzSmkGh1GsIX3D5sT76mcl1IVCia9vOiqT2jX2DJKM+X9RuuexlsPM2O5U
-         5boA==
+        bh=ruBbwhrhsClZBDQ/hSrIOxvtByrjslb4iithZDdrkUk=;
+        b=o2zzW9jZgiIuwG1aL6sGygDnwA4KBT1BuFPV4w8g0Ui3NjJcS4Td1DfHs1AKn+jEUG
+         OTiCKnOAeNWUEgHVzEt2riv0jTr0Sw7vkcauuPcIv5cTIjg7fEb+NKjJVGnc6vY0QFLc
+         ZFaniDIevGb0ObbMSZTbxUoZyImp7QUwhnsjT3oZZBQG9SgZ6X5lQH4ac29fRqloH33A
+         WlEwdXA2cAnh7mw475b6tbTB6a+O5DSm4kif3ACKWE0zsRrAhvuZkYRGelHz5YoRCWgn
+         fbS7efz326Rqf5ff36/nr8ZJFREySCFbBEOsBDRE/nechPRflTvuj4Z8N0pkupNVNBc2
+         hWow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778714630; x=1779319430;
+        d=1e100.net; s=20251104; t=1778714659; x=1779319459;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=11doEEY+kOTChPueO2pp1ReKbp1yZ6d6L7Lsv6EFxGQ=;
-        b=rEp+5sBR7kg5B7O+ShR9xipROnVGuSPgfn4fiQOTmp+VSkbm/5xWgIMgGOF0Ilt3dp
-         yg5jJP6EVlarLqqjZZJ5ocnaXaxgxSYUhr5Or4gjVtya1PRTLiLOY93jPddBIiRVuHij
-         YPX1LiLK2/HcI+Hpf+zCNCMn9PE6G7PyW5INdz5WC+lFjtuN6qiDx6wOUtSAx/FlvwDm
-         7wwx4qdxMVcmxCypa2IY9WDXKC0RfUmbUWNoGQE0EcWKknPi/F4L8RIjOyPkp29WZT/G
-         HFIm5gBk7JqpM4lPZQNXJnntOhLU8lUvwglfgLkZQUzEilNgjHbFsdOfjP4rIWtT2YpM
-         0yQQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/9GQzenoUtca3UTKjy/jqr/6q57s8qOPrD6cirBl7s16MjYJncAtsqEpPlx9NLJqATEIw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8PHCpLY/TU9g/UQJcE8XtQor+UW3XlhbYp/2M7mh4AN6Cp+Y9
-	H9IO6PDu4rtu2rGKVACwEmVFRmRNFKDd4C7DmeVTIGO4YkNO7pbejQGk
-X-Gm-Gg: Acq92OGMQ6HcQ3iyyDbdSY8kR1xu/a/wPcpv918WmNia/pLFMk7lMYeUMrIfo3fMDgm
-	7MfCPHKzmQwWxcf7jd3Dt7/W03XmiCBQ4E3gkCeyD4R36hTc0n0o/EAUFLcPQxx2G+3ncTs6cP+
-	9VlgRSVH8OcAyvdEHoH1+29EMD2IsO29voevH4jx1/r/sfifHpus+Gc1jR+MIBn3kT3NbJYTb+d
-	kJRLEBlQp3uylYVZjuQFCCqXDcpXeEKCykNODi5T0xE3nhhD0hFY7bt/BEU8EHx724Z5vL6JGsu
-	vOztrIhgFRnSyWWXW2tYhjdj1A4DzljygCpDhOWSfCmpYLQFXJghBXyHw6notJYs+4NXzZVzqEA
-	EllM7zvOQQlKJZdQKJWjBAa6eCaipAK21wCCLa2Aviw1ia3p/GpebcTFe8EvGe4fKcDRFJFaSnh
-	fMHu1Nv8+r1qoV/UHbEluoY5mtz+0eY0G4h7tRMzlvgqcqsBSPxJAqQ1VDmHIeM7MJ9GW0vGiuV
-	nrZEP0=
-X-Received: by 2002:a05:7022:785:b0:12d:b2e9:b20f with SMTP id a92af1059eb24-1343699ec42mr3444812c88.21.1778714630427;
-        Wed, 13 May 2026 16:23:50 -0700 (PDT)
+        bh=ruBbwhrhsClZBDQ/hSrIOxvtByrjslb4iithZDdrkUk=;
+        b=adbrC6bpFJ4f5OLA3sdKiox7j7cQNYNm5zhvw1YUufoZsQ5hgXZagto+lVu/IcLpmC
+         MZARq/dEjIGVojqQr0epWHnYRYI4Tgwx8ZtWyjCtPSt5Ml7v/FHqtIySSWqJVO8hiMJl
+         D+zkVwcbqRI6c92uE5Mftn4HRCRqeOePB47v8PMTE4cT1uYsD2jlzkfHIt5gNqlYJTJ0
+         W9zLFuSnAevpXyeEHEYImDWiFiTGCvY/nlIWH5rwZTxqnGgdKdV956E/JrnnYdBDB7mo
+         9QMe/wySW8DsreqvuqCiZV0yVbB6jfQGTVq0Rkr2sCu5BeU06X1skRDzpSh43OwT5a5m
+         0YFw==
+X-Forwarded-Encrypted: i=1; AFNElJ+6bQpdFvhvAjMu6wb07oQWwGv22A+CymnQC6Cfv3F7czmDqSuWq/VL0M6U3ew6pOh+Wmg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNk9wWhW+1rxtrdgcCXpZKuQcsytC2JiToqBuv5NWBZ8CDuEAi
+	yGwBb0keR5UC1ALh3PF8g9ZSjDpA3O13U0kAmqweMAba1ZKGlIfKi5SN
+X-Gm-Gg: Acq92OHD+00RZ/Yx1/Azw+ivFb6fzrFHoy6csOzhK15pjjVoUYCpPrLfltgUFL1iEbt
+	kfDhLLuA/iPinpZkF2wD0IrU4XmxQ7xqFI6onc6R7fWgPNzfVsJBAoBddxNk06cuUnkFAVAJEKB
+	GVtoFncl2dTNindO5UcZvt/FnfcaJB5IML4uUfhyAaN0JRt/EOT+gcA0QfCcRykCXFtxf7FBU9V
+	bDMEB6Onl4RtDAq8skyD1Yos1+VXRInXXAPSZGOCsG9zuzF38mADq+0N04KTUb2LNJgKPqMPsP2
+	bPErjOfKinWeK6lhrlxvO/YHCOu85BJofM163BoVuNwPareGb7M/IGFP625aKtShK07JNDheIy1
+	Tadbga3fKfLR9WQZipTi316aN08UQLBPlqqV6LL15cCsLLn1jccxHne4RQu6mBQNHqP5zvwCtt2
+	TdHSCp7B0+1f+va3iHtT9Qiw2FH6hTICeBV92K9Iivord08YjVYkjGtvnXbKk8LDYBsOYunycPM
+	5r6wg6rVs7mrHGSOQ==
+X-Received: by 2002:a05:7301:9f18:b0:2dd:6937:79d5 with SMTP id 5a478bee46e88-3011747cfa2mr3791853eec.8.1778714658528;
+        Wed, 13 May 2026 16:24:18 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:5152:641f:f5ef:6c7b? ([2620:10d:c090:500::2:8a9])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cc33aac9sm1132923c88.14.2026.05.13.16.23.49
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302978afdd3sm859170eec.29.2026.05.13.16.24.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 16:23:50 -0700 (PDT)
-Message-ID: <fe8bedbcf7a9c0b3af7c92351a694784804f7e82.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/3] veristat: Report max stack depth
+        Wed, 13 May 2026 16:24:18 -0700 (PDT)
+Message-ID: <1ca8beb266c48d54d2c5eeceb0345bb10969c069.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] bpf: Report maximum combined stack depth
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
  <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Kumar
  Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 13 May 2026 16:23:48 -0700
-In-Reply-To: <a27ed8f336669152c4b1b05e920aee4438e3e2b3.1778700777.git.paul.chaignon@gmail.com>
+Date: Wed, 13 May 2026 16:24:16 -0700
+In-Reply-To: <d3d23a0410f87f116f3bbaa98a815dbae113bda2.1778700777.git.paul.chaignon@gmail.com>
 References: <cover.1778700777.git.paul.chaignon@gmail.com>
-	 <a27ed8f336669152c4b1b05e920aee4438e3e2b3.1778700777.git.paul.chaignon@gmail.com>
+	 <d3d23a0410f87f116f3bbaa98a815dbae113bda2.1778700777.git.paul.chaignon@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
@@ -80,31 +80,36 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Wed, 2026-05-13 at 21:35 +0200, Paul Chaignon wrote:
+On Wed, 2026-05-13 at 21:34 +0200, Paul Chaignon wrote:
+> We've hit the 512 bytes limit on stack depth a few times in Cilium
+> recently. As a result, we started reporting in CI our current maximum
+> stack depth across all configurations for each BPF program.
+>=20
+> Unfortunately, that is not trivial to compute in userspace. The
+> verifier reports the stack depths of individual subprogs at the end of
+> the logs. However the maximum combined stack depth also depends on the
+> callgraph of those subprogs (the max combined stack depth is the height
+> of the callgraph weighted by per-subprog stack depths). We can compute
+> a callgraph in userspace from the loaded instructions, but it often
+> doesn't match the verifier's own callgraph because of dead code
+> elimination. Our current approach relies on dumping the BPF_LOG_LEVEL2
+> logs, but this feels overkill considering the verifier already has the
+> information we need.
+>=20
+> The patch lets the verifier dump the maximum combined stack depth in
+> the logs, on the same line as the per-subprog stack depths:
+>=20
+>     stack depth 16+256 max 272
+>=20
+> The per-subprog stack depths and the new max stack depth are not
+> directly comparable. The former is sometimes updated during fixups,
+> while the latter is not. As a result, even with a single subprog, we
+> may end up with two slightly different values. The aim of the new max
+> value is to be closest to what is actually enforced by the verifier.
+>=20
+> Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
+> ---
 
-[...]
-
-> @@ -834,6 +835,7 @@ static struct stat_def {
->  	[SIZE] =3D { "Program size", {"prog_size"}, },
->  	[JITED_SIZE] =3D { "Jited size", {"prog_size_jited"}, },
->  	[STACK] =3D {"Stack depth", {"stack_depth", "stack"}, },
-> +	[MAX_STACK] =3D {"Max stack depth", {"max_stack_depth"}, },
->  	[PROG_TYPE] =3D { "Program type", {"prog_type"}, },
->  	[ATTACH_TYPE] =3D { "Attach type", {"attach_type", }, },
->  	[MEMORY_PEAK] =3D { "Peak memory (MiB)", {"mem_peak", }, },
-> @@ -1023,7 +1025,7 @@ static int parse_verif_log(char * const buf, size_t=
- buf_sz, struct verif_stats *
->  				&s->stats[MARK_READ_MAX_LEN]))
->  			continue;
-> =20
-> -		if (1 =3D=3D sscanf(cur, "stack depth %511s", stack))
-> +		if (2 =3D=3D sscanf(cur, "stack depth %511s max %ld", stack, &s->stats=
-[MAX_STACK]))
->  			continue;
->  	}
->  	while ((token =3D strtok_r(cnt++ ? NULL : stack, "+", &state))) {
-
-Thinking about it some more I think that the meaning of the
-STACK/"Stack depth" metric should swapped for max stack depth.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
 [...]
