@@ -1,111 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A6423A984;
-	Wed, 13 May 2026 05:08:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B12DE393DD3
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 05:12:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778648891; cv=none; b=aJy5Z0eBWLQuWAiR+dy25PVdr4t/7XgfBRVlNcZ895mTVAyRERdCr0FzCl0RweszTenqIUGMFXOQVea3Y9kEFHQ0HGtK9gZwc4A1AkmiKKwYblcUeTiytSrXFPRfUzItQ9oz6WMwMEWTYzAl/RPPS5h6RmJjgXLriZ20Kh7DYlI=
+	t=1778649153; cv=none; b=sq/YemP3xJsdt3ZUAACb0mQ29vvMUzGjHooZVin3I+7uPWLqqLQPfJhEg/aiWn5K/8RkIUQoMJUZ6ZJZUgIedWIljCh+FOkbCPz6s851XaI3bpiRO8kqa3V63NohWSOzlndeDgz9F/fP9K1BN5fFaQP/02BNZ+ATZ1WSb6O3wc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778648891; c=relaxed/simple;
-	bh=sj3BxPV/5T76DEvHwVTxrjMQ54iMlh7U178nn3AGLvI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hTG7tq0ySx1wxVFI34gnHmfBOpyA3VT5fvbEzAem5cWLjSB8Pceo68zKWMCPDHmAzSvm61wU5iHFyJVoNYUV9LELg1H1SmvnBNH543jJGqzLe4gmCfokwEqhoKvvm4kShN5RlEQ6Hmes4cT1b9cFOB7ev0HAzvf2/U5fy9HTVVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ntt+83b2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778649153; c=relaxed/simple;
+	bh=20piQX2EOqq5GEX+CvsETgZTDumCWmHey2VqVB9qcb0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=rSyRXPJXdAaVysjNiJrO6SkGj02bmDMigS6ZWQBJGmfQTDyG1p5YlsMWZ+mw96KFZ+i37J/118xaTWgHFoUKAsK/6oi43q0vhdxOGhMQY441gEAkzKKHBN8Jn6Q2OBUpsDYhHwjMj+7kr+0ykB4m+vg/+07qa9qUYvrAG3XQmsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uGf/iSdW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ntt+83b2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2640EC2BCB7;
-	Wed, 13 May 2026 05:08:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uGf/iSdW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AFF7C2BCB7;
+	Wed, 13 May 2026 05:12:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778648891;
-	bh=sj3BxPV/5T76DEvHwVTxrjMQ54iMlh7U178nn3AGLvI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ntt+83b2ME63skqOmYoDvslFeUhUbfg7eQTY3hhkcZ6U3gR3c+JYCMzYxit2FLEft
-	 Woc7hTCxmPhVKGpFsHqm7MxyXfEROzDzpj6YUXuVQO3R+9tTR60Eu4h8XqyVra2QoX
-	 XwWMyphZyFIi+jX1G7eOqwpSrzQF+9Nf1TQV4vdSSPMWB8iDJc6zIyGrSIRlDFG3hI
-	 3QPSOS2ossDCd6+m1wLLLb40cmDKzISWP0f1PK2Pq3s68Lehp2zlsGmQ/00X/PbBKx
-	 WXT7/TEgx115juf56/wnwjl1x71JrCMXUkbvhfUCDLSU0lpOl08sXRQ5jVBOHxaq5X
-	 T++vvOlbRieTg==
-From: Kees Cook <kees@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>
-Cc: Kees Cook <kees@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	sun jian <sun.jian.kdev@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	bpf@vger.kernel.org,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH v5] libbpf: Use strscpy() in kernel code for skel_map_create()
-Date: Tue, 12 May 2026 22:08:07 -0700
-Message-Id: <20260513050806.do.620-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	s=k20201202; t=1778649153;
+	bh=20piQX2EOqq5GEX+CvsETgZTDumCWmHey2VqVB9qcb0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=uGf/iSdWNrjcTyjzfAsXOwBepX/c23IESDBbn71nUxC+LYtjjKVbyaMuQmfGrDphS
+	 YaAlv3kX5PNmsCiTM9Ol8QuTKTcI9MFHTXnf+ERmMi02p0KUOGY782Ep/pIwDjrPVe
+	 qtUGl9vBQQ/kEqzexYIYFodAMpI6tv91DdZVJuTaLoUztdYAQZTbE7WNqTVeoKieDW
+	 OehW/saGBXdvm+LsOOoY6dPbLw7KZh+K2INek6Xyje171jH6xRr812VLIU92ZJF6nM
+	 VqJ8Or10A4vffekb1x+hEg4YwDClfN0erxsLcMM6zHtZIYkDOmKkxSzuyu5yhMGOXl
+	 mq5hfWESfTJKg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v4 6/8] selftests: drv-net: refactor devmem
+ command builders into lib module
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Bobby Eshleman" <bobbyeshleman@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260511-tcp-dm-netkit-v4-6-841b78b99d74@meta.com>
+References: <20260511-tcp-dm-netkit-v4-6-841b78b99d74@meta.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 13 May 2026 05:12:32 +0000
+Message-Id: <20260513051233.1AFF7C2BCB7@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2004; i=kees@kernel.org; h=from:subject:message-id; bh=sj3BxPV/5T76DEvHwVTxrjMQ54iMlh7U178nn3AGLvI=; b=owGbwMvMwCVmps19z/KJym7G02pJDFks7OadU42tml5c1uZ0teVYv+69xs2HGex83+sbPtXOD AyU/X2oo5SFQYyLQVZMkSXIzj3OxeNte7j7XEWYOaxMIEMYuDgFYCJV+xgZ9p2Vmf3uhbC82ZMr pu9XvG4PnfdMoXib7qb0K79fhgi8cWL4nyNm8sx486Mnnw4cK0qefO7YbIebBZ7JDuFnVh+J5Wj zZQEA
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
 
-Linux has deprecated[1] strncpy(), and the use in skel_map_create()
-is best replaced with strscpy(). Since we still need to build this
-file in userspace, leave the strncpy() in place in that case. This
-is the last use of strncpy() in the kernel.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] NIC ring and RSS configurations are permanently leaked on the ph=
+ysical host if `configure_nic()` encounters an error midway through executi=
+on.
+- [Low] The newly created shared helper file `lib/py/devmem.py` is missing =
+from `TEST_FILES` in the subsystem Makefile.
+--
 
-Link: https://github.com/KSPP/linux/issues/90 [1]
-Signed-off-by: Kees Cook <kees@kernel.org>
----
- v5: Just ifdef for the kernel and use strscpy() there (Alexei)
- v4: https://lore.kernel.org/lkml/20260401001130.it.781-kees@kernel.org/
- v3: https://lore.kernel.org/lkml/20260324161605.make.168-kees@kernel.org/
- v2: https://lore.kernel.org/lkml/20260324053036.it.906-kees@kernel.org/
- v1: https://lore.kernel.org/lkml/20260324040535.work.851-kees@kernel.org/
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: sun jian <sun.jian.kdev@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Song Liu <song@kernel.org>
-Cc: Yonghong Song <yonghong.song@linux.dev>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Stanislav Fomichev <sdf@fomichev.me>
-Cc: Hao Luo <haoluo@google.com>
-Cc: <bpf@vger.kernel.org>
----
- tools/lib/bpf/skel_internal.h | 5 +++++
- 1 file changed, 5 insertions(+)
+commit c5e5518c4c4e4b7d059077276ec59958fe094dd8
+Author: Bobby Eshleman <bobbyeshleman@meta.com>
 
-diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
-index 6a8f5c7a02eb..74503d358bc8 100644
---- a/tools/lib/bpf/skel_internal.h
-+++ b/tools/lib/bpf/skel_internal.h
-@@ -243,7 +243,12 @@ static inline int skel_map_create(enum bpf_map_type map_type,
- 	attr.excl_prog_hash = (unsigned long) excl_prog_hash;
- 	attr.excl_prog_hash_size = excl_prog_hash_sz;
- 
-+#ifdef __KERNEL__
-+	if (strscpy(attr.map_name, map_name) < 0)
-+		return -EINVAL;
-+#else
- 	strncpy(attr.map_name, map_name, sizeof(attr.map_name));
-+#endif
- 	attr.key_size = key_size;
- 	attr.value_size = value_size;
- 	attr.max_entries = max_entries;
--- 
-2.34.1
+selftests: drv-net: refactor devmem command builders into lib module
 
+This commit refactors netkit-based devmem test commands into a shared libra=
+ry
+module. This allows the command builders to be reused transparently across
+both plain and netkit environments while keeping a shared environment across
+test runs.
+
+> diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/devmem.py b/to=
+ols/testing/selftests/drivers/net/hw/lib/py/devmem.py
+> new file mode 100644
+> index 0000000000000..d3e7a3645cba5
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/hw/lib/py/devmem.py
+
+This isn't a bug, but should this new shared helper file be added to
+TEST_FILES in the subsystem Makefile?=20
+
+According to the selftests documentation, any file referenced via import in
+test scripts must be added to TEST_FILES to ensure it is installed correctl=
+y.
+
+[ ... ]
+
+> +def configure_nic(cfg):
+> +    """Channels, rings, RSS, queue lease for netkit devmem."""
+> +    cfg.require_ipver('6')
+> +    ethnl =3D EthtoolFamily()
+
+[ ... ]
+
+> +    ethnl.rings_set({'header': {'dev-index': cfg.ifindex},
+> +                     'tcp-data-split': 'enabled',
+> +                     'hds-thresh': 0,
+> +                     'rx': min(64, cfg.orig_rx_rings)})
+> +
+> +    cfg.src_queue =3D channels - 1
+> +    ethtool(f"-X {cfg.ifname} equal {cfg.src_queue}")
+> +
+> +    with NetNSEnter(str(cfg.netns)):
+> +        netdevnl =3D NetdevFamily()
+> +        lease_result =3D netdevnl.queue_create({
+> +            "ifindex": cfg.nk_guest_ifindex,
+> +            "type": "rx",
+> +            "lease": {
+> +                "ifindex": cfg.ifindex,
+> +                "queue": {"id": cfg.src_queue, "type": "rx"},
+> +                "netns-id": 0,
+> +            },
+> +        })
+> +        cfg.nk_queue =3D lease_result['id']
+
+If queue_create() or the ethtool command fails and raises an exception, does
+this leave the physical NIC rings and RSS configuration permanently modifie=
+d?
+
+Since the cleanup_nic() function wouldn't be called if this setup fails
+midway, would it make sense to handle exceptions here to restore the
+original ring and RSS settings?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260511-tcp-dm-net=
+kit-v4-0-841b78b99d74@meta.com?part=3D6
