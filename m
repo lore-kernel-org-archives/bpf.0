@@ -1,263 +1,213 @@
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013008.outbound.protection.outlook.com [40.107.201.8])
+Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011048.outbound.protection.outlook.com [52.101.57.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5012F39A063;
-	Wed, 13 May 2026 07:24:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B320D3EF659;
+	Wed, 13 May 2026 09:01:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.48
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778657051; cv=fail; b=tSLhUhIJebbMgYbOIMbUCUzRzkBDAxnoR5xr+rGkCfz+SWZCfgwNbr5QBi+MnAP1RndUXADW/gYRe3HSpOU3uJi8wrF93BMiTWPXANmh/Grb9Bw6+BI+QYZA8C8BasHyOKKsEu5+SQTOackahDstarMzqrTgSm5qwXMVQOqXJNU=
+	t=1778662885; cv=fail; b=MZ+BGz+2pmqHPuyj1IcmAZy1fSn8cT9U8KNK81HgtSwTTUS8Swc+pdjeTKaprkLOZ8qtPtxjakcWPbKRi2TCrQoHZSldOT5rWhlMm5KgoGvdcRhd7hWWE132yIM2Ynf9t+DBky0XSsfjno9TQPkb+vytMKeXbAfU+t5MfrXpzzg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778657051; c=relaxed/simple;
-	bh=Bpa0qyMi0x+wGb9sUV+c89i0DVx5Cx9P2OoAXbwc6j8=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SY0Av4pVDlOYGWKonoyGJqKPpQgVpEJSKhkF2osNR+pkMdUPOIPqagwLif4jBwUcMjQz8H2499p01k9ac+DOS5cbxbSMs1CIpmBudF9Eiy3Gd1a4ROWkiLS39TGTrxbz+XHh+rAdks4IFtNgP1UeZMIYszL+D3TX3ULXWrgqyhw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=W+qEYULj; arc=fail smtp.client-ip=40.107.201.8
+	s=arc-20240116; t=1778662885; c=relaxed/simple;
+	bh=2tG36kgO6GYBpoMT1GQ4/foR6YOdT6Z3g+CteCqKKDc=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=dZ6ChBNkp3H12rM1abR9oSKdd1hiB8QkrJxvDIOFGKgQSv1krWd9qT9HT9lJRh2lgBGG51dAbXgYpw97W2NLeLI7gZv7YB4ZT5QZkHBwOxLneYOzO9PoaMzpyCKgz5nZqH1ksuT5/ZIg8fsHIwEZFpSH76QV52Y93sU1wNZhzQA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=hhqhT5AJ; arc=fail smtp.client-ip=52.101.57.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="W+qEYULj"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="hhqhT5AJ"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UIc5hxYnHV20oPCNxGXfSF9d98RaBWP2GTf/Q3Huq9jBZtxZxBgLvgjwyBQtsP+qpLUBAfEvWUm4TJGWB+wJQiRaMWLHrc9Pp7i8kQ0B1K+1CnDzeJgUejUxspMWA/8+yDlrvqI4pcy7W7sALjwwU234YKsf+6BjrF/bb9k1CQGIyHXI+6fmH2Oq8MPX33Olq7Oa0G1hhP3glhjAzCt8ziI/LzCx1FuL7a3mhbgx+vB+elKFizvxKGTV7qlV+A8+HcYxkl5/YEVw65v/zG7yopCofWcHSv6HeToAYm+yx78S/ojL8fj47c7bG9hPAgv3aolmeYe9VxBkPR/RrazjQA==
+ b=hJzuhOFmNoJameyb4+WK8bvvwcR8tMrncmvjRvPgkv7HhWrXO8m9Ffrw5/dcHXpJJCjvkTXfhyjfXEhNOz7zDskDCQK0hEUqGJzLRfS/S6xA47d4dSvyJOFN2E63jrbIHIruQPyUpDyvOiYPAE0hmEuzSnN4XWnO+KLEcdvIP2rDI5cqLB/48vYNBrEAd2TMzBKv0l2lXvN1Gxli523NkdBKvYRDZPnoogiebfffvTL4Z5l5S4Ove70efnkD28aEPcxAVnxw/ih7yHAuSa1VU6vC34Jh4qoRG9YbpVwD3DE+LuYhr4FcloLyZu/Ly9o2rD0JTpwQnApKjhLXZOXLtQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HKqbeFM/fxn82sZeoKMSZKrjEBvo+DbAc7+95doLiQw=;
- b=Lj/2R0o+/JgHJ6lHB/vemYkbA3/Vl7dYxuu+cbsYsrhIwWY/6JksDWfAjCZ1/ENGA2xEXRnwezF2CnG+E6Wknh/wNmMnDM9WggQrZomzII2vPRQaQnQzHGykIBustGb7TNWKozPaznL+JswOYOwt0QrLAn0mAB82ja8ROqniUHnRkB/EER7aDnyt63GSKk61M1ez3N1kW3gdB1dsNtywcd/32+hp65Ca5BCHxeY8m6kd/TfdspDzi/WqszsKUsFBxv9VTYW2a5s8e+5ffMdjT6XeFJb34bgVw+Qmtc1vxvVIgQFRU0rdUqRFitQgH02U277QLzP93xtI/xk+rwtGSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
+ bh=rHWsNSGe4btIxjBPrpEbAKB5ddDPX54C5780Xr7IFzk=;
+ b=XL5hYLA7dwP0f2UnJEJ8Jou2WvX3LpV4oFTOE/ztLzL4c+LeeagQv+PCA2Z6vF8s4ykGIdiUog/EJxRBe4PKjuIcL6zbgfAiZATywQFzxulF4l2NU+ihRiItoNbAvFL+inFzMbC/iYx1Kb/N+hsWF+eTdoiHIAXS8kdlbKob9O5/86+ehITIMcrhkFsGHtb2DICeH0KGGFKDcbtciE4XJyIV9deH+e6hZv+XvlQ8TU7XxPYb0PTUJLXf68nOoYTgHLZvam8Rqp53dt3HVFSYn7+mE7qHZbjU4jej9//p1DL5TIfnLWZ6ChL5pKDqnRYS03IqUmn5kb/QD2BNoqmVaQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HKqbeFM/fxn82sZeoKMSZKrjEBvo+DbAc7+95doLiQw=;
- b=W+qEYULjBZepKaQxEzVjqtElyZd+TZC7C0tZyx9XIX7GWLwdFC5fELSWW00i0FI7EdBJw7412FO1rPd7NjNzR94V9G+H7elPC9OJ3e2sZRrUuAxDJA63cxcERO0XO7UBsE7d1OzG1inE8b7omSvOL2JgISj7yk7NrsogZUlWN2j1SE1CpqonchFei34fyPyVdjqNLUL2+nORrAv5ctilExpLiRdAUorYdHjTGGxN0gUus86eZ3DyltiypMAkT7KNcV1kEeV9jaseNTxtbA9Lt0jvumvlp2U/XqPiY4BPGqLubo2QHqGp/y0U52tSO6DUiay4LdUBTMw7mGw+aAdpAA==
-Received: from BY3PR03CA0030.namprd03.prod.outlook.com (2603:10b6:a03:39a::35)
- by CY8PR12MB8243.namprd12.prod.outlook.com (2603:10b6:930:78::15) with
+ bh=rHWsNSGe4btIxjBPrpEbAKB5ddDPX54C5780Xr7IFzk=;
+ b=hhqhT5AJdPKnbfnJ9hONldCO/zgnv0QnaTdl06DrbOanndWtq2kpwAUUaTtg4bEuPv0tbRx9jJ+6fcCKmM7aC7cfBbLf22nMdd9mDKnnggAhVY378PNS6z+uWgsZR9lUPh+IBSdTGch+bYco6GjwzLv+Zc/Q8OLkooruGNJ2JucHpOd84AV9MCzqNeUeuPJn/IN2NkbRZXuQJ6ynRGiVekwSpjgeKFg3aHOdZdNbNoOVdGxQaT+RRaqIs0GfrELCkzJmWlnsZSYaWT+iTI96nVbC/7uynCVMF25nvy2Am06NKS3wNLp1xIDPt6nxdsx8Eoi9S2j0+EeRdJQd0/Q8QA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from IA0PR12MB8716.namprd12.prod.outlook.com (2603:10b6:208:485::18)
+ by PH7PR12MB9221.namprd12.prod.outlook.com (2603:10b6:510:2e8::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9913.11; Wed, 13 May
- 2026 07:24:05 +0000
-Received: from SJ1PEPF000023CC.namprd02.prod.outlook.com
- (2603:10b6:a03:39a:cafe::c3) by BY3PR03CA0030.outlook.office365.com
- (2603:10b6:a03:39a::35) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9913.12 via Frontend Transport; Wed,
- 13 May 2026 07:24:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- SJ1PEPF000023CC.mail.protection.outlook.com (10.167.244.6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.25.13 via Frontend Transport; Wed, 13 May 2026 07:24:04 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 13 May
- 2026 00:23:45 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 13 May
- 2026 00:23:45 -0700
-Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.7)
- with Microsoft SMTP Server id 15.2.2562.20 via Frontend Transport; Wed, 13
- May 2026 00:23:39 -0700
-From: Nimrod Oren <noren@nvidia.com>
-To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan
-	<shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
- Fastabend" <john.fastabend@gmail.com>
-CC: Stanislav Fomichev <sdf@fomichev.me>, Mohsin Bashir
-	<mohsin.bashr@gmail.com>, Amery Hung <ameryhung@gmail.com>, Martin KaFai Lau
-	<martin.lau@kernel.org>, Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
-	Nimrod Oren <noren@nvidia.com>, <netdev@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<bpf@vger.kernel.org>, Carolina Jubran <cjubran@nvidia.com>, Dragos Tatulea
-	<dtatulea@nvidia.com>
-Subject: [PATCH net] selftests: net: Fix checksums in xdp_native
-Date: Wed, 13 May 2026 10:23:55 +0300
-Message-ID: <20260513072355.1083381-1-noren@nvidia.com>
-X-Mailer: git-send-email 2.45.0
+ 2026 09:01:16 +0000
+Received: from IA0PR12MB8716.namprd12.prod.outlook.com
+ ([fe80::c18d:8eab:b36c:32da]) by IA0PR12MB8716.namprd12.prod.outlook.com
+ ([fe80::c18d:8eab:b36c:32da%3]) with mapi id 15.20.9913.009; Wed, 13 May 2026
+ 09:01:16 +0000
+Message-ID: <982b9bc1-0a0a-4fc5-8e3a-3672db2b29a1@nvidia.com>
+Date: Wed, 13 May 2026 11:00:51 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] mm: introduce a new page type for page pool in page
+ type
+To: Byungchul Park <byungchul@sk.com>, linux-mm@kvack.org,
+ akpm@linux-foundation.org, netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
+ harry.yoo@oracle.com, ast@kernel.org, daniel@iogearbox.net,
+ davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, saeedm@nvidia.com,
+ leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
+ andrew+netdev@lunn.ch, edumazet@google.com, pabeni@redhat.com,
+ david@redhat.com, lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
+ vbabka@suse.cz, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ horms@kernel.org, jackmanb@google.com, hannes@cmpxchg.org, ziy@nvidia.com,
+ ilias.apalodimas@linaro.org, willy@infradead.org, brauner@kernel.org,
+ kas@kernel.org, yuzhao@google.com, usamaarif642@gmail.com,
+ baolin.wang@linux.alibaba.com, almasrymina@google.com, toke@redhat.com,
+ asml.silence@gmail.com, bpf@vger.kernel.org, linux-rdma@vger.kernel.org,
+ sfr@canb.auug.org.au, dw@davidwei.uk, ap420073@gmail.com
+References: <20260224051347.19621-1-byungchul@sk.com>
+Content-Language: en-US
+From: Dragos Tatulea <dtatulea@nvidia.com>
+In-Reply-To: <20260224051347.19621-1-byungchul@sk.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR2P281CA0093.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9b::18) To CH3PR12MB8728.namprd12.prod.outlook.com
+ (2603:10b6:610:171::12)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF000023CC:EE_|CY8PR12MB8243:EE_
-X-MS-Office365-Filtering-Correlation-Id: 743389ea-446e-43c0-677e-08deb0c09cb1
+X-MS-TrafficTypeDiagnostic: IA0PR12MB8716:EE_|PH7PR12MB9221:EE_
+X-MS-Office365-Filtering-Correlation-Id: c5c8a412-45fe-4226-96fc-08deb0ce29c8
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|36860700016|376014|82310400026|1800799024|56012099003|18002099003|921020|11063799003;
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|11063799003|22082099003|18002099003|56012099003;
 X-Microsoft-Antispam-Message-Info:
-	50MjZ8BoJsIa4wTDfKYkTr8i6SUGq/IIaYEDnjZHzqFFha3RwRA6tTTZixxcXV++gUhiE0irZZnUeonFK9KtCkJo0TBo/yaFd7QMIYpBhFHBcoYIyt7v9xyt1OgzTwW2BMDC0lmHIOPivA2dKZyE0+/ohXLQw5h99ooP/0xosDFdlPv6o2Z5am0r4FKByyZuaEb/+aOPWBEnmHSSikYiqxKoaeBZGcqRhr5/9R9ThFsS2UbRWOXq5deup1pD1zzRJYkCmJ1eqRTMjbX/ucJSLQtVKPEQ+wFwSAdZR1tgPoFVqkV+LTHrDU1zrnXx3mzNeD3vCwILFZdRrSTyp1T0qdAx/a23Uc36ZoyRFElHtsQ/GjnSzhMRZJ+k0KuQlB0XfUJ9lUU2VjvL9CcKx1kQAvPEwK0ki3YruY/NZos6RYI4MyD+nC4iP9VYT6MtRdF3Lwqg/g8zyogUGuQtG24A5PGtPKNCcjgpW85Z1+DCQPtQ36FQ2c4gY9gf1FofA/PFrW/Hr9EbCR/PwCXsPbeTaHuk82uKGpK93IpH0Enm8jc/l9VOEqrYnDdL8LKYV4Rci4PITUIpf52sUeTDRbXjNRRta61tonLz6ULnU99QHsXvzSQNYJevBOlxblbsXfShLWfg3nKEqSRsn+DeRfQHSXAe705IU0o1zHfksmfQkWBqhTfqZFroR+42g3VMV663O+BrnrLcxCn7d8TGkQyHoFNaiPxrW516umBeTUKXGCQlfqOMZLaTiCvCgnVrgGUMAak384HUAnNkNQ5HiULxKA==
+	fvva++7zvhN1Ou+9nx5owi3opkAK7Fbb7WrihxLVI+O3lUoMJ+HCtgFw5VRZVf5b4AxtHU8vggV3KvbHNlU9DNvITqMYjZjY7+dyMz3cWEV0ZIFTVvBfxPQPSNI7UvJ0JxujuRPbPCcGt3Wp+3v7SeCsP6YAPZ6uDthmtGKKucSQlmZJA976xQUw/No2F9PcP5+4RbnF78DdpHnCZHRTBP9DB2hpWxwA2isxz+KFEAlh4uwWwKb+Uhf6oihvp0AM6WMBDGQy0AOF/hx+UEODjkuRrLP/S4xIzjsG9KWxlF8Etje5tGmeBIChvxPWRrURgPgcOMaiLSu4S7AavG3iBoxtT7hezoBRNDoi5ttSAKS0FwrNkEJxdLR7+9vbHONhyw8ZGzrVrXmxoy0cZA3BD1gHYCxQzWQz9X7jbsrE88EK8HAwXICsNSmNoDJfGC1Bia8g78VyoW4BJ9LbcRLToECg5/yoldGiFcJVPXBP13qp3e90+eJJtVNlIReNruhpFrXzxBKGmRuTl28r1QO83AN1bGavCxEKHL9vzeJje/89KEA9Bh2cdPrniTIhprg4QRMU2VuMEl60fPzQK8JBF7tO0QEvgjumKPE8cYGm8JnU2bEhmBaXD4rma0oIQtpbWgr0jKmcbDknkFaLeadU1CLOpCMiRNdUwBb4wNswkKRfcXqa1x4MPuWS8K87rHrzYryPcbf5ITIG5npASuWqHw==
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(36860700016)(376014)(82310400026)(1800799024)(56012099003)(18002099003)(921020)(11063799003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8716.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(11063799003)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	xHhvUJ9fq6gdFJtFDjsemsHf43E52Y8u1WQKJU5eVy35RBH1aRpk13DuKCQWJFUiy7rUtwcnzFdDpKfBqNSmMxr4soXvgCojgjjicsrP5zG4HFCqhDvpWdhW2UoTxosgLTNbhpaPZzTEBxla4hkp5bMnNTr3kSd49o34YLUVpuFk8agtKqMrE/gDoG7C00ifHpd9URFwPyjMici+IdzKCtsD9MqCQnWp4RSyH8bK1HLQlCPIxRQWOuVbEJe99bxA19Kz6jUgtejulcxyPRhnK0S1u8lXzcwiF+RJx37cXuQm2FwxdEGeqtI81aNxLHCS5gDSv1kFCB2nxuCnsdl80naCRMw/iUSXpHuhCzrSBtRAm0bKoy6tUOgQlO0udKUXvuKk0yfYc8TqWa5UXW65xAW/duJP2Go5jnSkkJtN6tYodr5xJmlZa4OjSKrka1IN
+	=?utf-8?B?YUMxL2tFbWFmcjB3djhWVllENUJYYlloc0kzd095OGlYUlRNdjdMbmtGenVZ?=
+ =?utf-8?B?bFNnN1E0MHpIdGZpMFJZZlVzN2dLRHV3SUk5VFBKVUcxZFBaOWZDak40MUJV?=
+ =?utf-8?B?NGpzeG4wOHpWcXIyWW9kMW9vZHhRWGFoQ3JkcEM4NWFNWDgzZUFOVGRiU0Vu?=
+ =?utf-8?B?dHZ3VEF3bkNrdlE1V0toQmIzanlsTC9GN3ZKa2RlcVc4aDdSZmhGUWZSUjFH?=
+ =?utf-8?B?MDFhWVJLU1p5RVRKaG1qVHhmNExYdGNrYUNFQ0tYSEd2SHdJSm8zK2dLaisx?=
+ =?utf-8?B?OGp4Q2VHVm1oUEY1V1U4Q1dqU2xhMUpISWwwZk5XWituQmhSdGE4eE10MDlj?=
+ =?utf-8?B?WDFIYTlyZFBraEpsNkh5WjNEcTNQd0gvRjFDcW9GZGhqQlAwdXg5RmloNW81?=
+ =?utf-8?B?empjRDg1THJZMHZMbkp4ZVVvaThBRFNRMm1pQWtnbG40aExDZWZORFVXRjlJ?=
+ =?utf-8?B?Q1RiQ3FpcDB1TVF5NnVQSFdyalExM0NDakw4MFJ2VkEvdi9HeGMxYWo3b1M0?=
+ =?utf-8?B?UUhEN0ZrQ0JHVU1xYlIxanhiSDhBYm5jRHpPQmdMK3E1cXlaOWsxQzJSTldx?=
+ =?utf-8?B?UGVmVGJhbHFHVUN6TmtBbG01M1RWTWRIcVM1MXB4a1BPVEhQVlZCc3B2c3dk?=
+ =?utf-8?B?ZkVMNHU4REltTTdIb2hIb2cra3JvcjZGTmk5dGNFRzU2QkRuQ0Fwb3VKOXc4?=
+ =?utf-8?B?Wnk2Vyttc2FBanYxZ05BaXVPT0FLSG9WTTBYaGlyMUl2cG85NEVDNVoyUlFJ?=
+ =?utf-8?B?TytQbnBSc2hDQXJZS2pLUG5xSURadGxaV1RKeEFGc2hpa1pidE5vd1IwYTNj?=
+ =?utf-8?B?cld6MC9IRlptUEhrTXp5SDVmMmQ0ZEdvcHB6S3ZMTkVINUxNMHBkd3phajRP?=
+ =?utf-8?B?d1p4VGZTNkJSQkRxNkRuY3B2SG9MMW9GYVlCK01CMnY0aTNBd2crQ2RjK3Ew?=
+ =?utf-8?B?UlNxZjB0MnBBTEkvMWx5aFREVEVyR1E5czZSNHdoM1pNZDVrRlI3amRhUGs0?=
+ =?utf-8?B?VFRza3dQOHQ2ckJ6cW9VeVFtNG1OZmFSUU1DQUNhVmNmZDNYZjZqemlKMmhR?=
+ =?utf-8?B?U2dQRkNCNEVqRDFINVc4cVUzUUlxbVFkMVdGT0VWbVFzRG81TUxGQjZIUndF?=
+ =?utf-8?B?OVFGdXcyQUpJbHRqZUhteGRWQnVkbm9vN2lCL2tpMDdHSWNvYkV0dmpzRFZY?=
+ =?utf-8?B?R3pRT1I3V0E2MWhwc2paVkVoSFpiMDVxZXBISUZaakdMczQwTHBVVWJxYTVI?=
+ =?utf-8?B?djZEVmdrMXR1WUZBaTd0V1FvbHZnRysyKzRhOGE5S1BPV2ZHMVFMdlFJblJD?=
+ =?utf-8?B?NGhiQzJLb2dEbVFMb1grTDlXUDZUZFZycTFabHlQWEc0TFgwYXlrUDZoU0xk?=
+ =?utf-8?B?OGJsVW56U0M4QWducWRkanphcmZENWpIcms5QldmZ0wrSGlKOGlxVUNGMGlR?=
+ =?utf-8?B?VVVRakMydFE5akV2QzdsVkVEVVpreWhvbVVMSVFReldWeVRmTUpHNWt0a0oy?=
+ =?utf-8?B?cFI4RVU1cDRyRkRnRlhiRms1dEpGWTdEQml4Y2w5S2MzOXBDbTR0c3pvUk9Q?=
+ =?utf-8?B?UVhKWjVmL3VOMXAxaUZkK1owQUZvZUJSV0hQdktNeDcrV0UyT1V5Si82ekZX?=
+ =?utf-8?B?cGg2RmN5bUhHa0h5R0diMTZnTG1ROUJKZWhaU2VTUWVvNzJvRmRNTEUrRGwv?=
+ =?utf-8?B?Z0hROUxPSjNhcmJGaG9ZcURsL0VpWEJmSkx4QWo1THRWMTkvQVJ2bDNpd3k0?=
+ =?utf-8?B?VXB2UlN5NFVOMFpaVjh1c2I0S0lvbGIzdTNDOWFYQW1TL3RLTFkyMlI5cktX?=
+ =?utf-8?B?am8vanhKcjJzSGlqNjhLUnFsNXRVMjhHaFNibU9JZnpNYlZYL0lHSTllVkpU?=
+ =?utf-8?B?TlB5d0Q2akxFd0d2RzIzamc0OGxsdFF3SVpVUmUwYTBmQWR0YTFucXE5ZFgr?=
+ =?utf-8?B?YTF2MUZkRUVwMnFpSFcxblJjQVhlMUE4eWtzblJqbndWNHNLWWp4eWVtMkl2?=
+ =?utf-8?B?OFBtSWw4Zi9pcUc5b1ExWm5CQXkwamxuVjNvSFk3VlJ3bVJNc3ZPRmEvZjA2?=
+ =?utf-8?B?eDdjYWljUzB0QWFQWlh5c1RBUkhUbUJic2JRdlMrTytrNmM0UFJqdTU5S0dy?=
+ =?utf-8?B?V0pzcEVwRStlNVJQTFN1Q08wMElkdkg3SEJ0N1VOWjM4c1BJazk2U28xM3ox?=
+ =?utf-8?B?VDlyL3pTRnY5UlBneVo4RUF0V2h2cDFwRDFVa1JETTJHdHZoSm1MVFU0bEZR?=
+ =?utf-8?B?QXZUNFRjbHZrZ1Q4a1crY1RwaGpmcVQzcWloUjB1SHEvZktIZkxzNkxQVWVj?=
+ =?utf-8?B?dUdPKzNGWE40ajRTalh2bmVSYTlWSkpMb0JQeUZxakU0dngwWlE5Zz09?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2026 07:24:04.1916
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5c8a412-45fe-4226-96fc-08deb0ce29c8
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8728.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2026 09:01:16.5905
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 743389ea-446e-43c0-677e-08deb0c09cb1
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF000023CC.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8243
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /x4Guh25fP1dlvVEXZ70Nc5CimWxVjlBFuxqYlkc1noGqHXoayXDwhEry1lZ8Nm897zKVGRfE075zkbSoZ2mFw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9221
 
-Data adjustment cases failed with "Data exchange failed" when using IPv4
-because the program did not update the IP and UDP checksums in the IPv4
-branch. The issue was masked when both IPv4 and IPv6 were configured,
-since the test harness prefers IPv6.
 
-Fixes: 0b65cfcef9c5 ("selftests: drv-net: Test tail-adjustment support")
-Reviewed-by: Carolina Jubran <cjubran@nvidia.com>
-Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
-Signed-off-by: Nimrod Oren <noren@nvidia.com>
----
- .../selftests/net/lib/xdp_native.bpf.c        | 54 ++++++++++---------
- 1 file changed, 29 insertions(+), 25 deletions(-)
 
-diff --git a/tools/testing/selftests/net/lib/xdp_native.bpf.c b/tools/testing/selftests/net/lib/xdp_native.bpf.c
-index 64f05229ab24..eaecfa58b967 100644
---- a/tools/testing/selftests/net/lib/xdp_native.bpf.c
-+++ b/tools/testing/selftests/net/lib/xdp_native.bpf.c
-@@ -268,6 +268,16 @@ static int xdp_mode_tx_handler(struct xdp_md *ctx, __u16 port)
- 	return XDP_PASS;
- }
- 
-+static __always_inline __u16 csum_fold_helper(__u32 csum)
-+{
-+	return ~((csum & 0xffff) + (csum >> 16));
-+}
-+
-+static __always_inline __u16 csum_fold_udp_helper(__u32 csum)
-+{
-+	return csum_fold_helper(csum) ? : 0xffff;
-+}
-+
- static void *update_pkt(struct xdp_md *ctx, __s16 offset, __u32 *udp_csum)
- {
- 	void *data_end = (void *)(long)ctx->data_end;
-@@ -281,21 +291,22 @@ static void *update_pkt(struct xdp_md *ctx, __s16 offset, __u32 *udp_csum)
- 
- 	if (eth->h_proto == bpf_htons(ETH_P_IP)) {
- 		struct iphdr *iph = data + sizeof(*eth);
--		__u16 total_len;
- 
- 		if (iph + 1 > (struct iphdr *)data_end)
- 			return NULL;
- 
--		iph->tot_len = bpf_htons(bpf_ntohs(iph->tot_len) + offset);
--
- 		udph = (void *)eth + sizeof(*iph) + sizeof(*eth);
- 		if (!udph || udph + 1 > (struct udphdr *)data_end)
- 			return NULL;
- 
--		len_new = bpf_htons(bpf_ntohs(udph->len) + offset);
-+		len = iph->tot_len;
-+		len_new = bpf_htons(bpf_ntohs(len) + offset);
-+		iph->tot_len = len_new;
-+		iph->check = csum_fold_helper(
-+			bpf_csum_diff(&len, sizeof(len), &len_new,
-+				      sizeof(len_new), ~((__u32)iph->check)));
- 	} else if (eth->h_proto  == bpf_htons(ETH_P_IPV6)) {
- 		struct ipv6hdr *ipv6h = data + sizeof(*eth);
--		__u16 payload_len;
- 
- 		if (ipv6h + 1 > (struct ipv6hdr *)data_end)
- 			return NULL;
-@@ -304,33 +315,27 @@ static void *update_pkt(struct xdp_md *ctx, __s16 offset, __u32 *udp_csum)
- 		if (!udph || udph + 1 > (struct udphdr *)data_end)
- 			return NULL;
- 
--		*udp_csum = ~((__u32)udph->check);
--
- 		len = ipv6h->payload_len;
- 		len_new = bpf_htons(bpf_ntohs(len) + offset);
- 		ipv6h->payload_len = len_new;
--
--		*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
--					  sizeof(len_new), *udp_csum);
--
--		len = udph->len;
--		len_new = bpf_htons(bpf_ntohs(udph->len) + offset);
--		*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
--					  sizeof(len_new), *udp_csum);
- 	} else {
- 		return NULL;
- 	}
- 
-+	len = udph->len;
-+	len_new = bpf_htons(bpf_ntohs(len) + offset);
-+
-+	*udp_csum = ~((__u32)udph->check);
-+	*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
-+				  sizeof(len_new), *udp_csum);
-+	*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
-+				  sizeof(len_new), *udp_csum);
-+
- 	udph->len = len_new;
- 
- 	return udph;
- }
- 
--static __u16 csum_fold_helper(__u32 csum)
--{
--	return ~((csum & 0xffff) + (csum >> 16)) ? : 0xffff;
--}
--
- static int xdp_adjst_tail_shrnk_data(struct xdp_md *ctx, __u16 offset,
- 				     unsigned long hdr_len)
- {
-@@ -359,7 +364,7 @@ static int xdp_adjst_tail_shrnk_data(struct xdp_md *ctx, __u16 offset,
- 		return -1;
- 
- 	udp_csum = bpf_csum_diff((__be32 *)tmp_buff, offset, 0, 0, udp_csum);
--	udph->check = (__u16)csum_fold_helper(udp_csum);
-+	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
- 
- 	if (bpf_xdp_adjust_tail(ctx, 0 - offset) < 0)
- 		return -1;
-@@ -403,7 +408,7 @@ static int xdp_adjst_tail_grow_data(struct xdp_md *ctx, __u16 offset)
- 		return -1;
- 
- 	udp_csum = bpf_csum_diff(0, 0, (__be32 *)tmp_buff, offset, udp_csum);
--	udph->check = (__u16)csum_fold_helper(udp_csum);
-+	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
- 
- 	buff_len = bpf_xdp_get_buff_len(ctx);
- 
-@@ -484,8 +489,7 @@ static int xdp_adjst_head_shrnk_data(struct xdp_md *ctx, __u64 hdr_len,
- 		return -1;
- 
- 	udp_csum = bpf_csum_diff((__be32 *)tmp_buff, offset, 0, 0, udp_csum);
--
--	udph->check = (__u16)csum_fold_helper(udp_csum);
-+	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
- 
- 	if (bpf_xdp_load_bytes(ctx, 0, tmp_buff, MAX_ADJST_OFFSET) < 0)
- 		return -1;
-@@ -542,7 +546,7 @@ static int xdp_adjst_head_grow_data(struct xdp_md *ctx, __u64 hdr_len,
- 		return -1;
- 
- 	udp_csum = bpf_csum_diff(0, 0, (__be32 *)data_buff, offset, udp_csum);
--	udph->check = (__u16)csum_fold_helper(udp_csum);
-+	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
- 
- 	if (hdr_len > MAX_ADJST_OFFSET || hdr_len == 0)
- 		return -1;
--- 
-2.45.0
+On 24.02.26 06:13, Byungchul Park wrote:
+> Currently, the condition 'page->pp_magic == PP_SIGNATURE' is used to
+> determine if a page belongs to a page pool.  However, with the planned
+> removal of @pp_magic, we should instead leverage the page_type in struct
+> page, such as PGTY_netpp, for this purpose.
+> 
+> Introduce and use the page type APIs e.g. PageNetpp(), __SetPageNetpp(),
+> and __ClearPageNetpp() instead, and remove the existing APIs accessing
+> @pp_magic e.g. page_pool_page_is_pp(), netmem_or_pp_magic(), and
+> netmem_clear_pp_magic().
+> 
+> Plus, add @page_type to struct net_iov at the same offset as struct page
+> so as to use the page_type APIs for struct net_iov as well.  While at it,
+> reorder @type and @owner in struct net_iov to avoid a hole and
+> increasing the struct size.
+> 
+> This work was inspired by the following link:
+> 
+>   https://lore.kernel.org/all/582f41c0-2742-4400-9c81-0d46bf4e8314@gmail.com/
+> 
+> While at it, move the sanity check for page pool to on the free path.
+> 
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Co-developed-by: Pavel Begunkov <asml.silence@gmail.com>
+> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> Signed-off-by: Byungchul Park <byungchul@sk.com>
+> Acked-by: David Hildenbrand <david@redhat.com>
+> Acked-by: Zi Yan <ziy@nvidia.com>
+> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+> Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
+> ---
+
+Seems like this patch broke tcp_mmap because
+validate_page_before_insert() returns -EINVAL due
+to a page having a type. Here's the full flow:
+
+getsockopt(TCP_ZEROCOPY_RECEIVE) returns -EINVAL because of the
+below flow in the kernel:
+
+tcp_zerocopy_receive()
+-> tcp_zerocopy_vm_insert_batch()
+  -> vm_insert_pages()
+    -> insert_pages()
+      -> insert_page_in_batch_locked()
+        -> validate_page_before_insert() returns -EINVAL
+           because page_has_type(page) is now true.
+
+The patch below fixes the issue. But is this a valid fix?
+
+diff --git a/mm/memory.c b/mm/memory.c
+index ea6568571131..4cb12673f450 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -2326,7 +2326,7 @@ static int validate_page_before_insert(struct vm_area_struct *vma,
+                        return -EINVAL;
+                return 0;
+        }
+-       if (folio_test_anon(folio) || page_has_type(page))
++       if (folio_test_anon(folio) || (page_has_type(page) && !PageNetpp(page)))
+                return -EINVAL;
+        flush_dcache_folio(folio);
+        return 0;
+
+Thanks,
+Dragos
+
 
