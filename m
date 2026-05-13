@@ -1,66 +1,65 @@
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866CD3B52E1
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 18:36:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5EBE3B7B99
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 18:36:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778697389; cv=none; b=nrl7SRd6bn8qEzpGncwT8/sQI+v2OmtabzeDq63F0ns25iwlCbe9XHP9DV1y2JQUF0WbvS92jJMZNJx2iHHe5brbGhgLGD+mmoWCEFol+X/pepDR8ziJBfc31vHibCIT+TXuzS9S0VrQOkAoYpr/Ng2MaomxTR5soMzQbmVm7gY=
+	t=1778697392; cv=none; b=MVnpN5SyjwMqtqs1jW588u3xsNdSN9J4BER2AE4s2+TGvRkTMzSI/5mONgq0GtozIFcZvqE1w5yUkBq+VitpwSb+cwrpKp3I5tshj0nteg/ofcdcyk4dd7l4I6X75lHwhZGxVzKMq9fcVEofkp9/lIoCvpKbjLL0ZZf8dp+BOLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778697389; c=relaxed/simple;
-	bh=AwM9cJRmcVcStEw5TEKGWm73QdLaxIwl7c+W6VAlCCg=;
+	s=arc-20240116; t=1778697392; c=relaxed/simple;
+	bh=NXfuPJC4WSBHlTygHezAndhnrlRtJXLP/Fq/2xUcvRE=;
 	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Subject:
-	 References:In-Reply-To; b=g/ZOtlrehw2/qSfYz6sUYajSdszSwxLPvtk2TIuOfkVQ9kXNjG+3OMK8vBNC9ii/sNz0q54AQXgMIDOUK/zuVxZVHiqxwEXgZDblA7waPW/AvSD66wdJbQesGa3DirzA9Kv8F9sETBAZ71PMpa/V4M48R9V7uZMQnmVaYvaWAI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=cD9oDTfI; arc=none smtp.client-ip=209.85.222.180
+	 References:In-Reply-To; b=gkT7cOfLnylVKKC0GtaqDKNMgTLOodDV4nsdji/J+/+WYHmVG9AGR8465r+CBrJQFJB5id0cib++Kha0Q2hNCpqfziHnsV1w+wIDlj8wWt27cPkwrGkoTfSUgk35i4niYwKhel2V7zdee25v9GsjmYZFrKfwAMF1LB3UTXxL+6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=DSYTfoqs; arc=none smtp.client-ip=209.85.222.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="cD9oDTfI"
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-9102e90bcbeso86109785a.1
-        for <bpf@vger.kernel.org>; Wed, 13 May 2026 11:36:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="DSYTfoqs"
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8d67a483d3eso790525585a.1
+        for <bpf@vger.kernel.org>; Wed, 13 May 2026 11:36:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1778697387; x=1779302187; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1778697390; x=1779302190; darn=vger.kernel.org;
         h=in-reply-to:references:subject:to:from:content-transfer-encoding
          :mime-version:message-id:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BXBweUZx3jqIrVzTdHurGYke6t/WyOEmRQAf2KrWVaM=;
-        b=cD9oDTfIYT1bfyD2JwneiXjHGdC7t9/bNzI4gN1HdbDcl7YcfCuWCZ5N5zKVTabveq
-         hbequyQVPVigXhC1tEoouH1XapFTWsX4N7s9peUNA+JTSVxMJpm8b8jCNUSvyYuCfXqR
-         RUIDWtMO9eCCOosCBxY8Gj3ec4sgvteQOKkp8DrRfP+O5ITWBdq3LDrKVt6LPBDifttH
-         M6koMy1l17tS9cRwl6CXYxdAY8+7hmJC2AsrWV60HGEBU+gjxc2CV2sE5HeMO/ojwF4Q
-         JHmKNfWsNYzqEWsSHF0zjFFTVnLvjfOvAo4fAMAL/+DxvCxtJ7ZkDPKIDMnQhO86o0z7
-         9BBA==
+        bh=GOF9niRN6Jvg5hWvhCYadN/BxIKdMgGJZ26cseYyxbc=;
+        b=DSYTfoqsiT7AF84hz15ZZiMdeYslCXcIBpkQAP+JPkf4C24XRXdixXbZXftKA1Zv2q
+         IRyUf9E0xyDQI92VjhlwvOFE2Kq09cxCGzagVQ7TnKtSLPnJUgsGvGx4SQdVLhJLynTO
+         fTveQOWMV2ICb9h/0dBqMqENiXFDWWZvJcH8s2ZOU1+mObl82vfalhoUrPfcoIsogv+E
+         KoBYnqOsuhVNJm+bU8H8bH1kpoR4SArDWlkil7yrH/v6lpfHpCjm/nOdEk6JqtxKt34V
+         4JzlqsDTFJGYMjvwuWpwTtv10wZVaO1aoS876YgYCyyzNwbC+ouNmliGhzo0jO+RQ5/l
+         xrFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778697387; x=1779302187;
+        d=1e100.net; s=20251104; t=1778697390; x=1779302190;
         h=in-reply-to:references:subject:to:from:content-transfer-encoding
          :mime-version:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BXBweUZx3jqIrVzTdHurGYke6t/WyOEmRQAf2KrWVaM=;
-        b=jEpb7l3SmffXicQZseAOztQz5wTO342xjOzvRqhVhQVrFNV0IXC7jzr5iNsibjSJar
-         7fxgDepUX9k6wL3RKFBI3myAp24RCmdiXwWqEimtnNZKz3G7HnMCRiu3Wy3i9z6UE28p
-         J5rG0K0/yOF4Ccs/nnXo0PDck9lBvrvOmLT997QzQ68BeXzQqHjQkN+ZIDw+s2vo330L
-         s09evjb3HgBuNqfg85ObMKkd2hFlsCG7T9ogjOL8MsfnUYk59ULuYfjgAAvEWRhv5f7N
-         kGz2ppNJ8ahUMF8hIPEyF5rKEeLIeWZkT+U0+8BbBUksyweUHEIIpa0WMGRImn0SPhXV
-         QNxw==
-X-Forwarded-Encrypted: i=1; AFNElJ8T7M2QAXNgLSR1kujqPoBaxN4Nz2QYdANogYIsng4OA0Gc8KTm7Kr56gpbVoJfS6dcH84=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySc/jxhMIBJH3xlbcrcC2EFTXd3+pQUfqmj4F71ug2bqyWtbFA
-	myZGyn2NY3Qpfme7l3HvBBcNFsVMKzfSUW9311oY5DUDiX1jKzTMINW/AMNK1u5IvQ==
-X-Gm-Gg: Acq92OGRMsGPV2qV57UD546nZktVveL4bCk56EjtURZYnmlXTq69L67y8ugmbZTMNJW
-	G2HB01o0pVP/ckfYgDzN1HfocEnOccMHerPBMLSdHorPjUyZ1hCV/BWpVuwp9Hr9se+aFDppjMa
-	eb0N1ve/EL2YpS1gza1XYLfuaaokc873Hzh7i6aesAWWhGSpQrMkqRMuYMebNisTVjtFon61oc+
-	D40wyvojjG3P3+nnIeBP1r9jNqV8clFdZ1bAHPo+OLHjLHpyboI8prX9mOTVk+9+c67XCD2MdIe
-	I/CVf3TMIXes5rHO+3qzxXuOxIamGC9GXsBPGtI/B035nVny7eL99LH1T+f0jpaQ4Aps7ddsaVu
-	slFHBOPzJJIwHk6DgIW726c7t7v6yJyls38Tc0YenPrYpFG0csModwR5AmL4lLSZG75rJjwbVgN
-	LrVPNCgIE8MULThgQWyHPW4PZczhJka6jKIhmoXDSs28mxALeR7YWtBTqgPV/K//sR5fdIrvCYU
-	NRf+aI=
-X-Received: by 2002:a05:620a:4403:b0:8da:e62d:888f with SMTP id af79cd13be357-90f8ad0a495mr680403485a.53.1778697386562;
-        Wed, 13 May 2026 11:36:26 -0700 (PDT)
+        bh=GOF9niRN6Jvg5hWvhCYadN/BxIKdMgGJZ26cseYyxbc=;
+        b=Jv6I5/ndrnE4SnidHlC8fF4GmZGkqWTV6L72Q1u6uGBDsajEazS/Stw7NiqUSxm+JD
+         QB91ZVB/KNaOS65EJxv8GdBmHWHfJ3dYowMYuFe11c+WVn8+kZRkN84Ht5TrpR/wRR2o
+         FbLMtl59yoKrhGX3EQJPb8YmYyElVeFWYHLYH6+zCeAOB5J4Kk7CaIgbpxefMUd18SW+
+         +k0lhdV/BSLopABK2UmR2lB1Q44QSBLo0JIB1yRBlu9oGdOmAVstYqjtiP/+OixxxFeb
+         vcQfQBtcGEv8r57xBpdZzanL91QN1Ft3Haiqus86d+QjssugLkMERPV7QDzaIOxzPKuH
+         PlGA==
+X-Forwarded-Encrypted: i=1; AFNElJ9FuqubjBbX0CsL4TCMHbMBUmodHE+r6j5ALgBO5u4SUtZyAXsTgWfFu4XQy7wWAzMk7X0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1jm0bGOYAlpqpdfgL4hnevrnPtedIGMZ1FOMJw42ejZ+UgoAe
+	boi7F6ud86XiR0DtMzJepeb2AuaYWsnWyl5ZfUyu1JNmJ99RXLBl6mjYOgqKh/xcvw==
+X-Gm-Gg: Acq92OER2ynpSGoXLThnsieMIJAhiJPbf0pgwCyxfFToTNsl3SoHz5vCpW6SGPtorCV
+	stqJuDrXvHAFeLuhQE5WcGRn2/IjS6Bu7rErRaKoSYHB/QmBcZ3fxxtpw+9LYZhN98jRadiiAkf
+	sOuNWqnl9Z6D9LH5yaX4aPcRrMHa777ia7L3qs3Rg1s0zRyLhvfxRDhED7UIyUufG3D/bg4R2yw
+	c/oFAg3GvTZRMeka+G8arM/QfQ12VqtAOp/Nzfbb9H+kFggRBQHOl/XFLUqqadPIeXVhotrF9x2
+	4RVAqukPrJbxFjbN9vpI5eLyox9D358kST4wIR3PDCIMsjf/Z+EDD2DfGywp8jhIuv2C8h0bLHj
+	aS2H8jka2VNvPH9BAGml505KOMKMCd7yF2WeGGeYqiA8Ow0t33nFog4gbUNgSocc+rKjWYNa+Ox
+	RCfAAKjFMxAaQz2AW2u/shrL2gMKj5QZ4+WJS1ugcy973bsRGAkiZ4IW+Fusn5Iw5JBrjR
+X-Received: by 2002:a05:620a:2682:b0:8e8:bedd:14b7 with SMTP id af79cd13be357-90f89668be9mr690867785a.22.1778697389597;
+        Wed, 13 May 2026 11:36:29 -0700 (PDT)
 Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-910bc83f926sm31771385a.30.2026.05.13.11.36.23
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-910bab32bd0sm34033485a.14.2026.05.13.11.36.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 11:36:23 -0700 (PDT)
-Date: Wed, 13 May 2026 14:36:23 -0400
-Message-ID: <c27b6ff5e1f47b0240a92610c1aa4b88@paul-moore.com>
+        Wed, 13 May 2026 11:36:27 -0700 (PDT)
+Date: Wed, 13 May 2026 14:36:26 -0400
+Message-ID: <c759ac7dd982a61d78078371780bdfac@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,25 +71,56 @@ Content-Transfer-Encoding: 8bit
 X-Mailer: pstg-pwork:20260512_1604/pstg-lib:20260513_1343/pstg-pwork:20260512_1604
 From: Paul Moore <paul@paul-moore.com>
 To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>, "Jonathan Corbet" <corbet@lwn.net>, "" , "James Morris" <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>, =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>, "Dr. David Alan Gilbert" <linux@treblig.org>, "Andrew Morton" <akpm@linux-foundation.org>, James.Bottomley@HansenPartnership.com, dhowells@redhat.com, "Fan Wu" <wufan@kernel.org>, "Ryan Foster" <foster.ryan.r@gmail.com>, "Randy Dunlap" <rdunlap@infradead.org>, linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, "Song Liu" <song@kernel.org>
-Subject: Re: [PATCH v7 9/10] selftests/hornet: Add a selftest for the Hornet  LSM
-References: <20260507191416.2984054-10-bboscaccy@linux.microsoft.com>
-In-Reply-To: <20260507191416.2984054-10-bboscaccy@linux.microsoft.com>
+Subject: Re: [PATCH v7 10/10] ipe: Add BPF program load policy enforcement via  Hornet integration
+References: <20260507191416.2984054-11-bboscaccy@linux.microsoft.com>
+In-Reply-To: <20260507191416.2984054-11-bboscaccy@linux.microsoft.com>
 
 On May  7, 2026 Blaise Boscaccy <bboscaccy@linux.microsoft.com> wrote:
 > 
-> This selftest contains a testcase that utilizes light skeleton eBPF
-> loaders and exercises hornet's map validation.
+> Add support for the bpf_prog_load_post_integrity LSM hook, enabling IPE
+> to make policy decisions about BPF program loading based on integrity
+> verdicts provided by the Hornet LSM.
+> 
+> New policy operation:
+>   op=BPF_PROG_LOAD - Matches BPF program load events
+> 
+> New policy properties:
+>   bpf_signature=NONE      - No Verdict
+>   bpf_signature=OK        - Program signature and map hashes verified
+>   bpf_signature=UNSIGNED  - No signature provided
+>   bpf_signature=PARTIALSIG - Signature OK but no map hash data
+>   bpf_signature=UNKNOWNKEY - The keyring requested by the user is invalid
+>   bpf_signature=UNEXPECTED - An unexpected hash value was encountered
+>   bpf_signature=FAULT 	   - System error during verification
+>   bpf_signature=BADSIG    - Signature or map hash verification failed
+>   bpf_keyring=BUILTIN     - Program was signed using a builtin keyring
+>   bpf_keyring=SECONDARY   - Program was signed using the secondary keyring
+>   bpf_keyring=PLATFORM    - Program was signed using the platform keyring
+>   bpf_kernel=TRUE         - Program originated from kernelspace
+>   bpf_kernel=FALSE        - Program originated from userspace
+> 
+> These properties map directly to the lsm_integrity_verdict enum values
+> provided by the Hornet LSM through security_bpf_prog_load_post_integrity.
+> 
+> The feature is gated on CONFIG_IPE_PROP_BPF_SIGNATURE which depends on
+> CONFIG_SECURITY_HORNET.
 > 
 > Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+> Acked-by: Fan Wu <wufan@kernel.org>
 > ---
->  tools/testing/selftests/Makefile             |  1 +
->  tools/testing/selftests/hornet/Makefile      | 63 ++++++++++++++++++++
->  tools/testing/selftests/hornet/loader.c      | 21 +++++++
->  tools/testing/selftests/hornet/trivial.bpf.c | 33 ++++++++++
->  4 files changed, 118 insertions(+)
->  create mode 100644 tools/testing/selftests/hornet/Makefile
->  create mode 100644 tools/testing/selftests/hornet/loader.c
->  create mode 100644 tools/testing/selftests/hornet/trivial.bpf.c
+>  Documentation/admin-guide/LSM/ipe.rst | 162 +++++++++++++++++++++++++-
+>  Documentation/security/ipe.rst        |  68 +++++++++++
+>  security/ipe/Kconfig                  |  15 +++
+>  security/ipe/audit.c                  |  15 +++
+>  security/ipe/eval.c                   |  93 ++++++++++++++-
+>  security/ipe/eval.h                   |  11 ++
+>  security/ipe/hooks.c                  |  63 ++++++++++
+>  security/ipe/hooks.h                  |  15 +++
+>  security/ipe/ipe.c                    |  14 +++
+>  security/ipe/ipe.h                    |   3 +
+>  security/ipe/policy.h                 |  14 +++
+>  security/ipe/policy_parser.c          |  27 +++++
+>  12 files changed, 498 insertions(+), 2 deletions(-)
 
 Merged into lsm/dev, thanks.
 
