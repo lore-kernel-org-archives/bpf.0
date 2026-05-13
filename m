@@ -1,66 +1,65 @@
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 262713AA9F4
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 18:36:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9161A3ACF0A
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 18:36:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778697370; cv=none; b=CJveOeZaBeXyMY2rZOVMFz4VgJMPJMEC4Ow8odjTAv+AkucLpANYM1bjXsmrBwfYaEu5jv1ZZv+O2MKQEQHY2QH7s1TrzlJqLkaQz+JmujbuDAnWXAMCHbRaYJS0hRA+752V+86GdSPgQazr8skpHv7iGBTrfGvmLhNrDAXCaSY=
+	t=1778697374; cv=none; b=ba7e/JDUEtr/Y7FUt0+FoTlED9epaY92JSFNcTvNWjusMfebSJ7MJ0SlY8//PxpB40WZ025yKDLj3cCFoCR1qzAaooV6Rtjh/zH5Ybx0NLneloyphHA8jplafTiP+1Jjxc0fO+RmE7mDv2THhtogOEl5rNMldoWp+LSpBPG3xF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778697370; c=relaxed/simple;
-	bh=+TqM+PtcKsHz4Xzb0T/t9rjYOVVf8Wg55mJJ72MLd6A=;
+	s=arc-20240116; t=1778697374; c=relaxed/simple;
+	bh=fKOKJEKCQB7cRMjjud6VYUpU43WsP6hzTEL1c0Fjrok=;
 	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Subject:
-	 References:In-Reply-To; b=JMGkDQsLTCCwgXfBGTLGvm9h3S1FIMatLxl5EW/C20pbkmjvH4BHYm+H74ogSP200KNJRz95AiGBzH+QPSHzrcc4xxeL3HqQn5obtxz5c60WzEX4PbRYlYSphWO3X6A2BRpUDBInjOLlk+7OZD9WNfCyzmJhaEBhPi3jw2tXHf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ZIKMEq8x; arc=none smtp.client-ip=209.85.222.180
+	 References:In-Reply-To; b=A5M6y8L6wGlfPesucj1bcgVYjMeEQQUn5kz3VBhb3w/lwU0EwtXado9/HYAPudgSfg32sulX+89zeYJ9lfW8yJA3BMwgJwW1DGAO86U5dBGWXk74L/zJ31wZzNtLjAQrHOpmUvOOCf/Xd2R58KjmaWPstCQFn7t+adQ0Fjz6aHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=A7MxMrbj; arc=none smtp.client-ip=209.85.222.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ZIKMEq8x"
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-90fc979d84cso76681685a.1
-        for <bpf@vger.kernel.org>; Wed, 13 May 2026 11:36:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="A7MxMrbj"
+Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-95fa7cd1392so160864241.2
+        for <bpf@vger.kernel.org>; Wed, 13 May 2026 11:36:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1778697365; x=1779302165; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1778697369; x=1779302169; darn=vger.kernel.org;
         h=in-reply-to:references:subject:to:from:content-transfer-encoding
          :mime-version:message-id:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xmWhw8+BzycLbCZdUGo17yGhh7wc4olKhqN+RMzekS4=;
-        b=ZIKMEq8xkGrjNG30QC3AIMbJd4ZWWAHLxvfJ94Q6RCyNGZd9fwLroog1punB40QvFw
-         h8KizRwT7DCSOqhahlu5AoaV+rubVpQRLjun/HFcvoTThml4QjLWlRQoJ5hnpDsmTHE/
-         Gv5QJwFxNbvZpBjI46IdVB9Aao7868mlGoIKkjM5khsE8oQ6T9Ln5Zg9TYWPUXmtcW8V
-         vdYwMl3mbr/4A3Zr2aXuX6gpQOzHHZ/+i0IgjYz+Y0zCB3fwyhxIT0i2WmCRsL6dOeH9
-         /9fDED+mzZLL5XvzHn6CW3wb7jj7pt1a8irMpLgDj7cT9O0VSwV1DbsmhhA6TU4UJ0CJ
-         EMMA==
+        bh=Rnl9nddGqHsoJCblcDMeoQmT9vKG6sC23FZyxNkSplI=;
+        b=A7MxMrbjSeVVFbeXNiNPJdI78vdz2rTwTyC5hL/rLuWxlOgb/ocUKXMFHPCIcJt2Xj
+         FJzPw4sIPjyQrKUAtKPrkk1eiskLuK5mjxX21fVq6yM9zrt4rKqwNFAqS2W5xNWX2Wsu
+         ZGPYuY6xNB0QZniXskfL7MZmHQPbOw5qEOPE4s9m2uH0kU6WPOyLlqlWRoZ46pdJaQeZ
+         /mY1Dfx7m0kg3teBSECwDHM5kNukzof8+ESeA641G96q8LPqz8fgX171wmkz5IJmgQtU
+         6JP7GW/WQQ/DEJw2JMZ7AWeXb3++SculGj729qIsqp44QL096yH9Sjwttw4fTFELZQVX
+         VAGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778697365; x=1779302165;
+        d=1e100.net; s=20251104; t=1778697369; x=1779302169;
         h=in-reply-to:references:subject:to:from:content-transfer-encoding
          :mime-version:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xmWhw8+BzycLbCZdUGo17yGhh7wc4olKhqN+RMzekS4=;
-        b=AkCs7TBEdVJPZUIWVXdAitfeunPRT+7ocDQSueGuozrnD0i5jywi1Cc7KE8l3oBv67
-         KKMXTppWWdTI4QBjSh9lnForf/TlScpkC9j83QE6sN+cFoFtHgIfx2D631lYa/M+63Lv
-         AqE3hWPFp1fuYGD2Iggv3qTUUWfyt5M/j0Rc/6GI5P7RYL6wMyZRcxu5GdGT7AScFUCe
-         Fc/Zy5yu7IKkRpTdwIC5+Y/CAErZ4SWHhERubiMy43QlB1oYh8zDTtejFXBqHehMoO9o
-         fealtbEUid+IE2C5kcmbQJCwas7PCW4y/5q1l4aJdzGI9AAjdQJO5JmLcYfWIJTbrx5n
-         WNlQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/oluL5cAxIofr0ojsmoKyG+MhxfoxU7kQ66uSR3JnAeD4iwpGK8KFBEFUIOL9qBfWs5zk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfXZscHB/qVjpHrcg2kkGUTJ4XmLxFYGUMQYeSdzYStuRYNqfQ
-	ptX+Nr9ar1WOIs+uHzy5h8MGbjC6FyFo7xhR6Vg8RjjO30WS7On1SZrWeT9UFgPR4HtVgtXRNSA
-	HhfE=
-X-Gm-Gg: Acq92OGmoAJ2sTV6Dye9qxNyLxfWEclNEwZzWgVs0hwvQR+uJCBCO/bJazKFENKMT0Z
-	G32h2re6OasEJoD67+198v/r99CLoC/KO/eB2JDx7qQ6oqh6I9Yx+AjUeSlpscSxZIGkWD2sosd
-	IP3SPbnB4M3WxCo2rWBHmXAPp+xar1GLs2h0FQ6vJ+f7TYZzVOa5tcO1iuCN+LB6PmJfmdpxTud
-	oZLeMoAoPgYy6kg57NZCI0njd47wPiDau+4+oYAldnT1zf78exumzebYff98cnlEY9/aG643ktl
-	kzt6Oc+BMmjdr6CGsiH7I/E5rumwHDxy0InFBrwtvmpgaGQ9NviMHCMqrOGqgW6J3vu1J6vuix+
-	6y1uqB8JjKX6zwYGKHip5sUccVFcAeWFnyBXXM7eK2gCblTi89Rc+oEDKaL8m/Gjsui2GfFq7F0
-	QrofT1b35pHQF8n9Q1qJymt0177k/ywcu7L3X7sKUmghzwVHCC+/9R1KR6LN/Z9+lhOYyH
-X-Received: by 2002:a05:620a:290d:b0:90b:9dca:2187 with SMTP id af79cd13be357-90fad385651mr655950285a.38.1778697364951;
-        Wed, 13 May 2026 11:36:04 -0700 (PDT)
+        bh=Rnl9nddGqHsoJCblcDMeoQmT9vKG6sC23FZyxNkSplI=;
+        b=ZLoQrSdhTPESxWi4CXt8mks3qIGvTtjvZIX60yVJn6oXtozQBqQ7aoMGamE3DqUgd6
+         OOiDEysGnteIulHkD2jg7T7vQwz1qc2kEVMzlgzweaQXzW4+wPG3W5yP8s0JkSx/FYK7
+         N4RJPj5HncxQhp9G46giGXh+JR0lTUNcuIl58UqygpfeVSx7n0CVFfs4mAGGSvtXDjEQ
+         J0bNT0PgrMSSHMcc0E2m+xJd0+2eHtyk3TD3EGGNLNMp9ddfXZsJblTR0WtcLspz4KFY
+         z/AnGS9wL8SBta4U3t81CenzqBU/v7wwIHbWw1UZ7oAShwJ2PVthpzwXfWoESt/AsDtq
+         e4uw==
+X-Forwarded-Encrypted: i=1; AFNElJ96cqOGGeThcB5cZln98EIBfc3ajj+1T87UjOoiRS2teAxsdjdlCHSExKWvx+LCIM8jOOo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyv98bRvJajX6VZB3A5isDE4NZmNqFMv0KzXNatEIyZN8TiABrt
+	hwm+07ZmbtI/zBaE+4XOA/xd/62ICBoNq4lfVcmoRxbqaf8AjsggOupK24gmYjxaDw==
+X-Gm-Gg: Acq92OEqmte2qbQGblXwWH6gYyBiKstmtJ1ZWgYO1XgkYhw+j32LQpzdBLssiuE8Zpv
+	zqwSpCNriUKIde8TrURK93rSkVy1Jt4dsr31IY0bGL2D/+EnxGGWJ7/x1w454vAtqWnIfoi5LCz
+	Mhz9Nhj2LGhm5rlexYbnwoqtmkpCHFeWIXE2gLedikGqK0QU9co6Y1NhcHm8NFyJIoGwY1h6adX
+	0+hmk/KVqU0zqq51zglgP786/Ci+vF43F5SsUkBTnXVhTQaA7jA2fONCYa4DGbfCDZHlvixkvxG
+	2wdfG+tB3tJhy56PhgZlovu8jZWtK2+K+kEspwcuWvCOmdNArzBSKxoZcmm4YiCavrqiR6XcQkD
+	1NZh00lT9DnuSfNdRPQbB6ICpD26WPyvepWwHf/d6m/dsV74z94wWPmAza+8dP0hbQDxQZ0up0w
+	6wZ/xRWY+xgOBlLHRu5ijFNGt5VDuY0prTBZf6xl07sChwpMjza84l69KdzsK2z9Gb21r+
+X-Received: by 2002:a05:6102:6f06:b0:631:b834:e055 with SMTP id ada2fe7eead31-63773d10a25mr2918465137.10.1778697369491;
+        Wed, 13 May 2026 11:36:09 -0700 (PDT)
 Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-910bcf3732dsm28874785a.33.2026.05.13.11.36.03
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8c90b4c50afsm2995736d6.27.2026.05.13.11.36.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 11:36:03 -0700 (PDT)
-Date: Wed, 13 May 2026 14:36:02 -0400
-Message-ID: <64548a3cec806e2080ce4515777b4a39@paul-moore.com>
+        Wed, 13 May 2026 11:36:07 -0700 (PDT)
+Date: Wed, 13 May 2026 14:36:06 -0400
+Message-ID: <37fe68a4543e20fb34b6c9a146151711@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,28 +71,58 @@ Content-Transfer-Encoding: 8bit
 X-Mailer: pstg-pwork:20260512_1604/pstg-lib:20260513_1343/pstg-pwork:20260512_1604
 From: Paul Moore <paul@paul-moore.com>
 To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>, "Jonathan Corbet" <corbet@lwn.net>, "" , "James Morris" <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>, =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>, "Dr. David Alan Gilbert" <linux@treblig.org>, "Andrew Morton" <akpm@linux-foundation.org>, James.Bottomley@HansenPartnership.com, dhowells@redhat.com, "Fan Wu" <wufan@kernel.org>, "Ryan Foster" <foster.ryan.r@gmail.com>, "Randy Dunlap" <rdunlap@infradead.org>, linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, "Song Liu" <song@kernel.org>
-Subject: Re: [PATCH v7 2/10] crypto: pkcs7: add ability to extract signed  attributes by OID
-References: <20260507191416.2984054-3-bboscaccy@linux.microsoft.com>
-In-Reply-To: <20260507191416.2984054-3-bboscaccy@linux.microsoft.com>
+Subject: Re: [PATCH v7 4/10] lsm: framework for BPF integrity verification
+References: <20260507191416.2984054-5-bboscaccy@linux.microsoft.com>
+In-Reply-To: <20260507191416.2984054-5-bboscaccy@linux.microsoft.com>
 
 On May  7, 2026 Blaise Boscaccy <bboscaccy@linux.microsoft.com> wrote:
 > 
-> Signers may add any information they like in signed attributes and
-> sometimes this information turns out to be relevant to specific
-> signing cases, so add an api pkcs7_get_authattr() to extract the value
-> of an authenticated attribute by specific OID.  The current
-> implementation is designed for the single signer use case and simply
-> terminates the search when it finds the relevant OID.
+> Add a new LSM hook and two new LSM hook callbacks to support LSMs that
+> perform integrity verification, e.g. digital signature verification,
+> of BPF programs.
 > 
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> While the BPF subsystem does implement a signature verification scheme,
+> it does not satisfy a number of existing requirements, adding support
+> for BPF program integrity verification to the LSM framework allows
+> administrators to select additional integrity verification mechanisms
+> to meet these needs while also providing a mechanism for future
+> expansion.  Additional on why this is necessary can be found at the
+> lore archive link below:
+> 
+> https://lore.kernel.org/linux-security-module/CAHC9VhTQ_DR=ANzoDBjcCtrimV7XcCZVUsANPt=TjcvM4d-vjg@mail.gmail.com/
+> 
+> The LSM-based BPF integrity verification mechanism works within the
+> existing security_bpf_prog_load() hook called by the BPF subsystem.
+> It adds an additional dedicated integrity callback and a new LSM
+> hook/callback to be called from within LSMs implementing integrity
+> verification.
+> 
+> The first new callback, bpf_prog_load_integrity(), located within the
+> security_bpf_prog_load() hook, is necessary to ensure that the integrity
+> verification callbacks are executed before any of the existing LSMs
+> are executed via the bpf_prog_load() callback.  Reusing the existing
+> bpf_prog_load() callback for integrity verification could result in LSMs
+> not having access to the integrity verification results when asked to
+> authorize the BPF program load in the bpf_prog_load() callback.
+> 
+> The new LSM hook, security_bpf_prog_load_post_integrity(), is intended
+> to be called from within LSMs performing BPF program integrity
+> verification.  It is used to report the verdict of the integrity
+> verification to other LSMs enforcing access control policy on BPF
+> program loads.  LSMs enforcing such access controls should register a
+> bpf_prog_load_post_integrity() callback to receive integrity verdicts.
+> 
+> More information on these new callbacks and hook can be found in the
+> code comments in this patch.
+> 
 > Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+> Link: https://lore.kernel.org/linux-security-module/CAHC9VhTQ_DR=ANzoDBjcCtrimV7XcCZVUsANPt=TjcvM4d-vjg@mail.gmail.com/
+> Signed-off-by: Paul Moore <paul@paul-moore.com>
 > ---
->  crypto/asymmetric_keys/Makefile       |  4 +-
->  crypto/asymmetric_keys/pkcs7_aa.asn1  | 18 ++++++
->  crypto/asymmetric_keys/pkcs7_parser.c | 81 +++++++++++++++++++++++++++
->  include/crypto/pkcs7.h                |  4 ++
->  4 files changed, 106 insertions(+), 1 deletion(-)
->  create mode 100644 crypto/asymmetric_keys/pkcs7_aa.asn1
+>  include/linux/lsm_hook_defs.h |  5 +++
+>  include/linux/security.h      | 25 ++++++++++++
+>  security/security.c           | 75 +++++++++++++++++++++++++++++++++--
+>  3 files changed, 102 insertions(+), 3 deletions(-)
 
 Merged into lsm/dev, thanks.
 
