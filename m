@@ -1,129 +1,66 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F5A2883F
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 00:10:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584DD42048;
+	Wed, 13 May 2026 00:14:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778631012; cv=none; b=hUCoSeXipZ43MejsbljEDH2tPlax0uUna3rTC32v1LqH5r7HRdjxxcrmfOcdcV1xOxShZ/YaHBnL2fM16waVsJFYmkIP33aGmoeV033qeX8/yl9kCQhAqO7N+Lro8Hs0wNxOMKXAoz9KUDEEvcCfkuvy1gqPvg5jbn/8BeDZkD8=
+	t=1778631245; cv=none; b=g/HJ4zhgMyx2KIUZ1GCpG13BnYAw2Y6ZenLzKVUSGn/T9JRja+1Xjr1lL1q+2VzGsQENMBQ1bniIVUWMYCjZ0jrRVqypeka6RcuI9MB+DzdGFvIfNbd5f4IOISRTu0JdG11sGX3Pr5+9iH3cHLHcAM1NDBemWTYbeD6zFePpT6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778631012; c=relaxed/simple;
-	bh=RsIfxyGs/7TeYSIfEYyCDwjN+86Dm+0eZZP6lpibvQ4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=As3roCsScroFDNQ3NOghG98g9CJFr1AMzm0iCkL6AweAMAfm9FAtaWOKvXu7IoVH2geLIRqb3v+1q3k+PJX0J4co+R5qnAl7GJuQ+XKusszn20iq8rDeqT5tJ3VinwWB/ZunOJbXCJWIkQkE2BQm3RYYKb3SeBagEFZ+6e/XBqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zn3jrc+j; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778631245; c=relaxed/simple;
+	bh=4GruWIT/Nsui7uZtqmIZLbC4ZkcuiHVREH43fi7IohM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QKSYDFj/xTwQhNg8NJx3F77qD4jobh0t/Bo+G8Pv+IIhjPPTDZQUK0ybfA/LvlsyyMf49R96N3dHGGr8zJ+qt4isSYoPMqWLSj0qN1iYVa12HEFL3X9nSXTFmTCiKF909uoLUNM7F8GvSqJViy7o18VWapkXo2TWHGOq3HpHWys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rcu+vUuW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zn3jrc+j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE1E0C2BCB0;
-	Wed, 13 May 2026 00:10:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rcu+vUuW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9979DC2BCB0;
+	Wed, 13 May 2026 00:14:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778631011;
-	bh=RsIfxyGs/7TeYSIfEYyCDwjN+86Dm+0eZZP6lpibvQ4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Zn3jrc+jRKRhwbnAJH15RIadOUQzpuPbJSea+qRrl9TaRS9tGwAsYQD8nwS7sIgwR
-	 Zf9ZppfyUoecaPK9qgoXAGemvc0H4xvpe2ZamuZLgaEOkf1CsdZkNbDLWqzabYp26A
-	 tZpHc7b8/nvObT9Incs4nIUaUACNLSjmPTDGOuQ3wtWWxFvVF0ssZJ60soquHGEbJR
-	 pDsKWw11m1xxUY5N6n9K4q1BVZFvOmlX0Ft5lbFIdmeZ1LPcntSoyaazwcj1K4UOim
-	 TXoDCiv7tXhS1wSyLRubAPD+duVWnT+XC5DTpmYuiTttFCoGZLhAaGoYDiXKgJnfgS
-	 kafdh4BYdBf1w==
-From: sashiko-bot@kernel.org
+	s=k20201202; t=1778631245;
+	bh=4GruWIT/Nsui7uZtqmIZLbC4ZkcuiHVREH43fi7IohM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=rcu+vUuWIuDEY8ieb95Amzv+7aqQxyCn+n16/MmYkoIPzz2GGbbvGoIQsHRFRlX8R
+	 jidecfhwgvnbfcDxyne/wa8Y1PlGgTfARvHUjqW7U7n9Zx3/aOKpQOX6u7wmbwPRBh
+	 G3LSktdzXVdpvnIR+4S+2rQY6RdoAn6QSASnh+Esz/mlmdRsh0Q3CXqpldk0oneWy9
+	 LoI7TpYm0p++hvw7ff1gWPVkc2G5sJDnPiHsbsnD5+J+4/NzYsSTJdoTw7VvC9nZFf
+	 3NJbdjrDYdyAe21ibfo0TOsCXIXDu8YoKg0o+t1ZIWit5xKvfILVkHSdz4gbN9acX7
+	 mwQR+Log8Mt7g==
+Date: Tue, 12 May 2026 17:14:03 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ john.fastabend@gmail.com, bpf@vger.kernel.org, Sashiko
+ <sashiko-bot@kernel.org>, daniel@iogearbox.net, jonathan.lemon@gmail.com
 Subject: Re: [PATCH net v2 2/4] net: tls: prevent chain-after-chain in plain
  text SG
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jakub Kicinski" <kuba@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260511174920.433155-3-kuba@kernel.org>
-References: <20260511174920.433155-3-kuba@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 13 May 2026 00:10:11 +0000
-Message-Id: <20260513001011.AE1E0C2BCB0@smtp.kernel.org>
+Message-ID: <20260512171403.17cdd5d5@kernel.org>
+In-Reply-To: <agOqCETGrzQccEGn@krikkit>
+References: <20260511174920.433155-1-kuba@kernel.org>
+	<20260511174920.433155-3-kuba@kernel.org>
+	<agMKcBrJYK5UIcsZ@krikkit>
+	<20260512090342.15779c9a@kernel.org>
+	<agOqCETGrzQccEGn@krikkit>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] The patch fails to handle empty TLS records (size =3D=3D 0, st=
-art =3D=3D end) when a BPF program pops all data, leading to a chain-after-=
-chain kernel panic or premature scatterlist termination.
---
+On Wed, 13 May 2026 00:30:32 +0200 Sabrina Dubroca wrote:
+> > > Probably a silly question: why do we need to chain the content type?
+> > > Could we just drop it directly into the right slot of msg_pl?  
+> > 
+> > Good question, IDK either. Maybe anticipating the need for padding?
+> > Do you prefer that as the fix, or follow up in net-next is fine?  
+> 
+> I'd go with "make it a bit more straightforward" and remove the
+> chaining. If you want to retain the hunk moving the other chaining
+> (for wrapping) around, go ahead. Not sure it would still make sense.
 
-commit a19dc6e44cc96cee4ac7cb297275155ee108e228
-Author: Jakub Kicinski <kuba@kernel.org>
-
-net: tls: prevent chain-after-chain in plain text SG
-
-This commit adjusts the scatterlist chaining logic in tls_push_record() to
-prevent an illegal chain-after-chain configuration when end =3D 0.
-
-> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-> index 2608b0c01849f..3bfdaf5e64f50 100644
-> --- a/net/tls/tls_sw.c
-> +++ b/net/tls/tls_sw.c
-> @@ -789,21 +789,33 @@ static int tls_push_record(struct sock *sk, int fla=
-gs,
->  	i =3D msg_pl->sg.end;
->  	sk_msg_iter_var_prev(i);
-
-Does this code handle the case where a BPF program pops all data and leaves
-an empty record where msg_pl->sg.size =3D=3D 0 and start =3D=3D end?
-
-[ ... ]
-
-> +	if (i < msg_pl->sg.start)
-> +		sg_chain(msg_pl->sg.data, ARRAY_SIZE(msg_pl->sg.data),
-> +			 msg_pl->sg.data);
-
-If start =3D=3D end =3D=3D 0, i wraps to NR_MSG_FRAG_IDS - 1. The condition
-i < msg_pl->sg.start evaluates to false, skipping the wrap link.
-
->  	rec->content_type =3D record_type;
->  	if (prot->version =3D=3D TLS_1_3_VERSION) {
->  		/* Add content type to end of message.  No padding added */
->  		sg_set_buf(&rec->sg_content_type, &rec->content_type, 1);
->  		sg_mark_end(&rec->sg_content_type);
-> -		sg_chain(msg_pl->sg.data, msg_pl->sg.end + 1,
-> -			 &rec->sg_content_type);
-> +		sg_chain(msg_pl->sg.data, i + 2, &rec->sg_content_type);
-
-In the start =3D=3D end =3D=3D 0 scenario, the content type link is placed =
-at
-data[NR_MSG_FRAG_IDS].
-
-If start =3D=3D end > 0 (for example, start =3D 5 and end =3D 5), i becomes=
- 4.
-The condition i < msg_pl->sg.start is true, so the wrap link is created.
-Here, msg_pl->sg.data is chained at i + 2 (which is 6, meaning data[5])
-to rec->sg_content_type.
-
->  	} else {
->  		sg_mark_end(sk_msg_elem(msg_pl, i));
->  	}
-> =20
-> -	if (msg_pl->sg.end < msg_pl->sg.start)
-> -		sg_chain(msg_pl->sg.data, ARRAY_SIZE(msg_pl->sg.data),
-> -			 msg_pl->sg.data);
-> -
->  	i =3D msg_pl->sg.start;
->  	sg_chain(rec->sg_aead_in, 2, &msg_pl->sg.data[i]);
-
-When start =3D=3D end =3D=3D 0, sg_aead_in chains to data[0]. Since the lis=
-t starting
-at data[0] never links to data[NR_MSG_FRAG_IDS], the scatterlist iterator
-might hit a premature SG_END at data[0] instead of finding the content type
-link. Can this cause the crypto API to fail because the expected cryptlen
-is not satisfied?
-
-When start =3D=3D end > 0 (e.g., 5), sg_aead_in is chained to msg_pl->sg.da=
-ta[5].
-Since data[5] is already a chain link to rec->sg_content_type, doesn't this
-result in an illegal chain-after-chain configuration that the scatterlist A=
-PI
-cannot resolve?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260511174920.4331=
-55-1-kuba@kernel.org?part=3D2
+AFAICT start=N end=0 and tls content_type chaining are unnecessary.
+So I think we can keep this fix as it.
