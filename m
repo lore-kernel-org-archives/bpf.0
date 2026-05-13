@@ -1,21 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813B338E8DA
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 04:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03072D5436
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 04:52:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778647916; cv=none; b=fJ1of9g3s2hyy4LiXMesD/KCQ8iD03Unm+WejNIsklLlw3CHyZeKVk2Mogcmeao3KuZVgxyFlqLfeWAo6QtcTm9QHGtZhXi8Y/nxzZks9yQ3EJEz2IB8a3sh3gyCsvgRsKMvXWwb+qxZPmI7R3cdeinhW06w4CdiGXuaCxkvb9w=
+	t=1778647927; cv=none; b=i3FlJPLBk94vIk+0am4uzbqZDfTB24imd2kedVweFnl2vRIkuOn6Zx/CdgEi5PU+MIfpGUCnJiROYZZ6QJSFuw+78yeeSfpb5i0WtryFVEmeRDj42OhjynvAc3JzIDacHYroOtFzKHBWbCgch+5Gl2avAOCTHdxCT8q2gnDN92w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778647916; c=relaxed/simple;
-	bh=Yx4I6zPbx+0cw7Hyx8HW0EboLRKErfqRDzuALA1AQmE=;
+	s=arc-20240116; t=1778647927; c=relaxed/simple;
+	bh=mdoivd/diWC3TG5M8m1epw+spi4Jm4xmGktQbjlcXTY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=guXBnCyasq1cJuh8iPaj6Y6XaY7z1stlYFpjpBQNCvpMtAJvKY0n46w8E0Nq4p+9Tr2rzZjo+py236vIZENFTj/lXwHSxFpfiHph6CIuGX50SZanpwtLmF2D1R0Xq/9PFhqR/Ilz3wSWawTfEzBQ4yTv/GSXI+AbozR+Azo8r9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	 MIME-Version; b=VGwfKUFOW99/sGlQRha9NhOb4s90FVDl+hN6++scSH+Mq/dKhzuLkAVVpx5Q9QReOw77k1bkjDnimN81Fb070lwthe2gBiMIfjCmsuaMB29AttzBibbYMmut5G/7JonDfzyDZ2yQJ8UIeDYgQIotVe8gMd53KL6KuXnDnRLGSQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 8942BB1982128; Tue, 12 May 2026 21:51:43 -0700 (PDT)
+	id 38D96B198257A; Tue, 12 May 2026 21:51:58 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,10 +23,11 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v4 21/25] selftests/bpf: Add verifier tests for stack argument validation
-Date: Tue, 12 May 2026 21:51:43 -0700
-Message-ID: <20260513045143.2399278-1-yonghong.song@linux.dev>
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>
+Subject: [PATCH bpf-next v4 24/25] bpf, arm64: Add JIT support for stack arguments
+Date: Tue, 12 May 2026 21:51:58 -0700
+Message-ID: <20260513045158.2402494-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260513044949.2382019-1-yonghong.song@linux.dev>
 References: <20260513044949.2382019-1-yonghong.song@linux.dev>
@@ -36,725 +37,253 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Add inline-asm based verifier tests that exercise stack argument
-validation logic directly.
+From: Puranjay Mohan <puranjay@kernel.org>
 
-Positive tests:
-  - subprog call with 6 arg's
-  - Two sequential calls to different subprogs (6-arg and 7-arg)
-  - Share a r11 store for both branches
+Implement stack argument passing for BPF-to-BPF and kfunc calls with
+more than 5 parameters on arm64, following the AAPCS64 calling
+convention.
 
-Negative tests =E2=80=94 verifier rejection:
-  - Read from uninitialized incoming stack arg slot
-  - Gap in outgoing slots: only r11-16 written, r11-8 missing
-  - Write at r11-80, exceeding max 7 stack args
-  - Missing store on one branch with a shared store
-  - First call has proper stack arguments and the second
-    call intends to inherit stack arguments but not working
-  - r11 load ordering issue
+BPF R1-R5 already map to x0-x4. With BPF_REG_0 moved to x8 by the
+previous commit, x5-x7 are free for arguments 6-8. Arguments 9-12
+spill onto the stack at [SP+0], [SP+8], ... and the callee reads
+them from [FP+16], [FP+24], ... (above the saved FP/LR pair).
 
-Negative tests =E2=80=94 pointer/ref tracking:
-  - Pruning type mismatch: one branch stores PTR_TO_STACK, the
-    other stores a scalar, callee dereferences =E2=80=94 must not prune
-  - Release invalidation: bpf_sk_release invalidates a socket
-    pointer stored in a stack arg slot
-  - Packet pointer invalidation: bpf_skb_pull_data invalidates
-    a packet pointer stored in a stack arg slot
-  - Null propagation: PTR_TO_MAP_VALUE_OR_NULL stored in stack
-    arg slot, null branch attempts dereference via callee
+BPF convention uses fixed offsets from BPF_REG_PARAMS (r11): off=3D-8 is
+always arg 6, off=3D-16 arg 7, etc. The verifier invalidates all outgoing
+stack arg slots after each call, so the compiler must re-store before
+every call. This means x5-x7 don't need to be saved on stack.
 
+Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |   4 +
- .../bpf/progs/btf__verifier_stack_arg_order.c |  40 ++
- .../selftests/bpf/progs/verifier_stack_arg.c  | 444 ++++++++++++++++++
- .../bpf/progs/verifier_stack_arg_order.c      | 126 +++++
- 4 files changed, 614 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/btf__verifier_stack=
-_arg_order.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_stack_arg.=
-c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_stack_arg_=
-order.c
+ arch/arm64/net/bpf_jit_comp.c | 88 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 87 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
-sting/selftests/bpf/prog_tests/verifier.c
-index a96b25ebff23..ee3d929fac8a 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -91,6 +91,8 @@
- #include "verifier_sockmap_mutate.skel.h"
- #include "verifier_spill_fill.skel.h"
- #include "verifier_spin_lock.skel.h"
-+#include "verifier_stack_arg.skel.h"
-+#include "verifier_stack_arg_order.skel.h"
- #include "verifier_stack_ptr.skel.h"
- #include "verifier_store_release.skel.h"
- #include "verifier_subprog_precision.skel.h"
-@@ -238,6 +240,8 @@ void test_verifier_sock_addr(void)            { RUN(v=
-erifier_sock_addr); }
- void test_verifier_sockmap_mutate(void)       { RUN(verifier_sockmap_mut=
-ate); }
- void test_verifier_spill_fill(void)           { RUN(verifier_spill_fill)=
-; }
- void test_verifier_spin_lock(void)            { RUN(verifier_spin_lock);=
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
+c
+index 085e650662e3..e3bbeaa94590 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -86,6 +86,7 @@ struct jit_ctx {
+ 	__le32 *image;
+ 	__le32 *ro_image;
+ 	u32 stack_size;
++	u16 stack_arg_size;
+ 	u64 user_vm_start;
+ 	u64 arena_vm_start;
+ 	bool fp_used;
+@@ -533,13 +534,19 @@ static int build_prologue(struct jit_ctx *ctx, bool=
+ ebpf_from_cbpf)
+ 	 *                        |     |
+ 	 *                        +-----+ <=3D (BPF_FP - prog->aux->stack_depth=
+)
+ 	 *                        |RSVD | padding
+-	 * current A64_SP =3D>      +-----+ <=3D (BPF_FP - ctx->stack_size)
++	 *                        +-----+ <=3D (BPF_FP - ctx->stack_size)
++	 *                        |     |
++	 *                        | ... | outgoing stack args (9+, if any)
++	 *                        |     |
++	 * current A64_SP =3D>      +-----+
+ 	 *                        |     |
+ 	 *                        | ... | Function call stack
+ 	 *                        |     |
+ 	 *                        +-----+
+ 	 *                          low
+ 	 *
++	 * Stack args 6-8 are passed in x5-x7, args 9+ at [SP].
++	 * Incoming args 9+ are at [FP + 16], [FP + 24], ...
+ 	 */
+=20
+ 	emit_kcfi(is_main_prog ? cfi_bpf_hash : cfi_bpf_subprog_hash, ctx);
+@@ -613,6 +620,9 @@ static int build_prologue(struct jit_ctx *ctx, bool e=
+bpf_from_cbpf)
+ 	if (ctx->stack_size && !ctx->priv_sp_used)
+ 		emit(A64_SUB_I(1, A64_SP, A64_SP, ctx->stack_size), ctx);
+=20
++	if (ctx->stack_arg_size)
++		emit(A64_SUB_I(1, A64_SP, A64_SP, ctx->stack_arg_size), ctx);
++
+ 	if (ctx->arena_vm_start)
+ 		emit_a64_mov_i64(arena_vm_base, ctx->arena_vm_start, ctx);
+=20
+@@ -673,6 +683,9 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx)
+ 	/* Update tail_call_cnt if the slot is populated. */
+ 	emit(A64_STR64I(tcc, ptr, 0), ctx);
+=20
++	if (ctx->stack_arg_size)
++		emit(A64_ADD_I(1, A64_SP, A64_SP, ctx->stack_arg_size), ctx);
++
+ 	/* restore SP */
+ 	if (ctx->stack_size && !ctx->priv_sp_used)
+ 		emit(A64_ADD_I(1, A64_SP, A64_SP, ctx->stack_size), ctx);
+@@ -1034,6 +1047,9 @@ static void build_epilogue(struct jit_ctx *ctx, boo=
+l was_classic)
+ 	const u8 r0 =3D bpf2a64[BPF_REG_0];
+ 	const u8 ptr =3D bpf2a64[TCCNT_PTR];
+=20
++	if (ctx->stack_arg_size)
++		emit(A64_ADD_I(1, A64_SP, A64_SP, ctx->stack_arg_size), ctx);
++
+ 	/* We're done with BPF stack */
+ 	if (ctx->stack_size && !ctx->priv_sp_used)
+ 		emit(A64_ADD_I(1, A64_SP, A64_SP, ctx->stack_size), ctx);
+@@ -1191,6 +1207,41 @@ static int add_exception_handler(const struct bpf_=
+insn *insn,
+ 	return 0;
  }
-+void test_verifier_stack_arg(void)            { RUN(verifier_stack_arg);=
- }
-+void test_verifier_stack_arg_order(void)      { RUN(verifier_stack_arg_o=
-rder); }
- void test_verifier_stack_ptr(void)            { RUN(verifier_stack_ptr);=
- }
- void test_verifier_store_release(void)        { RUN(verifier_store_relea=
-se); }
- void test_verifier_subprog_precision(void)    { RUN(verifier_subprog_pre=
-cision); }
-diff --git a/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_or=
-der.c b/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
-new file mode 100644
-index 000000000000..83692570d5bc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
+=20
++static const u8 stack_arg_reg[] =3D { A64_R(5), A64_R(6), A64_R(7) };
 +
-+#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
++#define NR_STACK_ARG_REGS	ARRAY_SIZE(stack_arg_reg)
 +
-+int subprog_bad_order_6args(int a, int b, int c, int d, int e, int f)
-+{
-+	return a + b + c + d + e + f;
-+}
-+
-+int subprog_call_before_load_6args(int a, int b, int c, int d, int e, in=
-t f)
-+{
-+	return a + b + c + d + e + f;
-+}
-+
-+int subprog_pruning_call_before_load_6args(int a, int b, int c, int d, i=
-nt e, int f)
-+{
-+	return a + b + c + d + e + f;
-+}
-+
-+#else
-+
-+int subprog_bad_order_6args(void)
-+{
-+	return 0;
-+}
-+
-+int subprog_call_before_load_6args(void)
-+{
-+	return 0;
-+}
-+
-+int subprog_pruning_call_before_load_6args(void)
-+{
-+	return 0;
-+}
-+
-+#endif
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/too=
-ls/testing/selftests/bpf/progs/verifier_stack_arg.c
-new file mode 100644
-index 000000000000..6587bf912bc0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-@@ -0,0 +1,444 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, long long);
-+	__type(value, long long);
-+} map_hash_8b SEC(".maps");
-+
-+#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
-+
-+__noinline __used
-+static int subprog_6args(int a, int b, int c, int d, int e, int f)
-+{
-+	return a + b + c + d + e + f;
-+}
-+
-+__noinline __used
-+static int subprog_7args(int a, int b, int c, int d, int e, int f, int g=
++static void emit_stack_arg_load(u8 dst, s16 bpf_off, struct jit_ctx *ctx=
 )
 +{
-+	return a + b + c + d + e + f + g;
++	int idx =3D bpf_off / sizeof(u64) - 1;
++
++	if (idx < NR_STACK_ARG_REGS)
++		emit(A64_MOV(1, dst, stack_arg_reg[idx]), ctx);
++	else
++		emit(A64_LDR64I(dst, A64_FP, (idx - NR_STACK_ARG_REGS) * sizeof(u64) +=
+ 16), ctx);
 +}
 +
-+__noinline __used
-+static long subprog_deref_arg6(long a, long b, long c, long d, long e, l=
-ong *f)
++static void emit_stack_arg_store(u8 src_a64, s16 bpf_off, struct jit_ctx=
+ *ctx)
 +{
-+	return *f;
++	int idx =3D -bpf_off / sizeof(u64) - 1;
++
++	if (idx < NR_STACK_ARG_REGS)
++		emit(A64_MOV(1, stack_arg_reg[idx], src_a64), ctx);
++	else
++		emit(A64_STR64I(src_a64, A64_SP, (idx - NR_STACK_ARG_REGS) * sizeof(u6=
+4)), ctx);
 +}
 +
-+SEC("tc")
-+__description("stack_arg: subprog with 6 args")
-+__success __retval(21)
-+__naked void stack_arg_6args(void)
++static void emit_stack_arg_store_imm(s32 imm, s16 bpf_off, const u8 tmp,=
+ struct jit_ctx *ctx)
 +{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 8) =3D 6;"
-+		"call subprog_6args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
++	int idx =3D -bpf_off / sizeof(u64) - 1;
++
++	emit_a64_mov_i(1, tmp, imm, ctx);
++	if (idx < NR_STACK_ARG_REGS)
++		emit(A64_MOV(1, stack_arg_reg[idx], tmp), ctx);
++	else
++		emit(A64_STR64I(tmp, A64_SP, (idx - NR_STACK_ARG_REGS) * sizeof(u64)),=
+ ctx);
 +}
 +
-+SEC("tc")
-+__description("stack_arg: two subprogs with >5 args")
-+__success __retval(90)
-+__naked void stack_arg_two_subprogs(void)
+ /* JITs an eBPF instruction.
+  * Returns:
+  * 0  - successfully JITed an 8-byte eBPF instruction.
+@@ -1646,6 +1697,11 @@ static int build_insn(const struct bpf_verifier_en=
+v *env, const struct bpf_insn
+ 	case BPF_LDX | BPF_MEM | BPF_H:
+ 	case BPF_LDX | BPF_MEM | BPF_B:
+ 	case BPF_LDX | BPF_MEM | BPF_DW:
++		if (insn->src_reg =3D=3D BPF_REG_PARAMS) {
++			emit_stack_arg_load(dst, off, ctx);
++			break;
++		}
++		fallthrough;
+ 	case BPF_LDX | BPF_PROBE_MEM | BPF_DW:
+ 	case BPF_LDX | BPF_PROBE_MEM | BPF_W:
+ 	case BPF_LDX | BPF_PROBE_MEM | BPF_H:
+@@ -1672,6 +1728,8 @@ static int build_insn(const struct bpf_verifier_env=
+ *env, const struct bpf_insn
+ 		if (src =3D=3D fp) {
+ 			src_adj =3D ctx->priv_sp_used ? priv_sp : A64_SP;
+ 			off_adj =3D off + ctx->stack_size;
++			if (!ctx->priv_sp_used)
++				off_adj +=3D ctx->stack_arg_size;
+ 		} else {
+ 			src_adj =3D src;
+ 			off_adj =3D off;
+@@ -1752,6 +1810,11 @@ static int build_insn(const struct bpf_verifier_en=
+v *env, const struct bpf_insn
+ 	case BPF_ST | BPF_MEM | BPF_H:
+ 	case BPF_ST | BPF_MEM | BPF_B:
+ 	case BPF_ST | BPF_MEM | BPF_DW:
++		if (insn->dst_reg =3D=3D BPF_REG_PARAMS) {
++			emit_stack_arg_store_imm(imm, off, tmp, ctx);
++			break;
++		}
++		fallthrough;
+ 	case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
+ 	case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
+ 	case BPF_ST | BPF_PROBE_MEM32 | BPF_W:
+@@ -1763,6 +1826,8 @@ static int build_insn(const struct bpf_verifier_env=
+ *env, const struct bpf_insn
+ 		if (dst =3D=3D fp) {
+ 			dst_adj =3D ctx->priv_sp_used ? priv_sp : A64_SP;
+ 			off_adj =3D off + ctx->stack_size;
++			if (!ctx->priv_sp_used)
++				off_adj +=3D ctx->stack_arg_size;
+ 		} else {
+ 			dst_adj =3D dst;
+ 			off_adj =3D off;
+@@ -1814,6 +1879,11 @@ static int build_insn(const struct bpf_verifier_en=
+v *env, const struct bpf_insn
+ 	case BPF_STX | BPF_MEM | BPF_H:
+ 	case BPF_STX | BPF_MEM | BPF_B:
+ 	case BPF_STX | BPF_MEM | BPF_DW:
++		if (insn->dst_reg =3D=3D BPF_REG_PARAMS) {
++			emit_stack_arg_store(src, off, ctx);
++			break;
++		}
++		fallthrough;
+ 	case BPF_STX | BPF_PROBE_MEM32 | BPF_B:
+ 	case BPF_STX | BPF_PROBE_MEM32 | BPF_H:
+ 	case BPF_STX | BPF_PROBE_MEM32 | BPF_W:
+@@ -1825,6 +1895,8 @@ static int build_insn(const struct bpf_verifier_env=
+ *env, const struct bpf_insn
+ 		if (dst =3D=3D fp) {
+ 			dst_adj =3D ctx->priv_sp_used ? priv_sp : A64_SP;
+ 			off_adj =3D off + ctx->stack_size;
++			if (!ctx->priv_sp_used)
++				off_adj +=3D ctx->stack_arg_size;
+ 		} else {
+ 			dst_adj =3D dst;
+ 			off_adj =3D off;
+@@ -2018,6 +2090,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_ver=
+ifier_env *env, struct bpf_pr
+ 	u8 *ro_image_ptr;
+ 	int body_idx;
+ 	int exentry_idx;
++	int out_cnt;
+=20
+ 	if (!prog->jit_requested)
+ 		return prog;
+@@ -2065,6 +2138,14 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_ve=
+rifier_env *env, struct bpf_pr
+ 	ctx.user_vm_start =3D bpf_arena_get_user_vm_start(prog->aux->arena);
+ 	ctx.arena_vm_start =3D bpf_arena_get_kern_vm_start(prog->aux->arena);
+=20
++	out_cnt =3D bpf_out_stack_arg_cnt(env, prog);
++	if (out_cnt) {
++		int nr_on_stack =3D out_cnt - NR_STACK_ARG_REGS;
++
++		if (nr_on_stack > 0)
++			ctx.stack_arg_size =3D round_up(nr_on_stack * sizeof(u64), 16);
++	}
++
+ 	if (priv_stack_ptr)
+ 		ctx.priv_sp_used =3D true;
+=20
+@@ -2229,6 +2310,11 @@ bool bpf_jit_supports_kfunc_call(void)
+ 	return true;
+ }
+=20
++bool bpf_jit_supports_stack_args(void)
 +{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 8) =3D 10;"
-+		"call subprog_6args;"
-+		"r6 =3D r0;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 16) =3D 30;"
-+		"*(u64 *)(r11 - 8) =3D 20;"
-+		"call subprog_7args;"
-+		"r0 +=3D r6;"
-+		"exit;"
-+		::: __clobber_all
-+	);
++	return true;
 +}
 +
-+SEC("tc")
-+__description("stack_arg: read from uninitialized stack arg slot")
-+__failure
-+__msg("invalid read from stack arg off 8 depth 0")
-+__naked void stack_arg_read_uninitialized(void)
-+{
-+	asm volatile (
-+		"r0 =3D *(u64 *)(r11 + 8);"
-+		"r0 =3D 0;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: gap at offset -8, only wrote -16")
-+__failure
-+__msg("callee expects 7 args, stack arg1 is not initialized")
-+__naked void stack_arg_gap_at_minus8(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 16) =3D 30;"
-+		"call subprog_7args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: pruning with different stack arg types")
-+__failure
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("R{{[0-9]}} invalid mem access 'scalar'")
-+__naked void stack_arg_pruning_type_mismatch(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"r6 =3D r0;"
-+		/* local =3D 0 on program stack */
-+		"r7 =3D 0;"
-+		"*(u64 *)(r10 - 8) =3D r7;"
-+		/* Branch based on random value */
-+		"if r6 s> 3 goto l0_%=3D;"
-+		/* Path 1: store stack pointer to outgoing arg6 */
-+		"r1 =3D r10;"
-+		"r1 +=3D -8;"
-+		"*(u64 *)(r11 - 8) =3D r1;"
-+		"goto l1_%=3D;"
-+	"l0_%=3D:"
-+		/* Path 2: store scalar to outgoing arg6 */
-+		"*(u64 *)(r11 - 8) =3D 42;"
-+	"l1_%=3D:"
-+		/* Call subprog that dereferences arg6 */
-+		"r1 =3D r6;"
-+		"r2 =3D 0;"
-+		"r3 =3D 0;"
-+		"r4 =3D 0;"
-+		"r5 =3D 0;"
-+		"call subprog_deref_arg6;"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: release_reference invalidates stack arg slot")
-+__failure
-+__msg("R{{[0-9]}} !read_ok")
-+__naked void stack_arg_release_ref(void)
-+{
-+	asm volatile (
-+		"r6 =3D r1;"
-+		/* struct bpf_sock_tuple tuple =3D {} */
-+		"r2 =3D 0;"
-+		"*(u32 *)(r10 - 8) =3D r2;"
-+		"*(u64 *)(r10 - 16) =3D r2;"
-+		"*(u64 *)(r10 - 24) =3D r2;"
-+		"*(u64 *)(r10 - 32) =3D r2;"
-+		"*(u64 *)(r10 - 40) =3D r2;"
-+		"*(u64 *)(r10 - 48) =3D r2;"
-+		/* sk =3D bpf_sk_lookup_tcp(ctx, &tuple, sizeof(tuple), 0, 0) */
-+		"r1 =3D r6;"
-+		"r2 =3D r10;"
-+		"r2 +=3D -48;"
-+		"r3 =3D %[sizeof_bpf_sock_tuple];"
-+		"r4 =3D 0;"
-+		"r5 =3D 0;"
-+		"call %[bpf_sk_lookup_tcp];"
-+		/* r0 =3D sk (PTR_TO_SOCK_OR_NULL) */
-+		"if r0 =3D=3D 0 goto l0_%=3D;"
-+		/* Store sock ref to outgoing arg6 slot */
-+		"*(u64 *)(r11 - 8) =3D r0;"
-+		/* Release the reference =E2=80=94 invalidates the stack arg slot */
-+		"r1 =3D r0;"
-+		"call %[bpf_sk_release];"
-+		/* Call subprog that dereferences arg6 =E2=80=94 should fail */
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_deref_arg6;"
-+	"l0_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_sk_lookup_tcp),
-+		  __imm(bpf_sk_release),
-+		  __imm_const(sizeof_bpf_sock_tuple, sizeof(struct bpf_sock_tuple))
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: pkt pointer in stack arg slot invalidated afte=
-r pull_data")
-+__failure
-+__msg("R{{[0-9]}} !read_ok")
-+__naked void stack_arg_stale_pkt_ptr(void)
-+{
-+	asm volatile (
-+		"r6 =3D r1;"
-+		"r7 =3D *(u32 *)(r6 + %[__sk_buff_data]);"
-+		"r8 =3D *(u32 *)(r6 + %[__sk_buff_data_end]);"
-+		/* check pkt has at least 1 byte */
-+		"r0 =3D r7;"
-+		"r0 +=3D 8;"
-+		"if r0 > r8 goto l0_%=3D;"
-+		/* Store valid pkt pointer to outgoing arg6 slot */
-+		"*(u64 *)(r11 - 8) =3D r7;"
-+		/* bpf_skb_pull_data invalidates all pkt pointers */
-+		"r1 =3D r6;"
-+		"r2 =3D 0;"
-+		"call %[bpf_skb_pull_data];"
-+		/* Call subprog that dereferences arg6 =E2=80=94 should fail */
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_deref_arg6;"
-+	"l0_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_skb_pull_data),
-+		  __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
-+		  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end)=
-)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: null propagation rejects deref on null branch"=
-)
-+__failure
-+__msg("R{{[0-9]}} invalid mem access 'scalar'")
-+__naked void stack_arg_null_propagation_fail(void)
-+{
-+	asm volatile (
-+		"r1 =3D 0;"
-+		"*(u64 *)(r10 - 8) =3D r1;"
-+		/* r0 =3D bpf_map_lookup_elem(&map_hash_8b, &key) */
-+		"r2 =3D r10;"
-+		"r2 +=3D -8;"
-+		"r1 =3D %[map_hash_8b] ll;"
-+		"call %[bpf_map_lookup_elem];"
-+		/* Store PTR_TO_MAP_VALUE_OR_NULL to outgoing arg6 slot */
-+		"*(u64 *)(r11 - 8) =3D r0;"
-+		/* null check on r0 */
-+		"if r0 !=3D 0 goto l0_%=3D;"
-+		/*
-+		 * On null branch, outgoing slot is SCALAR(0).
-+		 * Call subprog that dereferences arg6 =E2=80=94 should fail.
-+		 */
-+		"r1 =3D 0;"
-+		"r2 =3D 0;"
-+		"r3 =3D 0;"
-+		"r4 =3D 0;"
-+		"r5 =3D 0;"
-+		"call subprog_deref_arg6;"
-+	"l0_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_map_lookup_elem),
-+		  __imm_addr(map_hash_8b)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: missing store on one branch")
-+__failure
-+__msg("callee expects 7 args, stack arg1 is not initialized")
-+__naked void stack_arg_missing_store_one_branch(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		/* Write arg7 (r11-16) before branch */
-+		"*(u64 *)(r11 - 16) =3D 20;"
-+		"if r0 > 0 goto l0_%=3D;"
-+		/* Path 1: write arg6 and call */
-+		"*(u64 *)(r11 - 8) =3D 10;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_7args;"
-+		"goto l1_%=3D;"
-+	"l0_%=3D:"
-+		/* Path 2: missing arg6 store, call should fail */
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_7args;"
-+	"l1_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: share a store for both branches")
-+__success __retval(0)
-+__naked void stack_arg_shared_store(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		/* Write arg7 (r11-16) before branch */
-+		"*(u64 *)(r11 - 16) =3D 20;"
-+		"if r0 > 0 goto l0_%=3D;"
-+		/* Path 1: write arg6 and call */
-+		"*(u64 *)(r11 - 8) =3D 10;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_7args;"
-+		"goto l1_%=3D;"
-+	"l0_%=3D:"
-+		/* Path 2: also write arg6 and call */
-+		"*(u64 *)(r11 - 8) =3D 30;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_7args;"
-+	"l1_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: write beyond max outgoing depth")
-+__failure
-+__msg("stack arg write offset -80 exceeds max 7 stack args")
-+__naked void stack_arg_write_beyond_max(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		/* Write to offset -80, way beyond any callee's needs */
-+		"*(u64 *)(r11 - 80) =3D 99;"
-+		"*(u64 *)(r11 - 16) =3D 20;"
-+		"*(u64 *)(r11 - 8) =3D 10;"
-+		"call subprog_7args;"
-+		"r0 =3D 0;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: write unused stack arg slot")
-+__failure
-+__msg("func#0 writes 5 stack arg slots, but calls only require 2")
-+__naked void stack_arg_write_unused_slot(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		/* Write to offset -40, unused for the callee */
-+		"*(u64 *)(r11 - 40) =3D 99;"
-+		"*(u64 *)(r11 - 16) =3D 20;"
-+		"*(u64 *)(r11 - 8) =3D 10;"
-+		"call subprog_7args;"
-+		"r0 =3D 0;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: sequential calls reuse slots")
-+__failure
-+__msg("callee expects 7 args, stack arg1 is not initialized")
-+__naked void stack_arg_sequential_calls(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 8) =3D 6;"
-+		"*(u64 *)(r11 - 16) =3D 7;"
-+		"call subprog_7args;"
-+		"r6 =3D r0;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_7args;"
-+		"r0 +=3D r6;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+#else
-+
-+SEC("socket")
-+__description("stack_arg is not supported by compiler or jit, use a dumm=
-y test")
-+__success
-+int dummy_test(void)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
-+char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c=
- b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-new file mode 100644
-index 000000000000..938f4a2f5482
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-@@ -0,0 +1,126 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
-+
-+__noinline __used __naked
-+static int subprog_bad_order_6args(int a, int b, int c, int d, int e, in=
-t f)
-+{
-+	asm volatile (
-+		"*(u64 *)(r11 - 8) =3D r1;"
-+		"r0 =3D *(u64 *)(r11 + 8);"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: r11 load after r11 store")
-+__failure
-+__msg("r11 load must be before any r11 store or call insn")
-+__btf_func_path("btf__verifier_stack_arg_order.bpf.o")
-+__naked void stack_arg_load_after_store(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 8) =3D 6;"
-+		"call subprog_bad_order_6args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+__noinline __used __naked
-+static int subprog_call_before_load_6args(int a, int b, int c, int d, in=
-t e,
-+					  int f)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"r0 =3D *(u64 *)(r11 + 8);"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: r11 load after a call")
-+__failure
-+__msg("r11 load must be before any r11 store or call insn")
-+__btf_func_path("btf__verifier_stack_arg_order.bpf.o")
-+__naked void stack_arg_load_after_call(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 8) =3D 6;"
-+		"call subprog_call_before_load_6args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+__noinline __used __naked
-+static int subprog_pruning_call_before_load_6args(int a, int b, int c, i=
-nt d,
-+						  int e, int f)
-+{
-+	asm volatile (
-+		"if r1 s> 0 goto l0_%=3D;"
-+		"goto l1_%=3D;"
-+	"l0_%=3D:"
-+		"call %[bpf_get_prandom_u32];"
-+	"l1_%=3D:"
-+		"r0 =3D *(u64 *)(r11 + 8);"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: pruning keeps r11 load ordering")
-+__failure
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("r11 load must be before any r11 store or call insn")
-+__btf_func_path("btf__verifier_stack_arg_order.bpf.o")
-+__naked void stack_arg_pruning_load_after_call(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"r1 =3D r0;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 8) =3D 6;"
-+		"call subprog_pruning_call_before_load_6args;"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
-+#else
-+
-+SEC("socket")
-+__description("stack_arg order is not supported by compiler or jit, use =
-a dummy test")
-+__success
-+int dummy_test(void)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
-+char _license[] SEC("license") =3D "GPL";
+ void *bpf_arch_text_copy(void *dst, void *src, size_t len)
+ {
+ 	if (!aarch64_insn_copy(dst, src, len))
 --=20
 2.53.0-Meta
 
