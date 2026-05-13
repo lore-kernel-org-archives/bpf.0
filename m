@@ -1,122 +1,277 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 316593A75A0
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 19:07:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E37C3AD516;
+	Wed, 13 May 2026 19:13:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778699230; cv=none; b=iKtd0+DGOkcmDZUFXicWQ9dazHc5wL8PlhZlgeygHIodr62ny03N2yW+u9vtTRXqKJTKNSQGgbLVlwq5Tb80ADbtv3c82jGA16L/L4Ze5nh48EACPK+Hr6rnKF4lo+yXHUibbaE+/6rgIBHs6NOWkjUs8drsQjlY3UCZ8t9h/pc=
+	t=1778699636; cv=none; b=ireqlS5UBxpX2DqfZi2iVXyVd965F+cmUsdMGhOuB3aJtjBqwEGZYpfccENR0bUWG337zTGvUm0wf5YT+agOruMg0vEmAir7OjRvIp/6RILZCz6eMdy6bKKBtfK9SfUrGr14Gd3arH3nZ4eK4TlWQ8DUJm+Rm7latCPhHFDOoSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778699230; c=relaxed/simple;
-	bh=XtAziFXnH4G6jBDQallWM5Kj7X2Pb0iI5FyXv+OhKLA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uOESOYcuxYglETR4UNMNoA27Zx6tVmY+9qisawfJXVSEEC2vVSTKyMjcnalXrnPfatFnGKL5AAecuIXmgmnQPOLAf16qvq6eDot3NJF1rxi8hNQKm5VaF3qOJSJeo63RxsB3rJCo3psRUTwGtUl7/BsEPngPzDpJos2ef63FGzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kHwScXBO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778699636; c=relaxed/simple;
+	bh=u9Vi9SqU+iy7DIoB+ie/vVY+ODcrBUgIlvGHHSwspK8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=toBTMTYZBz1np5gP4NpA7QgsWNSAvoai4wyFAkbG9kwIwpTE3P7XdOerRYKQEvMkKLtSiit/DdlTexJhvMfyknkOebidbtrbRT43uwXryA6PGG+L3RoPe9I5KlyIayucAjwMRZqOT50+7yVzu21VkUODpwEPtGFjx1yw5uv6krg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=NKZLBMGp; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=udsIzVrO; arc=none smtp.client-ip=135.148.138.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kHwScXBO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6693CC19425;
-	Wed, 13 May 2026 19:07:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778699229;
-	bh=XtAziFXnH4G6jBDQallWM5Kj7X2Pb0iI5FyXv+OhKLA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=kHwScXBO80bbbXDJuIP+2+CzOCJajbBeEd3agsDWMpLFAuLXV+TqvUmqz9rRy8wTO
-	 mL4WvDKYLF0AIscWoqAZxWDAZrZVKbdKOl/PN3byhgJ3dSmga5WysiPycz4DYQ/9pr
-	 yye8GSLaKbVMBesKhC8InszC8niMrg4kTQjPRWXlXLYR9ynMxpHbdZTUHlcuxR7dps
-	 aLJEoo6zF0uuULZhmnqzaJjgtRI9uFrPj9j3DG68Qh/iXIQCn+LH0KjZMkTHdu5J6y
-	 lIkkmTCUp8QojSFJF9HvFkN3+JR6sqGinyABqj5JViVvsxSN8ogrvZVrU6wFG9kUsp
-	 O4n9CA15L2rEg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v4 8/8] selftests: drv-net: add netkit devmem
- tests
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Bobby Eshleman" <bobbyeshleman@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260511-tcp-dm-netkit-v4-8-841b78b99d74@meta.com>
-References: <20260511-tcp-dm-netkit-v4-8-841b78b99d74@meta.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 13 May 2026 19:07:07 +0000
-Message-Id: <20260513190709.6693CC19425@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="NKZLBMGp";
+	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="udsIzVrO"
+DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
+	h=Message-ID:Date:Subject:To:From; t=1778699602; bh=TBUm2X5S6ssSz+qMqeLDhKM
+	qDNPC+cZRaCg50wY6uh4=; b=NKZLBMGpYco2Gj/QE+jEWjHuRNly/eDaDCUWvcYrA3NmAKNizX
+	ZlSN6YrJZL5zju2U95WDMDYknCn92rh9UtSDGWCuBBJPHL3dZ+OsxO/oHrCR5qH+IMUSX4sAW/q
+	lFGxEiqh1zhE+lB2c5sbt0N9qO9CfbijsF/fs+OXi6BpcSO0GXDyALKYErx2cLs7ukBGJnxMvT6
+	ruvmJLVhdRKQBnZ5J9kXyA+x3owHgEaNbFOfamWirHEc2hOjdZHfY45OG1Nmf8QM2SM2AjdWrJ5
+	EXC18tQvOM1601E1BeFUVpmIheQpWCTkvJGOVEiMG2sgFK4jmDGgM10fveUm5QpVWxw==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
+	h=Message-ID:Date:Subject:To:From; t=1778699602; bh=TBUm2X5S6ssSz+qMqeLDhKM
+	qDNPC+cZRaCg50wY6uh4=; b=udsIzVrO8cpaM7p+GT0lxoIe351oR+j/mUntoaBlA+H2qpcfsY
+	O16B9Fi1h8HI3D+B+CPygFoUMEHYgZ6reFAg==;
+From: Daniel Hodges <git@danielhodges.dev>
+To: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	git@danielhodges.dev,
+	brho@google.com,
+	hodgesd@meta.com
+Subject: [PATCH 2/2] selftests/bpf: Add test validating arena VMA tracking across fork
+Date: Wed, 13 May 2026 15:13:22 -0400
+Message-ID: <20260513191322.21319-2-git@danielhodges.dev>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260513191322.21319-1-git@danielhodges.dev>
+References: <20260513191322.21319-1-git@danielhodges.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] Uncaught `KsftSkipEx` exceptions in `main()` cause the test to fai=
-l instead of reporting as skipped.
-- [High] Global NIC configuration changes are leaked if the setup phase fai=
-ls, breaking exception safety and corrupting the host NIC state.
-- [Medium] The commit message incorrectly claims that `nk_qlease.py` config=
-ures the NIC once in `main()` to avoid re-toggling settings.
---
+Validate that arena page frees don't trigger a use-after-free when a
+forked child holds an inherited arena mmap. The test allocates arena
+pages, forks, munmaps the arena in the parent, then frees the arena
+pages via BPF. With KASAN enabled, any stale VMA dereference in
+zap_pages() will be caught.
 
-commit daf9f495f84bddbf201c5b6c6297e5e878d7ea77
-Author: Bobby Eshleman <bobbyeshleman@meta.com>
+Signed-off-by: Daniel Hodges <git@danielhodges.dev>
+Assisted-by: Claude-Code:claude-opus-4-6
+---
+ .../bpf/prog_tests/arena_fork_free.c          | 114 ++++++++++++++++++
+ .../selftests/bpf/progs/arena_fork_free.c     |  71 +++++++++++
+ 2 files changed, 185 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_fork_free.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_fork_free.c
 
-selftests: drv-net: add netkit devmem tests
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_fork_free.c b/tools/testing/selftests/bpf/prog_tests/arena_fork_free.c
+new file mode 100644
+index 000000000000..6a6e1d4197cf
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/arena_fork_free.c
+@@ -0,0 +1,114 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++/*
++ * Validate arena VMA tracking across fork.
++ *
++ * When a process with an arena mmap forks, each VMA must be independently
++ * tracked. This test verifies that freeing arena pages after the parent
++ * munmaps does not access stale VMA pointers.
++ *
++ * Sequence:
++ *   1. Load arena, allocate pages via BPF
++ *   2. fork() — child inherits arena mmap
++ *   3. Parent: munmap the arena
++ *   4. Parent: free arena pages via BPF — zap_pages() must only touch
++ *      live VMAs
++ *
++ * With KASAN enabled, any stale VMA access will be caught.
++ */
++#include <test_progs.h>
++#include <sys/wait.h>
++#include <sys/mman.h>
++#include <unistd.h>
++#include <sys/user.h>
++#ifndef PAGE_SIZE
++#define PAGE_SIZE getpagesize()
++#endif
++#include "arena_fork_free.skel.h"
++
++void test_arena_fork_free(void)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	struct arena_fork_free *skel;
++	int pipe_fds[2] = {-1, -1};
++	size_t arena_sz;
++	void *arena_area;
++	pid_t child;
++	int ret, status;
++	char buf;
++
++	skel = arena_fork_free__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	/* Step 1: allocate arena pages via BPF */
++	ret = bpf_prog_test_run_opts(
++		bpf_program__fd(skel->progs.arena_alloc), &opts);
++	if (!ASSERT_OK(ret, "alloc_run"))
++		goto out;
++	if (!ASSERT_OK(opts.retval, "alloc_retval"))
++		goto out;
++	if (skel->bss->skip) {
++		printf("%s:SKIP:compiler doesn't support arena_cast\n",
++		       __func__);
++		test__skip();
++		goto out;
++	}
++
++	arena_area = bpf_map__initial_value(skel->maps.arena, &arena_sz);
++	if (!ASSERT_OK_PTR(arena_area, "arena_area"))
++		goto out;
++	arena_sz = bpf_map__max_entries(skel->maps.arena) * PAGE_SIZE;
++
++	if (!ASSERT_OK(pipe(pipe_fds), "pipe"))
++		goto out;
++
++	/* Step 2: fork — child inherits arena mmap */
++	child = fork();
++	if (!ASSERT_GE(child, 0, "fork")) {
++		close(pipe_fds[0]);
++		close(pipe_fds[1]);
++		goto out;
++	}
++
++	if (child == 0) {
++		/* Child: keep arena mmap alive, wait for parent to signal */
++		close(pipe_fds[1]);
++		read(pipe_fds[0], &buf, 1);
++		close(pipe_fds[0]);
++		_exit(0);
++	}
++
++	/* Parent continues */
++	close(pipe_fds[0]);
++	pipe_fds[0] = -1;
++
++	/* Step 3: munmap the arena in the parent */
++	ret = munmap(arena_area, arena_sz);
++	if (!ASSERT_OK(ret, "munmap"))
++		goto signal_child;
++
++	/*
++	 * Step 4: free arena pages via BPF.
++	 *
++	 * Wait for the RCU grace period so the parent's VMA slab memory
++	 * is actually freed (VMA freeing is deferred via call_rcu).
++	 * This ensures KASAN can detect any stale VMA dereference in
++	 * zap_pages().
++	 */
++	usleep(200000);
++	opts.retval = 0;
++	ret = bpf_prog_test_run_opts(
++		bpf_program__fd(skel->progs.arena_free), &opts);
++	ASSERT_OK(ret, "free_run");
++	ASSERT_OK(opts.retval, "free_retval");
++
++signal_child:
++	close(pipe_fds[1]);
++	pipe_fds[1] = -1;
++	waitpid(child, &status, 0);
++	ASSERT_TRUE(WIFEXITED(status), "child_exited");
++
++out:
++	arena_fork_free__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/arena_fork_free.c b/tools/testing/selftests/bpf/progs/arena_fork_free.c
+new file mode 100644
+index 000000000000..81b4f9a4e94b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/arena_fork_free.c
+@@ -0,0 +1,71 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++/*
++ * Validate arena VMA tracking across fork.
++ *
++ * Provides BPF programs to allocate and free arena pages, exercised by
++ * the userspace test to verify that zap_pages() correctly handles VMA
++ * lifecycle when a forked child holds an inherited arena mmap.
++ */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include "bpf_arena_common.h"
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(max_entries, 10); /* number of pages */
++#ifdef __TARGET_ARCH_arm64
++	__ulong(map_extra, 0x1ull << 32); /* start of mmap() region */
++#else
++	__ulong(map_extra, 0x1ull << 44); /* start of mmap() region */
++#endif
++} arena SEC(".maps");
++
++bool skip = false;
++
++#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
++
++void __arena *alloc_ptr;
++int alloc_page_cnt;
++
++SEC("syscall")
++int arena_alloc(void *ctx)
++{
++	alloc_ptr = bpf_arena_alloc_pages(&arena, NULL, 2, NUMA_NO_NODE, 0);
++	if (!alloc_ptr)
++		return 1;
++	alloc_page_cnt = 2;
++	return 0;
++}
++
++SEC("syscall")
++int arena_free(void *ctx)
++{
++	if (!alloc_ptr || !alloc_page_cnt)
++		return 1;
++	bpf_arena_free_pages(&arena, alloc_ptr, alloc_page_cnt);
++	alloc_ptr = NULL;
++	alloc_page_cnt = 0;
++	return 0;
++}
++
++#else
++
++SEC("syscall")
++int arena_alloc(void *ctx)
++{
++	skip = true;
++	return 0;
++}
++
++SEC("syscall")
++int arena_free(void *ctx)
++{
++	skip = true;
++	return 0;
++}
++
++#endif
++
++char _license[] SEC("license") = "GPL";
+-- 
+2.52.0
 
-Add nk_devmem.py with four tests for TCP devmem through a netkit device.
-
-> The NIC (HDS, RSS, queue lease) is configured once in main() before
-> ksft_run() and torn down in a finally block via cleanup_nic(), mirroring
-> the nk_qlease.py pattern.
-
-Is this description accurate? Looking at nk_qlease.py, it does not configure
-NIC settings in main(). Instead, it configures and re-toggles settings like
-rings and RSS within individual test cases using defer() for cleanup.
-
-Could the commit message be updated to reflect this accurately?
-
-> diff --git a/tools/testing/selftests/drivers/net/hw/nk_devmem.py b/tools/=
-testing/selftests/drivers/net/hw/nk_devmem.py
-> new file mode 100755
-> index 0000000000000..0e36a0fa96888
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/net/hw/nk_devmem.py
-> @@ -0,0 +1,55 @@
-[ ... ]
-> +def main() -> None:
-> +    """Configure the NIC once, then run the netkit devmem test cases."""
-> +    with NetDrvContEnv(__file__, rxqueues=3D2, primary_rx_redirect=3DTru=
-e) as cfg:
-> +        setup_test(cfg,
-> +                   os.path.join(os.path.dirname(os.path.abspath(__file__=
-)),
-> +                                "ncdevmem"))
-> +
-> +        require_devmem(cfg)
-> +        configure_nic(cfg)
-
-If require_devmem() or configure_nic() raises KsftSkipEx because the
-environment lacks devmem support or sufficient NIC channels, will this cause
-the Python script to crash with an unhandled exception instead of cleanly
-skipping?
-
-Because these functions are called outside the ksft_run() test runner loop,
-it appears KsftSkipEx won't be caught, resulting in a non-zero exit code
-instead of Kselftest's expected SKIP exit code (4).
-
-Furthermore, if configure_nic() raises an exception halfway through its
-modifications (for example, if an ethtool command fails after initial ring
-modifications), will this leak global NIC configuration changes?
-
-Since configure_nic() is called before the try...finally block, an exception
-here would cause the script to terminate immediately. This bypasses
-cleanup_nic() and leaves the host NIC permanently modified.
-
-Should configure_nic() be moved inside the try block to ensure cleanup_nic()
-is always executed?
-
-> +        try:
-> +            ksft_run([check_nk_rx, check_nk_tx, check_nk_tx_chunks,
-> +                      check_nk_rx_hds], args=3D(cfg,))
-> +        finally:
-> +            cleanup_nic(cfg)
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260511-tcp-dm-net=
-kit-v4-0-841b78b99d74@meta.com?part=3D8
