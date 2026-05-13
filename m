@@ -1,215 +1,114 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3EF1A9F82
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 00:30:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D184D16A956
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 00:33:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778632210; cv=none; b=kPkB/vAP294CSGYqUYLL98EnNUnwbqNn/CzEYSD9+OufHFaI/VYGsaI1Itqb6KZvqkmiWCkBHUIXHkawj4LBUERN+p1mMIKauuRX5IIfx7AuJjb7syqHz6Ph3NwZJqftIGJQ4guuacKbNyNROqc/ewh6Qz2SODpYjGflePDeWsU=
+	t=1778632438; cv=none; b=DSImP4L2Rk15848nltKGI9GwZHWckEyDPvot5z5AqC9N4WqpyFrciiy6iTtP1Ye9aYV3DF2+RqyqW0YMEVAc/JLV2Ns1g4kTZ1QCRzPayj9GdcFMAjQeiHpSLB8G9cPYvVJno2NTf80ghFu07ovThjLwddPwgGYyYIqMO08Iqyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778632210; c=relaxed/simple;
-	bh=3qn+tx6ThoGvSIVaSfU+vUteF/u1F5TqudRj/+oTY/4=;
+	s=arc-20240116; t=1778632438; c=relaxed/simple;
+	bh=X2owT7XR/q2FQTW2hK92OCtgaw11j/o0PY+T3pHIllk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=BKupRbGsPQMKzJ1jMrP7BH7A3+VZlBizuKTp+aXLlVDKNlRPuzN+KZ1Wzz1PaYmRKzTrHIS9HLVXO5qLsgYQ/H6BG1MOEM0/xgiRH60vf7lwwulG/RvHLUsfGIWdcbXvyxlaMN01hTtVKquVe9YCNzoU9SL2t5sW+0GSVyPBaQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u1S5S/tl; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=OaDZ7dNwZc4x1+kSFuECdmgcAC2oz0414XxE4sT2fQ0fbfwTnVPeuUJts8Q3URGWJfoJk5UoTViXn+X8X3L27A2LpIbh7y7sM2sZWSkjb4kz1Xj54Mu3oSJWMXJ7hCQx1CudhDei13Y2O5ts3jPet9AVq6zD0ST1XWJXGuWz/IY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dh+Hlyad; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u1S5S/tl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 145F2C2BCB0;
-	Wed, 13 May 2026 00:30:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dh+Hlyad"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55836C2BCB0;
+	Wed, 13 May 2026 00:33:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778632210;
-	bh=3qn+tx6ThoGvSIVaSfU+vUteF/u1F5TqudRj/+oTY/4=;
+	s=k20201202; t=1778632438;
+	bh=X2owT7XR/q2FQTW2hK92OCtgaw11j/o0PY+T3pHIllk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=u1S5S/tlUE2GGAY92NokLob8dH1E5J3SjoVESkO3rokTFhQs/rjWDKHw++Pd46nLQ
-	 91V1b/lobITeMDkO7lPv+7WwqOhFo1b879jbVcxHrZBpHAMZXnNE8ER/IVQBnSq9aX
-	 ydRzuPm+yry4Pj8oUdiiTSljBXW3DfNSnq8nI+d5CM6zlOV3P0fj1PE9mJXD4Mgtj2
-	 vRCeoZ68iT4uapzqW89BJ6gzIJezHHFJdVh/GMdFTAzWwmm4n7NbqspqmFqYhkSfSN
-	 J6oUQdi+w6CLx8vNc93tYICMfaLI3i07OWk8aH1CAOpG2+GEu9Hsj+QwWdH/AaQ+jx
-	 Pwl5Fh8YySpgA==
+	b=dh+Hlyad2rG/z9IdFurVB82x3d3HLSkq27g4Q0s3bRo3KjTusNckuMNRqr4bUccxn
+	 pAd8WY+eO03bvTOxjXmABzczDwWj928BgjlalzF0Ekio5Fa2HJCXgqqf6a3W2SlOiP
+	 RH8vsE3GPV7cTn7IvQRIs4MP4wG6faC1CJH2ZmP600j2hYJxOmnK/QcRrGrQvKqcu4
+	 hRmibf1+GaMGoI/YoFKJm81Pk4Y+BKLN/5bT/1X6ETlIHXV2Q1V0t6rW1hpO55cKbZ
+	 WUEnDavrFFaiA4J5SngE0ZqNZOkG80LINKB8wgW+xDkmqMpH4kM7rh072HtMC/lsri
+	 zuSRqGJXnGPEg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 1/2] selftests/bpf: libarena: Add rbtree data
- structure
+Subject: Re: [PATCH bpf-next v13 8/8] selftests/bpf: Add tests to verify map
+ create failure log
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Leon Hwang" <leon.hwang@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260511210740.5395-2-emil@etsalapatis.com>
-References: <20260511210740.5395-2-emil@etsalapatis.com>
+In-Reply-To: <20260511152817.89191-9-leon.hwang@linux.dev>
+References: <20260511152817.89191-9-leon.hwang@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 13 May 2026 00:30:09 +0000
-Message-Id: <20260513003010.145F2C2BCB0@smtp.kernel.org>
+Date: Wed, 13 May 2026 00:33:57 +0000
+Message-Id: <20260513003358.55836C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Critical] ABA vulnerability in lock-free freelist operations leads to me=
-mory corruption
-- [High] Inserting duplicate keys in `RB_DUPLICATE` mode silently overwrite=
-s subtrees and leaks memory
-- [High] Unchecked early loop termination (`can_loop`) corrupts the tree st=
-ructure and causes massive memory leaks
-- [Medium] Missing build system integration renders new tests as dead code
+- [Medium] The tests `test_invalid_numa_node` and `test_invalid_token_fd` u=
+se the hardcoded value `0xFF` (255) to trigger validation failures, which c=
+an cause spurious test failures on certain systems.
 --
 
-commit 3a9a1af9570223a1c9cf74c5f2e9d724407fddac
-Author: Emil Tsalapatis <emil@etsalapatis.com>
+commit 31093136dd05cf604e6a2e0d0a470807567ed4a7
+Author: Leon Hwang <leon.hwang@linux.dev>
 
-selftests/bpf: libarena: Add rbtree data structure
+selftests/bpf: Add tests to verify map create failure log
 
-This commit adds a native red-black tree data structure to libarena.
-The data structure supports key-value and node-based APIs, and uses
-the libarena memory allocator to manage its data.
+This commit adds tests to verify that the kernel reports the expected error
+messages and correct log_true_size when map creation fails.
 
-> diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_rbtree.bpf=
-.c b/tools/testing/selftests/bpf/libarena/selftests/st_rbtree.bpf.c
-> new file mode 100644
-> index 0000000000000..17d46c4af3324
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/libarena/selftests/st_rbtree.bpf.c
-> @@ -0,0 +1,974 @@
-> +// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
-> +
-> +#include <libarena/common.h>
-
-These new test files are added to the selftests directory, but they do not
-appear to be integrated into the build system. Per the selftests subsystem
-guidelines, files not explicitly added to variables like TEST_PROGS or
-TEST_GEN_FILES in the Makefile won't be compiled or executed during normal
-runs. Should these be added to the Makefile?
+> diff --git a/tools/testing/selftests/bpf/prog_tests/map_init.c b/tools/te=
+sting/selftests/bpf/prog_tests/map_init.c
+> index 14a31109dd0e0..5c61c8e373065 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/map_init.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/map_init.c
 
 [ ... ]
 
-> diff --git a/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c b/tool=
-s/testing/selftests/bpf/libarena/src/rbtree.bpf.c
-> new file mode 100644
-> index 0000000000000..2ce2dfe5a2235
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/libarena/src/rbtree.bpf.c
-
-[ ... ]
-
-> +static
-> +rbnode_t *rbnode_find(rbnode_t *subtree, u64 key, enum rbnode_find_mode =
-mode)
+> +static void test_invalid_numa_node(void)
 > +{
-> +	rbnode_t *node =3D subtree;
-> +	int dir;
+> +	const char *msg =3D "Invalid numa_node.\n";
+> +	LIBBPF_OPTS(bpf_map_create_opts, opts,
+> +		    .map_flags =3D BPF_F_NUMA_NODE,
+> +		    .numa_node =3D 0xFF,
+
+Is it possible for this test to fail spuriously on large systems? If the
+test runs on a machine with 256 or more NUMA nodes where node 255 is
+online, the kernel validation will pass.=20
+
+The map creation might then fail for another reason, skipping the expected
+log message and causing the test to fail.
+
+Would a value like 0xFFFFFFFE (avoiding NUMA_NO_NODE) be more reliable to
+ensure it exceeds nr_node_ids?
+
+> +	);
 > +
-> +	if (!subtree)
-> +		return NULL;
-> +
-> +	while (can_loop) {
-> +		/*
-> +		 * If we are not looking for the least upper bound,
-> +		 * we have found the only key. Otherwise keep going
-> +		 * until we find the "leftmost" instance of the key.
-> +		 */
-> +		if (mode =3D=3D RBN_FIND_DFL && node->key =3D=3D key)
-> +			break;
-> +
-> +		dir =3D (key <=3D node->key) ? 0 : 1;
-> +
-> +		if (!node->child[dir])
-> +			break;
-> +
-> +		/*
-> +		 * For least upper bound lookups, ensure that we
-> +		 * stop searching once we find the rightmost key.
-> +		 */
-> +		if (node->key =3D=3D key && node->child[dir]->key !=3D key)
-> +			break;
-> +
-> +		node =3D node->child[dir];
-> +	}
-> +
-> +	return node;
+> +	test_map_create_array(&opts, msg);
 > +}
 
-When mode is RBN_FIND_LUB, this loop can break early and return an internal
-node that has a valid, non-NULL child. Back in rb_node_insert(), the new
-node is unconditionally assigned to parent->left (since key <=3D parent->ke=
-y)
-which could silently overwrite the existing child pointer and leak the
-existing subtree. Does this correctly handle duplicate key insertions witho=
-ut
-detaching subtrees?
-
 [ ... ]
 
-> +static inline rbnode_t *rb_node_alloc_common(rbtree_t *rbtree __arg_aren=
-a, u64 key, u64 value)
+> +static void test_invalid_token_fd(void)
 > +{
-> +	rbnode_t *rbnode =3D NULL;
-> +
-> +	if (unlikely(!rbtree))
-> +		return NULL;
-> +
-> +	/* Use the built-in node cache for the rbtree to avoid going to the all=
-ocator. */
-> +	do  {
-> +		rbnode =3D rbtree->freelist;
-> +		if (!rbnode)
-> +			break;
-> +
-> +	} while (cmpxchg(&rbtree->freelist, rbnode, rbnode->parent) !=3D rbnode=
- && can_loop);
+> +	const char *msg =3D "Invalid map_token_fd.\n";
+> +	LIBBPF_OPTS(bpf_map_create_opts, opts,
+> +		    .map_flags =3D BPF_F_TOKEN_FD,
+> +		    .token_fd =3D 0xFF,
 
-Could this lockless cmpxchg sequence suffer from the ABA problem?
+Could this also cause an unexpected test failure if file descriptor 255
+happens to be an open BPF token in the test runner?=20
 
-If a thread is preempted after evaluating rbnode->parent but before executi=
-ng
-cmpxchg, another thread could pop rbnode, allocate it, and free it back to
-the freelist with a completely different parent pointer. When the original
-thread resumes, the cmpxchg succeeds but erroneously sets the freelist head
-to the stale parent pointer. This could link an actively used tree node back
-into the freelist and lead to memory corruption.
+It looks like test_invalid_btf_fd uses -1 to guarantee an invalid file
+descriptor. Does it make sense to use -1 here as well?
 
-[ ... ]
-
-> +__weak
-> +int rb_node_free(rbtree_t *rbtree __arg_arena, rbnode_t *rbnode __arg_ar=
-ena)
-> +{
-> +	rbnode_t *old;
+> +	);
 > +
-> +	do {
-> +		old =3D rbtree->freelist;
-> +		rbnode->parent =3D old;
-> +	} while (cmpxchg(&rbtree->freelist, old, rbnode) !=3D old && can_loop);
-> +
-> +	return 0;
+> +	test_map_create_array(&opts, msg);
 > +}
-
-Similarly, could this free implementation also be vulnerable to the ABA
-problem if the freelist head is rapidly popped and pushed concurrently?
-
-[ ... ]
-
-> +static inline rbnode_t *rbnode_least(rbnode_t *subtree)
-> +{
-> +	while (subtree->left && can_loop)
-> +		subtree =3D subtree->left;
-> +
-> +	return subtree;
-> +}
-
-If the loop limit is reached and can_loop terminates early, could this
-return a node that still has a left child?
-
-During node removal, this node would be swapped with the target node, leavi=
-ng
-the target node with both left and potentially right children. The removal
-logic evaluates if (!node->left !=3D !node->right) which would then bypass
-the single-child handler and fall through to the zero-child path, setting t=
-he
-parent's child pointer to NULL and leaking both subtrees. Are early loop
-terminations via can_loop safely handled without leaving the tree structure
-corrupted?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260511210740.5395=
--1-emil@etsalapatis.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260511152817.8919=
+1-1-leon.hwang@linux.dev?part=3D8
