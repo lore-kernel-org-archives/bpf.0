@@ -1,98 +1,103 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1A631F9BD
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 01:03:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778634237; cv=pass; b=OnG0/mVSD12FlGTvjaq0BvU2mAOq/fkZocUNyas3D1x4Y0TJ2UcMRLxZa5B4zCMcEJr1xZxMev2baNC+IA93g47kFceYoTXMukeByNzB7uHbMRtyn9wXCMbIJZI5x1G1r94qH+DQ/z7huhpv845gCu2ffvUoWudOyn81eEYZuoA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778634237; c=relaxed/simple;
-	bh=PtE1h/lcqYbzIpMbXPzdR0UXSxoXNzSeQjYHuR946Ik=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=hH/Ic/9gBDi9QD1SyqMQ9XA8cbNOmCWNiLbAsuI+C2mkxWrlaVBtD388Mpt1A2OWkTon63jxX9GT7I47Ncec7huA1hR2OMQ9fEmOjXKlCKIKa6gBnkYQVr0F+dcNjczYIDojJm09PY4wKYNehz/Uaar5UZ07ELQhtJu2bhkFAh0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TDffuj7j; arc=pass smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 585BE357D14
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 01:17:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778635022; cv=none; b=lrYCZSrfDh3cNaztVn86KJZ8UnqrVufyGeQbJPUGOitLJAgzBAs+xCf04l64HtBatwasc5bA+JqmWzO0rgjeTZvID1hEL2hgugiKZrk72fYJ7/FnMYBx3L67fnDOID5NEsKKRNMksQZlWxKpO1lhuCC4E1Qtt0vgJK3ylo7flYc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778635022; c=relaxed/simple;
+	bh=BGt/XflRUDA5DhFD/N1WAK0zw3vyMAn8WLZhQuFSrY4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=I4TnR0L6M4X4DFKVMgsJx70993Y4h0lLPFfs0XBPpB31ir+yWP9jtoY6ICB2rP/705NINL5Er8rNgOfesB9jpR5nCPYxPqUF/+Qx5Ew0efsQifny9MJZEPWuR/E2mVM2eS6CdCCS3w1fyASzwaAYvBcxTE44D1GDNFkNC9DnM5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dshRlg9/; arc=none smtp.client-ip=209.85.161.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TDffuj7j"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c736261ee8dso2865032a12.1
-        for <bpf@vger.kernel.org>; Tue, 12 May 2026 18:03:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778634233; cv=none;
-        d=google.com; s=arc-20240605;
-        b=UaBSwNjS/KmcsTEe7Ug5Tjy88x6paoiC1dJfBQb3jD5x4WcpwG2eN5tnoaEHqC5P8i
-         WtPTWM4qNB0KfgFDkCLIXLbZl1/fdZ6xL4KHEz+hCfMBQoEv+h2Zi1hlo8jgqAhdn1WX
-         6rjQT4XoDMLbPcWRG5HR5cb54L+R4AVaty4ah+GCLH+DpUuJLPfIw1wYLzehCRK7Ag9S
-         f/rN97eeRpJyNPoHwEE4PUsr05IXJQbZ4urLGzr9TWUKS5NtlhG50BafUrixjj6IuT0n
-         Rspt4RUnagjVxMrpdNpy/ndM1nW9JJAIEOp45V/K0Q7M9n0qwiW1GvR9lWPdKqMR2CxY
-         Oubw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=10yjKSUBHjYWC0KEN0bTJOHyCvaJRC8cFve1JVzww64=;
-        fh=NPVFJnkplS0XBaxDJfGZcLOa8RPQHO8kfhXKRMGAFb4=;
-        b=AGlN01JZ4SyA/9xOPIZEgE1FdlxqOl4zROUKwmWGdFmD8gc+uD32jQSKNTYK1O79El
-         E74WKt/Nii8kGgGW2PRlalLx6vg6N4CFe/5VchcxYwQUgT/eJsFOri+W9Lq4CuLfKB+t
-         X/vwYi0Chd6qGEFvVduZFew1tl7+wwdkq9wlZWBphApczFxK53wTobXID3hIVU7XPWJW
-         SLzxNPImCiR75/VbVk2TMjRcX/QLxIRRl0Uf4zLiYOGc5vhxSufW5pByDVRQwxch7ipJ
-         /OuiaE5rg8Fslzt5X0TxcDxfCCP1cPtWv0IHC1XstVBWRuP7M2eEYKnetbzLlJfUL0f9
-         smwA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dshRlg9/"
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-69b747a8984so351800eaf.2
+        for <bpf@vger.kernel.org>; Tue, 12 May 2026 18:17:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778634233; x=1779239033; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=10yjKSUBHjYWC0KEN0bTJOHyCvaJRC8cFve1JVzww64=;
-        b=TDffuj7jO8v/caRy8bPRgpHF8IM5v/jatotyzvrYnNljlgdrH9N5EGGdvRU0VNsk1v
-         YAKxSoFZ9YFNdHnZdSpjfDYyld3Jutc2m8FvUuqNGcV4VrRcqV10a1fSSZkwJO2y9bRr
-         9n9/7CywMgz38s+xNs2dnxzuSK9ctryALCv9AA/3n2mGrVnExt5VCVHW/6pf7poozjqU
-         RqLXkFhjW4BaUD4bTCOBMGYKoCaLe/sEQQNnB0bExqPc2onhR8mbPbTOIo5tCy6VVuXi
-         2Fimts9kaVsvPjo76lyulXdHLDL4Y9zyYaN8A1HBS9BvFyoqL7sEM0JP0474pnZ/OyUL
-         hclw==
+        d=gmail.com; s=20251104; t=1778635019; x=1779239819; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BGt/XflRUDA5DhFD/N1WAK0zw3vyMAn8WLZhQuFSrY4=;
+        b=dshRlg9/Sfcali7v30m1hCJG8e8QQCqx6dz5hqdsKz+suFkl8Z6EHFTEa9Q2WSTlJh
+         XZG7LDPJJnBMpaYsLFtEziEOCnByyEkkQgbOOPN+JUb4srlNHl2dnaBYgQK5MsOrXwUA
+         Gcg6Qb8ZoXwPJmWUP8A7q7O220FZKYxMm4oLq+Wq+yVC2IotxL/RLgRwM5bPr4N5Pt/K
+         2ngSXCDignZ0asSdFoc9a3T3UytiCztcoi4a5EqqgP9P4k7E+xylXbitfzwZZIg0Y8ZQ
+         67Ky5tnMyUG73mNw+ey9E6GDymzQjU9UGEjUncDpCAE1LA/E81U8bRQ1GNx/17UjQpmx
+         xM2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778634233; x=1779239033;
-        h=to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=10yjKSUBHjYWC0KEN0bTJOHyCvaJRC8cFve1JVzww64=;
-        b=KHZ1kRTlKnR3lOXZI2l54GjvSvbdFPb2jM6y2zLzjRigN3sqjqejMkyrfwFh3qH1VN
-         m6fv0AZ13cJjGUCNveuHbP7ggnmCS+klFixva+9d7Cq1AvmqJuVFeoOyxlpvAzs4hnPA
-         9oKTjTOwVm/Ux7gyIP4Heo0BwFk1HwXAJEWjrTwb4E2enk3xoBrQHmmhlorhCsn5teda
-         j2LisLdwJEXv40qoGpcR1AHGh0qvL4xKddI7HC+e6SCQ+Gvr9c2xZo1WSUZuTaqWlkNN
-         EfTZMZSPSJqJ/3ZRk+nnEPlzio9h/wYkb2m52naHkyRvLNypDOtgm0sMHy1NVf41haUY
-         D1/g==
-X-Gm-Message-State: AOJu0YwHThshezIYcg0vKXMDD9mbTWBZvTQpRNF0DK27ntcaKsdUdmfp
-	sn77yhS09c8NzHIaKZUwpCkWfIl+8/eONoF4NjU28n1kBRAqT8cDkCQ6ypaq86d+6hhwzW045DS
-	4bXkwd/Vaq3CKMiQh0mr8zG+N8Px2YRFp8Q==
-X-Gm-Gg: Acq92OGLT6pRA8QBMx91Njnyt0mqe/N7Lc3LChvf0CnK3t686Bn6S1ZrHotPGvQFyhf
-	PHBtEo064wzcLyZxLRoQLhc+7ciD/lnGcemNClOjv7sjWHZncq1ACgdnnsOppx/rLz+jlnqXG5v
-	tkU1xM8Qbo8qlg7W3M3m7o/pdpDLWbfjT83NpXp76cMrwPfStdBZ6QzupnAVFEVqAZh6VeYjmMO
-	cagncucrUEu+UGJ2XvZMx4hCoXfpSCky/aVZyaANscjvAeZ0L3NtSNJD4nx+QAvi/kT8I4BzlNF
-	+KggXXZM
-X-Received: by 2002:a05:6a21:6d8a:b0:39f:24a5:3063 with SMTP id
- adf61e73a8af0-3aface17b94mr597521637.1.1778634233388; Tue, 12 May 2026
- 18:03:53 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778635019; x=1779239819;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BGt/XflRUDA5DhFD/N1WAK0zw3vyMAn8WLZhQuFSrY4=;
+        b=FqV+ngSvYRH4hnfDXsPcDH50hE2+l+qIhFeg5ZJ90EoG86QeeFncoBCnbM1UDTrFHl
+         E+7kybbUmVPhUPW+RJQDinCu+FOXutM4K24SQTUQAQjnlrbgt7uDv2L+JVqXDuJT+Fby
+         OB447nhlavi6ms9oq+UdNXF1VU+g4giDXY/JIVkthXMBmRW+D6zAfh/wDo8PT51abOUD
+         4APmelO+e1sqdjQpM0yWzGOS3wXMyNzsbOc0DDx96mBSXS+MX+YHiU9awX/sLPcRhpQ9
+         bLWBxvMEeQlXkxk3q/sS7qJkvjX8zamh9ZtU9hHSiZh0/wih/dwALWcDfqvw8o+/orEh
+         8o7g==
+X-Forwarded-Encrypted: i=1; AFNElJ/uY2DFaPPagHfdyTjiPQYRkXbsawlvHvvYq3HQPWK9Z3sq0UpdN1RcP7hKhAD5f/Th+Dk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOrbt2/NiinVgiEjA8gqz+OGgHlUGGOHi48IdKWIDwU1UFkmTM
+	3hR5Ae1FEwD1vHTbVX3FrtT1dck5oB48zd9nJDY7FtOCVti8Crxwdq9b
+X-Gm-Gg: Acq92OEYQvHdTN8RKHPIVfIc1oGovLRhqtA7J+BBkppyIjdWoQug+rusicYIx8O84lc
+	Qie0tVe34b5gfJxVzS+mp4ivLNTSE590Optdq6/1StaCzMGVDtEYb3hQu2tAJ/IShZ28mAoUyEH
+	ZPn/Z+CJMz0xfPIEl2JRTgM3RJ5VpWFincXI3AdZz+iu3PpD0JIL67RlIBq3kPDd1+P52ryOfNS
+	bDLQhKPn96E0LixK+h9Ih2NlZvdryNAAH+mt5cou2Dv7VGcgvJ/rdAaAHotOmaTd94D0jkeOdQa
+	K5D/ss5r/KR+FmnH145VV4Hpv0BfsnUbMZ4GL1MiBrPaqCUBUQSQfFF6c7wOoDIp3YS5zz5VTo3
+	c1aBC/UhF8UJ5gihwkXlhL0xkwzf/PVx63QYD0hWZHBqrARTPEKONHiyWq8b3q37vv+dfjJHE5Z
+	CKAuZnxO6fiaT6fX8XRIOmrDObJWny90rctSGyE31E6SPkmlWQzrVQz0Q9y8hFGOxWTR6RACbIs
+	3Y5JdEnI5ZqShO/gg==
+X-Received: by 2002:a4a:e908:0:b0:694:a339:43ac with SMTP id 006d021491bc7-69b78e2f43dmr699568eaf.42.1778635019001;
+        Tue, 12 May 2026 18:16:59 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:51::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69b25956231sm8332504eaf.0.2026.05.12.18.16.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 May 2026 18:16:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-From: Josh Marshall <joshua.r.marshall.1991@gmail.com>
-Date: Tue, 12 May 2026 21:03:42 -0400
-X-Gm-Features: AVHnY4I19GnUBu9W4uQtMGFbq91k8QxK5VY9c7pknTI8mwVD0EwMGGuMBTAm2zk
-Message-ID: <CAFkJGRdNnKoV4kLaq83nQoz_jOSSPW=TTHioCKAXyyo5KPQBTQ@mail.gmail.com>
-Subject: Performance characteristics of BPF_MAP_TYPE_QUEUE
-To: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 12 May 2026 18:16:55 -0700
+Message-Id: <DIH5HQ54TYJF.2LNWVZJ50B5L0@gmail.com>
+Cc: "Mahe Tardy" <mahe.tardy@gmail.com>, <bpf@vger.kernel.org>,
+ <andrew+netdev@lunn.ch>, <andrii@kernel.org>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <davem@davemloft.net>, <eddyz87@gmail.com>,
+ <edumazet@google.com>, <john.fastabend@gmail.com>, <martin.lau@linux.dev>,
+ <pabeni@redhat.com>, <song@kernel.org>, <liamwisehart@meta.com>
+Subject: Re: [PATCH v1 1/4] bpf: Add netpoll kfuncs for sending UDP packets
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Jakub Kicinski" <kuba@kernel.org>
+X-Mailer: aerc
+References: <20260511085344.3302-1-mahe.tardy@gmail.com>
+ <20260511085344.3302-2-mahe.tardy@gmail.com>
+ <20260511182019.69ebc7c6@kernel.org> <DIGBS3WKQN94.1YYMZM0K6CETY@gmail.com>
+ <20260511193603.3ef00cee@kernel.org> <DIGD21MXE0XM.3CLUL6BVK74PK@gmail.com>
+ <20260512065335.50647ee9@kernel.org> <DIGZA9DICBXO.2QQ1V7T186JW2@gmail.com>
+ <20260512163255.34162f1a@kernel.org>
+In-Reply-To: <20260512163255.34162f1a@kernel.org>
 
-Hello all,
+On Tue May 12, 2026 at 4:32 PM PDT, Jakub Kicinski wrote:
+>
+> I think you may be overly optimistic on the dependability of netpoll.
+> Rik has added support for serial scraping at Meta because netconsole=20
+> misses a lot of crucial alerts. And I can confirm there's a bunch of
+> errors that appear in that dataset that are missed by netcons.
+>
+> Then there are little nuggets like some generations of bnxt NICs
+> having to discard all Rx frames when netcons is trying to send
+> and Tx is full (bnxt_force_rx_discard()).=20
 
-I'm looking at BPF options for userspace communication of events.
-Specifically, I'm trying to do something which monitors IPC related
-synchronization points which use kernel IPC primitives like file
-access.  I doubt that there is anything I could do in the end to make
-this low volume, and so I tried to check the various options for
-performance characteristics.  However, when I started looking, there
-seems to be little analysis or comparison.  I'm new, so I'm almost
-certainly just not looking in the right places, but I'd really
-appreciate some direction or information about BPF-userspace
-communication options so I don't develop using the wrong thing.
+horrors. since bnxt is doing that then indeed it's not something
+to rely on. I thought that over the years major vendors cleaned up
+the driver side well. Looks like it's still not the case.
+Sigh. Moving to sock_create_kern() and friends then.
