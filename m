@@ -1,21 +1,21 @@
 Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 972E835DD1C
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 04:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23BEF35DD1C
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 04:50:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778647815; cv=none; b=fBzbj6IgWROFwxZH6lgBbhadqX3Jo9RopA1gVBIK+MrSLAFR1d6/B+aERSopa0nW89wubHe1oPf/gmF2Av8yBcl/WvlDFh4DEFGQ74KCKiCHwTN+h8cWwUsoDuX06EnyhpBTyPMnZxs6YqSuWxhoQ/obCwV7/bO+Oc76SZyj8ZI=
+	t=1778647819; cv=none; b=OZheunjRmD8xSPNCkfqYe3To918HieAmz0DhItBDtWhM800Qspuo+BaS7jySHijGUec+Z5Vtq5/x5sEOma+flQE7Cbg0kPIfoVAegJB51silRGqTtBezMCt1DpgcWrDR6a/6ckd0e0zoEdZxxn4shd74FR1AgdHSr+iB5Zt9wuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778647815; c=relaxed/simple;
-	bh=8JQqSHt5S/N1w0F7EGKbOvzbXZZTiZbBVzVrafOfnCk=;
+	s=arc-20240116; t=1778647819; c=relaxed/simple;
+	bh=6RsnmSRGCuQNiePBEgLbO/R9IWjvmVB4fmWGVGr/dGs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ClrM4h7d0poZeVCrdAVjsHfysz1wXSkcetG2iD3ggB39U2Kd9KbL7+M02qItq0POE9NzecAiznafvyb/qO7uENvsR4bJZbpkLt41ynCMGgwKoAOTDIUlGidTeVqaaBEYI5J7Cdi/Ps7pDb1Dds1C3rbawv/zXEnD79/prqSJ6EU=
+	 MIME-Version:Content-Type; b=WyQAyH/iHWEbeiU1OksHM4Yi9no7+bDPEUjYygpWQX1ry1422eHxN8IJmG3oF5H9ivpA8D9RXqmn3oHQdNZ3f1sisFwGjasucKI1Div7iAj1071KztRxUMyd3Xz2PB+sM8mNaz4j5uaiXV9YCOYATmSp+55rpEti0+e3ri5C6RE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 0D08AB194685A; Tue, 12 May 2026 21:50:00 -0700 (PDT)
+	id 29818B1946887; Tue, 12 May 2026 21:50:05 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v4 02/25] bpf: Remove copy_register_state wrapper function
-Date: Tue, 12 May 2026 21:50:00 -0700
-Message-ID: <20260513045000.2382933-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v4 03/25] bpf: Add helper functions for r11-based stack argument insns
+Date: Tue, 12 May 2026 21:50:05 -0700
+Message-ID: <20260513045005.2383881-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260513044949.2382019-1-yonghong.song@linux.dev>
 References: <20260513044949.2382019-1-yonghong.song@linux.dev>
@@ -36,185 +36,59 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Remove the copy_register_state() helper which was just a plain struct
-assignment wrapper and replace all call sites with direct struct
-assignment. This simplifies the code in preparation for upcoming stack
-argument support.
+Add three static inline helper functions =E2=80=94 is_stack_arg_ldx(),
+is_stack_arg_st(), and is_stack_arg_stx() =E2=80=94 that identify r11-bas=
+ed
+(BPF_REG_PARAMS) instructions used for stack argument passing. These
+helpers encapsulate the detailed encoding requirements (operand size,
+register, offset alignment and sign) and hide raw BPF_REG_PARAMS usage
+from the verifier, making call sites more readable and explicit.
 
-No functional change.
+A later patch ("bpf: Enable r11 based insns") will wire these helpers
+into the verifier. Until then, check_and_resolve_insns() rejects any
+r11-based registers.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/verifier.c | 44 +++++++++++++++++++------------------------
- 1 file changed, 19 insertions(+), 25 deletions(-)
+ include/linux/filter.h | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 11054ad89c14..3bafb7ad2ba7 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3410,12 +3410,6 @@ static void assign_scalar_id_before_mov(struct bpf=
-_verifier_env *env,
- 		src_reg->id =3D ++env->id_gen;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index b77d0b06db6e..918d9b34eac6 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -749,6 +749,27 @@ static inline u32 bpf_prog_run_pin_on_cpu(const stru=
+ct bpf_prog *prog,
+ 	return ret;
  }
 =20
--/* Copy src state preserving dst->parent and dst->live fields */
--static void copy_register_state(struct bpf_reg_state *dst, const struct =
-bpf_reg_state *src)
--{
--	*dst =3D *src;
--}
--
- static void save_register_state(struct bpf_verifier_env *env,
- 				struct bpf_func_state *state,
- 				int spi, struct bpf_reg_state *reg,
-@@ -3423,7 +3417,7 @@ static void save_register_state(struct bpf_verifier=
-_env *env,
- {
- 	int i;
++static inline bool is_stack_arg_ldx(const struct bpf_insn *insn)
++{
++	return insn->code =3D=3D (BPF_LDX | BPF_MEM | BPF_DW) &&
++	       insn->src_reg =3D=3D BPF_REG_PARAMS &&
++	       insn->off > 0 && insn->off % 8 =3D=3D 0;
++}
++
++static inline bool is_stack_arg_st(const struct bpf_insn *insn)
++{
++	return insn->code =3D=3D (BPF_ST | BPF_MEM | BPF_DW) &&
++	       insn->dst_reg =3D=3D BPF_REG_PARAMS &&
++	       insn->off < 0 && insn->off % 8 =3D=3D 0;
++}
++
++static inline bool is_stack_arg_stx(const struct bpf_insn *insn)
++{
++	return insn->code =3D=3D (BPF_STX | BPF_MEM | BPF_DW) &&
++	       insn->dst_reg =3D=3D BPF_REG_PARAMS &&
++	       insn->off < 0 && insn->off % 8 =3D=3D 0;
++}
++
+ #define BPF_SKB_CB_LEN QDISC_CB_PRIV_LEN
 =20
--	copy_register_state(&state->stack[spi].spilled_ptr, reg);
-+	state->stack[spi].spilled_ptr =3D *reg;
-=20
- 	for (i =3D BPF_REG_SIZE; i > BPF_REG_SIZE - size; i--)
- 		state->stack[spi].slot_type[i - 1] =3D STACK_SPILL;
-@@ -3822,7 +3816,7 @@ static int check_stack_read_fixed_off(struct bpf_ve=
-rifier_env *env,
- 					 * with the destination register on fill.
- 					 */
- 					assign_scalar_id_before_mov(env, reg);
--				copy_register_state(&state->regs[dst_regno], reg);
-+				state->regs[dst_regno] =3D *reg;
- 				state->regs[dst_regno].subreg_def =3D subreg_def;
-=20
- 				/* Break the relation on a narrowing fill.
-@@ -3877,7 +3871,7 @@ static int check_stack_read_fixed_off(struct bpf_ve=
-rifier_env *env,
- 				 * with the destination register on fill.
- 				 */
- 				assign_scalar_id_before_mov(env, reg);
--			copy_register_state(&state->regs[dst_regno], reg);
-+			state->regs[dst_regno] =3D *reg;
- 			/* mark reg as written since spilled pointer state likely
- 			 * has its liveness marks cleared by is_state_visited()
- 			 * which resets stack/reg liveness for state transitions
-@@ -6031,7 +6025,7 @@ static int check_mem_access(struct bpf_verifier_env=
- *env, int insn_idx, struct b
- 						     size);
- 					return -EACCES;
- 				}
--				copy_register_state(&regs[value_regno], reg);
-+				regs[value_regno] =3D *reg;
- 				add_scalar_to_reg(&regs[value_regno], off);
- 				regs[value_regno].type =3D PTR_TO_INSN;
- 			} else {
-@@ -13248,7 +13242,7 @@ static int sanitize_ptr_alu(struct bpf_verifier_e=
-nv *env,
- 	 */
- 	if (!ptr_is_dst_reg) {
- 		tmp =3D *dst_reg;
--		copy_register_state(dst_reg, ptr_reg);
-+		*dst_reg =3D *ptr_reg;
- 	}
- 	err =3D sanitize_speculative_path(env, NULL, env->insn_idx + 1, env->in=
-sn_idx);
- 	if (err < 0)
-@@ -14698,7 +14692,7 @@ static int check_alu_op(struct bpf_verifier_env *=
-env, struct bpf_insn *insn)
- 					 * copy register state to dest reg
- 					 */
- 					assign_scalar_id_before_mov(env, src_reg);
--					copy_register_state(dst_reg, src_reg);
-+					*dst_reg =3D *src_reg;
- 					dst_reg->subreg_def =3D DEF_NOT_SUBREG;
- 				} else {
- 					/* case: R1 =3D (s8, s16 s32)R2 */
-@@ -14713,7 +14707,7 @@ static int check_alu_op(struct bpf_verifier_env *=
-env, struct bpf_insn *insn)
- 						no_sext =3D reg_umax(src_reg) < (1ULL << (insn->off - 1));
- 						if (no_sext)
- 							assign_scalar_id_before_mov(env, src_reg);
--						copy_register_state(dst_reg, src_reg);
-+						*dst_reg =3D *src_reg;
- 						if (!no_sext)
- 							clear_scalar_id(dst_reg);
- 						coerce_reg_to_size_sx(dst_reg, insn->off >> 3);
-@@ -14735,7 +14729,7 @@ static int check_alu_op(struct bpf_verifier_env *=
-env, struct bpf_insn *insn)
-=20
- 						if (is_src_reg_u32)
- 							assign_scalar_id_before_mov(env, src_reg);
--						copy_register_state(dst_reg, src_reg);
-+						*dst_reg =3D *src_reg;
- 						/* Make sure ID is cleared if src_reg is not in u32
- 						 * range otherwise dst_reg min/max could be incorrectly
- 						 * propagated into src_reg by sync_linked_regs()
-@@ -14749,7 +14743,7 @@ static int check_alu_op(struct bpf_verifier_env *=
-env, struct bpf_insn *insn)
-=20
- 						if (no_sext)
- 							assign_scalar_id_before_mov(env, src_reg);
--						copy_register_state(dst_reg, src_reg);
-+						*dst_reg =3D *src_reg;
- 						if (!no_sext)
- 							clear_scalar_id(dst_reg);
- 						dst_reg->subreg_def =3D env->insn_idx + 1;
-@@ -15629,7 +15623,7 @@ static void sync_linked_regs(struct bpf_verifier_=
-env *env, struct bpf_verifier_s
- 		    reg->delta =3D=3D known_reg->delta) {
- 			s32 saved_subreg_def =3D reg->subreg_def;
-=20
--			copy_register_state(reg, known_reg);
-+			*reg =3D *known_reg;
- 			reg->subreg_def =3D saved_subreg_def;
- 		} else {
- 			s32 saved_subreg_def =3D reg->subreg_def;
-@@ -15640,7 +15634,7 @@ static void sync_linked_regs(struct bpf_verifier_=
-env *env, struct bpf_verifier_s
- 			__mark_reg_known(&fake_reg, (s64)reg->delta - (s64)known_reg->delta);
-=20
- 			/* reg =3D known_reg; reg +=3D delta */
--			copy_register_state(reg, known_reg);
-+			*reg =3D *known_reg;
- 			/*
- 			 * Must preserve off, id and subreg_def flag,
- 			 * otherwise another sync_linked_regs() will be incorrect.
-@@ -15743,10 +15737,10 @@ static int check_cond_jmp_op(struct bpf_verifie=
-r_env *env,
- 	}
-=20
- 	is_jmp32 =3D BPF_CLASS(insn->code) =3D=3D BPF_JMP32;
--	copy_register_state(&env->false_reg1, dst_reg);
--	copy_register_state(&env->false_reg2, src_reg);
--	copy_register_state(&env->true_reg1, dst_reg);
--	copy_register_state(&env->true_reg2, src_reg);
-+	env->false_reg1 =3D *dst_reg;
-+	env->false_reg2 =3D *src_reg;
-+	env->true_reg1 =3D *dst_reg;
-+	env->true_reg2 =3D *src_reg;
- 	pred =3D is_branch_taken(env, dst_reg, src_reg, opcode, is_jmp32);
- 	if (pred >=3D 0) {
- 		/* If we get here with a dst_reg pointer type it is because
-@@ -15815,11 +15809,11 @@ static int check_cond_jmp_op(struct bpf_verifie=
-r_env *env,
- 	if (err)
- 		return err;
-=20
--	copy_register_state(dst_reg, &env->false_reg1);
--	copy_register_state(src_reg, &env->false_reg2);
--	copy_register_state(&other_branch_regs[insn->dst_reg], &env->true_reg1)=
-;
-+	*dst_reg =3D env->false_reg1;
-+	*src_reg =3D env->false_reg2;
-+	other_branch_regs[insn->dst_reg] =3D env->true_reg1;
- 	if (BPF_SRC(insn->code) =3D=3D BPF_X)
--		copy_register_state(&other_branch_regs[insn->src_reg], &env->true_reg2=
-);
-+		other_branch_regs[insn->src_reg] =3D env->true_reg2;
-=20
- 	if (BPF_SRC(insn->code) =3D=3D BPF_X &&
- 	    src_reg->type =3D=3D SCALAR_VALUE && src_reg->id &&
+ struct bpf_skb_data_end {
 --=20
 2.53.0-Meta
 
