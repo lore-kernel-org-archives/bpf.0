@@ -1,21 +1,21 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F8F9382F07
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 04:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2A56390219
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 04:50:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778647826; cv=none; b=tdoi6wdHGFxG7qbQSZ7F/SYzJSsdqEsa6LwJ0uL671tNEYDYlTvVb72FWvEEloOhimCFuGvuuAnTX5Yh2cE9DamOORwNri3Wpr52yyBp9l9+5Y3fg3nFGiYUDUdVAL7Ln45GxaZT+IKLLV4445AKhAIhqZg2uSZiCgdZU1Phry4=
+	t=1778647830; cv=none; b=M0RkDd022gblIQcbJpOWOcZjBphSb9gSz8B1uEKkXcgr/uE8XwCDuxH3MxGEK7K0uM4Tiz/dbjvVxjkyaJMnp+cbJqXoiv5VIUg6q6XCjlppnjZGno4u2aBKORYscs6EP+9t8i+rjABdP99FX/NSuoaCinf4XboFuWe47d0zb90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778647826; c=relaxed/simple;
-	bh=nSKY+FJbOvVPSi4guduxE6iZ76jAVjtfl2Wqt935SGE=;
+	s=arc-20240116; t=1778647830; c=relaxed/simple;
+	bh=cIQ7c7oLWDZANI9jDnNnRmRdGqnuh3aMKm9qc+YvNiA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FU15eDEShkz+abaqq/f6X+fpgpFv5dF23opg6uKqElaVXja7sVGPqHVI63mZPHZXrFC1HoEXBNfPpHsSq07ypFUuBefiIo/bVlxf90sTwmEL9gxK7LPXwe5XOmmGnzsgWy7zUrpsvHyY+KMFVCZao4UkU8kwLcMU9oXcWXeJVXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+	 MIME-Version; b=uV+PQrNC8BAK8jmcPApqsL9gAcY7/vtPeq3eGPP72PuQSHXFsIWqsGhovHPKbMxjhb5peswZDzvm5bAJEQ6W0hcjAgYC4sxiAM9hsRJ5kuIsSUdhEhZDGKB2lyccDcCS/4UYnrPHqfYoLD/mlCxLD6cWN/rbawqO8MRV0Ajyov0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 86692B1946998; Tue, 12 May 2026 21:50:20 -0700 (PDT)
+	id A2CBDB19469BE; Tue, 12 May 2026 21:50:25 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v4 06/25] bpf: Refactor jmp history to use dedicated spi/frame fields
-Date: Tue, 12 May 2026 21:50:20 -0700
-Message-ID: <20260513045020.2385962-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v4 07/25] bpf: Add precision marking and backtracking for stack argument slots
+Date: Tue, 12 May 2026 21:50:25 -0700
+Message-ID: <20260513045025.2387526-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260513044949.2382019-1-yonghong.song@linux.dev>
 References: <20260513044949.2382019-1-yonghong.song@linux.dev>
@@ -38,300 +38,251 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Move stack slot index (spi) and frame number out of the flags field
-in bpf_jmp_history_entry into dedicated bitfields. This simplifies
-the encoding and makes room for new flags.
-
-Previously, spi and frame were packed into the lower 9 bits of the
-12-bit flags field (3 bits frame + 6 bits spi), with INSN_F_STACK_ACCESS
-at BIT(9) and INSN_F_DST/SRC_REG_STACK at BIT(10)/BIT(11).
-But this has no room for an INSN_F_* flag for stack arguments.
-
-To resolve this issue, bpf_jmp_history_entry field idx is narrowed to
-20 bits (sufficient for insn indices up to 1M), and the freed bits hold
-spi (6 bits) and frame (3 bits) as dedicated struct fields. The flags
-enum is simplified accordingly:
-  INSN_F_STACK_ACCESS  -> BIT(0)
-  INSN_F_DST_REG_STACK -> BIT(1)
-  INSN_F_SRC_REG_STACK -> BIT(2)
-which allows more room for additional INSN_F_* flags.
-
-bpf_push_jmp_history() now takes explicit spi and frame parameters
-instead of encoding them into flags. The insn_stack_access_flags(),
-insn_stack_access_spi(), and insn_stack_access_frameno() helpers are
-removed.
-
-No functional change.
+Extend the precision marking and backtracking infrastructure to
+support stack argument slots (r11-based accesses). Without this,
+precision demands for scalar values passed through stack arguments
+are silently dropped, which could allow the verifier to incorrectly
+prune states with different constant values in stack arg slots.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf_verifier.h | 37 ++++++++++++++++--------------------
- kernel/bpf/backtrack.c       | 24 +++++++++--------------
- kernel/bpf/states.c          |  2 +-
- kernel/bpf/verifier.c        | 23 +++++++++++-----------
- 4 files changed, 37 insertions(+), 49 deletions(-)
+ include/linux/bpf_verifier.h |  8 +++++
+ kernel/bpf/backtrack.c       | 58 +++++++++++++++++++++++++++++++++++-
+ kernel/bpf/verifier.c        | 32 ++++++++++++++++----
+ 3 files changed, 92 insertions(+), 6 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 13bb07699cb1..a8685886f915 100644
+index a8685886f915..24fa1d4f9201 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -435,40 +435,35 @@ struct bpf_func_state {
+@@ -443,6 +443,8 @@ enum {
 =20
- #define MAX_CALL_FRAMES 8
-=20
--/* instruction history flags, used in bpf_jmp_history_entry.flags field =
-*/
-+/* instruction history flags, used in bpf_jmp_history_entry.flags field.
-+ * Frame number and SPI are stored in dedicated fields of bpf_jmp_histor=
-y_entry.
-+ */
- enum {
--	/* instruction references stack slot through PTR_TO_STACK register;
--	 * we also store stack's frame number in lower 3 bits (MAX_CALL_FRAMES =
-is 8)
--	 * and accessed stack slot's index in next 6 bits (MAX_BPF_STACK is 512=
-,
--	 * 8 bytes per slot, so slot index (spi) is [0, 63])
--	 */
--	INSN_F_FRAMENO_MASK =3D 0x7, /* 3 bits */
--
--	INSN_F_SPI_MASK =3D 0x3f, /* 6 bits */
--	INSN_F_SPI_SHIFT =3D 3, /* shifted 3 bits to the left */
-+	INSN_F_STACK_ACCESS =3D BIT(0),
-=20
--	INSN_F_STACK_ACCESS =3D BIT(9),
--
--	INSN_F_DST_REG_STACK =3D BIT(10), /* dst_reg is PTR_TO_STACK */
--	INSN_F_SRC_REG_STACK =3D BIT(11), /* src_reg is PTR_TO_STACK */
--	/* total 12 bits are used now. */
-+	INSN_F_DST_REG_STACK =3D BIT(1), /* dst_reg is PTR_TO_STACK */
-+	INSN_F_SRC_REG_STACK =3D BIT(2), /* src_reg is PTR_TO_STACK */
- };
-=20
--static_assert(INSN_F_FRAMENO_MASK + 1 >=3D MAX_CALL_FRAMES);
--static_assert(INSN_F_SPI_MASK + 1 >=3D MAX_BPF_STACK / 8);
--
- struct bpf_jmp_history_entry {
--	u32 idx;
- 	/* insn idx can't be bigger than 1 million */
-+	u32 idx : 20;
-+	u32 frame : 3;	/* stack access frame number */
-+	u32 spi : 6;	/* stack slot index (0..63) */
-+	u32 : 3;
- 	u32 prev_idx : 20;
- 	/* special INSN_F_xxx flags */
--	u32 flags : 12;
-+	u32 flags : 4;
-+	u32 : 8;
- 	/* additional registers that need precision tracking when this
- 	 * jump is backtracked, vector of six 10-bit records
- 	 */
- 	u64 linked_regs;
- };
-=20
-+static_assert(MAX_CALL_FRAMES <=3D (1 << 3));
-+static_assert(MAX_BPF_STACK / 8 <=3D (1 << 6));
+ 	INSN_F_DST_REG_STACK =3D BIT(1), /* dst_reg is PTR_TO_STACK */
+ 	INSN_F_SRC_REG_STACK =3D BIT(2), /* src_reg is PTR_TO_STACK */
 +
- /* Maximum number of bpf_reg_state objects that can exist at once */
- #define MAX_STACK_ARG_SLOTS (MAX_BPF_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS)
- #define BPF_ID_MAP_SIZE ((MAX_BPF_REG + MAX_BPF_STACK / BPF_REG_SIZE + \
-@@ -1182,7 +1177,7 @@ struct list_head *bpf_explored_state(struct bpf_ver=
-ifier_env *env, int idx);
- void bpf_free_verifier_state(struct bpf_verifier_state *state, bool free=
-_self);
- void bpf_free_backedges(struct bpf_scc_visit *visit);
- int bpf_push_jmp_history(struct bpf_verifier_env *env, struct bpf_verifi=
-er_state *cur,
--			 int insn_flags, u64 linked_regs);
-+			 int insn_flags, int spi, int frame, u64 linked_regs);
- void bpf_bt_sync_linked_regs(struct backtrack_state *bt, struct bpf_jmp_=
-history_entry *hist);
- void bpf_mark_reg_not_init(const struct bpf_verifier_env *env,
- 			   struct bpf_reg_state *reg);
-diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
-index 854731dc93fe..5e93e57fb7ae 100644
---- a/kernel/bpf/backtrack.c
-+++ b/kernel/bpf/backtrack.c
-@@ -9,7 +9,7 @@
++	INSN_F_STACK_ARG_ACCESS =3D BIT(3),
+ };
 =20
- /* for any branch, call, exit record the history of jmps in the given st=
-ate */
- int bpf_push_jmp_history(struct bpf_verifier_env *env, struct bpf_verifi=
-er_state *cur,
--			 int insn_flags, u64 linked_regs)
-+			 int insn_flags, int spi, int frame, u64 linked_regs)
- {
- 	u32 cnt =3D cur->jmp_history_cnt;
- 	struct bpf_jmp_history_entry *p;
-@@ -25,6 +25,8 @@ int bpf_push_jmp_history(struct bpf_verifier_env *env, =
-struct bpf_verifier_state
- 				env, "insn history: insn_idx %d cur flags %x new flags %x",
- 				env->insn_idx, env->cur_hist_ent->flags, insn_flags);
- 		env->cur_hist_ent->flags |=3D insn_flags;
-+		env->cur_hist_ent->spi =3D spi;
-+		env->cur_hist_ent->frame =3D frame;
- 		verifier_bug_if(env->cur_hist_ent->linked_regs !=3D 0, env,
- 				"insn history: insn_idx %d linked_regs: %#llx",
- 				env->insn_idx, env->cur_hist_ent->linked_regs);
-@@ -43,6 +45,8 @@ int bpf_push_jmp_history(struct bpf_verifier_env *env, =
-struct bpf_verifier_state
- 	p->idx =3D env->insn_idx;
- 	p->prev_idx =3D env->prev_insn_idx;
- 	p->flags =3D insn_flags;
-+	p->spi =3D spi;
-+	p->frame =3D frame;
- 	p->linked_regs =3D linked_regs;
- 	cur->jmp_history_cnt =3D cnt;
- 	env->cur_hist_ent =3D p;
-@@ -64,16 +68,6 @@ static bool is_atomic_fetch_insn(const struct bpf_insn=
- *insn)
- 	       (insn->imm & BPF_FETCH);
+ struct bpf_jmp_history_entry {
+@@ -842,6 +844,7 @@ struct backtrack_state {
+ 	u32 frame;
+ 	u32 reg_masks[MAX_CALL_FRAMES];
+ 	u64 stack_masks[MAX_CALL_FRAMES];
++	u8 stack_arg_masks[MAX_CALL_FRAMES];
+ };
+=20
+ struct bpf_id_pair {
+@@ -1240,6 +1243,11 @@ static inline void bpf_bt_set_frame_slot(struct ba=
+cktrack_state *bt, u32 frame,
+ 	bt->stack_masks[frame] |=3D 1ull << slot;
  }
 =20
--static int insn_stack_access_spi(int insn_flags)
--{
--	return (insn_flags >> INSN_F_SPI_SHIFT) & INSN_F_SPI_MASK;
--}
--
--static int insn_stack_access_frameno(int insn_flags)
--{
--	return insn_flags & INSN_F_FRAMENO_MASK;
--}
--
- /* Backtrack one insn at a time. If idx is not at the top of recorded
-  * history then previous instruction came from straight line execution.
-  * Return -ENOENT if we exhausted all instructions within given state.
-@@ -353,8 +347,8 @@ static int backtrack_insn(struct bpf_verifier_env *en=
-v, int idx, int subseq_idx,
- 		 * that [fp - off] slot contains scalar that needs to be
- 		 * tracked with precision
- 		 */
--		spi =3D insn_stack_access_spi(hist->flags);
--		fr =3D insn_stack_access_frameno(hist->flags);
-+		spi =3D hist->spi;
-+		fr =3D hist->frame;
- 		bpf_bt_set_frame_slot(bt, fr, spi);
- 	} else if (class =3D=3D BPF_STX || class =3D=3D BPF_ST) {
- 		if (bt_is_reg_set(bt, dreg))
-@@ -366,8 +360,8 @@ static int backtrack_insn(struct bpf_verifier_env *en=
-v, int idx, int subseq_idx,
++static inline void bt_set_frame_stack_arg_slot(struct backtrack_state *b=
+t, u32 frame, u32 slot)
++{
++	bt->stack_arg_masks[frame] |=3D 1 << slot;
++}
++
+ static inline bool bt_is_frame_reg_set(struct backtrack_state *bt, u32 f=
+rame, u32 reg)
+ {
+ 	return bt->reg_masks[frame] & (1 << reg);
+diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
+index 5e93e57fb7ae..2e4ae0ef0860 100644
+--- a/kernel/bpf/backtrack.c
++++ b/kernel/bpf/backtrack.c
+@@ -129,11 +129,21 @@ static inline u32 bt_empty(struct backtrack_state *=
+bt)
+ 	int i;
+=20
+ 	for (i =3D 0; i <=3D bt->frame; i++)
+-		mask |=3D bt->reg_masks[i] | bt->stack_masks[i];
++		mask |=3D bt->reg_masks[i] | bt->stack_masks[i] | bt->stack_arg_masks[=
+i];
+=20
+ 	return mask =3D=3D 0;
+ }
+=20
++static inline void bt_clear_frame_stack_arg_slot(struct backtrack_state =
+*bt, u32 frame, u32 slot)
++{
++	bt->stack_arg_masks[frame] &=3D ~(1 << slot);
++}
++
++static inline bool bt_is_frame_stack_arg_slot_set(struct backtrack_state=
+ *bt, u32 frame, u32 slot)
++{
++	return bt->stack_arg_masks[frame] & (1 << slot);
++}
++
+ static inline int bt_subprog_enter(struct backtrack_state *bt)
+ {
+ 	if (bt->frame =3D=3D MAX_CALL_FRAMES - 1) {
+@@ -194,6 +204,11 @@ static inline u64 bt_stack_mask(struct backtrack_sta=
+te *bt)
+ 	return bt->stack_masks[bt->frame];
+ }
+=20
++static inline u8 bt_stack_arg_mask(struct backtrack_state *bt)
++{
++	return bt->stack_arg_masks[bt->frame];
++}
++
+ static inline bool bt_is_reg_set(struct backtrack_state *bt, u32 reg)
+ {
+ 	return bt->reg_masks[bt->frame] & (1 << reg);
+@@ -335,6 +350,19 @@ static int backtrack_insn(struct bpf_verifier_env *e=
+nv, int idx, int subseq_idx,
+ 			return 0;
+ 		bt_clear_reg(bt, load_reg);
+=20
++		if (hist && hist->flags & INSN_F_STACK_ARG_ACCESS) {
++			spi =3D hist->spi;
++			/*
++			 * Stack arg read: callee reads from r11+off, but
++			 * the data lives in the caller's stack_arg_regs.
++			 * Set the mask in the caller frame so precision
++			 * is marked in the caller's slot at the callee
++			 * entry checkpoint.
++			 */
++			bt_set_frame_stack_arg_slot(bt, bt->frame - 1, spi);
++			return 0;
++		}
++
+ 		/* scalars can only be spilled into stack w/o losing precision.
+ 		 * Load from any other memory can be zero extended.
+ 		 * The desire to keep that precision is already indicated
+@@ -357,6 +385,17 @@ static int backtrack_insn(struct bpf_verifier_env *e=
+nv, int idx, int subseq_idx,
+ 			 * encountered a case of pointer subtraction.
+ 			 */
+ 			return -ENOTSUPP;
++
++		if (hist && hist->flags & INSN_F_STACK_ARG_ACCESS) {
++			spi =3D hist->spi;
++			if (!bt_is_frame_stack_arg_slot_set(bt, bt->frame, spi))
++				return 0;
++			bt_clear_frame_stack_arg_slot(bt, bt->frame, spi);
++			if (class =3D=3D BPF_STX)
++				bt_set_reg(bt, sreg);
++			return 0;
++		}
++
  		/* scalars can only be spilled into stack */
  		if (!hist || !(hist->flags & INSN_F_STACK_ACCESS))
  			return 0;
--		spi =3D insn_stack_access_spi(hist->flags);
--		fr =3D insn_stack_access_frameno(hist->flags);
-+		spi =3D hist->spi;
-+		fr =3D hist->frame;
- 		if (!bt_is_frame_slot_set(bt, fr, spi))
- 			return 0;
- 		bt_clear_frame_slot(bt, fr, spi);
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index 3ce6d2652b27..877338136009 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -1403,7 +1403,7 @@ int bpf_is_state_visited(struct bpf_verifier_env *e=
-nv, int insn_idx)
- 			 */
- 			err =3D 0;
- 			if (bpf_is_jmp_point(env, env->insn_idx))
--				err =3D bpf_push_jmp_history(env, cur, 0, 0);
-+				err =3D bpf_push_jmp_history(env, cur, 0, 0, 0, 0);
- 			err =3D err ? : propagate_precision(env, &sl->state, cur, NULL);
- 			if (err)
- 				return err;
+@@ -425,6 +464,12 @@ static int backtrack_insn(struct bpf_verifier_env *e=
+nv, int idx, int subseq_idx,
+ 						bpf_bt_set_frame_reg(bt, bt->frame - 1, i);
+ 					}
+ 				}
++				if (bt_stack_arg_mask(bt)) {
++					verifier_bug(env,
++						     "static subprog leftover stack arg slots %x",
++						     bt_stack_arg_mask(bt));
++					return -EFAULT;
++				}
+ 				if (bt_subprog_exit(bt))
+ 					return -EFAULT;
+ 				return 0;
+@@ -895,6 +940,17 @@ int bpf_mark_chain_precision(struct bpf_verifier_env=
+ *env,
+ 					*changed =3D true;
+ 				}
+ 			}
++			for (i =3D 0; i < func->out_stack_arg_cnt; i++) {
++				if (!bt_is_frame_stack_arg_slot_set(bt, fr, i))
++					continue;
++				reg =3D &func->stack_arg_regs[i];
++				if (reg->type !=3D SCALAR_VALUE || reg->precise) {
++					bt_clear_frame_stack_arg_slot(bt, fr, i);
++				} else {
++					reg->precise =3D true;
++					*changed =3D true;
++				}
++			}
+ 			if (env->log.level & BPF_LOG_LEVEL2) {
+ 				fmt_reg_mask(env->tmp_str_buf, TMP_STR_BUF_LEN,
+ 					     bt_frame_reg_mask(bt, fr));
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 69965d2c5fdd..14cbb38aa0e0 100644
+index 14cbb38aa0e0..30143bea6a86 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -3198,11 +3198,6 @@ static int check_reg_arg(struct bpf_verifier_env *=
-env, u32 regno,
- 	return __check_reg_arg(env, state->regs, regno, t);
+@@ -292,6 +292,11 @@ static int arg_from_argno(argno_t a)
+ 	return -1;
  }
 =20
--static int insn_stack_access_flags(int frameno, int spi)
--{
--	return INSN_F_STACK_ACCESS | (spi << INSN_F_SPI_SHIFT) | frameno;
--}
--
- static void mark_indirect_target(struct bpf_verifier_env *env, int idx)
++static int arg_idx_from_argno(argno_t a)
++{
++	return arg_from_argno(a) - 1;
++}
++
+ static const char *btf_type_name(const struct btf *btf, u32 id)
  {
- 	env->insn_aux_data[idx].indirect_target =3D true;
-@@ -3517,7 +3512,8 @@ static int check_stack_write_fixed_off(struct bpf_v=
-erifier_env *env,
- 	int i, slot =3D -off - 1, spi =3D slot / BPF_REG_SIZE, err;
- 	struct bpf_insn *insn =3D &env->prog->insnsi[insn_idx];
- 	struct bpf_reg_state *reg =3D NULL;
--	int insn_flags =3D insn_stack_access_flags(state->frameno, spi);
-+	int insn_flags =3D INSN_F_STACK_ACCESS;
-+	int hist_spi =3D spi, hist_frame =3D state->frameno;
-=20
- 	/* caller checked that off % size =3D=3D 0 and -MAX_BPF_STACK <=3D off =
-< 0,
- 	 * so it's aligned access and [off, off + size) are within stack limits
-@@ -3613,7 +3609,8 @@ static int check_stack_write_fixed_off(struct bpf_v=
-erifier_env *env,
+ 	return btf_name_by_offset(btf, btf_type_by_id(btf, id)->name_off);
+@@ -4115,7 +4120,8 @@ static int check_stack_arg_write(struct bpf_verifie=
+r_env *env, struct bpf_func_s
+ 		__mark_reg_known(arg, env->prog->insnsi[env->insn_idx].imm);
  	}
-=20
- 	if (insn_flags)
--		return bpf_push_jmp_history(env, env->cur_state, insn_flags, 0);
-+		return bpf_push_jmp_history(env, env->cur_state, insn_flags,
-+					    hist_spi, hist_frame, 0);
- 	return 0;
+ 	state->no_stack_arg_load =3D true;
+-	return 0;
++	return bpf_push_jmp_history(env, env->cur_state,
++				    INSN_F_STACK_ARG_ACCESS, spi, 0, 0);
  }
 =20
-@@ -3809,7 +3806,8 @@ static int check_stack_read_fixed_off(struct bpf_ve=
-rifier_env *env,
- 	int i, slot =3D -off - 1, spi =3D slot / BPF_REG_SIZE;
- 	struct bpf_reg_state *reg;
- 	u8 *stype, type;
--	int insn_flags =3D insn_stack_access_flags(reg_state->frameno, spi);
-+	int insn_flags =3D INSN_F_STACK_ACCESS;
-+	int hist_spi =3D spi, hist_frame =3D reg_state->frameno;
-=20
- 	stype =3D reg_state->stack[spi].slot_type;
- 	reg =3D &reg_state->stack[spi].spilled_ptr;
-@@ -3940,7 +3938,8 @@ static int check_stack_read_fixed_off(struct bpf_ve=
-rifier_env *env,
- 		insn_flags =3D 0; /* we are not restoring spilled register */
- 	}
- 	if (insn_flags)
--		return bpf_push_jmp_history(env, env->cur_state, insn_flags, 0);
-+		return bpf_push_jmp_history(env, env->cur_state, insn_flags,
-+					    hist_spi, hist_frame, 0);
- 	return 0;
+ /*
+@@ -4146,7 +4152,17 @@ static int check_stack_arg_read(struct bpf_verifie=
+r_env *env, struct bpf_func_st
+ 	arg =3D &caller->stack_arg_regs[spi];
+ 	cur =3D vstate->frame[vstate->curframe];
+ 	cur->regs[dst_regno] =3D *arg;
+-	return 0;
++	return bpf_push_jmp_history(env, env->cur_state,
++				    INSN_F_STACK_ARG_ACCESS, spi, 0, 0);
++}
++
++static int mark_stack_arg_precision(struct bpf_verifier_env *env, int ar=
+g_idx)
++{
++	struct bpf_func_state *caller =3D cur_func(env);
++	int spi =3D arg_idx - MAX_BPF_FUNC_REG_ARGS;
++
++	bt_set_frame_stack_arg_slot(&env->bt, caller->frameno, spi);
++	return mark_chain_precision_batch(env, env->cur_state);
  }
 =20
-@@ -15907,7 +15906,7 @@ static int check_cond_jmp_op(struct bpf_verifier_=
+ static int check_outgoing_stack_args(struct bpf_verifier_env *env, struc=
+t bpf_func_state *caller,
+@@ -6875,8 +6891,14 @@ static int check_mem_size_reg(struct bpf_verifier_=
 env *env,
  	}
+ 	err =3D check_helper_mem_access(env, mem_reg, mem_argno, reg_umax(size_=
+reg),
+ 				      access_type, zero_size_allowed, meta);
+-	if (!err)
+-		err =3D mark_chain_precision(env, reg_from_argno(size_argno));
++	if (!err) {
++		int regno =3D reg_from_argno(size_argno);
++
++		if (regno >=3D 0)
++			err =3D mark_chain_precision(env, regno);
++		else
++			err =3D mark_stack_arg_precision(env, arg_idx_from_argno(size_argno))=
+;
++	}
+ 	return err;
+ }
 =20
- 	if (insn_flags) {
--		err =3D bpf_push_jmp_history(env, this_branch, insn_flags, 0);
-+		err =3D bpf_push_jmp_history(env, this_branch, insn_flags, 0, 0, 0);
- 		if (err)
- 			return err;
- 	}
-@@ -15971,7 +15970,7 @@ static int check_cond_jmp_op(struct bpf_verifier_=
-env *env,
- 	if (dst_reg->type =3D=3D SCALAR_VALUE && dst_reg->id)
- 		collect_linked_regs(env, this_branch, dst_reg->id, &linked_regs);
- 	if (linked_regs.cnt > 1) {
--		err =3D bpf_push_jmp_history(env, this_branch, 0, linked_regs_pack(&li=
-nked_regs));
-+		err =3D bpf_push_jmp_history(env, this_branch, 0, 0, 0, linked_regs_pa=
-ck(&linked_regs));
- 		if (err)
- 			return err;
- 	}
-@@ -17278,7 +17277,7 @@ static int do_check(struct bpf_verifier_env *env)
- 		}
+@@ -7325,7 +7347,7 @@ static int process_iter_arg(struct bpf_verifier_env=
+ *env, struct bpf_reg_state *
+ 			    struct bpf_kfunc_call_arg_meta *meta)
+ {
+ 	const struct btf_type *t;
+-	u32 arg_idx =3D arg_from_argno(argno) - 1;
++	u32 arg_idx =3D arg_idx_from_argno(argno);
+ 	int spi, err, i, nr_slots, btf_id;
 =20
- 		if (bpf_is_jmp_point(env, env->insn_idx)) {
--			err =3D bpf_push_jmp_history(env, state, 0, 0);
-+			err =3D bpf_push_jmp_history(env, state, 0, 0, 0, 0);
- 			if (err)
- 				return err;
- 		}
+ 	if (reg->type !=3D PTR_TO_STACK) {
 --=20
 2.53.0-Meta
 
