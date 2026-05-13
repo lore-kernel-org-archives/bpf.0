@@ -1,64 +1,64 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FC0644A724
-	for <bpf@vger.kernel.org>; Wed, 13 May 2026 16:29:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4640A4C9574
+	for <bpf@vger.kernel.org>; Wed, 13 May 2026 16:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778689751; cv=none; b=gJf6O8MoPbof8i1y7yYXf7Ctc6Do5DqMK4HRguT+ik6ahxYcqY15XT9prOQ9s6E2zv7e5BJLTNMGXMW/NNFAKqCcTNnrWNcheY4UqZKPVzaFgZ7XEdXvWXmmkhg56+5/SOzV1ekzstS8ZtZBpirunrBDTFBfsqMITkegUopFFZk=
+	t=1778689810; cv=none; b=JzFQ010VIJ8j+CYV4UZGzSB/re8in6Li3quMUMaACqGNEGHdFW1c6bBejETMXdALQkXBFHhM4sVKKDcng/A9wWx1JrNFDcOJwbw2QcS6QkKO0h8AV+p+qM+PfSD2DOwzfQio7ng96JQ9ZX8kLzNPlzMXBwbeBr0vxMcvMq1uq2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778689751; c=relaxed/simple;
-	bh=ga/GaeF7RQuXBAbWhIuVXHI6+3MN5+3NaqWQNfW6IEs=;
+	s=arc-20240116; t=1778689810; c=relaxed/simple;
+	bh=QCUoednEPPjJ24Z5CLcTzNVzUImFgRkiDHscy7ikWU4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=REJREG6eGPDlomqI1+j7+fn4OsTezmPtntAAsxnB0Dq4z9DPQkXnclEKSz126lRJd+NkO48CkKk5RZTNJiJYH/imr/Y09U0h5AyocAdK1V/TS5T0v50KuUpfpQLvW8EjRIqZBs1Y+6VaQG6cXJdv1lW7MYelueCMvlk5n0ywUm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SnHiP/mV; arc=none smtp.client-ip=209.85.128.48
+	 Content-Type:Content-Disposition:In-Reply-To; b=p3bhu1JSvJMRhGM4qsrBlKrQxvwf2KX0kgBby0taH0dnleaIC/EGm9z5a7qGUPt7jsTqMeGjbaeSMyguDyR7KL40Pb1O0BRE0b9f5Y+Ojwo1Wot04yeZHVKlfkjhee3W33peX+Reh6eHAiXtsUYixjI9bnl3xesou2oayvjlvIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n0tN3863; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SnHiP/mV"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-488b0e1b870so117487475e9.2
-        for <bpf@vger.kernel.org>; Wed, 13 May 2026 09:29:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n0tN3863"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-48d146705b4so84313575e9.3
+        for <bpf@vger.kernel.org>; Wed, 13 May 2026 09:30:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778689748; x=1779294548; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778689807; x=1779294607; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wOc+Skhm2gYZJKUxRuM/yUCFNYfH507QF3U6ghPOViQ=;
-        b=SnHiP/mVUAa2NmmpUN5N/vE83hDTD14RyCaC4buimKk+Okxe9TlqsdB+NOL3c8Ys77
-         WrfHpQzj75CdMwNKuTUovTUZb4+o3KZIyv6g1dWaJ1NnjvzTBA1/+zBA5qNdsyWFQ0xy
-         uJ7g28+OPnDiUUOrXYOmf/HGOz7f3QQBXvL7zwl+yovwhfrdEMchv80XNF0qzRGX2Lrl
-         x4idBgischNFaTP+gKEXcW9CH6DOOGE7zVtZOWZWY1o6IEIEmKkw8uIaPMDxhrwlab7T
-         24gu2IvcZldmcX411ScdrR5pVhbJgxsdx0wSr6sRmD6xTP2m9N0rpTvu+UChJCH0B1Uf
-         VTrw==
+        bh=L822Kn6T1eRUp12x962YWI3y/VW5euMfJx1qzcfQ35c=;
+        b=n0tN3863yIPBXdyCbJQhn3ROp7g0wpv8N/yb+Jkc7Pw/kq/bz4zda1rAaSRgNkpDuF
+         S+/qknNuhvbkQBJgog3TgFQ3u5yKNwWpr5O0i37roQl1UEs713a2Om0bLoYjd1oOpLtk
+         fPa2BYcqnfgm4SRsNm4QYl0nhqDq410jlx8Vfwpos065H17UEOX5SBPu56P1uSGgGtkE
+         0QU6EAGrVBPSQRq0VSK3lLnbUx1jC2nZT0mpO3zk+i4rZMomfqsMKOYZGsvg7vJXtq1R
+         NsX1Sxu4LjurcRj/unpgPD6ZOy7lPuxVhxoMuCMSbIfgtqcWZtKP0lgKtBLG5c72IWLo
+         VM4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778689748; x=1779294548;
+        d=1e100.net; s=20251104; t=1778689807; x=1779294607;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wOc+Skhm2gYZJKUxRuM/yUCFNYfH507QF3U6ghPOViQ=;
-        b=QjTCG56QWk8ZQyJDYgV6iyFs2IaeEOHrMrjHga2Q2+/VwXbGbTuxaXVP6x5+yPi5n+
-         KLztZ+xo3QJO69cvWpkD4vghFT3CtG6rXue8WwCSJYWjDJuryQ2vI5/jxMZSuIXel7hL
-         /rG20/EyHNBaPjm+O1XsAx5JdIFp6WRJ5+a3FCOrGwckjT8LEY/DQCFD7sBP268P/s3X
-         uIgcsL6ZvJ8p8re+/lnt0NuFXuDLZ2HCizAuDom7DfIyECJxsKdUrW8wsKmLMaAOBZnp
-         P6hee8sDr9kOT9q+nDMz0Ugt8g12c0semkUMEe5IBRZV7tuaXuvQNtbCah8nYYTLpH+T
-         z39A==
-X-Gm-Message-State: AOJu0Yydp3REXftxZDDJkzCdkAJ0wBCTaTXiKpSiR+aD1cfZTPQ0v4DS
-	7R71F99E1TH0FariJGBIIt4eiiRk9TJkZhwgSm/RkJaT+ybpcJuP/bDsnKBX1w==
-X-Gm-Gg: Acq92OGrWXwtjZ4hxGVwtpaj92Nii75ubgPqgAhghcHQfOoxS+cNxJp9QYhUM4SGnd0
-	poSUkR8M/k6H6Kcf2D2K+pkaXN3Y5tdWlswJAqd1YKGWL9g3tghwkcHaL7rm0Dm90Y2OxtDtKIh
-	cap0XP4RKD2MZo/wGUVtrIUGAOApwcr8F6jnu7WBPeNxLC8pyjm3wnG/XjfTRR5h5vKDS+YVSjo
-	ctbIbHIBweeRqc9b9vTzS/1eUKlEvDatpuLCZJof9PZso+Es1QY40lr1yhQ9jyKrILAEcucw/du
-	A0seCf79CGThDZ92IxNM/mDaBMj6WEfa8S7XA+xI2ML942o4QV7rT4YTPOSdwfQluq24QLihcmE
-	zyGFK4w9cIHa79UU9y/TZHIySmLmo9yG5g2nDgzOTXZqIdJ2QvgncQcBOXYHouj0mafp95jnjFi
-	VrLm+nV/OdLvjZW3jPROhg2aQ43jz81FE1XmaWA26M05/74i49n893qyXrTmmu8XqQ+vJyYRwlN
-	gpj4MI/IQiBBGRACOb8Ey/PYpdqziCzNhMBhT0AXumz64D0NifA0bRB045td1cbJseGoJR3EIew
-	Gd+XVbDHDCFV6MGZRR5RsAwkjeLCOvDHwvDev74ktUc=
-X-Received: by 2002:a05:600c:19ca:b0:48d:46a:6e5b with SMTP id 5b1f17b1804b1-48fce9b9fb4mr49319585e9.7.1778689748229;
-        Wed, 13 May 2026 09:29:08 -0700 (PDT)
+        bh=L822Kn6T1eRUp12x962YWI3y/VW5euMfJx1qzcfQ35c=;
+        b=SsHaPIq0vUeYhl/MtM+dxu2648aObdm8QBTViKN59fUCOvqPwwv6dRzNE77FEX0Ubt
+         4PRgPS73dqLg+xDuMwjP8aKRcX+P55KNl/1v6iSlzpr9BSM9k77vp+BehrHlMxohtnc3
+         56Cccvf9b5Ny4gTPRNkReVVNBraLL0hhsHBp1IJ17sLQCV0yufJ9HdJo3wVKil4h9b0T
+         wJJUGBwlgk5blLUEu+MttSR6LBpHtrbPbKuJ22REH2BZ/PIZx+/5dV5/FlmmJ4Xz1kE0
+         38M3I0HnaPW6Z43NCBYLhFpVahF1L9S8/oz4J309dUBoWJ6mw+GYuMWPIdteGMSt0Ee1
+         Gf8A==
+X-Gm-Message-State: AOJu0YxzcLPuyaQu9ZK3zAla+U+etfgJQabEZyBc4OwN30R4uuLpGWKt
+	zt5pnAHpyaHpYjd0FGbfDiiBz0itPOR1KST/6YEefyibtT+xFFpQM1ZbEgbWpw==
+X-Gm-Gg: Acq92OEVSvrBw+feDyMuJ9LXYfaJuv9j8zWbkpQ9YcD5PJMMMcZvk+wz3+3SdSzd+uK
+	rr96W1IDPB9I7K5Q+kJpqM5L/GeB9ZAovE7m6pfpePfYAWgC6OnGSZJIdvi9qVdTV7riMW2FEie
+	4jgcBdDSzD7QG3sFmgY7WlWp8Xal2hiAx0C+eEkhe+XuQ+oEQFUihALwh0R/leDiVoVZ+pJ0f5J
+	8zHE+z9vcPLIm74eUmaD9OLPSenUrjL+3KFAfg4sooCK8NeCV4qo22ysp2g6LhTEAf2k9qlNazM
+	sckaas61QTar1PqbywwXV939cs3QNqBWw1fhqgV89u5LIOXd4p8z5U2tB22VHu3jhd7NYe4S6pP
+	6KZvhAAcuJ3WSkh9Uv1oivENCrVQVEYOOtUnZQoc5TDcgdTbMkp5iAIYHy9PMikdlGxxBt+ua5s
+	+2rEwXq58IMcHBaLaPfIEs795BcBorGLdT0gksCGFnrfQWlLlZ/Wi5U2e2iJc0dpHZWjV3moKar
+	yXmfAIBpXSHZiFhW5+lspjQ2x5vllPHthbRSGjW79t5Zdbs4jTKitwwwOj3whfY5WM94rLDkr3n
+	YCJMmo2Mf8/ITvOj+JFgI5rOPL9BHeENkG+TIHE2mfA=
+X-Received: by 2002:a05:600c:1d04:b0:48e:707f:cdfd with SMTP id 5b1f17b1804b1-48fc9a02239mr61900335e9.2.1778689807401;
+        Wed, 13 May 2026 09:30:07 -0700 (PDT)
 Received: from mail.gmail.com (2a01cb0889497e0055c0fd718e6af73d.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:55c0:fd71:8e6a:f73d])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-454916df968sm44539648f8f.25.2026.05.13.09.29.07
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45d9e767cb9sm43227f8f.2.2026.05.13.09.30.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 09:29:07 -0700 (PDT)
-Date: Wed, 13 May 2026 18:29:05 +0200
+        Wed, 13 May 2026 09:30:06 -0700 (PDT)
+Date: Wed, 13 May 2026 18:30:05 +0200
 From: Paul Chaignon <paul.chaignon@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -66,8 +66,8 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next v2 2/3] selftests/bpf: Test reported max stack depth
-Message-ID: <075d22efd4338385a92f13b7817025cc3f04ec60.1778689025.git.paul.chaignon@gmail.com>
+Subject: [PATCH bpf-next v2 3/3] veristat: Report max stack depth
+Message-ID: <b3459e61c408daef30d82272f1eacc6399844896.1778689025.git.paul.chaignon@gmail.com>
 References: <cover.1778689025.git.paul.chaignon@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -79,72 +79,80 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <cover.1778689025.git.paul.chaignon@gmail.com>
 
-This patch tests the maximum stack depth reporting in verifier logs,
-with a couple special cases covered: fastcall, private stacks (main
-subprog & callee), and rounding up to 16 bytes. For that last one, we
-need to skip the test when JIT compilation is disabled as the rounding
-is then to 32 bytes.
+This patch adds a new "Max stack depth" field to the set of gathered
+statistics. This field reports the maximum combined stack depth compared
+to the 512 bytes limit. It is null for rejected programs.
 
+Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
 ---
- .../selftests/bpf/progs/verifier_bpf_fastcall.c   |  3 +--
- .../selftests/bpf/progs/verifier_private_stack.c  | 15 +++++++++++++++
- 2 files changed, 16 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/veristat.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-index 0d9e167555b5..8d7ff38e4c06 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-@@ -799,8 +799,7 @@ __naked int bpf_loop_interaction2(void)
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index 5c82950e6978..9a2275d19ee1 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -48,6 +48,7 @@ enum stat_id {
+ 	SIZE,
+ 	JITED_SIZE,
+ 	STACK,
++	MAX_STACK,
+ 	PROG_TYPE,
+ 	ATTACH_TYPE,
+ 	MEMORY_PEAK,
+@@ -795,7 +796,7 @@ static const struct stat_specs default_csv_output_spec = {
+ 		TOTAL_INSNS, TOTAL_STATES, PEAK_STATES,
+ 		MAX_STATES_PER_INSN, MARK_READ_MAX_LEN,
+ 		SIZE, JITED_SIZE, PROG_TYPE, ATTACH_TYPE,
+-		STACK, MEMORY_PEAK,
++		STACK, MAX_STACK, MEMORY_PEAK,
+ 	},
+ };
  
- SEC("raw_tp")
- __arch_x86_64
--__log_level(4)
--__msg("stack depth 512+0")
-+__log_level(4) __msg("stack depth 512+0 max 512")
- /* just to print xlated version when debugging */
- __xlated("r0 = &(void __percpu *)(r0)")
- __success
-diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-index 646e8ef82051..2c00dd8579d1 100644
---- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-@@ -86,6 +86,7 @@ __naked static void cumulative_stack_depth_subprog(void)
- SEC("kprobe")
- __description("Private stack, subtree > MAX_BPF_STACK")
- __success
-+__log_level(4) __msg("stack depth 512+32 max 512")
- __arch_x86_64
- /* private stack fp for the main prog */
- __jited("	movabsq	$0x{{.*}}, %r9")
-@@ -324,6 +325,8 @@ int private_stack_async_callback_1(void)
- SEC("fentry/bpf_fentry_test9")
- __description("Private stack, async callback, potential nesting")
- __success __retval(0)
-+__load_if_JITed()
-+__log_level(4) __msg("stack depth 8+0+256+0 max 272")
- __arch_x86_64
- __jited("	subq	$0x100, %rsp")
- __arch_arm64
-@@ -344,6 +347,18 @@ int private_stack_async_callback_2(void)
- 	return 0;
- }
+@@ -834,6 +835,7 @@ static struct stat_def {
+ 	[SIZE] = { "Program size", {"prog_size"}, },
+ 	[JITED_SIZE] = { "Jited size", {"prog_size_jited"}, },
+ 	[STACK] = {"Stack depth", {"stack_depth", "stack"}, },
++	[MAX_STACK] = {"Max stack depth", {"max_stack_depth"}, },
+ 	[PROG_TYPE] = { "Program type", {"prog_type"}, },
+ 	[ATTACH_TYPE] = { "Attach type", {"attach_type", }, },
+ 	[MEMORY_PEAK] = { "Peak memory (MiB)", {"mem_peak", }, },
+@@ -1023,7 +1025,7 @@ static int parse_verif_log(char * const buf, size_t buf_sz, struct verif_stats *
+ 				&s->stats[MARK_READ_MAX_LEN]))
+ 			continue;
  
-+SEC("fentry/bpf_fentry_test9")
-+__description("private stack, max stack depth is private stack")
-+__success
-+__log_level(4) __msg("stack depth 8+256+0 max 256")
-+int private_stack_max_depth(void)
-+{
-+	int x = 0;
-+
-+	subprog1(&x);
-+	return 0;
-+}
-+
- #else
+-		if (1 == sscanf(cur, "stack depth %511s", stack))
++		if (2 == sscanf(cur, "stack depth %511s max %ld", stack, &s->stats[MAX_STACK]))
+ 			continue;
+ 	}
+ 	while ((token = strtok_r(cnt++ ? NULL : stack, "+", &state))) {
+@@ -2278,6 +2280,7 @@ static int cmp_stat(const struct verif_stats *s1, const struct verif_stats *s2,
+ 	case SIZE:
+ 	case JITED_SIZE:
+ 	case STACK:
++	case MAX_STACK:
+ 	case VERDICT:
+ 	case DURATION:
+ 	case TOTAL_INSNS:
+@@ -2512,6 +2515,7 @@ static void prepare_value(const struct verif_stats *s, enum stat_id id,
+ 	case MAX_STATES_PER_INSN:
+ 	case MARK_READ_MAX_LEN:
+ 	case STACK:
++	case MAX_STACK:
+ 	case SIZE:
+ 	case JITED_SIZE:
+ 	case MEMORY_PEAK:
+@@ -2602,7 +2606,8 @@ static int parse_stat_value(const char *str, enum stat_id id, struct verif_stats
+ 	case SIZE:
+ 	case JITED_SIZE:
+ 	case MEMORY_PEAK:
+-	case STACK: {
++	case STACK:
++	case MAX_STACK: {
+ 		long val;
+ 		int err, n;
  
- SEC("kprobe")
 -- 
 2.43.0
 
