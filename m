@@ -1,97 +1,87 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09FDF383C82
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 14:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0BE299944;
+	Thu, 14 May 2026 14:26:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778768788; cv=none; b=hZj2GNgIVUtGh2D4tqBak7xIe6tY/5JPV3xGkqsRliTda/o0tBQ/iMoB8515Y4dnf6At2Lg/WkBiKr1XCX8zQ4JfL7AkbkFwOaBufVW/8YskbnLiZVI/rgyb7Pd5q6zyFKEC27N2pVMJc3KVRIL3UwCRiFmyY2yipLTkPT7eoDI=
+	t=1778768806; cv=none; b=E2hgcoA/T5CTLXq0j9lZUn98Vtgf11jtF6CFQEAZCZE1IcT+FUafUmY85pakDiunsxf0aZjcOQh0BOF0oeQOBBiqNraBCABjz6BGvYUBckQVyH3Nf9WdWMKs2aZolT9LJnWt1253qY+zMfWWJUllPoIwmynISMOD44MXJNnSjcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778768788; c=relaxed/simple;
-	bh=5YO04BGNJ5Foa6mMJCVFbz2JiPs/zaXhw7uwUj/LaKg=;
+	s=arc-20240116; t=1778768806; c=relaxed/simple;
+	bh=wdU4t01p2N+3SdPkNhh5voaN25uhvmS7W5q3TIzmMXs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TSvrR36ubWb5GCnTVyVuL1my8M+B0wnROdaRWIp2md3nWhZxTYtvj+xv2e04DaAuszvJYEfByqAFLDDDWBdSRtr4TAk70dVqtac4ABKJ0INajAszckYx3rLR8wXhFDtcHPMIy3zSY0kWTkFAdEHRclfZXD8WTDQkTvjtYlb7/1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=If5PPhXn; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=Vjl1KjnceIER/jy3LP+/g1726CmvxMy6hdJKmUxARAQLho171qZBcaBHXXqt4Z2U/YxM61BmRdVo9qRjv2v244yzsfGX3w+vFIYaZq5zlyzLNsbZwba4ZdkerIvcb1w05JMlSW0pJD6AE9lh9Dq2FxvSznwhL7Z9/kszkfVY4kY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OzH7RFkV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="If5PPhXn"
-Message-ID: <57b7430f-babc-49d2-9434-98d0fa6b45e1@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778768785;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NyqG4DzidudMPHjQ9M8AXpwhVpgRwtfP8/SX3HjiPGw=;
-	b=If5PPhXnZg3uAl8RNCy6dCe9YrbyIp3ZdBPykvUrBOC0LmtAfc/WvcW95IO0cboNanGmBA
-	UkNuTn+5nxVWPM2cx+zEonudD2d0S8YF/hTcSoyyCCL7yvjNqaHSR2hrybIru0K3iZEkgI
-	AQpVk/v726DB1+jJOv0jtViWJcGgDXk=
-Date: Thu, 14 May 2026 22:26:14 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OzH7RFkV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBA83C2BCB3;
+	Thu, 14 May 2026 14:26:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778768805;
+	bh=wdU4t01p2N+3SdPkNhh5voaN25uhvmS7W5q3TIzmMXs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=OzH7RFkV4ENIRU8JkpGeh1mV+DeWUK1kl3bZCJKkKsAn5f1qWrv/eu7dZa0XVgpVe
+	 zMXC2xohdUNvVkiYPQqYS94ctD9tBccYKWY5e+VZAnpvAD5chPqYhGDrWy1rj2tKhr
+	 yIU+vFoxiZsFvnz3ViwQ0luGRECUp7ITZBWEyT/490u1PuELXXw4Rv16vQi5vV8lMK
+	 ac+ZaQi7usmdVVWjiQ76KP9FmS2EABqnqTKkOM1L7QyPUxy8rIU8V+xnTOesUjmZSK
+	 NKE2j023QSqTCD6SFDQW8fAii5F1uN9iMsTXMCVlzBgcCo7ZBx2pxeoNepPLPf/gyN
+	 Y7XiLAycwJDXw==
+Message-ID: <d015da7b-fe08-40e8-b14d-2e012cce3684@kernel.org>
+Date: Thu, 14 May 2026 16:26:40 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v14 8/8] selftests/bpf: Add tests to verify map
- create failure log
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260512153157.28382-9-leon.hwang@linux.dev>
- <20260514012532.E0375C2BCB3@smtp.kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: kmalloc_nolock() follow-ups, including kfree_rcu_nolock()
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260514012532.E0375C2BCB3@smtp.kernel.org>
+To: "Harry Yoo (Oracle)" <harry@kernel.org>
+Cc: Levi Zim <i@kxxt.dev>, linux-mm@kvack.org, rcu@vger.kernel.org,
+ bpf@vger.kernel.org, Hao Li <hao.li@linux.dev>,
+ "Paul E. McKenney" <paulmck@kernel.org>, Uladzislau Rezki
+ <urezki@gmail.com>, Joel Fernandes <joelagnelf@nvidia.com>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Amery Hung <ameryhung@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+References: <esepccfhqg7m6jo76ns2znj2cnuaepx2xvw5zaygtwohq4psma@563ypprp6rr3>
+ <9bea1536-534a-4a59-9b5f-92389fb05688@kxxt.dev>
+ <6wvjo33urd5i4jvbf6rwp7kwe3ppn3ktgmjk663hq2jxax65gm@kxljf3hkqs5e>
+ <1315d145-49ee-412f-ad91-0f6c61c4c2c9@kxxt.dev>
+ <2dhbxmhg4l35gupk3wgwtufsf735rnk4czmcoyspzckvexie3z@nswohkoipx44>
+ <be7a2a06-cd81-446c-9875-fafb198caf78@kernel.org>
+ <3aza75jldxj4g3o4kqdif3hubsnzkv53jvj52y2crohfxzto74@ofzzq2wfc4tz>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+In-Reply-To: <3aza75jldxj4g3o4kqdif3hubsnzkv53jvj52y2crohfxzto74@ofzzq2wfc4tz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 2026/5/14 09:25, sashiko-bot@kernel.org wrote:
-[...]
->> +static void test_invalid_numa_node(void)
->> +{
->> +	const char *msg = "Invalid numa_node.\n";
->> +	LIBBPF_OPTS(bpf_map_create_opts, opts,
->> +		    .map_flags = BPF_F_NUMA_NODE,
->> +		    .numa_node = 0xFF,
+On 5/14/26 12:09, Harry Yoo (Oracle) wrote:
+> On Thu, May 14, 2026 at 11:39:50AM +0200, Vlastimil Babka (SUSE) wrote:
+>> There's still the fallback to the larger bucket, right?
+>> That pretty much guarantees that if we fail due to a local lock in one
+>> bucket (due to preempting its holder), a local lock in another bucket won't
+>> be locked at the same time.
 > 
-> Would this test be flaky on a massive system? Using 0xFF (255) for the
-> NUMA node could accidentally match an online node on systems with large NUMA
-> topologies (e.g., up to 1024 nodes).
+> Right.
 > 
-> Would it be safer to use ~0U or -1 to represent a guaranteed invalid node?
+>> However if local sheaves are exhausted, we might need a shared lock (barn,
+>> list_lock, slab bit lock when no double cmpxchg) and that might be held by
+>> another cpu in both buckets. But should be very rare.
 > 
->> +	);
->> +
->> +	test_map_create_array(&opts, msg);
->> +}
-> [ ... ]
->> +static void test_invalid_token_fd(void)
->> +{
->> +	const char *msg = "Invalid map_token_fd.\n";
->> +	LIBBPF_OPTS(bpf_map_create_opts, opts,
->> +		    .map_flags = BPF_F_TOKEN_FD,
->> +		    .token_fd = 0xFF,
-> 
-> Could the use of 0xFF (255) as a file descriptor lead to spurious test failures?
-> 
-> While an open FD 255 is unlikely to be a BPF token, using -1 or ~0U is the
-> standard way to provide an invalid FD, which completely eliminates the risk of
-> accidentally hitting an open file descriptor.
-> 
->> +	);
->> +
->> +	test_map_create_array(&opts, msg);
->> +}
-> 
+> I'm not sure what makes trylock failure on a list_lock rare?
 
-Replied in v13
-https://lore.kernel.org/bpf/b22790b4-1e33-4cab-bc2f-92cf7fd60bfd@linux.dev/.
+That we can retry on different bucket. But maybe reality is different than
+my hopes.
 
-Thanks,
-Leon
+> When the local sheaves are exhausted, we're relying on either:
+> 
+> 1) another kmalloc or buddy user on that CPU (w/ allow_spin = true)
+>    refills the local sheaves or PCP 
+> 
+> 2) trylock on list_lock or zone->lock succeeds
+> 
+> Without async refills unlike the BPF memory allocator.
 
-[...]
-
+Maybe we'll need those for sheaves at some point? Hope not.
