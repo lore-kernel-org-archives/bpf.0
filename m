@@ -1,297 +1,253 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB08344023
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 17:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0821B38E5C8
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 17:22:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778778955; cv=none; b=OqjLKu2tS1iCdBPodqmBkK4DvvMa7fsTIyW+Vakby7h6AfU14rhioVlh9Z71ZLibD6iRUgkZbLRYAEuXah+YKYEi0KqPD34Xk25vE6/o0iDyH3C0W2PQAEwJjaO+U6wkGWBa4ynPgJ1w+3C0ewCVh/UJacnXaXsrTuX0QAcOQVc=
+	t=1778779363; cv=none; b=BCaZb45v6oVmGzNvuyhdAtFFWLW4up8fi7/t3GgQWBO9DOy0okUcSDE9MS5T9yQVW9om7cDgkA7CivmU9IWo/qxYaoa9eMQhFd7D3X9uCwPvhvDdJfKf5be7gypX4rmr2zd1HAKMrrgdOYUMywaQaAu61Dmiop7S1S1pcIFglzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778778955; c=relaxed/simple;
-	bh=H3A0sq4vu6CTl962RLjPTrzffENAu82hXZ3C6ccm/VI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CT08iVnjY8VFH/61WxCp8thdia+T8Vi1O3DrtDgq70YFaNj8NOoDsPka5xJj9xdaIkDw1aJKTc1Kmvq8ND6zqRGwCKEC6Nl2WOY+3R5rHxponBxPjCrXfoCtkJtHrvuGHCdZ6z/FFdXQnMyc4DaCpgYjdbk4eXfTrd6MlDDRZjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kWOjOnDG; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778779363; c=relaxed/simple;
+	bh=WaURA/DNPPwOj8kBu247T1AUk4Ywg+Oqa+t268ORM8E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=F6OH7zVyQMPE9Vj4Qc36h1Lfv2Qsi2KVpuXdFo6hgsAQvl62eL1n+wI5JRdHUkdSOYOqhXIkuJbiUGqchx836ZRyyCsi+D8R3Z2f0WGZUXVIAh7tcLxsVpqYRTmUckjn1PHAJE1ijc+yiVy6Yweq/Th3B77PEdwtZz1px6QF7l0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h7XA7KV9; arc=none smtp.client-ip=209.85.160.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kWOjOnDG"
-Message-ID: <f35f3133-9f1e-4118-8d58-eb29f69f8940@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778778952;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=V7QAIIci8xLeEesMzvjkbogkMCNAxI0hplM1EMDeAxI=;
-	b=kWOjOnDGc67r1OnJoNmDnU8mYRv5cjJHYIoRS9/U3QSvAxFWft1xewjcGQHez+B2YIFdPa
-	z/m96u8o099jjwKvTkW2k5O8et04jtgL8U2XlL4nBedxbfg+7quYTWxWU0D6MEcaKX1tnX
-	uBaduddggk97yb+m2eF2i9C9jB2/YHo=
-Date: Thu, 14 May 2026 10:15:45 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h7XA7KV9"
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-4042905015cso6228667fac.0
+        for <bpf@vger.kernel.org>; Thu, 14 May 2026 10:22:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778779360; x=1779384160; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wcw+cHjZfdX91JnE70m1FMdTq5GVKmXsz1C+2FwOHb0=;
+        b=h7XA7KV9BUu6UKpiANcUa7EKP34ZIQ3q+4AwXs9czWyBKUGGKOVjuYNhtE+aIwXpwX
+         XmhJsYjenqeHfW9kni63j4HW3inQB2r+I3eNMyHZhkKhSP9nl55r6jYAHczujanVr0xA
+         auyB0JSGrhoMRucnQL87bThIvFuZJf1vE7tBLRTs3MpsYOyfdm5T9/HYt2OZmb9aSM6T
+         b+hQhxdclxmW79ilHM9bUfh1l10wQ1YoO1gAGaNdt1YAr8PpVIx7KSauF1l5/z1u+Rmo
+         nnBZNC71QD9P/123j9oWOJO/JTjvRzJveTLCB/RrQf/UbLX342L/DNepg1c4FhiH1+NO
+         f36A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778779360; x=1779384160;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wcw+cHjZfdX91JnE70m1FMdTq5GVKmXsz1C+2FwOHb0=;
+        b=nJO/Gw+asqR5VPMBusKDCpiRHT6yXh3qtvyfE407Zc4zkRGO1hcndhrko9itObMN7P
+         wV7OV6sYOFus13cgV9/oFDDeqpTFSFxEkAHpN60PGAvWHPVhHR2YFXDh4CPIOtt886ZJ
+         K/0f+Mqg1pPEQ3YxYVqedviT7OR/PsZOIVD+6AKolJBRVFwI45J7+VqRuKbsrbWO1XCp
+         6fAcesONSw5jY8pzmr5XKh+L7W9thlWOBDNM4qAqClEsrIXbnENexHjlsGwzc9YwpbjZ
+         P0xreSnPSNju6KXc/M3yWJ6SYNKujgU3uATFEVXa5njcM+ACncnlbWmnql9e8qUHX7sT
+         59qA==
+X-Forwarded-Encrypted: i=1; AFNElJ+Ak3P+lnjToBr3tvtKvTeV9eavkLzw+xHIkYgh0SSltgUf/+5VTgrb4ORgtcqkzOyyLK8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9XwOeM8kwvLE8aJJvYLcAtXHgywdURiSnBFD9Q7tRZZobwP3z
+	st+D7UtQp+BVoNAaYJ4K00oaU10iJ+9ztMlsZ1Nrd4GiVvQBOM3HChEa
+X-Gm-Gg: Acq92OF8QFdIwelp/XfUS42Wh/oy54ZJAPN2eINOmPrvH8m2rEArB7hDcf+e35D7bf4
+	wmRkSXziX3IXRW4Wb21SuPOjCjb+U3+qFzbN1EB0v9tsoDcy5JKNzoqmBjPi8tUPIzCfY8njDBp
+	ir5Uff5znSz1rdse3QJB9sQNs3j1T7uKtCaklg388PW5Sa9KNsirE5AQLxutSEj3xgLZwUIVdGj
+	Q66pwqEKW7jLxXe6zI4LggPd+KYR7r4/WyrJD8HundMcYdt7Ln2nd9Y9u+Yt4nG0GOUO4XV8Ldy
+	qbmg50sYrUt1NXLXJdMrGPico8EvFNPPDshHrl5ONJJAJbAfnqjiCuh1rxyANT+04rkTieA+AQ5
+	S9x3wZkoLioG1eAASAv7ZUISK/VnFnA4femGcdw4V28A6oFdMc56IeRWXaixs7el+vsoryK1/5B
+	kgQdxh+fvdZUCmjEOye+S5KQ==
+X-Received: by 2002:a05:6820:8185:b0:685:7678:b53c with SMTP id 006d021491bc7-69c9bfb085cmr188329eaf.46.1778779359904;
+        Thu, 14 May 2026 10:22:39 -0700 (PDT)
+Received: from localhost ([2a03:2880:f812:12::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69b8c7e0140sm1483053eaf.3.2026.05.14.10.22.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2026 10:22:39 -0700 (PDT)
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+Subject: [PATCH net-next v5 0/8] net: devmem: support devmem with netkit
+ devices
+Date: Thu, 14 May 2026 10:22:27 -0700
+Message-Id: <20260514-tcp-dm-netkit-v5-0-408c59b91e66@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v3 3/3] bpf: Cache build IDs in sleepable stackmap
- path
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Puranjay Mohan <puranjay@kernel.org>,
- Shakeel Butt <shakeel.butt@linux.dev>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-team@meta.com
-References: <20260512032906.2670326-1-ihor.solodrai@linux.dev>
- <20260512032906.2670326-4-ihor.solodrai@linux.dev>
- <6b4e0918-79a5-49ae-a172-c7d6df558dec@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <6b4e0918-79a5-49ae-a172-c7d6df558dec@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-B4-Tracking: v=1; b=H4sIANQEBmoC/12PywrDIBBFf6W4rsWMz3TV/yhdJGoaKXmgIikh/
+ 17rKri83DnnMjsK1jsb0P2yI2+TC26Zc+DXC9JjN78tdiZnBAQEYUBx1Cs2E55t/LiIoTdS9YI
+ qQwnKzOrt4Lbie6J8k++2iF65GV2Ii/+WoQSlL05OWOVMgAnmwnDotITBsMdkY3fTy1REiZ5hW
+ cP0D4OChjGuhNQVzE5w09Qwy7BiTZ9/alsjz8vHcfwAOFy6kS0BAAA=
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>, 
+ Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>, 
+ Michael Chan <michael.chan@broadcom.com>, 
+ Pavan Chebbi <pavan.chebbi@broadcom.com>, 
+ Joshua Washington <joshwash@google.com>, 
+ Harshitha Ramamurthy <hramamurthy@google.com>, 
+ Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, 
+ Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
+ Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>, 
+ Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>, 
+ Michael Chan <michael.chan@broadcom.com>, 
+ Pavan Chebbi <pavan.chebbi@broadcom.com>, 
+ Joshua Washington <joshwash@google.com>, 
+ Harshitha Ramamurthy <hramamurthy@google.com>, 
+ Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, 
+ Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
+ Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>
+Cc: dw@davidwei.uk, sdf.kernel@gmail.com, mohsin.bashr@gmail.com, 
+ willemb@google.com, jiang.kun2@zte.com.cn, xu.xin16@zte.com.cn, 
+ wang.yaxin@zte.com.cn, netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Stanislav Fomichev <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, 
+ netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Bobby Eshleman <bobbyeshleman@meta.com>
+X-Mailer: b4 0.13.0
 
-On 5/14/26 7:58 AM, Mykyta Yatsenko wrote:
-> 
-> 
-> On 5/12/26 4:29 AM, Ihor Solodrai wrote:
->> Stack traces often contain adjacent IPs from the same VMA or from
->> different VMAs backed by the same ELF file. Cache the last successfully
->> parsed build ID together with the resolved VMA range and backing file
->> so the sleepable build-ID path can avoid repeated VMA locking and file
->> parsing in common cases.
->>
->> Suggested-by: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
->> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
->> ---
->>  kernel/bpf/stackmap.c | 51 ++++++++++++++++++++++++++++++++++++++++---
->>  1 file changed, 48 insertions(+), 3 deletions(-)
->>
->> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
->> index c1e96df360c3..318ce9ed0dd5 100644
->> --- a/kernel/bpf/stackmap.c
->> +++ b/kernel/bpf/stackmap.c
->> @@ -226,13 +226,34 @@ static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *i
->>  		.vma = NULL,
->>  		.mm = mm,
->>  	};
->> -	unsigned long vm_pgoff, vm_start;
->> +	struct {
->> +		struct file *file;
->> +		const char *build_id;
->> +		unsigned long vm_start;
->> +		unsigned long vm_end;
->> +		unsigned long vm_pgoff;
->> +	} cache = {};
->> +	unsigned long vm_pgoff, vm_start, vm_end;
->>  	struct vm_area_struct *vma;
->>  	struct file *file;
->>  	u64 ip;
->>  
->>  	for (u32 i = 0; i < trace_nr; i++) {
->>  		ip = READ_ONCE(id_offs[i].ip);
->> +
->> +		/*
->> +		 * Range cache fast path: if ip falls within the previously
->> +		 * resolved VMA range, reuse the cache build_id without
->> +		 * re-acquiring the VMA lock.
->> +		 */
->> +		if (cache.build_id && ip >= cache.vm_start && ip < cache.vm_end) {
->> +			memcpy(id_offs[i].build_id, cache.build_id, BUILD_ID_SIZE_MAX);
->> +			vm_start = cache.vm_start;
->> +			vm_end = cache.vm_end;
->> +			vm_pgoff = cache.vm_pgoff;
->> +			goto build_id_valid;
->> +		}
->> +
->>  		vma = stack_map_lock_vma(&lock, ip);
->>  		if (!vma || !vma->vm_file) {
->>  			stack_map_build_id_set_ip(&id_offs[i]);
->> @@ -240,9 +261,22 @@ static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *i
->>  			continue;
->>  		}
->>  
->> -		file = get_file(vma->vm_file);
->> +		file = vma->vm_file;
->>  		vm_pgoff = vma->vm_pgoff;
->>  		vm_start = vma->vm_start;
->> +		vm_end = vma->vm_end;
->> +
->> +		if (file == cache.file) {
->> +			/*
->> +			 * Same backing file as previous (e.g. different VMAs
->> +			 * of the same ELF binary). Reuse the cache build_id.
->> +			 */
->> +			memcpy(id_offs[i].build_id, cache.build_id, BUILD_ID_SIZE_MAX);
->> +			stack_map_unlock_vma(&lock);
->> +			goto build_id_valid;
->> +		}
->> +
->> +		file = get_file(file);
->>  		stack_map_unlock_vma(&lock);
->>  
->>  		/* build_id_parse_file() may block on filesystem reads */
->> @@ -251,11 +285,22 @@ static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *i
->>  			fput(file);
->>  			continue;
->>  		}
->> -		fput(file);
->>  
->> +		if (cache.file)
->> +			fput(cache.file);
->> +		cache.file = file;
->> +		cache.build_id = id_offs[i].build_id;
->> +
->> +build_id_valid:
->> +		cache.vm_start = vm_start;
->> +		cache.vm_end = vm_end;
->> +		cache.vm_pgoff = vm_pgoff;
-> 
-> nit: Maybe we can also put 
-> if (cache.build_id != id_offs[i])
-> 	memcpy(id_offs[i].build_id, cache.build_id, BUILD_ID_SIZE_MAX); 
-> here? So all writes to the id_offs[i] are at the same place for clearer structure?
+This series enables TCP devmem TX through netkit devices.
 
-Looks reasonable to me, will do this in v4.
+Netkit now supports queue leasing. A physical NIC's RX queue can be
+leased to a netkit guest interface inside a container namespace. This
+gives the container a devmem-capable data path on the RX side (bind-rx,
+etc...). On the TX side, the container process binds to its netkit guest
+interface and sends traffic that netkit redirects (via BPF or ip
+forwarding) to the physical NIC for DMA.
 
-> 
-> Overall it looks correct. Did you try to run it to see if we hit this cache at all?
+Two things in the existing devmem TX path prevent this from working:
 
-I vibe coded a bit of instrumentation to check. Works on a trivial example.
-I think real-world deep stacks should have a high cache hit rate here.
+1. validate_xmit_unreadable_skb() requires dev->netmem_tx before it will
+   forward a dmabuf-backed (unreadable) skb. This protects skbs from
+   landing on devices that don't have the IOMMU mappings for the backing
+   dmabuf or that don't speak netmem. Netkit, however, does not support
+   DMA, doesn't attempt to read unreadable skb pages and so doesn't
+   break netmem (it is pure skb routing and redirection). It is
+   functionally capable of routing unreadable skbs, but there is no way
+   for the TX validation pathway to distinguish between a device that
+   will actually attempt DMA-ing the skb and another device
+   (like netkit) that does not DMA but also does not break
+   netmem.
 
+2. bind_tx_doit uses the bound device as the DMA device.  When the user
+   binds devmem TX to the netkit guest, the bind handler attempts to
+   create DMA mappings against netkit, which has no DMA capability and
+   no IOMMU mappings.
 
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 318ce9ed0dd5..be3c41b2c814 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -10,9 +10,19 @@
- #include <linux/btf_ids.h>
- #include <linux/buildid.h>
- #include <linux/mmap_lock.h>
-+#include <linux/debugfs.h>
-+#include <linux/seq_file.h>
- #include "percpu_freelist.h"
- #include "mmap_unlock_work.h"
- 
-+#define DEBUG_BUILD_ID_CACHE
-+
-+#ifdef DEBUG_BUILD_ID_CACHE
-+static atomic64_t bid_cache_range_hits;
-+static atomic64_t bid_cache_file_hits;
-+static atomic64_t bid_cache_misses;
-+#endif
-+
- #define STACK_CREATE_FLAG_MASK					\
- 	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY |	\
- 	 BPF_F_STACK_BUILD_ID)
-@@ -247,6 +257,9 @@ static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *i
- 		 * re-acquiring the VMA lock.
- 		 */
- 		if (cache.build_id && ip >= cache.vm_start && ip < cache.vm_end) {
-+#ifdef DEBUG_BUILD_ID_CACHE
-+			atomic64_inc(&bid_cache_range_hits);
-+#endif
- 			memcpy(id_offs[i].build_id, cache.build_id, BUILD_ID_SIZE_MAX);
- 			vm_start = cache.vm_start;
- 			vm_end = cache.vm_end;
-@@ -271,6 +284,9 @@ static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *i
- 			 * Same backing file as previous (e.g. different VMAs
- 			 * of the same ELF binary). Reuse the cache build_id.
- 			 */
-+#ifdef DEBUG_BUILD_ID_CACHE
-+			atomic64_inc(&bid_cache_file_hits);
-+#endif
- 			memcpy(id_offs[i].build_id, cache.build_id, BUILD_ID_SIZE_MAX);
- 			stack_map_unlock_vma(&lock);
- 			goto build_id_valid;
-@@ -279,6 +295,9 @@ static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *i
- 		file = get_file(file);
- 		stack_map_unlock_vma(&lock);
- 
-+#ifdef DEBUG_BUILD_ID_CACHE
-+		atomic64_inc(&bid_cache_misses);
-+#endif
- 		/* build_id_parse_file() may block on filesystem reads */
- 		if (build_id_parse_file(file, id_offs[i].build_id, NULL)) {
- 			stack_map_build_id_set_ip(&id_offs[i]);
-@@ -943,3 +962,23 @@ const struct bpf_map_ops stack_trace_map_ops = {
- 	.map_mem_usage = stack_map_mem_usage,
- 	.map_btf_id = &stack_trace_map_btf_ids[0],
- };
-+
-+#ifdef DEBUG_BUILD_ID_CACHE
-+static int bid_cache_stats_show(struct seq_file *m, void *v)
-+{
-+	seq_printf(m, "range_hits %lld\nfile_hits %lld\nmisses %lld\n",
-+		   (long long)atomic64_read(&bid_cache_range_hits),
-+		   (long long)atomic64_read(&bid_cache_file_hits),
-+		   (long long)atomic64_read(&bid_cache_misses));
-+	return 0;
-+}
-+DEFINE_SHOW_ATTRIBUTE(bid_cache_stats);
-+
-+static int __init bid_cache_debugfs_init(void)
-+{
-+	debugfs_create_file("bpf_stackmap_buildid_cache", 0444, NULL, NULL,
-+			    &bid_cache_stats_fops);
-+	return 0;
-+}
-+late_initcall(bid_cache_debugfs_init);
-+#endif /* DEBUG_BUILD_ID_CACHE */
-diff --git a/tools/testing/selftests/bpf/uprobe_multi.c b/tools/testing/selftests/bpf/uprobe_multi.c
-index 3e58a86b8e25..e475298da6d4 100644
---- a/tools/testing/selftests/bpf/uprobe_multi.c
-+++ b/tools/testing/selftests/bpf/uprobe_multi.c
-@@ -95,6 +95,23 @@ static int usdt(void)
- extern char build_id_start[];
- extern char build_id_end[];
- 
-+/* Deep-recursion driver to give the sleepable build_id cache a stack with
-+ * many adjacent frames in the same VMA. Used by uprobe-deep mode.
-+ */
-+static int __attribute__((noinline)) recurse(int depth)
-+{
-+	if (depth <= 0) {
-+		(void)uprobe();
-+		return 0;
-+	}
-+	return recurse(depth - 1) + 1;
-+}
-+
-+static int trigger_uprobe_deep(int depth)
-+{
-+	return recurse(depth);
-+}
-+
- int __attribute__((weak)) trigger_uprobe(bool build_id_resident)
- {
- 	int page_sz = sysconf(_SC_PAGESIZE);
-@@ -142,6 +159,8 @@ int main(int argc, char **argv)
- 		return trigger_uprobe(false /* page-out build ID */);
- 	if (!strcmp("uprobe-paged-in", argv[1]))
- 		return trigger_uprobe(true /* page-in build ID */);
-+	if (!strcmp("uprobe-deep", argv[1]))
-+		return trigger_uprobe_deep(32);
- 
- error:
- 	fprintf(stderr, "usage: %s <bench|usdt>\n", argv[0]);
+This series solves these problems as follows:
 
+1. Extend netmem_tx to two bits, assigned to one of three values:
 
+   NETMEM_TX_NONE   - netmem not supported
+   NETMEM_TX_DMA    - netmem supported and performs DMA
+   NETMEM_TX_NO_DMA - netmem supported, but does not DMA
 
-> Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
-> 
->>  		id_offs[i].offset = (vm_pgoff << PAGE_SHIFT) + ip - vm_start;
->>  		id_offs[i].status = BPF_STACK_BUILD_ID_VALID;
->>  	}
->> +
->> +	if (cache.file)
->> +		fput(cache.file);
->>  }
->>  
->>  /*
-> 
+   With these bits, phys devices can set NETMEM_TX_DMA and devices like
+   netkit set NETMEM_TX_NO_DMA. The validation TX path ensures that any
+   DMA-capable netdev exactly matches the bound device, guaranteeing the
+   correct mapping of the bound dmabuf. The validation TX path also
+   allows devices with NETMEM_TX_NO_DMA to pass, knowing these devices
+   will not misuse netmem or run into IOMMU faults. After redirection or
+   routing and the skb finally makes its way through the stack to a
+   physical device's TX path, the above NETMEM_TX_DMA check is performed
+   again to guarantee the device has the appropriate binding/mappings.
+
+2. On TX bind, the bind handler recognizes NETMEM_TX_NO_DMA devices and
+   finds the phys TX device and binds to that instead. For the netkit
+   case, if it has been leased a queue from a DMA-capable device
+   already, then the bind action is performed on the DMA-capable device
+   instead and the dmabuf is mapped correctly.
+
+---
+Changes in v5:
+- configure_nic(): register cleanup via defer() and drop the separate
+  cleanup_nic() helper, this avoids leaking resources init'd during
+  setup. (Sashiko)
+- Use sys.byteorder when packing phys_ifindex into the BPF .bss map (Sashiko).
+- fix unhandle KsftSkip in tests (Sashiko).
+- see per-patch changes for more details
+- Link to v4: https://lore.kernel.org/r/20260511-tcp-dm-netkit-v4-0-841b78b99d74@meta.com
+
+Changes in v4:
+- remove enum list from netmem_tx comment (Stan)
+- fold NETMEM_TX_NO_DMA check in validate_xmit_unreadable_skb() into
+  skb_frags_readable check (Stan, Jakub)
+- change binding->vdev to void ptr cookie with comment (Jakub)
+- Fixed the bad change list version number (Stan)
+- Link to v3: https://lore.kernel.org/r/20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com
+
+Changes in v3:
+- Fix validate_xmit_unreadable_skb() logic for non-devmem
+  unreadable niovs (should not be dropped) (Sashiko)
+- Simplify lock handling in bind_tx, no premature release (Jakub)
+- split NO_DMA changes into separate patch (Jakub)
+- fixed some pylint issues, one required an additional patch ("selftests:
+  drv-net: make attr _nk_guest_ifname public") to rename a variable from
+  private to public
+- see per-patch changelist for more detailed changes
+- Link to v2: https://lore.kernel.org/r/20260504-tcp-dm-netkit-v2-0-56d52ac72fd4@meta.com
+
+Changes in v2:
+- Squash driver conversion patches (2-5) into patch 1 (Jakub)
+- In validate_xmit_unreadable_skb() to check netmem_tx mode before inspecting
+  frags (Jakub)
+- Lock bind_dev around netdev_queue_get_dma_dev() when bind_dev != netdev to
+  fix lockdep (Sashiko)
+- Move require_devmem() into individual test functions so KsftSkipEx goes up to
+  ksft_run() (Sashiko)
+- Add nk_devmem.py to TEST_PROGS in Makefile (Sashiko)
+- Link to v1:
+  https://lore.kernel.org/all/20260428-tcp-dm-netkit-v1-0-719280eba4d2@meta.com/
+
+Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+
+---
+Bobby Eshleman (8):
+      net: convert netmem_tx flag to enum
+      net: netkit: declare NETMEM_TX_NO_DMA mode
+      net: devmem: support TX over NETMEM_TX_NO_DMA devices
+      selftests: drv-net: ncdevmem: add -n flag to skip NIC configuration
+      selftests: drv-net: make attr _nk_guest_ifname public
+      selftests: drv-net: refactor devmem command builders into lib module
+      selftests: drv-net: add primary_rx_redirect support to NetDrvContEnv
+      selftests: drv-net: add netkit devmem tests
+
+ .../networking/net_cachelines/net_device.rst       |   2 +-
+ Documentation/networking/netmem.rst                |   8 +-
+ .../translations/zh_CN/networking/netmem.rst       |   7 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c          |   2 +-
+ drivers/net/ethernet/google/gve/gve_main.c         |   2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c  |   2 +-
+ drivers/net/ethernet/meta/fbnic/fbnic_netdev.c     |   2 +-
+ drivers/net/netkit.c                               |   1 +
+ include/linux/netdevice.h                          |  10 +-
+ net/core/dev.c                                     |   5 +-
+ net/core/devmem.c                                  |   6 +-
+ net/core/devmem.h                                  |  10 +-
+ net/core/netdev-genl.c                             |  65 +++++-
+ tools/testing/selftests/drivers/net/hw/Makefile    |   2 +
+ tools/testing/selftests/drivers/net/hw/devmem.py   |  77 ++-----
+ .../testing/selftests/drivers/net/hw/devmem_lib.py | 222 +++++++++++++++++++++
+ tools/testing/selftests/drivers/net/hw/ncdevmem.c  |  58 +++---
+ .../testing/selftests/drivers/net/hw/nk_devmem.py  |  46 +++++
+ .../drivers/net/hw/nk_primary_rx_redirect.bpf.c    |  39 ++++
+ .../testing/selftests/drivers/net/hw/nk_qlease.py  |   8 +-
+ tools/testing/selftests/drivers/net/lib/py/env.py  | 110 +++++++---
+ 21 files changed, 545 insertions(+), 139 deletions(-)
+---
+base-commit: 8ebd24a7822cbae25beeafba49b2159d6a68a5f2
+change-id: 20260423-tcp-dm-netkit-2bd78b638d30
+
+Best regards,
+-- 
+Bobby Eshleman <bobbyeshleman@meta.com>
 
