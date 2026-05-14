@@ -1,34 +1,32 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 420783B582F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BEE3B8BD7
 	for <bpf@vger.kernel.org>; Thu, 14 May 2026 18:48:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778784525; cv=none; b=iMEU4YZrrf7+vmZT8/kY0FobAFhN1hX76ZwnhzrI3lMB9Hof2oLJTBekwHTmygpNmB1oxiZnO3IAMJQDQWxpFXxkunMOH6q57h1Gi2CAUrSJm5GpgmdRoqtQJigsLzuPe+mKEYKmdSInvQJzbi8dBw1yKyU7u0IaUgmiUMibmPU=
+	t=1778784524; cv=none; b=e1eC1t9YLGKHttGGjjeqeyJDXol6Ia+OK0O3O4GLOV7citgO22q4ch/De7SA9K42a/WYh8789qXZiGSivbW+9pQJNWgdxZF4NpXPr17KWLSf/1iTEvjJF9JAzpaTj+XuZHjOr7koQJo4Z8IjJYI76OTLyU3UZ3495uwLmNNn1dU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778784525; c=relaxed/simple;
-	bh=RJhaGIPkFOmYJNTCzMNe3zL+DwlinrhPIzj+6xiWioI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a3u2zzjzKuO4o5scKCd5pL83NiC0B4zqnQdScK4QYX2TplOYz7HUzSBmYJi1UNdsYkqGPFoulqOT3qLINaXXfzkzqv0XKcymHcBqIryzQeiRRxx7oRu1AF/nuK8RsgIoGeht2EfJRJJgLmQUyISL7+FGhesymwVAPjkiBMGBPUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+	s=arc-20240116; t=1778784524; c=relaxed/simple;
+	bh=jUkLnQggV9Z/83pj1DFBi0fkPC7JCfjIihTssk6BezA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iJwPDpZytYX3Sl0ohSmNpGHoQnYf/34G7bujeEHewXyN67kylqx62tBpXhrhWV5RYQNUg44sqCbYFsJK/ny/BIDPslLqCHSxwMnh1f5l1JisQxVus4IS+yP9uv22G1apuYxP+tPgBAHCsEugmyq8F+qHDbwZp33QjV3XlZjhF4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 37641BA5CD5CD; Thu, 14 May 2026 11:48:32 -0700 (PDT)
+	id 1AF8BBA5CD5A8; Thu, 14 May 2026 11:48:27 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add test for stack arg read without caller write
-Date: Thu, 14 May 2026 11:48:32 -0700
-Message-ID: <20260514184832.1620221-1-yonghong.song@linux.dev>
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Sashiko <sashiko-bot@kernel.org>
+Subject: [PATCH bpf-next 1/2] bpf: Validate outgoing stack args when btf_prepare_func_args fails
+Date: Thu, 14 May 2026 11:48:27 -0700
+Message-ID: <20260514184827.1619863-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260514184827.1619863-1-yonghong.song@linux.dev>
-References: <20260514184827.1619863-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,148 +35,54 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Add negative tests for the outgoing stack arg validation.
-A static subprog with a 'long *' arg causes
-btf_prepare_func_args() to fail after setting arg_cnt. The
-validation ensures check_outgoing_stack_args() still runs.
+btf_prepare_func_args() sets sub->arg_cnt before validating arg types.
+If validation fails (e.g. unsupported pointer type in a static subprog),
+check_outgoing_stack_args() is skipped because btf_check_func_arg_match()
+returns early. For static subprogs, check_func_call() ignores non-EFAULT
+errors and proceeds with the call.
 
-Also update two existing tests (release_ref, stale_pkt_ptr) whose
-expected error messages changed: invalidated stack arg slots are now
-caught by check_outgoing_stack_args() at the call site instead of
-at the callee's dereference.
+This causes the callee to read stack arg slots that the caller never
+stored or not initialized, potentially dereferencing NULL caller->stack_a=
+rg_regs
+or getting no-initialized value.
 
+To fix the issue, when btf_prepare_func_args() fails and the subprog expe=
+cts
+stack args, call check_outgoing_stack_args() to verify the caller initial=
+ized
+the slots. Return -EFAULT on failure so the error is not ignored.
+
+Reported-by: Sashiko <sashiko-bot@kernel.org>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../bpf/progs/btf__verifier_stack_arg_order.c |  8 +++
- .../selftests/bpf/progs/verifier_stack_arg.c  |  4 +-
- .../bpf/progs/verifier_stack_arg_order.c      | 58 +++++++++++++++++++
- 3 files changed, 68 insertions(+), 2 deletions(-)
+ kernel/bpf/verifier.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_or=
-der.c b/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
-index da34e8456b6c..99bc115f8380 100644
---- a/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
-+++ b/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
-@@ -21,6 +21,10 @@ int subprog_pruning_call_before_load_6args(int a, int =
-b, int c, int d, int e, in
- 	return a + b + c + d + e + f;
- }
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 76a07f09ab64..8dd79b735a69 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9118,11 +9118,17 @@ static int btf_check_func_arg_match(struct bpf_ve=
+rifier_env *env, int subprog,
+ 	struct bpf_func_state *caller =3D cur_func(env);
+ 	struct bpf_verifier_log *log =3D &env->log;
+ 	u32 i;
+-	int ret;
++	int ret, err;
 =20
-+void subprog_bad_ptr_7args(long *a, int b, int c, int d, int e, int f, i=
-nt g)
-+{
-+}
-+
- #else
+ 	ret =3D btf_prepare_func_args(env, subprog);
+-	if (ret)
++	if (ret) {
++		if (bpf_in_stack_arg_cnt(sub) > 0) {
++			err =3D check_outgoing_stack_args(env, caller, sub->arg_cnt);
++			if (err)
++				return err;
++		}
+ 		return ret;
++	}
 =20
- int subprog_bad_order_6args(void)
-@@ -38,4 +42,8 @@ int subprog_pruning_call_before_load_6args(void)
- 	return 0;
- }
-=20
-+void subprog_bad_ptr_7args(void)
-+{
-+}
-+
- #endif
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/too=
-ls/testing/selftests/bpf/progs/verifier_stack_arg.c
-index d43a9b42034c..d45339b83795 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-@@ -152,7 +152,7 @@ __naked void stack_arg_pruning_type_mismatch(void)
- SEC("tc")
- __description("stack_arg: release_reference invalidates stack arg slot")
- __failure
--__msg("R{{[0-9]}} !read_ok")
-+__msg("callee expects 6 args, stack arg1 is not initialized")
- __naked void stack_arg_release_ref(void)
- {
- 	asm volatile (
-@@ -201,7 +201,7 @@ __naked void stack_arg_release_ref(void)
- SEC("tc")
- __description("stack_arg: pkt pointer in stack arg slot invalidated afte=
-r pull_data")
- __failure
--__msg("R{{[0-9]}} !read_ok")
-+__msg("callee expects 6 args, stack arg1 is not initialized")
- __naked void stack_arg_stale_pkt_ptr(void)
- {
- 	asm volatile (
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c=
- b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-index 1240cf8a40d6..c9fe4857da3f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-@@ -112,6 +112,64 @@ __naked void stack_arg_pruning_load_after_call(void)
- 	);
- }
-=20
-+/*
-+ * "bad_ptr": the first arg is 'long *', which is not a recognized point=
-er
-+ * type for static subprogs (not ctx, dynptr, or tagged).  btf_prepare_f=
-unc_args()
-+ * sets arg_cnt =3D 7 / stack_arg_cnt =3D 2, then fails with -EINVAL.  T=
-he subprog
-+ * is marked unreliable but the call still proceeds for static subprogs.
-+ */
-+__noinline __used __naked
-+static void subprog_bad_ptr_7args(long *a, int b, int c, int d, int e, i=
-nt f, int g)
-+{
-+	asm volatile (
-+		"r0 =3D *(u64 *)(r11 + 8);"
-+		"r1 =3D *(u64 *)(r11 + 16);"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: read without caller write")
-+__failure
-+__msg("callee expects 7 args, stack arg1 is not initialized")
-+__btf_func_path("btf__verifier_stack_arg_order.bpf.o")
-+__naked void stack_arg_read_without_write_1(void)
-+{
-+	asm volatile (
-+		"r1 =3D 0;"
-+		"r2 =3D 0;"
-+		"r3 =3D 0;"
-+		"r4 =3D 0;"
-+		"r5 =3D 0;"
-+		"call subprog_bad_ptr_7args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: read with not-initialized caller write")
-+__failure
-+__msg("R0 !read_ok")
-+__btf_func_path("btf__verifier_stack_arg_order.bpf.o")
-+__naked void stack_arg_read_without_write_2(void)
-+{
-+	asm volatile (
-+		"r1 =3D 0;"
-+		"r2 =3D 0;"
-+		"r3 =3D 0;"
-+		"r4 =3D 0;"
-+		"r5 =3D 0;"
-+		"*(u64 *)(r11 - 8) =3D 0;"
-+		"*(u64 *)(r11 - 16) =3D 0;"
-+		"call subprog_bad_ptr_7args;"
-+		"call subprog_bad_ptr_7args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
- #else
-=20
- SEC("socket")
+ 	ret =3D check_outgoing_stack_args(env, caller, sub->arg_cnt);
+ 	if (ret)
 --=20
 2.53.0-Meta
 
