@@ -1,67 +1,68 @@
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A3DA39281F
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 17:23:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19E213115BD;
+	Thu, 14 May 2026 18:14:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778779382; cv=none; b=Yb7VOhe8SOPbC3BTH1G/XOty/lVVnUN32N5PT399EDxDRmm27QffjDIN7NrWe5DN+IIWa3b19Ih4qltU/dMKp2GNbzqDBa3mAeqEFpyb8+0oAtCsoxtPhNKUb0z/5flqzegEUulRC0fcrlv1VwwOBx1dES+49BmX0m8Gf/a6+l4=
+	t=1778782460; cv=none; b=CM0hfOkvpxV21gvAA3yIOJ+NurdQMYafLdwEZ+Ksor2qeJh9qukSGVr21LCLURKbZk3I9DYeEHvOPoYYpy8GqX6v3HN3IwheKtvU+SQta5Mf2kJWoDByk8Z0vCrqMcMhPn/MkYG1QQgIU+JziCeBgs5bkxX3URfNbly5kPO5HQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778779382; c=relaxed/simple;
-	bh=EDyBqkyN5bDm600u/I66EqsZzueKCojlerqIBUvyphs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Ik4hY/FnwVG6gVyBmlM4HJ4ye33Iz5Pc4iRwCQalNM+bOJNO1KAdjFPxYLXnqCZ8CN0oKdeVOlB8vPPNKp6z5aZGqqiAX7P1X8CNiqIBAik1DAcRQO6Rn/zJ83dnktdgtj9P3cQUP7ufnNDkgg7byONUJREJcTMrAbHcuWPicFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EbNE0fqG; arc=none smtp.client-ip=209.85.210.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778782460; c=relaxed/simple;
+	bh=BQ7qpMLSNXeBFl5qOYux37jkMV7llWRcNVE9SfAA2MM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A6qF2ADjvoZbKzPLoWGodJXb3bEFM8m4gef444bWWJzNE1CGw9+vG0DCWMmgCjgGS7ETCIHEGfKgmuPhvIxnkRRKT1+NpJR1JiU7vFNlnA1CIURgwhP3GmIF5B43f0kRHhB3wxJ5z2HyE2dS7/rq2yO4EFv6NIa9c4JGLwl9s+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=TDklkNMk; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EbNE0fqG"
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7d55b97f358so5678148a34.3
-        for <bpf@vger.kernel.org>; Thu, 14 May 2026 10:23:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778779379; x=1779384179; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fK6Hgo3Ntm+Mk5vI9D7ReSoIcT5DoQh4kA5KdiywL8c=;
-        b=EbNE0fqGgztfEhlDW8IO7XoiGkpsuYndZ6xw/l+/6KOaeGXducdM7IGPNHTwgx9Uyc
-         IOnE3akvzeLJ/calq8q0VCT9+GIrxnoigU88AI5AqSKI7DkJOIyRAC0dym5wt8gQkuLn
-         vYvkpL8oPwe1alB7ptzJD6B+WPBFT3G0ThHplSa7rZAHgkmGdWx1HWlx5ct6s+a6Pb+f
-         pWBeolusN/C7fbIYzE/OrN10SjNljgi6j9FcGmD/zGXOxpDi2n41GKGXD5jrLoaGy6A8
-         IDc21bQ3Rlh6YVmQ5Q8ytHLLq3jU2NLB/rFJ645f9dpU9cEpvvVP5lbyj+fPvBiJ9DSb
-         NHrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778779379; x=1779384179;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fK6Hgo3Ntm+Mk5vI9D7ReSoIcT5DoQh4kA5KdiywL8c=;
-        b=JfI/1GkeSbzjg2vCF/qPNbFvhG80fa0ZfptLDen5xwMjOSUGM1RD/R/CA89x3L2NtM
-         TmFCVlsxLQtp8cuTzan4LUz3V4YZUBWa7ig6j+l7LeKmXMb04VoB6BXvgpsL9+2AS5IJ
-         yxiPZZ+OvqIBVL0t5F0uzE6zYLUDk3pRceqjrLg57JrPtHUnHoaXXtHKL6eVm0obqoeg
-         r4cyrV07CODDuEem7cbBW0j0COfR2liYIDb6lXW9C/UVxL6PGh/DNCeWogl/tyav25T4
-         vrAATfz19TNxxKU6hR4ly9Eg/BA+uG7G0bk/RqRim3sFH72YJGhZrsC99Y0H0y93nWGf
-         Vysg==
-X-Forwarded-Encrypted: i=1; AFNElJ/InMuP9Zam+D9YCb/rPTdiuMuVWqG9SUi7hQgtwhgRTikt7PkE1wLSXazx7GM73TZNssY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFCthmGUaMPWjR/Hsl9+u5wUuw1kArjp4pDeOj0eLjGcGn9vE9
-	z8FWhqdD405wLFodhFYFqyiC64up+txfNfXxjDr5dgXDpkJMZJKI+omB
-X-Gm-Gg: Acq92OFdgpTULuVYGNJIB2ePPbzB1AnK0euhzMZ1s5C1d7XmjhCbWrYyoeIzK6f3cvw
-	xOlBEaiX34sZI/XzkqihVfCnwSiZZ+98Y9Cvfzq9rwvR33qYLgsHDF88xqAfRg0KxesBnmuFDtG
-	hi2jZ2/A/Ujrv9guAnjw/+P0FnA7YUwRdic7dMBA6zooEK2OvBnRxX8w7TZxYWBhNcFn8DMyZBJ
-	g7R1ZP39vEI2v6jjQUZdB5DxrbNzFO9g0qhP7qMW5wbneHyOMhd5ZoZER72gcpY636HVLjziB66
-	peb4cP70gq3AEQafAvp7V4Sr1nPTjwHTk8PKD0WCEtl53/aIz/XWiY6odAy9122jFre/b7Qf5xZ
-	t5+Stx0LZodnSMb9n5yHqaguObsQwZBWmLIYagLks+Hk4ZSR+EvsLAcqhELp2kOE00WPzx3wyBo
-	+Hf0RhtFxAaQxmr8a3tAS4oA==
-X-Received: by 2002:a05:6820:81c7:b0:69b:8c73:e921 with SMTP id 006d021491bc7-69c942ef1femr249405eaf.20.1778779379501;
-        Thu, 14 May 2026 10:22:59 -0700 (PDT)
-Received: from localhost ([2a03:2880:f812:6b::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-439fc1e7bc7sm2229037fac.7.2026.05.14.10.22.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 10:22:59 -0700 (PDT)
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Thu, 14 May 2026 10:22:35 -0700
-Subject: [PATCH net-next v5 8/8] selftests: drv-net: add netkit devmem
- tests
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="TDklkNMk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1778782459; x=1810318459;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=BQ7qpMLSNXeBFl5qOYux37jkMV7llWRcNVE9SfAA2MM=;
+  b=TDklkNMkHE+ntWlumtmNhhu56wBJCDMd2kME0Hm/+lfq3fh3mOD1OPgF
+   1jtqjJt2vDeEca75ZyQ+22OzCObtOmppDWD7TsDw1BaDL9E5CyLpv7DYq
+   xUONDl2lm+T92f12xzjLPPiFL1R9p8D+MRtIMWfRcSgt39ZH8/jdG+7h5
+   X8GxvTO9bUvvRYHXWwQrxNx62lvx/tzzyPL38bTwI2zeSdgM8G9CYNMWr
+   xzujF4NX97U6khlIxkXDQ3bSjO0WxBwm+8QVdyfM7ApBvzKezGRZc7yps
+   37iuZI1MJvFMiDtJUPX+IX8bxz/JhLi/IjWcyiOnT+njfbG+NjdPB+xv1
+   w==;
+X-CSE-ConnectionGUID: l6cMKygMTVSs5+14yW2K1w==
+X-CSE-MsgGUID: vnaWtqheS02Sq0tvd0rzXA==
+X-IronPort-AV: E=Sophos;i="6.23,235,1770620400"; 
+   d="scan'208";a="288887666"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 May 2026 11:14:18 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Thu, 14 May 2026 11:14:17 -0700
+Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Thu, 14 May 2026 11:14:13 -0700
+Date: Thu, 14 May 2026 20:14:13 +0200
+From: Daniel Machon <daniel.machon@microchip.com>
+To: Paolo Abeni <pabeni@redhat.com>
+CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Horatiu Vultur <horatiu.vultur@microchip.com>, "Steen
+ Hegelund" <steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, "Herve
+ Codina" <herve.codina@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, Mohsin Bashir
+	<mohsin.bashr@gmail.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next v4 09/13] net: lan966x: add PCIe FDMA support
+Message-ID: <20260514181413.n7o6jwwfoez4up6z@DEN-DL-M70577>
+References: <20260508-lan966x-pci-fdma-v4-9-14e0c89d8d63@microchip.com>
+ <20260509082720.503A6C2BCB2@smtp.kernel.org>
+ <73a19f89-ccd7-4762-8e07-812d8d95ead2@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,156 +70,77 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260514-tcp-dm-netkit-v5-8-408c59b91e66@meta.com>
-References: <20260514-tcp-dm-netkit-v5-0-408c59b91e66@meta.com>
-In-Reply-To: <20260514-tcp-dm-netkit-v5-0-408c59b91e66@meta.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>, 
- Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>, 
- Michael Chan <michael.chan@broadcom.com>, 
- Pavan Chebbi <pavan.chebbi@broadcom.com>, 
- Joshua Washington <joshwash@google.com>, 
- Harshitha Ramamurthy <hramamurthy@google.com>, 
- Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, 
- Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
- Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>, 
- Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>, 
- Michael Chan <michael.chan@broadcom.com>, 
- Pavan Chebbi <pavan.chebbi@broadcom.com>, 
- Joshua Washington <joshwash@google.com>, 
- Harshitha Ramamurthy <hramamurthy@google.com>, 
- Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, 
- Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
- Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>
-Cc: dw@davidwei.uk, sdf.kernel@gmail.com, mohsin.bashr@gmail.com, 
- willemb@google.com, jiang.kun2@zte.com.cn, xu.xin16@zte.com.cn, 
- wang.yaxin@zte.com.cn, netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Stanislav Fomichev <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, 
- netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Bobby Eshleman <bobbyeshleman@meta.com>
-X-Mailer: b4 0.13.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <73a19f89-ccd7-4762-8e07-812d8d95ead2@redhat.com>
 
-From: Bobby Eshleman <bobbyeshleman@meta.com>
+> On 5/9/26 10:27 AM, sashiko-bot@kernel.org wrote:
+> > Thank you for your contribution! Sashiko AI review found 10 potential issue(s) to consider:
+> >> +static int lan966x_fdma_pci_napi_poll(struct napi_struct *napi, int weight)
+> >> +{
+> > [ ... ]
+> >> +    /* Get all received skbs. */
+> >> +    while (counter < weight) {
+> >> +            if (!fdma_has_frames(fdma))
+> >> +                    break;
+> >> +            /* Order DONE read before DCB/frame reads below. */
+> >> +            dma_rmb();
+> >> +            counter++;
+> >> +            switch (lan966x_fdma_pci_rx_check_frame(rx, &src_port)) {
+> >> +            case FDMA_PASS:
+> >> +                    break;
+> >> +            case FDMA_ERROR:
+> >> +                    fdma_dcb_advance(fdma);
+> >> +                    goto allocate_new;
+> >> +            }
+> >> +            skb = lan966x_fdma_pci_rx_get_frame(rx, src_port);
+> >> +            fdma_dcb_advance(fdma);
+> >> +            if (!skb)
+> >> +                    goto allocate_new;
+> >
+> > If napi_alloc_skb() fails due to memory pressure, does branching to
+> > allocate_new prematurely break out of the processing loop? Since the hardware
+> > interrupt was already cleared, and napi_complete_done() is called below,
+> > will this cause the RX queue to stall permanently for the remaining
+> > unprocessed frames? Should the code drop the packet and continue instead?
+> 
+> I went over the series and sashiko feedback, and generally speaking the
+> series LGTM, but I think this one is real and should be addressed.
 
-Add nk_devmem.py with four tests for TCP devmem through a netkit device.
+Thanks for reviewing. Before I respin, I'd like to sanity-check the design
+expectation.
 
-These tests are just duplicates of the original devmem tests, with some
-adjusted parameters such as telling ncdevmem to avoid device setup
-(since it only has access to netkit, not a phys device).
+I had already looked at this and concluded it was fine — the reasoning being
+that any leftover DCBs (frames) would be drained on the next IRQ when new
+traffic arrives. Same pattern exists in all other Microchip FDMA drivers
+(lan966x platform, sparx5/lan969x, ocelot) and has been running since their
+introduction without a reported issue, AFAIK.
 
-Each test uses NetDrvContEnv with primary_rx_redirect=True to set up the
-BPF redirect program on the primary netkit interface, then calls a
-shared run_*() helper which probes for devmem support and configures
-the NIC (HDS, RSS, queue lease) before driving the test. NIC state is
-restored per-test via defer() callbacks registered inside the helper.
+Is calling napi_complete_done() with DCBs still pending in the ring itself a
+NAPI-contract violation — in that case this is a pattern that needs fixing
+across all four drivers.
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
-Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
----
-Changes in v5:
-- Move require_devmem() inside test functions so ksft_run() reports it
-  as a SKIP (Sashiko).
-- Drop the inaccurate "mirroring the nk_qlease.py pattern" claim from
-  v4 (Sashiko).
+Happy to go either way — just want to make sure I understand the problem :-)
 
-Changes in v4:
-- Call configure_nic()/cleanup_nic() once around ksft_run() rather than
-  relying on per-test configuration inside the run_* helpers.
+> 
+> Also it would be very helpful if you could (for future series/revision)
+> reply to the (wrong) sashiko comments individually explaining with a few
+> words why the are off: decoding the context requires much more time for
+> whoever has not wrote the code itself.
 
-Changes in v3:
-- Reorder os.path expressions
-- Drop @ksft_disruptive from check_nk_rx_hds to mirror the original
-  check_rx_hds in devmem.py
+Ack.
 
-Changes in v2:
-- Add nk_devmem.py to TEST_PROGS in Makefile (Sashiko)
----
- tools/testing/selftests/drivers/net/hw/Makefile    |  1 +
- .../testing/selftests/drivers/net/hw/nk_devmem.py  | 46 ++++++++++++++++++++++
- 2 files changed, 47 insertions(+)
+> 
+> I understand that dealing with AI feedback is a pain, but, paraphrasing
+> a great aphorisms creator, I can assure you that ours (maintainers) pain
+> is greater.
 
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index 5e49d7bffced..c7a1206880ea 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -35,6 +35,7 @@ TEST_PROGS = \
- 	irq.py \
- 	loopback.sh \
- 	nic_timestamp.py \
-+	nk_devmem.py \
- 	nk_netns.py \
- 	nk_qlease.py \
- 	ntuple.py \
-diff --git a/tools/testing/selftests/drivers/net/hw/nk_devmem.py b/tools/testing/selftests/drivers/net/hw/nk_devmem.py
-new file mode 100755
-index 000000000000..300ed2a70ab4
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/hw/nk_devmem.py
-@@ -0,0 +1,46 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+"""Test devmem TCP with netkit."""
-+
-+import os
-+from devmem_lib import setup_test, run_rx, run_tx, run_tx_chunks, run_rx_hds
-+from lib.py import ksft_run, ksft_exit, ksft_disruptive
-+from lib.py import NetDrvContEnv
-+
-+
-+@ksft_disruptive
-+def check_nk_rx(cfg) -> None:
-+    """Run the devmem RX test through netkit."""
-+    run_rx(cfg)
-+
-+
-+@ksft_disruptive
-+def check_nk_tx(cfg) -> None:
-+    """Run the devmem TX test through netkit."""
-+    run_tx(cfg)
-+
-+
-+@ksft_disruptive
-+def check_nk_tx_chunks(cfg) -> None:
-+    """Run the devmem TX chunking test through netkit."""
-+    run_tx_chunks(cfg)
-+
-+
-+def check_nk_rx_hds(cfg) -> None:
-+    """Run the HDS test through netkit."""
-+    run_rx_hds(cfg)
-+
-+
-+def main() -> None:
-+    """Run the netkit devmem test cases."""
-+    with NetDrvContEnv(__file__, rxqueues=2, primary_rx_redirect=True) as cfg:
-+        setup_test(cfg,
-+                   os.path.join(os.path.dirname(os.path.abspath(__file__)),
-+                                "ncdevmem"))
-+        ksft_run([check_nk_rx, check_nk_tx, check_nk_tx_chunks,
-+                  check_nk_rx_hds], args=(cfg,))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
+I can only imagine.
 
--- 
-2.53.0-Meta
+> 
+> Thanks,
+> 
+> Paolo
+> 
 
+/Daniel
