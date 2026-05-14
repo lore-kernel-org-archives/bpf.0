@@ -1,95 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05EF33A168E;
-	Thu, 14 May 2026 09:39:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4562848BA;
+	Thu, 14 May 2026 10:02:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778751596; cv=none; b=MQGkQnIwn2/s0uVUvNqRXZ4Kr6a/+Z1i2Ue/UuQzvyc5l48NvN+Yp7Jzq1viNtu9flXHWmWXsdtcrS4EAvubsDfvYJixsnSZJqn4EL3X4EwcyGvfPKLzJHoZ4B54KvWl4yVvbt/nsqzlG8o1Wpgy6MIrCGJyEYYSPL/RvkIeg+c=
+	t=1778752953; cv=none; b=eXE1RDY5LD0A8vq0lohez2oYLzrttRnJpU0+VfVIKeWb1L4Fkvf5U8bOu6ZO8HyOVLTbVAwJzRqiKhznPCna8plC8d8Bg1Kna5FTeTuQpB39wdt3OZ7FX1Fy28OASFUZQRYQWNCgWdMBE7EIA6K7TwadT2Att45KIwkJ60jFNdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778751596; c=relaxed/simple;
-	bh=DHcx3aovbP+JoCVxu3/iNaP1b/668QSCA4X5z26cpnk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RIzsj+LclrZrZhZUStAVeKXx44mPOE6KqX0j2kUqNDP8x6hr3VSZaTCz2b+dSpMFCQG+7b+qTYeCfNgX8cVjLACOpPc6jhcFvdu4YLsYDxbENzSqry2Z8jJQYRWtlIOFlKba9gBnnESdHYROhbCJI+bY2BOFCzBuaFNmSGdxNGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DrHn2EdG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778752953; c=relaxed/simple;
+	bh=I5LGjB3LPZRTrFXwGMMedAZ0l8A/HmoWWktGrbcMPQQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=WswJb8dWi8SWS8/CL/Yz3/MhsNsSO82pb0+vQeaXNfsXVSx1Guzy6XsPbbhIzXoGNNmqFnp2YuDizyXwJ2zYUUky75cA9R4HeTrgZoz2Bw9pZDUnN4oudUpe2MKHRnQPnJqEIiyKcYxMy/s8p+5vegg9NuhDMINWu8mObX5kXtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lvtV8Hg3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DrHn2EdG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0A8FC2BCB3;
-	Thu, 14 May 2026 09:39:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lvtV8Hg3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4775C2BCB3;
+	Thu, 14 May 2026 10:02:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778751595;
-	bh=DHcx3aovbP+JoCVxu3/iNaP1b/668QSCA4X5z26cpnk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DrHn2EdGsspMBh2RrrWhrLAljxmtslTNgsHeSXvJBMB18gfDiPJ9Td2Y2IK4xZhQA
-	 qE5HLJfeiXZvmedFAy3Xq0KzPIhPda8LnVsrr2x+oleaVOD3e1VqvoznttLj6HwRg8
-	 QU003yTYN8bFfcxsrtXob/WbfqeQ4Rm38L9bqcgYyL/us3X7VzjJM/82HhNjEyuVe7
-	 +DEQH+q8xgTwYiVN7VanG2hA2bbJ6amG6GUexo1H371Qohsk44afdjzfT9gI8y0flM
-	 8zWpEk8CyFmyc7xp/Qj1jOdUCe2fcZmFnPjKt/+z17RAEa6kmUdrTmErS2C32d2Lfs
-	 mS3Ia8T0nivgQ==
-Message-ID: <be7a2a06-cd81-446c-9875-fafb198caf78@kernel.org>
-Date: Thu, 14 May 2026 11:39:50 +0200
+	s=k20201202; t=1778752953;
+	bh=I5LGjB3LPZRTrFXwGMMedAZ0l8A/HmoWWktGrbcMPQQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=lvtV8Hg3FF3mFtVkv62s3NarExlrZoVzcRXoehYpgOkGqsDCqUEXqxx7S1nGlBBBP
+	 SN8kooxAyn6POwG1UC358iK7tGKo8vftXupi17b3eYiBQdMdxQt/IB/H6zQj3yAhQp
+	 /CNh2Jd/I61/ro72qJ8s2wiR6EKRDZzbMS0ApKyzF8skrtt2PJHYt4GPUMsfl3XeaY
+	 KU1cFvXTwPcujQGH7ZokG1KMhmObjxL1sBNdFvc5NFll7WCMWaEjdMV3iLvu/WNInR
+	 YrO/l95WiXD62goABfNC5Ca7kmTkYCVMfmGHBvHSG6LHQ/fjCebOCQudSlA10eGhOT
+	 EcF9dMlyuxxjQ==
+Content-Type: multipart/mixed; boundary="===============3028240220261879341=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: kmalloc_nolock() follow-ups, including kfree_rcu_nolock()
-Content-Language: en-US
-To: "Harry Yoo (Oracle)" <harry@kernel.org>, Levi Zim <i@kxxt.dev>
-Cc: linux-mm@kvack.org, rcu@vger.kernel.org, bpf@vger.kernel.org,
- Hao Li <hao.li@linux.dev>, "Paul E. McKenney" <paulmck@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>, Joel Fernandes <joelagnelf@nvidia.com>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>,
- Amery Hung <ameryhung@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-References: <esepccfhqg7m6jo76ns2znj2cnuaepx2xvw5zaygtwohq4psma@563ypprp6rr3>
- <9bea1536-534a-4a59-9b5f-92389fb05688@kxxt.dev>
- <6wvjo33urd5i4jvbf6rwp7kwe3ppn3ktgmjk663hq2jxax65gm@kxljf3hkqs5e>
- <1315d145-49ee-412f-ad91-0f6c61c4c2c9@kxxt.dev>
- <2dhbxmhg4l35gupk3wgwtufsf735rnk4czmcoyspzckvexie3z@nswohkoipx44>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-In-Reply-To: <2dhbxmhg4l35gupk3wgwtufsf735rnk4czmcoyspzckvexie3z@nswohkoipx44>
-Content-Type: text/plain; charset=UTF-8
+Message-Id: <998802d0c3bb407e9bcc61e4fe6db2e3eed7ac06c7c6eca0ed0dd5409a8c2801@mail.kernel.org>
+In-Reply-To: <20260514-james-perf-llvm-version-v1-1-6cac1a9a4c8d@linaro.org>
+References: <20260514-james-perf-llvm-version-v1-1-6cac1a9a4c8d@linaro.org>
+Subject: Re: [PATCH 1/6] tools/build: Allow versioning of all LLVM tools defined in Makefile.include
+From: bot+bpf-ci@kernel.org
+To: james.clark@linaro.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com,jikos@kernel.org,bentiss@kernel.org,shuah@kernel.org,peterz@infradead.org,mingo@redhat.com,acme@kernel.org,namhyung@kernel.org,mark.rutland@arm.com,alexander.shishkin@linux.intel.com,jolsa@kernel.org,irogers@google.com,adrian.hunter@intel.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev
+Cc: linux-kernel@vger.kernel.org,llvm@lists.linux.dev,linux-input@vger.kernel.org,linux-kselftest@vger.kernel.org,bpf@vger.kernel.org,linux-perf-users@vger.kernel.org,james.clark@linaro.org,leo.yan@arm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 14 May 2026 10:02:32 +0000 (UTC)
+
+--===============3028240220261879341==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On 5/14/26 11:25, Harry Yoo (Oracle) wrote:
-> On Wed, May 13, 2026 at 09:34:01PM +0800, Levi Zim wrote:
->> On 5/13/26 9:42 AM, Harry Yoo (Oracle) wrote:
->> > On Tue, May 12, 2026 at 09:46:33PM +0800, Levi Zim wrote:
->> >> I don't know how could we fix it otherwise after removing BPF memory allocator completely.
->> >> Could we find a path to move forward without causing regressions on architectures without HAVE_CMPXCHG_DOUBLE?
->> > 
->> > Probably we can. Could you please see if this works for you?
->> > 
->> > https://git.kernel.org/pub/scm/linux/kernel/git/harry/linux.git/log/?h=slab-kmalloc-nolock-without-cmpxchg-double-rfc-v1r1-wip
->> 
->> Thanks a lot! I tested it and could confirm that it could fix the failure of
->> bpf_task_storage_get(BPF_LOCAL_STORAGE_GET_F_CREATE) on riscv64.
-> 
-> Thanks for confirming!
-> 
-> I will add this to TODO and post them and Cc you when submitting it to
-> the mailing list.
-> 
->> The commit message says that the allocation may still fail if the slab lock
->> acquisition fails upon the first try.
-> 
-> kmalloc_nolock() can always fail, unfortunately.
-> We can only make it less likely to fail.
+> tools/build: Allow versioning of all LLVM tools defined in Makefile.include
+>
+> The version of LLVM tools can be given on the build command with
+> LLVM=-15, but this isn't applied to all tools. For example $(CC) gets
+> versioned, but $(CLANG) doesn't. This causes a Perf build with LTO=1 to
+> fail with an error about mixed clang versions:
+>
+>  ld.lld: error: libperf/core.o: Unknown attribute kind (86)
+>    (Producer: 'LLVM18.1.8' Reader: 'LLVM 15.0.7')
+>
+> This file has two "ifneq ($(LLVM),)" blocks adjacent to each other, so
+> merge these blocks making it obvious that all tools should be versioned
+> consistently and there is nothing special about each block.
+>
+> This also reveals that ?= and "allow-override" are used inconsistently
+> between the blocks. "allow-override" is technically only required for
+> builtin variables, but isn't only used on them, and doesn't do any harm
+> if used on a non-builtin. Make them all "allow-override" for
+> consistency. The only functional difference this will cause is if there
+> is a file level definition of one of the variables followed by an
+> "#include of Makefile.include" which will now overwrite. But this isn't
+> done and in a later commit some of the duplicate definitions will be
+> removed for good measure.
+>
+> There are also some other LLVM tools that are not defined here and will
+> be moved in a later commit.
+>
+> Signed-off-by: James Clark <james.clark@linaro.org>
 
-There's still the fallback to the larger bucket, right?
-That pretty much guarantees that if we fail due to a local lock in one
-bucket (due to preempting its holder), a local lock in another bucket won't
-be locked at the same time.
-However if local sheaves are exhausted, we might need a shared lock (barn,
-list_lock, slab bit lock when no double cmpxchg) and that might be held by
-another cpu in both buckets. But should be very rare.
+This looks like a bug fix that corrects inconsistent LLVM tool versioning
+introduced in an earlier commit. Should this include:
 
->> But this is still a great improvement
->> compared to the previous always failing code.
-> 
-> Yup. Thanks!
-> 
+  Fixes: e9c281928c24 ("kbuild: Make $(LLVM) more flexible")
 
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25853166705
+--===============3028240220261879341==--
