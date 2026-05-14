@@ -1,123 +1,254 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADC0F342523;
-	Thu, 14 May 2026 18:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D62A93932EE
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 18:48:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778784344; cv=none; b=pTisklQOmDp1QInMg8n7jXItELrU5BhbadqUs2FF0V3CoDZ+dssXoDiy8V98iTZxceViI0j6UkuRxqkAQMmTdIQ92NA+CMziyYzeMzsHr2KjGe4Xh4Dj10mnu6aD7liGANfeTS7YkckUXHM2xLLw4sFcxgnoSmW//I3w3yTbytI=
+	t=1778784490; cv=none; b=su8TXhgPP8u8UeU71u4m7O4X3Kub2XioygOPpSBX3XU6dQmCHYDuvnl+l8l1gEtd2w+0NzVrg0lut4RzAD8RukKJze1F0thu8q4YV4C2fkuVgkgBj4WGjqJZwa2p8E9MdeUbtSrEWJYfvfwqSdmc65uILV3X3uNxcyd/Khq1/z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778784344; c=relaxed/simple;
-	bh=h5NvIKEROpxk8tQsVZfo9Q8scTuE1PnCdvU+OQXEZmI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hJjTcL+aKtZrRWdEwW0qEyyakQauz6HUVf+s2N4VwgIB9eU0jrRS82mtu3b0c0ZDU2kct6/OCgT3BYocqcuE7zyA/us8O1zns3Oq/3XqfcmJu79frV0CTVz1YtYsTwCBF6UsC+dQnc1nYTui4TZgpUF0UtzcW39BH4bIwFCXNig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cdYwcARa; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778784490; c=relaxed/simple;
+	bh=LISHixmEemGWefhJnNt0YLqvKPmUmQYLBvFEcfcdglI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FZpxFK55gED6rJwBuLOSwqnLp8j0jVgYVWBRAhISCDZWCvnRKaiKKlJuk4sVxecarkWqHbBKtlMwqYPQ0G/nu+2/pYFz7h/hDCywOs24pLLwGkyQN+3sVyS/CMVyGQ94GH7oKU3WG6nxlvqey6Ahi7o85bU2NlqDdLvHm/kAapI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WAG+W2L6; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cdYwcARa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6400C2BCB3;
-	Thu, 14 May 2026 18:45:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778784344;
-	bh=h5NvIKEROpxk8tQsVZfo9Q8scTuE1PnCdvU+OQXEZmI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=cdYwcARan3Lj3haDRmDWeCqxZM0oywJC4ZdslmqOdtC7eAg9oaeR52e4spxDG5Z/g
-	 WzpaPPOlUtWCFjTqeMFncH5xxyrvyFXYkHskd1V7lY6T3F68z1HnLsxBI9DgbMWhw7
-	 Dwin+Ir+jp+C9OB+K9Fv1YYK1Qw9OgLJ2tAHwkbUd3DVBvPbAwIYXNgCcFS6CnbB8P
-	 zmA7ZBG1OSKJ9ekpZxIF4kyVi5GSlzfqWDEQ8//iTIqhwAbyNUJkZc8HUzs9e8GGN7
-	 sg5oTLVrvy2WF3uO1iJSn+xNhobDoXLM1Z2jEBkW63TqYgHIxa2cRYftTQOGmne6b0
-	 Dd5a7Ebuq1KMw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 5/6] tools/build: selftests: Allow versioning LLVM lld
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "James Clark" <james.clark@linaro.org>
-Cc: dmitry.torokhov@gmail.com, bpf@vger.kernel.org, linux-input@vger.kernel.org, linux-perf-users@vger.kernel.org
-In-Reply-To: <20260514-james-perf-llvm-version-v1-5-6cac1a9a4c8d@linaro.org>
-References: <20260514-james-perf-llvm-version-v1-5-6cac1a9a4c8d@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 14 May 2026 18:45:43 +0000
-Message-Id: <20260514184543.C6400C2BCB3@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WAG+W2L6"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778784480;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=znmv14bPhg5rQ6lTlDgXYncHABq27E5lhY3paqRG6+U=;
+	b=WAG+W2L6Nn/7n/ZVoHf6F2W/hwTwz3Fr/4BjYPjX8BoFDwk9pvzVua9OjKsZN7xXrx1CpJ
+	hBZ5W0U0SlVtfNQHvY0ys+66kjsTR/KnzvE0Opy4ECNrVcu6zDvdeuVhqbwkLInGATnH1R
+	cmf+weiONl++ZluhPT6Pyr86sjndOMo=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH bpf v4 0/3] bpf: Implement stack_map_get_build_id_offset_sleepable()
+Date: Thu, 14 May 2026 11:47:24 -0700
+Message-ID: <20260514184727.1067141-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Using `-fuse-ld=3Dld.lld` breaks compilation of BPF selftests with=
- GCC.
---
+I noticed a following deadlock splat on bpf-next, when running a
+subset of selftests/bpf:
 
-commit 18e1876d18fad631b521da817483ba47293a9020
-Author: James Clark <james.clark@linaro.org>
+  #526     uprobe_multi_test:OK
+  #28      bpf_obj_id:OK
+  [   27.561465]
+  [   27.561603] ======================================================
+  [   27.561899] WARNING: possible circular locking dependency detected
+  [   27.562193] 7.0.0-rc5-g0eeb0094ba03 #3 Tainted: G           OE
+  [   27.562523] ------------------------------------------------------
+  [   27.562820] uprobe_multi/561 is trying to acquire lock:
+  [   27.563071] ff1100010768ba18 (&sb->s_type->i_mutex_key#8){++++}-{4:4}, at: netfs_start_io_read+0x24/0x110
+  [   27.563556]
+  [   27.563556] but task is already holding lock:
+  [   27.563845] ff1100010b12a640 (&mm->mmap_lock){++++}-{4:4}, at: stack_map_get_build_id_offset+0xfa/0x650
+  [   27.564296]
+  [   27.564296] which lock already depends on the new lock.
+  [   27.564296]
+  [   27.564696]
+  [   27.564696] the existing dependency chain (in reverse order) is:
+  [   27.565044]
+  [   27.565044] -> #1 (&mm->mmap_lock){++++}-{4:4}:
+  [   27.565340]        __might_fault+0xa3/0x100
+  [   27.565572]        _copy_to_iter+0xdf/0x1520
+  [   27.565786]        copy_page_to_iter+0x1c6/0x2d0
+  [   27.566011]        filemap_read+0x5f7/0xbf0
+  [   27.566218]        netfs_file_read_iter+0x1ca/0x240
+  [   27.566453]        vfs_read+0x482/0x9e0
+  [   27.566658]        ksys_read+0x115/0x1f0
+  [   27.566852]        do_syscall_64+0xde/0x390
+  [   27.567057]        entry_SYSCALL_64_after_hwframe+0x76/0x7e
+  [   27.567322]
+  [   27.567322] -> #0 (&sb->s_type->i_mutex_key#8){++++}-{4:4}:
+  [   27.567701]        __lock_acquire+0x1529/0x2a10
+  [   27.567923]        lock_acquire+0xd7/0x280
+  [   27.568124]        down_read_interruptible+0x55/0x340
+  [   27.568368]        netfs_start_io_read+0x24/0x110
+  [   27.568622]        netfs_file_read_iter+0x191/0x240
+  [   27.568858]        __kernel_read+0x401/0x850
+  [   27.569068]        freader_fetch+0x19b/0x790
+  [   27.569279]        __build_id_parse+0xde/0x580
+  [   27.569528]        stack_map_get_build_id_offset+0x248/0x650
+  [   27.569802]        __bpf_get_stack+0x653/0x890
+  [   27.570019]        bpf_get_stack_sleepable+0x1d/0x30
+  [   27.570257]        bpf_prog_51bb4c0f31ae471b_uprobe_sleepable+0x2d/0x42
+  [   27.570594]        uprobe_prog_run+0x425/0x870
+  [   27.570816]        uprobe_multi_link_handler+0x58/0xb0
+  [   27.571062]        handler_chain+0x234/0x1270
+  [   27.571275]        uprobe_notify_resume+0x4de/0xd60
+  [   27.571542]        exit_to_user_mode_loop+0xe0/0x480
+  [   27.571785]        exc_int3+0x1bd/0x260
+  [   27.571973]        asm_exc_int3+0x39/0x40
+  [   27.572169]
+  [   27.572169] other info that might help us debug this:
+  [   27.572169]
+  [   27.572571]  Possible unsafe locking scenario:
+  [   27.572571]
+  [   27.572854]        CPU0                    CPU1
+  [   27.573074]        ----                    ----
+  [   27.573293]   rlock(&mm->mmap_lock);
+  [   27.573502]                                lock(&sb->s_type->i_mutex_key#8);
+  [   27.573846]                                lock(&mm->mmap_lock);
+  [   27.574135]   rlock(&sb->s_type->i_mutex_key#8);
+  [   27.574364]
+  [   27.574364]  *** DEADLOCK ***
+  [   27.574364]
+  [   27.574671] 3 locks held by uprobe_multi/561:
+  [   27.574884]  #0: ffffffff852e0038 (rcu_tasks_trace_srcu_struct){....}-{0:0}, at: uprobe_notify_resume+0x229/0xd60
+  [   27.575371]  #1: ffffffff852e0038 (rcu_tasks_trace_srcu_struct){....}-{0:0}, at: uprobe_prog_run+0x239/0x870
+  [   27.575874]  #2: ff1100010b12a640 (&mm->mmap_lock){++++}-{4:4}, at: stack_map_get_build_id_offset+0xfa/0x650
+  [   27.576342]
+  [   27.576342] stack backtrace:
+  [   27.576578] CPU: 7 UID: 0 PID: 561 Comm: uprobe_multi Tainted: G           OE       7.0.0-rc5-g0eeb0094ba03 #3 PREEMPT(full)
+  [   27.576586] Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+  [   27.576588] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-5.el9 11/05/2023
+  [   27.576591] Call Trace:
+  [   27.576595]  <TASK>
+  [   27.576598]  dump_stack_lvl+0x54/0x70
+  [   27.576606]  print_circular_bug+0x2e8/0x300
+  [   27.576616]  check_noncircular+0x12e/0x150
+  [   27.576628]  __lock_acquire+0x1529/0x2a10
+  [   27.576642]  ? __pfx_walk_pgd_range+0x10/0x10
+  [   27.576651]  ? srso_return_thunk+0x5/0x5f
+  [   27.576656]  ? lock_acquire+0xd7/0x280
+  [   27.576661]  ? avc_has_perm_noaudit+0x38/0x1f0
+  [   27.576672]  lock_acquire+0xd7/0x280
+  [   27.576677]  ? netfs_start_io_read+0x24/0x110
+  [   27.576685]  ? srso_return_thunk+0x5/0x5f
+  [   27.576693]  ? netfs_start_io_read+0x24/0x110
+  [   27.576698]  down_read_interruptible+0x55/0x340
+  [   27.576702]  ? netfs_start_io_read+0x24/0x110
+  [   27.576707]  ? __pfx_cmp_ex_search+0x10/0x10
+  [   27.576716]  netfs_start_io_read+0x24/0x110
+  [   27.576723]  netfs_file_read_iter+0x191/0x240
+  [   27.576731]  __kernel_read+0x401/0x850
+  [   27.576741]  ? __pfx___kernel_read+0x10/0x10
+  [   27.576752]  ? __pfx_fixup_exception+0x10/0x10
+  [   27.576761]  ? srso_return_thunk+0x5/0x5f
+  [   27.576766]  ? lock_is_held_type+0x76/0x100
+  [   27.576773]  ? srso_return_thunk+0x5/0x5f
+  [   27.576777]  ? mtree_range_walk+0x421/0x6c0
+  [   27.576785]  freader_fetch+0x19b/0x790
+  [   27.576793]  ? mt_find+0x14b/0x340
+  [   27.576801]  ? __pfx_freader_fetch+0x10/0x10
+  [   27.576805]  ? mt_find+0x29a/0x340
+  [   27.576810]  ? mt_find+0x14b/0x340
+  [   27.576820]  __build_id_parse+0xde/0x580
+  [   27.576832]  ? __pfx___build_id_parse+0x10/0x10
+  [   27.576850]  stack_map_get_build_id_offset+0x248/0x650
+  [   27.576863]  __bpf_get_stack+0x653/0x890
+  [   27.576867]  ? __pfx_stack_trace_consume_entry+0x10/0x10
+  [   27.576880]  ? __pfx___bpf_get_stack+0x10/0x10
+  [   27.576884]  ? lock_acquire+0xd7/0x280
+  [   27.576889]  ? uprobe_prog_run+0x239/0x870
+  [   27.576895]  ? srso_return_thunk+0x5/0x5f
+  [   27.576899]  ? stack_trace_save+0xae/0x100
+  [   27.576908]  bpf_get_stack_sleepable+0x1d/0x30
+  [   27.576913]  bpf_prog_51bb4c0f31ae471b_uprobe_sleepable+0x2d/0x42
+  [   27.576919]  uprobe_prog_run+0x425/0x870
+  [   27.576927]  ? srso_return_thunk+0x5/0x5f
+  [   27.576933]  ? __pfx_uprobe_prog_run+0x10/0x10
+  [   27.576937]  ? uprobe_notify_resume+0x413/0xd60
+  [   27.576952]  uprobe_multi_link_handler+0x58/0xb0
+  [   27.576960]  handler_chain+0x234/0x1270
+  [   27.576976]  ? __pfx_handler_chain+0x10/0x10
+  [   27.576988]  ? srso_return_thunk+0x5/0x5f
+  [   27.576992]  ? __kasan_kmalloc+0x72/0x90
+  [   27.576998]  ? __pfx_ri_timer+0x10/0x10
+  [   27.577003]  ? timer_init_key+0xf5/0x200
+  [   27.577013]  uprobe_notify_resume+0x4de/0xd60
+  [   27.577025]  ? uprobe_notify_resume+0x229/0xd60
+  [   27.577030]  ? __pfx_uprobe_notify_resume+0x10/0x10
+  [   27.577035]  ? srso_return_thunk+0x5/0x5f
+  [   27.577039]  ? atomic_notifier_call_chain+0xfc/0x110
+  [   27.577047]  ? srso_return_thunk+0x5/0x5f
+  [   27.577051]  ? notify_die+0xe5/0x130
+  [   27.577056]  ? __pfx_notify_die+0x10/0x10
+  [   27.577063]  ? srso_return_thunk+0x5/0x5f
+  [   27.577071]  exit_to_user_mode_loop+0xe0/0x480
+  [   27.577076]  ? asm_exc_int3+0x39/0x40
+  [   27.577083]  exc_int3+0x1bd/0x260
+  [   27.577090]  asm_exc_int3+0x39/0x40
+  [   27.577095] RIP: 0033:0x6c4180
+  [   27.577100] Code: c6 05 0b 6f 32 00 01 5d c3 90 c3 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 f3 0f 1e fa eb 8a 66 2e 0f 1f 84 00 00 00 00 00 <cc> 48 89 e5 31 c0 5d c3 0f 1f 84 00 00 00 00 00 55 48 89 e5 31 c0
+  [   27.577104] RSP: 002b:00007ffcbf71ada8 EFLAGS: 00000246
+  [   27.577109] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007fec9163db7b
+  [   27.577112] RDX: 00007ffcbf71adbf RSI: 0000000000001000 RDI: 00000000007f0000
+  [   27.577115] RBP: 00007ffcbf71add0 R08: 00007fec91731330 R09: 00007fec9178d060
+  [   27.577118] R10: 00007fec9153ad98 R11: 0000000000000202 R12: 00007ffcbf71af08
+  [   27.577120] R13: 0000000000787760 R14: 00000000009eade8 R15: 00007fec917bf000
+  [   27.577135]  </TASK>
+  #54/1    build_id/nofault-paged-out:OK
 
-tools/build: selftests: Allow versioning LLVM lld
+It was reproducable, which allowed me to bisect to commit 777a8560fd29
+("lib/buildid: use __kernel_read() for sleepable context")
 
-This commit updates Makefile.include to add an LLD variable, matching the
-rest of the LLVM toolchain. It modifies the BPF selftests Makefile to use
-this new LLD variable instead of hardcoding lld.
+Then I used Codex for analysis of the splat, patch and relevant lore
+discussions, and then asked it to produce a patch draft, which was a
+starting point for this series.
 
-> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.incl=
-ude
-> index 380ad84ac51e6..5c2d505cba62b 100644
-> --- a/tools/scripts/Makefile.include
-> +++ b/tools/scripts/Makefile.include
-[ ... ]
-> @@ -91,6 +92,7 @@ else
->    # Some tools still require Clang, LLC and/or LLVM utils
->    $(call allow-override,CLANG,clang)
->    $(call allow-override,LLC,llc)
-> +  $(call allow-override,LLD,ld.lld)
+I verified that the patch series fixes the deadlock splat.
 
-Could setting LLD to ld.lld when not using LLVM cause issues for BPF
-selftests compilation with GCC?
+---
 
->    $(call allow-override,LLVM_CONFIG,llvm-config)
->    $(call allow-override,LLVM_OBJCOPY,llvm-objcopy)
->    $(call allow-override,LLVM_STRIP,llvm-strip)
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-> index 6ef6872adbc3e..44ba829e5d4dd 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -245,9 +245,9 @@ $(OUTPUT)/%:%.c
-> =20
->  # LLVM's ld.lld doesn't support all the architectures, so use it only on=
- x86
->  ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
-> -LLD :=3D lld
-> +USE_LD :=3D $(LLD)
->  else
-> -LLD :=3D $(shell command -v $(LD))
-> +USE_LD :=3D $(shell command -v $(LD))
->  endif
-> =20
->  # Filter out -static for liburandom_read.so and its dependent targets so=
- that static builds
-> @@ -258,7 +258,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c ura=
-ndom_read_lib2.c liburandom
->  		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) \
->  		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
->  		     -Wno-unused-command-line-argument \
-> -		     -fuse-ld=3D$(LLD) -Wl,-znoseparate-code -Wl,--build-id=3Dsha1 \
-> +		     -fuse-ld=3D$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=3Dsha1 \
+v3->v4:
+  * Change Fixes tag in patch #2 (AI)
+  * Nit in caching implementation (Mykyta)
+v3: https://lore.kernel.org/bpf/20260512032906.2670326-1-ihor.solodrai@linux.dev/
 
-When LLVM=3D1 is not set, CC defaults to gcc. The Makefile uses
-$(CC) ... -fuse-ld=3D$(USE_LD) to link liburandom_read.so.
+v2->v3:
+  * Split patch #2 in two: stack_map_get_build_id_offset_sleepable()
+    implementation, and then introduce caching
+  * Drop taking mmap_lock if CONFIG_PER_VMA_LOCK=n, fall back to raw
+    IPs instead
+  * Cache vm_{start,end} in addition to prev_file (Mykyta)
+v2: https://lore.kernel.org/bpf/20260409010604.1439087-1-ihor.solodrai@linux.dev/
 
-Because USE_LD evaluates to ld.lld, gcc receives -fuse-ld=3Dld.lld.
+v1->v2:
+  * Addressed feedback from Puranjay:
+    * split out a small refactoring patch
+    * use mmap_read_trylock()
+    * take into account CONFIG_PER_VMA_LOCK
+    * replace find_vma() with vma_lookup()
+    * cache prev_build_id to avoid re-parsing the same file
+  * Snapshot vm_pgoff and vm_start before unlocking (AI)
+  * To avoid repetitive unlocking statements, introduce struct
+    stack_map_vma_lock to hold relevant lock state info and add an
+    unlock helper
+v1: https://lore.kernel.org/bpf/20260407223003.720428-1-ihor.solodrai@linux.dev/
 
-However, GCC's command-line option parser is strictly hardcoded to accept
-only specific linker names (lld, bfd, gold, mold). It does not recognize
--fuse-ld=3Dld.lld or absolute paths, and fails with an error like:
+---
 
-gcc: error: unrecognized command-line option '-fuse-ld=3Dld.lld'; did you m=
-ean '-fuse-ld=3Dlld'?
+Ihor Solodrai (3):
+  bpf: Factor out stack_map_build_id_set_ip() in stackmap.c
+  bpf: Avoid faultable build ID reads under mm locks
+  bpf: Cache build IDs in sleepable stackmap path
 
-Does this regression break the default GCC build of BPF selftests on x86
-and riscv architectures?
+ kernel/bpf/stackmap.c | 176 +++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 167 insertions(+), 9 deletions(-)
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260514-james-perf=
--llvm-version-v1-0-6cac1a9a4c8d@linaro.org?part=3D5
+-- 
+2.54.0
+
