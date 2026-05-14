@@ -1,149 +1,121 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8B343B6C1E
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 11:18:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD03388378
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 11:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778757499; cv=none; b=hesUmJ+Vk5p6HL2D7Q+WlEIqTQsPe78K6MzcDruH0+7z5PWNsoPzb0eriwcgtdOmAgl2oQmeFUaF/8k3o32BGj69HIwQybcvpG9IBDT9TE4vItLVeMg+j3ZotAquYw/Yy0+GssVlY4n1mTkHV3bu0/lpJmHQydd+tT4J4WCSPx4=
+	t=1778757697; cv=none; b=D8K6VxD+jKJ7cSnM3iRXW1kO/1li1ddYzAFnfKVFFk89ETxsAUvadmwguJJJPVRUm84VsSAOQ/gmW9JoTbgeSj0+TV2/yD7ENc/0v2S4nVGl9q6JBW3bgXlH0nU4plqjQtLAqCab8C7aFohNz/314O3d3JGHC71xZUtiwwwUgHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778757499; c=relaxed/simple;
-	bh=QY6s7AfEenXtWFuj8Lf7D6nSgMrs3WQlj/inWWmt53o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZXgPfRB3inMw51yFsSBzFXL7vJqlUomM1ADJjEG/WxODaq3eB0cuxLyhesaWUWKQT2HZn24J4mGqwyVwvmu9uVcLEHsWsu9rD6xrbyIHwEQgbZMa2Wx6lWf2mNBXRW3ykEBRlbTNO3Whr7gjYBClh8iO9oGCotdkOSXV5LOHIxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KU+ZFo6w; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=SbYMl5hk; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1778757697; c=relaxed/simple;
+	bh=BXQpEdto4eUZwUCPfJkV6N+Amxhik1yX1IAh2jS9bwc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=YuY06LZk4gy0IEf1JtgQmX4FJ/951iZGuS5hoIxKroiVc6IpJo4SuSdwvhuP1+t11fBCywAdyZvvvLEwJIpMI8Zx47fEI5Vbh8K+Chq2POTVCndP59GV+h9++mEYaoRSGQdH1yf0YVrSUyr8KUmQ9Q5sKlpyKecTgK/UMJgIueU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SxUddwfh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KU+ZFo6w";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="SbYMl5hk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778757496;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=COO41hKBYdHBD+YBwmNP96xVT9h6SMU1rdVHr5HzbAU=;
-	b=KU+ZFo6wGluBTov5Tc8Je/owY4NQeL1YAo25AonnSYjgyqDjnLJfm6VOEgUaqrejZRTQt+
-	T32EcdELbEj0K5XPqOaHtCMUpjIxagk0D3emFQPe8QyEQHIzrAc/9ScuUzGrqOl1BPhmTK
-	+TpZNxdIEiH+JEWw3SviPoewpksO+UE=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-131-ytfuqX6VPP-otL_ADv3DfA-1; Thu, 14 May 2026 07:18:15 -0400
-X-MC-Unique: ytfuqX6VPP-otL_ADv3DfA-1
-X-Mimecast-MFC-AGG-ID: ytfuqX6VPP-otL_ADv3DfA_1778757494
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-48fe3e73da6so43175e9.2
-        for <bpf@vger.kernel.org>; Thu, 14 May 2026 04:18:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1778757494; x=1779362294; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=COO41hKBYdHBD+YBwmNP96xVT9h6SMU1rdVHr5HzbAU=;
-        b=SbYMl5hkfLdNudDn2lvbSgbKw/BIXNh6GPXz04mPmgMXmCFU34E9HIVC+USF6gg0+c
-         xNkGFS3ZLtkCuhmYarMNcwp1vAs/BZVzm6pqr4ERu4BQ69RzFzN3aQ/tiO04DT/OgU23
-         Q1KB2VpdMKIPxyk3KNjYOt6Ben7bOOxUqzYb37TFpcTSuY+Rp6tInG6D+19wDZ+j69/c
-         QsVR29gJuR5NleO5cpb4jn9hVHfElkW+08JOa7BNGZJtY3Lep0vE3gHCOlBVyfAqnjx0
-         paEqHzX1KU8EK9eZmBUt19OnhmD32bxzMUL1k8hZZiW/gUN1IDTt3PHC5GCc7jbm4+O8
-         NXxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778757494; x=1779362294;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=COO41hKBYdHBD+YBwmNP96xVT9h6SMU1rdVHr5HzbAU=;
-        b=l3mThINqSbxVjHoR4xjmKkrw2JHsonaRz+Tkt7nCZ2xSQQpgxO1BRtWI2Bo9Q6i9Jr
-         C0w1Ysk9lvLYKFflCtW9v0uiZ0ISL35UwqVWzUsAXyBCDR9vMsWwdQJ/jeTav25d+qKA
-         m6iEZp7rCf/nm8kZbdZzAnwHrdFvoiV0Tak4hl9EdseRmC8ipzMOyKUBLsCluflaKDnJ
-         0WIRkKni4326LjgQ5nWCtc8Q2MUHVW7wJuG2TyE+S1Sy4k8IHXudH+eKcCROzqBQWlfh
-         7PRubUawzIORRE4gNBQsvmTI/g5mhh8+k+geJjhXyTdtqBvHW0ACMJpE7ZRUwkSxaaMm
-         3frw==
-X-Forwarded-Encrypted: i=1; AFNElJ+W8NlLz2Mf2csfWRT7OqmSBaHZGyPiZxzoWBCXaWgYPhyu/Ghjl5gYZcqDzzdn40KetL4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzO11deU5AysvwJFbNHtpcY5H0OuTHugCruIRys3aXCmPGafUWs
-	flpfX6rZ1L+0hOUbc4Nh007aoW8wubQZVueDmbQ+oO1GSAovWfVg0vIUDJYw5jHG1G5fdlyyJIm
-	Q91uX786eeubnlwtePjY0rV3OzQVMyWy9vxGZ5hwTaC8sf7iNKvDBCg==
-X-Gm-Gg: Acq92OGfD5PvwJxdL8CPLaerwaKqeTTpG6hZQx0VVNlnLgjFb40QASvSyd+3YLkDqLe
-	U2Cctsc6/bbiKL0UZb5VREXDB807JCjPI9VWTR/ErCenZZYd5j6fVq7nHo8uAnuCFH0M6LDe80H
-	EkLXGXkCPg9lp7898Gl7NfHunBFVk3cSr/NAc71kvdGLYXhyWsl95DGM9aJgIlyRdI0oe/B1CD0
-	5p6wKeEjN6aAlYkOcYdFdCXUXkJz/WyArIp60vb5X+Vod8AiQ7CV0BX3G1hOCCFPL6XTyaRJs/u
-	hyGbvgRxFjh1JRqnV2bjNS7+Grm1ZinKJpr0MH3E09bJb3gqtgOfZ9ij4eSd1mP+XmSsmfh4bhe
-	2zglobONvJ9XzPFTQIQ+BBJTwScczSPfuQQ+cdGHmDhg42PADngctmH8=
-X-Received: by 2002:a05:600c:468f:b0:48a:5339:ef0e with SMTP id 5b1f17b1804b1-48fc9a028bemr103922765e9.3.1778757494245;
-        Thu, 14 May 2026 04:18:14 -0700 (PDT)
-X-Received: by 2002:a05:600c:468f:b0:48a:5339:ef0e with SMTP id 5b1f17b1804b1-48fc9a028bemr103922145e9.3.1778757493719;
-        Thu, 14 May 2026 04:18:13 -0700 (PDT)
-Received: from [192.168.88.32] ([216.128.9.106])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fd6498cdesm71780365e9.5.2026.05.14.04.18.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 May 2026 04:18:13 -0700 (PDT)
-Message-ID: <a83d79d1-b932-458a-b5fa-1cb623fa03f1@redhat.com>
-Date: Thu, 14 May 2026 13:18:12 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SxUddwfh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CBAEC2BCB3;
+	Thu, 14 May 2026 11:21:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778757697;
+	bh=BXQpEdto4eUZwUCPfJkV6N+Amxhik1yX1IAh2jS9bwc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=SxUddwfhftUK342PSWqFZUXqcqPkNpfZO2D51Jj492QAiebhQVFmWwqJ7ErCbtV4X
+	 przfyciJKzvp8mzVlNXy1bUNGESq/MErijOfDtuVM+o/G5kNTL5pg45ilOGtRrZFKE
+	 o1mSRDqYpRGeZ/mkjoep3ATfjGiZnKxOcs+3CyRPORIinJDrkCrUJfFMQjrAWAC6KA
+	 Q5aVjw5uChc19j+4D3d65tEZNrnJJ9dS936Ii30/T37iA3OLypcwmsQrK6cxzeH+Jg
+	 PV314FJfj4gCgdFu9Dk9HNVtj56p9yEoZksb/pkqgbGj2ySUsuRD+tc2aHKD8PvO/D
+	 BzJtvG+0/9hcQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 1/2] bpf: arena: fix use-after-free in VMA tracking on
+ fork
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Daniel Hodges" <git@danielhodges.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260513191322.21319-1-git@danielhodges.dev>
+References: <20260513191322.21319-1-git@danielhodges.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 14 May 2026 11:21:36 +0000
+Message-Id: <20260514112137.2CBAEC2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v2 4/4] net: tls: remove bad rollback and UAF on
- ENOSPC
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: netdev@vger.kernel.org, edumazet@google.com, andrew+netdev@lunn.ch,
- horms@kernel.org, sd@queasysnail.net, john.fastabend@gmail.com,
- bpf@vger.kernel.org
-References: <20260511174920.433155-1-kuba@kernel.org>
- <20260511174920.433155-5-kuba@kernel.org>
-From: Paolo Abeni <pabeni@redhat.com>
-Content-Language: en-US
-In-Reply-To: <20260511174920.433155-5-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 5/11/26 7:49 PM, Jakub Kicinski wrote:
-> As explained in commit 54a3ecaeeeae ("bpf: fix ktls panic with sockmap")
-> once we call BPF there's no way for us to rollback the iter
-> and copy data, since BPF may have modified the message.
-> This is regardless of whether BPF set up cork or not.
-> 
-> Remove the attempt to roll back iter completely. This removes a UAF
-> since BPF may have modified msg_pl and rec, so these pointers were
-> stale.
-> 
-> Note that I'm entirely unsure what the expected behavior is here
-> for BPF. Feels like this path must not be exercised by normal
-> applications / existing deployments in the first place.
-> 
-> Fixes: d3b18ad31f93 ("tls: add bpf support to sk_msg handling")
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
->  net/tls/tls_sw.c | 12 ++----------
->  1 file changed, 2 insertions(+), 10 deletions(-)
-> 
-> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-> index 360f71fd7884..22b77840e35a 100644
-> --- a/net/tls/tls_sw.c
-> +++ b/net/tls/tls_sw.c
-> @@ -1164,11 +1164,8 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
->  				else if (ret == -ENOMEM)
->  					goto wait_for_memory;
->  				else if (ctx->open_rec && ret == -ENOSPC) {
-> -					if (msg_pl->cork_bytes) {
-> -						ret = 0;
-> -						goto send_end;
-> -					}
-> -					goto rollback_iter;
-> +					ret = 0;
-> +					goto send_end;
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Critical] zap_pages() accesses user page tables locklessly, causing page=
+ table Use-After-Free during concurrent VMA teardown.
+- [High] Silent allocation failure in arena_vm_open() leads to memory leak =
+and physical page desynchronization.
+--
 
-The sashiko report here looks like a pre-existing issue that could be
-handled separately.
+commit 305653246e6ae24222d49bb8aa21f98a5bc22903
+Author: Daniel Hodges <git@danielhodges.dev>
+bpf: arena: fix use-after-free in VMA tracking on fork
 
-Still let me play safe and merge just the 2 first patch in the series.
+This commit addresses a use-after-free by giving each vma its own vma_list
+entry in arena_vm_open, rather than sharing a refcounted entry. It also
+ensures arena_vm_close removes and frees the respective entry.
 
-In case of a repost, please fix the typo (repetition) in the cover
-letter subj.
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
 
-/P
+[ ... ]
 
+> @@ -336,9 +334,19 @@ static int remember_vma(struct bpf_arena *arena, str=
+uct vm_area_struct *vma)
+> =20
+>  static void arena_vm_open(struct vm_area_struct *vma)
+>  {
+> -	struct vma_list *vml =3D vma->vm_private_data;
+> +	struct bpf_map *map =3D vma->vm_file->private_data;
+> +	struct bpf_arena *arena =3D container_of(map, struct bpf_arena, map);
+> +	struct vma_list *vml;
+> =20
+> -	refcount_inc(&vml->mmap_count);
+> +	vml =3D kmalloc_obj(*vml);
+> +	if (!vml) {
+> +		vma->vm_private_data =3D NULL;
+> +		return;
+> +	}
+
+Because vm_ops->open has a void return type, returning early here does not
+abort the vma creation. The child vma will successfully map the arena memory
+but remain omitted from arena->vma_list.
+
+Later, when bpf_arena_free_pages() calls zap_pages(), it iterates only over
+arena->vma_list. Does this omission cause the child process to retain valid
+user-space ptes pointing to the old physical pages?
+
+If so, this could prevent the physical pages from returning to the buddy
+allocator, leaking the memory. It may also break shared memory coherency if
+new physical pages are reallocated at the same virtual offset while the
+child still accesses the old pages.
+
+> +	vml->vma =3D vma;
+> +	vma->vm_private_data =3D vml;
+> +	guard(mutex)(&arena->lock);
+> +	list_add(&vml->head, &arena->vma_list);
+>  }
+
+This is an existing issue not introduced by this patch, but zap_pages()
+iterates over arena->vma_list and calls zap_vma_range() holding only
+arena->lock.
+
+The memory management subsystem requires mmap_lock or the per-vma lock to
+be held for vma->vm_mm when traversing a vma's page tables. Concurrently,
+processes may exit or unmap the arena. In the teardown sequence,
+free_pgtables() unlinks and frees the pud, pmd, and pte pages before
+remove_vma() invokes vma->vm_ops->close.
+
+Could zap_pages() execute during this teardown window and attempt to walk
+page tables that have already been freed, leading to a use-after-free on
+the page directory and table pages themselves?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260513191322.2131=
+9-1-git@danielhodges.dev?part=3D1
