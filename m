@@ -1,90 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4562848BA;
-	Thu, 14 May 2026 10:02:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 912D538A73A
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 10:07:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778752953; cv=none; b=eXE1RDY5LD0A8vq0lohez2oYLzrttRnJpU0+VfVIKeWb1L4Fkvf5U8bOu6ZO8HyOVLTbVAwJzRqiKhznPCna8plC8d8Bg1Kna5FTeTuQpB39wdt3OZ7FX1Fy28OASFUZQRYQWNCgWdMBE7EIA6K7TwadT2Att45KIwkJ60jFNdw=
+	t=1778753220; cv=none; b=ZFp0w6DFhJplCH7iuIHNxHAB6Yrr6JQ6+FKsKsS0GShxlFa4v+SAfNYTRxe1O5P+1fHfMzFiGA4xYr0DKPSqbKtEjmJTTLbrvXBAQRLO+dZWI4OR3+eIruSlImfOMxhoR0xhOc7ioNcoUPfWuZI20E/TbCLkXJaHbJJP+vN3oq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778752953; c=relaxed/simple;
-	bh=I5LGjB3LPZRTrFXwGMMedAZ0l8A/HmoWWktGrbcMPQQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WswJb8dWi8SWS8/CL/Yz3/MhsNsSO82pb0+vQeaXNfsXVSx1Guzy6XsPbbhIzXoGNNmqFnp2YuDizyXwJ2zYUUky75cA9R4HeTrgZoz2Bw9pZDUnN4oudUpe2MKHRnQPnJqEIiyKcYxMy/s8p+5vegg9NuhDMINWu8mObX5kXtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lvtV8Hg3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778753220; c=relaxed/simple;
+	bh=n7AmzdovlqWr/0+XmtV9bpUYvTu+8BjfI6wQWox+ZD4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=JBS+gXoba9TrQoRK9IL+yDMOBniL5WNQkty3gXJOwEyaSXxp8p5fp9b/+tQtxr4Hl4rn+xzZ86Xa9kAGfPtwjcZa4eaGgij5jFvRy4HgKMwHGzlEmV8DncceVl2dVTf2fVDqMuRPc1PH7sdQBrrlVaktn5y+ctQzIRXxtih4fhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OpDwbHlA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lvtV8Hg3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4775C2BCB3;
-	Thu, 14 May 2026 10:02:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OpDwbHlA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9938C2BCB3;
+	Thu, 14 May 2026 10:06:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778752953;
-	bh=I5LGjB3LPZRTrFXwGMMedAZ0l8A/HmoWWktGrbcMPQQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=lvtV8Hg3FF3mFtVkv62s3NarExlrZoVzcRXoehYpgOkGqsDCqUEXqxx7S1nGlBBBP
-	 SN8kooxAyn6POwG1UC358iK7tGKo8vftXupi17b3eYiBQdMdxQt/IB/H6zQj3yAhQp
-	 /CNh2Jd/I61/ro72qJ8s2wiR6EKRDZzbMS0ApKyzF8skrtt2PJHYt4GPUMsfl3XeaY
-	 KU1cFvXTwPcujQGH7ZokG1KMhmObjxL1sBNdFvc5NFll7WCMWaEjdMV3iLvu/WNInR
-	 YrO/l95WiXD62goABfNC5Ca7kmTkYCVMfmGHBvHSG6LHQ/fjCebOCQudSlA10eGhOT
-	 EcF9dMlyuxxjQ==
-Content-Type: multipart/mixed; boundary="===============3028240220261879341=="
+	s=k20201202; t=1778753219;
+	bh=n7AmzdovlqWr/0+XmtV9bpUYvTu+8BjfI6wQWox+ZD4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=OpDwbHlAAa3nrfbcXTQ9SGhWNuPlDBHQfuM7LB/0pDaY8Ir3bbnebOLrFSzvOfXdJ
+	 nh554iHw3s3elSAUgSdhObLgZYAe4HqveV/Q1uzo3lkTijoPbLzn09wRletBQfavZ2
+	 eMC4aAP1JW1ZVn3kPR0EWlC6RYi6jnZriS67KGYKvymBp3IiQ4WY8VrCkS/2iYq/Cp
+	 1DXlftVOI+2/Y2Z8hlI27HzQCeYWvhmVaTMSygnXLSCnRbaiu7yzn+wlieEXg3lHYw
+	 mp9LxOjby5tMsj/e/gY0ddsAHJGqIAgfSb0V68+/Fzf6Dm1Pjrv33Q+gpGdTkMHK8b
+	 5r5H20UYEXNOQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 3/3] veristat: Report max stack depth
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Paul Chaignon" <paul.chaignon@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <b3459e61c408daef30d82272f1eacc6399844896.1778689025.git.paul.chaignon@gmail.com>
+References: <b3459e61c408daef30d82272f1eacc6399844896.1778689025.git.paul.chaignon@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 14 May 2026 10:06:59 +0000
+Message-Id: <20260514100659.C9938C2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <998802d0c3bb407e9bcc61e4fe6db2e3eed7ac06c7c6eca0ed0dd5409a8c2801@mail.kernel.org>
-In-Reply-To: <20260514-james-perf-llvm-version-v1-1-6cac1a9a4c8d@linaro.org>
-References: <20260514-james-perf-llvm-version-v1-1-6cac1a9a4c8d@linaro.org>
-Subject: Re: [PATCH 1/6] tools/build: Allow versioning of all LLVM tools defined in Makefile.include
-From: bot+bpf-ci@kernel.org
-To: james.clark@linaro.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com,jikos@kernel.org,bentiss@kernel.org,shuah@kernel.org,peterz@infradead.org,mingo@redhat.com,acme@kernel.org,namhyung@kernel.org,mark.rutland@arm.com,alexander.shishkin@linux.intel.com,jolsa@kernel.org,irogers@google.com,adrian.hunter@intel.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev
-Cc: linux-kernel@vger.kernel.org,llvm@lists.linux.dev,linux-input@vger.kernel.org,linux-kselftest@vger.kernel.org,bpf@vger.kernel.org,linux-perf-users@vger.kernel.org,james.clark@linaro.org,leo.yan@arm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 14 May 2026 10:02:32 +0000 (UTC)
 
---===============3028240220261879341==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] The MEMORY_PEAK statistic is silently truncated from the default=
+ CSV output.
+- [Medium] The commit message incorrectly claims that the max stack depth '=
+is null for rejected programs', but the code outputs '0'.
+--
 
-> tools/build: Allow versioning of all LLVM tools defined in Makefile.include
->
-> The version of LLVM tools can be given on the build command with
-> LLVM=-15, but this isn't applied to all tools. For example $(CC) gets
-> versioned, but $(CLANG) doesn't. This causes a Perf build with LTO=1 to
-> fail with an error about mixed clang versions:
->
->  ld.lld: error: libperf/core.o: Unknown attribute kind (86)
->    (Producer: 'LLVM18.1.8' Reader: 'LLVM 15.0.7')
->
-> This file has two "ifneq ($(LLVM),)" blocks adjacent to each other, so
-> merge these blocks making it obvious that all tools should be versioned
-> consistently and there is nothing special about each block.
->
-> This also reveals that ?= and "allow-override" are used inconsistently
-> between the blocks. "allow-override" is technically only required for
-> builtin variables, but isn't only used on them, and doesn't do any harm
-> if used on a non-builtin. Make them all "allow-override" for
-> consistency. The only functional difference this will cause is if there
-> is a file level definition of one of the variables followed by an
-> "#include of Makefile.include" which will now overwrite. But this isn't
-> done and in a later commit some of the duplicate definitions will be
-> removed for good measure.
->
-> There are also some other LLVM tools that are not defined here and will
-> be moved in a later commit.
->
-> Signed-off-by: James Clark <james.clark@linaro.org>
+commit 407a4af46d427010feeebda3a91736b7ef774219
+Author: Paul Chaignon <paul.chaignon@gmail.com>
 
-This looks like a bug fix that corrects inconsistent LLVM tool versioning
-introduced in an earlier commit. Should this include:
+veristat: Report max stack depth
 
-  Fixes: e9c281928c24 ("kbuild: Make $(LLVM) more flexible")
+This patch adds a new "Max stack depth" field to the set of gathered statis=
+tics.
+It reports the maximum combined stack depth compared to the 512 bytes limit.
 
+>     This patch adds a new "Max stack depth" field to the set of gathered
+>     statistics. This field reports the maximum combined stack depth compa=
+red
+>     to the 512 bytes limit. It is null for rejected programs.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Is the last sentence accurate? The code appears to output 0 instead of "nul=
+l"
+for rejected programs.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25853166705
---===============3028240220261879341==--
+When a program is rejected and the log stops early, MAX_STACK remains
+zero-initialized. In prepare_value(), MAX_STACK falls back to outputting 0:
+
+	case MAX_STACK:
+	case SIZE:
+	case JITED_SIZE:
+	case MEMORY_PEAK:
+		*val =3D s ? s->stats[id] : 0;
+		break;
+
+Furthermore, outputting "null" would fail in parse_stat_value() during repl=
+ay
+mode, as it strictly expects an integer.
+
+> diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selft=
+ests/bpf/veristat.c
+> index 5c82950e6978e..9a2275d19ee1b 100644
+> --- a/tools/testing/selftests/bpf/veristat.c
+> +++ b/tools/testing/selftests/bpf/veristat.c
+
+[ ... ]
+
+> @@ -795,7 +796,7 @@ static const struct stat_specs default_csv_output_spe=
+c =3D {
+>  		TOTAL_INSNS, TOTAL_STATES, PEAK_STATES,
+>  		MAX_STATES_PER_INSN, MARK_READ_MAX_LEN,
+>  		SIZE, JITED_SIZE, PROG_TYPE, ATTACH_TYPE,
+> -		STACK, MEMORY_PEAK,
+> +		STACK, MAX_STACK, MEMORY_PEAK,
+>  	},
+>  };
+
+Does this change truncate the MEMORY_PEAK statistic from the default CSV ou=
+tput?
+
+Looking at the full definition of default_csv_output_spec:
+
+static const struct stat_specs default_csv_output_spec =3D {
+	.spec_cnt =3D 15,
+	.ids =3D {
+		FILE_NAME, PROG_NAME, VERDICT, DURATION,
+		TOTAL_INSNS, TOTAL_STATES, PEAK_STATES,
+		MAX_STATES_PER_INSN, MARK_READ_MAX_LEN,
+		SIZE, JITED_SIZE, PROG_TYPE, ATTACH_TYPE,
+		STACK, MAX_STACK, MEMORY_PEAK,
+	},
+};
+
+With MAX_STACK added, there are now 16 elements in the ids array, but spec_=
+cnt
+remains hardcoded at 15. Because the formatting loops iterate strictly up to
+spec_cnt, it seems the 16th element (MEMORY_PEAK) will be silently ignored,
+causing a regression in the generated statistics.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1778689025.gi=
+t.paul.chaignon@gmail.com?part=3D3
