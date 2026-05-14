@@ -1,117 +1,134 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D42525393E
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 11:40:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3293B5F59
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 11:57:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778758828; cv=none; b=EDKod2j+DWoDpNOeJBgkaKQGa/a0WoosIkukfatOOET38QNJNQk2OpIuSHN7ajmC2lPz1Qhvws9C8o8PecHPRLgJ5iAlOZ3cAmNtC3Q4uecVj2+kG1ayaDOWCGx/oKXXTH0NF0sitRa75pumcxkS2hYiNsgrrid4MBFHCQLyIso=
+	t=1778759831; cv=none; b=YI6ihrDcLuWE4LsJ2DUittgNtSOTOQTjBHhi/LI+e5AgSA0sU3ETuX5qk3mvcLCtuo41mpV3W/CvV9x/Ki8hSddDaaZiUT95pttMh3l/syR0IJpc5f+Cv04e5YqHhv8jsJmzcQNRnwQE3xukj2+jaZN4zr1Gyp1pcGXg9CptjU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778758828; c=relaxed/simple;
-	bh=CDg/f/iPE2TWSNF2OOK72s+EMcw2psqjQNDh66aIuuo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YXhSYfXEc6fv6SD0zpUY3Q6y3bRr//YdkQKM3TRvwAvXTL3Q0PqD2JGIGVM3c2XUYytjiZFk1LNxmRul42+WFxFvpCT7IRxcQDn3Rx3le+M4RY9S9JrFyCsdGaoO50V5qWuhVaC3PVEJ8x5BKvTfmkBr6bnPW61weDxrRX2bsmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RkghvynB; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778759831; c=relaxed/simple;
+	bh=8PnSM1ey3VNPGdaQ2G3QZUJgUSF7cWcPKAZsyhmLQfA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=rlm80+N4jfVFtYc919QGm0AyWPRgrYnwOUrpMmCn8YPdzt6XSvycm+UKCkU+Ooykzso3Csvc8+FMv8ezopxjiS1b1OzpAes+D6IleJmg0BCshfGqPYNcpVAXigLgfN7KLigYHfdsbJwyXvFG/16rspRVBMRm6cqkwB127vTtKoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A3zd85uB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RkghvynB"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4891d7164ddso43143955e9.3
-        for <bpf@vger.kernel.org>; Thu, 14 May 2026 04:40:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778758825; x=1779363625; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Ldth8JotWNNXuuFjvG7OgbN0zVV0RxKzEBMsfyUjvI=;
-        b=RkghvynBD20rUHrbj246ARtmiJdlSIFLVY8HjHBuQdggEcmF9Na6gKlYtXQdWxNIfn
-         QXntEt2DRxbz4FY7zfF2m9O1XKeI9Nsj2pg80UfHPQ0W3KFz3Mi3eTLPH/RzuvpjAcdO
-         aDs1KlBqNnmPO0xY4s4LJNtxTAigM5YQRWlugvd8AHMHd7LU3Rg+MWD6/3SLSsyo2qNO
-         KV7ralCY9l0f8uJh0qhLt5rFjmdmTjpB6uijfbR7np6ba06MUfpsMAxzpTYEUiQy3q3X
-         OjxKHH0EDVKnXG96gXMZPU/sh9HaOQkIKQm68CawsS58RkeLBNloSCNG04fEsDRkQ2D1
-         eyeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778758825; x=1779363625;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9Ldth8JotWNNXuuFjvG7OgbN0zVV0RxKzEBMsfyUjvI=;
-        b=GziXU5WuoAWdhVnVR9mk4XQ9eWXLO0X+lOtl30dkDcQfjXROYz843uoQ0RwE0huRao
-         2c2i47KIT75/xlab1m36/gXr3XpE03DenfOmc08LovQo+FE0Vp6YVDJ6uG3Hg1tZBOk/
-         5n1MbX8u7qZrD8ltxY3EvMJO3SGGKxGAsRXjuVTARSBKrjHKC3QGRBgiFAMRhIJobUu1
-         1oKhsL0rZSSDb/Jqek9KZgh+vXV7a6XFV8/u0fCntkwxPlFlPt4AFHxd71AnufqQjzxf
-         UttisaeNxTMWU85y+HLJ4UbFrM9GVKUgryN1WTBLscwrc4zfJsucHZVkRTiYlCi3UWmP
-         nbgg==
-X-Gm-Message-State: AOJu0Yy3UQQpnWRVc2pA4rqwHCU+oOi8h4zR23pV5hmDlej4/vuozfzp
-	OnXqRJOwcY82BfUTbBWVuifc3SMt8gze37QZF0rehx515gv1X29CnEww
-X-Gm-Gg: Acq92OFuaYTqeaMd7wpXUPtdJ4eCViOmjMXwCBB69hu5fr637mQYPbQbmmTBtXdol4x
-	iIX1ZBrFl9gD8y75tBGYArMjz8x8/0D27+SyEw4pZBxXEb9rP1CgZsnC4UzZu04JmOU3xYfSRgx
-	cSar4tpXJR/j7o6Up1lxh0uiMlrcmq6bvo8FST5cHkoLnmEsHB6mEqx79Pjj62SQ8bcI/sgW5be
-	a/KJJSx5JYUH5uA4mbEhsBQhRLiip8vCvQ/zVCJ8188PLEpAc5iHDA0WRhXS3Wz3leAdn/7DKlk
-	LhGZ2Y3Mn97VBclzhneALn+BoO0hwrLBylJJykIZN288x4lw2PiyBaRNsbihpAw95Ka25GQIxYx
-	M3E2piVeD7m1lQXOZRQDp+qh0GKlGTT/R3vYCiQIDnilfSxwi6XHYtu/2/tIz6Zmj+c/eUNRVmb
-	eYrzAyTqrKB3Z/cF0/SmGxg2WgPqpNuyhDepUCXsuW5/5cDTx12/Orp+DqpMoNeIb+KN9JZXhvy
-	yDpqq8KvaZ3NKfrRBIM14CDM5mIBUP4Wnzh+bvVXwPaY3LvXd+uJ+s8BwXCtIm5Z0TxOsSGXH52
-	fw+XEwMrRu9OX/lq/m9tifL+q0yvIRfI
-X-Received: by 2002:a05:600c:350f:b0:48e:8741:fd4c with SMTP id 5b1f17b1804b1-48fce9ead8fmr105645615e9.18.1778758824740;
-        Thu, 14 May 2026 04:40:24 -0700 (PDT)
-Received: from Tunnel (2a01cb0889497e0064f055e44d25c4ef.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:64f0:55e4:4d25:c4ef])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0a1a22csm5662323f8f.19.2026.05.14.04.40.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 04:40:24 -0700 (PDT)
-Date: Thu, 14 May 2026 13:40:22 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/3] veristat: Report max stack depth
-Message-ID: <agW0pt2oNh9oKq89@Tunnel>
-References: <cover.1778700777.git.paul.chaignon@gmail.com>
- <a27ed8f336669152c4b1b05e920aee4438e3e2b3.1778700777.git.paul.chaignon@gmail.com>
- <fe8bedbcf7a9c0b3af7c92351a694784804f7e82.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A3zd85uB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 133F4C2BCB3;
+	Thu, 14 May 2026 11:57:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778759831;
+	bh=8PnSM1ey3VNPGdaQ2G3QZUJgUSF7cWcPKAZsyhmLQfA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=A3zd85uBcvzQhXdQ1ygAa+T262MN+wptPFU49CugFgklxWFMh7Gqtbpdh/EGib9KK
+	 1eja6ga0TcnUwYC+CqCciUv2RtEMenPbTjc1YBt7n0cMGFxEusA1nSOijaZrD0kLSb
+	 U3Uzo6/FwtLQQWI93+Gc7uuJerslcf1wkEeKwhefoPDQpKJPiQbKMgZBZRTVi2gCn3
+	 labZ6X8OTjwPUjv4CbiKugut7a/0g5WocCyehNfq6uMTwlH+vg2mP1vdjF8R+ESmpt
+	 8QtTOqHVKL366zfcEdI60VW7IzNntSGr3DK893m0BIjZFAWXh3aUiKZLy+5uKOu7iZ
+	 /Q9jRfpiFFp4g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] libbpf: fix UAF in strset__add_str()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Carlos Llamas" <cmllamas@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260513232055.1681859-1-cmllamas@google.com>
+References: <20260513232055.1681859-1-cmllamas@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 14 May 2026 11:57:10 +0000
+Message-Id: <20260514115711.133F4C2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fe8bedbcf7a9c0b3af7c92351a694784804f7e82.camel@gmail.com>
 
-On Wed, May 13, 2026 at 04:23:48PM -0700, Eduard Zingerman wrote:
-> On Wed, 2026-05-13 at 21:35 +0200, Paul Chaignon wrote:
-> 
-> [...]
-> 
-> > @@ -834,6 +835,7 @@ static struct stat_def {
-> >  	[SIZE] = { "Program size", {"prog_size"}, },
-> >  	[JITED_SIZE] = { "Jited size", {"prog_size_jited"}, },
-> >  	[STACK] = {"Stack depth", {"stack_depth", "stack"}, },
-> > +	[MAX_STACK] = {"Max stack depth", {"max_stack_depth"}, },
-> >  	[PROG_TYPE] = { "Program type", {"prog_type"}, },
-> >  	[ATTACH_TYPE] = { "Attach type", {"attach_type", }, },
-> >  	[MEMORY_PEAK] = { "Peak memory (MiB)", {"mem_peak", }, },
-> > @@ -1023,7 +1025,7 @@ static int parse_verif_log(char * const buf, size_t buf_sz, struct verif_stats *
-> >  				&s->stats[MARK_READ_MAX_LEN]))
-> >  			continue;
-> >  
-> > -		if (1 == sscanf(cur, "stack depth %511s", stack))
-> > +		if (2 == sscanf(cur, "stack depth %511s max %ld", stack, &s->stats[MAX_STACK]))
-> >  			continue;
-> >  	}
-> >  	while ((token = strtok_r(cnt++ ? NULL : stack, "+", &state))) {
-> 
-> Thinking about it some more I think that the meaning of the
-> STACK/"Stack depth" metric should swapped for max stack depth.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] Unpatched Use-After-Free in strset__find_str()
+- [High] Use-After-Free in BTF add APIs due to btf_ensure_modifiable() free=
+ing raw_data
+- [Medium] Early return in strset__add_str() breaks hash map deduplication =
+invariants
+--
 
-Hm, I was a bit worried that might be considered a breaking change
-(ex., if someone is tracking the STACK metric over time), but if you
-think it's alright, I can send a followup to replace STACK with
-MAX_STACK. I agree it would be better as the STACK metric may not
-correspond to anything real at the moment (ex., if the callgraph may be
-all flat).
+commit 2a7bfcb093726b849608e340f9bda7c5e3f56ac2
+Author: Carlos Llamas <cmllamas@google.com>
 
-> 
-> [...]
+libbpf: fix UAF in strset__add_str()
+
+This commit addresses a heap-use-after-free in strset__add_str() that occurs
+when the provided string points into the internal strset data buffer.
+It adds a boundary check to return the offset directly if the string is
+already within the buffer, avoiding a dangling pointer during reallocation.
+
+[ ... ]
+>  |     #0 0x55d25155a2a7 in memcpy (tools/bpf/resolve_btfids/resolve_btfi=
+ds+0xcf2a7)
+>  |     #1 0x55d2515d708e in strset__add_str tools/lib/bpf/strset.c:162:2
+>  |     #2 0x55d2515c730b in btf__add_str tools/lib/bpf/btf.c:2109:8
+>  |     #3 0x55d2515c9020 in btf__add_func_param tools/lib/bpf/btf.c:3108:=
+14
+[ ... ]
+
+Does btf__add_str() have another use-after-free when operating on a
+non-modifiable BTF object?
+
+If a user calls btf__add_str(btf, s) where s is a pointer returned by
+btf__name_by_offset() (which points into btf->raw_data),
+btf_ensure_modifiable(btf) is called.
+
+btf_ensure_modifiable() allocates new buffers and calls
+btf_invalidate_raw_data(btf), which frees btf->raw_data.
+
+At this point, the argument s becomes a dangling pointer before
+strset__add_str() is even called, making the boundary check added by this
+patch evaluate against the freed raw_data.
+
+> diff --git a/tools/lib/bpf/strset.c b/tools/lib/bpf/strset.c
+> index 2464bcbd04e03..7d2b2784172e5 100644
+> --- a/tools/lib/bpf/strset.c
+> +++ b/tools/lib/bpf/strset.c
+> @@ -141,10 +141,15 @@ int strset__find_str(struct strset *set, const char=
+ *s)
+
+Does strset__find_str() suffer from the same vulnerability being fixed here?
+
+It follows the exact same pattern as strset__add_str(): it temporarily
+appends s by calling strset_add_str_mem(set, len), which may realloc() the
+internal buffer.
+
+If s points into the internal buffer, the realloc() frees the old memory,
+leaving s dangling before the memcpy() occurs.
+
+>   */
+>  int strset__add_str(struct strset *set, const char *s)
+>  {
+> +	const char *strs =3D strset__data(set);
+>  	long old_off, new_off, len;
+>  	void *p;
+>  	int err;
+> =20
+> +	/* Check whether 's' is already in the strset data buffer */
+> +	if (strs && s >=3D strs && s < strs + set->strs_data_len)
+> +		return s - strs;
+
+Can this early return break hash map deduplication invariants if s is a
+substring?
+
+If a caller passes a pointer to a substring of an existing string, the
+function returns the substring's offset but skips inserting it into
+set->strs_hash.
+
+Because the substring is never added to the hash map, subsequent lookups for
+it via strset__find_str() will fail, and future additions from an external
+pointer will duplicate the string.
+
+Would it be safer to calculate the offset, perform the realloc(), and then
+re-calculate the s pointer instead of returning early?
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260513232055.1681=
+859-1-cmllamas@google.com?part=3D1
