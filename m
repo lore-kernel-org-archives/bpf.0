@@ -1,163 +1,289 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C703F4132;
-	Thu, 14 May 2026 16:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A24133C1AD
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 16:34:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778775313; cv=none; b=Lt6ep+PUnTp/gcDmLn2KKCW6s0SPvbXVw377QNbhqFj8BuVtif3uHVQOHKVzfW2qThlZjWwSzJDzGfiHTKIGjCVZjbykr4e9xu5uAWnDRUTTMxXZIgJJWDDfcBFRHX19jsLOnBTTMma2gpw/IXkh/8yuZAiqq3WjOhKYnVtQCnU=
+	t=1778776462; cv=none; b=HNVL0/QEtjVUmTGyWiiEWoEltN9Kell+m4TLYW4V59Bq4P7WSbdMFP9+U8knt8LWgYpRv3MixuKb83q8Jj87tDdyK7jidbqlflhldTYIGbJZ7VMPr3cLRj5IbeKcL13p2d765xUxA7YXgO02VGoHODt/hxnBHwffXT4ZuDGrpVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778775313; c=relaxed/simple;
-	bh=QaLPJbfJQww7S7O77K7IbSknP+7RC/p4rdgdP9IQW+g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tJAldRmjrycVvEo2Le90JlonF6bXVElj4mqUyIpUDf/U9sP2VHqIFxQ5vm6Fng20emk6z/ZUc5ZTOsdKhPf1LN4et/Qnu1xrZnsh2LDt+FsWhbYAsjTmubnwDnPRjoDRNFmJIiCklcexaIdXEX6cjIjEJjdGp/IYQEf+T3qZAgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=MHb8489x; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	s=arc-20240116; t=1778776462; c=relaxed/simple;
+	bh=6O1scTpWnLKa+BmlkDjRVo+0Q9y6WGIP02q8NOYLJwk=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=r1K02G7fx8hP7HrL35Auup2TI1mhv/IBXznpx8zI2ihSYURvvUTDvAyfGZWjQczvMk4OvtklcAHFWI83vUXhqHcyEgHdH6xf8dh+pVJnJd8y9jb1fsqFEoTIef9GfGr8NOVQ2UAS17XUVZX8rqIIr8r/qpN1ogCdQKGs2X+uaOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Rb2Hk9C9; arc=none smtp.client-ip=74.125.82.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="MHb8489x"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-	In-Reply-To:References; bh=/0vlkD0eChacF5ETVs9gmQqQ0rk59QxBVpBmKOtfWuM=; b=MH
-	b8489xnA2ZxWUKc2vcNPg4J9fYfFtGzkdsdG0R2HUXd3IdFjthQWSwF9nbq0QRP0ufXfJArwfA0nB
-	B3GM5alMzhJoYuJLsJqMjxhoA+Fl1XFy0QStBr/zLnR/6LqkhTy5nd/UWuARxD6XpBBnKlm05OKqh
-	mMq21XRqy3xEaP8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1wNYhL-002vrb-Oy; Thu, 14 May 2026 18:14:07 +0200
-Date: Thu, 14 May 2026 18:14:07 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Daniel Thompson <daniel@riscstar.com>
-Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, maxime.chevallier@bootlin.com,
-	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
-	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
-	arnd@arndb.de, gregkh@linuxfoundation.org,
-	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
-	alexandre.torgue@foss.st.com, ast@kernel.org,
-	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
-	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
-	julianbraha@gmail.com, livelycarpet87@gmail.com,
-	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
-	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
-	rohan.g.thomas@altera.com, sdf@fomichev.me,
-	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
-	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 12/12] arm64: dts: qcom: qcs6490-rb3gen2: enable
- TC9564 with a single QCS8081 phy
-Message-ID: <f113752b-b351-4a14-af6d-1e2751f0913d@lunn.ch>
-References: <20260501155421.3329862-1-elder@riscstar.com>
- <20260501155421.3329862-13-elder@riscstar.com>
- <01d6ea18-e022-41c7-a642-ac0321957923@oss.qualcomm.com>
- <agRzai1UoHEIotZe@aspen.lan>
- <3c6e7ec5-f600-44ee-a97a-211a99102744@lunn.ch>
- <agXo_evi1oFLBJoo@aspen.lan>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Rb2Hk9C9"
+Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2ef62078ee7so10862803eec.0
+        for <bpf@vger.kernel.org>; Thu, 14 May 2026 09:34:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778776459; x=1779381259; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yb7gYFK3pQkgrvsE01oTSKK8XCM+MGmsisEXsbZlrho=;
+        b=Rb2Hk9C9gJfyjUeXojaDRoUMQMbO9jVVZYD/dd0/x/OgGoU7UAN/6Ur68eYuMz13/I
+         r2TF6ZZ3yW8HTOv89X9L3gSOi6SoyOrGdzTB/lh2lELoGVgyBtVlU7E4uwMUIFYfW99P
+         3PbgJyQvU8tgDFc36+Sk6s9Z1bG+hOHMFLqW/Nauva7zooKah3HBbsqvCSG1JiUnY7T8
+         C8SXReorh3HOawcTNDtvqFqburEqhcRc9Ydvzpe7efbfJ7gW7YT7E24FivKrNj9zebvM
+         Im7970HTa6YgDmDW2ZOa/LzhhkkKELn2XG6EsEBzktZ2CYKpHleZu83m/f4ek8xRqG9e
+         xW/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778776459; x=1779381259;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yb7gYFK3pQkgrvsE01oTSKK8XCM+MGmsisEXsbZlrho=;
+        b=eky+6Ub58wQW6lqSc2mDewSeMkA9Ylv38rkakt0votioooKzqMaeWgFVskDq1slEN+
+         1/VuqOMxfqaW0jXCYsiJLDMp0QHA+1ffgbFFVHOKminCyLrMmw6ocFCxYC/3FP5yU04F
+         uDpbmvmnjdnPVKMkgcKKivDetJ8b/jSjeszF9sNZgbC2NQYBJZ7GAJh/xo9g+Azy2len
+         IqTaOjNHCBN/aP5HnNVwaN37T67Im9iPfL4lEvwx/7Gh5z5N0ZyaD7Om51Sm2s1Pw+FD
+         TUpAcslY73hyhy/oHTJzk6ZRjVGNj7yYnvCx0mRXZUERuLAQv0dkICIqbyBIj4KYEHBS
+         kbnQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8wa1Ic8OsL6xxbR+vtFfYi24Vohf8BOacvK3J9BkJKxL7eYXUO83av6ocOlYibNCsQri4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtXichs7d8QovrzKNb2dAm9HQA4M/7zHqTtHGUn/bwCQP4VL3r
+	/zc6o8mHWd2QpF7+bnQSMCrhHZKLPXH3g2NDp+dAAQA57gdC6DnUHgq5odrULtKoWVyp3ARFsxu
+	Kx3vUgTEKTQ==
+X-Received: from dycoy22.prod.google.com ([2002:a05:7301:fc16:b0:2df:46bf:2390])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:608c:b0:2ed:e14:7f5f
+ with SMTP id 5a478bee46e88-303986b4534mr85365eec.35.1778776459299; Thu, 14
+ May 2026 09:34:19 -0700 (PDT)
+Date: Thu, 14 May 2026 09:33:52 -0700
+In-Reply-To: <20260512174638.120445-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <agXo_evi1oFLBJoo@aspen.lan>
+Mime-Version: 1.0
+References: <20260512174638.120445-1-irogers@google.com>
+X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
+Message-ID: <20260514163409.927816-1-irogers@google.com>
+Subject: [PATCH v3 00/17] perf build: Reduce build time by nearly half
+From: Ian Rogers <irogers@google.com>
+To: irogers@google.com, acme@kernel.org, james.clark@linaro.org, 
+	namhyung@kernel.org
+Cc: 9erthalion6@gmail.com, adrian.hunter@intel.com, alex@ghiti.fr, 
+	alexandre.chartre@oracle.com, andrii@kernel.org, ankur.a.arora@oracle.com, 
+	aou@eecs.berkeley.edu, bpf@vger.kernel.org, collin.funk1@gmail.com, 
+	costa.shul@redhat.com, daniel@iogearbox.net, dapeng1.mi@linux.intel.com, 
+	dsterba@suse.com, eddyz87@gmail.com, howardchu95@gmail.com, jolsa@kernel.org, 
+	leo.yan@arm.com, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, martin.lau@linux.dev, memxor@gmail.com, 
+	mingo@redhat.com, mmayer@broadcom.com, nathan@kernel.org, palmer@dabbelt.com, 
+	peterz@infradead.org, pjw@kernel.org, qmo@kernel.org, ricky.ringler@proton.me, 
+	song@kernel.org, swapnil.sapkal@amd.com, terrelln@fb.com, tglozar@redhat.com, 
+	thomas.falcon@intel.com, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-M> I’m afraid this must be necessarily long but to help navigate the
-> general structure is:
+This patch series refactors Kbuild internals, BPF skeleton generation,
+Python AST pre-computation, and foundational tooling dependencies across
+the perf tool build system. By eliminating umbrella target synchronization
+barriers, decoupling static library prerequisites, parallelizing single-core
+script generators, and eradicating redundant feature checks, this series
+unlocks absolute theoretical peak multi-core concurrency during Kbuild startup.
 
-Thanks for the long email.
+On a 28-core build workstation (make -j28 all from scratch), clean build
+latency improves by over 49%:
 
-> Let’s turn our attention to MDIO.
-> 
-> Following the pattern above where all the links related to power come
-> from the main device node, then the phy node for the qca8081 in an
-> rb3gen2 would look like something like this:
-> 
->     tc956x_emac1_phy: ethernet-phy@1c {
->         compatible = "ethernet-phy-id004d.d101";
->         reg = <0x1c>;
-> 
->         reset-gpios = <&tc956x_emac0 1 GPIO_ACTIVE_LOW>;
->         # On RB3gen2 all supplies are controlled by a single GPIO
->         # so we link all supplies to that single regulator
->         avdd-supply = <&qep_1p8>;
->         avdd18-supply = <&qep_1p8>;
->         vdd-supply = <&qep_1p8>;
->         vddldo-supply = <&qep_1p8>;
->         vdd18-supply = <&qep_1p8>;
->         vdd125-supply = <&qep_1p8>;
-> 
->         pinctrl-names = "default";
->         pinctrl-0 = <&qep_irq_pin>;
->         interrupts-extended = <&tlmm 101 IRQ_TYPE_LEVEL_LOW>;
->     };
-> 
-> Once we have established what the DT looks like then the question
-> becomes where to put "something, written in C [or Rust], that contains
-> burned in knowledge of how to turn on a wcn6855^H^H^H^H^H^H^Hqca8081"?
-> 
-> The qca8081 on rb3gen2 just gets a bunch of individual regulators and a
-> reset. As in the pci-pwrctrl-tc9563 example above, this means there is
-> nothing in the DT for a pwrseq driver to bind to.
+  Before:
+    real    0m29.006s
+    user    2m46.019s
+    sys     0m30.610s
 
-I don't understand that. We have a node in device tree for the PHY. We
-can put the needed properties there somehow. Maybe similar to how
-pinctrl works. Before probing the device, the driver core looks for
-the pinctrl- properties, and activates them. We could have similar
-properties for power sequencing, before enumerating an address, do
-whatever the pwrseq-names requests? It might need help for the driver
-actually enumerating the bus, to point to core at the node.
+  After:
+    real    0m14.782s
+    user    2m39.527s
+    sys     0m22.938s
 
-> Even if we could find
-> a way to do that, it is not obviously useful to decouple how to turn on
-> an MDIO device from how to drive it. Thus I think the right answer to
-> that is to put the code to fire up the regulators into the qca808x.c
-> driver and it looks to me like the existing probe/remove methods would
-> already work perfectly well as the place to put it.
+Saving 14.2 full seconds time per clean build. Furthermore, nothing to
+build incremental builds are improved by nearly 7x:
 
-But you have a chicken/egg. Same as with PCI, with Ethernet PHYs, you
-ask the device what it is, and then find a driver to drive it, and
-then call the probe function. However, if its clock is off, its GPIO
-reset is held in reset, its power regulators are switch off, it never
-answers when you ask it, what are you? If you have no idea what it is,
-you cannot probe it. And if you cannot probe it, the probe function
-cannot turn all these things on.
+  Before:
+    real    0m11.528s
+    user    0m9.633s
+    sys     0m6.965s
 
-The standard reply we have is, ignore the fact the device can be
-enumerated, hard code in DT what its ID is. And that is what you have
-above in your DT fragment. But you also need to live with the
-consequences of it being wrong, since that driver is going to be
-loaded, no questions asked. And don't think about having a rev A board
-and a rev B board which have different pin compatible PHYs, and want
-to use the enumeration to get the correct driver loaded.
+  After:
+    real    0m1.729s
+    user    0m1.600s
+    sys     0m0.884s
 
-DT developers continually want to make use of the enumeration feature,
-since it is there, part of 802.3, it is how it was done for the first
-20 years of networking, etc. And they keep trying to extend the
-current code to get the PHY running to allow it to be enumerated.  And
-i keep rejecting it.
+Summary of Patches:
 
-Ideally, i would like some generic core code which can be given a list
-of resources, probably phandles, and timing information. And it will
-walk the list and turn them on, inserting the requested delays. And
-then we can enumerate the device.
+1-3: Foundational Tooling & Fast-Path Feature Detection
+  - Exempts bpftool bootstrap from non-essential feature tests (LLVM, libbfd,
+    libcap), saving 1.1s of sub-make fork overhead during Kbuild startup.
+  - Integrates libdebuginfod directly into test-all.c, allowing Make to skip
+    individual feature check sub-make forks during AST parsing on fully
+    configured workstations. Escapes $(shell ...) macro expansion to prevent
+    unconditional sub-make forks.
+  - Fixes test-clang-bpf-co-re.bin feature check to correctly generate its
+    target file on disk via atomic move (> $@.tmp && mv $@.tmp $@), allowing
+    Kbuild to perfectly cache the detection result and avoid continuous sub-make
+    re-evaluations.
 
-Until such code exists, i agree, forget the device is enumerable, hard
-code the ID, and get the probe function to enable the regulators, take
-the device out of reset, enable the clocks, etc. And repeat that in
-every PHY driver.
+4-6: Flattening Umbrella Prepare Barriers
+  - builtin-trace embedded inclusions and pmu-events generation are completely
+    decoupled from the sequential "prepare" umbrella target, eliminating Make
+    AST double-parsing overhead and unchoking parallel compilation barriers.
 
-       Andrew
+7-10: Decoupling & Pre-generating BPF Skeletons
+  - BPF skeleton rules are extracted out of Makefile.perf into bpf_skel.mak.
+  - Decouples bpftool bootstrap from top-level static libbpf dependencies,
+    attaching bpf-skel-prepare directly to the umbrella prepare target. This
+    allows Make to pre-compile bpftool and dump vmlinux.h in the background at
+    build startup, removing the 7-second serialization bottleneck before BPF
+    object compilation.
+  - Ensures benchmark skeleton intermediate .bpf.o files are cleanly removed
+    during make clean, and adds bpf-skel-prepare to .PHONY.
+
+11-12: Foundational Linkage Optimization
+  - Eliminates redundant libbpf sub-make feature checks during static builds.
+  - Moves static libsymbol and libbpf library prerequisites out of the
+    prepare step, ensuring libbpf headers are installed before
+    compiling BPF-dependent tests.
+
+13-14: jevents.py Concurrency & Deduplication
+  - Splits the massive 2.8 MB big_c_string literal out of pmu-events.c
+    into a dedicated pmu-events-string.c compilation unit. This slices
+    C compilation latency in half by compiling string and struct
+    tables simultaneously across separate CPU cores while preserving
+    zero dynamic ELF relocations. Adds pmu-events-string.c to
+    .gitignore and uses Make 4.0 compatible dependency chaining.
+  - Pre-populates jevents.py JSON ASTs and metric formulas in parallel across
+    all available CPU cores using ProcessPoolExecutor (accelerating Python
+    execution by 11x, from 3.3s down to ~290ms). Moves _init_worker to top-level
+    scope to ensure clean pickling under spawn multiprocessing start methods.
+
+15: Out-of-Tree Incremental Rebuild Fix
+  - Prefixes SCRIPTS (perf-archive, perf-iostat) with $(OUTPUT) to prevent
+    Make from continuously re-executing script installation rules on already
+    built out-of-tree builds.
+
+16-17: AST Parsing Optimization & Shell Fork Eradication
+  - Converts ZENS, ARMS, and INTELS in pmu-events/Build from recursive
+    assignment (=) to simply expanded assignment (:=) and replaces
+    model_name/vendor_name with pure GNU Make string functions. This
+    guarantees Make executes directory probing shell forks exactly
+    once during AST parsing and evaluates path macros purely in
+    memory, completely eradicating over 7,800 redundant sub-processes
+    during out-of-tree build evaluation.
+  - Converts llvm-config shell queries in Makefile.config from
+    recursive assignment (=) to simply expanded assignment (:=). This
+    eliminates ~185 redundant sub-processes that were previously
+    executed across object compilation dependency checks.
+
+Changes since v2:
+  - Dropped Patch 4 (tools scripts: Short-circuit CC_NO_CLANG compiler
+    probe in Makefile.include) to prevent potential cross-compilation
+    regressions when CC and HOSTCC use different compilers.
+  - tools build (Patch 2): Escaped $(shell ...) macro expansion as
+    $$(shell ...) inside define feature_check_code to safely defer
+    sub-make execution until after eval parses the ifeq guard.
+  - tools build (Patch 3): Refactored test-clang-bpf-co-re.bin feature
+    check recipe to redirect grep output to a temporary file and
+    atomically move it upon success (> $@.tmp && mv $@.tmp $@),
+    preventing Kbuild from permanently caching failed detections due to
+    0-byte files.
+  - perf trace beauty (Patch 4): Updated commit description to accurately
+    reflect the unconditional top-level recursive kbuild hook
+    (perf-util-y += trace/beauty/).
+  - perf build (Patch 7): Added $(OUTPUT)bench/bpf_skel/.tmp to
+    bpf-skel-clean in Makefile.perf to ensure intermediate benchmark
+    skeleton .bpf.o artifacts are cleanly removed during make clean.
+    Removed unused bpf_skel_deps variable from bpf_skel.mak.
+  - perf build (Patch 9): Added $(LIBBPF) as an explicit prerequisite to
+    $(LIBPERF_TEST_IN) in Makefile.perf to guarantee libbpf headers are
+    fully installed before compiling sigtrap.c or other BPF-dependent
+    tests during parallel builds.
+  - perf build (Patch 10): Added bpf-skel-prepare to the .PHONY target
+    list in Makefile.perf to ensure Make never incorrectly skips the
+    target if a file or directory named bpf-skel-prepare accidentally
+    exists in the build tree.
+  - perf pmu-events (Patch 13): Added pmu-events/pmu-events-string.c to
+    tools/perf/.gitignore. Replaced grouped targets (&:) with Make 4.0
+    compatible dependency chaining to guarantee backward compatibility
+    with older Make versions (like 4.2.1) and prevent parallel builds
+    from spawning multiple concurrent jevents.py processes.
+  - perf pmu-events (Patch 14): Moved _init_worker from local main()
+    scope to the top-level module scope in jevents.py to ensure it can be
+    cleanly pickled when ProcessPoolExecutor uses the spawn
+    multiprocessing start method (avoiding AttributeError crashes).
+
+Ian Rogers (17):
+  bpftool build: Restrict feature tests during bootstrap compilation
+  tools build: Integrate libdebuginfod into test-all fast path
+  tools build: Fix test-clang-bpf-co-re.bin to generate target file
+  perf trace beauty: Make beauty generated C code standalone .o files
+  perf build: Decouple pmu-events from prepare umbrella target
+  perf build: Remove empty archheaders target
+  perf build: Move BPF skeleton generation out of Makefile.perf
+  perf build: Encapsulate vmlinux.h and bpftool in bpf_skel.mak
+  perf build: Move static libbpf dependency out of prepare step
+  perf build: Pre-generate BPF skeleton tooling during umbrella prepare
+    phase
+  perf build: Move libsymbol dependency out of prepare step
+  perf build: Remove redundant libbpf feature check for static builds
+  perf pmu-events: Split big_c_string storage into standalone
+    compilation unit
+  perf pmu-events: Parallelize JSON and metric pre-computation in
+    jevents.py
+  perf build: Prefix SCRIPTS with output directory to fix continuous
+    rebuilds
+  perf pmu-events: Convert recursive shell assignments and macros to
+    Make built-ins
+  perf build: Convert llvm-config shell queries to simply expanded
+    variables
+
+ tools/bpf/bpftool/Makefile                    |   5 +
+ tools/build/Makefile.feature                  |   6 +-
+ tools/build/feature/Makefile                  |   4 +-
+ tools/build/feature/test-all.c                |   5 +
+ tools/perf/.gitignore                         |   1 +
+ tools/perf/Build                              |   2 +
+ tools/perf/Makefile.config                    |  19 +-
+ tools/perf/Makefile.perf                      | 431 ++----------------
+ tools/perf/bench/Build                        |   6 +
+ .../bpf_skel/bench_uprobe.bpf.c               |   0
+ tools/perf/bench/uprobe.c                     |   2 +-
+ tools/perf/bpf_skel.mak                       | 109 +++++
+ tools/perf/builtin-trace.c                    |  30 +-
+ tools/perf/pmu-events/Build                   |  26 +-
+ tools/perf/pmu-events/jevents.py              |  56 ++-
+ tools/perf/trace/beauty/Build                 | 280 ++++++++++++
+ tools/perf/trace/beauty/arch_errno_names.c    |   2 +
+ tools/perf/trace/beauty/arch_errno_names.sh   |   2 +-
+ tools/perf/trace/beauty/beauty.h              |  60 +++
+ tools/perf/trace/beauty/eventfd.c             |   6 +-
+ tools/perf/trace/beauty/fsconfig.c            |   5 +
+ tools/perf/trace/beauty/futex_op.c            |   6 +-
+ tools/perf/trace/beauty/futex_val3.c          |   6 +-
+ tools/perf/trace/beauty/mmap.c                |  24 +-
+ tools/perf/trace/beauty/mode_t.c              |   6 +-
+ tools/perf/trace/beauty/msg_flags.c           |   8 +-
+ tools/perf/trace/beauty/open_flags.c          |   1 +
+ tools/perf/trace/beauty/perf_event_open.c     |  22 +-
+ tools/perf/trace/beauty/pid.c                 |   5 +-
+ tools/perf/trace/beauty/sched_policy.c        |   8 +-
+ tools/perf/trace/beauty/seccomp.c             |  12 +-
+ tools/perf/trace/beauty/signum.c              |   6 +-
+ tools/perf/trace/beauty/socket_type.c         |   6 +-
+ .../perf/{util => trace/beauty}/syscalltbl.c  |   0
+ .../perf/{util => trace/beauty}/syscalltbl.h  |   0
+ tools/perf/trace/beauty/tracepoints/Build     |  22 +
+ tools/perf/trace/beauty/waitid_options.c      |   8 +-
+ tools/perf/util/Build                         |  17 +-
+ tools/perf/util/bpf-trace-summary.c           |   2 +-
+ tools/perf/util/env.c                         |   4 +-
+ tools/perf/util/env.h                         |   1 +
+ 41 files changed, 717 insertions(+), 504 deletions(-)
+ rename tools/perf/{util => bench}/bpf_skel/bench_uprobe.bpf.c (100%)
+ create mode 100644 tools/perf/bpf_skel.mak
+ create mode 100644 tools/perf/trace/beauty/fsconfig.c
+ rename tools/perf/{util => trace/beauty}/syscalltbl.c (100%)
+ rename tools/perf/{util => trace/beauty}/syscalltbl.h (100%)
+
+-- 
+2.54.0.563.g4f69b47b94-goog
 
