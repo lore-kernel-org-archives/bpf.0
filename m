@@ -1,123 +1,147 @@
-Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.8])
+Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 421BA1A7264;
-	Thu, 14 May 2026 12:45:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED513B8D7E;
+	Thu, 14 May 2026 12:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778762743; cv=none; b=lmqE061zkHmVAQjsqyyG9+y7zVFZdcERaJ1Q0T0NnQxup80OmDRH9UXz8kMr58476pY/e9j9IkXRsyxnrnXjXCUTdp2JBOsReghMkTlVpeINQQt6s7rgERtbtHWK7nTefSDB3JrMzcQCVlXPrT9LFIfJ83gXNay0YCVR6y2zghA=
+	t=1778763311; cv=none; b=dYs/WM8MSgOcKasE69UtVDaL6lKKClfhFh1WFpYP3Su2YhvliObcc70hcoqEor8r90NZhl2nJCfA1I/rT7BvJ1NYQJSysPGTsDqoMnPWcZ8mpSCG8zFVoDlBh9Z4YilKYqSuJJXa24H3b7xhEjS8B5gm73uV9pO0xDF9wd3CHsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778762743; c=relaxed/simple;
-	bh=PWWsmg54Tt9lOl/hezGdPbbSgqsb5bTfM8zh+lNGJDc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rqJdg5A54tlsSrFdAxRZOl8Kh6aQhDvKG+X9AH417ZRZAjf4sbQgafEfxp45aDBuOY5UfyTMNZhweVRuaSicYqQgYowAj/2bVS5lOhxBFi0sKNl1K8QHpN4SAFQWoyULK0jh30ZEqZ9kR+jY928tnJ/JyzIW8lwQG6Dij71Tm1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=KgIiF83b; arc=none smtp.client-ip=220.197.31.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
+	s=arc-20240116; t=1778763311; c=relaxed/simple;
+	bh=R6HH5Gy2yDxuWVTPm8i/SLETztYgFyMhnHRI8h3tYGM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ixxD+sXFDTqWvb4LFdRh5rgtSkNAoaaCPntVaKp8QnDxtCdaIoggDMyQpmkhO9dib9cNPPhoo4gjnO7NHBzCEEBKYHEPjbFu5Z+CAg+aNb5uuf1t/uU+KIbA1N5ZARARuZjnfrj41rZbEnu7epVimgWYsUK68NOA7KTv8wy28wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=qCqdBxWU; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=P4ld4HvK; arc=none smtp.client-ip=103.168.172.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="KgIiF83b"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=LhIddh5A0idIBMcsr1JbG9HJj5gIEsxku/D3rEHjSd4=;
-	b=KgIiF83bvkBoWrOJt21KU4laLGcgZnELd4jSF16AhS0rl1clquCrfqrsg/ZvxF
-	l5vIBz10pPCPhYuae/nnfCtBC0TOslSvlqb+uEZt2ym8Q/lMQp4X7jLTBzGJGl2R
-	xaEGX0HM7dtc/G17Tx9/Nv+0bNJQLtsMcV7qXJ5PLvFCQ=
-Received: from [IPV6:2408:8210:480a:2590:67b8:4623:bebc:2a2] (unknown [])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wD3V+MXwgVq_hZ5BQ--.62255S2;
-	Thu, 14 May 2026 20:37:44 +0800 (CST)
-Message-ID: <cec221f3-a97b-4a84-b1e2-0820ccac11a2@126.com>
-Date: Thu, 14 May 2026 20:37:43 +0800
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="qCqdBxWU";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="P4ld4HvK"
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 0943514000F0;
+	Thu, 14 May 2026 08:55:07 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-03.internal (MEProxy); Thu, 14 May 2026 08:55:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1778763307; x=
+	1778849707; bh=fzxE9SLwv4zyvXc0A4utqpkyA3MbkU7IiUyolXZDaz0=; b=q
+	CqdBxWUohwAqqeye8LIaCN/D0bmOropSbkR4JQbmx5vCFKj0RjwffqySYF0yc/dO
+	2lvtbu68yOBqChZGqUqVx3ShwfPYaFvv3E60QWyuBwJjGUYY+NVYH5jmGEJopZOY
+	t1X1MV3vAASVKAqSG+//pdZmeJtC0NJcl8f2Q6put7GRcRu7hdEIZbMz/kpnG7FV
+	0Zo1yE9CQ2ECoce5FzejKkk3Q9usmm16AS5WtundEOanRuPySfhUg/6Qz6P2Pf8J
+	DNeVaoFW+GCD1ZwVFaD4vsWggYwyqdayZqNOqXjFnYor6XoypQ5ePVHSUwKhm8rf
+	V0v+R31Nv/0SLp18/FG2w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1778763307; x=1778849707; bh=fzxE9SLwv4zyvXc0A4utqpkyA3MbkU7IiUy
+	olXZDaz0=; b=P4ld4HvKRt9PnHw2Q6yMD6GtaoZNf89QI4JKQ0qpPUQOKxqxBVN
+	bUGXOsmiUdU+MJ8CJx8VgpgGO/Pi9Lrj1JXxHySG/Fm92udNEmCxgCjfVVsgOmIC
+	MyJo+Vaars73Yr2h3j8co1vhFQ0bjdg5w/mvPsfnnlWEIMvDvbXkNaH1MDWY5M2m
+	4QBKdBekWr2NAjvlD/zFUFpAmGbUWmmhRpZRKbiubRG8EJRYhJpZuObegPcHYrGz
+	sKN+rM9BdE3K+/p6/0c2CqMRdlnpdqWc0DW4lWnFwzP0jzK6yTCt07ep77jMYrjv
+	owg3rIMgUQaGT4bNzeQZOjjAq4Wud31GxJw==
+X-ME-Sender: <xms:KsYFanOoHfL3rWj-0SY--mzOZ8dKPeNyInfEmdLTteuN1egU41fM2Q>
+    <xme:KsYFam7AiM3BadsL7pSWTcsRsGq44vYV4YvazpKUk2KqL_kogcCxR9lyZL3Ii_233
+    XV-c7nEkQ8R6Ni_kT-_-zVAs-RtkoRbD7bXQ8lmtZAdlyk8x9IToUyL>
+X-ME-Received: <xmr:KsYFaqjyBKs2kTnwIu2i4kHP3fBfyBwEqA0iS6PgVGPoqaTe2RkJg8Wv5Hh2tiMBmsdVdrhq1GFkw3HdNiT5G_A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdduvdejheejucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
+    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
+    grthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfekgeetheegheeifffguedvueff
+    fefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopeelpdhmohgu
+    vgepshhmthhpohhuthdprhgtphhtthhopehprggsvghnihesrhgvughhrghtrdgtohhmpd
+    hrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghvvghm
+    segurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkh
+    gvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtgho
+    mhdprhgtphhtthhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghhpdhrtghpth
+    htohephhhorhhmsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhohhhnrdhfrghs
+    thgrsggvnhgusehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghpfhesvhhgvghrrdhkvg
+    hrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:KsYFarf3n7c6Z_JOpgkWdnqcrJfqmpxaM_4lMUmQVOurG3n7NcFujA>
+    <xmx:KsYFaizfZb9hTV1M1H0mzZDS3nFbNlouZkpnjQoA2CoXh8GqBw75iQ>
+    <xmx:KsYFaq10PWGUCXItD0YYlNgFTY3sWp4VDSFHPAIRaYuiRKsheolIwQ>
+    <xmx:KsYFaoxUIKeNQQxyR71C8LObCoyTsFnkjuTHiGElnlsGqhbpZRqJVA>
+    <xmx:K8YFaoabp071-GlX8S8fo-Ecl5rH_MifZTUl79JhjbZYYG1uuocAc2vY>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 14 May 2026 08:55:06 -0400 (EDT)
+Date: Thu, 14 May 2026 14:55:03 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
+	netdev@vger.kernel.org, edumazet@google.com, andrew+netdev@lunn.ch,
+	horms@kernel.org, john.fastabend@gmail.com, bpf@vger.kernel.org
+Subject: Re: [PATCH net v2 4/4] net: tls: remove bad rollback and UAF on
+ ENOSPC
+Message-ID: <agXGJ2v-Gnf5trWX@krikkit>
+References: <20260511174920.433155-1-kuba@kernel.org>
+ <20260511174920.433155-5-kuba@kernel.org>
+ <a83d79d1-b932-458a-b5fa-1cb623fa03f1@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 1/2] tools/lib/bpf/libbpf: Prioritize module kfuncs
- over vmlinux kfuncs
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, andrii@kernel.org,
- eddyz87@gmail.com, alexei.starovoitov@gmail.com
-Cc: ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260510030136.27876-1-chensong_2000@126.com>
- <CAP01T77aPyqjV+9CVVL-YSEajvQYaMg9SNX3fygr0kTeKrBquw@mail.gmail.com>
-Content-Language: en-US
-From: Song Chen <chensong_2000@126.com>
-In-Reply-To: <CAP01T77aPyqjV+9CVVL-YSEajvQYaMg9SNX3fygr0kTeKrBquw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3V+MXwgVq_hZ5BQ--.62255S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZryDKF18KFWUWF1xtF1DWrg_yoW8KrWkpF
-	45Kr4YkF48Jr9akanaqF4jqr90g3yfKr4jqFy3Jw17AF1YqFyIvFnFyr1ruFyDCws7Ja4D
-	uayjqF17Ca45ZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRUfHUUUUUU=
-X-CM-SenderInfo: xfkh02prqjsjqqqqqiyswou0bp/xtbBpBiSEmoFwhjfJgAA3w
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a83d79d1-b932-458a-b5fa-1cb623fa03f1@redhat.com>
 
-
-
-On 5/12/26 09:33, Kumar Kartikeya Dwivedi wrote:
-> On Sun, 10 May 2026 at 05:05, Song Chen <chensong_2000@126.com> wrote:
->>
->> Change the kfunc resolution order in find_ksym_btf_id() to search
->> module BTFs before vmlinux BTF. This allows kernel modules to override
->> vmlinux kfuncs with the same name, enabling a form of live-patching
->> for kfuncs.
->>
->> Previously, vmlinux kfuncs were always preferred, making it impossible
->> for modules to provide enhanced or fixed versions of existing kfuncs.
->> With this change, modules can now override kernel kfuncs, while
->> programs that don't use module BTFs remain unaffected.
->>
->> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
->> Signed-off-by: Song Chen <chensong_2000@126.com>
->>
->> ---
->> changelog:
->> v1 -->  v2:
->> 1, introduce namespace to specify which module the kfunc belongs to, like:
->> modulea__foo
->> moduleb__foo
->> foo
->> As a result, kfunc foo can co-exist in modulea, moduleb and vmlinux, ebpf
->> code owner can specify which one he wants to call.
->> ---
->>   tools/lib/bpf/libbpf.c | 60 +++++++++++++++++++++++++++++++-----------
->>   1 file changed, 45 insertions(+), 15 deletions(-)
->>
+2026-05-14, 13:18:12 +0200, Paolo Abeni wrote:
+> On 5/11/26 7:49 PM, Jakub Kicinski wrote:
+> > As explained in commit 54a3ecaeeeae ("bpf: fix ktls panic with sockmap")
+> > once we call BPF there's no way for us to rollback the iter
+> > and copy data, since BPF may have modified the message.
+> > This is regardless of whether BPF set up cork or not.
+> > 
+> > Remove the attempt to roll back iter completely. This removes a UAF
+> > since BPF may have modified msg_pl and rec, so these pointers were
+> > stale.
+> > 
+> > Note that I'm entirely unsure what the expected behavior is here
+> > for BPF. Feels like this path must not be exercised by normal
+> > applications / existing deployments in the first place.
+> > 
+> > Fixes: d3b18ad31f93 ("tls: add bpf support to sk_msg handling")
+> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> > ---
+> >  net/tls/tls_sw.c | 12 ++----------
+> >  1 file changed, 2 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> > index 360f71fd7884..22b77840e35a 100644
+> > --- a/net/tls/tls_sw.c
+> > +++ b/net/tls/tls_sw.c
+> > @@ -1164,11 +1164,8 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
+> >  				else if (ret == -ENOMEM)
+> >  					goto wait_for_memory;
+> >  				else if (ctx->open_rec && ret == -ENOSPC) {
+> > -					if (msg_pl->cork_bytes) {
+> > -						ret = 0;
+> > -						goto send_end;
+> > -					}
+> > -					goto rollback_iter;
+> > +					ret = 0;
+> > +					goto send_end;
 > 
-> Instead of modulea___ prefix, how about using declaration tags instead?
-> We can use `namespace:vmlinux` and `namespace:module` to choose
-> precedence for module or vmlinux.
-> Then further scope using `namespace:moduleA` or `namespace:moduleB`.
+> The sashiko report here looks like a pre-existing issue that could be
+> handled separately.
 > 
+> Still let me play safe and merge just the 2 first patch in the series.
 
-Thanks for the suggestion. Just to clarify — are you proposing this
-as a BTF/string-level naming convention, or as something that would
-appear in actual C identifiers? Since colons aren't valid in C
-identifiers, I want to make sure I understand the intended mechanism.
+Kind of. We had agreed that #2 could be fixed in a somewhat better
+way.
 
+@Jakub removal of the content_type chaining can be done in net-next as
+a clean up now I guess
 
-> By default, I think preferring vmlinux symbols over modules makes
-> sense. If one wants to prefer an overload with the same name coming
-> from a module, they can place the right tag. But we need more
-> consensus from other folks before you respin again. If we didn't have
-> a way of indicating the preference, I would agree picking the one in
-> module would allow more interesting cases by default, but since we do
-> have a mechanism, it makes sense to pick a more sensible conservative
-> default, in my opinion.
-> 
-> Anyway, let's see what others might say.
-> 
-yes, many thanks.
-
-Best regards,
-
-Song
-
-> pw-bot: cr
-> 
->> [...]
-
+-- 
+Sabrina
