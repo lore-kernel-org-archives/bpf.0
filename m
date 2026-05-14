@@ -1,67 +1,67 @@
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
+Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D212390992
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 17:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97743914EB
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 17:22:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778779374; cv=none; b=f/w5pDQ4yOLaLhbEa/DVu+ZlxqY83UnoV8yMkgsR1xWKPiNkQzvMQe1U7JgNAgQe4sGk19x3zCdFJZS4UPPjK75XarrAYcV/9h2kadIKCWvZHAa33libDzwRmBqHdb/NCX7+0I3O8EufS5NSgstZCKfFqcuynBsHyLwYIWS8a/I=
+	t=1778779375; cv=none; b=HfH3Ykn8Ecm4zv0XpiWXi9YnRZV7KcDoKw5DMCg+hfPQ078wGuq85EzwJEHb0rcCCDpu63YN+VS+0tuK9lcIZaZg2O/FbE0yeTdR94j/cdbQqyeStGvn0mWZRKal49vhZNq0APMihHortLXqbfs7ZsumataYjdoEV+pkhqkMU3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778779374; c=relaxed/simple;
-	bh=1QC4PkD36OXhmrBejw/9qqlS5pST0Kv6rS1HYH/Wsr4=;
+	s=arc-20240116; t=1778779375; c=relaxed/simple;
+	bh=wptIkvH9L489Qlo2T7M1mLc4bl4xRw6+9h17Bso5o/8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Hyy2Iph5bX244QKndFQaeJQU68g3fKk9eURRvabgcxgVHRv+Xj0e+Y2ZcQENXlypJhcJm7bI9CXZxnbfk5PWqDj3nCK4v0QRlxnjx+bvyn9d0zivW8ha7mAK635CEpfP9rzKfr2RP6i7A3BAEFgL4Z8rOLyZw6PTv2CwDOybLrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ScAMzkbl; arc=none smtp.client-ip=74.125.224.50
+	 In-Reply-To:To:Cc; b=mVP2O8WWVJzVYF5s28YWu01ObW5LylOheun0rdKmJiJ12GPMp3kAC2d8HrQaRpZru3wFLrmkwO4vxQspNtF+oj404kgDbRv1Z7Jtzl6t5DHWiEds9P2nbpJLS49ZmiGyeScap0hKOGvULBydJr9LPy43G6+Cs2KjcgS7nzmY+1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=enzGIqOg; arc=none smtp.client-ip=74.125.224.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ScAMzkbl"
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-654672a6d68so10325029d50.0
-        for <bpf@vger.kernel.org>; Thu, 14 May 2026 10:22:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="enzGIqOg"
+Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-65dbe04fc1bso6906875d50.1
+        for <bpf@vger.kernel.org>; Thu, 14 May 2026 10:22:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778779370; x=1779384170; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778779371; x=1779384171; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rXRLmOaeN9M4AwY3iBISX01P3DWw0uS/LnGVtbElBLg=;
-        b=ScAMzkblT7qEDln9wMUuYFMaxTnmSPjhz0noMVYe7tl0vUi6ucNEVtdY1cJtNBOtjk
-         sAymgASCXcLuM//46H/kTzQ6Xr66JALSSoTxBDDCqbtaKmbUHEv0kILlmm+pgzhqyZ9t
-         XeZPotVpZWVdcSj/tELH6sFH51fzmyxwj7Bkh+RuuYR9aoSEr6tsfrED7itTGsnP3v1T
-         4Iu8SKZ+cn0XiwfBsw5mr5e5sZMa2I1GJ3pMTMssMBKwD5SC43//EIDoOtO1Xng9Qn2W
-         vj8sSipZgjs6tqut4Kk4aFETcio9B28Xq7lS6Rd9M6cxZq/pGPCD4cnTIYSyziDQEgxk
-         gQIg==
+        bh=9HA/ybwawhpYacQbiJl7tU2w4tisbAXIL92cuydme34=;
+        b=enzGIqOgEYzB+6SyUyh1GN7EtLmoHeyU4CvqLV7imOsRX80EPJUvnhA3ePoLFNuydj
+         B/G+6ZsDp+kP8XH3g1xVSDF0/cKMIrDRO6g55ZG+iTN2soA8hVtsjj2QTIJrpEYZgywK
+         FSiblWES/YabS2q+5MgwDRaWlH+Ly+DiesfBjdZH15V8vVw3pvLaq8jxGJyTTBXBWhW/
+         Lm/TAjVgvgRfotf85PY/QPe5Kqg4w/qMGPqP7q1VUhIVSiiEiFf+JRQCbubeSgDTSvuE
+         FAwHqUaD4TTxoMKrqt0a5tD/aaVaq5/S46IDFcC8LjQME9um8PmvbTgj+p0+widX/d3z
+         fr8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778779370; x=1779384170;
+        d=1e100.net; s=20251104; t=1778779371; x=1779384171;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=rXRLmOaeN9M4AwY3iBISX01P3DWw0uS/LnGVtbElBLg=;
-        b=MJSHIAXQg6FnPrijIMo41aSDDfkWIMe6ySCIio5az5pxb8PgRV55hWOCIBKfMr9DUP
-         INHreswpNn48Q534zlhXPaIMm0CCbOv8O+UXwzi6tdFQ9CX93dHNcBCmfQKsqsAYgemB
-         qYAEwfo33tXeK6xRqgLWdxXMV8yX8gqz6RRvi7klRgLjbsv1Ztv7jMNkKlWCtdkxc4TW
-         NCj8vNVgVEDPL8KcQFPIi2ezoWgBJaAr5lgeMDmCmI2aOgH8dvJizjzSykAqaH/k6j8I
-         fbqCrdeOpU8MIcK2lYI77ipGLC+RUlFUoYdpP8Ki6PibBSysta2YkxRBHTbuWgnTwVH2
-         p2HA==
-X-Forwarded-Encrypted: i=1; AFNElJ9KkKyjZAGHAJtp6pEr7Pw7FAjGXRMFXTImAn+Ltro4oj/fboll+zScPmkiVeJCDgk6PFY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyyhsc/R9vXIGumDwrWfsP3XSF/XSakpH2DjxEv8xcNYJdGnVzV
-	/doeGRloLSSGyn8+B+8+w8dWbVHQUwBUw1Y2kiZus9QAuDhdPPxp6cNN
-X-Gm-Gg: Acq92OET+1wxTIwR7CQqbNtlKFbQzoL47TR8PhM/d4IOUACZZZxtDNp9zI0/h1NaYKd
-	twtsO8XURQcKDkpZQZ0SL4t1LvsP39oAwJpVamI1I8pTJX6FGqcIQILceh39YIxBsyYUWukF4dM
-	gJhqFxa+a98ChLJaQrTE6JhmrFfvRxTp+/5Al6mDaQOotVPlNPZCNlaHriywBJpjnL39rnlEqcy
-	IHjI4LTit/bXp+z4LELYPOXBnptMyTiyZtm3ue8X4b3R0MX90q3eh5Z4kp/tOEvQxJok7lTPcER
-	Fyo8S2hWX7/wjZiRD+VGOpaWf96WWF4ExPkD5da9oPMJwk8lL/fzjfzo6hXpWpdCw/fXGEAG3HV
-	ZSpKcfrofDE0X4Gp07rGGIfKlxRtaVwKqmi7+Eo8Ri8xZzC40YWLaSA0soStiJaYheGW+IXPuTH
-	DwX4W5UEtFh6XDpTFhJaKd+Q==
-X-Received: by 2002:a53:d046:0:10b0:65d:f14d:8651 with SMTP id 956f58d0204a3-65e226e0182mr151093d50.24.1778779369718;
-        Thu, 14 May 2026 10:22:49 -0700 (PDT)
-Received: from localhost ([2a03:2880:f806:19::])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65e0d8e701fsm1373608d50.8.2026.05.14.10.22.49
+        bh=9HA/ybwawhpYacQbiJl7tU2w4tisbAXIL92cuydme34=;
+        b=Ggspbc5wr42+Nu4tYWEp0RU8UB7QW56PNhdhVuGFPcIb/WqOoSRY0TYWDXNzXNWmFq
+         IYg76vRWhH26k826W+Iv9bJ7/y+vsSMGGdnvpgYWEN9dMNbPeRZ7Iyg5jZBjcBT7r8fx
+         Kb/sd/D2XyFUSIQdR9deog5BD71r/361I35uUrjl6iMze4lJLCN053igVzTlhykqt91J
+         3+8lQStsHGnKH+Bt1g0R6KG8F0vKOsFZfzaRUVYjI3W+1Xtr4OSYOS79Pj89OJoTPpaj
+         0hc2RDWe8dFel6+5jxaOv3GWSK6+eUG6EKbgmirsI2TcTI/HbYiQbs+BD/KkFrbF+TK4
+         fE8Q==
+X-Forwarded-Encrypted: i=1; AFNElJ9VdNERk3+GXH1IXVZRxKby0I8HG+le0YyogFlF2EWolfZmAs0b2GC1G3f436tHQMp3KfA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1Swh2x0TxE/Ki1eS4yB23CWeReGGWSylDEbpB+sClwa3eGjB+
+	xL9k0IqOAgcSJitW+8ZWQrlgQTgE4j5XShkfBmm3yt8GG0aPxxjV9Alz
+X-Gm-Gg: Acq92OH98jDhGPluPplATvp3/T+Jkr+UnDnK4fDyqKPmbjx/CZvUJ9Bp+kqOHMXXi7d
+	hiu9wRKS85NM6oGVdDkNjAUPJdoqlx+mOoOwPbPmlxTgutNF+cyb51r3lNAJqtK5owoLADQf+Jx
+	BsH81LhJX5l2YDJzBndKuMitvf3r37fy/+qYGhWkZRNydXVSX2xJhyCUbcica4wh4s8tSiz3vqd
+	otBYXM/i4M3M+n7XY6gZXX3yWL/1GT1ncoZ5sgR1jAPfZu7Ru44w4gJy5rgdZ9JoFUkaY4n/O9A
+	ejWCmXGs0sxJEhMp4enwLUYoIuJoe78PAU7ULJNUY8lYw+5moq+FVzXH0Z2KNei8nfIQFv+2+18
+	xY8wSW4pwaM0Rkpfcckq/6U79xC8yy/qOA+FqoPXE9jXCTKPPIWM73ZZBsaFmRmErYaXMtRWvNe
+	0iNyWzZxmTY0TQp8KZ7pYMpw==
+X-Received: by 2002:a53:d051:0:20b0:650:ea3:de9b with SMTP id 956f58d0204a3-65e226de860mr156252d50.21.1778779371526;
+        Thu, 14 May 2026 10:22:51 -0700 (PDT)
+Received: from localhost ([2a03:2880:f806:23::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65e0dbcda4bsm1363004d50.18.2026.05.14.10.22.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 10:22:49 -0700 (PDT)
+        Thu, 14 May 2026 10:22:51 -0700 (PDT)
 From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Thu, 14 May 2026 10:22:31 -0700
-Subject: [PATCH net-next v5 4/8] selftests: drv-net: ncdevmem: add -n flag
- to skip NIC configuration
+Date: Thu, 14 May 2026 10:22:32 -0700
+Subject: [PATCH net-next v5 5/8] selftests: drv-net: make attr
+ _nk_guest_ifname public
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260514-tcp-dm-netkit-v5-4-408c59b91e66@meta.com>
+Message-Id: <20260514-tcp-dm-netkit-v5-5-408c59b91e66@meta.com>
 References: <20260514-tcp-dm-netkit-v5-0-408c59b91e66@meta.com>
 In-Reply-To: <20260514-tcp-dm-netkit-v5-0-408c59b91e66@meta.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -117,132 +117,110 @@ X-Mailer: b4 0.13.0
 
 From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Add a -n (skip_config) flag that causes ncdevmem to skip NIC
-configuration when operating as an RX server. When -n is passed,
-ncdevmem skips configuring header split, RSS, and flow steering, as well
-as their teardown on exit.
-
-This allows ksft tests to pre-configure the NIC in the host namespace
-before launching ncdevmem in the guest namespace. This is needed for
-netkit devmem tests where the test harness namespace has direct access
-to the NIC and the ncdevmem namespace does not.
+Subsequent patches will use the _nk_guest_ifname as a public attr for
+setting up devmem. Rename to nk_guest_ifname to avoid angering the
+linter about the '_' prefix being used for a non-private attr.
 
 Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
- tools/testing/selftests/drivers/net/hw/ncdevmem.c | 58 +++++++++++++----------
- 1 file changed, 34 insertions(+), 24 deletions(-)
+ tools/testing/selftests/drivers/net/hw/nk_qlease.py |  8 ++++----
+ tools/testing/selftests/drivers/net/lib/py/env.py   | 16 ++++++++--------
+ 2 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-index e098d6534c3c..d96e8a3b5a65 100644
---- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-+++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-@@ -93,6 +93,7 @@ static char *port;
- static size_t do_validation;
- static int start_queue = -1;
- static int num_queues = -1;
-+static int skip_config;
- static char *ifname;
- static unsigned int ifindex;
- static unsigned int dmabuf_id;
-@@ -828,7 +829,7 @@ static struct netdev_queue_id *create_queues(void)
+diff --git a/tools/testing/selftests/drivers/net/hw/nk_qlease.py b/tools/testing/selftests/drivers/net/hw/nk_qlease.py
+index aa83dc321328..139a91ebd229 100755
+--- a/tools/testing/selftests/drivers/net/hw/nk_qlease.py
++++ b/tools/testing/selftests/drivers/net/hw/nk_qlease.py
+@@ -71,7 +71,7 @@ def test_iou_zcrx(cfg) -> None:
+     flow_rule_id = set_flow_rule(cfg)
+     defer(ethtool, f"-N {cfg.ifname} delete {flow_rule_id}")
  
- static int do_server(struct memory_buffer *mem)
- {
--	struct ethtool_rings_get_rsp *ring_config;
-+	struct ethtool_rings_get_rsp *ring_config = NULL;
- 	char ctrl_data[sizeof(int) * 20000];
- 	size_t non_page_aligned_frags = 0;
- 	struct sockaddr_in6 client_addr;
-@@ -851,27 +852,29 @@ static int do_server(struct memory_buffer *mem)
- 		return -1;
- 	}
+-    rx_cmd = f"ip netns exec {cfg.netns.name} {cfg.bin_local} -s -p {cfg.port} -i {cfg._nk_guest_ifname} -q {cfg.nk_queue}"
++    rx_cmd = f"ip netns exec {cfg.netns.name} {cfg.bin_local} -s -p {cfg.port} -i {cfg.nk_guest_ifname} -q {cfg.nk_queue}"
+     tx_cmd = f"{cfg.bin_remote} -c -h {cfg.nk_guest_ipv6} -p {cfg.port} -l 12840"
+     with bkg(rx_cmd, exit_wait=True):
+         wait_port_listen(cfg.port, proto="tcp", ns=cfg.netns)
+@@ -128,7 +128,7 @@ def test_attach_xdp_with_mp(cfg) -> None:
  
--	ring_config = get_ring_config();
--	if (!ring_config) {
--		pr_err("Failed to get current ring configuration");
--		return -1;
--	}
-+	if (!skip_config) {
-+		ring_config = get_ring_config();
-+		if (!ring_config) {
-+			pr_err("Failed to get current ring configuration");
-+			return -1;
-+		}
+     netdevnl = NetdevFamily()
  
--	if (configure_headersplit(ring_config, 1)) {
--		pr_err("Failed to enable TCP header split");
--		goto err_free_ring_config;
--	}
-+		if (configure_headersplit(ring_config, 1)) {
-+			pr_err("Failed to enable TCP header split");
-+			goto err_free_ring_config;
-+		}
+-    rx_cmd = f"ip netns exec {cfg.netns.name} {cfg.bin_local} -s -p {cfg.port} -i {cfg._nk_guest_ifname} -q {cfg.nk_queue}"
++    rx_cmd = f"ip netns exec {cfg.netns.name} {cfg.bin_local} -s -p {cfg.port} -i {cfg.nk_guest_ifname} -q {cfg.nk_queue}"
+     with bkg(rx_cmd):
+         wait_port_listen(cfg.port, proto="tcp", ns=cfg.netns)
  
--	/* Configure RSS to divert all traffic from our devmem queues */
--	if (configure_rss()) {
--		pr_err("Failed to configure rss");
--		goto err_reset_headersplit;
--	}
-+		/* Configure RSS to divert all traffic from our devmem queues */
-+		if (configure_rss()) {
-+			pr_err("Failed to configure rss");
-+			goto err_reset_headersplit;
-+		}
+@@ -178,7 +178,7 @@ def test_destroy(cfg) -> None:
+     ethtool(f"-X {cfg.ifname} equal {cfg.src_queue}")
+     defer(ethtool, f"-X {cfg.ifname} default")
  
--	/* Flow steer our devmem flows to start_queue */
--	if (configure_flow_steering(&server_sin)) {
--		pr_err("Failed to configure flow steering");
--		goto err_reset_rss;
-+		/* Flow steer our devmem flows to start_queue */
-+		if (configure_flow_steering(&server_sin)) {
-+			pr_err("Failed to configure flow steering");
-+			goto err_reset_rss;
-+		}
- 	}
+-    rx_cmd = f"ip netns exec {cfg.netns.name} {cfg.bin_local} -s -p {cfg.port} -i {cfg._nk_guest_ifname} -q {cfg.nk_queue}"
++    rx_cmd = f"ip netns exec {cfg.netns.name} {cfg.bin_local} -s -p {cfg.port} -i {cfg.nk_guest_ifname} -q {cfg.nk_queue}"
+     rx_proc = cmd(rx_cmd, background=True)
+     wait_port_listen(cfg.port, proto="tcp", ns=cfg.netns)
  
- 	if (bind_rx_queue(ifindex, mem->fd, create_queues(), num_queues, &ys)) {
-@@ -1052,13 +1055,17 @@ static int do_server(struct memory_buffer *mem)
- err_unbind:
- 	ynl_sock_destroy(ys);
- err_reset_flow_steering:
--	reset_flow_steering();
-+	if (!skip_config)
-+		reset_flow_steering();
- err_reset_rss:
--	reset_rss();
-+	if (!skip_config)
-+		reset_rss();
- err_reset_headersplit:
--	restore_ring_config(ring_config);
-+	if (!skip_config)
-+		restore_ring_config(ring_config);
- err_free_ring_config:
--	ethtool_rings_get_rsp_free(ring_config);
-+	if (!skip_config)
-+		ethtool_rings_get_rsp_free(ring_config);
- 	return err;
- }
+@@ -196,7 +196,7 @@ def test_destroy(cfg) -> None:
+     ip(f"link del dev {cfg._nk_host_ifname}")
+     kill_timer.join()
+     cfg._nk_host_ifname = None
+-    cfg._nk_guest_ifname = None
++    cfg.nk_guest_ifname = None
  
-@@ -1404,7 +1411,7 @@ int main(int argc, char *argv[])
- 	int is_server = 0, opt;
- 	int ret, err = 1;
+     queue_info = netdevnl.queue_get(
+         {"ifindex": cfg.ifindex, "id": cfg.src_queue, "type": "rx"}
+diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
+index 24ce122abd9c..409b41922245 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/env.py
++++ b/tools/testing/selftests/drivers/net/lib/py/env.py
+@@ -339,7 +339,7 @@ class NetDrvContEnv(NetDrvEpEnv):
+     def __init__(self, src_path, rxqueues=1, **kwargs):
+         self.netns = None
+         self._nk_host_ifname = None
+-        self._nk_guest_ifname = None
++        self.nk_guest_ifname = None
+         self._tc_clsact_added = False
+         self._tc_attached = False
+         self._bpf_prog_pref = None
+@@ -390,7 +390,7 @@ class NetDrvContEnv(NetDrvEpEnv):
  
--	while ((opt = getopt(argc, argv, "Lls:c:p:v:q:t:f:z:")) != -1) {
-+	while ((opt = getopt(argc, argv, "Lls:c:p:v:q:t:f:z:n")) != -1) {
- 		switch (opt) {
- 		case 'L':
- 			fail_on_linear = true;
-@@ -1436,6 +1443,9 @@ int main(int argc, char *argv[])
- 		case 'z':
- 			max_chunk = atoi(optarg);
- 			break;
-+		case 'n':
-+			skip_config = 1;
-+			break;
- 		case '?':
- 			fprintf(stderr, "unknown option: %c\n", optopt);
- 			break;
+         netkit_links.sort(key=lambda x: x['ifindex'])
+         self._nk_host_ifname = netkit_links[1]['ifname']
+-        self._nk_guest_ifname = netkit_links[0]['ifname']
++        self.nk_guest_ifname = netkit_links[0]['ifname']
+         self.nk_host_ifindex = netkit_links[1]['ifindex']
+         self.nk_guest_ifindex = netkit_links[0]['ifindex']
+ 
+@@ -409,7 +409,7 @@ class NetDrvContEnv(NetDrvEpEnv):
+         if self._nk_host_ifname:
+             cmd(f"ip link del dev {self._nk_host_ifname}")
+             self._nk_host_ifname = None
+-            self._nk_guest_ifname = None
++            self.nk_guest_ifname = None
+ 
+         if self._init_ns_attached:
+             cmd("ip netns del init", fail=False)
+@@ -448,16 +448,16 @@ class NetDrvContEnv(NetDrvEpEnv):
+         cmd("ip netns attach init 1")
+         self._init_ns_attached = True
+         ip("netns set init 0", ns=self.netns)
+-        ip(f"link set dev {self._nk_guest_ifname} netns {self.netns.name}")
++        ip(f"link set dev {self.nk_guest_ifname} netns {self.netns.name}")
+         ip(f"link set dev {self._nk_host_ifname} up")
+         ip(f"-6 addr add fe80::1/64 dev {self._nk_host_ifname} nodad")
+         ip(f"-6 route add {self.nk_guest_ipv6}/128 via fe80::2 dev {self._nk_host_ifname}")
+ 
+         ip("link set lo up", ns=self.netns)
+-        ip(f"link set dev {self._nk_guest_ifname} up", ns=self.netns)
+-        ip(f"-6 addr add fe80::2/64 dev {self._nk_guest_ifname}", ns=self.netns)
+-        ip(f"-6 addr add {self.nk_guest_ipv6}/64 dev {self._nk_guest_ifname} nodad", ns=self.netns)
+-        ip(f"-6 route add default via fe80::1 dev {self._nk_guest_ifname}", ns=self.netns)
++        ip(f"link set dev {self.nk_guest_ifname} up", ns=self.netns)
++        ip(f"-6 addr add fe80::2/64 dev {self.nk_guest_ifname}", ns=self.netns)
++        ip(f"-6 addr add {self.nk_guest_ipv6}/64 dev {self.nk_guest_ifname} nodad", ns=self.netns)
++        ip(f"-6 route add default via fe80::1 dev {self.nk_guest_ifname}", ns=self.netns)
+ 
+     def _tc_ensure_clsact(self):
+         qdisc = json.loads(cmd(f"tc -j qdisc show dev {self.ifname}").stdout)
 
 -- 
 2.53.0-Meta
