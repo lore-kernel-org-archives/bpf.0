@@ -1,66 +1,67 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34C88391850
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 17:22:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63DB391E73
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 17:22:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778779370; cv=none; b=U9MlJZsZ3psRaD/0GVlF3TxdqKV437cPgECau03ajPqlr2DAiP+aPaWf7Yh6Hwksbeo0JitUsSw1OM4CaQy5ldaEaGWFvBh3NIV47jT0BG6VlKlEa0lRyKHJNswKqPb5GGQe/mUlCOcf2RvP2rlxmucHFzO5FwEoD68HL+rEhAU=
+	t=1778779372; cv=none; b=LWGWYH69/sHsJSqolLN51k4uObiSYCTVEO5oQufl2fHiwViP73Xqjjg9Cu2hhxq9ZOyqzSn8wuQpvD2PWrzqbYi0Dhy+4Ewyljr+z+itI31j/oys/fiwUQKt58uhGckNMjixYKQ94ECjHRv2EsBN6tHUGqO0bXraMPerlfhBmMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778779370; c=relaxed/simple;
-	bh=AUkEXZ9shK/AEw9rish8lLHvzIx+b3il3PP8PxYF4lk=;
+	s=arc-20240116; t=1778779372; c=relaxed/simple;
+	bh=8LTP/NFszKg1m9DiKbOV+XH39o0HnFYg4YrJ0MdNLT8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gjKAj4g3jh0YlnExgI1E0xXHqX7d4ck7XMDTHWoNHJ96lelhgI1BR4j1Y5BC0vmCkHhpoP8WZWbAINluhMiC7kegE7F+zUMDm04XxO/P5tbbox6chazJE9cSw/UPSoPUvM3nfrip5Kwu7b/wkb6iY6oQKCFhp/XuXaqsHfTYCPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hhC9n54V; arc=none smtp.client-ip=209.85.214.178
+	 In-Reply-To:To:Cc; b=JdAjqrHFmd4VrTosOXVtbwH6+GsbD93djzVv6VbrK0rlZEV0ErB3HDNJkiLQMZNM87/H770dicx0OfFPPzbQgzLZF9cHpe1tzGGEg7oYErwgTrXVgF/6Y9Vv4KLhn6O6HDxUnX1FQ8RcyNmb4MxoSHoW1ARq4QInVDIhAfe8cZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kld/8bot; arc=none smtp.client-ip=209.85.160.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hhC9n54V"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2b7d3ecc10dso81513755ad.2
-        for <bpf@vger.kernel.org>; Thu, 14 May 2026 10:22:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kld/8bot"
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-40427db1300so5988840fac.0
+        for <bpf@vger.kernel.org>; Thu, 14 May 2026 10:22:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778779366; x=1779384166; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778779368; x=1779384168; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7yopC/9MxA39yKranAJ5Os3jyJpUN93ONWaDD2qEA7s=;
-        b=hhC9n54VZ84cvwcMzJlpSU1MH0hA1f/oYJpnYy/Q1Bz8o2YAC4g4b1KRCIJFj7jbcG
-         17MbTa+7oIHCkTa3U7ukQjglNo2cP4KYEHgqt7DbWkjppbSR2O1yagSEEwfrjbBOq+Gz
-         GFg+70CFvzzzzVT48L9ooA+aipUvQwOe7Pnu8GEVIka24yUbXA5Y4pTkCX5s17E9jXd7
-         uQif0SqOsAPWI3KFa5IE3rHZW1rgBxNJEHltQ20cCMwkVvA/Kvw1Wd+IvnJQOpF6vNrJ
-         t++uC3Eehj9/it/gXWn/eN8FvV9UfvrTgOQz7bPJJ11kXFagMzCIf6BbT8iyr/kniXPU
-         tlPg==
+        bh=J0KuaJtzt3M5KTpkegLP3WJoGkmy0+cTdZFwIB1803c=;
+        b=Kld/8botLzMtziur/NgC9ORB7H7UHJ4Kvz/87/bZ33M/gzjsUl9f34RDD1dC9amY8V
+         TbCfDNwkAPKiDD/vx5Q/Mzr+OcrP15X/EUlVaDlmQXQmpDLD/diisXq4wtmLHdg2RIvO
+         UGJl9pss/unFf0spD5qJlfrRVJVahXteT2mbviGCPvDR1IjcKL/GQHP6+4c/PKV9GW7A
+         n7358s3rNUVo/Re3EaHMfBsg6g9g7w7pGulL7oOv6Up6TfmSczAMRDb+vmTUf4S8C5Kc
+         DcZ9xMJ4F81XlVxzvQGJXmR/7NxVd50HhnEYzeDTLdracpikl3Xtm0VEs/dHF8V8xDZB
+         X5GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778779366; x=1779384166;
+        d=1e100.net; s=20251104; t=1778779368; x=1779384168;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=7yopC/9MxA39yKranAJ5Os3jyJpUN93ONWaDD2qEA7s=;
-        b=WPDQNn6dQ9qpxuCAtLmXnm2R+XbFbZnPSlNmXMXMtmqxZzWPdY6g33+Lf4DLmu9UdO
-         R6wv2yXlf6pQTsyX4/MfoabKEJdbTDMiHHfSZKtvMxzzyMNftsExehgv40tAAgSxLExp
-         obbdOTl/I6ESPO+tl3XjaSm2sitzGPPqXm/OvCwrM9zJQ7jsUwnZRZVLIyqeR6fMZOYH
-         g5kyYu2KpYhqWtde2ttPywrbfWVNmJ/2RQ7wfPGZQE09diwM56ZYlzTR2sX3CjhURLi1
-         9Iuz96ELfPaXfxq8eqnOo6bzSNmXem7ciajOUwZZj4la3CeXf2p8I4Z+2W28kTF8mB0l
-         LOJA==
-X-Forwarded-Encrypted: i=1; AFNElJ8U6cqF1nqlX5EEHIg3JudjTIrpkq+7V4bnDKc2hfBnTNa0LcmeMk6xp3Gsy+SDLJLbjGs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtZNQ3x5XLaNghcnoKH3ci46kTFW+kpB+RC/5u8Q1UIx02tHS3
-	4FILQe6xmNlTdPXu77ftctnHxXblivh5Ul2ijMTebE3ki/XPyXVgMpFd
-X-Gm-Gg: Acq92OF9enDcOcWfWz/tsx8xCVO7Mj/QaBu3gcPxnB78n1l+x4M/BiAKcIPtC+PZAO2
-	d53WeDVeSWR4LSPQ1Xt8wgBnHN11Z4ucL21XMG+q7i8cey5F9BDVRGqnl/MahHWaPWVShL/ebsV
-	u13Cr2mZj/EqFJ3Kz5XfdE5gr/wS/CXBBu4D+CcyD9bq5pmhTNQLdh3if0T5i9nChNRGomOLSEy
-	GmifwaeegzIx9FGwiCbqg0tPfxzgvGEgave5YBfcsiK6FR8sKq0xngH8pxmF7ZerVxgBx4h37oD
-	9MDEov3nX/AvJWXG2icP+0VszCjWQorPVyK5rxBUqEi77VHUHIIbZ3NPVfvFtiRIQmE9bqjaDyM
-	ZkLCmClX/rZMumWWggZCeOAKfz+JFP+68mLvKm89aNgY4Xgg0oCsMVaExPxnVqkrG3Lcx3BrRnc
-	NrK2Z7bnsUB0eL5YIlPktr
-X-Received: by 2002:a17:903:46d0:b0:2bd:657f:3a1a with SMTP id d9443c01a7336-2bd7e77ab65mr5300005ad.8.1778779366071;
-        Thu, 14 May 2026 10:22:46 -0700 (PDT)
-Received: from localhost ([2a03:2880:f80c:1::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5d0fcb10sm32152215ad.60.2026.05.14.10.22.45
+        bh=J0KuaJtzt3M5KTpkegLP3WJoGkmy0+cTdZFwIB1803c=;
+        b=mwVePCZdVSlX+M+AujaUr+uuki4spiT5j24psUy25NaSFCitd7vjWOT5TE3uDyCq8M
+         mpJ6W808gwB6a3CuZYMkxDCr58H5JWlzeMeZwypT4QrvJhSjMSQp58WsPf+ArDUhHDZN
+         tG6HEWSM/pk2w3pd2JZmqLnrL7mm8GveZm4QudhtK0U6GtU6nwDok2Lw0flbXDZG4dXt
+         yd75g1MaCC9ZdDi5+ga55yT6VjQx2eRtLmp3QxYR7Etk9lLCLGPVwTKDdnbyS1e2JMOy
+         ELcAtoNKRCXFAoyiga27IsNtqc/BWwxngV0jlNdpUKb9689EDWxr4MOKjkYKwh/q+Qc0
+         JXzQ==
+X-Forwarded-Encrypted: i=1; AFNElJ95u86wFcRj1/ONyOWS22eQHbo+YI4Ehi9yxTn0JrQBCQgSfC7MkNRiojiDUANatbE/Bbk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfE1pawbEq+iY1OxKK2kWeMex500XCZzlDSZN7ZSSdkTHLiQmr
+	doPIZ49vEPee1TzcYdwXuN541fGJFULCDPTc//HryfAwLvGsGksk8K6K
+X-Gm-Gg: Acq92OEReha3wioUztolbro6rGfFhqQF6W0El4It0ipRf1wFypmZ2Ffi2YKsbOxcL+Z
+	vFIHxCopIHobB2kdg7thVcJjuPokdtDUfguK4zoM3tsCjFMXzwK60Bs5fNmo3TVh4b0igWA9+Ic
+	xSym4f5uwHbRmMIx2j0ceZWmP+4Bt5Gr24N8pCGbmp1koJgf+gD+9MEWzogCzigxdVVu/EZywJy
+	qlU2jT69ppaRYlE+h4+ogVcrEnL2ZzLWb4SoZXnc0bu0s5MHsjru5Rh/9jfHONXMSlYkrMlKLVM
+	bqsoTR5aap+AQ9KlottW6J5Oe9WGc7TpQq/eTT/9xWeO/Il+4B3vBnnR8EnGc3QQQ0fEEInCLfs
+	GAmNrJf3uhRkoWmvO2h0Q33VOM9Kgk2OnItQO0Pw+nIbTORsTZde8LWz04NqHpBJyJHXOkONjF9
+	5x6WIQjFG1jWov4YNNq7qcag==
+X-Received: by 2002:a05:6870:90ca:b0:417:3be0:4e4e with SMTP id 586e51a60fabf-43a2da2c6acmr366882fac.16.1778779368215;
+        Thu, 14 May 2026 10:22:48 -0700 (PDT)
+Received: from localhost ([2a03:2880:f812:51::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-439fc542218sm2206434fac.16.2026.05.14.10.22.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 10:22:45 -0700 (PDT)
+        Thu, 14 May 2026 10:22:47 -0700 (PDT)
 From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Thu, 14 May 2026 10:22:29 -0700
-Subject: [PATCH net-next v5 2/8] net: netkit: declare NETMEM_TX_NO_DMA mode
+Date: Thu, 14 May 2026 10:22:30 -0700
+Subject: [PATCH net-next v5 3/8] net: devmem: support TX over
+ NETMEM_TX_NO_DMA devices
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,8 +69,8 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260514-tcp-dm-netkit-v5-2-408c59b91e66@meta.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260514-tcp-dm-netkit-v5-3-408c59b91e66@meta.com>
 References: <20260514-tcp-dm-netkit-v5-0-408c59b91e66@meta.com>
 In-Reply-To: <20260514-tcp-dm-netkit-v5-0-408c59b91e66@meta.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -116,107 +117,230 @@ X-Mailer: b4 0.13.0
 
 From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Some virtual devices like netkit (or ifb) never DMA and never touch frag
-contents, they just forward the skb to another device. They are unable
-to forward unreadable skbs, however, because they fail to pass TX
-validation checks on dev->netmem_tx. The existing two-state
-NETMEM_TX_NONE / NETMEM_TX_DMA doesn't give the TX validator enough
-information to differentiate devices that will attempt DMA on the
-unreadable skb from those that will simply route it untouched.
+When a netkit virtual device leases queues from a physical NIC, devmem
+TX bindings created on the netkit device must still result in the dmabuf
+being mapped for dma by the physical device. This patch accomplishes
+this by teaching the bind handler to search for the underlying
+DMA-capable device by looking it up via leased rx queues. The function
+netdev_find_netmem_tx_dev(), used for finding the underlying DMA-capable
+device, can be extended to support other non-netkit NETMEM_TX_NO_DMA
+devices in the future if needed.
 
-Add a third mode to the enum so drivers can indicate 1) if they have
-netmem TX support, and 2) if they do, whether they are DMA-capable:
-
-NETMEM_TX_NO_DMA - pass-through, device never DMAs
-
-Widen dev->netmem_tx from a 1-bit field to 2 bits to fit the new value,
-and declare netkit as NETMEM_TX_NO_DMA. Devmem TX support over these
-devices comes in a follow-up patch.
+Additionally, this patch extends validate_xmit_unreadable_skb() to
+support the netkit case, where the skb is validated twice: once on the
+netkit guest device and again on the physical NIC after BPF redirect or
+ip forwarding.
 
 Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
-Changes in v3:
-- net_cachelines/net_device.rst: align the netmem_tx row's type column
-  with the rest of the table by using "unsigned_long:2" instead of
-  "unsigned long:2"
-- Split this into a distinct patch (Jakub)
----
- Documentation/networking/net_cachelines/net_device.rst | 2 +-
- Documentation/networking/netmem.rst                    | 3 +++
- Documentation/translations/zh_CN/networking/netmem.rst | 3 +++
- drivers/net/netkit.c                                   | 1 +
- include/linux/netdevice.h                              | 3 ++-
- 5 files changed, 10 insertions(+), 2 deletions(-)
+Changes in v4:
+- Fold the `NETMEM_TX_NO_DMA` check in `validate_xmit_unreadable_skb()`
+  (Stan, Jakub)
+- Convert `binding->vdev` to void* opaque cookie with comment (Jakub)
 
-diff --git a/Documentation/networking/net_cachelines/net_device.rst b/Documentation/networking/net_cachelines/net_device.rst
-index 1c19bb7705df..7b3392553fd6 100644
---- a/Documentation/networking/net_cachelines/net_device.rst
-+++ b/Documentation/networking/net_cachelines/net_device.rst
-@@ -10,7 +10,7 @@ Type                                Name                        fastpath_tx_acce
- =================================== =========================== =================== =================== ===================================================================================
- unsigned_long:32                    priv_flags                  read_mostly                             __dev_queue_xmit(tx)
- unsigned_long:1                     lltx                        read_mostly                             HARD_TX_LOCK,HARD_TX_TRYLOCK,HARD_TX_UNLOCK(tx)
--unsigned long:1                     netmem_tx:1;                read_mostly
-+unsigned_long:2                     netmem_tx:2;                read_mostly
- char                                name[16]
- struct netdev_name_node*            name_node
- struct dev_ifalias*                 ifalias
-diff --git a/Documentation/networking/netmem.rst b/Documentation/networking/netmem.rst
-index 5ccadba4f373..217869d1108d 100644
---- a/Documentation/networking/netmem.rst
-+++ b/Documentation/networking/netmem.rst
-@@ -99,3 +99,6 @@ Driver TX Requirements
-    appropriate mode:
+Changes in v3:
+- Fix validate_xmit_unreadable_skb() bug for non-devmem
+  unreadable niovs (should not be dropped)
+- Major simplification of validate_xmit_unreadable_skb()
+- Fix prematurely released lock in bind-tx handler (Jakub)
+
+Changes in v2:
+- In validate_xmit_unreadable_skb() to check netmem_tx mode before
+  inspecting frags (Jakub)
+- Lock bind_dev around netdev_queue_get_dma_dev() when bind_dev !=
+  netdev to fix lockdep (Sashiko)
+---
+ net/core/dev.c         |  3 ++-
+ net/core/devmem.c      |  6 +++--
+ net/core/devmem.h      | 10 ++++++--
+ net/core/netdev-genl.c | 63 ++++++++++++++++++++++++++++++++++++++++++++++----
+ 4 files changed, 72 insertions(+), 10 deletions(-)
+
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 2da2688fe490..bbc93b181ef9 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -3993,7 +3993,8 @@ static struct sk_buff *validate_xmit_unreadable_skb(struct sk_buff *skb,
+ 	struct skb_shared_info *shinfo;
+ 	struct net_iov *niov;
  
-    - `NETMEM_TX_DMA`: for physical devices that perform DMA.
+-	if (likely(skb_frags_readable(skb)))
++	if (likely(skb_frags_readable(skb) ||
++		   dev->netmem_tx == NETMEM_TX_NO_DMA))
+ 		goto out;
+ 
+ 	if (dev->netmem_tx == NETMEM_TX_NONE)
+diff --git a/net/core/devmem.c b/net/core/devmem.c
+index 468344739db2..893643909f6a 100644
+--- a/net/core/devmem.c
++++ b/net/core/devmem.c
+@@ -181,7 +181,7 @@ int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
+ }
+ 
+ struct net_devmem_dmabuf_binding *
+-net_devmem_bind_dmabuf(struct net_device *dev,
++net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
+ 		       struct device *dma_dev,
+ 		       enum dma_data_direction direction,
+ 		       unsigned int dmabuf_fd, struct netdev_nl_sock *priv,
+@@ -212,6 +212,7 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+ 	}
+ 
+ 	binding->dev = dev;
++	binding->vdev = vdev;
+ 	xa_init_flags(&binding->bound_rxqs, XA_FLAGS_ALLOC);
+ 
+ 	err = percpu_ref_init(&binding->ref,
+@@ -396,7 +397,8 @@ struct net_devmem_dmabuf_binding *net_devmem_get_binding(struct sock *sk,
+ 	 */
+ 	dst_dev = dst_dev_rcu(dst);
+ 	if (unlikely(!dst_dev) ||
+-	    unlikely(dst_dev != READ_ONCE(binding->dev))) {
++	    unlikely(dst_dev != READ_ONCE(binding->dev) &&
++		     dst_dev != READ_ONCE(binding->vdev))) {
+ 		err = -ENODEV;
+ 		goto out_unlock;
+ 	}
+diff --git a/net/core/devmem.h b/net/core/devmem.h
+index 1c5c18581fcb..3852a56036cb 100644
+--- a/net/core/devmem.h
++++ b/net/core/devmem.h
+@@ -19,7 +19,13 @@ struct net_devmem_dmabuf_binding {
+ 	struct dma_buf *dmabuf;
+ 	struct dma_buf_attachment *attachment;
+ 	struct sg_table *sgt;
++	/* Physical NIC that does the actual DMA for this binding. */
+ 	struct net_device *dev;
++	/* Opaque cookie identifying the virtual device (e.g. netkit) the user
++	 * called bind-tx on. Used only for pointer comparison. Never
++	 * dereferenced.
++	 */
++	void *vdev;
+ 	struct gen_pool *chunk_pool;
+ 	/* Protect dev */
+ 	struct mutex lock;
+@@ -84,7 +90,7 @@ struct dmabuf_genpool_chunk_owner {
+ 
+ void __net_devmem_dmabuf_binding_free(struct work_struct *wq);
+ struct net_devmem_dmabuf_binding *
+-net_devmem_bind_dmabuf(struct net_device *dev,
++net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
+ 		       struct device *dma_dev,
+ 		       enum dma_data_direction direction,
+ 		       unsigned int dmabuf_fd, struct netdev_nl_sock *priv,
+@@ -165,7 +171,7 @@ static inline void net_devmem_put_net_iov(struct net_iov *niov)
+ }
+ 
+ static inline struct net_devmem_dmabuf_binding *
+-net_devmem_bind_dmabuf(struct net_device *dev,
++net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
+ 		       struct device *dma_dev,
+ 		       enum dma_data_direction direction,
+ 		       unsigned int dmabuf_fd,
+diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+index 4d2c49371cdb..b4d48f3672a5 100644
+--- a/net/core/netdev-genl.c
++++ b/net/core/netdev-genl.c
+@@ -1077,7 +1077,7 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
+ 		goto err_rxq_bitmap;
+ 	}
+ 
+-	binding = net_devmem_bind_dmabuf(netdev, dma_dev, DMA_FROM_DEVICE,
++	binding = net_devmem_bind_dmabuf(netdev, NULL, dma_dev, DMA_FROM_DEVICE,
+ 					 dmabuf_fd, priv, info->extack);
+ 	if (IS_ERR(binding)) {
+ 		err = PTR_ERR(binding);
+@@ -1119,9 +1119,43 @@ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
+ 	return err;
+ }
+ 
++/* Find the DMA-capable device for a netmem TX binding.
++ *
++ * For NETMEM_TX_DMA devices, return the device itself.
++ * For NETMEM_TX_NO_DMA devices, walk leased RX queues to find the underlying
++ * physical device and return it.
++ */
++static struct net_device *
++netdev_find_netmem_tx_dev(struct net_device *dev)
++{
++	struct netdev_rx_queue *lease_rxq;
++	struct net_device *phys_dev;
++	int i;
 +
-+   - `NETMEM_TX_NO_DMA`: for virtual or passthrough devices that do
-+     not DMA, but still support handling of netmem-backed skbs.
-diff --git a/Documentation/translations/zh_CN/networking/netmem.rst b/Documentation/translations/zh_CN/networking/netmem.rst
-index 9c84423b7528..320f3eacf51b 100644
---- a/Documentation/translations/zh_CN/networking/netmem.rst
-+++ b/Documentation/translations/zh_CN/networking/netmem.rst
-@@ -92,3 +92,6 @@ dma-mapping API 去处理。
- 2. 驱动程序应将 `netdev->netmem_tx` 设置为适当的模式：
- 
-    - `NETMEM_TX_DMA`：适用于执行 DMA 的物理设备。
++	if (dev->netmem_tx == NETMEM_TX_DMA)
++		return dev;
 +
-+   - `NETMEM_TX_NO_DMA`：适用于不执行 DMA 的虚拟或透传设备，但仍支持
-+     处理 netmem 支持的 skb。
-diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-index 5e2eecc3165d..0ad6a806d7d5 100644
---- a/drivers/net/netkit.c
-+++ b/drivers/net/netkit.c
-@@ -466,6 +466,7 @@ static void netkit_setup(struct net_device *dev)
- 	dev->priv_flags |= IFF_NO_QUEUE;
- 	dev->priv_flags |= IFF_DISABLE_NETPOLL;
- 	dev->lltx = true;
-+	dev->netmem_tx = NETMEM_TX_NO_DMA;
++	if (dev->netmem_tx != NETMEM_TX_NO_DMA)
++		return NULL;
++
++	for (i = 0; i < dev->real_num_rx_queues; i++) {
++		lease_rxq = READ_ONCE(__netif_get_rx_queue(dev, i)->lease);
++		if (!lease_rxq)
++			continue;
++
++		phys_dev = lease_rxq->dev;
++		if (netif_device_present(phys_dev) &&
++		    phys_dev->netmem_tx == NETMEM_TX_DMA)
++			return phys_dev;
++	}
++
++	return NULL;
++}
++
+ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
+ {
+ 	struct net_devmem_dmabuf_binding *binding;
++	struct net_device *bind_dev;
+ 	struct netdev_nl_sock *priv;
+ 	struct net_device *netdev;
+ 	struct device *dma_dev;
+@@ -1171,22 +1205,41 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
+ 		goto err_unlock_netdev;
+ 	}
  
- 	dev->netdev_ops     = &netkit_netdev_ops;
- 	dev->ethtool_ops    = &netkit_ethtool_ops;
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index b7a4503f7cdb..bf3dd9b2c1a7 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -1797,6 +1797,7 @@ enum netdev_stat_type {
- enum netmem_tx_mode {
- 	NETMEM_TX_NONE,		/* no netmem TX support */
- 	NETMEM_TX_DMA,		/* DMA-capable netmem TX (real HW) */
-+	NETMEM_TX_NO_DMA,	/* no DMA, e.g. passthrough for virtual devs */
- };
+-	dma_dev = netdev_queue_get_dma_dev(netdev, 0, NETDEV_QUEUE_TYPE_TX);
+-	binding = net_devmem_bind_dmabuf(netdev, dma_dev, DMA_TO_DEVICE,
+-					 dmabuf_fd, priv, info->extack);
++	bind_dev = netdev_find_netmem_tx_dev(netdev);
++	if (!bind_dev) {
++		err = -EOPNOTSUPP;
++		NL_SET_ERR_MSG(info->extack,
++			       "No DMA-capable device found for netmem TX");
++		goto err_unlock_netdev;
++	}
++
++	if (bind_dev != netdev)
++		netdev_lock(bind_dev);
++
++	dma_dev = netdev_queue_get_dma_dev(bind_dev, 0, NETDEV_QUEUE_TYPE_TX);
++
++	binding = net_devmem_bind_dmabuf(bind_dev,
++					 bind_dev != netdev ? netdev : NULL,
++					 dma_dev, DMA_TO_DEVICE, dmabuf_fd,
++					 priv, info->extack);
+ 	if (IS_ERR(binding)) {
+ 		err = PTR_ERR(binding);
+-		goto err_unlock_netdev;
++		goto err_unlock_bind_dev;
+ 	}
  
- enum netdev_reg_state {
-@@ -2143,7 +2144,7 @@ struct net_device {
- 	struct_group(priv_flags_fast,
- 		unsigned long		priv_flags:32;
- 		unsigned long		lltx:1;
--		unsigned long		netmem_tx:1;
-+		unsigned long		netmem_tx:2;
- 	);
- 	const struct net_device_ops *netdev_ops;
- 	const struct header_ops *header_ops;
+ 	nla_put_u32(rsp, NETDEV_A_DMABUF_ID, binding->id);
+ 	genlmsg_end(rsp, hdr);
+ 
++	if (bind_dev != netdev)
++		netdev_unlock(bind_dev);
+ 	netdev_unlock(netdev);
+ 	mutex_unlock(&priv->lock);
+ 
+ 	return genlmsg_reply(rsp, info);
+ 
++err_unlock_bind_dev:
++	if (bind_dev != netdev)
++		netdev_unlock(bind_dev);
+ err_unlock_netdev:
+ 	netdev_unlock(netdev);
+ err_unlock_sock:
 
 -- 
 2.53.0-Meta
