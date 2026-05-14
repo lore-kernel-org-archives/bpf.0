@@ -1,86 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466F1330662;
-	Thu, 14 May 2026 09:25:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F5E37F746
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 09:32:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778750750; cv=none; b=ARz7Ien4OPE9AYvovjgCXPg+gxG4OXoWFL3ChubqI1j1u/jsc10T+Rxr/zW/Gzq/GWCpfp/HruacJtlf2AnREWKXQa5bLqNhzSDrcllqQcip6GP8/iNcHOrrEZssSV3IDSuTyaqdVuwjdNtP8zjV3qgFy5X6Rqy0l6peRUds7jU=
+	t=1778751153; cv=none; b=mEfC2EIwthhrbyCMhrzLR6YwNYck/raxfwp7EPaL5pmpGEa+2rNNi8IkNlmSdM3Pr7+EQ+VdHZ9PyMUIs0dh4d8zml0x5LJU2G86zeHrXHDe4bxRxs0vRSzeL1kHzvLqV4VtPpKK7bG6Sn0m67Vny7Tj6AKYdxjxjFmBgV7dF90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778750750; c=relaxed/simple;
-	bh=M4WVs7iBLmP4pE2MrA1L5Ry/mhmsTAqWHCyv7F6kDE0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=obzRb7wm8K/7uPzU99eUGSSk1sBsUylicwhQHkqMUrqaKTBjDG7i8cmg9/Uss9ZFD3BRpwNeIMXrkOEXfzi7hWR41B4nRaTLCpyqiB6D3GkngRPKUvoAGEbMTF/5mW8Kkdhj77oPgZZc80p9B283EvYaFM5/4wnY8Rcp5jbQ20U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bm4lvvxQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778751153; c=relaxed/simple;
+	bh=g4qN1qiOL6eoyFGTvuGJsgsnQ0jH3lElMo1cnFmnA00=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Bs18LKxQ5SIqvrfNagxSJE/YCWSdtKo46oku2niXToGMkGiuH8ovycT9ysErdOZjMm+V4XJczEWrDsy5Rj1erTKxe5SRVpCe7XV77AlRrT5rzD7/PO8dbLybQQTMAHPnnEIlaX1Z26zWN8zAlyvB5LPwfcWzLLy7UBykxmy7liA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kyeKNy93; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bm4lvvxQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AE81C2BCB3;
-	Thu, 14 May 2026 09:25:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778750750;
-	bh=M4WVs7iBLmP4pE2MrA1L5Ry/mhmsTAqWHCyv7F6kDE0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Bm4lvvxQYFKUIbFeIz8z5QsUYZlNiTLDN0fTlrC3hi+xEmVMeo/kNl6101yz4VKJZ
-	 r8v0iNrK14k5XvhE5Jy7ouxv3NDdOsDHptrWTf52a29T0+WJbixavx9sy4NHLYfw2L
-	 lP1vmOgFj6U3X55Iq44Yillywj+W53k7w/77ihzhEAIhuU+FUJhugRiND9ecNCU7Xb
-	 Bz15FhLvemp6sFehnokb18RIHrumIW/tM1mgudrygY/H/HBelEwBbKAE/aoRec+ft4
-	 QJpE2BrsibF3oJwfWFk9LA4JNl1TBfWNmxnwYmoXWeK0mB0yFxo/FcxwM5QzocDoqc
-	 1GHegVmZ8XCiw==
-Date: Thu, 14 May 2026 18:25:47 +0900
-From: "Harry Yoo (Oracle)" <harry@kernel.org>
-To: Levi Zim <i@kxxt.dev>
-Cc: linux-mm@kvack.org, rcu@vger.kernel.org, bpf@vger.kernel.org, 
-	Vlastimil Babka <vbabka@kernel.org>, Hao Li <hao.li@linux.dev>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Uladzislau Rezki <urezki@gmail.com>, 
-	Joel Fernandes <joelagnelf@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Amery Hung <ameryhung@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: kmalloc_nolock() follow-ups, including kfree_rcu_nolock()
-Message-ID: <2dhbxmhg4l35gupk3wgwtufsf735rnk4czmcoyspzckvexie3z@nswohkoipx44>
-References: <esepccfhqg7m6jo76ns2znj2cnuaepx2xvw5zaygtwohq4psma@563ypprp6rr3>
- <9bea1536-534a-4a59-9b5f-92389fb05688@kxxt.dev>
- <6wvjo33urd5i4jvbf6rwp7kwe3ppn3ktgmjk663hq2jxax65gm@kxljf3hkqs5e>
- <1315d145-49ee-412f-ad91-0f6c61c4c2c9@kxxt.dev>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kyeKNy93"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-44b330c5cc6so5671380f8f.1
+        for <bpf@vger.kernel.org>; Thu, 14 May 2026 02:32:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1778751150; x=1779355950; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jIhsStlSAZdSG6VxaddFdlwdDOVd+4VLWmlrEpic5HY=;
+        b=kyeKNy93HloOQAPUGi9QaNC2baV/8JPS/4t4SDA+KiqJq22SN9hkNsMn7iD82X4bju
+         tRyWrySNJja+xn1gSHqp9d6h1qjzUWX4SoPlieA3NUK0nWrWz+7OjOliJYD6QPLb4hP2
+         wAful7H5dmDbH0Vo5ZZOirp5CmTrTpg8CNh7PGPaBwhpUQKNLn6t9VQE4571Hgv2yXo0
+         WAD8RRy/qeDn2WtyaVrOmi73UKCkiA6EEore2iX/3j553e7b9ByT8Yq3SLDAoYc5b16N
+         +nD8PEPaxN8cwoEXU/ZRLk3QF2aBenGIBst04QBZrxItlno6nT6IU3Z3xtir93EtjnJU
+         f7qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778751150; x=1779355950;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jIhsStlSAZdSG6VxaddFdlwdDOVd+4VLWmlrEpic5HY=;
+        b=OUn9m2OCbPbJR/fhFxi0DNUhpuRqc/auUMt38kgT55l4j3KbOdx8kj9CRGcWfOjGlB
+         q6WHMf2qMOLV2Gg61aiMfv8egR1rb9Y80herak+CEkRcgKx4CAsASSmzpK1Yy+S+6H8u
+         P07Ojf3Iq5I7qi2f0ihC5ouGLV/9XDe5XH/C6ba5XrorvTEdpNT1o1bxm0atpz9i4Yzc
+         25WDgWUROLr71uidCxFNcMCkqL0Kcb/oQEGpxkCoj4WYf0IkTsBjEkhRkhoFPUFvQ18j
+         2PUDICnyRrBEgLmsRLn/JJ08CbbnxuS+Jw2KxwWnB/8ZgMdoO/a5xdTsd/T0K+58Mdge
+         yK+Q==
+X-Forwarded-Encrypted: i=1; AFNElJ/5+1sU5IwFqcU9Z+WWPfIpb7Ld+g5vbJWUbo4cuELCH8TMeO9ItbfIu8q0muwRQoR2djg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywl72XhLBdW0WU350m49TNy/L8+Ul5SP0/ZmstT9HIdZcdxAdil
+	2FGD6Q449CXDAADRSgmf8qGkoeYj7ypNhUE0i61qkwh6QYfaAEp8QUhMOPEwbqd2000=
+X-Gm-Gg: Acq92OGz3ahHJUMyvz0LWeuLPYcXDOxDWDZZ7WYIhv36E86E/QvilZ55eG77aevn3YO
+	TGmnM2RvZqLvh1gNFo0hCkBZWcHONpoZDAa8bPGGAbVBM4f2qvx21FCyBZJSz/6gpD923mzu5dq
+	2cihbPqGJvDuM7kVutSkM3Ljkvhb5VCnxxVyPFzL8GG/IYfndNGyH0e3bLCBnOPWKbHsR+hav3G
+	9fS8JqBP8KvwjRTcj5rX608nde9jxMdaz4OvbSoyCUzFweIhZmGozIhxKkZMqWWFFUK6D3Hb67S
+	u8l4agJbifR+WX95vp+XvhHx5hukjwEJtYPnxsTkQcTdJBgOG9urbQYd+JswTG+VOoB8MJCQZ2V
+	H6qiaWo68DUogy02cd/vf9IbUiSV5OzmX4sdJkq9SQEZhB0O1qWgAWWXGeyMEiGGHpdjBrP0W6X
+	5IPsV4mRhZk4JbP80mSvQOxmqu+QumxYBx
+X-Received: by 2002:a05:6000:2401:b0:43f:e721:76b8 with SMTP id ffacd0b85a97d-45c7a7dc644mr10324893f8f.37.1778751150103;
+        Thu, 14 May 2026 02:32:30 -0700 (PDT)
+Received: from ho-tower-lan.lan ([185.48.77.170])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0fe0fecsm5097164f8f.26.2026.05.14.02.32.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2026 02:32:29 -0700 (PDT)
+From: James Clark <james.clark@linaro.org>
+Subject: [PATCH 0/6] tools/build: Allow versioning of all LLVM tools
+Date: Thu, 14 May 2026 10:32:07 +0100
+Message-Id: <20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1315d145-49ee-412f-ad91-0f6c61c4c2c9@kxxt.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJeWBWoC/x3MSwqAMAwA0atI1gasWgWvIi7ammrEHykUQby71
+ eUs3twQSJgCdNkNQpEDH3sKlWfgZrNPhDymhrIom0IrhYvZKOBJ4nFd44aR5DNYV8YqZ7V17Qh
+ Jn0Ker//cD8/zAm21c3VpAAAA
+To: Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+ James Clark <james.clark@linaro.org>, leo.yan@arm.com
+X-Mailer: b4 0.14.0
 
-On Wed, May 13, 2026 at 09:34:01PM +0800, Levi Zim wrote:
-> On 5/13/26 9:42 AM, Harry Yoo (Oracle) wrote:
-> > On Tue, May 12, 2026 at 09:46:33PM +0800, Levi Zim wrote:
-> >> I don't know how could we fix it otherwise after removing BPF memory allocator completely.
-> >> Could we find a path to move forward without causing regressions on architectures without HAVE_CMPXCHG_DOUBLE?
-> > 
-> > Probably we can. Could you please see if this works for you?
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/harry/linux.git/log/?h=slab-kmalloc-nolock-without-cmpxchg-double-rfc-v1r1-wip
-> 
-> Thanks a lot! I tested it and could confirm that it could fix the failure of
-> bpf_task_storage_get(BPF_LOCAL_STORAGE_GET_F_CREATE) on riscv64.
+I ran into the build issue mentioned in the first commit, because using
+an option like LLVM=-15 is a documented way to build [1], but only
+some of the LLVM tools defined in tools/ support this.
 
-Thanks for confirming!
+After fixing that, a lot of other tidyups fell out. I didn't go too far,
+for example some selftests include tools/testing/selftests/lib.mk which
+reimplements some of the LLVM_SUFFIX stuff, but other selftests include
+tools/scripts/Makefile.include and I stopped before touching the former.
+Some other non build scripts hard code toolchains and I didn't touch
+those either, this change is only focused on things that already
+include Makefile.include.
 
-I will add this to TODO and post them and Cc you when submitting it to
-the mailing list.
+[1]: Documentation/kbuild/llvm.rst
 
-> The commit message says that the allocation may still fail if the slab lock
-> acquisition fails upon the first try.
+Signed-off-by: James Clark <james.clark@linaro.org>
+---
+James Clark (6):
+      tools/build: Allow versioning of all LLVM tools defined in Makefile.include
+      tools/build: Indent if else blocks
+      selftests: Remove unused LLD variable
+      tools/build: Allow versioning LLVM readelf
+      tools/build: selftests: Allow versioning LLVM lld
+      tools/build: selftests: Remove some duplicate toolchain definitions
 
-kmalloc_nolock() can always fail, unfortunately.
-We can only make it less likely to fail.
+ tools/bpf/resolve_btfids/Makefile    |  3 --
+ tools/lib/api/Makefile               |  4 --
+ tools/lib/bpf/Makefile               |  8 ++--
+ tools/lib/subcmd/Makefile            |  4 --
+ tools/lib/symbol/Makefile            |  4 --
+ tools/perf/Makefile.perf             |  7 ----
+ tools/scripts/Makefile.include       | 77 ++++++++++++++++++++----------------
+ tools/testing/selftests/bpf/Makefile |  9 ++---
+ tools/testing/selftests/hid/Makefile |  7 ----
+ 9 files changed, 50 insertions(+), 73 deletions(-)
+---
+base-commit: 09d355618f7ccc27ffc7fc668b2e232872962079
+change-id: 20260511-james-perf-llvm-version-43ab1cb5bc7d
 
-> But this is still a great improvement
-> compared to the previous always failing code.
-
-Yup. Thanks!
-
+Best regards,
 -- 
-Cheers,
-Harry / Hyeonggon
+James Clark <james.clark@linaro.org>
+
