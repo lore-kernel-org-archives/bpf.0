@@ -1,97 +1,130 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74CB71DB54C
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 04:23:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 654A43F4127;
+	Thu, 14 May 2026 04:35:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778732585; cv=none; b=d8qGYCDxxJ0gHqfj5f/H5SS+vbJgX46bl3+cWxad9QpuE/Fv1zemED4mrLYOvArOjaBwhqXo5asbq1etIAX4jO85JHCWeYSlmE/swnXIykpZUJag4nIqlOdwqrzGQhvMG3wCblHEcE0+h5YQLGcXWK5rpNRNkWMvpPudS/LB/R4=
+	t=1778733318; cv=none; b=iRh2rqPww6djEPm+KHFUMjklkAn9+JR71EDjzojE0cJS757vRVsau3646Ngi3fLUsZGVsHR6W7n6lpBwciAf2bFoIPhN8Xq3cxSq6hSetk9TDAm/L0sdQC66CToFbAfL1sVqAGJ0AfC+IqqvKS9NW+XVpeiFIHPwTrfYeQAt8nI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778732585; c=relaxed/simple;
-	bh=i0c34wutd56w1OL6wbvY7w+qP021ydJ+cfefLVkdb+c=;
+	s=arc-20240116; t=1778733318; c=relaxed/simple;
+	bh=1ssLU2f3czkBnxWmcWahoHkeXwL7OgSqF0DYp06kaEU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=iZB+wkCRwR2uGDuHXa2uCpQIR6mxPYTiOqaNeNpKKcEGXesAXE6KrmTDvVgREAdE8CXi3wM1qVKoDTGyCzYs2Nv9N02StsdcWjtIgU2a1tx/smnYjTwr47x4tBFyRZn+BKcbkGJ/r2ZZehyjjUXJo6l+ZVAwVCmb8tnyLaNlJaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WbbXSogk; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=VX9H+gcKnmHa8AwbbkZec4P7Nnuf9Wh5z5lMmEG0GVLneZxeNBdDUCSrJBEZCZq+lFPLtw9NBpBlDd4XWYdEMUAMbqryLZEhBM+Ss3eVa/Qyd/DEtLQ+goXpIsn9lHhIxX3KJmjib7EVLw7lZxFlwPuMyXJwCFZZtyalJmZvhp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EqB1ukED; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WbbXSogk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF3ECC2BCB7;
-	Thu, 14 May 2026 04:23:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EqB1ukED"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2016AC2BCB7;
+	Thu, 14 May 2026 04:35:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778732585;
-	bh=i0c34wutd56w1OL6wbvY7w+qP021ydJ+cfefLVkdb+c=;
+	s=k20201202; t=1778733318;
+	bh=1ssLU2f3czkBnxWmcWahoHkeXwL7OgSqF0DYp06kaEU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=WbbXSogk10zSb/7b6W4Tn9wWNHB0pA13yeK4QoIf5LJsWH0Fp+i/kjLastWOww3ya
-	 KQOUCkC71ThzemolgSBpk/Wxyq+NbfA6PxouU4d0N+oNTe1iPaCIxA8kr8ZX4ri947
-	 3NllW6PqSJa40dOPsUiFd2t85d1Do894epDmJwHUbnUORwmoEIcqvmBIcR2qYQL3jz
-	 EQywnR0FFrc5PoD/cBYN+CAtGNwLpPK5+/4j2q04RAU0lqKr3QA0ti0ib3/FmBnVXw
-	 qSWJUhP4uDayuzy7ESxOjblcQ2qDp6Yamh5A2O2FcDDMQMS6sZ8uwVkBgd7xFHXsNv
-	 tz5H588ln/fDw==
+	b=EqB1ukEDfPbR0fJD4tUyyoTgta8WCeK8GJl13RWOvJ13q0qA9WSuIZeAgTkZhtind
+	 AwaMkGjNhXI6IEYvbJ9Db8omzpajGaaJ+1akqF4LPLGhO+a1hz1MI6OcPlpbODA3UE
+	 RCFVU2JNsY4lGGp6UpYukNN9Q43Uj1hP+IOugPRz96BUV4q6Zx7VU8s2QpkfMxgrng
+	 yof735x78Ra/900GUpp9MU/jnYa+lzXF7HozRQ2Ux1xnhK/rnf38KZrBpg05DM41ur
+	 fqDAUilzQDMmJ4pFvO58OPHuFxdcnJpo1VNCF1Oea2ah5bDvrzdC1vpcVBlVXvM8H3
+	 FCYzVVybgWXNA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: Override EXTRA_LDFLAGS for
- static builds
+Subject: Re: [PATCH v2 14/18] perf pmu-events: Split big_c_string storage
+ into standalone compilation unit
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Paul Chaignon" <paul.chaignon@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <714556da329c812988010ffe53173d9152570a78.1778669303.git.paul.chaignon@gmail.com>
-References: <714556da329c812988010ffe53173d9152570a78.1778669303.git.paul.chaignon@gmail.com>
+To: "Ian Rogers" <irogers@google.com>
+Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+In-Reply-To: <20260512174638.120445-15-irogers@google.com>
+References: <20260512174638.120445-15-irogers@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 14 May 2026 04:23:04 +0000
-Message-Id: <20260514042304.EF3ECC2BCB7@smtp.kernel.org>
+Date: Thu, 14 May 2026 04:35:17 +0000
+Message-Id: <20260514043518.2016AC2BCB7@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] The suggested workaround `EXTRA_LDFLAGS=3D-static` in README.rst=
- breaks the bpftool build or silently disables LLVM support.
+- [High] The use of the `&:` grouped target syntax in the Makefile breaks c=
+ompatibility with GNU Make < 4.3 and causes race conditions during parallel=
+ builds.
+- [Low] The newly generated `pmu-events-string.c` is not added to `tools/pe=
+rf/.gitignore`, resulting in an untracked file after an in-tree build.
 --
 
-commit dcbd0d5d7a0eb4a9300ad0890d83b7e4cdfd3aeb
-Author: Paul Chaignon <paul.chaignon@gmail.com>
+commit e5e31a4f692737db305f31f8a7cee6c36037c141
+Author: Ian Rogers <irogers@google.com>
 
-selftests/bpf: Override EXTRA_LDFLAGS for static builds
+perf pmu-events: Split big_c_string storage into standalone compilation unit
 
-This commit updates the README.rst for BPF selftests to include
-EXTRA_LDFLAGS=3D-static when recommending how to statically link,
-in order to fix shared library loading errors with libLLVM.so
-when running vmtest.sh.
+Currently, jevents.py emits both the massive 2.8 MB big_c_string literal
+and tens of thousands of compact_pmu_event struct arrays into a single
+pmu-events.c compilation unit. This commit refactors jevents.py to emit
+big_c_string into a dedicated pmu-events-string.c compilation unit. This
+allows Kbuild to compile them simultaneously in parallel, cutting C
+compilation latency.
 
-> diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selft=
-ests/bpf/README.rst
-> index 776fbe3cb8f9b..37164322a1023 100644
-> --- a/tools/testing/selftests/bpf/README.rst
-> +++ b/tools/testing/selftests/bpf/README.rst
-> @@ -77,7 +77,7 @@ In case of linker errors when running selftests, try us=
-ing static linking:
+> diff --git a/tools/perf/pmu-events/Build b/tools/perf/pmu-events/Build
+> index dc1df2d57ddc1..e957aa2fcb480 100644
+> --- a/tools/perf/pmu-events/Build
+> +++ b/tools/perf/pmu-events/Build
+> @@ -1,7 +1,12 @@
+>  EMPTY_PMU_EVENTS_C =3D pmu-events/empty-pmu-events.c
+>  # pmu-events.c will be generated by jevents.py or copied from EMPTY_PMU_=
+EVENTS_C
+>  PMU_EVENTS_C	=3D  $(OUTPUT)pmu-events/pmu-events.c
+> +PMU_EVENTS_STRING_C =3D $(OUTPUT)pmu-events/pmu-events-string.c
+> +
+
+Does this new generated file need to be added to tools/perf/.gitignore?
+
+Looking at tools/perf/.gitignore, pmu-events/pmu-events.c is explicitly
+ignored, but the new string file is not:
+
+tools/perf/.gitignore:
+    ...
+    pmu-events/pmu-events.c
+    pmu-events/jevents
+    pmu-events/metric_test.log
+    ...
+
+Compiling perf in-tree might leave the working directory dirty with an
+untracked pmu-events-string.c file.
+
+>  pmu-events-y	+=3D pmu-events.o
+> +ifneq ($(NO_JEVENTS),1)
+> +pmu-events-y	+=3D pmu-events-string.o
+> +endif
 > =20
->  .. code-block:: console
+>  # pmu-events.c file is generated in the OUTPUT directory so it needs a
+>  # separate rule to depend on it properly
+
+[ ... ]
+
+> @@ -222,8 +232,9 @@ endif
 > =20
-> -  $ LDLIBS=3D-static PKG_CONFIG=3D'pkg-config --static' vmtest.sh
-> +  $ LDLIBS=3D-static EXTRA_LDFLAGS=3D-static PKG_CONFIG=3D'pkg-config --=
-static' vmtest.sh
+>  # Finally, the rule to build pmu-events.c using jevents.py. All test
+>  # and inputs are dependencies.
+> -$(PMU_EVENTS_C): $(JEVENTS_DEPS)
+> +$(PMU_EVENTS_STRING_C) $(PMU_EVENTS_C) &: $(JEVENTS_DEPS)
+>  	$(call rule_mkdir)
 
-Can adding EXTRA_LDFLAGS=3D-static break the bpftool build or silently disa=
-ble
-LLVM support?
+Will this rule work correctly on systems using GNU Make older than 4.3?
 
-In the bpftool Makefile, LLVM's --system-libs and -lstdc++ are only appended
-to LIBS if llvm-config --shared-mode outputs 'static'. However, the
-feature-llvm test in tools/build/feature/Makefile unconditionally includes
---system-libs and uses g++, which automatically includes -lstdc++.
+The top-level Makefile enforces a minimum requirement of GNU Make 4.0, but
+the &: grouped target feature was introduced in GNU Make 4.3.
 
-If a system has static LLVM libraries but llvm-config --shared-mode is set
-to 'shared' (common on many distros), the feature-llvm test statically links
-successfully, but bpftool's Makefile will attempt to build with LLVM support
-using gcc -static while omitting --system-libs and -lstdc++. This can cause
-the build to fail with undefined references.
+On older, supported versions of Make (like 4.2.1), the &: syntax is not
+recognized. Make parses & as a literal target and interprets the line as
+having three independent targets: $(PMU_EVENTS_STRING_C), $(PMU_EVENTS_C),
+and &.
 
-Additionally, if static LLVM libraries are entirely absent, the feature test
-fails, causing bpftool to silently build without LLVM support.
+During a parallel build, could this result in multiple jevents.py
+processes spawning simultaneously? It seems they might write to pmu-events.c
+and pmu-events-string.c concurrently, potentially interleaving output and
+corrupting the generated C source files.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/714556da329c8129880=
-10ffe53173d9152570a78.1778669303.git.paul.chaignon@gmail.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260512174638.1204=
+45-1-irogers@google.com?part=3D14
