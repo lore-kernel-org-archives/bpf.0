@@ -1,108 +1,123 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45325175A68;
-	Thu, 14 May 2026 00:28:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE3F1F03D9
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 00:46:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778718539; cv=none; b=RyeFZJ2EfZEphzKeatOh7IDH/164EiKUT37nflk1WuPhqzipOi/Buzzf1VjQzsN9HfL2jTMbrMp5SOY7u26VV2lZsswbTfnry5u4zFTdzorC6fleC23qcU0InrlF7U+TUiL1UCV/gIqkRLQAPn5oV7bYoOS/1oNv2/CuvjAuU9M=
+	t=1778719594; cv=none; b=BW3f6EAMa5FQeIiWtY5PjGwVYUBWneY4LQ7Ths6bcgqfNGdc7VLRjIsItLZeNa6zY1hU8FgjxSTrTtxFtxKada1Y9TvvS9jCgc+Tc0vln8CMce9PIBMhl6ghvkYM4FZb/qu68YoZLIQiZPDC/Z44ItVo29yBb+c/5010e4It6ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778718539; c=relaxed/simple;
-	bh=uTNCscIH+UVpiddHOv+LK5aSVRb2mKzbK3LuxFUgYZ8=;
+	s=arc-20240116; t=1778719594; c=relaxed/simple;
+	bh=zHb2t8ppCZ7lOfr5L3n58PlQwzEfoWLBGuAncUeRc1c=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=W2MW5bXM+0DmcUeAyMx5GARUVoaEHUXeq6DWOuch4bT1mraVpZFEsNm7+FWpS7oyTN3HpX2d9qdGb06ABrmAOfcc6Mz/JX7kCz/hJMnuZcZGuononYY/sn0oWJnO1xWgbPrLCtOFXLtETazPhaAZZJtFGyO4nE3nx7CVVnUVoDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aqK47f6u; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=YG1v8MUVgoeNNv38DBpOm5yQWBkzY/ukc+Yzu94SQjBWRtdPiPcff89VpjTAZLu2n4XjUnyO2WaqCSBQyhhEHHCGrKvCrtIwvhFfWV2vu/xV6sj/rLTthjm1XyOATmLP3mvxWGoM5tjEPDPdOsJ9BmP5cYtLxOMa1lWzRl3dr3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a4Qv2Hcg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aqK47f6u"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4120C19425;
-	Thu, 14 May 2026 00:28:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a4Qv2Hcg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DA09C19425;
+	Thu, 14 May 2026 00:46:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778718539;
-	bh=uTNCscIH+UVpiddHOv+LK5aSVRb2mKzbK3LuxFUgYZ8=;
+	s=k20201202; t=1778719594;
+	bh=zHb2t8ppCZ7lOfr5L3n58PlQwzEfoWLBGuAncUeRc1c=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=aqK47f6ugYua0X9dhK19ZYJ7wcZg12G1WRnbTos8f8gucTYYFamAFjrhGWBQ+1e0i
-	 mD1WI2EzWnI2BcA02fI7eXC20FUU/kGq0qMOdBbHa805BTvnmGrQOs9YCLCr0e7Z+X
-	 g4AWhtZdqmA6ZUl4g7RHc9OXG/Tq5OmnlheBfK6eYnPsWdB3IzduWXSBzJmkHjzBps
-	 87pLw5B2uqYPeWGVsUDQ8a8KEnNC/TnfyGDEZp70DrkGwshBXBQiQ7+dw3YZU/jCIt
-	 z4YMALlOgiJrZnUimH4UGAd4eaPnmi9XXw8Wq8MyVGZ1K2CGSkgskZ0tL1bnOGOEOB
-	 0XmrubRAsu8pw==
+	b=a4Qv2HcgJen868Pj55JTQxtNvwATz13BAqdNypkUPxevqnLXuVOn7+IlRIqhuIOiB
+	 jmC5w4ZWGfv0XJCKSRWNhyyqUBtfjyl//mohIEZW/GEVkJizxaYBE3a64h3KlbtDV8
+	 HPLdHXAj7syXwqfIJwtRkdjlzNtgFF4/qun+ehbF0QMboq+SpVaZboWIcAGdE+uyJR
+	 fwUUCS8WD2Ca0EEoMoeCMiz1/9aoJiOurlQiBC+W170ftPKISszgGeY7MdTG0/NFVp
+	 WMCrACDUkpjZlCsa9x0SDm4CD0Igt/g6hLVjncpLyXEFny/Sy2yx8pqzO0EKd8JOhk
+	 52ovL7zo92AUw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 04/18] tools scripts: Short-circuit CC_NO_CLANG
- compiler probe in Makefile.include
+Subject: Re: [PATCH bpf-next v14 6/8] bpf: Add syscall common attributes
+ support for map_create
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ian Rogers" <irogers@google.com>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260512174638.120445-5-irogers@google.com>
-References: <20260512174638.120445-5-irogers@google.com>
+To: "Leon Hwang" <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260512153157.28382-7-leon.hwang@linux.dev>
+References: <20260512153157.28382-7-leon.hwang@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 14 May 2026 00:28:58 +0000
-Message-Id: <20260514002858.F4120C19425@smtp.kernel.org>
+Date: Thu, 14 May 2026 00:46:33 +0000
+Message-Id: <20260514004634.3DA09C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Exporting `CC_NO_CLANG` across sub-makes breaks cross-compilation =
-when target and host compilers differ (e.g., CC=3Dgcc and HOSTCC=3Dclang).
-- [Medium] The empty check `ifeq ($(CC_NO_CLANG),)` blindly trusts the user=
-'s external shell environment, introducing build fragility.
+- [High] Race condition causing unrelated file descriptor closure and resou=
+rce leakage due to failure after fd_install().
 --
 
-commit fd712ba4b295d8ef072e15714d284857b59a5cfa
-Author: Ian Rogers <irogers@google.com>
+commit 37e50113e50fb4d6482363699239289046be6ff2
+Author: Leon Hwang <leon.hwang@linux.dev>
 
-tools scripts: Short-circuit CC_NO_CLANG compiler probe in Makefile.include
+bpf: Add syscall common attributes support for map_create
 
-This commit wraps the CC_NO_CLANG evaluation in a conditional check and exp=
-orts
-it. This caching prevents Make from re-executing the compiler probe multiple
-times during incremental builds.
+This commit adds common syscall log attributes to map_create(). It creates
+a verifier log to report map-creation failure reasons back to userspace,
+improving debuggability.
 
-> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.incl=
-ude
-> index 41971a68972dd..3c7803122ae21 100644
-> --- a/tools/scripts/Makefile.include
-> +++ b/tools/scripts/Makefile.include
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 2fa05ba8f1619..6600e126fbfb4 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+
 [ ... ]
-> @@ -74,7 +74,10 @@ $(call allow-override,CXX,$(CROSS_COMPILE)g++)
->  $(call allow-override,STRIP,$(CROSS_COMPILE)strip)
->  endif
+
+> @@ -1611,6 +1632,31 @@ static int map_create(union bpf_attr *attr, bpfptr=
+_t uattr)
+>  	return err;
+>  }
 > =20
-> +ifeq ($(CC_NO_CLANG),)
+> +static int map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_c=
+ommon_attr *attr_common,
+> +		      bpfptr_t uattr_common, u32 size_common)
+> +{
+> +	struct bpf_verifier_log *log;
+> +	struct bpf_log_attr attr_log;
+> +	int err, ret;
+> +
+> +	log =3D bpf_log_attr_create_vlog(&attr_log, attr_common, uattr_common, =
+size_common);
+> +	if (IS_ERR(log))
+> +		return PTR_ERR(log);
+> +
+> +	err =3D __map_create(attr, uattr, log);
+> +
+> +	/* preserve original error even if log finalization is successful */
+> +	ret =3D bpf_log_attr_finalize(&attr_log, log);
+> +	if (ret) {
+> +		if (err >=3D 0)
+> +			close_fd(err);
 
-Does this empty check run the risk of blindly trusting the external shell
-environment? If CC_NO_CLANG happens to be exported in the user's shell,
-the probe is completely skipped. Would checking the origin of the variable,
-such as using ifeq ($(origin CC_NO_CLANG), undefined), prevent this from
-causing unintended build misconfigurations?
+Since __map_create() has already successfully created the map and installed
+the file descriptor via fd_install(), the fd is globally visible to the
+process at this point.
 
->  CC_NO_CLANG :=3D $(shell $(CC) -dM -E -x c /dev/null | grep -Fq "__clang=
-__"; echo $$?)
-> +endif
-> +export CC_NO_CLANG
+If bpf_log_attr_finalize() fails (for example, due to an invalid pointer
+for log_true_size), we attempt to roll back by calling close_fd(err) and
+returning an error.
 
-Could exporting CC_NO_CLANG cause regressions during cross-compilation
-when CC and HOSTCC use different compilers?
+Could this race with a concurrent thread?
 
-Many tools build host components by invoking sub-makes with an overridden
-compiler, like CC=3D"$(HOSTCC)" in tools/objtool or libsubcmd. Because
-CC_NO_CLANG is exported here, these sub-makes will inherit the parent's
-cached value and skip their own compiler probes.
+If another thread closes this fd and opens a new file between fd_install()
+and this close_fd() call, wouldn't we erroneously close an unrelated file?
 
-If CC=3Dgcc and HOSTCC=3Dclang, the sub-make will inherit CC_NO_CLANG=3D1,
-which incorrectly appends GCC-specific flags (like -Wstrict-aliasing=3D3)
-for the Clang build, potentially breaking it. Conversely, if CC=3Dclang
-and HOSTCC=3Dgcc, sub-makes might inherit CC_NO_CLANG=3D0 and attempt
-to use Clang-specific flags like --target=3D with GCC.
+Also, if another thread dups the fd before we close it, wouldn't the BPF
+map remain alive and accessible to userspace even though the map_create
+syscall returned a failure?
 
-> =20
->  ifneq ($(LLVM),)
->  HOSTAR  ?=3D $(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX)
+> +		err =3D ret;
+> +	}
+> +
+> +	kfree(log);
+> +	return err;
+> +}
+
+[ ... ]
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260512174638.1204=
-45-1-irogers@google.com?part=3D4
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260512153157.2838=
+2-1-leon.hwang@linux.dev?part=3D6
