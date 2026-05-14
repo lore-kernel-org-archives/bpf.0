@@ -1,216 +1,149 @@
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013030.outbound.protection.outlook.com [40.93.196.30])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76143BF69C;
-	Thu, 14 May 2026 11:11:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.30
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778757098; cv=fail; b=RaRACojVcxeao7qYAPDJYtGfnZkhNgrsRi10Be0zt00D9EvCVoeqTbiYfZYGgPE5oe81I8OKbELV2ciRbXgPVFlHlkvDi/2OJ0Oqbi1uXe87EIEoE9moPXgjluUoRt6uy5YQIT8L6KpJahSVHwPG8uJVyvHfsriO0MF8XiFO8JQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778757098; c=relaxed/simple;
-	bh=h9lmcb+zqBYthVoW3dmHTWkZcO6PrOBwFbxCmbZKMvU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UgkPySAgmjk1zy2S54QJz040Rrz1sPvVagE97TUkCY6rYY3IWY83y0zhIgMCtijisMxuq+aWSVkbUEeSO6nFuGTlr2EkqhufeVhx3ATYRahCudqHwAOx6SLyXyGrgcf11ayV6vWrsn/y9nX5YBsbj5HZd6Uer8kFlVHBehIXRkk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Wffw0W6W; arc=fail smtp.client-ip=40.93.196.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8B343B6C1E
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 11:18:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778757499; cv=none; b=hesUmJ+Vk5p6HL2D7Q+WlEIqTQsPe78K6MzcDruH0+7z5PWNsoPzb0eriwcgtdOmAgl2oQmeFUaF/8k3o32BGj69HIwQybcvpG9IBDT9TE4vItLVeMg+j3ZotAquYw/Yy0+GssVlY4n1mTkHV3bu0/lpJmHQydd+tT4J4WCSPx4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778757499; c=relaxed/simple;
+	bh=QY6s7AfEenXtWFuj8Lf7D6nSgMrs3WQlj/inWWmt53o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZXgPfRB3inMw51yFsSBzFXL7vJqlUomM1ADJjEG/WxODaq3eB0cuxLyhesaWUWKQT2HZn24J4mGqwyVwvmu9uVcLEHsWsu9rD6xrbyIHwEQgbZMa2Wx6lWf2mNBXRW3ykEBRlbTNO3Whr7gjYBClh8iO9oGCotdkOSXV5LOHIxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KU+ZFo6w; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=SbYMl5hk; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Wffw0W6W"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VvJ0TqnNzduD3iybgS1fosh6qUQ5actpUa4rz1NC9ubLJHrONtnDJBjs+PdsrjtdLGDmoM3SIj8VRLeKX494sRd/6N8Cs8tGLD2UPQO4UNBmuxPNP4rI2X0x0PoSS7xwP7Xl8TwyjdN2fZ3EOdo/77B2Drn7+JXSul3wZMpnZYv+m3nmktSCuxdvGMzCUAm7RHh5E83yTTlxj83iLjQfWY3amduRaFkdDnvXdfiGSHdfDunda5uuj+68fZBPUe+XzxQPMKkOS8H/CwCOOFcy3fwUBqqbpMO17u7Ex9FBE58Lmfqw0bFOmMcBmbhD+HaOjFLC1q9KDwj9RP3RPU+auQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2gLSjPe0F34ZQ/twBAmhziASDQpOwQSq0k6Wqo3p8qk=;
- b=RJJxllj7/h0s03zl2ED4eYLBcMp7DwrwK9ny/pDw/dmUT+qiIQTzwf+Ywm/PaW9j1GBDQY5hibD7kjR3wwAfrTnnLKcWh3F1uY//XqCOFtJfJBMsbMaKesu2krLvQYg7XaHocnkzqdK66xLLc+b68/ax3Rg+pP4/9J76JK/ZSryQKxEy4EMnSu9Jd8riUkZMdrBr39PorDuwg8nTXG3nf/XDtpNuVzWsVcVXIckPSH9xrxv2hpru+J65i2vBMgEpXUXjYJq3INEENH96kMpUtU8+3LIhZOzHZO8k6srGn1P7JRFpoio07mnZDIozH1FfntkWCUHsAiqa8qc3HL0OYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2gLSjPe0F34ZQ/twBAmhziASDQpOwQSq0k6Wqo3p8qk=;
- b=Wffw0W6WrCcFZO4zTMKcTxvQCyIL926SvdbBJcnw+KtUyoGVsSVLLn2NYGv3HFU5eV2Edz8KuPJlDB85MU6SV846ygg9LnFDjjAZCpdPCTJin6p8c4ATwsgjgpsYCR+kYk/PBeFRMc95zAfQpIz+jpg5JHQqTvnG+/q90Goi/Yw7l0FZUaHYotBTbvswyIvGZRfmAhu+spOmOddS+1pnTEU2Z40UN9SPl9iZiczanRRjtTOqSo2AZahNGDo3dpGUIRegBr331UMVeUs0sbMgRy73CdGiug99AtT6TkBbtr8MalRTd1h3XvL5/1+xkNyUIydGd/eZ+RTpIumCLILk8A==
-Received: from SJ0PR05CA0203.namprd05.prod.outlook.com (2603:10b6:a03:330::28)
- by DS0PR12MB7656.namprd12.prod.outlook.com (2603:10b6:8:11f::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9913.11; Thu, 14 May
- 2026 11:11:26 +0000
-Received: from SJ5PEPF000001D0.namprd05.prod.outlook.com
- (2603:10b6:a03:330:cafe::a7) by SJ0PR05CA0203.outlook.office365.com
- (2603:10b6:a03:330::28) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.25.16 via Frontend Transport; Thu, 14
- May 2026 11:11:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- SJ5PEPF000001D0.mail.protection.outlook.com (10.167.242.52) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.25.13 via Frontend Transport; Thu, 14 May 2026 11:11:26 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 14 May
- 2026 04:11:10 -0700
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Thu, 14 May 2026 04:11:09 -0700
-Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
- Transport; Thu, 14 May 2026 04:11:04 -0700
-From: Tariq Toukan <tariqt@nvidia.com>
-To: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
- S. Miller" <davem@davemloft.net>
-CC: Boris Pismenny <borisp@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, "Mark
- Bloch" <mbloch@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
-	<sdf@fomichev.me>, Shahar Shitrit <shshitrit@nvidia.com>, William Tu
-	<witu@nvidia.com>, Kuniyuki Iwashima <kuniyu@google.com>, Dragos Tatulea
-	<dtatulea@nvidia.com>, Sabrina Dubroca <sd@queasysnail.net>, Kees Cook
-	<kees@kernel.org>, <netdev@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>, Gal Pressman
-	<gal@nvidia.com>
-Subject: [PATCH net-next 2/2] net/mlx5e: Let kTLS RX get async ICOSQ param in napi poll
-Date: Thu, 14 May 2026 14:10:38 +0300
-Message-ID: <20260514111038.338251-3-tariqt@nvidia.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20260514111038.338251-1-tariqt@nvidia.com>
-References: <20260514111038.338251-1-tariqt@nvidia.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KU+ZFo6w";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="SbYMl5hk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778757496;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=COO41hKBYdHBD+YBwmNP96xVT9h6SMU1rdVHr5HzbAU=;
+	b=KU+ZFo6wGluBTov5Tc8Je/owY4NQeL1YAo25AonnSYjgyqDjnLJfm6VOEgUaqrejZRTQt+
+	T32EcdELbEj0K5XPqOaHtCMUpjIxagk0D3emFQPe8QyEQHIzrAc/9ScuUzGrqOl1BPhmTK
+	+TpZNxdIEiH+JEWw3SviPoewpksO+UE=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-131-ytfuqX6VPP-otL_ADv3DfA-1; Thu, 14 May 2026 07:18:15 -0400
+X-MC-Unique: ytfuqX6VPP-otL_ADv3DfA-1
+X-Mimecast-MFC-AGG-ID: ytfuqX6VPP-otL_ADv3DfA_1778757494
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-48fe3e73da6so43175e9.2
+        for <bpf@vger.kernel.org>; Thu, 14 May 2026 04:18:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1778757494; x=1779362294; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=COO41hKBYdHBD+YBwmNP96xVT9h6SMU1rdVHr5HzbAU=;
+        b=SbYMl5hkfLdNudDn2lvbSgbKw/BIXNh6GPXz04mPmgMXmCFU34E9HIVC+USF6gg0+c
+         xNkGFS3ZLtkCuhmYarMNcwp1vAs/BZVzm6pqr4ERu4BQ69RzFzN3aQ/tiO04DT/OgU23
+         Q1KB2VpdMKIPxyk3KNjYOt6Ben7bOOxUqzYb37TFpcTSuY+Rp6tInG6D+19wDZ+j69/c
+         QsVR29gJuR5NleO5cpb4jn9hVHfElkW+08JOa7BNGZJtY3Lep0vE3gHCOlBVyfAqnjx0
+         paEqHzX1KU8EK9eZmBUt19OnhmD32bxzMUL1k8hZZiW/gUN1IDTt3PHC5GCc7jbm4+O8
+         NXxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778757494; x=1779362294;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=COO41hKBYdHBD+YBwmNP96xVT9h6SMU1rdVHr5HzbAU=;
+        b=l3mThINqSbxVjHoR4xjmKkrw2JHsonaRz+Tkt7nCZ2xSQQpgxO1BRtWI2Bo9Q6i9Jr
+         C0w1Ysk9lvLYKFflCtW9v0uiZ0ISL35UwqVWzUsAXyBCDR9vMsWwdQJ/jeTav25d+qKA
+         m6iEZp7rCf/nm8kZbdZzAnwHrdFvoiV0Tak4hl9EdseRmC8ipzMOyKUBLsCluflaKDnJ
+         0WIRkKni4326LjgQ5nWCtc8Q2MUHVW7wJuG2TyE+S1Sy4k8IHXudH+eKcCROzqBQWlfh
+         7PRubUawzIORRE4gNBQsvmTI/g5mhh8+k+geJjhXyTdtqBvHW0ACMJpE7ZRUwkSxaaMm
+         3frw==
+X-Forwarded-Encrypted: i=1; AFNElJ+W8NlLz2Mf2csfWRT7OqmSBaHZGyPiZxzoWBCXaWgYPhyu/Ghjl5gYZcqDzzdn40KetL4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzO11deU5AysvwJFbNHtpcY5H0OuTHugCruIRys3aXCmPGafUWs
+	flpfX6rZ1L+0hOUbc4Nh007aoW8wubQZVueDmbQ+oO1GSAovWfVg0vIUDJYw5jHG1G5fdlyyJIm
+	Q91uX786eeubnlwtePjY0rV3OzQVMyWy9vxGZ5hwTaC8sf7iNKvDBCg==
+X-Gm-Gg: Acq92OGfD5PvwJxdL8CPLaerwaKqeTTpG6hZQx0VVNlnLgjFb40QASvSyd+3YLkDqLe
+	U2Cctsc6/bbiKL0UZb5VREXDB807JCjPI9VWTR/ErCenZZYd5j6fVq7nHo8uAnuCFH0M6LDe80H
+	EkLXGXkCPg9lp7898Gl7NfHunBFVk3cSr/NAc71kvdGLYXhyWsl95DGM9aJgIlyRdI0oe/B1CD0
+	5p6wKeEjN6aAlYkOcYdFdCXUXkJz/WyArIp60vb5X+Vod8AiQ7CV0BX3G1hOCCFPL6XTyaRJs/u
+	hyGbvgRxFjh1JRqnV2bjNS7+Grm1ZinKJpr0MH3E09bJb3gqtgOfZ9ij4eSd1mP+XmSsmfh4bhe
+	2zglobONvJ9XzPFTQIQ+BBJTwScczSPfuQQ+cdGHmDhg42PADngctmH8=
+X-Received: by 2002:a05:600c:468f:b0:48a:5339:ef0e with SMTP id 5b1f17b1804b1-48fc9a028bemr103922765e9.3.1778757494245;
+        Thu, 14 May 2026 04:18:14 -0700 (PDT)
+X-Received: by 2002:a05:600c:468f:b0:48a:5339:ef0e with SMTP id 5b1f17b1804b1-48fc9a028bemr103922145e9.3.1778757493719;
+        Thu, 14 May 2026 04:18:13 -0700 (PDT)
+Received: from [192.168.88.32] ([216.128.9.106])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fd6498cdesm71780365e9.5.2026.05.14.04.18.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 May 2026 04:18:13 -0700 (PDT)
+Message-ID: <a83d79d1-b932-458a-b5fa-1cb623fa03f1@redhat.com>
+Date: Thu, 14 May 2026 13:18:12 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001D0:EE_|DS0PR12MB7656:EE_
-X-MS-Office365-Filtering-Correlation-Id: 71baa17a-dc11-4eec-b2e3-08deb1a98a5d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|7416014|376014|82310400026|1800799024|22082099003|18002099003|56012099003|11063799003;
-X-Microsoft-Antispam-Message-Info:
-	7Q0mAdN+um4iTjpX09StW7wtKhvsIlvGvQO1PyNXDM/COK/pjAv1l4db9d+B6ox8jtd35c65p1+oaXfaV0FR2wRdI6+bSkyWjMDARWtGgeysoi8rl/pRTEiOs4MsEblmmvjhOhxNZfYME+Sld+5kH77abKd2mNIny2D4qxD8TkYZhycNySkGPufYRMQJTIBLTvImRrYMmVP/sfmJnZttAUuyuwO00bXEQVGOOCk6OoT6rEYGGNdBc3OjRZgC4UPb1JAcXKKl8YWT+2TIITcuSw4ZOMj2x1NshoIj4zq1IOlZgah/gz7IUgLPJ0qo3X3IGSBFRNIIKJEqp0QEtOb91zef8zhq0KEmdNl/84CV7RF/1KNX0utCodZGLcdiGXlJUgkwkY0UXot9xH7p2FhLn46sOEUMTvohUheSZbc3nLPDUkmjpYowSvD2AJdFAjLEyIWwP9mV38ZU+UGYU0R2lvkgmaFbDtn3KxnUIiC4O7k3YR6uJ3CGCY3PZ+5F8oaBkp6CVAIN5A1pAovcySKBmfY3JReDc7V0RqKnMdxaqpZ+KLYR1f1eY65bk1mo4BJsTRVTRDF/UEloGXI8nxn4dsr0ylcajWUTjeLbEUwcfBqraHaOOuCieusVAL59lsbW8ja6Txv3G1UFgaDE52CFOSqES1xYGZpruiPVquRn73HdKZp3Jh1+Hk2bdeVWXgRBxf0z27HVE1zkQLKOCRY6+pr81gdsSBLaNQwmJDwhg4o=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700016)(7416014)(376014)(82310400026)(1800799024)(22082099003)(18002099003)(56012099003)(11063799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	l/PIydQMP7sDXLAtXCKb902rU9yRmsDjmJ1t9jNWnId4FWTVTmct0ulWryHRYxT/rILnTmqdwBYFmPc2iuayxjAzVEeaK9StDePT9K1HF7+4KBT2Dc1ZRelqwvq2dY+KDoGuO1tChKX2y+EvjuOHUdeWFl9cp479h7LwToSzc496yO3Mz+xi2Nx8gHBhlCAlGtPHD05OKmY9piRCkFMzqL7wXku4XOeTBXmepkGR0LX/ZARCeN3ybheCeM4P/lhApWYgqvVQ0Isy8JVAPOK9k5McPQDgCqS1RZuQsahvBQWAEX5sw8oMoZdmWXKTYQf/mHfRfkWj//EigSyAQDGPQEZARg/592gKXss1hTp/SGlH5CcMu1NLj7OUJ2UwZDEy0wQhmDIha/3/86JOOWfLRCqH1OyL3rv2JCUR/6sSwX1qTOp+4IRU3Fv/KKAEP6bu
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2026 11:11:26.1840
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 71baa17a-dc11-4eec-b2e3-08deb1a98a5d
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001D0.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7656
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v2 4/4] net: tls: remove bad rollback and UAF on
+ ENOSPC
+To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
+Cc: netdev@vger.kernel.org, edumazet@google.com, andrew+netdev@lunn.ch,
+ horms@kernel.org, sd@queasysnail.net, john.fastabend@gmail.com,
+ bpf@vger.kernel.org
+References: <20260511174920.433155-1-kuba@kernel.org>
+ <20260511174920.433155-5-kuba@kernel.org>
+From: Paolo Abeni <pabeni@redhat.com>
+Content-Language: en-US
+In-Reply-To: <20260511174920.433155-5-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Do not pass channel just to extract the async ICOSQ.
-It's already extracted, pass it.
+On 5/11/26 7:49 PM, Jakub Kicinski wrote:
+> As explained in commit 54a3ecaeeeae ("bpf: fix ktls panic with sockmap")
+> once we call BPF there's no way for us to rollback the iter
+> and copy data, since BPF may have modified the message.
+> This is regardless of whether BPF set up cork or not.
+> 
+> Remove the attempt to roll back iter completely. This removes a UAF
+> since BPF may have modified msg_pl and rec, so these pointers were
+> stale.
+> 
+> Note that I'm entirely unsure what the expected behavior is here
+> for BPF. Feels like this path must not be exercised by normal
+> applications / existing deployments in the first place.
+> 
+> Fixes: d3b18ad31f93 ("tls: add bpf support to sk_msg handling")
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+>  net/tls/tls_sw.c | 12 ++----------
+>  1 file changed, 2 insertions(+), 10 deletions(-)
+> 
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index 360f71fd7884..22b77840e35a 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+> @@ -1164,11 +1164,8 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
+>  				else if (ret == -ENOMEM)
+>  					goto wait_for_memory;
+>  				else if (ctx->open_rec && ret == -ENOSPC) {
+> -					if (msg_pl->cork_bytes) {
+> -						ret = 0;
+> -						goto send_end;
+> -					}
+> -					goto rollback_iter;
+> +					ret = 0;
+> +					goto send_end;
 
-Re-order the checks in mlx5e_ktls_rx_pending_resync_list to optimize the
-common flow.
+The sashiko report here looks like a pre-existing issue that could be
+handled separately.
 
-Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
-Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
----
- .../ethernet/mellanox/mlx5/core/en_accel/ktls_rx.c   |  5 +----
- .../ethernet/mellanox/mlx5/core/en_accel/ktls_txrx.h | 12 ++++++------
- drivers/net/ethernet/mellanox/mlx5/core/en_txrx.c    |  5 +++--
- 3 files changed, 10 insertions(+), 12 deletions(-)
+Still let me play safe and merge just the 2 first patch in the series.
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ktls_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ktls_rx.c
-index ac8168ebb38c..bca45679e201 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ktls_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ktls_rx.c
-@@ -744,17 +744,14 @@ void mlx5e_ktls_del_rx(struct net_device *netdev, struct tls_context *tls_ctx)
- 	mlx5e_ktls_priv_rx_put(priv_rx);
- }
- 
--bool mlx5e_ktls_rx_handle_resync_list(struct mlx5e_channel *c, int budget)
-+bool mlx5e_ktls_rx_handle_resync_list(struct mlx5e_icosq *sq, int budget)
- {
- 	struct mlx5e_ktls_offload_context_rx *priv_rx, *tmp;
- 	struct mlx5e_ktls_resync_resp *ktls_resync;
- 	struct mlx5_wqe_ctrl_seg *db_cseg;
--	struct mlx5e_icosq *sq;
- 	LIST_HEAD(local_list);
- 	int i, j;
- 
--	sq = c->async_icosq;
--
- 	if (unlikely(!test_bit(MLX5E_SQ_STATE_ENABLED, &sq->state)))
- 		return false;
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ktls_txrx.h b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ktls_txrx.h
-index 4022c7e78a2e..93bd383a23d8 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ktls_txrx.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/ktls_txrx.h
-@@ -45,13 +45,13 @@ mlx5e_ktls_tx_try_handle_resync_dump_comp(struct mlx5e_txqsq *sq,
- 	return false;
- }
- 
--bool mlx5e_ktls_rx_handle_resync_list(struct mlx5e_channel *c, int budget);
-+bool mlx5e_ktls_rx_handle_resync_list(struct mlx5e_icosq *sq, int budget);
- 
- static inline bool
--mlx5e_ktls_rx_pending_resync_list(struct mlx5e_channel *c, int budget)
-+mlx5e_ktls_rx_pending_resync_list(struct mlx5e_icosq *sq, int budget)
- {
--	return budget && test_bit(MLX5E_SQ_STATE_PENDING_TLS_RX_RESYNC,
--				  &c->async_icosq->state);
-+	return test_bit(MLX5E_SQ_STATE_PENDING_TLS_RX_RESYNC, &sq->state) &&
-+		budget;
- }
- 
- static inline void
-@@ -70,13 +70,13 @@ mlx5e_ktls_tx_try_handle_resync_dump_comp(struct mlx5e_txqsq *sq,
- }
- 
- static inline bool
--mlx5e_ktls_rx_handle_resync_list(struct mlx5e_channel *c, int budget)
-+mlx5e_ktls_rx_handle_resync_list(struct mlx5e_icosq *sq, int budget)
- {
- 	return false;
- }
- 
- static inline bool
--mlx5e_ktls_rx_pending_resync_list(struct mlx5e_channel *c, int budget)
-+mlx5e_ktls_rx_pending_resync_list(struct mlx5e_icosq *sq, int budget)
- {
- 	return false;
- }
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_txrx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_txrx.c
-index 8df5bc5d0537..143890af516a 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_txrx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_txrx.c
-@@ -189,8 +189,9 @@ int mlx5e_napi_poll(struct napi_struct *napi, int budget)
- 				  &aicosq->state);
- 
- 		/* Keep after async ICOSQ CQ poll */
--		if (unlikely(mlx5e_ktls_rx_pending_resync_list(c, budget)))
--			busy |= mlx5e_ktls_rx_handle_resync_list(c, budget);
-+		if (unlikely(mlx5e_ktls_rx_pending_resync_list(aicosq, budget)))
-+			busy |= mlx5e_ktls_rx_handle_resync_list(aicosq,
-+								 budget);
- 
- 		if (xsk_open) {
- 			busy |= mlx5e_poll_xdpsq_cq(&xsksq->cq);
--- 
-2.44.0
+In case of a repost, please fix the typo (repetition) in the cover
+letter subj.
+
+/P
 
