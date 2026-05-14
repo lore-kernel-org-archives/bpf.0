@@ -1,32 +1,32 @@
-Received: from m16.mail.126.com (m16.mail.126.com [117.135.210.6])
+Received: from m16.mail.126.com (m16.mail.126.com [220.197.31.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB5838736B;
-	Thu, 14 May 2026 12:44:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 421BA1A7264;
+	Thu, 14 May 2026 12:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778762704; cv=none; b=i7Kdz7xVmRlAX+OBmGx0NksjSK/1l07S1bxDGtwWuZpNAvCtuD0ZRLGbMmzTFuYRzNQ5H1mD1aULRmm0l3rnS3+NYkB+t8OAdZWn1VqSsQ0x/8QDzhR5+H+gyfrlxLXOiGE5mAL8VBruncL6J96/fZnGuNcUvZGrdmCzWAPkZnU=
+	t=1778762743; cv=none; b=lmqE061zkHmVAQjsqyyG9+y7zVFZdcERaJ1Q0T0NnQxup80OmDRH9UXz8kMr58476pY/e9j9IkXRsyxnrnXjXCUTdp2JBOsReghMkTlVpeINQQt6s7rgERtbtHWK7nTefSDB3JrMzcQCVlXPrT9LFIfJ83gXNay0YCVR6y2zghA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778762704; c=relaxed/simple;
-	bh=UvaC7Jxoxw6o2/IENNWbfeLjQgv54ttBPXCj8P784xM=;
+	s=arc-20240116; t=1778762743; c=relaxed/simple;
+	bh=PWWsmg54Tt9lOl/hezGdPbbSgqsb5bTfM8zh+lNGJDc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZbHkkm0OBZYEeoLTHxPV5wmNvQP+z0NopLPPybby+APOIy0cnQKYNP9vMqvA9gW4y2p3s3hQYS4Zuw27O3XBuYO/9yCsI1Pd3LpNT/ONMIfLJGuDjFLBQ88a58NSRkya0F1qTvUXG9mMQV308uMj1xT8WTUeIX0sef5Neyiv4SE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=jjXn90yu; arc=none smtp.client-ip=117.135.210.6
+	 In-Reply-To:Content-Type; b=rqJdg5A54tlsSrFdAxRZOl8Kh6aQhDvKG+X9AH417ZRZAjf4sbQgafEfxp45aDBuOY5UfyTMNZhweVRuaSicYqQgYowAj/2bVS5lOhxBFi0sKNl1K8QHpN4SAFQWoyULK0jh30ZEqZ9kR+jY928tnJ/JyzIW8lwQG6Dij71Tm1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=KgIiF83b; arc=none smtp.client-ip=220.197.31.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="jjXn90yu"
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="KgIiF83b"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
 	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=mY2N9tDDkbbSakumSMfZMNd5aZ9U+KdaUV45cgxHeF0=;
-	b=jjXn90yumJsEWw8us0egMnHVZpRiOeTmNM5soTxLMYi/KXNutnA5j52aIaNgIQ
-	MJAxf6hn2E452m0LRReKbvJSpRvd4nHlFI5Fc+4xnUSA1QOzDvbfs9I3jZmpaZAw
-	X9xZHDiv2M7AR0lMdnvKuBrTYNAYutl57qrz+/zn4ExHc=
+	Content-Type; bh=LhIddh5A0idIBMcsr1JbG9HJj5gIEsxku/D3rEHjSd4=;
+	b=KgIiF83bvkBoWrOJt21KU4laLGcgZnELd4jSF16AhS0rl1clquCrfqrsg/ZvxF
+	l5vIBz10pPCPhYuae/nnfCtBC0TOslSvlqb+uEZt2ym8Q/lMQp4X7jLTBzGJGl2R
+	xaEGX0HM7dtc/G17Tx9/Nv+0bNJQLtsMcV7qXJ5PLvFCQ=
 Received: from [IPV6:2408:8210:480a:2590:67b8:4623:bebc:2a2] (unknown [])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wD3N8yDwwVqpVd5BQ--.17765S2;
-	Thu, 14 May 2026 20:43:48 +0800 (CST)
-Message-ID: <b469b3b7-cfd0-4829-8ea5-40293c7a6d07@126.com>
-Date: Thu, 14 May 2026 20:43:47 +0800
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wD3V+MXwgVq_hZ5BQ--.62255S2;
+	Thu, 14 May 2026 20:37:44 +0800 (CST)
+Message-ID: <cec221f3-a97b-4a84-b1e2-0820ccac11a2@126.com>
+Date: Thu, 14 May 2026 20:37:43 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -36,32 +36,31 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH V2 1/2] tools/lib/bpf/libbpf: Prioritize module kfuncs
  over vmlinux kfuncs
-To: Kaitao Cheng <kaitao.cheng@linux.dev>
-Cc: bpf@vger.kernel.org, martin.lau@linux.dev, alexei.starovoitov@gmail.com,
- jolsa@kernel.org, haoluo@google.com, kpsingh@kernel.org, song@kernel.org,
- linux-kernel@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
- andrii@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
- john.fastabend@gmail.com, sdf@fomichev.me
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, andrii@kernel.org,
+ eddyz87@gmail.com, alexei.starovoitov@gmail.com
+Cc: ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20260510030136.27876-1-chensong_2000@126.com>
- <a439f19e-1a47-46ce-8a2c-c53c9f038b8d@linux.dev>
+ <CAP01T77aPyqjV+9CVVL-YSEajvQYaMg9SNX3fygr0kTeKrBquw@mail.gmail.com>
 Content-Language: en-US
 From: Song Chen <chensong_2000@126.com>
-In-Reply-To: <a439f19e-1a47-46ce-8a2c-c53c9f038b8d@linux.dev>
+In-Reply-To: <CAP01T77aPyqjV+9CVVL-YSEajvQYaMg9SNX3fygr0kTeKrBquw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3N8yDwwVqpVd5BQ--.17765S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3JryUAr4UXrWUZw18AFy8uFg_yoW7Wr45pF
-	WrJrn0kF4xJr9IyF4xXrWUWry3KrWxKr4avFW3tFy3ur1vvFn5AF10k3W5u3s8Aw1vvF4I
-	9F4Yqr13C3yDAFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:_____wD3V+MXwgVq_hZ5BQ--.62255S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZryDKF18KFWUWF1xtF1DWrg_yoW8KrWkpF
+	45Kr4YkF48Jr9akanaqF4jqr90g3yfKr4jqFy3Jw17AF1YqFyIvFnFyr1ruFyDCws7Ja4D
+	uayjqF17Ca45ZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRUfHUUUUUU=
-X-CM-SenderInfo: xfkh02prqjsjqqqqqiyswou0bp/xtbBsgTtbWoFw4T8zgAA3s
+X-CM-SenderInfo: xfkh02prqjsjqqqqqiyswou0bp/xtbBpBiSEmoFwhjfJgAA3w
 
-Hi,
 
-On 5/12/26 11:18, Kaitao Cheng wrote:
-> 
-> 
-> 在 2026/5/10 11:01, Song Chen 写道:
+
+On 5/12/26 09:33, Kumar Kartikeya Dwivedi wrote:
+> On Sun, 10 May 2026 at 05:05, Song Chen <chensong_2000@126.com> wrote:
+>>
 >> Change the kfunc resolution order in find_ksym_btf_id() to search
 >> module BTFs before vmlinux BTF. This allows kernel modules to override
 >> vmlinux kfuncs with the same name, enabling a form of live-patching
@@ -88,136 +87,37 @@ On 5/12/26 11:18, Kaitao Cheng wrote:
 >>   tools/lib/bpf/libbpf.c | 60 +++++++++++++++++++++++++++++++-----------
 >>   1 file changed, 45 insertions(+), 15 deletions(-)
 >>
->> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->> index 0be7017800fe..9c9e5ff4d754 100644
->> --- a/tools/lib/bpf/libbpf.c
->> +++ b/tools/lib/bpf/libbpf.c
->> @@ -8532,35 +8532,65 @@ static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
->>   	return libbpf_kallsyms_parse(kallsyms_cb, obj);
->>   }
->>   
->> +static void split_module_from_ksym(const char *ksym_name,
->> +			const char **module_name,
->> +			size_t *module_name_len,
->> +			const char **kfunc_name)
->> +{
->> +	const char *sep = strstr(ksym_name, "__");
->> +
->> +	if (!sep) {
->> +		*module_name = NULL;
->> +		*module_name_len = 0;
->> +		*kfunc_name = ksym_name;
->> +	} else {
->> +		*module_name = ksym_name;
->> +		*module_name_len = sep - ksym_name;
->> +		*kfunc_name = sep + strlen("__");
->> +	}
->> +}
 > 
-> I don't think overloading "__" in ksym_name is safe.
-> 
-> 1. "__" itself is very common in kernel symbol names. Forcibly
->     treating the first "__" as the separator between the module name
->     and the kfunc name is seriously ambiguous. We cannot rule out
->     existing kfuncs, either defined by a module or by the core kernel,
->     whose names already contain "__".
-
-It will fallback event kfunc has an ordinary name with "__".
-> 
-> 2. ksym_name is not used only locally inside find_ksym_btf_id(). If
->     ext->name / ext->essent_name becomes inconsistent with the actual
->     kfunc name, it may affect other code paths as well
-
-ksym_name remains same, no impact to other part.
-
-> 
-> It seems that there are two problems to solve here:
-> 
-> 1. Allowing kernel modules to override vmlinux kfuncs with the same
->     name.
-> 
->     This should be relatively straightforward to implement by matching
->     names in kernel modules first, and then falling back to vmlinux.
-> 
-> 2. Handling the case where different kernel modules have kfuncs with
->     the same name.
-> 
->     Could we use a new libbpf API to establish the mapping manually?
->     for example:
->         bpf_object__set_ksym_btf(obj, "kfunc_name", "module_name")
-> 
->     Or define a new attribute, for example:
->         extern void kfunc_name(void) __ksym __module("module_name");
-> 
->     We probably need to hear suggestions from other developers on this.
-> 
-> Note: Adding the module name as a prefix to the kfunc name is
-> technically feasible, but it has significant historical compatibility
-> issues, which are hard to solve.
-> 
->>   static int find_ksym_btf_id(struct bpf_object *obj, const char *ksym_name,
->> -			    __u16 kind, struct btf **res_btf,
->> -			    struct module_btf **res_mod_btf)
->> +			__u16 kind, struct btf **res_btf,
->> +			struct module_btf **res_mod_btf)
->>   {
->>   	struct module_btf *mod_btf;
->>   	struct btf *btf;
->> -	int i, id, err;
->> +	int i, id = 0, err;
->> +	const char *module_name;
->> +	const char *kfunc_name;
->> +	size_t module_name_len;
->> +
->> +	split_module_from_ksym(ksym_name, &module_name, &module_name_len, &kfunc_name);
->> +	if (module_name_len == 0)
->> +		goto search_vmlinux;
->>   
->> -	btf = obj->btf_vmlinux;
->>   	mod_btf = NULL;
->> -	id = btf__find_by_name_kind(btf, ksym_name, kind);
->>   
->> -	if (id == -ENOENT) {
->> -		err = load_module_btfs(obj);
->> -		if (err)
->> -			return err;
->> +	err = load_module_btfs(obj);
->> +	if (err)
->> +		goto search_vmlinux;
->>   
->> -		for (i = 0; i < obj->btf_module_cnt; i++) {
->> -			/* we assume module_btf's BTF FD is always >0 */
->> -			mod_btf = &obj->btf_modules[i];
->> +	for (i = 0; i < obj->btf_module_cnt; i++) {
->> +		/* we assume module_btf's BTF FD is always >0 */
->> +		mod_btf = &obj->btf_modules[i];
->> +		if (strlen(mod_btf->name) == module_name_len &&
->> +			!strncmp(mod_btf->name, module_name, module_name_len)) {
->>   			btf = mod_btf->btf;
->> -			id = btf__find_by_name_kind_own(btf, ksym_name, kind);
->> +			id = btf__find_by_name_kind_own(btf, kfunc_name, kind);
->>   			if (id != -ENOENT)
->> -				break;
->> +				goto found;
->>   		}
->>   	}
->> -	if (id <= 0)
->> +
->> +search_vmlinux:
->> +	btf = obj->btf_vmlinux;
->> +	mod_btf = NULL;
->> +	id = btf__find_by_name_kind(btf, ksym_name, kind);
->> +	if (id == -ENOENT)
->>   		return -ESRCH;
->>   
->> +found:
->>   	*res_btf = btf;
->>   	*res_mod_btf = mod_btf;
->>   	return id;
+> Instead of modulea___ prefix, how about using declaration tags instead?
+> We can use `namespace:vmlinux` and `namespace:module` to choose
+> precedence for module or vmlinux.
+> Then further scope using `namespace:moduleA` or `namespace:moduleB`.
 > 
 
+Thanks for the suggestion. Just to clarify — are you proposing this
+as a BTF/string-level naming convention, or as something that would
+appear in actual C identifiers? Since colons aren't valid in C
+identifiers, I want to make sure I understand the intended mechanism.
 
-best regards,
+
+> By default, I think preferring vmlinux symbols over modules makes
+> sense. If one wants to prefer an overload with the same name coming
+> from a module, they can place the right tag. But we need more
+> consensus from other folks before you respin again. If we didn't have
+> a way of indicating the preference, I would agree picking the one in
+> module would allow more interesting cases by default, but since we do
+> have a mechanism, it makes sense to pick a more sensible conservative
+> default, in my opinion.
+> 
+> Anyway, let's see what others might say.
+> 
+yes, many thanks.
+
+Best regards,
 
 Song
+
+> pw-bot: cr
+> 
+>> [...]
 
