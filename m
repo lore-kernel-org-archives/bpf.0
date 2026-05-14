@@ -1,119 +1,223 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from m16.mail.126.com (m16.mail.126.com [117.135.210.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC9C73812D3
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 12:45:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB5838736B;
+	Thu, 14 May 2026 12:44:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778762703; cv=none; b=qLxeTYD3JyLNmypl/DkoMffeMaFafdrQsXWE/WbWBgrjZStPIT+ggRriwChefscZ4kVyEXeXRV6iW+QhrZZIK2HwfnbDTNqoAe846/ISkvaxvtJThkKDT0POIXp9X7aDTBniYyMMTLa7z9DizKAnmvZwXn6JRQ80e8+tW7jpICE=
+	t=1778762704; cv=none; b=i7Kdz7xVmRlAX+OBmGx0NksjSK/1l07S1bxDGtwWuZpNAvCtuD0ZRLGbMmzTFuYRzNQ5H1mD1aULRmm0l3rnS3+NYkB+t8OAdZWn1VqSsQ0x/8QDzhR5+H+gyfrlxLXOiGE5mAL8VBruncL6J96/fZnGuNcUvZGrdmCzWAPkZnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778762703; c=relaxed/simple;
-	bh=inD9yKX5Vx4mE6TvB/1cLEWXe0/9U0WufzWDw84EPnc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=bXc1Who3oGiMLYc/ojxD7NITbAx1f2kwt8oqRhAjhSLWMwSg7TgtEpkP8OzYUnc5Q701F4QloUMPY0QhN0TSOGSyehidZSMoSnEXNpM4GG+Y0a7yTXwGFqwy0KPHmXy8hgGezu0Bg2T/zaP9rNllIiH7Kl1mUWhYi3Pf+MEsdtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FD2y9PNv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778762704; c=relaxed/simple;
+	bh=UvaC7Jxoxw6o2/IENNWbfeLjQgv54ttBPXCj8P784xM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZbHkkm0OBZYEeoLTHxPV5wmNvQP+z0NopLPPybby+APOIy0cnQKYNP9vMqvA9gW4y2p3s3hQYS4Zuw27O3XBuYO/9yCsI1Pd3LpNT/ONMIfLJGuDjFLBQ88a58NSRkya0F1qTvUXG9mMQV308uMj1xT8WTUeIX0sef5Neyiv4SE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=jjXn90yu; arc=none smtp.client-ip=117.135.210.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FD2y9PNv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C2ABC2BCB3;
-	Thu, 14 May 2026 12:45:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778762702;
-	bh=inD9yKX5Vx4mE6TvB/1cLEWXe0/9U0WufzWDw84EPnc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=FD2y9PNv5CX0eF1LC1aTqoQDgItkQtejJ7BHX0yaiEdYC81JDZf4w8eX47v8/INBO
-	 z8hpVoWParMVMVEigoe7W0myIZNtMoyqvlav2mX9xnH/D0oDc1StkcXrht2BbogkMM
-	 LKEv5ls4yScSQIk6YBpM6FTiTUmpUmGk9JLH6lpTPaNnvYdLchXm+j+bqECNpZLJ15
-	 Kfy0AXsFccqP6ERItsi5TTR/ntkSQs90mPBSo1agJbPas6NvPt1wHCzIhuPGFNwgBy
-	 9vdbSsQ98cq3hHuP+q3bqrNQEsTlSBOyeKuit8D5n5O86rs+RfttJl5J6GJBW9ZQNA
-	 5M3o/gcKs5e0A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 3/6] af_iucv: convert to getsockopt_iter
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Breno Leitao" <leitao@debian.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260513-getsock_four-v1-3-fe7f0e756fac@debian.org>
-References: <20260513-getsock_four-v1-3-fe7f0e756fac@debian.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 14 May 2026 12:45:01 +0000
-Message-Id: <20260514124502.5C2ABC2BCB3@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="jjXn90yu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
+	Content-Type; bh=mY2N9tDDkbbSakumSMfZMNd5aZ9U+KdaUV45cgxHeF0=;
+	b=jjXn90yumJsEWw8us0egMnHVZpRiOeTmNM5soTxLMYi/KXNutnA5j52aIaNgIQ
+	MJAxf6hn2E452m0LRReKbvJSpRvd4nHlFI5Fc+4xnUSA1QOzDvbfs9I3jZmpaZAw
+	X9xZHDiv2M7AR0lMdnvKuBrTYNAYutl57qrz+/zn4ExHc=
+Received: from [IPV6:2408:8210:480a:2590:67b8:4623:bebc:2a2] (unknown [])
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wD3N8yDwwVqpVd5BQ--.17765S2;
+	Thu, 14 May 2026 20:43:48 +0800 (CST)
+Message-ID: <b469b3b7-cfd0-4829-8ea5-40293c7a6d07@126.com>
+Date: Thu, 14 May 2026 20:43:47 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 1/2] tools/lib/bpf/libbpf: Prioritize module kfuncs
+ over vmlinux kfuncs
+To: Kaitao Cheng <kaitao.cheng@linux.dev>
+Cc: bpf@vger.kernel.org, martin.lau@linux.dev, alexei.starovoitov@gmail.com,
+ jolsa@kernel.org, haoluo@google.com, kpsingh@kernel.org, song@kernel.org,
+ linux-kernel@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
+ andrii@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, sdf@fomichev.me
+References: <20260510030136.27876-1-chensong_2000@126.com>
+ <a439f19e-1a47-46ce-8a2c-c53c9f038b8d@linux.dev>
+Content-Language: en-US
+From: Song Chen <chensong_2000@126.com>
+In-Reply-To: <a439f19e-1a47-46ce-8a2c-c53c9f038b8d@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3N8yDwwVqpVd5BQ--.17765S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3JryUAr4UXrWUZw18AFy8uFg_yoW7Wr45pF
+	WrJrn0kF4xJr9IyF4xXrWUWry3KrWxKr4avFW3tFy3ur1vvFn5AF10k3W5u3s8Aw1vvF4I
+	9F4Yqr13C3yDAFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRUfHUUUUUU=
+X-CM-SenderInfo: xfkh02prqjsjqqqqqiyswou0bp/xtbBsgTtbWoFw4T8zgAA3s
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Unlocked access to `iucv->hs_dev` in the `SO_MSGSIZE` case can lea=
-d to a NULL pointer dereference or use-after-free.
---
+Hi,
 
-commit f3b71ba02ea8266fcb82046dd3417eeb5b94f2d5
-Author: Breno Leitao <leitao@debian.org>
+On 5/12/26 11:18, Kaitao Cheng wrote:
+> 
+> 
+> 在 2026/5/10 11:01, Song Chen 写道:
+>> Change the kfunc resolution order in find_ksym_btf_id() to search
+>> module BTFs before vmlinux BTF. This allows kernel modules to override
+>> vmlinux kfuncs with the same name, enabling a form of live-patching
+>> for kfuncs.
+>>
+>> Previously, vmlinux kfuncs were always preferred, making it impossible
+>> for modules to provide enhanced or fixed versions of existing kfuncs.
+>> With this change, modules can now override kernel kfuncs, while
+>> programs that don't use module BTFs remain unaffected.
+>>
+>> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+>> Signed-off-by: Song Chen <chensong_2000@126.com>
+>>
+>> ---
+>> changelog:
+>> v1 -->  v2:
+>> 1, introduce namespace to specify which module the kfunc belongs to, like:
+>> modulea__foo
+>> moduleb__foo
+>> foo
+>> As a result, kfunc foo can co-exist in modulea, moduleb and vmlinux, ebpf
+>> code owner can specify which one he wants to call.
+>> ---
+>>   tools/lib/bpf/libbpf.c | 60 +++++++++++++++++++++++++++++++-----------
+>>   1 file changed, 45 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+>> index 0be7017800fe..9c9e5ff4d754 100644
+>> --- a/tools/lib/bpf/libbpf.c
+>> +++ b/tools/lib/bpf/libbpf.c
+>> @@ -8532,35 +8532,65 @@ static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
+>>   	return libbpf_kallsyms_parse(kallsyms_cb, obj);
+>>   }
+>>   
+>> +static void split_module_from_ksym(const char *ksym_name,
+>> +			const char **module_name,
+>> +			size_t *module_name_len,
+>> +			const char **kfunc_name)
+>> +{
+>> +	const char *sep = strstr(ksym_name, "__");
+>> +
+>> +	if (!sep) {
+>> +		*module_name = NULL;
+>> +		*module_name_len = 0;
+>> +		*kfunc_name = ksym_name;
+>> +	} else {
+>> +		*module_name = ksym_name;
+>> +		*module_name_len = sep - ksym_name;
+>> +		*kfunc_name = sep + strlen("__");
+>> +	}
+>> +}
+> 
+> I don't think overloading "__" in ksym_name is safe.
+> 
+> 1. "__" itself is very common in kernel symbol names. Forcibly
+>     treating the first "__" as the separator between the module name
+>     and the kfunc name is seriously ambiguous. We cannot rule out
+>     existing kfuncs, either defined by a module or by the core kernel,
+>     whose names already contain "__".
 
-af_iucv: convert to getsockopt_iter
+It will fallback event kfunc has an ordinary name with "__".
+> 
+> 2. ksym_name is not used only locally inside find_ksym_btf_id(). If
+>     ext->name / ext->essent_name becomes inconsistent with the actual
+>     kfunc name, it may affect other code paths as well
 
-This commit converts the IUCV socket getsockopt implementation to use the
-getsockopt_iter callback with sockopt_t. It replaces direct user copy
-functions with copy_to_iter.
+ksym_name remains same, no impact to other part.
 
-> diff --git a/net/iucv/af_iucv.c b/net/iucv/af_iucv.c
-> index 72dfccd4e3d58..7a5ce93a83d9c 100644
-> --- a/net/iucv/af_iucv.c
-> +++ b/net/iucv/af_iucv.c
+> 
+> It seems that there are two problems to solve here:
+> 
+> 1. Allowing kernel modules to override vmlinux kfuncs with the same
+>     name.
+> 
+>     This should be relatively straightforward to implement by matching
+>     names in kernel modules first, and then falling back to vmlinux.
+> 
+> 2. Handling the case where different kernel modules have kfuncs with
+>     the same name.
+> 
+>     Could we use a new libbpf API to establish the mapping manually?
+>     for example:
+>         bpf_object__set_ksym_btf(obj, "kfunc_name", "module_name")
+> 
+>     Or define a new attribute, for example:
+>         extern void kfunc_name(void) __ksym __module("module_name");
+> 
+>     We probably need to hear suggestions from other developers on this.
+> 
+> Note: Adding the module name as a prefix to the kfunc name is
+> technically feasible, but it has significant historical compatibility
+> issues, which are hard to solve.
+> 
+>>   static int find_ksym_btf_id(struct bpf_object *obj, const char *ksym_name,
+>> -			    __u16 kind, struct btf **res_btf,
+>> -			    struct module_btf **res_mod_btf)
+>> +			__u16 kind, struct btf **res_btf,
+>> +			struct module_btf **res_mod_btf)
+>>   {
+>>   	struct module_btf *mod_btf;
+>>   	struct btf *btf;
+>> -	int i, id, err;
+>> +	int i, id = 0, err;
+>> +	const char *module_name;
+>> +	const char *kfunc_name;
+>> +	size_t module_name_len;
+>> +
+>> +	split_module_from_ksym(ksym_name, &module_name, &module_name_len, &kfunc_name);
+>> +	if (module_name_len == 0)
+>> +		goto search_vmlinux;
+>>   
+>> -	btf = obj->btf_vmlinux;
+>>   	mod_btf = NULL;
+>> -	id = btf__find_by_name_kind(btf, ksym_name, kind);
+>>   
+>> -	if (id == -ENOENT) {
+>> -		err = load_module_btfs(obj);
+>> -		if (err)
+>> -			return err;
+>> +	err = load_module_btfs(obj);
+>> +	if (err)
+>> +		goto search_vmlinux;
+>>   
+>> -		for (i = 0; i < obj->btf_module_cnt; i++) {
+>> -			/* we assume module_btf's BTF FD is always >0 */
+>> -			mod_btf = &obj->btf_modules[i];
+>> +	for (i = 0; i < obj->btf_module_cnt; i++) {
+>> +		/* we assume module_btf's BTF FD is always >0 */
+>> +		mod_btf = &obj->btf_modules[i];
+>> +		if (strlen(mod_btf->name) == module_name_len &&
+>> +			!strncmp(mod_btf->name, module_name, module_name_len)) {
+>>   			btf = mod_btf->btf;
+>> -			id = btf__find_by_name_kind_own(btf, ksym_name, kind);
+>> +			id = btf__find_by_name_kind_own(btf, kfunc_name, kind);
+>>   			if (id != -ENOENT)
+>> -				break;
+>> +				goto found;
+>>   		}
+>>   	}
+>> -	if (id <= 0)
+>> +
+>> +search_vmlinux:
+>> +	btf = obj->btf_vmlinux;
+>> +	mod_btf = NULL;
+>> +	id = btf__find_by_name_kind(btf, ksym_name, kind);
+>> +	if (id == -ENOENT)
+>>   		return -ESRCH;
+>>   
+>> +found:
+>>   	*res_btf = btf;
+>>   	*res_mod_btf = mod_btf;
+>>   	return id;
+> 
 
-[ ... ]
 
-> @@ -1535,7 +1536,7 @@ static int iucv_sock_setsockopt(struct socket *sock=
-, int level, int optname,
->  }
-> =20
->  static int iucv_sock_getsockopt(struct socket *sock, int level, int optn=
-ame,
-> -				char __user *optval, int __user *optlen)
-> +				sockopt_t *opt)
->  {
->  	struct sock *sk =3D sock->sk;
+best regards,
 
-[ ... ]
+Song
 
-> @@ -1574,9 +1573,8 @@ static int iucv_sock_getsockopt(struct socket *sock=
-, int level, int optname,
-
-While reviewing this conversion, I noticed a pre-existing issue in this
-function. Does the SO_MSGSIZE case need socket lock protection when accessi=
-ng
-iucv->hs_dev?
-
-In iucv_sock_getsockopt():
-
-        case SO_MSGSIZE:
-                if (sk->sk_state =3D=3D IUCV_OPEN)
-                        return -EBADFD;
-                val =3D (iucv->hs_dev) ? iucv->hs_dev->mtu -
-                                sizeof(struct af_iucv_trans_hdr) - ETH_HLEN=
- :
-                                0x7fffffff;
-                break;
-
-If iucv->hs_dev is cleared concurrently by another thread holding the lock
-(such as during iucv_sock_close), could the compiler emit two separate
-memory loads for hs_dev since READ_ONCE() isn't used?
-
-If the pointer is set to NULL between the check and the dereference for mtu,
-could this result in a NULL pointer dereference, or a use-after-free if the
-socket held the final reference to the net_device being unregistered?
-
-> -	if (put_user(len, optlen))
-> -		return -EFAULT;
-> -	if (copy_to_user(optval, &val, len))
-> +	opt->optlen =3D len;
-> +	if (copy_to_iter(&val, len, &opt->iter_out) !=3D len)
->  		return -EFAULT;
-> =20
->  	return 0;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260513-getsock_fo=
-ur-v1-0-fe7f0e756fac@debian.org?part=3D3
