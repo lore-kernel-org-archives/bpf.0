@@ -1,220 +1,102 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02D1355814
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 20:38:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1279F3C140E
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 20:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778791086; cv=none; b=Ph9aTX2DXPO0th9DgTnb9b78fM4chSWz60rNU/liGYPGB6KCAGobbZwBM9GgP8SNc4fXtGFgia3AhNVKXRrmuxqaYd6LsIgJjNB5qSSb+9MIdts98PSZagaQptieXhEGr0LChMyuPKEnsHtW9w8UbLNwO3gU1wp0BZ13tkMxcM0=
+	t=1778791467; cv=none; b=jgZcWK4FdclJmv4SE0TBwxjGt0BjhZr2CLgrNebuo5pnbbSR15rXI+FauKk+D1RmUPJBtM314ra8Iuvb2bat10MZwzWZlEplhMeiG2O2RjlPTcmY4TESxkCNnaKxJ91d0H0Dp+PCoIRw+tPjNXemSeY2jLsiTN2u9dpY7mNDObY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778791086; c=relaxed/simple;
-	bh=go01oXcceTeotLSc8FBnfn/ift3sy3rW0XxYWSob+oI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rZPTbanbjCgUaE5gLrsla4oS2aCtBnIy+iqWYFTlqBTvW6LBhmjZQw2O3g90hz1DFgAS2l9jlLVrIjM6W6oAJMPfe6XDu60UzLON3YmOOmsBdw+RgFw/qenSAAinpI/Mph2fUXz4AVK5FSL2V+jFb6NUXUJLmQ0i1oI8frhlyus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=k1w13OXd; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778791467; c=relaxed/simple;
+	bh=PT+KZHkUKuH5xQ/uIUEy3gjKOuOLrDM+KkANeGmBbrc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=kj8HYif7HG9BI0JtVa8j/pFONb6VZIn15ffPpg9/a3k47wHKey1lVlUl4Lyx3cwLDvB0gCnjSZu9FwD/fK/WHcyRQRTWc4/a3+Fx5ApEn6KHXVUOgjuohGG8p8ls89HkQixwPjUN2/4dex9Ym84FmZ3Iekgtcr7f//f4rABgH3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jqsp/4wF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="k1w13OXd"
-Message-ID: <3091f0f2-eaf0-469b-8221-55e8ef3c6812@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778791081;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z/h6ShPXwqAubj3ugdzXRuezfp6udXhwHKqFbqwWq08=;
-	b=k1w13OXdmbqbua2Euz5iHCTjCOA4F/lYiMJiN2W9HtE4wkhBjxeu9IgEXxPGRUtnrkzCMP
-	HDYPyoUfHSXv3V4NTjhdlLdpKFl4wY2iv5nJu3wh4nfAm6VVhgtgMceXIRtvEzjXDwaipa
-	qZ6Pq9gPfUBw5KQ9wOr1Dl/NjQUaRtw=
-Date: Thu, 14 May 2026 13:37:43 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jqsp/4wF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36E20C2BCB3;
+	Thu, 14 May 2026 20:44:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778791466;
+	bh=PT+KZHkUKuH5xQ/uIUEy3gjKOuOLrDM+KkANeGmBbrc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=Jqsp/4wFB/LSGVpLk24SOUR0tkDhC1CUhY36rXg740r4ysAo7vpJM5vd8SPneFFcc
+	 TxJj5WGRCy8D7IzvLZMlckCjUGvsVHxUcv+d23o1G3PJFX27Rvb+VvRvfImmZNUhDn
+	 43Pd4IX7h/vDdZtT7H/lhYYtHWA2L8cDJpQ/mQ0qV6j5/Jp2yMy/e7jOxytjmfG/sA
+	 +aMZHv8Eacea78ioNO32tbZzVmQ8EFW7GTFsPFgth0+DTMaaJUuG9OD6L8BsBfmgAD
+	 HTJcJoJ+YIX9o9oN1fJaBSLh08Ji8HVuE7GNy4C+BbT4/R7+UtL5mCiKDymD7q5tWn
+	 vwTxORTD2SmyA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 3/7] selftests/bpf: Emit nop,nop10 instructions combo
+ for x86_64 arch
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiri Olsa" <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260514135342.22130-4-jolsa@kernel.org>
+References: <20260514135342.22130-4-jolsa@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 14 May 2026 20:44:25 +0000
+Message-Id: <20260514204426.36E20C2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf v4 2/3] bpf: Avoid faultable build ID reads under mm
- locks
-To: bot+bpf-ci@kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com
-Cc: puranjay@kernel.org, shakeel.butt@linux.dev, mykyta.yatsenko5@gmail.com,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com,
- martin.lau@kernel.org, yonghong.song@linux.dev, clm@meta.com
-References: <20260514184727.1067141-3-ihor.solodrai@linux.dev>
- <baab29c5bbb2d4b6885da72ef98a1b7da439c4479166c587de704f3587f51ae8@mail.kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <baab29c5bbb2d4b6885da72ef98a1b7da439c4479166c587de704f3587f51ae8@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 5/14/26 12:37 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
->> index 4ef0fd06cea5..c1e96df360c3 100644
->> --- a/kernel/bpf/stackmap.c
->> +++ b/kernel/bpf/stackmap.c
->> @@ -9,6 +9,7 @@
->>  #include <linux/perf_event.h>
->>  #include <linux/btf_ids.h>
->>  #include <linux/buildid.h>
->> +#include <linux/mmap_lock.h>
->>  #include "percpu_freelist.h"
->>  #include "mmap_unlock_work.h"
-> 
-> [ ... ]
-> 
->> @@ -158,6 +159,105 @@ static inline void stack_map_build_id_set_ip(struct bpf_stack_build_id *id)
->>  	memset(id->build_id, 0, BUILD_ID_SIZE_MAX);
->>  }
->>
->> +struct stack_map_vma_lock {
->> +	bool vma_locked;
->> +	struct vm_area_struct *vma;
->> +	struct mm_struct *mm;
->> +};
->> +
->> +static struct vm_area_struct *
->> +stack_map_lock_vma(struct stack_map_vma_lock *lock, unsigned long ip)
->> +{
->> +	struct mm_struct *mm = lock->mm;
->> +	struct vm_area_struct *vma;
->> +
->> +	if (WARN_ON_ONCE(!mm))
->> +		return NULL;
->> +
->> +	vma = lock_vma_under_rcu(mm, ip);
->> +	if (vma)
->> +		goto vma_locked;
->> +
->> +	if (!mmap_read_trylock(mm))
->> +		return NULL;
->> +
->> +	vma = vma_lookup(mm, ip);
->> +	if (!vma) {
->> +		mmap_read_unlock(mm);
->> +		return NULL;
->> +	}
->> +
->> +#ifdef CONFIG_PER_VMA_LOCK
->> +	if (!vma_start_read_locked(vma)) {
->> +		mmap_read_unlock(mm);
->> +		return NULL;
->> +	}
->> +	mmap_read_unlock(mm);
->> +#else
->> +	mmap_read_unlock(mm);
->> +	return NULL;
->> +#endif
->> +vma_locked:
->> +	lock->vma_locked = true;
->> +	lock->vma = vma;
->> +	return vma;
->> +}
->> +
->> +static void stack_map_unlock_vma(struct stack_map_vma_lock *lock)
->> +{
->> +	struct vm_area_struct *vma = lock->vma;
->> +
->> +	if (lock->vma_locked) {
->> +		if (WARN_ON_ONCE(!vma))
->> +			goto out;
->> +		vma_end_read(vma);
->> +	}
->> +out:
->> +	lock->vma_locked = false;
->> +	lock->vma = NULL;
->> +}
->> +
->> +static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *id_offs,
->> +						    u32 trace_nr)
->> +{
->> +	struct mm_struct *mm = current->mm;
->> +	struct stack_map_vma_lock lock = {
->> +		.vma_locked = false,
->> +		.vma = NULL,
->> +		.mm = mm,
->> +	};
->> +	unsigned long vm_pgoff, vm_start;
->> +	struct vm_area_struct *vma;
->> +	struct file *file;
->> +	u64 ip;
->> +
->> +	for (u32 i = 0; i < trace_nr; i++) {
->> +		ip = READ_ONCE(id_offs[i].ip);
->> +		vma = stack_map_lock_vma(&lock, ip);
->> +		if (!vma || !vma->vm_file) {
->> +			stack_map_build_id_set_ip(&id_offs[i]);
->> +			stack_map_unlock_vma(&lock);
->> +			continue;
->> +		}
-> 
-> Is the vm_file check here correct for classifying anonymous VMAs?
-> Per mm-vma.md, vma->vm_file is not a reliable indicator of file-backed
-> status. Some anonymous VMAs carry a vm_file reference, such as private
-> mappings of /dev/zero set via vma_set_anonymous() which sets vm_ops
-> = NULL but leaves vm_file populated.
-> 
-> The canonical test is vma_is_anonymous(vma) (checking !vma->vm_ops).
-> For a private /dev/zero mapping, this code would pass /dev/zero to
-> build_id_parse_file() instead of immediately falling back to the raw IP.
-> 
-> This was flagged in v3 review by bot+bpf-ci@kernel.org and acknowledged
-> by the author as a minor edge case but left unchanged for consistency
-> with existing code elsewhere in stackmap.c:
-> 
-> https://lore.kernel.org/bpf/1f275575e3c2309dc7b7f099c7e5cd47bb25182d94883ca0893cf4aaf03c954c@mail.kernel.org/
-> 
-> Should this be switched to vma_is_anonymous(), or is it preferable to
-> keep the current pattern and address it later across all of stackmap.c?
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The commit modifies `USDT_NOP` in `usdt.h` to an 11-byte `nop,no=
+p10` sequence but does not update `prog_tests/usdt.c`, causing the selftest=
+ to break and introducing a git bisect regression.
+--
 
-I wonder why the bots are so concerned.
+commit 600c1890b9793e001b5d8d9027629fb122af9024
+Author: Jiri Olsa <jolsa@kernel.org>
 
-If they get support of at least one human I'll respin with an
-additional patch adding vma_is_anonymous() checks.
+selftests/bpf: Emit nop,nop10 instructions combo for x86_64 arch
+   =20
+This commit updates the USDT_NOP macro in usdt.h for x86_64 to emit an
+11-byte nop, nop10 instruction sequence instead of the previous nop, nop5
+sequence. It synchronizes with the latest usdt.h changes to utilize nop10
+optimization support.
 
+> diff --git a/tools/testing/selftests/bpf/usdt.h b/tools/testing/selftests=
+/bpf/usdt.h
+> --- a/tools/testing/selftests/bpf/usdt.h
+> +++ b/tools/testing/selftests/bpf/usdt.h
 
-> 
->> +
->> +		file = get_file(vma->vm_file);
->> +		vm_pgoff = vma->vm_pgoff;
->> +		vm_start = vma->vm_start;
->> +		stack_map_unlock_vma(&lock);
->> +
->> +		/* build_id_parse_file() may block on filesystem reads */
->> +		if (build_id_parse_file(file, id_offs[i].build_id, NULL)) {
->> +			stack_map_build_id_set_ip(&id_offs[i]);
->> +			fput(file);
->> +			continue;
->> +		}
->> +		fput(file);
->> +
->> +		id_offs[i].offset = (vm_pgoff << PAGE_SHIFT) + ip - vm_start;
->> +		id_offs[i].status = BPF_STACK_BUILD_ID_VALID;
->> +	}
->> +}
-> 
-> [ ... ]
-> 
->> @@ -178,6 +278,11 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
->>  	const char *prev_build_id;
->>  	int i;
->>
->> +	if (may_fault && has_user_ctx) {
->> +		stack_map_get_build_id_offset_sleepable(id_offs, trace_nr);
->> +		return;
->> +	}
->> +
->>  	/* If the irq_work is in use, fall back to report ips. Same
->>  	 * fallback is used for kernel stack (!user) on a stackmap with
->>  	 * build_id.
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25879521172
+[ ... ]
 
+> @@ -313,7 +313,7 @@ struct usdt_sema { volatile unsigned short active; };
+>  #if defined(__ia64__) || defined(__s390__) || defined(__s390x__)
+>  #define USDT_NOP			nop 0
+>  #elif defined(__x86_64__)
+> -#define USDT_NOP                       .byte 0x90, 0x0f, 0x1f, 0x44, 0x0=
+0, 0x0 /* nop, nop5 */
+> +#define USDT_NOP                       .byte 0x90, 0x66, 0x66, 0x0f, 0x1=
+f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 /* nop, nop10 */
+
+Does changing this instruction sequence from 6 bytes to 11 bytes without
+updating prog_tests/usdt.c in the same commit cause a test breakage?
+
+The selftest in prog_tests/usdt.c hardcodes the old 6-byte nop1_nop5_combo
+and searches for it using find_instr(usdt_2, nop1_nop5_combo, 6). Because
+the old sequence is no longer present in usdt_2.c, find_instr will return
+NULL, causing the ASSERT_OK_PTR assertion to fail.
+
+I see this is addressed later in the series in commit
+ca88e95623000540d5b706ce364d5b5abf75b4c1. Would it be better to squash the
+test update into this commit to avoid breaking git bisect?
+
+Additionally, looking at that later commit, it updates nop1_nop10_combo to
+11 bytes but appears to continue passing 6 as the size argument to
+find_instr. Should that size argument be updated to 11 as well?
+
+>  #else
+>  #define USDT_NOP			nop
+>  #endif
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260514135342.2213=
+0-1-jolsa@kernel.org?part=3D3
