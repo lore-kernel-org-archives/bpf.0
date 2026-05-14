@@ -1,315 +1,176 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 323C9427A10
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 15:23:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778772229; cv=none; b=CcuYawRx6LwBJacrckoipoJtAvTg87x8x+CmB8E4MJoXHjHMRZXUeRuvDQOVZ8rcRbxUvd9WLr2czupseKmNVnuWjgz6bDOBj4CR1rRmXmsSrfYtuC5yHuFn7JEIx/hp2oKTXL8a4XnCG8XIDR79Chi1mTHNTP+81C5eAvutQDc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778772229; c=relaxed/simple;
-	bh=UOMIBF6IJOiBHJ031b0CiERDKfflOx7IIddTWub9PkI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pYW5QVkxWPXlNSKqzMu4yExJwZCDmOrrLGrJ9Zyu/Fj/KIL/QzeHxIQcn/wu3Yu3jccEmYWiOBG9iCaa9eyz+nGGtGkq1q2yvYhGAhXCxpQ9xaH6/UbESw9LaULQzOWudt6jtl4sV6rcbJJ21aq5HeAXoUlaA5BIErICdqYlwT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=pgvz75ge; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EA643093DF
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 15:27:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778772443; cv=pass; b=MJmX1o2Zp7nHtQUWfgqYTkoTHKqH1zE9/kxBUkMB9MA32K4UgEWBeIAV2zIwiw0tagtwaN7WO+o7JnXaisaBKFl59dpPDmQJE1ZdJA69k5+wdSKqhkyJ39zv0jP6jes/DsZg8WtLLO82RkUYCUPews2oL+NCBWjNCpYGN6X5wvY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778772443; c=relaxed/simple;
+	bh=a32WAFRSmWqgloOjWjLcKDwoe9d9WV2q+uj8MCId4Ao=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FnNphDZQz2m+8caqDf5JoFwUOGoguw4kyh1U0CbNyMKaPVLxvU6oVGvgYZtdNYKMbEQHFAD7SF+l9SNvh2uo/ZI8kfjdo8WE7AWDvK5Rvmm5/A6b811mbsArGKu45sTfq3cGvqJFojRFrKFQgZc4T0tibsgzt8MLb7tnrsdTCQ8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZDYfzZ33; arc=pass smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="pgvz75ge"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-48896199cbaso70756985e9.1
-        for <bpf@vger.kernel.org>; Thu, 14 May 2026 08:23:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZDYfzZ33"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-43d75312379so6203286f8f.1
+        for <bpf@vger.kernel.org>; Thu, 14 May 2026 08:27:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778772440; cv=none;
+        d=google.com; s=arc-20240605;
+        b=R4hkRa/XBVY8L4y8Ex67Z39UFv/4JatSiZsb1ZdlHKNmlWpTlVESYl5ktm3YBS51qO
+         wkeHWxELXhgh7sM10yF4PhPQSLAmzUH/pgwg81qkbNHhL0LgyicCeuRdaPiEZbOO1fwg
+         aFASKrpRutj6lhqcqUUCiGbUVK/yiR8809aenm3gDxDUD7NkFoa4VgbjdDTaA2VqqbFf
+         0DoyfVDE0EcV54bBH6GQBsQt57Mo6JvCIn+g8ZB6+u8Kv2BxjdwJwNr50mROHJ0td0QH
+         moajvCJCLmbPjelWc8ku7GRW9f0wXRj+E75r/G1dTrtEUtVs3Z+RMrzotAtueCq2Cy65
+         mSNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Uk08Ee07RRbvfX24Gz8S6GrKsKQaj0zXyYDrCQZADAI=;
+        fh=qzg27WHe/AzeTAbSIxJQiqV10qRboNfn84yENSW1SkA=;
+        b=Ku/2Aymzq77uctuKG/bnwxeNeXdh5IfvAglPuOwPPM/+0MO3Fz8B34yBt5ch6c6z3P
+         /VKyFRW2hwPHXkar/jr/h+ywNAqSfnQf87Znu2qS+1DmhirC+JKq4adqr2HKfO2HeoXF
+         QZmo1MehWqAtP91ZTpHCeMd2m9ftAXPYMxjxfpnvjFfvwtxt36fw2OpqfEbY5nQDvqpP
+         rP/Nu8d7uMaq1JzBqn03A2RXBgHHe+Qoxw4mOpJexWuN9VqHxnmjiVTIo74LFHSlHim6
+         mZQAGFkJOMOFcZPi/0CcBkWr5zOJ6jMwf2jH8fI5jxZoNu2GsRuM7L2WPtLJwSkc7ewR
+         O9GQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1778772226; x=1779377026; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+gKCjNZN7Myh92wsTwdDyQ4hRCAPzb5zU67ocdyFfL8=;
-        b=pgvz75ge3T3pHSXjcn5SK35lIsvHyNnjvKxGsk1OE1n1+GkVrHDOlAel/reR/ffZ66
-         8Qcdr5EqrphM+swYHeUSFA0GNDCG2n2v8Ht4+kZsD/D+aLdhS4Jc2O6vt+l4yIiw3Rj3
-         9GKlGwBgqAl+t/5vIS5AwdiEyHuRgQ7dTWqGGjIBzPC1Y86UcpVcuIlT7VjpEgyc8Bv9
-         guo3BZGH5CowE/Pqdi94y423KthAb2trDX0vSUI4sxMAeZ54t28gIi5OFFTCcGqurkAp
-         TO/ZucoFQWaqi9yUErHCg6U+LQz+sNZdi27KukZJJCYEMXBVFvrfXb62CHBPyOshjyhy
-         dLzQ==
+        d=gmail.com; s=20251104; t=1778772440; x=1779377240; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Uk08Ee07RRbvfX24Gz8S6GrKsKQaj0zXyYDrCQZADAI=;
+        b=ZDYfzZ33/6bQWByyNh8kffCDM6fYZ+AZV98hGtQLMBMrKFRMExckmjJFIImBfeQzpA
+         UV0KhHa8RLsOTvnNozDA/vGIfmhv6+tdJXLoBfdCTPHTArMoiR6kpgdpL5PHok+s7e+O
+         s65SGo8QsbuQW25xgeOzwflFKx05YcahIQNMyuFwVDEhEKTNPfRilkb682pLaWTzCZjq
+         j4DRB4MtqzfDSwdx4ykVUqWPcb8qUXqFokv5zj+lOzXw5FPurhuiF7wJAd6L4nzl6mug
+         VjlbJKOsNy9dgwJ0bo0sGT683SAFGEAKLIuIHC8FlBar9kc7QAnJrSetQANVapHZx1EB
+         v+7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778772226; x=1779377026;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+gKCjNZN7Myh92wsTwdDyQ4hRCAPzb5zU67ocdyFfL8=;
-        b=FbkwtETWyuGFxxoQw1xBk8HAKR3HA6x9Lc0gF+HhDJdoFlJ97hpktI1me9eWNl5be0
-         WrhEyIBbYYu1NYaIBceqFWFzXbtERKJ0iq7c+8FRbn2GrEFQjVxV5o7GGhYhG3EkVR5Y
-         2CxCGDZdq9Go2wboFm6VjASi2FEA2xPBgC2yZttJs6Dg2CW045/uOGssiV3NyqnaDF1E
-         NXbfexXa4qVzaYEI0PhdFl5mBbQW2JpkHyHgzILYcueSzYOhjcQOhoeEZ+2YFXoKD4BC
-         /t9eEPOgwy5CRzvave+bFLyaxjfRhCFGRkFdMKDDjHABa86oeCssBuerA/6MQlxqv4gT
-         8xDA==
-X-Forwarded-Encrypted: i=1; AFNElJ/Z+XJU0a4i/mi3InYnJVQMkeprP44fvi+O14akjCWgBC412MLKQV6ADZHRw33C2kAJtyU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3o2jVtU+0PqGJ97OPH3YgxTiTDV8X1saWjx39vjNW6VjxvJZd
-	HVgRxRYo5rdd2e/hzgHsPpm0iqNMi4CwPhgOelWwCakhe2NMrIIK9XU4y9E6LLtew8c=
-X-Gm-Gg: Acq92OGMbsZs2tboBV1mVkOqNsEf/tw4giqu106lgr0+x715/rw+lY1vwEhk2BCDBnT
-	p50ieUliVehShktI1XhpbHrzsptKk305A+kZ2uor/DabEAG5DddPAXY3+CkWsnniQqG9qv/CptI
-	ZQQBFleN/81tf3y1fj/uO/8EYkM1dw9eTWTFfYAej8qD19cLU790GntnaoOYvhwda5lE1RcWdcQ
-	wTi2zwKQlsmLc0KIODeZjRaeCF0o/K+thkUbSrKR37OLf2SZMSJeZqxTQG1IbZ165iTBTxQBN1t
-	TKc8UrpsduqPye8zWiRaxfW0uUwCgfATghXjAi3eFKzqg0rmpeWmIgqKFVeKeZSie7VaYelj4sO
-	ahM7kP075qF+l8hb+bCF8MSXaNXWQ7vpqydmvuaLZQR3plKfZ9UsLssA39pK18qZThchS3JwrRf
-	ARXOxrWEYgrn0TJvfxd4V6E5Dkr5YO8I1+Iondodg68SR7GGdc/++/b7ml/JJG2g0u9btVY2nTW
-	2nNarL2X2+nwsnPtyitjyGSqZRuKsQyhSPBIMFA2cjMKnrK07Gzb18gMMd6rPZ3BgntvaTcJB8a
-	sXOleMlvgv0EximNN6Y=
-X-Received: by 2002:a05:600c:c104:b0:48f:e230:2a25 with SMTP id 5b1f17b1804b1-48fe2302b27mr16709485e9.32.1778772225397;
-        Thu, 14 May 2026 08:23:45 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45d9ec39806sm7358296f8f.9.2026.05.14.08.23.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 08:23:44 -0700 (PDT)
-Date: Thu, 14 May 2026 16:23:41 +0100
-From: Daniel Thompson <daniel@riscstar.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, maxime.chevallier@bootlin.com,
-	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
-	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
-	arnd@arndb.de, gregkh@linuxfoundation.org,
-	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
-	alexandre.torgue@foss.st.com, ast@kernel.org,
-	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
-	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
-	julianbraha@gmail.com, livelycarpet87@gmail.com,
-	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
-	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
-	rohan.g.thomas@altera.com, sdf@fomichev.me,
-	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
-	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 12/12] arm64: dts: qcom: qcs6490-rb3gen2: enable
- TC9564 with a single QCS8081 phy
-Message-ID: <agXo_evi1oFLBJoo@aspen.lan>
-References: <20260501155421.3329862-1-elder@riscstar.com>
- <20260501155421.3329862-13-elder@riscstar.com>
- <01d6ea18-e022-41c7-a642-ac0321957923@oss.qualcomm.com>
- <agRzai1UoHEIotZe@aspen.lan>
- <3c6e7ec5-f600-44ee-a97a-211a99102744@lunn.ch>
+        d=1e100.net; s=20251104; t=1778772440; x=1779377240;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Uk08Ee07RRbvfX24Gz8S6GrKsKQaj0zXyYDrCQZADAI=;
+        b=AMKf6dtebfirzt8X3sI3f3w2lkkhk2Enh1Avo86rYvHBxPmMYFKCsz69XxK60LLPtm
+         +3w5ZTM1CnQ9aJ1yIJzEcetdvbY0672rQrmjKT4Z1QMWV53bUjYj0ogZ6RFGkOrWnteJ
+         1xw9MhcnLtdFUqPjXN9Hy26f/2qTWMLOrmmsSu4a1v+vTPJ911N00J0kQr/JoEV9WYJq
+         hx3hiNs2oIjGPRycq27BBBQOMGDuuml120BAvqAyeiRZFm0t4JTYxABH9ZdF4jgo6fmx
+         RBOcVoueZxjOK+Y1u4USoDBu9atV5m/tJIy14dAucr1ZkElIGTg2VXJxjhblonZkuxRR
+         1EmA==
+X-Forwarded-Encrypted: i=1; AFNElJ+upZI3hJ0JVCDzvqtN/FZCc2mNLTGVGcQCG4VdB6ZH5vc3kixKzoQnuL9/zPBjh8nKa6M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8DMx8v3brsoYVrgvkIL8lexDh4OTVAKR9wC8IG76z3ByoSyXT
+	VvfebRBhsUscVX0thGpzYCPo+5aAWSUpRnU6DM5wJTM+tUiDyjNfuWANAc94ChfkbBR6Kd9E5tL
+	SLVTywMM/G2PQ37CA8CreRgTFXGBLHTw=
+X-Gm-Gg: Acq92OF3Nsu5vFyltSyJovCzBY69RJ/4uhdJ9wzOOlJdQV/QM0szBzJ3JKfcVCfcWUL
+	XEnqWzPPnQhZx2vaoZhm3mWNbiYw3yGpqQL3NaEApzse+M/LnmzaH7svznYn7Bw6Jl/J4n66Een
+	OlMtEJ0HqHO92FjdLYielPuSMZgI6/NjD8r3DpcKPKDFydIlSAhkN+sxS1aicdDcGl1yukzn7Py
+	Hr2Ubfdqajxj99aBSQVYGftR0NgaUWG10UXEwv/h1BHg36HSzzboWaey1AeKZheMM89GYVgPJ+C
+	96oCl9gaKZSFfFLIgT8SGTGc8saioAjmHklwLqmuUfnaNTBfST6AlcgNbYF/AHBDE0jtbyu83Un
+	NDa/xEqfCIm3FSbqaroJLWIC2qUXDmnmfYIn1
+X-Received: by 2002:a05:600c:609b:b0:485:3c2e:60d5 with SMTP id
+ 5b1f17b1804b1-48fe4cadfeemr695815e9.2.1778772440173; Thu, 14 May 2026
+ 08:27:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3c6e7ec5-f600-44ee-a97a-211a99102744@lunn.ch>
+References: <20260510030136.27876-1-chensong_2000@126.com> <a439f19e-1a47-46ce-8a2c-c53c9f038b8d@linux.dev>
+ <CAADnVQLNLd7kV+pBV1i7YvPoQGMVzJusS71iPs6oc_K0Qpd9fA@mail.gmail.com> <f61ecd8f-675d-41e6-bdad-4496f5ecd076@126.com>
+In-Reply-To: <f61ecd8f-675d-41e6-bdad-4496f5ecd076@126.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 14 May 2026 08:27:08 -0700
+X-Gm-Features: AVHnY4J0s-rykE-zkwrHvZq-9PlgvvtIfXZ5JPeDxQu1_g8sgDM2zV18O4rbQR8
+Message-ID: <CAADnVQ+HDDuatpxvEJMcTotiRvMax0q-bjF5Z2uLtz_gr6STQg@mail.gmail.com>
+Subject: Re: [PATCH V2 1/2] tools/lib/bpf/libbpf: Prioritize module kfuncs
+ over vmlinux kfuncs
+To: Song Chen <chensong_2000@126.com>
+Cc: Kaitao Cheng <kaitao.cheng@linux.dev>, bpf <bpf@vger.kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Hao Luo <haoluo@google.com>, 
+	KP Singh <kpsingh@kernel.org>, Song Liu <song@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 13, 2026 at 04:35:13PM +0200, Andrew Lunn wrote:
-> > However the real reason we jammed this on is because I couldn't find a
-> > way to get the phy/mdio code to turn one on. However it is possible to
-> > add regulator support to MDIO devices by extending their existing logic
-> > to manage resets so it can also manage a regulator. It comes out fairly
-> > clean so we can add that to the patch set and remove the
-> > regulator-always-on.
+On Thu, May 14, 2026 at 5:56=E2=80=AFAM Song Chen <chensong_2000@126.com> w=
+rote:
 >
-> We, I have rejected this before. It might look clean and easy, but it
-> is not. How do you determine the order of enabling reset, regulators
-> clocks? How do you specify the need sleeps in between these different
-> operations?
+> Hi;
+>
+> On 5/13/26 05:41, Alexei Starovoitov wrote:
+> > On Mon, May 11, 2026 at 8:19=E2=80=AFPM Kaitao Cheng <kaitao.cheng@linu=
+x.dev> wrote:
+> >>
+> >> It seems that there are two problems to solve here:
+> >>
+> >> 1. Allowing kernel modules to override vmlinux kfuncs with the same
+> >>     name.
+> >>
+> >>     This should be relatively straightforward to implement by matching
+> >>     names in kernel modules first, and then falling back to vmlinux.
+> >>
+> >> 2. Handling the case where different kernel modules have kfuncs with
+> >>     the same name.
+> >>
+> >>     Could we use a new libbpf API to establish the mapping manually?
+> >>     for example:
+> >>         bpf_object__set_ksym_btf(obj, "kfunc_name", "module_name")
+> >>
+> >>     Or define a new attribute, for example:
+> >>         extern void kfunc_name(void) __ksym __module("module_name");
+> >>
+> >>     We probably need to hear suggestions from other developers on this=
+.
+> >
+> > I'm not excited about 2.
+> > Two different modules are not allowed to have two different functions
+> > with the same name.
+> > The kernel has only one global namespace.
+> > Hence I don't think we should be introducing such namespacing concept
+> > into kfuncs.
+> >
+> > But 1, I feel, is useful for experiments and mitigations,
+> > but it probably should be done transparently to libbpf.
+> >
+> > register_btf_kfunc_id_set() should be changed to return an error
+> > when a module attempts to register a kfunc with a name that already
+> > exists in the kernel.
+> > We also introduce override_btf_kfunc_set() that would register
+> > a replacement kfunc.
+> > override_btf_kfunc_set() would check that all overriding kfuncs
+> > have the exact same kfunc already in vmlinux BTF: proto and name should=
+ match.
+> > Then the kernel will just remember that the address of that kfunc
+> > is in the module.
+> > libbpf doesn't need to be aware of this substitution.
+> > It will find kfunc in the vmlinux BTF, but the verifier will supply
+> > implementation from the module to bpf prog.
+> > 2nd module should be able to override_btf_kfunc_set() from vmlinux
+> > and from 1st module that replaced some kfuncs.
+> > All that only for bpf progs that are loaded after override.
+> > Already loaded progs don't need to be live patched.
+> > Thoughts?
+>
+> If i understand you correctly, you suggest instead of introduce
+> namespace in libbpf, we should replace kfunc in
+> vmlinux(btf->types[type_id]) with kfunc in modules by introducing
+> override_btf_kfunc_set.
+>
+> In [1], I simply returned an error, your suggestion is a little further
+> than that, correct me if i'm wrong.
+>
+> [1]:https://lore.kernel.org/all/20260122090404.15553-1-chensong_2000@189.=
+cn/
 
-I agree it is only easy for the easy cases. I can even be specific
-that, for me, the easy cases mean enabling a single regulator and where
-power-on reset is not significantly slower than reset-pin reset
-meaning we don’t need to distinguish between a power-cycling reset and
-a reset-pin reset).
-
-However I think that complex cases cannot be handled by generic MDIO
-code. I think these cases are best solved from the MDIO probe method of
-individual PHY drivers.
-
-
-> There is nothing in particular MDIO specific here, and there is
-> generic power sequencing code in the kernel. And a while back,
-> somebody said they would look at what is needed to make MDIO busses
-> and Ethernet PHYs make use of that generic power sequencing code. That
-> is the better way to do this.
-
-I’d love to know if they got anywhere. I’ve reviewed the pwrseq
-subsystem and I don’t think it is intended to solve the problems
-presented by the ethernet phys on a rb3gen2. Let me try to explain my
-reasoning. Maybe someone will be able to point out what I have missed!
-
-I’m afraid this must be necessarily long but to help navigate the
-general structure is:
-
- 1. Quick review of the pwrseq subsystem
- 2. Quick review of the PCI power control driver, both the concept and
-    to note why some PCI power control drivers do not use pwrseq
- 3. Summarize how this works on DT
- 4. Introduce a description of an qca8081 in “modern devicetree”
- 5. Examine whether pwrseq or the power control driver concept would
-    make writing MDIO device drivers easier than “just doing it in the
-    probe method”
-
-pwrseq is only generic in the sense that has a compact consumer API and
-that it provides reusable tools that allow *specific* power sequencing
-drivers to be written relatively easily. The specific drivers created
-with these tools typically bind to something concrete in the DT (e.g.
-compatible = "pcie-m2-m-connector" or "qcom,wcn6855-pmu"): things you
-can point to such as the M.2 slot or a special purpose power management
-unit in a combo chip.
-
-The pwrseq core allows each driver to register a .match() method to
-allow pwrseq driver recognise that another driver has asked for its
-help to enable a pwrseq target. They usually match, not by compatible
-but by traversing the phandle relationships from the device’s DT node
-to verify that they link back to the pwrseq driver in the expected
-manner.
-
-For ethernet phys I'm doubtful pwrseq offers any benefit because most
-phys are standalone and therefore just get a bunch of board level
-regulators: there isn’t anything concrete in the DT for which we can
-instantiate a pwrseq device. Without a device it is difficult to fire
-up a driver that is responsible for knowing what power sequence is
-needed to activate the phy. It is therefore better to encode this
-knowledge in the phy driver instead.
-
-Another related-but-different concept is PCI power control drivers.
-When pwrseq was introduced the first client was a PCI power control
-driver. PCI power control drivers are used to solve chicken-and-egg bus
-enumeration problems. They work binding a platform bus driver to any
-PCI device with a compatible string (e.g. compatible = "pci17cb,1103")
-before attempting to enumerate the real device. The platform device
-driver responsible for turning on the power ready for enumeration but
-does not drive the actual PCI device. This ensures the device can
-respond to enumeration requests and, eventually, probe the “real” PCI
-driver.
-
-Note that the PCI power control drivers do not have to use the pwrseq
-framework to turn the power on. There are examples of both in the
-current tree:
-
-* pci-pwrctrl-pwrseq.c uses pwrseq and is, at it's core, just table of
-  compatible strings and pwrseq target names. This allows it recognize,
-  from the compatible string what pwrseq target to request.
-  For example on wcn6855 it can request that only the WLAN hardware
-  be enabled (BT power-on is requested separately before using the
-  HCI UART).
-
-* pci-pwrctrl-tc9563.c is the power controller driver for the
-  TC956x PCIe switch. This is an example of the case where there
-  is nothing for a pwrseq driver to bind to. TC956x just gets a bunch
-  of individual regulators and a reset line. For that reason
-  pci-pwrctrl-tc9563 just uses the regular C code to grab everything
-  is needs, relying on things like the bulk regulator helpers keep the
-  code as compact as possible.
-
-One key insight about the above is that there are three separate device
-drivers parsing specific properties of the node. Having all the
-properties related to a device in a single node was very strongly
-pushed for by Rob H[1] and AFAIK is a key expectation for new DT
-bindings. This strongly influences the scope of pwrseq and PCI power
-control (and power domains) and discourages giving DT a generic means
-to express power sequencing. That knowledge is handed to us implicitly
-by the compatible string!
-
-For example, in the case of WCN6855[2] we have:
-
-1. pci-pwrctrl-pwrseq which uses the compatible string to get itself
-   bound and to decide what pwrseq target to enable.
-2. pwrseq-qcom-wcn which reads all the *-supply properties together
-   with a couple of clocks and enable lines. It ensures we don't
-   enable anything until the power lines have settled.
-3. ath11k[_pci] which isn’t probed until the device is “on” and
-   then reads the remaining properties such as qcom,calibration-variant
-
-[1]: https://lore.kernel.org/all/CAL_JsqLAnJqZ95_bf6_fFmPJFMjuy43UfP2UxzEmFMNnG_t-Ug@mail.gmail.com/
-[2]: https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts#L987C1-L1004C3
-
-In short, the pwrseq client API is beguilingly simple but that does not
-mean the providers are generic. In the above example there must still
-be something, written in C, that contains knowledge of how to turn on a
-wcn6855.
-
-Let’s turn our attention to MDIO.
-
-Following the pattern above where all the links related to power come
-from the main device node, then the phy node for the qca8081 in an
-rb3gen2 would look like something like this:
-
-    tc956x_emac1_phy: ethernet-phy@1c {
-        compatible = "ethernet-phy-id004d.d101";
-        reg = <0x1c>;
-
-        reset-gpios = <&tc956x_emac0 1 GPIO_ACTIVE_LOW>;
-        # On RB3gen2 all supplies are controlled by a single GPIO
-        # so we link all supplies to that single regulator
-        avdd-supply = <&qep_1p8>;
-        avdd18-supply = <&qep_1p8>;
-        vdd-supply = <&qep_1p8>;
-        vddldo-supply = <&qep_1p8>;
-        vdd18-supply = <&qep_1p8>;
-        vdd125-supply = <&qep_1p8>;
-
-        pinctrl-names = "default";
-        pinctrl-0 = <&qep_irq_pin>;
-        interrupts-extended = <&tlmm 101 IRQ_TYPE_LEVEL_LOW>;
-    };
-
-Once we have established what the DT looks like then the question
-becomes where to put "something, written in C [or Rust], that contains
-burned in knowledge of how to turn on a wcn6855^H^H^H^H^H^H^Hqca8081"?
-
-The qca8081 on rb3gen2 just gets a bunch of individual regulators and a
-reset. As in the pci-pwrctrl-tc9563 example above, this means there is
-nothing in the DT for a pwrseq driver to bind to. Even if we could find
-a way to do that, it is not obviously useful to decouple how to turn on
-an MDIO device from how to drive it. Thus I think the right answer to
-that is to put the code to fire up the regulators into the qca808x.c
-driver and it looks to me like the existing probe/remove methods would
-already work perfectly well as the place to put it.
-
-Does MDIO bus code need to know about pwrseq at all? I don't think so.
-Perhaps there are phys that are suitable to be managed via pwrseq
-because they are part of a larger ethernet chip with some kind of PMU,
-but that doesn’t require it to be exposed outside the driver. The
-drivers for such a phy can simply call the pwrseq APIs from its probe
-method.
-
-Do we need something equivalent to PCI power control for the MDIO bus?
-I don't think the same chicken-and-egg problem actually exists for MDIO
-bus. If a subnode with a compatible string (and regulators) exists we
-don't need to scan that address because we already know enough about
-the bus to probe the driver and therefore can let the driver handle
-turning on the power (just like we do for I2C or SPI drivers).
-
-MDIO does have bus scanning but we only need to scan for things we
-don’t know about and must do so on the assumption they are already
-powered on. That’s because when we don’t know what’s there then your
-earlier question ("How do you determine the order of enabling reset,
-regulators clocks?") is impossible to answer. There could be a generic
-bus-supply property to handle easy cases where a single regulator
-activates everything on the bus although this isn’t needed on RB3gen2
-since we statically know what is on the bus.
-
-If you've got this far and not found a fatal mistake in the reasoning
-then perhaps it sounds like an awful lot of churn to have to modify
-each PHY driver every time that PHY is used in an embedded platform
-with software controlled regulators!
-
-That, in a nutshell, is why I was tempted to copy the phy-supply
-property to cover the "easy cases" we discussed at the outset. Doing so
-does nothing to impede the hard cases since the code for that would
-still work fine from the MDIO probe method. At worst a driver might
-have to register with a flag to suppress any generic power/reset logic
-from the core (since it's obviously wrong to wait for a reset to
-complete on a device that isn't powered up).
-
-To be clear I’m very happy to back away from phy-supply. We use the same
-patterns we see in I2C and SPI drivers and rely purely on probe methods
-instead to turn on regulators. However I don’t see how to exploit power
-sequencing code to help describe these things generically.
-
-
-Daniel.
+Right. The error on name conflict and new api to override
+if there is a full match.
