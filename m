@@ -1,75 +1,140 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97FA38B7B0
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 20:48:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57AD738C427
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 20:51:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778791702; cv=none; b=bGhsnkXHCm3Qz7l13rqdLW5HiuA8rEW8HDiShdY1/oKQ0HEIyoy9Xp0DMfvmVK80pALLi+9VAuX5J3IJJettBUVSIwiAvJDvkpvfac5M7loIMNeiTXc+eA2SmdVqSZP4EJw4A2AX2SMvX6z9y7LHw8kmM9TYuSC5shAt3lQ2BCA=
+	t=1778791897; cv=none; b=djuSdA5wHG3GjsJnKQix+6HpuHUzYvAPqM2Oa6GRzhIAwkWVNdRoBG5DxEWBRUqcvb/RZ7kJQ50S/eAWLOW1NRFTki2oGjtGOWUIjoiJqC54FlTF4+u5Hg5HXDWXtSPmV3f7Kqt77pw6KQDRAD7fp3R5gR1/ztjnavqS07ZWdz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778791702; c=relaxed/simple;
-	bh=GbI/HilT3/TE2hgnXD77YehXroaGkd4zT9OenCM2N4c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=slW+5c1wmxat/vEg5kybxLPKGU5tJ3p1vTeupGN4wQfRkPdOn4wcZFe+uFLCRuw2svbz47ILpv44N3O0SdWxyE3j8HotsC9pjy7dZPlG6nPqpLdoPv6LL9gwEbA229SxtRdOfWaTDP2p/4NTE1VIPzSFs1LmiAWBcVb7uMLZxXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VUZQ5Gd3; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778791897; c=relaxed/simple;
+	bh=hNV3IZgj0KS/6fZ3Tiglj3itI35P9P61kz/m5Ck4lAs=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=nRF1uXy/x4PbXdNK2uMl/M4hNDXAUEl76DfL+f9XorntBQhKw5ycC3WG4tL97bY3XARv2TJj1e024BAlZ3V3hN5ARFivbMZoFjB78Nbh5NuHR5xSL8LVcNWMErQQJ6556ZQR92hXrUgvl/5F22zxOBWm90Rfviw9HpyUAGXk5gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W19fGPgz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VUZQ5Gd3"
-Date: Thu, 14 May 2026 13:47:42 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778791688;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Bpbz1P5iYvLVjsXAG5YnXFlWjXOyOYaznXeZkwC9pOw=;
-	b=VUZQ5Gd3sn4YMGXTelqn4KD8K1R3xdyruCIO8sTa1IMhkuhj8h+dPn5NqgX03eyUDUkDpH
-	2c94L1iJhyRmrhTh1ib4LSKa15K8JL1/z8gFhC0Bexm3U6LtlY4TlV/ThfKC+IBzelV57Z
-	okvyVGht+Xym3+Rz1YrPaYKn16tNOQs=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Puranjay Mohan <puranjay@kernel.org>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH bpf v4 2/3] bpf: Avoid faultable build ID reads under mm
- locks
-Message-ID: <agYzuDIJszA_7rp3@linux.dev>
-References: <20260514184727.1067141-1-ihor.solodrai@linux.dev>
- <20260514184727.1067141-3-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W19fGPgz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEE0EC2BCB3;
+	Thu, 14 May 2026 20:51:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778791896;
+	bh=hNV3IZgj0KS/6fZ3Tiglj3itI35P9P61kz/m5Ck4lAs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=W19fGPgzIibcMKDiccCasuAL0iFE6x1Tw4MPFVMs+cuEE3961yUxqMB4U/vKd5Clh
+	 H62jnTsjgpbweRwtmxD9gfU2PqCO/jys3F6zSfJEyrSLkDn5smzqo52zTU9ZgnDOAp
+	 xczJEeInd3r1Rh2mYquaEqIQpmAE5rpMk5SlUwqr6XnuI8YFqQCoFH6lCHxvfTUHRw
+	 reuxDgv60wAU4rxBfMUHzuOdN5D8HHoN5yjvZycg0ZqxKSC6tjqSiPbF98Kgjf3JRM
+	 RkdY/rcU+JE/hG10+FAv8zgBKRzc1ehymonxuggMrwteOQZiOPOTpmR1ww0J+1ns0r
+	 /EZjyk5J8Kp/w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 4/7] selftests/bpf: Change uprobe syscall tests to use
+ nop10
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiri Olsa" <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260514135342.22130-5-jolsa@kernel.org>
+References: <20260514135342.22130-5-jolsa@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 14 May 2026 20:51:36 +0000
+Message-Id: <20260514205136.CEE0EC2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260514184727.1067141-3-ihor.solodrai@linux.dev>
-X-Migadu-Flow: FLOW_OUT
 
-On Thu, May 14, 2026 at 11:47:26AM -0700, Ihor Solodrai wrote:
-> Sleepable build ID parsing can block in __kernel_read() [1], so the
-> stackmap sleepable path must not call it while holding mmap_lock or a
-> per-VMA read lock.
-> 
-> The issue and the fix are conceptually similar to a recent procfs
-> patch [2].
-> 
-> Resolve each covered VMA with a stable read-side reference, preferring
-> lock_vma_under_rcu() and falling back to mmap_read_trylock()
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Multiple test validation checks use hardcoded, incorrect byte le=
+ngths when comparing instruction sequences, leaving trailing bytes unverifi=
+ed.
+--
 
-Why trylock()? Why not just reuse the mechanism introduced in [2]? That is
-abstract out the mechanism introduced in [2] in mm core and reuse it.
+commit ca88e95623000540d5b706ce364d5b5abf75b4c1
+Author: Jiri Olsa <jolsa@kernel.org>
 
+selftests/bpf: Change uprobe syscall tests to use nop10
 
-> only long
-> enough to acquire the VMA read lock. Take a reference to the backing
-> file, drop the VMA lock, and then parse the build ID through
-> (sleepable) build_id_parse_file().
-> 
-> [1]: https://lore.kernel.org/all/20251218005818.614819-1-shakeel.butt@linux.dev/
-> [2]: https://lore.kernel.org/all/20260128183232.2854138-1-andrii@kernel.org/
-> 
+This commit updates the uprobe syscall tests to reflect that optimized
+uprobes are now placed on top of 10-byte nop instructions rather than
+5-byte nop instructions.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/to=
+ols/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> index 955a37751b52d..c2e9e549c737d 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+[ ... ]
+> @@ -388,14 +388,16 @@ static int find_uprobes_trampoline(void *tramp_addr)
+[ ... ]
+> -static void *find_nop5(void *fn)
+> +static void *find_nop10(void *fn)
+>  {
+>  	int i;
+> =20
+> -	for (i =3D 0; i < 10; i++) {
+> -		if (!memcmp(nop5, fn + i, 5))
+> +	for (i =3D 0; i < 128; i++) {
+> +		if (!memcmp(nop10, fn + i, 9))
+
+Is this memcmp() checking enough bytes? The nop10 sequence is 10 bytes long,
+but this only compares the first 9 bytes, leaving the final byte unverified.
+
+>  			return fn + i;
+>  	}
+>  	return NULL;
+> @@ -420,7 +422,8 @@ static void *check_attach(struct uprobe_syscall_execu=
+ted *skel, trigger_t trigge
+>  	ASSERT_EQ(skel->bss->executed, executed, "executed");
+> =20
+>  	/* .. and check the trampoline is as expected. */
+> -	call =3D (struct __arch_relative_insn *) addr;
+> +	ASSERT_OK(memcmp(addr, lea_rsp, 4), "lea_rsp");
+
+Does this memcmp() skip verifying the displacement byte? The lea_rsp array
+is 5 bytes long, and the 0x80 (-128) byte proves the red zone is bypassed
+correctly. Comparing only 4 bytes seems to miss this detail.
+
+> +	call =3D (struct __arch_relative_insn *)(addr + 5);
+>  	tramp =3D (void *) (call + 1) + call->raddr;
+>  	ASSERT_EQ(call->op, 0xe8, "call");
+>  	ASSERT_OK(find_uprobes_trampoline(tramp), "uprobes_trampoline");
+[ ... ]
+> diff --git a/tools/testing/selftests/bpf/prog_tests/usdt.c b/tools/testin=
+g/selftests/bpf/prog_tests/usdt.c
+> index 69759b27794d7..be34c4087ff56 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/usdt.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
+[ ... ]
+> @@ -271,17 +271,17 @@ static void subtest_optimized_attach(void)
+>  	__u8 *addr_1, *addr_2;
+> =20
+>  	/* usdt_1 USDT probe has single nop instruction */
+> -	addr_1 =3D find_instr(usdt_1, nop1_nop5_combo, 6);
+> -	if (!ASSERT_NULL(addr_1, "usdt_1_find_nop1_nop5_combo"))
+> +	addr_1 =3D find_instr(usdt_1, nop1_nop10_combo, 6);
+
+Should this length parameter be updated to match the new array size? The
+nop1_nop10_combo array was increased to 11 bytes, but find_instr() is still
+being called with length 6.
+
+>  	addr_1 =3D find_instr(usdt_1, nop1, 1);
+>  	if (!ASSERT_OK_PTR(addr_1, "usdt_1_find_nop1"))
+>  		return;
+> =20
+> -	/* usdt_2 USDT probe has nop,nop5 instructions combo */
+> -	addr_2 =3D find_instr(usdt_2, nop1_nop5_combo, 6);
+> -	if (!ASSERT_OK_PTR(addr_2, "usdt_2_find_nop1_nop5_combo"))
+> +	/* usdt_2 USDT probe has nop,nop10 instructions combo */
+> +	addr_2 =3D find_instr(usdt_2, nop1_nop10_combo, 6);
+
+Could this cause the test to miss verifying the full sequence? It looks like
+it is still passing 6 instead of 11 for the updated nop1_nop10_combo array.
+
+> +	if (!ASSERT_OK_PTR(addr_2, "usdt_2_find_nop1_nop10_combo"))
+>  		return;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260514135342.2213=
+0-1-jolsa@kernel.org?part=3D4
