@@ -1,128 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 912D538A73A
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 10:07:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 284B5253359;
+	Thu, 14 May 2026 10:09:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778753220; cv=none; b=ZFp0w6DFhJplCH7iuIHNxHAB6Yrr6JQ6+FKsKsS0GShxlFa4v+SAfNYTRxe1O5P+1fHfMzFiGA4xYr0DKPSqbKtEjmJTTLbrvXBAQRLO+dZWI4OR3+eIruSlImfOMxhoR0xhOc7ioNcoUPfWuZI20E/TbCLkXJaHbJJP+vN3oq8=
+	t=1778753380; cv=none; b=scG6/F7/SlMvVjteLUDBC3pN5MD0eDrjkOvOwj+4Wg7Sh30jNJcVjf0ig9W4RQFxMqJn2fS1WE4g1vFNxJ2iKDYgQpvMFD+ug5BcwXD7b6PD0VT0iy9iRYynSKwS+3ATCZWb9uTTVzlBwHsg2R7lb/9lX3kwB4V4QxvSprLvBZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778753220; c=relaxed/simple;
-	bh=n7AmzdovlqWr/0+XmtV9bpUYvTu+8BjfI6wQWox+ZD4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=JBS+gXoba9TrQoRK9IL+yDMOBniL5WNQkty3gXJOwEyaSXxp8p5fp9b/+tQtxr4Hl4rn+xzZ86Xa9kAGfPtwjcZa4eaGgij5jFvRy4HgKMwHGzlEmV8DncceVl2dVTf2fVDqMuRPc1PH7sdQBrrlVaktn5y+ctQzIRXxtih4fhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OpDwbHlA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778753380; c=relaxed/simple;
+	bh=NHFi+ZN0DxhqAObytOz95z+znYJzoFR8tNEwrKza858=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=suUzOmRNPTv7Z5Ptp/iDpcWkf6ho7SfYMiR6T9Je8KHqgpiAswlnLQcxS2exeC75C0sRNswRNqWHSOBfqISjH/MGSsdQ8pPRKVjaQv+aVKnoNi1cCUBfqLcbgvjKOtY5rN5DpL2FzNRfRsfz8TaInVs5cOCtSOG9lR0x/NtXEbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QB8ilueI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OpDwbHlA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9938C2BCB3;
-	Thu, 14 May 2026 10:06:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QB8ilueI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C6FBC2BCB8;
+	Thu, 14 May 2026 10:09:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778753219;
-	bh=n7AmzdovlqWr/0+XmtV9bpUYvTu+8BjfI6wQWox+ZD4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=OpDwbHlAAa3nrfbcXTQ9SGhWNuPlDBHQfuM7LB/0pDaY8Ir3bbnebOLrFSzvOfXdJ
-	 nh554iHw3s3elSAUgSdhObLgZYAe4HqveV/Q1uzo3lkTijoPbLzn09wRletBQfavZ2
-	 eMC4aAP1JW1ZVn3kPR0EWlC6RYi6jnZriS67KGYKvymBp3IiQ4WY8VrCkS/2iYq/Cp
-	 1DXlftVOI+2/Y2Z8hlI27HzQCeYWvhmVaTMSygnXLSCnRbaiu7yzn+wlieEXg3lHYw
-	 mp9LxOjby5tMsj/e/gY0ddsAHJGqIAgfSb0V68+/Fzf6Dm1Pjrv33Q+gpGdTkMHK8b
-	 5r5H20UYEXNOQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 3/3] veristat: Report max stack depth
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Paul Chaignon" <paul.chaignon@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <b3459e61c408daef30d82272f1eacc6399844896.1778689025.git.paul.chaignon@gmail.com>
-References: <b3459e61c408daef30d82272f1eacc6399844896.1778689025.git.paul.chaignon@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 14 May 2026 10:06:59 +0000
-Message-Id: <20260514100659.C9938C2BCB3@smtp.kernel.org>
+	s=k20201202; t=1778753379;
+	bh=NHFi+ZN0DxhqAObytOz95z+znYJzoFR8tNEwrKza858=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QB8ilueIZ8dtkFqneoDKaezRhf/3GiLsA9b5zMPjGKXGJL+9UR5aC+ARkNkj6ZRnH
+	 RclT5APtND4inI+KfpZgMrJQGy25w4H8b8qXH2FR8/EQg4uE73guKww/qBAonDWl5s
+	 F/ufNuCEPoOmbMjqVg4nna+qCXMWGXR5W29BQEGn/6t38iFGD9r+9j8GBs9QOAJ8BV
+	 FRvWKhKVDCUaG892h+7cHWHaRQPbf/+iSnAMikP5nYNGZgiE/smvfkkzYpn7zVLLAV
+	 cusxM4UYYs+AKSXotZyGzXdlgXZFqjhnOJuMKfnjM1+G+eY5M8bHq1PeNjwDg8o7IC
+	 0rpPhV8uZegPw==
+Date: Thu, 14 May 2026 19:09:37 +0900
+From: "Harry Yoo (Oracle)" <harry@kernel.org>
+To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Cc: Levi Zim <i@kxxt.dev>, linux-mm@kvack.org, rcu@vger.kernel.org, 
+	bpf@vger.kernel.org, Hao Li <hao.li@linux.dev>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Uladzislau Rezki <urezki@gmail.com>, 
+	Joel Fernandes <joelagnelf@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Amery Hung <ameryhung@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: Re: kmalloc_nolock() follow-ups, including kfree_rcu_nolock()
+Message-ID: <3aza75jldxj4g3o4kqdif3hubsnzkv53jvj52y2crohfxzto74@ofzzq2wfc4tz>
+References: <esepccfhqg7m6jo76ns2znj2cnuaepx2xvw5zaygtwohq4psma@563ypprp6rr3>
+ <9bea1536-534a-4a59-9b5f-92389fb05688@kxxt.dev>
+ <6wvjo33urd5i4jvbf6rwp7kwe3ppn3ktgmjk663hq2jxax65gm@kxljf3hkqs5e>
+ <1315d145-49ee-412f-ad91-0f6c61c4c2c9@kxxt.dev>
+ <2dhbxmhg4l35gupk3wgwtufsf735rnk4czmcoyspzckvexie3z@nswohkoipx44>
+ <be7a2a06-cd81-446c-9875-fafb198caf78@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <be7a2a06-cd81-446c-9875-fafb198caf78@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] The MEMORY_PEAK statistic is silently truncated from the default=
- CSV output.
-- [Medium] The commit message incorrectly claims that the max stack depth '=
-is null for rejected programs', but the code outputs '0'.
---
+On Thu, May 14, 2026 at 11:39:50AM +0200, Vlastimil Babka (SUSE) wrote:
+> There's still the fallback to the larger bucket, right?
+> That pretty much guarantees that if we fail due to a local lock in one
+> bucket (due to preempting its holder), a local lock in another bucket won't
+> be locked at the same time.
 
-commit 407a4af46d427010feeebda3a91736b7ef774219
-Author: Paul Chaignon <paul.chaignon@gmail.com>
+Right.
 
-veristat: Report max stack depth
+> However if local sheaves are exhausted, we might need a shared lock (barn,
+> list_lock, slab bit lock when no double cmpxchg) and that might be held by
+> another cpu in both buckets. But should be very rare.
 
-This patch adds a new "Max stack depth" field to the set of gathered statis=
-tics.
-It reports the maximum combined stack depth compared to the 512 bytes limit.
+I'm not sure what makes trylock failure on a list_lock rare?
 
->     This patch adds a new "Max stack depth" field to the set of gathered
->     statistics. This field reports the maximum combined stack depth compa=
-red
->     to the 512 bytes limit. It is null for rejected programs.
+When the local sheaves are exhausted, we're relying on either:
 
-Is the last sentence accurate? The code appears to output 0 instead of "nul=
-l"
-for rejected programs.
+1) another kmalloc or buddy user on that CPU (w/ allow_spin = true)
+   refills the local sheaves or PCP 
 
-When a program is rejected and the log stops early, MAX_STACK remains
-zero-initialized. In prepare_value(), MAX_STACK falls back to outputting 0:
+2) trylock on list_lock or zone->lock succeeds
 
-	case MAX_STACK:
-	case SIZE:
-	case JITED_SIZE:
-	case MEMORY_PEAK:
-		*val =3D s ? s->stats[id] : 0;
-		break;
+Without async refills unlike the BPF memory allocator.
 
-Furthermore, outputting "null" would fail in parse_stat_value() during repl=
-ay
-mode, as it strictly expects an integer.
-
-> diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selft=
-ests/bpf/veristat.c
-> index 5c82950e6978e..9a2275d19ee1b 100644
-> --- a/tools/testing/selftests/bpf/veristat.c
-> +++ b/tools/testing/selftests/bpf/veristat.c
-
-[ ... ]
-
-> @@ -795,7 +796,7 @@ static const struct stat_specs default_csv_output_spe=
-c =3D {
->  		TOTAL_INSNS, TOTAL_STATES, PEAK_STATES,
->  		MAX_STATES_PER_INSN, MARK_READ_MAX_LEN,
->  		SIZE, JITED_SIZE, PROG_TYPE, ATTACH_TYPE,
-> -		STACK, MEMORY_PEAK,
-> +		STACK, MAX_STACK, MEMORY_PEAK,
->  	},
->  };
-
-Does this change truncate the MEMORY_PEAK statistic from the default CSV ou=
-tput?
-
-Looking at the full definition of default_csv_output_spec:
-
-static const struct stat_specs default_csv_output_spec =3D {
-	.spec_cnt =3D 15,
-	.ids =3D {
-		FILE_NAME, PROG_NAME, VERDICT, DURATION,
-		TOTAL_INSNS, TOTAL_STATES, PEAK_STATES,
-		MAX_STATES_PER_INSN, MARK_READ_MAX_LEN,
-		SIZE, JITED_SIZE, PROG_TYPE, ATTACH_TYPE,
-		STACK, MAX_STACK, MEMORY_PEAK,
-	},
-};
-
-With MAX_STACK added, there are now 16 elements in the ids array, but spec_=
-cnt
-remains hardcoded at 15. Because the formatting loops iterate strictly up to
-spec_cnt, it seems the 16th element (MEMORY_PEAK) will be silently ignored,
-causing a regression in the generated statistics.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1778689025.gi=
-t.paul.chaignon@gmail.com?part=3D3
+-- 
+Cheers,
+Harry / Hyeonggon
