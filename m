@@ -1,132 +1,174 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E72397323
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 21:22:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EAFD34752A
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 21:31:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778793740; cv=none; b=H5zrGXaZ0VcGr/OcIk/iBV3pWOtoYUekke+O+QqhTvQZkXsZd0tf2FQSs94Qq/KH9+kfQ0W+BHGoL44ixL09v8GgATMRmoUk1aUG5onEQKepTyTVSrJVerFIXK59Op3Fss27mLcb7X8TJs3dM28MFtKnSULOH5IB6OFkpiRwVbI=
+	t=1778794264; cv=none; b=tkE5YdCxmOavL2BBpNoGFQiaejYD1LFBlUJBvWk0LB/L69ck5eJZq6hA49c0HcwSJfPh1iatY43ePgQQNTebCuMi0/R8P0yUX1ZC6P+ZKSe3pi0haV7Opcb449P406XkbImOZ5j0XNMzcuQ+RSDwsFgVJpzehl41n3PXCdErTxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778793740; c=relaxed/simple;
-	bh=MU78KTDiSqEbU0pZu2/gdOoYLuB4S2tj5KlqceP+py0=;
+	s=arc-20240116; t=1778794264; c=relaxed/simple;
+	bh=BGJOcV12Yojt7+Gh85TUMr76DZIq1PH8pLKGzwMYzbw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=cYEeGuMAQuqhwvCgFAoq+4m5qbzmW1sBYsQ43l8yD7udImGc+q4L23+ocpCQOb27+qqvALpXErQW55GCW+DlWNnTrCBzBe2Fyh3nL3TBlYOOl+EIHshMsZ0EP0oAqY9iD+VZxay+WyNyi8ExQPqsMd1d9qu+QvE2APY4TIqStNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uphOge/h; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=D0bwMvzRUPusdX+5PQoN/xTPm4tOm3H9UIZ7rCPE30TTkifV+hPqlfRwhKWBPaMdsb285BPjGO+aNb7vGZqBmdeFrB3pjYm7pEDAJBVwYfgps86R0e3n5zRdqi/lZ38lgmA8zozH182DWpiGdNQ5dgt+m5MR9iSWqK8rE1apy64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GJvosg9D; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uphOge/h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF1F3C2BCB3;
-	Thu, 14 May 2026 21:22:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GJvosg9D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF769C2BCB3;
+	Thu, 14 May 2026 21:31:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778793739;
-	bh=MU78KTDiSqEbU0pZu2/gdOoYLuB4S2tj5KlqceP+py0=;
+	s=k20201202; t=1778794264;
+	bh=BGJOcV12Yojt7+Gh85TUMr76DZIq1PH8pLKGzwMYzbw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=uphOge/hgaY1Ca3TcvVQuPXSytmOtLw6+seBjNtV11JTJOFGcDCzR4BtYWL3ppEQ1
-	 525IYIupsr5JxbqgdZ8DePbaxP0GRMdrziFxxUrB4U5blNO9qoVMMCjWv/SeDoJ/PN
-	 aXRG9XXrsrnD8hoWQttL4lD4euUfD0TwbIm0DJMD1Bzbw5dNI2xsNu0n3xPUPZwozp
-	 ZLFEWCyeAzfjCkD0j0b/UZVytAZLHWQ9JcFS3h+PoZjpqVDyESuZy3IWfNZ99lojE/
-	 DC+9oarRPCh5PhBfoqxjVkPKd8ArLDKLHrY0ZkiU1SFg0X9liBBmYbfdrHw9O81W6f
-	 yoYb0yk5IhzQg==
+	b=GJvosg9D7U9u2KO/i2lAQDjJowsB4j/7vU6rY9wd/6E5l+E3XgMbb9/yrx4tPXs8I
+	 bh1t0vigw3DNtvPb68nWkWwrQQXcKPi1f9PtdYe9Yzy0oQAKdgmVRIC/Fcga5JH8o8
+	 cCHHbJuCX4Xkupir4cGL3XfQenBm+iFa6M9LmKp1rXNcnCNycsPKm5AV3KOivQ4+ZU
+	 uNR26PIqhr4Ge6lqYwPmksZ/3qqurLVg+i10HSGPwPJ+ZiGWs+vIzoIlCtHXL64kPr
+	 dcc9sttldtTqYYjp3eEKkhk6ImcbXV9SYKV3h6zrgbvrLul2LmWgD7gNPMMXYPPb0g
+	 E+S9mrEaVMq7A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 7/7] selftests/bpf: Add tests for uprobe nop10 red zone
- clobbering
+Subject: Re: [PATCH bpf v4 2/3] bpf: Avoid faultable build ID reads under mm
+ locks
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiri Olsa" <jolsa@kernel.org>
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260514135342.22130-8-jolsa@kernel.org>
-References: <20260514135342.22130-8-jolsa@kernel.org>
+In-Reply-To: <20260514184727.1067141-3-ihor.solodrai@linux.dev>
+References: <20260514184727.1067141-3-ihor.solodrai@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 14 May 2026 21:22:19 +0000
-Message-Id: <20260514212219.BF1F3C2BCB3@smtp.kernel.org>
+Date: Thu, 14 May 2026 21:31:02 +0000
+Message-Id: <20260514213103.EF769C2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] The `optimized_red_zone` USDT subtest does not guarantee that its =
-arguments are placed in the stack's red zone, rendering it ineffective as a=
- regression test.
-- [High] The uprobe regression tests loop too quickly to guarantee that the=
- asynchronous uprobe optimization has completed, making them prone to false=
-ly passing on unfixed kernels.
+- [High] Sleepable build ID parsing unconditionally fails on platforms with=
+out CONFIG_PER_VMA_LOCK.
+- [High] Incorrect file-backed VMA classification using !vma->vm_file inste=
+ad of vma_is_anonymous(vma).
+- [Medium] Severe I/O performance regression due to removal of VMA and buil=
+d ID caching.
 --
 
-commit c8c0580fb53dfbfe85e78c3bfddc6256a6a88b56
-Author: Andrii Nakryiko <andrii@kernel.org>
+commit 5e68cb2c06b22387698d796c574ee7addecfea18
+Author: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-selftests/bpf: Add tests for uprobe nop10 red zone clobbering
+bpf: Avoid faultable build ID reads under mm locks
 
-This commit introduces tests to ensure the uprobe nop10 optimization avoids
-clobbering the stack's red zone on x86-64. It adds an assembly-level test
-that checks for red-zone data integrity and a USDT subtest checking for
-correct argument delivery over 10 invocations.
+This commit introduces a sleepable path for build ID parsing to avoid
+blocking in __kernel_read() while holding mmap_lock or a per-VMA read lock.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/to=
-ols/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+Link: https://lore.kernel.org/all/20251218005818.614819-1-shakeel.butt@linu=
+x.dev/
+Link: https://lore.kernel.org/all/20260128183232.2854138-1-andrii@kernel.or=
+g/
+
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> index 4ef0fd06cea58..c1e96df360c3f 100644
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
+
 [ ... ]
-> @@ -855,6 +897,37 @@ static void test_uprobe_race(void)
->  #define __NR_uprobe 336
->  #endif
-> =20
-> +static void test_uprobe_red_zone(void)
+
+> +static struct vm_area_struct *
+> +stack_map_lock_vma(struct stack_map_vma_lock *lock, unsigned long ip)
 > +{
+
 [ ... ]
-> +	for (i =3D 0; i < 10; i++)
-> +		ASSERT_EQ(uprobe_red_zone_test(), 0, "red_zone_intact");
 
-Does this loop execute too quickly to guarantee the uprobe optimization has
-completed?
+> +	vma =3D vma_lookup(mm, ip);
+> +	if (!vma) {
+> +		mmap_read_unlock(mm);
+> +		return NULL;
+> +	}
+> +
+> +#ifdef CONFIG_PER_VMA_LOCK
+> +	if (!vma_start_read_locked(vma)) {
+> +		mmap_read_unlock(mm);
+> +		return NULL;
+> +	}
+> +	mmap_read_unlock(mm);
+> +#else
+> +	mmap_read_unlock(mm);
+> +	return NULL;
+> +#endif
 
-Uprobe optimization is performed asynchronously by a worker thread. Since
-this is a tight loop with no delays or blocking, the 10 iterations might
-finish before the background worker patches the code.
+Does this unconditionally fail on platforms without CONFIG_PER_VMA_LOCK? If
+the fallback logic acquires the mmap_read_trylock() and successfully locates
+the VMA, it looks like it will drop the lock and return NULL in the #else
+block.
 
-If all hits execute on the unoptimized INT3 path, the test could falsely
-pass on kernels where the CALL-based optimization bug is present.
+Could the locking abstraction be extended to hold the mmap_read_lock across
+the get_file() call when per-VMA locks are unavailable?
 
-> +
-> +	bpf_link__destroy(link);
-> +
-> +cleanup:
-> +	uprobe_syscall_executed__destroy(skel);
-> +}
-[ ... ]
-> diff --git a/tools/testing/selftests/bpf/usdt_2.c b/tools/testing/selftes=
-ts/bpf/usdt_2.c
-> --- a/tools/testing/selftests/bpf/usdt_2.c
-> +++ b/tools/testing/selftests/bpf/usdt_2.c
-> @@ -13,4 +13,17 @@ void usdt_2(void)
->  	USDT(optimized_attach, usdt_2);
->  }
-> =20
-> +static volatile unsigned long usdt_red_zone_arg1 =3D 0xDEADBEEF;
-> +static volatile unsigned long usdt_red_zone_arg2 =3D 0xCAFEBABE;
-> +static volatile unsigned long usdt_red_zone_arg3 =3D 0xFEEDFACE;
-> +
-> +void __attribute__((noinline)) usdt_red_zone_trigger(void)
-> +{
-> +	unsigned long a1 =3D usdt_red_zone_arg1;
-> +	unsigned long a2 =3D usdt_red_zone_arg2;
-> +	unsigned long a3 =3D usdt_red_zone_arg3;
-> +
-> +	USDT(optimized_attach, usdt_red_zone, a1, a2, a3);
+> +vma_locked:
+> +	lock->vma_locked =3D true;
+> +	lock->vma =3D vma;
+> +	return vma;
 > +}
 
-Is it guaranteed that the compiler will place these variables in the
-red zone?=20
+[ ... ]
 
-On x86_64, the compiler will typically allocate these three arguments
-to general-purpose registers rather than spilling them to memory.=20
+> +static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_bui=
+ld_id *id_offs,
+> +						    u32 trace_nr)
+> +{
+> +	struct mm_struct *mm =3D current->mm;
+> +	struct stack_map_vma_lock lock =3D {
+> +		.vma_locked =3D false,
+> +		.vma =3D NULL,
+> +		.mm =3D mm,
+> +	};
+> +	unsigned long vm_pgoff, vm_start;
+> +	struct vm_area_struct *vma;
+> +	struct file *file;
+> +	u64 ip;
+> +
+> +	for (u32 i =3D 0; i < trace_nr; i++) {
+> +		ip =3D READ_ONCE(id_offs[i].ip);
+> +		vma =3D stack_map_lock_vma(&lock, ip);
+> +		if (!vma || !vma->vm_file) {
 
-If they are placed in registers or a standard stack frame above rsp, the
-uprobe bug wouldn't clobber them, which might allow the test to falsely
-pass on an unfixed kernel.
+Can anonymous VMAs (like private mappings of /dev/zero) have a valid vm_file
+pointer? If so, using !vma->vm_file as a proxy for file-backed
+classification might dispatch pseudo-files to build_id_parse_file().
+
+Would using !vma_is_anonymous(vma) be more robust here?
+
+> +			stack_map_build_id_set_ip(&id_offs[i]);
+> +			stack_map_unlock_vma(&lock);
+> +			continue;
+> +		}
+> +
+> +		file =3D get_file(vma->vm_file);
+> +		vm_pgoff =3D vma->vm_pgoff;
+> +		vm_start =3D vma->vm_start;
+> +		stack_map_unlock_vma(&lock);
+> +
+> +		/* build_id_parse_file() may block on filesystem reads */
+> +		if (build_id_parse_file(file, id_offs[i].build_id, NULL)) {
+> +			stack_map_build_id_set_ip(&id_offs[i]);
+> +			fput(file);
+> +			continue;
+> +		}
+> +		fput(file);
+
+Does this cause an I/O performance drop by removing the VMA and build ID
+caching that exists in the non-sleepable path? Without caching prev_vma and
+prev_build_id, this loop appears to perform get_file(), build_id_parse_file=
+()
+(which reads from the filesystem), and fput() for every single frame in the
+stack trace.
+
+I note that this caching is added back later in the series in commit
+38cfe2cebe4d604860680459fcb33a68258f0654 ("bpf: Cache build IDs in
+sleepable stackmap path"). Should this patch include the caching to avoid
+introducing a temporary regression if bisecting?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260514135342.2213=
-0-1-jolsa@kernel.org?part=3D7
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260514184727.1067=
+141-1-ihor.solodrai@linux.dev?part=3D2
