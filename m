@@ -1,54 +1,54 @@
-Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
+Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE16234753A
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 16:34:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD237344046
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 16:34:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778776475; cv=none; b=l4EFbPQooGufC7STQ7tUfoaga1FL4qZ5ledrb/oL2YDCnV7M2mKXYcREOmzWcFcCLPw/mBeBRPFczRruIK+opTmwkDg1hqoOb0EplLkVVt2qzEmF9YzLZDAwEsLWUF6vXOt3sALJailYBH6GMFG+IQ/vx+o7ieFFDRyf26W28+A=
+	t=1778776476; cv=none; b=PgKzERA3yInoCHfPQKHBcoayUjipnsApL8eg1P8Yw8SP26Xvb2/1e3rjbU5kJonZYtjyvhU5Rt2TmC30dbcxIaKb1YEbtZTaJBG0SJxCbjdmkv/Bv1Ax95qcVZj1sQMrtywNaz4NDGoU73kdf7cW3Q0cVVUMobDMuQB12iB6gBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778776475; c=relaxed/simple;
-	bh=/7TyOYbdEe9k68HYyv7dCCFzh+d6Q52A6z+ebAC5RwQ=;
+	s=arc-20240116; t=1778776476; c=relaxed/simple;
+	bh=xokYndru7r5U27QA5IiJ9grDU4CmNf+aSc8fRA9ncZg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=NbvtMWkuITuEM1FV9q5JnN7mjChBkNNFUjLGcW6g4mCH2tNMb6z1w8tN0VYgr2SwHhnBRCZKduNjYFFeJgz67BbC/X5dGpPOLCS99kkLEYFIPyOaplBa9kypGb6TKJhgGd9UOl6QLfK1/q8MoAZBiS/pu8YU9eA3cDrNiPe/WLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H4eHCZqE; arc=none smtp.client-ip=74.125.82.201
+	 To:Cc:Content-Type; b=Um6icgfIDHCEgiX2LkJqWuHkHnY1qea+XqNxwCYAVj0lwp/V+lar1KHShZrPKblx8RO6kj0qXrsTZY+EWUwEIsIynskyMWDURlhpp8Q4QdKZ1B7fbkpH/CbFngFq+pq84WgLTnJgGSoRlS/xr9SiEEq55tN5Ia7PHi7FiC6UhCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qtxBa4TN; arc=none smtp.client-ip=74.125.82.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H4eHCZqE"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2ba9a744f7dso8576760eec.0
-        for <bpf@vger.kernel.org>; Thu, 14 May 2026 09:34:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qtxBa4TN"
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-13312be8a31so6021690c88.1
+        for <bpf@vger.kernel.org>; Thu, 14 May 2026 09:34:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778776472; x=1779381272; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1778776474; x=1779381274; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5GIfuekLiG6d1t2FIig7OwOH7cYz1r1KvcU67M955lU=;
-        b=H4eHCZqEHwLg9qmfJFurOiHENcCAjLtVIrRFHLmDlGTI1QsucXVKbU0L/WUCOuwUvo
-         fXtEacMPMFF4wUIHHV7jGGaMob/RT/+PpNm48qrQAK/TFzEj8SMdURy8D4CLNIKFcWk8
-         k8TdN0w5Rj8vHbDIAIiCzzw2EXlbtQTdHhP/sJ7YbX/MbyIA77ji1MnChE9QykN68FFD
-         psIxAcR2YqrNYK+mP3uryiW7pT+Gz72hVb71CwgTDsB/gWyYMp8ldMD4X7e95osCWIuj
-         VGjkTKroayYwUeFQ2sSPYJL2sQkUNV8PepEZn51e5TazyfCjDBFXtXWqYuUt+h7aUvTr
-         rqdA==
+        bh=r68S8jxOjdQsq88pAcfrL0Nqp+mR1s52o0SNFT5DPPA=;
+        b=qtxBa4TNUD9OyR2rF246snAMNlGr05/E3aBo3BcFNvyl/Ui5IUv8MdP+kUXGvBs0Af
+         CjThkou0ANwhChcu4SkD+Ea5ZYgYx/rjneiRjIs1jm0+ZtXj8bU1iWMXlVlyHod7FpW7
+         fQW/rLLxkRpXHBbOSStRBJ9k0f9Tr7qkj9bN3q8t02zQ7e39CrpSUibNe3pZp0sHchy8
+         h5BQubEJqjnDzZywe2rVBaudW7Mcgx2oUZAN+ueHy9BvlsvlXIsWT++Mu3Q0lqBBXO28
+         Dfq+AxPgfP1ww8xeTX6PEsRJSgV+XsYRPHjugGWrWwx/XohlaFzRAIWnwUZIfBWfjsKz
+         rkyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778776472; x=1779381272;
+        d=1e100.net; s=20251104; t=1778776474; x=1779381274;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5GIfuekLiG6d1t2FIig7OwOH7cYz1r1KvcU67M955lU=;
-        b=GIr2GV1LcHFA/VB/Kwm+h0J/BW7C41m6Qbs8LK82VdiCYYAk4IiXRxlZDXh0Fzm6p4
-         cUHE0rF96iZBsL+6pkLpLLULVfRf8tDtdZv/AnDKrQsgsYIUvABX0DYxng9/8L1x4Ovi
-         D1uZoHGBmgXlbe2sh27kQ/sQWHkpSqxoqpy2LBEteq2fwqIQ2Jf2bcogZvUh7vDY0Kuy
-         0nuD2W5i5BWAKu7gDh5Wc+SF1E3Fg9lwA9PQ55wSz4KhtqExJSaJButuNWI+NCam5i0S
-         fVp+DEKuKhXVk9q3ipE6fz4ACT7vAsLFxLFh0B3+YquOgpyusl1oBjz974OuGM7e1NvV
-         i77A==
-X-Forwarded-Encrypted: i=1; AFNElJ+/EXHZxFyF8RG1/odxULtQ7CHd6XnT1kqp6dwQmQaLKPNilzSXe7wnEHUNO5TBPk2uCl4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJ/itM9f+nL5r0g7sYPMS8ScS1/j6p7aAPwcfxFKdJi798+Yec
-	fJfgrK1g5WJ97mNbA2kgWzEx69MRBjytm+ukYs+UvUdf+yMbBEdYXj1xzUD4f82+jfF0jTKHSTw
-	6+0lltzbiTA==
-X-Received: from dybgn2.prod.google.com ([2002:a05:7301:2502:b0:2f9:af7:5043])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:290f:b0:2ed:23cd:babf
- with SMTP id 5a478bee46e88-303981873d8mr110905eec.12.1778776471796; Thu, 14
- May 2026 09:34:31 -0700 (PDT)
-Date: Thu, 14 May 2026 09:33:57 -0700
+        bh=r68S8jxOjdQsq88pAcfrL0Nqp+mR1s52o0SNFT5DPPA=;
+        b=YyswV3QXElfzdqNptG7/TBBqKXJinUmJBDSKVQgvwjxH0kq09C/IX7+njiNrDBX5cq
+         27+7hUpqZAobJGjGwcUcpXrgW3Ol1ChafRAVARRIkYG/lnnIECqSxK5wvToclpgzNtTs
+         LuCo4/6zQkqR3ujdoIEBUUX7BLvQHYmeALfZD8Sd+V/B4IF1ICOCkP8DtyDUXZau8qXR
+         o+oiXL4LR/1BGo729HyYvKlb0DhnF6cEs+wI60ggMElmuK46um9RFhX9AYZyQVsG3vAd
+         PWCDlEL1LUxOMOUdsbFUxTpASD6nQChlG/Z8VJdrST/62fuluNwBYphVmTtYgmu1Bib1
+         Kl5Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+FvNBSTzAm35nvFs3XXuZzGrvf8bydD6LskEn0tPuRx0fb8h+hhoTCZrwW0vCtQcCXZA0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzy4+Dd8myNwSsefbhAq51TA8u7QBXx62Pq9JVN7CH6H3nSkK2D
+	TgJC0kyPNnbwdKitaWQ6FBeSI/AOt4v+WmLOVIuINdzKAg/F6s7iUHjbGoFId2wxQV2dDuPECUB
+	uZiGux63w/A==
+X-Received: from dlbdz8.prod.google.com ([2002:a05:7022:ec8:b0:12c:8bfc:84e3])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:ea2b:b0:133:1cfe:5120
+ with SMTP id a92af1059eb24-1342ee3a1f0mr5673761c88.7.1778776473729; Thu, 14
+ May 2026 09:34:33 -0700 (PDT)
+Date: Thu, 14 May 2026 09:33:58 -0700
 In-Reply-To: <20260514163409.927816-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,9 +58,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260512174638.120445-1-irogers@google.com> <20260514163409.927816-1-irogers@google.com>
 X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260514163409.927816-6-irogers@google.com>
-Subject: [PATCH v3 05/17] perf build: Decouple pmu-events from prepare
- umbrella target
+Message-ID: <20260514163409.927816-7-irogers@google.com>
+Subject: [PATCH v3 06/17] perf build: Remove empty archheaders target
 From: Ian Rogers <irogers@google.com>
 To: irogers@google.com, acme@kernel.org, james.clark@linaro.org, 
 	namhyung@kernel.org
@@ -77,52 +76,37 @@ Cc: 9erthalion6@gmail.com, adrian.hunter@intel.com, alex@ghiti.fr,
 	thomas.falcon@intel.com, yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Currently, the $(LIBPMU_EVENTS_IN) sub-make depends on the massive
-"prepare" umbrella target. Because "prepare" depends on external
-libraries (libapi, libperf, etc.) as well as dozens of generated
-headers, make completely serializes the launch of the pmu-events
-sub-make behind some of those unrelated prerequisites.
-
-Since pmu-events is a large compilation unit, unblock its startup by
-binding it directly to only $(LIBPERF) instead of prepare. This allows
-background python generation scripts to overlap simultaneously with
-the rest of the build.
-
-Testing a parallel build (make -j28 clean all) shows improvements:
-  Before:
-    real    0m27.642s
-    user    2m32.356s
-    sys     0m26.683s
-
-  After:
-    real    0m22.254s
-    user    2m32.810s
-    sys     0m24.646s
-
-This reclaims over 5 full seconds of build latency (~19.5% overall
-reduction) by elevating average CPU concurrency from ~5.5 active cores
-up to ~8 active cores.
+Remove empty target that doesn't do anything.
 
 Tested-by: James Clark <james.clark@linaro.org>
 Assisted-by: Gemini:gemini-3.1-pro-preview
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.perf | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/Makefile.perf | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index c81797ceec42..c66af4c825fd 100644
+index c66af4c825fd..24581941e912 100644
 --- a/tools/perf/Makefile.perf
 +++ b/tools/perf/Makefile.perf
-@@ -550,7 +550,7 @@ build := -f $(srctree)/tools/build/Makefile.build dir=. obj
- $(PERF_IN): prepare FORCE
- 	$(Q)$(MAKE) $(build)=perf
+@@ -627,7 +627,7 @@ endif
+ __build-dir = $(subst $(OUTPUT),,$(dir $@))
+ build-dir   = $(or $(__build-dir),.)
  
--$(LIBPMU_EVENTS_IN): FORCE prepare
-+$(LIBPMU_EVENTS_IN): FORCE $(LIBPERF)
- 	$(Q)$(MAKE) -f $(srctree)/tools/build/Makefile.build dir=pmu-events obj=pmu-events
+-prepare: $(OUTPUT)PERF-VERSION-FILE archheaders \
++prepare: $(OUTPUT)PERF-VERSION-FILE \
+ 	arm64-sysreg-defs \
+ 	$(LIBAPI) \
+ 	$(LIBPERF) \
+@@ -1070,7 +1070,7 @@ FORCE:
+ .PHONY: all install clean config-clean strip install-gtk
+ .PHONY: shell_compatibility_test please_set_SHELL_PATH_to_a_more_modern_shell
+ .PHONY: .FORCE-PERF-VERSION-FILE TAGS tags cscope FORCE prepare
+-.PHONY: archheaders python_perf_target
++.PHONY: python_perf_target
  
- $(LIBPMU_EVENTS): $(LIBPMU_EVENTS_IN)
+ endif # force_fixdep
+ 
 -- 
 2.54.0.563.g4f69b47b94-goog
 
