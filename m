@@ -1,102 +1,75 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1279F3C140E
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 20:44:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97FA38B7B0
+	for <bpf@vger.kernel.org>; Thu, 14 May 2026 20:48:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778791467; cv=none; b=jgZcWK4FdclJmv4SE0TBwxjGt0BjhZr2CLgrNebuo5pnbbSR15rXI+FauKk+D1RmUPJBtM314ra8Iuvb2bat10MZwzWZlEplhMeiG2O2RjlPTcmY4TESxkCNnaKxJ91d0H0Dp+PCoIRw+tPjNXemSeY2jLsiTN2u9dpY7mNDObY=
+	t=1778791702; cv=none; b=bGhsnkXHCm3Qz7l13rqdLW5HiuA8rEW8HDiShdY1/oKQ0HEIyoy9Xp0DMfvmVK80pALLi+9VAuX5J3IJJettBUVSIwiAvJDvkpvfac5M7loIMNeiTXc+eA2SmdVqSZP4EJw4A2AX2SMvX6z9y7LHw8kmM9TYuSC5shAt3lQ2BCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778791467; c=relaxed/simple;
-	bh=PT+KZHkUKuH5xQ/uIUEy3gjKOuOLrDM+KkANeGmBbrc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kj8HYif7HG9BI0JtVa8j/pFONb6VZIn15ffPpg9/a3k47wHKey1lVlUl4Lyx3cwLDvB0gCnjSZu9FwD/fK/WHcyRQRTWc4/a3+Fx5ApEn6KHXVUOgjuohGG8p8ls89HkQixwPjUN2/4dex9Ym84FmZ3Iekgtcr7f//f4rABgH3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jqsp/4wF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778791702; c=relaxed/simple;
+	bh=GbI/HilT3/TE2hgnXD77YehXroaGkd4zT9OenCM2N4c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=slW+5c1wmxat/vEg5kybxLPKGU5tJ3p1vTeupGN4wQfRkPdOn4wcZFe+uFLCRuw2svbz47ILpv44N3O0SdWxyE3j8HotsC9pjy7dZPlG6nPqpLdoPv6LL9gwEbA229SxtRdOfWaTDP2p/4NTE1VIPzSFs1LmiAWBcVb7uMLZxXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VUZQ5Gd3; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jqsp/4wF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36E20C2BCB3;
-	Thu, 14 May 2026 20:44:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778791466;
-	bh=PT+KZHkUKuH5xQ/uIUEy3gjKOuOLrDM+KkANeGmBbrc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Jqsp/4wFB/LSGVpLk24SOUR0tkDhC1CUhY36rXg740r4ysAo7vpJM5vd8SPneFFcc
-	 TxJj5WGRCy8D7IzvLZMlckCjUGvsVHxUcv+d23o1G3PJFX27Rvb+VvRvfImmZNUhDn
-	 43Pd4IX7h/vDdZtT7H/lhYYtHWA2L8cDJpQ/mQ0qV6j5/Jp2yMy/e7jOxytjmfG/sA
-	 +aMZHv8Eacea78ioNO32tbZzVmQ8EFW7GTFsPFgth0+DTMaaJUuG9OD6L8BsBfmgAD
-	 HTJcJoJ+YIX9o9oN1fJaBSLh08Ji8HVuE7GNy4C+BbT4/R7+UtL5mCiKDymD7q5tWn
-	 vwTxORTD2SmyA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/7] selftests/bpf: Emit nop,nop10 instructions combo
- for x86_64 arch
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiri Olsa" <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260514135342.22130-4-jolsa@kernel.org>
-References: <20260514135342.22130-4-jolsa@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 14 May 2026 20:44:25 +0000
-Message-Id: <20260514204426.36E20C2BCB3@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VUZQ5Gd3"
+Date: Thu, 14 May 2026 13:47:42 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778791688;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Bpbz1P5iYvLVjsXAG5YnXFlWjXOyOYaznXeZkwC9pOw=;
+	b=VUZQ5Gd3sn4YMGXTelqn4KD8K1R3xdyruCIO8sTa1IMhkuhj8h+dPn5NqgX03eyUDUkDpH
+	2c94L1iJhyRmrhTh1ib4LSKa15K8JL1/z8gFhC0Bexm3U6LtlY4TlV/ThfKC+IBzelV57Z
+	okvyVGht+Xym3+Rz1YrPaYKn16tNOQs=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Puranjay Mohan <puranjay@kernel.org>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH bpf v4 2/3] bpf: Avoid faultable build ID reads under mm
+ locks
+Message-ID: <agYzuDIJszA_7rp3@linux.dev>
+References: <20260514184727.1067141-1-ihor.solodrai@linux.dev>
+ <20260514184727.1067141-3-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260514184727.1067141-3-ihor.solodrai@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The commit modifies `USDT_NOP` in `usdt.h` to an 11-byte `nop,no=
-p10` sequence but does not update `prog_tests/usdt.c`, causing the selftest=
- to break and introducing a git bisect regression.
---
+On Thu, May 14, 2026 at 11:47:26AM -0700, Ihor Solodrai wrote:
+> Sleepable build ID parsing can block in __kernel_read() [1], so the
+> stackmap sleepable path must not call it while holding mmap_lock or a
+> per-VMA read lock.
+> 
+> The issue and the fix are conceptually similar to a recent procfs
+> patch [2].
+> 
+> Resolve each covered VMA with a stable read-side reference, preferring
+> lock_vma_under_rcu() and falling back to mmap_read_trylock()
 
-commit 600c1890b9793e001b5d8d9027629fb122af9024
-Author: Jiri Olsa <jolsa@kernel.org>
+Why trylock()? Why not just reuse the mechanism introduced in [2]? That is
+abstract out the mechanism introduced in [2] in mm core and reuse it.
 
-selftests/bpf: Emit nop,nop10 instructions combo for x86_64 arch
-   =20
-This commit updates the USDT_NOP macro in usdt.h for x86_64 to emit an
-11-byte nop, nop10 instruction sequence instead of the previous nop, nop5
-sequence. It synchronizes with the latest usdt.h changes to utilize nop10
-optimization support.
 
-> diff --git a/tools/testing/selftests/bpf/usdt.h b/tools/testing/selftests=
-/bpf/usdt.h
-> --- a/tools/testing/selftests/bpf/usdt.h
-> +++ b/tools/testing/selftests/bpf/usdt.h
-
-[ ... ]
-
-> @@ -313,7 +313,7 @@ struct usdt_sema { volatile unsigned short active; };
->  #if defined(__ia64__) || defined(__s390__) || defined(__s390x__)
->  #define USDT_NOP			nop 0
->  #elif defined(__x86_64__)
-> -#define USDT_NOP                       .byte 0x90, 0x0f, 0x1f, 0x44, 0x0=
-0, 0x0 /* nop, nop5 */
-> +#define USDT_NOP                       .byte 0x90, 0x66, 0x66, 0x0f, 0x1=
-f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 /* nop, nop10 */
-
-Does changing this instruction sequence from 6 bytes to 11 bytes without
-updating prog_tests/usdt.c in the same commit cause a test breakage?
-
-The selftest in prog_tests/usdt.c hardcodes the old 6-byte nop1_nop5_combo
-and searches for it using find_instr(usdt_2, nop1_nop5_combo, 6). Because
-the old sequence is no longer present in usdt_2.c, find_instr will return
-NULL, causing the ASSERT_OK_PTR assertion to fail.
-
-I see this is addressed later in the series in commit
-ca88e95623000540d5b706ce364d5b5abf75b4c1. Would it be better to squash the
-test update into this commit to avoid breaking git bisect?
-
-Additionally, looking at that later commit, it updates nop1_nop10_combo to
-11 bytes but appears to continue passing 6 as the size argument to
-find_instr. Should that size argument be updated to 11 as well?
-
->  #else
->  #define USDT_NOP			nop
->  #endif
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260514135342.2213=
-0-1-jolsa@kernel.org?part=3D3
+> only long
+> enough to acquire the VMA read lock. Take a reference to the backing
+> file, drop the VMA lock, and then parse the build ID through
+> (sleepable) build_id_parse_file().
+> 
+> [1]: https://lore.kernel.org/all/20251218005818.614819-1-shakeel.butt@linux.dev/
+> [2]: https://lore.kernel.org/all/20260128183232.2854138-1-andrii@kernel.org/
+> 
