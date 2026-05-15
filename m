@@ -1,123 +1,168 @@
-Received: from mail-dl1-f73.google.com (mail-dl1-f73.google.com [74.125.82.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C923E0C60
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 19:33:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B676376BEC;
+	Fri, 15 May 2026 19:41:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778873639; cv=none; b=r0/rZUb5AbmKkZ11vjpsr2e+RQLvE68hTPZhuEsmngMZdlF+8tNRXlQjmEO3nmXGKBWLSFSqWTL46ht/W6BIjmCJFSPRS631nw9ahwoCMv5cd/oo0p0zf4y71TTH/JU+i/y6RcLVxJ8IPno1eDk4kq3vSTs+KO/ndobkWMjLXUA=
+	t=1778874107; cv=none; b=M60CFGkcl2y1g8Xt9JCt+3ZZ5dPm6ovyGg0LWCuStwuLdSg44XxbCg2WFA8gWS+fCi4ZnMRw4fptYu5KNeUyPqufDN70gq/yBbhnWunw1SylmDsO5/9LiI5ellU1ti6M6gMGmxo/0yrJYA7wqd7rW0EIFHqbrLO9ArS0Nnv4+vY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778873639; c=relaxed/simple;
-	bh=KgYhLbj+7JbYPwwwjNkDDjdOGe6Kx8xfZHNose5DOpk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=EYiTAJqKpLxeMQb9ZTQHEJ5B53WoEIbnJ7ubrAbJOD0WuGWQloFVvxzgPMwBraxpOJnoFEfQJ0m4bY3nV5ktDzKWUnfWwn/PymLR7WMWZawiMGNKe6RXFpS/dG5rCtTMlPF5QhMr8ip6vxBWpcKqBlMXLxnEpl9yed5COQAkHPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p+FgWcqY; arc=none smtp.client-ip=74.125.82.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	s=arc-20240116; t=1778874107; c=relaxed/simple;
+	bh=1yXhHqfMG9ohZvPpaTmXOpNtz2MyNmvkQA5IXlkA9fk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=em2WnvVSBwGgzmYVKOvwILfugBNNqM5ra5fiBx17KjQr9RSsVlskk8TxGugUKWdOw4q1eYaWtuH7BFRlaaBiqy84ndHym+VQe0AlelcvdFOoojKuNei8EHSm+l4pyOzTTMF3t7Xbi1OnWLXld8gwfKAESY3zZcE1FYGBpDLq8aI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oByE9J/L; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p+FgWcqY"
-Received: by mail-dl1-f73.google.com with SMTP id a92af1059eb24-13312be8a31so1045164c88.1
-        for <bpf@vger.kernel.org>; Fri, 15 May 2026 12:33:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778873637; x=1779478437; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=a7UhuB240zbvecKzTnCZgue1l2Usf38vhdVC8tHlI64=;
-        b=p+FgWcqYDAEC6+EpEsggsHQDhUZS+WPXar4iDeDKwhVPaVkVpWJ/FbpOlGjmkc9wHd
-         nZlK5V1ixCtfDtcuFBU+m1MZZf7Kk4xUT0c2yZl1kYEwiQ2Ho58NGg9uOp9yqlmSvY11
-         PeqYBnlyep9oCIP3pE8krM8LebH0nxn2TYtCDzxIbThfTqgLcYrRKqape53o3BTZq/2f
-         jFa5i1G74w8S5HuNYXdGfLspmb0ijh7e1uuKKNE2l/QB34/fJNXxRQ7MFWh1HagSzBwV
-         hm6nWlsuCGcYSXoBB3mBAxpI/F+b79YFtOzs6DLBqQQBhSL2wT9zmZD1qpRtlhJAkLIl
-         S6Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778873637; x=1779478437;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a7UhuB240zbvecKzTnCZgue1l2Usf38vhdVC8tHlI64=;
-        b=bMcf2DscIkw2w1HsC1TgLDGd6RuL+dlcRUjuQMcJcGd6cIuI0OnYxwrQeA389nQJWT
-         TZYERW2HdZbiPGNuQrqhPjH0HuDfF1jlaCPMYPHkhnZXThNmWmEEbOOzlRKEBnFOoNdy
-         LPUMec1tw5KAXF+HyQB5ht/LGnack39LOahcKXFMPAcJnPwhOdbsCwhDC2uadJ8VJMpT
-         fJCy/yDaHonE0xElgq1sIN0Lv1Vvj1v7ke3SdZVi+QU+rBwkCcsHzNRUwO4hyb0Vi0Gi
-         UZ5ApSNPlt3f6me5tLFc3yf3HptMWG4CIq/HEA5oeiX8MRqVYqlN+5h+JKD6XJYZIyhs
-         uazg==
-X-Forwarded-Encrypted: i=1; AFNElJ83sbfVY77c/udIX4XjtYhveyQOiCKb/dqNuRgddykrewixIk/UMj2l7csIprK7rWtS+7M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUVT6PGq6jfAzaw4/8u+4szll4tw76JA7hUTk0sN51/3U5EI65
-	LNiGTnY9nCnQqS396/mLBm3RVpBvKPrcsGaydKcK1+hBBD5s9WEBBJrq4mzLSYA/BpMfdRc8kMB
-	eqOFH4UCFvA==
-X-Received: from dlaj12.prod.google.com ([2002:a05:701b:280c:b0:134:a6ef:d90f])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:402:b0:134:ff2e:9889
- with SMTP id a92af1059eb24-13505536992mr2806623c88.32.1778873636710; Fri, 15
- May 2026 12:33:56 -0700 (PDT)
-Date: Fri, 15 May 2026 12:33:14 -0700
-In-Reply-To: <20260515193314.1593560-1-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oByE9J/L"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A54CCC2BCB0;
+	Fri, 15 May 2026 19:41:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778874106;
+	bh=1yXhHqfMG9ohZvPpaTmXOpNtz2MyNmvkQA5IXlkA9fk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oByE9J/L5tCLwamlatLjUIYlyuszL75CP+AGdM0d50Q05TDHdxuVRYqYoVuwC2e24
+	 Gas3bFp051gEhMsymJg/pQYUtqA8SWMgfyU3htTr+ONr4hEvSZTDe8wtIB2Tf83AkV
+	 wX6xK462qPgkQBWKxuRibN4up+A00SfcoPrbZ9JSwwbLXIgAqmwItNjMX6PJ7B5KWs
+	 8or80lh96NI0gS3VnQv3EjSrBknbc4ma5sPxRa20J30F4ea4QAhyyoLzNisLxa+aGy
+	 7m0RCWFHLcZUZfzYnZfJKNtU5oQhMd6mnLBeFi9T4Cgkgd5gdFK/1NggS6Wkukon7y
+	 +NdZZpkvPlcbw==
+Date: Fri, 15 May 2026 12:41:44 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: acme@kernel.org, james.clark@linaro.org, 9erthalion6@gmail.com,
+	adrian.hunter@intel.com, alex@ghiti.fr,
+	alexandre.chartre@oracle.com, andrii@kernel.org,
+	ankur.a.arora@oracle.com, aou@eecs.berkeley.edu,
+	bpf@vger.kernel.org, collin.funk1@gmail.com, costa.shul@redhat.com,
+	daniel@iogearbox.net, dapeng1.mi@linux.intel.com, dsterba@suse.com,
+	eddyz87@gmail.com, howardchu95@gmail.com, jolsa@kernel.org,
+	leo.yan@arm.com, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, martin.lau@linux.dev,
+	memxor@gmail.com, mingo@redhat.com, mmayer@broadcom.com,
+	nathan@kernel.org, palmer@dabbelt.com, peterz@infradead.org,
+	pjw@kernel.org, qmo@kernel.org, ricky.ringler@proton.me,
+	song@kernel.org, swapnil.sapkal@amd.com, terrelln@fb.com,
+	tglozar@redhat.com, thomas.falcon@intel.com,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH v4 11/14] perf pmu-events: Parallelize JSON and metric
+ pre-computation in jevents.py
+Message-ID: <agd2-MgXgs---InR@google.com>
+References: <CAP-5=fWfrGMV4EafqkwQO-R33c_szXcxVLgH0c4k2zt3zj4HdQ@mail.gmail.com>
+ <20260515173852.1378571-1-irogers@google.com>
+ <20260515173852.1378571-12-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260515173852.1378571-1-irogers@google.com> <20260515193314.1593560-1-irogers@google.com>
-X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260515193314.1593560-15-irogers@google.com>
-Subject: [PATCH v5 14/14] perf build: Convert llvm-config shell queries to
- simply expanded variables
-From: Ian Rogers <irogers@google.com>
-To: irogers@google.com, acme@kernel.org, james.clark@linaro.org, 
-	namhyung@kernel.org
-Cc: 9erthalion6@gmail.com, adrian.hunter@intel.com, alex@ghiti.fr, 
-	alexandre.chartre@oracle.com, andrii@kernel.org, ankur.a.arora@oracle.com, 
-	aou@eecs.berkeley.edu, bpf@vger.kernel.org, collin.funk1@gmail.com, 
-	costa.shul@redhat.com, daniel@iogearbox.net, dapeng1.mi@linux.intel.com, 
-	dsterba@suse.com, eddyz87@gmail.com, howardchu95@gmail.com, jolsa@kernel.org, 
-	leo.yan@arm.com, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, martin.lau@linux.dev, memxor@gmail.com, 
-	mingo@redhat.com, mmayer@broadcom.com, nathan@kernel.org, palmer@dabbelt.com, 
-	peterz@infradead.org, pjw@kernel.org, qmo@kernel.org, ricky.ringler@proton.me, 
-	song@kernel.org, swapnil.sapkal@amd.com, terrelln@fb.com, tglozar@redhat.com, 
-	thomas.falcon@intel.com, yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260515173852.1378571-12-irogers@google.com>
 
-In Makefile.config, CFLAGS, CXXFLAGS, LIBLLVM, and EXTLIBS were assigned
-using recursive expansion or appended with raw $(shell $(LLVM_CONFIG) ...)
-calls. Because these variables were expanded during dependency evaluation
-across every single object file compilation rule, Kbuild continuously
-re-executed llvm-config forks nearly 200 times during incremental builds.
+On Fri, May 15, 2026 at 10:38:48AM -0700, Ian Rogers wrote:
+> Currently, jevents.py parses hundreds of JSON event and metric files
+> sequentially across all CPU architectures during Kbuild startup, taking
+> ~3.3 seconds of pure single-core execution time.
 
-Convert llvm-config shell queries to simply expanded variables (:=) to
-ensure Make evaluates LLVM compiler flags and library paths exactly once
-when Makefile.config is parsed, eliminating ~185 redundant sub-processes
-during build startup.
+I'm curious about this.  Does it really need to parse all architectures?
+Oh... is it for perf stat record/report?
 
-Assisted-by: Gemini:gemini-3.1-pro-preview
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.config | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+Thanks,
+Namhyung
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index fbe7fa83b0bb..7a61da082c0b 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -951,11 +951,14 @@ ifndef NO_LIBLLVM
-   $(call feature_check,llvm-perf)
-   ifeq ($(feature-llvm-perf), 1)
-     CFLAGS += -DHAVE_LIBLLVM_SUPPORT
--    CFLAGS += $(shell $(LLVM_CONFIG) --cflags)
--    CXXFLAGS += -DHAVE_LIBLLVM_SUPPORT
--    CXXFLAGS += $(shell $(LLVM_CONFIG) --cxxflags)
--    LIBLLVM = $(shell $(LLVM_CONFIG) --libs all) $(shell $(LLVM_CONFIG) --system-libs)
--    EXTLIBS += -L$(shell $(LLVM_CONFIG) --libdir) $(LIBLLVM)
-+    LLVM_CFLAGS := $(shell $(LLVM_CONFIG) --cflags 2>/dev/null)
-+    LLVM_CXXFLAGS := $(shell $(LLVM_CONFIG) --cxxflags 2>/dev/null)
-+    LLVM_LIBLLVM := $(shell $(LLVM_CONFIG) --libs all 2>/dev/null) $(shell $(LLVM_CONFIG) --system-libs 2>/dev/null)
-+    LLVM_LIBDIR := $(shell $(LLVM_CONFIG) --libdir 2>/dev/null)
-+    CFLAGS += $(LLVM_CFLAGS)
-+    CXXFLAGS += -DHAVE_LIBLLVM_SUPPORT $(LLVM_CXXFLAGS)
-+    LIBLLVM := $(LLVM_LIBLLVM)
-+    EXTLIBS += -L$(LLVM_LIBDIR) $(LIBLLVM)
-     EXTLIBS += -lstdc++
-     $(call detected,CONFIG_LIBLLVM)
-   else
--- 
-2.54.0.563.g4f69b47b94-goog
-
+> 
+> Refactor jevents.py to pre-populate its internal JSON AST cache in parallel
+> across all available CPU cores using ProcessPoolExecutor. Define the worker
+> process initializer _init_worker at the top-level module scope to guarantee
+> flawless pickling and standard event mapping inheritance under spawn
+> multiprocessing semantics (avoiding AttributeError crashes when spawn is
+> used instead of fork). This accelerates jevents.py execution by over 11x
+> (from 3.3s down to ~290ms), fully reclaiming multi-core concurrency during
+> the build generation phase.
+> 
+> Tested-by: James Clark <james.clark@linaro.org>
+> Assisted-by: Gemini:gemini-3.1-pro-preview
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/pmu-events/jevents.py | 36 ++++++++++++++++++++++++++++----
+>  1 file changed, 32 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+> index 6adf4b30e1ba..ebacb056524f 100755
+> --- a/tools/perf/pmu-events/jevents.py
+> +++ b/tools/perf/pmu-events/jevents.py
+> @@ -457,8 +457,8 @@ class JsonEvent:
+>      return f'{{ { _bcs.offsets[s] } }}, /* {fix_comment(s)} */\n'
+>  
+>  
+> -@lru_cache(maxsize=None)
+> -def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
+> +_json_cache = {}
+> +def _read_json_events_impl(path: str, topic: str) -> Sequence[JsonEvent]:
+>    """Read json events from the specified file."""
+>    try:
+>      events = json.load(open(path), object_hook=JsonEvent)
+> @@ -474,12 +474,16 @@ def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
+>    if updates:
+>      for event in events:
+>        if event.metric_name in updates:
+> -        # print(f'Updated {event.metric_name} from\n"{event.metric_expr}"\n'
+> -        #       f'to\n"{updates[event.metric_name]}"')
+>          event.metric_expr = updates[event.metric_name]
+>  
+>    return events
+>  
+> +def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
+> +  key = (path, topic)
+> +  if key not in _json_cache:
+> +    _json_cache[key] = _read_json_events_impl(path, topic)
+> +  return _json_cache[key]
+> +
+>  def preprocess_arch_std_files(archpath: str) -> None:
+>    """Read in all architecture standard events."""
+>    global _arch_std_events
+> @@ -1381,6 +1385,14 @@ const char *describe_metricgroup(const char *group)
+>  }
+>  """)
+>  
+> +def _parallel_read_json_events(task: Tuple[str, str]) -> Tuple[str, str, Sequence[JsonEvent]]:
+> +  path, topic = task
+> +  return path, topic, _read_json_events_impl(path, topic)
+> +
+> +def _init_worker(std_events: dict) -> None:
+> +  global _arch_std_events
+> +  _arch_std_events = std_events
+> +
+>  def main() -> None:
+>    global _args
+>  
+> @@ -1459,9 +1471,25 @@ struct pmu_table_entry {
+>      raise IOError(f'Missing architecture directory \'{_args.arch}\'')
+>  
+>    archs.sort()
+> +  import concurrent.futures
+> +  tasks = []
+> +  def collect_json(parents: Sequence[str], item: os.DirEntry) -> None:
+> +    if len(parents) == 0:
+> +      return
+> +    if item.is_file() and item.name.endswith('.json') and not item.name.endswith('metricgroups.json'):
+> +      tasks.append((item.path, get_topic(item.name)))
+> +
+>    for arch in archs:
+>      arch_path = f'{_args.starting_dir}/{arch}'
+>      preprocess_arch_std_files(arch_path)
+> +    ftw(arch_path, [], collect_json)
+> +
+> +  with concurrent.futures.ProcessPoolExecutor(initializer=_init_worker, initargs=(_arch_std_events,)) as executor:
+> +    for path, topic, events in executor.map(_parallel_read_json_events, tasks):
+> +      _json_cache[(path, topic)] = events
+> +
+> +  for arch in archs:
+> +    arch_path = f'{_args.starting_dir}/{arch}'
+>      ftw(arch_path, [], preprocess_one_file)
+>  
+>    _bcs.compute()
+> -- 
+> 2.54.0.563.g4f69b47b94-goog
+> 
