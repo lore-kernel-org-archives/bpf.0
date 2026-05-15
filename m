@@ -1,165 +1,134 @@
-Received: from flow-a3-smtp.messagingengine.com (flow-a3-smtp.messagingengine.com [103.168.172.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6628F37187F;
-	Fri, 15 May 2026 15:16:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C983CB2FC
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 15:16:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778858171; cv=none; b=DUmZfW0WcFnwpG4Eer9jtOq8guH6opzmu1zRHMdOleC1ZgVSk+RDvqjfQDiW9180DDZ/8HxWQvKAa4ONOcX5GkI4X3FU1ub+ElBaW3xMwf2LqV0CrTBs6gExGLhyaTRmy9IDyM5dHRpN6wxnwYHTSGzpNMquHEqqvU1YG5zsyHQ=
+	t=1778858174; cv=none; b=Pd2/ZCd4FFrLcYXJfHK+82RkpvCd+ox+eBBl6ZbtmExYt2YW72urDTW2QqhInYWnj+c6OdU3gBVAFm/taR49Qrlq2V+Nm9yqxclWBIbHgu20fe+KAZKEYD7G+5OOYxlSRNmYlu1K+7fIwNUKp7/dI9A8sM8WJBz/sO9udTIU1OI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778858171; c=relaxed/simple;
-	bh=D/xuaDGwPLUBL036bk0uJhbi2HUM849uBA1N2mT6730=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Rb28ymKRzEdXn2+8qfZbps14Z7pmes4vcmV5UwVfpiITbYigPpQvubWawWwsPytr2S25kC7A33NCa15GrZ24B49KHJ7LNDxJOvhyhbkFCiKKJHXOJVzjxOtH1H6fPUumXyeAqrFRU1difk4BEYrZyYyBeDuqCws3j1IrlpRoFfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=SpE0mLi/; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=f90z6Mcw; arc=none smtp.client-ip=103.168.172.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1778858174; c=relaxed/simple;
+	bh=8PmVyxQmnnEiS1KxO/fEeLK8LEKexDtIgCORnjyk6tQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gYN5Ay1Ra0zSCFqk4uwXiEJzQcTgvIJIXBtJl3pntU6xRoWD6cXsYUzHBDr5O+pHUoJSLykQvD+2Nvg1j4X5ztXkYS0PwqCFVN9AfMDQVZfEtd+dlUXm2IQMkxDqIEFSGzUgGyE33+B5FQxwA5f/zy5Ah3m08DlDmjH9BnBQsSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=northecho.dev; spf=none smtp.mailfrom=northecho.dev; dkim=pass (2048-bit key) header.d=northecho-dev.20251104.gappssmtp.com header.i=@northecho-dev.20251104.gappssmtp.com header.b=eEILS7a0; arc=none smtp.client-ip=74.125.224.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=northecho.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=northecho.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="SpE0mLi/";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="f90z6Mcw"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.phl.internal (Postfix) with ESMTP id 94470138040D;
-	Fri, 15 May 2026 11:16:08 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-04.internal (MEProxy); Fri, 15 May 2026 11:16:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1778858168;
-	 x=1778865368; bh=J4ckqZIWQV1ocroUGeQi74weQoQtp7XwfxKqP7cAhnc=; b=
-	SpE0mLi/5H5t8/WiJrScmiVEJCZmZNzFAJos7clC7t6G27l/wyd2aqsVwo2FK0gw
-	J9Fh71EwH5lufhK9vUnafVNfr4CF99AaVFsxhvKZgvB2rwzcU/qfX1YvMhumCyk4
-	VrdmQhbI9bh7g+W94cKzmphOIfxBHEEXuBj3MP/3nS/5P+WaJRr1W8avAKbow/H0
-	5QFf4GGGToPc4y8waaBvDFBTWvaHNnl+MOgbu3gIJg+q48aXBEs3yhOADJJU60fx
-	Drf6I++li/cVmxWV4PCMSle8YxRwaFHz2upM/eTvzfaLeco3JzoT90kOjI9LztN3
-	suAEvtVjwviraRgmquQi1A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1778858168; x=
-	1778865368; bh=J4ckqZIWQV1ocroUGeQi74weQoQtp7XwfxKqP7cAhnc=; b=f
-	90z6McwpyXyWDKrW7P4DK8geuJNe05eo2VbfdMnZ9lZK5jy0djD6ZoQTMCni5u3X
-	Ti7ghwZD4B/L/3mM6nKmz0lTLGdlRDZAmTowppCOwcAX3q85XfnGPRvr+0TOVGFd
-	uo7r294Bsi1Qs6Ce754ec5DN/R5zFnAuPLbXrqf5xN8iLCKtaBICmS8vzctwiV1E
-	e52dZR6FYUdYUHeVAGDHGxZqunVlBAF8ksCiSWqMGynC6bXdOKbyrmuO1XrV751/
-	1uv2AIhOZPNhNAZspDwgd14kjq64c5LyDp5+tujSevbu0Wos4hkozuYe7HbZCiNr
-	h/nHZK2F/nJfpRYHFCtXg==
-X-ME-Sender: <xms:uDgHajcnNS8FlzUOJpNstBevDI20ei5RGCkCDgyFOmteSCFmVDH9hA>
-    <xme:uDgHakDwH48TweiH5v964ItQQKIvHm62QsF2TriRy4z3BsJrUnrLchJM8AToXp4cs
-    9NRfWWxInPksG0O0kN75rdWB7MobsuZPlsojF2qeSE_ldPKK2lqiMmy>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddufedtjeefucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvdegpdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtoh
-    epkhgrfhgrihesfhgsrdgtohhmpdhrtghpthhtohepshgufhesfhhomhhitghhvghvrdhm
-    vgdprhgtphhtthhopegrlhgvgigvihdrshhtrghrohhvohhithhovhesghhmrghilhdrtg
-    homhdprhgtphhtthhopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtohep
-    jhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhgvmh
-    igohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhl
-    vgdrtghomhdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvth
-X-ME-Proxy: <xmx:uDgHav0grKTUvRJbwKOOu55TTY2TcYsTA_e-i-amNCPMFw5u2mb5aw>
-    <xmx:uDgHaiChU2CXfS3FM8cs_uK54BIVVnVAaFb3iTZ9r20HS49y0L5fmw>
-    <xmx:uDgHaoaam7id5OiJw90OuIdz956nq0j1-PwU3bO8w1L1Bfy_CwV4gQ>
-    <xmx:uDgHauY_eYD48nz1hHut4PYvsnBsnmsqRnrL3mudrFdrZHQkS9Jt3g>
-    <xmx:uDgHagCHfw_iqF2buV0AbVq1dWjVW--bWaXkkTFt_OgwEKl0a2eP5V9I>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 032091060065; Fri, 15 May 2026 11:16:08 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=northecho-dev.20251104.gappssmtp.com header.i=@northecho-dev.20251104.gappssmtp.com header.b="eEILS7a0"
+Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-651c36a7ee9so1588406d50.0
+        for <bpf@vger.kernel.org>; Fri, 15 May 2026 08:16:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=northecho-dev.20251104.gappssmtp.com; s=20251104; t=1778858172; x=1779462972; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OKFizhLjRF18dIH2oJNICiOfhq8yOlJciPdatJOILtg=;
+        b=eEILS7a0PD8Q9XvNQDnKKw1N97OdbdtPQ3RzGLXwj1ldbP3C/CVYZrCOp6i86i8ENu
+         xRm7kWa0LHvblNAsASl32Tbmr5aAg8zxUdeMjfI0kPx+BmXHfwXu+sbprW3/xm1VfpNJ
+         6hFuMMnHEyDuAAI9tz6B0bHaUIc25Iimk3jF4eyZZNUp5PfbEq+nhVjooz2lZ9/cuUYI
+         rW/UkYHQJWFAuwNjrOueHdrXJUSD+AbJ1emiIJXOc4mSCWvton1YpTK+S+xDtpdFURox
+         Zjw6EZuT40oE5ZZ6YRpOf8qEwuoZS8iVdRV1kHIZyiHQregM/pIEpFAXEf5scXbRrSys
+         27uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778858172; x=1779462972;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OKFizhLjRF18dIH2oJNICiOfhq8yOlJciPdatJOILtg=;
+        b=lbvkTHSulw/U7+DEjK51Pdg9OSiAD46hbMnsjvLlcbXBiKg9bcESFgqXxwAVl0aYIm
+         bkITqk/Pjg+OTvV/sGZq7fIQ163TEUjTiYAOl1cg505KJcjfswxmLcWV2WV+XtPm0O8Q
+         3XwZ/LYQrAteVUzuhn/+XlZDcJtAj1REGJdtgsN307y31Z0tkDIB90l5Ko0Czx+3N8Aw
+         89O/W/xTecVZiUx0KlD3Se021B47ewvFIKxEkoe8ItTNpo4qLgAJ3Ii9wq2b/sKRqRBG
+         2sWldAogLA7jB3abWYVIsuavgK/ANs3QO/sqCTo2+Q8VdwWZ6qFDoHi1+sT3Gc1MtyWm
+         qZWg==
+X-Forwarded-Encrypted: i=1; AFNElJ98EJxCIXK0QpHKGrapywFHEJ+nddKpr3vZL8n/28mi2oUSDWTpIij/oirMv7F0vRcZl3Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZrPeCmwokIi6F5LsEUTNeZsw4GGx+7xQJKvvNuaovfBTJMOh8
+	CXHEYBN8/DqBRUjC4p8pF9bk0Q6pgebCFFe3pW21AuGZ79x4huRAFJfX5KNmtaHFnv9h
+X-Gm-Gg: Acq92OGKMehyQqC83AVYAyxJnivOf8bkyiBQpE/B9hrtCvhX6wAz1A4qrJvYCpVPf+F
+	oZfn8FAxjJH+HoL8ED5tPC9650vjvQyAUMW/rT1uKnDanKQ7T18AcNUauExrv4fe1k3ndMpCCpz
+	NXIrIdCDJ+5vqFP3XOh+Rg257qshvB4I1glDzS8kq6GFkOVavmv+Pcop2p4mZx3HRWmG0vWGjW4
+	4Aof84VMP8VfwL0YwgwO+UphBa8NTvU+CLz2v6AAEKq5ikwAYcJpHrJ8VwkD7LT7HVkj0mJMQj/
+	31hjJSlPGpJjghkJDAozYSfQpEclXjZTxwBvF6lVOJdvuXwn/sQ2kA+dqKYeUulHtTSvBWXZfyq
+	GR10lfKHBDi/Q3s5eJtvWHz/vrdvevL4zvDtQWbtpsIRx6MMREu66pbLBqo9/f/JdPfOZ8xoPSw
+	nU3BWJWgDFEG0n4yO03D2+NOunqUsz5bU3ZTn9SoMdcLvfjjTYUVHW3kC8tY51AVqNhz6j1jw9Z
+	khS4ydTDVv8xic=
+X-Received: by 2002:a05:690e:134c:b0:65c:27b5:414c with SMTP id 956f58d0204a3-65e2281c6c2mr2570464d50.5.1778858171353;
+        Fri, 15 May 2026 08:16:11 -0700 (PDT)
+Received: from kelso.tail8e61da.ts.net (99-10-92-174.lightspeed.rlghnc.sbcglobal.net. [99.10.92.174])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65e0d878cf2sm2724116d50.2.2026.05.15.08.16.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 May 2026 08:16:10 -0700 (PDT)
+From: Christopher Lusk <clusk@northecho.dev>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net 0/2] net: tls: fix async BPF split record loss
+Date: Fri, 15 May 2026 11:15:54 -0400
+Message-ID: <20260515151556.189841-1-clusk@northecho.dev>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Avg9O9r9re3Z
-Date: Fri, 15 May 2026 17:15:46 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
- "Arnd Bergmann" <arnd@kernel.org>
-Cc: "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>,
- "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
- "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>,
- "Jesper Dangaard Brouer" <hawk@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>,
- "Martin KaFai Lau" <kafai@fb.com>,
- =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Simon Horman" <horms@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>,
- bpf <bpf@vger.kernel.org>, Netdev <netdev@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>
-Message-Id: <b387dd31-0ee5-41b9-b07a-13b718080e89@app.fastmail.com>
-In-Reply-To: 
- <CAADnVQLYitAZVpXCTygA1uAUtN6m8pMkWzFi9su719M=nktmQQ@mail.gmail.com>
-References: <20260515113102.2389020-1-arnd@kernel.org>
- <CAADnVQLYitAZVpXCTygA1uAUtN6m8pMkWzFi9su719M=nktmQQ@mail.gmail.com>
-Subject: Re: [PATCH] bpf: test_run: reduce kernel stack usage
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 15, 2026, at 16:47, Alexei Starovoitov wrote:
-> On Fri, May 15, 2026 at 4:31=E2=80=AFAM Arnd Bergmann <arnd@kernel.org=
-> wrote:
->
-> 1k?
-> pahole -C xdp_test_data
-> /* size: 192, cachelines: 3, members: 9 */
-> /* sum members: 120, holes: 1, sum holes: 56 */
-> /* padding: 16 */
-> /* paddings: 1, sum paddings: 36 */
->
-> what s390 doing to make it huge?
+This fixes a kTLS TX bug in the BPF sk_msg apply_bytes path when the
+selected AEAD provider completes asynchronously.
 
-I think it's a combination of cacheline alignment (256 byte
-lines) that leads to padding before 'rxq' and at the end of
-xdp_test_data, as well as CONFIG_KASAN_STACK that increases
-the stack usage further.
+tls_push_record() can split ctx->open_rec into the record being encrypted
+and a remainder record. If tls_do_encryption() returns -EINPROGRESS, the
+current code returns before reattaching the remainder. The peer observes a
+truncated stream, and the orphaned tls_rec is leaked.
 
-> Probably better to rearrange the field and fix the root cause.
+Patch 1 keeps the split remainder rooted on the async path and lets the BPF
+verdict loop continue draining queued records while preserving the async
+return signal. Patch 2 adds a regression selftest which compares the sync
+and async providers for the same BPF apply_bytes split-record stream.
 
-It looks like this change reduces the stack usage by 256
-bytes, and keeps it under the warning limit for all the
-configurations I was testing:
+The selftest fails on the vulnerable tree with the async provider receiving
+12916 bytes instead of 17312. It passes with this series:
 
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -98,8 +98,8 @@ struct xdp_page_head {
- };
-=20
- struct xdp_test_data {
--       struct xdp_buff *orig_ctx;
-        struct xdp_rxq_info rxq;
-+       struct xdp_buff *orig_ctx;
-        struct net_device *dev;
-        struct page_pool *pp;
-        struct xdp_frame **frames;
+  TAP version 13
+  1..2
+  ok 1 sync provider transmits split record
+  ok 2 async provider transmits split record
 
-I still get 1368 bytes stack frame in one config (with KASAN_STACK)
-here, compared to 392 with my patch. In another config without
-KASAN, the mainline version has 1344, the rearranged xdp_test_data
-has 1088 bytes and the dynamic allocation variant uses 200.
+This work is LLM-assisted. The static-analysis variant hunt and
+async-boundary state-retention class sweep that surfaced this
+candidate site at net/tls/tls_sw.c were performed using Codex
+(gpt-5.5); the writeup, patch refinement, and this cover letter
+were performed using Claude (claude-opus-4-7). Hardware validation
+(QEMU/KVM kernel run, deterministic 17312 vs 12916 sync/async
+byte-count delta, lifetime-probe linear-leak scaling) and operator
+review at every external gate were human-driven. Methodology
+context at https://northecho.dev/posts/codex-vs-claude-code-vuln-research/.
 
-The one-line change is probably enough to stay off my radar since
-it stays below the arbitrary warning limit I test with to find
-regressions, but 1368 bytes is still a lot, so there is a good
-chance someone else will hit this again.
+Sent to the public list per the security-bugs.rst exception for
+findings trivial to discover via automated tooling, as interpreted
+by the kernel security team for LLM-assisted reports (Willy Tarreau,
+2026-05-14, IVPU thread).
 
-Another alternative would be to allocate xdp_test_data statically
-instead of on the stack.
+Christopher Lusk (2):
+  net: tls: preserve split open record on async encrypt
+  selftests: net: add kTLS async split record regression
 
-Let me know which variant you prefer.
+ net/tls/tls_sw.c                              |  29 +-
+ tools/testing/selftests/net/Makefile          |   5 +
+ .../selftests/net/ktls_async_split.bpf.c      |  24 ++
+ .../testing/selftests/net/ktls_async_split.c  | 391 ++++++++++++++++++
+ 4 files changed, 441 insertions(+), 8 deletions(-)
+ create mode 100644 tools/testing/selftests/net/ktls_async_split.bpf.c
+ create mode 100644 tools/testing/selftests/net/ktls_async_split.c
 
-       Arnd
+-- 
+2.54.0
