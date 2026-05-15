@@ -1,32 +1,32 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD881DDC3F
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 00:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF0B1DDC3F
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 00:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778806390; cv=none; b=jtdWdICNoV2/DycZKX7TBoxQujanLS/CI4WEj32+61vMR+P1lmIU4blhhQXuFvD5iQje7J4ordjyGFBozJLWLNosRu7ERAsoo6lODSnjX02R75UHkBZCeM1Dn9f2kCiEUo4s/wD53NK9XHpOtJvBDebkCVQ6LuuHE61FK1wtwGo=
+	t=1778806393; cv=none; b=mDbJRJyES/+Js94KXguKZXE+5Uz02TzgFbWtzgP7ikgnOq0bKr46UmskzvB/k0r5FrYj5dR0NZJ+V6+9sJQlFs2GA1h267R886swzTyTLs9lridWMzkoRWlbVEPUTx3bk7qOK1RfTTMvqFdub0p4w5Mi2ifJDppj6kfYEu/L4D4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778806390; c=relaxed/simple;
-	bh=/6E4Uj1V5dxCdPU6zojMhfvBzk9DWzYdC9lbgSXe2yg=;
+	s=arc-20240116; t=1778806393; c=relaxed/simple;
+	bh=nlRC9LSJKm7nyiFU+68qzUc9cXr7fKv8RPut4e5vTBs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A7KGyaIeUVayCi9C2ijkhp3foI2rv1FSyHkpcXmzyb2/BrY15+c0dLdjnoPNloVfu1LD+7KtN4SF6WLfnR43toNlOroD7qJ8g2S9p83btWbvOjTBGUNhWr9PLIzYsicqdJ2iooaed/FgyKGNAtDBV8hjQVqBqGBZw/ftwiL7+vQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AYaB7YA3; arc=none smtp.client-ip=95.215.58.179
+	 MIME-Version; b=cMsi/cK+dd3t2iLqYMuYNhPaL7QODH9xoFTImpPq1Mgizb6UsP9ugiQZBDqBISzQZaoFvRJPqysjY3KYO6WIHJqDoz+b9DJZec5rCqMdJBDET+/qvXNXWzW69/IPrEhDgIBWlyMDBwdBGC9oIp8rQ9e8vJ+t5mfSDIrqxR0g6Q8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RcP6sT9e; arc=none smtp.client-ip=95.215.58.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AYaB7YA3"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RcP6sT9e"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778806386;
+	t=1778806389;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ALIqiwZGQGc8gWzhYBCduPwwRPxukG0LlNeus3Maqs8=;
-	b=AYaB7YA3qVXOXxtMJSRL+dGec7b6tqc/xr9oRj4ssLiK9Y5RcAZlvsEBM9aQoTAYSoC5JY
-	0YMGBfpr4X6apFQ3qj5+WCO8MabSpKTXzQj6bDOwtefBSsoOQvGWMmerKKRoR6To9ubmQy
-	YSqAsJf1YAWhYb2mG3UHcDDM7q3SR+o=
+	bh=IPMdFo+wk5C2wi7fcGI7iiRmyVjxlC+u2pym/b4gu3U=;
+	b=RcP6sT9eSE84ChazrVXYh/osc1hvyVObm88zzhyRtH4lv4oAxpvk5Kq0WFXwHJxNNSnk9l
+	xn4t5KQSjat08z6lytF9m2AVrhya5jh0/yH7pc5ZvE/1StbHDRVzVxq91xm/1c4YtJdPSk
+	jHufd09IQjrgV06y+IU9ffnXSjOhGOQ=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -39,9 +39,9 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v5 1/3] bpf: Factor out stack_map_build_id_set_ip() in stackmap.c
-Date: Thu, 14 May 2026 17:52:42 -0700
-Message-ID: <20260515005244.1333013-2-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v5 2/3] bpf: Avoid faultable build ID reads under mm locks
+Date: Thu, 14 May 2026 17:52:43 -0700
+Message-ID: <20260515005244.1333013-3-ihor.solodrai@linux.dev>
 In-Reply-To: <20260515005244.1333013-1-ihor.solodrai@linux.dev>
 References: <20260515005244.1333013-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -53,73 +53,168 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Factor out a small helper from stack_map_get_build_id_offset() in
-preparation for adding a sleepable build ID resolution path.
+Sleepable build ID parsing can block in __kernel_read() [1], so the
+stackmap sleepable path must not call it while holding mmap_lock or a
+per-VMA read lock.
 
-No functional changes.
+The issue and the fix are conceptually similar to a recent procfs
+patch [2].
 
-Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+Resolve each covered VMA with a stable read-side reference, preferring
+lock_vma_under_rcu() and falling back to mmap_read_trylock() only long
+enough to acquire the VMA read lock. Take a reference to the backing
+file, drop the VMA lock, and then parse the build ID through
+(sleepable) build_id_parse_file().
+
+We have to use mmap_read_trylock() (and give up on failure) in this
+context because taking mmap_read_lock() is generally unsafe on code
+paths reachable from BPF programs [3], and may lead to deadlocks.
+
+[1] https://lore.kernel.org/all/20251218005818.614819-1-shakeel.butt@linux.dev/
+[2] https://lore.kernel.org/all/20260128183232.2854138-1-andrii@kernel.org/
+[3] https://lore.kernel.org/bpf/2895ecd8-df1e-4cc0-b9f9-aef893dc2360@linux.dev/
+
+Fixes: d4dd9775ec24 ("bpf: wire up sleepable bpf_get_stack() and bpf_get_task_stack() helpers")
+Suggested-by: Puranjay Mohan <puranjay@kernel.org>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- kernel/bpf/stackmap.c | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+ kernel/bpf/stackmap.c | 109 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 109 insertions(+)
 
 diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index da3d328f5c15..4ef0fd06cea5 100644
+index 4ef0fd06cea5..08f7659505d1 100644
 --- a/kernel/bpf/stackmap.c
 +++ b/kernel/bpf/stackmap.c
-@@ -152,6 +152,12 @@ static int fetch_build_id(struct vm_area_struct *vma, unsigned char *build_id, b
- 			 : build_id_parse_nofault(vma, build_id, NULL);
+@@ -9,6 +9,7 @@
+ #include <linux/perf_event.h>
+ #include <linux/btf_ids.h>
+ #include <linux/buildid.h>
++#include <linux/mmap_lock.h>
+ #include "percpu_freelist.h"
+ #include "mmap_unlock_work.h"
+ 
+@@ -158,6 +159,109 @@ static inline void stack_map_build_id_set_ip(struct bpf_stack_build_id *id)
+ 	memset(id->build_id, 0, BUILD_ID_SIZE_MAX);
  }
  
-+static inline void stack_map_build_id_set_ip(struct bpf_stack_build_id *id)
++struct stack_map_vma_lock {
++	bool vma_locked;
++	struct vm_area_struct *vma;
++	struct mm_struct *mm;
++};
++
++static struct vm_area_struct *
++stack_map_lock_vma(struct stack_map_vma_lock *lock, unsigned long ip)
 +{
-+	id->status = BPF_STACK_BUILD_ID_IP;
-+	memset(id->build_id, 0, BUILD_ID_SIZE_MAX);
++	struct mm_struct *mm = lock->mm;
++	struct vm_area_struct *vma;
++
++	if (WARN_ON_ONCE(!mm))
++		return NULL;
++
++	vma = lock_vma_under_rcu(mm, ip);
++	if (vma)
++		goto vma_locked;
++
++	/*
++	 * Taking mmap_read_lock() is unsafe here, because the caller
++	 * BPF program might already hold it, causing a deadlock.
++	 */
++	if (!mmap_read_trylock(mm))
++		return NULL;
++
++	vma = vma_lookup(mm, ip);
++	if (!vma) {
++		mmap_read_unlock(mm);
++		return NULL;
++	}
++
++#ifdef CONFIG_PER_VMA_LOCK
++	if (!vma_start_read_locked(vma)) {
++		mmap_read_unlock(mm);
++		return NULL;
++	}
++	mmap_read_unlock(mm);
++#else
++	mmap_read_unlock(mm);
++	return NULL;
++#endif
++vma_locked:
++	lock->vma_locked = true;
++	lock->vma = vma;
++	return vma;
++}
++
++static void stack_map_unlock_vma(struct stack_map_vma_lock *lock)
++{
++	struct vm_area_struct *vma = lock->vma;
++
++	if (lock->vma_locked) {
++		if (WARN_ON_ONCE(!vma))
++			goto out;
++		vma_end_read(vma);
++	}
++out:
++	lock->vma_locked = false;
++	lock->vma = NULL;
++}
++
++static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *id_offs,
++						    u32 trace_nr)
++{
++	struct mm_struct *mm = current->mm;
++	struct stack_map_vma_lock lock = {
++		.vma_locked = false,
++		.vma = NULL,
++		.mm = mm,
++	};
++	unsigned long vm_pgoff, vm_start;
++	struct vm_area_struct *vma;
++	struct file *file;
++	u64 ip;
++
++	for (u32 i = 0; i < trace_nr; i++) {
++		ip = READ_ONCE(id_offs[i].ip);
++		vma = stack_map_lock_vma(&lock, ip);
++		if (!vma || !vma->vm_file) {
++			stack_map_build_id_set_ip(&id_offs[i]);
++			stack_map_unlock_vma(&lock);
++			continue;
++		}
++
++		file = get_file(vma->vm_file);
++		vm_pgoff = vma->vm_pgoff;
++		vm_start = vma->vm_start;
++		stack_map_unlock_vma(&lock);
++
++		/* build_id_parse_file() may block on filesystem reads */
++		if (build_id_parse_file(file, id_offs[i].build_id, NULL)) {
++			stack_map_build_id_set_ip(&id_offs[i]);
++			fput(file);
++			continue;
++		}
++		fput(file);
++
++		id_offs[i].offset = (vm_pgoff << PAGE_SHIFT) + ip - vm_start;
++		id_offs[i].status = BPF_STACK_BUILD_ID_VALID;
++	}
 +}
 +
  /*
   * Expects all id_offs[i].ip values to be set to correct initial IPs.
   * They will be subsequently:
-@@ -165,23 +171,21 @@ static int fetch_build_id(struct vm_area_struct *vma, unsigned char *build_id, b
- static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
- 					  u32 trace_nr, bool user, bool may_fault)
- {
--	int i;
- 	struct mmap_unlock_irq_work *work = NULL;
- 	bool irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
-+	bool has_user_ctx = user && current && current->mm;
- 	struct vm_area_struct *vma, *prev_vma = NULL;
+@@ -178,6 +282,11 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
  	const char *prev_build_id;
-+	int i;
+ 	int i;
  
++	if (may_fault && has_user_ctx) {
++		stack_map_get_build_id_offset_sleepable(id_offs, trace_nr);
++		return;
++	}
++
  	/* If the irq_work is in use, fall back to report ips. Same
  	 * fallback is used for kernel stack (!user) on a stackmap with
  	 * build_id.
- 	 */
--	if (!user || !current || !current->mm || irq_work_busy ||
--	    !mmap_read_trylock(current->mm)) {
-+	if (!has_user_ctx || irq_work_busy || !mmap_read_trylock(current->mm)) {
- 		/* cannot access current->mm, fall back to ips */
--		for (i = 0; i < trace_nr; i++) {
--			id_offs[i].status = BPF_STACK_BUILD_ID_IP;
--			memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX);
--		}
-+		for (i = 0; i < trace_nr; i++)
-+			stack_map_build_id_set_ip(&id_offs[i]);
- 		return;
- 	}
- 
-@@ -196,8 +200,7 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
- 		vma = find_vma(current->mm, ip);
- 		if (!vma || fetch_build_id(vma, id_offs[i].build_id, may_fault)) {
- 			/* per entry fall back to ips */
--			id_offs[i].status = BPF_STACK_BUILD_ID_IP;
--			memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX);
-+			stack_map_build_id_set_ip(&id_offs[i]);
- 			continue;
- 		}
- build_id_valid:
 -- 
 2.54.0
 
