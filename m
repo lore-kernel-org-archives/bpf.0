@@ -1,277 +1,132 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B6573B4EA0
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 14:42:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778856138; cv=none; b=H5vWiDbVfg9lfZJCXoiixedy4ytIlt9El2qKA49zZgl80YWgvkLDUNULPDCD/aNDrJngiO//UdpcVFR/kNDBFqLXjC1lZi3taOPgYwliHO9VeM8s/vEJPULkcDKnKHYLaFng5hV9gd8NypWuf0u2ob2DBogLukhdGS1du3jRm/E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778856138; c=relaxed/simple;
-	bh=LZeBCl2ciYkr6Byb2/1HqNidFlfZdsC9qLxWJVky7I4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F9jPY5bepaDoyQb9/Js/6Zi2hZCD1cQ0UB9VFL7EGVrcv3XJmD3DtKBUlVc9s8SigS6gVtH2+6XDOk5pwY7yTOOPzDReqZRn/3qgWOIWnqKaQhSDUItBs9nIWmsmVp+HBtdW0yQMF6CWVjMpGPlLReyqIA+gygeprCyiidRa74o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=nVpYhzq2; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E28E3AEF55
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 14:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778856493; cv=pass; b=jySXPQhojqBN5P3NpSMGDk1wVMCV85cl/UE+yULQJFsUDJLzXEgSFSWAm+ekd5DSW077en0PFyKpmrze7z5osz6/CDYpZ3cOuzPCtqUsbYPbXG1f5LfMUglJE5ZhsfQ3eDnadhQimkiJNVDFNy8p5JQ4M+HvgkNQaY2dLfzJ/q0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778856493; c=relaxed/simple;
+	bh=l0ozLGbcjuIJmi/yw/V0EiYOZG4hK5ePDjx5Or9hgco=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JS0mg2PJqhsfNd8Wz5jeHAa6h2di8hCCyS/m80r/nSXRPhdtbpHeKhsOOXHmOOT8qSq0u/DymNY5Anbku69EglwfckEnutHsVS8X79Oo9kRcnAZH8iRS8OgQT1JgtR7h2L5qLAG7nFPQaE3fgXTXkCK+uMO6xeYlNyscFos+Fhk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DXAjZAGw; arc=pass smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="nVpYhzq2"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-488b0046078so75489665e9.1
-        for <bpf@vger.kernel.org>; Fri, 15 May 2026 07:42:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DXAjZAGw"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-44985f4ab0fso5447177f8f.0
+        for <bpf@vger.kernel.org>; Fri, 15 May 2026 07:48:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778856488; cv=none;
+        d=google.com; s=arc-20240605;
+        b=gyOzUMcbxHqAWNnv5edqsy3mx008SgUfL+sAvr0ubQMbRQ+1mPuwecW7fou9SRRSsx
+         JeqfpgmITpUYiRC5UTtrWKg1PJKCTMmxnLBeJmBOuQDmgEPa5WrVA9Y750cEtxWLpKcL
+         JH4DUEioX9lHytuchFr0/k1O0LwnStTbejDIrExOp9x8rBqrSFfQkTAlS039WclCxdon
+         Y805ohITfaOTed+6V1dxKoWjacKeFbfNHGM3sKTCMkGNNboEEdP05O9AdkRx1LpgD7wx
+         GnWrAxb70OYzz33BBz1sRZO0/DhCpf5FAFpUiTU5+WJ6cgeCrnKTGpdLOfVIenR4eVEr
+         xl3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=l0ozLGbcjuIJmi/yw/V0EiYOZG4hK5ePDjx5Or9hgco=;
+        fh=G2IlyKHBjC3PrdXu0ctsaAnemRgOLbOBYmyC3SmCBI8=;
+        b=gfdTAcs6rN/cs8SteYyu1b1aN/laCWsic8K5HwyYgJzcVU5YiLXBWYOGsiXbDHLy5G
+         dyu5RSEeOdITI3XEUsuqrBLXus6VmoNLY64JfNEm8nKhMemg3B8zqP/xLZ4IYerJm4QE
+         B7LWS5emicr1zSrvWMFk7beD59MnbtC1I/tFkdznfDpLjobIh2BIsgw+O/xkZFboFFLX
+         N/5LZh8Wi3+wYyHTKH3/xjBIB6wy6T0oTiOt/8m0jOPwz1xObzHiEMOyNyxL9W9r7dmt
+         qdZVsJDKb7lLQ54sRwseYS/rrbXnnRg7CQaHT7x52lkkxCuEsQefOeM+nlvUVSE0rnMN
+         OFUA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1778856134; x=1779460934; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7DLL66al4CZld43bSNXSjcwgynvaL5lE06OXkqyj12I=;
-        b=nVpYhzq2Y2VDrknqwRdsHreTN3pc9Q21dPAs5zgaKlsJhIbx6dDjBWDAu9liE/hmyV
-         UBOV3Bk5DJFuHNzHa2evz9U5SXinI0IraYPq6xRsX2vmFGW6Ooj1/L9i1oVl3xjhwvtP
-         4qgvo7GCD47Ou42SFo6GtnrGcTkm9D0GD0Zo6gJ17oCOx9mYIKCaMZxWSKq/7Jwfjt3K
-         n8MerfkqD3aoriMktgDcuJR+JgKK9+JxXaHmX6KRRo1BmQuCf4XcnUDk/913xeHSAqHh
-         0ulcfV/JXxTl4kObyF9HdAGGKQjRceXdavAV4Dwmv42+EpzW22nPLT4/wk3dwmPWqZAl
-         u/gg==
+        d=gmail.com; s=20251104; t=1778856488; x=1779461288; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l0ozLGbcjuIJmi/yw/V0EiYOZG4hK5ePDjx5Or9hgco=;
+        b=DXAjZAGwc652jCVwEctT9TrSu/8trr5N1ViqFwAvim98iTZwngOEB+cyOwf8jEOjdW
+         oE5ZteloVxoruA8g3Hm5oHupj6Y6EG6MevUOVBQ8OBP6XUiTq4rhrf2ceZgBoq1sQSsH
+         PG0aknUDFS6P0R+Io7q0neeWbU2acMbRQP5L0Al3do2kBPQSHw8ZPY579qzXJN0Abepq
+         PXJmhFWvdmWKja3n7y1LpXhLcq/UbMrX2H2GxmKlY/9/GMa4MgFIiLuilKrrQL4fEIw1
+         mj/vdjOSicy65W1+Q1Hhv/dfMvX6EdxNBnG+EwJPRSGcyUk0ntdd7rS507xg3z9J+aQz
+         CwUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778856134; x=1779460934;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7DLL66al4CZld43bSNXSjcwgynvaL5lE06OXkqyj12I=;
-        b=lIbpcemafcCk1OxiUVmaRyTjPoBSvB0SdCrKk41ZQoL4u3PhA9+hIM2l7NyCNoFCt5
-         imSllNcKFAu6EBEuU5dwqhciASbhyFWazTtvP+YqjXmIya+cW/76+9wZ+pQbfbVwDR/a
-         D8V+LTGPuazs/L5FQBakOnmuLL+L3fiPxgvos8++oV4yojpP9Ly+cpm13ng1uMbc42CJ
-         azKU+qKKyAtShMPlCKlQZlRHlFxZam/u+am9TaLR2N60FuOxoMojhOR/E5oiLlbbH1y7
-         gj67UHtp4ROzJfSou0FB/TN0jLIvlUvt7t6K16p2MAcqZrjZL8wJ//RaDIxg1uCu3+1d
-         Yelw==
-X-Forwarded-Encrypted: i=1; AFNElJ9sCRQTc1h/R4QySqy5wonJsjSMZN4IWJBwQSKHoGcY2IUxdWiKmYHOEw5IOpnyuMWnwys=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYBxliKjRkgxTM/I5EKxua0H2fLwh9NypNuvvzonTcqEEygLYZ
-	ABokHScHePuq1TjmmBYabyQ47yGEWTz3CpXOylckGZesUPt1MlB29sIgySLmxRD5eTY=
-X-Gm-Gg: Acq92OHxKAaOhaRRvbV62pyQIk2FJO+I+Qmbp85oEOq7Nagx8TPVHg2NPLITJvPRVIw
-	lYzihzkk8yxExPkB/Vysx3z/zagm2T1hZTCgjAqiLzjn4TRrEJeBVLICkU+9PLcLEbOI/bMfu3z
-	o7Xo81shsZVCyQw0b9mcoN81ULnxKTVzgBE9CZU6WI6ZXTdddKL1aivtY8Tq50Bx6w55FXtf3sQ
-	Xop8uTubAdgwcKPo3qx+R18gFoDm2RTGHP/9RhFmRDnNQmI/qisurBJ09NB4vFvq8BBAmUJBeD/
-	uHWKrI12ZTBzCOedRdu31dCJaH5hvHM6bjmIPMCnFLE6/GvbT/pU3IuXI+mX2k17hItyYblFW1V
-	B4bPhGxqOU91qzHEd/Waxn65TTAR49/N5gQpG7D8pcladK8K1oznVsOcS/AAmA3W0v6QiY1FbC6
-	pdl2i+QKcYPJm0RSaURPvg6ot4OvyaxcmcXTsC5E/GtKecbwKjNhPBesdcPEqMZzNC4/3qRbtCg
-	zT/4let3EoM5U0LWBIU1RQ3AK2arfpUVgPUhaa/FaddiYrLk0ud4yqhir8LCRIGeDT74pNuVR3C
-	EcK9Ebu7/2FyjmV9B4I=
-X-Received: by 2002:a05:600c:8485:b0:486:fa35:aef2 with SMTP id 5b1f17b1804b1-48fe5fcdec2mr67166485e9.4.1778856133590;
-        Fri, 15 May 2026 07:42:13 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48febf80d04sm14872875e9.36.2026.05.15.07.42.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2026 07:42:12 -0700 (PDT)
-Date: Fri, 15 May 2026 15:42:09 +0100
-From: Daniel Thompson <daniel@riscstar.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Alex Elder <elder@riscstar.com>, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, maxime.chevallier@bootlin.com,
-	rmk+kernel@armlinux.org.uk, andersson@kernel.org,
-	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, linusw@kernel.org, brgl@kernel.org,
-	arnd@arndb.de, gregkh@linuxfoundation.org,
-	mohd.anwar@oss.qualcomm.com, a0987203069@gmail.com,
-	alexandre.torgue@foss.st.com, ast@kernel.org,
-	boon.khai.ng@altera.com, chenchuangyu@xiaomi.com,
-	chenhuacai@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-	hkallweit1@gmail.com, inochiama@gmail.com, john.fastabend@gmail.com,
-	julianbraha@gmail.com, livelycarpet87@gmail.com,
-	matthew.gerlach@altera.com, mcoquelin.stm32@gmail.com, me@ziyao.cc,
-	prabhakar.mahadev-lad.rj@bp.renesas.com, richardcochran@gmail.com,
-	rohan.g.thomas@altera.com, sdf@fomichev.me,
-	siyanteng@cqsoftware.com.cn, weishangjuan@eswincomputing.com,
-	wens@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 12/12] arm64: dts: qcom: qcs6490-rb3gen2: enable
- TC9564 with a single QCS8081 phy
-Message-ID: <agcwwRhXqKljob0m@aspen.lan>
-References: <20260501155421.3329862-1-elder@riscstar.com>
- <20260501155421.3329862-13-elder@riscstar.com>
- <01d6ea18-e022-41c7-a642-ac0321957923@oss.qualcomm.com>
- <agRzai1UoHEIotZe@aspen.lan>
- <3c6e7ec5-f600-44ee-a97a-211a99102744@lunn.ch>
- <agXo_evi1oFLBJoo@aspen.lan>
- <f113752b-b351-4a14-af6d-1e2751f0913d@lunn.ch>
+        d=1e100.net; s=20251104; t=1778856488; x=1779461288;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=l0ozLGbcjuIJmi/yw/V0EiYOZG4hK5ePDjx5Or9hgco=;
+        b=BDctyg/1SyVwM267hi+F6ZMhWPMNCVB0SQoyaHgs4BNjnnQycJMDzoqeq8Q2eMV7te
+         GXhLSTWoyQ06pip7ZH9sI5QftluMw60S729rN0sL/Gi5Ux/ME3riROUAsknG66uMRPym
+         HVC4IyMWVIOe7WjSUeVhRLqJHDOd0gLqUIyESJIiM/Q5mjoX1HjFBrdwTtW2PuvLZVaf
+         da6SseI/pmn+lC6orLHal9kuwr0XbWrixBtLziN+o2yDmDJKxaJpCHwTIsfHNJPWCLFk
+         W4AfotJz01k6tcLY4RtQHNECCBsIHgzYrMWVmotAMhUFX0k2BxJ3nxIRsONdBrVvnRa3
+         b8lw==
+X-Forwarded-Encrypted: i=1; AFNElJ8LmTMRaMk2w4OgpU8YELU8KvYKpngYYPQZOUJ+Rpl+dI4I1Mfs8cZ5EbyE9Q9gWLlsj0U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjQE8jTsHOCtoS62GAdvnqv15o81R4cS0sAl1BznWDk/bKeOMn
+	Z+c+8MjmH8LBj6I8uW569GppUxbb3qb/pPr9wJHMahU+CaFcFPjf+LL5FeccG8EgPAZ4hQbiDcp
+	KIWiFvfAljb2TPguCsKby/Mb9BcV07M8=
+X-Gm-Gg: Acq92OFJmVI/uIA5dag2xVdPUQn173lkCWM+OKYh/X1t5pJtKtkOIRaLS/TZCmCNImI
+	oddvdZYrIdxiEwh0d0CsavjBSmRVN04s2LiL7HGCMdR8BuOvMkSvbcedXDdLfNkaYCbwiYgJmtm
+	oXjrLQkJnudCP26O3P82kAEAqZZBb9/YjGZgV+zdN45Xu7jbUp35Koa8bR+qQcZ6ut9vkUPWnvi
+	n8DSptwLHfP0KiXpKHSQuLyfkFZyMur69arEPtexxdDFfpy6yfjH8g909iEcGhKYH6XhFQoQLOM
+	TmxvnmDfPuUKn8Z4aa/BjFly/hZqUMCts/nCKn6UjTt+4U8ZQnDTyroLbpZn94F0B1tiXK5hOhk
+	o9br5b/c5HEmnS1SvK8jKDADrfhSNc4hMmEWv
+X-Received: by 2002:a05:6000:288c:b0:43b:962b:5314 with SMTP id
+ ffacd0b85a97d-45e5c372a9cmr6225346f8f.19.1778856488007; Fri, 15 May 2026
+ 07:48:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f113752b-b351-4a14-af6d-1e2751f0913d@lunn.ch>
+References: <20260515113102.2389020-1-arnd@kernel.org>
+In-Reply-To: <20260515113102.2389020-1-arnd@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 15 May 2026 07:47:56 -0700
+X-Gm-Features: AVHnY4IJhGzViGxkFydpy-ZBw9ON9MzDz_cZ5mrUv3ShjDNoKLYLS1-DYxXoS10
+Message-ID: <CAADnVQLYitAZVpXCTygA1uAUtN6m8pMkWzFi9su719M=nktmQQ@mail.gmail.com>
+Subject: Re: [PATCH] bpf: test_run: reduce kernel stack usage
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Martin KaFai Lau <kafai@fb.com>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Simon Horman <horms@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, bpf <bpf@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 14, 2026 at 06:14:07PM +0200, Andrew Lunn wrote:
-> > I’m afraid this must be necessarily long but to help navigate the
-> > general structure is:
+On Fri, May 15, 2026 at 4:31=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
+te:
 >
-> Thanks for the long email.
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> > Let’s turn our attention to MDIO.
-> >
-> > Following the pattern above where all the links related to power come
-> > from the main device node, then the phy node for the qca8081 in an
-> > rb3gen2 would look like something like this:
-> >
-> >     tc956x_emac1_phy: ethernet-phy@1c {
-> >         compatible = "ethernet-phy-id004d.d101";
-> >         reg = <0x1c>;
-> >
-> >         reset-gpios = <&tc956x_emac0 1 GPIO_ACTIVE_LOW>;
-> >         # On RB3gen2 all supplies are controlled by a single GPIO
-> >         # so we link all supplies to that single regulator
-> >         avdd-supply = <&qep_1p8>;
-> >         avdd18-supply = <&qep_1p8>;
-> >         vdd-supply = <&qep_1p8>;
-> >         vddldo-supply = <&qep_1p8>;
-> >         vdd18-supply = <&qep_1p8>;
-> >         vdd125-supply = <&qep_1p8>;
-> >
-> >         pinctrl-names = "default";
-> >         pinctrl-0 = <&qep_irq_pin>;
-> >         interrupts-extended = <&tlmm 101 IRQ_TYPE_LEVEL_LOW>;
-> >     };
-
-I nearly snipped this... but I referring to *-supplies so often below
-I decided it was useful to keep it!
-
-
-> > Once we have established what the DT looks like then the question
-> > becomes where to put "something, written in C [or Rust], that contains
-> > burned in knowledge of how to turn on a wcn6855^H^H^H^H^H^H^Hqca8081"?
-> >
-> > The qca8081 on rb3gen2 just gets a bunch of individual regulators and a
-> > reset. As in the pci-pwrctrl-tc9563 example above, this means there is
-> > nothing in the DT for a pwrseq driver to bind to.
+> The xdp_test_data structure is really too large to put on the stack
+> and results in one of the largest stack frames in the kernel:
 >
-> I don't understand that. We have a node in device tree for the PHY. We
-> can put the needed properties there somehow.  Maybe similar to how
-> pinctrl works. Before probing the device, the driver core looks for
-> the pinctrl- properties, and activates them. We could have similar
-> properties for power sequencing, before enumerating an address, do
-> whatever the pwrseq-names requests? It might need help for the driver
-> actually enumerating the bus, to point to core at the node.
-
-pinctrl properties describe the relationship between the device and the
-pin controller of its host. In the case above &qep_irq_pin it leads back
-to something belonging to the pin controller.
-
-Devicetree does have power domains and these are actually pretty similar
-to pinctrl. power-domains properties are used to essentially used to
-describe the relationship between the device and a power domain
-controller.
-
-However in this case power domains don't really fit. There is no power
-domain controller to link to. Thus I'd still expect the phy power
-supplies to be modelled in devicetree as I showed above.  pwrseq, PCI
-and USB all adopt this approach for modelling onboard devices in DT.
-
-
-> > Even if we could find
-> > a way to do that, it is not obviously useful to decouple how to turn on
-> > an MDIO device from how to drive it. Thus I think the right answer to
-> > that is to put the code to fire up the regulators into the qca808x.c
-> > driver and it looks to me like the existing probe/remove methods would
-> > already work perfectly well as the place to put it.
+> net/bpf/test_run.c: In function 'bpf_test_run_xdp_live':
+> net/bpf/test_run.c:387:1: error: the frame size of 1608 bytes is larger t=
+han 1536 bytes [-Werror=3Dframe-larger-than=3D]
 >
-> But you have a chicken/egg. Same as with PCI, with Ethernet PHYs, you
-> ask the device what it is, and then find a driver to drive it, and
-> then call the probe function. However, if its clock is off, its GPIO
-> reset is held in reset, its power regulators are switch off, it never
-> answers when you ask it, what are you? If you have no idea what it is,
-> you cannot probe it. And if you cannot probe it, the probe function
-> cannot turn all these things on.
->
-> The standard reply we have is, ignore the fact the device can be
-> enumerated, hard code in DT what its ID is. And that is what you have
-> above in your DT fragment.
+> Reduce this using dynamic allocation, which avoids around 1KB of
+> stack usage.
 
-My comment above about it not being useful to decouple was very much
-based on this "standard reply".
+1k?
+pahole -C xdp_test_data
+/* size: 192, cachelines: 3, members: 9 */
+/* sum members: 120, holes: 1, sum holes: 56 */
+/* padding: 16 */
+/* paddings: 1, sum paddings: 36 */
 
-The *-supply properties will differ from phy to phy so we need the DT
-to know what device is in order to supply the right properties. In other
-words de-coupling the parsing of those supply properties (and anything
-else) does not help MDIO with the chicken/egg problem.
+what s390 doing to make it huge?
 
-However perhaps I was being a little shortsighted to say there are no
-benefits (below).
+Probably better to rearrange the field and fix the root cause.
 
-
-> But you also need to live with the
-> consequences of it being wrong, since that driver is going to be
-> loaded, no questions asked. And don't think about having a rev A board
-> and a rev B board which have different pin compatible PHYs, and want
-> to use the enumeration to get the correct driver loaded.
-
-Typically embedded platforms "solve" this by having a bootloader
-retrieve the board revision (usually from whatever non-volatile storage
-it keeps the mac address) and swap a status = "okay"/status =
-"disabled" pair in the DT.
-
-This is not great (hence quoting "solve") but it must also be added
-that this approach does also work when the PHY isn't pin compatible and
-needs to be powered up differently.
-
-
-> DT developers continually want to make use of the enumeration feature,
-> since it is there, part of 802.3, it is how it was done for the first
-> 20 years of networking, etc. And they keep trying to extend the
-> current code to get the PHY running to allow it to be enumerated.  And
-> i keep rejecting it.
-
-Has someone already tried to "sell" you on approach somewhat similar to
-the onboard_usb_dev code?
-
-onboard_usb_dev centralizes *all* knowledge of how to turn the regulators,
-clocks, resets for all soldered down USB devices that need help to be
-turned on. In the case of USB then it literally examines the list of
-VID/PID pairs supported by onboard_usb_dev to decide whether to create
-the platform device used to lubricate things.
-
-This still relies on the "standard reply" meaning it doesn't solve the
-chicken/egg and it doesn't avoid there being something written in C (or
-Rust) that knows how to turn on devices. However it does do is move
-the churn associated with enabling a new USB on an embedded platform
-out of the USB drivers and into a single centralized place.
-
-With the embedded churn on one place stops "embedded crap" from creeping
-through the all the drivers. I suspect is also much easier to divide
-review/maintenance responsibilities.
-
-FWIW I think the relatively simple structure of the MDIO bus means we
-don't actually have to mess about with platform devices. I think one
-might be able to get it down to four function calls (which could easily
-be stubbed out on !CONFIG_OF systems).
-
-
-> Ideally, i would like some generic core code which can be given a list
-> of resources, probably phandles, and timing information. And it will
-> walk the list and turn them on, inserting the requested delays. And
-> then we can enumerate the device.
->
-> Until such code exists, i agree, forget the device is enumerable, hard
-> code the ID, and get the probe function to enable the regulators, take
-> the device out of reset, enable the clocks, etc. And repeat that in
-> every PHY driver.
-
-So, having spent a bit of time thinking about it I do wonder if creating
-some kind of onboard_mdio.c to collect knowledge of how to turn specific
-mdio devices on might be better than putting the same knowledge
-directly into probe functions.
-
-Should generic core code (or library functons) ever arrive then having
-this code centralized between phys would make adopting the generic code
-code easier.
-
-I'm not overly attached to either idea but if you'd like me to sketch
-out a prototype then let me know!
-
-
-Daniel.
+pw-bot: cr
