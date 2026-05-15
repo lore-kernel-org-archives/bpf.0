@@ -1,111 +1,133 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12AE2319859
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 15:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 257393FF1C7
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 15:37:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778858980; cv=none; b=NjP7WPx64JkxS0so+NcLFpoYy6axR2aoiXvzb5fwPRKol9GwGI4Zvs5j/jsegKANq0Imm3d0w9qi52K45/voEogzAO6dSQS/Stnup71xFKY8TMfHxwCAa8Y2HJ9P9uRc0ZSS5Oit2Rt69Fs6BHsa2a6xcdZDZd09v1Aofy93dnY=
+	t=1778859467; cv=none; b=WvMeR2EZ1p9reMQVlM/wq6MLeeraGrIe/akUAZWBzbEHia5Ye9rZi98kikL9qRct+hYz/nL9LSySVFBKPlT0EbLJy88Dj3WcqcqZsJ2y1BL4YZqiUtg4XuK+2Wh2iD2g/0MbNjlQIMga/WdT5Xc7tHqQvSkRj4kwW/ttkONivmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778858980; c=relaxed/simple;
-	bh=/En1jPQvG7Wj5oL2pt2CU2M6/zSyclY9AkAqPILgluY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HA9Cr/JCXFjoZbHk4twx21fZPBCxDo5Hm01OnwB5OJxUKp0pmOk43Bklm8V/ZNLaIjpx2b7dtUdcV+qrpbiRe1e3RqewXY+r0iezkkwp1tDyybpXorvC662k+uPDz47O2bHnGlhV7YEpi+sTSjYlKg8lLog2uJWAVOPtCnvJKI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=l0j1ACKJ; arc=none smtp.client-ip=95.215.58.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778859467; c=relaxed/simple;
+	bh=HqrEwFz+F7gpbG94BoPl3Vh1bgEzyB4F8K3wrJfuRj0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Zz9rdaDj8600jlwECeY0ZAwuiCHWpPtW6GMTkSEZpRLyj+PcPgrcEtNbtuGFj/V534qp1BlJwNfwvCkJAfgLGvc/qEdRoQLD/i609Fd7iEwf4DrV5WC7uIHnq3e8UXQKFQjAw0OVDe5FvGkGBet9lAU9i13xLMGuJ+UYjWZaRKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DiScDIhw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="l0j1ACKJ"
-Message-ID: <4369aaa6-424f-42f3-9390-dd223e76ae1a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778858967;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+v9iT+Xk09ahOyLgi4H8bvTOszQ6m/GwEDih89VOQQg=;
-	b=l0j1ACKJKWWnzuhYKcCtKsH52zzxe6KiBN/pJTkNWx614IiL7wjRnFMwpEFnLdNxPXBrul
-	P0zz1aQiSIXnHMEGLVoGlG9kxXW5hLu7OxTpDnitcEBG5L0jAAF8+AEDwGJ/kuS8R0IBbz
-	h5Z4FLUvk6DVhqV16OjavMO3X884Xwc=
-Date: Fri, 15 May 2026 08:29:11 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DiScDIhw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF0D9C2BCB0;
+	Fri, 15 May 2026 15:37:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778859467;
+	bh=HqrEwFz+F7gpbG94BoPl3Vh1bgEzyB4F8K3wrJfuRj0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=DiScDIhwbxhPWydshiZgTfQdEPezQELlzBNmTJU9AWfyiLK/AKXbC15Osp7Jtf/GW
+	 JoEqmBw40G+gKH/5FKLNd8NdTJ2kFb7CHcYMNnKscEXA5ScCpm7K0fmdAuEfQvz4Xk
+	 sphiLPOevj1pTKDH0QGfYzmv0aTfvQT3gLHy+gFIyn6Q+rQtxbxm0LB02FTV5ZrRV/
+	 q/H2UY6d46L/hNrZXdv5g1iqydXWYsy6jQdN3Jci1sp+q3vm9XBAEJ/N6ZfhPRqnHI
+	 2kjO5sKmU+c2X9ZcSN6gOi9BuK8DV2xetjNXk/1yDau2ostgG6ZVAnDghmZEXYM0fH
+	 dvrJtv7mSiJWA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] selftests/bpf: fix tunnel option size in
+ ip6geneve_set_tunnel()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Faisal Bukhari" <faisalbukhari523@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260515151830.711129-1-faisalbukhari523@gmail.com>
+References: <20260515151830.711129-1-faisalbukhari523@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 15 May 2026 15:37:46 +0000
+Message-Id: <20260515153746.DF0D9C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 10/25] bpf: Extend liveness analysis to track
- stack argument slots
-Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260513045043.2389049-1-yonghong.song@linux.dev>
- <20260514225322.D0118C2BCB3@smtp.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260514225322.D0118C2BCB3@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] The test constructs a malformed Geneve packet where the option siz=
+e field exceeds the total options length.
+- [High] The receiver test silently fails to read the Geneve options, meani=
+ng the BPF tunnel option feature remains unverified.
+- [Medium] The commit message incorrectly claims to fix an incorrect option=
+ length, but causes no functional change.
+--
 
+commit 41bdc36eb9d63a2614970dded5866e42f459a85a
+Author: Faisal Bukhari <faisalbukhari523@gmail.com>
 
-On 5/14/26 12:53 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] Incorrect logging of stack argument slots in `arg_track_join`.
-> --
->
-> commit 5139934569dff44b05e1ee083e4eb084fdca15e3
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> bpf: Extend liveness analysis to track stack argument slots
->
-> This commit extends the BPF verifier's liveness analysis to correctly track
-> stack argument slots. It expands tracking arrays to cover MAX_AT_TRACK_REGS
-> and propagates the tracked state through function calls to prevent incorrectly
-> poisoning stack slots derived from frame pointers passed through stack
-> arguments. It also updates logging functions to expose these new stack
-> argument states.
->
->> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
->> index 13dc5ae44d2b5..7f4a0e4c2c49d 100644
->> --- a/kernel/bpf/liveness.c
->> +++ b/kernel/bpf/liveness.c
-> [ ... ]
->
->> @@ -1630,7 +1705,7 @@ static int compute_subprog_args(struct bpf_verifier_env *env,
->>   				continue;
->>   			ti = target - start;
->>   
->> -			for (r = 0; r < MAX_BPF_REG; r++)
->> +			for (r = 0; r < MAX_AT_TRACK_REGS; r++)
->>   				changed |= arg_track_join(env, idx, target, r,
->>   							  &at_in[ti][r], at_out[r]);
-> Is it possible this will misleadingly print stack argument slots as
-> non-existent registers?
->
-> Since compute_subprog_args() now iterates r up to MAX_AT_TRACK_REGS,
-> arg_track_join() will receive r >= MAX_BPF_REG.
->
-> Looking at arg_track_join():
->
-> kernel/bpf/liveness.c:arg_track_join() {
->      ...
-> 	if (r >= 0)
-> 		verbose(env, "r%d: ", r);
-> 	else
-> 		verbose(env, "fp%+d: ", r * 8);
->      ...
-> }
->
-> It seems this will log stack argument slots as r11, r12, etc., in the
-> BPF_LOG_LEVEL2 verifier log, rather than their proper designations (sa0 to
-> sa5) like arg_track_log() and print_subprog_arg_access() do.
->
-> Should arg_track_join() be updated to handle r >= MAX_BPF_REG to maintain
-> consistent formatting?
+selftests/bpf: fix tunnel option size in ip6geneve_set_tunnel()
 
-Yes, you are right, for 'r >= 0' case, we should have r[0-10] and for r >= 11
-we should use 'sa*' to indicate it is for stack arguments.
-Will fix.
+Pass the correct size to bpf_skb_set_tunnel_opt() in
+ip6geneve_set_tunnel().
 
+> sizeof(gopt) returns the size of the pointer instead of the
+> actual Geneve option structure, resulting in an incorrect
+> option length being passed to the helper. Use
+> sizeof(local_gopt) to provide the proper structure size.
+
+This isn't a bug, but does this actually change the size passed to the help=
+er?
+
+On the 64-bit eBPF architecture, pointers are exactly 8 bytes.
+struct local_geneve_opt consists of a 4-byte struct geneve_opt and a 4-byte
+int, totaling exactly 8 bytes. Thus, the exact same length (8) is passed to
+the helper before and after the patch. The patch improves semantics but does
+not appear to fix an incorrect length.
+
+> diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools=
+/testing/selftests/bpf/progs/test_tunnel_kern.c
+> index 32127f1cd6872..b53d367451b2c 100644
+> --- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+> +++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+> @@ -675,7 +675,7 @@ int ip6geneve_set_tunnel(struct __sk_buff *skb)
+>  	gopt->length =3D 2; /* 4-byte multiple */
+>  	*(int *) &gopt->opt_data =3D bpf_htonl(0xfeedbeef);
+
+Is it possible this creates a malformed Geneve packet?
+
+According to the Geneve protocol (RFC 8926), the length field defines the
+option data length in 4-byte multiples, excluding the 4-byte header.
+Thus, length =3D 2 indicates 8 bytes of data (12 bytes total option length).
+
+However, only 8 bytes total are passed to bpf_skb_set_tunnel_opt() via
+sizeof(local_gopt). This results in an option that claims a length exceeding
+the available option space.
+
+Should the length field be set to 1 instead?
+
+> -	ret =3D bpf_skb_set_tunnel_opt(skb, gopt, sizeof(gopt));
+> +	ret =3D bpf_skb_set_tunnel_opt(skb, gopt, sizeof(local_gopt));
+
+While looking at this, I noticed an issue in the receiver function
+ip6geneve_get_tunnel() which calls bpf_skb_get_tunnel_opt() with a 4-byte
+local struct geneve_opt:
+
+tools/testing/selftests/bpf/progs/test_tunnel_kern.c:ip6geneve_get_tunnel()=
+ {
+	struct geneve_opt gopt;
+...
+	ret =3D bpf_skb_get_tunnel_opt(skb, &gopt, sizeof(gopt));
+	if (ret < 0)
+		gopt.opt_class =3D 0;
+...
+}
+
+Does this silently fail to read the Geneve options?
+
+The kernel helper enforces that the buffer size must be at least the size of
+the options present on the packet. Since the sender set 8 bytes of options,
+bpf_skb_get_tunnel_opt() with a 4-byte buffer will fail with -ENOMEM.
+
+It seems the test might be ignoring this error and bypassing the verificati=
+on
+of the Geneve options entirely.
+
+>  	if (ret < 0) {
+>  		log_err(ret);
+>  		return TC_ACT_SHOT;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260515151830.7111=
+29-1-faisalbukhari523@gmail.com?part=3D1
