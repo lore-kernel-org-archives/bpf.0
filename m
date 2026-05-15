@@ -1,66 +1,66 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61B683F58CE
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 16:41:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE613F8703
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 16:41:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778863301; cv=none; b=Le//mCKgHq1R0Em0fR30G1tusOA5kqkl2koXLU02TU4VbplkA/5X3RE9DWMnUlQuhaoIHt+ECpwiHNybonrOFaO179XPo2ZGjXNrakkSa8jWBQDi4jhchity2CT7eM1HvAmKYvwSUHOxk1V8nZ2IcZa5b5SBMpqCOrUWE6Kt+UA=
+	t=1778863303; cv=none; b=Ow7ZnOPH8/5lKX/jYwejMY/7juPsZi7+zyRJSQ7VuJZArgoNCPszVqG09fggoSusVdGxyqsNRYADqV7qWOmUKAdEiGgBMlGE9dVTfDw6q3EScwtVZEFuoffl9RKmZZTELKuJzfYGwPYstIxSucOkWXeukbw/xqnBdqMmO67saGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778863301; c=relaxed/simple;
-	bh=TYh5H5FK67cM3RyT/EcJyqFe7cCfsGl3amyIj/1um6o=;
+	s=arc-20240116; t=1778863303; c=relaxed/simple;
+	bh=Ipjgw9wkUjdT1QJaAiv8GEHjtmFa0RuplGAz1gJOw38=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LlOeNTKtKpTORRejGNKkzX7ccr1lQuSbihEec+4Zl/Pzt4mcfkE/sxEA2PJ48W4XL7Nuk5wxzi5JDKfi7BRJ57pRGMfOe/3Uw8/gUwnf9o1UBnqgAlCtgk8Ev1s2s3G/tOW7ywpHpaYPmfbeNu8Te8XwePu81PhDyEtzvfuwZ0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GKu8sc4x; arc=none smtp.client-ip=209.85.221.46
+	 In-Reply-To:To:Cc; b=YyZh/Pav0WE3P52AprpHbLXxwdjpUim/9RIxgVOMUrmZsPwDJEZnJH1aivd+JKc6PbYFY+vHS/2o8EAYh24/YtpymKWINspJGhrqHu4+C/KcMmiCVuBXCfOEGyREc6AULH1UAHMAbK5AnRb/Ki7N3ok6ocWZewfxY/do/YROla0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GoVXPbwd; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GKu8sc4x"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-43fe608cb92so5930745f8f.2
-        for <bpf@vger.kernel.org>; Fri, 15 May 2026 09:41:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GoVXPbwd"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-44a5174670eso5289950f8f.1
+        for <bpf@vger.kernel.org>; Fri, 15 May 2026 09:41:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778863296; x=1779468096; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778863299; x=1779468099; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7BZtTgWJarhWGKiDqicgpgWq0ir+n4C3T28pxoXNooc=;
-        b=GKu8sc4xms6TfDVjrCD8xUNCMU6jvHypBfbj5uZrqutvTEH6q8ZL0XDuSsfaGf999k
-         hTTbBuuKOpta4sEdg6YuFsPICLaernWEpeSF2b4nf00OBtybkE0dVj2upQz1O6xXLoYI
-         clQlBTYXfbd4c61g56m1hEMvJMDKlvIpM3goCX1kFVztXN48Iow9ddFqetxxrdQ3hfgM
-         h224SZoscRbH4R66+eZK9gByKcyAtp92ZhiHpcQql2QVQkPbmKIVsmxVsV3Y4HNG5dFe
-         VmRtTvKXwWJKfXMKnwqX0Rki2Z+ozb7iKXayuSndJiuZSrrIQHlf9NztvR6iKkKdL6jf
-         qU7Q==
+        bh=MdFCjEy8biK7whdFbIIbtvUjS/1FT/VL0LkBBDVBKUg=;
+        b=GoVXPbwd1CB54af1VZwlY++gdKcwYBiJwx7+63uh5sEsFU5A7fEnZPhFgkW8daOQzt
+         Q+gIidYYUKbVm6EYdeHS5+Owe8qBYZnvGWm8Y+BzKfzCYT8d3zyMedkbIoxghTRvXOOE
+         TccQbj1Ywee290Cyh4ct9Xs0vcRjPa+/ZaEcnQZCzBdwKoENMFQQpeI9YX/pqpuJe40o
+         p6KqQdiTvPSdqZ/sdUymjVPoU6WEwOqVXhFTaNmkwj6EbfSRxr8837laBXR3OWgLfXNN
+         O9P1BvvHdnfaZp8+75x6ByRoovMCHpoId4TcvGG2X7azt/zeISnb3lObUGHLzQgNtMD/
+         dLLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778863296; x=1779468096;
+        d=1e100.net; s=20251104; t=1778863299; x=1779468099;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=7BZtTgWJarhWGKiDqicgpgWq0ir+n4C3T28pxoXNooc=;
-        b=bITtJLcozVWbF6fWmkD39IpztnlPgFfXngCpZgao5rp005uGibxp7/eRp02HSsgUqZ
-         JVU8Ecr4F4JIHjx92HfuoNz1i2I9bO9efu5FAOETDubizOnORHrJi+yxBZk/HrkNF2GO
-         GpcBTDCq+XJOZRbqAbkLb4baBPiEtZ0uCxr53prT3ujw5wue6rfVwfbRRNHhmf2FHCmZ
-         MieUdnsb0+2ZV4ym2j3L9FZGVu6o9jKdNVwZi0B10wLuKzBdN3ClYCoI6EZ0ChN5oabn
-         jLpaqALCusEYF6eGqdx4E4K7SLuRk6e6W09ne9dJKpvaSNAOnKBOtkwZSHEIpw9RTVc4
-         cwtg==
-X-Gm-Message-State: AOJu0YwuUAC8gE96CbmGvRifcZmCnd/1bQPiMd0aRUeu0IJu1WLUFSTl
-	VZ5IDuwqqQfyhnNFwroS4ucJyxtsHtkxGaJrc+DgGb90lBd2gqEttT+hTnmO6AIQ
-X-Gm-Gg: Acq92OHx/BJHdnh/CIG6WQFx7tGtFz4xM2xYx9H2+BOfhWr+4IeulQ5n97BXc6Q4V8p
-	e8oMxy0GcpayVVKw0C7fwmHKhHj2lqWptArldBdk7wjTvNxYyoTHhR0zeBTdIzH/EoBaE5xFs8v
-	156cBg84CVsUyfo8M0HRUQko3ATinh/M+E4y39YTyeCdLuxielEIEHU8ZGD59L8kXx59aXcgyvJ
-	oehXVyPFFpdKAv5WZRELw5O6jPwn5cJvq1yUnMXMbIxn02q5x/FM6y0Fkt6MNEee3+aTgC+WH4g
-	D7S6izgFO3rEtjRhrWOUMkLIBJZKls9nWlRDJFIWyCnWSOA5OzTWePTuqC0fU7Dj+2IU0y9yULU
-	h7ccIjUj605wsUYtLU6auujF7aljb/4PFZCFbWFGIAiDy8pnD0To3OENS4RyZkEUvmxC6BmzZ3+
-	xEADhOx5K54yxBag==
-X-Received: by 2002:a05:6000:4007:b0:43d:1cec:4766 with SMTP id ffacd0b85a97d-45e5c5bf971mr6501447f8f.23.1778863295996;
-        Fri, 15 May 2026 09:41:35 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:48::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45d9e767d0bsm14667917f8f.3.2026.05.15.09.41.35
+        bh=MdFCjEy8biK7whdFbIIbtvUjS/1FT/VL0LkBBDVBKUg=;
+        b=tW+th1eg66hxu10QAJhLfCoDb5k9uHoXFHpM0fq3iiw75TU/tGz1mDv8gzInJeViqs
+         Oy8Ov7nuao9r47Wp6bXZ8tR3uP8AoqI/cesoLVrOC6GgES5f/niWWjOVRz47V5M7Jm5r
+         bEN+uEtzErsUYiJDqwI9UvWHhfPCIZyo8HbOgrIG6Kw1LjFc/ONbk8k4BBDgn0weMGsR
+         jGDILViISVifugPtIY4hW0CiKST9EGCSDjI1K5SYckkZjLh/Un+UsBn/+CinX/gzIZGv
+         zbNWJxWIILe/z9tZ9OF3YYNeA8ZaB6jfLP9axs6S+ivetW7nxMa8QF4V7JVWBoPFYr+6
+         ifVA==
+X-Gm-Message-State: AOJu0Ywex2riNW3qpx0dZhxzvRIFjIC4pW50E9/HhpNQDmbX8rasMUur
+	6ozmDBeN61Kx7alzeE3Y4EH9Vun1BOdMDgyvJiMAq+EMF7GgdbcX5aIBT1I4nqLi
+X-Gm-Gg: Acq92OG6vm5WyQfmvQJme75/fk0kRj09GYraVvU3FvndiIjwLCL6N5yB5YL5/pcdEAj
+	Q3n4TKEtxe/SZRN0/KiexClpNtnGADdmjeIV5CUeRfB63WxsDkG8Nk7Uj2ome5yiAr4nJAM6Bfh
+	yHokqEBVQwAwh8HD+Q5Cat/2cgKS81Spdjhg8KI2XICVlhl25kWuJjqdRmBQJSe//QhXan9ro1o
+	6Xb2t2yYIofy3wrl7RpyPeDfy4sini61g+ijXgIMRjtCYjMwFlwF8sUh11l0Kdx7zBuroTLWRVR
+	066iCVUUTMOZSYArv7vLVbDyHOdv8HfRwhczTdqENQu+iMcHNcdS77XuYB4ZTmxDgs3fWC12jci
+	hEVa4Zdwy39FKiFIE9dBhc+pFuAk/Hb16+pZLda+LkYFc2iB/4/cvEi0BXHfPYgxivLP6LlKUrM
+	KZm7dPz1Q5RKjsOQ==
+X-Received: by 2002:a5d:5850:0:b0:44d:1338:46b4 with SMTP id ffacd0b85a97d-45e5c58fb66mr6559177f8f.9.1778863298738;
+        Fri, 15 May 2026 09:41:38 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:74::])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45d9ed2f738sm15722635f8f.16.2026.05.15.09.41.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2026 09:41:35 -0700 (PDT)
+        Fri, 15 May 2026 09:41:38 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Fri, 15 May 2026 09:41:01 -0700
-Subject: [PATCH bpf-next 1/3] bpf: Export btf_get_module_btf() and
- btf_relocate_id()
+Date: Fri, 15 May 2026 09:41:03 -0700
+Subject: [PATCH bpf-next 3/3] selftests/bpf: Add test for tracepoint
+ btf_ids tracefs file
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260515-generic_tracepoint-v1-1-aa619fa94132@meta.com>
+Message-Id: <20260515-generic_tracepoint-v1-3-aa619fa94132@meta.com>
 References: <20260515-generic_tracepoint-v1-0-aa619fa94132@meta.com>
 In-Reply-To: <20260515-generic_tracepoint-v1-0-aa619fa94132@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
@@ -78,78 +78,162 @@ To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  rostedt@goodmis.org
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778863293; l=2539;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778863293; l=4780;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=NIWCFO9BlrJMM8xctDo+1sOgxbgYwBN3s7DsfLZjN74=;
- b=eYA4Lj9C07D1qQIVbpYwVTZG1nNfHmzN4YFUH44Nqlxevt7If7DuOYhsL7AJzCrpIlLoCANby
- ze80IwwPgVeCYcCs+RyGDFlDz0pGkQuMQAiCrZ/t6K36+FhQYGSRBI+
+ bh=6UVSI/QyQvHved++RBWOTRFTQSo5Q4yVKDQt9agbtUI=;
+ b=0a+wGYl7X2ngld0qePjokGK/W3zFPq/7+xK/lehQnnPWoEMKxBDMnNLhg7KT5SQYUrcFNtmOT
+ uNshC7w2d6iBJ5ZohyVG9Oqs/0LaQ6r5z4x3sA4uMsoZtUX0ctmLd2r
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Make btf_get_module_btf() and btf_relocate_id() available outside
-kernel/bpf/btf.c so the tracing core can look up module BTF and
-translate ids stored by resolve_btfids (which are local to a
-module's split BTF) into the runtime ids used by the kernel.
+Read events/bpf_testmod/bpf_testmod_test_read/btf_ids and verify the
+exported FUNC_PROTO matches the testmod tracepoint signature
+(__data, struct task_struct *task, struct bpf_testmod_test_read_ctx
+*ctx) and the record struct trace_event_raw_bpf_testmod_test_read
+carries the fields declared by TP_STRUCT__entry.
 
-Used by the upcoming events/<sys>/<event>/btf_ids tracefs interface.
+Use the testmod tracepoint so the test exercises the module/split-BTF
+path (btf_relocate_id) rather than vmlinux only, and falls back from
+/sys/kernel/tracing to /sys/kernel/debug/tracing when tracefs is not
+mounted at the new location.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- include/linux/btf.h | 2 ++
- kernel/bpf/btf.c    | 6 ++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ .../testing/selftests/bpf/prog_tests/tp_btf_ids.c  | 124 +++++++++++++++++++++
+ 1 file changed, 124 insertions(+)
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 240401d9b25b..273a93a3b2bd 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -235,6 +235,8 @@ int btf_check_and_fixup_fields(const struct btf *btf, struct btf_record *rec);
- bool btf_type_is_void(const struct btf_type *t);
- s32 btf_find_by_name_kind(const struct btf *btf, const char *name, u8 kind);
- s32 bpf_find_btf_id(const char *name, u32 kind, struct btf **btf_p);
-+struct btf *btf_get_module_btf(const struct module *module);
-+__u32 btf_relocate_id(const struct btf *btf, __u32 id);
- const struct btf_type *btf_type_skip_modifiers(const struct btf *btf,
- 					       u32 id, u32 *res_id);
- const struct btf_type *btf_type_resolve_ptr(const struct btf *btf,
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 17d4ab0a8206..b92914dd224c 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6429,12 +6429,13 @@ struct btf *btf_parse_vmlinux(void)
-  * split BTF ids will need to be mapped to actual base/split ids for
-  * BTF now that it has been relocated.
-  */
--static __u32 btf_relocate_id(const struct btf *btf, __u32 id)
-+__u32 btf_relocate_id(const struct btf *btf, __u32 id)
- {
- 	if (!btf->base_btf || !btf->base_id_map)
- 		return id;
- 	return btf->base_id_map[id];
- }
-+EXPORT_SYMBOL_GPL(btf_relocate_id);
- 
- #ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- 
-@@ -8496,7 +8497,7 @@ struct module *btf_try_get_module(const struct btf *btf)
- /* Returns struct btf corresponding to the struct module.
-  * This function can return NULL or ERR_PTR.
-  */
--static struct btf *btf_get_module_btf(const struct module *module)
-+struct btf *btf_get_module_btf(const struct module *module)
- {
- #ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- 	struct btf_module *btf_mod, *tmp;
-@@ -8525,6 +8526,7 @@ static struct btf *btf_get_module_btf(const struct module *module)
- 
- 	return btf;
- }
-+EXPORT_SYMBOL_GPL(btf_get_module_btf);
- 
- static int check_btf_kconfigs(const struct module *module, const char *feature)
- {
+diff --git a/tools/testing/selftests/bpf/prog_tests/tp_btf_ids.c b/tools/testing/selftests/bpf/prog_tests/tp_btf_ids.c
+new file mode 100644
+index 000000000000..7a893ae523e0
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/tp_btf_ids.c
+@@ -0,0 +1,124 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <bpf/btf.h>
++
++#define TRACEFS		"/sys/kernel/tracing"
++#define DEBUGFS_TRACING	"/sys/kernel/debug/tracing"
++#define EVENT_SUBPATH	"events/bpf_testmod/bpf_testmod_test_read/btf_ids"
++
++struct btf_ids_info {
++	__u32 obj_id;
++	__u32 raw_id;
++	__u32 tp_id;
++};
++
++static const char *btf_ids_path(char *buf, size_t sz)
++{
++	if (access(TRACEFS "/trace", F_OK) == 0)
++		snprintf(buf, sz, "%s/%s", TRACEFS, EVENT_SUBPATH);
++	else
++		snprintf(buf, sz, "%s/%s", DEBUGFS_TRACING, EVENT_SUBPATH);
++	return buf;
++}
++
++static int read_btf_ids(struct btf_ids_info *info)
++{
++	char path[256], buf[256];
++	int fd, n;
++
++	fd = open(btf_ids_path(path, sizeof(path)), O_RDONLY);
++	if (fd < 0)
++		return -errno;
++
++	n = read(fd, buf, sizeof(buf) - 1);
++	close(fd);
++	if (n <= 0)
++		return -EIO;
++	buf[n] = '\0';
++
++	if (sscanf(buf,
++		   "btf_obj_id: %u\nraw_btf_id: %u\ntp_btf_id: %u\n",
++		   &info->obj_id, &info->raw_id, &info->tp_id) != 3)
++		return -EINVAL;
++	return 0;
++}
++
++static const char *param_name(struct btf *btf, const struct btf_param *p)
++{
++	return btf__name_by_offset(btf, p->name_off);
++}
++
++static const char *member_name(struct btf *btf, const struct btf_member *m)
++{
++	return btf__name_by_offset(btf, m->name_off);
++}
++
++void test_tp_btf_ids(void)
++{
++	const struct btf_type *proto_t, *rec_t;
++	const struct btf_param *params;
++	const struct btf_member *members;
++	struct btf_ids_info info;
++	struct btf *vmlinux_btf, *btf;
++	const char *name;
++	int err;
++
++	err = read_btf_ids(&info);
++	if (!ASSERT_OK(err, "read btf_ids"))
++		return;
++
++	ASSERT_GT(info.obj_id, 0, "obj_id non-zero");
++	ASSERT_GT(info.raw_id, 0, "raw_id non-zero");
++	ASSERT_GT(info.tp_id, 0, "tp_id non-zero");
++
++	vmlinux_btf = btf__load_vmlinux_btf();
++	if (!ASSERT_OK_PTR(vmlinux_btf, "load vmlinux BTF"))
++		return;
++
++	/* Module BTF is split BTF; load with vmlinux as base. */
++	btf = btf__load_from_kernel_by_id_split(info.obj_id, vmlinux_btf);
++	if (!ASSERT_OK_PTR(btf, "load module BTF")) {
++		btf__free(vmlinux_btf);
++		return;
++	}
++
++	/*
++	 * raw_btf_id should be the FUNC_PROTO of __bpf_trace_<call>:
++	 *   void *__data, struct task_struct *task,
++	 *   struct bpf_testmod_test_read_ctx *ctx
++	 */
++	proto_t = btf__type_by_id(btf, info.raw_id);
++	if (!ASSERT_OK_PTR(proto_t, "raw type_by_id"))
++		goto out;
++	if (!ASSERT_TRUE(btf_is_func_proto(proto_t), "raw is FUNC_PROTO"))
++		goto out;
++	ASSERT_EQ(btf_vlen(proto_t), 3, "func_proto arg count");
++
++	params = btf_params(proto_t);
++	ASSERT_STREQ(param_name(btf, &params[0]), "__data", "arg0 name");
++	ASSERT_STREQ(param_name(btf, &params[1]), "task", "arg1 name");
++	ASSERT_STREQ(param_name(btf, &params[2]), "ctx", "arg2 name");
++
++	/*
++	 * tp_btf_id should be STRUCT trace_event_raw_<call> with the
++	 * fields declared by TP_STRUCT__entry plus the common header.
++	 */
++	rec_t = btf__type_by_id(btf, info.tp_id);
++	if (!ASSERT_OK_PTR(rec_t, "tp type_by_id"))
++		goto out;
++	if (!ASSERT_TRUE(btf_is_struct(rec_t), "tp is STRUCT"))
++		goto out;
++	name = btf__name_by_offset(btf, rec_t->name_off);
++	ASSERT_STREQ(name, "trace_event_raw_bpf_testmod_test_read",
++		     "tp struct name");
++
++	members = btf_members(rec_t);
++	ASSERT_STREQ(member_name(btf, &members[0]), "ent", "field0 name");
++	ASSERT_STREQ(member_name(btf, &members[1]), "pid", "field1 name");
++	ASSERT_STREQ(member_name(btf, &members[2]), "comm", "field2 name");
++	ASSERT_STREQ(member_name(btf, &members[3]), "off", "field3 name");
++	ASSERT_STREQ(member_name(btf, &members[4]), "len", "field4 name");
++out:
++	btf__free(btf);
++	btf__free(vmlinux_btf);
++}
 
 -- 
 2.53.0-Meta
