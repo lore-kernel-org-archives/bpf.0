@@ -1,115 +1,161 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813DC3DF01F
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 08:20:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8813FAE07
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 08:25:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778833201; cv=none; b=X0q/KYl7Mz1nwGtKqTOk55ZrjlcFvO1rukQNq+yFsTjwV5b/culIDYxQsmjRcWWKpzA5kuljdPmGb/fYbWltRxgs+3IDNf+DiPCTGyVQfRMWxJF/Gy9IDR6vmnQnXqDv9L1xMt/VSiKeASMNf3EhW7mVZdZEm+sPDqDjA68pzWY=
+	t=1778833517; cv=none; b=u6ONUZv6Ae6wep81q/AVuFc+L0Brtcj7Qk4u52S21NjVXdrOe+qLHgxsV14m9wbcn2OLyL1NG8FjT8gQoFdcRdvjIB27VaMv/Z+wpD0PPyUsl5Swr+0XhqT1R7OFg4eQEb29fiUOrfMRYjkxYBjDdQ15kUne8gryyHxMwkbKfUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778833201; c=relaxed/simple;
-	bh=ugGcMYtB0fPhdBu4UszOvZNNj6rWmerTKhti3SxAvT4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=noevF/iioT0UdJRGHAqiNS8kFI0BveJplTrYx0szIPsc9Wt3gHTqvXALN7sfZZS8CsyY91mVTsw7mV8TIPK5AbGCbveAikBfCCZsDzZDVsQg319I4dSQejvDS4aLvwg0zioRkeTQTCIATvhTuefRNmi3MbJ0nIX9GNfAulFvMpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eRjp2E0N; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778833517; c=relaxed/simple;
+	bh=x7M8QMRLEdW4Rrh+jkBoFBRBtP4oSw/c9kEx6akVmCc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Npox8hnCBsFuqNStcdikfkLlKCPZ4C5gS3LYU+Tb1If8d2XND7DNQRLEinDWu1C3J6l2fOVLLpEe7VqddGT8l6F1YbNYVedFUvJJr9QjFGAkLNqE1ka43lWtJIyun16Gvc19IpgE1ztvXhZy497Pp5JPnDwjZoqimFRvVyVCv6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CYGt7kLH; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eRjp2E0N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBCE2C2BCB0;
-	Fri, 15 May 2026 08:20:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778833201;
-	bh=ugGcMYtB0fPhdBu4UszOvZNNj6rWmerTKhti3SxAvT4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=eRjp2E0NkKTMLtlfQsBPGGDq7JQ/OP3TjsqMh/5c8BfNo2sszVmblcb3hu9Gu35m2
-	 BhIeIEj5KSTROEpyXA+VsXSpeVyEpyzcgsvkTY1shYK2BDjbcLXGtc4KbLcyXwUGMT
-	 8Nvq0P4wdQqBqG9Oc7fHNXLWPabvXXVh5Q8gHLPOeRvc/Fztj+4EbmySf7mT++HpRc
-	 3aSa0hCbHRw4KLBT85/ILyftC1zViZVv1Ido00uES1VaWzeQxSKHndrPXrOi6DuVGl
-	 zlu2M6BE2046nZGAph5aQv6KJ3zQyVsmo0GbjV9esrQwJ0j9fZrruuKLWfE38pCFnq
-	 uBw8Y78PdZ5Dw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 24/25] bpf, arm64: Add JIT support for stack
- arguments
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260513045158.2402494-1-yonghong.song@linux.dev>
-References: <20260513045158.2402494-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 15 May 2026 08:20:00 +0000
-Message-Id: <20260515082000.DBCE2C2BCB0@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CYGt7kLH"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-44b052142e1so4962187f8f.1
+        for <bpf@vger.kernel.org>; Fri, 15 May 2026 01:25:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1778833514; x=1779438314; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B8R9wMI16Tg8iAgIRKSdM3jyUIf/EyyLOvedUo+31Xs=;
+        b=CYGt7kLHSS2S0vz6UYTjOiFc+6gmfJJuZAhKUQCpJrSGAu04qsPGT3ZjJoRYqJkC7Q
+         ZfTovfnnheBgbieDa0eF2Bd36NAYAS6Ny+pPxKPkmjCL/DX/PdaF/O1uQG4X4s1jKH3B
+         7K/4p94A8FpJVcUxpRMqsO8HQKAGvsJTUUtvYF2YZdd+rchtECuBxdYJ+t+iQ/qLEybx
+         0x7mvfS8R9W9kTzZ0573NRlV7Wxs4uqxzuvsHZBHQwB4/NQ4IAzsN7tu3/hRkghZxGFf
+         KxSAm9GGqVVrK1PISzmHGd3KNPVv3WSwlzKLdzFerikad/6W8JDjgLEp8R/aGLeYmK4n
+         Oaiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778833514; x=1779438314;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B8R9wMI16Tg8iAgIRKSdM3jyUIf/EyyLOvedUo+31Xs=;
+        b=iGly1+8BqH/dA/+V2PQZpdLI30nnSlx3AmrBEcY9ctCgiEmZIL2DZBDB7pgRJX03kY
+         9abZtca0bb4gx6VN+JgNeE+Yo11XvFIGJe7rpEmABkRT8+YCfHVuRJdwivLT1qdXLqxQ
+         RhU1otPTceh0e3BNxjJ60MXFMrj0LzR6SK/OAZbZRoa9ShJ0yxnjs3HjdlVX51Nn5hMt
+         h+DFpG3poam32dZJvtc6WyBXMeR9izwvKpZfso2V6w3w6AhiGfRQ5xUtouLMNAnOPLy/
+         AseH9JSyIhqbeHhI3lE7r14pyuODrPnDfSyKNNJtWtus7imdnSuxxLa1bPM/RqsG+His
+         voPg==
+X-Forwarded-Encrypted: i=1; AFNElJ9laUaVQnBLQIKWH2rgECsNfCdvyeKsnugBBUkXysAHFbqui1pyiS4ifNk2GVE6VGm2KHA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxt7cEVzbu6tJSGQ+NHR/3oQgIvRkdCjCNrndh5Bx+luMItWvEt
+	sz6vHlKtBJpZDFyghjR62e6wNEWNGyUvx88+t9yc3MJBvmmC7iVJWRZr2YnjoQoYEO4=
+X-Gm-Gg: Acq92OEOCtqYGod0SzHa7WxqBiiBqjSN+D7L5B/9YNiC9VuHwWalsHC2xfpfGUFjonF
+	LSr3e/NgaTpvaB3Zqe+gDG5/2Dhe+2WUmM36Y6Exq7nTgP1uD9IQ5HyHwpBs10WATXx15jcQH0Y
+	ClWC8O1GoMFhO+AsCVW3scOsz9XmvPebHLszlInKhPi5niH2/5hWUiUicHiHqDMff0BqABlzhwt
+	qYCSnp3DpTa2z86W3eiUNSBFZgv5ysNR5pr0xKWEMf7xOhE1P5oq68cSeoV/vsWUJzf4WKkoLgA
+	DQ1gKb77sAo5aogmo5WnR1mXWjACkcDNaj7pItviPNKFh2nvzPm5pafI44MNNU/RSKAJ64dVC/W
+	6A2vVnZB/7LsWpE5eOdVD6zBWo8d3862UjMN/5Kl4Msgg/ogeg5lvQPF/uXxzlbjsiWX/8ab3fb
+	itNAzhCrjuQuczK/P77ndmFoa0b94hlOmsePEaw0g=
+X-Received: by 2002:a05:6000:2c12:b0:452:87de:d3a6 with SMTP id ffacd0b85a97d-45e5c6048d1mr3580229f8f.33.1778833514418;
+        Fri, 15 May 2026 01:25:14 -0700 (PDT)
+Received: from [192.168.1.3] ([185.48.77.170])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45d9ec3ac86sm13115730f8f.14.2026.05.15.01.25.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 May 2026 01:25:14 -0700 (PDT)
+Message-ID: <69034d26-e886-48f2-a20b-524854a5c00f@linaro.org>
+Date: Fri, 15 May 2026 09:25:13 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/6] tools/build: selftests: Allow versioning LLVM lld
+To: sashiko-reviews@lists.linux.dev
+Cc: dmitry.torokhov@gmail.com, bpf@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-perf-users@vger.kernel.org
+References: <20260514-james-perf-llvm-version-v1-5-6cac1a9a4c8d@linaro.org>
+ <20260514184543.C6400C2BCB3@smtp.kernel.org>
+Content-Language: en-US
+From: James Clark <james.clark@linaro.org>
+In-Reply-To: <20260514184543.C6400C2BCB3@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] Incoming stack arguments 6-8 are mapped to caller-saved regist=
-ers `x5-x7` without being spilled to the stack, allowing them to be corrupt=
-ed by function calls. This bypasses verifier bounds checks and enables arbi=
-trary kernel memory read/write.
---
 
-commit 20fea8a10865fdb2efc7f0e237022c9e2e575fd7
-Author: Puranjay Mohan <puranjay@kernel.org>
 
-bpf, arm64: Add JIT support for stack arguments
+On 14/05/2026 7:45 pm, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] Using `-fuse-ld=ld.lld` breaks compilation of BPF selftests with GCC.
+> --
+> 
+> commit 18e1876d18fad631b521da817483ba47293a9020
+> Author: James Clark <james.clark@linaro.org>
+> 
+> tools/build: selftests: Allow versioning LLVM lld
+> 
+> This commit updates Makefile.include to add an LLD variable, matching the
+> rest of the LLVM toolchain. It modifies the BPF selftests Makefile to use
+> this new LLD variable instead of hardcoding lld.
+> 
+>> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
+>> index 380ad84ac51e6..5c2d505cba62b 100644
+>> --- a/tools/scripts/Makefile.include
+>> +++ b/tools/scripts/Makefile.include
+> [ ... ]
+>> @@ -91,6 +92,7 @@ else
+>>     # Some tools still require Clang, LLC and/or LLVM utils
+>>     $(call allow-override,CLANG,clang)
+>>     $(call allow-override,LLC,llc)
+>> +  $(call allow-override,LLD,ld.lld)
+> 
+> Could setting LLD to ld.lld when not using LLVM cause issues for BPF
+> selftests compilation with GCC?
+> 
 
-Implement stack argument passing for BPF-to-BPF and kfunc calls with
-more than 5 parameters on arm64, following the AAPCS64 calling
-convention.
+$(LLD) is only used in one place, and it's used with $(CLANG) so this is 
+impossible.
 
-> BPF convention uses fixed offsets from BPF_REG_PARAMS (r11): off=3D-8 is
-> always arg 6, off=3D-16 arg 7, etc. The verifier invalidates all outgoing
-> stack arg slots after each call, so the compiler must re-store before
-> every call. This means x5-x7 don't need to be saved on stack.
+>>     $(call allow-override,LLVM_CONFIG,llvm-config)
+>>     $(call allow-override,LLVM_OBJCOPY,llvm-objcopy)
+>>     $(call allow-override,LLVM_STRIP,llvm-strip)
+>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+>> index 6ef6872adbc3e..44ba829e5d4dd 100644
+>> --- a/tools/testing/selftests/bpf/Makefile
+>> +++ b/tools/testing/selftests/bpf/Makefile
+>> @@ -245,9 +245,9 @@ $(OUTPUT)/%:%.c
+>>   
+>>   # LLVM's ld.lld doesn't support all the architectures, so use it only on x86
+>>   ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
+>> -LLD := lld
+>> +USE_LD := $(LLD)
+>>   else
+>> -LLD := $(shell command -v $(LD))
+>> +USE_LD := $(shell command -v $(LD))
+>>   endif
+>>   
+>>   # Filter out -static for liburandom_read.so and its dependent targets so that static builds
+>> @@ -258,7 +258,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom
+>>   		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) \
+>>   		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
+>>   		     -Wno-unused-command-line-argument \
+>> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
+>> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
+> 
+> When LLVM=1 is not set, CC defaults to gcc. The Makefile uses
+> $(CC) ... -fuse-ld=$(USE_LD) to link liburandom_read.so.
+> 
+> Because USE_LD evaluates to ld.lld, gcc receives -fuse-ld=ld.lld.
+> 
+> However, GCC's command-line option parser is strictly hardcoded to accept
+> only specific linker names (lld, bfd, gold, mold). It does not recognize
+> -fuse-ld=ld.lld or absolute paths, and fails with an error like:
+> 
+> gcc: error: unrecognized command-line option '-fuse-ld=ld.lld'; did you mean '-fuse-ld=lld'?
+> 
+> Does this regression break the default GCC build of BPF selftests on x86
+> and riscv architectures?
+> 
 
-While it is true that the verifier invalidates outgoing stack arg slots aft=
-er
-each call, does this logic safely apply to incoming stack arguments?
+Same as above. $(CC) is not used with $(LLD). You'd probably want to use 
+$(LD) in a $(CC) build command anyway.
 
-Incoming arguments are modeled as memory accesses relative to BPF_REG_PARAMS
-and the verifier assumes these memory slots are preserved across helper and
-subprog calls.
 
-Since x5-x7 are caller-saved registers per AAPCS64, what happens if a BPF
-program makes a call (which clobbers x5-x7) and subsequently reads its
-incoming stack arguments 6-8?
-
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index 085e650662e3d..e3bbeaa94590c 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-
-[ ... ]
-
-> @@ -1191,6 +1207,41 @@ static int add_exception_handler(const struct bpf_=
-insn *insn,
->  	return 0;
->  }
-> =20
-> +static const u8 stack_arg_reg[] =3D { A64_R(5), A64_R(6), A64_R(7) };
-> +
-> +#define NR_STACK_ARG_REGS	ARRAY_SIZE(stack_arg_reg)
-> +
-> +static void emit_stack_arg_load(u8 dst, s16 bpf_off, struct jit_ctx *ctx)
-> +{
-> +	int idx =3D bpf_off / sizeof(u64) - 1;
-> +
-> +	if (idx < NR_STACK_ARG_REGS)
-> +		emit(A64_MOV(1, dst, stack_arg_reg[idx]), ctx);
-
-Could emit_stack_arg_load() read corrupted values if the BPF program reads
-an incoming argument after making a helper or subprog call that clobbered
-the x5-x7 registers?
-
-If LLVM treats the incoming arguments as preserved memory and doesn't spill
-them locally, a mismatch could occur where the verifier applies its bounds
-tracking to the original argument but the program actually reads a clobbered
-value, potentially leading to arbitrary memory reads or writes.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260513044949.2382=
-019-1-yonghong.song@linux.dev?part=3D24
