@@ -1,54 +1,54 @@
-Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
+Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9EE53E8348
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 17:39:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A065D3F39C9
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 17:39:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778866760; cv=none; b=IV1v7r8PwjASRcbgr6kGO7y85ytX9Y4og5Hz7jqp/bqmJgreoI4XHtVJ6Exn2C1RqWKT4lwCGSZXyJkQ2WRuLcJkoo68ZlyOtehLXEcDE3YOrPBgIGN2fRPa4N/zkcXbVP10zXc3amo10nemuC5/nsmGEdgCOqzPjTFqDbXZnjI=
+	t=1778866761; cv=none; b=lbUj0XPUU7p/DSs59/Lu4DmX0iWNnTIe2xyctpua/rHc/Xmqc9iOhoqoRDuuRbdDyS/+rEONt9pGqOynZyhqDOwE08AMzgynI4LvSrWl7LKZm+C/JiUBk70c2GK5skTvxHrlMEZfob/lZsfHCmB3Q6bRmmcOb2OCL+0dMIIm2cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778866760; c=relaxed/simple;
-	bh=l5QKav5wmqSVNvurZfB75hgd7Q4yiRfMQ7JC8EnR+0M=;
+	s=arc-20240116; t=1778866761; c=relaxed/simple;
+	bh=o/K4kgugTGSk6IivctS3woOeRJortswYl5L/8mR0x6I=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ZBFrhFbBp/4kd/lOE2ZoVssFUph9c4ZY6PSLPYtwoKRwuQJmwIcZDv/gy8gSdTS9A6x2+xceaxg9viZ29h+X3Uyd5YNgdqjPbSSRXe/yc3RtpUCnTN3cItVD5e7k8oURDDXYV8Mrob6ySUOrxtibe/Jx8u0W6z2FCtgY4W1SpSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oU1lW+Ws; arc=none smtp.client-ip=74.125.82.74
+	 To:Cc:Content-Type; b=JQURjU6tzwY+lQjnenwCPajCCVPO+JuuvurujlJOsqBTtvioaUNAEO2K8nlPIpwMFgEb9Guu1374zX6Lj82vDZvfCBHJ/5NN3GjhMsEw0CSDh+khPbpjMcsQEWv/ZCumLBWcr9Gw2xv5K+8TKpenj0ZjM2JhDWRY6q7ihREQ6rY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RjmBQ/nd; arc=none smtp.client-ip=74.125.82.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oU1lW+Ws"
-Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-1353a6f29deso6186c88.1
-        for <bpf@vger.kernel.org>; Fri, 15 May 2026 10:39:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RjmBQ/nd"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2f5943ca81aso662206eec.0
+        for <bpf@vger.kernel.org>; Fri, 15 May 2026 10:39:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778866757; x=1779471557; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1778866759; x=1779471559; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5Ko4k/zOsIwJVmScnIi9Okmp0zWky5zOptE9t4gyo8w=;
-        b=oU1lW+Ws5YBcwmQ83/HvJl7AXXDCP6vLKZ+Rye6qwmaeEobu5qWrEcPZBM+YghLTzI
-         suMqv2aZTVpIoRavC8dTRXkIga6eI+NvLJgIC4931gEtFJ2f4ZAB8Ev+SNNmQgUxNnX4
-         vDf8raCz5uSCIsJuujxJmpoMltrNA2VUdxDgiSWfvOuPgDag5oiguDwv2nfAlbLzAIIs
-         1ku3NAcOPsC5Nr4hP9Uwz8fRQJ0dXRZOBzk2nNMRjJfEi7n8agrnaqn78Pjy1mFzlv9f
-         aGQ9rW0BL+RzAnZuAEe0VYKxTj2uauKIfwXLHk7eZkKAPe+lwcYklWtSJLgbcwBkwDoh
-         WTqA==
+        bh=mgPMCywWzI9T8eglAxB7fkblHJQb+JFJwFxoaBxPkU8=;
+        b=RjmBQ/ndIcuk0+tP5ypIdpP5yIOXBIVQqXOhnzRrBhmq4O1ZfrtRswnY6snlmC4Y/2
+         Ug4nnHe1LX6rkFuxQgvU72Tkzm8sGatQeV78KM7mNyvE9a+qYENdE7qRQeoG0a/1jn4C
+         28MtXQ8Ms9uPNgGFjCs7NuAWf7TOGbXZxLA5wK+beoOFcPY0qWbLiwJ3E23kgLHV53kg
+         bYyJXJ/4N855Hj0Gs/1wJIbusZ4BtHAoI/9E8t2pgG+nOjIRZHEZmQ31+C2EzUw5Z0fk
+         xwdtgg+r+UarP6BC+Qos3BaE39RIVWQCYd9yTX+Cqjn+krAdepVdIn5IvKWS/d6cW31B
+         9FTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778866757; x=1779471557;
+        d=1e100.net; s=20251104; t=1778866759; x=1779471559;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5Ko4k/zOsIwJVmScnIi9Okmp0zWky5zOptE9t4gyo8w=;
-        b=BBKz39079ltjDVg7GxUnqFh6jzU5agzMtCiQkgvmytqhKvXpbTPo1eN6pwHe8SepI1
-         okKbIwzLKqBM16AOrRQWOBmVexZdgZhD2cfKAz3nVhC5FNO6tck/yyZkvFrbLWh5dEzc
-         kr4gqrS2SdZqPAR4SABqybzfUiqcb/fbUW5n4mU02BDNHBslK9DOVJGuw1Y4wtZ5xXtp
-         Xpk9cmFPkOkjiq8HzUyoymiHYBZFz0Qwo8svA83HVrJTmGDPWtkERj/Y1uaVF8CHB1G6
-         3dG2iKD47X+zERA36J3kTAfhcGNhI4Ki/cIlscPDpkpC0Oo/YwHpzSn7QTSPVgrE0aEZ
-         RNGg==
-X-Forwarded-Encrypted: i=1; AFNElJ/8oe+sYpfnIjFRjsQYSBRXx8Acvh3mUE+MhUOB+2UbYIwgfPynKEYsmRrfAd1QEtEDMQw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YziVoYOxib3g6VEiRC+/X4jBY+AOhFwPjfCSuhpjhXL8p0NMcYj
-	2Mf/a63JITprXvBryVDwQdUJt6/8zQ0380SD6XQV26dcq0SH8YAwF2Tg7Qj++Z1QZazMFKSYO8Q
-	2MHvm452zTw==
-X-Received: from dlbui2.prod.google.com ([2002:a05:7022:3d02:b0:12a:9ef0:93ed])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:fb09:b0:12a:72af:83d1
- with SMTP id a92af1059eb24-135046255femr2542223c88.11.1778866756863; Fri, 15
- May 2026 10:39:16 -0700 (PDT)
-Date: Fri, 15 May 2026 10:38:45 -0700
+        bh=mgPMCywWzI9T8eglAxB7fkblHJQb+JFJwFxoaBxPkU8=;
+        b=P7YnHoZAN25BzpkNbHxQ7uvzeMzRKYR8EZtQ9jo6Q8GqX8FDZYWpklEsDZmDkRyeYy
+         et9qj/4qBw6I6V1swp9N7g3isA/XU+LsP67vibaOQJ2GSL27d8Lr0ygR436nr8Vte7LD
+         6EYuzRSOM7Mkf4xXzK3IQhaP90Sx2imVnwC5Iqbeuf79/Uiovc6257WgqgRK6gt0GSQ9
+         Lu94J1838wDcxw6qEjlfyIqo0gaMghg6huniewBVc0axU7el2GFMwK+Qcdrw1LypfwPa
+         cRUm+z7R5jHxEfAEMbl7nXcN6RSP8Firk0lLQAf0wgxcR0kItQoF+EAJ4R2YnMpi9vjr
+         t3og==
+X-Forwarded-Encrypted: i=1; AFNElJ+khEcvRFQ7DvyY2M6yPPrqYhlAPP3UsIQgKkBE8Rs+oA0IVuqQkPmZU2F1B6AnWauZsm0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDt3SwacOHXXE2a16dYbm7qonIcI+GYqTHipZ/AiC8Ns+FVfs2
+	J3OsWW3g+Ev8rvA/nVKGnxNmJ/PA67CyVZnmTwlyF+z5IGADvCp/W4Lb5aASfu2kfKwLxTttnOJ
+	SkuqC/DmpJw==
+X-Received: from dyek35.prod.google.com ([2002:a05:7300:6423:b0:2e2:26bc:21c2])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:ac90:b0:2ff:9d6b:4f31
+ with SMTP id 5a478bee46e88-3039812b389mr2310822eec.6.1778866758473; Fri, 15
+ May 2026 10:39:18 -0700 (PDT)
+Date: Fri, 15 May 2026 10:38:46 -0700
 In-Reply-To: <20260515173852.1378571-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -59,8 +59,9 @@ Mime-Version: 1.0
 References: <CAP-5=fWfrGMV4EafqkwQO-R33c_szXcxVLgH0c4k2zt3zj4HdQ@mail.gmail.com>
  <20260515173852.1378571-1-irogers@google.com>
 X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260515173852.1378571-9-irogers@google.com>
-Subject: [PATCH v4 08/14] perf build: Move libsymbol dependency out of prepare step
+Message-ID: <20260515173852.1378571-10-irogers@google.com>
+Subject: [PATCH v4 09/14] perf build: Remove redundant libbpf feature check
+ for static builds
 From: Ian Rogers <irogers@google.com>
 To: irogers@google.com, acme@kernel.org, james.clark@linaro.org, 
 	namhyung@kernel.org
@@ -77,51 +78,44 @@ Cc: 9erthalion6@gmail.com, adrian.hunter@intel.com, alex@ghiti.fr,
 	thomas.falcon@intel.com, yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-The prepare step is a large serialization point before parallel
-sub-makes build the perf tool. The libsymbol headers are used in the
-bench and util libraries. Move the libsymbol dependency out of the
-prepare step and into the dependencies for those targets to avoid it
-being a source of serialization in the prepare step.
+By default, the perf tool compiles and statically links against its own
+internal copy of libbpf (tools/lib/bpf/libbpf.a), setting LIBBPF_STATIC=1.
+
+Despite this static linkage, Makefile.config unconditionally executed
+$(call feature_check,libbpf), which forced a synchronous sub-make fork
+during AST parsing to detect dynamic system libbpf libraries.
+
+As noted in the internal Makefile comments, this check was executed purely
+so that running `make VF=1` would display the detection status of system
+libbpf. During standard builds without LIBBPF_DYNAMIC=1, the detection
+result was entirely ignored.
+
+Wrap the libbpf feature check inside LIBBPF_DYNAMIC=1 so Make avoids the
+redundant sub-make fork overhead during standard static builds.
 
 Tested-by: James Clark <james.clark@linaro.org>
 Assisted-by: Gemini:gemini-3.1-pro-preview
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.perf | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ tools/perf/Makefile.config | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 876065a02de6..96a68723109f 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -558,7 +558,7 @@ $(LIBPMU_EVENTS): $(LIBPMU_EVENTS_IN)
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index bc1111c88226..fbe7fa83b0bb 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -587,10 +587,8 @@ ifndef NO_LIBELF
  
- # The $(LIBPERF_UTIL) dependency is to ensure bpftool and vmlinux.h
- # aren't racily built for bench/bpf_skel/bench_uprobe.bpf.c
--$(LIBPERF_BENCH_IN): FORCE prepare | $(LIBPERF_UTIL)
-+$(LIBPERF_BENCH_IN): FORCE prepare $(LIBSYMBOL) | $(LIBPERF_UTIL)
- 	$(Q)$(MAKE) $(build)=perf-bench
- 
- $(LIBPERF_BENCH): $(LIBPERF_BENCH_IN)
-@@ -576,7 +576,7 @@ $(LIBPERF_UI_IN): FORCE prepare
- $(LIBPERF_UI): $(LIBPERF_UI_IN)
- 	$(QUIET_AR)$(RM) $@ && $(AR) rcs $@ $<
- 
--$(LIBPERF_UTIL_IN): FORCE prepare
-+$(LIBPERF_UTIL_IN): FORCE prepare $(LIBSYMBOL)
- 	$(Q)$(MAKE) $(build)=perf-util
- 
- $(LIBPERF_UTIL): $(LIBPERF_UTIL_IN)
-@@ -637,8 +637,7 @@ prepare: $(OUTPUT)PERF-VERSION-FILE \
- 	bpf-skel-prepare \
- 	$(LIBAPI) \
- 	$(LIBPERF) \
--	$(LIBSUBCMD) \
--	$(LIBSYMBOL)
-+	$(LIBSUBCMD)
- 
- ifdef LIBBPF_STATIC
- prepare: $(LIBBPF)
+   ifndef NO_LIBBPF
+     ifeq ($(feature-bpf), 1)
+-      # detecting libbpf without LIBBPF_DYNAMIC, so make VF=1 shows libbpf detection status
+-      $(call feature_check,libbpf)
+-
+       ifdef LIBBPF_DYNAMIC
++        $(call feature_check,libbpf)
+         ifeq ($(feature-libbpf), 1)
+           EXTLIBS += -lbpf
+           CFLAGS += -DHAVE_LIBBPF_SUPPORT
 -- 
 2.54.0.563.g4f69b47b94-goog
 
