@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57013033FC
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 05:28:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC532745E
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 06:02:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778822909; cv=none; b=H6BKBAyPtLw+5l/D2cBk6IMNj7dujE6boLgvud8nyu8gWTVb1eWnTeqkE4rCJFLUEdZUX3ZtOlAn0k2FQnINayfKuioZvZhvVenajcFSvZAPwAOK8OAAw/CkbTlT/Ev2A47mTh7beqWr9n4KjQ9sWX5InQ+LU4FH3Kesx3ZzfqI=
+	t=1778824940; cv=none; b=ZKFRVWuOznw11X9ZTtnDpyq7gCiGvG/MUvMwNsXfCY5eX5N8I0CBv38GLTS3a1ARizvKXmZ36WIfIii1iofxeVnf9wGGMgYn+bajrrrfWgLndU0TglYEVf97dj6r028rH8uqZkI4VCgx4vQAgu0SbJmmOF1yVGczvnx0TlJbZMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778822909; c=relaxed/simple;
-	bh=jc2M/kNmHhkEOdhdByfQkHAm2wr/hKlpTp1Hmgx6KKE=;
+	s=arc-20240116; t=1778824940; c=relaxed/simple;
+	bh=RTlbYjrkgycTW/O7fngKv0EA7v+a4oC9Oey5zoF6/7I=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=bE3jPy+++iWOYadesBz1QvP6QvMPDtUFiURvsZpy71m7dcodu8kVFC75F5GCWHHafFhshoQIlvN2edz3eEv87dFWh8U7P1FTlWEpATrnZzpAfig89dZGTdkwrL8wawjs8f7BTuznTY6RTtL7ffvFaApXHvGS5BKWJVnDoMV4mjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=akVfgQIA; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=m6Yai1uO16xJLaqg2KsXYLw5CKKHn6kFyDqIMOYnvGl7VSt8MhFyIQXOkZr/uaxHW7gg1iFWhVdKqfEC3Yj92I7b00peRzvMLRKDbjINNyycQV7qZUIgtYeoTRlEBLtqUg1pPpveL7VstVfTCWBr5wFdq57QovLCMujnRtb+Fz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gdr/E5sV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="akVfgQIA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B53C0C2BCB0;
-	Fri, 15 May 2026 05:28:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gdr/E5sV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD991C2BCB0;
+	Fri, 15 May 2026 06:02:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778822908;
-	bh=jc2M/kNmHhkEOdhdByfQkHAm2wr/hKlpTp1Hmgx6KKE=;
+	s=k20201202; t=1778824940;
+	bh=RTlbYjrkgycTW/O7fngKv0EA7v+a4oC9Oey5zoF6/7I=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=akVfgQIAvfiaJu5zNlDe4G76CSW9j0DBc8RDqQcjyPvEb3YwfgKUltVNRTmeT0IzK
-	 bykeskYbN4JtqXolrKvMzj76EapYBhafgjq8KHAajgKHSc21B/47KGbZO8C0vYFaFC
-	 IYZFxyEDxBDBFsWqK6g1X0ivoffU16DiYrzbXyKNWhpNVYtkfcgW13SQ8dV+01PPFn
-	 kSgy+ms5YG1mnqM6PbgGT8+GVUDlXP0WZN/dDCfurtVWiSMjewrJtKhEQyraKf9UBD
-	 cgJoG0LuOi9yfbhbZQkZOKY54MR6LoTFfgzs3/C8cbDXQErFN0RDr4sGz4/vhYDLOL
-	 aHYKUNqAk0LbA==
+	b=gdr/E5sVeiylEsCyUpFWDLEB8gHTOdx29mZk/m13+s1ougCZo2MP8kD48m/Dm12+M
+	 9sN4QYVZEApTH34mQmEgEqRl5UKKJ/cQ+nXNKRPrf3GwqBRC4C7VoIPaXxmG7X+Q75
+	 YiykEL6f6+9zoF1rTMZYHLLiylSHDKhWerLPG+FOSfw9AZLkhGp+luCmyVvrq0jRrm
+	 VTtKtqh4OKyeyyZc5KtW2krKHIL1ssyuWShX12jbqpT9r1O83UtNdxGXUUrUYRgxUe
+	 0YTOmMesrH28Z/EYvBapVeUX5AafCMcwJpxKDNDPF/vDH7iJGCnxxGC+vOceVpvWEe
+	 IYHbrJqI05ZPg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 16/25] bpf: Disable private stack for x86_64
- if stack arguments used
+Subject: Re: [PATCH bpf-next v4 17/25] bpf,x86: Implement JIT support for
+ stack arguments
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260513045114.2392291-1-yonghong.song@linux.dev>
-References: <20260513045114.2392291-1-yonghong.song@linux.dev>
+In-Reply-To: <20260513045122.2393118-1-yonghong.song@linux.dev>
+References: <20260513045122.2393118-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 15 May 2026 05:28:28 +0000
-Message-Id: <20260515052828.B53C0C2BCB0@smtp.kernel.org>
+Date: Fri, 15 May 2026 06:02:14 +0000
+Message-Id: <20260515060214.CD991C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,49 +46,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] Hardcoding architecture-specific JIT register limitations into the =
-generic BPF verifier.
+- [Critical] When a BPF program with an exception boundary calls a function=
+ with more than 5 arguments, unwinding an exception via bpf_throw() restore=
+s callee-saved registers from the wrong stack offset, corrupting kernel reg=
+isters.
 --
 
-commit d388190c12c82279caa212e6edeefb82d873dd00
+commit 86dff956386bae1d3e030c84363f5b56f2e023a7
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-bpf: Disable private stack for x86_64 if stack arguments used
+bpf,x86: Implement JIT support for stack arguments
 
-This commit disables private stack support on x86_64 when stack arguments
-are used, because x86-64 uses R9 for both the private stack frame pointer
-and arg6. Other architectures have enough registers to support both.
+This commit implements x86_64 JIT support for BPF functions and kfuncs with
+more than 5 arguments. The extra arguments are passed on the stack, maintai=
+ning
+compatibility with the x86-64 calling convention. It introduces logic to ha=
+ndle
+pushing outgoing arguments to the stack area below the callee-saved registe=
+rs.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 47df3f40a71cf..745e13cfb54d6 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -5163,7 +5163,10 @@ static int check_max_stack_depth_subprog(struct bp=
-f_verifier_env *env, int idx,
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index ea9e707e8abff..ceefefb4da217 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+
+[ ... ]
+
+> @@ -1700,6 +1755,42 @@ static int do_jit(struct bpf_verifier_env *env, st=
+ruct bpf_prog *bpf_prog, int *
+>  			push_r12(&prog);
+>  		push_callee_regs(&prog, callee_regs_used);
 >  	}
-> =20
->  	subprog_depth =3D round_up_stack_depth(env, subprog[idx].stack_depth);
-> -	if (priv_stack_supported) {
-> +	if (IS_ENABLED(CONFIG_X86_64) && subprog[idx].stack_arg_cnt) {
+> +
+> +	/* Compute callee-saved register area size. */
+> +	callee_saved_size =3D 0;
 
-Is it appropriate to hardcode host architecture macros like
-IS_ENABLED(CONFIG_X86_64) directly into the core verifier logic?
+[ ... ]
 
-This isn't a bug, but it introduces architecture-specific constraints into =
-the
-generic BPF verifier. Would it be better to handle this by querying JIT bac=
-kend
-capabilities via a generic API (e.g., passing stack argument requirements t=
-o a
-JIT capability checker) so the verifier remains architecture-agnostic?
+> +	/*
+> +	 * Allocate outgoing stack arg area for args 7+ only.
+> +	 * Arg 6 goes into r9 register, not on stack.
+> +	 */
+> +	outgoing_rsp =3D out_stack_arg_cnt > 1 ? (out_stack_arg_cnt - 1) * 8 : =
+0;
+> +	emit_sub_rsp(&prog, outgoing_rsp);
 
-> +		/* x86-64 uses R9 for both private stack frame pointer and arg6. */
-> +		subprog[idx].priv_stack_mode =3D NO_PRIV_STACK;
-> +	} else if (priv_stack_supported) {
->  		/* Request private stack support only if the subprog stack
->  		 * depth is no less than BPF_PRIV_STACK_MIN_SIZE. This is to
->  		 * avoid jit penalty if the stack usage is small.
+Does allocating the outgoing stack arguments area (outgoing_rsp) after push=
+ing
+the callee-saved registers cause an issue when unwinding an exception via
+bpf_throw()?
+
+When bpf_throw() is called, the stack unwinder (arch_bpf_stack_walk()) capt=
+ures
+the current stack pointer (sp) of the BPF frame, which points to the bottom=
+ of
+this outgoing_rsp area.
+
+bpf_throw() passes this shifted sp to the exception callback in the rsi
+register.
+
+The JIT-generated exception callback executes mov rsp, rsi followed by
+pop_callee_regs(). Because rsp is offset by outgoing_rsp bytes below the ac=
+tual
+saved registers, the pop instructions will read from the outgoing arguments=
+ area
+instead of the saved registers.
+
+Could returning to the kernel with corrupted callee-saved registers cause
+unpredictable behavior or panics?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260513044949.2382=
-019-1-yonghong.song@linux.dev?part=3D16
+019-1-yonghong.song@linux.dev?part=3D17
