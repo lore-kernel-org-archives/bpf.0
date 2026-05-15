@@ -1,20 +1,21 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41161DED5C
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 22:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109FA35E1DF
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 22:50:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778885452; cv=none; b=WgGDWuCRfYBy5MjhNgV2AnDo3U3CStm8RTXQDDe7IWe2jAeWt83op8WPPrx4cfKe9wqPPhXZbYvOAOnqkFmNo7dMWofYpSFXj/8VGboCvwWqiYet2g8jg/z1ihPmKncnrLUWeGNrVOzbandw17URBTd+DIpfyIHo5BdXcaHvbHI=
+	t=1778885458; cv=none; b=HhKhFoNV4dQDqPy3jWopYNDed9uS+GdGEU/s79cFij8c5fEoz8Wpo0/8ftvA78M1vh6V5yROq3kcvprYicr9CmX2RI0Ur+R4Tj7WGqJFnoPTYTU49kZyg8FucJv12tpJfMOctn8cXNU6Jw2qWU6HpnCcYmJ0gclMbiDnpYGty5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778885452; c=relaxed/simple;
-	bh=iOEUGqvCwNVqBFdUQN0+U8Eo12XX5ktfKOiqpib0yOI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=H36KfMtH676yi9nFeizqtXvMY6WVvaGMQGRG8ZZgUROy3v0XlD2P/meNwQeTYZ4iR6GDkUEJwlMX7NZTbu+I9euAkvaUFglxC9BcHaBa/FapO6GN6zh0ZQrHkgnbCFKRKho/zZcEk/cacOc47aZ09NhPd3NVVHlk+Q8BRDTAM+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+	s=arc-20240116; t=1778885458; c=relaxed/simple;
+	bh=5Iqtr43CHuB8Vt3G2cJSUJwrHTfYPoUFADc1Fgg+oaw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=MkQippRKUH2axGRsXe4uo5b2LH0BclU5zLbtWqhFHVaR+El2GVt6k0XfkzKR08fJS2RaAsnt338pMrUVPJgkOBp3mVhTCOxhiVXLVuubprRin0SQMq+ND5tc82QfoS4tPtP3nAY2uDDfUDCELIMbaGdhnFMpQxChq9eUjrLp438=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id AE74FC060B423; Fri, 15 May 2026 15:50:35 -0700 (PDT)
+	id CA83DC060B63D; Fri, 15 May 2026 15:50:40 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -22,10 +23,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v3 0/7] bpf: Follow-up fixes for stack argument support
-Date: Fri, 15 May 2026 15:50:35 -0700
-Message-ID: <20260515225035.821178-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 1/7] bpf: Validate outgoing stack args when btf_prepare_func_args fails
+Date: Fri, 15 May 2026 15:50:40 -0700
+Message-ID: <20260515225040.821515-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260515225035.821178-1-yonghong.song@linux.dev>
+References: <20260515225035.821178-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -34,52 +37,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Commit cd59fa185a03 ("bpf: Support stack arguments for BPF functions and =
-kfuncs")
-added stack argument support for bpf functions and kfuncs. This patch set
-is to fix various issues related to stack arguments, mainly include:
-  - Validate outgoing stack args when btf_prepare_func_args fails
-  - Fix arg_track_join log to use sa prefix for stack arg slots
-  - Clean up redundant stack arg checks for non-JITed programs
-  - Fix exception unwinding with outgoing stack arguments
+btf_prepare_func_args() sets sub->arg_cnt before validating arg types.
+If validation fails (e.g. unsupported pointer type in a static subprog),
+check_outgoing_stack_args() is skipped because btf_check_func_arg_match()
+returns early. For static subprogs, check_func_call() ignores non-EFAULT
+errors and proceeds with the call.
 
-Changelog:
-  v2 -> v3:
-    - v2: https://lore.kernel.org/bpf/20260515014958.1186132-1-yonghong.s=
-ong@linux.dev/
-    - Add additional fix (fix arg_track_join log, fix exception with outg=
-oing stack
-      arguments, some cleanup, etc.).
-  v1 -> v2:
-    - v1: https://lore.kernel.org/bpf/20260514184827.1619863-1-yonghong.s=
-ong@linux.dev/
-    - Remove 'Reported-by: Sashiko <sashiko-bot@kernel.org>'.
-    - Add proper fix tag.
+This causes the callee to read stack arg slots that the caller never
+stored or not initialized, potentially dereferencing NULL caller->stack_a=
+rg_regs
+or getting no-initialized value.
 
-Yonghong Song (7):
-  bpf: Validate outgoing stack args when btf_prepare_func_args fails
-  selftests/bpf: Add test for stack arg read without caller write
-  selftests/bpf: Log arg_track_join for stack arg slots in liveness
-    analysis
-  bpf: Fix arg_track_join log to use sa prefix for stack arg slots
-  bpf: Clean up redundant stack arg checks for non-JITed programs
-  bpf,x86: Fix exception unwinding with outgoing stack arguments
-  selftests/bpf: Add exception tests with stack arguments
+To fix the issue, when btf_prepare_func_args() fails and the subprog expe=
+cts
+stack args, call check_outgoing_stack_args() to verify the caller initial=
+ized
+the slots. Return -EFAULT on failure so the error is not ignored.
 
- arch/x86/net/bpf_jit_comp.c                   |   9 +-
- include/linux/bpf.h                           |   3 +-
- kernel/bpf/core.c                             |   2 +-
- kernel/bpf/fixups.c                           |   3 +-
- kernel/bpf/helpers.c                          |   2 +-
- kernel/bpf/liveness.c                         |   4 +-
- kernel/bpf/verifier.c                         |  10 +-
- .../selftests/bpf/prog_tests/exceptions.c     |   7 ++
- .../bpf/progs/btf__verifier_stack_arg_order.c |   8 ++
- .../testing/selftests/bpf/progs/exceptions.c  | 113 ++++++++++++++++++
- .../selftests/bpf/progs/verifier_stack_arg.c  |   8 +-
- .../bpf/progs/verifier_stack_arg_order.c      |  58 +++++++++
- 12 files changed, 216 insertions(+), 11 deletions(-)
+Fixes: 3ab5bd317ee2 ("bpf: Set sub->arg_cnt earlier in btf_prepare_func_a=
+rgs()")
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ kernel/bpf/verifier.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 76a07f09ab64..8dd79b735a69 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9118,11 +9118,17 @@ static int btf_check_func_arg_match(struct bpf_ve=
+rifier_env *env, int subprog,
+ 	struct bpf_func_state *caller =3D cur_func(env);
+ 	struct bpf_verifier_log *log =3D &env->log;
+ 	u32 i;
+-	int ret;
++	int ret, err;
+=20
+ 	ret =3D btf_prepare_func_args(env, subprog);
+-	if (ret)
++	if (ret) {
++		if (bpf_in_stack_arg_cnt(sub) > 0) {
++			err =3D check_outgoing_stack_args(env, caller, sub->arg_cnt);
++			if (err)
++				return err;
++		}
+ 		return ret;
++	}
+=20
+ 	ret =3D check_outgoing_stack_args(env, caller, sub->arg_cnt);
+ 	if (ret)
 --=20
 2.53.0-Meta
 
