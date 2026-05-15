@@ -1,198 +1,107 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F693B47F7
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 20:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778877111; cv=pass; b=VblvX1FBWSkhbYi1nez/s4pE0tuEtvMqDP6Qkv6aF30oHcyAg8NhMgCavkOuOlDrOZYEodOxZefukH/TMxthx7eKXXqund3Ota8eITJXSAXE6GLhxPu2JO9e9LDefDjQ+kYFoRXco4wBV/NW0sp6iCqm8Y199w+93YALofDLjEk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778877111; c=relaxed/simple;
-	bh=9OMOUObyA/NJI8Nj5AuEVkMo+9Md8jL717X6LDMVPXU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FqVH1Th6/A7dscTJv5db8xxKke439SC4GahbFJBk7O5Pjt6U5tmp12K95MbZGuktHstO6BAmUL8h3IDR0lyfWAxoX2Gvb6+XiEnR7tFA/DSPCSWvf/JhnQ5QTpVJk6vZkQkk5ONJXiJCvcbNr45ImNhaPJA7bTiKATLZkIsZNEU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bxK/ARjG; arc=pass smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5326B389DF0
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 20:36:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778877370; cv=none; b=tf1UWJudl5bsYC4L9qoBKIDIUfr4BPv8PVclAC1SGxzDPpa/ZvD27wEtshiC9IZy1FCh9iBuQmTSgxOoH4XctiuuSJrU+SP7lp9R8oLt687PkZ12bz3g5t93xvXKZNi73aebDCObUrZUKsIs9SnG0z6I/05mOxFDAs/EzqkVtyU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778877370; c=relaxed/simple;
+	bh=jI6tqarsPGaco81iEqPfW1IgiYwnrNynhxjb6ExFkXI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=qR0Qdp2YH2XMmsS3Nm5lmPFenGn6jtutLEL33RjiNFU/bWfOlqF4C31IU1ME73TpDpsuLysqdNVT2hgnmtuUwqNn5PPZe5PhNH6IWxf1eaiA/e2XYnz4Wa232PxMXD2F14SlrwN0sCBSdPzUx2XlnkmGZJxQqKeSjN7iBhN4rPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SgFX6Mns; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bxK/ARjG"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c827313dac0so685023a12.1
-        for <bpf@vger.kernel.org>; Fri, 15 May 2026 13:31:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778877106; cv=none;
-        d=google.com; s=arc-20240605;
-        b=TtOPArbL4l1+qyMN9FmVV5MtWMvtNs3X3xy+i6vlJmghbGlazZytRpfY2XGRo9dzo0
-         acAgTignKvcbaSUn836G2I5jHOLen1TtxHTVx39CSwVIwpHVVRGqmgbVEUd0nDwoKvpm
-         Dmli0GeubwwedOBoRp/wVWVSiAqxrYthscfwf58kQ/MhQrwU7iO+m6qpRCxEMRraELf6
-         gJs4g3aY5cH4X1MJdELvs4+EOQRnTgXgCcEN0vtqsXaMQTytV8k+M45p000Ojoofq+d8
-         KUoWo9kOLec3lz6AED86WwHxv0Jar0QBce6fNIqLWYpz2h+xMXlpDLMR7A2PoLEZEQ9e
-         kvLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=GfKMCbzq+rYGH17flAZI0P8SiAo/th+/psoW2A9BSc4=;
-        fh=MvGIOrVCjjHAZCppGKn+WFWHQl6YhaO3PPmVwuICQUw=;
-        b=Kr5ZO8s+TWlOttNfHpCWnkSDRIhWsEXKm5Qqag0prShGZh89rbIWxHyxIMMZlpZTrt
-         wOd8IiumifosPIQsDMi2cz+OEVp0SAoIjbgHwejEHlyvPPvSUUsQV27zeU2zEZMehKJf
-         xZLhL5Cgg1y7Wni3TjePVekfoJdBc08hzOIWfKFXy7wo+7O9WmaC/nDhQit3ImEqvo4r
-         64aQumZ+e7v0Bkm+EISJ9zoYhOJSbsNY3l+TB5oXLXA84y3fZyNzBI61x2FiSsD/8War
-         mF8j7IUIVOdoi8B/tEp9kusist+EXdhoUSO1VX/I4NnUg+V9+Qgnv2+ts5kl9kx++j43
-         Drsw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778877106; x=1779481906; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GfKMCbzq+rYGH17flAZI0P8SiAo/th+/psoW2A9BSc4=;
-        b=bxK/ARjGYj3qePrf/PXxgkNvSEO82j7+vGjDXHLEbf5az10TkChLRa2r8SQ2oU2kod
-         ndLFWbFDkoKtN9AxZ2NSXRewttsrWIYhpa3yQtRTC6r1+58J4DHYBkhcd2koCZanrUzA
-         Lp3znOSLYTxNK7xlAJYVmRt4Uu33pV29+sF0ZBRYQj5lIrb5La/q2xVkEq1g7nWSMXjJ
-         xwy+ZY1t+qIAs1doLgjQfhFRawG7gahyqpTekLEmgQCuw9dUrFI8oPmarpCLLxCDZBZf
-         Sr0Bm36QZPcXFJ/SfuHqN4uVDe39BxCvIhcCnxbyXrja0dIknV2REUsBxzBChDgpd0y3
-         KZ5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778877106; x=1779481906;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GfKMCbzq+rYGH17flAZI0P8SiAo/th+/psoW2A9BSc4=;
-        b=Z4aGgJSpmZ4OejTWcGi3b+3R1EcxnVhbZ3m+u5VT974xKr3xOMHukI0Q/i3eufNvqp
-         hixt/49YaPnEY4Q9ypY1P4cjriSKTyjHPyK248l8OjjX0tU6ko0CgvuxD8lL7Xt/YwXb
-         xlKKGQ/cN11D4pNDJ+XwBYBIkqeB8M0/YKn7HPzo+1z4hS27GBTnJyBXjULlDSJztWvY
-         beFiZjwK59vV7gmZvTDduGVPDk25KKjN3Q5/mo45ciWndyx5CMxhxOZ89FHTfx9hwTo7
-         USfu+eh2gnQd959s2TOmYcD1EhaqVJXLGWiQHB8Yx9nQtlAV/eg52HD2PeRossgc5MdE
-         gqFw==
-X-Forwarded-Encrypted: i=1; AFNElJ8oNGzRmIVu3v5DGY0r3ZEVQtfkuxB0P69e1o+ymFv5l4BcLRL9IuQtpDTD42Lw/yePpho=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqZLR0riHie0KmBIGDRvRQ65Rm3QEhUT9oghGChoZxbHHNBbXN
-	eiERG/upRBwaLfaVVYhsEGqy9jxo6i1uuNvBBq1UnyOg0hOAurxIa/rflU+RqutBnLmign5PI//
-	GZRvfslvaFNkogEv2IEm/CzY6PAHjh2s=
-X-Gm-Gg: Acq92OHI0X466jrmhZUfmXAbvKdUmXI4R9C6Dm+xPBy6l3Lst6ru9h4lxNtd7S85tdp
-	Su4hqy/fya7xgDEdQ+nAd93T34s6N1iBQpviBZCZwMYsuSLrBzsjPBEwrWAcfM6uOT1M7AN70sZ
-	k0X3n9xO3EfEqzc4DFzaFKhx/i6kx+2xB2j6IJ07sV2IR+YRTHpFIfjajpE3XI4kn/OtknmIsBw
-	87gWyErGq6jdhFlDaAjZotbkamIICO94Xxol17dCFvCXYhIb91QFWqMNG/5Hcr+8gFtVTSneA6F
-	6UBzRqHGkr3h38Z+CyAndbWSGfHrvqqt1Q==
-X-Received: by 2002:a17:90b:1d8e:b0:35b:d795:cf5d with SMTP id
- 98e67ed59e1d1-3695137f713mr4228692a91.5.1778877105837; Fri, 15 May 2026
- 13:31:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SgFX6Mns"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E01BDC2BCB0;
+	Fri, 15 May 2026 20:36:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778877370;
+	bh=jI6tqarsPGaco81iEqPfW1IgiYwnrNynhxjb6ExFkXI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=SgFX6MnsRw2w0mGNsYC2DAWmKsdtdiuRQNux8qAf8/m9iYfPWOCdX7f7D2k46etwa
+	 2FjHO785jVKNwiDrv78EeztOyaFAW0uwbvU1OY0TuJH0/9hSakr8q8SiwUaeUvLjBq
+	 LBzQo2Fc3MGcuIGaL0XoDpR791wCggzR1N8RK7FTOtXNNgV4fvsB3hm45QF70nLAYK
+	 oFnQ8JFvu5NnACCVJSmSo/8StbIie62ZHi96ZNDG49EwOIPhxMZYq190NFFzckHeSb
+	 vRe37juU95wzPxh4CQbdljlqgKplBYgiM2OkRh6ufMEJX6qCIZbtcOHXpIQ6ie75TA
+	 6hg14xPx+oaYA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v5 2/4] selftests/bpf: add bpf_icmp_send kfunc
+ tests
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Mahe Tardy" <mahe.tardy@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260515194746.50920-3-mahe.tardy@gmail.com>
+References: <20260515194746.50920-3-mahe.tardy@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 15 May 2026 20:36:09 +0000
+Message-Id: <20260515203609.E01BDC2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260514135342.22130-1-jolsa@kernel.org> <20260514135342.22130-2-jolsa@kernel.org>
-In-Reply-To: <20260514135342.22130-2-jolsa@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 15 May 2026 13:31:31 -0700
-X-Gm-Features: AVHnY4IkXbPoE27Y25mhMhjX45nN-pzqZNIcNXqxHbAb6I9OJRsGCw2MdyrOT6c
-Message-ID: <CAEf4BzZxNLEeyDE2aJVm=T=RzDayaHzAbHxXQqn6M6uqa45obA@mail.gmail.com>
-Subject: Re: [PATCH 1/7] uprobes/x86: Move optimized uprobe from nop5 to nop10
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 14, 2026 at 6:53=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> Andrii reported an issue with optimized uprobes [1] that can clobber
-> redzone area with call instruction storing return address on stack
-> where user code may keep temporary data without adjusting rsp.
->
-> Fixing this by moving the optimized uprobes on top of 10-bytes nop
-> instruction, so we can squeeze another instruction to escape the
-> redzone area before doing the call, like:
->
->   lea -0x80(%rsp), %rsp
->   call tramp
->
-> Note the lea instruction is used to adjust the rsp register without
-> changing the flags.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The `read_icmp_errqueue` function will silently pass without ass=
+erting the error code if an `IP_RECVERR` control message is not found.
+--
 
-I think it should be very loudly explained that we can't go back to
-nop10 and have to do short jump over patched sequence (and why).
+commit 30b471fdde74d100ff073064731c793e5f178384
+Author: Mahe Tardy <mahe.tardy@gmail.com>
 
->
-> The optimized uprobe performance stays the same:
->
->         uprobe-nop     :    3.129 =C2=B1 0.013M/s
->         uprobe-push    :    3.045 =C2=B1 0.006M/s
->         uprobe-ret     :    1.095 =C2=B1 0.004M/s
->   -->   uprobe-nop10   :    7.170 =C2=B1 0.020M/s
->         uretprobe-nop  :    2.143 =C2=B1 0.021M/s
->         uretprobe-push :    2.090 =C2=B1 0.000M/s
->         uretprobe-ret  :    0.942 =C2=B1 0.000M/s
->   -->   uretprobe-nop10:    3.381 =C2=B1 0.003M/s
->         usdt-nop       :    3.245 =C2=B1 0.004M/s
->   -->   usdt-nop10     :    7.256 =C2=B1 0.023M/s
->
-> [1] https://lore.kernel.org/bpf/20260509003146.976844-1-andrii@kernel.org=
-/
-> Reported-by: Andrii Nakryiko <andrii@kernel.org>
-> Closes: https://lore.kernel.org/bpf/20260509003146.976844-1-andrii@kernel=
-.org/
-> Fixes: ba2bfc97b462 ("uprobes/x86: Add support to optimize uprobes")
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  arch/x86/kernel/uprobes.c | 121 +++++++++++++++++++++++++++-----------
->  1 file changed, 86 insertions(+), 35 deletions(-)
->
-> diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
-> index ebb1baf1eb1d..f7c4101a4039 100644
-> --- a/arch/x86/kernel/uprobes.c
-> +++ b/arch/x86/kernel/uprobes.c
-> @@ -636,9 +636,21 @@ struct uprobe_trampoline {
->         unsigned long           vaddr;
->  };
->
-> +#define LEA_INSN_SIZE          5
-> +#define OPT_INSN_SIZE          (LEA_INSN_SIZE + CALL_INSN_SIZE)
-> +#define OPT_JMP8_OFFSET                (OPT_INSN_SIZE - JMP8_INSN_SIZE)
-> +#define REDZONE_SIZE           0x80
-> +
-> +static const u8 lea_rsp[] =3D { 0x48, 0x8d, 0x64, 0x24, 0x80 };
-> +
-> +static bool is_lea_insn(const uprobe_opcode_t *insn)
+selftests/bpf: add bpf_icmp_send kfunc tests
+
+This commit adds a new selftest for the bpf_icmp_send kfunc. It sets up
+a client/server connection, attaches an egress cgroup_skb program to
+trigger an ICMP unreach message, and verifies the correct ICMP unreach
+code is received in the error queue.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c b/t=
+ools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+> new file mode 100644
+> index 0000000000000..b98c0312adadc
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+
+[ ... ]
+
+> +static void read_icmp_errqueue(int sockfd, int expected_code)
 > +{
-> +       return !memcmp(insn, lea_rsp, LEA_INSN_SIZE);
-> +}
+
+[ ... ]
+
+> +	for (; cm; cm =3D CMSG_NXTHDR(&msg, cm)) {
+> +		if (cm->cmsg_level !=3D IPPROTO_IP ||
+> +		    cm->cmsg_type !=3D IP_RECVERR)
+> +			continue;
 > +
->  static bool is_reachable_by_call(unsigned long vtramp, unsigned long vad=
-dr)
->  {
-> -       long delta =3D (long)(vaddr + 5 - vtramp);
-> +       long delta =3D (long)(vaddr + OPT_INSN_SIZE - vtramp);
->
->         return delta >=3D INT_MIN && delta <=3D INT_MAX;
->  }
-> @@ -651,7 +663,7 @@ static unsigned long find_nearest_trampoline(unsigned=
- long vaddr)
->         };
->         unsigned long low_limit, high_limit;
->         unsigned long low_tramp, high_tramp;
-> -       unsigned long call_end =3D vaddr + 5;
-> +       unsigned long call_end =3D vaddr + OPT_INSN_SIZE;
->
->         if (check_add_overflow(call_end, INT_MIN, &low_limit))
->                 low_limit =3D PAGE_SIZE;
-> @@ -826,8 +838,8 @@ SYSCALL_DEFINE0(uprobe)
+> +		sock_err =3D (struct sock_extended_err *)CMSG_DATA(cm);
+> +
+> +		if (!ASSERT_EQ(sock_err->ee_origin, SO_EE_ORIGIN_ICMP,
+> +			       "sock_err_origin_icmp"))
+> +			return;
+> +		if (!ASSERT_EQ(sock_err->ee_type, ICMP_DEST_UNREACH,
+> +			       "sock_err_type_dest_unreach"))
+> +			return;
+> +		ASSERT_EQ(sock_err->ee_code, expected_code, "sock_err_code");
+> +	}
+> +}
 
-should we change -ENXIO to -EPROTO or some other distinct error code,
-so libbpf can avoid using nop5 attachment on kernels new enough to
-support nop5 optimization, but old enough to not do this properly with
-nop10?
+Does this function silently pass if no IP_RECVERR control message is found?
 
->         regs->ax  =3D args.ax;
->         regs->r11 =3D args.r11;
->         regs->cx  =3D args.cx;
-> -       regs->ip  =3D args.retaddr - 5;
-> -       regs->sp +=3D sizeof(args);
-> +       regs->ip  =3D args.retaddr - OPT_INSN_SIZE;
-> +       regs->sp +=3D sizeof(args) + REDZONE_SIZE;
->         regs->orig_ax =3D -1;
->
->         sp =3D regs->sp;
+Looking at the loop, if it finishes without finding a message where
+cm->cmsg_level =3D=3D IPPROTO_IP and cm->cmsg_type =3D=3D IP_RECVERR, it ex=
+its
+normally without executing the assertions.
 
-[...]
+Should there be a check after the loop or a boolean flag used to ensure the
+expected message was actually received, rather than allowing the test to
+pass successfully when the message is completely absent?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260515194746.5092=
+0-1-mahe.tardy@gmail.com?part=3D2
