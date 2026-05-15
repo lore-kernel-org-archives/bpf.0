@@ -1,158 +1,164 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA1637F015
-	for <bpf@vger.kernel.org>; Thu, 14 May 2026 23:59:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2D711E511;
+	Fri, 15 May 2026 00:01:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778803159; cv=none; b=eyGGOiMnLYq1FGheE7XUi6zVDNfe0H6SZ1PxmhFcUKBMg6v3NwFyAkyQGLnCek8psgD1StBTXjfBFSi993xQeu7+uyOaQV6kjdivQb32gVwolBq8cTM7MO6miaLuDqa4JACZCKpUXdNnCEdufqqwc0qIa3y4oTto1tzfY8xYVbs=
+	t=1778803307; cv=none; b=i3/kUbQH/SaRIRIToFV3qohd/f96FN+5FlCJcuPOPntZqrNXGbAojrQ/x4WCQRW+/kTnVXR1G0l6ZKZd9JTMY1EcPk+BJlp4DB8Xkz/4AZSUJ/wJbtsJnvWULOni2HR3zyNkpFRsupbpyXO28qVkMnLR+pkcTdtquedb4aNtjc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778803159; c=relaxed/simple;
-	bh=rma+j5DMovVGBr/2qKK/beJSBDTRQXYhT1j6mSQs5qA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=J2QX0owrWt5JH9Mcvh/HP1e4enWJjNjC0MlfrFIFSLNuPAqdHoyyaMOlREXcj5k8CxXe0Lx5jTEU9pXjRZ864sTXiw8T6Mkojoo9Gvd4YRalvf8VAVl9uz3dvBdbH/cdIMqT3wn4oe0u6KA3+lKjcpCiV2Tl3MPPGpGdp9NLSek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lXvKGiKK; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lXvKGiKK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAA8DC2BCB3;
-	Thu, 14 May 2026 23:59:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778803158;
-	bh=rma+j5DMovVGBr/2qKK/beJSBDTRQXYhT1j6mSQs5qA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=lXvKGiKK/swZe7RbiU+5kbgnj34NqNiZcKuPsiodwP/gJD2fYQjozyo6QJNFgTuL1
-	 4TvWyxqPeRH8P/wr9SDRtHgAGOeeMiBy87PM7ZuWLNgNNentKOBYV7tIFaialw5Vif
-	 /6XNrzQ89StlbrDn0EidTu58MnIHyDGvxk/T8v8Wd5iYj39o7NpEoFE9QGgbGnOPWL
-	 dRjIhQWImOINtbz1uXt3gGeRxB35Aovgi3HLDrWniNHArutcurspBbm4R7n7jTT/LC
-	 Pt8+sSjR3Ep0t9rAT+f1FpHdvaFzQFj2sNdqf7GG78/RyeZ+crY+uHekKPNquM6FZB
-	 aS63DHGKVbNGA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 11/25] bpf: Reject stack arguments in
- non-JITed programs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260513045049.2390444-1-yonghong.song@linux.dev>
-References: <20260513045049.2390444-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 14 May 2026 23:59:18 +0000
-Message-Id: <20260514235918.CAA8DC2BCB3@smtp.kernel.org>
+	s=arc-20240116; t=1778803307; c=relaxed/simple;
+	bh=tdH1VrcQncwA79cpJHv5nqOIrihe48zQtl+e4GgZTC8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=arfJvm3GH8FOvUQ/L4X3BeiRknUibCoK76buQ+kk0zTWP3tZT+ku5QkD9ILZa04vVx2unPc8fxqYV5rmneFqlHruNfb3rdmtmUtm4nxqI87/ZyxmkVEsDkKwF6FUyHfl3byqnaM7P1luAzKPDDsXi+xHdAdXVjY8JFGjaDJpKT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-c45ff70000001609-85-6a06625d2aa3
+Date: Fri, 15 May 2026 09:01:28 +0900
+From: Byungchul Park <byungchul@sk.com>
+To: Dragos Tatulea <dtatulea@nvidia.com>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>,
+	Pedro Falcato <pfalcato@suse.de>,
+	"Vlastimil Babka (SUSE)" <vbabka@kernel.org>, linux-mm@kvack.org,
+	akpm@linux-foundation.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
+	harry.yoo@oracle.com, ast@kernel.org, daniel@iogearbox.net,
+	davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+	john.fastabend@gmail.com, sdf@fomichev.me, saeedm@nvidia.com,
+	leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
+	andrew+netdev@lunn.ch, edumazet@google.com, pabeni@redhat.com,
+	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+	horms@kernel.org, jackmanb@google.com, hannes@cmpxchg.org,
+	ziy@nvidia.com, ilias.apalodimas@linaro.org, willy@infradead.org,
+	brauner@kernel.org, kas@kernel.org, yuzhao@google.com,
+	usamaarif642@gmail.com, baolin.wang@linux.alibaba.com,
+	almasrymina@google.com, toke@redhat.com, asml.silence@gmail.com,
+	bpf@vger.kernel.org, linux-rdma@vger.kernel.org,
+	sfr@canb.auug.org.au, dw@davidwei.uk, ap420073@gmail.com
+Subject: Re: [PATCH v4] mm: introduce a new page type for page pool in page
+ type
+Message-ID: <20260515000128.GA7850@system.software.com>
+References: <20260224051347.19621-1-byungchul@sk.com>
+ <982b9bc1-0a0a-4fc5-8e3a-3672db2b29a1@nvidia.com>
+ <4af19eda-c29c-4302-92d5-c0915267fc0c@kernel.org>
+ <agRB2QTbzceRgpzX@pedro-suse>
+ <1817a749-8232-43ab-a0f5-350e5aade235@kernel.org>
+ <f3e38c07-d410-4c8e-a572-68d52dc55353@nvidia.com>
+ <20260514085402.GA63255@system.software.com>
+ <f4f5e3b2-64c4-4ad2-8678-d29ae08150e6@nvidia.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f4f5e3b2-64c4-4ad2-8678-d29ae08150e6@nvidia.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0yTZxTH87zPe6Pa7LE4eabZsnSbGiIMicazbN6yLHmzZRm6L8u8bNW+
+	kSKt2ioDki1lNhGZXKYjgVIXUG4CprFIoVUMAgNh3lIDeTetRRx2boiGkoZSFFuM0W+//M//
+	/HI+HBFrhrmlosF0UDabdNlaXsWqHi2sSdmxi89KqwungcPZwkPzdC40jHRwEGkJMuBociOY
+	itwWYK6zD0Got5+H/3smEZyuCWNw3LCxEGybQeDxBhH8V3GWh7G+UQGaXV9CoP4BCxePtGMY
+	Lb3CQ7EtiqEzMiHAzx2NMXGrVYCb7hIOfpupw9BuHRHgltfBw92WOQ4edBezMGA/w8KT8l4M
+	gZJN0Fe9BMJ/jiP4t8EhQK+znYHwsZM8DFV6GWjrHBLghK+ah/u2AAJfzygL5bOFPBQ+DLBQ
+	VVCCIDodk0+UTXFQ9cddYVOaVKAovNQz/hhL58/8xUjDFb+yknJpkJE8dr8gVbsOSa2NyVKR
+	4sOSq+koL7kmjwvSneGLvHSlIspKnnsfSZ6OECMVH57gM5Z8q/pEL2cbcmTzhxu+V2Weq7ei
+	/QNJuX5nGW9FvZoilCBSsobOzvSzL3la8QlxZskH9E5jLY4zT1ZQRYnM82KyklrbTsT6KhGT
+	v0V6uCsyv5xIttJBe9V8SU3W0QvjzVy8pCGFmPpDp7gXg0V0oPKf+QVMkqny7CFThMQYL6MN
+	z8R4nEA20Ee3/SjOb5L3aJe7n4l7KJkT6ZwtKry49C16uVFhyxCxv6a1v6a1v9JWI9yENAZT
+	jlFnyF6TmplnMuSm7t5ndKHYt9X/OLutA03e/LobERFpF6q/uc5laThdjiXP2I2oiLWL1SkX
+	YpFar8vLl837vjMfypYt3WiZyGqT1OnhH/Qaskd3UN4ry/tl88spIyYstSJbILOFrPUf/+Lj
+	2vMNiZ6CdOwevBrYbGxFTaYtTmNQn+Z7sv3AUzfJq83oGlv12VhFxvDy6E+fZyw6tUWt90Z2
+	4t9L16cn3b9xtXxk8peU6Kf5pVTDORPfrtyoCV0LdW1fUJcfvPXOV5aaobMk8Wjw/Tey1voe
+	e72Vuy+vTH13SqtlLZm61cnYbNE9BxRLiQppAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTcRjG+Z+7q8FxmZ6Uvqy70sUoersQfig6BIUZFYRdVp5ytk3b1DQI
+	Vg4ySbPsonPS8u40rJm6eYnSpa0LhVasbM6snJZppJhrUm1G1Lcfz/P83k8vg0ssZCgjVyUL
+	apVMIaVEhGj7+oyl+w5RCStuuYLAUFtDQfVkGlT0WUjw1LgxMJgaEIx7emj41dqBYMzWScHn
+	9m8ISm5M4GB4piPAXf8DgbXJjeBT/k0KPnb001Bt3gau8gECWs424tB/4SEF2TovDq2eERrO
+	WCp9h+u0NLQX2Ul43pBDwuUfZTg0avto6G4yUNBb84uEgbZsAuz6KgK+XrHh4MqJgg5jMEw8
+	HkYwWGGgwVbbiMHE+SIKXhY0YVDf+pKGvC4jBe91LgRd7f0EXJnKpCBzyEVA4ekcBN5J3/GR
+	3HESCh/00lGR/GmHg+Lbh0dx/k7Va4x/lX+R4B13H2G8Ve+keaM5ha+rDOezHF04bzado3jz
+	t0s0//ZVC8U/zPcSvPXdWt5qGcP47IwRKjpkr2hDnKCQpwrq5RsPiuJvl2tRkj0kzVmbS2mR
+	TZKFAhiOXcVNOrpoPxPsAu5tZSnuZ4pdxDkcnmkOYhdz2vo8IguJGJx9w3AZ9zyEv5jFxnCP
+	9IXTIzG7hmserib9IwmbiXPOsWLyTxHI2Qs+TAs4G845fg5hWYjxcRhX8ZPxxwHsRu5LjxP5
+	eTY7j7vX0InlIrH+P1v/n63/ZxsRbkJBclWqUiZXrF6mORafrpKnLTucqDQj3z+Vn5q6aEHj
+	3VvaEMsg6UxxdCeZICFlqZp0ZRviGFwaJF7a7IvEcbL0k4I68YA6RSFo2lAYQ0hDxFv3CAcl
+	7FFZsnBMEJIE9d8WYwJCtehsxtzBncL+k7HBuvIhVawy4uuQtRJGtbcu9LQMOJ+aUkwfBicf
+	zzrqtiTtQcb1R0I/6d4Heq957+8qch76Pidl890Z6zZ1KJ8kR9m04UXYytj5sbqIPP3eEyVJ
+	L9xL7FV97lJRd8vqqbLr2+uOx1wtPtUf17uweUdE82I4sDsyrFRKaOJlkeG4WiP7DVpNal5L
+	AwAA
+X-CFilter-Loop: Reflected
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Critical] The patch fails to prevent interpreter fallback if stack argum=
-ents are used only in nested subprograms (e.g., Main -> Subprog A -> Subpro=
-g B). This can lead to a kernel crash via an uninitialized R11 dereference.
-- [Low] Standalone global functions with stack arguments are rejected with =
-`-ENOTSUPP` without a verifier log, instead of `-EINVAL` with a descriptive=
- message.
---
+On Thu, May 14, 2026 at 11:24:36AM +0200, Dragos Tatulea wrote:
+> On 14.05.26 10:54, Byungchul Park wrote:
+> > On Wed, May 13, 2026 at 02:06:06PM +0200, Dragos Tatulea wrote:
+> >> On 13.05.26 11:36, David Hildenbrand (Arm) wrote:
+> >>> On 5/13/26 11:26, Pedro Falcato wrote:
+> >>>> On Wed, May 13, 2026 at 11:12:43AM +0200, Vlastimil Babka (SUSE) wrote:
+> >>>>> On 5/13/26 11:00, Dragos Tatulea wrote:
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>> Seems like this patch broke tcp_mmap because
+> >>>>>> validate_page_before_insert() returns -EINVAL due
+> >>>>>> to a page having a type. Here's the full flow:
+> >>>>>>
+> >>>>>> getsockopt(TCP_ZEROCOPY_RECEIVE) returns -EINVAL because of the
+> >>>>>> below flow in the kernel:
+> >>>>>>
+> >>>>>> tcp_zerocopy_receive()
+> >>>>>> -> tcp_zerocopy_vm_insert_batch()
+> >>>>>>   -> vm_insert_pages()
+> >>>>>>     -> insert_pages()
+> >>>>>>       -> insert_page_in_batch_locked()
+> >>>>>>         -> validate_page_before_insert() returns -EINVAL
+> >>>>>>            because page_has_type(page) is now true.
+> >>>>>>
+> >>>>>> The patch below fixes the issue. But is this a valid fix?
+> >>>>>
+> >>>>> Hmm the check traces back to commit 0ee930e6cafa0 "mm/memory.c: prevent
+> >>>>> mapping typed pages to userspace"
+> >>>>>
+> >>>>>> Pages which use page_type must never be mapped to userspace as it would
+> >>>>>> destroy their page type.  Add an explicit check for this instead of
+> >>>>>> assuming that kernel drivers always get this right.
+> >>>>>
+> >>>>> So uh, this doesn't look good I think.
+> >>>>
+> >>>> Yep, you fundamentally can't map a page with a type as page type aliases with
+> >>>> mapcount. Even with the given diff, just mapping it will increment the mapcount
+> >>>> and wreak havoc. I think we need to revert this patch for now.
+> >>>>
+> >>>> I'm not sure what the long term plan for this would be. If page types are moved
+> >>>> to memdesc types, then the two stop colliding and that could work. I don't know
+> >>>> if that's Willy's plan, however.
+> >>>>
+> >>>> (then there's the other question: are page pool pages really folios? not really.
+> >>>> they are mappable, but they aren't part of the page cache, or anon, nor are
+> >>>> they in the LRU or have rmap capabilities. perhaps we need a different memdesc
+> >>>> for those. we're one step away from reinventing class polymorphism from first
+> >>>> principles ;)
+> >>>
+> >>> Zi Yan is working on this: non-folio pages would no longer mess with
+> >>> rmap/mapcounts, and page table walking code will identify them to be non-folio
+> >>> things to skip them.
+> >>>
+> >>> It will take a while, though ...
+> >>>
+> >> So do I get it right that the path forward here is to revert this commit [1]
+> >> and wait until the work from Zi Yan is ready?
+> >
+> > I think it's the best way for now.
+> >
+> Ack. Can you do it please? This is a more complicated revert and the risk that I
+> mess it up is higher.
 
-commit 851a484e2b5b68983f11bc3764118f2bcba5acb0
-Author: Yonghong Song <yonghong.song@linux.dev>
+I will.
 
-bpf: Reject stack arguments in non-JITed programs
-
-This patch attempts to reject programs that use stack arguments when runnin=
-g in
-the interpreter, as the interpreter does not support the BPF_REG_PARAMS (r1=
-1)
-register. It does this by checking for stack arguments in
-__bpf_prog_select_runtime() and bpf_fixup_call_args().
-
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index ae10b9ca018df..958d86f0beac3 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2599,7 +2599,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct b=
-pf_verifier_env *env, struct
->  		goto finalize;
-> =20
->  	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
-> -	    bpf_prog_has_kfunc_call(fp))
-> +	    bpf_prog_has_kfunc_call(fp) || (env && env->subprog_info[0].stack_a=
-rg_cnt))
->  		jit_needed =3D true;
-
-Does this condition correctly catch stack arguments in nested subprograms?
-
-env->subprog_info[0].stack_arg_cnt only tracks the main program's incoming
-and direct outgoing stack arguments. If the main program calls Subprog A wi=
-th
-no stack arguments, and Subprog A calls Subprog B with more than 5 argument=
-s,
-the main program's stack_arg_cnt remains 0.
-
-If bpf_prog_jit_compile() subsequently fails for the main program,
-jit_needed evaluates to false and it falls back to the interpreter.
-
-> =20
->  	if (!bpf_prog_select_interpreter(fp))
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index ba86039789fdf..19056016eed8b 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -1407,6 +1407,12 @@ int bpf_fixup_call_args(struct bpf_verifier_env *e=
-nv)
->  		verbose(env, "calling kernel functions are not allowed in non-JITed pr=
-ograms\n");
->  		return -EINVAL;
->  	}
-
-Is it possible for bpf_jit_subprogs() to succeed earlier in this function
-and return 0, bypassing these new checks entirely?
-
-If jit_requested is true, bpf_jit_subprogs() is called before this
-point:
-
-kernel/bpf/fixups.c:bpf_fixup_call_args() {
-    ...
-	if (env->prog->jit_requested &&
-	    !bpf_prog_is_offloaded(env->prog->aux)) {
-		err =3D bpf_jit_subprogs(env);
-		if (err =3D=3D 0)
-			return 0;
-    ...
-}
-
-If it succeeds, the function returns 0 early, skipping the new loop.
-
-Combined with the issue in __bpf_prog_select_runtime() above, the interpret=
-er
-could end up executing the main program and processing BPF_PSEUDO_CALL
-instructions by jumping to the un-JITted instructions of the subprograms.=20
-
-When Subprog A writes to outgoing stack slots via BPF_REG_PARAMS (r11), the
-interpreter will use an uninitialized r11, potentially corrupting memory.
-
-> +	for (i =3D 1; i < env->subprog_cnt; i++) {
-
-Should this loop start at i =3D 0 to properly handle standalone global
-functions?
-
-For standalone global functions that are verified independently,
-env->subprog_cnt is 1. Starting the loop at i =3D 1 skips the global
-function entirely.
-
-The program is still safely rejected later in __bpf_prog_select_runtime()
-because env->subprog_info[0].stack_arg_cnt > 0 correctly sets
-jit_needed =3D true, leading to an -ENOTSUPP return. However, starting at
-i =3D 0 would emit the expected verifier log and return -EINVAL instead of
-failing silently with -ENOTSUPP.
-
-> +		if (bpf_in_stack_arg_cnt(&env->subprog_info[i])) {
-> +			verbose(env, "stack args are not supported in non-JITed programs\n");
-> +			return -EINVAL;
-> +		}
-> +	}
->  	if (env->subprog_cnt > 1 && env->prog->aux->tail_call_reachable) {
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260513044949.2382=
-019-1-yonghong.song@linux.dev?part=3D11
+	Byungchul
+> 
+> Thanks,
+> Dragos
+> 
+> 
