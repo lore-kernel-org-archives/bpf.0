@@ -1,154 +1,177 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70BBB3321A7
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 16:40:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44273F927E
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 16:41:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778863221; cv=none; b=IQbtJLiiB5ciPC7r5dkvcqHI3+Som++bIiIEY/MW8bkBDRSWWUKzxUCNsS407xQr77v0prTkyfN2+ZxfousyFWGU+op8E1gQjkAOLNEvvW25XpR8pSn0fMOfh06elnoLAdRVEa9dXdJGJmK9+ntF/bPxfKjsP8zt/ZvIMcQUwik=
+	t=1778863299; cv=none; b=IXDGQx/cRutAW4GrGpBPWVJYZ9iRZq+mkvfZRjFzJ3BEmqqQZSgapPyEHriP+Tw2GgY5R1e+W3yVPhqCtffx4HKbDY3xeLmGKTdttXL6PDeEtrmE6A+aUYs+zvwVvABrUvOJkwK+W55e8s+bCxcvhMOTB727zKn8baHkr0HkuhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778863221; c=relaxed/simple;
-	bh=vfptBbJElZ3Op7RaU6ED5TpNfMzlrdsbJQRKcutL+3s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=coD0N9FripxD3IVDRtZ6LxynBAhHWPbu7efz+wH7e49SLr0wMZfXRP81jsEiXORaNf2zsYvinqv3iTPaZGuhIWv1RzUVcXKIermcML11SjeCuid6CqDl4zLY3foeM2/F0EdpPw0egyVNR8w1jeulwrm+oJe80mnkhhePMKQCsFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=amTkad5a; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778863299; c=relaxed/simple;
+	bh=3hNAaiR4ZlfYXtpbG/PId2FkplkENPT7MqXDDOBnFn4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bKqdY5oQ7XtFXbqrTASQANtvY/BUVyvaQs58XnzWd7E+EwtN4E1tFm2DzK+B5OtmTpbmNYEJCPJYtuWX3a6ZUQdS32KIr+2liufPHu7cyIiZ7UCCgD72TPogKAgNux35GmKa0GiQWjFPs2uhkTrok4DBjxJPOug870RAnwA7MvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vlxd+YHj; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="amTkad5a"
-Message-ID: <862c4eb6-c1ba-4570-beda-2baaec63d904@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778863207;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/ELEz5GLh6Ex/92yMj17L1f58o+Y+p7rGA5o60AYmfc=;
-	b=amTkad5aVcPB6UGHqSnCEyHZdgGITW04bXtwlTCM1B91i4GfFmwFERiXPOwvE289PiooTl
-	EpGbg5k+kCAECWO8oNjOhzKUJcFO0lpmuUIqflTCJXSdP84ufeLkjUEvAaYvykylF0xNHJ
-	dLvW5dz52xmW+IGXWHaEkPTR/GYMirY=
-Date: Fri, 15 May 2026 09:39:57 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vlxd+YHj"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48984d29fe3so321515e9.0
+        for <bpf@vger.kernel.org>; Fri, 15 May 2026 09:41:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778863295; x=1779468095; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nH6Oz0qj3BS5COjXbRWw2uOYfMi24rwRQT1SPkqsjVs=;
+        b=Vlxd+YHjO36GD+c9qqJRjfGCs7UsoVTrBSwSUw6LCo7CWxHwmwOMG0vom0ECZGPgOB
+         RqzkHE3lbAFFe9O/d6CKLiZoTy5AI/5dJMEnNKP7+dwgBD5NXLHts0uL3p5gwDvSsuIB
+         DPSbYgJKV/6/Q3xJWe13CGTdvXZ3HQgS832LsmARosymCuzN9/kSbm2lpiEiefV1s3sB
+         ARP4yvDu9p7shX3ucGAugZOhkC4RUj4JdZ8iOfOMfTnii4m53IfKr+HYE+8rXu79itsL
+         d19FZZaUQAimgQYtMYZRoIyjO4lqOgEpCmHksaONDRrLBZZy6KcXI7IgOSColVvumMu0
+         /PIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778863295; x=1779468095;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nH6Oz0qj3BS5COjXbRWw2uOYfMi24rwRQT1SPkqsjVs=;
+        b=EuR3Jj1z9/FC1LfbpGbTncRghPqq7Tx011oWsB7ISoQPov973s3MSsqibvvAN/m1PR
+         +T3AlKEFhQ/rXE+BHRgXoNrSJe55SKqRd4RxJjsEraRvnzEEoJZg2MtarPIyk2BcuDh1
+         aY10B46jIwU9KQv0myPus34YqVQAy33xCX40Cx8It6oO/r1dXUBnF4iooeXuQXMyWJcR
+         cK8RcDbnjxRWXeIk9OyW3t1nVR2odR/vUvf5y+KrehBcur1orS3k86TIh67/LS/KnyBy
+         pGUA75Dn+U8I6jUjziDCO2GAfcu7/RoeDD9QATcLRWXJShWkEZYgFaKWxm89bCyyxlcd
+         3Fjg==
+X-Gm-Message-State: AOJu0YzWgFMHdRGguzREgdYRnFNBS8WWI2Tul7mG3rBK9h7hcSQielNz
+	FvqVlFYjNvrNR63uIXbJeqcextpa+L9F9zEBO0kA87B5Lzhzg5uRXx8QVVhjBA==
+X-Gm-Gg: Acq92OHM7+JYgzFA9L6Y7igP24p7aBPi4nt0oXqCvA3hnYN+vbdWZBLzV86/If4EdC6
+	hrmX7Zq6q9vXKpO9bdRFZOSK5uvgJIsXuD0UAl8eiJLkgQtRdAx3xQp7/Y31PdNCZOfWmpoNKB8
+	mFyYioeFpj68jV9i46d3VAsgTAgWLnFqwyJ/vucdUkXdzhm7CXBu0/+6dv1p7Suh3HTs4ffRsUJ
+	HFIKwWHUubDt2LHIhaU/A8laynbJ4WiuJrhQfYqP67XJHHzDlIgXNbV3JLu3B1ITcjkfXGTdsB5
+	qiUOaKbEUIt02JyLR2EUMkrBDuG9KX/BiCf6sqFaVa7HBSrJB1FwGW0zxhkEiIBbpf4KYCPoD3m
+	PEHyaM2wHhpCnakZ+I5t2QB6gIAq0w8qRsOQQPHn4rU9Sp75fcM3QCQBlEKYEeIltYJmKpjghQu
+	HGvQTz3ZdGjbFb
+X-Received: by 2002:a05:6000:228a:b0:43c:4810:dc4a with SMTP id ffacd0b85a97d-45e5c5a83f1mr6359512f8f.38.1778863294756;
+        Fri, 15 May 2026 09:41:34 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:1::])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da15a6454sm15745826f8f.34.2026.05.15.09.41.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 May 2026 09:41:34 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Subject: [PATCH bpf-next 0/3] tracing: Expose tracepoint BTF ids via
+ tracefs
+Date: Fri, 15 May 2026 09:41:00 -0700
+Message-Id: <20260515-generic_tracepoint-v1-0-aa619fa94132@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 15/25] bpf: Reject stack arguments if tail
- call reachable
-Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260513045109.2392108-1-yonghong.song@linux.dev>
- <20260515032335.C4FE4C2BCB0@smtp.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260515032335.C4FE4C2BCB0@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-B4-Tracking: v=1; b=H4sIAJ1MB2oC/x3MQQqDMBAF0KsMf20gSq0hVymlxDjqbMYwCUUQ7
+ 17oO8C7UNmEKyJdMP5KlUMRqe8IeU+6sZMFkTD44elHH9zGyib50yxlLodoc8sjhDSmKc19QEc
+ oxquc//SFuaxO+Wx43/cPxrtSIm4AAAA=
+X-Change-ID: 20260508-generic_tracepoint-d488a5a7ab18
+To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+ daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
+ eddyz87@gmail.com, memxor@gmail.com, peterz@infradead.org, 
+ rostedt@goodmis.org
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778863293; l=3677;
+ i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
+ bh=3hNAaiR4ZlfYXtpbG/PId2FkplkENPT7MqXDDOBnFn4=;
+ b=BBzsVsC/zpQAmiqIbkn4dThyRxbKUTu50Vc6CuwvXJTr8mQ9c+6jIpoo16kerIWDws86OwJHT
+ 0g+D9lItgN5Cq5EnygGLNawL2KbFQ4Qcbj76ofALA0u9baW+FawQRtc
+X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
+ pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
+BPF and other consumers that want to attach to or decode a generic
+tracepoint need three pieces of BTF information for it:
 
+  - the BTF of the object that owns the tracepoint's types
+  - the FUNC_PROTO describing the tracepoint arguments (with names),
+    consumed by raw_tp / tp_btf BPF programs
+  - the STRUCT id of trace_event_raw_<call>, the ring-buffer record
+    consumed by classic BPF_PROG_TYPE_TRACEPOINT programs
 
-On 5/15/26 5:23 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [High] Order-dependent verification allows invalid programs combining tail calls and stack arguments to bypass checks.
-> - [High] Exception and async callbacks bypass the new stack argument and tail call restriction.
-> --
->
-> commit 807349b213e40b7418c45dc1ae2cee5695bf101d
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> bpf: Reject stack arguments if tail call reachable
->
-> This patch updates the BPF verifier to reject programs that combine tail calls
-> with stack arguments, as tail calls are deprecated. It hooks into the call
-> depth traversal to fail verification if stack arguments are present in a
-> call chain that can reach a tail call.
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index a363811aec7a0..47df3f40a71cf 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -5267,14 +5267,23 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
->>   	 * this info will be utilized by JIT so that we will be preserving the
->>   	 * tail call counter throughout bpf2bpf calls combined with tailcalls
->>   	 */
->> -	if (tail_call_reachable)
->> +	if (tail_call_reachable) {
->>   		for (tmp = idx; tmp >= 0; tmp = dinfo[tmp].caller) {
->>   			if (subprog[tmp].is_exception_cb) {
->>   				verbose(env, "cannot tail call within exception cb\n");
->>   				return -EINVAL;
->>   			}
->> +			if (subprog[tmp].stack_arg_cnt) {
-> Can this check be bypassed depending on the order of subprogram calls?
+Today none of this is easily discoverable from userspace. The kernel
+knows the ids - resolve_btfids fills them in at link time - but
+consumers have to search them by the naming convention
+("__bpf_trace_<name>", "trace_event_raw_<name>"), walking BTF for
+every tracepoint.
 
-No.
+This series stores those ids in trace_event_class and exposes them
+via events/<sys>/<event>/btf_ids, e.g.
 
->
-> If a main program calls subprogram A (which uses stack args) and then
-> subprogram B (which has a tail call), it seems subprogram A might be
-> evaluated first when tail_call_reachable is false, bypassing this check.
->
-> When subprogram B is evaluated, it sets tail_call_reachable to true,
-> which propagates to the main program.
->
-> When the main program finishes, only the main program's stack_arg_cnt is
-> checked, allowing the program to pass verification.
+  # cat /sys/kernel/tracing/events/sched/sched_switch/btf_ids
+    btf_obj_id: 1
+    raw_btf_id: 28882
+    tp_btf_id: 106335
 
-But in this case, main program stack_arg_cnt is not 0, so -EINVAL will return.
+  # bpftool btf dump id 1 root_id 28882 format raw
+  [28882] FUNC_PROTO '(anon)' ret_type_id=0 vlen=5
+        '__data' type_id=9
+        'preempt' type_id=60674
+        'prev' type_id=219
+        'next' type_id=219
+        'prev_state' type_id=108689
 
-> If the calls were reversed, subprogram A would inherit the true state and
-> be correctly rejected.
->
-> Does this sequence allow invalid programs to bypass the safety check?
->
->> +				verbose(env, "tail_calls are not allowed in programs with stack args\n");
->> +				return -EINVAL;
->> +			}
->>   			subprog[tmp].tail_call_reachable = true;
->>   		}
->> +	} else if (!idx && subprog[0].has_tail_call && subprog[0].stack_arg_cnt) {
-> Does this fallback check miss exception and async callbacks?
+  # bpftool btf dump id 1 root_id 106335 format raw
+  [106335] STRUCT 'trace_event_raw_sched_switch' size=64 vlen=9
+        'ent' type_id=104654 bits_offset=0
+        'prev_comm' type_id=580 bits_offset=64
+        'prev_pid' type_id=92875 bits_offset=192
+        'prev_prio' type_id=79365 bits_offset=224
+        'prev_state' type_id=83958 bits_offset=256
+        'next_comm' type_id=580 bits_offset=320
+        'next_pid' type_id=92875 bits_offset=448
+        'next_prio' type_id=79365 bits_offset=480
+        '__data' type_id=407 bits_offset=512
 
-This check does not deal with exception and async callbacks.
+For per-syscall events (all sharing the same dispatcher), raw_btf_id
+is 0 — raw_tp / tp_btf programs attach to raw_syscalls/sys_{enter,exit},
+not per-syscall events:
 
->
-> By explicitly checking !idx and subprog[0], it appears to assume the main
-> program is the only call graph root.
->
-> Since exception and async callbacks are verified independently as their own
-> root programs (where idx > 0), would a callback that contains a tail call,
-> uses stack arguments, and makes no BPF-to-BPF calls bypass both the primary
-> tail_call_reachable check and this fallback check?
+  # cat /sys/kernel/tracing/events/syscalls/sys_enter_write/btf_ids
+    btf_obj_id: 1
+    raw_btf_id: 0
+    tp_btf_id: 106540
 
-As far as I know, callback and exception prog are not allowing tail call.
-For example:
-                 if (subprog[sidx].is_async_cb) {
-                         if (subprog[sidx].has_tail_call) {
-                                 verifier_bug(env, "subprog has tail_call and async cb");
-                                 return -EFAULT;
-                         }
-			...
-		}
+This unlocks few usecases for consumers:
 
-...
-         if (tail_call_reachable) {
-                 for (tmp = idx; tmp >= 0; tmp = dinfo[tmp].caller) {
-                         if (subprog[tmp].is_exception_cb) {
-                                 verbose(env, "cannot tail call within exception cb\n");
-                                 return -EINVAL;
-                         }
-			...
-		}
-	}
+  - Resolving tp_btf attach targets and argument types directly,
+    instead of constructing "__bpf_trace_*" names and
+    re-discovering them in vmlinux BTF.
+  - Get a stable, machine-readable contract for tracepoint payloads,
+    with field names preserved.
 
->
->> +		verbose(env, "tail_calls are not allowed in programs with stack args\n");
->> +		return -EINVAL;
->> +	}
->> +
->>   	if (subprog[0].tail_call_reachable)
->>   		env->prog->aux->tail_call_reachable = true;
+Patch 1 exports the two BTF helpers the tracing core needs.
+Patch 2 wires DECLARE_EVENT_CLASS to publish the ids, adds the tracefs
+        reader, and wires the syscall classes so per-syscall events
+        carry tp_btf_id (raw_btf_id is 0 there — see above).
+Patch 3 adds a selftest covering the sched_switch tracepoint.
+
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+---
+Mykyta Yatsenko (3):
+      bpf: Export btf_get_module_btf() and btf_relocate_id()
+      tracing: Expose tracepoint BTF ids via tracefs
+      selftests/bpf: Add test for tracepoint btf_ids tracefs file
+
+ include/linux/btf.h                                |   2 +
+ include/linux/trace_events.h                       |   9 ++
+ include/trace/trace_events.h                       |  24 ++++
+ kernel/bpf/btf.c                                   |   6 +-
+ kernel/trace/trace_events.c                        |  81 +++++++++++++-
+ kernel/trace/trace_syscalls.c                      |  17 +++
+ .../testing/selftests/bpf/prog_tests/tp_btf_ids.c  | 124 +++++++++++++++++++++
+ 7 files changed, 260 insertions(+), 3 deletions(-)
+---
+base-commit: 3fe213c040b3a175f6051ed3aaf823a430ac0b08
+change-id: 20260508-generic_tracepoint-d488a5a7ab18
+
+Best regards,
+--  
+Mykyta Yatsenko <yatsenko@meta.com>
 
