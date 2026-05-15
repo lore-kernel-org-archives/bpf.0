@@ -1,167 +1,117 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95CB937C0FC
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 19:48:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95630388E62;
+	Fri, 15 May 2026 19:48:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778874492; cv=none; b=rNSCM49geSO4CesDB47llVZ6TBu+qxsaPcvPy8IZahNnyVQf+v1r9qXXkMTJ/l4faRnaMdUAYgql1xCCaQ3neDC+6qsnqrjkFS+C893Bl6UuHVydob1wMNh/c65/0flUQ2nImh2ybvLls50217rBZE3+wi8TUzRtcJ+gLJYx8nM=
+	t=1778874495; cv=none; b=YWAy+zDsAE3w+rZFphPSVZ4MLVOjpsynfgLa5ptfz4wYkVNt11r4NhF/HBKneQxSrI03Im0SzW4USvOt14g4UYui8zT78T+fCgPkrMpULtB9pQIZwJYi76cyz6DRhLrSczjbnC04lsvmnnV9WqA1b527tuNUUe02zn5UA37huuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778874492; c=relaxed/simple;
-	bh=YQTSnBKXSZ6DXmMJfmTI8kl5fiE+zcKdBcwFS7x8CUY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MXCYsUVDvh4UxwjK9GBUZynSFN8nul+cjzVKAK5RJmTESHidwHN3E+saOgZjh1t7sfvs6+HEzuDorwF4sZyamiHh87K9bXshNho+c2PQwMFaLuI2rsDcMO9xJWGbOnuiRQoupmk97jpngUcZznaYUM0Ki9YUPS9XgGkZ+9M2NJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VyZIE+G6; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778874495; c=relaxed/simple;
+	bh=2IEyOw6Z8HJDTQVQ25UoBE85/dz6zn8voxPel+zo1l8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rFSdozXilS+2Ku/qUMhikV8jFfutDQz75aFTBkhU9ImvPIzCSi7/onRWfG2zxaaGVpIbIHP1a+AbI9N7g1B254cIGp8nE6X5hkuPlzk93IgzHqVwCHclHNLeUX6INaIITbkbfJ6gk8IqolYlHfxOxCK9PFeRY8z75A9pF3Iuub4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PomqFIK1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VyZIE+G6"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48a563e4ef7so1607665e9.0
-        for <bpf@vger.kernel.org>; Fri, 15 May 2026 12:48:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778874478; x=1779479278; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cuBiYanhPSZBjczVVrC3iA2zrRkOY+30jLwNONrxrkY=;
-        b=VyZIE+G6fLnoAz0wHrGaFGvWYJ7XAVr/rcPyS2BblOtCXeujJd6SxyE6q4ymZwaYAC
-         t+ZLCC7svN1A666OScZtJUD33UsqvMc1PPWedmlvNR0CTRgPaLc+UYWC68SpgJmPL4Iy
-         ggFIhMns1/o4f8OMM3WN7lkFWAWVoYcCTqp8pnBhEuS420k4Q8JtbY8t7FChhw13Do5h
-         Bqvn1xwZf05ZAvAdcAcV25TCpS2IppYWS6gNwvipCuqgctDFtuvkWC6YzzJWOwAu8509
-         kiTc8OSt8MTY7I0UiZwo3O91JfzrGeiHFz/mn1MxL2RftCleNbyX76uTmkoxj6kkN3Ay
-         P7UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778874478; x=1779479278;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cuBiYanhPSZBjczVVrC3iA2zrRkOY+30jLwNONrxrkY=;
-        b=Bmo3kOmXpNUohDYTrnTZW1NHjxUiH14ev7OYR9YCIkIsJIGkshW1Jw0uXBgfWgcZOb
-         CcVM8rOH0mGEiikqqMpd4UesIOPb38K2MlVtIV62TcfOp/LqiJq3QK9DBhq46oS9sBiI
-         FL9KpwpWjN97oEt3Nunt7wac171XTqcmRQsu2mc/Y/VU8FjRoZj3RN0G3TIchMJQoQHV
-         wE7RqNkb2OMtWnVWiabFi08Wybs8jYgeDde8KZ5CnBAK/vpz3RGrQ8JgwSXhSQ2alRj0
-         eqQXXQT7VuKS0bZKxOYjwSJEwtF1ADYhYBK1CbuxQgg2VysxxM5BGgVfoQhJSAITPau/
-         TZ4Q==
-X-Gm-Message-State: AOJu0YxvwB5VaBw0B8q2gEPv45ppnmNecNRviVwO7ZHAXKaJgC7v7kWt
-	r0VeGmx+TK3UZVVhZrCjX2Tzxoo9PCLp71rTKINoS4cb/Oae7XoZVzZ2npZ6HD8n
-X-Gm-Gg: Acq92OFU1KkmZwEe5oI3pGXFJDat8jYqD4npt4nri9JlmNEehMomgw+J4F3vP/66iCY
-	mNjWDbIJh0OhkQUDMb5ha5RFtLcP6ikvg90Xb6fFk0Alo8XhqlZLveqqm/vtkLl6R9/08LGlo/Q
-	/fvnB8KomABk9KQouoH1ci7kcfTT7BPZf4Y/hHmexelnI8XYsn2pgeg+6x61L3N9JoPtIo0z3M7
-	LVRa3NLfpnqNAU8+lzoFVSfIElPUw1GdAeRF64vaa522s8l7vOLVvBcbELXEoNQFVwnXBpbAkAE
-	bkNGyVWdWMuF9ihNh5dnMOoVfSdKY17/yn9NGSEvbUlmdDTc3Zu21ZdLv7+suIGfZGyWo3hIvWs
-	XYzw8WhqMnJA4AH9Q9OMR2RnIQkZTgx3EF63H3RLdMswloNIyLxLECeN+1bE8UnRiofF3kNoMGN
-	+hurt0fRtZMMAbDIzrl9SgArsD7CI=
-X-Received: by 2002:a05:600c:3104:b0:488:ab1d:dcc5 with SMTP id 5b1f17b1804b1-48fe651b57fmr71443215e9.27.1778874478278;
-        Fri, 15 May 2026 12:47:58 -0700 (PDT)
-Received: from mtardy-friendly-lvh-runner.local ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-48fe4c833fcsm77509945e9.2.2026.05.15.12.47.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2026 12:47:57 -0700 (PDT)
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: bpf@vger.kernel.org
-Cc: martin.lau@linux.dev,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	ast@kernel.org,
-	andrii@kernel.org,
-	yonghong.song@linux.dev,
-	jordan@jrife.io,
-	Mahe Tardy <mahe.tardy@gmail.com>
-Subject: [PATCH bpf-next v5 0/4] bpf: add icmp_send kfunc
-Date: Fri, 15 May 2026 19:47:42 +0000
-Message-Id: <20260515194746.50920-1-mahe.tardy@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PomqFIK1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8038BC4AF09;
+	Fri, 15 May 2026 19:48:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778874492;
+	bh=2IEyOw6Z8HJDTQVQ25UoBE85/dz6zn8voxPel+zo1l8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PomqFIK1bhI4K3qLhPE97EcIH0XGqk/HKaoduQUAY4JdvtJUv0x9EWF38d+sCywu7
+	 N8KGTe+YYo9aFrouqdUmHyKh5XOV2ktJZ43Bhj6SaJ704HwxzlULdzqlelCX6kiMMd
+	 vD72CZAgFuf+Ic5zAi/HpQT8R20B8Y3rUn7rbPXp8UPaMd+D2vbvgWSYvy3gjsG1Sp
+	 fxFyb/ZMvLCk9j2F5YZZrPi+KV+EvQaYoe8RaZluMpMX6i869PQZiF9Mhm3XiSrL8P
+	 wsfWPo88YTUOPl+p4P639jniztvT80BMmF6RWrBIOWaRxpZgkrD8QmHP89GozFCWpV
+	 5HdROghXGDEbg==
+Date: Fri, 15 May 2026 12:48:10 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: acme@kernel.org, james.clark@linaro.org, 9erthalion6@gmail.com,
+	adrian.hunter@intel.com, alex@ghiti.fr,
+	alexandre.chartre@oracle.com, andrii@kernel.org,
+	ankur.a.arora@oracle.com, aou@eecs.berkeley.edu,
+	bpf@vger.kernel.org, collin.funk1@gmail.com, costa.shul@redhat.com,
+	daniel@iogearbox.net, dapeng1.mi@linux.intel.com, dsterba@suse.com,
+	eddyz87@gmail.com, howardchu95@gmail.com, jolsa@kernel.org,
+	leo.yan@arm.com, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, martin.lau@linux.dev,
+	memxor@gmail.com, mingo@redhat.com, mmayer@broadcom.com,
+	nathan@kernel.org, palmer@dabbelt.com, peterz@infradead.org,
+	pjw@kernel.org, qmo@kernel.org, ricky.ringler@proton.me,
+	song@kernel.org, swapnil.sapkal@amd.com, terrelln@fb.com,
+	tglozar@redhat.com, thomas.falcon@intel.com,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH v4 12/14] perf build: Prefix SCRIPTS with output
+ directory to fix continuous rebuilds
+Message-ID: <agd4ehtRHi1VbvQ7@google.com>
+References: <CAP-5=fWfrGMV4EafqkwQO-R33c_szXcxVLgH0c4k2zt3zj4HdQ@mail.gmail.com>
+ <20260515173852.1378571-1-irogers@google.com>
+ <20260515173852.1378571-13-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260515173852.1378571-13-irogers@google.com>
 
-Hello,
+On Fri, May 15, 2026 at 10:38:49AM -0700, Ian Rogers wrote:
+> In Makefile.perf, ALL_PROGRAMS includes SCRIPTS (perf-archive,
+> perf-iostat). However, unlike PROGRAMS and DLFILTERS, SCRIPTS was not
+> prefixed with $(OUTPUT).
 
-This is v5 of adding the icmp_send kfunc, as suggested during LSF/MM/BPF
-2025[^1]. The goal is to allow cgroup_skb programs to actively reject
-east-west traffic, similarly to what is possible to do with netfilter
-reject target.
+Looks like a bug.
 
-The first step to implement this is using ICMP control messages, with
-the ICMP_DEST_UNREACH type with various code ICMP_NET_UNREACH,
-ICMP_HOST_UNREACH, ICMP_PROT_UNREACH, etc. This is easier to implement
-than a TCP RST reply and will already hint the client TCP stack to abort
-the connection and not retry extensively.
+Thanks,
+Namhyung
 
-Note that this is different than the sock_destroy kfunc, that along
-calls tcp_abort and thus sends a reset, destroying the underlying
-socket.
-
-Caveats of this kfunc design are that a program can call this function N
-times, thus send N ICMP unreach control messages and that the program
-can return from the BPF filter with pass leading to a potential
-confusing situation where the TCP connection was established while the
-client received ICMP_DEST_UNREACH messages.
-
-Initially this kfunc was named icmp_send_unreach but now the interface
-accepts a type parameter to facilitate future extension to other ICMP
-control message types. Only ICMP_DEST_UNREACH and ICMPV6_DEST_UNREACH
-are currently supported.
-
-v2 updates:
-- fix a build error from a missing function call rename;
-- avoid changing return line in bpf_kfunc_init;
-- return SK_DROP from the kfunc (similarly to bpf_redirect);
-- check the return value in the selftest.
-
-v3 update:
-- fix an undefined reference build error.
-
-v4 updates:
-- prevent the kfunc to be called recursively and add a test (thanks to
-  Martin).
-- do not fetch dst route when unnecessary (thanks to Martin).
-- extend the test for IPv6 (thanks to Martin).
-- use SK_DROP in examples and use non blocking sockets for testing
-  (thanks to Martin).
-- test when the kfunc returns -EINVAL (thanks to Jordan).
-- add the kfunc to bpf_kfunc_set_skb as suggested by Alexei.
-- guard the IPv4 parts with IS_ENABLED(CONFIG_INET).
-- fix a wrong initial value for client_fd (thanks to Yonghong).
-- add documentation to the kfunc.
-- to Jordan: I couldn't include <linux/icmp.h> because of redefines from
-  <network_helpers.h>.
-
-v5 updates:
-- kfunc name is now icmp_send and takes the control message type as
-  parameter for future potential extension (daniel)
-- drop the net patches to route packet since now the kfunc is limited to
-  cgroup_skb and tc progs (daniel & martin)
-- linearize skb headers (sashiko)
-- zero SKB control block (sashiko)
-- bind to port 0 instead of fixed port (sashiko)
-- poll to wait for POLLERR event (sashiko)
-- do not use ASSERT_EQ in CMSG_NXTHDR loop (sashiko)
-- fix comment about byte order (sashiko)
-- fix endianness IP address issue (sashiko)
-- add forgotten cleanup_cgroup_environment (sashiko)
-- let packets pass in recursion test (sashiko)
-- clarify evaluation order for recursion test (sashiko)
-
-[^1]: https://lwn.net/Articles/1022034/
-
-Link to v4: https://lore.kernel.org/bpf/20260420105816.72168-1-mahe.tardy@gmail.com/
-
-Mahe Tardy (4):
-  bpf: add bpf_icmp_send kfunc
-  selftests/bpf: add bpf_icmp_send kfunc tests
-  selftests/bpf: add bpf_icmp_send kfunc IPv6 tests
-  selftests/bpf: add bpf_icmp_send recursion test
-
- net/core/filter.c                             | 103 +++++++++
- .../bpf/prog_tests/icmp_send_kfunc.c          | 215 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/icmp_send.c |  99 ++++++++
- 3 files changed, 417 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
- create mode 100644 tools/testing/selftests/bpf/progs/icmp_send.c
-
---
-2.34.1
-
+> 
+> During out-of-tree builds (or when O= is specified), Make checked for the
+> unprefixed target 'tools/perf/perf-archive'. Since the actual script was
+> installed into $(OUTPUT)perf-archive, Make concluded the target was
+> missing and continuously re-executed the script installation rule on every
+> single incremental build.
+> 
+> Prefix SCRIPTS with $(OUTPUT) and update the static pattern rule to ensure
+> Kbuild correctly tracks generated script prerequisites during incremental
+> builds.
+> 
+> Tested-by: James Clark <james.clark@linaro.org>
+> Assisted-by: Gemini:gemini-3.1-pro-preview
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/Makefile.perf | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index b8a81c9749a8..fc92d6ceac5b 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -405,7 +405,7 @@ python-clean := $(call QUIET_CLEAN, python) $(RM) -r $(PYTHON_EXTBUILD) $(OUTPUT
+>  # Use the detected configuration
+>  -include $(OUTPUT).config-detected
+>  
+> -SCRIPTS = $(patsubst %.sh,%,$(SCRIPT_SH))
+> +SCRIPTS = $(addprefix $(OUTPUT),$(patsubst %.sh,%,$(SCRIPT_SH)))
+>  
+>  PROGRAMS += $(OUTPUT)perf
+>  
+> @@ -592,8 +592,8 @@ $(GTK_IN): FORCE prepare
+>  $(OUTPUT)libperf-gtk.so: $(GTK_IN) $(PERFLIBS)
+>  	$(QUIET_LINK)$(CC) -o $@ -shared $(LDFLAGS) $(filter %.o,$^) $(GTK_LIBS)
+>  
+> -$(SCRIPTS) : % : %.sh
+> -	$(QUIET_GEN)$(INSTALL) '$@.sh' '$(OUTPUT)$@'
+> +$(SCRIPTS) : $(OUTPUT)% : %.sh
+> +	$(QUIET_GEN)$(INSTALL) '$<' '$@'
+>  
+>  $(OUTPUT)PERF-VERSION-FILE: .FORCE-PERF-VERSION-FILE
+>  	$(Q)$(SHELL_PATH) util/PERF-VERSION-GEN $(OUTPUT)
+> -- 
+> 2.54.0.563.g4f69b47b94-goog
+> 
