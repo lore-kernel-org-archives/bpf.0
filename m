@@ -1,128 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 345873EEAF9
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 18:25:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867B93EEAE9
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 18:28:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778869510; cv=none; b=MLLfO+OKYOP2Rny+jy3TFEsCIouXSMthcxP4f6/hfUeQQF+nxA2mgAKrd2iwpUu/T+AkRIXuyP2Q/CyiZJmRS4aLtj7JgruS6/3LUXdHooOmHDMzxlnrUHZGQG0oIOu6Dn4tmbFLSYTK1GHDUAIdLDb0pkZ/ggLpdAfpnFTM0rY=
+	t=1778869707; cv=none; b=pPiaaGWG9hiMcwa7NvkWHw6xTqYOuAMT+lLMA1J3xHpiUC2KTckwAXkqwhj94cHl0mlaFQfYcnopg9tfQKLMJaI6x+ZuOdpUCVxvp0ud+Z0x+rZUsD75bECxLDLEPH8HEcmGYONv7XiQq/Pv8qOIhIf7/IoI1E5IIJdoZTtG0t0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778869510; c=relaxed/simple;
-	bh=nz3xozvp2rBHN1PjKGlnasO+PycQX7BliV+pJHppGzs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=siNrqEeZvbPaHcAVjYhYO9OLBpIA9jvXP2naJDp4gBBc/pRrUNKhNPFEc5RBUJKGpOR28ji009+vZj54/lITqo7QpMB9V07VqlCckULSHlmCxIL1YFDbOzIzZVYUSDElBLLW5DxDQGD5BzU28sxCYJCODh4aitnqYXs0zAwfz4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qyeEjQ5Z; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778869707; c=relaxed/simple;
+	bh=9CqivdOtEu4A2vc+2oIRyhT4hwgAQpw6jlhg8/uvt1k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gu+Q8wFBA7RibU1PBhzSa6i3v+x++euAQWTgtXebUPVuAmu4qQ4ZRKj0Fr5a1AP5QNWIyaDJKjd8d4fD/hmugH7BEkEESgPdarx76HEom+Wo3uk/peoTywyZKgKV9MdNYVhQ0sW71OKKPJ52+ZMzWmqsgTumH3L64aeKTHmi2Uk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iEjAhTf7; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qyeEjQ5Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A08E7C2BCC7;
-	Fri, 15 May 2026 18:25:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778869509;
-	bh=nz3xozvp2rBHN1PjKGlnasO+PycQX7BliV+pJHppGzs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=qyeEjQ5Z2SN9iMoiIbMWTnuOq3cSCpIMRjv48njIILIaZUIuWQypT0RdPdJzyMUqu
-	 NTOJae1tdhcx3B3D3SZ5SwTcASWNKEoaV2JVaFiV4mXqsquamehQvYqpAWV/uaOeOF
-	 EToZGdhCOW0SL5Wbl5z3AAEvMvTP0QSfxbap2334uTV7+ARR6wzx36yBL2IWdBqtWO
-	 ixz8jPr25p8zCsZ+0PNHoP8R7/IzrjYF4XKUVlRRuCGQ2AT9BIbXhpqLGLMOmvvRui
-	 Gb3bjBEYoOt81pa9TEbDMdCJYclvV1xYk2lpxPLGnxODsrWt3x/Hz2B+7WsIdQf1fD
-	 Cxk5kRUT3c9mw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/3] tracing: Expose tracepoint BTF ids via
- tracefs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260515-generic_tracepoint-v1-2-aa619fa94132@meta.com>
-References: <20260515-generic_tracepoint-v1-2-aa619fa94132@meta.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 15 May 2026 18:25:09 +0000
-Message-Id: <20260515182509.A08E7C2BCC7@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iEjAhTf7"
+Message-ID: <c1719854-d732-4ea6-9da9-26aaf21e85ef@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778869693;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=a7KQbURJVJFNJLLR2ilh4aULfEJVXnigcpe56pKwWMQ=;
+	b=iEjAhTf7jfLn11y+s4E+311K2xX2Y2pSgQKdIwVUuTEmnoSrl09dUrFH8XMQVcTB/Zv34F
+	SdKmNxpx1Olxc3hOsu8L9NLs2FezE3tdolJVc9OI7AiKH5zZEmdErBYtVRfmA5UX6gzSzt
+	O8tU9+u5GnP4Tk7Alht3HatqCzH9nW0=
+Date: Fri, 15 May 2026 11:27:55 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH] bpf: fix btf_types_are_same for cross-BTF type comparison
+To: chenyuan_fl@163.com, martin.lau@linux.dev, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Yuan Chen <chenyuan@kylinos.cn>
+References: <20260407080900.551797-1-chenyuan_fl@163.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260407080900.551797-1-chenyuan_fl@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] The global `event_mutex` is held across a `copy_to_user()` operati=
-on, creating a denial-of-service vulnerability and latency spikes.
---
+On 4/7/26 1:09 AM, chenyuan_fl@163.com wrote:
+> From: Yuan Chen <chenyuan@kylinos.cn>
+> 
+> When comparing types from different BTF objects (e.g., module BTF vs
+> vmlinux BTF), the original btf_types_are_same() returns false because:
+>   - Type IDs are local to each BTF
+>   - Pointer comparison of btf_type_by_id results always fails
+> 
+> This prevents kfuncs with KF_IMPLICIT_ARGS flag from modules (like
+> bpf_kfunc_multi_st_ops_test_1_assoc) from properly recognizing implicit
+> arguments such as 'struct bpf_prog_aux *', causing the verifier to not
+> inject the aux pointer value during fixup.
 
-commit 5bcf593e0ef00b79b0e87af32e5fdb4e5481d768
-Author: Mykyta Yatsenko <yatsenko@meta.com>
+Hi Yuan,
 
-tracing: Expose tracepoint BTF ids via tracefs
+Could you please provide an example of what is failing? For example, a
+selftest, verifier log, or at least the (btf, type_id) pair?
 
-This commit introduces a new tracefs file btf_ids for each event. It exposes
-the BTF object ID and tracepoint/raw BTF IDs populated by resolve_btfids at
-link time to allow raw_tp and tp_btf BPF programs to properly attach.
+I am guessing the root cause might be that the distill_base deletes the
+types used by implicit args (such as bpf_prog_aux), causing .BTF.base to
+be incomplete, and module BTF duplicating kernel types. But I'm speculating
+here due to lack of an example.
 
-> diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-> index c46e623e7e0de..d463fb44c790a 100644
-> --- a/kernel/trace/trace_events.c
-> +++ b/kernel/trace/trace_events.c
+Module BTF is supposed to reference base BTF types through the
+distilled base. If struct bpf_prog_aux ends up as a separate
+module-local type instead of resolving to the vmlinux BTF type, we
+should fix the distill_base/relocation handling so the module BTF
+points at the canonical vmlinux type ID. Then the existing strict
+comparison will work unchanged.
 
-[ ... ]
+To Alan's point, changing btf_types_are_same() to compare only kind,
+size and name makes it too permissive. Two different structs can have
+the same name and size, but different members or semantics.
 
-> @@ -2200,6 +2201,62 @@ event_id_read(struct file *filp, char __user *ubuf=
-, size_t cnt, loff_t *ppos)
+I think we should identify the root cause and fix it.
+This patch is a no go IMO.
+
+Thanks.
+
+
+> 
+> Fix by comparing actual type content (kind, size, name) when BTFs are
+> different instead of comparing pointers.
+> 
+> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+> ---
+>  kernel/bpf/btf.c | 32 ++++++++++++++++++++++++++++----
+>  1 file changed, 28 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index a62d78581207..daad28ae32e5 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -7432,15 +7432,39 @@ int btf_struct_access(struct bpf_verifier_log *log,
+>   * the same. Trivial ID check is not enough due to module BTFs, because we can
+>   * end up with two different module BTFs, but IDs point to the common type in
+>   * vmlinux BTF.
+> + *
+> + * When comparing types across different BTF objects (e.g., module BTF vs
+> + * vmlinux BTF), we need to compare the actual type content (name, kind, size)
+> + * since type IDs may differ between BTF objects even for the same type.
+>   */
+>  bool btf_types_are_same(const struct btf *btf1, u32 id1,
+>  			const struct btf *btf2, u32 id2)
+>  {
+> -	if (id1 != id2)
+> -		return false;
+> +	const struct btf_type *t1, *t2;
+> +
+> +	/* If same BTF object, ID comparison is sufficient */
+>  	if (btf1 == btf2)
+> -		return true;
+> -	return btf_type_by_id(btf1, id1) == btf_type_by_id(btf2, id2);
+> +		return id1 == id2;
+> +
+> +	/* Different BTF objects - compare actual type content.
+> +	 * Type IDs may differ between module BTF and vmlinux BTF,
+> +	 * so we need to check if the types are semantically identical.
+> +	 */
+> +	t1 = btf_type_by_id(btf1, id1);
+> +	t2 = btf_type_by_id(btf2, id2);
+> +	if (!t1 || !t2)
+> +		return false;
+> +
+> +	/* Must be same kind and have same name */
+> +	if (BTF_INFO_KIND(t1->info) != BTF_INFO_KIND(t2->info))
+> +		return false;
+> +	if (t1->size != t2->size)
+> +		return false;
+> +	if (strcmp(__btf_name_by_offset(btf1, t1->name_off),
+> +		   __btf_name_by_offset(btf2, t2->name_off)) != 0)
+> +		return false;
+> +
+> +	return true;
 >  }
->  #endif
-> =20
-> +#ifdef CONFIG_BPF_EVENTS
-> +static ssize_t
-> +event_btf_ids_read(struct file *filp, char __user *ubuf, size_t cnt, lof=
-f_t *ppos)
-> +{
-> +	struct trace_event_file *file;
-> +	struct trace_event_call *call;
-> +	const struct btf_type *t;
-> +	struct module *mod =3D NULL;
-> +	u32 raw_id, tp_id;
-> +	const u32 *ids;
-> +	struct btf *btf;
-> +	char buf[128];
-> +	int len;
-> +
-> +	/* Module unload could free call->class and ids[] mid-read. */
-> +	guard(mutex)(&event_mutex);
-> +
-> +	file =3D event_file_file(filp);
-> +	if (!file)
-> +		return -ENODEV;
+>  
+>  bool btf_struct_ids_match(struct bpf_verifier_log *log,
 
-[ ... ]
-
-> +	len =3D scnprintf(buf, sizeof(buf),
-> +			"btf_obj_id: %u\nraw_btf_id: %u\ntp_btf_id: %u\n",
-> +			btf_obj_id(btf), raw_id, tp_id);
-> +	btf_put(btf);
-> +
-> +	return simple_read_from_buffer(ubuf, cnt, ppos, buf, len);
-
-Does this hold the global event_mutex during copy_to_user()?
-
-Because guard(mutex)(&event_mutex) holds the lock until the function return=
-s,
-the mutex remains locked during simple_read_from_buffer(), which internally
-calls copy_to_user().
-
-Could this allow a user to intentionally stall the global tracing subsystem?
-
-If the user-space buffer is backed by userfaultfd or a slow FUSE mount, the
-page fault could block indefinitely while holding event_mutex, which protec=
-ts
-system-wide tracing operations (including module loading and unloading).
-
-Looking at event_filter_read() nearby, it explicitly releases event_mutex
-before calling simple_read_from_buffer(). Would it be safer to use a similar
-pattern here by dropping the lock once the buffer string is populated?
-
-> +}
-> +#endif
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260515-generic_tr=
-acepoint-v1-0-aa619fa94132@meta.com?part=3D2
