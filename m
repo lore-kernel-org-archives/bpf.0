@@ -1,43 +1,42 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81D473A9D90
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 23:44:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8871A6813
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 23:59:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778888676; cv=none; b=IWPY8+W13GH1SwgOmkX8cuaF9/+DV2UtNzvrGcAWSp16vsWI5aJ68Lfe/w4Rf3ufTd5iUzNIQybuh7NqJZw6odFLkCYQbiKKqxTFsIGtFDvoEnW2pliiqD8Y3KDkC7UAIgYNDMnktzexQ1OP5Au0Jkn3CQM2WaBxx5N4/aAM+Sw=
+	t=1778889573; cv=none; b=lcZciqqinZNyZqW8JLiQORuKfDXfwsYNns03JMZAES8q8z1f3ZoK28iJEdA5zzniv1dMY1QuYnP20F1/YMOXTXyDL4SQv59gESC5aAejRBwccdp66kiaEXkOd7HbARLfFfTLAI6E6xoaY3yFTTP/bKUPbXVLCMTbP+6LkuIoeGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778888676; c=relaxed/simple;
-	bh=X0w8WKqVCMSAVrxFK3Zg8IgTppTDHr3CtV19muEKr2A=;
+	s=arc-20240116; t=1778889573; c=relaxed/simple;
+	bh=mw6auwkjUUD3KIZSifXUfwufE0ZoQK+RylWPyoQH7hA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u4YOJ6Z5aBZZAsenPqdV6XkQ/LcTv8N/NtO6cj+ExYKe43rnx1yJam6MaIIcND73n6XOGOT1CGF9CW/fTcNeOb0153cGycbBWQtFAQHAJ2Sa6NeAiqJvtdaqxspPUljOPMwSnk9VnoyvNC3T9LprJDTyJc/O/Gx/FpEoM+QqxiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uGhqrRY7; arc=none smtp.client-ip=91.218.175.173
+	 In-Reply-To:Content-Type; b=sX+H2OhUnu63+4j14qEenkDWmLUfZnNaVIALBeb8U0gVX4w6L7l+JTAN4zIks9P+jHFjDlP7kzt0jrE5bJJsPqGvZiCLXW9J6ctoAX3tNwzmzLzS2R/Ob6bKTdOi2rniQT3hQQw8XJGFndIjNedgu4SMQbGVC/kh1F4TSZoFUns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ruQTs39K; arc=none smtp.client-ip=91.218.175.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uGhqrRY7"
-Message-ID: <e3879e7d-08b6-4bb7-bf76-b2f4d6f59a11@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ruQTs39K"
+Message-ID: <c99ca87d-2835-4e49-815f-663452c9c156@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778888672;
+	t=1778889568;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=sMQSl4pcwOYYAvhJ4KtMrvza91Bsy8kJtipnOMtb3cU=;
-	b=uGhqrRY7QA/FH2jlGi1LKgZfovR6ix96TBaB4z9RxRqe+QQWDztoytwJvg8/fhsyVbLucK
-	mz1uKaBfYVyTq3nLQW1RubhAqaw0Z7gHzwX/P8sWpcvNWyzZkmhrVXi0vkNVT/Dm7hp4rQ
-	IaXACpVUszq8wDgZKZu3dwBUn6o+vsQ=
-Date: Fri, 15 May 2026 16:44:25 -0700
+	bh=m3OgqK5CrfHdFOiX516osZ1BrYrCBElo1qeS3xSA1TU=;
+	b=ruQTs39KDzuARxjY8pkeT+TGUlWgS+7bb0WOOgKLhMxb1k768dz6YuGwGq96Zi2bHGX6+7
+	bnMD8ss7IQac43foQHreQLcuI5GEzZuTdkgBSm8bflO7UvCg20gIzT0kRcHl+4v+9vQbbm
+	zKj9HMIQZIoZppjW2c8VPcBQMe0HQVc=
+Date: Fri, 15 May 2026 16:59:21 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v5 2/3] bpf: Avoid faultable build ID reads under
- mm locks
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
- Suren Baghdasaryan <surenb@google.com>
+Subject: Re: [PATCH bpf-next v5 3/3] bpf: Cache build IDs in sleepable
+ stackmap path
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
  Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
  <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
@@ -45,12 +44,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
  Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org,
  linux-kernel@vger.kernel.org, kernel-team@meta.com
 References: <20260515005244.1333013-1-ihor.solodrai@linux.dev>
- <20260515005244.1333013-3-ihor.solodrai@linux.dev>
- <CAEf4BzZ1u6N2+cSkkSn65F_D_jEZK+4Gy_M1GNOVXkD36h0Now@mail.gmail.com>
+ <20260515005244.1333013-4-ihor.solodrai@linux.dev>
+ <CAEf4BzYYmA7=pSe--McfQNP=SEkPnZyhBLb-_-eB8XS4Gtw2QQ@mail.gmail.com>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAEf4BzZ1u6N2+cSkkSn65F_D_jEZK+4Gy_M1GNOVXkD36h0Now@mail.gmail.com>
+In-Reply-To: <CAEf4BzYYmA7=pSe--McfQNP=SEkPnZyhBLb-_-eB8XS4Gtw2QQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
@@ -58,223 +57,138 @@ X-Migadu-Flow: FLOW_OUT
 On 5/15/26 3:40 PM, Andrii Nakryiko wrote:
 > On Thu, May 14, 2026 at 5:53 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
 >>
->> Sleepable build ID parsing can block in __kernel_read() [1], so the
->> stackmap sleepable path must not call it while holding mmap_lock or a
->> per-VMA read lock.
+>> Stack traces often contain adjacent IPs from the same VMA or from
+>> different VMAs backed by the same ELF file. Cache the last successfully
+>> parsed build ID together with the resolved VMA range and backing file
+>> so the sleepable build-ID path can avoid repeated VMA locking and file
+>> parsing in common cases.
 >>
->> The issue and the fix are conceptually similar to a recent procfs
->> patch [2].
->>
->> Resolve each covered VMA with a stable read-side reference, preferring
->> lock_vma_under_rcu() and falling back to mmap_read_trylock() only long
->> enough to acquire the VMA read lock. Take a reference to the backing
->> file, drop the VMA lock, and then parse the build ID through
->> (sleepable) build_id_parse_file().
->>
->> We have to use mmap_read_trylock() (and give up on failure) in this
->> context because taking mmap_read_lock() is generally unsafe on code
->> paths reachable from BPF programs [3], and may lead to deadlocks.
->>
->> [1] https://lore.kernel.org/all/20251218005818.614819-1-shakeel.butt@linux.dev/
->> [2] https://lore.kernel.org/all/20260128183232.2854138-1-andrii@kernel.org/
->> [3] https://lore.kernel.org/bpf/2895ecd8-df1e-4cc0-b9f9-aef893dc2360@linux.dev/
->>
->> Fixes: d4dd9775ec24 ("bpf: wire up sleepable bpf_get_stack() and bpf_get_task_stack() helpers")
->> Suggested-by: Puranjay Mohan <puranjay@kernel.org>
+>> Suggested-by: Mykyta Yatsenko <yatsenko@meta.com>
+>> Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
 >> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 >> ---
->>  kernel/bpf/stackmap.c | 109 ++++++++++++++++++++++++++++++++++++++++++
->>  1 file changed, 109 insertions(+)
+>>  kernel/bpf/stackmap.c | 56 ++++++++++++++++++++++++++++++++++++++++---
+>>  1 file changed, 53 insertions(+), 3 deletions(-)
 >>
 >> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
->> index 4ef0fd06cea5..08f7659505d1 100644
+>> index 08f7659505d1..7336fd55c856 100644
 >> --- a/kernel/bpf/stackmap.c
 >> +++ b/kernel/bpf/stackmap.c
->> @@ -9,6 +9,7 @@
->>  #include <linux/perf_event.h>
->>  #include <linux/btf_ids.h>
->>  #include <linux/buildid.h>
->> +#include <linux/mmap_lock.h>
->>  #include "percpu_freelist.h"
->>  #include "mmap_unlock_work.h"
+>> @@ -230,13 +230,33 @@ static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *i
+>>                 .vma = NULL,
+>>                 .mm = mm,
+>>         };
+>> -       unsigned long vm_pgoff, vm_start;
+>> +       struct {
+>> +               struct file *file;
+>> +               const unsigned char *build_id;
+>> +               unsigned long vm_start;
+>> +               unsigned long vm_end;
+>> +               unsigned long vm_pgoff;
+>> +       } cache = {};
+>> +       unsigned long vm_pgoff, vm_start, vm_end;
+>>         struct vm_area_struct *vma;
+>>         struct file *file;
+>>         u64 ip;
 >>
->> @@ -158,6 +159,109 @@ static inline void stack_map_build_id_set_ip(struct bpf_stack_build_id *id)
->>         memset(id->build_id, 0, BUILD_ID_SIZE_MAX);
+>>         for (u32 i = 0; i < trace_nr; i++) {
+>>                 ip = READ_ONCE(id_offs[i].ip);
+>> +
+>> +               /*
+>> +                * Range cache fast path: if ip falls within the previously
+>> +                * resolved VMA range, reuse the cache build_id without
+>> +                * re-acquiring the VMA lock.
+>> +                */
+>> +               if (cache.build_id && ip >= cache.vm_start && ip < cache.vm_end) {
+>> +                       vm_start = cache.vm_start;
+>> +                       vm_end = cache.vm_end;
+>> +                       vm_pgoff = cache.vm_pgoff;
+> 
+> isn't this unnecessarily convoluted way of doing things? If we are
+> here, we know for sure a) how to calculate offset and b) we need to
+> memcpy. So just do that here and just then maybe jump all the way to
+> id_offs[i].offset setting. Or just fill offset, status and memcpy
+> build id here and continue.
+> 
+>> +                       goto build_id_valid;
+>> +               }
+>> +
+>>                 vma = stack_map_lock_vma(&lock, ip);
+>>                 if (!vma || !vma->vm_file) {
+>>                         stack_map_build_id_set_ip(&id_offs[i]);
+>> @@ -244,9 +264,21 @@ static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *i
+>>                         continue;
+>>                 }
+>>
+>> -               file = get_file(vma->vm_file);
+>> +               file = vma->vm_file;
+>>                 vm_pgoff = vma->vm_pgoff;
+>>                 vm_start = vma->vm_start;
+>> +               vm_end = vma->vm_end;
+>> +
+>> +               if (file == cache.file) {
+>> +                       /*
+>> +                        * Same backing file as previous (e.g. different VMAs
+>> +                        * of the same ELF binary). Reuse the cache build_id.
+>> +                        */
+>> +                       stack_map_unlock_vma(&lock);
+>> +                       goto build_id_valid;
+>> +               }
+> 
+> same thing here, file matched, so memcpy(build_id), calculate correct
+> offset, set offset and status, unlock and continue. This logic is
+> pretty straightforward, IMO it's cleaner to copy-paste these 4 lines
+> than dealing with the goto maze...
+
+
+Eeh... it's a style preference I guess. I had two memcpy() points 
+originally, and then Mykyta suggested to consolidate them, so I did.
+
+Having a single "build_id_valid" point with a common "ok" sequence
+makes sense to me, but at the same time I am not allergic to 4-line 
+copy pastes.
+
+AFAIU with your suggestion we'll still have a label at
+id_offs[i].offset = ... so it's not like we'll get rid of goto right?
+
+> 
+> 
+>> +
+>> +               file = get_file(file);
+>>                 stack_map_unlock_vma(&lock);
+>>
+>>                 /* build_id_parse_file() may block on filesystem reads */
+>> @@ -255,11 +287,29 @@ static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *i
+>>                         fput(file);
+>>                         continue;
+>>                 }
+>> -               fput(file);
+>>
+>> +               if (cache.file)
+>> +                       fput(cache.file);
+>> +               cache.file = file;
+>> +               cache.build_id = id_offs[i].build_id;
+>> +
+>> +build_id_valid:
+>> +               /*
+>> +                * In the slow path cache.build_id points to id_offs[i].build_id.
+>> +                * Cache hits leave cache.build_id pointing at a prior slot,
+>> +                * triggering the memcpy here.
+>> +                */
+>> +               if (cache.build_id != id_offs[i].build_id)
+>> +                       memcpy(id_offs[i].build_id, cache.build_id, BUILD_ID_SIZE_MAX);
+>> +               cache.vm_start = vm_start;
+>> +               cache.vm_end = vm_end;
+>> +               cache.vm_pgoff = vm_pgoff;
+>>                 id_offs[i].offset = (vm_pgoff << PAGE_SHIFT) + ip - vm_start;
+>>                 id_offs[i].status = BPF_STACK_BUILD_ID_VALID;
+>>         }
+>> +
+>> +       if (cache.file)
+>> +               fput(cache.file);
 >>  }
 >>
->> +struct stack_map_vma_lock {
->> +       bool vma_locked;
->> +       struct vm_area_struct *vma;
->> +       struct mm_struct *mm;
->> +};
->> +
-> 
-> tbh, it feels like this should be provided as some sort of primitive
-> by vma/mm API given how common it becomes when one tries to work with
-> VMAs efficiently (in terms of avoiding unnecessary mmap lock)... but
-> that would be a question to Suren maybe
-
-Shakeel raised the same point in v4 [1]. I don't know of any potential
-users of this pattern, and refactoring this into a generic mechanism
-now (with only stackmap using it) seems premature. Although I agree
-with the premise. Let's see if Suren has an opinion.
-
-[1] https://lore.kernel.org/bpf/agYzuDIJszA_7rp3@linux.dev/
-
-> 
->> +static struct vm_area_struct *
->> +stack_map_lock_vma(struct stack_map_vma_lock *lock, unsigned long ip)
->> +{
->> +       struct mm_struct *mm = lock->mm;
->> +       struct vm_area_struct *vma;
->> +
->> +       if (WARN_ON_ONCE(!mm))
->> +               return NULL;
->> +
->> +       vma = lock_vma_under_rcu(mm, ip);
->> +       if (vma)
->> +               goto vma_locked;
->> +
->> +       /*
->> +        * Taking mmap_read_lock() is unsafe here, because the caller
->> +        * BPF program might already hold it, causing a deadlock.
->> +        */
->> +       if (!mmap_read_trylock(mm))
->> +               return NULL;
->> +
->> +       vma = vma_lookup(mm, ip);
->> +       if (!vma) {
->> +               mmap_read_unlock(mm);
->> +               return NULL;
->> +       }
->> +
->> +#ifdef CONFIG_PER_VMA_LOCK
->> +       if (!vma_start_read_locked(vma)) {
->> +               mmap_read_unlock(mm);
->> +               return NULL;
->> +       }
->> +       mmap_read_unlock(mm);
->> +#else
->> +       mmap_read_unlock(mm);
->> +       return NULL;
->> +#endif
->> +vma_locked:
->> +       lock->vma_locked = true;
->> +       lock->vma = vma;
->> +       return vma;
->> +}
->> +
-> 
-> cc'ing Suren to help check we didn't miss any of the per-VMA/mmap
-> locking gotchas
-> 
->> +static void stack_map_unlock_vma(struct stack_map_vma_lock *lock)
->> +{
->> +       struct vm_area_struct *vma = lock->vma;
->> +
->> +       if (lock->vma_locked) {
->> +               if (WARN_ON_ONCE(!vma))
->> +                       goto out;
->> +               vma_end_read(vma);
->> +       }
->> +out:
->> +       lock->vma_locked = false;
->> +       lock->vma = NULL;
->> +}
->> +
->> +static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *id_offs,
->> +                                                   u32 trace_nr)
-> 
-> why is this only sleepable case? the only difference between sleepable
-> and non-sleepable is the use of build_id_parse[_file] vs
-> build_id_parse_nofault to fetch build ID, no? Other than that the
-> algorithm of locking VMAs is the same, no?
-
-There seems to be a difference in lock lifetimes, because
-non-sleepable path may run with IRQs disabled. Right now it does:
-
-    bool irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
-      ...
-    if (!has_user_ctx || irq_work_busy || !mmap_read_trylock(current->mm)) {
-      // fallback to IPs...
-    }
-    for (i = 0; i < trace_nr; i++) {
-      // fetch build_id ...
-    }
-    bpf_mmap_unlock_mm(work, current->mm);
-
-While on sleepable path we always release the lock before parsing with
-the new stack_map_unlock_vma(), because build_id_parse_file() can
-block.
-
-Not sure how this could be reconciled in a common lock/unlock pattern,
-if that's what you're suggesting.
-
-For me it's easier to reason about when sleepable / non-sleepable are
-on distinct codepaths, although we may be able to factor out some
-common helpers.
-
-
-> 
->> +{
->> +       struct mm_struct *mm = current->mm;
->> +       struct stack_map_vma_lock lock = {
->> +               .vma_locked = false,
->> +               .vma = NULL,
->> +               .mm = mm,
->> +       };
->> +       unsigned long vm_pgoff, vm_start;
->> +       struct vm_area_struct *vma;
->> +       struct file *file;
->> +       u64 ip;
->> +
->> +       for (u32 i = 0; i < trace_nr; i++) {
->> +               ip = READ_ONCE(id_offs[i].ip);
->> +               vma = stack_map_lock_vma(&lock, ip);
->> +               if (!vma || !vma->vm_file) {
->> +                       stack_map_build_id_set_ip(&id_offs[i]);
->> +                       stack_map_unlock_vma(&lock);
->> +                       continue;
->> +               }
->> +
->> +               file = get_file(vma->vm_file);
->> +               vm_pgoff = vma->vm_pgoff;
->> +               vm_start = vma->vm_start;
-> 
-> nit: we can calculate offset here instead of carrying over pgoff and
-> start, offset formula is cheap, no big deal
-> 
-> 
->> +               stack_map_unlock_vma(&lock);
->> +
->> +               /* build_id_parse_file() may block on filesystem reads */
->> +               if (build_id_parse_file(file, id_offs[i].build_id, NULL)) {
->> +                       stack_map_build_id_set_ip(&id_offs[i]);
->> +                       fput(file);
->> +                       continue;
->> +               }
->> +               fput(file);
->> +
->> +               id_offs[i].offset = (vm_pgoff << PAGE_SHIFT) + ip - vm_start;
->> +               id_offs[i].status = BPF_STACK_BUILD_ID_VALID;
->> +       }
->> +}
->> +
 >>  /*
->>   * Expects all id_offs[i].ip values to be set to correct initial IPs.
->>   * They will be subsequently:
->> @@ -178,6 +282,11 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
->>         const char *prev_build_id;
->>         int i;
->>
->> +       if (may_fault && has_user_ctx) {
->> +               stack_map_get_build_id_offset_sleepable(id_offs, trace_nr);
->> +               return;
->> +       }
->> +
->>         /* If the irq_work is in use, fall back to report ips. Same
->>          * fallback is used for kernel stack (!user) on a stackmap with
->>          * build_id.
 >> --
 >> 2.54.0
 >>
