@@ -1,108 +1,135 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF783EFFB2;
-	Fri, 15 May 2026 18:04:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 847373F9A18;
+	Fri, 15 May 2026 18:09:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778868284; cv=none; b=HozSo83cwzozUh23btGiCKBtskmhTbFnXyj3QRz0+qvUDZqRMdMPWNZe/CkztvTWOMKHszhAhNoItx2rNbKsdlgGGddJfDKxzP6hJcA8oPXvzRvKf5KconOVnVCanbev43Bo3BJfPouzgg4a4Y53cGhcBX7f5MtbqtdZhz6bF6Q=
+	t=1778868546; cv=none; b=iqXa9zRIk3z+FGbNE0YZcxWoyYY7T+Orhh5MU7m6pY/I+n7fxRKs6GG/xnrVb7fP+e+XaN9jA3GaoRueS67lMl6llVHhBkSvSkzT20uKZ5fLmMJ61J1Aus8Hee6skIJnE8JcA/0JcAWgReRFrA9ZA/vgAFV1H4pykjHC/sB1pcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778868284; c=relaxed/simple;
-	bh=XQUeR9WLWM1bYFhHSY6dnds7dKJzX/NkWxk1KegAYzA=;
+	s=arc-20240116; t=1778868546; c=relaxed/simple;
+	bh=tsOSeZ8nXV1cEulyggrhOrxLareLerjjc6os2g3jyRo=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mNDsdt9yc1JBjBUQFLge3ccEUmM5MZOZDIlJCJkTKrh+tIPvP3dBYITMW9lkmE9GIm4/y/hdKQA9GgQgFmo79Iz14/mt7Y4JLdiBrxjcPPi20heeU8Qtm9geS1CoXUhcUSLsTR5FVVw6gGupIaO4iqf3E2vMTiqmio6dWuJVFKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zy5zFhtx; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=jq8CRd5r6nTqkY+nN9ujIwMIQMxfxg21TqlhH3cQDOoaci/J7csVnRVWKIM6vpgtbTZ8g8oCptTeXsYMOD4f7mthYvU7I+OkaaIxCcaQGMK032jcsDNtBojUXTVqD4bDRk9sqpf4lILdIjIWHqbnGi2Dx5MHYw0+aXCDwgcfLWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ghwzTZy5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zy5zFhtx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1B4DC2BCB0;
-	Fri, 15 May 2026 18:04:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ghwzTZy5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA8EEC2BCB0;
+	Fri, 15 May 2026 18:09:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778868284;
-	bh=XQUeR9WLWM1bYFhHSY6dnds7dKJzX/NkWxk1KegAYzA=;
+	s=k20201202; t=1778868546;
+	bh=tsOSeZ8nXV1cEulyggrhOrxLareLerjjc6os2g3jyRo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Zy5zFhtxiLjnrt4OtMgE2vBzI+jvz8qX93nLm21fxyfTgfSRGflaLSyflUlEwFVUw
-	 sJ5xlTdaXbbRuZc5sFy3ZTpAcHQL3a6lqWH/bFrTncfVs0vzgzpaOl4AaevOvByxES
-	 OvFnQs6oDm0edIbG3VhWq1MKfeMpHll84YmpNZF+NJwGSob+QveJ7U8f/MYMRdgxra
-	 nWZkHmDaIeJCcG6cuyd8VQB2TZVTUnhTK07tqS0mt7BMmYsvq9OFW2sOKcTFx7cre0
-	 on0YfL5MoQU0s7EzyJj/uKDanz6On88unqvmurHDV5VDnq4N8/rR2XAfiF43hauIzv
-	 l1AU2oTu3hGJQ==
+	b=ghwzTZy5uF3kK1V4KFMzhkc3stmJUD148ELjpPldcmOlshFk2rond2kQsBLKEpvqR
+	 i/Q2Y/ipNBx6yEPf5FMNLpcXywirxCszNASMPfWhECwg2ykaDDED5naEJaQDnoBoj4
+	 V5w1KpRp3IibyOJxIEW9BnljdLjhGZvyK4F9daGBz0LEbKnGz+LviPFw1Y9iyRsbtJ
+	 qUr+WDkJd0+r374Mj7BqPlmKKPLNV7jGp7ag0Jqvqdb1C8r+grif1qIYitrTg2Yoz4
+	 PW4ZHe7WAgqdEit31dC/M2FZ82DbTzr2n+A8iUocGEtGZU2+bppVVnvelNb/jcNcmp
+	 L30O03NsMPVUg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 01/14] tools build: Fix feature checks to touch
- target files on success
+Subject: Re: [PATCH v4 10/14] perf pmu-events: Split big_c_string storage
+ into standalone compilation unit
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ian Rogers" <irogers@google.com>
 Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-In-Reply-To: <20260515173852.1378571-2-irogers@google.com>
-References: <20260515173852.1378571-2-irogers@google.com>
+In-Reply-To: <20260515173852.1378571-11-irogers@google.com>
+References: <20260515173852.1378571-11-irogers@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 15 May 2026 18:04:37 +0000
-Message-Id: <20260515180443.D1B4DC2BCB0@smtp.kernel.org>
+Date: Fri, 15 May 2026 18:09:05 +0000
+Message-Id: <20260515180905.DA8EEC2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] Build Artifact Leak / Make Clean Breakage
-- [Medium] Error Reporting / Diagnostics logic fails to capture actual comp=
-iler/tool errors
+- [Medium] Race condition in parallel builds causing non-deterministic 'No =
+such file or directory' errors.
+- [Medium] Meaningful code and commit message mismatch regarding dependency=
+ chaining.
+- [Low] NO_JEVENTS=3D1 fallback and default jevents.py mode fail to compile=
+ due to big_c_string linkage conflict.
 --
 
-commit 566bad233a12ce681515edad91fc35069a93ec9e
+commit b03f8034531e9c582fd4777daf59f93349bcf916
 Author: Ian Rogers <irogers@google.com>
 
-tools build: Fix feature checks to touch target files on success
+perf pmu-events: Split big_c_string storage into standalone compilation unit
 
-This commit modifies the clang bpf and bpftool feature checks to physically
-touch their target files on disk upon success. It also adds redirection to
-create a .make.output file, allowing Kbuild to cache positive detections
-and avoid redundant sub-make executions during build startup.
+This commit splits the generation of big_c_string into a dedicated
+compilation unit to speed up Kbuild. It modifies jevents.py to
+optionally generate this file, adds it to the build system, and
+updates the pmu-events.h header.
 
-> diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-> --- a/tools/build/feature/Makefile
-> +++ b/tools/build/feature/Makefile
-[ ... ]
-> @@ -383,9 +383,9 @@ $(OUTPUT)test-libaio.bin:
->  $(OUTPUT)test-libzstd.bin:
->  	$(BUILD) -lzstd
-> =20
-> -$(OUTPUT)test-clang-bpf-co-re.bin:
-> -	$(CLANG) -S -g --target=3Dbpf -o - $(patsubst %.bin,%.c,$(@F)) |	\
-> -		grep BTF_KIND_VAR
-> +$(OUTPUT)test-clang-bpf-co-re.bin: test-clang-bpf-co-re.c
-> +	$(CLANG) -S -g --target=3Dbpf -o - $< |	\
-> +		grep BTF_KIND_VAR > $(@:.bin=3D.make.output) 2>&1 && touch $@
+>     To guarantee 100% backward compatibility with GNU Make 4.0+ (avoiding=
+ the
+>     Make 4.3+ grouped target &: syntax which causes older Make versions l=
+ike
+>     4.2.1 to spawn multiple concurrent jevents.py processes during parall=
+el
+>     builds), implement a robust dependency chaining pattern:
+>       $(PMU_EVENTS_C): $(JEVENTS_DEPS)
+>       $(PMU_EVENTS_STRING_C): $(PMU_EVENTS_C)
+>               @:
 
-Does this redirection only capture the output of grep?
+The commit message states that a no-op recipe (@:) is used for dependency
+chaining, but the actual code implements a file-recovery shell script
+instead. Could the commit message be updated to match the code?
 
-Because the output redirection is applied strictly to the final command in =
-the
-shell pipeline, the stderr from the compiler might flow to the parent shell
-instead. Since the parent Kbuild feature check suppresses output, this
-regression could prevent actual compiler errors from being captured in the
-.make.output file, defeating its purpose for diagnostics.
+> diff --git a/tools/perf/pmu-events/Build b/tools/perf/pmu-events/Build
+> index dc1df2d57ddc1..00ae173cdb5c8 100644
+> --- a/tools/perf/pmu-events/Build
+> +++ b/tools/perf/pmu-events/Build
 
 [ ... ]
-> @@ -398,7 +398,7 @@ $(OUTPUT)test-libopenssl.bin:
+
+> @@ -224,6 +234,10 @@ endif
+>  # and inputs are dependencies.
+>  $(PMU_EVENTS_C): $(JEVENTS_DEPS)
+>  	$(call rule_mkdir)
+> -	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) $(JEVEN=
+TS_MODEL) $(OUT_DIR) $@
+> +	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) $(JEVEN=
+TS_MODEL) \
+> +            $(OUT_DIR) $(PMU_EVENTS_C) $(PMU_EVENTS_STRING_C)
+> +
+> +$(PMU_EVENTS_STRING_C): $(PMU_EVENTS_C)
+> +	$(Q)test -f $@ || { rm -f $<; $(MAKE) -f $(srctree)/tools/build/Makefil=
+e.build dir=3Dpmu-events obj=3Dpmu-events; }
+
+Does this introduce a race condition during parallel builds?
+
+If pmu-events-string.c is missing but pmu-events.c is up-to-date, a
+parallel build could execute this recipe concurrently with the compilation
+of pmu-events.o. The rm -f $< would remove pmu-events.c while the C compiler
+is trying to read it, leading to a "No such file or directory" error.
+
+> diff --git a/tools/perf/pmu-events/pmu-events.h b/tools/perf/pmu-events/p=
+mu-events.h
+> index d3b24014c6ff1..fb4eb5b7ec163 100644
+> --- a/tools/perf/pmu-events/pmu-events.h
+> +++ b/tools/perf/pmu-events/pmu-events.h
+> @@ -141,4 +141,6 @@ int pmu_for_each_sys_metric(pmu_metric_iter_fn fn, vo=
+id *data);
 > =20
->  $(OUTPUT)test-bpftool-skeletons.bin:
->  	$(SYSTEM_BPFTOOL) version | grep '^features:.*skeletons' \
-> -		> $(@:.bin=3D.make.output) 2>&1
-> +		> $(@:.bin=3D.make.output) 2>&1 && touch $@
+>  const char *describe_metricgroup(const char *group);
+> =20
+> +extern const char big_c_string[];
 
-Since test-bpftool-skeletons.bin is now physically created on disk upon
-success, does it need to be added to the FILES list at the top of the
-Makefile?
+Will this cause a compilation error when building with NO_JEVENTS=3D1?
 
-The make clean target relies exclusively on the FILES variable to remove
-generated artifacts. If this binary is missing from that list, the generated
-file will permanently survive make clean. This regression could permanently
-poison the Kbuild cache, causing it to treat the feature as present even if
-the underlying bpftool environment is later changed or uninstalled.
+The build uses empty-pmu-events.c which still defines big_c_string as:
+
+static const char *const big_c_string =3D ...;
+
+Including this header will result in a conflicting type and linkage error
+between const char[] and const char *const, and between extern and static.
+The same conflict appears to happen when invoking jevents.py without the
+output_string_file argument.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260515173852.1378=
-571-1-irogers@google.com?part=3D1
+571-1-irogers@google.com?part=3D10
