@@ -1,154 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA693016E9;
-	Fri, 15 May 2026 00:39:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DDF52EB10
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 00:40:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778805569; cv=none; b=ZialmSMpb9S8KTqrv+rFX+3kNDJpcQqMH1XryJHsrjf+H5cjIOJcFGVit7H/8AUTRhMKnbhe2n12bHe8PSMurp+0Nq8cW201sSoDB+ExhY6wCxQjO0+VHYhQ1jFpzBDDAjHmruUhODq9HfnIgK763OJdniZX4SvpelrS4ImuYS8=
+	t=1778805605; cv=none; b=ax5fgaqXFRgvlqHhDOaIGStdQMEXlh0OcJZkFmfZbWg9fArZhg4bNdSajadPHPtWbXHQXRJ038nsa3t0CMCuclP/CwUjQ4iH1gSflCU9ypymAZTwid/EKbWCv3NCuywmBjFVgka88p5TUHRcnk+5rNNQ8FkUYlt1p1aDnaIt0l8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778805569; c=relaxed/simple;
-	bh=Tu8Os6C/ahGbS6kVIJ44nQq/nityPs+wFR5QwdOeq8M=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=DGU9a4IKbgh27peJkbRBmN6/cKnxCu584QJ0DpcipO1vRjQv9cUPTdy4VyKL0iZnbCAKkZHOZ0vdzbThn2ZDzGXLzbCxIFFuGLtOnivLVnM9k0WiqlHACDh+qctjZRVRe+kuFSduSXhV1oT9Mq9+Hl68ECy2BMzxymfYA1bL7Lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JcsS4iAL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778805605; c=relaxed/simple;
+	bh=MPsAoDgwSud8ujCJSnrS05eA3l7Zf0/YspFqjl5KxL8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L18BKz3k2sa/bzF5u3B6vDqzegrlXR+hJNjcDmmpnh1hX43wbnPROIHXiwLaoP9FuDTSDP/tdJmonD9CwVU+ZWpPzS5oq9V3RsZCVq8gZGFArBfVAKK2ONWLTABJjOdDFPUwIQvfUvf647WQalEGZq1myph0V6Xa3/BeEVRq8Uk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=OohOHiBa; arc=none smtp.client-ip=209.85.167.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JcsS4iAL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5564C2BCB3;
-	Fri, 15 May 2026 00:39:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778805569;
-	bh=Tu8Os6C/ahGbS6kVIJ44nQq/nityPs+wFR5QwdOeq8M=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=JcsS4iALLkW4WFG8NHnZ4o8K56ilZrmxk/3gBxZ5wuH2rR/P80MZyoB5TnUjmuNex
-	 yA9q+66XEsOCfVM0a6J9pSJLcsQhqD8/saYDbZULxgEBkwZ7HuVyrsIfLwXUTQPXiv
-	 fVgrRT2foE8jn5FGEoBZpmQukI1SSoVLlGbrcSqNlgMP6a5x68pfsRQNdvh/52aKdd
-	 AoKNPuNq4AymA9hd1PZ4Nv3s4m670mnIwJJ6Ih8XKJWSoX9B2v6vWrfqXjQwQmgM7V
-	 3iHVWy6Dat5C2hcU2Anfcc/Z8YWsohvq6raoju0f/Kru3ncTJFlNX77h0SssxgzbmK
-	 XZXTyDdieWJhQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 13/17] perf pmu-events: Split big_c_string storage
- into standalone compilation unit
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ian Rogers" <irogers@google.com>
-Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-In-Reply-To: <20260514163409.927816-14-irogers@google.com>
-References: <20260514163409.927816-14-irogers@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 15 May 2026 00:39:28 +0000
-Message-Id: <20260515003928.D5564C2BCB3@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="OohOHiBa"
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-47c7b282e21so3545259b6e.1
+        for <bpf@vger.kernel.org>; Thu, 14 May 2026 17:40:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1778805598; x=1779410398; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UFhBAFvMzOFdU+dTo9inXOk2WrWYrKcxJWd53K7eJsI=;
+        b=OohOHiBaLc8K5Tlts/0Tu6ucHfYd3CGIYkLRiVPto4l+BdZKEjA7lFRldtNRyDjrgR
+         RR8+BxBQxOaW75oE32lJHCp8W/ji5ObHpOHflrxJpQm1e729J6CzwY8+uifqbbkNRfLI
+         sk1SLVKkcwCbeAjIagqJZTUNPcWnF1U1B+HAwLBhEusqDCTCjwAo3rVQ+YstlyzD33Nr
+         s6ZRmbyLVu8KBfv5LQS33sihWGCvzZ2Oe63SZUbktomvU/a03x1Uay9iy5G1KQGXZoWe
+         e4blKx5MKsyDfz/mgni1kZP5ity1v28aA2CKOgYM4JJwN1Qe+FxKf6f5uK/BzKCIn4op
+         VGMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778805598; x=1779410398;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UFhBAFvMzOFdU+dTo9inXOk2WrWYrKcxJWd53K7eJsI=;
+        b=J+B38tfpAGndj42FJ0z31n/DDpL4v1fXN2D93p9MbyR4AdyBZ5ANPsMJUXdHlB2poP
+         z/qwIH5CIJTVfH8c3JfewIB4XYr1st6IoPdEQLa877RaBNQAT/FIeyTnNtPiVTn5jXZu
+         FatEvNM0dm4E5aY935AUcqibrnrwLboJXtXZz8PSlqNv4KzM4+GJd8v5OCQ9pUXvvrV+
+         wy2TbOZ0trwPZwkw3b+3LtE7uqYfGQK/hPO1ctqNvDjV8kEKXxZh/sZ3JOWUkezPZaVL
+         gKZt1Xgdk8M2UGgrESvbuxVDFKgIXxNCRP5nwyE4+Qa9ATR/s/DXHUMhMrC/Y1NPPmzo
+         Y2EQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8Gv9MxM1eD+iHVYzwlcDgn3SDDmAvjEXTQV7d2qzdsMQSX+AX8+tsEENuS/22GFWKGUG8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfMXEpafHDT0Rg2mvKU4uO5KXpq7PAr3+t6ptcKuwqmb6o3fzQ
+	XdKr9gIeNbWaUX/vnmyNbqboqYpX3k4a0op/QbRORWa2/dXyas/iO/FnTZ1wT59ngL8=
+X-Gm-Gg: Acq92OFX+a6+HQw+azuqAbFwvWPw6/QyrXRuDpSo8sjPYre5NeH2Vm2UltzcyTuy9g6
+	e9Vf+e0f7bWtTMpnlmWmrbBVZFGN9KK5RkKQD5dgX+xRy2DGTraSCKjRpTLvFHZYA3N4aqqUL7C
+	skvrZlhvmcCutU3PwmjsNuJjkXtFEQGscv2zxoYyk2Kl0MDf5PUg6fBfpeKEGtjsWXzug0OfBov
+	xOort61Y/e5hRgtygTF1uC+J/+XYvM3IiTX8FpK2RqLoYKblOPlLi+pagveccGNFrrKgfQ5YM2F
+	o5VN4OwXRr3mWiQzrxMNqUHvKVjMbhC41I8x3mhwFFVnrEozi2s3ym5+2EhidGKaCBdMSX1VaN9
+	fiTjNv1PbTenh3LRBOzOGZshMb9M39CNbjsXYe2yaB5abgBRfyFZ9QskAbaTg8bER2TqSXzei4C
+	rv5EI=
+X-Received: by 2002:a05:6808:384b:b0:466:fcbb:1673 with SMTP id 5614622812f47-482e56c1060mr1243567b6e.17.1778805598394;
+        Thu, 14 May 2026 17:39:58 -0700 (PDT)
+Received: from 20HS2G4 ([2a09:bac6:bf21:96::f:3c1])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-482ee331fa4sm55843b6e.2.2026.05.14.17.39.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2026 17:39:56 -0700 (PDT)
+Date: Thu, 14 May 2026 19:39:54 -0500
+From: Chris Arges <carges@cloudflare.com>
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Martin KaFai Lau <martin.lau@kernel.org>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, kernel-team@cloudflare.com
+Subject: Re: [PATCH net v2] net: Clear skb metadata in LWT BPF xmit
+Message-ID: <agZrWsoTb0v4XieV@20HS2G4>
+References: <20260514-bpf-lwt-drop-skb-metadata-v2-1-458664edc2b5@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260514-bpf-lwt-drop-skb-metadata-v2-1-458664edc2b5@cloudflare.com>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Medium] Incremental build breakage causing `perf` to be unconditionally =
-relinked on every `make` invocation.
-- [Low] Missing variable declaration for `big_c_string` causes a compiler w=
-arning/error on Clang.
-- [Low] Fragile multiple-output dependency chaining causes an unrecoverable=
- build loop if the secondary file is deleted.
---
+On 2026-05-14 12:47:09, Jakub Sitnicki wrote:
+> skb metadata is meant for passing information between XDP and TC.
+> LWT programs cannot access the __sk_buff->data_meta pseudo-pointer.
+> 
+> However, LWT_XMIT programs can call helpers that move packet data.
+> One such helper is bpf_skb_change_head(), which uses skb_data_move() to
+> move both packet data and metadata after skb_push(). skb_data_move()
+> expects metadata to sit immediately before skb->data. This is the layout
+> that commit 8989d328dfe7 ("net: Helper to move packet data and metadata
+> after skb_push/pull") preserves for TC(X) programs when skb_push() or
+> skb_pull() moves packet data.
+> 
+> The IP output path can run LWT xmit before neighbour output has built the
+> outgoing L2 header. For forwarded, or otherwise RX-originated, packets
+> skb->data points at the network header while skb_mac_header() can still
+> point at the old L2 header. If such an skb still carries XDP metadata,
+> skb_data_move() sees metadata ending at skb_mac_header(), not immediately
+> before skb->data, and warns:
+> 
+>   WARNING: CPU: 21 PID: 454557 at include/linux/skbuff.h:4609 skb_data_move+0x47/0x90
+>   CPU: 21 UID: 0 PID: 454557 Comm: napi/iconduit-g Tainted: G           O        6.18.21 #1
+>   RIP: 0010:skb_data_move+0x47/0x90
+>   Call Trace:
+>    <IRQ>
+>    bpf_skb_change_head+0xe6/0x1a0
+>    bpf_prog_...+0x213/0x2e3
+>    run_lwt_bpf.isra.0+0x1d3/0x360
+>    bpf_xmit+0x46/0xe0
+>    lwtunnel_xmit+0xa1/0xf0
+>    ip_finish_output2+0x1e7/0x5e0
+>    ip_output+0x63/0x100
+>    __netif_receive_skb_one_core+0x85/0xa0
+>    process_backlog+0x9c/0x150
+>    __napi_poll+0x2b/0x190
+>    net_rx_action+0x40b/0x7f0
+>    handle_softirqs+0xd2/0x270
+>    do_softirq+0x3f/0x60
+>    </IRQ>
+> 
+> Drop skb metadata in the LWT BPF xmit path, just before invoking the
+> program. Doing it late, rather than in ip[6]_finish_output2(), preserves
+> metadata for tc egress on the outgoing device when no LWT BPF program is
+> attached - the only scenario where carrying tc-layer metadata through the
+> IP output path could be meaningful. Non-BPF LWT encap types do not run
+> helpers that touch metadata, so the BPF xmit op is the only site that needs
+> the clear.
+> 
+> Fixes: 8989d328dfe7 ("net: Helper to move packet data and metadata after skb_push/pull")
+> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+> ---
+> Changes in v2:
+> - Clear metadata in bpf_xmit to allow access from tc(x) egress (Daniel)
+> - Add WARNING snippet to the description
+> - Link to v1: https://lore.kernel.org/r/20260428-wip-skb-local-storage-from-scratch-v1-1-8f7ca9b378ce@cloudflare.com
 
-commit c21d41481809344c6220821a1680882429693c05
-Author: Ian Rogers <irogers@google.com>
+I was able to reproduce the problem with a C program. After applying your patch
+I could no longer repro.
 
-perf pmu-events: Split big_c_string storage into standalone compilation unit
-
-This commit refactors jevents.py to output the big_c_string literal into
-a separate pmu-events-string.c file. It also updates the perf Makefile
-to build this new file, using a dependency chain pattern to avoid multiple
-jevents.py executions in parallel builds.
-
-> diff --git a/tools/perf/pmu-events/Build b/tools/perf/pmu-events/Build
-> index dc1df2d57ddc1..95172a2a851f5 100644
-> --- a/tools/perf/pmu-events/Build
-> +++ b/tools/perf/pmu-events/Build
-
-[ ... ]
-
-> @@ -224,6 +234,10 @@ endif
->  # and inputs are dependencies.
->  $(PMU_EVENTS_C): $(JEVENTS_DEPS)
->  	$(call rule_mkdir)
-> -	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) $(JEVEN=
-TS_MODEL) $(OUT_DIR) $@
-> +	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) $(JEVEN=
-TS_MODEL) \
-> +            $(OUT_DIR) $(PMU_EVENTS_C) $(PMU_EVENTS_STRING_C)
-> +
-> +$(PMU_EVENTS_STRING_C): $(PMU_EVENTS_C)
-> +	@:
-
-If a user manually deletes pmu-events-string.c, won't Make execute this dum=
-my
-recipe, assume the file was recreated, and then fail during compilation?
-
-This could leave the build in an unrecoverable state until pmu-events.c is
-also deleted, which seems contrary to the fully self-correcting goal mentio=
-ned
-in the commit message.
-
-> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jev=
-ents.py
-> index 3a1bcdcdc685f..70a45e62f5d16 100755
-> --- a/tools/perf/pmu-events/jevents.py
-> +++ b/tools/perf/pmu-events/jevents.py
-
-[ ... ]
-
-> @@ -1463,10 +1465,20 @@ struct pmu_table_entry {
->      ftw(arch_path, [], preprocess_one_file)
-> =20
->    _bcs.compute()
-> -  _args.output_file.write('static const char *const big_c_string =3D\n')
-> -  for s in _bcs.big_string:
-> -    _args.output_file.write(s)
-> -  _args.output_file.write(';\n\n')
-> +  if not _args.output_string_file:
-> +    _args.output_file.write('static const char *const big_c_string =3D\n=
-')
-> +    for s in _bcs.big_string:
-> +      _args.output_file.write(s)
-> +    _args.output_file.write(';\n\n')
-> +  else:
-> +    _args.output_string_file.write('/* SPDX-License-Identifier: GPL-2.0 =
-*/\n')
-> +    _args.output_string_file.write('/* Autogenerated by jevents.py */\n')
-> +    _args.output_string_file.write('const char big_c_string[] =3D\n')
-> +    for s in _bcs.big_string:
-> +      _args.output_string_file.write(s)
-> +    _args.output_string_file.write(';\n')
-
-Will compiling this file with Clang trigger a missing-variable-declarations
-warning?
-
-It looks like big_c_string is defined globally here without a prior extern
-declaration in the same compilation unit, which could cause a build failure
-when -Werror is enabled.
-
-> +    _args.output_string_file.close()
-
-Does closing output_string_file here cause an incremental build breakage?
-
-Since output_file is written to during the subsequent ftw calls that parse
-the architecture JSON files, output_string_file will end up with an older
-modification timestamp than output_file (which corresponds to pmu-events.c).
-
-Combined with the Makefile rule $(PMU_EVENTS_STRING_C): $(PMU_EVENTS_C)
-having a dummy @: recipe, Make will see pmu-events-string.c is older than
-pmu-events.c on every invocation, and unconditionally rebuild
-pmu-events-string.o and relink the perf binary.
-
-> +    _args.output_file.write('extern const char big_c_string[];\n\n')
->    for arch in archs:
->      arch_path =3D f'{_args.starting_dir}/{arch}'
->      ftw(arch_path, [], process_one_file)
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260514163409.9278=
-16-1-irogers@google.com?part=3D13
+Tested-by: Chris J Arges <carges@cloudflare.com>
