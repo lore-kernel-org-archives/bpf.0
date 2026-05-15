@@ -1,155 +1,247 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F4433B6DC
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 04:35:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B02BE3090D7
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 04:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778819740; cv=none; b=HPqs7vcXvtNofGdUYX2W9bJECKSDJnlIenQDbNAu0b+Fkn9Ydxy3NLflD9t2NH+y/tYFufjZqAQpJ8t49RfgItKBZw4fS1qT0yavIOUJ8Y7Rr8H4tbdxH9ffprv59LzQEueKwq1Knxa+aSxpX+W8siayc8XPjXgJLup32rCjRkQ=
+	t=1778820487; cv=none; b=qXLqkxjrjSvT3XhF2b8pyhhJVgGxNGW7/VN5T8sS39eQxCgTf5wiMudKfGXqRmJAuKAra1/IQ61WGWAJTzWESUS3/LvUMf3BhpsmARBwA4YsGwnw9E6H4aslnTNF6ZTHY8l/X7zcXK79Vp4+vHb3ARE/XBICC9eS6jpISTgGzdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778819740; c=relaxed/simple;
-	bh=aAU4r4wcSzuJBRtvpmCVb7VW5HpUc9ZubfS/88tMtgE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iOL//rexKSnnzaaf78MNcFFb/r4DZowNITglDyUhZJVAsX2OG8kFl5Z2x0un5DCQMNMv69aNvAeVS/ezXamOS3nbcCqpJ0Tm7Zz4ak6/R9JBVPtLhNviEDX7I7cLW3eC03U/ljunXaYBLGFPK/HdKlBneqaU/ek2LmJMeGxH6t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RcC4LpGG; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778820487; c=relaxed/simple;
+	bh=qTEOizOeHgrKtAJFuO3cnaAsij6UlVmxM3796iF7vDk=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=o4A7AU7VF5v5gWGP3pXHfgoWmdh0phOoe8CLgeexZl0NSmlc1gFUF/rVhqs6C8z2cZMxYlOdJdUqYxhrpxog01E8blTIT+GNDVli3Vc5D8Lo08raTPKtrervFvZnStLJMF/cuzzSd6D2BPb5+Fxro2uNtq8e0k7eN8IJo5uBSR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--cmllamas.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UM15ceF+; arc=none smtp.client-ip=74.125.82.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--cmllamas.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RcC4LpGG"
-Message-ID: <0fb2d99b-b122-44fa-a8bc-9befe6e350bc@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778819735;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JTPHY20UAnHcyPzsegTptAYyXWembJwUrSvdT0eQ7G4=;
-	b=RcC4LpGG7HyGL4mkc7i5Z69cIXry+7cKanZJTwWUMpiSgGyLcVjaxhY9AkD1e41V8rVx4/
-	f/+WwZUnivWFJ2iEHe3EM7/HNym9764I1Fa6NbJCs93wLEY8VwJ+vNAtoiq7oBZlqV3UFs
-	B1iFTEg05eWHCe0bF6liOeV8tv+MRvc=
-Date: Fri, 15 May 2026 12:34:38 +0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UM15ceF+"
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-13312af37fdso1558402c88.0
+        for <bpf@vger.kernel.org>; Thu, 14 May 2026 21:48:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778820484; x=1779425284; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IAMpwBcg60oTzS31N53VrOTJbcKgVIhyBAqPOW2GB5c=;
+        b=UM15ceF+y/XsdRiKoBVSUL8lldB5ILKzqu2V8ImxjXUu+dGwCalBlyghKkc7QFqr1j
+         NRmqsYI34NAKb/E8t0RXSVYoSb2Sh4ksAi86UKjGagPk1MWib6LQ6Lrci+o+2CiKWa04
+         zZgrXAfvpkCIIRvzyo62XkteqOeLXO3aiaCoBzrmpWO3JIXrbfgWonvHL/3bwm0vptTr
+         DQdyMaOXdk8l8mBb22CWLCcP5bQR7S9vIsXIvPVnyTki1MHRgofEenAjOYC5SZDbhVB+
+         tmL2dd6+/XyrvVaD1nsgJKAaA3Uis6TjTONQnVRaF3h9d4hxPeI3tB4a6bub+AGiAYaP
+         nUsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778820484; x=1779425284;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IAMpwBcg60oTzS31N53VrOTJbcKgVIhyBAqPOW2GB5c=;
+        b=lNkcL/vOCt19wK6FPs5SNyauliZyHHE2GKBnROJAhq1smX2Bvm70H7HcPSOUZPWkjp
+         50HWOZE6Wn5U8NovR/o92Q4DQmc5CHXN8f5fmwWkuPxE7sk0Ic0bE+i8A4OJad9cD6hw
+         v8xgiPZxMWdA8WRafOxfq46LzkhTzrbZnaQEYVW0sCo6VKvBazLLGzzxaKbQblYct/9Y
+         zYjRrAJP4V8VLOAGELbKV9x9iKmCPLOplJPK3DAkTHg1SqUsjMpNxB/6JkTPaF9/VMhn
+         n2UyL/qavd2F+MTvuHMexyd0PvIvu+tw4UpI3R70rBqJtrR8zdVbjto8tCjVJSKgTyhg
+         SSZg==
+X-Forwarded-Encrypted: i=1; AFNElJ+qRP4u7+gkSWrfLNzkx7q9fxGdCA5tHbFU4gxPjwacgDS6iN/7gcv8YBf6wYI/vdKPcvk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxksgMwZntrqQXvpd7Bm+UH6VSCHeTUr2ResJ5O74dkpXrtsdEI
+	aJ2Rg+YbPMmd9TBiY9tbhRQ7YUX5WBWjnv96s0QTNAJchfx6wxn60DqBj9f+9FnBou/cvR0OstL
+	OnicrdpxYrsI/7w==
+X-Received: from dlbrh6.prod.google.com ([2002:a05:7022:f306:b0:12c:1f83:7b4c])
+ (user=cmllamas job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:7023:b11:b0:12d:ceaf:ffcc with SMTP id a92af1059eb24-1350451e06cmr1008180c88.5.1778820483381;
+ Thu, 14 May 2026 21:48:03 -0700 (PDT)
+Date: Fri, 15 May 2026 04:47:58 +0000
+In-Reply-To: <89d34016-cf82-4beb-989c-e4fc2e3cd29e@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH RESEND bpf-next v10 2/8] bpf: clear list node owner and
- unlink before drop
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, ast@kernel.org, memxor@gmail.com, corbet@lwn.net,
- martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
- song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- shuah@kernel.org, chengkaitao@kylinos.cn, skhan@linuxfoundation.org,
- vmalik@redhat.com, linux-kselftest@vger.kernel.org, martin.lau@kernel.org,
- clm@meta.com, ihor.solodrai@linux.dev, bot+bpf-ci@kernel.org
-References: <20260512055919.95716-3-kaitao.cheng@linux.dev>
- <da95f45b43d94d17796b19abc4c555e35daafab7d5e1cdca3714fe0f54ab8cce@mail.kernel.org>
- <e141699dab70282d811ec30bbf2aa8279706817b.camel@gmail.com>
- <DII0TT9LXYCX.2GMM6QA4Q9BPZ@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kaitao Cheng <kaitao.cheng@linux.dev>
-In-Reply-To: <DII0TT9LXYCX.2GMM6QA4Q9BPZ@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+References: <89d34016-cf82-4beb-989c-e4fc2e3cd29e@gmail.com>
+X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
+Message-ID: <20260515044759.2863546-1-cmllamas@google.com>
+Subject: [PATCH v2] libbpf: fix UAF in strset__add_str()
+From: Carlos Llamas <cmllamas@google.com>
+To: mykyta.yatsenko5@gmail.com, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>
+Cc: kernel-team@android.com, linux-kernel@vger.kernel.org, 
+	Carlos Llamas <cmllamas@google.com>, Mykyta Yatsenko <yatsenko@meta.com>, 
+	"open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
+strset_add_str_mem() might reallocate the strset data buffer in order to
+accommodate the provided string 's'. However, if 's' points to a string
+already present in the buffer, it becomes dangling after the realloc.
+This leads to a use-after-free when attempting to memcpy() the string
+into the new buffer.
 
+One scenario that triggers this problematic path is when resolve_btfids
+attempts to patch kfunc prototypes using existing BTF parameter names:
 
-在 2026/5/14 09:50, Alexei Starovoitov 写道:
-> On Wed May 13, 2026 at 3:53 PM PDT, Eduard Zingerman wrote:
->> On Tue, 2026-05-12 at 06:41 +0000, bot+bpf-ci@kernel.org wrote:
->>
->> [...]
->>
->>> When a BPF program holds an owning or refcount-acquired reference to
->>> one of these nodes (node X), which is structurally supported because
->>> __bpf_obj_drop_impl() uses refcount_dec_and_test() and only frees at
->>> refcount 0, a concurrent push to a DIFFERENT bpf_list_head becomes a
->>> corruption:
->>>
->>> CPU 0 (bpf_list_head_free, lock released)  CPU 1 (BPF prog, refcount X)
->>> -----------------------------------------   ----------------------------
->>> (owner of X == NULL, X linked in drain)
->>>                                             bpf_list_push_back(other, X)
->>>                                               __bpf_list_add: spin_lock()
->>>                                               cmpxchg(X->owner, NULL,
->>>                                                       POISON) -> OK
->>>                                               list_add_tail(&X->list_head,
->>>                                                             other_head)
->>>                                                 -> overwrites X->next,
->>>                                                    X->prev, corrupts
->>>                                                    other_head's chain
->>>                                                    because X is still
->>>                                                    stitched into drain
->>> pos = drain.next;      (may be X or neighbor using X's stale next)
->>> list_del_init(pos);    reads X->next/prev now pointing into other_head,
->>>                        corrupts other_head's list and/or drain
->>
->>
->> Kaitao, this scenario seem plausible, could you please comment on it?
-> 
-> I think bot is correct.
-> This patch looks buggy.
-> It seems to me an optimization that breaks the concurrent logic.
-> May be just drop this patch and reorder the other one, so that bot
-> sees nonown suffix logic first.
+ | resolve_btfids: function bpf_list_push_back_impl already exists in BTF
+ | Segmentation fault (core dumped)
 
-This patch is still necessary because it addresses the problem discussed
-in this thread:
-https://lore.kernel.org/all/DH846C0P88QU.16YT12I1LXBZM@etsalapatis.com/
+Compiling resolve_btfids with fsanitize=address generates a detailed
+report of the UAF:
 
-The patch does have a bug, however. To fix the issues we are seeing now,
-I propose the additional changes below and would appreciate feedback.
+ | =================================================================
+ | ERROR: AddressSanitizer: heap-use-after-free on address 0x7f4c4a500bd4
+ | ==1507892==ERROR: AddressSanitizer: heap-use-after-free on address 0x7f4c4a500bd4 at pc 0x55d25155a2a8 bp 0x7ffcef879060 sp 0x7ffcef878818
+ | READ of size 5 at 0x7f4c4a500bd4 thread T0
+ |     #0 0x55d25155a2a7 in memcpy (tools/bpf/resolve_btfids/resolve_btfids+0xcf2a7)
+ |     #1 0x55d2515d708e in strset__add_str tools/lib/bpf/strset.c:162:2
+ |     #2 0x55d2515c730b in btf__add_str tools/lib/bpf/btf.c:2109:8
+ |     #3 0x55d2515c9020 in btf__add_func_param tools/lib/bpf/btf.c:3108:14
+ |     #4 0x55d25159f0b5 in process_kfunc_with_implicit_args tools/bpf/resolve_btfids/main.c:1196:9
+ |     #5 0x55d25159e004 in btf2btf tools/bpf/resolve_btfids/main.c:1229:9
+ |     #6 0x55d25159cee7 in main tools/bpf/resolve_btfids/main.c:1535:6
+ |     #7 0x7f4c78e29f76 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+ |     #8 0x7f4c78e2a026 in __libc_start_main csu/../csu/libc-start.c:360:3
+ |     #9 0x55d2514bb860 in _start (tools/bpf/resolve_btfids/resolve_btfids+0x30860)
+ |
+ | 0x7f4c4a500bd4 is located 13268 bytes inside of 2829000-byte region [0x7f4c4a4fd800,0x7f4c4a7b02c8)
+ | freed by thread T0 here:
+ |     #0 0x55d25155b700 in realloc (tools/bpf/resolve_btfids/resolve_btfids+0xd0700)
+ |     #1 0x55d2515c426c in libbpf_reallocarray tools/lib/bpf/./libbpf_internal.h:220:9
+ |     #2 0x55d2515c426c in libbpf_add_mem tools/lib/bpf/btf.c:224:13
+ |
+ | previously allocated by thread T0 here:
+ |     #0 0x55d25155b2e3 in malloc (tools/bpf/resolve_btfids/resolve_btfids+0xd02e3)
+ |     #1 0x55d2515d6e7d in strset__new tools/lib/bpf/strset.c:58:20
 
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2263,8 +2263,10 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
-        if (!head->next || list_empty(head))
-                goto unlock;
-        list_for_each_safe(pos, n, head) {
--               WRITE_ONCE(container_of(pos,
--                       struct bpf_list_node_kern, list_head)->owner, NULL);
-+               struct bpf_list_node_kern *node;
+While resolve_btfids could be refactored to avoid this call path, let's
+instead fix this issue at the source in strset__add_str() and avoid
+similar scenarios. Let's simply check whether 's' is already within the
+strset data buffer boundaries, and skip appending it at the end of the
+buffer again.
+
+While already here, also fix strset__find_str() which suffers from the
+same problem by factoring out the common operations into a new helper
+function strset__offset() as suggested by Mykyta.
+
+Fixes: 90d76d3ececc ("libbpf: Extract internal set-of-strings datastructure APIs")
+Suggested-by: Mykyta Yatsenko <yatsenko@meta.com>
+Signed-off-by: Carlos Llamas <cmllamas@google.com>
+---
+v2:
+  Implemented the fix in strset__offset() helper as suggested by Mykyta.
+  Added support to handle "substrings" of existing ones.
+  Used 90d76d3ececc as Fixes tag as suggested by Sashiko.
+
+v1:
+  https://lore.kernel.org/all/20260513232055.1681859-1-cmllamas@google.com/
+
+ tools/lib/bpf/strset.c | 70 ++++++++++++++++++++++++++----------------
+ 1 file changed, 43 insertions(+), 27 deletions(-)
+
+diff --git a/tools/lib/bpf/strset.c b/tools/lib/bpf/strset.c
+index 2464bcbd04e0..e50da238914d 100644
+--- a/tools/lib/bpf/strset.c
++++ b/tools/lib/bpf/strset.c
+@@ -107,25 +107,53 @@ static void *strset_add_str_mem(struct strset *set, size_t add_sz)
+ 			      set->strs_data_len, set->strs_data_max_len, add_sz);
+ }
+ 
+-/* Find string offset that corresponds to a given string *s*.
+- * Returns:
+- *   - >0 offset into string data, if string is found;
+- *   - -ENOENT, if string is not in the string data;
+- *   - <0, on any other error.
++/* Returns the offset of the string in set, and populates *grow* with the
++ * length which set needs to grow by to include *s*.
+  */
+-int strset__find_str(struct strset *set, const char *s)
++static long strset__offset(struct strset *set, const char *s, long *grow)
+ {
+-	long old_off, new_off, len;
++	const char *strs = strset__data(set);
++	long len;
+ 	void *p;
+ 
+-	/* see strset__add_str() for why we do this */
++	/* Check whether 's' is already within the buffer */
++	if (strs && s >= strs && s < strs + set->strs_data_len) {
++		*grow = 0;
++		return s - strs;
++	}
 +
-+               node = container_of(pos, struct bpf_list_node_kern, list_head);
-+               WRITE_ONCE(node->owner, BPF_PTR_POISON);
-                list_move_tail(pos, &drain);
-        }
- unlock:
-@@ -2272,8 +2274,12 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
-        __bpf_spin_unlock_irqrestore(spin_lock);
-
-        while (!list_empty(&drain)) {
-+               struct bpf_list_node_kern *node;
++	/* Hashmap keys are always offsets within set->strs_data, so to even
++	 * look up some string from the "outside", we need to first append it
++	 * at the end, so that it can be addressed with an offset. Luckily,
++	 * until set->strs_data_len is incremented, that string is just a piece
++	 * of garbage for the rest of the code, so no harm, no foul. On the
++	 * other hand, if the string is unique, it's already appended and
++	 * ready to be used, only a simple set->strs_data_len increment away.
++	 */
+ 	len = strlen(s) + 1;
+ 	p = strset_add_str_mem(set, len);
+ 	if (!p)
+ 		return -ENOMEM;
+ 
+-	new_off = set->strs_data_len;
+ 	memcpy(p, s, len);
++	*grow = len;
 +
-                pos = drain.next;
-+               node = container_of(pos, struct bpf_list_node_kern, list_head);
-                list_del_init(pos);
-+               WRITE_ONCE(node->owner, NULL);
-                /* The contained type can also have resources, including a
-                 * bpf_list_head which needs to be freed.
-                 */
-@@ -2481,6 +2487,14 @@ static int __bpf_list_add(struct bpf_list_node_kern *node,
-        if (unlikely(!h->next))
-                INIT_LIST_HEAD(h);
-
-+       /* bpf_list_head_free() marks nodes being detached with BPF_PTR_POISON
-+        * before list_del_init().  cmpxchg(NULL, POISON) below would fail with
-+        * that old value and fall into the generic error path, which wrongly
-+        * calls __bpf_obj_drop_impl().  Reject POISON up front instead.
-+        */
-+       if (READ_ONCE(node->owner) == BPF_PTR_POISON)
-+               return -EINVAL;
++	return set->strs_data_len;
++}
 +
-        /* node->owner != NULL implies !list_empty(n), no need to separately
-         * check the latter
-         */
-
++/* Find string offset that corresponds to a given string *s*.
++ * Returns:
++ *   - >0 offset into string data, if string is found;
++ *   - -ENOENT, if string is not in the string data;
++ *   - <0, on any other error.
++ */
++int strset__find_str(struct strset *set, const char *s)
++{
++	long old_off, new_off, grow;
++
++	new_off = strset__offset(set, s, &grow);
++	if (new_off < 0)
++		return new_off;
+ 
+ 	if (hashmap__find(set->strs_hash, new_off, &old_off))
+ 		return old_off;
+@@ -141,25 +169,12 @@ int strset__find_str(struct strset *set, const char *s)
+  */
+ int strset__add_str(struct strset *set, const char *s)
+ {
+-	long old_off, new_off, len;
+-	void *p;
++	long old_off, new_off, grow;
+ 	int err;
+ 
+-	/* Hashmap keys are always offsets within set->strs_data, so to even
+-	 * look up some string from the "outside", we need to first append it
+-	 * at the end, so that it can be addressed with an offset. Luckily,
+-	 * until set->strs_data_len is incremented, that string is just a piece
+-	 * of garbage for the rest of the code, so no harm, no foul. On the
+-	 * other hand, if the string is unique, it's already appended and
+-	 * ready to be used, only a simple set->strs_data_len increment away.
+-	 */
+-	len = strlen(s) + 1;
+-	p = strset_add_str_mem(set, len);
+-	if (!p)
+-		return -ENOMEM;
+-
+-	new_off = set->strs_data_len;
+-	memcpy(p, s, len);
++	new_off = strset__offset(set, s, &grow);
++	if (new_off < 0)
++		return new_off;
+ 
+ 	/* Now attempt to add the string, but only if the string with the same
+ 	 * contents doesn't exist already (HASHMAP_ADD strategy). If such
+@@ -172,6 +187,7 @@ int strset__add_str(struct strset *set, const char *s)
+ 	if (err)
+ 		return err;
+ 
+-	set->strs_data_len += len; /* new unique string, adjust data length */
++	set->strs_data_len += grow; /* new unique string, adjust data length */
++
+ 	return new_off;
+ }
 -- 
-Thanks
-Kaitao Cheng
+2.54.0.563.g4f69b47b94-goog
 
