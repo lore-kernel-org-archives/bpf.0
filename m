@@ -1,200 +1,185 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-lf1-f65.google.com (mail-lf1-f65.google.com [209.85.167.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A641A3E5EE1
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 07:15:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778829322; cv=none; b=EWbXSqjZQ7iwYZmDa8xrNzpaGQ2CRjsr9mc/yapUfcxRYDbdzTnRK8oePg1Db6U0ccSfkQRCo/VR2I7yg/Ba+KjsIaZ3XUnlmqg2m7J8Dw0Jhb8Cb8fo3FyNtoWQT3HxMZE2zRhT23IyytAymlF1Kv/vpTVJ8S4usS0SMwFhb1U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778829322; c=relaxed/simple;
-	bh=Mqeo7wSQ9cvujMQ58+fSENQkR7cydw5nHM5UQoNm3Hs=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=eXRQK3CC8tMyp1IJdEOY3CuxJMDFkL/GQQFr62mMpPEAffskWk65jMIxJtBiDAcA1P5S79esOv+EvgvWfhbx5tbBJ+Lrj+Ytwne2S39NDrkZHyIBpBbSUqRo99GvFQWRIoWcQz+Incf7MjZFwTI89U0H3R/aJdAgtW6iipiYciM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S9vPMdI6; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024323F9F4F
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 08:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.65
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778832793; cv=pass; b=NccWRF/qn+pZaa+Ie1SuJyVqGqlIwh6ehapyVBF8MxrjWDXknjv7ZsMyvWR04DRA4kch0kyl1HZaDbnWVvAOSh2lGHEWPE53pMspEsxRpegZxaG4G1zj19Tzy3jkLjdHYrC+NB9vB8cRjNDuyFy7Ug/sf+YSHc7lVNMFFtEcG0I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778832793; c=relaxed/simple;
+	bh=WZojfUbXd3wS4TVRo6hSiQiW7Yxrt5hOcaPdrieI9Q0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z1Wwjf4qkh9+xKPAODJZvnCvYUaUp40rUauPGEODyU9hCzbe7oCPne6uWnqd0PLSUKMy3FZYHctrk4trJW/EpB35NfVW/xFT7jlK8olXfgLxnbjYgWlaUG3T3+Hu2f2cH4i4sJ3TOLzOP4VWW6nsloAmOSUPXte2pMIjultfv+U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P1usW8D6; arc=pass smtp.client-ip=209.85.167.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S9vPMdI6"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-366122e01fcso9889933a91.2
-        for <bpf@vger.kernel.org>; Fri, 15 May 2026 00:15:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P1usW8D6"
+Received: by mail-lf1-f65.google.com with SMTP id 2adb3069b0e04-5a858881ad2so10409350e87.3
+        for <bpf@vger.kernel.org>; Fri, 15 May 2026 01:13:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778832790; cv=none;
+        d=google.com; s=arc-20240605;
+        b=LjYiGVXIEZgyBNa9NmVf2sllW8amTdfn6F9IAuf+Hotb8nCnE3oq4M7K7tJ9e8VDR5
+         17DggFZoQpKVvEvR9QsDVc65LMAdRmOYwqTR34N3fBCnnAJbsfg7cq/bHdJ8480tkD7s
+         D0qkB2rAgFTxyhZQgbZtbWXBCb+iFWd6H8eJQyajSM7ZfIKdvxvIjaLPT8WTypHXsamF
+         BCjr7WhboiApDAgzA/w6uvyELT017T/xHTu9YexTcNwHm2eXCXzXP3cp2uWwZvJFD9+t
+         /osFXTo3wxtbh7seBu642CF35N6xbP/oZOcZi1H9kUhNsPG2pLONnuZLEh6/RECN1NNf
+         R9jA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=a4JAmq7jALYWdvpg4Mui88YmjXY6uXYwFxPs/+Z4xyc=;
+        fh=YlAmmP8EcYDc6EQXcP0jgcZtyVv1/ycdWuBfkHu1ZWA=;
+        b=iRLcE+D0wx+57vE7+hbhFcKsXEedJFdFE6jiCx7rvSLsLaFjFwutQ8oG+AaGbMapNz
+         MLDivg3snixYMmvi2fu2nLEMXh3zOxMnNYrG26aelkPoVbzUbWvTTFtZvQZvLOfdymWr
+         zhMVvK1mJjkW57rQSYv4RxcO1o2YsZAsiViwYAMwj9hcHE/BVH7QDsAXuRLF9NjnC0Q2
+         PLrcuIr1F2GvUPVdhmWrsWVOUuCPV49PIqZVQdcWE+FZvO0QKu2n76mjlEZcXtYsCZ/s
+         bFca0DXaDT6VjGP3g4g1SkfBAT3AUWo57GspamPCWqvJo2FQ2Lzc4iJn2aJWGrAQ6ewF
+         q9AA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778829319; x=1779434119; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b3RlI8YNokBP9FYY4cx+xESI8OetO8LQ784NhfGUE9E=;
-        b=S9vPMdI6vSCS+K/V4XWlsDip5fbD5OfCPU+ugohnoOo8A6tHTW7kKSxxdoJIK2r8wy
-         t0iDOUzqnfNlQh0y3D24hKNnZTKetB41AqGVZFuz+IUlRdcnmK+Geglnv+3JOrWEn+dM
-         DetHKi+AG9wq8CfAr4a3xBh1quad7SPnISyG4yr/X8bCFW2mFEMcK2ylvMmUlcw/u37z
-         /GJX82SqfMFqtIdm1CZnXydHZbg3uTZArVCultcmCR/296Q0wYw5QqrL9hdfcMehPOZ+
-         seT0EqjpZHCSB8G+kloczHfLTMgTcr49LkjSlreTsNeOEXp5ZJwz0XQ82QTNT82RqHvH
-         68Bg==
+        d=gmail.com; s=20251104; t=1778832790; x=1779437590; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a4JAmq7jALYWdvpg4Mui88YmjXY6uXYwFxPs/+Z4xyc=;
+        b=P1usW8D6DVVsjF+Bzq/VQjg3qsR4oAR6lAinDy08ATFV3PSqJAM0QZYy5ivG7mg0vD
+         l7br1jZNzxnSdU2h7sFQS2n2OMODzKHOdq0yLIoEIYmrA57RDWOs5B61V7yeiY1x26HI
+         b7oP5ufuomQ1RP2D8xjAZazZqtNt/xIU44Uhlxl2cBgM5WqsnKuCwptG60Sv8DWfeEVJ
+         b9wb/qEF3gjG+R+wiLEEycDSj0GPn7gqdMfrHF8g0qUXcrCiJ+MzuEmH2cQ4pAygngqe
+         5qWKUmst9wtA7L1DANLA7yrLOrLCBNiZrH089U4QAN1wcaJyBd1H/Pv7OShB3iunszAs
+         48zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778829319; x=1779434119;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=b3RlI8YNokBP9FYY4cx+xESI8OetO8LQ784NhfGUE9E=;
-        b=KySAVm173lyiZkmeQFBAGEWSlwa1DCK+2U6rTQ5qwR5bNoKMpxr4d/JSuxYrFWg+e+
-         QZVrxzbpaGHgB8KN5p7+oY8oOSS1kDWZoU2Gx+KoTLkGJmQBIYKffNc9z6X3l3NVdid1
-         4xggexd5vQtwt/QoF/O4lxN3OvcI0q5bv0sSm7IUQFHFVbsf92gpFVADJNPEB/9hmQ2X
-         1hiCf+xyn7dsdLDqyewPr8EdQNESq9XW34x2SzpPYoWwy6PqG5PzeqtHvF0G7pLz7AdD
-         A3GmAId8wRT4474dar2jsgGn2HiLncXvdSUrclNVIjbVsPfasq84baCXnn+KVSQGiIxr
-         oIVA==
-X-Forwarded-Encrypted: i=1; AFNElJ8k7RohqcVyYhDawJWawqSeX2EooL4HvtrciVUTVM3e3KIZJeWOAdfKq8a3qfITgwpQluE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnwHYtT9gQfq129GLFSsQhyyKV9jwNg6GfgnzyuG4teuPuGVsl
-	4LKx5b60tK9s2EYHEkZGFWYtwn7sQMb/IcHG7/8DJ7enL7MBOKVlaAHMnazh5wBW1LIrN6LRSAy
-	IpSM91ITQ2zT1k71SnmXOK68RRQ==
-X-Received: from pfbdu16.prod.google.com ([2002:a05:6a00:2b50:b0:82f:9778:a429])
- (user=yuyanghuang job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:90a9:b0:837:e9cc:d470 with SMTP id d2e1a72fcca58-83f33c9ec67mr3222990b3a.20.1778829318594;
- Fri, 15 May 2026 00:15:18 -0700 (PDT)
-Date: Fri, 15 May 2026 16:15:04 +0900
-In-Reply-To: <20260515071504.2054786-1-yuyanghuang@google.com>
+        d=1e100.net; s=20251104; t=1778832790; x=1779437590;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=a4JAmq7jALYWdvpg4Mui88YmjXY6uXYwFxPs/+Z4xyc=;
+        b=ADg1PCzmoNTaRQSSf6g99izcMIlx7T0tWxKdPh1Dq6pcEZAhh3UBnugaVnhY3YAvBa
+         RqThIm2e3tG2SnZNhLuxTotFwJcBy5ND3MksnAONTZP9U3kxwCDYk0lTh1T4Z/Ylz5kC
+         smyW35dJ3SLtPh6C9DHvf8JNinr/jVJ2tmBLQM+2YTvf86u7OUbMlSUU6vsKw9+UByuf
+         Z/zpS+lVtqYh1m34D0bfDeN9Nae0KFz2I5qn8SP5bVB20As4Jei5x7YwpHEbCzuM8U3F
+         EfTTkVQfjrOA94paeoB+Nc0Q3+XQz0s6fjyxAkJVJwF1sJ2+uhwIMGDGDvCN031EO0Qa
+         U2fg==
+X-Forwarded-Encrypted: i=1; AFNElJ9GTkFOU2h8qCqvbUFuW0fQhsJCJDh8C3sLP0aNp6cJrASz60d7BxrROUh5z13FTvDz/SE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlDxEFxZIqVxFvI3hvJ0vP7QxOjPXWVwdgIbVdT8ZcDR3Jg0+l
+	hFXVuJUq+ZSLHCXs/70T+RRNDDt3PgLuUzfqvmQnyTblzQ15d85BsNkH8Y9P42R8SpjoNwNNLeL
+	II6+mIS3QokiRhxAdDU4jdyzrBslub2o=
+X-Gm-Gg: Acq92OFCPhDT8LdsS/SEQp16Cv+9L5iJcFCkaC5gyYM5w/jaVlp5iEVz29B/aIDLhH7
+	BmmdeVAJSxspoXM63Mtp2SBXnR5H7SY7yhx8ueHHHJIpidOEAhnTy9QXj1urFN86JYQLY+M4RAY
+	L9UtzNQT5RlsaV37CaX78Zu24/u+bYYNxDooJLJiP6KLYkdxCOIUWEK3fVd0sjtp6TsgvtZlNmJ
+	uOmNJci9X1kDhRSnS2TNKWb2T9BjLR8PwVRnemNWcMRXZt8Pq7g2bs2KS4Trn4TuFTmqKiJGovd
+	6jyLdx37H3gFCuM8iHzbl8xOzDqQiA==
+X-Received: by 2002:ac2:4845:0:b0:5aa:123d:b755 with SMTP id
+ 2adb3069b0e04-5aa123db7f4mr324589e87.28.1778832789745; Fri, 15 May 2026
+ 01:13:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260515071504.2054786-1-yuyanghuang@google.com>
-X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260515071504.2054786-3-yuyanghuang@google.com>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add verification for
- BPF_PROG_QUERY attr size boundaries
-From: Yuyang Huang <yuyanghuang@google.com>
-To: Yuyang Huang <yuyanghuang@google.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Nikolay Aleksandrov <razor@blackwall.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
-	"=?UTF-8?q?Maciej=20=C5=BBenczykowski?=" <maze@google.com>, Lorenzo Colitti <lorenzo@google.com>
+MIME-Version: 1.0
+References: <20260515050437.104716-1-rollkingzzc@gmail.com> <e0a24b78-9800-4927-b611-ccbad1e906fe@linux.dev>
+In-Reply-To: <e0a24b78-9800-4927-b611-ccbad1e906fe@linux.dev>
+From: Cen Zhang <rollkingzzc@gmail.com>
+Date: Fri, 15 May 2026 16:12:56 +0800
+X-Gm-Features: AVHnY4LR9n2-Ae_qI7oLykis3AKXqA3FEb14WmP1plDNUNwyVA_AWuBsLTL_fJE
+Message-ID: <CAB7XQsEJDoZHUznSYE3v1DadVXGWP7J21rS4Q=BuMr_jV9tX_w@mail.gmail.com>
+Subject: Re: [PATCH] net: skmsg: pin the delayed-work psock in sk_psock_backlog
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	zerocling0077@gmail.com, 2045gemini@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Add a new selftest to verify that the BPF syscall (specifically
-BPF_PROG_QUERY) correctly respects the caller-declared attribute
-size boundaries:
-- Optional output fields (like query.revision) are not written if the
-  caller-declared size ends before them.
-- Calls with a size below the mandatory minimum return -EINVAL.
-- Full-size calls still receive the optional fields normally.
+Dear Jiayuan Chen
 
-Cc: Maciej =C5=BBenczykowski <maze@google.com>
-Cc: Lorenzo Colitti <lorenzo@google.com>
-Signed-off-by: Yuyang Huang <yuyanghuang@google.com>
-Link: https://lore.kernel.org/r/CANP3RGfZTXM_u=3DE_atoomPZXutoQJ02nOMkCCR-Y=
-BZbOm2suWA@mail.gmail.com
+Jiayuan Chen <jiayuan.chen@linux.dev> =E4=BA=8E2026=E5=B9=B45=E6=9C=8815=E6=
+=97=A5=E5=91=A8=E4=BA=94 14:10=E5=86=99=E9=81=93=EF=BC=9A
+> Where is the 'last_old_ref_before_put' symbol from? I can't find it
+> anywhere in the tree.
+>
+> If you are using LLMs to dig into races like this, please also have them
+> produce a reproducer, e.g. patch mdelay() into
+>
+> the relevant windows to widen them, then trigger it from userspace.
+>
+>
 
-Tested with virtme-ng:
-# ./test_progs -t bpf_attr_size
-#17/1    bpf_attr_size/query_size_boundaries:OK
-#17/2    bpf_attr_size/query_mandatory_too_short_einval:OK
-#17      bpf_attr_size:OK
-Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
----
- .../selftests/bpf/prog_tests/bpf_attr_size.c  | 84 +++++++++++++++++++
- 1 file changed, 84 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
+Hi Jiayuan,
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c b/tools=
-/testing/selftests/bpf/prog_tests/bpf_attr_size.c
-new file mode 100644
-index 000000000000..65fd717782de
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_attr_size.c
-@@ -0,0 +1,84 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Google LLC */
-+#include <linux/bpf.h>
-+#include <unistd.h>
-+#include <sys/syscall.h>
-+#include <test_progs.h>
-+#include "test_tc_link.skel.h"
-+#include "tc_helpers.h"
-+
-+#define OLD_QUERY_SIZE		offsetofend(union bpf_attr, query.prog_cnt)
-+#define FULL_QUERY_SIZE		offsetofend(union bpf_attr, query.revision)
-+#define SHORT_QUERY_SIZE	offsetofend(union bpf_attr, query.attach_type)
-+
-+static void test_query_size_boundaries(void)
-+{
-+	LIBBPF_OPTS(bpf_prog_attach_opts, opta);
-+	LIBBPF_OPTS(bpf_prog_detach_opts, optd);
-+	struct test_tc_link *skel;
-+	union bpf_attr attr;
-+	int fd, err;
-+
-+	skel =3D test_tc_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_load"))
-+		return;
-+
-+	fd =3D bpf_program__fd(skel->progs.tc1);
-+
-+	err =3D bpf_prog_attach_opts(fd, loopback, BPF_TCX_INGRESS, &opta);
-+	if (!ASSERT_OK(err, "prog_attach"))
-+		goto cleanup;
-+
-+	/* 1. Old size: revision must not be written */
-+	memset(&attr, 0, sizeof(attr));
-+	attr.query.target_ifindex =3D loopback;
-+	attr.query.attach_type =3D BPF_TCX_INGRESS;
-+
-+	err =3D syscall(__NR_bpf, BPF_PROG_QUERY, &attr, OLD_QUERY_SIZE);
-+	if (!ASSERT_OK(err, "query_old_size"))
-+		goto detach;
-+
-+	ASSERT_EQ(attr.query.prog_cnt, 1, "prog_cnt_written");
-+	ASSERT_EQ(attr.query.revision, 0, "revision_not_written");
-+
-+	/* 2. Full size: revision must be written normally */
-+	memset(&attr, 0, sizeof(attr));
-+	attr.query.target_ifindex =3D loopback;
-+	attr.query.attach_type =3D BPF_TCX_INGRESS;
-+
-+	err =3D syscall(__NR_bpf, BPF_PROG_QUERY, &attr, FULL_QUERY_SIZE);
-+	if (!ASSERT_OK(err, "query_full_size"))
-+		goto detach;
-+
-+	ASSERT_EQ(attr.query.prog_cnt, 1, "prog_cnt_written");
-+	ASSERT_GT(attr.query.revision, 0, "revision_written");
-+
-+detach:
-+	err =3D bpf_prog_detach_opts(fd, loopback, BPF_TCX_INGRESS, &optd);
-+	ASSERT_OK(err, "prog_detach");
-+cleanup:
-+	test_tc_link__destroy(skel);
-+}
-+
-+static void test_query_mandatory_too_short_einval(void)
-+{
-+	union bpf_attr attr;
-+	int err;
-+
-+	/* Below minimum size: must return -EINVAL */
-+	memset(&attr, 0, sizeof(attr));
-+	attr.query.target_ifindex =3D loopback;
-+	attr.query.attach_type =3D BPF_TCX_INGRESS;
-+
-+	err =3D syscall(__NR_bpf, BPF_PROG_QUERY, &attr, SHORT_QUERY_SIZE);
-+	ASSERT_EQ(err, -1, "query_too_short_fails");
-+	ASSERT_EQ(errno, EINVAL, "query_too_short_einval");
-+}
-+
-+void test_bpf_attr_size(void)
-+{
-+	if (test__start_subtest("query_size_boundaries"))
-+		test_query_size_boundaries();
-+	if (test__start_subtest("query_mandatory_too_short_einval"))
-+		test_query_mandatory_too_short_einval();
-+}
---=20
-2.54.0.563.g4f69b47b94-goog
+Thanks for checking this. You are right: last_old_ref_before_put is
+not an in-tree kernel symbol. It was a temporary validation probe
+label which recorded the old psock refcount immediately before the
+backlog worker's final put, and it should not have appeared in the
+commit message as if it were kernel output.
 
+The in-tree path I was trying to describe is:
+
+  sk_psock_backlog() starts at net/core/skmsg.c:670.
+  get path: sk_psock_get(psock->sk), net/core/skmsg.c:692.
+  put path: sk_psock_put(psock->sk, psock), net/core/skmsg.c:746.
+  detach clears sk_user_data at net/core/skmsg.c:892.
+  reattach publishes a replacement psock at net/core/skmsg.c:793.
+  warning path: REFCOUNT_SUB_UAF at lib/refcount.c:28.
+
+The trigger was based on the in-tree sockmap_redir BPF selftest
+under tools/testing/selftests/bpf/prog_tests/.
+The one-shot test used AF_UNIX SOCK_STREAM socket pairs, attached
+the sk_skb verdict program to the input map, inserted one socket
+into the input map and one destination socket into the sockmap at
+key 0, then sent one byte through the input peer so the destination
+psock backlog worker was queued.
+For validation I used a temporary local instrumentation patch in
+net/core/skmsg.c. It added a debugfs-controlled gate in
+sk_psock_backlog() after the TX-enabled check and before the
+existing sk_psock_get(psock->sk) call, plus counters and pr_info()
+snapshots in sk_psock_backlog(), sk_psock_init() and
+sk_psock_drop(). It also stored the pointer returned by
+sk_psock_get(psock->sk) for logging. The worker still used the
+existing get path and the existing sk_psock_put(psock->sk, psock)
+exit path.
+With the worker parked before sk_psock_get(psock->sk), the test
+forked: the child deleted the destination sockmap entry, and the
+parent retried BPF_NOEXIST update of the same key with the same
+destination socket fd until reattach succeeded.
+After the delete completed, the test released the old worker. At
+that point sk->sk_user_data referred to the replacement psock, while
+the delayed work still belonged to the old psock. The recorded state
+before the warning had the sk_user_data psock and the psock returned
+by sk_psock_get(psock->sk) equal to each other, but different from
+the delayed-work container. The instrumentation was only used to make
+that interleaving deterministic and observable. The warning below is
+the kernel's normal refcount warning path.
+
+The native kernel report from that run was:
+
+  refcount_t: underflow; use-after-free.
+  WARNING: lib/refcount.c:28 at refcount_warn_saturate+0xbf/0xf0
+  Workqueue: events sk_psock_backlog
+  RIP: 0010:refcount_warn_saturate+0xbf/0xf0
+  Call trace:
+    sk_psock_backlog() (net/core/skmsg.c:670)
+    process_one_work() (kernel/workqueue.c:3200)
+
+So the reproducer is instrumentation-assisted, not an
+unmodified upstream selftest. The instrumentation can widen the
+race window and record the participating psock pointers, but it
+does not publish a replacement psock, clear sk->sk_user_data, or
+add an extra put on the old psock. The final warning is reached
+through the existing sk_psock_put(psock->sk, psock) path after
+the test has forced delete-plus-reattach to happen before the
+parked worker resumes.
+
+I will send v2 as a new thread after the netdev 24-hour
+interval, with the lab probe label removed from the commit text.
+If useful, I can also share the small instrumentation/selftest
+diff separately to show the exact widened window.
+
+Thanks,
+Zhang Cen
