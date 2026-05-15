@@ -1,21 +1,21 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A2B03E92AB
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 22:51:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B863EE1EE
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 22:51:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778885474; cv=none; b=qV9yIWEtjClK5J8bWZQ/vzo9nxiMHQTSNMPRJX2lRyi8IwVRPEP2OBDhGlXH483QhL1GPiD3OnEisvscw+xMpNYjmduyCISPO3vvQInBo6I+36BK0eRFZBmbMPE10KTtRB6lZJJ0OgF8uok5It6nTrQO8Ysf3CRju7sdlozd5os=
+	t=1778885478; cv=none; b=XcnHnOXQYgf88E/LJzQgLHsDvXvWX8Nv/7TB3NoQWM2QBeYlf2Um9Z+SH9EbbFW+REGvhpxs/4C0e44Jrf4apewEczFHOX1jvo4Xu73xwtyzjudlLQPDFb1brXZi2/K1iDJ0ikDEzK5rPXZe6ZzfnMoFyXyqny0GWzE2CrS62yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778885474; c=relaxed/simple;
-	bh=JBO5mZQxzLDN1O8BnSuFCbUeh8n460B/+nuuIYZDHv4=;
+	s=arc-20240116; t=1778885478; c=relaxed/simple;
+	bh=WvWSsDQ0nwCa7yq2rQl8658hoNhX1w/x519UilV1pJk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EocyZ3/T7P1YeA9/a4X692yqCnymQK60N1suE6sim9z656E1kTpKdVQ+4daVBhUcBwOQxZNgi1pZOFkOGE7kwY1LJSLhCv/lQN8MlWwd8kD/Wn1l199jT9SmEmG6cKLDxQMcapC8twwj2Fg+yj/diUJaYP0vzqhiju+fL5EcAd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+	 MIME-Version; b=LrOH3zRjWbLLWhOKRB5QNWABxowmpbTDcM90Zy3IijUDnG+MW12Nm/v0sH6c2hrtOq2934Wkg8ilCjW6bRMxzZtK2VDUDM0+s4o+SqH7t95AyE/8NrVsZRiYMuDbYyo6QIBbX8kURoj7Ydxf+D2Aqae8f+4OY8l9tTswWe0X2jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 60581C0611FD5; Fri, 15 May 2026 15:51:01 -0700 (PDT)
+	id 9944EC062F4BB; Fri, 15 May 2026 15:51:11 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v3 5/7] bpf: Clean up redundant stack arg checks for non-JITed programs
-Date: Fri, 15 May 2026 15:51:01 -0700
-Message-ID: <20260515225101.824054-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 7/7] selftests/bpf: Add exception tests with stack arguments
+Date: Fri, 15 May 2026 15:51:11 -0700
+Message-ID: <20260515225111.825224-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260515225035.821178-1-yonghong.song@linux.dev>
 References: <20260515225035.821178-1-yonghong.song@linux.dev>
@@ -37,61 +37,162 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Remove a redundant stack_arg_cnt check in __bpf_prog_select_runtime()
-and start the stack arg loop from index 0 in bpf_fixup_call_args().
-Both changes are no-ops that simplify the code:
-
-In __bpf_prog_select_runtime(), the subprog_info[0].stack_arg_cnt
-check is unreachable:
-  - when there is only a main program (no bpf-to-bpf calls),
-    subprog_info[0].stack_arg_cnt is always 0 because the main
-    program's arg_cnt is forced to 1
-  - when bpf-to-bpf calls use stack args and JIT succeeds,
-    fp->bpf_func is set and this code is skipped
-  - when JIT fails, bpf_fixup_call_args() rejects the program
-    before we get to __bpf_prog_select_runtime().
-
-In bpf_fixup_call_args(), starting the loop at i=3D1 skipped subprog 0,
-which is safe since the main program always has arg_cnt=3D1 and thus
-bpf_in_stack_arg_cnt() returns 0. Starting at i=3D0 removes the need
-to reason about this invariant.
+Add tests to verify that bpf_throw() correctly unwinds the stack
+when the program uses outgoing stack arguments (functions with >5
+args). Without the preceding fix, these tests crash the kernel
+due to corrupted callee-saved register restore.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/core.c   | 2 +-
- kernel/bpf/fixups.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/exceptions.c     |   7 ++
+ .../testing/selftests/bpf/progs/exceptions.c  | 113 ++++++++++++++++++
+ 2 files changed, 120 insertions(+)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 427a6d828e01..cdbe9fdf474f 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2609,7 +2609,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct b=
-pf_verifier_env *env, struct
- 		goto finalize;
+diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/=
+testing/selftests/bpf/prog_tests/exceptions.c
+index e8cbaf2a3e82..3588d6f97fd4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
++++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
+@@ -85,6 +85,13 @@ static void test_exceptions_success(void)
+ 	RUN_SUCCESS(exception_bad_assert_range_with, 10);
+ 	RUN_SUCCESS(exception_throw_from_void_global, 11);
 =20
- 	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
--	    bpf_prog_has_kfunc_call(fp) || (env && env->subprog_info[0].stack_a=
-rg_cnt))
-+	    bpf_prog_has_kfunc_call(fp))
- 		jit_needed =3D true;
++	if (skel->rodata->has_stack_arg) {
++		RUN_SUCCESS(exception_throw_stack_arg, 56);
++		RUN_SUCCESS(exception_throw_after_stack_arg, 56);
++		RUN_SUCCESS(exception_throw_subprog_stack_arg, 56);
++		RUN_SUCCESS(exception_throw_subprog_after_stack_arg, 56);
++	}
++
+ #define RUN_EXT(load_ret, attach_err, expr, msg, after_link)			  \
+ 	{									  \
+ 		LIBBPF_OPTS(bpf_object_open_opts, o, .kernel_log_buf =3D log_buf,		 \
+diff --git a/tools/testing/selftests/bpf/progs/exceptions.c b/tools/testi=
+ng/selftests/bpf/progs/exceptions.c
+index 4206f59d7b86..f236aadfe7e6 100644
+--- a/tools/testing/selftests/bpf/progs/exceptions.c
++++ b/tools/testing/selftests/bpf/progs/exceptions.c
+@@ -379,4 +379,117 @@ int exception_bad_assert_range_with(struct __sk_buf=
+f *ctx)
+ 	return 1;
+ }
 =20
- 	if (!bpf_prog_select_interpreter(fp))
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 19056016eed8..2cec4e8cd4a0 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -1407,7 +1407,7 @@ int bpf_fixup_call_args(struct bpf_verifier_env *en=
-v)
- 		verbose(env, "calling kernel functions are not allowed in non-JITed pr=
-ograms\n");
- 		return -EINVAL;
- 	}
--	for (i =3D 1; i < env->subprog_cnt; i++) {
-+	for (i =3D 0; i < env->subprog_cnt; i++) {
- 		if (bpf_in_stack_arg_cnt(&env->subprog_info[i])) {
- 			verbose(env, "stack args are not supported in non-JITed programs\n");
- 			return -EINVAL;
++#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
++
++const volatile bool has_stack_arg =3D true;
++
++long arg1 =3D 1, arg2 =3D 2, arg3 =3D 3, arg4 =3D 4, arg5 =3D 5;
++long arg6 =3D 6, arg7 =3D 7, arg8 =3D 8, arg9 =3D 9, arg10 =3D 10;
++
++__noinline static long throwing_many_args(long a, long b, long c, long d=
+,
++					  long e, long f, long g, long h,
++					  long i, long j)
++{
++	bpf_throw(a + b + c + d + e + f + g + h + i + j);
++	return 0;
++}
++
++__noinline int exception_cb_sa(u64 cookie)
++{
++	return cookie + 1;
++}
++
++SEC("tc")
++__exception_cb(exception_cb_sa)
++int exception_throw_stack_arg(struct __sk_buff *ctx)
++{
++	throwing_many_args(arg1, arg2, arg3, arg4, arg5,
++			   arg6, arg7, arg8, arg9, arg10);
++	return 0;
++}
++
++__noinline static long no_throw_many_args(long a, long b, long c, long d=
+,
++					  long e, long f, long g, long h,
++					  long i, long j)
++{
++	return a + b + c + d + e + f + g + h + i + j;
++}
++
++SEC("tc")
++__exception_cb(exception_cb_sa)
++int exception_throw_after_stack_arg(struct __sk_buff *ctx)
++{
++	long ret;
++
++	ret =3D no_throw_many_args(arg1, arg2, arg3, arg4, arg5,
++				 arg6, arg7, arg8, arg9, arg10);
++	if (ret > 0)
++		bpf_throw(ret);
++	return 0;
++}
++
++__noinline static long subprog_throw_sa(long val)
++{
++	throwing_many_args(val, val + 1, val + 2, val + 3, val + 4,
++			   val + 5, val + 6, val + 7, val + 8, val + 9);
++	return 0;
++}
++
++SEC("tc")
++__exception_cb(exception_cb_sa)
++int exception_throw_subprog_stack_arg(struct __sk_buff *ctx)
++{
++	subprog_throw_sa(arg1);
++	return 0;
++}
++
++__noinline static long subprog_throw_after_sa(long val)
++{
++	long ret;
++
++	ret =3D no_throw_many_args(val, val + 1, val + 2, val + 3, val + 4,
++				 val + 5, val + 6, val + 7, val + 8, val + 9);
++	if (ret > 0)
++		bpf_throw(ret);
++	return 0;
++}
++
++SEC("tc")
++__exception_cb(exception_cb_sa)
++int exception_throw_subprog_after_stack_arg(struct __sk_buff *ctx)
++{
++	subprog_throw_after_sa(arg1);
++	return 0;
++}
++
++#else
++
++const volatile bool has_stack_arg =3D false;
++
++SEC("tc")
++int exception_throw_stack_arg(struct __sk_buff *ctx)
++{
++	return 0;
++}
++
++SEC("tc")
++int exception_throw_after_stack_arg(struct __sk_buff *ctx)
++{
++	return 0;
++}
++
++SEC("tc")
++int exception_throw_subprog_stack_arg(struct __sk_buff *ctx)
++{
++	return 0;
++}
++
++SEC("tc")
++int exception_throw_subprog_after_stack_arg(struct __sk_buff *ctx)
++{
++	return 0;
++}
++
++#endif
++
+ char _license[] SEC("license") =3D "GPL";
 --=20
 2.53.0-Meta
 
