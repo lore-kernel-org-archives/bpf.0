@@ -1,135 +1,165 @@
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-a3-smtp.messagingengine.com (flow-a3-smtp.messagingengine.com [103.168.172.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA5023C4FF
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 14:58:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6628F37187F;
+	Fri, 15 May 2026 15:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778857111; cv=none; b=eE5f2kwVKxuNmFi5QIL/R//+rg18ZrCazV431BvNCh03II7tVrWlSSl4EmklKW5/vXTy3gZOiP2XthD6zdLtEnIV3PiLzCTdelQuA9pY2dodcyaqKiekNLyCJUm1JP5st2pvbg1LORCLQ8Oq0J9e3g92rzVulreQfnPOb658Vs8=
+	t=1778858171; cv=none; b=DUmZfW0WcFnwpG4Eer9jtOq8guH6opzmu1zRHMdOleC1ZgVSk+RDvqjfQDiW9180DDZ/8HxWQvKAa4ONOcX5GkI4X3FU1ub+ElBaW3xMwf2LqV0CrTBs6gExGLhyaTRmy9IDyM5dHRpN6wxnwYHTSGzpNMquHEqqvU1YG5zsyHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778857111; c=relaxed/simple;
-	bh=E1xx1uYoxK+eSCVWHUsVq/IguOxd3TLj+xysRTJERkQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Zs9GWeSqRHIn9kBle+2/5ef1H3BU5y+jXvQZ2JCD+LW15615Z9ZwCre/jCGVrEV2lUi2uK6lsES7TKfbBzAHcMAKvF7cfz/u0syO7MK3tLsH0zpGumonISrZ90aCvDeo5PGGGn/9+OTvHRr+omEG0kNizPpKCsI2WVkpn2NqOzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PDAnfSVr; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778858171; c=relaxed/simple;
+	bh=D/xuaDGwPLUBL036bk0uJhbi2HUM849uBA1N2mT6730=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=Rb28ymKRzEdXn2+8qfZbps14Z7pmes4vcmV5UwVfpiITbYigPpQvubWawWwsPytr2S25kC7A33NCa15GrZ24B49KHJ7LNDxJOvhyhbkFCiKKJHXOJVzjxOtH1H6fPUumXyeAqrFRU1difk4BEYrZyYyBeDuqCws3j1IrlpRoFfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=SpE0mLi/; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=f90z6Mcw; arc=none smtp.client-ip=103.168.172.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PDAnfSVr"
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-90fe17c157aso344749985a.0
-        for <bpf@vger.kernel.org>; Fri, 15 May 2026 07:58:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778857108; x=1779461908; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0+nei0qxNlG/6SVkqADrmiSvLLb+6waS8I6r15019/8=;
-        b=PDAnfSVrU9OUHCH0STDvIPOJmRymaf8I4D7D0/3cdx7Nh94rucmofMhBh1MZlaKj5J
-         L/GBLIHg906/V/r/BHUsSKmv71mbxCpJjd3Ijviiy3G9Usq/tjqIA52GSp5WNVbuZBmz
-         X6G0tnUXmmOXj8elA0thZqSXX0u1mEa5jEYEU7prPCMae+NrHDNcX7jeoWMq+ty/ayEk
-         /Z3Vv6vsYY7eQuzU652tfxXN/6EdHZ+aMRkj5bSYVMAOcMwqoOgwGzykM6ESxB4I5are
-         w5dEhem6l12rzFq7eJXx7djYbRp6VXZTaJT9a3uZdrXU4iT4H8hVGQ6IIbKJqcPdNw28
-         I0Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778857108; x=1779461908;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0+nei0qxNlG/6SVkqADrmiSvLLb+6waS8I6r15019/8=;
-        b=cmN6M8VBYIW0KeDmyT9PPH26VCl1Ths2UZjGw9e03zj15GpF6g54tlZM5ETUnMrSmC
-         AvY65QFeZyGspyrnqSToj6qj1agH0tC3EhD79P6KtITr+60+AwGhxtmTr1xpqQoJMR0s
-         LNiMKQMeUx7i0IBzN1EajOk0rq8Jj9E1PVKUzlTpRgzomjeQOawCpwowuEJYkISXJd8+
-         7EpCUM+LINiR6rKdw4eoO8orwj8CDABGR2uTIJEPeen03GqBYE+xQ/NiwgitYuRID/sZ
-         tscBVeCzllzaoc7JAYuBCf6vp03RXpjyXiqMav49yztmjSdNWLIJnU44xYv7k8pkACBE
-         cbhg==
-X-Forwarded-Encrypted: i=1; AFNElJ/HiEY7iL0V+QFmHliDtCcGrdBsrt5L5Se4dH2K/rXhO33jmU2Vqz+KcDBUI+RxISZNpyE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz333x3+N0XdDc/C5hy/iNuEYPYexsq6bk0Wpf8YKzhw2gz2A/Y
-	jozVAPzsJMStCF4gx3aoJl3l+7k42TyeRBZ+wG7MgXYRfJjSQlnqCwTv
-X-Gm-Gg: Acq92OHnvfTpwi/Lwm2q+CKJSKvRMCLDfyHR5OVfr/bHGV5+V/vNE87zfBeuqlTEvsw
-	Yfw9hjF94gyQ1UUyfZ5nBGVHWd77DE0HnGCSE2H+q7/hWEnhJP4c+t8nZifkWTLrFEawlSlK9jV
-	s9fESoOlkRDu5SGMAVBeEL8eWDcN8IIj6fmHHXr6sPn0SpSTkNYqScNZJL3DTj2SsNqAhoWP9GI
-	yIYK+vFNxJS+KCy55lQ0gZn37pezTH9aWv0ly+uVOj4BEu7/FHTTnqYJd4y/A+vEfvc/djuPW+1
-	qUKhsfLGW26agJ/VcGNTYuR8gx/KLr3b/B8ThHun10+LaATnGokONIpWZ7RcWEGa5NaUp3liKdU
-	NUS8KSLYITkESBCvWvUKhZk3z8HSS44at6puRbwJHxKr/uoF8WOG904d1SyX++9XFn4boW0aALX
-	yIRz/+rOIR4PxX5QTqHCSSL+SbLSX29/kDWSyNgrvk2+mGtNLD0RHGYhXIjY2TGNFfZsvmmICY1
-	yh+7/NnsHluWnCudgwVrrHM0rEihbVKh4WG7c6xPuk=
-X-Received: by 2002:a05:620a:4083:b0:911:1a2c:f953 with SMTP id af79cd13be357-911cd75d3e6mr700185285a.20.1778857108064;
-        Fri, 15 May 2026 07:58:28 -0700 (PDT)
-Received: from server0.tail6e7dd.ts.net (c-68-48-65-54.hsd1.mi.comcast.net. [68.48.65.54])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-910bcf3584esm550293385a.34.2026.05.15.07.58.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2026 07:58:27 -0700 (PDT)
-From: Michael Bommarito <michael.bommarito@gmail.com>
-To: Jens Axboe <axboe@kernel.dk>,
-	io-uring@vger.kernel.org
-Cc: Pavel Begunkov <asml.silence@gmail.com>,
-	Li Zetao <lizetao1@huawei.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] io_uring: propagate array_index_nospec opcode into req->opcode
-Date: Fri, 15 May 2026 10:58:11 -0400
-Message-ID: <20260515145812.1241925-1-michael.bommarito@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="SpE0mLi/";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="f90z6Mcw"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailflow.phl.internal (Postfix) with ESMTP id 94470138040D;
+	Fri, 15 May 2026 11:16:08 -0400 (EDT)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-04.internal (MEProxy); Fri, 15 May 2026 11:16:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1778858168;
+	 x=1778865368; bh=J4ckqZIWQV1ocroUGeQi74weQoQtp7XwfxKqP7cAhnc=; b=
+	SpE0mLi/5H5t8/WiJrScmiVEJCZmZNzFAJos7clC7t6G27l/wyd2aqsVwo2FK0gw
+	J9Fh71EwH5lufhK9vUnafVNfr4CF99AaVFsxhvKZgvB2rwzcU/qfX1YvMhumCyk4
+	VrdmQhbI9bh7g+W94cKzmphOIfxBHEEXuBj3MP/3nS/5P+WaJRr1W8avAKbow/H0
+	5QFf4GGGToPc4y8waaBvDFBTWvaHNnl+MOgbu3gIJg+q48aXBEs3yhOADJJU60fx
+	Drf6I++li/cVmxWV4PCMSle8YxRwaFHz2upM/eTvzfaLeco3JzoT90kOjI9LztN3
+	suAEvtVjwviraRgmquQi1A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1778858168; x=
+	1778865368; bh=J4ckqZIWQV1ocroUGeQi74weQoQtp7XwfxKqP7cAhnc=; b=f
+	90z6McwpyXyWDKrW7P4DK8geuJNe05eo2VbfdMnZ9lZK5jy0djD6ZoQTMCni5u3X
+	Ti7ghwZD4B/L/3mM6nKmz0lTLGdlRDZAmTowppCOwcAX3q85XfnGPRvr+0TOVGFd
+	uo7r294Bsi1Qs6Ce754ec5DN/R5zFnAuPLbXrqf5xN8iLCKtaBICmS8vzctwiV1E
+	e52dZR6FYUdYUHeVAGDHGxZqunVlBAF8ksCiSWqMGynC6bXdOKbyrmuO1XrV751/
+	1uv2AIhOZPNhNAZspDwgd14kjq64c5LyDp5+tujSevbu0Wos4hkozuYe7HbZCiNr
+	h/nHZK2F/nJfpRYHFCtXg==
+X-ME-Sender: <xms:uDgHajcnNS8FlzUOJpNstBevDI20ei5RGCkCDgyFOmteSCFmVDH9hA>
+    <xme:uDgHakDwH48TweiH5v964ItQQKIvHm62QsF2TriRy4z3BsJrUnrLchJM8AToXp4cs
+    9NRfWWxInPksG0O0kN75rdWB7MobsuZPlsojF2qeSE_ldPKK2lqiMmy>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddufedtjeefucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvdegpdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtoh
+    epkhgrfhgrihesfhgsrdgtohhmpdhrtghpthhtohepshgufhesfhhomhhitghhvghvrdhm
+    vgdprhgtphhtthhopegrlhgvgigvihdrshhtrghrohhvohhithhovhesghhmrghilhdrtg
+    homhdprhgtphhtthhopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtohep
+    jhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhgvmh
+    igohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhl
+    vgdrtghomhdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvth
+X-ME-Proxy: <xmx:uDgHav0grKTUvRJbwKOOu55TTY2TcYsTA_e-i-amNCPMFw5u2mb5aw>
+    <xmx:uDgHaiChU2CXfS3FM8cs_uK54BIVVnVAaFb3iTZ9r20HS49y0L5fmw>
+    <xmx:uDgHaoaam7id5OiJw90OuIdz956nq0j1-PwU3bO8w1L1Bfy_CwV4gQ>
+    <xmx:uDgHauY_eYD48nz1hHut4PYvsnBsnmsqRnrL3mudrFdrZHQkS9Jt3g>
+    <xmx:uDgHagCHfw_iqF2buV0AbVq1dWjVW--bWaXkkTFt_OgwEKl0a2eP5V9I>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 032091060065; Fri, 15 May 2026 11:16:08 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: Avg9O9r9re3Z
+Date: Fri, 15 May 2026 17:15:46 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
+ "Arnd Bergmann" <arnd@kernel.org>
+Cc: "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>,
+ "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>,
+ "Jesper Dangaard Brouer" <hawk@kernel.org>,
+ "John Fastabend" <john.fastabend@gmail.com>,
+ "Martin KaFai Lau" <kafai@fb.com>,
+ =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Simon Horman" <horms@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>,
+ bpf <bpf@vger.kernel.org>, Netdev <netdev@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>
+Message-Id: <b387dd31-0ee5-41b9-b07a-13b718080e89@app.fastmail.com>
+In-Reply-To: 
+ <CAADnVQLYitAZVpXCTygA1uAUtN6m8pMkWzFi9su719M=nktmQQ@mail.gmail.com>
+References: <20260515113102.2389020-1-arnd@kernel.org>
+ <CAADnVQLYitAZVpXCTygA1uAUtN6m8pMkWzFi9su719M=nktmQQ@mail.gmail.com>
+Subject: Re: [PATCH] bpf: test_run: reduce kernel stack usage
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Commit 1e988c3fe126 ("io_uring: prevent opcode speculation") added
-array_index_nospec() to the local opcode in io_init_req(), but the
-sanitised value is not written back to req->opcode.  The
-unconditional write at the top of io_init_req() stores the raw byte
-into the persistent field; the success path of the bounds check
-leaves it unchanged, and downstream consumers read the raw value.
+On Fri, May 15, 2026, at 16:47, Alexei Starovoitov wrote:
+> On Fri, May 15, 2026 at 4:31=E2=80=AFAM Arnd Bergmann <arnd@kernel.org=
+> wrote:
+>
+> 1k?
+> pahole -C xdp_test_data
+> /* size: 192, cachelines: 3, members: 9 */
+> /* sum members: 120, holes: 1, sum holes: 56 */
+> /* padding: 16 */
+> /* paddings: 1, sum paddings: 36 */
+>
+> what s390 doing to make it huge?
 
-In io_uring/io_uring.c those consumers are io_issue_sqe(),
-__io_issue_sqe(), io_wq_submit_work() and io_prep_async_work() (all
-indexing io_issue_defs[]); io_clean_op(), io_req_defer_failed() and
-io_req_sqe_copy() (io_cold_defs[]); io_check_restriction() via
-test_bit() on ctx->restrictions.sqe_op; and the audit hook at the
-io_issue_sqe entry.  io_uring/bpf_filter.c added in v7.0 extends
-this set with io_uring_populate_bpf_ctx() and
-__io_uring_run_bpf_filters(), indexing a heap-resident per-filter
-pointer array sized at allocation to IORING_OP_LAST.
+I think it's a combination of cacheline alignment (256 byte
+lines) that leads to padding before 'rxq' and at the end of
+xdp_test_data, as well as CONFIG_KASAN_STACK that increases
+the stack usage further.
 
-The kernel's spectre_v1 protection is per-site array_index_nospec()
-annotation, so a site missing the annotation is unprotected
-regardless of CPU vendor, microarchitecture, or microcode revision.
-A per-site array_index_nospec() was applied to the same class of
-gap in io_uring/fdinfo.c recently.  Propagating the clamped opcode
-to req->opcode once, immediately after the existing
-array_index_nospec(), closes the remaining sites at the source
-without per-site clamps.
+> Probably better to rearrange the field and fix the root cause.
 
-The compiled change is one instruction (a single mov of the clamped
-byte to req->opcode); the cmp/sbb/and clamp triplet is unchanged.
-No functional change: array_index_nospec() is a no-op for opcodes in
-[0, IORING_OP_LAST), and out-of-range opcodes are still rejected at
-the bounds check above this assignment.  Boot-tested under UML
-(x86_64 defconfig) by building stock and patched kernels and running
-a 54-test subset of liburing's test suite against each; pass/fail
-identical on both.
+It looks like this change reduces the stack usage by 256
+bytes, and keeps it under the warning limit for all the
+configurations I was testing:
 
-Fixes: 1e988c3fe126 ("io_uring: prevent opcode speculation")
-Signed-off-by: Michael Bommarito <michael.bommarito@gmail.com>
-Assisted-by: Claude:claude-opus-4-7
----
- io_uring/io_uring.c | 1 +
- 1 file changed, 1 insertion(+)
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -98,8 +98,8 @@ struct xdp_page_head {
+ };
+=20
+ struct xdp_test_data {
+-       struct xdp_buff *orig_ctx;
+        struct xdp_rxq_info rxq;
++       struct xdp_buff *orig_ctx;
+        struct net_device *dev;
+        struct page_pool *pp;
+        struct xdp_frame **frames;
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 4ed998d60c09c..7b257a03ef84c 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -1739,6 +1739,7 @@ static int io_init_req(struct io_ring_ctx *ctx, struct io_kiocb *req,
- 		return io_init_fail_req(req, -EINVAL);
- 	}
- 	opcode = array_index_nospec(opcode, IORING_OP_LAST);
-+	req->opcode = opcode;
- 
- 	def = &io_issue_defs[opcode];
- 	if (def->is_128 && !(ctx->flags & IORING_SETUP_SQE128)) {
--- 
-2.53.0
+I still get 1368 bytes stack frame in one config (with KASAN_STACK)
+here, compared to 392 with my patch. In another config without
+KASAN, the mainline version has 1344, the rearranged xdp_test_data
+has 1088 bytes and the dynamic allocation variant uses 200.
 
+The one-line change is probably enough to stay off my radar since
+it stays below the arbitrary warning limit I test with to find
+regressions, but 1368 bytes is still a lot, so there is a good
+chance someone else will hit this again.
+
+Another alternative would be to allocate xdp_test_data statically
+instead of on the stack.
+
+Let me know which variant you prefer.
+
+       Arnd
