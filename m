@@ -1,185 +1,252 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709F13E92AB;
-	Fri, 15 May 2026 22:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778885916; cv=none; b=DqpNaE3syLVkNrTE1Jizh8q/LzJy7rVFDDibqmNTlUF4HQ4G4s+ebyf6VY/iK9CP563dO/V5gRhDpfshuvuYDsyRQ2cjtJmNpahntbiOOuVPga7PQhr+Bm93eldPcMBPQzyaoqKIxJcU3KV7rRR2q0ntDsmnOsoJStO+LwoO07Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778885916; c=relaxed/simple;
-	bh=YCcPJH/vYgPQzSl/jsRGZR7a3T07mS4IJqsbO6CFGbA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UDI9fA4+ytBh86QNjsc59l5iF2cm8DCoJeBZVu2zPrQN1fKsEl9CFmeWxHf2PTgF92Z1Q1jSv7NS263UpE+Lms4WvueuCEwuF7SC2tg7s0lW9gNGnRvrtrKb2Zw9p6QmYBN2iiDVPkpBWbtRXs1pi4sTyKocxBVaJfHz7NsYVQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FN46Z9kg; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD643F6C23
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 23:05:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778886355; cv=pass; b=h1GbZ6m5wx5yVJLoNgY2XgfU0EjdQ2NfqOyaVzWz+4+4zZPL/sM9qP2U1xUZMjfq2BH3v1bn/RpRaJt14lgw5tpZzwAk+0uHwNI+E9Nd+Pq6sLRu+V0ppT652pGsookT1bM5tEEpAyRNQOzXcRTlfYwvHCt4wkQ00CfbXKa287I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778886355; c=relaxed/simple;
+	bh=suFbph81hdeSmypU1mzKSMli5hfNz6jJ5McmjgJwF4U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fL3gtUgoVmsHwBZA8gIxl0Tw9/Nef0ZSrCnhL4WjTigLGsKGc9WTTooE3moiowcwfVG43wa6Yiq4JfiVOc6qDCMPL/ON8j4o6I34DuupQo/mXFbstVPs/J4mvrmlON8yRVoVWJGcdRISTNtQLmq9d7+IrFh9lAXbjlMDOeR/YkY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QIgFmRH7; arc=pass smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FN46Z9kg"
-Message-ID: <bda702a1-18f5-47ed-8a4e-a01b94829e07@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778885911;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ycnjTqUOfjzmeEfBwBIsxrCHrlibJg0T0GtKO5eKf28=;
-	b=FN46Z9kgrU4Kbrry6rzC1hKw5c/BjJWT9JzboldGA6XMR/SAGsv528OaUcjWjUgSQeYBmd
-	5K+exPVhr0rkGPOt/yb/c/n4qF/6CBQfTOFh6/xG+dXkoSNGmmEZt0uvPz9elT4wnWFAFD
-	bzNYWItnaGOho3LJep+0i0TX7jE83Ck=
-Date: Fri, 15 May 2026 15:58:14 -0700
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QIgFmRH7"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2ba180a022dso275ad.1
+        for <bpf@vger.kernel.org>; Fri, 15 May 2026 16:05:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778886353; cv=none;
+        d=google.com; s=arc-20240605;
+        b=BbFEal6LNjOWUznNuQIr+RLGk1giPwXmEwzwyfM1bCzUxzanCp9VEjYh0td7LfU/Ej
+         C/5uO1eEUTDRjyEmI9OakaNZoCCRlQw7EfUHP8pGVsVY9JOHTUVhiuq1VZgYC6+IdPKE
+         sg2S9c1L8jqyPGHl2nCXEw6O0kn+gUnyukQ9BrLP7sCFricShEl1O4Qwah0vfL0WimmD
+         7I7/EMnXNMCvZT1dsU48cI5yQusCbVbkUappP15m0z5NnvfSUsjGsCZPtDw6cawL0ckd
+         oXV6Qz3JhmU3fK3e6qxFP8bZKmVJLVACHqOhUh/HhwImW+/f+9pvmFKZnKZXPojoaLz0
+         YENA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Bh+mpeCZDXkGnyfQrLJnKNiehc49w9oYDvRRReIZglk=;
+        fh=7RN0Txm4p9WrkJbDPY+XuHqB9RRY6NkHfNdGwq007N8=;
+        b=ZAP1glQ8inPUxE9+JbV2qKaJD0JYGds/n2bQlvffLvbQ71yiNHym3RG0NrHXu/EbfU
+         u5dEdFm8m7daEhIyOf2YAISl1uX2sGqc7RilpE6Ga3/tOR5vZJmzyAvW6vTBdUWA7xEF
+         Jxmu0ICxT80QAi+xr33IaGl/8iGTuOhfZk4b64lih2bi/Kn0Wg3fQaNv0erhQZ2X8OUY
+         F9yYPJ5XX4RyvYtMxy3hAmXBWMjabbpHA5CrFMNSxGWcNfkPiGDiGbwBjpeADNQgGtxN
+         LTMcmuBemqxv66ATsei+LLJ+76+/ZXGLKOMcNx6ZmVh0CGkBnBuynE88mPAkDXpabs3E
+         nx1A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778886353; x=1779491153; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Bh+mpeCZDXkGnyfQrLJnKNiehc49w9oYDvRRReIZglk=;
+        b=QIgFmRH7MBYPkJYGt6H0v07N+4AxrO3rk3oXh7ybAfiKZO30a3zR643Ah8TKwG2VVA
+         nbYyDmojb8YsPgTjo5yrDIq/cDNIXzhZ1k2yW/xvxvd4A6NP8BV48lLuL8cuJMzGIDrh
+         6IeXdOgaLEcd1vQqrWJcIVlpYt96lzVoujMW0Yk/Z5vlOHfU65B4r82rY+Rys3VagKEz
+         t4OPpWAC8xEplexSrUrOa87bHjXOfJHSVaaSDMbR1JQfcLxW2qLESVRwrhXh8InuD+gC
+         SJ8I+I1+Q1t8ejWZz2uEPaGSLa+XoOYdvHYkrsu4POFv1xvmfWIMiJ44Q4Z92Km2dHa2
+         1/pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778886353; x=1779491153;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Bh+mpeCZDXkGnyfQrLJnKNiehc49w9oYDvRRReIZglk=;
+        b=IARM5XMR7oRDjsEZNTjXTmh0QZpL3kZIaK/b7SBeXiZ3IE4Upp8v4EE5xuNRA3hAG9
+         g8AlZmBtpeQ3XtMLQ2CGpqjSZGR/Vg6CTtBihLphxl2sBdUQ587M8ij9t+0gr2fUVAfN
+         LcdOBOxE08JESDv8qwTbzAE3xLfVVFlTmeQJ1GeuFX3prlULg02uY3a5pmnAQ7GCO/vj
+         Fdf+fUiv2WE4lJrD6mIULejdqYtjLrGEQWahsPTDTfhSVZpfUWm1FRSmiUyXJmelAaHu
+         xJTKkvXuhjus6bDz0kXeNcwI+Bh+XjAAPal3njhM2ja17G1Y/92Zu1n6eE6exkqsfFb1
+         gx9A==
+X-Forwarded-Encrypted: i=1; AFNElJ/PRq6PsyvW9tb4QFj7xsXY2yBDY5hIJYD6MiLSkwNG9rLenLHIvFLWrsvGkXVtrd/eU9Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5a8tCLUYXXDcquDTELlXCd/ATgGmNfwFuLoOJJ6kyqzPnYGCS
+	zzJLlchwxP4bkSeCImfr6gXHzkErRYW2eeSwOm+3Z9jchPa8hHh8yrwTf3kBWKALeOHpwF5ZORO
+	Td0W+9CfCtkzVJLAT5TKkhLV51a126RfCcbi++7Mt
+X-Gm-Gg: Acq92OF2Kvl/tsnJD1RPvULn2evu6DJNDPHx2fMm5VImjCx0WSK1M1MorusrCQyjs1j
+	QBTPCphhlFkwcuuAn1KpWD1Kyx1efr/YyUe9NCg3yofK1R4gGYufv5LD263051Br0Fc3YIqnUrg
+	ZKGGzRV4iYQqYWUktsHfE+ffcVo2j/pb8k4htryw3Tbfin1oZMRDxYXOrG+vRu+24qLBF9Mezon
+	G49xVHDzgnCZk68HJorBKPl8nZvglsmzdbS3Vd3H2/u0ia6ae2cI8ik4Cpp/Bgl+6hyaJj6Fhl8
+	xdDq6eUeCMxyEyg+9pERApyY6odAnQ==
+X-Received: by 2002:a17:902:f708:b0:2b9:e831:5e5c with SMTP id
+ d9443c01a7336-2bda0d83abcmr1008035ad.4.1778886352002; Fri, 15 May 2026
+ 16:05:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 5/6] tools/build: selftests: Allow versioning LLVM lld
-To: James Clark <james.clark@linaro.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, leo.yan@arm.com
-References: <20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org>
- <20260514-james-perf-llvm-version-v1-5-6cac1a9a4c8d@linaro.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260514-james-perf-llvm-version-v1-5-6cac1a9a4c8d@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <CAP-5=fWfrGMV4EafqkwQO-R33c_szXcxVLgH0c4k2zt3zj4HdQ@mail.gmail.com>
+ <20260515173852.1378571-1-irogers@google.com> <20260515173852.1378571-12-irogers@google.com>
+ <agd2-MgXgs---InR@google.com>
+In-Reply-To: <agd2-MgXgs---InR@google.com>
+From: Ian Rogers <irogers@google.com>
+Date: Fri, 15 May 2026 16:05:40 -0700
+X-Gm-Features: AVHnY4I87UbONLW4vVSxAqG3U53creLX2NaY-sDa-kngTYO33SvKPfpn4X2mZcg
+Message-ID: <CAP-5=fXSLgN6hXtQattTp9gqxBkO1gi97EWRF45_0ZKQcK0Z+A@mail.gmail.com>
+Subject: Re: [PATCH v4 11/14] perf pmu-events: Parallelize JSON and metric
+ pre-computation in jevents.py
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: acme@kernel.org, james.clark@linaro.org, 9erthalion6@gmail.com, 
+	adrian.hunter@intel.com, alex@ghiti.fr, alexandre.chartre@oracle.com, 
+	andrii@kernel.org, ankur.a.arora@oracle.com, aou@eecs.berkeley.edu, 
+	bpf@vger.kernel.org, collin.funk1@gmail.com, costa.shul@redhat.com, 
+	daniel@iogearbox.net, dapeng1.mi@linux.intel.com, dsterba@suse.com, 
+	eddyz87@gmail.com, howardchu95@gmail.com, jolsa@kernel.org, leo.yan@arm.com, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	martin.lau@linux.dev, memxor@gmail.com, mingo@redhat.com, mmayer@broadcom.com, 
+	nathan@kernel.org, palmer@dabbelt.com, peterz@infradead.org, pjw@kernel.org, 
+	qmo@kernel.org, ricky.ringler@proton.me, song@kernel.org, 
+	swapnil.sapkal@amd.com, terrelln@fb.com, tglozar@redhat.com, 
+	thomas.falcon@intel.com, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/14/26 2:32 AM, James Clark wrote:
-> Building with LLVM=... could result in a different version of lld being
-> used than the main toolchain for liburandom_read.so because it's
-> hardcoded to "lld" in this makefile.
-> 
-> Make it consistent with the rest of the LLVM toolchain by adding an LLD
-> variable to Makefile.include. Keep the fallback for other architectures
-> in tools/testing/selftests/bpf/Makefile as it seems like it's something
-> specific to this make rule and shouldn't be global.
-> 
-> Clang accepts either a full path or "ld.lld-15" style inputs to
-> -fuse-ld= so this will work with LLD defined the same way as the other
-> LLVM tools. However, for full paths, we need to use ".../ld.lld" instead
-> of the generic driver "lld", but I don't think the original use of "lld"
-> was significant as this is always a linux build.
-> 
-> Signed-off-by: James Clark <james.clark@linaro.org>
-> ---
->  tools/scripts/Makefile.include       | 2 ++
->  tools/testing/selftests/bpf/Makefile | 8 ++++----
->  2 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-> index 380ad84ac51e..5c2d505cba62 100644
-> --- a/tools/scripts/Makefile.include
-> +++ b/tools/scripts/Makefile.include
-> @@ -67,6 +67,7 @@ ifneq ($(LLVM),)
->    $(call allow-override,HOSTAR,$(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX))
->    $(call allow-override,LD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
->    $(call allow-override,HOSTLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
-> +  $(call allow-override,LLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
->    $(call allow-override,CXX,$(LLVM_PREFIX)clang++$(LLVM_SUFFIX))
->    $(call allow-override,STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
->    $(call allow-override,LLVM_STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
-> @@ -91,6 +92,7 @@ else
->    # Some tools still require Clang, LLC and/or LLVM utils
->    $(call allow-override,CLANG,clang)
->    $(call allow-override,LLC,llc)
-> +  $(call allow-override,LLD,ld.lld)
->    $(call allow-override,LLVM_CONFIG,llvm-config)
->    $(call allow-override,LLVM_OBJCOPY,llvm-objcopy)
->    $(call allow-override,LLVM_STRIP,llvm-strip)
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 6ef6872adbc3..44ba829e5d4d 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -245,9 +245,9 @@ $(OUTPUT)/%:%.c
->  
->  # LLVM's ld.lld doesn't support all the architectures, so use it only on x86
->  ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
-> -LLD := lld
-> +USE_LD := $(LLD)
->  else
-> -LLD := $(shell command -v $(LD))
-> +USE_LD := $(shell command -v $(LD))
->  endif
->  
->  # Filter out -static for liburandom_read.so and its dependent targets so that static builds
-> @@ -258,7 +258,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom
->  		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) \
->  		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
->  		     -Wno-unused-command-line-argument \
-> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
+On Fri, May 15, 2026 at 12:41=E2=80=AFPM Namhyung Kim <namhyung@kernel.org>=
+ wrote:
+>
+> On Fri, May 15, 2026 at 10:38:48AM -0700, Ian Rogers wrote:
+> > Currently, jevents.py parses hundreds of JSON event and metric files
+> > sequentially across all CPU architectures during Kbuild startup, taking
+> > ~3.3 seconds of pure single-core execution time.
+>
+> I'm curious about this.  Does it really need to parse all architectures?
+> Oh... is it for perf stat record/report?
 
-Hi James,
+So it is controlled by JEVENTS_ARCH and JEVENTS_MODEL:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
+t/tree/tools/perf/pmu-events/Build?h=3Dperf-tools-next#n24
+The default for JEVENTS_ARCH is SRCARCH (e.g. x86) while JEVENTS_MODEL
+defaults to "all". We have a build test for JEVENTS_ARCH is "all":
+https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
+t/tree/tools/perf/tests/make?h=3Dperf-tools-next#n74
+So saying "all CPU architectures" is a bit over the top, but not
+wholly inaccurate.
 
-This patch breaks the selftests/bpf build:
+Fwiw, I created a script to convert CPUIDs into models:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.gi=
+t/tree/tools/perf/pmu-events/models.py?h=3Dperf-tools-next
+which maybe could be used to reduce the perf binary size by building
+only the native CPU's JSON. It is a useful script for debugging :-)
 
-$ clang --version
-clang version 22.1.3 (CentOS 22.1.3-1.el9)
-Target: x86_64-redhat-linux-gnu
-Thread model: posix
-InstalledDir: /usr/bin
-Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg
+Thanks,
+Ian
 
-$ make LLVM=1 -j$(nproc)
-  [...] # ok
-
-$ make LLVM=1 -C tools/testing/selftests/bpf -j$(nproc)
-
-[...] # somewhere in the middle
-
-  LIB      liburandom_read.so
-clang: error: invalid linker name in argument '-fuse-ld=ld.lld'
-make: *** [Makefile:256: /home/isolodrai/workspace/review/linux/tools/testing/selftests/bpf/liburandom_read.so] Error 1
-make: Leaving directory '/home/isolodrai/workspace/review/linux/tools/testing/selftests/bpf'
-
-[...]
-
-Or a simpler reproducer:
-
-$ make LLVM=1 OUTPUT=/tmp/out /tmp/out/liburandom_read.so
-  LIB      liburandom_read.so
-clang: error: invalid linker name in argument '-fuse-ld=ld.lld'
-make: *** [Makefile:256: /tmp/out/liburandom_read.so] Error 1
-
-$ make LLVM=-22 OUTPUT=/tmp/out /tmp/out/liburandom_read.so
-  LIB      liburandom_read.so
-clang-22: error: invalid linker name in argument '-fuse-ld=ld.lld-22'
-make: *** [Makefile:256: /tmp/out/liburandom_read.so] Error 1
-
-I tried your patches, and only then noticed BPF CI caught this too:
-https://github.com/kernel-patches/bpf/actions/runs/25943477658/job/76267174885?pr=12082
-
->  		     -Wl,--version-script=liburandom_read.map \
->  		     -fPIC -shared -o $@
->  
-> @@ -268,7 +268,7 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_r
->  		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
->  		     -Wno-unused-command-line-argument \
->  		     -lurandom_read $(filter-out -static,$(LDLIBS)) -L$(OUTPUT) \
-> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
->  		     -Wl,-rpath=. -o $@
->  
->  $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
-> 
-
+> Thanks,
+> Namhyung
+>
+> >
+> > Refactor jevents.py to pre-populate its internal JSON AST cache in para=
+llel
+> > across all available CPU cores using ProcessPoolExecutor. Define the wo=
+rker
+> > process initializer _init_worker at the top-level module scope to guara=
+ntee
+> > flawless pickling and standard event mapping inheritance under spawn
+> > multiprocessing semantics (avoiding AttributeError crashes when spawn i=
+s
+> > used instead of fork). This accelerates jevents.py execution by over 11=
+x
+> > (from 3.3s down to ~290ms), fully reclaiming multi-core concurrency dur=
+ing
+> > the build generation phase.
+> >
+> > Tested-by: James Clark <james.clark@linaro.org>
+> > Assisted-by: Gemini:gemini-3.1-pro-preview
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/pmu-events/jevents.py | 36 ++++++++++++++++++++++++++++----
+> >  1 file changed, 32 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/j=
+events.py
+> > index 6adf4b30e1ba..ebacb056524f 100755
+> > --- a/tools/perf/pmu-events/jevents.py
+> > +++ b/tools/perf/pmu-events/jevents.py
+> > @@ -457,8 +457,8 @@ class JsonEvent:
+> >      return f'{{ { _bcs.offsets[s] } }}, /* {fix_comment(s)} */\n'
+> >
+> >
+> > -@lru_cache(maxsize=3DNone)
+> > -def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
+> > +_json_cache =3D {}
+> > +def _read_json_events_impl(path: str, topic: str) -> Sequence[JsonEven=
+t]:
+> >    """Read json events from the specified file."""
+> >    try:
+> >      events =3D json.load(open(path), object_hook=3DJsonEvent)
+> > @@ -474,12 +474,16 @@ def read_json_events(path: str, topic: str) -> Se=
+quence[JsonEvent]:
+> >    if updates:
+> >      for event in events:
+> >        if event.metric_name in updates:
+> > -        # print(f'Updated {event.metric_name} from\n"{event.metric_exp=
+r}"\n'
+> > -        #       f'to\n"{updates[event.metric_name]}"')
+> >          event.metric_expr =3D updates[event.metric_name]
+> >
+> >    return events
+> >
+> > +def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
+> > +  key =3D (path, topic)
+> > +  if key not in _json_cache:
+> > +    _json_cache[key] =3D _read_json_events_impl(path, topic)
+> > +  return _json_cache[key]
+> > +
+> >  def preprocess_arch_std_files(archpath: str) -> None:
+> >    """Read in all architecture standard events."""
+> >    global _arch_std_events
+> > @@ -1381,6 +1385,14 @@ const char *describe_metricgroup(const char *gro=
+up)
+> >  }
+> >  """)
+> >
+> > +def _parallel_read_json_events(task: Tuple[str, str]) -> Tuple[str, st=
+r, Sequence[JsonEvent]]:
+> > +  path, topic =3D task
+> > +  return path, topic, _read_json_events_impl(path, topic)
+> > +
+> > +def _init_worker(std_events: dict) -> None:
+> > +  global _arch_std_events
+> > +  _arch_std_events =3D std_events
+> > +
+> >  def main() -> None:
+> >    global _args
+> >
+> > @@ -1459,9 +1471,25 @@ struct pmu_table_entry {
+> >      raise IOError(f'Missing architecture directory \'{_args.arch}\'')
+> >
+> >    archs.sort()
+> > +  import concurrent.futures
+> > +  tasks =3D []
+> > +  def collect_json(parents: Sequence[str], item: os.DirEntry) -> None:
+> > +    if len(parents) =3D=3D 0:
+> > +      return
+> > +    if item.is_file() and item.name.endswith('.json') and not item.nam=
+e.endswith('metricgroups.json'):
+> > +      tasks.append((item.path, get_topic(item.name)))
+> > +
+> >    for arch in archs:
+> >      arch_path =3D f'{_args.starting_dir}/{arch}'
+> >      preprocess_arch_std_files(arch_path)
+> > +    ftw(arch_path, [], collect_json)
+> > +
+> > +  with concurrent.futures.ProcessPoolExecutor(initializer=3D_init_work=
+er, initargs=3D(_arch_std_events,)) as executor:
+> > +    for path, topic, events in executor.map(_parallel_read_json_events=
+, tasks):
+> > +      _json_cache[(path, topic)] =3D events
+> > +
+> > +  for arch in archs:
+> > +    arch_path =3D f'{_args.starting_dir}/{arch}'
+> >      ftw(arch_path, [], preprocess_one_file)
+> >
+> >    _bcs.compute()
+> > --
+> > 2.54.0.563.g4f69b47b94-goog
+> >
