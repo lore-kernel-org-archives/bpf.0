@@ -1,153 +1,470 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0946F341AC7
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 16:13:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A36D3F86E8
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 16:20:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.170
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778861609; cv=pass; b=r1tiDhA/jtu20xQOj+ZL7nDc3JwloT9k7mTtqhYHb+9hbt51gEpB3SAjKyURcE7tsAV2abIfUHUvItcDEIRz6W27Iwv+2vQTtI/+M+oUUChqaPV0yAVjaHXhHrJgK1X1o6WewF9HbfmMybuYeK7qWaCAUfqgdEZR5gLTWt/Xpdo=
+	t=1778862059; cv=pass; b=KsIp3tcG6naU3vjPtDvTWTvN00kDXCYwH1McJCQrq9Y09cLGZz7dEaB+nds3HR2uotNt1rv3whOqx8Kc5EAH9QFnWcKXd/dLPO3FnpUMRPMY0kuNgjERu5/eEI3z9xeCS0bn8bidnUIS37SdQpP+7j6RCDkItYuGUAw9Ekgn+sU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778861609; c=relaxed/simple;
-	bh=zR1yYc9OM8/abzeKbNBLcU2waXyUwdgxJgy2JNeeQrQ=;
+	s=arc-20240116; t=1778862059; c=relaxed/simple;
+	bh=/EPmi14+1zjubWdFrLL2KPxrm79oW2N9XZy8UV7+Mz8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rkD3T8cDHVn9x2xszhxlaVt9FSSttEzMd/8KcbWqBCDzcK0BVX69kSkI2bbQrOuaYaH/d4WPRE2QhLOs8ExBtfdo7OdWHUcme6uz6vcGGZBEWgNjuG4M9RReSga3qL0vPRLqOz/NUv2/kY/aILsC/sB4l0mILgm72LjyJldR+e4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aAlYK5Ku; arc=pass smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=oeFRPQ6TaNw8IP2AxenKdNQtQeIGA1UK0jjpLQ4TcbFaq+A9N2d5Jl8IBCbhHaTfoce3oHbA7/9caTt/WQY8Rm10Ehbn9pxVKS7CxHdWK4Bf+c4xNS/bpgtvB2hd4pHe5fcU0ybVG7c8pIlgMQGzvHGLhWmf5vXyT3Cp95kTYSw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ArAbyibN; arc=pass smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aAlYK5Ku"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-67cac5ece75so15573828a12.2
-        for <bpf@vger.kernel.org>; Fri, 15 May 2026 09:13:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778861606; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ArAbyibN"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2ba3b9bcf69so555ad.0
+        for <bpf@vger.kernel.org>; Fri, 15 May 2026 09:20:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778862057; cv=none;
         d=google.com; s=arc-20240605;
-        b=lw/th1DEpeMful0cIOBQsiShC0r39SbWz6xvUsbryJg6mQcwZUpk+O6Hp9plGoTiu5
-         TGS/qZ1B8wPZPYgz1GTNaD5nQ7rZ9Zwm1btW6whNNdY6zBlH+7iI82DDewjc1X1mZupX
-         mEVOnEZ+R6Fz+uLA80kaQbj2MexvYvIO5T/1W7JL4QXEoDC+Ej2ZcdFt9XwNym8UJbQk
-         VIKFl4xXK6v6gwLEVUZ+WQ5Wk125V74Nhv4TtTKnMjt+1uLA5igy10tOO9ah17na9e+4
-         HMS3UFzjtK2XGn3oG0GdxhXrFRZvbVtBb7nEBnr/KYYXZ9gpvD1J8ZDkmtEQ+2z64EUZ
-         xOIw==
+        b=aslL30p55BvLyVJRxAeCj99ay+hXgIDVdpzDueG79EEsU73jdpykA7V+NZXsMUU8DR
+         rAqOsK5zvxdmpdC4zpiSk3nFV3WR1JnYz6EKjFNRSDgd4ve53pd++1wid5FRgvDzHIjF
+         CYUot/eBEhkw5hF8qXTZPbVcwcbV8wjwup3JVJL1WUEOHY0XoAtF07GYcGdC9upeeRck
+         CDGXjNaq2Q8lxjTWX8rK+GOE12cuGLUB7yw8/nwSNxyRYGWEOZTVXOTPtYbZH1bKhHRM
+         ZQpQsMjEoNYaHbq1Rfmr3o/4X4XtF8W95H3BJ4xTZ6K9KFwgyjw8vV7HDHk+wNa4xLnp
+         6SJQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=RdcWSBi36KnefYlCpM3Langpu7uSIZQhoWSIjSgZsAs=;
-        fh=tlEGSbXDVjbDcaL51xtZHX1JT0p1IyST8krYqRBsCxA=;
-        b=lXHSrryLJaEm3krDOaRf8w4khiQL+0Ry54y3Db3TomYNWfNUKH+d+m575sFveFV4SM
-         ksx16bVLIcuUtkGR/1I0N6F8VfOukZtpO2i9MVkvksxaIgu0m5ghaqO8NM+sq4lJmfux
-         s/cge3I02GlQDR2ZqgDt0p3gGbdWiWxkzqyvFqMbNSY14NzrB1tC0ODsjPGYQ06oRgno
-         kbiimyU91fpwwnv2fAAbWOVqkJ8v5N5SsxD9QUQ8jrEFYbEj/fQ+6n2JEugW4K/18CGY
-         G40LqzFvyOzKUm3jb7g1WlGEvGeNeuGOK9cwCAcvtvjtswm/ABrKgNUhpBCD9AAkNZ4S
-         iDug==;
+        bh=zhV09scwUdNYRokEFV6EToCs7XBqklXbgOQ8ThCs9Gs=;
+        fh=6AE4dJQJpQJ4Uy5utLbgkzxzk1bnbiMnA9eUL5CgK7I=;
+        b=kFNgx9ROoqTf2Wf6eeJVJSuiQ4psnf7Db8XR9NpfNJl+1nD6J4caBKoOdSQX5dS/PB
+         ZkGgLha99leXHX8LkJg7ONbvRbsodf/CJYdPq6+2QteXVm9i85grmvqfB5zw/uHWuIvv
+         ltUYBsZ3Xj10LpbXwVeOx4N7uK1vu9y+dOXVK8b4YEdiPBLlZsaEp1jaImIGcJdDvfD8
+         M3rIElRp4vCpKxgAiua4fq2vU6hw4FGifJDwdLGI05Zzte1tL0wrL5+zst0V+3kATgVE
+         T+KK9TLrp/JTCxw4I494qvwCRXqxKSeO9sxHXAVOt2S6QbgiuJ57ugW9Kn8HeuPcUAJX
+         /Y4w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778861606; x=1779466406; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1778862057; x=1779466857; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RdcWSBi36KnefYlCpM3Langpu7uSIZQhoWSIjSgZsAs=;
-        b=aAlYK5KuUM7wYoFNKdy8WyjLHt/suDkMJJA+KotAxncEydrn6WgtWDlHLjOGdhSafp
-         LjJFhFic15WqS2MCaIijewIv00VLOcqFURiVirsFot0/ra9kxwyuDFdxHQvhsc3RaoCb
-         hzRkE9Zl7yrs4DZGZMsNJ0HoAzEKSvZrHouyjEmSSrcfzPqBCxfFMa23YkuJw51HpUAr
-         LaxhQzK8m8sS8eJgKFSNaZA62moNhzrPjEwAQpBe2ZV7vSLdjAHura42lMlyCcKYv441
-         3UXlm6Kzh1v13tQV9+h3vtYHRHw5MCjC7S/6pUE1WjlkMihbknFVnbKUb91WIgz3DCK3
-         hDQw==
+        bh=zhV09scwUdNYRokEFV6EToCs7XBqklXbgOQ8ThCs9Gs=;
+        b=ArAbyibN5UvsaKpUlCPzMjtif3nriM/zmJP+PrHlGu4nk3/UlIAqh54iU8pAysb8QV
+         JAYeUvBNPZHk2yhtbwCCNRZnYDfXT6JCsCEP2EiPp/O55I7BEzmn3I92hPRSBK4bq7R+
+         xHkaDOQodyE4RXywg6SZbPRCd3RV/WrhomoqlRGsDMi19qguFi/aOZOjEnf+JZsFzAFf
+         Q61JYrHWb3B7INrn/dc0fc0DL6wvcx3TGcGgWjZ+cec/huH7rJqksv8YfOi25MIDrB9T
+         wkk1bweAoWwyeRv3TIyMVt2vOVBIvRKsh9RzzihueF9OACbCeTIfE2WyX8tID4Xkot+h
+         7L5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778861606; x=1779466406;
+        d=1e100.net; s=20251104; t=1778862057; x=1779466857;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=RdcWSBi36KnefYlCpM3Langpu7uSIZQhoWSIjSgZsAs=;
-        b=hiDz9esfrxDRFnLOhkomwF+l/qlrzwUaQpwRzt72r5m7+CDcLZkwGGiC+QOmQVkX64
-         fNIPEWu1lZt93dzNBH7s2wdPxFotxS/dNRDsZcOsJ+en7CG/Zor6LzMNHKFZiEykDzJQ
-         teEkzA1bFzYogMjkhSb554uPlUsEx5jlOvr+FTNUb4RsM2mTBCUuYEMthEOsj750rqSa
-         AeXSJpVs/1HXVbOshkUSZqLewm8v9bpF0e0i/4D/CVreAuNUeQreZQq7xhbKBeCq/t66
-         /8CyvR9MsK1xRX/9Zqpbr/JVWwukTFDR262+MD3J44qEJ+uodnZ5bKTDeGtNcR6w5uO8
-         KCjA==
-X-Forwarded-Encrypted: i=1; AFNElJ+8eysqzkYL3mujB/PdGlsDbCNeL2Qze7lzWPIeC2h/62ckYeILqSHvjJTSnVbufPpvKQw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWlD6sJh8qbZvCjo0ONWM7S7ebse3yyaugjjVC8cqhuBD5qjNP
-	cA3xwJNQNsRUbz1clFFPSemievKInztqlw4+XAQW+QXGUW89pBc4uJZZNz4hHLb9+aXR+drpr6J
-	Ye3GE+m1KPV9H6w3Roeag1iO30Le0NGs=
-X-Gm-Gg: Acq92OE12XMrNY30+FJBp6+Lg2suzcwF/WnUsHvcNxhsxlDntsx/kYgM6i22FI2i27x
-	lnUgS99XWYB82OOcus3+pi40Zv7+fe1rdBtBBeijS/taYERsT/HTD/kz/OpEXiNbfamPJEM3k2l
-	XLY9hV2zGEcipByb57gPGxSQegogJM9fplB2Xv+Zexxj0iuyWYfcgO+lbf4PEvew5ACzFjU0Osy
-	eZBVpEz6v+cmWLP0IqKTXqO5hFnL9r8JmGEKIEfBUF+tpPKsBsR1Tsp+okZMj3YQ6ADxZEiFprC
-	0thi7tzUkqHUX31jdwP1+0jwwzN1IbkZXz+b71wyMvnRBc/MKrIDvpk4iGcJsJonmpnRTjaSEsE
-	1B+USPwfAFE9GLHYy3y5BZHGSWnyJCGUUcT/R
-X-Received: by 2002:a17:907:2d13:b0:bd5:2c3c:616a with SMTP id
- a640c23a62f3a-bd52c3c6261mr97395666b.37.1778861606050; Fri, 15 May 2026
- 09:13:26 -0700 (PDT)
+        bh=zhV09scwUdNYRokEFV6EToCs7XBqklXbgOQ8ThCs9Gs=;
+        b=A2oXrgTtfXpJ2wG4cSuHTobko4B1dEv9k0VFHEgzFlQroSq5TBjZChxgIbZz6qac/G
+         3m6vYdKQn31U/q2FPjDMItc65bdTQxCvUoZRrW2uN1r/yF7kGRIuTCsY8Jp8lXhGv2yJ
+         82FzcG/kjEx8RDVaWWoBbAlxmILKdPJIfZWsQtasuHB+WAfK6PFQyPwHJ1hGNVB+UXN5
+         BtdZhYzSfWcNv+TwYtc5eYHb7q3/nXOYckcZ5osz64wKKRbKR3HducJ4ZQsGEkAEz0VT
+         AePbo0NJ/Dx7CVHsT4D9LrGox4SyD53JuwEEE1BC8Zh4jdFrKMGiyrM4v/qoJ7/XxyxQ
+         Ty1g==
+X-Forwarded-Encrypted: i=1; AFNElJ/UFoaPzphzg29PBURSucE9q55O0/yiBMq3EiKbJHrNEndjF9USWnVewo2UseUoDwoQ/qg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyImvoClditS3jrrJxGTRNNJtWf54Cw5m5ihnqbjVb84uGaFviS
+	ZtAe0xzLusGEfgONEzFTKLH2mKAyuBBqhmGEs6hcL6CWq8GKChxFnXqs2fCrZSF3d8m5qZYu/Zo
+	Pvzgh4F3inmuuiwnvbimhzhnRNQgoQ/56sNyeu7aV
+X-Gm-Gg: Acq92OFOoMSUeVLo04HIVhU4Wsu1x6faxv5E1fCgNezjhdg56hr1ICouPJwxHJNQ1z1
+	U1t1dkXqNsh+Og0X1hs2Kgp/p/t3L2FG1bZyFFVQ9zVaSOhgfbkdyVeoIcYuYgN24N5hFPqQcCZ
+	vnslNepK5BSeuVBPRi6LzuSM9IbsSDLZ2SJk5MjnMfKmCE56iL6IG6LDg0wYIMbL9TEIYLlbfZm
+	+/bHSnlnPkoAE+v4VFQ2HgF8FVYrp3W+wvNOleqexVqwAuhQADFNRz+mqyXDPQkS+lrvMeD1CGi
+	bcislj01Hs/ojy4SeMc=
+X-Received: by 2002:a17:903:4405:b0:2b4:6153:e541 with SMTP id
+ d9443c01a7336-2bd84c82659mr2078635ad.3.1778862055942; Fri, 15 May 2026
+ 09:20:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260515113102.2389020-1-arnd@kernel.org> <CAADnVQLYitAZVpXCTygA1uAUtN6m8pMkWzFi9su719M=nktmQQ@mail.gmail.com>
- <b387dd31-0ee5-41b9-b07a-13b718080e89@app.fastmail.com>
-In-Reply-To: <b387dd31-0ee5-41b9-b07a-13b718080e89@app.fastmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 15 May 2026 09:13:13 -0700
-X-Gm-Features: AVHnY4LIZBVCqMg1hBQMiFvFAmVKWiP3lskvoyscc1J20sfPKogHZR-c06VLQak
-Message-ID: <CAADnVQLa4KbzSHs-5NdabqKhXAYLx+JGei52gKNEv9ww+Q+Bbw@mail.gmail.com>
-Subject: Re: [PATCH] bpf: test_run: reduce kernel stack usage
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Arnd Bergmann <arnd@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Martin KaFai Lau <kafai@fb.com>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Simon Horman <horms@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, bpf <bpf@vger.kernel.org>, 
-	Netdev <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20260512174638.120445-1-irogers@google.com> <20260514163409.927816-1-irogers@google.com>
+ <agZHYSFneOSIo8d5@google.com> <CAP-5=fUJFRcXFdpSy_X23NSU7zMp9SVZEqX+cEBsKP9YARGRvA@mail.gmail.com>
+In-Reply-To: <CAP-5=fUJFRcXFdpSy_X23NSU7zMp9SVZEqX+cEBsKP9YARGRvA@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Fri, 15 May 2026 09:20:44 -0700
+X-Gm-Features: AVHnY4I75MWaI-wF_DmtAlpK-G0hZtvy0KMdBRIL5hge3WP6Q0c60dE8AiFc8EM
+Message-ID: <CAP-5=fWfrGMV4EafqkwQO-R33c_szXcxVLgH0c4k2zt3zj4HdQ@mail.gmail.com>
+Subject: Re: [PATCH v3 00/17] perf build: Reduce build time by nearly half
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: acme@kernel.org, james.clark@linaro.org, 9erthalion6@gmail.com, 
+	adrian.hunter@intel.com, alex@ghiti.fr, alexandre.chartre@oracle.com, 
+	andrii@kernel.org, ankur.a.arora@oracle.com, aou@eecs.berkeley.edu, 
+	bpf@vger.kernel.org, collin.funk1@gmail.com, costa.shul@redhat.com, 
+	daniel@iogearbox.net, dapeng1.mi@linux.intel.com, dsterba@suse.com, 
+	eddyz87@gmail.com, howardchu95@gmail.com, jolsa@kernel.org, leo.yan@arm.com, 
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	martin.lau@linux.dev, memxor@gmail.com, mingo@redhat.com, mmayer@broadcom.com, 
+	nathan@kernel.org, palmer@dabbelt.com, peterz@infradead.org, pjw@kernel.org, 
+	qmo@kernel.org, ricky.ringler@proton.me, song@kernel.org, 
+	swapnil.sapkal@amd.com, terrelln@fb.com, tglozar@redhat.com, 
+	thomas.falcon@intel.com, yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 15, 2026 at 8:16=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote=
-:
+On Thu, May 14, 2026 at 3:23=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
+te:
 >
-> On Fri, May 15, 2026, at 16:47, Alexei Starovoitov wrote:
-> > On Fri, May 15, 2026 at 4:31=E2=80=AFAM Arnd Bergmann <arnd@kernel.org>=
- wrote:
+> On Thu, May 14, 2026 at 3:06=E2=80=AFPM Namhyung Kim <namhyung@kernel.org=
+> wrote:
 > >
-> > 1k?
-> > pahole -C xdp_test_data
-> > /* size: 192, cachelines: 3, members: 9 */
-> > /* sum members: 120, holes: 1, sum holes: 56 */
-> > /* padding: 16 */
-> > /* paddings: 1, sum paddings: 36 */
+> > On Thu, May 14, 2026 at 09:33:52AM -0700, Ian Rogers wrote:
+> > > This patch series refactors Kbuild internals, BPF skeleton generation=
+,
+> > > Python AST pre-computation, and foundational tooling dependencies acr=
+oss
+> > > the perf tool build system. By eliminating umbrella target synchroniz=
+ation
+> > > barriers, decoupling static library prerequisites, parallelizing sing=
+le-core
+> > > script generators, and eradicating redundant feature checks, this ser=
+ies
+> > > unlocks absolute theoretical peak multi-core concurrency during Kbuil=
+d startup.
+> > >
+> > > On a 28-core build workstation (make -j28 all from scratch), clean bu=
+ild
+> > > latency improves by over 49%:
+> > >
+> > >   Before:
+> > >     real    0m29.006s
+> > >     user    2m46.019s
+> > >     sys     0m30.610s
+> > >
+> > >   After:
+> > >     real    0m14.782s
+> > >     user    2m39.527s
+> > >     sys     0m22.938s
+> > >
+> > > Saving 14.2 full seconds time per clean build. Furthermore, nothing t=
+o
+> > > build incremental builds are improved by nearly 7x:
+> > >
+> > >   Before:
+> > >     real    0m11.528s
+> > >     user    0m9.633s
+> > >     sys     0m6.965s
+> > >
+> > >   After:
+> > >     real    0m1.729s
+> > >     user    0m1.600s
+> > >     sys     0m0.884s
 > >
-> > what s390 doing to make it huge?
+> > I've quickly checked it with latency profiling like below:
+> >
+> >   $ perf record --latency -- make -C tools/perf
+> >
+> >   $ perf report --latency -s comm
+> >
+> > The result looks like this.
+> >
+> > Before:
+> >   #
+> >   # Samples: 715K of event 'cpu/cycles/Pu'
+> >   # Event count (approx.): 422452811481
+> >   #
+> >   #  Latency  Overhead  Command
+> >   # ........  ........  ...............
+> >   #
+> >       45.28%    71.33%  cc1
+> >       34.48%    16.92%  python3
+> >       11.15%     2.21%  ld
+> >        2.58%     1.51%  x86_64-linux-gn
+> >        2.22%     0.99%  cc1plus
+> >        0.71%     0.63%  sh
+> >        0.69%     0.14%  llvm-config
+> >        0.62%     0.56%  clang
+> >        0.57%     4.40%  shellcheck
+> >        0.44%     0.12%  perl
+> >
+> > After:
+> >   #
+> >   # Samples: 709K of event 'cpu/cycles/Pu'
+> >   # Event count (approx.): 416654798495
+> >   #
+> >   #  Latency  Overhead  Command
+> >   # ........  ........  ...............
+> >   #
+> >       64.99%    71.16%  cc1
+> >       15.07%     1.81%  ld
+> >        7.14%    17.59%  python3
+> >        3.66%     1.53%  x86_64-linux-gn
+> >        3.48%     0.75%  cc1plus
+> >        1.11%     4.43%  shellcheck
+> >        1.09%     0.74%  sh
+> >        0.86%     0.59%  clang
+> >        0.77%     0.12%  perl
+> >        0.45%     0.23%  make
+> >
+> > Now I see a big drop in the latency from python.  And the llvm-config
+> > doesn't show up in the top 10.
 >
-> I think it's a combination of cacheline alignment (256 byte
-> lines) that leads to padding before 'rxq' and at the end of
-> xdp_test_data, as well as CONFIG_KASAN_STACK that increases
-> the stack usage further.
+> This looks good. What is "x86_64-linux-gn", and since we default off
+> LIBPERL, why does perl show up in the commands?
 >
-> > Probably better to rearrange the field and fix the root cause.
->
-> It looks like this change reduces the stack usage by 256
-> bytes, and keeps it under the warning limit for all the
-> configurations I was testing:
->
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -98,8 +98,8 @@ struct xdp_page_head {
->  };
->
->  struct xdp_test_data {
-> -       struct xdp_buff *orig_ctx;
->         struct xdp_rxq_info rxq;
-> +       struct xdp_buff *orig_ctx;
->         struct net_device *dev;
->         struct page_pool *pp;
->         struct xdp_frame **frames;
+> Thanks,
+> Ian
 
-yeah. this is much better.
+So, Sashiko reviews caught 2 regressions I introduced in v3. Given
+that people seem reasonably happy I propose the following for v4 to
+make the easy bits easy to land:
 
-> Another alternative would be to allocate xdp_test_data statically
-> instead of on the stack.
+1) Drop patch 1 the bpftool change - hopefully someone on the BPF side
+can pull in an equivalent change so that we're not testing libbfd for
+disassembly support in a bootstrap version of bpftool that doesn't
+support disassembly.
+2) Drop patch 2 on feature testing debuginfod and avoiding repeated
+tests we can come back to it.
+3) Fix patch 3 "tools build: Fix test-clang-bpf-co-re.bin" to cover
+the other missed case and to make the dependency tracking better. We
+shouldn't have to re-feature test BPF features on every incremental
+build.
+4) Patch 4 to 8, keep everything seems happy.
+5) Drop patch 9 "perf build: Move static libbpf dependency out of
+prepare step." There's parallelism in the prepare step, so this likely
+wasn't gaining much build time and Sashiko seems to find many
+potential not really issues that suggest the gain isn't worth the
+pain.
+6) Patch 10 needs a fix for a variable dropped from v2.
+7) Patch 11 to 12, keep everything seems happy.
+8) Patch 13, the header file declaring the variable seems to have gone
+AWOL. Needs a fix.
+9) Patch 14, Sashiko is warning "Does this loop overwrite standard
+events from earlier architectures?" which would be a worry if (1) we
+cared much about building for >1 architecture, or (2) more than just
+arm64 were using the architecture standard files. I think we can
+address this problem later.
+10) Patch 15 to 17, keep everything seems happy.
 
-iirc test_run can execute it in parallel, so static won't work.
+Thanks,
+Ian
+
+> > Thanks,
+> > Namhyung
+> >
+> > >
+> > > Summary of Patches:
+> > >
+> > > 1-3: Foundational Tooling & Fast-Path Feature Detection
+> > >   - Exempts bpftool bootstrap from non-essential feature tests (LLVM,=
+ libbfd,
+> > >     libcap), saving 1.1s of sub-make fork overhead during Kbuild star=
+tup.
+> > >   - Integrates libdebuginfod directly into test-all.c, allowing Make =
+to skip
+> > >     individual feature check sub-make forks during AST parsing on ful=
+ly
+> > >     configured workstations. Escapes $(shell ...) macro expansion to =
+prevent
+> > >     unconditional sub-make forks.
+> > >   - Fixes test-clang-bpf-co-re.bin feature check to correctly generat=
+e its
+> > >     target file on disk via atomic move (> $@.tmp && mv $@.tmp $@), a=
+llowing
+> > >     Kbuild to perfectly cache the detection result and avoid continuo=
+us sub-make
+> > >     re-evaluations.
+> > >
+> > > 4-6: Flattening Umbrella Prepare Barriers
+> > >   - builtin-trace embedded inclusions and pmu-events generation are c=
+ompletely
+> > >     decoupled from the sequential "prepare" umbrella target, eliminat=
+ing Make
+> > >     AST double-parsing overhead and unchoking parallel compilation ba=
+rriers.
+> > >
+> > > 7-10: Decoupling & Pre-generating BPF Skeletons
+> > >   - BPF skeleton rules are extracted out of Makefile.perf into bpf_sk=
+el.mak.
+> > >   - Decouples bpftool bootstrap from top-level static libbpf dependen=
+cies,
+> > >     attaching bpf-skel-prepare directly to the umbrella prepare targe=
+t. This
+> > >     allows Make to pre-compile bpftool and dump vmlinux.h in the back=
+ground at
+> > >     build startup, removing the 7-second serialization bottleneck bef=
+ore BPF
+> > >     object compilation.
+> > >   - Ensures benchmark skeleton intermediate .bpf.o files are cleanly =
+removed
+> > >     during make clean, and adds bpf-skel-prepare to .PHONY.
+> > >
+> > > 11-12: Foundational Linkage Optimization
+> > >   - Eliminates redundant libbpf sub-make feature checks during static=
+ builds.
+> > >   - Moves static libsymbol and libbpf library prerequisites out of th=
+e
+> > >     prepare step, ensuring libbpf headers are installed before
+> > >     compiling BPF-dependent tests.
+> > >
+> > > 13-14: jevents.py Concurrency & Deduplication
+> > >   - Splits the massive 2.8 MB big_c_string literal out of pmu-events.=
+c
+> > >     into a dedicated pmu-events-string.c compilation unit. This slice=
+s
+> > >     C compilation latency in half by compiling string and struct
+> > >     tables simultaneously across separate CPU cores while preserving
+> > >     zero dynamic ELF relocations. Adds pmu-events-string.c to
+> > >     .gitignore and uses Make 4.0 compatible dependency chaining.
+> > >   - Pre-populates jevents.py JSON ASTs and metric formulas in paralle=
+l across
+> > >     all available CPU cores using ProcessPoolExecutor (accelerating P=
+ython
+> > >     execution by 11x, from 3.3s down to ~290ms). Moves _init_worker t=
+o top-level
+> > >     scope to ensure clean pickling under spawn multiprocessing start =
+methods.
+> > >
+> > > 15: Out-of-Tree Incremental Rebuild Fix
+> > >   - Prefixes SCRIPTS (perf-archive, perf-iostat) with $(OUTPUT) to pr=
+event
+> > >     Make from continuously re-executing script installation rules on =
+already
+> > >     built out-of-tree builds.
+> > >
+> > > 16-17: AST Parsing Optimization & Shell Fork Eradication
+> > >   - Converts ZENS, ARMS, and INTELS in pmu-events/Build from recursiv=
+e
+> > >     assignment (=3D) to simply expanded assignment (:=3D) and replace=
+s
+> > >     model_name/vendor_name with pure GNU Make string functions. This
+> > >     guarantees Make executes directory probing shell forks exactly
+> > >     once during AST parsing and evaluates path macros purely in
+> > >     memory, completely eradicating over 7,800 redundant sub-processes
+> > >     during out-of-tree build evaluation.
+> > >   - Converts llvm-config shell queries in Makefile.config from
+> > >     recursive assignment (=3D) to simply expanded assignment (:=3D). =
+This
+> > >     eliminates ~185 redundant sub-processes that were previously
+> > >     executed across object compilation dependency checks.
+> > >
+> > > Changes since v2:
+> > >   - Dropped Patch 4 (tools scripts: Short-circuit CC_NO_CLANG compile=
+r
+> > >     probe in Makefile.include) to prevent potential cross-compilation
+> > >     regressions when CC and HOSTCC use different compilers.
+> > >   - tools build (Patch 2): Escaped $(shell ...) macro expansion as
+> > >     $$(shell ...) inside define feature_check_code to safely defer
+> > >     sub-make execution until after eval parses the ifeq guard.
+> > >   - tools build (Patch 3): Refactored test-clang-bpf-co-re.bin featur=
+e
+> > >     check recipe to redirect grep output to a temporary file and
+> > >     atomically move it upon success (> $@.tmp && mv $@.tmp $@),
+> > >     preventing Kbuild from permanently caching failed detections due =
+to
+> > >     0-byte files.
+> > >   - perf trace beauty (Patch 4): Updated commit description to accura=
+tely
+> > >     reflect the unconditional top-level recursive kbuild hook
+> > >     (perf-util-y +=3D trace/beauty/).
+> > >   - perf build (Patch 7): Added $(OUTPUT)bench/bpf_skel/.tmp to
+> > >     bpf-skel-clean in Makefile.perf to ensure intermediate benchmark
+> > >     skeleton .bpf.o artifacts are cleanly removed during make clean.
+> > >     Removed unused bpf_skel_deps variable from bpf_skel.mak.
+> > >   - perf build (Patch 9): Added $(LIBBPF) as an explicit prerequisite=
+ to
+> > >     $(LIBPERF_TEST_IN) in Makefile.perf to guarantee libbpf headers a=
+re
+> > >     fully installed before compiling sigtrap.c or other BPF-dependent
+> > >     tests during parallel builds.
+> > >   - perf build (Patch 10): Added bpf-skel-prepare to the .PHONY targe=
+t
+> > >     list in Makefile.perf to ensure Make never incorrectly skips the
+> > >     target if a file or directory named bpf-skel-prepare accidentally
+> > >     exists in the build tree.
+> > >   - perf pmu-events (Patch 13): Added pmu-events/pmu-events-string.c =
+to
+> > >     tools/perf/.gitignore. Replaced grouped targets (&:) with Make 4.=
+0
+> > >     compatible dependency chaining to guarantee backward compatibilit=
+y
+> > >     with older Make versions (like 4.2.1) and prevent parallel builds
+> > >     from spawning multiple concurrent jevents.py processes.
+> > >   - perf pmu-events (Patch 14): Moved _init_worker from local main()
+> > >     scope to the top-level module scope in jevents.py to ensure it ca=
+n be
+> > >     cleanly pickled when ProcessPoolExecutor uses the spawn
+> > >     multiprocessing start method (avoiding AttributeError crashes).
+> > >
+> > > Ian Rogers (17):
+> > >   bpftool build: Restrict feature tests during bootstrap compilation
+> > >   tools build: Integrate libdebuginfod into test-all fast path
+> > >   tools build: Fix test-clang-bpf-co-re.bin to generate target file
+> > >   perf trace beauty: Make beauty generated C code standalone .o files
+> > >   perf build: Decouple pmu-events from prepare umbrella target
+> > >   perf build: Remove empty archheaders target
+> > >   perf build: Move BPF skeleton generation out of Makefile.perf
+> > >   perf build: Encapsulate vmlinux.h and bpftool in bpf_skel.mak
+> > >   perf build: Move static libbpf dependency out of prepare step
+> > >   perf build: Pre-generate BPF skeleton tooling during umbrella prepa=
+re
+> > >     phase
+> > >   perf build: Move libsymbol dependency out of prepare step
+> > >   perf build: Remove redundant libbpf feature check for static builds
+> > >   perf pmu-events: Split big_c_string storage into standalone
+> > >     compilation unit
+> > >   perf pmu-events: Parallelize JSON and metric pre-computation in
+> > >     jevents.py
+> > >   perf build: Prefix SCRIPTS with output directory to fix continuous
+> > >     rebuilds
+> > >   perf pmu-events: Convert recursive shell assignments and macros to
+> > >     Make built-ins
+> > >   perf build: Convert llvm-config shell queries to simply expanded
+> > >     variables
+> > >
+> > >  tools/bpf/bpftool/Makefile                    |   5 +
+> > >  tools/build/Makefile.feature                  |   6 +-
+> > >  tools/build/feature/Makefile                  |   4 +-
+> > >  tools/build/feature/test-all.c                |   5 +
+> > >  tools/perf/.gitignore                         |   1 +
+> > >  tools/perf/Build                              |   2 +
+> > >  tools/perf/Makefile.config                    |  19 +-
+> > >  tools/perf/Makefile.perf                      | 431 ++--------------=
+--
+> > >  tools/perf/bench/Build                        |   6 +
+> > >  .../bpf_skel/bench_uprobe.bpf.c               |   0
+> > >  tools/perf/bench/uprobe.c                     |   2 +-
+> > >  tools/perf/bpf_skel.mak                       | 109 +++++
+> > >  tools/perf/builtin-trace.c                    |  30 +-
+> > >  tools/perf/pmu-events/Build                   |  26 +-
+> > >  tools/perf/pmu-events/jevents.py              |  56 ++-
+> > >  tools/perf/trace/beauty/Build                 | 280 ++++++++++++
+> > >  tools/perf/trace/beauty/arch_errno_names.c    |   2 +
+> > >  tools/perf/trace/beauty/arch_errno_names.sh   |   2 +-
+> > >  tools/perf/trace/beauty/beauty.h              |  60 +++
+> > >  tools/perf/trace/beauty/eventfd.c             |   6 +-
+> > >  tools/perf/trace/beauty/fsconfig.c            |   5 +
+> > >  tools/perf/trace/beauty/futex_op.c            |   6 +-
+> > >  tools/perf/trace/beauty/futex_val3.c          |   6 +-
+> > >  tools/perf/trace/beauty/mmap.c                |  24 +-
+> > >  tools/perf/trace/beauty/mode_t.c              |   6 +-
+> > >  tools/perf/trace/beauty/msg_flags.c           |   8 +-
+> > >  tools/perf/trace/beauty/open_flags.c          |   1 +
+> > >  tools/perf/trace/beauty/perf_event_open.c     |  22 +-
+> > >  tools/perf/trace/beauty/pid.c                 |   5 +-
+> > >  tools/perf/trace/beauty/sched_policy.c        |   8 +-
+> > >  tools/perf/trace/beauty/seccomp.c             |  12 +-
+> > >  tools/perf/trace/beauty/signum.c              |   6 +-
+> > >  tools/perf/trace/beauty/socket_type.c         |   6 +-
+> > >  .../perf/{util =3D> trace/beauty}/syscalltbl.c  |   0
+> > >  .../perf/{util =3D> trace/beauty}/syscalltbl.h  |   0
+> > >  tools/perf/trace/beauty/tracepoints/Build     |  22 +
+> > >  tools/perf/trace/beauty/waitid_options.c      |   8 +-
+> > >  tools/perf/util/Build                         |  17 +-
+> > >  tools/perf/util/bpf-trace-summary.c           |   2 +-
+> > >  tools/perf/util/env.c                         |   4 +-
+> > >  tools/perf/util/env.h                         |   1 +
+> > >  41 files changed, 717 insertions(+), 504 deletions(-)
+> > >  rename tools/perf/{util =3D> bench}/bpf_skel/bench_uprobe.bpf.c (100=
+%)
+> > >  create mode 100644 tools/perf/bpf_skel.mak
+> > >  create mode 100644 tools/perf/trace/beauty/fsconfig.c
+> > >  rename tools/perf/{util =3D> trace/beauty}/syscalltbl.c (100%)
+> > >  rename tools/perf/{util =3D> trace/beauty}/syscalltbl.h (100%)
+> > >
+> > > --
+> > > 2.54.0.563.g4f69b47b94-goog
+> > >
