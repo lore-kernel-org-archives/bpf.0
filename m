@@ -1,54 +1,54 @@
-Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
+Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75CFB3DC87F
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 17:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9C42F7EE6
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 17:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778866751; cv=none; b=ZcgOw3dfhowFRhjfrogDYGpfdt7Br3WUmeUDtyMWbBkMST9cPKrmBS/vk7N2BY4lYQAF8x0rBfKOt/kLy0AQJ8eeFXxIBZQUz1uGGrJHI3IOiTbOUmp4VY6Vn/aBEGIEMLj0nOJR+JKMJUexasnAZ9smLEdRLxkXwMFNcPV2b/M=
+	t=1778866755; cv=none; b=UtRy84e7L3hXZ+PmyDSzq3M6zwiZN1Gr2tk4W3FCp8jmD8up980p6QOlWpKbKiyB/wpZtcEq+JJdr1dIN4A1RcOW1R7WQKvxbDsfuu3SjDxUKw+Bs5TW4EzC1JG/X2x5/Ms5iP+I1iF9piqxxTwH3iud9hSHrw72aj/Jjw6upX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778866751; c=relaxed/simple;
-	bh=xokYndru7r5U27QA5IiJ9grDU4CmNf+aSc8fRA9ncZg=;
+	s=arc-20240116; t=1778866755; c=relaxed/simple;
+	bh=E8WgP2OPYV84m7NlyA7UDb/+f9ZTgE9HuPA2z3Pd1uA=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=EpGOSx6la/b/EkyvOtx9kmmCtvXLAyKjsqngPC9SVATXNOyNdrKq95O+YxRZQaYbAdehyONCxb8XlwdiAKnDMTMkIh55QVcdpG7jZSOG87L2+mqHQ0s4X/27oTCrqG3QXPYMKpObqkA7P1l0UZZFBeSjBGn733hIJdPidvlkh2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bJT3P5MW; arc=none smtp.client-ip=74.125.82.201
+	 To:Cc:Content-Type; b=BSXxaQ6+JG6djWzxGJ0CvfhUCeZdYz2lzIx1eaWKQLYt4ZOG0qbnEZfif6NIwCdi1Ms2yEjAaGRA/Y++ZVg2e7+5HgCETfAKAcUjlkGAmEAWA87i+kEvP6n39KjdgTNBIo5I7eNUFXFmtyjwQJP7Qb24fObPefOawioFbY/kQiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=R7bJRIeA; arc=none smtp.client-ip=74.125.82.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bJT3P5MW"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2f3ec2e8d07so501963eec.1
-        for <bpf@vger.kernel.org>; Fri, 15 May 2026 10:39:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R7bJRIeA"
+Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2f525565b33so105516eec.0
+        for <bpf@vger.kernel.org>; Fri, 15 May 2026 10:39:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778866749; x=1779471549; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1778866751; x=1779471551; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r68S8jxOjdQsq88pAcfrL0Nqp+mR1s52o0SNFT5DPPA=;
-        b=bJT3P5MWq5IUVOIZVfadHuA7plL+CevtkA7x5sCn4z3OmPI1rwgG6139uUINWMQsB5
-         skA8dNGmksd05Y/5zdRF9iQzA6MJYw8maJLepmGenxDrr4qfa/26N4F4AMlRsD+j4bS2
-         GAcHfMNXe/VKKAVXi6dEu0D/qvJgmA1lkWtlnQaSQBoHM0lGS19DUbKdBFucnYnK9E+j
-         VntDKwlJLY2AqIVfSH802ZY9p6pFkhZ1s9mTRMykwDH4Pf+6gim+saqU6no/Qiq3NWET
-         Mfxce+ok4VA8EYXU6xgP++eeiK3ZKsw++QzmEwvlX/LAiFY0skbKSXQWeqwY8qTAIGgA
-         ogCg==
+        bh=ySSlk3AGnoYm7eQWOUje//dSZFFdDolZN9BqzUX7+o4=;
+        b=R7bJRIeAYhDvol4+747o5uc/KvyRTBR1Sxo7sSaCydjBOItoAakY+b81gTkAW04All
+         5vxCK+shvwSSfH/gX/mY9sZ/m/EasG+38UDzecPgUaF9LurKGaZXfuOzf5K21QLM+sGQ
+         X9e9Q7UfMRpLqHK4lK5Li/s+3RtT087re7eUZPdMq7pp+Acw4023uwqxB0KiG8uj6E+a
+         BJFHeLMVhZoOjHMuynypqqCjO0N3bKRD/596k0PwKgOuTRhQkWj4xIywz/3zG5i4UvX4
+         9S1at71b6S4yj3g4vSZ+S1nJRST6L8uu18pSHeJMU2BLqpSRTvrEWU/gZ+Xb+rTRmNDy
+         5WWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778866749; x=1779471549;
+        d=1e100.net; s=20251104; t=1778866751; x=1779471551;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r68S8jxOjdQsq88pAcfrL0Nqp+mR1s52o0SNFT5DPPA=;
-        b=fuYk2wBxfFS+G4kU7urFla3DrdJ6sWZ8xzPa9zHw5fLQV8LVbSnJIHhoczNi+k1Xai
-         PsWnPIPs9X1vV5ryxHQ1yepYtmKI9gQZcn09CEKD9tM8yNrHkr8C0EPLPe3TcoygtLdS
-         d6b+i+q9c+0D1CqJVxmIIhF3QRRBvH0hg5QLOVETuNVc3ghlK2uAYSAWEppUxYYNIo3b
-         j+74CLZpyF0asRcbLfSXr+Tq908n08YeDsWwE2dkDdLlYsObgn03iOiT8kAVrFIJ8xlx
-         rhVFl7OC4oxfT4ZbrtWE608/2+BDb0SvaPH8SaubmrCuCVUvnfjiNzYbH80l1Uj7qLXe
-         CBmQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8vf12LWlfSPpc7yjieEew1L0l8yx62tVo8ztG8kgYOeeED7OpISwuvESbWieL0AukEnyc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIrG2DCRT5Pviq1+OjI2ANR+emtlpAKjkpauB5nILCS/ctK0rK
-	LwnkjSqoQ7PE55c9dkApa/+LcICmd4P9zyB5R/0pRpTfZdGo9DYAAHzL9+wTUGkPiJRWCgjIl0Y
-	tsgUOcza75A==
-X-Received: from dybia10.prod.google.com ([2002:a05:7301:30a:b0:2da:3d44:ddce])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:724f:b0:2ed:27a3:eae2
- with SMTP id 5a478bee46e88-30398189fa8mr2946651eec.15.1778866749283; Fri, 15
- May 2026 10:39:09 -0700 (PDT)
-Date: Fri, 15 May 2026 10:38:41 -0700
+        bh=ySSlk3AGnoYm7eQWOUje//dSZFFdDolZN9BqzUX7+o4=;
+        b=UskzsVJ6i04d2jG8VegW1v6YFWUd0VDMycV3ar7rOZha42P8kf4RrFB9pLTb2lBJqr
+         sqx8+eoxgPbB1NlaTDswqQOi4Et4EvFZmWhSYIGlH4RONAiSJ2aQWGnpXNkpVpii2vBz
+         wiphNb0bBBTjCsHIN3vBA+qxAaMj/LhN4UD0DmuW9YM6b6Ovzs+8RO7ZGIDJaCS9373P
+         KDHXvEwOD7d00Rsda3IVW7k0sB5wY+bWV2GkRlMPquwHJTFtqI2TJdxGeXw/aVBsuzY9
+         Ah7m77YIvYHzW1kgCwJh8lXeeqcQAQHiZoEiK+1cpizutOyv+JEw0emimHTm9b3/tsAM
+         65iA==
+X-Forwarded-Encrypted: i=1; AFNElJ88o1XojVYiLX+//XQOusb//1qZd9I3CfT8ETlXLYlQmrdmR0InljFhZyX/7Amlz4n6Gqg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxQp2gmTrMqTXzc9MiWjfP5xptYWNA4VR3vx+YXmFblEV6GFAK
+	pgYfPUee6+p7UIM0F/VOXVolZ0z+fyLZfRvMX9wpY8ATM4MjP0SPpx4iFImJq+rwIDEl8itbxC9
+	O6P6DYoOlQQ==
+X-Received: from dybgs18.prod.google.com ([2002:a05:7301:2092:b0:2d9:3459:1de6])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:818b:b0:2da:45f8:1b41
+ with SMTP id 5a478bee46e88-30398618bdbmr2553697eec.19.1778866751183; Fri, 15
+ May 2026 10:39:11 -0700 (PDT)
+Date: Fri, 15 May 2026 10:38:42 -0700
 In-Reply-To: <20260515173852.1378571-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -59,8 +59,8 @@ Mime-Version: 1.0
 References: <CAP-5=fWfrGMV4EafqkwQO-R33c_szXcxVLgH0c4k2zt3zj4HdQ@mail.gmail.com>
  <20260515173852.1378571-1-irogers@google.com>
 X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260515173852.1378571-5-irogers@google.com>
-Subject: [PATCH v4 04/14] perf build: Remove empty archheaders target
+Message-ID: <20260515173852.1378571-6-irogers@google.com>
+Subject: [PATCH v4 05/14] perf build: Move BPF skeleton generation out of Makefile.perf
 From: Ian Rogers <irogers@google.com>
 To: irogers@google.com, acme@kernel.org, james.clark@linaro.org, 
 	namhyung@kernel.org
@@ -77,37 +77,265 @@ Cc: 9erthalion6@gmail.com, adrian.hunter@intel.com, alex@ghiti.fr,
 	thomas.falcon@intel.com, yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Remove empty target that doesn't do anything.
+Currently, the top-level Makefile.perf defines a massive global bpf-skel
+umbrella target that pre-compiles all 12+ BPF skeletons (%.skel.h) upfront
+before launching sub-makes. This forces unrelated sub-makes to serialize
+behind bpftool and clang BPF target evaluations, causing parallel build
+bottlenecks.
+
+Furthermore, bench_uprobe.bpf.c lived inside util/bpf_skel/, breaking
+conceptual directory encapsulation since it is consumed purely by
+bench/uprobe.c.
+
+Refactor the BPF skeletons to better achieve directory isolation:
+1. Move tools/perf/util/bpf_skel/bench_uprobe.bpf.c directly into
+   tools/perf/bench/bpf_skel/.
+2. Extract the skeleton generation infrastructure out of Makefile.perf into
+   a shared inclusion file tools/perf/bpf_skel.mak.
+3. Include bpf_skel.mak locally inside tools/perf/util/Build and
+   tools/perf/bench/Build and bind precise local prerequisites.
+4. Safely synchronize the shared bpftool bootstrap and vmlinux.h targets
+   via the conditional prepare: umbrella to avoid parallel sub-make races,
+   while evaluating the actual skeletons completely locally on demand. A
+   later patch will move these targets into bpf_skel.mak.
+5. Export CLANG from the global Makefile to ensure accurate tool
+   propagation.
+6. Clean up Makefile.perf by stripping the global bpf-skel umbrella target
+   and its SKELETONS list.
+
+While removing code from Makefile.perf generally helps build
+performance, the impact here is minimal. The main motivation for the
+change is to better encapsulate things in the build and simplify
+Makefile.perf that has around 50 lines removed.
 
 Tested-by: James Clark <james.clark@linaro.org>
 Assisted-by: Gemini:gemini-3.1-pro-preview
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.perf | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/perf/Makefile.perf                      | 59 ++-----------------
+ tools/perf/bench/Build                        |  6 ++
+ .../bpf_skel/bench_uprobe.bpf.c               |  0
+ tools/perf/bench/uprobe.c                     |  2 +-
+ tools/perf/bpf_skel.mak                       | 54 +++++++++++++++++
+ tools/perf/util/Build                         | 15 ++++-
+ 6 files changed, 79 insertions(+), 57 deletions(-)
+ rename tools/perf/{util => bench}/bpf_skel/bench_uprobe.bpf.c (100%)
+ create mode 100644 tools/perf/bpf_skel.mak
 
 diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index c66af4c825fd..24581941e912 100644
+index 24581941e912..373eae7fb72a 100644
 --- a/tools/perf/Makefile.perf
 +++ b/tools/perf/Makefile.perf
-@@ -627,7 +627,7 @@ endif
- __build-dir = $(subst $(OUTPUT),,$(dir $@))
- build-dir   = $(or $(__build-dir),.)
+@@ -274,7 +274,7 @@ ifeq ($(PYLINT),1)
+   PYLINT := $(shell which pylint 2> /dev/null)
+ endif
  
--prepare: $(OUTPUT)PERF-VERSION-FILE archheaders \
-+prepare: $(OUTPUT)PERF-VERSION-FILE \
- 	arm64-sysreg-defs \
+-export srctree OUTPUT RM CC CXX RUSTC LD AR CFLAGS CXXFLAGS RUST_FLAGS V BISON FLEX AWK
++export srctree OUTPUT RM CC CXX RUSTC CLANG LD AR CFLAGS CXXFLAGS RUST_FLAGS V BISON FLEX AWK LIBBPF
+ export HOSTCC HOSTLD HOSTAR HOSTCFLAGS SHELLCHECK MYPY PYLINT
+ 
+ include $(srctree)/tools/build/Makefile.include
+@@ -632,8 +632,7 @@ prepare: $(OUTPUT)PERF-VERSION-FILE \
  	$(LIBAPI) \
  	$(LIBPERF) \
-@@ -1070,7 +1070,7 @@ FORCE:
- .PHONY: all install clean config-clean strip install-gtk
- .PHONY: shell_compatibility_test please_set_SHELL_PATH_to_a_more_modern_shell
- .PHONY: .FORCE-PERF-VERSION-FILE TAGS tags cscope FORCE prepare
--.PHONY: archheaders python_perf_target
-+.PHONY: python_perf_target
+ 	$(LIBSUBCMD) \
+-	$(LIBSYMBOL) \
+-	bpf-skel
++	$(LIBSYMBOL)
  
- endif # force_fixdep
+ ifdef LIBBPF_STATIC
+ prepare: $(LIBBPF)
+@@ -914,44 +913,13 @@ python-clean:
  
+ SKEL_OUT := $(abspath $(OUTPUT)util/bpf_skel)
+ SKEL_TMP_OUT := $(abspath $(SKEL_OUT)/.tmp)
+-SKELETONS := $(SKEL_OUT)/bpf_prog_profiler.skel.h
+-SKELETONS += $(SKEL_OUT)/bperf_leader.skel.h $(SKEL_OUT)/bperf_follower.skel.h
+-SKELETONS += $(SKEL_OUT)/bperf_cgroup.skel.h $(SKEL_OUT)/func_latency.skel.h
+-SKELETONS += $(SKEL_OUT)/off_cpu.skel.h $(SKEL_OUT)/lock_contention.skel.h
+-SKELETONS += $(SKEL_OUT)/kwork_trace.skel.h $(SKEL_OUT)/sample_filter.skel.h
+-SKELETONS += $(SKEL_OUT)/kwork_top.skel.h $(SKEL_OUT)/syscall_summary.skel.h
+-SKELETONS += $(SKEL_OUT)/bench_uprobe.skel.h
+-SKELETONS += $(SKEL_OUT)/augmented_raw_syscalls.skel.h
+ 
+ $(SKEL_TMP_OUT) $(LIBAPI_OUTPUT) $(LIBBPF_OUTPUT) $(LIBPERF_OUTPUT) $(LIBSUBCMD_OUTPUT) $(LIBSYMBOL_OUTPUT):
+ 	$(Q)$(MKDIR) -p $@
+ 
+ ifeq ($(CONFIG_PERF_BPF_SKEL),y)
++prepare: $(BPFTOOL) $(SKEL_OUT)/vmlinux.h
+ BPFTOOL := $(SKEL_TMP_OUT)/bootstrap/bpftool
+-# Get Clang's default includes on this system, as opposed to those seen by
+-# '--target=bpf'. This fixes "missing" files on some architectures/distros,
+-# such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
+-#
+-# Use '-idirafter': Don't interfere with include mechanics except where the
+-# build would have failed anyways.
+-define get_sys_includes
+-$(shell $(1) $(2) -v -E - </dev/null 2>&1 \
+-       | sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
+-$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}')
+-endef
+-
+-ifneq ($(CROSS_COMPILE),)
+-CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
+-endif
+-
+-CLANG_OPTIONS = -Wall
+-CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
+-BPF_INCLUDE := -I$(SKEL_TMP_OUT)/.. -I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES)
+-TOOLS_UAPI_INCLUDE := -I$(srctree)/tools/include/uapi
+-
+-ifneq ($(WERROR),0)
+-  CLANG_OPTIONS += -Werror
+-endif
+ 
+ $(BPFTOOL): | $(SKEL_TMP_OUT)
+ 	$(Q)CFLAGS= $(MAKE) -C ../bpf/bpftool \
+@@ -993,29 +961,10 @@ else
+ 	$(Q)cp "$(VMLINUX_H)" $@
+ endif
+ 
+-$(SKEL_TMP_OUT)/%.bpf.o: $(OUTPUT)PERF-VERSION-FILE util/bpf_skel/perf_version.h | $(SKEL_TMP_OUT)
+-$(SKEL_TMP_OUT)/%.bpf.o: util/bpf_skel/%.bpf.c $(LIBBPF) $(SKEL_OUT)/vmlinux.h
+-	$(QUIET_CLANG)$(CLANG) -g -O2 -fno-stack-protector --target=bpf \
+-	  $(CLANG_OPTIONS) $(EXTRA_BPF_FLAGS) $(BPF_INCLUDE) $(TOOLS_UAPI_INCLUDE) \
+-	  -include $(OUTPUT)PERF-VERSION-FILE -include util/bpf_skel/perf_version.h \
+-	  -fms-extensions -Wno-microsoft-anon-tag \
+-	  -c $(filter util/bpf_skel/%.bpf.c,$^) -o $@
+-
+-$(SKEL_OUT)/%.skel.h: $(SKEL_TMP_OUT)/%.bpf.o | $(BPFTOOL)
+-	$(QUIET_GENSKEL)$(BPFTOOL) gen skeleton $< > $@
+-
+-bpf-skel: $(SKELETONS)
+-
+-.PRECIOUS: $(SKEL_TMP_OUT)/%.bpf.o
+-
+-else # CONFIG_PERF_BPF_SKEL
+-
+-bpf-skel:
+-
+ endif # CONFIG_PERF_BPF_SKEL
+ 
+ bpf-skel-clean:
+-	$(call QUIET_CLEAN, bpf-skel) $(RM) -r $(SKEL_TMP_OUT) $(SKELETONS) $(SKEL_OUT)/vmlinux.h
++	$(call QUIET_CLEAN, bpf-skel) $(RM) -r $(SKEL_TMP_OUT) $(SKEL_OUT)/*.skel.h $(SKEL_OUT)/vmlinux.h $(OUTPUT)bench/bpf_skel/*.skel.h $(OUTPUT)bench/bpf_skel/.tmp
+ 
+ pmu-events-clean:
+ ifeq ($(OUTPUT),)
+diff --git a/tools/perf/bench/Build b/tools/perf/bench/Build
+index b558ab98719f..67b76fe20ba6 100644
+--- a/tools/perf/bench/Build
++++ b/tools/perf/bench/Build
+@@ -24,3 +24,9 @@ perf-bench-$(CONFIG_X86_64) += mem-memcpy-x86-64-asm.o
+ perf-bench-$(CONFIG_X86_64) += mem-memset-x86-64-asm.o
+ 
+ perf-bench-$(CONFIG_NUMA) += numa.o
++
++ifeq ($(CONFIG_PERF_BPF_SKEL),y)
++include $(srctree)/tools/perf/bpf_skel.mak
++
++$(OUTPUT)bench/uprobe.o: $(SKEL_OUT)/bench_uprobe.skel.h
++endif
+diff --git a/tools/perf/util/bpf_skel/bench_uprobe.bpf.c b/tools/perf/bench/bpf_skel/bench_uprobe.bpf.c
+similarity index 100%
+rename from tools/perf/util/bpf_skel/bench_uprobe.bpf.c
+rename to tools/perf/bench/bpf_skel/bench_uprobe.bpf.c
+diff --git a/tools/perf/bench/uprobe.c b/tools/perf/bench/uprobe.c
+index 89697ff788ef..616873bca243 100644
+--- a/tools/perf/bench/uprobe.c
++++ b/tools/perf/bench/uprobe.c
+@@ -44,7 +44,7 @@ static const char * const bench_uprobe_usage[] = {
+ };
+ 
+ #ifdef HAVE_BPF_SKEL
+-#include "bpf_skel/bench_uprobe.skel.h"
++#include "bench/bpf_skel/bench_uprobe.skel.h"
+ 
+ #define bench_uprobe__attach_uprobe(prog) \
+ 	skel->links.prog = bpf_program__attach_uprobe_opts(/*prog=*/skel->progs.prog, \
+diff --git a/tools/perf/bpf_skel.mak b/tools/perf/bpf_skel.mak
+new file mode 100644
+index 000000000000..aa04d8b3ee07
+--- /dev/null
++++ b/tools/perf/bpf_skel.mak
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: GPL-2.0
++# Shared BPF Skeleton Generator Rules
++
++include $(srctree)/tools/scripts/Makefile.include
++
++# Shared foundational tooling always lives in util/bpf_skel
++SKEL_TOOL_OUT := $(abspath $(OUTPUT)util/bpf_skel)
++SKEL_TOOL_TMP_OUT := $(abspath $(SKEL_TOOL_OUT)/.tmp)
++
++# Component specific output lives in $(dir)/bpf_skel
++SKEL_OUT := $(abspath $(OUTPUT)$(dir)/bpf_skel)
++SKEL_TMP_OUT := $(abspath $(SKEL_OUT)/.tmp)
++
++ifeq ($(CONFIG_PERF_BPF_SKEL),y)
++BPFTOOL := $(SKEL_TOOL_TMP_OUT)/bootstrap/bpftool
++VMLINUX_H := $(SKEL_TOOL_OUT)/vmlinux.h
++
++define get_sys_includes
++$(shell $(1) $(2) -v -E - </dev/null 2>&1 \
++       | sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
++$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}')
++endef
++
++ifneq ($(CROSS_COMPILE),)
++CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
++endif
++
++CLANG_OPTIONS = -Wall
++CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
++LIBBPF_INCLUDE := $(abspath $(or $(OUTPUT),.))/libbpf/include
++BPF_INCLUDE := -I$(SKEL_TMP_OUT)/.. -I$(SKEL_TOOL_OUT) -I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES)
++TOOLS_UAPI_INCLUDE := -I$(srctree)/tools/include/uapi
++
++ifneq ($(WERROR),0)
++  CLANG_OPTIONS += -Werror
++endif
++
++# Consolidated Pattern rule for $(dir)/bpf_skel/
++$(SKEL_TMP_OUT)/%.bpf.o: $(srctree)/tools/perf/$(dir)/bpf_skel/%.bpf.c $(LIBBPF) $(VMLINUX_H) $(OUTPUT)PERF-VERSION-FILE util/bpf_skel/perf_version.h
++	$(call rule_mkdir)
++	$(QUIET_CLANG)
++	$(Q)$(CLANG) -g -O2 -fno-stack-protector --target=bpf \
++	  $(CLANG_OPTIONS) $(EXTRA_BPF_FLAGS) $(BPF_INCLUDE) $(TOOLS_UAPI_INCLUDE) \
++	  -include $(OUTPUT)PERF-VERSION-FILE -include util/bpf_skel/perf_version.h \
++	  -fms-extensions -Wno-microsoft-anon-tag \
++	  -c $< -o $@
++
++$(SKEL_OUT)/%.skel.h: $(SKEL_TMP_OUT)/%.bpf.o $(BPFTOOL)
++	$(call rule_mkdir)
++	$(QUIET_GENSKEL)
++	$(Q)$(BPFTOOL) gen skeleton $< > $@
++
++.PRECIOUS: $(SKEL_TMP_OUT)/%.bpf.o
++endif # CONFIG_PERF_BPF_SKEL
+diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+index abc9a2926e85..40c258ac99b9 100644
+--- a/tools/perf/util/Build
++++ b/tools/perf/util/Build
+@@ -442,4 +442,17 @@ $(OUTPUT)%.pylint_log: %
+ 
+ perf-util-y += $(PYLINT_TEST_LOGS)
+ 
+-
++ifeq ($(CONFIG_PERF_BPF_SKEL),y)
++include $(srctree)/tools/perf/bpf_skel.mak
++
++$(OUTPUT)util/bpf_ftrace.o: $(SKEL_OUT)/func_latency.skel.h
++$(OUTPUT)util/bpf-filter.o: $(SKEL_OUT)/sample_filter.skel.h
++$(OUTPUT)util/bpf_kwork_top.o: $(SKEL_OUT)/kwork_top.skel.h
++$(OUTPUT)util/bpf_off_cpu.o: $(SKEL_OUT)/off_cpu.skel.h
++$(OUTPUT)util/bpf-trace-summary.o: $(SKEL_OUT)/syscall_summary.skel.h
++$(OUTPUT)util/bpf_counter_cgroup.o: $(SKEL_OUT)/bperf_cgroup.skel.h
++$(OUTPUT)util/bpf_trace_augment.o: $(SKEL_OUT)/augmented_raw_syscalls.skel.h
++$(OUTPUT)util/bpf_counter.o: $(SKEL_OUT)/bpf_prog_profiler.skel.h $(SKEL_OUT)/bperf_leader.skel.h $(SKEL_OUT)/bperf_follower.skel.h
++$(OUTPUT)util/bpf_lock_contention.o: $(SKEL_OUT)/lock_contention.skel.h
++$(OUTPUT)util/bpf_kwork.o: $(SKEL_OUT)/kwork_trace.skel.h
++endif
 -- 
 2.54.0.563.g4f69b47b94-goog
 
