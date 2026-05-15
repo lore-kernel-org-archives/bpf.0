@@ -1,94 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31EC03F0A81;
-	Fri, 15 May 2026 08:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68F6D3F0A8F;
+	Fri, 15 May 2026 08:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778832849; cv=none; b=EHsT8BJc7/cqcQa0Ebk0pV8RBIPMZzwjokm4xhugrXzk+FoP4ScN+1SFZ1yVNB5iLS8ht66nVpZm0sYLoEXXoxvjaWmESuOFG2mmO1QS0tOQptLTqJnXEDJBJUDyjOoKLI1w4cvz6Pbce28ZwbFjDLOjRzaXas7d9EHBEIQO3nQ=
+	t=1778832957; cv=none; b=q4+yHNkK+OjhJwQmYdWH3Bgl7d3g7NVA3tqWx45Sk8TgcANW2kFmL2lBG6i9GHiVkQz/oHNg6FiIin5N2168GNVyonp8J48MqZJbNDyN1rpJr4W3JV2pk/n99Fszvmbkfpn5Oi+P1PigL+J+Gr/wGy0O++fY2DDfP7rPLa05MCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778832849; c=relaxed/simple;
-	bh=zqrtEYBR5vL3fQvzItspsHtrj6rrxUy1zU0ZiWZxKNA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=LBXwEnD/oDDOK9mLgYFzl3X3tv7UlsiBEYcnTWi4nv/QWlVHzNybfYcUBuQBrIkNPQF+vo99C08OXVEnSZTTTeY3h+KUATu9NO492sReb9DwHv+ayGykMgtJ/T3F+/zuLkTJs2IZnEJ6VwQv6PDLawo5CZ9qZhF2WaNbEFzHmGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iX6TxfvU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778832957; c=relaxed/simple;
+	bh=pn5Bt2djtKvNo/mokG6x5amT/ycktCiUYk//0IkiJRo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fDrQlYg0OhvMNRG7FKVHivAC0txC2p/mIO+nG8yuAt8HBO2gsGQwrqq9HhTp7syjeCsTvXJHBLZLl7/bF297Y24jUtPER5lDLidzzwBZVYOcY4g6uXI/IRMKU89eg3paoluo++scGhnj/zXV9itge40wZqGqcl9+NZu8BHo706A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=BJmPYVsG; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iX6TxfvU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27A06C2BCB8;
-	Fri, 15 May 2026 08:14:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778832848;
-	bh=zqrtEYBR5vL3fQvzItspsHtrj6rrxUy1zU0ZiWZxKNA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=iX6TxfvUXpX2CvR8meTchQMTcG7wLxoqun6yTlJOQV9Ey9sfoF89x3yjUyl3T85FL
-	 2dnpEUtEwbpInhrV4JPJ5Mn807ICEk/lczubU4gGuAgQ0nk2QYkhN05qzAPE4hK4zR
-	 V5QRNAIWzy0U0KAtTWwsQzx69k51KR45vL4zxcZ7SbGogpeP7i1dkuoHqe+eh5BSbw
-	 ojAfnimy0sLCBGWxxCe1qXyh047/u8b1ACwgdtYZckSCM7pRxtIylJOZAAcBt35/4w
-	 RpkFDcuU+JXSq793gHEFodvJoif2zAMGYVyx2mTf3JzHs6IBfYCHCTNiPc/TJPX0i6
-	 dNJ3dBPElxMYQ==
-Content-Type: multipart/mixed; boundary="===============5085312704577427323=="
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="BJmPYVsG"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=2FFd0YZvzjAtbEKn0Cg4H/lM9Izey3C5itF2pPcZA0o=; b=BJmPYVsGyFPcHZdCHSjEnv07g6
+	KHkjvufSohFkORf9CcHQLxbCX+AMKVzNk2HXmUVrsJ8Fty6awd3HtnAJSbHeXwPiwn7/Wr8B9qeCC
+	qXM3r/ExrO6htkpKS7L3Y0p2Uww3eCJYAUoWZ0JoMG8/Xxeme40G/8nd+ZKpqBjcLe3SukKznSOjT
+	n1Mm7RiWKD9MADhiodLES8RZRUv60zqH/OUHkgnpJ9TatinfdjVGGSpqQEM5Lq7QFM/L3KlFQO4WT
+	p7OYtysU9AtI/Tp0x/injUUaWLbkg/f374WNtLrCnrcuqEOBtjf8aFPMYSF52kiRhJ0zNHTECyj/d
+	HXgciK5A==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wNnhW-004aYs-2j;
+	Fri, 15 May 2026 08:15:19 +0000
+Date: Fri, 15 May 2026 01:15:10 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: Chas Williams <3chas3@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Jon Maloy <jmaloy@redhat.com>, 
+	Alexandra Winter <wintera@linux.ibm.com>, Thorsten Winkler <twinkler@linux.ibm.com>, 
+	James Chapman <jchapman@katalix.com>, David Howells <dhowells@redhat.com>, 
+	Marc Dionne <marc.dionne@auristor.com>, David Heidelberg <david+nfc@ixit.cz>, 
+	Samuel Ortiz <sameo@linux.intel.com>, linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, tipc-discussion@lists.sourceforge.net, 
+	linux-s390@vger.kernel.org, linux-afs@lists.infradead.org, oe-linux-nfc@lists.linux.dev, 
+	kernel-team@meta.com
+Subject: Re: [PATCH net-next 4/6] l2tp: ppp: convert to getsockopt_iter
+Message-ID: <agbVsd9bzIhylAwH@gmail.com>
+References: <20260513-getsock_four-v1-0-fe7f0e756fac@debian.org>
+ <20260513-getsock_four-v1-4-fe7f0e756fac@debian.org>
+ <agSZeMEvxE0xyNB8@devvm7509.cco0.facebook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2e08eb1ca27a9a2f8ad29e1c24f779b579621b0a648589f7044799d91c5e00f5@mail.kernel.org>
-In-Reply-To: <20260515071504.2054786-2-yuyanghuang@google.com>
-References: <20260515071504.2054786-2-yuyanghuang@google.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: align syscall writeback behavior with caller-declared size
-From: bot+bpf-ci@kernel.org
-To: yuyanghuang@google.com,yuyanghuang@google.com
-Cc: davem@davemloft.net,ast@kernel.org,andrew+netdev@lunn.ch,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,edumazet@google.com,kuba@kernel.org,jolsa@kernel.org,john.fastabend@gmail.com,memxor@gmail.com,martin.lau@linux.dev,razor@blackwall.org,pabeni@redhat.com,shuah@kernel.org,horms@kernel.org,song@kernel.org,sdf@fomichev.me,yonghong.song@linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,netdev@vger.kernel.org,maze@google.com,lorenzo@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 15 May 2026 08:14:08 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <agSZeMEvxE0xyNB8@devvm7509.cco0.facebook.com>
+X-Debian-User: leitao
 
---===============5085312704577427323==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
+On Wed, May 13, 2026 at 08:32:39AM -0700, Stanislav Fomichev wrote:
+> > @@ -1358,12 +1357,11 @@ static int pppol2tp_getsockopt(struct socket *sock, int level, int optname,
+> >  			goto end_put_sess;
+> >  	}
+> >  
+> > -	err = -EFAULT;
+> > -	if (put_user(len, optlen))
+> > -		goto end_put_sess;
+> > -
+> > -	if (copy_to_user((void __user *)optval, &val, len))
+> > +	opt->optlen = len;
+> > +	if (copy_to_iter(&val, len, &opt->iter_out) != len) {
+> > +		err = -EFAULT;
+> >  		goto end_put_sess;
+> > +	}
+> >  
+> >  	err = 0;
+> 
+> nit: if you're moving `err = -EFAULT`, you might as well remove this
+> `err = 0` ?
 
-PiAgICAgYnBmOiBhbGlnbiBzeXNjYWxsIHdyaXRlYmFjayBiZWhhdmlvciB3aXRoIGNhbGxlci1k
-ZWNsYXJlZCBzaXplCj4KPiAgICAgVGhlIGJwZihjbWQsIGF0dHIsIHNpemUpIHN5c2NhbGwgY29w
-aWVzIHVwIHRvICdzaXplJyBieXRlcyBvbiBpbnB1dCwgYnV0Cj4gICAgIHNldmVyYWwgY29tbWFu
-ZHMgd3JpdGUgb3V0cHV0cyBiYWNrIHRvIHVzZXJzcGFjZSB1bmNvbmRpdGlvbmFsbHkuIEJlY2F1
-c2UKPiAgICAgY29weV90b191c2VyKCkgZG9lcyBub3QgZmF1bHQgb24gYWRqYWNlbnQgbWFwcGVk
-IG1lbW9yeSwgYSBzaG9ydCB1c2Vyc3BhY2UKPiAgICAgYnVmZmVyIHJlc3VsdHMgaW4gb3V0LW9m
-LWJvdW5kcyB3cml0ZXMsIHBvdGVudGlhbGx5IG92ZXJ3cml0aW5nIGFkamFjZW50Cj4gICAgIHVz
-ZXJzcGFjZSBtZW1vcnkuCj4KPiAgICAgQWRkcmVzcyB0aGlzIGJ5IGludHJvZHVjaW5nIHR3byBw
-b2xpY2llcyBiYXNlZCBvbiBmaWVsZCB0eXBlOgo+Cj4gICAgIDEpIE1hbmRhdG9yeSBmaWVsZHMg
-KG9yaWdpbmFsIEFCSSk6IFJldHVybiAtRUlOVkFMIGluIF9fc3lzX2JwZigpIGlmIHRoZQo+ICAg
-ICAgICBidWZmZXIgc2l6ZSBkb2VzIG5vdCBjb3ZlciB0aGVtLiBUaGlzIGhhcmRlbnMgdGhlIHN5
-c2NhbGwgZnJvbnQtZ2F0ZQo+ICAgICAgICBmb3IgdGhlIGZvbGxvd2luZyBjb21tYW5kczoKPiAg
-ICAgICAgLSBCUEZfUFJPR19RVUVSWSAobWluIHNpemU6IHF1ZXJ5LnByb2dfY250KQo+ICAgICAg
-ICAtIEJQRl9QUk9HX1RFU1RfUlVOIChtaW4gc2l6ZTogdGVzdC5kdXJhdGlvbikKPiAgICAgICAg
-LSBCUEZfKl9HRVRfTkVYVF9JRCAobWluIHNpemU6IG5leHRfaWQpCj4gICAgICAgIC0gQlBGX09C
-Sl9HRVRfSU5GT19CWV9GRCAobWluIHNpemU6IGluZm8uaW5mb19sZW4pCj4gICAgICAgIC0gQlBG
-X1RBU0tfRkRfUVVFUlkgKG1pbmltdW0gc2l6ZTogdGFza19mZF9xdWVyeS5wcm9iZV9hZGRyKQo+
-ICAgICAgICAtIEJQRl9NQVBfKl9CQVRDSCAobWluIHNpemU6IGJhdGNoLmZsYWdzKQo+Cj4gICAg
-IDIpIE9wdGlvbmFsIGZpZWxkcyAobGF0ZXIgcmV2aXNpb25zKTogU2tpcCB3cml0ZWJhY2sgaWYg
-dGhlIGJ1ZmZlciBzaXplCj4gICAgICAgIGRvZXMgbm90IGNvdmVyIHRoZSBmaWVsZC4gVGhpcyBp
-cyBhcHBsaWVkIHRvIEJQRl9QUk9HX1FVRVJZJ3MKPiAgICAgICAgJ3F1ZXJ5LnJldmlzaW9uJy4g
-T2xkZXIgdXNlcnNwYWNlIHBhc3NpbmcgYSBzbWFsbGVyIHNpemUgKGUuZy4sIDQwCj4gICAgICAg
-IGJ5dGVzKSB3aWxsIGhhdmUgdGhlIHdyaXRlIHNhZmVseSBza2lwcGVkLiBUaGlzIHNpemUtZ2F0
-aW5nIHBhdHRlcm4KPiAgICAgICAgbWlycm9ycyB0aGUgZXhpc3RpbmcgcHJlY2VkZW50IHVzZWQg
-Zm9yICdsb2dfdHJ1ZV9zaXplJyAodmVyaWZpZXIuYykKPiAgICAgICAgYW5kICdidGZfbG9nX3Ry
-dWVfc2l6ZScgKGJ0Zi5jKS4KPgo+ICAgICBUbyBzdXBwb3J0IHRoaXMsIHRoZSB1c2VyLWRlY2xh
-cmVkICdzaXplJyBpcyBwbHVtYmVkIGZyb20gX19zeXNfYnBmKCkKPiAgICAgdGhyb3VnaCB0aGUg
-cXVlcnkgZGlzcGF0Y2hlcnMgKGNncm91cCwgdGN4LCBuZXRraXQpIHRvIHRoZSB1bmRlcmx5aW5n
-Cj4gICAgIHdyaXRlYmFjayBoZWxwZXJzIGluIGNncm91cC5jIGFuZCBtcHJvZy5jLgo+Cj4gICAg
-IENjOiBNYWNpZWogxbtlbmN6eWtvd3NraSA8bWF6ZUBnb29nbGUuY29tPgo+ICAgICBDYzogTG9y
-ZW56byBDb2xpdHRpIDxsb3JlbnpvQGdvb2dsZS5jb20+Cj4gICAgIFNpZ25lZC1vZmYtYnk6IFl1
-eWFuZyBIdWFuZyA8eXV5YW5naHVhbmdAZ29vZ2xlLmNvbT4KPiAgICAgTGluazogaHR0cHM6Ly9s
-b3JlLmtlcm5lbC5vcmcvci9DQU5QM1JHZlpUWE1fdT1FX2F0b29tUFpYdXRvUUowMm5PTWtDQ1It
-WUJaYk9tMnN1V0FAbWFpbC5nbWFpbC5jb20KClRoaXMgbG9va3MgbGlrZSBhIGJ1ZyBmaXggZm9y
-IGFuIG91dC1vZi1ib3VuZHMgd3JpdGUgdnVsbmVyYWJpbGl0eS4KU2hvdWxkIHRoaXMgaW5jbHVk
-ZSBhIEZpeGVzOiB0YWcgdG8gaWRlbnRpZnkgd2hpY2ggY29tbWl0IGludHJvZHVjZWQgdGhlCnVu
-Y29uZGl0aW9uYWwgY29weV90b191c2VyKCkgY2FsbHMgZm9yIHF1ZXJ5LnJldmlzaW9uIHdpdGhv
-dXQgY2hlY2tpbmcKdGhlIHVzZXItcHJvdmlkZWQgYnVmZmVyIHNpemU/CgogIEZpeGVzOiAzZmUy
-MTNjMDQwYjMgKCJhZGRpbmcgY2kgZmlsZXMiKQoKCi0tLQpBSSByZXZpZXdlZCB5b3VyIHBhdGNo
-LiBQbGVhc2UgZml4IHRoZSBidWcgb3IgZW1haWwgcmVwbHkgd2h5IGl0J3Mgbm90IGEgYnVnLgpT
-ZWU6IGh0dHBzOi8vZ2l0aHViLmNvbS9rZXJuZWwtcGF0Y2hlcy92bXRlc3QvYmxvYi9tYXN0ZXIv
-Y2kvY2xhdWRlL1JFQURNRS5tZAoKQ0kgcnVuIHN1bW1hcnk6IGh0dHBzOi8vZ2l0aHViLmNvbS9r
-ZXJuZWwtcGF0Y2hlcy9icGYvYWN0aW9ucy9ydW5zLzI1OTA1OTI4MzMx
+Good point, if we got here, err is already = 0, and this line becomes
+useless.
 
---===============5085312704577427323==--
+Also, we probably don't need the "goto end_put_sess;" above, given the
+next line is the "end_put_sess" label.
+
+Thanks for the review, I will update.
+--breno
