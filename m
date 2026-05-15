@@ -1,185 +1,97 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655F23D9DB3
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 17:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 729973DA7EE
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 17:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778865796; cv=none; b=V00oFGBI7O+vBis+BzxJZ02EyHtZtHIwIiCIVMcPnxyIuIEprL46DO6H7a3A9gXAe9xxtgCjIQslQpeZmac19FA1fZ+VIDlPCpEl1uyMchOH72Cj0ybOx83dQchGmATJwYNmG//v4Sa80WZ3gW9q8GF+R+NVElMs/hhhoWWh0/0=
+	t=1778865797; cv=none; b=reAUj/I1GhjMxPRw2YXrYPe0t1HBveSSALQXk1JOer0jZ4GIuIxzCFeUK6o1cyD5PV7U6jEQJe8D01otLl6xCucSJIXa6nIpbR0vZuMyRhLXqPfpt2r6tlSJ9RCTafOh/VLHJtoloDh7xBWYrkJtDiNSTFzynnUd8sRr/g1FS1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778865796; c=relaxed/simple;
-	bh=KEI/qfeKzpigetnsdVeCXzMCSW33pCqz/9zeW7O0AGM=;
+	s=arc-20240116; t=1778865797; c=relaxed/simple;
+	bh=yZOTde1ellY+/v76AyqQbpcBfixPidjBMyQS7ssTF38=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=CZFDYLblYDJSSy3BZR0AObZDhR6l1jHPGO/O7WwH0nSFGkBL+u4+Tx+wvSNzP8dc/agzk6MGWpSJQ/3KaLuivvCdI8JIEaqbK8zymTr815wq//o/BK2cKlapYT4g/eZ9NkiluD50iuXiaOM2Jnn38FX7bOhpX0APoIzmvedGV4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rqfB9Re3; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=ZiBCVX3iekmenmtc7RaXhOYH6UdxEJaENxvq5Ll9WeYCnIsjf4xN4F4BYyPWjfkYnuHgy2t9W6l3HMxtgWovNAogn53LviFQktfBnUHpZoNqD1Og01nAHkztXiVSOx+BDWoNeDekIMzYKZpBt3HGf4Q1YYEJ3NPgpW4NHdob9f0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pNZjsuJq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rqfB9Re3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B315BC2BCFA;
-	Fri, 15 May 2026 17:23:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pNZjsuJq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28B7BC2BCB0;
+	Fri, 15 May 2026 17:23:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778865795;
-	bh=KEI/qfeKzpigetnsdVeCXzMCSW33pCqz/9zeW7O0AGM=;
+	s=k20201202; t=1778865797;
+	bh=yZOTde1ellY+/v76AyqQbpcBfixPidjBMyQS7ssTF38=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=rqfB9Re3TJIff9pFai7fX2ucuajMf87Qs7+D7BJxLyEX+IS1Yf98avQCSsM6/GbJq
-	 U1ntWbHtqcqHUR49EQxWDRC4TDLYNOKsJ60ds5HYmL8c6qxvXt9xjQgOzwGG4+/NNG
-	 RK2tJFPg/MjawJ9E2kcS58vBTSDS9CtLIe2TjIBD1sq/eGwOXzmyVRd8HxVMV8Nbrl
-	 It3iDhLV9v1mEhxcBEyv3FS69fiR3xhz8WozPazg3LLXcKkaDEW4zPaS8GujKMZ5t3
-	 8efKG8ZaL5rFAQCTF22nkgmCuSBykLwJdoycroJ6Ha3wMUxCMqbTulJoekMbetivf4
-	 4ZOCJY4VHLiMQ==
+	b=pNZjsuJqyumxzu8o3d8ORZQZYJm2Sk6gqq/9TW63FXE6niaeheIG7/9xHN1jnMDq8
+	 dVkzg/KhQFr+92rLPSbch0OdEVixIc7AF1//xSFs0+FDT71KEnImdVObHDAzVX2iPa
+	 MfJLapSerkhW1Ewy6lsUCQA33PkZDvOIZkz1MIS7V6NBphpZvUBwt5NbR0y9Xm+NDe
+	 +OPi7JxTMXEduBpW/DG7Tm4xBd5pl2S2KggCmhghveuzolzGX2anQzurIDbshv5J7R
+	 4+MZV9K+EZ+6f9/Na6vN/L5mN6JyzmPOOlB2QCQPeYafIsHc5UWwjPhnilBz+beNrG
+	 C7H5XnFq6vcsQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v5 3/8] net: devmem: support TX over
- NETMEM_TX_NO_DMA devices
+Subject: Re: [PATCH net-next v5 8/8] selftests: drv-net: add netkit devmem
+ tests
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Bobby Eshleman" <bobbyeshleman@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260514-tcp-dm-netkit-v5-3-408c59b91e66@meta.com>
-References: <20260514-tcp-dm-netkit-v5-3-408c59b91e66@meta.com>
+In-Reply-To: <20260514-tcp-dm-netkit-v5-8-408c59b91e66@meta.com>
+References: <20260514-tcp-dm-netkit-v5-8-408c59b91e66@meta.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 15 May 2026 17:23:14 +0000
-Message-Id: <20260515172315.B315BC2BCFA@smtp.kernel.org>
+Date: Fri, 15 May 2026 17:23:16 +0000
+Message-Id: <20260515172317.28B7BC2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Critical] Kernel panic (DoS) by bypassing unreadable SKB validation for =
-netkit devices.
-- [High] Use-After-Free and ABA pointer reuse vulnerability due to dangling=
- `vdev` and `dev` in TX bindings.
-- [High] Use-After-Free in `netdev_nl_bind_tx_doit` due to unprotected acce=
-ss to `phys_dev`.
-- [Medium] Lockdep warning (recursive locking) when locking both virtual an=
-d physical devices.
+- [Medium] The test function `check_nk_rx_hds` is missing the `@ksft_disrup=
+tive` decorator.
 --
 
-commit fc62474407bd468f37ed050ed11229d597ff605b
+commit 6b7595d97efcd40188639cc504f84e6faae25b3e
 Author: Bobby Eshleman <bobbyeshleman@meta.com>
 
-net: devmem: support TX over NETMEM_TX_NO_DMA devices
+selftests: drv-net: add netkit devmem tests
 
-When a netkit virtual device leases queues from a physical NIC, devmem
-TX bindings created on the netkit device must still result in the dmabuf
-being mapped for dma by the physical device. This patch accomplishes
-this by teaching the bind handler to search for the underlying
-DMA-capable device.
+This commit adds nk_devmem.py with four tests for TCP devmem through a netk=
+it
+device. The tests duplicate the original devmem tests with adjusted paramet=
+ers
+for the netkit environment.
 
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 2da2688fe490b..bbc93b181ef9a 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -3993,7 +3993,8 @@ static struct sk_buff *validate_xmit_unreadable_skb=
-(struct sk_buff *skb,
->  	struct skb_shared_info *shinfo;
->  	struct net_iov *niov;
-> =20
-> -	if (likely(skb_frags_readable(skb)))
-> +	if (likely(skb_frags_readable(skb) ||
-> +		   dev->netmem_tx =3D=3D NETMEM_TX_NO_DMA))
->  		goto out;
-
-If the netkit device is configured to pass packets to its peer (such as via
-NETKIT_PASS or NETKIT_NEXT), could this allow an unreadable devmem SKB to be
-injected into the host's local receive stack via __netif_rx()?
-
-If software paths expecting valid struct pages attempt to read the payload,
-such as local sockets calling kmap_local_page(), will this result in a cras=
-h?
+> diff --git a/tools/testing/selftests/drivers/net/hw/nk_devmem.py b/tools/=
+testing/selftests/drivers/net/hw/nk_devmem.py
+> new file mode 100755
+> index 0000000000000..300ed2a70ab44
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/hw/nk_devmem.py
 
 [ ... ]
 
-> diff --git a/net/core/devmem.c b/net/core/devmem.c
-> index 468344739db29..893643909f6a4 100644
-> --- a/net/core/devmem.c
-> +++ b/net/core/devmem.c
-
-[ ... ]
-
-> @@ -212,6 +212,7 @@ net_devmem_bind_dmabuf(struct net_device *dev,
->  	}
-> =20
->  	binding->dev =3D dev;
-> +	binding->vdev =3D vdev;
->  	xa_init_flags(&binding->bound_rxqs, XA_FLAGS_ALLOC);
-
-Does this code need to take a reference count on dev and vdev?
-
-Since TX bindings remain active until the user closes the netlink socket,
-if the physical or virtual device is unregistered and freed while the
-socket is open, these pointers might become dangling.
-
-If a new net_device is subsequently allocated at the exact same memory
-address, could the pointer comparison dst_dev !=3D READ_ONCE(binding->vdev)
-in net_devmem_get_binding() falsely succeed?
-
-[ ... ]
-
-> diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-> index 4d2c49371cdb4..b4d48f3672a5b 100644
-> --- a/net/core/netdev-genl.c
-> +++ b/net/core/netdev-genl.c
-
-[ ... ]
-
-> +static struct net_device *
-> +netdev_find_netmem_tx_dev(struct net_device *dev)
-> +{
-> +	struct netdev_rx_queue *lease_rxq;
-> +	struct net_device *phys_dev;
-> +	int i;
+> +@ksft_disruptive
+> +def check_nk_tx_chunks(cfg) -> None:
+> +    """Run the devmem TX chunking test through netkit."""
+> +    run_tx_chunks(cfg)
 > +
-> +	if (dev->netmem_tx =3D=3D NETMEM_TX_DMA)
-> +		return dev;
 > +
-> +	if (dev->netmem_tx !=3D NETMEM_TX_NO_DMA)
-> +		return NULL;
+> +def check_nk_rx_hds(cfg) -> None:
+
+Should check_nk_rx_hds() also be marked with the @ksft_disruptive decorator?
+
+Since run_rx_hds() configures NIC hardware parameters (HDS, RSS, queue leas=
+e)
+that bring the interface down and up, it appears this test will disrupt
+network traffic.
+
+Without the decorator, this function bypasses the framework's test filtering
+and will run even if the user explicitly disables disruptive tests.
+
+> +    """Run the HDS test through netkit."""
+> +    run_rx_hds(cfg)
 > +
-> +	for (i =3D 0; i < dev->real_num_rx_queues; i++) {
-> +		lease_rxq =3D READ_ONCE(__netif_get_rx_queue(dev, i)->lease);
-> +		if (!lease_rxq)
-> +			continue;
-> +
-> +		phys_dev =3D lease_rxq->dev;
-> +		if (netif_device_present(phys_dev) &&
-> +		    phys_dev->netmem_tx =3D=3D NETMEM_TX_DMA)
-> +			return phys_dev;
-
-Is it safe to return phys_dev here without holding an RCU read lock or taki=
-ng
-a reference on the device?
-
-Because the caller netdev_nl_bind_tx_doit() operates without the RTNL lock,
-could the physical device be unregistered and freed concurrently between th=
-is
-pointer read and the subsequent lock acquisition?
-
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
->  int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
->  {
-
-[ ... ]
-
-> +	if (bind_dev !=3D netdev)
-> +		netdev_lock(bind_dev);
-
-Since both the virtual device and the physical device are likely initialized
-as Ethernet devices, they will share the same lock class.
-
-Will acquiring netdev_lock(bind_dev) while already holding the lock for
-netdev trigger a lockdep warning for possible recursive locking?
-
-> +
-> +	dma_dev =3D netdev_queue_get_dma_dev(bind_dev, 0, NETDEV_QUEUE_TYPE_TX);
-
-[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260514-tcp-dm-net=
-kit-v5-0-408c59b91e66@meta.com?part=3D3
+kit-v5-0-408c59b91e66@meta.com?part=3D8
