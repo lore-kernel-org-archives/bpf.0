@@ -1,164 +1,127 @@
-Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2D711E511;
-	Fri, 15 May 2026 00:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
+Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF09F191
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 00:08:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778803307; cv=none; b=i3/kUbQH/SaRIRIToFV3qohd/f96FN+5FlCJcuPOPntZqrNXGbAojrQ/x4WCQRW+/kTnVXR1G0l6ZKZd9JTMY1EcPk+BJlp4DB8Xkz/4AZSUJ/wJbtsJnvWULOni2HR3zyNkpFRsupbpyXO28qVkMnLR+pkcTdtquedb4aNtjc4=
+	t=1778803733; cv=none; b=huNsFHjHUyFwVLg4Iw29OwV+Sx6NVx6SRtsnoW73T73zeUIK9cfOPHVIu5nsrUe/DjO8d5hM6UOwXRlHzZ8In+1RJ0rhceWrPMdUDgsAGO42jmffIpoQSb2S4OoLcT9ft6i86ZFPF87pwW2yBfr9ffJ4wX3zBnA0vTCfBHFrT0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778803307; c=relaxed/simple;
-	bh=tdH1VrcQncwA79cpJHv5nqOIrihe48zQtl+e4GgZTC8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=arfJvm3GH8FOvUQ/L4X3BeiRknUibCoK76buQ+kk0zTWP3tZT+ku5QkD9ILZa04vVx2unPc8fxqYV5rmneFqlHruNfb3rdmtmUtm4nxqI87/ZyxmkVEsDkKwF6FUyHfl3byqnaM7P1luAzKPDDsXi+xHdAdXVjY8JFGjaDJpKT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c45ff70000001609-85-6a06625d2aa3
-Date: Fri, 15 May 2026 09:01:28 +0900
-From: Byungchul Park <byungchul@sk.com>
-To: Dragos Tatulea <dtatulea@nvidia.com>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>,
-	Pedro Falcato <pfalcato@suse.de>,
-	"Vlastimil Babka (SUSE)" <vbabka@kernel.org>, linux-mm@kvack.org,
-	akpm@linux-foundation.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
-	harry.yoo@oracle.com, ast@kernel.org, daniel@iogearbox.net,
-	davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
-	john.fastabend@gmail.com, sdf@fomichev.me, saeedm@nvidia.com,
-	leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
-	andrew+netdev@lunn.ch, edumazet@google.com, pabeni@redhat.com,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	horms@kernel.org, jackmanb@google.com, hannes@cmpxchg.org,
-	ziy@nvidia.com, ilias.apalodimas@linaro.org, willy@infradead.org,
-	brauner@kernel.org, kas@kernel.org, yuzhao@google.com,
-	usamaarif642@gmail.com, baolin.wang@linux.alibaba.com,
-	almasrymina@google.com, toke@redhat.com, asml.silence@gmail.com,
-	bpf@vger.kernel.org, linux-rdma@vger.kernel.org,
-	sfr@canb.auug.org.au, dw@davidwei.uk, ap420073@gmail.com
-Subject: Re: [PATCH v4] mm: introduce a new page type for page pool in page
- type
-Message-ID: <20260515000128.GA7850@system.software.com>
-References: <20260224051347.19621-1-byungchul@sk.com>
- <982b9bc1-0a0a-4fc5-8e3a-3672db2b29a1@nvidia.com>
- <4af19eda-c29c-4302-92d5-c0915267fc0c@kernel.org>
- <agRB2QTbzceRgpzX@pedro-suse>
- <1817a749-8232-43ab-a0f5-350e5aade235@kernel.org>
- <f3e38c07-d410-4c8e-a572-68d52dc55353@nvidia.com>
- <20260514085402.GA63255@system.software.com>
- <f4f5e3b2-64c4-4ad2-8678-d29ae08150e6@nvidia.com>
+	s=arc-20240116; t=1778803733; c=relaxed/simple;
+	bh=qwzd7gYR3G9oqc36hD6UgmTtCPiWHheLj9P4fyjsQXY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=TYg+voRywA6Cz1lc3u7ZZFBl+8F7XnYQe6rg2aXZzbZmFrGEGmKw8Oxv7H9r97HQA9EGXoYeKccI6UqQOaf3VwUF84a7LPxMmqX6w2+bdNQsZBNyaAXBWK4jNMVWTSsoWPOrbLiwgPpwXZK6OfbhtytCrCz00TXtd+JpgHsVjdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VZxDsYHs; arc=none smtp.client-ip=74.125.224.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VZxDsYHs"
+Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-65318dafbcbso11043236d50.2
+        for <bpf@vger.kernel.org>; Thu, 14 May 2026 17:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778803731; x=1779408531; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mkzcpi6f3a5TQRwJpoc7JwokbKKG2Daka/0xM2ukt4w=;
+        b=VZxDsYHschkElZbdhpxsj81rIzei7mCW1Tw9sixROBW3L9azJKxtpTHI7Mm7D3m5ho
+         JbGYvf8v3ExghvPlG/2m2q/sA6jvUIablMijVcFM4lWarvFv8sSw73IVDoItxeFxyfgc
+         U9JtVOdJNsR627mP4A0v/C0bmII50hR5xYZHZVxjt6XIE+ysfdjvIY3yaubVrJOeREgs
+         Umhs0E4HxSnti/KvbEBlSwn+pLONyCipr0pYmW+KW4WqLv7w0c/CazsvBOVNstCdXJml
+         nQ77WdYoyV/I6SzrmMZ9NT/nZa/vWIj9ymMrr0Q1TwA6PRywym8TNXkMxN/3pszUy0d6
+         i3YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778803731; x=1779408531;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mkzcpi6f3a5TQRwJpoc7JwokbKKG2Daka/0xM2ukt4w=;
+        b=lOKIBOekfi+e3UiaMjNx8adZ3YfbscCwCumm32aAeLfCHTX4eRJZw2NCDb2jYk4D3i
+         R5Qm0qQTbGeDdrvopcJU5gRX4P4O5vcoOVcQgnrb/EErzNpa0Hw33/Xps6erhIfqBrdL
+         tpNhHuLV3z7Gx/fanbJZzZLEJj1Wfp6i9IzqmoIwYuv7XYGkSuQr1vnMEuLyyc1s00fZ
+         hEkp63FCYDr6zezVSgSEjNTwzF2l2oEeD1hB3GBbu0qh0v7xV3HVBsXO8rhZxAKpbB+Y
+         krxNmGCPT3PHW5FCwOb/bOumwSzc6mGw8rqAAFW4a469tWAhVmBSI5aUr/V1Kn1iIY0v
+         rW8A==
+X-Forwarded-Encrypted: i=1; AFNElJ91u7elUfW09nTPPaBwQa1MPgjR4fqxip8J/5wH6gOAnBLVWaLYVM7waaxq99QvuddJh6w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyElSJ5JG1fqjH/RmwsEQ72c8hlIVthxuWBSTVW7hZS7BKvBBqb
+	mAlKemO5rAK89J62Mvz1HILXwA5YOOalbaN4ynA7pJvLDWGVx20RjP+m
+X-Gm-Gg: Acq92OHbt9kLfTDXO9FzENaUXLPbuYXAytR13JmIgTQuXfK2ySzSsN5zNT/530WxlJF
+	NmM2nvXTsx16bQIY9kyvx29Xwvlz/S/J+GSUKZSHxmzMl2IC2vftetvHyYIjKbLYKbuOIkt0pph
+	TgAj3GVSMMRRhuoJODHRzEPy8mTMjm/IVrAA8WS/vAB2drajHzqTHIPIK0D5Iz3G4kC8obeTUJc
+	cz03X+AbmbAxQDeW3y3lcOTLId5R7or275FqHw3quAkr45lTx+ACmHEE479KywhXBW1ohL0AFiT
+	KnJtNlL+Z9X422ucExi5Rr4PKf8cPdbiO5zXX7e6QCLnolJWgsZcJVwuMMNGwOB2jeKvPq1DhB4
+	ILR0+JJee0iZxASuBacOsZDwNDJ/HhGCL6XHRoHvuL66ywUt/ttwwxw9LAJrRuubJatUaWD5jx5
+	VbvC5EbovdGUXRJe23BVJHNoD6YMXXy2vOvZgj1FQFCcZanMLrk2SZUR0Ihzck0gybvplZl3p1w
+	saYsxGCvP88+9OgSg==
+X-Received: by 2002:a05:690c:6987:b0:7b8:9418:7605 with SMTP id 00721157ae682-7c95c201035mr17401737b3.38.1778803730660;
+        Thu, 14 May 2026 17:08:50 -0700 (PDT)
+Received: from localhost ([2a03:2880:f806:45::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7c7f55bca95sm21073767b3.39.2026.05.14.17.08.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 May 2026 17:08:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f4f5e3b2-64c4-4ad2-8678-d29ae08150e6@nvidia.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0yTZxTH87zPe6Pa7LE4eabZsnSbGiIMicazbN6yLHmzZRm6L8u8bNW+
-	kSKt2ioDki1lNhGZXKYjgVIXUG4CprFIoVUMAgNh3lIDeTetRRx2boiGkoZSFFuM0W+//M//
-	/HI+HBFrhrmlosF0UDabdNlaXsWqHi2sSdmxi89KqwungcPZwkPzdC40jHRwEGkJMuBociOY
-	itwWYK6zD0Got5+H/3smEZyuCWNw3LCxEGybQeDxBhH8V3GWh7G+UQGaXV9CoP4BCxePtGMY
-	Lb3CQ7EtiqEzMiHAzx2NMXGrVYCb7hIOfpupw9BuHRHgltfBw92WOQ4edBezMGA/w8KT8l4M
-	gZJN0Fe9BMJ/jiP4t8EhQK+znYHwsZM8DFV6GWjrHBLghK+ah/u2AAJfzygL5bOFPBQ+DLBQ
-	VVCCIDodk0+UTXFQ9cddYVOaVKAovNQz/hhL58/8xUjDFb+yknJpkJE8dr8gVbsOSa2NyVKR
-	4sOSq+koL7kmjwvSneGLvHSlIspKnnsfSZ6OECMVH57gM5Z8q/pEL2cbcmTzhxu+V2Weq7ei
-	/QNJuX5nGW9FvZoilCBSsobOzvSzL3la8QlxZskH9E5jLY4zT1ZQRYnM82KyklrbTsT6KhGT
-	v0V6uCsyv5xIttJBe9V8SU3W0QvjzVy8pCGFmPpDp7gXg0V0oPKf+QVMkqny7CFThMQYL6MN
-	z8R4nEA20Ee3/SjOb5L3aJe7n4l7KJkT6ZwtKry49C16uVFhyxCxv6a1v6a1v9JWI9yENAZT
-	jlFnyF6TmplnMuSm7t5ndKHYt9X/OLutA03e/LobERFpF6q/uc5laThdjiXP2I2oiLWL1SkX
-	YpFar8vLl837vjMfypYt3WiZyGqT1OnhH/Qaskd3UN4ry/tl88spIyYstSJbILOFrPUf/+Lj
-	2vMNiZ6CdOwevBrYbGxFTaYtTmNQn+Z7sv3AUzfJq83oGlv12VhFxvDy6E+fZyw6tUWt90Z2
-	4t9L16cn3b9xtXxk8peU6Kf5pVTDORPfrtyoCV0LdW1fUJcfvPXOV5aaobMk8Wjw/Tey1voe
-	e72Vuy+vTH13SqtlLZm61cnYbNE9BxRLiQppAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTcRjG+Z+7q8FxmZ6Uvqy70sUoersQfig6BIUZFYRdVp5ytk3b1DQI
-	Vg4ySbPsonPS8u40rJm6eYnSpa0LhVasbM6snJZppJhrUm1G1Lcfz/P83k8vg0ssZCgjVyUL
-	apVMIaVEhGj7+oyl+w5RCStuuYLAUFtDQfVkGlT0WUjw1LgxMJgaEIx7emj41dqBYMzWScHn
-	9m8ISm5M4GB4piPAXf8DgbXJjeBT/k0KPnb001Bt3gau8gECWs424tB/4SEF2TovDq2eERrO
-	WCp9h+u0NLQX2Ul43pBDwuUfZTg0avto6G4yUNBb84uEgbZsAuz6KgK+XrHh4MqJgg5jMEw8
-	HkYwWGGgwVbbiMHE+SIKXhY0YVDf+pKGvC4jBe91LgRd7f0EXJnKpCBzyEVA4ekcBN5J3/GR
-	3HESCh/00lGR/GmHg+Lbh0dx/k7Va4x/lX+R4B13H2G8Ve+keaM5ha+rDOezHF04bzado3jz
-	t0s0//ZVC8U/zPcSvPXdWt5qGcP47IwRKjpkr2hDnKCQpwrq5RsPiuJvl2tRkj0kzVmbS2mR
-	TZKFAhiOXcVNOrpoPxPsAu5tZSnuZ4pdxDkcnmkOYhdz2vo8IguJGJx9w3AZ9zyEv5jFxnCP
-	9IXTIzG7hmserib9IwmbiXPOsWLyTxHI2Qs+TAs4G845fg5hWYjxcRhX8ZPxxwHsRu5LjxP5
-	eTY7j7vX0InlIrH+P1v/n63/ZxsRbkJBclWqUiZXrF6mORafrpKnLTucqDQj3z+Vn5q6aEHj
-	3VvaEMsg6UxxdCeZICFlqZp0ZRviGFwaJF7a7IvEcbL0k4I68YA6RSFo2lAYQ0hDxFv3CAcl
-	7FFZsnBMEJIE9d8WYwJCtehsxtzBncL+k7HBuvIhVawy4uuQtRJGtbcu9LQMOJ+aUkwfBicf
-	zzrqtiTtQcb1R0I/6d4Heq957+8qch76Pidl890Z6zZ1KJ8kR9m04UXYytj5sbqIPP3eEyVJ
-	L9xL7FV97lJRd8vqqbLr2+uOx1wtPtUf17uweUdE82I4sDsyrFRKaOJlkeG4WiP7DVpNal5L
-	AwAA
-X-CFilter-Loop: Reflected
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 14 May 2026 17:08:49 -0700
+Message-Id: <DIITAO4S7XCK.2EUA3QLTEFGKM@gmail.com>
+Cc: <ast@kernel.org>, <andrii@kernel.org>, <memxor@gmail.com>,
+ <daniel@iogearbox.net>, <eddyz87@gmail.com>, <song@kernel.org>,
+ <mattbobrowski@google.com>
+Subject: Re: [RESEND PATCH bpf-next 1/2] selftests/bpf: libarena: Add rbtree
+ data structure
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Emil Tsalapatis" <emil@etsalapatis.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc
+References: <20260511214100.9487-1-emil@etsalapatis.com>
+ <20260511214100.9487-2-emil@etsalapatis.com>
+In-Reply-To: <20260511214100.9487-2-emil@etsalapatis.com>
 
-On Thu, May 14, 2026 at 11:24:36AM +0200, Dragos Tatulea wrote:
-> On 14.05.26 10:54, Byungchul Park wrote:
-> > On Wed, May 13, 2026 at 02:06:06PM +0200, Dragos Tatulea wrote:
-> >> On 13.05.26 11:36, David Hildenbrand (Arm) wrote:
-> >>> On 5/13/26 11:26, Pedro Falcato wrote:
-> >>>> On Wed, May 13, 2026 at 11:12:43AM +0200, Vlastimil Babka (SUSE) wrote:
-> >>>>> On 5/13/26 11:00, Dragos Tatulea wrote:
-> >>>>>>
-> >>>>>>
-> >>>>>>
-> >>>>>> Seems like this patch broke tcp_mmap because
-> >>>>>> validate_page_before_insert() returns -EINVAL due
-> >>>>>> to a page having a type. Here's the full flow:
-> >>>>>>
-> >>>>>> getsockopt(TCP_ZEROCOPY_RECEIVE) returns -EINVAL because of the
-> >>>>>> below flow in the kernel:
-> >>>>>>
-> >>>>>> tcp_zerocopy_receive()
-> >>>>>> -> tcp_zerocopy_vm_insert_batch()
-> >>>>>>   -> vm_insert_pages()
-> >>>>>>     -> insert_pages()
-> >>>>>>       -> insert_page_in_batch_locked()
-> >>>>>>         -> validate_page_before_insert() returns -EINVAL
-> >>>>>>            because page_has_type(page) is now true.
-> >>>>>>
-> >>>>>> The patch below fixes the issue. But is this a valid fix?
-> >>>>>
-> >>>>> Hmm the check traces back to commit 0ee930e6cafa0 "mm/memory.c: prevent
-> >>>>> mapping typed pages to userspace"
-> >>>>>
-> >>>>>> Pages which use page_type must never be mapped to userspace as it would
-> >>>>>> destroy their page type.  Add an explicit check for this instead of
-> >>>>>> assuming that kernel drivers always get this right.
-> >>>>>
-> >>>>> So uh, this doesn't look good I think.
-> >>>>
-> >>>> Yep, you fundamentally can't map a page with a type as page type aliases with
-> >>>> mapcount. Even with the given diff, just mapping it will increment the mapcount
-> >>>> and wreak havoc. I think we need to revert this patch for now.
-> >>>>
-> >>>> I'm not sure what the long term plan for this would be. If page types are moved
-> >>>> to memdesc types, then the two stop colliding and that could work. I don't know
-> >>>> if that's Willy's plan, however.
-> >>>>
-> >>>> (then there's the other question: are page pool pages really folios? not really.
-> >>>> they are mappable, but they aren't part of the page cache, or anon, nor are
-> >>>> they in the LRU or have rmap capabilities. perhaps we need a different memdesc
-> >>>> for those. we're one step away from reinventing class polymorphism from first
-> >>>> principles ;)
-> >>>
-> >>> Zi Yan is working on this: non-folio pages would no longer mess with
-> >>> rmap/mapcounts, and page table walking code will identify them to be non-folio
-> >>> things to skip them.
-> >>>
-> >>> It will take a while, though ...
-> >>>
-> >> So do I get it right that the path forward here is to revert this commit [1]
-> >> and wait until the work from Zi Yan is ready?
-> >
-> > I think it's the best way for now.
-> >
-> Ack. Can you do it please? This is a more complicated revert and the risk that I
-> mess it up is higher.
+On Mon May 11, 2026 at 2:40 PM PDT, Emil Tsalapatis wrote:
+> Add a native red-black tree data structure to libarena.
+> The data structure supports multiple APIs (key-value based,
+> node based) with which users can query and modify it. The
+> tree uses the libarena memory allocator to manage its data.
+>
+> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+> ---
+>  .../bpf/libarena/include/libarena/rbtree.h    |   89 ++
+>  .../bpf/libarena/selftests/st_rbtree.bpf.c    |  974 ++++++++++++++++
 
-I will.
+st_ is too obscure. Use test_ ?
 
-	Byungchul
-> 
-> Thanks,
-> Dragos
-> 
-> 
+> +SEC("syscall")
+> +__weak int test_rbtree_insert_one(void)
+
+None of these tests check parallel operations, right?
+Let's add them and add the lock.
+Not sure what's the point of lockless rbtree->freelist
+when the whole thing still needs to be locked?
+
+imo there is no point in single threaded primitives.
+Only syscall prog can be single threaded. The rest run in parallel.
+
+> +		arena_stderr("WARNING: Attempting to allocate a node "
+> +				"for a NULL rbtree\n");
+
+Don't split strings, since it's harder to grep for them.
+It's ok that they're long and go over 80 or ever 100 chars.
+
+> +__weak
+> +int rb_print_pop_up(rbnode_t **rbnode, u8 *depthp, enum rb_print_state (=
+*stack)[RB_MAXLVL_PRINT], enum rb_print_state *state)
+> +{
+> +	volatile u8 depth;
+> +	int j;
+> +
+> +	if (unlikely(!rbnode || !depthp || !stack || !state))
+> +		return -EINVAL;
+> +
+> +	WRITE_ONCE(depth, *depthp);
+
+WRITE_ONCE? what for?
+
