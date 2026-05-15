@@ -1,155 +1,144 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ADE93FB040
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 08:26:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23BA4378D8D;
+	Fri, 15 May 2026 08:33:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778833594; cv=none; b=AXX8rWzYSJujGnEQeZw8R1tCoTC3tFN9J4RRlUSB1t9wLKviv6tvgto3yvSIOrj6C8P3XYie35KJKQ6Mee7XSqL6ziPigAjvgVJbOJp/K+bFLakNUnojCZT4osjwOV4Uyo9Y5/EUkBpSZXUrIQyS8DVZGfSeM+RdNBA+HOiIwoU=
+	t=1778834020; cv=none; b=cJ5veb7m2ECCPrbW9LALDQLBf8qbCzoXLaTThdkVHkaqIiQGjcV7r4XGoV8IY7qOXd7IFnMRTZzS54HRIQNsviIU40JxR07haT78AwxatYOuN+nBqqCFXfRLWea3FuRtNYOy7Qi1LtFsr86DV4/EE6aSu2Vxk2b/yuNLiiQwmJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778833594; c=relaxed/simple;
-	bh=ZUfjXKYn3B6z42BPQD2XBa7OBP+izoAhR6k5tyBgJjg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GaXLMGqjfTyz0QFvx6RHbT5LcpcUlfvQJ4DtCMSqmYMqXwVKY6r3HfsSCW/Pg1khWKZ/sOXZrMqqVQmp0wv9HkE5z/wV4FNDCfB3fsinOCcCToM9G7e/v5G/b80cgrUts2x3ychqdqyerWZr4Ah0NDoZwUmb3vQmgeAtMeutOZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MDKhU2vw; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778834020; c=relaxed/simple;
+	bh=0cISody7YAb2PZkhZH2Ka6q/ZFFj+dTiPt+pQU9bT+M=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=GMwRXCtjpVVddZkAKEEZ7ru2Kv1DpJWrfNlNSGeZ3qRnaH6TawOoNCTzWyPvjidYCPbMNjIe+aALhNfO8ip+DhfGLzxuw6iCWf738BgNEs1PD5EygR5WkcirnuMnK4dRWLETR8yb3IvgqvhvktSFJzaurPe4Rhk+ndjNdx9R/Sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=dZBfiV8m; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MDKhU2vw"
-Message-ID: <c5fadf42-583c-4e8c-8484-46781a0581b2@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778833580;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XabvpQDNM+J86JDRbuohWAB73JVV3E1H7YgDDbtsPO8=;
-	b=MDKhU2vwFXU0huKVVjPN2A9Dflc3bUk9Xo5kfL8xkJOsKWc7C1pjhOapONRWhOCwxWpYiV
-	tBqtPqqv6eMnmERXcQ5iLaEaYPZ6EAXbqoIDkNDDyhz2PAU9tmYTzpX+6dj1MGTcnLg9lD
-	qPG+s8Ll3JQskGtg4ziMnAMOKCnLoG0=
-Date: Fri, 15 May 2026 16:26:01 +0800
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="dZBfiV8m"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=tpou6ki3jAJXp90TqJk59yYkaVlW8JK+YsrVKfCVQ98=; b=dZBfiV8m4wwLpm0OL3+VFovqaK
+	EwnJpucTVmDT4I1Ja2i/EoDENWhB4dPFZF9mGnNMlwFTEjtV1dPnL05oNsxF7otqEHJn2UlVEcxND
+	kOZzSWqLxLD6eMg/2LPj1nMbJFY5hb0fOqwl8xaAP55HWSSJQWrTy1jPhU95VmTz18YBtILIUnvru
+	W8UprivhZbs5FK3JPbxnXHxTgLClu3Gsghpu8TLFOSObmqc17xKW6RPCbxk1hcpAjTgdi85AyXiNE
+	aWgVoiPsizfgO/KF9MotInjJhty7PcBTZw0IyG6bHyP+zcH3NAW7TK6tDjOGgjJfn0P57ba0ApKo3
+	nHoiFvaA==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wNnyy-004b97-17;
+	Fri, 15 May 2026 08:33:21 +0000
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next v2 0/7] net: convert
+ atm/xdp/af_iucv/l2tp_ppp/rxrpc/tipc to getsockopt_iter
+Date: Fri, 15 May 2026 01:32:24 -0700
+Message-Id: <20260515-getsock_four-v2-0-0d8eed952627@debian.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] net: skmsg: pin the delayed-work psock in
- sk_psock_backlog
-To: Cen Zhang <rollkingzzc@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, zerocling0077@gmail.com,
- 2045gemini@gmail.com
-References: <20260515050437.104716-1-rollkingzzc@gmail.com>
- <e0a24b78-9800-4927-b611-ccbad1e906fe@linux.dev>
- <CAB7XQsEJDoZHUznSYE3v1DadVXGWP7J21rS4Q=BuMr_jV9tX_w@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <CAB7XQsEJDoZHUznSYE3v1DadVXGWP7J21rS4Q=BuMr_jV9tX_w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-B4-Tracking: v=1; b=H4sIABjaBmoC/22NwQ6DIBAFf4XsWRrEgomn/kdjGsRFt02gASQ2x
+ n9vtNee37yZDRJGwgQd2yBioUTBQ8dkxcDOxk/IaYSOgRRSC1U3fMKcgn09XFgiF7pBbVp5VUp
+ BxeAd0dF66u7gMXOPa4b+t6RleKLNh+1gZ0o5xM9ZLvX5+B8pNRfcYesEtko7Y28jDmT8JcQJ+
+ n3fv2HpArrFAAAA
+X-Change-ID: 20260513-getsock_four-063e6a724555
+To: Chas Williams <3chas3@gmail.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Magnus Karlsson <magnus.karlsson@intel.com>, 
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, Jon Maloy <jmaloy@redhat.com>, 
+ Alexandra Winter <wintera@linux.ibm.com>, 
+ Thorsten Winkler <twinkler@linux.ibm.com>, 
+ James Chapman <jchapman@katalix.com>, David Howells <dhowells@redhat.com>, 
+ Marc Dionne <marc.dionne@auristor.com>, 
+ David Heidelberg <david+nfc@ixit.cz>, Samuel Ortiz <sameo@linux.intel.com>
+Cc: linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ tipc-discussion@lists.sourceforge.net, linux-s390@vger.kernel.org, 
+ linux-afs@lists.infradead.org, oe-linux-nfc@lists.linux.dev, 
+ Breno Leitao <leitao@debian.org>, kernel-team@meta.com
+X-Mailer: b4 0.16-dev-d5d98
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2195; i=leitao@debian.org;
+ h=from:subject:message-id; bh=0cISody7YAb2PZkhZH2Ka6q/ZFFj+dTiPt+pQU9bT+M=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqBtpJ1ql6+kWh2Sk7mRqFW0RJgA5fXYWF+7RiV
+ oQ9N0uRQjqJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCagbaSQAKCRA1o5Of/Hh3
+ bdnCD/9F/kItVPDT/aJ3OibaUFifLnSO9z8CWVnyrIWgmI1vKVxPeAEJTpEsRTyzb5htGsJA828
+ sFmprgPgwVcqugpUt94rY9VLGD8lKU66g7Bc2q/QhJKj/28jbleKzbaFiwiAsDbo6K3rjjOuryy
+ 6BHWrbVkfpIEcGzNOcTztluIUCOIsnQznLtoyi7gigzZlRL7xyz6alXeX/NrCZsJ64YHBCnyHC1
+ SkUksQtC8RP42aOMNCCp2OxKhDK2Q3+a/+xdWKMwYGqvvcqw5+J6I+hsrlvi9xkQ+qyvopmbhFj
+ +21KMSBL88ZyNW9njp1C1g/PeUXEATp8vCCa8wR/EtBoI1GZHtt4Q3Pv0DvZ6HOtaHz3w8nKI21
+ EXa5PWwt6TlTgyCM17iyRyA4NsbDLtLQeQyR9RaWlzI+b6ivu0aC0VjPUaYivIEFLsycO0ZS8Kz
+ Us6cTemOwHghAT5B5ckXlCJAMDnN3505SpIEbDFb/J3mzMnohRNZ+upfklH9txv4firm9gk6NVa
+ /JA054zSgAjBQXrQgHnM3LSOJGDPJVfUJOUEPyGEg+dyL+X7ljII2MopupJcSDZp+6woon+5d0t
+ 6jC+yCpkuljNAzqPUJdiNYumbW1J93DvERms0/MDgMGO+UQ5ACCCBfBWpUlEUdRHeTwMxhSzJjV
+ SuY+Bgq/jwXdP6g==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
+This series continues the conversion of the remaining proto_ops getsockopt
+callbacks to the new getsockopt_iter callback introduced in commit 67fab22a7adc
+("net: add getsockopt_iter callback to proto_ops").
 
-On 5/15/26 4:12 PM, Cen Zhang wrote:
-> Dear Jiayuan Chen
->
-> Jiayuan Chen <jiayuan.chen@linux.dev> 于2026年5月15日周五 14:10写道：
->> Where is the 'last_old_ref_before_put' symbol from? I can't find it
->> anywhere in the tree.
->>
->> If you are using LLMs to dig into races like this, please also have them
->> produce a reproducer, e.g. patch mdelay() into
->>
->> the relevant windows to widen them, then trigger it from userspace.
->>
->>
-> Hi Jiayuan,
->
-> Thanks for checking this. You are right: last_old_ref_before_put is
-> not an in-tree kernel symbol. It was a temporary validation probe
-> label which recorded the old psock refcount immediately before the
-> backlog worker's final put, and it should not have appeared in the
-> commit message as if it were kernel output.
->
-> The in-tree path I was trying to describe is:
->
->    sk_psock_backlog() starts at net/core/skmsg.c:670.
->    get path: sk_psock_get(psock->sk), net/core/skmsg.c:692.
->    put path: sk_psock_put(psock->sk, psock), net/core/skmsg.c:746.
->    detach clears sk_user_data at net/core/skmsg.c:892.
->    reattach publishes a replacement psock at net/core/skmsg.c:793.
->    warning path: REFCOUNT_SUB_UAF at lib/refcount.c:28.
->
-> The trigger was based on the in-tree sockmap_redir BPF selftest
-> under tools/testing/selftests/bpf/prog_tests/.
-> The one-shot test used AF_UNIX SOCK_STREAM socket pairs, attached
-> the sk_skb verdict program to the input map, inserted one socket
-> into the input map and one destination socket into the sockmap at
-> key 0, then sent one byte through the input peer so the destination
-> psock backlog worker was queued.
-> For validation I used a temporary local instrumentation patch in
-> net/core/skmsg.c. It added a debugfs-controlled gate in
-> sk_psock_backlog() after the TX-enabled check and before the
-> existing sk_psock_get(psock->sk) call, plus counters and pr_info()
-> snapshots in sk_psock_backlog(), sk_psock_init() and
-> sk_psock_drop(). It also stored the pointer returned by
-> sk_psock_get(psock->sk) for logging. The worker still used the
-> existing get path and the existing sk_psock_put(psock->sk, psock)
-> exit path.
-> With the worker parked before sk_psock_get(psock->sk), the test
-> forked: the child deleted the destination sockmap entry, and the
-> parent retried BPF_NOEXIST update of the same key with the same
-> destination socket fd until reattach succeeded.
-> After the delete completed, the test released the old worker. At
-> that point sk->sk_user_data referred to the replacement psock, while
+The new callback takes a sockopt_t — a type-safe wrapper around iov_iter
+plus an optlen field — instead of raw __user pointers. This:
 
-So, should the fix swap the order of sk->sk_user_data = null and 
-sk_psock_clear_state(psock, SK_PSOCK_TX_ENABLED)?
+    - Replaces (char __user *optval, int __user *optlen) with sockopt_t *opt
+    - Reads the input buffer size from opt->optlen instead of get_user()
+    - Writes the option value via copy_to_iter() instead of copy_to_user()
+    - Reports the returned length via opt->optlen instead of put_user(),
+      independently of the bytes copied through the iter
 
+Each conversion is a behaviour-preserving and code-style-preserving refactor;
+no big changes being introduced, even when the code looks weird.
 
-> the delayed work still belonged to the old psock. The recorded state
-> before the warning had the sk_user_data psock and the psock returned
-> by sk_psock_get(psock->sk) equal to each other, but different from
-> the delayed-work container. The instrumentation was only used to make
-> that interleaving deterministic and observable. The warning below is
-> the kernel's normal refcount warning path.
->
-> The native kernel report from that run was:
->
->    refcount_t: underflow; use-after-free.
->    WARNING: lib/refcount.c:28 at refcount_warn_saturate+0xbf/0xf0
->    Workqueue: events sk_psock_backlog
->    RIP: 0010:refcount_warn_saturate+0xbf/0xf0
->    Call trace:
->      sk_psock_backlog() (net/core/skmsg.c:670)
->      process_one_work() (kernel/workqueue.c:3200)
->
-> So the reproducer is instrumentation-assisted, not an
-> unmodified upstream selftest. The instrumentation can widen the
-> race window and record the participating psock pointers, but it
-> does not publish a replacement psock, clear sk->sk_user_data, or
-> add an extra put on the old psock. The final warning is reached
-> through the existing sk_psock_put(psock->sk, psock) path after
-> the test has forced delete-plus-reattach to happen before the
-> parked worker resumes.
->
-> I will send v2 as a new thread after the netdev 24-hour
-> interval, with the lab probe label removed from the commit text.
-> If useful, I can also share the small instrumentation/selftest
-> diff separately to show the exact widened window.
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Changes in v2:
+- Fix a issue reported by sashiko, where I was using "long int" instead
+  of "int" for a value.
+- Nit from Stanislav
+- Added an additional patch to make the af_iucv SO_MSGSIZE similar to
+  its partners.
+- Link to v1: https://patch.msgid.link/20260513-getsock_four-v1-0-fe7f0e756fac@debian.org
 
-You can just put the kernel patch and userspace program patch in this 
-thread (no need to send a new patch).
+---
+Breno Leitao (7):
+      af_iucv: take socket lock around SO_MSGSIZE getsockopt
+      af_iucv: convert to getsockopt_iter
+      atm: convert to getsockopt_iter
+      xdp: convert to getsockopt_iter
+      l2tp: ppp: convert to getsockopt_iter
+      rxrpc: convert to getsockopt_iter
+      tipc: convert to getsockopt_iter
 
-Also this patch should be targeted to bpf not net.
+ net/atm/common.c     | 18 +++++++++++-------
+ net/atm/common.h     |  2 +-
+ net/atm/pvc.c        |  6 +++---
+ net/atm/svc.c        | 15 +++++++--------
+ net/iucv/af_iucv.c   | 16 ++++++++--------
+ net/l2tp/l2tp_ppp.c  | 20 +++++++-------------
+ net/rxrpc/af_rxrpc.c | 16 +++++++++-------
+ net/tipc/socket.c    | 31 ++++++++++++++++---------------
+ net/xdp/xsk.c        | 24 +++++++++++-------------
+ 9 files changed, 73 insertions(+), 75 deletions(-)
+---
+base-commit: afb06186b0a5f3ff659cfd97421660c95bbde3be
+change-id: 20260513-getsock_four-063e6a724555
 
---
-pw-bot: cr
-
-
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
 
