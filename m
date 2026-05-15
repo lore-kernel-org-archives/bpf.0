@@ -1,155 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1306372ECA
-	for <bpf@vger.kernel.org>; Fri, 15 May 2026 18:37:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220B93F9A14
+	for <bpf@vger.kernel.org>; Fri, 15 May 2026 18:38:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778870222; cv=none; b=f48oEGauurmYOmJIvXKIwyXs8RQdkGxr2v7j9oJXsnG+40EwXMdFOkAYwIupX/ZmVVj4dyulWLKlrQvkdxQRpsFzqw03y1dLe4H4BJQdqAWf2cXeu5W6OqmTJiEklbA90wjrTy6CYOVU41mJsBPyFSFHk72kfMFRFJzmOOqosfQ=
+	t=1778870294; cv=none; b=NNSv7GdFG6+in/vQWCOLGap8PkZmuJYSPqmMyypGEeJfYLLCDly1HNaFSHpN6f0QDrgmLSd5WKfwO3qniJwiSbeNY6Q3A/HgCY4g+y0O8FwAxwzg/cYJG/gFkeaZ7ntb8bcoT+PiqYzZxR+lY+lN3bZC3YtoiEkN/QaGlKX5fAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778870222; c=relaxed/simple;
-	bh=As3Bd82gvjHtodWsTzHPp9Extcr9z/5CC1jfsZrsDSg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=RW7kWVaNuxBG4TXgXNvec9p88887yYeGRhhRBqPPunohG2nBgH28h7eyUAY2nWf3EdvtnJOC1POK4JwDdhaAc6GK9iv+jw/p556SXVqouqlgHtE1liokHTazxFKSeU08KYIkLRCAzs4owhCphwnfFvqT3tEub2yp7DiRdClc5sk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ttJDozRS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778870294; c=relaxed/simple;
+	bh=k5VW4oDrG/O1uIaSctnLaAkhDnEI15xDK9kkrZgNuXU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HDDKt4c8w9KLTBHJMMffEclUpVEKAIgGyanptsTYRvVlvZuUuWc7T+FYtx+CXWCnlcev21H8jklVSBAybyrbljMsziJKaRAgjRc1mtIYkTqMAavx0OktWEyGkB7RV88jUSjXMhkvgB4EOV29xjYevz+w2qhLYpn8Y2ZWTUy/5ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XghzgMbW; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ttJDozRS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31941C2BCB0;
-	Fri, 15 May 2026 18:36:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778870219;
-	bh=As3Bd82gvjHtodWsTzHPp9Extcr9z/5CC1jfsZrsDSg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=ttJDozRSN5Zs8RZlsgfPVOMs3IJPbaENddGB6UcsxsuZS8hpjyLUYAebMGZ+JxTbB
-	 t91Gp8V24W/2GW8KHkl7WpWOMR3BL4YUH7lUtlvvebMK0rH9oA3/uCsQAxlekeJ2mp
-	 jEIbRqSRuU3qrmIhk4B6ixTo2s1TuDGXJQ3/ejqWaMURxrLNkK9tGQXaZYRXVqYj0L
-	 G1EGdrgLaqZoLbhnBbX7ZagPAcgbVHA5c6MdtHjimPYFDeOUiWPGdUaqwhYgmKK4pG
-	 MEnAlDNP2wPjmNrnbVeW7loBZuIytY5Lvu6jmG6Dv6uqMOAyPdTs/jdr20ZfxRcLVY
-	 7+9/gVJY+/f1g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Add test for tracepoint
- btf_ids tracefs file
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260515-generic_tracepoint-v1-3-aa619fa94132@meta.com>
-References: <20260515-generic_tracepoint-v1-3-aa619fa94132@meta.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 15 May 2026 18:36:58 +0000
-Message-Id: <20260515183659.31941C2BCB0@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XghzgMbW"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48e82c23840so910315e9.3
+        for <bpf@vger.kernel.org>; Fri, 15 May 2026 11:38:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778870287; x=1779475087; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k5VW4oDrG/O1uIaSctnLaAkhDnEI15xDK9kkrZgNuXU=;
+        b=XghzgMbWSQOxk32wfrd99kf1tXI3HumLCinzWmEWtLVzIFjPIhNSNIq4kDC4tTL2YE
+         ojQegKItxinfFAiCTz+geqaOJ0Vf19NMskIjxE8uKTBu3pip19EVqp5E3u9bJy3WqZ8k
+         CO9tbRQmXYzStZm2kmfkBEqPgnJemreJU/W+YitqMI7WMMO6KckgR1avTXPfEXC39Cum
+         T+/2xSH1EynZHsh3N09H/g819AfiiA2U4aZ8Rr7iU1zb4I647UxITthgmwtuVL4c/LST
+         9D4rUCokKH3jGLH5WhD3GjlPjooncqa3QimOXxDBedZQjIYilKHShbuLzOvMBLlVJenf
+         o91w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778870287; x=1779475087;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=k5VW4oDrG/O1uIaSctnLaAkhDnEI15xDK9kkrZgNuXU=;
+        b=lb4eOilvWf/zM/UoyKODGsPyAwwrwog4BhWi+2BlKu6jxvg0Zcsbsj+/3tyjlYXlKw
+         8ZDucDSdM3yl9Nc7nvB/5L/f8XJX2oEUWzfjs7EavKa+TL8F1UNkWN1p8SSHoTqrNtxa
+         k/k/V2jkkd0l96iCxPem/BOc+FwAzWnbIZNjj3oMU+F/pMTX/0W05vgqunnqny6Fi4Lk
+         5Scq6ljdt3XhK8Y8dVZisgTNOPrgVbfwjqi4X8XpzQW7G2EX+OExacPofMz2MYQ0vZI2
+         Gl5rfiQuXN/g4qv3fDWZYhWfYb7TT8gQYMDOMLRaycg+Ud/16RHljSo0AerwfwfFwT4l
+         HhAA==
+X-Forwarded-Encrypted: i=1; AFNElJ/LVFhqJAKc2cNMtrRls36RvnxAFh1e3grxTVMN4iE320+q5CeqEHtCV3eofyY52+8DGek=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSIZq6sbBFwB4wr3LMHha+UjhGu9kNRCssFaG8BYLbbht+uEAw
+	pE+lnpE9CzsdBCm17KV+qrZz9s0u2zXsxDrHbd2WIo8+8/BXfPLfvR6EH0uE1i6U
+X-Gm-Gg: Acq92OFeMyWkivEEf6JbxxswwNJryu2povXI6sP3OHdp1dk62+QuWzS7WfXog9R6vpK
+	tyzwuY4cQQm+oUMvJEwdt6NV4Bl/TOSh8IkVLx++5a+m18kwjIWBjDn7JOOaaYKXxZMs9Z1LCUF
+	4zzSH9EsXnBI2I5hBdlUDgDKmcegKohMmZZ9QyHYK+0q/LkUYcGMOFSpsfs7NxlEuyA+wYTPodm
+	wkfyrxXuHzgOpx22gjGclwLmjM9iSBUJRd5MJmUdLHi8m8s2QWvC1ahMYggM9QVPH9tFvndQVJO
+	IRRebLDKVHkJxAdHFG8rsXjGWsQE7QDKdOsURgK7SMvE0mC1Rk8KIwN5PP7tSX4rdH4wye8Nh83
+	w8Sifsd4INTYJfxU/J2WpmfiCSiyN+y77j3IHBaaUcTgxftjI34PpyLxe2skf7l5O5qcOH8doru
+	Q9GLv7PVCW+xeYQP9bKVatOUIcSjKIdkt/WPGA2F9v5/jrKVLvBiEtD31TgvPqMnTN+iSko/M=
+X-Received: by 2002:a5d:5f53:0:b0:44b:9dca:7d93 with SMTP id ffacd0b85a97d-45e5c58761emr6944564f8f.26.1778870286817;
+        Fri, 15 May 2026 11:38:06 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45d9e768bcesm17709798f8f.4.2026.05.15.11.38.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 May 2026 11:38:06 -0700 (PDT)
+Date: Fri, 15 May 2026 19:38:04 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: "Arnd Bergmann" <arnd@arndb.de>
+Cc: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, "Arnd Bergmann"
+ <arnd@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "David S . Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
+ Abeni" <pabeni@redhat.com>, "Jesper Dangaard Brouer" <hawk@kernel.org>,
+ "John Fastabend" <john.fastabend@gmail.com>, "Martin KaFai Lau"
+ <kafai@fb.com>, Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?=
+ <toke@redhat.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Simon Horman" <horms@kernel.org>, "Stanislav Fomichev"
+ <sdf@fomichev.me>, bpf <bpf@vger.kernel.org>, Netdev
+ <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] bpf: test_run: reduce kernel stack usage
+Message-ID: <20260515193804.4d85283b@pumpkin>
+In-Reply-To: <b387dd31-0ee5-41b9-b07a-13b718080e89@app.fastmail.com>
+References: <20260515113102.2389020-1-arnd@kernel.org>
+	<CAADnVQLYitAZVpXCTygA1uAUtN6m8pMkWzFi9su719M=nktmQQ@mail.gmail.com>
+	<b387dd31-0ee5-41b9-b07a-13b718080e89@app.fastmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] Missing test environment check for `bpf_testmod` module causes s=
-purious test failures.
-- [Medium] Out-of-bounds array reads and cascading failures due to non-abor=
-ting assertions and missing length checks.
---
+On Fri, 15 May 2026 17:15:46 +0200
+"Arnd Bergmann" <arnd@arndb.de> wrote:
 
-commit 1c2fbe8e9b6c6c1082b4ae630c67ceb3b5db79b5
-Author: Mykyta Yatsenko <yatsenko@meta.com>
+> On Fri, May 15, 2026, at 16:47, Alexei Starovoitov wrote:
+> > On Fri, May 15, 2026 at 4:31=E2=80=AFAM Arnd Bergmann <arnd@kernel.org>=
+ wrote:
+> >
+> > 1k?
+> > pahole -C xdp_test_data
+> > /* size: 192, cachelines: 3, members: 9 */
+> > /* sum members: 120, holes: 1, sum holes: 56 */
+> > /* padding: 16 */
+> > /* paddings: 1, sum paddings: 36 */
+> >
+> > what s390 doing to make it huge? =20
+>=20
+> I think it's a combination of cacheline alignment (256 byte
+> lines) that leads to padding before 'rxq' and at the end of
+> xdp_test_data, as well as CONFIG_KASAN_STACK that increases
+> the stack usage further.
 
-selftests/bpf: Add test for tracepoint btf_ids tracefs file
+There will also be a 'double stack frame' in order to put an
+aligned item on stack.
+That could be slightly larger than a stack frame and probably doesn't
+show up in the figures.
 
-This commit adds a selftest to verify that the BTF IDs exposed in the
-tracefs btf_ids file for a module tracepoint match the expected FUNC_PROTO
-and STRUCT representations. It uses the bpf_testmod_test_read tracepoint
-to exercise the module/split-BTF path.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tp_btf_ids.c b/tools/=
-testing/selftests/bpf/prog_tests/tp_btf_ids.c
-> new file mode 100644
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/tp_btf_ids.c
-
-[ ... ]
-
-> +void test_tp_btf_ids(void)
-> +{
-> +	const struct btf_type *proto_t, *rec_t;
-> +	const struct btf_param *params;
-> +	const struct btf_member *members;
-> +	struct btf_ids_info info;
-> +	struct btf *vmlinux_btf, *btf;
-> +	const char *name;
-> +	int err;
-> +
-
-Since this test relies on bpf_testmod_test_read from the bpf_testmod.ko
-kernel module, should there be a check for env.has_testmod here?=20
-
-Without it, if the module is not loaded, the test might fail with a missing
-tracefs directory instead of gracefully skipping via test__skip().
-
-> +	err =3D read_btf_ids(&info);
-> +	if (!ASSERT_OK(err, "read btf_ids"))
-> +		return;
-
-[ ... ]
-
-> +	/*
-> +	 * raw_btf_id should be the FUNC_PROTO of __bpf_trace_<call>:
-> +	 *   void *__data, struct task_struct *task,
-> +	 *   struct bpf_testmod_test_read_ctx *ctx
-> +	 */
-> +	proto_t =3D btf__type_by_id(btf, info.raw_id);
-> +	if (!ASSERT_OK_PTR(proto_t, "raw type_by_id"))
-> +		goto out;
-> +	if (!ASSERT_TRUE(btf_is_func_proto(proto_t), "raw is FUNC_PROTO"))
-> +		goto out;
-> +	ASSERT_EQ(btf_vlen(proto_t), 3, "func_proto arg count");
-> +
-> +	params =3D btf_params(proto_t);
-> +	ASSERT_STREQ(param_name(btf, &params[0]), "__data", "arg0 name");
-> +	ASSERT_STREQ(param_name(btf, &params[1]), "task", "arg1 name");
-> +	ASSERT_STREQ(param_name(btf, &params[2]), "ctx", "arg2 name");
-
-Does this code risk reading out of bounds if btf_vlen(proto_t) is less than=
- 3?
-
-The ASSERT_EQ macro logs a failure but does not inherently abort the
-function execution. Should this be wrapped in a conditional check, such as
-if (!ASSERT_EQ(...)) goto out, to prevent accessing params[2] if the length
-is too small?
-
-> +
-> +	/*
-> +	 * tp_btf_id should be STRUCT trace_event_raw_<call> with the
-> +	 * fields declared by TP_STRUCT__entry plus the common header.
-> +	 */
-> +	rec_t =3D btf__type_by_id(btf, info.tp_id);
-> +	if (!ASSERT_OK_PTR(rec_t, "tp type_by_id"))
-> +		goto out;
-> +	if (!ASSERT_TRUE(btf_is_struct(rec_t), "tp is STRUCT"))
-> +		goto out;
-> +	name =3D btf__name_by_offset(btf, rec_t->name_off);
-> +	ASSERT_STREQ(name, "trace_event_raw_bpf_testmod_test_read",
-> +		     "tp struct name");
-> +
-> +	members =3D btf_members(rec_t);
-> +	ASSERT_STREQ(member_name(btf, &members[0]), "ent", "field0 name");
-> +	ASSERT_STREQ(member_name(btf, &members[1]), "pid", "field1 name");
-> +	ASSERT_STREQ(member_name(btf, &members[2]), "comm", "field2 name");
-> +	ASSERT_STREQ(member_name(btf, &members[3]), "off", "field3 name");
-> +	ASSERT_STREQ(member_name(btf, &members[4]), "len", "field4 name");
-
-Similarly, is it necessary to assert btf_vlen(rec_t) and conditionally jump
-to out if it is too small before accessing members[0] through members[4]?
-
-If the structure layout changes or is malformed, this might read adjacent
-BTF data.
-
-> +out:
-> +	btf__free(btf);
-> +	btf__free(vmlinux_btf);
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260515-generic_tr=
-acepoint-v1-0-aa619fa94132@meta.com?part=3D3
+-- David
