@@ -1,114 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392423ED13B
-	for <bpf@vger.kernel.org>; Sat, 16 May 2026 17:11:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 349FA33D6D8
+	for <bpf@vger.kernel.org>; Sat, 16 May 2026 19:05:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778951507; cv=none; b=aWiM7X4aGCmtk1IPPGonNX0xAxhnxtG/epyfnhUvhqOvpLgwuyEXT2fQsf7cURB5R9XjbbPReJUX4XZOHTsPsq00BpVUzret/UEeY1fDNilBFyS7PPi0AmiGYUIBHA56h+82+0Cvz0d3sY/LeBLDv+FEKTeXVvTa5ucZ1zmnJ6A=
+	t=1778958360; cv=none; b=bVXKuV9S4Dwl2p7qdK48w2fIoqE2fnJ4x8zVQ2GfMd1MsgVny2F4s1AS8V7qaDHZ9KWoI3F14ZY753u9zYyGNz7QR1bfLMj1d7HZHZ8rIbqnsKxkWHQL1RGaCEfdFHY3T8g+jIq825rQJr3MRr/Hi1QV1MRFq3GuTZw98rCXatQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778951507; c=relaxed/simple;
-	bh=Q2pPSZqC8vdkBq0hahMEFG9zcwk0/UlsWuqtNoprbCE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=URKDZbBS0CZ6S/qhbufnDT+fnN6MTZENURl5VK2zycB6XEFQ2FFwSRr3BN4jKRE9AVmkt6cowBPeVbr3RutxoubUh7a9wWhzpUHXB98y5fgUhoscgJDSH1UkP+UnTrlDEyJsgKDKGA5fYed24OiFvVboBrK2MdDUIBLPfFhUsCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m4tavPly; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778958360; c=relaxed/simple;
+	bh=UyZOZuyRlMt3+ip0WlUfEQ2nBW08rltWdK8cjbw87Jo=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Xw+KKFya0vuLulO5Tovkeg9VZLopqfuTLWs+wPT9dZb/zrF2bPk6TlQd0BLi3MBhTEoFOulQI+qEfCAa3kBU4Y68rlpOp4A2oRWUc/vPFo3ribnUWheXLE6soyFL/Hlw2DyHNlNuK60StH7rnQpyJOku9IbaKn0+FsAvqdGe5jQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=aeKKAanc; arc=none smtp.client-ip=209.85.210.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m4tavPly"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C11F9C19425;
-	Sat, 16 May 2026 17:11:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778951506;
-	bh=Q2pPSZqC8vdkBq0hahMEFG9zcwk0/UlsWuqtNoprbCE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=m4tavPlyRhVMdxBapksW7qyLG9t3gwxbGAQAxaMpaQIga+4W+1eTrKABLCtc63Qvs
-	 axOdhf1ySYaREVF4d0pCshcKec7M7Cme48cnw4yIMttZ3O8XiMo6f107qzVxP7OJ5M
-	 oNVofO8WfwislgVVr1742Ha/rqqYzVCTjrZ6n4/x0RRSkSsqoFmC5iGARLov7Psybz
-	 97jM3mzuaqHgwGY0wX77D3JyP2eZC3bUSb7762cB70j3GQNucEeZX+GnJ9ygP1VM3l
-	 C7aVWTM+XfkP1goALIwYRBqDWm5ucw3WHuyhtTfrv11KYfmFky0MJHyfVzTr7fS3FZ
-	 muhRnfuXd1Dbg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] bpf, sockmap: keep sk_msg copy state in sync
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Zhang Cen" <rollkingzzc@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260516164319.1519418-1-rollkingzzc@gmail.com>
-References: <20260516164319.1519418-1-rollkingzzc@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 16 May 2026 17:11:46 +0000
-Message-Id: <20260516171146.C11F9C19425@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="aeKKAanc"
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7dca4debedaso1088992a34.2
+        for <bpf@vger.kernel.org>; Sat, 16 May 2026 12:05:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1778958358; x=1779563158; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nZc4kj/8128oLJ3m8eOOQSX4eFeWKel+YW2aiCdJSZ4=;
+        b=aeKKAanch01DJJc5tIz0fzxjvag9DEngY3FNU7E9eDpSn/sBspxJWfasn1KZF0D2VF
+         37HihApVcpXyNRrtWWiVqHFHFzUo4oVu/R1FGbdgQQkYByDscC9K0mry3LZVH4leAIk+
+         MALH1cq1akwqRTj2XnZenk462Ps4iDmE5A3EseRoF9GJSttOp9ucA70Z/jGm7H1DSbmv
+         6Xk40sTPSaP1r9y7PBwNMgh4a3mL1Vz50DXh3U8txmwWkRnu2uM4qEGrc/M0KNT2IOlD
+         8BrwxhKOkuk1kl/h7G3WY1pUToYlZtJdJ3BLI3YBCdXmUJtkQ4LtiOOJzWyuMjt1iZ89
+         AuSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778958358; x=1779563158;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=nZc4kj/8128oLJ3m8eOOQSX4eFeWKel+YW2aiCdJSZ4=;
+        b=dmuICPcnCtqMXPw6X5Cf1alh+ExS+ieVFjC4mEVCuG8N/V5JrW8QJ86sCunkLdao7I
+         9IhrNByKAytfHaOZWrYHAH6KcahpTzwGvCXgqws9MzKt4Ap9RtvUTN0oDdt3Qkf6reIe
+         vpAkBxpASHJC9jo76c5ANxhDxAVTrXSGmnBd0nhDatlM7dsiPRETc7WdLkwb2sosHcr9
+         YVSVXQDTYQqZNqmvklTqotiiLsqPT67uzO6Yfq+YVKQ209859SPEECxTz0hSkxTZEA98
+         +pjCBgmc4Yi7cdnoCw9h0yvso757dLmK6K9aUBKEZ4q6Acsb66rTQ+r2bKFCzxH4SOiv
+         vhsQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9NZNSXV5fxDPiWSL0GSzCuFeuQi2bXuc2xIaRWgtljKylCmn9i2aJjYW31OF7sDqQcGyo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yygt3tnYndhEu040K93RX5NHEuIwwoc5lDAp+sgLP+WiHDbd7vi
+	vP+oFGginnuBcwyAhC2N+UBpLvHkYsi1rE19EgcR9P+dVEhSkohloaLYu0d0xwmQu7g=
+X-Gm-Gg: Acq92OGx7s3y0/cx3C5VRXCOv8TMEjPfz9neCrms1wgp1dS9IiZ5Ug3rVCxwDC7PkvB
+	ePmVkI7jZwyQILzQFS4yefjgbgqYkCbw5e+8CNDfHL/it4jEGX5BP5CYU2bXQOthbLMSwq1joCH
+	FVaL8Mnismg1LTw0zh0Vfu63HEAPuT2IlQ0KPjchQG36JoYISdj3H+MYyGjOh8AARKtocqSepBi
+	BS87K+k00C0kHuhrQRzA29eGakToRhLr7SrKtVt8Ml/w+vDZFjYNOc0cVueMB2plDJuTVNNfVwN
+	57+ep0jwSGfz4c0DfYzJ1EklStR8qcvMyXKzAw/fSwAc+P4YWNHEdbqDxYzUr07h+8grHGBgLuu
+	66YEGn1/HjIOwD3FIP1uMFpb23QgC+LrZCK4EIUXLxwa/c8yXU6BAgxB6e6LoQsNHY5sIewklo+
+	Y66qq85ZIJmNfgyfIe4vPcZqnnZEkeOJO4Mh2VsGJL4Hyzjc0XaJDuWlhqZBl/wNHPmi/Zn2xjD
+	7CJ
+X-Received: by 2002:a05:6830:4704:b0:7dc:e090:68a with SMTP id 46e09a7af769-7e4de651649mr6339319a34.0.1778958358300;
+        Sat, 16 May 2026 12:05:58 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e55bbd08ccsm4023092a34.17.2026.05.16.12.05.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 May 2026 12:05:57 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org, 
+ Michael Bommarito <michael.bommarito@gmail.com>
+Cc: Pavel Begunkov <asml.silence@gmail.com>, Li Zetao <lizetao1@huawei.com>, 
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20260515145812.1241925-1-michael.bommarito@gmail.com>
+References: <20260515145812.1241925-1-michael.bommarito@gmail.com>
+Subject: Re: [PATCH] io_uring: propagate array_index_nospec opcode into
+ req->opcode
+Message-Id: <177895835722.925638.5480075990608035864.b4-ty@b4>
+Date: Sat, 16 May 2026 13:05:57 -0600
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf_msg_pull_data() leaves stale copy bits for collapsed scatterli=
-st elements when they are not overwritten by trailing elements.
---
 
-commit a47d507f1f74e146090ec75c8b70147c2a08cf57
-Author: Zhang Cen <rollkingzzc@gmail.com>
+On Fri, 15 May 2026 10:58:11 -0400, Michael Bommarito wrote:
+> Commit 1e988c3fe126 ("io_uring: prevent opcode speculation") added
+> array_index_nospec() to the local opcode in io_init_req(), but the
+> sanitised value is not written back to req->opcode.  The
+> unconditional write at the top of io_init_req() stores the raw byte
+> into the persistent field; the success path of the bounds check
+> leaves it unchanged, and downstream consumers read the raw value.
+> 
+> [...]
 
-bpf, sockmap: keep sk_msg copy state in sync
+Applied, thanks!
 
-This patch updates BPF sk_msg helpers to keep the parallel msg->sg.copy
-bitmap in sync when scatterlist entries are shifted, split, or compacted.
-It preserves the copy bit for split tail entries and clears it whenever a
-helper replaces an entry with a freshly allocated private page.
+[1/1] io_uring: propagate array_index_nospec opcode into req->opcode
+      (no commit info)
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
+Best regards,
+-- 
+Jens Axboe
 
-[ ... ]
 
-> @@ -2738,6 +2751,8 @@ BPF_CALL_4(bpf_msg_pull_data, struct sk_msg *, msg,=
- u32, start,
->  	} while (i !=3D last_sge);
-> =20
->  	sg_set_page(&msg->sg.data[first_sge], page, copy, 0);
-> +	sk_msg_set_elem_copy(msg, first_sge, false);
-> +	sk_msg_set_elem_copy(msg, msg->sg.end, false);
-> =20
->  	/* To repair sg ring we need to shift entries. If we only
->  	 * had a single entry though we can just replace it and
-> @@ -2754,6 +2769,7 @@ BPF_CALL_4(bpf_msg_pull_data, struct sk_msg *, msg,=
- u32, start,
->  	sk_msg_iter_var_next(i);
->  	do {
->  		u32 move_from;
-> +		bool move_copy;
-> =20
->  		if (i + shift >=3D NR_MSG_FRAG_IDS)
->  			move_from =3D i + shift - NR_MSG_FRAG_IDS;
-> @@ -2762,10 +2778,13 @@ BPF_CALL_4(bpf_msg_pull_data, struct sk_msg *, ms=
-g, u32, start,
->  		if (move_from =3D=3D msg->sg.end)
->  			break;
 
-If the collapsed region is at the end of the message (where last_sge =3D=3D
-msg->sg.end), will this loop break immediately on the first iteration before
-clearing the copy bits for the interior slots (from first_sge + 1 to
-last_sge - 1)?
-
-If these vacated slots retain their stale copy bits and are later reused
-for newly allocated private memory, could they inherit copy =3D=3D true and
-cause sk_msg_compute_data_pointers() to set msg->data =3D NULL, incorrectly
-denying the BPF program direct write access?
-
-> +		move_copy =3D sk_msg_elem_is_copy(msg, move_from);
->  		msg->sg.data[i] =3D msg->sg.data[move_from];
-> +		sk_msg_set_elem_copy(msg, i, move_copy);
->  		msg->sg.data[move_from].length =3D 0;
->  		msg->sg.data[move_from].page_link =3D 0;
->  		msg->sg.data[move_from].offset =3D 0;
-> +		sk_msg_set_elem_copy(msg, move_from, false);
->  		sk_msg_iter_var_next(i);
->  	} while (1);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260516164319.1519=
-418-1-rollkingzzc@gmail.com?part=3D1
