@@ -1,220 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4FB12236F7
-	for <bpf@vger.kernel.org>; Sat, 16 May 2026 21:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778968714; cv=none; b=bu1JG4RZ6vfRQ419iWzUKyMAUJ5WYToPREXnflGezF0xjaD1rqWTcb0UDwUSuMl0yB8GU/GvnF0QoNNMb4RXKtRGoPYLJHECMcxkWjD7vP4ca4d8KFTUjB+rPVbXaP0U14ug6lYjSJ0FfC0JsjC71xtXTOBGj7cNDA+NMOtzRmI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778968714; c=relaxed/simple;
-	bh=FPKl45cmtznKWi/BUdYbaSgXI471CZiWF/DoDmjb6H0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=h3R2u//Qw6B+8+2PclUJoW+3toWvx6lGpdaV0yvxHQZrfceJgJdUcRW1AyASHEdS7bzwkTHB6rpgNK/noqrPwJ2Z6iBWHFt54LRZGJBqkHVvrcNq6wDRljK7e98St9tEpcouPV0Rzb5LNVsiwezBfaOpZqY5WE9TCUVev4lhQVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FAKdEZhG; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DE5A392C28
+	for <bpf@vger.kernel.org>; Sat, 16 May 2026 23:09:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778972988; cv=pass; b=E0M+pbKB347sOQLJwjpxxgWATRGOiAErrhHWL3wBgN5JN5ipCbDp62EkV+JUwWcGzLrqUO8dyjO9i84iBNsmgiVwY62VLSHlUfCDLMz4qh2rO9r1lv3qaJuDycA51vYquXkI7kG0gZl/fb9Zxd2PDW9WobPfFQuSayqYxERXGtE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778972988; c=relaxed/simple;
+	bh=ySGuOJIt/e7vBgBZIongGFzCTMYGjbLTujd8HU4eMlc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oREXu5NZ2CFzfHUPebIqneTuwVNMj622AcWhrjpwtEzKS1zTWTBPo6cTMCiAS4VhXTgq76HGojqnvnv9m6HVOT0fejCIacy6JkY5tfp6jsC5PDYdTmBveoFyl1oY9Jmdi4TL1aFWsp+0HkNVzq19+WytnbgDSSXLekQJthdDfio=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VmFOBnXb; arc=pass smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FAKdEZhG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49107C19425;
-	Sat, 16 May 2026 21:58:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778968714;
-	bh=FPKl45cmtznKWi/BUdYbaSgXI471CZiWF/DoDmjb6H0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=FAKdEZhGrHu91IPEC0Se/O9ldT3hZ/3mI9WZ/0s+2vGu8SJwXfK2tkDSaRUuWW+NN
-	 6AXBbk1ut59l9cVHXBnGwfgomSPUwIblBrAJk9hOjvUPsP8qK7K33MP5dWNoHSAY42
-	 UrgSACV11mIaqMm96TqruAaKtqfxa60iveI7HCh/WJF0b9Ir2UvhUuQmwVS82pbuZL
-	 n4hGtOpoqxLHxJTiCaauoY0+ThtgTYgf8pnEs/gwDOcTQS+X+y3emzIYcu9wrMnYce
-	 RsG4bgDJci4+kacXgxRSAc1SL2qZF73rFsBHy8ZiYl0rKt2MR2l2RJeSiG762shmiw
-	 pfMV31e0HV/WA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] tracing/probes: Allow use of BTF names to
- dereference pointers
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Steven Rostedt" <rostedt@goodmis.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260516173310.1dbad146@fedora>
-References: <20260516173310.1dbad146@fedora>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 16 May 2026 21:58:33 +0000
-Message-Id: <20260516215834.49107C19425@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VmFOBnXb"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-488a9033b2cso6294415e9.2
+        for <bpf@vger.kernel.org>; Sat, 16 May 2026 16:09:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778972985; cv=none;
+        d=google.com; s=arc-20240605;
+        b=l3e5YTsXnlY3S7K8+WBbIxrVlu7tsH7+MlYmKZYvph+c4b+0Xw6Xib2V6kfL3fXhAY
+         FzsL0m9Q6+4MMbLG3ruMmV3N9e0shO3rwv22ACXtPzcB+ETHXl8cz9kMZ7OuPZyzONR+
+         ghUyTQx3dlhaSGTcKx+Z+Qfwu45W9FDDJ3cpekP7OK4diY6zPJ1+PQsflFNxTRrXLxOc
+         YyvTR8+RYGd1QYaejmfJJ1WRAVyaR9Qfzd/XwrCMBZN8E2Q2xtge/KTqiMrpILXIjXdV
+         RA/zkgOVf95LvboZv9wD31ZkE3/OQx2m4rRDphnHYdSyMs0pq98CUU/wK3xbE67RPoan
+         PB/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=WUv7HOC1avvqkmnJI3IpOuXaKMorA+E/q5T5MT6vt+4=;
+        fh=n4T/eSrQcy47woypHUpBip4rhqK8p0gPHZzQYdTBvf8=;
+        b=M0Ki0ZGuFpDDVd6pqwt4cm+qQJI/hzb6h3RZnH1XxWLFArOvVyKf88XSqVHc1o8Avd
+         vJKwhGo+TkFFRwEpM73+G/Az2XKZsDu1C68ZKO2Mxx5Z7mOvljcWsvgscE306Yh0F1kf
+         TnUD7702lS3i6uvMVXUMk55f/Jq/Dva3y/x2tbxJbUW0/SqnP5pBmsSUV39Kizo3J/dN
+         CB1EU6M+kQQb3cSURF4w5CK/1Z3/8K1J+UdDkgtakvU+bVbx2MJg9/E/CRKsFNuOJU9G
+         IpTB58h56KxiPl1kCknN2MzQJGjofMrpqprL6u7pfSmharjWOoHQ8oQPd03C3awa8veO
+         visQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778972985; x=1779577785; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WUv7HOC1avvqkmnJI3IpOuXaKMorA+E/q5T5MT6vt+4=;
+        b=VmFOBnXbf9BfLJfC7AeXcrWg+p6F7bPsfIYDu8aAd102z8cSC4F9rqLPrIO59oA23e
+         IWChX/u8Mikk+MkzAHX5xB4K4XaGjIRNtyGGiJKrLkgPfnkdZFuC1FUthX69d8yVrbnZ
+         LglFt2ILtZBP5fPdpxTb+J0Uoc425zeaeBFtxMlHkzOZwysstHmlTmPjCizcCoUTlQBt
+         cRg73CAKQDDpe1eJBLmnnbtnTKRLoRSOpSReWPKjzzILW12S+eXc74+lslgn6pRTkW6m
+         0hhEaGPd+awDsJM5FIfNt5jWnzUkl7FBBBrd/usBcQLRpcMf3HnY+nnYb1oDpJRxvYa/
+         ElYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778972985; x=1779577785;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=WUv7HOC1avvqkmnJI3IpOuXaKMorA+E/q5T5MT6vt+4=;
+        b=pnTkYCvbg3phNwx7Xjh5HfPcgaQXveQYx/GUlfQ9RStiRVuQFkMYxVS/p+HC6ICjsu
+         DZVCmXfUEU6S4oW0uvbtYgMCbpT/SVIUYOlE/gks0GSqXMHnkX+R987a+8w2sc9FJ/DI
+         pGK1tsQTxXjVI8Y3RqWxin+8UrcRifTeMUWwpQrabnw+s3Due+98w4h/XXCyNWk2ouyw
+         xk/+4oF16JSEUzuCkh5eosOkAkSMJLXZC7Jjl1yct5T7oMaDfFPcO0cPc4wDsz/07RX9
+         jOanKcop+IyuA/sMOPaZaxG+D6wdqrEY3IT46oc63MPAqlA6tWu9zwPD5rv2bvO9AVt3
+         2fNA==
+X-Gm-Message-State: AOJu0Yy7a17hpGTZl8x/hA6bpjbrUBDs5C52mxdJbgVZ4igIChDXZNvo
+	KTJTyFZSVzq6/MmGRKzjlPshVAd9lUgtivQMGkfIf58wtthaKyUocAP42KHib+8MIkqbqXLWxAJ
+	X9EMtWNeoV4/OHw3UhAPr3ztigWaTkz4=
+X-Gm-Gg: Acq92OGYEf94oAAzrX9O4mKn/ECDpdDS9hSQ7DNHuPLlOyzo13f9s9wReNKEM0sCTNG
+	Va08XfPiVUdlzsMv7YpFlLSM6Ri0p79qb/KKqcXHALGXOpazKCl0K+wke8DJ5OBoOiwnB0YYd4S
+	L/emgXIe9YJEg0xzjYcAh5PUX+mKOngtTjJ0cKv3UvVw3XqBISX4rWl5arFq1ognP+CdrZF0esv
+	phIE6beP87UXXASzp+UVT3CnH0HWuZKcTbEXOSR+nD0j/ge/sLqFQUvri2oLr3fxxSnhoZUCtaO
+	hUYeo5FgRH5HyQnxV81PX7mVT+ScqEvdIsAaBudWsXP3EMyzyEXEsR/3z2i+MnHRhh+gLq4yMnp
+	i90Eobf+oCpbOEuGc96jObb00TA==
+X-Received: by 2002:a05:600c:8485:b0:486:fa35:aef2 with SMTP id
+ 5b1f17b1804b1-48fe5fcdec2mr139062365e9.4.1778972984495; Sat, 16 May 2026
+ 16:09:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260516022426.2109698-1-memxor@gmail.com> <20260516022426.2109698-2-memxor@gmail.com>
+In-Reply-To: <20260516022426.2109698-2-memxor@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 16 May 2026 16:09:33 -0700
+X-Gm-Features: AVHnY4ItruqozK43bxZm20nl05atKIlkAqV5wei_VdsAOWCFmEZr5D4PaosbtzI
+Message-ID: <CAADnVQLV2YKuLmZC3zUazKErT0xrkqV4Cs_1BSmXaFSPXLCxRw@mail.gmail.com>
+Subject: Re: [PATCH bpf v1 1/2] bpf: Check global subprog exception paths
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, kkd@meta.com, 
+	Kernel Team <kernel-team@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
-s) to consider:
-- [High] Uninitialized variable `btf` in `btf_find_offset()` causes a kerne=
-l crash/panic on error paths.
-- [Medium] Nested structure resolution fails if members use BTF modifiers (=
-const, volatile) or typedefs.
-- [Medium] The updated user-space dereference parser misidentifies valid BT=
-F struct accesses and breaks negative user-space offsets.
-- [Low] Missing error mapping for `-ENOENT` suppresses trace log errors whe=
-n a struct member is not found.
-- [Low] The `-E2BIG` error for excessively deep anonymous structures is sil=
-ently dropped, creating dead code in the error handler.
---
+On Fri, May 15, 2026 at 7:24=E2=80=AFPM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> Global subprogs are verified independently and are not descended into
+> when their callers are symbolically executed. This means a caller can
+> hold references or locks across a global subprog call that may throw,
+> while the verifier only checks the non-exceptional return path at the
+> call site.
+>
+> Record whether a subprog might throw in the CFG summary pass, alongside
+> the existing might_sleep and packet-data-changing summaries, and
+> propagate that effect through reachable callees.
+>
+> When a global subprog is marked as possibly throwing, push the normal
+> continuation and validate the exceptional path immediately at the call
+> site, avoiding a synthetic exception state and associated special case
+> in the pruning checks.
+>
+> Fixes: f18b03fabaa9 ("bpf: Implement BPF exceptions")
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+>  include/linux/bpf_verifier.h |  2 ++
+>  kernel/bpf/cfg.c             | 13 ++++++++++++-
+>  kernel/bpf/verifier.c        | 23 +++++++++++++++++------
+>  3 files changed, 31 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index b148f816f25b..b2cc337ebe74 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -739,6 +739,7 @@ struct bpf_subprog_info {
+>         bool keep_fastcall_stack: 1;
+>         bool changes_pkt_data: 1;
+>         bool might_sleep: 1;
+> +       bool might_throw: 1;
+>         u8 arg_cnt:3;
 
-commit 59c817c69d1d406c3cfa1e1e3659ff16a7e33c9d
-Author: Steven Rostedt <rostedt@goodmis.org>
-Subject: tracing/probes: Allow use of BTF names to dereference pointers
-
-This patch adds syntax to the FETCHARGS parsing of probes to allow the use
-of structure and member names to get the offsets to dereference pointers,
-using BTF.
-
-> diff --git a/kernel/trace/trace_btf.c b/kernel/trace/trace_btf.c
-> index 00172f301f25a..be88cc4d97dd3 100644
-> --- a/kernel/trace/trace_btf.c
-> +++ b/kernel/trace/trace_btf.c
-
-[ ... ]
-
-> +static int find_member(const char *ptr, struct btf *btf,
-> +		       const struct btf_type **type, int level)
-> +{
-
-[ ... ]
-
-> +		/* Handle anonymous structures */
-> +		if (strlen(tname))
-> +			continue;
-> +
-> +		*type =3D btf_type_by_id(btf, member->type);
-> +		if (btf_type_is_struct(*type)) {
-> +			int offset =3D find_member(ptr, btf, type, level + 1);
-> +
-> +			if (offset < 0)
-> +				continue;
-
-If find_member() returns -E2BIG due to deep anonymous structure nesting,
-this check appears to swallow the error and just skip to the next member.
-Does this prevent -E2BIG from ever reaching the caller and make the
-TP_ERR_MEMBER_TOO_DEEP error handling dead code?
-
-> +
-> +			return offset + BITS_ROUNDDOWN_BYTES(member->offset);
-> +		}
-> +	}
-> +
-> +	return -ENOENT;
-> +}
-> +
-> +/**
-> + * btf_find_offset - Find an offset of a member for a structure
-
-[ ... ]
-
-> +int btf_find_offset(char *arg, long *offset_p)
-> +{
-> +	const struct btf_type *t;
-> +	struct btf *btf;
-> +	long offset =3D 0;
-> +	char *ptr;
-> +	int ret;
-> +	s32 id;
-> +
-> +	ptr =3D strchr(arg, '.');
-> +	if (!ptr)
-> +		return -EINVAL;
-> +
-> +	*ptr =3D '\0';
-> +
-> +	ret =3D -ENXIO;
-> +	id =3D bpf_find_btf_id(arg, BTF_KIND_STRUCT, &btf);
-> +	if (id < 0)
-> +		goto error;
-
-If bpf_find_btf_id() fails here, it returns an error code and does not
-initialize the btf pointer.
-
-Does this cause btf_put(btf) to dereference an uninitialized stack pointer
-in the error path below, potentially leading to a panic?
-
-> +
-> +	/* Get BTF_KIND_FUNC type */
-> +	t =3D btf_type_by_id(btf, id);
-> +
-> +	/* May allow more than one member, as long as they are structures */
-> +	do {
-> +		ret =3D -ENXIO;
-> +		if (!t || !btf_type_is_struct(t))
-> +			goto error;
-
-If a structure member is a typedef or has a modifier (like const), the
-updated type from find_member() will be BTF_KIND_TYPEDEF or BTF_KIND_CONST.
-
-Will btf_type_is_struct() then fail on the next iteration of this loop?
-Should btf_type_skip_modifiers() be used to resolve the underlying structure
-type first?
-
-[ ... ]
-
-> +error:
-> +	btf_put(btf);
-> +	if (ptr)
-> +		*ptr =3D '.';
-> +	return ret;
-> +}
-
-[ ... ]
-
-> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-> index e0d3a0da26af5..6fcede2de1a55 100644
-> --- a/kernel/trace/trace_probe.c
-> +++ b/kernel/trace/trace_probe.c
-> @@ -1165,7 +1165,7 @@ parse_probe_arg(char *arg, const struct fetch_type =
-*type,
-> =20
->  	case '+':	/* deref memory */
->  	case '-':
-> -		if (arg[1] =3D=3D 'u') {
-> +		if (arg[1] =3D=3D 'u' && isdigit(arg[2])) {
-
-Does this new condition misidentify valid BTF structure lookups that happen
-to start with 'u' followed by a digit, such as +u16_port.id($arg)?
-
-Also, does it break previously valid negative user-space offsets like
-+u-10($arg) since arg[2] would be a hyphen instead of a digit?
-
->  			deref =3D FETCH_OP_UDEREF;
->  			arg[1] =3D arg[0];
->  			arg++;
-> @@ -1178,7 +1178,22 @@ parse_probe_arg(char *arg, const struct fetch_type=
- *type,
->  			return -EINVAL;
->  		}
->  		*tmp =3D '\0';
-> -		ret =3D kstrtol(arg, 0, &offset);
-> +		if (arg[0] !=3D '-' && !isdigit(*arg)) {
-> +			int err =3D 0;
-> +			ret =3D btf_find_offset(arg, &offset);
-> +			switch (ret) {
-> +			case -ENODEV: err =3D TP_ERR_NOSUP_BTFARG; break;
-> +			case -E2BIG: err =3D TP_ERR_MEMBER_TOO_DEEP; break;
-> +			case -EINVAL: err =3D TP_ERR_BAD_STRUCT_FMT; break;
-> +			case -ENXIO: err =3D TP_ERR_BAD_BTF_TID; break;
-> +			}
-
-If find_member() cannot find the specified member, it returns -ENOENT.
-Since -ENOENT is missing from this switch statement, err remains 0 and
-__trace_probe_log_err() is skipped.
-
-Should there be a mapping for -ENOENT (perhaps to TP_ERR_NO_BTF_FIELD) so
-users get a specific error log when they misspell a field name?
-
-> +			if (err)
-> +				__trace_probe_log_err(ctx->offset, err);
-> +			if (ret < 0)
-> +				return ret;
-> +		} else {
-> +			ret =3D kstrtol(arg, 0, &offset);
-> +		}
->  		if (ret) {
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260516173310.1dba=
-d146@fedora?part=3D1
+Let's move it up, probably next to has_tail_call,
+to avoid conflicts with bpf-next.
