@@ -1,103 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from outbound.mr.icloud.com (mr-2002g-snip4-6.eps.apple.com [57.103.68.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E71405C31
-	for <bpf@vger.kernel.org>; Sat, 16 May 2026 09:55:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFC127EC7C
+	for <bpf@vger.kernel.org>; Sat, 16 May 2026 12:06:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.68.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778925332; cv=none; b=iVDfsitt5zFgrIgy4xW9ubQ07dY6xjgRiQ/zoQXvMuFNPfim0JyGwGYDvSlZKymSC4QuWXLAPzGRlFjOMZ9gurnqEHjpxGOzztVE5k+QJwSVREYVVs1hqs7n8X7vAlrEJoT9T4BVyzxoWOJizmcbhIWQLdQYKldha7UMnBGSkEk=
+	t=1778933211; cv=none; b=T4FfSyxAiItsTv24v+iqtpCKRXIQ0ri9c0Hu10ytLgnlkDtSKAJRR4M5clwRPdKCKUpBByMuBqn5nNOVcNvcP+mDph/MPPanqUgNZYTJ0707ydeA4aokI1hzRE1fsUekVT9jqxlk8eVUMR9a09rP1E9h4tVxlDObrasru9rsTsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778925332; c=relaxed/simple;
-	bh=m6wEiREUyUE10X93cxJMGF8m43jMJSQQdgOV37LTUig=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=urEGr7mGZWkmvsmuJGoFAG16+B5RwzFmSamYOZLr4AbvnhOL+QPRW5wCuuQU6MyyXTw7+0NXs21qILJLVPJ7pvz/w+bLkxgnb4Aq08gZGbNwhYq7NLdc993Uwo3Ln9h0NW6Jt+4kerlvaIrwDerYJ4gNPmQevC+hdfnNGBB0foE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bxWKspBh; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778933211; c=relaxed/simple;
+	bh=bkitfgbATV7muE7dLlUcvmr9xMuCmbEgqgAiY22qe8c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=R7xOGg8j5ASGYQ8Tt3J58abMDaYvyHJx7B2fi7PDGN5PPM4zwwBs0JBlmQI8R98gIzzifRyIClK6HJjUICYhNMCAtFaW52L0i1DS5zVNMLnP9vk5Zad/dP03JRXGCmSSw0LovjFVPLwbzEKPXkMkFTr4yl1sO5XJBooa+ftOzG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvasnytskyi.net; spf=pass smtp.mailfrom=kvasnytskyi.net; dkim=pass (2048-bit key) header.d=kvasnytskyi.net header.i=@kvasnytskyi.net header.b=sTwzVRL0; arc=none smtp.client-ip=57.103.68.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvasnytskyi.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kvasnytskyi.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bxWKspBh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778925331; x=1810461331;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m6wEiREUyUE10X93cxJMGF8m43jMJSQQdgOV37LTUig=;
-  b=bxWKspBht+XahpynsWH1k83RJxExBEyLY8HEPNln3aJqtYVraRcjpsB7
-   wp3p13S48TxzD3VXNLnQu6l5GMqhlcWMyvyxSGhCEavPH0nNUQcG9ClOI
-   iZ3RZGVtdf/Yu3uW7vbyo4twbIYZYGuDDtJsxDS9OduOb5pi5+eHxEory
-   8vDDKv4QEQhgM252dsxxxaCbvrGXhfzm0qckdDSLCgc2TRNmmHV0pU2ne
-   neCQNNkoDjAUMFgC//CTOsUtGTTH+A1Io/UkaXSoBh/JvHYP+rG7UZCNk
-   h5khTR3iFzPvG/cXl1hI3ouf8itIB9U+7m5TwUatBK6QuVKAoOWV1eUfi
-   A==;
-X-CSE-ConnectionGUID: gdm0xsrqSoi3cNz6Ho+cnA==
-X-CSE-MsgGUID: J5XoDwepR4WWVldYX+XFng==
-X-IronPort-AV: E=McAfee;i="6800,10657,11787"; a="90174060"
-X-IronPort-AV: E=Sophos;i="6.23,238,1770624000"; 
-   d="scan'208";a="90174060"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2026 02:55:30 -0700
-X-CSE-ConnectionGUID: kttadIOuSIa31bXM8+hW8A==
-X-CSE-MsgGUID: foAg92+QTZiArTK278xUgw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,238,1770624000"; 
-   d="scan'208";a="235901402"
-Received: from igk-lkp-server01.igk.intel.com (HELO bdf09bfdbd5f) ([10.211.93.152])
-  by fmviesa007.fm.intel.com with ESMTP; 16 May 2026 02:55:28 -0700
-Received: from kbuild by bdf09bfdbd5f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wOBjx-000000009Iz-18Iv;
-	Sat, 16 May 2026 09:55:25 +0000
-Date: Sat, 16 May 2026 11:54:50 +0200
-From: kernel test robot <lkp@intel.com>
-To: Mahe Tardy <mahe.tardy@gmail.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	martin.lau@linux.dev, daniel@iogearbox.net,
-	john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
-	yonghong.song@linux.dev, jordan@jrife.io,
-	Mahe Tardy <mahe.tardy@gmail.com>
-Subject: Re: [PATCH bpf-next v5 4/4] selftests/bpf: add bpf_icmp_send
- recursion test
-Message-ID: <202605161150.IlT3RNUq-lkp@intel.com>
-References: <20260515194746.50920-5-mahe.tardy@gmail.com>
+	dkim=pass (2048-bit key) header.d=kvasnytskyi.net header.i=@kvasnytskyi.net header.b="sTwzVRL0"
+Received: from outbound.mr.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-west-2a-60-percent-6 (Postfix) with ESMTPS id 7B02F180017B;
+	Sat, 16 May 2026 12:06:45 +0000 (UTC)
+X-ICL-Out-Info: HUtFAUMHWwJACUgBTUQeDx5WFlZNRAJCTQFBHVsPRQBDAFYCXQZLVxQEClwAVgVyG08ZQANOH0EbQBEdA1IfEhZdRUECWgpcMFIOUh5ZEkYDUgFaQ1kORlBLGw5cAktaFVUXDgJCH1AfTBZXQ1oZHBlaFFwYU0VRH1RYQxlFVmlBC08dXRlbHEJkWFcJCgBEEUoWShlEAEsZFxZWGRcGWxQERAFdBV0CRQhOAl8HXQBFF0ADVQRSH0EUClwAVgVyG08ZQANOH0EbQBEdA1IfDFBNAUMICghHA00XXjJTBF8RUBY=
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kvasnytskyi.net; s=sig1; t=1778933208; x=1781525208; bh=QNuhYDnlYFZZgAg9TfiK4gX6cXQQKz0Ik93tJj+M/aA=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=sTwzVRL0/De253VX7g+vSjdeojP0LYkM5Uhe7R+fVWSy5fd4/JdOb+yvTf0/x2xqCeAbz/KmCac0SbfETg/RT1VYXGcqFW4p2kLCkzqc/Jk/Jq4TirG0C0exVEx3Kxoiymn9ph/g5hPrGXIw30B/mnHVMH+gqplRep9VU9eXjdlDe4X4uTL/qkrmUjwU7bkfkACcOI0nAjHaJarbDWVpvB34EfJzOJAdzlnvZBFndrnNWPiNs7H751byQf7hJ/uuHLcKTgyaSMcpYasNA0jqrhm01vbCYJb8gMvkUyb6JEDCl6oerD84pY1km/XkF/AlwB4hPHpAs8QZabd4XrqfUQ==
+mail-alias-created-date: 1743450725635
+Received: from periecle (unknown [17.57.152.38])
+	by p00-icloudmta-asmtp-us-west-2a-60-percent-6 (Postfix) with ESMTPSA id BC93C1800106;
+	Sat, 16 May 2026 12:06:41 +0000 (UTC)
+From: Roman Kvasnytskyi <roman@kvasnytskyi.net>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Roman Kvasnytskyi <roman@kvasnytskyi.net>
+Subject: [PATCH bpf] selftests/bpf: Reject unsupported -k option in vmtest.sh
+Date: Sat, 16 May 2026 14:06:25 +0200
+Message-ID: <20260516120625.80839-1-roman@kvasnytskyi.net>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260515194746.50920-5-mahe.tardy@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: nH-lzb8WrWMz4XOfNm1oqSXTv0Mgol4_
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE2MDExOSBTYWx0ZWRfX3pDR6/+SI2Zy
+ sXu9KJMta2THkrjo3Vys1QUSvA5pGt/NPMy89Q4bG0s1z5nzPoyNvAClXNB4RU4CvwoXhJgohmi
+ eglyIj8fJvFrOIniylg536uNzVSsiAijAYc9usf5c1OV6nnS2K+eqbk9HxHRdkQe3pkSBWpPXzK
+ isCtrk0ojMaHknHjFvOD0ZbOsnFXSvQRYG8MFYeAw1MND8fj0s5ejhOyNIZK5i7FFcAJtJUq9Za
+ rrZ2yPgoua8UpLUWhdCjV/eUaRyoY/Hp3O3+xVxvh3s+uT8CGX+NJ+1j+Dw+7TC62fK3prjhJp1
+ O+2RLjupuPcFeOtA44DZy/2fzoZ1XL6EQn3HPHFE1O8jdpVVFYuEpijm3rUgi0=
+X-Authority-Info-Out: v=2.4 cv=IfyKmGqa c=1 sm=1 tr=0 ts=6a085dd7
+ cx=c_apl:c_pps:t_out a=9OgfyREA4BUYbbCgc0Y0oA==:117
+ a=9OgfyREA4BUYbbCgc0Y0oA==:17 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=NLb4dWRdAAAA:8 a=UdcUEC0rSNdnLTSpIWMA:9 a=A-tYh6_xkEhJBr09wb0_:22
+X-Proofpoint-GUID: nH-lzb8WrWMz4XOfNm1oqSXTv0Mgol4_
 
-Hi Mahe,
+vmtest.sh does not document a -k option and does not handle it in the
+getopts case statement. However, the getopts optstring includes k, which
+causes the script to accept -k silently instead of reporting it as an
+invalid option.
 
-kernel test robot noticed the following build warnings:
+Remove k from the optstring so unsupported options are rejected through
+the existing invalid-option path.
 
-[auto build test WARNING on bpf-next/master]
-[also build test WARNING on bpf-next/net bpf/master linus/master v7.1-rc3 next-20260508]
-[cannot apply to linux-review/Mahe-Tardy/net-move-netfilter-nf_reject_fill_skb_dst-to-core-ipv4/20260422-023045]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Fixes: c9709f52386d ("bpf: Helper script for running BPF presubmit tests")
+Signed-off-by: Roman Kvasnytskyi <roman@kvasnytskyi.net>
+---
+ tools/testing/selftests/bpf/vmtest.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mahe-Tardy/bpf-add-bpf_icmp_send-kfunc/20260516-035616
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20260515194746.50920-5-mahe.tardy%40gmail.com
-patch subject: [PATCH bpf-next v5 4/4] selftests/bpf: add bpf_icmp_send recursion test
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260516/202605161150.IlT3RNUq-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260516/202605161150.IlT3RNUq-lkp@intel.com/reproduce)
+diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
+index 2f869daf8a06..9ca802285393 100755
+--- a/tools/testing/selftests/bpf/vmtest.sh
++++ b/tools/testing/selftests/bpf/vmtest.sh
+@@ -382,7 +382,7 @@ main()
+ 	local exit_command="poweroff -f"
+ 	local debug_shell="no"
+ 
+-	while getopts ':hskl:id:j:' opt; do
++	while getopts ':hsl:id:j:' opt; do
+ 		case ${opt} in
+ 		l)
+ 			LOCAL_ROOTFS_IMAGE="$OPTARG"
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202605161150.IlT3RNUq-lkp@intel.com/
+base-commit: a828abbb897657451d96ad7bf20f1893ac983bb9
+-- 
+2.54.0
 
-All warnings (new ones prefixed by >>):
-
->> Warning: net/core/filter.c:12496 function parameter '__skb' not described in 'bpf_icmp_send'
->> Warning: net/core/filter.c:12496 function parameter '__skb' not described in 'bpf_icmp_send'
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
