@@ -1,98 +1,135 @@
-Received: from outbound.mr.icloud.com (mr-2002g-snip4-6.eps.apple.com [57.103.68.249])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFC127EC7C
-	for <bpf@vger.kernel.org>; Sat, 16 May 2026 12:06:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.68.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F1DCC8CE
+	for <bpf@vger.kernel.org>; Sat, 16 May 2026 12:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778933211; cv=none; b=T4FfSyxAiItsTv24v+iqtpCKRXIQ0ri9c0Hu10ytLgnlkDtSKAJRR4M5clwRPdKCKUpBByMuBqn5nNOVcNvcP+mDph/MPPanqUgNZYTJ0707ydeA4aokI1hzRE1fsUekVT9jqxlk8eVUMR9a09rP1E9h4tVxlDObrasru9rsTsE=
+	t=1778934687; cv=none; b=hJdRVjEJEywKd4m1hrbI2XywrHs6TkSNpGpcmxz6Tw1YT/wJXIEd2MOSNpwTcTRqfl3a5TXceIXjwnABnQuPiRDkFGSHPzO5JFCSUYgXmrIQKSNUmcqUZJqCbUlA6KBOM21Oyxs/Uvq/AsL88RtSXsroyRp3GJ2WLMqWK+ppzOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778933211; c=relaxed/simple;
-	bh=bkitfgbATV7muE7dLlUcvmr9xMuCmbEgqgAiY22qe8c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=R7xOGg8j5ASGYQ8Tt3J58abMDaYvyHJx7B2fi7PDGN5PPM4zwwBs0JBlmQI8R98gIzzifRyIClK6HJjUICYhNMCAtFaW52L0i1DS5zVNMLnP9vk5Zad/dP03JRXGCmSSw0LovjFVPLwbzEKPXkMkFTr4yl1sO5XJBooa+ftOzG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvasnytskyi.net; spf=pass smtp.mailfrom=kvasnytskyi.net; dkim=pass (2048-bit key) header.d=kvasnytskyi.net header.i=@kvasnytskyi.net header.b=sTwzVRL0; arc=none smtp.client-ip=57.103.68.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvasnytskyi.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kvasnytskyi.net
+	s=arc-20240116; t=1778934687; c=relaxed/simple;
+	bh=8D5UushKBSnK0ZYAfhKAaC4/5v0NbtOI9Jk/J9k7w8E=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=R9aOXALFyjBuFgch9+zNfpCpuQO57KNkr7Sh7nijCjReHnMqTee83drPzpGjsP/g2MUJRmYgjFA9euvL0ueCtsvKMGqRS/3IFfEQsVnNj42btKQBgYQvomgM8Iz8km3ZdeCaxp5Dhm4N1SRoNeblRwlDvnprWxft9VbTffX9aBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EXhSR3nj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kvasnytskyi.net header.i=@kvasnytskyi.net header.b="sTwzVRL0"
-Received: from outbound.mr.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-west-2a-60-percent-6 (Postfix) with ESMTPS id 7B02F180017B;
-	Sat, 16 May 2026 12:06:45 +0000 (UTC)
-X-ICL-Out-Info: HUtFAUMHWwJACUgBTUQeDx5WFlZNRAJCTQFBHVsPRQBDAFYCXQZLVxQEClwAVgVyG08ZQANOH0EbQBEdA1IfEhZdRUECWgpcMFIOUh5ZEkYDUgFaQ1kORlBLGw5cAktaFVUXDgJCH1AfTBZXQ1oZHBlaFFwYU0VRH1RYQxlFVmlBC08dXRlbHEJkWFcJCgBEEUoWShlEAEsZFxZWGRcGWxQERAFdBV0CRQhOAl8HXQBFF0ADVQRSH0EUClwAVgVyG08ZQANOH0EbQBEdA1IfDFBNAUMICghHA00XXjJTBF8RUBY=
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kvasnytskyi.net; s=sig1; t=1778933208; x=1781525208; bh=QNuhYDnlYFZZgAg9TfiK4gX6cXQQKz0Ik93tJj+M/aA=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=sTwzVRL0/De253VX7g+vSjdeojP0LYkM5Uhe7R+fVWSy5fd4/JdOb+yvTf0/x2xqCeAbz/KmCac0SbfETg/RT1VYXGcqFW4p2kLCkzqc/Jk/Jq4TirG0C0exVEx3Kxoiymn9ph/g5hPrGXIw30B/mnHVMH+gqplRep9VU9eXjdlDe4X4uTL/qkrmUjwU7bkfkACcOI0nAjHaJarbDWVpvB34EfJzOJAdzlnvZBFndrnNWPiNs7H751byQf7hJ/uuHLcKTgyaSMcpYasNA0jqrhm01vbCYJb8gMvkUyb6JEDCl6oerD84pY1km/XkF/AlwB4hPHpAs8QZabd4XrqfUQ==
-mail-alias-created-date: 1743450725635
-Received: from periecle (unknown [17.57.152.38])
-	by p00-icloudmta-asmtp-us-west-2a-60-percent-6 (Postfix) with ESMTPSA id BC93C1800106;
-	Sat, 16 May 2026 12:06:41 +0000 (UTC)
-From: Roman Kvasnytskyi <roman@kvasnytskyi.net>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	KP Singh <kpsingh@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Roman Kvasnytskyi <roman@kvasnytskyi.net>
-Subject: [PATCH bpf] selftests/bpf: Reject unsupported -k option in vmtest.sh
-Date: Sat, 16 May 2026 14:06:25 +0200
-Message-ID: <20260516120625.80839-1-roman@kvasnytskyi.net>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EXhSR3nj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A234C19425;
+	Sat, 16 May 2026 12:31:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778934687;
+	bh=8D5UushKBSnK0ZYAfhKAaC4/5v0NbtOI9Jk/J9k7w8E=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=EXhSR3njSEhKIKvo4BxdlgVXgmZ+H6iqchB76C6ELcXtsOVpyjsZEx7Bd3tqV209f
+	 AVDqJ6RY2bbsMqX0ocjaw4UxH7IkfxxC77fb0yu8nQlX9Wwa+AjS4cTKP+KBjzz9KT
+	 rNFRnUWeielYacXozMvFUAc3Xmnc10idvH8Zc4P8ks5RjCoqk/fWFtYqriL8IMjC5U
+	 lOFsvW4ixhxpxQOVTvDeF5BnhUSc7AZJeC00Ge2N6QmDoNPXuKSVmzBr8QmpJVz1bx
+	 TgFK7pLD9UKXNRRzCkEhMbSwdf7JCWb7tAjsFSeZ4ZVzfwOLw/bQvvLwlORe/R95H4
+	 5RyDIf46UYlsg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net v2 3/5] xsk: drain continuation descs after overflow
+ in xsk_build_skb()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jason Xing" <kerneljasonxing@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260515123018.80147-4-kerneljasonxing@gmail.com>
+References: <20260515123018.80147-4-kerneljasonxing@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 16 May 2026 12:31:26 +0000
+Message-Id: <20260516123127.1A234C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: nH-lzb8WrWMz4XOfNm1oqSXTv0Mgol4_
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE2MDExOSBTYWx0ZWRfX3pDR6/+SI2Zy
- sXu9KJMta2THkrjo3Vys1QUSvA5pGt/NPMy89Q4bG0s1z5nzPoyNvAClXNB4RU4CvwoXhJgohmi
- eglyIj8fJvFrOIniylg536uNzVSsiAijAYc9usf5c1OV6nnS2K+eqbk9HxHRdkQe3pkSBWpPXzK
- isCtrk0ojMaHknHjFvOD0ZbOsnFXSvQRYG8MFYeAw1MND8fj0s5ejhOyNIZK5i7FFcAJtJUq9Za
- rrZ2yPgoua8UpLUWhdCjV/eUaRyoY/Hp3O3+xVxvh3s+uT8CGX+NJ+1j+Dw+7TC62fK3prjhJp1
- O+2RLjupuPcFeOtA44DZy/2fzoZ1XL6EQn3HPHFE1O8jdpVVFYuEpijm3rUgi0=
-X-Authority-Info-Out: v=2.4 cv=IfyKmGqa c=1 sm=1 tr=0 ts=6a085dd7
- cx=c_apl:c_pps:t_out a=9OgfyREA4BUYbbCgc0Y0oA==:117
- a=9OgfyREA4BUYbbCgc0Y0oA==:17 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=NLb4dWRdAAAA:8 a=UdcUEC0rSNdnLTSpIWMA:9 a=A-tYh6_xkEhJBr09wb0_:22
-X-Proofpoint-GUID: nH-lzb8WrWMz4XOfNm1oqSXTv0Mgol4_
 
-vmtest.sh does not document a -k option and does not handle it in the
-getopts case statement. However, the getopts optstring includes k, which
-causes the script to accept -k silently instead of reporting it as an
-invalid option.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] UAPI breakage and transmission batch abortion due to returning -EO=
+VERFLOW to userspace
+--
 
-Remove k from the optstring so unsupported options are rejected through
-the existing invalid-option path.
+commit 1d238b3786b35997fb62e781dd7528f204ca8b34
+Author: Jason Xing <kerneljasonxing@gmail.com>
 
-Fixes: c9709f52386d ("bpf: Helper script for running BPF presubmit tests")
-Signed-off-by: Roman Kvasnytskyi <roman@kvasnytskyi.net>
----
- tools/testing/selftests/bpf/vmtest.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+xsk: drain continuation descs after overflow in xsk_build_skb()
 
-diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
-index 2f869daf8a06..9ca802285393 100755
---- a/tools/testing/selftests/bpf/vmtest.sh
-+++ b/tools/testing/selftests/bpf/vmtest.sh
-@@ -382,7 +382,7 @@ main()
- 	local exit_command="poweroff -f"
- 	local debug_shell="no"
- 
--	while getopts ':hskl:id:j:' opt; do
-+	while getopts ':hsl:id:j:' opt; do
- 		case ${opt} in
- 		l)
- 			LOCAL_ROOTFS_IMAGE="$OPTARG"
+When a multi-buffer packet exceeds MAX_SKB_FRAGS and triggers -EOVERFLOW,
+only the current descriptor is released from the TX ring. This patch
+introduces a drain_cont flag to properly handle the remaining continuation
+descriptors, preventing them from being misinterpreted as the beginning
+of a new packet.
 
-base-commit: a828abbb897657451d96ad7bf20f1893ac983bb9
--- 
-2.54.0
+Link: https://lore.kernel.org/all/20260425041726.85FB3C2BCB2@smtp.kernel.or=
+g/
 
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 0a6203c425766..9c51eed6ee99c 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+[ ... ]
+> @@ -1062,6 +1064,26 @@ static int __xsk_generic_xmit(struct sock *sk)
+>  			goto out;
+>  		}
+> =20
+> +		if (unlikely(xs->drain_cont)) {
+> +			unsigned long flags;
+> +			u32 idx;
+> +
+> +			spin_lock_irqsave(&xs->pool->cq_prod_lock, flags);
+> +			idx =3D xskq_get_prod(xs->pool->cq);
+> +			xskq_prod_write_addr(xs->pool->cq, idx, desc.addr);
+> +			xskq_prod_submit_n(xs->pool->cq, 1);
+> +			spin_unlock_irqrestore(&xs->pool->cq_prod_lock, flags);
+> +
+> +			xs->tx->invalid_descs++;
+> +			xskq_cons_release(xs->tx);
+> +			if (!xp_mb_desc(&desc)) {
+> +				xs->drain_cont =3D false;
+> +				err =3D -EOVERFLOW;
+> +				goto out;
+
+Does returning -EOVERFLOW to userspace break the expected UAPI here?
+
+The original code suppressed the -EOVERFLOW error to silently drop the inva=
+lid
+packet and continue processing the batch:
+
+		if (IS_ERR(skb)) {
+			err =3D PTR_ERR(skb);
+			if (err !=3D -EOVERFLOW)
+				goto out;
+			err =3D 0;
+			continue;
+		}
+
+By using goto out with err =3D -EOVERFLOW, doesn't this abort the transmiss=
+ion
+batch prematurely? Any valid packets queued immediately behind the malformed
+packet would not be processed during the current system call.
+
+Additionally, if the batch is aborted before any valid packets are transmit=
+ted
+(when sent_frame =3D=3D false), the __xsk_tx_release(xs) call at the out la=
+bel
+will be skipped. Will this cause the global TX consumer index to remain
+un-updated for the dropped descriptors, leading to a ring slot leak from the
+userspace perspective?
+
+Note that a later patch in the series ('selftests/xsk: fix multi-buffer
+invalid desc tests for drain_cont') acknowledges this behavior by modifying
+the selftests to tolerate the early return, but does this actually fix the
+underlying ABI breakage in the kernel?
+
+> +			}
+> +			continue;
+> +		}
+> +
+>  		skb =3D xsk_build_skb(xs, &desc);
+>  		if (IS_ERR(skb)) {
+>  			err =3D PTR_ERR(skb);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260515123018.8014=
+7-1-kerneljasonxing@gmail.com?part=3D3
