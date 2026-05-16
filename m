@@ -1,64 +1,64 @@
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58995225416
-	for <bpf@vger.kernel.org>; Sat, 16 May 2026 03:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1528C225416
+	for <bpf@vger.kernel.org>; Sat, 16 May 2026 03:53:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778903511; cv=none; b=hyW1TbaTyByCg40RAdOYQcSDkUQT5JNCJ5ktoG7kNlF4jXnIjUl/NkD9hoSfYJbspebSrN99YWPKFv7+fWyPKtvuHFKqI8/QtrJl7acXXe3YujviVd8erRI5cb+TZXLqJox0WbBQ3LL/mMz8hw28q+PEBxNrYxVoqjGOns+YYlQ=
+	t=1778903604; cv=none; b=dB1IvE6veKJx2bdDGDraDcVfWkBs0oaabgFFGo9jZFcSNTLF9+0Z7eCIsgDMiZMpmoJ+AjWRqxfs2hXva9jDmiLktiaclGOCZSBONeyYiGWooghF99nKk5VQtkCTkRoSN5i5yiSgu/UUX9kSc4iRH0bdPRvcuWNTH0pjjW4GrZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778903511; c=relaxed/simple;
-	bh=OXwC77Eg8RYHOONBItTMZUqZfVOYz2LjHVNFU5kUjOc=;
+	s=arc-20240116; t=1778903604; c=relaxed/simple;
+	bh=n2ZqdUkKIBGunyb0KJlrC18xLNWLGIbDAp2kOuAgGAM=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=XuvjMOAgCi/YfmdlA0o1t9dsNNpEBXTnhYAnzP3MLutEl+yVTr1rWqQ8GEtdHVEWWfiUWiW1Mlpujtc63vwrKzUTAR2KX9dOL0OuzIFki7Fbcn8eOPlvezxgPXldIZDQiHRtzoOpZxQBwlJmXiwFg9j9F0n1NvyDxm/qogKKSx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W/839noM; arc=none smtp.client-ip=209.85.128.66
+	 References:In-Reply-To; b=nbnj2O81DBWA96xO/lazNv9FObyvOUhlJwfbZhS7WbfW2/9a6SV0MykpLLJ3bChENUfPffXzw6aJbAjBN+zQSGuaCV6hN12oBGc51SddRfQFKMb6D4Cbz7x0KWRkr9WAc8VGKvNfvnneZtA6ygS81ogyIoazh2OZWNhHD8x8n2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EpjrPWQO; arc=none smtp.client-ip=209.85.128.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W/839noM"
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-488b0e1b870so6329185e9.2
-        for <bpf@vger.kernel.org>; Fri, 15 May 2026 20:51:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EpjrPWQO"
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-4891e86fabeso5496495e9.1
+        for <bpf@vger.kernel.org>; Fri, 15 May 2026 20:53:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778903509; x=1779508309; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778903601; x=1779508401; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OXwC77Eg8RYHOONBItTMZUqZfVOYz2LjHVNFU5kUjOc=;
-        b=W/839noMBIAIBxdD/DNIc6eSrl8Q94ogqvaleFNJHE+2F7ZJ0AD5phPrVH+6wudIsR
-         zLxtFs5tcQ/3UAtvUT48uJr8LRI79BUnenkzpWNfcXRTQCTd8DLgfncxXxcSCi8I5hD7
-         wVWyWHlVE0iqUsBG1yA7dNEX06mJ7eK5sAt6nOLy/o7HjfQ1aw2VE92ZMpdmvT1mlaFv
-         zoGYskppF187vjg+/1pVxrbeJ9NXvtQJe7wSCW8TeCT9xv/PuOOqRs4+GKk9LzqmKOQ9
-         sp50nlktql5zZBkcmX94FUxrYyLo+3UpI13SBsxZSXcEMDAM3t1aYDE5D+GSe1jG11tI
-         RAuQ==
+        bh=n2ZqdUkKIBGunyb0KJlrC18xLNWLGIbDAp2kOuAgGAM=;
+        b=EpjrPWQOARxAtR3T5EB1zGbFMBv9E6hS9tgJtlucLHk2Vc+4/waeXs4D66gTd2unyZ
+         L0eKQ3JVATN5RwhoPWqzVls5pfWH2g8OOJlFDeb/Yv34aL97sIC2FqyI2/Ar7+47beq+
+         L+9Kh65rsRF/m89qvTGXVGWgKn17745iDquERO/kngCXs0JxJFDZPS1Jvj+Df/1i0GVv
+         HSWHY6/aMZ+ZTYeiwcPU8OzeuzgkXyBVFVw78lRiWuUGVRc0cEf48192SrDZhVv0v6MF
+         LwQeas5Tc+TjbeNNF5dCX/pDPWrQD4mMfTFy4sgT2wI7BjXAR1QXqh2lbLvlxB6j4ITB
+         lMOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778903509; x=1779508309;
+        d=1e100.net; s=20251104; t=1778903601; x=1779508401;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=OXwC77Eg8RYHOONBItTMZUqZfVOYz2LjHVNFU5kUjOc=;
-        b=dA9TOXcCTsdxdrTebSgRJlF5vtHQbhQ4QFnGSm/EGj1lZOw+aB+qkK08O0Gb32CSB1
-         f4ghuxT1P1vjNIbPEk0cz/JykK7PWLNm0VigbO/ApCXH0pKWjFda0WfQxA0LlNzLYVcO
-         9euDUQfA5xqKz1VX6PQy4GoLA1LiuqrMconI7qjlCJNKvIzu0MlzHegBfwXTRmfsqSPf
-         60HHKcW05Pr38lb13ZzhD7gF32AZRHRmdn7pPkKGQLgVNz5kEDz+vTQpnVeFLV7htgD3
-         2ilHpUZrPoaDbaKnLmrzLGSwxefeiE4eD8kEjSDzSun9G6RWbfxkOB0PH7FuPsxpXOc5
-         Mtrw==
-X-Forwarded-Encrypted: i=1; AFNElJ8kxyP5yYQgOV24S13guZ4Qk0Du/wUHe+KvGdZkl66QxbBC7EHZfD8H78KoGfRETFCo530=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhRoqgYSVv5+5q5Yrsd/aSCHxxK1R0dYVO+t4F9VjgJqsy67+x
-	+Hrk5ETho/etM6T5kSl/ENrBI8509rJCfpNWwXaqf4gPNeKTYMDT2Za8CdIY1eAP
-X-Gm-Gg: Acq92OHG8QEFbnkpZDDK97gYIPKdDOhPZ29z5uEPw22sbhq2eeRzRPsVFdXamF2nllb
-	ULwUDFE04+aIs8S2BfjAGBjST+yXVpV4sFJe+QwpxHMtpbQcQ81WsqAcNHsmTiiCiJh4+qBuayL
-	a4iS1qQN1uhY9gA6WgmrLL+k5eFcR3oOAou1Ds2lGi6Z65DrnYcMigpizrWZSFdwMg+jqDBjOJg
-	MoC6s8rSN6UTqkQgm+/TnTQ2XRmeT/+he+9cq//0mfCCt4LH+2ebIxix9ZDfPY7eOwexW+uHBip
-	3LYcBiFEFdTPWSAnHI7iMfdRsj2i62ssaZl99MOU6qtZCQMUpwJ30x3RY8N6Ux9qu0j0CRlkgN0
-	qTZrjmQP5wcHVZrza03RaSUPqwiCMVcZZn6lqJWNGUONX7/MfyxUeXEBESYLqLQmQ2VKR9mmEP2
-	5xZBXt5zY0D83clE3+8OG7/3IIloqnOy+bVLQ2qqjJc35ir1hznX3RXKg+m18cDFbcgpbnvN3Ds
-	yw8Bt6lyS3rTZXHUAnxSMaYPZGRNXyjVf+gEWSyjrBTEPFPJQrSx7Dx+Mr/uOk8lQ==
-X-Received: by 2002:a05:600c:c087:b0:48d:c0a:3813 with SMTP id 5b1f17b1804b1-48fe60de6a7mr74767885e9.3.1778903508593;
-        Fri, 15 May 2026 20:51:48 -0700 (PDT)
+        bh=n2ZqdUkKIBGunyb0KJlrC18xLNWLGIbDAp2kOuAgGAM=;
+        b=WEcj36Xo5SCUNKyOOCZL6IuwltBLIFHiIDoTXSUWBzK6EakUO+TFa1GDedNFcucmz6
+         F7HVHZuFx7QGMYPREx58oKAcpN9ADC24kw/pfb6A4qzLYx2LwbEIcwBOF42hFf+jzK+3
+         XizAvgrkhhKt6gM3ep3oZzF75Le5kN0vNpbt3QA5rD8JJYpFQTXbz5A+VLIwj4FwQmmg
+         GGQoGsFvxhvs8B7bxA8GZ+H+214Pqh5p2Y43DKUOTrUrL2MILkC95MvhfueY2LSMWehQ
+         ACmkxjInc0LQ185KlrH+ppA8aqgbtQzIgqtDkkc0fHLhOqY1zp9kNlLlKwbQAndN0Rlq
+         Dx9A==
+X-Forwarded-Encrypted: i=1; AFNElJ82ZSZSfmsl3NQ0SMz8LwrpTPgEnKOUmoqSwRN2KmRauaZwhOwwNkXfZ17vN776Qsurn6Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVDzcXeuFcIdblophPL8u552GWHSnhPn3rQK6L7XLq7VPMOv0s
+	qUHiLOnv6W2Vsp26kfaLzVxF3prYqHqPhXBsHdn4rimB+Xp7L5a4ER5x
+X-Gm-Gg: Acq92OH+aclXUwT82vDKm8H9ZLnEtcnyFOt/Sly3iMtTaA+UNVvsNLujLELBWd2HkWe
+	it/1Ldp2c75eZSFMT1HRuP2CWGfcXWg0IuO5mKAYrtKs6EZvEtCIjjUDSSzWlQ6KXi1y/3NpYFq
+	JsAT9KtaJCEn54ueXMdXKDJlxVHcNcGkeUVTd0r5oZnEABTV5hc375I2il03a3RKxTicg7+cZh1
+	/8rbvEGSx6EeiKI/KICZu0vZ+8bvE430FqFZq73NDnsTX2J2wksMmVxeHWq0WGB2H35ulV4daoV
+	QN18HTrueG93vlrADUDZBmT5FQ2IGT/JPNjU1/p1uiVcnh3LDDWQvENk+Q/cM3CI8xBNFEyZ6My
+	6Xfcp2qu50rTO92FDwf3jgGraU++d+TndGHQAs4cjZbPOIxIG9LsXnLDAb+eSbF2bzPiH8Pai2P
+	R7N7vkOhm2f5SxeUd8NHDZ48M5WbCw9PeNBWfiSuUxJdZXjbBTfI1AYCCcIwbSJXakTF+R9ndU3
+	9z9jQax0jJTzZR63XYZoIOo+ivSe2ITgpXuKy0I7bX1AO3KYhUe1zIG8xRJuVqus8NM48+wYcSU
+X-Received: by 2002:a05:600c:34c3:b0:48f:d0f7:78f1 with SMTP id 5b1f17b1804b1-48fe60e4e27mr97290195e9.4.1778903601223;
+        Fri, 15 May 2026 20:53:21 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48febe7543asm27685025e9.28.2026.05.15.20.51.47
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe4c88495sm102893375e9.4.2026.05.15.20.53.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2026 20:51:48 -0700 (PDT)
+        Fri, 15 May 2026 20:53:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,48 +67,29 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sat, 16 May 2026 05:51:47 +0200
-Message-Id: <DIJSNXM0DL9L.1VDFFWJXB84PU@gmail.com>
+Date: Sat, 16 May 2026 05:53:20 +0200
+Message-Id: <DIJSP4BF4ZW5.514DDTZYASI8@gmail.com>
 Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
  <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
  <kernel-team@fb.com>, "Martin KaFai Lau" <martin.lau@kernel.org>
-Subject: Re: [PATCH bpf-next v3 6/7] bpf,x86: Fix exception unwinding with
- outgoing stack arguments
+Subject: Re: [PATCH bpf-next v3 7/7] selftests/bpf: Add exception tests with
+ stack arguments
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
 X-Mailer: aerc 0.21.0
 References: <20260515225035.821178-1-yonghong.song@linux.dev>
- <20260515225106.824804-1-yonghong.song@linux.dev>
-In-Reply-To: <20260515225106.824804-1-yonghong.song@linux.dev>
+ <20260515225111.825224-1-yonghong.song@linux.dev>
+In-Reply-To: <20260515225111.825224-1-yonghong.song@linux.dev>
 
 On Sat May 16, 2026 at 12:51 AM CEST, Yonghong Song wrote:
-> When a main program with exception_boundary has outgoing stack
-> arguments (e.g. from calling subprogs with >5 args), bpf_throw() fails
-> to correctly restore callee-saved registers, causing a kernel crash.
+> Add tests to verify that bpf_throw() correctly unwinds the stack
+> when the program uses outgoing stack arguments (functions with >5
+> args). Without the preceding fix, these tests crash the kernel
+> due to corrupted callee-saved register restore.
 >
-> The x86 JIT allocates the outgoing stack arg area below the
-> callee-saved registers via 'sub rsp, outgoing_rsp' in the prologue.
-> When bpf_throw() unwinds, it captures the main program's sp (which
-> includes this outgoing area) and passes it to the exception callback.
-> The callback gets rsp and rbp, followed by pop_callee_regs, but rsp
-> points into the outgoing arg area rather than the callee-saved
-> registers, so the pops restore garbage values. Returning to the
-> kernel with corrupted callee-saved registers causes a crash.
->
-> Fix this by passing the main program's outgoing_rsp as the 4th
-> argument to the exception callback. The callback adjusts rsp with
-> 'add rsp, rcx' before popping callee-saved registers, correctly
-> skipping the outgoing arg area. When outgoing_rsp is 0 (the common
-> case), this is a no-op.
->
-> Fixes: 324c3ca6eed6 ("bpf,x86: Implement JIT support for stack arguments"=
-)
 > Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 > ---
 
-Do we need any adjustment for arm64?
-
-For this patch:
 Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
 > [...]
