@@ -1,159 +1,351 @@
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011005.outbound.protection.outlook.com [52.101.57.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A17C361667;
-	Sun, 17 May 2026 11:27:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.5
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779017250; cv=fail; b=FI6tAw87hg2o9s5KNXRoUIlyyx+GRoxuS43dkHax4tMRR0mebSDg25VIDu4LjIwV2NCKCjWxL5EwsPPTTW/9EKTpDICDZlyWmty2VLuc5G3ww1h9XrDEh8MVwcebKtTl5Ngs5ObdFcHjEvVPcw522mPuBJDKoDZ/AVdwwyViIMA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779017250; c=relaxed/simple;
-	bh=AcpU6J2kjZv44DTXiXJPvEfXm/yIkt7/9SgC6b18Qwo=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=E7inAV2uT6vqAxp7xrpvTocFettizVdmcsXXPtw9C5lCcxM/aZGjQ1mHAVyGxq0A9gvlDSA2GFe3P+gLO9eNJ+utm1OAdh+HfMvZww56MwHIdgxdWrxO9SLXQg8QX+sMZse125H9U5Gt+x1Y88lkAy8wUbvRymV+KChnUFlFJz4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=qyuaUO66; arc=fail smtp.client-ip=52.101.57.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C3535AC00
+	for <bpf@vger.kernel.org>; Sun, 17 May 2026 11:42:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779018176; cv=none; b=Vg/05M4wflNah/apdFiSrBnuvcIqDizc01EINT6hQolJ2vQqLB29E667oJ5WZPBA2NzG5KXb/A7HlzyxvDSu6ENKTPjz97mrD/wTW/pIInzHgNe7Pdul9O5PwvYpjtFbddP2OzOwbfs0xNWVytP1oVCJB7XY41KJ6kwCp3N9MME=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779018176; c=relaxed/simple;
+	bh=Xy1jqNO/dWSb+SZbjSvHdSEZMKvQz0fLuscfrvVICH0=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CRHr+9Eb3dOSsUHexvXzVbqXi6SGz1nQYYOzHpYIope/Ahm6Q700rSX6hTAZDfR6eecX/ELzEDvk8O9qmFo/Cz2Rsr/QZyzDk+cosFmpOc/gVW01QvGMRIgXf+iHjJxjcYYFiErb6TvliuPb9GDBdpfpN1l3baTrS0FWWWzNMQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Muj7IKRM; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="qyuaUO66"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=iYKdyXaIXVGNqSOo9ByvMgq30ha6oHd2NV+RnIFvsbfLC+Rk8Y6gM7asCWyPSsovQKOslnVEKHD04dn4A/jLBNqZpeXplcd49NMpf6bWsSVBkBDhzgeh5JTbApf+rnBiOLz3h4LYH3/8xYhp9MgxNbFZ0UH9JcEnFDV1j2m8iTVHTGJtFoddoxN+LACD30ovm+AOi6Xov8oGC3pCY/6BmdmzPOv8IbauMNdsEVQ8AQF6qjq28nxIfvfDC9sQwj/gy8BHPbKoWmGZXbZCbOiReHKG8LeORdfAWpSAqeKSB9wdLtkAlOXAHlq4/bQ7j+fzh8VCyWGLQPyTXHm0oV+tAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d8MXiYSjsezHTTnoKMIxBQH5qg+qHU0Qv+sXpilipno=;
- b=cjX54pDcu6Kycc0S4lrzDtyso9jw9qbn7BskyvZBl2fwimDnDJedhkmOZMhCQ03jh/PRSdBpQaNII2lrVGtyqG81NzlV/M7xgQKo91DEYm2MA82Y6C6K37w9Cz/zykS+kJcBM7ghZvPVpCJgM+wx/jnb8Xn6ywaelmSb3NWaQeO6DB5w3/Ts7Y0AVvmVqCpL/1ri7H21ADZs5dUIWnUGQx3nxFPGT/9n5M9DeL2pbgdmQ5ooN2Asr6CasT9YaUXZ2r0eLW5EsbBBa3or4Js0/Oi0Kzi5BnknvW2t8EpyBkFPCRTTtcpsaerSYP3lYDdn6l9ZZY+Mwy/ygO8shi9bRA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d8MXiYSjsezHTTnoKMIxBQH5qg+qHU0Qv+sXpilipno=;
- b=qyuaUO66/urdnzo5RXsJLVmHb9g+YcR/jo0d9TP1WGHVabkmuj38uxA6jKNVjYrtWysF/H0mqVCRD7vTL0bOBvztas9aqb5snjfgvHSEwHYjHG3heTNd77V/FiAx5LS0Ps+DA5ixbRkZZolyAs0hKXlOOZM/9z7dz19gBuCtKmktp7Cq+9PQ2gKxGVQkDtR4xYR2Qt/MkGY4iV9SbXpqqeLZ1I6OHWgnuBPr94+E8nJOMvurOkIqyByzZ4kjdbF6OMWHnaNuKmKjIwLP8ETsESpv/5mTbxY7aJrh2deGk1IOs2xTdmeFfmIlOB1sf33D6U9rQDkuzw8cGd0Dkrrykg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MW4PR12MB6802.namprd12.prod.outlook.com (2603:10b6:303:20f::19)
- by DS2PR12MB9821.namprd12.prod.outlook.com (2603:10b6:8:270::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.22; Sun, 17 May
- 2026 11:27:24 +0000
-Received: from MW4PR12MB6802.namprd12.prod.outlook.com
- ([fe80::51f4:a3d9:b44e:9587]) by MW4PR12MB6802.namprd12.prod.outlook.com
- ([fe80::51f4:a3d9:b44e:9587%5]) with mapi id 15.21.0025.020; Sun, 17 May 2026
- 11:27:24 +0000
-Message-ID: <aa818076-6e5a-4b61-bc7f-0bfe3907fe2f@nvidia.com>
-Date: Sun, 17 May 2026 14:27:15 +0300
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] selftests: net: Fix checksums in xdp_native
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Mohsin Bashir
- <mohsin.bashr@gmail.com>, Amery Hung <ameryhung@gmail.com>,
- Martin KaFai Lau <martin.lau@kernel.org>,
- Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- Carolina Jubran <cjubran@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>
-References: <20260513072355.1083381-1-noren@nvidia.com>
- <20260514183832.5ef205c1@kernel.org>
-Content-Language: en-US
-From: Nimrod Oren <noren@nvidia.com>
-In-Reply-To: <20260514183832.5ef205c1@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0086.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1e::22) To MW4PR12MB6802.namprd12.prod.outlook.com
- (2603:10b6:303:20f::19)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Muj7IKRM"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-43fe62837baso622491f8f.3
+        for <bpf@vger.kernel.org>; Sun, 17 May 2026 04:42:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779018172; x=1779622972; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JK0RbP9KNEdv+TVPsROEDK3VHRuOLbzAz89mc5tNNn0=;
+        b=Muj7IKRMUoGXZPn73IRXv3AAv6ckC9WJvJE2qQ3KUs+MlKqcfUh/Cf6+v4qe1pTHSE
+         AWusOmUmvO0KTvat06yjVOCiFoWQN4L9I5dY4fWEvs+q+RcCfWM4S6TrrFn7qDDRDZVM
+         FI9Q3pGO7WzmK0HpwG/XZOTGWeGDiSr5Iry5aKEelHKzZ/AS/upxvAMhJeUxl1djUHOy
+         iOtjny/sxvZQTffNTbQDVRDG/QjwPTDMC1gXV/YGcOzPv6dD259cVrZ31SnJ8ikm0zdy
+         D2Hpznwpm7MuzHvrEFsxZH8t4sdgy/+mposlC6KQdKfi03i3/VLUc54FKhXN4iZR9faa
+         zbhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779018172; x=1779622972;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JK0RbP9KNEdv+TVPsROEDK3VHRuOLbzAz89mc5tNNn0=;
+        b=JYqTbDXq+3IiwMcij14kh33vJvqxQgzdVsGtAcbByrue8SKT6JMzvrPCmJbgi1ZFlK
+         fdQi7pmtnY/QP1BUSCPqwtAky6TMpVBmQ/S/7CIC/6nO487IsRTb02f+oWItjGcjRhdR
+         xrSmRpvLM2aivAjJ2B6ebPpxZ71v99i4LBTVrNrplOAREiMS/ObsmotJD1tz9T1tjEKz
+         wncXhzpFkzuJhMOu/J/gzvFr4eVaa+Guqe/0MbjbCBUYnrEKVQ5aCGYeFpxlMdlzKPN2
+         amaKxCJcriNzVjEttEwMN2AVKufacJErDInNgvurh+FlyTcxue9mbuwCMQlCY74c+uTb
+         0aiw==
+X-Forwarded-Encrypted: i=1; AFNElJ+i33r7A4tBZ/r7J+yfBix73LRBs8vBmF2Q17qX9KW7yY+af27EiSxwnYRPm3BLV4Y1/Wk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDYnAM+5oNSscpB3uSwNDOGkIIXkm9xjD8Y/yg8ILHCSx50/ll
+	qX83vk0O2GvfPkgEvzdMyICyLK3wnjkhWUKSQUp8bgfcWErNjKdY+5fQE6xU76FM
+X-Gm-Gg: Acq92OFNn+FSJPt38F9KHMsGAAqrI6yPt5+HpfI2ekikxw/lpq/Oh9aZ6g0HdzuTWnf
+	U7Sa4zsJKpIu7b8QXQpL8c4xzQQHi1fl7/jzM4E/e+GF/+2+GiX09aygbBT9NU3OtVNg7AOEbAD
+	NC3kFPai6rQTQbNAJqVErHUWwUt8jZjk6WOxjETJsX3QY36iPVIkjeIkA0LU1JHypr7o3EGbMo6
+	fyDEwiiceS66lOZQ8lYVyAa0o9/rUxGqBUgKs+whBybenTN/zdMhC6F38H+stLWt2GDNUnCnHia
+	zQEKHC+Xqc1Kr5RssL/LLo0boka78x9JMhB5djHpC216fNGT+4scDlrnrrrIh7FHh0+PXBU85c+
+	2buEd9Gtb++gfg+VlSIOOSP5zmaq6RKEFFuF3qfYSEQCkadXsfzrDT67FBSHASwMJOwahp3+OBM
+	KPp1ZXiQ4BYvM80PiLZ5xuW5UZtw==
+X-Received: by 2002:a05:6000:2087:b0:441:1e1e:a050 with SMTP id ffacd0b85a97d-45e5c367353mr16471811f8f.16.1779018172192;
+        Sun, 17 May 2026 04:42:52 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0fe1a41sm31736211f8f.31.2026.05.17.04.42.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 May 2026 04:42:51 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Sun, 17 May 2026 13:42:50 +0200
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
+Subject: Re: [PATCH 1/7] uprobes/x86: Move optimized uprobe from nop5 to nop10
+Message-ID: <agmpurrWy15nahPK@krava>
+References: <20260514135342.22130-2-jolsa@kernel.org>
+ <20260514200545.C672EC2BCB3@smtp.kernel.org>
+ <agcSP6LxxpRA4ICO@krava>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR12MB6802:EE_|DS2PR12MB9821:EE_
-X-MS-Office365-Filtering-Correlation-Id: 229ecbd3-5f30-4603-95f3-08deb4074475
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|366016|7416014|11063799003|4143699003|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	JTVlxqZJaQSQroOvNmyvagqVFK75d84ftyMJbJs4SacQxnBo8EZpRtOvnw9P2NeRhgos/6mFp8ZhDl2oJCiuTtcNsY/z4X8yJ2yeYQfLL3kyiP3olhU5f1+Fj+2aG85wXehScX0dj4TLC2s5BBRyT/K/A3XRZqF0qOqOyz/WYonw2ym0odYJuaSuDeiXWfgjaTZY8/WetAZZ71CUkkN2JvqgBf4i7ow7/sqtJwbLtrpziW4UypiAySZ1TbYtPJz5Wi9B3JcGZewyarPJkctl2yMB4GGurleh/a+KJcn982KKS2IZe8U+6h4Lbbjx7VTGvOCGijii/2DemaZs1xSl6oDIf8BiXwGFIKSOpl1W/Fc40xTeFd7WKt85zsJB0euK6kx+z64vtbyrAzkG/5I4SnsYFK97EKlaXPK27Y85gxE/g7Y8OCfIfJS4vd4k26Ev+v0+gpoPEY+W2cCDxXgwPFSTX3BbFeEUTZ+51TIF53AKYEcz3yQYesznlvFhkLeN15YoTrhc1Y0mqF4GOuWxAq+OaVrcLbM11ekajDJmK9XCDfyEbEHTSWjBip+UyhQPP6x89n1TkpH95g/Ct7YcjljY+C+OQBCGFwsx2vuwJLEhMVgfQVzPFr5ruewlyWr9yENezPf9CQk3/PpYMmYT/P+NVJvbD//1uCZf1Styc/csot+PtDDc+lmsEBJBxpBP
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR12MB6802.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(7416014)(11063799003)(4143699003)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TTJUVkE2Mlo4VkhCcXlUNUJIbmtoVFp4SUlrQms1Mm8rWStJN1BHNjF5UFNB?=
- =?utf-8?B?bG1nWlBnR01KWXpEZlJhQWNvdERRdTdlRmdGNWZITjhPZ0g4RnNKREcyR1lX?=
- =?utf-8?B?UUtQcVB2VjBzamxCTVZncFZudG1VamFUY3FhbFIvSFNOdHFJbml4d21lNFRX?=
- =?utf-8?B?Z2hwcEVkaHNzeHc2OFI0dVphQ1RYSzYxTGdSM3hYWnZvNU5vZnZOSHNQa0RM?=
- =?utf-8?B?Nk5lbDNQRFVQMHFtL3JNWW5xRU1aSFJETlZpMEE4dllEdnhmUll4N3RLclNh?=
- =?utf-8?B?ZVE4ckJnUFZjL3ZWbm9jVzBuWC9zOTFxVS81Skw5Uzlwb1B4Mktqa3gwTTNo?=
- =?utf-8?B?Z1NWdnB0SnJxVyttNEJ5WjBHaXgrVmtGTHZ2MWF5TURSZWkwR2ZjM0pSc1JF?=
- =?utf-8?B?MUNRaGtPZGNyT01XVTRRQjNYZ0JXYWJ5SkJnMGxsZm01THdOdUpQUnB5YVFN?=
- =?utf-8?B?MllHb2xHajFNY0FwS3JFbzFMVDBueGJuS2N5QXBNNFJwelkwSElZUm83MFVl?=
- =?utf-8?B?WGFMMzBmOFBWZDJkdjVPaEljc3ZYRGpwaHlRNW8vVy9MOGtNR255bTlIVkF4?=
- =?utf-8?B?bDZWMllqNEJGdGY5WDlqWW9sdUZ2TVhiV1FiRXhZZElIQjMyM08xb0h5NDFi?=
- =?utf-8?B?azNtYUVFeGlzODVQWXBvN2M2TFpBa2lkRis1SXI5SFNIdjRpQkc1NDBEV2NM?=
- =?utf-8?B?TkVHbE4yZ0tOMkJTWDlxZUFhbTBNencvYVQ0Zmw2cjFmOFJ1VmpuWEZ6REJ3?=
- =?utf-8?B?cnloN2I4Ujdzb2dvemxETW1KZ2xuQjgxSmVHWG42UXJ2RlBsUnYyaHJ4aEF6?=
- =?utf-8?B?UnNHZlYrdzUzZ2FsaGhwbEF5Z0V1RFBDZ3ZXZ3BqM0dMQk4xNWpWNTNZS01n?=
- =?utf-8?B?M1JocTVyVlMzbzBuL3o5dmNtZ2JUMFJsUnBRVzVYaTNOZVV4Tm9kRHhHQUJB?=
- =?utf-8?B?bi8xVmEvL1c4V1dnOXlra2ZpNEk3K1VNMm4vd2ZDdzYveGh0ZjMwaTR5NnB0?=
- =?utf-8?B?cFFXSFV6Q0drSzl2VXJ5djcraVo5SWVPUHZ3SmVOYkNZdjNvQVdjUk1HcG40?=
- =?utf-8?B?cmM2ZVducTF5NnlhamUwSjQ5SllGN25kUDA2YXZaZnhKT1IyU3dJWDl2RzVV?=
- =?utf-8?B?SzBuUHJ5Nkx3Q2RoaDVLRU5idmE4UlV0SVc2aGsvWjlLSEs2S1dHUFFpbVFZ?=
- =?utf-8?B?Z3VDRjN4cWhBMnY4UVU5ZUFueTZqL0pGTU16R0UwMVYwYUJObittZlMzTWIz?=
- =?utf-8?B?c0czWnB5Q3FrczRnNFcxVUZkcGtwbDRrcm15amIyUlpLS1MvM0FIZXEyRUdo?=
- =?utf-8?B?UVJab2lqZEVYV3pmcDhkeHNiUnVDWFQwU0VJNjh5eGtmWXV4dzJBV0NqWFVy?=
- =?utf-8?B?M0ZUQnFjMExYMURDS3JSU3NTQXQ1d05YQlVNMVYzVjMyQVorbzQ2Y3cyRFFy?=
- =?utf-8?B?QlFVYWRxSHNKZmk2YytESFd3cVZuSEJyTThEdGhMWDIzWmFKMTAyVURtREFS?=
- =?utf-8?B?VTNMYmhZZkdoekFXL3RZUmRjakQwaG9ZQzk3eFdYeWJNRENPZHBtaEptWkJW?=
- =?utf-8?B?ekxMbGpDVG5UbTJDUFQ4SGNvcmh3THRHZ3hOWVAvM29oOXFNWkcxQk1LNTdQ?=
- =?utf-8?B?MEExN3FSU3hRakp5VFViZnZwRGFxUjM4Y2lOZThoN1JEQkdkUzBMUFRqdW9Q?=
- =?utf-8?B?cTkwWlZOcndDdVdqbytDcllLNmhTcXhJSjhGVGVXZkdFMmdERDRvaDhNd1pD?=
- =?utf-8?B?Znd3QUlzSmlNaE9oSEFJV044NXVITm5Rc3RXTGVRUkd1a2NtWU9jU3NmWXpO?=
- =?utf-8?B?STEyTFV6RjRSdjYxT1VkTnhaSk9YTXVaeHQxY1hlTjduMDdRL25uaFdNbW5U?=
- =?utf-8?B?WGFtWllxSk5YNmJIUUV4N1NKZjR1UzBNNzc1NEtaaHFhSUE2SWJlOS9HTUh4?=
- =?utf-8?B?d1BCMVAwQUVwelhjV0ZlNDZPelpXUjc0V1hPOEE5SmJESjBmOTZGZlN6Wlp2?=
- =?utf-8?B?aGVPVU5BVVFqeEQ0eVE4OUR6aVAxc2ZyU1R2VWQ2a1J0SG5OQ25iUmNkU09x?=
- =?utf-8?B?SnRuM2REN0ZONmFvTlgxamE5RnRkMytYSFNrcjJFV3Q4MnBSREE5T0V3alBm?=
- =?utf-8?B?dDhWOGVNVnUrVGFHREdXaENDVUZuSzVGTG5vb0FJM1ZmdzN2MzNVcFFndFBx?=
- =?utf-8?B?QWpPNmIyTVovOS9GZkEwUW9kdjlNQVAzVURnLzRmaERLSlJpYk0yVkFHWHNT?=
- =?utf-8?B?ME1pZ1ZldmZ2ZDNiV1o0c1NWNmI2RUxjV3NneWF2ZXdBYWpHSlkrNnB3U2dT?=
- =?utf-8?Q?WRLTg9VAgfX/yYVXHa?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 229ecbd3-5f30-4603-95f3-08deb4074475
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR12MB6802.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2026 11:27:24.5388
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iO3Tx6WA5LZen9RANFJXuGV+oikswN8APc2ix/3WIzDHy1TdUcvjz19AZIVCHEjiHuAxIi85V7lozZkFvLNS8Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS2PR12MB9821
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <agcSP6LxxpRA4ICO@krava>
 
-
-
-On 15/05/2026 4:38, Jakub Kicinski wrote:
-> On Wed, 13 May 2026 10:23:55 +0300 Nimrod Oren wrote:
->> Data adjustment cases failed with "Data exchange failed" when using IPv4
->> because the program did not update the IP and UDP checksums in the IPv4
->> branch. The issue was masked when both IPv4 and IPv6 were configured,
->> since the test harness prefers IPv6.
+On Fri, May 15, 2026 at 02:31:59PM +0200, Jiri Olsa wrote:
+> On Thu, May 14, 2026 at 08:05:45PM +0000, sashiko-bot@kernel.org wrote:
+> > Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> > - [High] set_orig_insn fails to unoptimize uprobes in foreign processes because __is_optimized relies on __in_uprobe_trampoline, which hardcodes current->mm for VMA lookups, resulting in silent stack pointer corruption.
+> > - [High] set_orig_insn fails to unoptimize a forked child's uprobe due to breakpoint overwriting the lea instruction, leaving a corrupted instruction that truncates the stack pointer.
+> > --
+> > 
+> > commit ecbc682eb0a0b0a7df1fd339bbdb6beeb8e1fc0a
+> > Author: Jiri Olsa <jolsa@kernel.org>
+> > 
+> > uprobes/x86: Move optimized uprobe from nop5 to nop10
+> > 
+> > This commit fixes a redzone clobbering issue with optimized uprobes by
+> > moving them to use a 10-byte nop instruction, allowing space for a stack
+> > adjustment before the call.
+> > 
+> > Link: https://lore.kernel.org/bpf/20260509003146.976844-1-andrii@kernel.org/
+> > 
+> > > diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+> > > --- a/arch/x86/kernel/uprobes.c
+> > > +++ b/arch/x86/kernel/uprobes.c
+> > 
+> > [ ... ]
+> > 
+> > > @@ -1049,19 +1077,21 @@ static bool __is_optimized(uprobe_opcode_t *insn, unsigned long vaddr)
+> > >  	struct __packed __arch_relative_insn {
+> > >  		u8 op;
+> > >  		s32 raddr;
+> > > -	} *call = (struct __arch_relative_insn *) insn;
+> > > +	} *call = (struct __arch_relative_insn *)(insn + LEA_INSN_SIZE);
+> > >  
+> > > -	if (!is_call_insn(insn))
+> > > +	if (!is_lea_insn(insn))
+> > > +		return false;
+> > > +	if (!is_call_insn(insn + LEA_INSN_SIZE))
+> > >  		return false;
+> > > -	return __in_uprobe_trampoline(vaddr + 5 + call->raddr);
+> > > +	return __in_uprobe_trampoline(vaddr + OPT_INSN_SIZE + call->raddr);
+> > >  }
+> > 
+> > Does this sequence risk silent stack pointer corruption during uprobe
+> > unregistration?
+> > 
+> > When a tracer unregisters a uprobe from another process, it runs in the
+> > tracer's context. However, __is_optimized() calls __in_uprobe_trampoline(),
+> > which hardcodes current->mm for the VMA lookup:
+> > 
+> > arch/x86/kernel/uprobes.c:__in_uprobe_trampoline() {
+> >         struct vm_area_struct *vma = vma_lookup(current->mm, ip);
+> >         return vma && vma_is_special_mapping(vma, &tramp_mapping);
+> > }
+> > 
+> > Since current is the tracer, the lookup fails, causing __is_optimized()
+> > to return false.
+> > 
+> > If __is_optimized() returns false, set_orig_insn() bypasses
+> > swbp_unoptimize() and writes only the first byte of the original
+> > instruction (e.g., 0x66 for nop10) over the 0x48 (lea) byte.
+> > 
+> > This leaves the instruction 66 8d 64 24 80 e8 ... in the tracee's memory,
+> > which decodes as lea -0x80(%rsp), %sp. Could this truncate the stack
+> > pointer to 16 bits and cause stack corruption when the tracee subsequently
+> > pushes or pops?
 > 
-> Oops, maybe we should run against both IP version after all?
+> yes, we need to pass vma->vm_mm to __is_optimized and not use current->mm
+> 
+> > 
+> > [ ... ]
+> > 
+> > > @@ -1095,14 +1125,25 @@ int set_orig_insn(struct arch_uprobe *auprobe, struct vm_area_struct *vma,
+> > >  		  unsigned long vaddr)
+> > >  {
+> > >  	if (test_bit(ARCH_UPROBE_FLAG_CAN_OPTIMIZE, &auprobe->flags)) {
+> > > -		int ret = is_optimized(vma->vm_mm, vaddr);
+> > > -		if (ret < 0)
+> > > +		uprobe_opcode_t insn[OPT_INSN_SIZE];
+> > > +		int ret;
+> > > +
+> > > +		ret = copy_from_vaddr(vma->vm_mm, vaddr, &insn, OPT_INSN_SIZE);
+> > > +		if (ret)
+> > >  			return ret;
+> > > -		if (ret) {
+> > > +		if (__is_optimized((uprobe_opcode_t *)&insn, vaddr)) {
+> > >  			ret = swbp_unoptimize(auprobe, vma, vaddr);
+> > >  			WARN_ON_ONCE(ret);
+> > >  			return ret;
+> > >  		}
+> > > +		/*
+> > > +		 * We can have re-attached probe on top of jmp8 instruction,
+> > > +		 * which did not get optimized. We need to restore the jmp8
+> > > +		 * instruction, instead of the original instruction (nop10).
+> > > +		 */
+> > > +		if (is_swbp_insn(&insn[0]) && insn[1] == OPT_JMP8_OFFSET)
+> > > +			return uprobe_write_opcode(auprobe, vma, vaddr, JMP8_INSN_OPCODE,
+> > > +						   false /* is_register */);
+> > >  	}
+> > >  	return uprobe_write_opcode(auprobe, vma, vaddr, *(uprobe_opcode_t *)&auprobe->insn,
+> > >  				   false /* is_register */);
+> > 
+> > Is there a similar issue for forked children that inherit the optimized
+> > 10-byte sequence?
+> > 
+> > During fork, uprobe_mmap() installs a breakpoint in the child by writing
+> > 0xCC to the first byte, changing the instruction from 48 8d... to cc 8d...
+> > 
+> > If the uprobe is unregistered before the child hits and re-optimizes it,
+> > __is_optimized() will return false because is_lea_insn() strictly expects
+> > the first byte to be 0x48:
+> > 
+> > arch/x86/kernel/uprobes.c:is_lea_insn() {
+> >         return !memcmp(insn, lea_rsp, LEA_INSN_SIZE);
+> > }
+> > 
+> > The fallback check for the re-attached probe on top of jmp8 also fails
+> > because insn[1] is 0x8d, not OPT_JMP8_OFFSET.
+> > 
+> > Could set_orig_insn() then fall back to writing just the first byte of
+> > the original instruction over the 0xcc, again leaving 66 8d 64 24 80 e8 ...
+> > and silently truncating the child's stack pointer?
+> 
+> nice.. maybe we can skip the install_breakpoint call in uprobe_mmap
+> for optimized probes.. will check
 
-I can send a follow-up to run all xdp.py cases against both IP versions
-when both are configured. Or are you suggesting this as a broader change
-for all drivers/net/*.py selftests?
+I think we need to dup uprobe trampolines on fork like below
+
+jirka
+
+
+---
+ arch/x86/kernel/uprobes.c | 30 ++++++++++++++++++++++++------
+ include/linux/uprobes.h   |  6 ++++--
+ kernel/events/uprobes.c   |  8 +++++++-
+ mm/mmap.c                 |  2 +-
+ 4 files changed, 36 insertions(+), 10 deletions(-)
+
+diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+index 2be6707e3320..a29cdc3b85f1 100644
+--- a/arch/x86/kernel/uprobes.c
++++ b/arch/x86/kernel/uprobes.c
+@@ -682,19 +682,21 @@ static unsigned long find_nearest_trampoline(unsigned long vaddr)
+ 	return high_tramp;
+ }
+ 
+-static struct uprobe_trampoline *create_uprobe_trampoline(unsigned long vaddr)
++static struct uprobe_trampoline *
++create_uprobe_trampoline(struct mm_struct *mm, unsigned long vaddr, bool nearest)
+ {
+ 	struct pt_regs *regs = task_pt_regs(current);
+-	struct mm_struct *mm = current->mm;
+ 	struct uprobe_trampoline *tramp;
+ 	struct vm_area_struct *vma;
+ 
+ 	if (!user_64bit_mode(regs))
+ 		return NULL;
+ 
+-	vaddr = find_nearest_trampoline(vaddr);
+-	if (IS_ERR_VALUE(vaddr))
+-		return NULL;
++	if (nearest)  {
++		vaddr = find_nearest_trampoline(vaddr);
++		if (IS_ERR_VALUE(vaddr))
++			return NULL;
++	}
+ 
+ 	tramp = kzalloc_obj(*tramp);
+ 	if (unlikely(!tramp))
+@@ -726,7 +728,7 @@ static struct uprobe_trampoline *get_uprobe_trampoline(unsigned long vaddr, bool
+ 		}
+ 	}
+ 
+-	tramp = create_uprobe_trampoline(vaddr);
++	tramp = create_uprobe_trampoline(current->mm, vaddr, true);
+ 	if (!tramp)
+ 		return NULL;
+ 
+@@ -1169,6 +1171,22 @@ static bool can_optimize(struct insn *insn, unsigned long vaddr)
+ 	/* We can't do cross page atomic writes yet. */
+ 	return PAGE_SIZE - (vaddr & ~PAGE_MASK) >= 5;
+ }
++
++int arch_uprobe_dup_mmap(struct mm_struct *oldmm, struct mm_struct *newmm)
++{
++	struct uprobes_state *old_state = &oldmm->uprobes_state;
++	struct uprobes_state *new_state = &newmm->uprobes_state;
++	struct uprobe_trampoline *old_tramp, *new_tramp;
++
++	hlist_for_each_entry(old_tramp, &old_state->head_tramps, node) {
++		new_tramp = create_uprobe_trampoline(newmm, old_tramp->vaddr, false);
++		if (!new_tramp)
++			return -EINVAL;
++		hlist_add_head(&new_tramp->node, &new_state->head_tramps);
++	}
++
++	return 0;
++}
+ #else /* 32-bit: */
+ /*
+  * No RIP-relative addressing on 32-bit
+diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
+index f548fea2adec..01fc8f59eee5 100644
+--- a/include/linux/uprobes.h
++++ b/include/linux/uprobes.h
+@@ -214,7 +214,8 @@ extern int uprobe_mmap(struct vm_area_struct *vma);
+ extern void uprobe_munmap(struct vm_area_struct *vma, unsigned long start, unsigned long end);
+ extern void uprobe_start_dup_mmap(void);
+ extern void uprobe_end_dup_mmap(void);
+-extern void uprobe_dup_mmap(struct mm_struct *oldmm, struct mm_struct *newmm);
++extern int uprobe_dup_mmap(struct mm_struct *oldmm, struct mm_struct *newmm);
++extern int arch_uprobe_dup_mmap(struct mm_struct *oldmm, struct mm_struct *newmm);
+ extern void uprobe_free_utask(struct task_struct *t);
+ extern void uprobe_copy_process(struct task_struct *t, u64 flags);
+ extern int uprobe_post_sstep_notifier(struct pt_regs *regs);
+@@ -284,9 +285,10 @@ static inline void uprobe_start_dup_mmap(void)
+ static inline void uprobe_end_dup_mmap(void)
+ {
+ }
+-static inline void
++static inline int
+ uprobe_dup_mmap(struct mm_struct *oldmm, struct mm_struct *newmm)
+ {
++	return 0;
+ }
+ static inline void uprobe_notify_resume(struct pt_regs *regs)
+ {
+diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+index 4084e926e284..29890e354430 100644
+--- a/kernel/events/uprobes.c
++++ b/kernel/events/uprobes.c
+@@ -1845,13 +1845,19 @@ void uprobe_end_dup_mmap(void)
+ 	percpu_up_read(&dup_mmap_sem);
+ }
+ 
+-void uprobe_dup_mmap(struct mm_struct *oldmm, struct mm_struct *newmm)
++int __weak arch_uprobe_dup_mmap(struct mm_struct *oldmm, struct mm_struct *newmm)
++{
++	return 0;
++}
++
++int uprobe_dup_mmap(struct mm_struct *oldmm, struct mm_struct *newmm)
+ {
+ 	if (mm_flags_test(MMF_HAS_UPROBES, oldmm)) {
+ 		mm_flags_set(MMF_HAS_UPROBES, newmm);
+ 		/* unconditionally, dup_mmap() skips VM_DONTCOPY vmas */
+ 		mm_flags_set(MMF_RECALC_UPROBES, newmm);
+ 	}
++	return arch_uprobe_dup_mmap(oldmm, newmm);
+ }
+ 
+ static unsigned long xol_get_slot_nr(struct xol_area *area)
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 5754d1c36462..ae7540d42dc6 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1739,7 +1739,6 @@ __latent_entropy int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
+ 	if (mmap_write_lock_killable(oldmm))
+ 		return -EINTR;
+ 	flush_cache_dup_mm(oldmm);
+-	uprobe_dup_mmap(oldmm, mm);
+ 	/*
+ 	 * Not linked in yet - no deadlock potential:
+ 	 */
+@@ -1901,6 +1900,7 @@ __latent_entropy int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
+ 		mm_flags_set(MMF_UNSTABLE, mm);
+ 	}
+ out:
++	retval = retval ?: uprobe_dup_mmap(oldmm, mm);
+ 	mmap_write_unlock(mm);
+ 	flush_tlb_mm(oldmm);
+ 	mmap_write_unlock(oldmm);
+-- 
+2.53.0
 
