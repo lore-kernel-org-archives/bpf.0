@@ -1,61 +1,63 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256AD2D8DA8
-	for <bpf@vger.kernel.org>; Sun, 17 May 2026 06:33:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 272792D8DA8
+	for <bpf@vger.kernel.org>; Sun, 17 May 2026 06:33:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778999606; cv=none; b=YX89658ErSyfNOlKNpbXYnvhrMlk8lIA5AElc69eTXlbSljAA55joTIbXgyLLctfBUkKbmr1pB9lAvumYskzX2zYN3VLg8oWT2OcXJxGUH/5Y/UhdktgdHgX1Ht9E0jEWs8AgGacZk43gn1BGC+hU8tpi40mSRoCT3weyXSoqf0=
+	t=1778999611; cv=none; b=S0fdLV0s50GElKIV9N9Go4nNvpDOFjZxF8idkl0AjM8HOTNm3w5IMif/5QmvKdetTzqjeuMjGbusXQrk3x+Ig8Zj4BodMPmhIG8TfOaEieD6hX0LdYL+LSnVOLqNDipjPIviRDVIE2xypdHNudUlr/k0amzxJJXJcNBzg/DbWLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778999606; c=relaxed/simple;
-	bh=Iembz5WZriJohL290gtclVjvHwhKD+3xwyU6eomHFpk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=o7Y34cpqKFeqz0p/ustmTbn1c4oqSTPQeBJfbcsPS9MbljpyQDgjw2Y8T5v5wufPlBp0o8ioWM7zUY4+0NRpishVwbtsA+zi0i0J3CalXLJUjJ0QRpuBUkfP4lLtgZj8z9bBycOaPTy4JJ/6XbZL6DtBLTEorzng0hrWmxKCRKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jPygyvdB; arc=none smtp.client-ip=209.85.214.170
+	s=arc-20240116; t=1778999611; c=relaxed/simple;
+	bh=b69IeRzK/gkXviBHF52sHbmYpsdUOWt7Bk6X3kz8qps=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=GazmKX0qsUPqN33NxyAeAApLmfdo9Vpfgmm4zDVr9LPV9vT/V7oLYzimLsd5SaC+q/D7RhtRwl2UyjcDfJu1Ptk5Y5MuHPEl+vIVXliVDoEuhVc8xf4p4bS5NhgiZRG7x2LdB8gwEuFxJ+pXL3VM0P172rGVCCL6WFzBFHHU6vY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Byd35I3l; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jPygyvdB"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2bab2548e8bso4990145ad.0
-        for <bpf@vger.kernel.org>; Sat, 16 May 2026 23:33:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Byd35I3l"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2bd2c147abaso7105025ad.3
+        for <bpf@vger.kernel.org>; Sat, 16 May 2026 23:33:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778999604; x=1779604404; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vfn1wnsws3qKZ05OCo0NYpyEDF6wFwNBCzjnVjoFnoc=;
-        b=jPygyvdB9RhtK8NFZ60B83kyCs0F1KmQ1VsPwROEQlVOfPO7zkzOjEcP4o9Hj+geU/
-         ft7WSdmcPqqjcR96JgnVT3qUB3mnRAjNXP53ScG4DtsC8f5ptXXT2Un2VHAjcityO4e1
-         FGFvSF7Gr43BXKnsH6Rv4oge8JXajq7RB3JFH2BrW7tRAgb5dZ6XjwKBM7pscLOhWDus
-         UNnHdnsIn4j6JX0T6eDEMn8uR6Vf4cP8rr8Wj3CrIGBhytSK0MrPysQ7PvWmehS680uJ
-         3TcYDpwaZHKGF4ZkJkKVQK4lk8QfTEmOegZQpdYBVjR0ZwBZiPwkZu7m/M6pFKYoTPsN
-         uz5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778999604; x=1779604404;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1778999609; x=1779604409; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Vfn1wnsws3qKZ05OCo0NYpyEDF6wFwNBCzjnVjoFnoc=;
-        b=nwGw44w2t58usYkMZ4nQAczvHUdDZZivbUvJajvZoFGEFXf5TfESwEBBzpW11enNpF
-         64Dlu4LvyFm2JwDSBqJXHdQTPkvePtcpZk/kGVdgUG//q1OsNwFYjgMN3IYgQYcMHfXy
-         HUtEoS+rwmPUEgKiG67NDhKAIaoiIClVfHQOU0Uf40jZVsu9eX0Pv3gsBcBAFt650Km9
-         qs634Opipq/JwIYmh8nG+dXTuu6N4NyrPEfN92EGrER98K7ge0ODX/j1CEnvZk0Jisdc
-         vW5YV1+UeocyORZhmxZxBO2ss3vOzb1VEiB17o1ivcJ3t4Z79P96ARGxtMbEpfS6fKzZ
-         +maw==
-X-Gm-Message-State: AOJu0Yyc1gtNI4pZ3CWPj8nGanpGh+gXqHLFHdRqTHByiPSuH8KlPRHe
-	d7y8Xkim4985QXajFeokC+PoM21QqohRsgTAtyTwM34YWQAw8Aaezxi3
-X-Gm-Gg: Acq92OG865hehjf0M35zW/Id28hqn0pN90UA7ltVVwKsuFu72V0DyOm9h1i2SjwZlyB
-	QPUNgjJNdEc9v4D6cw1KzcLYzDpQbm8DPyHr2gnAdnqjTc3rX3qg/6v4hZwyu14Pqxi1m2yORbO
-	haFP/fFJTZ3s8qt3XredG2KhC8KzXyKulK1SzlB2Ty4s6Cqbw43QVrmyRmbCe829MTybfdDTuo8
-	NhYb17MecIO/rXS9Lg6+UfNnjNBjPKltcCUecbGTEeDTtOSG4z7/rcG3HN8PZuRSGjJTuehgrRz
-	U9XPYDXgtDMiY4eaaClpoO55e2LTMEYIb4BvK8tNIgYvC5nQBsTsfZfAJH7cP1JrpHRbKGhpbtr
-	QfjbKNC/SwIsLBD/hZdlyc+7QOisaX4Ejb4Q21U8GRzAnqk1ewczML9Lf/9nE0vOpFTEfV6Do18
-	KlDQfoIjr+Fuqq0TyhhfvXL/Doy2/mIEyFFUXie9H1sk+lmKKDC9ctDcShiUYZvEBEVff+K3wlE
-	6IC3Wc+oy5uRFXJezH+MW0nnLuNQgE=
-X-Received: by 2002:a17:903:24d:b0:2bd:9803:9308 with SMTP id d9443c01a7336-2bd98039479mr77245475ad.36.1778999604411;
-        Sat, 16 May 2026 23:33:24 -0700 (PDT)
+        bh=pEWjwKmS1o82G8iZfnk1MYvRFND8ZVdz4Bvvebda+3Q=;
+        b=Byd35I3lRztc2bPhhnyk2hInOEKVRj7eHrRdglfAiS03p/cRc6ldOqbMOyPJQBSQ39
+         KyADa4hFMW5PDi4ZdOr0t1egN8/TUSx60c+2g+0xx8Cy3cPICMaNsUZ3my5+MzjRbQNY
+         TYbVEkyK4hTvcqfHoPrpMlNT8KkhDjCWd1kpiwWYtrvdzkooY+b2+8xDHiE+u/4/ijxa
+         Jqz29Xqt/y4g0RSuEs3Iic1mehVYubjzK3xpJL2nERcHcPEwkT0O2d0Ak7e1e2cJsHzt
+         plyrw0gOANkWX9B21edMsZgCM/38DVD/riRDHscuIwIoqe8Cnz6UTkGYWB0F3GzvqDrv
+         m66g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778999609; x=1779604409;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=pEWjwKmS1o82G8iZfnk1MYvRFND8ZVdz4Bvvebda+3Q=;
+        b=VNIAbTXNpiN6LFDbFMceXg6A0ExzvSMDGI0lCadB3SP3d0ApxAOopy/8Hb6t47gFmt
+         qVoAL0m9jb47kf3scZf+BOhatI5o28xwLIWI58mMt8/yWnj83Rr8HUvs5XHlbii73lsl
+         yRt0kO97QMT6rx+oQBQPttnWAQkh80MERON+jRCD+hYaeeBQkbelOq6H2vd5APwX8zHZ
+         tuaoB+vAdE2xo3sTWmJZGCspfub8FYiQGyOjIi2e24Wb36BdHDhwCnSxI9/PLPRctMkE
+         5Sl3Rr6dXjo1FRR73UktS6tLW98LnmJYZF0n5w+ALvy8zp7v75d9tVcuxJubBUqazdbP
+         bsVA==
+X-Gm-Message-State: AOJu0Yz+q1tFhjYrUU95xmjYZyOS2bSCQxIgVCLNYw4/ZVMYq9xEw93r
+	nP5Kmp5w9LxBRStuIg2J56S5mDFnfNQUG52mpejjXX87CbioJbPCdCXA
+X-Gm-Gg: Acq92OEIZ6uEJTrFuH+/25uiCwQli9aYHxrINTsBTnzMLdAczXVsHcaakOafkDZrqq8
+	ABNdR+1ZFkhozVuNIP0zlL6AtGdzfJdka+SM0XIk7AkqhKD1bFyyu1ib9UoOEJSYYO0GSUnAH+A
+	iPhiXNJKHaF0WMJxzbo+Cgy+u5DWf5fbIL/FJlJIg0c8F28As6fUs9BPN3o45t5z4EdeMRZXshn
+	ntwRO0cTmlVSGNxLbaLwbZ1SH/zjkmIjcE1B3Do6SdeB+MOeZeo/lgzO0/uoKXX3PEkMryTT5YO
+	Y0e4wdEcJ3YJvwOwalxsvpGfUYI8YS4E43aR0M5hvaWrgxtAJ7+uVrOmo/hj5CzyYBAtQke+Vex
+	cpVZ4YDRD+Omm3YYzRJjYnvOHmQ1GShW1UGKZKQtinRRGXWtOEUzHJUZ7arU2Eu0EBXRKXgO0nt
+	Y8WNpxs8hHVq529fkVwO/qC5B/d9depu3c2KrJSaBXR5eK0OEbmmy3RtFFXGk4yW+oFi73LQgXR
+	3gHkRTkau+2R4RtkAc6sgGiBc1O8d8=
+X-Received: by 2002:a17:903:2410:b0:2ad:9b86:ddc2 with SMTP id d9443c01a7336-2bd7e88f047mr116704295ad.22.1778999609456;
+        Sat, 16 May 2026 23:33:29 -0700 (PDT)
 Received: from KERNELXING-MC1.tencent.com ([2408:8207:1923:2c20:78ef:13e7:10c0:51d5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5bd5f2cesm111625115ad.14.2026.05.16.23.33.19
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5bd5f2cesm111625115ad.14.2026.05.16.23.33.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 May 2026 23:33:23 -0700 (PDT)
+        Sat, 16 May 2026 23:33:28 -0700 (PDT)
 From: Jason Xing <kerneljasonxing@gmail.com>
 To: davem@davemloft.net,
 	edumazet@google.com,
@@ -75,10 +77,12 @@ To: davem@davemloft.net,
 Cc: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Jason Xing <kernelxing@tencent.com>
-Subject: [PATCH net v3 0/5] xsk: fix meta and publish of cq issues
-Date: Sun, 17 May 2026 14:33:06 +0800
-Message-Id: <20260517063311.28921-1-kerneljasonxing@gmail.com>
+Subject: [PATCH net v3 1/5] xsk: cache csum_start/csum_offset to fix TOCTOU in xsk_skb_metadata()
+Date: Sun, 17 May 2026 14:33:07 +0800
+Message-Id: <20260517063311.28921-2-kerneljasonxing@gmail.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20260517063311.28921-1-kerneljasonxing@gmail.com>
+References: <20260517063311.28921-1-kerneljasonxing@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -89,47 +93,62 @@ Content-Transfer-Encoding: 8bit
 
 From: Jason Xing <kernelxing@tencent.com>
 
-The series is the product of previous review from sashiko[1].
+The TX metadata area resides in the UMEM buffer which is memory-mapped
+and concurrently writable by userspace. In xsk_skb_metadata(),
+csum_start and csum_offset are read from shared memory for bounds
+validation, then read again for skb assignment. A malicious userspace
+application can race to overwrite these values between the two reads,
+bypassing the bounds check and causing out-of-bounds memory access
+during checksum computation in the transmit path.
 
-1) META
-patch 1: address TOCTOU around metadata.
+Fix this by reading csum_start and csum_offset into local variables
+once, then using the local copies for both validation and assignment.
 
-2) PUBLISH of CQ
-patch 2: make sure xsk_addr->addrs[] can be published to cq when
-         overflow occurs.
-patch 3: keep cleaning up the continuation descs (more than 17) and
-         publish its address when overflow occurs.
-patch 4: like patch 3, but only handles the invalid descs cases.
+Note that other metadata fields (flags, launch_time) and the cached
+csum fields may be mutually inconsistent due to concurrent userspace
+writes, but this is benign: the only security-critical invariant is
+that each field's validated value is the same one used, which local
+caching guarantees.
 
-[1]: https://lore.kernel.org/all/20260502200722.53960-1-kerneljasonxing@gmail.com/
-
+Closes: https://lore.kernel.org/all/20260503200927.73EA1C2BCB4@smtp.kernel.org/
+Fixes: 48eb03dd2630 ("xsk: Add TX timestamp and TX checksum offload support")
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
 ---
-V3
-Link: https://lore.kernel.org/all/20260515123018.80147-1-kerneljasonxing@gmail.com/
-1. avoid breaking previous usage of sendto, and siliently handle
-overflow case (Stan, sashiko)
-2. add one particular exception process in patch 4 (sashiko)
-3. adjust the selftest to make sure it passes in either virutal or
-physical machines, which includes add usleep to support physical machine.
+ net/xdp/xsk.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-V2
-Link: https://lore.kernel.org/all/20260510012310.88570-1-kerneljasonxing@gmail.com/
-1. adjust selftests (Jakub)
-2. add READ_ONCE in patch 1 (Stan)
-
-Jason Xing (5):
-  xsk: cache csum_start/csum_offset to fix TOCTOU in xsk_skb_metadata()
-  xsk: fix buffer leak in xsk_drop_skb() for AF_XDP multi-buffer Tx
-  xsk: drain continuation descs after overflow in xsk_build_skb()
-  xsk: drain continuation descs on invalid descriptor in
-    __xsk_generic_xmit()
-  selftests/xsk: drain CQ to wait for TX completion
-
- include/net/xdp_sock.h                        |  1 +
- net/xdp/xsk.c                                 | 44 +++++++++++++----
- .../selftests/bpf/prog_tests/test_xsk.c       | 48 +++++++++++--------
- 3 files changed, 63 insertions(+), 30 deletions(-)
-
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 5e5786cd9af5..f8c8a8c9dfba 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -802,6 +802,7 @@ static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
+ 			    u32 hr)
+ {
+ 	struct xsk_tx_metadata *meta = NULL;
++	u16 csum_start, csum_offset;
+ 
+ 	if (unlikely(pool->tx_metadata_len == 0))
+ 		return -EINVAL;
+@@ -811,13 +812,15 @@ static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
+ 		return -EINVAL;
+ 
+ 	if (meta->flags & XDP_TXMD_FLAGS_CHECKSUM) {
+-		if (unlikely(meta->request.csum_start +
+-			     meta->request.csum_offset +
++		csum_start = READ_ONCE(meta->request.csum_start);
++		csum_offset = READ_ONCE(meta->request.csum_offset);
++
++		if (unlikely(csum_start + csum_offset +
+ 			     sizeof(__sum16) > desc->len))
+ 			return -EINVAL;
+ 
+-		skb->csum_start = hr + meta->request.csum_start;
+-		skb->csum_offset = meta->request.csum_offset;
++		skb->csum_start = hr + csum_start;
++		skb->csum_offset = csum_offset;
+ 		skb->ip_summed = CHECKSUM_PARTIAL;
+ 
+ 		if (unlikely(pool->tx_sw_csum)) {
 -- 
 2.43.7
 
