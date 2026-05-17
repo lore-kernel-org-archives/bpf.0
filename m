@@ -1,130 +1,193 @@
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FBBF2EDD78
-	for <bpf@vger.kernel.org>; Sun, 17 May 2026 07:55:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B60194AE6
+	for <bpf@vger.kernel.org>; Sun, 17 May 2026 07:57:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779004538; cv=none; b=ICl5uZd/lT/dcHAm8yATieik51jy9wMjwTjyqKXPGOYngTg9/k747vwHIp0AmBFMV3xCbcpuu7+hEGr0mLj+yC1DfOdq0qNyqhueXGfjkKZ/d66tCOJqa/TGsBsvlteEaGT3etfE8HX0IjeXqR3wqtYDaDjzgj0/jtnJftCLG5s=
+	t=1779004659; cv=none; b=StBjeDMAsEvXQ7Ls87v9oyQ1jAwq+el/wkYy+Qpgc7QRD4GTRgjdxY18b5mNg73CoBAnOHKDJdEOlq/QYWaAcviHHRyVgzklRkr5QqKWPB0HyGZPPhnm81SiTrsyl6dwB9AE9uLn8uy8UlGWI1i/5UlKOlvBcQQOlLN5Hxnmgnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779004538; c=relaxed/simple;
-	bh=ps2EZAI5YrDKjx9lnvzkHJ19L3NjEOMyGa12/vfnXrA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gIaxDmiDZ/QNhCjXv1xa57igdZdCc5QXF087tj4vGVE3nQymlj65Z76yk9BF3E3HJcRT36Sa28VGrUKuxk4lAVVeJhlbawZnNYDtvAl+Dci8LIreiK+1sOADiKD5DIsX1kNweLL7NeKFdiMar7MjtbiyiMXBol7fCwFSC0lXuwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bAe8C6mP; arc=none smtp.client-ip=209.85.128.66
+	s=arc-20240116; t=1779004659; c=relaxed/simple;
+	bh=WlonSPQ2g716u2nSc0F9X3bgiefCnEaVc+eX1vcV/OI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=r60HYaCfuBqL6Dz/TkdhIMu/V2vWIyUkf9K4qW41WJa2qbkBalBICY6OhCe/ZuOBuqc+FoscQfbNJzUiyvvx4tH9ft9PLzgzpbYgOILRet6lvSCkB1feO+cbxy6ENH3gydlu+OpQmbc7TLFdxgTvEgXFriXtb8mzveLYeJPNaKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IgsIQwTV; arc=none smtp.client-ip=209.85.128.68
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bAe8C6mP"
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-48a7fe4f40bso14764985e9.0
-        for <bpf@vger.kernel.org>; Sun, 17 May 2026 00:55:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IgsIQwTV"
+Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-48a7fe4f40bso14774945e9.0
+        for <bpf@vger.kernel.org>; Sun, 17 May 2026 00:57:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779004534; x=1779609334; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1779004656; x=1779609456; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fMsQn6B7jmQ0Yihtlprt30BUdYKDLYuh3p7PW+adwtk=;
-        b=bAe8C6mPZSHAn7PLdKk0du1tqd7r3INmNQyvhR5QIlDbCvSqqEu/s1kGYnkdF6gaRI
-         k5ytBdpl7ZEkp1AJ9N3KvzJk9+w08s2xdSntVLCOYdV7iAxuKD+f7Bh5ZnEtk55AhbUl
-         LzFhVynr+CuYbgF29oabV7QhX8uYdcoqeGIPb0H6oHr85f7SCXBL2aIpxebLxj0sF9yF
-         AQHoN6I1sG5920DpQzxM8GqzJkczppbwkw+TdYd+7JojkIGTS8R0OjQxXhXYX00MCszx
-         E/jsJrzaid0eOeZnOshR7vs65iVKTyL8sWCZAToAUYJ8RiH0QvEipeI4NPxlHmQyrmL2
-         C78w==
+        bh=G64BVp3q67RyijZWjKJBHXbSCK7MIF2ZOshnisNgmf0=;
+        b=IgsIQwTVclVyjfuFycSjXlhkqF8ckMDaUCkA2KSJFZITSE4i5/WIyi++T/5kX6u0sE
+         6Qc8LH42xazeOzMTUsn+fs4v/RUX90L/zYWRiHujLLV0ONq4aZi6KdzPgcYEtKQDisUR
+         NKcXtFRNNZT5IJpRy//Zhi51uWwh5NbAaR449BIlAgMBrl4Q4PvLube1xInNL0L6zOX7
+         73/DPJm7S4i4p76zy44asArwelhOFbLsvzxWaoEibCvP56NgGA02l2RU4BvmjKuPazX9
+         kyVl8djcuHoLFP64bxYExuIpFP7y6AykrJP3XcWb+k7/HgLAoSi2EY4bDxBrRDydZbxM
+         m3Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779004534; x=1779609334;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fMsQn6B7jmQ0Yihtlprt30BUdYKDLYuh3p7PW+adwtk=;
-        b=D6LFkFx0FF+kLKJ+oNdhifB/VG4C1BU4G9Xxy0F4Mz0WwRLRkg6q74V8qdYfzQjBSU
-         WHpJlvjPbflbObgAjFqfQVxxuAseEuoITpjQ+hsX1Oj35QILAML6P+dqpmxclgEw7PA7
-         ImKKh646QJ8LFgD4+UXjbpD7n2jDpDd485tj4Ofa9T0u+XmkZebOxeFEzk84EnR6avNU
-         r/bt7PryQd87i30iI77nbFXOmM+ZgqOoptR+DijoHuBsvteU+B7UrlX67nPxPEw+Uvy4
-         caeoXe51w1pfaZlpW5V5kQBr1QRVmEWWUF84rj3ZFHrMny3ZZK5P4jqriO+I5bHvkCKd
-         s1Rg==
-X-Gm-Message-State: AOJu0Yy68RzkJqNaIdBVs8mbS93Rjz+v0W1jyJgy5eAC/l/xB6FYWWR4
-	VMqS6aFy/RlN6gLQoGD22ufBjuKDr1of1zDkdlKnyqHnDzwXZwjatORmMWGpmoAx
-X-Gm-Gg: Acq92OF1vwVAJ/PO1AW+IZnqMKmTc6ALdmgwj8XTQLbihQA1HRuAGxAD4qWdv3wvC/N
-	5IsCCX6zrfB+6r8wdZbkkA343cEng4rt/137jstELuEppnRWcdkXXQA5v/5HHtBsyenTUBHgFvV
-	Wm34ESkSSN4QHnSsfDYeStiyfRzjipvBFGlAv4JFiEp2dpNTj+2PEk1GBWJocivwPGfiXsSPWZU
-	K+YEevQrlab2VZqkSSTbFXD8t+yEaGRvW0SDDn9oV5DtOCdYQGuy8BXbTUMVEJQnqqjoD0a3Tox
-	SAPDB7l5wNws1o7ExIVuJZu+uakVIvy3hjFum71wIsNJUdZnNKhKG2VZjwqofishNSC+mpkDgm6
-	1czHDXmdOdxoDRjpe0MO2ngQX0ElI78Rzs0nPqg3f7Mm2MF12ogcMLLE9CsTx96u9kxzKco4h08
-	KhsNlNqIHeqwrWDOjtasvD/CcosfY0e8WvfD1b+8pN9f1nwFgdubtiOzCKgOnFwWMjb7MVaosCZ
-	eCyvFNWCjXzh07fOY1OTGo31UxaswcKEKYvDjTAwcfSZ4WfVYSf7DtivHmTJm9YmTfSkvvX7H9Z
-X-Received: by 2002:a05:600c:1f87:b0:48f:fe2a:1099 with SMTP id 5b1f17b1804b1-48ffe2a1244mr49678805e9.5.1779004533566;
-        Sun, 17 May 2026 00:55:33 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779004656; x=1779609456;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G64BVp3q67RyijZWjKJBHXbSCK7MIF2ZOshnisNgmf0=;
+        b=GbeWB9WLr5Tp8G8ArvF/eIHZCKfRG0bQykHS2pGz+2oZiWtpFR1Akvbgj1Kr9RehiY
+         ahA/SKE8iz/q/Hy7N4LzkB+sDOiAChHRiMwXLsG3wDVDy9gy7QlJmFnvIEl9jC1G1uFQ
+         43mCHG3Q7obTehF4QIhNGtW3ZDD5NUl4sBP/OE0MmygQ7gQmean77qKUpHzJo1RjCPda
+         LuADh3MCMP6WIpQ6t+JellHm1QZmyzbKDDJ3BbST+1yDs7TWL+fyjK01t4mwtoBSgjjY
+         YKgY10V2pKV4CYCZKKH0tMqTZRfRG+YcInhO6X03FfcFJykwIOFvVLybfwBQwkQQ2RUz
+         +N5g==
+X-Forwarded-Encrypted: i=1; AFNElJ9qIWIpjZt0Hm1HoFOiqKh/Y4bEc4n6gIsqbwJgubGvdVFjyT/2EwaoKzPcZb3eICrA0Co=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPIsY0qgdxIx5DajQy/cWLnwpIZN1lZLPvpOxOdmksw47TAB9i
+	2z4Q1R5TvEVZYC3LT1HaZfkTk34q+1hDZmXOvBb/e8CzGPvCxVHK1sPu
+X-Gm-Gg: Acq92OFh3MpGt/IlflCP/rVPUjQgRQmgPvcRCFpmhbX4pl7cObgAfVHRYpadFgJz6cZ
+	myHGolbNp7+GHcSwDIMfsmRE9I1x+O+JWoVWE7GU8fBKZAePqHzYK/oDF3W7P/sNgb8041cKeMu
+	tIiLo8TDiYEPLqgiSgeBmgxh37wTel7h/DjC/4svM9PCvVD+QP7B28PPxoHwhhbgDy28hpwy+n4
+	1VnRCT3he1RMxB3gXRJNf++LuBKLxVIT4PBGuRlO1KB2lVd0PJkDawUaRDRNXM0Wp4qrclqcQNu
+	oAOOvGl3KeFa73ah/C1JvxvOfItegJQNyOlU9CxK9V/42iNWtvkd1Q5Z4gmRummhcxmK1TJ0d0l
+	fuMFbnOqsCYCJLCLd0VZzwWUfnyWRjpZkmpKFUoxQZC6XHvv/gfWWK/YTbaI1SurIGal1O5HidT
+	ypLh7Ld0amiIYNJG0PtLDwUkdKDsS2Md8auxtOpVzeaqZ2mgJj8aFmFwhU4hrtv/hBf3dWH7/rQ
+	WbjuBtvNhcUGCJL9rTDZXfji+7cZBKxuhwQyZOO3R4yTWxWvnexJQkasAkku8WU1GmWmZo2HCDj
+X-Received: by 2002:a05:600c:48a8:b0:48f:e230:d5ab with SMTP id 5b1f17b1804b1-48fe651e11cmr91890175e9.31.1779004655928;
+        Sun, 17 May 2026 00:57:35 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45e6a135f0csm9826225f8f.27.2026.05.17.00.55.33
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe5cab882sm180848485e9.13.2026.05.17.00.57.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 May 2026 00:55:33 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf v2 2/2] selftests/bpf: Cover global subprog exception leaks
-Date: Sun, 17 May 2026 09:55:29 +0200
-Message-ID: <20260517075530.3461166-3-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260517075530.3461166-1-memxor@gmail.com>
-References: <20260517075530.3461166-1-memxor@gmail.com>
+        Sun, 17 May 2026 00:57:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1270; i=memxor@gmail.com; h=from:subject; bh=ps2EZAI5YrDKjx9lnvzkHJ19L3NjEOMyGa12/vfnXrA=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIYuzxGNlaubzmJs71s25oCcSx16+PGH7At4PE5q7Zz0pu hy1+NHWjhIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAExEdzHD/4CTE1wtPr2a0MFR 5/X66o6wOfW7RXewdq5YzuR3cut+9x8M3yuWHlyVfvzTyYnZZxMnFWoprSstcfd1DdnM68X7IIC JGQA=
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 17 May 2026 09:57:34 +0200
+Message-Id: <DIKSIO0A3O95.1L6CGZBD8YRRE@gmail.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ <kernel-team@fb.com>, "Martin KaFai Lau" <martin.lau@kernel.org>
+Subject: Re: [PATCH bpf-next v3 6/7] bpf,x86: Fix exception unwinding with
+ outgoing stack arguments
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Yonghong Song" <yonghong.song@linux.dev>, "Alexei Starovoitov"
+ <alexei.starovoitov@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20260515225035.821178-1-yonghong.song@linux.dev>
+ <20260515225106.824804-1-yonghong.song@linux.dev>
+ <DIKJM7FYGJ9K.2H5U2EPKDENME@gmail.com>
+ <d023d1a7-73dd-46eb-b763-3b2004380a8a@linux.dev>
+In-Reply-To: <d023d1a7-73dd-46eb-b763-3b2004380a8a@linux.dev>
 
-Add a verifier failure case where the caller holds a reference across a
-global subprog call that may throw. The program must be rejected because
-the exceptional path would skip the caller's reference release.
+On Sun May 17, 2026 at 6:55 AM CEST, Yonghong Song wrote:
+>
+>
+> On 5/16/26 5:59 PM, Alexei Starovoitov wrote:
+>> On Fri May 15, 2026 at 3:51 PM PDT, Yonghong Song wrote:
+>>> When a main program with exception_boundary has outgoing stack
+>>> arguments (e.g. from calling subprogs with >5 args), bpf_throw() fails
+>>> to correctly restore callee-saved registers, causing a kernel crash.
+>>>
+>>> The x86 JIT allocates the outgoing stack arg area below the
+>>> callee-saved registers via 'sub rsp, outgoing_rsp' in the prologue.
+>>> When bpf_throw() unwinds, it captures the main program's sp (which
+>>> includes this outgoing area) and passes it to the exception callback.
+>>> The callback gets rsp and rbp, followed by pop_callee_regs, but rsp
+>>> points into the outgoing arg area rather than the callee-saved
+>>> registers, so the pops restore garbage values. Returning to the
+>>> kernel with corrupted callee-saved registers causes a crash.
+>>>
+>>> Fix this by passing the main program's outgoing_rsp as the 4th
+>>> argument to the exception callback. The callback adjusts rsp with
+>>> 'add rsp, rcx' before popping callee-saved registers, correctly
+>>> skipping the outgoing arg area. When outgoing_rsp is 0 (the common
+>>> case), this is a no-op.
+>>>
+>>> Fixes: 324c3ca6eed6 ("bpf,x86: Implement JIT support for stack argument=
+s")
+>>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>>> ---
+>>>   arch/x86/net/bpf_jit_comp.c | 9 ++++++++-
+>>>   include/linux/bpf.h         | 3 ++-
+>>>   kernel/bpf/fixups.c         | 1 +
+>>>   kernel/bpf/helpers.c        | 2 +-
+>>>   4 files changed, 12 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>>> index ceefefb4da21..f4fdceedaad7 100644
+>>> --- a/arch/x86/net/bpf_jit_comp.c
+>>> +++ b/arch/x86/net/bpf_jit_comp.c
+>>> @@ -557,10 +557,15 @@ static void emit_prologue(u8 **pprog, u8 *ip, u32=
+ stack_depth, bool ebpf_from_cb
+>>>   			/* Keep the same instruction layout. */
+>>>   			emit_nops(&prog, 3);     /* nop3 */
+>>>   	}
+>>> -	/* Exception callback receives FP as third parameter */
+>>> +	/*
+>>> +	 * Exception callback receives:
+>>> +	 *   rsi =3D main program's SP, rdx =3D main program's FP,
+>>> +	 *   rcx =3D main program's outgoing stack arg area size
+>>> +	 */
+>>>   	if (is_exception_cb) {
+>>>   		EMIT3(0x48, 0x89, 0xF4); /* mov rsp, rsi */
+>>>   		EMIT3(0x48, 0x89, 0xD5); /* mov rbp, rdx */
+>>> +		EMIT3(0x48, 0x01, 0xCC); /* add rsp, rcx */
+>> Maybe let's do it on C side like:
+>> bpf_exception_cb(cookie, ctx.sp + ctx.aux->stack_arg_adjust, ctx.bp, 0);
+>
+> This sounds better!
+>
+>> Avoids the need to use 'rcx'.
+>>
+>>>   		/* The main frame must have exception_boundary as true, so we
+>>>   		 * first restore those callee-saved regs from stack, before
+>>>   		 * reusing the stack frame.
+>>> @@ -1789,6 +1794,8 @@ static int do_jit(struct bpf_verifier_env *env, s=
+truct bpf_prog *bpf_prog, int *
+>>>   	 * Arg 6 goes into r9 register, not on stack.
+>>>   	 */
+>>>   	outgoing_rsp =3D out_stack_arg_cnt > 1 ? (out_stack_arg_cnt - 1) * 8=
+ : 0;
+>>> +	if (bpf_prog->aux->exception_boundary)
+>>> +		bpf_prog->aux->stack_arg_adjust =3D outgoing_rsp;
+>>>   	emit_sub_rsp(&prog, outgoing_rsp);
+>>>
+>>>   	if (arena_vm_start)
+>>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>>> index 242f9597d9ab..2a1616c769a9 100644
+>>> --- a/include/linux/bpf.h
+>>> +++ b/include/linux/bpf.h
+>>> @@ -1735,7 +1735,8 @@ struct bpf_prog_aux {
+>>>   	int cgroup_atype; /* enum cgroup_bpf_attach_type */
+>>>   	struct bpf_map *cgroup_storage[MAX_BPF_CGROUP_STORAGE_TYPE];
+>>>   	char name[BPF_OBJ_NAME_LEN];
+>>> -	u64 (*bpf_exception_cb)(u64 cookie, u64 sp, u64 bp, u64, u64);
+>>> +	u64 (*bpf_exception_cb)(u64 cookie, u64 sp, u64 bp, u64 stack_arg_adj=
+ust, u64);
+>> no need to change this.
+>
+> Indeed, with the above=C2=A0'ctx.sp + ctx.aux->stack_arg_adjust',
+> the 4th argument does not need any change.
+>
+>>> +	u16 stack_arg_adjust;
+>> this one is still needed, but maybe let's call it stack_arg_sp_adjust?
+>
+> Okay. Will use the stack_arg_sp_adjust.
+>
+>>
+>> Looking at arch/arm64/net/bpf_jit_comp.c:590
+>> it doesn't use SP, so should it fine.
+>>
+>> and arm64 seems to work already?
+>
+> I will take a look at arm64 as well.
+>
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../selftests/bpf/progs/exceptions_fail.c     | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/exceptions_fail.c b/tools/testing/selftests/bpf/progs/exceptions_fail.c
-index 051e2b6f2694..ac44d60e5066 100644
---- a/tools/testing/selftests/bpf/progs/exceptions_fail.c
-+++ b/tools/testing/selftests/bpf/progs/exceptions_fail.c
-@@ -208,6 +208,28 @@ int reject_with_reference(void *ctx)
- 	return 0;
- }
- 
-+__noinline int global_subprog_may_throw(struct __sk_buff *ctx)
-+{
-+	if (ctx->len)
-+		bpf_throw(0);
-+	return 0;
-+}
-+
-+SEC("?tc")
-+__failure __msg("Unreleased reference")
-+int reject_global_subprog_throw_with_reference(struct __sk_buff *ctx)
-+{
-+	struct foo *f;
-+
-+	f = bpf_obj_new(typeof(*f));
-+	if (!f)
-+		return 0;
-+	if (ctx->protocol)
-+		global_subprog_may_throw(ctx);
-+	bpf_obj_drop(f);
-+	return 0;
-+}
-+
- __noinline static int subprog_ref(struct __sk_buff *ctx)
- {
- 	struct foo *f;
--- 
-2.53.0
-
+Please also remove guards on tests to allow them to run on arm64, once it i=
+s
+handled properly.
