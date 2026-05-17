@@ -1,260 +1,220 @@
-Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151F93242A4
-	for <bpf@vger.kernel.org>; Sun, 17 May 2026 14:56:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779029811; cv=none; b=I8fLK1r+FJRmSCuA47MGBE7fgxuj+n/biCo7OE0jZ8jfNTX8JocddNkyMPU+1gjuoYx+HKaCoQlE53Vz99H8UexcwUhRBADOLGDI/v2/aj/JhfDpPvu+HdHdR8m9S8yS1I/nBTr+AVvtinG7wU7WzmMu/rBt27sSV23+1lqxLkE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779029811; c=relaxed/simple;
-	bh=Ufyxpdwq1L3yxUTfTSSPaUDjXRsTw2KAtE0kW+ZjqQ4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bX4r/HLZBGJXtp/kNtUhbMVtidhpYUWIMw6crFuySRFMAJX/VQEsiCP5OuAdUWoG633JDMjfkTLRnElnwJBZgc5eJVDIUugDIVwI8m273XAYsmT3l7LNHvEc+lHtSlvPDaGALGUjq2C+2jK7zCAHTX5Wbk8Dp2krNJrSpxdKAv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gBoVrZ1O; arc=none smtp.client-ip=209.85.215.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B8A346E66
+	for <bpf@vger.kernel.org>; Sun, 17 May 2026 14:59:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779029960; cv=pass; b=Ajjntey9EhNE4eYWh8mTGbyMdUm30FxCFZfG9I3X0Hd/z35lEmsaukwkVui7pLJMEeiojPEExcmqWaWWi612lHuzpu3t5yxWXpbZ3x4OSeRkDnMahWAROBwMdh2aMM1RB91gOKxHvqw5OwBuG1niSB0WaAeUTmpYCmM7X4Cj2Wg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779029960; c=relaxed/simple;
+	bh=DdUpUIIlNtC1GkgxJocJ0L2ZBOuRrEs3lNvLItd+uIs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GcHZbwXPlXTy1DgKT0mGpi9u9fPjF/qbfDVIWwUxQ/jUB7q5rwmOUvwmwM2grLVsAqZKSLuf8Se96gJiB8thNqW6jSLGVLXA+Y7lLcN8AgdUDspiGOPa4e7xe/NrWD/unbjEnlB17VL3PNquvBqrOrA9JrJE3aQcxIRJ9BRge28=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O9so0iqI; arc=pass smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gBoVrZ1O"
-Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-c796163fac5so1231203a12.1
-        for <bpf@vger.kernel.org>; Sun, 17 May 2026 07:56:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O9so0iqI"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4891c0620bcso7233745e9.1
+        for <bpf@vger.kernel.org>; Sun, 17 May 2026 07:59:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779029957; cv=none;
+        d=google.com; s=arc-20240605;
+        b=P+cF+mvQZd7RsFDZUoGxJun2mBJENN6g+enwhv+op8bvN0pDcPnJ8A30Hj6LeTu9Ie
+         SkqVQzZcIAUY/fQFZ1oT3A6sk/j2ZqwStRqq0Bx0cBkrB9s+8O8/61vEextICtboGS4h
+         Iih0qAmuEQCcfuYLXy0vd+vL6ZKsg2X0JRgfdZxuRDFyK1FCtpA2ufwUWMQd7iIto3Nz
+         avIWTJwvYPp4eoYl+HNQREoQsmgoemrUs0NtKAoIz3fBBem3JBPAIc6SVXqtHv47ucMK
+         CnPO+9UmlOWI/DQJblEotkYPJ3+12M5MCtTSbYicG/Hs5hxiuHuPcWnYUGUcCvc/X3o7
+         zAKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0gR3NlGyuSJvM4hb6gvAcKREcl/fs8ArQUfaiv0RDIQ=;
+        fh=OXXnMnByOLDk4Ad8IXVqUCN8TicNm1RC8CklRAt3/gs=;
+        b=EVumnZ3ILgT4FWKQDvO+yxPaRNlq4LkuEG1m48vwTspY5qhOIrPWFbs0TxI+lFQxLt
+         vhXNNds5y6Z0EJ+kI1qvNYsWZryfpUh9DTjhuVv/kwmnIIL0UsWbReaEkYbogWOvn0Vk
+         76NIDPqUQK9cGhXflPWQdhhHKmVeUkXpctXTC3ABfK4S5BtWglfwAWJ2vs9DxhiIty0n
+         qOYspHdv/u4ms3RopZysU8L8zqXtdZ32ezmvYl9BMpYq0TgGtr9i8WqZDML1OtAwxlgU
+         34nZv9ZTR7RAqsfZTkoovBKKVuxSDd10mAeZvjDtrxqRMjDK3HT0qtXcjqaeRtVwX10z
+         SP8A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779029809; x=1779634609; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1779029957; x=1779634757; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Oam6mIXKm5UmWVLfrs9YAgkeS3fp9PlCxKZcZnyOOMI=;
-        b=gBoVrZ1OYzstv2Fhky0PnLDDsNs+1bHYYHCdMnbXrIosRDNcc2NucU3rGc9ykfc84L
-         Ztcd0IUaH9TVaemvdxekUGJCmO3nKsLyRX81NHNVGn2iJGc2Y9gPut94k7D7xWwlCctD
-         Mnf7+pe4uKdE++zVFvuN9VD/oO32x5QRC40MHhrpAg/5LPo1VRav2FyLzKIEWSJNTKqu
-         Sg3csXQvycdfe/N8Xa3E9SSofLhuNacnJImA+nTt7JXbjZX3gFphcdIBhrJeyDFxAx+h
-         Je+WmzEBLXLlAeVxkMfS4eXPMEgHrbnBeetnRGjFLId1QWpLzPcYPN484oxcj03ReR6R
-         Qtig==
+        bh=0gR3NlGyuSJvM4hb6gvAcKREcl/fs8ArQUfaiv0RDIQ=;
+        b=O9so0iqIyxgCXAsGeLyexnVMrnig+jOL5V2DWTb7bn2I4HnwY9k5uyRgHWOvEI+LiB
+         kkGeSBwGDIvrmJZ2PILV1m2S8tNO0hvcgxNZbllXGWKiBCZTJf8e1YYaoSRNcDpYEWz1
+         0IFJe+qaFqjkXtiBYLRqby0pAr4xn2tl7j/c8Nl833+VlbLTdAoPql1Jgagz+fGwT0ny
+         /gG2QGGFftSVcEAgLm4EzP6TwX3sOBtvRffVTKiWr94mC9ztjppbtUQ57At1Z0bEivMg
+         pkBYtCd/UNVQSpl6Bd8V+U7S2pwwDLQaQtaJtDhawz+jyPcZJ3qlZINM6I5LgJj8+a/d
+         jwVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779029809; x=1779634609;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1779029957; x=1779634757;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Oam6mIXKm5UmWVLfrs9YAgkeS3fp9PlCxKZcZnyOOMI=;
-        b=PnykaINndbxEvQFP2Ak3Kv6yKuCt75Dg++NR/LgJh4dP7gpss6yuuXK8p8SpNyhUcA
-         BWS3/9kBY8XIaLanJpme4rx7Oqs0hesRp1GkMj6zVjjZz8GQfAfYCEvYXwGt7uBlphUn
-         q09Lrmy4kyaH4jOlxy680Ld39gRf9XblqUsJsadeNXHHEHcX/hb8vv2HI0qBvViwn0Iz
-         BY6Q/imkGCGfheM8bSe3WSF1iQbIvhBx/YzgpJAZl8ilGKxloY/0D0Ezfa/jds43mlqG
-         oZcWXBv1Z4nsHM4YaU7r/O8MRkPhziNfJc02m+YZ4DGodweZUgYM/V8m546L3bb2frj0
-         bzxQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9DCotk9v2nbldjBPighvye7k/F6CUn4HwAWVxZqLLIHV7c4iPp78+OKkpc2zI/gFgAoUo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKzqj9SpzRzACnlrSMX+aW4dO9jFguhJKBtR9KRapXQZ2iXir2
-	Y39q5PTAATrVrzgutHwYoBcU96VzDwH61hSNi8N1A1f9UpI+EPtWsoNl
-X-Gm-Gg: Acq92OEgZ9UhwrmUBlMOIOHj91sPbXENAsJSwO4wkp48x1tiLFy5MKiTkyM+OT72ExA
-	b06lvJDtaxGtvHmxwOQHFE7EDu8nBZYZwqnIqmGXG9KP5a786leCkyWGapCtD6lSqOIqvWEUYGO
-	66HbGB3G49mphWwR79d0lL5Mm9zwsZgPqkn65P0/ZZDipY538CSOiKNCDZGQqYijpEqzEPMoufO
-	La/06LlQ7HZjN6OnoLFdd/rphKrGAw5MBj/mZIYNrtn6scZJAWsm4VTbyCT2B1W6JNglA2eN0i7
-	KLSBRBHGOcuhOPHmaGuyHv/0FGLeGpUQeeHnUZmUcfV50WngqCvYBmXkCU1bgeKkjxXJzITcyVH
-	JsHHtbgRmHnJrMVQD/qNMSx6tU123pe5xLVrxbiaoja1rvQz5W82MQRK+WKAJ5m0um7cG5K1MbO
-	Rj6EXs5R6UwsqV4le7PrXn2Xx1x/x3Q7H/O6Y=
-X-Received: by 2002:a05:6a20:6a03:b0:398:71e4:6287 with SMTP id adf61e73a8af0-3b22e7b6d8cmr13148176637.10.1779029809240;
-        Sun, 17 May 2026 07:56:49 -0700 (PDT)
-Received: from fedora.localdomain ([222.20.193.20])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c82bb1006fbsm10392522a12.21.2026.05.17.07.56.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 May 2026 07:56:48 -0700 (PDT)
-From: Xingwang Xiang <v3rdant.xiang@gmail.com>
-To: john.fastabend@gmail.com,
-	kuba@kernel.org,
-	mrpre@163.com
-Cc: jakub@cloudflare.com,
-	sd@queasysnail.net,
-	davem@davemloft.net,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	netdev@vger.kernel.org,
-	daniel@iogearbox.net,
-	bpf@vger.kernel.org,
-	Xingwang Xiang <v3rdant.xiang@gmail.com>
-Subject: [PATCH net v5 2/2] selftests/bpf: add regression test for ktls+sockmap verdict UAF
-Date: Sun, 17 May 2026 23:56:27 +0900
-Message-ID: <20260517145630.20521-3-v3rdant.xiang@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260517145630.20521-1-v3rdant.xiang@gmail.com>
-References: <20260517145630.20521-1-v3rdant.xiang@gmail.com>
+        bh=0gR3NlGyuSJvM4hb6gvAcKREcl/fs8ArQUfaiv0RDIQ=;
+        b=H2LGlz5A7fgaTJ6dBLU877V5d70ArfLRuoZe9lPc8w9d+hurqfTmL2WDGePUtwL6a2
+         Q715NHU2sjbYYlnfnwjiq20flmQie3ioEIIyj9oE9gN1kRRtSMMGE/QVx490VSb5S58o
+         dYMPFBPP0POClD27sUcHrgmLEmhQAPMcN5EZIlg/K5MKpzMJFy1SDk0T8vwTT1RtTelB
+         S0izzk7g59QL7qnIHVTbNZW7dXLJg6sve//jYpEtBNIvguHt8Q0HY7ogpt9n3SGYFODF
+         ZJEx0B5uMGlkn94SStNIW9CEtp4uL3oz+Is8H20VcXDiNdGChQCwDWlMcPuv+OevMy88
+         td0g==
+X-Forwarded-Encrypted: i=1; AFNElJ/FylWA/lY/FFS5GRV/fnjRMOu5DOq0LfIfYFV+BPGE7AWosclo7Eyf/65jyePb0KwLOIg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMbpvfortRuF6Nf4M4eTcJZV4inMyo/CminTPsl/KVLrS0vr1d
+	OEHyv3HBvC2nJjqT4LaGBJ9Ta7PuIAM5224u6eo72yQd3Gdobsn7Qno+K+HHUjAk9mDhzbGSYj0
+	U35+SxRZU6k+HD8ufu9W19X4EiJyoeCU=
+X-Gm-Gg: Acq92OEIWvW9piDBpicm5Zhs9vGBcdFY2nN7BiCdShssevmmmNkZ2DxDQnGAdJjgL/c
+	On+Qd873pk4czqe2nGOxhZMdHNZB8LRwaA6sFpb4WdAqcb6yNO72RQjX0EYfzms/zi2q4PSfXV7
+	CoV1xH9A6lWRzQo7Z5MPM/r01EWmTew2+ZZARgrJ95feg1sFrIdWF6BqLhgKugCH7PnRKNnJA+7
+	9fhYHfUoMlbzDmuD5IiezKbahal0RgIbH/X+4KyJrNhl2f0l/c/oIcAACq8kBTKXpGDsyGyR7jc
+	uKiKbFe6wOEeCtUiwmLm/KbX5K9pxcb1R7kDyDQQIsz1FzpadE/ofyNdF/4hqoKJXwRZj+Zy7CK
+	FDCuaxDrkxy7E183P/FEZQHfhMw==
+X-Received: by 2002:a05:600c:c10b:b0:489:1cd2:610a with SMTP id
+ 5b1f17b1804b1-48fe60d55c4mr117370815e9.9.1779029957276; Sun, 17 May 2026
+ 07:59:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260510030136.27876-1-chensong_2000@126.com> <a439f19e-1a47-46ce-8a2c-c53c9f038b8d@linux.dev>
+ <CAADnVQLNLd7kV+pBV1i7YvPoQGMVzJusS71iPs6oc_K0Qpd9fA@mail.gmail.com>
+ <505473d8-85ed-434f-a863-8ecad2ab1d6a@linux.dev> <419f6871-d66b-421d-ba81-804e162309f8@126.com>
+In-Reply-To: <419f6871-d66b-421d-ba81-804e162309f8@126.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sun, 17 May 2026 07:59:04 -0700
+X-Gm-Features: AVHnY4LUD7EDXzBL2L5t2qNLTBOSdoSdK-M7NwrzFKq4yVzlS4kMml5Ne6_LtS4
+Message-ID: <CAADnVQ+jYGMjAC9aNygmhyppUO9foWN4z9cjSpwCEXAFHpRVJQ@mail.gmail.com>
+Subject: Re: [PATCH V2 1/2] tools/lib/bpf/libbpf: Prioritize module kfuncs
+ over vmlinux kfuncs
+To: Song Chen <chensong_2000@126.com>
+Cc: Kaitao Cheng <kaitao.cheng@linux.dev>, bpf <bpf@vger.kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Hao Luo <haoluo@google.com>, 
+	KP Singh <kpsingh@kernel.org>, Song Liu <song@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Test the scenario where a socket is inserted into a sockmap with a
-BPF_SK_SKB_VERDICT program before TLS RX is configured.  Previously
-sk_psock_verdict_data_ready() would call tcp_read_skb() and drain the
-receive queue without advancing copied_seq, causing tls_decrypt_sg()
-to walk a dangling frag_list pointer (use-after-free).
+On Sat, May 16, 2026 at 11:32=E2=80=AFPM Song Chen <chensong_2000@126.com> =
+wrote:
+>
+> Hi,
+>
+> On 5/14/26 21:29, Kaitao Cheng wrote:
+> >
+> >
+> > =E5=9C=A8 2026/5/13 05:41, Alexei Starovoitov =E5=86=99=E9=81=93:
+> >> On Mon, May 11, 2026 at 8:19=E2=80=AFPM Kaitao Cheng <kaitao.cheng@lin=
+ux.dev> wrote:
+> >>>
+> >>> It seems that there are two problems to solve here:
+> >>>
+> >>> 1. Allowing kernel modules to override vmlinux kfuncs with the same
+> >>>     name.
+> >>>
+> >>>     This should be relatively straightforward to implement by matchin=
+g
+> >>>     names in kernel modules first, and then falling back to vmlinux.
+> >>>
+> >>> 2. Handling the case where different kernel modules have kfuncs with
+> >>>     the same name.
+> >>>
+> >>>     Could we use a new libbpf API to establish the mapping manually?
+> >>>     for example:
+> >>>         bpf_object__set_ksym_btf(obj, "kfunc_name", "module_name")
+> >>>
+> >>>     Or define a new attribute, for example:
+> >>>         extern void kfunc_name(void) __ksym __module("module_name");
+> >>>
+> >>>     We probably need to hear suggestions from other developers on thi=
+s.
+> >>
+> >> I'm not excited about 2.
+> >> Two different modules are not allowed to have two different functions
+> >> with the same name.
+> >> The kernel has only one global namespace.
+> >> Hence I don't think we should be introducing such namespacing concept
+> >> into kfuncs.
+> >>
+> >> But 1, I feel, is useful for experiments and mitigations,
+> >> but it probably should be done transparently to libbpf.
+> >>
+> >> register_btf_kfunc_id_set() should be changed to return an error
+> >> when a module attempts to register a kfunc with a name that already
+> >> exists in the kernel.
+> >> We also introduce override_btf_kfunc_set() that would register
+> >> a replacement kfunc.
+> >> override_btf_kfunc_set() would check that all overriding kfuncs
+> >> have the exact same kfunc already in vmlinux BTF: proto and name shoul=
+d match.
+> >> Then the kernel will just remember that the address of that kfunc
+> >> is in the module.
+> >> libbpf doesn't need to be aware of this substitution.
+> >> It will find kfunc in the vmlinux BTF, but the verifier will supply
+> >> implementation from the module to bpf prog.
+> >> 2nd module should be able to override_btf_kfunc_set() from vmlinux
+> >> and from 1st module that replaced some kfuncs.
+> >
+> > If multiple modules are allowed to call override_btf_kfunc_id_set()
+> > for the same vmlinux kfunc, the effective implementation becomes
+> > dependent on module load order.
+> >
+> > For example, module A overrides a vmlinux kfunc and an A BPF program
+> > is written with the expectation that this kfunc resolves to module A's
+> > implementation. Later, developer B loads module B, which overrides the
+> > same kfunc so that B's BPF program can work. If developer A then reload=
+s
+> > or reruns the A BPF program without knowing about module B's override,
+> > the same kfunc may now resolve to module B's implementation. This can
+> > make the behavior hard to debug and increase the maintenance cost of th=
+e
+> > system.
+> >
+> > If this is the intended semantics, I think override_btf_kfunc_id_set()
+> > should have clear comments documenting that later overrides replace
+> > earlier ones for future BPF program loads. It may also be useful to
+> > expose some debugging visibility, e.g. through verifier logs, debugfs,
+> > or bpftool, so users can tell whether a given kfunc currently resolves
+> > to vmlinux or to a specific module.
+>
+> I agree with you. I have already had a solution for this proposal:
+> define a new attribute, for example:
+>         extern void kfunc_name(void) __ksym __module("module_name");
+>
+> 1) introduce a tag in bpf_helpers.h
+> #define __kmod(name) __attribute__((btf_decl_tag("kmod:" name)))
+>
+> 2) add module_name in struct extern_desc
+> struct extern_desc {
+>      enum extern_type type;
+> ....
+>                  const char *module_name;
+>     } ksym;
+> 3) read tag in bpf_object__collect_externs:
+>    tag =3D btf__name_by_offset(btf, t->name_off);
+>    ext->ksym.module_name =3D tag + strlen("kmod:");
+> 4) search kfunc in modules in find_ksym_btf_id if ext->ksym.module_name
+> is valid, otherwise, search it in vmlinux.
+>
+> This proposal solves the kfunc priority gracefully, if ebpf program
+> declares the kfunc module explicitly like this:
+>
+> extern int foo(const char *str, const char *substr) __ksym __kmod("hello"=
+);
+>
+> then use foo in module hello, if no __kmod after declaration,
+> ext->ksym.module_name is NULL, the behavior of find_ksym_btf_id remains
+> same, no impact to its original logic.
 
-The test drives the full vulnerable sequence and verifies that after
-the fix recv() returns the correct decrypted data.
-
-Signed-off-by: Xingwang Xiang <v3rdant.xiang@gmail.com>
----
- .../selftests/bpf/prog_tests/sockmap_ktls.c   | 103 ++++++++++++++++++
- .../selftests/bpf/progs/test_sockmap_ktls.c   |  21 ++++
- 2 files changed, 124 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c b/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
-index b87e7f39e..6ed8e149e 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_ktls.c
-@@ -417,6 +417,107 @@ static void run_tests(int family, enum bpf_map_type map_type)
- 	close(map);
- }
- 
-+/*
-+ * Regression test for the KTLS + sockmap (verdict) reverse-order UAF.
-+ *
-+ * Vulnerable sequence:
-+ *   1. Insert receiver socket into sockmap with BPF_SK_SKB_VERDICT program.
-+ *      sk->sk_data_ready becomes sk_psock_verdict_data_ready.
-+ *   2. Configure TLS RX: tls_sw_strparser_arm() saves
-+ *      sk_psock_verdict_data_ready as rx_ctx->saved_data_ready.
-+ *
-+ * When data arrives, tls_rx_msg_ready() calls saved_data_ready() =
-+ * sk_psock_verdict_data_ready(), which calls tcp_read_skb() and drains
-+ * sk_receive_queue via __skb_unlink() without advancing copied_seq.
-+ * tls_strp_msg_load() then finds the queue empty while tcp_inq() is still
-+ * non-zero, hits WARN_ON_ONCE(!first), and leaves a dangling frag_list
-+ * pointer that tls_decrypt_sg() walks — a use-after-free.
-+ *
-+ * The fix adds a tls_sw_has_ctx_rx() check to sk_psock_verdict_data_ready(),
-+ * mirroring what sk_psock_strp_data_ready() already does: when a TLS RX
-+ * context is present, defer to psock->saved_data_ready (sock_def_readable)
-+ * instead of calling tcp_read_skb(), so TLS retains sole ownership of the
-+ * receive queue.  Data is then decrypted and returned correctly by
-+ * tls_sw_recvmsg().
-+ */
-+static void test_sockmap_ktls_verdict_with_tls_rx(int family, int sotype)
-+{
-+	struct tls12_crypto_info_aes_gcm_128 crypto_info = {};
-+	char send_buf[] = "hello ktls sockmap reverse order";
-+	char recv_buf[sizeof(send_buf)] = {};
-+	struct test_sockmap_ktls *skel;
-+	int c = -1, p = -1, zero = 0;
-+	int prog_fd, map_fd;
-+	ssize_t n;
-+	int err;
-+
-+	skel = test_sockmap_ktls__open_and_load();
-+	if (!ASSERT_TRUE(skel, "open_and_load"))
-+		return;
-+
-+	err = create_pair(family, sotype, &c, &p);
-+	if (!ASSERT_OK(err, "create_pair"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(skel->progs.prog_skb_verdict_pass);
-+	map_fd = bpf_map__fd(skel->maps.sock_map_verdict);
-+
-+	err = bpf_prog_attach(prog_fd, map_fd, BPF_SK_SKB_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach sk_skb verdict"))
-+		goto out;
-+
-+	/* Step 1: configure TLS TX on sender (no sockmap involvement) */
-+	err = setsockopt(c, IPPROTO_TCP, TCP_ULP, "tls", strlen("tls"));
-+	if (!ASSERT_OK(err, "setsockopt(TCP_ULP) client"))
-+		goto out;
-+
-+	crypto_info.info.version = TLS_1_2_VERSION;
-+	crypto_info.info.cipher_type = TLS_CIPHER_AES_GCM_128;
-+	memset(crypto_info.key, 0x01, sizeof(crypto_info.key));
-+	memset(crypto_info.salt, 0x02, sizeof(crypto_info.salt));
-+
-+	err = setsockopt(c, SOL_TLS, TLS_TX, &crypto_info, sizeof(crypto_info));
-+	if (!ASSERT_OK(err, "setsockopt(TLS_TX)"))
-+		goto out;
-+
-+	/* Step 2: insert receiver into sockmap BEFORE TLS RX */
-+	err = bpf_map_update_elem(map_fd, &zero, &p, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+		goto out;
-+
-+	/* Step 3: configure TLS RX AFTER sockmap insertion */
-+	err = setsockopt(p, IPPROTO_TCP, TCP_ULP, "tls", strlen("tls"));
-+	if (!ASSERT_OK(err, "setsockopt(TCP_ULP) server"))
-+		goto out;
-+
-+	err = setsockopt(p, SOL_TLS, TLS_RX, &crypto_info, sizeof(crypto_info));
-+	if (!ASSERT_OK(err, "setsockopt(TLS_RX)"))
-+		goto out;
-+
-+	/*
-+	 * A buggy kernel hits WARN_ON_ONCE in tls_strp_load_anchor_with_queue
-+	 * and may UAF in tls_decrypt_sg here.  With the fix,
-+	 * sk_psock_verdict_data_ready defers to sock_def_readable and TLS
-+	 * decrypts the record normally.
-+	 */
-+	n = send(c, send_buf, sizeof(send_buf), 0);
-+	if (!ASSERT_EQ(n, (ssize_t)sizeof(send_buf), "send"))
-+		goto out;
-+
-+	n = recv_timeout(p, recv_buf, sizeof(recv_buf), 0, 5);
-+	if (!ASSERT_EQ(n, (ssize_t)sizeof(send_buf), "recv"))
-+		goto out;
-+
-+	ASSERT_OK(memcmp(send_buf, recv_buf, sizeof(send_buf)), "data integrity");
-+
-+out:
-+	if (c != -1)
-+		close(c);
-+	if (p != -1)
-+		close(p);
-+	test_sockmap_ktls__destroy(skel);
-+}
-+
- static void run_ktls_test(int family, int sotype)
- {
- 	if (test__start_subtest("tls simple offload"))
-@@ -429,6 +530,8 @@ static void run_ktls_test(int family, int sotype)
- 		test_sockmap_ktls_tx_no_buf(family, sotype, true);
- 	if (test__start_subtest("tls tx with pop"))
- 		test_sockmap_ktls_tx_pop(family, sotype);
-+	if (test__start_subtest("tls verdict with tls rx"))
-+		test_sockmap_ktls_verdict_with_tls_rx(family, sotype);
- }
- 
- void test_sockmap_ktls(void)
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_ktls.c b/tools/testing/selftests/bpf/progs/test_sockmap_ktls.c
-index 83df4919c..facafeaf4 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_ktls.c
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_ktls.c
-@@ -17,6 +17,13 @@ struct {
- 	__type(value, int);
- } sock_map SEC(".maps");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 2);
-+	__type(key, int);
-+	__type(value, int);
-+} sock_map_verdict SEC(".maps");
-+
- SEC("sk_msg")
- int prog_sk_policy(struct sk_msg_md *msg)
- {
-@@ -38,3 +45,17 @@ int prog_sk_policy_redir(struct sk_msg_md *msg)
- 	bpf_msg_apply_bytes(msg, apply_bytes);
- 	return bpf_msg_redirect_map(msg, &sock_map, two, 0);
- }
-+
-+/*
-+ * Verdict program for the reverse-order TLS/sockmap regression test.
-+ * Returns SK_PASS so tcp_read_skb() drains the receive queue via
-+ * sk_psock_verdict_recv() without calling tcp_eat_skb(), which is
-+ * the precondition for the KTLS strparser frag_list UAF.
-+ */
-+SEC("sk_skb/verdict")
-+int prog_skb_verdict_pass(struct __sk_buff *skb)
-+{
-+	return SK_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+I don't like it for the same reasons as before.
+This is a half measure of namespaces.
+If override is not clear win, let's do error during kmod load
+on conflicting kfunc name for now.
