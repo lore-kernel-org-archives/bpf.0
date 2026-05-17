@@ -1,155 +1,133 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F83510F2
-	for <bpf@vger.kernel.org>; Sun, 17 May 2026 04:55:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778993740; cv=none; b=CDLHng7uTvCX7ALYdI5KR+zZflKgBcJT33k3bxByLVqm4PEuPiPTJ+szLibNqiHiOYj3LyHa5L2WZuQheFnX6HvcZRwf7wtfuhIq2F1yqxwc7Z0zOKlO/dAi+6VFcj6fZI9gjrbSH81WSB6P+Yvl+TPIOVfgtjpH4RWoq/H8wg8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778993740; c=relaxed/simple;
-	bh=tVcBHxUJvCpNrUOi5DxOmFiLkVZKRi54jAbJwlHD6GI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BOelxEXfsfXfnjdWy6UI8DDkfKB81lXUHRs+tXtWLpdhQwD6rxzHg4IqyyGbG6NUA/bdbcN/86H0Zi6KHqNK0F4R1qyAT3JnuXn7+3lXna09OlrC5/Diaq8m5oUpjacSEk6bJ97cNTfZ/tVetskzgI2Vub6ho2QAslSGJWboXm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=O9961MVu; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E6578F39
+	for <bpf@vger.kernel.org>; Sun, 17 May 2026 06:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778998563; cv=pass; b=anXlbnDQsCOz02nLnSMi2XzPulDbWSEQGSbCFRhUiqYdCNCY+FWZLCzY+fzCcXBjnXHYTufvp+NAkpaIyYVNSQJ+YOTZblC4OCJL1933ZDCkc83X+OXiNYK9nJD6bPg5zspafJBKjgTpyPTjmKXlvSsmj0iEi7/DI75xjMSMe3U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778998563; c=relaxed/simple;
+	bh=KQwepD6izLpoXVuCEseHVqNDIYjLt7x9FUc+tmd2nvk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CmfDhJoP5n5Fr4tjdTBL4Zinsws1OeU4VSkTKKKDzjNV+yk9PraummeLgY36RkAmmC2XyeJHLk9/e6BPSrCry/S3Fip1tUiZ6d4IxSfbRgBtBGmV6wrJUAkKRmMywxkEBRVlphYfKwS2iGTF25chA6TZMB5taWVrcIXdASCT2A4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fBHC27WL; arc=pass smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="O9961MVu"
-Message-ID: <d023d1a7-73dd-46eb-b763-3b2004380a8a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778993736;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=02RIvWx1aZA/sxoknuTitUULjHAtzDVi4AY0UHS552c=;
-	b=O9961MVuTdgfdvFDeAgMgQqH8KyKAdzHnuVIybenUn9Jna/utKFfkAJsQMRTHwmBPcp6IE
-	2tNyMbi3G+Io0QJvQoXYkubjLhXYwPXE9UEq3GNjPg+h0SHJ2tWotBvIUlPdLyvPI+LCGh
-	9meFAmelVvtg31dKvqBrLtGWl3DS8QI=
-Date: Sat, 16 May 2026 21:55:09 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fBHC27WL"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5a8d1f43432so2033111e87.3
+        for <bpf@vger.kernel.org>; Sat, 16 May 2026 23:16:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778998560; cv=none;
+        d=google.com; s=arc-20240605;
+        b=K/fFsmSbwqp9LyCT4TLRdaGBtS0kwXvSWwteuYkxoKI+SJ0hyDS60eexIWbOaJ11xO
+         dKozRdC0wevXHatjkQ5mLRVrZ0Q+7kmbV128dXOuwuBfoGCKYA519yUCWjinWWkJw+ij
+         SHCmbq06dSlr1PQIxja/w7FiOhm/aL0SrsXysLdfC5gQgchVMw2nJhmxbf2J6DP80fFE
+         1nyIwRYtmMlKiVE7qnDZqDcG2X0vdNyPI1IirGmirje/tERaui1+3ysYprQ5nI26yqWs
+         nSLNWk4pV1D4rg6OJKGXv/NaZwcPkkPX7Xdk53w7/Zlti+QBNc4NQzNmp5mmWQLV9cfV
+         MeOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=cZb6AJaZ1xadPD91ePgoZT8bZhlU06q0reAG9tkJInc=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=kQt45Jx7SuyCZgt42nb4QYa/QU5lN6RYeVXAk5J7UZo625e/DkrqXTf/CTdk/eHXJK
+         rzv1O6ff7rU+GcNf/LFComsGYIguS+SRQJ1HpHqOVTXUd/5ghElKlUy8ahNIGWtE8Eno
+         65DhnEiXNG7VmtK/0AAN54YxtHUTTu2LCzPMsADYXsHQCq+tn1UYrHNIhZAPlWWLgbes
+         U05pm5ddk86QfeyLgf3NlRmGmj5VctVU9U7my3prgQoVZ91e9WuULNiiuioR4xqIkrlb
+         eRkMFs8NVey71V5GqI2kBPtbxgnWGKtNVcPgaJxmKGynxX+G+TRQ2eMNP7L2gUmLPWZG
+         GbDg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778998560; x=1779603360; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cZb6AJaZ1xadPD91ePgoZT8bZhlU06q0reAG9tkJInc=;
+        b=fBHC27WLVk6LHB8zKQsgC6hlMW/JuZWozVHRBDeJFehDUfZQB/sy9EhmeVTmjK8plP
+         XFR37Gl+LnIFh4yqZffBzk/srnPg9fgqLhh/b0PdzkJ2f4rvhcXAQBDAdTurCdQdge9f
+         yq6E2SD7FV9ZuhTm2ojT7MVSvgu/SGh/WeX4n5lzzCTYB1W/F1sjJjqexhXEhU43jfTC
+         Gxt8FSxdcyE8FNXN0GYzs/piAJrdntCULSKNPBhN2AMn5U9+Qs+Fwi1nm4SyywCggSzY
+         DPgzcTdSWg8nmbeAKIqHRhDc6yEuaL7Y4vOaUkP1XS33cp+DHGt3SiS/KyItmsLRVMnw
+         lacw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778998560; x=1779603360;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cZb6AJaZ1xadPD91ePgoZT8bZhlU06q0reAG9tkJInc=;
+        b=O1oWMZ7F+F9C1Zt5RMJdMVSB0/SEpQeY46UfSjQDx90Mv1StV7tqGeHNw/S1gRNL2J
+         VHozpDC/Afvan1PXHzsefD7NqfeTleCEehOlQoVIXi9B0p18DtEJ0TgDlBagJPul4GsH
+         BX0vH0DmqQ1gd6NIVK1C+lKNFPL11KdED+95AHtJAf1yy+isJY9WQYQOJRAjnZO98voA
+         v2cjSlHonBFxptfViN1TtHXmysEkURnBJtkSimkUTN+rauUtogCrtfAoG97sLwtHIgjU
+         VKCmVoBdszA4Yiy0tyqH+4HFAfE0/6VzrtX9+6Gm4JpCdcA4zgCzeKZBmFCWWnKnKLzh
+         BR2A==
+X-Gm-Message-State: AOJu0Yy6ggdxICuIexH67glGLqUB0nT+BD0PxdUXo+rO9WLOaooj8XvY
+	anMgwYNgeORZGI79OptwaPr8xIw8ik5woNByXHBbKihhItLaoqvJoDUf1NDQrfp69wMLeeODFEM
+	83b/SioFqV0dgqOKajNVe4MUMhpDqBoTTzmA6RzLpLA==
+X-Gm-Gg: Acq92OEhwo9vk2A9wLIg6HWcoi549D1sZXHjoKpXN0ektdJkIlSWNcbGsyOkmgE+NS+
+	1p+Xu3pcy2Uda8mLzk3wjQw9Z6TBo0f8FziF4BeZoaQ0q1oSWHp2CYq8dOXx3ZEeuljkzuWjj2/
+	R+v7jt4QpvztbDRaPe2tKrp2LnRfopBOrKL3MhWnL8t7RvvwvRnknZkRlGB1pLza2BzjLBaNr6L
+	o9emChddKVZUpAuSsGMv9uE8edp2xStorYp/C3syOq8PwK4aCfLNXt6JKm7IhuRg7RYkPn7DRVD
+	x0Cp8A2kZv2YaoS3fhsl6d7V8p4+QOvb6ajEoyYwHIwQQNGRRw==
+X-Received: by 2002:a05:6512:128a:b0:5a8:65ce:e83b with SMTP id
+ 2adb3069b0e04-5aa0e60cfadmr3117551e87.7.1778998559852; Sat, 16 May 2026
+ 23:15:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 6/7] bpf,x86: Fix exception unwinding with
- outgoing stack arguments
-Content-Language: en-GB
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
- Martin KaFai Lau <martin.lau@kernel.org>
-References: <20260515225035.821178-1-yonghong.song@linux.dev>
- <20260515225106.824804-1-yonghong.song@linux.dev>
- <DIKJM7FYGJ9K.2H5U2EPKDENME@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <DIKJM7FYGJ9K.2H5U2EPKDENME@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260515123018.80147-6-kerneljasonxing@gmail.com>
+ <20260516123128.BA67BC19425@smtp.kernel.org> <CAL+tcoB=cW0tuoJLfoRKoNX2rYSTcF_c09nyZqq0ZZQEJHJP9A@mail.gmail.com>
+In-Reply-To: <CAL+tcoB=cW0tuoJLfoRKoNX2rYSTcF_c09nyZqq0ZZQEJHJP9A@mail.gmail.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Sun, 17 May 2026 14:15:22 +0800
+X-Gm-Features: AVHnY4IzglYJ7hA4FzDnVyoltczY2JD9hsjiM39e-19Twt4_xVRlot1zyCdw2n8
+Message-ID: <CAL+tcoD0VbrgdZYv4Nj0kgvon6RUXnXbWjoxcgCQ6qPanqR+7A@mail.gmail.com>
+Subject: Re: [PATCH net v2 5/5] selftests/xsk: fix multi-buffer invalid desc
+ tests for drain_cont
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+> > > @@ -950,17 +950,11 @@ static int complete_pkts(struct xsk_socket_info *xsk, int batch_size)
+> > >
+> > >       rcvd = xsk_ring_cons__peek(&xsk->umem->cq, batch_size, &idx);
+> > >       if (rcvd) {
+> > > -             if (rcvd > xsk->outstanding_tx) {
+> > > -                     u64 addr = *xsk_ring_cons__comp_addr(&xsk->umem->cq, idx + rcvd - 1);
+> > > -
+> > > -                     ksft_print_msg("[%s] Too many packets completed\n", __func__);
+> > > -                     ksft_print_msg("Last completion address: %llx\n",
+> > > -                                    (unsigned long long)addr);
+> > > -                     return TEST_FAILURE;
+> > > -             }
+> > > -
+> > >               xsk_ring_cons__release(&xsk->umem->cq, rcvd);
+> > > -             xsk->outstanding_tx -= rcvd;
+> > > +             if (rcvd > xsk->outstanding_tx)
+> > > +                     xsk->outstanding_tx = 0;
+> > > +             else
+> > > +                     xsk->outstanding_tx -= rcvd;
+> >
+> > Does clamping xsk->outstanding_tx to 0 mask underlying regressions by
+> > silently discarding unexpected completions?
+> >
+> > If the kernel correctly generates CQ entries for invalid descriptors now,
+> > could outstanding_tx be incremented by the total number of submitted
+> > descriptors instead of only the valid ones?
 
+Well, this assumption doesn't always hold because
+xsk_cq_cancel_locked() cancels the desc from cq. I confirmed this with
+testing - switching to outstanding_tx += i causes 6 additional test
+failures.
 
-On 5/16/26 5:59 PM, Alexei Starovoitov wrote:
-> On Fri May 15, 2026 at 3:51 PM PDT, Yonghong Song wrote:
->> When a main program with exception_boundary has outgoing stack
->> arguments (e.g. from calling subprogs with >5 args), bpf_throw() fails
->> to correctly restore callee-saved registers, causing a kernel crash.
->>
->> The x86 JIT allocates the outgoing stack arg area below the
->> callee-saved registers via 'sub rsp, outgoing_rsp' in the prologue.
->> When bpf_throw() unwinds, it captures the main program's sp (which
->> includes this outgoing area) and passes it to the exception callback.
->> The callback gets rsp and rbp, followed by pop_callee_regs, but rsp
->> points into the outgoing arg area rather than the callee-saved
->> registers, so the pops restore garbage values. Returning to the
->> kernel with corrupted callee-saved registers causes a crash.
->>
->> Fix this by passing the main program's outgoing_rsp as the 4th
->> argument to the exception callback. The callback adjusts rsp with
->> 'add rsp, rcx' before popping callee-saved registers, correctly
->> skipping the outgoing arg area. When outgoing_rsp is 0 (the common
->> case), this is a no-op.
->>
->> Fixes: 324c3ca6eed6 ("bpf,x86: Implement JIT support for stack arguments")
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->> ---
->>   arch/x86/net/bpf_jit_comp.c | 9 ++++++++-
->>   include/linux/bpf.h         | 3 ++-
->>   kernel/bpf/fixups.c         | 1 +
->>   kernel/bpf/helpers.c        | 2 +-
->>   4 files changed, 12 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> index ceefefb4da21..f4fdceedaad7 100644
->> --- a/arch/x86/net/bpf_jit_comp.c
->> +++ b/arch/x86/net/bpf_jit_comp.c
->> @@ -557,10 +557,15 @@ static void emit_prologue(u8 **pprog, u8 *ip, u32 stack_depth, bool ebpf_from_cb
->>   			/* Keep the same instruction layout. */
->>   			emit_nops(&prog, 3);     /* nop3 */
->>   	}
->> -	/* Exception callback receives FP as third parameter */
->> +	/*
->> +	 * Exception callback receives:
->> +	 *   rsi = main program's SP, rdx = main program's FP,
->> +	 *   rcx = main program's outgoing stack arg area size
->> +	 */
->>   	if (is_exception_cb) {
->>   		EMIT3(0x48, 0x89, 0xF4); /* mov rsp, rsi */
->>   		EMIT3(0x48, 0x89, 0xD5); /* mov rbp, rdx */
->> +		EMIT3(0x48, 0x01, 0xCC); /* add rsp, rcx */
-> Maybe let's do it on C side like:
-> bpf_exception_cb(cookie, ctx.sp + ctx.aux->stack_arg_adjust, ctx.bp, 0);
+Since this series fixs the wrong behavior and publishes the
+invalid/overflowed desc into the cq, outstanding_tx is no longer used
+as the verification in selftests. But it is still useful, like as an
+indicator on when to kick the txq.
 
-This sounds better!
-
-> Avoids the need to use 'rcx'.
->
->>   		/* The main frame must have exception_boundary as true, so we
->>   		 * first restore those callee-saved regs from stack, before
->>   		 * reusing the stack frame.
->> @@ -1789,6 +1794,8 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
->>   	 * Arg 6 goes into r9 register, not on stack.
->>   	 */
->>   	outgoing_rsp = out_stack_arg_cnt > 1 ? (out_stack_arg_cnt - 1) * 8 : 0;
->> +	if (bpf_prog->aux->exception_boundary)
->> +		bpf_prog->aux->stack_arg_adjust = outgoing_rsp;
->>   	emit_sub_rsp(&prog, outgoing_rsp);
->>   
->>   	if (arena_vm_start)
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index 242f9597d9ab..2a1616c769a9 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -1735,7 +1735,8 @@ struct bpf_prog_aux {
->>   	int cgroup_atype; /* enum cgroup_bpf_attach_type */
->>   	struct bpf_map *cgroup_storage[MAX_BPF_CGROUP_STORAGE_TYPE];
->>   	char name[BPF_OBJ_NAME_LEN];
->> -	u64 (*bpf_exception_cb)(u64 cookie, u64 sp, u64 bp, u64, u64);
->> +	u64 (*bpf_exception_cb)(u64 cookie, u64 sp, u64 bp, u64 stack_arg_adjust, u64);
-> no need to change this.
-
-Indeed, with the above 'ctx.sp + ctx.aux->stack_arg_adjust',
-the 4th argument does not need any change.
-
->> +	u16 stack_arg_adjust;
-> this one is still needed, but maybe let's call it stack_arg_sp_adjust?
-
-Okay. Will use the stack_arg_sp_adjust.
-
->
-> Looking at arch/arm64/net/bpf_jit_comp.c:590
-> it doesn't use SP, so should it fine.
->
-> and arm64 seems to work already?
-
-I will take a look at arm64 as well.
-
->
-> and the field x86 specific? not sure about other archs.
->
->
-
+Thanks,
+Jason
