@@ -1,497 +1,381 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF88194AE6
-	for <bpf@vger.kernel.org>; Sun, 17 May 2026 02:09:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778983785; cv=pass; b=mTIaD4Yy0qLyfB/nfloEtU60DxYVldNMZsFJvoJE2imKKFlfMYw0IeOIQwCwndOhJP78LOjdlIJx1Z7Ng6tdwwgyp4FU02CMXgsGF59kXx/17koST+x3NUlZC6VmHaLqBl4IXEqppWzyGJS8hejwfx9yz782hoaVv+djkJiDmz4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778983785; c=relaxed/simple;
-	bh=wCr4N8mYfYoIPWB9C8PT2ELm8Fckx0JWQsBfxrIsZoc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VNKy2S6hp1SWYNi8QCzBH4oT9T5vtgIVbUuBGPctevNr5ZEBM9FsZECX6NdOoPGxstgzM0/f7NypNT8XPwMu7TXzAmXRpBBp0OVQV+VrV6jzR1VFswpX4mH6fgQ5ASJemcmErW8dSeJqW8t2JlIpiYZ5zbP8KU9MIV9f52FFslg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P8vKpF3q; arc=pass smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08988155757;
+	Sun, 17 May 2026 02:22:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778984574; cv=none; b=BOg+nzPJJjLFxS4wZTCHrABv49wdERXslQrx8JKO9rQ7s8RuV8BJmjHnl6hsBSSdbyunyAB/W2v9YKiy4g4sBC986Lu+wEpGApIpTrQyPoVxIbekayWuUuOjkTNSqO7JwgMNDg9DFibCnWggJtypWd3aocAYiiHqKmma3l+CPxc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778984574; c=relaxed/simple;
+	bh=c0IBh+8ZlywSrmCOYYFltO1fo4BKe7fD9H+UQUBXKew=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=EN1pWf1/uWQtDz92BSJZrQK8x3bMz0zysd+O7/tJbZvf0CSn9pS3rSayBtBr9KIy1kelA2xHnLHxvleQ5EcC2A1DiKCmGzxGiTL1TPpLTeuZgXTDmLvPgZ6KRMm3cY9Q6sYB7p5c00CVfsaaUPyWV0LIgTv2RlVj1ZpAD7xlTfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TV0CySFI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P8vKpF3q"
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5a877510541so1394023e87.2
-        for <bpf@vger.kernel.org>; Sat, 16 May 2026 19:09:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778983782; cv=none;
-        d=google.com; s=arc-20240605;
-        b=UMCNFbUuKISqnGmMrHttfo/TMNR87UCM49Ybepsp0ihj7R5VyTYx1H+VidPiPlFb4v
-         GnWW6TOn0RuNZuZr5wVUm2g6XB8r4yfNF+wKYqT/y/HyFWU7MmcSLdCHPWO3c61psBGD
-         lo0wDHleUH/9E/xVJorc+opPDEpMUWKuRnsxCdO3Qp0qXENUaLGdQH9xgIxArm33amF1
-         nfwRW4qcaxLgjxGNkpzJcNjPCZuYzREeba53BchktiAljX6JtnlOjDpr0B9P5JiS04pn
-         JrV92vKraW5HVFJuuI2rUeIKy9oV3tCHun7ySkn1mbz9CfAJ9+VavKm+7xPXEV+SAh0p
-         L1ng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=nO3j0t9MiAa/cJqnzOkw+Q9w6M93B+L1CjXXR/zt8LU=;
-        fh=hYDCbxPfZzYDlBqmCIstOwyv8lsex/q7q0O8eq0Wj5k=;
-        b=MhWW/xhnDqHaVj5h3vXsdErj/QQ2zscjwofxBfSmKEwgkcfyJNn89wJHjYj/aGYyAT
-         SRfT20VYOIKyDwOPc7NuR2ylBEDqG/fGMTXRNQHzg148KGjzG/F95HASzn00ECVr849g
-         hUbJXgulZm+rNtLrmQxI4gTcZWP/zI/HpBxLSqpSQVg5vbDzfBqDlCpPMIN2zoPOVW2o
-         rjf85hOEqI9Q23EkvdIoWj5jkQrNzfNOy7Bn6L66Xqzn7UVUee9LF9xEg4eWvAMmelAT
-         6YPdHaZ4UAZy4+GCe6oI/WAhwND/q9dI8UWexb5WkWFhnI1faZorGMuzTTIPADAtw/TJ
-         yEog==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778983782; x=1779588582; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nO3j0t9MiAa/cJqnzOkw+Q9w6M93B+L1CjXXR/zt8LU=;
-        b=P8vKpF3qvGMznU1qwNMFV/H6wcMlIyX9Fito7HiMvppEbz9rekeFtBLdoGIUQER8IM
-         J9v0/LcpK8SFCtoFgE4wVZj7+w6z2ibEePI3Ihz72hmBUTFeVfTp9AgOdXRm3jZ5xJxA
-         Kb9mc/4tkrH4CeUvy0tFU4K7E2ZpGYzHyOxCnPUtD8NM1z23CmxE91E1d2tNtIrqI59H
-         Kp4YAkT/9UNBcjuEeyJE2cue6rRF+UjVKRrVropuaPHlm8l4qlyIM4p5nlxOEAQ/FWi/
-         X/Si4hBtZn8sV1dGkaIg/G+aItKTV8Rbbtgw/MI6S67aPp8B3vHvtlPfwxhAKUz7VPxe
-         A8AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778983782; x=1779588582;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=nO3j0t9MiAa/cJqnzOkw+Q9w6M93B+L1CjXXR/zt8LU=;
-        b=R0SIeCVgmahglnp4Q8Q3zErwzheycn0EAGZVWMes/3pCw/7znnSb+0A1ZQFBXL9Co+
-         hOnzN8vSaij6YrTA5uC03dcGRT8NGrfH34Yja+rbuaRfxyHgqelntxc4on8Gstcw6hHm
-         GFIDodhAhuAdnQqFMPLEYOE2mFZL9KR46V+iBK2/1HY51EDmRsJDJ+yioBemawb/4PjI
-         muCey1KqZV27wYrAjMdDTVcr7cHxJXJ2CM1WjPLRsrHVqlikCImZuAvOY/yVjg0VSe9H
-         INuoD2P6UUUJeNi3KVIXDWko74xqJjCNbG0og0Ac78EqsXX5AtAyM53LIVeIhcdbvE+K
-         hprw==
-X-Forwarded-Encrypted: i=1; AFNElJ8U/LMMsHy5VpZ7EYRD9crIqsLraWQPovo/FnzX3R2eVny+YvDss1+emVo9Q2n0u+1BacU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1qPBChBVJK60r4HMkkf+seqCQaJMHyKy/uu/P85QgVzEB74T5
-	pvHMC8T9sANxDkSpRkTO4s7abb+MmndG07l3mt17iXiFdrUedcBrk/wNtA4GP/vgNkjV+zRxCQT
-	Nq+LikoOqVGVxk11oiPA6oP9I+anO89A=
-X-Gm-Gg: Acq92OGp19qyhMwPvqDSLAg1sYfhN3T5fETbMIc7DuVn2KKjUv4HAxaSRunnVJ+yGYL
-	GIwTy2U5Z2YEEVFb5N7RP29IIHWimUwpl9ojMgWL1vz8eNqYuCvqfjHz4xvPZhW+eMWNFx2+b1l
-	93bcR+xVjAOe9KKGqHiQdQeYHWrDeHX+6lZF9muWEbJhL3rhBj8uSEiiU+4rn59RKwRTF2V1MjC
-	adtteCxuFhBgcTfuDV7gNb6cPnepg1AmWlMwts4LIl9YuKXuRUC3HWSLmfGgXIOS3P8TNEQk8AH
-	uuysUGAVpkBqs6dZNITt+qBW1Sh7yru+MLstQlYLxFZLNyO6nw==
-X-Received: by 2002:a05:6512:128a:b0:5a8:6c7b:f9d7 with SMTP id
- 2adb3069b0e04-5aa0e769eecmr2807294e87.41.1778983781501; Sat, 16 May 2026
- 19:09:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TV0CySFI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED7D1C19425;
+	Sun, 17 May 2026 02:22:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778984573;
+	bh=c0IBh+8ZlywSrmCOYYFltO1fo4BKe7fD9H+UQUBXKew=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=TV0CySFIaEQrW1umAo9WAQmnHFWChBeL+BsbykKg9P+HGDJVZvB22QioiVUIsAdFJ
+	 WIqDeOvWV9KXo1QO7CHoAMmDTTmoVLPFI2wCxJ3EhZ2U+gUuiVTFYlcUvYh72Ew1Xf
+	 nn7/iA93CrXBmdhiOwtwH51qxEWzl5WloyzdS/cuJ2I4dhpjTpTlp1xu+uc+8V3OFd
+	 qEKG0+i4tn6ZVlEwVosuouamoS1pj1BROwI6drjP3zMLZT8eNqZS/2SUH6oobqqaU8
+	 Vm7XfJqLnn11E02ynHLbyoZHTfmeVdRV2/FIHwnS7U9ccrcOM51W47c+msKWNmE4mg
+	 dvaYuvnufe7DA==
+Date: Sun, 17 May 2026 11:22:47 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux trace kernel
+ <linux-trace-kernel@vger.kernel.org>, bpf@vger.kernel.org, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Mark Rutland <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>,
+ Namhyung Kim <namhyung@kernel.org>, Takaya Saeki <takayas@google.com>,
+ Douglas Raillard <douglas.raillard@arm.com>, Tom Zanussi
+ <zanussi@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Thomas
+ Gleixner <tglx@linutronix.de>, Ian Rogers <irogers@google.com>, Jiri Olsa
+ <olsajiri@gmail.com>
+Subject: Re: [PATCH v2] tracing/probes: Allow use of BTF names to
+ dereference pointers
+Message-Id: <20260517112247.cdb5953d9efda795ac5b34f1@kernel.org>
+In-Reply-To: <20260516173310.1dbad146@fedora>
+References: <20260516173310.1dbad146@fedora>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260515123018.80147-1-kerneljasonxing@gmail.com> <agdRCYgpmVKkrQFB@boxer>
-In-Reply-To: <agdRCYgpmVKkrQFB@boxer>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Sun, 17 May 2026 10:09:04 +0800
-X-Gm-Features: AVHnY4L8iEfTvBrUVUtHlcv0-8kRC6326SHOWRCABLdtZk3dSp_FwiYWdc9NopI
-Message-ID: <CAL+tcoBqr2Hb_Lkprp5brxLeVnr0fQDY=sUKEVdD-CcowZ7BRQ@mail.gmail.com>
-Subject: Re: [PATCH net v2 0/5] xsk: fix meta and publish of cq issues
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
-	jonathan.lemon@gmail.com, sdf@fomichev.me, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, 
-	horms@kernel.org, andrew+netdev@lunn.ch, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, May 16, 2026 at 1:00=E2=80=AFAM Maciej Fijalkowski
-<maciej.fijalkowski@intel.com> wrote:
->
-> On Fri, May 15, 2026 at 08:30:13PM +0800, Jason Xing wrote:
-> > From: Jason Xing <kernelxing@tencent.com>
-> >
-> > The series is the product of previous review from sashiko[1].
-> >
-> > 1) META
-> > patch 1: address TOCTOU around metadata.
-> >
-> > 2) PUBLISH of CQ
-> > patch 2: make sure xsk_addr->addrs[] can be published to cq when
-> >          overflow occurs.
-> > patch 3: keep cleaning up the continuation descs (more than 17) and
-> >          publish its address when overflow occurs.
-> > patch 4: like patch 3, but only handles the invalid descs cases.
-> >
-> > [1]: https://lore.kernel.org/all/20260502200722.53960-1-kerneljasonxing=
-@gmail.com/
-> >
-> > ---
-> > V2
-> > Link: https://lore.kernel.org/all/20260510012310.88570-1-kerneljasonxin=
-g@gmail.com/
-> > 1. adjust selftests (Jakub)
-> > 2. add READ_ONCE in patch 1 (Stan)
-> >
-> >
-> > Jason Xing (5):
-> >   xsk: cache csum_start/csum_offset to fix TOCTOU in xsk_skb_metadata()
-> >   xsk: fix buffer leak in xsk_drop_skb() for AF_XDP multi-buffer Tx
-> >   xsk: drain continuation descs after overflow in xsk_build_skb()
-> >   xsk: drain continuation descs on invalid descriptor in
-> >     __xsk_generic_xmit()
-> >   selftests/xsk: fix multi-buffer invalid desc tests for drain_cont
-> >
-> >  include/net/xdp_sock.h                        |  1 +
-> >  net/xdp/xsk.c                                 | 48 +++++++++++++++----
-> >  .../selftests/bpf/prog_tests/test_xsk.c       | 45 +++++++++--------
-> >  3 files changed, 64 insertions(+), 30 deletions(-)
->
-> this adds regression to xskxceiver runs on real hw (ice on my side):
->
-> PREREQUISITES: [ PASS ]
-> 1..108
-> ok 1 PASS: SKB SEND_RECEIVE
-> ok 2 PASS: SKB SEND_RECEIVE_2K_FRAME
-> ok 3 PASS: SKB SEND_RECEIVE_SINGLE_PKT
-> ok 4 PASS: SKB POLL_RX
-> ok 5 PASS: SKB POLL_TX
-> ok 6 PASS: SKB POLL_RXQ_FULL
-> ok 7 PASS: SKB POLL_TXQ_FULL
-> ok 8 PASS: SKB ALIGNED_INV_DESC
-> ok 9 PASS: SKB ALIGNED_INV_DESC_2K_FRAME_SIZE
-> ok 10 PASS: SKB UMEM_HEADROOM
-> ok 11 PASS: SKB BIDIRECTIONAL
-> ok 12 PASS: SKB STAT_RX_DROPPED
-> ok 13 PASS: SKB STAT_TX_INVALID
-> ok 14 PASS: SKB STAT_RX_FULL
-> ok 15 PASS: SKB STAT_FILL_EMPTY
-> ok 16 PASS: SKB XDP_PROG_CLEANUP
-> ok 17 PASS: SKB XDP_DROP_HALF
-> ok 18 PASS: SKB XDP_SHARED_UMEM
-> ok 19 PASS: SKB XDP_METADATA_COPY
-> ok 20 PASS: SKB XDP_METADATA_COPY_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 21 FAIL: SKB ALIGNED_INV_DESC_MULTI_BUFF
-> ok 22 PASS: SKB TOO_MANY_FRAGS
-> ok 23 PASS: SKB XDP_ADJUST_TAIL_SHRINK
-> ok 24 PASS: SKB TX_QUEUE_CONSUMER
-> ok 25 PASS: SKB XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF
-> ok 26 # SKIP SKIP: SKB XDP_ADJUST_TAIL_GROW
-> ok 27 # SKIP SKIP: SKB XDP_ADJUST_TAIL_GROW_MULTI_BUFF
-> ok 28 PASS: SKB SEND_RECEIVE_9K_PACKETS
-> ok 29 PASS: SKB SEND_RECEIVE_UNALIGNED
-> ok 30 PASS: SKB UNALIGNED_INV_DESC
-> ok 31 PASS: SKB UNALIGNED_INV_DESC_4001_FRAME_SIZE
-> ok 32 PASS: SKB SEND_RECEIVE_UNALIGNED_9K_PACKETS
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 33 FAIL: SKB UNALIGNED_INV_DESC_MULTI_BUFF
-> ok 34 PASS: SKB HW_SW_MIN_RING_SIZE
-> ok 35 PASS: SKB HW_SW_MAX_RING_SIZE
-> ok 36 PASS: SKB TEARDOWN
-> ok 37 PASS: DRV SEND_RECEIVE
-> ok 38 PASS: DRV SEND_RECEIVE_2K_FRAME
-> ok 39 PASS: DRV SEND_RECEIVE_SINGLE_PKT
-> ok 40 PASS: DRV POLL_RX
-> ok 41 PASS: DRV POLL_TX
-> ok 42 PASS: DRV POLL_RXQ_FULL
-> ok 43 PASS: DRV POLL_TXQ_FULL
-> ok 44 PASS: DRV ALIGNED_INV_DESC
-> ok 45 PASS: DRV ALIGNED_INV_DESC_2K_FRAME_SIZE
-> ok 46 PASS: DRV UMEM_HEADROOM
-> ok 47 PASS: DRV BIDIRECTIONAL
-> ok 48 PASS: DRV STAT_RX_DROPPED
-> ok 49 PASS: DRV STAT_TX_INVALID
-> ok 50 PASS: DRV STAT_RX_FULL
-> ok 51 PASS: DRV STAT_FILL_EMPTY
-> ok 52 PASS: DRV XDP_PROG_CLEANUP
-> ok 53 PASS: DRV XDP_DROP_HALF
-> ok 54 PASS: DRV XDP_SHARED_UMEM
-> ok 55 PASS: DRV XDP_METADATA_COPY
-> ok 56 PASS: DRV XDP_METADATA_COPY_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 57 FAIL: DRV ALIGNED_INV_DESC_MULTI_BUFF
-> ok 58 PASS: DRV TOO_MANY_FRAGS
-> ok 59 PASS: DRV XDP_ADJUST_TAIL_SHRINK
-> ok 60 PASS: DRV TX_QUEUE_CONSUMER
-> ok 61 PASS: DRV XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF
-> ok 62 PASS: DRV XDP_ADJUST_TAIL_GROW
-> ok 63 PASS: DRV XDP_ADJUST_TAIL_GROW_MULTI_BUFF
-> ok 64 PASS: DRV SEND_RECEIVE_9K_PACKETS
-> ok 65 PASS: DRV SEND_RECEIVE_UNALIGNED
-> ok 66 PASS: DRV UNALIGNED_INV_DESC
-> ok 67 PASS: DRV UNALIGNED_INV_DESC_4001_FRAME_SIZE
-> ok 68 PASS: DRV SEND_RECEIVE_UNALIGNED_9K_PACKETS
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 69 FAIL: DRV UNALIGNED_INV_DESC_MULTI_BUFF
-> ok 70 PASS: DRV HW_SW_MIN_RING_SIZE
-> ok 71 PASS: DRV HW_SW_MAX_RING_SIZE
-> ok 72 PASS: DRV TEARDOWN
-> ok 73 PASS: ZC SEND_RECEIVE
-> ok 74 PASS: ZC SEND_RECEIVE_2K_FRAME
-> ok 75 PASS: ZC SEND_RECEIVE_SINGLE_PKT
-> ok 76 PASS: ZC POLL_RX
-> ok 77 PASS: ZC POLL_TX
-> ok 78 PASS: ZC POLL_RXQ_FULL
-> ok 79 PASS: ZC POLL_TXQ_FULL
-> ok 80 PASS: ZC ALIGNED_INV_DESC
-> ok 81 PASS: ZC ALIGNED_INV_DESC_2K_FRAME_SIZE
-> ok 82 PASS: ZC UMEM_HEADROOM
-> ok 83 PASS: ZC BIDIRECTIONAL
-> # Can not run RX_DROPPED test for ZC mode
-> ok 84 # SKIP SKIP: ZC STAT_RX_DROPPED
-> ok 85 PASS: ZC STAT_TX_INVALID
-> ok 86 PASS: ZC STAT_RX_FULL
-> ok 87 PASS: ZC STAT_FILL_EMPTY
-> ok 88 PASS: ZC XDP_PROG_CLEANUP
-> ok 89 PASS: ZC XDP_DROP_HALF
-> ok 90 PASS: ZC XDP_SHARED_UMEM
-> ok 91 PASS: ZC XDP_METADATA_COPY
-> ok 92 PASS: ZC XDP_METADATA_COPY_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 93 FAIL: ZC ALIGNED_INV_DESC_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [11], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> ---------------------------------------
-> not ok 94 FAIL: ZC TOO_MANY_FRAGS
-> ok 95 PASS: ZC XDP_ADJUST_TAIL_SHRINK
-> # Can not run TX_QUEUE_CONSUMER test for ZC mode
-> ok 96 # SKIP SKIP: ZC TX_QUEUE_CONSUMER
-> ok 97 PASS: ZC XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF
-> ok 98 PASS: ZC XDP_ADJUST_TAIL_GROW
-> ok 99 PASS: ZC XDP_ADJUST_TAIL_GROW_MULTI_BUFF
-> ok 100 PASS: ZC SEND_RECEIVE_9K_PACKETS
-> ok 101 PASS: ZC SEND_RECEIVE_UNALIGNED
-> ok 102 PASS: ZC UNALIGNED_INV_DESC
-> ok 103 PASS: ZC UNALIGNED_INV_DESC_4001_FRAME_SIZE
-> ok 104 PASS: ZC SEND_RECEIVE_UNALIGNED_9K_PACKETS
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 105 FAIL: ZC UNALIGNED_INV_DESC_MULTI_BUFF
-> ok 106 PASS: ZC HW_SW_MIN_RING_SIZE
-> ok 107 PASS: ZC HW_SW_MAX_RING_SIZE
-> ok 108 PASS: ZC TEARDOWN
-> # 4 skipped test(s) detected. Consider enabling relevant config options t=
-o improve coverage.
-> # Totals: pass:97 fail:7 xfail:0 xpass:0 skip:4 error:0
-> XSK_SELFTESTS_ens785f0np0_SOFTIRQ: [ FAIL ]
-> 1..108
-> ok 1 PASS: SKB BUSY-POLL SEND_RECEIVE
-> ok 2 PASS: SKB BUSY-POLL SEND_RECEIVE_2K_FRAME
-> ok 3 PASS: SKB BUSY-POLL SEND_RECEIVE_SINGLE_PKT
-> ok 4 PASS: SKB BUSY-POLL POLL_RX
-> ok 5 PASS: SKB BUSY-POLL POLL_TX
-> ok 6 PASS: SKB BUSY-POLL POLL_RXQ_FULL
-> ok 7 PASS: SKB BUSY-POLL POLL_TXQ_FULL
-> ok 8 PASS: SKB BUSY-POLL ALIGNED_INV_DESC
-> ok 9 PASS: SKB BUSY-POLL ALIGNED_INV_DESC_2K_FRAME_SIZE
-> ok 10 PASS: SKB BUSY-POLL UMEM_HEADROOM
-> ok 11 PASS: SKB BUSY-POLL BIDIRECTIONAL
-> ok 12 PASS: SKB BUSY-POLL STAT_RX_DROPPED
-> ok 13 PASS: SKB BUSY-POLL STAT_TX_INVALID
-> ok 14 PASS: SKB BUSY-POLL STAT_RX_FULL
-> ok 15 PASS: SKB BUSY-POLL STAT_FILL_EMPTY
-> ok 16 PASS: SKB BUSY-POLL XDP_PROG_CLEANUP
-> ok 17 PASS: SKB BUSY-POLL XDP_DROP_HALF
-> ok 18 PASS: SKB BUSY-POLL XDP_SHARED_UMEM
-> ok 19 PASS: SKB BUSY-POLL XDP_METADATA_COPY
-> ok 20 PASS: SKB BUSY-POLL XDP_METADATA_COPY_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 21 FAIL: SKB BUSY-POLL ALIGNED_INV_DESC_MULTI_BUFF
-> ok 22 PASS: SKB BUSY-POLL TOO_MANY_FRAGS
-> ok 23 PASS: SKB BUSY-POLL XDP_ADJUST_TAIL_SHRINK
-> ok 24 PASS: SKB BUSY-POLL TX_QUEUE_CONSUMER
-> ok 25 PASS: SKB BUSY-POLL XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF
-> ok 26 # SKIP SKIP: SKB BUSY-POLL XDP_ADJUST_TAIL_GROW
-> ok 27 # SKIP SKIP: SKB BUSY-POLL XDP_ADJUST_TAIL_GROW_MULTI_BUFF
-> ok 28 PASS: SKB BUSY-POLL SEND_RECEIVE_9K_PACKETS
-> ok 29 PASS: SKB BUSY-POLL SEND_RECEIVE_UNALIGNED
-> ok 30 PASS: SKB BUSY-POLL UNALIGNED_INV_DESC
-> ok 31 PASS: SKB BUSY-POLL UNALIGNED_INV_DESC_4001_FRAME_SIZE
-> ok 32 PASS: SKB BUSY-POLL SEND_RECEIVE_UNALIGNED_9K_PACKETS
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 33 FAIL: SKB BUSY-POLL UNALIGNED_INV_DESC_MULTI_BUFF
-> ok 34 PASS: SKB BUSY-POLL HW_SW_MIN_RING_SIZE
-> ok 35 PASS: SKB BUSY-POLL HW_SW_MAX_RING_SIZE
-> ok 36 PASS: SKB BUSY-POLL TEARDOWN
-> ok 37 PASS: DRV BUSY-POLL SEND_RECEIVE
-> ok 38 PASS: DRV BUSY-POLL SEND_RECEIVE_2K_FRAME
-> ok 39 PASS: DRV BUSY-POLL SEND_RECEIVE_SINGLE_PKT
-> ok 40 PASS: DRV BUSY-POLL POLL_RX
-> ok 41 PASS: DRV BUSY-POLL POLL_TX
-> ok 42 PASS: DRV BUSY-POLL POLL_RXQ_FULL
-> ok 43 PASS: DRV BUSY-POLL POLL_TXQ_FULL
-> ok 44 PASS: DRV BUSY-POLL ALIGNED_INV_DESC
-> ok 45 PASS: DRV BUSY-POLL ALIGNED_INV_DESC_2K_FRAME_SIZE
-> ok 46 PASS: DRV BUSY-POLL UMEM_HEADROOM
-> ok 47 PASS: DRV BUSY-POLL BIDIRECTIONAL
-> ok 48 PASS: DRV BUSY-POLL STAT_RX_DROPPED
-> ok 49 PASS: DRV BUSY-POLL STAT_TX_INVALID
-> ok 50 PASS: DRV BUSY-POLL STAT_RX_FULL
-> ok 51 PASS: DRV BUSY-POLL STAT_FILL_EMPTY
-> ok 52 PASS: DRV BUSY-POLL XDP_PROG_CLEANUP
-> ok 53 PASS: DRV BUSY-POLL XDP_DROP_HALF
-> ok 54 PASS: DRV BUSY-POLL XDP_SHARED_UMEM
-> ok 55 PASS: DRV BUSY-POLL XDP_METADATA_COPY
-> ok 56 PASS: DRV BUSY-POLL XDP_METADATA_COPY_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 57 FAIL: DRV BUSY-POLL ALIGNED_INV_DESC_MULTI_BUFF
-> ok 58 PASS: DRV BUSY-POLL TOO_MANY_FRAGS
-> ok 59 PASS: DRV BUSY-POLL XDP_ADJUST_TAIL_SHRINK
-> ok 60 PASS: DRV BUSY-POLL TX_QUEUE_CONSUMER
-> ok 61 PASS: DRV BUSY-POLL XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF
-> ok 62 PASS: DRV BUSY-POLL XDP_ADJUST_TAIL_GROW
-> ok 63 PASS: DRV BUSY-POLL XDP_ADJUST_TAIL_GROW_MULTI_BUFF
-> ok 64 PASS: DRV BUSY-POLL SEND_RECEIVE_9K_PACKETS
-> ok 65 PASS: DRV BUSY-POLL SEND_RECEIVE_UNALIGNED
-> ok 66 PASS: DRV BUSY-POLL UNALIGNED_INV_DESC
-> ok 67 PASS: DRV BUSY-POLL UNALIGNED_INV_DESC_4001_FRAME_SIZE
-> ok 68 PASS: DRV BUSY-POLL SEND_RECEIVE_UNALIGNED_9K_PACKETS
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 69 FAIL: DRV BUSY-POLL UNALIGNED_INV_DESC_MULTI_BUFF
-> ok 70 PASS: DRV BUSY-POLL HW_SW_MIN_RING_SIZE
-> ok 71 PASS: DRV BUSY-POLL HW_SW_MAX_RING_SIZE
-> ok 72 PASS: DRV BUSY-POLL TEARDOWN
-> ok 73 PASS: ZC BUSY-POLL SEND_RECEIVE
-> ok 74 PASS: ZC BUSY-POLL SEND_RECEIVE_2K_FRAME
-> ok 75 PASS: ZC BUSY-POLL SEND_RECEIVE_SINGLE_PKT
-> ok 76 PASS: ZC BUSY-POLL POLL_RX
-> ok 77 PASS: ZC BUSY-POLL POLL_TX
-> ok 78 PASS: ZC BUSY-POLL POLL_RXQ_FULL
-> ok 79 PASS: ZC BUSY-POLL POLL_TXQ_FULL
-> ok 80 PASS: ZC BUSY-POLL ALIGNED_INV_DESC
-> ok 81 PASS: ZC BUSY-POLL ALIGNED_INV_DESC_2K_FRAME_SIZE
-> ok 82 PASS: ZC BUSY-POLL UMEM_HEADROOM
-> ok 83 PASS: ZC BUSY-POLL BIDIRECTIONAL
-> # Can not run RX_DROPPED test for ZC mode
-> ok 84 # SKIP SKIP: ZC BUSY-POLL STAT_RX_DROPPED
-> ok 85 PASS: ZC BUSY-POLL STAT_TX_INVALID
-> ok 86 PASS: ZC BUSY-POLL STAT_RX_FULL
-> ok 87 PASS: ZC BUSY-POLL STAT_FILL_EMPTY
-> ok 88 PASS: ZC BUSY-POLL XDP_PROG_CLEANUP
-> ok 89 PASS: ZC BUSY-POLL XDP_DROP_HALF
-> ok 90 PASS: ZC BUSY-POLL XDP_SHARED_UMEM
-> ok 91 PASS: ZC BUSY-POLL XDP_METADATA_COPY
-> ok 92 PASS: ZC BUSY-POLL XDP_METADATA_COPY_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 93 FAIL: ZC BUSY-POLL ALIGNED_INV_DESC_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [11], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> ---------------------------------------
-> not ok 94 FAIL: ZC BUSY-POLL TOO_MANY_FRAGS
-> ok 95 PASS: ZC BUSY-POLL XDP_ADJUST_TAIL_SHRINK
-> # Can not run TX_QUEUE_CONSUMER test for ZC mode
-> ok 96 # SKIP SKIP: ZC BUSY-POLL TX_QUEUE_CONSUMER
-> ok 97 PASS: ZC BUSY-POLL XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF
-> ok 98 PASS: ZC BUSY-POLL XDP_ADJUST_TAIL_GROW
-> ok 99 PASS: ZC BUSY-POLL XDP_ADJUST_TAIL_GROW_MULTI_BUFF
-> ok 100 PASS: ZC BUSY-POLL SEND_RECEIVE_9K_PACKETS
-> ok 101 PASS: ZC BUSY-POLL SEND_RECEIVE_UNALIGNED
-> ok 102 PASS: ZC BUSY-POLL UNALIGNED_INV_DESC
-> ok 103 PASS: ZC BUSY-POLL UNALIGNED_INV_DESC_4001_FRAME_SIZE
-> ok 104 PASS: ZC BUSY-POLL SEND_RECEIVE_UNALIGNED_9K_PACKETS
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 105 FAIL: ZC BUSY-POLL UNALIGNED_INV_DESC_MULTI_BUFF
-> ok 106 PASS: ZC BUSY-POLL HW_SW_MIN_RING_SIZE
-> ok 107 PASS: ZC BUSY-POLL HW_SW_MAX_RING_SIZE
-> ok 108 PASS: ZC BUSY-POLL TEARDOWN
-> # 4 skipped test(s) detected. Consider enabling relevant config options t=
-o improve coverage.
-> # Totals: pass:97 fail:7 xfail:0 xpass:0 skip:4 error:0
-> XSK_SELFTESTS_ens785f0np0_BUSY_POLL: [ FAIL ]
->
-> Summary:
-> XSK_SELFTESTS_ens785f0np0_SOFTIRQ: [ FAIL ]
-> XSK_SELFTESTS_ens785f0np0_BUSY_POLL: [ FAIL ]
+On Sat, 16 May 2026 17:33:09 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Thanks for the test. I spent some time finally configuring the env in
-my machine with ixgbe driver.
+> From: Steven Rostedt <rostedt@goodmis.org>
+> 
+> Add syntax to the FETCHARGS parsing of probes to allow the use of
+> structure and member names to get the offsets to dereference pointers.
+> 
+> Currently, a dereference must be a number, where the user has to figure
+> out manually the offset of a member of a structure that they want to
+> reference. For example, to get the size of a kmem_cache that was passed to
+> the function kmem_cache_alloc_noprof, one would need to do:
+> 
+>  # cd /sys/kernel/tracing
+>  # echo 'f:cache kmem_cache_alloc_noprof size=+0x18($arg1):u32' >> dynamic_events
+> 
+> This requires knowing that the offset of size is 0x18, which can be found
+> with gdb:
+> 
+>   (gdb) p &((struct kmem_cache *)0)->size
+>   $1 = (unsigned int *) 0x18
+> 
+> If BTF is in the kernel, it can be used to find this with names, where the
+> user doesn't need to find the actual offset:
+> 
+>  # echo 'f:cache kmem_cache_alloc_noprof size=+kmem_cache.size($arg1):u32' >> dynamic_events
+> 
+> Instead of the "+0x18", it would have "+kmem_cache.size" where the format is:
+> 
+>   +STRUCT.MEMBER[.MEMBER[..]]
+> 
+> The delimiter is '.' and the first item is the structure name. Then the
+> member of the structure to get the offset of. If that member is an
+> embedded structure, another '.MEMBER' may be added to get the offset of
+> its members with respect to the original value.
+> 
+>   "+kmem_cache.size($arg1)" is equivalent to:
+> 
+>   (*(struct kmem_cache *)$arg1).size
+> 
+> Anonymous structures are also handled:
+> 
+>   # echo 'e:xmit net.net_dev_xmit +net_device.name(+sk_buff.dev($skbaddr)):string' >> dynamic_events
+> 
+> Where "+net_device.name(+sk_buff.dev($skbaddr))" is equivalent to:
+> 
+>   (*(struct net_device *)((*(struct sk_buff *)($skbaddr)).dev)->name)
+> 
+> Note that "dev" of struct sk_buff is inside an anonymous structure:
+> 
+> struct sk_buff {
+> 	union {
+> 		struct {
+> 			/* These two members must be first to match sk_buff_head. */
+> 			struct sk_buff		*next;
+> 			struct sk_buff		*prev;
+> 
+> 			union {
+> 				struct net_device	*dev;
+> 				[..]
+> 			};
+> 		};
+> 		[..]
+> 	};
+> 
+> This will allow up to three deep of anonymous structures before it will
+> fail to find a member.
+> 
+> The above produces:
+> 
+>     sshd-session-1080    [000] b..5.  1526.337161: xmit: (net.net_dev_xmit) arg1="enp7s0"
+> 
+> And nested structures can be found by adding more members to the arg:
+> 
+>   # echo 'f:read filemap_readahead.isra.0 file=+0(+dentry.d_name.name(+file.f_path.dentry($arg2))):string' >> dynamic_events
+> 
+> The above is equivalent to:
+> 
+>   *((*(struct dentry *)(*(struct file *)$arg2).f_path.dentry)->d_name.name)
+> 
+> And produces:
+> 
+>        trace-cmd-1381    [002] ...1.  2082.676268: read: (filemap_readahead.isra.0+0x0/0x150) file="trace.dat"
+> 
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Some of the failures are probably caused because of lack of patch 5 in
-your setup? The rest is caused/breaked by patch 3 which was stated by
-Stan. I fixed that in the next version.
+Thanks for updating it! I think this looks good to me. 
+Let me test it. I think we also need updating selftests.
 
-Thanks,
-Jason
+Thank you,
+
+> ---
+> Changes since v1: https://patch.msgid.link/20250729113335.2e4f087d@batman.local.home
+> 
+> - Pass error info back so that error_log can display what went wrong
+>   (Masami Hiramatsu)
+> 
+> - Use __btf_member_bit_offset() to get nested struct member offsets
+>   (Douglas Raillard)
+> 
+> - Add btf_put(btf) (Jiri Olsa)
+> 
+>  Documentation/trace/kprobetrace.rst |   3 +
+>  kernel/trace/trace_btf.c            | 111 ++++++++++++++++++++++++++++
+>  kernel/trace/trace_btf.h            |  10 +++
+>  kernel/trace/trace_probe.c          |  19 ++++-
+>  kernel/trace/trace_probe.h          |   4 +-
+>  5 files changed, 144 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
+> index 3b6791c17e9b..00273157100c 100644
+> --- a/Documentation/trace/kprobetrace.rst
+> +++ b/Documentation/trace/kprobetrace.rst
+> @@ -54,6 +54,8 @@ Synopsis of kprobe_events
+>    $retval	: Fetch return value.(\*2)
+>    $comm		: Fetch current task comm.
+>    +|-[u]OFFS(FETCHARG) : Fetch memory at FETCHARG +|- OFFS address.(\*3)(\*4)
+> +  +STRUCT.MEMBER[.MEMBER[..]](FETCHARG) : If BTF is supported, Fetch memory
+> +		  at FETCHARG + the offset of MEMBER inside of STRUCT.(\*5)
+>    \IMM		: Store an immediate value to the argument.
+>    NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
+>    FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
+> @@ -70,6 +72,7 @@ Synopsis of kprobe_events
+>          accesses one register.
+>    (\*3) this is useful for fetching a field of data structures.
+>    (\*4) "u" means user-space dereference. See :ref:`user_mem_access`.
+> +  (\*5) +STRUCT.MEMBER(FETCHARG) is equivalent to (*(struct STRUCT *)(FETCHARG)).MEMBER
+>  
+>  Function arguments at kretprobe
+>  -------------------------------
+> diff --git a/kernel/trace/trace_btf.c b/kernel/trace/trace_btf.c
+> index 00172f301f25..be88cc4d97dd 100644
+> --- a/kernel/trace/trace_btf.c
+> +++ b/kernel/trace/trace_btf.c
+> @@ -120,3 +120,114 @@ const struct btf_member *btf_find_struct_member(struct btf *btf,
+>  	return member;
+>  }
+>  
+> +#define BITS_ROUNDDOWN_BYTES(bits) ((bits) >> 3)
+> +
+> +static int find_member(const char *ptr, struct btf *btf,
+> +		       const struct btf_type **type, int level)
+> +{
+> +	const struct btf_member *member;
+> +	const struct btf_type *t = *type;
+> +	int i;
+> +
+> +	/* Max of 3 depth of anonymous structures */
+> +	if (level > 3)
+> +		return -E2BIG;
+> +
+> +	for_each_member(i, t, member) {
+> +		const char *tname = btf_name_by_offset(btf, member->name_off);
+> +
+> +		if (strcmp(ptr, tname) == 0) {
+> +			int offset = __btf_member_bit_offset(t, member);
+> +			*type = btf_type_by_id(btf, member->type);
+> +			return BITS_ROUNDDOWN_BYTES(offset);
+> +		}
+> +
+> +		/* Handle anonymous structures */
+> +		if (strlen(tname))
+> +			continue;
+> +
+> +		*type = btf_type_by_id(btf, member->type);
+> +		if (btf_type_is_struct(*type)) {
+> +			int offset = find_member(ptr, btf, type, level + 1);
+> +
+> +			if (offset < 0)
+> +				continue;
+> +
+> +			return offset + BITS_ROUNDDOWN_BYTES(member->offset);
+> +		}
+> +	}
+> +
+> +	return -ENOENT;
+> +}
+> +
+> +/**
+> + * btf_find_offset - Find an offset of a member for a structure
+> + * @arg: A structure name followed by one or more members
+> + * @offset_p: A pointer to where to store the offset
+> + *
+> + * Will parse @arg with the expected format of: struct.member[[.member]..]
+> + * It is delimited by '.'. The first item must be a structure type.
+> + * The next are its members. If the member is also of a structure type it
+> + * another member may follow ".member".
+> + *
+> + * Note, @arg is modified but will be put back to what it was on return.
+> + *
+> + * Returns: 0 on success and -EINVAL if no '.' is present
+> + *    or -ENXIO if the structure or member is not found.
+> + *    Returns -EINVAL if BTF is not defined.
+> + *  On success, @offset_p will contain the offset of the member specified
+> + *    by @arg.
+> + */
+> +int btf_find_offset(char *arg, long *offset_p)
+> +{
+> +	const struct btf_type *t;
+> +	struct btf *btf;
+> +	long offset = 0;
+> +	char *ptr;
+> +	int ret;
+> +	s32 id;
+> +
+> +	ptr = strchr(arg, '.');
+> +	if (!ptr)
+> +		return -EINVAL;
+> +
+> +	*ptr = '\0';
+> +
+> +	ret = -ENXIO;
+> +	id = bpf_find_btf_id(arg, BTF_KIND_STRUCT, &btf);
+> +	if (id < 0)
+> +		goto error;
+> +
+> +	/* Get BTF_KIND_FUNC type */
+> +	t = btf_type_by_id(btf, id);
+> +
+> +	/* May allow more than one member, as long as they are structures */
+> +	do {
+> +		ret = -ENXIO;
+> +		if (!t || !btf_type_is_struct(t))
+> +			goto error;
+> +
+> +		*ptr++ = '.';
+> +		arg = ptr;
+> +		ptr = strchr(ptr, '.');
+> +		if (ptr)
+> +			*ptr = '\0';
+> +
+> +		ret = find_member(arg, btf, &t, 0);
+> +		if (ret < 0)
+> +			goto error;
+> +
+> +		offset += ret;
+> +
+> +	} while (ptr);
+> +
+> +	btf_put(btf);
+> +	*offset_p = offset;
+> +	return 0;
+> +
+> +error:
+> +	btf_put(btf);
+> +	if (ptr)
+> +		*ptr = '.';
+> +	return ret;
+> +}
+> diff --git a/kernel/trace/trace_btf.h b/kernel/trace/trace_btf.h
+> index 4bc44bc261e6..7b0797a6050b 100644
+> --- a/kernel/trace/trace_btf.h
+> +++ b/kernel/trace/trace_btf.h
+> @@ -9,3 +9,13 @@ const struct btf_member *btf_find_struct_member(struct btf *btf,
+>  						const struct btf_type *type,
+>  						const char *member_name,
+>  						u32 *anon_offset);
+> +
+> +#ifdef CONFIG_PROBE_EVENTS_BTF_ARGS
+> +/* Will modify arg, but will put it back before returning. */
+> +int btf_find_offset(char *arg, long *offset);
+> +#else
+> +static inline int btf_find_offset(char *arg, long *offset)
+> +{
+> +	return -EINVAL;
+> +}
+> +#endif
+> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> index e0d3a0da26af..6fcede2de1a5 100644
+> --- a/kernel/trace/trace_probe.c
+> +++ b/kernel/trace/trace_probe.c
+> @@ -1165,7 +1165,7 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
+>  
+>  	case '+':	/* deref memory */
+>  	case '-':
+> -		if (arg[1] == 'u') {
+> +		if (arg[1] == 'u' && isdigit(arg[2])) {
+>  			deref = FETCH_OP_UDEREF;
+>  			arg[1] = arg[0];
+>  			arg++;
+> @@ -1178,7 +1178,22 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
+>  			return -EINVAL;
+>  		}
+>  		*tmp = '\0';
+> -		ret = kstrtol(arg, 0, &offset);
+> +		if (arg[0] != '-' && !isdigit(*arg)) {
+> +			int err = 0;
+> +			ret = btf_find_offset(arg, &offset);
+> +			switch (ret) {
+> +			case -ENODEV: err = TP_ERR_NOSUP_BTFARG; break;
+> +			case -E2BIG: err = TP_ERR_MEMBER_TOO_DEEP; break;
+> +			case -EINVAL: err = TP_ERR_BAD_STRUCT_FMT; break;
+> +			case -ENXIO: err = TP_ERR_BAD_BTF_TID; break;
+> +			}
+> +			if (err)
+> +				__trace_probe_log_err(ctx->offset, err);
+> +			if (ret < 0)
+> +				return ret;
+> +		} else {
+> +			ret = kstrtol(arg, 0, &offset);
+> +		}
+>  		if (ret) {
+>  			trace_probe_log_err(ctx->offset, BAD_DEREF_OFFS);
+>  			break;
+> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+> index 262d8707a3df..d649bb9f5b7c 100644
+> --- a/kernel/trace/trace_probe.h
+> +++ b/kernel/trace/trace_probe.h
+> @@ -563,7 +563,9 @@ extern int traceprobe_define_arg_fields(struct trace_event_call *event_call,
+>  	C(NEED_STRING_TYPE,	"$comm and immediate-string only accepts string type"),\
+>  	C(TOO_MANY_ARGS,	"Too many arguments are specified"),	\
+>  	C(TOO_MANY_EARGS,	"Too many entry arguments specified"),	\
+> -	C(EVENT_TOO_BIG,	"Event too big (too many fields?)"),
+> +	C(EVENT_TOO_BIG,	"Event too big (too many fields?)"), \
+> +	C(MEMBER_TOO_DEEP,	"Too many indirections of anonymous structure"), \
+> +	C(BAD_STRUCT_FMT,	"Unknown BTF structure"),
+>  
+>  #undef C
+>  #define C(a, b)		TP_ERR_##a
+> -- 
+> 2.53.0
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
