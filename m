@@ -1,135 +1,201 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE00A282F12
-	for <bpf@vger.kernel.org>; Sun, 17 May 2026 01:44:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85FD2405C27
+	for <bpf@vger.kernel.org>; Sun, 17 May 2026 01:50:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778982300; cv=pass; b=IcCzbuomZVeCsDPZ9qy2CUqJLTkwClJV7D5s9PeHMrIXjbrvqUDaUYFpTiRdG/eaeV1Ad2uoD6lDi48Ssem4ikzDcVXAYaGjNK3nmLEy/Gd4q3yU4kNdGA5/xJPbC4R0Ip2OHvm3uEMhtkgbz8p5MlpGaQ5lcqClorhoRzToqhg=
+	t=1778982628; cv=pass; b=kTXGOCG9berpm0bET9Qq8bJ1JVAmQAmM6Ipk9blh2a1pHx5ZAlJjlQFzRgqvxNlGxvmtncB5kveC3VMp0kMrLRHncze1sI4DjV2OcskRe8Aa5uqUd/+bK675AulvJNDboQLmz4DJ9I0J+ajbPDrrx8GXS5GuUxoAig+Eb8J49ww=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778982300; c=relaxed/simple;
-	bh=NEDl5DMoo7jrjGwiAq57+R3NM7H6fAc/K4famdkSEsI=;
+	s=arc-20240116; t=1778982628; c=relaxed/simple;
+	bh=nYJ1lQWEQZMAUa8pscubpFTZASsZvEJcD69gXaCEt2Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bcP+5pxoP3yGQbIZELPv2GTL0nnNVS2lAWS7ZH001yqd+lZGo6c1UgoToy+NNDXzbOn6jxye2r2cpbqM4cAqDmQrZ1eICfg3xiDHjKs1kN+Oq1R+EME5+PaAUJOf7IGoChitOyHobV9PgBoU5OXIQsWv+h1MKmxuJcsv1CQ1z6g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=njybb0mN; arc=pass smtp.client-ip=209.85.218.41
+	 To:Cc:Content-Type; b=NyvrmE5viGa+fNxNT/K3QSyr2k7GPbQha6RN4P0QK38rGVnAN3CgpM08vb2bwR+XNbAfbgTuvhAUGtXLFhz1iJJolJyFXtBnvgENIPp+zSke/i5/1S0/fyJIfis4lXekUA6hNMIkT0LcyprhahqTOxsjk7C+Cq4GNRpFNh3eyx4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BJqk6sR3; arc=pass smtp.client-ip=209.85.167.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="njybb0mN"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b8f97c626aaso248328166b.2
-        for <bpf@vger.kernel.org>; Sat, 16 May 2026 18:44:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778982297; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BJqk6sR3"
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5a887ebb416so1375986e87.2
+        for <bpf@vger.kernel.org>; Sat, 16 May 2026 18:50:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778982624; cv=none;
         d=google.com; s=arc-20240605;
-        b=k/GPFS6cu0ajavTwNveol0JxVkK7sIC9Y7HZTVxT4STJcYJg9SCEz30XksxSTCzOYz
-         eXXjjyOgFif6cnygf6Os+EhKsYPToT8GymGFc4oxpV+lAm8eIqGNdhr1hQzXNqSMztmc
-         eGM7uiOBr3Wx9B2ND3mjtStBuNQqLbZrpnSCNjnkv4xYE6mQK3hlzFDyIdexHyAEH2XJ
-         WD/wqAR9ZHVBmPSUUJvKgGkU5y9JKAtuCrtB4B8Yk4iD9oahbkBGiCcXe4IrQm/3qHk9
-         Ztx2QE2Mp+zAY7xC7WcPErNhq457hPGKs0KZu7N4uhunyF56Jo7td+EqZYHqPzmaGkwN
-         yaFw==
+        b=OWNXn0YBsr7n3tq2Qchv2ioeQZomLwQgEQDRajyztnVITVwn//5fstwHHoFE9oZjiC
+         neQWJFJ1qF5tF9Te3EDXFRsg187q4JFPRSgkQNxOOqgej7bPFp93GYTKkRdcDaB6gNT7
+         sgfHCMLpcYDfgO51aiJbXuLsSoIHaksvAYx0KWNi+cKKs10J8sdSRv7ufqbg6PQqH9mk
+         /ULN1jbgXaXnKrqMlxuo+x2a5G8UJQEWxEVJ9xO1IQHb29yh4msSjNu8jXw8Pee7HKvL
+         eYcprYCtymv9r04YVWn+Gezqw5Eg8RxvbS81ZKs2+GC+qg96S1w10gaTNL7lxl7r3zOp
+         nXxw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=nGV3pUFeUKLiEnY2yH7vsWpwkbUOOPZyrYebt0Swvic=;
-        fh=YCk6NYLv0a5GiW7ok5zwNvEnZHOnsFYC9qcmhO9KnTM=;
-        b=Z+jfu0BKQyv1uV/U5jYP0wkThJwoftYWCunTQB477CLXh+3IGQ9Oy770ccQOgjplfi
-         Zb/d6ZrKHcU79hKSGzhn27bxfmZjce6VOU73TDoFw5ROdq3vecOIDNPlXV5R5iWyBaN0
-         r3QU4E+Y55KnWQvRMYDS1TdgAufdeMqHDwFra8LvHCy2it+0AGBQKWZyaX89iQCqaF5W
-         mLYrYo/8OmqiaUC2BIxVMx4nshON8+4YuWLEp7i0W7YcP4ZFne2p6wDWMVMtW87xUVNC
-         iZ2iEYpyQ17/rCuv2cusKivyiORAwnB8nSGoWeKemnaHtKVu2LJcWZ4jrk0d4g3mYsuN
-         eKDg==;
+        bh=hOEykRQTpFKMfjOoZ1QFIYhrfxe+UpeYQRXwMBS6ryU=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=Bww+k054BSIsFIY6kwWzeR+YGoFdA8b0sb693GNNN386xiGS2sA5zGBBoB2PxA+iOL
+         4NaXwUH4+ZOCI2FXvRN25WPKz3T40qHMEyiY/BYcxd25w4d8YGShr6b8b156rV4O9meM
+         FaQVYN+4uhLg9m5bvcQ2yMUD9wtxeh3KcKTBcMdDHLWh2aUhy7iEFsxH1QBXVWLCM8gr
+         anyTCWRivOI3qceWwQI2MaokPARUT594eIv4J1I1eRb4/K8vA0pR6eeEQLzs8WEngsCo
+         CcK/NGERAHA0lYnIAb8DV9Hpl1OeDTiACyqfvss5jHeXUM+9Br0R2aFcjOxkcBmF4tGi
+         eApQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778982297; x=1779587097; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778982624; x=1779587424; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nGV3pUFeUKLiEnY2yH7vsWpwkbUOOPZyrYebt0Swvic=;
-        b=njybb0mNQnQepO0/TiC+vUoH89+vWTZ6cNk7WwUSkNU/3YCbA7EJCqPb1dJkvzUTkD
-         OVRohXHGvZeZw/qyl6+0jP7nsyXo6Bu48zF0MI8+1ESn/GkX/lDvsB2bk+7tZHRqqCXs
-         p55WMfiobBlWmB8Q1eElCsf79u5zlEIb9UmP44JJBvZk4Lhusv+9v3RqPOM88Dc2q9NN
-         zOlUHyCQ/0tTrzMZgkewhvKE3Yshn4h154n2iovPMaNq0ifOyZnkUgN1ZwBdKRZy1f2C
-         uTzcqcStqTU5d5P61Dl1XnQrtv0PTEsppRLdoxXxhLK5kke6H0qHL3hWuTnF49pr9WXc
-         LqXQ==
+        bh=hOEykRQTpFKMfjOoZ1QFIYhrfxe+UpeYQRXwMBS6ryU=;
+        b=BJqk6sR3NX+GIzxCC70QDbKkcMxH6ex6u0BUW8wEgZlzcyi1qWIKx2Tigz315dbzvY
+         +VC9Gew+TFTVWuX4U+ddUrQ1GfFLGNeAzPX6wNgb4C58etsXpgJdBuwsQFRT1p9ASOCg
+         ghVZWkm8HvkIbviOPlGoNSTK0MUYKtVsc6W0qWMKPLXOr3Z/8LmyaZWHx1Q0XMQmwu7I
+         yjQhQ7LNMB1P1ZKiJ5wVoiyP9ElLDSAZDwAD+oUuU4B45AWWWG4PWod99BGQBKnKcnRT
+         7qhhrceq00j9a6Nhyf3KU4+fxzvMhWvmtxwEDIpquddzANCqMRQu4IdZB7P2mMlANW1H
+         I1mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778982297; x=1779587097;
+        d=1e100.net; s=20251104; t=1778982624; x=1779587424;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=nGV3pUFeUKLiEnY2yH7vsWpwkbUOOPZyrYebt0Swvic=;
-        b=sOebK4elPEqcAdsGmCbK70VIp7Zvk2ooxs9Ts3hXkciphXIVRW/vGTDuTQ5svhf+Bg
-         f1twzEHVBcItFmmlS2P62m+SMLF8xOSon4upOseWHbKUmHCnYPzyOFZJOhXKshs8/HX5
-         pQcr26SqeRlVNNjz9yp+PwTUYmMORxUZFnaCpHbO7d5KlPPadw2gB0j3uAdF2/fcQ7i8
-         1X70VaBE6kol5eyxlw152RGB3gUwPQScj+gFgCIJXyjtsnh3MqK1ZSKzFih2PYzN8gON
-         afy6Yy+ScQggaYyKg30pMZLsXGOSe61ezcJJ4SeQTePLMX5D1f4OuMGrEBQmtTm0FmEz
-         HBEw==
-X-Forwarded-Encrypted: i=1; AFNElJ/RZRzjw7yHYd5DnlhzIWinPMMim1hXi4i0wF7MYEb84De5t7yjq2Ztzk3EApWxxQr0n2s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/fJ/PHMAKTDu3suU2kbfs+j8ud2c4bonn+gWK1LQGGH8JVgHU
-	SFDFi0EmKrL8pZCRcXrWEcs5dUrWSY5S1KvB3mLEsGaAFIv88xX4fTuuGkRI4DpnhfBVCg6pvW+
-	ABRSm2h98xYfREkcMFiAiYr5Vb7PAXLA=
-X-Gm-Gg: Acq92OFzWgzLK4Yl6o8R+kY22U95yqgGDHC7ZwavvR1b5m7gPqWj26nHFWEORi8D/RN
-	3CepOtq3LUbnzmXZZ/xk1d/E+a6qEbkJKmSD2KejE2EORzbp8jBb1a1l+JWTIxHaUlmzOj/caIl
-	+VBWxnJG+ki5E7/+PhSTLaGNct02ZuVFGJ47ueL01vP0gDenB9GnF8tOiuR1tnfygWPY7qtm0hb
-	lA4FqECHd3w1e0gch77CGZEquogI65xnS2MhKFyau/nITgfXkuyAuA+L/HBFACyUpaQc7eWhzRZ
-	/W8m9iFij2bz/j9r3/CzCtvT0y3MUEGfODQ1KsRmOAv8pqVoTmO7VVpArWM5NwhjiRJhMHCXuHY
-	4v8FWyD0B77YhwSXaslwHzbjXb/nYIIqDM4EiezekLtYIel8=
-X-Received: by 2002:a17:906:6a04:b0:bd5:7c2:70cb with SMTP id
- a640c23a62f3a-bd517a9ea73mr524298266b.49.1778982296944; Sat, 16 May 2026
- 18:44:56 -0700 (PDT)
+        bh=hOEykRQTpFKMfjOoZ1QFIYhrfxe+UpeYQRXwMBS6ryU=;
+        b=LIR285mMBv83AeAM+mV+Sr5HgYu3Ls3PKtSJDWbRbTXUqo4AILqU2zfp9WiHSdTyWG
+         qwRgbiLGzdLq7umTTruiYsA+85bQIzIqnYXg1FsNCH0uXO+/v6O/p0SO1F3NfvrVeTg9
+         9OMEtcdk4kW6udt8mAbZE317wPfV65i8SI8/pQTWYcJ4Dit4n4v0sUnu4koIqcHaLMbV
+         2vkc7s/+mYBWJbuUL7ToEi3td32keEiI6Jfv7iB3DlP5VtuJPKWgffUKPBdUTlKNzPyk
+         cprVyUGgUONRUVqMvShEVwliSbncij50TAyIareFW4QdEPW12Dh31/IBYQpNkl94y2oj
+         kqtw==
+X-Gm-Message-State: AOJu0YwI5FEvk2QarHHowS7vFWraH8qdDxN/hqQ23Be1FyW2maonoVaP
+	cCJ2u8jhnLQ5TTB0E0Ult+ptZfUst5nk4mrR+VOnh3pjnOaagR6QfBfnD4hP3Wn9jVnccrPPSoi
+	4wcIvpo/JsD2Jq/zhLBD/RyYvrCBrfZ/TyWlHPlQ=
+X-Gm-Gg: Acq92OHFsXtAWMQh3l+v4z+duuWcJwTF4I2kvJmOO769xo3ZueuJbSRrCGIdWKp+8aW
+	+JKdfT5qyBpzRucAfUupxEk83f7uC7ro/bZwokE8QHh2u+lomujfmsSuEM/mT0qylZSuyKqEINU
+	0kwb8VX5//crEMqR94j8pUtH+pyw1O74QrZlxULGIMKAdx1Zcek6Q5Je+KM6x+xa4VLA+EE4fgm
+	8W4MLa8pDK+c/Btryrqb5cRS1/SN+ZaRqi/vnlGmgmkPCJAAgFPORJIkZCltC0ZwEPed7zcHemV
+	/E6nV+/V/R2N+6CdhlhWva50gB5fryCSgORMuK4=
+X-Received: by 2002:a05:6512:118a:b0:5a8:e32f:6edd with SMTP id
+ 2adb3069b0e04-5aa0e5baa13mr2904320e87.0.1778982624275; Sat, 16 May 2026
+ 18:50:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260515014958.1186132-1-yonghong.song@linux.dev> <177898201164.476559.9152177315116491592.git-patchwork-notify@kernel.org>
-In-Reply-To: <177898201164.476559.9152177315116491592.git-patchwork-notify@kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sat, 16 May 2026 18:44:45 -0700
-X-Gm-Features: AVHnY4KmlDr13NkRi5eo3drI5vdon69dRYKeoJV6UwUNe_BSKcuuOHqIcXUSruQ
-Message-ID: <CAADnVQKqO-avv9rOM_kk1gktHQQODVxz=sPH-gSFG0VNh08Wtw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Validate outgoing stack args when
- btf_prepare_func_args fails
-To: patchwork-bot+netdevbpf@kernel.org
-Cc: Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kernel Team <kernel-team@fb.com>, 
-	Martin KaFai Lau <martin.lau@kernel.org>
+References: <20260515123018.80147-4-kerneljasonxing@gmail.com> <20260516123127.1A234C19425@smtp.kernel.org>
+In-Reply-To: <20260516123127.1A234C19425@smtp.kernel.org>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Sun, 17 May 2026 09:49:46 +0800
+X-Gm-Features: AVHnY4IkiF7kus0UIm1_JsybGIshEID6rvZs8CBtI_oGvGHBAcRvdcmb7VqBtVo
+Message-ID: <CAL+tcoBbv-dO9CEm5cWHyZ7Xt4siJfvWuWndizXX5KYO65xFeA@mail.gmail.com>
+Subject: Re: [PATCH net v2 3/5] xsk: drain continuation descs after overflow
+ in xsk_build_skb()
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 16, 2026 at 6:39=E2=80=AFPM <patchwork-bot+netdevbpf@kernel.org=
-> wrote:
+On Sat, May 16, 2026 at 8:31=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
-> Hello:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [High] UAPI breakage and transmission batch abortion due to returning -=
+EOVERFLOW to userspace
+> --
 >
-> This series was applied to bpf/bpf-next.git (master)
-> by Alexei Starovoitov <ast@kernel.org>:
+> commit 1d238b3786b35997fb62e781dd7528f204ca8b34
+> Author: Jason Xing <kerneljasonxing@gmail.com>
 >
-> On Thu, 14 May 2026 18:49:58 -0700 you wrote:
-> > btf_prepare_func_args() sets sub->arg_cnt before validating arg types.
-> > If validation fails (e.g. unsupported pointer type in a static subprog)=
-,
-> > check_outgoing_stack_args() is skipped because btf_check_func_arg_match=
-()
-> > returns early. For static subprogs, check_func_call() ignores non-EFAUL=
-T
-> > errors and proceeds with the call.
+> xsk: drain continuation descs after overflow in xsk_build_skb()
+>
+> When a multi-buffer packet exceeds MAX_SKB_FRAGS and triggers -EOVERFLOW,
+> only the current descriptor is released from the TX ring. This patch
+> introduces a drain_cont flag to properly handle the remaining continuatio=
+n
+> descriptors, preventing them from being misinterpreted as the beginning
+> of a new packet.
+>
+> Link: https://lore.kernel.org/all/20260425041726.85FB3C2BCB2@smtp.kernel.=
+org/
+>
+> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > index 0a6203c425766..9c51eed6ee99c 100644
+> > --- a/net/xdp/xsk.c
+> > +++ b/net/xdp/xsk.c
+> [ ... ]
+> > @@ -1062,6 +1064,26 @@ static int __xsk_generic_xmit(struct sock *sk)
+> >                       goto out;
+> >               }
 > >
-> > This causes the callee to read stack arg slots that the caller never
-> > stored or not initialized, potentially dereferencing NULL caller->stack=
-_arg_regs
-> > or getting no-initialized value.
-> >
-> > [...]
+> > +             if (unlikely(xs->drain_cont)) {
+> > +                     unsigned long flags;
+> > +                     u32 idx;
+> > +
+> > +                     spin_lock_irqsave(&xs->pool->cq_prod_lock, flags)=
+;
+> > +                     idx =3D xskq_get_prod(xs->pool->cq);
+> > +                     xskq_prod_write_addr(xs->pool->cq, idx, desc.addr=
+);
+> > +                     xskq_prod_submit_n(xs->pool->cq, 1);
+> > +                     spin_unlock_irqrestore(&xs->pool->cq_prod_lock, f=
+lags);
+> > +
+> > +                     xs->tx->invalid_descs++;
+> > +                     xskq_cons_release(xs->tx);
+> > +                     if (!xp_mb_desc(&desc)) {
+> > +                             xs->drain_cont =3D false;
+> > +                             err =3D -EOVERFLOW;
+> > +                             goto out;
 >
-> Here is the summary with links:
->   - [bpf-next,v2,1/2] bpf: Validate outgoing stack args when btf_prepare_=
-func_args fails
->     https://git.kernel.org/bpf/bpf-next/c/4286f5deee14
->   - [bpf-next,v2,2/2] selftests/bpf: Add test for stack arg read without =
-caller write
->     https://git.kernel.org/bpf/bpf-next/c/ef1b54e0db67
+> Does returning -EOVERFLOW to userspace break the expected UAPI here?
+>
+> The original code suppressed the -EOVERFLOW error to silently drop the in=
+valid
+> packet and continue processing the batch:
+>
+>                 if (IS_ERR(skb)) {
+>                         err =3D PTR_ERR(skb);
+>                         if (err !=3D -EOVERFLOW)
+>                                 goto out;
+>                         err =3D 0;
+>                         continue;
+>                 }
+>
+> By using goto out with err =3D -EOVERFLOW, doesn't this abort the transmi=
+ssion
+> batch prematurely? Any valid packets queued immediately behind the malfor=
+med
+> packet would not be processed during the current system call.
+>
+> Additionally, if the batch is aborted before any valid packets are transm=
+itted
+> (when sent_frame =3D=3D false), the __xsk_tx_release(xs) call at the out =
+label
+> will be skipped. Will this cause the global TX consumer index to remain
+> un-updated for the dropped descriptors, leading to a ring slot leak from =
+the
+> userspace perspective?
+>
+> Note that a later patch in the series ('selftests/xsk: fix multi-buffer
+> invalid desc tests for drain_cont') acknowledges this behavior by modifyi=
+ng
+> the selftests to tolerate the early return, but does this actually fix th=
+e
+> underlying ABI breakage in the kernel?
 
-bot is confused.
-First 5 patches of v3 were applied. Not v2.
+Yes, Stan also pointed out. I've already removed this part in the incoming =
+v3.
+
+Thanks,
+Jason
+
+>
+> > +                     }
+> > +                     continue;
+> > +             }
+> > +
+> >               skb =3D xsk_build_skb(xs, &desc);
+> >               if (IS_ERR(skb)) {
+> >                       err =3D PTR_ERR(skb);
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260515123018.80=
+147-1-kerneljasonxing@gmail.com?part=3D3
