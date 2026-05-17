@@ -1,179 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f65.google.com (mail-pj1-f65.google.com [209.85.216.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E3D3BB105
-	for <bpf@vger.kernel.org>; Sun, 17 May 2026 14:17:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6162027587D
+	for <bpf@vger.kernel.org>; Sun, 17 May 2026 14:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779027464; cv=none; b=o4WeQodrRa2uopKqj2oWBPlgwJ2IWl+U6SZrzUnfe/Z5oQVMZT6eAgLR2Syw6gj1vUjj3DLPYCNm9qHeXtA6c6ygFZXY6JMFvF4uBLMBHL5zBCHkz7H8r3RMytbK+DeCIjhdAlZKfyIUSaJoMPxb8xgpzqEnCj9P5+eRGkK0q7A=
+	t=1779029808; cv=none; b=ZLizj02pVlLGu5vssaklMaxQmol4Y3s6NuIiaqcJVOiLCoKwHj0gjM4w3F0en5wayAS0JwlKR0BX8KHGLWIZKMfwnCk0AS+2e8hmcBblCOYEKrWIJYKKwzQ4io1ORhIFMYOsHh/E3YCxFRBVwNwKd5zRijK+6d0kRzgAqGgWH4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779027464; c=relaxed/simple;
-	bh=E3Vg2Oq2ir+JjV1MKpVqofNBfbCynlS3UP/dp5f/jdw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=T0yz+hrK2KXLNF4BVCD0mdl7gWDZD9SQNxQdt50fjDTZlP3ptB2+nn2ohZ6vbCpm6GRDOz5OFWdYbiQnOJObENoE5iHQB13TVWBGrVty5yUJcaPMbJ9PYYRuwBBq+baBOsijjftDJ0h6XM8tVtawrfG6QN4YXvAfsGqZDrwhhDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a42HipzP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779029808; c=relaxed/simple;
+	bh=INaGmIt0//C93uZOPPIiep3TMeifrVgauwt4fvfY+yM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RTeU3zCNts0IYhYFNUWFWfEJWTnkvgC5kZHvWsPfrBkj3gKpfXYmLbmiS7V3vjfrR/ZxOx1XOtK91CNhbGZI+7ZcGg9G9f1h527spbvNVq3T54wUJCGi+6S+G4+gRGovloavIb6+vubGxX/8X61NzW/Tjffg2a+318FwJMIulKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K5jN8EXM; arc=none smtp.client-ip=209.85.216.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a42HipzP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0856DC2BCB8;
-	Sun, 17 May 2026 14:17:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779027462;
-	bh=E3Vg2Oq2ir+JjV1MKpVqofNBfbCynlS3UP/dp5f/jdw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=a42HipzPYDBPqVZ9Pso2pNiiMUfP1tVki1e6bhdSaWNkRy9v8KEnTvzNQXQ1FZ7w7
-	 tA50VE2BRUeCh79Q+CnpbVaD3SNNbGZSXl+V6ib41jJ4PJ7Fcj27ARnAX39NJq/C7Z
-	 9q8O4ch9ftktER3GyNIfJUjQHMIp/r3Poek3rH2DdSgiKeFhVw4FQmVd7NojjptQzB
-	 giBFHGtzCeRGL4ijyUVbjcAKuFJALorL9YGnrcfdYYO53DXy1e3z0fuLuqkHrA232h
-	 /W4Y30rqZXhp/EvFl/NMo23I3i/zmFTnzvE5W+6rW3/JF0fgdAto9HvZf8zYhkiv7Q
-	 ashNmApNK9RVQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3] killswitch: add per-function short-circuit
- mitigation primitive
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sasha Levin" <sashal@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260517134858.146569-1-sashal@kernel.org>
-References: <20260517134858.146569-1-sashal@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 17 May 2026 14:17:41 +0000
-Message-Id: <20260517141742.0856DC2BCB8@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K5jN8EXM"
+Received: by mail-pj1-f65.google.com with SMTP id 98e67ed59e1d1-369002b26f4so610293a91.3
+        for <bpf@vger.kernel.org>; Sun, 17 May 2026 07:56:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779029799; x=1779634599; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=s7WER+JhbZ/KqlU4Zw1Oz1ftuqqMYu4Xbn9qvubzl5s=;
+        b=K5jN8EXMBLZhe6vTLC2Mw+UvmuwYDYJAk/4l1MPkcWhaiLC4lEJQoCZzrTDONmvn/e
+         RTkPMgukAKfgjD8oi4Zc5WcE0xkKEeUQOhT1B0xghrHvGIi9BwTBhW+koTfJ6Vkwj6BM
+         cn8GHk9+36e3hxweBL8kajUU5uCd07tQTTSBHPdsn7TFe1LuWfwlvDLhEAJib+QMek/S
+         qopwylK9v3xmrqDssfOc1BedhrRvYiIms8I6xGu4CCU0RO8Zi/32Hia35fBhX/8L/u5x
+         4894uAgn8J1biqW1JFSiOtn4rWMKqK3qHcHvm5rly/pgOOEctWO+uxPSar/mCso25hRj
+         45UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779029799; x=1779634599;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s7WER+JhbZ/KqlU4Zw1Oz1ftuqqMYu4Xbn9qvubzl5s=;
+        b=V7biufZsJtxsw5/rZyDaEnC2nAKayRyhhK43L32YhDzl93NovoDGUkfD0jroaHLJgY
+         w0eB3GquJO8S/UXOPSu3CLJbzWlf+DF5Ip1RIrtWDnjskRQjyYEXtGVWh6z+Imv22vRI
+         CN6gszrX6c4W8jySg63G4WHFjMr/Ozz410c7iOc7o8eRi1jg0WwLxSqSx95tUcDtvong
+         ePee/ggfADevkNI5d10tVEBj65CDG1CNsrSywAFeHi9flnunK53k0HIqQ0ga+Ftnyb6K
+         QNP1jSSnpQfu7iRf7KrQjPbV1thB/6a3dEOP25g+1ESHFraQbiJk5zzmb0pbmXMDB1k1
+         eHRA==
+X-Forwarded-Encrypted: i=1; AFNElJ+MQbPWKLSDJQ05/suhbIyd9pOMVeAQ3xeWIcWJXGiJDfpg/iP2+texFz3iYGektIWEUcw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfohVEOllDySbqiAiM7Ej/4V5zT7DRWWfhAoFMxMDFLJo4Uapg
+	EQQ71A7/unREu/LQfDhil2tB/OZR7a1gkMXTRzBx89I1HwI/rTgNKDBw
+X-Gm-Gg: Acq92OGuvDEj9qfhPJGLNqfi+fdKFKCQq+oc6K07nzpKAp1vw8mlAwXn9tSIbt0boPI
+	zYWDn1szRwbm9PUlrWo1hz71qB6U5HsPFMn7cS3Y910t6G6wKiZcbN2PO34yo9LWGXYmXeQaLgL
+	TSuxjW3ljJuy3+I9QuVjTmf0ZqFhVbG/yfE2etdOEERZgjhauIJeZpnaCNjC0e/nKf1NOp7ssJn
+	YUDDkmA3gPS/4Uhnd/jKF2nTrk3zNBvY/tNBVQZHxKCXph+3JUlIynk2c8/gW3GssEks4mIq8nJ
+	AiSStt+ygYh0M7RbRz862TvdpE9OJH0s0n+rkyRh3ErLZNEMB5KUCCE7YbzDcXVstKaBLRH3iXE
+	oUrawieZCWTNvMot6Mo4BRSD4mx4Dt6QOWuvDmuRLjFgnDUyLre/VUwlXgzbKwOaQ9GwjJiUZ9i
+	gYv3mSLOIaY6xA1zkgD6DfRdwy/sH8o5cLKc8=
+X-Received: by 2002:a17:90b:1c11:b0:368:a297:bd3d with SMTP id 98e67ed59e1d1-36951895b57mr10465826a91.3.1779029798633;
+        Sun, 17 May 2026 07:56:38 -0700 (PDT)
+Received: from fedora.localdomain ([222.20.193.20])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c82bb1006fbsm10392522a12.21.2026.05.17.07.56.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 May 2026 07:56:38 -0700 (PDT)
+From: Xingwang Xiang <v3rdant.xiang@gmail.com>
+To: john.fastabend@gmail.com,
+	kuba@kernel.org,
+	mrpre@163.com
+Cc: jakub@cloudflare.com,
+	sd@queasysnail.net,
+	davem@davemloft.net,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	netdev@vger.kernel.org,
+	daniel@iogearbox.net,
+	bpf@vger.kernel.org,
+	Xingwang Xiang <v3rdant.xiang@gmail.com>
+Subject: [PATCH net v5 0/2] bpf, skmsg: fix verdict sk_data_ready racing with ktls rx
+Date: Sun, 17 May 2026 23:56:25 +0900
+Message-ID: <20260517145630.20521-1-v3rdant.xiang@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Calling __module_address() without rcu_read_lock() or module_mutex=
- in ks_module_notify() triggers lockdep splats and risks a Use-After-Free.
-- [Medium] The command parser in ks_control_write() rigidly fails with -EIN=
-VAL if there are multiple spaces or tabs between arguments.
---
+sk_psock_verdict_data_ready() lacks the tls_sw_has_ctx_rx() guard that
+sk_psock_strp_data_ready() gained in e91de6afa81c.  When a socket is
+inserted into a sockmap (BPF_SK_SKB_VERDICT) before TLS RX is configured,
+the missing guard causes tcp_read_skb() to drain sk_receive_queue without
+advancing copied_seq, leaving a dangling frag_list pointer that
+tls_decrypt_sg() walks — a use-after-free.
 
-commit 41367b8b3bd9a102ede7118d0216e23f583793b2
-Author: Sasha Levin <sashal@kernel.org>
+Patch 1 mirrors the fix from e91de6afa81c: add the tls_sw_has_ctx_rx()
+check to sk_psock_verdict_data_ready() so that when a TLS RX context is
+present the function defers to psock->saved_data_ready (sock_def_readable)
+instead of calling tcp_read_skb().
 
-killswitch: add per-function short-circuit mitigation primitive
+Patch 2 adds a selftest that drives the vulnerable sequence end-to-end
+and verifies recv() returns the correct decrypted data.
 
-This commit introduces a killswitch mitigation primitive, which allows
-an administrator to force a given function to return a specified value
-without executing its body. This is intended to mitigate security issues
-until a patch can be deployed. It is operated via a securityfs interface.
+Xingwang Xiang (2):
+  bpf, skmsg: fix verdict sk_data_ready racing with ktls rx
+  selftests/bpf: add regression test for ktls+sockmap verdict UAF
 
-> diff --git a/kernel/killswitch.c b/kernel/killswitch.c
-> new file mode 100644
-> index 0000000000000..7f509c62ea748
-> --- /dev/null
-> +++ b/kernel/killswitch.c
+ net/core/skmsg.c                              |   9 +-
+ .../selftests/bpf/prog_tests/sockmap_ktls.c   | 103 ++++++++++++++++++
+ .../selftests/bpf/progs/test_sockmap_ktls.c   |  21 ++++
+ 3 files changed, 131 insertions(+), 2 deletions(-)
 
-[ ... ]
-
-> +static int ks_module_notify(struct notifier_block *nb, unsigned long act=
-ion,
-> +			    void *data)
-> +{
-> +	struct module *mod =3D data;
-> +	struct ks_attr *attr, *n;
-> +
-> +	if (action !=3D MODULE_STATE_GOING)
-> +		return NOTIFY_DONE;
-> +
-> +	mutex_lock(&ks_lock);
-> +	list_for_each_entry_safe(attr, n, &ks_engaged_list, list) {
-> +		if (!attr->kp.addr ||
-> +		    __module_address((unsigned long)attr->kp.addr) !=3D mod)
-
-Does this need to be wrapped in an rcu_read_lock() and rcu_read_unlock()?
-
-The __module_address() function traverses the RCU-protected module latch tr=
-ee
-and requires the caller to hold module_mutex or be within an RCU read-side
-critical section.
-
-The module subsystem drops the module_mutex before invoking the blocking
-notifier chain, so this code executes without it.
-
-Can this trigger a lockdep warning or risk a use-after-free if concurrent
-operations modify the tree during traversal?
-
-> +			continue;
-> +
-> +		pr_warn("killswitch: %s mitigation lost: module %s unloading; re-engag=
-e after reload if still needed\n",
-> +			attr->kp.symbol_name, mod->name);
-
-[ ... ]
-
-> +static ssize_t ks_control_write(struct file *file, const char __user *ub=
-uf,
-> +				size_t count, loff_t *ppos)
-> +{
-> +	char *buf, *cur, *verb, *sym, *retstr;
-> +	long retval =3D 0;
-> +	int ret;
-
-[ ... ]
-
-> +	cur =3D strim(buf);
-> +	verb =3D strsep(&cur, " \t\n");
-> +	if (!verb || !*verb) {
-> +		ret =3D -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	if (!strcmp(verb, "disengage_all")) {
-> +		mutex_lock(&ks_lock);
-> +		ks_disengage_all_locked();
-> +		mutex_unlock(&ks_lock);
-> +		ret =3D count;
-> +		goto out;
-> +	}
-> +
-> +	sym =3D strsep(&cur, " \t\n");
-> +	if (!sym || !*sym) {
-
-Is it possible for valid input to be rejected here if there are consecutive
-spaces between tokens?
-
-If a user or script writes "engage  my_func  0" with multiple spaces,
-strsep() replaces the first space with a null terminator and returns an emp=
-ty
-string for the subsequent space.
-
-The check !*sym would then interpret this empty token as invalid input and
-abort with -EINVAL.
-
-Would it be better to use skip_spaces() or a loop to handle natural variati=
-ons
-in whitespace?
-
-> +		ret =3D -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	if (!strcmp(verb, "disengage")) {
-> +		ret =3D __ks_disengage(sym);
-> +		ret =3D ret ? ret : count;
-> +		goto out;
-> +	}
-> +
-> +	if (strcmp(verb, "engage")) {
-> +		ret =3D -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	retstr =3D strsep(&cur, " \t\n");
-> +	if (!retstr || !*retstr) {
-
-Could this also fail similarly if there are consecutive spaces before the
-return value token?
-
-> +		ret =3D -EINVAL;
-> +		goto out;
-> +	}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260517134858.1465=
-69-1-sashal@kernel.org?part=3D1
