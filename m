@@ -1,202 +1,159 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36438329C57
-	for <bpf@vger.kernel.org>; Sun, 17 May 2026 15:07:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5565B381AF
+	for <bpf@vger.kernel.org>; Sun, 17 May 2026 15:11:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779030439; cv=none; b=KSiUb2slxFe35FiI5+wzoB5dXsqAOef61y6uBoG72Ed4cM815nc3s+Yo4P47DtJ1CAP1E9ENWWSj9OViTiegLp95u1BrsCRzfcGRmAWKD54g+Zq7k8TUtWgvZjcbbrn8mlRHBaoUad5Gxbcd2D1GUxESAmPuv9+beVeqdTClpjA=
+	t=1779030673; cv=none; b=mQAI3T8I2WFA/iA3E4gse8xR4WK9nvx9bPEwJ0nanS0hCrjSsk3l4NLRivXOthUdtN5s5KL40W87cV2vTMCPcI6ItUO5SSeCVC5smw6F9scNLfbuBtbCMio1jGZ+a1dLXB9wu8ixwZrvgIhmr3jawmvVLqJSHdJKZzLPpwWu/00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779030439; c=relaxed/simple;
-	bh=f9o58j2jKoDmsiE25Bzjzvhv0gE4IbIk3p5xCigHkv0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uwqvC6fgwm8U7vrlKqsI0rbuYj1Ekp1JCGWqYeS6oZOYnHGncQuzBXv7WRuyrklO2WyHeeeQabR877RStuMuBGkx8XVuYKTAxGpcT8qmfnVTJruzQ7kaaqwyq44FsVlIzut1hBjaMjItdzovvHp+GknzQm/pDP60XfjGSASU/60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 748A5CA16E26D; Sun, 17 May 2026 08:07:07 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add exception tests with stack arguments
-Date: Sun, 17 May 2026 08:07:07 -0700
-Message-ID: <20260517150707.289273-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260517150702.288031-1-yonghong.song@linux.dev>
-References: <20260517150702.288031-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1779030673; c=relaxed/simple;
+	bh=utx2lSjDECFzKN9ugdzHWliG9rQgr0YOWYfFmSYrY+E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Lj/5ni4y6WBro4yzPb1QPYOH0UxzO+u0b08u/tlxPu8a9BbUThKa52F3Iz0ek6M2cYcA8fPn+AzDGlrfaZwKiOkz7QcvDkRTNTzcNW8aGJ1ulht44HTTczDmb3f2MMtHhc1qVgQkp00CY02LvKBHcwqXFd8oSDbjAsfdhpxM13s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X+17zWAK; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X+17zWAK"
+Message-ID: <de1af862-6875-4d73-96de-01329c5bcb49@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779030668;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WSNWa6nFHG5+LGazpb/kIv/QwSIdEzJ6XvT2/t6JimM=;
+	b=X+17zWAKyOPtgC0zOry3/9YxJQiewodzt1g2+ra5Ki3eCBAVSEL67j6SyLAozQoI1COKjh
+	r68rLy/jtPIHZCi4I+eMarFGJqYQ0qNEZp9JjOzDHBAlo6POtJ615n+H8rGNAFFamCpc+G
+	OVnJiBsCbnZ3I2OLfeQ0+te+wXC04g4=
+Date: Sun, 17 May 2026 08:11:01 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next v3 6/7] bpf,x86: Fix exception unwinding with
+ outgoing stack arguments
+Content-Language: en-GB
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+ Martin KaFai Lau <martin.lau@kernel.org>
+References: <20260515225035.821178-1-yonghong.song@linux.dev>
+ <20260515225106.824804-1-yonghong.song@linux.dev>
+ <DIKJM7FYGJ9K.2H5U2EPKDENME@gmail.com>
+ <d023d1a7-73dd-46eb-b763-3b2004380a8a@linux.dev>
+ <DIKSIO0A3O95.1L6CGZBD8YRRE@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <DIKSIO0A3O95.1L6CGZBD8YRRE@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Add tests to verify that bpf_throw() correctly unwinds the stack
-when the program uses outgoing stack arguments (functions with >5
-args). Without the preceding x86 fix, these tests crash the kernel
-on x86 due to corrupted callee-saved register restore. There is
-no change for arm64 to support exception with stack arguments.
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../selftests/bpf/prog_tests/exceptions.c     |   7 ++
- .../testing/selftests/bpf/progs/exceptions.c  | 114 ++++++++++++++++++
- 2 files changed, 121 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/=
-testing/selftests/bpf/prog_tests/exceptions.c
-index e8cbaf2a3e82..3588d6f97fd4 100644
---- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
-+++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-@@ -85,6 +85,13 @@ static void test_exceptions_success(void)
- 	RUN_SUCCESS(exception_bad_assert_range_with, 10);
- 	RUN_SUCCESS(exception_throw_from_void_global, 11);
-=20
-+	if (skel->rodata->has_stack_arg) {
-+		RUN_SUCCESS(exception_throw_stack_arg, 56);
-+		RUN_SUCCESS(exception_throw_after_stack_arg, 56);
-+		RUN_SUCCESS(exception_throw_subprog_stack_arg, 56);
-+		RUN_SUCCESS(exception_throw_subprog_after_stack_arg, 56);
-+	}
-+
- #define RUN_EXT(load_ret, attach_err, expr, msg, after_link)			  \
- 	{									  \
- 		LIBBPF_OPTS(bpf_object_open_opts, o, .kernel_log_buf =3D log_buf,		 \
-diff --git a/tools/testing/selftests/bpf/progs/exceptions.c b/tools/testi=
-ng/selftests/bpf/progs/exceptions.c
-index 4206f59d7b86..c8d716fbd419 100644
---- a/tools/testing/selftests/bpf/progs/exceptions.c
-+++ b/tools/testing/selftests/bpf/progs/exceptions.c
-@@ -379,4 +379,118 @@ int exception_bad_assert_range_with(struct __sk_buf=
-f *ctx)
- 	return 1;
- }
-=20
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) \
-+	&& defined(__BPF_FEATURE_STACK_ARGUMENT)
-+
-+const volatile bool has_stack_arg =3D true;
-+
-+long arg1 =3D 1, arg2 =3D 2, arg3 =3D 3, arg4 =3D 4, arg5 =3D 5;
-+long arg6 =3D 6, arg7 =3D 7, arg8 =3D 8, arg9 =3D 9, arg10 =3D 10;
-+
-+__noinline static long throwing_many_args(long a, long b, long c, long d=
-,
-+					  long e, long f, long g, long h,
-+					  long i, long j)
-+{
-+	bpf_throw(a + b + c + d + e + f + g + h + i + j);
-+	return 0;
-+}
-+
-+__noinline int exception_cb_sa(u64 cookie)
-+{
-+	return cookie + 1;
-+}
-+
-+SEC("tc")
-+__exception_cb(exception_cb_sa)
-+int exception_throw_stack_arg(struct __sk_buff *ctx)
-+{
-+	throwing_many_args(arg1, arg2, arg3, arg4, arg5,
-+			   arg6, arg7, arg8, arg9, arg10);
-+	return 0;
-+}
-+
-+__noinline static long no_throw_many_args(long a, long b, long c, long d=
-,
-+					  long e, long f, long g, long h,
-+					  long i, long j)
-+{
-+	return a + b + c + d + e + f + g + h + i + j;
-+}
-+
-+SEC("tc")
-+__exception_cb(exception_cb_sa)
-+int exception_throw_after_stack_arg(struct __sk_buff *ctx)
-+{
-+	long ret;
-+
-+	ret =3D no_throw_many_args(arg1, arg2, arg3, arg4, arg5,
-+				 arg6, arg7, arg8, arg9, arg10);
-+	if (ret > 0)
-+		bpf_throw(ret);
-+	return 0;
-+}
-+
-+__noinline static long subprog_throw_sa(long val)
-+{
-+	throwing_many_args(val, val + 1, val + 2, val + 3, val + 4,
-+			   val + 5, val + 6, val + 7, val + 8, val + 9);
-+	return 0;
-+}
-+
-+SEC("tc")
-+__exception_cb(exception_cb_sa)
-+int exception_throw_subprog_stack_arg(struct __sk_buff *ctx)
-+{
-+	subprog_throw_sa(arg1);
-+	return 0;
-+}
-+
-+__noinline static long subprog_throw_after_sa(long val)
-+{
-+	long ret;
-+
-+	ret =3D no_throw_many_args(val, val + 1, val + 2, val + 3, val + 4,
-+				 val + 5, val + 6, val + 7, val + 8, val + 9);
-+	if (ret > 0)
-+		bpf_throw(ret);
-+	return 0;
-+}
-+
-+SEC("tc")
-+__exception_cb(exception_cb_sa)
-+int exception_throw_subprog_after_stack_arg(struct __sk_buff *ctx)
-+{
-+	subprog_throw_after_sa(arg1);
-+	return 0;
-+}
-+
-+#else
-+
-+const volatile bool has_stack_arg =3D false;
-+
-+SEC("tc")
-+int exception_throw_stack_arg(struct __sk_buff *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("tc")
-+int exception_throw_after_stack_arg(struct __sk_buff *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("tc")
-+int exception_throw_subprog_stack_arg(struct __sk_buff *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("tc")
-+int exception_throw_subprog_after_stack_arg(struct __sk_buff *ctx)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
- char _license[] SEC("license") =3D "GPL";
---=20
-2.53.0-Meta
+On 5/17/26 12:57 AM, Kumar Kartikeya Dwivedi wrote:
+> On Sun May 17, 2026 at 6:55 AM CEST, Yonghong Song wrote:
+>>
+>> On 5/16/26 5:59 PM, Alexei Starovoitov wrote:
+>>> On Fri May 15, 2026 at 3:51 PM PDT, Yonghong Song wrote:
+>>>> When a main program with exception_boundary has outgoing stack
+>>>> arguments (e.g. from calling subprogs with >5 args), bpf_throw() fails
+>>>> to correctly restore callee-saved registers, causing a kernel crash.
+>>>>
+>>>> The x86 JIT allocates the outgoing stack arg area below the
+>>>> callee-saved registers via 'sub rsp, outgoing_rsp' in the prologue.
+>>>> When bpf_throw() unwinds, it captures the main program's sp (which
+>>>> includes this outgoing area) and passes it to the exception callback.
+>>>> The callback gets rsp and rbp, followed by pop_callee_regs, but rsp
+>>>> points into the outgoing arg area rather than the callee-saved
+>>>> registers, so the pops restore garbage values. Returning to the
+>>>> kernel with corrupted callee-saved registers causes a crash.
+>>>>
+>>>> Fix this by passing the main program's outgoing_rsp as the 4th
+>>>> argument to the exception callback. The callback adjusts rsp with
+>>>> 'add rsp, rcx' before popping callee-saved registers, correctly
+>>>> skipping the outgoing arg area. When outgoing_rsp is 0 (the common
+>>>> case), this is a no-op.
+>>>>
+>>>> Fixes: 324c3ca6eed6 ("bpf,x86: Implement JIT support for stack arguments")
+>>>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>>>> ---
+>>>>    arch/x86/net/bpf_jit_comp.c | 9 ++++++++-
+>>>>    include/linux/bpf.h         | 3 ++-
+>>>>    kernel/bpf/fixups.c         | 1 +
+>>>>    kernel/bpf/helpers.c        | 2 +-
+>>>>    4 files changed, 12 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>>>> index ceefefb4da21..f4fdceedaad7 100644
+>>>> --- a/arch/x86/net/bpf_jit_comp.c
+>>>> +++ b/arch/x86/net/bpf_jit_comp.c
+>>>> @@ -557,10 +557,15 @@ static void emit_prologue(u8 **pprog, u8 *ip, u32 stack_depth, bool ebpf_from_cb
+>>>>    			/* Keep the same instruction layout. */
+>>>>    			emit_nops(&prog, 3);     /* nop3 */
+>>>>    	}
+>>>> -	/* Exception callback receives FP as third parameter */
+>>>> +	/*
+>>>> +	 * Exception callback receives:
+>>>> +	 *   rsi = main program's SP, rdx = main program's FP,
+>>>> +	 *   rcx = main program's outgoing stack arg area size
+>>>> +	 */
+>>>>    	if (is_exception_cb) {
+>>>>    		EMIT3(0x48, 0x89, 0xF4); /* mov rsp, rsi */
+>>>>    		EMIT3(0x48, 0x89, 0xD5); /* mov rbp, rdx */
+>>>> +		EMIT3(0x48, 0x01, 0xCC); /* add rsp, rcx */
+>>> Maybe let's do it on C side like:
+>>> bpf_exception_cb(cookie, ctx.sp + ctx.aux->stack_arg_adjust, ctx.bp, 0);
+>> This sounds better!
+>>
+>>> Avoids the need to use 'rcx'.
+>>>
+>>>>    		/* The main frame must have exception_boundary as true, so we
+>>>>    		 * first restore those callee-saved regs from stack, before
+>>>>    		 * reusing the stack frame.
+>>>> @@ -1789,6 +1794,8 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>>>>    	 * Arg 6 goes into r9 register, not on stack.
+>>>>    	 */
+>>>>    	outgoing_rsp = out_stack_arg_cnt > 1 ? (out_stack_arg_cnt - 1) * 8 : 0;
+>>>> +	if (bpf_prog->aux->exception_boundary)
+>>>> +		bpf_prog->aux->stack_arg_adjust = outgoing_rsp;
+>>>>    	emit_sub_rsp(&prog, outgoing_rsp);
+>>>>
+>>>>    	if (arena_vm_start)
+>>>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>>>> index 242f9597d9ab..2a1616c769a9 100644
+>>>> --- a/include/linux/bpf.h
+>>>> +++ b/include/linux/bpf.h
+>>>> @@ -1735,7 +1735,8 @@ struct bpf_prog_aux {
+>>>>    	int cgroup_atype; /* enum cgroup_bpf_attach_type */
+>>>>    	struct bpf_map *cgroup_storage[MAX_BPF_CGROUP_STORAGE_TYPE];
+>>>>    	char name[BPF_OBJ_NAME_LEN];
+>>>> -	u64 (*bpf_exception_cb)(u64 cookie, u64 sp, u64 bp, u64, u64);
+>>>> +	u64 (*bpf_exception_cb)(u64 cookie, u64 sp, u64 bp, u64 stack_arg_adjust, u64);
+>>> no need to change this.
+>> Indeed, with the above 'ctx.sp + ctx.aux->stack_arg_adjust',
+>> the 4th argument does not need any change.
+>>
+>>>> +	u16 stack_arg_adjust;
+>>> this one is still needed, but maybe let's call it stack_arg_sp_adjust?
+>> Okay. Will use the stack_arg_sp_adjust.
+>>
+>>> Looking at arch/arm64/net/bpf_jit_comp.c:590
+>>> it doesn't use SP, so should it fine.
+>>>
+>>> and arm64 seems to work already?
+>> I will take a look at arm64 as well.
+>>
+> Please also remove guards on tests to allow them to run on arm64, once it is
+> handled properly.
+
+Done. See
+     https://lore.kernel.org/bpf/20260517150702.288031-1-yonghong.song@linux.dev/
+
+No change is needed for arm64. It already can handle exception and stack arg's together.
 
