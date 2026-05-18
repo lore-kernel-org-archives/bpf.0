@@ -1,199 +1,370 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C380C372EE9
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 13:54:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779112444; cv=pass; b=PnL6uOzFEIG1DCx0aRXHl9/PTVnAtKEbRTig4qbdKV803ZpeeG3YtQVQX0Waa1nmhNwYlwnW86oHMvI3OerxZvHnr8M/3pSF3xe+8MC+gG/P/3ipPlEM68sxXegfnGKcAjfJ90H57Qbft/Fyj7YKRc/2yUnZnjseEDUSPr8qh9E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779112444; c=relaxed/simple;
-	bh=TmD28ZM4swHtfnvSp7BEh2wcnOTb7f4zOQZTyYX2jGI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EspyRkr4Q54cRJFqnmf+pas82d6TP6CJ3Sjmbom21ZLhMubfu3/tqwL2XAmKW0ifS+mheW0Prw+TqRfE1YVGoiLxN8RXN5PPHvrw/VmFbEN8w/Aiy99tE+vVn9BGgCgVrWNhFaFljlGeAo0o+GZK5lkQJFQ1JOgllhGTunQEqic=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bzKagooh; arc=pass smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bzKagooh"
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5aa1b2327c8so2206633e87.0
-        for <bpf@vger.kernel.org>; Mon, 18 May 2026 06:54:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779112441; cv=none;
-        d=google.com; s=arc-20240605;
-        b=XZkGiswGUVgeELvUc3YEBaT0qcR1bhx2R6WfhkJdlsCqKy3FtTmmN2MeCnlZQDU8E5
-         88Xdkr47bi9HfQ/meQ6u0pQa+VrdW4U5gDrhCqmhfDeidE6LygDs4CtMTzmgjhdeGCxY
-         bMhkkGN5JFqEV+8Mm0IO+/0+Fw2zjAMw0ux2Oz7NdzLqmV6VEME+7tfytX0p8vVfcCwJ
-         kVch8O/KARR0bkUFAkRXSlAyM3wS2H1G3J+3HiVavdGC+AzdvNWs1YxCBiAHUZPymFgi
-         ByVSPccPX2JlvvfR24pQi4lMEAxBz3HFfi4dE5K+FriCIER3Jb2QPc0K+DGQRDYDumja
-         z22g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=RFk/FYkO4eFAk9o9pHJjJBzIhmqttrEmir/vP3Hc1t0=;
-        fh=y50dByX9qlzxZMDiIkTNxAjQsKoJasfU9omqLhG3rvo=;
-        b=Z1i9eO2NUdUNfj189AHvj7CEc+d+HMOF1qS8gFprP+PVtCrZQbKWBoeL+Hx2eUTtIn
-         n0RAYOS3n8CaUUAMqoHiKLlyEWEiE4gz2ILRXm+f9tMA5y3Bd6aAzwFZOnfOgMpJB1UA
-         wSBMDPhYV06fVBbJUut5G5SbZNqBI9I+tDhiRAHyNMHZRbguoLRolGSsnwjQyBgMh9+d
-         7Dfbv0KNB/xcLCYwaaAvOGJJdvX/CnNdX/nKx/7n7bv1ISWiWYPJ0jQrHtZtpW4jxfVp
-         KasjPxPBJgoZBFaK5gMfW8KlIWfz0nRBCY0oQZMyTWGNCoZSeSxusRlT/0HKFZJA6l82
-         GP5w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779112441; x=1779717241; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RFk/FYkO4eFAk9o9pHJjJBzIhmqttrEmir/vP3Hc1t0=;
-        b=bzKagoohnB1y/ezP83W/3ILMs/mUsKluFV4HwNPYfwvdUavWnm+JlYMpx9/2x6pR9q
-         RIRHHE1AseLklgY1PGLani02Y4wuxHaJqXrjW7HhkqrtAMWSRwkSdOh9MS568hRekp2C
-         eV8IX2cC7hnPe13jS0TLrmYj8p54Ca01zb86IRvkMV6rvK4Z4bFHRL0uR4pOYXqCRgzC
-         ErIxZGC/cTuRmdU1L3iv4bVbl59kKUFL1Hljt4EEeZwBEuSnnGcb9hVCMNRHNfMQYMnp
-         0WTFnzwVI6jBcRWbeJI5+OrCqxnVsTd4wc5L9Gc05g4j5fdWdpwwShEzFd5QmNeNBrxf
-         R7eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779112441; x=1779717241;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=RFk/FYkO4eFAk9o9pHJjJBzIhmqttrEmir/vP3Hc1t0=;
-        b=prmBAEg1y3H8opvBix/jPXaWbRT2vcsOWPCPwwmIxaSLGGX8Dp2w+gChugT5c38niS
-         0l0Y8P5d2RULPUer/mjn3aO94oKiQSMr0HG7nYfTjBK9zIkYVk5T/XrQSHDZ40aRnyf5
-         hZ40xsQWzZ/A5rVlA2zeUf2p6yBSE0f9LNjBLmtakiBmKMXf0vXwo00tKQ9RkRbFb8nH
-         CvhKUjgp6PT1QictOw1Mnf5OyChcj9FgmDwnWJTkWiypz6BnUSEXf5Bh8VSC4X3imhal
-         lJwj0ZNkvq5FKfGsCExJCdFKENVHn1xpNJPx4emKJhf/xjdP9Zhi9f9RttYN24Ui0zVc
-         Hszg==
-X-Forwarded-Encrypted: i=1; AFNElJ8kB4E01FI6OzHwx6nZ6cWH14Xb68ezr8sGON1RY9/zCq5Q56rbhpQZ3G3jAOykmrxSUqc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAcfZvK5x3q4wJ/Ejv5Zc7zJxY2/u8+h+If18wokF9wvoNRor9
-	aZZauJwtInkdPnKYlILnF6mY8ajUsUwy1P+fx9nGpFvOD4rXmunqXheH0JzVZI4MDfsmC+o0496
-	q0XEqcp9pW5OrOMBUCAiUN+EZ5kH2y2k=
-X-Gm-Gg: Acq92OEYo+gOLAviFC/9Qdec3VWggRP4vI5hN7Y/6Y5zrv325w4D8gZtxztwNtXZCo8
-	6qM2aHjpe8nflPo8tjTwMKivtR75Q0Xd8I83lKbTgt2WEYjF0KAHfAYd1c48O24AuFHN0T5Bc+D
-	OG2IftKCUPrR9SIMeOKz804IaG+7w8i4NBRslIhYkL3TU1mdSbG2F4x8XLC1NEg2qBWMs5FG+mW
-	mNbZ4lhLx6sdilSrZkdm3Tx2srz7d/Zk2tc7svbxsGRfmNECaHB0E5rI3dvzrh1Kl9zMhfiwO5p
-	EGvcNsCjFHFXRzj1plSajCJRVrQ9hGglR4wYG8w=
-X-Received: by 2002:a05:6512:10c9:b0:5a8:6f10:799c with SMTP id
- 2adb3069b0e04-5aa0e7305demr4625853e87.21.1779112440555; Mon, 18 May 2026
- 06:54:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB773793DE;
+	Mon, 18 May 2026 13:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779112710; cv=none; b=nKF6E0fVl76suRrCKlJlZmGD/bJEsYGWExuGXVKLq1G7tYrRhIad0M3gNSfcsve/EYMtuToGkzQ8ePsS+/+pmk6cdZVk3mFiwi9XFSk5qHbs0LJUnHukKFanO919s9X/MAFPgXRabGU99Rx0SO8Lje164UXAOIEeLYEZIl0L7/k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779112710; c=relaxed/simple;
+	bh=0iWugykATQYVTMbyksk048izgnrKy6+uHcttXBIIgJM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=rgu507nPG8AO06+oIJ/JbEnJSv/IqI66eYCna87CUOA5plV874znEiuIiDJH7nqKt/hJfCdq8BWTC9CIU16WFosQj5i3jMawcvX2jtiRP+pTAH+Cydn4fJb6qgDtZ05RBXP+MRctnJMJg954PmtD8TxXU0lLxEAOgE0W5V3VcrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf05.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay04.hostedemail.com (Postfix) with ESMTP id 4C4191A06BC;
+	Mon, 18 May 2026 13:58:26 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf05.hostedemail.com (Postfix) with ESMTPA id 13F1C20016;
+	Mon, 18 May 2026 13:58:22 +0000 (UTC)
+Date: Mon, 18 May 2026 09:58:32 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
+ <linux-trace-kernel@vger.kernel.org>, bpf@vger.kernel.org
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Mark Rutland <mark.rutland@arm.com>,
+ Peter Zijlstra <peterz@infradead.org>, Namhyung Kim <namhyung@kernel.org>,
+ Takaya Saeki <takayas@google.com>, Douglas Raillard 
+ <douglas.raillard@arm.com>, Tom Zanussi <zanussi@kernel.org>, Andrew Morton
+  <akpm@linux-foundation.org>, Thomas Gleixner <tglx@linutronix.de>, Ian 
+ Rogers <irogers@google.com>, Jiri Olsa <olsajiri@gmail.com> Subject: [PATCH
+ v2] tracing/pr
+Subject: [PATCH v3] tracing/probes: Allow use of BTF names to dereference
+ pointers
+Message-ID: <20260518095832.52659a3a@gandalf.local.home>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260518082344.96647-1-kerneljasonxing@gmail.com>
- <20260518082344.96647-6-kerneljasonxing@gmail.com> <f9606d4b-7ff7-479f-8e73-2e8cc77095fa@kernel.org>
-In-Reply-To: <f9606d4b-7ff7-479f-8e73-2e8cc77095fa@kernel.org>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Mon, 18 May 2026 21:53:22 +0800
-X-Gm-Features: AVHnY4K-swb5msmI4aJefZbnvwlj0XzxaGYnWrFJPaZmGuIjZQLaUMRdNs14Qig
-Message-ID: <CAL+tcoDRSpVsiCym+DYsGLBGrdEuim7AZqyBTHYzd-OSBki5-Q@mail.gmail.com>
-Subject: Re: [PATCH net-next 5/6] bpf: enable bpf timestamping rx in TCP layer
-To: Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, horms@kernel.org, willemb@google.com, kuniyu@google.com, 
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, 
-	Simon Sundberg <Simon.Sundberg@kau.se>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>, 
-	netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: c9ojry6zrc8m3mqptnqxeufrb746i1i6
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: 13F1C20016
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX19PdUr/EgYucY7qiSu+lglV3jDhUBkhnqg=
+X-HE-Tag: 1779112702-985039
+X-HE-Meta: U2FsdGVkX1/Hv4NCC7BM9Sxbz/U0V3HVWGHNE4YYTvZK6NK7daExKO9TYkLCOffUnGkNlHvgN4N3aIHj9QLKUadOp9ysAEP4ZY+TdDGX6MBJKwhaCAKh1hw9YU1FWfMT0nl/9kerWBP4Bcptb4/c7VEbAfr6+MHV79ElxezHFqItpWhsSt1d9l8xdk4kHEwTzMTzFZqPJW/zeO9ElS9dL6mVlya0PhY+2g6lvVY9Oe3V4nTg6X5ZXCY3x2jUeayhvgqzk+YsaxfoHHC4IsLc2/wLndsxbtlcd1Sm5SbrHFvTyeqcQv+6q4UZybdK13Mrnr58jBzXDm0W6snTIm88ID1knL8kNuEZhUjDUUJFw8f2EeLhBS9iWUmxUYE+kt8OYvut2vAmXZpv8m5x17A8VCk5BOptGQ/H6oj86yjNkAbwaG77BbKrNjHFdU0iPwqERYSTuOODPVsL3u0oKGKFZA==
 
-On Mon, May 18, 2026 at 9:01=E2=80=AFPM Jesper Dangaard Brouer <hawk@kernel=
-.org> wrote:
->
->
->
-> On 18/05/2026 10.23, Jason Xing wrote:
-> > From: Jason Xing <kernelxing@tencent.com>
-> >
-> > Add two if statements to accurately isolate bpf timestamping and so
-> > timestamping. They can work respectively.
-> >
-> > As to so_timestamping, only add a loose condition via report flags
-> > to avoid duplicate strict checks that is done in tcp_recv_timestamp()
-> > and performance impact. If the loose condition is hit,
-> > tcp_recv_timestamp() is able to handle the exact case and doesn't
-> > hamper the existing timestamping feature.
-> >
-> > Make it work in TCP protocol.
-> >
-> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > ---
-> >   net/ipv4/tcp.c | 14 ++++++++++++--
-> >   1 file changed, 12 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> > index 21ece4c71612..64c69bb3578a 100644
-> > --- a/net/ipv4/tcp.c
-> > +++ b/net/ipv4/tcp.c
-> > @@ -2949,8 +2949,18 @@ int tcp_recvmsg(struct sock *sk, struct msghdr *=
-msg, size_t len, int flags)
-> >       release_sock(sk);
-> >
-> >       if ((cmsg_flags | msg->msg_get_inq) && ret >=3D 0) {
-> > -             if (cmsg_flags & TCP_CMSG_TS)
-> > -                     tcp_recv_timestamp(msg, sk, &tss);
-> > +             if (cmsg_flags & TCP_CMSG_TS) {
-> > +                     u32 tsflags =3D READ_ONCE(sk->sk_tsflags);
-> > +
-> > +                     if (cgroup_bpf_enabled(CGROUP_SOCK_OPS) &&
-> > +                         SK_BPF_CB_FLAG_TEST(sk, SK_BPF_CB_RX_TIMESTAM=
-PING))
-> > +                             bpf_skops_rx_timestamping(sk, &tss,
-> > +                                                       BPF_SOCK_OPS_TS=
-TAMP_RCV_CB);
->
-> Does this mean I can enable timestamp reading per cgroup?
+From: Steven Rostedt <rostedt@goodmis.org>
 
-Yes, I think so, but I didn't try. One of the natures of sockopt
-feature is supporting cgroup attach.
-cgroup_bpf_prog_attach()/cgroup_bpf_link_attach() is probably
-something that you're looking for.
+Add syntax to the FETCHARGS parsing of probes to allow the use of
+structure and member names to get the offsets to dereference pointers.
 
-IIUC, you can attach the prog onto the cgroup where all the sockets
-are set using the bpf timestamping function. So the current impl is
-cleaner and has better isolation (to filter out those unmatched
-flows).
+Currently, a dereference must be a number, where the user has to figure
+out manually the offset of a member of a structure that they want to
+reference. For example, to get the size of a kmem_cache that was passed to
+the function kmem_cache_alloc_noprof, one would need to do:
 
->
-> In Simon's netstacklat[1] tool we are forced process all RX timestamp
-> (hooking fentry/tcp_recv_timestamp), and then we have a BPF filter[2] on
-> the cgroup IDs that we are interested in (which is a significant
-> overhead, as this is deployed at Cloudflare production scale).
+ # cd /sys/kernel/tracing
+ # echo 'f:cache kmem_cache_alloc_noprof size=+0x18($arg1):u32' >> dynamic_events
 
-I can feel the pain when filtering in this kind of relatively hot
-path, which is what I'm trying to avoid internally. What I've done in
-production (to cover those old kernels) is to just let the kernel
-print the information, that's it, and there is an agent continuously
-gathering the data, doing the match and computing latency. But it's
-overall complicated.
+This requires knowing that the offset of size is 0x18, which can be found
+with gdb:
 
-Many thanks here, I'm always interested in hearing more useful and
-real requirements and fancy ideas on how to monitor the latency :) Now
-I'm still struggling to port the internal functions to bpf
-timestamping.
+  (gdb) p &((struct kmem_cache *)0)->size
+  $1 = (unsigned int *) 0x18
 
-Thanks,
-Jason
+If BTF is in the kernel, it can be used to find this with names, where the
+user doesn't need to find the actual offset:
 
->
->
-> [1] https://github.com/xdp-project/bpf-examples/tree/main/netstacklat
->
-> [2]
-> https://github.com/xdp-project/bpf-examples/blob/main/netstacklat/netstac=
-klat.bpf.c#L484-L488
->
->
-> > +                     if (sock_flag(sk, SOCK_RCVTSTAMP) ||
-> > +                         tsflags & SOF_TIMESTAMPING_SOFTWARE ||
-> > +                         tsflags & SOF_TIMESTAMPING_RAW_HARDWARE)
-> > +                             tcp_recv_timestamp(msg, sk, &tss);
-> > +             }
-> >               if ((cmsg_flags & TCP_CMSG_INQ) | msg->msg_get_inq) {
-> >                       msg->msg_inq =3D tcp_inq_hint(sk);
-> >                       if (cmsg_flags & TCP_CMSG_INQ)
->
+ # echo 'f:cache kmem_cache_alloc_noprof size=+kmem_cache.size($arg1):u32' >> dynamic_events
+
+Instead of the "+0x18", it would have "+kmem_cache.size" where the format is:
+
+  +STRUCT.MEMBER[.MEMBER[..]]
+
+The delimiter is '.' and the first item is the structure name. Then the
+member of the structure to get the offset of. If that member is an
+embedded structure, another '.MEMBER' may be added to get the offset of
+its members with respect to the original value.
+
+  "+kmem_cache.size($arg1)" is equivalent to:
+
+  (*(struct kmem_cache *)$arg1).size
+
+Anonymous structures are also handled:
+
+  # echo 'e:xmit net.net_dev_xmit +net_device.name(+sk_buff.dev($skbaddr)):string' >> dynamic_events
+
+Where "+net_device.name(+sk_buff.dev($skbaddr))" is equivalent to:
+
+  (*(struct net_device *)((*(struct sk_buff *)($skbaddr)).dev)->name)
+
+Note that "dev" of struct sk_buff is inside an anonymous structure:
+
+struct sk_buff {
+	union {
+		struct {
+			/* These two members must be first to match sk_buff_head. */
+			struct sk_buff		*next;
+			struct sk_buff		*prev;
+
+			union {
+				struct net_device	*dev;
+				[..]
+			};
+		};
+		[..]
+	};
+
+This will allow up to three deep of anonymous structures before it will
+fail to find a member.
+
+The above produces:
+
+    sshd-session-1080    [000] b..5.  1526.337161: xmit: (net.net_dev_xmit) arg1="enp7s0"
+
+And nested structures can be found by adding more members to the arg:
+
+  # echo 'f:read filemap_readahead.isra.0 file=+0(+dentry.d_name.name(+file.f_path.dentry($arg2))):string' >> dynamic_events
+
+The above is equivalent to:
+
+  *((*(struct dentry *)(*(struct file *)$arg2).f_path.dentry)->d_name.name)
+
+And produces:
+
+       trace-cmd-1381    [002] ...1.  2082.676268: read: (filemap_readahead.isra.0+0x0/0x150) file="trace.dat"
+
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+Changes since v2: https://patch.msgid.link/20260516173310.1dbad146@fedora
+
+- Added skip_modifies when looking up field (Sashiko)
+
+- Pass -E2BIG error to caller if that was the issue (Sashiko)
+
+- Fix btf_put() error path (Sashiko)
+
+- Update error log on -ENOENT (Sashiko)
+
+ Documentation/trace/kprobetrace.rst |   3 +
+ kernel/trace/trace_btf.c            | 115 ++++++++++++++++++++++++++++
+ kernel/trace/trace_btf.h            |  10 +++
+ kernel/trace/trace_probe.c          |  20 ++++-
+ kernel/trace/trace_probe.h          |   4 +-
+ 5 files changed, 149 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
+index 3b6791c17e9b..00273157100c 100644
+--- a/Documentation/trace/kprobetrace.rst
++++ b/Documentation/trace/kprobetrace.rst
+@@ -54,6 +54,8 @@ Synopsis of kprobe_events
+   $retval	: Fetch return value.(\*2)
+   $comm		: Fetch current task comm.
+   +|-[u]OFFS(FETCHARG) : Fetch memory at FETCHARG +|- OFFS address.(\*3)(\*4)
++  +STRUCT.MEMBER[.MEMBER[..]](FETCHARG) : If BTF is supported, Fetch memory
++		  at FETCHARG + the offset of MEMBER inside of STRUCT.(\*5)
+   \IMM		: Store an immediate value to the argument.
+   NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
+   FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
+@@ -70,6 +72,7 @@ Synopsis of kprobe_events
+         accesses one register.
+   (\*3) this is useful for fetching a field of data structures.
+   (\*4) "u" means user-space dereference. See :ref:`user_mem_access`.
++  (\*5) +STRUCT.MEMBER(FETCHARG) is equivalent to (*(struct STRUCT *)(FETCHARG)).MEMBER
+ 
+ Function arguments at kretprobe
+ -------------------------------
+diff --git a/kernel/trace/trace_btf.c b/kernel/trace/trace_btf.c
+index 00172f301f25..ca09982d8dbe 100644
+--- a/kernel/trace/trace_btf.c
++++ b/kernel/trace/trace_btf.c
+@@ -120,3 +120,118 @@ const struct btf_member *btf_find_struct_member(struct btf *btf,
+ 	return member;
+ }
+ 
++#define BITS_ROUNDDOWN_BYTES(bits) ((bits) >> 3)
++
++static int find_member(const char *ptr, struct btf *btf,
++		       const struct btf_type **type, int level)
++{
++	const struct btf_member *member;
++	const struct btf_type *t = *type;
++	int i;
++
++	/* Max of 3 depth of anonymous structures */
++	if (level > 3)
++		return -E2BIG;
++
++	for_each_member(i, t, member) {
++		const char *tname = btf_name_by_offset(btf, member->name_off);
++
++		if (strcmp(ptr, tname) == 0) {
++			int offset = __btf_member_bit_offset(t, member);
++			*type = btf_type_skip_modifiers(btf, member->type, NULL);
++			return BITS_ROUNDDOWN_BYTES(offset);
++		}
++
++		/* Handle anonymous structures */
++		if (strlen(tname))
++			continue;
++
++		*type = btf_type_by_id(btf, member->type);
++		if (btf_type_is_struct(*type)) {
++			int offset = find_member(ptr, btf, type, level + 1);
++
++			if (offset < 0) {
++				if (offset == -ENOENT)
++					continue;
++				return offset;
++			}
++
++			return offset + BITS_ROUNDDOWN_BYTES(member->offset);
++		}
++	}
++
++	return -ENOENT;
++}
++
++/**
++ * btf_find_offset - Find an offset of a member for a structure
++ * @arg: A structure name followed by one or more members
++ * @offset_p: A pointer to where to store the offset
++ *
++ * Will parse @arg with the expected format of: struct.member[[.member]..]
++ * It is delimited by '.'. The first item must be a structure type.
++ * The next are its members. If the member is also of a structure type it
++ * another member may follow ".member".
++ *
++ * Note, @arg is modified but will be put back to what it was on return.
++ *
++ * Returns: 0 on success and -EINVAL if no '.' is present
++ *    or -ENXIO if the structure or member is not found.
++ *    Returns -EINVAL if BTF is not defined.
++ *  On success, @offset_p will contain the offset of the member specified
++ *    by @arg.
++ */
++int btf_find_offset(char *arg, long *offset_p)
++{
++	const struct btf_type *t;
++	struct btf *btf;
++	long offset = 0;
++	char *ptr;
++	int ret;
++	s32 id;
++
++	ptr = strchr(arg, '.');
++	if (!ptr)
++		return -EINVAL;
++
++	*ptr = '\0';
++
++	ret = -ENXIO;
++	id = bpf_find_btf_id(arg, BTF_KIND_STRUCT, &btf);
++	if (id < 0)
++		goto error;
++
++	/* Get BTF_KIND_FUNC type */
++	t = btf_type_by_id(btf, id);
++
++	/* May allow more than one member, as long as they are structures */
++	do {
++		ret = -ENXIO;
++		if (!t || !btf_type_is_struct(t))
++			goto error_put;
++
++		*ptr++ = '.';
++		arg = ptr;
++		ptr = strchr(ptr, '.');
++		if (ptr)
++			*ptr = '\0';
++
++		ret = find_member(arg, btf, &t, 0);
++		if (ret < 0)
++			goto error_put;
++
++		offset += ret;
++
++	} while (ptr);
++
++	btf_put(btf);
++	*offset_p = offset;
++	return 0;
++
++error_put:
++	btf_put(btf);
++error:
++	if (ptr)
++		*ptr = '.';
++	return ret;
++}
+diff --git a/kernel/trace/trace_btf.h b/kernel/trace/trace_btf.h
+index 4bc44bc261e6..7b0797a6050b 100644
+--- a/kernel/trace/trace_btf.h
++++ b/kernel/trace/trace_btf.h
+@@ -9,3 +9,13 @@ const struct btf_member *btf_find_struct_member(struct btf *btf,
+ 						const struct btf_type *type,
+ 						const char *member_name,
+ 						u32 *anon_offset);
++
++#ifdef CONFIG_PROBE_EVENTS_BTF_ARGS
++/* Will modify arg, but will put it back before returning. */
++int btf_find_offset(char *arg, long *offset);
++#else
++static inline int btf_find_offset(char *arg, long *offset)
++{
++	return -EINVAL;
++}
++#endif
+diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+index e0d3a0da26af..74c4255da307 100644
+--- a/kernel/trace/trace_probe.c
++++ b/kernel/trace/trace_probe.c
+@@ -1165,7 +1165,7 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
+ 
+ 	case '+':	/* deref memory */
+ 	case '-':
+-		if (arg[1] == 'u') {
++		if (arg[1] == 'u' && isdigit(arg[2])) {
+ 			deref = FETCH_OP_UDEREF;
+ 			arg[1] = arg[0];
+ 			arg++;
+@@ -1178,7 +1178,23 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
+ 			return -EINVAL;
+ 		}
+ 		*tmp = '\0';
+-		ret = kstrtol(arg, 0, &offset);
++		if (arg[0] != '-' && !isdigit(*arg)) {
++			int err = 0;
++			ret = btf_find_offset(arg, &offset);
++			switch (ret) {
++			case -ENODEV: err = TP_ERR_NOSUP_BTFARG; break;
++			case -E2BIG: err = TP_ERR_MEMBER_TOO_DEEP; break;
++			case -EINVAL: err = TP_ERR_BAD_STRUCT_FMT; break;
++			case -ENXIO: err = TP_ERR_BAD_BTF_TID; break;
++			case -ENOENT: err = TP_ERR_NO_BTF_FIELD; break;
++			}
++			if (err)
++				__trace_probe_log_err(ctx->offset, err);
++			if (ret < 0)
++				return ret;
++		} else {
++			ret = kstrtol(arg, 0, &offset);
++		}
+ 		if (ret) {
+ 			trace_probe_log_err(ctx->offset, BAD_DEREF_OFFS);
+ 			break;
+diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+index 262d8707a3df..d649bb9f5b7c 100644
+--- a/kernel/trace/trace_probe.h
++++ b/kernel/trace/trace_probe.h
+@@ -563,7 +563,9 @@ extern int traceprobe_define_arg_fields(struct trace_event_call *event_call,
+ 	C(NEED_STRING_TYPE,	"$comm and immediate-string only accepts string type"),\
+ 	C(TOO_MANY_ARGS,	"Too many arguments are specified"),	\
+ 	C(TOO_MANY_EARGS,	"Too many entry arguments specified"),	\
+-	C(EVENT_TOO_BIG,	"Event too big (too many fields?)"),
++	C(EVENT_TOO_BIG,	"Event too big (too many fields?)"), \
++	C(MEMBER_TOO_DEEP,	"Too many indirections of anonymous structure"), \
++	C(BAD_STRUCT_FMT,	"Unknown BTF structure"),
+ 
+ #undef C
+ #define C(a, b)		TP_ERR_##a
+-- 
+2.53.0
+
