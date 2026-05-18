@@ -1,108 +1,129 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 285F63F65F3;
-	Mon, 18 May 2026 11:37:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A11330B10
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 11:42:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779104279; cv=none; b=KaexmSLWpiYlkcCpwFx9XkxDXIERce2AuuYBx87S9WlfplpAuPm2lMlyhcHeqvFMh16toVsaiwCgHEusderCvv5a5YNZcjeeSHQUvVeenGRqbBG5Hq4ZRAYQqdDpw4aOGy2tXWrs/Pkmxn8EWvOCtAtSts6nSzAFwgBx+ydRcbE=
+	t=1779104529; cv=none; b=gwHzuYmG5QQXmmRAetYKBp/c1yWc8tcwk1H8C7b0w1/QcSap1bvibL1SEYkxcBPsrM41+uJoq0axtJZvB4BzMfQ+maBmoy2UM92G4xhKrORMVrIrC6l47Kmcmg2eSkA1hnCWRQs/1lzcPV/42p+7Xqa8EWA1Yo9NOIFW4BWllHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779104279; c=relaxed/simple;
-	bh=/MBx4iAaT+bKS7godRXNFZ5WOKFAolb0dAA9ZYeT3eI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=HUvf3UMb1LI2LYhIfRybaEI8FQpedHv0xiARIonX0CXfwuyIuupJOSz+DOD45WKjTeslY5Vdh46suRDYKwwJ1E3MzQkxqedl1ESWIs5seoqlCThDPn8QzPPzVt/7IoHdAT9S99xutpuk5SDXC6NaHUk3FaQ5K49VOUWwp9x3hZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VDFkaPJ9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779104529; c=relaxed/simple;
+	bh=SSeTYrk6DxFnOZGx7luqCwiinStUnL9aJI7UyILYpts=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=VmE+hwROrPZBmElpSDBBYktimboAX2bOUES8M8v+mX9sSvqGZ/7LmE86KGaKmjaqGbFPdXgxWiZNa+uD+alKSqYWT8kXzttvIju6W6OmtPP5RaQh/WpF2YPDNBDZdwisO0qYT4kmHVa+zf+Yi1E27/UFXT2s5MP2our8eigH1Jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eKfHt6/t; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VDFkaPJ9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44F6DC2BCB7;
-	Mon, 18 May 2026 11:37:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eKfHt6/t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE128C2BCF6;
+	Mon, 18 May 2026 11:42:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779104278;
-	bh=/MBx4iAaT+bKS7godRXNFZ5WOKFAolb0dAA9ZYeT3eI=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=VDFkaPJ975V04saTEzgxwLsRkqgCN/xezIEqrw/9dnpeghkOfBIf0hb1tOhhq2Hs1
-	 4JmTsS1tWfONiEFqqdKDbvBLvzIQUKK3N7ZKeKVjcvk9Qq+dVqeNKnsrlFZ5hqLD7A
-	 Y+ZBVqetFEFi5BVE4AMdzJfb1dGVRSiLw0vmCRCgPl17Bjg4EY1tr4baATDed7Yylo
-	 GKW257yOWGlI/hYMUu4/hYknTiz3r9C9o1pBL47MHPlME3xCXYh1A6zxCsk/A35UCk
-	 jHPWRO+qznhIl0rGBpYI9Ncd7clozO2Ajueq627uNrqENxCDEgnpm2OLmumS28SNl6
-	 mQB/FGlnQaPIw==
-Content-Type: multipart/mixed; boundary="===============5408726358768098547=="
+	s=k20201202; t=1779104529;
+	bh=SSeTYrk6DxFnOZGx7luqCwiinStUnL9aJI7UyILYpts=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=eKfHt6/tVndcsAXSQCvOeI29bN1LEwueekrpu7e1luR7QR+yK1VX9tjOdPcJvfhdu
+	 DYDWAPcDyU1dShgieQSJ9y0LCQRFdc17+5pIan8GkiZJqWFdIcMcziXPrWVMmAaVGB
+	 /8LTrxqAOqULfbE63wc4vfhfHcWFjthQ4cfjc3CfaKWY9Qyskjudv55py/0sRtI0I7
+	 JeHxVoxQEnqM/yJohecWfRil8SQZuYwxJ+7MmcpaGYTy2topSjtmKh6lGrTXVk//ge
+	 YxiEtnTcxm8I0npEBniTYr7ELQWvN8B+LfENF7Q71KJEq/Pg3s4GVtX7FJXfXGvnHk
+	 19JoeOjSGOQZg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCHv2 02/11] uprobes/x86: Allow to copy uprobe trampolines
+ on fork
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiri Olsa" <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260518105957.123445-3-jolsa@kernel.org>
+References: <20260518105957.123445-3-jolsa@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 18 May 2026 11:42:08 +0000
+Message-Id: <20260518114208.CE128C2BCF6@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <a5a57eb9690a537c2d8d7ec619fb1d200c9fc804436ae085b9344b691c2470df@mail.kernel.org>
-In-Reply-To: <20260518105957.123445-5-jolsa@kernel.org>
-References: <20260518105957.123445-5-jolsa@kernel.org>
-Subject: Re: [PATCHv2 04/11] libbpf: Change has_nop_combo to work on top of nop10
-From: bot+bpf-ci@kernel.org
-To: jolsa@kernel.org,oleg@redhat.com,peterz@infradead.org,mingo@kernel.org,mhiramat@kernel.org,andrii@kernel.org
-Cc: jakub@cloudflare.com,bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 18 May 2026 11:37:58 +0000 (UTC)
 
---===============5408726358768098547==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Critical] __in_uprobe_trampoline uses current->mm instead of the target =
+mm_struct, causing kernel crashes and instruction stream corruption during =
+uprobe_unregister.
+- [High] Removing VM_DONTCOPY without synchronizing the uprobes state cause=
+s a linear VMA leak across fork chains.
+--
 
-> libbpf: Change has_nop_combo to work on top of nop10
->
-> We now expect nop combo with 10 bytes nop instead of 5 bytes nop,
-> fixing has_nop_combo to reflect that.
->
-> Fixes: 41a5c7df4466 ("libbpf: Add support to detect nop,nop5 instructions combo for usdt probe")
+commit be0e6254bd9df4f56adce23d7a5e24a78c286291
+Author: Jiri Olsa <jolsa@kernel.org>
+uprobes/x86: Allow to copy uprobe trampolines on fork
 
-Should the Fixes tag reference commit 5c3c59c7952a ("uprobes/x86: Move
-optimized uprobe from nop5 to nop10") instead? Commit 41a5c7df4466 originally
-introduced has_nop_combo() with the correct nop5 check. Commit 5c3c59c7952a
-later changed the kernel to use nop10 instead of nop5 for uprobe optimization
-but failed to update the libbpf has_nop_combo() function accordingly, creating
-a mismatch between kernel and userspace.
+This commit allows vma uprobe trampoline objects to be copied on fork to
+the new process by removing the VM_DONTCOPY flag.
 
-> Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
->
-> diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-> index e3710933fd52..7e62e4d5bedd 100644
-> --- a/tools/lib/bpf/usdt.c
-> +++ b/tools/lib/bpf/usdt.c
+> diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+> --- a/arch/x86/kernel/uprobes.c
+> +++ b/arch/x86/kernel/uprobes.c
+> @@ -702,7 +702,7 @@ static struct uprobe_trampoline *create_uprobe_trampo=
+line(unsigned long vaddr)
+> =20
+>  	tramp->vaddr =3D vaddr;
+>  	vma =3D _install_special_mapping(mm, tramp->vaddr, PAGE_SIZE,
+> -				VM_READ|VM_EXEC|VM_MAYEXEC|VM_MAYREAD|VM_DONTCOPY|VM_IO,
+> +				VM_READ|VM_EXEC|VM_MAYEXEC|VM_MAYREAD|VM_IO,
 
-[ ... ]
+Does removing VM_DONTCOPY without synchronizing the uprobes state cause a
+linear VMA leak across fork chains?
 
-> @@ -596,14 +596,14 @@ static int parse_usdt_spec(struct usdt_spec *spec, const struct usdt_note *note,
->  #if defined(__x86_64__)
->  static bool has_nop_combo(int fd, long off)
->  {
-> -	unsigned char nop_combo[6] = {
-> -		0x90, 0x0f, 0x1f, 0x44, 0x00, 0x00 /* nop,nop5 */
-> +	unsigned char nop_combo[11] = {
-> +		0x90, 0x66, 0x66, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00,
->  	};
-> -	unsigned char buf[6];
-> +	unsigned char buf[11];
->
-> -	if (pread(fd, buf, 6, off) != 6)
-> +	if (pread(fd, buf, 11, off) != 11)
->  		return false;
-> -	return memcmp(buf, nop_combo, 6) == 0;
-> +	return memcmp(buf, nop_combo, 11) == 0;
->  }
+When dup_mmap() copies the uprobe trampoline VMA to the child process during
+fork(), the child's tracking list (mm->uprobes_state.head_tramps) is
+initialized as completely empty via mm_init_uprobes_state(), meaning the
+parent's state is not duplicated.
 
-This isn't a bug, but Jakub Sitnicki suggested in v1 review to use
-ARRAY_SIZE(buf) instead of repeating the scalar value 11 in multiple places.
-The suggestion was included alongside the Reviewed-by tag but was not
-addressed.
+When the child process executes a uprobe, arch_uprobe_optimize() calls
+get_uprobe_trampoline(). Because head_tramps is empty, it fails to find the
+VMA it already inherited. It then falls back to create_uprobe_trampoline(),
+which calls find_nearest_trampoline(). Since the inherited VMA is already
+mapped, find_nearest_trampoline() finds a new unmapped area and installs a
+second duplicate trampoline VMA.
 
-Reference: https://lore.kernel.org/bpf/87fr3t7wpu.fsf@cloudflare.com/
+In a deep fork chain, each generation inherits all previous VMAs, has an
+empty head_tramps list, and creates a new VMA. Can this cause a linear
+accumulation of redundant VMAs, eventually exhausting vm.max_map_count and
+virtual memory?
 
-[ ... ]
+As a related question about the uprobe trampolines introduced in the preced=
+ing
+commit ba2bfc97b462, does __in_uprobe_trampoline() safely handle unregister=
+ed
+uprobes?
 
+When a uprobe is unregistered (e.g., via bpf_uprobe_unregister in a workque=
+ue
+or by a different process like perf), set_orig_insn() calls is_optimized() =
+to
+check if the uprobe is optimized. If is_optimized() internally calls
+__in_uprobe_trampoline() which hardcodes current->mm for the VMA lookup, do=
+es
+it completely ignore the passed mm parameter?
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+If unregistered asynchronously from a kernel thread, current->mm is NULL. C=
+an
+this cause a deterministic NULL pointer dereference in vma_lookup() and cra=
+sh
+the kernel?
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26030080109
---===============5408726358768098547==--
+Additionally, if unregistered by a different process, would vma_lookup()
+search the wrong mm, return false, and cause set_orig_insn() to incorrectly
+assume the instruction is not optimized? Could this lead to replacing only
+the first byte of the 5-byte CALL instruction with the original opcode,
+leaving the 4-byte relative offset as garbage and crashing the traced proce=
+ss
+when it executes the corrupted instruction?
+
+>  				&tramp_mapping);
+>  	if (IS_ERR(vma)) {
+>  		kfree(tramp);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518105957.1234=
+45-3-jolsa@kernel.org?part=3D1
