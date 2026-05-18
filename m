@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87FBE3D3326;
-	Mon, 18 May 2026 11:01:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1EA3EFFA3;
+	Mon, 18 May 2026 11:01:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779102090; cv=none; b=qfb3jOYsdb3IIAUzRvZnkrL8mJsOozi6m365uQoRBD9BozwYgYEHODM2ltJW3HgvhNIvBAZp9IwNuDwG1UXENPo0COPpcLfhlgDGu2/kxzNF82Nn0mv6SxivZF/lBuy2v7Hm3Nh1PLjYXlOH+eXLl+GnxbSz8f+nc1OYBb9QNP8=
+	t=1779102099; cv=none; b=JxH6T1g18dKLRVHJytd+8MKqxyu5T5h+PAsGClFFEk3Xz3STmkvnt8FsSoxzftvT06lr2JV7aBI1Bt34sqGAVZiXoYuy8LdR+xtKqWSuqHKXfjc5L14qL1nnMaVKwJ4Rww/v8WIecHrROsGBn3IRInV2zWjuL7RL62W2F/vUzZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779102090; c=relaxed/simple;
-	bh=6qRisYUewPQrwQgfo7iXLIPDLMkbLCXqfZVLhdIbPfg=;
+	s=arc-20240116; t=1779102099; c=relaxed/simple;
+	bh=b70JuMJL8au4dv/4IsWBKPHVafYXD8nwC+DKai4J8Ao=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GoRJfOgtge9wuDFHIwLU8JXJ2+BiIwwq8cQaCq2V6f7WUYGJke+JljztGWBPVtL7jkoBFnAPmlj2sRNlWkoarKd4thmViZoRtKpqnoNuCI4Jzvp2nLhmvxkOnuu+67OF3XsCl1crCcnt+3ysvIFsuzbDYsVNkRDui9PgDsCGeB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P+KrzcuO; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=FkdtqEPfUJfNRCC3qfBRpcOrVp7+6cZjzElJnQh0/lFd1t+DLCdNAnCGGlH5BgT0RzlH+q9Ta4FW96Ff9/dA7QIl2V0kFQ/2oFlq8MjTelMqDJ8sFS9NajyU4LNEQ1omgM89uHsFN3h6/1r8/RSVzkS3OM3VCPuQmEGAuIKr1I4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G1HxaoBF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P+KrzcuO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0823C2BCB7;
-	Mon, 18 May 2026 11:01:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G1HxaoBF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 059DCC2BCB7;
+	Mon, 18 May 2026 11:01:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779102088;
-	bh=6qRisYUewPQrwQgfo7iXLIPDLMkbLCXqfZVLhdIbPfg=;
+	s=k20201202; t=1779102098;
+	bh=b70JuMJL8au4dv/4IsWBKPHVafYXD8nwC+DKai4J8Ao=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=P+KrzcuO9CdXw94K/tWchpUVoDgWOCcFE9AjMC1YMqn9RsFQxYpWnTcAOEK98TlOA
-	 MozHBGOV9tcEqooW5mOGBVLk+YT7xnMPB+QPDG33yR1B/WZMu8d3/3PXPnL+aTFFZq
-	 5g7nQL3hYHa8H2wR4fnISHA+PY+kSj3d36FV3NN0E4k8jOXWsVBdMhgulxj2/nSbfx
-	 liYpxhc9rFOeJK7OHxXe74vjhS4XwqHjE4u/5/nVOXBMXMdPN8R2wAoHlIFJZnLcoV
-	 VioaXwegSKD4AhWlLT9udnKSJW2nNiIoBwwQuWsi760YIvzmwFPKDz1lWsBd6pijXg
-	 sRVY3OOXmkjjw==
+	b=G1HxaoBFOQGtAkqHuPyfJxls0tr8dTd+FEqRRuBYikSfivMlQuYJgf9y40HBlo7ZA
+	 oj1ph/4Lrn6mu4/usvUkNJelHP7pW8lRLobJaEzrk9/4v/VBVJYUi2nizecqlm+GGu
+	 Xa3R3cxihZOPBYSrG5CPw3LbIvWvcsJf/D3yS3rbmYOKBUH9bjam53ez80uYdiPd8f
+	 E5gTYhqUR5qU8upbRy+40vCnFUBhSMIbK1ypWFDvcVeT7bAKhYpzVrH1anR9YUGCo2
+	 KgUDN2bgw8n1vH5ViQeCsEvwFNHJRIiKhubnvGtImYKUrX2vipH6x+k0YBV93tosTa
+	 FJp4Ordzz0E8g==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Oleg Nesterov <oleg@redhat.com>,
 	Peter Zijlstra <peterz@infradead.org>,
@@ -34,9 +34,9 @@ To: Oleg Nesterov <oleg@redhat.com>,
 	Andrii Nakryiko <andrii@kernel.org>
 Cc: bpf@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
-Subject: [PATCHv2 09/11] selftests/bpf: Add reattach tests for uprobe syscall
-Date: Mon, 18 May 2026 12:59:55 +0200
-Message-ID: <20260518105957.123445-10-jolsa@kernel.org>
+Subject: [PATCHv2 10/11] selftests/bpf: Add tests for uprobe nop10 red zone clobbering
+Date: Mon, 18 May 2026 12:59:56 +0200
+Message-ID: <20260518105957.123445-11-jolsa@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260518105957.123445-1-jolsa@kernel.org>
 References: <20260518105957.123445-1-jolsa@kernel.org>
@@ -48,212 +48,270 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adding reattach tests for uprobe syscall tests to make sure
-we can re-attach and optimize same uprobe multiple times.
+From: Andrii Nakryiko <andrii@kernel.org>
 
-The reason is that optimized uprobe does not restore original
-nop10 after detach, but instead it uses 'jmp 8' instruction.
+The uprobe nop5 optimization used to replace a 5-byte NOP with a 5-byte
+CALL to a trampoline. The CALL pushes a return address onto the stack at
+[rsp-8], clobbering whatever was stored there.
 
-Making sure we can still install and optimize uprobe on top
-of the 'jmp 8' instruction.
+On x86-64, the red zone is the 128 bytes below rsp that user code may use
+for temporary storage without adjusting rsp. Compilers can place USDT
+argument operands there, generating specs like "8@-8(%rbp)" when rbp ==
+rsp. With the CALL-based optimization, the return address overwrites that
+argument before the BPF-side USDT argument fetch runs.
 
+Add two tests for this case. The uprobe_syscall subtest stores known values
+at -8(%rsp), -16(%rsp), and -24(%rsp), executes an optimized nop10 uprobe,
+and verifies the red-zone data is still intact. The USDT subtest triggers a
+probe in a function where the compiler places three USDT operands in the
+red zone and verifies that all 10 optimized invocations deliver the expected
+argument values to BPF.
+
+On an unfixed kernel, the first hit goes through the INT3 path and later
+hits use the optimized CALL path, so the red-zone checks fail after
+optimization.
+
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+[ updates to use nop10 ]
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- .../selftests/bpf/prog_tests/uprobe_syscall.c | 115 ++++++++++++++++--
- 1 file changed, 105 insertions(+), 10 deletions(-)
+ .../selftests/bpf/prog_tests/uprobe_syscall.c | 75 +++++++++++++++++++
+ tools/testing/selftests/bpf/prog_tests/usdt.c | 49 ++++++++++++
+ tools/testing/selftests/bpf/progs/test_usdt.c | 25 +++++++
+ tools/testing/selftests/bpf/usdt_2.c          | 13 ++++
+ 4 files changed, 162 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-index e4a19dc9df69..e88b316a3f2c 100644
+index e88b316a3f2c..739b0be13aa3 100644
 --- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
 +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-@@ -431,21 +431,27 @@ static void *check_attach(struct uprobe_syscall_executed *skel, trigger_t trigge
- 	return tramp;
+@@ -357,6 +357,48 @@ __nocf_check __weak void usdt_test(void)
+ 	USDT(optimized_uprobe, usdt);
  }
  
--static void check_detach(void *addr, void *tramp)
-+static bool check_detach(void *addr, void *tramp)
- {
-+	bool ok = true;
++/*
++ * Assembly-level red zone clobbering test. Stores known values in the
++ * red zone (below RSP), executes a nop10 (uprobe site), and checks that
++ * the values survived. Returns 0 if intact, 1 if clobbered.
++ *
++ * The nop5 optimization used CALL (which pushes a return address to
++ * [rsp-8]), the value at -8(%rsp) was overwritten. The nop10 optimization
++ * should escape that by moving stackpointer below the redzone before
++ * doing the CALL.
++ */
++__attribute__((aligned(16)))
++__nocf_check __weak __naked unsigned long uprobe_red_zone_test(void)
++{
++	asm volatile (
++		"movabs $0x1111111111111111, %%rax\n"
++		"movq   %%rax, -8(%%rsp)\n"
++		"movabs $0x2222222222222222, %%rax\n"
++		"movq   %%rax, -16(%%rsp)\n"
++		"movabs $0x3333333333333333, %%rax\n"
++		"movq   %%rax, -24(%%rsp)\n"
 +
- 	/* [uprobes_trampoline] stays after detach */
--	ASSERT_OK(find_uprobes_trampoline(tramp), "uprobes_trampoline");
--	ASSERT_OK(memcmp(addr, jmp2B, 2), "jmp2B");
-+	if (!ASSERT_OK(find_uprobes_trampoline(tramp), "uprobes_trampoline"))
-+		ok = false;
-+	if (!ASSERT_OK(memcmp(addr, jmp2B, 2), "jmp2B"))
-+		ok = false;
-+	return ok;
- }
- 
--static void check(struct uprobe_syscall_executed *skel, struct bpf_link *link,
--		  trigger_t trigger, void *addr, int executed)
-+static void *check(struct uprobe_syscall_executed *skel, struct bpf_link *link,
-+		   trigger_t trigger, void *addr, int executed)
- {
- 	void *tramp;
- 
- 	tramp = check_attach(skel, trigger, addr, executed);
- 	bpf_link__destroy(link);
- 	check_detach(addr, tramp);
-+	return tramp;
- }
- 
- static void test_uprobe_legacy(void)
-@@ -456,6 +462,7 @@ static void test_uprobe_legacy(void)
- 	);
- 	struct bpf_link *link;
- 	unsigned long offset;
-+	void *tramp;
- 
- 	offset = get_uprobe_offset(&uprobe_test);
- 	if (!ASSERT_GE(offset, 0, "get_uprobe_offset"))
-@@ -473,7 +480,28 @@ static void test_uprobe_legacy(void)
- 	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_opts"))
- 		goto cleanup;
- 
--	check(skel, link, uprobe_test, uprobe_test, 2);
-+	tramp = check(skel, link, uprobe_test, uprobe_test, 2);
++		".byte 0x66, 0x66, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00\n" /* nop10: uprobe site */
 +
-+	/* reattach and detach without triggering optimization */
++		"movabs $0x1111111111111111, %%rax\n"
++		"cmpq   %%rax, -8(%%rsp)\n"
++		"jne    1f\n"
++		"movabs $0x2222222222222222, %%rax\n"
++		"cmpq   %%rax, -16(%%rsp)\n"
++		"jne    1f\n"
++		"movabs $0x3333333333333333, %%rax\n"
++		"cmpq   %%rax, -24(%%rsp)\n"
++		"jne    1f\n"
++
++		"xorl   %%eax, %%eax\n"
++		"retq\n"
++		"1:\n"
++		"movl   $1, %%eax\n"
++		"retq\n"
++		::: "rax", "memory"
++	);
++}
++
+ static int find_uprobes_trampoline(void *tramp_addr)
+ {
+ 	void *start, *end;
+@@ -855,6 +897,37 @@ static void test_uprobe_race(void)
+ #define __NR_uprobe 336
+ #endif
+ 
++static void test_uprobe_red_zone(void)
++{
++	struct uprobe_syscall_executed *skel;
++	struct bpf_link *link;
++	void *nop10_addr;
++	size_t offset;
++	int i;
++
++	nop10_addr = find_nop10(uprobe_red_zone_test);
++	if (!ASSERT_NEQ(nop10_addr, NULL, "find_nop10"))
++		return;
++
++	skel = uprobe_syscall_executed__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	offset = get_uprobe_offset(nop10_addr);
 +	link = bpf_program__attach_uprobe_opts(skel->progs.test_uprobe,
-+					       0, "/proc/self/exe", offset, NULL);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_opts"))
++			0, "/proc/self/exe", offset, NULL);
++	if (!ASSERT_OK_PTR(link, "attach_uprobe"))
 +		goto cleanup;
++
++	for (i = 0; i < 10; i++)
++		ASSERT_EQ(uprobe_red_zone_test(), 0, "red_zone_intact");
 +
 +	bpf_link__destroy(link);
-+	if (!check_detach(uprobe_test, tramp))
-+		goto cleanup;
 +
-+	uprobe_test();
-+	ASSERT_EQ(skel->bss->executed, 2, "executed_no_probe");
++cleanup:
++	uprobe_syscall_executed__destroy(skel);
++}
 +
-+	/* reattach with triggering optimization */
-+	link = bpf_program__attach_uprobe_opts(skel->progs.test_uprobe,
-+				0, "/proc/self/exe", offset, NULL);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_opts"))
-+		goto cleanup;
-+
-+	check(skel, link, uprobe_test, uprobe_test, 4);
- 
- 	/* uretprobe */
- 	skel->bss->executed = 0;
-@@ -495,6 +523,7 @@ static void test_uprobe_multi(void)
- 	LIBBPF_OPTS(bpf_uprobe_multi_opts, opts);
- 	struct bpf_link *link;
- 	unsigned long offset;
-+	void *tramp;
- 
- 	offset = get_uprobe_offset(&uprobe_test);
- 	if (!ASSERT_GE(offset, 0, "get_uprobe_offset"))
-@@ -515,7 +544,28 @@ static void test_uprobe_multi(void)
- 	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_multi"))
- 		goto cleanup;
- 
--	check(skel, link, uprobe_test, uprobe_test, 2);
-+	tramp = check(skel, link, uprobe_test, uprobe_test, 2);
-+
-+	/* reattach and detach without triggering optimization */
-+	link = bpf_program__attach_uprobe_multi(skel->progs.test_uprobe_multi,
-+				0, "/proc/self/exe", NULL, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_multi"))
-+		goto cleanup;
-+
-+	bpf_link__destroy(link);
-+	if (!check_detach(uprobe_test, tramp))
-+		goto cleanup;
-+
-+	uprobe_test();
-+	ASSERT_EQ(skel->bss->executed, 2, "executed_no_probe");
-+
-+	/* reattach with triggering optimization */
-+	link = bpf_program__attach_uprobe_multi(skel->progs.test_uprobe_multi,
-+				0, "/proc/self/exe", NULL, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_multi"))
-+		goto cleanup;
-+
-+	check(skel, link, uprobe_test, uprobe_test, 4);
- 
- 	/* uretprobe.multi */
- 	skel->bss->executed = 0;
-@@ -539,6 +589,7 @@ static void test_uprobe_session(void)
- 	);
- 	struct bpf_link *link;
- 	unsigned long offset;
-+	void *tramp;
- 
- 	offset = get_uprobe_offset(&uprobe_test);
- 	if (!ASSERT_GE(offset, 0, "get_uprobe_offset"))
-@@ -558,7 +609,28 @@ static void test_uprobe_session(void)
- 	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_multi"))
- 		goto cleanup;
- 
--	check(skel, link, uprobe_test, uprobe_test, 4);
-+	tramp = check(skel, link, uprobe_test, uprobe_test, 4);
-+
-+	/* reattach and detach without triggering optimization */
-+	link = bpf_program__attach_uprobe_multi(skel->progs.test_uprobe_session,
-+				0, "/proc/self/exe", NULL, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_multi"))
-+		goto cleanup;
-+
-+	bpf_link__destroy(link);
-+	if (!check_detach(uprobe_test, tramp))
-+		goto cleanup;
-+
-+	uprobe_test();
-+	ASSERT_EQ(skel->bss->executed, 4, "executed_no_probe");
-+
-+	/* reattach with triggering optimization */
-+	link = bpf_program__attach_uprobe_multi(skel->progs.test_uprobe_session,
-+				0, "/proc/self/exe", NULL, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_multi"))
-+		goto cleanup;
-+
-+	check(skel, link, uprobe_test, uprobe_test, 8);
- 
- cleanup:
- 	uprobe_syscall_executed__destroy(skel);
-@@ -568,7 +640,7 @@ static void test_uprobe_usdt(void)
+ static void test_uprobe_error(void)
  {
- 	struct uprobe_syscall_executed *skel;
- 	struct bpf_link *link;
--	void *addr;
-+	void *addr, *tramp;
+ 	long err = syscall(__NR_uprobe);
+@@ -881,6 +954,8 @@ static void __test_uprobe_syscall(void)
+ 		test_uprobe_usdt();
+ 	if (test__start_subtest("uprobe_race"))
+ 		test_uprobe_race();
++	if (test__start_subtest("uprobe_red_zone"))
++		test_uprobe_red_zone();
+ 	if (test__start_subtest("uprobe_error"))
+ 		test_uprobe_error();
+ 	if (test__start_subtest("uprobe_regs_equal"))
+diff --git a/tools/testing/selftests/bpf/prog_tests/usdt.c b/tools/testing/selftests/bpf/prog_tests/usdt.c
+index a160d7c4fa0d..8954f543d68e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/usdt.c
++++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
+@@ -250,6 +250,7 @@ static void subtest_basic_usdt(bool optimized)
+ #ifdef __x86_64__
+ extern void usdt_1(void);
+ extern void usdt_2(void);
++extern void usdt_red_zone_trigger(void);
  
- 	errno = 0;
- 	addr = find_nop10(usdt_test);
-@@ -587,7 +659,30 @@ static void test_uprobe_usdt(void)
- 	if (!ASSERT_OK_PTR(link, "bpf_program__attach_usdt"))
- 		goto cleanup;
- 
--	check(skel, link, usdt_test, addr, 2);
-+	tramp = check(skel, link, usdt_test, addr, 2);
-+
-+	/* reattach and detach without triggering optimization */
-+	link = bpf_program__attach_usdt(skel->progs.test_usdt,
-+				-1 /* all PIDs */, "/proc/self/exe",
-+				"optimized_uprobe", "usdt", NULL);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_usdt"))
-+		goto cleanup;
-+
-+	bpf_link__destroy(link);
-+	if (!check_detach(addr, tramp))
-+		goto cleanup;
-+
-+	usdt_test();
-+	ASSERT_EQ(skel->bss->executed, 2, "executed_no_probe");
-+
-+	/* reattach with triggering optimization */
-+	link = bpf_program__attach_usdt(skel->progs.test_usdt,
-+				-1 /* all PIDs */, "/proc/self/exe",
-+				"optimized_uprobe", "usdt", NULL);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_usdt"))
-+		goto cleanup;
-+
-+	check(skel, link, usdt_test, addr, 4);
- 
+ static unsigned char nop1[1] = { 0x90 };
+ static unsigned char nop1_nop10_combo[11] = { 0x90, 0x66, 0x66, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 };
+@@ -340,6 +341,52 @@ static void subtest_optimized_attach(void)
  cleanup:
- 	uprobe_syscall_executed__destroy(skel);
+ 	test_usdt__destroy(skel);
+ }
++
++/*
++ * Test that USDT arguments survive nop10 optimization in a function where
++ * the compiler places operands in the red zone.
++ *
++ * Signal handlers are prone to having the compiler place USDT argument
++ * operands in the red zone (below rsp).
++ *
++ * The nop5 optimization used CALL (which pushes a return address to
++ * [rsp-8]), the value at -8(%rsp) was overwritten. The nop10 optimization
++ * should escape that by moving stackpointer below the redzone before
++ * doing the CALL.
++ */
++static void subtest_optimized_red_zone(void)
++{
++	struct test_usdt *skel;
++	int i;
++
++	skel = test_usdt__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	skel->bss->expected_arg[0] = 0xDEADBEEF;
++	skel->bss->expected_arg[1] = 0xCAFEBABE;
++	skel->bss->expected_arg[2] = 0xFEEDFACE;
++	skel->bss->expected_pid = getpid();
++
++	skel->links.usdt_check_arg = bpf_program__attach_usdt(
++		skel->progs.usdt_check_arg, 0, "/proc/self/exe",
++		"optimized_attach", "usdt_red_zone", NULL);
++	if (!ASSERT_OK_PTR(skel->links.usdt_check_arg, "attach_usdt_red_zone"))
++		goto cleanup;
++
++	for (i = 0; i < 10; i++)
++		usdt_red_zone_trigger();
++
++	ASSERT_EQ(skel->bss->arg_total, 10, "arg_total");
++	ASSERT_EQ(skel->bss->arg_bad, 0, "arg_bad");
++	ASSERT_EQ(skel->bss->arg_last[0], 0xDEADBEEF, "arg_last_1");
++	ASSERT_EQ(skel->bss->arg_last[1], 0xCAFEBABE, "arg_last_2");
++	ASSERT_EQ(skel->bss->arg_last[2], 0xFEEDFACE, "arg_last_3");
++
++cleanup:
++	test_usdt__destroy(skel);
++}
++
+ #endif
+ 
+ unsigned short test_usdt_100_semaphore SEC(".probes");
+@@ -613,6 +660,8 @@ void test_usdt(void)
+ 		subtest_basic_usdt(true);
+ 	if (test__start_subtest("optimized_attach"))
+ 		subtest_optimized_attach();
++	if (test__start_subtest("optimized_red_zone"))
++		subtest_optimized_red_zone();
+ #endif
+ 	if (test__start_subtest("multispec"))
+ 		subtest_multispec_usdt();
+diff --git a/tools/testing/selftests/bpf/progs/test_usdt.c b/tools/testing/selftests/bpf/progs/test_usdt.c
+index f00cb52874e0..0ee78fb050a1 100644
+--- a/tools/testing/selftests/bpf/progs/test_usdt.c
++++ b/tools/testing/selftests/bpf/progs/test_usdt.c
+@@ -149,5 +149,30 @@ int usdt_executed(struct pt_regs *ctx)
+ 		executed++;
+ 	return 0;
+ }
++
++int arg_total;
++int arg_bad;
++long arg_last[3];
++long expected_arg[3];
++int expected_pid;
++
++SEC("usdt")
++int BPF_USDT(usdt_check_arg, long arg1, long arg2, long arg3)
++{
++	if (expected_pid != (bpf_get_current_pid_tgid() >> 32))
++		return 0;
++
++	__sync_fetch_and_add(&arg_total, 1);
++	arg_last[0] = arg1;
++	arg_last[1] = arg2;
++	arg_last[2] = arg3;
++
++	if (arg1 != expected_arg[0] ||
++	    arg2 != expected_arg[1] ||
++	    arg3 != expected_arg[2])
++		__sync_fetch_and_add(&arg_bad, 1);
++
++	return 0;
++}
+ #endif
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/usdt_2.c b/tools/testing/selftests/bpf/usdt_2.c
+index b359b389f6c0..5e38f8605b02 100644
+--- a/tools/testing/selftests/bpf/usdt_2.c
++++ b/tools/testing/selftests/bpf/usdt_2.c
+@@ -13,4 +13,17 @@ void usdt_2(void)
+ 	USDT(optimized_attach, usdt_2);
+ }
+ 
++static volatile unsigned long usdt_red_zone_arg1 = 0xDEADBEEF;
++static volatile unsigned long usdt_red_zone_arg2 = 0xCAFEBABE;
++static volatile unsigned long usdt_red_zone_arg3 = 0xFEEDFACE;
++
++void __attribute__((noinline)) usdt_red_zone_trigger(void)
++{
++	unsigned long a1 = usdt_red_zone_arg1;
++	unsigned long a2 = usdt_red_zone_arg2;
++	unsigned long a3 = usdt_red_zone_arg3;
++
++	USDT(optimized_attach, usdt_red_zone, a1, a2, a3);
++}
++
+ #endif
 -- 
 2.53.0
 
