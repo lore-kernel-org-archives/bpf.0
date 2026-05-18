@@ -1,101 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00921380FDB
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 17:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C9F3376490
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 17:12:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779124162; cv=none; b=ARJ9VV9/cS0L/6GQed4Tqs8tGVKkCOfvxIAVoOLiS0sNvnTE0mm2IYO4ZWDiJRhNh5r17ysa0ridlVvMQ1b2NkcajAm5QCdG8CW16weSjw1vyHMfnKEppAE1FZb1EscxgLDi3XuSUPRqd5LK6rvc2QQ2FB5pShj70Hjkwyfvoo0=
+	t=1779124366; cv=none; b=JY36rXHK9sC/9SLx9UsHIXIRmzRLZEcotTBpYOQ2lgZ0KvdBg0jKQumtPL+W3MIBgwaJqcWoQ/y67Yoiby+AuD/0svu9PHCgjj95QBcnhVQZqiPPQ6QCODQy05PJsVITrk0zTKZb0qW6Khteujx99h/zsEKBaxH+avS5pHkJxUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779124162; c=relaxed/simple;
-	bh=IDkp1qEmW5HMnYT8xDHs2bziEMDzXA0W/mjgi+ut/fM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=slofqReezkBi4v2oHogc7SvfhwEDiXjSXmRwsicbbrlCjL5Hqp01+u+Tf8LwCPj8gcvHI823V/3XfIry4O1hn9dl+8QEWVhqZabG5AS05oibcQJJflXHBuT7atkHDSf7VjrCoXmGfT7XsQKESJzBjRee7Xhl1Un6RXgTYT8284U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YErxbABk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779124366; c=relaxed/simple;
+	bh=E/4WeoAntZmDMnfV7zG8H+Yk5WfL6D2Nd73+uPfhq8o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AeAuNaUnSFmzm8B2OL+YxtcKZHRNKuFm1xid7q00Mjl/wCfeUXIg2wPL7VVdjI4NZjrKXWNWqSVuPeB6BaB6EOcT5OjNUPVBl+SZi6kvJO3A/b4tV0pvdeSsYatbl0qM2LPU5OcOtvFTtqViifmLKtAuUHsmWVxuuTCaPCVZkcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n4EL8kaM; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YErxbABk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53767C2BCB7;
-	Mon, 18 May 2026 17:09:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779124161;
-	bh=IDkp1qEmW5HMnYT8xDHs2bziEMDzXA0W/mjgi+ut/fM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=YErxbABkE+D076nlS8pN3G8TBxzoc8T+3/WeL/zkdGGe3i7k+82Hety8pLlFdpkY1
-	 G1hHJqfW1TtUWsM5PZzPufFOTdxqb959+6krBPNDfzCfE1NTb0BxADe5sl9Hpffh+s
-	 u8g21saLPQtudn1v9diDvhSKwXknbljopZMBKRCGpGxMi7bs5N8x0DAzpbmYfm3Co6
-	 VOwT5c7N+sTlU5fgsi3vH4+g1xfFe0lvk5xwlbbO1k7z8kOUIbz9AfGAX5I7toxgSg
-	 whoKHiXtqAEPr4vk54LxCsp0DUSt3rGeSij+xafSWfQrORO0yEtBwQGPzpXHmelrGe
-	 lQQxAJg086uoQ==
-Content-Type: multipart/mixed; boundary="===============0915842576159487075=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n4EL8kaM"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c80167f5716so1024755a12.2
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 10:12:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779124365; x=1779729165; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nyPh44NnAjI+9jKQI9q0bPTcCqGC6CGNFE37YibG8X8=;
+        b=n4EL8kaM25ok1aD7Z6MfP131lwBI1fSwMwFI7zd7kPPFfXVL2aay7ccb28Ga6P3Sny
+         Rx/8vF6NQW6DKtJRAi7RhsKgkKpvs/zWeSZfqJUTTa2f8dv+m8fpd/ckcwpAUK0yEdHf
+         kvS0nyUnYXOrYf0e+mmqWkA+/XEPwqWoHwWh/Kzo44ae7QCnkQYfECpdDVTnEJMEQJM8
+         INl2Jco7eEev2HaOhj0XG6J8Tvyf6+zWptO8HkxwnecuFhXJaQULs8/+VA2oBNOpPH3x
+         lz6H++lhN80uy8oSnmhQZhOKXN0YlCfRHrQoXxl2wjO8o1Rtrv4/xMmrokZSGn0gH/0U
+         IGfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779124365; x=1779729165;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nyPh44NnAjI+9jKQI9q0bPTcCqGC6CGNFE37YibG8X8=;
+        b=Fvk9FpFT8PB+3DhCJUG5P4CwWj7M9QgzeuIVb/zZXm4AQ7pSc1muIyh8dlsgLU1Sc4
+         K0/mInyDk65rwOICcicsp1/zmlpwyrAO8ypIHYP6tXcyyfe5Qj7CIS/6TI/CG7JQFAYo
+         fGjTqYxiRAWBBem08Ge3ZBYLY83lWnUV0OXCEJmz0v2cvYuieGyPhPR9fXoI8MCbVV7u
+         pBThi0DWNnPOCO/sIDOnjLf5PL65iQ3yh4N96tnSPA2+vLhaaSF3T4ohK/Kgs2cTlaa8
+         ooG2Uabt1XYKNPcenUYPlSwE8vKMS5F6KxQxy7qDdK6LkcWL+tby53+LxVf0pTgD1obW
+         B92g==
+X-Forwarded-Encrypted: i=1; AFNElJ/c9tMskDQinv/WvC5q0EbZTc6k1ioZlw+VLX33rgA0g2nk8W0x8TQ2eMt93FEQ/OaOUZw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgsCKNh/JsrWNBhVEBLXZc2QAXjYuKG0it6/z0K4CxP+7RDuZ2
+	oWyryI5j96qRJhUiNLDucSA0+Jl1V6J3MFIq3v1Z6Lal+0hMnrZraFuf
+X-Gm-Gg: Acq92OGnT+QVcnUeiwEMjAugMsldi+sqbXObEhbYL93JywlvIP9oNaI65W959Um5qe8
+	unEnA6q+yn+aaEIcYgWj0tOQGCGVJGu3fGV1s6PjStvyxvYIDASo7QsYqeucn/ypnhs5LWILyqH
+	Xe+9/g0AamgQk1Ag/0KzDr47Chy8ibiSWs5PfF9xcpBc9dKn+r4iUSdLr7+RKy+EymJBhu1LlUp
+	iczTSrsfcGn2QTO9OssYSaD1BcUSNIUFUKTP5ubNDgHKZ32pWjfKN9I7K9hifyjDzmBF4iv+CnL
+	SOp7ijjFWrCrBlVTWmO/HkBCKbLfVo9l0by8Fl92OoLIPLDqWHi9DXIitqiu+ZcJml3id/5bucN
+	yTCzOZf89CvSAnZZUSiGuuQ/lOS2+9MuCvY8x5mAsJeWRt5N3yDm0ncIYbzP3lnLblZEUQ/Nu3T
+	nMB//eq+G8t9bO6BiYmSWTm14waBJW75YmfQ==
+X-Received: by 2002:a05:6a20:734a:b0:398:6bb5:54c4 with SMTP id adf61e73a8af0-3b22e815a13mr17993040637.5.1779124364750;
+        Mon, 18 May 2026 10:12:44 -0700 (PDT)
+Received: from google.com ([118.150.148.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83f19c7f202sm14646616b3a.43.2026.05.18.10.12.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 May 2026 10:12:44 -0700 (PDT)
+Date: Tue, 19 May 2026 01:12:40 +0800
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: Andreas Schwab <schwab@linux-m68k.org>
+Cc: geert@linux-m68k.org, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+	jolsa@kernel.org, jserv@ccns.ncku.edu.tw, eleanor15x@gmail.com,
+	marscheng@google.com, linux-kernel@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org, bpf@vger.kernel.org,
+	Daniel Palmer <daniel@thingy.jp>
+Subject: Re: [PATCH bpf-next v3] m68k, bpf: Add initial BPF JIT compiler
+ support
+Message-ID: <agtIiKuoTlp-4XAO@google.com>
+References: <20260511212756.3163955-1-visitorckw@gmail.com>
+ <87h5oc4jpf.fsf@igel.home>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <86c3b9ef65bb65d98d90fb341c3ff0c278053fe2bf77f118084af3ff500c6e64@mail.kernel.org>
-In-Reply-To: <be2dc2c3d85120286e60b3029b3338fff339f942.1779121582.git.paul.chaignon@gmail.com>
-References: <be2dc2c3d85120286e60b3029b3338fff339f942.1779121582.git.paul.chaignon@gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix test for refinement of single-value tnum
-From: bot+bpf-ci@kernel.org
-To: paul.chaignon@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 18 May 2026 17:09:21 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87h5oc4jpf.fsf@igel.home>
 
---===============0915842576159487075==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi Andreas,
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> index a3e4c0945137..bc038ac2df98 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> @@ -1892,25 +1892,25 @@ __naked void bounds_refinement_tnum_umax(void *ctx)
->  /* This test covers the bounds deduction when the u64 range and the tnum
->   * overlap only at umin. After instruction 3, the ranges look as follows:
->   *
-> - * 0    umin=0xe00     umax=0xeff                              U64_MAX
-> + * 0    umin=0xe1      umax=0xf0                               U64_MAX
-                              ^^^^^
+On Tue, May 12, 2026 at 07:32:44PM +0200, Andreas Schwab wrote:
+> On Mai 11 2026, Kuan-Wei Chiu wrote:
+> 
+> > +
+> > +			emit_16(ctx, 0x4a80 | d_lo);			/* tst.l d_lo */
+> > +			emit_16(ctx, 0x6b04);				/* bmi.s .+6 */
+> > +			emit_16(ctx, 0x7000 | (d_hi << 9));		/* moveq #0, d_hi */
+> > +			emit_16(ctx, 0x6002);				/* bra.s .+4 */
+> > +			emit_16(ctx, 0x70ff | (d_hi << 9));		/* moveq #-1, d_hi */
+> 
+> I think this could be "tst.l d_lo; smi d_hi; extb.l d_hi".
+> 
+Sorry for the late reply, and thanks for the review.
 
-The comment says umax=0xf0 but looking at the code change below:
+This makes sense.
+I initially kept things simple to focus on correctness first, but since
+you pointed it out, I will include this optimization in the next
+respin.
 
->   * |    [xxxxxxxxxxxxxx]                                       |
->   * |----------------------------|------------------------------|
->   * |    x               x                                      | tnum values
->   *
-> - * The verifier can therefore deduce that the R0=0xe0=224.
-> + * The verifier can therefore deduce that the R0=0xe1=225.
->   */
->  SEC("socket")
->  __description("bounds refinement with single-value tnum on umin")
-> -__msg("3: (15) if r0 == 0xf0 {{.*}} R0=224")
-> +__msg("3: (15) if r0 == 0xf1 {{.*}} R0=225")
->  __success __log_level(2)
->  __naked void bounds_refinement_tnum_umin(void *ctx)
->  {
->  	asm volatile("			\
->  	call %[bpf_get_prandom_u32];	\
-> -	r0 |= 0xe0;			\
-> -	r0 &= 0xf0;			\
-> -	if r0 == 0xf0 goto +2;		\
-> -	if r0 == 0xe0 goto +1;		\
-> +	r0 |= 0xe1;			\
-> +	r0 &= 0xf1;			\
-                   ^^^^
+Thanks!
 
-After r0 |= 0xe1, the register has umin=0xe1. Then after r0 &= 0xf1,
-the mask 0xf1 allows bits 11110001, which permits both 0xe1 and 0xf1.
-This creates a u64 range of [0xe1, 0xf1], not [0xe1, 0xf0] as stated
-in the comment.
-
-Should the comment be updated to umax=0xf1 to match the implementation?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26047251229
---===============0915842576159487075==--
+Regards,
+Kuan-Wei
