@@ -1,153 +1,221 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FDC71C84A2
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 16:26:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA56A3F54D9;
+	Mon, 18 May 2026 16:29:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779121600; cv=none; b=bXbpogIRKiR/YP+ipvwCr6+mIKkyWt91FZetj+ZPn/hCzsy/oeZiFTmIAx8AWPop0FO1tRnMGXxyurGk0W4ruCjUyE+ji8CrAzaCg+xoRmnqLv5cE0gk+TGd2BFYjJCvo8JuWiXa9H71f2B76/GzMzXlhWgnP6Jg/RAyRgkGCFw=
+	t=1779121782; cv=none; b=eL5ckd+joog+XUMh3+5vCxUZJoeS/jmiyNGHgcyJ8fveKi8yVewY+9jSLd05r+0P7oTIqIAsbWDR14RyPOkKFiVGE/KLDZPLD3XxgYy2OtL46RxKnZGSWLIxEg098GjMbMU12mejzFdVQBP5ExCvliEflPl/WJVMV7rkYBPYQ9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779121600; c=relaxed/simple;
-	bh=698a073YtdcNv2PF7blbPB+XeYWFONBCV3INYhUT46g=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bqaQyxDey8bHhPVUpSJiD0WjnxJztDSzmMZeUxNjAGTWPKbkthEb/8/MX8TsvXTvwr3wHPyAYW85zTdtFOd+jcR+ijemdFAKBIfK2qMrw3gUstu4Z8EtXzuLpAFCaalQ15/0LhYAT8/o/v3JNRsLS0x5nsv9z2xIXHEECwYtwA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SF4e3G/+; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779121782; c=relaxed/simple;
+	bh=wX5cHt5MOV5qS2WFeJSpXMaa6oitFgNSICt71BtgmH8=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Xwtf3D27v4P0lmQ8s6/UEDnmxPL31Ro4yr5kIMQSLCyMRZjaq49BzDRP6+p1fDbPp/SGxdkHRRFxfGXTf3LSqzpSvoexU29CDeiwjRg/G2KSsIrf+8IYNUieJJ6BQuv+91C7qI2fBmd3N+MxbW0OyWluiubWeu04xPZu9BxhWA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SBmxuxou; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SF4e3G/+"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-488b3f8fa2bso27910805e9.1
-        for <bpf@vger.kernel.org>; Mon, 18 May 2026 09:26:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779121598; x=1779726398; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gicoQlYdDOYVmuA34vHwu/Jt1gncKkKI3uZ0DPbJpNM=;
-        b=SF4e3G/+ej8VFyEG6dlMdsUFu4LyakKaet45Eagq+K6LxjlSe1pVqCr82b/aVZFHlT
-         mR5okWeMjg193GnWFpN7anRsJ6lFYj6Uc9unZxQE6rhNtUwWgR8cLGJQap28nfs0jEmY
-         119+m4Um0M3aqP8DDddkIJzOGIujFJt4ZMBEMGDzYSqSCfSSkl6O2t4NQfgQOZB4MUPJ
-         8dvzS+aVYePt4VJ/LDCGMaEeqLQbcXev3QPefgYM/J/5ql8d3x2SuH9cGIMANYGOnnxI
-         AR76wrHlsdq4Qlyi5uFXBuwTB7B886IoUGFfX7LTUVpQHz8CNA7uprV4ENHsiseva2UT
-         p2sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779121598; x=1779726398;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gicoQlYdDOYVmuA34vHwu/Jt1gncKkKI3uZ0DPbJpNM=;
-        b=rmDie32/K7AscN/vwaZp5PPoPs2MjxyumsXsBJh2Qeywu9oYQ1NqqOQXyo2PhGNCmJ
-         wzfFV0lGr24v1kgYR0QFRpxKAUErc7G2z9rMUrPo3OOpn1tsfd7O5UHOz/8X7Dw1MBgz
-         ra8YILWRdCwl7A+hhyuR7nPwDDkUNpUQwbUNxYVY+7AaiHdrpK2BA5TrjmnmuGbFX7ro
-         treUyV8XClGXLNHU6Jp4Vi8Abr1oUWULgwYnvPzIOS+slWuHxhgnllieD4UyEyAVNzKP
-         A/GfBES7WyGLj+jNKE/gbdwdFtfr90TIhc8NTsrqa+BRwPXWmIZD2WOsZKBS8N/1xmFU
-         XdOg==
-X-Gm-Message-State: AOJu0Yy4XPH6F2dvKZL+Z9Zkk9QLWvaFNP2Ll7wtMC2+ANaHsPR3UY7a
-	m+wr+hKsMl3H5MCY6sxUNHxx38Imw0xXRf6HxUIWV1Tasdo0YcjUtj/y8sATt6hF
-X-Gm-Gg: Acq92OE03xz/mswEJ7OyMLg1d28rXPMlz/0J99+h5Ym5qZRxB4UFS8GTVubu0tF5i/S
-	lX9efK+5mhfsax9Z5wiX8V5jPtaEUvrB0IZ4yccQwMVSJUc3FFsuAq7iolbpes41xSc9ltNpBrx
-	ynzDQ77gbcntnN+JOKngGuZELggYlOCxMSPAIUpUieAcsr+GajlJ9mbEKRfDVg+Z7TMZMgm4xrE
-	8g3tGus8pHmxUBa4CIfkOrNO5kdHx1exTMjdjWMQ20ZbOyhxCnUrqarR6toMzaZ2zKvdm4J5KwS
-	6LZ+qy/+4Zc8B1KTbk1DmaAEvzbE1LRZreMLYpu3WeO0NEU5MDoQeRceudYRoXzgsCwtxWfhCaj
-	y2LOTN5EkYdAmXqsYcH4Od/ugsT7dNkDMVgw3IfLYi7rSo2RzZtlHp6oowaAupktgzqLeKakmNm
-	MZmt98FcGGRyj0YmRldtqRgp7CpKka1aN4nZHwkOyIouXBAvP8+lg85hmP2iu38IyFTE0gVWebh
-	/TVPRLrXNJstAOweXo/STUo5loOqBmqe5HL9wB5Fl1JNTIJnIcEW9jQw6mCtGEI3EgdlRAcctg2
-	RVs9zmGvGTlAoVhWri0rbmrP8WezSsQbfbU3gjgsWg==
-X-Received: by 2002:a05:600c:609b:b0:485:3c2e:60d5 with SMTP id 5b1f17b1804b1-48fe4cadfeemr244187115e9.2.1779121597606;
-        Mon, 18 May 2026 09:26:37 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e0002302090c50a60b9.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:230:2090:c50a:60b9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48feae166dasm98002805e9.9.2026.05.18.09.26.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 09:26:36 -0700 (PDT)
-Date: Mon, 18 May 2026 18:26:35 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next] selftests/bpf: Fix test for refinement of
- single-value tnum
-Message-ID: <be2dc2c3d85120286e60b3029b3338fff339f942.1779121582.git.paul.chaignon@gmail.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SBmxuxou"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64IE3iJt2818971;
+	Mon, 18 May 2026 16:16:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=edwsF8
+	UOn8laCFkVUEWcJSCH3X7HFoCsyivED0AzOJA=; b=SBmxuxou5lU+Wyaq3fs5IR
+	hT21lem4ixVpj/mUS0Ye5/okKomj7z20LNEiuOmPyCwfw2KUeQdz1AV99KBTdKka
+	YlgURVJ+AegvZDW1ueZa9FXxefA/dr25bBRnUnim5DYRgZoDW0+2Kjxm+CGSv4ho
+	qSCVfbivSvbfq4FGK0OC/BX9DRgtaYE/CMnLGnJTckGQlZScdMnxzCmo3aGaUM5O
+	0JZKyrf34ymie6aMWkxtmnCA65ByW3qdvRNKfzkjMg3wUyp7I6fslvu7VBQnJaxa
+	QpHElxiqiw+33jxt8zjqpqFdcLU7fodKpQiu0T7kPDiZgmEY454PMQ1uelwOQyZw
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h9xs1my-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 May 2026 16:16:57 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64IG9CsZ013597;
+	Mon, 18 May 2026 16:16:56 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e73wjxq2a-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 May 2026 16:16:56 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64IGGsbG57278770
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 18 May 2026 16:16:54 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2436B2004B;
+	Mon, 18 May 2026 16:16:54 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8501120043;
+	Mon, 18 May 2026 16:16:53 +0000 (GMT)
+Received: from [9.111.207.149] (unknown [9.111.207.149])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 18 May 2026 16:16:53 +0000 (GMT)
+Message-ID: <bd711f74-a1f3-4410-975b-64e9009aaf30@linux.ibm.com>
+Date: Mon, 18 May 2026 18:16:52 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 13/19] unwind_user: Enable archs that pass RA in a
+ register
+From: Jens Remus <jremus@linux.ibm.com>
+To: Steven Rostedt <rostedt@kernel.org>
+Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev,
+        Indu Bhagat <ibhagatgnu@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Dylan Hatch <dylanbhatch@google.com>
+References: <20260505121718.3572346-14-jremus@linux.ibm.com>
+ <20260505183531.C9EE8C2BCC7@smtp.kernel.org>
+ <8761b037-d8f8-4142-9091-cc51d0d19df8@linux.ibm.com>
+Content-Language: en-US
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <8761b037-d8f8-4142-9091-cc51d0d19df8@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE4MDE1OSBTYWx0ZWRfXyKJNM2YMkCuP
+ NxWFjIrKTPskXL7CpeZPaTNMg6gyGgn7d96zK2A6tVhHUzpPuwg+9BEIOpI5cCmjirk7gwGfY1o
+ WJQby43MHKSxV7uD+jiTYBO5F04CekQJ0prORHMjpChrwpHhKeWnO98k69uZaImieNBrYHLQfWh
+ 0XpedfSU5Na0oc71nqIqGYNT2FBucwGue2d+by3tTz5kwPG6c/R+tUm/FEgEJJQ35jrqhUZuaEx
+ dLecJDvJf4eCfgUknb3U2tAwJDJFuhsZUoQuKo8qxfJW/e8i1BO4ISXwVDnar1r6XaUTCXYTN18
+ LE9nHFFexjGgRVtIjF6LDK9HbQXNzvqb7ISGV4+EsXbI6k4BIsbZHnFXdrRchZqhhlH0uvQT9j/
+ AmVbXshTSOGNdnLHVSEHHWiHkJzAFh2Je4pTmIKVr02z32WM8TYImaQVg3eQXF8yBotDXgR9Vl0
+ Hrau0/PgqNb2iJqmYGw==
+X-Authority-Analysis: v=2.4 cv=BNuDalQG c=1 sm=1 tr=0 ts=6a0b3b79 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8
+ a=VwQbUJbxAAAA:8 a=epHxvWqJeI6bM8ofl7UA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: dt_oHQXb1FRo_1ogB8QhGzZ5wUrS87ZD
+X-Proofpoint-GUID: OixFTxfIlWTM7ZcaCYDbfmsAUlGb66UY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-18_03,2026-05-18_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 priorityscore=1501 malwarescore=0 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605180159
 
-This patch fixes the "bounds refinement with single-value tnum on umin"
-verifier selftest. This selftest was introduced in commit e6ad477d1bf8
-("selftests/bpf: Test refinement of single-value tnum") to cover the
-logic from __update_reg64_bounds(), introduced in commit efc11a667878
-("bpf: Improve bounds when tnum has a single possible value"). However,
-the test still passes if that last commit is reverted.
+On 5/18/2026 4:57 PM, Jens Remus wrote:
+> On 5/5/2026 8:35 PM, sashiko-bot@kernel.org wrote:
+>> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+>> - [High] Unprivileged user space can trigger a kernel warning (`WARN_ON_ONCE`) and potential panic by providing a maliciously crafted `.sframe` section.
+>> --
+>>
+>> commit 20f03d41baa46baef137fb9a88081c8f92b5eb5f
+>> Author: Jens Remus <jremus@linux.ibm.com>
+>>
+>> unwind_user: Enable archs that pass RA in a register
+>>
+>> This commit updates the user space stack unwinder to support architectures
+>> that pass the return address in a register instead of saving it on the
+>> stack. It also handles architectures where the stack pointer may be
+>> unchanged in the topmost frame.
+>>
+>>> diff --git a/include/linux/unwind_user.h b/include/linux/unwind_user.h
+>>> index 64618618febde..bc2edae399556 100644
+>>> --- a/include/linux/unwind_user.h
+>>> +++ b/include/linux/unwind_user.h
+>>> @@ -23,6 +23,15 @@ static inline bool unwind_user_at_function_start(struct pt_regs *regs)
+>>>  #define unwind_user_at_function_start unwind_user_at_function_start
+>>>  #endif
+>>>  
+>>> +#ifndef unwind_user_get_ra_reg
+>>> +static inline int unwind_user_get_ra_reg(unsigned long *val)
+>>> +{
+>>> +	WARN_ON_ONCE(1);
+> 
+> Replace with the following to resolve below issue:
+> 
+> 	dbg_once("unwind_user_get_ra_reg() not implemented\n");
 
-The test is supposed to cover the case when the tnum and u64 range (or
-cnum64 now) overlap in a single value. __update_reg64_bounds() detects
-that case and refines the bounds to a known constant. However, the
-constants for the test were poorly chosen and the bounds get refined to
-a known constant even without __update_reg64_bounds(). The code is as
-follows:
+Omit or replace by the following?
 
-  0: call bpf_get_prandom_u32#7  ; R0=scalar()
-  1: r0 |= 224                   ; R0=scalar(umin=umin32=224,var_off=(0xe0; 0xffffffffffffff1f))
-  2: r0 &= 240                   ; R0=scalar(smin=umin=smin32=umin32=224,smax=umax=smax32=umax32=240,var_off=(0xe0; 0x10))
-  3: if r0 == 0xf0 goto pc+2     ; R0=224
+	pr_debug_once("%s (%d): unwind_user_get_ra_reg() not implemented\n",
+		      current->comm, current->pid);
 
-After instruction 3, we have u64=[0xe0; 0xef] and tnum=(0xe0; 0x10).
-__reg_bound_offset() is able to deduce a new tnum from the u64,
-tnum=(0xe0; 0x0f), which combined with the existing tnum gives us a
-constant: 0xe0 or 224.
+This did not work with dbg_once() defined in kernel/unwind/user.c as
+follows, as linux/unwind_deferred.h includes linux/unwind_user.h and
+therefore gets included into other modules that do not define dbg_once()
+(e.g. via linux/irq-entry-common.h including linux/unwind_deferred.h).
 
-We can easily fix this by choosing different starting bounds. If we make
-it u64=[0xe1; 0xf0], then __reg_bound_offset() doesn't have any impact.
+Steven, Should I omit the dbg_once() or could I replace by the above
+unguarded pr_debug_once()?
 
-Fixes: e6ad477d1bf8 ("selftests/bpf: Test refinement of single-value tnum")
-Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
----
- .../testing/selftests/bpf/progs/verifier_bounds.c  | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index a3e4c0945137..bc038ac2df98 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -1892,25 +1892,25 @@ __naked void bounds_refinement_tnum_umax(void *ctx)
- /* This test covers the bounds deduction when the u64 range and the tnum
-  * overlap only at umin. After instruction 3, the ranges look as follows:
-  *
-- * 0    umin=0xe00     umax=0xeff                              U64_MAX
-+ * 0    umin=0xe1      umax=0xf0                               U64_MAX
-  * |    [xxxxxxxxxxxxxx]                                       |
-  * |----------------------------|------------------------------|
-  * |    x               x                                      | tnum values
-  *
-- * The verifier can therefore deduce that the R0=0xe0=224.
-+ * The verifier can therefore deduce that the R0=0xe1=225.
-  */
- SEC("socket")
- __description("bounds refinement with single-value tnum on umin")
--__msg("3: (15) if r0 == 0xf0 {{.*}} R0=224")
-+__msg("3: (15) if r0 == 0xf1 {{.*}} R0=225")
- __success __log_level(2)
- __naked void bounds_refinement_tnum_umin(void *ctx)
- {
- 	asm volatile("			\
- 	call %[bpf_get_prandom_u32];	\
--	r0 |= 0xe0;			\
--	r0 &= 0xf0;			\
--	if r0 == 0xf0 goto +2;		\
--	if r0 == 0xe0 goto +1;		\
-+	r0 |= 0xe1;			\
-+	r0 &= 0xf1;			\
-+	if r0 == 0xf1 goto +2;		\
-+	if r0 == 0xe1 goto +1;		\
- 	r10 = 0;			\
- 	exit;				\
- "	:
+#ifdef CONFIG_DYNAMIC_DEBUG
+
+#define dbg_once(fmt, ...)							\
+	pr_debug_once("%s (%d): " fmt, current->comm, current->pid, ##__VA_ARGS__)
+
+#else /* !CONFIG_DYNAMIC_DEBUG */
+
+#define dbg_once(args...)		no_printk(args)
+
+#endif /* !CONFIG_DYNAMIC_DEBUG */
+
+> 
+>>
+>> Can a maliciously crafted .sframe section trigger this warning and panic
+>> the kernel if panic_on_warn is enabled?
+>>
+>> The SFrame unwind data is parsed from user-provided ELF binaries, so the
+>> .sframe sections are entirely user-controlled.
+>>
+>> If an unprivileged user on an architecture using the generic fallback
+>> provides an SFrame Frame Row Entry with dataword_count > 0 but an
+>> explicit ra_off dataword of 0, it appears this would bypass the
+>> frame->outermost check while keeping frame->ra_off == 0.
+> 
+> Valid.  On architectures that pass the RA on the stack and therefore do
+> not implement unwind_user_get_ra_reg(), such as x86-64, above
+> WARN_ON_ONCE(1) can be triggered using forged .sframe that maliciously
+> specifies the SFrame fixed RA offset (from CFA) as zero and has a SFrame
+> FRE with either no RA and FP offsets with a RA padding offset of zero.
+> 
+>>
+>> When the kernel unwinds the stack, unwind_user_next_common() would see
+>> frame->ra_off == 0 and call unwind_user_get_ra_reg():
+>>
+>> kernel/unwind/user.c:unwind_user_next_common() {
+>>     ...
+>> 	if (frame->ra_off) {
+>> 		if (get_user_word(&ra, cfa, frame->ra_off, state->ws))
+>> 			return -EINVAL;
+>> 	} else {
+>> 		if (!state->topmost || unwind_user_get_ra_reg(&ra))
+>> 			return -EINVAL;
+>> 	}
+>>     ...
+>> }
+>>
+>> Would it be better to gracefully return an error code like -EINVAL here
+>> without raising a warning?
+>>
+>>> +	return -EINVAL;
+>>> +}
+>>
+>> [ ... ]
+>>
+> 
+> Regards,
+> Jens
+
+Thanks and regards,
+Jens
 -- 
-2.43.0
+Jens Remus
+Linux on Z Development (D3303)
+jremus@de.ibm.com / jremus@linux.ibm.com
+
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
 
