@@ -1,212 +1,270 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 224B5396D19;
-	Mon, 18 May 2026 21:33:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779140014; cv=none; b=AznZQNiFmk6nCFImM6pyXk3u4Lx9XF+UHzb/ExA/7llUXq9IdY+3kCf839k99+iA73T/xv8cYLkgXNbhHr2GQEoSgM5z30uTMz/D2PIZuOXJUzimO5HLxGn8RCTmrBrR8rjVi4Inucj1wDQWIamK0NZX3Sw27u8DAsglGo0tC+A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779140014; c=relaxed/simple;
-	bh=jm+8XSYDMvSi0eSTW0hiNffY0O5/GrMLm2X7qEh1GeQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UB4vPAipjPLL8W+QRS8qxCZclJ2716/xkEiVLpvBdQU5fM2mMt+Zgs/cvfsclxazuHWsioNaEunQRoTyALQnwI5vjMUm4ATINlOoso+50c7zYeiPTHyFAnW69fFUHzSxVVOAJjLM6+jl39GYVGHSni4+9+uMV7a5uBL1qRHI3KI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=AMCmSssC; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 337FE39A066
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 21:50:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779141004; cv=pass; b=twCSM8/DErSfLwC7ZLLzpd77uRzDXaXiectOmNzQ7p5EydMc2n/4LhksOmYHbTgJ6/m2pY5XTAoY/OmQZ1qFUHCZ4e4r7hCAwQfAA/8syteSGI+jj4jpo5GA+CcMexd0IzSyriGyYTYpuS6ALF3BXg60agS1cetPqTtw226SPH4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779141004; c=relaxed/simple;
+	bh=VkJcVq88PZ051GeKnLPd8Ml2ZKh5BjaQJaJRp7q6aDs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U342dHptHhrTbFMCNaVLr9qce5UCjjbvdt7bDduqeVahnB+VhLd4R7dgAIwqrQyx+Wdo70an/ppeLQsq6lqmaT+bad+nQMxV50TGO6wf6xPkt2GWAeg56xQOSjXV51caZIP6Nx+bH7YuQB/ls1dPNhn5lZGq2QsXN6VVnoP3vHQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pR7a8EmB; arc=pass smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="AMCmSssC"
-Received: by linux.microsoft.com (Postfix, from userid 1204)
-	id 2796120B7166; Mon, 18 May 2026 14:33:26 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2796120B7166
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1779140006;
-	bh=OzpN7yYP9aHL5n1nKfsdJpLTuSYn6hCedu5lqH42zIw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AMCmSssCko7dJ3wVbDRNEAWDRlKL/LtcghLRS6ceCmjRe0bHfR+KshONAlQReiXl3
-	 Y7KB9U/oPWzZkmYB8UL7Utt2vLSgAshYCaFf/FBk/vIxP2bUnW+UhwjCDupfHJZxAx
-	 r+eeEiPqyjnVf7fiMLbKq3/fpgX/EXvFNZ5inb4Q=
-Date: Mon, 18 May 2026 14:33:26 -0700
-From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@google.com, pabeni@redhat.com, leon@kernel.org,
-	longli@microsoft.com, kotaranov@microsoft.com, horms@kernel.org,
-	shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
-	ernis@linux.microsoft.com, shirazsaleem@microsoft.com,
-	linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-	stephen@networkplumber.org, jacob.e.keller@intel.com,
-	dipayanroy@microsoft.com, leitao@debian.org, kees@kernel.org,
-	john.fastabend@gmail.com, hawk@kernel.org, bpf@vger.kernel.org,
-	daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me,
-	yury.norov@gmail.com
-Subject: Re: [PATCH v8 2/2] net: mana: force full-page RX buffers via ethtool
- private flag
-Message-ID: <aguFpq8+LV+I9oH0@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20260508115100.488506-3-dipayanroy@linux.microsoft.com>
- <20260512022133.856196-1-kuba@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pR7a8EmB"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ba180a022dso1075ad.1
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 14:50:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779141002; cv=none;
+        d=google.com; s=arc-20240605;
+        b=L79PCATGQl71tYKuE21SRbOTzU5tzt79DmxqaQflyqVN5gf8bMhb389Wpud3zl2IQu
+         i3KuSDAPNWBdHfSjYoPm4DWsNxvXQ46WvN91KQP7Nz6yT6aLnw7EVIbR0BxNjzgCcw7m
+         7Yuw8zQXDQSToVwejD+K8BwK8hP0u56K5BrBUtdL+NhGlo3Eu7J6B/cA+qU7q/DsYw1W
+         Kfa9uXMNt9hL6FcRqS4kGvuDCIJm7gqcaPj3DB2fxNfi5Z0vnmLl1E0fFPoVyn1QvTvc
+         h33BvR2ayIrhShy/0GgG3b1JAcHh2zQ1spmteivRIm81l/TqgNgj6+o5kSQ8thXdQ0gc
+         UcUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=6JbypSeXnACgLDxcb5qtpEO/b70xrtWk27xe3ssqhmA=;
+        fh=ADmW/dUusXXmwe+OLIjmAWphiYAYV3Dmb2fIKKHNOac=;
+        b=XZMB/X1aCTwJe/8EcaJSCEsAA286QGf3PCIXqtSdwWF7N8x008zHx35ibU91NkxFYb
+         gYsxebC+BTP2dOjK0UD/bdzKSspMxZgS22ppl629+s4p/JJLWLoU2CTdHoh9G6UVrFpo
+         b1kMKPhCSUss0dMc1UEa/WmsqxZZESazsGwTq1unJ1J7tu+RQRzcIkKNFk1484qxQc0q
+         JJkF/xdgWL8A1Io3C7K1AJkN1IE18danbBvprOipme98E0/PhRHRJ+XyolOtrX7VT2dy
+         axMlKFPxrEjRiAYbz/RRuwGoSqHN5vf+nbUpOxHD9odsmLCpwWdVqvog/OG5+v7JkfiQ
+         26hg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779141002; x=1779745802; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6JbypSeXnACgLDxcb5qtpEO/b70xrtWk27xe3ssqhmA=;
+        b=pR7a8EmBPVhtgoI+iG1VPzFORXXBx15tpSmrwe8xs+DN6OwRvuST6qoTu/bminXVa0
+         MRDXOUz8E5xc9sf3YPgPgTwNuGEIEKHitQ9ysyFhjfqnrPhBl78GpGwEfbS6wmbMNplv
+         V06l+xrqnc3BHcmhkaXmEL/IUuKLrAuiBEQ3THI0IO0F6VHOXyzSlOUHrje95ZqjYAUI
+         rFx+F0sc9GGw3Fkv0CovlxhYyIsCEIayzRIEzoKdp24HXkdaIHBKm0OTN/uo6BvE7r8y
+         w2e0heo0RJLFkXkFjNCvVMt7Fcjc2G0J+gPs6rvi/VohEMuKipuldrZ5eBbZEx6Ftzmi
+         XnDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779141002; x=1779745802;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=6JbypSeXnACgLDxcb5qtpEO/b70xrtWk27xe3ssqhmA=;
+        b=lldorkHLB0RvpdnsfjyOCrJY3MSIiwP8fFqAX3mmmGEsfbiew4AdFzYnkLdHnVVUSW
+         BTMIMy8qNPC5izT3VEujzX+16VopxLUFdi3Zl53rDIdAvGtelXNguwz/boAG5XeHl8fC
+         M90tBtDj/helkj5Hi9sRcKUuVHqmbBIDx3Kmu3jCyD9T06aOI320/g3lnGRvNx/81u5I
+         LPThitwK0ENBFvrFHR2IVNaRJ/CpbE5O0wMm3HWg0f/G3gMOT20fmPI9PEc9Xc+vJBVU
+         1AKdlOZG9jZgRLZfHE9Nz9ffLW4yQBzXB4jWw+N6AFyCRe/GOhJdhXGrykZ7DzgGMdob
+         tqwQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8vkZ8klbC3CBdd1JY0A6Jgcj0sCHIPtBK3tY4ZwOpil8n8sxMHUpTgDV06LkjdU9vuLs0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0HgQDopDNONAsYYbyNzUmXznkdGlkyS8izJ1PIAup8gKK6zp7
+	DWPGtB/YueHarNNbIZNutCPeyM2WOJKAUDosb9fCtrP5TsbJgU9R29lCHNzGnl9to8/LDHLz/U4
+	HICK3aWgDqbXFkDfqQbzfi0r5IhgwFGD+yS0iGUaF
+X-Gm-Gg: Acq92OHg7ra+Wlt9dmvHQnzdo/XEUGCDAvoUXl7ms5fuMvXBLtQaR7p9bBpT1qq6Q7D
+	ZHVpNhZ/fWYNi+ur0H72UG5vYl6o25e4EmFb9r49LGHTk42qALEPShRcMJgX9AQWm+i/L9GkqJ6
+	MRS756Udg/8dHlVNsrBJUNlO6XCBGRLWYmOqw6xSQ7zX1fe5kGKdMjYlr/aeJCmMzDPDuW+eXE8
+	mqTrKnLBqMV2Qyc/OlvGUKn/b3d1dG2zLjLInaLvoNdgHP2sMwaYqqtwAmLMnHhs7TeDUU6tfC8
+	UYCvzswgjvtcMQX9O5d5z1+beHvIlRpo0Zy3p8LrbOQqMYpEQBy877xLk7uENCJyyeoV5dODpXe
+	eXQ9Imm7uY8TH8sgO
+X-Received: by 2002:a17:903:2b0e:b0:2bd:7bec:f0e6 with SMTP id
+ d9443c01a7336-2bdb3039f44mr4031835ad.1.1779141001688; Mon, 18 May 2026
+ 14:50:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260512022133.856196-1-kuba@kernel.org>
+References: <20260518194654.735580-1-dipayanroy@linux.microsoft.com> <20260518194654.735580-2-dipayanroy@linux.microsoft.com>
+In-Reply-To: <20260518194654.735580-2-dipayanroy@linux.microsoft.com>
+From: Harshitha Ramamurthy <hramamurthy@google.com>
+Date: Mon, 18 May 2026 14:49:49 -0700
+X-Gm-Features: AVHnY4K_8GpyBqIYGQp4SgXCG1-y0gChQxakRF0W6U_iz8zjhZO9jcW9YHuJGe4
+Message-ID: <CAEAWyHcFE5kUPthnRHQJS5s=YBRhdaOP9mYNsxkMt-Pm1U_1+A@mail.gmail.com>
+Subject: Re: [PATCH net 1/2] net: mana: Add NULL guards in teardown path to
+ prevent panic on attach failure
+To: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org, 
+	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, leon@kernel.org, 
+	longli@microsoft.com, kotaranov@microsoft.com, horms@kernel.org, 
+	shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com, 
+	ernis@linux.microsoft.com, shirazsaleem@microsoft.com, 
+	linux-hyperv@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
+	stephen@networkplumber.org, jacob.e.keller@intel.com, 
+	dipayanroy@microsoft.com, leitao@debian.org, kees@kernel.org, 
+	john.fastabend@gmail.com, hawk@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me, yury.norov@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 11, 2026 at 07:21:33PM -0700, Jakub Kicinski wrote:
-> This is an AI-generated review of your patch. The human sending this
-> email has considered the AI review valid, or at least plausible.
+On Mon, May 18, 2026 at 12:52=E2=80=AFPM Dipayaan Roy
+<dipayanroy@linux.microsoft.com> wrote:
+>
+> When queue allocation fails partway through, the error cleanup frees
+> and NULLs apc->tx_qp and apc->rxqs. Multiple teardown paths such as
+> mana_remove(), mana_change_mtu() recovery, and internal error handling
+> in mana_alloc_queues() can subsequently call into functions that
+> dereference these pointers without NULL checks:
+>
+> - mana_chn_setxdp() dereferences apc->rxqs[0], causing a NULL pointer
+>   dereference panic (CR2: 0000000000000000 at mana_chn_setxdp+0x26).
+> - mana_destroy_vport() iterates apc->rxqs without a NULL check.
+> - mana_fence_rqs() iterates apc->rxqs without a NULL check.
+> - mana_dealloc_queues() iterates apc->tx_qp without a NULL check.
+>
+> Add NULL guards for apc->rxqs in mana_fence_rqs(),
+> mana_destroy_vport(), and before the mana_chn_setxdp() call. Add a
+> NULL guard for apc->tx_qp in mana_dealloc_queues() to skip TX queue
+> draining when TX queues were never allocated or already freed.
+>
+> Fixes: ca9c54d2d6a5 ("net: mana: Add a driver for Microsoft Azure Network=
+ Adapter (MANA)")
+> Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
+> Signed-off-by: Dipayaan Roy <dipayanroy@linux.microsoft.com>
 > ---
-> net: mana: force full-page RX buffers via ethtool private flag
-> 
-> This patch adds an ethtool private flag "full-page-rx" that forces one
-> RX buffer per page, bypassing the page_pool fragment path, to address
-> a 15-20% throughput regression seen on some 4K PAGE_SIZE ARM64
-> platforms under high connection counts.  Toggling the flag triggers
-> mana_detach() + mana_attach() to apply the new RX buffer layout.
-> 
-> > diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-> > index a28ca461c135..dfd222de11d0 100644
-> > --- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-> > +++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-> 
-> [ ... ]
-> 
-> > @@ -590,6 +609,88 @@ static int mana_get_link_ksettings(struct net_device *ndev,
-> >  	return 0;
-> >  }
-> >  
-> 
-> [ ... ]
-> 
-> > +static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
-> > +{
-> > +	struct mana_port_context *apc = netdev_priv(ndev);
-> > +	u32 changed = apc->priv_flags ^ priv_flags;
-> > +	u32 old_priv_flags = apc->priv_flags;
-> > +	bool schedule_port_reset = false;
-> > +	int err = 0;
-> > +
-> > +	if (!changed)
-> > +		return 0;
-> > +
-> > +	/* Reject unknown bits */
-> > +	if (priv_flags & ~GENMASK(MANA_PRIV_FLAG_MAX - 1, 0))
-> > +		return -EINVAL;
-> > +
-> > +	if (changed & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF)) {
-> > +		apc->priv_flags = priv_flags;
-> > +
-> > +		if (!apc->port_is_up) {
-> > +			/* Port is down, flag updated to apply on next up
-> > +			 * so just return.
-> > +			 */
-> > +			return 0;
-> > +		}
-> > +
-> > +		/* Pre-allocate buffers to prevent failure in mana_attach
-> > +		 * later
-> > +		 */
-> > +		err = mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queues);
-> > +		if (err) {
-> > +			netdev_err(ndev,
-> > +				   "Insufficient memory for new allocations\n");
-> > +			apc->priv_flags = old_priv_flags;
-> > +			return err;
-> > +		}
-> > +
-> > +		err = mana_detach(ndev, false);
-> > +		if (err) {
-> > +			netdev_err(ndev, "mana_detach failed: %d\n", err);
-> > +			apc->priv_flags = old_priv_flags;
-> > +
-> > +			/* Port is in an inconsistent state. Restore
-> > +			 * 'port_is_up' so that queue reset work handler
-> > +			 * can properly detach and re-attach.
-> > +			 */
-> > +			apc->port_is_up = true;
-> > +			schedule_port_reset = true;
-> > +			goto out;
-> > +		}
-> > +
-> > +		err = mana_attach(ndev);
-> > +		if (err) {
-> > +			netdev_err(ndev, "mana_attach failed: %d\n", err);
-> > +			apc->priv_flags = old_priv_flags;
-> > +
-> > +			/* Restore 'port_is_up' so the reset work handler
-> > +			 * can properly detach/attach. Without this,
-> > +			 * the handler sees port_is_up=false and skips
-> > +			 * queue allocation, leaving the port dead.
-> > +			 */
-> > +			apc->port_is_up = true;
-> > +			schedule_port_reset = true;
-> > +		}
-> > +	}
-> > +
-> > +out:
-> > +	mana_pre_dealloc_rxbufs(apc);
-> > +
-> > +	if (schedule_port_reset)
-> > +		queue_work(apc->ac->per_port_queue_reset_wq,
-> > +			   &apc->queue_reset_work);
-> > +
-> > +	return err;
-> > +}
-> 
-> [High]
-> Can this failure path oops inside the reset work handler?
-> 
-> When mana_attach() fails after mana_detach() has already torn the vport
-> down, apc->tx_qp has been set to NULL by mana_destroy_txq() and apc->rxqs
-> has been cleared by mana_cleanup_port_context().  This code then forces
-> apc->port_is_up back to true and queues apc->queue_reset_work:
-> 
->     apc->port_is_up = true;
->     schedule_port_reset = true;
-> 
-> When mana_per_port_queue_reset_work_handler runs it calls
-> mana_detach(ndev, false), which latches port_st_save = port_is_up = true
-> and, because port_st_save is true, invokes mana_dealloc_queues().  The TX
-> drain loop there does:
-> 
->     txq = &apc->tx_qp[i].txq;
->     atomic_read(&txq->pending_sends);
-> 
-> with no NULL check on apc->tx_qp, and mana_destroy_vport further down
-> iterates apc->rxqs[rxq_idx] while rxqs is NULL.  Would that produce a
-> NULL pointer dereference in the workqueue worker whenever mana_attach()
-> fails here (for example on an allocation failure in
-> mana_init_port_context or mana_create_txq, or a transient HW command
-> failure in mana_query_vport_cfg / mana_cfg_vport)?
-> 
-> The mana_detach() failure path above (goto out) reaches
-> mana_dealloc_queues() through the same chain and looks to have the same
-> exposure.
-Hi Jakub,
+>  drivers/net/ethernet/microsoft/mana/mana_en.c | 70 +++++++++++--------
+>  1 file changed, 41 insertions(+), 29 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/=
+ethernet/microsoft/mana/mana_en.c
+> index 9afc786b297a..0582803907a8 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> @@ -1727,6 +1727,9 @@ static void mana_fence_rqs(struct mana_port_context=
+ *apc)
+>         struct mana_rxq *rxq;
+>         int err;
+>
+> +       if (!apc->rxqs)
+> +               return;
+> +
+>         for (rxq_idx =3D 0; rxq_idx < apc->num_queues; rxq_idx++) {
+>                 rxq =3D apc->rxqs[rxq_idx];
+>                 err =3D mana_fence_rq(apc, rxq);
+> @@ -2858,13 +2861,16 @@ static void mana_destroy_vport(struct mana_port_c=
+ontext *apc)
+>         struct mana_rxq *rxq;
+>         u32 rxq_idx;
+>
+> -       for (rxq_idx =3D 0; rxq_idx < apc->num_queues; rxq_idx++) {
+> -               rxq =3D apc->rxqs[rxq_idx];
+> -               if (!rxq)
+> -                       continue;
+> +       if (apc->rxqs) {
+>
+> -               mana_destroy_rxq(apc, rxq, true);
+> -               apc->rxqs[rxq_idx] =3D NULL;
+> +               for (rxq_idx =3D 0; rxq_idx < apc->num_queues; rxq_idx++)=
+ {
+> +                       rxq =3D apc->rxqs[rxq_idx];
+> +                       if (!rxq)
+> +                               continue;
+> +
+> +                       mana_destroy_rxq(apc, rxq, true);
+> +                       apc->rxqs[rxq_idx] =3D NULL;
+> +               }
+>         }
+>
+>         mana_destroy_txq(apc);
+> @@ -3269,7 +3275,8 @@ static int mana_dealloc_queues(struct net_device *n=
+dev)
+>         if (apc->port_is_up)
+>                 return -EINVAL;
+>
+> -       mana_chn_setxdp(apc, NULL);
+> +       if (apc->rxqs)
+> +               mana_chn_setxdp(apc, NULL);
 
-Thanks for your comments, I have sent a separate fixes series to the
-net tree that fixes the possible NULL pointer derefernce issue and also
-makes the reset handler safe for the case where it runs after a failed
-attach:
-https://lore.kernel.org/all/20260518194654.735580-1-dipayanroy@linux.microsoft.com/
+Is this check required? mana_dealloc_queues() is only called by
+mana_detach(). And mana_detach() calls `mana_dealloc_queues()` only if
+the port state was previously up. apc->port_is_up seems to be set to
+true only on successful queue allocation. Can apc->rxqs be NULL here?
 
+>
+>         if (gd->gdma_context->is_pf && !apc->ac->bm_hostmode)
+>                 mana_pf_deregister_filter(apc);
+> @@ -3287,33 +3294,38 @@ static int mana_dealloc_queues(struct net_device =
+*ndev)
+>          * number of queues.
+>          */
+>
+> -       for (i =3D 0; i < apc->num_queues; i++) {
+> -               txq =3D &apc->tx_qp[i].txq;
+> -               tsleep =3D 1000;
+> -               while (atomic_read(&txq->pending_sends) > 0 &&
+> -                      time_before(jiffies, timeout)) {
+> -                       usleep_range(tsleep, tsleep + 1000);
+> -                       tsleep <<=3D 1;
+> -               }
+> -               if (atomic_read(&txq->pending_sends)) {
+> -                       err =3D pcie_flr(to_pci_dev(gd->gdma_context->dev=
+));
+> -                       if (err) {
+> -                               netdev_err(ndev, "flr failed %d with %d p=
+kts pending in txq %u\n",
+> -                                          err, atomic_read(&txq->pending=
+_sends),
+> -                                          txq->gdma_txq_id);
+> +       if (apc->tx_qp) {
 
-> 
-> For comparison, mana_change_mtu() handles a mana_attach() failure by
-> returning the error without scheduling a reset.  Would a similar
-> treatment here avoid the asynchronous oops, or is there a reason the
-> reset must be scheduled in this specific failure case?
-> -- 
-> pw-bot: cr
+And same as above, is it possible for apc->tx_qp to be NULL here?
 
-The full-page-rx private flag is intended to be driven by a udev rule
-that fires automatically during VM provisioning on affected platforms.
-If there is a transient failure, the VM fails to provision, requiring manual
-intervention.The reset handler retries the attach, giving the port a
-chance to recover to default config autonomously without intervention.
-
-Regards
-Dipayaan Roy
+> +               for (i =3D 0; i < apc->num_queues; i++) {
+> +                       txq =3D &apc->tx_qp[i].txq;
+> +                       tsleep =3D 1000;
+> +                       while (atomic_read(&txq->pending_sends) > 0 &&
+> +                              time_before(jiffies, timeout)) {
+> +                               usleep_range(tsleep, tsleep + 1000);
+> +                               tsleep <<=3D 1;
+> +                       }
+> +                       if (atomic_read(&txq->pending_sends)) {
+> +                               err =3D
+> +                                   pcie_flr(to_pci_dev(gd->gdma_context-=
+>dev));
+> +                               if (err) {
+> +                                       netdev_err(ndev, "flr failed %d w=
+ith %d pkts pending in txq %u\n",
+> +                                                  err,
+> +                                           atomic_read(&txq->pending_sen=
+ds),
+> +                                           txq->gdma_txq_id);
+> +                               }
+> +                               break;
+>                         }
+> -                       break;
+>                 }
+> -       }
+>
+> -       for (i =3D 0; i < apc->num_queues; i++) {
+> -               txq =3D &apc->tx_qp[i].txq;
+> -               while ((skb =3D skb_dequeue(&txq->pending_skbs))) {
+> -                       mana_unmap_skb(skb, apc);
+> -                       dev_kfree_skb_any(skb);
+> +               for (i =3D 0; i < apc->num_queues; i++) {
+> +                       txq =3D &apc->tx_qp[i].txq;
+> +                       while ((skb =3D skb_dequeue(&txq->pending_skbs)))=
+ {
+> +                               mana_unmap_skb(skb, apc);
+> +                               dev_kfree_skb_any(skb);
+> +                       }
+> +                       atomic_set(&txq->pending_sends, 0);
+>                 }
+> -               atomic_set(&txq->pending_sends, 0);
+>         }
+> +
+>         /* We're 100% sure the queues can no longer be woken up, because
+>          * we're sure now mana_poll_tx_cq() can't be running.
+>          */
+> --
+> 2.43.0
+>
+>
