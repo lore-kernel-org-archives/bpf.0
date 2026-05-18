@@ -1,118 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC2E37BE83
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 17:07:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00921380FDB
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 17:09:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779124060; cv=none; b=XDPDaWqC8OTDC+9M23YZlT/7GDsy5z+pbAaRa3c8lc7D70K517bkHEqPVDvpPZx3tkchylGW6m82hC/pI7vZ76nqAuWfgrQG9BNK29UBf72A2CBqXVIqJgFFOGxuY7eYHtz4kxzX2bshRvY0V5OrcPlcnJx5jdD0qbYhr4u83uc=
+	t=1779124162; cv=none; b=ARJ9VV9/cS0L/6GQed4Tqs8tGVKkCOfvxIAVoOLiS0sNvnTE0mm2IYO4ZWDiJRhNh5r17ysa0ridlVvMQ1b2NkcajAm5QCdG8CW16weSjw1vyHMfnKEppAE1FZb1EscxgLDi3XuSUPRqd5LK6rvc2QQ2FB5pShj70Hjkwyfvoo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779124060; c=relaxed/simple;
-	bh=e1FwZTDR08KbFRNJtnzwjcwwgmq5u+Xq0m4WzIq98yE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Vd9lyNfCDrWauOaN4VDzmku99VmEN+cveDMH+rlXU6mCAACU+FBdUwGUSFTXg/Zs5KVDmyxFFxVTCk6vuewBKz2epgaRiDjpKdPpQoB8kPPf8Mx7dC6W0ObHqn5YBWzjpUhFr/U0MINTvdD5afQComuCBRi/HTN8sIPq8fYcXAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XiPOZYFg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779124162; c=relaxed/simple;
+	bh=IDkp1qEmW5HMnYT8xDHs2bziEMDzXA0W/mjgi+ut/fM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=slofqReezkBi4v2oHogc7SvfhwEDiXjSXmRwsicbbrlCjL5Hqp01+u+Tf8LwCPj8gcvHI823V/3XfIry4O1hn9dl+8QEWVhqZabG5AS05oibcQJJflXHBuT7atkHDSf7VjrCoXmGfT7XsQKESJzBjRee7Xhl1Un6RXgTYT8284U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YErxbABk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XiPOZYFg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3626C2BCB7;
-	Mon, 18 May 2026 17:07:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YErxbABk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53767C2BCB7;
+	Mon, 18 May 2026 17:09:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779124059;
-	bh=e1FwZTDR08KbFRNJtnzwjcwwgmq5u+Xq0m4WzIq98yE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=XiPOZYFgvayDoAgDRPGV8SfapbLXehBr/D+zyvFJzJ7X1FCyDLqrG+tbnQuqAYuMi
-	 cK9PEAsgUZ1kdb0pW09ms6ri654bCVdAK62/jMYiaRpoQxmqt5BM43gKNf3nRwheS6
-	 1wnj0ObiNBJ0UlzrzODGo44JOw0pdAEW8cSWN6Lm3RPOdngQ2DeXfXuIn/9kKuFbfd
-	 6yxzcZsB/HGfZ+UuD0Y26wE5g0xOIbHXiW8c5HBhWKWVyASabaUhHHttjD6Nvun3Fj
-	 +z9o44QK7/2CUkcWrVeA20l9h1/34i6b1xWi41Lmrj9DMOqRwnzlSju4jPTGL45EHB
-	 EtoXCBJcjWErw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v6 6/6] selftests/bpf: add bpf_icmp_send
- recursion test
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mahe Tardy" <mahe.tardy@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260518122842.218522-7-mahe.tardy@gmail.com>
-References: <20260518122842.218522-7-mahe.tardy@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 18 May 2026 17:07:39 +0000
-Message-Id: <20260518170739.A3626C2BCB7@smtp.kernel.org>
+	s=k20201202; t=1779124161;
+	bh=IDkp1qEmW5HMnYT8xDHs2bziEMDzXA0W/mjgi+ut/fM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=YErxbABkE+D076nlS8pN3G8TBxzoc8T+3/WeL/zkdGGe3i7k+82Hety8pLlFdpkY1
+	 G1hHJqfW1TtUWsM5PZzPufFOTdxqb959+6krBPNDfzCfE1NTb0BxADe5sl9Hpffh+s
+	 u8g21saLPQtudn1v9diDvhSKwXknbljopZMBKRCGpGxMi7bs5N8x0DAzpbmYfm3Co6
+	 VOwT5c7N+sTlU5fgsi3vH4+g1xfFe0lvk5xwlbbO1k7z8kOUIbz9AfGAX5I7toxgSg
+	 whoKHiXtqAEPr4vk54LxCsp0DUSt3rGeSij+xafSWfQrORO0yEtBwQGPzpXHmelrGe
+	 lQQxAJg086uoQ==
+Content-Type: multipart/mixed; boundary="===============0915842576159487075=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <86c3b9ef65bb65d98d90fb341c3ff0c278053fe2bf77f118084af3ff500c6e64@mail.kernel.org>
+In-Reply-To: <be2dc2c3d85120286e60b3029b3338fff339f942.1779121582.git.paul.chaignon@gmail.com>
+References: <be2dc2c3d85120286e60b3029b3338fff339f942.1779121582.git.paul.chaignon@gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix test for refinement of single-value tnum
+From: bot+bpf-ci@kernel.org
+To: paul.chaignon@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 18 May 2026 17:09:21 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] The BPF program `recursion` acts as a global drop-all firewall for=
- host IPv4 traffic, causing severe network disruption and test flakiness.
---
+--===============0915842576159487075==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit d88b16de11be32b864006f6686e0acf06d339e51
-Author: Mahe Tardy <mahe.tardy@gmail.com>
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+> index a3e4c0945137..bc038ac2df98 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+> @@ -1892,25 +1892,25 @@ __naked void bounds_refinement_tnum_umax(void *ctx)
+>  /* This test covers the bounds deduction when the u64 range and the tnum
+>   * overlap only at umin. After instruction 3, the ranges look as follows:
+>   *
+> - * 0    umin=0xe00     umax=0xeff                              U64_MAX
+> + * 0    umin=0xe1      umax=0xf0                               U64_MAX
+                              ^^^^^
 
-selftests/bpf: add bpf_icmp_send recursion test
+The comment says umax=0xf0 but looking at the code change below:
 
-This commit adds a test to verify that the bpf_icmp_send kfunc stops early
-and returns -EBUSY when triggered recursively. The test attaches a BPF
-program to the root cgroup to intercept the kernel-generated ICMP packet.
+>   * |    [xxxxxxxxxxxxxx]                                       |
+>   * |----------------------------|------------------------------|
+>   * |    x               x                                      | tnum values
+>   *
+> - * The verifier can therefore deduce that the R0=0xe0=224.
+> + * The verifier can therefore deduce that the R0=0xe1=225.
+>   */
+>  SEC("socket")
+>  __description("bounds refinement with single-value tnum on umin")
+> -__msg("3: (15) if r0 == 0xf0 {{.*}} R0=224")
+> +__msg("3: (15) if r0 == 0xf1 {{.*}} R0=225")
+>  __success __log_level(2)
+>  __naked void bounds_refinement_tnum_umin(void *ctx)
+>  {
+>  	asm volatile("			\
+>  	call %[bpf_get_prandom_u32];	\
+> -	r0 |= 0xe0;			\
+> -	r0 &= 0xf0;			\
+> -	if r0 == 0xf0 goto +2;		\
+> -	if r0 == 0xe0 goto +1;		\
+> +	r0 |= 0xe1;			\
+> +	r0 &= 0xf1;			\
+                   ^^^^
 
-> diff --git a/tools/testing/selftests/bpf/progs/icmp_send.c b/tools/testin=
-g/selftests/bpf/progs/icmp_send.c
-> index 6e1ba539eeb0f..7830334b747ac 100644
-> --- a/tools/testing/selftests/bpf/progs/icmp_send.c
-> +++ b/tools/testing/selftests/bpf/progs/icmp_send.c
+After r0 |= 0xe1, the register has umin=0xe1. Then after r0 &= 0xf1,
+the mask 0xf1 allows bits 11110001, which permits both 0xe1 and 0xf1.
+This creates a u64 range of [0xe1, 0xf1], not [0xe1, 0xf0] as stated
+in the comment.
 
-[ ... ]
+Should the comment be updated to umax=0xf1 to match the implementation?
 
-> @@ -65,4 +68,32 @@ int egress(struct __sk_buff *skb)
->  	return SK_DROP;
->  }
-> =20
-> +SEC("cgroup_skb/egress")
-> +int recursion(struct __sk_buff *skb)
-> +{
-> +	void *data =3D (void *)(long)skb->data;
-> +	void *data_end =3D (void *)(long)skb->data_end;
-> +	struct iphdr *iph;
-> +	int ret;
-> +
-> +	iph =3D data;
-> +	if ((void *)(iph + 1) > data_end || iph->version !=3D 4)
-> +		return SK_PASS;
-> +
-> +	/* This call will provoke a recursion: the ICMP packet generated by the
-> +	 * kfunc will re-trigger this program since we are in the root cgroup in
-> +	 * which the kernel ICMP socket belongs. However when re-entering the
-> +	 * kfunc, it should return EBUSY.
-> +	 */
-> +	ret =3D bpf_icmp_send(skb, unreach_type, unreach_code);
-> +	rec_kfunc_rets[rec_count & 1] =3D ret;
-> +	__sync_fetch_and_add(&rec_count, 1);
-> +
-> +	/* Let the first ICMP error message pass */
-> +	if (iph->protocol =3D=3D IPPROTO_ICMP)
-> +		return SK_PASS;
-> +
-> +	return SK_DROP;
-> +}
 
-Since this program is attached to the global root cgroup, does it act as a
-global drop-all firewall for host IPv4 traffic?=20
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-If any background traffic occurs while this test runs, it appears it will be
-unconditionally dropped here.
-
-Could this also cause test flakiness? If concurrent background traffic
-triggers this program, it would race with the test traffic and overwrite the
-rec_kfunc_rets array, leading to unexpected values in the test assertions.
-
-Should the program explicitly filter packets, for example by checking
-iph->daddr or iph->protocol, to ensure it only processes the test's intended
-traffic?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518122842.2185=
-22-1-mahe.tardy@gmail.com?part=3D6
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26047251229
+--===============0915842576159487075==--
