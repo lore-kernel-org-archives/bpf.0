@@ -1,228 +1,258 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4823E16BA
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 09:05:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779095123; cv=none; b=s37Z3hIvruOF2bst2XbbvUWdJV4HCi+KBtQWfPJbRvKDDEXVUmT0S7Lkp5srydV2RTzTZb9jg7C6zSAQiIYe3GbJxlpg+9cH1HOUzoKkLO52D/7ilw02FT92HjnJw/EsTqnzCsaiMHjlfF5TSqxunno9bc2XKFjRyLIs5Ut8STg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779095123; c=relaxed/simple;
-	bh=N+mBa9Qop2DRXCEJaXykcTUTNPqJPKjVhuTJzDs3+Ds=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KkdW8BPU1HnWJCw7J1xOsSNnHP+NZPZe1bepOCAOMWId8DpU6iCKfu3lIpa/iN3XGdNmZAYaxJqZOHgsdzNPq+LEjHnTYHSV7joawmAaXbWG+q/VEB8Yzzov1KMmt63xJollA3xsmjnF10vCfmWx0Hkx8sTi/UiF68jaM44n6zU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vtiNbayr; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4FCD3E51DF
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 09:07:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779095225; cv=pass; b=OuZDxvvV9oSpyRZyu4L25qzI5qW6XnWuw44p+WBxfRpmb6anNfhxsvHwg5OR+6WyerPj+WJPw1huChsAGFK2NbkYG3fO14fjP/Z28bWLLjXyjM4QlHXPYz75sdc8lW1OWRW1cUQxnkbihG6v5EXfSygiU5CnNLjlbpLOGYZElFk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779095225; c=relaxed/simple;
+	bh=9DM4qFj/buo+UBPSULdadhr2vBlrJYfk5WdGNzc/i6U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KvmeB6nPRX3UBN20eN/AgQdShnAB0ei5UqAlv2lF4wbgPZQpeEsczVpq+C43g7dV1PZVc4kDn27QLQxkbxOldHJ2BK8bnJPCPSW1YeV3pXykxC0jzPrVIITAEMQJwzTiGEMmUg6NfFfl0xwkFo1LGnvgiw8rg7ib8dXLG27fzjo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NaezeYyl; arc=pass smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vtiNbayr"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-45ae6a0e523so905128f8f.1
-        for <bpf@vger.kernel.org>; Mon, 18 May 2026 02:05:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NaezeYyl"
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5a8d1f43432so3544285e87.3
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 02:07:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779095222; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KTpkUPdyRy2rJ8yf423DtMCUVa4hHinduXGyRTbtP63AWUu//UJadagb6BorSalTMb
+         REFHiTC2sMhYgOk2j/szf9j6k6p77sSkU2HYngiEAfWj6Jd/3ieXyQrD7k32pzGtCAHS
+         F7cETNgwzNraw3BLSGTV5GpcMamKsoK1Sv7wA8lp8hcpvOodBFYczdv73wGV1KTUHOI8
+         WEG0W89qTXn2MOVjRuPMGSNaOTnIb6i+4Uv8YszdObhevQh7hONEVipxj7mCgq7BT/N4
+         VpI5JFx3w3z/W86ex8I3Kao+wz01Q1IK6kj0gi5hDjrbQznCTqsPUB+04509Cfse35eC
+         pB4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=TmMV+o90q+i4tF81/qjwEZD+GrK37jZ87CMwSL7czsQ=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=M0vW/+PbE9DAzQKDjq8FTSEb2A26CoW6EMv7qgSmr1WZdW0qnQZM09rhVkAqr4aZcG
+         nWOH6+ZuZWQJlLpUYegizcIU9exkrJgaCbyxVOwLWXM2TgcdANpqdqeiJXeUjv6tNvzy
+         CHdJGqXoLFN41lQKASaK9QoZ3jyMlHhZcdwX3RgBfDEUmqmwyWo8bHoWRq5/rH2H8Z4n
+         Dfm8XHQH6LLSHY/bv3ReiU2JuEKVhqeI0cEuIn0u0k9VcOPnCXDVRnbiZ1f1L/wotYp0
+         nGxO93rZWDKX6d0BENnmAHRL2lAeXYjRfjIfvVDAu0oF1EepaB14bCSQwbY2EOltVXJL
+         groQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1779095119; x=1779699919; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b5p4hero2Con2BmKZIS8vOF61ZHN0e7aAbx1KJsO8hg=;
-        b=vtiNbayrVhfvPUlg45HCUIOWCBpzFDwIkRu/o37TrMurtMPtutoJzBZHyRqaHQJDvD
-         t6G4JkhrVrq0ijH+q8RG875GTJFF+TXc4Zi4CEQEvK0YSrp71FOlVmkDIveOEG5iiZa/
-         s0b1eKzsP7+XduTsuzvEPu2I5XPlRz0S0IhtZ3L2quQlGRQ7kmFQL+14GTPZmswJOAdd
-         O2YRM85mlcKjMZJHEuPRLJGCmzprVPGyG6gzdPgkjmoIWDZGm2jY/462fL96EDhJWGFQ
-         Rpku9+hNTOo1DoE7shodoL2tXiVbwSf6gyChnh76jq/sYaxRXACvvkj3h8ruYjw3rApu
-         Vd7A==
+        d=gmail.com; s=20251104; t=1779095222; x=1779700022; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TmMV+o90q+i4tF81/qjwEZD+GrK37jZ87CMwSL7czsQ=;
+        b=NaezeYylLjOpjrp+1fTjPWRl/sflsFN4CiR1Gi3L8pgISxuVjSRaMx6IEk4UYCtI/o
+         iZRYIGRv0Yr3uFcMEDxn4SrP56/oVAw3qxQU7h84lVLlvxk80VYfiQ1NTrHkj9CQbJrn
+         uHBYRC1SQ5uB5mrnXyePVdtZkcwxuUyKEvs4+OSj/mUXQPTdRPsdo5LpAGdYpUqtBuRL
+         CQ+zFn1VUPPytRPPKro0LMyerB07A93MONICu8qoZcPUIcxTDEk4QjE6d3q9JZ/g0WCo
+         V7YBlJ+Ti/wO44d7L43oT56ELXoCAkwJ3hyi6nzF3bVhPQTVrMyLvU5BfksCIenqrcpl
+         HJIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779095119; x=1779699919;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b5p4hero2Con2BmKZIS8vOF61ZHN0e7aAbx1KJsO8hg=;
-        b=UyeREs+VQ+0Y96ApjEMM2TIK4JQP31SfiuNPG2gl1eKSkoHBBNCzFx4aM35Jj1w1WA
-         OUMFOONCHv7JK5yAIyp5mmGK4u/g0WR1DXWTppMywv27QIXrMV1zezwDytbrFd6ByUdI
-         3fgA0a5JdqInnkNJ1x8vVNpf8sHHDSacwYsQtkobhm3lGwXaM3is5AbBwYQ/dT+HQNC4
-         6qpA2b0rfig09XWMA1ZsnbicVyhtlD1KnB8V45BtW+oqapTbkEPLhbOUjP9DGdwfu9oT
-         ydJkaY8VSFgQeV3tRqB8bze5oXTG0sTHOiB8hrQWolh5dlB6tKFpLsPOtL8CwlEmqzFg
-         YyWw==
-X-Forwarded-Encrypted: i=1; AFNElJ/6E/B428/IK6Ter8Fyb366vG9YusS0uyUJHn4i3WLsxAYuy1GH9xa5i7g35Md/x/HjxRE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMGbEs47PNsN7jush2RZ1B53vPiryGuJWvso19OVZ9Y0Fb559W
-	+atzFHYh62FCT7eaqZ+3W408cCdXSaDld+zZH9XLCRlGkBd7xgyToyAiilwbUgiF+kM=
-X-Gm-Gg: Acq92OFOlzrEsRZBJ4+lVla2nI11WuETyGrkttSxFY+kDJr0ktdGNhhZsTd82AwGQDY
-	zOLL3/E7g4faVvaVU+h6wlzlrhs8J3L6q2Ila82tZ6ydOnni5zIJu/t0/krb6RD0wiSiiTUR49o
-	B+e1N17VP8wdRAuinnECzqpg9jSCx/2N+a9StAgWbQtZ7qLVsifV/xiAVAek+zv5E0Cw7jLJO53
-	V9Qcgd8sdtcujTnUo5ir/MDw3O0FRAz5G2jtQQL7nygu0c1/d6RKap+T6mixBiWwThKAHqWKrJG
-	pDFgB1s8LbXvSm2wquMnzwHJoZNrp0ZPRXpP+7HMo+TBriSMEiqBLniqe3BG1TXkNfsREaaLGQN
-	q15BQpqQpxN4Uljx2XX1gHsH/m6mEp1q9wrD6qSfJJ9mddoG+pH8RlQsHIyIHE+zrV/HT9RvJYI
-	6Ruzak5eQ7KsfImHUXWv8BJ5J/5R4s
-X-Received: by 2002:a5d:44d2:0:b0:45e:739b:3e3c with SMTP id ffacd0b85a97d-45e739b3f89mr5942873f8f.0.1779095118902;
-        Mon, 18 May 2026 02:05:18 -0700 (PDT)
-Received: from [192.168.1.3] ([185.48.77.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0fe0f72sm38419068f8f.25.2026.05.18.02.05.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 May 2026 02:05:18 -0700 (PDT)
-Message-ID: <b8108271-9e89-46bf-8cd3-3376cbdea6a3@linaro.org>
-Date: Mon, 18 May 2026 10:05:16 +0100
+        d=1e100.net; s=20251104; t=1779095222; x=1779700022;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=TmMV+o90q+i4tF81/qjwEZD+GrK37jZ87CMwSL7czsQ=;
+        b=P0gFI1wgmG3lsu9SokMf5/TdK9uMgDo4rsHDEJgBUOXrBd4xPQetbtCyewXkrpAHnB
+         GwIxYiv7bdDEP1cZIMLawD5nSC+9s4dZyzuQU8l68Sl3RzfPVtXU4wyVc7QRCoTJzZKX
+         SkOxlfXbOL0KtKaNY2/mQZYFHSf+e1WyjfIPkcqYs6z0F6NAp425rbBXNVoIhFNoAlMS
+         hgVLOJNmbV8vJeQ4y6GM+IA8MZZjFjO+a7GBKJNQ47ehpKqdp4aesLIg1W9npnwDI0DN
+         0PS6tlKDPlTd0Q7IeH+MmhNoSkuklSV+OgKhQSumGbpfXzkfueGc+uff50uh3fSisIkL
+         Wlfw==
+X-Gm-Message-State: AOJu0YyW/1c0uiZRAwsopHJCjmqGrN9vmyGiAARmerHrBuK1j+/VleNd
+	0u8OtiQfxCl6Q506nOmi+VxJ9F2IGPpoGRATGkQEeGByF+lgeUp9Rkn6sN/NUQaSZhZZoohesC6
+	w0n87fVMLkUfKr1NAfYH0oS8jYj0BJQ4=
+X-Gm-Gg: Acq92OF+C8+529/KNfrRoF579j4Y1FmJK2MsBWcOc29z8z9o9CVoESF5SO0u9OaF1Sl
+	NN5EwVj6tfHY1vAW6F0n2fuWZjJmULniA5LpdbebmDtg7gtdZxs2+yEZxnmOpcM6/w/35pYXCx8
+	qa/cdBTGcLpmtIjRNxv1xvVPQl2ZnKCta7BVlrT3Xq3JCIR2FwRxhRnAJ9vwY43ax4UMB+v5bty
+	+w5wKYwX7u4OyDS9FFpxJSajXYzTaZyW3QcwLEG62CUQQTl3s0OzRW373/4xRHpdiBmTmOkvVwG
+	dYk9bKuFsMIJ9/wyuXDLhlR8Ym6AP5uhoOEWcrzW
+X-Received: by 2002:a05:6512:1053:b0:5a8:99c8:94b7 with SMTP id
+ 2adb3069b0e04-5aa0e616b94mr4663489e87.18.1779095221568; Mon, 18 May 2026
+ 02:07:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/6] tools/build: selftests: Allow versioning LLVM lld
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, leo.yan@arm.com,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>
-References: <20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org>
- <20260514-james-perf-llvm-version-v1-5-6cac1a9a4c8d@linaro.org>
- <bda702a1-18f5-47ed-8a4e-a01b94829e07@linux.dev>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <bda702a1-18f5-47ed-8a4e-a01b94829e07@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260517063311.28921-2-kerneljasonxing@gmail.com> <20260518063407.C3B99C2BCB7@smtp.kernel.org>
+In-Reply-To: <20260518063407.C3B99C2BCB7@smtp.kernel.org>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Mon, 18 May 2026 17:06:23 +0800
+X-Gm-Features: AVHnY4LKrw0qFtbHGKqfXcu-V7tP9AzJn4y6fuq2eTHGnnu_X0lVCJt5SRs-J-k
+Message-ID: <CAL+tcoCp19F2rNxYL_LoGsY5MuBZ6cGKSZsj6D7kvQZcYp0wJg@mail.gmail.com>
+Subject: Re: [PATCH net v3 1/5] xsk: cache csum_start/csum_offset to fix
+ TOCTOU in xsk_skb_metadata()
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, May 18, 2026 at 2:34=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 3 potential issu=
+e(s) to consider:
+> - [Critical] The `skb->csum_start` assignment in `xsk_skb_metadata` can s=
+ilently wrap around 16 bits on architectures with large page sizes (e.g., 6=
+4KB), leading to negative checksum offsets and hardware descriptor corrupti=
+on.
+> - [High] Software checksum fallback (`skb_checksum_help`) in `xsk_build_s=
+kb_zerocopy()` operates on an empty linear SKB, unconditionally failing and=
+ dropping packets.
+> - [High] Returning `-EINVAL` from `xsk_skb_metadata` permanently wedges t=
+he AF_XDP TX queue, causing a local Denial of Service.
+> --
+>
+> commit a101fbe76c494016d6edebf7d5d5e0dc173c0af5
+> Author: Jason Xing <kerneljasonxing@gmail.com>
+>
+> xsk: cache csum_start/csum_offset to fix TOCTOU in xsk_skb_metadata()
+>
+> The TX metadata area resides in the UMEM buffer which is memory-mapped
+> and concurrently writable by userspace. In xsk_skb_metadata(),
+> csum_start and csum_offset are read from shared memory for bounds
+> validation, then read again for skb assignment. This commit fixes a TOCTO=
+U
+> race by reading these values into local variables once.
+>
+> Closes: https://lore.kernel.org/all/20260503200927.73EA1C2BCB4@smtp.kerne=
+l.org/
+> Fixes: 48eb03dd2630 ("xsk: Add TX timestamp and TX checksum offload suppo=
+rt")
+>
+> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > index 5e5786cd9af55..f8c8a8c9dfba5 100644
+> > --- a/net/xdp/xsk.c
+> > +++ b/net/xdp/xsk.c
+> > @@ -811,13 +812,15 @@ static int xsk_skb_metadata(struct sk_buff *skb, =
+void *buffer,
+> >               return -EINVAL;
+> >
+> >       if (meta->flags & XDP_TXMD_FLAGS_CHECKSUM) {
+> > -             if (unlikely(meta->request.csum_start +
+> > -                          meta->request.csum_offset +
+> > +             csum_start =3D READ_ONCE(meta->request.csum_start);
+> > +             csum_offset =3D READ_ONCE(meta->request.csum_offset);
+> > +
+> > +             if (unlikely(csum_start + csum_offset +
+> >                            sizeof(__sum16) > desc->len))
+> >                       return -EINVAL;
+>
+> Does returning -EINVAL here wedge the AF_XDP TX queue?
+>
+> If xsk_skb_metadata() rejects invalid metadata and returns -EINVAL,
+> xsk_build_skb() appears to propagate this error without advancing the
+> consumer pointer via xskq_cons_release(xs->tx).
+>
+> When __xsk_generic_xmit() receives the -EINVAL error, it bypasses
+> the post-loop cleanup and the invalid descriptor is never consumed.
+>
+> Could this put the socket into an infinite loop on subsequent sendmsg() c=
+alls?
 
+I should state that the first two bugs are valid and pre-existing, so
+no action needs to be performed in this series.
 
-On 15/05/2026 11:58 pm, Ihor Solodrai wrote:
-> On 5/14/26 2:32 AM, James Clark wrote:
->> Building with LLVM=... could result in a different version of lld being
->> used than the main toolchain for liburandom_read.so because it's
->> hardcoded to "lld" in this makefile.
->>
->> Make it consistent with the rest of the LLVM toolchain by adding an LLD
->> variable to Makefile.include. Keep the fallback for other architectures
->> in tools/testing/selftests/bpf/Makefile as it seems like it's something
->> specific to this make rule and shouldn't be global.
->>
->> Clang accepts either a full path or "ld.lld-15" style inputs to
->> -fuse-ld= so this will work with LLD defined the same way as the other
->> LLVM tools. However, for full paths, we need to use ".../ld.lld" instead
->> of the generic driver "lld", but I don't think the original use of "lld"
->> was significant as this is always a linux build.
->>
->> Signed-off-by: James Clark <james.clark@linaro.org>
->> ---
->>   tools/scripts/Makefile.include       | 2 ++
->>   tools/testing/selftests/bpf/Makefile | 8 ++++----
->>   2 files changed, 6 insertions(+), 4 deletions(-)
->>
->> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
->> index 380ad84ac51e..5c2d505cba62 100644
->> --- a/tools/scripts/Makefile.include
->> +++ b/tools/scripts/Makefile.include
->> @@ -67,6 +67,7 @@ ifneq ($(LLVM),)
->>     $(call allow-override,HOSTAR,$(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX))
->>     $(call allow-override,LD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
->>     $(call allow-override,HOSTLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
->> +  $(call allow-override,LLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
->>     $(call allow-override,CXX,$(LLVM_PREFIX)clang++$(LLVM_SUFFIX))
->>     $(call allow-override,STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
->>     $(call allow-override,LLVM_STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
->> @@ -91,6 +92,7 @@ else
->>     # Some tools still require Clang, LLC and/or LLVM utils
->>     $(call allow-override,CLANG,clang)
->>     $(call allow-override,LLC,llc)
->> +  $(call allow-override,LLD,ld.lld)
->>     $(call allow-override,LLVM_CONFIG,llvm-config)
->>     $(call allow-override,LLVM_OBJCOPY,llvm-objcopy)
->>     $(call allow-override,LLVM_STRIP,llvm-strip)
->> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
->> index 6ef6872adbc3..44ba829e5d4d 100644
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -245,9 +245,9 @@ $(OUTPUT)/%:%.c
->>   
->>   # LLVM's ld.lld doesn't support all the architectures, so use it only on x86
->>   ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
->> -LLD := lld
->> +USE_LD := $(LLD)
->>   else
->> -LLD := $(shell command -v $(LD))
->> +USE_LD := $(shell command -v $(LD))
->>   endif
->>   
->>   # Filter out -static for liburandom_read.so and its dependent targets so that static builds
->> @@ -258,7 +258,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom
->>   		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) \
->>   		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
->>   		     -Wno-unused-command-line-argument \
->> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
->> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-> 
-> Hi James,
-> 
-> This patch breaks the selftests/bpf build:
-> 
-> $ clang --version
-> clang version 22.1.3 (CentOS 22.1.3-1.el9)
-> Target: x86_64-redhat-linux-gnu
-> Thread model: posix
-> InstalledDir: /usr/bin
-> Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg
-> 
-> $ make LLVM=1 -j$(nproc)
->    [...] # ok
-> 
-> $ make LLVM=1 -C tools/testing/selftests/bpf -j$(nproc)
-> 
-> [...] # somewhere in the middle
-> 
->    LIB      liburandom_read.so
-> clang: error: invalid linker name in argument '-fuse-ld=ld.lld'
-> make: *** [Makefile:256: /home/isolodrai/workspace/review/linux/tools/testing/selftests/bpf/liburandom_read.so] Error 1
-> make: Leaving directory '/home/isolodrai/workspace/review/linux/tools/testing/selftests/bpf'
-> 
-> [...]
-> 
-> Or a simpler reproducer:
-> 
-> $ make LLVM=1 OUTPUT=/tmp/out /tmp/out/liburandom_read.so
->    LIB      liburandom_read.so
-> clang: error: invalid linker name in argument '-fuse-ld=ld.lld'
-> make: *** [Makefile:256: /tmp/out/liburandom_read.so] Error 1
-> 
-> $ make LLVM=-22 OUTPUT=/tmp/out /tmp/out/liburandom_read.so
->    LIB      liburandom_read.so
-> clang-22: error: invalid linker name in argument '-fuse-ld=ld.lld-22'
-> make: *** [Makefile:256: /tmp/out/liburandom_read.so] Error 1
-> 
-> I tried your patches, and only then noticed BPF CI caught this too:
-> https://github.com/kernel-patches/bpf/actions/runs/25943477658/job/76267174885?pr=12082
-> 
+Yes, it will cause xsk to get stuck in the send syscall infinitely. I
+think -EINVAL should be dealt with the same method as -EOVERFLOW:
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 5e5786cd9af5..c6cf2434a7c9 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -1010,6 +1010,10 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock=
+ *xs,
+                        xs->tx->invalid_descs++;
+                }
+                xskq_cons_release(xs->tx);
++       } else if (err =3D=3D -EINVAL) {
++               xsk_cq_cancel_locked(xs->pool, 1);
++               xs->tx->invalid_descs++;
++               xskq_cons_release(xs->tx);
+        } else {
+                /* Let application retry */
+                xsk_cq_cancel_locked(xs->pool, 1);
+@@ -1059,7 +1063,7 @@ static int __xsk_generic_xmit(struct sock *sk)
+                skb =3D xsk_build_skb(xs, &desc);
+                if (IS_ERR(skb)) {
+                        err =3D PTR_ERR(skb);
+-                       if (err !=3D -EOVERFLOW)
++                       if (err !=3D -EOVERFLOW && err !=3D -EINVAL)
+                                goto out;
+                        err =3D 0;
+                        continue;
 
-Thanks for testing. Yeah looks like I made a mistake here testing the 
-various different formats of LLD. Converting it to a full path works 
-with both prefixed and postfixed versions, and that's what's already 
-done for non x86/riscv so I'll do that.
+>
+> > -             skb->csum_start =3D hr + meta->request.csum_start;
+> > -             skb->csum_offset =3D meta->request.csum_offset;
+> > +             skb->csum_start =3D hr + csum_start;
+> > +             skb->csum_offset =3D csum_offset;
+>
+> Could this addition overflow skb->csum_start on architectures with large =
+page
+> sizes?
+>
+> Since desc->len can be up to PAGE_SIZE (e.g., 65536 bytes on ARM64 or
+> PowerPC), csum_start could be as large as 65534. Adding the driver headro=
+om
+> (hr) could cause the sum to exceed 65535, truncating when assigned to the
+> 16-bit skb->csum_start field.
+>
+> When the driver later computes skb_checksum_start_offset(skb), could this
+> result in a negative integer and cause out-of-bounds offsets to be progra=
+mmed
+> into the hardware?
 
->>   		     -Wl,--version-script=liburandom_read.map \
->>   		     -fPIC -shared -o $@
->>   
->> @@ -268,7 +268,7 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_r
->>   		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
->>   		     -Wno-unused-command-line-argument \
->>   		     -lurandom_read $(filter-out -static,$(LDLIBS)) -L$(OUTPUT) \
->> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
->> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
->>   		     -Wl,-rpath=. -o $@
->>   
->>   $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
->>
-> 
+Ack, it should be checked in advance like this:
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 5e5786cd9af5..1fd7a70e5d38 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -816,6 +816,9 @@ static int xsk_skb_metadata(struct sk_buff *skb,
+void *buffer,
+                             sizeof(__sum16) > desc->len))
+                        return -EINVAL;
 
++               if (unlikely((u32)hr + csum_start > U16_MAX))
++                       return -EINVAL;
++
+                skb->csum_start =3D hr + meta->request.csum_start;
+                skb->csum_offset =3D meta->request.csum_offset;
+                skb->ip_summed =3D CHECKSUM_PARTIAL;
+
+>
+> >               skb->ip_summed =3D CHECKSUM_PARTIAL;
+> >
+> >               if (unlikely(pool->tx_sw_csum)) {
+> >                       int err;
+> >
+> >                       err =3D skb_checksum_help(skb);
+> >                       if (err)
+> >                               return err;
+> >               }
+>
+> Does skb_checksum_help() unconditionally fail here for zero-copy AF_XDP
+> sockets?
+>
+> xsk_build_skb_zerocopy() creates a non-linear SKB where data is stored in
+> fragments, meaning skb_headlen(skb) is 0.
+>
+> Inside skb_checksum_help(), it checks if the offset is greater than or eq=
+ual
+> to skb_headlen(skb). Since skb_headlen() is 0, this check always evaluate=
+s
+> to true, triggering a WARN_ONCE and returning -EINVAL.
+>
+> Could this cause all checksummed packets to be dropped when hardware offl=
+oad
+> is unsupported and pool->tx_sw_csum is true?
+
+I don't think we need to move the check ahead as warn_once is simply enough=
+...
+
+Thanks,
+Jason
