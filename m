@@ -1,176 +1,164 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95DB8410D12
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 12:36:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779107801; cv=pass; b=D3y4CtwSEq53Jwx3Cwm0rWNyBQwop1OB7eNzMr1hU/7uEOZD5dJrRiBjxm3Kp+caZfUXSJkh9Di+tZ/ECLmeI39RqwTh3gvXAmTUnPCWcPSw1hkb+Wd53ow0ulUKLKFH1JYZvnqAWEgc2Znamsel5pvNK/dcqWVZxKyqtg0+B8A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779107801; c=relaxed/simple;
-	bh=UxFHQ8myRrvcKnyp2w/HbJak2/jS/38obKXyH8OshAs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IIaruLHQeEauDe9aBSskK2bLoNpzBVE4TlilaH52/jLUCFx3bQjONl4tbwkF57VEJARH/LDoWyV+oLzeLsEUX/n0/qNYL9243aouN+2W1hSqtcNzo7dbCJBvkgD8cnPBqUgjvtXUfmF4lTvFijUY740iN86atsS8hKdaxY9Jmrk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D+U3xSLK; arc=pass smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986ED449ECF
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 12:50:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779108646; cv=none; b=dnN76aj8TLl7yqZZySl1fT75W3GOyKBRk/xwWv8s1xYTHczVSM1Rn6bsP8y9GZp9csDnTUNyu50tDWiiTYHovaSQbKI9+dsXN0vnkE5pkR3zIDIvHdGKPkrkYx5GWdPvCv5l8lxylj39y/D12fvmlp5qPPLaYRHLA/wsiGE2t8M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779108646; c=relaxed/simple;
+	bh=kG0zBGxl5DlcXlb7z+bicLfvzmtEd5Qp2YiqQMBvAwA=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dGF+yNDYNtQ43+El3gjkhMQE2tLUzzZEikd4Rnf6IltbVbBAAXpZ3tzfxdF5xfmLC/EuW6eegsOZyUWUHmKZUhdT1RhXaGNZYPmCqFCy5cdZCP5QKI/8qK1+F/4CXQ9gnEaG4ieoydUJydNngwyUmnAzwr6uwvZrpIs7dhfXGgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o7qYqmTi; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D+U3xSLK"
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-39393c1b5aaso20771761fa.3
-        for <bpf@vger.kernel.org>; Mon, 18 May 2026 05:36:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779107798; cv=none;
-        d=google.com; s=arc-20240605;
-        b=IA7qMxCvX8nm3j9192LoSqoox21RJZrLEzVAEW9vrfCG9wOLxuzde3iEONEES2YL8D
-         /Pzw+xXbZS1Jk+CFcrlkzCnf6StiUiXKVfFJNOUwby47z/BgkC8lq69KHgoZz0aKdysS
-         4WsMPl1hsJIUi+vRRE7faMbYRxwnzSkA7KgB/IJNk9qzUPrcL1PADN47CYMF4fDR5oRw
-         5Vx7SX8C7ZTW9Q+U0YC8CnN33+0pCeIxEjmIi+rxw811TbaPBvcM0rfw8DagTGHHm3Yw
-         xcMyv7dfcN6/KtrJRj4vwVvMKCNM8gnzZ34hvncO6AXYvXqmzibYghluVwq1W8pN1BBM
-         4OxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=LQLPiuOk6sV8kiLBT0hZDm0NkG6cxPfbECWJSraE7Lo=;
-        fh=cTw8RuaeFjmHb6+Ze8UGmtjYQAGTIG87F9LXAYUmRj4=;
-        b=L/TSWGJ6+EB6J+HN/Lo1LEo5gZ78P3l2WDxPIim87gLxbyBae3UTZ7/nQwL0vwkMOO
-         MsHdH3MLC9msNz2casNZa8u+2ihXLOeoHJ6FGNxEQ7ZsHzdW249+7DuIFwqHjEd+IWJ5
-         iMbXHIeCqRpO5E14zyzcV6QcXrdIrYmqZ570+lcB2UBN1VMZqui6SrGodNGh4Bo0RR+a
-         fKXWjUuy/WEyPPr3Hq4Dd7zXgpp6K3EKm7/wMECwxShfnsFLa3T3Bp4KzCctmZikFQ5T
-         7oEc+eSY5gSBKewbuPMBfviLUUJlmeNXCqftM7Ao8O+8SmZaALrzA9Bik7c4orHtepBi
-         3fCw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o7qYqmTi"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4893940bb5eso11234075e9.3
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 05:50:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779107798; x=1779712598; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LQLPiuOk6sV8kiLBT0hZDm0NkG6cxPfbECWJSraE7Lo=;
-        b=D+U3xSLKudhqxPnVvVdDuYrJSiOy1pbQoULBThY5Y9ZcyGjINGdi6w+9J61pKjyUoW
-         i8amaWF7yS7vAJ7mi88CDKyMqFofr2MwiBYBzWIXe8x3EIlpngj2Ld3M8e8/8ZKQX5v1
-         A04c3MQIEnK8Qp3OWt4tRpP4xkrMqIyY3n8uQHX70+11NxKFFjXea3rYddzMPrrM71jE
-         yaH8yMEogH3/Stsv1isyZb8tYbu49YpwIv0ZxRL+6ICsMNGMX8lPhyawnyVgYRYDfNkn
-         Kjdu6TLbogTiaCnEUg73OSpmgyATvkXYaQHwNT/xv321DeVgpxsv3n/1gmrOQGI5I7fI
-         UdVA==
+        d=gmail.com; s=20251104; t=1779108643; x=1779713443; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ql/8UlldJOKpd6Udzj2qJIyg292oHzAM/rjPKsghj1Y=;
+        b=o7qYqmTipw8tOuUatmfeqti+3WoC7PwuntoGrB2xPsG1rZvqQ6DmQjAKA81TavWTP4
+         DO73hNZ8TtQaMjPnX6M/WdcOM+Qi327RQGMupu4Mq8oKSN/+hdnsdfHblTNMoF6GLMUT
+         o66khy150297C/hvul9oePpXcrzyYHAHoPEwnJAXpRrhawvWlOtTTD3TbIKEstHVy0Nr
+         txaAbrfZnQnFbp8f0uNf7YqJRnGWiflZ1zW0f3f8zsiCow4qNoRKQdB9fcWdU04Ia9Xz
+         FxXq8JX/HARbEOrAjLP902qZRxRdGm7fP7dq8TWDb6m2Bm8iOLZUJ/41y5cjvesSwXUC
+         w8oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779107798; x=1779712598;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=LQLPiuOk6sV8kiLBT0hZDm0NkG6cxPfbECWJSraE7Lo=;
-        b=lfTqlIv11pS1FryQRlm6CQVtH6/xiqYZsIOIuRMftI+sO6duTWcjA6ysCHehb1PzSe
-         F/deuy4ebZbmcXf7Xn5GalHB0zwLjjPwlgBi6h0PP0JB6ZIJ41Tl0CW0zYP2X5Ed8y8E
-         duyRbN/+X/Gi3L5szb4KEgej/t43qKhrnDXcHvRoZstl0Jnd5TE8vXNWrQJW639gf2Hr
-         DKHfdyrQorTQ+JmQJkT5bCJk2EGXW1VcjHouzvnS5VGNyZg5HvR5U1xeH9ikmUeaKRmF
-         QuATkEAS5cDCLdZ2FjUCdviA486YdzTUiedVE2fLrC6rEtJiZmoWvtqh6OVgj0NGv9dE
-         94xQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+tTVNtLuuY24hg4koUpq1amNvfnXAhoyLr4FnzexdmAKxvP9QR73nlgUx4jtr14drOt68=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVRQkdjtZxVNvv7kwvmfVlGCfrsOUIth69/u+6Yokwgi1fZDE7
-	TRYaWKBVzuXmuRIdwujE4gtsyBTzILmSDOyJV+CdCC/v3SK6YqcglVAlfzFDw6RQaNHAlhCRVhG
-	mOKQn+Puevlo9sdfvjrqGSliGx8FBfxo=
-X-Gm-Gg: Acq92OG+hGL2mXg1AzUHZZUsQ0DB7AW1tdCD6TWZaB8cuh2rChIZa7xOvXPuLwFbthW
-	k7h5jNXlT+FZNB92+2bOAxpXvdCbLPK1t2LRrqkmRqfNy4lsbLoL1SL8DA2ErnHExCRHJSYpCuy
-	VRAoOeUpcQEXcj3zlAoN+/bs62L4Im7Za8Da09vzmjlMl8P+K+n3IFj2Jx5/dFhWInyL0yi4wbW
-	l9yIQ59q8Rchh45Yy1tZW/Z4juwS38QuIPxGwf7QFmru6UJZhRBsKIb3TMTXflBZn5n5Uu7iCc/
-	YDfEUvRfLZ5ryIrRfofqS2ozXvv4RnQpq6VOPvS1GwGOTxlPdnQ=
-X-Received: by 2002:a05:6512:3b8a:b0:5a8:5187:2e78 with SMTP id
- 2adb3069b0e04-5aa0e60ce1fmr4598222e87.13.1779107797593; Mon, 18 May 2026
- 05:36:37 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779108643; x=1779713443;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ql/8UlldJOKpd6Udzj2qJIyg292oHzAM/rjPKsghj1Y=;
+        b=srUIzB/xeVKAHs2rUhYRkkgQGxCJ+aRYFYmBcjwH9WdXaQEKekCrbUuFZKLPXPyYoH
+         WsaHNDw94D65AuvnvDtsU/x0QJUGX6ZpuiKax1wS8oXGht3s7fQJe/2/c6qoZY3aUYsP
+         dwJ7XNMD0S5CCQDcLS3S6SY8zl0SXZSGNsVPCJ+NjSPXMUEJZP4fPPeG6fX4xG1Ee8jJ
+         Smc+MXl3jQspaxsSQX6mix+v2v8goFa5fhEJE/+wIQADj2nW+UQizS9yCFB0TbtcZASN
+         nNsTSbSKiRLe/AxKyY8Sd7CTS4RC4ETcElibwHRQK7GdW8mAHDJGZqspi5ByN1fT7TT/
+         o5Jw==
+X-Gm-Message-State: AOJu0YwSNuYvvIjDWKSmSIrPv+XRJmqv3CmhseEd5ZT6bkSjCQHgQHe6
+	gn2V0DD6HHo5ZaUFqPb7Fs/weOPXWda6v+2SUPk7PB7bj7psAWovmOdYDi8hsRqQ
+X-Gm-Gg: Acq92OFoUEI/N/m45/Le7M+X3dfLQMKa2D8TpEuTmaTHMePeTXCeiiGDWVXxA42Wqif
+	hBD2qefvgqboNskQIGzbi0XrN9oXrob+ES2Cgm0tw5Pyp41WzBDWq9ftE5jXhVXGNJm5CHXpU/1
+	bYxwvMjswbEMA6pOrFX/2BsVA6LyJP+7os2YrXkdYRr1J4Tfk73h6rzD89kiHLuRJb1L96qBRS8
+	YZ8zLjflDQXAwVSHHYsE9kwveq/VIUAipwpIxr+tPd2aYcUz+idbjEIXEH9Dt+Zr577ExpJjofm
+	AVin3kF05rBUOfsXWRcjh+Cu0Y7XZEbdxi+UdWjPCZjz/UZgFG6xwRPu9ITu6hKGSfrm5YnZmhm
+	SeMCPrMiOmdz4UlBaHuWxZt7wbS/9tnirz3aJ6B2rw6vgCzBzmbnz6NgLuQXV4LqMBscWQw0Dmv
+	zthMca7l6sKnyKXryuoqpnGbZ8dQ==
+X-Received: by 2002:a05:600c:35c5:b0:48f:f64c:c314 with SMTP id 5b1f17b1804b1-48ff64cc4d1mr171305945e9.30.1779108642524;
+        Mon, 18 May 2026 05:50:42 -0700 (PDT)
+Received: from krava ([2a00:102a:403c:11b1:accc:2af:f875:4e0d])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe53ab6aasm271285035e9.2.2026.05.18.05.50.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 May 2026 05:50:41 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 18 May 2026 14:50:39 +0200
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCHv2 02/11] uprobes/x86: Allow to copy uprobe trampolines on
+ fork
+Message-ID: <agsLH2G2DPxD3g12@krava>
+References: <20260518105957.123445-3-jolsa@kernel.org>
+ <20260518114208.CE128C2BCF6@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260518082344.96647-1-kerneljasonxing@gmail.com>
- <20260518082344.96647-2-kerneljasonxing@gmail.com> <850e3709-2cb1-4a26-8546-745401423696@kernel.org>
-In-Reply-To: <850e3709-2cb1-4a26-8546-745401423696@kernel.org>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Mon, 18 May 2026 20:35:59 +0800
-X-Gm-Features: AVHnY4KuhWWWfQKXUCIMgTLWad_PQHq31BMxVWNlZDH5P1tGxWBXQynOnQmIOqM
-Message-ID: <CAL+tcoBA0+Vspq37FtEURgM9A+Fk5MOPkhPvaq7OwP6SSpXfxg@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/6] bpf: Add bpf_ktime_get_real_ns() kfunc
-To: Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, horms@kernel.org, willemb@google.com, kuniyu@google.com, 
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, sdf@fomichev.me, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, Jason Xing <kernelxing@tencent.com>, john.fastabend@gmail.com, 
-	Simon Sundberg <Simon.Sundberg@kau.se>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260518114208.CE128C2BCF6@smtp.kernel.org>
 
-On Mon, May 18, 2026 at 7:57=E2=80=AFPM Jesper Dangaard Brouer <hawk@kernel=
-.org> wrote:
->
-> On 18/05/2026 10.23, Jason Xing wrote:
-> > From: Jason Xing <kernelxing@tencent.com>
-> >
-> > Currently BPF programs can obtain timestamps via bpf_ktime_get_ns(),
-> > which returns CLOCK_MONOTONIC time. However, the skb->tstamp field
-> > populated by the network stack uses ktime_get_real() which is in the
-> > CLOCK_REALTIME domain.
-> >
-> > In the series, kernel reports the software/hardware timestamps through
-> > sockopt and then userspace bpf application gets them and calculate the
-> > delta only through an unified time unit.
-> >
-> > However, prior to this, when a BPF program tries to measure RX packet
-> > delay by comparing skb->tstamp with bpf_ktime_get_ns(), the result
-> > is incorrect because the two clocks have different epochs.
-> >
-> > Introduce a new BPF kfunc bpf_ktime_get_real_ns() that returns the
-> > current CLOCK_REALTIME time. This allows BPF programs to perform
-> > accurate delay calculations without clock domain mismatch issue.
-> >
->
-> I support adding this helper, because have also hit this issue[1].
-> Our ugly workaround is to use the TAI clock and adjust for the current
-> TAI offset.
+On Mon, May 18, 2026 at 11:42:08AM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [Critical] __in_uprobe_trampoline uses current->mm instead of the target mm_struct, causing kernel crashes and instruction stream corruption during uprobe_unregister.
+> - [High] Removing VM_DONTCOPY without synchronizing the uprobes state causes a linear VMA leak across fork chains.
+> --
+> 
+> commit be0e6254bd9df4f56adce23d7a5e24a78c286291
+> Author: Jiri Olsa <jolsa@kernel.org>
+> uprobes/x86: Allow to copy uprobe trampolines on fork
+> 
+> This commit allows vma uprobe trampoline objects to be copied on fork to
+> the new process by removing the VM_DONTCOPY flag.
+> 
+> > diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+> > --- a/arch/x86/kernel/uprobes.c
+> > +++ b/arch/x86/kernel/uprobes.c
+> > @@ -702,7 +702,7 @@ static struct uprobe_trampoline *create_uprobe_trampoline(unsigned long vaddr)
+> >  
+> >  	tramp->vaddr = vaddr;
+> >  	vma = _install_special_mapping(mm, tramp->vaddr, PAGE_SIZE,
+> > -				VM_READ|VM_EXEC|VM_MAYEXEC|VM_MAYREAD|VM_DONTCOPY|VM_IO,
+> > +				VM_READ|VM_EXEC|VM_MAYEXEC|VM_MAYREAD|VM_IO,
+> 
+> Does removing VM_DONTCOPY without synchronizing the uprobes state cause a
+> linear VMA leak across fork chains?
+> 
+> When dup_mmap() copies the uprobe trampoline VMA to the child process during
+> fork(), the child's tracking list (mm->uprobes_state.head_tramps) is
+> initialized as completely empty via mm_init_uprobes_state(), meaning the
+> parent's state is not duplicated.
+> 
+> When the child process executes a uprobe, arch_uprobe_optimize() calls
+> get_uprobe_trampoline(). Because head_tramps is empty, it fails to find the
+> VMA it already inherited. It then falls back to create_uprobe_trampoline(),
+> which calls find_nearest_trampoline(). Since the inherited VMA is already
+> mapped, find_nearest_trampoline() finds a new unmapped area and installs a
+> second duplicate trampoline VMA.
+> 
+> In a deep fork chain, each generation inherits all previous VMAs, has an
+> empty head_tramps list, and creates a new VMA. Can this cause a linear
+> accumulation of redundant VMAs, eventually exhausting vm.max_map_count and
+> virtual memory?
 
-Right. Thanks :)
+I don't think it's big problem, because it's unlikely you'll insert extra uprobes
+to child process.. but perhaps we could go away with struct uprobe_trampoline
+object and operate directly on top of vma objects, it could event make code
+easier, will try
 
->
-> [1] https://github.com/xdp-project/bpf-examples/tree/main/netstacklat
+> 
+> As a related question about the uprobe trampolines introduced in the preceding
+> commit ba2bfc97b462, does __in_uprobe_trampoline() safely handle unregistered
+> uprobes?
+> 
+> When a uprobe is unregistered (e.g., via bpf_uprobe_unregister in a workqueue
+> or by a different process like perf), set_orig_insn() calls is_optimized() to
+> check if the uprobe is optimized. If is_optimized() internally calls
+> __in_uprobe_trampoline() which hardcodes current->mm for the VMA lookup, does
+> it completely ignore the passed mm parameter?
 
-The tool is useful as long as we enable net_enable_timetamp(). Yes,
-bpf/so timestamping is one of methods to do so.
+__in_uprobe_trampoline has no longer hardcoded current->mm, check
+previous patch:
 
-Thanks,
-Jason
+      uprobes/x86: Use proper mm_struct in __in_uprobe_trampoline
 
->
-> Cc Simon Sundberg <Simon.Sundberg@kau.se>
->
-> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > ---
-> >   kernel/bpf/helpers.c | 6 ++++++
-> >   1 file changed, 6 insertions(+)
-> >
-> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> > index 2bb60200c266..863645d096ef 100644
-> > --- a/kernel/bpf/helpers.c
-> > +++ b/kernel/bpf/helpers.c
-> > @@ -2317,6 +2317,11 @@ void bpf_rb_root_free(const struct btf_field *fi=
-eld, void *rb_root,
-> >
-> >   __bpf_kfunc_start_defs();
-> >
-> > +__bpf_kfunc u64 bpf_ktime_get_real_ns(void)
-> > +{
-> > +     return ktime_get_real_fast_ns();
-> > +}
-> > +
-> >   /**
-> >    * bpf_obj_new() - allocate an object described by program BTF
-> >    * @local_type_id__k: type ID in program BTF
-> > @@ -4859,6 +4864,7 @@ BTF_ID_FLAGS(func, bpf_task_work_schedule_resume,=
- KF_IMPLICIT_ARGS)
-> >   BTF_ID_FLAGS(func, bpf_dynptr_from_file)
-> >   BTF_ID_FLAGS(func, bpf_dynptr_file_discard)
-> >   BTF_ID_FLAGS(func, bpf_timer_cancel_async)
-> > +BTF_ID_FLAGS(func, bpf_ktime_get_real_ns)
-> >   BTF_KFUNCS_END(common_btf_ids)
-> >
-> >   static const struct btf_kfunc_id_set common_kfunc_set =3D {
->
+jirka
+
+> 
+> If unregistered asynchronously from a kernel thread, current->mm is NULL. Can
+> this cause a deterministic NULL pointer dereference in vma_lookup() and crash
+> the kernel?
+> 
+> Additionally, if unregistered by a different process, would vma_lookup()
+> search the wrong mm, return false, and cause set_orig_insn() to incorrectly
+> assume the instruction is not optimized? Could this lead to replacing only
+> the first byte of the 5-byte CALL instruction with the original opcode,
+> leaving the 4-byte relative offset as garbage and crashing the traced process
+> when it executes the corrupted instruction?
+> 
+> >  				&tramp_mapping);
+> >  	if (IS_ERR(vma)) {
+> >  		kfree(tramp);
+> 
+> -- 
+> Sashiko AI review · https://sashiko.dev/#/patchset/20260518105957.123445-3-jolsa@kernel.org?part=1
