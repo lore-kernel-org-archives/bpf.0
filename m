@@ -1,212 +1,194 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66AD303CAE;
-	Mon, 18 May 2026 15:22:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B9F3376BF7
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 15:23:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779117725; cv=none; b=KoTJkUI6QiG6erpYrusd17Z3w0Zq+QHHVuGDXcn1RcMftFZ6olMxq2sas3MdXGUfUy6u6ErHmxtBxyZBf3Yy/M9FiSwEnBlKdoNgDNxmfQCjSPdED5ezQlpgudvIbVMSl2zk8kPET9MaSd0S3+EyDYHt2r/ragp4AGDWblxF6aA=
+	t=1779117827; cv=none; b=Y1l4VmzSJb7Fc/kAI0iBuYc/ntNBhSBJIGO5eusyarHx7wsYaSAqiA3v/LNZlmLBSr4AUIuwr2L3ndfY0RsLYJ2vkAhCmmsZeM8n1/1+/w2scl7+WC+tgpikHbKfO2xVDQ+i36BHEqbObyOAhrPSJ8EGk9aaHMIHU9w4dvj5Kg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779117725; c=relaxed/simple;
-	bh=Bx/RqOuSExXx/+Nptr2e3aCphKTqL0knskqPy6v1UHg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TgcEW5HtLY7Qm77XbcR/fgW31xRcQZOZZGSpTBh7qPzmMhviQlZj5m/kMXnMvkDV6U5yGHfWn7hRSZQgGYlu6XqKiLkTMFSztZOgJ6CE0AKSeSUrW5gCV2OBgt+/InqwBfbWaR837KA/Kbpk1IxooAfsZsVNc0/GQYGJ1fi4kwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=R/PNmw8k; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1779117827; c=relaxed/simple;
+	bh=tmS0yY9aJiTmj7PrQn+1aW5FlWIoZKFBBJCgg9x80n4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QZvEWYJmlGM18KmF7f9PzgJ4sTHMskUbVCLYr5YFO6TKaNX+kv0e7Rwpn8HVghCNZuyAzGu29LvqwfMZ/LWePGxT3D/DirXeFCLWKGu+MtxDdplnhFbvkxeFC4NDBzx8EVR0hGpwFSH28W708J3yPlwoLBi2dT66BvSpWIEW2yU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WooTIuQL; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="R/PNmw8k"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64I9x9aC271835;
-	Mon, 18 May 2026 15:22:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=0dPt8a
-	R10ao2ScNFB9ch8xlT0dn3qbG6bqX4wZjmiyU=; b=R/PNmw8kTxzt4FR7RLFG3B
-	vIIToeKcBUO5xGiCoqvCMxveNY3n04DVEQD/tvzCs3/zpleXQKlCgh32EhU9hBRB
-	MROMjXPb5jvpAgmBARvnG+8QcYPTg1Vb0QfdqjqZ7Q+KwHMoMjq4/ePgXg3tF+Tu
-	KOoDlUkrQQpBVWRTNMqPMTMtus3A2JTGw3B15dSz3QGVILmYxNxQx/ZTxeppvSFh
-	gUU2F14bkorTmivH62CqNLZxA+/AWPuCyawdJ9XMm9ntLInTx+ZJaph3lpmvMxVO
-	IUnNtyCkQzr+S4tE5KY1BzBHTw2g2Fais1snRPk3jph2Zmt6n1uI7A7L94JFCCWg
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h74rskx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 May 2026 15:22:01 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64IF98E7014398;
-	Mon, 18 May 2026 15:22:00 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e73wjxg67-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 May 2026 15:21:59 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64IFLwEL36897216
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 18 May 2026 15:21:58 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EED922004B;
-	Mon, 18 May 2026 15:21:57 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9AEF320040;
-	Mon, 18 May 2026 15:21:57 +0000 (GMT)
-Received: from [9.111.207.149] (unknown [9.111.207.149])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 18 May 2026 15:21:57 +0000 (GMT)
-Message-ID: <468c9a62-f5a5-4411-846a-15d595f25bf5@linux.ibm.com>
-Date: Mon, 18 May 2026 17:22:01 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WooTIuQL"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b936331786dso307909966b.3
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 08:23:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779117824; x=1779722624; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ay5gk0yjiV4+KahLRcNBOcR7+/tW2rOXFNeAxAhmkYg=;
+        b=WooTIuQLwNE+fsitjWCFlBdA2YTdNtDeocarADaToNm+lhON1gZvzlFq7a/ANQYFyj
+         voClv1IU5wpMFgnEbsfXr8pyLjfhXsQbTwDZHAlOh/I57T0lteVK2oplXv/UvmLcEgm5
+         TeUeAjGpiQga4sOWUIJBpN+iNKQa4V0IfsJAnuC+1FK69H60rndBHUmb2ZtYPhjd1GUd
+         TUyZXIPHSE2azc/bikZvTf0iBgNK8lUSWtzcanW6k48/WKLISp3k+/o3GJ/ACMWtdWkB
+         L7kvuBBHp2LAeT+mVEbu/tUtMFI9l3RYMB80y9/8fyIMRtEmz/9l1HA6WrPmJST6wS6o
+         yOcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779117824; x=1779722624;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ay5gk0yjiV4+KahLRcNBOcR7+/tW2rOXFNeAxAhmkYg=;
+        b=T48QoWu1kpV+SHPA5+yjlzSLnn5k3s1Pzh0oRDUwwmulUbckvQfjR6TG8P24ckOj4F
+         GMnwQ2mW++MIqTg2jQyPnXyRkYEMVYa9eLR89CAEWcxbANRVUmErclisEzWv6EQ6PnwI
+         RhIP6vF/G1mTY+TzIL4kOnBml9qBiUQ5xBAE1/fnYHxI4gdeTRFFmYP+vkrtYIpBzqKO
+         SlhZCZ77cVqxBiI0b1MtSoTwudEumwvBiOZ/1Wqj/ctJC1ijy+2ad0EdSZpSVtA337os
+         vi8jib6vnADZlf7j72RaxqSi+3iKK4oTySw0VNRT3OvgEOpVJxaM1MaH+712X+ukqzS7
+         ETdQ==
+X-Gm-Message-State: AOJu0YxYLIGxs/IlaVaLGfLmDrRHfj5N/OtOJ09BsXba597WELD5tJME
+	5B/biBnHlvmLUMqbwE1XRQyDpVn8Yg8w2zvf3KgcU9ZwiPvwrB9bnrml
+X-Gm-Gg: Acq92OFu9b7i3pLwe3Dbh5NB2kTUU3oBJ5YHyjTteY1OpcNoXbdQbeH4FWjo0M4gLSW
+	5CYjCRZmUEjwLxNqotVMeVUx2Om/tArgD6obEA8WeMkHv/9hH4VuA17nnv0Jat5WdNz4SycRtL9
+	DxT1m7rDv7gYxqoS+kj8tzX0HxSGn34PTpNPWsnDmCOuReKmWYL2joZ/uuiB764tlVyRG94K9ik
+	kMPsFsyaJkhKL8msOsY+WFseYtqjlnDg67E5lF7ptP12ZXm9oKFwXKkVxv2L83mrKif0qbDZLj1
+	jy24i+q/tGjxHM8EGhcEP25kjI6RT0qUxuxzLJ4k2Ho/wPUNN5w0p1BniQh3KRcJiwprCM020Yq
+	FU9sGj5ejtubuedOvRjtcbQXwSslR/hQ9gGaE2Z2Q3mfdfAyYZXKh+U5g4OxZo21vFC0v5D0G7a
+	1etveMJF0OMZtdFQ==
+X-Received: by 2002:a17:907:9451:b0:bd8:ba46:db25 with SMTP id a640c23a62f3a-bd8ba46e86cmr135248666b.39.1779117823990;
+        Mon, 18 May 2026 08:23:43 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:48::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bd4f4bd2f67sm575138966b.7.2026.05.18.08.23.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 May 2026 08:23:43 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Subject: [PATCH bpf-next v2 0/3] tracing: Expose tracepoint BTF ids via
+ tracefs
+Date: Mon, 18 May 2026 08:23:14 -0700
+Message-Id: <20260518-generic_tracepoint-v2-0-b755a5cf67bb@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 03/19] unwind_user/sframe: Store .sframe section data
- in per-mm maple tree
-To: Steven Rostedt <rostedt@kernel.org>, Josh Poimboeuf
- <jpoimboe@kernel.org>,
-        Dylan Hatch <dylanbhatch@google.com>
-Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev,
-        Indu Bhagat <ibhagatgnu@gmail.com>, Heiko Carstens <hca@linux.ibm.com>
-References: <20260505121718.3572346-4-jremus@linux.ibm.com>
- <20260505185158.39F35C2BCB4@smtp.kernel.org>
-Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20260505185158.39F35C2BCB4@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=ffCdDUQF c=1 sm=1 tr=0 ts=6a0b2e99 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8
- a=VwQbUJbxAAAA:8 a=xPhrWWXr5758mneMkFAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: feB9fiDNIv659jX89xIsCz5pH1VuUxt_
-X-Proofpoint-GUID: XyV20r5v1sdjme-XpmxV7O50Hz03irhG
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE4MDE0OCBTYWx0ZWRfX0PXQfQNSGJJe
- Q3D3BSVuFTs7Aa6imwH1bqsndLHjyCboJf8zt4lRPf7ObTAVlIY3w14XdNyoPCoJrsKWDqrOQwj
- R706gp5WjvgS+Yn0KgyaivFBHnJXFGFc/a527i36R1zVWalLqS6N+WSLzJxqntzjICtr09+8UMn
- aWZEyCYEVSQZdvOWz4wAgCo7sKDO2CjQZuWtNXAVH5D0pDT2XG3aDHuUdgyUQ3o7zDw6hcd7ekK
- 9yVElH48e9k6tRnmXOr8JywrBy6toVOPqPbs675MPFdOmYvKFfWtixHIbkGuk8j/jp03YRAt8IZ
- OCxfPKcmLxqgk4ZzjlK8cK0KuipV9SsxoP8XjZTTWyqkxEURy10lMkeUCN5szf75UhByj/UaBDe
- LQamEv6luBBKBzZpW+LHq9ytfLr/cSPHOELNq0OgonSgHfjuzaB0XIoOoosp9DMh+NupyA/0sfD
- WrIgKWu6twg4SUUMXHQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-18_03,2026-05-18_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 spamscore=0 phishscore=0 suspectscore=0 adultscore=0
- clxscore=1015 impostorscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605180148
+X-B4-Tracking: v=1; b=H4sIAOIuC2oC/23NQQqDMBBA0auEWZuSpGqjq96jSBnjqLMwkSSIR
+ bx7wW67/vD+AYkiU4JWHBBp48TBQytMIcDN6CeSPEArwChTq0pZOZGnyO6dIzpaA/ssh9JarPC
+ BvbZQCFgjjbxf6Av6dZSe9gxdIWDmlEP8XLdNX/0H6+ofvGmpJGKtmxGbUt/Nc6GMNxcW6M7z/
+ AJ9VIBDvQAAAA==
+X-Change-ID: 20260508-generic_tracepoint-d488a5a7ab18
+To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+ daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
+ eddyz87@gmail.com, memxor@gmail.com, rostedt@goodmis.org
+Cc: Mykyta Yatsenko <yatsenko@meta.com>, linux-trace-kernel@vger.kernel.org
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779117822; l=4524;
+ i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
+ bh=tmS0yY9aJiTmj7PrQn+1aW5FlWIoZKFBBJCgg9x80n4=;
+ b=axlmYjl9j8LHTyrPJZPSkDaYM2mCV1eNkopuhCRv/0L22fSuBPqG5hQsb4iS2zGZfhki71Zio
+ odZYXsLG56BB1DR22Z+Q890xKm9UjLYcTBnGwMV9qm53mfS6p0LPcaa
+X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
+ pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
-On 5/5/2026 8:51 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 6 potential issue(s) to consider:
+BPF and other consumers that want to attach to or decode a generic
+tracepoint need three pieces of BTF information for it:
 
-> - [High] Unbounded memory leak of sframe_section allocations leading to Denial of Service (OOM)
+  - the BTF of the object that owns the tracepoint's types
+  - the FUNC_PROTO describing the tracepoint arguments (with names),
+    consumed by raw_tp / tp_btf BPF programs
+  - the STRUCT id of trace_event_raw_<call>, the ring-buffer record
+    consumed by classic BPF_PROG_TYPE_TRACEPOINT programs
 
-> --
-> 
-> commit 3b41045a6b38a262cb32acf9ed118e4d667448dd
-> Author: Josh Poimboeuf <jpoimboe@kernel.org>
-> 
-> unwind_user/sframe: Store .sframe section data in per-mm maple tree
-> 
-> Associate an .sframe section with its mm by adding it to a per-mm maple
-> tree which is indexed by the corresponding text address range. A single
-> .sframe section can be associated with multiple text ranges.
-> 
+Today none of this is easily discoverable from userspace. The kernel
+knows the ids - resolve_btfids fills them in at link time - but
+consumers have to search them by the naming convention
+("__bpf_trace_<name>", "trace_event_raw_<name>"), walking BTF for
+every tracepoint.
 
->> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
->> index c128c1eeaca20..fdb2a49085638 100644
->> --- a/kernel/unwind/sframe.c
->> +++ b/kernel/unwind/sframe.c
-> [ ... ]
->> @@ -81,6 +81,7 @@ static int sframe_read_header(struct sframe_section *sec)
->>  int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
->>  		       unsigned long text_start, unsigned long text_end)
->>  {
+This series stores those ids in trace_event_class and exposes them
+via events/<sys>/<event>/btf_ids, e.g.
 
-> [ ... ]
->>  		}
->>  	}
->>  
->>  	sec = kzalloc(sizeof(*sec), GFP_KERNEL);
+  # cat /sys/kernel/tracing/events/sched/sched_switch/btf_ids
+    btf_obj_id: 1
+    raw_btf_id: 28882
+    tp_btf_id: 106335
 
-Replace with the following to resolve below issue:
+  # bpftool btf dump id 1 root_id 28882 format raw
+  [28882] FUNC_PROTO '(anon)' ret_type_id=0 vlen=5
+        '__data' type_id=9
+        'preempt' type_id=60674
+        'prev' type_id=219
+        'next' type_id=219
+        'prev_state' type_id=108689
 
-	sec = kzalloc(sizeof(*sec), GFP_KERNEL_ACCOUNT);
+  # bpftool btf dump id 1 root_id 106335 format raw
+  [106335] STRUCT 'trace_event_raw_sched_switch' size=64 vlen=9
+        'ent' type_id=104654 bits_offset=0
+        'prev_comm' type_id=580 bits_offset=64
+        'prev_pid' type_id=92875 bits_offset=192
+        'prev_prio' type_id=79365 bits_offset=224
+        'prev_state' type_id=83958 bits_offset=256
+        'next_comm' type_id=580 bits_offset=320
+        'next_pid' type_id=92875 bits_offset=448
+        'next_prio' type_id=79365 bits_offset=480
+        '__data' type_id=407 bits_offset=512
 
-> 
-> This allocates the section with GFP_KERNEL instead of GFP_KERNEL_ACCOUNT,
-> which bypasses memory cgroup limits.
+For per-syscall events (all sharing the same dispatcher), raw_btf_id
+is 0 — raw_tp / tp_btf programs attach to raw_syscalls/sys_{enter,exit},
+not per-syscall events:
 
-Documentation/core-api/memory-allocation.rst states:
+  # cat /sys/kernel/tracing/events/syscalls/sys_enter_write/btf_ids
+    btf_obj_id: 1
+    raw_btf_id: 0
+    tp_btf_id: 106540
 
-* Untrusted allocations triggered from userspace should be a subject
-  of kmem accounting and must have ``__GFP_ACCOUNT`` bit set. There
-  is the handy ``GFP_KERNEL_ACCOUNT`` shortcut for ``GFP_KERNEL``
-  allocations that should be accounted.
+This unlocks few usecases for consumers:
 
-Additionally I verified that a user space program can register a forged
-.sframe section for every byte of a mmap'ed area to trigger the OOM
-killer.  Using cgroup memory and swap limits I can see a difference in
-behavior between GFP_KERNEL and GFP_KERNEL_ACCOUNT on my s390 test
-system:
+  - Resolving tp_btf attach targets and argument types directly,
+    instead of constructing "__bpf_trace_*" names and
+    re-discovering them in vmlinux BTF.
+  - Get a stable, machine-readable contract for tracepoint payloads,
+    with field names preserved.
 
-# cgcreate -g "memory:test_group" -t root:root
-# cgset -r memory.max=1G "test_group"
-# cgset -r memory.swap.max=3G "test_group"
+Patch 1 exports the two BTF helpers the tracing core needs.
+Patch 2 wires DECLARE_EVENT_CLASS to publish the ids, adds the tracefs
+        reader, and wires the syscall classes so per-syscall events
+        carry tp_btf_id (raw_btf_id is 0 there — see above).
+Patch 3 adds a selftest covering the sched_switch tracepoint.
 
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+---
+Changes in v2:
+- kernel/bpf/btf.c: dropped both EXPORT_SYMBOL_GPL()
+- kernel/trace/trace_events.c (event_btf_ids_read):
+  replaced guard(mutex)(&event_mutex) with explicit
+  mutex_lock/mutex_unlock. scnprintf() and simple_read_from_buffer()
+  (which calls copy_to_user()) now run outside the lock work.
+- tools/testing/selftests/bpf/prog_tests/tp_btf_ids.c:
+  - Added if (!env.has_testmod) { test__skip(); return; } at the top of
+    test_tp_btf_ids() so the test skips gracefully when bpf_testmod.ko
+    is absent.
+  - Wrapped ASSERT_EQ(btf_vlen(proto_t), 3, ...) with if (!...) goto out;
+    to prevent OOB read of params[2].
+  - Added if (!ASSERT_GE(btf_vlen(rec_t), 5, ...)) goto out; before reading
+    members[0..4].
+- Link to v1: https://patch.msgid.link/20260515-generic_tracepoint-v1-0-aa619fa94132@meta.com
 
-Kernel with unwind user sframe using GFP_KERNEL:
+---
+Mykyta Yatsenko (3):
+      bpf: Make btf_get_module_btf() and btf_relocate_id() non-static
+      tracing: Expose tracepoint BTF ids via tracefs
+      selftests/bpf: Add test for tracepoint btf_ids tracefs file
 
-# time cgexec -g "memory:test_group" ~/test/malicious-sframe/sframe_test 1000000
-...
-Killed                     cgexec -g "memory:test_group" ~/test/malicious-sframe/sframe_test 1000000
+ include/linux/btf.h                                |   2 +
+ include/linux/trace_events.h                       |   9 ++
+ include/trace/trace_events.h                       |  24 ++++
+ kernel/bpf/btf.c                                   |   4 +-
+ kernel/trace/trace_events.c                        |  80 ++++++++++++-
+ kernel/trace/trace_syscalls.c                      |  17 +++
+ .../testing/selftests/bpf/prog_tests/tp_btf_ids.c  | 132 +++++++++++++++++++++
+ 7 files changed, 265 insertions(+), 3 deletions(-)
+---
+base-commit: 8668cd470c38011c44a42f6c7b188f4149f23a7a
+change-id: 20260508-generic_tracepoint-d488a5a7ab18
 
-real    0m21.106s
-user    0m0.700s
-sys     0m20.305s
-
-
-Kernel with unwind user sframe using GFP_KERNEL_ACCOUNT:
-
-# time cgexec -g "memory:test_group" ~/test/malicious-sframe/sframe_test 1000000
-...
-Killed                     cgexec -g "memory:test_group" ~/test/malicious-sframe/sframe_test 1000000
-
-real    0m3.566s
-user    0m0.295s
-sys     0m3.248s
-
-
-Running the following in parallel to monitor the cgroup memory usage:
-# watch -n1 cat /sys/fs/cgroup/test_group/memory.stat
-shows that in case of GFP_KERNEL the value for "kernel" bumps to a high
-value and stays there whereas in case of GFP_KERNEL_ACCOUNT it continues
-to increase.
-
-> 
-> Furthermore, is there a mechanism to clean up these allocated sections when
-> the corresponding VMA is torn down (e.g., via munmap)? Without cleanup hooks
-> in the VMA teardown paths, it looks like an application could repeatedly mmap
-> an executable region, register it here, and munmap it, leaking kernel memory
-> and maple tree nodes indefinitely.
-
-IIUC this is already being taken care of the change in __mmdrop() to
-call sframe_free_mm(mm), which is part of this patch.
-
-Regards,
-Jens
--- 
-Jens Remus
-Linux on Z Development (D3303)
-jremus@de.ibm.com / jremus@linux.ibm.com
-
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
+Best regards,
+--  
+Mykyta Yatsenko <yatsenko@meta.com>
 
