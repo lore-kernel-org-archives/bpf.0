@@ -1,270 +1,142 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 337FE39A066
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 21:50:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779141004; cv=pass; b=twCSM8/DErSfLwC7ZLLzpd77uRzDXaXiectOmNzQ7p5EydMc2n/4LhksOmYHbTgJ6/m2pY5XTAoY/OmQZ1qFUHCZ4e4r7hCAwQfAA/8syteSGI+jj4jpo5GA+CcMexd0IzSyriGyYTYpuS6ALF3BXg60agS1cetPqTtw226SPH4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779141004; c=relaxed/simple;
-	bh=VkJcVq88PZ051GeKnLPd8Ml2ZKh5BjaQJaJRp7q6aDs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U342dHptHhrTbFMCNaVLr9qce5UCjjbvdt7bDduqeVahnB+VhLd4R7dgAIwqrQyx+Wdo70an/ppeLQsq6lqmaT+bad+nQMxV50TGO6wf6xPkt2GWAeg56xQOSjXV51caZIP6Nx+bH7YuQB/ls1dPNhn5lZGq2QsXN6VVnoP3vHQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pR7a8EmB; arc=pass smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9A0C39B970
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 21:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779141352; cv=none; b=KTAlGO7Osm1Gs1SBKSHmdYCnXII4wgsd1h4h9/yDN7fXk3F52wnn+dDy+T8A5HgGWqpbw1h+TdyfatAilKMHcUtn5YtqN61TNh7l72UOtXu+El431mWhm+edXiu0FUXIJWzfvXCitTAfVosN9S40LxZ72MpqNdlftuTz+c7xF5c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779141352; c=relaxed/simple;
+	bh=WhaVFwVRm1Wf4thmzuA0e0qjOQLT9x+04R1dduxYWzY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LPIUVyhvg4b/nFmMwm+ybax3d0ciGsRDD94O9xYhnTsm6ihuj4dYg4Q3Nsf8inAHPWoGhiPEikNpGKshpRs9x2v/SbqHMuhjkjRQfxxO53XFXkMJbN04OULEUuIJ2n3s+xTfvTeD7JospRXrnwoMU8L9jPSCxO40UEDlNyZCWfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IvoDbo4V; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pR7a8EmB"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ba180a022dso1075ad.1
-        for <bpf@vger.kernel.org>; Mon, 18 May 2026 14:50:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779141002; cv=none;
-        d=google.com; s=arc-20240605;
-        b=L79PCATGQl71tYKuE21SRbOTzU5tzt79DmxqaQflyqVN5gf8bMhb389Wpud3zl2IQu
-         i3KuSDAPNWBdHfSjYoPm4DWsNxvXQ46WvN91KQP7Nz6yT6aLnw7EVIbR0BxNjzgCcw7m
-         7Yuw8zQXDQSToVwejD+K8BwK8hP0u56K5BrBUtdL+NhGlo3Eu7J6B/cA+qU7q/DsYw1W
-         Kfa9uXMNt9hL6FcRqS4kGvuDCIJm7gqcaPj3DB2fxNfi5Z0vnmLl1E0fFPoVyn1QvTvc
-         h33BvR2ayIrhShy/0GgG3b1JAcHh2zQ1spmteivRIm81l/TqgNgj6+o5kSQ8thXdQ0gc
-         UcUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6JbypSeXnACgLDxcb5qtpEO/b70xrtWk27xe3ssqhmA=;
-        fh=ADmW/dUusXXmwe+OLIjmAWphiYAYV3Dmb2fIKKHNOac=;
-        b=XZMB/X1aCTwJe/8EcaJSCEsAA286QGf3PCIXqtSdwWF7N8x008zHx35ibU91NkxFYb
-         gYsxebC+BTP2dOjK0UD/bdzKSspMxZgS22ppl629+s4p/JJLWLoU2CTdHoh9G6UVrFpo
-         b1kMKPhCSUss0dMc1UEa/WmsqxZZESazsGwTq1unJ1J7tu+RQRzcIkKNFk1484qxQc0q
-         JJkF/xdgWL8A1Io3C7K1AJkN1IE18danbBvprOipme98E0/PhRHRJ+XyolOtrX7VT2dy
-         axMlKFPxrEjRiAYbz/RRuwGoSqHN5vf+nbUpOxHD9odsmLCpwWdVqvog/OG5+v7JkfiQ
-         26hg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IvoDbo4V"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2b46da8c48eso1575ad.1
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 14:55:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779141002; x=1779745802; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6JbypSeXnACgLDxcb5qtpEO/b70xrtWk27xe3ssqhmA=;
-        b=pR7a8EmBPVhtgoI+iG1VPzFORXXBx15tpSmrwe8xs+DN6OwRvuST6qoTu/bminXVa0
-         MRDXOUz8E5xc9sf3YPgPgTwNuGEIEKHitQ9ysyFhjfqnrPhBl78GpGwEfbS6wmbMNplv
-         V06l+xrqnc3BHcmhkaXmEL/IUuKLrAuiBEQ3THI0IO0F6VHOXyzSlOUHrje95ZqjYAUI
-         rFx+F0sc9GGw3Fkv0CovlxhYyIsCEIayzRIEzoKdp24HXkdaIHBKm0OTN/uo6BvE7r8y
-         w2e0heo0RJLFkXkFjNCvVMt7Fcjc2G0J+gPs6rvi/VohEMuKipuldrZ5eBbZEx6Ftzmi
-         XnDg==
+        d=google.com; s=20251104; t=1779141350; x=1779746150; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=eATlafWR2CpUln9HSfV3CyzBd2Vyaqeh6UVZyYqlodE=;
+        b=IvoDbo4V1nj4Q9OWvBMcUPpA6eDFfBAFbu4ry1ujeKWH4fYBAFNjP7BApepEoXKgFW
+         echIH2GbEhb+kGhHlHfftLXlBnHDih1oHm9UtaSSK5CAFRUvXh1PCqOj+XI9wKqJnmv9
+         BdHZsxEJDc6k4l629t6bytiQfWInZt6CAKX455PJMRgqGvsL+3fHb7ubaoj1OjP5TMpJ
+         apWTAqJbeutKX9DtvRx+hRvKlId5JUFry4JYzoUpiHudyEvfAoPlfnA1GOb/KpKOehgq
+         VY2sjO/zadidGT8zNRrbzepfosggp1gNZrno+6RpVU2wOW8V9Y0N7qAHPHbOdQPTZ4W2
+         afYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779141002; x=1779745802;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6JbypSeXnACgLDxcb5qtpEO/b70xrtWk27xe3ssqhmA=;
-        b=lldorkHLB0RvpdnsfjyOCrJY3MSIiwP8fFqAX3mmmGEsfbiew4AdFzYnkLdHnVVUSW
-         BTMIMy8qNPC5izT3VEujzX+16VopxLUFdi3Zl53rDIdAvGtelXNguwz/boAG5XeHl8fC
-         M90tBtDj/helkj5Hi9sRcKUuVHqmbBIDx3Kmu3jCyD9T06aOI320/g3lnGRvNx/81u5I
-         LPThitwK0ENBFvrFHR2IVNaRJ/CpbE5O0wMm3HWg0f/G3gMOT20fmPI9PEc9Xc+vJBVU
-         1AKdlOZG9jZgRLZfHE9Nz9ffLW4yQBzXB4jWw+N6AFyCRe/GOhJdhXGrykZ7DzgGMdob
-         tqwQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8vkZ8klbC3CBdd1JY0A6Jgcj0sCHIPtBK3tY4ZwOpil8n8sxMHUpTgDV06LkjdU9vuLs0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0HgQDopDNONAsYYbyNzUmXznkdGlkyS8izJ1PIAup8gKK6zp7
-	DWPGtB/YueHarNNbIZNutCPeyM2WOJKAUDosb9fCtrP5TsbJgU9R29lCHNzGnl9to8/LDHLz/U4
-	HICK3aWgDqbXFkDfqQbzfi0r5IhgwFGD+yS0iGUaF
-X-Gm-Gg: Acq92OHg7ra+Wlt9dmvHQnzdo/XEUGCDAvoUXl7ms5fuMvXBLtQaR7p9bBpT1qq6Q7D
-	ZHVpNhZ/fWYNi+ur0H72UG5vYl6o25e4EmFb9r49LGHTk42qALEPShRcMJgX9AQWm+i/L9GkqJ6
-	MRS756Udg/8dHlVNsrBJUNlO6XCBGRLWYmOqw6xSQ7zX1fe5kGKdMjYlr/aeJCmMzDPDuW+eXE8
-	mqTrKnLBqMV2Qyc/OlvGUKn/b3d1dG2zLjLInaLvoNdgHP2sMwaYqqtwAmLMnHhs7TeDUU6tfC8
-	UYCvzswgjvtcMQX9O5d5z1+beHvIlRpo0Zy3p8LrbOQqMYpEQBy877xLk7uENCJyyeoV5dODpXe
-	eXQ9Imm7uY8TH8sgO
-X-Received: by 2002:a17:903:2b0e:b0:2bd:7bec:f0e6 with SMTP id
- d9443c01a7336-2bdb3039f44mr4031835ad.1.1779141001688; Mon, 18 May 2026
- 14:50:01 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779141350; x=1779746150;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eATlafWR2CpUln9HSfV3CyzBd2Vyaqeh6UVZyYqlodE=;
+        b=itzJj3c/6i69WZG8MsAnC4r48ZpHJZQ1LcwsGu+TVPdPOyIIT0dbF0PS5J0UrsQgfE
+         b7wwwCEfarjcOPvg4K/1JzADxpef08QMGC/3qA0axF73WU/SOWp5Ur4HxL/8FcRcZOeG
+         XGrFHYNL2TSnkSF8adJzXeT3RxLBVgwGimGIFORXWL6n5mratjknn3iboc0vrgjM8awn
+         ge7MfU9y5Y07XoIpxJbtl6KqP6uIlsiOYBClUjKfp7vr4ksGVKZ2WJLGN56XmQycKR1m
+         Gg2r3ZsHGPYG8SPMM3vjE4WSnH8dYbUVEmH2VcdEyRm4p8f7iSmPQ0kypgygQIQQqKiq
+         xAuA==
+X-Forwarded-Encrypted: i=1; AFNElJ+8Qbn+iWHc4v6SLLqWX2wS1xsRZOXoUCKcFMHVh/+xM/x+RKZjIUnZMLlL0jyj/l0+zqA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQXdGzFLa6FMueQaRWXs3CyCqc0Iusrjw04bVQxPYSRzgEexKA
+	0qmTjIPKXth2+dawUnHRArakKvVyxIUC3i9AKS+d68HDYWW/0f6f91Po852EGz93Aw==
+X-Gm-Gg: Acq92OFg7qOwH5XKQji+7FSQ8Gfnz1ePFKAoulaK1Rv/jHVpkYJSs9u9gwI8Z52cKDx
+	gk7+epVa2l1MaSIDHrLRjOSdhnrwdK9V0TiihS9XRQPEpOvBBYqWF4xJW8K1ynQZWS+138+pi5X
+	jWwZpl1fgx6yKnL8SXEh3bCdMHgDbtwRFTNpH6msQ2LwF1LTTKNeb9iBccZQMyBQJJwPH5S6JNE
+	4QpzVVRw6rR8qyb4NHVyC1nByOV6aUapDfhUqqnPaN5Bt49A+AheXKqq/WgfSxjOuGaqKwuzmOz
+	OUbbe9eNXglPzmKa2FXx7NdSyh+YbEjK1nVd6u0xmbr8QTYI8JFCiQDrhDbmP0bq8KwO+RHHl0e
+	K9pnn5knmRGetCNaCCEA2ccT0ak8Bq99iI07ASlQaDzGjNhmeLrbfTCTRQ6lq8xw7BRGeiEPT8r
+	BLRATaKTwD1T3Q5EajphdnCM0tdMDO3rkcfDY80xh529w0xEzv8fqlKfLgDukpVus3+j/Z1Z/N6
+	dKtr5qGpa0foXNo
+X-Received: by 2002:a17:902:d512:b0:2bc:dc0b:ab29 with SMTP id d9443c01a7336-2bdb0109472mr3880435ad.0.1779141349445;
+        Mon, 18 May 2026 14:55:49 -0700 (PDT)
+Received: from google.com (171.46.125.34.bc.googleusercontent.com. [34.125.46.171])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5cfe498asm164380125ad.39.2026.05.18.14.55.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 May 2026 14:55:48 -0700 (PDT)
+Date: Mon, 18 May 2026 21:55:43 +0000
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+	Xiu Jianfeng <xiujianfeng@huawei.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+	Fabian =?iso-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
+	Arnout Engelen <arnout@bzzt.net>,
+	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
+	Christian Heusel <christian@heusel.eu>,
+	=?iso-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org,
+	debian-kernel@lists.debian.org
+Subject: Re: [PATCH v5 00/14] module: Introduce hash-based integrity checking
+Message-ID: <20260518215543.GA1878854@google.com>
+References: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260518194654.735580-1-dipayanroy@linux.microsoft.com> <20260518194654.735580-2-dipayanroy@linux.microsoft.com>
-In-Reply-To: <20260518194654.735580-2-dipayanroy@linux.microsoft.com>
-From: Harshitha Ramamurthy <hramamurthy@google.com>
-Date: Mon, 18 May 2026 14:49:49 -0700
-X-Gm-Features: AVHnY4K_8GpyBqIYGQp4SgXCG1-y0gChQxakRF0W6U_iz8zjhZO9jcW9YHuJGe4
-Message-ID: <CAEAWyHcFE5kUPthnRHQJS5s=YBRhdaOP9mYNsxkMt-Pm1U_1+A@mail.gmail.com>
-Subject: Re: [PATCH net 1/2] net: mana: Add NULL guards in teardown path to
- prevent panic on attach failure
-To: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org, 
-	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, leon@kernel.org, 
-	longli@microsoft.com, kotaranov@microsoft.com, horms@kernel.org, 
-	shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com, 
-	ernis@linux.microsoft.com, shirazsaleem@microsoft.com, 
-	linux-hyperv@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	stephen@networkplumber.org, jacob.e.keller@intel.com, 
-	dipayanroy@microsoft.com, leitao@debian.org, kees@kernel.org, 
-	john.fastabend@gmail.com, hawk@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me, yury.norov@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
 
-On Mon, May 18, 2026 at 12:52=E2=80=AFPM Dipayaan Roy
-<dipayanroy@linux.microsoft.com> wrote:
->
-> When queue allocation fails partway through, the error cleanup frees
-> and NULLs apc->tx_qp and apc->rxqs. Multiple teardown paths such as
-> mana_remove(), mana_change_mtu() recovery, and internal error handling
-> in mana_alloc_queues() can subsequently call into functions that
-> dereference these pointers without NULL checks:
->
-> - mana_chn_setxdp() dereferences apc->rxqs[0], causing a NULL pointer
->   dereference panic (CR2: 0000000000000000 at mana_chn_setxdp+0x26).
-> - mana_destroy_vport() iterates apc->rxqs without a NULL check.
-> - mana_fence_rqs() iterates apc->rxqs without a NULL check.
-> - mana_dealloc_queues() iterates apc->tx_qp without a NULL check.
->
-> Add NULL guards for apc->rxqs in mana_fence_rqs(),
-> mana_destroy_vport(), and before the mana_chn_setxdp() call. Add a
-> NULL guard for apc->tx_qp in mana_dealloc_queues() to skip TX queue
-> draining when TX queues were never allocated or already freed.
->
-> Fixes: ca9c54d2d6a5 ("net: mana: Add a driver for Microsoft Azure Network=
- Adapter (MANA)")
-> Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
-> Signed-off-by: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-> ---
->  drivers/net/ethernet/microsoft/mana/mana_en.c | 70 +++++++++++--------
->  1 file changed, 41 insertions(+), 29 deletions(-)
->
-> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/=
-ethernet/microsoft/mana/mana_en.c
-> index 9afc786b297a..0582803907a8 100644
-> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-> @@ -1727,6 +1727,9 @@ static void mana_fence_rqs(struct mana_port_context=
- *apc)
->         struct mana_rxq *rxq;
->         int err;
->
-> +       if (!apc->rxqs)
-> +               return;
-> +
->         for (rxq_idx =3D 0; rxq_idx < apc->num_queues; rxq_idx++) {
->                 rxq =3D apc->rxqs[rxq_idx];
->                 err =3D mana_fence_rq(apc, rxq);
-> @@ -2858,13 +2861,16 @@ static void mana_destroy_vport(struct mana_port_c=
-ontext *apc)
->         struct mana_rxq *rxq;
->         u32 rxq_idx;
->
-> -       for (rxq_idx =3D 0; rxq_idx < apc->num_queues; rxq_idx++) {
-> -               rxq =3D apc->rxqs[rxq_idx];
-> -               if (!rxq)
-> -                       continue;
-> +       if (apc->rxqs) {
->
-> -               mana_destroy_rxq(apc, rxq, true);
-> -               apc->rxqs[rxq_idx] =3D NULL;
-> +               for (rxq_idx =3D 0; rxq_idx < apc->num_queues; rxq_idx++)=
- {
-> +                       rxq =3D apc->rxqs[rxq_idx];
-> +                       if (!rxq)
-> +                               continue;
-> +
-> +                       mana_destroy_rxq(apc, rxq, true);
-> +                       apc->rxqs[rxq_idx] =3D NULL;
-> +               }
->         }
->
->         mana_destroy_txq(apc);
-> @@ -3269,7 +3275,8 @@ static int mana_dealloc_queues(struct net_device *n=
-dev)
->         if (apc->port_is_up)
->                 return -EINVAL;
->
-> -       mana_chn_setxdp(apc, NULL);
-> +       if (apc->rxqs)
-> +               mana_chn_setxdp(apc, NULL);
+Hi Thomas,
 
-Is this check required? mana_dealloc_queues() is only called by
-mana_detach(). And mana_detach() calls `mana_dealloc_queues()` only if
-the port state was previously up. apc->port_is_up seems to be set to
-true only on successful queue allocation. Can apc->rxqs be NULL here?
+On Tue, May 05, 2026 at 11:05:04AM +0200, Thomas Weißschuh wrote:
+> The current signature-based module integrity checking has some drawbacks
+> in combination with reproducible builds. Either the module signing key
+> is generated at build time, which makes the build unreproducible, or a
+> static signing key is used, which precludes rebuilds by third parties
+> and makes the whole build and packaging process much more complicated.
+> 
+> The goal is to reach bit-for-bit reproducibility. Excluding certain
+> parts of the build output from the reproducibility analysis would be
+> error-prone and force each downstream consumer to introduce new tooling.
+> 
+> Introduce a new mechanism to ensure only well-known modules are loaded
+> by embedding a merkle tree root of all modules built as part of the full
+> kernel build into vmlinux.
 
->
->         if (gd->gdma_context->is_pf && !apc->ac->bm_hostmode)
->                 mana_pf_deregister_filter(apc);
-> @@ -3287,33 +3294,38 @@ static int mana_dealloc_queues(struct net_device =
-*ndev)
->          * number of queues.
->          */
->
-> -       for (i =3D 0; i < apc->num_queues; i++) {
-> -               txq =3D &apc->tx_qp[i].txq;
-> -               tsleep =3D 1000;
-> -               while (atomic_read(&txq->pending_sends) > 0 &&
-> -                      time_before(jiffies, timeout)) {
-> -                       usleep_range(tsleep, tsleep + 1000);
-> -                       tsleep <<=3D 1;
-> -               }
-> -               if (atomic_read(&txq->pending_sends)) {
-> -                       err =3D pcie_flr(to_pci_dev(gd->gdma_context->dev=
-));
-> -                       if (err) {
-> -                               netdev_err(ndev, "flr failed %d with %d p=
-kts pending in txq %u\n",
-> -                                          err, atomic_read(&txq->pending=
-_sends),
-> -                                          txq->gdma_txq_id);
-> +       if (apc->tx_qp) {
+I noticed Sashiko had a few concerns about the build changes. Would you
+mind taking a look to see if they're valid?
 
-And same as above, is it possible for apc->tx_qp to be NULL here?
+https://sashiko.dev/#/patchset/20260505-module-hashes-v5-0-e174a5a49fce%40weissschuh.net
 
-> +               for (i =3D 0; i < apc->num_queues; i++) {
-> +                       txq =3D &apc->tx_qp[i].txq;
-> +                       tsleep =3D 1000;
-> +                       while (atomic_read(&txq->pending_sends) > 0 &&
-> +                              time_before(jiffies, timeout)) {
-> +                               usleep_range(tsleep, tsleep + 1000);
-> +                               tsleep <<=3D 1;
-> +                       }
-> +                       if (atomic_read(&txq->pending_sends)) {
-> +                               err =3D
-> +                                   pcie_flr(to_pci_dev(gd->gdma_context-=
->dev));
-> +                               if (err) {
-> +                                       netdev_err(ndev, "flr failed %d w=
-ith %d pkts pending in txq %u\n",
-> +                                                  err,
-> +                                           atomic_read(&txq->pending_sen=
-ds),
-> +                                           txq->gdma_txq_id);
-> +                               }
-> +                               break;
->                         }
-> -                       break;
->                 }
-> -       }
->
-> -       for (i =3D 0; i < apc->num_queues; i++) {
-> -               txq =3D &apc->tx_qp[i].txq;
-> -               while ((skb =3D skb_dequeue(&txq->pending_skbs))) {
-> -                       mana_unmap_skb(skb, apc);
-> -                       dev_kfree_skb_any(skb);
-> +               for (i =3D 0; i < apc->num_queues; i++) {
-> +                       txq =3D &apc->tx_qp[i].txq;
-> +                       while ((skb =3D skb_dequeue(&txq->pending_skbs)))=
- {
-> +                               mana_unmap_skb(skb, apc);
-> +                               dev_kfree_skb_any(skb);
-> +                       }
-> +                       atomic_set(&txq->pending_sends, 0);
->                 }
-> -               atomic_set(&txq->pending_sends, 0);
->         }
-> +
->         /* We're 100% sure the queues can no longer be woken up, because
->          * we're sure now mana_poll_tx_cq() can't be running.
->          */
-> --
-> 2.43.0
->
->
+Sami
