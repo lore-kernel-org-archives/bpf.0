@@ -1,118 +1,157 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1023245107A;
-	Mon, 18 May 2026 13:01:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E00AF15B998;
+	Mon, 18 May 2026 13:07:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779109291; cv=none; b=W+0d6HhsFaOSAdA00ySI1BUsWKNlZp9eNuTyH+o9ycqtseiqDfXpWHOXw1czkWY4DgYfyCqZKjvBxtqVi7ODhIkpAQ7OpAVKLESGKtVUgWPNb1G1TLmRpkDFROmZD3L7LQHXe8lAvzLv+iFeu0p13GmSpWRX5ufMrfPj6F18BNE=
+	t=1779109674; cv=none; b=jDOFyLtsvJaN66fObvb7FE6J/AR1NGzjMTvYC1Y9I7aJnK4vihNXSxOSVdM6pgCFDbra0qqYyqFjJsPAlqNmt0h79ueQ43bDbpSb88N3LUPJ1VU1Melehmr2Mb/91sfeIm6uQILEe9XsvuGAl+Lz3Er0ru5CzKzykvXhv3x+tJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779109291; c=relaxed/simple;
-	bh=hojHRr+PheKoQ7m5OKEUeo0v+iLPsIfkBZlaT1Myalg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rQwFOZUhGGXkaDVwEdlNd97JopeBadvFFeNBtK7UosozmUWAfrQmxA2SaX290/06JIOiM2N04oLbgUpHOl9IB+VRF55F7kHwAh3jmMqO/NH4Gw2TtqIx0KAp06vxVVnMg9pN8YjccY5Ss0WcXVhKuy0HkNsAUR1COfS3ggRMAAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iCkNx4CO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779109674; c=relaxed/simple;
+	bh=fmZi/ojNKf5WLkhdT6cGy1Mrh/r5vxk5BkoZKyQyqbQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=XoLMiYjMQS2KjeP94FNEV0lUfpBLC3OWaOlzcYNmj/2JM58pX6NwwVowinijHgdU/YzGq9MOwhPDEZaR0Rc0n0+lM4N4y9gi1N9uUpn9xzVAczSj5zCAEynL5B4DBfK8RyzNm0hxeYsipjYV9xjf03btZBK7+raGi62oqsJeomI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eBk7CgWX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iCkNx4CO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36914C2BCB7;
-	Mon, 18 May 2026 13:01:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eBk7CgWX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23F3CC2BCB7;
+	Mon, 18 May 2026 13:07:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779109290;
-	bh=hojHRr+PheKoQ7m5OKEUeo0v+iLPsIfkBZlaT1Myalg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iCkNx4COB7SMaKeftGoydd9hWGfaLWmMcABqSc/aDRmNTLoszje2E78szvbBWyGOF
-	 fY0oHcTNfwEHadVc2//53yGKZ+4JLrOVIEqxyHhbFYyolq/T+Wcnm8Z1TBz3OUEO0f
-	 4JwIS+dtdmoOcxLge3kMaDgrGq3Y1IwNS4nAG+6GMZr6gvcfzmVqNPFhYjnrLJgl5B
-	 eikuxuVBGsHT7MECuGfR1ri0vU8DY6RS6/1WQ3eGaQobkRjyA+ijYvSnTn01IOQ2eq
-	 CoV1OInrdeR8/8erKc8ose8yipMm+grip2W5tohSMzhwkzx7qsTgvkYfqynMGZ7z8l
-	 W3hEgd3Oz2wgg==
-Message-ID: <f9606d4b-7ff7-479f-8e73-2e8cc77095fa@kernel.org>
-Date: Mon, 18 May 2026 15:01:22 +0200
+	s=k20201202; t=1779109673;
+	bh=fmZi/ojNKf5WLkhdT6cGy1Mrh/r5vxk5BkoZKyQyqbQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=eBk7CgWXgKzzaoygJ+a+8xkv/ofnP0kU5S3guCRhtvxeZigVNGcgJCB/5nEM3OPTf
+	 S1KPnmtAPIkyvQ7ojnq220s2c5VtfwvisqirRj74VgweO46FN5ElRxKLUoih5WWI2x
+	 GJCM3tmXijIUs6GvVLCSUyv2UJ5RmiOX1xqjCG3xpqxvaW4k5YsZFPwF4CDMJ+IXeL
+	 bAAeb1kmqrfl45mxvk5bHOAa9vD/aHB/F4SRTsUNhNihZHH/E9gpb1LbpzU5XQkh8c
+	 v/pJGOB4LPbqbtyjk6FzEhG2KCoqoI9LrznyTRVHpsyw+GMKV0hansWdHe4DRZM1g4
+	 lKMYykSNFWdGQ==
+Content-Type: multipart/mixed; boundary="===============5176383016918948956=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 5/6] bpf: enable bpf timestamping rx in TCP layer
-To: Jason Xing <kerneljasonxing@gmail.com>, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- willemb@google.com, kuniyu@google.com, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
- memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
- Simon Sundberg <Simon.Sundberg@kau.se>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hy?=
- =?UTF-8?Q?gensen?= <toke@toke.dk>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
- Jason Xing <kernelxing@tencent.com>
-References: <20260518082344.96647-1-kerneljasonxing@gmail.com>
- <20260518082344.96647-6-kerneljasonxing@gmail.com>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <20260518082344.96647-6-kerneljasonxing@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <92695da279ff66c47eeab8c93562f171982732ad4f420f0057c773efb6c1db8f@mail.kernel.org>
+In-Reply-To: <20260518122842.218522-7-mahe.tardy@gmail.com>
+References: <20260518122842.218522-7-mahe.tardy@gmail.com>
+Subject: Re: [PATCH bpf-next v6 6/6] selftests/bpf: add bpf_icmp_send recursion test
+From: bot+bpf-ci@kernel.org
+To: mahe.tardy@gmail.com,bpf@vger.kernel.org
+Cc: martin.lau@linux.dev,daniel@iogearbox.net,john.fastabend@gmail.com,ast@kernel.org,andrii@kernel.org,yonghong.song@linux.dev,jordan@jrife.io,netdev@vger.kernel.org,netfilter-devel@vger.kernel.org,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,mahe.tardy@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 18 May 2026 13:07:53 +0000 (UTC)
+
+--===============5176383016918948956==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+> index d0ac0502f6df..a9e9806877cf 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
 
+[ ... ]
 
-On 18/05/2026 10.23, Jason Xing wrote:
-> From: Jason Xing <kernelxing@tencent.com>
-> 
-> Add two if statements to accurately isolate bpf timestamping and so
-> timestamping. They can work respectively.
-> 
-> As to so_timestamping, only add a loose condition via report flags
-> to avoid duplicate strict checks that is done in tcp_recv_timestamp()
-> and performance impact. If the loose condition is hit,
-> tcp_recv_timestamp() is able to handle the exact case and doesn't
-> hamper the existing timestamping feature.
-> 
-> Make it work in TCP protocol.
-> 
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> ---
->   net/ipv4/tcp.c | 14 ++++++++++++--
->   1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index 21ece4c71612..64c69bb3578a 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ -2949,8 +2949,18 @@ int tcp_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int flags)
->   	release_sock(sk);
->   
->   	if ((cmsg_flags | msg->msg_get_inq) && ret >= 0) {
-> -		if (cmsg_flags & TCP_CMSG_TS)
-> -			tcp_recv_timestamp(msg, sk, &tss);
-> +		if (cmsg_flags & TCP_CMSG_TS) {
-> +			u32 tsflags = READ_ONCE(sk->sk_tsflags);
+> diff --git a/tools/testing/selftests/bpf/progs/icmp_send.c b/tools/testing/selftests/bpf/progs/icmp_send.c
+> index 6e1ba539eeb0..7830334b747a 100644
+> --- a/tools/testing/selftests/bpf/progs/icmp_send.c
+> +++ b/tools/testing/selftests/bpf/progs/icmp_send.c
+> @@ -13,6 +13,9 @@ int unreach_type = 0;
+>  int unreach_code = 0;
+>  int kfunc_ret = -1;
+>
+> +unsigned int rec_count = 0;
+> +int rec_kfunc_rets[] = { -1, -1 };
 > +
-> +			if (cgroup_bpf_enabled(CGROUP_SOCK_OPS) &&
-> +			    SK_BPF_CB_FLAG_TEST(sk, SK_BPF_CB_RX_TIMESTAMPING))
-> +				bpf_skops_rx_timestamping(sk, &tss,
-> +							  BPF_SOCK_OPS_TSTAMP_RCV_CB);
+>  SEC("cgroup_skb/egress")
+>  int egress(struct __sk_buff *skb)
+>  {
+> @@ -65,4 +68,32 @@ int egress(struct __sk_buff *skb)
+>  	return SK_DROP;
+>  }
+>
+> +SEC("cgroup_skb/egress")
+> +int recursion(struct __sk_buff *skb)
+> +{
+> +	void *data = (void *)(long)skb->data;
+> +	void *data_end = (void *)(long)skb->data_end;
+> +	struct iphdr *iph;
+> +	int ret;
+> +
+> +	iph = data;
+> +	if ((void *)(iph + 1) > data_end || iph->version != 4)
+> +		return SK_PASS;
+> +
+> +	/* This call will provoke a recursion: the ICMP packet generated by the
+> +	 * kfunc will re-trigger this program since we are in the root cgroup in
+> +	 * which the kernel ICMP socket belongs. However when re-entering the
+> +	 * kfunc, it should return EBUSY.
+> +	 */
+> +	ret = bpf_icmp_send(skb, unreach_type, unreach_code);
+> +	rec_kfunc_rets[rec_count & 1] = ret;
 
-Does this mean I can enable timestamp reading per cgroup?
+Will this program affect background traffic when running on the system?
 
-In Simon's netstacklat[1] tool we are forced process all RX timestamp
-(hooking fentry/tcp_recv_timestamp), and then we have a BPF filter[2] on
-the cgroup IDs that we are interested in (which is a significant
-overhead, as this is deployed at Cloudflare production scale).
+The recursion program is attached to the root cgroup and intercepts all
+IPv4 traffic. While v5 changed SK_DROP to SK_PASS to avoid blocking
+traffic, the program still calls bpf_icmp_send() on every IPv4 packet
+without filtering for test-specific traffic.
+
+This means background IPv4 traffic (SSH, DNS, other tests) will trigger
+ICMP Destination Unreachable messages, potentially causing network
+disruption and test races on rec_kfunc_rets and rec_count.
+
+The egress program demonstrates proper filtering by checking for TCP,
+SERVER_IP, and server_port:
+
+SEC("cgroup_skb/egress")
+int egress(struct __sk_buff *skb)
+{
+	void *data = (void *)(long)skb->data;
+	void *data_end = (void *)(long)skb->data_end;
+	struct iphdr *iph;
+	struct ipv6hdr *ip6h;
+	struct tcphdr *tcph;
+
+	iph = data;
+	if ((void *)(iph + 1) > data_end || iph->version != 4)
+		return SK_PASS;
+
+	if (iph->protocol != IPPROTO_TCP)
+		return SK_PASS;
+
+	if (bpf_ntohs(iph->daddr) != SERVER_IP)
+		return SK_PASS;
+
+	tcph = (struct tcphdr *)((void *)iph + sizeof(*iph));
+	if ((void *)(tcph + 1) > data_end)
+		return SK_PASS;
+
+	if (tcph->dest != server_port)
+		return SK_PASS;
+	...
+}
+
+Could the recursion program use similar filtering to explicitly check for
+the test's traffic?
+
+> +	__sync_fetch_and_add(&rec_count, 1);
+> +
+> +	/* Let the first ICMP error message pass */
+> +	if (iph->protocol == IPPROTO_ICMP)
+> +		return SK_PASS;
+> +
+> +	return SK_DROP;
+> +}
+> +
+>  char LICENSE[] SEC("license") = "Dual BSD/GPL";
 
 
-[1] https://github.com/xdp-project/bpf-examples/tree/main/netstacklat
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-[2] 
-https://github.com/xdp-project/bpf-examples/blob/main/netstacklat/netstacklat.bpf.c#L484-L488
-
-
-> +			if (sock_flag(sk, SOCK_RCVTSTAMP) ||
-> +			    tsflags & SOF_TIMESTAMPING_SOFTWARE ||
-> +			    tsflags & SOF_TIMESTAMPING_RAW_HARDWARE)
-> +				tcp_recv_timestamp(msg, sk, &tss);
-> +		}
->   		if ((cmsg_flags & TCP_CMSG_INQ) | msg->msg_get_inq) {
->   			msg->msg_inq = tcp_inq_hint(sk);
->   			if (cmsg_flags & TCP_CMSG_INQ)
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26034287312
+--===============5176383016918948956==--
