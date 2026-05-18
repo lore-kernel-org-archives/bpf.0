@@ -1,275 +1,147 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED4B64AA4;
-	Mon, 18 May 2026 13:59:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779112758; cv=fail; b=GXlmtwQARIPizIZ+lb2mzvQEAftIA0B3PEl+x9+H02OP2XK+5/jdM1T7/U7Clkkjz/Ur3yLblC5olMr/3HIHCBba0ruWeLqDCdXJpUjvQo4LVb3V5PB2O6d4M6G/3MpafhfHE1o6Tm92r/XQFiXu2AyqT7o/lOu6nPXyD4517p4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779112758; c=relaxed/simple;
-	bh=wr6Vh7XCq5XvvJu5uRQzqL8LInn/C7H8UBpBCdwnGkY=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=AcHrhM0WrcszZ/LRSL0RLVvuS6luz/Ml/orej+dMBsEkpzDShnborrsz1zy5Jaq4llmNuvK95MrXWPc7yiwvdjkLkTVhQmN0qX5DIMyVd6l4LYtiRFWiq6UqLd0MVeaazqtIFzx6SSPeyfw+5uZ19UcZO4yfa8zWiBELZhcuApE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cd+oTK48; arc=fail smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE4D0492539
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 14:21:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779114089; cv=none; b=jydeg11DnUglNn29J3U0DXd/WOmHWIWDk/Pwnu7OAtOSiGn8oulPRtv1FsQRkZzY1VDdVmHvqtUReDRWTfM8GXtrVsvGvWnbS9jhBt7J4zRWPZEba+qh9mP9EH6TVsz0ecJKBDytB7z9RPThCjHTQlc76epfwNJykmg+QLMl3Rc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779114089; c=relaxed/simple;
+	bh=ViOooZ5q6HLjbn4PmRfwA6YbFDqGs3bxZJ7jJDAirp4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cx4OE8cfpPN8BYXzG+8WDsFevQqPnhALncfl1GPl0pU6GDMD82jXa+PreXiFOwI97jpuwiErmKKrBOnSLY0oYUXmv1IpOOGBduqXuZ35BF8LaeIhEu3HnZQT4BJR8mO0JCrbURaZeyo7llVKE4NWBd5brgXul83WFhvh8o1f+90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hpNf0cNi; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cd+oTK48"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779112756; x=1810648756;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=wr6Vh7XCq5XvvJu5uRQzqL8LInn/C7H8UBpBCdwnGkY=;
-  b=cd+oTK481k7O3OB/9Di8ID1D/nLjfAF9j4sglPfWigQ+NBpxymmRYVGE
-   +VcvZAXIrcL1o9oLwbRLXf5WK6VUrFERrm5AHIwQ/nC/wcKdKESdoASEt
-   fdSmY750snx4j2FIRFjRbhFQsd0zLmc9i3ClCxddQ3muSib1kyT8ae6um
-   UPLeCXjOuxb6F95z19EUTOIlAyxbvN09mYDSoVOUg6cl8IKmWJkMklRLt
-   PSx+Omvz/abgmrwU6f5RZ1bIcMXMWZZx714qoJHJNFG0VeWvAGQFatGox
-   KiHVC34FIrmMg134yZLz9Vvt+ujlZWe4CTigTYSXGSxso+UJXR+Pjy8ge
-   Q==;
-X-CSE-ConnectionGUID: c/ZIBzb+RvOgf98XHparPg==
-X-CSE-MsgGUID: bTax12YiTLyxaR6aD2Fayg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11790"; a="97533510"
-X-IronPort-AV: E=Sophos;i="6.23,242,1770624000"; 
-   d="scan'208";a="97533510"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2026 06:59:15 -0700
-X-CSE-ConnectionGUID: rJQrD5N9Sba9k6g9jL2gaQ==
-X-CSE-MsgGUID: uRHWvfWCSZeRbx21RgsDbw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,242,1770624000"; 
-   d="scan'208";a="269768289"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2026 06:59:15 -0700
-Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Mon, 18 May 2026 06:59:14 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Mon, 18 May 2026 06:59:14 -0700
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (40.93.194.14)
- by edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Mon, 18 May 2026 06:59:13 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=b09B/YD6STATVScgsC5FIZSyxtf/Q5WjKnK1ZcfPwvnKx2Yc37cMOAQI+xb8/+TY5PomS3C6XRhFhSJgG3c067cD2JOLvpzZ/Ypdy6STJ1A94j5tVrJgH0x7evvVyYmkMRAbG3FDsnmyRYDwGvKb8IH5yg3NHBKKbzYUXvXVFso+wttujKqDYI0J2A5lgrcmhfyBEg/pmfOkhN5lo+K6LGb4+xbO4k8vB3wO7jv4l5/WldK/lmQ8k135RVNV+2QnXNA42F2I+fJrgSPuqBXDvBFTKYOueyAFac3ozCtPTaatFYIotbZw1q5W6+hyK6AbbLAJ3wVlk2+FAttk/aTe3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZhtrHUfihNO3D2BHsJFVl2UFR4pQOGOp2y0PwechgZY=;
- b=FVfppNllrihgwnGD3EAcJW4zkZerO0WAyIAZHLslxWgNv5halvi9qXg6pRm6qhDh1Qp6MF/SAYZKOyHGTNLVunvk9L3B1qchgVzG7oZNhFO20nS2qLLBDQFAumCUjdAvrgFQdCLBfWQNCqOLbTQAl3yP00dRdQXvHiWkg3JTOVbeY/n7BF4GiD+h4bokT9Cr6NfBCFDD6JJ9lOOfF5hDCBbRix1AAuFWPt6kreQreLlPYI2x+KxSNjcAj/v4lEcj9NxAS9Q13fXBl/3IBExrxrU0Ne6WNq6RaoGu0vjzpKrIw3mZ9bMms0il25JwPSSjQ0vQJTgEb97LUYfcgOolvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
- by SJ0PR11MB5040.namprd11.prod.outlook.com (2603:10b6:a03:2d6::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.21; Mon, 18 May
- 2026 13:59:10 +0000
-Received: from DS0PR11MB8718.namprd11.prod.outlook.com
- ([fe80::6aa:411d:4bfa:619c]) by DS0PR11MB8718.namprd11.prod.outlook.com
- ([fe80::6aa:411d:4bfa:619c%5]) with mapi id 15.21.0025.023; Mon, 18 May 2026
- 13:59:10 +0000
-Message-ID: <744d9c62-a5e8-4702-bcdf-c9a8d31a026d@intel.com>
-Date: Mon, 18 May 2026 15:59:00 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] xsk: switch xdp_build_skb_from_zc() to napi_alloc_skb()
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Lorenz Brun
-	<lorenz@monogon.tech>
-CC: Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
-	<przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
-	<horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
- Fastabend" <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
-	<stable@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
-	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<bpf@vger.kernel.org>
-References: <20260512152658.2818805-1-lorenz@monogon.tech>
- <9c49ecf7-1d35-4b03-8a71-9d724562594d@intel.com>
- <CAJMi0nQN+XB14Z81=W2reEGnax526-MB=Armx+f_miWMWUmRFw@mail.gmail.com>
- <agsUHNss20SweH3a@boxer>
-Content-Language: en-US
-From: Alexander Lobakin <aleksander.lobakin@intel.com>
-In-Reply-To: <agsUHNss20SweH3a@boxer>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: TL2P290CA0012.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:2::16) To DS0PR11MB8718.namprd11.prod.outlook.com
- (2603:10b6:8:1b9::20)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hpNf0cNi"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-44e5624c053so1357986f8f.2
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 07:21:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779114083; x=1779718883; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EYFr7XXcKEsZj+Bv1UNXpfsZHaxqcET1cNdw3E5KQ6o=;
+        b=hpNf0cNigPpXw9DykFa6IzN5idA/nkAFGlX77z4gmiktlupdS+NvYA293YJl/UyhX9
+         QVJh0DLrqKNAxMZ1YqiW92drtZZcx8zCwaS4BIysSLKp0R2IshQAbpcLiVhNm6SSRB80
+         tHjgNex6fZKg2y2caMDnNx5xlQqEOJLltG+/VHBUf8tHF5WVom4Qp5ORpdguND6ywqCS
+         +DiPpp5DVDNRgP6iz+SFa4fwAduZDZKRSKMiOI7TYMYCRFd0xM3k8THTJBSem9u0Hau8
+         1ZddxKq98msBx9Gf2+jXNHcxihO+uSH7vyUuKpauUBPl9Z9RosFCkWFuYbqbUfwco+dR
+         BCRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779114083; x=1779718883;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EYFr7XXcKEsZj+Bv1UNXpfsZHaxqcET1cNdw3E5KQ6o=;
+        b=oPevvcTm8AgUnTGhAKnEDM9vY6BzLpoSPy+fSObtz4jmPbephrNh4Ql6TXwDOoSGWE
+         83nvPOmyvikz4/6hIVXHxZCqmrbSZbTP8lOC12/tJWzZo9sPuWyJ4Cf5Kr0LZdNceMln
+         I5lO7w8lCBB3+zxsI/am/VoHq/onMMX2O4dOhjfTYHnK4AKwtuB2Qs5t+nN+fxxNELdg
+         EroOmcGKnUM8k2AcYHzxg83RmhwM6f8PCi3svbziRyJxlB6EFuLwFNYFD90yn9WYE9D7
+         +Am1ScEayg/K4O1BtAneMXWB9kRCk5WEHpjzpfhgMZEN+WhGxufPtQAvXjkO+/YFFRJ0
+         8wUQ==
+X-Gm-Message-State: AOJu0YySpEJQAqINN0RpHZpBdfiYp5O7bzczstVsu4JCKTY09J1Pz0YY
+	FyEd3+/E+T0ZENZsTuOxf9bc87HmezmxcegQaLl0z187o31JEGgmkall
+X-Gm-Gg: Acq92OGpqcwTanoDFb4DIt8EPMQ0wr9zHu2ZNlpuk/d92pPV1BjMixMNW/XMl2ka6t6
+	1q9z6fIOdbF1KvPzSBVTS0DJ67KLCau6hl4UTc42befVpzVCCCRl3NeMLREXPu0lDNrfyPHIsZU
+	Vm9Wm32deDl0H5c5rTjAgjNwcYT9TO9CTBXBObrGbPxE9fEv4b7BHo33Y3Ql07sOREdvx7v7hQu
+	wADJo7Kw2Ym1GZzSK1SEgQarVCaSRjWKklnzz0vAmtEsjCpaBg46OggqBO0NRLZTLoWFKK4iZkC
+	wcB6X8q6eelHfGLczs/2OYlj+gkRPTBv7Jwz7jrug8QlO3rMeB7VDmLXVWm0aXTf4y4AcQE3gSY
+	CacIz0kaYhLzNXxiErLA8DQCU+raRpoqzokIUk/jvqQQuXbigULpsPQzISmpHJ7JZKARk4MFhR7
+	SyaInNH6bMlZecfXceLiaEwyXBP7/8r17ufx7kyU9h2m3vn+RNLyWGoIOnsQpqQRhRwg==
+X-Received: by 2002:a05:6000:2083:b0:43e:a9ba:b194 with SMTP id ffacd0b85a97d-45e5c5dd921mr25324601f8f.34.1779114082921;
+        Mon, 18 May 2026 07:21:22 -0700 (PDT)
+Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0a1a22csm36715510f8f.19.2026.05.18.07.21.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 May 2026 07:21:22 -0700 (PDT)
+Date: Mon, 18 May 2026 16:21:20 +0200
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, martin.lau@linux.dev, daniel@iogearbox.net,
+	john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
+	yonghong.song@linux.dev, jordan@jrife.io, netdev@vger.kernel.org,
+	netfilter-devel@vger.kernel.org, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, martin.lau@kernel.org,
+	eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev
+Subject: Re: [PATCH bpf-next v6 1/6] net: move netfilter
+ nf_reject_fill_skb_dst to core ipv4
+Message-ID: <agsgYJsHZzA_0L97@gmail.com>
+References: <20260518122842.218522-2-mahe.tardy@gmail.com>
+ <af01ada15e1b76da2dfb6cfa749727e0337787f117ddf5724a3cb702513e81dc@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|SJ0PR11MB5040:EE_
-X-MS-Office365-Filtering-Correlation-Id: 68714062-f936-409c-684a-08deb4e5a260
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014|18002099003|56012099003|22082099003|3023799003|11063799003|4143699003;
-X-Microsoft-Antispam-Message-Info: NWePC7xdSIM6PhVP8PWKAUi2KX+h6yPROPVrR8hAGi4Xut6RGzqMscNzznVKTbESM1AntuD65Vnj1UogkHneKt+eCttD633Xfkhz31xiBXzHwdYWsKvWfGMK2mEodMzXGMe2350j/YagttdfWxW0pf/iCk65IqxwrqbHZoAMPwMIKB3RxY7uyE7A2AK/+keyCt8uzTF8Q5Qzl2Jz1pl4gWpm+TVBmEFAPXw46NPjdKQa2cLv85DBwcGClQFSQTDKR+Nq6IZx+86GOYyXL6eNvSqIK5m8jAKIG/aQj05dKzfDSr4zfN4IZgrPl4GI3IdWYnGzzD2/079FHP7R9wyqwqcBngeP3XCuQWJj/XKOPiwGzoYSB6BdWHuQq+3ZPnq9KSSfC2Hjb/tiSfuqpzvEQNMQUwvwGeHZYe8OltsvrKyDdxs4n6uUdwEJGrEb18kX419YXVRfrKqZ71F9+TNg/WNpPHshcv5fRb+N6RS9+Ils6ozz9Vwxzsro++52oAI0wKkPxB2EH/7Ewf1j9pheMma1e9B6HFK410aL65tjKddReVKfR3/L2H/rffT+m1/2FFUJNlZi0r1Uh8Mj3VKb4d/wiw8UQksL3pCbu+xIpj1/v/nGrjS5LmBbY3fIkqb42yWLZIT2Ctw15tGsx+cooPoZoy/a2BiWX3ybGsclrrPUV7q1oBKuKTcbnzm+NcHQNLY+csEqVGLqTefiiT1Igg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(18002099003)(56012099003)(22082099003)(3023799003)(11063799003)(4143699003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YkJYTWJzd0N1WENwUFJIYTkvQThtN0pkejhDRU1PcXpzV212Q0djVksxS3Nt?=
- =?utf-8?B?YTdGWUpCMnNJcTR2R2Q5Zk0waGpyUFY1MzhzSU01MWdwd2hmOW1paU9zUmFl?=
- =?utf-8?B?YmUrNmhyNzR1YzBnSHAwc24yVVErcTl6RXNsQjBBU1dXZ2xCMG5YY2NRT3dw?=
- =?utf-8?B?bEdnZzN0eExWelVyeGdIVXlXSkw2N21va1c4aHJzOHdFaUhMN21CUi9XaTFo?=
- =?utf-8?B?SVRwaDlQaktpLzIxOXp2SmNLNW85bW80TUdKU1JOajJNRWxjUUtKR2JJMlBI?=
- =?utf-8?B?VGZaZFhwM0hmTG5XMGdXYktaZmlJR1hha0RQUTNIbW5rd2FrdDNXcGllK3R5?=
- =?utf-8?B?QjRQeTgraWFIR1hHL013NTFBSmJ4V3d6enlUT0habHQxeldlQXFCTEhrVVBr?=
- =?utf-8?B?T0UrWStZMHdpQWw2QlJFNHROMnRnVUZpK3lReTUzN2NQR08zRFIybFlvOGxF?=
- =?utf-8?B?bEF6MGRPcUVLbUxZZ080OUxiZk8vVEdGZzFMeDBoSkNET3V5K0tzanVZem9y?=
- =?utf-8?B?T0htd21YZkdaOGlpV1RQczNzbzdVRWJmOGNtUmZaT2drTlRhQTd4STNuSzVJ?=
- =?utf-8?B?dU56MEhSNllVa3MzbWFCczFLUVUxWWdYN3p4blErbUJHN0hOMHZQVjloNTZN?=
- =?utf-8?B?c0JvdkFKc0tRdFJ2RUJFL1ZWRDhQOG1tNzkxc3ExZXBvdzB1VUtHMTlUcGtJ?=
- =?utf-8?B?ZzNwbU5yQjJkYmtSU0RybzZqWWs4blU0SkdvMng3dWZ1ZUY3a2Y1emJJaHpQ?=
- =?utf-8?B?azI4RlB5Zm93ZmFmbU1OeEtwMVg5NFZnMTZyQk9CbzNFK3RsdkpLTWhiRFhk?=
- =?utf-8?B?NzRmRU54THpJUThZZWR0UDQ1SnRjS0t3emRuWisrNkVZYUFRcm5tT3dwcTdN?=
- =?utf-8?B?ZDU2aDd1L1RIbkxoV3FIMFZaZzAvTFg0Y2ZOdTMxR292NEhPRjBpZEIrUmdT?=
- =?utf-8?B?VUtybDA1S3lOSnpGNWw4TmhGTmVtRTk3cDFUQjREbGZzeFUvS3VVUE5QbUQ1?=
- =?utf-8?B?dG50UFp4djB1ZzJSMFh6a3llaHhWRDJEekxDQ3ArTytRWVFCUGQ0cXFURVhQ?=
- =?utf-8?B?V1ZtQmg3SXpwOTdZR0tNd2c0K3NEbkVBMXRzTWdxMnhXdjd6aktOckhhQnov?=
- =?utf-8?B?NEpabHNCWEVmTWQ3elFJdDcrNTEzcnRmMCt0VkxQcURyWXNiRk1lSEFVWVRI?=
- =?utf-8?B?WDVTRU1Ia201WkNtdlU0dWdvS3lPNXN4USs5UDQzRkcxSEVkTXRLTjdHVGwz?=
- =?utf-8?B?SU5aUWRyYVVIT3BvR1V5L0lkMk5obUVoQ0RBeTk2ZmFrWEpzUlI5R1kwVStx?=
- =?utf-8?B?TlNzT09VdXZWYVhHMnNFWnJvN1lrb0RMQWdveG16L2JmQWIydDg2TTNTaTdw?=
- =?utf-8?B?QmQvVWJjMXhsMnFKN3pPS1AzdWNibkZSeGhrQng4b1paOVJoUlhGZWg1Wlpt?=
- =?utf-8?B?bkR3dGNSTWludVhWUlkzalFQdDYwTXNvVmN6aFdWbjhQcjNjSnc1LzlnRzlt?=
- =?utf-8?B?aEpsWTNLbG9UZGdLVVNtWDhycGQxQVZZYUxweTVEU2czQjdKSUl5T2d5d2ln?=
- =?utf-8?B?dVVlSmc5NHNSSCtObFpwSW1maDg5TE0zcXJMY2taaVc1K1hyTGZLWGlmaGVM?=
- =?utf-8?B?dkhYRzg5NU9oRGR2cjJ6eThjVXRyZHB2dkNYN0JzWjE5MFA1Y29zUHhHRzhC?=
- =?utf-8?B?emtKK0gxZWl6M2s3YUxJbjhBdUcwbUpnaHZ1clJzdHhBUnpPbklRNHp1TGho?=
- =?utf-8?B?ZFN4aGNycUhPVjY0N05iZ28wZ1ZpZnVzTVV2eE5RQTl6c1R3TlF0dGthSUR0?=
- =?utf-8?B?c2dmOTc2d1FEaE5VT3J3TE5ZNzFacWFsUHhTZlVIZkw4Si9UakJWcFp4SC9I?=
- =?utf-8?B?Q09Oenp1TTEwKzlGK0FnVFhoMWx6Y2V5YThjb0xDNkFFb3ErZmlTdm9WUFIw?=
- =?utf-8?B?SnNLeCtTbkIxZ2tlUisyWC9XamlXZjFCOXpIUVVpVFZVYjhWRVJmdHNWYWw0?=
- =?utf-8?B?Uit0UEw5V01TVDRhVmw2cjVCdmpQM3c1eko5RWhZcTN5QXErVnNKcjROeFQ2?=
- =?utf-8?B?d3djT2NOMzVRNTZWSFNKVTRWanVjNHIxU3RLQytWOUQrZXc5N2F3cDE2blgy?=
- =?utf-8?B?SFpjQUxXR2ZNQ0RVTUp1ZGN1R0NZUHBsWDFBbkJOUUpZTmZLaWRNMHE3QnpX?=
- =?utf-8?B?VGtuNEFoRGxIbERnNHJYNVMvNEFxY0FDdHh4dzBSOVZHOUtjb1lMNEsxd2sx?=
- =?utf-8?B?NVhQOHp5NVBGZEgrYXRNZlJ3b2NkamYzOXg2MXNyUnpEUUpBWCtCdHBiL3cr?=
- =?utf-8?B?QVkwT0JKcis3RXM1eWFwN09GbmFOSnlKQjZZcmNpMlYxTHFkakR5cU8xbGVY?=
- =?utf-8?Q?iezpAkbtpMInSC2Y=3D?=
-X-Exchange-RoutingPolicyChecked: ar89Dg9cGgqZRmnY2EDl7mY0WGxnXlmbqgi2SvWMlTbDTfHnb1J3ottQ4FVZBlzA4a7zwKENyiBPgW9GmTBWXSDGTOWAqJi4Su53h2ppD9NnVPst4tJT/atTbm2B9Wa6Xre3s166Foegd1QjwVZz9IFIFX/WAzBWIVtiTMAOXHsItKyfO5Q8rpZDZgtw5h8XXdM/yhmJzJIM19weT+wnsZhgEiVMQvULfOrnlzwLtiMl46vehDr5hcdaC0+q4gLelZWQdI07IiQQlleKtut1gODS4HoPt4hFfw+/3oUMsSuR7IIl/xG3dwJhm8E1ucdI2uE4UJu0+r9lnk6MBCRlUA==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68714062-f936-409c-684a-08deb4e5a260
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2026 13:59:10.0714
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: U/xTwygXAMDZV9RQ9Xv6/JkWn2DWpnsehstdWNDujGzvUboGuFWjgwHBTKoj6Y3M1qbmgqyCYuVEE62B+ZH4kxbbWDB5yDtZDmYhL7bEH3E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5040
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <af01ada15e1b76da2dfb6cfa749727e0337787f117ddf5724a3cb702513e81dc@mail.kernel.org>
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Date: Mon, 18 May 2026 15:29:00 +0200
-
-> On Mon, May 18, 2026 at 02:57:55PM +0200, Lorenz Brun wrote:
->> On Wed, 13 May 2026 at 17:21, Alexander Lobakin
->> <aleksander.lobakin@intel.com> wrote:
->>>
->>> From: Lorenz Brun <lorenz@monogon.tech>
->>> Date: Tue, 12 May 2026 17:26:56 +0200
->>>
->>>> xdp_build_skb_from_zc() allocated xdp->frame_sz bytes from the per-cpu
->>>> system_page_pool and built the skb head with napi_build_skb(). The
->>>> latter places skb_shared_info at the tail of the buffer, but the
->>>> helper sized the allocation as if the whole frame_sz were usable for
->>>> data. Whenever the packet plus reserved headroom approached frame_sz,
->>>> the head memcpy overran shinfo with packet content, corrupting
->>>> ->flags (SKBFL_ZEROCOPY_ENABLE) and ->nr_frags, which then drove
->>>> skb_copy_ubufs() off the end of frags[] on the RX path:
->>>>
->>>>   UBSAN: array-index-out-of-bounds in include/linux/skbuff.h:2541
->>>>   index 113 is out of range for type 'skb_frag_t [17]'
->>>>    skb_copy_ubufs+0x7da/0x960
->>>>    ip_local_deliver_finish+0xcd/0x110
->>>>    ice_napi_poll+0xe4/0x2a0 [ice]
->>>>
->>>> The overrun bytes come from the packet, so an on-wire sender can
->>>> corrupt kernel memory remotely whenever the XDP program returns
->>>> XDP_PASS.
->>>>
->>>> Rather than patch the sizing math, switch to the pattern used by other
->>>> in-tree AF_XDP zero-copy drivers like mlx5 and i40e which use
->>>> napi_alloc_skb() sized to the actual packet plus skb_put_data().
->>>> This sizes the head exactly for the data being copied, drops the
->>>> system_page_pool local_lock from this path, and removes the
->>>> structural mismatch between frame_sz and the skb head buffer. Frags
->>>> are allocated with alloc_page() per frag, matching the other drivers.
->>>
->>> I used napi_build_skb() + system page_pool to enable PP recycling
->>> improving XSk XDP_PASS performance a lot.
->>> Are you sure there's no other way to approach this?
->>>
->>> napi_alloc_skb() used in other drivers works, but it's sorta old
->>> approach which is way slower.
->>>
->>> System page_pools always allocate a full page, why can it create an skb
->>> prone to overruns?
->>>
->>>>
->>>> Fixes: 560d958c6c68 ("xsk: add generic XSk &xdp_buff -> skb conversion")
->>>> Cc: stable@vger.kernel.org
->>>> Signed-off-by: Lorenz Brun <lorenz@monogon.tech>
->>> Thanks,
->>> Olek
->>
->> Hi Olek
->>
->> I looked at the code again. While your approach is indeed faster, it
->> is only faster for traffic bypassing AF_XDP, which is generally not
->> that relevant for performance.
->>
->> More critically, it currently corrupts kernel memory and panics the
->> kernel very quickly when running with frame-size set to 2048, 1500
->> MTU, and passing received packets. To be honest, I'm not familiar
->> enough with the XSK subsystem to know exactly what specific sizing
->> assumption was violated here. By comparison, the approach taken by the
->> other drivers is a lot more obviously correct and works perfectly.
->>
->> If you want to preserve the current approach, I'm perfectly happy with
->> that. However, I don't feel comfortable sending patches for it, as I
->> don't understand exactly what the expectations of the various data
->> blocks are.
->>
->> AFAIK, reproduction should be fairly easy. You just need to run a TCP
->> connection to the receiving node (which gets passed to the kernel)
->> while receiving some UDP packets via AF_XDP at the same time. As
->> mentioned, it also needs frame-size 2048 to reproduce quickly.
->>
->> I checked if I could get you an easy reproducer, but xdp-tools is
->> quite limited. If you want to keep your approach and can't reproduce
->> the panic yourself, let me know and I can see if I can synthesize a
->> minimal reproducer.
+On Mon, May 18, 2026 at 01:07:54PM +0000, bot+bpf-ci@kernel.org wrote:
+> > diff --git a/net/ipv4/route.c b/net/ipv4/route.c
+> > index bc1296f0ea69..1f031c5ef554 100644
+> > --- a/net/ipv4/route.c
+> > +++ b/net/ipv4/route.c
+> > @@ -2945,6 +2945,21 @@ struct rtable *ip_route_output_flow(struct net *net, struct flowi4 *flp4,
+> >  }
+> >  EXPORT_SYMBOL_GPL(ip_route_output_flow);
+> >
+> > +int ip_route_reply_fill_dst(struct sk_buff *skb)
+> > +{
+> > +	struct rtable *rt;
+> > +	struct flowi4 fl4 = {
+> > +		.daddr = ip_hdr(skb)->saddr
+> > +	};
 > 
-> We now respect the tailroom in UMEM which is supposed to address shinfo
-> override cases. Could you re-test this on your side with cited patchset
-> being present on your tree?
+> Can this lead to an out-of-bounds read?
 > 
-> https://lore.kernel.org/bpf/20260402154958.562179-1-maciej.fijalkowski@intel.com/
+> Now that this is exported for BPF kfuncs, it can be reached from early
+> hooks like TC ingress where the IPv4 header might not be linearized yet.
+> 
+> If a malformed packet contains less than sizeof(struct iphdr) bytes of
+> linear data, does accessing ->saddr require validation via pskb_may_pull()
+> or similar?
+> 
+> This concern was raised by sashiko-bot@kernel.org in v4 review:
+> https://lore.kernel.org/bpf/20260421111320.D97D9C2BCB0@smtp.kernel.org/
 
-Either way and regardless of whether XSk XDP_PASS is
-performance-demanding or not, fixing an issue by replacing the
-implementation with the one from some driver "because it works" is not
-something I'd like to see.
-If you have difficulties with root-causing the actual problem, I can
-take a look and fix it since it's my code.
+Yes but it should be fine since it's the caller responsability to make
+sure the header has been linearized, and we are calling
+pskb_network_may_pull.
 
-But yeah, first make sure the series Maciej mentioned is present in your
-tree.
+> > +
+> > +	rt = ip_route_output_key(dev_net(skb->dev), &fl4);
+> 
+> Can skb->dev be NULL here?
+> 
+> While safe in its original netfilter context, a BPF_PROG_TYPE_NETFILTER
+> program attached to the NF_INET_LOCAL_OUT hook will receive locally
+> generated SKBs before skb->dev is assigned (e.g., in __ip_local_out before
+> ip_output).
+> 
+> Does dev_net(skb->dev) need a check to prevent a kernel panic when called
+> from such contexts?
+> 
+> This concern was raised by sashiko-bot@kernel.org in v4 review:
+> https://lore.kernel.org/bpf/20260421111320.D97D9C2BCB0@smtp.kernel.org/
 
-Thanks,
-Olek
+We can't attach such program as now it's only cgroup_skb and tc,
+outdated.
+
+> > +	if (IS_ERR(rt))
+> > +		return PTR_ERR(rt);
+> > +	skb_dst_set(skb, &rt->dst);
+> > +	return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(ip_route_reply_fill_dst);
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26034287312
+
