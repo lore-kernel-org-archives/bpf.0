@@ -1,133 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEEFF37D104;
-	Mon, 18 May 2026 08:20:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B6A53E717A
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 08:24:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779092416; cv=none; b=tfxj6gcWAsJg8NiJuJXUlWwRf3LYJ6JwVKMfZ5iZ8pDn8KY4Yjv5pSneXIpup43lsW6tDnExR2VZ93NoQC0X4vQsAuubqSyoH0uUpLGgy0N+P4SUbsFzqyxx94FCPRFdkRwRqiAJFQe5RqU12eSJMTIwYcw4koKZMWcxHZf7TAA=
+	t=1779092650; cv=none; b=nVakbZSuGLXgtPNwEVVkV/WrSAz9qmG8M4CNMI7RV3MF9ex7iGwB0jKjrmXXfYHGIKPTpD+RmpMH5571in5N1+O+NXfVban02UmTPsjQXkBRwihXd0ILFxWJQM+d3Eo4aXcv4jwUWuhNDdkVRSOaBIqxKTLxBaX5/vOTDrG25/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779092416; c=relaxed/simple;
-	bh=qJwD183reFaB9jW+MW1Pfqa4hIkj9klr+0aTFDs6k+E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dylLK4XucjchvdmHrgofGPsJEETI3EgWlGLVYr9IrkzdRMiAXpFOyhMhnU9vjssjcBvyWW0O5bmr0KLWrMIiG96SYCsIhUlTIlcycEFhH251ndNu2IBXBqndjxKfBfuDPLecJt3i2n/Ck5fXVIJg00t86HUqC105iL7gkkVHb/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qub/xeCC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779092650; c=relaxed/simple;
+	bh=Pm0SSXQemv2uh3B1C/YKpI9VqnSeLwbthTiy2vHdUlM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dg4mONT8FjnjvLDmwVQm26VVlO12ddP2wyy0pk6oq2qTnB7ghVlh8/S1mj2hPrvSrDS+7VnsODmlf68gfoCuTkiq0dvAIqJ/I/ZWZuqXaDs1UmKwfefEN8xpnDcce2Wn7M+4QNilVI9G1YqfAbQ3AXKWvDZH3xOi4JEnrfIMCfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LPvJWtHd; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qub/xeCC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA39C2BCB7;
-	Mon, 18 May 2026 08:20:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779092415;
-	bh=qJwD183reFaB9jW+MW1Pfqa4hIkj9klr+0aTFDs6k+E=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qub/xeCCPo256Fph96OpfyQeU70ix/6ePEohr72245giPZpEiYPcf2+pqx96eCK+X
-	 l0Qyo+sSHlX1A4IKkDcO5DL5d4xySSPX2mDHkowF+v/cV/IkBcho19ssz4qINHmQjH
-	 z0sAZtUh4k11djiRc6iwXt4IVTxy58WmrGoGXnVZYmKILvY3pkg7SVy6WWa1EMF9Gz
-	 isS8dbVkSi/Ku7j/8K62PkbBNlfpFOMqeTvwpiVmC4zmCY9UzWWwx6lW+w5aj/cWCD
-	 Toci5a+22SM4tE59wg9TuKJgRsyb/uRX2/FpEg4x7hmHz5HO/3CYWZGYLciN8JwqAB
-	 yXw23pVrlmq1Q==
-Message-ID: <fbbf4366-a138-451b-98a8-71c3e92b246f@kernel.org>
-Date: Mon, 18 May 2026 10:20:03 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LPvJWtHd"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-36643b96b99so1875993a91.0
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 01:24:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779092648; x=1779697448; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8DoCMEHbqsmQR26KKm6FMm5fGobBSkxtUUIymvUejsM=;
+        b=LPvJWtHdXp2vS3XHhC6maCHb/AwPvzyNCNQ6JVWLV/cZhex+3W6j/xmtc8Czotn3SK
+         3OkPgf6xPVpbFSPO+EL1PVVBCWABisuSAfSzM2+4w1FyVwlcA6xuPm14J6xJOcTucQHk
+         wQZehM8J7u6SfmPaSwTTVvU5fTB4XLTqe3WLjQyKkQuBNGeVHZzxPsomrx4wiex53QEn
+         GUVMdwwjwD6N2K8dFxKmnEv1gCXNjDAOZ2aZfPEkt/A8mS2VkC/AzwMNjBkNbWaT8D0L
+         qbV83uC2KtonkJCvh5bxJhrPsBuShOuCN2Pt7FMMurVE59QuiQCMMBwDdcHbhAzxnktJ
+         CtMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779092648; x=1779697448;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8DoCMEHbqsmQR26KKm6FMm5fGobBSkxtUUIymvUejsM=;
+        b=SLpMvtSXChJpghfR5BeU4lsbg6O0XWFcN7HcQaNheLaA49cy08QA8xyk2VaNA75IP+
+         1kQIdFWb0hfgsFrvInrY4+cY2E9War4DDgsvbcxmSb29CzUn+QtIQ8im00FKP3M/6KBX
+         WCYLFO43v7CXFGW5//SEWAIMU/Xd0nvznb63BfLoYrWHusJ6JcciW3LNDw+94BYcZZQk
+         6v9bJ5RErcq7Cxoi03ur/5Cj5RzvnbIo2VmElF+j7novm9tDKVAjjshJThiy+uglZPqB
+         exS4nKarwbdgjLKcMBxpQhw4MeHseVaDoJxZW5bbEWEvR7u+TZ6PNOy0cRPMtjdRSSft
+         ykMQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/qr2+FR1YwD/abJjNxT5f9IgZ0vC7C9U8HhTpm5uPFLAP+SYTsW2qJ8lPNJ2WuzI+7x4A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAeaE9rhhE2mL+0U/yjDJyqbungHB1KBRrabTDGLqhwlm/oxvB
+	zAnDWxUiOYq6lY7GeOwPEFE44utbmptjJU4GmR8rEwTf+8pBeaH01LAy
+X-Gm-Gg: Acq92OHB5SOT/gK95EOPneMNV+LIFWPGAPvmctHFCQaJYIp18EG+1+I+6wwBkD8ygT+
+	1tqq7SwG++DzSP0NzwwWX0ox1tAIyysHpsXve4he2+kX2VZtMa8UE/IKL5hMFyxlWpS73rFWWRn
+	PGfiAbi/X9vdIGhysqQHZNQG276YfZv8nMzp0ejDcmFyqHF7l7r70M0WU3ZAMeHIn78LsOCeGw3
+	l9s1+ooIRD5LB3aQDnn3MUuDhmCKJynSYeoT/0Thuk82AnyZv77FRGHBCZvQw75r5IFWGrFHt5r
+	JNBR+jsxI2KwNFGyAiaIUUBwbBeFRT6Kw6ge1ocoE8hJKK/FA20eiurh3ueXFGqz8chqo4aO7za
+	GVe81/qTUTKBX7TQO3g0f2ytTugWj9O8A7hIiEZA+FLY4Vkg2gATmyRNvcDGmwGmo3t0B0lu/jb
+	GJCItaMZIx3bj4EqKMRz4VR1H65j9L3BAPFpDyWakPSXsghKfvdw3UyCgqSYz69ySrNzlxUfRNb
+	z6RpyOc4xxDQ3uhQs3sQcj0cm+cTQ==
+X-Received: by 2002:a17:90b:3c87:b0:369:b957:1d84 with SMTP id 98e67ed59e1d1-369b9571f47mr3798456a91.14.1779092647645;
+        Mon, 18 May 2026 01:24:07 -0700 (PDT)
+Received: from KERNELXING-MB0.tencent.com ([43.132.141.25])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-369517ed182sm10382060a91.15.2026.05.18.01.24.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 May 2026 01:24:06 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	willemb@google.com,
+	kuniyu@google.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me
+Cc: netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH net-next 0/6] bpf-timetamp: support rx side
+Date: Mon, 18 May 2026 16:23:38 +0800
+Message-Id: <20260518082344.96647-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Revert "mm: introduce a new page type for page pool in
- page type"
-To: Byungchul Park <byungchul@sk.com>, akpm@linux-foundation.org
-Cc: kernel_team@skhynix.com, ast@kernel.org, daniel@iogearbox.net,
- davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, saeedm@nvidia.com,
- leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
- andrew+netdev@lunn.ch, edumazet@google.com, pabeni@redhat.com,
- ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
- surenb@google.com, mhocko@suse.com, horms@kernel.org, jackmanb@google.com,
- hannes@cmpxchg.org, ziy@nvidia.com, ilias.apalodimas@linaro.org,
- kas@kernel.org, willy@infradead.org, baolin.wang@linux.alibaba.com,
- asml.silence@gmail.com, toke@redhat.com, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20260515034701.17027-1-byungchul@sk.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260515034701.17027-1-byungchul@sk.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/15/26 05:47, Byungchul Park wrote:
-> This reverts commit db359fccf212e7fa3136e6edbed6228475646fd7.
-> 
-> Netpp page_type'ed pages might be used in mapping so as to use
-> @_mapcount.  However, since @page_type and @_mapcount are union'ed in
-> struct page, these two can't be used at the same time.  Revert the
-> commit introducing page_type for Netpp for now.
-> 
-> The patch will be retried once @page_type and @_mapcount get allowed to
-> be used at the same time.
-> 
-> The revert also includes removal of @page_type initialization part
-> introduced by commit 735a309b4bfb9e ("net: add net_iov_init() and use it
-> to initialize ->page_type"), which will be restored on the retry.
-> 
-> Reported-by: Dragos Tatulea <dtatulea@nvidia.com>
-> Closes: https://lore.kernel.org/all/982b9bc1-0a0a-4fc5-8e3a-3672db2b29a1@nvidia.com
-> Signed-off-by: Byungchul Park <byungchul@sk.com>
+From: Jason Xing <kernelxing@tencent.com>
 
-Too bad we didn't notice this earlier during testing in -next etc :(
+Previously the series[1] has already supported tx side for BPF
+timestamping, now it's time to support rx side.
 
-vm_insert_page() sucks. I hope we can revisit this, once vm_insert_page() no
-longer touches the mapcount.
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=68b92ac494eb
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Jason Xing (6):
+  bpf: Add bpf_ktime_get_real_ns() kfunc
+  net: export sock_disable_timestamp() declaration
+  bpf: support bpf_setsockopt for bpf timestamping rx feature
+  bpf: add BPF_SOCK_OPS_TSTAMP_RCV_CB callback
+  bpf: enable bpf timestamping rx in TCP layer
+  selftests/bpf: Add RX latency tests for bpf timestamping
+
+ include/net/sock.h                            | 12 +++-
+ include/uapi/linux/bpf.h                      | 10 ++-
+ kernel/bpf/helpers.c                          |  6 ++
+ net/core/filter.c                             |  8 +++
+ net/core/sock.c                               | 20 +++++-
+ net/ipv4/tcp.c                                | 14 +++-
+ tools/include/uapi/linux/bpf.h                |  5 ++
+ .../bpf/prog_tests/net_timestamping.c         | 69 ++++++++++++++++++-
+ .../selftests/bpf/progs/net_timestamping.c    | 35 ++++++++++
+ 9 files changed, 172 insertions(+), 7 deletions(-)
 
 -- 
-Cheers,
+2.43.7
 
-David
