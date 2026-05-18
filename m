@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4974D3E024F;
-	Mon, 18 May 2026 08:06:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEEFF37D104;
+	Mon, 18 May 2026 08:20:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779091599; cv=none; b=X4EyR+jsoTsvtTW6D2C20I6AJQI4PrM/CG0K6yExu0nsE/vgS/VkhqBBJiA6XCBSc82OOdmCeB0MFnUTXsrLntAF3W2IQCCA/FnUiX2/0yHtlu+G7B9xLzlPuUYMtFVXF2mYzutvDIQ4NtKfPNkXqbkLyh24E2jDwaaQ+Fi8y/E=
+	t=1779092416; cv=none; b=tfxj6gcWAsJg8NiJuJXUlWwRf3LYJ6JwVKMfZ5iZ8pDn8KY4Yjv5pSneXIpup43lsW6tDnExR2VZ93NoQC0X4vQsAuubqSyoH0uUpLGgy0N+P4SUbsFzqyxx94FCPRFdkRwRqiAJFQe5RqU12eSJMTIwYcw4koKZMWcxHZf7TAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779091599; c=relaxed/simple;
-	bh=kEuniSHQNIJ6L0hPMKHr8wZkzqKyNNWkUVWkXhasdXA=;
+	s=arc-20240116; t=1779092416; c=relaxed/simple;
+	bh=qJwD183reFaB9jW+MW1Pfqa4hIkj9klr+0aTFDs6k+E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GUjmlDfMdA1gnR2HbYOEWzARxykoPfc4n5vhP/tqea+3eiEcAwYJkxGwR3RAFgcVgza9toXNswdmFr1k3ctbTU6RiYzkzOc5+HUqvazZEjsZSU5LPtqr9/vyBd9Bld4GvHzavqxwwB79WIefe3LASFjN2vOdGyj2NAb7LUDpHgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=INZ5j3KR; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=dylLK4XucjchvdmHrgofGPsJEETI3EgWlGLVYr9IrkzdRMiAXpFOyhMhnU9vjssjcBvyWW0O5bmr0KLWrMIiG96SYCsIhUlTIlcycEFhH251ndNu2IBXBqndjxKfBfuDPLecJt3i2n/Ck5fXVIJg00t86HUqC105iL7gkkVHb/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qub/xeCC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="INZ5j3KR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0ADAC2BCB7;
-	Mon, 18 May 2026 08:06:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qub/xeCC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA39C2BCB7;
+	Mon, 18 May 2026 08:20:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779091598;
-	bh=kEuniSHQNIJ6L0hPMKHr8wZkzqKyNNWkUVWkXhasdXA=;
+	s=k20201202; t=1779092415;
+	bh=qJwD183reFaB9jW+MW1Pfqa4hIkj9klr+0aTFDs6k+E=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=INZ5j3KRIvy4Z5CGgrdXBCP3zQoo46tl5JhAXKL8QiMoOPlkLJrMDpj+ZxyxCAiHu
-	 5QKLn81mMUogW66RPtBBpQDF3XTQVJTQjVhE6Z4lblQ2r192u2SEDMfPxJFblcRJo3
-	 g+WzHT7dJ0We8jH0fK9DguWfVQmfppbRhGdrIBZ70HIjztIRzlA7skVOXSps6jK7kt
-	 KJcba635Qk44MTDo49U9Tq2XtuCd12/YMTP9VztzEq4SaAhSctg88I9pce7Gh3BMUQ
-	 L/1UhjJR92pWAdhnsFqnEozTBxHJg+u3VkpunwomR7JL1DtWvsbMEBRPGVf89x7NPV
-	 jXAkwB6IsxfyQ==
-Message-ID: <9ba50fd2-077e-4291-9276-9adb18186873@kernel.org>
-Date: Mon, 18 May 2026 10:06:29 +0200
+	b=qub/xeCCPo256Fph96OpfyQeU70ix/6ePEohr72245giPZpEiYPcf2+pqx96eCK+X
+	 l0Qyo+sSHlX1A4IKkDcO5DL5d4xySSPX2mDHkowF+v/cV/IkBcho19ssz4qINHmQjH
+	 z0sAZtUh4k11djiRc6iwXt4IVTxy58WmrGoGXnVZYmKILvY3pkg7SVy6WWa1EMF9Gz
+	 isS8dbVkSi/Ku7j/8K62PkbBNlfpFOMqeTvwpiVmC4zmCY9UzWWwx6lW+w5aj/cWCD
+	 Toci5a+22SM4tE59wg9TuKJgRsyb/uRX2/FpEg4x7hmHz5HO/3CYWZGYLciN8JwqAB
+	 yXw23pVrlmq1Q==
+Message-ID: <fbbf4366-a138-451b-98a8-71c3e92b246f@kernel.org>
+Date: Mon, 18 May 2026 10:20:03 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,23 +35,22 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/8] mm: Add ptep_try_install() for lockless empty-slot
- installs
-To: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
- Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, sched-ext@lists.linux.dev,
- bpf@vger.kernel.org, x86@kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20260517211232.1670594-1-tj@kernel.org>
- <20260517211232.1670594-2-tj@kernel.org>
+Subject: Re: [PATCH] Revert "mm: introduce a new page type for page pool in
+ page type"
+To: Byungchul Park <byungchul@sk.com>, akpm@linux-foundation.org
+Cc: kernel_team@skhynix.com, ast@kernel.org, daniel@iogearbox.net,
+ davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, saeedm@nvidia.com,
+ leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
+ andrew+netdev@lunn.ch, edumazet@google.com, pabeni@redhat.com,
+ ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
+ surenb@google.com, mhocko@suse.com, horms@kernel.org, jackmanb@google.com,
+ hannes@cmpxchg.org, ziy@nvidia.com, ilias.apalodimas@linaro.org,
+ kas@kernel.org, willy@infradead.org, baolin.wang@linux.alibaba.com,
+ asml.silence@gmail.com, toke@redhat.com, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20260515034701.17027-1-byungchul@sk.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -98,56 +97,35 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260517211232.1670594-2-tj@kernel.org>
+In-Reply-To: <20260515034701.17027-1-byungchul@sk.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 5/17/26 23:12, Tejun Heo wrote:
-> Add ptep_try_install(ptep, new_pte): atomically set *ptep to new_pte
-> iff it is currently pte_none(). Returns true on success, false if the
-> slot was already populated or the arch has no implementation.
+On 5/15/26 05:47, Byungchul Park wrote:
+> This reverts commit db359fccf212e7fa3136e6edbed6228475646fd7.
 > 
-> The intended caller is the upcoming bpf_arena kernel-side fault
-> recovery path. The install runs from a page fault and may have to
-> contend with locks already held by the faulting kernel caller, so
-> keeping it lock-free via cmpxchg is the safe choice.
+> Netpp page_type'ed pages might be used in mapping so as to use
+> @_mapcount.  However, since @page_type and @_mapcount are union'ed in
+> struct page, these two can't be used at the same time.  Revert the
+> commit introducing page_type for Netpp for now.
 > 
-> The generic version in <linux/pgtable.h> returns false. x86 and arm64
-> override with try_cmpxchg-based implementations on the underlying
-> pteval. Other architectures get the false stub - the callers there
-> already fall through to oops.
+> The patch will be retried once @page_type and @_mapcount get allowed to
+> be used at the same time.
 > 
-> Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> ---
+> The revert also includes removal of @page_type initialization part
+> introduced by commit 735a309b4bfb9e ("net: add net_iov_init() and use it
+> to initialize ->page_type"), which will be restored on the retry.
+> 
+> Reported-by: Dragos Tatulea <dtatulea@nvidia.com>
+> Closes: https://lore.kernel.org/all/982b9bc1-0a0a-4fc5-8e3a-3672db2b29a1@nvidia.com
+> Signed-off-by: Byungchul Park <byungchul@sk.com>
 
-[...]
+Too bad we didn't notice this earlier during testing in -next etc :(
 
->  
-> +#ifndef __HAVE_ARCH_PTEP_TRY_INSTALL
-> +/**
-> + * ptep_try_install - atomically install an empty PTE
-> + * @ptep: page table entry
-> + * @new_pte: value to install
-> + *
-> + * Atomically set *@ptep to @new_pte iff *@ptep is pte_none(). Return
-> + * true on success. Architectures opt in by providing a cmpxchg-based
-> + * override. The generic stub returns false.
-> + */
-> +static inline bool ptep_try_install(pte_t *ptep, pte_t new_pte)
-> +{
-> +	return false;
-> +}
-> +#endif
+vm_insert_page() sucks. I hope we can revisit this, once vm_insert_page() no
+longer touches the mapcount.
 
-Ehm, what?
-
-This is a very, very, very bad generic idea/interface.
-
-On which ptes is this supposed to be used? User ptes or kernel ptes?
-
-Surely we don't want this on user ptes.
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
