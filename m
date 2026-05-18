@@ -1,54 +1,54 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
+Received: from mail-dl1-f73.google.com (mail-dl1-f73.google.com [74.125.82.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD2F37BE70
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 15:47:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 694FA44D6A1
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 15:47:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779119239; cv=none; b=a7SwYAw/t79LTAo/l+bGs7nh6KGfL+zF+2OxAR6zPTdYJX+4vpV5JeZMNEX4w+OOkxYMNGK//uuxClRA5b9cDBKafVXRENpKzT5WlG8nbtcPv05Wxcq2DrcCcpasHAXSneTw7WiJ/3d3c3qQqOXflJeGveWHOftIMUmyJIA8y/8=
+	t=1779119241; cv=none; b=Dy1ndFWpiIWip1J670GYQxp/D5YANilfeF/kK+ZjgWgAXLSMgqwtm4NtCJY+8IRoD3LdeVlqMG9CPYBsbxAgPu/q1aKcaACaV9eMG5EVj+W7M75dWfm9E/08RZFpyb9OAgAZN+/p4D5ZmeMR9PaXCT7uK5JoNAhiUXUGRJrHQV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779119239; c=relaxed/simple;
-	bh=UO8COcfsaqz02sjdD6/7eGxdxivUik5cN2WpzQTquMs=;
+	s=arc-20240116; t=1779119241; c=relaxed/simple;
+	bh=L14klLZVHgQZQ5seTQndooWBR1p+rofTHdL1BdJlPEE=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XEvWj4FT/Oc5HtgnQZxRMYjsAHKZGSu+YjYvjKXjJQxPVnUUlSo1AC878kTbmAFqleB0O9bvFB/zapTK5DvyIbV3sGDq0x4PY7mcREmBSLU3Tjl8ipsMnr6zoMBxF/mjN8M6d+2Nl052g9nOqBca9KbW7bvSJ95x3FfJn9VoVgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YQinennJ; arc=none smtp.client-ip=74.125.82.202
+	 To:Cc:Content-Type; b=RDQA4AWj++26eAiQkQyN/ZDcZOA411HhX0cdVUABHDOMRP0CC8JlJzPWvgbXBJGccEvWRyj9bLHfAFENf+USJYD3k84R3uzH6Z4rDTV1VVtd/NcHuKVtbWRDYnMOCyTnIUxKPqhGA81mp+hz34XYXnxj9iB5CEdf9Ht5mrwBpYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H0k/gMd3; arc=none smtp.client-ip=74.125.82.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YQinennJ"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-30230e64087so2931028eec.0
-        for <bpf@vger.kernel.org>; Mon, 18 May 2026 08:47:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H0k/gMd3"
+Received: by mail-dl1-f73.google.com with SMTP id a92af1059eb24-132d631edaaso12810672c88.0
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 08:47:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779119230; x=1779724030; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1779119228; x=1779724028; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=elI3dCv9to9+reTrmH7gWaOOH/Cw1KfhvnnriZ/0VzQ=;
-        b=YQinennJ2/LJQgmXBz3gMZ7CyttkpVcwJXMrMeHx2mQLenLMTeUngykZbXIHlXouNR
-         G4PZjzpyffIvlUrc/h4Lenazi+T3qQhEpRhkHa2GDZ9CVYBowDTJxboi01Lfov39OwTB
-         7ejTx/4uXOb//9n166LoA/O47fz52ijYatpFBySJTp2KH/lQLG7s7hVRRWnPg1WeZ/V0
-         p2j+QAJP/ZbafhDW8APl0/DJNz8p7CM0s1TWnzTk6fdzhaSXg36YjSNJTRdSwr3PFRUn
-         WlSgtfS/ED59N4tfqxI301J5ET19GsprrzV1Zjh0pFyIhoIglZ7s6s5RbWap0SXdEa8Q
-         ROPA==
+        bh=/d6+paeaMcTTaPCQt35CLTxbLauWsR41NVkCLRNdE7I=;
+        b=H0k/gMd30KAQYok4yNOI0BBiOPDSnBn0MLL82+2G0B9XMQEEwUDwefYukbmHfGPEnm
+         RqOyGVwxdqVdQRFNOWUMqpIRYFZ4rTsOtrERCRu+aJ2WRF8lJ4OVGKgi7GqSrOwco5SR
+         Ip8ZYwnWkIhapNn4Emd5njwb4ByzZ68TegQWp8f+pUcHAjnqpiRqpHSZqfwTgopJeIZi
+         7IzIDQ4m0rj+oxww1dCXhuLtNwQ8Qnw4+pyOuc/f3rcETHQSEX5TL2xqJMd0gyu1IaVN
+         u0pjnmdJGRAQ4yBhC/XqWto5xQTWvwO5+tRZ+rLf8mBt+da9/93IEnJ/QV1CCUSq+t+o
+         aT5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779119230; x=1779724030;
+        d=1e100.net; s=20251104; t=1779119228; x=1779724028;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=elI3dCv9to9+reTrmH7gWaOOH/Cw1KfhvnnriZ/0VzQ=;
-        b=DBJAyFarfCCcaMA6paomhsPK22LkIv6x1VgXIdJICd0oa3g3m3/FW6k1bAR3hTuuUP
-         ufEKDYpbja6dhTe2metKG/nEnEEwNOmTbjRXJwrP0h1opsHwseZ1sEPn38UXK0M4GUOX
-         SwLLR0tdT8sgsW43sgZiznx2mkZ5pt/ngf7D1Bf1GAtFXGNW8pZjJwuF0NIIyBRrux0q
-         Qsx7zYlyAqpR6VD2zRaLi0z9VJ3EGLue3m4ikGBMdwkbNW+kPzW8v0gloamp5PHeyDzu
-         bLlQO9hULmQOR2ft23w6jnXmHi1dZhnf2Cxf7Yvs1sn4a+A3Nk4SCSqs2FIQ8RaPysEF
-         RiXA==
-X-Forwarded-Encrypted: i=1; AFNElJ9Du8kfCwfXCBl5/mKnh4th+IQ8usWwiQrE0nucnFMma0KHIix+CmDh9asN33zEeLDk83Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEmfHibc5Nzf/vjpuZwsA/PDvFUQCnGcvctrNUGFiAWwJ61sGR
-	gaaxsv8GU6Gh5LtAiEgSrlICMJT3vY0vsGZnGbTkpAD2j0l1vm0RSB/vcLhM1CkScK0TRW/tK2f
-	YH20w4kKhSw==
-X-Received: from dycmx4.prod.google.com ([2002:a05:693c:2884:b0:2ee:de47:cde3])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:d706:b0:2d9:f0b3:1d98
- with SMTP id 5a478bee46e88-303982860f0mr6417996eec.7.1779119229503; Mon, 18
- May 2026 08:47:09 -0700 (PDT)
-Date: Mon, 18 May 2026 08:46:36 -0700
+        bh=/d6+paeaMcTTaPCQt35CLTxbLauWsR41NVkCLRNdE7I=;
+        b=g+epV7YRjOik+USwm4f3LxsLGKxwh19CUUOZ94NjYgcpjL8P8832Ro2aZo1mF1v4f1
+         /qFDi9lsI2ZOYwwRpuLZAbX63erd8ZpQRc3YL8r2QvcumOGho27cWfkAUwudEm7Hy7no
+         gispHTATEiWgZDKlJf9M2UiIPOSXe7uN638ixj5T5dY+aMXILUAILPr+SBZJFsBuY8yA
+         IDPwYb2sOY98pLrGfQu4DXmslPrKElE/oK9fjj1ZqTKMdM0U8MFrG7Kg0VDKlyaz5jcA
+         fWizI3aD9CLG4fZfZNqAxXNLUfy6TN8iXjac4RP7I0Vu8ShPZ9ZNytXYqAZG1RFpB3Rb
+         w5pg==
+X-Forwarded-Encrypted: i=1; AFNElJ8qdP5O0yJsCJzTeROqm2fizO+MVJcJ9kj+EgYGDhLobavqe70fkq+UlnQ+w2HBar/wewA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMlKiD1LI4wT7syIxjitlPBlMn6WnMgLFhCamfH3Zxuh77OqIk
+	kVnjV2wvilBqWGYW9JvRcVifN3GKb5iNWIArDsEmVLSR4Ufw9QCp4FaHWeOwQo7LGCnYYZder0q
+	KM5TQ7SS87A==
+X-Received: from dlbpt3.prod.google.com ([2002:a05:7022:e803:b0:135:3471:e411])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:689d:b0:12d:ca32:5a2
+ with SMTP id a92af1059eb24-135044192c9mr6931834c88.6.1779119227537; Mon, 18
+ May 2026 08:47:07 -0700 (PDT)
+Date: Mon, 18 May 2026 08:46:35 -0700
 In-Reply-To: <20260518154638.2798789-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,9 +58,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260518044740.2526802-1-irogers@google.com> <20260518154638.2798789-1-irogers@google.com>
 X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260518154638.2798789-13-irogers@google.com>
-Subject: [PATCH v7 12/14] perf build: Prefix SCRIPTS with output directory to
- fix continuous rebuilds
+Message-ID: <20260518154638.2798789-12-irogers@google.com>
+Subject: [PATCH v7 11/14] perf pmu-events: Parallelize JSON and metric
+ pre-computation in jevents.py
 From: Ian Rogers <irogers@google.com>
 To: irogers@google.com, acme@kernel.org, namhyung@kernel.org
 Cc: 9erthalion6@gmail.com, adrian.hunter@intel.com, alex@ghiti.fr, 
@@ -77,51 +77,101 @@ Cc: 9erthalion6@gmail.com, adrian.hunter@intel.com, alex@ghiti.fr,
 	thomas.falcon@intel.com, yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-In Makefile.perf, ALL_PROGRAMS includes SCRIPTS (perf-archive,
-perf-iostat). However, unlike PROGRAMS and DLFILTERS, SCRIPTS was not
-prefixed with $(OUTPUT).
+Currently, jevents.py parses hundreds of JSON event and metric files
+sequentially across all CPU architectures during Kbuild startup, taking
+~3.3 seconds of pure single-core execution time.
 
-During out-of-tree builds (or when O= is specified), Make checked for the
-unprefixed target 'tools/perf/perf-archive'. Since the actual script was
-installed into $(OUTPUT)perf-archive, Make concluded the target was
-missing and continuously re-executed the script installation rule on every
-single incremental build.
-
-Prefix SCRIPTS with $(OUTPUT) and update the static pattern rule to ensure
-Kbuild correctly tracks generated script prerequisites during incremental
-builds.
+Refactor jevents.py to pre-populate its internal JSON AST cache in parallel
+across all available CPU cores using ProcessPoolExecutor. Define the worker
+process initializer _init_worker at the top-level module scope to guarantee
+flawless pickling and standard event mapping inheritance under spawn
+multiprocessing semantics (avoiding AttributeError crashes when spawn is
+used instead of fork). This accelerates jevents.py execution by over 11x
+(from 3.3s down to ~290ms), fully reclaiming multi-core concurrency during
+the build generation phase.
 
 Tested-by: James Clark <james.clark@linaro.org>
 Assisted-by: Gemini:gemini-3.1-pro-preview
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.perf | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/perf/pmu-events/jevents.py | 36 ++++++++++++++++++++++++++++----
+ 1 file changed, 32 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index b8a81c9749a8..fc92d6ceac5b 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -405,7 +405,7 @@ python-clean := $(call QUIET_CLEAN, python) $(RM) -r $(PYTHON_EXTBUILD) $(OUTPUT
- # Use the detected configuration
- -include $(OUTPUT).config-detected
+diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+index 7344940e776a..807c42edcd33 100755
+--- a/tools/perf/pmu-events/jevents.py
++++ b/tools/perf/pmu-events/jevents.py
+@@ -457,8 +457,8 @@ class JsonEvent:
+     return f'{{ { _bcs.offsets[s] } }}, /* {fix_comment(s)} */\n'
  
--SCRIPTS = $(patsubst %.sh,%,$(SCRIPT_SH))
-+SCRIPTS = $(addprefix $(OUTPUT),$(patsubst %.sh,%,$(SCRIPT_SH)))
  
- PROGRAMS += $(OUTPUT)perf
+-@lru_cache(maxsize=None)
+-def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
++_json_cache = {}
++def _read_json_events_impl(path: str, topic: str) -> Sequence[JsonEvent]:
+   """Read json events from the specified file."""
+   try:
+     events = json.load(open(path), object_hook=JsonEvent)
+@@ -474,12 +474,16 @@ def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
+   if updates:
+     for event in events:
+       if event.metric_name in updates:
+-        # print(f'Updated {event.metric_name} from\n"{event.metric_expr}"\n'
+-        #       f'to\n"{updates[event.metric_name]}"')
+         event.metric_expr = updates[event.metric_name]
  
-@@ -592,8 +592,8 @@ $(GTK_IN): FORCE prepare
- $(OUTPUT)libperf-gtk.so: $(GTK_IN) $(PERFLIBS)
- 	$(QUIET_LINK)$(CC) -o $@ -shared $(LDFLAGS) $(filter %.o,$^) $(GTK_LIBS)
+   return events
  
--$(SCRIPTS) : % : %.sh
--	$(QUIET_GEN)$(INSTALL) '$@.sh' '$(OUTPUT)$@'
-+$(SCRIPTS) : $(OUTPUT)% : %.sh
-+	$(QUIET_GEN)$(INSTALL) '$<' '$@'
++def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
++  key = (path, topic)
++  if key not in _json_cache:
++    _json_cache[key] = _read_json_events_impl(path, topic)
++  return _json_cache[key]
++
+ def preprocess_arch_std_files(archpath: str) -> None:
+   """Read in all architecture standard events."""
+   global _arch_std_events
+@@ -1381,6 +1385,14 @@ const char *describe_metricgroup(const char *group)
+ }
+ """)
  
- $(OUTPUT)PERF-VERSION-FILE: .FORCE-PERF-VERSION-FILE
- 	$(Q)$(SHELL_PATH) util/PERF-VERSION-GEN $(OUTPUT)
++def _parallel_read_json_events(task: Tuple[str, str]) -> Tuple[str, str, Sequence[JsonEvent]]:
++  path, topic = task
++  return path, topic, _read_json_events_impl(path, topic)
++
++def _init_worker(std_events: dict) -> None:
++  global _arch_std_events
++  _arch_std_events = std_events
++
+ def main() -> None:
+   global _args
+ 
+@@ -1459,9 +1471,25 @@ struct pmu_table_entry {
+     raise IOError(f'Missing architecture directory \'{_args.arch}\'')
+ 
+   archs.sort()
++  import concurrent.futures
++  tasks = []
++  def collect_json(parents: Sequence[str], item: os.DirEntry) -> None:
++    if len(parents) == 0:
++      return
++    if item.is_file() and item.name.endswith('.json') and not item.name.endswith('metricgroups.json'):
++      tasks.append((item.path, get_topic(item.name)))
++
+   for arch in archs:
+     arch_path = f'{_args.starting_dir}/{arch}'
+     preprocess_arch_std_files(arch_path)
++    ftw(arch_path, [], collect_json)
++
++  with concurrent.futures.ProcessPoolExecutor(initializer=_init_worker, initargs=(_arch_std_events,)) as executor:
++    for path, topic, events in executor.map(_parallel_read_json_events, tasks):
++      _json_cache[(path, topic)] = events
++
++  for arch in archs:
++    arch_path = f'{_args.starting_dir}/{arch}'
+     ftw(arch_path, [], preprocess_one_file)
+ 
+   _bcs.compute()
 -- 
 2.54.0.563.g4f69b47b94-goog
 
