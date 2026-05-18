@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B9A43F6C47;
-	Mon, 18 May 2026 11:44:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40252302756;
+	Mon, 18 May 2026 11:46:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779104696; cv=none; b=URpIT+G5YORN4TfXr1FeZUmUk1pDjZNT5uxfKUvJX8VoOx64NtJniuH85TraVjZEPidRhEbFH/YPkwYEZeBujF2THKCfPTy9dDaQtCtJessuTKkUeErpLNctbIaFb3zaZLgk2CHAizo1/fAvOW8IHdLHeF0MRkTYBpBYMo6YgJk=
+	t=1779104783; cv=none; b=R6p5l5h/Du+IvG8pdPd3YHho+niyZNxqzDiPVmqbgIwtKbXhUoqz2BkDDsoXJKCB475eeXo6AEluuE9T4LG0s52ZNcwlN6AkwSHO6x2FFFBrLnsAQJsDAlVy0xEyGEJtc/r0Zz0wQzkCntGVnN1NgcHgCn+m/x6CrPiRvZ3bKcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779104696; c=relaxed/simple;
-	bh=pWq9XAxTuPdgs7tFtyzqEWZA5ZkN0qS2ybq5p8QU1aQ=;
+	s=arc-20240116; t=1779104783; c=relaxed/simple;
+	bh=XqZni0xuqOWv6atxkSxgH5JoYFF8z41zXXsop3zKZfI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z5vEGCkZhKPPc92zclbyNvi/bkyPci0yncX9BC2lAPxJqcnhwXIvO7BK15b1sp0UuuCwaj2c4DZEFh9MeJSGb0wV8jdMWcwreu0Gh4EfEI+bxVOCqktrsJwENgqHmDHYRaK4fDdTpNn5vSq3CVNer6WstrRrhL136GePTD+5LcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=duQFcPqh; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=LRPWwGW4bRt2UWtdxZUy3xa2h7TuHSrSS4Bljcizie3MVmq5KU80y0OG5XAdyrE8cS2vYRs5dRny1Bv0mWUay5lA2bUXXa+2a5ytaDPioCUF1/Uy7XMasyM9FgGMSXFRj8UI+s7qA8CyBsn6cCPpyyArTadMwCahjeR+f9cujVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CAQsjz5M; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="duQFcPqh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55099C2BCB8;
-	Mon, 18 May 2026 11:44:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CAQsjz5M"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC4BBC2BCF6;
+	Mon, 18 May 2026 11:46:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779104695;
-	bh=pWq9XAxTuPdgs7tFtyzqEWZA5ZkN0qS2ybq5p8QU1aQ=;
+	s=k20201202; t=1779104782;
+	bh=XqZni0xuqOWv6atxkSxgH5JoYFF8z41zXXsop3zKZfI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=duQFcPqh2MyBKNEEOMjP5JnEJXjkvYJoZxmfuqnTmcSSYq0SCw9FFzbjdcZrD/5gi
-	 /c+se/kTKLdoe636uKqraiRM5/WAv/Tp7sR+6UMijcK/4X3zLrDSqbuRi66eX28QSl
-	 u3XjE1CZRq8PXnA+PMKmXtu91Hvu/PoKC/C39HmM6jZcro5P+OKEZZPeZFzD6RSp0X
-	 HdjoG81cZYjtGVNbJV8yxRk/Atj2ZuAHzL0sBg4YXkDgOQmPkJX8652QOqOVqIoeeU
-	 ZQ7OpukpwEzBlF10kMpynqpvX+EwSTSkVGVZi/C/BHv0szJb9kFS0ecv2rW3H0uFce
-	 Om6Y1Ru0qg2hg==
-Message-ID: <cf5f932b-6586-4f64-ad2f-c9a6ff81affe@kernel.org>
-Date: Mon, 18 May 2026 13:44:50 +0200
+	b=CAQsjz5MR5HfrsRXegE6dNHqFlSV0vf4Te6NzEK3APu/K5S3I8tas2Nm8WVsbtlgl
+	 RnEsZ/Wl7AjzlJ75EQ6BBo6WW196SMgCpcvyF0SZNMIcdzyf+V4o3wVMNVjjwoWKz2
+	 eMQbqmJTHD/TcD0fXOQfMTNu0g/GhBAiE23pWIT1P/Yrpt8Czl6MsndH6L4cQBDokp
+	 lKftBHqW9BgOXoUI3y+cRGovEyQgIBSkDd31Vrwi+uamgQrAlMeJYttBeKFGRo9AYQ
+	 Rj4JP1NIPU4c2TdyabqAdaDypocx4oPqjVqvfmuvhr7oFWNHWQ0RIpuUZmdVbNrMhu
+	 yBoRF5fNCYW1g==
+Message-ID: <928e935a-b7a2-4cab-bb1b-49c88f8dd612@kernel.org>
+Date: Mon, 18 May 2026 13:46:15 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,79 +35,28 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/5] powerpc/bpf: Add support for verifier selftest
-To: adubey@linux.ibm.com, bpf@vger.kernel.org
-Cc: hbathini@linux.ibm.com, linuxppc-dev@lists.ozlabs.org,
- maddy@linux.ibm.com, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- stable@vger.kernel.org
-References: <20260517214043.12975-1-adubey@linux.ibm.com>
-Content-Language: fr-FR
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-In-Reply-To: <20260517214043.12975-1-adubey@linux.ibm.com>
+Subject: Re: [PATCH net-next 0/6] bpf-timetamp: support rx side
+To: Jason Xing <kerneljasonxing@gmail.com>, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ willemb@google.com, kuniyu@google.com, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+ memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ Jason Xing <kernelxing@tencent.com>
+References: <20260518082344.96647-1-kerneljasonxing@gmail.com>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <20260518082344.96647-1-kerneljasonxing@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-
-
-Le 17/05/2026 à 23:40, adubey@linux.ibm.com a écrit :
-> From: Abhishek Dubey <adubey@linux.ibm.com>
+On 18/05/2026 10.23, Jason Xing wrote:
+> From: Jason Xing <kernelxing@tencent.com>
 > 
-> The verifier selftest validates JITed instructions by matching expected
-> disassembly output. The first two patches fix issues in powerpc instruction
-> disassembly that were causing test flow failures. The fix is common for
-> 64-bit & 32-bit powerpc. Add support for the powerpc-specific "__powerpc64"
-> architecture tag in the third patch, enabling proper test filtering in
-> verifier test files. Introduce verifier testcases for tailcalls on powerpc64
-> in the final patch.
 
-Build fails:
+You have a spelling mistake in the subject/title.
 
-   DESCEND objtool
-   INSTALL libsubcmd_headers
-   CC      arch/powerpc/net/bpf_jit_comp32.o
-arch/powerpc/net/bpf_jit_comp32.c:232:6: error: conflicting types for 
-'bpf_jit_build_epilogue'; have 'void(u32 *, struct codegen_context *)' 
-{aka 'void(unsigned int *, struct codegen_context *)'}
-   232 | void bpf_jit_build_epilogue(u32 *image, struct codegen_context 
-*ctx)
-       |      ^~~~~~~~~~~~~~~~~~~~~~
-In file included from arch/powerpc/net/bpf_jit_comp32.c:19:
-arch/powerpc/net/bpf_jit.h:217:6: note: previous declaration of 
-'bpf_jit_build_epilogue' with type 'void(u32 *, u32 *, struct 
-codegen_context *)' {aka 'void(unsigned int *, unsigned int *, struct 
-codegen_context *)'}
-   217 | void bpf_jit_build_epilogue(u32 *image, u32 *fimage, struct 
-codegen_context *ctx);
-       |      ^~~~~~~~~~~~~~~~~~~~~~
-arch/powerpc/net/bpf_jit_comp32.c: In function 'bpf_jit_build_epilogue':
-arch/powerpc/net/bpf_jit_comp32.c:240:43: error: passing argument 2 of 
-'bpf_jit_build_fentry_stubs' from incompatible pointer type 
-[-Wincompatible-pointer-types]
-   240 |         bpf_jit_build_fentry_stubs(image, ctx);
-       |                                           ^~~
-       |                                           |
-       |                                           struct codegen_context *
-arch/powerpc/net/bpf_jit.h:218:50: note: expected 'u32 *' {aka 'unsigned 
-int *'} but argument is of type 'struct codegen_context *'
-   218 | void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct 
-codegen_context *ctx);
-       |                                             ~~~~~^~~~~~
-arch/powerpc/net/bpf_jit_comp32.c:240:9: error: too few arguments to 
-function 'bpf_jit_build_fentry_stubs'; expected 3, have 2
-   240 |         bpf_jit_build_fentry_stubs(image, ctx);
-       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-arch/powerpc/net/bpf_jit.h:218:6: note: declared here
-   218 | void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct 
-codegen_context *ctx);
-       |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-make[4]: *** [scripts/Makefile.build:289: 
-arch/powerpc/net/bpf_jit_comp32.o] Error 1
-make[3]: *** [scripts/Makefile.build:548: arch/powerpc/net] Error 2
-make[2]: *** [scripts/Makefile.build:548: arch/powerpc] Error 2
-make[1]: *** [/home/chleroy/linux-powerpc/Makefile:2143: .] Error 2
-make: *** [Makefile:248: __sub-make] Error 2
+  timetamp -> timestamp
 
-
-Christophe
-
+--Jesper
