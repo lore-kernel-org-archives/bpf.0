@@ -1,184 +1,119 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFFB213FEE
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 03:04:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779073450; cv=none; b=gvwSigRuQQZ9KBSEKtTZaSN56kg3aNZSrqagdbkSCq19GRRr5I4D5NF5nPPXLJwQsHeBjrRkhYyCm4upLPJPSjxkHYgMW7hZwp0lR+BKsoe5W8VjZhOwCVM0YJfL8Hwx9PgRPUIlsZHe3ji4euGb6zYQt1nVh9FaLZRe+OcrjMo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779073450; c=relaxed/simple;
-	bh=LhJd21TJY6kQSergeUeOjMlBVtk5mv46gi6ZVfrw3EQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=PmQuhhdHGRGn3iy5D06C9H22tZBIQifsKV4gCKIr1ssdsIwcO0asTDg24dBaN+8MMFIigWE09NXCn5Q4BMrJx8/Wq3inDJaj9m5m0cuEgeqzw3RbR4IkkVONR51pD1AxxR+vQkhgMI2iE5INzEdebqkJk0uX8gx7g0+t9ggNcPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ecMpg4nY; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EDDA3803DE
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 03:30:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779075003; cv=pass; b=VCpel6zkGvZIU7112rEZgmQ3lTrL2C4m6XDL79NXK0F7V8kAS7ipweauk91iuA8VFMVImTzCqPCGM9HVl/PigUyWhrBwie/CDnnKmRQoTLjEnJtPc94X70ENiYPTDOv+kIhBiXUxeVU7yVDWtUUezaN/Qo13shagPIxZS9BY/Qo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779075003; c=relaxed/simple;
+	bh=Ah2or2wqmpMc/QA9Fh43Z3aAuzOVZJMZOOpqKfpS3T4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SEF3n5W+OvVtZy0r5TXBY0YqSKS6DY7pXMlzgXwHXRMNQRXuXWMdj6tXUZrb5P5Kw/V6k8d4OGl6T/3xPE4OHf4n7bbfPIi7rlOI0mjUTGLrUIG5mDeVgPAbUZ09liUykBXRX4QP8vHFs750PKgtPiNdbmuIlyUZcGuOoK2ssDs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IUNfa1Z3; arc=pass smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ecMpg4nY"
-Message-ID: <d5961282-d41c-4e54-8ba2-cd08823a8c77@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779073433;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OtlbHBe0gQY3ywI5L11Vd3mlmKGGFhETqTTgSJyoI4o=;
-	b=ecMpg4nYnW6HnHkh5XiEArCEnV8i6nFBYgRFnW0UGsyKQzTB4hEgSrs2qjAizEEKneUoQL
-	t8mmVQPNwu8Bnp4vrp4i9wSAD99gSg/G24iwzrr4Gz8mLq0dochxY38YOo/gGPIDJhgaCp
-	ZVA7V37LTTFo9S3VKGYMS4/3BlZxLLg=
-Date: Mon, 18 May 2026 11:02:57 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IUNfa1Z3"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-488af96f6b2so19261565e9.0
+        for <bpf@vger.kernel.org>; Sun, 17 May 2026 20:30:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779075001; cv=none;
+        d=google.com; s=arc-20240605;
+        b=db8xddtKemwlHSM+ng3NqEHRsNvvHJPZJXmPAKvwBdHIUZ3n6AFGHZIxXCDjQxeTvC
+         8aRQkRAijHs78gPS02YSdXqt4jkxPzh9Bqzc3YgumyOP6x8Hz72M3z1D5INbk60SKGoJ
+         pI5zx6YOw3ypzYQYl+ZDUcQhd/Vdt0zXuZjf9H0XUSycZsUon4/HPvsEo7XtVSGHvc7g
+         WNYHo1z0oHyU8g2jbawWHd208Kopj1BOJ/cuF26n+ma3/IAFaOCBHa5tK5HaSO7PfnBf
+         k/Krgsp73rXTS9x+2YZAnC8YY038Yj3ztlL1SVgh8RvIDdsJLTaBGBRHygNCLSk5Hik6
+         7KDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Ah2or2wqmpMc/QA9Fh43Z3aAuzOVZJMZOOpqKfpS3T4=;
+        fh=3xknuT5WL/NqbnJpXwQYnW+td1YBF5a4KWkJipVzyMI=;
+        b=CU4Q9gxDE7xNGYKy1nBkFF7ba7B5J88vdPxa3D5LavP6kX0+4MJpBWNHe62Uyd62N7
+         ubwq5wIMJ1A0L2ZyzPPdTrAIU1GU77r4HbkvH2uWoWq0RU8PTTGvsOMgkQ2NtY8O4wki
+         pTkPEPj/PmVR1um5tTB8IS3paY6EGqZ3I9jsstnjX/kc4hlbGCciJxu0xp8FnsLvVdB7
+         AFzWG9Hil3VWCYDb2XQp7pffW8YTutwRnJKfL8oEt+Zqo46QLDBv2V47EewjtB3hzJpY
+         D+Vd7jBtg2gyruZvLL5Avz6tc9QaBQFwjBm32bbQECQeGLqhMGVd+DRWHgdO0KvyRQmO
+         HsAg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779075001; x=1779679801; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ah2or2wqmpMc/QA9Fh43Z3aAuzOVZJMZOOpqKfpS3T4=;
+        b=IUNfa1Z3DM9Bh12g+I6TcllOzu8J/koiqn56iX7+DLbJu0VXaiFl/l7Oy97Qfm0u17
+         xQzLHuer/I2vjy3DKKw6FzxEW81cJ6pEpB7KW14g5ZXKFN7oWKG7OuAWOSKz6gTusHf3
+         r+d/oQdqbzl25DuBkSuUb11kyPCgY6N7nY6u6mW+lG+xM2S3/mMD2DPsi3d5d2YqVyRr
+         BEWYgpDfYurKLER8J3vyVLBZ2mJLKZTyD6z7YRRfK0T0eks3WuUv7niTrQYRFC6sBpJy
+         cyreFq6xqwgIYMn1Zv0ch9Y34heYlMdODr0R0cqx0y7o5ZOLxxdBi4qiCOhuryiTyKrR
+         rzRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779075001; x=1779679801;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Ah2or2wqmpMc/QA9Fh43Z3aAuzOVZJMZOOpqKfpS3T4=;
+        b=CCzf2TbimXuhn4EMbjmEMGBfEOAFjM+pvXlssylsBCB5Cc/KXxKr1/osseV80X8Nz7
+         nvS98Q6VKxgdUrTSRxgWHI0B/26Mjnj6jBcFl52xpZAP3ygVZ8AuZzoQiChEVZH/pdZE
+         sCLXm17WVQE0sgVVOPh/3N8/YoUJzQ0o7J0LPFlfwFSAfhiK1W9UQ1loZQm6xXWY3GWl
+         3JEBteLbyB/52RXKpuEFYT5+xLPRESg9f3NRuYbpYI/vHHUQCuJk2FgVaV1M77pgzxR6
+         3KwmnSo31/2+szvoZUBYioamnDOqH1oClvG3avehsBBDkwIFYtEturEQVjXEkyv8kW9X
+         GGPA==
+X-Forwarded-Encrypted: i=1; AFNElJ+owPw36pkkzBJRwBWNwyuwkk2IFtGVhJ3Dd8NBVAvTcMX1/YP3R4HGLMwuM7XmriEjmJM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2/ArPICUP7q97XqM9xq94mcUZs525powXyGO6txwIcYYa3quH
+	6lo0xAUO4nEl/43bqhuhKRhqhSD5LBEGWp5v5Ix0HHtduHsIH3FCqioiAshsZttf8Bg11dYwMOg
+	L4aDIEtI5nv/uP7pfkJio4S/0iKuueeA=
+X-Gm-Gg: Acq92OGo2kH0/rtJTGkOpVacqpw0LWh2iFD74W8phLoLMnEQFHJFELHVdLHiZhAnyB5
+	5UUu1TYNyRQtgW3/SlKfDyCImIepIeLPamAk62AlshVpHDNsAbkoIeQE1pALp41SIm8qtPrEn7Y
+	Oby8gf8h9SHO2tI1FM+XvUEguPpEO5TC5UhTJK7b9OsjBxJmJ9qqN1S1kkOS9rifRcLKAfw5lTo
+	J6U7YH2HZLwGIkiYhrrt+IMjSH6EUDlmGgUcnfVzTky/561kXY0FAWMeI3OeS0c7cvgpXzlh51g
+	KhBrs7ctqEuq1syVcIKmDIHUbfqRC1/YPK0DgwfTEprnRNsO27/2VjyYMTMg+x6+20jBxoXzIWI
+	sxbu0+2A6WlIVCJdXfgVVoN/4zA==
+X-Received: by 2002:a05:6000:26c3:b0:45d:b14b:23fb with SMTP id
+ ffacd0b85a97d-45e5c366f83mr20413156f8f.11.1779075000433; Sun, 17 May 2026
+ 20:30:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH RESEND bpf-next v10 2/8] bpf: clear list node owner and
- unlink before drop
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kaitao Cheng <kaitao.cheng@linux.dev>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, ast@kernel.org,
- memxor@gmail.com, corbet@lwn.net, martin.lau@linux.dev,
- daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- chengkaitao@kylinos.cn, skhan@linuxfoundation.org, vmalik@redhat.com,
- linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev, bot+bpf-ci@kernel.org
-References: <20260512055919.95716-3-kaitao.cheng@linux.dev>
- <da95f45b43d94d17796b19abc4c555e35daafab7d5e1cdca3714fe0f54ab8cce@mail.kernel.org>
- <e141699dab70282d811ec30bbf2aa8279706817b.camel@gmail.com>
- <DII0TT9LXYCX.2GMM6QA4Q9BPZ@gmail.com>
- <0fb2d99b-b122-44fa-a8bc-9befe6e350bc@linux.dev>
- <7fa6794161a8bd4fdbc21dad68e86e9770c873cc.camel@gmail.com>
- <0171629c-bdd3-4661-a4e6-2698dd623c3a@linux.dev>
-In-Reply-To: <0171629c-bdd3-4661-a4e6-2698dd623c3a@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260515071504.2054786-1-yuyanghuang@google.com>
+In-Reply-To: <20260515071504.2054786-1-yuyanghuang@google.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sun, 17 May 2026 20:29:49 -0700
+X-Gm-Features: AVHnY4IEM0nvjSnXzFwg7aWUVavgM-pZSVaHMNKMxqjmbw4PkrOQcMdn5z4rIOY
+Message-ID: <CAADnVQ+Mc81ciE+6i4Mvg5h=fRNq6460w0-NAw_bU12oaBWruQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/2] bpf: Align syscall writeback behavior with
+ user-declared size
+To: Yuyang Huang <yuyanghuang@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Nikolay Aleksandrov <razor@blackwall.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-在 2026/5/17 00:18, Kaitao Cheng 写道:
-> 
-> 
-> 在 2026/5/16 02:24, Eduard Zingerman 写道:
->> On Fri, 2026-05-15 at 12:34 +0800, Kaitao Cheng wrote:
->>>
->>> 在 2026/5/14 09:50, Alexei Starovoitov 写道:
->>>> On Wed May 13, 2026 at 3:53 PM PDT, Eduard Zingerman wrote:
->>>>> On Tue, 2026-05-12 at 06:41 +0000, bot+bpf-ci@kernel.org wrote:
->>>>>
->>>>> [...]
->>>>>
->>>>>> When a BPF program holds an owning or refcount-acquired reference to
->>>>>> one of these nodes (node X), which is structurally supported because
->>>>>> __bpf_obj_drop_impl() uses refcount_dec_and_test() and only frees at
->>>>>> refcount 0, a concurrent push to a DIFFERENT bpf_list_head becomes a
->>>>>> corruption:
->>>>>>
->>>>>> CPU 0 (bpf_list_head_free, lock released)  CPU 1 (BPF prog, refcount X)
->>>>>> -----------------------------------------   ----------------------------
->>>>>> (owner of X == NULL, X linked in drain)
->>>>>>                                             bpf_list_push_back(other, X)
->>>>>>                                               __bpf_list_add: spin_lock()
->>>>>>                                               cmpxchg(X->owner, NULL,
->>>>>>                                                       POISON) -> OK
->>>>>>                                               list_add_tail(&X->list_head,
->>>>>>                                                             other_head)
->>>>>>                                                 -> overwrites X->next,
->>>>>>                                                    X->prev, corrupts
->>>>>>                                                    other_head's chain
->>>>>>                                                    because X is still
->>>>>>                                                    stitched into drain
->>>>>> pos = drain.next;      (may be X or neighbor using X's stale next)
->>>>>> list_del_init(pos);    reads X->next/prev now pointing into other_head,
->>>>>>                        corrupts other_head's list and/or drain
->>>>>
->>>>>
->>>>> Kaitao, this scenario seem plausible, could you please comment on it?
->>>>
->>>> I think bot is correct.
->>>> This patch looks buggy.
->>>> It seems to me an optimization that breaks the concurrent logic.
->>>> May be just drop this patch and reorder the other one, so that bot
->>>> sees nonown suffix logic first.
->>>
->>> This patch is still necessary because it addresses the problem discussed
->>> in this thread:
->>> https://lore.kernel.org/all/DH846C0P88QU.16YT12I1LXBZM@etsalapatis.com/
->>>
->>> The patch does have a bug, however. To fix the issues we are seeing now,
->>> I propose the additional changes below and would appreciate feedback.
->>>
->>> --- a/kernel/bpf/helpers.c
->>> +++ b/kernel/bpf/helpers.c
->>> @@ -2263,8 +2263,10 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
->>>         if (!head->next || list_empty(head))
->>>                 goto unlock;
->>>         list_for_each_safe(pos, n, head) {
->>> -               WRITE_ONCE(container_of(pos,
->>> -                       struct bpf_list_node_kern, list_head)->owner, NULL);
->>> +               struct bpf_list_node_kern *node;
->>> +
->>> +               node = container_of(pos, struct bpf_list_node_kern, list_head);
->>> +               WRITE_ONCE(node->owner, BPF_PTR_POISON);
->>>                 list_move_tail(pos, &drain);
->>>         }
->>>  unlock:
->>> @@ -2272,8 +2274,12 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
->>>         __bpf_spin_unlock_irqrestore(spin_lock);
->>>
->>>         while (!list_empty(&drain)) {
->>> +               struct bpf_list_node_kern *node;
->>> +
->>>                 pos = drain.next;
->>> +               node = container_of(pos, struct bpf_list_node_kern, list_head);
->>>                 list_del_init(pos);
->>> +               WRITE_ONCE(node->owner, NULL);
->>
->> I think this still leaves a short race window open.
->> Why does the .owner has field to be NULL?
->> Can the logic that implies for it to be NULL be extended to accept
->> POISON as well?
-> 
-> Here, before setting owner to NULL, list_del_init() has already been
-> executed, which means the node no longer belongs to any list. This
-> should match the semantic meaning of owner == NULL.
-> 
-> Do you mean deleting WRITE_ONCE(node->owner, NULL) and preventing
-> all subsequent __bpf_list_add() operations on this node?
+On Fri, May 15, 2026 at 12:15=E2=80=AFAM Yuyang Huang <yuyanghuang@google.c=
+om> wrote:
+>
+> The bpf(cmd, attr, size) syscall copies up to 'size' bytes on input, but
+> several commands write outputs back to userspace unconditionally. If the
+> caller passes a short buffer, this can lead to out-of-bounds writes,
+> potentially overwriting adjacent userspace memory.
 
-Hi Eduard Zingerman,
-
-I’m not sure I fully understand your point. Could you please explain
-your suggestion in a bit more detail, or help clarify where the
-“short race window” you mentioned is left open?
-
->>
->>>                 /* The contained type can also have resources, including a
->>>                  * bpf_list_head which needs to be freed.
->>>                  */
-> 
-> 
->>> @@ -2481,6 +2487,14 @@ static int __bpf_list_add(struct bpf_list_node_kern *node,
->>>         if (unlikely(!h->next))
->>>                 INIT_LIST_HEAD(h);
->>>
->>> +       /* bpf_list_head_free() marks nodes being detached with BPF_PTR_POISON
->>> +        * before list_del_init().  cmpxchg(NULL, POISON) below would fail with
->>> +        * that old value and fall into the generic error path, which wrongly
->>> +        * calls __bpf_obj_drop_impl().  Reject POISON up front instead.
->>> +        */
->>> +       if (READ_ONCE(node->owner) == BPF_PTR_POISON)
->>> +               return -EINVAL;
->>> +
-> 
-> This code block is not needed; I will remove it.
-> 
-
--- 
-Thanks
-Kaitao Cheng
-
+The whole thing sounds like a user space bug.
+Please demonstrate a case where this issue is seen
+by using libbpf APIs.
