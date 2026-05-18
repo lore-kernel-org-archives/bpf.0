@@ -1,33 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F10013E714A;
-	Mon, 18 May 2026 09:34:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA532F7F1D
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 09:47:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779096855; cv=none; b=TV25xEH422VaYW/8a6Bwn0IRZoFJ+0MGbeEeneip4QFW2S2SsbmMvtX6Qd9NUtkkbpqlfnTxB8/XPdE3icc57rnL3AkSoxe9WTz6YtozlQ+UPP1Wi6GneOEPp2hjAzLkYUtRaE7x6dkwB5OvSlLECA7EhsTYhvOrx10417ff/GI=
+	t=1779097678; cv=none; b=iF6UApXx5iuwK+atiKRGf/Me+PUleMKZRKSqUrzhK8mBj5yqoq5Sdm3N7NWLNQ92OgvyC4gOIxDpbcEQHGIMqqczWc2CcJvsF6W/5H3vgGViTA7hCCuJbeqvHVdmbi36ZfJQnRwidiLH8nhd6/R+UYH40Qw9YwaFdcuOcWgLliA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779096855; c=relaxed/simple;
-	bh=GzBzHDjnj4M3YTbCmBceQUc3zfWmzR4wFD9lrvfEGjY=;
+	s=arc-20240116; t=1779097678; c=relaxed/simple;
+	bh=kQwAY/l0CYICe34k0IpNyn+TG1YD4kxDzsA4u0x5DHg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G3y6CkFIMDDb/Bh1TkMkd6/Nz8YAUHfhOiEvPt+auTXbvgYNuybXeIrNi2TF0L75icYv9T/9HWgqUCK0AqsXz5YbOdoeZWkPLcsQKDa2H3GzX0EQurXW911tvHeATKrck95eHONIbsZOyFF0xninMMxDAMk33YAPbqDQRysYpio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sZEb6K2Y; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=PMXvFXPjPsB+VW3Xnt++1yvT/qQRaDxqmWB3QNaTnmmMzYjq4mNFvoL6IoltRwOY59CSpAiTL2VnjJrSVPzBu94vgcLxYVUgNS5AfdelnhBi91ko5yts8OJRF9e+bxs+c54yUAo2fjQd0IJikS5a+W3ma5kqtCv78p5uhmc0Yng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OLrwMiH4; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sZEb6K2Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00108C2BCB7;
-	Mon, 18 May 2026 09:34:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779096854;
-	bh=GzBzHDjnj4M3YTbCmBceQUc3zfWmzR4wFD9lrvfEGjY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=sZEb6K2YedoHePpZc1igvCSBfZNBrGJBi8jQLbBUY2nThD+L/3S8D9jqg17V76XK6
-	 FSM2oQQMeno2AKFYtifyrgLOfCZDthPUxHTWx8eZvyyDrqzkk2Hrec75AZN9qsVAwa
-	 UMG9lre442aR/vAZD6Xuug6/4fzcx9l4wR+eOhpIKLjS9h1nzotoIZ5QDBClDpEmcm
-	 LVGaHGK7CXXiOcgZKSicJhfNM2qk0bu+yhtViubdsNc8fyQu3Vsr3PFQPOiFZCJYIf
-	 RDiUHxvHBV8BpypAMXbUQDMjWAZkjHe6asgWo9C7IPUOV2FMkDgmseugS+orIIQZow
-	 AHur9V0RknTsA==
-Message-ID: <65d11b12-5696-4403-8062-3ae65ca9113e@kernel.org>
-Date: Mon, 18 May 2026 11:33:59 +0200
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OLrwMiH4"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-48e56c1bf5dso9192785e9.3
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 02:47:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1779097676; x=1779702476; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T/EO1D6TrcoAaYAZG0MsX8/FpcPXBdwplKszfXP85PU=;
+        b=OLrwMiH4CQtgKscf4/rdKN+2eUNFBwGtIQoIjOQYGsQF170r3tnj1mx0+nuoV0Pp+c
+         C32LKxRuFq14cKbZ9wBBnDo0v2eXxJnuKXsXWJ5vjmm7Hg7Oef85al4yfax/KSUwz21w
+         c4zdR8W+dV/SJjIOI6sAmfhngxRAtIIcWEX8G+a9B5Vm/Q9HjUwWzglyXVDNnp4g62Fj
+         Z0OvszHSolcGTOXOOtutb742fX+BkxOH33esJoJhpUZTl2UyN7Bo4I2PS5G6MPS1SnZw
+         nDc9VugIjDR9gsQxfMdeAI3kniNT/VHEozB6shE2A7NpHf31i0khh5PQ+12RrdVKn2lt
+         T04A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779097676; x=1779702476;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T/EO1D6TrcoAaYAZG0MsX8/FpcPXBdwplKszfXP85PU=;
+        b=jfcXVvQEesvMQ0Qozw7NeFFJVVwajspFPFVXgbuoyPsrYSTrcorUkLMQIa7cKe3do6
+         O2DyjXQDzLqdbFgKra2CepBlNE2mVsEtINtWqQ+m0o+EMcTpLa3+Q1svgDofibhvTAbi
+         iNPmooDoCTyOEvPxJuHCA1D2s/UeK7oBq+o2ZKPfec0i24iFpGeceMCTdynhF+XNquwU
+         0ycr3Ani6rDhErxa4P/frdLN3M13xLGtse0cegRi5FIQT2x9IPZFO8Mzdx//SpaG1MZY
+         y5nmt4iHQNRenlzmzTqeK5SYPhurEk7k5RHln6N1BMlFJmlnL3+pzODCblr94Wkx0igW
+         YGTQ==
+X-Forwarded-Encrypted: i=1; AFNElJ89PnOmgRmqOcXhOmdFIKHKfu6zHOd5JTHrS2xatqew5Q3yiubxvXuiKnDclcwEKLIy54s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yws+xu324fZYl9BOFVdh41+fpO1xw3MBio7WV6ZXSy5xTJkkgJ9
+	G3S/0j0KF9eaD0F8utbB9wgsG7iqSdPt/FPlV0K3M6NSoVbwTKQHxhlktGoeOv2M6bM=
+X-Gm-Gg: Acq92OFTOKu/MKbghrIci6xvQGblXtXEITOPZ3aPpZWWaW7ayZLl6g2SwJp7iMyYOn6
+	5uHwvlT8yB6K7EiGvefnPg8KktDwQK2zZMEcqYXpGsLvtGpIpsdBeVHhHo1q0+xb1GazqiZPvCC
+	1uafR6/18L9JQiSwkvMMSInFdOWr/hT8qrWvK8nhbxheE1tTCtKchUfJUkf6LympVLFGtok6Gju
+	lgQZTq2JzyVS6lABi3TEbiezt6SWR2kyEpDaTKlqkyhIpNfSkuPMdbbTl5zNrGSJe003BdM9W1R
+	3B5ViZjLG9il2R8YcZtU+IVcI1F5Tikh7mW9ijcKTiKQs01td7W97vTBAeb+4lpJfeGlT+pw0RE
+	cgZuIQi10jKBV8gmJDvnMx+tax3zYQ4vcB6YpARoRQGSI/cK1kKmlYaZz/Oue3qZ5365gRb4s5A
+	eQAhyt2W3c79Zs7UZNPUElgkA9fmeE
+X-Received: by 2002:a05:600c:34d4:b0:48f:e245:394e with SMTP id 5b1f17b1804b1-48fe631f631mr226307655e9.27.1779097675702;
+        Mon, 18 May 2026 02:47:55 -0700 (PDT)
+Received: from [192.168.1.3] ([185.48.77.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4900c16c744sm58005165e9.3.2026.05.18.02.47.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 May 2026 02:47:55 -0700 (PDT)
+Message-ID: <ef5688a7-3e1d-47be-aca7-cc6e564e059c@linaro.org>
+Date: Mon, 18 May 2026 10:47:53 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,109 +68,76 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] mm: introduce a new page type for page pool in page
- type
-To: Byungchul Park <byungchul@sk.com>
-Cc: Dragos Tatulea <dtatulea@nvidia.com>, linux-mm@kvack.org,
- akpm@linux-foundation.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel_team@skhynix.com, harry.yoo@oracle.com,
- ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org,
- hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
- saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
- andrew+netdev@lunn.ch, edumazet@google.com, pabeni@redhat.com,
- lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, horms@kernel.org,
- jackmanb@google.com, hannes@cmpxchg.org, ziy@nvidia.com,
- ilias.apalodimas@linaro.org, willy@infradead.org, brauner@kernel.org,
- kas@kernel.org, yuzhao@google.com, usamaarif642@gmail.com,
- baolin.wang@linux.alibaba.com, almasrymina@google.com, toke@redhat.com,
- asml.silence@gmail.com, bpf@vger.kernel.org, linux-rdma@vger.kernel.org,
- sfr@canb.auug.org.au, dw@davidwei.uk, ap420073@gmail.com
-References: <20260224051347.19621-1-byungchul@sk.com>
- <982b9bc1-0a0a-4fc5-8e3a-3672db2b29a1@nvidia.com>
- <20260513121805.GA22430@system.software.com>
- <8348d867-f8a1-432c-be2d-699ad96b2e93@kernel.org>
- <20260513123920.GA51788@system.software.com>
- <627bb280-be44-4648-8771-5a479cda988f@kernel.org>
- <20260513132636.GA75142@system.software.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
+Subject: Re: [PATCH v2 5/6] tools/build: selftests: Allow versioning LLVM lld
+To: sashiko-reviews@lists.linux.dev
+Cc: dmitry.torokhov@gmail.com, linux-perf-users@vger.kernel.org,
+ bpf@vger.kernel.org, linux-input@vger.kernel.org
+References: <20260518-james-perf-llvm-version-v2-5-f12cc4f031d8@linaro.org>
+ <20260518093237.90640C2BCC6@smtp.kernel.org>
 Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260513132636.GA75142@system.software.com>
-Content-Type: text/plain; charset=UTF-8
+From: James Clark <james.clark@linaro.org>
+In-Reply-To: <20260518093237.90640C2BCC6@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/13/26 15:26, Byungchul Park wrote:
-> On Wed, May 13, 2026 at 03:02:43PM +0200, David Hildenbrand (Arm) wrote:
->> On 5/13/26 14:39, Byungchul Park wrote:
->>>  On 5/13/26 14:18, Byungchul Park wrote:
->>>
->>> This is not final patch, but for sharing the rough idea *with code* -
->>> maybe there are more points in code that should be adjusted by the
->>> change.  I just typed the draft patch quick just for sharing idea.
->>>
->>> If we should allow pp type pages to be used in mapping as well, then
->>> we should allow a page to keep both its type and mapcount at the same
->>> time.  Am I missing something?
->>
->> We don't want code to accidentally overflow mapcounts into these bits and have
->> them wrongly be detected as page types.
->>
->> This is just very fragile.
+
+
+On 18/05/2026 10:32 am, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] Empty USE_LD variable causes clang build failure in selftests when ld.lld is not in PATH.
+> --
 > 
-> Okay.  Thanks for the explanation.  Plus, the adjustment I mentioned
-> might not be as simple as I thought it'd be.
+> commit 371ca22c55bb0fa6502ac06f7b33d63418ad16ff
+> Author: James Clark <james.clark@linaro.org>
 > 
-> So sorry about the noise.  I'm a zombie now.  I'll think about it after
-> some rest.
+> tools/build: selftests: Allow versioning LLVM lld
+> 
+> This commit adds an LLD variable to Makefile.include to allow versioning of
+> LLVM's linker, keeping it consistent with the rest of the LLVM toolchain. It
+> modifies the BPF selftests Makefile to resolve the full path of the linker
+> using the command -v shell utility.
+> 
+>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+>> index 6ef6872adbc3e..836e783f0170e 100644
+>> --- a/tools/testing/selftests/bpf/Makefile
+>> +++ b/tools/testing/selftests/bpf/Makefile
+> 
+> [ ... ]
+> 
+>> @@ -245,9 +245,9 @@ $(OUTPUT)/%:%.c
+>>   
+>>   # LLVM's ld.lld doesn't support all the architectures, so use it only on x86
+>>   ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
+>> -LLD := lld
+>> +USE_LD := $(shell command -v $(LLD))
+> 
+> Does this cause the build to fail if the toolchain directory is not in the
+> system PATH?
+> 
+> If a user explicitly specifies the compiler using an absolute path like
+> CLANG=/path/to/clang, but does not add the toolchain directory to their PATH,
+> the command -v utility will return an empty string.
 
-It's a shame we didn't get reports earlier that we do have some vm_insert_page()
-users :(
+If they don't use LLVM= and use CLANG= with an absolute path then they 
+need to set all the tools with an absolute path. That's the problem that 
+setting the path with a prefix for all tools with LLVM= solved.
 
--- 
-Cheers,
+I suppose this could _technically_ be a regression, but so could adding 
+any new build rule that added a new tool that wouldn't be set in 
+someones existing build command. Being that strict would mean we can't 
+ever add new tools so I don't think this is an issue. And I don't think 
+there's a way to solve this and also respect the documented rules of LLVM=
 
-David
+> 
+> This would cause USE_LD to be empty, leading to a malformed argument like
+> -fuse-ld= being passed to clang later in the Makefile, which then fails with
+> an invalid linker name error.
+> 
+> Previously, passing the hardcoded lld allowed clang to natively resolve the
+> linker relative to its own binary location. Is there a way to support both
+> versioned linker names and absolute compiler paths without relying entirely
+> on the system PATH?
+> 
+> [ ... ]
+> 
+
