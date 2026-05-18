@@ -1,94 +1,178 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75233CF032;
-	Mon, 18 May 2026 07:20:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703E43D0BE5;
+	Mon, 18 May 2026 07:26:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779088860; cv=none; b=RQ/G/iN2NRJFDH2oC4cJ6maZ7mlop20NDi3mokIMk63HFx073TOg99Doy/0UfJKoPN8yEG/4JKoiL5LMNK0E2E+H/QUo/1ifl36TVsgZJhr/YYnRVt9c3W0OrcLUag1l7ATtxYlH5Cr/qXzPxUGiNSoOp7Uejvt3UQAsCxAWO5A=
+	t=1779089173; cv=none; b=t6wrgaeWKk5REATxjJPKo426g9lNdMgK0KfOhfbkR2m7Eh2e0h7SEUgRtklbl6DaDQDa2beewgJNQeeAW12uxBhgmqt0XonVf6UXenMPfhZvEmXFyzKYt+hkC6jFGLwqJ478MOCAbnyaigaebTG7mFnrFQoqOIjth8wcsLlzo+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779088860; c=relaxed/simple;
-	bh=f+VDzJu5kyWEt4aDEa8SHcG2BEIGEy0p37k+XH/gSn8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QDu3hdzPXULuq9+k543zPSwHqED6aJk3/5x78bOymfg4npd0x7h6tpLU5WyCf9zCO3c9ybKPNceVp5lOa12f/VfIonbEa1sAEWBse4P2MZUNxnwbOfRkGcjm8zExR/IfG0ywQNTz26zDmrlLkmZ4jnuVYQO7QSIQAnlnWpae+aw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=bcr6ZW+6; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1779089173; c=relaxed/simple;
+	bh=ItILD+8MC/UCfiDqeGg6Vcn7s/U85Ya+y5BT7bVnPjQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AjhPYrmf3EFYmYJ6XP19iKePF2D7mGKOLHJ8TS7R4e+UrkEwPLpQNk7gO9m+5piE+ajM1MnPYHHGNqhvSLYpZ0y6X6+fVhEvkk3SVvxRpT5eAsKUSOAPWZjFFpixA1GZWrB2sguO1kbGEL1UmJmnSEfRLeOkYw5kbuXGXTWUUak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=W20J4MJP; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="bcr6ZW+6"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=oymZOlMj6aZm2jiVzI4Upf5k8ifuN/pveVWUu4TydLQ=; b=bcr6ZW+6uMYVPPdYnu1n5lZvLE
-	SGn2E8l0rK+cjQ+R6Sj5HL59towTXB6p12v2CEvZTRYmeGs2QkOf4gLowmIrvuI3JiuVpU2DOQQiu
-	ndfkYABp9AVnYFrMPoKMGIujfaB+EX05Vg83yfMS2mbf0dy0/Ghhaty6xMyz/eRsGISxsZdQitFOR
-	kBmGZPmASGz9S7TSlR7rOPtuNlSAhUKb6vCKWR0NYuqbdYs6gBQeYkthJrz5ORo1qBuec7q+BFWEp
-	Y0NW5xhU2pyfHfK2jwpm1QeszCSqZfOkFSFOnoR0fhrifOkzGQX8T7FNYmekXVm65m4u8QGeakwRx
-	sx+RmmBA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wOsHL-0000000A9JE-24Bl;
-	Mon, 18 May 2026 07:20:44 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id BBF7B300329; Mon, 18 May 2026 09:20:42 +0200 (CEST)
-Date: Mon, 18 May 2026 09:20:42 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Tejun Heo <tj@kernel.org>
-Cc: David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>, sched-ext@lists.linux.dev,
-	bpf@vger.kernel.org, x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/8] sched_ext: Sub-allocator over kernel-claimed BPF
- arena pages
-Message-ID: <20260518072042.GP3102624@noisy.programming.kicks-ass.net>
-References: <20260517211232.1670594-1-tj@kernel.org>
- <20260517211232.1670594-8-tj@kernel.org>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="W20J4MJP"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64I7HBUX3901160;
+	Mon, 18 May 2026 07:25:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=cb9nWJ
+	uF3hQ3miUzMebgNN6Kj7RqYUCcNl6nTWfgSd0=; b=W20J4MJP+al4K0g9lt0N+o
+	8Y4T0nr8BD/aG0V3GCwSjHdrdv449aFHU0NhIJ9FHBNeCEQpsVqfZH0WvIjw7BYV
+	9GOZ7nweeMzHOePMe/v0zqSVdzeLWxfPTQMXI1mObyBFh41I7VEHopccmCDvP9NP
+	mUIr4c+54w5eUeLK5nvogVEoowtFKm+iESo8G55q40dGbAT/Q4lzhHkHK6f/Fqrl
+	ZKN7kFTr+7xBvNnC/K2JgEWfA40fRUjVOFp90D4akemCDFChBzyczFsQByFR1aCU
+	7+hKB08j/daHXyIFGCAnqMXCjaALElxQGJprt2OG+gS6dNCXSQpavbbGXMBUt0iw
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h8mess7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 May 2026 07:25:55 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64I7O4ri010865;
+	Mon, 18 May 2026 07:25:54 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e72wpvxku-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 May 2026 07:25:54 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64I7Ppe244892500
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 18 May 2026 07:25:51 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1212420043;
+	Mon, 18 May 2026 07:25:51 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9C10220040;
+	Mon, 18 May 2026 07:25:48 +0000 (GMT)
+Received: from [9.78.106.17] (unknown [9.78.106.17])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 18 May 2026 07:25:48 +0000 (GMT)
+Message-ID: <e074658e-401f-4d12-8997-4007d86b9826@linux.ibm.com>
+Date: Mon, 18 May 2026 12:55:47 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260517211232.1670594-8-tj@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/5] powerpc/bpf: Move out dummy_tramp_addr after Long
+ branch stub
+To: adubey@linux.ibm.com, bpf@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com, ast@kernel.org,
+        andrii@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+References: <20260517214043.12975-1-adubey@linux.ibm.com>
+ <20260517214043.12975-3-adubey@linux.ibm.com>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <20260517214043.12975-3-adubey@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: MF7cg5mXDx7I93ljsD12K5d6Cutk981Z
+X-Authority-Analysis: v=2.4 cv=GYMnWwXL c=1 sm=1 tr=0 ts=6a0abf03 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VnNF1IyMAAAA:8
+ a=jJgxMy1UuW8321J8VzYA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: MF7cg5mXDx7I93ljsD12K5d6Cutk981Z
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE4MDA2NyBTYWx0ZWRfX40xScc2nOQVE
+ d5L/d1A0SmTd3+AVfStaX/sD/c4t0HUwUFo3M4LuYuAL7obV6nQAHNUB4vJ0C07x1GVs+fEN4kJ
+ GdpvEAyte2k5lbR3PtH4QS6EtqEfzBjRatJTwSDAG+shF2qPuIUnOMGls7itPjBwjHj8SZy7qDL
+ NeFovnGAEFXEtZUcZjtRkJe5JP6LZD0Vcua8Pe+eyl+a7J3Gabn6KJNSkEWzOQ+7r3/GXjpMv3d
+ 0WRcLVzUlODBBi4JvEnHpDPdPFhRo6jFmMLn+DYyVTPNpzJlrxDfF7QwmZa6WTro3XrIzNOEiCs
+ RQKo4U4GhSWxA1lsNMBgh2vIxoBG27tpGzOOyzPnflSIo/YS+O2iT15RFWTvbtI+uHlYyDVZg15
+ A2IVJrD5+BhgaNbCFm9rXvg2u4cgglY2H0rUS8BfsVS38AHbsuTIlLgGLWhGHBMMXfuD0nbWB+C
+ IW4q8pVamAqsIR7ZJRg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-18_01,2026-05-15_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
+ adultscore=0 suspectscore=0 spamscore=0 clxscore=1015 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605180067
 
-On Sun, May 17, 2026 at 11:12:31AM -1000, Tejun Heo wrote:
-> Build a per-scheduler sub-allocator on top of pages claimed from the BPF
-> arena registered in the previous patch. Subsequent kernel-managed
-> arena-resident structures (e.g. per-CPU set_cmask cmask) carve their storage
-> from this pool.
-> 
-> scx_arena_pool_init() creates a gen_pool. scx_arena_alloc() returns the
-> kernel VA. On exhaustion, the pool grows by claiming more pages via
-> bpf_arena_alloc_pages_sleepable(). Chunks are added at the kernel-side
-> mapping address; callers translate to the BPF-arena form themselves if
-> needed.
-> 
-> Allocations sleep (GFP_KERNEL) - they may grow the pool through vzalloc and
-> arena page allocation. All current consumers run from the enable path (after
-> ops.init() and the kernel-side arena auto-discovery, before validate_ops()),
-> where sleeping is fine.
-> 
-> scx_arena_pool_destroy() walks each chunk, returns outstanding ranges to the
-> gen_pool with gen_pool_free() and then calls gen_pool_destroy(). The
-> underlying arena pages are released when the arena map itself is torn down,
-> so the pool destroy doesn't free them explicitly.
 
-Should this really be part of scx rather than be part of the bpf-arena
-thing proper?
+
+On 18/05/26 3:10 am, adubey@linux.ibm.com wrote:
+> From: Abhishek Dubey <adubey@linux.ibm.com>
+> 
+> Move the long branch address space to the bottom of the long
+> branch stub. This allows uninterrupted disassembly until the
+> last 8 bytes. Exclude these last bytes from the overall
+> program length to prevent failure in assembly generation.
+> Also, align dummy_tramp_addr field with 8-byte boundary.
+> 
+> Following is disassembler output for test program with moved down
+> dummy_tramp_addr field:
+> .....
+> .....
+> pc:68    left:44     a6 03 08 7c  :  mtlr 0
+> pc:72    left:40     bc ff ff 4b  :  b .-68
+> pc:76    left:36     a6 02 68 7d  :  mflr 11
+> pc:80    left:32     05 00 9f 42  :  bcl 20, 31, .+4
+> pc:84    left:28     a6 02 88 7d  :  mflr 12
+> pc:88    left:24     14 00 8c e9  :  ld 12, 20(12)
+> pc:92    left:20     a6 03 89 7d  :  mtctr 12
+> pc:96    left:16     a6 03 68 7d  :  mtlr 11
+> pc:100   left:12     20 04 80 4e  :  bctr
+> pc:104   left:8      c0 34 1d 00  :
+> 
+> Failure log:
+> Can't disasm instruction at offset 104: c0 34 1d 00 00 00 00 c0
+> Disassembly logic can truncate at 104, ignoring last 8 bytes.
+> 
+> Update the dummy_tramp_addr field offset calculation from the end
+> of the program to reflect its new location, for bpf_arch_text_poke()
+> to update the actual trampoline's address in this field.
+> 
+> All BPF trampoline selftests continue to pass with this patch applied.
+> 
+> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+> ---
+>   arch/powerpc/net/bpf_jit_comp.c | 34 +++++++++++++++++++--------------
+>   1 file changed, 20 insertions(+), 14 deletions(-)
+> 
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> index ef7614177cb1..b73bc9295c31 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -57,19 +57,21 @@ void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context
+>   	 * In the final pass, align the mis-aligned dummy_tramp_addr field
+>   	 * in the fimage. The alignment NOP must appear before OOL stub,
+>   	 * to make ool_stub_idx & long_branch_stub_idx constant from end.
+> +	 *
+> +	 * The dummy_tramp_addr field is placed at bottom of Long branch stub.
+>   	 */
+>   #ifdef CONFIG_PPC64
+>   	if (fimage && image) {
+>   		/*
+>   		 * pc points to first instruction of OOL stub,
+> -		 * dummy_tramp_addr is past 4/3 instructions depending on
+> +		 * dummy_tramp_addr is past 11/10 instructions depending on
+>   		 * CONFIG_PPC_FTRACE_OUT_OF_LINE is enabled/not respectively.
+>   		 *
+>   		 * The decision to emit alignment NOP must depend on the alignment
+>   		 * of dummy_tramp_addr field.
+>   		 */
+>   		unsigned long pc = (unsigned long)fimage + CTX_NIA(ctx);
+
+> -		pc += IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE) ? 4 : 3;
+> +		pc += IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE) ? 11 : 10;
+
+To get the address, should multiply the instruction count with 4..
+
+     pc += (IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE) ? 11 : 10) * 4;
+
+Also, pc may not be appropriate name here. We are essentially
+calculating the pointer address of dummy_tramp_addr. `addrp` maybe?
+
+- Hari
