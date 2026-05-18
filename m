@@ -1,71 +1,73 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C99D8381AE3
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 18:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB822D838E
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 18:49:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779128011; cv=none; b=Cov9ORSnZV0SNiPoWQS8928QzGEI2yFgwYvUItIYyySxpiAg1BjfqOrmO1I//B+1v91t+MN9tHaQkerM4pZQ9/Mo6LMqfFjWQD4CAiX63RCkVttA/bh+z2GoX35UslbSlCW7h35I3XJQQm2po4hpb6R9KChzeatVZsH3aRiWKqM=
+	t=1779130177; cv=none; b=EZfyHUA0kKsHUd2pbJsh4ZyWgtZmEaL5uH46SyaItAQ0ecDXZTj9boJJbRwWtS9c/iaPxkfmo7a2SDQuKpTTpHT1Bz7p4F73Afze/b9Sa7uow321qEbErjh04HNNCzL0q961CTtp3f6a1dRmf+mEmYPZndvTvaP99nC8NS8es6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779128011; c=relaxed/simple;
-	bh=LvaFAT8Tk8IvuNbiwwUuWT3PICxar58xbElnDqoyo+w=;
+	s=arc-20240116; t=1779130177; c=relaxed/simple;
+	bh=MC6vPKbNlgjaWmED6rvvCIpirl9l+mwWzP22ZBRnHDE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cd8VbAuTLaazKnJWcPlGAUWddPQlMTSWXVqX+zOTggLvaYxQMfEwIZC/It4g43wQJuSREMxpgFhYbD8EVlwuoT2bZIPpan96MB1qL3HBSIzj5lg0QzNd/DHRJtGA7RiiyL9IgmBXN7hsb3qAxZVPxAP1ytTw8g1ROz/T5drAFPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kRElvCDd; arc=none smtp.client-ip=209.85.221.49
+	 Content-Type:Content-Disposition:In-Reply-To; b=AGOpdt5DvTvotWt9+FW6da2gC5QBY5j1BUz2W8ZHl+4CxbTlkC7GTwC4ZS+26+dRKVyJ5WdDTyw06Nc5Y2v+seL7VLEUS2IIuyAVSOluXTeQVbWl/ZrElrqsH8Dz1856JCQKAclkp71ejUzVZsVQHvwJfS1rw5y9l6uOQ0zTjGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XEhXw50X; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kRElvCDd"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-43fe608cb92so1620593f8f.2
-        for <bpf@vger.kernel.org>; Mon, 18 May 2026 11:13:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XEhXw50X"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-488af9fdaa7so12241525e9.1
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 11:49:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779128007; x=1779732807; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779130174; x=1779734974; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=2SkNQZ1eRpX72UK8FcYhuc5kIn0Q9OYKn5Iz6nc7pug=;
-        b=kRElvCDd8poP9SQjSCh1ijS1LTA5IeQYtIjWht1ich50MKSbL5Cc5Hm7KYwq8L59Eo
-         PSuX7nzWubvOfKIkZ+xsjJVTqkjT3MocEKCvlmT3e6EzVtar4d2akWrO1FfhNlxns4sk
-         RmRlNB7lRKaMyPuUz3MnmZkiEvayhJDNCVoxhWTEb68QDGlROk6ej9kP7gHSpbMiM/rb
-         A5WgzfliratOQHZGUReFYzsbw7Y9mt6OMSaUCwJ1dnfVwHSRwHi52LVysRbPrS+mCuSu
-         2duarqUBA3b6xruN1+2Q6TZQ1czW4/mzdK4zt6uuJ5CTEiIhLCZpkrhcnh1Xo5TyF+9c
-         KkXA==
+        bh=ycA5svcD7G5NV7SE5711YCA0d1sVSC7pnvewKsFkowE=;
+        b=XEhXw50Xyc3Rki5kYlWBU7rmTT4TI2bDI6CqPShGSC332Hfvh7s3K+TNtuUHeTZnVm
+         HxG+lsi6eMY1OEpYvlcc2a6x+ZpBoY/Nde+T0IjGZQWFyr3ESiOcok1NgpeRa1lWpbm/
+         AII+57ZpE+POzYPCSMTeXA1mEKuXjVNYWBntLtsOU2Ho3GC5iZUfpnIiDo39PPJWFC4x
+         FMRn71I7OqJ23+ACVwW6nQQQ8TZzr+tQh0Ps52rN+zUEMtvqfl9257YydpCAZ0N7c8kn
+         tjb9B3UCKfRqblK7TQ944RafQplsFamBR3BZLspa3wNnYznJO1Rt0lCJGyqoEA5l0kcn
+         wvlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779128007; x=1779732807;
+        d=1e100.net; s=20251104; t=1779130174; x=1779734974;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2SkNQZ1eRpX72UK8FcYhuc5kIn0Q9OYKn5Iz6nc7pug=;
-        b=RleKgLWzKF+NbEOyat4QPcPj824sHVg5/FBr+BY1FnPx/W9x6ewUj0bwtkJq2prIdj
-         nncNDVEWfDu4JbTQby3jbuTjgsP3eMJdDOknBzr4awIEEvTpvqUP8+HowqNxjL4KhK0B
-         /MKxu8tsKcnrdW3ojdi9UVv6LWzmgLpyVXuSNTHk0vwcgBRkpmbtv0+kGCTmxy7YmVO+
-         4J6ICOndHDKZ2lW8ucarvHKpXvTH/Rb9inhCXqgJpu3VmkUvI8boatXVxweFK5oEB0nN
-         D88ksmWNuC03URYcOR2QNNWnAbu6Vu3HaUWGPOZ7hycpaeg7eqmR2tlZ57c1qbYjvX9n
-         d1oA==
-X-Gm-Message-State: AOJu0YyLTVo6z+iy5X5FDbM5cj1bR0cl2iDLtlRo+3TbYapOKwcySDe4
-	mUsDA9nX6q/9ddjCWZRy96XT80bAxDwN1k0cKADWEfgUJo6zlFy5qFZwQfBpPu9OmXPAOKVZ
-X-Gm-Gg: Acq92OEsV0Nf0s+wrOg9ErwzWFCW01ALYRmGUdi338uisQRDcz1KD1sHBjYXoJXIbJY
-	MY6lmsnEsPn2GiXTPgVYtIkuIChOFOKNIuhA6ML6ZlffU4uiT/BWweGz1VIOYFiJ4E1uqrqwF8y
-	Rk7sJ9HNKM8u+0kwys3vGGoBKj7hT88oaIHa8Ovtt2c3KK7JCAtoVoL/82KdZzTj9bwfKKs1uok
-	aknnZev1EDoaYm9nwM4Ma9akl5LSBfgaNi5S4YRKsrdZkoUJxApaK++hxaqrxxvBgEjFUneHvOj
-	99g7+jzUFgSyCHXTSiT9NdVJ5YAilui8Miu2U6Ayp0Jdo6gRDcIh/cwuEi7QmuB7QmE8xGzwDQX
-	d2odFvXs2w5ttwG+hVQvvTF532pXtOmsVINau48Mdid719ci4ZF0M4nQqoV0pS1TuhbK9v5xCMP
-	/psMtft5J6YM4+n0xxI0lITipnOizG9x7kUf9kx8W+tSneB010AsgSKjdwkqgGw9yS6A==
-X-Received: by 2002:a05:600c:1e24:b0:488:aa33:dcbd with SMTP id 5b1f17b1804b1-48fe63182a2mr254168315e9.26.1779128007125;
-        Mon, 18 May 2026 11:13:27 -0700 (PDT)
-Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe5694fcasm250953405e9.5.2026.05.18.11.13.26
+        bh=ycA5svcD7G5NV7SE5711YCA0d1sVSC7pnvewKsFkowE=;
+        b=JVE+5s/XwxAWr94qYQoPPDkKt0CLs14nWPqEfU71ufWMyXDn6UpsM8qhGaRCZiAuJh
+         U2HyDQinZ0NAmD6j9mtO5Vui5fmXqStDZTY6nqQHCN2H56ADq5ZEYUmt0a8hMl/mggCd
+         ugSFvekWhidAqn9a6qhfIuSsoUcKHNKM8pRtNpCgkgs6nLDVD4FimEZJUh+9e8UkF3Ap
+         xi6ap2/uUfxidkkOK/p1zyAxquTvTaZU+IH2dXmmMAy9jXuQe3N5kVt8mACsFKPkUJkH
+         nbLZIivCCSYKNFKvR2+JgShaQcvTwiI6Jz/8eh4XEPKYO8+dH4XWchoCi91Zh80/lVYf
+         kzAQ==
+X-Gm-Message-State: AOJu0YwtsMfd20mU9b4pmJ3oeGwdMOjm8vzINJOONcSTnPnFXUFmjV3A
+	ONovjyzDoSJo2WER3KcY4rNL/P4nMGudJUfMk0UQH4W+sMMAHKAqnnodqVMNFNij
+X-Gm-Gg: Acq92OHEV16NjRLnzxNpaetchqGAacOlSL/qOljyjz9oIr/5c7Lgz5ny4PustZVMg4U
+	MGDGOcSaQrJkD8WCajy9Se7XA3JWb+KCXSqTfUNZBrm9vMbAKlzsc9X+rKuKAXN8TmVzscczOaj
+	7pwmlulCz3sExynShmryYqVPipoJSFBid7mk0xqTwDa8YiOcqZ2z83PGf48tiGEEAoap8iowUob
+	3vYRUFUZkimmn54+5QDnwk3jsrD21Sg/+qHJJkL1NcQsJcdOZh5KPconJDkmsGBHUaQvmia9Z/1
+	/F+eQFZDGs4MEGxSk4oLivNuvmmnk4yRme5BRYA8yezCoXZzwe73W0hP6KFdT4J6crxSjc65ONW
+	4P/o9VGtfbTSkOwT7Spp4BlW0C6ZT2mRHo6srOU90OsKiIg9BIMfypStwJuSo/LUJPN67jE4hEI
+	mOkAm0ZzlPEcc+o+VPXnYphuICQNe/12x9T+O/JzhpEQ2odSWk/Z4K17ZFvlhRARrgoEz+5hNu6
+	m52FagCflTa3umYQWln8mr54MrS2TvslIu41Z2CniJhA9smm5vzaqrB5J/W5tkjvvvk9nGI5b6t
+	1oQRa7s6QQxrF+I8moTFGYn45SyZzAQXRmASaeZBGdWMQPzbSky2
+X-Received: by 2002:a05:600c:4fd4:b0:48a:581c:ead with SMTP id 5b1f17b1804b1-48fe60ed7b7mr225620585e9.10.1779130173722;
+        Mon, 18 May 2026 11:49:33 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e0002302090c50a60b9.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:230:2090:c50a:60b9])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4900c16c744sm88940555e9.3.2026.05.18.11.49.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 11:13:26 -0700 (PDT)
-Date: Mon, 18 May 2026 20:13:25 +0200
-From: Mahe Tardy <mahe.tardy@gmail.com>
+        Mon, 18 May 2026 11:49:33 -0700 (PDT)
+Date: Mon, 18 May 2026 20:49:31 +0200
+From: Paul Chaignon <paul.chaignon@gmail.com>
 To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v6 5/6] selftests/bpf: add bpf_icmp_send kfunc
- IPv6 tests
-Message-ID: <agtWxQedLwq1X-Rq@gmail.com>
-References: <20260518122842.218522-6-mahe.tardy@gmail.com>
- <20260518164538.21D3BC2BCB7@smtp.kernel.org>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Override EXTRA_LDFLAGS for
+ static builds
+Message-ID: <agtfO9lHdKdP92Mo@mail.gmail.com>
+References: <714556da329c812988010ffe53173d9152570a78.1778669303.git.paul.chaignon@gmail.com>
+ <20260514042304.EF3ECC2BCB7@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -75,54 +77,55 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260518164538.21D3BC2BCB7@smtp.kernel.org>
+In-Reply-To: <20260514042304.EF3ECC2BCB7@smtp.kernel.org>
 
-On Mon, May 18, 2026 at 04:45:37PM +0000, sashiko-bot@kernel.org wrote:
+On Thu, May 14, 2026 at 04:23:04AM +0000, sashiko-bot@kernel.org wrote:
 > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] Buffer truncation and type mismatch when calling getsockname() for IPv6 sockets.
+> - [Medium] The suggested workaround `EXTRA_LDFLAGS=-static` in README.rst breaks the bpftool build or silently disables LLVM support.
 > --
 > 
-> commit 324aeb5b326896da717647e51a1e69a4c3e6f647
-> Author: Mahe Tardy <mahe.tardy@gmail.com>
+> commit dcbd0d5d7a0eb4a9300ad0890d83b7e4cdfd3aeb
+> Author: Paul Chaignon <paul.chaignon@gmail.com>
 > 
-> selftests/bpf: add bpf_icmp_send kfunc IPv6 tests
+> selftests/bpf: Override EXTRA_LDFLAGS for static builds
 > 
-> This commit extends the existing ICMP send tests with IPv6 support.
+> This commit updates the README.rst for BPF selftests to include
+> EXTRA_LDFLAGS=-static when recommending how to statically link,
+> in order to fix shared library loading errors with libLLVM.so
+> when running vmtest.sh.
 > 
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> > --- a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> > @@ -81,14 +95,13 @@ static void read_icmp_errqueue(int sockfd, int expected_code)
-> >  }
+> > diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
+> > index 776fbe3cb8f9b..37164322a1023 100644
+> > --- a/tools/testing/selftests/bpf/README.rst
+> > +++ b/tools/testing/selftests/bpf/README.rst
+> > @@ -77,7 +77,7 @@ In case of linker errors when running selftests, try using static linking:
 > >  
-> >  static void trigger_prog_read_icmp_errqueue(struct icmp_send *skel,
-> > -					    int code)
-> > +					    int code, int af, const char *ip)
-> >  {
-> >  	int srv_fd = -1, client_fd = -1;
-> >  	struct sockaddr_in addr;
-> >  	socklen_t len = sizeof(addr);
+> >  .. code-block:: console
 > >  
-> > -	srv_fd = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0,
-> > -			      TIMEOUT_MS);
-> > +	srv_fd = start_server(af, SOCK_STREAM, ip, 0, TIMEOUT_MS);
-> >  	if (!ASSERT_GE(srv_fd, 0, "start_server"))
-> >  		return;
-> >  
-> >  	if (getsockname(srv_fd, (struct sockaddr *)&addr, &len)) {
-> >  		close(srv_fd);
-> >  		return;
-> >  	}
-> >  	skel->bss->server_port = ntohs(addr.sin_port);
+> > -  $ LDLIBS=-static PKG_CONFIG='pkg-config --static' vmtest.sh
+> > +  $ LDLIBS=-static EXTRA_LDFLAGS=-static PKG_CONFIG='pkg-config --static' vmtest.sh
 > 
-> Since start_server() can now return an IPv6 socket, does getsockname() truncate
-> the 28-byte IPv6 address data into the 16-byte sockaddr_in structure here?
+> Can adding EXTRA_LDFLAGS=-static break the bpftool build or silently disable
+> LLVM support?
 > 
-> Should addr be updated to a struct sockaddr_storage to safely handle both
-> address families, along with a cast to read the port properly?
+> In the bpftool Makefile, LLVM's --system-libs and -lstdc++ are only appended
+> to LIBS if llvm-config --shared-mode outputs 'static'. However, the
+> feature-llvm test in tools/build/feature/Makefile unconditionally includes
+> --system-libs and uses g++, which automatically includes -lstdc++.
+> 
+> If a system has static LLVM libraries but llvm-config --shared-mode is set
+> to 'shared' (common on many distros), the feature-llvm test statically links
+> successfully, but bpftool's Makefile will attempt to build with LLVM support
+> using gcc -static while omitting --system-libs and -lstdc++. This can cause
+> the build to fail with undefined references.
 
-Duplicate bot review, do we care for reading the port? I don't think
+I'm not sure I'm following this, but I have static LLVM libraries with
+llvm-config --shared-mode set to "shared" and everything seems to build
+fine.
 
+> 
+> Additionally, if static LLVM libraries are entirely absent, the feature test
+> fails, causing bpftool to silently build without LLVM support.
 > 
 > -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260518122842.218522-1-mahe.tardy@gmail.com?part=5
+> Sashiko AI review · https://sashiko.dev/#/patchset/714556da329c812988010ffe53173d9152570a78.1778669303.git.paul.chaignon@gmail.com?part=1
