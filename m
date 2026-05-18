@@ -1,186 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCB833F787D;
-	Mon, 18 May 2026 11:50:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12ADD2882C9;
+	Mon, 18 May 2026 11:57:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779105039; cv=none; b=PiWMeFQlM9jbegjX1uFSIvgpFWAaoGwYOigcP4dq/ZsdNCY6hQMPWdahSEkhdi3j5soAXTIb4kRBRFrewdItMU26FY8AODya80nnaYnFH9ndqeKPny3zlyKxTs0cplQNmyV3ZBjLtaWQjhIrvuRtxJGX6anAX6M3Aa6hgPo4a70=
+	t=1779105443; cv=none; b=MBq52wCaGkE11DZUO6pUqAA6MXOqHm3aor2VUF3XEsRomX4KgiilTXjQxvGkQYsIveVLVA5Wdbz/27ptxxYiToiUPLnr24kKfsyW1Lp7uPnroeoknZz6usWay2IbWzhxU/BQ6Up13rwPtjwGC4jGoOFKHrICdn7G0IT7PErzk/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779105039; c=relaxed/simple;
-	bh=Wb8kqHIrykSD2a4vVB2ZQJ8KeHcaMCz3wwM4f/OqqEY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=a/otudISGbe6vUvuzKIRNPH97RW505dxQ2BACyeEpdYZ5NGMFPWXRqE7PR4N6mq59B0ZJrWoFjOUgr1yzfLRzrokXBnj/ioOb+l1Vl28LLZDSiIfhNe1uM82h+cvTxC3ExL/8P8xaj8EPoSY6BjXK9jQ3Bgy5JD+EPFNTsTIpgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RYJZAno8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779105443; c=relaxed/simple;
+	bh=6ROGVadPwq5Q7Gz9WoMLBxVIVVNoZyNCKKg3PyKPaaU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=igjtdnXyeOU/uLRG4Q2Zh6rWN7YJlq7azLzCMVi8dQ/QxxQaXtV0odRMIdIymkTUS2JtuGzmDzz/6uEy75Yam2Vq+jMxrFmOtbInyzzof5kVdTIsYnh3Fv3VY7Eo6BSUKevcW39Xsvslk34xDLjozS6T7Lk93j3aWD7k79wUJLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KuB1KIqg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RYJZAno8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ADA0C2BCB7;
-	Mon, 18 May 2026 11:50:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KuB1KIqg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19D26C2BCB8;
+	Mon, 18 May 2026 11:57:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779105039;
-	bh=Wb8kqHIrykSD2a4vVB2ZQJ8KeHcaMCz3wwM4f/OqqEY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=RYJZAno8trhdari6J7Hoa4C7b7GC/kGlizS0nQQnO0Q419PeaSC+xTgGn5evIl0Ac
-	 /ieEG0O0fptonlTfNyNUg+i5DgkIEXaRZzOD1AAwoIjsT0yM44jv/cKZLbaPfqHkk4
-	 g+kBYaIFPCUJzGVIoGfSJH+WRxJsm+tZalwSoUKBSMVCIsQuwcmaN7VgkJvMcwBLdz
-	 2DAg37ETdkBT63RjSvx/7ZD0wcAI3brWctbWHM8xhFgMl5dVi/4K7U6FQhjz3qygaw
-	 wgiC14k5VRx/kgFAKTQau+EG8tFTNpRCY4F3hIR9bl6u16ZZ3pL4MqmRtBnr8m/8vd
-	 k8Uat4fnMZ32Q==
-Content-Type: multipart/mixed; boundary="===============4674189153323790873=="
+	s=k20201202; t=1779105443;
+	bh=6ROGVadPwq5Q7Gz9WoMLBxVIVVNoZyNCKKg3PyKPaaU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KuB1KIqghdPy+qvB8a4BGNDu6xNalPP0oV8XWG/e2ciCg80o/WaGbPTsX/hWeK/9k
+	 0EZt2y2sCPEMV0+Jb7JbI0ekQWKUby8jXo3vaamxUr/iUkKkp1tvUSQlkIcPHWlMsx
+	 d5Ibsns/MgWUW9ECqB19gcPet6uFULJo00PyS0Sh8HNKxlz2lewT06uo/TmcSCJjuL
+	 XukqYt/wvKqwFfAnUmoSWe5YmXEypqkmXx18W8/0g0rqJd6KRV26GF+CK6J32ze2gt
+	 2vYG5u2R2kjKz15NPKK50cUQFNBQ0NmDh8Jr7rXHOs9vGQz+2WmbkjxVoZ1cSzGHnE
+	 NzEO2QE/xoqOg==
+Message-ID: <850e3709-2cb1-4a26-8546-745401423696@kernel.org>
+Date: Mon, 18 May 2026 13:57:15 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6e6637310053d539ab60c103045167e1c069694747583959d9927f2c7f73c138@mail.kernel.org>
-In-Reply-To: <20260518105957.123445-4-jolsa@kernel.org>
-References: <20260518105957.123445-4-jolsa@kernel.org>
-Subject: Re: [PATCHv2 03/11] uprobes/x86: Move optimized uprobe from nop5 to nop10
-From: bot+bpf-ci@kernel.org
-To: jolsa@kernel.org,oleg@redhat.com,peterz@infradead.org,mingo@kernel.org,mhiramat@kernel.org,andrii@kernel.org
-Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 18 May 2026 11:50:39 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 1/6] bpf: Add bpf_ktime_get_real_ns() kfunc
+To: Jason Xing <kerneljasonxing@gmail.com>, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ willemb@google.com, kuniyu@google.com, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+ memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, sdf@fomichev.me
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ Jason Xing <kernelxing@tencent.com>, john.fastabend@gmail.com,
+ Simon Sundberg <Simon.Sundberg@kau.se>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hy?=
+ =?UTF-8?Q?gensen?= <toke@toke.dk>
+References: <20260518082344.96647-1-kerneljasonxing@gmail.com>
+ <20260518082344.96647-2-kerneljasonxing@gmail.com>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <20260518082344.96647-2-kerneljasonxing@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---===============4674189153323790873==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
+On 18/05/2026 10.23, Jason Xing wrote:
+> From: Jason Xing <kernelxing@tencent.com>
+> 
+> Currently BPF programs can obtain timestamps via bpf_ktime_get_ns(),
+> which returns CLOCK_MONOTONIC time. However, the skb->tstamp field
+> populated by the network stack uses ktime_get_real() which is in the
+> CLOCK_REALTIME domain.
+> 
+> In the series, kernel reports the software/hardware timestamps through
+> sockopt and then userspace bpf application gets them and calculate the
+> delta only through an unified time unit.
+> 
+> However, prior to this, when a BPF program tries to measure RX packet
+> delay by comparing skb->tstamp with bpf_ktime_get_ns(), the result
+> is incorrect because the two clocks have different epochs.
+> 
+> Introduce a new BPF kfunc bpf_ktime_get_real_ns() that returns the
+> current CLOCK_REALTIME time. This allows BPF programs to perform
+> accurate delay calculations without clock domain mismatch issue.
+> 
 
-PiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYva2VybmVsL3Vwcm9iZXMuYyBiL2FyY2gveDg2L2tlcm5l
-bC91cHJvYmVzLmMKPiAtLS0gYS9hcmNoL3g4Ni9rZXJuZWwvdXByb2Jlcy5jCj4gKysrIGIvYXJj
-aC94ODYva2VybmVsL3Vwcm9iZXMuYwoKWyAuLi4gXQoKPiBAQCAtOTYzLDcgKzk3NSw3IEBAIHN0
-YXRpYyBpbnQgdmVyaWZ5X2luc24oc3RydWN0IHBhZ2UgKnBhZ2UsIHVuc2lnbmVkIGxvbmcgdmFk
-ZHIsIHVwcm9iZV9vcGNvZGVfdCAqbmV3X29wY29kZSwKPiAgICogICAtIFNNUCBzeW5jIGFsbCBD
-UFVzCj4gICAqLwo+ICBzdGF0aWMgaW50IGludDNfdXBkYXRlKHN0cnVjdCBhcmNoX3Vwcm9iZSAq
-YXVwcm9iZSwgc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEsCj4gLQkJICAgICAgIHVuc2lnbmVk
-IGxvbmcgdmFkZHIsIGNoYXIgKmluc24sIGJvb2wgb3B0aW1pemUpCj4gKwkJICAgICAgIHVuc2ln
-bmVkIGxvbmcgdmFkZHIsIGNoYXIgKmluc24sIGludCBzaXplLCBib29sIG9wdGltaXplKQo+ICB7
-Cj4gIAl1cHJvYmVfb3Bjb2RlX3QgaW50MyA9IFVQUk9CRV9TV0JQX0lOU047Cj4gIAlzdHJ1Y3Qg
-d3JpdGVfb3Bjb2RlX2N0eCBjdHggPSB7Cj4gQEAgLTk3OCw3ICs5OTAsNyBAQCBzdHJ1Y3Qgd3Jp
-dGVfb3Bjb2RlX2N0eCBjdHggPSB7Cj4gIAkgKiBzbyB3ZSBjYW4gc2tpcCB0aGlzIHN0ZXAgZm9y
-IG9wdGltaXplID09IHRydWUuCj4gIAkgKi8KPiAgCWlmICghb3B0aW1pemUpIHsKPiAtCQljdHgu
-ZXhwZWN0ID0gRVhQRUNUX0NBTEw7Cj4gKwkJY3R4LmV4cGVjdCA9IEVYUEVDVF9PUFRJTUlaRUQ7
-Cj4gIAkJZXJyID0gdXByb2JlX3dyaXRlKGF1cHJvYmUsIHZtYSwgdmFkZHIsICZpbnQzLCAxLCB2
-ZXJpZnlfaW5zbiwKPiAgCQkJCSAgIHRydWUgLyogaXNfcmVnaXN0ZXIgKi8sIGZhbHNlIC8qIGRv
-X3VwZGF0ZV9yZWZfY3RyICovLAo+ICAJCQkJICAgJmN0eCk7Cj4gQEAgLTk5MCw3ICsxMDAyLDcg
-QEAgc3RydWN0IHdyaXRlX29wY29kZV9jdHggY3R4ID0gewo+Cj4gIAkvKiBXcml0ZSBhbGwgYnV0
-IHRoZSBmaXJzdCBieXRlIG9mIHRoZSBwYXRjaGVkIHJhbmdlLiAqLwo+ICAJY3R4LmV4cGVjdCA9
-IEVYUEVDVF9TV0JQOwo+IC0JZXJyID0gdXByb2JlX3dyaXRlKGF1cHJvYmUsIHZtYSwgdmFkZHIg
-KyAxLCBpbnNuICsgMSwgNCwgdmVyaWZ5X2luc24sCj4gKwllcnIgPSB1cHJvYmVfd3JpdGUoYXVw
-cm9iZSwgdm1hLCB2YWRkciArIDEsIGluc24gKyAxLCBzaXplIC0gMSwgdmVyaWZ5X2luc24sCgpX
-aGVuIHJlLW9wdGltaXppbmcgZnJvbSBKTVA4IGJhY2sgdG8gTEVBK0NBTEwsIGRvZXMgdGhlIENB
-TEwgaW5zdHJ1Y3Rpb24gYXQKb2Zmc2V0IDUgZ2V0IHJld3JpdHRlbiB3aXRob3V0IElOVDMgcHJv
-dGVjdGlvbj8KClRoZSBpbnQzX3VwZGF0ZSgpIHNlcXVlbmNlIHdyaXRlcyBJTlQzIGF0IG9mZnNl
-dCAwIGR1cmluZyB1bm9wdGltaXplCighb3B0aW1pemUgcGF0aCksIHRoZW4gbGF0ZXIgd3JpdGVz
-IGJ5dGVzIDEuLjkgd2hpbGUgdmVyaWZ5aW5nIG9mZnNldCAwCnN0YXlzIElOVDMuIER1cmluZyBy
-ZS1vcHRpbWl6YXRpb24gKG9wdGltaXplID09IHRydWUpLCB0aGUgY29kZSBza2lwcyB0aGUKaW5p
-dGlhbCBJTlQzIHdyaXRlIGFuZCBkaXJlY3RseSB3cml0ZXMgYnl0ZXMgMS4uOS4KCkNvbnNpZGVy
-IHRoaXMgc2VxdWVuY2Ugd2hlbiByZS1vcHRpbWl6aW5nIGEgcHJldmlvdXNseSB1bm9wdGltaXpl
-ZCB1cHJvYmUKdGhhdCBpcyBjdXJyZW50bHkgJ2ptcCByZWw4JyBiYWNrIHRvICdsZWE7IGNhbGwn
-OgoKICBTdGVwIDc6IEN1cnJlbnQgc3RhdGUgaXMgMHhDQyAweDA4IC4uLiAoSU5UMyBmb2xsb3dl
-ZCBieSBKTVA4IG9mZnNldCkKICBTdGVwIDg6IFdyaXRlIGJ5dGVzIDEuLjksIHRyYW5zZm9ybWlu
-ZyB0byAweENDIDB4OGQgMHg2NCAweDI0IDB4ODAgMHhFOCAuLi4KICAgICAgICAgIFRoZSBDQUxM
-IG9wY29kZSAoMHhFOCkgYXQgb2Zmc2V0IDUgYW5kIGl0cyA0LWJ5dGUgZGlzcGxhY2VtZW50CiAg
-ICAgICAgICBnZXQgd3JpdHRlbiB3aXRob3V0IGFuIElOVDMgcHJvdGVjdGluZyB0aGF0IGxvY2F0
-aW9uLgoKQSBjb25jdXJyZW50IHRocmVhZCBleGVjdXRpbmcgYXQgdmFkZHIgY291bGQgb2JzZXJ2
-ZSBhIHBhcnRpYWxseS13cml0dGVuIENBTEwKaW5zdHJ1Y3Rpb24gZHVyaW5nIHRoZSB0cmFuc2l0
-aW9uLiBQZXRlciBaaWpsc3RyYSBzdWdnZXN0ZWQgcGxhY2luZyBJTlQzIGF0CmJvdGggb2Zmc2V0
-IDAgYW5kIG9mZnNldCA1IHRvIHByb3RlY3QgYm90aCB0aGUgTEVBIGFuZCBDQUxMIGluc3RydWN0
-aW9ucwpkdXJpbmcgbW9kaWZpY2F0aW9uOgoKICBSZWZlcmVuY2U6IGh0dHBzOi8vbG9yZS5rZXJu
-ZWwub3JnL2JwZi8yMDI2MDUxODEwNDMwNi5HVTMxMDI2MjRAbm9pc3kucHJvZ3JhbW1pbmcua2lj
-a3MtYXNzLm5ldC8KCiAgIk5vdGUgdGhhdCBmcm9tIHN0ZXAgNyB0byBzdGVwIDgsIHlvdSByZS13
-cml0ZSB0aGUgQ0FMTCBpbnN0cnVjdGlvbgogICB3aXRob3V0IGdvaW5nIHRocm91Z2ggSU5UMy4g
-VGhpcyBtZWFucyBpdCBpcyBlbnRpcmVseSBwb3NzaWJsZSBmb3IgYQogICBjb25jdXJyZW50IGV4
-ZWN1dGlvbiB0byBvYnNlcnZlIGEgY29tcG9zaXRlIGluc3RydWN0aW9uLiBUaGlzIGlzIE5PVAog
-ICBzb3VuZCEgSG93ZXZlciwgSSB0aGluayBpdCBjYW4gYmUgc2FsdmFnZWQsIGlmIGluc3RlYWQg
-b2Ygb25seSB3cml0aW5nCiAgIElOVDMgYXQgKzAsIHlvdSBhbHNvIHdyaXRlIElOVDMgYXQgKzUu
-IgoKWyAuLi4gXQoKPiBAQCAtMTA5NSwxNCArMTEyMiwyNSBAQCBpbnQgc2V0X29yaWdfaW5zbihz
-dHJ1Y3QgYXJjaF91cHJvYmUgKmF1cHJvYmUsIHN0cnVjdCB2bV9hcmVhX3N0cnVjdCAqdm1hLAo+
-ICAJCSAgdW5zaWduZWQgbG9uZyB2YWRkcikKPiAgewo+ICAJaWYgKHRlc3RfYml0KEFSQ0hfVVBS
-T0JFX0ZMQUdfQ0FOX09QVElNSVpFLCAmYXVwcm9iZS0+ZmxhZ3MpKSB7Cj4gLQkJaW50IHJldCA9
-IGlzX29wdGltaXplZCh2bWEtPnZtX21tLCB2YWRkcik7Cj4gLQkJaWYgKHJldCA8IDApCj4gKwkJ
-dXByb2JlX29wY29kZV90IGluc25bT1BUX0lOU05fU0laRV07Cj4gKwkJaW50IHJldDsKPiArCj4g
-KwkJcmV0ID0gY29weV9mcm9tX3ZhZGRyKHZtYS0+dm1fbW0sIHZhZGRyLCAmaW5zbiwgT1BUX0lO
-U05fU0laRSk7Cj4gKwkJaWYgKHJldCkKPiAgCQkJcmV0dXJuIHJldDsKPiAtCQlpZiAocmV0KSB7
-Cj4gKwkJaWYgKF9faXNfb3B0aW1pemVkKHZtYS0+dm1fbW0sICh1cHJvYmVfb3Bjb2RlX3QgKikm
-aW5zbiwgdmFkZHIpKSB7Cj4gIAkJCXJldCA9IHN3YnBfdW5vcHRpbWl6ZShhdXByb2JlLCB2bWEs
-IHZhZGRyKTsKPiAgCQkJV0FSTl9PTl9PTkNFKHJldCk7Cj4gIAkJCXJldHVybiByZXQ7Cj4gIAkJ
-fQo+ICsJCS8qCj4gKwkJICogV2UgY2FuIGhhdmUgcmUtYXR0YWNoZWQgcHJvYmUgb24gdG9wIG9m
-IGptcDggaW5zdHJ1Y3Rpb24sCj4gKwkJICogd2hpY2ggZGlkIG5vdCBnZXQgb3B0aW1pemVkLiBX
-ZSBuZWVkIHRvIHJlc3RvcmUgdGhlIGptcDgKPiArCQkgKiBpbnN0cnVjdGlvbiwgaW5zdGVhZCBv
-ZiB0aGUgb3JpZ2luYWwgaW5zdHJ1Y3Rpb24gKG5vcDEwKS4KPiArCQkgKi8KPiArCQlpZiAoaXNf
-c3dicF9pbnNuKCZpbnNuWzBdKSAmJiBpbnNuWzFdID09IE9QVF9KTVA4X09GRlNFVCkKPiArCQkJ
-cmV0dXJuIHVwcm9iZV93cml0ZV9vcGNvZGUoYXVwcm9iZSwgdm1hLCB2YWRkciwgSk1QOF9JTlNO
-X09QQ09ERSwKClRoaXMgaXNuJ3QgYSBidWcsIGJ1dCB0aGUgbXVsdGktbGluZSBpZiBzdGF0ZW1l
-bnQgaXMgbWlzc2luZyBicmFjZXM6CgoJCWlmIChpc19zd2JwX2luc24oJmluc25bMF0pICYmIGlu
-c25bMV0gPT0gT1BUX0pNUDhfT0ZGU0VUKQoJCQlyZXR1cm4gdXByb2JlX3dyaXRlX29wY29kZShh
-dXByb2JlLCB2bWEsIHZhZGRyLCBKTVA4X0lOU05fT1BDT0RFLAoJCQkJCQkgICBmYWxzZSAvKiBp
-c19yZWdpc3RlciAqLyk7CgpLZXJuZWwgY29kaW5nIHN0eWxlIHJlcXVpcmVzIGJyYWNlcyBvbiBh
-bnkgbXVsdGktbGluZSBzdGF0ZW1lbnQuCgogIFJlZmVyZW5jZTogaHR0cHM6Ly9sb3JlLmtlcm5l
-bC5vcmcvYnBmLzIwMjYwNTE4MTA0MzA2LkdVMzEwMjYyNEBub2lzeS5wcm9ncmFtbWluZy5raWNr
-cy1hc3MubmV0LwoKWyAuLi4gXQoKPiBAQCAtMTE2MCwxNCArMTE5OCwyNCBAQCB2b2lkIGFyY2hf
-dXByb2JlX29wdGltaXplKHN0cnVjdCBhcmNoX3Vwcm9iZSAqYXVwcm9iZSwgdW5zaWduZWQgbG9u
-ZyB2YWRkcikKPgo+ICBzdGF0aWMgYm9vbCBjYW5fb3B0aW1pemUoc3RydWN0IGluc24gKmluc24s
-IHVuc2lnbmVkIGxvbmcgdmFkZHIpCj4gIHsKPiAtCWlmICghaW5zbi0+eDg2XzY0IHx8IGluc24t
-Pmxlbmd0aCAhPSA1KQo+ICsJaWYgKCFpbnNuLT54ODZfNjQpCj4gIAkJcmV0dXJuIGZhbHNlOwo+
-Cj4gLQlpZiAoIWluc25faXNfbm9wKGluc24pKQo+ICsJLyogV2UgY2FuJ3QgZG8gY3Jvc3MgcGFn
-ZSBhdG9taWMgd3JpdGVzIHlldC4gKi8KPiArCWlmIChQQUdFX1NJWkUgLSAodmFkZHIgJiB+UEFH
-RV9NQVNLKSA8IE9QVF9JTlNOX1NJWkUpCj4gIAkJcmV0dXJuIGZhbHNlOwo+Cj4gLQkvKiBXZSBj
-YW4ndCBkbyBjcm9zcyBwYWdlIGF0b21pYyB3cml0ZXMgeWV0LiAqLwo+IC0JcmV0dXJuIFBBR0Vf
-U0laRSAtICh2YWRkciAmIH5QQUdFX01BU0spID49IDU7Cj4gKwkvKiBXZSBjYW4gb3B0aW1pemUg
-b24gdG9wIG9mIG5vcDEwLi4gKi8KPiArCWlmIChpbnNuLT5sZW5ndGggPT0gT1BUX0lOU05fU0la
-RSAmJiBpbnNuX2lzX25vcChpbnNuKSkKPiArCQlyZXR1cm4gdHJ1ZTsKPiArCj4gKwkvKiAuLiBh
-bmQgSk1QIHJlbDggdG8gZW5kIG9mIHNsb3Qg4oCUIGNoZWNrIHN3YnBfdW5vcHRpbWl6ZS4gKi8K
-PiArCWlmIChpbnNuLT5sZW5ndGggPT0gMiAmJgo+ICsJICAgIGluc24tPm9wY29kZS5ieXRlc1sw
-XSA9PSBKTVA4X0lOU05fT1BDT0RFICYmCj4gKwkgICAgaW5zbi0+aW1tZWRpYXRlLnZhbHVlID09
-IE9QVF9KTVA4X09GRlNFVCkKPiArCQlyZXR1cm4gdHJ1ZTsKPiArCj4gKwlyZXR1cm4gZmFsc2U7
-Cj4gIH0KCkNhbiBjYW5fb3B0aW1pemUoKSBzYWZlbHkgYWNjZXB0IG5hdHVyYWxseSBvY2N1cnJp
-bmcgJ2ptcCArOCcgaW5zdHJ1Y3Rpb25zCmZyb20gdXNlciBiaW5hcmllcz8KClRoZSBKTVA4IGJy
-YW5jaCByZXR1cm5zIHRydWUgZm9yIGFueSAyLWJ5dGUgJ2ptcCByZWw4JyB3aXRoIGRpc3BsYWNl
-bWVudCA4CihieXRlcyAweEVCIDB4MDgpLiBUaGUgY29tbWVudCBzYXlzIHRoaXMgaXMgZm9yIHN3
-YnBfdW5vcHRpbWl6ZSgpJ3MKa2VybmVsLXBsYWNlZCBqbXAsIGJ1dCBjYW5fb3B0aW1pemUoKSBp
-cyBjYWxsZWQgZHVyaW5nIGluaXRpYWwgYW5hbHlzaXMgdmlhCnByZXBhcmVfdXByb2JlKCkgLT4g
-YXJjaF91cHJvYmVfYW5hbHl6ZV9pbnNuKCkgLT4gdXByb2JlX2luaXRfaW5zbigpLCBiZWZvcmUK
-YW55IGtlcm5lbCBtb2RpZmljYXRpb25zIG9jY3VyLiBUaGUgaW5zdHJ1Y3Rpb24gYnl0ZXMgY29t
-ZSBkaXJlY3RseSBmcm9tIHRoZQp1c2VyIGJpbmFyeSB0aHJvdWdoIGNvcHlfaW5zbigpLgoKSWYg
-YSB1c2VyIGJpbmFyeSBuYXR1cmFsbHkgY29udGFpbnMgJ0VCIDA4JyBhdCB0aGUgdXByb2JlIGxv
-Y2F0aW9uIChlLmcuLCBhCmZvcndhcmQgYnJhbmNoIG92ZXIgYW4gOC1ieXRlIGxpdGVyYWwgcG9v
-bCBvciBhbGlnbm1lbnQgcGFkZGluZyksIHRoaXMgcGF0aAp3b3VsZCB0cmlnZ2VyOgoKICAxLiB1
-cHJvYmVfaW5pdF9pbnNuKCkgZGVjb2RlcyB0aGUgdXNlcidzICdqbXAgMHgwOCcgKGxlbmd0aD0y
-LCBvcGNvZGU9MHhFQiwKICAgICBpbW1lZGlhdGU9OCkuCiAgMi4gY2FuX29wdGltaXplKCkgbWF0
-Y2hlcyB0aGUgbmV3IEpNUDggYnJhbmNoIGFuZCByZXR1cm5zIHRydWUuCiAgMy4gQVJDSF9VUFJP
-QkVfRkxBR19DQU5fT1BUSU1JWkUgaXMgc2V0LgogIDQuIHNldF9zd2JwKCkgd3JpdGVzIElOVDMg
-YXQgdmFkZHIsIHJlcGxhY2luZyB0aGUgMHhFQi4KICA1LiBXaGVuIHRoZSBicmVha3BvaW50IGZp
-cmVzLCBzd2JwX29wdGltaXplKCkgLT4gaW50M191cGRhdGUoKSB3cml0ZXMgMTAKICAgICBieXRl
-cyAobGVhIC0weDgwKCVyc3ApLCVyc3A7IGNhbGwgdHJhbXApIG92ZXIgdmFkZHIuLnZhZGRyKzku
-CiAgNi4gdmVyaWZ5X2luc24oKSBvbmx5IGNoZWNrcyB0aGF0IGJ5dGUgMCBpcyBJTlQzIChFWFBF
-Q1RfU1dCUCkgYmVmb3JlCiAgICAgd3JpdGluZyBieXRlcyAxLi45LiBJdCBkb2VzIG5vdCB2ZXJp
-ZnkgdGhvc2UgOCBieXRlcyBhcmUgZnJvbSBhIHByaW9yCiAgICAgb3B0aW1pemF0aW9uLgogIDcu
-IFRoZSA4IGJ5dGVzIGF0IHZhZGRyKzIuLnZhZGRyKzkgKG9yaWdpbmFsIHVzZXIgY29kZS9kYXRh
-IGZvbGxvd2luZyB0aGUKICAgICBqbXApIGdldCBvdmVyd3JpdHRlbiB3aXRoIHRoZSB0YWlsIG9m
-IHRoZSBMRUEgYW5kIHRoZSBDQUxMIGVuY29kaW5nLgogIDguIE9uIHVucmVnaXN0ZXIsIHN3YnBf
-dW5vcHRpbWl6ZSgpIG9ubHkgd3JpdGVzIDIgYnl0ZXMgYmFjay4gQnl0ZXMKICAgICB2YWRkcisy
-Li52YWRkcis5IHN0YXkgY29ycnVwdGVkIHdpdGggY2FsbCBpbnN0cnVjdGlvbiByZW1uYW50cyBp
-biB0aGUKICAgICBDT1cnZCBwYWdlLgoKVGhlIGNvcnJ1cHRpb24gcGVyc2lzdHMgZXZlbiB0aG91
-Z2ggdGhlIG9yaWdpbmFsIGptcCB3b3VsZCBza2lwIHRob3NlIGJ5dGVzLApiZWNhdXNlIG90aGVy
-IGNvbnRyb2wgZmxvdyAoaW5kaXJlY3QgYnJhbmNoZXMsIGZ1bmN0aW9uIHBvaW50ZXJzLCBhbHRl
-cm5hdGl2ZQplbnRyeSBwb2ludHMpIG1pZ2h0IHJlYWNoIHRoYXQgcmFuZ2UuCgpDb250cmFzdCB3
-aXRoIG5vcDEwOiB3aGVuIGNhbl9vcHRpbWl6ZSByZXR1cm5zIHRydWUgZm9yIGEgMTAtYnl0ZSBu
-b3AKKGxlbmd0aD09T1BUX0lOU05fU0laRSAmJiBpbnNuX2lzX25vcCksIHdyaXRpbmcgMTAgYnl0
-ZXMgb25seSBvdmVyd3JpdGVzIHRoZQpub3AgaXRzZWxmLiBUaGUgZWFybGllciBub3A1IGNvZGUg
-d2FzIHNhZmUgYmVjYXVzZSBpdCByZXF1aXJlZCBpbnNuLT5sZW5ndGgKPT0gNSBhbmQgd3JvdGUg
-ZXhhY3RseSA1IGJ5dGVzICh3cml0ZSBzaXplIG1hdGNoZWQgaW5zdHJ1Y3Rpb24gc2l6ZSkuCgpU
-aGUgSk1QOCBjYXNlIGJyZWFrcyB0aGF0IGludmFyaWFudDogd3JpdGUgc2l6ZSAoMTAgYnl0ZXMp
-IGV4Y2VlZHMKaW5zdHJ1Y3Rpb24gc2l6ZSAoMiBieXRlcyksIHNvIHRoZSA4IHRyYWlsaW5nIGJ5
-dGVzIGFyZSBhcmJpdHJhcnkgdXNlcgpjb250ZW50LiBXb3VsZCBhIGxlbmd0aCBjaGVjayAocmVx
-dWlyaW5nIGluc24tPmxlbmd0aCA9PSBPUFRfSU5TTl9TSVpFIGZvcgp0aGUgSk1QOCBjYXNlKSBv
-ciB0cmFja2luZyBvcHRpbWl6YXRpb24gc3RhdGUgdmlhIGEgZmxhZyBwcmV2ZW50IG9wdGltaXpp
-bmcKdXNlciBpbnN0cnVjdGlvbnMgdGhhdCBoYXBwZW4gdG8gbWF0Y2ggdGhlIEpNUDggcGF0dGVy
-bj8KCgotLS0KQUkgcmV2aWV3ZWQgeW91ciBwYXRjaC4gUGxlYXNlIGZpeCB0aGUgYnVnIG9yIGVt
-YWlsIHJlcGx5IHdoeSBpdCdzIG5vdCBhIGJ1Zy4KU2VlOiBodHRwczovL2dpdGh1Yi5jb20va2Vy
-bmVsLXBhdGNoZXMvdm10ZXN0L2Jsb2IvbWFzdGVyL2NpL2NsYXVkZS9SRUFETUUubWQKCkNJIHJ1
-biBzdW1tYXJ5OiBodHRwczovL2dpdGh1Yi5jb20va2VybmVsLXBhdGNoZXMvYnBmL2FjdGlvbnMv
-cnVucy8yNjAzMDA4MDEwOQ==
+I support adding this helper, because have also hit this issue[1].
+Our ugly workaround is to use the TAI clock and adjust for the current 
+TAI offset.
 
---===============4674189153323790873==--
+[1] https://github.com/xdp-project/bpf-examples/tree/main/netstacklat
+
+Cc Simon Sundberg <Simon.Sundberg@kau.se>
+
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> ---
+>   kernel/bpf/helpers.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 2bb60200c266..863645d096ef 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2317,6 +2317,11 @@ void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
+>   
+>   __bpf_kfunc_start_defs();
+>   
+> +__bpf_kfunc u64 bpf_ktime_get_real_ns(void)
+> +{
+> +	return ktime_get_real_fast_ns();
+> +}
+> +
+>   /**
+>    * bpf_obj_new() - allocate an object described by program BTF
+>    * @local_type_id__k: type ID in program BTF
+> @@ -4859,6 +4864,7 @@ BTF_ID_FLAGS(func, bpf_task_work_schedule_resume, KF_IMPLICIT_ARGS)
+>   BTF_ID_FLAGS(func, bpf_dynptr_from_file)
+>   BTF_ID_FLAGS(func, bpf_dynptr_file_discard)
+>   BTF_ID_FLAGS(func, bpf_timer_cancel_async)
+> +BTF_ID_FLAGS(func, bpf_ktime_get_real_ns)
+>   BTF_KFUNCS_END(common_btf_ids)
+>   
+>   static const struct btf_kfunc_id_set common_kfunc_set = {
+
