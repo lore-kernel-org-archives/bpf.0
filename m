@@ -1,326 +1,234 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F9B481FA5
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 16:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779120309; cv=none; b=LWhfuQ/XouPstLLHFPgeL9eQF/3tjJTy8wxqYn2hLLc8QklqW1UFFvnMv4jtwSTOVzXfcy1tEhhgKgLqi8XzDgQqbmQUJq/RtB7ERp1YS8XWyDSd4sRBoaYsCPUDMhjl6GEpjKAafmPoJFugdcG0trHQrZ7WEC7ALrx3GVLEuq8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779120309; c=relaxed/simple;
-	bh=qMo2h68N+JrWSJO/RZ8Kho5+FZTjs7X8pRv0HUWBMYw=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bd4TruGV9/Xyrvp/iHNoVmdN6pkR2EIt4KROucCGc3WP5GIQzoqtfFsWwWDbwnPg+aBeSTB+FyZPBla+0OFuL8VL+gb3NGyY2R8CZbX/uZirk7n3UyXl/sqPt51WtjiNf5KaBSsR6ltFJVBLryUFus4HRsJwR1bGDlDOAEHX7ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hBWlOUsw; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A0F43E4A3
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 16:06:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779120379; cv=pass; b=eOG9YUIDxhg46TKd8lgaTxEEhYXhalR9aVuY+/qT4OayN/lep9ZwWdDiVwP4i9Ey6LWykS1cFnf75vMyfnBO3LjHrngLhg+oClpuj4Pn2EBNJIO7lp+P8gU84pcU6jbZQlLsjcObQWlMXX/DZUCeZa9NDyR4PrbbweXMw0v/2qY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779120379; c=relaxed/simple;
+	bh=0JN4eWAeyH1DFvPDOFr1bp0SNGRTw2jc5rqIj+ZsVUM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VGGT38sy/lWUVfZenCQMh4egzu0PDtklS1O4G4ZBBB4U+2yGPWSiGLDYydO0zgTAfetIQI5Zv+jnWndLFh5+JPDjAQIFgnFPklr/T8If6ce5IMjys38ZearTYEponCrEwUKUflVw4dXS7ebpoDOXBdOK0i4Vg70oV+SGCBv9dps=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jGueLnnv; arc=pass smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hBWlOUsw"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-488a88aeec9so29903775e9.2
-        for <bpf@vger.kernel.org>; Mon, 18 May 2026 09:05:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jGueLnnv"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2b2e8b95bdbso155ad.0
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 09:06:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779120368; cv=none;
+        d=google.com; s=arc-20240605;
+        b=EakAO9T7tt4xEcErSwRHsonAztzMd1pLiuyEDNDRhe4fvN3AshaXARRR15qyGfVg/l
+         LGMPC5rhjxepXqB9ip9B1KTKX2fEsQ10Kcl5tZqow/uuN65itd3rY4zO3DQ9UuS1E47I
+         /nT35AhJ7wpiuF/euTDyg/R7tP4pi0vaGdGTEeSXXzvU95IRRlw9A83/BhEp08dXocif
+         LBBnMzSANt0t5AlbWibc58CmFVOVchhk5DyPHDDsOplNwjl8K5WC2W8QKUeAB305ZfOB
+         ZLpuvC9phbQwQ5rt0NqzAkMEXyWefgzpp8pDSsVhRWcz4bBZynW4kNTaUFIOPE9sq6tn
+         kmMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=/yL2S/NNFD9uZOxHwjkGhATRbJfyjLUg+vdf0l7wFBI=;
+        fh=hYvSGx70cgQ7eW5EWiRTqxj0tT3/bGjdlE3bafpgQQ4=;
+        b=UdKN7Gg8eEKMQicgfJ9Hv7o6TaDAiIzuGiW9D/uajG5Xl5uApd3OOsSLvnXO+4pR6v
+         UO0s3QzZk5BtOf/QLEZQT1IWcnIURZN1eSaWZ0mfsCZ9UWucPHd93gkBdg1dSdBQgofu
+         addSgvFaS5ktUfOGsst0ttyjBgyu5cTwpQjXDahOHKZ322f9R6EYRls6i7g7xa32SvMN
+         KA3jzReeVdCoCzb0ZCRgqrOTpBt+4f+1CWOdzkEXrJ+W8Nh/Y2T/12e+0pvX2IBST5Cc
+         ztRrsv55e+tzKmN03l9xvDyu/krPsLhruuAuFnXLZkWfagXmvcdchf+WjpgFSEovtxs1
+         tOfw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779120298; x=1779725098; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4VGgz8O/vKdGfNaGXkWUrfuoXq2xq9PVhrs10AnzG/A=;
-        b=hBWlOUswxaVjRAWafsHjSVhQ+dH8s0Rl/2lb43D15L/aoWVNG//caWFwd6SPExFd/C
-         t+SbY0tCw+lTRXa/WNeuWF0c7C6vJmCKtLpco8a8Hss2Hj1ubq6K7ebC7BXqLVk9jR8n
-         anetXfdjQVFXBWU5zsN2ASCnlAAwG51auGeEc5kMpKoo5HusOzUF74wFXVp0+p5HHPgR
-         f647sMWcJ7x9fQyJekUlKpuKs57xxCwwDzKnx7liFDM7oUfvcEbVAiIZvSa17lyVHAn/
-         9GV/T1Q06dhQhLR3t4tB2amjUowmSHfUb68AESpYpPYLyHVzXIP36zGrkxcbNWf7R1Pi
-         hzIw==
+        d=google.com; s=20251104; t=1779120368; x=1779725168; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/yL2S/NNFD9uZOxHwjkGhATRbJfyjLUg+vdf0l7wFBI=;
+        b=jGueLnnvGXPf0SEVFUOojzRtxCqeaOSe0Yzj+zD3sHWcSHCOPwqjC9HnKvg5/v8vvO
+         re1A4G8Fh9asuAzg6hSNQholYgZA16S5Ssrud0W/kdtLOERIt95MnH1l3ORcirQBC9Yu
+         oZ+mlJ1qvOaTU9/Ipx+JI4HCPUFBcbUzE4yU8akOhcl53ykTaj2qY/XzdzJX6F615JKL
+         GuRfH+f1mYy1yL3L6lnz78pE6TCzJNFOAJS++nSyeSoB8m0C/l+f4Pdwnvfb6DP7qrY2
+         N30usLFBRg+HJBllLX+Yxk/3tXlQZy5YufVqvEqHSjKTMhp0jh9zG95dxHQtX0yfIbHs
+         O//A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779120298; x=1779725098;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4VGgz8O/vKdGfNaGXkWUrfuoXq2xq9PVhrs10AnzG/A=;
-        b=l/nUS+jxFj9oPG4rWxydY77sn6umQeIR79Gh+5mJ9CTNwen2LgwoGw4AvI2vtpwElG
-         GJ0F9ZBKwB3XH3u1I+pUF9Hu7Md9UIyvITMOGVAaW+m17mC0w3u705V072XorSqvyFj+
-         JMZcVLGfwJ0ASu1S/k2byZVMUjS5jf8PIIEwXU3cl8KHZ+g0GUbN3byjm+xm99SbDUPk
-         Y0Di5BesBfvvkZQi7POR5mLSoFAfTpUixaKqVq62bGy4dc4fZinli59HRgOmdVbpmY5Y
-         0j2/rbvs0Eb8sm73IQKAETRmnjYrcSAooTTdUqiVK9TDTbrm/Hx5lbzmKZdEThbvwh8j
-         T4UQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/bkjv4Ni/j2yXk9yDB6obdjOnr2OjWsfPprIalOlcc659tIDOxJpOkO+4VY0M+ZGaWD58=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQzuyoPKdhpf4aNHFvVR/xFwkYPM6MLnRw57XzW2kB7sL6w65+
-	kxJuI6aiyZaII1Rm9ZberK/oKpnQ50EOhR55baFZNpE2PTJk2eo5wJWM
-X-Gm-Gg: Acq92OHD1r7OHx4rBfQP0RJS6DUssLkFnpWcjsRhiCBkbVovmgp+uGa82G8Hi8kK0OX
-	Fjz+ot9zJzwTMgPT5XSvGximwlWNr7OVGRDrzr968GdSBazidV99nytZ+u7dLBhV4aCy/uX0Rhu
-	4/vc+MdaabTSYVGtkMlBgdObe1XMYTdhEGCxZYmkhrPjpu76+KFkayH2mXJm8r/kEc6n8qtGZrv
-	MwKcIwOEcFxITSCwYaMKQ4DhG1BojcZo1heaZcfP5MSrmixwNhJDTnkArrpTIAuwQnwXds1ILl1
-	3RnCq/sDpd2G4nv46iAeXsTU5cJwWC7EUgc2a0+km1kbdpZQpgP7SsNVHStZEtFqeW7tEa90X9d
-	JRmywaqwG5G21x9oMrN0HqkBATpfnxrt8C1vaHPtXu2Lbgc0tIA8hFRRG4fZ9u4iZ2MKgsDpIbr
-	x2z9UT0sKRaxc=
-X-Received: by 2002:a05:600c:3f1b:b0:489:1c5f:3a9e with SMTP id 5b1f17b1804b1-48fe60e7fa1mr247507865e9.13.1779120298029;
-        Mon, 18 May 2026 09:04:58 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48feae166dasm97591015e9.9.2026.05.18.09.04.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 09:04:57 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 18 May 2026 18:04:56 +0200
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
-Subject: Re: [PATCHv2 02/11] uprobes/x86: Allow to copy uprobe trampolines on
- fork
-Message-ID: <ags4qIlqFBvgZ3UP@krava>
-References: <20260518105957.123445-3-jolsa@kernel.org>
- <20260518114208.CE128C2BCF6@smtp.kernel.org>
- <agsLH2G2DPxD3g12@krava>
+        d=1e100.net; s=20251104; t=1779120368; x=1779725168;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/yL2S/NNFD9uZOxHwjkGhATRbJfyjLUg+vdf0l7wFBI=;
+        b=B7dpm+b6X55/ugaOzqHB2L0oi5TGS7BDFiMl5sJGtFsbdtuRvB/DXySnGM/v8qnOra
+         p2VBq1xvV91ZfV+F+3PIw3Cy9W27SBZXeM/NUhSzuOs88eZS348Qm3DWcRnmWcntnc7r
+         vuOGIeJvxgxAsu5/5pUNKc+6dst8x+75O06tSZNpPqCSogzmBYO5Gc+/j7fi0aGrnKlo
+         QkrsGgqzERZmmmwE8amP3wTMBdt/Nt+TCgM80axSsZDzu8IFxwULrXBy2arfnGPDlBng
+         azortIddgNNn/9oXx0ZeIH317Y8Ykger3vf+pK9vIqzTS7LKCZeo0b9icn+/kEuEg3pQ
+         THdg==
+X-Forwarded-Encrypted: i=1; AFNElJ8L3GXRZpqPUVlhzTDYsYf4il/7vY/Cjvqi7Dj8W/y9qtlxWSDoC9CSVnIhfSfzpG8kanQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzprZfGgDQ0yB4FTRqpcmTIQHNExijfU3+PezRqO2c4UkPlqHoS
+	4NkW+9ZRBDoBDZRWd8GOCBdRFgwZexamZNhH4w7Eweg3JNNcU4J4Xvlm+ZLA+ls3QpM7XvSlXlr
+	sQTQgpxAjlsEzsMmX7rTCNIOxg1z8NQ2hD22QV55A
+X-Gm-Gg: Acq92OH7UxXSK/vuj4WII16gDRfRpKRrPHtS+7DsY3q18cAOQYWL0/FzqJzS6tHr7OS
+	D7dXnmW5pM7HE9/qiPP6pEObGNElFGYfKhMPVgI0LIkm87jOOAgWERMbhvhPUwFn1EXizD1wFUI
+	Q6qv+M2Zr3NZH7D8sA90RXAvTql0mHO/a+tCe45iblF0yCRM3Pt8FbKDUvmgaHyOWt6CMf/URBl
+	piDvrrTQ3U/r27AVDFXxry5luyDMuDXL+neK3L5nJjcni6OpAO8qvpSNvRP05Mt6GI0jf5X2Psf
+	9Tenk+qpkToScATY0VrdBTCDlGsCNfk9NEGkWBoYDOQq7LuF
+X-Received: by 2002:a17:902:d2cf:b0:2bd:3c1b:3073 with SMTP id
+ d9443c01a7336-2bdb041654emr3259205ad.16.1779120367385; Mon, 18 May 2026
+ 09:06:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <agsLH2G2DPxD3g12@krava>
+References: <20260518-james-perf-llvm-version-v2-0-f12cc4f031d8@linaro.org> <20260518-james-perf-llvm-version-v2-4-f12cc4f031d8@linaro.org>
+In-Reply-To: <20260518-james-perf-llvm-version-v2-4-f12cc4f031d8@linaro.org>
+From: Ian Rogers <irogers@google.com>
+Date: Mon, 18 May 2026 09:05:55 -0700
+X-Gm-Features: AVHnY4J8ZynnI8bourXp6ojaD0bCqutv1EZpQT8aGfrcInLJ1HrazyPhkbTF28U
+Message-ID: <CAP-5=fWmXQEbLg=xGJwQ4s5q5xUZUTdxx2N1K71N0gztZunQrQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] tools/build: Allow versioning LLVM readelf
+To: James Clark <james.clark@linaro.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, ihor.solodrai@linux.dev, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 18, 2026 at 02:50:39PM +0200, Jiri Olsa wrote:
-> On Mon, May 18, 2026 at 11:42:08AM +0000, sashiko-bot@kernel.org wrote:
-> > Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> > - [Critical] __in_uprobe_trampoline uses current->mm instead of the target mm_struct, causing kernel crashes and instruction stream corruption during uprobe_unregister.
-> > - [High] Removing VM_DONTCOPY without synchronizing the uprobes state causes a linear VMA leak across fork chains.
-> > --
-> > 
-> > commit be0e6254bd9df4f56adce23d7a5e24a78c286291
-> > Author: Jiri Olsa <jolsa@kernel.org>
-> > uprobes/x86: Allow to copy uprobe trampolines on fork
-> > 
-> > This commit allows vma uprobe trampoline objects to be copied on fork to
-> > the new process by removing the VM_DONTCOPY flag.
-> > 
-> > > diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
-> > > --- a/arch/x86/kernel/uprobes.c
-> > > +++ b/arch/x86/kernel/uprobes.c
-> > > @@ -702,7 +702,7 @@ static struct uprobe_trampoline *create_uprobe_trampoline(unsigned long vaddr)
-> > >  
-> > >  	tramp->vaddr = vaddr;
-> > >  	vma = _install_special_mapping(mm, tramp->vaddr, PAGE_SIZE,
-> > > -				VM_READ|VM_EXEC|VM_MAYEXEC|VM_MAYREAD|VM_DONTCOPY|VM_IO,
-> > > +				VM_READ|VM_EXEC|VM_MAYEXEC|VM_MAYREAD|VM_IO,
-> > 
-> > Does removing VM_DONTCOPY without synchronizing the uprobes state cause a
-> > linear VMA leak across fork chains?
-> > 
-> > When dup_mmap() copies the uprobe trampoline VMA to the child process during
-> > fork(), the child's tracking list (mm->uprobes_state.head_tramps) is
-> > initialized as completely empty via mm_init_uprobes_state(), meaning the
-> > parent's state is not duplicated.
-> > 
-> > When the child process executes a uprobe, arch_uprobe_optimize() calls
-> > get_uprobe_trampoline(). Because head_tramps is empty, it fails to find the
-> > VMA it already inherited. It then falls back to create_uprobe_trampoline(),
-> > which calls find_nearest_trampoline(). Since the inherited VMA is already
-> > mapped, find_nearest_trampoline() finds a new unmapped area and installs a
-> > second duplicate trampoline VMA.
-> > 
-> > In a deep fork chain, each generation inherits all previous VMAs, has an
-> > empty head_tramps list, and creates a new VMA. Can this cause a linear
-> > accumulation of redundant VMAs, eventually exhausting vm.max_map_count and
-> > virtual memory?
-> 
-> I don't think it's big problem, because it's unlikely you'll insert extra uprobes
-> to child process.. but perhaps we could go away with struct uprobe_trampoline
-> object and operate directly on top of vma objects, it could event make code
-> easier, will try
+On Mon, May 18, 2026 at 2:04=E2=80=AFAM James Clark <james.clark@linaro.org=
+> wrote:
+>
+> Documentation/kbuild/llvm.rst mentions that readelf is included in the
+> LLVM toolchain, but it's not currently included in this block.
+>
+> Add it so that LLVM=3D... options also apply to readelf. Users in tools/
+> were Perf which was hardcoding it, and another was the BPF makefile.
+> Both already include Makefile.include so convert them to use the new
+> variable.
+>
+> It also didn't have the cross compile prefix, so either readelf didn't
+> mind opening cross binaries, or it wasn't working for cross builds.
+>
+> Signed-off-by: James Clark <james.clark@linaro.org>
 
-ok looks like we could go without struct uprobe_trampoline layer (below),
-that should address the comment, will do that in next version
+For the tools/perf/Makefile.perf part of this change.
 
-jirka
+Reviewed-by: Ian Rogers <irogers@google.com>
 
+Thanks for the cleanup!
+Ian
 
----
-diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
-index 2be6707e3320..c87079e53946 100644
---- a/arch/x86/kernel/uprobes.c
-+++ b/arch/x86/kernel/uprobes.c
-@@ -631,11 +631,6 @@ static struct vm_special_mapping tramp_mapping = {
- 	.pages  = tramp_mapping_pages,
- };
- 
--struct uprobe_trampoline {
--	struct hlist_node	node;
--	unsigned long		vaddr;
--};
--
- static bool is_reachable_by_call(unsigned long vtramp, unsigned long vaddr)
- {
- 	long delta = (long)(vaddr + 5 - vtramp);
-@@ -682,12 +677,10 @@ static unsigned long find_nearest_trampoline(unsigned long vaddr)
- 	return high_tramp;
- }
- 
--static struct uprobe_trampoline *create_uprobe_trampoline(unsigned long vaddr)
-+static struct vm_area_struct *create_uprobe_trampoline(unsigned long vaddr)
- {
- 	struct pt_regs *regs = task_pt_regs(current);
- 	struct mm_struct *mm = current->mm;
--	struct uprobe_trampoline *tramp;
--	struct vm_area_struct *vma;
- 
- 	if (!user_64bit_mode(regs))
- 		return NULL;
-@@ -696,69 +689,26 @@ static struct uprobe_trampoline *create_uprobe_trampoline(unsigned long vaddr)
- 	if (IS_ERR_VALUE(vaddr))
- 		return NULL;
- 
--	tramp = kzalloc_obj(*tramp);
--	if (unlikely(!tramp))
--		return NULL;
--
--	tramp->vaddr = vaddr;
--	vma = _install_special_mapping(mm, tramp->vaddr, PAGE_SIZE,
-+	return _install_special_mapping(mm, vaddr, PAGE_SIZE,
- 				VM_READ|VM_EXEC|VM_MAYEXEC|VM_MAYREAD|VM_DONTCOPY|VM_IO,
- 				&tramp_mapping);
--	if (IS_ERR(vma)) {
--		kfree(tramp);
--		return NULL;
--	}
--	return tramp;
- }
- 
--static struct uprobe_trampoline *get_uprobe_trampoline(unsigned long vaddr, bool *new)
-+static struct vm_area_struct *get_uprobe_trampoline(unsigned long vaddr)
- {
--	struct uprobes_state *state = &current->mm->uprobes_state;
--	struct uprobe_trampoline *tramp = NULL;
-+	VMA_ITERATOR(vmi, current->mm, 0);
-+	struct vm_area_struct *vma;
- 
- 	if (vaddr > TASK_SIZE || vaddr < PAGE_SIZE)
- 		return NULL;
- 
--	hlist_for_each_entry(tramp, &state->head_tramps, node) {
--		if (is_reachable_by_call(tramp->vaddr, vaddr)) {
--			*new = false;
--			return tramp;
--		}
-+	for_each_vma(vmi, vma) {
-+		if (!vma_is_special_mapping(vma, &tramp_mapping))
-+			continue;
-+		if (is_reachable_by_call(vma->vm_start, vaddr))
-+			return vma;
- 	}
--
--	tramp = create_uprobe_trampoline(vaddr);
--	if (!tramp)
--		return NULL;
--
--	*new = true;
--	hlist_add_head(&tramp->node, &state->head_tramps);
--	return tramp;
--}
--
--static void destroy_uprobe_trampoline(struct uprobe_trampoline *tramp)
--{
--	/*
--	 * We do not unmap and release uprobe trampoline page itself,
--	 * because there's no easy way to make sure none of the threads
--	 * is still inside the trampoline.
--	 */
--	hlist_del(&tramp->node);
--	kfree(tramp);
--}
--
--void arch_uprobe_init_state(struct mm_struct *mm)
--{
--	INIT_HLIST_HEAD(&mm->uprobes_state.head_tramps);
--}
--
--void arch_uprobe_clear_state(struct mm_struct *mm)
--{
--	struct uprobes_state *state = &mm->uprobes_state;
--	struct uprobe_trampoline *tramp;
--	struct hlist_node *n;
--
--	hlist_for_each_entry_safe(tramp, n, &state->head_tramps, node)
--		destroy_uprobe_trampoline(tramp);
-+	return create_uprobe_trampoline(vaddr);
- }
- 
- static bool __in_uprobe_trampoline(struct mm_struct *mm, unsigned long ip)
-@@ -1111,21 +1061,15 @@ int set_orig_insn(struct arch_uprobe *auprobe, struct vm_area_struct *vma,
- static int __arch_uprobe_optimize(struct arch_uprobe *auprobe, struct mm_struct *mm,
- 				  unsigned long vaddr)
- {
--	struct uprobe_trampoline *tramp;
--	struct vm_area_struct *vma;
--	bool new = false;
--	int err = 0;
-+	struct vm_area_struct *vma, *tramp;
- 
- 	vma = find_vma(mm, vaddr);
- 	if (!vma)
- 		return -EINVAL;
--	tramp = get_uprobe_trampoline(vaddr, &new);
--	if (!tramp)
--		return -EINVAL;
--	err = swbp_optimize(auprobe, vma, vaddr, tramp->vaddr);
--	if (WARN_ON_ONCE(err) && new)
--		destroy_uprobe_trampoline(tramp);
--	return err;
-+	tramp = get_uprobe_trampoline(vaddr);
-+	if (IS_ERR_OR_NULL(tramp))
-+		return PTR_ERR(tramp);
-+	return WARN_ON_ONCE(swbp_optimize(auprobe, vma, vaddr, tramp->vm_start));
- }
- 
- void arch_uprobe_optimize(struct arch_uprobe *auprobe, unsigned long vaddr)
-diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
-index f548fea2adec..43d950f444cf 100644
---- a/include/linux/uprobes.h
-+++ b/include/linux/uprobes.h
-@@ -238,8 +238,6 @@ extern void uprobe_handle_trampoline(struct pt_regs *regs);
- extern void *arch_uretprobe_trampoline(unsigned long *psize);
- extern unsigned long uprobe_get_trampoline_vaddr(void);
- extern void uprobe_copy_from_page(struct page *page, unsigned long vaddr, void *dst, int len);
--extern void arch_uprobe_clear_state(struct mm_struct *mm);
--extern void arch_uprobe_init_state(struct mm_struct *mm);
- extern void handle_syscall_uprobe(struct pt_regs *regs, unsigned long bp_vaddr);
- extern void arch_uprobe_optimize(struct arch_uprobe *auprobe, unsigned long vaddr);
- extern unsigned long arch_uprobe_get_xol_area(void);
-diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-index 4084e926e284..b5c516168f84 100644
---- a/kernel/events/uprobes.c
-+++ b/kernel/events/uprobes.c
-@@ -1806,14 +1806,6 @@ static struct xol_area *get_xol_area(void)
- 	return area;
- }
- 
--void __weak arch_uprobe_clear_state(struct mm_struct *mm)
--{
--}
--
--void __weak arch_uprobe_init_state(struct mm_struct *mm)
--{
--}
--
- /*
-  * uprobe_clear_state - Free the area allocated for slots.
-  */
-@@ -1825,8 +1817,6 @@ void uprobe_clear_state(struct mm_struct *mm)
- 	delayed_uprobe_remove(NULL, mm);
- 	mutex_unlock(&delayed_uprobe_lock);
- 
--	arch_uprobe_clear_state(mm);
--
- 	if (!area)
- 		return;
- 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 5f3fdfdb14c7..9c6baabdc961 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1059,7 +1059,6 @@ static void mm_init_uprobes_state(struct mm_struct *mm)
- {
- #ifdef CONFIG_UPROBES
- 	mm->uprobes_state.xol_area = NULL;
--	arch_uprobe_init_state(mm);
- #endif
- }
- 
+> ---
+>  tools/lib/bpf/Makefile         | 8 ++++----
+>  tools/perf/Makefile.perf       | 1 -
+>  tools/scripts/Makefile.include | 2 ++
+>  3 files changed, 6 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+> index 168140f8e646..180dca9c57c8 100644
+> --- a/tools/lib/bpf/Makefile
+> +++ b/tools/lib/bpf/Makefile
+> @@ -114,12 +114,12 @@ PC_FILE           :=3D $(addprefix $(OUTPUT),$(PC_F=
+ILE))
+>
+>  TAGS_PROG :=3D $(if $(shell which etags 2>/dev/null),etags,ctags)
+>
+> -GLOBAL_SYM_COUNT =3D $(shell readelf -s --wide $(BPF_IN_SHARED) | \
+> +GLOBAL_SYM_COUNT =3D $(shell $(READELF) -s --wide $(BPF_IN_SHARED) | \
+>                            cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*/=
+/' | \
+>                            sed 's/\[.*\]//' | \
+>                            awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {prin=
+t $$NF}' | \
+>                            sort -u | wc -l)
+> -VERSIONED_SYM_COUNT =3D $(shell readelf --dyn-syms --wide $(OUTPUT)libbp=
+f.so | \
+> +VERSIONED_SYM_COUNT =3D $(shell $(READELF) --dyn-syms --wide $(OUTPUT)li=
+bbpf.so | \
+>                               sed 's/\[.*\]//' | \
+>                               awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {p=
+rint $$NF}' | \
+>                               grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | so=
+rt -u | wc -l)
+> @@ -182,12 +182,12 @@ check_abi: $(OUTPUT)libbpf.so $(VERSION_SCRIPT)
+>                      "versioned symbols in $^ ($(VERSIONED_SYM_COUNT))." =
+\
+>                      "Please make sure all LIBBPF_API symbols are"       =
+\
+>                      "versioned in $(VERSION_SCRIPT)." >&2;              =
+\
+> -               readelf -s --wide $(BPF_IN_SHARED) |                     =
+\
+> +               $(READELF) -s --wide $(BPF_IN_SHARED) |                  =
+\
+>                     cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' |   =
+\
+>                     sed 's/\[.*\]//' |                                   =
+\
+>                     awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}'|  =
+\
+>                     sort -u > $(OUTPUT)libbpf_global_syms.tmp;           =
+\
+> -               readelf --dyn-syms --wide $(OUTPUT)libbpf.so |           =
+\
+> +               $(READELF) --dyn-syms --wide $(OUTPUT)libbpf.so |        =
+        \
+>                     sed 's/\[.*\]//' |                                   =
+\
+>                     awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}=
+'|  \
+>                     grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 |             =
+\
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index 0aba14f22a06..63276bf55856 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -215,7 +215,6 @@ FLEX    ?=3D flex
+>  BISON   ?=3D bison
+>  STRIP   =3D strip
+>  AWK     =3D awk
+> -READELF ?=3D readelf
+>
+>  # include Makefile.config by default and rule out
+>  # non-config cases
+> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.incl=
+ude
+> index e81e5b479c56..380ad84ac51e 100644
+> --- a/tools/scripts/Makefile.include
+> +++ b/tools/scripts/Makefile.include
+> @@ -73,6 +73,7 @@ ifneq ($(LLVM),)
+>    $(call allow-override,LLC,$(LLVM_PREFIX)llc$(LLVM_SUFFIX))
+>    $(call allow-override,LLVM_CONFIG,$(LLVM_PREFIX)llvm-config$(LLVM_SUFF=
+IX))
+>    $(call allow-override,LLVM_OBJCOPY,$(LLVM_PREFIX)llvm-objcopy$(LLVM_SU=
+FFIX))
+> +  $(call allow-override,READELF,$(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)=
+)
+>  else
+>    # Allow setting various cross-compile vars or setting CROSS_COMPILE as=
+ a prefix.
+>    $(call allow-override,CC,$(CROSS_COMPILE)gcc)
+> @@ -80,6 +81,7 @@ else
+>    $(call allow-override,LD,$(CROSS_COMPILE)ld)
+>    $(call allow-override,CXX,$(CROSS_COMPILE)g++)
+>    $(call allow-override,STRIP,$(CROSS_COMPILE)strip)
+> +  $(call allow-override,READELF,$(CROSS_COMPILE)readelf)
+>
+>    # Host versions aren't prefixed
+>    $(call allow-override,HOSTAR,ar)
+>
+> --
+> 2.34.1
+>
