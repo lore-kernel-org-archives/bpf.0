@@ -1,32 +1,32 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12805282F00
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 14:56:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89ADC2BEFE8
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 14:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779116201; cv=none; b=dO4oWTj9dmo1amsQVPrRb3hw1ynkxlheqk/rLXXRHwW7DEAtmn4GgUviWu/BoriytPmD9XeSBpIIu3Nfs7ur8MjYRJWvDwFr82c0qe78tI1+4GyxvET0BpwY8atbThqfdnEGHFPequwjMwAq56IX/Jr3weiLi2IkvK/eagzeASo=
+	t=1779116208; cv=none; b=ftXNlQI6ax22nH0jQxjtYkbl6KNx6E9UmDNjV2bgH6VUCWg7QJyQ4+cC9Wy48vwpIrx+PVBo4PeV5FLJucPQk1lYTp5Cluf9orG0CtARNG1cVBZ/Ygxof7Di7XaTAt2A+tUS9gqGDrmvNEhmHZ7Z3Zkt8ryb5oBcKXe3EmkghK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779116201; c=relaxed/simple;
-	bh=pGrid/MoHWKOyHGr/hGYclFjSiLInLI58doTfChTiyQ=;
+	s=arc-20240116; t=1779116208; c=relaxed/simple;
+	bh=GXs/KXHx/biQ2Ip988P1+V15pfIjsDzmesKmjpqYRzE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KrAJroh/Brv+mrW3qOIzYQUPfJMc1lZntBzcMlSN/pvhaCe2jBa7dInbnQ9/y3H30rdKGiQP3RcZqbjj/0pRHMd12vGORsEL+LTjkNVU3VNBWZSrB8FAta85EfAHl1eJwEJAXy1eeP0v2f47KYe9zBBLPilJlKeEHbwv5vcPf5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=e/0vf8k+; arc=none smtp.client-ip=95.215.58.187
+	 MIME-Version; b=un88wSxe9eXCg4P5JaCVfDWEf0Mu+SkenHvSi+DEVI56jK5lSTgzprCkOg88LZgGl/lfwI3hoc20OB9kLSWv4OeaDpMEX8vaoMKll+FMq5pebjboU4iY6SIu2MVk2agL8TypBhU+Rx1gVSiWyApoRl2HUwWcNKvxxomdax247qI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BNPyEbeB; arc=none smtp.client-ip=95.215.58.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="e/0vf8k+"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BNPyEbeB"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779116193;
+	t=1779116203;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=JC5CXjDD2n44DjeRg6Hk4TrBdiWxB43TsPTPXprvrLI=;
-	b=e/0vf8k+zvPIjaqDXm1ASgVyj7Egcg+D9gfqhxX+glr+LfFzw4zzd9tq08yGjv+oyS/PGI
-	BVQpfhmhat/dfaDW0j3/ExK0iMkV6O5JY+Hr06iGM1IL2Y15TyegFlcedYnBmuCwckxfLl
-	Nj4tEdRLTka2uBLyqNGyML6+fiYsccM=
+	bh=bERCOBouP45WRdBJGQNPQaxTPk4LlRukZpEH/2D3fus=;
+	b=BNPyEbeByasyGqHsJgOR1yS2SAqKvsLJaPe99p7mK5862kWPA6WcvOJ0YhNg5TPVNmeHDB
+	JH4DY3PZNbm21r51zQ5qmVAVM/iF8Q6B51cAs428XiISWDeFWQ5Ge9Ulb9nmFTi3yC4msM
+	n8EzgHHGt9IUA6rXO9pLK/XYLiGhjVs=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -40,9 +40,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next 3/5] libbpf: Add OPTS_VALID() for log_opts in bpf_map_create
-Date: Mon, 18 May 2026 22:54:44 +0800
-Message-ID: <20260518145446.6794-4-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next 4/5] selftests/bpf: Use -1 as token_fd in map create failure test
+Date: Mon, 18 May 2026 22:54:45 +0800
+Message-ID: <20260518145446.6794-5-leon.hwang@linux.dev>
 In-Reply-To: <20260518145446.6794-1-leon.hwang@linux.dev>
 References: <20260518145446.6794-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -54,33 +54,29 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-There should be an OPTS_VALID() check for log_opts before extracting its
-fields.
+Because 0xFF can be an open BPF token fd in the test runner that will fail
+test_invalid_token_fd(), change token_fd from 0xFF to -1 to avoid such
+test failure.
 
-If no such OPTS_VALID() check and an application compiled against a future
-libbpf header passes a log_opts with new, non-zero fields to libbpf.so,
-those fields will be ignored silently.
-
-Fixes: 702259006f93 ("libbpf: Add syscall common attributes support for map_create")
+Fixes: f675483cac1d ("selftests/bpf: Add tests to verify map create failure log")
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- tools/lib/bpf/bpf.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/map_init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 483c02cf21d1..3cd705802330 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -246,6 +246,9 @@ int bpf_map_create(enum bpf_map_type map_type,
- 	attr.excl_prog_hash_size = OPTS_GET(opts, excl_prog_hash_size, 0);
+diff --git a/tools/testing/selftests/bpf/prog_tests/map_init.c b/tools/testing/selftests/bpf/prog_tests/map_init.c
+index 5c61c8e37306..b0b902d5783d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/map_init.c
++++ b/tools/testing/selftests/bpf/prog_tests/map_init.c
+@@ -306,7 +306,7 @@ static void test_invalid_token_fd(void)
+ 	const char *msg = "Invalid map_token_fd.\n";
+ 	LIBBPF_OPTS(bpf_map_create_opts, opts,
+ 		    .map_flags = BPF_F_TOKEN_FD,
+-		    .token_fd = 0xFF,
++		    .token_fd = -1,
+ 	);
  
- 	log_opts = OPTS_GET(opts, log_opts, NULL);
-+	if (!OPTS_VALID(log_opts, bpf_log_opts))
-+		return libbpf_err(-EINVAL);
-+
- 	if (log_opts && feat_supported(NULL, FEAT_BPF_SYSCALL_COMMON_ATTRS)) {
- 		memset(&attr_common, 0, attr_common_sz);
- 		attr_common.log_buf = ptr_to_u64(OPTS_GET(log_opts, buf, NULL));
+ 	test_map_create_array(&opts, msg);
 -- 
 2.54.0
 
