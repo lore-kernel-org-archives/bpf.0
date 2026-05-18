@@ -1,370 +1,275 @@
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB773793DE;
-	Mon, 18 May 2026 13:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779112710; cv=none; b=nKF6E0fVl76suRrCKlJlZmGD/bJEsYGWExuGXVKLq1G7tYrRhIad0M3gNSfcsve/EYMtuToGkzQ8ePsS+/+pmk6cdZVk3mFiwi9XFSk5qHbs0LJUnHukKFanO919s9X/MAFPgXRabGU99Rx0SO8Lje164UXAOIEeLYEZIl0L7/k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779112710; c=relaxed/simple;
-	bh=0iWugykATQYVTMbyksk048izgnrKy6+uHcttXBIIgJM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=rgu507nPG8AO06+oIJ/JbEnJSv/IqI66eYCna87CUOA5plV874znEiuIiDJH7nqKt/hJfCdq8BWTC9CIU16WFosQj5i3jMawcvX2jtiRP+pTAH+Cydn4fJb6qgDtZ05RBXP+MRctnJMJg954PmtD8TxXU0lLxEAOgE0W5V3VcrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf05.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id 4C4191A06BC;
-	Mon, 18 May 2026 13:58:26 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf05.hostedemail.com (Postfix) with ESMTPA id 13F1C20016;
-	Mon, 18 May 2026 13:58:22 +0000 (UTC)
-Date: Mon, 18 May 2026 09:58:32 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>, bpf@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Mark Rutland <mark.rutland@arm.com>,
- Peter Zijlstra <peterz@infradead.org>, Namhyung Kim <namhyung@kernel.org>,
- Takaya Saeki <takayas@google.com>, Douglas Raillard 
- <douglas.raillard@arm.com>, Tom Zanussi <zanussi@kernel.org>, Andrew Morton
-  <akpm@linux-foundation.org>, Thomas Gleixner <tglx@linutronix.de>, Ian 
- Rogers <irogers@google.com>, Jiri Olsa <olsajiri@gmail.com> Subject: [PATCH
- v2] tracing/pr
-Subject: [PATCH v3] tracing/probes: Allow use of BTF names to dereference
- pointers
-Message-ID: <20260518095832.52659a3a@gandalf.local.home>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED4B64AA4;
+	Mon, 18 May 2026 13:59:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779112758; cv=fail; b=GXlmtwQARIPizIZ+lb2mzvQEAftIA0B3PEl+x9+H02OP2XK+5/jdM1T7/U7Clkkjz/Ur3yLblC5olMr/3HIHCBba0ruWeLqDCdXJpUjvQo4LVb3V5PB2O6d4M6G/3MpafhfHE1o6Tm92r/XQFiXu2AyqT7o/lOu6nPXyD4517p4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779112758; c=relaxed/simple;
+	bh=wr6Vh7XCq5XvvJu5uRQzqL8LInn/C7H8UBpBCdwnGkY=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=AcHrhM0WrcszZ/LRSL0RLVvuS6luz/Ml/orej+dMBsEkpzDShnborrsz1zy5Jaq4llmNuvK95MrXWPc7yiwvdjkLkTVhQmN0qX5DIMyVd6l4LYtiRFWiq6UqLd0MVeaazqtIFzx6SSPeyfw+5uZ19UcZO4yfa8zWiBELZhcuApE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cd+oTK48; arc=fail smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cd+oTK48"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779112756; x=1810648756;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=wr6Vh7XCq5XvvJu5uRQzqL8LInn/C7H8UBpBCdwnGkY=;
+  b=cd+oTK481k7O3OB/9Di8ID1D/nLjfAF9j4sglPfWigQ+NBpxymmRYVGE
+   +VcvZAXIrcL1o9oLwbRLXf5WK6VUrFERrm5AHIwQ/nC/wcKdKESdoASEt
+   fdSmY750snx4j2FIRFjRbhFQsd0zLmc9i3ClCxddQ3muSib1kyT8ae6um
+   UPLeCXjOuxb6F95z19EUTOIlAyxbvN09mYDSoVOUg6cl8IKmWJkMklRLt
+   PSx+Omvz/abgmrwU6f5RZ1bIcMXMWZZx714qoJHJNFG0VeWvAGQFatGox
+   KiHVC34FIrmMg134yZLz9Vvt+ujlZWe4CTigTYSXGSxso+UJXR+Pjy8ge
+   Q==;
+X-CSE-ConnectionGUID: c/ZIBzb+RvOgf98XHparPg==
+X-CSE-MsgGUID: bTax12YiTLyxaR6aD2Fayg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11790"; a="97533510"
+X-IronPort-AV: E=Sophos;i="6.23,242,1770624000"; 
+   d="scan'208";a="97533510"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2026 06:59:15 -0700
+X-CSE-ConnectionGUID: rJQrD5N9Sba9k6g9jL2gaQ==
+X-CSE-MsgGUID: uRHWvfWCSZeRbx21RgsDbw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,242,1770624000"; 
+   d="scan'208";a="269768289"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2026 06:59:15 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Mon, 18 May 2026 06:59:14 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Mon, 18 May 2026 06:59:14 -0700
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (40.93.194.14)
+ by edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Mon, 18 May 2026 06:59:13 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=b09B/YD6STATVScgsC5FIZSyxtf/Q5WjKnK1ZcfPwvnKx2Yc37cMOAQI+xb8/+TY5PomS3C6XRhFhSJgG3c067cD2JOLvpzZ/Ypdy6STJ1A94j5tVrJgH0x7evvVyYmkMRAbG3FDsnmyRYDwGvKb8IH5yg3NHBKKbzYUXvXVFso+wttujKqDYI0J2A5lgrcmhfyBEg/pmfOkhN5lo+K6LGb4+xbO4k8vB3wO7jv4l5/WldK/lmQ8k135RVNV+2QnXNA42F2I+fJrgSPuqBXDvBFTKYOueyAFac3ozCtPTaatFYIotbZw1q5W6+hyK6AbbLAJ3wVlk2+FAttk/aTe3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZhtrHUfihNO3D2BHsJFVl2UFR4pQOGOp2y0PwechgZY=;
+ b=FVfppNllrihgwnGD3EAcJW4zkZerO0WAyIAZHLslxWgNv5halvi9qXg6pRm6qhDh1Qp6MF/SAYZKOyHGTNLVunvk9L3B1qchgVzG7oZNhFO20nS2qLLBDQFAumCUjdAvrgFQdCLBfWQNCqOLbTQAl3yP00dRdQXvHiWkg3JTOVbeY/n7BF4GiD+h4bokT9Cr6NfBCFDD6JJ9lOOfF5hDCBbRix1AAuFWPt6kreQreLlPYI2x+KxSNjcAj/v4lEcj9NxAS9Q13fXBl/3IBExrxrU0Ne6WNq6RaoGu0vjzpKrIw3mZ9bMms0il25JwPSSjQ0vQJTgEb97LUYfcgOolvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
+ by SJ0PR11MB5040.namprd11.prod.outlook.com (2603:10b6:a03:2d6::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.21; Mon, 18 May
+ 2026 13:59:10 +0000
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::6aa:411d:4bfa:619c]) by DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::6aa:411d:4bfa:619c%5]) with mapi id 15.21.0025.023; Mon, 18 May 2026
+ 13:59:10 +0000
+Message-ID: <744d9c62-a5e8-4702-bcdf-c9a8d31a026d@intel.com>
+Date: Mon, 18 May 2026 15:59:00 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] xsk: switch xdp_build_skb_from_zc() to napi_alloc_skb()
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Lorenz Brun
+	<lorenz@monogon.tech>
+CC: Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
+	<przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+	<horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
+ Fastabend" <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+	<stable@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
+	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>
+References: <20260512152658.2818805-1-lorenz@monogon.tech>
+ <9c49ecf7-1d35-4b03-8a71-9d724562594d@intel.com>
+ <CAJMi0nQN+XB14Z81=W2reEGnax526-MB=Armx+f_miWMWUmRFw@mail.gmail.com>
+ <agsUHNss20SweH3a@boxer>
+Content-Language: en-US
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <agsUHNss20SweH3a@boxer>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: TL2P290CA0012.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:2::16) To DS0PR11MB8718.namprd11.prod.outlook.com
+ (2603:10b6:8:1b9::20)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: c9ojry6zrc8m3mqptnqxeufrb746i1i6
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: 13F1C20016
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19PdUr/EgYucY7qiSu+lglV3jDhUBkhnqg=
-X-HE-Tag: 1779112702-985039
-X-HE-Meta: U2FsdGVkX1/Hv4NCC7BM9Sxbz/U0V3HVWGHNE4YYTvZK6NK7daExKO9TYkLCOffUnGkNlHvgN4N3aIHj9QLKUadOp9ysAEP4ZY+TdDGX6MBJKwhaCAKh1hw9YU1FWfMT0nl/9kerWBP4Bcptb4/c7VEbAfr6+MHV79ElxezHFqItpWhsSt1d9l8xdk4kHEwTzMTzFZqPJW/zeO9ElS9dL6mVlya0PhY+2g6lvVY9Oe3V4nTg6X5ZXCY3x2jUeayhvgqzk+YsaxfoHHC4IsLc2/wLndsxbtlcd1Sm5SbrHFvTyeqcQv+6q4UZybdK13Mrnr58jBzXDm0W6snTIm88ID1knL8kNuEZhUjDUUJFw8f2EeLhBS9iWUmxUYE+kt8OYvut2vAmXZpv8m5x17A8VCk5BOptGQ/H6oj86yjNkAbwaG77BbKrNjHFdU0iPwqERYSTuOODPVsL3u0oKGKFZA==
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|SJ0PR11MB5040:EE_
+X-MS-Office365-Filtering-Correlation-Id: 68714062-f936-409c-684a-08deb4e5a260
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014|18002099003|56012099003|22082099003|3023799003|11063799003|4143699003;
+X-Microsoft-Antispam-Message-Info: NWePC7xdSIM6PhVP8PWKAUi2KX+h6yPROPVrR8hAGi4Xut6RGzqMscNzznVKTbESM1AntuD65Vnj1UogkHneKt+eCttD633Xfkhz31xiBXzHwdYWsKvWfGMK2mEodMzXGMe2350j/YagttdfWxW0pf/iCk65IqxwrqbHZoAMPwMIKB3RxY7uyE7A2AK/+keyCt8uzTF8Q5Qzl2Jz1pl4gWpm+TVBmEFAPXw46NPjdKQa2cLv85DBwcGClQFSQTDKR+Nq6IZx+86GOYyXL6eNvSqIK5m8jAKIG/aQj05dKzfDSr4zfN4IZgrPl4GI3IdWYnGzzD2/079FHP7R9wyqwqcBngeP3XCuQWJj/XKOPiwGzoYSB6BdWHuQq+3ZPnq9KSSfC2Hjb/tiSfuqpzvEQNMQUwvwGeHZYe8OltsvrKyDdxs4n6uUdwEJGrEb18kX419YXVRfrKqZ71F9+TNg/WNpPHshcv5fRb+N6RS9+Ils6ozz9Vwxzsro++52oAI0wKkPxB2EH/7Ewf1j9pheMma1e9B6HFK410aL65tjKddReVKfR3/L2H/rffT+m1/2FFUJNlZi0r1Uh8Mj3VKb4d/wiw8UQksL3pCbu+xIpj1/v/nGrjS5LmBbY3fIkqb42yWLZIT2Ctw15tGsx+cooPoZoy/a2BiWX3ybGsclrrPUV7q1oBKuKTcbnzm+NcHQNLY+csEqVGLqTefiiT1Igg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(18002099003)(56012099003)(22082099003)(3023799003)(11063799003)(4143699003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YkJYTWJzd0N1WENwUFJIYTkvQThtN0pkejhDRU1PcXpzV212Q0djVksxS3Nt?=
+ =?utf-8?B?YTdGWUpCMnNJcTR2R2Q5Zk0waGpyUFY1MzhzSU01MWdwd2hmOW1paU9zUmFl?=
+ =?utf-8?B?YmUrNmhyNzR1YzBnSHAwc24yVVErcTl6RXNsQjBBU1dXZ2xCMG5YY2NRT3dw?=
+ =?utf-8?B?bEdnZzN0eExWelVyeGdIVXlXSkw2N21va1c4aHJzOHdFaUhMN21CUi9XaTFo?=
+ =?utf-8?B?SVRwaDlQaktpLzIxOXp2SmNLNW85bW80TUdKU1JOajJNRWxjUUtKR2JJMlBI?=
+ =?utf-8?B?VGZaZFhwM0hmTG5XMGdXYktaZmlJR1hha0RQUTNIbW5rd2FrdDNXcGllK3R5?=
+ =?utf-8?B?QjRQeTgraWFIR1hHL013NTFBSmJ4V3d6enlUT0habHQxeldlQXFCTEhrVVBr?=
+ =?utf-8?B?T0UrWStZMHdpQWw2QlJFNHROMnRnVUZpK3lReTUzN2NQR08zRFIybFlvOGxF?=
+ =?utf-8?B?bEF6MGRPcUVLbUxZZ080OUxiZk8vVEdGZzFMeDBoSkNET3V5K0tzanVZem9y?=
+ =?utf-8?B?T0htd21YZkdaOGlpV1RQczNzbzdVRWJmOGNtUmZaT2drTlRhQTd4STNuSzVJ?=
+ =?utf-8?B?dU56MEhSNllVa3MzbWFCczFLUVUxWWdYN3p4blErbUJHN0hOMHZQVjloNTZN?=
+ =?utf-8?B?c0JvdkFKc0tRdFJ2RUJFL1ZWRDhQOG1tNzkxc3ExZXBvdzB1VUtHMTlUcGtJ?=
+ =?utf-8?B?ZzNwbU5yQjJkYmtSU0RybzZqWWs4blU0SkdvMng3dWZ1ZUY3a2Y1emJJaHpQ?=
+ =?utf-8?B?azI4RlB5Zm93ZmFmbU1OeEtwMVg5NFZnMTZyQk9CbzNFK3RsdkpLTWhiRFhk?=
+ =?utf-8?B?NzRmRU54THpJUThZZWR0UDQ1SnRjS0t3emRuWisrNkVZYUFRcm5tT3dwcTdN?=
+ =?utf-8?B?ZDU2aDd1L1RIbkxoV3FIMFZaZzAvTFg0Y2ZOdTMxR292NEhPRjBpZEIrUmdT?=
+ =?utf-8?B?VUtybDA1S3lOSnpGNWw4TmhGTmVtRTk3cDFUQjREbGZzeFUvS3VVUE5QbUQ1?=
+ =?utf-8?B?dG50UFp4djB1ZzJSMFh6a3llaHhWRDJEekxDQ3ArTytRWVFCUGQ0cXFURVhQ?=
+ =?utf-8?B?V1ZtQmg3SXpwOTdZR0tNd2c0K3NEbkVBMXRzTWdxMnhXdjd6aktOckhhQnov?=
+ =?utf-8?B?NEpabHNCWEVmTWQ3elFJdDcrNTEzcnRmMCt0VkxQcURyWXNiRk1lSEFVWVRI?=
+ =?utf-8?B?WDVTRU1Ia201WkNtdlU0dWdvS3lPNXN4USs5UDQzRkcxSEVkTXRLTjdHVGwz?=
+ =?utf-8?B?SU5aUWRyYVVIT3BvR1V5L0lkMk5obUVoQ0RBeTk2ZmFrWEpzUlI5R1kwVStx?=
+ =?utf-8?B?TlNzT09VdXZWYVhHMnNFWnJvN1lrb0RMQWdveG16L2JmQWIydDg2TTNTaTdw?=
+ =?utf-8?B?QmQvVWJjMXhsMnFKN3pPS1AzdWNibkZSeGhrQng4b1paOVJoUlhGZWg1Wlpt?=
+ =?utf-8?B?bkR3dGNSTWludVhWUlkzalFQdDYwTXNvVmN6aFdWbjhQcjNjSnc1LzlnRzlt?=
+ =?utf-8?B?aEpsWTNLbG9UZGdLVVNtWDhycGQxQVZZYUxweTVEU2czQjdKSUl5T2d5d2ln?=
+ =?utf-8?B?dVVlSmc5NHNSSCtObFpwSW1maDg5TE0zcXJMY2taaVc1K1hyTGZLWGlmaGVM?=
+ =?utf-8?B?dkhYRzg5NU9oRGR2cjJ6eThjVXRyZHB2dkNYN0JzWjE5MFA1Y29zUHhHRzhC?=
+ =?utf-8?B?emtKK0gxZWl6M2s3YUxJbjhBdUcwbUpnaHZ1clJzdHhBUnpPbklRNHp1TGho?=
+ =?utf-8?B?ZFN4aGNycUhPVjY0N05iZ28wZ1ZpZnVzTVV2eE5RQTl6c1R3TlF0dGthSUR0?=
+ =?utf-8?B?c2dmOTc2d1FEaE5VT3J3TE5ZNzFacWFsUHhTZlVIZkw4Si9UakJWcFp4SC9I?=
+ =?utf-8?B?Q09Oenp1TTEwKzlGK0FnVFhoMWx6Y2V5YThjb0xDNkFFb3ErZmlTdm9WUFIw?=
+ =?utf-8?B?SnNLeCtTbkIxZ2tlUisyWC9XamlXZjFCOXpIUVVpVFZVYjhWRVJmdHNWYWw0?=
+ =?utf-8?B?Uit0UEw5V01TVDRhVmw2cjVCdmpQM3c1eko5RWhZcTN5QXErVnNKcjROeFQ2?=
+ =?utf-8?B?d3djT2NOMzVRNTZWSFNKVTRWanVjNHIxU3RLQytWOUQrZXc5N2F3cDE2blgy?=
+ =?utf-8?B?SFpjQUxXR2ZNQ0RVTUp1ZGN1R0NZUHBsWDFBbkJOUUpZTmZLaWRNMHE3QnpX?=
+ =?utf-8?B?VGtuNEFoRGxIbERnNHJYNVMvNEFxY0FDdHh4dzBSOVZHOUtjb1lMNEsxd2sx?=
+ =?utf-8?B?NVhQOHp5NVBGZEgrYXRNZlJ3b2NkamYzOXg2MXNyUnpEUUpBWCtCdHBiL3cr?=
+ =?utf-8?B?QVkwT0JKcis3RXM1eWFwN09GbmFOSnlKQjZZcmNpMlYxTHFkakR5cU8xbGVY?=
+ =?utf-8?Q?iezpAkbtpMInSC2Y=3D?=
+X-Exchange-RoutingPolicyChecked: ar89Dg9cGgqZRmnY2EDl7mY0WGxnXlmbqgi2SvWMlTbDTfHnb1J3ottQ4FVZBlzA4a7zwKENyiBPgW9GmTBWXSDGTOWAqJi4Su53h2ppD9NnVPst4tJT/atTbm2B9Wa6Xre3s166Foegd1QjwVZz9IFIFX/WAzBWIVtiTMAOXHsItKyfO5Q8rpZDZgtw5h8XXdM/yhmJzJIM19weT+wnsZhgEiVMQvULfOrnlzwLtiMl46vehDr5hcdaC0+q4gLelZWQdI07IiQQlleKtut1gODS4HoPt4hFfw+/3oUMsSuR7IIl/xG3dwJhm8E1ucdI2uE4UJu0+r9lnk6MBCRlUA==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68714062-f936-409c-684a-08deb4e5a260
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2026 13:59:10.0714
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: U/xTwygXAMDZV9RQ9Xv6/JkWn2DWpnsehstdWNDujGzvUboGuFWjgwHBTKoj6Y3M1qbmgqyCYuVEE62B+ZH4kxbbWDB5yDtZDmYhL7bEH3E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5040
+X-OriginatorOrg: intel.com
 
-From: Steven Rostedt <rostedt@goodmis.org>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Date: Mon, 18 May 2026 15:29:00 +0200
 
-Add syntax to the FETCHARGS parsing of probes to allow the use of
-structure and member names to get the offsets to dereference pointers.
+> On Mon, May 18, 2026 at 02:57:55PM +0200, Lorenz Brun wrote:
+>> On Wed, 13 May 2026 at 17:21, Alexander Lobakin
+>> <aleksander.lobakin@intel.com> wrote:
+>>>
+>>> From: Lorenz Brun <lorenz@monogon.tech>
+>>> Date: Tue, 12 May 2026 17:26:56 +0200
+>>>
+>>>> xdp_build_skb_from_zc() allocated xdp->frame_sz bytes from the per-cpu
+>>>> system_page_pool and built the skb head with napi_build_skb(). The
+>>>> latter places skb_shared_info at the tail of the buffer, but the
+>>>> helper sized the allocation as if the whole frame_sz were usable for
+>>>> data. Whenever the packet plus reserved headroom approached frame_sz,
+>>>> the head memcpy overran shinfo with packet content, corrupting
+>>>> ->flags (SKBFL_ZEROCOPY_ENABLE) and ->nr_frags, which then drove
+>>>> skb_copy_ubufs() off the end of frags[] on the RX path:
+>>>>
+>>>>   UBSAN: array-index-out-of-bounds in include/linux/skbuff.h:2541
+>>>>   index 113 is out of range for type 'skb_frag_t [17]'
+>>>>    skb_copy_ubufs+0x7da/0x960
+>>>>    ip_local_deliver_finish+0xcd/0x110
+>>>>    ice_napi_poll+0xe4/0x2a0 [ice]
+>>>>
+>>>> The overrun bytes come from the packet, so an on-wire sender can
+>>>> corrupt kernel memory remotely whenever the XDP program returns
+>>>> XDP_PASS.
+>>>>
+>>>> Rather than patch the sizing math, switch to the pattern used by other
+>>>> in-tree AF_XDP zero-copy drivers like mlx5 and i40e which use
+>>>> napi_alloc_skb() sized to the actual packet plus skb_put_data().
+>>>> This sizes the head exactly for the data being copied, drops the
+>>>> system_page_pool local_lock from this path, and removes the
+>>>> structural mismatch between frame_sz and the skb head buffer. Frags
+>>>> are allocated with alloc_page() per frag, matching the other drivers.
+>>>
+>>> I used napi_build_skb() + system page_pool to enable PP recycling
+>>> improving XSk XDP_PASS performance a lot.
+>>> Are you sure there's no other way to approach this?
+>>>
+>>> napi_alloc_skb() used in other drivers works, but it's sorta old
+>>> approach which is way slower.
+>>>
+>>> System page_pools always allocate a full page, why can it create an skb
+>>> prone to overruns?
+>>>
+>>>>
+>>>> Fixes: 560d958c6c68 ("xsk: add generic XSk &xdp_buff -> skb conversion")
+>>>> Cc: stable@vger.kernel.org
+>>>> Signed-off-by: Lorenz Brun <lorenz@monogon.tech>
+>>> Thanks,
+>>> Olek
+>>
+>> Hi Olek
+>>
+>> I looked at the code again. While your approach is indeed faster, it
+>> is only faster for traffic bypassing AF_XDP, which is generally not
+>> that relevant for performance.
+>>
+>> More critically, it currently corrupts kernel memory and panics the
+>> kernel very quickly when running with frame-size set to 2048, 1500
+>> MTU, and passing received packets. To be honest, I'm not familiar
+>> enough with the XSK subsystem to know exactly what specific sizing
+>> assumption was violated here. By comparison, the approach taken by the
+>> other drivers is a lot more obviously correct and works perfectly.
+>>
+>> If you want to preserve the current approach, I'm perfectly happy with
+>> that. However, I don't feel comfortable sending patches for it, as I
+>> don't understand exactly what the expectations of the various data
+>> blocks are.
+>>
+>> AFAIK, reproduction should be fairly easy. You just need to run a TCP
+>> connection to the receiving node (which gets passed to the kernel)
+>> while receiving some UDP packets via AF_XDP at the same time. As
+>> mentioned, it also needs frame-size 2048 to reproduce quickly.
+>>
+>> I checked if I could get you an easy reproducer, but xdp-tools is
+>> quite limited. If you want to keep your approach and can't reproduce
+>> the panic yourself, let me know and I can see if I can synthesize a
+>> minimal reproducer.
+> 
+> We now respect the tailroom in UMEM which is supposed to address shinfo
+> override cases. Could you re-test this on your side with cited patchset
+> being present on your tree?
+> 
+> https://lore.kernel.org/bpf/20260402154958.562179-1-maciej.fijalkowski@intel.com/
 
-Currently, a dereference must be a number, where the user has to figure
-out manually the offset of a member of a structure that they want to
-reference. For example, to get the size of a kmem_cache that was passed to
-the function kmem_cache_alloc_noprof, one would need to do:
+Either way and regardless of whether XSk XDP_PASS is
+performance-demanding or not, fixing an issue by replacing the
+implementation with the one from some driver "because it works" is not
+something I'd like to see.
+If you have difficulties with root-causing the actual problem, I can
+take a look and fix it since it's my code.
 
- # cd /sys/kernel/tracing
- # echo 'f:cache kmem_cache_alloc_noprof size=+0x18($arg1):u32' >> dynamic_events
+But yeah, first make sure the series Maciej mentioned is present in your
+tree.
 
-This requires knowing that the offset of size is 0x18, which can be found
-with gdb:
-
-  (gdb) p &((struct kmem_cache *)0)->size
-  $1 = (unsigned int *) 0x18
-
-If BTF is in the kernel, it can be used to find this with names, where the
-user doesn't need to find the actual offset:
-
- # echo 'f:cache kmem_cache_alloc_noprof size=+kmem_cache.size($arg1):u32' >> dynamic_events
-
-Instead of the "+0x18", it would have "+kmem_cache.size" where the format is:
-
-  +STRUCT.MEMBER[.MEMBER[..]]
-
-The delimiter is '.' and the first item is the structure name. Then the
-member of the structure to get the offset of. If that member is an
-embedded structure, another '.MEMBER' may be added to get the offset of
-its members with respect to the original value.
-
-  "+kmem_cache.size($arg1)" is equivalent to:
-
-  (*(struct kmem_cache *)$arg1).size
-
-Anonymous structures are also handled:
-
-  # echo 'e:xmit net.net_dev_xmit +net_device.name(+sk_buff.dev($skbaddr)):string' >> dynamic_events
-
-Where "+net_device.name(+sk_buff.dev($skbaddr))" is equivalent to:
-
-  (*(struct net_device *)((*(struct sk_buff *)($skbaddr)).dev)->name)
-
-Note that "dev" of struct sk_buff is inside an anonymous structure:
-
-struct sk_buff {
-	union {
-		struct {
-			/* These two members must be first to match sk_buff_head. */
-			struct sk_buff		*next;
-			struct sk_buff		*prev;
-
-			union {
-				struct net_device	*dev;
-				[..]
-			};
-		};
-		[..]
-	};
-
-This will allow up to three deep of anonymous structures before it will
-fail to find a member.
-
-The above produces:
-
-    sshd-session-1080    [000] b..5.  1526.337161: xmit: (net.net_dev_xmit) arg1="enp7s0"
-
-And nested structures can be found by adding more members to the arg:
-
-  # echo 'f:read filemap_readahead.isra.0 file=+0(+dentry.d_name.name(+file.f_path.dentry($arg2))):string' >> dynamic_events
-
-The above is equivalent to:
-
-  *((*(struct dentry *)(*(struct file *)$arg2).f_path.dentry)->d_name.name)
-
-And produces:
-
-       trace-cmd-1381    [002] ...1.  2082.676268: read: (filemap_readahead.isra.0+0x0/0x150) file="trace.dat"
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-Changes since v2: https://patch.msgid.link/20260516173310.1dbad146@fedora
-
-- Added skip_modifies when looking up field (Sashiko)
-
-- Pass -E2BIG error to caller if that was the issue (Sashiko)
-
-- Fix btf_put() error path (Sashiko)
-
-- Update error log on -ENOENT (Sashiko)
-
- Documentation/trace/kprobetrace.rst |   3 +
- kernel/trace/trace_btf.c            | 115 ++++++++++++++++++++++++++++
- kernel/trace/trace_btf.h            |  10 +++
- kernel/trace/trace_probe.c          |  20 ++++-
- kernel/trace/trace_probe.h          |   4 +-
- 5 files changed, 149 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
-index 3b6791c17e9b..00273157100c 100644
---- a/Documentation/trace/kprobetrace.rst
-+++ b/Documentation/trace/kprobetrace.rst
-@@ -54,6 +54,8 @@ Synopsis of kprobe_events
-   $retval	: Fetch return value.(\*2)
-   $comm		: Fetch current task comm.
-   +|-[u]OFFS(FETCHARG) : Fetch memory at FETCHARG +|- OFFS address.(\*3)(\*4)
-+  +STRUCT.MEMBER[.MEMBER[..]](FETCHARG) : If BTF is supported, Fetch memory
-+		  at FETCHARG + the offset of MEMBER inside of STRUCT.(\*5)
-   \IMM		: Store an immediate value to the argument.
-   NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
-   FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
-@@ -70,6 +72,7 @@ Synopsis of kprobe_events
-         accesses one register.
-   (\*3) this is useful for fetching a field of data structures.
-   (\*4) "u" means user-space dereference. See :ref:`user_mem_access`.
-+  (\*5) +STRUCT.MEMBER(FETCHARG) is equivalent to (*(struct STRUCT *)(FETCHARG)).MEMBER
- 
- Function arguments at kretprobe
- -------------------------------
-diff --git a/kernel/trace/trace_btf.c b/kernel/trace/trace_btf.c
-index 00172f301f25..ca09982d8dbe 100644
---- a/kernel/trace/trace_btf.c
-+++ b/kernel/trace/trace_btf.c
-@@ -120,3 +120,118 @@ const struct btf_member *btf_find_struct_member(struct btf *btf,
- 	return member;
- }
- 
-+#define BITS_ROUNDDOWN_BYTES(bits) ((bits) >> 3)
-+
-+static int find_member(const char *ptr, struct btf *btf,
-+		       const struct btf_type **type, int level)
-+{
-+	const struct btf_member *member;
-+	const struct btf_type *t = *type;
-+	int i;
-+
-+	/* Max of 3 depth of anonymous structures */
-+	if (level > 3)
-+		return -E2BIG;
-+
-+	for_each_member(i, t, member) {
-+		const char *tname = btf_name_by_offset(btf, member->name_off);
-+
-+		if (strcmp(ptr, tname) == 0) {
-+			int offset = __btf_member_bit_offset(t, member);
-+			*type = btf_type_skip_modifiers(btf, member->type, NULL);
-+			return BITS_ROUNDDOWN_BYTES(offset);
-+		}
-+
-+		/* Handle anonymous structures */
-+		if (strlen(tname))
-+			continue;
-+
-+		*type = btf_type_by_id(btf, member->type);
-+		if (btf_type_is_struct(*type)) {
-+			int offset = find_member(ptr, btf, type, level + 1);
-+
-+			if (offset < 0) {
-+				if (offset == -ENOENT)
-+					continue;
-+				return offset;
-+			}
-+
-+			return offset + BITS_ROUNDDOWN_BYTES(member->offset);
-+		}
-+	}
-+
-+	return -ENOENT;
-+}
-+
-+/**
-+ * btf_find_offset - Find an offset of a member for a structure
-+ * @arg: A structure name followed by one or more members
-+ * @offset_p: A pointer to where to store the offset
-+ *
-+ * Will parse @arg with the expected format of: struct.member[[.member]..]
-+ * It is delimited by '.'. The first item must be a structure type.
-+ * The next are its members. If the member is also of a structure type it
-+ * another member may follow ".member".
-+ *
-+ * Note, @arg is modified but will be put back to what it was on return.
-+ *
-+ * Returns: 0 on success and -EINVAL if no '.' is present
-+ *    or -ENXIO if the structure or member is not found.
-+ *    Returns -EINVAL if BTF is not defined.
-+ *  On success, @offset_p will contain the offset of the member specified
-+ *    by @arg.
-+ */
-+int btf_find_offset(char *arg, long *offset_p)
-+{
-+	const struct btf_type *t;
-+	struct btf *btf;
-+	long offset = 0;
-+	char *ptr;
-+	int ret;
-+	s32 id;
-+
-+	ptr = strchr(arg, '.');
-+	if (!ptr)
-+		return -EINVAL;
-+
-+	*ptr = '\0';
-+
-+	ret = -ENXIO;
-+	id = bpf_find_btf_id(arg, BTF_KIND_STRUCT, &btf);
-+	if (id < 0)
-+		goto error;
-+
-+	/* Get BTF_KIND_FUNC type */
-+	t = btf_type_by_id(btf, id);
-+
-+	/* May allow more than one member, as long as they are structures */
-+	do {
-+		ret = -ENXIO;
-+		if (!t || !btf_type_is_struct(t))
-+			goto error_put;
-+
-+		*ptr++ = '.';
-+		arg = ptr;
-+		ptr = strchr(ptr, '.');
-+		if (ptr)
-+			*ptr = '\0';
-+
-+		ret = find_member(arg, btf, &t, 0);
-+		if (ret < 0)
-+			goto error_put;
-+
-+		offset += ret;
-+
-+	} while (ptr);
-+
-+	btf_put(btf);
-+	*offset_p = offset;
-+	return 0;
-+
-+error_put:
-+	btf_put(btf);
-+error:
-+	if (ptr)
-+		*ptr = '.';
-+	return ret;
-+}
-diff --git a/kernel/trace/trace_btf.h b/kernel/trace/trace_btf.h
-index 4bc44bc261e6..7b0797a6050b 100644
---- a/kernel/trace/trace_btf.h
-+++ b/kernel/trace/trace_btf.h
-@@ -9,3 +9,13 @@ const struct btf_member *btf_find_struct_member(struct btf *btf,
- 						const struct btf_type *type,
- 						const char *member_name,
- 						u32 *anon_offset);
-+
-+#ifdef CONFIG_PROBE_EVENTS_BTF_ARGS
-+/* Will modify arg, but will put it back before returning. */
-+int btf_find_offset(char *arg, long *offset);
-+#else
-+static inline int btf_find_offset(char *arg, long *offset)
-+{
-+	return -EINVAL;
-+}
-+#endif
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index e0d3a0da26af..74c4255da307 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -1165,7 +1165,7 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
- 
- 	case '+':	/* deref memory */
- 	case '-':
--		if (arg[1] == 'u') {
-+		if (arg[1] == 'u' && isdigit(arg[2])) {
- 			deref = FETCH_OP_UDEREF;
- 			arg[1] = arg[0];
- 			arg++;
-@@ -1178,7 +1178,23 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
- 			return -EINVAL;
- 		}
- 		*tmp = '\0';
--		ret = kstrtol(arg, 0, &offset);
-+		if (arg[0] != '-' && !isdigit(*arg)) {
-+			int err = 0;
-+			ret = btf_find_offset(arg, &offset);
-+			switch (ret) {
-+			case -ENODEV: err = TP_ERR_NOSUP_BTFARG; break;
-+			case -E2BIG: err = TP_ERR_MEMBER_TOO_DEEP; break;
-+			case -EINVAL: err = TP_ERR_BAD_STRUCT_FMT; break;
-+			case -ENXIO: err = TP_ERR_BAD_BTF_TID; break;
-+			case -ENOENT: err = TP_ERR_NO_BTF_FIELD; break;
-+			}
-+			if (err)
-+				__trace_probe_log_err(ctx->offset, err);
-+			if (ret < 0)
-+				return ret;
-+		} else {
-+			ret = kstrtol(arg, 0, &offset);
-+		}
- 		if (ret) {
- 			trace_probe_log_err(ctx->offset, BAD_DEREF_OFFS);
- 			break;
-diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-index 262d8707a3df..d649bb9f5b7c 100644
---- a/kernel/trace/trace_probe.h
-+++ b/kernel/trace/trace_probe.h
-@@ -563,7 +563,9 @@ extern int traceprobe_define_arg_fields(struct trace_event_call *event_call,
- 	C(NEED_STRING_TYPE,	"$comm and immediate-string only accepts string type"),\
- 	C(TOO_MANY_ARGS,	"Too many arguments are specified"),	\
- 	C(TOO_MANY_EARGS,	"Too many entry arguments specified"),	\
--	C(EVENT_TOO_BIG,	"Event too big (too many fields?)"),
-+	C(EVENT_TOO_BIG,	"Event too big (too many fields?)"), \
-+	C(MEMBER_TOO_DEEP,	"Too many indirections of anonymous structure"), \
-+	C(BAD_STRUCT_FMT,	"Unknown BTF structure"),
- 
- #undef C
- #define C(a, b)		TP_ERR_##a
--- 
-2.53.0
-
+Thanks,
+Olek
