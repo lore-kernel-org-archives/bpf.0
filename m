@@ -1,133 +1,284 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6541C2236EE
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 16:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779120873; cv=none; b=jvfOG7g+3pIftEcvYPuMiE1XWgvEJVogIaF0D0LD+N1wUsyyclRi3+052dnkyJ6+Gn2zbk3+hskyJoKVroccCeY70xirHTkD+PldD7uRrDPKLHIZr8yM1tdE5YJu4l07BlWcf9Rm74e2tFFJBsYghxx2x2CFTXwjMPt0IoRzC74=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779120873; c=relaxed/simple;
-	bh=KBmaIFHON2EYfGmxVZYjIH/WtRx0RWqToQinmPzD7i4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uXESwtXbkvEqyVvWEFFsOFhv6Z98fz5inoyqmdV89QZSaUgmDNYawqfSuV/eaEvdebqp69iM0kZI+bTPCQ0MLP2bnXJqptBkeQBzLj8tt3yQJYab5+aBqjbuBAoS/YBV0H/x68o9rI+oowfiRClpH/SNn/53/LuPzqw5VNOM7TY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pf4q7KQD; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B97048AE2B
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 16:14:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779120897; cv=pass; b=W1mwKSCXjB3l3f1ch2h/l0eNqdz/FSNUyMWP04CfU5dQGM9X5Bo0zrN8Nc3Md0BEbQLtwEF8rXA2nfsiYXCMbc02e6ScBU8r5GY+wwfkMxq6kekMT7xokzLAMga95qVToZxNE0N37U3fDd3BzRQf3GY2+XXqGzriad7MLf6JSE4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779120897; c=relaxed/simple;
+	bh=EmYKj06afbAhmfrg0dU9ILwqg+Kx17GPBCdiKSIJuRc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ugiPk3n3Oih/5SbVKUfnpVaO2FDo6/bK7iADP49krBKDiUVNSJgkt7B+7ZHi8yTeKYcRx2bsJVuAX4esAWH9jYAKCnnplY05w3KHeahyDrPkMu0gm/tsYY0pIIc1T3vseEEGrTLvRop/gQlglcKl73gtkE+t3PGXdBKzBO7fz3k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nBMieT8R; arc=pass smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pf4q7KQD"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-48fe26a177cso17769935e9.1
-        for <bpf@vger.kernel.org>; Mon, 18 May 2026 09:14:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nBMieT8R"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-369576666d5so1124198a91.0
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 09:14:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779120888; cv=none;
+        d=google.com; s=arc-20240605;
+        b=SULIDotdgnEbQoD8kmd2tRcFW9rNXl/ih/Ok3z8/OguFZM9n7sCK05OoF0twGyDt1q
+         9a4pSspKZ0rGv2wbMjsJw5FM/Zt4Rxq9hCKRBX4bkgcBPhskKAyDR+Fj/lz3eSoEL6vX
+         9sltfG6jDPxOgliwmeGqBDEpgg8p2Au6g0MBis1hBFb0ZtVLAUmeMSoAjtazUSRnB9nw
+         KxV6mdx4hlCaRj4UnbXgMaqamhYQpy5Pv/Lua33uOB2zHoa4g3+5rYxcYNStlHWohAYu
+         MZF+Yi6qTYsAQyvwgpx80dmgLPlXdvH1q3mKLL//WfbEFFOL0ZaUdM8JBjckBVI4hWPD
+         it0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=sjHa52dJp+dkJOLU1Zzxxd+w92lhdzj56DEfyUv/Ue8=;
+        fh=pOVB6+7CGP6VDjcADxllBDU3GoIRMyHwdq4oFqVCSyE=;
+        b=ipciEcVQjvlsNGwp+gOmMayKPSatUxLfDPhfV9XL55To9H8ZVRvu+FthQZ3vX2S5yU
+         hUsqDprqWAmcGW2+5q0avH8sKVoD6PoJpVp8ivQBPdlbQekE/v6+StKLTb9MFRMyJ4PT
+         OMu6Uf88TSqQNSZ3ibzDSU/3c9E5DvK+au/+2xY+06hjaPny7UA/GZBbhiuxDE+mwHSX
+         oLbx7de0esavy5YIAi7kemg2c7stKDGgoVP8zGD2d4cJbHlqAG0KhG66ooxHbyphY+G0
+         Ym4TpLgGhWRMheohrVQqv21OAmaOFYUaq6/WP0m++jMEdPht/V3ApfBQbUucmg76prQ2
+         NNKw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779120859; x=1779725659; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SDQc/Hmcg4wkxrkpnM69XNZHAqGS6wrj96XS3N9o/CM=;
-        b=pf4q7KQDIX4aYUNO5qTK8noUwHH4b4C7thwJpFBsfYrHz8JTcLB1azrAubTvOYJ42y
-         xblz69Rxvq1D2fs4AXfoxpo06u3Yq9kNyDXL37GBREMWim8ZSmZEH0EulOQbfPk4LwQw
-         o4LNbK/XFb6wbJPShfpG4oVTVog7ETwHP8YB2H92v8kbpWifzEQ6E23H7atM8629+WRp
-         8rccpBjzg5x6LLaONtL0W3hRhrSASlhWvn3pwMAbCtiyRbXzPuqVj/hgI+2PkrhTtjL7
-         c4tkZ9QWz4a6TwkJLhvEUL3nLoUgttWrhof1RVX9+tndGVC+SF507D2Ojde4fy4oGWH/
-         UsSg==
+        d=gmail.com; s=20251104; t=1779120888; x=1779725688; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sjHa52dJp+dkJOLU1Zzxxd+w92lhdzj56DEfyUv/Ue8=;
+        b=nBMieT8RN/OXdyhR8t0pMmB/zpvPQfGlaxlPd96cjf3lLKvZ7m3+Jdk39kkHQ0Riio
+         vHxFKSRWhzhq874LZnald5hnjtUQ40ehymGF53y9Cpj3amIQp+4bqu1yeWP3tdgybkCb
+         4m/pm2BJaum9Qx/tF72VhaUQ91LHWCALMtWJBvz3AWAEP5yjMXBos2Qe/7eGCFBoDule
+         O+lG3T+x4TzN4cgDXOpOB6PWg04ta7CSMQFGHoZx6tbwhGCx6Wo2rd2mSwVWNA4qWtPW
+         T4/u1No6D7B2R487wugtmKVFn57WVGIQ4QFLlPFcHnJrBszwiH5Il+NcL/GBaR6oEvYw
+         AUuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779120859; x=1779725659;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SDQc/Hmcg4wkxrkpnM69XNZHAqGS6wrj96XS3N9o/CM=;
-        b=CqA8H5cIl3cVQrkTymUToyz1MDxqCR56s6QGnYOl10OxdwcQ4+frhJgOJY/naZEtGm
-         O5JdZxHHeCJmtzLJVXJ53gxJxF9xGUxF2I14j2hn7pSwlf3y4am7kAzEB92BPmTc7gqh
-         hWPep4MNHy7C5lw/4P10j1SyA4xL9Bh4EPG8tdyp001BV36G6F2sUPTERJfmRiVokLFA
-         9lrcJSMm6WHEPYkz8/JT+KOMU58RePOijGOInlgmPGpu4cP2PtBjySaMzL8NePFHI8Sx
-         CCC80SRkHCKkrNVBsi5yIOWVmyQX7fTm72jm0SNeTsU2FHkkjYqUOqIesANExVnqy/JR
-         lpQQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8N7HFEDkjDoOAcTrpn0dyx8dM5gqRMbmk9KHDu/qQas2+MskhLDVF+tojDjiNUCEWPV6s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+T1oSwT8lYCk2zt+R0ydZtC+FjVJ2QlxEujnMsfuqETAOqA0s
-	3QuHnL6Hc2p+aaU0YOt5VpkEjHA9qp9pwFTGV4oJUNd9Go7v3HRqff/GYwMrkZdP
-X-Gm-Gg: Acq92OHS4HXxOegSV1nFEWJ5x/u/hXbf60TeCO7Gp4LIKxBiXWoUz56a4XJlZwd58o0
-	YvBBDDhIx8lFhkV++QmBmONRKRJVlF3xJeHx7ZIrvxXteN7i1yfio8Z8cN9BsWlthlqiR+yRJ+6
-	RWazsYjmR/J9WJM8AkPSQsso3nqmRLnKDx3Uxw6//pYg50oFqthX/zuZVNDrNvciZEhjIACKUOa
-	Xwl3j66fMCCpl3hilgqJxX6K6XuP2WV0DOOh/Joo/Hbletxne9DwkXuERAqwxprIRDGc3e6xkkm
-	uq4NBQc7mRDTwJL+UpdFBh97mEIT3AbrplDp6/osFuaQRfuTux8vqbZgnWvBjFenIuAZcyE5Wc+
-	7LnhyMXbX1HVOGyOtuJyiPX/wfl5dQURnojVwK4C/yZMIHC40EgAuShDpu43PqTkwLKUX9FNHYt
-	uGsAwv6Ez0fdr4+rgf0WxKAbfwSj1LADhORzziPn2C5ad9xRIB6P+7vXNyYQ8PiqWytK1u2rI=
-X-Received: by 2002:a05:600c:1d0d:b0:48f:da34:ec4e with SMTP id 5b1f17b1804b1-48fe632343dmr227408525e9.19.1779120858659;
-        Mon, 18 May 2026 09:14:18 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1126:4:1178:9251:cb12:6150? ([2620:10d:c092:500::5:5e25])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4900c16c62dsm72201115e9.11.2026.05.18.09.14.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 May 2026 09:14:17 -0700 (PDT)
-Message-ID: <e86e1075-f62c-4167-86df-158841952940@gmail.com>
-Date: Mon, 18 May 2026 17:14:16 +0100
+        d=1e100.net; s=20251104; t=1779120888; x=1779725688;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=sjHa52dJp+dkJOLU1Zzxxd+w92lhdzj56DEfyUv/Ue8=;
+        b=qeldp/syN675XlQKOiwkwNNW2sbdp43zSQfxJx5NWQYzcoczcHqOQa09NUlwwlqz3x
+         85yJASu1Axnxpfu7qkvyc8FcA70GbavgXjIt8feYN+s5Uw4XRACvopobWJHmPHIUUp0e
+         TBJGV4txaDBC82EtR6KRkq8JHkFY9Q0wAk45qhELj9mWKiXlCP/lHJ7NjdaziFrYnUmu
+         CwjK/T3dCqcXcOVWZID9FfdMjAzakmbNzgENL2t1y6L5FeAVZOeLzNvAqUgaWrG3YBow
+         mpag4zA9SrXOpavEq8L0ZZi+GRa5JXrb81c5DVljeVvPj2E6RCpDUKBvpDGX7S7WeL4U
+         E/AQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/Ran5Gbtr4b2di0xfhswJ1A2O9xTgOYzE3tm2Om5hEaC034/IufYx7uVzpqZtymsPENzs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+IKMW6DsFI1Dw3nym6Vd815izF6lO2GBa96OAc97zowP7D30a
+	eGUr2xd0PTo0AMB0nEJFUYbQSjUNYJf5ZXcpdwLjOUBm87A45ZKw4pp10yVrvAWVhj3SSKgmROI
+	4vP8f7jlNP600JfNEOUf//c9xrQa8rgQ=
+X-Gm-Gg: Acq92OHWdoysy93JdLAy3C3BbYTWLF/bdJ79pbVb54RCWf8j8O6X3uwK55AERfBKON6
+	PCKlp7WDhJ1K0JSVptS+0Y3ssZeGz0AIHslMDWRI9ybnNQxBUu2n3E0Ctjg7q4lc8ufIuTKLDY6
+	4ekACBIP6dfRffz3GG9EM9kq9thWkrv41KTeS8nnDlKljOwsB6wB+ZjqnZhW1D7bfkodplADIAS
+	NCsaivDFdZKeNNWPMCVenMI56ZacVR7J5mYH9uvAMTn4FztZaS8GBouyL4BPLFGL2g7/9Iqj2vw
+	EZzRGMHq25SZYghNY105DhzJtjoaU1EqXw==
+X-Received: by 2002:a17:90b:4a:b0:35d:a0b7:9608 with SMTP id
+ 98e67ed59e1d1-369519feb17mr15447389a91.7.1779120887793; Mon, 18 May 2026
+ 09:14:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 1/5] bpf: Check tail zero of bpf_common_attr
- using offsetofend
-To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
-References: <20260518145446.6794-1-leon.hwang@linux.dev>
- <20260518145446.6794-2-leon.hwang@linux.dev>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260518145446.6794-2-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260514135342.22130-1-jolsa@kernel.org> <20260514135342.22130-2-jolsa@kernel.org>
+ <20260518104306.GU3102624@noisy.programming.kicks-ass.net>
+In-Reply-To: <20260518104306.GU3102624@noisy.programming.kicks-ass.net>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 18 May 2026 09:14:35 -0700
+X-Gm-Features: AVHnY4JK4mY1rOZBzuAPZOoe3LWqZaJCXqcJOCk5pjKz8K5LnElg5g71QZFlCcA
+Message-ID: <CAEf4BzaSKBJDyo=GpRAfB45nqCu4CQ6RyVv2kX2hXhF+KhBTBA@mail.gmail.com>
+Subject: Re: [PATCH 1/7] uprobes/x86: Move optimized uprobe from nop5 to nop10
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Jiri Olsa <jolsa@kernel.org>, Oleg Nesterov <oleg@redhat.com>, Ingo Molnar <mingo@kernel.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, May 18, 2026 at 3:43=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+>
+> You seem to have forgotten to Cc LKML and x86 :-(
+>
+> On Thu, May 14, 2026 at 03:53:36PM +0200, Jiri Olsa wrote:
+>
+> > @@ -1017,17 +1030,32 @@ static int int3_update(struct arch_uprobe *aupr=
+obe, struct vm_area_struct *vma,
+> >  static int swbp_optimize(struct arch_uprobe *auprobe, struct vm_area_s=
+truct *vma,
+> >                        unsigned long vaddr, unsigned long tramp)
+> >  {
+> > -     u8 call[5];
+> > +     u8 insn[OPT_INSN_SIZE], *call =3D &insn[LEA_INSN_SIZE];
+> >
+> > -     __text_gen_insn(call, CALL_INSN_OPCODE, (const void *) vaddr,
+> > +     /*
+> > +      * We have nop10 instruction (with first byte overwritten to int3=
+),
+> > +      * changing it to:
+> > +      *   lea -0x80(%rsp), %rsp
+> > +      *   call tramp
+> > +      */
+> > +     memcpy(insn, lea_rsp, LEA_INSN_SIZE);
+> > +     __text_gen_insn(call, CALL_INSN_OPCODE,
+> > +                     (const void *) (vaddr + LEA_INSN_SIZE),
+> >                       (const void *) tramp, CALL_INSN_SIZE);
+> > -     return int3_update(auprobe, vma, vaddr, call, true /* optimize */=
+);
+> > +     return int3_update(auprobe, vma, vaddr, insn, OPT_INSN_SIZE, true=
+ /* optimize */);
+> >  }
+> >
+> >  static int swbp_unoptimize(struct arch_uprobe *auprobe, struct vm_area=
+_struct *vma,
+> >                          unsigned long vaddr)
+> >  {
+> > -     return int3_update(auprobe, vma, vaddr, auprobe->insn, false /* o=
+ptimize */);
+> > +     /*
+> > +      * We have optimized nop10 (lea, call), changing it to 'jmp rel8'=
+ to
+> > +      * end of the 10-byte slot instead of restoring the original nop1=
+0,
+> > +      * because we could have thread already inside lea instruction.
+>
+> Inaccurate, RIP could be on CALL, not inside LEA. Writing NOP10 would
+> make it inside NOP10 though, and that would cause havoc IF you use the
+> normal NOP10.
+>
+> Thing is, the encoding of NOP{8,9,10} would actually allow you to
+> preserve the CALL instruction :-)
+>
+> That is, observe:
+>
+>        PF1   PF2   ESC   NOPL  MOD   SIB   DISP32
+>
+> NOP10: 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 -- cs n=
+opw 0x00000000(%rax,%rax,1)
+> NOP10: 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0xe8, 0x78, 0x56, 0x34, 0x12 -- cs n=
+opw 0x12345678(%rax,%rbp,8)
+>
+> Specifically the CALL opcode sits in the SIB byte and decodes like:
+>
+>   e8 :=3D 11 101 000
+>
+>   scale =3D 11  (2^3 =3D 8)
+>   index =3D 101 BP
+>   base  =3D 000 AX
+>
+> And the displacement is just that, a displacement.
+>
+> So you *could* in fact, write back _A_ NOP10, just not the standard
+> NOP10.
+>
+> > +      */
+> > +     u8 jmp[OPT_INSN_SIZE] =3D { JMP8_INSN_OPCODE, OPT_JMP8_OFFSET };
+> > +
+> > +     return int3_update(auprobe, vma, vaddr, jmp, JMP8_INSN_SIZE, fals=
+e /* optimize */);
+> >  }
+>
+> Changelog wants significant update to explain this scheme.
+>
+> So we have:
+>
+>   NOP10 -+-> LEA -0x80(%rsp), %rsp, CALL foo -> JMP.d8 +8
+>          |                                          |
+>          `------------------------------------------'
+>
+> And you want to belabour the point of how you ensure re-writing the CALL
+> instruction isn't a problem (because I'm not convinced).
+>
+> Note that the above results in:
+>
+> initial:
+> 0: 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 -- cs nopw =
+0x00000000(%rax,%rax,1)
+>
+> optimize-int3:
+> 1: 0xcc, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 -- int3
+> optimize-tail:
+> 2: 0xcc, 0x8d, 0x64, 0x24, 0x80, 0xe8, 0x12, 0x34, 0x56, 0x78 -- int3; ca=
+ll 0x78563412
+> optimize-finish:
+> 3: 0x48, 0x8d, 0x64, 0x24, 0x80, 0xe8, 0x12, 0x34, 0x56, 0x78 -- lea -0x8=
+0(%rsp),%rsp; call 0x78563412
+>
+> unoptimize-int3:
+> 4: 0xcc, 0x8d, 0x64, 0x24, 0x80, 0xe8, 0x12, 0x34, 0x56, 0x78 -- int3; ca=
+ll 0x78563412
+> unoptimize-tail:
+> 5: 0xcc, 0x08, 0x64, 0x24, 0x80, 0xe8, 0x12, 0x34, 0x56, 0x78 -- int3; ca=
+ll 0x78563412
+> unoptimize-finish:
+> 6: 0xeb, 0x08, 0x64, 0x24, 0x80, 0xe8, 0x12, 0x34, 0x56, 0x78 -- jmp.d8 +=
+8; call 0x78563412
+>
+> optimize-int3:
+> 7: 0xcc, 0x08, 0x64, 0x24, 0x80, 0xe8, 0x12, 0x34, 0x56, 0x78 -- int3; ca=
+ll 0x78563412
+> optimize-tail:
+> 8: 0xcc, 0x8d, 0x64, 0x24, 0x80, 0xe8, 0x78, 0x56, 0x34, 0x12 -- int3; ca=
+ll 0x12345678
+> optimize-finish:
+> 9: 0x48, 0x8d, 0x64, 0x24, 0x80, 0xe8, 0x78, 0x56, 0x34, 0x12 -- int3; ca=
+ll 0x12345678
+>
+> Note that from step 7 to step 8, you re-write the CALL instruction
+> without going through INT3. This means it is entirely possible for a
+> concurrent execution to observe a composite instruction.
+>
+> This is NOT sound!
 
+We shouldn't need to change call instruction ever, uprobe trampoline
+is permanent within the given process and its address won't change.
 
-On 5/18/26 3:54 PM, Leon Hwang wrote:
-> Because of the 8-byte alignment, the compiler will pad struct
-> bpf_common_attr to 24 bytes. That said, sizeof(attr_common) is 24 instead
-> of 20.
-> 
-> When check tail zero using sizeof(attr_common) in
-> bpf_check_uarg_tail_zero(), there will be 4 bytes that won't be checked.
-> 
-> To also check the padding 4 bytes, replace sizeof(attr_common) with
-> offsetofend(struct bpf_common_attr, log_true_size).
-> 
-> Fixes: f28771c0691b ("bpf: Extend BPF syscall with common attributes support")
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  kernel/bpf/syscall.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 6600e126fbfb..83de8fb9b9aa 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -6278,7 +6278,9 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
->  
->  	memset(&attr_common, 0, sizeof(attr_common));
->  	if (cmd & BPF_COMMON_ATTRS) {
-> -		err = bpf_check_uarg_tail_zero(uattr_common, sizeof(attr_common), size_common);
-> +		err = bpf_check_uarg_tail_zero(uattr_common,
-> +					       offsetofend(struct bpf_common_attr, log_true_size),
-> +					       size_common);
+>
+> However, I think it can be salvaged, if instead of only writing INT3 at
+> +0, you also write INT3 at +5. The sequence then becomes:
+>
+> initial:
+> 0: 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 -- cs nopw =
+0x00000000(%rax,%rax,1)
+>
+> optimize-int3:
+> 1: 0xcc, 0x2e, 0x0f, 0x1f, 0x84, 0xcc, 0x00, 0x00, 0x00, 0x00 -- int3; in=
+t3
+> optimize-tail(s):
+> 2: 0xcc, 0x8d, 0x64, 0x24, 0x80, 0xcc, 0x12, 0x34, 0x56, 0x78 -- int3; in=
+t3
+> optimize-finish-1:
+> 3: 0xcc, 0x8d, 0x64, 0x24, 0x80, 0xe8, 0x12, 0x34, 0x56, 0x78 -- int3; ca=
+ll 0x78563412
+> optimize-finish-2:
+> 3: 0x48, 0x8d, 0x64, 0x24, 0x80, 0xe8, 0x12, 0x34, 0x56, 0x78 -- lea -0x8=
+0(%rsp),%rsp; call 0x78563412
+>
+> unoptimize-int3:
+> 4: 0xcc, 0x8d, 0x64, 0x24, 0x80, 0xe8, 0x12, 0x34, 0x56, 0x78 -- int3; ca=
+ll 0x78563412
+> unoptimize-tail:
+> 5: 0xcc, 0x2e, 0x0f, 0x1f, 0x84, 0xe8, 0x12, 0x34, 0x56, 0x78 -- int3; ca=
+ll 0x78563412
+> unoptimize-finish:
+> 6: 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0xe8, 0x12, 0x34, 0x56, 0x78 -- cs nopw =
+0x78563412(%rax,%rbp,8); call 0x78563412
+>
+> optimize-int3:
+> 7: 0xcc, 0x2e, 0x0f, 0x1f, 0x84, 0xcc, 0x12, 0x34, 0x56, 0x78 -- int3; in=
+t3
+> optimize-tail(s):
+> 8: 0xcc, 0x8d, 0x64, 0x24, 0x80, 0xcc, 0x78, 0x56, 0x34, 0x12 -- int3; in=
+t3
+> optimize-finish-1:
+> 9: 0xcc, 0x8d, 0x64, 0x24, 0x80, 0xe8, 0x78, 0x56, 0x34, 0x12 -- int3; ca=
+ll 0x12345678
+> optimize-finish-2:
+> 9: 0x48, 0x8d, 0x64, 0x24, 0x80, 0xe8, 0x78, 0x56, 0x34, 0x12 -- lea -0x8=
+0(%rsp),%rsp; call 0x12345678
+>
 
-The change looks correct.
-
-It looks like similar behavior exists in 2 other places of this file:
-bpf_map_get_info_by_fd()
-bpf_prog_get_info_by_fd()
-
-Does it make sense to fix those too, just to make sure agents follow the
-pattern correctly next time?
-
->  		if (err)
->  			return err;
->  
-
-
+[...]
