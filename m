@@ -1,77 +1,74 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C9F3376490
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 17:12:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E3E382395
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 17:18:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779124366; cv=none; b=JY36rXHK9sC/9SLx9UsHIXIRmzRLZEcotTBpYOQ2lgZ0KvdBg0jKQumtPL+W3MIBgwaJqcWoQ/y67Yoiby+AuD/0svu9PHCgjj95QBcnhVQZqiPPQ6QCODQy05PJsVITrk0zTKZb0qW6Khteujx99h/zsEKBaxH+avS5pHkJxUQ=
+	t=1779124694; cv=none; b=pQ4WaMX/UXP5oL0GIe7IpH7iWM9Q6BNLlydRiC80Jp4YP+M+g8T7VuEOsjsjcrF0iiv37/eQA1/I7dxivp5OD2elScyc0CDqjNR+8FKaoxtrLDgWsTIHMzPyS9YDEt4rpU72jNPQhaULizM9PW0Ixv+E5cMw3NYk8ioCuHlBG8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779124366; c=relaxed/simple;
-	bh=E/4WeoAntZmDMnfV7zG8H+Yk5WfL6D2Nd73+uPfhq8o=;
+	s=arc-20240116; t=1779124694; c=relaxed/simple;
+	bh=3c0QS5xzL7i2Q75DhbTuhvaZhPUd9TNapdTzHhuKIbg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AeAuNaUnSFmzm8B2OL+YxtcKZHRNKuFm1xid7q00Mjl/wCfeUXIg2wPL7VVdjI4NZjrKXWNWqSVuPeB6BaB6EOcT5OjNUPVBl+SZi6kvJO3A/b4tV0pvdeSsYatbl0qM2LPU5OcOtvFTtqViifmLKtAuUHsmWVxuuTCaPCVZkcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n4EL8kaM; arc=none smtp.client-ip=209.85.215.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=L51DwWWULCmbBPU/FOtGLq6SJWTX2Nz9g+l6J1EokVzSq/sqoU8SM/aRQnHsFjjE9Q74PXwMMe4Sfw27r2KUqCC69VJjOUgt+Iw6AGGT+qsdAVbxc/58TjD1+EOgThHcVLM1sR6u31dIzovOs7/trgp0AwJo1dL/mmZjsKGodRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cLdYX1aZ; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n4EL8kaM"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c80167f5716so1024755a12.2
-        for <bpf@vger.kernel.org>; Mon, 18 May 2026 10:12:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cLdYX1aZ"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-488a88aeec9so30919225e9.2
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 10:18:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779124365; x=1779729165; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779124692; x=1779729492; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nyPh44NnAjI+9jKQI9q0bPTcCqGC6CGNFE37YibG8X8=;
-        b=n4EL8kaM25ok1aD7Z6MfP131lwBI1fSwMwFI7zd7kPPFfXVL2aay7ccb28Ga6P3Sny
-         Rx/8vF6NQW6DKtJRAi7RhsKgkKpvs/zWeSZfqJUTTa2f8dv+m8fpd/ckcwpAUK0yEdHf
-         kvS0nyUnYXOrYf0e+mmqWkA+/XEPwqWoHwWh/Kzo44ae7QCnkQYfECpdDVTnEJMEQJM8
-         INl2Jco7eEev2HaOhj0XG6J8Tvyf6+zWptO8HkxwnecuFhXJaQULs8/+VA2oBNOpPH3x
-         lz6H++lhN80uy8oSnmhQZhOKXN0YlCfRHrQoXxl2wjO8o1Rtrv4/xMmrokZSGn0gH/0U
-         IGfA==
+        bh=HEqTTzF0Ghh6Rzlw5gbHSyUg5PTlw2WJ5Y6lPEAeK9k=;
+        b=cLdYX1aZ0ntSFY8Sihinyxg938YGokYZ+iqz+Kt/pJFC3Z2hqsj7RjX4rCYaTDuRl9
+         a6Sx246jNNF4y2nYq+hJsgXRJrh6yBBssPCJkEqAlnOfAPQjDjg1lZX4k6n57wsruo8a
+         xREnrC3Yjql4t0F7EZdbxEILvkBNCLOjRnsOkYr/5a3nOtpPeoq6qxW5ty6Y+N975fW8
+         UOryxL4q04xqLXw1nv6yfY2H0jVZe6px8IEAUUZ6WpBhobm/px9S7Y3Q1209e5OFRfHL
+         LoUho/kudMbvukksqusvULxAl2cYTltIssH/VtlbHJlu6s/CwtB+EBnHCDdRI71YXP+3
+         1YOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779124365; x=1779729165;
+        d=1e100.net; s=20251104; t=1779124692; x=1779729492;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nyPh44NnAjI+9jKQI9q0bPTcCqGC6CGNFE37YibG8X8=;
-        b=Fvk9FpFT8PB+3DhCJUG5P4CwWj7M9QgzeuIVb/zZXm4AQ7pSc1muIyh8dlsgLU1Sc4
-         K0/mInyDk65rwOICcicsp1/zmlpwyrAO8ypIHYP6tXcyyfe5Qj7CIS/6TI/CG7JQFAYo
-         fGjTqYxiRAWBBem08Ge3ZBYLY83lWnUV0OXCEJmz0v2cvYuieGyPhPR9fXoI8MCbVV7u
-         pBThi0DWNnPOCO/sIDOnjLf5PL65iQ3yh4N96tnSPA2+vLhaaSF3T4ohK/Kgs2cTlaa8
-         ooG2Uabt1XYKNPcenUYPlSwE8vKMS5F6KxQxy7qDdK6LkcWL+tby53+LxVf0pTgD1obW
-         B92g==
-X-Forwarded-Encrypted: i=1; AFNElJ/c9tMskDQinv/WvC5q0EbZTc6k1ioZlw+VLX33rgA0g2nk8W0x8TQ2eMt93FEQ/OaOUZw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgsCKNh/JsrWNBhVEBLXZc2QAXjYuKG0it6/z0K4CxP+7RDuZ2
-	oWyryI5j96qRJhUiNLDucSA0+Jl1V6J3MFIq3v1Z6Lal+0hMnrZraFuf
-X-Gm-Gg: Acq92OGnT+QVcnUeiwEMjAugMsldi+sqbXObEhbYL93JywlvIP9oNaI65W959Um5qe8
-	unEnA6q+yn+aaEIcYgWj0tOQGCGVJGu3fGV1s6PjStvyxvYIDASo7QsYqeucn/ypnhs5LWILyqH
-	Xe+9/g0AamgQk1Ag/0KzDr47Chy8ibiSWs5PfF9xcpBc9dKn+r4iUSdLr7+RKy+EymJBhu1LlUp
-	iczTSrsfcGn2QTO9OssYSaD1BcUSNIUFUKTP5ubNDgHKZ32pWjfKN9I7K9hifyjDzmBF4iv+CnL
-	SOp7ijjFWrCrBlVTWmO/HkBCKbLfVo9l0by8Fl92OoLIPLDqWHi9DXIitqiu+ZcJml3id/5bucN
-	yTCzOZf89CvSAnZZUSiGuuQ/lOS2+9MuCvY8x5mAsJeWRt5N3yDm0ncIYbzP3lnLblZEUQ/Nu3T
-	nMB//eq+G8t9bO6BiYmSWTm14waBJW75YmfQ==
-X-Received: by 2002:a05:6a20:734a:b0:398:6bb5:54c4 with SMTP id adf61e73a8af0-3b22e815a13mr17993040637.5.1779124364750;
-        Mon, 18 May 2026 10:12:44 -0700 (PDT)
-Received: from google.com ([118.150.148.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83f19c7f202sm14646616b3a.43.2026.05.18.10.12.41
+        bh=HEqTTzF0Ghh6Rzlw5gbHSyUg5PTlw2WJ5Y6lPEAeK9k=;
+        b=EtDw6w3bqthDXFzm4Nk22R90dK5Zp3xphAu3QPTmqNKYIp6/6TbGJArPX1sREyYBoh
+         1dJ7qQbp0XwQunqrutcAvgSMkYooqeXX1ciKhN2DvR7s0IpCdGJsF0VoZ+VKuhq5lH2I
+         Qe1nwkW77FkjKSTkR940YLv55BdUSy+WiNMSU7C91OmrxrxYgx45jwKpSp2ggf21kCjE
+         FslZwVsaE971/ha/Mn+9OL0+IrMgHjmP3lZc0sxf4QK6wmqdjxsfsm/enk5TxHDvpqGp
+         y0C0P1DfGwBrMvdXYaZaPLeZlgXeQj3mz/qIYXva0DOqdrSadZsDH7Ak+mbQsJi024LU
+         EXKQ==
+X-Gm-Message-State: AOJu0YyQErPzEcVUPAbHkDa7LGvm+fulBOpIOF1macx1/NL9/YpGGknp
+	MhhAiWx7lLzrpI8JwZ4pZslGHc2b+Ev27ZsG3s3BT3Z0QYiexs/GWjgf
+X-Gm-Gg: Acq92OFEfdUahgoMbMQBznifqMfGSf8KPOnwDPok3fbpdsdYU0pHk0CCTgl7NLZ+VRl
+	QqFmvI1DAWVBdwF98adpGtnLDJKMJJbthW05tXaQs7XXXgaWo1rXC2w0EXGfjpnTy6UqzTdxTn+
+	D9swt7AIrsEtHDsmKWKKH/qpbY1ozWoSZLsj9XZ6LwNbfyRl6MwFf5z7mCs0hNQe3b7Tu8L7iU3
+	ByIaCTYZr6UsHTdBQ4CtfyrQ1z2Rop9OubenmRLs+wXExHQyABMxjD38ZSaNTTlp7CsTVxLObok
+	3EKx2Jde0+IYebENChA/hI3GBZqRzlmQVdYs5wsYk/QubwdR+o64RrnghbZ2ww2MLtu8rLFfiqV
+	TEsg+3mw9z6JZRRyU3elm44WN2kPRiQ6bzlu++ZgssMYuisEQkW7rqbCp1W3Gp2EI1xG05KLMo3
+	ihIDbK9o2aLs1lFDgpu+muZZLCNhlBLdMnjA+E+xHbiFInD18YoIvGerY=
+X-Received: by 2002:a05:600c:8905:b0:48e:5d91:cffb with SMTP id 5b1f17b1804b1-48fe60e7d6emr201978945e9.10.1779124691418;
+        Mon, 18 May 2026 10:18:11 -0700 (PDT)
+Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe4c8d39esm271445945e9.7.2026.05.18.10.18.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 10:12:44 -0700 (PDT)
-Date: Tue, 19 May 2026 01:12:40 +0800
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: Andreas Schwab <schwab@linux-m68k.org>
-Cc: geert@linux-m68k.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
-	jolsa@kernel.org, jserv@ccns.ncku.edu.tw, eleanor15x@gmail.com,
-	marscheng@google.com, linux-kernel@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org, bpf@vger.kernel.org,
-	Daniel Palmer <daniel@thingy.jp>
-Subject: Re: [PATCH bpf-next v3] m68k, bpf: Add initial BPF JIT compiler
- support
-Message-ID: <agtIiKuoTlp-4XAO@google.com>
-References: <20260511212756.3163955-1-visitorckw@gmail.com>
- <87h5oc4jpf.fsf@igel.home>
+        Mon, 18 May 2026 10:18:11 -0700 (PDT)
+Date: Mon, 18 May 2026 19:18:09 +0200
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: bpf@vger.kernel.org, martin.lau@linux.dev, daniel@iogearbox.net,
+	john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
+	yonghong.song@linux.dev, jordan@jrife.io, netdev@vger.kernel.org,
+	netfilter-devel@vger.kernel.org, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com
+Subject: Re: [PATCH bpf-next v6 3/6] bpf: add bpf_icmp_send kfunc
+Message-ID: <agtJ0e_hlHS3Es_q@gmail.com>
+References: <20260518122842.218522-1-mahe.tardy@gmail.com>
+ <20260518122842.218522-4-mahe.tardy@gmail.com>
+ <ags3HARTFYwKU8nR@devvm7509.cco0.facebook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -80,30 +77,159 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87h5oc4jpf.fsf@igel.home>
+In-Reply-To: <ags3HARTFYwKU8nR@devvm7509.cco0.facebook.com>
 
-Hi Andreas,
-
-On Tue, May 12, 2026 at 07:32:44PM +0200, Andreas Schwab wrote:
-> On Mai 11 2026, Kuan-Wei Chiu wrote:
-> 
+On Mon, May 18, 2026 at 09:17:45AM -0700, Stanislav Fomichev wrote:
+> On 05/18, Mahe Tardy wrote:
+> > This is needed in the context of Tetragon to provide improved feedback
+> > (in contrast to just dropping packets) to east-west traffic when blocked
+> > by policies using cgroup_skb programs. We also extend this kfunc to tc
+> > program as a convenience.
+> > 
+> > This reuses concepts from netfilter reject target codepath with the
+> > differences that:
+> > * Packets are cloned since the BPF user can still let the packet pass
+> >   (SK_PASS from the cgroup_skb progs for example) and the current skb
+> >   need to stay untouched (cgroup_skb hooks only allow read-only skb
+> >   payload).
+> > * We protect against recursion since the kfunc, by generating an ICMP
+> >   error message, could retrigger the BPF prog that invoked it.
+> > 
+> > For now, we support cgroup_skb and tc program types. For cgroup_skb and
+> > tc egress, almost everything should be good. However for tc ingress:
+> > - packet will not be routed yet: need to set the net device for
+> >   icmp_send, thus the call to ip[6]_route_reply_fill_dst.
+> > - fragments could trigger hook: icmp_send will only reply to fragment 0.
+> > - ensure the ip headers is linearized before processing, and zero out
+> >   the SKB control block after cloning to prevent icmp_send()/icmpv6_send()
+> >   from misinterpreting garbage data as IP options.
+> > 
+> > Only ICMP_DEST_UNREACH and ICMPV6_DEST_UNREACH are currently supported.
+> > The interface accepts a type parameter to facilitate future extension to
+> > other ICMP control message types.
+> > 
+> > Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
+> > ---
+> >  net/core/filter.c | 118 ++++++++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 118 insertions(+)
+> > 
+> > diff --git a/net/core/filter.c b/net/core/filter.c
+> > index 9590877b0714..843fa775596b 100644
+> > --- a/net/core/filter.c
+> > +++ b/net/core/filter.c
+> > @@ -84,6 +84,8 @@
+> >  #include <linux/un.h>
+> >  #include <net/xdp_sock_drv.h>
+> >  #include <net/inet_dscp.h>
+> > +#include <linux/icmpv6.h>
+> > +#include <net/icmp.h>
+> > 
+> >  #include "dev.h"
+> > 
+> > @@ -12464,6 +12466,110 @@ __bpf_kfunc int bpf_xdp_pull_data(struct xdp_md *x, u32 len)
+> >  	return 0;
+> >  }
+> > 
+> > +static DEFINE_PER_CPU(bool, bpf_icmp_send_in_progress);
 > > +
-> > +			emit_16(ctx, 0x4a80 | d_lo);			/* tst.l d_lo */
-> > +			emit_16(ctx, 0x6b04);				/* bmi.s .+6 */
-> > +			emit_16(ctx, 0x7000 | (d_hi << 9));		/* moveq #0, d_hi */
-> > +			emit_16(ctx, 0x6002);				/* bra.s .+4 */
-> > +			emit_16(ctx, 0x70ff | (d_hi << 9));		/* moveq #-1, d_hi */
+> > +/**
+> > + * bpf_icmp_send - Send an ICMP control message
+> > + * @skb_ctx: Packet that triggered the control message
+> > + * @type: ICMP type (only ICMP_DEST_UNREACH/ICMPV6_DEST_UNREACH supported)
+> > + * @code: ICMP code (0-15 for IPv4, 0-6 for IPv6)
+> > + *
+> > + * Sends an ICMP control message in response to the packet. The original packet
+> > + * is cloned before sending the ICMP message, so the BPF program can still let
+> > + * the packet pass if desired.
+> > + *
+> > + * Currently only ICMP_DEST_UNREACH (IPv4) and ICMPV6_DEST_UNREACH (IPv6) are
+> > + * supported.
+> > + *
+> > + * Recursion protection: If called from a context that would trigger recursion
+> > + * (e.g., root cgroup processing its own ICMP packets), returns -EBUSY on
+> > + * re-entry.
+> > + *
+> > + * Return: 0 on success, negative error code on failure:
+> > + *         -EINVAL: Invalid code parameter
+> > + *         -EBADMSG: Packet too short or malformed
+> > + *         -ENOMEM: Memory allocation failed
+> > + *         -EBUSY: Recursion detected
+> > + *         -EHOSTUNREACH: Routing failed
+> > + *         -EPROTONOSUPPORT: Non-IP protocol
+> > + *         -EOPNOTSUPP: Unsupported ICMP type
+> > + */
+> > +__bpf_kfunc int bpf_icmp_send(struct __sk_buff *skb_ctx, int type, int code)
+> > +{
+> > +	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
+> > +	struct sk_buff *nskb;
+> > +	bool *in_progress;
+> > +
+> > +	in_progress = this_cpu_ptr(&bpf_icmp_send_in_progress);
+> > +	if (*in_progress)
+> > +		return -EBUSY;
+> > +
+> > +	switch (skb->protocol) {
+> > +#if IS_ENABLED(CONFIG_INET)
+> > +	case htons(ETH_P_IP):
+> > +		if (type != ICMP_DEST_UNREACH)
+> > +			return -EOPNOTSUPP;
+> > +		if (code < 0 || code > NR_ICMP_UNREACH)
+> > +			return -EINVAL;
+> > +
+> > +		nskb = skb_clone(skb, GFP_ATOMIC);
+> > +		if (!nskb)
+> > +			return -ENOMEM;
+> > +
+> > +		if (!pskb_network_may_pull(nskb, sizeof(struct iphdr))) {
+> > +			kfree_skb(nskb);
+> > +			return -EBADMSG;
+> > +		}
+> > +
+> > +		if (!skb_dst(nskb) && ip_route_reply_fill_dst(nskb) < 0) {
+> > +			kfree_skb(nskb);
+> > +			return -EHOSTUNREACH;
+> > +		}
+> > +
+> > +		memset(IPCB(nskb), 0, sizeof(struct inet_skb_parm));
+> > +
+> > +		*in_progress = true;
+> > +		icmp_send(nskb, type, code, 0);
+> > +		*in_progress = false;
 > 
-> I think this could be "tst.l d_lo; smi d_hi; extb.l d_hi".
+> [..]
 > 
-Sorry for the late reply, and thanks for the review.
+> > +		kfree_skb(nskb);
+> 
+> I was going to suggest to use consume_skb here, I think it is a better fit?
 
-This makes sense.
-I initially kept things simple to focus on correctness first, but since
-you pointed it out, I will include this optimization in the next
-respin.
+Yeah correct, I can replace it with consume_skb, didn't know about it,
+thanks.
 
-Thanks!
+> But I'm not sure why you do the clone here, I don't see any requirement from
+> the icmp_send side, can you clarify? Is it because of the pull?
 
-Regards,
-Kuan-Wei
+From the icmp_send side I think it's fine, however, this part might
+touch the original packet, especially ip_route_reply_fill_dst:
+
+
+if (!pskb_network_may_pull(nskb, sizeof(struct iphdr))) {
+	kfree_skb(nskb);
+	return -EBADMSG;
+}
+
+if (!skb_dst(nskb) && ip_route_reply_fill_dst(nskb) < 0) {
+	kfree_skb(nskb);
+	return -EHOSTUNREACH;
+}
+
+memset(IPCB(nskb), 0, sizeof(struct inet_skb_parm));
+
+
+All of this is mostly there because we allow this kfunc for tc and
+especially tc ingress. At this stage, the skb might not have a routing
+entry yet and icmp_send needs to know the dev from this or fail
+silently. This is the original reason why I added the the net patches
+(patch 1 and 2) and it was also spotted by Sashiko when I tried to
+remove them[^1].
+
+[^1]: https://lore.kernel.org/bpf/20260515202358.20252C2BCB0@smtp.kernel.org/
