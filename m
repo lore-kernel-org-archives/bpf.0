@@ -1,136 +1,209 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92BA03F58D1
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 14:27:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A5644D6B2
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 14:34:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779114445; cv=none; b=oJXfEUu6hp4mM6paFyyyZ7SER8jtgTcwFpwg5zY9TkPNhHsfIg2H4cEFZJWCFZob8hvFwcwhoaVQSAEuREGg6pSzxagKM000cczyYO5tJhf6EYBSyUI1f6fohWohnVU/uJ2pz+AM2vz/DTYPEEVxQkPAGa6eETCj2MnZpWmoWOw=
+	t=1779114887; cv=none; b=uIPxG6knR6JO12UHCPGBolDt8M6q/LkKNj+XCZRKhyRpsE+G1csdozlig9YnH97NKzYh4axdeZqdycLNMNMyupChylrzFlhZOW8avIvy7jXCvawPtfjQNVPo69WqlVRq3qhIoHZeWs2p6vm77t240IzZDzY4w6xb3TSpvmLK3KE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779114445; c=relaxed/simple;
-	bh=7/5JbgXtZakp8qAu9fde2pP1hH3kxzyf9U26Y/nySWk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fEU9vt7rnexny6qfZhX1WRf8DIZZKwVN3mFjD/JoZaeOHqe1rFAlq+UCTuCAgMui8cTcfdANbedn94aEh5RGWCVM28lQAFmSAkgb4OIqX1VjWTHANbHnd93qRRRnWapNLGPaoq+ngBlwudw6yDM0wWYug6KzXCIbf4LSjs+aOcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YSIV/zeM; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779114887; c=relaxed/simple;
+	bh=6tB6IANqEqGBGSpNROvV6S9uPrOOtGEYjKrPGyw9aTg=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=YtLlOsOfXZx/MmV5wJqfy26Ka+EhhZGKwqBjoSRdE4Ja8me7hUmRZS5rDn+vm0zzT9l4ZFKb2dIxHvjTUj/WPcoQLP6avwHAaJ4z97Nlrwj0GYa2forwzlL/mvhQy4ZH5MCXznYlrH+0lbWohFRg+PFjd+8yMFYgMJMVZGFiCow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oMthaEya; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YSIV/zeM"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-441209fb77eso1362699f8f.1
-        for <bpf@vger.kernel.org>; Mon, 18 May 2026 07:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779114440; x=1779719240; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qBsBNTtwVI2xNlfHzXc+UZ4Z+a3F93xqGI/4FrRRBuk=;
-        b=YSIV/zeM5KSPwQCDxE+MQAEC5QKx33TQ6w0zX0n6zXiVCuTxHeypqKlYqo0gobK0hr
-         hYY7yAt+2zbse6xZ6BiiirxaxSZwOBDVZo3KtAMjge1dMEVuHnIjWilHa7zC6WQ2XuxL
-         LNzLppQEVcFR58HN2ocepMUR3oz1cWExV6CswapaL+xis2iWccF5tqbiDaZEmPX8ZDUA
-         2sxcXxklmIH8ozaOGSaP4Hf60LbcoqYt65aTZLtDDrptEIzQpJMYO/JB5OgNomRgBez+
-         xxYPs0MLZ355PNO2N1vPrZy3xTxPlRv4cf4aUpYw5vmVpZXA2gl+uJrbozGKpM3/IBe8
-         H+sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779114440; x=1779719240;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qBsBNTtwVI2xNlfHzXc+UZ4Z+a3F93xqGI/4FrRRBuk=;
-        b=JP+68Bp80r/mjMii6A1Pn2SHdjU/fgTw3sT0YUnnXRtXNzXSRLth4EtQbztXm1uXD4
-         O2CVlOfnDLJwR8srh2EGuaMR6xqABtrL6SkEjxy6+qg1OjiUeoIUSwoXmCfgztXKiH1P
-         3PxC7S4ye7cs6CFASh94CU67wYojC8xsty1wuoFgQiXVt21T+jKYzlaijBxHcsMfzihb
-         wD5wTwhnCSrd5RyszjAcrG+2j7TP5PVEFfwW+NjvqwgIiSYLRHKo9KZVqCSlvw1SDAfn
-         hjaikBWRhrwkbMXywbo3yhcY9jVVMhUpxH8/s5IbX/IlVtl8gZGQsD733oRIZZfyM0VN
-         UpGg==
-X-Gm-Message-State: AOJu0YyjJaC3Sme/ERb+BoHAntc7nXr+mwPJekHiMP7BTKFExOHzBh8X
-	CpV7onxto+JjJtTlG0MjkoPq95CtxPpMYv1lZPl0oYJLYiqxLq9jqI0hDeYnDbvnJ40PqQ==
-X-Gm-Gg: Acq92OHYhbrqs/YNAepb6cQBYVqkJVi8dvOXo9tbKCG8D7i13i7NmavQZUgdidlJufb
-	GnPTzEjueipNLu0gvNvoTEP+xCH8ZJD5hjMUy/hJxDCLR/tYztxPoOj/YKN1g976ef16LbdZsJl
-	yKcYoyhYtphjBuowEFPysPpl2uAlr6T9GYBoC3HrbY7uytpiiiYhwZ3B0AGlErfUPX8wvVJvdhs
-	Pkb/T2nnxtwkheIj0DGQiQ6cbRv4fkUkG7241pljCP7J0mTrjQfpQu2qNCVMa9Q88XyDHOhJXjL
-	4+10v9DRfdT5GvT5VV0XkhKiwo/zmYcLGLkIXR56Z1EOvU1GEmbzMlxrqWGUTXM2NYi1BEu1BlP
-	gu6oZNdmwP9cAxWj+ydmdfMVLLMAf+TYEzeGTT0cj4eor2Gg2FOoAQujqHGeZmmAH3Z1WhAo/Je
-	259NWzgRfJJyAtbx/+thQkXbcnAUJWAXPykyIV4aJuLQdY4isi4TZ4NUU=
-X-Received: by 2002:a05:6000:2087:b0:449:31ca:5e53 with SMTP id ffacd0b85a97d-45e5b75624cmr24344453f8f.8.1779114439663;
-        Mon, 18 May 2026 07:27:19 -0700 (PDT)
-Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45d9adc2209sm34825331f8f.0.2026.05.18.07.27.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 07:27:19 -0700 (PDT)
-Date: Mon, 18 May 2026 16:27:17 +0200
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, martin.lau@linux.dev, daniel@iogearbox.net,
-	john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org,
-	yonghong.song@linux.dev, jordan@jrife.io, netdev@vger.kernel.org,
-	netfilter-devel@vger.kernel.org, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, martin.lau@kernel.org,
-	eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [PATCH bpf-next v6 5/6] selftests/bpf: add bpf_icmp_send kfunc
- IPv6 tests
-Message-ID: <agshxWX7r3pDznKC@gmail.com>
-References: <20260518122842.218522-6-mahe.tardy@gmail.com>
- <f1c34c53dbda338bac68cdcbb48197412e542040617d8bd04c7c94a0de052f1a@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oMthaEya"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBF16C2BCB7;
+	Mon, 18 May 2026 14:34:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779114886;
+	bh=6tB6IANqEqGBGSpNROvV6S9uPrOOtGEYjKrPGyw9aTg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=oMthaEya/yDinbawVcvbeSpFxbkK1az3idOjTTIna8DzhD4bybzNBsnKhg1pEde3q
+	 mcJbyp0CkCxSFVi2/L0KgpdZQfL+6HqxBEhUd7Sjho/JFv/y0TtI9Wh9HD7t9DpTU+
+	 CNUM93P9NQGEHOHqUZx0joFDyEdu1rM7OlpO35iBr6xuxZLCaEEu6PoZ48VAgWwK/C
+	 ZXgiT4NvlG75573M5N/alSaub38IdG6Qb+Q1CqLgDmRmsrwd+B0JXHFX9zlY8DLrmM
+	 lb0YjgmOpP9Q02CNEkDF+5CQK8br1nvVphIe5N86PMVP6tZyo9tGYuYBLT6IHZ3dIT
+	 U3vGDqUFUKLtw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3] tracing/probes: Allow use of BTF names to
+ dereference pointers
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Steven Rostedt" <rostedt@goodmis.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260518095832.52659a3a@gandalf.local.home>
+References: <20260518095832.52659a3a@gandalf.local.home>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 18 May 2026 14:34:46 +0000
+Message-Id: <20260518143446.BBF16C2BCB7@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f1c34c53dbda338bac68cdcbb48197412e542040617d8bd04c7c94a0de052f1a@mail.kernel.org>
 
-On Mon, May 18, 2026 at 01:21:35PM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> > index 4f0aed8152d3..d0ac0502f6df 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> 
-> [ ... ]
-> 
-> > @@ -81,14 +95,13 @@ static void read_icmp_errqueue(int sockfd, int expected_code)
-> >  }
-> >
-> >  static void trigger_prog_read_icmp_errqueue(struct icmp_send *skel,
-> > -					    int code)
-> > +					    int code, int af, const char *ip)
-> >  {
-> >  	int srv_fd = -1, client_fd = -1;
-> >  	struct sockaddr_in addr;
-> >  	socklen_t len = sizeof(addr);
-> >
-> > -	srv_fd = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0,
-> > -			      TIMEOUT_MS);
-> > +	srv_fd = start_server(af, SOCK_STREAM, ip, 0, TIMEOUT_MS);
-> >  	if (!ASSERT_GE(srv_fd, 0, "start_server"))
-> >  		return;
-> 
-> When af is AF_INET6, start_server() creates an IPv6 socket, but addr is
-> hardcoded as struct sockaddr_in which is 16 bytes.
-> 
-> Does this cause getsockname() to silently truncate the 28-byte
-> sockaddr_in6 structure because len is initialized to sizeof(addr)?
-> 
-> While reading addr.sin_port happens to work because sin_port and
-> sin6_port share the same offset, would it be better to use struct
-> sockaddr_storage here (like in connect_to_fd_nonblock() earlier in the
-> file) and extract the port conditionally based on the address family to
-> avoid type confusion?
-> 
-> Note: This concern was raised in v5 review by sashiko-bot@kernel.org,
-> but does not appear to have been addressed in v6. See
-> https://lore.kernel.org/bpf/20260515204444.D8204C2BCB0@smtp.kernel.org/
+Thank you for your contribution! Sashiko AI review found 6 potential issue(=
+s) to consider:
+- [High] Parser ambiguity breaks valid BTF structure names and user-space d=
+ereference syntax.
+- [Medium] Root BTF lookup strictly requires BTF_KIND_STRUCT, rejecting uni=
+ons and typedefs.
+- [Medium] Anonymous structure depth limit prematurely aborts searches acro=
+ss sibling members.
+- [Medium] Anonymous structures with modifiers are silently skipped during =
+member lookup.
+- [Low] Non-BTF fallback stub returns an incorrect error code, leading to m=
+isleading parser errors.
+- [Low] Empty member or structure names incorrectly match anonymous structu=
+res.
+--
 
-Also I have replied in the v5: I don't think we really care about this
-since we are just reading the sin_port.
+commit c2537a8a71eb55f21c0a67db37298aaf425c7fc7
+Author: Steven Rostedt <rostedt@goodmis.org>
 
-> 
-> [ ... ]
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26034287312
+tracing/probes: Allow use of BTF names to dereference pointers
 
+This commit adds syntax to FETCHARGS parsing to allow the use of BTF
+structure and member names to calculate pointer dereference offsets,
+avoiding the need to manually compute raw numeric offsets.
+
+> diff --git a/kernel/trace/trace_btf.c b/kernel/trace/trace_btf.c
+> --- a/kernel/trace/trace_btf.c
+> +++ b/kernel/trace/trace_btf.c
+[ ... ]
+> +static int find_member(const char *ptr, struct btf *btf,
+> +		       const struct btf_type **type, int level)
+> +{
+> +	const struct btf_member *member;
+> +	const struct btf_type *t =3D *type;
+> +	int i;
+> +
+> +	/* Max of 3 depth of anonymous structures */
+> +	if (level > 3)
+> +		return -E2BIG;
+> +
+> +	for_each_member(i, t, member) {
+> +		const char *tname =3D btf_name_by_offset(btf, member->name_off);
+> +
+> +		if (strcmp(ptr, tname) =3D=3D 0) {
+
+Does this code accidentally match anonymous structures when given malformed
+inputs? If arg contains consecutive dots like +.member, ptr will be an
+empty string. Because anonymous structures have an empty name, strcmp would
+return 0 and falsely match.
+
+> +			int offset =3D __btf_member_bit_offset(t, member);
+> +			*type =3D btf_type_skip_modifiers(btf, member->type, NULL);
+> +			return BITS_ROUNDDOWN_BYTES(offset);
+> +		}
+> +
+> +		/* Handle anonymous structures */
+> +		if (strlen(tname))
+> +			continue;
+> +
+> +		*type =3D btf_type_by_id(btf, member->type);
+> +		if (btf_type_is_struct(*type)) {
+
+Could this skip anonymous structures or unions declared with modifiers?
+If an anonymous structure is declared with const or volatile,
+btf_type_is_struct() evaluates to false since the kind is a modifier.
+Should it use btf_type_skip_modifiers() here before checking if it is a
+struct?
+
+> +			int offset =3D find_member(ptr, btf, type, level + 1);
+> +
+> +			if (offset < 0) {
+> +				if (offset =3D=3D -ENOENT)
+> +					continue;
+> +				return offset;
+
+Does this prematurely abort searches across valid sibling members?
+If a nested anonymous structure exceeds the depth limit, find_member()
+returns -E2BIG. Since -E2BIG is not -ENOENT, this returns immediately,
+preventing the loop from checking any subsequent named members in the parent
+structure.
+
+> +			}
+> +
+> +			return offset + BITS_ROUNDDOWN_BYTES(member->offset);
+> +		}
+> +	}
+> +
+> +	return -ENOENT;
+> +}
+[ ... ]
+> +int btf_find_offset(char *arg, long *offset_p)
+> +{
+> +	const struct btf_type *t;
+> +	struct btf *btf;
+> +	long offset =3D 0;
+> +	char *ptr;
+> +	int ret;
+> +	s32 id;
+> +
+> +	ptr =3D strchr(arg, '.');
+> +	if (!ptr)
+> +		return -EINVAL;
+> +
+> +	*ptr =3D '\0';
+> +
+> +	ret =3D -ENXIO;
+> +	id =3D bpf_find_btf_id(arg, BTF_KIND_STRUCT, &btf);
+
+Does restricting the root lookup to BTF_KIND_STRUCT prevent users from
+querying offsets on unions or typedefs? A user might want to start a query
+with a union like +bpf_attr.member or a typedef to a struct like
++spinlock_t.rlock.
+
+> +	if (id < 0)
+> +		goto error;
+[ ... ]
+> diff --git a/kernel/trace/trace_btf.h b/kernel/trace/trace_btf.h
+> --- a/kernel/trace/trace_btf.h
+> +++ b/kernel/trace/trace_btf.h
+[ ... ]
+> +#ifdef CONFIG_PROBE_EVENTS_BTF_ARGS
+> +/* Will modify arg, but will put it back before returning. */
+> +int btf_find_offset(char *arg, long *offset);
+> +#else
+> +static inline int btf_find_offset(char *arg, long *offset)
+> +{
+> +	return -EINVAL;
+
+Would returning -ENODEV instead of -EINVAL here result in a more
+accurate error message? parse_probe_arg() maps -EINVAL to
+TP_ERR_BAD_STRUCT_FMT ("Unknown BTF structure"), while -ENODEV maps to
+TP_ERR_NOSUP_BTFARG ("BTF is not available or not supported").
+
+> +}
+> +#endif
+> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> --- a/kernel/trace/trace_probe.c
+> +++ b/kernel/trace/trace_probe.c
+[ ... ]
+> @@ -1165,7 +1165,7 @@ parse_probe_arg(char *arg, const struct fetch_type =
+*type,
+> =20
+>  	case '+':	/* deref memory */
+>  	case '-':
+> -		if (arg[1] =3D=3D 'u') {
+> +		if (arg[1] =3D=3D 'u' && isdigit(arg[2])) {
+
+Can this inadvertently intercept valid BTF structure names? If a BTF type is
+named like u32_struct or u8_data (e.g., +u32_struct.member(...)),
+arg[1] is 'u' and arg[2] is a digit. This causes the parser to treat it
+as a user-space dereference, stripping the +u and failing in kstrtol().
+
+Also, does this break legacy user-space offsets like +u-10(...)? In that
+case, arg[2] is - rather than a digit, causing it to fall through to the
+BTF parsing path where it fails with TP_ERR_BAD_STRUCT_FMT.
+
+>  			deref =3D FETCH_OP_UDEREF;
+>  			arg[1] =3D arg[0];
+>  			arg++;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518095832.5265=
+9a3a@gandalf.local.home?part=3D1
