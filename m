@@ -1,129 +1,143 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394FD386561
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 08:31:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED7C2FE579
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 09:04:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779093117; cv=none; b=A9Jp/zrZIoU+RxaE3yW6Iq78WL0L4/4zp2PiboQz1QW6zTlk2oNTPU9sKi7eQDzPQHfkSA3ij+qOJDWu7PKPbU/47DLSeb/0yF1bIByENYwm8Am5YhZKFGMfDH283Q/xPpCN30dByFSPGmfikgyqAPgcC76ExlvIUTQ7WsmNTBY=
+	t=1779095052; cv=none; b=ZC7J0Yq3X5Sw3MNNUjTd3LNuy/1hXJVGqdL/VURDONehj1J1mUT6LP/+Jd1hUFhyT5GkPMwkoqibGDUvgdp2SjacbZjALBGbNoDnvgieTfjuOvXgNwOp6/Y0IldSt4z5EL8MpEWhQxNGn7Yk34NBcJZnDlaB1xNtEtezZAZ3aeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779093117; c=relaxed/simple;
-	bh=PmpScwcGJyXezoD1P7i8aSqy8+IuUXibgGwQ+ap6uj0=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F2f5eqUhIThf2rdnfa5SwkbjmIpOS4aY1qc6P1459GHgTUR6ZfDioglAEAKyzdc+1WgMh1P69hLUuZCa/GCwZA+uUUTeTGUXEdFh5iJIE9Dbjx/vfkEg3VGynb8DDZVB7tJt0ULQlXiXYJvz8kS0yMvP1vDnsFmNeJikf40Cz9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PqYMJKhI; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779095052; c=relaxed/simple;
+	bh=Q8GbrG+ClCg94DgU9vxRlD70lv5DVCRruYHFaOZIxRk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CeV5aztfqhEUwnT6YzKYX+u9ikDUxOISyD7wIKGlclQLyihQTCwMeoJxJDVBqZfCdZRJBgUHVU7vYWhMV+jKOUxkuIkjxkN5Cp8fCrTb8OW41hE2DOu8eUwy06NKkJWSWEPhTxD2IvLjqPCHXwlQ5aumbf9MCCIyMzz69HtiF68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rxBNZk5s; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PqYMJKhI"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-43d7e23defbso988348f8f.0
-        for <bpf@vger.kernel.org>; Mon, 18 May 2026 01:31:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rxBNZk5s"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-44e5624c053so1080532f8f.2
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 02:04:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779093115; x=1779697915; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pw8ouC4hEgSVvRs2LGBCbdqdtEj1Oh885FP+LlzBSas=;
-        b=PqYMJKhIq/F8qbQY7HS+jpofpzVmcW/ZQPBdrj5s0enRqwWfVvdY0oxi3wpjE8kEYv
-         aIIbMKO3fMPFzfb8+kWYlYNEElvH/+yvpoyxUH7oLiNR0RkpTLFAptMcOCyKZEP3I7Q0
-         uwQ5qIObPapxT4o2ko/UD8RuxO8FPMFTKd4S0rWfiDX0zOwOE7CLkRLDI08MmXfKkcer
-         cuc6DCOv+6xtYE0drcoYxJr9fhC0OXAdrESAmX5O5dvsFcizIHeoL8VtsSLsthx64TAL
-         mMXWWSFSFQZyTl9BYlYgKaOIFTcLTzB5v5RMQpqWDPZYNESfEbiqVyOgSDpvZiqGH6j9
-         O/LQ==
+        d=linaro.org; s=google; t=1779095049; x=1779699849; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xQsc42ku8RRwWOrN3cIN44IoeSXVQzXA3f6OA5chCWI=;
+        b=rxBNZk5syvkO/IJ+yrA1ptcHiceBicKPbbTvXglLWndNUAMDvW5TFkLAfWkXPfQD5i
+         Gm6m76otuwBrINsMN5/nd89drWEogOVRiwROzV5RZIHs4YTYU07W0SE9sFbE12CT9khH
+         hS3ePx4wivzdvbVPFcCD3IRru8p9kL/3ofy32TSejawd1e9euq65oesnkbI5awAc4bJZ
+         JKj4oVWKPNswTS9zwiTLll6efUGhuQbDfwLZljs3caykCWdFZk9Tbkk4Qtrwt1gEsF4G
+         0/jLXXbpcdgi87OxO5zS2k03H39ZzQDtACh449ipI1IC4O/KNsPxwJv69L9+XtbkW6lu
+         Ypqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779093115; x=1779697915;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Pw8ouC4hEgSVvRs2LGBCbdqdtEj1Oh885FP+LlzBSas=;
-        b=XsPF7AOBGJYn3+apojUILeIhQUbRW/b4UMmWADPx1oseVY8o48lpOrYvCn/YfiJZZf
-         LexoJ/YwCgxWErjsoi9p8vlQbRMN28L0fsdRE8YLqrO8wwTNJrb24fXzERcXh7B6OTTh
-         +LQFO4u7S/UrJ2CzodBw2eZCovEnBtytyqYzNxhCVOwshF/ewKVboeFSma9KcgkJZzgq
-         y8Pfmz+GURr/lRL9w7/DR5WKWY1lz/Hxn/tmkC9i5I51md/qOJO3M7t7gopFPAyLwjSm
-         GTnCtms+1oPe91TbBo9URk1ieraJ6vkeLkKMDYQ6Hli+x0/JHWppO2drRgtTaQ1bym7L
-         bL0A==
-X-Forwarded-Encrypted: i=1; AFNElJ/fduKlzp4ezhTj3uj9cn5SxuB5CB9jM1SC88+fb1IeByLsJefva/W72hYs9h0HXybOWZU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjmFahom8JTL+dxP2BSKgGBNSXKL2ARGMe6IsyGaTCV9IqosAm
-	lcjxCwksd8PD0yYw7zRy+5p5UmvA2a47lQ2Y0db+g3RxIZ9WeNdjBGwqhchgcngk
-X-Gm-Gg: Acq92OEyRdUk7ucI0vhzAAeW0xWpfqcMpEBSJ3NZspRGBRA53Szag8SGDtc794w3yhV
-	apE+cj5DGsYg8YJhnhyZKFxyjk44jHqcYA0o3LdoR57Di1IVCK0IvRnO1iPMwM4HGGGuu+DOhVr
-	4rxJha7cNK6iPZ8Y0bqY/geiuF3jl3+NPm4Xq+MUOzDhoVSWZvwFTGJYADRpOa9/g4/BVsg4dcA
-	FcTrbjyF5xxtbKtbCQvJOwvTb3s6Nw+7lmS1oUT3dxIsNI9ozBEUYAaN+4OLc/rELb8CqGGnGrE
-	X3DltIHOxOpPAsNTESvBfIXTDXx+Hp3OC5PITYBL6+DLSQ9Qbk9U2Orqp1BzyuRRjDdY93dEUhZ
-	yPwXi3LSf7wxCjl1G0vO0oqWGY2GrVeXsFaTezFBM/rO2x2wnixbHKJtN5ZGkkwg2T0BkWlcp0r
-	6k5UjpwTCTGxQ6zK8=
-X-Received: by 2002:a05:600c:5297:b0:48a:5342:36b5 with SMTP id 5b1f17b1804b1-48fe61ed375mr212210515e9.21.1779093114436;
-        Mon, 18 May 2026 01:31:54 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200:b655:ff13:e355:16a3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48febe6b9efsm112607115e9.5.2026.05.18.01.31.53
+        d=1e100.net; s=20251104; t=1779095049; x=1779699849;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xQsc42ku8RRwWOrN3cIN44IoeSXVQzXA3f6OA5chCWI=;
+        b=SEtgOG0sWs+rNttZYE1WwjViarR+anHyzC4YqvOfLq62VnEja3DXfBj7kg4SIDmKJU
+         Zz71fomw1msrKOPUGlXgRp54zr7QyT49qQ/vxZqZnkVVx/NlbU5a8qn8hDJUqV03Nzo5
+         G1kyzjAVvY6qiFbkFlJ3XmAZK57WOkADiMcTtCe6SWMyhxjxXTIVN/L0cfRfeErG3zeJ
+         o4T+ToJNWk9oyiBNjQI73zubSJWKo0lAvP9J5wDzPItFk77sn3bF1BDJXENxNaT6KaGo
+         vtM0SDmxvwjdHEyvNB13efC5IYreFbpF+OfD42laONio1UoRtt1n7iS+6l5nJE9jxFHp
+         AYkQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+Kcm5SiUqYBDQVQcIr8nswv6WwO2uZ2vOblgK0bqU4WYSNLlWAUns/FQBtn0ItCAzQJKE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHI2nY8WVgYPA0nWimg7Xe7W4Ux/18yKzkB9ENOavAOwCUL6Wg
+	dR8ab2CjdXTqUcrOdXg0bjd3Qx7H4ZzjgYzlAg48kcyyPRZf7E/qwniKoIaclgHonDs=
+X-Gm-Gg: Acq92OFMJ2ELoYw0jz9eM+C+qpnrpR4zRQesvU7ridt+rWDdbQt47M0/OniDiXwAdmT
+	JsZqpf57ElZT5LTDfk5g8u6X9CN/Ar/AOLDKM8WX/nWh6Vb6itSCJBW/oNBFAsu2uuN9Nwl9fSc
+	QbtyAIcMTn9gKYlm8gh/mMcp4cM25+TbEGrxAM3lNqFHYcZ9eGw/9IEiYSvez6RtC0hNxkJVVG/
+	HfZNo8BCHyCS07r0X3fHaxH4SnqqaUJGQ0mzPn/miBSNWjDS3/3Dv5aTgj3bBGF1YwmqBLaHwWT
+	x5Y0LfU8sDf9xWNhmMI7lND12UtZQcL4YhGX/6rgRza+7voULfFSCYKVX7/FcBwqfftzBXPFclw
+	U/xBhADuT5IsiDiodvwdInw3oTQSq5nYYgaB+ElRnEymvuTslYfiBx6Vco+udMeeJDz53uhM0eH
+	QhhIJ/WeOcb1rlYuKR8C7P8dMlHvOK+Jal
+X-Received: by 2002:a05:6000:2902:b0:43e:a81d:c475 with SMTP id ffacd0b85a97d-45e5c58fbf9mr21710267f8f.6.1779095048668;
+        Mon, 18 May 2026 02:04:08 -0700 (PDT)
+Received: from ho-tower-lan.lan ([185.48.77.170])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45d9e768072sm35084436f8f.5.2026.05.18.02.04.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 01:31:53 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 18 May 2026 10:31:51 +0200
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
-Subject: Re: [PATCH 1/7] uprobes/x86: Move optimized uprobe from nop5 to nop10
-Message-ID: <agrOd1GVFYSH_txN@krava>
-References: <20260514135342.22130-2-jolsa@kernel.org>
- <20260514200545.C672EC2BCB3@smtp.kernel.org>
- <agcSP6LxxpRA4ICO@krava>
- <agmpurrWy15nahPK@krava>
+        Mon, 18 May 2026 02:04:08 -0700 (PDT)
+From: James Clark <james.clark@linaro.org>
+Subject: [PATCH v2 0/6] tools/build: Allow versioning of all LLVM tools
+Date: Mon, 18 May 2026 10:03:06 +0100
+Message-Id: <20260518-james-perf-llvm-version-v2-0-f12cc4f031d8@linaro.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <agmpurrWy15nahPK@krava>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMvVCmoC/3WNSw6CQBAFr0J6bRsGAT8r72FYNEMDbYAhPWaiI
+ dzdgcSly3pJ1VvAswp7uCULKAfx4qYI2SEB29PUMUoTGbI0K9PCGHzSyB5n1haHIYwYWDcH8xP
+ VxtZFbc8NRHtWbuW9lx9V5F78y+lnPwpmW3/N/G8zGEyxtGQNXSm3l+Y+yETqjk47qNZ1/QLV3
+ 2IAvwAAAA==
+To: Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, ihor.solodrai@linux.dev
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+ James Clark <james.clark@linaro.org>
+X-Mailer: b4 0.14.0
 
-On Sun, May 17, 2026 at 01:42:50PM +0200, Jiri Olsa wrote:
+I ran into the build issue mentioned in the first commit, because using
+an option like LLVM=-15 is a documented way to build [1], but only
+some of the LLVM tools defined in tools/ support this.
 
-SNIP
+After fixing that, a lot of other tidyups fell out. I didn't go too far,
+for example some selftests include tools/testing/selftests/lib.mk which
+reimplements some of the LLVM_SUFFIX stuff, but other selftests include
+tools/scripts/Makefile.include and I stopped before touching the former.
+Some other non build scripts hard code toolchains and I didn't touch
+those either, this change is only focused on things that already
+include Makefile.include.
 
-> > > Is there a similar issue for forked children that inherit the optimized
-> > > 10-byte sequence?
-> > > 
-> > > During fork, uprobe_mmap() installs a breakpoint in the child by writing
-> > > 0xCC to the first byte, changing the instruction from 48 8d... to cc 8d...
-> > > 
-> > > If the uprobe is unregistered before the child hits and re-optimizes it,
-> > > __is_optimized() will return false because is_lea_insn() strictly expects
-> > > the first byte to be 0x48:
-> > > 
-> > > arch/x86/kernel/uprobes.c:is_lea_insn() {
-> > >         return !memcmp(insn, lea_rsp, LEA_INSN_SIZE);
-> > > }
-> > > 
-> > > The fallback check for the re-attached probe on top of jmp8 also fails
-> > > because insn[1] is 0x8d, not OPT_JMP8_OFFSET.
-> > > 
-> > > Could set_orig_insn() then fall back to writing just the first byte of
-> > > the original instruction over the 0xcc, again leaving 66 8d 64 24 80 e8 ...
-> > > and silently truncating the child's stack pointer?
-> > 
-> > nice.. maybe we can skip the install_breakpoint call in uprobe_mmap
-> > for optimized probes.. will check
-> 
-> I think we need to dup uprobe trampolines on fork like below
+[1]: Documentation/kbuild/llvm.rst
 
-or just allow it to be copied on fork
-
-jirka
-
+Signed-off-by: James Clark <james.clark@linaro.org>
+---
+Changes in v2:
+- Fix selftests/bpf build. LLD needs to take the full path to be used
+  with -fuse-ld=
+- Link to v1: https://lore.kernel.org/r/20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org
 
 ---
-diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
-index 4d91930aa792..e0067d1b6242 100644
---- a/arch/x86/kernel/uprobes.c
-+++ b/arch/x86/kernel/uprobes.c
-@@ -719,7 +719,7 @@ static struct uprobe_trampoline *create_uprobe_trampoline(unsigned long vaddr)
- 
- 	tramp->vaddr = vaddr;
- 	vma = _install_special_mapping(mm, tramp->vaddr, PAGE_SIZE,
--				VM_READ|VM_EXEC|VM_MAYEXEC|VM_MAYREAD|VM_DONTCOPY|VM_IO,
-+				VM_READ|VM_EXEC|VM_MAYEXEC|VM_MAYREAD|VM_IO,
- 				&tramp_mapping);
- 	if (IS_ERR(vma)) {
- 		kfree(tramp);
+James Clark (6):
+      tools/build: Allow versioning of all LLVM tools defined in Makefile.include
+      tools/build: Indent if else blocks
+      selftests: Remove unused LLD variable
+      tools/build: Allow versioning LLVM readelf
+      tools/build: selftests: Allow versioning LLVM lld
+      tools/build: selftests: Remove some duplicate toolchain definitions
+
+ tools/bpf/resolve_btfids/Makefile    |  3 --
+ tools/lib/api/Makefile               |  4 --
+ tools/lib/bpf/Makefile               |  8 ++--
+ tools/lib/subcmd/Makefile            |  4 --
+ tools/lib/symbol/Makefile            |  4 --
+ tools/perf/Makefile.perf             |  7 ----
+ tools/scripts/Makefile.include       | 77 ++++++++++++++++++++----------------
+ tools/testing/selftests/bpf/Makefile |  9 ++---
+ tools/testing/selftests/hid/Makefile |  7 ----
+ 9 files changed, 50 insertions(+), 73 deletions(-)
+---
+base-commit: 09d355618f7ccc27ffc7fc668b2e232872962079
+change-id: 20260511-james-perf-llvm-version-43ab1cb5bc7d
+
+Best regards,
+-- 
+James Clark <james.clark@linaro.org>
+
