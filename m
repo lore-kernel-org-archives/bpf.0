@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD973F23B7;
-	Mon, 18 May 2026 11:01:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87FBE3D3326;
+	Mon, 18 May 2026 11:01:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779102080; cv=none; b=Q+nwKo1Zac7HTxazcryiM3Jq/4qWTO60RHqcrWaqEEjbc6zcn9uEpzfJi9CB2XbwpCVIemy7AD6HCRKQ2ciH7tPqjM4PeA/JB3Q//BtMEl3VRGwVmhRdzMcgrJgeLVrHVV/jKprCPyfyX8V2YehExHJo32/aA27ZnclP0fCfTvo=
+	t=1779102090; cv=none; b=qfb3jOYsdb3IIAUzRvZnkrL8mJsOozi6m365uQoRBD9BozwYgYEHODM2ltJW3HgvhNIvBAZp9IwNuDwG1UXENPo0COPpcLfhlgDGu2/kxzNF82Nn0mv6SxivZF/lBuy2v7Hm3Nh1PLjYXlOH+eXLl+GnxbSz8f+nc1OYBb9QNP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779102080; c=relaxed/simple;
-	bh=UK17G6dklZa5Hl2vTmmy0UsIxtqzWgwovhbJ3CVUhjg=;
+	s=arc-20240116; t=1779102090; c=relaxed/simple;
+	bh=6qRisYUewPQrwQgfo7iXLIPDLMkbLCXqfZVLhdIbPfg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nCgtMp4lQGRhZApuKsK7G20x3cfRp+AkeoKr+XGfRAu1ipqMD4vxc+h7a1oGZA3IeySBiBnWwqGyhqH0Ao0PSzbc9/ou5ZMu1JYzV29Lajp/JfC9c/FS5hPHLwBnpon6sGu6kNG3M0yFCj8M/8XHDdGSb6nDhtbISIZOfBiz1sc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VIGsPxnC; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=GoRJfOgtge9wuDFHIwLU8JXJ2+BiIwwq8cQaCq2V6f7WUYGJke+JljztGWBPVtL7jkoBFnAPmlj2sRNlWkoarKd4thmViZoRtKpqnoNuCI4Jzvp2nLhmvxkOnuu+67OF3XsCl1crCcnt+3ysvIFsuzbDYsVNkRDui9PgDsCGeB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P+KrzcuO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VIGsPxnC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45332C2BCB8;
-	Mon, 18 May 2026 11:01:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P+KrzcuO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0823C2BCB7;
+	Mon, 18 May 2026 11:01:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779102079;
-	bh=UK17G6dklZa5Hl2vTmmy0UsIxtqzWgwovhbJ3CVUhjg=;
+	s=k20201202; t=1779102088;
+	bh=6qRisYUewPQrwQgfo7iXLIPDLMkbLCXqfZVLhdIbPfg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VIGsPxnCqzPVR/0kpxrKZz/ZUWo5nyduszFhpE3xeh4oTndpDCCmin+NecFmO05w3
-	 NnldmwL16FZOKgx3v/+GiHc8E0XWNIRk6lY/iz1SIcC9HmKxi5CmXo3xZbyftWxvFN
-	 VF473SgSoFRXN/ExorHc8noS3HdxK6pNwkJtpjB6YBLAxtrKww6wANAMKZ7cfIyXaJ
-	 wa/TqQ8APuMeIpcvWaYwO3aijG6XnQPBI7FUz5BIaI1eqF2t4P+HKoKQqatiYjRMPH
-	 EIa6qvhpbsZrQ6nRLBTLPp8rmdl3dg2/TU92ox0bfyUXFYE+FUJ6BP8wFRl/4jYoEz
-	 JgeHynZAjzs7A==
+	b=P+KrzcuO9CdXw94K/tWchpUVoDgWOCcFE9AjMC1YMqn9RsFQxYpWnTcAOEK98TlOA
+	 MozHBGOV9tcEqooW5mOGBVLk+YT7xnMPB+QPDG33yR1B/WZMu8d3/3PXPnL+aTFFZq
+	 5g7nQL3hYHa8H2wR4fnISHA+PY+kSj3d36FV3NN0E4k8jOXWsVBdMhgulxj2/nSbfx
+	 liYpxhc9rFOeJK7OHxXe74vjhS4XwqHjE4u/5/nVOXBMXMdPN8R2wAoHlIFJZnLcoV
+	 VioaXwegSKD4AhWlLT9udnKSJW2nNiIoBwwQuWsi760YIvzmwFPKDz1lWsBd6pijXg
+	 sRVY3OOXmkjjw==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Oleg Nesterov <oleg@redhat.com>,
 	Peter Zijlstra <peterz@infradead.org>,
@@ -34,9 +34,9 @@ To: Oleg Nesterov <oleg@redhat.com>,
 	Andrii Nakryiko <andrii@kernel.org>
 Cc: bpf@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
-Subject: [PATCHv2 08/11] selftests/bpf: Change uprobe/usdt trigger bench code to use nop10
-Date: Mon, 18 May 2026 12:59:54 +0200
-Message-ID: <20260518105957.123445-9-jolsa@kernel.org>
+Subject: [PATCHv2 09/11] selftests/bpf: Add reattach tests for uprobe syscall
+Date: Mon, 18 May 2026 12:59:55 +0200
+Message-ID: <20260518105957.123445-10-jolsa@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260518105957.123445-1-jolsa@kernel.org>
 References: <20260518105957.123445-1-jolsa@kernel.org>
@@ -48,159 +48,212 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Changing uprobe/usdt trigger bench code to use nop10 instead
-of nop5. Also changing un_bench_uprobes.sh to use nop10 triggers.
+Adding reattach tests for uprobe syscall tests to make sure
+we can re-attach and optimize same uprobe multiple times.
+
+The reason is that optimized uprobe does not restore original
+nop10 after detach, but instead it uses 'jmp 8' instruction.
+
+Making sure we can still install and optimize uprobe on top
+of the 'jmp 8' instruction.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/testing/selftests/bpf/bench.c           | 20 +++++------
- .../selftests/bpf/benchs/bench_trigger.c      | 36 +++++++++----------
- .../selftests/bpf/benchs/run_bench_uprobes.sh |  2 +-
- 3 files changed, 29 insertions(+), 29 deletions(-)
+ .../selftests/bpf/prog_tests/uprobe_syscall.c | 115 ++++++++++++++++--
+ 1 file changed, 105 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index 6155ce455c27..1252a1af2e84 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -539,12 +539,12 @@ extern const struct bench bench_trig_uretprobe_multi_push;
- extern const struct bench bench_trig_uprobe_multi_ret;
- extern const struct bench bench_trig_uretprobe_multi_ret;
- #ifdef __x86_64__
--extern const struct bench bench_trig_uprobe_nop5;
--extern const struct bench bench_trig_uretprobe_nop5;
--extern const struct bench bench_trig_uprobe_multi_nop5;
--extern const struct bench bench_trig_uretprobe_multi_nop5;
-+extern const struct bench bench_trig_uprobe_nop10;
-+extern const struct bench bench_trig_uretprobe_nop10;
-+extern const struct bench bench_trig_uprobe_multi_nop10;
-+extern const struct bench bench_trig_uretprobe_multi_nop10;
- extern const struct bench bench_trig_usdt_nop;
--extern const struct bench bench_trig_usdt_nop5;
-+extern const struct bench bench_trig_usdt_nop10;
- #endif
- 
- extern const struct bench bench_rb_libbpf;
-@@ -619,12 +619,12 @@ static const struct bench *benchs[] = {
- 	&bench_trig_uprobe_multi_ret,
- 	&bench_trig_uretprobe_multi_ret,
- #ifdef __x86_64__
--	&bench_trig_uprobe_nop5,
--	&bench_trig_uretprobe_nop5,
--	&bench_trig_uprobe_multi_nop5,
--	&bench_trig_uretprobe_multi_nop5,
-+	&bench_trig_uprobe_nop10,
-+	&bench_trig_uretprobe_nop10,
-+	&bench_trig_uprobe_multi_nop10,
-+	&bench_trig_uretprobe_multi_nop10,
- 	&bench_trig_usdt_nop,
--	&bench_trig_usdt_nop5,
-+	&bench_trig_usdt_nop10,
- #endif
- 	/* ringbuf/perfbuf benchmarks */
- 	&bench_rb_libbpf,
-diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-index bcc4820c802e..3998ea8ff9aa 100644
---- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-@@ -396,15 +396,15 @@ static void *uprobe_producer_ret(void *input)
+diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+index e4a19dc9df69..e88b316a3f2c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
++++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+@@ -431,21 +431,27 @@ static void *check_attach(struct uprobe_syscall_executed *skel, trigger_t trigge
+ 	return tramp;
  }
  
- #ifdef __x86_64__
--__nocf_check __weak void uprobe_target_nop5(void)
-+__nocf_check __weak void uprobe_target_nop10(void)
+-static void check_detach(void *addr, void *tramp)
++static bool check_detach(void *addr, void *tramp)
  {
- 	asm volatile (".byte 0x66, 0x66, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00");
++	bool ok = true;
++
+ 	/* [uprobes_trampoline] stays after detach */
+-	ASSERT_OK(find_uprobes_trampoline(tramp), "uprobes_trampoline");
+-	ASSERT_OK(memcmp(addr, jmp2B, 2), "jmp2B");
++	if (!ASSERT_OK(find_uprobes_trampoline(tramp), "uprobes_trampoline"))
++		ok = false;
++	if (!ASSERT_OK(memcmp(addr, jmp2B, 2), "jmp2B"))
++		ok = false;
++	return ok;
  }
  
--static void *uprobe_producer_nop5(void *input)
-+static void *uprobe_producer_nop10(void *input)
+-static void check(struct uprobe_syscall_executed *skel, struct bpf_link *link,
+-		  trigger_t trigger, void *addr, int executed)
++static void *check(struct uprobe_syscall_executed *skel, struct bpf_link *link,
++		   trigger_t trigger, void *addr, int executed)
  {
- 	while (true)
--		uprobe_target_nop5();
-+		uprobe_target_nop10();
- 	return NULL;
+ 	void *tramp;
+ 
+ 	tramp = check_attach(skel, trigger, addr, executed);
+ 	bpf_link__destroy(link);
+ 	check_detach(addr, tramp);
++	return tramp;
  }
  
-@@ -418,7 +418,7 @@ static void *uprobe_producer_usdt_nop(void *input)
- 	return NULL;
- }
+ static void test_uprobe_legacy(void)
+@@ -456,6 +462,7 @@ static void test_uprobe_legacy(void)
+ 	);
+ 	struct bpf_link *link;
+ 	unsigned long offset;
++	void *tramp;
  
--static void *uprobe_producer_usdt_nop5(void *input)
-+static void *uprobe_producer_usdt_nop10(void *input)
+ 	offset = get_uprobe_offset(&uprobe_test);
+ 	if (!ASSERT_GE(offset, 0, "get_uprobe_offset"))
+@@ -473,7 +480,28 @@ static void test_uprobe_legacy(void)
+ 	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_opts"))
+ 		goto cleanup;
+ 
+-	check(skel, link, uprobe_test, uprobe_test, 2);
++	tramp = check(skel, link, uprobe_test, uprobe_test, 2);
++
++	/* reattach and detach without triggering optimization */
++	link = bpf_program__attach_uprobe_opts(skel->progs.test_uprobe,
++					       0, "/proc/self/exe", offset, NULL);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_opts"))
++		goto cleanup;
++
++	bpf_link__destroy(link);
++	if (!check_detach(uprobe_test, tramp))
++		goto cleanup;
++
++	uprobe_test();
++	ASSERT_EQ(skel->bss->executed, 2, "executed_no_probe");
++
++	/* reattach with triggering optimization */
++	link = bpf_program__attach_uprobe_opts(skel->progs.test_uprobe,
++				0, "/proc/self/exe", offset, NULL);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_opts"))
++		goto cleanup;
++
++	check(skel, link, uprobe_test, uprobe_test, 4);
+ 
+ 	/* uretprobe */
+ 	skel->bss->executed = 0;
+@@ -495,6 +523,7 @@ static void test_uprobe_multi(void)
+ 	LIBBPF_OPTS(bpf_uprobe_multi_opts, opts);
+ 	struct bpf_link *link;
+ 	unsigned long offset;
++	void *tramp;
+ 
+ 	offset = get_uprobe_offset(&uprobe_test);
+ 	if (!ASSERT_GE(offset, 0, "get_uprobe_offset"))
+@@ -515,7 +544,28 @@ static void test_uprobe_multi(void)
+ 	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_multi"))
+ 		goto cleanup;
+ 
+-	check(skel, link, uprobe_test, uprobe_test, 2);
++	tramp = check(skel, link, uprobe_test, uprobe_test, 2);
++
++	/* reattach and detach without triggering optimization */
++	link = bpf_program__attach_uprobe_multi(skel->progs.test_uprobe_multi,
++				0, "/proc/self/exe", NULL, &opts);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_multi"))
++		goto cleanup;
++
++	bpf_link__destroy(link);
++	if (!check_detach(uprobe_test, tramp))
++		goto cleanup;
++
++	uprobe_test();
++	ASSERT_EQ(skel->bss->executed, 2, "executed_no_probe");
++
++	/* reattach with triggering optimization */
++	link = bpf_program__attach_uprobe_multi(skel->progs.test_uprobe_multi,
++				0, "/proc/self/exe", NULL, &opts);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_multi"))
++		goto cleanup;
++
++	check(skel, link, uprobe_test, uprobe_test, 4);
+ 
+ 	/* uretprobe.multi */
+ 	skel->bss->executed = 0;
+@@ -539,6 +589,7 @@ static void test_uprobe_session(void)
+ 	);
+ 	struct bpf_link *link;
+ 	unsigned long offset;
++	void *tramp;
+ 
+ 	offset = get_uprobe_offset(&uprobe_test);
+ 	if (!ASSERT_GE(offset, 0, "get_uprobe_offset"))
+@@ -558,7 +609,28 @@ static void test_uprobe_session(void)
+ 	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_multi"))
+ 		goto cleanup;
+ 
+-	check(skel, link, uprobe_test, uprobe_test, 4);
++	tramp = check(skel, link, uprobe_test, uprobe_test, 4);
++
++	/* reattach and detach without triggering optimization */
++	link = bpf_program__attach_uprobe_multi(skel->progs.test_uprobe_session,
++				0, "/proc/self/exe", NULL, &opts);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_multi"))
++		goto cleanup;
++
++	bpf_link__destroy(link);
++	if (!check_detach(uprobe_test, tramp))
++		goto cleanup;
++
++	uprobe_test();
++	ASSERT_EQ(skel->bss->executed, 4, "executed_no_probe");
++
++	/* reattach with triggering optimization */
++	link = bpf_program__attach_uprobe_multi(skel->progs.test_uprobe_session,
++				0, "/proc/self/exe", NULL, &opts);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_uprobe_multi"))
++		goto cleanup;
++
++	check(skel, link, uprobe_test, uprobe_test, 8);
+ 
+ cleanup:
+ 	uprobe_syscall_executed__destroy(skel);
+@@ -568,7 +640,7 @@ static void test_uprobe_usdt(void)
  {
- 	while (true)
- 		usdt_2();
-@@ -542,24 +542,24 @@ static void uretprobe_multi_ret_setup(void)
- }
+ 	struct uprobe_syscall_executed *skel;
+ 	struct bpf_link *link;
+-	void *addr;
++	void *addr, *tramp;
  
- #ifdef __x86_64__
--static void uprobe_nop5_setup(void)
-+static void uprobe_nop10_setup(void)
- {
--	usetup(false, false /* !use_multi */, &uprobe_target_nop5);
-+	usetup(false, false /* !use_multi */, &uprobe_target_nop10);
- }
+ 	errno = 0;
+ 	addr = find_nop10(usdt_test);
+@@ -587,7 +659,30 @@ static void test_uprobe_usdt(void)
+ 	if (!ASSERT_OK_PTR(link, "bpf_program__attach_usdt"))
+ 		goto cleanup;
  
--static void uretprobe_nop5_setup(void)
-+static void uretprobe_nop10_setup(void)
- {
--	usetup(true, false /* !use_multi */, &uprobe_target_nop5);
-+	usetup(true, false /* !use_multi */, &uprobe_target_nop10);
- }
+-	check(skel, link, usdt_test, addr, 2);
++	tramp = check(skel, link, usdt_test, addr, 2);
++
++	/* reattach and detach without triggering optimization */
++	link = bpf_program__attach_usdt(skel->progs.test_usdt,
++				-1 /* all PIDs */, "/proc/self/exe",
++				"optimized_uprobe", "usdt", NULL);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_usdt"))
++		goto cleanup;
++
++	bpf_link__destroy(link);
++	if (!check_detach(addr, tramp))
++		goto cleanup;
++
++	usdt_test();
++	ASSERT_EQ(skel->bss->executed, 2, "executed_no_probe");
++
++	/* reattach with triggering optimization */
++	link = bpf_program__attach_usdt(skel->progs.test_usdt,
++				-1 /* all PIDs */, "/proc/self/exe",
++				"optimized_uprobe", "usdt", NULL);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_usdt"))
++		goto cleanup;
++
++	check(skel, link, usdt_test, addr, 4);
  
--static void uprobe_multi_nop5_setup(void)
-+static void uprobe_multi_nop10_setup(void)
- {
--	usetup(false, true /* use_multi */, &uprobe_target_nop5);
-+	usetup(false, true /* use_multi */, &uprobe_target_nop10);
- }
- 
--static void uretprobe_multi_nop5_setup(void)
-+static void uretprobe_multi_nop10_setup(void)
- {
--	usetup(true, true /* use_multi */, &uprobe_target_nop5);
-+	usetup(true, true /* use_multi */, &uprobe_target_nop10);
- }
- 
- static void usdt_setup(const char *name)
-@@ -598,7 +598,7 @@ static void usdt_nop_setup(void)
- 	usdt_setup("usdt_1");
- }
- 
--static void usdt_nop5_setup(void)
-+static void usdt_nop10_setup(void)
- {
- 	usdt_setup("usdt_2");
- }
-@@ -665,10 +665,10 @@ BENCH_TRIG_USERMODE(uretprobe_multi_nop, nop, "uretprobe-multi-nop");
- BENCH_TRIG_USERMODE(uretprobe_multi_push, push, "uretprobe-multi-push");
- BENCH_TRIG_USERMODE(uretprobe_multi_ret, ret, "uretprobe-multi-ret");
- #ifdef __x86_64__
--BENCH_TRIG_USERMODE(uprobe_nop5, nop5, "uprobe-nop5");
--BENCH_TRIG_USERMODE(uretprobe_nop5, nop5, "uretprobe-nop5");
--BENCH_TRIG_USERMODE(uprobe_multi_nop5, nop5, "uprobe-multi-nop5");
--BENCH_TRIG_USERMODE(uretprobe_multi_nop5, nop5, "uretprobe-multi-nop5");
-+BENCH_TRIG_USERMODE(uprobe_nop10, nop10, "uprobe-nop10");
-+BENCH_TRIG_USERMODE(uretprobe_nop10, nop10, "uretprobe-nop10");
-+BENCH_TRIG_USERMODE(uprobe_multi_nop10, nop10, "uprobe-multi-nop10");
-+BENCH_TRIG_USERMODE(uretprobe_multi_nop10, nop10, "uretprobe-multi-nop10");
- BENCH_TRIG_USERMODE(usdt_nop, usdt_nop, "usdt-nop");
--BENCH_TRIG_USERMODE(usdt_nop5, usdt_nop5, "usdt-nop5");
-+BENCH_TRIG_USERMODE(usdt_nop10, usdt_nop10, "usdt-nop10");
- #endif
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh b/tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh
-index 9ec59423b949..e490b337e960 100755
---- a/tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh
-@@ -2,7 +2,7 @@
- 
- set -eufo pipefail
- 
--for i in usermode-count syscall-count {uprobe,uretprobe}-{nop,push,ret,nop5} usdt-nop usdt-nop5
-+for i in usermode-count syscall-count {uprobe,uretprobe}-{nop,push,ret,nop10} usdt-nop usdt-nop10
- do
- 	summary=$(sudo ./bench -w2 -d5 -a trig-$i | tail -n1 | cut -d'(' -f1 | cut -d' ' -f3-)
- 	printf "%-15s: %s\n" $i "$summary"
+ cleanup:
+ 	uprobe_syscall_executed__destroy(skel);
 -- 
 2.53.0
 
