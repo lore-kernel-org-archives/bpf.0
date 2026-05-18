@@ -1,238 +1,164 @@
-Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA228380FCA
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 05:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779080756; cv=none; b=NvPn1Jn4G92Lyqsw22AJOScUjwHMqgqhujwiARHr7eFkhSA+u7flFRhGtvdItMouA4v26iqJjkiMKtwgfhrSLS6QKLEvCGflHBig/3fP13g5h0Q09fK/UdJWuShDrl8xdcYWI8hFukaofwDNTITweRs3Z8e1c87mChzDAuwZsOE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779080756; c=relaxed/simple;
-	bh=K1Wq278vsgpAJ82/1xnQlDmx7QnSoRuuUTYRlUgEGik=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=YbkJ4cA67uC1+9Ljr+zzMWgNZoNY9QD9hvSJqi9M/wNGd8PNIlNtLRTIhO64DwtqmjygrEWqoKZzFhs5NZv9pyzQae9cdWVI9Pw8n10/CcJXGuQEc2MxUGgd6XbzdSPWZxBHGL3tdCWVpoMtD1wZ4kEdJT1nmPCP+f07JLwYi20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--cmllamas.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BBatnoQY; arc=none smtp.client-ip=74.125.82.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9AF386C25
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 05:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779080888; cv=pass; b=M3BTI0ie0n1n3obKGGtT5nkdu8/sHr1urIRdusArGPqMFd+TajcKY9bc1byKUQmfxj/kCTdYLRuIy+YKs+NFY4MU/LTk9bXdNvwDcDX1rDAjyFn3WAFHTJFdiX/l7QjkpULTCfqN7IsBk8eeAS4WW06/0XB7Sv4z62qT4vFvopk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779080888; c=relaxed/simple;
+	bh=Z6E0MXc38WsNUpI9/E+q7zdtFMGyY0/TRIM+ulMUnZU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fCE4oHzLM9l+0WVSX5NwFjd0F1gGViC5sfImEh1Z9iWM49l8/K5z2EagqBp7ASgm6nFcJXCCNeaCXPa4QmNANkpSWdegwIBNOgZ27jqnB1oMDXC19c8BfVSXY8VrACca1NefMnFGhjF6omUoNWKo1qGJTZakPe2Nz1u+tb5MI2E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KxptlgZF; arc=pass smtp.client-ip=209.85.160.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--cmllamas.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BBatnoQY"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2f485961555so6648392eec.1
-        for <bpf@vger.kernel.org>; Sun, 17 May 2026 22:05:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KxptlgZF"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-50e61648f10so10331cf.1
+        for <bpf@vger.kernel.org>; Sun, 17 May 2026 22:08:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779080886; cv=none;
+        d=google.com; s=arc-20240605;
+        b=P+tywvtInYwKwiFOHWgbcBv3TVXgEdUR6PSgYVNBuyoUsLCq8nSyxHrMUcE6MSVkle
+         Ya+9UfuaKGjxRCNT4YqI9AhVMKOlnp90aSc6qlMROFzKorJhtSeyAQlQHO2pmz1r7N/8
+         i5HVRJSfNeurmrlv4rxOfHlxsJao+aq68zRM2Xupvr3MEua3acRyUCJ6i2TmrVBTT6u8
+         uVMA4t+uNGEZtRuI1sYA3aX/LxaknodXjZtHIpuMvK4eW5ECBE7JYF5slcj7krSl8uMs
+         a21Gmb7/I1Bcj95E7Po/mB3MjSv8rmxmeE61hKNj2LXQe+49CGQS2ii59gYX18f9+K6F
+         lfww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=PgGO0nV6zeGKwarKeI0vOixvX+FJHU5rTim5V0Roj1s=;
+        fh=Fg61oZSY3oqtIrpsVPTsd4YZk3Iqn/8DfySDlXSwRXw=;
+        b=ieR1Ih+T/JCdOYLPTdsnNuPicGJ41TLz2u6uyKBBQy3J0hkZSxqMxof6uZomnN489E
+         0J9gdXsDc/aGLHNcpQFFMxSJm3gzdzyi51iPXK2gegLqOOXove32w4YJ0EPler56zea1
+         nB2H5fUmHsRASq7juWnq2j3txC3iqOWudzteyWU8lp0tJpSdEQ5/V72G3b0W56kk5bWm
+         MKkcKX/0MsA297wyaqvbxXg0b0qFyeG2MTE1fYhTZW7UB1/wUHDoMSHRF/GmCn/xzOgo
+         vtkDnbI7OAyWbfsay+1AN6xkjiG4udO6gl1Ged466sFnthNmthSLKL5D3hOIoTBnmIip
+         ROpA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779080753; x=1779685553; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ldbviCQOock1GEaZ68ZDQA1lEpoIOnI4AhsQB6ucOCg=;
-        b=BBatnoQY9TpBzunvTwewmrKCwlkoq/uUDDu7QvLgS27rt57YQfeQb5Nqvkhnk0EX+U
-         oDBZoREio9FZYaUH/wwcCsBhoKuVV7gZRqEhC+5eQ/CNUvyaxAhd619SvSDg65vFsD20
-         tt26LODSBZaoUpmn+Y+K4Fnk5yL5GD8Cke6121sBxOVAeYqpLa93kl1A3jQg8djQfjYY
-         bX/4IeTPiblbpXLeZsUiix/cWlxaqvaBqvl0v3X/k+TJmx5JBIach4V9e6gFF2wFOetu
-         gYAze/dxbZy/Hkie4fpHcA37+ylPr/0bK9ZqjgqMCBEBRDivONkP74/skf7ExGiXAo5Y
-         pu0g==
+        d=google.com; s=20251104; t=1779080886; x=1779685686; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PgGO0nV6zeGKwarKeI0vOixvX+FJHU5rTim5V0Roj1s=;
+        b=KxptlgZF3J2RjP2kA0+rshgJ//Y2dyhyaPxw9rVAq/wVX+Lhg38/L4WQ4iY/gvrpdx
+         J+d38d1vidaLJPcaxvMbSJFjfvNEBtKYztVHn6TDMF4Ckg5ZroP0rdYtTnasZYkjbh9/
+         3aKOk3QW+5LnnhHBez8GExoYXDnYd+2QTqgA5VYUQ8yZwexYjc1vNiFf2rlkrC/fN1wy
+         +kgbafhdmOhHPniJdt4jFPuZPS4kZatJiAZRkangfgH4BBD+DvA/MmB23JTJqu+sAT2h
+         oaDpUOCUii9sE7Arbc3bYmfJOKXMglm8Qkq3HzIZKtoGT03VKCHgYvwSyXm0SK0oINj1
+         7GlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779080753; x=1779685553;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ldbviCQOock1GEaZ68ZDQA1lEpoIOnI4AhsQB6ucOCg=;
-        b=ouLyTjvQCSfFrAB6IdEgYbRScm45GQ7HQQi7/HlQBTVBbbOzDAR2ffAxfMdyWEaFNe
-         YiD2FGSLVFvgCnxUKiDRZvqDsUeRbUibzQD8uAmMo/7mnDMg7HkReuhv79OLarUu3ZPI
-         C+SduZdw13CXGpQTpysRNBugY0+5B5igTT9tHO65T5C6wjxJrLuZRA89Ph6LfqA6sCtC
-         ynJMF14Rrrf8h8ZFuvE4K/XuCYT7aotPMzEqZahr0FRpWhQ44YHulrEw6Hpf0yRJVW9z
-         QtirMecbw1aiRD8UqKAqBE8bdaRE4IPEZ9I16wOSq1mypgIX6A2mTYHnPPi1SCCQzUJh
-         l5aQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+00HLeRWTy91UCBBntBQsIboSKOKojSLY4FMicQYMAnNIlbR2mby34TCwWQiuf4mzMC6U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2x56l58TEh89ycE0hMtn1cX2D4a3u/NHjmfEmRsohQnAQuB+/
-	DiJCrFzJOp1UI80A1vvRsK0XUBW1RswZJCGtDOzJIGPnfv9Ef3mBmHMMhirtR06jwTbpe6v3vmJ
-	BFrdEB0T9y6dckg==
-X-Received: from dybpn9.prod.google.com ([2002:a05:7301:4389:b0:303:c170:9611])
- (user=cmllamas job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7301:2a0f:b0:2d9:6373:ad10 with SMTP id 5a478bee46e88-3039812a653mr5447126eec.7.1779080752752;
- Sun, 17 May 2026 22:05:52 -0700 (PDT)
-Date: Mon, 18 May 2026 05:05:49 +0000
-In-Reply-To: <CAEf4BzZMoWdgYFGXwT9kkZ1TKbe9ZB=XKJCuKy0+2uqzSMDMUw@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1779080886; x=1779685686;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=PgGO0nV6zeGKwarKeI0vOixvX+FJHU5rTim5V0Roj1s=;
+        b=r1NZm4VI7lIeeB9olKsLSbQ0FSKAzpUvqJeJe6y6Ld2QrL/vhtoT+Lf95hyIo9Iini
+         iPvJgcXmMajCBko80suMr0XoEI/QqhLkLVWNQoYlXg4EAG9gcQ1sefkzjrheG/b0oc5/
+         Td4j3P8UDuCI2qvR8RmJWPmA6SXVYgzszoqoOKjX+urACl/w7YoGl98OgObqXyVx9QaA
+         +lWvr+fRMc3pDGkBAwoIq0WArfSNFGUAS0+u7GlGhgXczFqgdJ0DaS1Ssc171zsj64EO
+         ObtXodu9RdZatZmbcqf1lKhAPd1OODvkguaRp/idXm3FCo65oEWUwIr7jcT4e0x6ex9z
+         HTFg==
+X-Forwarded-Encrypted: i=1; AFNElJ/wczLGUMjpj5jwA4fWHxLwZCPd7akqH5FEpONI4W7hR9eaGn8uBIGrwssbSMIwFB0otBY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdVLLdB9wj3yjOYzkhnC/viRMKtD1rXzSGUa1dZ7ggFKMceGTb
+	Gt03xvQlSMrDYe5a7KO1DX+psKsTe/vylFzamBHapATcuUte6QM2xfUgXoW6YHChg1WVB2ITwuc
+	hUMx85/NgBGTIy0P5iO/JmHwQGtthUwLcous7DD06
+X-Gm-Gg: Acq92OG1lFSKzMTnEyy/ZpQvf2VaKArlQOS02OUXQQCWhNNde/LXWHvE6m99RP2jBOW
+	zaRPxLSKtIDSixvtr7qwZ1NbdjQVXGJemaqzu1SkuKsBYb+/WGoLz1A+ck/aimOJUhZXZUxlQ9l
+	9G/Zzry4aR3q6jj6rZlpEVHCH0dWn9DAFckGePuVwwA0hzQweRJ0w/RbsnSVpvoEbA5HjvxwIUb
+	bfOspVyMIkbMBzWCeiXHHxV7bkFdRZAQEvwehtqA1RepdJP5LB4byOrKlIUX3BnKCnQUKGsEGl0
+	Uj00EgFtEzCmkmZKrzEVDnkQr6MGeL6NCh8NqMUtOrFiVpQcSpC1p4P33ypn
+X-Received: by 2002:a05:622a:5d4:b0:516:4f62:85eb with SMTP id
+ d75a77b69052e-51679462c6emr13074271cf.22.1779080885212; Sun, 17 May 2026
+ 22:08:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <CAEf4BzZMoWdgYFGXwT9kkZ1TKbe9ZB=XKJCuKy0+2uqzSMDMUw@mail.gmail.com>
-X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260518050550.2600101-1-cmllamas@google.com>
-Subject: [PATCH v3] libbpf: fix UAF in strset__add_str()
-From: Carlos Llamas <cmllamas@google.com>
-To: mykyta.yatsenko5@gmail.com, andrii.nakryiko@gmail.com, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>
-Cc: kernel-team@android.com, linux-kernel@vger.kernel.org, 
-	Carlos Llamas <cmllamas@google.com>, Mykyta Yatsenko <yatsenko@meta.com>, 
-	"open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" <bpf@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260515071504.2054786-1-yuyanghuang@google.com> <CAADnVQ+Mc81ciE+6i4Mvg5h=fRNq6460w0-NAw_bU12oaBWruQ@mail.gmail.com>
+In-Reply-To: <CAADnVQ+Mc81ciE+6i4Mvg5h=fRNq6460w0-NAw_bU12oaBWruQ@mail.gmail.com>
+From: Yuyang Huang <yuyanghuang@google.com>
+Date: Mon, 18 May 2026 14:07:29 +0900
+X-Gm-Features: AVHnY4Id0O4-8DzVSPeGl5IFxiRysVVNPFTf9XpoWx4UkzENJhMEoOAWU_Sb_Xw
+Message-ID: <CADXeF1FvFrT4i_=3Z4USRV5XnOzhk92M7ahvcs6LyA9j_tWU9w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/2] bpf: Align syscall writeback behavior with
+ user-declared size
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Nikolay Aleksandrov <razor@blackwall.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-strset_add_str_mem() might reallocate the strset data buffer in order to
-accommodate the provided string 's'. However, if 's' points to a string
-already present in the buffer, it becomes dangling after the realloc.
-This leads to a use-after-free when attempting to memcpy() the string
-into the new buffer.
+>The whole thing sounds like a user space bug.
 
-One scenario that triggers this problematic path is when resolve_btfids
-attempts to patch kfunc prototypes using existing BTF parameter names:
+Could you please clarify why you consider this a userspace bug?
 
- | resolve_btfids: function bpf_list_push_back_impl already exists in BTF
- | Segmentation fault (core dumped)
+From our perspective, this is a binary backward compatibility issue.
+An older binary compiled against older UAPI headers has no way of
+knowing about newer fields. If it passes size =3D 40 (the correct size
+at the time), the kernel violates the ABI contract by writing beyond
+that declared size.
 
-Compiling resolve_btfids with fsanitize=address generates a detailed
-report of the UAF:
+> Please demonstrate a case where this issue is seen by using libbpf APIs.
 
- | =================================================================
- | ERROR: AddressSanitizer: heap-use-after-free on address 0x7f4c4a500bd4
- | ==1507892==ERROR: AddressSanitizer: heap-use-after-free on address 0x7f4c4a500bd4 at pc 0x55d25155a2a8 bp 0x7ffcef879060 sp 0x7ffcef878818
- | READ of size 5 at 0x7f4c4a500bd4 thread T0
- |     #0 0x55d25155a2a7 in memcpy (tools/bpf/resolve_btfids/resolve_btfids+0xcf2a7)
- |     #1 0x55d2515d708e in strset__add_str tools/lib/bpf/strset.c:162:2
- |     #2 0x55d2515c730b in btf__add_str tools/lib/bpf/btf.c:2109:8
- |     #3 0x55d2515c9020 in btf__add_func_param tools/lib/bpf/btf.c:3108:14
- |     #4 0x55d25159f0b5 in process_kfunc_with_implicit_args tools/bpf/resolve_btfids/main.c:1196:9
- |     #5 0x55d25159e004 in btf2btf tools/bpf/resolve_btfids/main.c:1229:9
- |     #6 0x55d25159cee7 in main tools/bpf/resolve_btfids/main.c:1535:6
- |     #7 0x7f4c78e29f76 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
- |     #8 0x7f4c78e2a026 in __libc_start_main csu/../csu/libc-start.c:360:3
- |     #9 0x55d2514bb860 in _start (tools/bpf/resolve_btfids/resolve_btfids+0x30860)
- |
- | 0x7f4c4a500bd4 is located 13268 bytes inside of 2829000-byte region [0x7f4c4a4fd800,0x7f4c4a7b02c8)
- | freed by thread T0 here:
- |     #0 0x55d25155b700 in realloc (tools/bpf/resolve_btfids/resolve_btfids+0xd0700)
- |     #1 0x55d2515c426c in libbpf_reallocarray tools/lib/bpf/./libbpf_internal.h:220:9
- |     #2 0x55d2515c426c in libbpf_add_mem tools/lib/bpf/btf.c:224:13
- |
- | previously allocated by thread T0 here:
- |     #0 0x55d25155b2e3 in malloc (tools/bpf/resolve_btfids/resolve_btfids+0xd02e3)
- |     #1 0x55d2515d6e7d in strset__new tools/lib/bpf/strset.c:58:20
+Our old project does not use libbpf; we interface directly with the
+raw BPF syscall.
 
-While resolve_btfids could be refactored to avoid this call path, let's
-instead fix this issue at the source in strset__add_str() and avoid
-similar scenarios.
+For example, our Android net_test  suite uses this legacy 40-byte
+Python ctypes struct layout:
 
-Let's check if set->strs_data was reallocated and whether 's' points to
-an internal string within the old strset buffer. In such case, 's' is
-reconstructed to point to the new buffer.
+  # legacy 40-byte layout (pre-revision field)
+  BpfAttrProgQuery =3D cstruct.Struct(
+    "bpf_attr_prog_query", "=3DIIIIQI4xQ",
+    "target_fd attach_type query_flags attach_flags prog_ids_ptr
+prog_cnt prog_attach_flags"
+  )
+  # Invoked via: syscall(__NR_bpf, BPF_PROG_QUERY, &attr, 40)
 
-While already here, also fix strset__find_str() which suffers from the
-same problem by factoring out the common operations into a new helper
-function strset_str_append().
+As shown in the original discussion thread, without this fix, a newer
+kernel unconditionally writes the optional revision field at offset
+56. Since copy_to_user doesn't fault on adjacent mapped memory, this
+silently corrupts 8 bytes of the caller's heap (corrupting the Python
+interpreter).
 
-Fixes: 90d76d3ececc ("libbpf: Extract internal set-of-strings datastructure APIs")
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Suggested-by: Mykyta Yatsenko <yatsenko@meta.com>
-Signed-off-by: Carlos Llamas <cmllamas@google.com>
----
-v3:
-  Switch to 's' reconstruction approach suggested by Andrii.
-  Adjusted names and commit log accordingly.
+This size-gating pattern in this patch should be identical to the
+pattern introduced by commit 47a71c1f9af0 in btf.c.
 
-v2:
-  Implemented the fix in strset__offset() helper as suggested by Mykyta.
-  Added support to handle "substrings" of existing ones.
-  Used 90d76d3ececc as Fixes tag as suggested by Sashiko.
-  https://lore.kernel.org/all/20260515044759.2863546-1-cmllamas@google.com/
+I am not 100% sure but, it seems running a binary statically linked
+with an older libbpf version (or directly using raw BPF syscalls)
+might face a similar issue? Do we expect those binaries to be broken
+in the newer kernel version?
 
-v1:
-  https://lore.kernel.org/all/20260513232055.1681859-1-cmllamas@google.com/
- tools/lib/bpf/strset.c | 58 +++++++++++++++++++++++++++---------------
- 1 file changed, 37 insertions(+), 21 deletions(-)
 
-diff --git a/tools/lib/bpf/strset.c b/tools/lib/bpf/strset.c
-index 2464bcbd04e0..d229961ff2fc 100644
---- a/tools/lib/bpf/strset.c
-+++ b/tools/lib/bpf/strset.c
-@@ -107,6 +107,37 @@ static void *strset_add_str_mem(struct strset *set, size_t add_sz)
- 			      set->strs_data_len, set->strs_data_max_len, add_sz);
- }
- 
-+static long strset_str_append(struct strset *set, const char *s)
-+{
-+	const char *old_data = strset__data(set);
-+	long len = strlen(s) + 1;
-+	void *p;
-+
-+	/* Hashmap keys are always offsets within set->strs_data, so to even
-+	 * look up some string from the "outside", we need to first append it
-+	 * at the end, so that it can be addressed with an offset. Luckily,
-+	 * until set->strs_data_len is incremented, that string is just a piece
-+	 * of garbage for the rest of the code, so no harm, no foul. On the
-+	 * other hand, if the string is unique, it's already appended and
-+	 * ready to be used, only a simple set->strs_data_len increment away.
-+	 */
-+	p = strset_add_str_mem(set, len);
-+	if (!p)
-+		return -ENOMEM;
-+
-+	/* The set->strs_data might have reallocated and if 's' pointed
-+	 * to an internal string within the old buffer, then it became
-+	 * dangling and needs to be reconstructed before the copy.
-+	 */
-+	if (old_data && old_data != strset__data(set) &&
-+	    s >= old_data && s < old_data + set->strs_data_len)
-+		s = strset__data(set) + (s - old_data);
-+
-+	memcpy(p, s, len);
-+
-+	return len;
-+}
-+
- /* Find string offset that corresponds to a given string *s*.
-  * Returns:
-  *   - >0 offset into string data, if string is found;
-@@ -116,16 +147,12 @@ static void *strset_add_str_mem(struct strset *set, size_t add_sz)
- int strset__find_str(struct strset *set, const char *s)
- {
- 	long old_off, new_off, len;
--	void *p;
- 
--	/* see strset__add_str() for why we do this */
--	len = strlen(s) + 1;
--	p = strset_add_str_mem(set, len);
--	if (!p)
--		return -ENOMEM;
-+	len = strset_str_append(set, s);
-+	if (len < 0)
-+		return len;
- 
- 	new_off = set->strs_data_len;
--	memcpy(p, s, len);
- 
- 	if (hashmap__find(set->strs_hash, new_off, &old_off))
- 		return old_off;
-@@ -142,24 +169,13 @@ int strset__find_str(struct strset *set, const char *s)
- int strset__add_str(struct strset *set, const char *s)
- {
- 	long old_off, new_off, len;
--	void *p;
- 	int err;
- 
--	/* Hashmap keys are always offsets within set->strs_data, so to even
--	 * look up some string from the "outside", we need to first append it
--	 * at the end, so that it can be addressed with an offset. Luckily,
--	 * until set->strs_data_len is incremented, that string is just a piece
--	 * of garbage for the rest of the code, so no harm, no foul. On the
--	 * other hand, if the string is unique, it's already appended and
--	 * ready to be used, only a simple set->strs_data_len increment away.
--	 */
--	len = strlen(s) + 1;
--	p = strset_add_str_mem(set, len);
--	if (!p)
--		return -ENOMEM;
-+	len = strset_str_append(set, s);
-+	if (len < 0)
-+		return len;
- 
- 	new_off = set->strs_data_len;
--	memcpy(p, s, len);
- 
- 	/* Now attempt to add the string, but only if the string with the same
- 	 * contents doesn't exist already (HASHMAP_ADD strategy). If such
--- 
-2.54.0.563.g4f69b47b94-goog
-
+On Mon, May 18, 2026 at 12:30=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, May 15, 2026 at 12:15=E2=80=AFAM Yuyang Huang <yuyanghuang@google=
+.com> wrote:
+> >
+> > The bpf(cmd, attr, size) syscall copies up to 'size' bytes on input, bu=
+t
+> > several commands write outputs back to userspace unconditionally. If th=
+e
+> > caller passes a short buffer, this can lead to out-of-bounds writes,
+> > potentially overwriting adjacent userspace memory.
+>
+> The whole thing sounds like a user space bug.
+> Please demonstrate a case where this issue is seen
+> by using libbpf APIs.
