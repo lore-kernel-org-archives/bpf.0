@@ -1,118 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7A938887A
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 06:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C4530AD1A;
+	Mon, 18 May 2026 06:52:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779086269; cv=none; b=DVuoI/3YQAWs0/nkx1mFwgZ5CbPlb6Ny+sVorH/xv9rKb1GcadjLw0JW3coubvpIw+1VGYMdP5W3NzVskM1oIoN97oBv85EJSePX/THTJTnecACq0Qod3VJpZHzxctf92H3XcrAqKLy05UOmHne6DvGWLEv5Tm0h585nbt62OD0=
+	t=1779087166; cv=none; b=dDiBfDyHVl+6YEsJMRiEmhYUyMWsjecL0FvkPX0XiC6hbnKqjrQeFV4Z7YmvdlTsU0Js7SnMmfO2va5eloO00Yy5NKHPA6LvF/FmBnmRLQwk2vnGbQxvOdkNxWEObH5vRoZxKMSwLssZ+Tp6mEPLQPgOMbRG22EY9PzPtSOKyOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779086269; c=relaxed/simple;
-	bh=PrT96Y/vLV0Zld5NPvnbzDiOZRpJnR9HPYAVqBrX/a4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tx4iBNNAGop/KJRquILbndXI6zUKQ890XWZhKgDHWRbfB0/Gxj9llEr2Qa2yUJ8Ay4r/epYBZHGzCCrHBHy4FH6eJLJj4npWOOdP39p+Zox3vykeVpnvKTLJfkf5auCmJEJO0rpaCFvm5QCrKO9LUHqxGscGCw7y40ENgXvI30c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tpomMW39; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779087166; c=relaxed/simple;
+	bh=vJSeAGlhmmhPXLo+X/Jt1tXtqIGN05TsKjlPQaA2O9o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nlk3KxgFxIHXpaqN+jklcC5Si92RXdppUoxsTtPY6oz6u41/m5KNpl/C7JEFJfbF6gzBoNwfp+NpvCC6hH715MJYnik3juYzQIMa2+5hoa1f30y1kcoDJMQBafVufeRvX4to1vzJePy7Pw3YM2vwLMWsIQiYQVR12WJNnTLeoVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vbk3plrz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tpomMW39"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BF94C2BCFD
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 06:37:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vbk3plrz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FF29C2BCC6;
+	Mon, 18 May 2026 06:52:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779086268;
-	bh=PrT96Y/vLV0Zld5NPvnbzDiOZRpJnR9HPYAVqBrX/a4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=tpomMW39Z+QDBMxf/W2OlOg6wDPsPG25eOFCJTVwmHzccb84gLd4cO9h/QGw+/gZD
-	 GAsyRzMtDEKon2j700Sa96994l4RBypdbX+Z/ROuYRHDIRkNIs7PVMgpO2psMCgcwS
-	 2t/OpakfWgVJNjObHzxYCPZeUX1OMgBcyZAmFBeqZJI8ZQPbs9TA7w75y153t7kFIY
-	 U4Nz8gtYhQA87sytwD1i4vdRJs+8httO/jezAxwxirFI7fVHXjf8PslP3/4Ha1H/rD
-	 0ww/W+yedO4WQcrdCNfDtEKxT4hiBLWOWmBOjlqa1yZYDkX0cDbHrrybjue+LRS2o7
-	 z2/3a+RWPiTBw==
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-8acb09ddbf6so42325556d6.2
-        for <bpf@vger.kernel.org>; Sun, 17 May 2026 23:37:48 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ9+hBgshj1S3zBLQ8NuziuSqa2eC6+j2yeMNNAOqswAIfih/RBWA42Q3Nrjm0fUTxH5K18=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOD+ph1mrMdckm0wrxVvyNXXgNiVK5yQ3XaE6sxF+H18NVUxUb
-	uSLkiecPp3lLD2j+iWPA8TJMYpfJNp5GRvyvGbljio6nB281NZqIgF59ZryQUrTAYIt658mpkIr
-	K3hKClTtasey6bXoSsBOdaMgLzE+/k1c=
-X-Received: by 2002:a05:6214:3c98:b0:8ca:2410:4b05 with SMTP id
- 6a1803df08f44-8ca2410535fmr151166296d6.40.1779086267702; Sun, 17 May 2026
- 23:37:47 -0700 (PDT)
+	s=k20201202; t=1779087166;
+	bh=vJSeAGlhmmhPXLo+X/Jt1tXtqIGN05TsKjlPQaA2O9o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Vbk3plrztF4TrpI+RCLFYof3xWhztONDqfoUu/f4MD+AbkYUIErTq92jgdkl1VMtS
+	 ZR2bkWQV7dvVNXCDkzhTqeIat+/HpblQPrSnfwc7jjUPfkaYkyO+RmHOq4vmO4kxDS
+	 z5oWN6KzaZFFyL8+C4b256LKnMDDTEcBbos4t9qrz/tjHc2uANxo5A8gTEboro1VEZ
+	 42lBZ0AGXpft2cxg5wfB8cHe3Cj+OBA2eQLBiIFaqzJSi75P57UuCby+hDB7ztGgoK
+	 jK05+jSa/yTWjKPNgvr7yV7uoAvEQ5htwKoBSpIWU+gJVe41f7UnSGH0jSHxRA9Gn/
+	 NKdeQLVFEpqAQ==
+Date: Sun, 17 May 2026 23:52:44 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Suchit Karunakaran <suchitkarunakaran@gmail.com>,
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 2/2] perf build: compile BPF skeletons with -mcpu=v3
+Message-ID: <agq3PCt_FhxIYgQ8@google.com>
+References: <20260507184238.65280-2-suchitkarunakaran@gmail.com>
+ <20260507234959.EEC5BC2BCB8@smtp.kernel.org>
+ <agAqESWvLdIJBErN@google.com>
+ <agZgPBrlKZ655KdO@x1>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260508195749.1885522-1-sashal@kernel.org> <20260517134858.146569-1-sashal@kernel.org>
-In-Reply-To: <20260517134858.146569-1-sashal@kernel.org>
-From: Song Liu <song@kernel.org>
-Date: Sun, 17 May 2026 23:37:36 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
-X-Gm-Features: AVHnY4J4mKBEhL8yoe8m_C50zE8fB-yoG9ZDQzbqPScq3MxagdnowtQVIUF5N1M
-Message-ID: <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
-Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation primitive
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
-	live-patching@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Joshua Peisach <jpeisach@ubuntu.com>, Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>, 
-	Anthony Iliopoulos <ailiop@suse.com>, Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <agZgPBrlKZ655KdO@x1>
 
-On Sun, May 17, 2026 at 6:49=E2=80=AFAM Sasha Levin <sashal@kernel.org> wro=
-te:
->
-> When a kernel (security) issue goes public, fleets stay exposed until a p=
-atched
-> kernel is built, distributed, and rebooted into.
->
-> For many such issues the simplest mitigation is to stop calling the buggy
-> function. Killswitch provides that. An admin writes:
->
->     echo "engage af_alg_sendmsg -1" \
->         > /sys/kernel/security/killswitch/control
->
-> After this, af_alg_sendmsg() returns -EPERM on every call without
-> running its body. The mitigation takes effect immediately, and is dropped=
- on
-> the next reboot -- by which point a patched kernel is hopefully in place.
->
-> A lot of recent kernel issues sit in code paths most installs only have e=
-nabled
-> to support a relative minority of users: AF_ALG, ksmbd, nf_tables, vsock,=
- ax25,
-> and friends.
->
-> For most users, the cost of "this socket family stops working for the day=
-" is
-> much smaller than the cost of running a known vulnerable kernel until the=
- fix
-> lands.
->
-> Why not an existing facility:
->
-> * livepatch needs a built, signed, per-kernel-version module per CVE.
->   Under Secure Boot the operator can't sign their own, so they wait
->   for the vendor, and only a minority of vendors actually ship
->   livepatches. Killswitch covers the days before that module shows
->   up.
->
-> * fail_function (CONFIG_FUNCTION_ERROR_INJECTION) is disabled in
->   most production kernels. Even where enabled, it only works on
->   functions pre-annotated with ALLOW_ERROR_INJECTION() in source -
->   no help for a freshly-disclosed CVE. The debugfs UI is blocked by
->   lockdown=3Dintegrity and the override is probabilistic.
->
-> * BPF override (bpf_override_return) honors the same
->   ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
->   production kernels. Even where on, the operator interface is
->   "load a verified BPF program," not a one-line write.
+On Thu, May 14, 2026 at 08:52:28PM -0300, Arnaldo Carvalho de Melo wrote:
+> On Sat, May 09, 2026 at 11:47:45PM -0700, Namhyung Kim wrote:
+> > Hi Arnaldo,
+> > 
+> > On Thu, May 07, 2026 at 11:49:59PM +0000, sashiko-bot@kernel.org wrote:
+> > > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> > > - [High] Adding `-mcpu=v3` to `CLANG_OPTIONS` forces all BPF skeletons to use the BPF v3 ISA, breaking backward compatibility for perf tools designed to run on older kernels.
+> > > --
+> > > 
+> > > commit 2e8791aeccf694e1ae9ed9fda46e3a6f73332838
+> > > Author: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+> > > 
+> > > perf build: compile BPF skeletons with -mcpu=v3
+> > > 
+> > > This commit adds -mcpu=v3 to CLANG_OPTIONS to support the atomic
+> > > cmpxchg instruction required by the lock_contention BPF program.
+> > > This forces Clang to emit BPF ISA v3 instructions during skeleton
+> > > compilation.
+> > > 
+> > > > diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> > > > index cee19c923c060..a9a8c84b6b006 100644
+> > > > --- a/tools/perf/Makefile.perf
+> > > > +++ b/tools/perf/Makefile.perf
+> > > 
+> > > [ ... ]
+> > > 
+> > > > @@ -1195,7 +1195,7 @@ ifneq ($(CROSS_COMPILE),)
+> > > >  CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
+> > > >  endif
+> > > >  
+> > > > -CLANG_OPTIONS = -Wall
+> > > > +CLANG_OPTIONS = -Wall -mcpu=v3
+> > > 
+> > > Does this change break backward compatibility for other perf tools running
+> > > on older kernels?
+> > > 
+> > > Since CLANG_OPTIONS is used in the pattern rule for compiling all BPF
+> > > skeletons, this forces every BPF program in perf (such as
+> > > augmented_raw_syscalls.bpf.c and off_cpu.bpf.c) to target the BPF ISA v3.
+> > > 
+> > > Kernels older than 5.1 do not support v3 instructions and will reject
+> > > these programs during the verifier load phase.
+> > 
+> > I think it's old enough and we can move on to ensure v3 instructions.
+> 
+> Can I take this as an Reviewed-by or Acked-by?
 
-If it is OK for killswitch to attach to any kernel functions, do we still
-need ALLOW_ERROR_INJECTION() for fail_function and BPF
-override? Shall we instead also allow fail_function and BPF override
-to attach to any kernel functions?
+Yep,
+
+Reviewed-by: Namhyung Kim <namhyung@kernel.org>
 
 Thanks,
-Song
+Namhyung
+
