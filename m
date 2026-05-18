@@ -1,54 +1,54 @@
-Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
+Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101C9384CEC
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 04:48:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D072438656D
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 04:48:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779079701; cv=none; b=l+KQ0aou/XGextJuOci6J5gEOFOmlFGhsCg3PnM05ZBj0uq9cW+ouCU5471njSVxPw5Q/Ok/iApH9GmVoP47Jm5l0emAlrT7+CKYwb/3RtTsRVPlerppn8X8fU6OChPNKIO7wMimhEM2yLBP1OadggC3vDssZ2YO3knqL7udRZY=
+	t=1779079702; cv=none; b=D/DLe/5XCjoCwSaM9o1rF24DcrKqQhsTvUogOq+MzUpYpX+3Aomzt5TWB5b4rFUETg4ATHm9/dTnv4VScs6fBIbosQTSxJ3DHepWnOlAHRNAtyh9R3DW7Nivu+Nm1MyUs5Aop6B5GAlAkdSc8JUvxjBHebUT09nBEceXK/7OUDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779079701; c=relaxed/simple;
-	bh=W1AKf6HBmEZYwn59EoYtmY5+eNzGcl5c+gVy8e78TF0=;
+	s=arc-20240116; t=1779079702; c=relaxed/simple;
+	bh=UO8COcfsaqz02sjdD6/7eGxdxivUik5cN2WpzQTquMs=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=jLl21bgd/OjHwloDsoslL3F9+v4xjI/pLFZfJEARcf3XyzhQV/AuOYoJaQSmlhGrAINeV6QeXEZkJ/EWJ9ewXRaDgttcPp8K0B9dcjhFTCSuqmGOl2T37TkZDF4FwumHf1TH6snJ7ShaChLFwDazOIW0sRrT4BX5TrbMXYNkF2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=G8dOgxeU; arc=none smtp.client-ip=74.125.82.74
+	 To:Cc:Content-Type; b=EOAGjK0ueEpFbaXbiw2lM4EZDS+bDsnxv2GuGCk4j1Bw68dhcgkbVPMEvkQKJ+N6CXZ9R9BAc3dwXeNM12HgiDwH5b7Xngb54uxLLDtAwqCDjzK/Oz5pj1eI3Zt45fgGbCn5ORnakNSAm+NdG/nojRPHp/OuqEmpYaY/dVjSfgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gIewkNQF; arc=none smtp.client-ip=74.125.82.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="G8dOgxeU"
-Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-135916eefa0so3373174c88.1
-        for <bpf@vger.kernel.org>; Sun, 17 May 2026 21:48:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gIewkNQF"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2f2d983d109so6438166eec.0
+        for <bpf@vger.kernel.org>; Sun, 17 May 2026 21:48:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779079694; x=1779684494; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1779079699; x=1779684499; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=J8Gn9u6Ay2gAeNSJD6VxHlLmg9jVbwsa1tUO88FBQSI=;
-        b=G8dOgxeU8ZqRgeH2hCEEDhIDXUWtDnYIqduW9GDfbACf7N2o6SsT5cOOQGGxpueUnu
-         0rH06ZONa/du0BlfxVowPBA5+0Lzwn/2Stzt1xMsV6xgIlXN2CJty7as7slpsJupIm7F
-         7KXuclsoR61UZwdVRXpy07Vt/LWOhmoYANw9zkE//PSODu6IM17BixFT14S6PimHIzct
-         WwSyKOIp0LRzy2pf+GS1Gx5hj4T/l566OgNNyco6cjSHQUPWlw730fr5amzDNeCREE6d
-         Tb/v1p3QB0tRLYkYh6bIBjnZ1wrE3gI8dUXydkp+N//QXt1WRnQM65MLHXKfxc22hiVv
-         sKTg==
+        bh=elI3dCv9to9+reTrmH7gWaOOH/Cw1KfhvnnriZ/0VzQ=;
+        b=gIewkNQFxS7vmTxscHRN/sn7v6nVtxrgOJS1noSq7bPvntiWlJm6niwUD2I62OIrcS
+         6STsMe08D2VUA4zxxo6szUzo0ikT4s7YHkOTGuTf8axufHFKETqTGo5WTTT1zP0cOXEu
+         dSm2/wmfYoDsRob7mxDz7JmfaibBRBkOdnUj/mTY0ZUGi6GgovBYjA1T95tNt/r3Q9BO
+         ncf5VI3xsSLa9QvsAbcFJegurMRXW6SLO4IDML2jiEkdi0pAQca6EXkErKb13F6i46xB
+         eXCd2jVPOB9pOc0GTK6HMKHK5busySV8STf57BqKkMxEoy7KrujgXc4frKO/6nuOqch3
+         YIEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779079694; x=1779684494;
+        d=1e100.net; s=20251104; t=1779079699; x=1779684499;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J8Gn9u6Ay2gAeNSJD6VxHlLmg9jVbwsa1tUO88FBQSI=;
-        b=ohnRbJoSCCQ6sME5llxfVMer9FpC/7QK8w0KauATU58gxeq+nKSQQ2HPmXfUMAxkgB
-         LD6iH0UKEWDOYBA26EPQnR9v3tO81xr9t6hMmYoiYFwlTqXuQado8HF4+qzut1NbyGss
-         3L/wYtmnbtT37W5Ge8NF7FxQv8550KMHBuhSgbzZO1K2YZSSqV3GCsQkmiIOPppMsLuC
-         G5G4qAHbLw4WnoScQ0uHVgzWAhmlyCM/RkUjqpSCaB55Iz4IbAJ7HzwBBc1SY4nvFW92
-         stnky7eyiNcwEqGa0Sv7bqqkAu2OHjx+Y+BYFI/qkCAloQBd3pV5g3taOZsHwJySHU6i
-         AWxg==
-X-Forwarded-Encrypted: i=1; AFNElJ/jD7cY07hhGgL1U0v/qRMKGLS6aMfVfB47xUhkAP005VNlQg00AwnXY7hFxdcwmauGzwA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylXyK76hEwDA82LhUxOi6f4+WnemLlmoklHEOO0uNM/oH/Xb5s
-	Y+lxPYK+hKeQcMxXuckAiR5pd2yQkxWXYhQWeEvR3FMXaBcOJANybcgovqnkhhdKkJLqJi0iwMK
-	zpek085JtEQ==
-X-Received: from dybgs18.prod.google.com ([2002:a05:7301:2092:b0:2d9:3459:1de6])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:3212:b0:2e6:e504:5431
- with SMTP id 5a478bee46e88-303986978b0mr6075608eec.22.1779079693815; Sun, 17
- May 2026 21:48:13 -0700 (PDT)
-Date: Sun, 17 May 2026 21:47:36 -0700
+        bh=elI3dCv9to9+reTrmH7gWaOOH/Cw1KfhvnnriZ/0VzQ=;
+        b=huoqAUFzIrb1h9g9bvTjkdtwdEa8zXSIDLcZ9UGNjKiWt7igVsL+1bnvzpoE2U3BiQ
+         3mDVTUcAjNviGhA1cY9glWXavIaRCMuaDqdgbkCIQmBSN8j1iqS4U7/Qr199Zf2WURCb
+         G9V2q2jH5iTmfcirNwQugXF2dwRHsCNfl5sIsBz6zSz1E8gNf/pNtIgk3SCQwBNnk/LH
+         she/PdfKVRWzV5nPd2H4238q6IsU7d+faHCIBmJqP5GqE2NHcMhuYEU6ox4BAQHrBJVg
+         GXr7tTVhHCHIVbWcpmKRMDiQMBn848Agvvi0Ss0JAMrS4ftqbbn3yJUrngbsVHUgS/Ie
+         kjWg==
+X-Forwarded-Encrypted: i=1; AFNElJ+Xwj1xOFSCnLXeU/GT5cvo+K47mCBYaTsOV0MihW9YuMdywavd2CwtrXsjCBuTbwrqVrE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywjk44ae/xAuewG4KGH4cwgwvOVymno0IpD3kGTBdvgXNqK3sGt
+	XO+RfTrZ+Bmscw5BJH4UiaxGXqPxl9D754UhwGZ/+nj5Ap1vc3EWf334nnagVoUHYesu4eyzz/K
+	OiKF+FOXD2Q==
+X-Received: from dybdf6.prod.google.com ([2002:a05:7300:b586:b0:2ea:c1bb:3a9c])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:6c05:b0:2c0:c5e4:605f
+ with SMTP id 5a478bee46e88-303986533e0mr6163849eec.24.1779079698716; Sun, 17
+ May 2026 21:48:18 -0700 (PDT)
+Date: Sun, 17 May 2026 21:47:38 -0700
 In-Reply-To: <20260518044740.2526802-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,9 +58,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260515193314.1593560-1-irogers@google.com> <20260518044740.2526802-1-irogers@google.com>
 X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260518044740.2526802-11-irogers@google.com>
-Subject: [PATCH v6 10/14] perf pmu-events: Split big_c_string storage into
- standalone compilation unit
+Message-ID: <20260518044740.2526802-13-irogers@google.com>
+Subject: [PATCH v6 12/14] perf build: Prefix SCRIPTS with output directory to
+ fix continuous rebuilds
 From: Ian Rogers <irogers@google.com>
 To: irogers@google.com, acme@kernel.org, james.clark@linaro.org, 
 	namhyung@kernel.org
@@ -77,175 +77,51 @@ Cc: 9erthalion6@gmail.com, adrian.hunter@intel.com, alex@ghiti.fr,
 	thomas.falcon@intel.com, yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-Currently, jevents.py emits both the massive 2.8 MB big_c_string literal
-and tens of thousands of compact_pmu_event struct arrays into a single
-pmu-events.c compilation unit. Compiling this giant file takes ~2.2 seconds
-on a single CPU core during Kbuild startup.
+In Makefile.perf, ALL_PROGRAMS includes SCRIPTS (perf-archive,
+perf-iostat). However, unlike PROGRAMS and DLFILTERS, SCRIPTS was not
+prefixed with $(OUTPUT).
 
-Refactor jevents.py to emit big_c_string into a dedicated
-pmu-events-string.c compilation unit. This allows Kbuild to compile
-pmu-events.o and pmu-events-string.o simultaneously in parallel across
-two separate CPU cores, preserving 100% string deduplication and zero
-dynamic ELF relocations while cutting C compilation latency in half.
+During out-of-tree builds (or when O= is specified), Make checked for the
+unprefixed target 'tools/perf/perf-archive'. Since the actual script was
+installed into $(OUTPUT)perf-archive, Make concluded the target was
+missing and continuously re-executed the script installation rule on every
+single incremental build.
 
-Add pmu-events-string.c to tools/perf/.gitignore to ensure in-tree Kbuild
-runs do not leave untracked generated files in the working directory.
-
-To guarantee 100% backward compatibility with GNU Make 4.0+ (avoiding the
-Make 4.3+ grouped target &: syntax which causes older Make versions like
-4.2.1 to spawn multiple concurrent jevents.py processes during parallel
-builds), implement a robust dependency chaining pattern:
-  $(PMU_EVENTS_C): $(JEVENTS_DEPS)
-  $(PMU_EVENTS_STRING_C): $(PMU_EVENTS_C)
-          @:
-This ensures jevents.py is invoked exactly once. If jevents.py aborts
-early, Make's .DELETE_ON_ERROR: purges pmu-events.c, guaranteeing that
-subsequent Make invocations correctly re-execute the script and overwrite
-pmu-events-string.c. In jevents.py, explicitly close output_file first
-and output_string_file second at the tail of main() to guarantee that
-pmu-events-string.c receives a filesystem timestamp greater than or equal
-to pmu-events.c, completely avoiding redundant incremental rebuilds.
+Prefix SCRIPTS with $(OUTPUT) and update the static pattern rule to ensure
+Kbuild correctly tracks generated script prerequisites during incremental
+builds.
 
 Tested-by: James Clark <james.clark@linaro.org>
 Assisted-by: Gemini:gemini-3.1-pro-preview
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/.gitignore            |  1 +
- tools/perf/Makefile.perf         |  4 ++--
- tools/perf/pmu-events/Build      | 16 +++++++++++++++-
- tools/perf/pmu-events/jevents.py | 23 +++++++++++++++++++----
- 4 files changed, 37 insertions(+), 7 deletions(-)
+ tools/perf/Makefile.perf | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/perf/.gitignore b/tools/perf/.gitignore
-index 0f9451a6e39c..3b968c5158b8 100644
---- a/tools/perf/.gitignore
-+++ b/tools/perf/.gitignore
-@@ -38,6 +38,7 @@ arch/*/include/generated/
- trace/beauty/generated/
- pmu-events/arch/common/common/legacy-cache.json
- pmu-events/pmu-events.c
-+pmu-events/pmu-events-string.c
- pmu-events/jevents
- pmu-events/metric_test.log
- pmu-events/empty-pmu-events.log
 diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 96a68723109f..b8a81c9749a8 100644
+index b8a81c9749a8..fc92d6ceac5b 100644
 --- a/tools/perf/Makefile.perf
 +++ b/tools/perf/Makefile.perf
-@@ -925,7 +925,7 @@ bpf-skel-clean:
- pmu-events-clean:
- ifeq ($(OUTPUT),)
- 	$(call QUIET_CLEAN, pmu-events) $(RM) \
--		pmu-events/pmu-events.c \
-+		pmu-events/pmu-events*.c \
- 		pmu-events/metric_test.log \
- 		pmu-events/test-empty-pmu-events.c \
- 		pmu-events/empty-pmu-events.log
-@@ -933,7 +933,7 @@ ifeq ($(OUTPUT),)
- 		-name 'extra-metricgroups.json' -delete
- else # When an OUTPUT directory is present, clean up the copied pmu-events/arch directory.
- 	$(call QUIET_CLEAN, pmu-events) $(RM) -r $(OUTPUT)pmu-events/arch \
--		$(OUTPUT)pmu-events/pmu-events.c \
-+		$(OUTPUT)pmu-events/pmu-events*.c \
- 		$(OUTPUT)pmu-events/metric_test.log \
- 		$(OUTPUT)pmu-events/test-empty-pmu-events.c \
- 		$(OUTPUT)pmu-events/empty-pmu-events.log
-diff --git a/tools/perf/pmu-events/Build b/tools/perf/pmu-events/Build
-index dc1df2d57ddc..95172a2a851f 100644
---- a/tools/perf/pmu-events/Build
-+++ b/tools/perf/pmu-events/Build
-@@ -1,7 +1,12 @@
- EMPTY_PMU_EVENTS_C = pmu-events/empty-pmu-events.c
- # pmu-events.c will be generated by jevents.py or copied from EMPTY_PMU_EVENTS_C
- PMU_EVENTS_C	=  $(OUTPUT)pmu-events/pmu-events.c
-+PMU_EVENTS_STRING_C = $(OUTPUT)pmu-events/pmu-events-string.c
-+
- pmu-events-y	+= pmu-events.o
-+ifneq ($(NO_JEVENTS),1)
-+pmu-events-y	+= pmu-events-string.o
-+endif
+@@ -405,7 +405,7 @@ python-clean := $(call QUIET_CLEAN, python) $(RM) -r $(PYTHON_EXTBUILD) $(OUTPUT
+ # Use the detected configuration
+ -include $(OUTPUT).config-detected
  
- # pmu-events.c file is generated in the OUTPUT directory so it needs a
- # separate rule to depend on it properly
-@@ -9,6 +14,10 @@ $(OUTPUT)pmu-events/pmu-events.o: $(PMU_EVENTS_C)
- 	$(call rule_mkdir)
- 	$(call if_changed_dep,cc_o_c)
+-SCRIPTS = $(patsubst %.sh,%,$(SCRIPT_SH))
++SCRIPTS = $(addprefix $(OUTPUT),$(patsubst %.sh,%,$(SCRIPT_SH)))
  
-+$(OUTPUT)pmu-events/pmu-events-string.o: $(PMU_EVENTS_STRING_C)
-+	$(call rule_mkdir)
-+	$(call if_changed_dep,cc_o_c)
-+
- # Message for $(call echo-cmd,cp), possibly remove the src file from
- # the destination to save space in the build log.
- quiet_cmd_cp   = COPY    $(patsubst %$<,%,$@) <- $<
-@@ -118,6 +127,7 @@ CUR_OUT_JSON	:= $(shell [ -d $(OUT_DIR) ] && find $(OUT_DIR) -type f)
+ PROGRAMS += $(OUTPUT)perf
  
- # Things in the OUTPUT directory but shouldn't be there as computed by
- # OUT_JSON and GEN_JSON.
-+
- ORPHAN_FILES	:= $(filter-out $(OUT_JSON) $(GEN_JSON),$(CUR_OUT_JSON))
+@@ -592,8 +592,8 @@ $(GTK_IN): FORCE prepare
+ $(OUTPUT)libperf-gtk.so: $(GTK_IN) $(PERFLIBS)
+ 	$(QUIET_LINK)$(CC) -o $@ -shared $(LDFLAGS) $(filter %.o,$^) $(GTK_LIBS)
  
- # Message for $(call echo-cmd,mkd). There is already a mkdir message
-@@ -224,6 +234,10 @@ endif
- # and inputs are dependencies.
- $(PMU_EVENTS_C): $(JEVENTS_DEPS)
- 	$(call rule_mkdir)
--	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) $(JEVENTS_MODEL) $(OUT_DIR) $@
-+	$(Q)$(call echo-cmd,gen)$(PYTHON) $(JEVENTS_PY) $(JEVENTS_ARCH) $(JEVENTS_MODEL) \
-+            $(OUT_DIR) $(PMU_EVENTS_C) $(PMU_EVENTS_STRING_C)
-+
-+$(PMU_EVENTS_STRING_C): $(PMU_EVENTS_C)
-+	@:
+-$(SCRIPTS) : % : %.sh
+-	$(QUIET_GEN)$(INSTALL) '$@.sh' '$(OUTPUT)$@'
++$(SCRIPTS) : $(OUTPUT)% : %.sh
++	$(QUIET_GEN)$(INSTALL) '$<' '$@'
  
- endif # ifeq ($(NO_JEVENTS),1)
-diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index 3a1bcdcdc685..7344940e776a 100755
---- a/tools/perf/pmu-events/jevents.py
-+++ b/tools/perf/pmu-events/jevents.py
-@@ -1422,6 +1422,8 @@ such as "arm/cortex-a34".''',
-   )
-   ap.add_argument(
-       'output_file', type=argparse.FileType('w', encoding='utf-8'), nargs='?', default=sys.stdout)
-+  ap.add_argument(
-+      'output_string_file', type=argparse.FileType('w', encoding='utf-8'), nargs='?', default=None)
-   _args = ap.parse_args()
- 
-   _args.output_file.write(f"""
-@@ -1463,10 +1465,20 @@ struct pmu_table_entry {
-     ftw(arch_path, [], preprocess_one_file)
- 
-   _bcs.compute()
--  _args.output_file.write('static const char *const big_c_string =\n')
--  for s in _bcs.big_string:
--    _args.output_file.write(s)
--  _args.output_file.write(';\n\n')
-+  if not _args.output_string_file:
-+    _args.output_file.write('static const char *const big_c_string =\n')
-+    for s in _bcs.big_string:
-+      _args.output_file.write(s)
-+    _args.output_file.write(';\n\n')
-+  else:
-+    _args.output_string_file.write('/* SPDX-License-Identifier: GPL-2.0 */\n')
-+    _args.output_string_file.write('/* Autogenerated by jevents.py */\n')
-+    _args.output_string_file.write('extern const char big_c_string[];\n')
-+    _args.output_string_file.write('const char big_c_string[] =\n')
-+    for s in _bcs.big_string:
-+      _args.output_string_file.write(s)
-+    _args.output_string_file.write(';\n')
-+    _args.output_file.write('extern const char big_c_string[];\n\n')
-   for arch in archs:
-     arch_path = f'{_args.starting_dir}/{arch}'
-     ftw(arch_path, [], process_one_file)
-@@ -1476,6 +1488,9 @@ struct pmu_table_entry {
-   print_mapping_table(archs)
-   print_system_mapping_table()
-   print_metricgroups()
-+  _args.output_file.close()
-+  if _args.output_string_file:
-+    _args.output_string_file.close()
- 
- if __name__ == '__main__':
-   main()
+ $(OUTPUT)PERF-VERSION-FILE: .FORCE-PERF-VERSION-FILE
+ 	$(Q)$(SHELL_PATH) util/PERF-VERSION-GEN $(OUTPUT)
 -- 
 2.54.0.563.g4f69b47b94-goog
 
