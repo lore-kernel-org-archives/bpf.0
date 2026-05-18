@@ -1,140 +1,215 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456783876A4
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 17:32:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25601C84A2
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 17:32:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779125545; cv=none; b=hvPe9pmckRPvaZXjS+Xq58YFR3BsafyP2cN13DlUufSnprlgBykw2MZg4BM/7NJjV7PNbY3a4dhfP063a/L72nsf8dyvBvzw6u5GquEeh/M8uFhAGRF44bVE8ggdogY/ytrp/9uUYeRbR+SnkIgplO7rad2xmDkchtUOzODfGjA=
+	t=1779125554; cv=none; b=Ql+dZGMJhkMC/rSOOYXZY5yA3NHbLP9Xeu4AIkbAfmQvQR9s/wZ/TDghfgB6rfYceyaXxcgg8ztr52dXyn5MuHmSPAOdpkQZ3hulxvWUqoQL9y8IAVCXnrUgZK5gNj2FXMLVc90FCq2sk5P2p14blyit1/fI8rq4GUJRHjPEmbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779125545; c=relaxed/simple;
-	bh=qDnq4eaGNFK2SGI02BmVW/3CM1ybPuWfyYB5cPPAe50=;
+	s=arc-20240116; t=1779125554; c=relaxed/simple;
+	bh=AH+DBcfb8hb1EXWNIPBBXvrpcWc8hMPu2qrEVpv3n+A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dDTcEXOK/H0f4anTGGbGh8YSKxBhG3H9XTKHes6uP8Z1vsH9FWOP8CWeOVrpqybmd1z3LO1Kqxz3/qwYQp9WjTOP9sNoCR//6HaTmxJpT/JF55UO9L/PMaaZBURwiQCx5Wl1Z7BQphUphtwCQXNUAVD2cmSYR0ljyzJpdce9xFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fd2FbRgk; arc=none smtp.client-ip=209.85.128.49
+	 Content-Type:Content-Disposition:In-Reply-To; b=VeLwbk9HvTx+A4XTEqsCRD6YOz24LWN0gqiBIW0B1hFYA+Cr2TxA3nYVfAxXDlz56vz9zkl7MJLiAFdbrSypCr7jNZZZb+zCJ4bH7GVGKb74xOXKNxKKcXWn55NdhiNeClds/WCwHDZuNA0r/jLZUJpGklUFJ30rGoE5faWLK3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=noNNTp+M; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fd2FbRgk"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-488a9033b2cso20184895e9.2
-        for <bpf@vger.kernel.org>; Mon, 18 May 2026 10:32:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="noNNTp+M"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2bab2548e8bso10944335ad.0
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 10:32:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779125543; x=1779730343; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YYV0zqL6HYPOKYxx4HDUjaYd9lPJSBdXFVS13R+/0Hw=;
-        b=fd2FbRgkNTfsOimTfq3JNO/3GxA94QltooDJJTU2/3BOt9EWHGqxIjFcNo+ai3sDvn
-         uhXI55kg2XqWwM1zMJUMDsegLPxmpWASH9MjnPluY7bWWp9yQ/n8B2593JurJIuYDGF0
-         2Qf0mZX98wtwOCNnhppVgx+B7j0JDduwrhZ44S9j7gBlpbHrwdhg1/ixPrnC552Wstle
-         PliRnAGMVpdAt4bqo7vywuvTGZLByRLjRIp8GFNwakwUVnxI2TdnqWj1XCkRG3ZAEcFz
-         KP4hc5nx/NpApV674Qom2td7WgfbtNXaSIdbjePpr4NqHj0CaPZ04yPNqLrpQPQpK48d
-         wuHA==
+        d=gmail.com; s=20251104; t=1779125552; x=1779730352; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2uzkrbz+xMoiruhnNnylQApyqxZ7RLlqdiRaKQfhQVA=;
+        b=noNNTp+Mp4zszvaxnK49BxdeEj+qjciSrzuCUcijqqYz6IU+Z3Nm5XLHMM0bHXsG8m
+         ZJGnWXfSE+48hRG0EffhNm20s8dKyDu5/K26vBFfZ/7Ix4zJUt/w6kKzQo5pCbidfTHq
+         qw1mB2VA67HLVd1DcQGHYf5IgaBE/IlJWomQGc85PG01UpmxQxU6yhs8UZUZwpkMATmP
+         LbkWO6Gx2aGPMKZh1Jr/sDzxOixvu0ZLteOjkgEIqnYycXtYevrY37GZ1ptGYZyL2HL5
+         yAOXgSoggdZjfkt3n8CSfPg/D6IL7jvyPyuyYW1MGnR4bpVVi2R+er1EbH3i7cPMzpcv
+         NJ8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779125543; x=1779730343;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YYV0zqL6HYPOKYxx4HDUjaYd9lPJSBdXFVS13R+/0Hw=;
-        b=S0JxmqCVFN9ru3dvIR1LnXznaAgPX2ofHxYCbqOwA+5FYp55ZSA8h5BgjMUeYPFMkq
-         8hy3rRdU8V527JyMPu15UH4HPbnP806uAOVxEy6A+VJOweM8UxYUpCljvipZy/I6513u
-         ZEFYFFrtzIYL6zSHY8It+0rAYpCWWkb4BDEooddgy2RuWW5GC5oil/QYwUan/GrzvB30
-         lIWiVhWhRCa37W6uYS/4gfqU6ol3mSdZR1fyV0Ka/Co3trVLfyzsP6W6J+wwMH7uPiku
-         H51TdwGXoKW6Kx4X+IO+9OPi9sInES79X1bNL9wjWwYdNv7PT6lXB6Df6Kk3B8JihUjG
-         flxw==
-X-Gm-Message-State: AOJu0Yzh5SFYBJ7I3NphRdmmrGBgvlWIhK3DGeFL5ay9HBqbWa863187
-	f9HKNTWIj4yROWoBVwM2eocvRg1w+ePl+FWZAWpiVVFfvg59KLqLpbQQ
-X-Gm-Gg: Acq92OEl0vFXUvhRFIcJqTqxNKq/JOszOhPYKV23tY9UDFTwY+UYUuZ3Wx2aiuGGWz1
-	WuMZdGTmdFLnI6Q2yNiTjMB+0uENkGbtqG4eLbgWNTb9Q2o7zNeZ3OY84kTh4JAL86v8tc7gH5u
-	8RPS5FWaFxmkgfQeDAhtc8zl8TE3qrNJW5ExQmPcB6NnWbOlKZa0+oSF+0dzCls/LP3B4HREQUp
-	Z2wkyBL81YV3XzFNZgvICrVI1BFnbigv+JLJZsRvD4mt1+Bk4/Y0mDDr4YSJigYtVe0n/XcM2ue
-	KQGhu00GAL9cJP6jC9rThkTlqXDKekDjo2OzBpBktJEqZdt3x1mKiy7BhM3IVaPozskyqegWBNq
-	XHN87fqk+a5RF6X1ZMUFZ6r8ObngMvk8UaYkz6ipJACtStBEqGope9TmBd9jZm0rLbUpgDDyevK
-	78q5SiQJXmkBhye4TnDT8DmMC0aH58S/Sc4k5RzMf4K5YYbJ08+rozJmxUYr3hIn5utVlFWqm5u
-	CkI577J3kiiHIeLIbgzMkriOcms1BqdSSONLh3c8nwbZ34L6j1UjhHyXnDGP20ewdGPyyK1lNAN
-	lbA5h9+yOFw4sODXgTsoSWvdiARXND+PWBoWKNQ8Pg==
-X-Received: by 2002:a05:600c:4f8a:b0:489:ad:7b5b with SMTP id 5b1f17b1804b1-48fe62f8c6bmr248825185e9.24.1779125542488;
-        Mon, 18 May 2026 10:32:22 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e0002302090c50a60b9.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:230:2090:c50a:60b9])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45d9e767ee0sm36480002f8f.1.2026.05.18.10.32.21
+        d=1e100.net; s=20251104; t=1779125552; x=1779730352;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2uzkrbz+xMoiruhnNnylQApyqxZ7RLlqdiRaKQfhQVA=;
+        b=QGwCJO3AEJE3a/5/KoKULIb8slCvJ+1hIgMyqdSZhWzBDq0KQMynVxoxIwFg+xMjr5
+         1a3Y2npsQT5mmc8C2sPxGYozPZiUrTfbi5Iqveb6ezB+Mw4h1TnfuFJF7dRr64F7LdsU
+         6AJDCDJTj9467P2HvLmRrflibn2Na6oELiS9LZ8wOapIRabEufaTNpMUARMpuvqjNSv3
+         QyfrMCVsgC73eR2uUqwP5EKfPoHons4v+RRoN3iUHyEghIjCKRqwplnt7MGaiAiMbLej
+         2DJr0hQWOgS9QwLUcmVG21lhD0HeKOQJqL15ZhHgfRvMvUZOez3k2+n5LMS4u6r4c2rz
+         Q7qQ==
+X-Gm-Message-State: AOJu0YzgqJ5PT4EsqRJvqxsGUgUPGS/ZbHrMwjIOp2Qlu0piopPzskro
+	JVu/esjPxIASKrCWBT9Q8Nnmd+1qleUzDtwjzupXZg9JGVQPoW6jdzIZQ5unQA==
+X-Gm-Gg: Acq92OFQAqQnqCuyKQYPzfh4tc9mKu2MQeuGqNopslRQieIBc3G+Lji4fUD9wqYRJOr
+	8XfZxpNAf35+cJ0MXRwdnHB1GH8u8Qru3zu7w5pg2on+/4NsoFOsH13IoWjw2gHljnPcyXHg94d
+	mMYl6Xgf8ByjVjihuPlQDWRTH3DbWwbHdizysYg3pbUo8jSCtMJwToaWDxrnKNu5iQe0V2AxVOn
+	iHq0M0LbIJNWk9dLsJIWNJ4JiK8rUQtPA+/BqYoXDZETF+tu4gs8YU/gfLFf3EIqkoQfIL7kZq6
+	jzRmZ9+VHfbKSfQQhsQJYJRrFVby7ilI44/PV71/2CM0+jrErP2KbTCixUL3Vg80+sjWpgrWhU6
+	FZ8PBZ/wVEPjyCpjcYvRUZKxkWdAzCdTzDhp8pSIRazIakTigfTbd0FxdWhGs9WfC2EIOr6hK4X
+	th0ouW8vDIzCEzc+Klw1GUvbHyFKTNGCWomA==
+X-Received: by 2002:a17:902:da90:b0:2bd:612b:912d with SMTP id d9443c01a7336-2bd7e8ad548mr166936445ad.14.1779125551825;
+        Mon, 18 May 2026 10:32:31 -0700 (PDT)
+Received: from google.com ([118.150.148.19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5cfe6b8fsm163562595ad.46.2026.05.18.10.32.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 10:32:21 -0700 (PDT)
-Date: Mon, 18 May 2026 19:32:20 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
-	martin.lau@kernel.org, yonghong.song@linux.dev, clm@meta.com,
-	ihor.solodrai@linux.dev
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix test for refinement of
- single-value tnum
-Message-ID: <agtNJGOp-jwGrQiL@mail.gmail.com>
-References: <be2dc2c3d85120286e60b3029b3338fff339f942.1779121582.git.paul.chaignon@gmail.com>
- <86c3b9ef65bb65d98d90fb341c3ff0c278053fe2bf77f118084af3ff500c6e64@mail.kernel.org>
+        Mon, 18 May 2026 10:32:31 -0700 (PDT)
+Date: Tue, 19 May 2026 01:32:29 +0800
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3] m68k, bpf: Add initial BPF JIT compiler
+ support
+Message-ID: <agtNLbj1V0DuEJvL@google.com>
+References: <20260511212756.3163955-1-visitorckw@gmail.com>
+ <20260513010339.81EDEC2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <86c3b9ef65bb65d98d90fb341c3ff0c278053fe2bf77f118084af3ff500c6e64@mail.kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260513010339.81EDEC2BCB0@smtp.kernel.org>
 
-On Mon, May 18, 2026 at 05:09:21PM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> > index a3e4c0945137..bc038ac2df98 100644
-> > --- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> > +++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> > @@ -1892,25 +1892,25 @@ __naked void bounds_refinement_tnum_umax(void *ctx)
-> >  /* This test covers the bounds deduction when the u64 range and the tnum
-> >   * overlap only at umin. After instruction 3, the ranges look as follows:
-> >   *
-> > - * 0    umin=0xe00     umax=0xeff                              U64_MAX
-> > + * 0    umin=0xe1      umax=0xf0                               U64_MAX
->                               ^^^^^
+On Wed, May 13, 2026 at 01:03:39AM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
+> - [High] BPF-to-BPF calls (BPF_PSEUDO_CALL) are broken, corrupting arguments, return values, and tail call tracking.
+> - [High] Missing protection against signed division overflow (`S32_MIN / -1` and `S64_MIN / -1`), leading to undefined behavior and potential kernel panics.
+> - [Medium] Using `kcalloc` for potentially large array allocations leads to JIT failures under memory fragmentation.
+> --
 > 
-> The comment says umax=0xf0 but looking at the code change below:
+> commit 1a2c23f18e30a4b931f962e5e35eed83ff42f6a2
+> Author: Kuan-Wei Chiu <visitorckw@gmail.com>
 > 
-> >   * |    [xxxxxxxxxxxxxx]                                       |
-> >   * |----------------------------|------------------------------|
-> >   * |    x               x                                      | tnum values
-> >   *
-> > - * The verifier can therefore deduce that the R0=0xe0=224.
-> > + * The verifier can therefore deduce that the R0=0xe1=225.
-> >   */
-> >  SEC("socket")
-> >  __description("bounds refinement with single-value tnum on umin")
-> > -__msg("3: (15) if r0 == 0xf0 {{.*}} R0=224")
-> > +__msg("3: (15) if r0 == 0xf1 {{.*}} R0=225")
-> >  __success __log_level(2)
-> >  __naked void bounds_refinement_tnum_umin(void *ctx)
-> >  {
-> >  	asm volatile("			\
-> >  	call %[bpf_get_prandom_u32];	\
-> > -	r0 |= 0xe0;			\
-> > -	r0 &= 0xf0;			\
-> > -	if r0 == 0xf0 goto +2;		\
-> > -	if r0 == 0xe0 goto +1;		\
-> > +	r0 |= 0xe1;			\
-> > +	r0 &= 0xf1;			\
->                    ^^^^
+> m68k, bpf: Add initial BPF JIT compiler support
 > 
-> After r0 |= 0xe1, the register has umin=0xe1. Then after r0 &= 0xf1,
-> the mask 0xf1 allows bits 11110001, which permits both 0xe1 and 0xf1.
-> This creates a u64 range of [0xe1, 0xf1], not [0xe1, 0xf0] as stated
-> in the comment.
+> Add a BPF JIT compiler for the m68k architecture.
+> 
+> > diff --git a/arch/m68k/net/bpf_jit_comp.c b/arch/m68k/net/bpf_jit_comp.c
+> > new file mode 100644
+> > index 0000000000000..1531b321410ae
+> > --- /dev/null
+> > +++ b/arch/m68k/net/bpf_jit_comp.c
+> 
+> [ ... ]
+> 
+> > +static noinline s32 jit_sdiv32(s32 a, s32 b) { return b ? a / b : 0; }
+> > +static noinline s32 jit_smod32(s32 a, s32 b) { return b ? a % b : a; }
+> > +
+> > +static noinline u64 jit_mul64(u64 a, u64 b) { return a * b; }
+> > +static noinline u64 jit_div64(u64 a, u64 b) { return b ? div64_u64(a, b) : 0; }
+> > +static noinline s64 jit_sdiv64(s64 a, s64 b) { return b ? div64_s64(a, b) : 0; }
+> 
+> What happens if signed division or modulo is performed by -1 with the minimum
+> representable value (e.g., S32_MIN / -1)?
+> 
+> In C, evaluating INT_MIN / -1 results in signed integer overflow (undefined
+> behavior), which can trigger a CPU division exception on m68k and crash the
+> kernel.
+> 
+> Should explicit bounds checking be added to handle these edge cases and return
+> the dividend as required by the eBPF specification?
+> 
 
-That's correct. But after instruction 3, on the fallthrough path, we can
-also deduce that R0 != 0xf1 and our existing refinement logic can thus
-tighten the u64 range to [0xe1; 0xf0]. The comment is therefore correct.
+Ack.
+will add the missing bounds checks in neext version.
 
+> [ ... ]
 > 
-> Should the comment be updated to umax=0xf1 to match the implementation?
+> > +static int emit_call(const struct bpf_insn *insn, struct jit_ctx *ctx)
+> > +{
+> > +	const s8 arg_regs[] = { BPF_REG_5, BPF_REG_4, BPF_REG_3, BPF_REG_2, BPF_REG_1 };
+> > +	const s8 *tmp1 = bpf2m68k[TMP_REG_1];
+> > +	bool extra_pass = ctx->target != NULL;
+> > +	u64 func_addr;
+> > +	bool fixed;
+> > +	int i, err;
+> > +
+> > +	err = bpf_jit_get_func_addr(ctx->prog, insn, extra_pass, &func_addr, &fixed);
+> > +	if (err)
+> > +		return err;
+> > +
+> > +	for (i = 0; i < 5; i++) {
+> > +		const s8 *reg = bpf2m68k[arg_regs[i]];
+> > +		s8 d_lo = bpf_get_reg32(reg[1], tmp1[1], ctx);
+> > +		s8 d_hi = bpf_get_reg32(reg[0], tmp1[0], ctx);
+> > +
+> > +		emit_16(ctx, 0x2f00 | d_lo);			/* move.l d_lo, -(%sp) */
+> > +		emit_16(ctx, 0x2f00 | d_hi);			/* move.l d_hi, -(%sp) */
+> > +	}
+> > +
+> > +	emit_16(ctx, 0x207c);					/* movea.l #func_addr, %a0 */
+> > +	emit_32(ctx, (u32)func_addr);
+> > +
+> > +	emit_16(ctx, 0x4e90);					/* jsr (%a0) */
+> > +
+> > +	emit_16(ctx, 0x4fef);					/* lea 40(%sp), %sp */
+> > +	emit_16(ctx, 40);
+> > +
+> > +	emit_16(ctx, 0xc340);					/* exg %d0, %d1 */
 > 
+> Does this code break BPF-to-BPF calls (BPF_PSEUDO_CALL)?
 > 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> It appears to treat the subprogram exactly like a standard C helper by pushing
+> BPF registers R1-R5 to the stack and then executing exg %d0, %d1 to swap the
+> 64-bit return value.
 > 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26047251229
+> However, the subprogram's JIT-compiled code unconditionally uses the standard
+> build_prologue(), which lacks a check for ctx->prog->is_func.
+> 
+> Consequently, doesn't the subprogram act like a root BPF program, initializing
+> BPF_REG_1 from 8(%fp), zeroing its upper 32 bits, and completely ignoring the
+> stacked R2-R5 arguments?
+> 
+> Additionally, it seems the global tail call counter (BPF_TC_LO) is improperly
+> reset to 33 on every subprogram entry, and the return value of BPF subprograms
+> (which already populate BPF_REG_0 properly) gets corrupted by the swap.
+> 
 
+Will try to fix this.
+
+> [ ... ]
+> 
+> > +struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_prog *prog)
+> > +{
+> > +	struct bpf_binary_header *header;
+> > +	struct jit_ctx ctx;
+> > +	unsigned int image_size;
+> > +	u8 *image_ptr;
+> > +
+> > +	if (!prog->jit_requested)
+> > +		return prog;
+> > +
+> > +	memset(&ctx, 0, sizeof(ctx));
+> > +	ctx.prog = prog;
+> > +
+> > +	ctx.offsets = kcalloc(prog->len + 1, sizeof(int), GFP_KERNEL);
+> 
+> Is it safe to use kcalloc() here for potentially large array allocations?
+> 
+> Since the BPF verifier allows up to 1,000,000 instructions per program, this
+> could request up to 4MB of contiguous physical memory.
+> 
+> On systems with memory fragmentation, this large physically contiguous
+> allocation is highly likely to fail, unnecessarily aborting JIT compilation.
+> 
+> Would it be better to use kvcalloc() instead, consistent with other BPF JITs?
+> 
+
+Ack.
+Will change to kvcalloc().
+
+Regards,
+Kuan-Wei
+
+> > +	if (!ctx.offsets)
+> > +		return prog;
+> 
+> -- 
+> Sashiko AI review · https://sashiko.dev/#/patchset/20260511212756.3163955-1-visitorckw@gmail.com?part=1
