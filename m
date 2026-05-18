@@ -1,65 +1,66 @@
-Received: from mail-dl1-f73.google.com (mail-dl1-f73.google.com [74.125.82.73])
+Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94067270552
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 04:47:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C2A385509
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 04:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779079675; cv=none; b=D9Y04sApzPPRMnZ0aGzvBk5pGjb4U9eW990rDI7JZepjh9eWgURX7BDvyanEaGaImCCOZ2n4G8qI4tGNoepWvLemoUXQrjjQ4MFe7zP3VvFLcKgyTc37Ao6ygmy4ZUserFv4ZWpdAO4GdUBzuIJpHB3ptTiNift+CbTEGSw7tGQ=
+	t=1779079676; cv=none; b=kWqRle5KsJxImjnieRwu1o1+fIrJgKm+KA+0dWa69Ra+4QcnnPZ3NJx02ZXW3Wl6abIy8geQ2AcmL0vEj99V1q0ImVzlJ1w4Y5HGCfH1MCyXuEDR3FuaqZALHqX1W/8rFdSW7dZvZ+0zDyUjxVNnMrg2xa2EvRNdnFDNsE4JsvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779079675; c=relaxed/simple;
-	bh=qoozwfBDiN7ZsI8K4OD5U/OY10bC2BZpXnY6TRkFg24=;
+	s=arc-20240116; t=1779079676; c=relaxed/simple;
+	bh=M4TALmiKZilb0u+lhPWRfGvMJCr+kBUrEvnnlqnUv2w=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=J5Lt3nwWZEyR1yvrjNbZ0abap9miP0uYm0Kbcn8zm3EmYK2pWADnImzo0nB5AphtJrSZodz4/etDtm0PmcwmTLBmnNkfdFMosQTBpt+06YRmxuAJdnBZEeQd5nHr+yA37uCWU/RyLXOBVR8U79zB9gBBt5yfOhanl97ieTTQDJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=spduw99S; arc=none smtp.client-ip=74.125.82.73
+	 To:Cc:Content-Type; b=gdvKk2CLEaGfsRKXfQV+vikBDfTFI4KvNMOvyHFwQMds51UIOBczwuITShGcAtQi2kaoSGO1Rul0T3oLFJQrKptcHoGTNHGRsiuI5GbRlQsyBVhLirhxc8qnvNAAMakav9Phinvd5jv38QZ+2SToo5cY+Gfg4/YvCTagaH0WD+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aQueClA/; arc=none smtp.client-ip=74.125.82.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="spduw99S"
-Received: by mail-dl1-f73.google.com with SMTP id a92af1059eb24-130aab78a09so1473137c88.0
-        for <bpf@vger.kernel.org>; Sun, 17 May 2026 21:47:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aQueClA/"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2fe1cf409a1so3732154eec.1
+        for <bpf@vger.kernel.org>; Sun, 17 May 2026 21:47:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779079673; x=1779684473; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1779079675; x=1779684475; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z7BIH49ZbGVpqWGyC/PF2U37BJu1GatOcjrU2HEGUrA=;
-        b=spduw99S6VUh/PLP33RlqEBid+Klzpru683Zv9QaBChBNBhhaUhX/j4hIrOWMJMRoh
-         CMCRXclOjOXz/pG1Qm2RUuarZLZXi+9q41Lb6a1q2sIGuj26m0d9qRYi+hg/uT/HwdiL
-         UGXK5F351uidB45LqFppEUT/BYAqzwygh4mKlMcZ+a5p4PeRUMO7bZtLvVyX9aWCZWMc
-         UZ20ehVdFxN2wfo+tu1jkuMdo+VHDeW4t9MJhY9g131QAMj40uD0PiqnxH7Ug71pLga7
-         bTTJhu9yl94aL/Tde+9prxGNQkMFxyPVlCdMOMKyGPuwjW8drpS8PU8n5gQ2mmEjYuBE
-         HkWQ==
+        bh=Xy1UTgDV/XpXNGsXM34DAoH9zJ9hy0otqwfOVYZUB1U=;
+        b=aQueClA/3EWlBeoH7vEQTCdUs1umh8j6soeiXfVR2EeUhHd+g5IAkvbSNWC6AQoalI
+         f+w9ts+Jtr+qlnDfiUf1pqvfvXnpJAPm4wAq1qHZEdnmC/7QVWlr10kEM2MMjdQt4Yuc
+         XTKMdkNYj46IfewCILNnxQdjLKOgubrv1nSUk77hXz5CwYhdA3JBdNWrNR+va338NRSC
+         Cyy2zuavao9mZ0iu7OBOgRzwYPxIZvV9UrxSbWQ4SF6mMb2hUSkSeVzaXg2Dxvsf2Izc
+         kYMFsXMbN0R4ns+UmhhBLNYbuCCUbrGjllqkkbw1p/vftNzK83ybtMrH+lzZouJrubJK
+         SExA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779079673; x=1779684473;
+        d=1e100.net; s=20251104; t=1779079675; x=1779684475;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z7BIH49ZbGVpqWGyC/PF2U37BJu1GatOcjrU2HEGUrA=;
-        b=GWNXZXdaDTs09o4pPYn86zW0DR5+Png5GuyYieGQhdeN0zas9o5FNPzfYHNMMfqSWO
-         jXbtGm7NgJ8UlKQT19LT5l08sYqHSHkJhcReTFwtuWRU08alekm0jw3Bqh8CqSLJmP5u
-         itOcc/gk6z5IGm+OQny/tWLEE6FRPh6EWH2uymjlMvzilNWa2vZaiZXmcDde9XumjIQC
-         +3FSHroMMRx6Unpp+tNdcru09PbUbUgLekFXjyYj4FCcy0mf928rXRWL2sgJh4TDy6i9
-         CwkkiJeKhOnasuvWWb/UJVEI+XGqN99+KRJ6iDkuLqlxdRhzFjNKlAoLdLNII4ykr394
-         +dKg==
-X-Forwarded-Encrypted: i=1; AFNElJ9o+GA+go6GaSCXRNPDdw+ZGlptSk5AMypJAbuobQ0yWQRA5xFzrOXPYE8OXGPVJQByiSQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmRqAq2LxZKlCV3DwEqEho3yLsfd5QkKFEDSxSZ0IOnemdoLv6
-	X4JAVeUxnCwe8hrKQoAud86k8YacvWnediv20yxZQXl047i0Ul7gXjUHhFYisMy7SXHRZ2czejm
-	MWeU1LmjhEw==
-X-Received: from dlae15.prod.google.com ([2002:a05:701b:230f:b0:135:2b50:3913])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:4193:b0:12d:ca31:f1b4
- with SMTP id a92af1059eb24-135047447camr5873896c88.24.1779079672430; Sun, 17
- May 2026 21:47:52 -0700 (PDT)
-Date: Sun, 17 May 2026 21:47:26 -0700
-In-Reply-To: <20260515193314.1593560-1-irogers@google.com>
+        bh=Xy1UTgDV/XpXNGsXM34DAoH9zJ9hy0otqwfOVYZUB1U=;
+        b=pJmGRynSrxH0JeT3+VX4ptZ1kMBzd1rdpbAhykcCqmGmW8V5BG9qAX/bbgPSkbi5dU
+         yVjhLnZU6b8hAqZse7c3oFe+p5JhDPD1ssMXY+WcFeDqsv3hlFBmltyQTsaQXCq7Ff7U
+         EIcauhvIEoFkB4EOBLqJC+fYTwUnU/nVJ/uPBPF73dKiKpId4qEqgymw+4ggFmAPwBIh
+         2pCyBAs6o9lavSUeJJK+lB3qvbXIyDcLXLsXA/H0AqqSKdF1nL8qc64PwqGQHXkySYTe
+         +pE0DY8VvM6fBSnFcZ0KsxTbSba/e1bu0+/Y4yw1V/tdxWa3UZlVJi6YZ8TAY1GYXpNH
+         up1w==
+X-Forwarded-Encrypted: i=1; AFNElJ/BBY2tNlu3UFM5PYF8zFxDJr7F8pn+JME1asSF7oaFlSW7GCvT7jvHiFREWYJlFNlbArc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjhhWshYeDMNJCjkwywj4r1pjmmj6qbyS3nN7vPISHKmB9/FMl
+	YkSfBtd0/92HBTPoVzIw4+oaIMsHvP+niOsWmH6+IWqvwylAQARbUQhMYx59X22QADTmtSfiPjs
+	Y4Z/V2I5QPg==
+X-Received: from dycak13.prod.google.com ([2002:a05:7301:1c0d:b0:302:4f05:e74b])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7301:3d1a:b0:2da:1a81:588
+ with SMTP id 5a478bee46e88-303983c6515mr5286792eec.14.1779079674284; Sun, 17
+ May 2026 21:47:54 -0700 (PDT)
+Date: Sun, 17 May 2026 21:47:27 -0700
+In-Reply-To: <20260518044740.2526802-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260515193314.1593560-1-irogers@google.com>
+References: <20260515193314.1593560-1-irogers@google.com> <20260518044740.2526802-1-irogers@google.com>
 X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260518044740.2526802-1-irogers@google.com>
-Subject: [PATCH v6 00/14] perf build: Reduce build time by nearly half
+Message-ID: <20260518044740.2526802-2-irogers@google.com>
+Subject: [PATCH v6 01/14] tools build: Fix feature checks to touch target
+ files on success
 From: Ian Rogers <irogers@google.com>
 To: irogers@google.com, acme@kernel.org, james.clark@linaro.org, 
 	namhyung@kernel.org
@@ -76,180 +77,72 @@ Cc: 9erthalion6@gmail.com, adrian.hunter@intel.com, alex@ghiti.fr,
 	thomas.falcon@intel.com, yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-This patch series refactors Kbuild internals, BPF skeleton generation,
-Python AST pre-computation, and foundational tooling dependencies across
-the perf tool build system. By eliminating umbrella target synchronization
-barriers, decoupling static library prerequisites, parallelizing single-core
-script generators, and eradicating redundant feature checks, this series
-unlocks absolute theoretical peak multi-core concurrency during Kbuild startup.
+In tools/build/feature/Makefile, test-clang-bpf-co-re.bin and
+test-bpftool-skeletons.bin redirected grep output but never touched or
+created the $@ target file upon success.
 
-On a 28-core build workstation (make -j28 all from scratch), clean build
-latency improves by over 44%:
+Because the target file was never created on disk, Kbuild could never cache
+the result of the check. Consequently, Make treated the prerequisite as
+missing and continuously re-executed the Clang BPF backend and bpftool
+feature checks on every single sub-make evaluation during build startup.
 
-  Before:
-    real    0m29.006s
-    user    2m46.019s
-    sys     0m30.610s
+Refactor both feature check recipes to group the shell pipeline within
+curly braces and redirect both stdout and stderr to .make.output before
+touching $@ purely upon success (> $(@:.bin=.make.output) 2>&1 && touch $@).
+Grouping the pipeline ({ cmd1 | cmd2; }) ensures that compiler stderr is
+successfully captured in .make.output rather than escaping to the parent
+shell. This perfectly matches standard Kbuild feature check conventions,
+allowing Make to cache positive detections and avoid redundant sub-make
+forks during incremental builds. Add test-bpftool-skeletons.bin to the
+FILES list so that make clean correctly purges the generated binary. For
+test-clang-bpf-co-re.bin, add explicit source file prerequisite
+test-clang-bpf-co-re.c and simplify the Clang recipe using $<.
 
-  After:
-    real    0m16.091s
-    user    2m40.135s
-    sys     0m25.740s
+Tested-by: James Clark <james.clark@linaro.org>
+Assisted-by: Gemini:gemini-3.1-pro-preview
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/build/feature/Makefile | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-Saving 12.9 full seconds time per clean build. Furthermore, nothing to
-build incremental builds are improved by nearly 7x:
-
-  Before:
-    real    0m11.528s
-    user    0m9.633s
-    sys     0m6.965s
-
-  After:
-    real    0m1.717s
-    user    0m1.682s
-    sys     0m0.960s
-
-Summary of Patches:
-
-1: Fast-Path Feature Detection
-  - Refactors test-clang-bpf-co-re.bin and test-bpftool-skeletons.bin feature
-    checks to group shell pipelines within curly braces and redirect both stdout
-    and stderr to .make.output before touching $@ purely upon success
-    (> $(@:.bin=.make.output) 2>&1 && touch $@). Grouping the pipeline ({ cmd1 | cmd2; })
-    ensures that compiler stderr is successfully captured in .make.output rather
-    than escaping to the parent shell. This perfectly matches standard Kbuild
-    feature check conventions and ensures the target files are touched on disk
-    purely upon success, allowing Kbuild to cache positive detections and avoid
-    continuous sub-make re-evaluations during incremental builds. Adds
-    test-bpftool-skeletons.bin to the clean FILES list and explicit source
-    prerequisite test-clang-bpf-co-re.c.
-
-2-4: Flattening Umbrella Prepare Barriers
-  - builtin-trace embedded inclusions and pmu-events generation are completely
-    decoupled from the sequential "prepare" umbrella target, eliminating Make
-    AST double-parsing overhead and unchoking parallel compilation barriers.
-
-5-7: Decoupling & Pre-generating BPF Skeletons
-  - BPF skeleton rules are extracted out of Makefile.perf into bpf_skel.mak.
-  - Decouples bpftool bootstrap from top-level static libbpf dependencies,
-    attaching bpf-skel-prepare directly to the umbrella prepare target. This
-    allows Make to pre-compile bpftool and dump vmlinux.h in the background at
-    build startup, removing the 7-second serialization bottleneck before BPF
-    object compilation.
-  - Ensures benchmark skeleton intermediate .bpf.o files are cleanly removed
-    during make clean, and adds bpf-skel-prepare to .PHONY.
-
-8-9: Foundational Linkage Optimization
-  - Moves static libsymbol library prerequisites out of the prepare step.
-  - Eliminates redundant libbpf sub-make feature checks during static builds.
-
-10-11: jevents.py Concurrency & Deduplication
-  - Splits the massive 2.8 MB big_c_string literal out of pmu-events.c into a
-    dedicated pmu-events-string.c compilation unit. This slices C compilation
-    latency in half by compiling string and struct tables simultaneously across
-    separate CPU cores while preserving zero dynamic ELF relocations. Adds
-    pmu-events-string.c to .gitignore, declares extern const char big_c_string[];
-    locally inside output_string_file and output_file when split to prevent linkage
-    conflicts with empty-pmu-events.c, defers file closures to ensure identical
-    timestamps, and uses canonical Make 4.0 @: dependency chaining.
-  - Pre-populates jevents.py JSON ASTs and metric formulas in parallel across
-    all available CPU cores using ProcessPoolExecutor (accelerating Python
-    execution by 11x, from 3.3s down to ~290ms). Moves _init_worker to top-level
-    scope to ensure clean pickling under spawn multiprocessing start methods.
-
-12: Out-of-Tree Incremental Rebuild Fix
-  - Prefixes SCRIPTS (perf-archive, perf-iostat) with $(OUTPUT) to prevent
-    Make from continuously re-executing script installation rules on already
-    built out-of-tree builds.
-
-13-14: AST Parsing Optimization & Shell Fork Eradication
-  - Converts ZENS, ARMS, and INTELS in pmu-events/Build from recursive assignment
-    (=) to simply expanded assignment (:=) and replaces model_name/vendor_name
-    with pure GNU Make string functions. This guarantees Make executes directory
-    probing shell forks exactly once during AST parsing and evaluates path macros
-    purely in memory, completely eradicating over 7,800 redundant sub-processes
-    during out-of-tree build evaluation.
-  - Converts llvm-config shell queries in Makefile.config from recursive assignment
-    (=) to simply expanded assignment (:=). This eliminates ~185 redundant sub-processes
-    that were previously executed across object compilation dependency checks.
-
-Changes since v5:
-  - perf pmu-events (Patch 10): Refactored jevents.py to explicitly close output_file
-    first and output_string_file second at the absolute tail of main(), guaranteeing
-    that pmu-events-string.c receives a filesystem modification timestamp strictly
-    greater than or equal to pmu-events.c. This completely eliminates any nanosecond
-    timestamp discrepancy during Python teardown, ensuring Make's canonical @:
-    dependency chaining rule correctly sees pmu-events-string.c as fully up to
-    date and preventing redundant recompilations during incremental builds without
-    requiring manual touch commands in the Makefile.
-
-Ian Rogers (14):
-  tools build: Fix feature checks to touch target files on success
-  perf trace beauty: Make beauty generated C code standalone .o files
-  perf build: Decouple pmu-events from prepare umbrella target
-  perf build: Remove empty archheaders target
-  perf build: Move BPF skeleton generation out of Makefile.perf
-  perf build: Encapsulate vmlinux.h and bpftool in bpf_skel.mak
-  perf build: Pre-generate BPF skeleton tooling during umbrella prepare
-    phase
-  perf build: Move libsymbol dependency out of prepare step
-  perf build: Remove redundant libbpf feature check for static builds
-  perf pmu-events: Split big_c_string storage into standalone
-    compilation unit
-  perf pmu-events: Parallelize JSON and metric pre-computation in
-    jevents.py
-  perf build: Prefix SCRIPTS with output directory to fix continuous
-    rebuilds
-  perf pmu-events: Convert recursive shell assignments and macros to
-    Make built-ins
-  perf build: Convert llvm-config shell queries to simply expanded
-    variables
-
- tools/build/feature/Makefile                  |  13 +-
- tools/perf/.gitignore                         |   1 +
- tools/perf/Build                              |   2 +
- tools/perf/Makefile.config                    |  19 +-
- tools/perf/Makefile.perf                      | 423 ++----------------
- tools/perf/bench/Build                        |   6 +
- .../bpf_skel/bench_uprobe.bpf.c               |   0
- tools/perf/bench/uprobe.c                     |   2 +-
- tools/perf/bpf_skel.mak                       | 109 +++++
- tools/perf/builtin-trace.c                    |  32 +-
- tools/perf/pmu-events/Build                   |  26 +-
- tools/perf/pmu-events/jevents.py              |  59 ++-
- tools/perf/trace/beauty/Build                 | 276 ++++++++++++
- tools/perf/trace/beauty/arch_errno_names.c    |   2 +
- tools/perf/trace/beauty/arch_errno_names.sh   |   2 +-
- tools/perf/trace/beauty/beauty.h              |  60 +++
- tools/perf/trace/beauty/eventfd.c             |   6 +-
- tools/perf/trace/beauty/fsconfig.c            |   5 +
- tools/perf/trace/beauty/futex_op.c            |   5 +-
- tools/perf/trace/beauty/futex_val3.c          |   5 +-
- tools/perf/trace/beauty/mmap.c                |  24 +-
- tools/perf/trace/beauty/mode_t.c              |   6 +-
- tools/perf/trace/beauty/msg_flags.c           |   8 +-
- tools/perf/trace/beauty/open_flags.c          |   2 +
- tools/perf/trace/beauty/perf_event_open.c     |  21 +-
- tools/perf/trace/beauty/pid.c                 |   5 +-
- tools/perf/trace/beauty/sched_policy.c        |   8 +-
- tools/perf/trace/beauty/seccomp.c             |  12 +-
- tools/perf/trace/beauty/signum.c              |   6 +-
- tools/perf/trace/beauty/socket_type.c         |   6 +-
- .../perf/{util => trace/beauty}/syscalltbl.c  |   0
- .../perf/{util => trace/beauty}/syscalltbl.h  |   0
- tools/perf/trace/beauty/tracepoints/Build     |  21 +
- tools/perf/trace/beauty/waitid_options.c      |   8 +-
- tools/perf/util/Build                         |  17 +-
- tools/perf/util/bpf-trace-summary.c           |   2 +-
- tools/perf/util/env.c                         |   4 -
- tools/perf/util/env.h                         |   1 +
- 38 files changed, 688 insertions(+), 516 deletions(-)
- rename tools/perf/{util => bench}/bpf_skel/bench_uprobe.bpf.c (100%)
- create mode 100644 tools/perf/bpf_skel.mak
- create mode 100644 tools/perf/trace/beauty/fsconfig.c
- rename tools/perf/{util => trace/beauty}/syscalltbl.c (100%)
- rename tools/perf/{util => trace/beauty}/syscalltbl.h (100%)
-
+diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+index 4e4a92ef5e1e..9da5a4fd956a 100644
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -72,7 +72,8 @@ FILES=                                          \
+          test-file-handle.bin			\
+          test-libpfm4.bin			\
+          test-rust.bin				\
+-         test-libopenssl.bin
++         test-libopenssl.bin			\
++         test-bpftool-skeletons.bin
+ 
+ FILES := $(addprefix $(OUTPUT),$(FILES))
+ 
+@@ -379,9 +380,9 @@ $(OUTPUT)test-libaio.bin:
+ $(OUTPUT)test-libzstd.bin:
+ 	$(BUILD) -lzstd
+ 
+-$(OUTPUT)test-clang-bpf-co-re.bin:
+-	$(CLANG) -S -g --target=bpf -o - $(patsubst %.bin,%.c,$(@F)) |	\
+-		grep BTF_KIND_VAR
++$(OUTPUT)test-clang-bpf-co-re.bin: test-clang-bpf-co-re.c
++	{ $(CLANG) -S -g --target=bpf -o - $< |	\
++		grep BTF_KIND_VAR; } > $(@:.bin=.make.output) 2>&1 && touch $@
+ 
+ $(OUTPUT)test-file-handle.bin:
+ 	$(BUILD)
+@@ -393,8 +394,8 @@ $(OUTPUT)test-libopenssl.bin:
+ 	$(BUILD) $(shell $(PKG_CONFIG) --libs --cflags openssl 2>/dev/null)
+ 
+ $(OUTPUT)test-bpftool-skeletons.bin:
+-	$(SYSTEM_BPFTOOL) version | grep '^features:.*skeletons' \
+-		> $(@:.bin=.make.output) 2>&1
++	{ $(SYSTEM_BPFTOOL) version | grep '^features:.*skeletons'; } \
++		> $(@:.bin=.make.output) 2>&1 && touch $@
+ 
+ # Testing Rust is special: we don't compile anything, it's enough to check the
+ # compiler presence. Compiling a test code for this purposes is problematic,
 -- 
 2.54.0.563.g4f69b47b94-goog
 
