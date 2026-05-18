@@ -1,97 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882132DFF04
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 16:45:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10ED027816C
+	for <bpf@vger.kernel.org>; Mon, 18 May 2026 17:07:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779122738; cv=none; b=sKhpR2X6DJACjiYZUInf88aWbNts6+BqE4RcXIqy+XQvlHf07fiRzXPBrsC7fTJbPMO3rbvWZgnFwvDFisphqSEq3rOyx8XXfCSrK9q2zYFGrtTAy+Qn5d8xkiA6YGwGnluvgwbsW2WNSxVOqNM7mk6oBNXHFW+gt8X/2Kl23aM=
+	t=1779124042; cv=none; b=g0qZ4oVPt9LRpLfe4IeT1fSdeE4usz3MT1u3jFttxcM3y30QXG/j0a4JjOTGb14RFZjZkQL9Qba6t7ZvLXfytLT9luctaHJ39fj1VUjmggq/+k4kiGCeTuoz4Lw11jJhsIAV/Co+gcUV+QZIB/N6hII4LAYAWqLSqYhBe9IIAOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779122738; c=relaxed/simple;
-	bh=9lI3n3wJfCupGx6bm0Ikv4WuSk3rSG2iHjR2vQfbjS0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hRcMbLTiGZPuCrM6YvKXM7aa9NTll58aDosNHXNwoxyUq5FHCNV8T7JAc/CSfjATEE6QwJ34+5TkgvSNfUc9+B+r7dV2arOnwEK4yr+YE2GvoEVbC4yusuhd95DKXqL0dUXRK5bqYSv8WEpPwkWiyGMZ2GiHYZpZS8vF5Vt3S3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OPCNV6NB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779124042; c=relaxed/simple;
+	bh=0d92nKsILldaG5KcgGwmxuWMoDm+8edMkHW2YKbN2Og=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Scw3zziPLQshZMUHMATJOFE0+tUkTR0kDn1vAzjaA/wt948tG+IUcYav30BAqIT9wQDq5iNf5OFi+VCRSYKeYN7xe5DD/ESWktiM0pnLgWKnYXHhfV1E3SyhLitnqYdmOjnXpM4Tg2dFoGTIR4he+EaYyBO5zdUjy1rrS89+WP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HLRdHPsi; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OPCNV6NB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21D3BC2BCB7;
-	Mon, 18 May 2026 16:45:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779122738;
-	bh=9lI3n3wJfCupGx6bm0Ikv4WuSk3rSG2iHjR2vQfbjS0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=OPCNV6NBF4a7GnQL+h8KG17ALCho/PSMzDD/50icYv+f3eK8m2QvGd/jt1temWqDt
-	 njQ82VuyqGsww4kQ2RjCCdC9aganC+vGKGp1MrBI7wBtcadNFvBO4Zr+JYIelYUPHp
-	 79fir6rCoBV4vJDFhfBMkqXybfYxtGCIdaCDILRLupKAC80FyIoP5uadXpAKMmxBie
-	 C5YpMbJg0MVWHNGNHhO+kdgpgEXy5LTutpI0sjbwk+Ny1wqJhYFgMELNSm3isAUkod
-	 zfUbxEshDDES8NdMDi7DrA86vLKpyMn2KRc3Q2osjHcXhVuq9tSOkglTBnIB+kio+8
-	 +1W/RKrY74d2g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v6 5/6] selftests/bpf: add bpf_icmp_send kfunc
- IPv6 tests
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mahe Tardy" <mahe.tardy@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260518122842.218522-6-mahe.tardy@gmail.com>
-References: <20260518122842.218522-6-mahe.tardy@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 18 May 2026 16:45:37 +0000
-Message-Id: <20260518164538.21D3BC2BCB7@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HLRdHPsi"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c7b9f54d3deso2091154a12.1
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 10:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779124040; x=1779728840; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pQBD1pOu6yZoCHpJ70rmlGRDmngML/+8uAz5xw0+M0Q=;
+        b=HLRdHPsiMYFVF7ON4AtIutoJBVmP5AVi0aJxiXaBD3Ygbr68I5BTp/chi9olZS5Kpc
+         4JjXl0N2yEruLmtbnXU0OAcYll10IvOKL/wN8tgt5gtEy4nT4GUslAanRSWmC1k2SmYX
+         QltRLGBIHA4PXHNJkZ7ERJ0VbAOeczJljTqN7VARRkLtIQGRsAqGmQ8YHesPtyH/qrAg
+         h4gq7DL3hrjPQYWWO1O3d+U9gMhQ7k7QDQRn6fiSw2DfSkyAYqYXfTv/ntAJTL16UXbg
+         +uu7ar4tytqvRjfvQ8QyWUWhXctisNJfCjxB2XNDWBn+i7+KLxXRZpRoALpfw7sITquE
+         2EoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779124040; x=1779728840;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pQBD1pOu6yZoCHpJ70rmlGRDmngML/+8uAz5xw0+M0Q=;
+        b=ib6uKftBQhGxAybcSXK1NaC/R5V2smNSmBSqwymLGwRb1iGbssyG+OX6oP6KrGjBM/
+         SfdNmFDQxV3c6ELCZWPS7EOERyZns3iFaCTmJG1kj3WGpUeUD5HSw3L/zeVZ9767jPUC
+         ygQArrKmxeUcBLOGevBmWKQmYcn1h8NoruDrsF1KIrJozByuPX3UDUyDVXYHSWdKGzGD
+         9MhqNTdAE1XnepKInRMGfAB6+r6QhBY1jw1SjvLKZ+Jeh/MVRvpNq/w4pfdva1niGZnC
+         yQC7XoffI/slrRLMCDnueYMWwghOUg2sEHCg6jWH8QJ1hx53YCCywFUFuXRsbIaMVy4O
+         JoXw==
+X-Forwarded-Encrypted: i=1; AFNElJ8SH9UOJeWKtRzoPGpxywM2hdgE5x8m2K1k/vJ+cdib5L1dQM7xtfKqH80aPQmXIPQOzys=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwL15Zx4OBNH4CiCus6EOvJtzZxHlNJZEJyC5Psr0rWIJaz9pz
+	dEs7HBLUk34Ia4G31lsyMXf3IIL0pIyQpe4NdwzQwxJrq62MY38K5SGe
+X-Gm-Gg: Acq92OED8wlLAPgBQ6IUwXq7eX6lXPF2CP4X6EEsFkQbqFE4RxKbwVQ8NWan7RDc52n
+	IMOxdw80onygQGIZvASxxnKDqbkJHn5fOX/nZuhx1PC8Fp42DoqI/FdEcW2NSbC1lAkF8TNyaj8
+	+kNSO2FqkxLtx4bAHCW4bHfWZ+0KGWcOEAr4YNwp/zSoULjxXmuoya2Bt/Vxek8RDA0/ZN71PeE
+	/a88clCi7yODGFPDVzxMezZ/GaWM+SrFVW0jOjQDujclsZe5WAULyeL2x9K6+poDmM2Rrx77Jqp
+	UdaDiwE3QgqSemNsdE6I90I4WQsHnnH2AtlAJjb7vzZL+XUvaF0ZCPhK2ykN73o347x6aiUbxjk
+	4h/HKFs5mZ5EfnI8Or7OXjERqB42e1hVgvD7qaucU7wR19KU9htrMVe7G3wJJCv52gy6/cAZKBm
+	FbvJKi0csiNklu9aMStYyRkoW5XCYyiVnNtQ==
+X-Received: by 2002:a05:6a20:748d:b0:3a3:1164:c7a6 with SMTP id adf61e73a8af0-3b22e81f7a7mr17501052637.14.1779124040350;
+        Mon, 18 May 2026 10:07:20 -0700 (PDT)
+Received: from google.com ([118.150.148.19])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c82bb0fef5esm13229899a12.15.2026.05.18.10.07.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 May 2026 10:07:20 -0700 (PDT)
+Date: Tue, 19 May 2026 01:07:09 +0800
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: Greg Ungerer <gerg@kernel.org>
+Cc: geert@linux-m68k.org, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+	jolsa@kernel.org, jserv@ccns.ncku.edu.tw, eleanor15x@gmail.com,
+	marscheng@google.com, linux-kernel@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org, bpf@vger.kernel.org,
+	Daniel Palmer <daniel@thingy.jp>
+Subject: Re: [PATCH bpf-next v3] m68k, bpf: Add initial BPF JIT compiler
+ support
+Message-ID: <agtHPT7Oo4MZ6CBc@google.com>
+References: <20260511212756.3163955-1-visitorckw@gmail.com>
+ <f30f7e98-4749-4925-b999-2653941b42ee@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f30f7e98-4749-4925-b999-2653941b42ee@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Buffer truncation and type mismatch when calling getsockname() f=
-or IPv6 sockets.
---
+Hi greg,
 
-commit 324aeb5b326896da717647e51a1e69a4c3e6f647
-Author: Mahe Tardy <mahe.tardy@gmail.com>
+On Tue, May 12, 2026 at 09:57:11PM +1000, Greg Ungerer wrote:
+> Hi Kuan-Wei,
+> 
+> On 12/5/26 07:27, Kuan-Wei Chiu wrote:
+> > Add a BPF JIT compiler for the m68k architecture.
+> > 
+> > The JIT generates m68k machine code targeting m68020+ processors. It
+> > currently excludes 68000/68010 and coldfire processors, as it relies on
+> > 32 bit branch displacements (b<cc>.l) to handle large bpf programs.
+> 
+> FWIW the ColdFire ISA_B and newer instruction set extensions do support
+> the 32 bit branch displacement instruction forms. So that would mean that
+> at least the MMU based version 4 cores may be able to be supported
+> without too much extra effort.
+> 
+Sorry for getting back to you so late, and thanks for the info!
 
-selftests/bpf: add bpf_icmp_send kfunc IPv6 tests
+I haven't thoroughly checked what else the current implementation might
+lack for coldfire support, but I suspect it won't be as simple as just
+modifying the kconfig. For instance, at least the exg instruction I'm
+currently using is not supported on coldfire.
 
-This commit extends the existing ICMP send tests with IPv6 support.
+Since the current patch is already quite large, I'm inclined to focus
+on getting everything running correctly on classic m68k first. Once
+this initial support is merged in-tree, we can revisit it and figure
+out the necessary adjustments for coldfire.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c b/t=
-ools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> --- a/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_kfunc.c
-> @@ -81,14 +95,13 @@ static void read_icmp_errqueue(int sockfd, int expect=
-ed_code)
->  }
-> =20
->  static void trigger_prog_read_icmp_errqueue(struct icmp_send *skel,
-> -					    int code)
-> +					    int code, int af, const char *ip)
->  {
->  	int srv_fd =3D -1, client_fd =3D -1;
->  	struct sockaddr_in addr;
->  	socklen_t len =3D sizeof(addr);
-> =20
-> -	srv_fd =3D start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0,
-> -			      TIMEOUT_MS);
-> +	srv_fd =3D start_server(af, SOCK_STREAM, ip, 0, TIMEOUT_MS);
->  	if (!ASSERT_GE(srv_fd, 0, "start_server"))
->  		return;
-> =20
->  	if (getsockname(srv_fd, (struct sockaddr *)&addr, &len)) {
->  		close(srv_fd);
->  		return;
->  	}
->  	skel->bss->server_port =3D ntohs(addr.sin_port);
+That being said, getting coldfire supported would definitely be cool!
 
-Since start_server() can now return an IPv6 socket, does getsockname() trun=
-cate
-the 28-byte IPv6 address data into the 16-byte sockaddr_in structure here?
-
-Should addr be updated to a struct sockaddr_storage to safely handle both
-address families, along with a cast to read the port properly?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518122842.2185=
-22-1-mahe.tardy@gmail.com?part=3D5
+Regards,
+Kuan-Wei
