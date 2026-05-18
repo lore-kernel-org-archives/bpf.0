@@ -1,74 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B3D91DB13A;
-	Mon, 18 May 2026 19:36:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA336346AC2;
+	Mon, 18 May 2026 19:47:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779132998; cv=none; b=gXww8pimhU4u57iSdZCtJMp+yHILEPlxtj61B+8kKFEvfOdaIYDyY4Vt7buKWCWDRb7l9q81lbpm1r18yg6aOYIJ3Z9dNnE7M8W43lB0JXhfgurE061X4f0fc9Xy/fs+IqUxCKo+YFBHfkuzRTJEtNjxtw0nG0BpK7PCi+IIR+I=
+	t=1779133641; cv=none; b=C3RlBUm4zScrsQDoVPZkKrYyS8E/zQ3gFtGnq+02gHCOLvsZ0BdvE7z/cVbviQfifaWLoajL5ld/YqKslxlLEMhshGjtUg6sx+aPdT6HVOjGta6Fi95/ETsP7JH1LLD9Usz2Z6LSzTxW6+KkxWvf1lnpwzQKMyBwdJI46zW48+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779132998; c=relaxed/simple;
-	bh=Wi4BvHbnLogHwDnFAOY65k7rUtfMvJIPCaPQGLK8bGM=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=qfHNUpXLhMsFltuTAOjvBsFlBTq3V5qOqao2fYmOPdXcKkI528hfdN4GiMogGZbUyM/8rws44/DaEm9VN+BIbmsoEATFqXgxal5X5daP3dCOktelAORQgwfi06hhyVNiFl3X5jVqPeAZ0XUsf8j2W7xsNlgfddENf7I8OVFUErY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nHUbWISf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779133641; c=relaxed/simple;
+	bh=kxII/5G2NwPmXEG++FHPsH1/AEBqc9FKZzrBq4bibjc=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=bdzeSFxRnCs81iwUQ8goUzEsX7eBa5qZ6DGlmBkqSpfC8zG1pE5ERfxLLYMd4aD20Kjb25+GJGk/YnDzJ0uG02SorsD8U/xrfMSMPkrULaeOqP9B8YWjL6+DdmVW6t8Iq+v2twqjOUnfRwpLWPTcdXp8lzA8NPrWH04stP6dJOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=CazOhGFW; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nHUbWISf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D39DC2BCC9;
-	Mon, 18 May 2026 19:36:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779132997;
-	bh=Wi4BvHbnLogHwDnFAOY65k7rUtfMvJIPCaPQGLK8bGM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=nHUbWISfDDPMmeTskxlUgDj20zlZf5ueVVBgVCkkys/td237mdFYzqbo+3e2bKrP7
-	 +I6JaY27VuRSK6VaJc0oAH6tC29ivAtndPbkgjI9eV967MvzipLcFuj5JLNgXhh+mW
-	 CZ9C1ihR87awMWUbC6RDLrjiDLt5NPSmseTMxVMXVSTL7K32VAn/RxvxamnBkoqy17
-	 a7XZvINC1MAYhvNAVPTkjob5f58PPVKUsCR+hZxb628znZfT5lp1eAXkpEt657oTLn
-	 gkhWX7RSTVep0I5Ayg9VVCl2sTYfMQeM69J2pVwjQPO24a8jxhS+YAw96uwf09snN5
-	 AwY37XiJh6aKA==
-Date: Mon, 18 May 2026 09:36:36 -1000
-Message-ID: <64f59b64664f769661a8b8cd587c85f8@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Qing Ming <a0yami@mailbox.org>
-Cc: Josef Bacik <josef@toxicpanda.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Koutný <mkoutny@suse.com>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Yosry Ahmed <yosry@kernel.org>,
-	cgroups@vger.kernel.org,
-	linux-block@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="CazOhGFW"
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 7D3B220B7166;
+	Mon, 18 May 2026 12:47:14 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7D3B220B7166
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1779133634;
+	bh=fyTfiydw4H8mIqzNYtreKgjRdnGF1qAhJXcvnEyTJws=;
+	h=From:To:Subject:Date:From;
+	b=CazOhGFWXaypq1pD5CFDrY/+iNmzm5o6PiJ7ox8jpZvJYqw84KJonnLZmSZeAVj7B
+	 OG+A/XbnmSewzH/pKJ4fyaobPtl3eFn+8C5IylCqk3sE2St7RMwOBjFDw/nhy3ECix
+	 KjWk/RWMBdg136Qmnfykz9wTjqd71RczCJH2lsJQ=
+From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+To: kys@microsoft.com,
+	haiyangz@microsoft.com,
+	wei.liu@kernel.org,
+	decui@microsoft.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	leon@kernel.org,
+	longli@microsoft.com,
+	kotaranov@microsoft.com,
+	horms@kernel.org,
+	shradhagupta@linux.microsoft.com,
+	ssengar@linux.microsoft.com,
+	ernis@linux.microsoft.com,
+	shirazsaleem@microsoft.com,
+	linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH v2] cgroup/rstat: validate cpu before
- css_rstat_cpu() access
-In-Reply-To: <20260516070849.106141-1-a0yami@mailbox.org>
-References: <20260515122952.59209-1-a0yami@mailbox.org>
- <20260516070849.106141-1-a0yami@mailbox.org>
+	linux-rdma@vger.kernel.org,
+	stephen@networkplumber.org,
+	jacob.e.keller@intel.com,
+	dipayanroy@microsoft.com,
+	leitao@debian.org,
+	kees@kernel.org,
+	john.fastabend@gmail.com,
+	hawk@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	ast@kernel.org,
+	sdf@fomichev.me,
+	yury.norov@gmail.com
+Subject: [PATCH net 0/2] net: mana: Fix NULL dereferences during teardown after attach failure.
+Date: Mon, 18 May 2026 12:43:49 -0700
+Message-ID: <20260518194654.735580-1-dipayanroy@linux.microsoft.com>
+X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hello,
+When mana_attach() fails (e.g. during queue allocation), the error
+cleanup frees apc->tx_qp and apc->rxqs and sets them to NULL. Multiple
+subsequent teardown paths can then dereference these NULL pointers,
+causing kernel panics.
 
-> Qing Ming (1):
->   cgroup/rstat: validate cpu before css_rstat_cpu() access
+Patch 1 adds NULL guards in the low-level teardown functions
+(mana_fence_rqs, mana_destroy_vport, mana_dealloc_queues) so they are
+safe to call regardless of queue initialization state. This covers all
+callers: mana_remove(), mana_change_mtu() recovery, and internal error
+paths in mana_alloc_queues().
 
-Applied to cgroup/for-7.1-fixes.
+Patch 2 addresses the queue reset work handler specifically, where an
+unconditional mana_detach() on an already-detached port caused
+redundant teardown. It checks netif_device_present() to skip the detach
+and directly retry mana_attach().
 
-In hindsight, we should have added a separate kfunc wrapper from the
-start instead of tagging css_rstat_updated() with __bpf_kfunc directly,
-which would have avoided the rename. Oh well, it is what it is.
+Dipayaan Roy (2):
+  net: mana: Add NULL guards in teardown path to prevent panic on attach
+    failure
+  net: mana: Skip redundant detach in queue reset handler if already
+    detached
 
-Thanks.
+ drivers/net/ethernet/microsoft/mana/mana_en.c | 77 ++++++++++++-------
+ 1 file changed, 48 insertions(+), 29 deletions(-)
 
---
-tejun
+-- 
+2.43.0
+
