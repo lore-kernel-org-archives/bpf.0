@@ -1,135 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F693AC0F6
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 05:31:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 277563DF00F;
+	Mon, 18 May 2026 06:12:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779082284; cv=none; b=bOGBVW/xnEYZ1c+dS8nelG6rZI8Nszdm9rLMGCtTwNtx78vNAhHEBeYd4qwJIQCTlgHZs/YJCCibJPxFqVrr3HwC0pMEcfiQ2Rm+HgHOj8tv64bCkHNE69/5EMdbdzzWoYXQQOipKwpdpQQ2lc6pyhwT4r6PwUPLyHVGGeJBSsM=
+	t=1779084774; cv=none; b=d9b+ywfaZrR95dSIkJLoL/bytcp5SsRt+m1c5y1rbsLFbLeY6hc7f8oYMEn+zfiHgYIN/oroBZERErFcW7fljWycrvKwDiB0TmWTElpm624dkGQS9TNtYceAnuFkYKzH7LbjxnCuFfu6IE4LXM+x0bKdkWwN03Pf2+tA2womeQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779082284; c=relaxed/simple;
-	bh=ibCvXq5cqOS9Dpdz4d10BNfs2EZFKjZN8vIYj2HpMnQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=M3ivXJ5ebpGie2MGrVVhDig8hgYCmiyvdCFKqqJEUj3RUikPJCFkw0huIrSMWdokZaJsN69lViGiXmnH7Afz6pspzOHbgxXAEt9hnHeo9vFR4QrLzVLduI9I7ypU24a94EFQKhb8tNRP0PcoPrB0OeSy/Ww/bIuXvl3k4Qz7Xno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M3DHcbyE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779084774; c=relaxed/simple;
+	bh=cmW47h1N3C1ApXsJh8U96zGnZ7wWIBEJGi1VKE6Z9GE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oAYLYYZnEQPm703OLRbPALz7RMdwkK/iXzPPz0NsuWfZolvHcy3k86HeI6IA8Go09cP6yigU8BpN9aySEUZf0rD7ZISMqxIfgYziFdzQ8oJ4uFbcQaIGjY/nHRia1o+EdtvHf/Q451Bac8xRfdfLEoSeYFh4uvVX5tucCIHvt3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PbS+MVdB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M3DHcbyE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EF28C2BCB7;
-	Mon, 18 May 2026 05:31:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PbS+MVdB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3908FC2BCB7;
+	Mon, 18 May 2026 06:12:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779082284;
-	bh=ibCvXq5cqOS9Dpdz4d10BNfs2EZFKjZN8vIYj2HpMnQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=M3DHcbyE8VmeyI8Ns6XDm2auEI0oFM6iz5Pd9fpX2oJdJPsGio/+ahQyKdX1OhJk4
-	 kf3FTmb3232d7s724ECZvLtrluGlPdADXoltJXLXqQ8PU4RaIXGdadt2nYBgg70AgL
-	 4cDLAa4B5ekXbgzBIiyG1L9iOV8WK38hggEMv5KsT9ey3nry3pul22YuE3l5gD3mkp
-	 ov9tiikbY39VyWMdarQKVk3VBJqqzvNfGeN2hfmsshiCNKTxaVaMzZIcuY7qw3I36n
-	 wJgP2uI6w70KNC/pQzxvCZc8s3womQebchAAQ19nEe0AGDEIQwXcn4+RjsdsgVuSou
-	 rm6E2yaceSWYg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3] libbpf: fix UAF in strset__add_str()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Carlos Llamas" <cmllamas@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260518050550.2600101-1-cmllamas@google.com>
-References: <20260518050550.2600101-1-cmllamas@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 18 May 2026 05:31:23 +0000
-Message-Id: <20260518053124.2EF28C2BCB7@smtp.kernel.org>
+	s=k20201202; t=1779084773;
+	bh=cmW47h1N3C1ApXsJh8U96zGnZ7wWIBEJGi1VKE6Z9GE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PbS+MVdBc+u+VJjVs19UKn9E3xWONbgT2lQfrjyacXaH0Dq8SJkpY2fDQvftzFRmQ
+	 VXVE32LlwR1d+6RYHUYRXUGDVo9EtVLlURf9BRtEVBWTcWNTmmtbaUotDiWt9sDM+v
+	 u28OTAe/UMZKcSY15YD4E4gMMDMtf1VR25vC8VM9Ovp5/vPwLsQL4mvAev2FUE2Pb/
+	 iw/r0nDo5JqBxcynLm4atAS7oWd2HOIW21kVfSPH7u5DX9ZbMFv5RnR4qRPt7HW+GY
+	 0nO3KuZH4FtxIEsaEsnG8XJR4WoMrgimQ4ztts3yJM71LFPX61WXGD+UO9cqU4Al7t
+	 dP285yXEYefZA==
+Date: Sun, 17 May 2026 23:12:50 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: acme@kernel.org, james.clark@linaro.org, 9erthalion6@gmail.com,
+	adrian.hunter@intel.com, alex@ghiti.fr,
+	alexandre.chartre@oracle.com, andrii@kernel.org,
+	ankur.a.arora@oracle.com, aou@eecs.berkeley.edu,
+	bpf@vger.kernel.org, collin.funk1@gmail.com, costa.shul@redhat.com,
+	daniel@iogearbox.net, dapeng1.mi@linux.intel.com, dsterba@suse.com,
+	eddyz87@gmail.com, howardchu95@gmail.com, jolsa@kernel.org,
+	leo.yan@arm.com, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, martin.lau@linux.dev,
+	memxor@gmail.com, mingo@redhat.com, mmayer@broadcom.com,
+	nathan@kernel.org, palmer@dabbelt.com, peterz@infradead.org,
+	pjw@kernel.org, qmo@kernel.org, ricky.ringler@proton.me,
+	song@kernel.org, swapnil.sapkal@amd.com, terrelln@fb.com,
+	tglozar@redhat.com, thomas.falcon@intel.com,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH v4 11/14] perf pmu-events: Parallelize JSON and metric
+ pre-computation in jevents.py
+Message-ID: <agqt4sGEQxcYg7ko@google.com>
+References: <CAP-5=fWfrGMV4EafqkwQO-R33c_szXcxVLgH0c4k2zt3zj4HdQ@mail.gmail.com>
+ <20260515173852.1378571-1-irogers@google.com>
+ <20260515173852.1378571-12-irogers@google.com>
+ <agd2-MgXgs---InR@google.com>
+ <CAP-5=fXSLgN6hXtQattTp9gqxBkO1gi97EWRF45_0ZKQcK0Z+A@mail.gmail.com>
+ <agpi522tGtMWwvld@z2>
+ <CAP-5=fXJhx6enPranMaTsDcbf86bJMx7kvHeRGSFkA_+8mRB6g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fXJhx6enPranMaTsDcbf86bJMx7kvHeRGSFkA_+8mRB6g@mail.gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Use-After-Free in btf__add_* APIs when called with strings from bt=
-f__name_by_offset on an unmodifiable BTF.
-- [Medium] Undefined Behavior in pointer comparison and arithmetic potentia=
-lly re-introducing UAF.
---
+On Sun, May 17, 2026 at 07:33:32PM -0700, Ian Rogers wrote:
+> On Sun, May 17, 2026 at 5:52 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > On Fri, May 15, 2026 at 04:05:40PM -0700, Ian Rogers wrote:
+> > > On Fri, May 15, 2026 at 12:41 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> > > >
+> > > > On Fri, May 15, 2026 at 10:38:48AM -0700, Ian Rogers wrote:
+> > > > > Currently, jevents.py parses hundreds of JSON event and metric files
+> > > > > sequentially across all CPU architectures during Kbuild startup, taking
+> > > > > ~3.3 seconds of pure single-core execution time.
+> > > >
+> > > > I'm curious about this.  Does it really need to parse all architectures?
+> > > > Oh... is it for perf stat record/report?
+> > >
+> > > So it is controlled by JEVENTS_ARCH and JEVENTS_MODEL:
+> > > https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/tools/perf/pmu-events/Build?h=perf-tools-next#n24
+> > > The default for JEVENTS_ARCH is SRCARCH (e.g. x86) while JEVENTS_MODEL
+> > > defaults to "all". We have a build test for JEVENTS_ARCH is "all":
+> > > https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/tools/perf/tests/make?h=perf-tools-next#n74
+> > > So saying "all CPU architectures" is a bit over the top, but not
+> > > wholly inaccurate.
+> >
+> > Ok, so it's all x86 models.  I think it's ok to have "all" for build
+> > tests.
+> >
+> > >
+> > > Fwiw, I created a script to convert CPUIDs into models:
+> > > https://web.git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/tools/perf/pmu-events/models.py?h=perf-tools-next
+> > > which maybe could be used to reduce the perf binary size by building
+> > > only the native CPU's JSON. It is a useful script for debugging :-)
+> >
+> > Sounds like it should be used by default to pick the current model.
+> 
+> Having a build of perf tied to a particular model like Skylake,
+> doesn't seem very good for distributions. I think the default should
+> try to match what we hope the distributions will do, so an x86 binary
+> should run on all x86 models.
 
-commit c0c79bff673db7048c82410ff03ad09f2f25dbab
-Author: Carlos Llamas <cmllamas@google.com>
+Oh right, distros will need it.
 
-    libbpf: fix UAF in strset__add_str()
+Thanks,
+Namhyung
 
-    strset_add_str_mem() might reallocate the strset data buffer in order to
-    accommodate the provided string 's'. However, if 's' points to a string
-    already present in the buffer, it becomes dangling after the realloc.
-
-> diff --git a/tools/lib/bpf/strset.c b/tools/lib/bpf/strset.c
-> index 2464bcbd04e03..d229961ff2fcd 100644
-> --- a/tools/lib/bpf/strset.c
-> +++ b/tools/lib/bpf/strset.c
-
-[ ... ]
-
-> @@ -107,6 +107,37 @@ static void *strset_add_str_mem(struct strset *set, =
-size_t add_sz)
->  			      set->strs_data_len, set->strs_data_max_len, add_sz);
->  }
-> =20
-> +static long strset_str_append(struct strset *set, const char *s)
-> +{
-> +	const char *old_data =3D strset__data(set);
-> +	long len =3D strlen(s) + 1;
-> +	void *p;
-> +
-> +	/* Hashmap keys are always offsets within set->strs_data, so to even
-> +	 * look up some string from the "outside", we need to first append it
-> +	 * at the end, so that it can be addressed with an offset. Luckily,
-> +	 * until set->strs_data_len is incremented, that string is just a piece
-> +	 * of garbage for the rest of the code, so no harm, no foul. On the
-> +	 * other hand, if the string is unique, it's already appended and
-> +	 * ready to be used, only a simple set->strs_data_len increment away.
-> +	 */
-> +	p =3D strset_add_str_mem(set, len);
-> +	if (!p)
-> +		return -ENOMEM;
-> +
-> +	/* The set->strs_data might have reallocated and if 's' pointed
-> +	 * to an internal string within the old buffer, then it became
-> +	 * dangling and needs to be reconstructed before the copy.
-> +	 */
-> +	if (old_data && old_data !=3D strset__data(set) &&
-> +	    s >=3D old_data && s < old_data + set->strs_data_len)
-
-Does this comparison invoke undefined behavior if old_data was freed by
-realloc() inside strset_add_str_mem() or if s is an unrelated pointer?
-
-According to the C standard, comparing or subtracting freed or unrelated
-pointers using relational operators can invoke undefined behavior. Compilers
-tracking pointer provenance might deduce the pointer was freed and optimize
-away the bounds check entirely, bypassing the safety check.
-
-Could these pointers be cast to uintptr_t before comparison to safely check
-the bounds?
-
-Does a similar use-after-free still exist in the btf__add_* APIs
-(e.g. btf__add_str) when called with strings from btf__name_by_offset()
-on an unmodifiable BTF?
-
-If a user passes a string retrieved via btf__name_by_offset(), the
-string pointer points directly into btf->raw_data.
-
-Inside the btf__add_* APIs, btf_ensure_modifiable(btf) is called first,
-which calls btf_invalidate_raw_data() and frees btf->raw_data.
-
-Could this leave the s pointer dangling before it even reaches this
-check? The check added here uses old_data which corresponds to
-btf->strs_set, not the freed btf->raw_data, so it wouldn't rescue the
-pointer.
-
-> +		s =3D strset__data(set) + (s - old_data);
-> +
-> +	memcpy(p, s, len);
-> +
-> +	return len;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518050550.2600=
-101-1-cmllamas@google.com?part=3D1
