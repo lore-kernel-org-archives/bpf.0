@@ -1,122 +1,67 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77FA53D5234
-	for <bpf@vger.kernel.org>; Mon, 18 May 2026 11:31:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9144366577;
+	Mon, 18 May 2026 11:37:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779103888; cv=none; b=RU+13oA/u6/ezricyYmHhZr/sbrWk4F7wcOJ3mG5hLGmR6L4YH/jjvhe55nfm4//J6xRzzCNay9j0+f7Du1QrWxbCchV9H4dJFmW/EytLlpNGse2la/Fe9zMvl33dnipX05fwjqnNu3CKfzWIt0qPJ1tZYoxEtMYN6jPvHz/TW4=
+	t=1779104277; cv=none; b=YUiEoJV4rwYGzG/FR0tudyk3DeHs3/h50gQstvn3E3OUoh0nu9bezhwY7M9XTPrpizx5e8ccjVwj2jXPW2eLHqrz7QjG1IGEfKUoWyASJPFBx84nkysDg070W59Lh54AKJYC7clkcgvUxsQ3sfIlT0ezE5KUb4V1/pqdxf6j5vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779103888; c=relaxed/simple;
-	bh=cg0fOJ/rOGe8lwKajljAkAEV6vusUKLvwhSExtpu0pg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PCLsOQ1xPLVP1ZJm9vG2ATQstJKm/Ks7dPxxo1TjbSzgmlAVWpltsZPZvYQ5ubqGuKgKtI+nXN+VQ4bWSHLzZ20UY9VstuVVyMbRFF/ZhLlIhXy5WHPLFB7S+6ZkflfDuAV4Jlv71Vhaazs3dwQextQrZMPlFEVuef94KuFXzFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gOa83R1i; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779104277; c=relaxed/simple;
+	bh=h/gWCTfNbsYJ23bAT6BkmDZhMkk2QkGhDdpbYyAEDwY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=oSMcWKKZpLcUFSC5x7vbX73nGwyolykzt0weSVEKvNQojQSjoP1rBh1OsxG5TsHZSdwQuTMHtq0m+JKdMH9E2Ire1A5sjeCMm4X92IAcnahf3Rl5S2g2NpviUowUa9zb7nWExjKoWXk5TWetszAOg3h57XJyY75xOprw1gw5C+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dMKYdKNy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gOa83R1i"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 938ECC2BCB7;
-	Mon, 18 May 2026 11:31:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dMKYdKNy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B60BC2BCB7;
+	Mon, 18 May 2026 11:37:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779103887;
-	bh=cg0fOJ/rOGe8lwKajljAkAEV6vusUKLvwhSExtpu0pg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=gOa83R1iOYC8yFb9j/tN4HDf8tFsTFCLUGl3VgQSnq06CQvfxq4NoOeHILiF+pNvA
-	 fUnR/kgUVN9eTxucg8IzHuJrHEzM/YfHE9NvlLRwkXkjvjBUY7aq78WYN7iezI0YtY
-	 qgbOjrbpIyVvs/2IIa5K5EV+CkQXBNWaHSDN+6quSbaYyaWqfkSWPc0wNB6OrCKhMq
-	 5sEtfhm+WDlI85GmKTrRqOPQzyfSvo6grfy3AdiZ+nlSGOv96iptVXhaddo4KxCEhi
-	 n/lUc4z2rw9vwGeaqTWPtadknps8EGQMBKC7CkhDWXUaO7FmehK6kPMTJLWZ9Hla8h
-	 b1zMNZhf4gNTA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv2 05/11] libbpf: Detect uprobe syscall with new error
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiri Olsa" <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260518105957.123445-6-jolsa@kernel.org>
-References: <20260518105957.123445-6-jolsa@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 18 May 2026 11:31:26 +0000
-Message-Id: <20260518113126.938ECC2BCB7@smtp.kernel.org>
+	s=k20201202; t=1779104276;
+	bh=h/gWCTfNbsYJ23bAT6BkmDZhMkk2QkGhDdpbYyAEDwY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=dMKYdKNy48aMAlkUG1fUAN7Y5saa697Ij+fyWNhFeHISapKNweS6uW8jy0EyP6Cvp
+	 2bylPpdez7oIw8ISu6Akph3vlzaGqikfK7myvoYGryWX+eUz+cHw2OoILm1nXWxmzq
+	 8Ma04nqQklgdnIUgEMjrmsj6UH9/Szkfrs4vVfrjdGRdw0ce/KMFuHcz+8HDlfPVfh
+	 Ayg49jPuEVkqowu3KRgMsSrritS3I/wtJnm39uAaA/IJVfzZNpU09QsaRGiIyJ9JFe
+	 B+KqP/tNfdEbTFpnH0KCFyPHcohAbCnERTlU7GKBkL5QS17azm1S6KPQCjxlxtrZF3
+	 Y7Xvo1Ze3xiaQ==
+Content-Type: multipart/mixed; boundary="===============1980439990770604517=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <70f506d03335c3cbd12dce21577fb1af98fbd432d8c1bb3464c1080a5d502331@mail.kernel.org>
+In-Reply-To: <20260518105957.123445-9-jolsa@kernel.org>
+References: <20260518105957.123445-9-jolsa@kernel.org>
+Subject: Re: [PATCHv2 08/11] selftests/bpf: Change uprobe/usdt trigger bench code to use nop10
+From: bot+bpf-ci@kernel.org
+To: jolsa@kernel.org,oleg@redhat.com,peterz@infradead.org,mingo@kernel.org,mhiramat@kernel.org,andrii@kernel.org
+Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 18 May 2026 11:37:56 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] Missing kernel dependency causes immediate selftest failure and li=
-bbpf feature detection breakage.
-- [High] libbpf feature detection breaks backward compatibility by not acce=
-pting the old ENXIO error code.
---
+--===============1980439990770604517==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 674b83913f8f61b2f16ba8f8b86e6bf8e84da5a3
-Author: Jiri Olsa <jolsa@kernel.org>
+> selftests/bpf: Change uprobe/usdt trigger bench code to use nop10
+>
+> Changing uprobe/usdt trigger bench code to use nop10 instead
+> of nop5. Also changing un_bench_uprobes.sh to use nop10 triggers.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
-libbpf: Detect uprobe syscall with new error
+This isn't a bug, but there's a typo in the commit message: the filename
+is written as "un_bench_uprobes.sh" but should be "run_bench_uprobes.sh"
+(starting with 'r').
 
-This commit updates libbpf's feature detection and the uprobe selftests to
-expect the uprobe syscall to return -EPROTO instead of -ENXIO. This is in
-response to an optimized uprobe fix that changed the syscall's error code.
 
-> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
-> index 4f19a0d79b0cf..a37aaea5253e5 100644
-> --- a/tools/lib/bpf/features.c
-> +++ b/tools/lib/bpf/features.c
-> @@ -577,10 +577,10 @@ static int probe_ldimm64_full_range_off(int token_f=
-d)
->  static int probe_uprobe_syscall(int token_fd)
->  {
->  	/*
-> -	 * If kernel supports uprobe() syscall, it will return -ENXIO when call=
-ed
-> +	 * If kernel supports uprobe() syscall, it will return -EPROTO when cal=
-led
->  	 * from the outside of a kernel-generated uprobe trampoline.
->  	 */
-> -	return syscall(__NR_uprobe) < 0 && errno =3D=3D ENXIO;
-> +	return syscall(__NR_uprobe) < 0 && errno =3D=3D EPROTO;
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Is it possible this change breaks libbpf's backward compatibility with older
-kernels? Since probe_uprobe_syscall() detects uprobe syscall support on
-various kernel versions, replacing the check rather than allowing either
-(e.g., errno =3D=3D ENXIO || errno =3D=3D EPROTO) might cause libbpf to sil=
-ently
-fail to detect uprobe support on kernels that predate the EPROTO change.
-
-Also, looking at arch/x86/kernel/uprobes.c, the kernel-side change does
-not appear to be present in the tree yet:
-
-SYSCALL_DEFINE0(uprobe)
-{
-	...
-	/* Allow execution only from uprobe trampolines. */
-	if (!in_uprobe_trampoline(regs->ip))
-		return -ENXIO;
-
-Will replacing this check cause immediate regressions for both feature
-detection and the selftests until the kernel dependency is merged?
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/to=
-ols/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> index 955a37751b52d..c944136252c6d 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> @@ -762,7 +762,7 @@ static void test_uprobe_error(void)
->  	long err =3D syscall(__NR_uprobe);
-> =20
->  	ASSERT_EQ(err, -1, "error");
-> -	ASSERT_EQ(errno, ENXIO, "errno");
-> +	ASSERT_EQ(errno, EPROTO, "errno");
-
-Similarly, does this selftest change introduce an immediate regression if
-the running kernel still returns -ENXIO?
-
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518105957.1234=
-45-6-jolsa@kernel.org?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26030080109
+--===============1980439990770604517==--
