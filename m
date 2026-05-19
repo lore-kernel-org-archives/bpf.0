@@ -1,137 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D25F3B3899;
-	Tue, 19 May 2026 19:57:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779220677; cv=none; b=oAcCSquhmUbCPaLZLwy4Z+LqH6r1cQ6m4sscjBfhUgSHXk302ouNTdTb/vWpb+a5JA4bAbYCj2ThAyBTKUHlgPE/sNPk9UNoEUDUMtT+xByXDAvgq/HRvkQQ1QXW55znCKDbDWpLX76SHkWAR1ebqXFpg3w/A0AexT7V/2io+SI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779220677; c=relaxed/simple;
-	bh=HJa7LTlB7rUz0py6A8HhHWbQBqnXH+vvLhZdOPi4+UQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i4z4Ia8bDL+PoD1v+qrba1qK0J9d0nyMY5/RI6lR6Hw3Iut8Em5ZKRoKv3ie5TIhDFwOgFESNCw8WVgtOTMzyzdRdzrXEOX66vEG5JzHZYFmikpj75KDkXMOnPVyCiaTo8y5Z7ySUATm05Zs2cFa6QsTIZLJEXRikDUdpjiJi9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MIDo0oZ3; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E497038BF7A
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 19:58:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779220689; cv=pass; b=KPWVdIISmekF6Lf1Yk8f9xiYoWIED1fQewCWPrxHJbRjuAvjKDR0Lx2guTQZyU2E3F16qSkVbKE8SRjjZJNHBpundfOElnvait3ma669YVzWHBJcjq5TITXs2dXFmdUJXrJOFN5ptV7NHhUWK8Ob7uf8d1nwtw3iiKcBuVJhQUA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779220689; c=relaxed/simple;
+	bh=MkQ41IfwJ0nvjPn4fveYrRfBVnbitV8rEVwRZYxgI1Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eRcga3TfpG7UhztNjTOHZx9UhTi3xCkibTRzE3SUn309KQkzdww0s6GtlGcV36siMyVhqIMkJFjEeeJ2RB313Ky027i4hDZI/E/61/klyTq8lFZVgsuOjumaTFVcZ7aDfMkv9jTVzGHi3W7z58UFTpEcZzSbZXZFo55zRkBblvM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B6VfRVpF; arc=pass smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MIDo0oZ3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 876D81F000E9;
-	Tue, 19 May 2026 19:57:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779220675;
-	bh=1Tamg3Hf9ko+bZLZl3xbxvWbVEJhbX7dm5Vi5ngVEyA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=MIDo0oZ3rO3gBAI4EqRlMprpx3hMXyMnW5nC6bKsdblVLHZLT0gDBnRbUR29fDMms
-	 Xy0TroVpr9Flole9DLbqOqt/DaAr+T5+OPs34A5cJoRdDF7clifWYpig0oyIuUWV3J
-	 FM9P3Yb3Dogn8KGhOgTMme6FNcK94KrGPV5uUMK0Dd7OxnJn/aAQ0QfneK89iXeV2L
-	 8UYlcPERZbtTrGXhki01jG+pbEo0VXAWIcLIzoeMiPJhXhUEpgeW3Q6jT6hLV+ZLNG
-	 p5hiShgr65NLt6tw2u5kG4gMIxML2YLhh8/TBSMpi6pXD7SSyTRLqk7k1FJfVgpiuS
-	 D5YClChAyz4hw==
-Date: Tue, 19 May 2026 15:57:54 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org, live-patching@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Joshua Peisach <jpeisach@ubuntu.com>,
-	Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>,
-	Anthony Iliopoulos <ailiop@suse.com>,
-	Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation
- primitive
-Message-ID: <agzAwjKhOhuANz_P@laps>
-References: <20260508195749.1885522-1-sashal@kernel.org>
- <20260517134858.146569-1-sashal@kernel.org>
- <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
- <agsVDqdALBoHEHlv@laps>
- <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
- <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B6VfRVpF"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-7cb343d343fso34948697b3.2
+        for <bpf@vger.kernel.org>; Tue, 19 May 2026 12:58:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779220687; cv=none;
+        d=google.com; s=arc-20240605;
+        b=RsvfKMilWNoSkqWxBWfgByX2va7wGw+Bjy3d4878LKsC0N/myRb1Rz2/RD2qRVh1sq
+         B5CDGt/8+sYrPb8dO80fj6w5F3pmxdD8N15gVEDHjV+FiP2ikQCV0QlbpTYoX0ainj/B
+         2u45W+RnDATyyYRbS3RNnBkcJs+cts3DNMjGMudmatt1DQfpWI7yLW7YSQ1FCeUaXQlQ
+         mQ/7nIzDdLYTaOYTlmqUUs70NPfqRiA+a877uvD/FAwnAM0EhgPePF6GNKL9Wkwko6Us
+         qySMmAmEyMymVbIifwmjIwRgbYZfvU3eIsxPdLcRnvdLYyuQFoHQlNnM7b8vFxB4l73k
+         2mdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=OkKi7olYT0UMvP1V+ApFdiGBxqqlUbmJyXbpHlsr2iM=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=hnNjUPKpp8kSHbnwycIoGRTJ4QJY6kaY/09IUcZU2kNXSx9vFxNz/X+eqg3qj5qjel
+         E6O3/+X/et3NhoVlnFmpQOktDdYkI5xldT6LvlwWpD7hoPsRGGo4UzjCxcGaSHbKDZv5
+         ioUWyFafaUzNxgmMcpaTvknkV8FjQ3sd9K8cpxns5qEB7eU2Tsa+zkJv0oNbMfoiXYNa
+         HPAn1xl3cVuR+aI4ojUjtqqcS6NJkVkoo0WirP5Pamqtu2gv/k3G1RSmTTNhKJsvbgrs
+         BdC9epdZa01hNIGlueNh9p7EjQUyLxQ2mAkO8A+x2N3TCEnqJcoiIhzeDbtXX+eNGfED
+         IkpA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779220687; x=1779825487; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OkKi7olYT0UMvP1V+ApFdiGBxqqlUbmJyXbpHlsr2iM=;
+        b=B6VfRVpFUYinCptrnqWZJnO2xjg3Ry/d1/Bqzp0kU4pn3BZ8bwSZJkiEAeIKLPpDeL
+         aAQ2X7DqIhR16UKHXqc5CdjdBm49pmV32cIPtqea5h+qdOxEwv23Vb5FlEhbWobKIsVL
+         m+hLQG4u6vWEbGvVPh6KVSrTPUsxDgU0XqlyIZC+zMjuLafuOM3H9dw+qJJRwLMQ3HLm
+         rYLn8pjayykDt3LYhbCoTN1f8e+NAyXOyUePyxEtu8voWyuDwgLxakVpYRhfl6TFmsuO
+         d1mLkXvpvAxspsuACbrui+p8esB5S2rXVAdVAswfcYGf78u/PXZqGYc8NoO8Zn58Zqnx
+         wYqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779220687; x=1779825487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=OkKi7olYT0UMvP1V+ApFdiGBxqqlUbmJyXbpHlsr2iM=;
+        b=md/22pgkcCEpqpHCbkUzrwSoRXr8+zt428cmG5Nf4+9thJQHZfHGOfvt4v/5Lvk5TM
+         mc8E+oduMKwXh+mYD1MoJFxNh1ylD8qULiHyoeKvUj3Ug9YIuJYYyNVeYD4QPdFwA979
+         LWs4Xm/7+Ii6VHUkV91sXAQobJg9bgvWkAFoGpewk5GDjiXNMxev7HHHSw4QcVBYCLmb
+         T90H9/rbcVl5p/JQrREHsHWnXjUeHF2qIVifaa4uFXyE3yPcXxhWKOV+LIw32rD0Qn/K
+         OehQQZDgIkmlDZzSONj8jkdtUUGgEJLhLZqBlXfnwIe66B6HkOIL4Sg+kvTnNVjhCbcR
+         F56w==
+X-Gm-Message-State: AOJu0YzNYwyvcOO7biByB4wpa9JvEy5a5mjVnzKhszXoVxGdXUUN11vb
+	QM5PrBB8d4uKA1rLPzcBc1TZTmWmxPhAPZIEZjRBN/cIt049FLWlufmN2V8nJ5nM4HCVMLw9Suf
+	X932NfyQJzpfc0bqTM735R6AIWniqrS8=
+X-Gm-Gg: Acq92OEqF1TOanFMwikzX/0Bc/mZ+pwjgcfaT2CXqUSQDf04XQQ5dFBUnnrpuQ5Qkap
+	Yna7Wzj826ruwnYl2YsJUyveivbY67+mga97tT3RGBPMrFVWO5jBji9nxp8WYxipgDfKHT7pFGa
+	wTJ9OdKkpqE6WyIMEkpEXPAjIb38x+zSOLZaNxl1Z+XqOPExdsmrMfifdkYD96b2b9G+sEqtKRP
+	yL0rJVSl8Mi1KIGG8ddwlNL6A5AZ+DxOXTnFSdm1IFmW2MQoBY0ikQvWpbbFrpZgjMV3nMcGA24
+	MSouKRR9CwKLDXQKTGHe/2tOGLM0JuI=
+X-Received: by 2002:a05:690c:e3ce:b0:7bd:8cc5:6bdb with SMTP id
+ 00721157ae682-7c95c6edd6emr231497557b3.35.1779220686647; Tue, 19 May 2026
+ 12:58:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net>
+References: <20260519181314.2731658-8-ameryhung@gmail.com> <20260519185519.A746A1F000E9@smtp.kernel.org>
+In-Reply-To: <20260519185519.A746A1F000E9@smtp.kernel.org>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Tue, 19 May 2026 12:57:53 -0700
+X-Gm-Features: AVHnY4JmK8v0DHREJQ1CnU9JGl1GTlGh1s6crkftapNbTQuHiwMwEo1ZwnKJJHM
+Message-ID: <CAMB2axOdxq241ZGHGqeT2OPNtW5r8bkMu9egdso5W2OBbRsexg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 07/14] bpf: Unify referenced object tracking
+ in verifier
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 19, 2026 at 02:13:26PM +0200, Daniel Borkmann wrote:
->On 5/19/26 1:59 AM, Song Liu wrote:
->>On Mon, May 18, 2026 at 6:33 AM Sasha Levin <sashal@kernel.org> wrote:
->>>On Sun, May 17, 2026 at 11:37:36PM -0700, Song Liu wrote:
->>>>On Sun, May 17, 2026 at 6:49 AM Sasha Levin <sashal@kernel.org> wrote:
->>>>>* fail_function (CONFIG_FUNCTION_ERROR_INJECTION) is disabled in
->>>>>   most production kernels. Even where enabled, it only works on
->>>>>   functions pre-annotated with ALLOW_ERROR_INJECTION() in source -
->>>>>   no help for a freshly-disclosed CVE. The debugfs UI is blocked by
->>>>>   lockdown=integrity and the override is probabilistic.
->>>>>
->>>>>* BPF override (bpf_override_return) honors the same
->>>>>   ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
->>>>>   production kernels. Even where on, the operator interface is
->>>>>   "load a verified BPF program," not a one-line write.
->>>>
->>>>If it is OK for killswitch to attach to any kernel functions, do we still
->>>>need ALLOW_ERROR_INJECTION() for fail_function and BPF
->>>>override? Shall we instead also allow fail_function and BPF override
->>>>to attach to any kernel functions?
->>>
->>>I don't think so. ALLOW_ERROR_INJECTION is not a security mechanism, it's an
->>>integrity/safety mechanism for both bpf and fault injection.
->>>
->>>It protects against a "developer or CI script doing legitimate fault injection
->>>accidentally panics the box" scenario, not an "attacker gets in" one.
->>
->>There really isn't a clear boundary between "security mechanism" and
->>"non-security mechanism". As we are making killswitch available
->>everywhere under root, users will soon learn to use it to do fault injection,
->>and potentially much more scary things. (Think about agents with sudo
->>access).
+On Tue, May 19, 2026 at 11:55=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
 >
->Fully agree with Song here that there is no clear boundary, and that the
->killswitch could lead to arbitrary, hard to debug breakage if applied to
->the wrong function.. introducing worse bugs than the one being mitigated
->or even /short-circuit LSM enforcement/ (engage security_file_open 0,
->engage cap_capable 0, engage apparmor_* etc).
-
-This is similar to livepatch, right? Do we need guardrails there too?
-
-Or do we just trust root to do the right thing for it's systems without needing
-to be it's babysitter?
-
->The ALLOW_ERROR_INJECTION() provides a curated white-list where you may
->return with an error without causing more severe damage (assuming the
->error handling code is right). The right thing would be to more widely
->apply ALLOW_ERROR_INJECTION() or to figure out a better way to safely
->enable the latter without explicit function annotation.
-
-Sure, this would also work. How do you see this happening? Can we let a certain
-user/pid/etc disable the allowlist if they choose to?
-
->Wrt BPF:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [Low] Unused legacy fields `ref_obj_id` and `id` remain in `struct bpf_=
+call_arg_meta`.
+> --
 >
->>>>>* BPF override (bpf_override_return) honors the same
->>>>>   ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
->>>>>   production kernels. Even where on, the operator interface is
->>>>>   "load a verified BPF program," not a one-line write.
+> commit ff3476feb916076d44d843f726cd0727a0a067bc
+> Author: Amery Hung <ameryhung@gmail.com>
 >
->The claim that BPF itself is off in many production kernels is not really
->true, where did you get that from? All the major distros and cloud providers
->have BPF enabled these days, and even systemd ships BPF programs for
->custom service firewalling etc.
+> bpf: Unify referenced object tracking in verifier
+>
+> This commit unifies referenced object tracking in the verifier by introdu=
+cing
+> struct ref_obj_desc to consolidate the id and ref_obj_id fields. It updat=
+es
+> kfuncs and helpers to use this shared structure, replacing open-coded upd=
+ates
+> with shared helper functions.
+>
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index edebeb3ad3635..bc7f8725cc698 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+>
+> [ ... ]
+>
+> > @@ -231,9 +231,28 @@ static void bpf_map_key_store(struct bpf_insn_aux_=
+data *aux, u64 state)
+> >                            (poisoned ? BPF_MAP_KEY_POISON : 0ULL);
+> >  }
+> >
+> > +static void update_ref_obj(struct ref_obj_desc *ref_obj, struct bpf_re=
+g_state *reg)
+> > +{
+>
+> [ ... ]
+>
+> >  struct bpf_call_arg_meta {
+> >       struct bpf_map_desc map;
+> >       struct bpf_dynptr_desc dynptr;
+> > +     struct ref_obj_desc ref_obj;
+> >       bool raw_mode;
+> >       bool pkt_access;
+> >       u8 release_regno;
+>
+> [Severity: Low]
+> Since this patch consolidates id and ref_obj_id into the new ref_obj fiel=
+d,
+> should the legacy ref_obj_id and id fields be removed from struct
+> bpf_call_arg_meta as well?
+>
+> Looking at the rest of struct bpf_call_arg_meta, it appears these old fie=
+lds
+> were successfully removed from struct bpf_kfunc_call_arg_meta but were le=
+ft
+> behind here.
+>
 
-The world is a bit bigger than home distros and cloud providers, but sure - bpf
-is enabled widely enough at this point.
+Right. bpf_call_arg_meta::id should be removed as part of this patch.
 
-How do you see this working with the allowlist?
-
--- 
-Thanks,
-Sasha
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260519181314.27=
+31658-1-ameryhung@gmail.com?part=3D7
