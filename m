@@ -1,92 +1,92 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABECA233936
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 11:50:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A464C0439
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 12:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.175
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779191446; cv=pass; b=ZKnj6xKUcPhXF7IaZQjis5bDSI/K/n4vP/SG58PANrbFj2TRE7xV17BGS3DMRKFJeAPoBaWh+4NYGnNT3XU0pUOCBZSLLQAD1v2lDvWPoa6RRKsHjJe0UamOCZRU/bNeRI8B5xZCj1zZjKW7/fI981IvXF/KGfUmQvxOEGHs5gI=
+	t=1779192379; cv=pass; b=ns40xMhFV6JXvmQs86gsHzYBsgospELEvCg+m779UFdj0SHBZKd8G604aue0MpoTNbDZgvhGld/rMdOBVE5MaoDyOIeNcxhh6kIx2lt7SUm1rJcbUrqKYEb8yJebLTXE7bPKTJlN6m+ao0BF6ecakGaXY+tO6+ElKHJVixxt8IA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779191446; c=relaxed/simple;
-	bh=QJzDa9BGAfImrSXnbL9DptnBQ0lviJmd7Y3LBBtzBjQ=;
+	s=arc-20240116; t=1779192379; c=relaxed/simple;
+	bh=CGxVSGycpBzhHRm6QLRx4kIqnzL+aHoMvldBecTAROE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Sfw6SkD9rwMddYPr17QGO8CdbRq9asAwKCsn0rj3isVTCLXYxhG9LlUPOCyoD0gM06q4Ocbg1W+641oKo5KxAAjCV7+w/6k+VfxUJUd5UoyoweStdCDSUyL04RDe2217Kd6Mz8QLX2Rk6PRX9j3iDVQTXSVDtWY7p9pRJBLP6d8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K2C8LGS2; arc=pass smtp.client-ip=209.85.167.54
+	 To:Cc:Content-Type; b=q8VB+29n6dMHFDjZYDOcBS9+68hM14WDC7Z6Y1p/pn7/ugnQ7EkgNIxYJpoW1JhdG+IY9p5yMCF8UNtIZP3OzjllHg9J5jIdEgtEvI3W5BbcyMfLHaqFW80fFM/sMfpEFScaKgoUnj7AmAvVY3hrb9w7tvkWcRXWFmlsEH5/ua0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S7WIn25R; arc=pass smtp.client-ip=209.85.208.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K2C8LGS2"
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5a8704dc3a8so3803188e87.3
-        for <bpf@vger.kernel.org>; Tue, 19 May 2026 04:50:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779191443; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S7WIn25R"
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-39393ec4ed0so33878441fa.0
+        for <bpf@vger.kernel.org>; Tue, 19 May 2026 05:06:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779192374; cv=none;
         d=google.com; s=arc-20240605;
-        b=FJ8P1rsKC8PADJOXnl9DO5+jKDlLhExbpcaHMRxX9jkpfhlvNh3IlNm38tjWMDgQWF
-         Uo+T+ckAmJvyupLDGAPhkROXC9rlzCM69RXNIiMJ8mbbrCU/d6mT5xmZV86PPDJzcXrb
-         5nR3NtMBZ403T8eLwwYLUjv2yqrsGsNP54b8Re76JRmgZtpHNf0t7pxCL3ioUSiWNQUi
-         8cySYkTX37kVu6AoAb2nZ6rp36jPqAsoRaxat1a/L9gqjuurxO1xOu185G5lZ572CGoE
-         M697V8Z7dWLBWOWPRlC4V4Po3BFqQOxc3bYmWjDEdS+ukekMJa8YUfsHktenVw0Zm6YX
-         LKIQ==
+        b=gN+x74GvMCbstpxOfwGGQYwI62NyBLdpiuddhmhqDjxCvQ8AEv52Thpe+9xYEYMDNN
+         wlLVrInge3YkmnMJaMrWNSHffwfO9OBM5f/qhoMhYHqHPHWF7jb5E8WdOUzxfYwtDEiv
+         Svn5w+bgJXqiu0NiV3hpWGNTcPvR6lUn/sXIgMhZ7UC7wUtnZ6MQKgrUhRcTqOA9HhMy
+         2gw1YyHFTR/65A+UVLKZlnfmFhJPENxVdO2Hr8bOkG+6ubh8VX6OVoHzCE5h4G+qpAav
+         tiWxDq1TXs1HOzgfgq1Ya+WqSLT0T5ssowUEhE9TkBnLFCUouYk+w/wB7a3kV6E3I8lG
+         zzbw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=fC4uhJe1yFAxqc/8/hROeQyQEZWu7EVe2jEzXlw3jZY=;
+        bh=Kp7kUH9UIq+pMnPJFmd1HjQegMSsejvI9T/sI2XmpDI=;
         fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=TYNSXBeHeHtf0i4F6Mxb3pSVWJpVwibQAmRSeb2dkMADfUOczRw15WqeOppQpB+c9o
-         7hbp04sFPQ/xXcCNEuehNVvUVHZvvGGJXqL88hk4lHv/VcaZVqkdBubxticFm4IDyck9
-         xU97gYzHPtt+hAlmCzqp4Mh8O3wZ0se1eYijqb20s0nFY4YSafcCrjvxD5WPprOG4xne
-         FJ6NKsVvGAm+vwPd6hbTZSyxTLhBAaNE/c+wIDfZq76b1HtD6M1bxvEpTewSfMId230I
-         x4tQBiKyNTH9taE9CdFkFWqEIY6hXfDT3UVHL+QIDejTAlnvj2BPf7ZHdod0tfHS4DWf
-         qZng==;
+        b=eAvw8PXgvl2Ai9bJdzctQfnSo+ioJPveNfglxtlpjFktv/b6HB2h0TY7FdoPhO4KAv
+         fItsdr6Ke4qmx7ZZtTg1AxDmNNMsAJjdvUn00BZbG7PrzrT9VZjm6OptC5LgNiWeZ2c6
+         6kA8zQ9g+sTYXzQXne2T/kxy6zvOwIkm+B6dvytBvt/iTSiGys99oLdXkUS2bHU9380G
+         fQyxIqEvyJZ98nJR2xOCA+xJmOQGbd49FPW9SV9033fAYMNXfMezhaOh7pj9HuKR5m+s
+         DBKHvsg8rmdOjxNaLaiX9wOxnzwxyhInpocUeZBKx135tGnL7M21wiX0nQHYze2pyLNj
+         DixQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779191443; x=1779796243; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779192374; x=1779797174; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fC4uhJe1yFAxqc/8/hROeQyQEZWu7EVe2jEzXlw3jZY=;
-        b=K2C8LGS2cKPTIPFNGRkuH/R/D9ilNr78FBX5CMWuQ1w7FHrMsbEBfvQg9wwkN9kLOo
-         huKnuVlnlQdjTuQjotM5njh5/FoEEMdOwyI5vnGgyyJFuH95DWtIIN6g4LcJh00OCtNP
-         XQwp37ogGWkqcmBKiILIqAQ7EeKMCnVoWECiA4X3k5LFSNeZxGQlOIvYU3kF7BrO/Nem
-         ojiVSssVRHfkvR6D5kZPDOr6lSngGeSWxsRtgCWXtqP0idGyXhmYK+bDGu0H95lcxHaD
-         OQM7AmuCgXD/od7ZxNm1zz88UteAebq3fIMqrFkN5faBSXapzgZWpcZ2eUo5Qkkg8PJq
-         aIpg==
+        bh=Kp7kUH9UIq+pMnPJFmd1HjQegMSsejvI9T/sI2XmpDI=;
+        b=S7WIn25RJnzegY8+O5vNELXElFea41ZqTf+6dQseGeiMSGi5q7TMhi9zVUIbZZEcDk
+         5Gt8I4e6549lsl/3rXV66PK2KVwi0rZqBpwk+IOx+zK7CVRLPH4Tv3SiMx7rmKO2nlxn
+         lpPzrALVhuCk6bPzcQj4PZ9QHx1rdrb968oBIjVnqi9fBCl/nKZTeOYYVHuKkCV2R4Qi
+         uAEn6U9EFV4yzG/Ry9+7vQ00HFqgyvjU5pR3RvfS1MYL11MhN5fe5g4kHeuT//IO/ETR
+         fwTa9+hJbu7RBhT+hF6IhkHRVHUMayU32boClGmLH+2PMXiVDJFRflzQhKVfPcwIq05V
+         VBsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779191443; x=1779796243;
+        d=1e100.net; s=20251104; t=1779192374; x=1779797174;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=fC4uhJe1yFAxqc/8/hROeQyQEZWu7EVe2jEzXlw3jZY=;
-        b=mJ5d/82+rwygFs3/pfaXJbZkfQB0pOuJhfF5KwRZ8ILECg4A4qOfy2w+TL0Jnrfp58
-         pITEja2gfEo8uZyi9tYqvJ8HnuZqug46uZvMBmXvnxosj7hH7GUfIH1+LrznLk8ykgAP
-         5Yoeq0jCeiQEG4jAZznclhnHp6cfyTeNdqyPg1ZD//JAn1Vqt1zQUyyqV0EfXQLUKo2E
-         qMYW77jtP8nhytc1X4W1fhbuZ9EJuP4Rk50hKzoFHaVjO87g1zIJNKHGHGtZRrJqlcZ0
-         Su3LL9e784zzgNuJk8HewqaJ1ynRXvRjjEY4pTuNouhwrKVHUzsiOXHos0Zh8G9llRAA
-         FFyg==
-X-Gm-Message-State: AOJu0YxvmyXS7lNKJhIR363+vkvUK7CGVlMaqKrXazU4xVehspJn565g
-	PkQotAoPO3jjUC8BOkhGtQNyHDraVZbmrZ9quOSL6iNSDzKza1tF2K7wKseTiN2vs78KZ/nWsvc
-	WKLX/kEVCCB2g98Dk0oi8ReA74g/bYHetbJpCKXEwvw==
-X-Gm-Gg: Acq92OEP8eyNGo8rZx8/rJJ/qjGW6mtLc8pHl4H6imtTszV8ysimgTKB+uRRKQ81a81
-	QvdRPumMVpa8tJoOnv5S3K+eNTFm43kwDHyGgI65BZ8KPRk9uHgDUC6z+v6/yLusCaTY0to54Fy
-	+F0wPZeAw61pFtchDeXpvj7rmEdmEPF86N4aCgxIodNhAw8zQpfWgdkZ5t5Wqh4NId5BMlUZ7el
-	BKjD4BGt+hiT87RuKVkBfjgm0NFPkTWyk0yLKg4SUlUL6NIMnA3Q0EBqyMcTbBZTbhB/AZaPbNM
-	KyDcOUAWkUiRZyQ8utFWzNkeOpzEhjS3Jgjwr24q
-X-Received: by 2002:a05:6512:39cb:b0:5a8:d1ef:caad with SMTP id
- 2adb3069b0e04-5aa0e733fb7mr5371601e87.4.1779191442645; Tue, 19 May 2026
- 04:50:42 -0700 (PDT)
+        bh=Kp7kUH9UIq+pMnPJFmd1HjQegMSsejvI9T/sI2XmpDI=;
+        b=Yr+leDI7IXdW246Aj6JxzaLAzZ7tRkoJr/otOhVpxYZhWKf25PWDIhtG/SgSSMh4/Q
+         idxUbr5WQf0irYS2belUsH3XJ7oMZBs9HQ7o6de8xYLb19gHV7C3POO54VIdp3apPAY9
+         OeBFke16ZsFbV46fvhzj5GWrdiHvoFlL8NR5M1I7D0h9XVDi4xFFW2L35/6X5xuQU4XK
+         U7G9tkws1dSMczTnmoMaRdyyR5DUyKQJiOZGHg04zmR0nSna0x6vOAi52eWpVykVnclt
+         3woBf7jzPn5MzrPPqi48kdknQnAuW2XdwbfslBut0/Ce8hhR49k64mXvXSqgqytD1T5F
+         sKTA==
+X-Gm-Message-State: AOJu0YzDw/eAiQcL5BxZTGXwW9GSwQ5AjRMRb6UR/Mm/zFjTZ7IrvwSz
+	p7A16xr9QPsMGpZ1Q8jfmjKDmJwlT/ClZCgkaAzTy7YoqSwO87Wl2PRskft0EtKzuwCvu8na7d0
+	xvI6934DQ+0UXB96YbHBIvyJHqWvJ2Zb9MI/FxI+Xsw==
+X-Gm-Gg: Acq92OFHqzsrnoUEOZzzThpqcBtEJwBANKi817T2n8MmRCJLHN7Z5/jU6XZ8FMtblJi
+	qwyEwQNnB6Z7P0eJyguP4NnTNo4REZ/U6LmJTeAuvXWLGGy3DyhuXov4P4FFeV9ouD9eTDoDQMO
+	xmp91SVk+KkAuVXMIpqUTdqe8BEgtkxXthU3ttAW1No6nBHm5B/wZv6BzkdB2rUi0zHJ2/aKFmD
+	jrxXZeRue+24G99M37f/C1uLz4YA8VGC8fV4UD6YYgznHVYyQ2NW+w/qRJG7u33OHcQ4o5TLiy2
+	UMFVs4ttS2ZcDNO245ZbsPJjZIWIl+jiyqc++Voh
+X-Received: by 2002:a05:6512:398a:b0:5a8:e336:b55a with SMTP id
+ 2adb3069b0e04-5aa0e61948cmr5619291e87.7.1779192373905; Tue, 19 May 2026
+ 05:06:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260518082344.96647-3-kerneljasonxing@gmail.com> <20260519082513.D38EFC2BCC6@smtp.kernel.org>
-In-Reply-To: <20260519082513.D38EFC2BCC6@smtp.kernel.org>
+References: <20260518082344.96647-7-kerneljasonxing@gmail.com> <20260519082515.AF651C2BCB3@smtp.kernel.org>
+In-Reply-To: <20260519082515.AF651C2BCB3@smtp.kernel.org>
 From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Tue, 19 May 2026 19:50:03 +0800
-X-Gm-Features: AVHnY4IeBHzVPRu7LSGThA5UlHE4ZYixCeJRIL6bfCGxUd-Kyii8UdDT0FIGGPc
-Message-ID: <CAL+tcoDpJZjsh_3-=YDJi=2CMDNhDJ=RgNr2yKkV+8mU08wL0A@mail.gmail.com>
-Subject: Re: [PATCH net-next 2/6] net: export sock_disable_timestamp() declaration
+Date: Tue, 19 May 2026 20:05:36 +0800
+X-Gm-Features: AVHnY4J2CCAk_a1JeE9M8IeVY0qq4Nch-g9YVsRP0rcTv7eisiLVVhlScWxxLHE
+Message-ID: <CAL+tcoBa3_mGcULSbvtqWvK1ZbffX9CKQXznYpvaV+du7a8Ntw@mail.gmail.com>
+Subject: Re: [PATCH net-next 6/6] selftests/bpf: Add RX latency tests for bpf timestamping
 To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -96,110 +96,101 @@ On Tue, May 19, 2026 at 4:25=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
 > Thank you for your contribution! Sashiko AI review found 2 potential issu=
 e(s) to consider:
-> - [High] Calling `bpf_setsockopt` to enable or disable `SK_BPF_CB_RX_TIME=
-STAMPING` from BPF hooks executing in softirq will trigger a kernel panic (=
-sleep in atomic context) if `CONFIG_JUMP_LABEL` is not enabled.
-> - [Low] API asymmetry between `sock_enable_timestamp` and `sock_disable_t=
-imestamp` creates a dangerous bitmask trap.
+> - [Medium] The return values of `ASSERT_TRUE` are ignored in `recv_verify=
+_rx_timestamp`, causing it to unconditionally return `true` on successful `=
+recvmsg`.
+> - [Medium] Using a fixed `usleep(10000)` to wait for a workqueue to run i=
+s prone to test flakiness on heavily loaded CI systems.
 > --
 >
-> commit ae551b79a5c9f8c77421dc360627b1e40e3ceaec
+> commit 3f1fdeab36943dce908082eb563628a5f8ca353b
 > Author: Jason Xing <kerneljasonxing@gmail.com>
-> Subject: net: export sock_disable_timestamp() declaration
 >
-> This patch removes the static modifier from sock_disable_timestamp() and =
-adds
-> its declaration to include/net/sock.h. This change exposes the function t=
-o the
-> rest of the kernel, specifically allowing the BPF subsystem to dynamicall=
-y turn
-> off the global time record function.
+> selftests/bpf: Add RX latency tests for bpf timestamping
 >
-> > diff --git a/include/net/sock.h b/include/net/sock.h
-> > index dccd3738c3687..8a49312ee0976 100644
-> > --- a/include/net/sock.h
-> > +++ b/include/net/sock.h
-> > @@ -3038,6 +3038,7 @@ static inline bool sk_listener_or_tw(const struct=
- sock *sk)
-> >  }
-> >
-> >  void sock_enable_timestamp(struct sock *sk, enum sock_flags flag);
-> > +void sock_disable_timestamp(struct sock *sk, unsigned long flags);
+> This commit extends the test_tcp() selftest to cover the new BPF RX
+> timestamping path. It tests a mixed mode where SO TX/RX and BPF TX/RX
+> timestamping operate simultaneously, verifying they do not conflict.
 >
-> This isn't a bug, but does exporting these two functions with asymmetrica=
-l
-> signatures create a bitmask trap?
->
-> The newly exported sock_disable_timestamp() expects a bitmask (unsigned l=
-ong
-> flags), while sock_enable_timestamp() expects an enum index (enum sock_fl=
-ags
-> flag).
->
-> If a future developer mistakenly passes an enum index (like SOCK_TIMESTAM=
-P
-> which has value 7) to sock_disable_timestamp(), wouldn't it silently clea=
-r
-> multiple unrelated socket flags (bits 0, 1, and 2) instead of the intende=
-d
-> flag?
-
-You said what if someone makes a mistake... At least so far we're able
-to handle this.
-
-The existing impl was deliberately designed. See how __sk_destruct()
-works with the function.
-
->
-> >  int sock_recv_errqueue(struct sock *sk, struct msghdr *msg, int len, i=
-nt level,
-> >                      int type);
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/net_timestamping.c =
+b/tools/testing/selftests/bpf/prog_tests/net_timestamping.c
+> > index dbfd87499b6b5..3cc52b670e74b 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/net_timestamping.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/net_timestamping.c
 >
 > [ ... ]
 >
-> > diff --git a/net/core/sock.c b/net/core/sock.c
-> > index b37b664b6eb92..2d552ae5edd42 100644
-> > --- a/net/core/sock.c
-> > +++ b/net/core/sock.c
-> > @@ -474,7 +474,7 @@ static bool sock_needs_netstamp(const struct sock *=
-sk)
-> >       }
+> > @@ -143,11 +143,45 @@ static void test_socket_timestamping(int fd)
+> >       SK_TS_ACK =3D 0;
 > >  }
 > >
-> > -static void sock_disable_timestamp(struct sock *sk, unsigned long flag=
-s)
-> > +void sock_disable_timestamp(struct sock *sk, unsigned long flags)
-> >  {
-> >       if (sk->sk_flags & flags) {
-> >               sk->sk_flags &=3D ~flags;
+> > +static bool recv_verify_rx_timestamp(int fd, char *buf, int len)
+> > +{
 >
-> If BPF programs running in an atomic softirq context call bpf_setsockopt(=
-) to
-> disable SK_BPF_CB_RX_TIMESTAMPING, could this trigger a panic?
+> [ ... ]
 >
-> Looking at net_disable_timestamp() which is called immediately after this
-> bitmask update, if CONFIG_JUMP_LABEL is not enabled, the code falls back =
-to
-> calling static_branch_dec() on netstamp_needed_key.
+> > +     for (cm =3D CMSG_FIRSTHDR(&msg); cm; cm =3D CMSG_NXTHDR(&msg, cm)=
+) {
+> > +             if (cm->cmsg_level =3D=3D SOL_SOCKET &&
+> > +                 cm->cmsg_type =3D=3D SCM_TIMESTAMPING) {
+> > +                     tss =3D (void *)CMSG_DATA(cm);
+> > +                     break;
+> > +             }
+> > +     }
+> > +
+> > +     ASSERT_TRUE(tss !=3D NULL, "SCM_TIMESTAMPING cmsg present");
+> > +     ASSERT_TRUE(tss && (tss->ts[0].tv_sec || tss->ts[0].tv_nsec),
+> > +                 "rx sw timestamp non-zero");
+> > +     return true;
+> > +}
 >
-> This expands to static_key_slow_dec(), which unconditionally acquires
-> jump_label_mutex and cpus_read_lock().
+> Since the return values of ASSERT_TRUE() are ignored here, will this
+> function unconditionally return true even if the assertions fail?
+>
+> If the caller expects a false return to abort early, this could cause the
+> test to proceed regardless of the assertion results.
 
-No. When !CONFIG_JUMP_LABEL is met, the following code is the right
-place that you need to look into:
-static inline void static_key_slow_dec(struct static_key *key)
-{
-        STATIC_KEY_CHECK_USE(key);
-        atomic_dec(&key->enabled);
-}
-
-So in this circumstance, no sleep at all. You were analyzing another one :(
+Even though it doesn't affect the result, I will add checks here:
+if (!ASSERT_TRUE(tss !=3D NULL, "SCM_TIMESTAMPING cmsg present"))
+        return false;
+if (!ASSERT_TRUE(tss->ts[0].tv_sec || tss->ts[0].tv_nsec, "rx sw
+timestamp non-zero"))
+        return false;
 
 >
-> Since acquiring a sleeping mutex inside a softirq context triggers a
-> sleep-in-atomic panic, will this cause a deterministic crash when users
-> dynamically attach these BPF programs?
+> [ ... ]
+>
+> > @@ -187,7 +221,27 @@ static void test_tcp(int family, bool enable_socke=
+t_timestamping)
+>
+> [ ... ]
+>
+> > +     afd =3D accept(sfd, NULL, NULL);
+> > +     if (!ASSERT_OK_FD(afd, "accept"))
+> > +             goto out;
+> > +
+> > +     /* net_enable_timestamp() defers the static key update via
+> > +      * schedule_work() when CONFIG_JUMP_LABEL is set. Give the
+> > +      * workqueue a chance to run so that netstamp_needed_key is
+> > +      * active and skb->tstamp gets populated in the receive path.
+> > +      */
+> > +     usleep(10000);
+>
+> Could this fixed 10ms sleep cause test flakiness on heavily loaded CI
+> systems?
+>
+> If the workqueue is delayed for longer than 10ms, the static key might no=
+t
+> be active in time, which would leave skb->tstamp unpopulated and cause th=
+e
+> test to fail intermittently.
+
+From my limited knowledge about CI tests, 10ms is probably enough...
+
+Thanks,
+Jason
+
 >
 > --
 > Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518082344.96=
-647-1-kerneljasonxing@gmail.com?part=3D2
+647-1-kerneljasonxing@gmail.com?part=3D6
