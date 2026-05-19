@@ -1,109 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DECC78F2F
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 23:03:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C7120C461
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 23:17:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779231832; cv=none; b=CYGH//rIXg8ja2/ofY/ICvsSzanPfCaiADiRWx7hw4lYdW2js8yAKWX9myK7zYdDPAALmTZR8DBIQXJFx65nUS1oTYEfeOnFynuVdQO1jP+g3yAfh5T8xxJohsJkn8LegeDIeZPK5zsjq0UmhiMym9qRrfHZcNcE7DTNc0YuBpI=
+	t=1779232630; cv=none; b=oiyyOW96FsPY7sr/omXNk294Hayx06RxM/VocoZzpYiT6TWYIz2fKil46R/OS+ikxVc4R92mTZDFkCYFQ6QmVR1PeYHPaye77/tVaK/MtbEn2A3flZuY5LFIazFW3CDi9j3DeLY601wpFI/F8zRzEHxY9s1L+Hl4ynLdU2YUyEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779231832; c=relaxed/simple;
-	bh=xKMAuxSnBaiIQnifO4lO5g7yb/HDUh2AjgWXj9gRzQE=;
+	s=arc-20240116; t=1779232630; c=relaxed/simple;
+	bh=Eb0mF10dPcBEAb8A+vklFm6/f/BAB5bM+kULHpJmTC4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=BazyBjRzoyPBlF5oHkS7XqKO3PSoB8Cse+QQnujt6RoRs3XEt5x2nBa2BHYYVPzaRuvizImL981cj3F8ls0ggDZPfeDOWMPpoJZ2bXwwtYKdw11oiRVu+mGvE+NeWMYdLLJ3VwYJO0KtC6sR4Mp6tVcpeSFc2VemofnMuhRviSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oolkC350; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=O7b/AyUbO19kXn28VvgnU+Vn8MytZsY5Wc7/sRWFsFOeVZuZxgXdxCipeJbY7e0W9Ud1qh5SWawMnEMumngDkxRSJ8JAr+rgtX+KKaWpBLPueCZePRAngO9jD/56QhcroXQkFIG6ti7f48kpg7pSW7fsIjpQNVuRR+Gbx24GPZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=no75C2yq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oolkC350"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EF351F000E9;
-	Tue, 19 May 2026 23:03:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="no75C2yq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D4561F000E9;
+	Tue, 19 May 2026 23:17:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779231826;
-	bh=L6x84DScyauFoFkyNCgdMiKe99U2Iy86dHCfRK5nK08=;
+	s=k20260515; t=1779232629;
+	bh=6lTwbdt4erNMBMTDsdcpEHwDG7t1vTJ8YyiBoOIiq0I=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=oolkC350fOGaBZP/56vo0AVm8Cc74zrPebNhbNIs3Ss+ZS8SfZul09XlVXXsm3r4R
-	 G2UBX8MDrCXjAhSK6siHGsPFeE53keUlNqIfukr3ZPBrnX+8g7AOKjAfZjk3SDWg0f
-	 dszjIDBEXbTgtZw7eGWlHMuP6Q4HL5SE1QgFVoFACWghXFBBj3+IoCy25/3LmN5D2m
-	 G22tMyQAQKWfZxPfLOGL1dS4Zj8oKHbjAEn6czv90HkaaPGSnkNV3g2wiBOLRY/pEc
-	 sQteWFZLp3j0ZS7U9xameh/72hgYfJk3DNhlEDzvwz67XP97ABHWa+8qG/hBNpOGi5
-	 2mZBliqr3d3eg==
+	b=no75C2yq7CHzxKpoIt/fddgZPFLeqauvV6ejRwMrHNzY8M5+eJ9SRbGaLolZ0vHyG
+	 zDL+hZHecqOBT7RpAG5OHxMJH7D1Q/AvcDyAFOuWhIlbvVL4HDo8r7YmZ8AZ8Wd/pf
+	 GIPQfSYys1xt3kwicDWJub7bDp9eGVub1ojBLiyky9ZkXcLrGmtxm5yPEzk3MJfDPN
+	 5MIR2K+keTWT/Dl8yMYX3aiatQjZd4J+xv4vrz4oGplqDPJxrs+FBjIviJQzdkPgF1
+	 lhEerB65Qwwa77SAkx7p3OhlEMKz1mqOMTqUVqK+BTkNv6vekNS9Aquz+v7BogbfUF
+	 89maSXzWyw4QA==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next 12/12] selftests/bpf: Test attaching
- struct_ops to a cgroup
+Subject: Re: [PATCH] bpf, libbpf: reject non-exclusive metadata maps in the
+ signed loader
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Martin KaFai Lau" <martin.lau@linux.dev>
+To: "KP Singh" <kpsingh@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260519215841.2984970-13-martin.lau@linux.dev>
-References: <20260519215841.2984970-13-martin.lau@linux.dev>
+In-Reply-To: <20260519215358.126364-1-kpsingh@kernel.org>
+References: <20260519215358.126364-1-kpsingh@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 19 May 2026 23:03:46 +0000
-Message-Id: <20260519230346.8EF351F000E9@smtp.kernel.org>
+Date: Tue, 19 May 2026 23:17:08 +0000
+Message-Id: <20260519231709.3D4561F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] The return values of `bpf_map_get_info_by_fd()` are not checked,=
- and the `info` struct and `info_len` parameter are reused across successiv=
-e calls without being reset.
+- [High] The generated BPF loader program uses a hardcoded 8-byte read (BPF=
+_DW) to access the `excl_prog_sha` pointer field, which causes the BPF veri=
+fier to reject the loader on 32-bit architectures and silently bypasses the=
+ exclusivity check.
+- [High] Branch target offset calculation is off-by-one, causing the jump t=
+arget to land past the beginning of the cleanup block.
 --
 
-commit 7b32bddd7d98a92b1f824ecda2b3ef053e323da3
-Author: Martin KaFai Lau <martin.lau@kernel.org>
-Date:   Tue May 19 21:58:19 2026 +0000
+commit 51df41105aded76b418cec093cbbaaad09c03147
+Author: KP Singh <kpsingh@kernel.org>
 
-selftests/bpf: Test attaching struct_ops to a cgroup
+bpf, libbpf: reject non-exclusive metadata maps in the signed loader
 
-Basic tests for attaching struct_ops to cgroup.
+This patch updates the BPF loader to verify that metadata maps are exclusive
+while they are frozen. It places excl_prog_sha in struct bpf_map and emits a
+check in gen_loader to reject the map with -EINVAL if excl_prog_sha is NULL.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops.c b/tools=
-/testing/selftests/bpf/prog_tests/bpf_tcp_ops.c
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops.c
-
+> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+> index cd5c2543f54d8..becfda5b90253 100644
+> --- a/tools/lib/bpf/gen_loader.c
+> +++ b/tools/lib/bpf/gen_loader.c
 [ ... ]
-
-> +static void test_query(int cgroup_fd, struct bpf_tcp_ops *skel)
-> +{
-> +	struct bpf_map_info info =3D {};
-> +	__u32 info_len =3D sizeof(info);
-> +	LIBBPF_OPTS(bpf_prog_query_opts, query_opts);
-> +	struct bpf_link *link1 =3D NULL, *link2 =3D NULL;
-> +	__u32 map1_id, map2_id, map_ids[2] =3D {};
-> +	__s32 type_id;
+> @@ -601,6 +601,23 @@ static void emit_signature_match(struct bpf_gen *gen)
+>  			emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, -1));
+>  		}
+>  	}
 > +
-> +	type_id =3D get_bpf_tcp_ops_type_id();
-> +	if (type_id <=3D 0)
-> +		return;
-> +
-> +	bpf_map_get_info_by_fd(bpf_map__fd(skel->maps.tcp_ops1), &info, &info_l=
-en);
-> +	map1_id =3D info.id;
-> +
-> +	bpf_map_get_info_by_fd(bpf_map__fd(skel->maps.tcp_ops2), &info, &info_l=
-en);
-> +	map2_id =3D info.id;
+> +	/* Reject if the metadata map is not exclusive. Without exclusivity
+> +	 * the cached map->sha[] verified above can be stale: another BPF
+> +	 * program with map access could have mutated the contents between
+> +	 * BPF_OBJ_GET_INFO_BY_FD and loader execution.
+> +	 */
+> +	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX,
+> +					 0, 0, 0, 0));
+> +	emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, SHA256_DWORD_SIZE *=
+ sizeof(__u64)));
 
-[Severity: Medium]
-Are the return values of bpf_map_get_info_by_fd() intentionally left
-unchecked? If the function fails, it might lead to confusing test failures.
+[Severity: High]
+Does this 8-byte read (BPF_DW) cause issues on 32-bit architectures?
 
-Additionally, does reusing the info struct and info_len between the two cal=
-ls
-without resetting them pose a risk?=20
+Since pointers are 4 bytes long on 32-bit systems, the verifier will reject
+the loader program with an access size mismatch error (-EACCES) because it
+expects the memory access size to exactly match the BTF-defined pointer
+size.
 
-The kernel updates info_len during the first call, so reusing it could be
-problematic if sizes differ. Also, if the second call were to fail, info.id
-would retain the value from the first call, causing map2_id to incorrectly
-equal map1_id.
+Also, if the verifier check were bypassed, wouldn't an 8-byte read straddle
+both the 4-byte excl_prog_sha and the adjacent 4-byte ops pointer? Since
+ops is always non-zero, the resulting 64-bit value would never be 0,
+causing the BPF_JEQ check below to silently fall through and bypass the
+exclusivity check.
 
-Would it be better to wrap these calls in the standard assert macros and re=
-set
-the variables before the second call?
+> +	off =3D -(gen->insn_cur - gen->insn_start - gen->cleanup_label) / 8 - 1;
+> +	if (is_simm16(off)) {
+> +		emit(gen, BPF_MOV64_IMM(BPF_REG_7, -EINVAL));
+> +		emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_2, 0, off));
+
+[Severity: High]
+Is the branch target offset calculation off by one?
+
+The offset off is computed based on insn_cur before emitting the
+BPF_MOV64_IMM instruction. Since emitting the BPF_MOV64_IMM instruction
+advances insn_cur by 8 bytes, and BPF branch offsets are evaluated relative
+to the instruction immediately following the branch itself, the actual jump
+target evaluates to cleanup_label + 8 bytes (1 instruction) instead of the
+cleanup_label itself.
+
+This skips the first instruction of the cleanup block. If nr_progs > 0, it
+skips loading the first FD into BPF_REG_1 and calls sys_close() with an
+uninitialized or stale register (e.g., a map pointer), potentially closing a
+random/incorrect file descriptor in the system. If nr_progs =3D=3D 0 and
+nr_maps > 0, it may jump into the middle of a 16-byte BPF_LD_IMM64
+instruction, causing verifier rejection.
+
+Does this need to be adjusted, even though it appears to be a pattern copied
+from the loop above it?
+
+> +	} else {
+> +		gen->error =3D -ERANGE;
+> +		emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, -1));
+> +	}
+>  }
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260519215841.2984=
-970-1-martin.lau@linux.dev?part=3D12
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260519215358.1263=
+64-1-kpsingh@kernel.org?part=3D1
