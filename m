@@ -1,118 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283A82F8E90;
-	Tue, 19 May 2026 19:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779218640; cv=none; b=UZqIuD6JZ+foO57jqGuHoQYcgPGe6HcZ3e9SPXlHqaycWUIQIeSqOVbFBCR0QsbKScgvWfIO0lB95ZAK974Ya0xax17Jg9zwlx1GNH3gx68Og1VQSBZqxNkPpHdjsMzgf952TjmFAH4WDFtoFEbd6OhFuAbv4DAhZ/cJBEb4yE4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779218640; c=relaxed/simple;
-	bh=lFjdbMw+j91pvfAlw9yJ2BZZfDgHmaa652F8B2FGJjI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=YTCo1YXes/8MIiXxVgeUlhPYmMGdKn0HXXEPHOoXCuhOh67/ieC+VMAsggzTGt/qL8dzgnqu/IR4dcIpN5oOlIXbFZOW4unzwOu2R4K3PYfPIVsra1KZ7XN9V3ql1zJw5J5taIyciuSuNyxxWqmR764zsVVS6YX1edNLxcICYIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ktNJXRbN; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91AB2F8E90
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 19:24:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779218647; cv=pass; b=G2hhxcaB/bAIEuNoKsaIy/Mre1S/voZxKvnrjgfmDW91Isdszw3tcSA9WxACNAB5r8v0TCq97bovMLJAnZVzU/sVzIxmPjvXGTCoGVDsUcLLugoBSVFJC18BBhPKjzTdQv+3hm937RPkgyZGay0VFSMgRaI04SOrlPXzD38BOZ4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779218647; c=relaxed/simple;
+	bh=RlvM1M6ANjyWqgZqYLqn7hs5nlMVkBq/XuvFm7K5JZg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SUEmcfyGNrW+WtMefdQh5foBnfayp42ub+hP+n20W+CT+x02ProHU4i7Lrq4uQFy6HO33RMX2iPQOYPByJGpfpKGCqEUK0s9ZUm+AzcS1EkfU8wiFRbS5mjqp+Kcba2Qsv7ZdGBX6vNUgzzSTbJSkFtxaKXrWifRY7pViHYDMUo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kgv6mxlm; arc=pass smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ktNJXRbN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A44B31F00894;
-	Tue, 19 May 2026 19:23:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779218638;
-	bh=jyBQ3cmJxykIgAoQvvMmHQCbRsXK9xpKOQmJf8X3OkM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ktNJXRbNFrTUV2z0ZXBnadHe7wmO2Yf5ukX3yekfkE4IHSAm6A+knuUJQUKh81kYo
-	 OU8zV31SghuSSN1UqkWlSOVpqqcYLrmFbsPd/K/4FKFvT0+02MLIE1mnTiHq+EhfCY
-	 Pg+qDy0rfhAv+pOS7CJIPCTpndgTzGQ+sA5Jp/ZRXFxemRUML5H74r00xredLg4pfF
-	 E42dr2ppuGRlTT2ADgb0d14ikhKkgTyxpVftid66BSzPIq9GK4VWLWQ1nhfI/iD8pS
-	 kHbtv6BQeGiuiK8NFY4Y9TrIX5GM+tm+Wss4TgT8ZgTwU7wFVAuqvmg5WghS4o2Ac2
-	 xvcrOJTVWGtfg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH stable 6.1 1/3] perf build: Conditionally define NDEBUG
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Florian Fainelli" <florian.fainelli@broadcom.com>
-Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-In-Reply-To: <20260519185154.2987285-2-florian.fainelli@broadcom.com>
-References: <20260519185154.2987285-2-florian.fainelli@broadcom.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 19 May 2026 19:23:58 +0000
-Message-Id: <20260519192358.A44B31F00894@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kgv6mxlm"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-67c1e0229acso6653120a12.1
+        for <bpf@vger.kernel.org>; Tue, 19 May 2026 12:24:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779218644; cv=none;
+        d=google.com; s=arc-20240605;
+        b=jP92tX6zUnTLCuB1rMUJ2nhqdeZ5g8nzPD92CW4cVIIT39MXtXRyYwSo9zO3DPwYKx
+         L0/2ZnHuxcPx941fdrmGBHIQ4Rhamakcc/oiQnWQppPdEcXJutV00fG94rmI4qm9g41b
+         ZRhFE2FysN/ppwq7oAiH7ac+itSld+g4km1USLUbZLX2hXp8ReWAKLDRhG/U3s045id3
+         4BbBr9jSwXR4dQ5MuwyqBGckfJMNM/fgKQAc4+KyQW3f2TGKe4D/ix6+NPCAlgMBRdGT
+         C3NWkxHRXuZu6efBk+BGkYjEmy675N9iH5UTDPiLShOnCEoz+F25Cv4t1uzh2s4dtN8c
+         itOg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=llVLZbOPPPSzMipQ2syl4ldrO1/hT+fdvXZ/pihXu0U=;
+        fh=6hiPdiTe4zHoVSFcX6DceRO15RsbA1SKMTu9jUn9QM4=;
+        b=TIDbMv4V8nWbOs2Gblt4s3PFeVn1FdTskDa+y7im8BgSUihkueGMSnYI2imgC49IlY
+         isdJ6YD0GqPuAr505EagbQk9nx7rbznVKzZxnMgH7bALGOXLeschbfpKRHj3vUyobCih
+         ld3aysWwkzhqdT7GNHbJ3rd77q/gZn5jdnY96U8jmLhhxQQ5a3PfrLVklBj42NAotvOW
+         zZa3Yuat0usgfQmSdlBUf+z1vfUUthlbAL0c5rV+9v3PPKEi4/9OmxRUU/4PQ2S9uwVI
+         AhS2w/ZDxoJfFXinOGgUJ538YQ9PG3Gq8vN4DPAWXws+f/XQDF9lazLYoj9HcMm3GtcJ
+         kqig==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779218644; x=1779823444; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=llVLZbOPPPSzMipQ2syl4ldrO1/hT+fdvXZ/pihXu0U=;
+        b=Kgv6mxlmDc/TSode4v+KFx6cpXeqzT0MoSTKV5VIMm4QYJQk7YLOS+jwxjOKu3GgMv
+         h+ZtoU//Ym0IO/KIGsGmkI97jDVd29Tjz+wUqSlcoqRG5eHlhgGIPi3qUBt4mNg/+sUw
+         B4LteX2a/XaX1PxzYCVk+5R7YH6zN2QmxCiHvF3qaCDM0TtZgJgyRe+9FuIZx8g1B1st
+         SU14EUPwaTLOIAzAYr/j1wyDpcKgRTE8NufoO3ur8OzXE87I6oTyhCepbezoOu49Xxt1
+         KNvfbKRmqhrOi3jxXPBj03cOLOACq+DDbc9HPDa8iaP6i/eICgZECc7F/Mqfcl9F7Lvp
+         VzoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779218644; x=1779823444;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=llVLZbOPPPSzMipQ2syl4ldrO1/hT+fdvXZ/pihXu0U=;
+        b=SlmqOyz02R7JXcUWQYZmtmzTbWQm7dzoO84XcgYckVQaNx8kQdJ+qeRo2ypHDJK40a
+         WbGVb20w3CTFc7oVF1kGU9aPVapUI2hu3AtoCHyLMppbWIs3SCiCUUHeglw9eCQbFF5C
+         DNuu0uFCqRJjJCpDZNQ09XNMGjHzy9hB/NP8pNp3xX/poVzL1DYMUgWP7TzIkOIOKKDx
+         ww6brjGYBgOIQzT4M9X8L2uIc9pUU09WE21sWHxdML2W0N0ZIuS3zXHj3j/3TnDAQE+q
+         Lm8JDorVu+kU/9P1dVsv6ZEIgH0bNj22V7yKuIlrCa1+t+Qeg2jQOu8vCFYeiIO3RRB7
+         arVg==
+X-Gm-Message-State: AOJu0Yxt6FCpKutduCzTQgn6RBI7d0aJnv1Q786ary+YHlAt6/yS7Fcp
+	OBIQCyjmSFdHxKIXOJ1vlPJ4xHECHpWsCbMsbPXUj/wIyHAcmOea1d22l5F/9LZmfQfFZB1h3qr
+	OahYt9tBnrVjgFZ5nxov5JUU4KlrwpVk=
+X-Gm-Gg: Acq92OHh8021YVCA6Wdyhw/DO0CgVG0jVLk8vsFWwrDSETbEdKPEp5hkJmHeqmDyP/Y
+	y/DT44VOQVYVQwTq49ilN2hQDaCDm8NUUhKtuHqwned75GmyVPD36ZEo5vPFvlnWdil87EZzQyA
+	LE0LokaFTzgHDjPeoyi5wIG28qk0Ob9owyuDT3KEw9y/zKDoFVfBvpIQEg8TmURCJxfjRV5grZh
+	ChvszR80zD+NnANFGOv/XB7ymiENw+H2Ir4IAIpRE4NpZh7+XKFtOLqIgZHTPPMHvztZ1819HsD
+	bHEi1oTMA1t/jir5ACiXHePCLqx72ZhCp7otku/E7Q==
+X-Received: by 2002:aa7:c14a:0:b0:66d:d2f9:520c with SMTP id
+ 4fb4d7f45d1cf-683bd68303bmr8038389a12.19.1779218643829; Tue, 19 May 2026
+ 12:24:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260519163632.2220753-1-puranjay@kernel.org> <20260519163632.2220753-4-puranjay@kernel.org>
+ <CAADnVQKhkKPS_7v-4dGWEsjR7rBRB_XG4jHq3JpLYwzKmCn4Bg@mail.gmail.com>
+In-Reply-To: <CAADnVQKhkKPS_7v-4dGWEsjR7rBRB_XG4jHq3JpLYwzKmCn4Bg@mail.gmail.com>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Tue, 19 May 2026 21:23:52 +0200
+X-Gm-Features: AVHnY4LucGI1rbU4TXVGDWXG5eVGsToCd8XmhyzBF3DZiYEMpkb0mkD5Vd-ULaw
+Message-ID: <CANk7y0h2T3d7u2O5g8PFTNAwQgHedi9r7BiNv_pVVmFP4JOGXw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/4] selftests/bpf: Cap batch-timing calibration
+ at BPF may_goto loop limit
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, 
+	Fei Chen <feichen@meta.com>, Taruna Agrawal <taragrawal@meta.com>, 
+	Nikhil Dixit Limaye <ndixit@meta.com>, "Nikita V. Shirokov" <tehnerd@tehnerd.com>, 
+	Kernel Team <kernel-team@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Medium] Defining NDEBUG removes the side-effecting `bfd_check_format()` =
-call inside `assert()`, leaving the `bfd` object uninitialized.
-- [Medium] Compiling out assert() removes critical runtime validation, lead=
-ing to deadlocks and NULL pointer dereferences.
-- [Low] Defining NDEBUG causes variables only used in assert() to trigger u=
-nused-but-set build failures.
---
+On Tue, May 19, 2026 at 8:11=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Tue, May 19, 2026 at 9:36=E2=80=AFAM Puranjay Mohan <puranjay@kernel.o=
+rg> wrote:
+> >
+> > BENCH_BPF_LOOP uses the may_goto instruction (via can_loop) to bound
+> > its iteration loop.  The kernel enforces a maximum of BPF_MAX_LOOPS
+> > (8,388,608) iterations per may_goto instruction.
+>
+> claude is incorrect.
+> may_goto is timer based. It aborts at 1/4 of a second.
+> Old BPF_MAX_LOOPS limit applies for bpf_loop and bpf_for() iters only.
+> Is this a theoretical issue?
 
-commit 34a3ad3c8a3c7ed93c69e4b84492292fae1cb400
-Author: Ian Rogers <irogers@google.com>
-
-perf build: Conditionally define NDEBUG
-
-When a build is done without DEBUG=3D1 then define NDEBUG. This will
-compile out asserts and other debug code.
-
-Link: https://lore.kernel.org/r/20230330183827.1412303-1-irogers@google.com
-
-> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> index 898226ea8cadc..45708084fd3d6 100644
-> --- a/tools/perf/Makefile.config
-> +++ b/tools/perf/Makefile.config
-> @@ -228,6 +228,7 @@ ifndef DEBUG
->  endif
-> =20
->  ifeq ($(DEBUG),0)
-> +CORE_CFLAGS +=3D -DNDEBUG=3D1
-
-[Severity: Medium]
-Will this cause a regression in tools/perf/util/annotate.c? The function
-bfd_check_format() is called directly inside an assert() macro there.=20
-
-Since this function has side effects (identifying the binary format and
-initializing the architecture and machine state), compiling it out will lea=
-ve
-the bfd structure uninitialized.=20
-
-Subsequent calls like bfd_get_arch(bfdf) operate on uninitialized bfdf stat=
-e,
-leading to NULL pointer dereferences and crashes during perf annotate.
-
-[Severity: Low]
-Will this also cause build regressions due to unused variables? Variables s=
-uch
-as old in tools/perf/util/block-range.c are initialized and assigned values=
- but
-are only read inside assert() macros.=20
-
-Compiling out assert() leaves these variables assigned but never read, which
-triggers unused-but-set build failures because the perf build uses -Werror.
-
-[Severity: Medium]
-Does compiling out assert() remove required runtime validation elsewhere? T=
-he
-codebase currently relies on assert() for handling expected runtime failure=
-s.
-
-For example, in bench_sched_pipe() (tools/perf/bench/sched-pipe.c),
-assert(pid >=3D 0) checks for fork() failures. Without it, a fork failure c=
-auses
-the parent to execute the child's logic, reading from an empty pipe and
-deadlocking indefinitely.
-
-Similarly, in tools/perf/builtin-timechart.c (assert(cursor !=3D NULL)) and
-tools/perf/builtin-top.c (evlist__id2evsel), allocation and lookup failures
-proceed without aborting, leading to immediate NULL pointer dereferences on
-subsequent lines.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260519185154.2987=
-285-1-florian.fainelli@broadcom.com?part=3D1
+Yes, this is theoretical, the benchmark will never cross this limit
+because it runs the loop for 20ms at max.
+So, I will drop this patch in the next version.
