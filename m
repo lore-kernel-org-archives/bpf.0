@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9016E2FB969;
-	Tue, 19 May 2026 02:00:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D640A30AD1A;
+	Tue, 19 May 2026 02:09:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779156006; cv=none; b=p7WeGAzJziu5ziJ4RLxS0GYAGIL1lAqz67oP3nICGDxfg4Ul3osfuqA20zyOr4zkxuUN2TW4z5UV42erAXZ3fvxkDbIbWjr2HHnZly6ymvlXlsvUCrvvWE7y7u+ohlW9iLzG1IMcCgMDro9qLdTU5yzTx/P6haDtzKA4l6jECT0=
+	t=1779156596; cv=none; b=nri/sP3439T0F9V4735Gt5ZKEoAKT0tasStol/oNV+r2dvVgcNYiZp2jQvbjkiVViMrizzNFmAxL8z9IFaLD4xID4BFzDmJ5xZg4Gl6vCC6Qg7gxVlrYjHVNuw0SmyExEtYAU/4dfMwgNbMOxp7coDpKZuhZTbM+v6R4sjJ52OU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779156006; c=relaxed/simple;
-	bh=KWvE0n4HLkfgFgaWO1y39G6mfV9oqV5D07CE+uU53YU=;
+	s=arc-20240116; t=1779156596; c=relaxed/simple;
+	bh=T0xSLxJ/GyTKjCog/LqeN/BNj3foZSjmpd4uaVwM4I8=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=A3QqKDwmwsgnmfSYG+SOD6nmXDLqNsslE/hBPymuW/rLBbNsO+aqqG4AU/D2DULmTAJerMwXIvfV8JUHbME3qFY87RALTDb/fjsKdfIEkSwxdI8dmTPuyb8KbXgBFoOwsHFPKNDfJ3ds0IUiLJdPDoQmiX/QzIEeiyS2W7rymdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kYCqbc3T; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=ZgEP3ij/udh/KRNbYuEJGVv6XC8CH29Zzm9/EwMk45NlXhNfVCDPqWMUo08XVUpKEaN/0zrDy1J/9BFnj8nCLhcLHg7MWcdCqpwkjNkjLYUbHlJsJUViq3ITpALXxjf34XK74nDuSdjIbMs9awRyNgCqjsiw8rEaYyu2qb8PYX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jHj91jVH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kYCqbc3T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD43DC2BCB8;
-	Tue, 19 May 2026 02:00:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jHj91jVH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FFB3C2BCB8;
+	Tue, 19 May 2026 02:09:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779156006;
-	bh=KWvE0n4HLkfgFgaWO1y39G6mfV9oqV5D07CE+uU53YU=;
+	s=k20201202; t=1779156596;
+	bh=T0xSLxJ/GyTKjCog/LqeN/BNj3foZSjmpd4uaVwM4I8=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=kYCqbc3TFn1CG/MjChsg5WeUIHBvjYdCDxA3O+kvHtv6yP7Ekbpc2y0OXP+D83TBr
-	 GU4TP1IQ3SNI4M1+FD1xChz715jWbz/k3UBLPcgrkgaW0rC+7fo2FYiTEoAvDsGOKb
-	 uyj1tita3zzK8J5eWjutnqKJyF4LE7tlj3tcft9GxX9lx5mlmFN/dEVmoKawyApUy/
-	 i2q7WD+azjtkrlFJN85Dfycn/Gso/mRp80FkSvvcW2zfgxveA5rroD+egO1evX8htN
-	 x5ne4ER/ZarktvXowXYxsny93F4Vsk7KkPNGF+1Hle3lMhckrMvZo84A1QZyUJceRk
-	 8Q1Iu05AQxiPQ==
+	b=jHj91jVHlZWsXgKv+mVodC4kLv99mlmuTcsb2g82m0k6OfPCZFzrNpPhGMTEtNGzd
+	 eGMHHi5yaI0ux8JulOdKHUpNuPsQ+CQHIUPhcJ14ASRnU+vJ+aG2TqehpCBUwq/L/t
+	 o+bgh6nvJtfmUWUCOmMdZAqx4cr/sG/R9ih8ghcsif1hmBCGCaOHbubjSga7P1USmh
+	 ozQlKT3AY8OX1BoecAVMGx2QPVSO6xZHZ9LZenz37b/fH2I0L3Z36xzUviRDAhGM8V
+	 JgxW2tQuM3n/Yji5NMKs0LW5PfRXYJm/AbDD0szIJH5GoVO6Dj5FENyVo6Z0BpTudO
+	 Wl3Z2nJYo2FTg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 6DA493930D10;
-	Tue, 19 May 2026 02:00:18 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 197AE3930D10;
+	Tue, 19 May 2026 02:10:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,46 +37,40 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/2] net/mlx5e: simplify and optimize napi poll
- flow
+Subject: Re: [PATCH bpf] selftests/bpf: Reject unsupported -k option in
+ vmtest.sh
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <177915601713.2051001.3494173884962273155.git-patchwork-notify@kernel.org>
-Date: Tue, 19 May 2026 02:00:17 +0000
-References: <20260514111038.338251-1-tariqt@nvidia.com>
-In-Reply-To: <20260514111038.338251-1-tariqt@nvidia.com>
-To: Tariq Toukan <tariqt@nvidia.com>
-Cc: edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, borisp@nvidia.com,
- saeedm@nvidia.com, leon@kernel.org, mbloch@nvidia.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, shshitrit@nvidia.com, witu@nvidia.com, kuniyu@google.com,
- dtatulea@nvidia.com, sd@queasysnail.net, kees@kernel.org,
- netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, gal@nvidia.com
+ <177915660790.2054007.17618199440509300067.git-patchwork-notify@kernel.org>
+Date: Tue, 19 May 2026 02:10:07 +0000
+References: <20260516120625.80839-1-roman@kvasnytskyi.net>
+In-Reply-To: <20260516120625.80839-1-roman@kvasnytskyi.net>
+To: Roman Kvasnytskyi <roman@kvasnytskyi.net>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
+ kpsingh@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
 Hello:
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-On Thu, 14 May 2026 14:10:36 +0300 you wrote:
-> Hi,
+On Sat, 16 May 2026 14:06:25 +0200 you wrote:
+> vmtest.sh does not document a -k option and does not handle it in the
+> getopts case statement. However, the getopts optstring includes k, which
+> causes the script to accept -k silently instead of reporting it as an
+> invalid option.
 > 
-> This series simplifies the mlx5e napi poll flow and reduces branching in
-> hot paths by leveraging existing dependencies between channel features.
-> 
-> Patch 1 avoids passing the full channel object to kTLS RX code paths
-> when only the async ICOSQ is needed, and slightly optimizes the common
-> flow in the pending resync handling logic.
+> Remove k from the optstring so unsupported options are rejected through
+> the existing invalid-option path.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next,1/2] net/mlx5e: Reduce branches in napi poll
-    https://git.kernel.org/netdev/net-next/c/cc199cd1b912
-  - [net-next,2/2] net/mlx5e: Let kTLS RX get async ICOSQ param in napi poll
-    https://git.kernel.org/netdev/net-next/c/425d0e2df5c2
+  - [bpf] selftests/bpf: Reject unsupported -k option in vmtest.sh
+    https://git.kernel.org/bpf/bpf-next/c/6df582112aa9
 
 You are awesome, thank you!
 -- 
