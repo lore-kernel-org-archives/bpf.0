@@ -1,129 +1,112 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98193E16B6
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 08:25:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49EDC3F4120;
+	Tue, 19 May 2026 08:58:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779179116; cv=none; b=noVmDhGxXl7WJAG2NwBUkzwd58uAIdE/Jf50InxACZVFY2Rn+GpdU/jWaBDzGO6TcVOES+svYEkIrXPjoCveZP0hi3rIho10OH0SGKmyoaOz7JnO6y3osXHuMulVTCfVdK9olkG30VWOWhr0SkHORJLtviE2Dln7QjewnOKcpHo=
+	t=1779181093; cv=none; b=mCDba8htoBz2x55XkoTzqbt9h2GbG/DaYeNKxh1LHW+C1sQd+7F1u2NQ15bQI9jQZPqx98bs2AzuNahhkiWe3dbbKTfFkKQ9kE3gXFYLybjb24iD53K/5qAV9HLaYnCwBnW5QhVwNeRa5flAbIfZ+J6KI9SVNyo6OEJVxPjCp2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779179116; c=relaxed/simple;
-	bh=BgY5uvwCwE0cUj3YRFfGaUEGJQp0tsLv3EsgGIrGanQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gFSm6ImzTKCCpInh4jQJvYkygl+QKpftNjh3Uf5g9zelj13ODc7uYHgflOhvWP6vpqykvSaRTWhuiVlQnQGAMcLBpXPkJZkLcaLSTGyxpZF8WSJhTFObO4YB9rqp60VgzvchiozQm+QADXRJvBjqPh2qIkp3SCts4X92PJpLbHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GDXYQeJE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779181093; c=relaxed/simple;
+	bh=gauNbmJGhz8SMUOs2xoEyEo5YiMVdKM4Tk3hN8N4jDY=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=TKlYYnlycIUX12476XQVQ7RIasY5vFtXlpj9WStUDkG9YMW74AvTCA9XRv1zm8puwjEV5CSSigTs2ekZw6j9zfK2JlOwEMX3j8mnhhB83ED4Z0OMpLgdeP/zZV6s7Q/oedlmzIoKVU2F3vE/oolkP6Pda6Oyuz1XGzHMAq9fdxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OIQ+Vgif; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GDXYQeJE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF651C2BCB3;
-	Tue, 19 May 2026 08:25:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OIQ+Vgif"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8029C2BCB3;
+	Tue, 19 May 2026 08:58:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779179115;
-	bh=BgY5uvwCwE0cUj3YRFfGaUEGJQp0tsLv3EsgGIrGanQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=GDXYQeJEZXAMqfs0fr0A8xxi1r+lsEnCXeOY9Ww8CZs1U3Mlcj7hU3yqf3MEfTMmo
-	 +e5FDwVhHKPKpPlDKiXMN5K/UgvOJ46sqWgWd5tnne5NLI1tBNPi0qUnrhQRmD4p63
-	 yFrLJ+C8cVmb/ixJCce3NaE9kIpcFU+T2vuZ/IL/HerFjV2kt9mMiFwJKSjKzusFvs
-	 2+hAG07iibqSYOFFv1NAOriAag0zreC5vAMuzyEo7mVXquCYAHpj2aJb4ivGQjSupj
-	 gtH2r1YfI5J24d+5b4XXR3MCyTDSLDu2HLsl8MHs5XnhzkIQqgR+ZeZq6gM8VPNN2X
-	 xf2hPbE7QBUFA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 6/6] selftests/bpf: Add RX latency tests for
- bpf timestamping
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jason Xing" <kerneljasonxing@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260518082344.96647-7-kerneljasonxing@gmail.com>
-References: <20260518082344.96647-7-kerneljasonxing@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 19 May 2026 08:25:15 +0000
-Message-Id: <20260519082515.AF651C2BCB3@smtp.kernel.org>
+	s=k20201202; t=1779181092;
+	bh=gauNbmJGhz8SMUOs2xoEyEo5YiMVdKM4Tk3hN8N4jDY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=OIQ+VgifWcStlS5toMmZGu84EdGLCtmmnLn3Ob3jognZffsMTzc/DJEggAgX+G8GF
+	 gfXNpBlOAUMaNuJe9AtOT/v5b/oebVSMZIx3zMHhjtWXCiv7fi10XdKZkOB2uy6vB0
+	 efEsR/C9/1Yi/v/sOFKfbAf3ry0bfSdYJ++0AuKQwIqLG+z057qPvsDwpVQXffOll/
+	 KOaJDFoh8mi0pv5pkUtjWLO+6PnBcJ0+oBFBk11sntZi7sVHF8Qr13ZiGb7Pxi+jZS
+	 SggTQz761MHciv8LbGkZHWQ+0ROYb8U0S0OUmBVl3yj/UjdDwGaZBKr0hvRoiMoU4x
+	 EO+uDPznm51EA==
+Date: Mon, 18 May 2026 22:58:11 -1000
+Message-ID: <297658c4ae2d6e7103f5968efc936224@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: David Vernet <void@manifault.com>,
+ Andrea Righi <arighi@nvidia.com>,
+ Changwoo Min <changwoo@igalia.com>,
+ Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Mike Rapoport <rppt@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ sched-ext@lists.linux.dev,
+ bpf@vger.kernel.org,
+ x86@kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/8] mm: Add ptep_try_install() for lockless empty-slot installs
+In-Reply-To: <2f02d90d-cdc9-48ef-abe3-99e00f22595f@kernel.org>
+References: <20260517211232.1670594-1-tj@kernel.org>
+ <20260517211232.1670594-2-tj@kernel.org>
+ <9ba50fd2-077e-4291-9276-9adb18186873@kernel.org>
+ <agtuPrgIDNKSu2Oo@slm.duckdns.org>
+ <2f02d90d-cdc9-48ef-abe3-99e00f22595f@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] The return values of `ASSERT_TRUE` are ignored in `recv_verify_r=
-x_timestamp`, causing it to unconditionally return `true` on successful `re=
-cvmsg`.
-- [Medium] Using a fixed `usleep(10000)` to wait for a workqueue to run is =
-prone to test flakiness on heavily loaded CI systems.
+Hello, David.
+
+On Tue, May 19, 2026 at 10:00:39AM +0200, David Hildenbrand (Arm) wrote:
+> Is that really possible? I'd much rather prefer to trylock and retry, unless
+> that can really result in deadlocks. But I have the feeling that such deadlocks
+> should be impossible here.
+
+I'm not well versed in either mm or BPF, so the BPF folks will have a
+better take. But here's a scenario that seemed plausible to me:
+
+1. A bpf prog calls bpf_arena_alloc_pages() on its arena. The kernel
+   takes arena->spinlock via raw_res_spin_lock_irqsave().
+2. Under the lock, the alloc path goes through bpf_map_alloc_pages()
+   -> alloc_pages_node(), which fires trace_mm_page_alloc().
+3. A BPF tracepoint program on mm_page_alloc that shares the arena
+   starts running with the lock still held.
+4. The tracepoint program calls a kfunc, passing an arena pointer
+   one entry past the array it meant to touch.
+5. The kfunc dereferences. The kernel-side address is unbacked, so
+   the CPU faults.
+
+trylock + retry at 5 would A-A deadlock.
+
+> For example, staring at apply_range_set_cb(), what prevents:
+>
+> (1) apply_range_set_cb() finding pte_none(ptep_get(pte)
+> (2) apply_range_set_scratch_cb() succeeding ptep_try_install()
+> (3) apply_range_set_cb() overwriting the pte with set_pte_at()
+>
+> Between (2) and (3) CPUs could access the scratch PTE.
+
+Scratch only gets installed when BPF passes an unallocated arena
+address to the kernel side, which is itself the violation, reported
+through the program's BPF stream. Behavior at that addr is then
+undefined. For scx, the scheduler should be aborted and torn down.
+
+The only requirements are that the kernel doesn't oops and the
+violation gets caught. Beyond that, behavior at the address is
+unspecified, and which installer wins the race doesn't matter as
+long as kernel integrity holds.
+
+Thanks.
+
 --
-
-commit 3f1fdeab36943dce908082eb563628a5f8ca353b
-Author: Jason Xing <kerneljasonxing@gmail.com>
-
-selftests/bpf: Add RX latency tests for bpf timestamping
-
-This commit extends the test_tcp() selftest to cover the new BPF RX
-timestamping path. It tests a mixed mode where SO TX/RX and BPF TX/RX
-timestamping operate simultaneously, verifying they do not conflict.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/net_timestamping.c b/=
-tools/testing/selftests/bpf/prog_tests/net_timestamping.c
-> index dbfd87499b6b5..3cc52b670e74b 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/net_timestamping.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/net_timestamping.c
-
-[ ... ]
-
-> @@ -143,11 +143,45 @@ static void test_socket_timestamping(int fd)
->  	SK_TS_ACK =3D 0;
->  }
-> =20
-> +static bool recv_verify_rx_timestamp(int fd, char *buf, int len)
-> +{
-
-[ ... ]
-
-> +	for (cm =3D CMSG_FIRSTHDR(&msg); cm; cm =3D CMSG_NXTHDR(&msg, cm)) {
-> +		if (cm->cmsg_level =3D=3D SOL_SOCKET &&
-> +		    cm->cmsg_type =3D=3D SCM_TIMESTAMPING) {
-> +			tss =3D (void *)CMSG_DATA(cm);
-> +			break;
-> +		}
-> +	}
-> +
-> +	ASSERT_TRUE(tss !=3D NULL, "SCM_TIMESTAMPING cmsg present");
-> +	ASSERT_TRUE(tss && (tss->ts[0].tv_sec || tss->ts[0].tv_nsec),
-> +		    "rx sw timestamp non-zero");
-> +	return true;
-> +}
-
-Since the return values of ASSERT_TRUE() are ignored here, will this
-function unconditionally return true even if the assertions fail?
-
-If the caller expects a false return to abort early, this could cause the
-test to proceed regardless of the assertion results.
-
-[ ... ]
-
-> @@ -187,7 +221,27 @@ static void test_tcp(int family, bool enable_socket_=
-timestamping)
-
-[ ... ]
-
-> +	afd =3D accept(sfd, NULL, NULL);
-> +	if (!ASSERT_OK_FD(afd, "accept"))
-> +		goto out;
-> +
-> +	/* net_enable_timestamp() defers the static key update via
-> +	 * schedule_work() when CONFIG_JUMP_LABEL is set. Give the
-> +	 * workqueue a chance to run so that netstamp_needed_key is
-> +	 * active and skb->tstamp gets populated in the receive path.
-> +	 */
-> +	usleep(10000);
-
-Could this fixed 10ms sleep cause test flakiness on heavily loaded CI
-systems?
-
-If the workqueue is delayed for longer than 10ms, the static key might not
-be active in time, which would leave skb->tstamp unpopulated and cause the
-test to fail intermittently.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518082344.9664=
-7-1-kerneljasonxing@gmail.com?part=3D6
+tejun
