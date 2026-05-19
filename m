@@ -1,103 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3BC42874E3;
-	Tue, 19 May 2026 20:26:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F3283B813E
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 20:34:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779222419; cv=none; b=ZZJpLKlxYptR0PgihAA/s0rmL4MMLFYR7NyQjsQ+GjB4NnJdQEKq9h3gqWotnSTAsqCyfpet9NQyg91aYy44bSWOqIFu5p3ql9YqL/GwO30p89LEq0+xA3OiY03oAwU3BSOpDRHyUaRVE8XlFPPTbtNCnDzoHMpcLyzTuThoyqE=
+	t=1779222855; cv=none; b=Je0wYk8RGFcBRaSc7VZ4ZcZTgru61YGt4CcZLXu2slLNGewowyHPMtXtiR4dY6md/fWGl9JsrXR5O4mrO0kxN+OKXtOipX7q52J7Ge9mKnKsxWFcL764b+4PBfLYZGX+MrmE+Ew3Zb7GL/t8P4+0NXEGcS5ErXjdn4I9eohlEH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779222419; c=relaxed/simple;
-	bh=W87Ncg5sK70elKtoSJlUPVxgaIjggXxk1gFUJsVeK1U=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ECuk1uAYMFZ7GrxlbOau96mMWeHfp+4Mvpiy31wDZ8lg4hESEmYkbmfoNQKtG0OQV6bhzenHvNXnC6NygzIBJVxVFWf7QiLZQzsfCMmgm13E2RpXvo64jmIUaqE8NFXRkiP+vzfqPbB8Gmw5kY3Dm+zUoQ6u305y1VAMRE8SOYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZSCezyE6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779222855; c=relaxed/simple;
+	bh=1wemuly0fv73DYvh+b9bnboi5v5P2NQBwVj823s9/lg=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=mIC1FpGbcAF5bBqyr7a4q7LFiKZh+YZUY4ZBpYPLPIocWSvlI9chVHYHvSaDEIqWZCss9uwTs54AyZqaMl2SbMu3YVWalZBhgvhxWkfLo6EdFkhwWzgl2FOWT95UkksvG2asDDc/Tz6MEX65Xnxnx8C+qKvlido5coDZdhkCzUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UgjbpcSR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZSCezyE6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 427231F000E9;
-	Tue, 19 May 2026 20:26:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UgjbpcSR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA2B71F000E9;
+	Tue, 19 May 2026 20:34:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779222418;
-	bh=12aBSvojo05afpnBg6VM7sWoJBKuZQ5iYoXpWWaZoTw=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ZSCezyE6OE5QP9x1+Mrz//sLQUIRHpRMeoSCruEB2NB+dygaVzEjm6gMSZcA4QjZ7
-	 pZeOhxu87Z46oi4MJMIiwY9ZVEdHw9Z29iG1/fy14DVTkukKsaiRAYZAzawUqysAlL
-	 ngJipQtN0jVENoG65wMyi/uM0N/pIiZ9Hkdyc9NBDUxKVi7BR87omtGJ0YUd0KqPcw
-	 Q3cFXLa8AjPqA2R+nX37kTTo3Xfb582dM0AynrWfQdmVt9GpAKABrqsasmrr92AHLc
-	 2NOMHcrqmQfW51ZSXC6v1a2maJG1HcjR57zekGYXx9nTb7K3Y8iKHkdrqmI9p6Jd1n
-	 7epqQHlY2C7XQ==
-Content-Type: multipart/mixed; boundary="===============1006306579911665399=="
+	s=k20260515; t=1779222853;
+	bh=xOWVl2ZnQypco/sChPAAI8dgFEPDhybFevaXZFY0vhg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=UgjbpcSRmz99GaQQqip4ssr6+LBW2p76Rdm6FN+g4VaVg7mmxSDdYcXSozaecizsI
+	 ZsyWwwSsGxUxI/aUOrlPaK5N4EFqPQhMXGq8pdJ/WrJtVNaMLOEDg3kygZWU0WAVWB
+	 Nwl6grHC+7N7TLvVUJ95nujHWm1mnuwHpgPBUPowZ1BHl903kYfE7zFe8hGOFYkfqv
+	 L25Ra7TG+nJwr1vg/EY8Bfdn0PpzFud1Q4h0sg8kev/5Fa9d3byX2YV8jS3ikjo+rE
+	 70yXgp5Hzl0mUvXelJajXdjeFXQ2qu7n/xGeUfVRoA9BEPO2aeli/dg5rxeFta8iaw
+	 9ndbBh0kiFb8g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v5 2/6] powerpc/bpf: Move out dummy_tramp_addr after
+ Long branch stub
+Reply-To: sashiko-reviews@lists.linux.dev
+To: adubey@linux.ibm.com
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260519233812.18787-3-adubey@linux.ibm.com>
+References: <20260519233812.18787-3-adubey@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 19 May 2026 20:34:13 +0000
+Message-Id: <20260519203413.AA2B71F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <8038d2d4d6cbe44e018d1d2201fc10bc550994d05be6aeee83f6baed0964bac8@mail.kernel.org>
-In-Reply-To: <20260519233812.18787-3-adubey@linux.ibm.com>
-References: <20260519233812.18787-3-adubey@linux.ibm.com>
-Subject: Re: [PATCH v5 2/6] powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
-From: bot+bpf-ci@kernel.org
-To: adubey@linux.ibm.com,bpf@vger.kernel.org
-Cc: hbathini@linux.ibm.com,linuxppc-dev@lists.ozlabs.org,maddy@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,shuah@kernel.org,linux-kselftest@vger.kernel.org,stable@vger.kernel.org,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 19 May 2026 20:26:58 +0000 (UTC)
 
---===============1006306579911665399==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Meaningful code and commit message mismatch: The patch fails to =
+exclude the last 8 bytes from the overall program length, despite the commi=
+t message claiming it does.
+--
 
->     powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
+commit ba8b98dfdd35a5bb47f0ad30755a56bb74e290d8
+Author: Abhishek Dubey <adubey@linux.ibm.com>
+
+powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
+
+This commit moves the dummy_tramp_addr field to the bottom of the long bran=
+ch
+stub in the PowerPC BPF JIT. It updates the dummy_tramp_addr field offset
+calculation from the end of the program to reflect its new location.
+
+> powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
 >
->     Move the long branch address space to the bottom of the long
->     branch stub. This allows uninterrupted disassembly until the
->     last 8 bytes. Exclude these last bytes from the overall
->     program length to prevent failure in assembly generation.
->     Also, align dummy_tramp_addr field with 8-byte boundary.
->
->     Following is disassembler output for test program with moved down
->     dummy_tramp_addr field:
->     .....
->     .....
->     pc:68    left:44     a6 03 08 7c  :  mtlr 0
->     pc:72    left:40     bc ff ff 4b  :  b .-68
->     pc:76    left:36     a6 02 68 7d  :  mflr 11
->     pc:80    left:32     05 00 9f 42  :  bcl 20, 31, .+4
->     pc:84    left:28     a6 02 88 7d  :  mflr 12
->     pc:88    left:24     14 00 8c e9  :  ld 12, 20(12)
->     pc:92    left:20     a6 03 89 7d  :  mtctr 12
->     pc:96    left:16     a6 03 68 7d  :  mtlr 11
->     pc:100   left:12     20 04 80 4e  :  bctr
->     pc:104   left:8      c0 34 1d 00  :
->
->     Failure log:
->     Can't disasm instruction at offset 104: c0 34 1d 00 00 00 00 c0
->     Disassembly logic can truncate at 104, ignoring last 8 bytes.
->
->     Update the dummy_tramp_addr field offset calculation from the end
->     of the program to reflect its new location, for bpf_arch_text_poke()
->     to update the actual trampoline's address in this field.
->
->     All BPF trampoline selftests continue to pass with this patch applied.
->
->     Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+> Move the long branch address space to the bottom of the long
+> branch stub. This allows uninterrupted disassembly until the
+> last 8 bytes. Exclude these last bytes from the overall
+> program length to prevent failure in assembly generation.
 
-This looks like a bug fix for the bpf trampoline implementation on
-powerpc64. Should this include a Fixes tag?
+[Severity: Medium]
+Does the code actually exclude these last 8 bytes from the overall program
+length?
 
-The bug was introduced in commit d243b62b7bd3 which added support for bpf
-trampolines on powerpc64. That commit placed the dummy_tramp_addr field at
-the beginning of the long branch stub, causing the disassembly failures and
-incorrect offset calculations that this patch fixes.
+Looking at the patch, there are no modifications to jited_len or any
+subtraction of SZL (8 bytes) from it. The 8 bytes of dummy_tramp appear
+to still be included in the final program length returned to user space.
 
-Suggested:
+Because of this, standard tools like bpftool prog dump jited might still
+attempt to disassemble the trailing 8 bytes of data, which can result in
+incorrect instructions or disassembly failures.
 
-  Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
+While a subsequent patch in the series works around this issue by truncating
+the length in the selftest's disassembler wrapper, the kernel still returns
+the full length, leaving standard tools exposed to the disassembly failure.
 
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_c=
+omp.c
+> index 00b86ed97cb56..56a923d3908e1 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+[ ... ]
+> @@ -1404,10 +1407,12 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_po=
+ke_type old_t,
+>  	 * 1. Update the address in the long branch stub:
+>  	 * If new_addr is out of range, we will have to use the long branch stu=
+b, so patch new_addr
+>  	 * here. Otherwise, revert to dummy_tramp, but only if we had patched o=
+ld_addr here.
+> +	 *
+> +	 * dummy_tramp_addr moved to bottom of long branch stub.
+>  	 */
+>  	if ((new_addr && !is_offset_in_branch_range(new_addr - ip)) ||
+>  	    (old_addr && !is_offset_in_branch_range(old_addr - ip)))
+> -		ret =3D patch_ulong((void *)(bpf_func_end - bpf_jit_long_branch_stub -=
+ SZL),
+> +		ret =3D patch_ulong((void *)(bpf_func_end - SZL), /* SZL: dummy_tramp_=
+addr offset */
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+[Severity: Medium]
+Additionally, if jited_len had actually been reduced, this new calculation
+using bpf_func_end - SZL would become incorrect, since bpf_func_end
+relies on jited_len encompassing those 8 bytes.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26121409898
---===============1006306579911665399==--
+Could the commit message be updated if excluding the bytes was left out, or
+should the length calculation be adjusted?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260519233812.1878=
+7-1-adubey@linux.ibm.com?part=3D2
