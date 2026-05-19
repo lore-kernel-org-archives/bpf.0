@@ -1,32 +1,32 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D0033B6C18
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 21:59:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063143ECBC9
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 21:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779227957; cv=none; b=g1LEl5jbxXS1x5Lz76WwQ1EXJ4c+7vvoTR0ZpyJRjYoPs+3y5+Abnt4eJlWEyhoDrFNA7zTORb1bRaXOX3YhKTxugxXLG1J2mudAACuZGmBhvqMMqonKBXAmSLMHOovEG51rY9cAT7UbIX83uXk/BZpQBiChhwJTAl2Sr7+uq38=
+	t=1779227957; cv=none; b=JjTT+RdRf/eUpkab1wrRP1MZ192/kPdjjEgKXR1IYyhDrCDGRxE8guBB1NwPyuYDQuiGbDax5yYEW4OQuLDED7gcehDJy7vnbj4ebHAroebkEIdO10RZG9y+8z7X++m4q8mS8QyxBpzEBqJDAfEtqfb4aEo2vqA86wwQKCTPh+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779227957; c=relaxed/simple;
-	bh=Y6CRujwoyKjzq6Pyaj7KQpuDhXuDKoE7O5WBbNahNXk=;
+	bh=tE6bGvTf5BqkkdOSOjJLkMs1vgsgaepExXMsYIWDWQk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rP9e/8IyQQSEqiFeyQH8Bj372UH+e3nB1eIGqETkqibNPzVsGc7GwvrAeRq5ujUH2CBY/eCddxoOTKfdLAxE93TZFzdwN+keLbsfGb7g7feaeuq0IMiY9up0L0p3FCOO0O908WwpdLmo0c6C3tI+dFL9KkblTH6HnOc3GYiBX+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JhgO+oPM; arc=none smtp.client-ip=95.215.58.177
+	 MIME-Version; b=rVGSRryOPQkYM+ZbH+HSu7Z5iZPciSYk3ANlF0tHL9hNcL8/q+asM6L3BTB2xVcY7fSi3w16TieF/kGukElIAcuorwtBixPITmz9To9VpNwRC+4+NtxPovxO1xt6K9YfJabkj7HwFgsnqwXjYKdEztszxnaTbw38ArY68CJMSFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h29I/E7C; arc=none smtp.client-ip=95.215.58.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JhgO+oPM"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h29I/E7C"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779227953;
+	t=1779227952;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Uq5yIilHF4EBRD7cfkuyajYq7Ky9lA/T9ZAi4HGEsvA=;
-	b=JhgO+oPMO3PTqZ8ekBQn4viGjOFBb6F7I+CHa0QvPp1Ges/wiMgfre/dacX1SCzpU46J3+
-	PXhGVjIAgmMMC8GIruOYOLaUadLN89mjpV6M9NpbVj2MZYwquzLe/70u6ncZKyKL1683d2
-	H2CADGiJ1fiMJyJuNdJSpDKHR7hyq5M=
+	bh=wsHLBJEyvmQwgAs5L0RpOlzrfCTgYnMbu+/BqF6695A=;
+	b=h29I/E7CJPstvErmcMcEM5c3bX+2nsJ4NcDZEC/KRmw5x8dPDNCUf/luO+tf+qVHggUEh4
+	+NixrWXEuoVye4MdImqaTDhD0141F/9tjqI8ze74oGzYO607iKBtNqGdGUwvepWoAhOgXW
+	gJ3yVgoX/if/Y2VId/bskubsqix4d9o=
 From: Martin KaFai Lau <martin.lau@linux.dev>
 To: bpf@vger.kernel.org
 Cc: 'Alexei Starovoitov ' <ast@kernel.org>,
@@ -36,9 +36,9 @@ Cc: 'Alexei Starovoitov ' <ast@kernel.org>,
 	'Roman Gushchin ' <roman.gushchin@linux.dev>,
 	'Amery Hung ' <ameryhung@gmail.com>,
 	netdev@vger.kernel.org
-Subject: [RFC PATCH bpf-next 07/12] bpf: Move LSM trampoline unlink into bpf_cgroup_link_auto_detach()
-Date: Tue, 19 May 2026 14:58:14 -0700
-Message-ID: <20260519215841.2984970-8-martin.lau@linux.dev>
+Subject: [RFC PATCH bpf-next 06/12] bpf: Add prog_list_init_item(), prog_list_replace_item(), and prog_list_id()
+Date: Tue, 19 May 2026 14:58:13 -0700
+Message-ID: <20260519215841.2984970-7-martin.lau@linux.dev>
 In-Reply-To: <20260519215841.2984970-1-martin.lau@linux.dev>
 References: <20260519215841.2984970-1-martin.lau@linux.dev>
 Precedence: bulk
@@ -52,46 +52,92 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Martin KaFai Lau <martin.lau@kernel.org>
 
-Move the LSM trampoline unlink into bpf_cgroup_link_auto_detach().
-The purpose is to consolidate the auto_detach cleanup logic.
+Add three helpers to abstract operations on a bpf_prog_list entry.
 
-It prepares for the upcoming struct_ops cgroup attachment patch where
-bpf_cgroup_link_auto_detach() will need to handle the struct_ops case
-(link->map != NULL).
+Right now, bpf_prog_array_item is initialized from prog_list_prog(pl),
+which returns either pl->prog or pl->link->link.prog. This will not work
+when struct_ops is attached to a cgroup because the attachment is backed
+by a struct_ops map instead of a BPF prog.
+
+The same applies to __cgroup_bpf_query(). Instead of always copying a
+prog id to userspace, struct_ops cgroup attachment will need to copy the
+struct_ops map id.
+
+Refactor bpf_prog_array_item initialization into prog_list_init_item()
+and prog_list_replace_item(), and refactor id lookup into prog_list_id().
+These helpers will be extended to support pl->link->map in a later patch.
 
 This is a no-op change.
 
 Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
 ---
- kernel/bpf/cgroup.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ kernel/bpf/cgroup.c | 26 +++++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 7 deletions(-)
 
 diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 720eaa3285a2..b5769f5401e6 100644
+index abfd6df349d4..720eaa3285a2 100644
 --- a/kernel/bpf/cgroup.c
 +++ b/kernel/bpf/cgroup.c
-@@ -292,6 +292,8 @@ static void bpf_cgroup_storages_link(struct bpf_cgroup_storage *storages[],
-  */
- static void bpf_cgroup_link_auto_detach(struct bpf_cgroup_link *link)
- {
-+	if (link->link.prog->expected_attach_type == BPF_LSM_CGROUP)
-+		bpf_trampoline_unlink_cgroup_shim(link->link.prog);
- 	cgroup_put(link->cgroup);
- 	link->cgroup = NULL;
+@@ -378,6 +378,22 @@ static struct bpf_prog *prog_list_prog(struct bpf_prog_list *pl)
+ 	return NULL;
  }
-@@ -325,11 +327,8 @@ static void cgroup_bpf_release(struct work_struct *work)
- 					bpf_trampoline_unlink_cgroup_shim(pl->prog);
- 				bpf_prog_put(pl->prog);
+ 
++static void prog_list_init_item(struct bpf_prog_list *pl, struct bpf_prog_array_item *item)
++{
++	item->prog = prog_list_prog(pl);
++	bpf_cgroup_storages_assign(item->cgroup_storage, pl->storage);
++}
++
++static void prog_list_replace_item(struct bpf_prog_list *pl, struct bpf_prog_array_item *item)
++{
++	WRITE_ONCE(item->prog, pl->link->link.prog);
++}
++
++static u32 prog_list_id(struct bpf_prog_list *pl)
++{
++	return prog_list_prog(pl)->aux->id;
++}
++
+ /* count number of elements in the list.
+  * it's slow but the list cannot be long
+  */
+@@ -471,9 +487,7 @@ static int compute_effective_progs(struct cgroup *cgrp,
+ 				item = &progs->items[fstart];
+ 				fstart++;
  			}
--			if (pl->link) {
--				if (pl->link->link.prog->expected_attach_type == BPF_LSM_CGROUP)
--					bpf_trampoline_unlink_cgroup_shim(pl->link->link.prog);
-+			if (pl->link)
- 				bpf_cgroup_link_auto_detach(pl->link);
--			}
- 			kfree(pl);
- 			static_branch_dec(&cgroup_bpf_enabled_key[atype]);
+-			item->prog = prog_list_prog(pl);
+-			bpf_cgroup_storages_assign(item->cgroup_storage,
+-						   pl->storage);
++			prog_list_init_item(pl, item);
+ 			cnt++;
  		}
+ 
+@@ -957,7 +971,7 @@ static void replace_effective_prog(struct cgroup *cgrp,
+ 				desc->bpf.effective[atype],
+ 				lockdep_is_held(&cgroup_mutex));
+ 		item = &progs->items[pos];
+-		WRITE_ONCE(item->prog, link->link.prog);
++		prog_list_replace_item(pl, item);
+ 	}
+ }
+ 
+@@ -1275,15 +1289,13 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
+ 		} else {
+ 			struct hlist_head *progs;
+ 			struct bpf_prog_list *pl;
+-			struct bpf_prog *prog;
+ 			u32 id;
+ 
+ 			progs = &cgrp->bpf.progs[atype];
+ 			cnt = min_t(int, prog_list_length(progs, NULL), total_cnt);
+ 			i = 0;
+ 			hlist_for_each_entry(pl, progs, node) {
+-				prog = prog_list_prog(pl);
+-				id = prog->aux->id;
++				id = prog_list_id(pl);
+ 				if (copy_to_user(prog_ids + i, &id, sizeof(id)))
+ 					return -EFAULT;
+ 				if (++i == cnt)
 -- 
 2.53.0-Meta
 
