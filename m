@@ -1,178 +1,190 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AAC74A341E;
-	Tue, 19 May 2026 12:24:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779193481; cv=none; b=gikKNrc8/maWt+ctgQPytkzyK4MnQVHb/NrH+8Z2HooPJwi2ZZzc6LlZes/62o6PreIUCiRU42WVxUXb/oBJBG5ChFmmRo0nOR2UNsbOviDsU406tBP8JZgEt5zgbKNFi6Qx8SbV0+ixS7GBzak72oAPQtz/dq0JEAYE3iBtThA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779193481; c=relaxed/simple;
-	bh=v378/OOnuouH9GSkgdrAA6sJ4e1vmMJwFnDXc7SBol4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CJjk8+Yx1OmdtcRfw397LEh4jvUq5A2+sCIwZiTxYV7Livlak0Lv3MmvTtdDT1hi56DW+7QtNATSnQsci9IOohTj7K2P0pjBUP6F9jQV8Ifm3/I6fwsg9sA9eSSIJr76DXU68bBYJ8ZwuaGE09UY1f3lxCLvFV5cPeO3CZRKM5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=g7GEV8Gk; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05534CA260
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 12:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779193653; cv=pass; b=jwLZVQWJrF7ivoTYF4wi9XaqmdHmXK/Iux0CmAT0g2T9K2dURmVraSWK0v943jT4UeEIzDoEAgjUD82lpW0CowOvZ1eP3omMw9SoI4zC5r7P3tQqTW8b307kqWBJlfWYbONb1CTpySMGxAf4liHD0bYgfNlln51t52LM+R9Tl/s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779193653; c=relaxed/simple;
+	bh=y1j7Eq9lmZxwVs6xShWbSL5Xng4sr3FjXZzg1MsHkss=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nLI7jhQ7z5ASzWkpADynj5618rzk2gpALtRV7blYPK7vq5cbEIAZFT6yqeKZerWnCDElrSjvG4l2vUPyTpDEfuJCn+MQ9RV427rROiHQpHqgt7mKonAgqVqHlRrtRy6QdMTs+uncSJ075+2NO2364+ZLXpzeMbB9de+X94Ik3Is=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i2S4GFBu; arc=pass smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="g7GEV8Gk"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64J1VCiW834424;
-	Tue, 19 May 2026 12:24:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=6RsEJ1
-	ZIrFM8Z93E5XF/FZvHPlnufzppX7BrDEkcASI=; b=g7GEV8GkDUyE3HyqUCEDz/
-	b49sQ8dHqEPswjTZjxGRmwzKRHzdyIGn+A2qLPBzdU3UC6afK+8iphR8yBUZUpru
-	QGbxHVKZg5JCeHak2DwKg2t+rX0571PDL3vVfruCUE18WshMZrltKCPF5PgLwr7h
-	7ChaAm8BwrxUjsicjXLLaQerUfsaoqNQTyIZialKqXqUYItrTyXkHsmModeorhkm
-	HBACneeTrJ6tQm2CPRLBV8+1ua6CMVKjCDZKJC9BMEzJlOWZkN9zBonJ4xWuDpfk
-	KEzFCcHNp3JBFx6A7ktDh8ZyLOvRdzI7y16WDJkK5cHMa/qzD9xrBszr1xfUcqVA
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h8mmv13-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 May 2026 12:24:37 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64JC94FZ005398;
-	Tue, 19 May 2026 12:24:36 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e754gaa4h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 May 2026 12:24:36 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64JCOZ5J44368232
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 19 May 2026 12:24:35 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E849B20040;
-	Tue, 19 May 2026 12:24:34 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BC7EF2004B;
-	Tue, 19 May 2026 12:24:34 +0000 (GMT)
-Received: from [9.52.200.195] (unknown [9.52.200.195])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 19 May 2026 12:24:34 +0000 (GMT)
-Message-ID: <4838400f-209f-4e78-b41f-04b61d129ee7@linux.ibm.com>
-Date: Tue, 19 May 2026 14:24:34 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i2S4GFBu"
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-395317d8852so31129031fa.2
+        for <bpf@vger.kernel.org>; Tue, 19 May 2026 05:27:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779193650; cv=none;
+        d=google.com; s=arc-20240605;
+        b=TpNJKhhVbbPH6QRF5h9DK9fssNjHU/4tGhDmL2nAhBzgX/EqM2Dcu8BwmFZd7yHEsU
+         TTpx+MR9E3gsaKu7w5aR07KpV54urbkPGiBGgBpeytkuaxEwAHToWU/JQvIXCskdwPSQ
+         ZrW4g5IRJ+kBEQ5GAnGfd7oQAejrXNFup1TQWm9XjrT4EMpXhRpiTTgB7eMrPc4qJ7Zn
+         1RyqcnV/J0Ibl/R6f5oSt6h2OQFk3roszVVbCvvVoneb5bokTdbt5DzgkpeCEHG9tVn/
+         swhTntx2cddWRxWGxIyx3j7FjDs3ryf7oBr6rEbjgPA+RTXdUSJlRCR9YtXrLtkrfhgK
+         d75g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=LCs1qpXwTXyCOYCDlieFw6GpLdqpYpgZgXSKHKgLEss=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=cn2OPZIqObFkGvLWKVw5rWJ3jwwlvOoXiiKqy3jwItJW8LsTEzY1TFn6UF404GMJBt
+         EXA5jTx4QAshrEiA+z1BNUfrw4SPa0dxhp2El281zWpEE1LR8M6X9qazFLT6IAzVoB0+
+         VtaIDlQKk2dEMdWE2d63yYQk7R0vTz6at/5MEWyjITCO9VGXyMGKQRso/f/8bY1XaBNr
+         LPk+hlausAEpNIbHPr5fhyyL0lxdapvBAn+LhIithsO7eJBhldf6yoDVqPjCRS06PE1S
+         lEqDd7iHzkeKnwnaq9Hx9hRxbixjXFvkHiqkVRPRDKzbFWjT9hMfRi9ghd75YnJrWyD7
+         2PpQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779193650; x=1779798450; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LCs1qpXwTXyCOYCDlieFw6GpLdqpYpgZgXSKHKgLEss=;
+        b=i2S4GFBui0EgUf3viXHSxJy6+3KdM5uuzaT15MXyej/pPT8zi6DCBqAo1gzKPGId9r
+         tAG7ZBJW1oUUyvPQzcI2cQlSfj1zSD4MVvNLjZe3zoOvIYX+3EWElRMCn0J1xyJLAlIm
+         27gV1sYCFOYRl5Ep5W5l69ZGc3WR6zA6AgGTFrdofCza9SbGqov+a+2QtZZe4L9HZfUE
+         IsEArfN3JvSNfL57K/0fD0Sk1sW/nCM/0wa4WtqEop6UsrmQvP/IEFW0l+qpsRkUxjsT
+         K2g86V4uq989VTkwhUELnbCsxujMb9Nqog1gHfDB1E23Ic+c90f2Ba5D9My56aV6fOMp
+         qAow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779193650; x=1779798450;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=LCs1qpXwTXyCOYCDlieFw6GpLdqpYpgZgXSKHKgLEss=;
+        b=Z27Zf1LK0Zl4Lzu1/dZhwq9mOyJe5dvI4oqfxxcMGu3SYCQBJqbc1j9C8Apw0qLixO
+         GSI/SeSi61pTfPikyCXojNCXRTCym4zmqmPx/ExKOn9cll9+fSeky7STrHBKZdf9GGLc
+         jdp4XpMNM3akrwrWrGKF4cuAskNrxs0UCe1n/LAtfJOn/IhY0s7guqGBdWgQuYbnjfkd
+         R0bOMdDQ8tXhIka1e78ia5JmxcUiXXrIOdRUcaAiwWqcGQh4bmMw7EM2ddm8hh3JjH6F
+         8G/dQzTViqCloyIomKXEPBNvGYyNzk0xRyvYm+Y9JZQwVeNiBVmRmcncV4GhR7MND88h
+         1SKg==
+X-Gm-Message-State: AOJu0YwtXj3LpGxVYmtbh8gaaAsaOK3/dx7/I0YnsRLFDtcJ56TLM0f/
+	BNr/S4Ho26oCf+QJvhV2W3T7CuK1EDG8dudYWNfDmeffVaGZT1UyoBpWYihY8h68Ns9754/nMEw
+	7RLr555p3jtZrXC/yGbGjBEEB+y9+EBTKod+kwppFgQ==
+X-Gm-Gg: Acq92OGiST3lkTDeR2PBVGL7ZyH1PcqfqslVgWXYwnz9ozMMtErwZfZP1S6MDQo3en6
+	NjR/uWlywMzvIz4jKxGz8cdybqbZzCnmKf/VEh8qbiH1/JSV5u3S/wAjPpecB7QgpwRE1IqTa3L
+	7iBS7PnOsvdr2Vhw2mgo11R4kXtQ31pmtL4mG1y5+oWRjYg3SkLDJ7Pm6NM/vSSlYpfdGJSsPo/
+	MBfwQ++2Vbr6OCM9MwhLxY3cD3gAKkCY7IYpFnH4v9KavCxzMY8NXxOJMMZtH9LgGt44KbZzv7F
+	Jsbc36BFnwiuFfKTjxRgDR85DsTzmjFzn6+frGTG
+X-Received: by 2002:a05:6512:1285:b0:5a4:d44:99f0 with SMTP id
+ 2adb3069b0e04-5aa0e733f63mr7062600e87.6.1779193649825; Tue, 19 May 2026
+ 05:27:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 13/19] unwind_user: Enable archs that pass RA in a
- register
-To: Steven Rostedt <rostedt@kernel.org>
-Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev,
-        Indu Bhagat <ibhagatgnu@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Dylan Hatch <dylanbhatch@google.com>
-References: <20260505121718.3572346-14-jremus@linux.ibm.com>
- <20260505183531.C9EE8C2BCC7@smtp.kernel.org>
- <8761b037-d8f8-4142-9091-cc51d0d19df8@linux.ibm.com>
- <bd711f74-a1f3-4410-975b-64e9009aaf30@linux.ibm.com>
- <20260518123112.20da820b@gandalf.local.home>
-Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20260518123112.20da820b@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: RFJ8kIdB5QGXvivTvHsoizeclZO_McW4
-X-Authority-Analysis: v=2.4 cv=GYMnWwXL c=1 sm=1 tr=0 ts=6a0c5685 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VnNF1IyMAAAA:8
- a=DT2LHYgYV7ePjqTwKPkA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: d3D4apo1E-Xu4t4TMap9L9dDALS-BI5e
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE5MDEyMCBTYWx0ZWRfX0VN8XDARI53S
- g6H8YITbq4BKP3NJh2w4QplBMnvBpoj/kIhFMfQhLt89WIF25dOg++91kvsyiBuy7YunY+4ImwC
- DgCGgxnYC5nx5UGENlrqJ4hQtqOxYCq/YGE8bkoGsbzsbPLGjyVCdyow+N7Sutobzd7WeAzlnBX
- 8gfQG4wtNExt9m1rSvYsGOBvR01qMSRjT+g6mSivDBATwYIrowMxi+NlAhpyqDF1QCUi9h8k356
- jV8TdXGdFi6+labzx46EKcLHLm8jqBdQeMJcXcilakIObkQCRcFfBgjYHWyGeWidiO3eewropKb
- YP4NheoyICHk+gcoBEYOtD71OEoNlc+VB3nnvdB58iZ9zUDabk8KAm6Kif2KB/wvc1eY624F9kg
- bJWHBK2LToxCoUkLXkk1bbPIOKazeW1OmXGQdZuljhZefnFSYiC8T5u04HOsoC2+69mJXCTPeay
- epEaDoer9hDTlqUy7VA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-19_03,2026-05-18_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
- adultscore=0 suspectscore=0 spamscore=0 clxscore=1015 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605190120
+References: <20260518082344.96647-6-kerneljasonxing@gmail.com> <20260519082514.AD96BC2BCC6@smtp.kernel.org>
+In-Reply-To: <20260519082514.AD96BC2BCC6@smtp.kernel.org>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Tue, 19 May 2026 20:26:52 +0800
+X-Gm-Features: AVHnY4LztSDKvv4FGhna3JZkUb_Rg2ODnWdgpjv0ylTPj4N756C-Z86N40V1q78
+Message-ID: <CAL+tcoCBQzn5k8PQ53s0kMuBkry2FYvekvJfiNjwM_SoN2rF7A@mail.gmail.com>
+Subject: Re: [PATCH net-next 5/6] bpf: enable bpf timestamping rx in TCP layer
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/18/2026 6:31 PM, Steven Rostedt wrote:
-> On Mon, 18 May 2026 18:16:52 +0200
-> Jens Remus <jremus@linux.ibm.com> wrote:
-> 
->>>>> +#ifndef unwind_user_get_ra_reg
->>>>> +static inline int unwind_user_get_ra_reg(unsigned long *val)
->>>>> +{
->>>>> +	WARN_ON_ONCE(1);  
->>>
->>> Replace with the following to resolve below issue:
->>>
->>> 	dbg_once("unwind_user_get_ra_reg() not implemented\n");  
->>
->> Omit or replace by the following?
->>
->> 	pr_debug_once("%s (%d): unwind_user_get_ra_reg() not implemented\n",
->> 		      current->comm, current->pid);
->>
->> This did not work with dbg_once() defined in kernel/unwind/user.c as
->> follows, as linux/unwind_deferred.h includes linux/unwind_user.h and
->> therefore gets included into other modules that do not define dbg_once()
->> (e.g. via linux/irq-entry-common.h including linux/unwind_deferred.h).
->>
->> Steven, Should I omit the dbg_once() or could I replace by the above
->> unguarded pr_debug_once()?
-> 
-> Question, should the above ever get hit? That is, should all architectures
-> that support sframes have unwind_user_get_ra_reg() defined?
+On Tue, May 19, 2026 at 4:25=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 4 potential issu=
+e(s) to consider:
+> - [High] BPF sock_ops hook is called without holding the socket lock, vio=
+lating core locking rules and risking data corruption.
+> - [Medium] Missing BPF RX timestamping for zero-copy receive (tcp_zerocop=
+y_receive).
+> - [Medium] MSG_PEEK causes event duplication, corrupting BPF statistics.
+> - [Medium] Data race due to lockless read of sk->sk_bpf_cb_flags.
+> --
+>
+> commit bdfc9a5e79a8f2a8060029cde75cfb38b923754a
+> Author: Jason Xing <kerneljasonxing@gmail.com>
+>
+> bpf: enable bpf timestamping rx in TCP layer
+>
+> This commit introduces BPF RX timestamping for TCP by adding a BPF hook
+> to tcp_recvmsg(). It evaluates timestamping flags and conditionally
+> calls bpf_skops_rx_timestamping().
+>
+> > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> > index 21ece4c716121..64c69bb3578af 100644
+> > --- a/net/ipv4/tcp.c
+> > +++ b/net/ipv4/tcp.c
+> > @@ -2949,8 +2949,18 @@ int tcp_recvmsg(struct sock *sk, struct msghdr *=
+msg, size_t len, int flags)
+> >       release_sock(sk);
+> >
+> >       if ((cmsg_flags | msg->msg_get_inq) && ret >=3D 0) {
+> > -             if (cmsg_flags & TCP_CMSG_TS)
+> > -                     tcp_recv_timestamp(msg, sk, &tss);
+> > +             if (cmsg_flags & TCP_CMSG_TS) {
+> > +                     u32 tsflags =3D READ_ONCE(sk->sk_tsflags);
+> > +
+> > +                     if (cgroup_bpf_enabled(CGROUP_SOCK_OPS) &&
+> > +                         SK_BPF_CB_FLAG_TEST(sk, SK_BPF_CB_RX_TIMESTAM=
+PING))
+>
+> Since the socket lock was released above, is it safe to read
+> sk->sk_bpf_cb_flags here without READ_ONCE()? It appears
+> bpf_sock_ops_cb_flags_set() could modify this concurrently, potentially
+> causing a data race.
 
-No.  Architectures that do not pass the RA in a register, such as x86-64
-that passes the RA on the stack, do not implement unwind_user_get_ra_reg().
+Good catch. I'll add the pair then.
 
-> How can this be triggered? Does it require an architecture to implement
-> only partial sframe to trigger?
+>
+> > +                             bpf_skops_rx_timestamping(sk, &tss,
+> > +                                                       BPF_SOCK_OPS_TS=
+TAMP_RCV_CB);
+>
+> Does executing the BPF_PROG_TYPE_SOCK_OPS program here without holding th=
+e
+> socket lock risk data races? Since the program receives a full socket
+> context and can call helpers like bpf_setsockopt(), this might trigger
+> assertions in sock_owned_by_me(sk) or corrupt socket state.
 
-On x86-64 it can be triggered from user space using forged .sframe that
-incorrectly specifies no fixed RA offset and thus causes the common
-unwind user (sframe) logic to recover RA from the RA register using 
-the dummy unwind_user_get_ra_reg().
+IIUC, we have such protections which are reflected in
+bpf_test_access_bpf_calls().
 
-> If the trigger is due to an architecture not supporting sframe correctly,
-> then a WARN_ON() is appropriate.
-> 
-> But if this is not implemented by the architecture for normal reasons, why
-> bother printing anything?
+>
+> If MSG_PEEK is passed in the flags, will this cause the BPF program to be
+> invoked multiple times for the same skb? The callback doesn't seem to
+> receive arguments indicating a peek, which might artificially inflate pac=
+ket
+> counts and skew latency metrics.
 
-For unwind_user_get_ra_reg() that might be appropriate.  Although the
-dynamic debug message could help developers to implement sframe for
-another architecture.
+This is the pre-existing behavior. Yes, it can happen, but I don't
+regard it as a problem.
 
-Let me outline this for unwind_user_get_reg() and arm64:  This is used
-to recover CFA/RA/FP from arbitrary registers in the topmost frame.
-In SFrame such rules require SFrame V3 flexible FDE.  GNU assembler
-does not support/generate flexible FDE for arm64.  Therefore arm64
-would currently not need to implement unwind_user_get_reg().  But if a
-toolchain would be enabled to support/generate flexible FDE on arm64 in
-the future, the dynamic debug message might be helpful to quickly
-determine why some of the stacktraces are incomplete and which piece
-is missing to resolve.
+>
+> > +                     if (sock_flag(sk, SOCK_RCVTSTAMP) ||
+> > +                         tsflags & SOF_TIMESTAMPING_SOFTWARE ||
+> > +                         tsflags & SOF_TIMESTAMPING_RAW_HARDWARE)
+> > +                             tcp_recv_timestamp(msg, sk, &tss);
+>
+> Will packets processed via the zero-copy receive path miss these RX
+> timestamp events? High-performance applications using tcp_zerocopy_receiv=
+e()
+> go through tcp_zc_finalize_rx_tstamp(), which directly calls
+> tcp_recv_timestamp() but seems to omit this new BPF callback.
 
-Regards,
-Jens
--- 
-Jens Remus
-Linux on Z Development (D3303)
-jremus@de.ibm.com / jremus@linux.ibm.com
+Agreed. I'll support zc mode as Stan pointed out earlier.
 
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
+Thanks,
+Jason
 
+>
+> > +             }
+> >               if ((cmsg_flags & TCP_CMSG_INQ) | msg->msg_get_inq) {
+> >                       msg->msg_inq =3D tcp_inq_hint(sk);
+> >                       if (cmsg_flags & TCP_CMSG_INQ)
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518082344.96=
+647-1-kerneljasonxing@gmail.com?part=3D5
