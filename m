@@ -1,62 +1,62 @@
-Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E766C33F8AA
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 18:13:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3137344024
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 18:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779214406; cv=none; b=g7pluw1TLHRtB2Q8kilboXKpRHAVwKweHhk/4GTdv8GBEOwattWu9BM7+Wliyb7bfzD8LyWjs9gBE7L1JiHPYP5Na9CVx5KrgkZBKSW8OHDx8Mvo4bMqtcCX7/qmyRxNfPiQW6TvOEpimpn2/kgjNu+8ARpKoHoK4STH9cluyAs=
+	t=1779214406; cv=none; b=XWdnjVFQUX8BVKW3iC50MVENy40IxB667Cezir5LNXPTq5BDMps7oSZR5XnYGPqchDL6b0I8ysti7ZHkSwkovCu63f9INA+zZ7V/hIXYTYTMqYsjQllzjZdhi7Wzckz56GBvurpDi4DwWP1cjiIBgMg8E08n30j5x0vNTs/4tTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779214406; c=relaxed/simple;
-	bh=tZ51rEhjCGhsr01pIsMpJemlhH/OJfjo4pIBZJ8qjCk=;
+	bh=QKTf9jiczeUt+Nr4S1iZsRKJwxGf9xWDS0EWw8cuyyM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XUb5YUE/fttRmXpo5tlLdZGkbJ3Ork3jQT/mQesNEJcOVGo6VjDXQqm6AzSgEk9NTi+KJ/FcvEjr9nWHyRyh/v7ts/voochIasLPl3DeiDp7oWsD4t+7R2bTd5GcBIg84U3lrbfGyAKDowS8yTFFkU0b9Q7DnJ07SX/d85VwRjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HvTbbsCE; arc=none smtp.client-ip=74.125.224.53
+	 MIME-Version; b=OWz0lj5EMsPHGJbDsgJ4av0YG24TWO1zNHdYHuKDr/zAjuA1cAaT/byF7wjZU/4n5C/dwwfBdf8FNenI9Z2TAf3iABiWpB9iqeYZhaBRyW/0wwe65550+NUYKWZzfzd0MpoYNgELi/DUKoPcsfihT/fGnka5fgyXyAd4Fvd7p7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gned0lzU; arc=none smtp.client-ip=209.85.128.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HvTbbsCE"
-Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-65c7492a2ceso3356460d50.3
-        for <bpf@vger.kernel.org>; Tue, 19 May 2026 11:13:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gned0lzU"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-7c7fc722b50so28908707b3.2
+        for <bpf@vger.kernel.org>; Tue, 19 May 2026 11:13:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779214402; x=1779819202; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779214400; x=1779819200; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=H5KuNnGRxNHLJT6/5Dkj0fTR1u1/jY83wU7OXw6mQ6U=;
-        b=HvTbbsCEWzhJFVh1BVHXMiaLkJKofd9R26KA0bhWDdmUdP7ZpKAo2aiQBR+kYsHk2j
-         aDhUMOrbiNadGm0hHC6JWZO28VmKjFHj9B6T+urtJd6AKP+ysaiCpBEMvrlkXMvB7C3u
-         v+sa7HPoM0U4W6iWEm/MPC5eEMhhOK0b/xKHjyHwxORFILVC9owra6F6SizzueqAVSDn
-         RtzXG3sIhJqS4QABdcPE+jOdZ2tn51JAu/u8oHL2kSqKthL8sZ2Tz0L1mKEEZz2cC5ZZ
-         kVwXd7fF25K9mTZYulZPnE9brzsDyGv0k8MdXLHD8ZxCXaeA9I1u8GQxAOfQucoCnbrI
-         iAEg==
+        bh=rlmyr3CMyFCWhDTHZENVmDr9qrkuvPXB7zyLVILmNsQ=;
+        b=Gned0lzUYaamRrNaBxlsifW7Dr43eCrM0Kq/ngi2xm3omuL8UEfur3sbp3gV0N1y20
+         yLZFXDamW/p+Aukizeq7xFMD++5lQsu5ZldVijCguMJwleKFxMALfQyb8y/aq3aJvbv2
+         Vg6N+nOfXMPCYCMtfQD/inPKHaY0DSL9j/Wu9fYSLAkKyyGrOGfCymWqRp3ST6bWSW+s
+         WVuPtwQEEDx5VKuPw34PB/k/DZBPlDdNpItQTBds1TIdjg1yYi6Ka2oOBW1l9M91KkJS
+         BAQvjhGGjTSRHuDryOJ1sj2QULzUR1zyLPAGUPnjiTuXdCPlxoXjyVWE+LHcBeQi45S0
+         wSAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779214402; x=1779819202;
+        d=1e100.net; s=20251104; t=1779214400; x=1779819200;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=H5KuNnGRxNHLJT6/5Dkj0fTR1u1/jY83wU7OXw6mQ6U=;
-        b=ZYcD8LmeHuuGjNWtsibFJju4oR0eXqAzrKRLeG6rCEpD2VreB6SIgUm9XNTNdAQG3Q
-         HSpLzjaTm9RrVkbiDwNhpFH+gLdBRJYCujuqZS8WBfoB8+M/sQh/HC3Grf4a5yTP8aXT
-         Y30lHcjHM5PHHaUys2xme0qQX12H5uqvce+4OUynMvZ+ZL70fyusjGcwCcSQqZxCdfno
-         BE6T9S4KvzbWr4kvbiq4kiUyU0Wc2jvGo6c+THABSZQcmuk0RArom44SZomDY58ielvt
-         JfouUVzt1GmTQPT/5oiNrhqg6ojoYbygT8Le64HllZpd4P0CAUcSCiUc9EQaOmIwHXdd
-         jSqA==
-X-Gm-Message-State: AOJu0Ywmz/gVC+qxRmYrgpcMi0IC9prWCEV5/f7/BGHnRh2SsDbUogQe
-	l2TC+P9bVx//19tQBCc2sXzuyR8LUlZz7vm7W2beb+cYclNxre8h2FSruUiepLBK
-X-Gm-Gg: Acq92OFM1BF2p+qgHBmGeCII7bc2HwpHOPXREe0n3Mq9zStZeK9dhJI/3VpJl11zRuV
-	La6F57i+13dOe45GFGcIDb+4ibTweVFG50Zgw0SmQkjTHqRr1eYC5nxc6wjaf5/Pyo6arJT+cnM
-	K63KgX94YmGN+OtLewr4yvLVm774NEVzS2CCpAJ0BQ3Hn1TPInqJu3vdEXu9vEdsQM9s2TZQl82
-	t7xzVGyEo5fs3NELsBD1Jor8z3CL91z0aMjO2/RXGKjh4JVNKEdR9xmMCUUBhzWN9s9do5fH0ww
-	otAIO1FhxDrN6wRE3rutJoiDrFqjGgbeEotGZHvUL/B8M8txLv1uXHzEho3vjnZi04PFPlpbb8F
-	K7NjzZc/4/Wj/wVuoYG5nTSIDcD/RPnIqnlZOD0pcZHgLwcIYHVnGmjdEQbgWgjpXvHGD/TmpJt
-	2TkKlhiNPO6vHhmXOS
-X-Received: by 2002:a05:690e:1443:b0:65d:7d86:7758 with SMTP id 956f58d0204a3-65e228796fcmr19823501d50.59.1779214401905;
-        Tue, 19 May 2026 11:13:21 -0700 (PDT)
-Received: from localhost ([2a03:2880:f806:23::])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65e0d8e7585sm8236767d50.9.2026.05.19.11.13.21
+        bh=rlmyr3CMyFCWhDTHZENVmDr9qrkuvPXB7zyLVILmNsQ=;
+        b=r6fwoaFkzfE0LMaveojYky87wZ86K9VpUoas96somfSyTCb4vBLxLKkYuVL8bde5B7
+         kks7DgnK8LGWuixYVv4vVieCxP8AgT3qBEdhhnTMQuYjqqgWYzkCe09QdNpP0SvOnv1e
+         Xsd56hXYfyUe3kUjoTSXE1JSPWNKNU7/Cx0+b/IG1nTPuTqvvFCujiVKzjF2xGhqmL9H
+         iIdqmJ7/UY/y2sffV6J8mGZh8m95e71xPnytdJcy/dfp0EmCOnY2JVFCfMhGvZjF2okR
+         FrSxP+uUWEkjBvTvWx4kilsB3rsgDAm28k4NLXmlUHQpf/evMslRE9CjyrJnXeirLL1J
+         qv6Q==
+X-Gm-Message-State: AOJu0YxhYlnrjSX9mwCetJIgxYkbsCx+ipoNTvxADGkFPRL5uJ8OANxC
+	HQtkpz+yz/c+qMNcFvHWU6LtZQJMjJKOw9a2YpJIu/O88Uew3eWxZua7uimf0BLO
+X-Gm-Gg: Acq92OHjntE8kOZToaZknfT4M1GTTlr03RdbF2n1DeofREQET1Nn9Vg6qPRQb39J83o
+	LUIspDmDxICRl4QL2xZZc5WX6g5eYWEsZzF20Y+b5lsLv8/hn2aGctnYTTfLbweqW1NWhHX14ys
+	lo5J5KwI+S145WDHhUXM2tzlC55EEzNUbA+JBWwnbVzpXJtzyTbhnGun0oATj7r1VKY9JwUhwcG
+	vUR9mDwW/PHJs74Hr7yfMa5gj/bOXboBWRfJYRVODmMPYXrd/Qdm0x0IMfgmoKYnRPBsCqC7/b4
+	eMfHJfNUmjr3v4R7bQDLiLjW2GA/6AGBuRsNJkmUfZpMdXRgTobTVBHyd7/jLWFiMbZi6FGwIn3
+	8LTkO/KODQSYW7v8F7wV904EhSeTdNzLTNfvPegqQ8qQj2cr2irQBfQ6LR/bi/31ZBerzE8psS7
+	xhF3vw/Jzc3JMzrt54
+X-Received: by 2002:a05:690c:c1d5:b0:7bd:6114:4264 with SMTP id 00721157ae682-7c9594b45camr191016457b3.4.1779214400424;
+        Tue, 19 May 2026 11:13:20 -0700 (PDT)
+Received: from localhost ([2a03:2880:f806:14::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7cc991c9bd9sm40744567b3.4.2026.05.19.11.13.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 May 2026 11:13:21 -0700 (PDT)
+        Tue, 19 May 2026 11:13:20 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -69,9 +69,9 @@ Cc: netdev@vger.kernel.org,
 	mykyta.yatsenko5@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v5 04/14] bpf: Preserve reg->id of pointer objects after null-check
-Date: Tue, 19 May 2026 11:13:02 -0700
-Message-ID: <20260519181314.2731658-5-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v5 03/14] bpf: Assign reg->id when getting referenced kptr from ctx
+Date: Tue, 19 May 2026 11:13:01 -0700
+Message-ID: <20260519181314.2731658-4-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260519181314.2731658-1-ameryhung@gmail.com>
 References: <20260519181314.2731658-1-ameryhung@gmail.com>
@@ -83,125 +83,43 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Preserve reg->id of pointer objects after null-checking the register so
-that children objects derived from it can still refer to it in the new
-object relationship tracking mechanism introduced in a later patch. This
-change incurs a slight increase in the number of states in one selftest
-bpf object, rbtree_search.bpf.o. For Meta bpf objects, the increase of
-states is also negligible.
-
-Selftest BPF objects with insns_diff > 0
-
-Program                   Insns (A)  Insns (B)  Insns   (DIFF)  States (A)  States (B)  States (DIFF)
-------------------------  ---------  ---------  --------------  ----------  ----------  -------------
-rbtree_search                  6820       7326   +506 (+7.42%)         379         398   +19 (+5.01%)
-
-Meta BPF objects with insns_diff > 0
-
-Program                   Insns (A)  Insns (B)  Insns   (DIFF)  States (A)  States (B)  States (DIFF)
-------------------------  ---------  ---------  --------------  ----------  ----------  -------------
-ned_imex_be_tclass               52         57     +5 (+9.62%)           5           6   +1 (+20.00%)
-ned_imex_be_tclass               52         57     +5 (+9.62%)           5           6   +1 (+20.00%)
-ned_skop_auto_flowlabel         523        526     +3 (+0.57%)          39          40    +1 (+2.56%)
-ned_skop_mss                    289        292     +3 (+1.04%)          20          20    +0 (+0.00%)
-ned_skopt_bet_classifier         78         82     +4 (+5.13%)           8           8    +0 (+0.00%)
-dctcp_update_alpha              252        320   +68 (+26.98%)          21          27   +6 (+28.57%)
-dctcp_update_alpha              252        320   +68 (+26.98%)          21          27   +6 (+28.57%)
-ned_ts_func                     119        126     +7 (+5.88%)           6           7   +1 (+16.67%)
-tw_egress                      1119       1128     +9 (+0.80%)          95          96    +1 (+1.05%)
-tw_ingress                     1128       1137     +9 (+0.80%)          95          96    +1 (+1.05%)
-tw_tproxy_router               4380       4465    +85 (+1.94%)         114         118    +4 (+3.51%)
-tw_tproxy_router4              3093       3170    +77 (+2.49%)          83          88    +5 (+6.02%)
-ttls_tc_ingress               34656      35717  +1061 (+3.06%)         936         970   +34 (+3.63%)
-tw_twfw_egress               222327     222338    +11 (+0.00%)       10563       10564    +1 (+0.01%)
-tw_twfw_ingress               78295      78299     +4 (+0.01%)        3825        3826    +1 (+0.03%)
-tw_twfw_tc_eg                222839     222859    +20 (+0.01%)       10584       10585    +1 (+0.01%)
-tw_twfw_tc_in                 78295      78299     +4 (+0.01%)        3825        3826    +1 (+0.03%)
-tw_twfw_egress                 8080       8085     +5 (+0.06%)         456         456    +0 (+0.00%)
-tw_twfw_ingress                8053       8056     +3 (+0.04%)         454         454    +0 (+0.00%)
-tw_twfw_tc_eg                  8154       8174    +20 (+0.25%)         456         457    +1 (+0.22%)
-tw_twfw_tc_in                  8060       8063     +3 (+0.04%)         455         455    +0 (+0.00%)
-tw_twfw_egress               222327     222338    +11 (+0.00%)       10563       10564    +1 (+0.01%)
-tw_twfw_ingress               78295      78299     +4 (+0.01%)        3825        3826    +1 (+0.03%)
-tw_twfw_tc_eg                222839     222859    +20 (+0.01%)       10584       10585    +1 (+0.01%)
-tw_twfw_tc_in                 78295      78299     +4 (+0.01%)        3825        3826    +1 (+0.03%)
-tw_twfw_egress                 8080       8085     +5 (+0.06%)         456         456    +0 (+0.00%)
-tw_twfw_ingress                8053       8056     +3 (+0.04%)         454         454    +0 (+0.00%)
-tw_twfw_tc_eg                  8154       8174    +20 (+0.25%)         456         457    +1 (+0.22%)
-tw_twfw_tc_in                  8060       8063     +3 (+0.04%)         455         455    +0 (+0.00%)
-
-Looking into rbtree_search, the reason for such increase is that the
-verifier has to explore the main loop shown below for one more iteration
-until state pruning decides the current state is safe.
-
-long rbtree_search(void *ctx)
-{
-	...
-	bpf_spin_lock(&glock0);
-	rb_n = bpf_rbtree_root(&groot0);
-	while (can_loop) {
-		if (!rb_n) {
-			bpf_spin_unlock(&glock0);
-			return __LINE__;
-		}
-
-		n = rb_entry(rb_n, struct node_data, r0);
-		if (lookup_key == n->key0)
-			break;
-		if (nr_gc < NR_NODES)
-			gc_ns[nr_gc++] = rb_n;
-		if (lookup_key < n->key0)
-			rb_n = bpf_rbtree_left(&groot0, rb_n);
-		else
-			rb_n = bpf_rbtree_right(&groot0, rb_n);
-	}
-	...
-}
-
-Below is what the verifier sees at the start of each iteration
-(65: may_goto) after preserving id of rb_n. Without id of rb_n, the
-verifier stops exploring the loop at iter 16.
-
-           rb_n  gc_ns[15]
-iter 15    257   257
-
-iter 16    290   257    rb_n: idmap add 257->290
-                        gc_ns[15]: check 257 != 290 --> state not equal
-
-iter 17    325   257    rb_n: idmap add 290->325
-                        gc_ns[15]: idmap add 257->257 --> state safe
+Assign reg->id when getting referenced kptr from read program context
+to be consistent with R0 of KF_ACQUIRE kfunc. skb dynptr will track the
+referenced skb in qdisc programs using a new field reg->parent_id in
+a later patch.
 
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- kernel/bpf/verifier.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+ kernel/bpf/verifier.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 441950b43a4c..753681b0a987 100644
+index 564679f70afd..441950b43a4c 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -15524,15 +15524,10 @@ static void mark_ptr_or_null_reg(struct bpf_func_state *state,
- 
- 		mark_ptr_not_null_reg(reg);
- 
--		if (!reg_may_point_to_spin_lock(reg)) {
--			/* For not-NULL ptr, reg->ref_obj_id will be reset
--			 * in release_reference().
--			 *
--			 * reg->id is still used by spin_lock ptr. Other
--			 * than spin_lock ptr type, reg->id can be reset.
--			 */
--			reg->id = 0;
--		}
-+		/*
-+		 * reg->id is preserved for object relationship tracking
-+		 * and spin_lock lock state tracking
-+		 */
- 	}
- }
- 
+@@ -6209,8 +6209,6 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
+ 			} else {
+ 				mark_reg_known_zero(env, regs,
+ 						    value_regno);
+-				if (type_may_be_null(info.reg_type))
+-					regs[value_regno].id = ++env->id_gen;
+ 				/* A load of ctx field could have different
+ 				 * actual load size with the one encoded in the
+ 				 * insn. When the dst is PTR, it is for sure not
+@@ -6220,8 +6218,11 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
+ 				if (base_type(info.reg_type) == PTR_TO_BTF_ID) {
+ 					regs[value_regno].btf = info.btf;
+ 					regs[value_regno].btf_id = info.btf_id;
++					regs[value_regno].id = info.ref_obj_id;
+ 					regs[value_regno].ref_obj_id = info.ref_obj_id;
+ 				}
++				if (type_may_be_null(info.reg_type) && !regs[value_regno].id)
++					regs[value_regno].id = ++env->id_gen;
+ 			}
+ 			regs[value_regno].type = info.reg_type;
+ 		}
 -- 
 2.53.0-Meta
 
