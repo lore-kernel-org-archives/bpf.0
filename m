@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB4C3DB99C;
-	Tue, 19 May 2026 07:44:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 757533DFC67;
+	Tue, 19 May 2026 08:00:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779176676; cv=none; b=N92C0cJIuHuF0LnHt09gR9wEpW1MhHiy32sHx0PmGZaMow9i9AG3mufDGkkx57dVk4wr+9nT4726k0h9D/ozrxm+4hyxJ4MU0+oUZiWwcXk7SASD/GktZ92RDHsCLNNUVFe/UiITzq8A/XsBORILHx76owUcFs+vIZO/wJpWPIs=
+	t=1779177649; cv=none; b=XQO8MF5ImyX/J4YGKHlD20P6hkhBh6PkJ47bdqvSeD9QYB5mTsbTfiKpTll0FYjcTpJlUnuMxwtsJK/KpJ+V49UAT+PYQRgKmCt/LPm72n0pOhFSoIPFV3LhF+rThIOZzlUn5UkJtqDR8srGoGS3BSuNBGa+tdcRgKk/ek0qzBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779176676; c=relaxed/simple;
-	bh=acrnpGs+RgPn5vmsEe2IHJpGMxxnf1tBLZq09HiFtDs=;
+	s=arc-20240116; t=1779177649; c=relaxed/simple;
+	bh=jq+Ic2o6+/T6R+6rKPEYUVCfMRGyHOvp7RzEZ9FUseg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aJl4iEm9Q3mU05Lruo5Aepir1QVZMXvAvILfJw0wfGS3bCjaKVNQmqI9JC5rr2+eUnFMw9Xfs2GvtlEB98UbBDiOljIv9SQqu2PE8I2woW37M2kCKs8VF8k+hJxOmSQhCeJGAAsR4jS6ZL2fz7p9mYUQma5lVXAY7AR97RKBxB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dKmcNDHT; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=ejfcrCkJqx/Q8sHakmiYyOoL7tNpayPxMm8IqenwyUEnJ7p/Uq6XbjbI4nTsh0CVEP2P+s0flHj7SOb0V9kyTwcnrwKOzcl7QKM8cyJPxaXfVHlURQtyDlwxrPbnd4fbh1ggX+Kejgrne1wxV6M3DiLwhpCdDyW8j98xWiOEI/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I7vznwgL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dKmcNDHT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 477E3C2BCC6;
-	Tue, 19 May 2026 07:44:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I7vznwgL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27FD0C2BCB3;
+	Tue, 19 May 2026 08:00:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779176676;
-	bh=acrnpGs+RgPn5vmsEe2IHJpGMxxnf1tBLZq09HiFtDs=;
+	s=k20201202; t=1779177649;
+	bh=jq+Ic2o6+/T6R+6rKPEYUVCfMRGyHOvp7RzEZ9FUseg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dKmcNDHTXW+8ND9r4Uhrbhi1xuyTfW8NMikF4lGXqoqT9UkjEz/v7aOyrxjDp1GJg
-	 NYGUmwKHwt9FUoDZnDL029ZP6LpMcYTB0uRKBQLHBeUiVY1/uK6UJrcRvNfgrtx1qW
-	 bq1z0wrxU/jJudY5SKxWSMtH94IFjBD2F5cVxGSYP0OdOZ7nATUUvDCpbF+vVI20yv
-	 UmVwwYoIFwF7EZn91cb6ouWjsYOkrEO3UL9WvytVoccIduqoYITjFh6DvY9LPq/yMl
-	 84V9kCxo3aEL+b97R8AsKXB3Vyudi2SDLg8JqUDcWLSCyqCwfe2erbu8uht/RndmXn
-	 iA81wZJ4hZq5w==
-Message-ID: <82d2145a-9b41-4ee4-b980-e7bd5d12f035@kernel.org>
-Date: Tue, 19 May 2026 16:44:30 +0900
+	b=I7vznwgLR82bFg5okwmiS44hagsTw2fpDtHv0dip23rZYyVv4Z5pV0JENKZenbEPY
+	 caLAFtNgxAyhxPdG12x510QK9CG3TrZLhkbICxRov/OQDkC0s4u377E1oMvrrXwpD0
+	 3EKxDFcB9Ep5YgHVziesBC27Eb10HYleQgaos3KsBrEEXh4kLkX4il/gSUs5ieJWF2
+	 xTbsEghuYQZwcY1VgRfOFjtAQnl34fSLoNXrbJE8TSkf8FQx2ojuS/rT2+Y61bn+G/
+	 X5e2Fd3WrZEKYAfmyYW26ySv7pM3wQ/gnB8Wl460a8i+L59que2/pHmk3jQl+hA1Vi
+	 v08NGy3tgOARA==
+Message-ID: <2f02d90d-cdc9-48ef-abe3-99e00f22595f@kernel.org>
+Date: Tue, 19 May 2026 10:00:39 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,223 +35,126 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/8] mm/slab: introduce kfree_rcu_nolock()
-To: Uladzislau Rezki <urezki@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Vlastimil Babka <vbabka@kernel.org>, Christoph Lameter <cl@gentwo.org>,
- David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, "Paul E . McKenney"
- <paulmck@kernel.org>, Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Zqiang <qiang.zhang@linux.dev>, Steven Rostedt <rostedt@goodmis.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org,
- linux-mm@kvack.org, bpf@vger.kernel.org
-References: <20260416091022.36823-1-harry@kernel.org>
- <20260416091022.36823-5-harry@kernel.org> <aejeVK0J_jHSfVhD@milan>
- <aemevSofweaUSx0n@hyeyoo> <aeoD_Ts6hLsgNc9-@pc636>
- <3s4jafam3la72a6y3dkfvhtzxk3fsngb2cka3bpfqrirl5m633@pz3vzizefoxb>
- <afNG0jNQNYeZ940g@pc636>
+Subject: Re: [PATCH 1/8] mm: Add ptep_try_install() for lockless empty-slot
+ installs
+To: Tejun Heo <tj@kernel.org>
+Cc: David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
+ Changwoo Min <changwoo@igalia.com>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, sched-ext@lists.linux.dev,
+ bpf@vger.kernel.org, x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20260517211232.1670594-1-tj@kernel.org>
+ <20260517211232.1670594-2-tj@kernel.org>
+ <9ba50fd2-077e-4291-9276-9adb18186873@kernel.org>
+ <agtuPrgIDNKSu2Oo@slm.duckdns.org>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
-From: Harry Yoo <harry@kernel.org>
-In-Reply-To: <afNG0jNQNYeZ940g@pc636>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <agtuPrgIDNKSu2Oo@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-[Resending as it's rejected by mailing lists due to my broken email
-  setup. Apologies for the noise.]
-
-*shows up late again after LSFMM and processing some backlog*
-
-On 4/30/26 9:10 PM, Uladzislau Rezki wrote:
-> Hello, Harry!
+On 5/18/26 21:53, Tejun Heo wrote:
+> Hello,
 > 
+> On Mon, May 18, 2026 at 10:06:29AM +0200, David Hildenbrand (Arm) wrote:
+>> On 5/17/26 23:12, Tejun Heo wrote:
+>>> +static inline bool ptep_try_install(pte_t *ptep, pte_t new_pte)
+>>> +{
+>>> +	return false;
+>>> +}
+>>> +#endif
 >>
->> Hi Ulad. Apologies for the delayed response.
->> I meant to reply sooner but sidetracked by other issues.
+>> Ehm, what?
 >>
-> No problem, sometimes i also can lag because of other tasks :)
+>> This is a very, very, very bad generic idea/interface.
+>>
+>> On which ptes is this supposed to be used? User ptes or kernel ptes?
+>>
+>> Surely we don't want this on user ptes.
 > 
->> Your questions are fair, but let me try to clarify
->> the current situation.
->>
->> And before diving into details, I would like to reiterate that
->> there are potentially two points to discuss here:
->>
->> Point 1. Can we justify complicating subsystems by passing
->> 	 `allow_spin` parameter all over the place?
->>
-> Yes, we can. But as i noted i see some drawbacks :)
-> 
-> - all new incoming patches have to respect that new third argument;
+> Yeah, this is only for the BPF arena PTEs which are already managed in their
+> own way. I'd be happy to place / gate it however appropriate.
 
-That is true :)
 
-> - the fallback mechanism which uses irq-work is not optimal in my
->    opinion:
+So, we only use it within apply_to_page_range() with init_mm, where we don't use
+page table locks.
 
-In most cases it would not fall back because most likely trylock would
-succeed. If most of the calls do not fall back, a bit of suboptimality
-on the fallback path is acceptable.
+Usually we seem to grab the &arena->spinlock to protect the kernel page tables.
 
->      a) We introduce an extra window between queuing a pointer, mark
->         irq-work to be executed and then reenter the kfree_rcu() with
->         no-sync flag and now we need to wait a GP for them. But the GP
->         might be already passed for such pointers. So we potentially
->         need more time to offload. This is rather minus.
-> 
->      b) Since it is for BPF, allow_spin is always false, thus only
->         fallback path is used. Decoupling comes to mind.
+And you're saying that we might get called from a page fault handler where that
+lock can already be held.
 
-No, allow_spin == true means spinning on a lock is safe. If allow_spin
-is false, it would do a trylock instead of spinning, and it is expected
-to succeed most of the time. As long as trylock succeeds, it uses the
-same data structures as the existing kvfree_rcu batching without fallback.
+Is that really possible? I'd much rather prefer to trylock and retry, unless
+that can really result in deadlocks. But I have the feeling that such deadlocks
+should be impossible here.
 
-> 
->      c)
-> 
-> Why should we mix those? What it is worth to do, is to prevent mixing
-> "unknown path which is for BPF/others" with generic kfree_rcu().
+Can you elaborate on the deadlock situation and how that can happen in valid
+scenarios?
 
-Because we want to reuse the existing kvfree_rcu batching infrastructure
-without reinventing a new feature to do the same thing.
 
-The intent is to avoid the fallback in most cases when allow_spin is
-false, with fallback being there for correctness.
+The thing is that ptep_try_install() relies on other page table walking and
+insertion code to do the right thing. Shaky.
 
->> Point 2. Can we avoid adding this complexity to kvfree_rcu() and
->> 	 let slab handle it instead? (as mentioned in [4])
->>
-> it depends if BPF people want to free a pointer using RCU machinery?
-> Do you know if that an intention?
+For example, staring at apply_range_set_cb(), what prevents:
 
-They want to free slab objects after RCU grace period. Freeing slab
-objects without involving RCU is already supported by kfree_nolock().
-(There are other use cases as well, as recently posted in [1])
+(1) apply_range_set_cb() finding pte_none(ptep_get(pte)
+(2) apply_range_set_scratch_cb() succeeding ptep_try_install()
+(3) apply_range_set_cb() overwriting the pte with set_pte_at()
 
-I meant RCU sheaves can handle freeing slab objects after RCU grace
-period, and kfree_rcu_nolock() users don't need to handle vmalloc pages.
-So technically we don't have to add this complexity to kvfree_rcu
-batching and handle it in slab.
-
-But to do that, we shouldn't disable kfree_rcu_sheaf() completely on RT.
-Apparently Vlastimil has a suggestion to address this, and I'm going to
-digest his suggestion and explore that aspect.
-
-[1] 
-https://lore.kernel.org/linux-mm/esepccfhqg7m6jo76ns2znj2cnuaepx2xvw5zaygtwohq4psma@563ypprp6rr3
-
-[2] 
-https://lore.kernel.org/linux-mm/6811cc17-8ee4-48c8-8cbf-6bf4d9f98162@kernel.org
-
->> On Point 1: IMHO it could be justified, but at the same time I hope we
->> end up avoiding more complexity in the long term by working on Point 2.
->>
->> This reply focuses only on Point 1 and explains why it could be
->> justified.
->>
->> On Thu, Apr 23, 2026 at 01:35:25PM +0200, Uladzislau Rezki wrote:
->>> On Thu, Apr 23, 2026 at 01:23:25PM +0900, Harry Yoo (Oracle) wrote:
->>>> On Wed, Apr 22, 2026 at 04:42:28PM +0200, Uladzislau Rezki wrote:
->>>> How much performance do we sacrifice compared to
->>>> letting them go through the kvfree_rcu() fastpath?
->>>
->>> Freeing an object over RCU from
->>> NMI context is a corner case. It is __not_ generic.
->>
->> First, I want to clarify that kfree_rcu_nolock() is not just for NMI
->> context. It is intended to be used when the context is unknown (because
->> it can be called in an arbitrary code locations).
->>
-> When we say "unknown" to me it sounds like a worst case, which is NMI :)
-
-If we say "allow_spin = false assumes the most restrictive context, such
-as NMI context", that is misleading. It sounds like we always fall back,
-but we don't. Even when the context is unknown, fallback isn't required
-most of the time.
-
-So I would like to say "the context is unknown", meaning that
-technically kvfree_rcu could be re-entered in the middle of kvfree_rcu
-and we need to be able to handle that for correctness (although in most
-cases there's no re-entry and no fallback).
-
->> There are two kinds of problematic situations where BPF programs
->> are attached to:
->>
->>    - 1) a tracepoint or a function that can be invoked in a critical
->>         section (w/ a lock held), or
->>
->>    - 2) a function that can be called in an NMI context, which might
->>         preempt an arbitrary context holding a lock.
->>
->> While 1) and 2) are not (I think) dominant use cases, and although
->> most of users can legally call kvfree_rcu(), BPF can't use kvfree_rcu()
->> and must consider the most restrictive contexts.
->>
->>> We even do not have(now
->>> in mainline) users because we never support it from NMI,
->>> just like call_rcu().
->>
->> Unfortunately, we've had this use case (of allocating memory for BPF
->> programs) for a long time in the mainline. There are two current
->> approaches to mitigate the limitation:
->>
->>    - 1) Pre-allocate all memory. e.g.) allocate all hash table elements
->>         when creating a BPF map, rather than allocating them on demand.
->>         This ensures correctness but sacrifices memory.
->>
->>    - 2) Use the BPF-specific memory allocator [1] [2] to allocate memory
->>         on demand and avoid preallocation. While this wastes less memory
->>         than 1) and also maintains performance, it is re-inventing yet
->>         another memory allocator.
->>
->>         Also, the allocator reinvented kfree_rcu batching as well.
->>
->> Now, we're trying to avoid 1) and 2) as much as possible and use
->> kmalloc_nolock() instead [3].
->>
->>> If BPF needs
->>> it, then the first question which comes to mind is not about performance.
->>> It is how to support this case in kfree_rcu() without adding noticeable
->>> complexity or overhead or hacks to the generic path without making it harder
->>> to maintain.
->>
->> Since there will be only few subsystems that needs it, and because
->> they already use it on production systems, I don't see much value in
->> maintaining a simple implementation if that compromises performance
->> (and thus make the transition harder).
->>
->>> Performance wise you noted, you mean:
->>>
->>> a) call latency(this is probably the most important for NMI)?
->>> b) memory footprint?
->>> c) pointer-chasing overhead?
->>
->> I think it's either
->>
->> - The performance of kfree_rcu_nolock() itself (a), or
->> - Not distrubing workloads running on the machine (b and c)
->>
->> depending on what people use BPF for.
->>
-> Are you aware of any specific workloads which we can run? To test
-> and see what we have when it comes to performance metrics? I mean
-> exact uses cases with exact steps who to trigger them?
-> 
-> That would be useful to see on behaviour.
-
-I'll share once I find what BPF folks are using for performance
-benchmarks. (Which means I'm not aware at the moment :D)
-
-[+Cc bpf@vger.kernel.org]
-
-Thanks!
+Between (2) and (3) CPUs could access the scratch PTE.
 
 -- 
 Cheers,
-Harry / Hyeonggon
 
+David
