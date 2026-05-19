@@ -1,80 +1,194 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C01407CEB
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 16:18:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D88840803F;
+	Tue, 19 May 2026 16:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779207535; cv=none; b=JbrI8WlhrmdS00zVdekM7XVcHIM0Cx1MOhBalfDyhlqHfdAVzUnZVITeZjEM+WMvovHQPXfofAPlyI9EFyB1v22Nw5DVqjSeBaSkuIpZAFAU4idqVZXZ0SlQulkwf5GSc052vTvGGAK6hC8KgGpIkRy9+WavjVRhgg7fj3Ef3XQ=
+	t=1779208125; cv=none; b=r89sPSlQ0vr2vZV8QykyRP7OnGBJ49sZMM+R5+/qpV6GGiOizgKHYOspmilFpINL8VrDRNnZMa5IGGLIAZZ8J8LDbDiSB7oiHwpr3XMvw7h4+73Y+QrOElcQQE4mVwag8VNGVgHfGbbfTkMxSEWVsMBTVt/IOoOnyTEJ8HizEZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779207535; c=relaxed/simple;
-	bh=W5JALzTWFLfur+VIJoH5xyWQGn0wGA/oEmUYZK6HY8Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E1fq3pOtsuR70rC5VsllAyctZBATJtWwu/rf+3Us0qq684Jg7qcgjTDhChon+Gv1w+JtFWL8zzQGwYO451NIftoMdi58CZ/oeseXFRsYLjlb75950ASLNImAdGdx72OpuZ5ejVEpIc2lJJv2LQ0jIqhf3ncG4wFHZYWLSXjVLl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jciUDJHE; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jciUDJHE"
-Message-ID: <18a7fe5f-427e-44b8-9e88-b82591e1d2b7@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779207521;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=W5JALzTWFLfur+VIJoH5xyWQGn0wGA/oEmUYZK6HY8Y=;
-	b=jciUDJHENmNGcdL4IosgcMocdq1vmmuwqTHRTWhgJUnqK/2SIUwOXh33PsjzsiM6M+215Z
-	5U5ow42ZFaO40F3iiinmt+4SUG/touglLE19s4kaKELR880mWngECoWUQTqHztNNVnMtlD
-	Y3E+/aKB2/MT55clkHcQkXmzos3984k=
-Date: Tue, 19 May 2026 09:18:35 -0700
+	s=arc-20240116; t=1779208125; c=relaxed/simple;
+	bh=wkbJ4WV4ydeiB6L02Yks8hyZyILbcfbwA8MZQrQj9AE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LiSnCSENO6isgRCcpzZfXJv3dCv1a6/MoIKOfZGPpJKTv/EyjtrtwXUlFr9JH6CqbRQ8nXrv/FGeVYaopIrxpy6p5zHLPRPOrpmuUNfPP1Ma09sInlsDx/94S/Ktczwvlacb8lXAHZClpQxTbrf5W3S+2ig02wHPgd6o9yBXz2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf06.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay10.hostedemail.com (Postfix) with ESMTP id CFED1C1AFB;
+	Tue, 19 May 2026 16:28:40 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf06.hostedemail.com (Postfix) with ESMTPA id 8056C20010;
+	Tue, 19 May 2026 16:28:37 +0000 (UTC)
+Date: Tue, 19 May 2026 12:28:36 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
+ <linux-trace-kernel@vger.kernel.org>, bpf@vger.kernel.org, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>, Mark Rutland
+ <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>, Namhyung Kim
+ <namhyung@kernel.org>, Takaya Saeki <takayas@google.com>, Douglas Raillard
+ <douglas.raillard@arm.com>, Tom Zanussi <zanussi@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Thomas Gleixner <tglx@linutronix.de>, Ian
+ Rogers <irogers@google.com>, Jiri Olsa <olsajiri@gmail.com>
+Subject: Re: [PATCH v4] tracing/probes: Allow use of BTF names to
+ dereference pointers
+Message-ID: <20260519122836.0bfded70@fedora>
+In-Reply-To: <20260520002640.d372bd044ceba9364b1f168f@kernel.org>
+References: <20260518232312.0c78f055@gandalf.local.home>
+	<20260519185302.5fb527085a64567a388f24f3@kernel.org>
+	<20260519083128.5795c6af@gandalf.local.home>
+	<20260520002640.d372bd044ceba9364b1f168f@kernel.org>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] bpf: make bpf_session_cookie() reference optional
-Content-Language: en-GB
-To: Arnd Bergmann <arnd@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Menglong Dong <menglong8.dong@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, John Fastabend <john.fastabend@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
- Mykyta Yatsenko <yatsenko@meta.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260515090631.284426-1-arnd@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260515090631.284426-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-Rspamd-Queue-Id: 8056C20010
+X-Rspamd-Server: rspamout06
+X-Stat-Signature: p5wyjdtyqrzq7zkr5kdh1wtq57htp8wa
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/HFSMlBAH252OTplepd1WfPZWv99wzgeU=
+X-HE-Tag: 1779208117-803839
+X-HE-Meta: U2FsdGVkX181h80Qk1ZbJ8RKwc74Hf4SIEno10clTyGAHeFSmxOMtgl8O6Y5Xk8v+uagn4F5ATL19WUPqdlcV6tWA2DSpxMuax64BwtW54zkTrs9pZL2XAD1u3CiGfwlwI6SWQJG1hXae18a5eRXl72jnNYt3zN5RjEx2D8SjZ1mUQHGhoGoK/eyAHWIUwaUnLVs13UjCgmI4c6lEyZ2pLc4X5AHHmq2PIAzxeWu4mFoHLJlwQVpcmQc+l+0oOrLmMNYLYSD6lzlCViG/mg/Q/L0q7o7A7QUrJkzsP/oT2twqHTpQVLlGZ3v9TVPGuWghLPVPja9rmkKW3Itf9awDumlZY9P3eyx
+
+On Wed, 20 May 2026 00:26:40 +0900
+Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+> > Hmm, it may be better to make it one parenthesis?
+> > 
+> >        (STRUCT,PTR,ASSIGN)->FIELD
+> > 
+> >        data=(foo,foo_list,list)->data  
+> 
+> OK, but I don't like this 3 parameters conversion. I want to
+> make it a kind of type casting with an option.
+> 
+> 	(STRUCT,ASSIGN)PTR->FIELD
+> 
+> 	data=(foo,list)foo_list->data
+> 
+> The second parenthesis will be eventually needed for nested casting,
+> for example, in above case, if the data is a pointer to another data
+> structure:
+> 
+> struct bar {
+> 	int	value;
+> 	...
+> };
+> 
+> 	value=(bar)((foo,list)foo_list->data)->value
+
+Have fun with the parenthesis parsing ;-)
+
+> 
+> 
+> > 
+> > That would make it easier to differentiate between a simple "typecast" and
+> > a container_of() by checking if the content between the parenthesis has a
+> > comma.
+> > 
+> > Maybe even reorder it to:
+> > 
+> >        (PTR,STRUCT,ASSIGN)->FIELD
+> > 
+> >        data=(foo_list,foo,list)->data
+> > 
+> > to match the order of container_of():
+> > 
+> >       data = container_of(foo_list, struct foo, list)->data;
+> > 
+> > ?  
+> 
+> This doesn't seem to conform to the rule here of using parentheses for
+> type casting, so I personally don't like it.
+
+OK, as long as it's intuitive and is easy to remember. I hate having to
+look up the documents every time I have to do some probe argument
+parsing :-(
+
+> 
+> 
+> > > > diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> > > > index e0d3a0da26af..b0829eb1cb52 100644
+> > > > --- a/kernel/trace/trace_probe.c
+> > > > +++ b/kernel/trace/trace_probe.c
+> > > > @@ -464,6 +464,26 @@ static const char *fetch_type_from_btf_type(struct btf *btf,
+> > > >  	return NULL;
+> > > >  }
+> > > >  
+> > > > +static int query_btf_struct(const char *sname, struct traceprobe_parse_context *ctx)
+> > > > +{
+> > > > +	int id;
+> > > > +
+> > > > +	if (!ctx->btf) {
+> > > > +		struct btf *btf;    
+> > > 
+> > > This needs an empty line here.  
+> > 
+> > Sure.
+> > 
+> > For conditional blocks, I don't always add a newline, but this is your code
+> > and I'll follow your suggestions.  
+> 
+> Ah, this is just for fixing checkpatch.pl warning :-)
+
+I added it to keep your checkpatch happy.
 
 
+> > > > @@ -471,12 +491,12 @@ static int query_btf_context(struct traceprobe_parse_context *ctx)
+> > > >  	struct btf *btf;
+> > > >  	s32 nr;
+> > > >  
+> > > > -	if (ctx->btf)
+> > > > -		return 0;
+> > > > -
+> > > >  	if (!ctx->funcname)
+> > > >  		return -EINVAL;
+> > > >  
+> > > > +	if (ctx->btf)
+> > > > +		return 0;
+> > > > +    
+> > > 
+> > > Could you tell me why this order is changed?
+> > > I think this type casting will allow us to skip checking funcname
+> > > because btf context is already specified.  
+> > 
+> > I wanted this to fail if btf was already set but funcname wasn't, because
+> > this should only be called for functions.  
+> 
+> Hmm, OK. Then, can you make a separate patch for this?
 
-On 5/15/26 2:06 AM, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> Building without CONFIG_BPF_EVENTS produces a build-time
-> warning:
->
-> WARN: resolve_btfids: unresolved symbol bpf_session_is_return
->
-> The function is actually defined in kernel/trace/bpf_trace.o,
-> which is built conditionally based on configuration.
->
-> Make the reference to this function conditional as well,
-> as is already done in the bpf verifier for other functions.
->
-> Fixes: 8fe4dc4f6456 ("bpf: change prototype of bpf_session_{cookie,is_return}")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+I added a struct_btf (I can change it to typecast_btf) and have a
+helper function that is:
 
-LGTM exception in subject bpf_session_cookie() should be bpf_session_is_return().
+static struct btf *ctx_btf(struct traceprobe_parse_context *ctx)
+{
+	return ctx->flags & TPARG_FL_STRUCT ?
+		ctx->struct_btf : ctx->btf;
+}
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
+And have all functions get their btf from that. This way we can keep
+the two allocations separate.
 
+> 
+> >   
+> > > 
+> > > Ah, BTW, we may need to use a special struct btf* for type
+> > > casting. If the target function is in a module and the
+> > > casting type is defined in vmlinux, those are stored in
+> > > the different places...  
+> > 
+> > OK, I'll make a separate btf for it then. I'll have to make sure the btf
+> > used for parsing knows which one to use. Shouldn't be too hard if we check
+> > for the STRUCT flag in the ctx->flags.  
+> 
+> Yeah, and personally, I think that flag should be the TYPECAST flag.
+
+I'll update it.
+
+Thanks,
+
+-- Steve
