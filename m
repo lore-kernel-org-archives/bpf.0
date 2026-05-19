@@ -1,135 +1,198 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A5132E128
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 22:54:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDB73B9DBA;
+	Tue, 19 May 2026 22:55:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779231262; cv=none; b=urkqHsSJ+maKdKc7ddqVSy9V757qMILYzKXVphrRFbW7IdZy4O7j+Oq43RJEArxX4JVVzrShlX8tdVOhBpVkGhe2mQCRZyOCDME1dwvPD416ysnSpEreqC1pGR23lr1PkCEDeU+SkX/5mlWfIW0g03cPnPSKJIzDs4/6QqcBfcs=
+	t=1779231360; cv=none; b=ZNbPYJ7H3dbQGXPD4fayIXOWGxSKald1E8Uopa5VSRqgFKEpy3zK4H3WyK+X2AnNo+BLpX/1z/0K2slxW6RsJP0mPY9Kc9exQfEjb2seMCxTZrYRuV7sKZl+1OdceXoi+q4tWX/cB4j4s4VDSqjvTNH2Te50zZPkrxaot5DWabc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779231262; c=relaxed/simple;
-	bh=maCKmj2jhr8gbJuQOa9X7/0M8ivxfG/WhXgHYSIHkic=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=aPNq0Eg06ctZUB/U3VvPKdzGV9tD9Vm2BBd5PXRdnZbepNbrev0Mq2EpJtzQCK9LiUPUoID3oIXMIV0bqt9jdVd6EM9BCVBCU0dvL/UBu9A1JNjVA+lOER+GGXa8VzbF1JzEwLl8Eyjq6np1mMUF8s6teF88d2rIaXmmWJkyZH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VBLKSkVU; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779231360; c=relaxed/simple;
+	bh=gkNqQtPBBfKzigAv9GnQJnaep0TyIcROeO0JZFWcTU8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TJFLwsMwsb0p+FrSHrymIclBaaxGDWsp5Uxo31qKuGnqvLwTY5Aur/D732g/x1I1QXk16iMzGx5Il6LLPHkptyNfL8G4yRUNCVziJsyOcBjn+bzR5UX8wfWlRORwpx97ot9TRbjbjHZIuJaQnkhu87cwk50EWpCnaRW49UzB77w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CasF50+6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VBLKSkVU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CBCC1F000E9;
-	Tue, 19 May 2026 22:54:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CasF50+6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C3171F000E9;
+	Tue, 19 May 2026 22:55:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779231261;
-	bh=dhuWHhqgE+4S2bKdak3szmagWWb8OCf4rtM31WKEyxk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VBLKSkVUSBLuvrNSQqb9m99+N1RnvIbBrQHVhZdHNmDJTuoMH2sjNc0SuNfd4vc28
-	 NBn2gxl3HKbP0CAGhaPkHvGRbG/RP4MWG8ic5HAG4oc6IOV6mxk7SrY++/ldKbSbx1
-	 6k3V/obQljkkdjZQBYeChHEPnWuRdq2OnAg9pn3eE4avTmv4CHlWLBq8CUkmxN5uSc
-	 rs5yhtrMoRV/bSWuegnU0fFO9YMLUThjnAOlAzesRPKE03ZPNYVMS8AFffaoWkr17C
-	 wpk4lVAPYj1hz/Fa5hZUSqcvmY0wxPp/7Xu/FLwjhVVlGHJUzvGep1nWCF7O0eRBLm
-	 KUBSAUMdHr2iA==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next 02/12] bpf: Make struct_ops tasks_rcu grace
- period optional
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Martin KaFai Lau" <martin.lau@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260519215841.2984970-3-martin.lau@linux.dev>
-References: <20260519215841.2984970-3-martin.lau@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 19 May 2026 22:54:20 +0000
-Message-Id: <20260519225421.3CBCC1F000E9@smtp.kernel.org>
+	s=k20260515; t=1779231358;
+	bh=ltITWYTpdR14mpIrT86JiPdAjkQfUB2LfX1W0DEFewE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=CasF50+6728DUZsAs2JUV8duNXgCIYKDBtZYvHhY5JxRbZQFbFkvs2A59IR8r463h
+	 oqJ4AoSDTG62xzl2ywsSWiHZBPLr3uDkTNldZkb+XmPAo+GGhp/06V3hX1xEOHvst7
+	 NyPzZjvkjWWeGNHwZ3/iWm9BuBNVWPl2lKblAeAco0zPke4dk87/5hSQ+vv83qqI1l
+	 ZjERkEIMeP51xelD7t+bgcGQfGWiKak/v/foovQPTW0rBId9jtX0PkKMRbly2MN6Mr
+	 by8qZM3BDUHFj4v3Pv1a8YxXHphv52/ENosLHUYSkF5ImDOuDgm+N9YGJfRmF9j0JQ
+	 emmHWTrkImlXA==
+From: Jakub Kicinski <kuba@kernel.org>
+To: dipayanroy@linux.microsoft.com
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	kys@microsoft.com,
+	haiyangz@microsoft.com,
+	wei.liu@kernel.org,
+	decui@microsoft.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	leon@kernel.org,
+	longli@microsoft.com,
+	kotaranov@microsoft.com,
+	horms@kernel.org,
+	shradhagupta@linux.microsoft.com,
+	ssengar@linux.microsoft.com,
+	ernis@linux.microsoft.com,
+	shirazsaleem@microsoft.com,
+	linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	stephen@networkplumber.org,
+	jacob.e.keller@intel.com,
+	dipayanroy@microsoft.com,
+	leitao@debian.org,
+	kees@kernel.org,
+	john.fastabend@gmail.com,
+	hawk@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	ast@kernel.org,
+	sdf@fomichev.me,
+	yury.norov@gmail.com
+Subject: Re: [PATCH net 1/2] net: mana: Add NULL guards in teardown path to prevent panic on attach failure
+Date: Tue, 19 May 2026 15:55:56 -0700
+Message-ID: <20260519225556.3939204-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260518194654.735580-2-dipayanroy@linux.microsoft.com>
+References: <20260518194654.735580-2-dipayanroy@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Critical] The patch incorrectly skips the Tasks RCU grace period (`synch=
-ronize_rcu_tasks()`) before freeing executable trampoline memory for all `s=
-truct_ops` except `tcp_congestion_ops`, leading to Use-After-Free of execut=
-able memory.
-- [High] RCU-001 violation: `bpf_struct_ops_map_dissoc_progs()` removes the=
- map from `prog->aux->st_ops_assoc` after the regular RCU grace period has =
-already completed, leading to a Use-After-Free.
---
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+---
+net: mana: Add NULL guards in teardown path to prevent panic on attach failure
+    
+When queue allocation fails partway through, the error cleanup frees
+and NULLs apc->tx_qp and apc->rxqs. The patch adds NULL guards for these
+pointers in teardown paths such as mana_destroy_vport(), mana_fence_rqs(),
+and mana_dealloc_queues() to prevent NULL pointer dereferences.
 
-commit 85a451ad8aefbb364a1840344e08d2f34596b96c
-Author: Martin KaFai Lau <martin.lau@kernel.org>
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> index 9afc786b297a8..9e7e4bf526bf6 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+[ ... ]
+> @@ -2858,13 +2861,16 @@ static void mana_destroy_vport(struct mana_port_context *apc)
+>  	struct mana_rxq *rxq;
+>  	u32 rxq_idx;
+>  
+> -	for (rxq_idx = 0; rxq_idx < apc->num_queues; rxq_idx++) {
+> -		rxq = apc->rxqs[rxq_idx];
+> -		if (!rxq)
+> -			continue;
+> +	if (apc->rxqs) {
+>  
+> -		mana_destroy_rxq(apc, rxq, true);
+> -		apc->rxqs[rxq_idx] = NULL;
+> +		for (rxq_idx = 0; rxq_idx < apc->num_queues; rxq_idx++) {
+> +			rxq = apc->rxqs[rxq_idx];
+> +			if (!rxq)
+> +				continue;
+> +
+> +			mana_destroy_rxq(apc, rxq, true);
+> +			apc->rxqs[rxq_idx] = NULL;
+> +		}
+>  	}
 
-bpf: Make struct_ops tasks_rcu grace period optional
+If the teardown path frees apc->rxqs and sets it to NULL on attach failure,
+how does the interface recover if the user subsequently brings it back up?
 
-This commit makes the tasks RCU grace period optional during struct_ops map
-freeing. It introduces a map_free_pre_rcu callback to remove ksyms before t=
-he
-regular RCU grace period. The tasks RCU grace period is now only explicitly
-requested by tcp_congestion_ops.
+When mana_open() is invoked, it directly calls mana_alloc_queues(). Inside
+mana_alloc_queues() -> mana_add_rx_queues(), the code does:
 
-> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-> index 08791180d71d9..28eab24ef0ed0 100644
-> --- a/kernel/bpf/bpf_struct_ops.c
-> +++ b/kernel/bpf/bpf_struct_ops.c
-> @@ -996,24 +1005,8 @@ static void bpf_struct_ops_map_free(struct bpf_map =
-*map)
-> =20
->  	bpf_struct_ops_map_dissoc_progs(st_map);
+    apc->rxqs[i] = rxq;
 
-[Severity: High]
-Does this violate the RCU remove-before-reclaim rule?
+If apc->rxqs was left as NULL during the teardown, will this cause a NULL
+pointer dereference on the next interface bring-up?
 
-Because map->free_after_rcu_gp is set to true in bpf_struct_ops_map_alloc(),
-the regular RCU grace period occurs before bpf_struct_ops_map_free() is cal=
-led.
-Leaving bpf_struct_ops_map_dissoc_progs() here means the map is removed
-from prog->aux->st_ops_assoc after the grace period has already finished.
+[ ... ]
+> @@ -3287,33 +3294,38 @@ static int mana_dealloc_queues(struct net_device *ndev)
+>  	 * number of queues.
+>  	 */
+>  
+> -	for (i = 0; i < apc->num_queues; i++) {
+> -		txq = &apc->tx_qp[i].txq;
+> -		tsleep = 1000;
+> -		while (atomic_read(&txq->pending_sends) > 0 &&
+> -		       time_before(jiffies, timeout)) {
+> -			usleep_range(tsleep, tsleep + 1000);
+> -			tsleep <<= 1;
+> -		}
+> -		if (atomic_read(&txq->pending_sends)) {
+> -			err = pcie_flr(to_pci_dev(gd->gdma_context->dev));
+> -			if (err) {
+> -				netdev_err(ndev, "flr failed %d with %d pkts pending in txq %u\n",
+> -					   err, atomic_read(&txq->pending_sends),
+> -					   txq->gdma_txq_id);
+> +	if (apc->tx_qp) {
 
-Could a concurrent execution of the BPF program acquire the RCU read lock, =
-read
-the still-valid aux->st_ops_assoc pointer, and then access the map after it=
- is
-freed?
+In the error path where queue creation fails partway through, will
+mana_destroy_txq() be called?
 
-Should bpf_struct_ops_map_dissoc_progs() be moved to the new
-bpf_struct_ops_map_free_pre_rcu() callback instead?
+If mana_destroy_txq() unconditionally iterates over all apc->num_queues:
 
-> -	/* The struct_ops's function may switch to another struct_ops.
-> -	 *
-> -	 * For example, bpf_tcp_cc_x->init() may switch to
-> -	 * another tcp_cc_y by calling
-> -	 * setsockopt(TCP_CONGESTION, "tcp_cc_y").
-> -	 * During the switch,  bpf_struct_ops_put(tcp_cc_x) is called
-> -	 * and its refcount may reach 0 which then free its
-> -	 * trampoline image while tcp_cc_x is still running.
-> -	 *
-> -	 * A vanilla rcu gp is to wait for all bpf-tcp-cc prog
-> -	 * to finish. bpf-tcp-cc prog is non sleepable.
-> -	 * A rcu_tasks gp is to wait for the last few insn
-> -	 * in the tramopline image to finish before releasing
-> -	 * the trampoline image.
-> -	 */
-> -	synchronize_rcu_mult(call_rcu, call_rcu_tasks);
-> +	if (tasks_rcu && IS_ENABLED(CONFIG_TASKS_RCU))
-> +		synchronize_rcu_tasks();
-> =20
->  	__bpf_struct_ops_map_free(map);
->  }
+    for (i = 0; i < apc->num_queues; i++) {
+        ...
+        mana_destroy_wq_obj(apc, GDMA_SQ, apc->tx_qp[i].tx_object);
+        ...
 
-[Severity: Critical]
-Does skipping the Tasks RCU grace period for other struct_ops cause a
-use-after-free of executable trampoline memory?
+Will it pass 0 or INVALID_MANA_HANDLE to mana_destroy_wq_obj() for queues
+that were never fully initialized?
 
-All struct_ops programs are executed via dynamically generated trampolines.=
- When
-the program returns, the RCU read lock is dropped and preemption is re-enab=
-led.
-If a task is preempted while still executing the trampoline epilogue, the
-regular RCU grace period will not wait for it.
+Does mana_destroy_wq_obj() send a MANA_DESTROY_WQ_OBJ command to the hardware
+with these uninitialized handles, and could handle 0 corrupt the firmware
+state?
 
-Without the Tasks RCU wait, could the executable trampoline image be freed
-prematurely, causing preempted tasks to execute freed memory when they resu=
-me?
+> +		for (i = 0; i < apc->num_queues; i++) {
+> +			txq = &apc->tx_qp[i].txq;
+> +			tsleep = 1000;
+> +			while (atomic_read(&txq->pending_sends) > 0 &&
+> +			       time_before(jiffies, timeout)) {
+> +				usleep_range(tsleep, tsleep + 1000);
+> +				tsleep <<= 1;
+> +			}
+> +			if (atomic_read(&txq->pending_sends)) {
+> +				err =
+> +				    pcie_flr(to_pci_dev(gd->gdma_context->dev));
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260519215841.2984=
-970-1-martin.lau@linux.dev?part=3D2
+If pcie_flr() is triggered here, the PCI Function Level Reset wipes the
+internal GDMA state.
+
+Further down in this function, mana_disable_vport_rx(), mana_fence_rqs(),
+and mana_destroy_vport() are called. Will these functions attempt to send
+commands to the now-destroyed GDMA admin queue via mana_send_request() and
+wait for completions?
+
+Could this lead to cascading timeouts since the hardware was just reset and
+cannot process admin commands?
+
+> +				if (err) {
+> +					netdev_err(ndev, "flr failed %d with %d pkts pending in txq %u\n",
+> +						   err,
+> +					    atomic_read(&txq->pending_sends),
+> +					    txq->gdma_txq_id);
+> +				}
+> +				break;
+>  			}
+> -			break;
+>  		}
+-- 
+pw-bot: cr
