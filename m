@@ -1,190 +1,124 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A6BF32B13E;
-	Tue, 19 May 2026 18:27:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F311330E853
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 18:45:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779215228; cv=none; b=FZXU/3UrRAJNA4E1JVOR4eOjG6p22kIYrPf0tD6jgkpvIGvwVqN2+pCYerhdvbgKhgM2WemJtZRRPXtJ7cPM9/lWm+csHaCE7q9FVD8PqH8rrzKR8SBurdVLouztWBxWXloW2xOp5ICB5rvUk1IGmXOaybhrv4fO/clfCHK1Qis=
+	t=1779216339; cv=none; b=VowLWekbICoZyP9Jko/BVyR/tz2j/TchONEDuVE7o5xp9VavS9qB4/6NX6BGFoDMzXwCI1ciOivWqnZi+6o9+YCqDnXZXUZ4GgKBQwlf9sXHcFEpD0Shfhi73g1guRDgbbviirYy2vPWh+5qqBdvqfuSKCLrVX+aFp/0HoTHMrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779215228; c=relaxed/simple;
-	bh=D0UlmKjBbuBsCokH2s0rjpons46Hz6b4bz8eXZ/S05M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sKKex67eCNEkqwtgXAMYlzhKm+ZPQk2NxNh0jDiOzxzZS0TOAdcqbU5d9xTmI+St5l79qPMhgXZaCPmdMekwpzaWppK6ZfXdcA9dDx/FvsYEIgklPLj9tdwvIGKDuEYkNJdREIupQCCyP/qJ3aYCYzXCOy6DKj2C6tHwaQbNm28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e+D+HnG+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779216339; c=relaxed/simple;
+	bh=GMU4c7rfGsGNw/iuIQBApzQMONTqTb86Qov6bFwupNo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Grf40r5kQNKk9MzJIlBb2hhlBtkC3VTA7JC/7E4kRoFGTjZvvKkOSjjgjCJNa/z51azd1P0X2KhIQkj6yIAKjvEMYCXZm4JLtqyog+DU1WnNOPBz3IbP1fulPWWyVljI4BKIbqpVQfILCGurBM3oa42hx51UFUcz9vLxmaC/6Wk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=foURA0BQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e+D+HnG+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D87AFC2BCB3;
-	Tue, 19 May 2026 18:27:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="foURA0BQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A705C2BCB3;
+	Tue, 19 May 2026 18:45:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779215228;
-	bh=D0UlmKjBbuBsCokH2s0rjpons46Hz6b4bz8eXZ/S05M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e+D+HnG+Ty1mxKHOIn51N31dNSmrA7pWhCmcFXeHPgrxixwDhMoqZ4SpQvkkR0ZGC
-	 5Yk31RZJ5v9heamcJKC9opUlrmZznGPDieFD62pGXTvwev32/n1Mbux+j/3e5/0x31
-	 Vb+h/wNQr3manCEhQ/IFin306ZslkYcB5p/fnBkmZaWOvUqxAcQ8a/JXHPmcuTdG5X
-	 jqd1wRARaeD5PFOez1kOQGmZQvh5lFG3n/7LQqR2VsMFuuEdyYUgw48VR4nSHVvsko
-	 7oIP2llgDvNIuyPAOOhaD6Qdlw4GxKcoQInj8Jdfz8vwG2hvRrsMgcY9QgQrIdxniF
-	 olEhGNZ00lGhQ==
-Date: Tue, 19 May 2026 11:27:05 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: acme@kernel.org, 9erthalion6@gmail.com, adrian.hunter@intel.com,
-	alex@ghiti.fr, alexandre.chartre@oracle.com, andrii@kernel.org,
-	ankur.a.arora@oracle.com, aou@eecs.berkeley.edu,
-	bpf@vger.kernel.org, collin.funk1@gmail.com, costa.shul@redhat.com,
-	daniel@iogearbox.net, dapeng1.mi@linux.intel.com, dsterba@suse.com,
-	eddyz87@gmail.com, howardchu95@gmail.com, james.clark@linaro.org,
-	jolsa@kernel.org, leo.yan@arm.com, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, martin.lau@linux.dev,
-	memxor@gmail.com, mingo@redhat.com, mmayer@broadcom.com,
-	nathan@kernel.org, palmer@dabbelt.com, peterz@infradead.org,
-	pjw@kernel.org, qmo@kernel.org, ricky.ringler@proton.me,
-	song@kernel.org, swapnil.sapkal@amd.com, terrelln@fb.com,
-	tglozar@redhat.com, thomas.falcon@intel.com,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH v7 00/14] perf build: Reduce build time by nearly half
-Message-ID: <agyrebq2hdayDIyg@google.com>
-References: <20260518044740.2526802-1-irogers@google.com>
- <20260518154638.2798789-1-irogers@google.com>
+	s=k20201202; t=1779216338;
+	bh=GMU4c7rfGsGNw/iuIQBApzQMONTqTb86Qov6bFwupNo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=foURA0BQbZx+NQrbeJvNBbEhh9tgut4nSNDgS1f28tcohIr5lK2Q4XOAvi3dIU+1A
+	 K+/rSrFhyX38JZuQ7hyGDB8zoG4MdK2q7tjHMqZiNip50XDDEKhruvTAnfhPHjmSkN
+	 F1g7gTPWigLYORRbFauB9MvnJ6LDWzfSOrNMjTAzr5gmkQcGuVrnAS897cLN6CFKkc
+	 wuEeBSXT5YEO3bdJj5n+ZL0/LyUdkcdby+eGEx8n7Ni7EyeWYzO6L34rTrCyB2Zk7C
+	 nU/7y0bn2gjKhqMb5GUg5fm6rlgDbWEK4QtvTaoEms/DKA0vq18b2YFeXH9E/dqY20
+	 Ge1S4iFd+L1LQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v5 05/14] bpf: Refactor object relationship
+ tracking and fix dynptr UAF bug
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Amery Hung" <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260519181314.2731658-6-ameryhung@gmail.com>
+References: <20260519181314.2731658-6-ameryhung@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 19 May 2026 18:45:37 +0000
+Message-Id: <20260519184538.7A705C2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260518154638.2798789-1-irogers@google.com>
 
-On Mon, May 18, 2026 at 08:46:24AM -0700, Ian Rogers wrote:
-> This patch series refactors Kbuild internals, BPF skeleton generation,
-> Python AST pre-computation, and foundational tooling dependencies across
-> the perf tool build system. By eliminating umbrella target synchronization
-> barriers, decoupling static library prerequisites, parallelizing single-core
-> script generators, and eradicating redundant feature checks, this series
-> unlocks absolute theoretical peak multi-core concurrency during Kbuild startup.
-> 
-> On a 28-core build workstation (make -j28 all from scratch), clean build
-> latency improves by over 44%:
-> 
->   Before:
->     real    0m29.006s
->     user    2m46.019s
->     sys     0m30.610s
-> 
->   After:
->     real    0m16.091s
->     user    2m40.135s
->     sys     0m25.740s
-> 
-> Saving 12.9 full seconds time per clean build. Furthermore, nothing to
-> build incremental builds are improved by nearly 7x:
-> 
->   Before:
->     real    0m11.528s
->     user    0m9.633s
->     sys     0m6.965s
-> 
->   After:
->     real    0m1.717s
->     user    0m1.682s
->     sys     0m0.960s
-> 
-> Summary of Patches:
-> 
-> 1: Fast-Path Feature Detection
->   - Refactors test-clang-bpf-co-re.bin and test-bpftool-skeletons.bin feature
->     checks to group shell pipelines within curly braces and redirect both stdout
->     and stderr to .make.output before touching $@ purely upon success
->     (> $(@:.bin=.make.output) 2>&1 && touch $@). Grouping the pipeline ({ cmd1 | cmd2; })
->     ensures that compiler stderr is successfully captured in .make.output rather
->     than escaping to the parent shell. This perfectly matches standard Kbuild
->     feature check conventions and ensures the target files are touched on disk
->     purely upon success, allowing Kbuild to cache positive detections and avoid
->     continuous sub-make re-evaluations during incremental builds. Adds
->     test-bpftool-skeletons.bin to the clean FILES list and explicit source
->     prerequisite test-clang-bpf-co-re.c.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Critical] Incorrect indexing of `__state->stack` for outgoing stack argu=
+ments in the `bpf_for_each_reg_in_vstate_mask` macro leads to out-of-bounds=
+ heap access and potential memory corruption.
+--
 
-I think patch 1 can be separated and needs Ack/Review from BPF folks.
+commit 936dee8aae85e40857f1379da85e7a73536e2261
+Author: Amery Hung <ameryhung@gmail.com>
 
-> 
-> 2-4: Flattening Umbrella Prepare Barriers
->   - builtin-trace embedded inclusions and pmu-events generation are completely
->     decoupled from the sequential "prepare" umbrella target, eliminating Make
->     AST double-parsing overhead and unchoking parallel compilation barriers.
-> 
-> 5-7: Decoupling & Pre-generating BPF Skeletons
->   - BPF skeleton rules are extracted out of Makefile.perf into bpf_skel.mak.
->   - Decouples bpftool bootstrap from top-level static libbpf dependencies,
->     attaching bpf-skel-prepare directly to the umbrella prepare target. This
->     allows Make to pre-compile bpftool and dump vmlinux.h in the background at
->     build startup, removing the 7-second serialization bottleneck before BPF
->     object compilation.
->   - Ensures benchmark skeleton intermediate .bpf.o files are cleanly removed
->     during make clean, and adds bpf-skel-prepare to .PHONY.
-> 
-> 8-9: Foundational Linkage Optimization
->   - Moves static libsymbol library prerequisites out of the prepare step.
->   - Eliminates redundant libbpf sub-make feature checks during static builds.
-> 
-> 10-11: jevents.py Concurrency & Deduplication
->   - Splits the massive 2.8 MB big_c_string literal out of pmu-events.c into a
->     dedicated pmu-events-string.c compilation unit. This slices C compilation
->     latency in half by compiling string and struct tables simultaneously across
->     separate CPU cores while preserving zero dynamic ELF relocations. Adds
->     pmu-events-string.c to .gitignore, declares extern const char big_c_string[];
->     locally inside output_string_file and output_file when split to prevent linkage
->     conflicts with empty-pmu-events.c, defers file closures to ensure identical
->     timestamps, and uses canonical Make 4.0 @: dependency chaining.
->   - Pre-populates jevents.py JSON ASTs and metric formulas in parallel across
->     all available CPU cores using ProcessPoolExecutor (accelerating Python
->     execution by 11x, from 3.3s down to ~290ms). Moves _init_worker to top-level
->     scope to ensure clean pickling under spawn multiprocessing start methods.
-> 
-> 12: Out-of-Tree Incremental Rebuild Fix
->   - Prefixes SCRIPTS (perf-archive, perf-iostat) with $(OUTPUT) to prevent
->     Make from continuously re-executing script installation rules on already
->     built out-of-tree builds.
-> 
-> 13-14: AST Parsing Optimization & Shell Fork Eradication
->   - Converts ZENS, ARMS, and INTELS in pmu-events/Build from recursive assignment
->     (=) to simply expanded assignment (:=) and replaces model_name/vendor_name
->     with pure GNU Make string functions. This guarantees Make executes directory
->     probing shell forks exactly once during AST parsing and evaluates path macros
->     purely in memory, completely eradicating over 7,800 redundant sub-processes
->     during out-of-tree build evaluation.
->   - Converts llvm-config shell queries in Makefile.config from recursive assignment
->     (=) to simply expanded assignment (:=). This eliminates ~185 redundant sub-processes
->     that were previously executed across object compilation dependency checks.
-> 
-> Changes since v6:
->   - Rebase/resend as last series failed to apply by Sashiko.
-> 
-> Ian Rogers (14):
->   tools build: Fix feature checks to touch target files on success
->   perf trace beauty: Make beauty generated C code standalone .o files
->   perf build: Decouple pmu-events from prepare umbrella target
->   perf build: Remove empty archheaders target
->   perf build: Move BPF skeleton generation out of Makefile.perf
->   perf build: Encapsulate vmlinux.h and bpftool in bpf_skel.mak
->   perf build: Pre-generate BPF skeleton tooling during umbrella prepare
->     phase
->   perf build: Move libsymbol dependency out of prepare step
->   perf build: Remove redundant libbpf feature check for static builds
->   perf pmu-events: Split big_c_string storage into standalone
->     compilation unit
->   perf pmu-events: Parallelize JSON and metric pre-computation in
->     jevents.py
->   perf build: Prefix SCRIPTS with output directory to fix continuous
->     rebuilds
->   perf pmu-events: Convert recursive shell assignments and macros to
->     Make built-ins
->   perf build: Convert llvm-config shell queries to simply expanded
->     variables
+bpf: Refactor object relationship tracking and fix dynptr UAF bug
 
-Reviewed-by: Namhyung Kim <namhyung@kernel.org>
+This commit refactors object relationship tracking in the verifier and fixes
+a dynptr use-after-free bug where file/skb dynptrs are not invalidated when
+the parent referenced object is freed.
 
-Thanks,
-Namhyung
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 2cb4c7b0eab68..d83b9fbfef7f0 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
 
+[ ... ]
+
+> @@ -585,7 +591,7 @@ bpf_get_spilled_stack_arg(int slot, struct bpf_func_s=
+tate *frame)
+>  	     iter < frame->out_stack_arg_cnt;                          \
+>  	     iter++, reg =3D bpf_get_spilled_stack_arg(iter, frame))
+> =20
+> -#define bpf_for_each_reg_in_vstate_mask(__vst, __state, __reg, __mask, _=
+_expr)   \
+> +#define bpf_for_each_reg_in_vstate_mask(__vst, __state, __reg, __stack, =
+__mask, __expr)   \
+>  	({                                                               \
+>  		struct bpf_verifier_state *___vstate =3D __vst;            \
+>  		int ___i, ___j;                                          \
+
+[ ... ]
+
+> @@ -600,19 +607,26 @@ bpf_get_spilled_stack_arg(int slot, struct bpf_func=
+_state *frame)
+>  			bpf_for_each_spilled_reg(___j, __state, __reg, __mask) { \
+>  				if (!__reg)                              \
+>  					continue;                        \
+> +				__stack =3D &__state->stack[___j];         \
+>  				(void)(__expr);                          \
+>  			}                                                \
+>  			bpf_for_each_spilled_stack_arg(___j, __state, __reg) { \
+>  				if (!__reg)                              \
+>  					continue;                        \
+> +				__stack =3D &__state->stack[___j];         \
+
+[Severity: Critical]
+Is it safe to index the stack array using the out_stack_arg_cnt index here?
+
+In the bpf_for_each_spilled_stack_arg loop, ___j represents the index into
+the stack_arg_regs array, which is bounded by out_stack_arg_cnt. However,
+this line sets __stack =3D &__state->stack[___j], which indexes the local
+function stack array (bounded by allocated_stack / BPF_REG_SIZE).
+
+Since a BPF program can push stack arguments without allocating a local
+stack, ___j might exceed the local stack size, computing an out-of-bounds
+pointer.
+
+When release_reference() iterates over these registers, it evaluates
+stack->slot_type[BPF_REG_SIZE - 1], which reads out-of-bounds memory.
+If this memory coincidentally contains the value for STACK_DYNPTR (2),
+could this result in invalidate_dynptr() being called erroneously,
+writing STACK_INVALID across multiple slots and corrupting adjacent
+kernel memory?
+
+>  				(void)(__expr);                          \
+>  			}						 \
+>  		}                                                        \
+>  	})
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260519181314.2731=
+658-1-ameryhung@gmail.com?part=3D5
