@@ -1,155 +1,257 @@
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011014.outbound.protection.outlook.com [52.101.57.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F5E2874E3;
-	Tue, 19 May 2026 07:04:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779174262; cv=fail; b=FnoJ56jDfNytb8XNqRHjSPZi8XYOwSNTdMIeXig2yV0IHbNjLCUbOo3FiANfS22wOeOYf/Arpvx7VRQeLYhJyS8v7Rt0hfIxns2OwFYf8+yjfef4yIyKyFPfC+3c2FvGiEiX40O5NBZ2QUeeQ9EUvGfVis1KD/p5i6tqY6gj2Rw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779174262; c=relaxed/simple;
-	bh=DBlTPciHsnSbB7DUGnQhVkSRjdn5p1RAg7M9cS0E/PI=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=RojRLnrlVD0HgJbR0ybvUHYXiz1BSsJWyJevl5FaisM/jjufa3UoEg0alnd0iU8qMhMUcDMNNimoUvhhEB4hmRGK/sCjh/ypZWuTiG/piR9IGIJbflkXJSyb0yI9zTDCTW1kwcs5bd/fz/IWu/vrYWBluOT2yCJ7MjfTH3t6iZo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=pTRO3Aj2; arc=fail smtp.client-ip=52.101.57.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB4C3DB99C;
+	Tue, 19 May 2026 07:44:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779176676; cv=none; b=N92C0cJIuHuF0LnHt09gR9wEpW1MhHiy32sHx0PmGZaMow9i9AG3mufDGkkx57dVk4wr+9nT4726k0h9D/ozrxm+4hyxJ4MU0+oUZiWwcXk7SASD/GktZ92RDHsCLNNUVFe/UiITzq8A/XsBORILHx76owUcFs+vIZO/wJpWPIs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779176676; c=relaxed/simple;
+	bh=acrnpGs+RgPn5vmsEe2IHJpGMxxnf1tBLZq09HiFtDs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aJl4iEm9Q3mU05Lruo5Aepir1QVZMXvAvILfJw0wfGS3bCjaKVNQmqI9JC5rr2+eUnFMw9Xfs2GvtlEB98UbBDiOljIv9SQqu2PE8I2woW37M2kCKs8VF8k+hJxOmSQhCeJGAAsR4jS6ZL2fz7p9mYUQma5lVXAY7AR97RKBxB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dKmcNDHT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="pTRO3Aj2"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TnANcKn9DOjDY6oEMHYPTBYhByxkjV3AFaupz/TLd5EnwvfdTcAu2jrvjSRSsOItRkzTTXbInpjuHUdBI5pyvwzpBIPf3LXz3f8niqOfJcTd4/+UwNe2Mti2Nb9zxN0svnX4/8lzUNp7eNChZFW0cwfNtA+pv9ojMxCfVHD6CuWFHL1XEL873PF3XL6N6mVhkzSODRb9F+XtpNJjBYwKavWyu60+QTLK7Kqus88CvfNjqyPfXTnzAroX4e9v1rDxCjuOzz7v/sCKqfS9i2mkmVVjRjjiv59W2pGpG2wFb0QwKvFAL6ghvIovlQFfSWO3q1yqdLp5gYL0DVZQhl88Ww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Kpxqaq1j2+A+nTN09x4s9iZCdIsq2LB9Mzr4twCNTvg=;
- b=XjwTpNAua/cyIbh5+zAKDfLuTaZDGI4LCAbsMWFtkYLhFCLbsh6iC+h8XW3HAdKz4o4BeRvCzXnMTx/463dNVYjaF6++EDLwVllWCrZ5mxYcHgnAyRvid3A/uKH3NrBhwIWyJatRcrqgr0xPgwX3Khhtcp3BPgdOaCffpf0sjqLXWfz10jdMK2XQzKUa879T7D5L8r8o5ydX96HwFQ7dfFP8/EJeAJ1+x39Awa5QmmDC0trM3lPEavoz0iOfDxBJmoMfSbHAerr4iknjWWu30h7jtOBm/ZAAALw+v6NkDCGQMvFE9bLNO1Xq69iHbETrZWc4sloD1oV7pCfcJDzngw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Kpxqaq1j2+A+nTN09x4s9iZCdIsq2LB9Mzr4twCNTvg=;
- b=pTRO3Aj2hXRjHsEhs2gN79sJYtwG+UGeLL37SM1aRoJn6W7obLWzGzMkw4DB8FnU6l4bN3I5Gty6eE89N2epN21bvCjiRlThzubvayhhvpRrXq5rtlKHiXVy/9oTXO5f4FoD53EP4MZvAz9oz7aL2L1CuPpDO7U+7Zjb0m351n881yWqit75FH55s0HOK4QbPfANXIHU0Ocds+MbcuAwAtgBtfJEPxOh6pIhQ74coAjaIPlEqIatG30NzQPwk76jys/7P9O5t21zlWe+yLPuHhuJnBOsUyMMmni9Y9dSMY1tzJMZ2j+EnobzKYZgTmvWGMF7NjtS4bO1Vj7e/Ej1LQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MW4PR12MB6802.namprd12.prod.outlook.com (2603:10b6:303:20f::19)
- by CH3PR12MB8401.namprd12.prod.outlook.com (2603:10b6:610:130::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.24; Tue, 19 May
- 2026 07:04:13 +0000
-Received: from MW4PR12MB6802.namprd12.prod.outlook.com
- ([fe80::51f4:a3d9:b44e:9587]) by MW4PR12MB6802.namprd12.prod.outlook.com
- ([fe80::51f4:a3d9:b44e:9587%5]) with mapi id 15.21.0025.022; Tue, 19 May 2026
- 07:04:13 +0000
-Message-ID: <364bb4db-2a45-4b01-b2bc-1f6fdff937ad@nvidia.com>
-Date: Tue, 19 May 2026 10:04:03 +0300
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] selftests: net: Fix checksums in xdp_native
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Mohsin Bashir
- <mohsin.bashr@gmail.com>, Amery Hung <ameryhung@gmail.com>,
- Martin KaFai Lau <martin.lau@kernel.org>,
- Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- Carolina Jubran <cjubran@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>
-References: <20260513072355.1083381-1-noren@nvidia.com>
- <20260514183832.5ef205c1@kernel.org>
- <aa818076-6e5a-4b61-bc7f-0bfe3907fe2f@nvidia.com>
- <20260518143138.74839bf9@kernel.org>
-Content-Language: en-US
-From: Nimrod Oren <noren@nvidia.com>
-In-Reply-To: <20260518143138.74839bf9@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0155.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a2::16) To MW4PR12MB6802.namprd12.prod.outlook.com
- (2603:10b6:303:20f::19)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dKmcNDHT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 477E3C2BCC6;
+	Tue, 19 May 2026 07:44:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779176676;
+	bh=acrnpGs+RgPn5vmsEe2IHJpGMxxnf1tBLZq09HiFtDs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=dKmcNDHTXW+8ND9r4Uhrbhi1xuyTfW8NMikF4lGXqoqT9UkjEz/v7aOyrxjDp1GJg
+	 NYGUmwKHwt9FUoDZnDL029ZP6LpMcYTB0uRKBQLHBeUiVY1/uK6UJrcRvNfgrtx1qW
+	 bq1z0wrxU/jJudY5SKxWSMtH94IFjBD2F5cVxGSYP0OdOZ7nATUUvDCpbF+vVI20yv
+	 UmVwwYoIFwF7EZn91cb6ouWjsYOkrEO3UL9WvytVoccIduqoYITjFh6DvY9LPq/yMl
+	 84V9kCxo3aEL+b97R8AsKXB3Vyudi2SDLg8JqUDcWLSCyqCwfe2erbu8uht/RndmXn
+	 iA81wZJ4hZq5w==
+Message-ID: <82d2145a-9b41-4ee4-b980-e7bd5d12f035@kernel.org>
+Date: Tue, 19 May 2026 16:44:30 +0900
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR12MB6802:EE_|CH3PR12MB8401:EE_
-X-MS-Office365-Filtering-Correlation-Id: a53ac3a8-4bee-42a3-ab68-08deb574d50b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|56012099003|18002099003|22082099003|11063799003|4143699003;
-X-Microsoft-Antispam-Message-Info:
-	RgZerwTYjaJh1BmiKgWcaXiECqcESNXUvsXs805Mr8nRrujhRkM274yUdyhH7k46HsvuDBoj66tH69gpDkZEidsPoyUsCkANBW/GLV1SNMJdLXh1gWmN95zwXwzTQPyXH4Vx0xWWRR7BIa34/KJTcyeps5nyIzJptYVcwtJIubTOSXNT7zryTmcwSF2GE1f+N/YBFx1MrHdVClqG8Cl66ZvXeBgRnrC93UsPzIsbwaNIwXaMcWu3/bTSTkbbu/x7tCPPmYPXhn98YVIRIq55F20R9udql/doCVxGJtPSL5CXageQxX/jQXgzrcXHezpQnrwLeS9P58erVhaFlmk42OGRIjA6iNTFLlngPkMSCnTHcqAq93UuH/O4uf4WT/bvrNFido5aeFM0eMtnl8ZHQ3gi283MoWZPJNGdE361NWzPi66UGXz6kSsCOFfHHOTbX/OXdkIoL7Vs1ksCYZKDdzjw6lbmP98Ej7TtjiyoHma0xE6cSUys+x9WdiSC+e+b2BamvaDX6cRA13N46A0WSxmpBQmUckFgFYU6/5S14rpjC8kRasADN3f5bNaxFO/af8f7yORIttY8cBvoX0hZK0V01UlB043ym+C9xQYiOEVti8pDn4lQ0zhMTqxTcpT/2DeWe5wKW9z7pPCXPJfRAl2svIFkV44kPscEMhFBgHXGWXGdzSltvJG0PafurWh5
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR12MB6802.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(56012099003)(18002099003)(22082099003)(11063799003)(4143699003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?eGZkVS9GU1VRZzVSVWJldURlZ1Z0OEM5TEsyTFNUN25IZ2lXbmtFWDgvWjZo?=
- =?utf-8?B?NnhvakNTQTIwZTdZVC9QSFpBOTNlWWxlNDkvOWVjSG1sTklMcHI3SCs4RHJo?=
- =?utf-8?B?R2xsclhnbDhHRUw0M00rWWRaN0VFQjlOQ3d5WGJzVlpQVVJackJ2UHBZZmxH?=
- =?utf-8?B?SklMWXhLOGpoVG96RFh5Mm1ON2VPMEZZdThuNVhQMDFZMEZHd2xvd2tsRWw5?=
- =?utf-8?B?SVRFamZhOW9VeUlxUHhoZzI3WlF2alhLVlNNTndQc2dJazh0YndUS3N1QWhZ?=
- =?utf-8?B?K2p6a0N2RXFLdmZLaXlDTFppeDd0TVp6bDdHRzNYQVpaRDY4QzM3Rk5Ub3gv?=
- =?utf-8?B?eWs4a1NRY3c1b0FjV0RMS0paYWs3UmFpTVNCV3MvNnpsaEVpdUMzaFhvVzJ0?=
- =?utf-8?B?dmRtaWx0SzlpbWljMzFOcWtrK0sveVBUaXBQQVZPNWZFYXVQN0Y4TkgzUlV4?=
- =?utf-8?B?SGx5RXkrMXpLQ1c2MENFa3dURU4wYjRBQ2xvMnJSa3JEQ2ROdFBFQmhWV1JM?=
- =?utf-8?B?cnpmNFZrR0xKcVJBZ3pBY1hQTk10K3Y2M21oR3pyQkVsT2tIWUYwcE1PY0lR?=
- =?utf-8?B?VkVCR2xzTmU4ZHAzQUVqaURuWVczMER4N0R0cHJIY1JxVE9KanRSMUhLZmRw?=
- =?utf-8?B?MDdneXZpVys5dFp3RjNkMFY2NFhzWnNHak9CM252Tjh4SHp1dngrSkRFVlJn?=
- =?utf-8?B?TEpmQkVqQk54b1BpZXFDSGpSZWhDWlhnb0JtcEtlazd0b1dKN2hnVmp0dVhj?=
- =?utf-8?B?NDF2MEhOT3R4TEh5dmZSc2Z0UTB2TGdvQnI4WTFGYWdRN0x1cDc5R3FQeER4?=
- =?utf-8?B?YW1mMDRTZ1c1bkxVS2luRkYwK0JLMlYzZElteU5LZ1hkRWtFYVEwQld4cmpz?=
- =?utf-8?B?VzVSSnBSU3Buc284MVpNeTM1eURYNFlITUJmZlpHUFQxQy9DUzEyTzVwRXpN?=
- =?utf-8?B?bGF1TGw2UXl4dVVJVmZzcGxpYXlEWk1SaFZKNTlCQThQc3l6NGNobk9Camx0?=
- =?utf-8?B?aFdPUlZSOUdFVTEwS1JwbXJ3NTUxVEt4R1crZngzOWVFUHpkUE0vbDBLMDhW?=
- =?utf-8?B?d1lmVSsydTU0Z0NjaUNIRSsvM1lUeFQ2Unl2TXowSVRGTVRQMisrMUdTNHdH?=
- =?utf-8?B?U2tVY2IvQ0p4OE00aW9LZ3VwT0kxVWJhM0JOblAzNk1MMkI1RS8xeWhQN0RM?=
- =?utf-8?B?Nm1CSjUvajZEOVdPSGg1UHBIdkRQUm43UWIxMW5pdWN6NU1wbk9tWHFMRWFU?=
- =?utf-8?B?VjBhYm5vT0JaYlBEM3N5TUk3eklJSmVUd2dLcDZPL0RXRVp1UGVOVG9wUGRR?=
- =?utf-8?B?cGN2ek9Jc0lIMmUwWmorNUlid2VXR0hvcGpQT0lYakZubm5OTUE4dGRsTGJC?=
- =?utf-8?B?OHF3R0NHbWt1ZUtvTkx0Q3pjbU1QWldBT3E4QUdqRFAxYW45M0V3VUdtUW9W?=
- =?utf-8?B?ek1BaUVQcFdXWmxCQlVrUWJYcHV0RkNmYkhobU93c2FqOThkRGJkbVRTQnMr?=
- =?utf-8?B?QWhNRWgyeFFIdkYrd2tWa05Fbk93YkZ1dlh3YmpUR3grc0lQeDllbnFEYnJL?=
- =?utf-8?B?c0Jpc3ROdEdpTGNiKy9hNGVYeFFMbjRzYkxvaFp3UHozaE8ydWZET20rQUxr?=
- =?utf-8?B?NXc0bnFHTUlUMkxvbFVlckovTUFRS2thRUd4SVAxOG92YVFzVDhDeWhYMDlm?=
- =?utf-8?B?amxMYkZxL29rQlhaN3R2RTdxSEpJRFZuL05sU21qdTlLb2pNN1JRa2RIdmJl?=
- =?utf-8?B?SmlVTkVndzhlaXJoWEw5emhzMWdVODh6bzJ6cENMTzRkWk1RSXZNanRzRlpE?=
- =?utf-8?B?dHR1dUpzM0dqcU82eGt0S1ZncDlLbEVIdnEvNmRhQzVEaGJmSUZDTUQyRmVV?=
- =?utf-8?B?OFRoNXRJVUVCdlZ4U25Wb1dXdzNZSlN2RWtETFozaWhvMjVjR0tuSG5oY2cr?=
- =?utf-8?B?ZDJCaE5hOWlmUzJjVTQwUnV6NFFXZ2VzUmdRaWg0RFNSRjhoOFNzZlpwK3Rh?=
- =?utf-8?B?NVZmTUlNaExhbGJBVjZXa3huNkxxNlRyMFhxdk8vREJmemJwdG1xMk1GbzVT?=
- =?utf-8?B?dWFxc1U4YXJrbnJwbUVWN2ZHenBTeXR6RUJKZ0Y4d2gxWnMvSHkxUU5pckNt?=
- =?utf-8?B?anRibk42YjFCRWl2YXJIMUlpOG1CMW83ZjAvVDREa1dhK09FTFNrbTVEWTJT?=
- =?utf-8?B?YS9qWDZXMEdEVkVrUVJSL0RERGx5TlhVRjVMeVJlK3A0aHJna2t5VlVyRE1V?=
- =?utf-8?B?OSs4Y1B6djJxbG1JbjZOd1RUaGxEaTU3MmI2K3VJZldObGhPTW5vK0NUcnZK?=
- =?utf-8?Q?cFKnMQjCTgKwKVVlh/?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a53ac3a8-4bee-42a3-ab68-08deb574d50b
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR12MB6802.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2026 07:04:13.0248
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JMw+vzpARIrKKuBq2ZJCV16YePfb754sIcD8juCYU43J7Eq9E5FlV0LxWBvV/sPPjgcCzSQKdx7crX7kjEgwKg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8401
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/8] mm/slab: introduce kfree_rcu_nolock()
+To: Uladzislau Rezki <urezki@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Christoph Lameter <cl@gentwo.org>,
+ David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, "Paul E . McKenney"
+ <paulmck@kernel.org>, Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Zqiang <qiang.zhang@linux.dev>, Steven Rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org,
+ linux-mm@kvack.org, bpf@vger.kernel.org
+References: <20260416091022.36823-1-harry@kernel.org>
+ <20260416091022.36823-5-harry@kernel.org> <aejeVK0J_jHSfVhD@milan>
+ <aemevSofweaUSx0n@hyeyoo> <aeoD_Ts6hLsgNc9-@pc636>
+ <3s4jafam3la72a6y3dkfvhtzxk3fsngb2cka3bpfqrirl5m633@pz3vzizefoxb>
+ <afNG0jNQNYeZ940g@pc636>
+Content-Language: en-US
+From: Harry Yoo <harry@kernel.org>
+In-Reply-To: <afNG0jNQNYeZ940g@pc636>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 19/05/2026 0:31, Jakub Kicinski wrote:
-> This patch needs a respin for the issues Sashiko pointed out, to be 
-> clear.
-Replied to Sashiko earlier (my reply went to sashiko-reviews and bpf
-but not netdev - oops).
+[Resending as it's rejected by mailing lists due to my broken email
+  setup. Apologies for the noise.]
 
-All issues are pre-existing and harmless, so I don't think they should
-be addressed in a net fix.
+*shows up late again after LSFMM and processing some backlog*
+
+On 4/30/26 9:10 PM, Uladzislau Rezki wrote:
+> Hello, Harry!
+> 
+>>
+>> Hi Ulad. Apologies for the delayed response.
+>> I meant to reply sooner but sidetracked by other issues.
+>>
+> No problem, sometimes i also can lag because of other tasks :)
+> 
+>> Your questions are fair, but let me try to clarify
+>> the current situation.
+>>
+>> And before diving into details, I would like to reiterate that
+>> there are potentially two points to discuss here:
+>>
+>> Point 1. Can we justify complicating subsystems by passing
+>> 	 `allow_spin` parameter all over the place?
+>>
+> Yes, we can. But as i noted i see some drawbacks :)
+> 
+> - all new incoming patches have to respect that new third argument;
+
+That is true :)
+
+> - the fallback mechanism which uses irq-work is not optimal in my
+>    opinion:
+
+In most cases it would not fall back because most likely trylock would
+succeed. If most of the calls do not fall back, a bit of suboptimality
+on the fallback path is acceptable.
+
+>      a) We introduce an extra window between queuing a pointer, mark
+>         irq-work to be executed and then reenter the kfree_rcu() with
+>         no-sync flag and now we need to wait a GP for them. But the GP
+>         might be already passed for such pointers. So we potentially
+>         need more time to offload. This is rather minus.
+> 
+>      b) Since it is for BPF, allow_spin is always false, thus only
+>         fallback path is used. Decoupling comes to mind.
+
+No, allow_spin == true means spinning on a lock is safe. If allow_spin
+is false, it would do a trylock instead of spinning, and it is expected
+to succeed most of the time. As long as trylock succeeds, it uses the
+same data structures as the existing kvfree_rcu batching without fallback.
+
+> 
+>      c)
+> 
+> Why should we mix those? What it is worth to do, is to prevent mixing
+> "unknown path which is for BPF/others" with generic kfree_rcu().
+
+Because we want to reuse the existing kvfree_rcu batching infrastructure
+without reinventing a new feature to do the same thing.
+
+The intent is to avoid the fallback in most cases when allow_spin is
+false, with fallback being there for correctness.
+
+>> Point 2. Can we avoid adding this complexity to kvfree_rcu() and
+>> 	 let slab handle it instead? (as mentioned in [4])
+>>
+> it depends if BPF people want to free a pointer using RCU machinery?
+> Do you know if that an intention?
+
+They want to free slab objects after RCU grace period. Freeing slab
+objects without involving RCU is already supported by kfree_nolock().
+(There are other use cases as well, as recently posted in [1])
+
+I meant RCU sheaves can handle freeing slab objects after RCU grace
+period, and kfree_rcu_nolock() users don't need to handle vmalloc pages.
+So technically we don't have to add this complexity to kvfree_rcu
+batching and handle it in slab.
+
+But to do that, we shouldn't disable kfree_rcu_sheaf() completely on RT.
+Apparently Vlastimil has a suggestion to address this, and I'm going to
+digest his suggestion and explore that aspect.
+
+[1] 
+https://lore.kernel.org/linux-mm/esepccfhqg7m6jo76ns2znj2cnuaepx2xvw5zaygtwohq4psma@563ypprp6rr3
+
+[2] 
+https://lore.kernel.org/linux-mm/6811cc17-8ee4-48c8-8cbf-6bf4d9f98162@kernel.org
+
+>> On Point 1: IMHO it could be justified, but at the same time I hope we
+>> end up avoiding more complexity in the long term by working on Point 2.
+>>
+>> This reply focuses only on Point 1 and explains why it could be
+>> justified.
+>>
+>> On Thu, Apr 23, 2026 at 01:35:25PM +0200, Uladzislau Rezki wrote:
+>>> On Thu, Apr 23, 2026 at 01:23:25PM +0900, Harry Yoo (Oracle) wrote:
+>>>> On Wed, Apr 22, 2026 at 04:42:28PM +0200, Uladzislau Rezki wrote:
+>>>> How much performance do we sacrifice compared to
+>>>> letting them go through the kvfree_rcu() fastpath?
+>>>
+>>> Freeing an object over RCU from
+>>> NMI context is a corner case. It is __not_ generic.
+>>
+>> First, I want to clarify that kfree_rcu_nolock() is not just for NMI
+>> context. It is intended to be used when the context is unknown (because
+>> it can be called in an arbitrary code locations).
+>>
+> When we say "unknown" to me it sounds like a worst case, which is NMI :)
+
+If we say "allow_spin = false assumes the most restrictive context, such
+as NMI context", that is misleading. It sounds like we always fall back,
+but we don't. Even when the context is unknown, fallback isn't required
+most of the time.
+
+So I would like to say "the context is unknown", meaning that
+technically kvfree_rcu could be re-entered in the middle of kvfree_rcu
+and we need to be able to handle that for correctness (although in most
+cases there's no re-entry and no fallback).
+
+>> There are two kinds of problematic situations where BPF programs
+>> are attached to:
+>>
+>>    - 1) a tracepoint or a function that can be invoked in a critical
+>>         section (w/ a lock held), or
+>>
+>>    - 2) a function that can be called in an NMI context, which might
+>>         preempt an arbitrary context holding a lock.
+>>
+>> While 1) and 2) are not (I think) dominant use cases, and although
+>> most of users can legally call kvfree_rcu(), BPF can't use kvfree_rcu()
+>> and must consider the most restrictive contexts.
+>>
+>>> We even do not have(now
+>>> in mainline) users because we never support it from NMI,
+>>> just like call_rcu().
+>>
+>> Unfortunately, we've had this use case (of allocating memory for BPF
+>> programs) for a long time in the mainline. There are two current
+>> approaches to mitigate the limitation:
+>>
+>>    - 1) Pre-allocate all memory. e.g.) allocate all hash table elements
+>>         when creating a BPF map, rather than allocating them on demand.
+>>         This ensures correctness but sacrifices memory.
+>>
+>>    - 2) Use the BPF-specific memory allocator [1] [2] to allocate memory
+>>         on demand and avoid preallocation. While this wastes less memory
+>>         than 1) and also maintains performance, it is re-inventing yet
+>>         another memory allocator.
+>>
+>>         Also, the allocator reinvented kfree_rcu batching as well.
+>>
+>> Now, we're trying to avoid 1) and 2) as much as possible and use
+>> kmalloc_nolock() instead [3].
+>>
+>>> If BPF needs
+>>> it, then the first question which comes to mind is not about performance.
+>>> It is how to support this case in kfree_rcu() without adding noticeable
+>>> complexity or overhead or hacks to the generic path without making it harder
+>>> to maintain.
+>>
+>> Since there will be only few subsystems that needs it, and because
+>> they already use it on production systems, I don't see much value in
+>> maintaining a simple implementation if that compromises performance
+>> (and thus make the transition harder).
+>>
+>>> Performance wise you noted, you mean:
+>>>
+>>> a) call latency(this is probably the most important for NMI)?
+>>> b) memory footprint?
+>>> c) pointer-chasing overhead?
+>>
+>> I think it's either
+>>
+>> - The performance of kfree_rcu_nolock() itself (a), or
+>> - Not distrubing workloads running on the machine (b and c)
+>>
+>> depending on what people use BPF for.
+>>
+> Are you aware of any specific workloads which we can run? To test
+> and see what we have when it comes to performance metrics? I mean
+> exact uses cases with exact steps who to trigger them?
+> 
+> That would be useful to see on behaviour.
+
+I'll share once I find what BPF folks are using for performance
+benchmarks. (Which means I'm not aware at the moment :D)
+
+[+Cc bpf@vger.kernel.org]
+
+Thanks!
+
+-- 
+Cheers,
+Harry / Hyeonggon
 
