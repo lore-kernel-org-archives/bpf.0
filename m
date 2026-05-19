@@ -1,196 +1,189 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A464C0439
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 12:06:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779192379; cv=pass; b=ns40xMhFV6JXvmQs86gsHzYBsgospELEvCg+m779UFdj0SHBZKd8G604aue0MpoTNbDZgvhGld/rMdOBVE5MaoDyOIeNcxhh6kIx2lt7SUm1rJcbUrqKYEb8yJebLTXE7bPKTJlN6m+ao0BF6ecakGaXY+tO6+ElKHJVixxt8IA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779192379; c=relaxed/simple;
-	bh=CGxVSGycpBzhHRm6QLRx4kIqnzL+aHoMvldBecTAROE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q8VB+29n6dMHFDjZYDOcBS9+68hM14WDC7Z6Y1p/pn7/ugnQ7EkgNIxYJpoW1JhdG+IY9p5yMCF8UNtIZP3OzjllHg9J5jIdEgtEvI3W5BbcyMfLHaqFW80fFM/sMfpEFScaKgoUnj7AmAvVY3hrb9w7tvkWcRXWFmlsEH5/ua0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S7WIn25R; arc=pass smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D411A492502;
+	Tue, 19 May 2026 12:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779192835; cv=none; b=EyDjcW1Xq9b6ql+uqp4gAgP7D3t5KEtXvvdcPdlVJJHCBk5e0J+R3RG/MF5zHG7ckY2U3Fdz08BpW3qErMu1k7BtzFZYzm2fXfnjT8qtN21ECdNzV41+NAQUgIfcv6u+lxKTEreVQ2peJ9mMz49UboI7zgWXZ6EAhUAOCfon8Og=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779192835; c=relaxed/simple;
+	bh=qGkWukyg7BRJ3BYm19QN2I31E/gz6jl12f4LD2DpBVU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UOVCJv6QGfRPc/Kbroie6SkXcyr1cUv/Ssuq7pkSCVoMiUGCKRqjhaC3+xhhiZ5OPsemYAKc8Je4L1yRfBv91oi62AyqxnF3laa0J3sRxl/8udt2w5aU77qVQTUHLuQlYbb9JVh8Gv2+kZ1QuM4jjttvmBCW9fMVbjQMqCYmCzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=hQ5wDWvP; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S7WIn25R"
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-39393ec4ed0so33878441fa.0
-        for <bpf@vger.kernel.org>; Tue, 19 May 2026 05:06:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779192374; cv=none;
-        d=google.com; s=arc-20240605;
-        b=gN+x74GvMCbstpxOfwGGQYwI62NyBLdpiuddhmhqDjxCvQ8AEv52Thpe+9xYEYMDNN
-         wlLVrInge3YkmnMJaMrWNSHffwfO9OBM5f/qhoMhYHqHPHWF7jb5E8WdOUzxfYwtDEiv
-         Svn5w+bgJXqiu0NiV3hpWGNTcPvR6lUn/sXIgMhZ7UC7wUtnZ6MQKgrUhRcTqOA9HhMy
-         2gw1YyHFTR/65A+UVLKZlnfmFhJPENxVdO2Hr8bOkG+6ubh8VX6OVoHzCE5h4G+qpAav
-         tiWxDq1TXs1HOzgfgq1Ya+WqSLT0T5ssowUEhE9TkBnLFCUouYk+w/wB7a3kV6E3I8lG
-         zzbw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Kp7kUH9UIq+pMnPJFmd1HjQegMSsejvI9T/sI2XmpDI=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=eAvw8PXgvl2Ai9bJdzctQfnSo+ioJPveNfglxtlpjFktv/b6HB2h0TY7FdoPhO4KAv
-         fItsdr6Ke4qmx7ZZtTg1AxDmNNMsAJjdvUn00BZbG7PrzrT9VZjm6OptC5LgNiWeZ2c6
-         6kA8zQ9g+sTYXzQXne2T/kxy6zvOwIkm+B6dvytBvt/iTSiGys99oLdXkUS2bHU9380G
-         fQyxIqEvyJZ98nJR2xOCA+xJmOQGbd49FPW9SV9033fAYMNXfMezhaOh7pj9HuKR5m+s
-         DBKHvsg8rmdOjxNaLaiX9wOxnzwxyhInpocUeZBKx135tGnL7M21wiX0nQHYze2pyLNj
-         DixQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779192374; x=1779797174; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kp7kUH9UIq+pMnPJFmd1HjQegMSsejvI9T/sI2XmpDI=;
-        b=S7WIn25RJnzegY8+O5vNELXElFea41ZqTf+6dQseGeiMSGi5q7TMhi9zVUIbZZEcDk
-         5Gt8I4e6549lsl/3rXV66PK2KVwi0rZqBpwk+IOx+zK7CVRLPH4Tv3SiMx7rmKO2nlxn
-         lpPzrALVhuCk6bPzcQj4PZ9QHx1rdrb968oBIjVnqi9fBCl/nKZTeOYYVHuKkCV2R4Qi
-         uAEn6U9EFV4yzG/Ry9+7vQ00HFqgyvjU5pR3RvfS1MYL11MhN5fe5g4kHeuT//IO/ETR
-         fwTa9+hJbu7RBhT+hF6IhkHRVHUMayU32boClGmLH+2PMXiVDJFRflzQhKVfPcwIq05V
-         VBsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779192374; x=1779797174;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Kp7kUH9UIq+pMnPJFmd1HjQegMSsejvI9T/sI2XmpDI=;
-        b=Yr+leDI7IXdW246Aj6JxzaLAzZ7tRkoJr/otOhVpxYZhWKf25PWDIhtG/SgSSMh4/Q
-         idxUbr5WQf0irYS2belUsH3XJ7oMZBs9HQ7o6de8xYLb19gHV7C3POO54VIdp3apPAY9
-         OeBFke16ZsFbV46fvhzj5GWrdiHvoFlL8NR5M1I7D0h9XVDi4xFFW2L35/6X5xuQU4XK
-         U7G9tkws1dSMczTnmoMaRdyyR5DUyKQJiOZGHg04zmR0nSna0x6vOAi52eWpVykVnclt
-         3woBf7jzPn5MzrPPqi48kdknQnAuW2XdwbfslBut0/Ce8hhR49k64mXvXSqgqytD1T5F
-         sKTA==
-X-Gm-Message-State: AOJu0YzDw/eAiQcL5BxZTGXwW9GSwQ5AjRMRb6UR/Mm/zFjTZ7IrvwSz
-	p7A16xr9QPsMGpZ1Q8jfmjKDmJwlT/ClZCgkaAzTy7YoqSwO87Wl2PRskft0EtKzuwCvu8na7d0
-	xvI6934DQ+0UXB96YbHBIvyJHqWvJ2Zb9MI/FxI+Xsw==
-X-Gm-Gg: Acq92OFHqzsrnoUEOZzzThpqcBtEJwBANKi817T2n8MmRCJLHN7Z5/jU6XZ8FMtblJi
-	qwyEwQNnB6Z7P0eJyguP4NnTNo4REZ/U6LmJTeAuvXWLGGy3DyhuXov4P4FFeV9ouD9eTDoDQMO
-	xmp91SVk+KkAuVXMIpqUTdqe8BEgtkxXthU3ttAW1No6nBHm5B/wZv6BzkdB2rUi0zHJ2/aKFmD
-	jrxXZeRue+24G99M37f/C1uLz4YA8VGC8fV4UD6YYgznHVYyQ2NW+w/qRJG7u33OHcQ4o5TLiy2
-	UMFVs4ttS2ZcDNO245ZbsPJjZIWIl+jiyqc++Voh
-X-Received: by 2002:a05:6512:398a:b0:5a8:e336:b55a with SMTP id
- 2adb3069b0e04-5aa0e61948cmr5619291e87.7.1779192373905; Tue, 19 May 2026
- 05:06:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="hQ5wDWvP"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=lQBojDY84EYZekKZoulFlCOXOf8H914FBQk+2ZSsF6M=; b=hQ5wDWvPkargrg/9FISN9vF9o0
+	/ylJJiY7sUlG2YI4i2GCxTghR1XNzejpmh9PcOm98xRpzCGj//eI3HFVSWWbvYxfSWKEMW3g+dgRf
+	whaeMaFjn4cLGcGgSwW2KSCeunu8/f3xDZaQRpxY0K1vkU+Hp5zJ5ye0/cuaySKntHGW6WGu0HisE
+	+PLes7xgZlsGFJ8zhRNYHimhWOL+XY5paB/dZg7PA40Xhcv5Im98ikFt7dcl6jYnLIHzQMzLIr8Rz
+	GCcs43CrZbNNrzNEHY+NX46jtI9EpG3yfdjUlySgCShr2CVxWQenhRy04k5k2K+3ydMwQ0lQiieto
+	oBpIkAoQ==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wPJKC-0008pA-0P;
+	Tue, 19 May 2026 14:13:28 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wPJKB-0008ua-0C;
+	Tue, 19 May 2026 14:13:27 +0200
+Message-ID: <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net>
+Date: Tue, 19 May 2026 14:13:26 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260518082344.96647-7-kerneljasonxing@gmail.com> <20260519082515.AF651C2BCB3@smtp.kernel.org>
-In-Reply-To: <20260519082515.AF651C2BCB3@smtp.kernel.org>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Tue, 19 May 2026 20:05:36 +0800
-X-Gm-Features: AVHnY4J2CCAk_a1JeE9M8IeVY0qq4Nch-g9YVsRP0rcTv7eisiLVVhlScWxxLHE
-Message-ID: <CAL+tcoBa3_mGcULSbvtqWvK1ZbffX9CKQXznYpvaV+du7a8Ntw@mail.gmail.com>
-Subject: Re: [PATCH net-next 6/6] selftests/bpf: Add RX latency tests for bpf timestamping
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation
+ primitive
+To: Song Liu <song@kernel.org>, Sasha Levin <sashal@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ live-patching@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Joshua Peisach <jpeisach@ubuntu.com>, Florian Weimer <fw@deneb.enyo.de>,
+ Breno Leitao <leitao@debian.org>, Anthony Iliopoulos <ailiop@suse.com>,
+ Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Christian Brauner <brauner@kernel.org>
+References: <20260508195749.1885522-1-sashal@kernel.org>
+ <20260517134858.146569-1-sashal@kernel.org>
+ <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
+ <agsVDqdALBoHEHlv@laps>
+ <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28005/Tue May 19 08:25:42 2026)
 
-On Tue, May 19, 2026 at 4:25=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 2 potential issu=
-e(s) to consider:
-> - [Medium] The return values of `ASSERT_TRUE` are ignored in `recv_verify=
-_rx_timestamp`, causing it to unconditionally return `true` on successful `=
-recvmsg`.
-> - [Medium] Using a fixed `usleep(10000)` to wait for a workqueue to run i=
-s prone to test flakiness on heavily loaded CI systems.
-> --
->
-> commit 3f1fdeab36943dce908082eb563628a5f8ca353b
-> Author: Jason Xing <kerneljasonxing@gmail.com>
->
-> selftests/bpf: Add RX latency tests for bpf timestamping
->
-> This commit extends the test_tcp() selftest to cover the new BPF RX
-> timestamping path. It tests a mixed mode where SO TX/RX and BPF TX/RX
-> timestamping operate simultaneously, verifying they do not conflict.
->
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/net_timestamping.c =
-b/tools/testing/selftests/bpf/prog_tests/net_timestamping.c
-> > index dbfd87499b6b5..3cc52b670e74b 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/net_timestamping.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/net_timestamping.c
->
-> [ ... ]
->
-> > @@ -143,11 +143,45 @@ static void test_socket_timestamping(int fd)
-> >       SK_TS_ACK =3D 0;
-> >  }
-> >
-> > +static bool recv_verify_rx_timestamp(int fd, char *buf, int len)
-> > +{
->
-> [ ... ]
->
-> > +     for (cm =3D CMSG_FIRSTHDR(&msg); cm; cm =3D CMSG_NXTHDR(&msg, cm)=
-) {
-> > +             if (cm->cmsg_level =3D=3D SOL_SOCKET &&
-> > +                 cm->cmsg_type =3D=3D SCM_TIMESTAMPING) {
-> > +                     tss =3D (void *)CMSG_DATA(cm);
-> > +                     break;
-> > +             }
-> > +     }
-> > +
-> > +     ASSERT_TRUE(tss !=3D NULL, "SCM_TIMESTAMPING cmsg present");
-> > +     ASSERT_TRUE(tss && (tss->ts[0].tv_sec || tss->ts[0].tv_nsec),
-> > +                 "rx sw timestamp non-zero");
-> > +     return true;
-> > +}
->
-> Since the return values of ASSERT_TRUE() are ignored here, will this
-> function unconditionally return true even if the assertions fail?
->
-> If the caller expects a false return to abort early, this could cause the
-> test to proceed regardless of the assertion results.
+On 5/19/26 1:59 AM, Song Liu wrote:
+> On Mon, May 18, 2026 at 6:33 AM Sasha Levin <sashal@kernel.org> wrote:
+>> On Sun, May 17, 2026 at 11:37:36PM -0700, Song Liu wrote:
+>>> On Sun, May 17, 2026 at 6:49 AM Sasha Levin <sashal@kernel.org> wrote:
+>>>> * fail_function (CONFIG_FUNCTION_ERROR_INJECTION) is disabled in
+>>>>    most production kernels. Even where enabled, it only works on
+>>>>    functions pre-annotated with ALLOW_ERROR_INJECTION() in source -
+>>>>    no help for a freshly-disclosed CVE. The debugfs UI is blocked by
+>>>>    lockdown=integrity and the override is probabilistic.
+>>>>
+>>>> * BPF override (bpf_override_return) honors the same
+>>>>    ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
+>>>>    production kernels. Even where on, the operator interface is
+>>>>    "load a verified BPF program," not a one-line write.
+>>>
+>>> If it is OK for killswitch to attach to any kernel functions, do we still
+>>> need ALLOW_ERROR_INJECTION() for fail_function and BPF
+>>> override? Shall we instead also allow fail_function and BPF override
+>>> to attach to any kernel functions?
+>>
+>> I don't think so. ALLOW_ERROR_INJECTION is not a security mechanism, it's an
+>> integrity/safety mechanism for both bpf and fault injection.
+>>
+>> It protects against a "developer or CI script doing legitimate fault injection
+>> accidentally panics the box" scenario, not an "attacker gets in" one.
+> 
+> There really isn't a clear boundary between "security mechanism" and
+> "non-security mechanism". As we are making killswitch available
+> everywhere under root, users will soon learn to use it to do fault injection,
+> and potentially much more scary things. (Think about agents with sudo
+> access).
 
-Even though it doesn't affect the result, I will add checks here:
-if (!ASSERT_TRUE(tss !=3D NULL, "SCM_TIMESTAMPING cmsg present"))
-        return false;
-if (!ASSERT_TRUE(tss->ts[0].tv_sec || tss->ts[0].tv_nsec, "rx sw
-timestamp non-zero"))
-        return false;
+Fully agree with Song here that there is no clear boundary, and that the
+killswitch could lead to arbitrary, hard to debug breakage if applied to
+the wrong function.. introducing worse bugs than the one being mitigated
+or even /short-circuit LSM enforcement/ (engage security_file_open 0,
+engage cap_capable 0, engage apparmor_* etc).
 
->
-> [ ... ]
->
-> > @@ -187,7 +221,27 @@ static void test_tcp(int family, bool enable_socke=
-t_timestamping)
->
-> [ ... ]
->
-> > +     afd =3D accept(sfd, NULL, NULL);
-> > +     if (!ASSERT_OK_FD(afd, "accept"))
-> > +             goto out;
-> > +
-> > +     /* net_enable_timestamp() defers the static key update via
-> > +      * schedule_work() when CONFIG_JUMP_LABEL is set. Give the
-> > +      * workqueue a chance to run so that netstamp_needed_key is
-> > +      * active and skb->tstamp gets populated in the receive path.
-> > +      */
-> > +     usleep(10000);
->
-> Could this fixed 10ms sleep cause test flakiness on heavily loaded CI
-> systems?
->
-> If the workqueue is delayed for longer than 10ms, the static key might no=
-t
-> be active in time, which would leave skb->tstamp unpopulated and cause th=
-e
-> test to fail intermittently.
+The ALLOW_ERROR_INJECTION() provides a curated white-list where you may
+return with an error without causing more severe damage (assuming the
+error handling code is right). The right thing would be to more widely
+apply ALLOW_ERROR_INJECTION() or to figure out a better way to safely
+enable the latter without explicit function annotation.
 
-From my limited knowledge about CI tests, 10ms is probably enough...
+Wrt BPF:
 
-Thanks,
-Jason
+>>>> * BPF override (bpf_override_return) honors the same
+>>>>    ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
+>>>>    production kernels. Even where on, the operator interface is
+>>>>    "load a verified BPF program," not a one-line write.
 
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518082344.96=
-647-1-kerneljasonxing@gmail.com?part=3D6
+The claim that BPF itself is off in many production kernels is not really
+true, where did you get that from? All the major distros and cloud providers
+have BPF enabled these days, and even systemd ships BPF programs for
+custom service firewalling etc.
+
+The operator interface is to load a program vs. one-line write.. so we're
+disregarding existing infra where you can already achieve the same for a
+less safe one-liner convenience? (similarly for the livepatch infra..)
+
+If you need a one-liner: bpftrace -e 'kprobe:FUNC { override(RETVAL); }'
+Alternatively, add an extension to systemd where you can just deploy a
+list of functions, and it does the necessary work in the background and
+persistently.
+
+Also, what about other classes of bugs, like OOB access, UAFs, locking
+issues, etc which then could be used as a means for privilege escalations?
+It feels like this proposal is a quick'n'dirty prototype via Claude as a
+reaction to copy fail bug, but the right solution would be to improve
+the user space tooling as mentioned and existing infra we have in kernel.
