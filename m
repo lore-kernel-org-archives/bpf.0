@@ -1,177 +1,265 @@
-Received: from mail-qv1-f99.google.com (mail-qv1-f99.google.com [209.85.219.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A57B3BCD15
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 19:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5458336D9E7;
+	Tue, 19 May 2026 19:38:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779218997; cv=none; b=XWw+LsTxmHCKyTQE2VPB8KpYPWahYtS2m2uYd2TOil+oVNTi0fhkXZL/6+4abxGo6OWCpESAbpL09vsShihPTPv8lFEYiwdpHEVu1xsl1ZGyx/dsjm2H4j8X7h/wUCE+rrv2/46pqK8x7sfcGnQ1/yh/Hk8vT8EZtd208Pc5/sE=
+	t=1779219504; cv=none; b=iPU96kjNdjl0oQr62gmCgs3XTEOgfjnwtpwM7WUIeTG9T0Dj1hJjcwGmtcssKxED+i20R1RT9vObkzq9pEAZEdShCo+l48Mmq82Q8FfaDIr2nGorTOII+S41Egw8M2xzOZ/xmZfKLsNj7DQzsgT8HUqfHMFZ0Fm3cs+n01lbzQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779218997; c=relaxed/simple;
-	bh=YPcRiw4Tsr2KvMmATm06qRml6/4p3sbblnDe0qTV42Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W9ciaJQbQnydCew8YTCcrbA7izueJkaNQnyoy1xnYwF4C0gymXF4eDG4nwOEK58WfsYveB6X41rSUVwY9kKEPCif8Ht1BUKT9cp2UfU5KEpbD8kz1F3zr5mGAZ851yhfR9LIV69wONjzq4K/2LsfgOsywo01Kb9XCT4t8bReAYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=F12NdEY5; arc=none smtp.client-ip=209.85.219.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1779219504; c=relaxed/simple;
+	bh=HPF/db3yYwoEhSUmwrZgax09n583vG76bzmjhGogRbE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qIvg659DaUKlpnDl4FklqBG+3Jcu91hTnJKFQoA3c2/o/eevK6iJv5B3hOuzJ3GFlR3LCS1alej3VvAHQ9su9JP3HB4k6LTunyxH799yBU+XjrwUnAEjv+1lgyFsFsM/SOHz1S2Snn/m5JfmHCu8BTgepSLzRYENHzxv5v7KAcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=AahDoLvy; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="F12NdEY5"
-Received: by mail-qv1-f99.google.com with SMTP id 6a1803df08f44-8bb09239328so32639486d6.3
-        for <bpf@vger.kernel.org>; Tue, 19 May 2026 12:29:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779218995; x=1779823795;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:dkim-signature:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=HOwWa+Njguq/yZzIYzDdMRRevQFxklUNPfoFyUumtAI=;
-        b=LngISvt2zzffDcb9kHk6vy8QtkKy07W4o0iZD6CZUoa4GNaZOhz+NBNakYq+yyQuIK
-         V8RMQB6QvYljiKU+DjPD3uVpN5nRNdx7HGEPL7/yU3v65gIXs6M8SrZDfzEz4as1u+fJ
-         PQECGFqGPzpstA51oT9RT0WDJ5/jbacI400ksc5cGXjiXDWOeXHK9hrOwMV1WD20/boX
-         6XOt+niSWDB+NK1hRuilM/aO8chJX1eZ+12Nb6MXeBbtBqtzXb7aQDIPFsORFb2nub5G
-         pznx9ALMHqBOCmdSPoDOC+gWDHK89wLeI7lx5oObFTkaWNKhKmy1Uyy2lk1aEre6Wu7C
-         kz9w==
-X-Forwarded-Encrypted: i=1; AFNElJ9aQ1XIc1uMU5jYJOg1rSxX6ov4fe5RtEoUyAsliEiX8LlBXBN96wS0eJhrGCPpvPVd5q4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHPhtpB4fLCD48ScGBwGqjCSVH7z/K8QtYJ4FnSVwLOIJlbY7f
-	bn0hHkZoYewxpK76TdmdhKL6T4mT9Uk8qR+rmZi71n6Yok8J7cDCylqeMs6h2sacYwKdBUi5ZSf
-	O7YKzHWnn3L8ufPYyPIiq1eeSP46WWcW2f6OPvXXe4+aX7TetP1DeNvKwDBz0NY9PBa2aeu8tcN
-	EascgJgC2s/MCylr429uJsjjQ4IOHyrCX6UgohECdQmtuTr2hstkhWvPV8H3AxWvhlABRZUmLo1
-	jwotVSjwFPv
-X-Gm-Gg: Acq92OHnFDhsBs7o6VS3WzlQjV4R1V/6ACMRXfwS8notS8ls1+wjUXq/fFhfEQBZ0Mc
-	ybwEJ+EJp9zvFgFHfRZYFJNTGSTi/V01/ddEfnB+WlLsNvjdCNZovXr3e482lfiwsx9d/siDnzX
-	F9PAPItX8ONpo+N7qu6IHoIhhjjPTJ9KWWo9bM3Lrnjn1ngpNL6eDMG/CEx3sarnNc/GgPCq9AI
-	+Xrv+LdVP42sAO5wjSV4fq3Jh3UU32MrZX8rDtdBQkrnXMBB29Mu6uqQ9E47wYKKQEc/tlu3sR3
-	7J8hqYlaLugm3glnIRyZ3oqmzR272bB5gYM4Sp9ONrAeJGGUdrhHf5ZDwWw9BxFZPlOrX8fUE8H
-	R4OmR+/unCdNA1tkaQhLiGJ8IMjygRnbnYKSDg7oWOcT313CS0qh2nQubk73oznIS4caOpTJFj5
-	hCuqXuu4GxU63E/wrQeRm9+OheaEX/4VU/qQpI65cIX8L+hCETuwW7xwPbIN84Xw==
-X-Received: by 2002:a05:6214:2a8c:b0:8ca:16a6:3d3e with SMTP id 6a1803df08f44-8ca16a641b6mr301469126d6.3.1779218994942;
-        Tue, 19 May 2026 12:29:54 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-21.dlp.protect.broadcom.com. [144.49.247.21])
-        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-8ca3618dd6esm7906316d6.24.2026.05.19.12.29.54
-        for <bpf@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 19 May 2026 12:29:54 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-44dad1b938fso2400559f8f.1
-        for <bpf@vger.kernel.org>; Tue, 19 May 2026 12:29:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1779218993; x=1779823793; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=HOwWa+Njguq/yZzIYzDdMRRevQFxklUNPfoFyUumtAI=;
-        b=F12NdEY5w/jRp9DG94zgThPn4WGv5d/FoQarefXLkWGC7qS/fZB0JiX95AvVpbfLRR
-         wBVn9D6xnMPSU1XBDh4RdaH1N5thSUYDyUFvo9zEVH9Gfqqg0aVIOYHWUaLAcfCqSEy+
-         KKFeXZaQ0cSBXZr0H+YKpqXuOJifLhHE8kLgk=
-X-Forwarded-Encrypted: i=1; AFNElJ8vuOqLSEmAamVBPZ3Q9QoBMY0gr5vphMOzBxPDq3gvOnrDmjpOB5CMSMoXFpTWl13xOhE=@vger.kernel.org
-X-Received: by 2002:a05:6000:2c0f:b0:45e:9323:63ad with SMTP id ffacd0b85a97d-45e93236594mr661952f8f.36.1779218993474;
-        Tue, 19 May 2026 12:29:53 -0700 (PDT)
-X-Received: by 2002:a05:6000:2c0f:b0:45e:9323:63ad with SMTP id ffacd0b85a97d-45e93236594mr661909f8f.36.1779218993060;
-        Tue, 19 May 2026 12:29:53 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0fe2464sm49304372f8f.32.2026.05.19.12.29.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 May 2026 12:29:52 -0700 (PDT)
-Message-ID: <5b6063d2-a57f-4a8a-9b1f-9cc8ab4cf175@broadcom.com>
-Date: Tue, 19 May 2026 12:29:42 -0700
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AahDoLvy"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64JA1O5B1041837;
+	Tue, 19 May 2026 19:37:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=fRKtb3H4V/i0jW7DZVHIihN7cs5qU9m9+3J8j/NIV
+	Ok=; b=AahDoLvypVAwp4vspA4iMS5w7f8fBYo9XgNR2N4Y0Bmeoc8As2G/iZL3d
+	vsEFY148vV1qcfI21jWzpxLgtHdImsRzPR25LQzFfhmxKciM6S2hOsamghXJ1PHi
+	Pt5Nk5jPZKXm4dvc2EXIuwbvldeW1CnRvGOEH5CVUgJ0nD8AotL8oQehE3iIFpUt
+	FnkInLKvqaDEwoGiCbCs8zycpGPnZo85WLdg5U2x/E6Zj5ztzsb2ZLX0XSyAOda1
+	bGzRSnDRzqYOwjsHtXRbBYKl/TsSO2+iYkloKJ18KB4GdDid4DDAVK5h9b35XEnj
+	t5+y83N54im9LEiLpgnUGp9OTAplw==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h9xxvgc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 May 2026 19:37:57 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64JJO59f028479;
+	Tue, 19 May 2026 19:37:56 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e754gc0jn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 May 2026 19:37:56 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64JJbr3c49545652
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 19 May 2026 19:37:53 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3CD7320043;
+	Tue, 19 May 2026 19:37:53 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3179720040;
+	Tue, 19 May 2026 19:37:51 +0000 (GMT)
+Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 19 May 2026 19:37:51 +0000 (GMT)
+From: adubey@linux.ibm.com
+To: bpf@vger.kernel.org
+Cc: hbathini@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
+        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        stable@vger.kernel.org, Abhishek Dubey <adubey@linux.ibm.com>
+Subject: [PATCH v5 0/6] powerpc/bpf: Add support for verifier selftest
+Date: Tue, 19 May 2026 19:38:06 -0400
+Message-ID: <20260519233812.18787-1-adubey@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH stable 6.1 0/3] perf build fixes
-To: Ian Rogers <irogers@google.com>
-Cc: stable@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
- "open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-perf-users@vger.kernel.org>,
- "open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-kernel@vger.kernel.org>,
- "open list:BPF [MISC]" <bpf@vger.kernel.org>,
- "open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>,
- bcm-kernel-feedback-list@broadcom.com
-References: <20260519185154.2987285-1-florian.fainelli@broadcom.com>
- <CAP-5=fUuhNRj2Dwz9FmMnWKwXjM3RCFV1oQKO4e3X20EOHstEg@mail.gmail.com>
-Content-Language: en-US, fr-FR
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <CAP-5=fUuhNRj2Dwz9FmMnWKwXjM3RCFV1oQKO4e3X20EOHstEg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE5MDE5NiBTYWx0ZWRfX0eW5aRuWtSQI
+ cNTXKoKvmmPH8F+bkugazgumo5HfnYAUApvIF6ssJzJr5iSFVM7VhaEenLzwhsoEY8jRFUpP32r
+ B/m1EO74t6dCifSKrygtpSnN4EA+TffI3vSTo0hjlj3jYbE+9U/EnzdFi7Q6w38u3755B9fhMHN
+ KugYgoEcfunoVxouranbp4plYmTtwE3sm/qez3Hzf8uI1TDMKkK2IGJmpcCC8twWm60q1YRuMij
+ rimvyEZJRpFKUuywMsSATd+PmNg8G/ygzxl/twdTIQQBHnXSvPfe2dBqUSvH3DJlq48i3WZw/ol
+ AfhNLmFF4/POPTUMeRaCveTSYNsfwK3Bsfi8mfmAjt3ZjEsVY/wGxsqNnCbJ0PdgnMOszwASUSt
+ XfTsl6p31n6Q0fBmb018IlxMLxQ1YPeTPd5TLBEcUm6ufax27QC9fwzS7BvRJ74m8sgctXzBpt1
+ IgFRotvedMKhPiyqtAg==
+X-Authority-Analysis: v=2.4 cv=BNuDalQG c=1 sm=1 tr=0 ts=6a0cbc15 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=D-oU5X2WxZXJlpUmpAoA:9
+X-Proofpoint-ORIG-GUID: WUhXL4KGh4tFUBjs9ywKfaOoCnSOD-yc
+X-Proofpoint-GUID: WUhXL4KGh4tFUBjs9ywKfaOoCnSOD-yc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-19_05,2026-05-18_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 priorityscore=1501 malwarescore=0 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605190196
 
-On 5/19/26 11:55, Ian Rogers wrote:
-> On Tue, May 19, 2026 at 11:51 AM Florian Fainelli
-> <florian.fainelli@broadcom.com> wrote:
->>
->> This patch series contains "perf" build fixes specific to 6.1. We have
->> seen occasional build failures in our CI looking like these:
->>
->> util/parse-events-bison.c: In function 'yy_symbol_print':
->> util/parse-events-bison.c:901: error: unterminated #if
->>    901 | #if YYDEBUG
->>        |
->> util/parse-events-bison.c:1020:62: error: '_p' undeclared (first use in this function)
->>   1020 |   yy_symbol_value_print (yyo, yykind, yyvaluep, yylocationp, _parse_state, scanner);
->>        |                                                              ^~
->> util/parse-events-bison.c:1020:62: note: each undeclared identifier is reported only once for each function it appears in
->> util/parse-events-bison.c:1020:64: error: expected ')' at end of input
->>   1020 |   yy_symbol_value_print (yyo, yykind, yyvaluep, yylocationp, _parse_state, scanner);
->>        |                         ~                                      ^
->>        |                                                                )
->>   1021 |   YYFPRINTF (yyo, ")");
->>        |
->> util/parse-events-bison.c:1020:3: error: too few arguments to function 'yy_symbol_value_print'
->>   1020 |   yy_symbol_value_print (yyo, yykind, yyvaluep, yylocationp, _parse_state, scanner);
->>        |   ^~~~~~~~~~~~~~~~~~~~~
->> util/parse-events-bison.c:991:1: note: declared here
->>    991 | yy_symbol_value_print (FILE *yyo,
->>        | ^~~~~~~~~~~~~~~~~~~~~
->>
->> which are resolved by these patches.
-> 
-> Lgtm, but the changes should be unnecessary as perf from Linux 7.1
-> should run on Linux 6.1 and with more and better features.
+From: Abhishek Dubey <adubey@linux.ibm.com>
 
-That's a bit harder to ship logistically for us and likely for others as 
-well where we expect a single source to build the kernel and its 
-companion tools.
+The verifier selftest validates JITed instructions by matching expected
+disassembly output. The first two patches fix issues in powerpc instruction
+disassembly that were causing test flow failures. The fix is common for 
+64-bit & 32-bit powerpc. Add support for the powerpc-specific "__powerpc64"
+architecture tag in the third patch, enabling proper test filtering in
+verifier test files. Introduce verifier testcases for tailcalls on powerpc64
+in the final patch.
+
+The first patch in series is fix patch, correcting memory alignment with
+8-byte boundary for long branch trampoline address. The subsequent
+patches enables verifier selftests on powerpc. The last but one patch in
+the series fixes inaccurate comparision of tailcall info with tailcall
+threshold.
+
+Issue Details:
+--------------
+
+    The Long branch stub in the trampoline implementation[1] provides
+    flexibility to handles short as well as long branch distance to
+    actual trampoline. Whereas, the 8 bytes long dummy_tramp_addr field
+    sitting before long branch stub leads to failure when enabling
+    verifier based seltest for ppc64.
+    
+    The verifier selftests require disassembing the final jited image
+    to get native instructions. Later the disassembled instruction
+    sequence is matched against sequence of instructions provided in
+    test-file under __jited() wrapper. The final jited image contains
+    Out-of-line stub and Long branch stub as part of epilogue jitting
+    for a bpf program. The 8 bytes space for dummy_tramp is sandwiched
+    between both above mentioned stubs. These 8 bytes contain memory
+    address of dummy trampoline during trampoline invocation which don't
+    correspond to any powerpc instructions. So, disassembly fails
+    resulting in failure of verifier selftests.
+    
+    The following code snippet shows the problem with current arrangement
+    made for dummy_tramp_addr.
+    
+    /* Out-of-line stub */
+    mflr    r0  
+    [b|bl]  tramp
+    mtlr    r0 //only with OOL 
+    b       bpf_func + 4 
+    /* Long branch stub */
+    .long   <dummy_tramp_addr>  <---Invalid bytes sequence, disassembly fails
+    mflr    r11 
+    bcl     20,31,$+4
+    mflr    r12 
+    ld      r12, -8-SZL(r12)
+    mtctr   r12 
+    mtlr    r11 //retain ftrace ABI 
+    bctr
+
+    Consider test program binary of size 112 bytes:
+    0:  00000060 10004de8 00002039 f8ff21f9 81ff21f8 7000e1fb 3000e13b
+    28: 3000e13b 2a006038 f8ff7ff8 00000039 7000e1eb 80002138 7843037d
+    56: 2000804e a602087c 00000060 a603087c bcffff4b c0341d00 000000c0
+    84: a602687d 05009f42 a602887d f0ff8ce9 a603897d a603687d 2004804e
+
+    Disassembly output of above binary for ppc64le:
+    pc:0     left:112    00 00 00 60  :  nop
+    pc:4     left:108    10 00 4d e8  :  ld 2, 16(13)
+    pc:8     left:104    00 00 20 39  :  li 9, 0
+    pc:12    left:100    f8 ff 21 f9  :  std 9, -8(1)
+    pc:16    left:96     81 ff 21 f8  :  stdu 1, -128(1)
+    pc:20    left:92     70 00 e1 fb  :  std 31, 112(1)
+    pc:24    left:88     30 00 e1 3b  :  addi 31, 1, 48
+    pc:28    left:84     30 00 e1 3b  :  addi 31, 1, 48
+    pc:32    left:80     2a 00 60 38  :  li 3, 42
+    pc:36    left:76     f8 ff 7f f8  :  std 3, -8(31)
+    pc:40    left:72     00 00 00 39  :  li 8, 0
+    pc:44    left:68     70 00 e1 eb  :  ld 31, 112(1)
+    pc:48    left:64     80 00 21 38  :  addi 1, 1, 128
+    pc:52    left:60     78 43 03 7d  :  mr    3, 8
+    pc:56    left:56     20 00 80 4e  :  blr
+    pc:60    left:52     a6 02 08 7c  :  mflr 0
+    pc:64    left:48     00 00 00 60  :  nop
+    pc:68    left:44     a6 03 08 7c  :  mtlr 0
+    pc:72    left:40     bc ff ff 4b  :  b .-68
+    pc:76    left:36     c0 34 1d 00  :
+    ...
+
+    Failure log:
+    Can't disasm instruction at offset 76: c0 34 1d 00 00 00 00 c0 a6 02 68 7d 05 00 9f 42
+    --------------------------------------
+
+    Observation:
+    Can't disasm instruction at offset 76 as this address has
+    ".long <dummy_tramp_addr>" (0xc0341d00000000c0)
+    But valid instructions follow at offset 84 onwards.
+
+    Move the long branch address space to the bottom of the long
+    branch stub. This allows uninterrupted disassembly until the
+    last 8 bytes. Exclude these last bytes from the overall
+    program length to prevent failure in assembly generation.
+
+    Following is disassembler output for same test program with moved down
+    dummy_tramp_addr field:
+    .....
+    .....
+    pc:68    left:44     a6 03 08 7c  :  mtlr 0
+    pc:72    left:40     bc ff ff 4b  :  b .-68
+    pc:76    left:36     a6 02 68 7d  :  mflr 11
+    pc:80    left:32     05 00 9f 42  :  bcl 20, 31, .+4
+    pc:84    left:28     a6 02 88 7d  :  mflr 12
+    pc:88    left:24     14 00 8c e9  :  ld 12, 20(12)
+    pc:92    left:20     a6 03 89 7d  :  mtctr 12
+    pc:96    left:16     a6 03 68 7d  :  mtlr 11
+    pc:100   left:12     20 04 80 4e  :  bctr
+    pc:104   left:8      c0 34 1d 00  :
+
+    Failure log:
+    Can't disasm instruction at offset 104: c0 34 1d 00 00 00 00 c0
+    ---------------------------------------
+    Disassembly logic can truncate at 104, ignoring last 8 bytes.
+
+    Update the dummy_tramp_addr field offset calculation from the end
+    of the program to reflect its new location, for bpf_arch_text_poke()
+    to update the actual trampoline's address in this field.
+
+    [1] https://lore.kernel.org/all/20241030070850.1361304-18-hbathini@linux.ibm.com
+
+v4->v5:
+  Handled alignment NOP emit logic and corresponding stub offsets
+  Handled image buffer overflow problem in last pass
+  Above changes took care of other bot reviews
+  Included LLVMDisposeMessage() for graceful freeing
+  Adjusted parameters in bpf_jit_build_fentry_stubs for ppc32
+  Adjusted expected JIT inst. in tailcall test for
+CONFIG_PPC_KERNEL_PCREL config
+  Added fix patch at last for inaccurate use of cmplwi inst. 
+
+v3->v4:
+  Changed logic for emitting alignment NOP
+
+v2->v3:
+  Removed fixed NOP from bottom of long branch stub
+  Rebased on top of bpf-next
+
+v1->v2:
+  Added fix-patch to correct memory alignment in-place
+  Moved the optional alignmnet NOP before OOL stub
+
+[v1]: https://lore.kernel.org/bpf/20260225013627.22098-1-adubey@linux.ibm.com
+[v2]: https://lore.kernel.org/bpf/20260403004011.44417-1-adubey@linux.ibm.com
+[v3]: https://lore.kernel.org/bpf/20260411221413.44304-1-adubey@linux.ibm.com
+[v4]: https://lore.kernel.org/bpf/20260517214043.12975-1-adubey@linux.ibm.com
+
+Abhishek Dubey (6):
+  powerpc/bpf: fix alignment of long branch trampoline address
+  powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
+  selftest/bpf: Fixing powerpc JIT disassembly failure
+  selftest/bpf: Enable verifier selftest for powerpc64
+  powerpc64/bpf: fix compare instruction emitted for tailcall
+  selftest/bpf: Add tailcall verifier selftest for powerpc64
+
+ arch/powerpc/net/bpf_jit.h                    |  4 +-
+ arch/powerpc/net/bpf_jit_comp.c               | 65 ++++++++++++-----
+ arch/powerpc/net/bpf_jit_comp32.c             |  4 +-
+ arch/powerpc/net/bpf_jit_comp64.c             | 12 ++--
+ .../selftests/bpf/jit_disasm_helpers.c        | 16 ++++-
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |  1 +
+ .../bpf/progs/verifier_tailcall_jit.c         | 69 +++++++++++++++++++
+ tools/testing/selftests/bpf/test_loader.c     |  5 ++
+ 8 files changed, 149 insertions(+), 27 deletions(-)
+
 -- 
-Florian
+2.52.0
+
