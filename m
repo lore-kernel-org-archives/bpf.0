@@ -1,173 +1,185 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E97377017;
-	Tue, 19 May 2026 19:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2417138BF7A;
+	Tue, 19 May 2026 19:47:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779219529; cv=none; b=Rod6NHXekySXObumd+8JVRbAU/lPhBk7EpdpKK7ujxHADw71HLSjg5nXAbYSp0YSMxcm94xUvJw7u/2a60WLB1TS+2jqMNKncBp54lo/s8W1VtUgM6cZ8vrKCF3p8Cyxv34dnpEhcUhuYbgmjPtw/p1JhEU62pbK48o9gCXV0QA=
+	t=1779220070; cv=none; b=WVP6Her7bZn+Snh0i9xkM9vufgdR7ykhSiKKQSEesKv6jlWB3HFAtd1f6MaeYCVhXZr57+GX7+a3N9EaX5xMFeh6dN5XBefUEs7IrGgtL2oTLH+/+c+HT1QzRIdLG0ZSpvYdZZ30LaIS4tSfKSi9+3oGO7qmTExJ7VJiiQjuin0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779219529; c=relaxed/simple;
-	bh=PVEc0uBfWm94JHf1gXG35RuYqLQ/EXMLAfJ2spPOSDE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RI71GJ1MmQfPhn2vcTPJF8t+v7zE+NGd2TmPKIRc4+8sOpUfHWLM1hq9GtSDL1w7nyg1/PTJyx53xsHgreVWENTnI27OWXL60LPde184akzrHsZS9KaHk5LHvs7MchzZAnWrdKSkr3oDarK9cz9KwfC74o5V6TE3Me+eVC9ukU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=bZJyWDRe; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1779220070; c=relaxed/simple;
+	bh=BSrPY4gPw17spkBwS0rZBvox/62Gih28VXdmdz/KqIY=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=lflvNfy85FujDsQmREESqIdeBsJYEnXT7IYN3MwOdo4bwxS6LRNXLi5lKwDBLZ02P3psOIsAemVcUWZ33/NlaHy6wy2odi27k78KUm6Zlti4rrzqHWEAWi109H09ca9o9DtqWRJByagRGONvVYchVJ564uhsyoTCCf95aXPhBpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g0OXHz8z; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bZJyWDRe"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64JFtMtk1562366;
-	Tue, 19 May 2026 19:38:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=UGBaf2e/e94EaICpC
-	0vjDtDj5LYLiK0IqM78/lfvR3A=; b=bZJyWDRez51EjM5jtPac4mhnHjPXh3Qbp
-	R0iewXIIfTidpWigAtZcRHT1JZPwVBeS5si22CcGjxRVUCwM8WbooV2ATyUcHRfF
-	M4Va4NhbXaFYerOC99cd+BEJBYHOz3V6aBZov1qbwavjMhVGbPX56N6I13aUjhTa
-	TLrB9/FfVSV5FSUK94GN0eEYnx8lYiXcf88VQPmpfJL/zvgeZXjJzp2eUFQuBdFp
-	qDEIzcba9BkL1YlDDvBoeDhZn8Dq0tMcPtEyhnqXsq7mRPegCqffd8GsJusWCSke
-	iYIp4G8Hv7Xdc6Qjn8CNnzjiH5wp83QzhQmlfYdyask92aFvhUvQg==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6hb8e0kx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 May 2026 19:38:25 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64JJO5ZX028483;
-	Tue, 19 May 2026 19:38:25 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e754gc0m5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 May 2026 19:38:25 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64JJcLc746006550
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 19 May 2026 19:38:21 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8372B20043;
-	Tue, 19 May 2026 19:38:21 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5F67620040;
-	Tue, 19 May 2026 19:38:19 +0000 (GMT)
-Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 19 May 2026 19:38:19 +0000 (GMT)
-From: adubey@linux.ibm.com
-To: bpf@vger.kernel.org
-Cc: hbathini@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
-        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        stable@vger.kernel.org, Abhishek Dubey <adubey@linux.ibm.com>,
-        sashiko-bot@kernel.org
-Subject: [PATCH v5 5/6] powerpc64/bpf: fix compare instruction emitted for tailcall
-Date: Tue, 19 May 2026 19:38:11 -0400
-Message-ID: <20260519233812.18787-6-adubey@linux.ibm.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260519233812.18787-1-adubey@linux.ibm.com>
-References: <20260519233812.18787-1-adubey@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g0OXHz8z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 779301F000E9;
+	Tue, 19 May 2026 19:47:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779220068;
+	bh=ffiK6usqIvshLSQEFoM0C2CbZc8vGcx9ALJwGKofBxs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=g0OXHz8z+fQLCq5kc454EJwxswIjH+/79/a2ynD7KtWKHK6Sr2lfKIZ5HGtQnW4u3
+	 1nKuer11qiuRO3C+nySRDIuLGed6huK15TnqBq/YT5OGiVg8d41JS3Zlwnz5E1AjsP
+	 cWLHMCyA42MfRZRrCdBEXwKSrZm9qC+Vh50gb08zOcbKPsVlCFiCH9KnCUxcKa79TO
+	 muaVBuCcj06WnuakFTrT3UDUTyXHegOxN1V/UE1eFAhjS6tdp0II/hs5NQYWX/1zhF
+	 hhJ2WhN+Awp7CKk/rfMoFVgDibn4FTyEGCk24FYZtf8lsUeFXQOz0bMf0WRgZaBAdR
+	 Al+X+dBlFlEbA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net 1/2] net: mana: Add NULL guards in teardown path to
+ prevent panic on attach failure
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Dipayaan Roy" <dipayanroy@linux.microsoft.com>
+Cc: linux-hyperv@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20260518194654.735580-2-dipayanroy@linux.microsoft.com>
+References: <20260518194654.735580-2-dipayanroy@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 19 May 2026 19:47:47 +0000
+Message-Id: <20260519194748.779301F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE5MDE5NiBTYWx0ZWRfX7Mj/E2t2ykeP
- ZwH5Y7IRsSiaRRUzUiBJQvz5bfNZPdIdJIeEMZyXbi7xg1Z6kfqbLXtx079OuHrR8LPACxGWbqB
- nHO7TC2yFVVz7Qd1oSFOkw8VsAWVukfb8jC89dqMe8RquALTdDDhYj7cqCNAlWGX4LwvFxiC+9M
- V7YCBehNLmnYGdvsRDN3Nqnmh47VWYcVy8X3WtF74NawzXe/pC5lj3y0mDE4V51naveFcTE8SHP
- 67BAzFqZqddj5YbheAMV17voDetwj+fTRfpi83RpWq7Us8ev1A0hWERj8eRm0uz7QQk/6irRBT1
- H9MS4s+rDCkiwpkPjHluHoly2P7xbg0jl9UzKQYh1TbL+gyv40n4f3fcRe8Aqm89XsmznrqzU3H
- DDA7V7c49bD3mG9zWkqJN5gG+vYhSBzuVgPFRp2gljLQVpoSwUVklS+VAeZ7xUYtOVgLWC/1Q7m
- 7M5SvmveHgR969AK9uQ==
-X-Proofpoint-GUID: mS1pgS64aVTCOEOHKK0SFVQZB-Ymtkro
-X-Proofpoint-ORIG-GUID: mS1pgS64aVTCOEOHKK0SFVQZB-Ymtkro
-X-Authority-Analysis: v=2.4 cv=aYBRWxot c=1 sm=1 tr=0 ts=6a0cbc32 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=_ChPpPKTfPU_lHkPiKQA:9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-19_05,2026-05-18_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 adultscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
- clxscore=1011 spamscore=0 phishscore=0 priorityscore=1501 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605190196
 
-From: Abhishek Dubey <adubey@linux.ibm.com>
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] Missing re-allocation of `apc->rxqs` during interface bring-up cau=
+ses deterministic NULL pointer dereference
+- [High] Uninitialized queue handles (0 and INVALID_MANA_HANDLE) are sent t=
+o the firmware during error teardown, corrupting hardware state
+- [High] GDMA admin commands are issued immediately after a PCI Function Le=
+vel Reset (FLR), causing severe cascading timeouts and hardware state viola=
+tions
+--
 
-The tail_call_info field can contain either a scalar counter
-value or a 64-bit pointer to the counter, using a 32-bit
-compare (cmplwi) only checks the lower 32 bits, which can lead
-to incorrect comparisions when location of counter is near 4GB
-boundary. Use instruction cmpldi for accurate comparision in
-all cases.
+commit 2129283d37aabfe724d7509e34346eab93d302a2
+Author: Dipayaan Roy <dipayanroy@linux.microsoft.com>
 
-Reported-by: sashiko-bot@kernel.org
-Closes: https://lore.kernel.org/bpf/20260517191450.85AE6C2BCB8@smtp.kernel.org/
-Fixes: 2ed2d8f6fb38 ("powerpc64/bpf: Support tailcalls with subprogs")
-Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
----
- arch/powerpc/net/bpf_jit_comp.c   | 2 +-
- arch/powerpc/net/bpf_jit_comp64.c | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+net: mana: Add NULL guards in teardown path to prevent panic on attach fail=
+ure
+   =20
+When queue allocation fails partway through, the error cleanup frees
+and NULLs apc->tx_qp and apc->rxqs. The patch adds NULL guards for these
+pointers in teardown paths such as mana_destroy_vport(), mana_fence_rqs(),
+and mana_dealloc_queues() to prevent NULL pointer dereferences.
 
-diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-index 56a923d3908e..eb476c582bc5 100644
---- a/arch/powerpc/net/bpf_jit_comp.c
-+++ b/arch/powerpc/net/bpf_jit_comp.c
-@@ -764,7 +764,7 @@ static void bpf_trampoline_setup_tail_call_info(u32 *image, struct codegen_conte
- 		 * Setting the tail_call_info in trampoline's frame
- 		 * depending on if previous frame had value or reference.
- 		 */
--		EMIT(PPC_RAW_CMPLWI(_R3, MAX_TAIL_CALL_CNT));
-+		EMIT(PPC_RAW_CMPLDI(_R3, MAX_TAIL_CALL_CNT));
- 		PPC_BCC_CONST_SHORT(COND_GT, 8);
- 		EMIT(PPC_RAW_ADDI(_R3, _R4, -BPF_PPC_TAILCALL));
- 
-diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-index 885dc8cf55a2..74fce3cf6c5e 100644
---- a/arch/powerpc/net/bpf_jit_comp64.c
-+++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -276,7 +276,7 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
- 		 */
- 		EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_2), _R1, 0));
- 		EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), bpf_to_ppc(TMP_REG_2), -(BPF_PPC_TAILCALL)));
--		EMIT(PPC_RAW_CMPLWI(bpf_to_ppc(TMP_REG_1), MAX_TAIL_CALL_CNT));
-+		EMIT(PPC_RAW_CMPLDI(bpf_to_ppc(TMP_REG_1), MAX_TAIL_CALL_CNT));
- 		PPC_BCC_CONST_SHORT(COND_GT, 8);
- 		EMIT(PPC_RAW_ADDI(bpf_to_ppc(TMP_REG_1), bpf_to_ppc(TMP_REG_2),
- 								-(BPF_PPC_TAILCALL)));
-@@ -651,7 +651,7 @@ static int bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32 o
- 	PPC_BCC_SHORT(COND_GE, out);
- 
- 	EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), _R1, bpf_jit_stack_tailcallinfo_offset(ctx)));
--	EMIT(PPC_RAW_CMPLWI(bpf_to_ppc(TMP_REG_1), MAX_TAIL_CALL_CNT));
-+	EMIT(PPC_RAW_CMPLDI(bpf_to_ppc(TMP_REG_1), MAX_TAIL_CALL_CNT));
- 	PPC_BCC_CONST_SHORT(COND_LE, 8);
- 
- 	/* dereference TMP_REG_1 */
-@@ -661,7 +661,7 @@ static int bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32 o
- 	 * if (tail_call_info == MAX_TAIL_CALL_CNT)
- 	 *   goto out;
- 	 */
--	EMIT(PPC_RAW_CMPLWI(bpf_to_ppc(TMP_REG_1), MAX_TAIL_CALL_CNT));
-+	EMIT(PPC_RAW_CMPLDI(bpf_to_ppc(TMP_REG_1), MAX_TAIL_CALL_CNT));
- 	PPC_BCC_SHORT(COND_EQ, out);
- 
- 	/*
-@@ -696,7 +696,7 @@ static int bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32 o
- 	 * tail_call_info.
- 	 */
- 	EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_2), _R1, bpf_jit_stack_tailcallinfo_offset(ctx)));
--	EMIT(PPC_RAW_CMPLWI(bpf_to_ppc(TMP_REG_2), MAX_TAIL_CALL_CNT));
-+	EMIT(PPC_RAW_CMPLDI(bpf_to_ppc(TMP_REG_2), MAX_TAIL_CALL_CNT));
- 	PPC_BCC_CONST_SHORT(COND_GT, 8);
- 
- 	/* First get address of tail_call_info */
--- 
-2.52.0
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/=
+ethernet/microsoft/mana/mana_en.c
+> index 9afc786b297a8..9e7e4bf526bf6 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+[ ... ]
+> @@ -2858,13 +2861,16 @@ static void mana_destroy_vport(struct mana_port_c=
+ontext *apc)
+>  	struct mana_rxq *rxq;
+>  	u32 rxq_idx;
+> =20
+> -	for (rxq_idx =3D 0; rxq_idx < apc->num_queues; rxq_idx++) {
+> -		rxq =3D apc->rxqs[rxq_idx];
+> -		if (!rxq)
+> -			continue;
+> +	if (apc->rxqs) {
+> =20
+> -		mana_destroy_rxq(apc, rxq, true);
+> -		apc->rxqs[rxq_idx] =3D NULL;
+> +		for (rxq_idx =3D 0; rxq_idx < apc->num_queues; rxq_idx++) {
+> +			rxq =3D apc->rxqs[rxq_idx];
+> +			if (!rxq)
+> +				continue;
+> +
+> +			mana_destroy_rxq(apc, rxq, true);
+> +			apc->rxqs[rxq_idx] =3D NULL;
+> +		}
+>  	}
 
+If the teardown path frees apc->rxqs and sets it to NULL on attach failure,
+how does the interface recover if the user subsequently brings it back up?
+
+When mana_open() is invoked, it directly calls mana_alloc_queues(). Inside
+mana_alloc_queues() -> mana_add_rx_queues(), the code does:
+
+    apc->rxqs[i] =3D rxq;
+
+If apc->rxqs was left as NULL during the teardown, will this cause a NULL
+pointer dereference on the next interface bring-up?
+
+[ ... ]
+> @@ -3287,33 +3294,38 @@ static int mana_dealloc_queues(struct net_device =
+*ndev)
+>  	 * number of queues.
+>  	 */
+> =20
+> -	for (i =3D 0; i < apc->num_queues; i++) {
+> -		txq =3D &apc->tx_qp[i].txq;
+> -		tsleep =3D 1000;
+> -		while (atomic_read(&txq->pending_sends) > 0 &&
+> -		       time_before(jiffies, timeout)) {
+> -			usleep_range(tsleep, tsleep + 1000);
+> -			tsleep <<=3D 1;
+> -		}
+> -		if (atomic_read(&txq->pending_sends)) {
+> -			err =3D pcie_flr(to_pci_dev(gd->gdma_context->dev));
+> -			if (err) {
+> -				netdev_err(ndev, "flr failed %d with %d pkts pending in txq %u\n",
+> -					   err, atomic_read(&txq->pending_sends),
+> -					   txq->gdma_txq_id);
+> +	if (apc->tx_qp) {
+
+In the error path where queue creation fails partway through, will
+mana_destroy_txq() be called?
+
+If mana_destroy_txq() unconditionally iterates over all apc->num_queues:
+
+    for (i =3D 0; i < apc->num_queues; i++) {
+        ...
+        mana_destroy_wq_obj(apc, GDMA_SQ, apc->tx_qp[i].tx_object);
+        ...
+
+Will it pass 0 or INVALID_MANA_HANDLE to mana_destroy_wq_obj() for queues
+that were never fully initialized?
+
+Does mana_destroy_wq_obj() send a MANA_DESTROY_WQ_OBJ command to the hardwa=
+re
+with these uninitialized handles, and could handle 0 corrupt the firmware
+state?
+
+> +		for (i =3D 0; i < apc->num_queues; i++) {
+> +			txq =3D &apc->tx_qp[i].txq;
+> +			tsleep =3D 1000;
+> +			while (atomic_read(&txq->pending_sends) > 0 &&
+> +			       time_before(jiffies, timeout)) {
+> +				usleep_range(tsleep, tsleep + 1000);
+> +				tsleep <<=3D 1;
+> +			}
+> +			if (atomic_read(&txq->pending_sends)) {
+> +				err =3D
+> +				    pcie_flr(to_pci_dev(gd->gdma_context->dev));
+
+If pcie_flr() is triggered here, the PCI Function Level Reset wipes the
+internal GDMA state.
+
+Further down in this function, mana_disable_vport_rx(), mana_fence_rqs(),
+and mana_destroy_vport() are called. Will these functions attempt to send
+commands to the now-destroyed GDMA admin queue via mana_send_request() and
+wait for completions?
+
+Could this lead to cascading timeouts since the hardware was just reset and
+cannot process admin commands?
+
+> +				if (err) {
+> +					netdev_err(ndev, "flr failed %d with %d pkts pending in txq %u\n",
+> +						   err,
+> +					    atomic_read(&txq->pending_sends),
+> +					    txq->gdma_txq_id);
+> +				}
+> +				break;
+>  			}
+> -			break;
+>  		}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518194654.7355=
+80-1-dipayanroy@linux.microsoft.com?part=3D1
