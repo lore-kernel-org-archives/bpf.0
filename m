@@ -1,256 +1,271 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739A22405EB;
-	Tue, 19 May 2026 14:31:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A1484E3794
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 14:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779201061; cv=none; b=BL2tV/iHqEDqjEql3MsszdXxxryXcne85ipTVrAb11PSQ5SGSsHI+Q2DxYtntfPSWOV0I3iPIApbPOlz+Xw5Wy71GTgAsSbrq/CAPiwbRrZ5tOWUK+tLwAw1l23B3q4S8gJ5DG72KeRm3rKvJJ5GMkaO9ouvcMTUqtwnBlUyZpU=
+	t=1779201771; cv=none; b=JQ32zEer04hZAq54H2xXZjJlCWNxnkS8XZgP+3PyBzT6YH6FRV2njUHMhvKMo1wVWDeh+BOSQlf4ogXdulZcEW7Vksut37PZB1f/Z9FKPonAtomgete80+WuzEtmJ7C7vhNYL0PR45CJi2r9gwvAOYGKW9e9kLgrwe/hyC7OMPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779201061; c=relaxed/simple;
-	bh=wrdkZ7DRg/Uf6EOtaf+aEPytCIbrMzp9nlsNTx9V0jk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E8LVXtDmwOKTBwdSC0NtbDjyZVj80GRxAzlpLsU6U/bLlmdTfdzbRzQVbuCLhC07YG8G8QSZRyohc1AuBDuNhXRHCxizWbjoupQ32gCZkciYkhz01T22OmDZL68uWHxBUrg3bcBB93nBdeJhMK2MPbhA6rGohvfBhg+KS2dK5ro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=GNW1eE9e; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1779201771; c=relaxed/simple;
+	bh=YWXRV+NQFDhT7ERt4QhzrnIt+wYuh2w0flQKS9YlgtE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VNbZX+8pUr5N7AU+Yz+GhuXoT6HJ8H+/g0stvWMyCrb+zJhPsOa/xvoQ3YV73QDjJnYuHXSn8zjjd/N8ZNiRHXxDlFaaHMRdgYqEhZhCwPFHyhX7G7W5tJC9HfhxjDGWwy00NQYxDCIx6IoK5jQ81sM1ug25exNBnZ86QZV+bM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cbE5lVIi; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="GNW1eE9e"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64JATvcI3469512;
-	Tue, 19 May 2026 14:30:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=PBV99f
-	HpK0TwvNRo0gV03N+uyfhHuWlOZxMNV+iVr30=; b=GNW1eE9e9HoQaNYvNP+q+V
-	xzTrsYXM+hLqwU65mkFeaKm+Xm/OuGuWZjbBNpaCgJtMDbR+1B8zCBJzXRCXSwt3
-	L3iianewPFpQ0XF/UXm8DAmAiddxWE58cCwuIFwF52S3APadNgaUTtWyBjgldtPj
-	MJaLe5UPI2P+4QouznBNn9QbGd9IAZsDgZMLBux74yJD2BYBJWcc67yVuySaH5A2
-	GAUVdZqYJ0tWHtD3SloCvZmBejbWqKgrpF+BAepXeH6SamwGyvTVpukSHyMYfPPm
-	05fZPLvRUntYVRIZ4Dqu//XLGYbqBbV5MsV5r68lL4T5Vk99hoWhqpFImML7oy1g
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h8mnern-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 May 2026 14:30:57 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64JEO50N014220;
-	Tue, 19 May 2026 14:30:56 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e739vu5h6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 May 2026 14:30:56 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64JEUsuj43254140
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 19 May 2026 14:30:54 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0B2AF2004B;
-	Tue, 19 May 2026 14:30:54 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D5AFD20043;
-	Tue, 19 May 2026 14:30:53 +0000 (GMT)
-Received: from [9.52.200.195] (unknown [9.52.200.195])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 19 May 2026 14:30:53 +0000 (GMT)
-Message-ID: <ab7c154e-aa60-471d-ba03-334e55d1c74a@linux.ibm.com>
-Date: Tue, 19 May 2026 16:30:53 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cbE5lVIi"
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-7bd65714dcaso31152987b3.3
+        for <bpf@vger.kernel.org>; Tue, 19 May 2026 07:42:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779201765; x=1779806565; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SMJK+Q1KPAmdYgADquxXV0jIfAYvH6d0diFJCZ4DWlw=;
+        b=cbE5lVIiaMecRQyYhY+xN9jv+6q/9F66IkHmbuVqshtOlV11EQ8TXcFTn11mVBVSB5
+         uUTWhGMXhJd8tUYuHUShbhFqFA0ntNARVxPEA/1dLsFKXUB9eWZapygSHcf5dao9vwHG
+         8jnjmY0sjZYrcK/bjovwKmmGA+d8Yzv7AAATGwxadOM9N90rfrY1SkVK60cqp1+IkMHA
+         yK/EuG9CMN57BQ/S71H8OzqmTNkU4w+Si/c8HwdEVsKlLgHoOqPPy3arc5Od1CiNIQUV
+         kdxJIv6Kbaejq7xI8NNSb4dqlIQPoOue/17gidkUWTm/+mdaky6ZfkleLoCjya7qJuar
+         vxfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779201765; x=1779806565;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SMJK+Q1KPAmdYgADquxXV0jIfAYvH6d0diFJCZ4DWlw=;
+        b=lkAaq1I9csHZjcXke7eC4yRe0SWzXtMifPIZAqXFBCVKeswAFWL3oOT4qTatJzesCR
+         vJFHM6JZquCQ2AdX5BuOfw7NuAju1bWTTL43gVGBA4QH/p2t0pKuRLTbwX6KlKo9aVIC
+         PRpFPeMZCKPPFx7GDW8ciMh3/EMV8aONTCII0Sj8GVdu7/Fct9Cdh9qkGoKxXjMnaymv
+         40BzTKG3MZzy/ES3WECX6LJPT7LWmsvgfffrjyXdtntNG5wRfMiLbToBdDt17vIOfFfa
+         D4sO5v0f8PELhtg5uSXvbBhNv02qBbaLv7AlMKsMhma1Dcnh5NaQlr/VjJrsQywBmT8g
+         6i1A==
+X-Gm-Message-State: AOJu0Yxm+d8jYcqUXR73JUUfPOC90JG0ofIFBafjvA9hUoy5RDfLdvh2
+	+uoY4FI57JlKWhziVvv3m8k/A/lVMcM8kq3VA7sBM7Q+4uOKRLeCogCVHK2Z6Q==
+X-Gm-Gg: Acq92OHrkHsVdTnjoeSA2SIwmImYjfWum8rh1+YgoDSWQFUSr/CVIixJhABlNXXUhuU
+	OpHMiGeqRp61at9P115kUVTiVJU/4q8+F3nKCc05UPuNDJDeozLZQ0Jv1wZ97qxX9adbRehiQWh
+	v1xID75jC/JaMxzPLgXqMyn2ygYQ4/yOITuG8c04fVFMiWYEJQAdOcEX3NQI/nTLYjm1rhEHq97
+	EiqEHrpLblCN+yHWuLEApWjDF3DosFQPb/zrTZoBq1I5sAIU2qqBfivpUTp5Ja6Dfn8e8yhjnc+
+	tOa350b8TsfHMrBf2Q0repXoSDhVY/gJU21MrFK7wS00RkNW2IBPsJGDhXl3aoiCoMFU6yUw2uY
+	Vl7aNJc0ZLFM4O43UvxE8M9xpND6jtaokmSqMSpXeJl4bQuKgpSi2wKhMTJScCxY7Yky67Pm3bW
+	0xHGk8iVqunknbHcYM+W3YNYVKv1z9wWZVhuzYbwm7ts7MKJRIg7sQ8hVJqA==
+X-Received: by 2002:a05:690c:dd3:b0:7b8:926e:3f0d with SMTP id 00721157ae682-7c95c6f6efbmr208816987b3.26.1779201765187;
+        Tue, 19 May 2026 07:42:45 -0700 (PDT)
+Received: from suesslenovo ([98.97.172.65])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7cc9cda1a38sm37276747b3.43.2026.05.19.07.42.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2026 07:42:44 -0700 (PDT)
+Date: Tue, 19 May 2026 10:42:44 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next 1/1] bpf: fix deadlock in special field
+ destruction in NMI
+Message-ID: <agxkV-hsdwhvMliI@suesslenovo>
+References: <20260519011450.1144935-2-utilityemal77@gmail.com>
+ <20260519015123.36096C2BCB7@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 13/19] unwind_user: Enable archs that pass RA in a
- register
-To: Steven Rostedt <rostedt@kernel.org>
-Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Indu Bhagat <ibhagatgnu@gmail.com>,
-        Dylan Hatch <dylanbhatch@google.com>
-References: <20260505121718.3572346-14-jremus@linux.ibm.com>
- <20260505183531.C9EE8C2BCC7@smtp.kernel.org>
- <8761b037-d8f8-4142-9091-cc51d0d19df8@linux.ibm.com>
- <bd711f74-a1f3-4410-975b-64e9009aaf30@linux.ibm.com>
- <20260518123112.20da820b@gandalf.local.home>
- <4838400f-209f-4e78-b41f-04b61d129ee7@linux.ibm.com>
- <20260519084222.4d34c8b4@gandalf.local.home>
-Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20260519084222.4d34c8b4@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: 57zz_oqI7farCzu2Wfa-yfpEUqCY-_UP
-X-Authority-Analysis: v=2.4 cv=GYMnWwXL c=1 sm=1 tr=0 ts=6a0c7421 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VnNF1IyMAAAA:8
- a=kWH43m-WBJ70W3cScMkA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: 3ryT4dwjbiKCT1onmBO9yaFlJFP9omZF
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE5MDE0MCBTYWx0ZWRfX4L87o4C5L4Fg
- fMlvHnTBX4DK/s/I1v+1fEI7lqTY8Ga2vtbswZgQa3PIajwgok1WuDeIcqomtMik0Lk2poYFUF8
- nA3K7sFLflAzsRbt+KlEJ0ibjtSUzlp8QPbSsq0iMhAJrziKN92RHxqZSVWvC+EaZ24a9OSJIxJ
- +lirp/zJo1wMeEMFVI8zsKbw4tXvgNk1eeP1wSJdxsw6tPU4VC95+Hs478d48AQTR7jWhYbCDxb
- fQGYaNCvXUokglt2A2egU5UXagJYE7rgmu3EturWKScLrSkVm55YLVN+cErTfPDg8KE2kFbGswB
- hT4perhd7EDzsIa5n0qh8sFVE6yChtI9rEzI8O1Z+vEZH0YajF3eBad5bOVJ2fiFx/1Mrk5tlUI
- 28IZgFGWzTbMsfbCeY/qZPaGybH//rC66MNaMWhLahr6PLLzclxguSBQd6IML5VxPTaeaPyIk4K
- 0kzFW9mTUHqfDOUlGiQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-19_03,2026-05-18_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
- adultscore=0 suspectscore=0 spamscore=0 clxscore=1015 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605190140
+In-Reply-To: <20260519015123.36096C2BCB7@smtp.kernel.org>
 
-On 5/19/2026 2:42 PM, Steven Rostedt wrote:
-> On Tue, 19 May 2026 14:24:34 +0200
-> Jens Remus <jremus@linux.ibm.com> wrote:
+On Tue, May 19, 2026 at 01:51:22AM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
+> - [Critical] LRU maps containing NMI-unsafe fields (like BPF_KPTR_REF or BPF_LIST_HEAD) will permanently leak these fields and corrupt map state when updated or deleted in an IRQ-disabled context.
+> - [High] Modifying the generic `bpf_obj_free_fields()` to silently skip destruction in IRQ-disabled contexts causes permanent memory leaks for callers lacking deferred destructors (like `bpf_obj_drop` and Array maps).
+> - [Medium] Forcibly mutating the user-requested `map_flags` to include `BPF_F_NO_PREALLOC` silently breaks performance expectations and UAPI transparency.
+> --
 > 
->>> How can this be triggered? Does it require an architecture to implement
->>> only partial sframe to trigger?  
->>
->> On x86-64 it can be triggered from user space using forged .sframe that
->> incorrectly specifies no fixed RA offset and thus causes the common
->> unwind user (sframe) logic to recover RA from the RA register using 
->> the dummy unwind_user_get_ra_reg().
+> commit 3fbec1aa4107fa1f73249893a4ed21fd7d2213fa
+> Author: Justin Suess <utilityemal77@gmail.com>
 > 
-> OK, so if user space could trigger it via a invalid .sframe, I would do at
-> most a pr_debug() (may not even need a 'once'), and remove that this task
-> has an sframe. That is, as soon as a sframe is discovered to be corrupted,
-> it should be discarded and never used after that.
-
-
-Removing the .sframe section is not straightforward in this specific
-case, as the issue is not detected in the sframe decoding but only later
-in unwind_user_next_common() once it calls the dummy
-unwind_user_get_ra_reg().  unwind_user_next_common() gets called by
-unwind_user_next_sframe() after it obtained the information to unwind
-the frame using sframe_find().  Therefore the offending struct
-sframe_section is no longer known.  A reference to it cannot be stored
-in struct unwind_user_frame, as that would require a SRCU read lock to
-be held.  Instead the sec->sframe_start could be stored in struct
-unwind_user_frame, which could then be passed to sframe_remove_section().
-Instead of adding sframe-specific information to struct unwind_user_frame
-I would prefer to use the state->ip as key to remove the offending
-.sframe section.  Below is a compile-tested patch that outlines how
-that could potentially work.  The sframe decoding cannot detect this
-as it would need a mean to know whether the architecture implements
-unwind_user_get_ra_reg() (and likewise for unwind_user_get_reg()).
-
-Is there a simpler solution?
-
-
-diff --git a/include/linux/sframe.h b/include/linux/sframe.h
-@@ -33,6 +33,7 @@ extern void sframe_free_mm(struct mm_struct *mm);
- extern int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
-                              unsigned long text_start, unsigned long text_end);
- extern int sframe_remove_section(unsigned long sframe_addr);
-+extern int sframe_remove_section_for_ip(unsigned long ip);
- extern int sframe_find(unsigned long ip, struct unwind_user_frame *frame);
-
- static inline bool current_has_sframe(void)
-@@ -52,6 +53,7 @@ static inline int sframe_add_section(unsigned long sframe_start, unsigned long s
-        return -ENOSYS;
- }
- static inline int sframe_remove_section(unsigned long sframe_addr) { return -ENOSYS; }
-+extern int sframe_remove_section_for_ip(unsigned long ip) { return -ENOSYS; }
- static inline int sframe_find(unsigned long ip, struct unwind_user_frame *frame) { return -ENOSYS; }
- static inline bool current_has_sframe(void) { return false; }
-
-diff --git a/include/linux/unwind_user.h b/include/linux/unwind_user.h
-@@ -21,7 +21,7 @@ static inline int unwind_user_get_ra_reg(unsigned long *val)
- {
-        pr_debug_once("%s (%d): unwind_user_get_ra_reg() not implemented\n",
-                      current->comm, current->pid);
--       return -EINVAL;
-+       return -EFAULT;
- }
- #define unwind_user_get_ra_reg unwind_user_get_ra_reg
- #endif
-diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
-@@ -886,6 +886,20 @@ int sframe_remove_section(unsigned long sframe_start)
-        return 0;
- }
-
-+int sframe_remove_section_for_ip(unsigned long ip)
-+{
-+       struct mm_struct *mm = current->mm;
-+       struct sframe_section *sec;
-+
-+       guard(srcu)(&sframe_srcu);
-+
-+       sec = mtree_load(&mm->sframe_mt, ip);
-+       if (!sec)
-+               return -EINVAL;
-+
-+       return sframe_remove_section(sec->sframe_start);
-+}
-+
- void sframe_free_mm(struct mm_struct *mm)
- {
-        struct sframe_section *sec;
-diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
-@@ -45,6 +45,7 @@ static int unwind_user_next_common(struct unwind_user_state *state,
-                                   const struct unwind_user_frame *frame)
- {
-        unsigned long cfa, sp, fp, ra;
-+       int ret;
-
-        /* Stop unwinding when reaching an outermost frame. */
-        if (frame->outermost) {
-@@ -94,8 +95,11 @@ static int unwind_user_next_common(struct unwind_user_state *state,
-        /* Get the Return Address (RA) */
-        switch (frame->ra.rule) {
-        case UNWIND_USER_RULE_RETAIN:
--               if (!state->topmost || unwind_user_get_ra_reg(&ra))
-+               if (!state->topmost)
-                        return -EINVAL;
-+               ret = unwind_user_get_ra_reg(&ra);
-+               if (ret)
-+                       return ret;
-                break;
-        case UNWIND_USER_RULE_CFA_OFFSET:
-                /*
-@@ -173,11 +177,16 @@ static int unwind_user_next_fp(struct unwind_user_state *state)
- static int unwind_user_next_sframe(struct unwind_user_state *state)
- {
-        struct unwind_user_frame frame;
-+       unsigned long ip = state->ip;
-+       int ret;
-
-        /* sframe expects the frame to be local storage */
--       if (sframe_find(state->ip, &frame))
-+       if (sframe_find(ip, &frame))
-                return -ENOENT;
--       return unwind_user_next_common(state, &frame);
-+       ret = unwind_user_next_common(state, &frame);
-+       if (ret == -EFAULT)
-+               sframe_remove_section_for_ip(ip);
-+       return ret;
- }
-
- static int unwind_user_next(struct unwind_user_state *state)
-
-
+> bpf: fix deadlock in special field destruction in NMI
 > 
-> A print could be done just to inform the admin of what happened. And since
-> the sframe would be removed, that prevents it from spamming the console, so
-> the "once" isn't needed. We may want to show it for other applications.
+> This commit relaxes bpf_obj_free_fields() to skip async work cancellation
+> and unsafe free operations in IRQ-disabled contexts. It converts hash maps
+> with NMI-unsafe fields to non-preallocated maps using bpf_mem_alloc to
+> defer the cleanup. LRU maps and preallocated hash maps are adjusted to
+> support this mechanism.
 > 
-> The print should state the comm and pid of the task that failed.
-Thanks and regards,
-Jens
--- 
-Jens Remus
-Linux on Z Development (D3303)
-jremus@de.ibm.com / jremus@linux.ibm.com
+> Closes: https://lore.kernel.org/bpf/20260421201035.1729473-1-utilityemal77@gmail.com/
+> Link: https://lore.kernel.org/bpf/DIG0ONMVOP0L.3QFYUPWFSKWI4@gmail.com/
+> 
+> > diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> > index 3dd9b4924ae4f..0db1dc8ae0bec 100644
+> > --- a/kernel/bpf/hashtab.c
+> > +++ b/kernel/bpf/hashtab.c
+> [ ... ]
+> > @@ -522,13 +532,53 @@ static int htab_set_dtor(struct bpf_htab *htab, void (*dtor)(void *, void *))
+> >  	return 0;
+> >  }
+> >  
+> > +static int htab_convert_to_non_prealloc(struct bpf_htab *htab)
+> > +{
+> > +	bool percpu = htab_is_percpu(htab);
+> > +	int err;
+> > +
+> > +	htab_free_prealloced_fields(htab);
+> > +	free_percpu(htab->extra_elems);
+> > +	htab->extra_elems = NULL;
+> > +	prealloc_destroy(htab);
+> > +	htab->map.map_flags |= BPF_F_NO_PREALLOC;
+> 
+> Does mutating the map flags post-creation to include BPF_F_NO_PREALLOC alter
+> the memory model and user-visible flags without warning? If userspace queries
+> the map info via bpf_map_get_info_by_fd(), will it see flags it never
+> requested?
+Changing the userspace visible flag was done to provide visibility into
+the change.
+> 
+> Would it be better to explicitly reject this configuration and return -EINVAL
+> rather than secretly altering the underlying memory model?
+>
+That would break existing progs unacceptably, including the common case
+of a normal hashtab with ref kptrs and no BPF_F_NO_PREALLOC flag.
+> [ ... ]
+> >  static int htab_map_check_btf(struct bpf_map *map, const struct btf *btf,
+> >  			      const struct btf_type *key_type, const struct btf_type *value_type)
+> >  {
+> >  	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
+> > +	int err;
+> > +
+> > +	if (!htab_has_nmi_special_fields(htab)) {
+> > +		if (htab_is_prealloc(htab))
+> > +			return 0;
+> > +	} else {
+> > +		if (htab_is_lru(htab))
+> > +			return 0;
+> 
+> Since LRU maps are exempted from conversion to non-preallocated mode here,
+> they do not use bpf_mem_alloc and completely lack the deferred destructor
+> mechanism relied upon by this patch.
+> 
+> When an LRU element is replaced or deleted, htab_lru_push_free() is called
+> and synchronously invokes check_and_free_fields() which eventually calls
+> bpf_obj_free_fields().
+> 
+> If this executes in an IRQ-disabled context, will the new if
+> (irqs_disabled()) checks in bpf_obj_free_fields() silently skip freeing
+> the special fields?
+> 
+> Does this cause a permanent memory leak since the element is then
+> immediately pushed back to the LRU free list? When the element is
+> subsequently popped and reused, could it inherit stale pointers and
+> corrupt map state?
+> 
+It doesn't cause a memory leak.
 
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
+It does have the potential to reuse slots with existing pointers, but they
+aren't "stale" they are valid pointers that are recycled until bpf_obj_free_fields
+gets called on them in a non-irqs_disabled context which can happen on
+another delete / LRU trim / an xchg out and release / map
+destruction.
 
+> [ ... ]
+> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > index 6600e126fbfb4..1f52453d5a2f1 100644
+> > --- a/kernel/bpf/syscall.c
+> > +++ b/kernel/bpf/syscall.c
+> > @@ -839,6 +839,8 @@ void bpf_obj_free_fields(const struct btf_record *rec, void *obj)
+> >  			break;
+> >  		case BPF_KPTR_REF:
+> >  		case BPF_KPTR_PERCPU:
+> > +			if (irqs_disabled())
+> > +				break;
+> >  			xchgd_field = (void *)xchg((unsigned long *)field_ptr, 0);
+> >  			if (!xchgd_field)
+> >  				break;
+> 
+> Because bpf_obj_free_fields() is a generic helper used throughout the BPF
+> subsystem, does silently skipping destruction in IRQ-disabled contexts
+> cause leaks for callers that lack deferred destructors?
+> 
+> For example, if a BPF program running in an NMI or kprobe drops an object
+> containing nested kptrs via __bpf_obj_drop_impl(), will the nested fields
+> be skipped and permanently leaked when the outer object is queued for
+> freeing via bpf_global_ma?
+>
+Looks like this kfunc also tries to eagerly free fields and is callable
+from tp_btf/nmi_handler with no recovery mechanism.
+
+I don't see a good way to handle this at all... it also is effectively
+already bugged in the existing code unless I'm missing something
+
+Since you can use it to call abritrary dtors in NMI.
+
+1. 
+
+In some context where task_acquire is valid:
+
+struct blah {
+  struct task_struct __kptr* task;
+}
+
+b = bpf_task_acquire(...)
+a = bpf_obj_new(typeof(*blah_ptr));
+bpf_kptr_xchg(a->task, b);
+
+2. 
+
+Then xchg a into map
+bpf_kptr_xchg([map slot], a);
+...
+
+3. 
+
+In tp_btf/nmi_handler we exchange the obj out of the map
+and then drop it.
+
+c = bpf_kptr_xchg([slot where a is stored], NULL);
+bpf_obj_drop(c); 
+
+And because this can be called on an object not in a map, we don't have
+a good recovery mechanism.
+
+Because tp_btf/nmi_handler is always in_nmi and hence irqs_disabled, in
+the code before this patch the task_struct dtor will be invoked and
+cause a deadlock.
+
+This patch will not fix the issue and just free a struct blah holding the
+reference without actually dropping it.
+
+Unless I'm missing something then this whole approach taken by this
+patch can't handle this case since the bpf_obj is detached from the map
+entirely and has no allocator recovery mechanism at all.
+
+Then we are back to square 1 needing to defer the freeing with irq work.
+
+Kumar / Alexei do you have anything on this?
+
+
+> Does this similarly affect in-place updates to Array maps which rely on
+> bpf_obj_free_fields() to clear old special fields?
+> 
+Basically existing behavior (undocumented) is that bpf_map_update_elem
+won't copy kptr fields timers or spinlocks. (see copy_map_value, and
+bpf_obj_memcpy).
+
+So those fields can never be overwritten from bpf_map_update_elem on an
+array.
+
+The only thing that really changes is that now instead of trying to free
+the existing map slot value on update we just leave it alone if
+irqs_disabled().
+
+It's definitely a behavioral change either way. And it may be worth
+extending the bpf_obj_memcpy/copy_map_value exceptions to the other
+types covered in this patch.
+
+This was discussed here. [1]
+
+[1] https://lore.kernel.org/bpf/CAP01T75942V+wKJD0yhs8yb7U5vj+y9s6efJ+UdpTMfzP31CWg@mail.gmail.com/
+> -- 
+> Sashiko AI review � https://sashiko.dev/#/patchset/20260519011450.1144935-2-utilityemal77@gmail.com?part=1
