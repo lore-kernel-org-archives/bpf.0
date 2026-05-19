@@ -1,90 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166123EFFD6
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 17:14:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9506C3DB316
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 17:19:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779210898; cv=none; b=AtDgtsqdK7TwUUeUkU43i4a1NkCCxuXqjFwLF18Htk9oG9LyIGHmSsNouEIYDrxbR5nviVtcatgXNbYAwg7HMsRU5OoEjYiVEApKg/rCjx98SaI+OE7RXECbiklgTnDree4wV4bnyxH+Pi41fbnYQTq9BNkFRFXmyBYY+4YMDI4=
+	t=1779211175; cv=none; b=D3a8S0wLEBp3yWhhP1uSX3f2yTl3Z+ZdvgeE7E911btpEzVoxUyGZTlNaYpxSgEweHsWGNzcSmW8X1xwmcI3Is2QWeUJi877mXNB6JpZW1UcVauPudL8gPyPM1bpzXhEn2o/fXBZxUCLoZm65yesYCl4I6sE19KFjkdmqqG32zM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779210898; c=relaxed/simple;
-	bh=v+8+THsiQ+JGWlbKGg4Jfj6Y4acNA1mRPE3nwjflLjE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=re81lxSRZexS1JotoJdTBlgwoXGajQ+zAGXXR42CxM7+l3m7uA4xSE4YfoI/iL+22rZE+d3comTTPTgyWk++mBHRyntShwaR6IgEFotH1NEt36lGsgw34TGVXMLR6FaWaAHdVF2tnvcnj6Szi575HWupNBFC2R7JflfEERs7mXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O/W3TMP1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779211175; c=relaxed/simple;
+	bh=88LCbHfFAa39nMBD8cahZrF68VKoOMAuzAdTXvYRXqU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=i+mH+NnHmTx0F7/HlqTwwFvGVHyuub0+hfsdXHqXWyOefefGHwHMgkLpFfBzr6biiJI4/QVKRxL1YV2ByCkCrMyH82RPree/XYFajvmL3IrKSm1T/nESy3UAEy2VfpfOjZbM7jhaXjVJfsN9uNtb/E7rZOr72dDPUAxLbTGckxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qbsg8zRG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O/W3TMP1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B5D3C4AF0B;
-	Tue, 19 May 2026 17:14:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qbsg8zRG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8184FC2BCB3;
+	Tue, 19 May 2026 17:19:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779210897;
-	bh=v+8+THsiQ+JGWlbKGg4Jfj6Y4acNA1mRPE3nwjflLjE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=O/W3TMP129U7kd4ZmIwS01cOReIp+BPq6JNZreGW9rYLxjIHwdL+wxujgjUo9rDY1
-	 HnrjDvUbSAtnOyfYg4C+tWGRroo97QKAtwXdXRziAmslZ1PMlS7Cq3ErZIOhVRTCfX
-	 wVqWl4NV89u3UHZomIoNONjZ7DfCso3sBLU63cIWMGXxZ/XDaThXnNFY9izDDxMlg9
-	 aqKeMGPodURZdkwuhb8PCUPIMgl6cDobLzTwmXgn9sip0kPa1lptUr7iEIZroSFACC
-	 l2wFSId8YkNzcTlEDjydCckRcbLVjgbxtrKM5/Esux++6bcLO8fP2LzXEEQ3wjLdiA
-	 OZba5pBJsAF4A==
-Content-Type: multipart/mixed; boundary="===============8230685369894232359=="
+	s=k20201202; t=1779211174;
+	bh=88LCbHfFAa39nMBD8cahZrF68VKoOMAuzAdTXvYRXqU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=qbsg8zRGcKOHOVCLFgcyDVfBlD0he8SXrsymFrTLMMZxxfbeleQF3xzyAXBK/1R/h
+	 n/hNGgHWXOmdfQS9l2fyKAQZdo3t6EMYl5DSVIaimFDpqDaNg0V/psdN2QTutaNNeo
+	 dcDrbHJYdrPWFjcJE6J5tMy7lGRT7p0lRHLpwgHOhtdYzY/9rBr7Y20bNKeuqZBS7t
+	 Amo4TxGS5v0U0C+RESPggXBBlfNZYKhLqEmC4Hhxi2Tq0MMcVbK9HxWBSSMfT5pv4u
+	 padJsPY2zpODqZ8xN8xXyI1hTOEKQPhIbXeVOKyxKmHE4s8x1mhcA0UXJRQHEMsvnl
+	 eh5xfQzDkfX4w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 3/4] selftests/bpf: Cap batch-timing
+ calibration at BPF may_goto loop limit
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Puranjay Mohan" <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260519163632.2220753-4-puranjay@kernel.org>
+References: <20260519163632.2220753-4-puranjay@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 19 May 2026 17:19:33 +0000
+Message-Id: <20260519171934.8184FC2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <2afdea40f0c5a11c2337efafe6f460899d85bc28650e04d5e0b9ceb35f3ad9fc@mail.kernel.org>
-In-Reply-To: <20260519163632.2220753-2-puranjay@kernel.org>
-References: <20260519163632.2220753-2-puranjay@kernel.org>
-Subject: Re: [PATCH bpf-next 1/4] selftests/bpf: Fix cold_lru producing zero batch_hash in XDP LB benchmark
-From: bot+bpf-ci@kernel.org
-To: puranjay@kernel.org,bpf@vger.kernel.org
-Cc: puranjay@kernel.org,puranjay12@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,memxor@gmail.com,mykyta.yatsenko5@gmail.com,feichen@meta.com,taragrawal@meta.com,ndixit@meta.com,tehnerd@tehnerd.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 19 May 2026 17:14:57 +0000 (UTC)
 
---===============8230685369894232359==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The new CALIBRATE_MAX_BATCH cap of 8,000,000 is mathematically i=
+ncorrect and fails the patch's stated goal of keeping the benchmark within =
+the BPF may_goto limit.
+--
 
-> diff --git a/tools/testing/selftests/bpf/progs/xdp_lb_bench.c b/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-> index b9fd848c035d..f40e36aa183e 100644
-> --- a/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-> +++ b/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-> @@ -618,7 +618,7 @@ int xdp_lb_bench(struct xdp_md *xdp)
->  		__u32 *saddr = data + saddr_off;
->
->  		batch_gen++;
-> -		batch_hash = (batch_gen ^ bpf_get_smp_processor_id()) * KNUTH_HASH_MULT;
-> +		batch_hash = ((batch_gen ^ bpf_get_smp_processor_id()) | 1) * KNUTH_HASH_MULT;
-                                                                           ^^^^
+commit d9779455687fa035b58a0d4ba0d495256b32ed13
+Author: Puranjay Mohan <puranjay@kernel.org>
 
-Does forcing the LSB to 1 with '| 1' inadvertently destroy the lowest bit
-of entropy from the batch generator?
+selftests/bpf: Cap batch-timing calibration at BPF may_goto loop limit
 
-Since batch_gen increments sequentially by 1 per batch execution, forcing
-the least significant bit to 1 maps pairs of adjacent values to the same
-number. For example, if the CPU ID evaluates to 0, both batch_gen = 2 and
-batch_gen = 3 will yield 3 before the multiplication:
+This commit lowers CALIBRATE_MAX_BATCH from 10000000 to 8000000. This
+is intended to keep the benchmark iterations within the BPF_MAX_LOOPS
+limit of 8388608, avoiding early loop exits that cause underestimated
+costs.
 
-  batch_gen = 2, CPU = 0:  (2 ^ 0) | 1 = 2 | 1 = 3
-  batch_gen = 3, CPU = 0:  (3 ^ 0) | 1 = 3 | 1 = 3
+> diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_timing.c b/tool=
+s/testing/selftests/bpf/benchs/bench_bpf_timing.c
+> index 75a39da696552..081e2e860cb49 100644
+> --- a/tools/testing/selftests/bpf/benchs/bench_bpf_timing.c
+> +++ b/tools/testing/selftests/bpf/benchs/bench_bpf_timing.c
+> @@ -166,7 +166,7 @@ void bpf_bench_timing_report(struct bpf_bench_timing =
+*t, const char *name, const
+> =20
+>  #define CALIBRATE_SEED_BATCH	100
+>  #define CALIBRATE_MIN_BATCH	100
+> -#define CALIBRATE_MAX_BATCH	10000000
+> +#define CALIBRATE_MAX_BATCH	8000000
 
-Could this cause 50% of consecutive batches to generate the exact same
-batch_hash as the previous batch, causing those iterations to hit the warm
-LRU cache entries that were just populated and defeating the purpose of
-the cold_lru benchmark?
+[Severity: Medium]
+Will this new cap of 8000000 still cause the benchmark to hit the BPF
+may_goto limit during calibration?
 
-Reference: https://lore.kernel.org/bpf/20260519165140.12529C2BCB3@smtp.kernel.org/
+Looking at bpf_bench_calibrate(), the proportionality check explicitly
+requests a measurement of t->batch_iters * 2:
 
->  		if ((void *)(saddr + 1) <= data_end)
->  			*saddr ^= batch_hash;
->  	}
+	time_n =3D measure_elapsed(t, run_fn, run_ctx, t->batch_iters, CALIBRATE_R=
+UNS);
+	time_2n =3D measure_elapsed(t, run_fn, run_ctx, t->batch_iters * 2, CALIBR=
+ATE_RUNS);
 
+With a cap of 8000000, t->batch_iters * 2 can reach up to 16000000
+iterations. Since this exceeds the BPF_MAX_LOOPS limit of 8388608,
+won't the BPF program's can_loop condition return false early during the
+time_2n measurement?
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+This would cause time_2n to record the time for only ~8.38M iterations
+instead of 16M. When compared to time_n (8M iterations), the ratio would
+be ~1.05 instead of the expected 2.0. This completely violates the 5%
+PROPORTIONALITY_TOL and triggers a bogus proportionality check warning
+for fast benchmarks.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26112027147
---===============8230685369894232359==--
+To safely avoid the limit across all phases of calibration, shouldn't the
+cap be no more than BPF_MAX_LOOPS / 2 (e.g., 4000000)?
+
+>  #define CALIBRATE_TARGET_MS	10
+>  #define CALIBRATE_RUNS		5
+>  #define PROPORTIONALITY_TOL	0.05	/* 5% */
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260519163632.2220=
+753-1-puranjay@kernel.org?part=3D3
