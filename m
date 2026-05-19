@@ -1,186 +1,330 @@
-Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 429C43D8103;
-	Tue, 19 May 2026 09:57:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.145.95.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDC0448B36A;
+	Tue, 19 May 2026 10:11:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779184659; cv=none; b=jkcb4+TJ7HG8Qtr+nmVGCSuu0TNfcWCe5YzmN9rH9KhTz65bAikkI/cvVnwAS+Q29AoH9jPtCYSIndylemcbfQtJIXoiXKuGBI6Unefb+8qqR7OUEWl3AE19iPiGrDmoStfW7r6fPYbqRxnKNjcRVKfYUPdZPdvp5ElU9T5vHMc=
+	t=1779185508; cv=none; b=HzIGqP5THXA0YtH64PwiOwnhkeXySAxwkjHphGug9WifeCjtGlSjvAxjiJGolanDCVUuGpVZetPA5IHUD6E+3Tn0upwWU1FH5z3dC33IhfyTR3fhB3V9wKdpRNAQAxs/oTGfti4EvzmNQr8SXrRj2PSDwFXy/eSJvvdEB9w+hcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779184659; c=relaxed/simple;
-	bh=ao5yktV3VAW0NwfNu4akMcKARIkpwyiF0BaqE2LX4lQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=WBDTdSsor/dFLLzC7Ge2EF62u3oCorSEtCjq1fMvL8ezKlBZAjPieNgXew5loOjp1OFt8IyJERhYkjsKTxpXO1h40oyaxv2Y6dsONrGXErupGb+KrJmXbiAy7dHB0S7tBBjWAFVMAcZ9kKyiQVCCg8mamAWth3gqswpzzrUx/uM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=toke.dk; spf=pass smtp.mailfrom=toke.dk; arc=none smtp.client-ip=45.145.95.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=toke.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toke.dk
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-Authentication-Results: mail.toke.dk; dkim=none
-To: Jason Xing <kerneljasonxing@gmail.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, willemb@google.com,
- kuniyu@google.com, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
- memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, Simon
- Sundberg <Simon.Sundberg@kau.se>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH net-next 5/6] bpf: enable bpf timestamping rx in TCP layer
-In-Reply-To: <CAL+tcoA_VBcXu_2zVXFvsWF7+U=-TZf7bCz0KzNpN=p=82tB=w@mail.gmail.com>
-References: <20260518082344.96647-1-kerneljasonxing@gmail.com>
- <20260518082344.96647-6-kerneljasonxing@gmail.com>
- <f9606d4b-7ff7-479f-8e73-2e8cc77095fa@kernel.org>
- <CAL+tcoDRSpVsiCym+DYsGLBGrdEuim7AZqyBTHYzd-OSBki5-Q@mail.gmail.com>
- <2942dd24-3b6f-4e88-acb2-67d35ea8938b@kernel.org>
- <CAL+tcoCO7Op69K6w9fNX5BohHoafU3C1r62=J1djTMdc30nhFQ@mail.gmail.com>
- <CAL+tcoA_VBcXu_2zVXFvsWF7+U=-TZf7bCz0KzNpN=p=82tB=w@mail.gmail.com>
-Date: Tue, 19 May 2026 11:57:26 +0200
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <87lddfn2m1.fsf@toke.dk>
+	s=arc-20240116; t=1779185508; c=relaxed/simple;
+	bh=q51WE7wevZ2jWA3uAvc7h7Tfqyk1QPZnTjxADHrEy64=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lulRs4W3KnomuvSkMp4jXJzXmE3N2W0RQmyhDP8kVtSyFcFHLbFY9IX34OuZKvff/rOyYJOmoD/U/lBRdk7kOf8Wk9EfCf/1QE6uMtTpNfEunMHDrfbetGQsv4t/zjeB9/4NToEo3XMP8MdWmO7PsrGrU9voIAy+uGPFg9loHFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VMG9uZc/; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VMG9uZc/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779185507; x=1810721507;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=q51WE7wevZ2jWA3uAvc7h7Tfqyk1QPZnTjxADHrEy64=;
+  b=VMG9uZc/2tuUqg+8KvQ7LiE4uHINQlAXFfnp8P9kjeg3nSirYf1mJS4Y
+   n1xd7UcxlgalTOs5JdIcmiHjqOJimQcC+Uou+6zJ7VDGf95qnrweGUUPw
+   CPbO5j7S9PWsBN7coVQNKVg2teszVYnfoNCNiG6uKlpwlr0OMhNMvuat9
+   FV3C3T4ZSJl6B3L/om/xfGXG+RfSDUyse1PQk2aC2MlZPUV3U/BufXsg+
+   ZfSZq3Uaw+8yd/nSDtcG87IXbgIGFwab4r1ZNfZvGUukHxjFUTm2dPWmw
+   L3zdRuimnLcwh6YC+JqBNnmuMV1pI2vryV8tC1zVsR2w+LuCeAnNaGDDq
+   w==;
+X-CSE-ConnectionGUID: q2z1WzY3TQyh7nGZSxCS5g==
+X-CSE-MsgGUID: ifN9y+9KS4Ol0tLktGNKKQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11790"; a="90637675"
+X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
+   d="scan'208";a="90637675"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2026 03:11:46 -0700
+X-CSE-ConnectionGUID: 1kE+sZBsRj6v0jA3kbW9aw==
+X-CSE-MsgGUID: J5RMBlqPSCSLUopRIysj7Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
+   d="scan'208";a="263508820"
+Received: from lkp-server02.sh.intel.com (HELO 30e86e9c1927) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 19 May 2026 03:11:42 -0700
+Received: from kbuild by 30e86e9c1927 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wPHQ1-000000000rZ-40bx;
+	Tue, 19 May 2026 10:11:28 +0000
+Date: Tue, 19 May 2026 18:10:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+	bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Takaya Saeki <takayas@google.com>,
+	Douglas Raillard <douglas.raillard@arm.com>,
+	Tom Zanussi <zanussi@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ian Rogers <irogers@google.com>, Jiri Olsa <olsajiri@gmail.com>,
+	"Subject:[PATCH v2]" <tracing/pr@web.codeaurora.org>
+Subject: Re: [PATCH v4] tracing/probes: Allow use of BTF names to dereference
+ pointers
+Message-ID: <202605191828.Y3E73pH1-lkp@intel.com>
+References: <20260518232312.0c78f055@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260518232312.0c78f055@gandalf.local.home>
 
-Jason Xing <kerneljasonxing@gmail.com> writes:
+Hi Steven,
 
-> On Tue, May 19, 2026 at 7:16=E2=80=AFAM Jason Xing <kerneljasonxing@gmail=
-.com> wrote:
->>
->> On Tue, May 19, 2026 at 12:40=E2=80=AFAM Jesper Dangaard Brouer <hawk@ke=
-rnel.org> wrote:
->> >
->> >
->> >
->> > On 18/05/2026 15.53, Jason Xing wrote:
->> > > On Mon, May 18, 2026 at 9:01=E2=80=AFPM Jesper Dangaard Brouer <hawk=
-@kernel.org> wrote:
->> > >>
->> > >>
->> > >>
->> > >> On 18/05/2026 10.23, Jason Xing wrote:
->> > >>> From: Jason Xing <kernelxing@tencent.com>
->> > >>>
->> > >>> Add two if statements to accurately isolate bpf timestamping and so
->> > >>> timestamping. They can work respectively.
->> > >>>
->> > >>> As to so_timestamping, only add a loose condition via report flags
->> > >>> to avoid duplicate strict checks that is done in tcp_recv_timestam=
-p()
->> > >>> and performance impact. If the loose condition is hit,
->> > >>> tcp_recv_timestamp() is able to handle the exact case and doesn't
->> > >>> hamper the existing timestamping feature.
->> > >>>
->> > >>> Make it work in TCP protocol.
->> > >>>
->> > >>> Signed-off-by: Jason Xing <kernelxing@tencent.com>
->> > >>> ---
->> > >>>    net/ipv4/tcp.c | 14 ++++++++++++--
->> > >>>    1 file changed, 12 insertions(+), 2 deletions(-)
->> > >>>
->> > >>> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
->> > >>> index 21ece4c71612..64c69bb3578a 100644
->> > >>> --- a/net/ipv4/tcp.c
->> > >>> +++ b/net/ipv4/tcp.c
->> > >>> @@ -2949,8 +2949,18 @@ int tcp_recvmsg(struct sock *sk, struct msg=
-hdr *msg, size_t len, int flags)
->> > >>>        release_sock(sk);
->> > >>>
->> > >>>        if ((cmsg_flags | msg->msg_get_inq) && ret >=3D 0) {
->> > >>> -             if (cmsg_flags & TCP_CMSG_TS)
->> > >>> -                     tcp_recv_timestamp(msg, sk, &tss);
->> > >>> +             if (cmsg_flags & TCP_CMSG_TS) {
->> > >>> +                     u32 tsflags =3D READ_ONCE(sk->sk_tsflags);
->> > >>> +
->> > >>> +                     if (cgroup_bpf_enabled(CGROUP_SOCK_OPS) &&
->> > >>> +                         SK_BPF_CB_FLAG_TEST(sk, SK_BPF_CB_RX_TIM=
-ESTAMPING))
->> > >>> +                             bpf_skops_rx_timestamping(sk, &tss,
->> > >>> +                                                       BPF_SOCK_O=
-PS_TSTAMP_RCV_CB);
->> > >>
->> > >> Does this mean I can enable timestamp reading per cgroup?
->> > >
->> > > Yes, I think so, but I didn't try. One of the natures of sockopt
->> > > feature is supporting cgroup attach.
->> > > cgroup_bpf_prog_attach()/cgroup_bpf_link_attach() is probably
->> > > something that you're looking for.
->> > >
->> >
->> > Sound good
->> >
->> > > IIUC, you can attach the prog onto the cgroup where all the sockets
->> > > are set using the bpf timestamping function. So the current impl is
->> > > cleaner and has better isolation (to filter out those unmatched
->> > > flows).
->> > >
->> > >>
->> > >> In Simon's netstacklat[1] tool we are forced process all RX timesta=
-mp
->> > >> (hooking fentry/tcp_recv_timestamp), and then we have a BPF filter[=
-2] on
->> > >> the cgroup IDs that we are interested in (which is a significant
->> > >> overhead, as this is deployed at Cloudflare production scale).
->> > >
->> > > I can feel the pain when filtering in this kind of relatively hot
->> > > path, which is what I'm trying to avoid internally. What I've done in
->> > > production (to cover those old kernels) is to just let the kernel
->> > > print the information, that's it, and there is an agent continuously
->> > > gathering the data, doing the match and computing latency. But it's
->> > > overall complicated.
->> > >
->> >
->> > I hope you don't mean your internal/old approach was using printk and
->> > then analyzing this data.
->>
->> Of course not :)
->>
->> The internal approach is to cover the old kernels but doesn't mean the
->> approach is old :P
->>
->> Instead, the internal kernel module is super efficient and I'm trying
->> to ship bpf with such an ability. The fact is we've already deployed
->> in production: 7x24 running, zero sampling.
->>
->> Please see page 24 where there is a brief introduction on how to deal
->> with the log part:
->> https://lpc.events/event/19/contributions/2055/#preview:3846
->> I believe this is the promising direction (ring buffer + lightweight
->> kernel + heavy agent) we're taking.
->>
->> The headache part is that I need to provide an agent written in BPF to
->> do the heavy process.
->>
->> >
->> > > Many thanks here, I'm always interested in hearing more useful and
->> > > real requirements and fancy ideas on how to monitor the latency :) N=
-ow
->> >
->> > Simon Sundberg <Simon.Sundberg@kau.se> have many more fancy ideas on h=
-ow
->> > to monitor the latency.
->> > The netstacklat tool is part of Simon's PhD thesis:
->> > - https://doi.org/10.59217/qklv6836
->> >
->> > And we even gotten a paper accepted on netstacklat:
->> > -
->> > https://kau.diva-portal.org/smash/record.jsf?pid=3Ddiva2%3A2034009&dsw=
-id=3D3032
->>
->> Sorry, I cannot access this link. Could you give me the title of this pa=
-per?
->
-> Waiting at the Front Door - Continuous Monitoring of Latency in the
-> Host Network Stack
->
-> Oh, I guess it hasn't been officially published right? This is the
-> reason why I have no way to know the content.
+kernel test robot noticed the following build errors:
 
-No, it's not published yet; I'll send you a copy off-list :)
+[auto build test ERROR on trace/for-next]
+[also build test ERROR on linus/master v7.1-rc4 next-20260518]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
--Toke
+url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/tracing-probes-Allow-use-of-BTF-names-to-dereference-pointers/20260519-121930
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
+patch link:    https://lore.kernel.org/r/20260518232312.0c78f055%40gandalf.local.home
+patch subject: [PATCH v4] tracing/probes: Allow use of BTF names to dereference pointers
+config: sparc64-defconfig (https://download.01.org/0day-ci/archive/20260519/202605191828.Y3E73pH1-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260519/202605191828.Y3E73pH1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605191828.Y3E73pH1-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/trace/trace_probe.c:1289:9: error: call to undeclared function 'query_btf_struct'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1289 |                 ret = query_btf_struct(arg + 1, ctx);
+         |                       ^
+   1 error generated.
+
+
+vim +/query_btf_struct +1289 kernel/trace/trace_probe.c
+
+  1120	
+  1121	/* Recursive argument parser */
+  1122	static int
+  1123	parse_probe_arg(char *arg, const struct fetch_type *type,
+  1124			struct fetch_insn **pcode, struct fetch_insn *end,
+  1125			struct traceprobe_parse_context *ctx)
+  1126	{
+  1127		struct fetch_insn *code = *pcode;
+  1128		unsigned long param;
+  1129		int deref = FETCH_OP_DEREF;
+  1130		long offset = 0;
+  1131		char *tmp;
+  1132		int ret = 0;
+  1133	
+  1134		switch (arg[0]) {
+  1135		case '$':
+  1136			ret = parse_probe_vars(arg, type, pcode, end, ctx);
+  1137			break;
+  1138	
+  1139		case '%':	/* named register */
+  1140			if (ctx->flags & (TPARG_FL_TEVENT | TPARG_FL_FPROBE)) {
+  1141				/* eprobe and fprobe do not handle registers */
+  1142				trace_probe_log_err(ctx->offset, BAD_VAR);
+  1143				break;
+  1144			}
+  1145			ret = regs_query_register_offset(arg + 1);
+  1146			if (ret >= 0) {
+  1147				code->op = FETCH_OP_REG;
+  1148				code->param = (unsigned int)ret;
+  1149				ret = 0;
+  1150			} else
+  1151				trace_probe_log_err(ctx->offset, BAD_REG_NAME);
+  1152			break;
+  1153	
+  1154		case '@':	/* memory, file-offset or symbol */
+  1155			if (isdigit(arg[1])) {
+  1156				ret = kstrtoul(arg + 1, 0, &param);
+  1157				if (ret) {
+  1158					trace_probe_log_err(ctx->offset, BAD_MEM_ADDR);
+  1159					break;
+  1160				}
+  1161				/* load address */
+  1162				code->op = FETCH_OP_IMM;
+  1163				code->immediate = param;
+  1164			} else if (arg[1] == '+') {
+  1165				/* kprobes don't support file offsets */
+  1166				if (ctx->flags & TPARG_FL_KERNEL) {
+  1167					trace_probe_log_err(ctx->offset, FILE_ON_KPROBE);
+  1168					return -EINVAL;
+  1169				}
+  1170				ret = kstrtol(arg + 2, 0, &offset);
+  1171				if (ret) {
+  1172					trace_probe_log_err(ctx->offset, BAD_FILE_OFFS);
+  1173					break;
+  1174				}
+  1175	
+  1176				code->op = FETCH_OP_FOFFS;
+  1177				code->immediate = (unsigned long)offset;  // imm64?
+  1178			} else {
+  1179				/* uprobes don't support symbols */
+  1180				if (!(ctx->flags & TPARG_FL_KERNEL)) {
+  1181					trace_probe_log_err(ctx->offset, SYM_ON_UPROBE);
+  1182					return -EINVAL;
+  1183				}
+  1184				/* Preserve symbol for updating */
+  1185				code->op = FETCH_NOP_SYMBOL;
+  1186				code->data = kstrdup(arg + 1, GFP_KERNEL);
+  1187				if (!code->data)
+  1188					return -ENOMEM;
+  1189				if (++code == end) {
+  1190					trace_probe_log_err(ctx->offset, TOO_MANY_OPS);
+  1191					return -EINVAL;
+  1192				}
+  1193				code->op = FETCH_OP_IMM;
+  1194				code->immediate = 0;
+  1195			}
+  1196			/* These are fetching from memory */
+  1197			if (++code == end) {
+  1198				trace_probe_log_err(ctx->offset, TOO_MANY_OPS);
+  1199				return -EINVAL;
+  1200			}
+  1201			*pcode = code;
+  1202			code->op = FETCH_OP_DEREF;
+  1203			code->offset = offset;
+  1204			break;
+  1205	
+  1206		case '+':	/* deref memory */
+  1207		case '-':
+  1208			if (arg[1] == 'u') {
+  1209				deref = FETCH_OP_UDEREF;
+  1210				arg[1] = arg[0];
+  1211				arg++;
+  1212			}
+  1213			if (arg[0] == '+')
+  1214				arg++;	/* Skip '+', because kstrtol() rejects it. */
+  1215			tmp = strchr(arg, '(');
+  1216			if (!tmp) {
+  1217				trace_probe_log_err(ctx->offset, DEREF_NEED_BRACE);
+  1218				return -EINVAL;
+  1219			}
+  1220			*tmp = '\0';
+  1221			ret = kstrtol(arg, 0, &offset);
+  1222			if (ret) {
+  1223				trace_probe_log_err(ctx->offset, BAD_DEREF_OFFS);
+  1224				break;
+  1225			}
+  1226			ctx->offset += (tmp + 1 - arg) + (arg[0] != '-' ? 1 : 0);
+  1227			arg = tmp + 1;
+  1228			tmp = strrchr(arg, ')');
+  1229			if (!tmp) {
+  1230				trace_probe_log_err(ctx->offset + strlen(arg),
+  1231						    DEREF_OPEN_BRACE);
+  1232				return -EINVAL;
+  1233			} else {
+  1234				const struct fetch_type *t2 = find_fetch_type(NULL, ctx->flags);
+  1235				int cur_offs = ctx->offset;
+  1236	
+  1237				*tmp = '\0';
+  1238				ret = parse_probe_arg(arg, t2, &code, end, ctx);
+  1239				if (ret)
+  1240					break;
+  1241				ctx->offset = cur_offs;
+  1242				if (code->op == FETCH_OP_COMM ||
+  1243				    code->op == FETCH_OP_DATA) {
+  1244					trace_probe_log_err(ctx->offset, COMM_CANT_DEREF);
+  1245					return -EINVAL;
+  1246				}
+  1247				if (++code == end) {
+  1248					trace_probe_log_err(ctx->offset, TOO_MANY_OPS);
+  1249					return -EINVAL;
+  1250				}
+  1251				*pcode = code;
+  1252	
+  1253				code->op = deref;
+  1254				code->offset = offset;
+  1255				/* Reset the last type if used */
+  1256				ctx->last_type = NULL;
+  1257			}
+  1258			break;
+  1259		case '\\':	/* Immediate value */
+  1260			if (arg[1] == '"') {	/* Immediate string */
+  1261				ret = __parse_imm_string(arg + 2, &tmp, ctx->offset + 2);
+  1262				if (ret)
+  1263					break;
+  1264				code->op = FETCH_OP_DATA;
+  1265				code->data = tmp;
+  1266			} else {
+  1267				ret = str_to_immediate(arg + 1, &code->immediate);
+  1268				if (ret)
+  1269					trace_probe_log_err(ctx->offset + 1, BAD_IMM);
+  1270				else
+  1271					code->op = FETCH_OP_IMM;
+  1272			}
+  1273			break;
+  1274		case '(':
+  1275			tmp = strrchr(arg, ')');
+  1276			if (!tmp) {
+  1277				trace_probe_log_err(ctx->offset + strlen(arg),
+  1278						    DEREF_OPEN_BRACE);
+  1279				return -EINVAL;
+  1280			}
+  1281	
+  1282			tmp--;
+  1283			if (*tmp != '*') {
+  1284				trace_probe_log_err(ctx->offset + (tmp - arg),
+  1285						    NO_PTR_STRCT);
+  1286				return -EINVAL;
+  1287			}
+  1288			*tmp = '\0';
+> 1289			ret = query_btf_struct(arg + 1, ctx);
+  1290			*tmp = '*';
+  1291	
+  1292			if (ret < 0) {
+  1293				trace_probe_log_err(ctx->offset + 1, NO_PTR_STRCT);
+  1294				return -EINVAL;
+  1295			}
+  1296	
+  1297			ctx->flags |= TPARG_FL_STRUCT;
+  1298			tmp += 2;
+  1299	
+  1300			if (*tmp != '$') {
+  1301				trace_probe_log_err(ctx->offset + (tmp - arg),
+  1302						    BAD_VAR);
+  1303				return -EINVAL;
+  1304			}
+  1305	
+  1306			ctx->offset += tmp - arg;
+  1307			ret = parse_probe_vars(tmp, type, pcode, end, ctx);
+  1308			ctx->flags &= ~TPARG_FL_STRUCT;
+  1309			ctx->last_struct = NULL;
+  1310			break;
+  1311		default:
+  1312			if (isalpha(arg[0]) || arg[0] == '_') {	/* BTF variable */
+  1313				if (!tparg_is_function_entry(ctx->flags) &&
+  1314				    !tparg_is_function_return(ctx->flags)) {
+  1315					trace_probe_log_err(ctx->offset, NOSUP_BTFARG);
+  1316					return -EINVAL;
+  1317				}
+  1318				ret = parse_btf_arg(arg, pcode, end, ctx);
+  1319				break;
+  1320			}
+  1321		}
+  1322		if (!ret && code->op == FETCH_OP_NOP) {
+  1323			/* Parsed, but do not find fetch method */
+  1324			trace_probe_log_err(ctx->offset, BAD_FETCH_ARG);
+  1325			ret = -EINVAL;
+  1326		}
+  1327		return ret;
+  1328	}
+  1329	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
