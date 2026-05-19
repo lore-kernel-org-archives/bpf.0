@@ -1,120 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F3283B813E
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 20:34:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 641453BD643
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 20:36:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779222855; cv=none; b=Je0wYk8RGFcBRaSc7VZ4ZcZTgru61YGt4CcZLXu2slLNGewowyHPMtXtiR4dY6md/fWGl9JsrXR5O4mrO0kxN+OKXtOipX7q52J7Ge9mKnKsxWFcL764b+4PBfLYZGX+MrmE+Ew3Zb7GL/t8P4+0NXEGcS5ErXjdn4I9eohlEH0=
+	t=1779222972; cv=none; b=Q1SEettlJSaNZ4UQn6iqc/8bZGGVj8JCCShi687kWRTC+FTqWoTaMTbqvbs+IeXmHmIhla+tuTuAL9Yy02PhRtv+OTezcg+OmoRRnXoFb3qlQlKO8WmiIWj2FHh8gMto29ZEwjan5DfnQiG+KfcLsFOjdRIrl3T5OLk/p6HX2ro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779222855; c=relaxed/simple;
-	bh=1wemuly0fv73DYvh+b9bnboi5v5P2NQBwVj823s9/lg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mIC1FpGbcAF5bBqyr7a4q7LFiKZh+YZUY4ZBpYPLPIocWSvlI9chVHYHvSaDEIqWZCss9uwTs54AyZqaMl2SbMu3YVWalZBhgvhxWkfLo6EdFkhwWzgl2FOWT95UkksvG2asDDc/Tz6MEX65Xnxnx8C+qKvlido5coDZdhkCzUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UgjbpcSR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779222972; c=relaxed/simple;
+	bh=hX1kjjf8tRNTUTvCD6JssEYipiPDum5U4tW7nuUBhUw=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pibzOKyWQeIzVHAv4UqAxiSLjxybVRTmX60pi5K72hkBHA6N5W2rWFWfmHIYtKzcGv1Ku0nnHRC0gZtgNYd5d+xYaQ1u+n25hejNM8A4aUF8a8KA5oTFI7snYwySoZAFXl796V8WZ9ysZ+Exj2QV3qRFSNO/gvn5UUamD/iRQ0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ro9y5YN+; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UgjbpcSR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA2B71F000E9;
-	Tue, 19 May 2026 20:34:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779222853;
-	bh=xOWVl2ZnQypco/sChPAAI8dgFEPDhybFevaXZFY0vhg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UgjbpcSRmz99GaQQqip4ssr6+LBW2p76Rdm6FN+g4VaVg7mmxSDdYcXSozaecizsI
-	 ZsyWwwSsGxUxI/aUOrlPaK5N4EFqPQhMXGq8pdJ/WrJtVNaMLOEDg3kygZWU0WAVWB
-	 Nwl6grHC+7N7TLvVUJ95nujHWm1mnuwHpgPBUPowZ1BHl903kYfE7zFe8hGOFYkfqv
-	 L25Ra7TG+nJwr1vg/EY8Bfdn0PpzFud1Q4h0sg8kev/5Fa9d3byX2YV8jS3ikjo+rE
-	 70yXgp5Hzl0mUvXelJajXdjeFXQ2qu7n/xGeUfVRoA9BEPO2aeli/dg5rxeFta8iaw
-	 9ndbBh0kiFb8g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 2/6] powerpc/bpf: Move out dummy_tramp_addr after
- Long branch stub
-Reply-To: sashiko-reviews@lists.linux.dev
-To: adubey@linux.ibm.com
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ro9y5YN+"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43fe608cb92so2544371f8f.2
+        for <bpf@vger.kernel.org>; Tue, 19 May 2026 13:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779222969; x=1779827769; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DMmhPTSKZ7glMxvBJLhvmMzc5am2XArv/AoR87EDIP0=;
+        b=Ro9y5YN+oOR+sjd6HoWZTZWhogSpL4kgb7bZPNT9pLwhaYH8XP9Pk2437Xr0eHiRP7
+         0R/vNi/qsVQ/rWGYCOh55xCMGH7oosjXW6038ksNgBuUJw+7VfTlzaorMjOBP9XXF7mf
+         olVxukv8FpohnD/PzH9suVlSPv9z0POiLzOrVa2Xwr63fcU3hwdeiHnIUrLm5cQS8UC2
+         oE99Or0XhxRBIVxZLhYwefmhmWyFHfabL//4S1GDhss5oL2G2XvcHOxkr9QDVC8oEN5g
+         piQkZNcFvsuDci7KJQNRd2P6YG4D74CJm0aancB2cz3yxieQU82HiVmU9Q8V0qZyeWzb
+         IH+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779222969; x=1779827769;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DMmhPTSKZ7glMxvBJLhvmMzc5am2XArv/AoR87EDIP0=;
+        b=dL86uy7vfcU7J8+uJ4R1sEk1p3875P1hf9uIb8efFLd8DIe1p/TFuX//Ocj/agyZ8H
+         bDWj/1JEAusNy75xOsKs4oZwMY6HeGCVv8NXZbsoIJLTVWAdZazJqE9Z8f/GhXLpzAoR
+         TmSlHjY7ciHdpp78+SBb/KpN7+xDWtRqyY+g/su/UAC/R1LXRuDvdrUAAIXULi6JWkCk
+         An2bEbGadwJ/jbDa88N73Lm+yN/quzwdaM8UA9zC1pNWHpDUBFX9jLq/hO1MB2m9/En3
+         TNL4LAjnTgFkb/DkiFMDsNGLkajVq5pb51kYU4AjRUQv3vE/NaD69hpTm1180V2FYa6H
+         7ayA==
+X-Gm-Message-State: AOJu0YzVFByTC7XFKU8boM8Q5riZizSElwj+tujlJ5K7vpSlIIWyAkmR
+	b/OTGbmzrt/xf1icOCMNNjDTNcdO9Lag8lgd7cLBHv2afkZbgW20YhCsjba0bQK5
+X-Gm-Gg: Acq92OGw+IVJYT083Re863hOwQbYgb2pM3/YpKXxYGc2sJrx5bGqZJ172/UojWh0KAQ
+	Oyiq02RFqeNLqUFZZSdsvWooZq8q4UAa/wzh/Kr2BIFD/KbLc6nfEWWpq6pu2ah0up+xJcQo5Fy
+	tPO9Oz7iM9iYWr1FT/0sDaEqexkq/Q5eUQ+w6fb2ofzpnlr+6PfUEGlnRGC8wHXVyigRRtIZBKr
+	qdZfqJbmuu1mI1F0puh4JtYxOhfEpQqC6no1jX8Q9RDbC9ToHZY6ZiA9qiKv09YTlMcy+rwkhvY
+	rHGq9qsg7tnWan+iTbmqeyWRgRJ1DhwcEi93lJOCPrZTkRrwilsDIXPxcPELAwbffYWlu/uLskx
+	hKIayDSc5DTkxVnyKd630qk0AQbPbsjyfmUcy3IXQdRvTGJBEvoyHvNXFPheGRpuug+yh7TW5gk
+	lgyGqVhdTo2n0U+HjHtJ7CJQPyOrisU05e
+X-Received: by 2002:a05:6000:25c6:b0:454:a12c:6cdb with SMTP id ffacd0b85a97d-45e5c57d4bcmr34441760f8f.2.1779222968510;
+        Tue, 19 May 2026 13:36:08 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0fe1a41sm52258659f8f.31.2026.05.19.13.36.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2026 13:36:08 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 19 May 2026 22:36:06 +0200
+To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260519233812.18787-3-adubey@linux.ibm.com>
-References: <20260519233812.18787-3-adubey@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 19 May 2026 20:34:13 +0000
-Message-Id: <20260519203413.AA2B71F000E9@smtp.kernel.org>
+Subject: Re: [PATCHv2 05/11] libbpf: Detect uprobe syscall with new error
+Message-ID: <agzJtkZuSRVK3YR_@krava>
+References: <20260518105957.123445-6-jolsa@kernel.org>
+ <20260518113126.938ECC2BCB7@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260518113126.938ECC2BCB7@smtp.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Meaningful code and commit message mismatch: The patch fails to =
-exclude the last 8 bytes from the overall program length, despite the commi=
-t message claiming it does.
---
+On Mon, May 18, 2026 at 11:31:26AM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [High] Missing kernel dependency causes immediate selftest failure and libbpf feature detection breakage.
+> - [High] libbpf feature detection breaks backward compatibility by not accepting the old ENXIO error code.
+> --
+> 
+> commit 674b83913f8f61b2f16ba8f8b86e6bf8e84da5a3
+> Author: Jiri Olsa <jolsa@kernel.org>
+> 
+> libbpf: Detect uprobe syscall with new error
+> 
+> This commit updates libbpf's feature detection and the uprobe selftests to
+> expect the uprobe syscall to return -EPROTO instead of -ENXIO. This is in
+> response to an optimized uprobe fix that changed the syscall's error code.
+> 
+> > diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+> > index 4f19a0d79b0cf..a37aaea5253e5 100644
+> > --- a/tools/lib/bpf/features.c
+> > +++ b/tools/lib/bpf/features.c
+> > @@ -577,10 +577,10 @@ static int probe_ldimm64_full_range_off(int token_fd)
+> >  static int probe_uprobe_syscall(int token_fd)
+> >  {
+> >  	/*
+> > -	 * If kernel supports uprobe() syscall, it will return -ENXIO when called
+> > +	 * If kernel supports uprobe() syscall, it will return -EPROTO when called
+> >  	 * from the outside of a kernel-generated uprobe trampoline.
+> >  	 */
+> > -	return syscall(__NR_uprobe) < 0 && errno == ENXIO;
+> > +	return syscall(__NR_uprobe) < 0 && errno == EPROTO;
+> 
+> Is it possible this change breaks libbpf's backward compatibility with older
+> kernels? Since probe_uprobe_syscall() detects uprobe syscall support on
+> various kernel versions, replacing the check rather than allowing either
+> (e.g., errno == ENXIO || errno == EPROTO) might cause libbpf to silently
+> fail to detect uprobe support on kernels that predate the EPROTO change.
 
-commit ba8b98dfdd35a5bb47f0ad30755a56bb74e290d8
-Author: Abhishek Dubey <adubey@linux.ibm.com>
+that's the idea, we don't want the feature to be used for kernel that
+return -ENXIO
 
-powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
+> 
+> Also, looking at arch/x86/kernel/uprobes.c, the kernel-side change does
+> not appear to be present in the tree yet:
+> 
+> SYSCALL_DEFINE0(uprobe)
+> {
+> 	...
+> 	/* Allow execution only from uprobe trampolines. */
+> 	if (!in_uprobe_trampoline(regs->ip))
+> 		return -ENXIO;
 
-This commit moves the dummy_tramp_addr field to the bottom of the long bran=
-ch
-stub in the PowerPC BPF JIT. It updates the dummy_tramp_addr field offset
-calculation from the end of the program to reflect its new location.
+huh? it's changed already via previous commit:
+  uprobes/x86: Move optimized uprobe from nop5 to nop10
 
-> powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
->
-> Move the long branch address space to the bottom of the long
-> branch stub. This allows uninterrupted disassembly until the
-> last 8 bytes. Exclude these last bytes from the overall
-> program length to prevent failure in assembly generation.
+jirka
 
-[Severity: Medium]
-Does the code actually exclude these last 8 bytes from the overall program
-length?
-
-Looking at the patch, there are no modifications to jited_len or any
-subtraction of SZL (8 bytes) from it. The 8 bytes of dummy_tramp appear
-to still be included in the final program length returned to user space.
-
-Because of this, standard tools like bpftool prog dump jited might still
-attempt to disassemble the trailing 8 bytes of data, which can result in
-incorrect instructions or disassembly failures.
-
-While a subsequent patch in the series works around this issue by truncating
-the length in the selftest's disassembler wrapper, the kernel still returns
-the full length, leaving standard tools exposed to the disassembly failure.
-
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_c=
-omp.c
-> index 00b86ed97cb56..56a923d3908e1 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
-[ ... ]
-> @@ -1404,10 +1407,12 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_po=
-ke_type old_t,
->  	 * 1. Update the address in the long branch stub:
->  	 * If new_addr is out of range, we will have to use the long branch stu=
-b, so patch new_addr
->  	 * here. Otherwise, revert to dummy_tramp, but only if we had patched o=
-ld_addr here.
-> +	 *
-> +	 * dummy_tramp_addr moved to bottom of long branch stub.
->  	 */
->  	if ((new_addr && !is_offset_in_branch_range(new_addr - ip)) ||
->  	    (old_addr && !is_offset_in_branch_range(old_addr - ip)))
-> -		ret =3D patch_ulong((void *)(bpf_func_end - bpf_jit_long_branch_stub -=
- SZL),
-> +		ret =3D patch_ulong((void *)(bpf_func_end - SZL), /* SZL: dummy_tramp_=
-addr offset */
-
-[Severity: Medium]
-Additionally, if jited_len had actually been reduced, this new calculation
-using bpf_func_end - SZL would become incorrect, since bpf_func_end
-relies on jited_len encompassing those 8 bytes.
-
-Could the commit message be updated if excluding the bytes was left out, or
-should the length calculation be adjusted?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260519233812.1878=
-7-1-adubey@linux.ibm.com?part=3D2
+> 
+> Will replacing this check cause immediate regressions for both feature
+> detection and the selftests until the kernel dependency is merged?
+> 
+> [ ... ]
+> 
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> > index 955a37751b52d..c944136252c6d 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+> > @@ -762,7 +762,7 @@ static void test_uprobe_error(void)
+> >  	long err = syscall(__NR_uprobe);
+> >  
+> >  	ASSERT_EQ(err, -1, "error");
+> > -	ASSERT_EQ(errno, ENXIO, "errno");
+> > +	ASSERT_EQ(errno, EPROTO, "errno");
+> 
+> Similarly, does this selftest change introduce an immediate regression if
+> the running kernel still returns -ENXIO?
+> 
+> >  }
+> 
+> -- 
+> Sashiko AI review · https://sashiko.dev/#/patchset/20260518105957.123445-6-jolsa@kernel.org?part=1
