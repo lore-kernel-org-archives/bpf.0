@@ -1,181 +1,207 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C14F403E8D
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 15:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF74408004;
+	Tue, 19 May 2026 15:26:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779203749; cv=none; b=AOn5AnL4NH4Z7uwyQ8l+HvH5TrSTJyUcqszosUpIUE0jVVRPUajzu+jwC41lt5XNNbAKMROR1fw/O1GnKdhVFh9b0+k491LfUjJ5pUXtYHPBKPE1O2URzD607s2gdwCFbNYARhQQaU/FhEmimHuGWrDaIICQSpO5967FdyCC3wk=
+	t=1779204405; cv=none; b=eBirz8fPJUBkgYFOlbbO5H9ELzxgVt66BSYNV5UhhYEm0GwybOZunkeYyIe7XjSd0gG+qeGHtvAj67sPJRIMFBm/cPgu/xkYLF+smWXS6Pt+wk3ZvHTYX7/alJGO/qmoTwVk43hRRV0bB4Uzj+psjUDRue7D8AZytIHORf3bm90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779203749; c=relaxed/simple;
-	bh=SNNvpQQuPVQMvp44GkMMtPNiqpHye4xFnZSe12UszYw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TNBYuHJsVBOkPivR5eUMABas834/MNnw+1gnQtyykoJ97nxEMbKNTfqDoqWQm7B6AVxo2c0IeuJRuuXvqDZrc32FSqkqWB9rEYPbPcz8PeLsv+N72+T7d0TFXJG93j7y/6ff1mYgwh87aqKJhDBd7dPM2XCYTTjd4ytZ8HFsr3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=szuAxYan; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779204405; c=relaxed/simple;
+	bh=DNTJvRmMRi4offeiUVL2k3hnBa0Ow5+gC3xtFfZDCtI=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=s4JzwnuYTPHPckJLVrR9XV8c8HJ8opcymAleYBu2L4c+srmQHL2iYXM6eVdXLbYU6fExgUhSwxNsupWIPutp5Xt9AU4UjN4y2sG00NWlvXrP7kpNEn0+sKFZfhmNW30sYwjTI1tWus1WuPHXE6qTCE5LNSRPsCzY3aBloybyCFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pKpbOIu4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="szuAxYan"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-488e1a8ac40so36150445e9.2
-        for <bpf@vger.kernel.org>; Tue, 19 May 2026 08:15:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779203746; x=1779808546; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BdiflLEoOIW6130918XzLUR22FM/UxzpgmqRMxrhy/I=;
-        b=szuAxYanJnRbJP7a+0A3VbyKLZhktq0QsWpb/pPSV/mefNbBU5UXjjjKABMfRdeMPY
-         CirvF4RxlYYYh7AWiWspkr1ZCWc49zfqmTsxg5FHwkvxRgKVapFXlNKrF7eayWH0LKEy
-         EqbhjC1e0F28K1xWyRoyPg0fqtF11iLN+g1P8TvX7QMpFIohkQAsoJuea4cFvOA2THFo
-         IUYrk/eZo7nybZCl1wPCW8Xf90J4SZd7MiasJKGZvH9vO0mc1Li5TZyhFboOmCJatUWS
-         3urWG8r1baH8ToqNVgliwBmhE7ipiG7SNSO4W5CU9EJKzeV/J2yvZ/fgNEeLQjRHDVmI
-         H6kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779203746; x=1779808546;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BdiflLEoOIW6130918XzLUR22FM/UxzpgmqRMxrhy/I=;
-        b=mR+zJAn85DA9ba9hHiixi15ceG6XfKruX763uSBOvWnDUD7Jgd9Qvr4ceHrPbJLbUs
-         ppbTeRrUW7OK0zR9B2X4gwkG8YR6CNNCx7czi4HOIEZ2pvQuc9r4Nwn+6KDePh2ROdLj
-         iDG07F9WBzNrrxWZnVzmCLZemHphWtfMWwMU4+zuG6F3AT5Qx0CG0ISqb51sgdqWzBZa
-         jl+D/9RArNsheAlv9cvHR+Rmet/9jkZANA30F6m6xkOfONCWEFrcqJy0sKLjeWA+3XKS
-         /hDgLA6lBzT+9OAVOnrlitDI4ssInBNT7cBplCjKbLw7C2FiAKXkZNoUxBFkKhIK7hO/
-         GBFw==
-X-Forwarded-Encrypted: i=1; AFNElJ/WjPoLmW1nakukeU3Mdu7/Cz8VtVpvGt3hWTSfSGp4dPgI6pLpXiiL9Uk5I0Vm88r5sPc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaEkN30kULMYPLkuUzjovwdtyZ7+6RWPdi+7X+0cQLgUJ6viL4
-	+HTdfUj6TdesE5Nw2qUQ6vhkMiFgHzrXeiiOWYGfB+U5DiyR2/Y7QNCS
-X-Gm-Gg: Acq92OEVYpQHBDcCr/HwfIIh7BcLlKzy7+jkvqfEvk5n56t9KFDaMknhm6lwdbltF9Z
-	i0B/zC36YP4uz1HkYSmhi+B6Aw3yH9ia7DAwufZX1b2edvDpKWEx/9BmPJQJiZH14R3zHCuZHRa
-	+bCZyoKxUp/cTky3s9A/VOzN7qwcsdHV9XE3IFX8wD7a0qslwuVRI9F4xHLIrh0uyTcYomVE04h
-	2QKIBsmezUzVsJgYnNIBHXo8JUFBU7hos1fzKoTnzMzWW02RM2zlLjx/fusgdmuyIQbd9Pk/Xq2
-	Tg/o1B2uPWwaVdoGgSBgj12BkQYjxp2lycsXyCCgheeSeDqD1rk5z7ZxWQ7zqQ1ufVtluXLlAPt
-	o0dP4dp6iLGc8sC3v/CFZQDTcRPDjKwT3ACu99NO+fPuQoa5AXY38IfnVCby11SKgbh8YP2OSbj
-	CVh15yPkJxF/DRzEmPV70mN+wiSa5OwsGr3AGFbUVHJwzz6pcV1tqoPpX3QPGrIAxNOgUhR966u
-	SAQ9i46+tA=
-X-Received: by 2002:a05:600c:6098:b0:48f:d1b8:9ab1 with SMTP id 5b1f17b1804b1-48fe60ecc51mr346949665e9.9.1779203746282;
-        Tue, 19 May 2026 08:15:46 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe5ab3977sm363119485e9.9.2026.05.19.08.15.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 May 2026 08:15:45 -0700 (PDT)
-Message-ID: <c0fb85f0-38f2-4f31-81a1-6650359752e9@gmail.com>
-Date: Tue, 19 May 2026 16:15:44 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pKpbOIu4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78B73C2BCB3;
+	Tue, 19 May 2026 15:26:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779204405;
+	bh=DNTJvRmMRi4offeiUVL2k3hnBa0Ow5+gC3xtFfZDCtI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=pKpbOIu47JTsvRy8/Jfd9LYt9HCNaBCdTADrCktxE39I9ErqzvKDRzhQQqtjdv5FD
+	 QhxsyS09QzbaE/xWYSTpu3Gvpxt5vqtEgcJh2WNPA4ox+fDA4lsAdyAcwHM5k5X7JZ
+	 jz1lgPZ3p4n/1atBfdh5yhNnFUAjFVNcHcdjnPVk//LvWkScTBT8ylZ1rsXkaF2XR3
+	 mdn3vzW5tBr/PdYqngzbLKnD2+LaGTdY19+alHGV5Q24m7qvh678/T8cHBGxZK8Xk0
+	 eWQrjAa4lIjPPfQ1v3IcwG870QeSY4mgncmjW1Mn5mwSndYQXQX4n+wC2pMq4xZJCs
+	 JFAFV0oDTGL7Q==
+Date: Wed, 20 May 2026 00:26:40 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
+ <linux-trace-kernel@vger.kernel.org>, bpf@vger.kernel.org, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>, Mark Rutland
+ <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>, Namhyung Kim
+ <namhyung@kernel.org>, Takaya Saeki <takayas@google.com>, Douglas Raillard
+ <douglas.raillard@arm.com>, Tom Zanussi <zanussi@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Thomas Gleixner <tglx@linutronix.de>, Ian
+ Rogers <irogers@google.com>, Jiri Olsa <olsajiri@gmail.com>
+Subject: Re: [PATCH v4] tracing/probes: Allow use of BTF names to
+ dereference pointers
+Message-Id: <20260520002640.d372bd044ceba9364b1f168f@kernel.org>
+In-Reply-To: <20260519083128.5795c6af@gandalf.local.home>
+References: <20260518232312.0c78f055@gandalf.local.home>
+	<20260519185302.5fb527085a64567a388f24f3@kernel.org>
+	<20260519083128.5795c6af@gandalf.local.home>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/5] bpf: Fix concurrent regression in
- map_create()
-To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
-References: <20260518145446.6794-1-leon.hwang@linux.dev>
- <20260518145446.6794-3-leon.hwang@linux.dev>
- <261a47f4-a92b-4a61-86ca-c1de362be105@gmail.com>
- <5660e657-f2a5-4866-9881-c705bff0c970@linux.dev>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <5660e657-f2a5-4866-9881-c705bff0c970@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
+On Tue, 19 May 2026 08:31:28 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> > 
+> > To access @data, simple casting does not work. Thus we need a
+> > new syntax:
+> > 
+> > 	(STRUCT)(PTR,ASSIGN)->FIELD
+> > 
+> > So the above case, we can do:
+> > 
+> > 	data=(foo)(foo_list,list)->data
+> 
+> Hmm, it may be better to make it one parenthesis?
+> 
+>        (STRUCT,PTR,ASSIGN)->FIELD
+> 
+>        data=(foo,foo_list,list)->data
+
+OK, but I don't like this 3 parameters conversion. I want to
+make it a kind of type casting with an option.
+
+	(STRUCT,ASSIGN)PTR->FIELD
+
+	data=(foo,list)foo_list->data
+
+The second parenthesis will be eventually needed for nested casting,
+for example, in above case, if the data is a pointer to another data
+structure:
+
+struct bar {
+	int	value;
+	...
+};
+
+	value=(bar)((foo,list)foo_list->data)->value
 
 
-On 5/19/26 3:47 AM, Leon Hwang wrote:
-> On 19/5/26 00:43, Mykyta Yatsenko wrote:
->>
->>
->> On 5/18/26 3:54 PM, Leon Hwang wrote:
-> [...]
->>>  	/* preserve original error even if log finalization is successful */
->>>  	ret = bpf_log_attr_finalize(&attr_log, log);
->>> -	if (ret) {
->>> -		if (err >= 0)
->>> -			close_fd(err);
->>> +	if (ret && err < 0)
->>> +		/*
->>> +		 * Failed to finalize the log.
->>> +		 * Should not close_fd(err) here. Since the bpf_map_new_fd()
->>
->> nit: you can't close_fd(err) here, because err < 0? The comment overall appears to
->> explain why we are making this change right now, rather than why this works this way.
->>
 > 
-> Will update the comment to
+> That would make it easier to differentiate between a simple "typecast" and
+> a container_of() by checking if the content between the parenthesis has a
+> comma.
 > 
-> 		/*
-> 		 * Failed to finalize the log.
-> 		 *
-> 		 * Should not close_fd(err) here by
-> 		 *
-> 		 *  if (ret) {
-> 		 *      if (err >= 0)
-> 		 *              close_fd(err);
-> 		 *      err = ret;
-> 		 *  }
-> 		 *
-> 		 * Since the bpf_map_new_fd() has published the map fd,
-> 		 * if a concurrent thread closes the fd, then opens new,
-> 		 * unrelated file that receives the exact same fd
-> 		 * number, close_fd(err) might inadvertently close the
-> 		 * unrelated file.
-> 		 *
-> 		 * As a trade-off, override the err only when failed to
-> 		 * finalize the log and failed to create map.
-> 		 */
+> Maybe even reorder it to:
 > 
-> The comment is to explain the reason for overriding err.
+>        (PTR,STRUCT,ASSIGN)->FIELD
 > 
->> If map_crate() failed with error code and then log finalization failed, do we really
->> want to override error code? It sounds like map_create error is more important.
->>
+>        data=(foo_list,foo,list)->data
 > 
-> In that case, there are two error codes that should be returned to user
-> space. How to achieve it?
+> to match the order of container_of():
 > 
-> Since we should not ignore any error code of them, can we report the
-> error code of __map_create() failure by adding an error attr to struct
-> bpf_common_attr? Hmm, seems not a good idea.
+>       data = container_of(foo_list, struct foo, list)->data;
 > 
-> Any idea?
+> ?
 
-I think we should do what Alexei suggests.
+This doesn't seem to conform to the rule here of using parentheses for
+type casting, so I personally don't like it.
 
-For example: we return ENOSPC when log is too short, regardless
-of the status of the operation for BPF_PROG_LOAD (see bpf_object_load_prog()
-in libbpf.c), it makes sense to do it consistently for map_create as well.
 
-log_finalize() error always overrides map_create() error.
+> > > diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> > > index e0d3a0da26af..b0829eb1cb52 100644
+> > > --- a/kernel/trace/trace_probe.c
+> > > +++ b/kernel/trace/trace_probe.c
+> > > @@ -464,6 +464,26 @@ static const char *fetch_type_from_btf_type(struct btf *btf,
+> > >  	return NULL;
+> > >  }
+> > >  
+> > > +static int query_btf_struct(const char *sname, struct traceprobe_parse_context *ctx)
+> > > +{
+> > > +	int id;
+> > > +
+> > > +	if (!ctx->btf) {
+> > > +		struct btf *btf;  
+> > 
+> > This needs an empty line here.
+> 
+> Sure.
+> 
+> For conditional blocks, I don't always add a newline, but this is your code
+> and I'll follow your suggestions.
 
-A precedent: We are safe from this race in bpf_prog_load(): bpf_prog_alloc_id() makes
-prog exposed, only after bpf_check() succeeds, which finalizes log.
-We should do similar for map_create().
+Ah, this is just for fixing checkpatch.pl warning :-)
 
 > 
-> Thanks,
-> Leon
+> > 
+> > > +		id = bpf_find_btf_id(sname, BTF_KIND_STRUCT, &btf);
+> > > +		if (id < 0)
+> > > +			return -EINVAL;  
+> > 
+> > Why don't you return id (it has corresponding errno)?
 > 
->>> +		 * has published the map fd, if a concurrent thread closes the
->>> +		 * fd, then opens new, unrelated file that receives the exact
->>> +		 * same fd number, close_fd(err) might inadvertently close the
->>> +		 * unrelated file.
->>> +		 * As a trade-off, override the err only when failed to finalize
->>> +		 * the log and failed to create map.
->>> +		 */
->>>  		err = ret;
->>> -	}
->>>  
->>>  	kfree(log);
->>>  	return err;
->>
+> Because I forgot to ;-)
 > 
+> > 
+> > > +		ctx->btf = btf;
+> > > +	} else {
+> > > +		id = btf_find_by_name_kind(ctx->btf, sname, BTF_KIND_STRUCT);
+> > > +		if (id < 0)
+> > > +			return -EINVAL;  
+> > 
+> > Ditto.
+> > 
+> > > +	}
+> > > +
+> > > +	ctx->last_struct = btf_type_by_id(ctx->btf, id);
+> > > +	return 0;
+> > > +}
+> > > +
+> > >  static int query_btf_context(struct traceprobe_parse_context *ctx)
+> > >  {
+> > >  	const struct btf_param *param;
+> > > @@ -471,12 +491,12 @@ static int query_btf_context(struct traceprobe_parse_context *ctx)
+> > >  	struct btf *btf;
+> > >  	s32 nr;
+> > >  
+> > > -	if (ctx->btf)
+> > > -		return 0;
+> > > -
+> > >  	if (!ctx->funcname)
+> > >  		return -EINVAL;
+> > >  
+> > > +	if (ctx->btf)
+> > > +		return 0;
+> > > +  
+> > 
+> > Could you tell me why this order is changed?
+> > I think this type casting will allow us to skip checking funcname
+> > because btf context is already specified.
+> 
+> I wanted this to fail if btf was already set but funcname wasn't, because
+> this should only be called for functions.
 
+Hmm, OK. Then, can you make a separate patch for this?
+
+> 
+> > 
+> > Ah, BTW, we may need to use a special struct btf* for type
+> > casting. If the target function is in a module and the
+> > casting type is defined in vmlinux, those are stored in
+> > the different places...
+> 
+> OK, I'll make a separate btf for it then. I'll have to make sure the btf
+> used for parsing knows which one to use. Shouldn't be too hard if we check
+> for the STRUCT flag in the ctx->flags.
+
+Yeah, and personally, I think that flag should be the TYPECAST flag.
+ 
+Thank you!
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
