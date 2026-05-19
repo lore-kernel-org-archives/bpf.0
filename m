@@ -1,32 +1,32 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBD83ECBC5
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 21:59:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AB873ECBDA
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 21:59:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779227966; cv=none; b=Hs5Bil5cM79sHEpDbdiTNlatuEYALsK1pXrUNCNKgm4GbLRVr1i1NlWB6J33VbUdWNSsRmP0UnvGQSPUi4PV9zu+zIbLDihTDTjwMqR1UzYJ3Km97fPeBZ0jSQpnIztqtau0Y2Io3OhN0a7QPtTGL063XtdBzT9Bz67xzZYZWDI=
+	t=1779227966; cv=none; b=nfWv9+bcJGyZ1p/NT+af9cQkNnJKYQB/YuwpBf0UbdVshDUgJK4d5mjeHEs2d4t6wI56LFk0HZfvayzhp7UfuyKDFw/jL+SP5IdqO1kOL5qpvCXndA+uTMDBMAsjw3xKoEPbnyfqk9+chaF9phDN0tMl7pjcVbAA1Q2Zn/Eh5lg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779227966; c=relaxed/simple;
-	bh=jii82pnFf6eqfSj4GOUI6x7GUuRI9y+hx4Jtu9AK4lM=;
+	bh=ZcGjKbVwQoxeFjHQ5lGnSM9g2YXjd6HchvKDY6b/Ke8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SwHpdEuCrJtd8+O39OUB7XVTMJsEmJk4zzJ0J6FG3paUO6y/g6zPvqBDwndVTcYdpnhcoV2MAAAVY9KibsjO9TlKNnijWxOdGmfgYUcIaN+jYPw81yHGO4rD0WURwetmxghOzCuEbNUFW16eMcpzoyQULNyyNQe+ITOKqtRfK+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Smv3yG7+; arc=none smtp.client-ip=95.215.58.189
+	 MIME-Version; b=lEpbU7ZPENzuC1jrW2zClAFvzO2OqxzB/ZJguKzs+F7Ylg4ZOBG/oDG7l3JH+FXWfkV6T7D1Kjd6okRZNF9JyFxQp/Cu/wGyFk0hXDkKS0JFi3LyDAh25Ci5G9kmAhqAAAVQyp7aILaKWpXKSkY3iF/P2pnVEjIK6I7PxPtBgF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lo8JeHKj; arc=none smtp.client-ip=95.215.58.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Smv3yG7+"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lo8JeHKj"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779227961;
+	t=1779227958;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=2V7z+2K6tysSeORT8jb2kkNeNPE/aWcyXLfPyrNl3+k=;
-	b=Smv3yG7+BAHBQ2NTxnU9jrK7q3MAnEbEmDG2hxX1US3o6SslVxl3GZgRtFoWWrut82/zj4
-	SmubM6+mWdDbAG2mK/z3gGxyMIBE+hsj4u3LQ2me9yTPSi44dV0XK98AJF1b7beRCD/I8Z
-	rr8dBv2P3R+bngvxmxtHEMBSuo0dR+M=
+	bh=yPzwzImi5SRYWFHKZHpwiJt3zqE6j4NwSOR6Ja0AU/8=;
+	b=lo8JeHKjLKA2868h0Z/H9jd5p3617I2ja/DNeANF7CPOQZyeWGRzBBrxK0/oUlMdklWmXF
+	pE0SnyD6dei9M0kKDFsI6W+hc4xc6wfxlyef0b0NRxhw8L5vYSHMW2uqGfGeGblKXGPQlt
+	Fx+ytFUlLMFSHrDM2Hd0m5q7NNiwgDg=
 From: Martin KaFai Lau <martin.lau@linux.dev>
 To: bpf@vger.kernel.org
 Cc: 'Alexei Starovoitov ' <ast@kernel.org>,
@@ -36,9 +36,9 @@ Cc: 'Alexei Starovoitov ' <ast@kernel.org>,
 	'Roman Gushchin ' <roman.gushchin@linux.dev>,
 	'Amery Hung ' <ameryhung@gmail.com>,
 	netdev@vger.kernel.org
-Subject: [RFC PATCH bpf-next 12/12] selftests/bpf: Test attaching struct_ops to a cgroup
-Date: Tue, 19 May 2026 14:58:19 -0700
-Message-ID: <20260519215841.2984970-13-martin.lau@linux.dev>
+Subject: [RFC PATCH bpf-next 10/12] bpf: tcp: Support selected sock_ops callbacks as struct_ops
+Date: Tue, 19 May 2026 14:58:17 -0700
+Message-ID: <20260519215841.2984970-11-martin.lau@linux.dev>
 In-Reply-To: <20260519215841.2984970-1-martin.lau@linux.dev>
 References: <20260519215841.2984970-1-martin.lau@linux.dev>
 Precedence: bulk
@@ -47,344 +47,372 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 From: Martin KaFai Lau <martin.lau@kernel.org>
 
-Basic tests for attaching struct_ops to cgroup.
+In LSFMMBPF 2025, I have talked about moving the BPF_PROG_TYPE_SOCK_OPS
+to a struct_ops interface [1].
 
-TODO:
-- more than one level of cgroup setup.
-- BPF_F_BEFORE/AFTER.
-- bpf_link__update_map an existing struct_ops with and without BPF_F_PREORDER.
-- cgroup_bpf_inherit().
+The BPF_SOCK_OPS_*_CB enum interface has grown over time as new TCP callback
+points were added. A BPF_PROG_TYPE_SOCK_OPS program now commonly needs a
+large switch on sock_ops->op, and the shared bpf_sock_ops_kern context has
+become harder to extend because different callbacks have different locking,
+argument, skb, and helper requirements. The existing
+'union { u32 args[4]; u32 replylong[4]; }' is also not reliable in
+passing args to bpf prog when there are multiple progs attached to a cgroup.
+
+The above has already been solved in struct_ops. Add a TCP-specific
+struct_ops type, bpf_tcp_ops, and support attaching it to cgroups.
+This allows each callback have its own func signature and allows
+the verifier to select kfuncs/helpers based on the specific
+struct_ops member being implemented.
+
+This patch wires up the following existing sock_ops callbacks:
+- BPF_SOCK_OPS_TIMEOUT_INIT
+- BPF_SOCK_OPS_RWND_INIT
+- BPF_SOCK_OPS_RTT_CB
+- BPF_SOCK_OPS_STATE_CB
+- BPF_SOCK_OPS_RETRANS_CB
+- BPF_SOCK_OPS_TCP_CONNECT_CB
+- BPF_SOCK_OPS_TCP_LISTEN_CB
+
+I don't think BASE_RTT is useful. NEEDS_ECN should be done in
+bpf-tcp-cc instead. The tstamp ones should be a separate
+struct_ops (e.g. "bpf_sock_ops") that can work in both TCP and UDP.
+
+timeout_init and rwnd_init could have a request_sock pointer. This patch
+tries a different API and direclty passes the request_sock pointer as
+an arg
+
+The patch is incomplete. TODOs:
+- A skb argument should be added to the retrans ops.
+- ACTIVE_ESTABLISHED_CB and PASSIVE_ESTABLISHED_CB
+- BPF_SOCK_OPS_*HDR related ops
+- RTO
+
+[1], page 13: https://drive.google.com/file/d/1wjKZth6T0llLJ_ONPAL_6Q_jbxbAjByp/view?usp=sharing
 
 Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
 ---
- .../selftests/bpf/prog_tests/bpf_tcp_ops.c    | 207 ++++++++++++++++++
- .../testing/selftests/bpf/progs/bpf_tcp_ops.c |  97 ++++++++
- 2 files changed, 304 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_tcp_ops.c
+ include/net/tcp.h      |  74 ++++++++++++++++++++++-
+ net/ipv4/Makefile      |   1 +
+ net/ipv4/af_inet.c     |   1 +
+ net/ipv4/bpf_tcp_ops.c | 134 +++++++++++++++++++++++++++++++++++++++++
+ net/ipv4/tcp.c         |   4 +-
+ net/ipv4/tcp_output.c  |   5 +-
+ 6 files changed, 214 insertions(+), 5 deletions(-)
+ create mode 100644 net/ipv4/bpf_tcp_ops.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops.c
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index ecbadcb3a744..eb9ff07f3c83 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -2960,12 +2960,78 @@ static inline int tcp_call_bpf_3arg(struct sock *sk, int op, u32 arg1, u32 arg2,
+ 
+ #endif
+ 
++#if defined(CONFIG_BPF_JIT) && defined(CONFIG_CGROUP_BPF)
++
++struct bpf_tcp_ops {
++	int (*timeout_init)(struct sock *sk, struct request_sock *req);
++	int (*rwnd_init)(struct sock *sk, struct request_sock *req);
++	void (*rtt)(struct sock *sk, long mrtt, u32 srtt);
++	void (*set_state)(struct sock *sk, int state);
++	void (*retrans)(struct sock *sk, int type);
++	void (*connect)(struct sock *sk);
++	void (*listen)(struct sock *sk);
++};
++
++#define bpf_tcp_ops_call(op, sk, ...)					\
++do {									\
++	if (cgroup_bpf_enabled(CGROUP_TCP_SOCK_OPS)) {			\
++		const struct bpf_prog_array_item *item;			\
++		const struct bpf_tcp_ops *tcp_ops;			\
++		struct cgroup *cgrp;					\
++									\
++		cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);		\
++		rcu_read_lock_dont_migrate();				\
++		bpf_cgroup_struct_ops_foreach(tcp_ops, item, cgrp,	\
++					      CGROUP_TCP_SOCK_OPS) {	\
++			if (tcp_ops->op)				\
++				tcp_ops->op(sk, ##__VA_ARGS__);		\
++		}							\
++		rcu_read_unlock_migrate();				\
++	}								\
++} while (0)
++
++#define bpf_tcp_ops_call_int(op, init_retval, sk, ...)			\
++({									\
++	int __retval = (init_retval);					\
++	if (cgroup_bpf_enabled(CGROUP_TCP_SOCK_OPS)) {			\
++		const struct bpf_prog_array_item *item;			\
++		const struct bpf_tcp_ops *tcp_ops;			\
++		struct bpf_run_ctx *old_run_ctx;			\
++		struct bpf_cg_run_ctx run_ctx;				\
++		struct sock *__sk = sk_to_full_sk(sk);                  \
++		struct request_sock *req = NULL;			\
++		struct cgroup *cgrp;					\
++									\
++		if (__sk) {						\
++			run_ctx.retval = (init_retval);			\
++			cgrp = sock_cgroup_ptr(&__sk->sk_cgrp_data);	\
++			if (!sk_fullsock(sk))				\
++				req = (struct request_sock *)sk;	\
++			rcu_read_lock_dont_migrate();			\
++			old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);\
++			bpf_cgroup_struct_ops_foreach(tcp_ops, item, cgrp, \
++						      CGROUP_TCP_SOCK_OPS) { \
++				if (tcp_ops->op)			\
++					run_ctx.retval = tcp_ops->op(__sk, req, ##__VA_ARGS__); \
++			}						\
++			bpf_reset_run_ctx(old_run_ctx);			\
++			rcu_read_unlock_migrate();			\
++			__retval = run_ctx.retval;			\
++		}							\
++	}								\
++	__retval;							\
++})
++#else
++#define bpf_tcp_ops_call(op, sk, ...)		do { } while (0)
++#define bpf_tcp_ops_call_int(op, init_retval, sk, ...)	(init_retval)
++#endif
++
+ static inline u32 tcp_timeout_init(struct sock *sk)
+ {
+ 	int timeout;
+ 
+ 	timeout = tcp_call_bpf(sk, BPF_SOCK_OPS_TIMEOUT_INIT, 0, NULL);
+-
++	timeout = bpf_tcp_ops_call_int(timeout_init, timeout, sk);
+ 	if (timeout <= 0)
+ 		timeout = TCP_TIMEOUT_INIT;
+ 	return min_t(int, timeout, TCP_RTO_MAX);
+@@ -2976,7 +3042,7 @@ static inline u32 tcp_rwnd_init_bpf(struct sock *sk)
+ 	int rwnd;
+ 
+ 	rwnd = tcp_call_bpf(sk, BPF_SOCK_OPS_RWND_INIT, 0, NULL);
+-
++	rwnd = bpf_tcp_ops_call_int(rwnd_init, rwnd, sk);
+ 	if (rwnd < 0)
+ 		rwnd = 0;
+ 	return rwnd;
+@@ -2989,8 +3055,10 @@ static inline bool tcp_bpf_ca_needs_ecn(struct sock *sk)
+ 
+ static inline void tcp_bpf_rtt(struct sock *sk, long mrtt, u32 srtt)
+ {
+-	if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_RTT_CB_FLAG))
++	if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_RTT_CB_FLAG)) {
+ 		tcp_call_bpf_2arg(sk, BPF_SOCK_OPS_RTT_CB, mrtt, srtt);
++		bpf_tcp_ops_call(rtt, sk, mrtt, srtt);
++	}
+ }
+ 
+ #if IS_ENABLED(CONFIG_SMC)
+diff --git a/net/ipv4/Makefile b/net/ipv4/Makefile
+index 7f9f98813986..356335e06b4c 100644
+--- a/net/ipv4/Makefile
++++ b/net/ipv4/Makefile
+@@ -71,4 +71,5 @@ obj-$(CONFIG_TCP_AO) += tcp_ao.o
+ 
+ ifeq ($(CONFIG_BPF_JIT),y)
+ obj-$(CONFIG_BPF_SYSCALL) += bpf_tcp_ca.o
++obj-$(CONFIG_CGROUP_BPF) += bpf_tcp_ops.o
+ endif
+diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+index 0e62032e76b1..71f9a171310f 100644
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -227,6 +227,7 @@ int __inet_listen_sk(struct sock *sk, int backlog)
+ 			return err;
+ 
+ 		tcp_call_bpf(sk, BPF_SOCK_OPS_TCP_LISTEN_CB, 0, NULL);
++		bpf_tcp_ops_call(listen, sk);
+ 	}
+ 	return 0;
+ }
+diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
 new file mode 100644
-index 000000000000..ae1cb874770b
+index 000000000000..aa647d805882
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops.c
-@@ -0,0 +1,207 @@
++++ b/net/ipv4/bpf_tcp_ops.c
+@@ -0,0 +1,134 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 +
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+#include <bpf/btf.h>
-+#include "cgroup_helpers.h"
-+#include "bpf_tcp_ops.skel.h"
++#include <linux/bpf.h>
++#include <linux/btf_ids.h>
++#include <linux/bpf_verifier.h>
++#include <net/bpf_sk_storage.h>
++#include <net/tcp.h>
 +
-+#define CGROUP_PATH	"/bpf_tcp_ops"
-+#define TEST_NETNS	"bpf_tcp_ops"
-+
-+static __s32 get_bpf_tcp_ops_type_id(void)
++static int timeout_init_stub(struct sock *sk, struct request_sock *req__nullable)
 +{
-+	struct btf *vmlinux_btf;
-+	__s32 type_id;
++	struct bpf_cg_run_ctx *ctx =
++		container_of(current->bpf_ctx, struct bpf_cg_run_ctx, run_ctx);
 +
-+	vmlinux_btf = btf__load_vmlinux_btf();
-+	if (!ASSERT_OK_PTR(vmlinux_btf, "load_vmlinux_btf"))
-+		return -1;
-+
-+	type_id = btf__find_by_name_kind(vmlinux_btf, "bpf_tcp_ops", BTF_KIND_STRUCT);
-+	btf__free(vmlinux_btf);
-+
-+	ASSERT_GT(type_id, 0, "find_bpf_tcp_ops");
-+	return type_id;
++	return ctx->retval;
 +}
 +
-+static void reset_order(struct bpf_tcp_ops *skel)
++static int rwnd_init_stub(struct sock *sk, struct request_sock *req__nullable)
 +{
-+	memset(skel->bss->listen_order, 0, sizeof(skel->bss->listen_order));
-+	memset(skel->bss->connect_order, 0, sizeof(skel->bss->connect_order));
-+	skel->bss->listen_cnt = 0;
-+	skel->bss->connect_cnt = 0;
++	struct bpf_cg_run_ctx *ctx =
++		container_of(current->bpf_ctx, struct bpf_cg_run_ctx, run_ctx);
++
++	return ctx->retval;
 +}
 +
-+static void do_listen_connect(int family)
++static void rtt_stub(struct sock *sk, long mrtt, u32 srtt)
 +{
-+	const char *addr = family == AF_INET ? "127.0.0.1" : "::1";
-+	int server_fd, client_fd;
-+
-+	server_fd = start_server(family, SOCK_STREAM, addr, 0, 0);
-+	if (!ASSERT_GE(server_fd, 0, "start_server"))
-+		return;
-+
-+	client_fd = connect_to_fd(server_fd, 0);
-+	if (ASSERT_OK_FD(client_fd, "connect_to_fd"))
-+		close(client_fd);
-+
-+	close(server_fd);
 +}
 +
-+/*
-+ * Attach ops1 and ops2 normally (in that order), then ops3 with
-+ * BPF_F_PREORDER. Expected execution order: [3, 1, 2] — ops3 runs
-+ * first despite being attached last, ops1 before ops2 by attach order.
-+ */
-+static void test_order(int cgroup_fd, struct bpf_tcp_ops *skel, int family)
++static void set_state_stub(struct sock *sk, int state)
 +{
-+	LIBBPF_OPTS(bpf_cgroup_opts, preorder_opts, .flags = BPF_F_PREORDER);
-+	struct bpf_link *link1 = NULL, *link2 = NULL, *link3 = NULL;
-+
-+	link1 = bpf_map__attach_cgroup_opts(skel->maps.tcp_ops1, cgroup_fd, NULL);
-+	if (!ASSERT_OK_PTR(link1, "attach_ops1"))
-+		goto done;
-+
-+	link2 = bpf_map__attach_cgroup_opts(skel->maps.tcp_ops2, cgroup_fd, NULL);
-+	if (!ASSERT_OK_PTR(link2, "attach_ops2"))
-+		goto done;
-+
-+	link3 = bpf_map__attach_cgroup_opts(skel->maps.tcp_ops3, cgroup_fd,
-+					    &preorder_opts);
-+	if (!ASSERT_OK_PTR(link3, "attach_ops3_preorder"))
-+		goto done;
-+
-+	reset_order(skel);
-+	do_listen_connect(family);
-+
-+	ASSERT_EQ(skel->bss->listen_cnt, 3, "listen_cnt");
-+	ASSERT_EQ(skel->bss->listen_order[0], 3, "listen_order[0]");
-+	ASSERT_EQ(skel->bss->listen_order[1], 1, "listen_order[1]");
-+	ASSERT_EQ(skel->bss->listen_order[2], 2, "listen_order[2]");
-+
-+	ASSERT_EQ(skel->bss->connect_cnt, 3, "connect_cnt");
-+	ASSERT_EQ(skel->bss->connect_order[0], 3, "connect_order[0]");
-+	ASSERT_EQ(skel->bss->connect_order[1], 1, "connect_order[1]");
-+	ASSERT_EQ(skel->bss->connect_order[2], 2, "connect_order[2]");
-+
-+done:
-+	bpf_link__destroy(link3);
-+	bpf_link__destroy(link2);
-+	bpf_link__destroy(link1);
 +}
 +
-+static void test_query(int cgroup_fd, struct bpf_tcp_ops *skel)
++static void retrans_stub(struct sock *sk, int type)
 +{
-+	struct bpf_map_info info = {};
-+	__u32 info_len = sizeof(info);
-+	LIBBPF_OPTS(bpf_prog_query_opts, query_opts);
-+	struct bpf_link *link1 = NULL, *link2 = NULL;
-+	__u32 map1_id, map2_id, map_ids[2] = {};
-+	__s32 type_id;
-+
-+	type_id = get_bpf_tcp_ops_type_id();
-+	if (type_id <= 0)
-+		return;
-+
-+	bpf_map_get_info_by_fd(bpf_map__fd(skel->maps.tcp_ops1), &info, &info_len);
-+	map1_id = info.id;
-+
-+	bpf_map_get_info_by_fd(bpf_map__fd(skel->maps.tcp_ops2), &info, &info_len);
-+	map2_id = info.id;
-+
-+	link1 = bpf_map__attach_cgroup_opts(skel->maps.tcp_ops1, cgroup_fd, NULL);
-+	if (!ASSERT_OK_PTR(link1, "attach_ops1"))
-+		goto done;
-+
-+	link2 = bpf_map__attach_cgroup_opts(skel->maps.tcp_ops2, cgroup_fd, NULL);
-+	if (!ASSERT_OK_PTR(link2, "attach_ops2"))
-+		goto done;
-+
-+	/* query effective: expect 2 entries in attachment order */
-+	query_opts.type_id = type_id;
-+	query_opts.prog_ids = map_ids;
-+	query_opts.count = ARRAY_SIZE(map_ids);
-+	query_opts.query_flags = BPF_F_QUERY_EFFECTIVE;
-+	ASSERT_OK(bpf_prog_query_opts(cgroup_fd, BPF_STRUCT_OPS, &query_opts),
-+		  "query_effective");
-+	ASSERT_EQ(query_opts.count, 2, "query_effective_count");
-+	ASSERT_EQ(map_ids[0], map1_id, "map_ids[0]");
-+	ASSERT_EQ(map_ids[1], map2_id, "map_ids[1]");
-+
-+	/* query attached (non-effective): expect 2 entries */
-+	memset(map_ids, 0, sizeof(map_ids));
-+	query_opts.query_flags = 0;
-+	query_opts.count = ARRAY_SIZE(map_ids);
-+	ASSERT_OK(bpf_prog_query_opts(cgroup_fd, BPF_STRUCT_OPS, &query_opts),
-+		  "query_attached");
-+	ASSERT_EQ(query_opts.count, 2, "query_attached_count");
-+	ASSERT_EQ(map_ids[0], map1_id, "attached_map_ids[0]");
-+	ASSERT_EQ(map_ids[1], map2_id, "attached_map_ids[1]");
-+
-+done:
-+	bpf_link__destroy(link2);
-+	bpf_link__destroy(link1);
 +}
 +
-+static void run_query_subtest(void)
++static void connect_stub(struct sock *sk)
 +{
-+	struct bpf_tcp_ops *skel = NULL;
-+	struct netns_obj *ns = NULL;
-+	int cgroup_fd;
-+
-+	cgroup_fd = test__join_cgroup(CGROUP_PATH);
-+	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
-+		return;
-+
-+	ns = netns_new(TEST_NETNS, true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
-+		goto done;
-+
-+	skel = bpf_tcp_ops__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		goto done;
-+
-+	test_query(cgroup_fd, skel);
-+
-+done:
-+	bpf_tcp_ops__destroy(skel);
-+	netns_free(ns);
-+	close(cgroup_fd);
 +}
 +
-+static void run_order_subtest(void)
++static void listen_stub(struct sock *sk)
 +{
-+	struct bpf_tcp_ops *skel = NULL;
-+	struct netns_obj *ns = NULL;
-+	int cgroup_fd;
-+
-+	cgroup_fd = test__join_cgroup(CGROUP_PATH);
-+	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
-+		return;
-+
-+	ns = netns_new(TEST_NETNS, true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
-+		goto done;
-+
-+	skel = bpf_tcp_ops__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		goto done;
-+
-+	test_order(cgroup_fd, skel, AF_INET);
-+	test_order(cgroup_fd, skel, AF_INET6);
-+
-+done:
-+	bpf_tcp_ops__destroy(skel);
-+	netns_free(ns);
-+	close(cgroup_fd);
 +}
 +
-+void test_bpf_tcp_ops(void)
++static struct bpf_tcp_ops __bpf_tcp_ops = {
++	.timeout_init = timeout_init_stub,
++	.rwnd_init = rwnd_init_stub,
++	.rtt = rtt_stub,
++	.set_state = set_state_stub,
++	.retrans = retrans_stub,
++	.connect = connect_stub,
++	.listen = listen_stub,
++};
++
++static const struct bpf_func_proto *
++get_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
 +{
-+	if (test__start_subtest("query"))
-+		run_query_subtest();
-+	if (test__start_subtest("order"))
-+		run_order_subtest();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/bpf_tcp_ops.c b/tools/testing/selftests/bpf/progs/bpf_tcp_ops.c
-new file mode 100644
-index 000000000000..80590f097143
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_tcp_ops.c
-@@ -0,0 +1,97 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++	u32 moff = prog->aux->attach_st_ops_member_off;
 +
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+#define MAX_CGROUP_OPS 8
-+
-+/* Call order for listen and connect, indexed by call sequence */
-+u32 listen_order[MAX_CGROUP_OPS];
-+u32 listen_cnt;
-+
-+u32 connect_order[MAX_CGROUP_OPS];
-+u32 connect_cnt;
-+
-+static void record_listen(int id)
-+{
-+	u32 idx = listen_cnt;
-+
-+	if (idx < MAX_CGROUP_OPS) {
-+		listen_order[idx] = id;
-+		listen_cnt = idx + 1;
++	switch (func_id) {
++	case BPF_FUNC_sk_storage_get:
++		return &bpf_sk_storage_get_proto;
++	case BPF_FUNC_sk_storage_delete:
++		return &bpf_sk_storage_delete_proto;
++	case BPF_FUNC_setsockopt:
++		/* The listener is not locked. */
++		if (moff == offsetof(struct bpf_tcp_ops, rwnd_init) ||
++		    moff == offsetof(struct bpf_tcp_ops, timeout_init))
++			return NULL;
++		return &bpf_sk_setsockopt_proto;
++	case BPF_FUNC_getsockopt:
++		if (moff == offsetof(struct bpf_tcp_ops, rwnd_init) ||
++		    moff == offsetof(struct bpf_tcp_ops, timeout_init))
++			return NULL;
++		return &bpf_sk_getsockopt_proto;
++	default:
++		return bpf_base_func_proto(func_id, prog);
 +	}
 +}
 +
-+static void record_connect(int id)
++static bool is_valid_access(int off, int size, enum bpf_access_type type,
++			    const struct bpf_prog *prog, struct bpf_insn_access_aux *info)
 +{
-+	u32 idx = connect_cnt;
++	if (!bpf_tracing_btf_ctx_access(off, size, type, prog, info))
++		return false;
 +
-+	if (idx < MAX_CGROUP_OPS) {
-+		connect_order[idx] = id;
-+		connect_cnt = idx + 1;
++	if (base_type(info->reg_type) == PTR_TO_BTF_ID &&
++	    !bpf_type_has_unsafe_modifiers(info->reg_type) &&
++	    info->btf_id == btf_sock_ids[BTF_SOCK_TYPE_SOCK])
++		/* promote it to tcp_sock */
++		info->btf_id = btf_sock_ids[BTF_SOCK_TYPE_TCP];
++
++	return true;
++}
++
++static int bpf_tcp_ops_init_member(const struct btf_type *t,
++				   const struct btf_member *member,
++				   void *kdata, const void *udata)
++{
++	return 0;
++}
++
++static int bpf_tcp_ops_init(struct btf *btf)
++{
++	return 0;
++}
++
++static int bpf_tcp_ops_validate(void *kdata)
++{
++	return 0;
++}
++
++static const struct bpf_verifier_ops bpf_tcp_ops_verifier = {
++	.get_func_proto		= get_func_proto,
++	.is_valid_access	= is_valid_access,
++};
++
++static struct bpf_struct_ops bpf_tcp_ops = {
++	.verifier_ops = &bpf_tcp_ops_verifier,
++	.init_member = bpf_tcp_ops_init_member,
++	.init = bpf_tcp_ops_init,
++	.validate = bpf_tcp_ops_validate,
++	.name = "bpf_tcp_ops",
++	.cgroup_atype = CGROUP_TCP_SOCK_OPS,
++	.cfi_stubs = &__bpf_tcp_ops,
++	.owner = THIS_MODULE,
++};
++
++static int __init __bpf_tcp_ops_init(void)
++{
++	return register_bpf_struct_ops(&bpf_tcp_ops, bpf_tcp_ops);
++}
++late_initcall(__bpf_tcp_ops_init)
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 432fa28e47d4..c0f47a4c7980 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -2998,8 +2998,10 @@ void tcp_set_state(struct sock *sk, int state)
+ 	 */
+ 	BTF_TYPE_EMIT_ENUM(BPF_TCP_ESTABLISHED);
+ 
+-	if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_STATE_CB_FLAG))
++	if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_STATE_CB_FLAG)) {
+ 		tcp_call_bpf_2arg(sk, BPF_SOCK_OPS_STATE_CB, oldstate, state);
++		bpf_tcp_ops_call(set_state, sk, state);
 +	}
-+}
-+
-+/* struct_ops instance 1 */
-+
-+SEC("struct_ops")
-+void BPF_PROG(tcp_ops1_listen, struct sock *sk)
-+{
-+	record_listen(1);
-+}
-+
-+SEC("struct_ops")
-+void BPF_PROG(tcp_ops1_connect, struct sock *sk)
-+{
-+	record_connect(1);
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_tcp_ops tcp_ops1 = {
-+	.listen  = (void *)tcp_ops1_listen,
-+	.connect = (void *)tcp_ops1_connect,
-+};
-+
-+/* struct_ops instance 2 */
-+
-+SEC("struct_ops")
-+void BPF_PROG(tcp_ops2_listen, struct sock *sk)
-+{
-+	record_listen(2);
-+}
-+
-+SEC("struct_ops")
-+void BPF_PROG(tcp_ops2_connect, struct sock *sk)
-+{
-+	record_connect(2);
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_tcp_ops tcp_ops2 = {
-+	.listen  = (void *)tcp_ops2_listen,
-+	.connect = (void *)tcp_ops2_connect,
-+};
-+
-+/* struct_ops instance 3 */
-+
-+SEC("struct_ops")
-+void BPF_PROG(tcp_ops3_listen, struct sock *sk)
-+{
-+	record_listen(3);
-+}
-+
-+SEC("struct_ops")
-+void BPF_PROG(tcp_ops3_connect, struct sock *sk)
-+{
-+	record_connect(3);
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_tcp_ops tcp_ops3 = {
-+	.listen  = (void *)tcp_ops3_listen,
-+	.connect = (void *)tcp_ops3_connect,
-+};
-+
-+char _license[] SEC("license") = "GPL";
+ 
+ 	switch (state) {
+ 	case TCP_ESTABLISHED:
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index f9d8755705f7..ed51713b2216 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -3673,9 +3673,11 @@ int __tcp_retransmit_skb(struct sock *sk, struct sk_buff *skb, int segs)
+ 		err = tcp_transmit_skb(sk, skb, 1, GFP_ATOMIC);
+ 	}
+ 
+-	if (BPF_SOCK_OPS_TEST_FLAG(tp, BPF_SOCK_OPS_RETRANS_CB_FLAG))
++	if (BPF_SOCK_OPS_TEST_FLAG(tp, BPF_SOCK_OPS_RETRANS_CB_FLAG)) {
+ 		tcp_call_bpf_3arg(sk, BPF_SOCK_OPS_RETRANS_CB,
+ 				  TCP_SKB_CB(skb)->seq, segs, err);
++		bpf_tcp_ops_call(retrans, sk, err);
++	}
+ 
+ 	if (unlikely(err) && err != -EBUSY)
+ 		NET_ADD_STATS(sock_net(sk), LINUX_MIB_TCPRETRANSFAIL, segs);
+@@ -4296,6 +4298,7 @@ int tcp_connect(struct sock *sk)
+ 	int err;
+ 
+ 	tcp_call_bpf(sk, BPF_SOCK_OPS_TCP_CONNECT_CB, 0, NULL);
++	bpf_tcp_ops_call(connect, sk);
+ 
+ #if defined(CONFIG_TCP_MD5SIG) && defined(CONFIG_TCP_AO)
+ 	/* Has to be checked late, after setting daddr/saddr/ops.
 -- 
 2.53.0-Meta
 
