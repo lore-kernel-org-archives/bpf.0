@@ -1,46 +1,60 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D411A492502;
-	Tue, 19 May 2026 12:13:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AAC74A341E;
+	Tue, 19 May 2026 12:24:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779192835; cv=none; b=EyDjcW1Xq9b6ql+uqp4gAgP7D3t5KEtXvvdcPdlVJJHCBk5e0J+R3RG/MF5zHG7ckY2U3Fdz08BpW3qErMu1k7BtzFZYzm2fXfnjT8qtN21ECdNzV41+NAQUgIfcv6u+lxKTEreVQ2peJ9mMz49UboI7zgWXZ6EAhUAOCfon8Og=
+	t=1779193481; cv=none; b=gikKNrc8/maWt+ctgQPytkzyK4MnQVHb/NrH+8Z2HooPJwi2ZZzc6LlZes/62o6PreIUCiRU42WVxUXb/oBJBG5ChFmmRo0nOR2UNsbOviDsU406tBP8JZgEt5zgbKNFi6Qx8SbV0+ixS7GBzak72oAPQtz/dq0JEAYE3iBtThA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779192835; c=relaxed/simple;
-	bh=qGkWukyg7BRJ3BYm19QN2I31E/gz6jl12f4LD2DpBVU=;
+	s=arc-20240116; t=1779193481; c=relaxed/simple;
+	bh=v378/OOnuouH9GSkgdrAA6sJ4e1vmMJwFnDXc7SBol4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UOVCJv6QGfRPc/Kbroie6SkXcyr1cUv/Ssuq7pkSCVoMiUGCKRqjhaC3+xhhiZ5OPsemYAKc8Je4L1yRfBv91oi62AyqxnF3laa0J3sRxl/8udt2w5aU77qVQTUHLuQlYbb9JVh8Gv2+kZ1QuM4jjttvmBCW9fMVbjQMqCYmCzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=hQ5wDWvP; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	 In-Reply-To:Content-Type; b=CJjk8+Yx1OmdtcRfw397LEh4jvUq5A2+sCIwZiTxYV7Livlak0Lv3MmvTtdDT1hi56DW+7QtNATSnQsci9IOohTj7K2P0pjBUP6F9jQV8Ifm3/I6fwsg9sA9eSSIJr76DXU68bBYJ8ZwuaGE09UY1f3lxCLvFV5cPeO3CZRKM5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=g7GEV8Gk; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="hQ5wDWvP"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=lQBojDY84EYZekKZoulFlCOXOf8H914FBQk+2ZSsF6M=; b=hQ5wDWvPkargrg/9FISN9vF9o0
-	/ylJJiY7sUlG2YI4i2GCxTghR1XNzejpmh9PcOm98xRpzCGj//eI3HFVSWWbvYxfSWKEMW3g+dgRf
-	whaeMaFjn4cLGcGgSwW2KSCeunu8/f3xDZaQRpxY0K1vkU+Hp5zJ5ye0/cuaySKntHGW6WGu0HisE
-	+PLes7xgZlsGFJ8zhRNYHimhWOL+XY5paB/dZg7PA40Xhcv5Im98ikFt7dcl6jYnLIHzQMzLIr8Rz
-	GCcs43CrZbNNrzNEHY+NX46jtI9EpG3yfdjUlySgCShr2CVxWQenhRy04k5k2K+3ydMwQ0lQiieto
-	oBpIkAoQ==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wPJKC-0008pA-0P;
-	Tue, 19 May 2026 14:13:28 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wPJKB-0008ua-0C;
-	Tue, 19 May 2026 14:13:27 +0200
-Message-ID: <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net>
-Date: Tue, 19 May 2026 14:13:26 +0200
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="g7GEV8Gk"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64J1VCiW834424;
+	Tue, 19 May 2026 12:24:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=6RsEJ1
+	ZIrFM8Z93E5XF/FZvHPlnufzppX7BrDEkcASI=; b=g7GEV8GkDUyE3HyqUCEDz/
+	b49sQ8dHqEPswjTZjxGRmwzKRHzdyIGn+A2qLPBzdU3UC6afK+8iphR8yBUZUpru
+	QGbxHVKZg5JCeHak2DwKg2t+rX0571PDL3vVfruCUE18WshMZrltKCPF5PgLwr7h
+	7ChaAm8BwrxUjsicjXLLaQerUfsaoqNQTyIZialKqXqUYItrTyXkHsmModeorhkm
+	HBACneeTrJ6tQm2CPRLBV8+1ua6CMVKjCDZKJC9BMEzJlOWZkN9zBonJ4xWuDpfk
+	KEzFCcHNp3JBFx6A7ktDh8ZyLOvRdzI7y16WDJkK5cHMa/qzD9xrBszr1xfUcqVA
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h8mmv13-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 May 2026 12:24:37 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64JC94FZ005398;
+	Tue, 19 May 2026 12:24:36 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e754gaa4h-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 May 2026 12:24:36 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64JCOZ5J44368232
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 19 May 2026 12:24:35 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E849B20040;
+	Tue, 19 May 2026 12:24:34 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BC7EF2004B;
+	Tue, 19 May 2026 12:24:34 +0000 (GMT)
+Received: from [9.52.200.195] (unknown [9.52.200.195])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 19 May 2026 12:24:34 +0000 (GMT)
+Message-ID: <4838400f-209f-4e78-b41f-04b61d129ee7@linux.ibm.com>
+Date: Tue, 19 May 2026 14:24:34 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,142 +62,117 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation
- primitive
-To: Song Liu <song@kernel.org>, Sasha Levin <sashal@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- live-patching@vger.kernel.org,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Joshua Peisach <jpeisach@ubuntu.com>, Florian Weimer <fw@deneb.enyo.de>,
- Breno Leitao <leitao@debian.org>, Anthony Iliopoulos <ailiop@suse.com>,
- Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Christian Brauner <brauner@kernel.org>
-References: <20260508195749.1885522-1-sashal@kernel.org>
- <20260517134858.146569-1-sashal@kernel.org>
- <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
- <agsVDqdALBoHEHlv@laps>
- <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
+Subject: Re: [PATCH v14 13/19] unwind_user: Enable archs that pass RA in a
+ register
+To: Steven Rostedt <rostedt@kernel.org>
+Cc: bpf@vger.kernel.org, sashiko@lists.linux.dev,
+        Indu Bhagat <ibhagatgnu@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Dylan Hatch <dylanbhatch@google.com>
+References: <20260505121718.3572346-14-jremus@linux.ibm.com>
+ <20260505183531.C9EE8C2BCC7@smtp.kernel.org>
+ <8761b037-d8f8-4142-9091-cc51d0d19df8@linux.ibm.com>
+ <bd711f74-a1f3-4410-975b-64e9009aaf30@linux.ibm.com>
+ <20260518123112.20da820b@gandalf.local.home>
 Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- xsFNBGNAkI0BEADiPFmKwpD3+vG5nsOznvJgrxUPJhFE46hARXWYbCxLxpbf2nehmtgnYpAN
- 2HY+OJmdspBntWzGX8lnXF6eFUYLOoQpugoJHbehn9c0Dcictj8tc28MGMzxh4aK02H99KA8
- VaRBIDhmR7NJxLWAg9PgneTFzl2lRnycv8vSzj35L+W6XT7wDKoV4KtMr3Szu3g68OBbp1TV
- HbJH8qe2rl2QKOkysTFRXgpu/haWGs1BPpzKH/ua59+lVQt3ZupePpmzBEkevJK3iwR95TYF
- 06Ltpw9ArW/g3KF0kFUQkGXYXe/icyzHrH1Yxqar/hsJhYImqoGRSKs1VLA5WkRI6KebfpJ+
- RK7Jxrt02AxZkivjAdIifFvarPPu0ydxxDAmgCq5mYJ5I/+BY0DdCAaZezKQvKw+RUEvXmbL
- 94IfAwTFA1RAAuZw3Rz5SNVz7p4FzD54G4pWr3mUv7l6dV7W5DnnuohG1x6qCp+/3O619R26
- 1a7Zh2HlrcNZfUmUUcpaRPP7sPkBBLhJfqjUzc2oHRNpK/1mQ/+mD9CjVFNz9OAGD0xFzNUo
- yOFu/N8EQfYD9lwntxM0dl+QPjYsH81H6zw6ofq+jVKcEMI/JAgFMU0EnxrtQKH7WXxhO4hx
- 3DFM7Ui90hbExlFrXELyl/ahlll8gfrXY2cevtQsoJDvQLbv7QARAQABzSZEYW5pZWwgQm9y
- a21hbm4gPGRhbmllbEBpb2dlYXJib3gubmV0PsLBkQQTAQoAOxYhBCrUdtCTcZyapV2h+93z
- cY/jfzlXBQJjQJCNAhsDBQkHhM4ACAsJCAcNDAsKBRUKCQgLAh4BAheAAAoJEN3zcY/jfzlX
- dkUQAIFayRgjML1jnwKs7kvfbRxf11VI57EAG8a0IvxDlNKDcz74mH66HMyhMhPqCPBqphB5
- ZUjN4N5I7iMYB/oWUeohbuudH4+v6ebzzmgx/EO+jWksP3gBPmBeeaPv7xOvN/pPDSe/0Ywp
- dHpl3Np2dS6uVOMnyIsvmUGyclqWpJgPoVaXrVGgyuer5RpE/a3HJWlCBvFUnk19pwDMMZ8t
- 0fk9O47HmGh9Ts3O8pGibfdREcPYeGGqRKRbaXvcRO1g5n5x8cmTm0sQYr2xhB01RJqWrgcj
- ve1TxcBG/eVMmBJefgCCkSs1suriihfjjLmJDCp9XI/FpXGiVoDS54TTQiKQinqtzP0jv+TH
- 1Ku+6x7EjLoLH24ISGyHRmtXJrR/1Ou22t0qhCbtcT1gKmDbTj5TcqbnNMGWhRRTxgOCYvG0
- 0P2U6+wNj3HFZ7DePRNQ08bM38t8MUpQw4Z2SkM+jdqrPC4f/5S8JzodCu4x80YHfcYSt+Jj
- ipu1Ve5/ftGlrSECvy80ZTKinwxj6lC3tei1bkI8RgWZClRnr06pirlvimJ4R0IghnvifGQb
- M1HwVbht8oyUEkOtUR0i0DMjk3M2NoZ0A3tTWAlAH8Y3y2H8yzRrKOsIuiyKye9pWZQbCDu4
- ZDKELR2+8LUh+ja1RVLMvtFxfh07w9Ha46LmRhpCzsFNBGNAkI0BEADJh65bNBGNPLM7cFVS
- nYG8tqT+hIxtR4Z8HQEGseAbqNDjCpKA8wsxQIp0dpaLyvrx4TAb/vWIlLCxNu8Wv4W1JOST
- wI+PIUCbO/UFxRy3hTNlb3zzmeKpd0detH49bP/Ag6F7iHTwQQRwEOECKKaOH52tiJeNvvyJ
- pPKSKRhmUuFKMhyRVK57ryUDgowlG/SPgxK9/Jto1SHS1VfQYKhzMn4pWFu0ILEQ5x8a0RoX
- k9p9XkwmXRYcENhC1P3nW4q1xHHlCkiqvrjmWSbSVFYRHHkbeUbh6GYuCuhqLe6SEJtqJW2l
- EVhf5AOp7eguba23h82M8PC4cYFl5moLAaNcPHsdBaQZznZ6NndTtmUENPiQc2EHjHrrZI5l
- kRx9hvDcV3Xnk7ie0eAZDmDEbMLvI13AvjqoabONZxra5YcPqxV2Biv0OYp+OiqavBwmk48Z
- P63kTxLddd7qSWbAArBoOd0wxZGZ6mV8Ci/ob8tV4rLSR/UOUi+9QnkxnJor14OfYkJKxot5
- hWdJ3MYXjmcHjImBWplOyRiB81JbVf567MQlanforHd1r0ITzMHYONmRghrQvzlaMQrs0V0H
- 5/sIufaiDh7rLeZSimeVyoFvwvQPx5sXhjViaHa+zHZExP9jhS/WWfFE881fNK9qqV8pi+li
- 2uov8g5yD6hh+EPH6wARAQABwsF8BBgBCgAmFiEEKtR20JNxnJqlXaH73fNxj+N/OVcFAmNA
- kI0CGwwFCQeEzgAACgkQ3fNxj+N/OVfFMhAA2zXBUzMLWgTm6iHKAPfz3xEmjtwCF2Qv/TT3
- KqNUfU3/0VN2HjMABNZR+q3apm+jq76y0iWroTun8Lxo7g89/VDPLSCT0Nb7+VSuVR/nXfk8
- R+OoXQgXFRimYMqtP+LmyYM5V0VsuSsJTSnLbJTyCJVu8lvk3T9B0BywVmSFddumv3/pLZGn
- 17EoKEWg4lraXjPXnV/zaaLdV5c3Olmnj8vh+14HnU5Cnw/dLS8/e8DHozkhcEftOf+puCIl
- Awo8txxtLq3H7KtA0c9kbSDpS+z/oT2S+WtRfucI+WN9XhvKmHkDV6+zNSH1FrZbP9FbLtoE
- T8qBdyk//d0GrGnOrPA3Yyka8epd/bXA0js9EuNknyNsHwaFrW4jpGAaIl62iYgb0jCtmoK/
- rCsv2dqS6Hi8w0s23IGjz51cdhdHzkFwuc8/WxI1ewacNNtfGnorXMh6N0g7E/r21pPeMDFs
- rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
- DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
- owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Jens Remus <jremus@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20260518123112.20da820b@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28005/Tue May 19 08:25:42 2026)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-GUID: RFJ8kIdB5QGXvivTvHsoizeclZO_McW4
+X-Authority-Analysis: v=2.4 cv=GYMnWwXL c=1 sm=1 tr=0 ts=6a0c5685 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VnNF1IyMAAAA:8
+ a=DT2LHYgYV7ePjqTwKPkA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: d3D4apo1E-Xu4t4TMap9L9dDALS-BI5e
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE5MDEyMCBTYWx0ZWRfX0VN8XDARI53S
+ g6H8YITbq4BKP3NJh2w4QplBMnvBpoj/kIhFMfQhLt89WIF25dOg++91kvsyiBuy7YunY+4ImwC
+ DgCGgxnYC5nx5UGENlrqJ4hQtqOxYCq/YGE8bkoGsbzsbPLGjyVCdyow+N7Sutobzd7WeAzlnBX
+ 8gfQG4wtNExt9m1rSvYsGOBvR01qMSRjT+g6mSivDBATwYIrowMxi+NlAhpyqDF1QCUi9h8k356
+ jV8TdXGdFi6+labzx46EKcLHLm8jqBdQeMJcXcilakIObkQCRcFfBgjYHWyGeWidiO3eewropKb
+ YP4NheoyICHk+gcoBEYOtD71OEoNlc+VB3nnvdB58iZ9zUDabk8KAm6Kif2KB/wvc1eY624F9kg
+ bJWHBK2LToxCoUkLXkk1bbPIOKazeW1OmXGQdZuljhZefnFSYiC8T5u04HOsoC2+69mJXCTPeay
+ epEaDoer9hDTlqUy7VA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-19_03,2026-05-18_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
+ adultscore=0 suspectscore=0 spamscore=0 clxscore=1015 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605190120
 
-On 5/19/26 1:59 AM, Song Liu wrote:
-> On Mon, May 18, 2026 at 6:33 AM Sasha Levin <sashal@kernel.org> wrote:
->> On Sun, May 17, 2026 at 11:37:36PM -0700, Song Liu wrote:
->>> On Sun, May 17, 2026 at 6:49 AM Sasha Levin <sashal@kernel.org> wrote:
->>>> * fail_function (CONFIG_FUNCTION_ERROR_INJECTION) is disabled in
->>>>    most production kernels. Even where enabled, it only works on
->>>>    functions pre-annotated with ALLOW_ERROR_INJECTION() in source -
->>>>    no help for a freshly-disclosed CVE. The debugfs UI is blocked by
->>>>    lockdown=integrity and the override is probabilistic.
->>>>
->>>> * BPF override (bpf_override_return) honors the same
->>>>    ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
->>>>    production kernels. Even where on, the operator interface is
->>>>    "load a verified BPF program," not a one-line write.
->>>
->>> If it is OK for killswitch to attach to any kernel functions, do we still
->>> need ALLOW_ERROR_INJECTION() for fail_function and BPF
->>> override? Shall we instead also allow fail_function and BPF override
->>> to attach to any kernel functions?
->>
->> I don't think so. ALLOW_ERROR_INJECTION is not a security mechanism, it's an
->> integrity/safety mechanism for both bpf and fault injection.
->>
->> It protects against a "developer or CI script doing legitimate fault injection
->> accidentally panics the box" scenario, not an "attacker gets in" one.
+On 5/18/2026 6:31 PM, Steven Rostedt wrote:
+> On Mon, 18 May 2026 18:16:52 +0200
+> Jens Remus <jremus@linux.ibm.com> wrote:
 > 
-> There really isn't a clear boundary between "security mechanism" and
-> "non-security mechanism". As we are making killswitch available
-> everywhere under root, users will soon learn to use it to do fault injection,
-> and potentially much more scary things. (Think about agents with sudo
-> access).
+>>>>> +#ifndef unwind_user_get_ra_reg
+>>>>> +static inline int unwind_user_get_ra_reg(unsigned long *val)
+>>>>> +{
+>>>>> +	WARN_ON_ONCE(1);  
+>>>
+>>> Replace with the following to resolve below issue:
+>>>
+>>> 	dbg_once("unwind_user_get_ra_reg() not implemented\n");  
+>>
+>> Omit or replace by the following?
+>>
+>> 	pr_debug_once("%s (%d): unwind_user_get_ra_reg() not implemented\n",
+>> 		      current->comm, current->pid);
+>>
+>> This did not work with dbg_once() defined in kernel/unwind/user.c as
+>> follows, as linux/unwind_deferred.h includes linux/unwind_user.h and
+>> therefore gets included into other modules that do not define dbg_once()
+>> (e.g. via linux/irq-entry-common.h including linux/unwind_deferred.h).
+>>
+>> Steven, Should I omit the dbg_once() or could I replace by the above
+>> unguarded pr_debug_once()?
+> 
+> Question, should the above ever get hit? That is, should all architectures
+> that support sframes have unwind_user_get_ra_reg() defined?
 
-Fully agree with Song here that there is no clear boundary, and that the
-killswitch could lead to arbitrary, hard to debug breakage if applied to
-the wrong function.. introducing worse bugs than the one being mitigated
-or even /short-circuit LSM enforcement/ (engage security_file_open 0,
-engage cap_capable 0, engage apparmor_* etc).
+No.  Architectures that do not pass the RA in a register, such as x86-64
+that passes the RA on the stack, do not implement unwind_user_get_ra_reg().
 
-The ALLOW_ERROR_INJECTION() provides a curated white-list where you may
-return with an error without causing more severe damage (assuming the
-error handling code is right). The right thing would be to more widely
-apply ALLOW_ERROR_INJECTION() or to figure out a better way to safely
-enable the latter without explicit function annotation.
+> How can this be triggered? Does it require an architecture to implement
+> only partial sframe to trigger?
 
-Wrt BPF:
+On x86-64 it can be triggered from user space using forged .sframe that
+incorrectly specifies no fixed RA offset and thus causes the common
+unwind user (sframe) logic to recover RA from the RA register using 
+the dummy unwind_user_get_ra_reg().
 
->>>> * BPF override (bpf_override_return) honors the same
->>>>    ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
->>>>    production kernels. Even where on, the operator interface is
->>>>    "load a verified BPF program," not a one-line write.
+> If the trigger is due to an architecture not supporting sframe correctly,
+> then a WARN_ON() is appropriate.
+> 
+> But if this is not implemented by the architecture for normal reasons, why
+> bother printing anything?
 
-The claim that BPF itself is off in many production kernels is not really
-true, where did you get that from? All the major distros and cloud providers
-have BPF enabled these days, and even systemd ships BPF programs for
-custom service firewalling etc.
+For unwind_user_get_ra_reg() that might be appropriate.  Although the
+dynamic debug message could help developers to implement sframe for
+another architecture.
 
-The operator interface is to load a program vs. one-line write.. so we're
-disregarding existing infra where you can already achieve the same for a
-less safe one-liner convenience? (similarly for the livepatch infra..)
+Let me outline this for unwind_user_get_reg() and arm64:  This is used
+to recover CFA/RA/FP from arbitrary registers in the topmost frame.
+In SFrame such rules require SFrame V3 flexible FDE.  GNU assembler
+does not support/generate flexible FDE for arm64.  Therefore arm64
+would currently not need to implement unwind_user_get_reg().  But if a
+toolchain would be enabled to support/generate flexible FDE on arm64 in
+the future, the dynamic debug message might be helpful to quickly
+determine why some of the stacktraces are incomplete and which piece
+is missing to resolve.
 
-If you need a one-liner: bpftrace -e 'kprobe:FUNC { override(RETVAL); }'
-Alternatively, add an extension to systemd where you can just deploy a
-list of functions, and it does the necessary work in the background and
-persistently.
+Regards,
+Jens
+-- 
+Jens Remus
+Linux on Z Development (D3303)
+jremus@de.ibm.com / jremus@linux.ibm.com
 
-Also, what about other classes of bugs, like OOB access, UAFs, locking
-issues, etc which then could be used as a means for privilege escalations?
-It feels like this proposal is a quick'n'dirty prototype via Claude as a
-reaction to copy fail bug, but the right solution would be to improve
-the user space tooling as mentioned and existing infra we have in kernel.
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
+
