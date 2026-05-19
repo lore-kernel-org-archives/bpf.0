@@ -1,133 +1,276 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C7120C461
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 23:17:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0CC233933
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 23:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779232630; cv=none; b=oiyyOW96FsPY7sr/omXNk294Hayx06RxM/VocoZzpYiT6TWYIz2fKil46R/OS+ikxVc4R92mTZDFkCYFQ6QmVR1PeYHPaye77/tVaK/MtbEn2A3flZuY5LFIazFW3CDi9j3DeLY601wpFI/F8zRzEHxY9s1L+Hl4ynLdU2YUyEA=
+	t=1779232769; cv=none; b=rIuJXqRvYNBuIWr67ICE+K+kLPa1OjoglFvdU8u8OEJRLAqILPIZudXaxwkwKUjpdptUtDb+vxr+0mn5mm5Swf9JN6VxA441UglkRf55e0BI1GiM6lIO1H39I2JQVTTLLRd94z5LSpqFb1ZNlPWroOpdQo5sMJSgqz5tuTQhihs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779232630; c=relaxed/simple;
-	bh=Eb0mF10dPcBEAb8A+vklFm6/f/BAB5bM+kULHpJmTC4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=O7b/AyUbO19kXn28VvgnU+Vn8MytZsY5Wc7/sRWFsFOeVZuZxgXdxCipeJbY7e0W9Ud1qh5SWawMnEMumngDkxRSJ8JAr+rgtX+KKaWpBLPueCZePRAngO9jD/56QhcroXQkFIG6ti7f48kpg7pSW7fsIjpQNVuRR+Gbx24GPZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=no75C2yq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779232769; c=relaxed/simple;
+	bh=LrKdJp0espHVwsiUxTjIvurtkYYcvw5FUGe70D5ZcC4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=enSz89bq81MqAHBy5QLQtLkSQ8dn7lvvtaODphV5zz6pSKAuoYridrZPi4Rl6z1V9rDRF05GTmz1OlE+QFz5qGZdwhV1x0Px1M1/7Q4/tTriGSrYWvMCKMUt8i0Nt/QSe0KPgiTKiz+1EORoa9NghbA+mK0ZONmmNNr3Vz9L7sc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U0/zDIAt; arc=none smtp.client-ip=74.125.224.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="no75C2yq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D4561F000E9;
-	Tue, 19 May 2026 23:17:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779232629;
-	bh=6lTwbdt4erNMBMTDsdcpEHwDG7t1vTJ8YyiBoOIiq0I=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=no75C2yq7CHzxKpoIt/fddgZPFLeqauvV6ejRwMrHNzY8M5+eJ9SRbGaLolZ0vHyG
-	 zDL+hZHecqOBT7RpAG5OHxMJH7D1Q/AvcDyAFOuWhIlbvVL4HDo8r7YmZ8AZ8Wd/pf
-	 GIPQfSYys1xt3kwicDWJub7bDp9eGVub1ojBLiyky9ZkXcLrGmtxm5yPEzk3MJfDPN
-	 5MIR2K+keTWT/Dl8yMYX3aiatQjZd4J+xv4vrz4oGplqDPJxrs+FBjIviJQzdkPgF1
-	 lhEerB65Qwwa77SAkx7p3OhlEMKz1mqOMTqUVqK+BTkNv6vekNS9Aquz+v7BogbfUF
-	 89maSXzWyw4QA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] bpf, libbpf: reject non-exclusive metadata maps in the
- signed loader
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "KP Singh" <kpsingh@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260519215358.126364-1-kpsingh@kernel.org>
-References: <20260519215358.126364-1-kpsingh@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 19 May 2026 23:17:08 +0000
-Message-Id: <20260519231709.3D4561F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U0/zDIAt"
+Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-65c0bda7f15so4224978d50.0
+        for <bpf@vger.kernel.org>; Tue, 19 May 2026 16:19:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779232766; x=1779837566; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LWbcVGbeC5sxdLCP6kS+NuSw6VPhO1baiJ/3+R6VfSA=;
+        b=U0/zDIAt292DGea99iiLJ3QMAt0ElWNqOBh2zlD2SJ8xBZHp/xZhyi1XHWQJSefISf
+         vFhsoQGQJ2m/KWqdQqx03+aPbEb7Dz2uZTRByNBh4P4WiXcuvChiS+lP0nQpv4aUDSzx
+         c8rQ3jEDIxvmfzWp5nvvrWehtuWA7dPEdPIYNNAZnEyZ7+ERf5zCPrrrS2XWRuA7ijhW
+         NMdnlzDcO04zYXEYKjb6qdCZ48svyaz9r4hICU8pMsNVCYbPw0TYMIs/lhW3HQ3Ip9Iw
+         j9K91xVIVlE7HJdZcdj6jXlzfgoP8F5W9os3P8MZ2SG9PiiaT/kzCRvj9aYHdMwc70mU
+         iDLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779232766; x=1779837566;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LWbcVGbeC5sxdLCP6kS+NuSw6VPhO1baiJ/3+R6VfSA=;
+        b=rG11e1I0afEQ1bsrm5utbIKCkWBPJyfUnq//kg03P1sNS9EvknY9+390KpNU0cxVmO
+         roDtyvUj4KzzLTZtM/481oyTXvLZSMdxJQki/ZPp0/yZcSJd2G0M3FdCsXDRR/pw05Jh
+         7om485ZFmd9eUilyUxj6op9Qd2xhr0gD6B+10sa95Lfu5vZHNompcjbh4uUyPbq48aD2
+         AouujQxPGbP9nvw/PODIc52yEQoetuns6npEgNhS8C3xjmLbLWLGivAx1gcwLevQK2Bi
+         ZRZGlTlpxXTBGVenzf+mDpnqgUHAknf1CYJZxqOr/op4fu1O1dpP7iObhTyL/pQ9Vkid
+         cBdQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9I87Wps8RMl8AS5huw1g7KAI+etih0nlOYJYZL2ZAUo+8u4Vv3ZEbqJwTmSgN57a139rA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfkVxUfcOJQLJTVOkyTSflOJGCYa5VJJznvzrphMkH8bsnA3MP
+	E81aQ5qKpxtZv8lzCKZ7mtGqdcLQiEQPdowgKoQtM9vedrm8OaMhsHV7q/8qJ49a
+X-Gm-Gg: Acq92OH2xhnmow+5v1XsMTCERahFeRBBI8l/3cYXX8Dof7TCsKfPeqLZizjYTTrxCQp
+	NUhkkprpCqjzZ5Jk+7X3B8W5keLxhEMMrK5vZE+rpzpiDJ4Wt/v20hFHi7/OPh7JH+MDu3TsNUf
+	uKPLmXlQLabBn6VF7ybh9YrcZfCYHwwWPkpC7ESNhrw5RCAI7nS8XwtX/G4TwQxTZojqLuoDvPp
+	TqTiDZhDWa7Ow6Voyog4uzKUONdwV/815NdfRMu5GT+0tG81+MRNJ9pRZydTWMhxO4VGsXU4hnR
+	P8PYniqcYH1TlGwbPIa02pR9zaYiAz2Eh7OUqU9D5nFddU9UhWk+yVup8s4nI9AoI5XwsKCVW8b
+	DUgn57EM5iJd/p8rABxe5kngGHHfX79Lt3C6Yc4K0rb486diPTRG1tVeYL1UYq7WbM4ZQDmG8BF
+	h5wDFzRyR0gc7sybKx5FJQtaEjQljfRDd8XxY4utxddksKuHgDhieOV467cxpNuqAPMaJAKjQv6
+	f0=
+X-Received: by 2002:a05:690e:1699:b0:651:c483:1d3c with SMTP id 956f58d0204a3-65e22893accmr21892479d50.44.1779232766446;
+        Tue, 19 May 2026 16:19:26 -0700 (PDT)
+Received: from suesslenovo ([2600:1700:18fb:6011:dd79:440a:64e6:dc11])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65e3aa93cdasm5306720d50.21.2026.05.19.16.19.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2026 16:19:26 -0700 (PDT)
+Date: Tue, 19 May 2026 19:19:25 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next 1/1] bpf: fix deadlock in special field
+ destruction in NMI
+Message-ID: <agzecV-igvisLqid@suesslenovo>
+References: <20260519011450.1144935-2-utilityemal77@gmail.com>
+ <20260519015123.36096C2BCB7@smtp.kernel.org>
+ <agxkV-hsdwhvMliI@suesslenovo>
+ <agyG3eQwgmoJwmj2@suesslenovo>
+ <DIMWGCWL1AG2.14F7CN23GMS8N@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DIMWGCWL1AG2.14F7CN23GMS8N@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] The generated BPF loader program uses a hardcoded 8-byte read (BPF=
-_DW) to access the `excl_prog_sha` pointer field, which causes the BPF veri=
-fier to reject the loader on 32-bit architectures and silently bypasses the=
- exclusivity check.
-- [High] Branch target offset calculation is off-by-one, causing the jump t=
-arget to land past the beginning of the cleanup block.
---
+On Tue, May 19, 2026 at 09:27:58PM +0200, Kumar Kartikeya Dwivedi wrote:
+> On Tue May 19, 2026 at 5:59 PM CEST, Justin Suess wrote:
+> > On Tue, May 19, 2026 at 10:42:44AM -0400, Justin Suess wrote:
+> >> Looks like this kfunc also tries to eagerly free fields and is callable
+> >> from tp_btf/nmi_handler with no recovery mechanism.
+> >>
+> >> I don't see a good way to handle this at all... it also is effectively
+> >> already bugged in the existing code unless I'm missing something
+> >>
+> >> Since you can use it to call abritrary dtors in NMI.
+> >>
+> >> 1.
+> >>
+> >> In some context where task_acquire is valid:
+> >>
+> >> struct blah {
+> >>   struct task_struct __kptr* task;
+> >> }
+> >>
+> >> b = bpf_task_acquire(...)
+> >> a = bpf_obj_new(typeof(*blah_ptr));
+> >> bpf_kptr_xchg(a->task, b);
+> >>
+> >> 2.
+> >>
+> >> Then xchg a into map
+> >> bpf_kptr_xchg([map slot], a);
+> >> ...
+> >>
+> >> 3.
+> >>
+> >> In tp_btf/nmi_handler we exchange the obj out of the map
+> >> and then drop it.
+> >>
+> >> c = bpf_kptr_xchg([slot where a is stored], NULL);
+> >> bpf_obj_drop(c);
+> >>
+> >> And because this can be called on an object not in a map, we don't have
+> >> a good recovery mechanism.
+> >>
+> >> Because tp_btf/nmi_handler is always in_nmi and hence irqs_disabled, in
+> >> the code before this patch the task_struct dtor will be invoked and
+> >> cause a deadlock.
+> >>
+> >> This patch will not fix the issue and just free a struct blah holding the
+> >> reference without actually dropping it.
+> >>
+> >> Unless I'm missing something then this whole approach taken by this
+> >> patch can't handle this case since the bpf_obj is detached from the map
+> >> entirely and has no allocator recovery mechanism at all.
+> >>
+> >> Then we are back to square 1 needing to defer the freeing with irq work.
+> >>
+> >> Kumar / Alexei do you have anything on this?
+> >
+> > I've confirmed this is a viable mechanism to deadlock as well
+> >
+> > Using the above approach, just exchanging out of a map and dropping the
+> > bpf_obj containing a task_struct kptr can be used to cause a deadlock
+> > outside any map path:
+> >
+> > On 576482b55c19e7ec00e162a0fde4c4f1a95128c7 (bpf-next/master) w/ RCU_NOCB_CPU/RCU_EXPERT:
+> >
+> >   [   10.773819] ================================
+> >   [   10.773820] WARNING: inconsistent lock state
+> >   [   10.773821] 7.1.0-rc2-g576482b55c19 #150 Not tainted
+> >   [   10.773822] --------------------------------
+> >   [   10.773822] inconsistent {INITIAL USE} -> {IN-NMI} usage.
+> >   [   10.773823] test_progs/471 [HC1[1]:SC0[0]:HE0:SE1] takes:
+> >   [   10.773825] ffff98623d66f0e8 (&rdp->nocb_lock){-.-.}-{2:2}, at: __call_rcu_common.constprop.0+0x54a/0x730
+> >   [   10.773832] {INITIAL USE} state was registered at:
+> >   [   10.773832]   lock_acquire+0xbf/0x2e0
+> >   [   10.773835]   _raw_spin_lock+0x30/0x40
+> >   [   10.773838]   rcu_nocb_gp_kthread+0x13f/0xb90
+> >   [   10.773840]   kthread+0xf4/0x130
+> >   [   10.773845]   ret_from_fork+0x264/0x330
+> >   [   10.773848]   ret_from_fork_asm+0x1a/0x30
+> >   [   10.773851] irq event stamp: 1127908
+> >   [   10.773851] hardirqs last  enabled at (1127907): [<ffffffff87104484>] _raw_spin_unlock_irqrestore+0x44/0x60
+> >   [   10.773853] hardirqs last disabled at (1127908): [<ffffffff871041a1>] _raw_spin_lock_irqsave+0x51/0x60
+> >   [   10.773854] softirqs last  enabled at (1127782): [<ffffffff862e6b80>] __irq_exit_rcu+0xc0/0x100
+> >   [   10.773857] softirqs last disabled at (1127777): [<ffffffff862e6b80>] __irq_exit_rcu+0xc0/0x100
+> >   [   10.773858]
+> >                  other info that might help us debug this:
+> >   [   10.773859]  Possible unsafe locking scenario:
+> >
+> >   [   10.773859]        CPU0
+> >   [   10.773859]        ----
+> >   [   10.773860]   lock(&rdp->nocb_lock);
+> >   [   10.773861]   <Interrupt>
+> >   [   10.773861]     lock(&rdp->nocb_lock);
+> >   [   10.773862]
+> >                   *** DEADLOCK ***
+> >
+> >   [   10.773862] 4 locks held by test_progs/471:
+> >   [   10.773863]  #0: ffffffff885ccaf0 (dup_mmap_sem){.+.+}-{0:0}, at: copy_process+0x1e39/0x2b80
+> >   [   10.773866]  #1: ffff9861c33a2ff8 (&mm->mmap_lock){++++}-{4:4}, at: dup_mmap+0x83/0x990
+> >   [   10.773871]  #2: ffff9861c1152ff8 (&mm->mmap_lock/1){+.+.}-{4:4}, at: dup_mmap+0xc8/0x990
+> >   [   10.773874]  #3: ffffffff885f43b8 (kmemleak_lock){-.-.}-{2:2}, at: __create_object+0x3a/0xa0
+> >   [   10.773877]
+> >                  stack backtrace:
+> >   [   10.773879] CPU: 1 UID: 0 PID: 471 Comm: test_progs Not tainted 7.1.0-rc2-g576482b55c19 #150 PREEMPT(full)
+> >   [   10.773881] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.17.0-0-gb52ca86e094d-prebuilt.qemu.org 04/01/2014
+> >   [   10.773882] Call Trace:
+> >   [   10.773883]  <NMI>
+> >   [   10.773884]  dump_stack_lvl+0x5d/0x80
+> >   [   10.773887]  print_usage_bug.part.0+0x22b/0x2c0
+> >   [   10.773891]  lock_acquire+0x295/0x2e0
+> >   [   10.773893]  ? __call_rcu_common.constprop.0+0x54a/0x730
+> >   [   10.773896]  _raw_spin_lock+0x30/0x40
+> >   [   10.773898]  ? __call_rcu_common.constprop.0+0x54a/0x730
+> >   [   10.773899]  __call_rcu_common.constprop.0+0x54a/0x730
+> >   [   10.773903]  bpf_obj_free_fields+0x118/0x250
+> >   [   10.773907]  bpf_obj_drop+0x4f/0x80
+> >   [   10.773910]  bpf_prog_b7ff9c2e6c583824_clear_task_kptrs_from_nmi+0x174/0x1f4
+> >   [   10.773912]  bpf_trace_run3+0x126/0x430
+> >   [   10.773916]  ? __pfx_perf_event_nmi_handler+0x10/0x10
+> >   [   10.773919]  nmi_handle.part.0+0x15b/0x250
+> >   [   10.773922]  ? __pfx_perf_event_nmi_handler+0x10/0x10
+> >   [   10.773924]  default_do_nmi+0x120/0x180
+> >   [   10.773927]  exc_nmi+0xe3/0x110
+> >   [   10.773928]  end_repeat_nmi+0xf/0x53
+> >   [   10.773931] RIP: 0010:__link_object+0xb4/0x270
+> >   [   10.773932] Code: 00 00 00 48 c7 c6 80 36 bb 89 48 c7 43 70 00 00 00 00 48 c7 43 78 00 00 00 00 48 89 3d 35 62 50 03 eb 66 48 89 c8 48 8b 48 30 <48> 8d 70 10 48 39 d1 73 11 48 03 48 38 48 39 cf 0f 82 2f 01 00 00
+> >   [   10.773933] RSP: 0018:ffffb516013b7a60 EFLAGS: 00000082
+> >   [   10.773935] RAX: ffff9861c37b5c80 RBX: ffff9861df869878 RCX: ffff9861c3776420
+> >   [   10.773936] RDX: ffff9861c3769e00 RSI: ffff9861c43564f8 RDI: ffff9861c3769d00
+> >   [   10.773936] RBP: 0000000000000100 R08: 0000000000000000 R09: 0000000000000000
+> >   [   10.773937] R10: 0000000000000000 R11: 0000000000000000 R12: ffff9861c3769d00
+> >   [   10.773937] R13: 0000000000000286 R14: 0000000000000000 R15: 0000000000000001
+> >   [   10.773943]  ? __link_object+0xb4/0x270
+> >   [   10.773945]  ? __link_object+0xb4/0x270
+> >   [   10.773947]  </NMI>
+> >   [   10.773947]  <TASK>
+> >   [   10.773948]  __create_object+0x51/0xa0
+> >   [   10.773951]  kmem_cache_alloc_from_sheaf_noprof+0x1e2/0x290
+> >   [   10.773956]  mas_dup_build+0x41d/0x7f0
+> >   [   10.773960]  __mt_dup+0x78/0xf0
+> >   [   10.773967]  dup_mmap+0x12e/0x990
+> >   [   10.773972]  ? srso_alias_return_thunk+0x5/0xfbef5
+> >   [   10.773973]  ? lock_acquire+0xbf/0x2e0
+> >   [   10.773979]  copy_process+0x1e45/0x2b80
+> >   [   10.773985]  kernel_clone+0xbb/0x3d0
+> >   [   10.773986]  ? srso_alias_return_thunk+0x5/0xfbef5
+> >   [   10.773987]  ? __lock_acquire+0x481/0x2590
+> >   [   10.773993]  __do_sys_clone+0x65/0x90
+> >   [   10.773998]  do_syscall_64+0xa1/0x5f0
+> >   [   10.774002]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> >   [   10.774003] RIP: 0033:0x7f9da26e8f2f
+> >   [   10.774005] Code: 89 e7 e8 c4 0e f6 ff 45 31 c0 31 d2 31 f6 64 48 8b 04 25 10 00 00 00 bf 11 00 20 01 4c 8d 90 d0 02 00 00 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 59 89 c5 85 c0 75 31 64 48 8b 04 25 10 00 00
+> >   [   10.774005] RSP: 002b:00007ffc278b4540 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
+> >   [   10.774007] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f9da26e8f2f
+> >   [   10.774007] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
+> >   [   10.774008] RBP: 00007ffc278b4740 R08: 0000000000000000 R09: 0000000000000001
+> >   [   10.774008] R10: 00007f9da2acaf10 R11: 0000000000000246 R12: 0000000000000003
+> >   [   10.774009] R13: 0000000000000001 R14: 0000000000000000 R15: 00005625de8b38d0
+> >   [   10.774014]  </TASK>
+> >   [   10.866584] perf: interrupt took too long (6193 > 6190), lowering kernel.perf_event_max_sample_rate to 32000
+> >   [   16.630663] kauditd_printk_skb: 30 callbacks suppressed
+> >
+> > I can give the reproducer if wished.
+> >
+> > You can see the path involves bpf_obj_drop and not any map methods at
+> > all.
+> >
+> > But basically this makes the whole mechanism of relying on map allocators to
+> > recycle and free objects in irqs_disabled contexts unsound because kptrs
+> > can live and be released outside map contexts.
+> 
+> The approach in this version is still different than what I had proposed. For
+> the particular case you highlighted, we should just reject bpf_obj_drop() in
+> is_tracing_prog_type() once the object has kptr fields etc. If someone still
+tp_btf is BPF_PROG_TYPE_TRACING.
 
-commit 51df41105aded76b418cec093cbbaaad09c03147
-Author: KP Singh <kpsingh@kernel.org>
+And ironically enough, is_tracing_prog_type doesn't even include
+BPF_PROG_TYPE_TRACING. Not sure if that was intentional?
 
-bpf, libbpf: reject non-exclusive metadata maps in the signed loader
+(Also same would apply to bpf_percpu_obj_drop_impl)
+> wants it they should just use bpf_wq to defer manually.
+Agreed.
 
-This patch updates the BPF loader to verify that metadata maps are exclusive
-while they are frozen. It places excl_prog_sha in struct bpf_map and emits a
-check in gen_loader to reject the map with -EINVAL if excl_prog_sha is NULL.
+Nobody really should ever be doing this tomfoolery anyway of freeing
+cgroups and task structs from NMI but that's beside the point.
+> 
+> The whole prealloc related change to the map is unnecessary, as I said before.
+> It's an orthogonal change. We should also not use irqs_disabled() and just do
+> the skipping unconditionally.
+I had trouble getting test_percpu_hash_refcounted_kptr_refcount_leak to
+pass without the prealloc changes, but it may have been an unrelated issue.
+> Let me work on a patch, since the nuance is obviously getting lost in email.
+Please have a go!
 
-> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-> index cd5c2543f54d8..becfda5b90253 100644
-> --- a/tools/lib/bpf/gen_loader.c
-> +++ b/tools/lib/bpf/gen_loader.c
-[ ... ]
-> @@ -601,6 +601,23 @@ static void emit_signature_match(struct bpf_gen *gen)
->  			emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, -1));
->  		}
->  	}
-> +
-> +	/* Reject if the metadata map is not exclusive. Without exclusivity
-> +	 * the cached map->sha[] verified above can be stale: another BPF
-> +	 * program with map access could have mutated the contents between
-> +	 * BPF_OBJ_GET_INFO_BY_FD and loader execution.
-> +	 */
-> +	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX,
-> +					 0, 0, 0, 0));
-> +	emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, SHA256_DWORD_SIZE *=
- sizeof(__u64)));
-
-[Severity: High]
-Does this 8-byte read (BPF_DW) cause issues on 32-bit architectures?
-
-Since pointers are 4 bytes long on 32-bit systems, the verifier will reject
-the loader program with an access size mismatch error (-EACCES) because it
-expects the memory access size to exactly match the BTF-defined pointer
-size.
-
-Also, if the verifier check were bypassed, wouldn't an 8-byte read straddle
-both the 4-byte excl_prog_sha and the adjacent 4-byte ops pointer? Since
-ops is always non-zero, the resulting 64-bit value would never be 0,
-causing the BPF_JEQ check below to silently fall through and bypass the
-exclusivity check.
-
-> +	off =3D -(gen->insn_cur - gen->insn_start - gen->cleanup_label) / 8 - 1;
-> +	if (is_simm16(off)) {
-> +		emit(gen, BPF_MOV64_IMM(BPF_REG_7, -EINVAL));
-> +		emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_2, 0, off));
-
-[Severity: High]
-Is the branch target offset calculation off by one?
-
-The offset off is computed based on insn_cur before emitting the
-BPF_MOV64_IMM instruction. Since emitting the BPF_MOV64_IMM instruction
-advances insn_cur by 8 bytes, and BPF branch offsets are evaluated relative
-to the instruction immediately following the branch itself, the actual jump
-target evaluates to cleanup_label + 8 bytes (1 instruction) instead of the
-cleanup_label itself.
-
-This skips the first instruction of the cleanup block. If nr_progs > 0, it
-skips loading the first FD into BPF_REG_1 and calls sys_close() with an
-uninitialized or stale register (e.g., a map pointer), potentially closing a
-random/incorrect file descriptor in the system. If nr_progs =3D=3D 0 and
-nr_maps > 0, it may jump into the middle of a 16-byte BPF_LD_IMM64
-instruction, causing verifier rejection.
-
-Does this need to be adjusted, even though it appears to be a pattern copied
-from the loop above it?
-
-> +	} else {
-> +		gen->error =3D -ERANGE;
-> +		emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, -1));
-> +	}
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260519215358.1263=
-64-1-kpsingh@kernel.org?part=3D1
+Thanks,
+Justin
