@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 214C8492511
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 16:36:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1CAD33A00C
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 16:36:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779208606; cv=none; b=bPKaJkvsI1KsA2G3mJwgfAKS84b8TiS7XIV8b5La5GKvWpjfFZQTiWzRhAQy19nIcxJvsoomavZ9VmejRSxykX+cdz2PyHSkJ5YchUZIjf/wNESpuu2o50X6UmZiAl16zEf0b2DBsz9IiwtoQMQEIS9OpoI7nH1NAyqDoaUommI=
+	t=1779208609; cv=none; b=Xpg0wbnIHm3GRsGb3Wlq2TCH3g212hI7y+IFpnh7Z8yz0ZVYKwJ58lWu80C+by8t4EqvWN+vwbfL9s0S8hgcDd4J/ElrfxBpogsp2SI7XmDW99fOp6nVQJp7Njqkf/10+sPpFMQnc0ud5bg6XfiKWQ2qe+TDD0hQPQtNOFOslTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779208606; c=relaxed/simple;
-	bh=I24jaPUwmsmtWLF5u4QeWb+I/xMcc/SaKDRU9iIoWic=;
+	s=arc-20240116; t=1779208609; c=relaxed/simple;
+	bh=p+w+3FjMjZKhT8HGZWLNCfsKqyhq+w7CfaLJrFPTttI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KYKVIqBT1H865NWfVOzrQFIJzxZsOIfz8D9gTRa1QJNivddlE9x+D62Ypl2KZsi3o2hkKBDy4Kl+P469ZXh4vJBvUfP3D+qCVIK8JbGsglVSPuj2zQ3RHsqaf+OOrVF/zkry2bcMW6ubDFYfkddmWpB6d1Zr3c8XJZXKsw1ND1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OsfCBZQS; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=ijgHDRv5yulB6QduWCQqBAVy6KhDgKuuCsx0EnYIs9luS2aPJazr4MC457JOt9Ha4Qjqcu1eHcMlHt2qxDEhwpZZbUOaaqXwgZE1XeBGS/dun/RLfTa2FRh77hZ461EjdKo1bSX36uIblnQnkU1ZGVtWoAe0r2SdkOC2cg/cc9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q/wU9eVo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OsfCBZQS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92FB3C2BCB3;
-	Tue, 19 May 2026 16:36:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q/wU9eVo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF36C2BCB3;
+	Tue, 19 May 2026 16:36:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779208605;
-	bh=I24jaPUwmsmtWLF5u4QeWb+I/xMcc/SaKDRU9iIoWic=;
+	s=k20201202; t=1779208609;
+	bh=p+w+3FjMjZKhT8HGZWLNCfsKqyhq+w7CfaLJrFPTttI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OsfCBZQS/VJ4MRP23KdSiXVdB0Li5X+QIUdD+TBDzT2r5/ixvWT0kvnQi9p9Xowzx
-	 0T/6qP3eK1COmrKRsX7XerF2OVRGsXHuj3EHZvANGdAYQQKirHYv2aDPHfnop4CGm0
-	 airX/ZKPkyWMXmk8HZ+e5d8l3XZzgd3LfjCrjGsqvIbWUbDz5X12lGw+utzBGUKFg3
-	 DA7WEbwTIkUyAO2OJs0rj86HkP6kbU13n/fOp+3ALmYuHfXbQxGh6fiHHl1AKYaFK/
-	 yy3217q5k4kr/xpggq3zRTLgNZbdLto+3FHwj2XM3LTOzBsVKtKHXojht1x+WzsNHg
-	 itDdeFP+zsr/Q==
+	b=Q/wU9eVo94HeX4ebdSqfx07cXZFflTZTlgIweUmFleX1Q/BJKdgYMD7RFQyCb4pdy
+	 jXp2Ta7MDQv+tsQbpXHeHLMkJhJRDdJ9+ndwUwVVcMxEPbyLjq/irl6iPytABbB0cE
+	 643QocPN661huItKoB9KPxClfkcPKWTMQPVdFePMXtiuiVWSkJQOu0hYMxGdzEC+f8
+	 kbBBYNfKKamuK5lpNtJZwBLYUJlcy5xm2rreWEAydEY5E0fH+ELCSM42q7kGsDxbrT
+	 +jrsy4Wtc+8hYMH1o9wm/IrT1zB9gJVRd5NdZp9itYxRxopqZJTpozIWftHnScSKsW
+	 l9MSfjP3IVaXw==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -42,9 +42,9 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Nikhil Dixit Limaye <ndixit@meta.com>,
 	"Nikita V. Shirokov" <tehnerd@tehnerd.com>,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next 1/4] selftests/bpf: Fix cold_lru producing zero batch_hash in XDP LB benchmark
-Date: Tue, 19 May 2026 09:36:29 -0700
-Message-ID: <20260519163632.2220753-2-puranjay@kernel.org>
+Subject: [PATCH bpf-next 2/4] selftests/bpf: Fix expired UDP LRU entries in XDP LB benchmark
+Date: Tue, 19 May 2026 09:36:30 -0700
+Message-ID: <20260519163632.2220753-3-puranjay@kernel.org>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260519163632.2220753-1-puranjay@kernel.org>
 References: <20260519163632.2220753-1-puranjay@kernel.org>
@@ -56,48 +56,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The cold_lru mechanism generates a per-batch hash to XOR into the source
-address, ensuring each batch tests a fresh (uncached) flow:
+populate_lru() inserts LRU entries with atime zero-initialized:
 
-    batch_hash = (batch_gen ^ cpu_id) * KNUTH_HASH_MULT;
-    *saddr ^= batch_hash;
+    struct real_pos_lru lru = { .pos = real_idx };
 
-When batch_gen equals the CPU ID, the XOR is zero and batch_hash becomes
-zero.  The source address is left unchanged, so every iteration hits the
-warm LRU entry instead of testing cold lookups.
+The BPF program's connection_table_lookup() enforces a 30-second timeout
+for UDP flows:
 
-During validation, batch_gen is 2 (one increment from seeding, one from
-the validation run itself).  If the BPF program happens to execute on
-CPU 2, batch_hash is zero and all LRU lookups hit, producing:
+    if (cur_time - dst_lru->atime > LRU_UDP_TIMEOUT)
+        return NULL;
 
-    [udp-v4-lru-miss] COUNTER FAIL: LRU misses=0, expected 1
-    Validation FAILED - aborting benchmark
+Since cur_time (system uptime) is always much larger than 30 seconds,
+every pre-populated UDP entry is treated as expired on first access.
+The lookup returns NULL, counting as an LRU miss.
 
-This fails roughly 50% of the time depending on scheduler placement.
+This is masked by calibration: the BPF program runs during calibration
+on one CPU, misses the expired entry, and re-inserts it with a fresh
+atime.  But if the scheduler moves the thread to a different CPU for
+validation, that CPU still has the atime=0 entry from populate_lru(),
+causing intermittent validation failures for UDP LRU-hit scenarios:
 
-Fix by forcing the multiplier input to be non-zero with | 1.  Since
-KNUTH_HASH_MULT (2654435761) is odd, the product of two odd numbers is
-always odd, so batch_hash can never be zero.
+    [udp-v4-lru-hit] COUNTER FAIL: LRU misses=1, expected 0
 
-Fixes: 4b4f2229104c ("selftests/bpf: Add XDP load-balancer BPF program")
+Fix by initializing atime with the current CLOCK_MONOTONIC time for UDP
+flows, matching the clock source used by bpf_ktime_get_ns() in the BPF
+program.
+
+Fixes: a4b5ba8187cb ("selftests/bpf: Add XDP load-balancer benchmark driver")
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/xdp_lb_bench.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/benchs/bench_xdp_lb.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_lb_bench.c b/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-index b9fd848c035d..f40e36aa183e 100644
---- a/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-@@ -618,7 +618,7 @@ int xdp_lb_bench(struct xdp_md *xdp)
- 		__u32 *saddr = data + saddr_off;
+diff --git a/tools/testing/selftests/bpf/benchs/bench_xdp_lb.c b/tools/testing/selftests/bpf/benchs/bench_xdp_lb.c
+index 0b6709a2b03c..8e25bccbde92 100644
+--- a/tools/testing/selftests/bpf/benchs/bench_xdp_lb.c
++++ b/tools/testing/selftests/bpf/benchs/bench_xdp_lb.c
+@@ -563,12 +563,23 @@ static void create_per_cpu_lru_maps(struct xdp_lb_bench *skel)
+ 	nr_inner_maps = nr_cpus;
+ }
  
- 		batch_gen++;
--		batch_hash = (batch_gen ^ bpf_get_smp_processor_id()) * KNUTH_HASH_MULT;
-+		batch_hash = ((batch_gen ^ bpf_get_smp_processor_id()) | 1) * KNUTH_HASH_MULT;
- 		if ((void *)(saddr + 1) <= data_end)
- 			*saddr ^= batch_hash;
- 	}
++static __u64 ktime_get_ns(void)
++{
++	struct timespec ts;
++
++	clock_gettime(CLOCK_MONOTONIC, &ts);
++	return (__u64)ts.tv_sec * 1000000000ULL + ts.tv_nsec;
++}
++
+ static void populate_lru(const struct test_scenario *sc, __u32 real_idx)
+ {
+ 	struct real_pos_lru lru = { .pos = real_idx };
+ 	struct flow_key fk;
+ 	int i, err;
+ 
++	if (sc->ip_proto == IPPROTO_UDP)
++		lru.atime = ktime_get_ns();
++
+ 	build_flow_key(&fk, sc);
+ 
+ 	/* Insert into every per-CPU inner LRU so the entry is found
 -- 
 2.53.0-Meta
 
