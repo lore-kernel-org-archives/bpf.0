@@ -1,271 +1,181 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A1484E3794
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 14:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C14F403E8D
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 15:15:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779201771; cv=none; b=JQ32zEer04hZAq54H2xXZjJlCWNxnkS8XZgP+3PyBzT6YH6FRV2njUHMhvKMo1wVWDeh+BOSQlf4ogXdulZcEW7Vksut37PZB1f/Z9FKPonAtomgete80+WuzEtmJ7C7vhNYL0PR45CJi2r9gwvAOYGKW9e9kLgrwe/hyC7OMPg=
+	t=1779203749; cv=none; b=AOn5AnL4NH4Z7uwyQ8l+HvH5TrSTJyUcqszosUpIUE0jVVRPUajzu+jwC41lt5XNNbAKMROR1fw/O1GnKdhVFh9b0+k491LfUjJ5pUXtYHPBKPE1O2URzD607s2gdwCFbNYARhQQaU/FhEmimHuGWrDaIICQSpO5967FdyCC3wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779201771; c=relaxed/simple;
-	bh=YWXRV+NQFDhT7ERt4QhzrnIt+wYuh2w0flQKS9YlgtE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VNbZX+8pUr5N7AU+Yz+GhuXoT6HJ8H+/g0stvWMyCrb+zJhPsOa/xvoQ3YV73QDjJnYuHXSn8zjjd/N8ZNiRHXxDlFaaHMRdgYqEhZhCwPFHyhX7G7W5tJC9HfhxjDGWwy00NQYxDCIx6IoK5jQ81sM1ug25exNBnZ86QZV+bM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cbE5lVIi; arc=none smtp.client-ip=209.85.128.172
+	s=arc-20240116; t=1779203749; c=relaxed/simple;
+	bh=SNNvpQQuPVQMvp44GkMMtPNiqpHye4xFnZSe12UszYw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TNBYuHJsVBOkPivR5eUMABas834/MNnw+1gnQtyykoJ97nxEMbKNTfqDoqWQm7B6AVxo2c0IeuJRuuXvqDZrc32FSqkqWB9rEYPbPcz8PeLsv+N72+T7d0TFXJG93j7y/6ff1mYgwh87aqKJhDBd7dPM2XCYTTjd4ytZ8HFsr3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=szuAxYan; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cbE5lVIi"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-7bd65714dcaso31152987b3.3
-        for <bpf@vger.kernel.org>; Tue, 19 May 2026 07:42:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="szuAxYan"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-488e1a8ac40so36150445e9.2
+        for <bpf@vger.kernel.org>; Tue, 19 May 2026 08:15:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779201765; x=1779806565; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SMJK+Q1KPAmdYgADquxXV0jIfAYvH6d0diFJCZ4DWlw=;
-        b=cbE5lVIiaMecRQyYhY+xN9jv+6q/9F66IkHmbuVqshtOlV11EQ8TXcFTn11mVBVSB5
-         uUTWhGMXhJd8tUYuHUShbhFqFA0ntNARVxPEA/1dLsFKXUB9eWZapygSHcf5dao9vwHG
-         8jnjmY0sjZYrcK/bjovwKmmGA+d8Yzv7AAATGwxadOM9N90rfrY1SkVK60cqp1+IkMHA
-         yK/EuG9CMN57BQ/S71H8OzqmTNkU4w+Si/c8HwdEVsKlLgHoOqPPy3arc5Od1CiNIQUV
-         kdxJIv6Kbaejq7xI8NNSb4dqlIQPoOue/17gidkUWTm/+mdaky6ZfkleLoCjya7qJuar
-         vxfg==
+        d=gmail.com; s=20251104; t=1779203746; x=1779808546; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BdiflLEoOIW6130918XzLUR22FM/UxzpgmqRMxrhy/I=;
+        b=szuAxYanJnRbJP7a+0A3VbyKLZhktq0QsWpb/pPSV/mefNbBU5UXjjjKABMfRdeMPY
+         CirvF4RxlYYYh7AWiWspkr1ZCWc49zfqmTsxg5FHwkvxRgKVapFXlNKrF7eayWH0LKEy
+         EqbhjC1e0F28K1xWyRoyPg0fqtF11iLN+g1P8TvX7QMpFIohkQAsoJuea4cFvOA2THFo
+         IUYrk/eZo7nybZCl1wPCW8Xf90J4SZd7MiasJKGZvH9vO0mc1Li5TZyhFboOmCJatUWS
+         3urWG8r1baH8ToqNVgliwBmhE7ipiG7SNSO4W5CU9EJKzeV/J2yvZ/fgNEeLQjRHDVmI
+         H6kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779201765; x=1779806565;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SMJK+Q1KPAmdYgADquxXV0jIfAYvH6d0diFJCZ4DWlw=;
-        b=lkAaq1I9csHZjcXke7eC4yRe0SWzXtMifPIZAqXFBCVKeswAFWL3oOT4qTatJzesCR
-         vJFHM6JZquCQ2AdX5BuOfw7NuAju1bWTTL43gVGBA4QH/p2t0pKuRLTbwX6KlKo9aVIC
-         PRpFPeMZCKPPFx7GDW8ciMh3/EMV8aONTCII0Sj8GVdu7/Fct9Cdh9qkGoKxXjMnaymv
-         40BzTKG3MZzy/ES3WECX6LJPT7LWmsvgfffrjyXdtntNG5wRfMiLbToBdDt17vIOfFfa
-         D4sO5v0f8PELhtg5uSXvbBhNv02qBbaLv7AlMKsMhma1Dcnh5NaQlr/VjJrsQywBmT8g
-         6i1A==
-X-Gm-Message-State: AOJu0Yxm+d8jYcqUXR73JUUfPOC90JG0ofIFBafjvA9hUoy5RDfLdvh2
-	+uoY4FI57JlKWhziVvv3m8k/A/lVMcM8kq3VA7sBM7Q+4uOKRLeCogCVHK2Z6Q==
-X-Gm-Gg: Acq92OHrkHsVdTnjoeSA2SIwmImYjfWum8rh1+YgoDSWQFUSr/CVIixJhABlNXXUhuU
-	OpHMiGeqRp61at9P115kUVTiVJU/4q8+F3nKCc05UPuNDJDeozLZQ0Jv1wZ97qxX9adbRehiQWh
-	v1xID75jC/JaMxzPLgXqMyn2ygYQ4/yOITuG8c04fVFMiWYEJQAdOcEX3NQI/nTLYjm1rhEHq97
-	EiqEHrpLblCN+yHWuLEApWjDF3DosFQPb/zrTZoBq1I5sAIU2qqBfivpUTp5Ja6Dfn8e8yhjnc+
-	tOa350b8TsfHMrBf2Q0repXoSDhVY/gJU21MrFK7wS00RkNW2IBPsJGDhXl3aoiCoMFU6yUw2uY
-	Vl7aNJc0ZLFM4O43UvxE8M9xpND6jtaokmSqMSpXeJl4bQuKgpSi2wKhMTJScCxY7Yky67Pm3bW
-	0xHGk8iVqunknbHcYM+W3YNYVKv1z9wWZVhuzYbwm7ts7MKJRIg7sQ8hVJqA==
-X-Received: by 2002:a05:690c:dd3:b0:7b8:926e:3f0d with SMTP id 00721157ae682-7c95c6f6efbmr208816987b3.26.1779201765187;
-        Tue, 19 May 2026 07:42:45 -0700 (PDT)
-Received: from suesslenovo ([98.97.172.65])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7cc9cda1a38sm37276747b3.43.2026.05.19.07.42.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 May 2026 07:42:44 -0700 (PDT)
-Date: Tue, 19 May 2026 10:42:44 -0400
-From: Justin Suess <utilityemal77@gmail.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 1/1] bpf: fix deadlock in special field
- destruction in NMI
-Message-ID: <agxkV-hsdwhvMliI@suesslenovo>
-References: <20260519011450.1144935-2-utilityemal77@gmail.com>
- <20260519015123.36096C2BCB7@smtp.kernel.org>
+        d=1e100.net; s=20251104; t=1779203746; x=1779808546;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BdiflLEoOIW6130918XzLUR22FM/UxzpgmqRMxrhy/I=;
+        b=mR+zJAn85DA9ba9hHiixi15ceG6XfKruX763uSBOvWnDUD7Jgd9Qvr4ceHrPbJLbUs
+         ppbTeRrUW7OK0zR9B2X4gwkG8YR6CNNCx7czi4HOIEZ2pvQuc9r4Nwn+6KDePh2ROdLj
+         iDG07F9WBzNrrxWZnVzmCLZemHphWtfMWwMU4+zuG6F3AT5Qx0CG0ISqb51sgdqWzBZa
+         jl+D/9RArNsheAlv9cvHR+Rmet/9jkZANA30F6m6xkOfONCWEFrcqJy0sKLjeWA+3XKS
+         /hDgLA6lBzT+9OAVOnrlitDI4ssInBNT7cBplCjKbLw7C2FiAKXkZNoUxBFkKhIK7hO/
+         GBFw==
+X-Forwarded-Encrypted: i=1; AFNElJ/WjPoLmW1nakukeU3Mdu7/Cz8VtVpvGt3hWTSfSGp4dPgI6pLpXiiL9Uk5I0Vm88r5sPc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaEkN30kULMYPLkuUzjovwdtyZ7+6RWPdi+7X+0cQLgUJ6viL4
+	+HTdfUj6TdesE5Nw2qUQ6vhkMiFgHzrXeiiOWYGfB+U5DiyR2/Y7QNCS
+X-Gm-Gg: Acq92OEVYpQHBDcCr/HwfIIh7BcLlKzy7+jkvqfEvk5n56t9KFDaMknhm6lwdbltF9Z
+	i0B/zC36YP4uz1HkYSmhi+B6Aw3yH9ia7DAwufZX1b2edvDpKWEx/9BmPJQJiZH14R3zHCuZHRa
+	+bCZyoKxUp/cTky3s9A/VOzN7qwcsdHV9XE3IFX8wD7a0qslwuVRI9F4xHLIrh0uyTcYomVE04h
+	2QKIBsmezUzVsJgYnNIBHXo8JUFBU7hos1fzKoTnzMzWW02RM2zlLjx/fusgdmuyIQbd9Pk/Xq2
+	Tg/o1B2uPWwaVdoGgSBgj12BkQYjxp2lycsXyCCgheeSeDqD1rk5z7ZxWQ7zqQ1ufVtluXLlAPt
+	o0dP4dp6iLGc8sC3v/CFZQDTcRPDjKwT3ACu99NO+fPuQoa5AXY38IfnVCby11SKgbh8YP2OSbj
+	CVh15yPkJxF/DRzEmPV70mN+wiSa5OwsGr3AGFbUVHJwzz6pcV1tqoPpX3QPGrIAxNOgUhR966u
+	SAQ9i46+tA=
+X-Received: by 2002:a05:600c:6098:b0:48f:d1b8:9ab1 with SMTP id 5b1f17b1804b1-48fe60ecc51mr346949665e9.9.1779203746282;
+        Tue, 19 May 2026 08:15:46 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe5ab3977sm363119485e9.9.2026.05.19.08.15.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 May 2026 08:15:45 -0700 (PDT)
+Message-ID: <c0fb85f0-38f2-4f31-81a1-6650359752e9@gmail.com>
+Date: Tue, 19 May 2026 16:15:44 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260519015123.36096C2BCB7@smtp.kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/5] bpf: Fix concurrent regression in
+ map_create()
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+References: <20260518145446.6794-1-leon.hwang@linux.dev>
+ <20260518145446.6794-3-leon.hwang@linux.dev>
+ <261a47f4-a92b-4a61-86ca-c1de362be105@gmail.com>
+ <5660e657-f2a5-4866-9881-c705bff0c970@linux.dev>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <5660e657-f2a5-4866-9881-c705bff0c970@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, May 19, 2026 at 01:51:22AM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
-> - [Critical] LRU maps containing NMI-unsafe fields (like BPF_KPTR_REF or BPF_LIST_HEAD) will permanently leak these fields and corrupt map state when updated or deleted in an IRQ-disabled context.
-> - [High] Modifying the generic `bpf_obj_free_fields()` to silently skip destruction in IRQ-disabled contexts causes permanent memory leaks for callers lacking deferred destructors (like `bpf_obj_drop` and Array maps).
-> - [Medium] Forcibly mutating the user-requested `map_flags` to include `BPF_F_NO_PREALLOC` silently breaks performance expectations and UAPI transparency.
-> --
+
+
+On 5/19/26 3:47 AM, Leon Hwang wrote:
+> On 19/5/26 00:43, Mykyta Yatsenko wrote:
+>>
+>>
+>> On 5/18/26 3:54 PM, Leon Hwang wrote:
+> [...]
+>>>  	/* preserve original error even if log finalization is successful */
+>>>  	ret = bpf_log_attr_finalize(&attr_log, log);
+>>> -	if (ret) {
+>>> -		if (err >= 0)
+>>> -			close_fd(err);
+>>> +	if (ret && err < 0)
+>>> +		/*
+>>> +		 * Failed to finalize the log.
+>>> +		 * Should not close_fd(err) here. Since the bpf_map_new_fd()
+>>
+>> nit: you can't close_fd(err) here, because err < 0? The comment overall appears to
+>> explain why we are making this change right now, rather than why this works this way.
+>>
 > 
-> commit 3fbec1aa4107fa1f73249893a4ed21fd7d2213fa
-> Author: Justin Suess <utilityemal77@gmail.com>
+> Will update the comment to
 > 
-> bpf: fix deadlock in special field destruction in NMI
+> 		/*
+> 		 * Failed to finalize the log.
+> 		 *
+> 		 * Should not close_fd(err) here by
+> 		 *
+> 		 *  if (ret) {
+> 		 *      if (err >= 0)
+> 		 *              close_fd(err);
+> 		 *      err = ret;
+> 		 *  }
+> 		 *
+> 		 * Since the bpf_map_new_fd() has published the map fd,
+> 		 * if a concurrent thread closes the fd, then opens new,
+> 		 * unrelated file that receives the exact same fd
+> 		 * number, close_fd(err) might inadvertently close the
+> 		 * unrelated file.
+> 		 *
+> 		 * As a trade-off, override the err only when failed to
+> 		 * finalize the log and failed to create map.
+> 		 */
 > 
-> This commit relaxes bpf_obj_free_fields() to skip async work cancellation
-> and unsafe free operations in IRQ-disabled contexts. It converts hash maps
-> with NMI-unsafe fields to non-preallocated maps using bpf_mem_alloc to
-> defer the cleanup. LRU maps and preallocated hash maps are adjusted to
-> support this mechanism.
+> The comment is to explain the reason for overriding err.
 > 
-> Closes: https://lore.kernel.org/bpf/20260421201035.1729473-1-utilityemal77@gmail.com/
-> Link: https://lore.kernel.org/bpf/DIG0ONMVOP0L.3QFYUPWFSKWI4@gmail.com/
+>> If map_crate() failed with error code and then log finalization failed, do we really
+>> want to override error code? It sounds like map_create error is more important.
+>>
 > 
-> > diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> > index 3dd9b4924ae4f..0db1dc8ae0bec 100644
-> > --- a/kernel/bpf/hashtab.c
-> > +++ b/kernel/bpf/hashtab.c
-> [ ... ]
-> > @@ -522,13 +532,53 @@ static int htab_set_dtor(struct bpf_htab *htab, void (*dtor)(void *, void *))
-> >  	return 0;
-> >  }
-> >  
-> > +static int htab_convert_to_non_prealloc(struct bpf_htab *htab)
-> > +{
-> > +	bool percpu = htab_is_percpu(htab);
-> > +	int err;
-> > +
-> > +	htab_free_prealloced_fields(htab);
-> > +	free_percpu(htab->extra_elems);
-> > +	htab->extra_elems = NULL;
-> > +	prealloc_destroy(htab);
-> > +	htab->map.map_flags |= BPF_F_NO_PREALLOC;
+> In that case, there are two error codes that should be returned to user
+> space. How to achieve it?
 > 
-> Does mutating the map flags post-creation to include BPF_F_NO_PREALLOC alter
-> the memory model and user-visible flags without warning? If userspace queries
-> the map info via bpf_map_get_info_by_fd(), will it see flags it never
-> requested?
-Changing the userspace visible flag was done to provide visibility into
-the change.
+> Since we should not ignore any error code of them, can we report the
+> error code of __map_create() failure by adding an error attr to struct
+> bpf_common_attr? Hmm, seems not a good idea.
 > 
-> Would it be better to explicitly reject this configuration and return -EINVAL
-> rather than secretly altering the underlying memory model?
->
-That would break existing progs unacceptably, including the common case
-of a normal hashtab with ref kptrs and no BPF_F_NO_PREALLOC flag.
-> [ ... ]
-> >  static int htab_map_check_btf(struct bpf_map *map, const struct btf *btf,
-> >  			      const struct btf_type *key_type, const struct btf_type *value_type)
-> >  {
-> >  	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
-> > +	int err;
-> > +
-> > +	if (!htab_has_nmi_special_fields(htab)) {
-> > +		if (htab_is_prealloc(htab))
-> > +			return 0;
-> > +	} else {
-> > +		if (htab_is_lru(htab))
-> > +			return 0;
+> Any idea?
+
+I think we should do what Alexei suggests.
+
+For example: we return ENOSPC when log is too short, regardless
+of the status of the operation for BPF_PROG_LOAD (see bpf_object_load_prog()
+in libbpf.c), it makes sense to do it consistently for map_create as well.
+
+log_finalize() error always overrides map_create() error.
+
+A precedent: We are safe from this race in bpf_prog_load(): bpf_prog_alloc_id() makes
+prog exposed, only after bpf_check() succeeds, which finalizes log.
+We should do similar for map_create().
+
 > 
-> Since LRU maps are exempted from conversion to non-preallocated mode here,
-> they do not use bpf_mem_alloc and completely lack the deferred destructor
-> mechanism relied upon by this patch.
+> Thanks,
+> Leon
 > 
-> When an LRU element is replaced or deleted, htab_lru_push_free() is called
-> and synchronously invokes check_and_free_fields() which eventually calls
-> bpf_obj_free_fields().
+>>> +		 * has published the map fd, if a concurrent thread closes the
+>>> +		 * fd, then opens new, unrelated file that receives the exact
+>>> +		 * same fd number, close_fd(err) might inadvertently close the
+>>> +		 * unrelated file.
+>>> +		 * As a trade-off, override the err only when failed to finalize
+>>> +		 * the log and failed to create map.
+>>> +		 */
+>>>  		err = ret;
+>>> -	}
+>>>  
+>>>  	kfree(log);
+>>>  	return err;
+>>
 > 
-> If this executes in an IRQ-disabled context, will the new if
-> (irqs_disabled()) checks in bpf_obj_free_fields() silently skip freeing
-> the special fields?
-> 
-> Does this cause a permanent memory leak since the element is then
-> immediately pushed back to the LRU free list? When the element is
-> subsequently popped and reused, could it inherit stale pointers and
-> corrupt map state?
-> 
-It doesn't cause a memory leak.
 
-It does have the potential to reuse slots with existing pointers, but they
-aren't "stale" they are valid pointers that are recycled until bpf_obj_free_fields
-gets called on them in a non-irqs_disabled context which can happen on
-another delete / LRU trim / an xchg out and release / map
-destruction.
-
-> [ ... ]
-> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > index 6600e126fbfb4..1f52453d5a2f1 100644
-> > --- a/kernel/bpf/syscall.c
-> > +++ b/kernel/bpf/syscall.c
-> > @@ -839,6 +839,8 @@ void bpf_obj_free_fields(const struct btf_record *rec, void *obj)
-> >  			break;
-> >  		case BPF_KPTR_REF:
-> >  		case BPF_KPTR_PERCPU:
-> > +			if (irqs_disabled())
-> > +				break;
-> >  			xchgd_field = (void *)xchg((unsigned long *)field_ptr, 0);
-> >  			if (!xchgd_field)
-> >  				break;
-> 
-> Because bpf_obj_free_fields() is a generic helper used throughout the BPF
-> subsystem, does silently skipping destruction in IRQ-disabled contexts
-> cause leaks for callers that lack deferred destructors?
-> 
-> For example, if a BPF program running in an NMI or kprobe drops an object
-> containing nested kptrs via __bpf_obj_drop_impl(), will the nested fields
-> be skipped and permanently leaked when the outer object is queued for
-> freeing via bpf_global_ma?
->
-Looks like this kfunc also tries to eagerly free fields and is callable
-from tp_btf/nmi_handler with no recovery mechanism.
-
-I don't see a good way to handle this at all... it also is effectively
-already bugged in the existing code unless I'm missing something
-
-Since you can use it to call abritrary dtors in NMI.
-
-1. 
-
-In some context where task_acquire is valid:
-
-struct blah {
-  struct task_struct __kptr* task;
-}
-
-b = bpf_task_acquire(...)
-a = bpf_obj_new(typeof(*blah_ptr));
-bpf_kptr_xchg(a->task, b);
-
-2. 
-
-Then xchg a into map
-bpf_kptr_xchg([map slot], a);
-...
-
-3. 
-
-In tp_btf/nmi_handler we exchange the obj out of the map
-and then drop it.
-
-c = bpf_kptr_xchg([slot where a is stored], NULL);
-bpf_obj_drop(c); 
-
-And because this can be called on an object not in a map, we don't have
-a good recovery mechanism.
-
-Because tp_btf/nmi_handler is always in_nmi and hence irqs_disabled, in
-the code before this patch the task_struct dtor will be invoked and
-cause a deadlock.
-
-This patch will not fix the issue and just free a struct blah holding the
-reference without actually dropping it.
-
-Unless I'm missing something then this whole approach taken by this
-patch can't handle this case since the bpf_obj is detached from the map
-entirely and has no allocator recovery mechanism at all.
-
-Then we are back to square 1 needing to defer the freeing with irq work.
-
-Kumar / Alexei do you have anything on this?
-
-
-> Does this similarly affect in-place updates to Array maps which rely on
-> bpf_obj_free_fields() to clear old special fields?
-> 
-Basically existing behavior (undocumented) is that bpf_map_update_elem
-won't copy kptr fields timers or spinlocks. (see copy_map_value, and
-bpf_obj_memcpy).
-
-So those fields can never be overwritten from bpf_map_update_elem on an
-array.
-
-The only thing that really changes is that now instead of trying to free
-the existing map slot value on update we just leave it alone if
-irqs_disabled().
-
-It's definitely a behavioral change either way. And it may be worth
-extending the bpf_obj_memcpy/copy_map_value exceptions to the other
-types covered in this patch.
-
-This was discussed here. [1]
-
-[1] https://lore.kernel.org/bpf/CAP01T75942V+wKJD0yhs8yb7U5vj+y9s6efJ+UdpTMfzP31CWg@mail.gmail.com/
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260519011450.1144935-2-utilityemal77@gmail.com?part=1
