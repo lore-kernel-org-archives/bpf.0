@@ -1,109 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2331B369236;
-	Tue, 19 May 2026 19:54:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D25F3B3899;
+	Tue, 19 May 2026 19:57:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779220445; cv=none; b=X4aIqRWqoS96IXsokw4gDsKoC7iL+jR0LFrG5WY4PjvKikQ65br5EoJJ9OkyaKqUvEjfa4V3mLJA0aX6xirxF+PsMx1WTZ8BhZAIHCI7POlzqw2ydT0YQDEtuejh/UpoAtKR5h3BhtOt0ikgLVuqUk65nRWJj5v+wqIx+7y+Dyg=
+	t=1779220677; cv=none; b=oAcCSquhmUbCPaLZLwy4Z+LqH6r1cQ6m4sscjBfhUgSHXk302ouNTdTb/vWpb+a5JA4bAbYCj2ThAyBTKUHlgPE/sNPk9UNoEUDUMtT+xByXDAvgq/HRvkQQ1QXW55znCKDbDWpLX76SHkWAR1ebqXFpg3w/A0AexT7V/2io+SI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779220445; c=relaxed/simple;
-	bh=RorHhA8ruz2tPyJmTFqBrTEog9o9Kru/OzYYgz+2lEk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=QvnRxZGBe0EFcluqV22lqusmn7Saspe6cyjdCAe+EdKqAqX6DWyNdsnSdre1gLYHpz27K3T4pSO7YsDcTcVqoigfJsM7lV93wBMQKFvOkIhyliIkEC3n6oU2Vs3yzWOeTMLdZXA+wrGMyIC+cy808hnqa+/nvQgUBbGRT3HAWeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P70jYKkD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779220677; c=relaxed/simple;
+	bh=HJa7LTlB7rUz0py6A8HhHWbQBqnXH+vvLhZdOPi4+UQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i4z4Ia8bDL+PoD1v+qrba1qK0J9d0nyMY5/RI6lR6Hw3Iut8Em5ZKRoKv3ie5TIhDFwOgFESNCw8WVgtOTMzyzdRdzrXEOX66vEG5JzHZYFmikpj75KDkXMOnPVyCiaTo8y5Z7ySUATm05Zs2cFa6QsTIZLJEXRikDUdpjiJi9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MIDo0oZ3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P70jYKkD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A40F01F000E9;
-	Tue, 19 May 2026 19:54:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MIDo0oZ3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 876D81F000E9;
+	Tue, 19 May 2026 19:57:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779220443;
-	bh=vWOIKq0OOgXucHtCGo6sCgOWXH+Ief2d3lc+BJjtVOo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=P70jYKkDmyL1fyEVhNCaZNYpld6L2YjmfuqoqEUeIkGoPjb1k60cWkSSl1cOsyJG0
-	 k0upor+0DL40j3CdqL9QBcJMFkdzxbzBcrhlRgmuDv7P3GL2bAjsi/k1rHSiONIhdf
-	 qrnV/UPmsl2wnsryXcUqi6Hipk9548d2TACJzfl7J6A3els0Ozgfufla/LMdMnVCwQ
-	 iKhoE+EbNDRpY//sPQ90YJ796HhtMjvyV0vj51Io1BFApAx4rGORy/9OD0YXFUngld
-	 oE+dGZe89UBf0her+9LnLODoaNpfc6Jb3XweC3aSZ4lHFGF6loPCimOF9Q9fcEIRgh
-	 UKZW6YY5GdH/Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH stable 6.1 3/3] perf build: Disable fewer bison warnings
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Florian Fainelli" <florian.fainelli@broadcom.com>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260519185154.2987285-4-florian.fainelli@broadcom.com>
-References: <20260519185154.2987285-4-florian.fainelli@broadcom.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 19 May 2026 19:54:03 +0000
-Message-Id: <20260519195403.A40F01F000E9@smtp.kernel.org>
+	s=k20260515; t=1779220675;
+	bh=1Tamg3Hf9ko+bZLZl3xbxvWbVEJhbX7dm5Vi5ngVEyA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=MIDo0oZ3rO3gBAI4EqRlMprpx3hMXyMnW5nC6bKsdblVLHZLT0gDBnRbUR29fDMms
+	 Xy0TroVpr9Flole9DLbqOqt/DaAr+T5+OPs34A5cJoRdDF7clifWYpig0oyIuUWV3J
+	 FM9P3Yb3Dogn8KGhOgTMme6FNcK94KrGPV5uUMK0Dd7OxnJn/aAQ0QfneK89iXeV2L
+	 8UYlcPERZbtTrGXhki01jG+pbEo0VXAWIcLIzoeMiPJhXhUEpgeW3Q6jT6hLV+ZLNG
+	 p5hiShgr65NLt6tw2u5kG4gMIxML2YLhh8/TBSMpi6pXD7SSyTRLqk7k1FJfVgpiuS
+	 D5YClChAyz4hw==
+Date: Tue, 19 May 2026 15:57:54 -0400
+From: Sasha Levin <sashal@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org, live-patching@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Joshua Peisach <jpeisach@ubuntu.com>,
+	Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>,
+	Anthony Iliopoulos <ailiop@suse.com>,
+	Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation
+ primitive
+Message-ID: <agzAwjKhOhuANz_P@laps>
+References: <20260508195749.1885522-1-sashal@kernel.org>
+ <20260517134858.146569-1-sashal@kernel.org>
+ <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
+ <agsVDqdALBoHEHlv@laps>
+ <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
+ <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The updated `sed` regex for parsing the bison version strictly requ=
-ires three numeric components, causing a shell syntax error for two-compone=
-nt versions.
---
+On Tue, May 19, 2026 at 02:13:26PM +0200, Daniel Borkmann wrote:
+>On 5/19/26 1:59 AM, Song Liu wrote:
+>>On Mon, May 18, 2026 at 6:33 AM Sasha Levin <sashal@kernel.org> wrote:
+>>>On Sun, May 17, 2026 at 11:37:36PM -0700, Song Liu wrote:
+>>>>On Sun, May 17, 2026 at 6:49 AM Sasha Levin <sashal@kernel.org> wrote:
+>>>>>* fail_function (CONFIG_FUNCTION_ERROR_INJECTION) is disabled in
+>>>>>   most production kernels. Even where enabled, it only works on
+>>>>>   functions pre-annotated with ALLOW_ERROR_INJECTION() in source -
+>>>>>   no help for a freshly-disclosed CVE. The debugfs UI is blocked by
+>>>>>   lockdown=integrity and the override is probabilistic.
+>>>>>
+>>>>>* BPF override (bpf_override_return) honors the same
+>>>>>   ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
+>>>>>   production kernels. Even where on, the operator interface is
+>>>>>   "load a verified BPF program," not a one-line write.
+>>>>
+>>>>If it is OK for killswitch to attach to any kernel functions, do we still
+>>>>need ALLOW_ERROR_INJECTION() for fail_function and BPF
+>>>>override? Shall we instead also allow fail_function and BPF override
+>>>>to attach to any kernel functions?
+>>>
+>>>I don't think so. ALLOW_ERROR_INJECTION is not a security mechanism, it's an
+>>>integrity/safety mechanism for both bpf and fault injection.
+>>>
+>>>It protects against a "developer or CI script doing legitimate fault injection
+>>>accidentally panics the box" scenario, not an "attacker gets in" one.
+>>
+>>There really isn't a clear boundary between "security mechanism" and
+>>"non-security mechanism". As we are making killswitch available
+>>everywhere under root, users will soon learn to use it to do fault injection,
+>>and potentially much more scary things. (Think about agents with sudo
+>>access).
+>
+>Fully agree with Song here that there is no clear boundary, and that the
+>killswitch could lead to arbitrary, hard to debug breakage if applied to
+>the wrong function.. introducing worse bugs than the one being mitigated
+>or even /short-circuit LSM enforcement/ (engage security_file_open 0,
+>engage cap_capable 0, engage apparmor_* etc).
 
-commit e696603d6c95e1ec405be3442c49513276f5ee86
-Author: Ian Rogers <irogers@google.com>
+This is similar to livepatch, right? Do we need guardrails there too?
 
-perf build: Disable fewer bison warnings
+Or do we just trust root to do the right thing for it's systems without needing
+to be it's babysitter?
 
-This commit reduces the number of disabled bison C warnings for bison versi=
-ons
-3.8.2 and later. It also avoids implicit declarations of yylex by adding
-declarations directly in the C files.
+>The ALLOW_ERROR_INJECTION() provides a curated white-list where you may
+>return with an error without causing more severe damage (assuming the
+>error handling code is right). The right thing would be to more widely
+>apply ALLOW_ERROR_INJECTION() or to figure out a better way to safely
+>enable the latter without explicit function annotation.
 
-Link: https://lore.kernel.org/r/20230728064917.767761-6-irogers@google.com
+Sure, this would also work. How do you see this happening? Can we let a certain
+user/pid/etc disable the allowlist if they choose to?
 
-> diff --git a/tools/perf/util/Build b/tools/perf/util/Build
-> index e315ecaec3233..b65ce3563bedd 100644
-> --- a/tools/perf/util/Build
-> +++ b/tools/perf/util/Build
-> @@ -269,10 +269,14 @@ CFLAGS_parse-events-flex.o  +=3D $(flex_flags)
->  CFLAGS_pmu-flex.o           +=3D $(flex_flags)
->  CFLAGS_expr-flex.o          +=3D $(flex_flags)
-> =20
-> -bison_flags :=3D -DYYENABLE_NLS=3D0
-> -BISON_GE_35 :=3D $(shell expr $(shell $(BISON) --version | grep bison | =
-sed -e 's/.\+ \([0-9]\+\).\([0-9]\+\)/\1\2/g') \>\=3D 35)
-> -ifeq ($(BISON_GE_35),1)
-> -  bison_flags +=3D -Wno-unused-parameter -Wno-nested-externs -Wno-implic=
-it-function-declaration -Wno-switch-enum -Wno-unused-but-set-variable -Wno-=
-unknown-warning-option
-> +# Some newer clang and gcc version complain about this
-> +# util/parse-events-bison.c:1317:9: error: variable 'parse_events_nerrs'=
- set but not used [-Werror,-Wunused-but-set-variable]
-> +#  int yynerrs =3D 0;
-> +
-> +bison_flags :=3D -DYYENABLE_NLS=3D0 -Wno-unused-but-set-variable
-> +BISON_GE_382 :=3D $(shell expr $(shell $(BISON) --version | grep bison |=
- sed -e 's/.\+ \([0-9]\+\).\([0-9]\+\).\([0-9]\+\)/\1\2\3/g') \>\=3D 382)
+>Wrt BPF:
+>
+>>>>>* BPF override (bpf_override_return) honors the same
+>>>>>   ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
+>>>>>   production kernels. Even where on, the operator interface is
+>>>>>   "load a verified BPF program," not a one-line write.
+>
+>The claim that BPF itself is off in many production kernels is not really
+>true, where did you get that from? All the major distros and cloud providers
+>have BPF enabled these days, and even systemd ships BPF programs for
+>custom service firewalling etc.
 
-[Severity: Low]
-Will this new regex cause shell syntax errors for two-component version
-strings like "bison (GNU Bison) 3.8"?
+The world is a bit bigger than home distros and cloud providers, but sure - bpf
+is enabled widely enough at this point.
 
-If the sed pattern strictly requires three numeric components, it will
-fail to match a two-component string and output the unmodified string
-instead.
+How do you see this working with the allowlist?
 
-When make passes this raw string containing unescaped parentheses
-to expr, it will cause the shell to abort with a syntax error like
-'sh: Syntax error: "(" unexpected' and fail the version check.
-
-> +ifeq ($(BISON_GE_382),1)
-> +  bison_flags +=3D -Wno-switch-enum
->  else
->    bison_flags +=3D -w
->  endif
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260519185154.2987=
-285-1-florian.fainelli@broadcom.com?part=3D3
+-- 
+Thanks,
+Sasha
