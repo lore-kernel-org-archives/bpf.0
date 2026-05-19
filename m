@@ -1,62 +1,62 @@
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50A133F8AD
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 18:13:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B50934028B
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 18:13:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779214421; cv=none; b=kXcqnJb1dUTQq4SZIp9Sq9ENTJliWqgi2AQkZZ0LEes766nTSKRq8Ibt0vctT15xMMIE0IMc4bYqcVhIcLlQewlZ9kVQqaY1HCLgEDpMywTPLlH/FYw9SeaTxgG65FqGm1qZp5WeHAURdLeTCYBSLzQW3cQVRNicOMIfDhmiOOI=
+	t=1779214421; cv=none; b=UFA2jUHuTV/HFXKYSSn4lvB5V1NPNKBw4wtfPR8lpx9oyx7d9UyBKFv6W1Kr24SXAiYES4db0TmB7gQnpwg/2HbF9pUNEXijq/+ANnMFqK0n3HEY7uzsiln32ZSFJ6R2k7f/7MdDyaz0d5EqHF22a65CrUIK8f050GUNn62/j/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779214421; c=relaxed/simple;
-	bh=NWJpeI/1k/9vPVgb++J1pU3sBb/BTOHNNpFqGvhmQHA=;
+	bh=QdNRFe0vIqkka4xbbVpTimo0ga8a86tcP8wKsinRgWY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nZjHsD1uhNe1vgjocCk53JtPhNbMCjU5QQkYLWK2nV26Xp1TcagU6FjHMMCZ/YceYSBDyan4nTVTS0Ytk/oUH2+orzUM0wL+FlPUux+EAIWS2vOiL0D3CuUmM7/9x0/F65tv8x/rNuBCOtNBUn7sN2LVAUAjCipu6v6oGORI1kQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rRcqCFCq; arc=none smtp.client-ip=209.85.128.178
+	 MIME-Version; b=nlk+27P/mDnYmQxcgmQIVwIJRsVd3Zf+wPYxF34BKN5n1yusYRwb6fgOISV5OKKSeHZCd8qyjjE/rAwtsln9BI2YrBkb6h8TXqlQXB5o2M0ph0PRnDKHqq5yx8HcpjkzNmPHxpJ9TkELL0n4qYYq4d7MFX4USaeJCTIo5FUWIXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EKmJex/8; arc=none smtp.client-ip=209.85.128.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rRcqCFCq"
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-7c2fa14795aso28344417b3.1
-        for <bpf@vger.kernel.org>; Tue, 19 May 2026 11:13:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EKmJex/8"
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-7cd35604a95so28586617b3.1
+        for <bpf@vger.kernel.org>; Tue, 19 May 2026 11:13:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779214414; x=1779819214; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779214417; x=1779819217; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CGJ9ymGUEKtLNacSkRlXr90Y+PFppYrhxlfdv5A8Yz4=;
-        b=rRcqCFCq1twmEaPL7jMqPGNQj9e1ABbK9igCytUARvL4M0wAKEPuH9It4k9JlfVUqE
-         2BT5Ezo8n7nfuXXfRrN5jaBVckrSNzP1RFiaxXXM7UTAPdy/kJzw/XMUHzCWYr3zkR/v
-         Sie3YXoDxaCs5yxHFwN4qid8oKXgdMPS5c1vbqfZWcKY3pYUhJ+A9+4gnA07riQWIvf6
-         ItYoLKRkiJgbilnZd640tRWDtbHnTSYY7t5RLJS0EqDMkFqTbQPvn00oDE+Pwfsn5iED
-         km9mWjDuBtswTPA/tgsVp/wKi/lHkBDnGb0WA6n/kDi6JvVB6vr1qASVju0YMbtgcdA7
-         UmZw==
+        bh=PlP5n46PN41L6jV72akk3EQSHatEAlv9HooAnPxWzak=;
+        b=EKmJex/8i1GBWWvXOPSm2HahWM4x41pa1zK9bkzrWaYgwpe43+lU65MutAupvqS+JK
+         pbaSUgzx+p6jc1319wcqlZMbsgZC9FNvPua1z2jnWGrOi08r38aVswVTOcGezw+hBf9S
+         IviGlJf7VUU3giDGdG4uyN7qkLau2DqFCzbOe9xbwwVIQKSSFaa1GieKQSH/2t/qaOmI
+         R7uugDAjMXX7uBXdzw+dAAlZFZAMA2y6MPGaQ+kYwHEyrQTFpORVleOjFrGqiCilqxDo
+         RSOHkhYw/C3Yw1a6nqr+E/a9t8z26GmkIGij1I+TNA4cCnoMh2dmlggvHhULZptG7G7e
+         g7bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779214414; x=1779819214;
+        d=1e100.net; s=20251104; t=1779214417; x=1779819217;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=CGJ9ymGUEKtLNacSkRlXr90Y+PFppYrhxlfdv5A8Yz4=;
-        b=SmvpYNc9lnw1AO2IrBZ7PI1XrNdxrnVng1UAher+Tg3NF8ac1Q+hfVyAt/F29wFnnS
-         D2E1IeieSEx1s49C6RJiDuj9tSKPX7HScQKymbXmocFCD4mReV6nd/Ye7f1Z+FmAAiue
-         dfCHyCwziddGOXWhUtecpMT2afxvW7jf+GU/BQmHeSx9a55l6vbvqH9rUcFKuck/y7UP
-         1PmzQ9E5Hbua265TMTlJpA1i6Dxz7nUlxy2K1gyBNyKkBx8BZ6/eE1UX+9+tZxFhN2Ga
-         VqYr992ffDiNFt1ugC6bXjK08C5stR9ViRW60mZkL2xYdAKGOPnDGG/5d3l2OP+bzxFi
-         OCKA==
-X-Gm-Message-State: AOJu0Yz+CLhBhZd4VyPcRRv3nIz1JXPxiKOb/Fy4TOwHNRQ+2puUgvV9
-	V0GZgtbk0NUwl5hClEdaN8BC5kV77UzNahYZ0/f1AmsW7PjIH0rZIg+405VqpPKn
-X-Gm-Gg: Acq92OGm7Fe1huaWyI/8uFoKlr9J1/6sMZBXH+x2z7f2GA77AHnTA7Ud/0RV3AuRYFx
-	b1RMFjtX7gE4FY9yfq4hqBU0fwSlkFXR7Nb7Ff45rj+qx4yJ3JECSXC9grVK+Dvf0spJf+Yz501
-	frDLtZkRT0BMmAxNderdNG8KZPOY4V51yQRpOLLU4xtbh9Oosw0MoI2FwlX6E333K/EfF24pT7Y
-	GSPj96yolk9YsLk47TH12dAV5os5nrt7R7dvijxZ0fxXXjv85SihnSJAWT/L0UrOQffASYdNNve
-	U2/mZ0P8X/BrGQvSd9Ve1LL9f9FzcAV0TffE1fmOpY9vGwaQvI5VanpmYw5WvLBRrXQpI6Wnsp3
-	RlrWKHBVTZhIBj6l7d58FsAf5VtIdhXJnL+BvjWQQQr7QKGnc6QwIptZsxvRPFpY70FNro0Rg93
-	wlBJ5ceDRr2avlcP0u
-X-Received: by 2002:a05:690c:39b:b0:7c0:4f0:7bc1 with SMTP id 00721157ae682-7c95b8296bamr220148647b3.31.1779214414489;
-        Tue, 19 May 2026 11:13:34 -0700 (PDT)
-Received: from localhost ([2a03:2880:f806:12::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7cc997b26a8sm40485957b3.15.2026.05.19.11.13.34
+        bh=PlP5n46PN41L6jV72akk3EQSHatEAlv9HooAnPxWzak=;
+        b=R+ZmsVefn6W3MiXCfmZgTApz/OLoYE1OARZxV3gidrjt9HMGYfqbkIhQH2KYRz3SLa
+         /rZK1BE/ggYfUgbB7AZaoG9N9I99V3mt+V9S888W9kzVb1Q62KPGQUPF98Nipto6J/iU
+         uYWuy4T9RBKFuxnnwWFTyw65jzVnZ3kPJZPFONfH/dEEec1Ky+sOXDyrhd0fEH0gEdeX
+         aAQjyKQGNZfUxpzJD0q9r1QF85dCiHBo1GITwDnvuXBbJDHnoGVfqc25q3RQVh7zCxqx
+         8OzvlWZPxPbs34XLq69W3cj/ig0+hrZi7olzaPDjD4Db6InVwtPN+Gp/CE0rdrZMkGUD
+         ln6A==
+X-Gm-Message-State: AOJu0Yyj1d4bKelKeWIsK4thkJJCMm7xnVsCWJcNN5+iFy2T68q3kgYa
+	TUVyAH6iXmOXO2P7d0HoZ0F7JlaJi70Q0Ylz4BzUR1gZ0qTWV/6wzwhHa0C5AHJO
+X-Gm-Gg: Acq92OEK4HF9X30vfDQpLQruUz+QyUJi3+p/6x/AxZSJab9uVmuE7bIzrV/QtBVr+6q
+	6BQotHyUg+5Q/5fsnJ74RVHmMnhr6TL7Og2DaZf0JkDmKRs9aPDKTcWfAQzIxNbi3aU9gLRvBtP
+	LX3ySMBwdpmPUCDUTv2lbSE4ikIHF6XMmMrAj9yJKGiTL2bqL5l/eQ3sDMrsIevvdI+QZqSiqxW
+	XOHwr9AsS/aSrNjGIlC/pckLEpPqLxqzC/+RFjcw4YbASTwFkaucEnxCcvVqq1SpZdix4pVzsCf
+	e/471+mNOO66SpmzQSixhB+5UXU6AUp7LAkcn0XvHnCzxUWKZGevwEX+I3HdsJFkXqmHPJHA5f6
+	Dbc1A9AsK6OdQGsuxUEmq6ICpcKpeIrpFLkcLUP4tb/hB/tElWObs7bz9T3MFFzTCLv89YIocgG
+	FleBu2uONAdeZsvBusW5YPExDRhBvWMkGNow==
+X-Received: by 2002:a05:690c:c4e8:b0:7bf:1433:8f92 with SMTP id 00721157ae682-7c7e5d9034amr210208817b3.7.1779214417481;
+        Tue, 19 May 2026 11:13:37 -0700 (PDT)
+Received: from localhost ([2a03:2880:f806::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7cc9c6ce2f4sm40449947b3.39.2026.05.19.11.13.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 May 2026 11:13:34 -0700 (PDT)
+        Tue, 19 May 2026 11:13:37 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -69,9 +69,9 @@ Cc: netdev@vger.kernel.org,
 	mykyta.yatsenko5@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v5 12/14] selftests/bpf: Test using dynptr after freeing the underlying object
-Date: Tue, 19 May 2026 11:13:10 -0700
-Message-ID: <20260519181314.2731658-13-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v5 14/14] selftests/bpf: Test using file dynptr after the reference on file is dropped
+Date: Tue, 19 May 2026 11:13:12 -0700
+Message-ID: <20260519181314.2731658-15-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260519181314.2731658-1-ameryhung@gmail.com>
 References: <20260519181314.2731658-1-ameryhung@gmail.com>
@@ -83,274 +83,84 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Make sure the verifier invalidates the dynptr and dynptr slice derived
-from an skb after the skb is freed.
+File dynptr and slice should be invalidated when the parent file's
+reference is dropped in the program. Without the verifier tracking
+dyntpr's parent referenced object, the dynptr would continute to be
+incorrectly used even if the underlying file is being tear down or gone.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- .../selftests/bpf/prog_tests/bpf_qdisc.c      |  6 ++
- .../progs/bpf_qdisc_fail__invalid_dynptr.c    | 68 +++++++++++++++++
- ...f_qdisc_fail__invalid_dynptr_cross_frame.c | 74 +++++++++++++++++++
- .../bpf_qdisc_fail__invalid_dynptr_slice.c    | 70 ++++++++++++++++++
- 4 files changed, 218 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_cross_frame.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_slice.c
+ .../selftests/bpf/progs/file_reader_fail.c    | 60 +++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c b/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
-index 730357cd0c9a..65277c8fc887 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
-@@ -8,6 +8,9 @@
- #include "bpf_qdisc_fifo.skel.h"
- #include "bpf_qdisc_fq.skel.h"
- #include "bpf_qdisc_fail__incompl_ops.skel.h"
-+#include "bpf_qdisc_fail__invalid_dynptr.skel.h"
-+#include "bpf_qdisc_fail__invalid_dynptr_slice.skel.h"
-+#include "bpf_qdisc_fail__invalid_dynptr_cross_frame.skel.h"
- 
- #define LO_IFINDEX 1
- 
-@@ -223,6 +226,9 @@ void test_ns_bpf_qdisc(void)
- 		test_qdisc_attach_to_non_root();
- 	if (test__start_subtest("incompl_ops"))
- 		test_incompl_ops();
-+	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr);
-+	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr_cross_frame);
-+	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr_slice);
+diff --git a/tools/testing/selftests/bpf/progs/file_reader_fail.c b/tools/testing/selftests/bpf/progs/file_reader_fail.c
+index 0739620dea8a..d5fae5e4cf9a 100644
+--- a/tools/testing/selftests/bpf/progs/file_reader_fail.c
++++ b/tools/testing/selftests/bpf/progs/file_reader_fail.c
+@@ -50,3 +50,63 @@ int xdp_no_dynptr_type(struct xdp_md *xdp)
+ 	bpf_dynptr_file_discard(&dynptr);
+ 	return 0;
  }
- 
- void serial_test_bpf_qdisc_default(void)
-diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr.c
-new file mode 100644
-index 000000000000..1d96f7987a3f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr.c
-@@ -0,0 +1,68 @@
-+// SPDX-License-Identifier: GPL-2.0
 +
-+#include <vmlinux.h>
-+#include "bpf_experimental.h"
-+#include "bpf_qdisc_common.h"
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int proto;
-+
-+SEC("struct_ops")
-+__failure __msg("Expected an initialized dynptr as R1")
-+int BPF_PROG(invalid_dynptr, struct sk_buff *skb, struct Qdisc *sch,
-+	     struct bpf_sk_buff_ptr *to_free)
++SEC("lsm/file_open")
++__failure
++__msg("Leaking reference id={{[0-9]+}} alloc_insn={{[0-9]+}}. Release it first.")
++int use_file_dynptr_after_put_file(void *ctx)
 +{
-+	struct bpf_dynptr ptr;
-+	struct ethhdr *hdr;
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct file *file = bpf_get_task_exe_file(task);
++	struct bpf_dynptr dynptr;
++	char buf[64];
 +
-+	bpf_dynptr_from_skb((struct __sk_buff *)skb, 0, &ptr);
++	if (!file)
++		return 0;
 +
-+	bpf_qdisc_skb_drop(skb, to_free);
++	if (bpf_dynptr_from_file(file, 0, &dynptr))
++		goto out;
 +
-+	hdr = bpf_dynptr_slice(&ptr, 0, NULL, sizeof(*hdr));
-+	if (!hdr)
-+		return NET_XMIT_DROP;
++	/* this should fail - file dynptr should be discarded first to prevent resource leak */
++	bpf_put_file(file);
 +
-+	proto = hdr->h_proto;
++	bpf_dynptr_read(buf, sizeof(buf), &dynptr, 0, 0);
++	return 0;
 +
-+	return NET_XMIT_DROP;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+struct sk_buff *BPF_PROG(bpf_qdisc_test_dequeue, struct Qdisc *sch)
-+{
-+	return NULL;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+int BPF_PROG(bpf_qdisc_test_init, struct Qdisc *sch, struct nlattr *opt,
-+	     struct netlink_ext_ack *extack)
-+{
++out:
++	bpf_dynptr_file_discard(&dynptr);
++	bpf_put_file(file);
 +	return 0;
 +}
 +
-+SEC("struct_ops")
-+__auxiliary
-+void BPF_PROG(bpf_qdisc_test_reset, struct Qdisc *sch)
++SEC("lsm/file_open")
++__failure
++__msg("Leaking reference id={{[0-9]+}} alloc_insn={{[0-9]+}}. Release it first.")
++int use_file_dynptr_slice_after_put_file(void *ctx)
 +{
-+}
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct file *file = bpf_get_task_exe_file(task);
++	struct bpf_dynptr dynptr;
++	char *data;
 +
-+SEC("struct_ops")
-+__auxiliary
-+void BPF_PROG(bpf_qdisc_test_destroy, struct Qdisc *sch)
-+{
-+}
++	if (!file)
++		return 0;
 +
-+SEC(".struct_ops")
-+struct Qdisc_ops test = {
-+	.enqueue   = (void *)invalid_dynptr,
-+	.dequeue   = (void *)bpf_qdisc_test_dequeue,
-+	.init      = (void *)bpf_qdisc_test_init,
-+	.reset     = (void *)bpf_qdisc_test_reset,
-+	.destroy   = (void *)bpf_qdisc_test_destroy,
-+	.id        = "bpf_qdisc_test",
-+};
-diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_cross_frame.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_cross_frame.c
-new file mode 100644
-index 000000000000..2e23b8593af9
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_cross_frame.c
-@@ -0,0 +1,74 @@
-+// SPDX-License-Identifier: GPL-2.0
++	if (bpf_dynptr_from_file(file, 0, &dynptr))
++		goto out;
 +
-+#include <vmlinux.h>
-+#include "bpf_experimental.h"
-+#include "bpf_qdisc_common.h"
-+#include "bpf_misc.h"
++	data = bpf_dynptr_data(&dynptr, 0, 1);
++	if (!data)
++		goto out;
 +
-+char _license[] SEC("license") = "GPL";
++	/* this should fail - file dynptr should be discarded first to prevent resource leak */
++	bpf_put_file(file);
 +
-+int proto;
++	*data = 'x';
++	return 0;
 +
-+static __noinline int free_skb(struct sk_buff *skb)
-+{
-+	bpf_kfree_skb(skb);
++out:
++	bpf_dynptr_file_discard(&dynptr);
++	bpf_put_file(file);
 +	return 0;
 +}
-+
-+SEC("struct_ops")
-+__failure __msg("invalid mem access 'scalar'")
-+int BPF_PROG(invalid_dynptr_cross_frame, struct sk_buff *skb, struct Qdisc *sch,
-+	     struct bpf_sk_buff_ptr *to_free)
-+{
-+	struct bpf_dynptr ptr;
-+	struct ethhdr *hdr;
-+
-+	bpf_dynptr_from_skb((struct __sk_buff *)skb, 0, &ptr);
-+
-+	hdr = bpf_dynptr_slice(&ptr, 0, NULL, sizeof(*hdr));
-+	if (!hdr)
-+		return NET_XMIT_DROP;
-+
-+	free_skb(skb);
-+
-+	proto = hdr->h_proto;
-+
-+	return NET_XMIT_DROP;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+struct sk_buff *BPF_PROG(bpf_qdisc_test_dequeue, struct Qdisc *sch)
-+{
-+	return NULL;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+int BPF_PROG(bpf_qdisc_test_init, struct Qdisc *sch, struct nlattr *opt,
-+	     struct netlink_ext_ack *extack)
-+{
-+	return 0;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+void BPF_PROG(bpf_qdisc_test_reset, struct Qdisc *sch)
-+{
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+void BPF_PROG(bpf_qdisc_test_destroy, struct Qdisc *sch)
-+{
-+}
-+
-+SEC(".struct_ops")
-+struct Qdisc_ops test = {
-+	.enqueue   = (void *)invalid_dynptr_cross_frame,
-+	.dequeue   = (void *)bpf_qdisc_test_dequeue,
-+	.init      = (void *)bpf_qdisc_test_init,
-+	.reset     = (void *)bpf_qdisc_test_reset,
-+	.destroy   = (void *)bpf_qdisc_test_destroy,
-+	.id        = "bpf_qdisc_test",
-+};
-diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_slice.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_slice.c
-new file mode 100644
-index 000000000000..731216c4e45a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_slice.c
-@@ -0,0 +1,70 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include "bpf_experimental.h"
-+#include "bpf_qdisc_common.h"
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int proto;
-+
-+SEC("struct_ops")
-+__failure __msg("invalid mem access 'scalar'")
-+int BPF_PROG(invalid_dynptr_slice, struct sk_buff *skb, struct Qdisc *sch,
-+	     struct bpf_sk_buff_ptr *to_free)
-+{
-+	struct bpf_dynptr ptr;
-+	struct ethhdr *hdr;
-+
-+	bpf_dynptr_from_skb((struct __sk_buff *)skb, 0, &ptr);
-+
-+	hdr = bpf_dynptr_slice(&ptr, 0, NULL, sizeof(*hdr));
-+	if (!hdr) {
-+		bpf_qdisc_skb_drop(skb, to_free);
-+		return NET_XMIT_DROP;
-+	}
-+
-+	bpf_qdisc_skb_drop(skb, to_free);
-+
-+	proto = hdr->h_proto;
-+
-+	return NET_XMIT_DROP;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+struct sk_buff *BPF_PROG(bpf_qdisc_test_dequeue, struct Qdisc *sch)
-+{
-+	return NULL;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+int BPF_PROG(bpf_qdisc_test_init, struct Qdisc *sch, struct nlattr *opt,
-+	     struct netlink_ext_ack *extack)
-+{
-+	return 0;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+void BPF_PROG(bpf_qdisc_test_reset, struct Qdisc *sch)
-+{
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+void BPF_PROG(bpf_qdisc_test_destroy, struct Qdisc *sch)
-+{
-+}
-+
-+SEC(".struct_ops")
-+struct Qdisc_ops test = {
-+	.enqueue   = (void *)invalid_dynptr_slice,
-+	.dequeue   = (void *)bpf_qdisc_test_dequeue,
-+	.init      = (void *)bpf_qdisc_test_init,
-+	.reset     = (void *)bpf_qdisc_test_reset,
-+	.destroy   = (void *)bpf_qdisc_test_destroy,
-+	.id        = "bpf_qdisc_test",
-+};
 -- 
 2.53.0-Meta
 
