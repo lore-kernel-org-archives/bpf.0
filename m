@@ -1,160 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 757533DFC67;
-	Tue, 19 May 2026 08:00:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A9F63E1220
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 08:25:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779177649; cv=none; b=XQO8MF5ImyX/J4YGKHlD20P6hkhBh6PkJ47bdqvSeD9QYB5mTsbTfiKpTll0FYjcTpJlUnuMxwtsJK/KpJ+V49UAT+PYQRgKmCt/LPm72n0pOhFSoIPFV3LhF+rThIOZzlUn5UkJtqDR8srGoGS3BSuNBGa+tdcRgKk/ek0qzBI=
+	t=1779179114; cv=none; b=mWgDizGWl79y1X2jhruceGI3A9h0hWozxWOMwdfHFw4fF1+smB6sTO4OA0sAzem9fAnto530O8qsbzJ3ua6lgytmusnykkd7/0G0fHSUampYjzcHvy3JEj+Bm8cfvdJEo43A1/BY0931zw6MccufLWGls0Nphr1GlCnSI3DEoxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779177649; c=relaxed/simple;
-	bh=jq+Ic2o6+/T6R+6rKPEYUVCfMRGyHOvp7RzEZ9FUseg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ejfcrCkJqx/Q8sHakmiYyOoL7tNpayPxMm8IqenwyUEnJ7p/Uq6XbjbI4nTsh0CVEP2P+s0flHj7SOb0V9kyTwcnrwKOzcl7QKM8cyJPxaXfVHlURQtyDlwxrPbnd4fbh1ggX+Kejgrne1wxV6M3DiLwhpCdDyW8j98xWiOEI/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I7vznwgL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779179114; c=relaxed/simple;
+	bh=SHiVfwiU5Ngd2W+3buFa4qpdrncZO+ppzbCAdf6kXrQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=eARkZUS7so5RU9ma0gp4gx1Z4yIjD9KyBofijbHJoCZpka1yafyaFZAbnP29O0Sebt+ehN/DL++8/z2R8Mm/gBhZbpWpK3rXnq3Qnsspf4JR/FpKLj+tG/+6tD/cKhYElcOC/8A8j9yBB5bKAU6ML9Dk9GTQVKv8W6fjMb+Ri70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L3NIfszX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I7vznwgL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27FD0C2BCB3;
-	Tue, 19 May 2026 08:00:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L3NIfszX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D38EFC2BCC6;
+	Tue, 19 May 2026 08:25:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779177649;
-	bh=jq+Ic2o6+/T6R+6rKPEYUVCfMRGyHOvp7RzEZ9FUseg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=I7vznwgLR82bFg5okwmiS44hagsTw2fpDtHv0dip23rZYyVv4Z5pV0JENKZenbEPY
-	 caLAFtNgxAyhxPdG12x510QK9CG3TrZLhkbICxRov/OQDkC0s4u377E1oMvrrXwpD0
-	 3EKxDFcB9Ep5YgHVziesBC27Eb10HYleQgaos3KsBrEEXh4kLkX4il/gSUs5ieJWF2
-	 xTbsEghuYQZwcY1VgRfOFjtAQnl34fSLoNXrbJE8TSkf8FQx2ojuS/rT2+Y61bn+G/
-	 X5e2Fd3WrZEKYAfmyYW26ySv7pM3wQ/gnB8Wl460a8i+L59que2/pHmk3jQl+hA1Vi
-	 v08NGy3tgOARA==
-Message-ID: <2f02d90d-cdc9-48ef-abe3-99e00f22595f@kernel.org>
-Date: Tue, 19 May 2026 10:00:39 +0200
+	s=k20201202; t=1779179114;
+	bh=SHiVfwiU5Ngd2W+3buFa4qpdrncZO+ppzbCAdf6kXrQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=L3NIfszXXgRDC0VAASfDRyOdqdFvqMfBSKj+/nNBC4H/sk083qUwTHp60MiQDXR5Q
+	 bPx7y0/F7VqGhfcq4ZHS6v19XVjBZoNd7STviJyEst7r67x3ZWU3DrlnrnWmu6hL/y
+	 jwpyU0nfVXUKkDrwV7gWGeC+HX8S/DgcYuPoPrkRe4k4NDZnijJuYLmfhRr7gtddeh
+	 3rMkC7s0ND2/1UYyM6xhwE/LxQhQPSsZNZ9fiGdWfcojHpnokWknfbdgwGBkQ7AKNK
+	 1rzurKeFUb8iG1xz1+rF2+me2mzH/sdTNvCIe/BrmHxk1E7tt047aU/sZqKOl5jZra
+	 9ZwObEADu8DPw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next 2/6] net: export sock_disable_timestamp()
+ declaration
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jason Xing" <kerneljasonxing@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260518082344.96647-3-kerneljasonxing@gmail.com>
+References: <20260518082344.96647-3-kerneljasonxing@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 19 May 2026 08:25:12 +0000
+Message-Id: <20260519082513.D38EFC2BCC6@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/8] mm: Add ptep_try_install() for lockless empty-slot
- installs
-To: Tejun Heo <tj@kernel.org>
-Cc: David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
- Changwoo Min <changwoo@igalia.com>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, sched-ext@lists.linux.dev,
- bpf@vger.kernel.org, x86@kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20260517211232.1670594-1-tj@kernel.org>
- <20260517211232.1670594-2-tj@kernel.org>
- <9ba50fd2-077e-4291-9276-9adb18186873@kernel.org>
- <agtuPrgIDNKSu2Oo@slm.duckdns.org>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <agtuPrgIDNKSu2Oo@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 5/18/26 21:53, Tejun Heo wrote:
-> Hello,
-> 
-> On Mon, May 18, 2026 at 10:06:29AM +0200, David Hildenbrand (Arm) wrote:
->> On 5/17/26 23:12, Tejun Heo wrote:
->>> +static inline bool ptep_try_install(pte_t *ptep, pte_t new_pte)
->>> +{
->>> +	return false;
->>> +}
->>> +#endif
->>
->> Ehm, what?
->>
->> This is a very, very, very bad generic idea/interface.
->>
->> On which ptes is this supposed to be used? User ptes or kernel ptes?
->>
->> Surely we don't want this on user ptes.
-> 
-> Yeah, this is only for the BPF arena PTEs which are already managed in their
-> own way. I'd be happy to place / gate it however appropriate.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] Calling `bpf_setsockopt` to enable or disable `SK_BPF_CB_RX_TIMEST=
+AMPING` from BPF hooks executing in softirq will trigger a kernel panic (sl=
+eep in atomic context) if `CONFIG_JUMP_LABEL` is not enabled.
+- [Low] API asymmetry between `sock_enable_timestamp` and `sock_disable_tim=
+estamp` creates a dangerous bitmask trap.
+--
 
+commit ae551b79a5c9f8c77421dc360627b1e40e3ceaec
+Author: Jason Xing <kerneljasonxing@gmail.com>
+Subject: net: export sock_disable_timestamp() declaration
 
-So, we only use it within apply_to_page_range() with init_mm, where we don't use
-page table locks.
+This patch removes the static modifier from sock_disable_timestamp() and ad=
+ds
+its declaration to include/net/sock.h. This change exposes the function to =
+the
+rest of the kernel, specifically allowing the BPF subsystem to dynamically =
+turn
+off the global time record function.
 
-Usually we seem to grab the &arena->spinlock to protect the kernel page tables.
+> diff --git a/include/net/sock.h b/include/net/sock.h
+> index dccd3738c3687..8a49312ee0976 100644
+> --- a/include/net/sock.h
+> +++ b/include/net/sock.h
+> @@ -3038,6 +3038,7 @@ static inline bool sk_listener_or_tw(const struct s=
+ock *sk)
+>  }
+> =20
+>  void sock_enable_timestamp(struct sock *sk, enum sock_flags flag);
+> +void sock_disable_timestamp(struct sock *sk, unsigned long flags);
 
-And you're saying that we might get called from a page fault handler where that
-lock can already be held.
+This isn't a bug, but does exporting these two functions with asymmetrical
+signatures create a bitmask trap?
 
-Is that really possible? I'd much rather prefer to trylock and retry, unless
-that can really result in deadlocks. But I have the feeling that such deadlocks
-should be impossible here.
+The newly exported sock_disable_timestamp() expects a bitmask (unsigned long
+flags), while sock_enable_timestamp() expects an enum index (enum sock_flags
+flag).
 
-Can you elaborate on the deadlock situation and how that can happen in valid
-scenarios?
+If a future developer mistakenly passes an enum index (like SOCK_TIMESTAMP
+which has value 7) to sock_disable_timestamp(), wouldn't it silently clear
+multiple unrelated socket flags (bits 0, 1, and 2) instead of the intended
+flag?
 
+>  int sock_recv_errqueue(struct sock *sk, struct msghdr *msg, int len, int=
+ level,
+>  		       int type);
 
-The thing is that ptep_try_install() relies on other page table walking and
-insertion code to do the right thing. Shaky.
+[ ... ]
 
-For example, staring at apply_range_set_cb(), what prevents:
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index b37b664b6eb92..2d552ae5edd42 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -474,7 +474,7 @@ static bool sock_needs_netstamp(const struct sock *sk)
+>  	}
+>  }
+> =20
+> -static void sock_disable_timestamp(struct sock *sk, unsigned long flags)
+> +void sock_disable_timestamp(struct sock *sk, unsigned long flags)
+>  {
+>  	if (sk->sk_flags & flags) {
+>  		sk->sk_flags &=3D ~flags;
 
-(1) apply_range_set_cb() finding pte_none(ptep_get(pte)
-(2) apply_range_set_scratch_cb() succeeding ptep_try_install()
-(3) apply_range_set_cb() overwriting the pte with set_pte_at()
+If BPF programs running in an atomic softirq context call bpf_setsockopt() =
+to
+disable SK_BPF_CB_RX_TIMESTAMPING, could this trigger a panic?
 
-Between (2) and (3) CPUs could access the scratch PTE.
+Looking at net_disable_timestamp() which is called immediately after this
+bitmask update, if CONFIG_JUMP_LABEL is not enabled, the code falls back to
+calling static_branch_dec() on netstamp_needed_key.
 
--- 
-Cheers,
+This expands to static_key_slow_dec(), which unconditionally acquires
+jump_label_mutex and cpus_read_lock().
 
-David
+Since acquiring a sleeping mutex inside a softirq context triggers a
+sleep-in-atomic panic, will this cause a deterministic crash when users
+dynamically attach these BPF programs?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260518082344.9664=
+7-1-kerneljasonxing@gmail.com?part=3D2
