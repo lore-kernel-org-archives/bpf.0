@@ -1,319 +1,301 @@
-Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9DE2BDC1C
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 01:14:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E9F2D7DF8
+	for <bpf@vger.kernel.org>; Tue, 19 May 2026 01:33:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779153301; cv=none; b=MnZkx4u4R3ySQ8mFBzoOrYcjJJDYcDcmAL3GjEosnVzxVTRgXaDf+yvig+dCFvsZCvFEF0/9zX69WDp2tNaJE/Y1sBY6kxyG5l9XiRkb1yhFs9IxGo9kyEh3MP9qY8X36ED4YnjjKFXtY45a4G0R5jps/PjREqgBTj0VgKBs0gg=
+	t=1779154430; cv=none; b=pjUt8mety74HeeMvPxcmgYx8jhD0grXoKyEjhTWDmLq3+1mnZLdM51hlCuFzD5Yt2nfr95RKT+BSkLxTi+rKSnr8R9W3u/jlI2fkpyfpag+vaOH+rdQpSRqj5J9DX5kfUmRnUJNp3PZDtzdqXvf9grlM9Zbl3THsiNrE2oGI5hA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779153301; c=relaxed/simple;
-	bh=JSKVOPSagD55A9gb/cBGZPxLxhujJDx/XUrq6J27PK0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j06v5esxuxZ0yqtGUgxOdzMpI8cd2/uD9DTJnCQIBdJ5t1ul/TYatL2i4E2CDXyjkUBp/DMGI5LUjRmGK1T9rMpaGcYCJ2znciSIVGmHX93vl6AEG5LMIBolnxu8jPn6JMNkFkeUexUPd8k0Fq0BSuZt1uMsO7eLO8OqtAeUaIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PxP4HHT0; arc=none smtp.client-ip=74.125.224.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779154430; c=relaxed/simple;
+	bh=yfu3HXA6WpN97f2/JLOaEHAfe4Lu3Fr+ei26pjJ6UjE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mxlVlLUNI40aIu4ijjfDzo3dpaCCMKaEBjVEXnyfWyXY8mDDZbPSL4kL2juk7uvyuWN2l+SJzN58lYugsBe26sof93VJ3lekKE2BxpfOWBVNnPuszE8CYAnyuzf+E3GZBoY4615QdY9NKvVFQqNliOwWn3MxF2Xh7rXeZqLsWn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrife.io; spf=none smtp.mailfrom=jrife.io; dkim=pass (2048-bit key) header.d=jrife-io.20251104.gappssmtp.com header.i=@jrife-io.20251104.gappssmtp.com header.b=Nl9JUDMZ; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jrife.io
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=jrife.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PxP4HHT0"
-Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-651b4d09141so2886062d50.1
-        for <bpf@vger.kernel.org>; Mon, 18 May 2026 18:14:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=jrife-io.20251104.gappssmtp.com header.i=@jrife-io.20251104.gappssmtp.com header.b="Nl9JUDMZ"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2b9a1896db5so5950275ad.3
+        for <bpf@vger.kernel.org>; Mon, 18 May 2026 18:33:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779153299; x=1779758099; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PuDRRJPPxsOG54TlqJyF6K+H0kfBBHpE9DokbD8VtyI=;
-        b=PxP4HHT0u+T3xPMouz6p+KC/U8c5N85qCY7dYgNKJFHyHz/hVX5jXYTXDGtQwGQHAm
-         VTZZrb/kpJCS43aLf6B5mCc+wHqtsCnU4HUxDJL6dH/szLE2XUTW4M0KRc44xqIopwSd
-         YRUhtqTk/owe7lzVo8QWHni52puHP5FGsn4qDHuNnwAVbBcbRNqdk5Mc/o07qSUucjM4
-         UYMDWXLNR7vasW8v+ESYovVSPlSiszDurq6BiJQQxJxMniMRJ4uUj30aZnEr6Mmrp475
-         FzLdYST1ct8FIC8zB0X7CXtRdAmG/khL5JjvgTK+LxLk1KOeW4VYMdiF/uWk1WF3GWc5
-         7r9Q==
+        d=jrife-io.20251104.gappssmtp.com; s=20251104; t=1779154428; x=1779759228; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PMUulh6qid06yp999kMZYRmV0VRKarV0DjzjDNUvDFI=;
+        b=Nl9JUDMZSi2Y7h5AOqoLvz7XV7wbX66yP8vU6ojg+DRPPGuANXRxW1KkDVpB0McFzW
+         NNVJRZZe90ACPhbIIGTQ8rahvxpR28Ml3Z4t5vXMlAGAnUqR8c78lfnrWZZ7E2H+AxE9
+         12cy5sX1yiFVnrqt3iIbnl500nRYseapg4RGYhvm/N8iRe0heT0vCWO7itB+qAuSKkWM
+         nhbHw5sdYaWnuvVLxiUaIcXYF/jS6kdq5QcYcVHp5oRFoBl8XfcfEF4sZLlplzlCayw4
+         vbLto2R7/e2b88bdePQPLqLRKX9TJctORZt/HizMRugAFV5QpkTbbjG6ugMVBa8OjSXh
+         UL9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779153299; x=1779758099;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=PuDRRJPPxsOG54TlqJyF6K+H0kfBBHpE9DokbD8VtyI=;
-        b=a1g6sKVAF+DlFCteTxPF6OABH6P5o9G4yxNUQm7ljdPVishvCzOmKvtv33ZxuFIX1B
-         FTXjX47zhBivD69+V7x4OQVprvQ06jg5qj7jL2yCVtOS6aWFS+afEQIt+eUxS6z1Clqp
-         1zd7SO2yK3IAV3tiNaLOLEUpT7mhN6DH1W2kPYtpHuEr24uDqoB5XDhb2auOUaOpK3Dn
-         aC9lC1qAjpQlzws+kZq+MDhooaBmNtRzg1hz1ray/jBFKQtWukNSOZRcZw2fnTUtsMKO
-         zXZm8ffW1Kuw9D4Wiv+hoM7f6lIyWaiKrVfSIWfP5YQ/tWi/10vgev5Pn060kTwkUrut
-         Irgw==
-X-Forwarded-Encrypted: i=1; AFNElJ9F7jdWinuLUS3GqpOVpAMx1xhQS+vFb1UcYV4olc73wx8tgFrD4Tk3qPeUeQNTLbjcE/k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUVT6QgAP/+348wdj9LL04UnjxzBlMzhnJ9k2kNJ8aWLWb7Fz9
-	XTvBRoyNfWPAufY3tIQdWSUIJqiXqXetXboWRsECUWge85avBULcstwE
-X-Gm-Gg: Acq92OE+2EqNroecWqud6+JYjfvK1DPa6vDQhX48h1tONMdNPpPsPS9yuhKhUhV75go
-	/CMv5tOB9RrsirS/vY+T8SAsDIvXs8iYCfb6IcynFUJJMIsaub0UsNE2d77vYI+s8hXW7f/QEru
-	bfxv3bPY7IjawRxPvkRUt0gc/10FlovvBbOGAGryG/4sHC013+bdG31wAeBDR4EC10gk7/t6uQj
-	hWdMkPYcyOmyzE0h3xU/4Emsv9HzV0SKj+mMaPhjwx7klD4PVvmPmAXz8CprFNLwIOYiksMKDQq
-	T6Lbvi6OG0NKhlNAwubtdEXBSz8jMy5BeZXx/nREW2tXy4Lg6ZxIQIhEK0upTBoXOZ6+rM4c2i8
-	sa2ECYNgC6s00ndiXPfaLakPLyha9IQ72rgYJSMCo2QgKVbCARf8c9kd3Nz+uypvlMDINSORZlz
-	kp5VkuSpMNa2AoUOt0jtrR/H2Iuu0iCXrJtJHKEbKp/0N7JXvd1aTQxPnnSfLyhu5HvZ99YAK/v
-	QMznkA6U6Y=
-X-Received: by 2002:a05:690e:4294:20b0:654:fd9:2e8c with SMTP id 956f58d0204a3-65e215f8938mr11401298d50.15.1779153298622;
-        Mon, 18 May 2026 18:14:58 -0700 (PDT)
-Received: from zenbox.prizrak.me ([2600:1700:18fb:6011:ab86:dbf9:c4df:2e70])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65e0db0b11esm7118675d50.11.2026.05.18.18.14.57
+        d=1e100.net; s=20251104; t=1779154428; x=1779759228;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PMUulh6qid06yp999kMZYRmV0VRKarV0DjzjDNUvDFI=;
+        b=oPsBanUpIti51NV2V9gfyihBynj02NZHbSKGQqU1AnZA32H/Fxn9d0XXPuGVHNKP/c
+         8I4510LVo3DuouAFSeHjn3s1IuN/guSrQ8/OHiWVN40KKsLimua6q65wviMaElXeJm7I
+         4Pm5Ks27JgbXj9ABJkdoiRUHaunXY7Jan3gBD/6PVc2bzKCzhe8W5+UPZeK3XqIqkkHf
+         YkA1izd4MrmjlIogcwwXdHgJbuoflJ1aaO6eO8S6s3fH0onXw+Nx848gr8ojXZea6tgo
+         UWNoRZWcMZ7wQHWiW2Rd7zCB/VgjD7nqACLBQ64bVzcmmKSuzTAFHV6OrPpTwJi7YmBn
+         7J6w==
+X-Gm-Message-State: AOJu0Yz1zKxFOnuVRWiYNcoRwccPLYPUC8y3odE0ipave9IR83HiGYCr
+	rcJ8DX4wEjBXZ5hZw19XhdNRXBu2RziJMd5qw/LyyDPrBwxqPbLlwLSLwhnCPfFPTGw=
+X-Gm-Gg: Acq92OFW+2DstkcrbkLAJm+x2EJzQD2misrei9EihG1sC54oHv03gF5LWE62pbG5zHE
+	NXNYcP8AmR5ywRsWtXRb0IXLhdDxyOqROEE5mtkrzjGS83rPhbQ5byecqloWnvsT48MmJ7q8yDo
+	I39waFwhbZW3cqxqgQhCL6lRaEu7CNm4lS/5PIfe3NTJl0HLWfba93CAjS02aC+Hy4GqrDNBw/e
+	5fltbIO29H6k2GHJIB3nGwLbw0A5DQ/TOjz3UZ3fqJUICCc+ADU0ddLAxhXMmdROVOdmW+usGNC
+	CBuNBS35BS9789VXaLGChRAUKVqvtKb8eU+FTQ5SaBsXmyozayjFNocKRpfxStj8X4rK6M62BWs
+	4UKivq19AuMDguutUrvtu3zocVvHIsR/4VS43qRcAHMl7NwNwuYchfY02Eb4SbElfZLimKqlweA
+	vV3ccE9tDqjwu+mUVUPqES6obR
+X-Received: by 2002:a17:903:2302:b0:2bd:e01c:d78 with SMTP id d9443c01a7336-2bde01c0e48mr37358615ad.7.1779154428357;
+        Mon, 18 May 2026 18:33:48 -0700 (PDT)
+Received: from m2 ([83.171.251.18])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5bd5f291sm170130185ad.15.2026.05.18.18.33.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 18:14:58 -0700 (PDT)
-From: Justin Suess <utilityemal77@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	bpf@vger.kernel.org,
-	mic@digikod.net,
-	Justin Suess <utilityemal77@gmail.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Subject: [PATCH bpf-next 1/1] bpf: fix deadlock in special field destruction in NMI
-Date: Mon, 18 May 2026 21:14:50 -0400
-Message-ID: <20260519011450.1144935-2-utilityemal77@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260519011450.1144935-1-utilityemal77@gmail.com>
-References: <20260519011450.1144935-1-utilityemal77@gmail.com>
+        Mon, 18 May 2026 18:33:48 -0700 (PDT)
+Date: Mon, 18 May 2026 18:33:45 -0700
+From: Jordan Rife <jordan@jrife.io>
+To: Mahe Tardy <mahe.tardy@gmail.com>
+Cc: bpf@vger.kernel.org, martin.lau@linux.dev, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, ast@kernel.org, andrii@kernel.org, yonghong.song@linux.dev, 
+	netdev@vger.kernel.org, netfilter-devel@vger.kernel.org, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com
+Subject: Re: [PATCH bpf-next v6 3/6] bpf: add bpf_icmp_send kfunc
+Message-ID: <onco52d3vpxkcc6hh3s5vuqjxanasucteq7wnqfqgzg4d65alc@q7h22nu3ytjn>
+References: <20260518122842.218522-1-mahe.tardy@gmail.com>
+ <20260518122842.218522-4-mahe.tardy@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260518122842.218522-4-mahe.tardy@gmail.com>
 
-Relax bpf_obj_free_fields to only cancel/free async work in irq_disabled
-contexts and defer unsafe free operations such as kptr dtors, list head
-and rb root destruction to a later non-irq_disabled call driven by the
-allocator or map free.
+On Mon, May 18, 2026 at 12:28:39PM +0000, Mahe Tardy wrote:
+> This is needed in the context of Tetragon to provide improved feedback
+> (in contrast to just dropping packets) to east-west traffic when blocked
+> by policies using cgroup_skb programs. We also extend this kfunc to tc
+> program as a convenience.
+> 
+> This reuses concepts from netfilter reject target codepath with the
+> differences that:
+> * Packets are cloned since the BPF user can still let the packet pass
+>   (SK_PASS from the cgroup_skb progs for example) and the current skb
+>   need to stay untouched (cgroup_skb hooks only allow read-only skb
+>   payload).
+> * We protect against recursion since the kfunc, by generating an ICMP
+>   error message, could retrigger the BPF prog that invoked it.
+> 
+> For now, we support cgroup_skb and tc program types. For cgroup_skb and
+> tc egress, almost everything should be good. However for tc ingress:
+> - packet will not be routed yet: need to set the net device for
+>   icmp_send, thus the call to ip[6]_route_reply_fill_dst.
+> - fragments could trigger hook: icmp_send will only reply to fragment 0.
+> - ensure the ip headers is linearized before processing, and zero out
+>   the SKB control block after cloning to prevent icmp_send()/icmpv6_send()
+>   from misinterpreting garbage data as IP options.
+> 
+> Only ICMP_DEST_UNREACH and ICMPV6_DEST_UNREACH are currently supported.
+> The interface accepts a type parameter to facilitate future extension to
+> other ICMP control message types.
+> 
+> Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
+> ---
+>  net/core/filter.c | 118 ++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 118 insertions(+)
+> 
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 9590877b0714..843fa775596b 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -84,6 +84,8 @@
+>  #include <linux/un.h>
+>  #include <net/xdp_sock_drv.h>
+>  #include <net/inet_dscp.h>
+> +#include <linux/icmpv6.h>
+> +#include <net/icmp.h>
+> 
+>  #include "dev.h"
+> 
+> @@ -12464,6 +12466,110 @@ __bpf_kfunc int bpf_xdp_pull_data(struct xdp_md *x, u32 len)
+>  	return 0;
+>  }
+> 
+> +static DEFINE_PER_CPU(bool, bpf_icmp_send_in_progress);
+> +
+> +/**
+> + * bpf_icmp_send - Send an ICMP control message
+> + * @skb_ctx: Packet that triggered the control message
+> + * @type: ICMP type (only ICMP_DEST_UNREACH/ICMPV6_DEST_UNREACH supported)
+> + * @code: ICMP code (0-15 for IPv4, 0-6 for IPv6)
+> + *
+> + * Sends an ICMP control message in response to the packet. The original packet
+> + * is cloned before sending the ICMP message, so the BPF program can still let
+> + * the packet pass if desired.
+> + *
+> + * Currently only ICMP_DEST_UNREACH (IPv4) and ICMPV6_DEST_UNREACH (IPv6) are
+> + * supported.
+> + *
+> + * Recursion protection: If called from a context that would trigger recursion
+> + * (e.g., root cgroup processing its own ICMP packets), returns -EBUSY on
+> + * re-entry.
+> + *
+> + * Return: 0 on success, negative error code on failure:
+> + *         -EINVAL: Invalid code parameter
+> + *         -EBADMSG: Packet too short or malformed
+> + *         -ENOMEM: Memory allocation failed
+> + *         -EBUSY: Recursion detected
+> + *         -EHOSTUNREACH: Routing failed
+> + *         -EPROTONOSUPPORT: Non-IP protocol
+> + *         -EOPNOTSUPP: Unsupported ICMP type
+> + */
+> +__bpf_kfunc int bpf_icmp_send(struct __sk_buff *skb_ctx, int type, int code)
+> +{
+> +	struct sk_buff *skb = (struct sk_buff *)skb_ctx;
+> +	struct sk_buff *nskb;
+> +	bool *in_progress;
+> +
+> +	in_progress = this_cpu_ptr(&bpf_icmp_send_in_progress);
+> +	if (*in_progress)
+> +		return -EBUSY;
+> +
+> +	switch (skb->protocol) {
+> +#if IS_ENABLED(CONFIG_INET)
+> +	case htons(ETH_P_IP):
+> +		if (type != ICMP_DEST_UNREACH)
+> +			return -EOPNOTSUPP;
+> +		if (code < 0 || code > NR_ICMP_UNREACH)
+> +			return -EINVAL;
+> +
+> +		nskb = skb_clone(skb, GFP_ATOMIC);
+> +		if (!nskb)
+> +			return -ENOMEM;
+> +
+> +		if (!pskb_network_may_pull(nskb, sizeof(struct iphdr))) {
+> +			kfree_skb(nskb);
+> +			return -EBADMSG;
 
-Detect fields that are unsafe to free under irqs_disabled at htab
-creation time. When creating a hashtab with these fields, forcibly set
-BPF_F_NO_PREALLOC and use the bpf memory allocator instead.
+nit: Instead of having several places where you call kfree_skb, maybe
+consider just cleaning up in once place at the end like:
 
-This must happen after the fields are checked, so convert the map to a
-non-prealloc one if the special fields are present, but before the map
-has been fully initialized.
+out:
+	if (nskb)
+		kfree_skb(nskb);
+	return err;
+	
+then in places like this do something like:
 
-Enable this fix for regular, percpu, and lru hashtabs.
+	err = -EBADMSG;
+	goto out;
 
-This fixes a deadlock caused by updating/deleting map elements in an
-NMI context by shifting the responsibility of freeing fields that are
-unsafe to free in contexts like NMI to the memory allocators existing
-mechanism for handling this.
+> +		}
+> +
+> +		if (!skb_dst(nskb) && ip_route_reply_fill_dst(nskb) < 0) {
+> +			kfree_skb(nskb);
+> +			return -EHOSTUNREACH;
+> +		}
+> +
+> +		memset(IPCB(nskb), 0, sizeof(struct inet_skb_parm));
+> +
+> +		*in_progress = true;
+> +		icmp_send(nskb, type, code, 0);
+> +		*in_progress = false;
+> +		kfree_skb(nskb);
+> +		break;
+> +#endif
+> +#if IS_ENABLED(CONFIG_IPV6)
+> +	case htons(ETH_P_IPV6):
+> +		if (type != ICMPV6_DEST_UNREACH)
+> +			return -EOPNOTSUPP;
+> +		if (code < 0 || code > ICMPV6_REJECT_ROUTE)
+> +			return -EINVAL;
+> +
+> +		nskb = skb_clone(skb, GFP_ATOMIC);
+> +		if (!nskb)
+> +			return -ENOMEM;
+> +
+> +		if (!pskb_network_may_pull(nskb, sizeof(struct ipv6hdr))) {
+> +			kfree_skb(nskb);
+> +			return -EBADMSG;
+> +		}
+> +
+> +		if (!skb_dst(nskb) && ip6_route_reply_fill_dst(nskb) < 0) {
+> +			kfree_skb(nskb);
+> +			return -EHOSTUNREACH;
+> +		}
+> +
+> +		memset(IP6CB(nskb), 0, sizeof(struct inet6_skb_parm));
+> +
+> +		*in_progress = true;
+> +		icmpv6_send(nskb, type, code, 0);
+> +		*in_progress = false;
+> +		kfree_skb(nskb);
+> +		break;
+> +#endif
+> +	default:
+> +		return -EPROTONOSUPPORT;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  __bpf_kfunc_end_defs();
+> 
+>  int bpf_dynptr_from_skb_rdonly(struct __sk_buff *skb, u64 flags,
+> @@ -12506,6 +12612,10 @@ BTF_KFUNCS_START(bpf_kfunc_check_set_sock_ops)
+>  BTF_ID_FLAGS(func, bpf_sock_ops_enable_tx_tstamp)
+>  BTF_KFUNCS_END(bpf_kfunc_check_set_sock_ops)
+> 
+> +BTF_KFUNCS_START(bpf_kfunc_check_set_icmp_send)
+> +BTF_ID_FLAGS(func, bpf_icmp_send)
+> +BTF_KFUNCS_END(bpf_kfunc_check_set_icmp_send)
+> +
+>  static const struct btf_kfunc_id_set bpf_kfunc_set_skb = {
+>  	.owner = THIS_MODULE,
+>  	.set = &bpf_kfunc_check_set_skb,
+> @@ -12536,6 +12646,11 @@ static const struct btf_kfunc_id_set bpf_kfunc_set_sock_ops = {
+>  	.set = &bpf_kfunc_check_set_sock_ops,
+>  };
+> 
+> +static const struct btf_kfunc_id_set bpf_kfunc_set_icmp_send = {
+> +	.owner = THIS_MODULE,
+> +	.set = &bpf_kfunc_check_set_icmp_send,
+> +};
+> +
+>  static int __init bpf_kfunc_init(void)
+>  {
+>  	int ret;
+> @@ -12557,6 +12672,9 @@ static int __init bpf_kfunc_init(void)
+>  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
+>  					       &bpf_kfunc_set_sock_addr);
+>  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_kfunc_set_tcp_reqsk);
+> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SKB, &bpf_kfunc_set_icmp_send);
+> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_kfunc_set_icmp_send);
 
-Fixes: 14a324f6a67e ("bpf: Wire up freeing of referenced kptr")
-Reported-by: Justin Suess <utilityemal77@gmail.com>
-Closes: https://lore.kernel.org/bpf/20260421201035.1729473-1-utilityemal77@gmail.com/
-Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Link: https://lore.kernel.org/bpf/DIG0ONMVOP0L.3QFYUPWFSKWI4@gmail.com/
-Signed-off-by: Justin Suess <utilityemal77@gmail.com>
----
- kernel/bpf/hashtab.c | 93 +++++++++++++++++++++++++++++++++++++++-----
- kernel/bpf/syscall.c |  8 +++-
- 2 files changed, 89 insertions(+), 12 deletions(-)
+Thanks, this could come in handy for TC.
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 3dd9b4924ae4..0db1dc8ae0be 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -130,6 +130,16 @@ struct htab_btf_record {
- 	u32 key_size;
- };
- 
-+static inline bool htab_has_nmi_special_fields(const struct bpf_htab *htab)
-+{
-+	const struct btf_record *rec = htab->map.record;
-+
-+	if (IS_ERR_OR_NULL(rec))
-+		return false;
-+	return rec->field_mask & (BPF_KPTR_REF | BPF_KPTR_PERCPU | BPF_UPTR |
-+				  BPF_LIST_HEAD | BPF_RB_ROOT);
-+}
-+
- static inline bool htab_is_prealloc(const struct bpf_htab *htab)
- {
- 	return !(htab->map.map_flags & BPF_F_NO_PREALLOC);
-@@ -522,13 +532,53 @@ static int htab_set_dtor(struct bpf_htab *htab, void (*dtor)(void *, void *))
- 	return 0;
- }
- 
-+static int htab_convert_to_non_prealloc(struct bpf_htab *htab)
-+{
-+	bool percpu = htab_is_percpu(htab);
-+	int err;
-+
-+	htab_free_prealloced_fields(htab);
-+	free_percpu(htab->extra_elems);
-+	htab->extra_elems = NULL;
-+	prealloc_destroy(htab);
-+	htab->map.map_flags |= BPF_F_NO_PREALLOC;
-+
-+	err = bpf_mem_alloc_init(&htab->ma, htab->elem_size, false);
-+	if (err)
-+		return err;
-+	if (percpu) {
-+		err = bpf_mem_alloc_init(&htab->pcpu_ma,
-+					 round_up(htab->map.value_size, 8),
-+					 true);
-+		if (err) {
-+			bpf_mem_alloc_destroy(&htab->ma);
-+			return err;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int htab_map_check_btf(struct bpf_map *map, const struct btf *btf,
- 			      const struct btf_type *key_type, const struct btf_type *value_type)
- {
- 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
-+	int err;
-+
-+	if (!htab_has_nmi_special_fields(htab)) {
-+		if (htab_is_prealloc(htab))
-+			return 0;
-+	} else {
-+		if (htab_is_lru(htab))
-+			return 0;
-+
-+		if (htab_is_prealloc(htab)) {
-+			err = htab_convert_to_non_prealloc(htab);
-+			if (err)
-+				return err;
-+		}
-+	}
- 
--	if (htab_is_prealloc(htab))
--		return 0;
- 	/*
- 	 * We must set the dtor using this callback, as map's BTF record is not
- 	 * populated in htab_map_alloc(), so it will always appear as NULL.
-@@ -1355,7 +1405,7 @@ static long htab_map_update_elem_in_place(struct bpf_map *map, void *key,
- 					  bool percpu, bool onallcpus)
- {
- 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
--	struct htab_elem *l_new, *l_old;
-+	struct htab_elem *l_new = NULL, *l_old;
- 	struct hlist_nulls_head *head;
- 	void *old_map_ptr = NULL;
- 	unsigned long flags;
-@@ -1387,8 +1437,17 @@ static long htab_map_update_elem_in_place(struct bpf_map *map, void *key,
- 		goto err;
- 
- 	if (l_old) {
--		/* Update value in-place */
--		if (percpu) {
-+		if (htab_has_nmi_special_fields(htab)) {
-+			l_new = alloc_htab_elem(htab, key, value, key_size,
-+						hash, percpu, onallcpus,
-+						l_old, map_flags);
-+			if (IS_ERR(l_new)) {
-+				ret = PTR_ERR(l_new);
-+				goto err;
-+			}
-+			hlist_nulls_add_head_rcu(&l_new->hash_node, head);
-+			hlist_nulls_del_rcu(&l_old->hash_node);
-+		} else if (percpu) {
- 			pcpu_copy_value(htab, htab_elem_get_ptr(l_old, key_size),
- 					value, onallcpus, map_flags);
- 		} else {
-@@ -1408,6 +1467,8 @@ static long htab_map_update_elem_in_place(struct bpf_map *map, void *key,
- 	}
- err:
- 	htab_unlock_bucket(b, flags);
-+	if (l_old && htab_has_nmi_special_fields(htab) && !ret)
-+		free_htab_elem(htab, l_old);
- 	if (old_map_ptr)
- 		map->ops->map_fd_put_ptr(map, old_map_ptr, true);
- 	return ret;
-@@ -1443,7 +1504,7 @@ static long __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
- 	 * to remove older elem from htab and this removal
- 	 * operation will need a bucket lock.
- 	 */
--	if (map_flags != BPF_EXIST) {
-+	if (map_flags != BPF_EXIST || htab_has_nmi_special_fields(htab)) {
- 		l_new = prealloc_lru_pop(htab, key, hash);
- 		if (!l_new)
- 			return -ENOMEM;
-@@ -1460,11 +1521,21 @@ static long __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
- 		goto err;
- 
- 	if (l_old) {
--		bpf_lru_node_set_ref(&l_old->lru_node);
-+		if (htab_has_nmi_special_fields(htab)) {
-+			pcpu_init_value(htab,
-+					htab_elem_get_ptr(l_new, key_size),
-+					value, onallcpus, map_flags);
-+			hlist_nulls_add_head_rcu(&l_new->hash_node, head);
-+			hlist_nulls_del_rcu(&l_old->hash_node);
-+			bpf_lru_node_set_ref(&l_new->lru_node);
-+			l_new = NULL;
-+		} else {
-+			bpf_lru_node_set_ref(&l_old->lru_node);
- 
--		/* per-cpu hash map can update value in-place */
--		pcpu_copy_value(htab, htab_elem_get_ptr(l_old, key_size),
--				value, onallcpus, map_flags);
-+			/* per-cpu hash map can update value in-place */
-+			pcpu_copy_value(htab, htab_elem_get_ptr(l_old, key_size),
-+					value, onallcpus, map_flags);
-+		}
- 	} else {
- 		pcpu_init_value(htab, htab_elem_get_ptr(l_new, key_size),
- 				value, onallcpus, map_flags);
-@@ -1479,6 +1550,8 @@ static long __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
- 		bpf_map_dec_elem_count(&htab->map);
- 		bpf_lru_push_free(&htab->lru, &l_new->lru_node);
- 	}
-+	if (l_old && !ret && htab_has_nmi_special_fields(htab))
-+		htab_lru_push_free(htab, l_old);
- 	return ret;
- }
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 6600e126fbfb..1f52453d5a2f 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -839,6 +839,8 @@ void bpf_obj_free_fields(const struct btf_record *rec, void *obj)
- 			break;
- 		case BPF_KPTR_REF:
- 		case BPF_KPTR_PERCPU:
-+			if (irqs_disabled())
-+				break;
- 			xchgd_field = (void *)xchg((unsigned long *)field_ptr, 0);
- 			if (!xchgd_field)
- 				break;
-@@ -854,16 +856,18 @@ void bpf_obj_free_fields(const struct btf_record *rec, void *obj)
- 			}
- 			break;
- 		case BPF_UPTR:
-+			if (irqs_disabled())
-+				break;
- 			/* The caller ensured that no one is using the uptr */
- 			unpin_uptr_kaddr(*(void **)field_ptr);
- 			break;
- 		case BPF_LIST_HEAD:
--			if (WARN_ON_ONCE(rec->spin_lock_off < 0))
-+			if (irqs_disabled() || WARN_ON_ONCE(rec->spin_lock_off < 0))
- 				continue;
- 			bpf_list_head_free(field, field_ptr, obj + rec->spin_lock_off);
- 			break;
- 		case BPF_RB_ROOT:
--			if (WARN_ON_ONCE(rec->spin_lock_off < 0))
-+			if (irqs_disabled() || WARN_ON_ONCE(rec->spin_lock_off < 0))
- 				continue;
- 			bpf_rb_root_free(field, field_ptr, obj + rec->spin_lock_off);
- 			break;
--- 
-2.53.0
+I'm not quite sure yet on using it in lieu of the sock_destroy kfunc for
+the UDP connected socket use case we discussed at LSFMMBPF. For socket
+LB mode in Cilium to make this work you'd need to add at least one new
+map lookup in the fast path to check for backend liveness and this
+partially defeats the performance benefits of socket LB which right
+now avoids service + backend lookups in the fast path for connected UDP.
+Ultimately, it might be better to stick with sock_destroy to kill
+sockets out-of-band for that use case, but still it's good to have this
+option.
 
+> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_ACT, &bpf_kfunc_set_icmp_send);
+>  	return ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SOCK_OPS, &bpf_kfunc_set_sock_ops);
+>  }
+>  late_initcall(bpf_kfunc_init);
+> --
+> 2.34.1
+> 
+
+Jordan
