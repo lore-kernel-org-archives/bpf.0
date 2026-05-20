@@ -1,57 +1,57 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A973EFD22;
-	Wed, 20 May 2026 15:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632A116DC28;
+	Wed, 20 May 2026 15:40:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779291631; cv=none; b=JHuhCla6eEjtpmIZCjO3sxjrwnvRdDvz7CHzHD7Qfwx0qDJo5Kfn/o3UZ2ZvWBEuj7MDP7pXyd0TvRu9CGviEjTgz9e5un0iVmLjsjpZthz0/x8fdg+kWzxknznDv/YgVsOTYsZxf8H+zko/dyoliQo5EGn6445MrIhZF28IO8E=
+	t=1779291651; cv=none; b=LDKJRpDbYznlz1iK1kykU/kXA/jKhSD9vKtsl7bDtDyO2x6kGUbf48ExAN+d+n/qFCAHzrTYIWZJKxgn+ILnl1up4Qxkyha5Ck90+xAC5/i7sP2hN4dw6gn+8Nhpxdhlus1VnfcNOlzGuE4rlK3wy5/V3SzfEoRdRtW1rj+HNVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779291631; c=relaxed/simple;
-	bh=Wro/b6jYmgm7DDfIhqot8C8Ej0U9e1lJqurx/bCiZps=;
+	s=arc-20240116; t=1779291651; c=relaxed/simple;
+	bh=vU3bTpy2WVxaFyCg8tgVZWE6/Q507QiIScI89F2YIGc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=twlRE4bVAhkPSJ+ooyXvTQ4ELQn+RS+KSiym/Yc8KMxce1tEAjC8NL9mIaYbiQcfZnccn3pATgn2squ0830Y96H/jKllf4+naEQPxNvdsaSXd7xfdiDdHChNP7owNU7srYszi3IPKDiopBezKxOX9jgwUqdBD3/JK3bj7p52A9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ivf/zv7p; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=oFDFVCqFMjlMzxHmb024FGYSqXUcc8vq9dmQ46JAutk33apSyuSi+ebbmw15S5BeJ+vXvdzQ1SQrz8ShITLb36Xfhna/PWvZgDWktPOCTBcr2LA/1VK6n3r9nYnhu3kFCFRN85RE3Qb+XEhxO7HeGeJ8sV0CaeRMpFjfX0HGPDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=hnHCkeic; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ivf/zv7p"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64K5E6WX1950620;
-	Wed, 20 May 2026 15:40:15 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="hnHCkeic"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64K6ocj8834424;
+	Wed, 20 May 2026 15:40:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=SmI34slVZs1BNH9m6
-	+m2YOZNt+zp/AB28hIWnnNMMn8=; b=ivf/zv7p9r5+XWye3TPo1ffSXxg1mU2LK
-	uO5P9LJcSb0u7AbNzTbpTZelFvL2/7pU5dRtHbjBtqVyWw7bGcdat24Z6OjgCYFr
-	SiEAYoepulLgUs4zbWs1xN5izpGY5X6zHCkU6uzw0zG8hM9qADrcnJK8d4vGXi1c
-	urV9laWOvtZC9+a7bNA0iZspIOdZOt5CLqaqNwoukKe35gmUvMYFHZ9Lx+9FC5vf
-	rGMo3JclhUZIiZ20ffGWUZggjkKdHyQrz64Svmh15vPZMEBA102eDn4WjIOCtpbS
-	xA6UswKmZhmTGRF1wA+Bngd59m1MSy1Oj769DrawaIb5SNL7OCvuQ==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h88htfs-1
+	:mime-version:references:subject:to; s=pp1; bh=3c0nvh5itwhP8hGgK
+	l3AyRHknls54+T11C0TpI4uHJU=; b=hnHCkeicm0I/sdvIH+wOiMqWtFt9Ym/9e
+	GaQFCntaAWNj/7/wKKp7ghBZa4R10xCcR5mhf0ylNF2jickqohLLf0suv+QhfDxX
+	riw86hdg0rIJbhbvatdfD0Zdfn9JFiPU9ZBTqQ4CAumUF654AnPzTQpu72BgEK38
+	xnc9qMMEOcppxyQeYUWvq/8kUivh0aX4+9CGiVrvcYs3xVZozVaMAHvOX6z7lHWQ
+	7Hky/gMUIU7oDFulZi/GSmQXFn4cBBtxfcDE6c0Q+k6DDXYVrFKxNERuJn6DoFMS
+	HqJHscKbYF/NvlsHh5Iq7v4EFscTZzTp+nnH4mLutkAkYH/KLbRSg==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h8mtspu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 May 2026 15:40:15 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64KFd8U4008385;
-	Wed, 20 May 2026 15:40:14 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e739w03b0-1
+	Wed, 20 May 2026 15:40:18 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64KFd4dP024644;
+	Wed, 20 May 2026 15:40:17 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e72wq871t-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 May 2026 15:40:14 +0000 (GMT)
+	Wed, 20 May 2026 15:40:17 +0000 (GMT)
 Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64KFeBsx21103176
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64KFeDce49217850
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 20 May 2026 15:40:11 GMT
+	Wed, 20 May 2026 15:40:13 GMT
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DCECB20043;
-	Wed, 20 May 2026 15:40:10 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id B13E720040;
+	Wed, 20 May 2026 15:40:13 +0000 (GMT)
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 55B862004E;
-	Wed, 20 May 2026 15:40:10 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 28CEA2004E;
+	Wed, 20 May 2026 15:40:13 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
 	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 20 May 2026 15:40:10 +0000 (GMT)
+	Wed, 20 May 2026 15:40:13 +0000 (GMT)
 From: Jens Remus <jremus@linux.ibm.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         x86@kernel.org, Steven Rostedt <rostedt@kernel.org>,
@@ -82,9 +82,9 @@ Cc: Jens Remus <jremus@linux.ibm.com>, bpf@vger.kernel.org, linux-mm@kvack.org,
         Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>,
         "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH v15 06/20] unwind_user/sframe: Detect .sframe sections in executables
-Date: Wed, 20 May 2026 17:39:50 +0200
-Message-ID: <20260520154004.3845823-7-jremus@linux.ibm.com>
+Subject: [PATCH v15 11/20] unwind_user/sframe: Show file name in debug output
+Date: Wed, 20 May 2026 17:39:55 +0200
+Message-ID: <20260520154004.3845823-12-jremus@linux.ibm.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260520154004.3845823-1-jremus@linux.ibm.com>
 References: <20260520154004.3845823-1-jremus@linux.ibm.com>
@@ -96,38 +96,39 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 2ISu0SHUttbv0n9vfydNFpwKXpKjlH2q
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIwMDE1MSBTYWx0ZWRfX7PV/sJz2ww+P
- 3/f3BwtqiU3FT5DyPXz/orsUimp1undhsKdq310qkRgje6tdAsY2U4BkqnfSMhIEfWfuov+4rgR
- mo42nz8tcH/qemdVol+DHMPwvoE2yxYwZQqdVUUiQ0jyF4VmLrX8yIPILiNqjKnFPcnpoi836r1
- C7KiJHgX0dhkCMbdGiKnUIYS+AdbqK/rnvOgjhvu4fCZflSXa/UZB8VAq27Vc4j8WsH6nkkgPCx
- VSa6i+/e6LVr/6ZNM2amsTvZDWLUiPJtu7wFw2/a6Hc/qYDrf6QMfLroerbfywNZSIhorssD7W8
- FguGSisAkobDJ6ilrcRLEJ84WkXWPE9RfcH3HmlSBqmiKH6ATBzfN48AgW7/5E+CKQj1qamK3C6
- 4O28N/xY7eBGwku9QCDhG3AS6KOFt1puUzFLO3Qy4CPu3BZohjGpl9F0EyjGlq3jRSzj0Goqegi
- 0LV1b1g8mjUBWXNVPnw==
-X-Proofpoint-GUID: 2ISu0SHUttbv0n9vfydNFpwKXpKjlH2q
-X-Authority-Analysis: v=2.4 cv=apyCzyZV c=1 sm=1 tr=0 ts=6a0dd5df cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-GUID: nOGEipXW_Vq4kLBKw8DEOnaegiLq7WTj
+X-Authority-Analysis: v=2.4 cv=GYMnWwXL c=1 sm=1 tr=0 ts=6a0dd5e2 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
  a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=V8glGbnc2Ofi9Qvn3v5h:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=pGLkceISAAAA:8
- a=VnNF1IyMAAAA:8 a=eNuN5pRUQDBy6NUwPKcA:9 a=2JgSa4NbpEOStq-L5dxp:22
+ a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=pGLkceISAAAA:8
+ a=VnNF1IyMAAAA:8 a=pfo6fe6KaiqNJ1UUovoA:9 a=2JgSa4NbpEOStq-L5dxp:22
+X-Proofpoint-ORIG-GUID: tAQjVecBoP-dCCoo7L_C0wBnG0GrfXMA
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIwMDE1MSBTYWx0ZWRfXxJNpDQlYKZnC
+ TBYNRBK75HFL20RcXOaKHoMyEFWef7YDs42GyablNEycjMtQixsgLIYaiy8w4Erewww6HIkl/O7
+ hziswLCOT8RDnNEwpNUf5G1xqW0wXPwo6ffa8K3o/Qz37cnrTsvISx2EbS8ja4zzWmIWodJ/eG4
+ G23qcbbwZ1hLeaifW58Qfm7qfNAiTBxcX+iZ3b451kQVYxUpdCvLx3AvdTtN/dHgLtymDgvDMVN
+ WPyD5BL50ruvn+Bkw2Qq5yNz/qK2D0rVv8yW8xvtdzpDRwKaUIdRY/JjbAq2E/71CuSVDnyKtdW
+ 1+golc23P3PrSYt8eDcNA6al5nuW2XHq+Pw4OoQyViVYJlIvj11UD818J9XZVsBlozQ3DgzceUx
+ v0miDnRbyMReg6kCkxOePDmntXRHIafDrVMpPcaXaIRb6JXYGVlf29l7n7Hi/w7LeC4SebJam/S
+ xZCmMl4D0l6RB9tNraw==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-05-20_03,2026-05-18_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 lowpriorityscore=0 priorityscore=1501 impostorscore=0
- bulkscore=0 suspectscore=0 adultscore=0 spamscore=0 phishscore=0
- clxscore=1015 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605130000
- definitions=main-2605200151
+ phishscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
+ adultscore=0 suspectscore=0 spamscore=0 clxscore=1015 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605200151
 
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-When loading an ELF executable, automatically detect an .sframe section
-and associate it with the mm_struct.
+When debugging sframe issues, the error messages aren't all that helpful
+without knowing what file a corresponding .sframe section belongs to.
+Prefix debug output strings with the file name.
 
-[ Jens Remus: Fix checkpatch warning "braces {} are not necessary for
-single statement blocks". ]
+[ Jens Remus: Fix checkpatch error "space prohibited before that close
+parenthesis ')'". ]
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
@@ -137,133 +138,194 @@ Signed-off-by: Jens Remus <jremus@linux.ibm.com>
 
 Notes (jremus):
     Changes in v15:
-    - Only add sframe for text that is PT_LOAD in addition to PF_X.
-      (Sashiko AI)
+    - Use GFP_KERNEL_ACCOUNT instead of GFP_KERNEL (see
+      memory-allocation.rst, section "Get Free Page flags"). (Sashiko AI)
+    
+    Changes in v14:
+    - Uppercase terms FDE and FRE in debug messages.
 
- fs/binfmt_elf.c          | 48 +++++++++++++++++++++++++++++++++++++---
- include/uapi/linux/elf.h |  1 +
- 2 files changed, 46 insertions(+), 3 deletions(-)
+ include/linux/sframe.h       |  4 +++-
+ kernel/unwind/sframe.c       | 23 ++++++++++--------
+ kernel/unwind/sframe_debug.h | 45 +++++++++++++++++++++++++++++++-----
+ 3 files changed, 56 insertions(+), 16 deletions(-)
 
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 16a56b6b3f6c..980a9f229cd1 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -48,6 +48,7 @@
- #include <linux/uaccess.h>
- #include <uapi/linux/rseq.h>
- #include <linux/rseq.h>
-+#include <linux/sframe.h>
- #include <asm/param.h>
- #include <asm/page.h>
+diff --git a/include/linux/sframe.h b/include/linux/sframe.h
+index 9a72209696f9..b79c5ec09229 100644
+--- a/include/linux/sframe.h
++++ b/include/linux/sframe.h
+@@ -10,7 +10,9 @@
  
-@@ -637,6 +638,21 @@ static inline int make_prot(u32 p_flags, struct arch_elf_state *arch_state,
- 	return arch_elf_adjust_prot(prot, arch_state, has_interp, is_interp);
+ struct sframe_section {
+ 	struct rcu_head	rcu;
+-
++#ifdef CONFIG_DYNAMIC_DEBUG
++	const char	*filename;
++#endif
+ 	unsigned long	sframe_start;
+ 	unsigned long	sframe_end;
+ 	unsigned long	text_start;
+diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+index 02331956009a..f931932bd34a 100644
+--- a/kernel/unwind/sframe.c
++++ b/kernel/unwind/sframe.c
+@@ -374,14 +374,17 @@ int sframe_find(unsigned long ip, struct unwind_user_frame *frame)
+ 	user_read_access_end();
+ 
+ end:
+-	if (ret && ret != -ENOENT)
++	if (ret && ret != -ENOENT) {
++		dbg_sec("removing bad .sframe section\n");
+ 		WARN_ON_ONCE(sframe_remove_section(sec->sframe_start));
++	}
+ 
+ 	return ret;
  }
  
-+static void elf_add_sframe(struct elf_phdr *text, struct elf_phdr *sframe,
-+			   unsigned long base_addr)
-+{
-+	unsigned long sframe_start, sframe_end, text_start, text_end;
+ static void free_section(struct sframe_section *sec)
+ {
++	dbg_free(sec);
+ 	kfree(sec);
+ }
+ 
+@@ -401,7 +404,7 @@ static int sframe_read_header(struct sframe_section *sec)
+ 	BUILD_BUG_ON(!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS));
+ 
+ 	if (copy_from_user(&shdr, (void __user *)sec->sframe_start, sizeof(shdr))) {
+-		dbg("header usercopy failed\n");
++		dbg_sec("header usercopy failed\n");
+ 		return -EFAULT;
+ 	}
+ 
+@@ -410,18 +413,18 @@ static int sframe_read_header(struct sframe_section *sec)
+ 	    !(shdr.preamble.flags & SFRAME_F_FDE_SORTED) ||
+ 	    !(shdr.preamble.flags & SFRAME_F_FDE_FUNC_START_PCREL) ||
+ 	    shdr.auxhdr_len) {
+-		dbg("bad/unsupported sframe header\n");
++		dbg_sec("bad/unsupported sframe header\n");
+ 		return -EINVAL;
+ 	}
+ 
+ 	if (!shdr.num_fdes || !shdr.num_fres) {
+-		dbg("no fde/fre entries\n");
++		dbg_sec("no FDE/FRE entries\n");
+ 		return -EINVAL;
+ 	}
+ 
+ 	header_end = sec->sframe_start + SFRAME_HEADER_SIZE(shdr);
+ 	if (header_end >= sec->sframe_end) {
+-		dbg("header doesn't fit in section\n");
++		dbg_sec("header doesn't fit in section\n");
+ 		return -EINVAL;
+ 	}
+ 
+@@ -433,7 +436,7 @@ static int sframe_read_header(struct sframe_section *sec)
+ 	fres_end   = fres_start + shdr.fre_len;
+ 
+ 	if (fres_start < fdes_end || fres_end > sec->sframe_end) {
+-		dbg("inconsistent fde/fre offsets\n");
++		dbg_sec("inconsistent FDE/FRE offsets\n");
+ 		return -EINVAL;
+ 	}
+ 
+@@ -489,6 +492,8 @@ int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
+ 	sec->text_start		= text_start;
+ 	sec->text_end		= text_end;
+ 
++	dbg_init(sec);
 +
-+	sframe_start = base_addr + sframe->p_vaddr;
-+	sframe_end   = sframe_start + sframe->p_memsz;
+ 	ret = sframe_read_header(sec);
+ 	if (ret) {
+ 		dbg_print_header(sec);
+@@ -498,8 +503,8 @@ int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
+ 	ret = mtree_insert_range(sframe_mt, sec->text_start, sec->text_end - 1,
+ 				 sec, GFP_KERNEL_ACCOUNT);
+ 	if (ret) {
+-		dbg("mtree_insert_range failed: text=%lx-%lx\n",
+-		    sec->text_start, sec->text_end);
++		dbg_sec("mtree_insert_range failed: text=%lx-%lx\n",
++			sec->text_start, sec->text_end);
+ 		goto err_free;
+ 	}
+ 
+@@ -521,7 +526,7 @@ static int __sframe_remove_section(struct mm_struct *mm,
+ 				   struct sframe_section *sec)
+ {
+ 	if (!mtree_erase(&mm->sframe_mt, sec->text_start)) {
+-		dbg("mtree_erase failed: text=%lx\n", sec->text_start);
++		dbg_sec("mtree_erase failed: text=%lx\n", sec->text_start);
+ 		return -EINVAL;
+ 	}
+ 
+diff --git a/kernel/unwind/sframe_debug.h b/kernel/unwind/sframe_debug.h
+index 36352124cde8..a63e75cccc70 100644
+--- a/kernel/unwind/sframe_debug.h
++++ b/kernel/unwind/sframe_debug.h
+@@ -10,26 +10,59 @@
+ #define dbg(fmt, ...)							\
+ 	pr_debug("%s (%d): " fmt, current->comm, current->pid, ##__VA_ARGS__)
+ 
++#define dbg_sec(fmt, ...)						\
++	dbg("%s: " fmt, sec->filename, ##__VA_ARGS__)
 +
-+	text_start   = base_addr + text->p_vaddr;
-+	text_end     = text_start + text->p_memsz;
-+
-+	/* Ignore return value, sframe section isn't critical */
-+	sframe_add_section(sframe_start, sframe_end, text_start, text_end);
+ static __always_inline void dbg_print_header(struct sframe_section *sec)
+ {
+ 	unsigned long fdes_end;
+ 
+ 	fdes_end = sec->fdes_start + (sec->num_fdes * sizeof(struct sframe_fde_v3));
+ 
+-	dbg("SEC: sframe:0x%lx-0x%lx text:0x%lx-0x%lx "
+-	    "fdes:0x%lx-0x%lx fres:0x%lx-0x%lx "
+-	    "ra_off:%d fp_off:%d\n",
+-	    sec->sframe_start, sec->sframe_end, sec->text_start, sec->text_end,
+-	    sec->fdes_start, fdes_end, sec->fres_start, sec->fres_end,
+-	    sec->ra_off, sec->fp_off);
++	dbg_sec("SEC: sframe:0x%lx-0x%lx text:0x%lx-0x%lx "
++		"fdes:0x%lx-0x%lx fres:0x%lx-0x%lx "
++		"ra_off:%d fp_off:%d\n",
++		sec->sframe_start, sec->sframe_end, sec->text_start, sec->text_end,
++		sec->fdes_start, fdes_end, sec->fres_start, sec->fres_end,
++		sec->ra_off, sec->fp_off);
 +}
 +
- /* This is much more generalized than the library routine read function,
-    so we keep this separate.  Technically the library read function
-    is only provided so that we can read a.out libraries that have
-@@ -647,7 +663,7 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
- 		unsigned long no_base, struct elf_phdr *interp_elf_phdata,
- 		struct arch_elf_state *arch_state)
- {
--	struct elf_phdr *eppnt;
-+	struct elf_phdr *eppnt, *sframe_phdr = NULL;
- 	unsigned long load_addr = 0;
- 	int load_addr_set = 0;
- 	unsigned long error = ~0UL;
-@@ -673,7 +689,8 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
- 
- 	eppnt = interp_elf_phdata;
- 	for (i = 0; i < interp_elf_ex->e_phnum; i++, eppnt++) {
--		if (eppnt->p_type == PT_LOAD) {
-+		switch (eppnt->p_type) {
-+		case PT_LOAD: {
- 			int elf_type = MAP_PRIVATE;
- 			int elf_prot = make_prot(eppnt->p_flags, arch_state,
- 						 true, true);
-@@ -712,6 +729,19 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
- 				error = -ENOMEM;
- 				goto out;
- 			}
-+			break;
-+		}
-+		case PT_GNU_SFRAME:
-+			sframe_phdr = eppnt;
-+			break;
-+		}
-+	}
++static inline void dbg_init(struct sframe_section *sec)
++{
++	struct mm_struct *mm = current->mm;
++	struct vm_area_struct *vma;
 +
-+	if (sframe_phdr) {
-+		eppnt = interp_elf_phdata;
-+		for (i = 0; i < interp_elf_ex->e_phnum; i++, eppnt++) {
-+			if (eppnt->p_flags & PF_X && eppnt->p_type == PT_LOAD)
-+				elf_add_sframe(eppnt, sframe_phdr, load_addr);
- 		}
- 	}
- 
-@@ -836,7 +866,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 	int first_pt_load = 1;
- 	unsigned long error;
- 	struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
--	struct elf_phdr *elf_property_phdata = NULL;
-+	struct elf_phdr *elf_property_phdata = NULL, *sframe_phdr = NULL;
- 	unsigned long elf_brk;
- 	bool brk_moved = false;
- 	int retval, i;
-@@ -945,6 +975,10 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 				executable_stack = EXSTACK_DISABLE_X;
- 			break;
- 
-+		case PT_GNU_SFRAME:
-+			sframe_phdr = elf_ppnt;
-+			break;
++	guard(mmap_read_lock)(mm);
++	vma = vma_lookup(mm, sec->sframe_start);
++	if (!vma)
++		sec->filename = kstrdup("(vma gone???)", GFP_KERNEL_ACCOUNT);
++	else if (vma->vm_file)
++		sec->filename = kstrdup_quotable_file(vma->vm_file, GFP_KERNEL_ACCOUNT);
++	else if (vma->vm_ops && vma->vm_ops->name)
++		sec->filename = kstrdup(vma->vm_ops->name(vma), GFP_KERNEL_ACCOUNT);
++	else if (arch_vma_name(vma))
++		sec->filename = kstrdup(arch_vma_name(vma), GFP_KERNEL_ACCOUNT);
++	else if (!vma->vm_mm)
++		sec->filename = kstrdup("(vdso)", GFP_KERNEL_ACCOUNT);
++	else
++		sec->filename = kstrdup("(anonymous)", GFP_KERNEL_ACCOUNT);
++}
 +
- 		case PT_LOPROC ... PT_HIPROC:
- 			retval = arch_elf_pt_proc(elf_ex, elf_ppnt,
- 						  bprm->file, false,
-@@ -1242,6 +1276,14 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 			elf_brk = k;
- 	}
++static inline void dbg_free(struct sframe_section *sec)
++{
++	kfree(sec->filename);
+ }
  
-+	if (sframe_phdr) {
-+		for (i = 0, elf_ppnt = elf_phdata;
-+		     i < elf_ex->e_phnum; i++, elf_ppnt++) {
-+			if (elf_ppnt->p_flags & PF_X && elf_ppnt->p_type == PT_LOAD)
-+				elf_add_sframe(elf_ppnt, sframe_phdr, load_bias);
-+		}
-+	}
+ #else /* !CONFIG_DYNAMIC_DEBUG */
+ 
+ #define dbg(args...)			no_printk(args)
++#define dbg_sec(args...)		no_printk(args)
+ 
+ static inline void dbg_print_header(struct sframe_section *sec) {}
+ 
++static inline void dbg_init(struct sframe_section *sec) {}
++static inline void dbg_free(struct sframe_section *sec) {}
 +
- 	e_entry = elf_ex->e_entry + load_bias;
- 	phdr_addr += load_bias;
- 	elf_brk += load_bias;
-diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
-index ee30dcd80901..e2a7dbed2e80 100644
---- a/include/uapi/linux/elf.h
-+++ b/include/uapi/linux/elf.h
-@@ -41,6 +41,7 @@ typedef __u16	Elf64_Versym;
- #define PT_GNU_STACK	(PT_LOOS + 0x474e551)
- #define PT_GNU_RELRO	(PT_LOOS + 0x474e552)
- #define PT_GNU_PROPERTY	(PT_LOOS + 0x474e553)
-+#define PT_GNU_SFRAME	(PT_LOOS + 0x474e554)
+ #endif /* !CONFIG_DYNAMIC_DEBUG */
  
- 
- /* ARM MTE memory tag segment type */
+ #endif /* _SFRAME_DEBUG_H */
 -- 
 2.51.0
 
