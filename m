@@ -1,57 +1,57 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44743EEACD;
-	Wed, 20 May 2026 15:40:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F31285072;
+	Wed, 20 May 2026 15:40:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779291651; cv=none; b=e18xc3EIK5eJ/73vC45nBTfic4OCpYTSRoMCK2JbxEFlhjt0pIZPNy6zDkpyvcGllExWLX7Zv/Cnmb41wzG0Zaipsmm5xl5LVhU2ipH0qXx0HEmdGMDbMUgw5bx6nRJ22xyxJuXe0eRqf8oin8Y+Hc6UPG9TTGdCS1J9T2rnw2g=
+	t=1779291653; cv=none; b=N415vpsXK1KP9p6VCowUV61gbmMlKzfdXeYguSG0DcRj0Gsj62Dt3QGkJHG44+1Sisa0UvCzds4q1nfoAGR/l1F/D3Ppxz0x1+nfFzHVZLw1jNYYVf6gaayXIJSzpxS3l8ePceMKCmEq17VC3wAxcja3z8sN9D+ULo3XdlUpLks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779291651; c=relaxed/simple;
-	bh=FY4cq2mmdOjkNgP2LdkbdnZ4tbTuKo0kZnqE4fvBH88=;
+	s=arc-20240116; t=1779291653; c=relaxed/simple;
+	bh=lOecHyF8OzA6DjC/qe3jutuuLV3mk+I5Os3HbhzakrU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CS5VQovPgvhOY721W+hOAC8sN8b1mUF6ujpobYoZxZS6pbjSue1EqfTxUz4EHaRIzOV2BQFLtzbay7dhztC+BEp+83m7DI9PGp1T3q9u4/S//U0Qa5gDaPIyg6sE7wIfCRH4qoNdKhEbZFaDYCHDbf4lQGEtxZdKHe3hAgWGivs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=sR1Hu+xN; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=n4C9qWnhlVz2mn90PWGHs0gUDWmjQ1wC0ZJaUQ5pWVBxmVx7rkLE3ptADw5LsDejeINsxzlMyzsG1qneNm3p/qAjbpg2TU4Sx15Bsu5fSxUkHj2t+usib3GUZDiBraDbIy91T9i3F6PrV1jOuz9kROZ1m7k+Zfh8VQn+ZmyYVSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ts7uHLp5; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="sR1Hu+xN"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64K6k2lC513145;
-	Wed, 20 May 2026 15:40:18 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ts7uHLp5"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64KBdqLq3067542;
+	Wed, 20 May 2026 15:40:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=3YhmEJz3THPGCV6XH
-	th7RTi4iJUGf4vityHFxauJl+s=; b=sR1Hu+xNh4YACGGV7nHrOpZXgZz7O+vAY
-	mpIi+00bAC4VU3SrITbC7Cukx9zKihiRCBj/WuMlkJKuG9on1yCObLL455RHUunR
-	h573/vwOutrA2C2B+JOuWBxwHpWooBpaNJQCPk2wL9byoNeGMUul0LSAHtzGHICs
-	8Y005F+le0G05mbtdmMXXDoHgfVf0xYbIexcVqU37aSlj+WiNaJpFyzJCWGAyyb6
-	fCE+x62HXE/UyVdMBAOMPESuEK3fjulxvLtwiSPh5mKCO4KQaouyQgwJTqV0nywy
-	4Y0UNDLr8mUJ36v3Iql3sYhRjRSyAp/7uZKBLCwGdGgDdzepqTc8g==
+	:mime-version:references:subject:to; s=pp1; bh=uzN6ExvwjSRFvHa4Q
+	SSdgJXqamOyosXCIwBkfX5X/iU=; b=ts7uHLp5+jAdPzzdtXNwyUUJbq/sFvFAn
+	lLvSzN9o3lEosyNNra60yNtsXvldsho217Evi4tQ/f6VWXM7qoXRFwI0Ks0GQLn4
+	yeWFIOIcB/ZEZmnS6sH3ms430Ie3nFlv8kzjCxdxhBLgy3h5K4UCxgOmBIxS9tlU
+	6HYLJj86mFIC0G075qvhefxzMq3eqvYJGSX+MmCIxR5DfUtgpK1cKZtYxd8+UWpb
+	yaj4fhX4LSHxiITZLaEtVcVZiodoWKBhIJurFv00ee1E2F5xzu9r+pfYNXeGapYT
+	8thbbO9WyfwgMMVK3bT4atxW59264X66EKiDYrbGU/+ZO5VByL1tg==
 Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h752ta3-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6haw9u5s-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 May 2026 15:40:17 +0000 (GMT)
+	Wed, 20 May 2026 15:40:22 +0000 (GMT)
 Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64KFd6Vx026083;
-	Wed, 20 May 2026 15:40:16 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e75ky7q66-1
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64KFdANZ026110;
+	Wed, 20 May 2026 15:40:21 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e75ky7q6k-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 May 2026 15:40:16 +0000 (GMT)
+	Wed, 20 May 2026 15:40:21 +0000 (GMT)
 Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64KFeC8R62063014
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64KFeHFO46268892
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 20 May 2026 15:40:12 GMT
+	Wed, 20 May 2026 15:40:17 GMT
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8BDDD20043;
-	Wed, 20 May 2026 15:40:12 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id BF0DD2004D;
+	Wed, 20 May 2026 15:40:17 +0000 (GMT)
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0CFA42004B;
-	Wed, 20 May 2026 15:40:12 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 403F82004B;
+	Wed, 20 May 2026 15:40:17 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
 	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 20 May 2026 15:40:11 +0000 (GMT)
+	Wed, 20 May 2026 15:40:17 +0000 (GMT)
 From: Jens Remus <jremus@linux.ibm.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         x86@kernel.org, Steven Rostedt <rostedt@kernel.org>,
@@ -81,9 +81,9 @@ Cc: Jens Remus <jremus@linux.ibm.com>, bpf@vger.kernel.org, linux-mm@kvack.org,
         Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
         Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH v15 09/20] unwind_user/sframe: Add support for outermost frame indication
-Date: Wed, 20 May 2026 17:39:53 +0200
-Message-ID: <20260520154004.3845823-10-jremus@linux.ibm.com>
+Subject: [PATCH v15 18/20] unwind_user/sframe: Duplicate registered .sframe section data on clone/fork
+Date: Wed, 20 May 2026 17:40:02 +0200
+Message-ID: <20260520154004.3845823-19-jremus@linux.ibm.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260520154004.3845823-1-jremus@linux.ibm.com>
 References: <20260520154004.3845823-1-jremus@linux.ibm.com>
@@ -96,98 +96,182 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=ffCdDUQF c=1 sm=1 tr=0 ts=6a0dd5e1 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIwMDE1MSBTYWx0ZWRfXzDf0BBVwHN8H
+ OeYMoeWwylZgdLIw/zdKsHPEr0h8qkx6aYfbKMNVY9M4EMtgIL7FrGt/O8Naku/9q0paeWVFdT4
+ gTsgm4xKJrGYSMlt0O2RDqFlmAUBKrEsCB1AxRjVb2EvoJ2E9H0YcTI+wp9lFMafcrpr0kZmm+5
+ 2ydSK8BuLe5n5lKwwDWKM2PPlEx8YzqBbcsyc8jVx/Qhw6RKIVi7RcqOxVA1aK9voiJwsqlaTPj
+ jk5RhH3M9d6K/Yf9SrOe5RMg2N8S3TLy7o6W/7o62UTeiW2fgCgm2TmTU3Qndx3jJ7cDxoBUTeI
+ +zogwZ3kW8aNY9XginzO89ilwIE7sHIiAc/mYrLI3FcSmuijRjUw2MHdlGPqRe56gV6LwYFCP3a
+ UrC+ER0nKFYbe6vXYBtEQpvek90hqt4hoMEZXida0H8Erda/xzhjqn7rAjEn4dvzVZcsg+j/76v
+ 9Jvx3aYknaAT05uHjeA==
+X-Authority-Analysis: v=2.4 cv=Np/htcdJ c=1 sm=1 tr=0 ts=6a0dd5e6 cx=c_pps
  a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
  a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=U7nrCbtTmkRpXpFmAIza:22 a=pGLkceISAAAA:8 a=VnNF1IyMAAAA:8
- a=U72JrVpwKSe1qDC-WCIA:9
-X-Proofpoint-ORIG-GUID: RutorrHK_Yh961JRGNUS1hvnwjZkw88C
-X-Proofpoint-GUID: XnZrEE4_Iky6X02Y2pC9TJ5PPqyzpqIn
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIwMDE1MSBTYWx0ZWRfX1OqTSBjg6JuQ
- 3CYMiUWNmccKjjzBUq2FHOZJTDO7VV9RUQtDZ/UosD6cXC4wirTJjKWlbMgrl57yNKjZx4nqukq
- CUEyyWpoI+g96MdSRvblOL3fNjCPUGmjXY8swPhuIFkQLVXheAquLoSsWfWMx3R6TTOvnx3HXEi
- gTK2ZGHp2EO4VVybVguhAvAOyiXxbjjRblupu5eGISleIYUFA8D+1pMybPtQ7IOkPP/lVSPpBJ+
- KdgYqWAWsxR62CmXaPjcU7qj0KlR791ABFSU5jlans+thlIpN2KGruDpNnwhNS4C5i4fU2fxluh
- hmge4nC/w4oV7pFW7faXGslWKLCMvhTmSL8q5nnhRvinUilCZYfHgBCDucTfgEKIMiDgejCKPP7
- njDNzY36T8g9hnYZU71eXoCzez16WpGBrTeb5i8io6vVApLmm8HCKExgY84mMF4IT50TmosB2E/
- C5c1EoJcDHhQugNIg7w==
+ a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8 a=H1ImvsCuyUzGZUZlsssA:9
+X-Proofpoint-ORIG-GUID: 0v1vB95jkJXiZWaV3My4cqKvh1HEwtRJ
+X-Proofpoint-GUID: eDqNSvCepqPb2rATY0Fc-wAC4b6k_woA
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-05-20_03,2026-05-18_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 spamscore=0 phishscore=0 suspectscore=0 adultscore=0
- clxscore=1015 impostorscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0
+ bulkscore=0 spamscore=0 clxscore=1015 priorityscore=1501 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 adultscore=0 phishscore=0 malwarescore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605200151
 
-SFrame may represent an undefined return address (RA) as SFrame FRE
-without any offsets as indication for an outermost frame.
+When duplicating a process' virtual memory mappings also duplicate all
+of its registered .sframe sections stored in the per-mm maple tree to
+enable stacktracing using sframe of the child process.
 
-Reviewed-by: Indu Bhagat <ibhagatgnu@gmail.com>
 Signed-off-by: Jens Remus <jremus@linux.ibm.com>
 ---
- kernel/unwind/sframe.c | 15 ++++++++++++++-
- kernel/unwind/sframe.h |  1 +
- 2 files changed, 15 insertions(+), 1 deletion(-)
+ include/linux/sframe.h       |  5 ++++
+ kernel/unwind/sframe.c       | 48 ++++++++++++++++++++++++++++++++++++
+ kernel/unwind/sframe_debug.h |  7 ++++++
+ mm/mmap.c                    |  9 +++++++
+ 4 files changed, 69 insertions(+)
 
+diff --git a/include/linux/sframe.h b/include/linux/sframe.h
+index b79c5ec09229..91889b4fe3dd 100644
+--- a/include/linux/sframe.h
++++ b/include/linux/sframe.h
+@@ -28,6 +28,7 @@ struct sframe_section {
+ };
+ 
+ #define INIT_MM_SFRAME .sframe_mt = MTREE_INIT(sframe_mt, 0),
++extern int sframe_dup_mm(struct mm_struct *mm, struct mm_struct *oldmm);
+ extern void sframe_free_mm(struct mm_struct *mm);
+ 
+ extern int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
+@@ -45,6 +46,10 @@ static inline bool current_has_sframe(void)
+ #else /* !CONFIG_HAVE_UNWIND_USER_SFRAME */
+ 
+ #define INIT_MM_SFRAME
++static inline int sframe_dup_mm(struct mm_struct *mm, struct mm_struct *oldmm)
++{
++	return 0;
++}
+ static inline void sframe_free_mm(struct mm_struct *mm) {}
+ static inline int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
+ 				     unsigned long text_start, unsigned long text_end)
 diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
-index a38f50a36363..f723c1a32f90 100644
+index ec8318977a2e..0661090dd5bc 100644
 --- a/kernel/unwind/sframe.c
 +++ b/kernel/unwind/sframe.c
-@@ -230,7 +230,7 @@ static __always_inline int __read_fre(struct sframe_section *sec,
- 	UNSAFE_GET_USER_INC(info, cur, 1, Efault);
- 	dataword_count = SFRAME_V3_FRE_DATAWORD_COUNT(info);
- 	dataword_size  = dataword_size_enum_to_size(SFRAME_V3_FRE_DATAWORD_SIZE(info));
--	if (!dataword_count || !dataword_size)
-+	if (!dataword_size)
- 		return -EINVAL;
- 
- 	if (cur + (dataword_count * dataword_size) > sec->fres_end)
-@@ -240,6 +240,17 @@ static __always_inline int __read_fre(struct sframe_section *sec,
- 	if (fde_type != SFRAME_FDE_TYPE_DEFAULT)
- 		return -EINVAL;
- 
-+	if (!dataword_count) {
-+		/*
-+		 * A FRE without data words indicates RA undefined /
-+		 * outermost frame.
-+		 */
-+		cfa_off	= 0;
-+		ra_off	= 0;
-+		fp_off	= 0;
-+		goto done;
-+	}
-+
- 	UNSAFE_GET_USER_INC(cfa_off, cur, dataword_size, Efault);
- 	dataword_count--;
- 
-@@ -260,6 +271,7 @@ static __always_inline int __read_fre(struct sframe_section *sec,
- 	if (dataword_count)
- 		return -EINVAL;
- 
-+done:
- 	fre->size	= addr_size + 1 + (dataword_count * dataword_size);
- 	fre->ip_off	= ip_off;
- 	fre->cfa_off	= cfa_off;
-@@ -326,6 +338,7 @@ static __always_inline int __find_fre(struct sframe_section *sec,
- 	frame->ra_off  = fre->ra_off;
- 	frame->fp_off  = fre->fp_off;
- 	frame->use_fp  = SFRAME_V3_FRE_CFA_BASE_REG_ID(fre->info) == SFRAME_BASE_REG_FP;
-+	frame->outermost = SFRAME_V3_FRE_RA_UNDEFINED_P(fre->info);
- 
+@@ -886,6 +886,54 @@ int sframe_remove_section(unsigned long sframe_start)
  	return 0;
  }
-diff --git a/kernel/unwind/sframe.h b/kernel/unwind/sframe.h
-index fc2908e92c7b..ed111fd0d702 100644
---- a/kernel/unwind/sframe.h
-+++ b/kernel/unwind/sframe.h
-@@ -77,5 +77,6 @@ struct sframe_fda_v3 {
- #define SFRAME_V3_FRE_DATAWORD_COUNT(info)		(((info) >> 1) & 0xf)
- #define SFRAME_V3_FRE_DATAWORD_SIZE(info)		(((info) >> 5) & 0x3)
- #define SFRAME_V3_AARCH64_FRE_MANGLED_RA_P(info)	(((info) >> 7) & 0x1)
-+#define SFRAME_V3_FRE_RA_UNDEFINED_P(info)		(SFRAME_V3_FRE_DATAWORD_COUNT(info) == 0)
  
- #endif /* _SFRAME_H */
++static void __sframe_dup_section(struct sframe_section *sec, struct sframe_section *oldsec)
++{
++	sec->sframe_start	= oldsec->sframe_start;
++	sec->sframe_end		= oldsec->sframe_end;
++	sec->text_start		= oldsec->text_start;
++	sec->text_end		= oldsec->text_end;
++
++	sec->fdes_start		= oldsec->fdes_start;
++	sec->fres_start		= oldsec->fres_start;
++	sec->fres_end		= oldsec->fres_end;
++	sec->num_fdes		= oldsec->num_fdes;
++
++	sec->ra_off		= oldsec->ra_off;
++	sec->fp_off		= oldsec->fp_off;
++
++	dbg_dup(sec, oldsec);
++}
++
++int sframe_dup_mm(struct mm_struct *mm, struct mm_struct *oldmm)
++{
++	struct sframe_section *sec, *oldsec;
++	unsigned long index = 0;
++	int ret;
++
++	guard(srcu)(&sframe_srcu);
++
++	mt_for_each(&oldmm->sframe_mt, oldsec, index, ULONG_MAX) {
++		sec = kzalloc(sizeof(*sec), GFP_KERNEL_ACCOUNT);
++		if (!sec)
++			return -ENOMEM;
++
++		__sframe_dup_section(sec, oldsec);
++
++		ret = mtree_insert_range(&mm->sframe_mt,
++					 sec->text_start,
++					 sec->text_end - 1,
++					 sec, GFP_KERNEL_ACCOUNT);
++		if (ret)
++			goto err_free;
++	}
++
++	return 0;
++
++err_free:
++	free_section(sec);
++	return ret;
++}
++
+ void sframe_free_mm(struct mm_struct *mm)
+ {
+ 	struct sframe_section *sec;
+diff --git a/kernel/unwind/sframe_debug.h b/kernel/unwind/sframe_debug.h
+index a63e75cccc70..2503972155e8 100644
+--- a/kernel/unwind/sframe_debug.h
++++ b/kernel/unwind/sframe_debug.h
+@@ -48,6 +48,12 @@ static inline void dbg_init(struct sframe_section *sec)
+ 		sec->filename = kstrdup("(anonymous)", GFP_KERNEL_ACCOUNT);
+ }
+ 
++static inline void dbg_dup(struct sframe_section *sec, struct sframe_section *oldsec)
++{
++	if (oldsec->filename)
++		sec->filename = kstrdup(oldsec->filename, GFP_KERNEL_ACCOUNT);
++}
++
+ static inline void dbg_free(struct sframe_section *sec)
+ {
+ 	kfree(sec->filename);
+@@ -61,6 +67,7 @@ static inline void dbg_free(struct sframe_section *sec)
+ static inline void dbg_print_header(struct sframe_section *sec) {}
+ 
+ static inline void dbg_init(struct sframe_section *sec) {}
++static inline void dbg_dup(struct sframe_section *sec, struct sframe_section *oldsec) {}
+ static inline void dbg_free(struct sframe_section *sec) {}
+ 
+ #endif /* !CONFIG_DYNAMIC_DEBUG */
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 5754d1c36462..250e8bea73ef 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -48,6 +48,7 @@
+ #include <linux/sched/mm.h>
+ #include <linux/ksm.h>
+ #include <linux/memfd.h>
++#include <linux/sframe.h>
+ 
+ #include <linux/uaccess.h>
+ #include <asm/cacheflush.h>
+@@ -1846,6 +1847,11 @@ __latent_entropy int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
+ 	}
+ 	/* a new mm has just been created */
+ 	retval = arch_dup_mmap(oldmm, mm);
++#ifdef CONFIG_HAVE_UNWIND_USER_SFRAME
++	if (!retval) {
++		retval = sframe_dup_mm(mm, oldmm);
++	}
++#endif
+ loop_out:
+ 	vma_iter_free(&vmi);
+ 	if (!retval) {
+@@ -1893,6 +1899,9 @@ __latent_entropy int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
+ 			vm_unacct_memory(charge);
+ 		}
+ 		__mt_destroy(&mm->mm_mt);
++#ifdef CONFIG_HAVE_UNWIND_USER_SFRAME
++		sframe_free_mm(mm);
++#endif
+ 		/*
+ 		 * The mm_struct is going to exit, but the locks will be dropped
+ 		 * first.  Set the mm_struct as unstable is advisable as it is
 -- 
 2.51.0
 
