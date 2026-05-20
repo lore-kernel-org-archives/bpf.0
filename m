@@ -1,188 +1,210 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC09E3A873D
-	for <bpf@vger.kernel.org>; Tue, 19 May 2026 23:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90DFE3A1C9;
+	Wed, 20 May 2026 00:18:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779235018; cv=none; b=Oco/ZsbynkMpwgOVyckUIwwHie8MPsVdKkBADv49Gfrogio14j8B8DmNvAsoqyq4kWeYtPkgSUgOzJw5UTeCKryi+FZo23hsbLylcBRpbcv3Cwhpn9MXdMHUG7eyxe4yzaG6CW+TGanRKSv2zhjTMKWIlBi6BB6eB/XlyG1tiSg=
+	t=1779236316; cv=none; b=VEkMbcFiq7XF5+UliYY2+eJtg61YUMlENCD/7MO0UL7RuRwE+waHE6skpLtgI9lMs4JWcqeQOTA6lNYM7rCsxcqIm9qW+OZgTvL7muLi7v8OIY5ndx0f6oKYSBkbKbNO4t/InjxmwFC9ZyBMTr49qWxcn/gFt5/+63t2k5SHBNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779235018; c=relaxed/simple;
-	bh=clhLouqYW5aBjVaVbgARr7kElklBo3818qBkVUJ96pc=;
+	s=arc-20240116; t=1779236316; c=relaxed/simple;
+	bh=JXypfhfZ2VtQgsexj4hBfU+garKFYQlJcsBrLrPsKh0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ni7JnR1T3c/eghwll2JSjnIv0maPZ8g9bLQOzQcktyENVptvpX8R40XwuVoIlnc/V6YW6KppwlLPFYKZp3HOIHdruNrs3hbLym2zlP2mwvcFP6hzxgc2cCx9Xo0qjJEkkX01ysorKA8fPQo11dNaNxjApaWXMXMvrosJHkEtlnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TvUowGGh; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=RHJPkEoBVO/fTNVxN5v+RoHae+i6OzvaFHPbkH8Kz+oLx2RjDp5ZJ04U5MyZW2DUfYuCXCHw0zfmorPpT5cV3GJUV/thWvgfw+ataakKIyRLjeKE6JL0IC7/mVX9WFI/s2SlWWzZ0SREUvX53vKin/vTwehObVbetHaNd1F3sL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RkkAVIEE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TvUowGGh"
-Date: Tue, 19 May 2026 16:56:16 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779235004;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DPEFO7kdxsh8SS4pTtrYEyGh/V9vDuaXz5keX2/Kf6s=;
-	b=TvUowGGhwT0UEM3xRszwSTPbxDZvvYWNsYS9nU/IYFew6GiGEme8L5X/IeEXCKAA12nhyh
-	PmhgTmBbDNyBRGvbSIGvxCxufl+kOpA1OKAz0Ov2lijGeD+mYASLuVVsXkSqHlNOj/HETp
-	ma6pGD2BR/FaQy8Hz1reTEK92Ii04CQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: [RFC PATCH bpf-next 09/12] bpf: Add infrastructure to support
- attaching struct_ops to cgroups
-Message-ID: <2026519225454.By6y.martin.lau@linux.dev>
-References: <20260519215841.2984970-10-martin.lau@linux.dev>
- <20260519225002.986EB1F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RkkAVIEE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E21581F000E9;
+	Wed, 20 May 2026 00:18:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779236315;
+	bh=q05XjgCA51smzb3FPVyWSr8RA81opvJFMvHtJQV1wFw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=RkkAVIEEIJyBmGunc2+iINrQJhpSIEjLpGi4RUM6Ekn3cjYjllrB36yGM2eGZkbdT
+	 mW90KXiFFBe0Wif3M2TaSQJ3Do5ByE9Jsin3lxrzUEyrt8yUChMII2o1BUiou4lodK
+	 NVrugVdjD5/YLVHSFVXV3yV5MVq0cBzQi6hyK95SEwCQeFa3Jh6IeR/Pd77PH81hER
+	 cMYC406BfYodcgIU1fUfQ+KYdRo2DLEH26hFglMBW1/K9A0yaWTqtqquwtJufe95UF
+	 1ensXKwQ4CqCDbFZiLH8lBJCSfi9thlttXITIdLNDOE0HJoMJtITNUOaSqEIAiry/U
+	 0IQHkNdpY4R0Q==
+Date: Tue, 19 May 2026 17:18:31 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, 9erthalion6@gmail.com,
+	adrian.hunter@intel.com, alex@ghiti.fr,
+	alexandre.chartre@oracle.com, andrii@kernel.org,
+	ankur.a.arora@oracle.com, aou@eecs.berkeley.edu,
+	bpf@vger.kernel.org, collin.funk1@gmail.com, costa.shul@redhat.com,
+	daniel@iogearbox.net, dapeng1.mi@linux.intel.com, dsterba@suse.com,
+	eddyz87@gmail.com, howardchu95@gmail.com, james.clark@linaro.org,
+	jolsa@kernel.org, leo.yan@arm.com, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, martin.lau@linux.dev,
+	memxor@gmail.com, mingo@redhat.com, mmayer@broadcom.com,
+	nathan@kernel.org, palmer@dabbelt.com, peterz@infradead.org,
+	pjw@kernel.org, qmo@kernel.org, ricky.ringler@proton.me,
+	song@kernel.org, swapnil.sapkal@amd.com, terrelln@fb.com,
+	tglozar@redhat.com, thomas.falcon@intel.com,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH v7 00/14] perf build: Reduce build time by nearly half
+Message-ID: <agz91_n-ohXQxQqv@google.com>
+References: <20260518044740.2526802-1-irogers@google.com>
+ <20260518154638.2798789-1-irogers@google.com>
+ <agyrebq2hdayDIyg@google.com>
+ <agyw0IoPccrjYq2q@x1>
+ <CAP-5=fVX+_oYzuanMwoia6PqtoRrK_K0zO1A+qG8Xp+fueETjw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260519225002.986EB1F00893@smtp.kernel.org>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fVX+_oYzuanMwoia6PqtoRrK_K0zO1A+qG8Xp+fueETjw@mail.gmail.com>
 
-On Tue, May 19, 2026 at 10:50:02PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 4 potential issue(s) to consider:
-> - [High] bpf_cgroup_struct_ops_foreach does not skip dummy items, leading to unintended execution of cfi_stubs.
-> - [High] Using a loadable module's cfi_stubs as a dummy sentinel causes a Use-After-Free when the module is unloaded and reloaded.
-> - [Medium] The macro bpf_cgroup_struct_ops_foreach uses rcu_dereference(), which is incompatible with sleepable struct_ops programs.
-> - [Medium] cgroup_bpf_struct_ops_register() lacks concurrency protection and global uniqueness enforcement.
-> --
+On Tue, May 19, 2026 at 11:53:08AM -0700, Ian Rogers wrote:
+> On Tue, May 19, 2026 at 11:49 AM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
+> >
+> > On Tue, May 19, 2026 at 11:27:05AM -0700, Namhyung Kim wrote:
+> > > On Mon, May 18, 2026 at 08:46:24AM -0700, Ian Rogers wrote:
+> > > > This patch series refactors Kbuild internals, BPF skeleton generation,
+> > > > Python AST pre-computation, and foundational tooling dependencies across
+> > > > the perf tool build system. By eliminating umbrella target synchronization
+> > > > barriers, decoupling static library prerequisites, parallelizing single-core
+> > > > script generators, and eradicating redundant feature checks, this series
+> > > > unlocks absolute theoretical peak multi-core concurrency during Kbuild startup.
+> > > >
+> > > > On a 28-core build workstation (make -j28 all from scratch), clean build
+> > > > latency improves by over 44%:
+> > > >
+> > > >   Before:
+> > > >     real    0m29.006s
+> > > >     user    2m46.019s
+> > > >     sys     0m30.610s
+> > > >
+> > > >   After:
+> > > >     real    0m16.091s
+> > > >     user    2m40.135s
+> > > >     sys     0m25.740s
+> > > >
+> > > > Saving 12.9 full seconds time per clean build. Furthermore, nothing to
+> > > > build incremental builds are improved by nearly 7x:
+> > > >
+> > > >   Before:
+> > > >     real    0m11.528s
+> > > >     user    0m9.633s
+> > > >     sys     0m6.965s
+> > > >
+> > > >   After:
+> > > >     real    0m1.717s
+> > > >     user    0m1.682s
+> > > >     sys     0m0.960s
+> > > >
+> > > > Summary of Patches:
+> > > >
+> > > > 1: Fast-Path Feature Detection
+> > > >   - Refactors test-clang-bpf-co-re.bin and test-bpftool-skeletons.bin feature
+> > > >     checks to group shell pipelines within curly braces and redirect both stdout
+> > > >     and stderr to .make.output before touching $@ purely upon success
+> > > >     (> $(@:.bin=.make.output) 2>&1 && touch $@). Grouping the pipeline ({ cmd1 | cmd2; })
+> > > >     ensures that compiler stderr is successfully captured in .make.output rather
+> > > >     than escaping to the parent shell. This perfectly matches standard Kbuild
+> > > >     feature check conventions and ensures the target files are touched on disk
+> > > >     purely upon success, allowing Kbuild to cache positive detections and avoid
+> > > >     continuous sub-make re-evaluations during incremental builds. Adds
+> > > >     test-bpftool-skeletons.bin to the clean FILES list and explicit source
+> > > >     prerequisite test-clang-bpf-co-re.c.
+> > >
+> > > I think patch 1 can be separated and needs Ack/Review from BPF folks.
+> > >
+> > > >
+> > > > 2-4: Flattening Umbrella Prepare Barriers
+> > > >   - builtin-trace embedded inclusions and pmu-events generation are completely
+> > > >     decoupled from the sequential "prepare" umbrella target, eliminating Make
+> > > >     AST double-parsing overhead and unchoking parallel compilation barriers.
+> > > >
+> > > > 5-7: Decoupling & Pre-generating BPF Skeletons
+> > > >   - BPF skeleton rules are extracted out of Makefile.perf into bpf_skel.mak.
+> > > >   - Decouples bpftool bootstrap from top-level static libbpf dependencies,
+> > > >     attaching bpf-skel-prepare directly to the umbrella prepare target. This
+> > > >     allows Make to pre-compile bpftool and dump vmlinux.h in the background at
+> > > >     build startup, removing the 7-second serialization bottleneck before BPF
+> > > >     object compilation.
+> > > >   - Ensures benchmark skeleton intermediate .bpf.o files are cleanly removed
+> > > >     during make clean, and adds bpf-skel-prepare to .PHONY.
+> > > >
+> > > > 8-9: Foundational Linkage Optimization
+> > > >   - Moves static libsymbol library prerequisites out of the prepare step.
+> > > >   - Eliminates redundant libbpf sub-make feature checks during static builds.
+> > > >
+> > > > 10-11: jevents.py Concurrency & Deduplication
+> > > >   - Splits the massive 2.8 MB big_c_string literal out of pmu-events.c into a
+> > > >     dedicated pmu-events-string.c compilation unit. This slices C compilation
+> > > >     latency in half by compiling string and struct tables simultaneously across
+> > > >     separate CPU cores while preserving zero dynamic ELF relocations. Adds
+> > > >     pmu-events-string.c to .gitignore, declares extern const char big_c_string[];
+> > > >     locally inside output_string_file and output_file when split to prevent linkage
+> > > >     conflicts with empty-pmu-events.c, defers file closures to ensure identical
+> > > >     timestamps, and uses canonical Make 4.0 @: dependency chaining.
+> > > >   - Pre-populates jevents.py JSON ASTs and metric formulas in parallel across
+> > > >     all available CPU cores using ProcessPoolExecutor (accelerating Python
+> > > >     execution by 11x, from 3.3s down to ~290ms). Moves _init_worker to top-level
+> > > >     scope to ensure clean pickling under spawn multiprocessing start methods.
+> > > >
+> > > > 12: Out-of-Tree Incremental Rebuild Fix
+> > > >   - Prefixes SCRIPTS (perf-archive, perf-iostat) with $(OUTPUT) to prevent
+> > > >     Make from continuously re-executing script installation rules on already
+> > > >     built out-of-tree builds.
+> > > >
+> > > > 13-14: AST Parsing Optimization & Shell Fork Eradication
+> > > >   - Converts ZENS, ARMS, and INTELS in pmu-events/Build from recursive assignment
+> > > >     (=) to simply expanded assignment (:=) and replaces model_name/vendor_name
+> > > >     with pure GNU Make string functions. This guarantees Make executes directory
+> > > >     probing shell forks exactly once during AST parsing and evaluates path macros
+> > > >     purely in memory, completely eradicating over 7,800 redundant sub-processes
+> > > >     during out-of-tree build evaluation.
+> > > >   - Converts llvm-config shell queries in Makefile.config from recursive assignment
+> > > >     (=) to simply expanded assignment (:=). This eliminates ~185 redundant sub-processes
+> > > >     that were previously executed across object compilation dependency checks.
+> > > >
+> > > > Changes since v6:
+> > > >   - Rebase/resend as last series failed to apply by Sashiko.
+> > > >
+> > > > Ian Rogers (14):
+> > > >   tools build: Fix feature checks to touch target files on success
+> > > >   perf trace beauty: Make beauty generated C code standalone .o files
+> > > >   perf build: Decouple pmu-events from prepare umbrella target
+> > > >   perf build: Remove empty archheaders target
+> > > >   perf build: Move BPF skeleton generation out of Makefile.perf
+> > > >   perf build: Encapsulate vmlinux.h and bpftool in bpf_skel.mak
+> > > >   perf build: Pre-generate BPF skeleton tooling during umbrella prepare
+> > > >     phase
+> > > >   perf build: Move libsymbol dependency out of prepare step
+> > > >   perf build: Remove redundant libbpf feature check for static builds
+> > > >   perf pmu-events: Split big_c_string storage into standalone
+> > > >     compilation unit
+> > > >   perf pmu-events: Parallelize JSON and metric pre-computation in
+> > > >     jevents.py
+> > > >   perf build: Prefix SCRIPTS with output directory to fix continuous
+> > > >     rebuilds
+> > > >   perf pmu-events: Convert recursive shell assignments and macros to
+> > > >     Make built-ins
+> > > >   perf build: Convert llvm-config shell queries to simply expanded
+> > > >     variables
+> > >
+> > > Reviewed-by: Namhyung Kim <namhyung@kernel.org>
+> >
+> > So this is for 2-14? I haven't checked if 1 can be left out of an
+> > initial merge by me.
 > 
-> commit bad29e4e0d1357905491993ee45063766d0f7705
-> Author: Martin KaFai Lau <martin.lau@kernel.org>
-> 
-> bpf: Add infrastructure to support attaching struct_ops to cgroups
-> 
-> This patch adds necessary infrastructure to attach a struct_ops
-> map to a cgroup. The initial need was to support migrating
-> the legacy BPF_PROG_TYPE_SOCK_OPS to a struct_ops.
-> 
-> > diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-> > index b2e79c2b41d51..8080f4a5c14b6 100644
-> > --- a/include/linux/bpf-cgroup.h
-> > +++ b/include/linux/bpf-cgroup.h
-> 
-> [ ... ]
-> 
-> > @@ -110,6 +112,18 @@ struct bpf_prog_list {
-> >  	u32 flags;
-> >  };
-> >  
-> > +#define bpf_cgroup_struct_ops_foreach(var, item, cgrp, atype)		\
-> > +	for (item = rcu_dereference((cgrp)->bpf.effective[atype])->items;\
-> > +	     ((var) = READ_ONCE(item->kdata));				\
-> > +	     item++)
-> 
-> [Severity: High]
-> Does this macro need to skip dummy sentinel items?
-> 
-> In cgroups with BPF_F_ALLOW_MULTI, compute_effective_progs() inserts dummy
-> sentinel items at the boundaries between cgroup levels. For struct_ops, this
-> dummy is the cfi_stubs pointer.
-> 
-> This macro appears to iterate over all non-NULL items and fails to skip the
-> dummy sentinel, which could cause the subsystem to repeatedly yield the
-> cfi_stubs pointer as a valid attached struct_ops instance.
+> I believe you are correct. Patch 1 is completely independent because
+> it is the only change in tools/build; everything else is in
+> tools/perf.
 
-The ops in the cfi_stubs is safe to be called. It intentionally skips
-checking for dummy in the fast path.
+Actually it goes to the patch 1 as well.  But we can take 2-14 in the
+perf tree first.
 
-> 
-> [Severity: Medium]
-> Will this rcu_dereference() trigger Lockdep warnings for sleepable struct_ops
-> programs?
-> 
-> The commit message mentions adding free_after_mult_rcu_gp to support a mix of
-> sleepable and non-sleepable struct_ops, but plain rcu_dereference() enforces
-> rcu_read_lock_held().
-> 
-> If a subsystem iterates the array while holding rcu_read_lock_trace()
-> (required for sleepable execution), this might trigger a 'suspicious
-> rcu_dereference_check() usage' warning. Conversely, if it holds
-> rcu_read_lock(), the struct_ops program cannot sleep without causing a panic.
+Thanks,
+Namhyung
 
-The proposed bpf_tcp_ops only has non-sleepable programs.
-
-The future sleepable callsite will need another version of foreach or
-rcu_dereference_check can be used here also. I think rcu_dereference_check
-is better.
-
-> 
-> > +
-> > +static inline bool cgroup_bpf_is_struct_ops_atype(enum cgroup_bpf_attach_type atype)
-> > +{
-> 
-> [ ... ]
-> 
-> > diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> > index a033aa479ab6e..d496db48d2b86 100644
-> > --- a/kernel/bpf/cgroup.c
-> > +++ b/kernel/bpf/cgroup.c
-> > @@ -24,6 +24,29 @@
-> >  DEFINE_STATIC_KEY_ARRAY_FALSE(cgroup_bpf_enabled_key, MAX_CGROUP_BPF_ATTACH_TYPE);
-> >  EXPORT_SYMBOL(cgroup_bpf_enabled_key);
-> >  
-> > +static u32 struct_ops_type_id[MAX_CGROUP_BPF_ATTACH_TYPE];
-> > +static void *struct_ops_cfi_stubs[MAX_CGROUP_BPF_ATTACH_TYPE];
-> > +static bool struct_ops_mult_rcu[MAX_CGROUP_BPF_ATTACH_TYPE];
-> > +
-> > +void cgroup_bpf_struct_ops_register(int atype, u32 type_id, void *cfi_stubs, bool mult_rcu)
-> > +{
-> > +	struct_ops_type_id[atype] = type_id;
-> > +	struct_ops_cfi_stubs[atype] = cfi_stubs;
-> > +	struct_ops_mult_rcu[atype] = mult_rcu;
-> > +}
-> 
-> [Severity: Medium]
-> Does this registration function need concurrency protection to prevent global
-> array corruption?
-> 
-> If two modules are loaded concurrently and declare the same cgroup_atype, it
-> seems this could cause a data race or silently overwrite the registered type_id
-> and cfi_stubs of a legitimate module.
-
-This will be a bug in the subsystems having the same cgroup_atype
-
-but (the next one)...
-
-> 
-> > +
-> > +static enum cgroup_bpf_attach_type find_atype_by_struct_ops_id(u32 type_id)
-> 
-> [ ... ]
-> 
-> >  static void *bpf_cgroup_array_dummy(enum cgroup_bpf_attach_type atype)
-> >  {
-> > +	if (cgroup_bpf_is_struct_ops_atype(atype))
-> > +		return struct_ops_cfi_stubs[atype];
-> >  	return bpf_prog_dummy();
-> >  }
-> 
-> [Severity: High]
-> Can using a loadable module's cfi_stubs as a dummy sentinel cause a
-> use-after-free when the module is unloaded and reloaded?
-> 
-> If all maps are detached, the module providing the struct_ops can be unloaded,
-> and its cfi_stubs memory freed. However, the cgroup's effective array might
-> still retain the dangling pointer to the freed cfi_stubs if BPF_F_ALLOW_MULTI
-> was set.
-> 
-> If the module is reloaded, cgroup_bpf_struct_ops_register() updates
-> struct_ops_cfi_stubs[atype] with a new pointer. If a user then queries the
-> cgroup via BPF_PROG_QUERY, the loop checks
-> item->prog == bpf_cgroup_array_dummy(atype) to skip the dummy. Since the
-> array contains the old freed pointer, it won't match the new cfi_stubs
-> pointer, and the query loop might mistakenly treat the old dummy as a valid
-> map, causing a use-after-free when calling bpf_struct_ops_kdata_map_id().
-
-Agree. This will be an issue on BPF_PROG_QUERY when the module reload.
-I did think about the module reload case but I have only considered the
-rcu-reader in bpf_cgroup_struct_ops_foreach.
-BPF_PROG_QUERY does not use rcu_read_lock and depends on cgroup_lock.
-This will need to be addressed.
