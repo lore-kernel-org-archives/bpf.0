@@ -1,84 +1,93 @@
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012058.outbound.protection.outlook.com [40.93.195.58])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3AC3EEACD;
-	Wed, 20 May 2026 15:40:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.58
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779291608; cv=fail; b=Qd+SS2884i9BmBMYDJ7FgisXy6RAOy3jBEQ5lhHd9NM/KJxvbwk0+gDAJrNSEhSMB6XamxgcSV6fZMQqSjZmtTW6cyFDpwh2871VD9tv9qZ2rm7yQqZnv/TSFpz7K128LI0ikk5uQcc/weA8HDNE+H4y6wYXBjnW5iUs2FHQwX8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779291608; c=relaxed/simple;
-	bh=GXHdUEvy3rr545quD4uLFsRyqEZ9fWWYoBK2LTJTzZw=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZHcgA8ygQurYFAVFNrMp79bTzWnOBHT+NHw28Ha7aKf7Ih2dnyt24IdK9lckLJLs1kFwC49Z7gUdqgrJkzOGZ3OcWaZZSuVaiu1gDb+tkUV2zxC0E18w3R2hzkak+phkGrTJT8xkrjdUBdGeBBRfb/bUoKI6EzfVpFhijijUZdI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=sSztpdf/; arc=fail smtp.client-ip=40.93.195.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A973EFD22;
+	Wed, 20 May 2026 15:40:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779291631; cv=none; b=JHuhCla6eEjtpmIZCjO3sxjrwnvRdDvz7CHzHD7Qfwx0qDJo5Kfn/o3UZ2ZvWBEuj7MDP7pXyd0TvRu9CGviEjTgz9e5un0iVmLjsjpZthz0/x8fdg+kWzxknznDv/YgVsOTYsZxf8H+zko/dyoliQo5EGn6445MrIhZF28IO8E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779291631; c=relaxed/simple;
+	bh=Wro/b6jYmgm7DDfIhqot8C8Ej0U9e1lJqurx/bCiZps=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=twlRE4bVAhkPSJ+ooyXvTQ4ELQn+RS+KSiym/Yc8KMxce1tEAjC8NL9mIaYbiQcfZnccn3pATgn2squ0830Y96H/jKllf4+naEQPxNvdsaSXd7xfdiDdHChNP7owNU7srYszi3IPKDiopBezKxOX9jgwUqdBD3/JK3bj7p52A9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ivf/zv7p; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="sSztpdf/"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MHULhf1U6OqerJzGsy6tZb15rKOzhBQ4kp0yCvWjjY6Sn77zSNUBt6yPYtTpEamigC3oP2BWhN2i+B1PJxxBKSzOS5PCS7vk7bHPlOm/x+bEN7NJWqsO8lBEtCRSmA/qfvUH30s4dcOJpDOKNXYDwKYLK3Vw8DYOGa07DSma8RQIY7vLyQARPkVCZL+zydDwhq3jNeRotqwIRNdZ4lg4lmQacP0DwkL4mo13YJDG529XbMjk0YbB2f4h7qnZSq25y/ix9pq3DZSiflP5fusmavholLEDSW3YJzP5amkcbKlYoXy++ogcQi+JZq66f0LMQtCY9+vel3givAx7eaHlKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/hl6g9RtIVt9le9IWnvRegPX4lhndQLh5sP8w5QCfIs=;
- b=INEB6FQUDmSyJAkDzxniVWEcWcV7XD+4vyKgYo8iUgIru7eojkO6TuH4pvkRNPyzBBAONBoWU4k+2hqI3YroegNWa3K1CuXHXHKaWyoD85L+/+BInTritkC0bN21ybHdoSMtpnbLzW3KaaqXn8S0ZVS8yK1D41hBWf2xNL5637/B1j7Bh6MaP532o2hBfomYoykG9cd1DI/JWgWLxwJkB+5SvgBGYCXdUn8ctxR/CTwJCUHRD698JUolmYJmqWlM7jJv4d1/9103uxJCFY5iXq1/zjysFlIS2iMkDER+ikVupgaNZDHgB1znrB7jBOEhjvtTqTGWopjn4sTgm+T8qg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/hl6g9RtIVt9le9IWnvRegPX4lhndQLh5sP8w5QCfIs=;
- b=sSztpdf/yOSpEWdGyM8vBhZtvS3EZEld+amjaE/iDUVp3K/dIKiN6v5teJp4m2XiI7jneo7Do4wGnNFYMAbWTJPRDpESsrcO2Qp7780uN8ErmPxv49zlF9IWtay+XMBfWlXHbJKS4OaVAo3xhk1XPigOHftVyV8hRxDjZkCfYbM/66f9VASiIVYchzeMBGzFws5UEXCHXssl8essulEVEWjYEXw4qSMK8ak+g7S5srqJYM0yVTkcxcgsyc0VwNMlIqrZaTbiH8a6SSf/+UA8kqOcIf/3Xe65h2oNndXP3mV5DEuUoDgf+O6KmjU0X+a+c9axXFmkyD4p0lDKdP1bnA==
-Received: from CY5P221CA0060.NAMP221.PROD.OUTLOOK.COM (2603:10b6:930:4::12) by
- CH3PR12MB9249.namprd12.prod.outlook.com (2603:10b6:610:1bc::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.25.24; Wed, 20 May 2026 15:39:44 +0000
-Received: from CH3PEPF0000000F.namprd04.prod.outlook.com
- (2603:10b6:930:4:cafe::64) by CY5P221CA0060.outlook.office365.com
- (2603:10b6:930:4::12) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.48.16 via Frontend Transport; Wed, 20
- May 2026 15:39:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CH3PEPF0000000F.mail.protection.outlook.com (10.167.244.40) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.48.11 via Frontend Transport; Wed, 20 May 2026 15:39:41 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 20 May
- 2026 08:39:23 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 20 May
- 2026 08:39:23 -0700
-Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.6)
- with Microsoft SMTP Server id 15.2.2562.20 via Frontend Transport; Wed, 20
- May 2026 08:39:17 -0700
-From: Nimrod Oren <noren@nvidia.com>
-To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan
-	<shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
- Fastabend" <john.fastabend@gmail.com>
-CC: Stanislav Fomichev <sdf@fomichev.me>, Mohsin Bashir
-	<mohsin.bashr@gmail.com>, Amery Hung <ameryhung@gmail.com>, Martin KaFai Lau
-	<martin.lau@kernel.org>, Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
-	Nimrod Oren <noren@nvidia.com>, <netdev@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<bpf@vger.kernel.org>, Carolina Jubran <cjubran@nvidia.com>, Dragos Tatulea
-	<dtatulea@nvidia.com>
-Subject: [PATCH net v2] selftests: net: Fix checksums in xdp_native
-Date: Wed, 20 May 2026 18:39:28 +0300
-Message-ID: <20260520153928.3371765-1-noren@nvidia.com>
-X-Mailer: git-send-email 2.45.0
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ivf/zv7p"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64K5E6WX1950620;
+	Wed, 20 May 2026 15:40:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=SmI34slVZs1BNH9m6
+	+m2YOZNt+zp/AB28hIWnnNMMn8=; b=ivf/zv7p9r5+XWye3TPo1ffSXxg1mU2LK
+	uO5P9LJcSb0u7AbNzTbpTZelFvL2/7pU5dRtHbjBtqVyWw7bGcdat24Z6OjgCYFr
+	SiEAYoepulLgUs4zbWs1xN5izpGY5X6zHCkU6uzw0zG8hM9qADrcnJK8d4vGXi1c
+	urV9laWOvtZC9+a7bNA0iZspIOdZOt5CLqaqNwoukKe35gmUvMYFHZ9Lx+9FC5vf
+	rGMo3JclhUZIiZ20ffGWUZggjkKdHyQrz64Svmh15vPZMEBA102eDn4WjIOCtpbS
+	xA6UswKmZhmTGRF1wA+Bngd59m1MSy1Oj769DrawaIb5SNL7OCvuQ==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h88htfs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 20 May 2026 15:40:15 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64KFd8U4008385;
+	Wed, 20 May 2026 15:40:14 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e739w03b0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 20 May 2026 15:40:14 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64KFeBsx21103176
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 20 May 2026 15:40:11 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DCECB20043;
+	Wed, 20 May 2026 15:40:10 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 55B862004E;
+	Wed, 20 May 2026 15:40:10 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 20 May 2026 15:40:10 +0000 (GMT)
+From: Jens Remus <jremus@linux.ibm.com>
+To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        x86@kernel.org, Steven Rostedt <rostedt@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Indu Bhagat <ibhagatgnu@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dylan Hatch <dylanbhatch@google.com>,
+        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Kees Cook <kees@kernel.org>, Sam James <sam@gentoo.org>
+Cc: Jens Remus <jremus@linux.ibm.com>, bpf@vger.kernel.org, linux-mm@kvack.org,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "Jose E. Marchesi" <jemarch@gnu.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "Carlos O'Donell" <codonell@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+        "Liam R. Howlett" <liam@infradead.org>,
+        Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH v15 06/20] unwind_user/sframe: Detect .sframe sections in executables
+Date: Wed, 20 May 2026 17:39:50 +0200
+Message-ID: <20260520154004.3845823-7-jremus@linux.ibm.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260520154004.3845823-1-jremus@linux.ibm.com>
+References: <20260520154004.3845823-1-jremus@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -86,185 +95,175 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF0000000F:EE_|CH3PR12MB9249:EE_
-X-MS-Office365-Filtering-Correlation-Id: 157f1beb-20aa-4612-2799-08deb686027b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|376014|7416014|36860700016|13003099007|921020|11063799006|56012099003|18002099003|6133799003;
-X-Microsoft-Antispam-Message-Info:
-	NnHArd6CswQguIiOetF+eAPExgL6LPTW0pElCWnqigmDNmb3oPPTsWA73JZw2XIypTQQcdgIvTJYfZ+fMme7XE7L20YwEtxwVYKtkBaZTK/vwi+ppHSYzAQAw9cw57HxUqKnBTlN2xpEvMCIlznH21el1MAMfs9Mfe6Ye8nI8x2WB4B47/hVLaBMhoNWqmVErK6FqcM+TvLdD9L3aMsaWOTPdbwzFr3gtuIt8TDI+7ok4nN4JlwdCWMUmV8CChnfic54lz9HIdfyWf4LatvkHvBJmEJIr8e5dbZQWmhhKHu2biEZGtLEpAv8VFtnXdzCZVSLW9ES6QKlujub52y2FHMYQZAykKiDh/NnjV+r+WQ9eLLJkUtWwOxIctGLvsC+q0MmNYgLtOMmNecBfFXylwuc/wUXrXI3Ep0/yP6ABAv/Kf5ZATsWFIoWT/jwAwShPG51MvT1ZxAVoXEqFLcPFwZ5/IIOENjpSdxLr90ywkpaxg80YH4zWYA2Y7bWnWHJxzObGQci/uZm542kr2tHuBGyNfJvw7dNmkU4aVtiq/FyfcNYJjzmrUOBuuXCbEH/yBql/JvOlZ3omgMUtl7FWZ3gMKsB+IsFSaqeCLPu7HkFam6XJglGf/pkTCrQix5WkCaASu1HZXdS0JkNVz3bhq0+6ZSo73z1CzaQqEi7FrVX/SS5yAGYndyjQMVBDavEqafSq1I3bhkPOGEUzmlQ/owy72mz1vOEj7mjcAcb2B8MhWx3H1DZgf5KIS0tImg4H2bEL/OfC0VB2k3bfL3r9A==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(7416014)(36860700016)(13003099007)(921020)(11063799006)(56012099003)(18002099003)(6133799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	e6yfZnxtxHIhdzA0KCa5kq4FFPAtuOY7ak9GKioXNVUOaj/l9nmMKwMIjMtgkmL+T1yAsaxyBkiTfcCvWO8xDTImuNANdO0+DwTJtg6uQGIvtTVtGeEZl7MDytxQFqUnPNRpgifo2lfTVBWtixXxJqqLVNxhPCy8Fa2MmPaA/MBECY4KASm75OrYXsKsEfR3dkVZDEC5IaKuA61f2k4F/n8ENLMd1gR1MaAmttkQfH3oqDaW8SjXAALRADDWw8YVAY6ac7KOu7WrJ8f6t6KgNmPzYgEmSH0wxt9COt557g7qsEuX15azlbKWGqMem0Wep8EoNRcI5u9YLtIMtV+9uvfV41oBj+4EdS7JQGl6OkYOS/4PW7GB83ZB0EpcNpfmTzGZ29JG0P1X4ZbY8R6r7vGIUplDI+Q3nPl6ojAjhcn25/M1DAIkvrY7sO2Vftpl
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2026 15:39:41.5055
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 157f1beb-20aa-4612-2799-08deb686027b
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH3PEPF0000000F.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9249
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 2ISu0SHUttbv0n9vfydNFpwKXpKjlH2q
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIwMDE1MSBTYWx0ZWRfX7PV/sJz2ww+P
+ 3/f3BwtqiU3FT5DyPXz/orsUimp1undhsKdq310qkRgje6tdAsY2U4BkqnfSMhIEfWfuov+4rgR
+ mo42nz8tcH/qemdVol+DHMPwvoE2yxYwZQqdVUUiQ0jyF4VmLrX8yIPILiNqjKnFPcnpoi836r1
+ C7KiJHgX0dhkCMbdGiKnUIYS+AdbqK/rnvOgjhvu4fCZflSXa/UZB8VAq27Vc4j8WsH6nkkgPCx
+ VSa6i+/e6LVr/6ZNM2amsTvZDWLUiPJtu7wFw2/a6Hc/qYDrf6QMfLroerbfywNZSIhorssD7W8
+ FguGSisAkobDJ6ilrcRLEJ84WkXWPE9RfcH3HmlSBqmiKH6ATBzfN48AgW7/5E+CKQj1qamK3C6
+ 4O28N/xY7eBGwku9QCDhG3AS6KOFt1puUzFLO3Qy4CPu3BZohjGpl9F0EyjGlq3jRSzj0Goqegi
+ 0LV1b1g8mjUBWXNVPnw==
+X-Proofpoint-GUID: 2ISu0SHUttbv0n9vfydNFpwKXpKjlH2q
+X-Authority-Analysis: v=2.4 cv=apyCzyZV c=1 sm=1 tr=0 ts=6a0dd5df cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=V8glGbnc2Ofi9Qvn3v5h:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=pGLkceISAAAA:8
+ a=VnNF1IyMAAAA:8 a=eNuN5pRUQDBy6NUwPKcA:9 a=2JgSa4NbpEOStq-L5dxp:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-20_03,2026-05-18_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 lowpriorityscore=0 priorityscore=1501 impostorscore=0
+ bulkscore=0 suspectscore=0 adultscore=0 spamscore=0 phishscore=0
+ clxscore=1015 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605130000
+ definitions=main-2605200151
 
-Data adjustment cases failed with "Data exchange failed" when using IPv4
-because the program did not update the IP and UDP checksums in the IPv4
-branch. The issue was masked when both IPv4 and IPv6 were configured,
-since the test harness prefers IPv6.
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-While here, generalize csum_fold_helper() to fold twice so it works for
-any 32-bit input.
+When loading an ELF executable, automatically detect an .sframe section
+and associate it with the mm_struct.
 
-Fixes: 0b65cfcef9c5 ("selftests: drv-net: Test tail-adjustment support")
-Reviewed-by: Carolina Jubran <cjubran@nvidia.com>
-Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
-Signed-off-by: Nimrod Oren <noren@nvidia.com>
+[ Jens Remus: Fix checkpatch warning "braces {} are not necessary for
+single statement blocks". ]
+
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Reviewed-by: Indu Bhagat <ibhagatgnu@gmail.com>
+Signed-off-by: Jens Remus <jremus@linux.ibm.com>
 ---
-v2:
- - generalize csum_fold_helper() to fold twice.
-v1: https://lore.kernel.org/20260513072355.1083381-1-noren@nvidia.com
----
- .../selftests/net/lib/xdp_native.bpf.c        | 55 ++++++++++---------
- 1 file changed, 30 insertions(+), 25 deletions(-)
 
-diff --git a/tools/testing/selftests/net/lib/xdp_native.bpf.c b/tools/testing/selftests/net/lib/xdp_native.bpf.c
-index 64f05229ab24..ded3f896e622 100644
---- a/tools/testing/selftests/net/lib/xdp_native.bpf.c
-+++ b/tools/testing/selftests/net/lib/xdp_native.bpf.c
-@@ -268,6 +268,17 @@ static int xdp_mode_tx_handler(struct xdp_md *ctx, __u16 port)
- 	return XDP_PASS;
+Notes (jremus):
+    Changes in v15:
+    - Only add sframe for text that is PT_LOAD in addition to PF_X.
+      (Sashiko AI)
+
+ fs/binfmt_elf.c          | 48 +++++++++++++++++++++++++++++++++++++---
+ include/uapi/linux/elf.h |  1 +
+ 2 files changed, 46 insertions(+), 3 deletions(-)
+
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index 16a56b6b3f6c..980a9f229cd1 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -48,6 +48,7 @@
+ #include <linux/uaccess.h>
+ #include <uapi/linux/rseq.h>
+ #include <linux/rseq.h>
++#include <linux/sframe.h>
+ #include <asm/param.h>
+ #include <asm/page.h>
+ 
+@@ -637,6 +638,21 @@ static inline int make_prot(u32 p_flags, struct arch_elf_state *arch_state,
+ 	return arch_elf_adjust_prot(prot, arch_state, has_interp, is_interp);
  }
  
-+static __always_inline __u16 csum_fold_helper(__u32 csum)
++static void elf_add_sframe(struct elf_phdr *text, struct elf_phdr *sframe,
++			   unsigned long base_addr)
 +{
-+	csum = (csum & 0xffff) + (csum >> 16);
-+	return ~((csum & 0xffff) + (csum >> 16));
++	unsigned long sframe_start, sframe_end, text_start, text_end;
++
++	sframe_start = base_addr + sframe->p_vaddr;
++	sframe_end   = sframe_start + sframe->p_memsz;
++
++	text_start   = base_addr + text->p_vaddr;
++	text_end     = text_start + text->p_memsz;
++
++	/* Ignore return value, sframe section isn't critical */
++	sframe_add_section(sframe_start, sframe_end, text_start, text_end);
 +}
 +
-+static __always_inline __u16 csum_fold_udp_helper(__u32 csum)
-+{
-+	return csum_fold_helper(csum) ? : 0xffff;
-+}
-+
- static void *update_pkt(struct xdp_md *ctx, __s16 offset, __u32 *udp_csum)
+ /* This is much more generalized than the library routine read function,
+    so we keep this separate.  Technically the library read function
+    is only provided so that we can read a.out libraries that have
+@@ -647,7 +663,7 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
+ 		unsigned long no_base, struct elf_phdr *interp_elf_phdata,
+ 		struct arch_elf_state *arch_state)
  {
- 	void *data_end = (void *)(long)ctx->data_end;
-@@ -281,21 +292,22 @@ static void *update_pkt(struct xdp_md *ctx, __s16 offset, __u32 *udp_csum)
+-	struct elf_phdr *eppnt;
++	struct elf_phdr *eppnt, *sframe_phdr = NULL;
+ 	unsigned long load_addr = 0;
+ 	int load_addr_set = 0;
+ 	unsigned long error = ~0UL;
+@@ -673,7 +689,8 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
  
- 	if (eth->h_proto == bpf_htons(ETH_P_IP)) {
- 		struct iphdr *iph = data + sizeof(*eth);
--		__u16 total_len;
- 
- 		if (iph + 1 > (struct iphdr *)data_end)
- 			return NULL;
- 
--		iph->tot_len = bpf_htons(bpf_ntohs(iph->tot_len) + offset);
--
- 		udph = (void *)eth + sizeof(*iph) + sizeof(*eth);
- 		if (!udph || udph + 1 > (struct udphdr *)data_end)
- 			return NULL;
- 
--		len_new = bpf_htons(bpf_ntohs(udph->len) + offset);
-+		len = iph->tot_len;
-+		len_new = bpf_htons(bpf_ntohs(len) + offset);
-+		iph->tot_len = len_new;
-+		iph->check = csum_fold_helper(
-+			bpf_csum_diff(&len, sizeof(len), &len_new,
-+				      sizeof(len_new), ~((__u32)iph->check)));
- 	} else if (eth->h_proto  == bpf_htons(ETH_P_IPV6)) {
- 		struct ipv6hdr *ipv6h = data + sizeof(*eth);
--		__u16 payload_len;
- 
- 		if (ipv6h + 1 > (struct ipv6hdr *)data_end)
- 			return NULL;
-@@ -304,33 +316,27 @@ static void *update_pkt(struct xdp_md *ctx, __s16 offset, __u32 *udp_csum)
- 		if (!udph || udph + 1 > (struct udphdr *)data_end)
- 			return NULL;
- 
--		*udp_csum = ~((__u32)udph->check);
--
- 		len = ipv6h->payload_len;
- 		len_new = bpf_htons(bpf_ntohs(len) + offset);
- 		ipv6h->payload_len = len_new;
--
--		*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
--					  sizeof(len_new), *udp_csum);
--
--		len = udph->len;
--		len_new = bpf_htons(bpf_ntohs(udph->len) + offset);
--		*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
--					  sizeof(len_new), *udp_csum);
- 	} else {
- 		return NULL;
+ 	eppnt = interp_elf_phdata;
+ 	for (i = 0; i < interp_elf_ex->e_phnum; i++, eppnt++) {
+-		if (eppnt->p_type == PT_LOAD) {
++		switch (eppnt->p_type) {
++		case PT_LOAD: {
+ 			int elf_type = MAP_PRIVATE;
+ 			int elf_prot = make_prot(eppnt->p_flags, arch_state,
+ 						 true, true);
+@@ -712,6 +729,19 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
+ 				error = -ENOMEM;
+ 				goto out;
+ 			}
++			break;
++		}
++		case PT_GNU_SFRAME:
++			sframe_phdr = eppnt;
++			break;
++		}
++	}
++
++	if (sframe_phdr) {
++		eppnt = interp_elf_phdata;
++		for (i = 0; i < interp_elf_ex->e_phnum; i++, eppnt++) {
++			if (eppnt->p_flags & PF_X && eppnt->p_type == PT_LOAD)
++				elf_add_sframe(eppnt, sframe_phdr, load_addr);
+ 		}
  	}
  
-+	len = udph->len;
-+	len_new = bpf_htons(bpf_ntohs(len) + offset);
+@@ -836,7 +866,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 	int first_pt_load = 1;
+ 	unsigned long error;
+ 	struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
+-	struct elf_phdr *elf_property_phdata = NULL;
++	struct elf_phdr *elf_property_phdata = NULL, *sframe_phdr = NULL;
+ 	unsigned long elf_brk;
+ 	bool brk_moved = false;
+ 	int retval, i;
+@@ -945,6 +975,10 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 				executable_stack = EXSTACK_DISABLE_X;
+ 			break;
+ 
++		case PT_GNU_SFRAME:
++			sframe_phdr = elf_ppnt;
++			break;
 +
-+	*udp_csum = ~((__u32)udph->check);
-+	*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
-+				  sizeof(len_new), *udp_csum);
-+	*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
-+				  sizeof(len_new), *udp_csum);
+ 		case PT_LOPROC ... PT_HIPROC:
+ 			retval = arch_elf_pt_proc(elf_ex, elf_ppnt,
+ 						  bprm->file, false,
+@@ -1242,6 +1276,14 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 			elf_brk = k;
+ 	}
+ 
++	if (sframe_phdr) {
++		for (i = 0, elf_ppnt = elf_phdata;
++		     i < elf_ex->e_phnum; i++, elf_ppnt++) {
++			if (elf_ppnt->p_flags & PF_X && elf_ppnt->p_type == PT_LOAD)
++				elf_add_sframe(elf_ppnt, sframe_phdr, load_bias);
++		}
++	}
 +
- 	udph->len = len_new;
+ 	e_entry = elf_ex->e_entry + load_bias;
+ 	phdr_addr += load_bias;
+ 	elf_brk += load_bias;
+diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+index ee30dcd80901..e2a7dbed2e80 100644
+--- a/include/uapi/linux/elf.h
++++ b/include/uapi/linux/elf.h
+@@ -41,6 +41,7 @@ typedef __u16	Elf64_Versym;
+ #define PT_GNU_STACK	(PT_LOOS + 0x474e551)
+ #define PT_GNU_RELRO	(PT_LOOS + 0x474e552)
+ #define PT_GNU_PROPERTY	(PT_LOOS + 0x474e553)
++#define PT_GNU_SFRAME	(PT_LOOS + 0x474e554)
  
- 	return udph;
- }
  
--static __u16 csum_fold_helper(__u32 csum)
--{
--	return ~((csum & 0xffff) + (csum >> 16)) ? : 0xffff;
--}
--
- static int xdp_adjst_tail_shrnk_data(struct xdp_md *ctx, __u16 offset,
- 				     unsigned long hdr_len)
- {
-@@ -359,7 +365,7 @@ static int xdp_adjst_tail_shrnk_data(struct xdp_md *ctx, __u16 offset,
- 		return -1;
- 
- 	udp_csum = bpf_csum_diff((__be32 *)tmp_buff, offset, 0, 0, udp_csum);
--	udph->check = (__u16)csum_fold_helper(udp_csum);
-+	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
- 
- 	if (bpf_xdp_adjust_tail(ctx, 0 - offset) < 0)
- 		return -1;
-@@ -403,7 +409,7 @@ static int xdp_adjst_tail_grow_data(struct xdp_md *ctx, __u16 offset)
- 		return -1;
- 
- 	udp_csum = bpf_csum_diff(0, 0, (__be32 *)tmp_buff, offset, udp_csum);
--	udph->check = (__u16)csum_fold_helper(udp_csum);
-+	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
- 
- 	buff_len = bpf_xdp_get_buff_len(ctx);
- 
-@@ -484,8 +490,7 @@ static int xdp_adjst_head_shrnk_data(struct xdp_md *ctx, __u64 hdr_len,
- 		return -1;
- 
- 	udp_csum = bpf_csum_diff((__be32 *)tmp_buff, offset, 0, 0, udp_csum);
--
--	udph->check = (__u16)csum_fold_helper(udp_csum);
-+	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
- 
- 	if (bpf_xdp_load_bytes(ctx, 0, tmp_buff, MAX_ADJST_OFFSET) < 0)
- 		return -1;
-@@ -542,7 +547,7 @@ static int xdp_adjst_head_grow_data(struct xdp_md *ctx, __u64 hdr_len,
- 		return -1;
- 
- 	udp_csum = bpf_csum_diff(0, 0, (__be32 *)data_buff, offset, udp_csum);
--	udph->check = (__u16)csum_fold_helper(udp_csum);
-+	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
- 
- 	if (hdr_len > MAX_ADJST_OFFSET || hdr_len == 0)
- 		return -1;
+ /* ARM MTE memory tag segment type */
 -- 
-2.45.0
+2.51.0
 
