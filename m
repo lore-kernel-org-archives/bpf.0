@@ -1,290 +1,175 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF49381AF9
-	for <bpf@vger.kernel.org>; Wed, 20 May 2026 21:47:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1303806C6
+	for <bpf@vger.kernel.org>; Wed, 20 May 2026 22:09:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779313669; cv=none; b=XnrhSDxH2vnx14RhvcIv8dliSWlulkwYSDMXWnfDSZHj2KNgPUh49V+buiSnu/nKPRKMLIEJNsXsOw2nJNV1oQ+8NComAzgTH0bPLEsqQrk35gDUvdUA8cjWvXDd77RF3Q5wWx75n+qmT0RhPgBnN1B5oXD+4ilFzTsZgTVUhFY=
+	t=1779314993; cv=none; b=R2tO4K48kb0uTSp30axqEGcE0ete884UOVmlY0Sp2RQvpa3GjMobLbu9DnhJo10hLM0Kz1JBS7jfrIAOHNpdmdErE1PYfTifv709Its2+HlUwx7bEZIVAUDzrqt1y+IerZGTRc8IdNucP7wOL9L6Yfu4CepkhS0uUD4WngCms0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779313669; c=relaxed/simple;
-	bh=ARzvYXH+T8zBstiJIjJ9AsHEOipATDfcwN6hoPtaBAQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=o7s+0iCE+qCYm/hA6haHwL9YUVba6kUdp37h1oBtOLYkbymjvbu0U+rOG5PnVTthvZmAP+GmQCWHhJt2kbOnlp6cc2LUDo9lxJ5F5FtX6QViUoKTJM/1TeEEhvfJZy0T8IEbE+85gPu/h5N8hDEJqRKcc2NzsqIxZczkpVXUnOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oa9Y3b+J; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779314993; c=relaxed/simple;
+	bh=sESrtnEkiukd957DKW4R4u+5NVgNWu0Rox+HVle5NOc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GdGeElKdmYZ3vGuIYZ+hfLBEekZ/+v390eoLkq3crI67HBbXSxIRx0ewm43pL/Vyek/KwHz9QTL3sFsZumwgTglbhKYc2H0wsqwIe+GzUHVzIPzL9Z9xx0dwFiTCPJmzzVsjhTeas4HEP8oLkHwD6fJpBSA65R6v9In1YiJ+eWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JY/2N9wD; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oa9Y3b+J"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2be1dd4af34so37238155ad.1
-        for <bpf@vger.kernel.org>; Wed, 20 May 2026 14:47:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779313668; x=1779918468; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YpTjOC7sOkfHmwRe7c7VQheaDmyv43bs1AM8pVSpDtA=;
-        b=Oa9Y3b+JilogU186oCv1BFBFSrGnSZ5YbRZd8mFL9YQGlMRHo0V0ldsZ2PRlL3qJNV
-         oQEQQfZ+u7i9HL2yjj2SxL5L4JTskw4ViVpYXTUi2Pw6T6ab/c7N9/10369hq5h8TVTa
-         nMzs6IT2USgMzgMILSasBlpkC7FWnBMabzavxo60VphsN0CWM0lnPbUfyemGfuPp1HpB
-         5VH74iHlVp67rQ7rBIdtFmmc7HEAc2pzUbFbAXmdaBWtQbzger1R5b4vtY5AD0pe2xr8
-         hNJ89GeHL4FMZ2biQWSIFaG8iiySTNmrP325ghQ4ACy003Jj3C2Fe/UP/zDIVO5YtFCJ
-         La6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779313668; x=1779918468;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YpTjOC7sOkfHmwRe7c7VQheaDmyv43bs1AM8pVSpDtA=;
-        b=JTngSdakHZiA9dhBmxeiMrNvpheKhICJej3FLsSjzmT8C12C49xSoiOodpS1kQAL77
-         bCQpHfiT8L8PdqjoMQdrrdbM3/xN/k1L4RsZ9k8BepZBnEk52MTha6glIZ2DJoYfn/IV
-         JtY+6B8kVfVC4bplKJFpm/AkhRPk8LhLvjP6G9PBTgTi3gd+RapM7nPzvjj9o2g/n+Ua
-         35jV6xXl87eyN7eOf8ONpqkQko+ZxsR32kvpq7pMwmVVNch+ZYo7IDv+VM+2PyItVFl1
-         WABVq/LlqvGRQSwRE5PTccr+lKfsv7JFuSHgWS8tNuhQETqz9/b4/K18XCVZIvUZQ6Tv
-         l+PA==
-X-Forwarded-Encrypted: i=1; AFNElJ99Leri3M2l9sPcTIAk2qpyXDGJ1qYSwE3YT82YqWEyMeZsTg7P9q4CIXBAQUArFqKO23E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQDnaJQmkqpkXYEud6PlNpW4Qq9yfOFISYxPNlUdnIca5Q66qM
-	UHuJ7XjM4iSztcVKZXG+HgOVq/cez6URIOWQf+m1mxgIMoBwF+cJ1jeD
-X-Gm-Gg: Acq92OFIbOKEZY83kOXI9F2zPGS1hi6aSifU4+MtZ11FlrUwUY/EFWZAgODc+jbLZEO
-	S/NVhnpTX3ieCIYrQjKtZP1n6rk3JMMXN4I4MejfvXBC7SbW6E+W912bsYJBZwWq/JrMvfLAxvC
-	j8RAhANX0Z0/KoEbss3PpSt/SV16gLqvJZDliq8KmpN59eV4tIA4sgR7i6vxW9TqFi4pc4r5k7J
-	w4FuN3R1yT1lab3y4eaTrQxLI7DtoxCG9jkb8ez/TqaaLIweuOIixGMS6n7lxv978BJQzcfFraq
-	LsVGkS5/Svp9XbLgt0xjuUpVnjGIQiJ/5O4X2Fo1lDszzstP2wQWwCvyrQjbI+HiFyRzzXnKkzZ
-	aVBf9ubkM1QqQJL/Y0HhyS0vSqIb42n5ZPCWhNmYSOlL9xSF/KeMteFeTLBEpbUwxAw1npI5p9R
-	pWh1JDlUUfEHjvZlK/gHKxYizcYaHmNlv6DhGfrraqdWaXLsAgTXcW
-X-Received: by 2002:a17:902:d5d0:b0:2b0:7531:b61e with SMTP id d9443c01a7336-2bd7e97a6c2mr170998335ad.41.1779313667710;
-        Wed, 20 May 2026 14:47:47 -0700 (PDT)
-Received: from [192.168.0.161] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5c05f27csm226191215ad.25.2026.05.20.14.47.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2026 14:47:47 -0700 (PDT)
-Message-ID: <02e6bb8e8b5e9e21e5b5f81adb9f440d556c83ed.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v5 05/14] bpf: Refactor object relationship
- tracking and fix dynptr UAF bug
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
- 	daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org, 
-	mykyta.yatsenko5@gmail.com, kernel-team@meta.com
-Date: Wed, 20 May 2026 14:47:44 -0700
-In-Reply-To: <20260519181314.2731658-6-ameryhung@gmail.com>
-References: <20260519181314.2731658-1-ameryhung@gmail.com>
-	 <20260519181314.2731658-6-ameryhung@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JY/2N9wD"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id BFBBBC2C649;
+	Wed, 20 May 2026 22:10:42 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id C1E7C60019;
+	Wed, 20 May 2026 22:09:48 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 76A47107EA218;
+	Thu, 21 May 2026 00:09:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1779314987; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=k2dpDAzX+92g0x+C7pCYldq5Fu4ePZOO/ElZAdhgYyk=;
+	b=JY/2N9wDK5+hiyRFaCppsT37VKYC9Nb9y01lTE4KuA22D047rlTEUb13AOGEQBmw5shxad
+	bkBRv1IIsJu521Nf/g5NSdRhNGYSiuqFIAoBPSKuvBespd5kKDCdFOQKU2Xe8OgbH9ZIc5
+	9zRB/XY9AYfzVdtXlWeYze5anzwAHpE6wdJSiCvF3ubWxOS6A5S1c8FXeN0t8ZQPe+fAlU
+	cHtJnkmvtBkFAXHPnni3F4ayWnS8oYf2GDI2gRtza2xRT+t/Aqwr9qKQpGssrS9EP1iDDM
+	i81ksRtKCdl/doxaT1whcP7dxFN0SmVTLDOjLQHNdvLalfptovkYBDiGRYz/kw==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Thu, 21 May 2026 00:09:11 +0200
+Subject: [PATCH bpf-next v2] bpf, docs: add LOAD_ACQUIRE and STORE_RELEASE
+ instructions
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260521-bpf-insn-doc-v2-1-8c43c037d599@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/22NzQ6CMBCEX4Xs2TVQBMST72E49GeRNdqStjYYw
+ rsLePU4mW++mSGQZwpwyWbwlDiws2sQhwz0IO2dkM2aQeSiziuRoxp7ZBssGqexqWpV1q2WpTj
+ DOhk99TztuhtspKUpQvdrwls9SMfNtrEDh+j8Z39Oxb74f5IKLLA5mcZII1vV66tyLj7ZHrV7Q
+ bcsyxcx6oKexgAAAA==
+X-Change-ID: 20260520-bpf-insn-doc-756b369ca328
+To: David Vernet <void@manifault.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
+ bpf@ietf.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Tue, 2026-05-19 at 11:13 -0700, Amery Hung wrote:
+Commit 880442305a39 ("bpf: Introduce load-acquire and store-release
+instructions") instroduced the LOAD_ACQUIRE and STORE_RELEASE atomic
+instructions modifiers. Those are currently not described in the
+documentation, despite being used in the verifier and the various JIT
+compilers supporting them.
 
-[...]
+Add the missing entries in the instruction set documentation.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 753681b0a987..89c219df6591 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -202,7 +202,7 @@ struct bpf_verifier_stack_elem {
-> =C2=A0
-> =C2=A0static int acquire_reference(struct bpf_verifier_env *env, int insn=
-_idx);
-> =C2=A0static int release_reference_nomark(struct bpf_verifier_state *stat=
-e, int ref_obj_id);
-> -static int release_reference(struct bpf_verifier_env *env, int ref_obj_i=
-d);
-> +static int release_reference(struct bpf_verifier_env *env, int id);
-> =C2=A0static void invalidate_non_owning_refs(struct bpf_verifier_env *env=
-);
-> =C2=A0static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env=
-);
-> =C2=A0static int ref_set_non_owning(struct bpf_verifier_env *env,
-> @@ -242,6 +242,7 @@ struct bpf_call_arg_meta {
-> =C2=A0	int mem_size;
-> =C2=A0	u64 msize_max_value;
-> =C2=A0	int ref_obj_id;
-> +	u32 id;
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+Changes in v2:
+- fix commit message typo
+- clarify zero-extension and registers meaning for LOAD_ACQ
+- clarify insn encoding for LOAD_ACQ and STORE_REL
+- Link to v1: https://patch.msgid.link/20260520-bpf-insn-doc-v1-1-74d7dada9bfc@bootlin.com
 
-Is this one used anywhere?
+To: David Vernet <void@manifault.com>
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: ebpf@linuxfoundation.org
+Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: bpf@vger.kernel.org
+Cc: bpf@ietf.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ .../bpf/standardization/instruction-set.rst        | 27 +++++++++++++++-------
+ 1 file changed, 19 insertions(+), 8 deletions(-)
 
-> =C2=A0	int func_id;
-> =C2=A0	struct btf *btf;
-> =C2=A0	u32 btf_id;
+diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
+index 39c74611752b..e8b33374bd09 100644
+--- a/Documentation/bpf/standardization/instruction-set.rst
++++ b/Documentation/bpf/standardization/instruction-set.rst
+@@ -668,7 +668,8 @@ that use the ``ATOMIC`` mode modifier as follows:
+   part of the "atomic32" conformance group.
+ * ``{ATOMIC, DW, STX}`` for 64-bit operations, which are
+   part of the "atomic64" conformance group.
+-* 8-bit and 16-bit wide atomic operations are not supported.
++* ``{ATOMIC, H, STX}`` (only for LOAD_ACQ/STORE_REL)
++* ``{ATOMIC, B, STX}`` (only for LOAD_ACQ/STORE_REL)
+ 
+ The 'imm' field is used to encode the actual atomic operation.
+ Simple atomic operation use a subset of the values defined to encode
+@@ -695,22 +696,24 @@ arithmetic operations in the 'imm' field to encode the atomic operation:
+   *(u64 *)(dst + offset) += src
+ 
+ In addition to the simple atomic operations, there also is a modifier and
+-two complex atomic operations:
++four complex atomic operations:
+ 
+ .. table:: Complex atomic operations
+ 
+   ===========  ================  ===========================
+   imm          value             description
+   ===========  ================  ===========================
+-  FETCH        0x01              modifier: return old value
+-  XCHG         0xe0 | FETCH      atomic exchange
+-  CMPXCHG      0xf0 | FETCH      atomic compare and exchange
++  FETCH        0x0001            modifier: return old value
++  XCHG         0x00e0 | FETCH    atomic exchange
++  CMPXCHG      0x00f0 | FETCH    atomic compare and exchange
++  LOAD_ACQ     0x0100            atomic load with barrier
++  STORE_REL    0x0110            atomic store with barrier
+   ===========  ================  ===========================
+ 
+ The ``FETCH`` modifier is optional for simple atomic operations, and
+-always set for the complex atomic operations.  If the ``FETCH`` flag
+-is set, then the operation also overwrites ``src`` with the value that
+-was in memory before it was modified.
++always set for the ``XCHG`` and ``CMPXCHG`` complex atomic operations.  If
++the ``FETCH`` flag is set, then the operation also overwrites ``src`` with
++the value that was in memory before it was modified.
+ 
+ The ``XCHG`` operation atomically exchanges ``src`` with the value
+ addressed by ``dst + offset``.
+@@ -721,6 +724,14 @@ The ``CMPXCHG`` operation atomically compares the value addressed by
+ value that was at ``dst + offset`` before the operation is zero-extended
+ and loaded back to ``R0``.
+ 
++The ``LOAD_ACQ`` and ``STORE_REL`` operations allow using lighter load and
++store memory barriers rather than full barriers. The corresponding accesses
++must be aligned, but are allowed for any access size (8-bit up to 64-bit
++operations), with 8-bit and 16-bit ``LOAD_ACQ`` loaded values being
++zero-extended. As atomics are encoded as stores, the meaning of dst and src
++are different for ``LOAD_ACQ``, effectively using src as memory based
++pointer and dst as destination register for the fetched value.
++
+ 64-bit immediate instructions
+ -----------------------------
+ 
 
-[...]
+---
+base-commit: ceeb3aa37bff895116944acf4347fcded0b7692d
+change-id: 20260520-bpf-insn-doc-756b369ca328
 
-> @@ -839,34 +806,20 @@ static int destroy_if_dynptr_stack_slot(struct bpf_=
-verifier_env *env,
-> =C2=A0			verbose(env, "cannot overwrite referenced dynptr\n");
-> =C2=A0			return -EINVAL;
-> =C2=A0		}
-> -	}
-> =C2=A0
-> -	mark_stack_slot_scratched(env, spi);
-> -	mark_stack_slot_scratched(env, spi - 1);
+Best regards,
+--  
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 
-Nit: no need to move mark_stack_slot_scratched().
-
-> =C2=A0
-> -	/* Writing partially to one dynptr stack slot destroys both. */
-> -	for (i =3D 0; i < BPF_REG_SIZE; i++) {
-> -		state->stack[spi].slot_type[i] =3D STACK_INVALID;
-> -		state->stack[spi - 1].slot_type[i] =3D STACK_INVALID;
-> +		invalidate_dynptr(env, &state->stack[spi - 1]);
-> +	} else {
-> +		/* Invalidate the dynptr and any derived slices */
-> +		err =3D release_reference(env, state->stack[spi].spilled_ptr.id);
-> =C2=A0	}
-> =C2=A0
-> -	dynptr_id =3D state->stack[spi].spilled_ptr.id;
-> -	/* Invalidate any slices associated with this dynptr */
-> -	bpf_for_each_reg_in_vstate(env->cur_state, fstate, dreg, ({
-> -		/* Dynptr slices are only PTR_TO_MEM_OR_NULL and PTR_TO_MEM */
-> -		if (dreg->type !=3D (PTR_TO_MEM | PTR_MAYBE_NULL) && dreg->type !=3D P=
-TR_TO_MEM)
-> -			continue;
-> -		if (dreg->dynptr_id =3D=3D dynptr_id)
-> -			mark_reg_invalid(env, dreg);
-> -	}));
-> -
-> -	/* Do not release reference state, we are destroying dynptr on stack,
-> -	 * not using some helper to release it. Just reset register.
-> -	 */
-> -	bpf_mark_reg_not_init(env, &state->stack[spi].spilled_ptr);
-> -	bpf_mark_reg_not_init(env, &state->stack[spi - 1].spilled_ptr);
-> +	if (!err) {
-> +		mark_stack_slot_scratched(env, spi);
-> +		mark_stack_slot_scratched(env, spi - 1);
-> +	}
-> =C2=A0
-> -	return 0;
-> +	return err;
-> =C2=A0}
-> =C2=A0
-> =C2=A0static bool is_dynptr_reg_valid_uninit(struct bpf_verifier_env *env=
-, struct bpf_reg_state *reg)
-
-[...]
-
-> @@ -8908,26 +8870,76 @@ static int release_reference_nomark(struct bpf_ve=
-rifier_state *state, int ref_ob
-> =C2=A0	return -EINVAL;
-> =C2=A0}
-> =C2=A0
-> -/* The pointer with the specified id has released its reference to kerne=
-l
-> - * resources. Identify all copies of the same pointer and clear the refe=
-rence.
-> - *
-> - * This is the release function corresponding to acquire_reference(). Id=
-empotent.
-> - */
-> -static int release_reference(struct bpf_verifier_env *env, int ref_obj_i=
-d)
-> +static int idstack_push(struct bpf_idmap *idmap, u32 id)
-> +{
-> +	int i;
-> +
-> +	if (!id)
-> +		return 0;
-> +
-> +	for (i =3D 0; i < idmap->cnt; i++)
-> +		if (idmap->map[i].old =3D=3D id)
-> +			return 0;
-> +
-> +	if (WARN_ON_ONCE(idmap->cnt >=3D BPF_ID_MAP_SIZE))
-> +		return -EFAULT;
-> +
-> +	idmap->map[idmap->cnt++].old =3D id;
-> +	return 0;
-> +}
-> +
-> +static int idstack_pop(struct bpf_idmap *idmap)
-> =C2=A0{
-> +	if (!idmap->cnt)
-> +		return 0;
-> +
-> +	return idmap->map[--idmap->cnt].old;
-> +}
-> +
-> +/* Release id and objects referencing the id iteratively in a DFS manner=
- */
-> +static int release_reference(struct bpf_verifier_env *env, int id)
-> +{
-> +	u32 mask =3D (1 << STACK_SPILL) | (1 << STACK_DYNPTR);
-> =C2=A0	struct bpf_verifier_state *vstate =3D env->cur_state;
-> +	struct bpf_idmap *idstack =3D &env->idmap_scratch;
-> +	struct bpf_stack_state *stack;
-> =C2=A0	struct bpf_func_state *state;
-> =C2=A0	struct bpf_reg_state *reg;
-> -	int err;
-> +	int root_id =3D id, err;
-> =C2=A0
-> -	err =3D release_reference_nomark(vstate, ref_obj_id);
-> -	if (err)
-> -		return err;
-> +	idstack->cnt =3D 0;
-> +	idstack_push(idstack, id);
-
-Nit: check error code or drop error path from idstack_push?
-
-> =C2=A0
-> -	bpf_for_each_reg_in_vstate(vstate, state, reg, ({
-> -		if (reg->ref_obj_id =3D=3D ref_obj_id)
-> -			mark_reg_invalid(env, reg);
-> -	}));
-> +	if (find_reference_state(vstate, id))
-> +		WARN_ON_ONCE(release_reference_nomark(vstate, id));
-> +
-> +	while ((id =3D idstack_pop(idstack))) {
-> +		bpf_for_each_reg_in_vstate_mask(vstate, state, reg, stack, mask, ({
-> +			if (reg->id !=3D id && reg->parent_id !=3D id && reg->ref_obj_id !=3D=
- id)
-> +				continue;
-> +
-> +			if (reg->ref_obj_id && reg->ref_obj_id !=3D root_id) {
-> +				struct bpf_reference_state *ref_state;
-> +
-> +				ref_state =3D find_reference_state(env->cur_state, reg->ref_obj_id);
-> +				verbose(env, "Leaking reference id=3D%d alloc_insn=3D%d. Release it =
-first.\n",
-> +					ref_state->id, ref_state->insn_idx);
-> +				return -EINVAL;
-
-Thinking some more about it, the mere presence of dangling objects
-with the same lifetime is not an error. The error would happen if such
-objects are accessed. Should the verifier invalidate such dangling
-objects instead of signaling an error immediately?
-
-> +			}
-> +
-> +			/* Free objects derived from the current object */
-> +			if (reg->id !=3D id) {
-
-I think this should be changed to `reg->parent_id =3D=3D id`,
-otherwise the reader has to infer that from the logical expression:
-
-  !(reg->id !=3D id && reg->parent_id !=3D id && reg->ref_obj_id !=3D id) &=
-&
-  !(reg->ref_obj_id && reg->ref_obj_id !=3D root_id) &&
-  (reg->id !=3D id)
-
-> +				err =3D idstack_push(idstack, reg->id);
-> +				if (err)
-> +					return err;
-> +			}
-> +
-> +			if (!stack || stack->slot_type[BPF_REG_SIZE - 1] =3D=3D STACK_SPILL)
-> +				mark_reg_invalid(env, reg);
-> +			else if (stack->slot_type[BPF_REG_SIZE - 1] =3D=3D STACK_DYNPTR)
-> +				invalidate_dynptr(env, stack);
-> +		}));
-> +	}
-> =C2=A0
-> =C2=A0	return 0;
-> =C2=A0}
-
-[...]
