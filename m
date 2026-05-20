@@ -1,146 +1,141 @@
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC1993438B3
-	for <bpf@vger.kernel.org>; Wed, 20 May 2026 00:26:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F2BD35966
+	for <bpf@vger.kernel.org>; Wed, 20 May 2026 00:43:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779236779; cv=none; b=VzbtmbvE5k01yEoqEaYijUHjWPPV29vaEryEdxjzIGzRzh4JyZWOqDMP69AFyVBXT0X6uXjSYDjPpwqb5Icbg0cNOOqN6JLtgNi7M0x3dxD6w08H5+2uPAaLQsKPfkHnflRQB2T/lgRzJuoisR1FWw77WeklAYIAmqCKjzjcn8k=
+	t=1779237783; cv=none; b=W1XPy+X0Jpxc6ub8i5AovsN3nPe70h7s20JaLIqWuAiQ5ldW4HQwsAzFI1eANWaJDwHfTh+pMvGVv9Wgvt+N1xp+SNjsXfgXtOtPzVd6GbJ4aAzbuYX+MtyW+KwWmfXxR6nEf5vviDttMXs90sWMs9GFFwTu8o8d8M3BIT6ENbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779236779; c=relaxed/simple;
-	bh=Q+peTABWxM1cV1Eu78eIvumQeHvhw0on1PjZ2G8dQGI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cxXKHueysuAufWp6qSuzDeGrwORiKD/L+A2ud0ckcD76Aep/N5s7HNCK6MPC+gWCyUEONmzBFQxTo9FtMOBQNYmhuobtlzXJcl91CwIGnNp/N7it+/Q1RHv+kvufBSX540ZMGnAsqpeA+92R27hWpxAe55HplJoSaP53MU6P9BM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OLrF7KMt; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779237783; c=relaxed/simple;
+	bh=WMicqqE67ul0vJopAceY8vMx2lsESDQwi2nHwp0/MwQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GDJEZlOsRbc16zh7IaYv+YarshFTR5KZl6MABcm2Z8dmvOfCahgrYjOP84cCRMurzPaUaUzEflR3XO/vijYxGTRoP6oHgFZPgFVQSJ22/lv3OWRVedeHpPFSj9R9QwqCiORAeel7c9zMOwuryizTzZpJ/N6K7hfyn5m0QRUEnt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GaVwUlk3; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OLrF7KMt"
-Date: Tue, 19 May 2026 17:25:53 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779236775;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xXDU6B2AA3RB0txN0ki89n2lvFpNNO8zaLnzqeinUg8=;
-	b=OLrF7KMtj50veG643eNyr2lzRQOg7JsIG8srMCf4tY455E1OmvwlHpXzWONg5v+uH5B5R2
-	OZBnFJoQtWCvlneEjfR+SUadvDufF+4pVfEsj4EElQQLmX/M+1R/AXRynCAKxJC1G/FR+I
-	ltMpMacaE/nar2QGE8P1wkSG8GovLQQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, Amery Hung <ameryhung@gmail.com>
-Subject: Re: [RFC PATCH bpf-next 02/12] bpf: Make struct_ops tasks_rcu grace
- period optional
-Message-ID: <2026520006.6Mm9.martin.lau@linux.dev>
-References: <20260519215841.2984970-3-martin.lau@linux.dev>
- <20260519225421.3CBCC1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GaVwUlk3"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-365d8e43759so2317346a91.0
+        for <bpf@vger.kernel.org>; Tue, 19 May 2026 17:43:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779237782; x=1779842582; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=A6KfxgyTszx0aKCDT6/DObZfaaYFv6TITrxlgwGLf1A=;
+        b=GaVwUlk3x8DjGwvyt4MjzW0mIxh9tAOuZz/PFJGB3gqMIv8vu/8/O1GWxPWJFSNfmc
+         HOJu0ebrubxAIbDE/xz73w7gArO2hMQDPPmI12a4BF+4uPf1wEBkHHdTzHEaOmBxCL3y
+         8oHvWSZvnrrMiaN0QmsxMF37k/7rBBJN4IaBCRX0C06k330xAWNAEsRtWYm8I3aVUa3C
+         z1QpKtL481bUfan85Hc7sPrHTdRsSB6PrkAsp0M2j13Wv7bWqEq6PDBvt3YlDo6/0boW
+         ZYbv9bIAS8nHjufhJhbjmFVvGt9I1Sc/+gvzPXKZ5Yrnrsqp2rWwAVN+ZJar5TejGoP6
+         tcZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779237782; x=1779842582;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A6KfxgyTszx0aKCDT6/DObZfaaYFv6TITrxlgwGLf1A=;
+        b=Vzzgq5ACNa5eKjdcjtz6Et5kiexiVq8NtZYbpZseNecVYTHhWDddtWC7gcozmTgLkp
+         4GNkAt4p1TI7+baKp0N9eDQiys2E+CKDn7tiMG2vnWbvTe0wRzrB6HFSqpABdMp+4pRM
+         BJUJhyfz7mdE9ay+l/F96uQOBA1GqbjkW4ev9/5u8j8i9kX4UgMPdvHrTRI+T0v8QBaf
+         U7GUix3BbqQ0tnFFJonSxte1ESq+NCC+fWySGbbH97vxsAieO4hasGoNIN1RhSTPG8nJ
+         KQKu3dZgZpcc/uYESo71vtvMOvSrKlRbgADkHifxwTW0wDGPMWlxPAaicJk5YnHYrMgv
+         Mw0A==
+X-Gm-Message-State: AOJu0Yz34WYRr3mZE/IkRfWmwxzfkpqFZGr1eE9tWfnknLYL1iGtBjoa
+	DobO4Ym0fJfx+KDB8ZnPY2TsXt6TlR6JNvUdcVSjjCdnfxmae0XGTyc/
+X-Gm-Gg: Acq92OGnu09YMcKbYvZlZwDx4j4EoOxoAnOTnMUhBiKeTzmbjY5DM5RqteG1bQf3lgP
+	AbGx/Zue88A6QFA1xV6L1AWNjEMTyHy882gAK5RsB4MaFT0Jm5EVQ3ozOftuWH2COaCQ3pVbAxP
+	+LDnS6ldKfu/OKQ1rE99wFjAIoPd4FILwkSFmvHzT2bytWWmajvyBpOoah0YTZECnd/EZPsskSe
+	YK0EbSODxjKrWR0f2OAneilqRCjDyl9GodswfqAxrOF/lyrq0jzTXe7JeF4alEYDRHUUaSgO+tK
+	MnlEzRCzrIS8Ny8/xJa6+UHQ+FLpFWEhMc4ifnJwKBe+uihNx945cUT8FE1UssabCGdDArXdvlc
+	kVyoNTEXa210G34/2B7kJq+fOv2DErx9AQ6qGcQzBpWE23uCYwZ6coaibCLXfjo62p0c9vrtFvE
+	Kg2wa5kJWNdDGPYeCeIXy6JdGwbvLgktWyFDxgf5CI7dwcr4dlY7hRC/T38rKelz53RhuqC/EqL
+	yV3xieEdaE4wDMhBoYARFpWOb6aZ5Jpufc4g4RICQ==
+X-Received: by 2002:a17:90b:38c9:b0:369:9469:aeba with SMTP id 98e67ed59e1d1-3699469b41cmr10628387a91.1.1779237781689;
+        Tue, 19 May 2026 17:43:01 -0700 (PDT)
+Received: from KERNELXING-MC1.tencent.com ([2408:8207:1923:2c20:f1df:d520:8103:19c8])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36951059f4dsm14746277a91.0.2026.05.19.17.42.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2026 17:43:00 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	bjorn@kernel.org,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	jonathan.lemon@gmail.com,
+	sdf@fomichev.me,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	horms@kernel.org,
+	andrew+netdev@lunn.ch
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH net v4 0/5] xsk: fix meta and publish of cq issues
+Date: Wed, 20 May 2026 08:42:39 +0800
+Message-Id: <20260520004244.55663-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260519225421.3CBCC1F000E9@smtp.kernel.org>
-X-Migadu-Flow: FLOW_OUT
 
-On Tue, May 19, 2026 at 10:54:20PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [Critical] The patch incorrectly skips the Tasks RCU grace period (`synchronize_rcu_tasks()`) before freeing executable trampoline memory for all `struct_ops` except `tcp_congestion_ops`, leading to Use-After-Free of executable memory.
-> - [High] RCU-001 violation: `bpf_struct_ops_map_dissoc_progs()` removes the map from `prog->aux->st_ops_assoc` after the regular RCU grace period has already completed, leading to a Use-After-Free.
-> --
-> 
-> commit 85a451ad8aefbb364a1840344e08d2f34596b96c
-> Author: Martin KaFai Lau <martin.lau@kernel.org>
-> 
-> bpf: Make struct_ops tasks_rcu grace period optional
-> 
-> This commit makes the tasks RCU grace period optional during struct_ops map
-> freeing. It introduces a map_free_pre_rcu callback to remove ksyms before the
-> regular RCU grace period. The tasks RCU grace period is now only explicitly
-> requested by tcp_congestion_ops.
-> 
-> > diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-> > index 08791180d71d9..28eab24ef0ed0 100644
-> > --- a/kernel/bpf/bpf_struct_ops.c
-> > +++ b/kernel/bpf/bpf_struct_ops.c
-> > @@ -996,24 +1005,8 @@ static void bpf_struct_ops_map_free(struct bpf_map *map)
-> >  
-> >  	bpf_struct_ops_map_dissoc_progs(st_map);
-> 
-> [Severity: High]
-> Does this violate the RCU remove-before-reclaim rule?
-> 
-> Because map->free_after_rcu_gp is set to true in bpf_struct_ops_map_alloc(),
-> the regular RCU grace period occurs before bpf_struct_ops_map_free() is called.
-> Leaving bpf_struct_ops_map_dissoc_progs() here means the map is removed
-> from prog->aux->st_ops_assoc after the grace period has already finished.
+From: Jason Xing <kernelxing@tencent.com>
 
-After the grace period finished, all struct_ops's bpf prog has
-finished running
+The series is the product of previous review from sashiko[1].
 
-> 
-> Could a concurrent execution of the BPF program acquire the RCU read lock, read
-> the still-valid aux->st_ops_assoc pointer, and then access the map after it is
-> freed?
+1) META
+patch 1: address TOCTOU around metadata.
 
-so this cannot happen.
+2) PUBLISH of CQ
+patch 2: make sure xsk_addr->addrs[] can be published to cq when
+         overflow occurs.
+patch 3: keep cleaning up the continuation descs (more than 17) and
+         publish its address when overflow occurs.
+patch 4: like patch 3, but only handles the invalid descs cases.
 
-afaik, for non struct_ops's prog, the st_ops_assoc has a refcnt.
-[I could be wrong here. CC Amery.]
+[1]: https://lore.kernel.org/all/20260502200722.53960-1-kerneljasonxing@gmail.com/
 
-Overall, moving bpf_struct_ops_map_dissoc_progs to map_free_pre_rcu
-could be a simpler read but don't think it is needed.
+---
+V4
+Link: https://lore.kernel.org/all/20260517063311.28921-1-kerneljasonxing@gmail.com/
+1. correct the description of xmit path in patch 3 (sashiko)
+2. move set logic into xmit path in patch 3 (Stan)
 
-> 
-> Should bpf_struct_ops_map_dissoc_progs() be moved to the new
-> bpf_struct_ops_map_free_pre_rcu() callback instead?
-> 
-> > -	/* The struct_ops's function may switch to another struct_ops.
-> > -	 *
-> > -	 * For example, bpf_tcp_cc_x->init() may switch to
-> > -	 * another tcp_cc_y by calling
-> > -	 * setsockopt(TCP_CONGESTION, "tcp_cc_y").
-> > -	 * During the switch,  bpf_struct_ops_put(tcp_cc_x) is called
-> > -	 * and its refcount may reach 0 which then free its
-> > -	 * trampoline image while tcp_cc_x is still running.
-> > -	 *
-> > -	 * A vanilla rcu gp is to wait for all bpf-tcp-cc prog
-> > -	 * to finish. bpf-tcp-cc prog is non sleepable.
-> > -	 * A rcu_tasks gp is to wait for the last few insn
-> > -	 * in the tramopline image to finish before releasing
-> > -	 * the trampoline image.
-> > -	 */
-> > -	synchronize_rcu_mult(call_rcu, call_rcu_tasks);
-> > +	if (tasks_rcu && IS_ENABLED(CONFIG_TASKS_RCU))
-> > +		synchronize_rcu_tasks();
-> >  
-> >  	__bpf_struct_ops_map_free(map);
-> >  }
-> 
-> [Severity: Critical]
-> Does skipping the Tasks RCU grace period for other struct_ops cause a
-> use-after-free of executable trampoline memory?
+V3
+Link: https://lore.kernel.org/all/20260515123018.80147-1-kerneljasonxing@gmail.com/
+1. avoid breaking previous usage of sendto, and siliently handle
+overflow case (Stan, sashiko)
+2. add one particular exception process in patch 4 (sashiko)
+3. adjust the selftest to make sure it passes in either virutal or
+physical machines, which includes add usleep to support physical machine.
 
-I don't think so. Other subsystems using struct_ops wait for
-the bpf prog finished running in unreg().
+V2
+Link: https://lore.kernel.org/all/20260510012310.88570-1-kerneljasonxing@gmail.com/
+1. adjust selftests (Jakub)
+2. add READ_ONCE in patch 1 (Stan)
 
-Note that in general this should only matter to the bpf-tcp-cc's struct_ops prog
-that does a bpf_setsockopt(TCP_CONGESTION) which triggers a bpf_map_put() on
-its own running struct_ops's map refcnt.
 
-> 
-> All struct_ops programs are executed via dynamically generated trampolines. When
-> the program returns, the RCU read lock is dropped and preemption is re-enabled.
-> If a task is preempted while still executing the trampoline epilogue, the
-> regular RCU grace period will not wait for it.
-> 
-> Without the Tasks RCU wait, could the executable trampoline image be freed
-> prematurely, causing preempted tasks to execute freed memory when they resume?
-> 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260519215841.2984970-1-martin.lau@linux.dev?part=2
+Jason Xing (5):
+  xsk: cache csum_start/csum_offset to fix TOCTOU in xsk_skb_metadata()
+  xsk: fix buffer leak in xsk_drop_skb() for AF_XDP multi-buffer Tx
+  xsk: drain continuation descs after overflow in xsk_build_skb()
+  xsk: drain continuation descs on invalid descriptor in
+    __xsk_generic_xmit()
+  selftests/xsk: drain CQ to wait for TX completion
+
+ include/net/xdp_sock.h                        |  1 +
+ net/xdp/xsk.c                                 | 44 +++++++++++++----
+ .../selftests/bpf/prog_tests/test_xsk.c       | 48 +++++++++++--------
+ 3 files changed, 63 insertions(+), 30 deletions(-)
+
+-- 
+2.43.7
+
