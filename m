@@ -1,107 +1,182 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E6961A6836;
-	Wed, 20 May 2026 16:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1520236403C
+	for <bpf@vger.kernel.org>; Wed, 20 May 2026 16:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779293662; cv=none; b=WjONBA/1sl+4jiQ0l7RqKXn83gcYD+dOJr+tBojaE1vYH0CQrVYdsRZohmDUr7jop/Ez8Gv7IRAZON6VFz7TOo4poyaJ1J7yWT0sFWLoi349t0jdI1KdCBQlqtd0TcrhMcjH4nFMkxcqKrDuOQEun8HGRHhdwp9O7O9m/Qtehtc=
+	t=1779293743; cv=none; b=p0BLUq+DqCpg3u+q9A5OfJRSPgtEjQZlMy5njz/nI+vAwbuSw82Ioydh2myT0AT/sv3BsEkeGY7AA5Stq8TRkIPGybL0plKVo82IHkgbnUOTUWmqyb2Sy0tTy/X4Q4cVhBmgpNSjUGZQoMcymITK64/lx0Tza05RNE8cYqf5qd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779293662; c=relaxed/simple;
-	bh=206Do778AhQOt1mOHVPBEMipIY28Q+yNhRY4+maBCoI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BuDJuH51KfrtkMO0b01odxKV13IwFFaTadu4gaaFzY0MEi1itrTkvnw5OGpA99KlhxsdD4OmRg6q4i62NATxGxGYOXqDpgVJg+pF7pDRsL3B+rHBX5k66beEX/DZcz0s6M7MrdnRsHsmaeYdavL/RpzRpKASx8WxIR3D70xbES4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=JaMF8kB9; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1779293743; c=relaxed/simple;
+	bh=a1zA5OT6wlwxqNwtmhesrYoLRggxs+x2/SlbZKRt4uU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=tDWP3lzAsGSUqYBpiaVnF4RImuwpVXO5Kv5v1nWpQNHuZ5fWw1v634k806LykxSuCkyD+irmqwnyV/ndKS1PIUl8h3HmUQowpd+z336Y7XEEJBJD7KW6i6hyar9hAW8AmISPV0sFa43paglpyAu/X/Bmt2LwSSNAShlfJ3g/Mlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m+jYl3Ld; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="JaMF8kB9"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=kCIUogO0mQs44DTJh/wxinjbQek0km84DbYAsM4WUd8=; b=JaMF8kB9trMMmNNO6sA6lOpJ49
-	UDS/B7BvEXzI5J/9tDb3jdf5G/DZ3SqO4d9syGpBYK73sJz3d9YYdwV8XWjiY7fEVMwOHklrZVDPa
-	gAdrd0EMR4Aq9Pcgm2cIBndpHnorLnni2ybVwGXg+7Kj1dFqcznFVxILDcDmoMbOblxoEPqtjIqv1
-	UH9WwMWq1LPSp2iQsDFhYvfd62JzsmK34l/Qcd6hiTo8edlnO4PAvFyczmK2ZvXozy68w/nFxWkId
-	eUpSY/sjWG2c6BBwOrI5ZLUVA7eks9Bv9jl7jkJJSR24SVTRcDVZiyeN7LoXxJAGqpLRJKZaaBo9/
-	Xxn+bj7g==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wPjYo-003EE7-0v;
-	Wed, 20 May 2026 16:14:18 +0000
-Date: Wed, 20 May 2026 09:14:13 -0700
-From: Breno Leitao <leitao@debian.org>
-To: sashiko-reviews@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m+jYl3Ld"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 690781F000E9;
+	Wed, 20 May 2026 16:15:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779293741;
+	bh=0UkXOkEpphEo53T4ramDaETbasdsSbMw98+grDGrZ9w=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=m+jYl3LdvBWHYJJx8ct0L0TseupjNI9gxlNDGjTR+gvXuZlsl6fKCfKpggmhdWvAu
+	 8QNtSL8RKeovuyySE4E5Bu4VmyKLbW3U+Pegvm6rEcWqYJFs9tUj65fU2lIBw9jX8I
+	 jEHSEt/FbD3XVyeGFDpmprzBKTo+WekY2nzODBK5WrH1a/rsdowh2urjft/va/SiYS
+	 m5ttNJF/hJyo5PkQzSPrVsTER7rC7qtZmXhki2UZpaJOUD4Hp9moEDVtG8KFYctBx+
+	 RxTerutwatX1tB4grme+CdB5KQpNnN050s33xxB+I4JNBPVK7FN1UoQMLjOPbDa7uW
+	 t90igM+nh3L8Q==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v15 12/20] unwind_user/sframe: Add .sframe validation
+ option
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jens Remus" <jremus@linux.ibm.com>
 Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v2 1/7] af_iucv: take socket lock around
- SO_MSGSIZE getsockopt
-Message-ID: <ag3dctqXsRO-1akg@gmail.com>
-References: <20260515-getsock_four-v2-1-0d8eed952627@debian.org>
- <20260516083434.6FC23C19425@smtp.kernel.org>
+In-Reply-To: <20260520154004.3845823-13-jremus@linux.ibm.com>
+References: <20260520154004.3845823-13-jremus@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 20 May 2026 16:15:30 +0000
+Message-Id: <20260520161541.690781F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260516083434.6FC23C19425@smtp.kernel.org>
-X-Debian-User: leitao
 
-On Sat, May 16, 2026 at 08:34:33AM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] The commit message incorrectly claims the bug is unexploitable and targets the patch to `net-next` without a `Fixes` tag, bypassing stable backports for a reachable NULL pointer dereference or use-after-free.
-> --
-> 
-> commit 2d366eacb5715c7a757195706a39c7382bd391e0
-> Author: Breno Leitao <leitao@debian.org>
-> af_iucv: take socket lock around SO_MSGSIZE getsockopt
-> 
-> This commit adds socket locking around the SO_MSGSIZE case in
-> iucv_sock_getsockopt() to prevent concurrent modifications to hs_dev.
-> The commit message states this is purely defensive and targets net-next.
-> 
-> > This is not an exploitable bug. iucv_sock_close() is the only writer
-> > of iucv->hs_dev and only runs from the protocol release callback,
-> > which the socket layer invokes after the last file reference drops.
-> > The getsockopt() syscall holds an fd reference for its entire
-> > duration via fdget()/fdput(), so iucv_sock_close() cannot run
-> > concurrently with the SO_MSGSIZE read on the same socket.
-> 
-> Is it strictly true that iucv_sock_close() only runs from the release
-> callback?
-> 
-> Looking at iucv_sock_recvmsg(), it appears to directly invoke
-> iucv_sock_close() when the message limit is exceeded:
-> 
-> net/iucv/af_iucv.c:iucv_sock_recvmsg() {
->         ...
->         if (atomic_read(&iucv->msg_recv) > iucv->msglimit) {
->                 ...
->                 iucv_sock_close(sk);
->                 ...
->         }
->         ...
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+
+New issues:
+- [High] Missing cond_resched() or fatal signal checking in the nested loop=
+s of sframe_validate_section() allows an unprivileged local attacker to tri=
+gger a CPU soft lockup.
+- [Low] The validation logic in sframe_validate_section() incorrectly rejec=
+ts a valid .sframe section if the first function is located at virtual addr=
+ess 0.
+
+Pre-existing issues:
+- [High] sframe_find() handles read failures by calling sframe_remove_secti=
+on(), which acquires a lock inside NMI or IRQ context, leading to deadlocks=
+ or PREEMPT_RT panics.
+--
+
+commit 07d74be031cf9fade2b9ddd98bfdd8f52c38c2da
+Author: Josh Poimboeuf <jpoimboe@kernel.org>
+
+unwind_user/sframe: Add .sframe validation option
+
+This commit introduces a debugging feature to optionally validate the
+entire .sframe section upon loading, rather than checking on-demand.
+It uses user_read_access_begin/end to read FDEs and FREs to verify their
+formatting and sorting.
+
+> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+> --- a/kernel/unwind/sframe.c
+> +++ b/kernel/unwind/sframe.c
+[ ... ]
+> int sframe_find(unsigned long ip, struct unwind_user_frame *frame)
+> {
+[ ... ]
+> 	ret =3D __find_fre(sec, &fde, ip, frame);
+> end_uaccess:
+> 	user_read_access_end();
+>=20
+> end:
+> 	if (ret && ret !=3D -ENOENT) {
+> 		dbg_sec("removing bad .sframe section\n");
+> 		WARN_ON_ONCE(sframe_remove_section(sec->sframe_start));
+> 	}
+>=20
+> 	return ret;
 > }
-> 
-> Since recvmsg() executes with an active file descriptor reference, could
-> this path be triggered concurrently with a getsockopt() call evaluating
-> SO_MSGSIZE on the same socket?
-> 
-> If so, evaluating iucv->hs_dev and then dereferencing iucv->hs_dev->mtu
-> in getsockopt() before this patch could be vulnerable to a race with
-> iucv_sock_close(), potentially leading to a null pointer dereference or
-> use-after-free.
 
-You are right. iucv_sock_recvmsg() does call iucv_sock_close() directly
-on the AF_IUCV_TRANS_HIPER msglimit-exceeded branch, in syscall context
-on a live fd. Two threads sharing an fd (or two fds for the same struct
-sock after dup/fork) can then run recvmsg() and getsockopt(SO_MSGSIZE)
-concurrently, if the dev_put() drops the last reference, A can be left
-dereferencing a freed netdev.
+[Severity: High]
+This isn't a bug introduced by this patch, but does calling
+sframe_remove_section() here risk a deadlock or panic on PREEMPT_RT?
 
-That said, I will separate this patch and send it to 'net'.
+If a page fault occurs during user memory access, unsafe_copy_from_user()
+returns -EFAULT to prevent sleeping.
+
+However, sframe_find() handles any error other than -ENOENT by calling
+sframe_remove_section(), which in turn calls mtree_erase().
+
+Since mtree_erase() takes an internal spinlock, doing this in NMI context
+(where sframe_find() is often called) can deadlock or panic a PREEMPT_RT
+kernel, while also permanently deleting a valid unwind section due to
+transient memory pressure.
+
+[ ... ]
+> +#ifdef CONFIG_SFRAME_VALIDATION
+[ ... ]
+> +static int sframe_validate_section(struct sframe_section *sec)
+> +{
+> +	unsigned long prev_ip =3D 0;
+> +	unsigned int i;
+> +
+> +	for (i =3D 0; i < sec->num_fdes; i++) {
+> +		struct sframe_fre_internal *fre, *prev_fre =3D NULL;
+> +		unsigned long ip, fre_addr;
+> +		struct sframe_fde_internal fde;
+> +		struct sframe_fre_internal fres[2];
+> +		bool which =3D false;
+> +		unsigned int j;
+> +		int ret;
+> +
+> +		ret =3D safe_read_fde(sec, i, &fde);
+> +		if (ret) {
+> +			dbg_sec("safe_read_fde(%u) failed\n", i);
+> +			return ret;
+> +		}
+> +
+> +		ip =3D fde.func_addr;
+> +		if (ip <=3D prev_ip) {
+
+[Severity: Low]
+Does this check accidentally reject valid sections where the first
+function is located at virtual address 0?
+
+Since prev_ip is initialized to 0, validating the first FDE when ip is 0
+will cause this check to evaluate to true, falsely triggering an -EINVAL.
+
+Valid executables can map their text section at 0 if vm.mmap_min_addr is
+set to 0.
+
+> +			dbg_sec("FDE %u not sorted\n", i);
+> +			return -EINVAL;
+> +		}
+> +		prev_ip =3D ip;
+> +
+> +		fre_addr =3D sec->fres_start + fde.fres_off;
+> +		for (j =3D 0; j < fde.fres_num; j++) {
+[ ... ]
+> +			fre_addr +=3D fre->size;
+> +
+> +			if (prev_fre && fre->ip_off <=3D prev_fre->ip_off) {
+> +				dbg_sec("FDE %u: FRE %u not sorted\n", i, j);
+> +				return -EINVAL;
+> +			}
+> +
+> +			prev_fre =3D fre;
+> +		}
+
+[Severity: High]
+Could a malicious user exploit these loops to trigger a CPU soft lockup?
+
+The variables sec->num_fdes and fde.fres_num are user-controlled and
+bounded only by the VMA size.
+
+Without a cond_resched() or fatal signal check, an attacker could supply
+large counts and cause these loops to run for seconds without yielding.
+
+On non-preemptible kernels, this monopolizes the CPU and triggers the soft
+lockup watchdog, resulting in a local denial of service.
+
+> +	}
+> +
+> +	return 0;
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260520154004.3845=
+823-1-jremus@linux.ibm.com?part=3D12
