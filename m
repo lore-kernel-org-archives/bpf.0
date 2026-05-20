@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A325347FEE;
-	Wed, 20 May 2026 23:50:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8153E3CFF58;
+	Wed, 20 May 2026 23:50:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779321058; cv=none; b=RA801EpK1jMH3clgU51fMaNF4kAyXYeEUeWxUm0xCmjLFjJoAJO2sw97ZMVJChLLAUoPiFAfurbK3d+tqtUtz5HiP8CBUvPu+QwtyZZ3zj62FUENPQ3schFB7WgpD8RkoGI7e5vWjL5OtrQxXJyrh5/2Tpm6aU+0RCURV53CK3U=
+	t=1779321059; cv=none; b=s05cBl4ltdfFlslVuLCr0OsUCy//0aAJP+EVjndrvFFMRyI71+x0oErnkNdKc9xmzGk3DYTZ7PLJ+Wb9Slkv0bpHLQZtoU0K6/Ms14lxwXca6rV6F8Znro5Lr5QJcw8Hq7lbICeb3kyf0IQjuKO35iWtEREQ2GYRTchJDegG0js=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779321058; c=relaxed/simple;
-	bh=Zg4cH11nX6LXikF4KR2+W+EzWTHS8IUCgbIUpXdNzwE=;
+	s=arc-20240116; t=1779321059; c=relaxed/simple;
+	bh=nIxRNHcochU3lNsJkNucnyLAioXnyzlit+Lp1sMRwas=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=V2ealzCHzXUBN9utW8XxGmduUyefrcw3l0k1Ijvb/j/XvtODBL/phTdV6eOE3OUbu+nDa47bgfsx6g47J3EFhIhYiBnMZ1tvKgues4ZS5f8yAHnHlyHXOEAWzGPMSw7RqdIxr3O/cwh2UrMBVi3M/udVt5bX5nGvXl2SLeIupMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jedo725t; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=uSQsjYan7T3rbCDtRnfQL4CxXVkLL6o6rZeWsiMMbxOJkm66j0s2+BmCeW+wmSFmdQgxY2KVPGg6lXfGTx6Oha8YguqlfswsDuWF9aT6jAc8vErwmky8jNeigM8w3SJkn0zkmeYurDeO21Hf790fBb0xQlpAuSy4EyFWbvBuT5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jqG8AojY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jedo725t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89A711F00A39;
-	Wed, 20 May 2026 23:50:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jqG8AojY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B20F1F00A3B;
+	Wed, 20 May 2026 23:50:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779321054;
-	bh=56EnKKPGuHgOKsaFa+NBa3ItADAq8xQmgeqKeYpg1Wk=;
+	s=k20260515; t=1779321056;
+	bh=aw33Msv3FojgQ5PJ/yDlSFo5ZWq8iJm1lg3DrSxILRI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=jedo725tD9w9fyUlX7zQezS2ZSB3n+ZskPz+3Mb+FqMvFd/PIMwjl0If6Ax77QebN
-	 ZT1wI3EVdktpOXzIPN5XXXl2zjXZ8Tau6DCWzkuGjPVby/qTofpt6Uu3rb7GdgU9x2
-	 cmk51IRwSCvfi4soFAHWNCEqOqrAWcTlmzBUuY/wnuQN1vhABrYEAtApAjj19H/exp
-	 4/ns2SP3KAnc+hYhP41YXcSXpMjCk8lpLcs8t1YSJivJkjtiqwrBlhRvNEnGMMKXyN
-	 +3pF3iJn7jj6jt+fwnlzjY9U6N+pDznUJfr7K4M16E6a0Kud7AjC7jM9s+c3T6PweM
-	 agyfd4ziUn0Xw==
+	b=jqG8AojYZewGiX1VPBblXeH2xbBlmCgwhm2F9sG4b3VbkvEPFatCTKKt/Wv2NNsNS
+	 RAWf8aClxV6wxK166QAMSqq5Wa8cFx9ZNwaXbOf0Zaxq1PiwmOcD587FFogsTZmWJX
+	 ll3jQAiMX7Sxk6DdvZyYKCi9RF6MdpxgnHbB1vphmKzgoJheiscV6ugheU1ZrSQPsN
+	 2T0G+6iV2O7H4vejiABwq/xNuResfnv67r198fWG3c9entRW8XZT0fzdNziQ6OVako
+	 lMrY4wHGG4hzdyrI0sjndDSmOrycc/bK0tlNMpF98hrz2lMlG39HYEFQhb1m5ms+VN
+	 FvAkbQ2ZO/RIg==
 From: Tejun Heo <tj@kernel.org>
 To: David Vernet <void@manifault.com>,
 	Andrea Righi <arighi@nvidia.com>,
@@ -53,9 +53,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-mm@kvack.org,
 	linux-kernel@vger.kernel.org,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH 1/8] mm: Add ptep_try_set() for lockless empty-slot installs
-Date: Wed, 20 May 2026 13:50:45 -1000
-Message-ID: <20260520235052.4180316-2-tj@kernel.org>
+Subject: [PATCH 3/8] bpf: Add sleepable variant of bpf_arena_alloc_pages for kernel callers
+Date: Wed, 20 May 2026 13:50:47 -1000
+Message-ID: <20260520235052.4180316-4-tj@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260520235052.4180316-1-tj@kernel.org>
 References: <20260520235052.4180316-1-tj@kernel.org>
@@ -67,111 +67,71 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add ptep_try_set(ptep, new_pte): atomically set *ptep to new_pte iff it is
-currently pte_none(). Returns true on success, false if the slot was already
-populated or the arch has no implementation.
+The existing kernel-side export of bpf_arena_alloc_pages is _non_sleepable
+only - it's used by the verifier to inline the kfunc when the call site is
+non-sleepable. There is no sleepable equivalent for kernel callers; the
+kfunc bpf_arena_alloc_pages itself is BPF-only.
 
-The intended caller is the upcoming bpf_arena kernel-side fault recovery
-path. The install runs from a page fault that can be nested under locks
-held by the faulting kernel caller (e.g. a BPF program holding
-raw_res_spin_lock_irqsave on its arena's spinlock), so trylock-and-retry
-would A-A deadlock. Lock-free cmpxchg is the only viable option, which
-constrains this helper to special kernel page tables where concurrent
-writers cooperate via atomic accessors.
+sched_ext needs sleepable kernel-side allocs for its arena pool init/grow
+paths. Add bpf_arena_alloc_pages_sleepable() mirroring the _non_sleepable
+wrapper but passing sleepable=true to arena_alloc_pages().
 
-The generic version in <linux/pgtable.h> returns false. x86 and arm64
-override with try_cmpxchg-based implementations on the underlying pteval.
-Other architectures get the false stub - the callers there already fall
-through to oops.
-
-v2: Rename to ptep_try_set(). Tighten kerneldoc for kernel-PTE use.
-    (David, Alexei)
-
-Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: David Hildenbrand <david@kernel.org>
 ---
- arch/arm64/include/asm/pgtable.h |  8 ++++++++
- arch/x86/include/asm/pgtable.h   |  8 ++++++++
- include/linux/pgtable.h          | 26 ++++++++++++++++++++++++++
- 3 files changed, 42 insertions(+)
+ include/linux/bpf.h |  8 ++++++++
+ kernel/bpf/arena.c  | 13 +++++++++++++
+ 2 files changed, 21 insertions(+)
 
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 9029b81ccbe8..a129be91ef2c 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -1830,6 +1830,14 @@ static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
- 	return __ptep_get_and_clear(mm, addr, ptep);
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 831996c411cf..64968ca6db51 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -679,6 +679,8 @@ int bpf_dynptr_from_file_sleepable(struct file *file, u32 flags,
+ void *bpf_arena_alloc_pages_non_sleepable(void *p__map, void *addr__ign, u32 page_cnt, int node_id,
+ 					  u64 flags);
+ void bpf_arena_free_pages_non_sleepable(void *p__map, void *ptr__ign, u32 page_cnt);
++void *bpf_arena_alloc_pages_sleepable(void *p__map, void *addr__ign, u32 page_cnt, int node_id,
++				      u64 flags);
+ #else
+ static inline void *bpf_arena_alloc_pages_non_sleepable(void *p__map, void *addr__ign, u32 page_cnt,
+ 							int node_id, u64 flags)
+@@ -689,6 +691,12 @@ static inline void *bpf_arena_alloc_pages_non_sleepable(void *p__map, void *addr
+ static inline void bpf_arena_free_pages_non_sleepable(void *p__map, void *ptr__ign, u32 page_cnt)
+ {
  }
- 
-+static inline bool ptep_try_set(pte_t *ptep, pte_t new_pte)
++
++static inline void *bpf_arena_alloc_pages_sleepable(void *p__map, void *addr__ign, u32 page_cnt,
++						    int node_id, u64 flags)
 +{
-+	pteval_t old = 0;
-+
-+	return try_cmpxchg(&pte_val(*ptep), &old, pte_val(new_pte));
++	return NULL;
 +}
-+#define ptep_try_set ptep_try_set
-+
- #define test_and_clear_young_ptes test_and_clear_young_ptes
- static inline bool test_and_clear_young_ptes(struct vm_area_struct *vma,
- 		unsigned long addr, pte_t *ptep, unsigned int nr)
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 13e3e9a054cb..047e273a4eab 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -1284,6 +1284,14 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm,
- 	} while (!try_cmpxchg((long *)&ptep->pte, (long *)&old_pte, *(long *)&new_pte));
- }
- 
-+static inline bool ptep_try_set(pte_t *ptep, pte_t new_pte)
-+{
-+	pte_t old_pte = __pte(0);
-+
-+	return try_cmpxchg((long *)&ptep->pte, (long *)&old_pte, *(long *)&new_pte);
-+}
-+#define ptep_try_set ptep_try_set
-+
- #define flush_tlb_fix_spurious_fault(vma, address, ptep) do { } while (0)
- 
- #define  __HAVE_ARCH_PMDP_SET_ACCESS_FLAGS
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index cdd68ed3ae1a..d68374f404c1 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -1036,6 +1036,32 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addres
- }
  #endif
  
-+#ifndef ptep_try_set
-+/**
-+ * ptep_try_set - atomically set an empty kernel PTE
-+ * @ptep: page table entry
-+ * @new_pte: value to install
-+ *
-+ * Atomically set *@ptep to @new_pte iff *@ptep is pte_none(). Return
-+ * true on success, false if the slot was already populated or the
-+ * arch has no implementation.
-+ *
-+ * For special kernel page tables only - never user page tables. The
-+ * caller must prevent concurrent teardown of @ptep and must accept
-+ * that other writers may race. Concurrent clearers must use
-+ * ptep_get_and_clear() so racing accesses agree on the outcome.
-+ *
-+ * Architectures opt in by providing a cmpxchg-based override and
-+ * defining ptep_try_set as an identity macro. The generic stub
-+ * returns false, which is correct for callers that fall through to
-+ * oops on failure.
-+ */
-+static inline bool ptep_try_set(pte_t *ptep, pte_t new_pte)
-+{
-+	return false;
-+}
-+#endif
+ extern const struct bpf_map_ops bpf_map_offload_ops;
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index 1c0b87ecc817..a811cf6170fa 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -934,6 +934,19 @@ void *bpf_arena_alloc_pages_non_sleepable(void *p__map, void *addr__ign, u32 pag
+ 
+ 	return (void *)arena_alloc_pages(arena, (long)addr__ign, page_cnt, node_id, false);
+ }
 +
- #ifndef wrprotect_ptes
- /**
-  * wrprotect_ptes - Write-protect PTEs that map consecutive pages of the same
++void *bpf_arena_alloc_pages_sleepable(void *p__map, void *addr__ign, u32 page_cnt,
++				      int node_id, u64 flags)
++{
++	struct bpf_map *map = p__map;
++	struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
++
++	if (map->map_type != BPF_MAP_TYPE_ARENA || flags || !page_cnt)
++		return NULL;
++
++	return (void *)arena_alloc_pages(arena, (long)addr__ign, page_cnt, node_id, true);
++}
++
+ __bpf_kfunc void bpf_arena_free_pages(void *p__map, void *ptr__ign, u32 page_cnt)
+ {
+ 	struct bpf_map *map = p__map;
 -- 
 2.54.0
 
