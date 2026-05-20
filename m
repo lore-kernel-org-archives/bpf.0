@@ -1,149 +1,205 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5ACD3ED3A4
-	for <bpf@vger.kernel.org>; Wed, 20 May 2026 17:15:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BE0F3A6B6D;
+	Wed, 20 May 2026 18:11:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779297355; cv=none; b=ozxKs1k4bL4eutRL3rUoUNzCG+kD11O812wHOpaS83pzwq0QPv0x/ucIQksDDGJ1o+E1QB25zJNLWthRKYrN/sOO2XR1weX1eWa73GeFah7UH7zCvxSfBcbli1hW8tLD751nfXyzwq+Sqfxm1X52AELci9jmmqaEpVNhlMYzhq4=
+	t=1779300701; cv=none; b=csz8FvVdASEmVy93vW6A2Oic/rlwds1k+Gk4bVHey1bRqklACM7K9BwtXYS+QQdgxSYd567PTmqleN0Q8Z5qgR4tYTGdZoAHayD/n+ZsuAOPZdervzKsJgyl5Vqd9UVfpX3xwNh42WQK3wbyjMY1W2ElE0wAuoiEzVARV+CzAus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779297355; c=relaxed/simple;
-	bh=MLt2tnNzp74uVGtu4VkKS+MkXNeMGEZuFO6OXzbqmTg=;
+	s=arc-20240116; t=1779300701; c=relaxed/simple;
+	bh=ReI7Pe1k2azsgNrEH63iUCivw8znTCYb+QNRCjEgjIc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fHJ9UrhTyTXC6fyt8JQq5ackfUgRxhZhhNGr/Pu/6/jcgOQRNdaOkA5klsvGf7sgcRZ8XkIyIufyI+SKALNiAFBews8z7O65ClUbUk1ovxJqmJYRKPd8jsAp9t5WK22l4wPnnVPPPoOJVEJSqTDpWEeOTh5LTORdEOZFejVjjog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F1EVlD0+; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=VllHL7sn2uofsk0A2JsI7ukOU9HXDOxDGQA0qheG2vdsRJciGRtj1Z+aqrjdrwjH6YCu/Zk+RRKdTadBo4UbnroO2KrefqwtNEsIq6Hrn2bOnDcUZPAdqgf/XdA6xq0wKkxvUcC/F18z64FwsTmRFV0VXE/mO8LCjbM+DHUN5Qo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=njSup9zs; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F1EVlD0+"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-836ebdeb969so2435509b3a.3
-        for <bpf@vger.kernel.org>; Wed, 20 May 2026 10:15:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779297352; x=1779902152; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ue8SwT8+H83JFEChssYsR7+2GhS8y/4jRpnpitk4RZE=;
-        b=F1EVlD0++I+2eLAxLUkf0k2lqcK+bZlv6Xr68KDJLtaWhBPjuIuUa1f+qlFzJTW+uB
-         MXu2MlEIGHfH8Q+FVf9PgF1sKycVDMmiRA9+MHVDflLena7rtvYT10D9BV7tExme02+4
-         cRBD1vtrDnzAmS6t7x5TZvdJY/BlgoTTXOCiopmvB2Yny1bWJTmmhsiYob6Bn91ZAW8Y
-         wrbpPq48T07otDS6P1siyTY5qUuJdp/lvZlMRhtjqe9bzTMpjTSjqFbAVfvTT/Qsq0UN
-         ThVyTEH9CnbwnTTFjgOVrRnpJ2wdVVRnyLQjemz/g1VyIS1cDuSjCFfUhB/75Ggfem3z
-         W89A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779297352; x=1779902152;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ue8SwT8+H83JFEChssYsR7+2GhS8y/4jRpnpitk4RZE=;
-        b=cq/vF0zvEHQ2geaDqjj1aXw05r+7tC7I+D5ZZr7v5kJMnsPvZcOG6FytRELgMzdlgd
-         bGrZyvg0AKCj1vXzN8OU51is41U743pmHjTBvxASakv0+Q1N8L+xnwIVKEQMxAu54KEQ
-         5UIoEWxDKqVNBkDvSgWCa20QrdMcNf55oeMwOPQtHq68YxEZ8bMnUM6luIKf1RI96YNq
-         XCE0Gql+eIkWVScVlcvjJ/shjgy6CaxsCvuzrQlQEtVnbpQ3CTip9f5uocVYXpC9/e6H
-         qDElzJUb6VBYXVf7sIUtBiSSchT4mne+AmVkSda3qO+sKMxLYK+HC+Q8LtAft/qpkgvQ
-         iTwg==
-X-Forwarded-Encrypted: i=1; AFNElJ/fwXVGYFItP2e4eGJVWpIPCWhYnxPraCmt/6b8NajIzgd7LjTW2l551mWzvkYDGm2nBA0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx60aGl5+AdoZlQv4XgOAFjwufL7y0mqbCt1JrSKZE2NlnE6c8L
-	iRnM4qOw/f3oj4mW7EII48eakxHVEAUhk+9VhQk3gJKZMjNCAIFwnj1IglBwRA==
-X-Gm-Gg: Acq92OFaX/2DQGK+lopONfegzLLHuN8NKm3mnU85OWl3p2J/ZD3IorHfSp3ke4rNwV7
-	AKrFWy1c2ef9CuqyIlxkg6QvqI2P6HbAWkPjxcR5JHgLUg57u8nw4nwX31IW18pGqHR5L4pVjsV
-	gSOukPXdJ+2M5r7E6YWO5PIw3I9cXNH4bOuoYy/E5o4WKZKg/teqkLzMcAlEZK289H+kcr44cb/
-	b0Lrn30l4grgXy8s2TGgdmoMtGf24SBWmnfQ2yKN6lRUwN4ah7DAXfCsRulTxSQ6MUKs+vNQ2Ok
-	95uPp9UXZmVpw3947a1E/maUqjfjHYTLNGsB4k0/dfIWW6LaxiAlOuMyi0PgVAykq+6sVlN85jZ
-	3GEIup/4aFhvUI8v+wb8tnMMja0yZsEe5muIgo2NteHmiTLrgZCgtWjCckWFypESxyD7CE5RJb1
-	UAsj4sghmnD6pZzEgmilayUkJ5lD7tCK8=
-X-Received: by 2002:a05:6a00:240e:b0:835:cc47:6fe8 with SMTP id d2e1a72fcca58-83f33dae668mr26095823b3a.46.1779297351847;
-        Wed, 20 May 2026 10:15:51 -0700 (PDT)
-Received: from john-p8 ([98.97.43.100])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83f196660easm21263882b3a.11.2026.05.20.10.15.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2026 10:15:51 -0700 (PDT)
-Date: Wed, 20 May 2026 10:15:49 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: Christopher Lusk <clusk@northecho.dev>, bpf@vger.kernel.org
-Subject: Re: [PATCH net 1/2] net: tls: preserve split open record on async
- encrypt
-Message-ID: <huduxtn6parzgiaf5cyiyrrvjjvx6jsdedowvrd4nkwmuyeind@j6migjgofh2i>
-References: <20260515151556.189841-2-clusk@northecho.dev>
- <20260516151628.F18DEC19425@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="njSup9zs"
+Received: by linux.microsoft.com (Postfix, from userid 1204)
+	id 59A3D20B7168; Wed, 20 May 2026 11:11:33 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 59A3D20B7168
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1779300693;
+	bh=XfQvxMfI6M+Oo70/NIQBu2bKqGiJTjH2WuohEgBfMOY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=njSup9zsmcuXswBqk9kKeBxXe8+Tef4n3n6ki/hOJVKKtlxuW10NC0MeqJya4TJPr
+	 PXP0GCmnluc4tjP9pMAg2v+gdgDWzxivbh/pyd3Zg0hOOet44+nyfT0cmvopslIjPn
+	 OZwNqkKxfitaA/lk+vZW3JVozEpeJy/1i1T7zOoY=
+Date: Wed, 20 May 2026 11:11:33 -0700
+From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@google.com, pabeni@redhat.com, leon@kernel.org,
+	longli@microsoft.com, kotaranov@microsoft.com, horms@kernel.org,
+	shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
+	ernis@linux.microsoft.com, shirazsaleem@microsoft.com,
+	linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+	stephen@networkplumber.org, jacob.e.keller@intel.com,
+	dipayanroy@microsoft.com, leitao@debian.org, kees@kernel.org,
+	john.fastabend@gmail.com, hawk@kernel.org, bpf@vger.kernel.org,
+	daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me,
+	yury.norov@gmail.com
+Subject: Re: [PATCH net 1/2] net: mana: Add NULL guards in teardown path to
+ prevent panic on attach failure
+Message-ID: <ag35VVYd0BOSYbrK@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20260518194654.735580-2-dipayanroy@linux.microsoft.com>
+ <20260519225556.3939204-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260516151628.F18DEC19425@smtp.kernel.org>
+In-Reply-To: <20260519225556.3939204-1-kuba@kernel.org>
 
-On Sat, May 16, 2026 at 03:16:28PM +0000, sashiko-bot@kernel.org wrote:
->Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
->- [Critical] Error masking in bpf_exec_tx_verdict() leads to zero-copy Use-After-Free
->- [Critical] Use-After-Free during __SK_REDIRECT socket lock drop
->--
->
->commit d94934a96df0cedb5ae4fee1bc9264e363a4efb9
->Author: Christopher Lusk <clusk@northecho.dev>
->
->net: tls: preserve split open record on async encrypt
->
->When a BPF sk_msg verdict reduces the apply_bytes size below the open
->record, the record is split. This patch ensures the remainder record
->remains rooted when the initial encryption completes asynchronously.
->
->> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
->> index 2590e855f6a5a..5682849e102c7 100644
->> --- a/net/tls/tls_sw.c
->> +++ b/net/tls/tls_sw.c
->
->[ ... ]
->
->> @@ -861,6 +869,7 @@ static int bpf_exec_tx_verdict(struct sk_msg *msg, struct sock *sk,
->>  	struct sock *sk_redir;
->>  	struct tls_rec *rec;
->>  	bool enospc, policy, redir_ingress;
->> +	bool async = false;
->>  	int err = 0, send;
->>  	u32 delta = 0;
->
->[ ... ]
->
->> @@ -910,6 +919,10 @@ static int bpf_exec_tx_verdict(struct sk_msg *msg, struct sock *sk,
->>  	switch (psock->eval) {
->>  	case __SK_PASS:
->>  		err = tls_push_record(sk, flags, record_type);
->> +		if (err == -EINPROGRESS) {
->> +			async = true;
->> +			err = 0;
->> +		}
->>  		if (err && err != -EINPROGRESS && sk->sk_err == EBADMSG) {
->>  			*copied -= sk_msg_free(sk, msg);
->>  			tls_free_open_rec(sk);
->
->[ ... ]
->
->> @@ -979,7 +992,7 @@ static int bpf_exec_tx_verdict(struct sk_msg *msg, struct sock *sk,
->>  	}
->>   out_err:
->>  	sk_psock_put(sk, psock);
->> -	return err;
->> +	return err ?: (async ? -EINPROGRESS : 0);
->>  }
->
->If async is true due to -EINPROGRESS from a previous fragment, but a
->subsequent fragment encounters an error (for example, if __SK_DROP returns
->-EACCES, or if tls_push_record() returns -ENOMEM), does this return
->statement mask the -EINPROGRESS status?
->
->If the error code overrides -EINPROGRESS, the caller tls_sw_sendmsg() might
->not increment its num_async counter. When the send ends, it could skip
->calling tls_encrypt_async_wait(). If MSG_ZEROCOPY was used, could this
->allow the function to return to userspace while the hardware crypto engine
->is still reading the pages, leading to a use-after-free?
+On Tue, May 19, 2026 at 03:55:56PM -0700, Jakub Kicinski wrote:
+> This is an AI-generated review of your patch. The human sending this
+> email has considered the AI review valid, or at least plausible.
+> ---
+> net: mana: Add NULL guards in teardown path to prevent panic on attach failure
+>     
+> When queue allocation fails partway through, the error cleanup frees
+> and NULLs apc->tx_qp and apc->rxqs. The patch adds NULL guards for these
+> pointers in teardown paths such as mana_destroy_vport(), mana_fence_rqs(),
+> and mana_dealloc_queues() to prevent NULL pointer dereferences.
+> 
+> > diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> > index 9afc786b297a8..9e7e4bf526bf6 100644
+> > --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> > +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> [ ... ]
+> > @@ -2858,13 +2861,16 @@ static void mana_destroy_vport(struct mana_port_context *apc)
+> >  	struct mana_rxq *rxq;
+> >  	u32 rxq_idx;
+> >  
+> > -	for (rxq_idx = 0; rxq_idx < apc->num_queues; rxq_idx++) {
+> > -		rxq = apc->rxqs[rxq_idx];
+> > -		if (!rxq)
+> > -			continue;
+> > +	if (apc->rxqs) {
+> >  
+> > -		mana_destroy_rxq(apc, rxq, true);
+> > -		apc->rxqs[rxq_idx] = NULL;
+> > +		for (rxq_idx = 0; rxq_idx < apc->num_queues; rxq_idx++) {
+> > +			rxq = apc->rxqs[rxq_idx];
+> > +			if (!rxq)
+> > +				continue;
+> > +
+> > +			mana_destroy_rxq(apc, rxq, true);
+> > +			apc->rxqs[rxq_idx] = NULL;
+> > +		}
+> >  	}
+> 
+> If the teardown path frees apc->rxqs and sets it to NULL on attach failure,
+> how does the interface recover if the user subsequently brings it back up?
+> 
+> When mana_open() is invoked, it directly calls mana_alloc_queues(). Inside
+> mana_alloc_queues() -> mana_add_rx_queues(), the code does:
+> 
+>     apc->rxqs[i] = rxq;
+> 
+> If apc->rxqs was left as NULL during the teardown, will this cause a NULL
+> pointer dereference on the next interface bring-up?
+> 
+> [ ... ]
+Hi Jakub,
 
-Christopher, this at least looks like a legitimate concern. Did you plan
-to address and send a v2? Or explain why this is not required?
+The only path that recovers from this state is mana_attach(), which
+calls mana_init_port() -> mana_init_port_context() to re-allocate
+apc->rxqs before calling mana_alloc_queues().
 
-Thanks,
-John
+When mana_open is invoked prior to it the rxqs would be already setup by
+mana_probe_port -> mana_init_port -> mana_init_port_context.
+
+> > @@ -3287,33 +3294,38 @@ static int mana_dealloc_queues(struct net_device *ndev)
+> >  	 * number of queues.
+> >  	 */
+> >  
+> > -	for (i = 0; i < apc->num_queues; i++) {
+> > -		txq = &apc->tx_qp[i].txq;
+> > -		tsleep = 1000;
+> > -		while (atomic_read(&txq->pending_sends) > 0 &&
+> > -		       time_before(jiffies, timeout)) {
+> > -			usleep_range(tsleep, tsleep + 1000);
+> > -			tsleep <<= 1;
+> > -		}
+> > -		if (atomic_read(&txq->pending_sends)) {
+> > -			err = pcie_flr(to_pci_dev(gd->gdma_context->dev));
+> > -			if (err) {
+> > -				netdev_err(ndev, "flr failed %d with %d pkts pending in txq %u\n",
+> > -					   err, atomic_read(&txq->pending_sends),
+> > -					   txq->gdma_txq_id);
+> > +	if (apc->tx_qp) {
+> 
+> In the error path where queue creation fails partway through, will
+> mana_destroy_txq() be called?
+> 
+> If mana_destroy_txq() unconditionally iterates over all apc->num_queues:
+> 
+>     for (i = 0; i < apc->num_queues; i++) {
+>         ...
+>         mana_destroy_wq_obj(apc, GDMA_SQ, apc->tx_qp[i].tx_object);
+>         ...
+> 
+> Will it pass 0 or INVALID_MANA_HANDLE to mana_destroy_wq_obj() for queues
+> that were never fully initialized?
+> 
+> Does mana_destroy_wq_obj() send a MANA_DESTROY_WQ_OBJ command to the hardware
+> with these uninitialized handles, and could handle 0 corrupt the firmware
+> state?
+>
+This is a known  exisiting issue in the cleaup path for partial tx
+setups and was also mentioned in the a recent patch where the rx partial
+init clean-up path was fixed. My colleague Aditya is already working on a
+patch to fix this and all other issues in the tx cleanup path.
+ 
+> > +		for (i = 0; i < apc->num_queues; i++) {
+> > +			txq = &apc->tx_qp[i].txq;
+> > +			tsleep = 1000;
+> > +			while (atomic_read(&txq->pending_sends) > 0 &&
+> > +			       time_before(jiffies, timeout)) {
+> > +				usleep_range(tsleep, tsleep + 1000);
+> > +				tsleep <<= 1;
+> > +			}
+> > +			if (atomic_read(&txq->pending_sends)) {
+> > +				err =
+> > +				    pcie_flr(to_pci_dev(gd->gdma_context->dev));
+> 
+> If pcie_flr() is triggered here, the PCI Function Level Reset wipes the
+> internal GDMA state.
+> 
+> Further down in this function, mana_disable_vport_rx(), mana_fence_rqs(),
+> and mana_destroy_vport() are called. Will these functions attempt to send
+> commands to the now-destroyed GDMA admin queue via mana_send_request() and
+> wait for completions?
+> 
+> Could this lead to cascading timeouts since the hardware was just reset and
+> cannot process admin commands?
+> 
+This is pre-existing behavior/issue the pcie_flr() path and the
+subsequent calls to mana_disable_vport_rx()/mana_fence_rqs()/mana_destroy_vport()
+are unchanged by this patch. My patch only adds a NULL guard for
+apc->tx_qp to skip this entire TX drain block when tx_qp is already
+freed. But this point seems to be valid issue, I will investigate this
+further and I will send a different patch set for this as follow up work.
+
+
+> > +				if (err) {
+> > +					netdev_err(ndev, "flr failed %d with %d pkts pending in txq %u\n",
+> > +						   err,
+> > +					    atomic_read(&txq->pending_sends),
+> > +					    txq->gdma_txq_id);
+> > +				}
+> > +				break;
+> >  			}
+> > -			break;
+> >  		}
+> -- 
+> pw-bot: cr
+
+Regards
+Dipayaan Roy
 
