@@ -1,336 +1,230 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4F43A3E9C;
-	Wed, 20 May 2026 23:51:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779321066; cv=none; b=oYs4yn1AOxac9B4mStZ7R6Ir+1zvobt9x1f07eScoJ2bUcW9K4jWtEw70cpWysWOuwh5Lakuiwb98wtYmtavNcJpycHgqWqWVN02R1kN3R2FlVQkWIS7lITX8V1ulVnlc+q08UPhJngddI7xJYkSNFt6goBd9RIY2Lx0a2JHg9g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779321066; c=relaxed/simple;
-	bh=CmaSxokkvlRLFrROBdPgYBc3HhKD4GVPgw+XoEV11jU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o2qFXJnNzwPjdaDjoGqNSGJKYwSz/IFdcUnEKxSHmV73LkqWP1T76C89AeAAfEDVYFVck2OsRgd79O75wHRQj6P/7OiKktyHAKjPCZLUqcZiN3juYvemmzmRTz98bR1AjxZyf7Jg6vxSr+P7Jw3q4kEIX/DIKy3eFBdIHSTagbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XB7ViVbI; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2235A345CBD
+	for <bpf@vger.kernel.org>; Wed, 20 May 2026 23:54:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779321251; cv=pass; b=N7Yi2+KlGvE8o2HWStbHRarH7HxBfTE0xeNRaUTdxSUdkM0boScNPim5lW4PPOJ3zGTGAR1dE9MCxvj6ZaoRCH+vVu4O88+jBLAFVXy53asVtLqMFK4bsTy6bR5NRqd7XnhHNDoP8R6GsaTbl4Lj+kDd9+TgxpIKsPkZ+OPeCsY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779321251; c=relaxed/simple;
+	bh=CSysq9SiVahqSP5MZ3etWW2Hzf9hnYf/hgEdCbyySWI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TFHSa0acXnMHCJBq+KZSaMLXO36mPMs9n0X9xkqbqJYjJVW9i0ukLL5NHBQBP4qH5jkcLvIu4h0yAbx5YJVAHpmM0RsCJk8tSQAxbTWTOjItWQk+D3leEy5RbKtmarUtqhb6sYnh7CzzpP1soGeOTzxDEizuhG3Rv6Mg1BLq0a4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lcW6bTcD; arc=pass smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XB7ViVbI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4162F1F00A39;
-	Wed, 20 May 2026 23:51:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779321060;
-	bh=pxPJ5Kb1pUca7gBA63ZwC2/H1JHE6paqYcxxGSFa3qQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=XB7ViVbI6QwMQAtAil6w+oL8bl0oAUYhmJxQH/p3CVU4rkIrtPxkP4wZHqFThxJaT
-	 Quip1QtcqkbzJwbhSLN2qv+Pdjk/CoYJIeYGN5ZR0ycpdWVXnz4d/pduzbZivrz1LZ
-	 4KQ2rTsPHaiUf2AQEF5jpsTgRVvJzZT3rGU9Y/0139arL3KUA2HtyxlJXnTN/JcyW2
-	 zP4cHBDOsfy/v3064tbJ//EMDQgf4qI7wL6986AU/Kes8ibuahwkM6z832ag2zcnIA
-	 JPyOoN1f623cxD12L7EzFewa2TcKySgmGyluNRSTYn84Y6FIQpfoBTPWZON07m542j
-	 fmEfYTtQcjX+g==
-From: Tejun Heo <tj@kernel.org>
-To: David Vernet <void@manifault.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	sched-ext@lists.linux.dev,
-	bpf@vger.kernel.org,
-	x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	Tejun Heo <tj@kernel.org>
-Subject: [PATCH 7/8] sched_ext: Sub-allocator over kernel-claimed BPF arena pages
-Date: Wed, 20 May 2026 13:50:51 -1000
-Message-ID: <20260520235052.4180316-8-tj@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260520235052.4180316-1-tj@kernel.org>
-References: <20260520235052.4180316-1-tj@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lcW6bTcD"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5a85b30dd54so5998875e87.2
+        for <bpf@vger.kernel.org>; Wed, 20 May 2026 16:54:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779321246; cv=none;
+        d=google.com; s=arc-20240605;
+        b=BqCT/T4dSys1eL+OuhhUnsEXXFDoEQTgoxHKu2WdwUnOF0SkYqxMNhqmUK3kBuaYUc
+         ADkgqgfPfx1rPngSvaHP+q+i7+xRy4PpeU5OD+KCxV5UMhqos/7cw1YAVps2gNXzh4X/
+         0sg+XG5hJESwG49ww/itDGHDuXT5Mu1TSmlyLirmIN5wNn3MCQVtOMyATwiDwf42SuZT
+         Q9aAyzuCZXGaYJFX4kZLPlavm6BW0MRsMhnrw/3I6m5VwKumLiPsNzXw2c40v8992IGf
+         n79c2qzN6yeGeW2Bb+ZH1shj0j/flsmTRvArRcQZa3OkjPhR5DJNDiPq4+8c6oySx6K0
+         jHvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=qVdteeUJUkJY8GpXMSwIKhxn3fHzJU6mCTRL8j03HL8=;
+        fh=KcKBBKByx3HDXynBtEe3YkciNIo8XbddpSzwQu8J+x8=;
+        b=StP0hgtCGWVUeu7hqEPNm8QvCftRCxAnGVGbPptZhoKtoXV+DsBo94dy0p2/gXJ/Uk
+         ePY9h10H3ukJ+5mj1HGG97+jspR8Vq4j9882B3SjzWuUI6fCZ0X7ZByi1ltpe5PcRpAn
+         fX4vfbFg+5ztivtjQ5C2yHLhj7CNasq657xR5UiXpYOAoAgnxiVdKifthCqqR7lsalGQ
+         ThDiBH70119JMLoi4OgwY3cgHtFMXjdEvRWYjY9c2HR473CxoCqhKNNBSc7kkWvn06sH
+         5fNXlw2BFDjOQ7AiwqDLuadcdCyhebwdjILIa8MQUVf+ymJJnfYuXYSgomMVYVDJgW36
+         7/Gw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779321246; x=1779926046; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qVdteeUJUkJY8GpXMSwIKhxn3fHzJU6mCTRL8j03HL8=;
+        b=lcW6bTcDSzoGk7PGD7LNGBKdUzFGFU0XhdJtu9W/JfS0Zo4++rxCnKhVtL8B4KDvgG
+         n/jWAGh29r115hQEbO7jmtykpExGK9TOQts7EYwaBK1350ro/hnLla0Mzy/DNs7zBzOe
+         kdsdgYC7xuaH5SbPTf8BOwkx3tiB8njaT5Vkgpk317eosmtCWua+8jrZHWNoXGC7U+/W
+         L/oxR85qpuVnV+h4R2/yEb9fPjWxtmKtXRQlzhPwCFBIapCB4GkC8aj+WK2TlW531Zkq
+         4gXaOpiydaKTWRndsfMOqzkWFdf5kiHCWY8vcHr+LcI9urI7jE7GBQhd65bk1lOpPSAz
+         o3+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779321246; x=1779926046;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qVdteeUJUkJY8GpXMSwIKhxn3fHzJU6mCTRL8j03HL8=;
+        b=n3Olr9xWdwGAi/A+5oFULoiBdkBSK2FuSO83jedgJYpxkeajHovYFhXmYKR9INTzXr
+         qPJ8q+0JV0zN2eDH7ESROhbNx3KIre7JzSkHtkQ1tsG2seiySw9qh4K4ySvNTEo+IAP7
+         89/i2J0Vov9vAUoYMseDsStwat/YQ4Uy33/xgvLHX+aRlj5UGmrsycSutPiKbOc/PvyW
+         mw9sk8x8nZd25eDg8LVGZAvoRRY5UZvpCxPJHPb+CRIQK09Q4TfJCUzk3TT6cJGcNf33
+         9SShEOPTxg7XEBBu7+mGk6K0Z6mXL6x7pNgjVQn902Kdt0A0MeqObE9iSS0BjX3zXfzn
+         iCWg==
+X-Forwarded-Encrypted: i=1; AFNElJ/C4jdM3WcrhbigJsJMO71jc9e8uUVhBYKneQo5zEsmq0pzyY1km80fNBW+nugVqCruxrw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqFLgSMnen5kYWJXmCswqLBLeWRlztgPIrb4+dkur6apAVIX8v
+	AcjbIDmSQ6AK/Bon2wo73XrTM0u6DAwYb4EeExRtZd+KaQbJmG8nCeJOG4GEn2Vc5N0Okk7XRwU
+	rVdATfh962P3Jd8S7cix5CT+XJ3k4se8=
+X-Gm-Gg: Acq92OGtObYWyBR1v/icyGJQtjzVSup/f5bmV3PHwbXATLHe5wGGAWjbMMXGnI7FFfN
+	xYAoEdQZL5QEW6pCg8zcDrEzsiz+nao8GpIOy6/Cab1CZUTtXY1Rd6fMSNW29BNAo9LFYU1nxKS
+	SZqELSVlen7SiWbbiZJXkYNektKTMHl2cdelqOhWKBViTZu4b0ogQUjdLzqFMmdkTGmxC4OR6A3
+	K5LxiWKnPnG1ptnjQl2W8jDKWLuoiDUUlfi30ZM/JWk2jsgnp+YCLqUScVoWoCA85v5pmWzb4gO
+	eCibr5m7F8os6BuUqvGIlHf37XextsWlWzOgSmxEHdeKfETEHg==
+X-Received: by 2002:a05:6512:38c5:b0:5a8:ed8f:2c03 with SMTP id
+ 2adb3069b0e04-5aa2ba8fde0mr117133e87.35.1779321245286; Wed, 20 May 2026
+ 16:54:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260520004244.55663-1-kerneljasonxing@gmail.com>
+ <20260520004244.55663-4-kerneljasonxing@gmail.com> <ag3c9/EF4h7DLQu3@boxer>
+In-Reply-To: <ag3c9/EF4h7DLQu3@boxer>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Thu, 21 May 2026 07:53:27 +0800
+X-Gm-Features: AVHnY4Ji5TGpZw3bmLWIgcUrQKDvsjJZOSQkRmCKyyZgCvkmwdIO6i-y-EnmcD4
+Message-ID: <CAL+tcoAvbEZ7U2oXBWwLAKeuC==gAHi=GXLZcrEPxbb4mQ9sfA@mail.gmail.com>
+Subject: Re: [PATCH net v4 3/5] xsk: drain continuation descs after overflow
+ in xsk_build_skb()
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
+	jonathan.lemon@gmail.com, sdf@fomichev.me, ast@kernel.org, 
+	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, 
+	horms@kernel.org, andrew+netdev@lunn.ch, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Build a per-scheduler sub-allocator on top of pages claimed from the BPF
-arena registered in the previous patch. Subsequent kernel-managed
-arena-resident structures (e.g. per-CPU set_cmask cmask) carve their storage
-from this pool.
+On Thu, May 21, 2026 at 12:10=E2=80=AFAM Maciej Fijalkowski
+<maciej.fijalkowski@intel.com> wrote:
+>
+> On Wed, May 20, 2026 at 08:42:42AM +0800, Jason Xing wrote:
+> > From: Jason Xing <kernelxing@tencent.com>
+> >
+> > When a multi-buffer packet exceeds MAX_SKB_FRAGS and triggers -EOVERFLO=
+W,
+> > only the current descriptor is released from the TX ring. The remaining
+> > continuation descriptors of the same packet stay in the ring. Since
+> > xs->skb is set to NULL after the drop, the TX loop picks up these
+> > leftover frags and misinterprets each one as the beginning of a new
+> > packet, corrupting the packet stream.
+> >
+> > Fix this by adding a drain_cont flag to xdp_sock. When overflow occurs
+> > and the dropped descriptor has XDP_PKT_CONTD set, the flag is raised,
+> > so we have a chance to examine and handle the potential remaining descs
+> > of this big overflow'ed skb.
+> >
+> > When the last fragment (without XDP_PKT_CONTD) is processed, the flag
+> > is cleared and the loop continues to process subsequent descriptors
+> > with the remaining budget. This behavior follows how previous xmit path
+> > treats overflow packets.
+> >
+> > Closes: https://lore.kernel.org/all/20260425041726.85FB3C2BCB2@smtp.ker=
+nel.org/
+> > Fixes: cf24f5a5feea ("xsk: add support for AF_XDP multi-buffer on Tx pa=
+th")
+> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> > ---
+> >  include/net/xdp_sock.h |  1 +
+> >  net/xdp/xsk.c          | 19 +++++++++++++++++++
+> >  2 files changed, 20 insertions(+)
+> >
+> > diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
+> > index ebac60a3d8a1..8b51876efbed 100644
+> > --- a/include/net/xdp_sock.h
+> > +++ b/include/net/xdp_sock.h
+> > @@ -80,6 +80,7 @@ struct xdp_sock {
+> >        * call of __xsk_generic_xmit().
+> >        */
+> >       struct sk_buff *skb;
+> > +     bool drain_cont;
+> >
+> >       struct list_head map_list;
+> >       /* Protects map_list */
+> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > index 0a6203c42576..f4add7be8c93 100644
+> > --- a/net/xdp/xsk.c
+> > +++ b/net/xdp/xsk.c
+> > @@ -1062,11 +1062,30 @@ static int __xsk_generic_xmit(struct sock *sk)
+> >                       goto out;
+> >               }
+> >
+> > +             if (unlikely(xs->drain_cont)) {
+>
+> Hi Jason,
+>
+> could we get away from introducing dedicated boolean to xdp_sock for
+> handling this rare case?
 
-scx_arena_pool_init() creates a gen_pool. scx_arena_alloc() returns the
-kernel VA. On exhaustion, the pool grows by claiming more pages via
-bpf_arena_alloc_pages_sleepable(). Chunks are added at the kernel-side
-mapping address; callers translate to the BPF-arena form themselves if
-needed.
+I've tried several ways, but they didn't work. Please see the short
+conversation with Stan:
+https://lore.kernel.org/all/CAL+tcoA6Cu3P-y2wYjJ_R9cSeRkW2tswY1LveqH=3Duxd2=
+McuR-w@mail.gmail.com/
 
-Allocations sleep (GFP_KERNEL) - they may grow the pool through vzalloc and
-arena page allocation. All current consumers run from the enable path (after
-ops.init() and the kernel-side arena auto-discovery, before validate_ops()),
-where sleeping is fine.
+That means we always rely on a flag (that is either static or like
+this patch) to recognize how we treat this abnormal descs.
 
-scx_arena_pool_destroy() walks each chunk, returns outstanding ranges to the
-gen_pool with gen_pool_free() and then calls gen_pool_destroy(). The
-underlying arena pages are released when the arena map itself is torn down,
-so the pool destroy doesn't free them explicitly.
+>
+> > +                     unsigned long flags;
+> > +                     u32 idx;
+> > +
+> > +                     spin_lock_irqsave(&xs->pool->cq_prod_lock, flags)=
+;
+> > +                     idx =3D xskq_get_prod(xs->pool->cq);
+> > +                     xskq_prod_write_addr(xs->pool->cq, idx, desc.addr=
+);
+> > +                     xskq_prod_submit_n(xs->pool->cq, 1);
+> > +                     spin_unlock_irqrestore(&xs->pool->cq_prod_lock, f=
+lags);
+>
+> It feels a bit off to do this cleanup one-by-one.
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
----
- kernel/sched/build_policy.c |   4 ++
- kernel/sched/ext.c          |  11 ++++
- kernel/sched/ext_arena.c    | 127 ++++++++++++++++++++++++++++++++++++
- kernel/sched/ext_arena.h    |  18 +++++
- kernel/sched/ext_internal.h |   5 ++
- 5 files changed, 165 insertions(+)
- create mode 100644 kernel/sched/ext_arena.c
- create mode 100644 kernel/sched/ext_arena.h
+Actually no, it adheres to the basic send logic in copy mode.
 
-diff --git a/kernel/sched/build_policy.c b/kernel/sched/build_policy.c
-index 5e76c9177d54..067979a7b69e 100644
---- a/kernel/sched/build_policy.c
-+++ b/kernel/sched/build_policy.c
-@@ -59,12 +59,16 @@
- 
- #ifdef CONFIG_SCHED_CLASS_EXT
- # include <linux/btf_ids.h>
-+# include <linux/find.h>
-+# include <linux/genalloc.h>
- # include "ext_types.h"
- # include "ext_internal.h"
- # include "ext_cid.h"
-+# include "ext_arena.h"
- # include "ext_idle.h"
- # include "ext.c"
- # include "ext_cid.c"
-+# include "ext_arena.c"
- # include "ext_idle.c"
- #endif
- 
-diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index 56f94ac32ba0..fb91079c1244 100644
---- a/kernel/sched/ext.c
-+++ b/kernel/sched/ext.c
-@@ -5003,6 +5003,7 @@ static void scx_sched_free_rcu_work(struct work_struct *work)
- 
- 	rhashtable_free_and_destroy(&sch->dsq_hash, NULL, NULL);
- 	free_exit_info(sch->exit_info);
-+	scx_arena_pool_destroy(sch);
- 	if (sch->arena_map)
- 		bpf_map_put(sch->arena_map);
- 	kfree(sch);
-@@ -7155,6 +7156,12 @@ static void scx_root_enable_workfn(struct kthread_work *work)
- 		sch->exit_info->flags |= SCX_EFLAG_INITIALIZED;
- 	}
- 
-+	ret = scx_arena_pool_init(sch);
-+	if (ret) {
-+		cpus_read_unlock();
-+		goto err_disable;
-+	}
-+
- 	for (i = SCX_OPI_CPU_HOTPLUG_BEGIN; i < SCX_OPI_CPU_HOTPLUG_END; i++)
- 		if (((void (**)(void))ops)[i])
- 			set_bit(i, sch->has_op);
-@@ -7473,6 +7480,10 @@ static void scx_sub_enable_workfn(struct kthread_work *work)
- 		sch->exit_info->flags |= SCX_EFLAG_INITIALIZED;
- 	}
- 
-+	ret = scx_arena_pool_init(sch);
-+	if (ret)
-+		goto err_disable;
-+
- 	if (validate_ops(sch, ops))
- 		goto err_disable;
- 
-diff --git a/kernel/sched/ext_arena.c b/kernel/sched/ext_arena.c
-new file mode 100644
-index 000000000000..53174033765d
---- /dev/null
-+++ b/kernel/sched/ext_arena.c
-@@ -0,0 +1,127 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * BPF extensible scheduler class: Documentation/scheduler/sched-ext.rst
-+ *
-+ * scx_arena_pool: kernel-side sub-allocator over BPF-arena pages.
-+ *
-+ * Each chunk added to @sch->arena_pool comes from one
-+ * bpf_arena_alloc_pages_sleepable() call and is registered at the
-+ * kernel-side mapping address. Callers translate to the BPF-arena form
-+ * themselves if needed.
-+ *
-+ * Allocations grow the pool on demand. Underlying arena pages are released
-+ * when the arena map itself is torn down.
-+ *
-+ * Copyright (c) 2026 Meta Platforms, Inc. and affiliates.
-+ * Copyright (c) 2026 Tejun Heo <tj@kernel.org>
-+ */
-+
-+enum scx_arena_consts {
-+	SCX_ARENA_MIN_ORDER		= 3,	/* 8-byte minimum sub-allocation */
-+	SCX_ARENA_GROW_PAGES		= 4,	/* per growth */
-+};
-+
-+s32 scx_arena_pool_init(struct scx_sched *sch)
-+{
-+	if (!sch->arena_map)
-+		return 0;
-+
-+	sch->arena_pool = gen_pool_create(SCX_ARENA_MIN_ORDER, NUMA_NO_NODE);
-+	if (!sch->arena_pool)
-+		return -ENOMEM;
-+	return 0;
-+}
-+
-+static void scx_arena_clear_chunk(struct gen_pool *pool, struct gen_pool_chunk *chunk,
-+				  void *data)
-+{
-+	int order = pool->min_alloc_order;
-+	size_t chunk_sz = chunk->end_addr - chunk->start_addr + 1;
-+	unsigned long end_bit = chunk_sz >> order;
-+	unsigned long b, e;
-+
-+	for_each_set_bitrange(b, e, chunk->bits, end_bit)
-+		gen_pool_free(pool, chunk->start_addr + (b << order),
-+			      (e - b) << order);
-+}
-+
-+/*
-+ * Tear down the pool. Outstanding gen_pool allocations are freed via
-+ * scx_arena_clear_chunk() so gen_pool_destroy() doesn't BUG. The underlying
-+ * arena pages are released when the arena map itself is torn down.
-+ */
-+void scx_arena_pool_destroy(struct scx_sched *sch)
-+{
-+	if (!sch->arena_pool)
-+		return;
-+	gen_pool_for_each_chunk(sch->arena_pool, scx_arena_clear_chunk, NULL);
-+	gen_pool_destroy(sch->arena_pool);
-+	sch->arena_pool = NULL;
-+}
-+
-+/*
-+ * Grow the pool by @page_cnt pages. bpf_arena_alloc_pages_sleepable() and
-+ * gen_pool_add() (which calls vzalloc(GFP_KERNEL)) require a sleepable
-+ * context.
-+ */
-+static int scx_arena_grow(struct scx_sched *sch, u32 page_cnt)
-+{
-+	u64 kern_vm_start;
-+	u32 uaddr32;
-+	void *p;
-+	int ret;
-+
-+	if (!sch->arena_map || !sch->arena_pool)
-+		return -EINVAL;
-+
-+	p = bpf_arena_alloc_pages_sleepable(sch->arena_map, NULL,
-+					    page_cnt, NUMA_NO_NODE, 0);
-+	if (!p)
-+		return -ENOMEM;
-+
-+	uaddr32 = (u32)(unsigned long)p;
-+	kern_vm_start = bpf_arena_map_kern_vm_start(sch->arena_map);
-+
-+	ret = gen_pool_add(sch->arena_pool, kern_vm_start + uaddr32,
-+			   page_cnt * PAGE_SIZE, NUMA_NO_NODE);
-+	if (ret) {
-+		bpf_arena_free_pages_non_sleepable(sch->arena_map, p, page_cnt);
-+		return ret;
-+	}
-+	return 0;
-+}
-+
-+/*
-+ * Allocate @size bytes from the arena pool. Returns kernel VA on success, NULL
-+ * on failure. May grow the pool via scx_arena_grow() which sleeps. Caller must
-+ * be in a GFP_KERNEL context.
-+ */
-+void *scx_arena_alloc(struct scx_sched *sch, size_t size)
-+{
-+	unsigned long kern_va;
-+	u32 page_cnt;
-+
-+	might_sleep();
-+
-+	if (!sch->arena_pool)
-+		return NULL;
-+
-+	kern_va = gen_pool_alloc(sch->arena_pool, size);
-+	if (!kern_va) {
-+		page_cnt = max_t(u32, SCX_ARENA_GROW_PAGES,
-+				 (size + PAGE_SIZE - 1) >> PAGE_SHIFT);
-+		if (scx_arena_grow(sch, page_cnt))
-+			return NULL;
-+		kern_va = gen_pool_alloc(sch->arena_pool, size);
-+		if (!kern_va)
-+			return NULL;
-+	}
-+
-+	return (void *)kern_va;
-+}
-+
-+void scx_arena_free(struct scx_sched *sch, void *kern_va, size_t size)
-+{
-+	if (sch->arena_pool && kern_va)
-+		gen_pool_free(sch->arena_pool, (unsigned long)kern_va, size);
-+}
-diff --git a/kernel/sched/ext_arena.h b/kernel/sched/ext_arena.h
-new file mode 100644
-index 000000000000..4f3610160102
---- /dev/null
-+++ b/kernel/sched/ext_arena.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * BPF extensible scheduler class: Documentation/scheduler/sched-ext.rst
-+ *
-+ * Copyright (c) 2025 Meta Platforms, Inc. and affiliates.
-+ * Copyright (c) 2025 Tejun Heo <tj@kernel.org>
-+ */
-+#ifndef _KERNEL_SCHED_EXT_ARENA_H
-+#define _KERNEL_SCHED_EXT_ARENA_H
-+
-+struct scx_sched;
-+
-+s32 scx_arena_pool_init(struct scx_sched *sch);
-+void scx_arena_pool_destroy(struct scx_sched *sch);
-+void *scx_arena_alloc(struct scx_sched *sch, size_t size);
-+void scx_arena_free(struct scx_sched *sch, void *kern_va, size_t size);
-+
-+#endif /* _KERNEL_SCHED_EXT_ARENA_H */
-diff --git a/kernel/sched/ext_internal.h b/kernel/sched/ext_internal.h
-index d40cfd29ddaa..ff7e882bd67a 100644
---- a/kernel/sched/ext_internal.h
-+++ b/kernel/sched/ext_internal.h
-@@ -1116,8 +1116,13 @@ struct scx_sched {
- 	 * Arena map auto-discovered from member progs at struct_ops attach.
- 	 * cid-form schedulers must use exactly one arena across all member
- 	 * progs. NULL on cpu-form.
-+	 *
-+	 * @arena_pool sub-allocates @arena_map. Each gen_pool chunk is added
-+	 * at the kernel-side mapping address. Grows on demand and pages are
-+	 * not released until sched destroy.
- 	 */
- 	struct bpf_map		*arena_map;
-+	struct gen_pool		*arena_pool;
- 
- 	DECLARE_BITMAP(has_op, SCX_OPI_END);
- 
--- 
-2.54.0
+>
+> I wonder if it could be covered by xsk_drop_skb() where you would walk th=
+e
+> tx ring and store addrs at xsk_addrs and then use xsk_cq_submit_addr_lock=
+ed() ?
+>
+> OTOH, in theory the amount of frags after we hit the overflow case could
+> be well over MAX_SKB_FRAGS again so xsk_addrs wouldn't be able to cover
+> them.
 
+Right, this is why we now put the logic into the xmit path just like
+other kinds of descriptors. We need to check and send it under a
+series of protections like the check of cq pressure and budget. I
+don't think it's an exception to escape the check logic. The whole
+process should be fast as there is no need to build skb and send it to
+the driver as long as this case is recognized.
+
+Thanks,
+Jason
+
+>
+> > +
+> > +                     xs->tx->invalid_descs++;
+> > +                     xskq_cons_release(xs->tx);
+> > +                     if (!xp_mb_desc(&desc))
+> > +                             xs->drain_cont =3D false;
+> > +                     continue;
+> > +             }
+> > +
+> >               skb =3D xsk_build_skb(xs, &desc);
+> >               if (IS_ERR(skb)) {
+> >                       err =3D PTR_ERR(skb);
+> >                       if (err !=3D -EOVERFLOW)
+> >                               goto out;
+> > +                     if (xp_mb_desc(&desc))
+> > +                             xs->drain_cont =3D true;
+> >                       err =3D 0;
+> >                       continue;
+> >               }
+> > --
+> > 2.43.7
+> >
