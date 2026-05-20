@@ -1,90 +1,86 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C172134CFC6
-	for <bpf@vger.kernel.org>; Wed, 20 May 2026 12:25:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7650923394B
+	for <bpf@vger.kernel.org>; Wed, 20 May 2026 13:33:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779279930; cv=none; b=OC3tG3BLBs2ezrhRqpOIjZ8HotM4Yg+XdSoiXR8gxyUmNBG1g7RJFszdhqLAxaRdKsQUX/orlSC2flPLFy3LOEaTmKgfFw2e3VqfrN4kIkLNCWCc8Dx197dQurzRlIOYWfCOu02nMXL2OEG4jO1fe22Esg8sWq8VzFQKgcXanwc=
+	t=1779284033; cv=none; b=OikHkeYO0b05ZnmEmNpDImXrrIfGITID7KhmPIyLjl2pyp5p1+LfgHIax+2hyfi4qbM27iUxPCreMvUaLFRPjhKEhqVHVJXXxae1G5kf94E4okPAZ2J9UeJ16scK79m3kOZ0ZktC+d3CtQUgGYQYGUiW4T1gV68EWr3mTPjyTaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779279930; c=relaxed/simple;
-	bh=DdlUt1eugd201x7vA6DJR+IRpqvZ3sWH7bI/bKJj26k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AOhrRgxs1O+lS2Uo3RVQR3Y1vlQ4gE1srNTwSd5M+43Nm2xvQDsgCrM2ajT6dd3WetkUY7iQE+3DaVkjjTPqOxiPuYbyEE38NSAKVS0UHixClDAOe2//uOGVUPia5Ll3TU38ChdVx+Xya1LQSULjQ6ztYvwbmXk1hBLvVcLJ8WY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hD02RckL; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779284033; c=relaxed/simple;
+	bh=2zbR2osNZMaJ5U8H1j/0OkSTHXyGsoMgNaduLFhcd58=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Br1lrzhWR69YsTeZ/M/Mpsj+kKDEiowTB73RxLgzCDLMGqgsmr39sw+3WDv7j8hGejkSk/gCxs/8qErm8Um9AznOEgYcZpumAly2LevrCRj1cB6fx+c7Wcq1bPRHYbJsmg4dcwBmqe0VOmG/7MBm3d/f/J0IzaM9HL3/vc2P8/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lojT43nS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hD02RckL"
-Message-ID: <8e555f2d-c0cf-407d-8fa1-7ea73a2429db@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779279916;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xk8QwP/EJ50Wc86TU+jLx8y++yWKcTQKvwfILz8Qi6E=;
-	b=hD02RckLkrtCYnUXhb1vDjr4Dr+oFswQPM/Ny6CLrP/SY1UDtgHmbeb8qfKTVnYZxJpDay
-	AlVrW0NbReGrFF6LahaNzHVFQ38Rn+lxPOvrXZBoF7fay64boSkX8KBCitj4YJeN2ju9SG
-	Zwp0qB3JY6LQ77QNJhCEu7i7uy6USUU=
-Date: Wed, 20 May 2026 20:24:16 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lojT43nS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C18461F000E9;
+	Wed, 20 May 2026 13:33:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779284032;
+	bh=bGmfwa3emc5UuDihZKikSA88k4DNmQRTPNBk5d0PCUg=;
+	h=From:To:Cc:Subject:Date;
+	b=lojT43nSSv/08njkyUOJuRb+DfPDbDLZarmgD/IL+5Vs6ZVZRQgAvBPForPH1lQZ9
+	 B5iNHjBAewgNXkKv+dnORxbw9qsSABdJG6BQUEIbBkKpt1arXzu4oqLm+ead8As6Uu
+	 X2gZiZ3112OLM10f06HuVJbVuwCbc8UDH9xFuGoCKjdCsFOvQ07hO4GV9dad5J3zbI
+	 a3B06rmp7lL9CbgW4acEZ71c4uUCy5hcr/ctnyE3XZf4ja3XkE4Xmbt7HVJb1cZdNk
+	 /fPtrssXOdcPRepO+UzIgkfjxlOk5EhEuLvMUP0pYglb/QOQ2JCnZt48Jzp3wdTe8G
+	 Ll6L1Wb9NCmjw==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
+	Fei Chen <feichen@meta.com>,
+	Taruna Agrawal <taragrawal@meta.com>,
+	Nikhil Dixit Limaye <ndixit@meta.com>,
+	"Nikita V. Shirokov" <tehnerd@tehnerd.com>,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v2 0/3] selftests/bpf: XDP LB benchmark fixes
+Date: Wed, 20 May 2026 06:33:29 -0700
+Message-ID: <20260520133338.3392667-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf] bpf, sockmap: keep sk_msg copy bitmap in sync
-To: Junxi Qian <qjx1298677004@gmail.com>, bpf@vger.kernel.org,
- netdev@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, "David S . Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-References: <20260520112327.189660-1-qjx1298677004@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260520112327.189660-1-qjx1298677004@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
+Changelog:
+v1: https://lore.kernel.org/all/20260519163632.2220753-1-puranjay@kernel.org/
+Changes in v2:
+- Drop patch 3 as it was fixing a situation that can never happen in practice.
+- Replace | 1 logic in patch 1 with replacing ^ operator with +
 
-On 5/20/26 7:23 PM, Junxi Qian wrote:
-> The sk_msg scatterlist ring stores the actual page descriptors in
-> sg.data[] and stores the copy-required state for each slot in the
-> parallel sg.copy bitmap.  bpf_msg_pull_data() trusts this bitmap to
-> know whether the current slot can be exposed for direct packet access or
-> whether it has to be copied into a private page first.
->
-> Several SK_MSG helpers move or split sg.data[] entries without moving
-> the matching sg.copy bit.  In particular, bpf_msg_push_data() can split
-> a copy-marked entry and place the tail in a new slot with a stale clear
-> copy bit.  A later bpf_msg_pull_data() can then skip the private copy
-> and expose a direct writable pointer to the shared page.
->
-> Keep sg.copy synchronized whenever these helpers move, split, replace or
-> remove scatterlist entries.  Clear the bit for newly allocated private
-> pages and preserve it for descriptors that still refer to the original
-> shared backing page.
->
-> Fixes: 015632bb30da ("bpf: sk_msg program helper bpf_sk_msg_pull_data")
-> Fixes: 6fff607e2f14 ("bpf: sk_msg program helper bpf_msg_push_data")
-> Fixes: 7246d8ed4dcc ("bpf: helper to pop data from messages")
-> Reported-by: Junxi Qian <qjx1298677004@gmail.com>
-> Reported-by: Qi Tang <tpluszz77@gmail.com>
-> Signed-off-by: Junxi Qian <qjx1298677004@gmail.com>
-> Cc: stable@vger.kernel.org
->
+Three bug fixes and one improvement for the XDP LB and batch-timing
+benchmarks.
 
-Thanks for the patch. However, this issue is already being addressed in 
-another patch.
+The cold_lru validation was failing a lot because batch_hash could
+compute to zero when batch_gen matched the CPU id. Similarly,
+pre-populated UDP LRU entries had atime=0 so they'd expire immediately
+on any CPU that calibration didn't warm. Both are fixed in patches 1-2.
 
-Please see:
-https://lore.kernel.org/bpf/20260517121626.406516-1-rollkingzzc@gmail.com/
-https://lore.kernel.org/bpf/20260520102715.3033936-1-rollkingzzc@gmail.com/
----
-pw-bot: cr
+Patch 3 adds IQR outlier filtering to the timing stats to stabilize
+scenarios with high stddev.
+
+Puranjay Mohan (3):
+  selftests/bpf: Fix cold_lru producing zero batch_hash in XDP LB
+    benchmark
+  selftests/bpf: Fix expired UDP LRU entries in XDP LB benchmark
+  selftests/bpf: Filter timing outliers with IQR in batch-timing library
+
+ .../selftests/bpf/benchs/bench_bpf_timing.c   | 26 +++++++++++++++++++
+ .../selftests/bpf/benchs/bench_xdp_lb.c       | 11 ++++++++
+ .../selftests/bpf/progs/xdp_lb_bench.c        |  2 +-
+ 3 files changed, 38 insertions(+), 1 deletion(-)
+
+-- 
+2.53.0-Meta
 
