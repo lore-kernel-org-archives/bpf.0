@@ -1,35 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.166.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8067538F945
-	for <bpf@vger.kernel.org>; Wed, 20 May 2026 16:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B4833B97A;
+	Wed, 20 May 2026 16:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.166.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779294600; cv=none; b=DfjVVJUT17KqymTTlE1kOrkfiNHGDx6mU6aP5kRYJasDjqowPktCzbOt6O/C+hop2MCtG6zsEzjd6w/lSZ/Rx2mcJTcxJ+FJyskwdkKDtTIRIQ6vvPlIEuInSN6mnFbtheeNd0lTyYAoUj7cYt65ngqkonsayp0xNFmwiT7TFp4=
+	t=1779294810; cv=none; b=DYdXn3OZ055WlujtJ1ntYhIXHOev70snz9yLmiT/x9HfRxKN84Av9Zet8K5A5Y+DbRh6NqjyvrtjXc3B/IejwAsgS8Yd7NQInG9DOUOakp5LhNN6NiBAj3RePbuS0Hl8doL6kOogqded3UG/w4TTtlLFHs90iaATYfbneJiJPAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779294600; c=relaxed/simple;
-	bh=cUXplAvw7i2MERNiIeacz0VTAXi79RC741U2z7Hj9nA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=J/WgqBtBOuE3UmMOtfZRD/ksNwruLf8hWqTaLsdgx8b1Rv61nGRlCpD0AnEmPM7GeN6dCcLJ/Ft5SVL+GoJNRyw8v617zMMElzJ6kgnviFELgSvHm5jrcRoxBtGjTUwarihpIU1Gp0KRrgxWKui5sQvzgWkeqBJ55om6MB59rBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A7Utyvuv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779294810; c=relaxed/simple;
+	bh=m9bIK7//CZw/Q1o2xMpgB+DPsJNKtAtp6MpgiVd2b0U=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OU8JRBa0nammRFSjn3cqAK0U8L5JFzs/VTA4O010hiZU/tF0bN8Ceap3svmNZT9q08tclqmxrKDcTer/oR1c8KlVqzTXXmqI72l0kiRxPKVjVfrGwmEvLvueuVZDcBzuucTlfV2jd0NsKZ0NP7HhVTWUQDyJ5+eHykPh//HM29M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=DdzHuhUz; arc=none smtp.client-ip=192.19.166.228
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A7Utyvuv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B0531F00893;
-	Wed, 20 May 2026 16:29:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779294599;
-	bh=tWI12zJhl/NnIIHdDWDKpccTMA2Ui1kZkG7buDBj0Ew=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=A7Utyvuv7YPr9RlWr6JNqItXnDkCnLSNo8BOiTj2PyEBODgqUgR5zhKYh9HIpbz15
-	 4/0+wpJ6H5fCYwuHyZdT24tsIwAvVZFUzNH18xXMXPYQneK7ZdyyZf5F7d+cMt32pZ
-	 Vl42fKZhG/EOdtw/ddD9FSXdBBvPysHQTRUQK3eAm/cuSEz60ONJWtROGWOALfOuEL
-	 Bbp0Eayr1P3CtBpeNCv/GZesfJ+lJ49ZgyaPNpxI8ueysIEWOOTLIJx7bMyMcBqWuK
-	 XHklihqJv5ktrANRLgqvJn/361f6bxag605j37vlXaaMvLkzqUhbu9jfAOj8p/49rq
-	 fGYUQsgSODqEQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 0BC3D3930B81;
-	Wed, 20 May 2026 16:30:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="DdzHuhUz"
+Received: from mail-acc-it-01.broadcom.com (mail-acc-it-01.acc.broadcom.net [10.35.36.83])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id E2E06C001AC3;
+	Wed, 20 May 2026 09:33:26 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com E2E06C001AC3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1779294807;
+	bh=m9bIK7//CZw/Q1o2xMpgB+DPsJNKtAtp6MpgiVd2b0U=;
+	h=From:To:Cc:Subject:Date:From;
+	b=DdzHuhUzX2PXwNjY62kyPQedxFPqVksi0HoDBI8VXBoS4k7nRtz254UeA8pe/tk1e
+	 ghTGQeSQ5oGo3AdoJDIy+GUy1ly1vA6UxFCrevkRAaARiC6lho47fOPffFoRBVE3l0
+	 LT0DKWnZ//qhBA593N7qbvLXR2gVBvTjRtpunzh4=
+Received: from stbirv-lnx-1.igp.broadcom.net (stbirv-lnx-1.igp.broadcom.net [10.67.48.32])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-acc-it-01.broadcom.com (Postfix) with ESMTPSA id 74CFBAEA2;
+	Wed, 20 May 2026 12:33:25 -0400 (EDT)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: stable@vger.kernel.org
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>,
+	Ian Rogers <irogers@google.com>,
+	linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM),
+	bpf@vger.kernel.org (open list:BPF [MISC]),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT),
+	bcm-kernel-feedback-list@broadcom.com
+Subject: [PATCH stable 6.1 v2 0/5] perf build fixes
+Date: Wed, 20 May 2026 09:33:15 -0700
+Message-Id: <20260520163320.3073037-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,48 +62,56 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/3] selftests/bpf: XDP LB benchmark fixes
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177929460989.3662293.646888504985123560.git-patchwork-notify@kernel.org>
-Date: Wed, 20 May 2026 16:30:09 +0000
-References: <20260520133338.3392667-1-puranjay@kernel.org>
-In-Reply-To: <20260520133338.3392667-1-puranjay@kernel.org>
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, puranjay12@gmail.com, ast@kernel.org,
- andrii@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, mykyta.yatsenko5@gmail.com,
- feichen@meta.com, taragrawal@meta.com, ndixit@meta.com, tehnerd@tehnerd.com,
- kernel-team@meta.com
 
-Hello:
+This patch series contains "perf" build fixes specific to 6.1. We have
+seen occasional build failures in our CI looking like these:
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+util/parse-events-bison.c: In function 'yy_symbol_print':
+util/parse-events-bison.c:901: error: unterminated #if
+  901 | #if YYDEBUG
+      |
+util/parse-events-bison.c:1020:62: error: '_p' undeclared (first use in this function)
+ 1020 |   yy_symbol_value_print (yyo, yykind, yyvaluep, yylocationp, _parse_state, scanner);
+      |                                                              ^~
+util/parse-events-bison.c:1020:62: note: each undeclared identifier is reported only once for each function it appears in
+util/parse-events-bison.c:1020:64: error: expected ')' at end of input
+ 1020 |   yy_symbol_value_print (yyo, yykind, yyvaluep, yylocationp, _parse_state, scanner);
+      |                         ~                                      ^
+      |                                                                )
+ 1021 |   YYFPRINTF (yyo, ")");
+      |
+util/parse-events-bison.c:1020:3: error: too few arguments to function 'yy_symbol_value_print'
+ 1020 |   yy_symbol_value_print (yyo, yykind, yyvaluep, yylocationp, _parse_state, scanner);
+      |   ^~~~~~~~~~~~~~~~~~~~~
+util/parse-events-bison.c:991:1: note: declared here
+  991 | yy_symbol_value_print (FILE *yyo,
+      | ^~~~~~~~~~~~~~~~~~~~~
 
-On Wed, 20 May 2026 06:33:29 -0700 you wrote:
-> Changelog:
-> v1: https://lore.kernel.org/all/20260519163632.2220753-1-puranjay@kernel.org/
-> Changes in v2:
-> - Drop patch 3 as it was fixing a situation that can never happen in practice.
-> - Replace | 1 logic in patch 1 with replacing ^ operator with +
-> 
-> Three bug fixes and one improvement for the XDP LB and batch-timing
-> benchmarks.
-> 
-> [...]
+which are resolved by these patches.
 
-Here is the summary with links:
-  - [bpf-next,v2,1/3] selftests/bpf: Fix cold_lru producing zero batch_hash in XDP LB benchmark
-    https://git.kernel.org/bpf/bpf-next/c/fa747e9f843b
-  - [bpf-next,v2,2/3] selftests/bpf: Fix expired UDP LRU entries in XDP LB benchmark
-    https://git.kernel.org/bpf/bpf-next/c/12e896b9794b
-  - [bpf-next,v2,3/3] selftests/bpf: Filter timing outliers with IQR in batch-timing library
-    https://git.kernel.org/bpf/bpf-next/c/abac8acb633a
+Changes in v2:
 
-You are awesome, thank you!
+- backport change adding version-lt3 macro
+- added fix for "perf build: Disable fewer bison warnings" per Sasha's review
+
+Arnaldo Carvalho de Melo (2):
+  tools build: Add 3-component logical version comparators
+  perf build: Remove -Wno-unused-but-set-variable from the flex flags
+    when building with clang < 13.0.0
+
+Ian Rogers (3):
+  perf build: Conditionally define NDEBUG
+  perf parse-events: Make YYDEBUG dependent on doing a debug build
+  perf build: Disable fewer bison warnings
+
+ tools/perf/Makefile.config     |  1 +
+ tools/perf/util/Build          | 32 +++++++++++++++++++++++++-------
+ tools/perf/util/expr.y         |  4 +++-
+ tools/perf/util/parse-events.y |  3 +++
+ tools/perf/util/pmu.y          |  3 +++
+ tools/scripts/utilities.mak    | 20 ++++++++++++++++++++
+ 6 files changed, 55 insertions(+), 8 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
