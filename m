@@ -1,142 +1,175 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4702D23B9
-	for <bpf@vger.kernel.org>; Wed, 20 May 2026 16:52:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746DB34216C;
+	Wed, 20 May 2026 16:54:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779295979; cv=none; b=TIxwCAlfLIdsgbeIgPuPVRUl/zi2sYMcq9hksV1aeGJQ2OasQs+1j7FERGQf9IaeObsd1kRAVcJrpclyDyLVK2oFKFXaQVExFmcoYjyDKapNsC3+u+zUnzQyi+9uVY0ucO9SaspfD3rfQRdHbVYIO1N41ZFKNk/L4fD08QT1Nc8=
+	t=1779296049; cv=none; b=AOofY9L6fbQmJAP+0Y+XuqNhrIjhm7To9xmsLiqZQ3wIR8Gr6lf/aG1suB4XENPrwPxR/UyF284H/AAtun0ERUDyzXoyw1EL3tjb3KQbIt7Ln4c5jcuW5aHie30CE9jxebsSWpDCoW+K5UY8xIF4Kb3H7o/5/7TT5OP5G6Tjzu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779295979; c=relaxed/simple;
-	bh=GcpX8SBDAas6dXd5vLh/FFL7lg3YkUh1iD+cihU+b9g=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mVhp/m+Di1RKXfF/LC3u938A+J6eIDui/UvgohQWmRtlhQN1LYoCcPduj1Yt69bM1dHCQvH/Dt2LzsFw6EirX/zEX3i3RT0goE32aNYGaiBuQLhwahW+YiK/6Q0fZ5uPgshUfKOQiEog8Pbh4bBJZvUD9vTELED3TtRVR90eYyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aL7uR+0e; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779296049; c=relaxed/simple;
+	bh=U8dVlvAolBei/O5G4/Phw+TTk1VJPk6u/RJnno2HZwU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YYqqsD8mtqz1EkIKHVyxTyc3h8UgzV9kL7svvftLt/3kQzvJ2lPzRTT9c6DbNtLmouUW/1PuE7WNy4R9m0okQBZYdVhKF+ptT9YlbRVpWvQurPsVSFXRrBuwRfCiPP+aU/Tbx301ore8Fd/SfD9b6MQDteYpvYgHU+tILe0ZOvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Yrd+gVqJ; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aL7uR+0e"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A69B71F00893;
-	Wed, 20 May 2026 16:52:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779295975;
-	bh=H56I4ZS2toCCYuMlnqnGz9pNcfd1uYfERSxsfh8IzzA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=aL7uR+0eA7/173upJMkdtkl/0JpkeYEABoMFX+aaBpEjeND2AV8UqvRYwX2im9b6c
-	 SKkKrdd/ero/miUKDUjpawRnTMRbKpZ4lhAQBHyux+T4el7d4eSAvDtlRpIZvBBDDQ
-	 /6M/fyrNPPcraoFF43reaPlV9QV6RWWdMMUNqCVwrco6D4pQdecGN8a0EPxWLsy1uP
-	 MF3puwwNdPNX2VjRM04DcAbr0cq1a8xdBd+hu+f9Arp214wZeRP8VRwNRAEiSWvVqZ
-	 FOb5SdjMOuZ83Ogxw97TjpLAlpCYA6SgAthyCk8sAbZeY1OzHInTTBF2ABD4tSKiyJ
-	 HSHXtwxblT40Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v15 20/20] unwind_user/sframe: Add prctl() interface for
- registering .sframe sections
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jens Remus" <jremus@linux.ibm.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260520154004.3845823-21-jremus@linux.ibm.com>
-References: <20260520154004.3845823-21-jremus@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 20 May 2026 16:52:55 +0000
-Message-Id: <20260520165255.A69B71F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Yrd+gVqJ"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=8zXYxYxtJ4oXAiq8sHqIS8mQ2m43gH38jqOVmvsoDUY=; b=Yrd+gVqJo7uSmNE7KTAogomHC3
+	xyRoJLz8XWybuw4d0gs6CQVNTzxBGfYHeiXWz3THE7zD3SM1Y/ufJikbrS1LIuAhBmtH6RTlbt5nE
+	0mR/CfEkps89u2ib9fvuwrHkPvhoJNw/pU1+UOGw9CQjBZyjYcLAyS9szJoPtHKAoyGk44pafPkd/
+	ZB1DsTthsLVweHRPqFDMFgUAqPZoaCQd459qCp2JNfu94tPTXLlRBJSDUeLxy02KZHoHOcsDPxohF
+	O+TWwIkccvNL/id1hXWLDqo0b2h/2FK9r9/XESKw8eBBVaZNH5xoKbU5+bLD+Do0zWzx0NZ8W93fM
+	jWzKw1tg==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wPkBC-003FTy-1l;
+	Wed, 20 May 2026 16:53:59 +0000
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next v3 0/6] net: convert
+ atm/xdp/af_iucv/l2tp_ppp/rxrpc/tipc to getsockopt_iter
+Date: Wed, 20 May 2026 09:53:45 -0700
+Message-Id: <20260520-getsock_four-v3-0-b8c0b16b7780@debian.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIABrnDWoC/22N0Q6CIBhGX4X919IQA8ur3qO1pvij1AYNkNmc7
+ 96km2pdf985Z4GA3mCAhizgMZlgnIWGVAUBNbZ2QGp6aAhwxiUTZUUHjMGp+1W7yVMmK5Rtzfd
+ CCCgIPDxqM2fdGSxGanGOcHkvYepuqOJm276jCdH5Zy6nMhP/I6mkjGqsNcNaSN2qU4+dae3O+
+ SG7E/+kxQ/NKaOsPyD2R8Elr7/odV1f2y18HAMBAAA=
+X-Change-ID: 20260513-getsock_four-063e6a724555
+To: Chas Williams <3chas3@gmail.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Magnus Karlsson <magnus.karlsson@intel.com>, 
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, Jon Maloy <jmaloy@redhat.com>, 
+ Alexandra Winter <wintera@linux.ibm.com>, 
+ Thorsten Winkler <twinkler@linux.ibm.com>, 
+ James Chapman <jchapman@katalix.com>, David Howells <dhowells@redhat.com>, 
+ Marc Dionne <marc.dionne@auristor.com>, 
+ David Heidelberg <david+nfc@ixit.cz>, Samuel Ortiz <sameo@linux.intel.com>
+Cc: linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ tipc-discussion@lists.sourceforge.net, linux-s390@vger.kernel.org, 
+ linux-afs@lists.infradead.org, oe-linux-nfc@lists.linux.dev, 
+ Breno Leitao <leitao@debian.org>, kernel-team@meta.com
+X-Mailer: b4 0.16-dev-d5d98
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3395; i=leitao@debian.org;
+ h=from:subject:message-id; bh=U8dVlvAolBei/O5G4/Phw+TTk1VJPk6u/RJnno2HZwU=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqDecgqhGcppWkZJXBATn0wKOKcERm7xYLRfIYi
+ OcW2ICvMfiJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCag3nIAAKCRA1o5Of/Hh3
+ bSUsD/4z1tCEk27rFb83pLCxGD3N59hMqcwo3v/KyU1akUACgaNMfqozW38FJi2pSvOcgzH1IOv
+ G13BnR8AivOWzd1Ci/mQQlOpCoCSxmjmPDBUX1eVVXwN9w+YIczfLh5Ip+xyhjh1v1+T0Axw/Z+
+ y17Av3LHwa8XSM21lMUg2Wwi34YD/naNBVpTS3g4V2+MRrK8iX3azwLyYMCIJaLuUPxeXXoJDOK
+ aN0pGOpdx/iIQ2G/gBO2f7rG+cb4xL9J8TJFq9vQRYwd93Dj3xldPEjRu4HucsAOE3mgnS0uaqs
+ e5qeaIWThYAfApRavLUTy8h4fDXEl4MES7Cvg0iJL3hYHVcoRi2OSSsuT+R2Xsi8kTo4p3dXmVg
+ H86aM+D5vmaAUczIueOKo4+rpIr02v6kL69bMuTnGkDOt9GY4iWc+bQclTXbclnbroNpE+iQ0rr
+ A8y9n95iJwo7ujNgzr7i6xTiOaVBEchDuet3FUFAwU7curZFHUwpEwTrYCEm0dINajvlNtlx6z6
+ br8l4wB80qNEJeNRP6lSUxRRG9Htxzb2dpEy/RVfW3Y0yKFEbQ0qawdJkvhXytwVGlTcEN0MnFq
+ amB+n6XZ1xKkdLKCDAOxjgBeOTv3TrF8DhZ1Bpy9UzwCk5O7HPha695jpgofYApIuKUtCzFMTRw
+ S5UGVf9yHdYO0Fw==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] The patch introduces a temporary testing UAPI into `prctl` which i=
-s explicitly noted by the author as not intended for mainline.
-- [High] Concurrent prctl(PR_ADD_SFRAME) and prctl(PR_REMOVE_SFRAME) calls =
-lack synchronization, leading to use-after-free, double-free, and memory le=
-aks.
-- [Medium] Unsupported prctl options PR_ADD_SFRAME and PR_REMOVE_SFRAME inc=
-orrectly return -ENOSYS instead of -EINVAL when the sframe feature is disab=
-led.
---
+This series continues the conversion of the remaining proto_ops getsockopt
+callbacks to the new getsockopt_iter callback introduced in commit 67fab22a7adc
+("net: add getsockopt_iter callback to proto_ops").
 
-commit a01f291288e4c84f6ad3bbf93c1ed0939390a9b8
-Author: Josh Poimboeuf <jpoimboe@kernel.org>
+The new callback takes a sockopt_t — a type-safe wrapper around iov_iter
+plus an optlen field — instead of raw __user pointers. This:
 
-unwind_user/sframe: Add prctl() interface for registering .sframe sections
+    - Replaces (char __user *optval, int __user *optlen) with sockopt_t *opt
+    - Reads the input buffer size from opt->optlen instead of get_user()
+    - Writes the option value via copy_to_iter() instead of copy_to_user()
+    - Reports the returned length via opt->optlen instead of put_user(),
+      independently of the bytes copied through the iter
 
-This commit adds new prctl interfaces to allow glibc to inform the kernel
-where to find .sframe sections. This provides the kernel with visibility
-into the ELF contents of shared libraries.
+Each conversion is a behaviour-preserving and code-style-preserving refactor;
+no big changes being introduced, even when the code looks weird.
 
->     [
->       This adds an interface for prctl() for testing loading of sframes f=
-or
->       libraries. But this interface should really be a system call. This =
-patch
->       is for testing purposes only and should not be applied to mainline.
->     ]
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Changes in v3:
+- Drop the "af_iucv" fix, and I will send it separately
+- Remove a left-over comment (Paolo)
+- Link to v2: https://patch.msgid.link/20260515-getsock_four-v2-0-0d8eed952627@debian.org
 
-[Severity: High]
-Should this patch be merged if it creates a permanent UAPI via prctl for a
-temporary testing feature?=20
+Changes in v2:
+- Fix a issue reported by sashiko, where I was using "long int" instead
+  of "int" for a value.
+- Nit from Stanislav
+- Added an additional patch to make the af_iucv SO_MSGSIZE similar to
+  its partners.
+- Link to v1: https://patch.msgid.link/20260513-getsock_four-v1-0-fe7f0e756fac@debian.org
 
-The commit message explicitly notes it is for testing purposes only and
-should not be applied to mainline. Committing to this interface could result
-in userspace relying on a temporary test mechanism.
+To: Alexandra Winter <wintera@linux.ibm.com>
+To: Thorsten Winkler <twinkler@linux.ibm.com>
+To: "David S. Miller" <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Simon Horman <horms@kernel.org>
+To: Chas Williams <3chas3@gmail.com>
+To: Magnus Karlsson <magnus.karlsson@intel.com>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Stanislav Fomichev <sdf@fomichev.me>
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Jesper Dangaard Brouer <hawk@kernel.org>
+To: John Fastabend <john.fastabend@gmail.com>
+To: James Chapman <jchapman@katalix.com>
+To: David Howells <dhowells@redhat.com>
+To: Marc Dionne <marc.dionne@auristor.com>
+To: Jon Maloy <jmaloy@redhat.com>
+Cc: linux-s390@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-atm-general@lists.sourceforge.net
+Cc: bpf@vger.kernel.org
+Cc: linux-afs@lists.infradead.org
+Cc: tipc-discussion@lists.sourceforge.net
 
-> diff --git a/kernel/sys.c b/kernel/sys.c
-> index 62e842055cc9c..b0a9b1e3ccd7c 100644
-> --- a/kernel/sys.c
-> +++ b/kernel/sys.c
-[ ... ]
-> @@ -2907,6 +2908,14 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long,=
- arg2, unsigned long, arg3,
->  		if (arg3 & PR_CFI_LOCK && !(arg3 & PR_CFI_DISABLE))
->  			error =3D arch_prctl_lock_branch_landing_pad_state(me);
->  		break;
-> +	case PR_ADD_SFRAME:
-> +		error =3D sframe_add_section(arg2, arg3, arg4, arg5);
-> +		break;
-> +	case PR_REMOVE_SFRAME:
-> +		if (arg3 || arg4 || arg5)
-> +			return -EINVAL;
-> +		error =3D sframe_remove_section(arg2);
-> +		break;
+---
+Breno Leitao (6):
+      af_iucv: convert to getsockopt_iter
+      atm: convert to getsockopt_iter
+      xdp: convert to getsockopt_iter
+      l2tp: ppp: convert to getsockopt_iter
+      rxrpc: convert to getsockopt_iter
+      tipc: convert to getsockopt_iter
 
-[Severity: High]
-Are concurrent calls to PR_ADD_SFRAME and PR_REMOVE_SFRAME properly
-synchronized to prevent double-free or memory leaks?
+ net/atm/common.c     | 18 +++++++++++-------
+ net/atm/common.h     |  2 +-
+ net/atm/pvc.c        |  6 +++---
+ net/atm/svc.c        | 15 +++++++--------
+ net/iucv/af_iucv.c   | 14 ++++++--------
+ net/l2tp/l2tp_ppp.c  | 20 +++++++-------------
+ net/rxrpc/af_rxrpc.c | 16 +++++++++-------
+ net/tipc/socket.c    | 33 +++++++++++++++++----------------
+ net/xdp/xsk.c        | 24 +++++++++++-------------
+ 9 files changed, 72 insertions(+), 76 deletions(-)
+---
+base-commit: 95c1d0b80d73a9508ceea198c6132500410846e5
+change-id: 20260513-getsock_four-063e6a724555
 
-If sframe_remove_section() only holds an SRCU read lock and
-sframe_add_section() only holds mmap_read_lock(), could Thread A and Thread
-B concurrently executing PR_REMOVE_SFRAME both find the same section and
-erase it?
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
 
-If Thread A calls mtree_erase() and queues the section for freeing via
-call_srcu(), and Thread C concurrently inserts a new section at the same
-text_start via PR_ADD_SFRAME:
-
-Thread B might then erase the new section but queue the old section's RCU
-callback a second time. Could this sequence lead to a double-free of the
-old section and a memory leak of the newly inserted section?
-
-[Severity: Medium]
-When the sframe feature is disabled in the kernel configuration, will these
-calls return -ENOSYS instead of -EINVAL?
-
-The dummy functions defined in include/linux/sframe.h return -ENOSYS:
-
-static inline int sframe_add_section(unsigned long sframe_start,
-                                     unsigned long sframe_end,
-                                     unsigned long text_start,
-                                     unsigned long text_end)
-{
-        return -ENOSYS;
-}
-
-According to the prctl ABI convention, unsupported options typically fall
-through to the default case and return -EINVAL. Could returning -ENOSYS
-cause unexpected errors for userspace applications probing for this feature=
-'s
-availability?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260520154004.3845=
-823-1-jremus@linux.ibm.com?part=3D20
