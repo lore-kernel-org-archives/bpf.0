@@ -1,57 +1,57 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA183FAE1D;
-	Wed, 20 May 2026 15:40:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C008D3FB074;
+	Wed, 20 May 2026 15:41:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779291662; cv=none; b=NYmhTtZoFmzNISyZWsJvkDhlqx28o5iaNnnkmLY0xcVD0RTJnVJ62+v1XXZvss/ISJFhRpy8IpCSMQuea+Q7UsNzrobSl/76ywccsORKfhmGRb4Mx+Iou1hA0C3fUsqB/sKCAaXJe4wvMia6SA3oWZQwT/NZDQQEk+I+XVlg+GA=
+	t=1779291662; cv=none; b=l4aiZC6omFyrOilZSuRkgtHH+HEAwjJrIV/taG7zWT7pyT/HnFSKHbNh4rjOB0JsCcyXcOuQW8oqvKOgRZGmZDZDZgxvpY0J1squu4U/JRt3D2InAPd3B+U/eCrAiuBqwZmImVovjV+az0ZUQXphcMfyiTisl/WqMlbjrmhLV64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779291662; c=relaxed/simple;
-	bh=v9zR+CxaBwVN8AGwvg5kcpnBTB/dRkF7ZIq0HuQ3Qrg=;
+	bh=1uqNk2OW4T2BX4f0DYsbJdKnO4ILhTmLZQFcrbqg1Pc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LsexWf9Dzdis/M3blH/yTFENybIgYUaJ05BlYwlurfcpQatYoKpoojTwZbt7yij9LPfn1E7XQ9ICDGzwiHH2V5YrrDqgS6zdBtLhcZ51ugehLk7hI7WppXqbxyOP/ZmIpVAs9cjIQzH68SXIJD26KOPtk6mf8kPUTwTRDeD3ryk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=RmtPp3Yy; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=aI3KAEHfSlcxm+sYA/BbGGKvadxjUvNcDcm4cXz5DjyDupBx3jlYaVWvsogxI07u03YzX6vpy0kx9OLX1vlyG+XUtVz6+d4N8oktEuu942OJQf6kzNi4Ow9/mYf8MhW+v5WTEx5E5YDHZ9toIeGBpWhb7GpwM7l/NtTyS8JIvVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=LLt4z6q5; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="RmtPp3Yy"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64KDiWDK441640;
-	Wed, 20 May 2026 15:40:23 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="LLt4z6q5"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64K6k2lD513145;
+	Wed, 20 May 2026 15:40:20 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=MtnVctqCs7YoKq/Mw
-	D8B6NDfS4Kt/fyB5yJ2+IDDGco=; b=RmtPp3YyIDUtcOunstkoYqNG6K8x8vh0d
-	XC/ylbnOE2XyhlxSEp2caZGJK2go77jARAMjTX7R+0+Z5v6UteO+Ls2S0qdgCFnN
-	U60uDQ+tJ7p2a37n6ngn8nYZHs04DA58wxJ09AsbbwMRFC2C5r9F+Aty5zB+8bwn
-	nl0ZqTv9JgYfbhsvKfiDQ79cxsGe5yXLaxK22G6KNFe4G4BF3loxLUbD3+4avKa7
-	fQQqtic+nCDXObGnMn1UK5EOpZNQEB/FCQ4AzG/INNFlQTSy1YLrWnx7HNNrUgq0
-	+vJ3WGF5O9el91TU3okL+GbzC+Lc3s7U4xk6dKR1zaIPkmRno8Y7w==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6hb8hspa-1
+	:mime-version:references:subject:to; s=pp1; bh=Fwe9ecz9H+oPKkp3z
+	AdaLZRBVdDt0f4wFwOsmwqxdFk=; b=LLt4z6q5tiKzAzHNgRov9cJRFGW2Kq2yY
+	BbcoFADK36lXnIEwuqGDTVINpyIiyUfMP8OXzDdLSyjTtFod7ED8THwpBaLBM8SP
+	lO1DwGOxOttsYiVdbhp0L73YVvDSWhJlUU9KDT1SQ6jqBIds1WNlmEE+Zs5/bnGg
+	8U3XyYv9MiaodOnrm96y26qDc4SxifMBIkTrrYKeQdEkJ6gCqZs4cvrVGnP4/+nZ
+	IEVOpIyZ22WkHK76CxC0RWvEKSQxO5VHI5I8boq4DUEmtnNMFXFXYN7QNoOCvCtl
+	nePqejl1Tt3uF8D+0ZwnLFQNQdCvfKHSX4DAD3kRiAJMajM/Tc1VA==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h752taa-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 May 2026 15:40:22 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64KFdHi1026172;
-	Wed, 20 May 2026 15:40:22 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e75ky7q6p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 20 May 2026 15:40:21 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64KFeI7E8323522
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 20 May 2026 15:40:19 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64KFd5tP031969;
 	Wed, 20 May 2026 15:40:18 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 53BA320040;
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e73wk801p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Wed, 20 May 2026 15:40:18 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64KFeEbu47251718
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 20 May 2026 15:40:14 GMT
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C648620043;
-	Wed, 20 May 2026 15:40:17 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 4A3C42004D;
+	Wed, 20 May 2026 15:40:14 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B917D20043;
+	Wed, 20 May 2026 15:40:13 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
 	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 20 May 2026 15:40:17 +0000 (GMT)
+	Wed, 20 May 2026 15:40:13 +0000 (GMT)
 From: Jens Remus <jremus@linux.ibm.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         x86@kernel.org, Steven Rostedt <rostedt@kernel.org>,
@@ -82,9 +82,9 @@ Cc: Jens Remus <jremus@linux.ibm.com>, bpf@vger.kernel.org, linux-mm@kvack.org,
         Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>,
         "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH v15 19/20] unwind_user/sframe/x86: Enable sframe unwinding on x86
-Date: Wed, 20 May 2026 17:40:03 +0200
-Message-ID: <20260520154004.3845823-20-jremus@linux.ibm.com>
+Subject: [PATCH v15 12/20] unwind_user/sframe: Add .sframe validation option
+Date: Wed, 20 May 2026 17:39:56 +0200
+Message-ID: <20260520154004.3845823-13-jremus@linux.ibm.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260520154004.3845823-1-jremus@linux.ibm.com>
 References: <20260520154004.3845823-1-jremus@linux.ibm.com>
@@ -97,37 +97,39 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIwMDE1MSBTYWx0ZWRfX1ynlGov/rsON
- ONpIgpdK/avkbTb7ZZZvkfzF6YGwh4OQEO1iP4y0mzix3CRsnkfAe4OxJsWfeTkyal6ZBnSGZds
- PHvbCTPIjXa1A74yNjXEftL/S6ji6anH1FY2m44uaCHmXJgsDSzr/AzjReP2/vFtbaSDJQ2Ib0I
- 6Yk2WS6y77HwI59arU7bm2tsbOqHjqNhC1EmtLfelw08L5yun8E4M8MzAjBH2xoP4rmV4mKJzBC
- G4A9/y0TxBAXxZY9MtVuHcpLV29baPqcp+dUmpl4GGAmHKSIES6xTcip4N5bbWmjWge6oNRMtra
- NgcyF2WJLE/d8xjWezuKz+PlP+t1Hk2tBmC+0Ewjyae8g7rPnTKH2co8xCPH5bBRlE5xEM7Jd3L
- UVKc7ERzeHawHQemetQmdAjDxxeY7Ly9oEb3zo6El4/ksr8OO6c8iQSUnnJkilvFHfLCNk+p47W
- YhSFMsigHLvtK7lPNOQ==
-X-Proofpoint-GUID: MY3deY7T0eQoBbntI9zjLIpcrmO-vjbB
-X-Proofpoint-ORIG-GUID: xgx2UBI6tlWlIKVb1qHEiuYVnXS55moD
-X-Authority-Analysis: v=2.4 cv=aYBRWxot c=1 sm=1 tr=0 ts=6a0dd5e7 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+X-Authority-Analysis: v=2.4 cv=ffCdDUQF c=1 sm=1 tr=0 ts=6a0dd5e4 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
  a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=pGLkceISAAAA:8
- a=VnNF1IyMAAAA:8 a=BJDwMle8H-fvePKCLUUA:9 a=2JgSa4NbpEOStq-L5dxp:22
+ a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=pGLkceISAAAA:8
+ a=VnNF1IyMAAAA:8 a=RXKZOtKmAAAA:8 a=iNKnMr3YqTL5pEm6fAYA:9
+ a=2JgSa4NbpEOStq-L5dxp:22 a=UFF3uGjEBZWolfm0k6KQ:22
+X-Proofpoint-ORIG-GUID: -mkfSxAZrBitVU35z00n1maSPFGjEpyV
+X-Proofpoint-GUID: PcRSCFKq2nBAV8d8RsO-g8IszMq0jrZL
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIwMDE1MSBTYWx0ZWRfX+4A6NmuzGWeG
+ gmHkZhotg90f9w+n46VxxVYmpLojP/Pt/cjMxbc+bsVsKbKMK3nWoUaXSAZS7+c3S9+4IuyB69u
+ Q3N9BqkINDt6at0tT1rsTSuhQZ0e4OGlWGjyjnhGCSe8a6QPxHKHkxZR5WmP9q2cH/rBdaHOMoW
+ 185O2lPNMtCIlDj3X//0PqtRmPJ02kt8dhD1WK517q5fwGG6zRBOE9WtzjuQVlKHlV4Pb7DdFCk
+ KIdf1PIMU0+Y/CgmbH5Aiz/kHFn0C1EvA8YH3ixcQCFRedYca5C0RDweYn0/B5IPfCzFD2nNFT/
+ yhnmKZnnSw+TFjiZHfbgd2MEAsA2aPVclD8l6QxCLkVdjYr/lgqi7W7wk8MRyetKECNyQSYLsvV
+ bd0FdsDcOuU3GhXqKbonzTbO0F15lUJBy6pL/1Lkz6tO/yF8oVvYpzMbOaF8iGRnXIf12me2j3l
+ PZE36FK2khAMfW/k9zQ==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-05-20_03,2026-05-18_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 adultscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
- clxscore=1015 spamscore=0 phishscore=0 priorityscore=1501 malwarescore=0
+ priorityscore=1501 spamscore=0 phishscore=0 suspectscore=0 adultscore=0
+ clxscore=1015 impostorscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605200151
 
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-The x86 SFrame V3 implementation works fairly well, starting with
-binutils 2.46.  Enable it.
+Add a debug feature to validate all .sframe sections when first loading
+the file rather than on demand.
 
-[ Jens Remus: Reword commit message for SFrame V3, starting with
-binutils 2.46. ]
+[ Jens Remus: Add support for SFrame V3.  Add support for PC-relative
+FDE function start offset.  Adjust to rename of struct sframe_fre to
+sframe_fre_internal.  Use %#x/%#lx format specifiers. ]
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
@@ -137,107 +139,181 @@ Signed-off-by: Jens Remus <jremus@linux.ibm.com>
 
 Notes (jremus):
     Changes in v15:
-    - unwind_user_get_reg(): Fail if !user_64bit_mode(). (Sashiko AI)
-    - unwind_user_get_reg(): Simplify guarding using CONFIG_X86_64.
-    - unwind_user_get_reg(): Add pr_debug_once() if unsupported register
-      number.
+    - sframe_validate_section(): Fix format specifier for number of FREs
+      in debug message. (Sashiko AI)
+    - Normalize error code usage (.sframe is removed for all but ENOENT):
+      ENOENT: No sframe or no FDE for IP found
+              (FDE found but no FRE is EINVAL)
+      EFAULT: Bad address
+      EINVAL: Invalid input or sframe
     
     Changes in v14:
-    - Drop superfluous empty line in unwind_user_get_reg().
+    - Add debug message if safe_read_fde() fails.
+    - Update function names in debug messages.
+    - Uppercase terms FDE and FRE in debug messages.
     
     Changes in v13:
-    - Naive implementation of unwind_user_get_reg() to support SFrame V3
-      flexible FDEs (e.g. used to represent DRAP pattern).
-    - Define SFRAME_REG_SP and SFRAME_REG_FP to the respective x86-64
-      DWARF register numbers.
-    - Reword commit message for SFrame V3 and (upcoming) binutils 2.46.
+    - Update to SFrame V3:
+      - Print struct sframe_fde_internal fields fda_off and info2 in debug
+        message.
+    - Adjust to rename of struct sframe_fde_internal field func_start_addr
+      to func_addr.
+    - Use format strings "%#x" and "%#lx" instead of "0x%x" and "0x%lx".
+    - Reword commit message (my changes).
 
- arch/x86/Kconfig                          |  1 +
- arch/x86/include/asm/unwind_user.h        | 39 +++++++++++++++++++++++
- arch/x86/include/asm/unwind_user_sframe.h | 12 +++++++
- 3 files changed, 52 insertions(+)
- create mode 100644 arch/x86/include/asm/unwind_user_sframe.h
+ arch/Kconfig           |  19 ++++++++
+ kernel/unwind/sframe.c | 101 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 120 insertions(+)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index f3f7cb01d69d..51286dfdb5f4 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -302,6 +302,7 @@ config X86
- 	select HAVE_UACCESS_VALIDATION		if HAVE_OBJTOOL
- 	select HAVE_UNSTABLE_SCHED_CLOCK
- 	select HAVE_UNWIND_USER_FP		if X86_64
-+	select HAVE_UNWIND_USER_SFRAME		if X86_64
- 	select HAVE_USER_RETURN_NOTIFIER
- 	select HAVE_GENERIC_VDSO
- 	select VDSO_GETRANDOM			if X86_64
-diff --git a/arch/x86/include/asm/unwind_user.h b/arch/x86/include/asm/unwind_user.h
-index f38f7c5ff1de..942475235431 100644
---- a/arch/x86/include/asm/unwind_user.h
-+++ b/arch/x86/include/asm/unwind_user.h
-@@ -15,6 +15,45 @@ static inline int unwind_user_word_size(struct pt_regs *regs)
- 	return user_64bit_mode(regs) ? 8 : 4;
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 37549832bd1f..132249d342a3 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -490,6 +490,25 @@ config HAVE_UNWIND_USER_SFRAME
+ 	bool
+ 	select UNWIND_USER
+ 
++config SFRAME_VALIDATION
++	bool "Enable .sframe section debugging"
++	depends on HAVE_UNWIND_USER_SFRAME
++	depends on DYNAMIC_DEBUG
++	help
++	  When adding an .sframe section for a task, validate the entire
++	  section immediately rather than on demand.
++
++	  This is a debug feature which is helpful for rooting out .sframe
++	  section issues.  If the .sframe section is corrupt, it will fail to
++	  load immediately, with more information provided in dynamic printks.
++
++	  This has a significant page cache footprint due to its reading of the
++	  entire .sframe section for every loaded executable and shared
++	  library.  Also, it's done for all processes, even those which don't
++	  get stack traced by the kernel.  Not recommended for general use.
++
++	  If unsure, say N.
++
+ config HAVE_PERF_REGS
+ 	bool
+ 	help
+diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+index f931932bd34a..b5f984fb2df2 100644
+--- a/kernel/unwind/sframe.c
++++ b/kernel/unwind/sframe.c
+@@ -382,6 +382,103 @@ int sframe_find(unsigned long ip, struct unwind_user_frame *frame)
+ 	return ret;
  }
  
-+#ifdef CONFIG_X86_64
++#ifdef CONFIG_SFRAME_VALIDATION
 +
-+static inline int unwind_user_get_reg(unsigned long *val, unsigned int regnum)
++static int safe_read_fde(struct sframe_section *sec,
++			 unsigned int fde_num, struct sframe_fde_internal *fde)
 +{
-+	struct pt_regs *regs = task_pt_regs(current);
++	int ret;
 +
-+	/* SFrame only supports x86-64 */
-+	if (!user_64bit_mode(regs))
-+		return -EINVAL;
++	if (!user_read_access_begin((void __user *)sec->sframe_start,
++				    sec->sframe_end - sec->sframe_start))
++		return -EFAULT;
++	ret = __read_fde(sec, fde_num, fde);
++	user_read_access_end();
++	return ret;
++}
 +
-+	switch (regnum) {
-+	/* DWARF register numbers 0..15 */
-+	case  0: *val = regs->ax; break;
-+	case  1: *val = regs->dx; break;
-+	case  2: *val = regs->cx; break;
-+	case  3: *val = regs->bx; break;
-+	case  4: *val = regs->si; break;
-+	case  5: *val = regs->di; break;
-+	case  6: *val = regs->bp; break;
-+	case  7: *val = regs->sp; break;
-+	case  8: *val = regs->r8; break;
-+	case  9: *val = regs->r9; break;
-+	case 10: *val = regs->r10; break;
-+	case 11: *val = regs->r11; break;
-+	case 12: *val = regs->r12; break;
-+	case 13: *val = regs->r13; break;
-+	case 14: *val = regs->r14; break;
-+	case 15: *val = regs->r15; break;
-+	default:
-+		pr_debug_once("%s (%d): unwind_user_get_reg(%u): unsupported register number\n",
-+			      current->comm, current->pid, regnum);
-+		return -EINVAL;
++static int safe_read_fre(struct sframe_section *sec,
++			 struct sframe_fde_internal *fde,
++			 unsigned long fre_addr,
++			 struct sframe_fre_internal *fre)
++{
++	int ret;
++
++	if (!user_read_access_begin((void __user *)sec->sframe_start,
++				    sec->sframe_end - sec->sframe_start))
++		return -EFAULT;
++	ret = __read_fre(sec, fde, fre_addr, fre);
++	user_read_access_end();
++	return ret;
++}
++
++static int sframe_validate_section(struct sframe_section *sec)
++{
++	unsigned long prev_ip = 0;
++	unsigned int i;
++
++	for (i = 0; i < sec->num_fdes; i++) {
++		struct sframe_fre_internal *fre, *prev_fre = NULL;
++		unsigned long ip, fre_addr;
++		struct sframe_fde_internal fde;
++		struct sframe_fre_internal fres[2];
++		bool which = false;
++		unsigned int j;
++		int ret;
++
++		ret = safe_read_fde(sec, i, &fde);
++		if (ret) {
++			dbg_sec("safe_read_fde(%u) failed\n", i);
++			return ret;
++		}
++
++		ip = fde.func_addr;
++		if (ip <= prev_ip) {
++			dbg_sec("FDE %u not sorted\n", i);
++			return -EINVAL;
++		}
++		prev_ip = ip;
++
++		fre_addr = sec->fres_start + fde.fres_off;
++		for (j = 0; j < fde.fres_num; j++) {
++			int ret;
++
++			fre = which ? fres : fres + 1;
++			which = !which;
++
++			ret = safe_read_fre(sec, &fde, fre_addr, fre);
++			if (ret) {
++				dbg_sec("FDE %u: safe_read_fre(%u) failed\n", i, j);
++				dbg_sec("FDE: func_addr:%#lx func_size:%#x fda_off:%#x fres_off:%#x fres_num:%u info:%u info2:%u rep_size:%u\n",
++					fde.func_addr, fde.func_size,
++					fde.fda_off,
++					fde.fres_off, fde.fres_num,
++					fde.info, fde.info2,
++					fde.rep_size);
++				return ret;
++			}
++
++			fre_addr += fre->size;
++
++			if (prev_fre && fre->ip_off <= prev_fre->ip_off) {
++				dbg_sec("FDE %u: FRE %u not sorted\n", i, j);
++				return -EINVAL;
++			}
++
++			prev_fre = fre;
++		}
 +	}
++
 +	return 0;
 +}
-+#define unwind_user_get_reg unwind_user_get_reg
 +
-+#endif /* CONFIG_X86_64 */
++#else /*  !CONFIG_SFRAME_VALIDATION */
 +
- #endif /* CONFIG_UNWIND_USER */
++static int sframe_validate_section(struct sframe_section *sec) { return 0; }
++
++#endif /* !CONFIG_SFRAME_VALIDATION */
++
++
+ static void free_section(struct sframe_section *sec)
+ {
+ 	dbg_free(sec);
+@@ -500,6 +597,10 @@ int sframe_add_section(unsigned long sframe_start, unsigned long sframe_end,
+ 		goto err_free;
+ 	}
  
- #ifdef CONFIG_HAVE_UNWIND_USER_FP
-diff --git a/arch/x86/include/asm/unwind_user_sframe.h b/arch/x86/include/asm/unwind_user_sframe.h
-new file mode 100644
-index 000000000000..d828ae1a4aac
---- /dev/null
-+++ b/arch/x86/include/asm/unwind_user_sframe.h
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_UNWIND_USER_SFRAME_H
-+#define _ASM_X86_UNWIND_USER_SFRAME_H
++	ret = sframe_validate_section(sec);
++	if (ret)
++		goto err_free;
 +
-+#ifdef CONFIG_X86_64
-+
-+#define SFRAME_REG_SP	7
-+#define SFRAME_REG_FP	6
-+
-+#endif
-+
-+#endif /* _ASM_X86_UNWIND_USER_SFRAME_H */
+ 	ret = mtree_insert_range(sframe_mt, sec->text_start, sec->text_end - 1,
+ 				 sec, GFP_KERNEL_ACCOUNT);
+ 	if (ret) {
 -- 
 2.51.0
 
