@@ -1,109 +1,132 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9D6B672
-	for <bpf@vger.kernel.org>; Wed, 20 May 2026 16:13:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4CD352030
+	for <bpf@vger.kernel.org>; Wed, 20 May 2026 16:14:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779293587; cv=none; b=YYPxEhoScyqLiyT0MaK+BUiiRP1mOFVEiqTCwc07rzVuMKUpBqcjdgDQDPUg98OhmtTL2mLYjtYb4o6FcOOpuMFi3D2l7RTGJ6QvX4GlNDK2lgeSFWpTKW8BqzcX+UEOJN6mUR8eIE0fn7UdPX3FUsLwfb+cg4Jy4e9Gxx4kXis=
+	t=1779293647; cv=none; b=kdXL9ZH0GPNJiPcddZsa3El1DqzE0aLenIkI0eh8SrKgYPfl0vxC2eC6nGVlNOwmt3CnbNPvOkMkOOUbmvOcJPZM2Iw6ps2B+F8LbyrcKZ11tHj+l81WTdG5OEXIG+7U3vI/90mkKrayQwFtlVqer2y/CHuwe3rjHH0IEy9TOLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779293587; c=relaxed/simple;
-	bh=v5ZiX4Wa0NQ2seGZ7SYH/er7EbvtBgsOyT5Z+fGVwBA=;
+	s=arc-20240116; t=1779293647; c=relaxed/simple;
+	bh=6kqY/ur0x5TLIzlJKS4aF/SghHIcgjEIR08zZRKPkzE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ineRq8Ekbyht22Z6icVcqx4ceH+xBGrad+WRdDDyo7SbhWt+WKGKN8Saigqv8lVQy/+ybD0KqxoqQT2ih5ZVLXQJlefsrWzg4jfftXCQvowQO6FmB3XwIWcIValeCsaxAS/5kNN2BrLpxxClcxEU2FYPi8D+GnGqGhUpPZbzayU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CjNm8pPx; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=eydDKZInlvmH5XuPM1oQZBJRwMsbWVfm/Z+286w0vykOU33XPG6KWLyaINGKZONsqrY4rPQW0+52C4X76GkT/9I9/I25GO6wrinBhOENFnEBQosR+caa9esejUQdapV6V/SUHrnVRoTGDOo/pY4XaKiRZ7acbj6T1I9fyvzfzzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RHXWTWJ/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CjNm8pPx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E6C1F000E9;
-	Wed, 20 May 2026 16:13:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RHXWTWJ/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE1C31F00893;
+	Wed, 20 May 2026 16:14:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779293585;
-	bh=Gzo8MWtZayIbYXrKtl8Bl1EClmz1acrSkMyluDROIUM=;
+	s=k20260515; t=1779293645;
+	bh=69pOzZY69NWvcEgAut7EKnhQVYs88Wuhw+/AiTNaRGc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=CjNm8pPxxV86E1fPZ0FUPCB8L0A9Ur9jt9lAe//Prs5s3DV9GqRuvL5ougICJvOGt
-	 W2AYhTxAew+9U7WsXWtnRpXEmuq9JVS4ajmy8WTvwukY3xblw5/FqV3uhQ7LGLDIzK
-	 vCz+akhDKAarhUvsvUss8SKeZ9ctWHxB+LQyahFX7wWgGeC1mIi2JNe+Qhjay0ODd7
-	 Dj3QMpWAohqna3EwMLPx0C8qymuF/JPzZq0i+KMTIKWMvtjZ9n/DOtENl29KUV4Ktz
-	 9XyiAIw6SsT7xus9iG0iKri5zTsY240D6YNzOzIORqfYwvzyp2qojxHdg+ra8uxKby
-	 RpjHczPha2wUA==
+	b=RHXWTWJ/reE1JsKDL81apW8dPM64hS+in6FW6hF/oEjeu4zPkkEbmKCQCib0Vpb3W
+	 2DzxXsKR4MzSkgFqbqvldQcQKpRo6hRbU3I0qpjhT7vlDa4MBOM39cR9NvGZQMla5b
+	 cWuyk8FYHgE+kXB7ptgBT9jZfWXptYPgyia8pchT3fwajTlplhCeEBYQ9iLpVxk5Hv
+	 du53HXfW/0B5ajqlJEZI+TKSgpIm3lzTcNg+XfUXdE4XUVnU+WGyPVpNDAdBxHsCej
+	 wbUzcW9mwHNRkBaCjVUgkTJhJB9ZMSne3in8FnI4LHjFmx2qVb/UqBo8p/v1C5FS3u
+	 RxeNLSA6UEweA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v15 04/20] x86/uaccess: Add unsafe_copy_from_user()
- implementation
+Subject: Re: [PATCH v15 11/20] unwind_user/sframe: Show file name in debug
+ output
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jens Remus" <jremus@linux.ibm.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260520154004.3845823-5-jremus@linux.ibm.com>
-References: <20260520154004.3845823-5-jremus@linux.ibm.com>
+In-Reply-To: <20260520154004.3845823-12-jremus@linux.ibm.com>
+References: <20260520154004.3845823-12-jremus@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 20 May 2026 16:13:05 +0000
-Message-Id: <20260520161305.A5E6C1F000E9@smtp.kernel.org>
+Date: Wed, 20 May 2026 16:14:05 +0000
+Message-Id: <20260520161405.AE1C31F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] The macros `unsafe_copy_to_user` and `unsafe_copy_from_user` use=
- generic local variable names (`__dst`, `__src`, `__len`), creating a varia=
-ble shadowing vulnerability.
+
+New issues:
+- [Low] Incorrect use of `vma->vm_file` instead of `!vma_is_anonymous(vma)`=
+ to classify a VMA as file-backed.
+
+Pre-existing issues:
+- [Critical] Calling `sframe_remove_section` from `sframe_find` acquires a =
+spinlock in NMI context, leading to deadlocks, and triggers a user-controll=
+able WARN.
 --
 
-commit 32beb94b1b6090052c09ccb07d8ccb9ac95181a6
+commit 60b05617f9a9c00f287a96dda25f8e4086c6178b
 Author: Josh Poimboeuf <jpoimboe@kernel.org>
 
-x86/uaccess: Add unsafe_copy_from_user() implementation
+unwind_user/sframe: Show file name in debug output
 
-This commit adds an x86 implementation for unsafe_copy_from_user() that
-matches the existing unsafe_copy_to_user() design, and refactors both=20
-macros to use shared looping logic.
+This commit prefixes debug output strings with the file name to make sframe
+debugging easier. It looks up the VMA corresponding to the sframe section
+and extracts the filename based on the VMA properties.
 
-> diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uacces=
-s.h
-> --- a/arch/x86/include/asm/uaccess.h
-> +++ b/arch/x86/include/asm/uaccess.h
+> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+> --- a/kernel/unwind/sframe.c
+> +++ b/kernel/unwind/sframe.c
+[ ... ]
+> @@ -374,14 +374,17 @@ int sframe_find(unsigned long ip, struct unwind_use=
+r_frame *frame)
+>  	user_read_access_end();
+> =20
+>  end:
+> -	if (ret && ret !=3D -ENOENT)
+> +	if (ret && ret !=3D -ENOENT) {
+> +		dbg_sec("removing bad .sframe section\n");
+>  		WARN_ON_ONCE(sframe_remove_section(sec->sframe_start));
+> +	}
+
+[Severity: Critical]
+This is a pre-existing issue, but can this lead to deadlocks in NMI context?
+
+sframe_find() is invoked for user stack unwinding from contexts like perf,
+which executes from NMI or hardirq contexts. sframe_remove_section() calls
+mtree_erase(), which acquires the maple tree's non-IRQ-safe mtree_lock.
+
+Acquiring a regular spinlock in NMI context can cause a hard CPU deadlock
+if the lock was already held by the interrupted thread.
+
+Also, could an unprivileged user trivially trigger this WARN_ON_ONCE by
+unmapping the section, potentially crashing the system if panic_on_warn
+is enabled?
 
 [ ... ]
+> diff --git a/kernel/unwind/sframe_debug.h b/kernel/unwind/sframe_debug.h
+> --- a/kernel/unwind/sframe_debug.h
+> +++ b/kernel/unwind/sframe_debug.h
+[ ... ]
+> +static inline void dbg_init(struct sframe_section *sec)
+> +{
+> +	struct mm_struct *mm =3D current->mm;
+> +	struct vm_area_struct *vma;
+> +
+> +	guard(mmap_read_lock)(mm);
+> +	vma =3D vma_lookup(mm, sec->sframe_start);
+> +	if (!vma)
+> +		sec->filename =3D kstrdup("(vma gone???)", GFP_KERNEL_ACCOUNT);
+> +	else if (vma->vm_file)
+> +		sec->filename =3D kstrdup_quotable_file(vma->vm_file, GFP_KERNEL_ACCOU=
+NT);
 
-> -#define unsafe_copy_to_user(_dst,_src,_len,label)			\
-> -do {									\
-> -	char __user *__ucu_dst =3D (_dst);				\
-> -	const char *__ucu_src =3D (_src);					\
-> -	size_t __ucu_len =3D (_len);					\
-> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u64, label);	\
-> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u32, label);	\
-> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u16, label);	\
-> -	unsafe_copy_loop(__ucu_dst, __ucu_src, __ucu_len, u8, label);	\
-> +#define unsafe_copy_to_user(_dst, _src, _len, label)				\
-> +do {										\
-> +	void __user *__dst =3D (_dst);						\
-> +	const void *__src =3D (_src);						\
-> +	size_t __len =3D (_len);							\
+[Severity: Low]
+Does this code accurately classify file-backed VMAs?
 
-[Severity: Medium]
-Could these generic local variable names (__dst, __src, __len) cause a=20
-variable shadowing regression?=20
+Anonymous mappings, such as private mappings of /dev/zero, can also have
+vm_file populated. Relying only on vm_file might misclassify these mappings
+for the debug output.
 
-If a caller passes an argument with one of these exact names (such as __len=
-),
-the macro's local declaration would initialize itself with its own uninitia=
-lized
-stack value rather than the caller's value.=20
+Would it be more reliable to use !vma_is_anonymous(vma) to check if the
+VMA is file-backed before accessing vm_file?
 
-The previous implementation avoided this trap by using uniquely prefixed=20
-variables like __ucu_len. Is it possible to use similar prefixed variable=20
-names for the new macros?
-
-> +	unsafe_copy_to_user_loop(__dst, __src, __len, u64, label);		\
-> +	unsafe_copy_to_user_loop(__dst, __src, __len, u32, label);		\
-> +	unsafe_copy_to_user_loop(__dst, __src, __len, u16, label);		\
-> +	unsafe_copy_to_user_loop(__dst, __src, __len, u8,  label);		\
-> +} while (0)
-
+> +	else if (vma->vm_ops && vma->vm_ops->name)
+> +		sec->filename =3D kstrdup(vma->vm_ops->name(vma), GFP_KERNEL_ACCOUNT);
 [ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260520154004.3845=
-823-1-jremus@linux.ibm.com?part=3D4
+823-1-jremus@linux.ibm.com?part=3D11
