@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39B2352026
-	for <bpf@vger.kernel.org>; Wed, 20 May 2026 16:01:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9CAC26B756
+	for <bpf@vger.kernel.org>; Wed, 20 May 2026 16:01:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779292902; cv=none; b=ukYjThmfQCO4dfC4e1ONQ/QeEdYMA1PlsZ1fbYZt11HpO363lAh/LYdmuDpi8OqpA0TC/EvpVcTeKVsc1PAsgKNeYkrg/M4mASerNAPnoAVmNqVOjDmQEpfUF25XmiyKrytt09wTcylQYcH4HabCurH+NbjwqSNGBwTOqtSI6Rs=
+	t=1779292920; cv=none; b=keuAPPxBvUnAZNXEyJ/aN6vPhyCgZkrlQXK68eLn+bcD3QiCvYv+bGA/6Fdf/9ynAi4Q+cmULyjV2FVDuiZFJtbGToXja+heddHgapfSdVFq3EkrP0O4W4MHQawy0rUon4R3DsSm/3fBuuBnsYnjjkDeYZc7i6E8xrnLadJJP3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779292902; c=relaxed/simple;
-	bh=/fhFfwU4E9D3ERbz6a03Xh8GMG/Pm8KlK+l/18jTEfg=;
+	s=arc-20240116; t=1779292920; c=relaxed/simple;
+	bh=jOXxzxwxRaHbSil7/B/IOXJ+xmBhW5LQG9BaL6Mpbqs=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=JnmW9k37eGU5RmBMG94ALwEflCsNLc304P1CaT+iDpqfUUR1yKgsxIzsyp5fRUHV5zvSVAYjlSNUemtPDwnuubP2mLfaIZBNhAC/CwjzNAvAHjQn7Qvx0vKQO31I4b2wSZvaDGf47PfpgDMoXuEYkqJm0J+lb2Ozd9R/Bo9+qd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IrFv3RLl; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=MpQCjS/Ud3AMHnh2HAaZH8lr71sw8xXNAFpkf6XdK9Pc65x59V40yLFPUwvSvjXpQqJJx1SxAEe9msZyZTPox3rut1joiBxArzQS2FaaiMo4+Vn3Wc9Yl4EuugymNK41mqC1jkXIp8zxF8GZ/M+2jeOaXjIRoibAJEH9oXl26aU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TVOco8NS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IrFv3RLl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B7FB1F000E9;
-	Wed, 20 May 2026 16:01:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TVOco8NS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 744321F000E9;
+	Wed, 20 May 2026 16:01:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779292900;
-	bh=240shqyEhRMaIEl/T5z3sv1NNei0H7foMx4SWXfvvlY=;
+	s=k20260515; t=1779292919;
+	bh=6CdZUk6yi0q83RDabLP5VF9tKzIJRpu9uIWSDNoHwU8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=IrFv3RLlWor2Klzfh2gY7vmMQlicHCxT1KdYC1SIrsJVYhizsd75k/a0KA7WWnq/l
-	 MbB8wKphhtGg0En34uoPy7+dxKSs19RYhwumMGXeYoMEl+bUSZO/EElJYz0DGvf6pg
-	 aBkllWW8ymh7YHbe35A6a+qfpuw6kEkoXCvlzR3Y4iuIOeCwGXn8j7PJToUWe1X3BK
-	 P6KHwWHWHXXKujXE/zcNo1N9gPVS707DRG+uVFKUo/P2eJerQO8CDZcJ+XUDJQFj5Z
-	 rJXy0KLzTPfjpwSJrQh7S50GVNSolqeFR4BqMq8WmGQ9C7i/k9/m3IiTWL0lVYJB7R
-	 O0drNNLNvQNww==
+	b=TVOco8NSmbHos1ygE8/JuqOralXZiOgpa0TUEasQB0cevwd7DiksON66jupixqVa6
+	 W6ejMkSwGgFyDoZ5G+eLESC0GLXCiT18zWt05PBfLZi82KUISn56CAZrabQjKuMJAi
+	 kYqA6Oex8aO4ov1Sg2JhEFtVt22UrEjzyBzyAtyIs7YE5NX+X98GYuu0pj4TeFp1MB
+	 P9syb0cdNRIBnehF0WRjfHBG3VZmZVhnP6uOHsPkQrPH30nzWSu8f4aJqAyexKnFMg
+	 OEt4TkMtViVCRuXz/v921wIFmoc8mJFnx3Oa7LHtnpg4LqrQiioD/QsWsGmdsIJGY9
+	 psAJZCTjjVDRw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v15 08/20] unwind_user: Stop when reaching an outermost
- frame
+Subject: Re: [PATCH v15 09/20] unwind_user/sframe: Add support for outermost
+ frame indication
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jens Remus" <jremus@linux.ibm.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260520154004.3845823-9-jremus@linux.ibm.com>
-References: <20260520154004.3845823-9-jremus@linux.ibm.com>
+In-Reply-To: <20260520154004.3845823-10-jremus@linux.ibm.com>
+References: <20260520154004.3845823-10-jremus@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 20 May 2026 16:01:39 +0000
-Message-Id: <20260520160140.8B7FB1F000E9@smtp.kernel.org>
+Date: Wed, 20 May 2026 16:01:59 +0000
+Message-Id: <20260520160159.744321F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,62 +46,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Uninitialized stack variable read of `outermost` field causes pr=
-emature termination of user space stack unwinding.
+
+Pre-existing issues:
+- [High] The size calculation for SFrame FRE evaluates to just the header s=
+ize, incorrectly omitting the size of the datawords because it uses the mut=
+ated `dataword_count` variable.
 --
 
-commit 6e5baf1a7025f1ab5a73320fe2e522b5d83d132d
+commit a8be8d2031245c57fdb06e0cafc371dc3614077c
 Author: Jens Remus <jremus@linux.ibm.com>
 
-unwind_user: Stop when reaching an outermost frame
+unwind_user/sframe: Add support for outermost frame indication
 
-This commit adds an outermost frame indication to the user space unwind
-frame structure. It checks this flag during the unwind process to stop
-unwinding when an outermost frame is reached.
+This commit adds support for the SFrame outermost frame indication. It
+allows an FRE without any offsets to represent an undefined return
+address.
+
+> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+> index a38f50a363633..f723c1a32f906 100644
+> --- a/kernel/unwind/sframe.c
+> +++ b/kernel/unwind/sframe.c
 
 [ ... ]
 
-> diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
-> index 1fb2724197332..fdb1001e37505 100644
-> --- a/kernel/unwind/user.c
-> +++ b/kernel/unwind/user.c
-> @@ -32,6 +32,12 @@ static int unwind_user_next_common(struct unwind_user_=
-state *state,
->  {
->  	unsigned long cfa, fp, ra;
+> @@ -260,6 +271,7 @@ static __always_inline int __read_fre(struct sframe_s=
+ection *sec,
+>  	if (dataword_count)
+>  		return -EINVAL;
 > =20
-> +	/* Stop unwinding when reaching an outermost frame. */
-> +	if (frame->outermost) {
+> +done:
+>  	fre->size	=3D addr_size + 1 + (dataword_count * dataword_size);
 
-[Severity: Medium]
-Will this read uninitialized stack memory during sframe unwinding?
+[Severity: High]
+This is a pre-existing issue, but does this calculation correctly size the =
+FRE?
 
-Looking at unwind_user_next_sframe(), the frame structure is allocated on t=
-he
-stack without zero-initialization:
+In __read_fre(), dataword_count is progressively decremented as offsets are
+parsed, and it is guaranteed to be 0 at this point due to the check right
+above the done label:
 
-kernel/unwind/user.c:unwind_user_next_sframe() {
-	struct unwind_user_frame frame;
+    if (dataword_count)
+        return -EINVAL;
 
-	/* sframe expects the frame to be local storage */
-	if (sframe_find(state->ip, &frame))
-		return -ENOENT;
-	return unwind_user_next_common(state, &frame);
-}
+done:
+    fre->size =3D addr_size + 1 + (dataword_count * dataword_size);
 
-Since the new outermost field isn't populated by sframe_find() until a later
-commit ("unwind_user/sframe: Add support for outermost frame indication"),
-could this uninitialized read evaluate to true and cause premature terminat=
-ion
-of user space stack unwinding?
+Because dataword_count is 0, fre->size evaluates to just the header size,
+completely omitting the size of the datawords.
 
-This would break the bisectability of the patch series.
+When __find_fre() executes fre_addr +=3D fre->size, it advances the pointer=
+ by
+this truncated amount. This would cause subsequent iterations to read
+misaligned data and potentially break stack unwinding.
 
-> +		state->done =3D true;
-> +		return 0;
-> +	}
-> +
+I see this was fixed later in the series in commit 9c045164b82cb
+("unwind_user/sframe: Separate reading of FRE from reading of FRE data word=
+s"),
+but noting it here for completeness.
+
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260520154004.3845=
-823-1-jremus@linux.ibm.com?part=3D8
+823-1-jremus@linux.ibm.com?part=3D9
