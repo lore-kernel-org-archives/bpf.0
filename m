@@ -1,105 +1,98 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27B49375AD0
-	for <bpf@vger.kernel.org>; Wed, 20 May 2026 21:00:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861363AC00;
+	Wed, 20 May 2026 21:06:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779310831; cv=none; b=qmu2CZqolHe61znoDck7PjsT6IRTtjOsqRxC+JyjTZU3BKfgGN5IBxha9AQJt60RqA9AniOTDBdMoK78y/g3sI+iwKB4Qw93zrIyCDs/fc8tyInZJKaj12WcZa4Vvgu/Va72aZaJxGjNFFZBh5OKTMUuml0c2PDk4Fdai88efws=
+	t=1779311217; cv=none; b=Zi1p/JPQk/gKP8kiRQIi9IKQEgn1llYFZpQF/Uo+waDtitMCVGxEmuezmZFPBBXeEReDd2SzTGum03+OMp4RbhMkIj/lqd4xvtAmNn0XBCcmCdCk3MH7TfLbga5jAf1HpkWws+DgpjzAE8Ca3awqiH/nQTIX9DXysjw2fFxIVr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779310831; c=relaxed/simple;
-	bh=ZGOU1vQ/drVWDurk8croKUjP74FWpTfm1pbAYUn2Okw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sN4UMWwVa31faUUCXQiXB6HjZGQYfQDA/ASSvEKy9hklk0HkeoI2cOoDrbEzPQdGv0dT5OBUNuLojwL8OgcWCqfYwaY3iiAVq9vzsaDUAKxD0VZrshJ34kfnA3ja7Rcghc7ELjw4pyfnOfb6xfHtKbQktxVCzS3s7dmXn8qhht4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hCT7yubU; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779311217; c=relaxed/simple;
+	bh=uKm5s5kMt9Mfwf1RMP9Sx3TkBYcz8atw92kZLg8oxak=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=LfAoaXty2DOF+o/3FShonP29ucJcB4q30pRJqz5JZGAe8UCUHD+cVa2WLuMmI5qYhrkWk/caMFJ03NsMEobdUJnOGoVBSC/ePYNEB2m0GjYIGW8cTVWTgyEnWOJVDbtBRXYp2IhUz4iZZU3vdxQ/8w+NqAY5JUN0E3tipF8MLY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NXpRUuRG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hCT7yubU"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ba21d32776so38455365ad.2
-        for <bpf@vger.kernel.org>; Wed, 20 May 2026 14:00:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779310829; x=1779915629; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0+w/6O06al13m4KjZS8ZlckD5KFM3OymOCn+QhhhktM=;
-        b=hCT7yubU14sisJ8ogDAqTxUyrQ9e2zndSFKIS0xuKgCruYqiywnrssVmgtV0AQSdD0
-         Lf1sgF3Scj/68MgpcqeVxr91muuQJ3EvoABzRgMrYwtjd3solPZnpuvfz4cIgi+7hgeS
-         FG/KPnvqVAIYloJxMD9bY6wupwzYyXSr/MrAaYyHI3QTkTonj+7IfC7PPHK3o99WEbve
-         J004zRRHbf0f491Wds58n8QqC+FiSU4uR5FxxuQLE0+Iwcvon+BK9PN4D1IFsn1Q0WEc
-         2rA6Gjt2HhGXMuBRIDr1FbSTe4bPZkqVX0ruORqebzyAZWzQg0t1Ci5hfB3jdu25vPBa
-         /DiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779310829; x=1779915629;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0+w/6O06al13m4KjZS8ZlckD5KFM3OymOCn+QhhhktM=;
-        b=ZJ++lUJnZt9rum674cgSHZCiS1I7Jhxh+fbpar94O0FVTWRAS3W1kEONzQ5InfL1xY
-         Onp2A1G1Y5czSxB3eUTRfvfvAPT+UG29tWUpdteXDzigFYuhwAg9N6iojVlK+0qwyY7R
-         RvmiUnYgle696L2uGh22sGRl7X2MhaZ+ehg+yCJsSklLkVDkx8ztchaBruKYEKoRhn2s
-         B9LruSZQTNZNwT8s+CFMYzX3KcuA4UTuWwORvBps2UFJ8AEx2oe2HkdiTcHbGm9ZliBq
-         qea0k4JMEwF+SNehIQFtEIvDeSxBxE/L8crDe8ROaYU1UosRq3JWI3/weGiNp5aIeqUq
-         lXZQ==
-X-Gm-Message-State: AOJu0YzpaSBSxr0eJhiW7qTKs0pF1ZpjXYXwdltHoG1ghACHm1y8K0ED
-	pyXomZNURgMhtkSsVq+zVB+qjEK3v3hf4oW02ugr75nslqdPLPSCzmJD
-X-Gm-Gg: Acq92OFoVKsLK9AkuczNUNDR25UmYAcysd/q9wXk/iZG4rZ0w059qPgd2Rmk62WnPe+
-	zo8NdapF3AIVNfboajqocHG1IEMDq654BdFFJhDtdjt4wHsgu2+E/QJVqA6ETiruAw6IFgUc1Z3
-	WzrXduuQM2doKGmz0HSB007sktuFdDT4rvYV89bqsN3GIfx+Ht9el6ic/I0JNsk+nGBfIR18nkv
-	f7cnFxT4vlvkoXagLvbyfbW4w8dExLclnWOBCEwz78B3L4iPo27Iw3jgNdw0kjcqu6zN6xHx1Nh
-	svz+RC6aD2j/kb7jhn6+bvRa9KAJMGCQ/VXZdwG+YRui+jTqElbEKGM4gvJaD9A8ix/txVov0dX
-	L9DA1k6s7SoroF2VNH3R4y9A5adA1/7LmwjeC8xs1x+agcN3T164PdJTZ9I7NVpCdAlBirytN//
-	Nampoo2v2cxrcfJd1cAJIhref6g44ErIs5OroAaUEmKB6VprayPStb2StZb2gZHJ5W+0aKNsi/U
-	iiS5XzEQOdOKCID5C25gk1/O80VEHOR7xwwUUWpgPhTW74SMIXhMa8eOvc5fAyVfA6kUCoahhOL
-	OD+nFcr4OfQrMHo=
-X-Received: by 2002:a17:903:3c30:b0:2bd:7ff4:ab0b with SMTP id d9443c01a7336-2bd7ff4b216mr270260545ad.39.1779310829236;
-        Wed, 20 May 2026 14:00:29 -0700 (PDT)
-Received: from codespaces-78f0a7.2t4prynt4dlezbzls5ze3dxsqg.rx.internal.cloudapp.net ([4.240.18.226])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5bd5fc47sm222229175ad.10.2026.05.20.14.00.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2026 14:00:28 -0700 (PDT)
-From: Muhammad Bilal <meatuni001@gmail.com>
-To: puranjay12@gmail.com
-Cc: bpf@vger.kernel.org,
-	ast@kernel.org,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@kernel.org,
-	eddyz87@gmail.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix zero batch_hash on CPU 0 after batch_gen wraparound
-Date: Wed, 20 May 2026 21:00:14 +0000
-Message-ID: <20260520210014.43330-1-meatuni001@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <CANk7y0jzV9RSa0KwM0xuyPc0egSrMFD+CaG1j_6NY4NZn1waJg@mail.gmail.com>
-References: <CANk7y0jzV9RSa0KwM0xuyPc0egSrMFD+CaG1j_6NY4NZn1waJg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NXpRUuRG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 036531F000E9;
+	Wed, 20 May 2026 21:06:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779311216;
+	bh=E54m0vPKwml/JCeVyk46PYZjEMAFgp/2ycATfjyhhV4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=NXpRUuRGE4hFboclbq160ixefJUJCweZwpwlb4HBiJPA5WUcyBBnDvcX2R+ROrgsm
+	 FLVvyageiQVnmNZYuTeXNtBU+1XLhp3bBNYT20hx+YSmtd+n2ODf+CIoXFz5A3/wvY
+	 qD7pdP2fEJMF+ekQHxs+hvVFtFNyFh6I08hSJMJZqqpi4J847pESUCkDOHvzwIirQb
+	 7mRWaO8xhEXYJKm0n7307B0wxN4Zr4i8zh3hMDC8vt9a2ilOUHzR1td/2MkLb6/cl8
+	 ZF8S6YF9jtuzV/POw6exg9Tr1Qf7U8hhWCZMJYPwJ9Y1OfCd1+stoCcGVFfm5IaA/3
+	 ynq7p5ZfGGjcg==
+Content-Type: multipart/mixed; boundary="===============4961839549319086560=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <32eaaf708c092e71f7848f2e55d09050fc3bd05f9da2aedb7adefab64648e6ce@mail.kernel.org>
+In-Reply-To: <20260520203318.31939-1-meatuni001@gmail.com>
+References: <20260520203318.31939-1-meatuni001@gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix zero batch_hash on CPU 0 after batch_gen wraparound
+From: bot+bpf-ci@kernel.org
+To: meatuni001@gmail.com,bpf@vger.kernel.org
+Cc: puranjay@kernel.org,puranjay12@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,shuah@kernel.org,linux-kselftest@vger.kernel.org,meatuni001@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 20 May 2026 21:06:56 +0000 (UTC)
 
-On Wed, May 20, 2026 at 4:53 PM Puranjay Mohan <puranjay@kernel.org> wrote:
-> A single batch runs for 10ms, and batch_gen is incremented for every
-> batch, so for it to wrap we need to run the benchmark for 1000+ years
-> with a single producer.
+--===============4961839549319086560==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-You're right, the wraparound argument is not practically relevant here.
+> diff --git a/tools/testing/selftests/bpf/progs/xdp_lb_bench.c b/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
+> index 13777b3dcac8..816880c1cd5e 100644
+> --- a/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
+> +++ b/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
+> @@ -618,7 +618,7 @@ int xdp_lb_bench(struct xdp_md *xdp)
+>  		__u32 *saddr = data + saddr_off;
+>
+>  		batch_gen++;
+> -		batch_hash = (batch_gen + bpf_get_smp_processor_id()) * KNUTH_HASH_MULT;
+> +		batch_hash = ((batch_gen + bpf_get_smp_processor_id()) | 1) * KNUTH_HASH_MULT;
+                         ^^^^
 
-> On CPU 0, consecutive batches with | 1:
->   batch_gen=2:  (2 + 0) | 1 = 3,  batch_hash = 3 * KNUTH
->   batch_gen=3:  (3 + 0) | 1 = 3,  batch_hash = 3 * KNUTH
+Does forcing the LSB to 1 with '| 1' inadvertently destroy the lowest
+bit of entropy from the batch generator?
 
-This is a valid issue. The proposed change introduces unwanted
-collisions between consecutive batch_gen values on CPU 0, which is
-worse than the current behavior.
+Since batch_gen increments sequentially by 1 per batch execution,
+forcing the least significant bit to 1 maps pairs of adjacent values
+to the same number.
 
-I'll drop this patch.
+For example, if the CPU ID evaluates to 0, both batch_gen = 2 and
+batch_gen = 3 will yield 3 before the multiplication:
 
-Thanks for the review.
+    batch_gen = 2, CPU = 0: (2 + 0) | 1 = 3
+    batch_gen = 3, CPU = 0: (3 + 0) | 1 = 3
 
-Muhammad Bilal
+Could this cause 50% of consecutive batches to generate the exact same
+batch_hash as the previous batch, causing those iterations to hit the
+warm LRU cache entries that were just populated and defeating the
+purpose of the cold_lru benchmark?
+
+This concern was raised in Puranjay's v1 patch where he used XOR instead
+of addition, and he acknowledged the issue and switched to plain addition
+in v2. This patch reintroduces the same '| 1' approach with addition, but
+the entropy-loss problem remains.
+
+Referenced discussion:
+https://lore.kernel.org/bpf/2afdea40f0c5a11c2337efafe6f460899d85bc28650e04d5e0b9ceb35f3ad9fc@mail.kernel.org/
+
+>  		if ((void *)(saddr + 1) <= data_end)
+>  			*saddr ^= batch_hash;
+>  	}
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26188863722
+--===============4961839549319086560==--
