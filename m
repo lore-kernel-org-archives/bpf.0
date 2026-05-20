@@ -1,108 +1,82 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 591A2352016
-	for <bpf@vger.kernel.org>; Wed, 20 May 2026 16:48:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA23363086;
+	Wed, 20 May 2026 16:48:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779295683; cv=none; b=bMah9KblIF1uq5phdMgWiVOPFgZ9vW/fX5MSlxsHL5c75FP7YmcAEtySUzNsvslKCAqRsj1cMD+qpHcmGdfCKCx2H32i+uuPN8sUYfN/xLJUnagb3X2oFsBvZPuh8SoXAgyUHIezvekGC+WCHFsPAnlWe8Is8rUQ3tDq9HLoUrQ=
+	t=1779295698; cv=none; b=o6ZdzJHAmuij6MWJyRgzvQpEAH2BTWIlTymzca/9Xik578AsXuTG+8fSVflETEqZh4vtKMCvopsSm28DYESY5qhzlOTzJL2w/j/A+Rsw+yEul0FrhKpZH2zcPFdMXTLQgLLvjxGzuyRFXsgMEWEDcr/NnEDNO2mJ6M2oRQbRrzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779295683; c=relaxed/simple;
-	bh=32pVRbyiEd3/R9KQTVcPzzVm1pXR2GMD02yo8TRky5c=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=WjYCn1JpJuML650ml+cPfxO5pCzFRVji5t07BtqZh71/Fv7YNqKrqXu+EHDrLDUWO9Ml6699s+4Z3mA9/KRc+GIyzhY/sJ+XYb7O2IUeivuIiCJk7Rp68c9pu6N8BJ6c4pboVYhVK2tMxOyg2Vywk1HwLi7IOIWfWvSikLQRMcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FUjPBhmm; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FUjPBhmm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA361F00893;
-	Wed, 20 May 2026 16:48:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779295682;
-	bh=SEQaibynUeVPoHo/5tHgF/b2OywqW/qQXDLPqXWMt8w=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FUjPBhmmikLdWWtYKkK5FYwI6LbaUT00CT76uyyoMRCQjxbfoLFliFpYS03ubZTAQ
-	 iUq7B6RmQphGniA8O4aIPcCSTqHLEAx4dF+4TLSdEj+a7updmlZPbfWn36X3S5Z0Sy
-	 eyGPIDxTX8aK9+YqPzIuKngGh8GAV4i2THhkXxQu0T+E5qHcJAlE1KzB4U1p9Gbukg
-	 20YaPD3zHeUb6c/cE0cYKYFnrm0kLCzSZmNz7QGSGZ8+6Nhkx4xc+qkHttieo2q9Eb
-	 BnHWhMzKegewR2A+XEGiCD9S20eRJIPpObyuPx4Q2xDwNHM1eIBn78nH0ItYUogdJP
-	 jY4N1wEx+WIew==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v15 17/20] unwind_user/sframe: Separate reading of FRE
- from reading of FRE data words
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jens Remus" <jremus@linux.ibm.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260520154004.3845823-18-jremus@linux.ibm.com>
-References: <20260520154004.3845823-18-jremus@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 20 May 2026 16:48:01 +0000
-Message-Id: <20260520164802.0AA361F00893@smtp.kernel.org>
+	s=arc-20240116; t=1779295698; c=relaxed/simple;
+	bh=gpBj82KBmP6C+DoIwvG66wIri8RUqdtqxB19mzF5hPE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AC3ne6+HxY2vGOxug66At6IDFv7qHeg1Ksomxlui/jaRmklSA6TEiQicOQbdgdSzwC00TgtU3bs0EeTvLZhfjR89FZGKk1YIo4P2sdXyTw95eyb/7GGhI5Bg+c4ajkoL0oZdOsCcx8vQ8ypOk2aopTZl2wiKmPc+g1UQJY965J8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf19.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 519F08C1BA;
+	Wed, 20 May 2026 16:48:15 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf19.hostedemail.com (Postfix) with ESMTPA id 6D24B20028;
+	Wed, 20 May 2026 16:48:13 +0000 (UTC)
+Date: Wed, 20 May 2026 12:48:32 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: sashiko-bot@kernel.org, sashiko-reviews@lists.linux.dev,
+ bpf@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, Linux trace
+ kernel <linux-trace-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5] tracing/eprobes: Allow use of BTF names to
+ dereference pointers
+Message-ID: <20260520124832.737a946a@gandalf.local.home>
+In-Reply-To: <20260520152021.350e7017551ef202aace4cd5@kernel.org>
+References: <20260519130144.40e71a00@fedora>
+	<20260519174848.176A6C2BCB3@smtp.kernel.org>
+	<20260519141726.613e2e54@fedora>
+	<20260520152021.350e7017551ef202aace4cd5@kernel.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: zz981ywhoysp6pww378nz1893umc9k6b
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 6D24B20028
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/ijJlSeSGUcoiAkF3L30McnQi8x4YzK3w=
+X-HE-Tag: 1779295693-719144
+X-HE-Meta: U2FsdGVkX18npd+AkGtbigyVYrf7qvD1rbKUE3Tw3NOkRqtn6j+yXyNLXwKEwBUwvU6ArRkJrCjnThZr3nX7uDTPcXV2aRyz3SeCQM2HJTEXVtNRGVOVP2fL0Apdghbw1MCbWk6vlUMMtquoDxg/147w1GuEzLlDsf3z/BhH9KeQBD3YWgEnVVRp7XszBRVwdRftIDOXjBKLhtbJZIliSyxhPyCrXQlsjHoGxyz+w/I/j4J28/XMKR/tNrxY8xukuz/OpsF9ZG2Tiie/Wf6eibFrG9+MOKdH2fi4ipQhCnMhgwxeq0ro/mu/f48SbEwAVuxXCocePn/g+YlZe/Lf1RLxwG8z9oHE
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On Wed, 20 May 2026 15:20:21 +0900
+Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
 
-Pre-existing issues:
-- [Critical] The `sframe_mt` maple tree is initialized without `MT_FLAGS_US=
-E_RCU`. As a result, maple tree nodes are freed synchronously via `kmem_cac=
-he_free()` instead of being deferred by RCU. Lockless concurrent readers us=
-ing `mtree_load()` (or `mt_for_each()`) can encounter a Use-After-Free if a=
-nother thread concurrently executes `sframe_remove_section()`.
---
+> > > > @@ -515,6 +542,10 @@ static void clear_btf_context(struct traceprobe_parse_context *ctx)
+> > > >  		ctx->params = NULL;
+> > > >  		ctx->nr_params = 0;
+> > > >  	}
+> > > > +	if (ctx->struct_btf) {
+> > > > +		btf_put(ctx->struct_btf);
+> > > > +		ctx->last_struct = NULL;    
+> > > 
+> > > [Severity: Low]
+> > > Should ctx->struct_btf be explicitly set to NULL after btf_put() drops
+> > > the reference?  
+> > 
+> > I'm thinking of dropping it in the '(' switch case.  
+> 
+> Can you consider making the '(' switch case part as a helper
+> function because it depends on CONFIG_DEBUG_INFO_BTF?
 
-commit 9c045164b82cb49d5d976dfee059454643b1da0a
-Author: Jens Remus <jremus@linux.ibm.com>
+Should we just encapsulate that entire case statement with:
 
-unwind_user/sframe: Separate reading of FRE from reading of FRE data words
+#ifdef CONFIG_DEBUG_INFO_BTF
+[..]
+#endif
 
-__find_fre() performs linear search for a matching SFrame FRE for a given I=
-P.
-For that purpose it uses __read_fre(), which reads the whole FRE.
+ ?
 
-> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
-> index 48709f0bafc78..ec8318977a2ef 100644
-> --- a/kernel/unwind/sframe.c
-> +++ b/kernel/unwind/sframe.c
-> @@ -39,6 +39,9 @@ struct sframe_fre_internal {
->  	u32		fp_ctl;
->  	s32		fp_off;
->  	u8		info;
-> +	unsigned long	dw_addr;
-> +	unsigned char	dw_count;
-> +	unsigned char	dw_size;
->  };
-> =20
->  DEFINE_STATIC_SRCU(sframe_srcu);
+-- Steve
 
-[Severity: Critical]
-This is a pre-existing issue, but I noticed that mm->sframe_mt is initializ=
-ed
-via the INIT_MM_SFRAME macro using MTREE_INIT(sframe_mt, 0), which explicit=
-ly
-leaves out the MT_FLAGS_USE_RCU flag.
-
-Since sframe_find() and sframe_remove_section() execute under the shared
-sframe_srcu read lock here, there is no mutual exclusion between a concurre=
-nt
-reader and writer.
-
-Because MT_FLAGS_USE_RCU is absent, maple tree node deletions triggered by
-mtree_erase() in __sframe_remove_section() synchronously free the nodes
-via kmem_cache_free() without waiting for an RCU grace period.
-
-Could this lead to a use-after-free if a lockless concurrent reader using
-mtree_load() accesses internal tree nodes while a writer is concurrently
-removing a section?
-
-If a multithreaded userspace program triggers a stack unwind in one thread
-while another concurrently removes a section via prctl, could this cause
-memory corruption or kernel panics?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260520154004.3845=
-823-1-jremus@linux.ibm.com?part=3D17
