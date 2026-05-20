@@ -1,149 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD2AB352022
-	for <bpf@vger.kernel.org>; Wed, 20 May 2026 16:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17B6233AD9D
+	for <bpf@vger.kernel.org>; Wed, 20 May 2026 16:22:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779294108; cv=none; b=MnYUJ1UzFK581GhpIf4r16cv9bKCeIUR0F+O+8EO1s5rNaCAoWCxs5gDAgiLW8k5a244XMe22s+gIwBrH5ZHw1fpRVGqaic3/XdofQws5EoA9hwVXG6evaqNCnmzWpl7SBsxZ2XSJEYAhrPGaUQ6wOdz44d1NsK1oU+AQtVSdwk=
+	t=1779294171; cv=none; b=Wye7/XfDjsTRDg3p9MOZ4DP2L05rIPv862RkaY7JMMroJnXeNhKe9ySZoK0dBiccJ6eELxzuIPRE6EpMD8bxks7tTiXVmfPA5qL1FNzIH4P8AUjYk/+ZefuOo4T+U46tH4s74aUfvgJmjQeYHKA43OhVWhop+QVIsonBKW00m3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779294108; c=relaxed/simple;
-	bh=ele0Erir9bg46kU9P5BQZQbbtVcHRSMwkSF4F/9AxH8=;
+	s=arc-20240116; t=1779294171; c=relaxed/simple;
+	bh=4UlL7hUowYscmhe/62/BN4YKDhoCjWbIrmXKoXB3TEI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UCZsjR1RkDp0lWc+T8MoKk7RE4FJRSmFyqGs65g/9VRFyVSxmp6UcH0c2JtR1sRz13lVGYgrTQkOaaNG2WrmpRhGNSAcfx8FlL0FU9z3Q5jET1IYmrQex86uimuAMcJpJdFe/Pt/woeQb0IKKrKg+3TfmthwT7eJp1nDxkciMtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E5ekrtJE; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=iJFovZZYwsKmWePs/G/8zReUOCPD+TCSPE2xz5eCSwujYoSPDaScCY7gJkWvFEj6ZXC24pt397Vd7hn+z9y9DWctK0nRCoAMh7mD4I7t6x9OtNR7mIvxmtqh3yd5MhkjlWOUVCT25NcuZr3u/n58Cehwbaesl5UZ2wD7YKO+akY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UFbguN9j; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E5ekrtJE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 195FA1F000E9;
-	Wed, 20 May 2026 16:21:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UFbguN9j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E65E1F000E9;
+	Wed, 20 May 2026 16:22:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779294107;
-	bh=PS84uHqChHRlPMtjxlJv7OBdy8zHqsxYemvSs5wZxho=;
+	s=k20260515; t=1779294169;
+	bh=BX2z+wxymci+TTR32BMVLVpnNm/3uf6waRPTJ7w0x6M=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=E5ekrtJEDLGv91R+j8t0pVQaK/0Vn2bgeG75J6u/clbmtwza9yK+TRlXG9rf9msrq
-	 vRxqBuhJ1BnOGY5OF+0Nj+OWz237nuIfA15HK3QW42gXBzNETx2UWMlle0dB1ASU34
-	 wDM7G0pZF1Ks1vnKez69Pa5OgIO/kYqI6MA0KzG0ehPe5jSyUdHCV8Ir+qMi75B+pv
-	 glrxU1HSvTLWr6KwVymOqKkEX6pL//Vnwy52/mrzmmmTYgEwjfIVazcJjm44/U5loR
-	 xYTcdceDYNciHln7tWntZmd8vPKw7gAhxPQhsjH+1q5+LLGzn1HsYOD+JEZ5hQj2mE
-	 zTotO1I0jeyFg==
+	b=UFbguN9jjggLhG5r1SEhVCwT03un7vR/ByELFezTGTPwTd5G/9ISXXSky8v+f9SS3
+	 rab8VaaxmoUABltoWXUXb0VIfll+ntxYFRtTQbrPsOQJVCkgtl4CaHwoJxEP+0smJg
+	 BFQmxvTkQoPI4GIZqeY7rPJooI8icSTeNQ0gCewtuaecSENWONxcCi0+v4/oL5NV6O
+	 QcpbZrSRCfGShfHPB5kQY+Kgp79Kjsm3ZZxaacWZ00kmolYwxM6EZmqCPUDwr9Ht9V
+	 0wLBYz1Nm9DRkpACRxgGx7x22pp00wGgV/KZJ+2SAO6fft5HDmOj/uDkI0iiVWgNOZ
+	 pn49TVJALiGeA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v15 13/20] unwind_user: Enable archs that pass RA in a
- register
+Subject: Re: [PATCH v15 15/20] unwind_user: Flexible CFA recovery rules
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jens Remus" <jremus@linux.ibm.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260520154004.3845823-14-jremus@linux.ibm.com>
-References: <20260520154004.3845823-14-jremus@linux.ibm.com>
+In-Reply-To: <20260520154004.3845823-16-jremus@linux.ibm.com>
+References: <20260520154004.3845823-16-jremus@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 20 May 2026 16:21:46 +0000
-Message-Id: <20260520162147.195FA1F000E9@smtp.kernel.org>
+Date: Wed, 20 May 2026 16:22:48 +0000
+Message-Id: <20260520162249.1E65E1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
-New issues:
-- [Low] The header file `<linux/unwind_user.h>` uses `pr_debug_once` and `c=
-urrent` without including the necessary headers.
-
 Pre-existing issues:
-- [High] The SFrame FRE size calculation computes an incorrect length becau=
-se `dataword_count` is consumed before it is used in the size formula.
+- [High] The size of an SFrame Frame Row Entry (FRE) is incorrectly calcula=
+ted because the `dataword_count` variable is decremented to zero before the=
+ size calculation is performed.
 --
 
-commit 842bbe46528fb50996a02de1f8b7f5df1d8b1026
+commit b8c75c92fee05bcde0ff7d5c03df68927b72d4f5
 Author: Jens Remus <jremus@linux.ibm.com>
 
-unwind_user: Enable archs that pass RA in a register
+unwind_user: Flexible CFA recovery rules
 
-This commit updates the user-space unwinder to support architectures that do
-not mandate saving the return address (RA) on the stack, such as s390 and
-arm64. It treats an RA offset of zero as an indication that the RA is in the
-link register for the topmost frame, and allows the stack pointer to remain
-unchanged in the topmost frame.
-
-> diff --git a/include/linux/unwind_user.h b/include/linux/unwind_user.h
-> index 64618618febde..7bf58f23aa64a 100644
-> --- a/include/linux/unwind_user.h
-> +++ b/include/linux/unwind_user.h
-> @@ -23,6 +23,16 @@ static inline bool unwind_user_at_function_start(struc=
-t pt_regs *regs)
->  #define unwind_user_at_function_start unwind_user_at_function_start
->  #endif
-> =20
-> +#ifndef unwind_user_get_ra_reg
-> +static inline int unwind_user_get_ra_reg(unsigned long *val)
-> +{
-> +	pr_debug_once("%s (%d): unwind_user_get_ra_reg() not implemented\n",
-> +		      current->comm, current->pid);
-
-[Severity: Low]
-Does this require including <linux/printk.h> and <linux/sched.h> or
-<asm/current.h>?
-
-Using pr_debug_once and current without these headers might cause compilati=
-on
-failures for files that include <linux/unwind_user.h> without prior inclusi=
-on
-of these dependencies.
-
-> +	return -EINVAL;
-> +}
-> +#define unwind_user_get_ra_reg unwind_user_get_ra_reg
-> +#endif
-
-[ ... ]
+To enable support for SFrame V3 flexible FDEs with a subsequent patch,
+add support for the following flexible Canonical Frame Address (CFA)
+recovery rules.
 
 > diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
-> index b5f984fb2df21..4af533e9f9804 100644
+> index e82d1dcdd471f..6187379750db5 100644
 > --- a/kernel/unwind/sframe.c
 > +++ b/kernel/unwind/sframe.c
-> @@ -255,10 +255,8 @@ static __always_inline int __read_fre(struct sframe_=
+> @@ -283,6 +283,18 @@ static __always_inline int __read_fre(struct sframe_=
 section *sec,
->  	dataword_count--;
+>  	return -EFAULT;
+>  }
 > =20
->  	ra_off =3D sec->ra_off;
-> -	if (!ra_off) {
-> -		if (!dataword_count--)
-> -			return -EINVAL;
-> -
-> +	if (!ra_off && dataword_count) {
-> +		dataword_count--;
 
 [Severity: High]
-This isn't a bug introduced by this patch, but does the SFrame FRE size
-calculation compute an incorrect length here?
+This isn't a bug introduced by this patch, but is the size of an SFrame Fra=
+me
+Row Entry (FRE) incorrectly calculated here because dataword_count is
+decremented to zero before the size calculation is performed?
 
-Because dataword_count is decremented as each offset is read from user spac=
-e,
-by the time it reaches the size calculation at the end of __read_fre():
+In __read_fre(), dataword_count is decremented as offsets are parsed:
 
-    if (dataword_count)
-        return -EINVAL;
+kernel/unwind/sframe.c:__read_fre() {
+	...
+	UNSAFE_GET_USER_INC(cfa_off, cur, dataword_size, Efault);
+	dataword_count--;
 
+	ra_off =3D sec->ra_off;
+	if (!ra_off && dataword_count) {
+		dataword_count--;
+		UNSAFE_GET_USER_INC(ra_off, cur, dataword_size, Efault);
+	}
+	...
+}
+
+By the time the code reaches the done: label, dataword_count is guaranteed
+to be 0. Does this cause the fre->size calculation to completely ignore the
+size of the data words?
+
+kernel/unwind/sframe.c:__read_fre() {
+	...
 done:
-    fre->size =3D addr_size + 1 + (dataword_count * dataword_size);
+	fre->size =3D addr_size + 1 + (dataword_count * dataword_size);
+	...
+}
 
-dataword_count is guaranteed to be 0.
+Because the computed size is too small, when the unwinder advances to the n=
+ext
+FRE, does it misalign the pointer and start interpreting the previous FRE's
+data words as the next FRE's header, reading garbage data and failing with
+-EINVAL or -EFAULT?
 
-This completely omits the size of the parsed datawords, causing fre_addr to
-advance by an incorrectly small amount during iteration and breaking SFrame
-unwinding for functions with multiple FREs.
+I notice this is fixed later in the series in commit 9c045164b82cb
+("unwind_user/sframe: Separate reading of FRE from reading of FRE data word=
+s")
+which properly preserves dataword_count.
 
-This issue was introduced earlier in the series by commit "unwind_user/sfra=
-me:
-Add support for reading .sframe contents", and appears to be fixed later in
-the series in commit "unwind_user/sframe: Add support for SFrame V3 flexible
-FDEs", where the size assignment is moved before the decrements.
-
->  		UNSAFE_GET_USER_INC(ra_off, cur, dataword_size, Efault);
->  	}
+> +static __always_inline void
+> +sframe_init_cfa_rule_data(struct unwind_user_cfa_rule_data *cfa_rule_dat=
+a,
+> +			  unsigned char fre_info,
+> +			  s32 offset)
+> +{
+> +	if (SFRAME_V3_FRE_CFA_BASE_REG_ID(fre_info) =3D=3D SFRAME_BASE_REG_FP)
+> +		cfa_rule_data->rule =3D UNWIND_USER_CFA_RULE_FP_OFFSET;
+> +	else
+> +		cfa_rule_data->rule =3D UNWIND_USER_CFA_RULE_SP_OFFSET;
+> +	cfa_rule_data->offset =3D offset;
+> +}
+> +
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260520154004.3845=
-823-1-jremus@linux.ibm.com?part=3D13
+823-1-jremus@linux.ibm.com?part=3D15
