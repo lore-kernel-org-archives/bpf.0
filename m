@@ -1,220 +1,159 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE9A3F65E0;
-	Wed, 20 May 2026 16:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30113D8137
+	for <bpf@vger.kernel.org>; Wed, 20 May 2026 16:59:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779296084; cv=none; b=kHDj5JjC7tTCo1ASzTeffjomZ58FxFVYEjaV+t89vw+q1CYSBHC2qRYcKI1of+V4GouA6yMFkKgb5/gTqtlPWHa5VydD1m3O5KHuedTpj0e/pmmSrGJJ9cJMAc7HeytOsOo0W4GKRK2bx++VVGFER1BecYuZglC1mPXoBW+Q/ug=
+	t=1779296359; cv=none; b=KTNNE5a3tHUoVnnktpiicvpHHE5mlnpxmLuc5kTNstZOxkZhjBAQXcaVwTWBa/TkD+PtWhw1SpiD1NdmM3zwSd6C7vYes7e8ri/wr97T7KWn9Mlqpd4bbkQx964CaPBg7eEeIvpEaBYa8udDLoy+duUYeRJfvACUQBRgbBbKHy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779296084; c=relaxed/simple;
-	bh=EJ91vFLbXslMvIHRojLDFKgOipEyDnI9YsoyRqBaYVE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YlqhUYEmB6NTk1bLtewmt4HviNn/q2Ugi4Bh0m4e20ZkNgSSg6AARyt16YgUgLPQdNiBie3cltTzCZ5zfxfFbSnyXWXvqh45i1xIdjgLmv5f/Lx8E4ietlqsHkz2974VSQct7bwlWDZO8PRR36PFscs6OGfEmozOhN70InQ+PVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=MBmvsGU+; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1779296359; c=relaxed/simple;
+	bh=AIhvkw0yBDgtvPsGE5h15ItzE0NtmWKsmKdeIQzLbpU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qOasv0JHlry6vikOAEzJQqDdX2KrBpGtQ6Jxboy/Rf77eofczmF7GdKvno5EC1FlnvXcZqzUo1MOqiWyfNc0XF1vlOnlOT+32pR/ADoMAv4o+Mi12FJlhvTiTbMq0W1icmkFz//eJAKaZIoFu244Ttl0BvoCiAKtEfallNBdA2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xt4uN8yV; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="MBmvsGU+"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=R9vdjw1UBOL4Hyoux1kOF6cKvhkh6pXtVIRprxY+a+g=; b=MBmvsGU+I9nZL0psA6vayRNoH3
-	MqxPfwFe3lnlOqTRZWa9ClPh0Mp3jhXaczm0NqpUdquSShZ4e4rngIzVHClnLFIKV9WzYK6F5KqEA
-	lKtLnr1SrRV+iYg8gwxgfNcLy5NEJMNeSF6889+z97ozgQ+91WtKJtczeStHo3Ij/hO+IZd3SJGzd
-	mrgFBbTt1JPW0RROoZvPYLDtTZ6oL397Afckw7f0R3zrbbfzAGKIByd4bgxYc+N5lE3/4hlmwCIds
-	dbq1eRz3ngVILS9ubI2adzTROl5V3zTdQnXxec/fwSnHoZQxdECfMqM2Io2igH7FZrg9RJLi6Ub+G
-	yqwF5NDw==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wPkBp-003FVj-14;
-	Wed, 20 May 2026 16:54:37 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Wed, 20 May 2026 09:53:51 -0700
-Subject: [PATCH net-next v3 6/6] tipc: convert to getsockopt_iter
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xt4uN8yV"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2bcd3ac3307so29130085ad.0
+        for <bpf@vger.kernel.org>; Wed, 20 May 2026 09:59:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779296357; x=1779901157; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H7TAEp9q//rixySKUh0Tspzo/0EDR88Kz9RGYRdINGA=;
+        b=Xt4uN8yVvxa9hVN1z29L2KOGHYh0NsE3A3GRJA6naizfc37eEDzZZcDfObA2CAmq1U
+         c3yjUmA949D1gkGyQznm1dxzWbOFwLJ36DE1/y443cxHxgJLF7kuLyuJBOIA1d6edNiq
+         kmKlb5QdIa7rNNz8+vqcxMvgQQzGlzYWTpCFJm7nMd4L8WyV34Nv1NUfQP5YHbo8WDJD
+         iy1u2Kv5HSwjIFryNxaYYp3td+hJUTSpz7KUYUGU0z31aeoGD5j2kLr0mm23NIvlfm9j
+         U3gJw5OutCbGYYSJyAyyFP/hSjwHWAmFU/sV+d+Q8IAnDLiCkIyXkCcJi0c4SVDJji4S
+         8RZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779296357; x=1779901157;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H7TAEp9q//rixySKUh0Tspzo/0EDR88Kz9RGYRdINGA=;
+        b=jnNu3AvkPUAYSbpmAThdtbh6nZiulimkCi5yvme9KGY40j9T2ieEEzVwxreXaexhS9
+         kDFoLcnAFuDVpb1KNq2zrcGX2/gORdKcq3AoJVdJ4ZdbDRG3+An+x2AXcULf9P6taeUL
+         1jresME8xlajh4i4NzqAA/TRl2hiYt0FbOU0vA325SbOKW/nkpEa8EjSvL+zwszZBtSM
+         n9aRffVhhYre10FlM2UMmaumYPudjK08y0sS+6lXQQUMyC4ICxirZjAWls0ZX3Qyddr/
+         ND7VI1VuLjfVib8aa8lCuUf1Cdi4cf5i6FhzRKq4Uce3AcESSmrKpbZj20PCBpfpHLOI
+         sooA==
+X-Forwarded-Encrypted: i=1; AFNElJ9fsFp7aDCRP0TuFTDTsYYfM7WflSNISihbldG5DeN97OeRrnj99M1SI4MQQS7lsURcC2I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5Je79yhbkP47rxAR475z8iD8GSxvjiIUuvfhfevP+30ad7syq
+	r+xOyvie3hdWb9yhbccp1/2LXCUuP3UR5S5cSwKa8H2Z0d5lZk+25KCt
+X-Gm-Gg: Acq92OHeoHW98yLsL2GhGjMNwRcBXNDfy0TvOxJ4/orWfujfFVjoND3420EHp1HiQbI
+	BAWKQCXFw0WWA0W7N76hPCJ/o7OzfonJHATSaTgzq9j1rfTVbUZs5MhosYXZ+bqQgYXPjNeOr1C
+	L/D7FLMM8b+2HDkUGDUwgnuYYYWzTJ4uUhuSzLAmspoJLcNWsGdNZE7oP4OiXrbtxZ1OhFgKadH
+	2povhp6PXdUGYZnGsfBB6UVIIKOBgqq/+yIR78ueDglTH9vBMpOoz1D6Bj6iv1j/POjKwpPi69r
+	EHjAdoA8GjsG+8AbzHpbquK5d0Z6YSuIRbLBpWD4kzfJHMZTZApQU5lppqd92Jm29p5cve+oWFQ
+	vPRbktDJuORQNKrozK1NgO5clM1ou1t/yxWMj/fUhrWliW/Fv7X0yeRPhr1DrmtdgeHZEqHomh5
+	iT0Ck88e3t7OdVmYmTCPkc
+X-Received: by 2002:a17:902:f987:b0:2bd:2430:eb7b with SMTP id d9443c01a7336-2bd7e8cbdf8mr183864475ad.12.1779296356690;
+        Wed, 20 May 2026 09:59:16 -0700 (PDT)
+Received: from john-p8 ([98.97.43.100])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5d11b495sm234935005ad.69.2026.05.20.09.59.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 May 2026 09:59:16 -0700 (PDT)
+Date: Wed, 20 May 2026 09:59:14 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: bot+bpf-ci@kernel.org
+Cc: rollkingzzc@gmail.com, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, sdf@fomichev.me, jakub@cloudflare.com, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	horms@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, zerocling0077@gmail.com, 2045gemini@gmail.com, 
+	stable@vger.kernel.org, martin.lau@kernel.org, eddyz87@gmail.com, 
+	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
+Subject: Re: [PATCH v3] bpf, sockmap: keep sk_msg copy state in sync
+Message-ID: <ds3zog2r7avfbiu6je6v24oevvg3ogaegkrjdv3w7ibm5eb7hy@unozyvsnb2ou>
+References: <20260520102715.3033936-1-rollkingzzc@gmail.com>
+ <646104384170b8d95ce979ba3d0bd87a808e5dd2a1f6b2bc4e0a346ca38e654d@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260520-getsock_four-v3-6-b8c0b16b7780@debian.org>
-References: <20260520-getsock_four-v3-0-b8c0b16b7780@debian.org>
-In-Reply-To: <20260520-getsock_four-v3-0-b8c0b16b7780@debian.org>
-To: Chas Williams <3chas3@gmail.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, 
- Magnus Karlsson <magnus.karlsson@intel.com>, 
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, Jon Maloy <jmaloy@redhat.com>, 
- Alexandra Winter <wintera@linux.ibm.com>, 
- Thorsten Winkler <twinkler@linux.ibm.com>, 
- James Chapman <jchapman@katalix.com>, David Howells <dhowells@redhat.com>, 
- Marc Dionne <marc.dionne@auristor.com>, 
- David Heidelberg <david+nfc@ixit.cz>, Samuel Ortiz <sameo@linux.intel.com>
-Cc: linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- tipc-discussion@lists.sourceforge.net, linux-s390@vger.kernel.org, 
- linux-afs@lists.infradead.org, oe-linux-nfc@lists.linux.dev, 
- Breno Leitao <leitao@debian.org>, kernel-team@meta.com
-X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4223; i=leitao@debian.org;
- h=from:subject:message-id; bh=EJ91vFLbXslMvIHRojLDFKgOipEyDnI9YsoyRqBaYVE=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqDecgoa2ed7mODMXM5hFG0/d4ScsBrKhwLkdx0
- m4Gsba1ip+JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCag3nIAAKCRA1o5Of/Hh3
- bVL/D/0UzBVtCzaf2YRbFbhLxaS3xilITTsnr/snaC5W1anUe/JAvVLYUuM9RMwBW59Z8/IEOAN
- t2nltU1DxtoCS8v3/Nh8cN3fP804Q/VlS9weCQOD3Veq1UYAyAf101749+7/8x6TtvgdvM6rGL8
- X5gUqzjIcHlZvV33S4lsp/ZLuhxP+iBWnCoaUvEUqSG8rGovhST672w/z4akyYM6Sep02kzkl3L
- w4Cb9lk3Aq7iXF+VvyzfPKArVWNrMGIaFmgWAFzlVK5g78G1+jEFDcbHzmQ+U28tBI2xMD86PTb
- Pg3Wjb4lFqVew1oGf60ECbbJrUf4QstnLRo7zFGl2ocN8x0i8aAbiFJMqJBo7RF82lcxIxKRBoD
- 3G/4/QtKHLLgmsD++bzViEdQkyCj6fB7wbH9ZGTD5IPm/E9Y6qwmjaM2FwVyEVJAs6Ro9dIh80W
- JynRPVwC45WqJA3gWcUFDmKHJb/M96/F19/eXkcUueZXC1Dw6EjsO1g7ymMwpNKL2TZf+bqPIVQ
- BDNCQf/BfVotZqIelgPSebNYqzYkQLRyuuuCKpWrNMsp00ldEE2RidHDZo278aZSV37tqH7nXwL
- +SF9Zg8MpZiut+PYUyhOBUuSL0Y6s6CjtPjWqeWr6fcZSnHhhc35JY4p1l+/PnEblVCVPVVtoM9
- jJgeqAw8jWXpDoA==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <646104384170b8d95ce979ba3d0bd87a808e5dd2a1f6b2bc4e0a346ca38e654d@mail.kernel.org>
 
-Convert TIPC sockets (msg, packet, stream proto_ops) to use the new
-getsockopt_iter callback with sockopt_t.
+On Wed, May 20, 2026 at 11:09:36AM +0000, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/net/core/filter.c b/net/core/filter.c
+>> index 9590877b0714..223d78708486 100644
+>> --- a/net/core/filter.c
+>> +++ b/net/core/filter.c
+>
+>[ ... ]
+>
+>> @@ -2794,6 +2835,8 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg, u32, start,
+>>  {
+>>  	struct scatterlist sge, nsge, nnsge, rsge = {0}, *psge;
+>>  	u32 new, i = 0, l = 0, space, copy = 0, offset = 0;
+>> +	bool sge_copy = false, nsge_copy = false, nnsge_copy = false;
+>> +	bool rsge_copy = false;
+>>  	u8 *raw, *to, *from;
+>>  	struct page *page;
+>>
+>> @@ -2866,6 +2909,7 @@ BPF_CALL_4(bpf_msg_push_data, struct sk_msg *, msg, u32, start,
+>>  			sk_msg_iter_var_prev(i);
+>>  		psge = sk_msg_elem(msg, i);
+>>  		rsge = sk_msg_elem_cpy(msg, i);
+>> +		rsge_copy = sk_msg_elem_is_copy(msg, i);
+>>
+>>  		psge->length = start - offset;
+>>  		rsge.length -= psge->length;
 
-Key changes:
-- Replace (char __user *optval, int __user *optlen) with sockopt_t *sopt
-- Use sopt->optlen for buffer length (input) and returned size (output)
-- Use copy_to_iter() instead of put_user()/copy_to_user()
+Zhang,
 
-The sockopt_t parameter is named sopt to avoid collision with the
-existing optname parameter named opt.
+Did you want to push two smallish patches to fix these two? I have had
+similar patches on my test system for a few days so they LGTM. These
+two fixes
 
-Note: Dropped the unnecessary parentheses to make checkpatch happier.
-Also dropped two now-stale comments that referred to the old "res"
-variable handling.
+>
+>    page = alloc_pages(__GFP_NOWARN | GFP_ATOMIC |
+>                       __GFP_COMP | __GFP_ZERO,
+>                       get_order(copy + len));
+>
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- net/tipc/socket.c | 33 +++++++++++++++++----------------
- 1 file changed, 17 insertions(+), 16 deletions(-)
+and
 
-diff --git a/net/tipc/socket.c b/net/tipc/socket.c
-index 9329919fb07f0..3a94278a44ac4 100644
---- a/net/tipc/socket.c
-+++ b/net/tipc/socket.c
-@@ -37,6 +37,7 @@
- 
- #include <linux/rhashtable.h>
- #include <linux/sched/signal.h>
-+#include <linux/uio.h>
- #include <trace/events/sock.h>
- 
- #include "core.h"
-@@ -3220,8 +3221,7 @@ static int tipc_setsockopt(struct socket *sock, int lvl, int opt,
-  * @sock: socket structure
-  * @lvl: option level
-  * @opt: option identifier
-- * @ov: receptacle for option value
-- * @ol: receptacle for length of option value
-+ * @sopt: socket option container (input buffer length, output value/length)
-  *
-  * For stream sockets only, returns 0 length result for all IPPROTO_TCP options
-  * (to ease compatibility).
-@@ -3229,22 +3229,22 @@ static int tipc_setsockopt(struct socket *sock, int lvl, int opt,
-  * Return: 0 on success, errno otherwise
-  */
- static int tipc_getsockopt(struct socket *sock, int lvl, int opt,
--			   char __user *ov, int __user *ol)
-+			   sockopt_t *sopt)
- {
- 	struct sock *sk = sock->sk;
- 	struct tipc_sock *tsk = tipc_sk(sk);
- 	struct tipc_service_range seq;
- 	int len, scope;
-+	int res = 0;
- 	u32 value;
--	int res;
- 
--	if ((lvl == IPPROTO_TCP) && (sock->type == SOCK_STREAM))
--		return put_user(0, ol);
-+	if (lvl == IPPROTO_TCP && sock->type == SOCK_STREAM) {
-+		sopt->optlen = 0;
-+		return 0;
-+	}
- 	if (lvl != SOL_TIPC)
- 		return -ENOPROTOOPT;
--	res = get_user(len, ol);
--	if (res)
--		return res;
-+	len = sopt->optlen;
- 
- 	lock_sock(sk);
- 
-@@ -3260,7 +3260,6 @@ static int tipc_getsockopt(struct socket *sock, int lvl, int opt,
- 		break;
- 	case TIPC_CONN_TIMEOUT:
- 		value = tsk->conn_timeout;
--		/* no need to set "res", since already 0 at this point */
- 		break;
- 	case TIPC_NODE_RECVQ_DEPTH:
- 		value = 0; /* was tipc_queue_size, now obsolete */
-@@ -3284,15 +3283,17 @@ static int tipc_getsockopt(struct socket *sock, int lvl, int opt,
- 	release_sock(sk);
- 
- 	if (res)
--		return res;	/* "get" failed */
-+		return res;
- 
- 	if (len < sizeof(value))
- 		return -EINVAL;
- 
--	if (copy_to_user(ov, &value, sizeof(value)))
-+	if (copy_to_iter(&value, sizeof(value), &sopt->iter_out) !=
-+	    sizeof(value))
- 		return -EFAULT;
-+	sopt->optlen = sizeof(value);
- 
--	return put_user(sizeof(value), ol);
-+	return 0;
- }
- 
- static int tipc_ioctl(struct socket *sock, unsigned int cmd, unsigned long arg)
-@@ -3365,7 +3366,7 @@ static const struct proto_ops msg_ops = {
- 	.listen		= sock_no_listen,
- 	.shutdown	= tipc_shutdown,
- 	.setsockopt	= tipc_setsockopt,
--	.getsockopt	= tipc_getsockopt,
-+	.getsockopt_iter = tipc_getsockopt,
- 	.sendmsg	= tipc_sendmsg,
- 	.recvmsg	= tipc_recvmsg,
- 	.mmap		= sock_no_mmap,
-@@ -3385,7 +3386,7 @@ static const struct proto_ops packet_ops = {
- 	.listen		= tipc_listen,
- 	.shutdown	= tipc_shutdown,
- 	.setsockopt	= tipc_setsockopt,
--	.getsockopt	= tipc_getsockopt,
-+	.getsockopt_iter = tipc_getsockopt,
- 	.sendmsg	= tipc_send_packet,
- 	.recvmsg	= tipc_recvmsg,
- 	.mmap		= sock_no_mmap,
-@@ -3405,7 +3406,7 @@ static const struct proto_ops stream_ops = {
- 	.listen		= tipc_listen,
- 	.shutdown	= tipc_shutdown,
- 	.setsockopt	= tipc_setsockopt,
--	.getsockopt	= tipc_getsockopt,
-+	.getsockopt_iter = tipc_getsockopt,
- 	.sendmsg	= tipc_sendstream,
- 	.recvmsg	= tipc_recvstream,
- 	.mmap		= sock_no_mmap,
+>
+>    rsge.offset += start - offset;
+>
 
--- 
-2.53.0-Meta
+bot must be reading reviews because I called that out in v2.
 
+[...]
+
+>
+>Could the ring buffer state become corrupted when data is appended exactly
+>at the end of the message and the ring buffer is full?
+>
+>If data is appended exactly at the end of the message (start == offset +
+>l), the loop finishes with i pointing to the unused slot msg->sg.end. If
+>the ring buffer is full (!space), the coalescing fallback logic reads:
+>
+>    copy = msg->sg.data[i].length
+>
+>Because i points to an unused slot, its length is 0, making copy == 0, and
+>the fallback coalescing block is bypassed. The function then
+>unconditionally calls:
+>
+>    sk_msg_iter_next(msg, end)
+>
+>which increments msg->sg.end. Since the ring buffer was already full,
+>advancing msg->sg.end causes it to wrap around and equal msg->sg.start.
+>This could corrupt the ring buffer state and overwrite the first element
+>without calling put_page(), leading to page leaks.
+
+^^^
+
+This one I haven't looked into yet. Let me know if you have time to get
+to above two issues this week would be great to get a v1 out at least.
+
+Thanks,
+John
