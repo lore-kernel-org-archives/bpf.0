@@ -1,125 +1,190 @@
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E41503D171C
-	for <bpf@vger.kernel.org>; Wed, 20 May 2026 14:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779286957; cv=none; b=HHd9uMdqFzwU+6b8u46u/WWgLw5SmNOS+BSAOrkTg/onqfrF3lrZZ4KSfw08C2FEcADelJvIBIsHOPW5RILFNX0Z2cm7mfG77C3KRJtUkkn3n2WNJfVC17yj1XdUDz6+lFGKE+bLYX1tWNN5ELz9mhQINgDfoYEUyK3+tgSmO1k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779286957; c=relaxed/simple;
-	bh=sGlwd6u82z+6w2sCIVZ2iDxtNvSuIiWzCUEzS7fBp7w=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726593ECBC8
+	for <bpf@vger.kernel.org>; Wed, 20 May 2026 14:31:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779287505; cv=pass; b=bATkpKbZvGgKy5gIk+yaGHIK3a4FJ5ZN9vsXEPLajm7minPTg72fOJEx2fPIyougkOFpimT6BPrmiEIzKloYsXVNFxMKM86B7QqF+ETCfA3GAtukCLfhxojuBs+B4wT+iWLGLgSBpxuIsjSY6t6JG6ElhokIHqp6LHWb/aAwmUw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779287505; c=relaxed/simple;
+	bh=MUi278I1pZtdv5LA/JQWCWwV6SHMPrlqEfIbohqCo7M=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cg4n0/rPoXD5qIaOOuELsaOUeKbFmwlGa5iRZgHfQPlWbi5zOWjedgzu3ksjJP1OnmCq+Wts3PE0nemcCV3iAfW8MhyO7CuTaOFATpBwj1yN81y3LtuKQGjow35cs27q7bVVxKvQboMkMnZJOS3opYtBr1912QA3RgC2TNbpBMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	 To:Cc:Content-Type; b=bTa5HlENhmchrRXH4HYxPh9G2Bu8Lt5on47BYRR4OJk78p/emmJmEREKBlhvZLQ2ON5L6Q2kpgluznUrooHmUr2fDcNYzrtNXo7Up2eruTZtwfj73RF+4BuhmiEzyl+9Jo2ViLi5EgCGMEQqvHisFX0g9322HB4BzAMd+taBfi0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pxgn1oYq; arc=pass smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-56f6afbd205so2991519e0c.0
-        for <bpf@vger.kernel.org>; Wed, 20 May 2026 07:22:35 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pxgn1oYq"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-44a74032ff8so3573748f8f.1
+        for <bpf@vger.kernel.org>; Wed, 20 May 2026 07:31:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779287500; cv=none;
+        d=google.com; s=arc-20240605;
+        b=gpPhlIX6KMoR90wZCznCPW2nhrqaud2iCRLCNUMwRWPy2buDLnCZK2v08lZfGOBoMn
+         tdUGE0l5JIsM+Kiehvp2sdq5m8CNs6xojDC34E3oKOh+/S02Nh0Fe4RHYJIq8LWonArE
+         TwMEWV5G4MLiU6kIMGtRwie+wGHjbrq3JpBsL2o9aXvYQRSiTCJbXjDyA0OTPNo1Wy+B
+         u59daTiObOHo2ZjLBdCaCyqYkeIsBf+0V6ZSYuaU+OyA+OgZ9rTwFsOOHjpnoih8QTtH
+         SRIRdhENK6cIXkOxOnzboBWfXjosIvwagyitg5gBsbihYgD/hJYS54H+jVyETtnfykJ2
+         d4lQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=l+wF22bF5EmTZVPtYuYx3YYi/+1MmDMRoeQxqbotBDA=;
+        fh=2s4OnOL+Fu/e956YtZ+LpdSSyIyAfs1TfYkL6LV4G/8=;
+        b=eEFgmUs8prk2J4gV65wnJ+6saeaPQNsqa32wsl1TZD6O3w/NrikNZq/r84oPD9OQ6b
+         WCm+l/P2reoIpa0gQhnkmQpjkNjsyW88G82HVt2ztLy4w63/fNieJm4uwC1EGC578LED
+         26RByb0+SxQJpc1aAzvOkdyGXEw8Y6WjqnegFpx4n93+3+LsMzbwnvdmqU4rCz/kxAfM
+         4EwRDuLttuB12FXu319k6uXCDSmksmPatLBmLxVoj2vaC3a/ouPAf/D4g8u74v0IDRhw
+         4vWXR1DCfmOjgxYjwCSmvd4W02g6O6UBZl88SFys8x88SR/xnC+04MlIBtq6C6vIDUq+
+         rbbA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779287500; x=1779892300; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l+wF22bF5EmTZVPtYuYx3YYi/+1MmDMRoeQxqbotBDA=;
+        b=pxgn1oYqzk6NlYkQx9eGTB0Qi6NHXoH1cFHSVHWjuHuM4O5XtEYQ0SCdnQ6BOSLsgW
+         FjT6PGNEyL2anhdJPbppcIuBQOkqkrMQVij57qMqhnn4IY85PCzcqiwfzlvG4bCo599H
+         AXhDBMhAmMjH3BNQE7LG2+DPwYPyBQ4yshPIZjT06NurzfC108Y6P4J92Kgq0p7RaoW0
+         /C6featBXNvsgpokC6slirkyuvYg4eXot6TwalMMnx4uVTNFJWXwkdLwx8+tHoi7EkTz
+         hGkToi+FQwDwHZ8w0RSgxl8e9NHozCedWalymcOHmVKbS8Kc3xSE/ly7/ilKUwim5lSP
+         S2Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779286955; x=1779891755;
+        d=1e100.net; s=20251104; t=1779287500; x=1779892300;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=aZoThamAoFC+57ME4syXtEn5B5U6ktH01XuUBn+rEH8=;
-        b=QIM6CUfGZg141RQBP3//MnzQ35l95nl1Z8jfz2gLJk/8eEuF5BaB1IBxZc374yTdvA
-         EXteAkSM9zqNYbjqqsvoDE8pOUQD9DJXGIj6wOuMMRi984RgLJExgpfwn6pdoKvTWeds
-         EKULK/EsaSXZWJMKBtnVa/qK8T8mqSmMUdbuhkkTTeSBzEp/vCEFuZhNddnFkMx6vpo+
-         XHEIYk63ZiAW+Z4NJSrCbsgll/+jjyh53Du7IyoAj/A6Y2x303NO8GD+LnFaOQBn41pp
-         lwZ8uGzboYBLYR3luBYg36DTPaXYy/0hZceh6TzDw+TPZPxiPK2NRFkKZ3I0hDHCUaLi
-         cz2Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+yY2cQ9zjWy2qwVFW/aM3uPzJIElGbAMMOnOvkotfHQmkQ/mPObpADA68PC1PChy3048A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFbXCabUIKTbvyvNnaAm+l/riFaTM6YAY/8pufa5d95k60/KzF
-	uu81TIUMZTccH40Oq11FqCYiFRdzffwyZBYLaQHlBJMjOmROQmikioYU4UYVevKmAPg=
-X-Gm-Gg: Acq92OGZOFwobNF3Whj29wqiAH2g0cITpQ6zkN6vKTCII1Z+/zD0XewKIPekiutn9sq
-	0APWKjbdDpeo/0LyitMIHUPOGXNToLJY0tKwXTXc/G5XXTFmSVS7cEAdtZHA1YaBvujkzZUzdkp
-	ID/2NFu8lsWwb4Gpk4uHdGkhq0ttw6G7mUdxZAgSthZwjeJ+/Qeu1Eh6/QpVFrRwXUEssBf6V2e
-	ogOpHORuRbqgqYy5qT8fWDcfvt3RdHVTRWNAY2vptbSrF/Yn3GuuDN682hvmDhUNANMaLlsLCX4
-	FUrIWTLTiBazwNPajnX7XA1qJcbFOsozSVOdgQZB+CweupmGUHr+KEhzEBC+iiyP6KTyiYP0cpg
-	70H34tVI3KEWqRA1l0sD9d6J2MBuKoxYsoXzn8aOZ4Rk9XwBHi0OGsKmxS+JmOFdyIPB8VAQvw/
-	QhM+01yk6J+8TVZWqUiGlYy+KgZxqKzeiweJWA/GwfwdRxA6aIO8mpl0gv2h6daCrT34/Dm8+ee
-	vwZeTvRLbSFuA==
-X-Received: by 2002:a05:6122:220e:b0:575:fa0b:bc23 with SMTP id 71dfb90a1353d-5760b7104ecmr4569427e0c.2.1779286954522;
-        Wed, 20 May 2026 07:22:34 -0700 (PDT)
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5760fae4264sm11748613e0c.17.2026.05.20.07.22.29
-        for <bpf@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 May 2026 07:22:29 -0700 (PDT)
-Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-56f6afbd205so2991420e0c.0
-        for <bpf@vger.kernel.org>; Wed, 20 May 2026 07:22:29 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ+oW+neKNEJQhz9e7vP8lc6TLDD97+1VWQgPOoCn03exFUJanWTEXhLxmV2eck6Jy+84ow=@vger.kernel.org
-X-Received: by 2002:a05:6122:6b8a:10b0:56e:e652:2c10 with SMTP id
- 71dfb90a1353d-575f574b7e6mr7767762e0c.4.1779286949282; Wed, 20 May 2026
- 07:22:29 -0700 (PDT)
+        bh=l+wF22bF5EmTZVPtYuYx3YYi/+1MmDMRoeQxqbotBDA=;
+        b=MD7FoRcJHkVpE09euAMWa8RtvutYEjSpiaDkmmoRSqiRU96MqlPd5vk87fzgxr5PU4
+         LwXoVH8ONAqJJXkh0t2k4mC7U4imaf2iQTm3+O1vo6yv9bzlvmFFWf4/ShJTm5Uqqgiy
+         2lmHh66MRA5LsluhmG+4iWVR9kQgWusfFixTLkjdUtCHAt9/DhtdZmJwYQV1AmdMrkJ3
+         0RVwe61s2OiE9Tl1SRtvHDcUUSnbL2AX4CHv3q7+O54WA1t/yTd6+HvcpT1thAvZVe80
+         OitNHqSIkROPWIGDZaIv87sHHt7oyGH82js/FHZMxEmSVB5hFg8ZpXIIEf8mI/mtRwAt
+         0hmQ==
+X-Forwarded-Encrypted: i=1; AFNElJ94t+WyGl34UCgcfMXI81ZqKz6hrmIC5Nb6DFULIolpHEYbIJL9+sTVR9pe9M5QJ4FeRqk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yykj1J122N7lp1jtfwfYPrcu7HEcAUQpuzXJEW6fDl7XpD9sG7v
+	2DzqyymmWxjrV5CpotLjBT9VZbCqAHv6YmGjM1OmIOa07x2x8GJYq4mrbcFNc6Av284v61XWZng
+	lzGE+Wgn0r7aJynQ+Cf14v9+APtf13ZQ=
+X-Gm-Gg: Acq92OG5qhuxkMiCEPrjtxPw7PIxIlrRrWUMlZp8lmbqrKEz/EZ604LO4eIkhG/cpCG
+	FCfFvKnSOoZfc4p96N/k/oWfNKQxKvhwdlJvtlY4sn9YU59WyEbdE0Jl3Xz6sHzsiawRcHO4uD5
+	soxf7iSBowuWG5FVuAUXjCUZnnzf/YOC3a8r/2nTyzFOR/2RHuXDGUYNhaaOsJ1rMqXdDeJIAk0
+	hOprm9fR/hoI8MFlmLg5EGKe5D9eS/TLgxb3Ka3Un6giqUjgNaXIOOmyxuxOpoU6i08wVRa72tz
+	zifd1TYC9XYZpPtUmo0ZBOMuZoT3YTy60Bf1rNFOTkOWEJt8RC7qgpapEsxWhWkRK3XYhJVmj/Y
+	oBHw=
+X-Received: by 2002:a05:6000:2489:b0:441:36b7:725f with SMTP id
+ ffacd0b85a97d-45e5c57d4c7mr39111981f8f.5.1779287500133; Wed, 20 May 2026
+ 07:31:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260519203858.1342507-1-arnd@kernel.org> <9eecfab7-afac-4144-b544-ac715b07980e@linux.dev>
- <8e9cdb17-83c6-4287-91eb-dd6d3a457f28@app.fastmail.com> <CAADnVQKnc6JTObEPUqh-EBY7+_GJ3TPfetxiWYE86UAiiMn-AA@mail.gmail.com>
-In-Reply-To: <CAADnVQKnc6JTObEPUqh-EBY7+_GJ3TPfetxiWYE86UAiiMn-AA@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 20 May 2026 16:22:18 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWb2hA+z+=ewu_=E2E40AtE-dYjzECKOaja+E414zbixA@mail.gmail.com>
-X-Gm-Features: AVHnY4IUmr7th7FfH5RLAy9yHVc1Z15QwLSdp67zRIpVjevSQzaeDtGElwSzkk8
-Message-ID: <CAMuHMdWb2hA+z+=ewu_=E2E40AtE-dYjzECKOaja+E414zbixA@mail.gmail.com>
-Subject: Re: [PATCH] bpf: avoid padding in struct bpf_common_attr
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Yonghong Song <yonghong.song@linux.dev>, 
-	Arnd Bergmann <arnd@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Leon Hwang <leon.hwang@linux.dev>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>, 
+References: <20260517211232.1670594-1-tj@kernel.org> <20260517211232.1670594-2-tj@kernel.org>
+ <9ba50fd2-077e-4291-9276-9adb18186873@kernel.org> <agtuPrgIDNKSu2Oo@slm.duckdns.org>
+ <2f02d90d-cdc9-48ef-abe3-99e00f22595f@kernel.org> <297658c4ae2d6e7103f5968efc936224@kernel.org>
+ <04b03066-86d3-4c0b-b077-307fd0f3bc9c@kernel.org> <5590fd3d-dae1-4070-b52f-bc40982ac678@kernel.org>
+ <agyZxmHoueGwBAQg@slm.duckdns.org> <CAADnVQJt0p7hSn2G074QZRh2LEdthy3RKYJ9j3w5yeJ-e8UQLw@mail.gmail.com>
+ <fb889bfc-af0e-491e-a69f-38c2abf88d22@kernel.org>
+In-Reply-To: <fb889bfc-af0e-491e-a69f-38c2abf88d22@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 20 May 2026 07:31:28 -0700
+X-Gm-Features: AVHnY4Jfl2x_h-7nV11QrGsQRKElNx9baYm9fCq6a9rlTD86qFRr9_qH0Fp83GM
+Message-ID: <CAADnVQ+j4o0Xy+cykSdx9txSqCouy0yHFaA09qTJp3OVF3VaRA@mail.gmail.com>
+Subject: Re: [PATCH 1/8] mm: Add ptep_try_install() for lockless empty-slot installs
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
+	Changwoo Min <changwoo@igalia.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Mike Rapoport <rppt@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, sched-ext@lists.linux.dev, 
+	bpf <bpf@vger.kernel.org>, X86 ML <x86@kernel.org>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, linux-mm <linux-mm@kvack.org>, 
 	LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Alexei,
-
-On Wed, 20 May 2026 at 16:03, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
-> On Wed, May 20, 2026 at 8:39=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wro=
-te:
-> > On Wed, May 20, 2026, at 00:17, Yonghong Song wrote:
-> > > On 5/19/26 1:38 PM, Arnd Bergmann wrote:
-> > >> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > >> index cc4c0b62cdfa..0f0ec00cae4a 100644
-> > >> --- a/include/uapi/linux/bpf.h
-> > >> +++ b/include/uapi/linux/bpf.h
-> > >> @@ -1507,6 +1507,7 @@ struct bpf_common_attr {
-> > >>      __u32 log_size;
-> > >>      __u32 log_level;
-> > >>      __u32 log_true_size;
-> > >> +    __u32 __pad;
-> > >
-> > > Let us make it as
-> > >       __u32 :32;
-> > > ?
-> > > This can avoid people to use the '__pad' name.
-> >
-> > Sure. Do you want me to resend, are are you going to change
-> > it yourself?
+On Wed, May 20, 2026 at 10:41=E2=80=AFAM David Hildenbrand (Arm)
+<david@kernel.org> wrote:
 >
-> No need to add a pad.
-> The issue was fixed in commit f05ddc6771c4 ("bpf: Check tail zero of
-> bpf_common_attr using offsetofend")
+> On 5/19/26 21:04, Alexei Starovoitov wrote:
+> > On Tue, May 19, 2026 at 10:11=E2=80=AFAM Tejun Heo <tj@kernel.org> wrot=
+e:
+> >>
+> >> On Tue, May 19, 2026 at 11:40:48AM +0200, David Hildenbrand (Arm) wrot=
+e:
+> >> ...
+> >>
+> >> Wouldn't it still be either or with both cases being okay?
+> >>
+> >>>
+> >>> ... or can we run into similar problems with kprobes? (I am obviously=
+ no bpf
+> >>> expert ...)
+> >>
+> >> Yeah, I mean, that was just the first TP I found scanning the code. An=
+y
+> >> kprobes or other TPs in the path would behave the same.
+> >>
+> >> When this fault triggers, the BPF program has already malfunctioned, s=
+o it's
+> >> not going to be a high frequency path and performance isn't a primary
+> >> consideration. So, anything that can ensure that the kernel doesn't cr=
+ash or
+> >> lock up would be fine. Any better ideas?
+> >
+> > As you guys already figured out the trylock is not an option.
+>
+> And that should be carefully documented.
 
-I am afraid that commit does not fix any  -Wpadded warnings?
++1
 
-Gr{oetje,eeting}s,
+>
+> At least in apply_range_clear_cb() one could similarly switch to
+> ptep_try_install() to at least have both these paths handle races in a
+> reasonable way. (having to handle when ptep_try_install() is not really i=
+mplemented)
 
-                        Geert
+You mean to use ptep_get_and_clear() ?
+Makes sense to me.
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+Also noticed bogus defensive check there that should be removed:
++ if (unlikely(!d))
++   return 0;
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+
+> Anyhow, the documentation of ptep_try_install() must clearly spell out th=
+at this
+> must be used very carefully, and only in special kernel page tables, neve=
+r user
+> page tables. There are likely other scenarios we should document (caller =
+must
+> prevent concurrent page table teardown somehow, and must be prepared to h=
+andle
+> races if other code is not using atomics).
+>
+> To highlight that, we should likely consider adding a "kernel" in the nam=
+e, like
+> "ptep_try_install_kernel()".
+>
+> I am also not sure if "install" is the right terminology and whether it s=
+hould
+> instead be "ptep_try_set()". (set_pte_at is the non-atomic interface righ=
+t now)
+
+I suggested using the ptep_try_set() name too :)
+
+> Further note that last time I talked to Linus about arch helpers, he pref=
+erred
+>
+> #define ptep_try_install ptep_try_install
+>
+> over __HAVE_ARCH_PTEP_TRY_INSTALL
+
+ok.
+I guess __HAVE_ARCH_PTEP_GET_AND_CLEAR is legacy ?
