@@ -1,132 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4CD352030
-	for <bpf@vger.kernel.org>; Wed, 20 May 2026 16:14:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E6961A6836;
+	Wed, 20 May 2026 16:14:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779293647; cv=none; b=kdXL9ZH0GPNJiPcddZsa3El1DqzE0aLenIkI0eh8SrKgYPfl0vxC2eC6nGVlNOwmt3CnbNPvOkMkOOUbmvOcJPZM2Iw6ps2B+F8LbyrcKZ11tHj+l81WTdG5OEXIG+7U3vI/90mkKrayQwFtlVqer2y/CHuwe3rjHH0IEy9TOLM=
+	t=1779293662; cv=none; b=WjONBA/1sl+4jiQ0l7RqKXn83gcYD+dOJr+tBojaE1vYH0CQrVYdsRZohmDUr7jop/Ez8Gv7IRAZON6VFz7TOo4poyaJ1J7yWT0sFWLoi349t0jdI1KdCBQlqtd0TcrhMcjH4nFMkxcqKrDuOQEun8HGRHhdwp9O7O9m/Qtehtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779293647; c=relaxed/simple;
-	bh=6kqY/ur0x5TLIzlJKS4aF/SghHIcgjEIR08zZRKPkzE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=eydDKZInlvmH5XuPM1oQZBJRwMsbWVfm/Z+286w0vykOU33XPG6KWLyaINGKZONsqrY4rPQW0+52C4X76GkT/9I9/I25GO6wrinBhOENFnEBQosR+caa9esejUQdapV6V/SUHrnVRoTGDOo/pY4XaKiRZ7acbj6T1I9fyvzfzzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RHXWTWJ/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779293662; c=relaxed/simple;
+	bh=206Do778AhQOt1mOHVPBEMipIY28Q+yNhRY4+maBCoI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BuDJuH51KfrtkMO0b01odxKV13IwFFaTadu4gaaFzY0MEi1itrTkvnw5OGpA99KlhxsdD4OmRg6q4i62NATxGxGYOXqDpgVJg+pF7pDRsL3B+rHBX5k66beEX/DZcz0s6M7MrdnRsHsmaeYdavL/RpzRpKASx8WxIR3D70xbES4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=JaMF8kB9; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RHXWTWJ/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE1C31F00893;
-	Wed, 20 May 2026 16:14:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779293645;
-	bh=69pOzZY69NWvcEgAut7EKnhQVYs88Wuhw+/AiTNaRGc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=RHXWTWJ/reE1JsKDL81apW8dPM64hS+in6FW6hF/oEjeu4zPkkEbmKCQCib0Vpb3W
-	 2DzxXsKR4MzSkgFqbqvldQcQKpRo6hRbU3I0qpjhT7vlDa4MBOM39cR9NvGZQMla5b
-	 cWuyk8FYHgE+kXB7ptgBT9jZfWXptYPgyia8pchT3fwajTlplhCeEBYQ9iLpVxk5Hv
-	 du53HXfW/0B5ajqlJEZI+TKSgpIm3lzTcNg+XfUXdE4XUVnU+WGyPVpNDAdBxHsCej
-	 wbUzcW9mwHNRkBaCjVUgkTJhJB9ZMSne3in8FnI4LHjFmx2qVb/UqBo8p/v1C5FS3u
-	 RxeNLSA6UEweA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v15 11/20] unwind_user/sframe: Show file name in debug
- output
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jens Remus" <jremus@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="JaMF8kB9"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=kCIUogO0mQs44DTJh/wxinjbQek0km84DbYAsM4WUd8=; b=JaMF8kB9trMMmNNO6sA6lOpJ49
+	UDS/B7BvEXzI5J/9tDb3jdf5G/DZ3SqO4d9syGpBYK73sJz3d9YYdwV8XWjiY7fEVMwOHklrZVDPa
+	gAdrd0EMR4Aq9Pcgm2cIBndpHnorLnni2ybVwGXg+7Kj1dFqcznFVxILDcDmoMbOblxoEPqtjIqv1
+	UH9WwMWq1LPSp2iQsDFhYvfd62JzsmK34l/Qcd6hiTo8edlnO4PAvFyczmK2ZvXozy68w/nFxWkId
+	eUpSY/sjWG2c6BBwOrI5ZLUVA7eks9Bv9jl7jkJJSR24SVTRcDVZiyeN7LoXxJAGqpLRJKZaaBo9/
+	Xxn+bj7g==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wPjYo-003EE7-0v;
+	Wed, 20 May 2026 16:14:18 +0000
+Date: Wed, 20 May 2026 09:14:13 -0700
+From: Breno Leitao <leitao@debian.org>
+To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260520154004.3845823-12-jremus@linux.ibm.com>
-References: <20260520154004.3845823-12-jremus@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 20 May 2026 16:14:05 +0000
-Message-Id: <20260520161405.AE1C31F00893@smtp.kernel.org>
+Subject: Re: [PATCH net-next v2 1/7] af_iucv: take socket lock around
+ SO_MSGSIZE getsockopt
+Message-ID: <ag3dctqXsRO-1akg@gmail.com>
+References: <20260515-getsock_four-v2-1-0d8eed952627@debian.org>
+ <20260516083434.6FC23C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260516083434.6FC23C19425@smtp.kernel.org>
+X-Debian-User: leitao
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On Sat, May 16, 2026 at 08:34:33AM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] The commit message incorrectly claims the bug is unexploitable and targets the patch to `net-next` without a `Fixes` tag, bypassing stable backports for a reachable NULL pointer dereference or use-after-free.
+> --
+> 
+> commit 2d366eacb5715c7a757195706a39c7382bd391e0
+> Author: Breno Leitao <leitao@debian.org>
+> af_iucv: take socket lock around SO_MSGSIZE getsockopt
+> 
+> This commit adds socket locking around the SO_MSGSIZE case in
+> iucv_sock_getsockopt() to prevent concurrent modifications to hs_dev.
+> The commit message states this is purely defensive and targets net-next.
+> 
+> > This is not an exploitable bug. iucv_sock_close() is the only writer
+> > of iucv->hs_dev and only runs from the protocol release callback,
+> > which the socket layer invokes after the last file reference drops.
+> > The getsockopt() syscall holds an fd reference for its entire
+> > duration via fdget()/fdput(), so iucv_sock_close() cannot run
+> > concurrently with the SO_MSGSIZE read on the same socket.
+> 
+> Is it strictly true that iucv_sock_close() only runs from the release
+> callback?
+> 
+> Looking at iucv_sock_recvmsg(), it appears to directly invoke
+> iucv_sock_close() when the message limit is exceeded:
+> 
+> net/iucv/af_iucv.c:iucv_sock_recvmsg() {
+>         ...
+>         if (atomic_read(&iucv->msg_recv) > iucv->msglimit) {
+>                 ...
+>                 iucv_sock_close(sk);
+>                 ...
+>         }
+>         ...
+> }
+> 
+> Since recvmsg() executes with an active file descriptor reference, could
+> this path be triggered concurrently with a getsockopt() call evaluating
+> SO_MSGSIZE on the same socket?
+> 
+> If so, evaluating iucv->hs_dev and then dereferencing iucv->hs_dev->mtu
+> in getsockopt() before this patch could be vulnerable to a race with
+> iucv_sock_close(), potentially leading to a null pointer dereference or
+> use-after-free.
 
-New issues:
-- [Low] Incorrect use of `vma->vm_file` instead of `!vma_is_anonymous(vma)`=
- to classify a VMA as file-backed.
+You are right. iucv_sock_recvmsg() does call iucv_sock_close() directly
+on the AF_IUCV_TRANS_HIPER msglimit-exceeded branch, in syscall context
+on a live fd. Two threads sharing an fd (or two fds for the same struct
+sock after dup/fork) can then run recvmsg() and getsockopt(SO_MSGSIZE)
+concurrently, if the dev_put() drops the last reference, A can be left
+dereferencing a freed netdev.
 
-Pre-existing issues:
-- [Critical] Calling `sframe_remove_section` from `sframe_find` acquires a =
-spinlock in NMI context, leading to deadlocks, and triggers a user-controll=
-able WARN.
---
-
-commit 60b05617f9a9c00f287a96dda25f8e4086c6178b
-Author: Josh Poimboeuf <jpoimboe@kernel.org>
-
-unwind_user/sframe: Show file name in debug output
-
-This commit prefixes debug output strings with the file name to make sframe
-debugging easier. It looks up the VMA corresponding to the sframe section
-and extracts the filename based on the VMA properties.
-
-> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
-> --- a/kernel/unwind/sframe.c
-> +++ b/kernel/unwind/sframe.c
-[ ... ]
-> @@ -374,14 +374,17 @@ int sframe_find(unsigned long ip, struct unwind_use=
-r_frame *frame)
->  	user_read_access_end();
-> =20
->  end:
-> -	if (ret && ret !=3D -ENOENT)
-> +	if (ret && ret !=3D -ENOENT) {
-> +		dbg_sec("removing bad .sframe section\n");
->  		WARN_ON_ONCE(sframe_remove_section(sec->sframe_start));
-> +	}
-
-[Severity: Critical]
-This is a pre-existing issue, but can this lead to deadlocks in NMI context?
-
-sframe_find() is invoked for user stack unwinding from contexts like perf,
-which executes from NMI or hardirq contexts. sframe_remove_section() calls
-mtree_erase(), which acquires the maple tree's non-IRQ-safe mtree_lock.
-
-Acquiring a regular spinlock in NMI context can cause a hard CPU deadlock
-if the lock was already held by the interrupted thread.
-
-Also, could an unprivileged user trivially trigger this WARN_ON_ONCE by
-unmapping the section, potentially crashing the system if panic_on_warn
-is enabled?
-
-[ ... ]
-> diff --git a/kernel/unwind/sframe_debug.h b/kernel/unwind/sframe_debug.h
-> --- a/kernel/unwind/sframe_debug.h
-> +++ b/kernel/unwind/sframe_debug.h
-[ ... ]
-> +static inline void dbg_init(struct sframe_section *sec)
-> +{
-> +	struct mm_struct *mm =3D current->mm;
-> +	struct vm_area_struct *vma;
-> +
-> +	guard(mmap_read_lock)(mm);
-> +	vma =3D vma_lookup(mm, sec->sframe_start);
-> +	if (!vma)
-> +		sec->filename =3D kstrdup("(vma gone???)", GFP_KERNEL_ACCOUNT);
-> +	else if (vma->vm_file)
-> +		sec->filename =3D kstrdup_quotable_file(vma->vm_file, GFP_KERNEL_ACCOU=
-NT);
-
-[Severity: Low]
-Does this code accurately classify file-backed VMAs?
-
-Anonymous mappings, such as private mappings of /dev/zero, can also have
-vm_file populated. Relying only on vm_file might misclassify these mappings
-for the debug output.
-
-Would it be more reliable to use !vma_is_anonymous(vma) to check if the
-VMA is file-backed before accessing vm_file?
-
-> +	else if (vma->vm_ops && vma->vm_ops->name)
-> +		sec->filename =3D kstrdup(vma->vm_ops->name(vma), GFP_KERNEL_ACCOUNT);
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260520154004.3845=
-823-1-jremus@linux.ibm.com?part=3D11
+That said, I will separate this patch and send it to 'net'.
