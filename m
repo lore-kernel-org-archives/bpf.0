@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA9062D97BB
-	for <bpf@vger.kernel.org>; Wed, 20 May 2026 13:34:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE16372ECF
+	for <bpf@vger.kernel.org>; Wed, 20 May 2026 13:34:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779284045; cv=none; b=MSbdUC9FLNsmTSZfzQewn50nQRtbj/YB0lOuA1SGKPBTtu5DobAtK8pw0vdfTQk6HJpUyIRL1tlgCdusLcnKFFpkCqVp7VN62nBpsT9uMt+9sydJ3RyssKQhtETHa20V//sBPIHI6txVA9OcVrz8nqDAV639EdXSYHcgfrXboX8=
+	t=1779284056; cv=none; b=SLXnwoGBfd0F3R6IjZnLHhSthjbs0XGnYxw5+48TXFaPwnfs7xsENTnNz5errf9dw+2r/KPM+fFC6dgkH39fQJy0ogluHIOgxgeXhfsb6VYOgSE7WWbsemo4mQAEppQWsMaDHYfSqT6meQ6cHklRMmEg2q7OEGqQWFIh1HhG/JY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779284045; c=relaxed/simple;
-	bh=VrA/CYx8uq9p4SGa/cvXzpbt3nQEt/HZ5/4h61xFSZ0=;
+	s=arc-20240116; t=1779284056; c=relaxed/simple;
+	bh=hgRceoc8RziBHjbqU9BKeDZKjif6VQEiuRJ7pito8dc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I69f/BDLnBJwChFngfcNToTtdsBwlZIUfGwkG21DbMyaGiV0hBtfaOCWcMZSsdujcfdhH4CnLraSqrm2s/t2IAvlfX7gyM3PXPi9mUkc8bfw1FN32bTvDVHKIOYmbW3iQV7RbsDbxwg8tcYbUsC88BpDtWqW6KjUNjM/ObgOivc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XOJ/JBPz; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=f6g1XSsSlQCAYMrUQQfbJjhvOUolIwVjvfQiYYu6P+Pmjpj+ZT/IIqixQ816NOOj3ZFXIEesFFoLfKY0haTw/NFfyyeyLLpCoLVhbmryKGEK28XFijiqeM14wUmaZuQ9/A2AsaX9TdQGmvNbZNFJ3Ylln8uzWMltUMNEaFWurL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EgMQZXkL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XOJ/JBPz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DA121F000E9;
-	Wed, 20 May 2026 13:34:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EgMQZXkL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7C891F000E9;
+	Wed, 20 May 2026 13:34:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779284044;
-	bh=DNi0LGta7gymhnZzqYT89QoJEKneM5Nafscyw+odQ5U=;
+	s=k20260515; t=1779284055;
+	bh=MKWi8fkjd7A2mKQDKrrsUNf9h1FJhzb9N9FoCa/Tixw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=XOJ/JBPzTlBkVLbARoA5Z5ryHRlOEE4hVoLzX/rwMxUDLWPXlLjNGFNgckLnoODuO
-	 mc2JOTSc5u0YMccTfARC77+NflHGr/jjowrxwLe3APtlnFil200o8PekTYtb5TiE2R
-	 +1ryQvdc7leX98j/vaUgDoDZZtECGADWAZllczTKapZiflyifxM1B9uzfM0BHzpgWG
-	 +qhTGijbQ8ubrh2Xdh4F5l5rYkrGHskmuauNW1yBjeiQlQpBvPiOEe713/aOTzraRa
-	 UTELvN9onrYNTuTXQOKJFzeY3whWYqz8AF+GCl1Oj6c193GsQSOw6RvRB1db4+3ci3
-	 epHKQE6K59bDw==
+	b=EgMQZXkLAu/SJG72ezH4cqX/1+jHz4/eUK4QWd2ojdUNYM6EvU3+vBfhlQRDYl+WG
+	 oNtdAdxMDKNMIIbegghVBQ2QtI9NUuthklaaq727ACJ1cFV9SJl59fV2Uycl7xzydn
+	 clMrxsWD2po/Y39os3HUujuDkr6r6bvbOygTYp5dz2bL0KZ0pgImeX3mZHMysH40ed
+	 pzmYIBwEd4NzaP+iLFuP08lBQ+YoDrKFcU/Qhmzub6LnT5xsDdp6guOKLbKkk+z8ZB
+	 a+r7P/Ovzy7j4ivuunbFYN4IIhItS+quZxrdyYGy0wWyuWnSSPhNs8w94GFX/NpAWf
+	 4WI8My05Q6Vqw==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -42,9 +42,9 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Nikhil Dixit Limaye <ndixit@meta.com>,
 	"Nikita V. Shirokov" <tehnerd@tehnerd.com>,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 2/3] selftests/bpf: Fix expired UDP LRU entries in XDP LB benchmark
-Date: Wed, 20 May 2026 06:33:31 -0700
-Message-ID: <20260520133338.3392667-3-puranjay@kernel.org>
+Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Filter timing outliers with IQR in batch-timing library
+Date: Wed, 20 May 2026 06:33:32 -0700
+Message-ID: <20260520133338.3392667-4-puranjay@kernel.org>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260520133338.3392667-1-puranjay@kernel.org>
 References: <20260520133338.3392667-1-puranjay@kernel.org>
@@ -56,53 +56,63 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-populate_lru() zero-initializes atime:
+System noise (timer interrupts, scheduling) can inflate the reported
+stddev.  tcp-v4-syn showed stddev 37.86 ns without filtering vs
+0.16 ns with filtering on the same run data.
 
-    struct real_pos_lru lru = { .pos = real_idx };
+Filter samples outside [Q1 - 1.5*IQR, Q3 + 1.5*IQR] before computing
+statistics.  Scenarios with genuinely wide distributions have large IQR
+so the fences stay wide and the filter has minimal effect.
 
-connection_table_lookup() treats UDP entries with
-cur_time - atime > 30s as expired, so every pre-populated entry
-expires immediately.  Calibration masks this on the CPU it runs on,
-but if validation migrates to another CPU:
-
-    [udp-v4-lru-hit] COUNTER FAIL: LRU misses=1, expected 0
-
-Initialize atime from CLOCK_MONOTONIC for UDP flows.
-
-Fixes: a4b5ba8187cb ("selftests/bpf: Add XDP load-balancer benchmark driver")
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- tools/testing/selftests/bpf/benchs/bench_xdp_lb.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ .../selftests/bpf/benchs/bench_bpf_timing.c   | 26 +++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/benchs/bench_xdp_lb.c b/tools/testing/selftests/bpf/benchs/bench_xdp_lb.c
-index 0b6709a2b03c..8e25bccbde92 100644
---- a/tools/testing/selftests/bpf/benchs/bench_xdp_lb.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_xdp_lb.c
-@@ -563,12 +563,23 @@ static void create_per_cpu_lru_maps(struct xdp_lb_bench *skel)
- 	nr_inner_maps = nr_cpus;
+diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_timing.c b/tools/testing/selftests/bpf/benchs/bench_bpf_timing.c
+index 75a39da69655..e02ad324f7bc 100644
+--- a/tools/testing/selftests/bpf/benchs/bench_bpf_timing.c
++++ b/tools/testing/selftests/bpf/benchs/bench_bpf_timing.c
+@@ -65,6 +65,31 @@ static int collect_samples(struct bpf_bench_timing *t,
+ 	return total;
  }
  
-+static __u64 ktime_get_ns(void)
++static int filter_outliers_iqr(double *sorted, int n)
 +{
-+	struct timespec ts;
++	double q1, q3, iqr, lo, hi;
++	int start = 0, end = n;
 +
-+	clock_gettime(CLOCK_MONOTONIC, &ts);
-+	return (__u64)ts.tv_sec * 1000000000ULL + ts.tv_nsec;
++	if (n < 8)
++		return n;
++
++	q1 = sorted[n / 4];
++	q3 = sorted[3 * n / 4];
++	iqr = q3 - q1;
++	lo = q1 - 1.5 * iqr;
++	hi = q3 + 1.5 * iqr;
++
++	while (start < end && sorted[start] < lo)
++		start++;
++	while (end > start && sorted[end - 1] > hi)
++		end--;
++
++	if (start > 0)
++		memmove(sorted, sorted + start, (end - start) * sizeof(double));
++
++	return end - start;
 +}
 +
- static void populate_lru(const struct test_scenario *sc, __u32 real_idx)
+ static void compute_stats(const double *sorted, int n,
+ 			  struct timing_stats *s)
  {
- 	struct real_pos_lru lru = { .pos = real_idx };
- 	struct flow_key fk;
- 	int i, err;
+@@ -150,6 +175,7 @@ void bpf_bench_timing_report(struct bpf_bench_timing *t, const char *name, const
+ 		return;
+ 	}
  
-+	if (sc->ip_proto == IPPROTO_UDP)
-+		lru.atime = ktime_get_ns();
-+
- 	build_flow_key(&fk, sc);
++	total = filter_outliers_iqr(all, total);
+ 	compute_stats(all, total, &s);
  
- 	/* Insert into every per-CPU inner LRU so the entry is found
+ 	if (t->machine_readable) {
 -- 
 2.53.0-Meta
 
