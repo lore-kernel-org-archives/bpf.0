@@ -1,122 +1,134 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1C3370AEE
-	for <bpf@vger.kernel.org>; Wed, 20 May 2026 20:34:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779309254; cv=none; b=Hdb1fRQew7H15RDCQSMfH+dOE/qtog6gsOJGltd84EX1sff7aLtEAOB9nX7Pwz7H/gWF3p52UgmhM2x0Tgra9JXrj1WE1r2B6tdFIP6ukd6fEJ2WdJrE2aB9E1TuR3EiEc7sEQyZA03TnDbM14uvAq59QtcaoRzRI3tnUPSDAFk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779309254; c=relaxed/simple;
-	bh=dy3591KAoddrcRCeSj7NDuxGxv74bfjtV5WlTzlf7Y8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AwwyZ1fGPgCKx759gSEr1F/xHMYbK095oIpTTueln7tBiysT5xGq506Q26+UNlepr3GgvfWzto4OJBXX/iX0EraYFnejMz46sPzKYMOPtBNSxpLKJLR6nLwH+70ZOYcjmpYAH31CYVe+0e9MhZrvjiRERuensyjnoJL2ZpXr9yE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OZNZEdXq; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7171833CE9A
+	for <bpf@vger.kernel.org>; Wed, 20 May 2026 20:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779310391; cv=pass; b=OW9yoEBPUVevsp3huY5gCZskDO1erOXva8R8txO/ohwvfJc7MjC7ydp92IlfqPRaWIAqwpkMAU50omntGkxlrghVlpkgN/nHSFD9wLLaBgTRMY8xYKLcOnYNRYF7/7I4zFrI/dhwsbtuf9CoEbox2ANtZ7IWTPsasVF/Ya9/YJA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779310391; c=relaxed/simple;
+	bh=epPRNW+DTeChnt2vYOd2BtSWp2xcqq/u4GOdfh4R0AM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iyzLRYyh/BxlQTS/GUfGxaICr1Aj/rYPAHEk/qMWBb+LaOkWbfqpyS7+6xcgoeICqPsXS7k/kv45B8Bz3YIAe+ALUsy7zvpliUrGlCD/kBxQER7i2Ta0lph1kULfNDEA28kVSrGvYflAZ23PR054/BgwTxW/acKNsRHNTCNACLQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VNwymQTy; arc=pass smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OZNZEdXq"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-82748257f5fso4069800b3a.1
-        for <bpf@vger.kernel.org>; Wed, 20 May 2026 13:34:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VNwymQTy"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-bd4f8260e4eso1059894066b.1
+        for <bpf@vger.kernel.org>; Wed, 20 May 2026 13:53:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779310389; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Z0+rVBRtaD+boiH1JP6Zqa1AQWa3veesf/V3ZVQa0+ytbSJQ4rMOT4dcBrnPggtvU8
+         CGaldHculxre+te9xVlz1WXzF3Va6KR6yyGOxKikGm8jOAf9a0NrSjrmfo/ZfQVSODEA
+         Xp3ImOux6Dgj1wTIHk/CfAbvk+iIh1dt0rnl9ihOwG+GETv/P8+YkPq/D7o1P/0KKdUR
+         hxtU0XsBOLFSxTzNF1hFDh2qcbTi0ubt0MD6phI8osO3Cc0lKeggs/gl+vV1107vTVO+
+         IUuTyi4d7r7K+kse4vZIcCNhRIyUP/CcW5JAOWun9HnyqIacVHwhCo6cdSNeio3sPgM3
+         f0Gw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=AgrHWFxpEFUsmkWDSh9F3ht6uMtkuODwzZ9hpGxEM4k=;
+        fh=VxaHefHNfxrqR+Ef3AaHXImQTc9EJsfEAty4yme7MwU=;
+        b=gYtFBpCdk4YBqJDCS6c1pfuCamMh0+ggRRA8EXaGepY/hce3+SmnPyeswbHmJ1R/Mj
+         XC4Uc6Tw2IBU/CepH3/aGjNJyA9j5u/d9ZD9B1MKM6x5T1TD1jKYkFQbZ8aAhYKJmUc0
+         tSV1eHQNLPfMZ4KoAtOG19CiQ3hS4k4e9orZZLdpYmzTrla5P0cq1Tgn54KhytdoJ8x1
+         IfmybexTANaC6pu/ad1EgBQQB/QRJ9A7weXpZBkyXOZxLA3Zkix5Hckw6Sw0tJvirB/f
+         +e3CICA+0ymP08I25ypNQOcuj1efeza/+vIHASm4jsycxXDFIVBGIOpR8kPFPbngak2b
+         grIQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779309252; x=1779914052; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iChxZzWfiNaD+hAkHjNeNDXclaERmNaIr1r1RbO6iYg=;
-        b=OZNZEdXq3IrdEdKNUYm5Pi7eD567cvE6JYSdjW365WXUL/vz1h5B6fMVwxUC6azPzA
-         dOfi6PXjQQZwl1d/z6aPinziKVXjRxDW2bzWiQeT4TGi/bmjEB887TETT2dbQQ9+k0Yz
-         r/bMqn4I+blpP9SIXRoGX7ZaEPR3BS/V2lr0dbhVy2F45onGx3jUwlh/ede8qls3SK/u
-         JzHGdc8ykVWfLQb2jPRzjiJZynpN1PRoKVyYUFQdqw+chyNMNhSl8CkDGViIThIrtZWY
-         e8wstjsbR/VzFzkMHvQmNSaLFItloJ0SYOdsQekytBe1BFMlZQ3C2Ex0SBJjLom03dk2
-         IDzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779309252; x=1779914052;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1779310389; x=1779915189; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iChxZzWfiNaD+hAkHjNeNDXclaERmNaIr1r1RbO6iYg=;
-        b=iAdT/lTv0OPjksrk+RIllc0jq4N6Rzpz+TB2vsw3pyDr1KblRFccyoWreUYy8uGwGt
-         K6y5dKcnXMXy9kDe7b9xNCp7tZiRPUpoweDyXdljbSw2dx1iD4YnIV2jToOl7G7WVKY6
-         Sj7uIWp7C74R8pUumRlTk/2XkLEgpBqVKpNC6Iv6P15KM8gRq04UreGCYNP9gAMaq9i6
-         yndPa+5kP0vhYbKv/Qe3iWey8gqDWxE72SratXMzk30mLCH5T+tVckyq26n7DLHKHi1n
-         gFJ/eC0P10xOTakPzRXkDmQe4uR1P32SdEcQUT5XXIG3GItAkYEIafu7QBfPQb+gI7kT
-         hWkA==
-X-Gm-Message-State: AOJu0YwwTn2JVKlgpzWvKaBCQcx+pe1zlDrGZP7WxgDAoYuOrJJTp1aU
-	ueEoF5QByw8Hlq08kkWthO6cK+Wj6y5eq2HZYdAXGdqJbTnbpSPHTC6uk/jscJG7utM=
-X-Gm-Gg: Acq92OF1t6ic8mT1mVjeRJUvpFPsJA+MTcZKmExfjDh7m6wu08KEJnhu8LjdMMplW0+
-	2P/E2g+W3GRxQZa7UAtev50r6wIGlgFz69s43iIh1f7uOz8xmzvjwUEJ5N/ZIDOp8FgCSM+f8Ao
-	0iktZD4mAIyFdOVUtoB+/x9YvULTxRDkuIrr57Ns1N1K7FkNM1swE0dSXxeAJJKLAXfM1pYA6T8
-	52euL0oAmN6N1JxausZhbFg+V1jjwl+xiOs3TiakFherlq/PmXdVMexTui+A/O+9g8vgtjs0p07
-	afz2n+aL5YpZDpaiWlzD+j3n32A97OuD946LK6JeUe+TayloRISTcz5m1g/Q/NwWQq+kL2Gwom6
-	wKfNkmLpp8953LlflgVWo3wxkcZ0szNyHxma+ztIyZRCh70iRhUNtfU3sE2/nUppIyg5pnoBpMQ
-	x2pR0emUfD7fXbUCRM2kodMiGan65GZBEO83CeJuaFVwrFajk0DbmpYJn9V7XM9V+tHehrpIInc
-	La7x0ICnJVZxzoa1Blv6ZHY+/jxL97fFas+6Ihk0fyDSHFwwiwl8o3N68iKfEOIp3UM6ZD1tV1/
-	lDlaPciuheP/ea+I7E3Qrse49NgDLauHzCB4
-X-Received: by 2002:a05:6a20:7355:b0:3a0:b65a:5df5 with SMTP id adf61e73a8af0-3b307f88262mr14502637.30.1779309252204;
-        Wed, 20 May 2026 13:34:12 -0700 (PDT)
-Received: from codespaces-78f0a7.2t4prynt4dlezbzls5ze3dxsqg.rx.internal.cloudapp.net ([4.240.18.226])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c82bb121ccasm20172328a12.29.2026.05.20.13.34.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2026 13:34:11 -0700 (PDT)
-From: Muhammad Bilal <meatuni001@gmail.com>
-To: bpf@vger.kernel.org
-Cc: puranjay@kernel.org,
-	puranjay12@gmail.com,
-	ast@kernel.org,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@kernel.org,
-	eddyz87@gmail.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Muhammad Bilal <meatuni001@gmail.com>
-Subject: [PATCH bpf-next] selftests/bpf: Fix zero batch_hash on CPU 0 after batch_gen wraparound
-Date: Wed, 20 May 2026 20:33:18 +0000
-Message-ID: <20260520203318.31939-1-meatuni001@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        bh=AgrHWFxpEFUsmkWDSh9F3ht6uMtkuODwzZ9hpGxEM4k=;
+        b=VNwymQTyJ9ygqXbsFITzfaBZhuQ40mkz9QfgY0DPribKSO4MhKQNIBJtBSYFNt2KWg
+         v6ml4TxGzChodOPpCbEUhCaaBOLjnzmtbjuRZzeEbfWwY3azeK8vydOhDI4ZThKdmW1G
+         6mRgxk9YC54690i1w3hi7iQqTHHWMFLuq8ru6QxGwWORtwTa4FG5rDbH4Dwgc7Jscvxr
+         8uma9JCsmiAq/bPFO/RBT2W2ARB66K3kGmTTZ/9313TezEMun9VaR/roFjSQMFIEKGms
+         lxFJsLcliNbiqmhKeou3UBPQ13qYyzhQyCeHvtfFy+3ooOSJS9YFnO2OK0ts9zaEJO0K
+         bQ3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779310389; x=1779915189;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=AgrHWFxpEFUsmkWDSh9F3ht6uMtkuODwzZ9hpGxEM4k=;
+        b=eXCmlCnbaoQyyHfIIL0WGA1/BTa3xzUphvvm3Y5j0G/82jrI/O2M2YPGygpEXqZljy
+         XAhKyU/x5HCYDWhKtHONIRyfYQqqe1JdjmGF3w/OXEpg+igXmMJIgl/5oVdcVBT1xARE
+         s7mm3HIHFGqmznnW8STPUqFuqUSkl409c8HjnctyKCxtFm0oz68giQdJI30pxu3LCSql
+         qfA2gjpGPY6X3kWfDJVmiWlD9cTobQsoGH6z3knkrFQi0aOL7E5dKH88bIHXmGbjA8OV
+         SzXZGm7W+uGuZaxTEyaMMzAVn/GJRPyELpSWuxduCkq6lVnVVQJj6jfXKSU3lKRV8Q9k
+         N57g==
+X-Gm-Message-State: AOJu0YwZTI2RCcp5xSD4uv8u+f0zRUHiStelhG6JG0IDP29U3naYZRwH
+	6afprYxSc54jzQk7lOfVeSC7L0XihWjhN8+BQepcil7MW7KAM8VhLbRpVgowMcJCHJY2A3kIMjd
+	qcM1AIRgV6YashAXXqkPfXNN1fRbXSdo=
+X-Gm-Gg: Acq92OEGveRvojJUBLQhIyDBkdIpsgXADj1ZyAeU6ViDJyT6+Yk9pmdfatca6QSEW01
+	0tteRIZ1ra4X1Lpe5UEzQjb/0K9DVWC4z4n67L7PAMjHVAE4p0DOc+nJmxgjhzRyQ+TwX6Ld5lG
+	Ke8WDK9exLj9ol3Gd+KsMcaQdMrRmo4lN+peqox+SU+5mGrrZmyTJyLRaBthFM4j0BRm2zI2gBi
+	xcMW/oo/EOJzaPZzJanDUoLyxJNGeAMf3RAg96WRVlGivmq0lrp3mPTWtUMoaQGdzriBj3GnpH1
+	lHq93+Lw6PlNnZ4S+4SuJ1+P/++KlTlfEyPCsX+9/KmfcWsYTKg2
+X-Received: by 2002:a17:907:a68b:b0:bda:2928:ff9a with SMTP id
+ a640c23a62f3a-bda292920a3mr427430366b.39.1779310388764; Wed, 20 May 2026
+ 13:53:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260520203318.31939-1-meatuni001@gmail.com>
+In-Reply-To: <20260520203318.31939-1-meatuni001@gmail.com>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Wed, 20 May 2026 21:52:57 +0100
+X-Gm-Features: AVHnY4LU9xhe_WiCvwDW3nY1nWmi2hDUZU0Ao5i8OnvITc6c-64a6IJubqmavh8
+Message-ID: <CANk7y0jzV9RSa0KwM0xuyPc0egSrMFD+CaG1j_6NY4NZn1waJg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix zero batch_hash on CPU 0
+ after batch_gen wraparound
+To: Muhammad Bilal <meatuni001@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com, 
+	shuah@kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-commit fa747e9f843b ("selftests/bpf: Fix cold_lru producing zero
-batch_hash in XDP LB benchmark") claims the addition ensures the
-multiplier input is "always >= 1". This invariant does not hold after
-wraparound.
+On Wed, May 20, 2026 at 9:34=E2=80=AFPM Muhammad Bilal <meatuni001@gmail.co=
+m> wrote:
+>
+> commit fa747e9f843b ("selftests/bpf: Fix cold_lru producing zero
+> batch_hash in XDP LB benchmark") claims the addition ensures the
+> multiplier input is "always >=3D 1". This invariant does not hold after
+> wraparound.
+> batch_gen is __u32. After 2^32 increments it wraps to 0. On CPU 0,
+> bpf_get_smp_processor_id() returns 0:
+>
+>     batch_gen =3D 0  (after u32 wraparound)
+>     batch_hash =3D (0 + 0) * KNUTH_HASH_MULT =3D 0
+>     *saddr ^=3D 0  ->  no-op, cold_lru miss counter stays 0
+>
+> Setting bit 0 before multiplying guarantees a non-zero odd result for
+> all possible values of batch_gen and cpu_id, including after wraparound:
+>
+>     (any_value | 1) >=3D 1  always, since bit 0 is always set
 
-batch_gen is __u32. After 2^32 increments it wraps to 0. On CPU 0,
-bpf_get_smp_processor_id() returns 0:
+You say - batch_gen is __u32. After 2^32 increments it wraps to 0
 
-    batch_gen = 0  (after u32 wraparound)
-    batch_hash = (0 + 0) * KNUTH_HASH_MULT = 0
-    *saddr ^= 0  ->  no-op, cold_lru miss counter stays 0
+A single batch runs for 10ms, and batch_gen is incremented for every
+batch, so for it to wrap we need to run the benchmark for 1000+ years
+with a single producer.
 
-Setting bit 0 before multiplying guarantees a non-zero odd result for
-all possible values of batch_gen and cpu_id, including after wraparound:
+and even if we want to benchmark for 1000 years and want to fix this,
+then doing " | 1 " is not the correct way because:
 
-    (any_value | 1) >= 1  always, since bit 0 is always set
+On CPU 0, consecutive batches with | 1:
+  batch_gen=3D2:  (2 + 0) | 1 =3D 3,  batch_hash =3D 3 * KNUTH
+  batch_gen=3D3:  (3 + 0) | 1 =3D 3,  batch_hash =3D 3 * KNUTH
+  batch_gen=3D4:  (4 + 0) | 1 =3D 5,  batch_hash =3D 5 * KNUTH
+  batch_gen=3D5:  (5 + 0) | 1 =3D 5,  batch_hash =3D 5 * KNUTH
 
-Fixes: fa747e9f843b ("selftests/bpf: Fix cold_lru producing zero batch_hash in XDP LB benchmark")
-Signed-off-by: Muhammad Bilal <meatuni001@gmail.com>
----
- tools/testing/selftests/bpf/progs/xdp_lb_bench.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/xdp_lb_bench.c b/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-index 13777b3dcac8..816880c1cd5e 100644
---- a/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-@@ -618,7 +618,7 @@ int xdp_lb_bench(struct xdp_md *xdp)
- 		__u32 *saddr = data + saddr_off;
- 
- 		batch_gen++;
--		batch_hash = (batch_gen + bpf_get_smp_processor_id()) * KNUTH_HASH_MULT;
-+		batch_hash = ((batch_gen + bpf_get_smp_processor_id()) | 1) * KNUTH_HASH_MULT;
- 		if ((void *)(saddr + 1) <= data_end)
- 			*saddr ^= batch_hash;
- 	}
--- 
-2.53.0
-
+Each even/odd pair of batch_gen values collapses to the same
+batch_hash, so half the batches reuse the previous batch's cold
+address which is already warm in the LRU.
