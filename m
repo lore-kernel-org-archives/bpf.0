@@ -1,204 +1,91 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB97F3EE1C6
-	for <bpf@vger.kernel.org>; Thu, 21 May 2026 14:29:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D52C3E9C16;
+	Thu, 21 May 2026 14:38:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779373779; cv=none; b=L/HugVOxbFUKlNh0bAombibib4WUbgaETFSWmfU8bhdy+URHtZjVmm9xdTZgcyNIu/PrcWOPBZFfza1cvCDvZJ9xgzEVzDxv6FfbHkSYEZjwrh1WwhxN5Et1/FcOKCpN81T9T+bGwk0Cc4cC/cnQ8UlLGZ4uELjifa6L8Bqd7w8=
+	t=1779374323; cv=none; b=ZYGJl7wkYRyU/fEvkOBEF6oAi21Qe4zdvq+FP7d+P1P1ndyM+ofGsDT+kS7U6kudEyo7P/5uT09EtaXFdehjy6rJPVJU1gBA9WoEi2ydfB06q7+025YgFQ986IZDEUclI1t8v6g23nWu7G8+94KZGcT0OMXSwT4MI0l7jedYV8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779373779; c=relaxed/simple;
-	bh=L8X/Vtnahfr1UKdViXhLKWhf9qHUBPeIKLu97RI+aL8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VnZYd20SurKSLfJm9jDM1hsVSSgO+EAuVcKwSVyBNijd45kVTGfYBAYbPwbw7ln6n/n2awJJ/aWjog6L3WDD3iitTeb5Le0v+PIl82VB8WFE9ECVPhfuITnnmPo/1GsTk6aRjLGHL4p+Guz8U6VZGzKKBpR4Ukwyy2BkvAKQfCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pWkyhPoa; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779374323; c=relaxed/simple;
+	bh=XK48jeRB+QfYua9qvT6nkgqWoyk74EnZmHziGEhJckQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CZfb8BFFnQWOx+LsXHPZCYEUgQv1GPCMFU29vnJIV6n2ZViu3SEwJIoWiD2BkYG/pPcHKoi50zEvGLa2f5aw8XElXgLijJoAyYlPRIED/TAIx+0mP+diX9PD7Labmi+rLRXvytYw6xiY1jXVyHnUZXLNi+BmarduS2Tq6Yexh6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XsBlQTOC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pWkyhPoa"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779373775;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Hw2iSi5nOOVvlhwvxYfHRrDn76QQRLFbRQOPEaOi5gE=;
-	b=pWkyhPoa58XOqB8Oismhu3yUX3jShmcFhalKAS/TS+Citaz/A1tJ+73T+8S/tJuoAbqs8N
-	q9zI0SN6YFaVcx4J4m3dhRl9wpOZI3VDd4w/a6ZoCRe+pMzxbbd8qQsjTd9b9C++2T/Na4
-	1hly5Lsh2FI7jTKFVK1jwW+enKsbRdg=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v2] bpf: Fix concurrent regression in map_create()
-Date: Thu, 21 May 2026 22:29:09 +0800
-Message-ID: <20260521142909.95818-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XsBlQTOC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA3991F00A3B;
+	Thu, 21 May 2026 14:38:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779374322;
+	bh=nTzgC5HjU2axc7qp/6EBnj55/XJGfG1tYASFCI0U7g0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=XsBlQTOCK2YksJm2MNjyE7j0ny1HPTgDymFmsxNKKxr1BVdAvgPOBuNn6tFA7vGjg
+	 CSQXiV3VGsBWuWOwPes8pP8JUZc2AK1A75GOlY3qX2oC5FjQ7qoHn31pb8iXNfDSFm
+	 iXK2YnCBCaUWupOdSh0ZVPN+0hcaS9CE+UFVcZubluvtHYPOHE110zqo5nJZBbiaNl
+	 07zGPmwKluAZrGdXdG5ILZLoarbkdL9yDRoeg2O+Yo3PYLyE8/2+NE9g1lJxASkcRS
+	 B6VRE8y+mpZLmBsjrXBLlPLTbSWjyT2Yslzd/guaonNwFYtLf41VMjJQhPrDfeUtxL
+	 sB6G0e3DI2Biw==
+Date: Thu, 21 May 2026 10:38:40 -0400
+From: Sasha Levin <sashal@kernel.org>
+To: Song Liu <song@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org, live-patching@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Joshua Peisach <jpeisach@ubuntu.com>,
+	Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>,
+	Anthony Iliopoulos <ailiop@suse.com>,
+	Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation
+ primitive
+Message-ID: <ag8Y8L2WCcSEDPkG@laps>
+References: <20260508195749.1885522-1-sashal@kernel.org>
+ <20260517134858.146569-1-sashal@kernel.org>
+ <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
+ <agsVDqdALBoHEHlv@laps>
+ <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
+ <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net>
+ <agzAwjKhOhuANz_P@laps>
+ <CAPhsuW6C3hyciA4=z+V0BkQ9EEubuNCKLwoxtXorSbnhkUxdJQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <CAPhsuW6C3hyciA4=z+V0BkQ9EEubuNCKLwoxtXorSbnhkUxdJQ@mail.gmail.com>
 
-Because there is time gap between bpf_map_new_fd() and close_fd(), a
-concurrent thread is able to close the new fd and opens a new, unrelated
-file with the exact same fd number. Thereafter, this close_fd() might
-inadvertently close the unrelated file.
+On Tue, May 19, 2026 at 03:00:15PM -0700, Song Liu wrote:
+>On Tue, May 19, 2026 at 12:57 PM Sasha Levin <sashal@kernel.org> wrote:
+>[...]
+>> >Fully agree with Song here that there is no clear boundary, and that the
+>> >killswitch could lead to arbitrary, hard to debug breakage if applied to
+>> >the wrong function.. introducing worse bugs than the one being mitigated
+>> >or even /short-circuit LSM enforcement/ (engage security_file_open 0,
+>> >engage cap_capable 0, engage apparmor_* etc).
+>>
+>> This is similar to livepatch, right? Do we need guardrails there too?
+>
+>livepatch has the same guardrails as other kernel modules:
+>CONFIG_MODULE_SIG, CONFIG_MODULE_SIG_FORCE, etc.
 
-To avoid such regression, do finalize log before security_bpf_map_create().
+Which the user can choose to enable or disable. Livepatches will work just fine
+with CONFIG_MODULE_SIG=n, right?
 
-However, in order to achieve it, move bpf_get_file_flag(),
-security_bpf_map_create(), bpf_map_alloc_id(), and bpf_map_new_fd() from
-__map_create() to map_create(). And, rename __map_create() to
-map_create_alloc() meanwhile.
+With the whitelist approach, the user has no choice but to accept it.
 
-Then, in order to reuse the map and token when all checks pass in
-map_create_alloc(), pass "struct bpf_map **" and "struct bpf_token **" to
-map_create_alloc().
+Would it make sense to allow disabling the whitelist via a kernel config or
+some runtime flag?
 
-Fixes: 49f9b2b2a18c ("bpf: Add syscall common attributes support for map_create")
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
-v1 -> v2:
-* Finalize log before security_bpf_map_create() (per Alexei).
-* v1: https://lore.kernel.org/bpf/20260518145446.6794-3-leon.hwang@linux.dev/
----
- kernel/bpf/syscall.c | 80 ++++++++++++++++++++++++++------------------
- 1 file changed, 47 insertions(+), 33 deletions(-)
-
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 83de8fb9b9aa..28489e2fea04 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1359,7 +1359,8 @@ static int map_check_btf(struct bpf_map *map, struct bpf_token *token,
- 
- #define BPF_MAP_CREATE_LAST_FIELD excl_prog_hash_size
- /* called via syscall */
--static int __map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_verifier_log *log)
-+static int map_create_alloc(union bpf_attr *attr, bpfptr_t uattr, struct bpf_verifier_log *log,
-+			    struct bpf_map **mapp, struct bpf_token **tokenp)
- {
- 	const struct bpf_map_ops *ops;
- 	struct bpf_token *token = NULL;
-@@ -1367,7 +1368,6 @@ static int __map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_verifie
- 	u32 map_type = attr->map_type;
- 	struct bpf_map *map;
- 	bool token_flag;
--	int f_flags;
- 	int err;
- 
- 	err = CHECK_ATTR(BPF_MAP_CREATE);
-@@ -1403,10 +1403,6 @@ static int __map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_verifie
- 		return -EINVAL;
- 	}
- 
--	f_flags = bpf_get_file_flag(attr->map_flags);
--	if (f_flags < 0)
--		return f_flags;
--
- 	if (numa_node != NUMA_NO_NODE &&
- 	    ((unsigned int)numa_node >= nr_node_ids ||
- 	     !node_online(numa_node))) {
-@@ -1598,6 +1594,49 @@ static int __map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_verifie
- 		goto free_map;
- 	}
- 
-+	*mapp = map;
-+	*tokenp = token;
-+	return 0;
-+
-+free_map:
-+	bpf_map_free(map);
-+put_token:
-+	bpf_token_put(token);
-+	return err;
-+}
-+
-+static int map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_common_attr *attr_common,
-+		      bpfptr_t uattr_common, u32 size_common)
-+{
-+	struct bpf_token *token = NULL;
-+	struct bpf_verifier_log *log;
-+	struct bpf_log_attr attr_log;
-+	struct bpf_map *map = NULL;
-+	int err, ret;
-+	int f_flags;
-+
-+	log = bpf_log_attr_create_vlog(&attr_log, attr_common, uattr_common, size_common);
-+	if (IS_ERR(log))
-+		return PTR_ERR(log);
-+
-+	err = map_create_alloc(attr, uattr, log, &map, &token);
-+
-+	/* preserve original error even if log finalization is successful */
-+	ret = bpf_log_attr_finalize(&attr_log, log);
-+	if (ret)
-+		err = ret;
-+
-+	kfree(log);
-+
-+	if (err)
-+		goto free_map;
-+
-+	f_flags = bpf_get_file_flag(attr->map_flags);
-+	if (f_flags < 0) {
-+		err = f_flags;
-+		goto free_map;
-+	}
-+
- 	err = security_bpf_map_create(map, attr, token, uattr.is_kernel);
- 	if (err)
- 		goto free_map_sec;
-@@ -1626,37 +1665,12 @@ static int __map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_verifie
- free_map_sec:
- 	security_bpf_map_free(map);
- free_map:
--	bpf_map_free(map);
--put_token:
-+	if (map)
-+		bpf_map_free(map);
- 	bpf_token_put(token);
- 	return err;
- }
- 
--static int map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_common_attr *attr_common,
--		      bpfptr_t uattr_common, u32 size_common)
--{
--	struct bpf_verifier_log *log;
--	struct bpf_log_attr attr_log;
--	int err, ret;
--
--	log = bpf_log_attr_create_vlog(&attr_log, attr_common, uattr_common, size_common);
--	if (IS_ERR(log))
--		return PTR_ERR(log);
--
--	err = __map_create(attr, uattr, log);
--
--	/* preserve original error even if log finalization is successful */
--	ret = bpf_log_attr_finalize(&attr_log, log);
--	if (ret) {
--		if (err >= 0)
--			close_fd(err);
--		err = ret;
--	}
--
--	kfree(log);
--	return err;
--}
--
- void bpf_map_inc(struct bpf_map *map)
- {
- 	atomic64_inc(&map->refcnt);
 -- 
-2.54.0
-
+Thanks,
+Sasha
