@@ -1,57 +1,57 @@
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1DF3D9055;
-	Thu, 21 May 2026 14:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250F03E1695;
+	Thu, 21 May 2026 14:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779373602; cv=none; b=diEnHSekN5gt1NLaOpnCW6FRPFFpXTM2fPcgNgZIfWe31Dvf8LwqUpETdjRU1IS+0MqYPGSyybXrqPwzTyMwbYtnFfecnSl7cZWlNI24sN5q+aMIKB0A+YiKoGxZmv7/JnbHnsMR4/4SxI3iE74vXwqjXwnpEjBvhbDQbsxrKTg=
+	t=1779373603; cv=none; b=nKC44YKWh0jtfr53o3PTVSyQZn3GP08P/km+Aw+A2wyPFmgFWvcKRrpyLymynzGXhhtkGaADfxEO047988Cb9p+/y6kSPeU6xkRqmFqF5uR6szzEQdMRIW04XfdYZIaa2ap6xwO45rfpxdSjldFd/86SdjmEku4l5r5OxjE9Wak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779373602; c=relaxed/simple;
-	bh=pOTifWMyDUr3KztHc7ELPe1Ms++E6svSTXBfgYLa2PY=;
+	s=arc-20240116; t=1779373603; c=relaxed/simple;
+	bh=lnqUBHPpzXbWDkV21nilebs+kDCcwN10JV8SRrKWPOs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RzLWjBS0TBRMAi64xZunXfcJZCHBt8d9UcLF8KLzDOs3sh017nHAm7s+aKwsT3Vr2G+uO4SR/Cnyvny7BPlvqqNl6YsW/Qd1FSbszznjAV6UQXwdpJKsWq/n9PccNcaaSw9pLMkQeEeGJbXCPIpVXP9c35IpgMw5VNQ55Gc+K8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=pSEyqh5w; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=KEk+MS5mOSFZPwXjI8GCPshs9uwGLEahyTdeDicajcBA9qtQsJSFqgb7DlKvAKzJA6PnCPnxMXus7YcNkOaBIvRZyTkF8S1slp95V2Aok5ZJycAoIqlubVJYGl7t0TLLg7N7Uhp8G1RKL/Kzn9uwSD4Uum9YGtKLgT6al8QDo6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=j4Du8KgI; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pSEyqh5w"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64LE9rhJ069465;
-	Thu, 21 May 2026 14:26:02 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="j4Du8KgI"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64LBVPOJ271835;
+	Thu, 21 May 2026 14:25:58 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=WbHj9iJ7NuBWvii1A
-	/p//5DBJ1F6JGPeRMLlnMLO6Uc=; b=pSEyqh5wjnpwsukgafEIKddJxopOs7y00
-	+ZVILJpPdafoQiR3lHLzdY5zow3hdI5apSbb2NO4bvdBltLH2yfsjKiBLhtoAC6r
-	aGtZ6nz+50g9mzN/iO3g96O+nQkRGW5LQdt+SKahj/41CZPTp3Zglxmi5c3sbLDN
-	q2pAHMqFQA6lL78WObsRroZc9t7F7Iv7Koy6w6IFomRnLPWjv5xCwhIst9nuYVuQ
-	lihv2aMNneCF7saQ1ASb3sdwMBeBzDsulq5gVTD82ocvPGG9FyeXKE+cvIeGU8Zt
-	0q0QqmC8YPudR2asfHbWJQD6iotyOVEq2dtQ1paDsVI26tW0FwIKA==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h8mydaf-1
+	:mime-version:references:subject:to; s=pp1; bh=dLUdkq8a3Y1OwT5DX
+	jpOwlqcJtqrXG3rf2YuzJ2NkbA=; b=j4Du8KgIApJgAohv8CFRqcAykYsTymGs7
+	N/XLg32AAbJC+mQmMqdAcFkxRj6zomQbHS3SVt4G0agihIzaEMhaxM6xg0QSLC5v
+	mikLELCp3PrnQe1T3tZ+JCfhp3UgGWQ7dTxOQc79sNI/iCQ9j8MV4QrfB3msMhwf
+	MIjZBzjyW7yThlAnL7F6PZYj7dWKipQOvzUxO4dzsia0dxuq0nJql8qwWUUWqoqd
+	sifPRWl/3KPLs3nPa68zb9LiO5nKJfm0h0/6t3bcuC22fjk6n2rT5o0KNYLEIA6O
+	f348nae+GpZOxkwKOc9yOoAeCZC3LtrJw+KsgGSovyt4DSgOL0iUQ==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h757dqe-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 May 2026 14:26:01 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64LEO5Xo006184;
-	Thu, 21 May 2026 14:26:00 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e75kyc9u0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 May 2026 14:26:00 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64LEPvdL28377478
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 21 May 2026 14:25:57 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0FF9720040;
 	Thu, 21 May 2026 14:25:57 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64LEO92l001746;
+	Thu, 21 May 2026 14:25:56 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e72wqcst0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 May 2026 14:25:55 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64LEPq4T45678870
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 21 May 2026 14:25:52 GMT
 Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id ACC5120049;
-	Thu, 21 May 2026 14:25:56 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 55C8920040;
+	Thu, 21 May 2026 14:25:52 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 002AD20049;
+	Thu, 21 May 2026 14:25:52 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
 	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 21 May 2026 14:25:56 +0000 (GMT)
+	Thu, 21 May 2026 14:25:51 +0000 (GMT)
 From: Jens Remus <jremus@linux.ibm.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         x86@kernel.org, Steven Rostedt <rostedt@kernel.org>,
@@ -80,11 +80,10 @@ Cc: Jens Remus <jremus@linux.ibm.com>, bpf@vger.kernel.org, linux-mm@kvack.org,
         Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
         Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
         Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH v16 20/20] unwind_user/sframe: Add prctl() interface for registering .sframe sections
-Date: Thu, 21 May 2026 16:25:46 +0200
-Message-ID: <20260521142546.3908498-21-jremus@linux.ibm.com>
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH v16 08/20] unwind_user: Stop when reaching an outermost frame
+Date: Thu, 21 May 2026 16:25:34 +0200
+Message-ID: <20260521142546.3908498-9-jremus@linux.ibm.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260521142546.3908498-1-jremus@linux.ibm.com>
 References: <20260521142546.3908498-1-jremus@linux.ibm.com>
@@ -97,99 +96,95 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: OUZAgxwN4FB_fHaCqX_mujPmJt2qr6ue
-X-Authority-Analysis: v=2.4 cv=GYMnWwXL c=1 sm=1 tr=0 ts=6a0f15fa cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+X-Authority-Analysis: v=2.4 cv=ffCdDUQF c=1 sm=1 tr=0 ts=6a0f15f5 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
  a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=pGLkceISAAAA:8
- a=VnNF1IyMAAAA:8 a=1RKwvADtGVyjO38rMG4A:9 a=2JgSa4NbpEOStq-L5dxp:22
-X-Proofpoint-ORIG-GUID: zPlQu9xIGGGD_WQ6kxrO-9UCFhYyJMIb
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIxMDE0MiBTYWx0ZWRfXyY3olyWCekyi
- Vgu5puGG/58e0KVOmBgnDleJsWKu5skVuUeu9MEMW540HMEn82k8pL2woSITI3dfVuzeQITqgtE
- FtQxRrvYhpYHLOrg0T/raneNKl51iH5L1KVi0ng359JsFiooL5Z6lGf7+f6dy0/d/sGxfamK7AH
- fZrNVBNTiJqPTvxgrc5D2EUrrz0we3uexp+nSYV8NhMnoE1NsY4/LucQpfFA36fnLF97CKsWXtN
- gPRDjnrjASTL7Sw2lOm+VqWFXNOTemJNkkSBXd7Qf3J7M6b/jiiIUVpTV+JNRIAYSsyJ7kBn/Ud
- nScPxkS3Jv0jMZv/WDl7gJ15AD7NrVuzaRJMCb8+fBiK2k/g7SwkOihgGyDmgCr/n194XKibiYF
- Olt5LUyD7TmnrXjN/02jsp+kn7tHLlK8xYpajCGfCRwXX65o5fGeUF5pOOJD+oc8kuv3kpG7OcH
- LO2C3nVxBMIQbx262eQ==
+ a=U7nrCbtTmkRpXpFmAIza:22 a=pGLkceISAAAA:8 a=VnNF1IyMAAAA:8
+ a=_1qlYuAciRtwIPuEvDgA:9
+X-Proofpoint-ORIG-GUID: fUfePOnfi9_oEKj4Abvipy8o3-nPleKs
+X-Proofpoint-GUID: c8elz6F9YYxRXonNj5nq1kxFANaA4Iy3
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIxMDE0MiBTYWx0ZWRfX6N2qZycI2BBT
+ jLDodVQXz80U+52pLCZg+xmQAY7Ow54WWQdZJSDAhgkmx06upvMLkZwcaApQt53aW+Io6peTD3Z
+ 81I0CRQmOPlgvFLHpAgYYsMHPrfSZQJJ3IYakPW5fjsW2I1SWx6yAOnmv7rB7WVqWMaxtBltwPZ
+ EXQwF1GQxWx6JIckdTQJlHZhF5gYU+QlcrScerf+JVVewo2+nBOXNFDhHVlavkPQadyE5XF6+iT
+ ZDkM+Pidu8gUtfbSJlC1a1S3IQhLzcW13losOWp8JWXIwzx2jF2OSsV/eI7+cqny6nmOO8g56fR
+ YZijlyIYV5ZArd1SdT6tBkr7g+0LnXNncEqtBHNGwpgrqrhqh1NJlLAxFo52OTtp/FjrxO0LIYP
+ 6HOc+PV2I14kVXZemJ9lvpxlWyBD2DbyEDmjJXkJKd8u4vjA3oeiBg+88eV71u8s0anv4nhMoL3
+ cBIi0jv8QOnf0Q6VA2w==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-05-21_02,2026-05-18_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
- adultscore=0 suspectscore=0 spamscore=0 clxscore=1015 impostorscore=0
+ priorityscore=1501 spamscore=0 phishscore=0 suspectscore=0 adultscore=0
+ clxscore=1015 impostorscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605210142
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+Add an indication for an outermost frame to the unwind user frame
+structure and stop unwinding when reaching an outermost frame.
 
-The kernel doesn't have direct visibility to the ELF contents of shared
-libraries.  Add some prctl() interfaces which allow glibc to tell the
-kernel where to find .sframe sections.
+This will be used by unwind user sframe, as SFrame may represent an
+undefined return address as indication for an outermost frame.
 
-[
-  This adds an interface for prctl() for testing loading of sframes for
-  libraries. But this interface should really be a system call. This patch
-  is for testing purposes only and should not be applied to mainline.
-]
-
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Reviewed-by: Indu Bhagat <ibhagatgnu@gmail.com>
 Signed-off-by: Jens Remus <jremus@linux.ibm.com>
 ---
+ arch/x86/include/asm/unwind_user.h | 6 ++++--
+ include/linux/unwind_user_types.h  | 1 +
+ kernel/unwind/user.c               | 6 ++++++
+ 3 files changed, 11 insertions(+), 2 deletions(-)
 
-Notes (jremus):
-    Changes in v15:
-    - Fix rebase error (missing break). (Sashiko AI)
-    
-    Changes in v14:
-    - Bump PR_ADD_SFRAME and PR_REMOVE_SFRAME.
-
- include/uapi/linux/prctl.h | 4 ++++
- kernel/sys.c               | 9 +++++++++
- 2 files changed, 13 insertions(+)
-
-diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-index b6ec6f693719..bd0bf828b033 100644
---- a/include/uapi/linux/prctl.h
-+++ b/include/uapi/linux/prctl.h
-@@ -416,4 +416,8 @@ struct prctl_mm_map {
- # define PR_CFI_DISABLE		_BITUL(1)
- # define PR_CFI_LOCK		_BITUL(2)
+diff --git a/arch/x86/include/asm/unwind_user.h b/arch/x86/include/asm/unwind_user.h
+index 6e469044e4de..2dfb5ef11e36 100644
+--- a/arch/x86/include/asm/unwind_user.h
++++ b/arch/x86/include/asm/unwind_user.h
+@@ -23,13 +23,15 @@ static inline int unwind_user_word_size(struct pt_regs *regs)
+ 	.cfa_off	=  2*(ws),			\
+ 	.ra_off		= -1*(ws),			\
+ 	.fp_off		= -2*(ws),			\
+-	.use_fp		= true,
++	.use_fp		= true,				\
++	.outermost	= false,
  
-+/* SFRAME management */
-+#define PR_ADD_SFRAME			82
-+#define PR_REMOVE_SFRAME		83
+ #define ARCH_INIT_USER_FP_ENTRY_FRAME(ws)		\
+ 	.cfa_off	=  1*(ws),			\
+ 	.ra_off		= -1*(ws),			\
+ 	.fp_off		= 0,				\
+-	.use_fp		= false,
++	.use_fp		= false,			\
++	.outermost	= false,
+ 
+ static inline bool unwind_user_at_function_start(struct pt_regs *regs)
+ {
+diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
+index 43e4b160883f..616cc5ee4586 100644
+--- a/include/linux/unwind_user_types.h
++++ b/include/linux/unwind_user_types.h
+@@ -32,6 +32,7 @@ struct unwind_user_frame {
+ 	s32 ra_off;
+ 	s32 fp_off;
+ 	bool use_fp;
++	bool outermost;
+ };
+ 
+ struct unwind_user_state {
+diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
+index 1fb272419733..fdb1001e3750 100644
+--- a/kernel/unwind/user.c
++++ b/kernel/unwind/user.c
+@@ -32,6 +32,12 @@ static int unwind_user_next_common(struct unwind_user_state *state,
+ {
+ 	unsigned long cfa, fp, ra;
+ 
++	/* Stop unwinding when reaching an outermost frame. */
++	if (frame->outermost) {
++		state->done = true;
++		return 0;
++	}
 +
- #endif /* _LINUX_PRCTL_H */
-diff --git a/kernel/sys.c b/kernel/sys.c
-index 62e842055cc9..b0a9b1e3ccd7 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -65,6 +65,7 @@
- #include <linux/rcupdate.h>
- #include <linux/uidgid.h>
- #include <linux/cred.h>
-+#include <linux/sframe.h>
- 
- #include <linux/nospec.h>
- 
-@@ -2907,6 +2908,14 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
- 		if (arg3 & PR_CFI_LOCK && !(arg3 & PR_CFI_DISABLE))
- 			error = arch_prctl_lock_branch_landing_pad_state(me);
- 		break;
-+	case PR_ADD_SFRAME:
-+		error = sframe_add_section(arg2, arg3, arg4, arg5);
-+		break;
-+	case PR_REMOVE_SFRAME:
-+		if (arg3 || arg4 || arg5)
-+			return -EINVAL;
-+		error = sframe_remove_section(arg2);
-+		break;
- 	default:
- 		trace_task_prctl_unknown(option, arg2, arg3, arg4, arg5);
- 		error = -EINVAL;
+ 	/* Get the Canonical Frame Address (CFA) */
+ 	if (frame->use_fp) {
+ 		if (state->fp < state->sp)
 -- 
 2.51.0
 
