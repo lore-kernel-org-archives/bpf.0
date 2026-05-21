@@ -1,99 +1,102 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF293191D0
-	for <bpf@vger.kernel.org>; Thu, 21 May 2026 23:32:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 197CE34E746;
+	Thu, 21 May 2026 23:33:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779406379; cv=none; b=lm8RkIjEN0T8xH7MObognauX9BSyMyoJPuU49iqpGM682dxgDiFH7YKSfrmb3xEVF8dAEs3jQrI9BoU2q2FqfsQswjLCfh/LJ8bDV6pzJ9zP2AZR6gpFuxUk7Wk+iuZtNoVrUQRGSHANWc9M4wOZiDKg7ie1ddkH8GNPCef0wNg=
+	t=1779406415; cv=none; b=WGeEAjxCk0TJkSN/sVaP2ClZ4uIoP+6qL6dSSfVYWR46mRozL5Y6oQtoIlYsFSAXHAH/kcSkI0YfDdR2liQ3dTy6CVtsfhRtafp4zRl+rsahhBdCXQlYLFWsFQReRWe1PMRZJyVKJqQlg/zqzAQeKDVbtTl34xbT2YfChA2UxsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779406379; c=relaxed/simple;
-	bh=lkdIZ6Q2zn4KMxbxd/hBExwnE3+zpIGPnfJYONLY5a8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WnFhOpglVa446/Nj4Pae9emRAwUSxNRBg/QZuOjAEmipAKtSYNQnxGNyG5gtowID/T/ClUEK+/iOQGlqXz76D68+gTKjMayKJLItlJ2dpWyoS2x8J453gvS80wn7aGC1p4tBBGpWT3FehyFaaj9haSL0OUUKryb4ZO/CxDNi7CQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kv/GsNkH; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779406415; c=relaxed/simple;
+	bh=p/eT2ES4g1OtNMBBJtz4Ei7qPxF+kkiPDjmAU7ctm8w=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=kamsVZGjUR9GRR5j4PZpnyj62Grp9mJKbVqP23H2nuAPnD6fWh+VuUUcb5Ue/Hic/qoXKX2tpqaY3YqXDToDru7/TZi7eXHQAkiRZh3ErSx8dk9+xDRNMYWoNQvLqkFZ70KtSMhl2WfdG/Sn3O5aVb+LvAFW95r/J8rMjDDkanE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m9UnGRvh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kv/GsNkH"
-Message-ID: <8818c106-1e8e-488e-8da4-98c6b079f8b9@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779406374;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ngtm8Y87kSwySV9lKNY009muS7W62DD4gztCyNolY2w=;
-	b=kv/GsNkHamZjMdz5RPwADtwM/gAcsgRTa12n6XN0EAJXux0OUZSRNwC1dxD3pKLCHgawv9
-	uQDHnHkD5K/5/AKt53Oq4vNgdUqbAQrFdHzYon+Vy29LtneETxlldn6XU/s7od1xcgq0bb
-	lXTQ5PZZbA2KRoSs8pUS2YwWpYRIbHI=
-Date: Thu, 21 May 2026 16:32:50 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m9UnGRvh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A11A1F000E9;
+	Thu, 21 May 2026 23:33:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779406413;
+	bh=7jZRoF9HgYcVl17myB5JjUZbtv6mU1dVLl+Gk3KEKcY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=m9UnGRvh5ZURLXOhw9ODxcu45PdlxsRuSP3RKWr6ljKwZ49HQna/UAg9/ZgpkqXDe
+	 ktJQhSOU8+IbTo7RTdlKJ/kO8roP2gP9EH4UhJVpeDJjVN8ecSro9yQfyVsSLZYSaj
+	 ubb2jtpsV4QBsAt7I4F+cFdOiyfPrGW/spgCmwre981W/e5re6nNinhueFAPhK0jca
+	 7AHvAxRBrOU9o4gFrNQiC+yVZn2cLatuSAeuvcpTMCOal6dt/AVRlCZlJxVVKsw+DO
+	 sgoegCtc0LnAge566f8drmMbiKYFy6nAEyxksymoZQI1iLQyGpwWdwwuF0yo68wijt
+	 zJ3AVpw2OpzfQ==
+Content-Type: multipart/mixed; boundary="===============8845870231642385149=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v6 1/3] bpf: Factor out stack_map build ID
- helpers
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260521225022.2695755-2-ihor.solodrai@linux.dev>
- <20260521231600.E14FD1F000E9@smtp.kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260521231600.E14FD1F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <4dfa1f3ecf6354e9de5fa0341c248eac18132447d452446a7e9ad9fe67142118@mail.kernel.org>
+In-Reply-To: <20260521225022.2695755-4-ihor.solodrai@linux.dev>
+References: <20260521225022.2695755-4-ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v6 3/3] bpf: Cache build IDs in sleepable stackmap path
+From: bot+bpf-ci@kernel.org
+To: ihor.solodrai@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com
+Cc: puranjay@kernel.org,shakeel.butt@linux.dev,mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 21 May 2026 23:33:33 +0000 (UTC)
+
+--===============8845870231642385149==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 2026-05-21 4:16 p.m., sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] Data race and incorrect ordering in stack_map_build_id_set_valid causing stale reads
-> --
-> 
-> commit 4eb2cc8713ca7f31dcbc75f5166e94dd60761e7c
-> Author: Ihor Solodrai <ihor.solodrai@linux.dev>
-> 
-> bpf: Factor out stack_map build ID helpers
-> 
-> This commit factors out helpers from stack_map_get_build_id_offset() to
-> prepare for adding a sleepable build ID resolution path. The commit
-> message states there are no functional changes.
-> 
->> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
->> index da3d328f5c15a..4c753e02c4159 100644
->> --- a/kernel/bpf/stackmap.c
->> +++ b/kernel/bpf/stackmap.c
-> [ ... ]
->> @@ -152,6 +152,28 @@ static int fetch_build_id(struct vm_area_struct *vma, unsigned char *build_id, b
-> [ ... ]
->> +static inline void stack_map_build_id_set_valid(struct bpf_stack_build_id *id,
->> +						u64 offset,
->> +						const unsigned char *build_id)
->> +{
->> +	id->status = BPF_STACK_BUILD_ID_VALID;
-> 
-> [Severity: Medium]
-> In bpf_get_stack(), the destination buffer can be a BPF map value that is
-> concurrently readable locklessly by user-space. Since the buffer initially
-> contains the raw instruction pointer (ip), does setting status to VALID
-> before writing the offset create a data race?
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> index 95336c0e8b56..0d641ac39227 100644
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
 
-This is a good point. Will fix in the next version.
+[ ... ]
 
-> 
-> A concurrent lockless reader polling the status field might observe the
-> VALID status while the union still holds the raw ip instead of the correct
-> file offset, and before the build_id string is fully copied.
-> 
-> Prior to this patch, the offset was written before the status. Could this
-> reordering of assignments cause concurrent readers to observe stale data?
-> 
->> +	id->offset = offset;
->> +	if (id->build_id != build_id)
->> +		memcpy(id->build_id, build_id, BUILD_ID_SIZE_MAX);
->> +}
-> 
+> @@ -253,6 +261,17 @@ static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *i
+>  	for (u32 i = 0; i < trace_nr; i++) {
+>  		ip = READ_ONCE(id_offs[i].ip);
+>
+> +		/*
+> +		 * Range cache fast path: if ip falls within the previously
+> +		 * resolved VMA range, reuse the cache build_id without
+> +		 * re-acquiring the VMA lock.
+> +		 */
+> +		if (cache.build_id && ip >= cache.vm_start && ip < cache.vm_end) {
+> +			offset = stack_map_build_id_offset(cache.vm_pgoff, cache.vm_start, ip);
+> +			stack_map_build_id_set_valid(&id_offs[i], offset, cache.build_id);
+> +			continue;
+> +		}
+> +
+>  		vma = stack_map_lock_vma(&lock, ip);
+>  		if (!vma || !vma->vm_file) {
+>  			stack_map_build_id_set_ip(&id_offs[i]);
 
+sashiko-bot@kernel.org raised a concern in v3 (repeated in v4 and v5 by
+bpf-ci) about the VMA classification here using !vma->vm_file. While
+this check predates your patch series, it's worth addressing for the
+context this code now operates in.
+
+Can private mappings of /dev/zero or driver memory cause issues? These
+mappings can have a non-NULL vma->vm_file but are still considered
+anonymous. If the stackmap path proceeds to parse the ELF build ID from
+these files, could it trigger unintended side effects?
+
+For example, reading from a character device might alter hardware state,
+or reading from a FIFO could consume data.
+
+Would checking vma_is_anonymous(vma) here be safer to properly classify
+the VMA?
+
+Reference: https://lore.kernel.org/bpf/20260513043154.24483C2BCB7@smtp.kernel.org/
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26258400944
+--===============8845870231642385149==--
