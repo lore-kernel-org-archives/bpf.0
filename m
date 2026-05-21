@@ -1,255 +1,228 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0A93C5DA6;
-	Thu, 21 May 2026 12:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.11
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779365153; cv=fail; b=ntyqYMK35q0XxsHEDLDahpgGC4QlW4dtdlSVuvzwW5PvCNgfLlVVq6cCvPwsHvmfNEGBvdNUg0FBn83E1uVOirjnsy3LCfG4+qnC5YGXmIBD/1odJh13tWIkJASt/DNgTfSbImLqR9Gja8K67iPGzTsPSmMd9E6rAGr0vSxl9pw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779365153; c=relaxed/simple;
-	bh=cb6YwGroEdcwKeDvk5TciGy4JSUI4zROC1gN2Wf3350=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=uhJ7eFKb8E6j4oolJg3vQ+3gxGfcH6t2iguMIpj6maPMBIFb+r/ZZzLJEjYWPD2oUSg1l9XCIDmix5Pt6WIG8ewRgUeL5f/rbOOkIZ4k/ed4W0s9xisB7wYgXA8c4xCs+2iC8p7aeFSmaZVTUC/rEZetQMNp9fRCXLeUsyBE/B8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QbN4ZN/J; arc=fail smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D1F36F8F3;
+	Thu, 21 May 2026 12:06:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779365168; cv=none; b=lW6Pa/tF3kYaNXeRgHBxRm0LYudGz4AUr3/tuXuzXoIlOG74SAdCOkS7wFoZbfa2UI4YSLJPmLkwtWU5huFAEokjk6cSgJ/CXNxMQQUl6LFaqwHaZIabmq6vjXixhvhPD4gmKL0PV4F1Hj+jFVcEuctGP4x6YU0zNMEd3nbqpxc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779365168; c=relaxed/simple;
+	bh=o3UeE0B1gQsdaujAM6JHX3XjO0D2yR+ppFJvBvhj2wQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=h9DGrwcNb4jjevNVbE37DJMWSt0OxtdI9rQE9bH/Pev8FlXGCYrmV7HRaz/vq48Pl3gQUcyxIzaVBaN19KzqwkLQ6ntCTBqlMNHh7XQVTsBI/Z8uRtL0QwIz/xthrQQgVaqAE5DG1mukYOTPsnayTVezYApY0P/btGMgg8sxmHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aEhWrGvU; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QbN4ZN/J"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779365151; x=1810901151;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=cb6YwGroEdcwKeDvk5TciGy4JSUI4zROC1gN2Wf3350=;
-  b=QbN4ZN/JNne81TCaXrLW8jBDH1uMOs+mqaupt/YLWmnH/py+w8IOpx0C
-   1j1wOXW1MyOPBw9hd1Z7aoHo+oatwV5Yf04tyY5llBtplFozEOYI9wI1J
-   BhuTf+TroXU2qf2L1+rMPSja54pDFxcNype1Klo5ktt7+Icu6EmXDECI4
-   HXfv0JavOSqconbhyzWoB+DMvCW+uxlWByF14nVHDjhBQBjl+Xd6OdAHH
-   Q6DvCJbOk7/6CVo8GYtPcZ0eYjxSZCqyBH/QOqP6cWVsazJcfXXi8ni6x
-   n17NFUoPqalu6a1b683gbvdF8dYjRrz1CJ9CAojH+vmYIyUC44KzqFdKA
-   w==;
-X-CSE-ConnectionGUID: OVG/Yd+gQC2KBjBe5JHVhw==
-X-CSE-MsgGUID: WbCfoSCvQ2yVJVkYfKsIGw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11792"; a="90855888"
-X-IronPort-AV: E=Sophos;i="6.23,246,1770624000"; 
-   d="scan'208";a="90855888"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 05:05:50 -0700
-X-CSE-ConnectionGUID: j7/CxkH+SHeCXT8/qdcmgQ==
-X-CSE-MsgGUID: IiLXljx+TtS+jbpucOD4aw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,246,1770624000"; 
-   d="scan'208";a="244501952"
-Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
-  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2026 05:05:50 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Thu, 21 May 2026 05:05:49 -0700
-Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Thu, 21 May 2026 05:05:49 -0700
-Received: from CO1PR03CU002.outbound.protection.outlook.com (52.101.46.22) by
- edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Thu, 21 May 2026 05:05:49 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TbkVTn+zrM8tHMctQ9TMHRCArktHkomhlH7Z2+5tIIB11XbRyjESYc4chRy6ZYpZSUSLJafQxDPGxyiSBvdNDulaprTP0poCLARAczzrX6CmQ/N9Gk6pdWpAk9fIQ5ZBv6r+9eGXLKkkzhAVGJfu+7wCgGZgO2ct5hJNnqyVlkl6/utzDDX5cZEhInitBrVFf6Mm7oZw2GqP70GwfEOw8UukEL2mArsPp+FP1fq1MTGFwjnI6tFRsU1fQFnPHbd/+rRoIGsProD3wpve1DH5czR50dLQen4ec9uonludj59mH93kxg4W7ygiaPFUqNQri1EvgI6A+4UjiSEOfaaaUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Xgh3oPLQ2WamIwAhIT/xAK9+dqRkCv4dEzeHnwabPZ8=;
- b=jFsbIenjOC6vaQrmRl7KanRYK8lHkZEq3reb+evmc1nvfAQCfV3VrrB87sHzG4qiO/CJOSWRS/FBRJoRtHaVxwAL24XtjwlmdEphJDvYUp3ElDGfuTSRT98wf5kqkUteSrY4AVsTmNf3qQrgdd++PBJ607OvcNXhDeJLdw/Mh65zqPazulaZcDIzMPjqutVMYOtO7TUIeuLOrFLqF7o7jFF3D49jjYITGCOSSrcEybKMecBgH9+0RYZwL36C1rj2PyanHeLK39niVDZ2ld6Q2Yfhq5OvFkXtg5ikHtaPf0CTR13Maszw8z4rsaD0s95Ax3meAtG98R7CsXXHqTG/cw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- LV8PR11MB8769.namprd11.prod.outlook.com (2603:10b6:408:204::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.48.14; Thu, 21 May 2026 12:05:46 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.21.0048.016; Thu, 21 May 2026
- 12:05:46 +0000
-Date: Thu, 21 May 2026 14:05:39 +0200
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: Jason Xing <kerneljasonxing@gmail.com>
-CC: <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-	<pabeni@redhat.com>, <bjorn@kernel.org>, <magnus.karlsson@intel.com>,
-	<jonathan.lemon@gmail.com>, <sdf@fomichev.me>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <hawk@kernel.org>, <john.fastabend@gmail.com>,
-	<horms@kernel.org>, <andrew+netdev@lunn.ch>, <bpf@vger.kernel.org>,
-	<netdev@vger.kernel.org>, Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH net v4 2/5] xsk: fix buffer leak in xsk_drop_skb() for
- AF_XDP multi-buffer Tx
-Message-ID: <ag71E39eTnzx2Npy@boxer>
-References: <20260520004244.55663-1-kerneljasonxing@gmail.com>
- <20260520004244.55663-3-kerneljasonxing@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260520004244.55663-3-kerneljasonxing@gmail.com>
-X-ClientProxiedBy: VI1PR07CA0161.eurprd07.prod.outlook.com
- (2603:10a6:802:16::48) To DM4PR11MB6117.namprd11.prod.outlook.com
- (2603:10b6:8:b3::19)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aEhWrGvU"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64L67aSf441640;
+	Thu, 21 May 2026 12:06:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=YGlv5i
+	A8YcXVb4xuyVsf4pRMy3TV3Cu0ZNMWpvskLcM=; b=aEhWrGvUDctqj4qiYnwos5
+	0L2dWutds6Cd3Kejy7YVJqKDTw75Zkh6aTrzmgSIIVZJ9ymElFnhTlxIy6yONp0o
+	IRBvYYptwZwWabJIBwJrHewb6+7KrpXITPNxxKSFSY3lZ2whMhywQJgDVLSQU1nr
+	cxXKqER+npJxR0NlwZ7qRfMaPRwgFg5rAJjKDads0S7aGoon0TJ/x931aUFNzOiy
+	0GXy8VGrQV9N9IucBzxAepFJ7NklysBwBX5UyTvcpisnEFYUcygRipVt7ThDrFUO
+	r2KhKryIGyo7YBixDlcwxZPACG7dvGxnBmEDcue15i44SuTqfHTlnNIrMV/rg8ZQ
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6hb8nfvb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 May 2026 12:06:04 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64LBs6I3021027;
+	Thu, 21 May 2026 12:06:03 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e74dhuv5c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 May 2026 12:06:03 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64LC61r547382788
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 21 May 2026 12:06:01 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 717432004B;
+	Thu, 21 May 2026 12:06:01 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 501A620043;
+	Thu, 21 May 2026 12:06:01 +0000 (GMT)
+Received: from [9.52.200.195] (unknown [9.52.200.195])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 21 May 2026 12:06:01 +0000 (GMT)
+Message-ID: <f746df8e-0fb7-4e0b-be46-2fa9c1e21a04@linux.ibm.com>
+Date: Thu, 21 May 2026 14:05:59 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|LV8PR11MB8769:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9c9e8304-9e19-4322-d3b2-08deb7314a85
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016|4143699003|56012099003|18002099003|22082099003|11063799006|6133799003;
-X-Microsoft-Antispam-Message-Info: gqVz+Fn74cjgTtFXOyKh8wrVnNCPxmU5y8K/XAkhn4+lp5SsS7866zaThYsGjbaZNi55z568GbYtipsL0iux4GgWrdXF7pOXWklnM1Eux7p+s2/apa2sL6JjMit3H/kyPEZWgrxp1U+fcxKR2Ug3z6WAdIGmATJC59lzRSkvk6ufSYj6iT12SvgG2nV6rQrCWUBb7avt15G9hnFFaPnbrm3xoF6ERXCDuJ40bHox0+w4d9p3n7qYcS1DZ2pSvRcLIpFmLIF0MnJQjTg0IexrtDxJy1qLWQ9joUobM+OyjgloVXyqpbnIYPtZvpPJkDqzD6uNz3NYqmn+OjEtBaoxkMsN5Cebj2+DvXtR/N8o4gKzjpWxcgfCG9T+RtfzrkQRqPB4sCZW23hNi6c/dcc/xspgSkJthaKoqg9QdZ+rHaxnNPUs88rxg+tL0IRRNES3yBTZlhCuB6SGJkJEUVM7+TRFeGYF6tsKCxmgzr7I3vWxp2AuAKdszqJsqrAVfIaOQM3YglNN7M09JRp+PKVmUaeJaXOrtLDkPrjYyLsh4wMXaIgdBsKQdjmx9DzdCu527tP0ksz4p5AkLf52adUtqAnVhbihWZNE7sSD5Tc0n8GcjecrJv+pFBvdOMNdQ/Mi9KGeWI1ACSNEMUZhmGHxmw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(4143699003)(56012099003)(18002099003)(22082099003)(11063799006)(6133799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Hf8HM/mIMOZ6FHn9Yu65AnyLJ3PxOBEdvvAOAyxKwOqXmXqc/USOs+RoqTyD?=
- =?us-ascii?Q?fhUrX4X1N+VmiXdrkkJqIH7PpHMdZzIsxDllue1jibXkYCUJtEkjibWoH7sY?=
- =?us-ascii?Q?7DMlPZtqKPtWNyBq+isjV+ldF+t4RkHHMj2lGCowOv2RaWn0n5N8cuJ1aZzA?=
- =?us-ascii?Q?FJptzNjW4eEGFIw9ZDbE89xmroN8OfUdVNH9tXWNIZDo8pJujeVUXLyVP5wP?=
- =?us-ascii?Q?jE13cYOWKPoYR5Cxe9/S5BaGI1gQnfBZGO7wHpej1XnUSPt5F93uY9REx6WZ?=
- =?us-ascii?Q?W4yvJXNOaUiJ5x87TPPC6NQQ0cVp8AhivOszOIokWlHF4qj9zf5nBsx6AVbT?=
- =?us-ascii?Q?lyORRi9xdAvi9gC7HClDZVNj2j7m4KAd4wAI+ixhWXTe2Tc183GgKq3BQQPm?=
- =?us-ascii?Q?LiLsri6uv2cj4Lauyf7Bu6xbfFVtf4QZK9k7vsERb6xqEjrXH/+t9TlEeR1S?=
- =?us-ascii?Q?3BnakySzCUYdonkzVgkE/i5Ch0apHWYPJv+0vQoy06Oly8PQNEsEjn6WB5Iq?=
- =?us-ascii?Q?35un9BYufUsdpuln5SjpOV6hKmcRA5NoHe8OdM6Zuk2H9fLvKQlf0ZEpBpM6?=
- =?us-ascii?Q?17kTY3xAJog/tM4sTr/1gb8p/G5Q1w/o1wieWUlsriSjXUoMmPQcM/UJgX+7?=
- =?us-ascii?Q?1jfcezkn8YfHPHmwNmX5Z9oH3PVVDhhr4NuPZq+Sq8FC5yk0xAIlKsZHs6uR?=
- =?us-ascii?Q?N8CPslhKFzclNdH1zgdthAmyltEoz9SjerUy7+EqT3FJQS6lkNou65t57Dzc?=
- =?us-ascii?Q?+ANpd7liQbbVmNcmhhY84Zmw6HSivEMRahLE7qpCNLjsyNwN15kMFg/xR1l2?=
- =?us-ascii?Q?HP5FympzmzDk/gqWEA03Qhsj8yuWGLZ+ePI30vMCga4al8FoWZ7g8hOcnSGl?=
- =?us-ascii?Q?BjorRFv7R5TWGOPkf12YnU8mIirj4uaPbHPJLuWGoxOkGRWmRFw7yHqsncRl?=
- =?us-ascii?Q?+N+vxN4j//ILuuNyIY1ssQM9wad4z1a+MqXOZ55O8BYCGJ4isYpu98tAyr6I?=
- =?us-ascii?Q?ehfOFXRqfeGwwDQtEeEdgkmQ+DbNK77igqJ9GGQCRgRn743RgEfzB+w0OO79?=
- =?us-ascii?Q?eGXmKv5RcHjcFhtEOwZv7xSZaMJZzgXSaCbcVTI82HZXP0NPVny+oT5NXkOP?=
- =?us-ascii?Q?jqbaKNuNydEykJpwzDJ6D1swgvWI/hc/V+lcjvcqY87hWqX979FlcMUaqT7V?=
- =?us-ascii?Q?+Sn/42yYTDdmQuUlz6BhxB2DihF4BikRNMYhT35wl1YCnD5Ucz04UMZngkAx?=
- =?us-ascii?Q?vpMw/1VsSiv5ZxnDmKw7MErdnjYFScoEPZKFP0OAAo3NrDpIlLFIC5bT5jcL?=
- =?us-ascii?Q?oBOAT9ZhEx36mbZeIP6FovFgiApu0XnorEBV+q2IUBSzB7ACwCJSKM7ga8zA?=
- =?us-ascii?Q?V4BWPMFj1V6aOhYAlz4PUceO8iIhSd+/HRP46FDNn3vZInolPrakM5C5KmYu?=
- =?us-ascii?Q?FilpsExK325CYNI6MiD8B+myidfQZmyQ5V9iZUg8AYuG9S+93h3hNCBlYPU9?=
- =?us-ascii?Q?iwtmDBG5MnWOUyirK1cAFjh+S7tgBMCQBBmkGbWKKuCYQmrCr5XCTwFlbthY?=
- =?us-ascii?Q?bGJJIHm4jo9rxHTI3a7xAvrq0l6kuyFjtiMec/HEjnypjkVlGB9iL+/ksAaz?=
- =?us-ascii?Q?9VsxMVpcFx+YEfE1Kd8JFp13u15I4pvARBGoVoMkEAKABjqFRSE/9tUpbd88?=
- =?us-ascii?Q?Mx8A0sYmOrsvWyNMxdk1VousBn2FfdQjgz+uvqUkRMeX/Jzn4ctpRlv5G9+g?=
- =?us-ascii?Q?L8t6aqdwiBg12K8SALk9l4sJxLZQPik=3D?=
-X-Exchange-RoutingPolicyChecked: nLbx98vNzsb2m6vufRCut3Awa3tq7ikPQXme6M1R0xXkOpDEvW89LlmkUd4W0v+4huMidc2dYItaWaMzomh/VfxS6IWJmujmRlkQYLeLmmBFKctWdX7RIUvX9RIV2XK+ZTgnjX15qIZWF/kz0A4UaXXBtaM0YWd05045Jou7yo1swIfB+H4VpRfdMtCu+8UkmHd79X1tuHPWN6kwZ2dZdddqdrZrnsz4o9ZWJRjgRMbwZh3izPjkkoV1pIUF2wmw63KXTL70tEfVkTpTGY7JIH9boH6KuKs1B4tbXdRqvtREUCr+5cH9gZFz4/qqpdlffr9QqWFa0jin8R7m2SAVBw==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c9e8304-9e19-4322-d3b2-08deb7314a85
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2026 12:05:46.5704
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DcS6vYz0Jum1aJZYUhsHym/fopJLrad9rYbr/fpmO9WTOqZ/9I8Azr/u3nlKh93dC2ZabDMeFYRhdm80ex+7V1riw3TRaxDneMA5tCCiwDg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR11MB8769
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v15 18/20] unwind_user/sframe: Duplicate registered
+ .sframe section data on clone/fork
+To: sashiko-reviews@lists.linux.dev, Steven Rostedt <rostedt@kernel.org>
+Cc: bpf@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+        Indu Bhagat <ibhagatgnu@gmail.com>
+References: <20260520154004.3845823-19-jremus@linux.ibm.com>
+ <20260520170112.A8AA41F00893@smtp.kernel.org>
+Content-Language: en-US
+From: Jens Remus <jremus@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20260520170112.A8AA41F00893@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIxMDEyMSBTYWx0ZWRfX9Dh0nif3dal0
+ aQrl+QVIABSem0B68jYUv/tNQP1N2fTRlQtJvCZT4zCgrcC7YC76jWNnigXhCcXHoUvSoysDvnl
+ HR6tSX9vnieVfAwb4SUbjOyrnsswJxO8pfsON7yMZj7PgDEQyJJXMcGAr5iAGJMOXC9GLkEqkWd
+ nbj5CKAkRBSCTbt0uC24Y4BFosXmMB16rH03QBXVkgbhTaNEXD8Z2LBi7vdOEu065dM/mWAuMEs
+ jxyeFO+cXrVKa0WEH0goLY0OlmiLSxrphtYiyvpBoeYRB7jbnQd40Sut5bhXFBpE+nn5C7TBgT3
+ rZBhyfIt84z7CQEtHta1WBWNHs3CXDe6TqBGCWou/fM3DUYhCTlcBYtkZvHp415TI5hTseR/gqQ
+ PWhsKJoI/AHC8siX6KCNTkG4cb7oaijmg5YN8zM28V0e0SLM4AeO1PqeU6IMczB+LGiJGKn+ObI
+ gzYDJxr7LWG/xW7dJ8w==
+X-Proofpoint-GUID: iLkTU3lhzcFHpEiSiRuE-QTg1cDx_H9s
+X-Proofpoint-ORIG-GUID: rNSJJtBAR-bJt7rr0sXvuVFcYJJVXuVA
+X-Authority-Analysis: v=2.4 cv=aYBRWxot c=1 sm=1 tr=0 ts=6a0ef52c cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VnNF1IyMAAAA:8
+ a=VwQbUJbxAAAA:8 a=ijAAiHPv0kBOpVhWHt0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-21_02,2026-05-18_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 adultscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
+ clxscore=1015 spamscore=0 phishscore=0 priorityscore=1501 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605210121
 
-On Wed, May 20, 2026 at 08:42:41AM +0800, Jason Xing wrote:
-> From: Jason Xing <kernelxing@tencent.com>
+On 5/20/2026 7:01 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [Medium] Mixing goto-based error handling with guard() scope-based cleanup in sframe_dup_mm().
+> - [Low] Redundant #ifdef blocks around sframe functions in dup_mmap().
+> --
 > 
-> This patch is inspired by the check[1] from sashiko. It says when
-> overflow happens, the address of cq to be published is invalid.
-> Actually the severer thing is the whole process of publishing the
-> address of cq in this particular case is not right: it should truely
-> publish the address and advance the cached_prod in cq as long as it
-> reads descriptors from txq.
+> commit 06e12a491c0dc4cc93fac24f7de9fe0b02b9a9e0
+> Author: Jens Remus <jremus@linux.ibm.com>
+> Subject: unwind_user/sframe: Duplicate registered .sframe section data on clone/fork
 > 
-> The following is the full analysis.
-> xsk_drop_skb() is called in three places, which all discard a partially
-> built multi-buffer skb:
-> 1) xsk_build_skb() -EOVERFLOW error path: packet exceeds MAX_SKB_FRAGS
-> 2) __xsk_generic_xmit() post-loop cleanup: an invalid descriptor in
->    the TX ring prevents the partial packet from completing
-> 3) xsk_release(): socket close while xs->skb holds an incomplete packet
+> When duplicating a process' virtual memory mappings also duplicate all
+> of its registered .sframe sections stored in the per-mm maple tree to
+> enable stacktracing using sframe of the child process.
 > 
-> In all three cases, the TX descriptors for the already-processed frags
-> have been consumed from the TX ring (xskq_cons_release), and CQ slots
-> have been reserved. However, xsk_drop_skb() calls xsk_consume_skb()
-> which cancels the CQ reservations via xsk_cq_cancel_locked(). Since
-> the buffer addresses never appear in the completion queue, userspace
-> permanently loses track of these buffers.
+>> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+>> index ec8318977a2ef..0661090dd5bcd 100644
+>> --- a/kernel/unwind/sframe.c
+>> +++ b/kernel/unwind/sframe.c
+> [ ... ]
+>> @@ -886,6 +886,54 @@ int sframe_remove_section(unsigned long sframe_start)
+> [ ... ]
+>> +int sframe_dup_mm(struct mm_struct *mm, struct mm_struct *oldmm)
+>> +{
+>> +	struct sframe_section *sec, *oldsec;
+>> +	unsigned long index = 0;
+>> +	int ret;
+>> +
+>> +	guard(srcu)(&sframe_srcu);
+>> +
+>> +	mt_for_each(&oldmm->sframe_mt, oldsec, index, ULONG_MAX) {
+>> +		sec = kzalloc(sizeof(*sec), GFP_KERNEL_ACCOUNT);
+>> +		if (!sec)
+>> +			return -ENOMEM;
+>> +
+>> +		__sframe_dup_section(sec, oldsec);
+>> +
+>> +		ret = mtree_insert_range(&mm->sframe_mt,
+>> +					 sec->text_start,
+>> +					 sec->text_end - 1,
+>> +					 sec, GFP_KERNEL_ACCOUNT);
+>> +		if (ret)
+>> +			goto err_free;
 > 
-> Fix this by letting consume_skb() trigger the existing xsk_destruct_skb
-> destructor, which already submits buffer addresses to the CQ via
-> xsk_cq_submit_addr_locked().
+> [Severity: Medium]
+> Is it intentional to mix goto-based error handling with scope-based cleanup
+> in the same function?
 > 
-> Note that cancelling the descriptors back to the TX ring (via
-> xskq_cons_cancel_n) is not a appropriate option because an oversized
-> packet that always exceeds MAX_SKB_FRAGS would be retried indefinitely,
-> which is an obviously deadlock bug in the TX path.
-> 
-> Also move the desc->addr assignment in xsk_build_skb() above the
-> overflow check so that the current descriptor's address is recorded
-> before a potential -EOVERFLOW jump to free_err, consistent with the
-> zerocopy path in xsk_build_skb_zerocopy().
-> 
-> [1]: https://lore.kernel.org/all/20260425041726.85FB3C2BCB2@smtp.kernel.org/
-> 
-> Fixes: cf24f5a5feea ("xsk: add support for AF_XDP multi-buffer on Tx path")
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> The cleanup subsystem guidelines recommend against mixing goto labels and
+> guard declarations to prevent confusing ownership semantics and lifecycle
+> bugs. Would it be better to drop the err_free label entirely and explicitly
+> call free_section(sec) followed by returning ret directly inside this block?
 
-Sorry for the noise, got lost in my inbox and replied on v3.
+No.  sec must not be unconditionally free'd if it got successfully
+inserted into the maple tree.
 
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> 
+>> +	}
+>> +
+>> +	return 0;
+>> +
+>> +err_free:
+>> +	free_section(sec);
+>> +	return ret;
+>> +}
+> [ ... ]
+>> diff --git a/mm/mmap.c b/mm/mmap.c
+>> index 2311ae7c2ff45..d5aa8c54f8c1c 100644
+>> --- a/mm/mmap.c
+>> +++ b/mm/mmap.c
+> [ ... ]
+>> @@ -1846,6 +1847,11 @@ __latent_entropy int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
+>>  	}
+>>  	/* a new mm has just been created */
+>>  	retval = arch_dup_mmap(oldmm, mm);
+>> +#ifdef CONFIG_HAVE_UNWIND_USER_SFRAME
+>> +	if (!retval) {
+>> +		retval = sframe_dup_mm(mm, oldmm);
+>> +	}
+>> +#endif
 
-> ---
->  net/xdp/xsk.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
+Will swap the order, so that arch_dup_mmap() is last.
+
 > 
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index f8c8a8c9dfba..0a6203c42576 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -793,8 +793,11 @@ static void xsk_consume_skb(struct sk_buff *skb)
->  
->  static void xsk_drop_skb(struct sk_buff *skb)
->  {
-> -	xdp_sk(skb->sk)->tx->invalid_descs += xsk_get_num_desc(skb);
-> -	xsk_consume_skb(skb);
-> +	struct xdp_sock *xs = xdp_sk(skb->sk);
-> +
-> +	xs->tx->invalid_descs += xsk_get_num_desc(skb);
-> +	consume_skb(skb);
-> +	xs->skb = NULL;
->  }
->  
->  static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
-> @@ -876,7 +879,7 @@ static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
->  			return ERR_PTR(-ENOMEM);
->  
->  		/* in case of -EOVERFLOW that could happen below,
-> -		 * xsk_consume_skb() will release this node as whole skb
-> +		 * xsk_drop_skb() will release this node as whole skb
->  		 * would be dropped, which implies freeing all list elements
->  		 */
->  		xsk_addr->addrs[xsk_addr->num_descs] = desc->addr;
-> @@ -968,6 +971,8 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
->  				goto free_err;
->  			}
->  
-> +			xsk_addr->addrs[xsk_addr->num_descs] = desc->addr;
-> +
->  			if (unlikely(nr_frags == (MAX_SKB_FRAGS - 1) && xp_mb_desc(desc))) {
->  				err = -EOVERFLOW;
->  				goto free_err;
-> @@ -985,8 +990,6 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
->  
->  			skb_add_rx_frag(skb, nr_frags, page, 0, len, PAGE_SIZE);
->  			refcount_add(PAGE_SIZE, &xs->sk.sk_wmem_alloc);
-> -
-> -			xsk_addr->addrs[xsk_addr->num_descs] = desc->addr;
->  		}
->  	}
->  
-> -- 
-> 2.43.7
+> [Severity: Low]
+> This isn't a bug, but are these preprocessor guards necessary?
 > 
+> Since include/linux/sframe.h already provides static inline dummy versions
+> of sframe_dup_mm() and sframe_free_mm() when CONFIG_HAVE_UNWIND_USER_SFRAME
+> is disabled, these conditional blocks could potentially be removed to keep
+> the C source code cleaner.
+
+Valid.  Will drop the unnecessary #ifdef.
+
+> 
+>>  loop_out:
+>>  	vma_iter_free(&vmi);
+>>  	if (!retval) {
+> [ ... ]
+>> @@ -1893,6 +1899,9 @@ __latent_entropy int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
+>>  			vm_unacct_memory(charge);
+>>  		}
+>>  		__mt_destroy(&mm->mm_mt);
+>> +#ifdef CONFIG_HAVE_UNWIND_USER_SFRAME
+>> +		sframe_free_mm(mm);
+>> +#endif
+> 
+> [Severity: Low]
+> This isn't a bug, but similarly, could this block be dropped since the dummy
+> stub handles the disabled case without needing explicit conditionals?
+> 
+>>  		/*
+>>  		 * The mm_struct is going to exit, but the locks will be dropped
+>>  		 * first.  Set the mm_struct as unstable is advisable as it is
+> 
+
+Regards,
+Jens
+-- 
+Jens Remus
+Linux on Z Development (D3303)
+jremus@de.ibm.com / jremus@linux.ibm.com
+
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
+
