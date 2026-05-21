@@ -1,143 +1,232 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30715356742
-	for <bpf@vger.kernel.org>; Thu, 21 May 2026 04:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A3841760
+	for <bpf@vger.kernel.org>; Thu, 21 May 2026 04:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779337825; cv=none; b=DbOJ6GAktjvk/rxc065/Htbzt0KcshVpHoGxZM++2Czcn/rfFBAps70b0Hg3ZHtu576hdCAF0fuD4IkaseGNscWIKES/rsC2HC4pNibfrgl4Zmbd0NZKUDIY0SDWJqp/ti5syA2FaUUEpJVSRm6fc6G5A8+IlZfs9mRFVnFBmYg=
+	t=1779338186; cv=none; b=ad9hutJ4BITlweAWtGnqyImhhDE8PIbMgsZwUU613zGedszdFmNEx4e5e6Tz/wARvC137pXTM4p6Vg5tvyL8DatDu+ObcPXrI3Vf2ZcJdAoCajyqdXDvoNh08KSPkWybAjeAXnlssIth5PXpjVjh0UOPdrjew+N87PQqq+ryzI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779337825; c=relaxed/simple;
-	bh=irqFk6mqjMjwGfXt427bsER8quLH6AaSh68xRMS9NBk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=nOTgdy3ufMroxROHL/iiOcB5m8LfyO5e2RcXX/mXeB57yP1LJdvCADz59YMaZHFtViYLRGnoOWSfYXyv6oGBmCrxBiZP6vv5aEbGsVKXClZMst0xdH6hC3rvN2FzlpiJkWRP6INJrK3v1QiqY0o1xw4EKXT54NgsOs5lpAUKq1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iU18r+Hc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779338186; c=relaxed/simple;
+	bh=C2bcxia+RzIq6VwX3Iqc8sIBkaQ3Nw5dYPHjeN2Ba34=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q+BbQQ9+z2dab65cdxUxCNe0zpffxiOnPMaY0SOv+EgJHj9Ypk3CNemaxYSsXqpH48hTGjKPiskp1J7+RkP+xMPVBNHTGgvwwXAiqfX9szP9LCJJhAjo+/ENqecyh0sfkI2TZPsHFBkcd+PZh925WErloMzovkayyzRv1SqS+78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ON4RGCNr; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iU18r+Hc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0BD71F000E9;
-	Thu, 21 May 2026 04:30:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779337823;
-	bh=X5GblndfLg6aXSy+30b5eMTEKG7kmcQP5bt3WjJf/VQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=iU18r+HcFfhLPD7T2F4Xw36K2/9rzgabMkTp0uz8JgxrApOfro/AHBlWwqZk/qwnM
-	 0PAiI804k7aUuhTVxVzMYG43nUhtCabzLoYfcNdOVLfE/yGgtFni4nRvsAOOmtJFU1
-	 cEQVKPOdz4tc/w9PP+scib6+TTZtQwIPoh20BW8s0CIudRZAAtO2NLoOoM1Wp9oIOL
-	 AbBSFNxvTAcLXF+8z2LqxWtp/o1+Oyq0ry7dlxhxFgO9dLDjLAxhmB70pSmhvCDNZy
-	 5/VedN0M4r/qWk5/xpZ6XbPwGNqZRUcv3UeMbd6NJNgIRHprRuktqWr/aRbJuqxrfq
-	 TjlJ8RkxWAezw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v11 2/8] bpf: clear list node owner and unlink
- before drop
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kaitao Cheng" <kaitao.cheng@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260521032306.97118-3-kaitao.cheng@linux.dev>
-References: <20260521032306.97118-3-kaitao.cheng@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 21 May 2026 04:30:22 +0000
-Message-Id: <20260521043023.A0BD71F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ON4RGCNr"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-490229aa522so22161255e9.3
+        for <bpf@vger.kernel.org>; Wed, 20 May 2026 21:36:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779338183; x=1779942983; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=b0l6Y+cSVP8EYJCr5270r/xmwOSYiPyih1GwoM0BYiM=;
+        b=ON4RGCNr4eILQJw+hT0b2iztp4oXud7My+Oxl+qSFx6fYvi+uaWU1/Ru5S4fYiYYLb
+         sKNQS/egD5v6xhieisyWABao37gjpgoRmS4PUvR7ZYYbNr26tlQfU6GhS1DSYi7gIBPx
+         oDzKUpnX2TEhxI04ER0UBmsN0lmGINvjLnNn1ldvNzgICc+NWaLeq14umbd8C9h41OwU
+         zV8FgZL/v+zgRV+7E/GkwSd19kgkspq1kJMC+pRhbkEn7kcK4HRx7/6iQReKwIDzAYHO
+         /XybP5uetf+b16fC2TB+wiwnAlvsb3YLOhm67vQA4Brv0sTiZ2CBC591t/mOMcwm46bk
+         F9Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779338183; x=1779942983;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b0l6Y+cSVP8EYJCr5270r/xmwOSYiPyih1GwoM0BYiM=;
+        b=Vd5w7uFUZw/hvXoJwkAUBSLLrS1nFOMEzPtnOS7W7kg1bt5vEXOdyIbRJb+GA9cA5/
+         pt4CLcGZdtaYA9waKwSQgasVWK3WxBq2wCTHWPXoJOER5KdKQJcVtMKmk2rK169CjEdV
+         vxeDBZKKZrslyJ1NkQ4pbZKw6PwK1Ways1nH+YUYXFcFkODNBkHUP/Zm6/7awGocFspr
+         Rz6qzQv7VFfzH/rROCfNFYXkPsRktCiUWXxboeoCdMN6oLXkN+hxqrqASs2Qwx7/bFL3
+         acUWcMiB9Gs3FLZQEDCEjZo46fm2TvPG7nMxCU7Ioet0a7EZvl9/NDzezS3DD6l6Pe92
+         7/4Q==
+X-Gm-Message-State: AOJu0YypgvzWTk3iPuBrunIsdYaj3WbVp6WnJ0D0gcriyP4xdLDN6qR+
+	ku1AuNamiIiY3/bGZ7vDiLUVVTeGX5P+lcmLDZOMwGoNlLk642A4W8xeOzPZOM50ipU=
+X-Gm-Gg: Acq92OG7Zrd+gH8u6JDn4Z6NvxlyNErr4FquqPUhludcHZk5bPZyeP5ha6mLdWHjifJ
+	iJNO9oXXMPwlwE71/uyyFzk0IEGdm0keIVjL5/MWECWVbaSbjGcvTuWCODYg7JAa9QIGLRfJ1AC
+	DRjWBeVARNXcjCI6ac5J6YDUQVU6j9JAV1Nb63GJhZ7qhvaw24dUkju0nVNLwoSZaaVhVaV/CJn
+	mvrCZF0ttzdBjVzhpr9SmZtE2V1wA4ndpDnXRN07cLemO8JSmnAXF4oqd/A33VoeUiozPFKWrCL
+	UttNgiaSgsFY82Bi88ZkBJk12WV50StS8Xfgp8grmdyRKDfT6bdLFpHren7hxPTltqWXV4JHtzs
+	6RYDf3kiwHKFewea2CbVvFeEYbR6dc22D4oauHovd45jA6avnDv4NDH/ITDCaUMLEjwUlheZYqO
+	unjad8aMdkP+W0erSUXytE6OWV7DFALzbxZDaci/JHpmSWWmhUODZeXtx6LST857LqMAqPdBJ4C
+	A==
+X-Received: by 2002:a05:600c:2b06:b0:48f:d1c0:5cd3 with SMTP id 5b1f17b1804b1-490360830d1mr9060555e9.13.1779338182648;
+        Wed, 20 May 2026 21:36:22 -0700 (PDT)
+Received: from ds-pc.. (host86-149-62-231.range86-149.btcentralplus.com. [86.149.62.231])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49035f52a0dsm6631635e9.24.2026.05.20.21.36.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 May 2026 21:36:22 -0700 (PDT)
+From: Dhiraj Shah <find.dhiraj@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] bpf: Add kernel-doc for arena page kfuncs
+Date: Thu, 21 May 2026 05:35:53 +0100
+Message-ID: <20260521043553.199781-1-find.dhiraj@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+The page-management kfuncs exposed by BPF arena -
+bpf_arena_alloc_pages(), bpf_arena_free_pages() and
+bpf_arena_reserve_pages() - are part of the BPF kfunc ABI but lack
+rendered documentation. Their contracts (valid argument ranges,
+sleepable-only context, and the set of error returns) are today only
+discoverable by reading kernel/bpf/arena.c.
 
-New issues:
-- [High] Potentially unbounded O(N) list traversal with interrupts disabled=
- in `bpf_list_head_free()`.
+Add a kernel-doc comment block above each of the three kfuncs and
+render them under a new "BPF arena kfuncs" subsection in
+Documentation/bpf/kfuncs.rst, alongside the existing core kfunc
+subsections.
 
-Pre-existing issues:
-- [High] The patch fixes the stale `node->owner` issue for `bpf_list_head_f=
-ree()` but fails to apply the equivalent fix for `bpf_rb_root_free()`, leav=
-ing `bpf_rbtree_remove()` vulnerable to the same memory corruption.
---
+No functional change.
 
-commit 59439e3ee3f8d57af8635b521393d245d26bbdf4
-Author: Kaitao Cheng <chengkaitao@kylinos.cn>
+Signed-off-by: Dhiraj Shah <find.dhiraj@gmail.com>
+---
+ Documentation/bpf/kfuncs.rst | 27 +++++++++++++++
+ kernel/bpf/arena.c           | 64 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 91 insertions(+)
 
-bpf: clear list node owner and unlink before drop
+diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+index 75e6c078e0e7..fe0df1e16453 100644
+--- a/Documentation/bpf/kfuncs.rst
++++ b/Documentation/bpf/kfuncs.rst
+@@ -732,3 +732,30 @@ the verifier. bpf_cgroup_ancestor() can be used as follows:
+ BPF provides a set of kfuncs that can be used to query, allocate, mutate, and
+ destroy struct cpumask * objects. Please refer to :ref:`cpumasks-header-label`
+ for more details.
++
++4.4 BPF arena kfuncs
++--------------------
++
++A BPF arena (``BPF_MAP_TYPE_ARENA``) is a sparsely-populated shared memory
++region that a BPF program and a user-space process can both address. The
++following kfuncs allow a sleepable BPF program to allocate, free, and reserve
++pages within an arena:
++
++.. kernel-doc:: kernel/bpf/arena.c
++   :identifiers: bpf_arena_alloc_pages bpf_arena_free_pages bpf_arena_reserve_pages
++
++A typical pattern is to allocate one or more pages, write to them from BPF,
++and let user space observe the same memory after a page fault populates its
++VMA:
++
++.. code-block:: c
++
++	void __arena *page;
++
++	page = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
++	if (!page)
++		return -ENOMEM;
++
++	/* ... use the page from BPF; user space sees the same bytes ... */
++
++	bpf_arena_free_pages(&arena, page, 1);
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index 49a8f7b1beef..b8ec2953dee6 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -870,6 +870,33 @@ static void arena_free_irq(struct irq_work *iw)
+ 
+ __bpf_kfunc_start_defs();
+ 
++/**
++ * bpf_arena_alloc_pages() - Allocate pages within a BPF arena.
++ * @p__map: Pointer to a ``BPF_MAP_TYPE_ARENA`` map.
++ * @addr__ign: Page-aligned user-space address within the arena at which to
++ *	       place the allocation, or %NULL to let the kernel choose. When
++ *	       non-NULL the address must fall inside the arena's user VMA
++ *	       range; otherwise the allocation fails.
++ * @page_cnt: Number of pages to allocate. Must be non-zero and no greater
++ *	      than the arena's configured size in pages.
++ * @node_id: NUMA node hint for the backing pages, or %NUMA_NO_NODE.
++ * @flags: Reserved for future use; must be 0.
++ *
++ * Allocates @page_cnt physically-backed pages and inserts them into the
++ * arena's kernel VMA at the offset corresponding to @addr__ign (or at an
++ * arbitrary free offset when @addr__ign is %NULL). A subsequent user-space
++ * page fault on the matching user address populates the user VMA with the
++ * same pages, giving BPF and user space a shared view of the region.
++ *
++ * The underlying allocator may sleep, so this kfunc is only callable from
++ * sleepable BPF programs.
++ *
++ * Return:
++ * * Kernel pointer to the start of the allocated region on success.
++ * * %NULL if @p__map is not an arena, @flags is non-zero, @page_cnt is zero
++ *   or exceeds the arena size, @addr__ign is misaligned or outside the
++ *   arena, @node_id is invalid, or the kernel is out of memory.
++ */
+ __bpf_kfunc void *bpf_arena_alloc_pages(void *p__map, void *addr__ign, u32 page_cnt,
+ 					int node_id, u64 flags)
+ {
+@@ -893,6 +920,23 @@ void *bpf_arena_alloc_pages_non_sleepable(void *p__map, void *addr__ign, u32 pag
+ 
+ 	return (void *)arena_alloc_pages(arena, (long)addr__ign, page_cnt, node_id, false);
+ }
++
++/**
++ * bpf_arena_free_pages() - Free a range of pages within a BPF arena.
++ * @p__map: Pointer to a ``BPF_MAP_TYPE_ARENA`` map.
++ * @ptr__ign: User-space virtual address of the first page to free, as used
++ *	      to address the arena from BPF and user space. Typically the
++ *	      same address that was previously returned (in user-space form)
++ *	      by bpf_arena_alloc_pages().
++ * @page_cnt: Number of pages to free.
++ *
++ * Releases the backing pages, unmapping them from the arena's kernel VMA
++ * and from any user-space VMA that previously faulted them in. May sleep,
++ * so the kfunc is callable only from sleepable BPF programs.
++ *
++ * The call is a no-op when @p__map is not an arena, when @page_cnt is zero,
++ * or when @ptr__ign is %NULL.
++ */
+ __bpf_kfunc void bpf_arena_free_pages(void *p__map, void *ptr__ign, u32 page_cnt)
+ {
+ 	struct bpf_map *map = p__map;
+@@ -913,6 +957,26 @@ void bpf_arena_free_pages_non_sleepable(void *p__map, void *ptr__ign, u32 page_c
+ 	arena_free_pages(arena, (long)ptr__ign, page_cnt, false);
+ }
+ 
++/**
++ * bpf_arena_reserve_pages() - Reserve a page range within a BPF arena.
++ * @p__map: Pointer to a ``BPF_MAP_TYPE_ARENA`` map.
++ * @ptr__ign: Page-aligned user-space virtual address of the start of the
++ *	      range to reserve.
++ * @page_cnt: Number of pages to reserve. Zero is permitted and is a no-op.
++ *
++ * Marks @page_cnt pages starting at @ptr__ign as reserved so that subsequent
++ * bpf_arena_alloc_pages() calls will not place allocations in that range.
++ * No physical pages are allocated by this kfunc; the range is simply
++ * excluded from the arena's free space.
++ *
++ * Return:
++ * * 0 on success, or when @page_cnt is zero.
++ * * -EINVAL if @p__map is not an arena or the requested range falls outside
++ *   the arena's user VMA.
++ * * -EBUSY if any page in the requested range is already allocated, or if
++ *   contention on the arena's internal spinlock prevents the operation from
++ *   completing.
++ */
+ __bpf_kfunc int bpf_arena_reserve_pages(void *p__map, void *ptr__ign, u32 page_cnt)
+ {
+ 	struct bpf_map *map = p__map;
+-- 
+2.43.0
 
-This commit fixes an issue where refcounted BPF list nodes can outlive their
-list head and retain a stale owner pointer. To prevent memory corruption if=
- a
-new list is allocated at the same address, it moves nodes to a private drain
-list under the spinlock, poisons their owner pointers, and unlinks them
-before dropping the objects.
-
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 094457c3e6d37..59855b434f0b2 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-
-[ ... ]
-
-> @@ -2261,20 +2262,30 @@ void bpf_list_head_free(const struct btf_field *f=
-ield, void *list_head,
->  	__bpf_spin_lock_irqsave(spin_lock);
->  	if (!head->next || list_empty(head))
->  		goto unlock;
-> -	head =3D head->next;
-> +	list_for_each_safe(pos, n, head) {
-> +		struct bpf_list_node_kern *node;
-> +
-> +		node =3D container_of(pos, struct bpf_list_node_kern, list_head);
-> +		WRITE_ONCE(node->owner, BPF_PTR_POISON);
-> +		list_move_tail(pos, &drain);
-> +	}
-
-[Severity: High]
-Could this new loop potentially cause a long CPU stall?
-
-Since __bpf_spin_lock_irqsave() disables local interrupts, this O(N) list
-traversal executes with interrupts disabled.
-
-BPF lists do not have a hard size limit, so if a program accumulates a
-very large number of elements in a single list, could iterating over them
-here trigger the NMI watchdog or cause severe latency spikes?
-
->  unlock:
-> -	INIT_LIST_HEAD(orig_head);
-> +	INIT_LIST_HEAD(head);
->  	__bpf_spin_unlock_irqrestore(spin_lock);
-> =20
-> -	while (head !=3D orig_head) {
-> -		void *obj =3D head;
-> +	while (!list_empty(&drain)) {
-> +		struct bpf_list_node_kern *node;
-> =20
-> -		obj -=3D field->graph_root.node_offset;
-> -		head =3D head->next;
-> +		pos =3D drain.next;
-> +		node =3D container_of(pos, struct bpf_list_node_kern, list_head);
-> +		list_del_init(pos);
-> +		/* Ensure __bpf_list_add() sees the node as unlinked. */
-> +		smp_store_release(&node->owner, NULL);
->  		/* The contained type can also have resources, including a
->  		 * bpf_list_head which needs to be freed.
->  		 */
-> -		__bpf_obj_drop_impl(obj, field->graph_root.value_rec, false);
-> +		__bpf_obj_drop_impl((char *)pos - field->graph_root.node_offset,
-> +				    field->graph_root.value_rec, false);
->  	}
->  }
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does bpf_rb_root_free() need
-the exact same fix?
-
-When draining an rbtree, bpf_rb_root_free() calls __bpf_obj_drop_impl() on
-each node without clearing the node_internal->owner or unlinking the nodes.
-
-If a surviving refcounted rb-node retains a pointer to the freed rb_root,
-and a new bpf_rb_root is allocated at the old address, wouldn't a call to
-bpf_rbtree_remove(new_root, stale_node) erroneously bypass the ownership
-check and invoke rb_erase_cached() with stale tree pointers?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260521032306.9711=
-8-1-kaitao.cheng@linux.dev?part=3D2
