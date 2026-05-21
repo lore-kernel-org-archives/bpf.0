@@ -1,170 +1,200 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010009.outbound.protection.outlook.com [52.101.46.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EAF92D0615
-	for <bpf@vger.kernel.org>; Thu, 21 May 2026 07:37:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779349046; cv=none; b=O+SA2CTpNHSNkc6C04zDjDLvvv1KUhOYfEWNxZ7zrDlJNrprQr7FXru8TmFsf7BBM/56uZDpTgU8fIgvlZJL4cag+U5MtKWcBv5DaHrt15UEKSdG4fKz98ZXDq1KfhJ5LrmA8B4CoxJWQ9iamx5VbHn4jefvquHJhVUS7qzBb6M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779349046; c=relaxed/simple;
-	bh=R8pP1d8ekCrIzeVrljMRYUBnWOGmUkz6ksI2SX7JeBs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tskgEEOtyD+HYgh9kRYwT2Fnw9pE5EM1XWLGjz7gLuXkVA80DrCFnjIPoORysC7dKll3u5t0g321v4hrezfjQPtQOhkn7U/AAJcArpCtVxkYzScdPuaACXLNcamQYprD0V1lyGm1IZZJLjPKQbHHzlsPtY6cV+Dfd8R3sRHVOoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iRpekRVh; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AD6D23D297;
+	Thu, 21 May 2026 07:56:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779350179; cv=fail; b=sZbVQHGzvR/5/z27Sodg/cjf+lKD2i0C+AxcbyOTSlMT2IBwER5VQVgVv86sn8pzpYmWnjHPAldxNS0c4QBXt9UPoUo7mcaRYHZAdGxEL/GFOX6HZlEk97Q+fN9rxpH6QVwJ62bVlMeDq2yRTPmDsUw23Z6vpgo4raR/QHQfflY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779350179; c=relaxed/simple;
+	bh=rYFkokQF2osUkogh1AG83OZjybjUg4GueZhDAZPuVz4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=abx3HukaOvf+bZQRi33Tux17d9oslDCtxRGiuM5NeKY+4fBVTFbribnlx499Q03bChOXsaSv+dIomwnh7+ikebXAy00nXC/lEoLqvYwHDUhZhSDBiYndUHyXJzrbloyXnr5em3zPUTOUk4K/h/oe6yDGPiSFRk8tR95pDtahja0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ZhGs5Vpn; arc=fail smtp.client-ip=52.101.46.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iRpekRVh"
-Message-ID: <db0be5c8-13cb-4007-be06-bee3e1cbafbf@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779349022;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=M14ZvRYGbbDChleEwMkrlZeua+SBBNOi/r7kAJG70c4=;
-	b=iRpekRVh0ABAaNsYeytGvVAJzme6ykXDAKtDQU/Su+oZ4UrsAVvvjxLYYC0VmKW96eDF6p
-	qFnQ21/Jar59VsHhrpKgp8J//prkhveEhiyZazjVin9D9FRH2LJ1nByaQAOHnPKb4J2Wmv
-	EiK2cm3aPnDbHwp3/xcdCxlvt0n+GRY=
-Date: Thu, 21 May 2026 15:35:52 +0800
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ZhGs5Vpn"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=CXSYp8RNA17TqgUqGoFaBTPBXwumI6M4Es3qjweGvfAXU0KwWHCyBt8xQ+KmqYr0JYMZwopTCtIatdKNSCuXXzUXptpxkq8OzUnt3ljdu1bzf15e8uwsSE0FXECvhcDpLGZPSD28d1gG4+IRQwaFcTNdF3R4bkQeCTHGIM/acfFbQteVEdf/LUm8GKVRLQ9NfILS6D8GCTvSolniXEWqvrhJm5rQrwFQQ/NCXYO9xUCIGFzNuV2wFQeGgFOowJf+wR2FTIEaRnNtpRlA9rluQMRcgTsC371KWRjMWRwtT2OW9bNgy/cZtJunm0yfXMNDfnylc1cU4nTgUPghfidw8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PIiW66qx0F9DSyV5uctvgMYRil/LIhoKuBpwPIhOdGk=;
+ b=LW6MKYZ0FeXeDhKb2GP9fmTjEmIeB0sbIdt0CUpwwJyICenjIPf/mKdzAT5zotuVKp8MKLM2i5QkvREZJOc/szLP80kD3DO68B9Q/AaE2VOf+1MctamBmZKDOlqVhbe+JvHfiueqc0M42ToV6P0nGnYtZteR1Vy3FG3r4099+zxWpgNW/gekTzgWR1ygp13sxpJIO2UpkecJGbQItBkGaqL+B9ZxXir2sBVhWdpyoDCSOydA5ljMkrxVaIXHiUWsWn0mS85cryKaSK4kpOa3PTgEH44xrtXGeZT815r/31+pNulIj4YKXRxpw/T6Oi65wCyD/KSOPf+Wh+AXUpoMLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PIiW66qx0F9DSyV5uctvgMYRil/LIhoKuBpwPIhOdGk=;
+ b=ZhGs5VpnkvqMKaZJHpUY9FKW9uyQoMNK+hVHtG2WaGa1fIfsUITv3LOdYUVlGePmQOMgQbHqOmO9pIwBZ9KV79/JUV4yjfLL7Pfb3tSnB+Bm5MsOirD46D/DykXNrmKqfFYEYxXd65BEv4Mi1OKJ4gqgSuPp+AQM25L5tN2VnCdqgVHPBNmC9OLkGp4s9QZZOsPoKp4t/SlRd3No6dq1a6u0nOe4DHFaHmCJEGO4m0RqgmsRRnVWA/SkbLB9Zl4cziPs5VOTSphw45TCYku0ocsnGW1GnW6TPf/jJcSUAlYBJpFH61acDNm6VatYFti/ERRsMzBH+5InLwtVAPtRGw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB4827.namprd12.prod.outlook.com (2603:10b6:5:1d6::14)
+ by SJ2PR12MB7867.namprd12.prod.outlook.com (2603:10b6:a03:4cd::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.48.17; Thu, 21 May
+ 2026 07:56:14 +0000
+Received: from DM6PR12MB4827.namprd12.prod.outlook.com
+ ([fe80::6261:3040:864b:159c]) by DM6PR12MB4827.namprd12.prod.outlook.com
+ ([fe80::6261:3040:864b:159c%4]) with mapi id 15.21.0048.016; Thu, 21 May 2026
+ 07:56:13 +0000
+Date: Thu, 21 May 2026 09:56:05 +0200
+From: Andrea Righi <arighi@nvidia.com>
+To: Tejun Heo <tj@kernel.org>
+Cc: David Vernet <void@manifault.com>, Changwoo Min <changwoo@igalia.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>, sched-ext@lists.linux.dev,
+	bpf@vger.kernel.org, x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/8] sched_ext: Sub-allocator over kernel-claimed BPF
+ arena pages
+Message-ID: <ag66lfvACAEAI9w8@gpd4>
+References: <20260520235052.4180316-1-tj@kernel.org>
+ <20260520235052.4180316-8-tj@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260520235052.4180316-8-tj@kernel.org>
+X-ClientProxiedBy: ZR0P278CA0054.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:1d::23) To DM6PR12MB4827.namprd12.prod.outlook.com
+ (2603:10b6:5:1d6::14)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v11 6/8] bpf: Add bpf_list_add to insert node
- after a given list node
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
- martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- chengkaitao@kylinos.cn, skhan@linuxfoundation.org, memxor@gmail.com,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, vmalik@redhat.com,
- linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260521032306.97118-7-kaitao.cheng@linux.dev>
- <61871735d9151729b3092d42209dad08b1e38fa930bc1c9e452645240efbc40e@mail.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kaitao Cheng <kaitao.cheng@linux.dev>
-In-Reply-To: <61871735d9151729b3092d42209dad08b1e38fa930bc1c9e452645240efbc40e@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4827:EE_|SJ2PR12MB7867:EE_
+X-MS-Office365-Filtering-Correlation-Id: 38d48788-97f3-4b08-7736-08deb70e6e07
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|6133799003|11063799006|4143699003|18002099003|56012099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	zJ7ZyyliXRY8UKdLKHBcehBjLSoLNU5NJbwdSskic3rAVjgLg5cH8+c7sEJDaACQOGr/sut/fo+ZOy0igBQBTHWb+qRmvYQAs7l3cGqjhCqwmcyr57FiFmtB3Aez9JS67yqKnOatEKeqDHpCeH/7usj5Pjos41m0hmtrdZJDamDXMKbI+EPLRom4XDqgEOHXcXhS4bZ2qcdpcfCf3KdiBT83PfuCnJPWvh7sHB+RsRn4/Q8K7vx3BDVCCdwN7vMg3tYxS1ulRXPt7M8Dy0alWnCTuqWY8Yb0ZYoAkTw7Omz8mfXrhFKQ+7Ub6VAHfOHDoPkaair0MS5KTJNxdv8kcA3A5MqmiST/ieexrIqxqv6eRxDrdJlPDx4VECflSb3/qHQ6L5c86UuSmYxS/iBtDoGJnfNHLRR+5TjqCrOgprP7fEHLLPyfvgMsw4d8be7HoFpNMsxamgurqTRRmte46+9cuqmsBObW9SpW2BTZTE28NwVAIcMfQOKyWccRhCZRYSvjoJ9H//LF+woybjvqKxsYyw94kC+AqAY4UKro6bYZYTfXND6jaCCwCPPgWZYWEszBw7xlCxHfW1nnJf5Dxenszu146Jvw8EPYTjx0jXtT5iVxgTyqkrC61PN5TEj2EY/2yFVwMkAafeA7y1ZMMmjrUTvLGj66h4cODUKhotQAHTqKpheJmb2blLnLbsiU
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4827.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(6133799003)(11063799006)(4143699003)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?BQm6JgcsbIFN/Mo5fIfdIXN00QYqKz0ObZHO3T0K8naDV0Kath+Ny9f2UWkM?=
+ =?us-ascii?Q?2AiJJ87o9QT2EMYW9o6FIluhlOwC3I6WdI+xGaSPDYyFL2tjl2JJffb8rcNT?=
+ =?us-ascii?Q?ZE/tWRgPRY5wxeobprX4MUSh+fHGvpN2qy5PwwVnclU+bc93oLeCQDBiEimm?=
+ =?us-ascii?Q?waWyoOBFPxGw0AuaRtk5w3mBX8kJFRAI6HYB17Zvk0Bei+S+VAji3fOWHWK1?=
+ =?us-ascii?Q?IjZZjm6ogYpcaHFzC7oVJsixDKPk4mJT+EiF8IVDuL2vidrQwNZM7+yswDMi?=
+ =?us-ascii?Q?IEmMGhBY5/mEdo/bYLs2DViC6hgFYWk7bPSUzGH7eNwS3Kp5moS3DunwMxTE?=
+ =?us-ascii?Q?VbqRj6hAjFPABnbrub74oxufBfLnzUfisrvmlZcJz7w4ssywa6L/UX+kcfPf?=
+ =?us-ascii?Q?VBy9KkMD090ea6uVHnun49KXtdY7oLq4T6rEOoCc8m3FL32pAihr8dKXe7ef?=
+ =?us-ascii?Q?oWBmdMld/ILue76UpT4CFd4b9mDIE1cDm2rpzMXsBJTVyF0DOnzfk0xH8Wku?=
+ =?us-ascii?Q?rtFGJ1pc0PvDW+2/fd5LxcYX4RiCNugV3LZmIDRv/zqXbgEY/rdZ4z6g2QTg?=
+ =?us-ascii?Q?KrcPMClza9eXQ0I5wlhSy4BqYKU5BBNinBUU12N+KcWt+FPm41ai4+QylW0e?=
+ =?us-ascii?Q?RfYvQl7dP20VqGPKffs/oiuwyanFM1CB8EFg/o1jUhAFGRbgEeGtYO0K3pFU?=
+ =?us-ascii?Q?XtMGDyAFD14fXZbSbf2NZrQ1mFme7ByfOYnOVcB6dfz6Heg1EJsA2eFh/Yru?=
+ =?us-ascii?Q?iTzPHIbccTwvpgi1hqMibptLaNTikbhxtgAc/ILCC4D/n8Tz8n8yPnzWy3Dq?=
+ =?us-ascii?Q?SYn4LRM1hbgitgu8oucXz09Vwb4Z/OsKYx3MdcIyem3lglLwvNMw0wDRy9IK?=
+ =?us-ascii?Q?wLyYjmyEDt7g43IRk2LPBcD5ca1scTNNRSgtEXgGFRWHmcf2+fmcx9jVUnTj?=
+ =?us-ascii?Q?URB6SdsSbxmWSZSxcrDc+1XXHt02yFQA0EPUHp9onV5EUpG8ETMN5dw3c4Mb?=
+ =?us-ascii?Q?oTHMKZ880slk2+rDa3VJq+gAoJ8j8hrKRzi3uePe1mGigCaTB7TvdBiVg5bH?=
+ =?us-ascii?Q?3EBvBfebqHav7ZLhzHFFSbnE+vjypm7HEUwx/LUi6PAan0JVHtbXd9tE72uW?=
+ =?us-ascii?Q?ctDSeKSTURWbT7tB3G5r5KCqIvaaPEFZ5xjqoboN1gHJJKch7ZjWiZ6gdwYr?=
+ =?us-ascii?Q?O+twzK+b+4EuYGaE4fRD7f6PxgpBVOKwNvO9/3yunUBEVC5qxvRRNqBcqKQp?=
+ =?us-ascii?Q?E8QMPzWmzzJyqcCCrlgkMTbhphdqmGF9jFNjk21xRkbk/YtrcIo65ioY8anz?=
+ =?us-ascii?Q?thHzkVqqe3mzb2fFtCm6gFAeB7vw3/rf7O9YIRq+gb5HQzBFDQWci9RmxodV?=
+ =?us-ascii?Q?z3pTqrNybzG5NvcMXYIaHbEBasaA1i86v0dha2mCXO90nyrC3HQVMPVy/8wF?=
+ =?us-ascii?Q?kDw7oLIuSQpnzq36AfF6p0A9AktkeFZBfU2gvcgol+S1c1jLwSUSA4ahIuci?=
+ =?us-ascii?Q?1e5NaDyP0tqr9qRNonI+4LccJnE4CP5Q0q9ZLjgho4UjOBKs3p8fPcoQ3t7Z?=
+ =?us-ascii?Q?DDigP3erfQmlab7fTCZH4+2oCUbv+2fPezPUFoaklKRuIZHyzh50g+IhC8Uo?=
+ =?us-ascii?Q?8ggHJEVcjTP+JHgH9b10TaNgDGO2dpCyyTsRVxTBuZfLKN7gEJqNK6ujqq5c?=
+ =?us-ascii?Q?2toNFQh2lgkdUPPawjgjrwyHOdJe4+/Q42KZrIL+ozb+Raot?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 38d48788-97f3-4b08-7736-08deb70e6e07
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4827.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2026 07:56:13.7977
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: U+wBdQ/33wh2U0dK9vgbo8i5v67O4qztBcxhXHy4klNIQSfeRCUcvDfRKmjrfp9icvrpSiesO4DTJjw3Ld9Ohg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7867
 
-在 2026/5/21 12:08, bot+bpf-ci@kernel.org 写道:
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> index 1c69476c8a09..89579165ef4d 100644
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -2577,6 +2577,16 @@ __bpf_kfunc int bpf_list_push_back_impl(struct bpf_list_head *head,
->>  	return bpf_list_push_back(head, node, meta__ign, off);
->>  }
->>
->> +__bpf_kfunc int bpf_list_add(struct bpf_list_head *head, struct bpf_list_node *new,
->> +			     struct bpf_list_node *prev__nonown_allowed,
->> +			     struct btf_struct_meta *meta, u64 off)
->> +{
->> +	struct bpf_list_node_kern *n = (void *)new, *p = (void *)prev__nonown_allowed;
->> +	struct list_head *prev_ptr = &p->list_head;
->> +
->> +	return __bpf_list_add(n, head, &prev_ptr, meta ? meta->record : NULL, off);
->> +}
-> 
-> If __bpf_list_add() fails at runtime (e.g., because prev is not in the
-> list indicated by head), it drops the 'new' node via __bpf_obj_drop_impl
-> in the fail path.
-> 
-> However, the verifier unconditionally converts 'new' into a non-owning
-> reference during check_kfunc_call(). If __bpf_list_add() fails, the BPF
-> program retains this non-owning reference to a freed node.
-> 
-> Could this allow the program to trigger a use-after-free within the lock
-> critical section?
-> 
-> (sashiko-bot@kernel.org, v10 RESEND)
-> https://lore.kernel.org/bpf/20260513204420.2BB22C19425@smtp.kernel.org/
+Hi Tejun,
 
-This should be an acceptable case within the current design framework.
-
->>  static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head,
->>  					    struct list_head *n)
+On Wed, May 20, 2026 at 01:50:51PM -1000, Tejun Heo wrote:
+> Build a per-scheduler sub-allocator on top of pages claimed from the BPF
+> arena registered in the previous patch. Subsequent kernel-managed
+> arena-resident structures (e.g. per-CPU set_cmask cmask) carve their storage
+> from this pool.
 > 
-> [ ... ]
+> scx_arena_pool_init() creates a gen_pool. scx_arena_alloc() returns the
+> kernel VA. On exhaustion, the pool grows by claiming more pages via
+> bpf_arena_alloc_pages_sleepable(). Chunks are added at the kernel-side
+> mapping address; callers translate to the BPF-arena form themselves if
+> needed.
 > 
->> @@ -4756,6 +4766,7 @@ BTF_ID_FLAGS(func, bpf_list_push_front, KF_IMPLICIT_ARGS)
->>  BTF_ID_FLAGS(func, bpf_list_push_front_impl)
->>  BTF_ID_FLAGS(func, bpf_list_push_back, KF_IMPLICIT_ARGS)
->>  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
->> +BTF_ID_FLAGS(func, bpf_list_add, KF_IMPLICIT_ARGS)
+> Allocations sleep (GFP_KERNEL) - they may grow the pool through vzalloc and
+> arena page allocation. All current consumers run from the enable path (after
+> ops.init() and the kernel-side arena auto-discovery, before validate_ops()),
+> where sleeping is fine.
 > 
-> Since bpf_list_add is marked with KF_IMPLICIT_ARGS, won't the verifier
-> look for a bpf_list_add_impl counterpart during program load?
+> scx_arena_pool_destroy() walks each chunk, returns outstanding ranges to the
+> gen_pool with gen_pool_free() and then calls gen_pool_destroy(). The
+> underlying arena pages are released when the arena map itself is torn down,
+> so the pool destroy doesn't free them explicitly.
 > 
-> Without defining and registering a bpf_list_add_impl function,
-> find_kfunc_impl_proto() will fail to find the required _impl suffix in
-> the vmlinux BTF.
-> 
-> Will this cause the verifier to unconditionally reject the kfunc?
-> 
-> (sashiko-bot@kernel.org, v10 RESEND)
-> https://lore.kernel.org/bpf/20260513204420.2BB22C19425@smtp.kernel.org/
-
-The target prototype with the _impl suffix has already been deprecated.
-
->>  BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
->>  BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
->>  BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
-> 
-> [ ... ]
-> 
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 35eebb5e7769..662ad7312697 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> 
-> [ ... ]
-> 
->> @@ -19524,8 +19527,11 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->>  		int struct_meta_reg = BPF_REG_3;
->>  		int node_offset_reg = BPF_REG_4;
->>
->> -		/* rbtree_add has extra 'less' arg, so args-to-fixup are in diff regs */
->> -		if (is_bpf_rbtree_add_kfunc(desc->func_id)) {
->> +		/* list_add/rbtree_add have an extra arg (prev/less),
->> +		 * so args-to-fixup are in diff regs.
->> +		 */
-> 
-> This isn't a bug, but the multi-line comment format doesn't follow the
-> BPF subsystem style. The preferred form in kernel/bpf/ has the opening
-> /* on its own line.
-> 
-> Additionally, consider adding an is_bpf_list_add_kfunc() helper instead
-> of direct comparison with special_kfunc_list[KF_bpf_list_add].
-> 
-> (bot+bpf-ci@kernel.org and Eduard Zingerman, v10 RESEND)
-> https://lore.kernel.org/bpf/f573f7e0a5140fe6254d2ddfd3f69add455fa25c67c020c0312e2c2ceeca7c69@mail.kernel.org/
-
-I provided a more detailed explanation in the link below.
-https://lore.kernel.org/all/9e300669-8793-41a2-84a1-98fb8195e263@linux.dev/
-
->> +		if (desc->func_id == special_kfunc_list[KF_bpf_list_add] ||
->> +		    is_bpf_rbtree_add_kfunc(desc->func_id)) {
->>  			struct_meta_reg = BPF_REG_4;
->>  			node_offset_reg = BPF_REG_5;
->>  		}
-> 
-> 
+> Signed-off-by: Tejun Heo <tj@kernel.org>
 > ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26204125015
 
--- 
-Thanks
-Kaitao Cheng
+...
 
+> +/*
+> + * Allocate @size bytes from the arena pool. Returns kernel VA on success, NULL
+> + * on failure. May grow the pool via scx_arena_grow() which sleeps. Caller must
+> + * be in a GFP_KERNEL context.
+> + */
+> +void *scx_arena_alloc(struct scx_sched *sch, size_t size)
+> +{
+> +	unsigned long kern_va;
+> +	u32 page_cnt;
+> +
+> +	might_sleep();
+> +
+> +	if (!sch->arena_pool)
+> +		return NULL;
+> +
+> +	kern_va = gen_pool_alloc(sch->arena_pool, size);
+> +	if (!kern_va) {
+> +		page_cnt = max_t(u32, SCX_ARENA_GROW_PAGES,
+> +				 (size + PAGE_SIZE - 1) >> PAGE_SHIFT);
+> +		if (scx_arena_grow(sch, page_cnt))
+> +			return NULL;
+> +		kern_va = gen_pool_alloc(sch->arena_pool, size);
+> +		if (!kern_va)
+> +			return NULL;
+
+IIUC, since @page_cnt is sized to cover @size and the new chunk is added empty
+to the pool, gen_pool_alloc() here should always succeed. Should we do:
+
+  if (WARN_ON_ONCE(!kern_va))
+      return NULL;
+
+to catch potential logical bugs / future concurrency / exotic configurations?
+
+Thanks,
+-Andrea
