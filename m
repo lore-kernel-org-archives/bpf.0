@@ -1,125 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from forward101a.mail.yandex.net (forward101a.mail.yandex.net [178.154.239.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B41379C20;
-	Thu, 21 May 2026 16:20:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF3D379ED8;
+	Thu, 21 May 2026 16:27:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779380414; cv=none; b=Nnyo+7J+d0FLdA87XnKN8/pQ7v2UwMDcOWtUJZvP+lYvgJJw+ZYEgMMts7lbjpootEzmjUP7DyLElNFRI14MMLAINiN7BHrRVa8tn17Z6Y7Jmo6uLtvRyvDZctkYWASQy4mDKHfZIiF7SZtIbh+9OhC1N489tNSYgqYpjj+A6cg=
+	t=1779380845; cv=none; b=Go8c/s6JhrECSqewJkXi0tm2dcgy67QA3UiKuOsde3+3VIzJ4XjrCqHpujPfEaUbBJIb3W0vg1kmuHdyMlghJpVGgkEbMGS0hN8v+LW/2AhwQBMHdfMNjkrieeMZ/HHMQFzTcywRE42W5IC5bxZruqQJ3Fn/HGaj/Qa8u0ImQRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779380414; c=relaxed/simple;
-	bh=CZGNxW4c5rvD2a9Ms341KGzTyHeSf+CH9ZvJXzcqWJE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Zq3XjPvAl5i1OQxuYu5lvg2E/WMvCKip2akZOf+o6PuZ539ONxlRLNs+pfXHQxbzFwCOlB1DJCVOIfvSowUALaIBLaXI6Kh6v9vzi+b6UVCHfpW0b1jrT2gQMQfPRea0+rEUP+1uKwVyWcGDDuWua0lXyk5I4af/jei285Ij12A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VB1qvmg8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779380845; c=relaxed/simple;
+	bh=/h2suqSmh1VRy0ZDF7M+hpAPAXzQc14eVg4ZcH/J93w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mslgteVw7XasQzRn/cD1K50S1S9U/4U29mMO/7TuRuwJDK5Wz4+/G+2HPpyCqqMrOrxa+F7shgWZr/X5XZ9paP2zAhLHQKEqYsYKGJ8WBHtOc58c2nUO2vFNcZZdISTSSQFu6GqcpeVH0/RE+e6UMOAe9mWwfuwIOU7puLfrJmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=mOT6rEaX; arc=none smtp.client-ip=178.154.239.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VB1qvmg8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B38701F000E9;
-	Thu, 21 May 2026 16:20:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779380413;
-	bh=JSaieM4EdAi9F9FDJSXysY+oN61h6IMYagfLi8JvNpg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=VB1qvmg8GhLpR4YDJMuDzZ1ESIAzYu0wje3R7Wl7jmgVg3JTKNaykOIn7vmvEubo+
-	 GJ1NkZ29OXvIVMPYVfqb4CgWVjGHTlHGad7ud96bQfFQJWb5GKKbOcgmXy13TPlL4t
-	 0WSrRd9uuRZXr2Z9RjIVPBZD7pLqHlVyHQO6K4RcVE6wWtytIsw2SKJq7t9tMM/MzN
-	 hipdWlyJPEaFt1a1tqeokd8JQ6+9PiwK4YWkupQSpg3k31H626kwWoWHlzKkmrIGBq
-	 +dhPUJaMqYsair+G0H6hk6EX/9FsxZzV6sC7ueq4Y4GImKtRKlVnMLOTG84z1x7hCT
-	 Vzn3RtroXaGiA==
-Date: Thu, 21 May 2026 12:20:33 -0400
-From: Steven Rostedt <rostedt@kernel.org>
-To: Jens Remus <jremus@linux.ibm.com>
-Cc: sashiko-reviews@lists.linux.dev, Josh Poimboeuf <jpoimboe@kernel.org>,
- bpf@vger.kernel.org, Indu Bhagat <ibhagatgnu@gmail.com>, Dylan Hatch
- <dylanbhatch@google.com>
-Subject: Re: [PATCH v15 11/20] unwind_user/sframe: Show file name in debug
- output
-Message-ID: <20260521122033.4648359e@gandalf.local.home>
-In-Reply-To: <17ef3fa5-d378-43da-9407-62fd1bba5d96@linux.ibm.com>
-References: <20260520154004.3845823-12-jremus@linux.ibm.com>
-	<20260520161405.AE1C31F00893@smtp.kernel.org>
-	<17ef3fa5-d378-43da-9407-62fd1bba5d96@linux.ibm.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="mOT6rEaX"
+Received: from mail-nwsmtp-smtp-production-main-52.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-52.vla.yp-c.yandex.net [IPv6:2a02:6b8:c0f:4c9f:0:640:5657:0])
+	by forward101a.mail.yandex.net (Yandex) with ESMTPS id 9368580C2E;
+	Thu, 21 May 2026 19:27:11 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-52.vla.yp-c.yandex.net (smtp) with ESMTPSA id ARWPO30gRuQ0-PRtRLhY9;
+	Thu, 21 May 2026 19:27:10 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
+	t=1779380831; bh=gEM7FQjpHaiA+zwiIQRtAFpWhBBRhsP6Tj3J5miCxNY=;
+	h=Message-ID:Date:Cc:Subject:To:From;
+	b=mOT6rEaXu27R+d3Bnx8a7nYNDzFZ8nl9tbc3BVj1Rkiw4sjLuSEsVh2Do6uXgGS+/
+	 hR8Zvyma2tjs35v8sM2ntdathbpxoQ6QHsL2n7Vxr4JOUnYw2QJJx0Y3cZQWjE8iqI
+	 wVt05+oK+xa9qzKNnYu9IycE2TRYskKZPmA5Ud6E=
+Authentication-Results: mail-nwsmtp-smtp-production-main-52.vla.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+From: Dmitry Antipov <dmantipov@yandex.ru>
+To: John Fastabend <john.fastabend@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Cong Wang <cong.wang@bytedance.com>
+Cc: netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	lvc-project@linuxtesting.org,
+	Dmitry Antipov <dmantipov@yandex.ru>,
+	syzbot+431f9a9e3f5227fbb904@syzkaller.appspotmail.com
+Subject: [PATCH] udp: fix use-after-free in __sk_msg_recvmsg()
+Date: Thu, 21 May 2026 19:27:09 +0300
+Message-ID: <20260521162709.578638-1-dmantipov@yandex.ru>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Thu, 21 May 2026 12:55:50 +0200
-Jens Remus <jremus@linux.ibm.com> wrote:
+In 'udp_bpf_recvmsg()', 'sk_msg_recvmsg()' should be called
+with socket locked. Otherwise two threads may peek the same
+message, and one of the threads may dequeue and free that
+message while it is still processed by another thread.
 
-> >> +static inline void dbg_init(struct sframe_section *sec)
-> >> +{
-> >> +	struct mm_struct *mm = current->mm;
-> >> +	struct vm_area_struct *vma;
-> >> +
-> >> +	guard(mmap_read_lock)(mm);
-> >> +	vma = vma_lookup(mm, sec->sframe_start);
-> >> +	if (!vma)
-> >> +		sec->filename = kstrdup("(vma gone???)", GFP_KERNEL_ACCOUNT);  
-> 
-> Should vma_is_anonymous() be explicitly tested?  Currently an anonymous
-> VMA is assumed as last resort (in the final else clause).
+Reported-by: syzbot+431f9a9e3f5227fbb904@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=431f9a9e3f5227fbb904
+Fixes: 1f5be6b3b063 ("udp: Implement udp_bpf_recvmsg() for sockmap")
+Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
+---
+ net/ipv4/udp_bpf.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Yeah, perhaps it should be first.
+diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
+index 9f33b07b1481..ac628eaa7759 100644
+--- a/net/ipv4/udp_bpf.c
++++ b/net/ipv4/udp_bpf.c
+@@ -79,6 +79,7 @@ static int udp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 		goto out;
+ 	}
+ 
++	lock_sock(sk);
+ msg_bytes_ready:
+ 	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
+ 	if (!copied) {
+@@ -91,11 +92,13 @@ static int udp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 			if (psock_has_data(psock))
+ 				goto msg_bytes_ready;
+ 			ret = sk_udp_recvmsg(sk, msg, len, flags);
+-			goto out;
++			goto unlock;
+ 		}
+ 		copied = -EAGAIN;
+ 	}
+ 	ret = copied;
++unlock:
++	release_sock(sk);
+ out:
+ 	sk_psock_put(sk, psock);
+ 	return ret;
+-- 
+2.54.0
 
-> 
-> 	else if (vma_is_anonymous(vma))
-> 		sec->filename = kstrdup("(anonymous)", GFP_KERNEL_ACCOUNT);
-> 
-> >> +	else if (vma->vm_file)
-> >> +		sec->filename = kstrdup_quotable_file(vma->vm_file, GFP_KERNEL_ACCOUNT);  
-> > 
-> > [Severity: Low]
-> > Does this code accurately classify file-backed VMAs?
-> > 
-> > Anonymous mappings, such as private mappings of /dev/zero, can also have
-> > vm_file populated. Relying only on vm_file might misclassify these mappings
-> > for the debug output.
-> > 
-> > Would it be more reliable to use !vma_is_anonymous(vma) to check if the
-> > VMA is file-backed before accessing vm_file?
-
-As stated above, we should probably test it first. Maybe even vma->vm_mm too?
-
-	if (!vma->vm_mm)
-		sec->filename = kstrdup("(vdso)", GFP_KERNEL_ACCOUNT);
-	else if (vma_is_anonymous(vma))
-		sec->filename = kstrdup("(anonymous)", GFP_KERNEL_ACCOUNT);
-	else if (vm->vm_file)
-		[..]
-
-
-> >   
-> >> +	else if (vma->vm_ops && vma->vm_ops->name)  
-> 
-> Shashiko AI review of v14 brought up that vma->vm_ops->name(vma) may
-> return NULL.  Should this be explicitly handled as follows?
-> 
-> 	else if (vma->vm_ops && vma->vm_ops->name && vma->vm_ops->name(vma))
-
-Maybe we could even shortcut it with:
-
-	const char *name;
-	[..]
- 	else if (vma->vm_ops && vma->vm_ops->name && (name = vma->vm_ops->name(vma)))
-		sec->filename = kstrdup(name, GFP_KERNEL_ACCOUNT);  
-
-
-> 
-> >> +		sec->filename = kstrdup(vma->vm_ops->name(vma), GFP_KERNEL_ACCOUNT);  
-> > [ ... ]  
-> 
-> If explicitly testing for vma_is_anonymous() above, then the last resort
-> would be something unknown?
-> 
-> 	else
-> 		sec->filename = kstrdup("(unknown vma???)", GFP_KERNEL);
-
-Sure.
-
--- Steve
