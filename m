@@ -1,103 +1,122 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F7C385D6A;
-	Thu, 21 May 2026 04:08:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F252385D7E;
+	Thu, 21 May 2026 04:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779336488; cv=none; b=Sm96sG3a+wtpQgbzIQcAoX2Ua/V8xZOLef4Sdf9zHj1SSVXZw6Sp8DgW33uW5nGjeeH/NjKEUPZ0TFQDkBc4VxxhM52u21xA8WuXUvOlA1y+EuhNI2noq6IEMKvoZhOSdoys1KGkZlTuNGlngKlsXb1ZKbyvID+DPDxyr/W1pwg=
+	t=1779336490; cv=none; b=nFl2ZhfhEunNmWv8+sgo+3Rg472zlJ4eUcC3Cjz1hqgCsrzqz8dyEGgjfrAZUO6DdaGPd2ZtS/gckYYiICDrmdfULvzXcg/ZJkOUehMFtprwmdIwCWYTKGMfW5I95yOPhxLTUNljWfd0po7Gn+Wv0El0d9eki/RZIwlGv7J4XSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779336488; c=relaxed/simple;
-	bh=tWvDXSYZFaDH97EJ1cKD4ntvXbHySA0txrLy8cJTm5U=;
+	s=arc-20240116; t=1779336490; c=relaxed/simple;
+	bh=QFR6C8wh0WVpRMIVxkrzujvyth5nTpujg8pr/bnlBYE=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=mshd8jiPzoPplFoQ6YM2UOIEcr3LUXwY8RvfQUv/iEX+8aadupJGrdXH2bo/sR71tDlSx+VvwH1B7bNCDgsDA3Z3/aqS8oLT0/1uC4pu5BJNuLcttkEDeKX0bHUFIvux4GAOKPOVzQHvjuP5pK/WiqzRhVhFsix7S625m3D2OLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tic+USRH; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=NY95j37Ymh2mmGnYGZ+N+LK3ynzMtPl/rJJZEwUdnpgJ27AFlQKn80xnjY4h9eAxp6hklOHZKUsoYJxt8Ee4yamcP/AOVt1Zb9sFO0gd2dMDejwlI49G2U/Cian/zdt05iHeWbQxo9X1bKiFz0VOVU8AWYsYFdKLxWKt5TyAwgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TMy3RVTt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tic+USRH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 300211F00A3B;
-	Thu, 21 May 2026 04:08:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TMy3RVTt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD34C1F000E9;
+	Thu, 21 May 2026 04:08:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779336487;
-	bh=eQWoNj8AIg6neloKrZ5uxPZGxOnyIQcrCWjq1UZQu2g=;
+	s=k20260515; t=1779336489;
+	bh=tcn4ApfCGarJ7JITZjCvuMhuuEDuxOjra6VBOmUEC7E=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Tic+USRH+dS/dhi7szSBn31GoaNpyUrP5XCZZeKIcAwb0aHIYchxR8T6eC/fTjZX7
-	 ML7oMK9Sjwyr8TVfk87RUFKZ3bXiIzHryO2gX8X0xBKHcwY+8hvZhYm0J2B3XzwsEi
-	 vKugbcfNKwxeBBLQztlmWKBHDI0C0/UQOMubRTv9QkzWGuE3IeOU/lbjlxh3yBv3xN
-	 OZZrWHI5gIuSB+BQrYBGlgcMN8UXFTk5g59GVMKeXpROxDLtrpbstiwz4lfC36z2mY
-	 lInD+sHfUQGyHTK+rUhQ625CounPe9oB9cKHVvVdmES4I/fVbLiIKCP97ZT/VzFsuy
-	 TJ/1yc5c7gWzA==
-Content-Type: multipart/mixed; boundary="===============6482725756755353255=="
+	b=TMy3RVTtaQY8rJGEVBXbLTDHjKJvbfdPeR3OgOJm32y0ThhIg58GHoKcaAN2pGn0X
+	 bz2cl+nLg1YYPQhLHtDLrKd8safCPymQ/eOrCoN0CN9LaWvpIydqI/JT6Iq2c1Kh6e
+	 ss7rInNDnH1RUW55L0eLlrLVMhx9njjR9Xgt8FVRIkKt/iwTFFCTtlvc5FHB7J+Ko2
+	 I+wdcLJGJZZNqTCTStcYX/pEMJyUrV73D/+CODBJapl3tghtPYeQJG+F9IjLwaUbQU
+	 mphIOG780yKrFi99vmTTbsGu5PzrKm+VV5q1WIHuW3iMmcvBqEE2VLiZi3K57StxDh
+	 QBMMsE5ZXjskw==
+Content-Type: multipart/mixed; boundary="===============4087047492165139329=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <96cd744d0a5a8756cb0c1e31e95fbe682956b97226e2159120785feb01013e53@mail.kernel.org>
-In-Reply-To: <20260521032306.97118-4-kaitao.cheng@linux.dev>
-References: <20260521032306.97118-4-kaitao.cheng@linux.dev>
-Subject: Re: [PATCH bpf-next v11 3/8] bpf: allow non-owning list-node args via __nonown_allowed
+Message-Id: <35619368729a7d55f123388f7e99a79b10f788968aaf9c8124b3ea4fe6ca3134@mail.kernel.org>
+In-Reply-To: <20260521032306.97118-3-kaitao.cheng@linux.dev>
+References: <20260521032306.97118-3-kaitao.cheng@linux.dev>
+Subject: Re: [PATCH bpf-next v11 2/8] bpf: clear list node owner and unlink before drop
 From: bot+bpf-ci@kernel.org
 To: kaitao.cheng@linux.dev,ast@kernel.org,corbet@lwn.net,martin.lau@linux.dev,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,chengkaitao@kylinos.cn,skhan@linuxfoundation.org,memxor@gmail.com
 Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-doc@vger.kernel.org,vmalik@redhat.com,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 21 May 2026 04:08:07 +0000 (UTC)
+Date: Thu, 21 May 2026 04:08:08 +0000 (UTC)
 
---===============6482725756755353255==
+--===============4087047492165139329==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> index 75e6c078e0e7..3a9db1108b95 100644
-> --- a/Documentation/bpf/kfuncs.rst
-> +++ b/Documentation/bpf/kfuncs.rst
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 094457c3e6d3..59855b434f0b 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2247,10 +2247,11 @@ EXPORT_SYMBOL_GPL(bpf_base_func_proto);
+>  void bpf_list_head_free(const struct btf_field *field, void *list_head,
+>  			struct bpf_spin_lock *spin_lock)
+>  {
+> -	struct list_head *head = list_head, *orig_head = list_head;
+> +	struct list_head *head = list_head, drain, *pos, *n;
+>
+>  	BUILD_BUG_ON(sizeof(struct list_head) > sizeof(struct bpf_list_head));
+>  	BUILD_BUG_ON(__alignof__(struct list_head) > __alignof__(struct bpf_list_head));
+> +	INIT_LIST_HEAD(&drain);
+>
+>  	/* Do the actual list draining outside the lock to not hold the lock for
+>  	 * too long, and also prevent deadlocks if tracing programs end up
+> @@ -2261,20 +2262,30 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
+>  	__bpf_spin_lock_irqsave(spin_lock);
+>  	if (!head->next || list_empty(head))
+>  		goto unlock;
+> -	head = head->next;
+> +	list_for_each_safe(pos, n, head) {
+> +		struct bpf_list_node_kern *node;
+> +
+> +		node = container_of(pos, struct bpf_list_node_kern, list_head);
+> +		WRITE_ONCE(node->owner, BPF_PTR_POISON);
+> +		list_move_tail(pos, &drain);
+> +	}
 
-[ ... ]
+Does this introduce an unbounded delay with interrupts disabled?
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 8dd79b735a69..f3cf8d85bea0 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+The original code detached the head in O(1) time. Now there is an O(N)
+loop inside __bpf_spin_lock_irqsave(). Since BPF lists can grow quite
+large, could this cause soft lockups?
 
-[ ... ]
+This also appears to contradict the comment just above the lock which
+explicitly mentions doing the actual list draining outside the lock to
+not hold it for too long.
 
-> @@ -12244,6 +12249,13 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  			return ret;
->  		break;
->  	case KF_ARG_PTR_TO_LIST_NODE:
-> +		if (is_kfunc_arg_nonown_allowed(btf, &args[i]) &&
-> +		    type_is_non_owning_ref(reg->type) && !reg->ref_obj_id) {
-> +			/* Allow bpf_list_front/back return value for
-> +			 * __nonown_allowed list-node arguments.
-> +			 */
-> +			goto check_ok;
-> +		}
->  		if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
->  			verbose(env, "%s expected pointer to allocated object\n",
->  				reg_arg_name(env, argno));
->  @@ -12253,6 +12265,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  			verbose(env, "allocated object must be referenced\n");
->  			return -EINVAL;
->  		}
-> +check_ok:
->  		ret = process_kf_arg_ptr_to_list_node(env, reg, argno, meta);
->  		if (ret < 0)
->  			return ret;
+Lore reference:
+https://lore.kernel.org/bpf/20260513060221.DB2C7C2BCB7@smtp.kernel.org/
+Reviewer: sashiko-bot@kernel.org
+Date: Wed, 13 May 2026 06:02:21 +0000
 
-This isn't a bug, but the multi-line comment doesn't match the BPF
-subsystem style. The BPF guide requires multi-line comments to have the
-opening /* on its own line for files under kernel/bpf/. Should this be:
-
-  /*
-   * Allow bpf_list_front/back return value for
-   * __nonown_allowed list-node arguments.
-   */
-
-Eduard Zingerman raised a related nit in v10 RESEND: the check
-'!reg->ref_obj_id' appears redundant. Would type_is_non_owning_ref() be
-sufficient here?
-
-Reference: https://lore.kernel.org/bpf/0419643c9a04bf0824066742e52e3f197b43909b.camel@gmail.com/
+>  unlock:
+> -	INIT_LIST_HEAD(orig_head);
+> +	INIT_LIST_HEAD(head);
+>  	__bpf_spin_unlock_irqrestore(spin_lock);
+>
+> -	while (head != orig_head) {
+> -		void *obj = head;
+> +	while (!list_empty(&drain)) {
+> +		struct bpf_list_node_kern *node;
+>
+> -		obj -= field->graph_root.node_offset;
+> -		head = head->next;
+> +		pos = drain.next;
+> +		node = container_of(pos, struct bpf_list_node_kern, list_head);
+> +		list_del_init(pos);
+> +		/* Ensure __bpf_list_add() sees the node as unlinked. */
+> +		smp_store_release(&node->owner, NULL);
+>  		/* The contained type can also have resources, including a
+>  		 * bpf_list_head which needs to be freed.
+>  		 */
+> -		__bpf_obj_drop_impl(obj, field->graph_root.value_rec, false);
+> +		__bpf_obj_drop_impl((char *)pos - field->graph_root.node_offset,
+> +				    field->graph_root.value_rec, false);
+>  	}
+>  }
 
 
 ---
@@ -105,4 +124,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26204125015
---===============6482725756755353255==--
+--===============4087047492165139329==--
