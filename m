@@ -1,109 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D58A36B046
-	for <bpf@vger.kernel.org>; Thu, 21 May 2026 14:47:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53B0135675C;
+	Thu, 21 May 2026 14:50:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779374828; cv=none; b=ak8ACvrlK0IGYpQ88u2fXBUExZ9732RAFiXc1RCiBZKvVJT2LPtNNzn1VteCRU2gr9ktiFWe80F5Z/5qRzsk1cNyxJQ41NX3a2gx52tglT46k3ACvM0PXnUHFKE/QHNmrIMs8RWU1uk2GVesa/yzdrESefer93fyg93uHAnQ5jY=
+	t=1779375006; cv=none; b=bZRO4DbvKkB8voNInCCWd7ZIKjwGcYPnvT2pCoRbQRnnkraMhEzWckFJXCIj93FumBx9l2wT6UbIMcDfUsMYBUNvW63cdFR3dCb4X9FCYTfEL4HfLvaDt1fH2Xi/hd629nl8Da+ZaxxT0Um6OqlK87IRCAuI9PKy1lJPukQgybA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779374828; c=relaxed/simple;
-	bh=ZhbLd6/rqvOA09uRvp2qvtk5DhhEHcaeAbraOE3xdU4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Cd1qaNc/6LvsrygbeuqKe1kOzXOwNFK36zzMoNiVRt3nbR+IDuqDD3ysL8KG4gFxDdoJXzKYtD566ZfRWxLBm0ZSelIvt7F+kwJzVFilseKQgpQf0xowPI/P0yAcsKB2kg86QNezsLU/drKTgL3w/0+9CnkP7iZTtv8CUHrKwXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EmuCej8I; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779375006; c=relaxed/simple;
+	bh=6ZXrLRQJaVUkk4RLvHu/IuNp63JzBiutBMedmCXCipw=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=jMsvy25mHhwaYDVpIKgRPvZdeE+gvsuNFV2VhYE8NlaPjMmoELJtDRjPmMe8l/r8gUO6fZazzzsR3u5rQMXz136WeG7TjfDZYCkgrFELyHrPnaxx9V2Jv4HyqqQxBB67LvDdIHRjVwVOThyYPjwLmuPMB3RRKTjkKt/WavgoYCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rwux+s+P; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EmuCej8I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1EFB1F00A3B;
-	Thu, 21 May 2026 14:47:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rwux+s+P"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA9E91F000E9;
+	Thu, 21 May 2026 14:50:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779374826;
-	bh=Xk7pBC1uCTobRLfx09msxxETgi4zC612dNF8PNFLZXg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=EmuCej8ICNwuGTeEsocITF0rFjpkGkbzAFSRGMAPXfkBrCaQSyZSbmPg01Y1CYNV4
-	 Ys8c8yNRKfQ8ENfkQrqFk3yxC1i6whe7fSY3fow0fKOhJwDD3lDq5yomrMLv3G9yz/
-	 htwpRLpWhYJs7FlaP9n6brZNwiRiXjZaSBwfxZgWQvf4M7lMaj/UMb8lfwWHu6FLkQ
-	 stzd4U0Y5IWsKtRSRfccFgW9wvzmFFbnpxKX8RRMTcTEsoOu/sHL6mfWXBkfQi5csY
-	 MtYpRzlVkoIGUxH67yIUT1sicyPr92fVuOipvf+AUk7mFRRaao+mBMGX+X91R8Gvx4
-	 BPhZ37OedkT9w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v16 08/20] unwind_user: Stop when reaching an outermost
- frame
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jens Remus" <jremus@linux.ibm.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260521142546.3908498-9-jremus@linux.ibm.com>
-References: <20260521142546.3908498-9-jremus@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 21 May 2026 14:47:06 +0000
-Message-Id: <20260521144706.A1EFB1F00A3B@smtp.kernel.org>
+	s=k20260515; t=1779375004;
+	bh=Y5/Yk2ZnXM1T3ZsKaelmlrfmKvHwGGyAGp4YK4SZkGM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=Rwux+s+PrmTcHuAQvSRUDh6xWYNHUXfdGOwTbHfR/MhJNRlH212YEh8EBzicJQ5nd
+	 03tT460tutB8+vCLH6ZHn8qLItlXDOn9VPK4Vn6KuWnvqBZENeilvZg/EbWXOPP6HV
+	 BKygrNvqJaKYvtbPn5BexURIOoX0YeUiP42KyMsg68MFpAtGT/DzKMo2fk5FIFzv6z
+	 6hR87ztq90EhfWpOllcqDbanPrr2EvTuVu7ia4pdJHEhS8KsAtl2iHlA5FH9HWK3GN
+	 b60KJ60Pe12PiCVtod2lGAcWLbKGEjAMFygHjbWKPrUI3x5wQJCY3nGY/jC3iNsOBs
+	 AfLZHj0BMfXdQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0A853930DF1;
+	Thu, 21 May 2026 14:50:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2] selftests: net: Fix checksums in xdp_native
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177937501442.361786.10654244140459827358.git-patchwork-notify@kernel.org>
+Date: Thu, 21 May 2026 14:50:14 +0000
+References: <20260520153928.3371765-1-noren@nvidia.com>
+In-Reply-To: <20260520153928.3371765-1-noren@nvidia.com>
+To: Nimrod Oren <noren@nvidia.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, mohsin.bashr@gmail.com, ameryhung@gmail.com,
+ martin.lau@kernel.org, dimitri.daskalakis1@gmail.com, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, cjubran@nvidia.com, dtatulea@nvidia.com
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The newly added `outermost` field in `struct unwind_user_frame` =
-is left uninitialized in `unwind_user_next_sframe()`, causing `unwind_user_=
-next_common()` to read stack garbage and potentially terminate unwinding pr=
-ematurely.
---
+Hello:
 
-commit 88bb99c2143c88573eb3287429d12baa8f4ccda7
-Author: Jens Remus <jremus@linux.ibm.com>
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-unwind_user: Stop when reaching an outermost frame
+On Wed, 20 May 2026 18:39:28 +0300 you wrote:
+> Data adjustment cases failed with "Data exchange failed" when using IPv4
+> because the program did not update the IP and UDP checksums in the IPv4
+> branch. The issue was masked when both IPv4 and IPv6 were configured,
+> since the test harness prefers IPv6.
+> 
+> While here, generalize csum_fold_helper() to fold twice so it works for
+> any 32-bit input.
+> 
+> [...]
 
-This commit adds an indication for an outermost frame to the unwind user
-frame structure. It updates the common user unwinding code to stop when
-such a frame is encountered.
+Here is the summary with links:
+  - [net,v2] selftests: net: Fix checksums in xdp_native
+    https://git.kernel.org/netdev/net/c/dfc077043351
 
-[ ... ]
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
-> index 1fb2724197332..fdb1001e37505 100644
-> --- a/kernel/unwind/user.c
-> +++ b/kernel/unwind/user.c
-> @@ -32,6 +32,12 @@ static int unwind_user_next_common(struct unwind_user_=
-state *state,
->  {
->  	unsigned long cfa, fp, ra;
-> =20
-> +	/* Stop unwinding when reaching an outermost frame. */
-> +	if (frame->outermost) {
 
-[Severity: Medium]
-Could this read uninitialized stack memory during bisection?
-
-In unwind_user_next_sframe(), struct unwind_user_frame frame is declared
-on the stack without being fully zeroed. It then calls __find_fre() which
-populates only some fields, leaving the new outermost field uninitialized:
-
-unwind_user_next_sframe()
-   struct unwind_user_frame frame;
-  =20
-   __find_fre()
-      /* populates cfa_off, ra_off, fp_off, use_fp */
-
-   unwind_user_next_common()
-      if (frame->outermost) { /* reads uninitialized stack memory */
-
-If the stack memory happens to be non-zero, this could incorrectly set
-state->done =3D true and truncate the stack trace prematurely.
-
-While this appears to be resolved in the subsequent commit
-"unwind_user/sframe: Add support for outermost frame indication", does
-introducing the read here before the initialization break bisectability?
-
-> +		state->done =3D true;
-> +		return 0;
-> +	}
-> +
->  	/* Get the Canonical Frame Address (CFA) */
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260521142546.3908=
-498-1-jremus@linux.ibm.com?part=3D8
