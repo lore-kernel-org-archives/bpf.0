@@ -1,115 +1,150 @@
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C42430EF74
-	for <bpf@vger.kernel.org>; Thu, 21 May 2026 09:42:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0086537CD35
+	for <bpf@vger.kernel.org>; Thu, 21 May 2026 09:56:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779356576; cv=none; b=uzf8LbEB6UrR2lRDwYIvwPmuaBYEcXwLTs0qKpDBmW7JLzUihJEcdtMnoTkA3sCFZDfign0ohKHk9anOrT+yyf3Ke8D9H36ZmoO5KYpKBHx9DYwFEP07Ogacl4Aw48R9lHMFn36vLso8+mTpqegSPr2Xc/a7vFmODLgoADJ5Tlo=
+	t=1779357371; cv=none; b=pUhz2kOY/TUao5sb9JufwoS51hdaeDOoGLz/uFQtLb4Hh1dLMfv1+41VuUWPbhyW8AtAbjQ1tyB4RI5WxS07j3GLJI6ogydHp1T613Fj8UncEbaFAXfKLwPoRcCbdTo1YDgP72nhgEx/VpK8c5Xu4xWzpyDRGqyf3ZeTwNqbLXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779356576; c=relaxed/simple;
-	bh=guB4lS9kyi78JK5do5dUd/XbsnRUSSrOptJveHhaR1s=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=M8AYEO5mFiQOVcgxmcDGo+83hRWUB9v9qT0bNg0gFqaub/tvIF8nGBrx0eRu4K1A63qCX4jYagj4rdtciUMNLV/YcwgoWCLEmPCef8HW2cbZdKVATXDLv4In8AfOoWOctWbrX9spmRET8bRmxXO69GJ5AKbehNs4XeRKWieWySM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mlcUirVc; arc=none smtp.client-ip=209.85.161.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779357371; c=relaxed/simple;
+	bh=kbVueLwdS6FCSHLaai+FgwoTwF0y1M51qZTlJCAovz8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=oONzf2TJ99IVzj4lOc+SMCsTv4OdSQg8vPLjl/7qHgvg1Dg3oPO3TflxV/a+Aj2EGlN2JI8hln6/pnLZS8LGh9ZJXbirko2RobX7TFF3S+pz8komt2jQRbz7tyiCV2N4XCbEbSADNa2putMXe1tq5AofLalN3m3eVAp2QU8nqgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kQn0J2Kg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mlcUirVc"
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-69d60694c9bso955029eaf.2
-        for <bpf@vger.kernel.org>; Thu, 21 May 2026 02:42:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779356574; x=1779961374; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Enrh790BjgIIUBfQlfWGTFeBgm0WSl+DUA/ZN6Netao=;
-        b=mlcUirVckoKxnauXA0BdS16rQULzEEuL0HL5/3MeYY8W5wyg+x6E76ct7nSm4mFlrT
-         1yjGNPxjDCAtjYx3l4c+P57a8gFqJFTHjfwOIZ4418OHiqBhwsmC0H7f+cY0qMrdVM7L
-         KCbmDibCXMVP0WWb3dnLGy5x3AB/8QkSuODlxrqRtzaOE6qoAmrjev2fUoPY+Y7fvi9r
-         eXfeZRY+uBGpOIbWcAaiovuonlg1pJ6X4be8tfmQEOidYrhe/tCqzUlnw2uZ7zO9Hgv+
-         h01biK2a3mmK90L+sWho0ZHDC1C/DHx0q9EVrQlHB23EpvhCiD/860/23BcJX08bdGaW
-         fj+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779356574; x=1779961374;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Enrh790BjgIIUBfQlfWGTFeBgm0WSl+DUA/ZN6Netao=;
-        b=X51hWVe4aWHyMVfxqQxIwLD2kBPdjBjSO9SZ3uvTKi9HuPyDB4+vZWeKteb5atejMu
-         UVKx99CCCZdFqbr9dVTv1ZIV1VedItnjbjXiaCyoDYSqyVmggiRQ6UldLHBTrvwlkKCS
-         viG4uv5h7EXZmnFghFgQXTE2QutZG+rWpByguw+f4nXIXx6kq9caVdfDOzXK2NlOtODj
-         fw9yKiwh1gRdvzmn1us6W0i8wEIwphyV0LijvI1E3OmAGc9lqbDkKWSyk+qxHAZC5bKQ
-         gtn4NsMihNmtMD2SCYgdhIXkKbgYsx1g5qMszr6nacSR4FpAktNqCFwk54foWATuTmXi
-         Vl9w==
-X-Forwarded-Encrypted: i=1; AFNElJ9c7zm4LTIU14vAXuaqJVf5aLrZElazxKVG/cqoyqzN0paNSCKJlhlgYB4+BAt2yIM1fAU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaZCerYIqHdY6V63ChoTvnZdbSfUao/z6nOXSSYo7AhLlZzLxO
-	PggtYEOzhfGgxv3IB5PClnlLLY0m47PJJXUzQYM8QiY751p60rq0lZLH
-X-Gm-Gg: Acq92OE85TiE5zdVCGUSecZdZR37FH5Za210GFfQcOFqOOP+BNjSv/2PgCMLarBsj2G
-	pKnSAPCUC6S/JcAg6hzjZ65KCKGa9OQ3Ch3C4yz+C4k1Tk4pJuRSPmNyy2Lev0VnaOx+zLJ2m4s
-	U102WpjpsKGzP/w4XIlkSArhLyipEuXvLaaCddZfcDnSW32mIa2NZuxd5PypNXExcKiH7BZ3pp7
-	OLvVfagQGmRxGgCXxbjSNqJsJjLM5bUUAx2lxaqmSLKXH+3GcA66lGqFb8kd0j9QiE7H97m3VEV
-	bigDQpBrko/bKE84hcB9we5vNtpvgv9RMxYP428fw9woX4zb1pSt94LAVIqnD9ErG6wE6RtzyX7
-	sLCiIToDgaAJ4yR5pIi4Gg06C6iIh+s8APpU6yXQvAWslzNya/zke+7lOWsku4BZQS1Lgw++m/Z
-	lPNQ0uGGZPFzPP9vgIv5QZ5OHIof1QDCGyzBoXL7qnuBQSlQZibSRgG/zW8QxxuSK/VEPCOAqni
-	BMpGDphBwrQb0ANeA==
-X-Received: by 2002:a05:6820:290f:b0:694:6acf:a42d with SMTP id 006d021491bc7-69d6eefa916mr913981eaf.39.1779356574211;
-        Thu, 21 May 2026 02:42:54 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:71::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69d77385a8esm199938eaf.11.2026.05.21.02.42.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 May 2026 02:42:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kQn0J2Kg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E4D51F00A3F;
+	Thu, 21 May 2026 09:56:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779357369;
+	bh=qESjHINfOXXAwSHMsVTmBlHJ3voEobLzaWHNcLCjLX8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=kQn0J2Kg0xr4Oo4pTEbkNj+nYJ5882f4lKubJpwQ0sdcNqPipjfLA+uoFMZWJ+7JH
+	 NInJsbgICGho6492f/ZdirRZRT+2Z0hiTmB4reAJ2THx8gaiF7T+Aqjpdktf+A8Pvf
+	 diywyVwKwcpMzMxtFHMoAqMMnMt8cH7LmWIyBH3zzSczkIGz6oplUTijy0MUmluYO5
+	 yihppxQjCRNGpuaGlKEnqItZw+IhJuQ7C0tJGpavV9iSeKHvLJIILPeCBud7dRJG1h
+	 ak+wEN6Tk0SYRGCTDirL2xNwKI+mhZc81lwRGnB2E3aLdmHFC4MBRxLeB4+dl8XC59
+	 w4fAkIcadKilw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v11 2/2] kunit: add clock tests for
+ smp_cond_load_relaxed_timeout()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ankur Arora" <ankur.a.arora@oracle.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260521083038.134260-2-ankur.a.arora@oracle.com>
+References: <20260521083038.134260-2-ankur.a.arora@oracle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 21 May 2026 09:56:09 +0000
+Message-Id: <20260521095609.7E4D51F00A3F@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 21 May 2026 02:42:50 -0700
-Message-Id: <DIO99FYEHNC1.23KFEHRPTRB5N@gmail.com>
-Subject: Re: [PATCH 2/8] bpf: Recover arena kernel faults with scratch page
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Tejun Heo" <tj@kernel.org>, "David Vernet" <void@manifault.com>,
- "Andrea Righi" <arighi@nvidia.com>, "Changwoo Min" <changwoo@igalia.com>,
- "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>
-Cc: "Peter Zijlstra" <peterz@infradead.org>, "Catalin Marinas"
- <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>, "Thomas
- Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>, "Borislav
- Petkov" <bp@alien8.de>, "Dave Hansen" <dave.hansen@linux.intel.com>,
- "Andrew Morton" <akpm@linux-foundation.org>, "David Hildenbrand"
- <david@kernel.org>, "Mike Rapoport" <rppt@kernel.org>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, <sched-ext@lists.linux.dev>, <bpf@vger.kernel.org>,
- <x86@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc
-References: <20260520235052.4180316-1-tj@kernel.org>
- <20260520235052.4180316-3-tj@kernel.org>
-In-Reply-To: <20260520235052.4180316-3-tj@kernel.org>
 
-On Wed May 20, 2026 at 4:50 PM PDT, Tejun Heo wrote:
->
-> v2: Use ptep_get_and_clear() in apply_range_clear_cb(). (David)
->
-> Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> Cc: David Hildenbrand <david@kernel.org>
-> ---
->  Documentation/bpf/kfuncs.rst |  14 +++
->  arch/arm64/mm/fault.c        |  10 +-
->  arch/x86/mm/fault.c          |  12 ++-
->  include/linux/bpf.h          |   1 +
->  include/linux/bpf_defs.h     |  11 +++
->  kernel/bpf/arena.c           | 177 +++++++++++++++++++++++++++--------
->  kernel/bpf/core.c            |   5 +
->  7 files changed, 183 insertions(+), 47 deletions(-)
->  create mode 100644 include/linux/bpf_defs.h
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-First 5 patches lgtm. Should we create a stable branch out of them
-and pull into bpf-next and sched-ext trees?
-I'm preparing a followup for slab-over-arena on top of these changes.
+New issues:
+- [Low] The variable `result` in `test_smp_cond_expiry()` is assigned but n=
+ever used.
+- [Low] The opening brace of the function `synthetic_clock()` is placed on =
+the same line as the function definition.
+
+Pre-existing issues:
+- [High] The `smp_cond_load_relaxed_timeout()` implementation suffers from =
+an unhandled integer overflow when evaluating extremely large timeouts like=
+ `S64_MAX` or `U64_MAX`.
+--
+
+commit 7f53d0ddbab5d1cd94d6d7bf4f26665e2d25582d
+Author: Ankur Arora <ankur.a.arora@oracle.com>
+
+kunit: add clock tests for smp_cond_load_relaxed_timeout()
+
+This commit adds clock tests for smp_cond_load_relaxed_timeout() to ensure
+the implementation handles clock accesses and edge cases correctly. The tes=
+ts
+check if the timeout expires properly and whether the clock is accessed
+appropriately per iteration. The acquire variant is skipped since it uses an
+identical clock path.
+
+> Also ensure that edge cases are handled sanely. Note that two edge
+> cases fail: S64_MAX and U64_MAX. However, both of those are quite
+> far out and if needed, can be addressed in the implementation of
+> the interface.
+
+[Severity: High]
+This is a pre-existing issue, but the commit message acknowledges that the
+underlying implementation fails for S64_MAX and U64_MAX. Passing a maximum
+value to request an infinite wait is a standard kernel paradigm.
+
+Does the internal calculation overflow and wrap around, causing the timeout
+check to immediately succeed? If so, this transforms an intended infinite
+wait into an immediate exit, silently breaking synchronization logic.
+
+Should the macro implementation be fixed rather than simply avoiding the
+failing edge cases in the test suite?
+
+> diff --git a/lib/tests/barrier-timeout-test.c b/lib/tests/barrier-timeout=
+-test.c
+> index 2160844b27b85..6ce6c7b0fc445 100644
+> --- a/lib/tests/barrier-timeout-test.c
+> +++ b/lib/tests/barrier-timeout-test.c
+
+[ ... ]
+
+> @@ -112,8 +114,63 @@ static void test_smp_cond_timeout(struct kunit *test)
+>  		KUNIT_EXPECT_GE(test, runtime, timeout_ns);
+>  }
+> =20
+> +static s64 synthetic_clock(struct clock_state *clk) {
+
+[Severity: Low]
+According to the Linux kernel coding style guidelines, the opening brace of
+a function definition must be placed on a new line. Should this be moved to
+the next line to avoid checkpatch warnings?
+
+> +	clk->end_time +=3D clk->extra;
+> +	clk->niters++;
+> +
+> +	return clk->end_time;
+> +}
+
+[ ... ]
+
+> +static void test_smp_cond_expiry(struct kunit *test)
+> +{
+> +	const struct smp_cond_expiry_params *p =3D test->param_value;
+> +	struct clock_state clk =3D {
+> +		.start_time =3D 0,
+> +		.end_time =3D 0,
+> +		.extra =3D p->clk_inc,
+> +		.niters =3D 0,
+> +	};
+> +	unsigned int result;
+> +	s64 runtime;
+> +
+> +	flag =3D 0;
+> +	result =3D smp_cond_load_relaxed_timeout(&flag,
+> +					       0,
+> +					       synthetic_clock(&clk),
+> +					       p->timeout);
+> +
+> +	runtime =3D (u64)clk.end_time - (u64)clk.start_time;
+
+[Severity: Low]
+The variable result is assigned the return value of
+smp_cond_load_relaxed_timeout(), but it is never read or asserted afterward.
+Could this trigger an unused-but-set-variable compiler warning and break
+builds with -Werror enabled?
+
+> +	KUNIT_EXPECT_EQ(test, clk.niters, p->niters);
+> +	KUNIT_EXPECT_GE(test, runtime, p->timeout);
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260521083038.1342=
+60-1-ankur.a.arora@oracle.com?part=3D2
