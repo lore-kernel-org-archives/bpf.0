@@ -1,53 +1,53 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9620B3DE451;
-	Thu, 21 May 2026 14:26:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30EC53EDE61;
+	Thu, 21 May 2026 14:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779373584; cv=none; b=r8RqMWGqk94v1CVje9jWYdJsBE+4xO3/RfbBcPmt2FL+mcM/AW+UL392APJrXW3guWlsQ8SZ2JvMSfErgMCk05BiGOBz8e0cjAnCO+LFA6gSmA6C7dwuG1KsOTKbIfcExqjg9gTmzBf7cGbc+tJa4/+yne1khsxM5BOijL7jryU=
+	t=1779373584; cv=none; b=Fo4n8NVIhHTAz/bnT4p/lVDKAq34g70XM2VcCemm2kdC6PamNadNZzYZlFi6raYwLEtlAws+57iWPk4gvpmCqpZXahhhcLHwdV8MR9pq+7460e6Qw7uZ1zpyhFf/q1dLJ3dpw7+KWxct4T7VhvZOQ7xMXXJmPizJVLr36JVGbTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779373584; c=relaxed/simple;
-	bh=VglWC5QjBmwSCIAAVXJjNHx/C67wfgsvPJQGG5CiALo=;
+	bh=Wro/b6jYmgm7DDfIhqot8C8Ej0U9e1lJqurx/bCiZps=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tXLagwUWInezU/45q9U5Z8ZeG2MyNmgpprkwPUbbv0FLMzDAi36Su6A8TtmJx/0M+dNk5B9MDiFw9B1DLeYMWpa7MPPeJc9P98Q36QclufhkT1ViSHpBQm22l4a0C7TL9BVKj5gOscEH8z/5em31IXd1tpf1YOy5Pil8PzCEwTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PzSTxvG+; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=Ayy5EPQDmji0uBepyPkTJkuWbKHL4hnsFAg5yA5OIY/a0WzG8jhiBPZFpXKvLJo6Qf11pqfKKIXbIIos8UWerqTvRRYIWTTX6S54Ct7d3yMdzb0hqnukF5z9gQQM1rJOJrGPX+w1Hpmzb4Job3RUi1cDrLXk5esx/1/6NKcX0pM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=iZeZjlWo; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PzSTxvG+"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64L1b1mX3214577;
-	Thu, 21 May 2026 14:25:57 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="iZeZjlWo"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64L1kP7S2907049;
+	Thu, 21 May 2026 14:25:58 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=FvnhYyrYWxk5OBPJw
-	rKrmJeEttrxtHxGpLoGH3hJxZs=; b=PzSTxvG+zUJDfQtYO+5eJd2RxQRLxrGHk
-	aCqFN8j4BX82bfbkRYglMyk+YSagOt60WoqzGUC+R7JP+3Pf8U8bqc9QadYo8sAJ
-	mW3Q8HrDn5VzZHj9THwNzllG5dykmHxRLClGb/k55A4e+CW1SKVNtUX6i5VpSx+8
-	6lbuI78S7S1v4/btgl41KYl1WXlWEheHcuZ464UaIY/JHsLdWLFTDhfmE7qMFcKA
-	rqkZF7i20Y96TTrB3GNhyDj8RTDRSwSEVRdSymkm/bZZ2G4wlouoOmVQoxQuHoHn
-	M4DH5GU2JMbt3bd9w6nY1NrxQ75hyCKlNgXOSV/86slYpxj6+cs3A==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6hawe824-1
+	:mime-version:references:subject:to; s=pp1; bh=SmI34slVZs1BNH9m6
+	+m2YOZNt+zp/AB28hIWnnNMMn8=; b=iZeZjlWoa3xojRQ9GYDXflQBwFUAqq3KP
+	PwrdPAAYWNnwxiHWuYpU5A0ZeySHLsEs8VwXeAdSd3Stinke4jbgo5e76MyX4Agu
+	mozc/rVVPuTGwegRMLPPLdURfmfoGWj634slWKnmLjGWz8nFjC60znOPeKqszx6E
+	43SBHY1aFmHZ4fL2YvyfXq1o3oBoawTxeOcKdquFPQJq/oaBy6Cfdl3FUzRJwBYn
+	DI+aPy0cTv8KfqZuf1c9UJecMNH/JD2Ijx2qI2IR6wGA0yLQ+3O9kkez90obtOdC
+	URQTYg+uS7EqlkI4FiRNlSbBD+4HxZH4KvcP1qn3hAtMqwdMpJgnA==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h8myd9t-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Thu, 21 May 2026 14:25:56 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64LEO6Om017119;
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64LEO56P027486;
 	Thu, 21 May 2026 14:25:55 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e73wkcjcs-1
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e739w4pew-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Thu, 21 May 2026 14:25:55 +0000 (GMT)
 Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64LEPqUR50856384
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64LEPpqS47448364
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 21 May 2026 14:25:52 GMT
+	Thu, 21 May 2026 14:25:51 GMT
 Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EEDAA20040;
+	by IMSVA (Postfix) with ESMTP id 919A620040;
 	Thu, 21 May 2026 14:25:51 +0000 (GMT)
 Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 978382004B;
+	by IMSVA (Postfix) with ESMTP id 3AA0B20049;
 	Thu, 21 May 2026 14:25:51 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
 	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
@@ -82,9 +82,9 @@ Cc: Jens Remus <jremus@linux.ibm.com>, bpf@vger.kernel.org, linux-mm@kvack.org,
         Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>,
         "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH v16 07/20] unwind_user/sframe: Wire up unwind_user to sframe
-Date: Thu, 21 May 2026 16:25:33 +0200
-Message-ID: <20260521142546.3908498-8-jremus@linux.ibm.com>
+Subject: [PATCH v16 06/20] unwind_user/sframe: Detect .sframe sections in executables
+Date: Thu, 21 May 2026 16:25:32 +0200
+Message-ID: <20260521142546.3908498-7-jremus@linux.ibm.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260521142546.3908498-1-jremus@linux.ibm.com>
 References: <20260521142546.3908498-1-jremus@linux.ibm.com>
@@ -97,137 +97,173 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIxMDE0MiBTYWx0ZWRfX5cPz7+SzHrWN
- Nxa7dM704y2kOk5lq7rrcEsCKbESVqbyYtqZpBAu4I8a2PqfJ1uveZNer4IgFy3C0h+3zkBLic0
- p8lh+krGSSDnDYHU59kuRFnpxLjCcrtNVInJYGDD3HEItNGdFjt4V5IO/4OtgnlNqlGiP3d1iID
- WLspnHGIz7PMORn8F+9hLFHglqsBJOCN0qRSbmJjtjLQzL7Nbx+4B3YyqXqzUkFMmighMJU/POf
- O2VGUukVwoWc3HYDQ26DzgKZewmQSoZGwwy4+8dGoP/4MRxfsgjHrMdbjJpMSz4GhHrQNZgmhgG
- sMUT1k5lvwL+62YcMY1ocnxoQanzju/vhcqOghkGFythwnE/oWZV0YizMPWuY/u4qXaE4Afpn3b
- ojK+Ib3/ZdicKajF5ipovweyCo/HgEiZEFikT5JelpoS6ECfcr5WzK5LePSTd75gswl2NMFblOa
- FUxRXHu1nPSeb2Usj8w==
-X-Authority-Analysis: v=2.4 cv=Np/htcdJ c=1 sm=1 tr=0 ts=6a0f15f5 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+X-Proofpoint-GUID: BXQPl9o_9hJlojKYzPjBMR-se2WqGftm
+X-Authority-Analysis: v=2.4 cv=GYMnWwXL c=1 sm=1 tr=0 ts=6a0f15f5 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
  a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=pGLkceISAAAA:8
- a=VnNF1IyMAAAA:8 a=ItKwCHsCKAUqeRWvWoIA:9 a=2JgSa4NbpEOStq-L5dxp:22
-X-Proofpoint-ORIG-GUID: erpxgp4-yIAbyBSFs8dWTTSRpqokbHrh
-X-Proofpoint-GUID: y6XOmu7WISs7NQ9XdEa_-tlGoDw_v9-g
+ a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=pGLkceISAAAA:8
+ a=VnNF1IyMAAAA:8 a=eNuN5pRUQDBy6NUwPKcA:9 a=2JgSa4NbpEOStq-L5dxp:22
+X-Proofpoint-ORIG-GUID: l9IPRIG7Wx9EHFafGw2nEDMxjUpnlYg9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIxMDE0MiBTYWx0ZWRfX7G3DLMzxR02p
+ juBaGJ9UnhbR11PxgAq77UYKxICjNn9Bkz5kgWYIHO5o9QUgP+HOS3nSHsis4WpHkk+U8+LjCPU
+ tHxmmejAbCHLoBzLgAXfE3q5ruren8okSHXrUcGCY/pFnw8Fs4HsY66QPIfEpe8V/1Aqnqy+F0p
+ Zv6IZbXjOPGADi1TxPN7TAh9N4C+XJQdSSMtJWKDbcYbE1665cbc+jEKOFObXwrHCMtRpl6Agiw
+ HfAqD1NaRfE5iSqruKcHYjgz6V8zJnkv11g3Zuo9tiQwgKiGllH4sHY5Oj4TJQ6L/cpGdtMRhTE
+ Yos8nAUr75yuxIExbXCZ0SmrJxIhH/2lZOrrUZrMkEVlmLUhuFP06rXDnlet8MQSO+b1zrF106d
+ 63ejUjr73QcXxcpUeuG7NZBGmB0Z1Z9MvHE8mpDJQ0+8QW8tW0zXZbJJYbXB3fPJ87PEegZPssw
+ LClfBuW9WvSWSlfadBg==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-05-21_02,2026-05-18_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 spamscore=0 clxscore=1015 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 suspectscore=0 adultscore=0 phishscore=0 malwarescore=0
+ phishscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
+ adultscore=0 suspectscore=0 spamscore=0 clxscore=1015 impostorscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605210142
 
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Now that the sframe infrastructure is fully in place, make it work by
-hooking it up to the unwind_user interface.
+When loading an ELF executable, automatically detect an .sframe section
+and associate it with the mm_struct.
 
-[ Jens Remus: Remove unused pt_regs from unwind_user_next_common() and
-its callers.  Simplify unwind_user_next_sframe(). ]
+[ Jens Remus: Fix checkpatch warning "braces {} are not necessary for
+single statement blocks". ]
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Reviewed-by: Indu Bhagat <ibhagatgnu@gmail.com>
 Signed-off-by: Jens Remus <jremus@linux.ibm.com>
 ---
- arch/Kconfig                      |  1 +
- include/linux/unwind_user_types.h |  4 +++-
- kernel/unwind/user.c              | 23 +++++++++++++++++++++++
- 3 files changed, 27 insertions(+), 1 deletion(-)
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 94b2d5e8e529..37549832bd1f 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -488,6 +488,7 @@ config HAVE_UNWIND_USER_FP
- 
- config HAVE_UNWIND_USER_SFRAME
- 	bool
-+	select UNWIND_USER
- 
- config HAVE_PERF_REGS
- 	bool
-diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
-index 412729a269bc..43e4b160883f 100644
---- a/include/linux/unwind_user_types.h
-+++ b/include/linux/unwind_user_types.h
-@@ -9,7 +9,8 @@
-  * available.
-  */
- enum unwind_user_type_bits {
--	UNWIND_USER_TYPE_FP_BIT =		0,
-+	UNWIND_USER_TYPE_SFRAME_BIT =		0,
-+	UNWIND_USER_TYPE_FP_BIT =		1,
- 
- 	NR_UNWIND_USER_TYPE_BITS,
- };
-@@ -17,6 +18,7 @@ enum unwind_user_type_bits {
- enum unwind_user_type {
- 	/* Type "none" for the start of stack walk iteration. */
- 	UNWIND_USER_TYPE_NONE =			0,
-+	UNWIND_USER_TYPE_SFRAME =		BIT(UNWIND_USER_TYPE_SFRAME_BIT),
- 	UNWIND_USER_TYPE_FP =			BIT(UNWIND_USER_TYPE_FP_BIT),
- };
- 
-diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
-index 90ab3c1a205e..1fb272419733 100644
---- a/kernel/unwind/user.c
-+++ b/kernel/unwind/user.c
-@@ -7,6 +7,7 @@
- #include <linux/sched/task_stack.h>
- #include <linux/unwind_user.h>
+Notes (jremus):
+    Changes in v15:
+    - Only add sframe for text that is PT_LOAD in addition to PF_X.
+      (Sashiko AI)
+
+ fs/binfmt_elf.c          | 48 +++++++++++++++++++++++++++++++++++++---
+ include/uapi/linux/elf.h |  1 +
+ 2 files changed, 46 insertions(+), 3 deletions(-)
+
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index 16a56b6b3f6c..980a9f229cd1 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -48,6 +48,7 @@
  #include <linux/uaccess.h>
+ #include <uapi/linux/rseq.h>
+ #include <linux/rseq.h>
 +#include <linux/sframe.h>
+ #include <asm/param.h>
+ #include <asm/page.h>
  
- #define for_each_user_frame(state) \
- 	for (unwind_user_start(state); !(state)->done; unwind_user_next(state))
-@@ -82,6 +83,16 @@ static int unwind_user_next_fp(struct unwind_user_state *state)
- 	return unwind_user_next_common(state, &fp_frame);
+@@ -637,6 +638,21 @@ static inline int make_prot(u32 p_flags, struct arch_elf_state *arch_state,
+ 	return arch_elf_adjust_prot(prot, arch_state, has_interp, is_interp);
  }
  
-+static int unwind_user_next_sframe(struct unwind_user_state *state)
++static void elf_add_sframe(struct elf_phdr *text, struct elf_phdr *sframe,
++			   unsigned long base_addr)
 +{
-+	struct unwind_user_frame frame;
++	unsigned long sframe_start, sframe_end, text_start, text_end;
 +
-+	/* sframe expects the frame to be local storage */
-+	if (sframe_find(state->ip, &frame))
-+		return -ENOENT;
-+	return unwind_user_next_common(state, &frame);
++	sframe_start = base_addr + sframe->p_vaddr;
++	sframe_end   = sframe_start + sframe->p_memsz;
++
++	text_start   = base_addr + text->p_vaddr;
++	text_end     = text_start + text->p_memsz;
++
++	/* Ignore return value, sframe section isn't critical */
++	sframe_add_section(sframe_start, sframe_end, text_start, text_end);
 +}
 +
- static int unwind_user_next(struct unwind_user_state *state)
+ /* This is much more generalized than the library routine read function,
+    so we keep this separate.  Technically the library read function
+    is only provided so that we can read a.out libraries that have
+@@ -647,7 +663,7 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
+ 		unsigned long no_base, struct elf_phdr *interp_elf_phdata,
+ 		struct arch_elf_state *arch_state)
  {
- 	unsigned long iter_mask = state->available_types;
-@@ -95,6 +106,16 @@ static int unwind_user_next(struct unwind_user_state *state)
+-	struct elf_phdr *eppnt;
++	struct elf_phdr *eppnt, *sframe_phdr = NULL;
+ 	unsigned long load_addr = 0;
+ 	int load_addr_set = 0;
+ 	unsigned long error = ~0UL;
+@@ -673,7 +689,8 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
  
- 		state->current_type = type;
- 		switch (type) {
-+		case UNWIND_USER_TYPE_SFRAME:
-+			switch (unwind_user_next_sframe(state)) {
-+			case 0:
-+				return 0;
-+			case -ENOENT:
-+				continue;	/* Try next method. */
-+			default:
-+				state->done = true;
-+			}
+ 	eppnt = interp_elf_phdata;
+ 	for (i = 0; i < interp_elf_ex->e_phnum; i++, eppnt++) {
+-		if (eppnt->p_type == PT_LOAD) {
++		switch (eppnt->p_type) {
++		case PT_LOAD: {
+ 			int elf_type = MAP_PRIVATE;
+ 			int elf_prot = make_prot(eppnt->p_flags, arch_state,
+ 						 true, true);
+@@ -712,6 +729,19 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
+ 				error = -ENOMEM;
+ 				goto out;
+ 			}
 +			break;
- 		case UNWIND_USER_TYPE_FP:
- 			if (!unwind_user_next_fp(state))
- 				return 0;
-@@ -123,6 +144,8 @@ static int unwind_user_start(struct unwind_user_state *state)
- 		return -EINVAL;
++		}
++		case PT_GNU_SFRAME:
++			sframe_phdr = eppnt;
++			break;
++		}
++	}
++
++	if (sframe_phdr) {
++		eppnt = interp_elf_phdata;
++		for (i = 0; i < interp_elf_ex->e_phnum; i++, eppnt++) {
++			if (eppnt->p_flags & PF_X && eppnt->p_type == PT_LOAD)
++				elf_add_sframe(eppnt, sframe_phdr, load_addr);
+ 		}
  	}
  
-+	if (current_has_sframe())
-+		state->available_types |= UNWIND_USER_TYPE_SFRAME;
- 	if (IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP))
- 		state->available_types |= UNWIND_USER_TYPE_FP;
+@@ -836,7 +866,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 	int first_pt_load = 1;
+ 	unsigned long error;
+ 	struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
+-	struct elf_phdr *elf_property_phdata = NULL;
++	struct elf_phdr *elf_property_phdata = NULL, *sframe_phdr = NULL;
+ 	unsigned long elf_brk;
+ 	bool brk_moved = false;
+ 	int retval, i;
+@@ -945,6 +975,10 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 				executable_stack = EXSTACK_DISABLE_X;
+ 			break;
  
++		case PT_GNU_SFRAME:
++			sframe_phdr = elf_ppnt;
++			break;
++
+ 		case PT_LOPROC ... PT_HIPROC:
+ 			retval = arch_elf_pt_proc(elf_ex, elf_ppnt,
+ 						  bprm->file, false,
+@@ -1242,6 +1276,14 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 			elf_brk = k;
+ 	}
+ 
++	if (sframe_phdr) {
++		for (i = 0, elf_ppnt = elf_phdata;
++		     i < elf_ex->e_phnum; i++, elf_ppnt++) {
++			if (elf_ppnt->p_flags & PF_X && elf_ppnt->p_type == PT_LOAD)
++				elf_add_sframe(elf_ppnt, sframe_phdr, load_bias);
++		}
++	}
++
+ 	e_entry = elf_ex->e_entry + load_bias;
+ 	phdr_addr += load_bias;
+ 	elf_brk += load_bias;
+diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+index ee30dcd80901..e2a7dbed2e80 100644
+--- a/include/uapi/linux/elf.h
++++ b/include/uapi/linux/elf.h
+@@ -41,6 +41,7 @@ typedef __u16	Elf64_Versym;
+ #define PT_GNU_STACK	(PT_LOOS + 0x474e551)
+ #define PT_GNU_RELRO	(PT_LOOS + 0x474e552)
+ #define PT_GNU_PROPERTY	(PT_LOOS + 0x474e553)
++#define PT_GNU_SFRAME	(PT_LOOS + 0x474e554)
+ 
+ 
+ /* ARM MTE memory tag segment type */
 -- 
 2.51.0
 
