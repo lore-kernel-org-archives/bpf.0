@@ -1,148 +1,125 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1224A386552
-	for <bpf@vger.kernel.org>; Thu, 21 May 2026 06:12:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4483B32E134
+	for <bpf@vger.kernel.org>; Thu, 21 May 2026 06:30:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779343937; cv=none; b=VVjAVKfxb40o3NErqYGNA+AEDjOD9xlBY6iit/9Ejn3wiKtgzdoiUYwnekSV32X/+Cf/pXkktyl22fg/0va7jM2jr+OdRjUOXdBc0HjS3W1k+YtMDcJ/k/RL/VCYK+UJ2gBPNM/Mh3Jrs9GIk54o9xFgJrhm0zHqpHRE0zXHWa8=
+	t=1779345052; cv=none; b=eVMZbKLfjTvpSzYIsQvtBOREt/TF/GjgNSOxi7KvfRzGbB1ItyV8aqrg3QbqnFZNlw1OFaaDtQzgeszYzV5V3kpHaciRrHUd4TMTZx2iwCbHHPxDGU6RsG9XYaU1lkc1lXvzg0t5c3oDDEF2+7sizVGcmqsiAUpBWRebGfyLR8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779343937; c=relaxed/simple;
-	bh=raJPW6sw8ZqcjtVnpcCSp1V1gkoDLFL4/+bdI3yisUs=;
+	s=arc-20240116; t=1779345052; c=relaxed/simple;
+	bh=8R0vctU7z4EQZbfy1owVGxzrU5Y0GCb3Axo7exyTG6o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=saQJ9DbYKZ9W8uIO33RSj1zO/CUazxHHPVxcqp05a3MhBOuANwCXHQAr8LNiixdpT5PPyljETFfZmD4kQ+65oLpDq7CmbhhLZy7kexDIz6tXIKe4bEKuU+WXOId4N7an+kN5DzXdnswWjxR2sl0qZm6hzr027PF11I7iAA7jKkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DIrSViX/; arc=none smtp.client-ip=95.215.58.170
+	 In-Reply-To:Content-Type; b=ePoOowX1KicHsXjAEvbdD97/8lyAs3dnMMoqaaBCEdIUrT7DPd5xPAZgh4pT0Ivc02i3xiaDItVMtCq0GhPwBm0E1/nGD51CxrjZISozdcj3Zb5SQjs6xiKaRyYJUOPm+q9zXA1ElFpkW9dZPRy7Cah/mqzf9XGhMuDDDYSQT/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wN8a4GRa; arc=none smtp.client-ip=91.218.175.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DIrSViX/"
-Message-ID: <23c93af8-c025-4c39-b0df-b84562756c30@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wN8a4GRa"
+Message-ID: <e3161bcf-92e6-4d85-9e80-a6b081d44f62@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779343921;
+	t=1779345038;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=255yUP+COzLOATJHIQiHzRErI8DeSF7IuKku14LXU6E=;
-	b=DIrSViX/rFnHdNbP/64T9lzCRyQNNW2cqY+H2hzDLr/ejTGDKR+eC/zWIPIBwEGj2cGDl2
-	2Jt5AqcCgcg9sdaVLXAm/SPVucWyuJNH2eAQWIBBCbZRwVQRFc0LcoDNl5zqOi1wqqDRbi
-	/FctbRwZdBcZjSnRncfTkBV0GWuXxz0=
-Date: Thu, 21 May 2026 14:11:11 +0800
+	bh=oWXMI+artQUT3BERACb5g1lLwEqc2ryF+PiR5qEMqIQ=;
+	b=wN8a4GRavA48KI1TPyKp/odiEc3L06Z02eFOccaPR+FcudhtLR1xmwJ6dR/g/753lGtriz
+	abDZOh8HHhgbPWyqye/vaVBo30K0NgdrPIH3vXX1MKXLnEcpJvbBaKirDzxkHUMwGbuHr6
+	iYwWzSlpsaJawH4uKlMFeFOplUOeh/I=
+Date: Thu, 21 May 2026 14:29:38 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v11 2/8] bpf: clear list node owner and unlink
- before drop
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260521032306.97118-3-kaitao.cheng@linux.dev>
- <20260521043023.A0BD71F000E9@smtp.kernel.org>
+Subject: Re: [PATCH bpf-next v11 3/8] bpf: allow non-owning list-node args via
+ __nonown_allowed
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
+ martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ chengkaitao@kylinos.cn, skhan@linuxfoundation.org, memxor@gmail.com,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, vmalik@redhat.com,
+ linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260521032306.97118-4-kaitao.cheng@linux.dev>
+ <96cd744d0a5a8756cb0c1e31e95fbe682956b97226e2159120785feb01013e53@mail.kernel.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Kaitao Cheng <kaitao.cheng@linux.dev>
-In-Reply-To: <20260521043023.A0BD71F000E9@smtp.kernel.org>
+In-Reply-To: <96cd744d0a5a8756cb0c1e31e95fbe682956b97226e2159120785feb01013e53@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-在 2026/5/21 12:30, sashiko-bot@kernel.org 写道:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> 
-> New issues:
-> - [High] Potentially unbounded O(N) list traversal with interrupts disabled in `bpf_list_head_free()`.
-> 
-> Pre-existing issues:
-> - [High] The patch fixes the stale `node->owner` issue for `bpf_list_head_free()` but fails to apply the equivalent fix for `bpf_rb_root_free()`, leaving `bpf_rbtree_remove()` vulnerable to the same memory corruption.
-> --
-> 
-> commit 59439e3ee3f8d57af8635b521393d245d26bbdf4
-> Author: Kaitao Cheng <chengkaitao@kylinos.cn>
-> 
-> bpf: clear list node owner and unlink before drop
-> 
-> This commit fixes an issue where refcounted BPF list nodes can outlive their
-> list head and retain a stale owner pointer. To prevent memory corruption if a
-> new list is allocated at the same address, it moves nodes to a private drain
-> list under the spinlock, poisons their owner pointers, and unlinks them
-> before dropping the objects.
-> 
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> index 094457c3e6d37..59855b434f0b2 100644
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
+在 2026/5/21 12:08, bot+bpf-ci@kernel.org 写道:
+>> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+>> index 75e6c078e0e7..3a9db1108b95 100644
+>> --- a/Documentation/bpf/kfuncs.rst
+>> +++ b/Documentation/bpf/kfuncs.rst
 > 
 > [ ... ]
 > 
->> @@ -2261,20 +2262,30 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
->>  	__bpf_spin_lock_irqsave(spin_lock);
->>  	if (!head->next || list_empty(head))
->>  		goto unlock;
->> -	head = head->next;
->> +	list_for_each_safe(pos, n, head) {
->> +		struct bpf_list_node_kern *node;
->> +
->> +		node = container_of(pos, struct bpf_list_node_kern, list_head);
->> +		WRITE_ONCE(node->owner, BPF_PTR_POISON);
->> +		list_move_tail(pos, &drain);
->> +	}
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 8dd79b735a69..f3cf8d85bea0 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
 > 
-> [Severity: High]
-> Could this new loop potentially cause a long CPU stall?
+> [ ... ]
 > 
-> Since __bpf_spin_lock_irqsave() disables local interrupts, this O(N) list
-> traversal executes with interrupts disabled.
+>> @@ -12244,6 +12249,13 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+>>  			return ret;
+>>  		break;
+>>  	case KF_ARG_PTR_TO_LIST_NODE:
+>> +		if (is_kfunc_arg_nonown_allowed(btf, &args[i]) &&
+>> +		    type_is_non_owning_ref(reg->type) && !reg->ref_obj_id) {
+>> +			/* Allow bpf_list_front/back return value for
+>> +			 * __nonown_allowed list-node arguments.
+>> +			 */
+>> +			goto check_ok;
+>> +		}
+>>  		if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
+>>  			verbose(env, "%s expected pointer to allocated object\n",
+>>  				reg_arg_name(env, argno));
+>>  @@ -12253,6 +12265,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+>>  			verbose(env, "allocated object must be referenced\n");
+>>  			return -EINVAL;
+>>  		}
+>> +check_ok:
+>>  		ret = process_kf_arg_ptr_to_list_node(env, reg, argno, meta);
+>>  		if (ret < 0)
+>>  			return ret;
 > 
-> BPF lists do not have a hard size limit, so if a program accumulates a
-> very large number of elements in a single list, could iterating over them
-> here trigger the NMI watchdog or cause severe latency spikes?
+> This isn't a bug, but the multi-line comment doesn't match the BPF
+> subsystem style. The BPF guide requires multi-line comments to have the
+> opening /* on its own line for files under kernel/bpf/. Should this be:
+> 
+>   /*
+>    * Allow bpf_list_front/back return value for
+>    * __nonown_allowed list-node arguments.
+>    */
 
-This is merely address-taking and assignment, so it is almost negligible
-in cost, and the likelihood of causing a soft lockup is very low.
+This file uses this comment style extensively, so I followed the
+existing convention here.
 
->>  unlock:
->> -	INIT_LIST_HEAD(orig_head);
->> +	INIT_LIST_HEAD(head);
->>  	__bpf_spin_unlock_irqrestore(spin_lock);
->>  
->> -	while (head != orig_head) {
->> -		void *obj = head;
->> +	while (!list_empty(&drain)) {
->> +		struct bpf_list_node_kern *node;
->>  
->> -		obj -= field->graph_root.node_offset;
->> -		head = head->next;
->> +		pos = drain.next;
->> +		node = container_of(pos, struct bpf_list_node_kern, list_head);
->> +		list_del_init(pos);
->> +		/* Ensure __bpf_list_add() sees the node as unlinked. */
->> +		smp_store_release(&node->owner, NULL);
->>  		/* The contained type can also have resources, including a
->>  		 * bpf_list_head which needs to be freed.
->>  		 */
->> -		__bpf_obj_drop_impl(obj, field->graph_root.value_rec, false);
->> +		__bpf_obj_drop_impl((char *)pos - field->graph_root.node_offset,
->> +				    field->graph_root.value_rec, false);
->>  	}
->>  }
+> Eduard Zingerman raised a related nit in v10 RESEND: the check
+> '!reg->ref_obj_id' appears redundant. Would type_is_non_owning_ref() be
+> sufficient here?
 > 
-> [Severity: High]
-> This isn't a bug introduced by this patch, but does bpf_rb_root_free() need
-> the exact same fix?
+> Reference: https://lore.kernel.org/bpf/0419643c9a04bf0824066742e52e3f197b43909b.camel@gmail.com/
 > 
-> When draining an rbtree, bpf_rb_root_free() calls __bpf_obj_drop_impl() on
-> each node without clearing the node_internal->owner or unlinking the nodes.
-> 
-> If a surviving refcounted rb-node retains a pointer to the freed rb_root,
-> and a new bpf_rb_root is allocated at the old address, wouldn't a call to
-> bpf_rbtree_remove(new_root, stale_node) erroneously bypass the ownership
-> check and invoke rb_erase_cached() with stale tree pointers?
 
-I will probably send a separate fix patch later; this issue does not need
-to be addressed in this patch series.
+Sorry, I missed that. If needed, I can fix it in the next version.
+
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26204125015
 
 -- 
 Thanks
