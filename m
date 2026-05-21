@@ -1,152 +1,188 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98BB2349CC5;
-	Thu, 21 May 2026 15:22:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA94348860
+	for <bpf@vger.kernel.org>; Thu, 21 May 2026 15:23:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779376946; cv=none; b=WN5DL4CtD3bxscRwUcuEPApUF+RxPwUAEieYeMVN7zP+/zO49wsVtjffBOYLBNN19SNDgxb+xKW64JwyImerfl/a3B4m7nZSFNH4gmVSmTCYJsyhX/hFo8JL4SlNHPkPN2VVyVxsoTrDhbF3UL0XcG0flGNPgxn1Ln01Tm6aOW4=
+	t=1779377016; cv=none; b=t0tE1JzLK2AS63mneJnwN9dNsHrrLrljgLJfFFpzd31Rk1jVWv5+slxhwMsJkJ2jfagbbFjuaI/rAQ4MoHR/gVeUGpViwjEi9jt7+UI0hahwgeuaGzSKGhp7hgGZQpvLNCs6rSsjeGi0LrwtOUTlmQ60FVTl5E2dtkaFwGonWvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779376946; c=relaxed/simple;
-	bh=ZW+A5geojVhY9XYQPOmZaZZzPr01sJZSa7u+WMblLsc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qYH5m9U0hyEbmmDZFiioq8x9bE1D3EQptZQph0Kr25dOhlMebTFoqENmz2N4+BLwjpHFfUSjgQbL9CtDMFWWVcTztkRGbMP8yjFBMJMqOD/jw/LABO9HP5qfVacsmSdaWGpPtVnMjvQHOgDlAON/77m8lJiTf0f39iKXGlfALSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dmO0I3lQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779377016; c=relaxed/simple;
+	bh=OXTIb1/N5Bc5RUHCbP84pisCmO6LuOOayqAJscQyIPc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Fcx92eXFehFZFV3Q2J1d1n/1EJGUgWyt6/BSslHIuNJOF9DRhV2jrKKsiPOgeUcAFrs3iZ6zwHObjUGzMhC8tSceNA3lB0vK8eKL7O6bkI7CR/8ZxCNPPKZe43mF3sT9/Giw3JvLxiaEEg7hAE38VGNeetG3is/cnXJJI52vKos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Akr04Vv3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dmO0I3lQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54A1C1F00A3B;
-	Thu, 21 May 2026 15:22:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Akr04Vv3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E80E1F000E9;
+	Thu, 21 May 2026 15:23:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779376945;
-	bh=GBuyomqWaYCSvJwjKMsq/TIYTszizMMxSdlOrlSrPhE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=dmO0I3lQGx8DMkccgIRz7PDhQDzamhKIDcSsonRscI/AK98pc2F5UitSg1w54dO9o
-	 kT/daisMcG3SFNNG7P1zX0L/t8Wt2QKhxOMlEPmJt4o+ShU3V21oKCR226hKLREWYo
-	 YKnj2EAsuLT8QOhaF0FJRiRs6KtS33U14nR8IZ2JpVEypyue3+I8L/cW04Qk28o/kk
-	 L0wGM4afChhv/scfBlogrEmNtlECjmOA89WXDNow/w1pO580Jc4o6Rnhw0BeqFy5Lq
-	 x+oPXTy9TTYpKyrTG9VxWbqfzHfVaQr+znrEzrzSbjHMh7jIB3v2rsiy7q34URLeYt
-	 JcADK7jvt/wPQ==
-From: KP Singh <kpsingh@kernel.org>
-To: bpf@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	KP Singh <kpsingh@kernel.org>
-Subject: [PATCH v2 2/2] bpf, libbpf: reject non-exclusive metadata maps in the signed loader
-Date: Thu, 21 May 2026 17:22:17 +0200
-Message-ID: <20260521152217.2345235-3-kpsingh@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260521152217.2345235-1-kpsingh@kernel.org>
-References: <20260521152217.2345235-1-kpsingh@kernel.org>
+	s=k20260515; t=1779377015;
+	bh=gevCHyv4QKmSZnCu0TcXDn4WsjEcfgwIF6WlGvR0ptM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Akr04Vv3/GnRX4nmuUptuWzi0ZC4/EK1jXRWHQc3Ee052oz4IhMCTJ4IPgQ2UieKI
+	 EWwHB7bs8rdgYBooficV3FxWjKz+XRwsvNSuJrKl4y/KjzwDu5DrY7PdHwgSu/wGEL
+	 gohodNBCaLIkZrhr2CqeshZX9b/E3S83QpksRZ6aJNfFNP6V/LO/juUqNoMKptQQ+F
+	 X9vlNQ/vAILBblQe1Yhk+9GehcPorDkrqwfJ+NDq4IK7M3JMv6JNTOTuj0xo5QXJQh
+	 jHLrkCTcaJ9ZUk6voUoklTvEugbj0OIMob4V3QCOn0GtN8U6VDIx5YP31pDbSD95mg
+	 rtJIZ1baUruLg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v16 20/20] unwind_user/sframe: Add prctl() interface for
+ registering .sframe sections
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jens Remus" <jremus@linux.ibm.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260521142546.3908498-21-jremus@linux.ibm.com>
+References: <20260521142546.3908498-21-jremus@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 21 May 2026 15:23:35 +0000
+Message-Id: <20260521152335.6E80E1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The loader verifies map->sha against the metadata hash in its
-instructions. map->sha is calculated when BPF_OBJ_GET_INFO_BY_FD is called
-on the frozen map.
+Thank you for your contribution! Sashiko AI review found 6 potential issue(=
+s) to consider:
 
-While the map is frozen, the loader must also ensure the map is
-exclusive, as, without exclusivity, another BPF program with map access
-can mutate the contents afterwards, so the check passes on stale data.
+New issues:
+- [High] The patch adds a test-only UAPI interface that is explicitly not i=
+ntended for mainline inclusion, violating ABI stability rules.
+- [High] Unbounded memory allocation in PR_ADD_SFRAME allows a local Denial=
+ of Service (DoS) via memory exhaustion.
+- [Low] When SFrame support is disabled, the prctl options incorrectly retu=
+rn -ENOSYS instead of -EINVAL.
 
-Place excl_prog_sha right after sha[] in struct bpf_map and have
-gen_loader bail with -EINVAL when it is NULL, via BPF_PSEUDO_MAP_IDX at
-fixed offset 32. Declare excl_prog_sha with __bpf_md_ptr so the
-8-byte BPF_LDX_MEM read works on 32-bit kernels.
+Pre-existing issues:
+- [Critical] Improper handling of -EFAULT in sframe_find() leads to prematu=
+re deletion of valid unwinding metadata and poses a severe NMI deadlock ris=
+k.
+- [High] A malicious user application can reliably trigger a WARN_ON_ONCE i=
+n sframe_find() by causing concurrent removals of an .sframe section, poten=
+tially panicking the system.
+- [High] Unbounded iteration in sframe_validate_section() without yielding =
+the CPU can cause softlockup DoS.
+--
 
-Fixes: fb2b0e290147 ("libbpf: Update light skeleton for signing")
-Signed-off-by: KP Singh <kpsingh@kernel.org>
----
- include/linux/bpf.h                              |  2 +-
- tools/lib/bpf/gen_loader.c                       | 16 ++++++++++++++++
- .../selftests/bpf/progs/verifier_map_ptr.c       | 10 ++++++----
- 3 files changed, 23 insertions(+), 5 deletions(-)
+commit f2ba64c060979156a7ef9c545cd667594369670a
+Author: Josh Poimboeuf <jpoimboe@kernel.org>
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index cd191c5fdb0a..ea9bd24f82c0 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -295,6 +295,7 @@ struct bpf_map_owner {
- 
- struct bpf_map {
- 	u8 sha[SHA256_DIGEST_SIZE];
-+	__bpf_md_ptr(char *, excl_prog_sha);
- 	const struct bpf_map_ops *ops;
- 	struct bpf_map *inner_map_meta;
- #ifdef CONFIG_SECURITY
-@@ -335,7 +336,6 @@ struct bpf_map {
- 	atomic64_t sleepable_refcnt;
- 	s64 __percpu *elem_count;
- 	u64 cookie; /* write-once */
--	char *excl_prog_sha;
- };
- 
- static inline const char *btf_field_type_name(enum btf_field_type type)
-diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-index 9478b8f78f26..fee35c26deb8 100644
---- a/tools/lib/bpf/gen_loader.c
-+++ b/tools/lib/bpf/gen_loader.c
-@@ -600,6 +600,22 @@ static void emit_signature_match(struct bpf_gen *gen)
- 			gen->error = -ERANGE;
- 		}
- 	}
-+
-+	/* Reject if the metadata map is not exclusive. Without exclusivity
-+	 * the cached map->sha[] verified above can be stale: another BPF
-+	 * program with map access could have mutated the contents between
-+	 * BPF_OBJ_GET_INFO_BY_FD and loader execution.
-+	 */
-+	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX,
-+					 0, 0, 0, 0));
-+	emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, SHA256_DWORD_SIZE * sizeof(__u64)));
-+	off = -(gen->insn_cur - gen->insn_start - gen->cleanup_label) / 8 - 2;
-+	if (is_simm16(off)) {
-+		emit(gen, BPF_MOV64_IMM(BPF_REG_7, -EINVAL));
-+		emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_2, 0, off));
-+	} else {
-+		gen->error = -ERANGE;
-+	}
- }
- 
- void bpf_gen__record_attach_target(struct bpf_gen *gen, const char *attach_name,
-diff --git a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c b/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
-index e2767d27d8aa..baef2e93cb41 100644
---- a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
-@@ -70,13 +70,15 @@ __naked void bpf_map_ptr_write_rejected(void)
- 	: __clobber_all);
- }
- 
--/* The first element of struct bpf_map is a SHA256 hash of 32 bytes, accessing
-- * into this array is valid. The opts field is now at offset 33.
-+/* The first 32 bytes of struct bpf_map are the SHA256 hash; accessing into
-+ * this array is valid. excl_prog_sha follows at offset 32 (8 bytes via
-+ * __bpf_md_ptr), then ops at offset 40. Reading at offset 41 crosses into
-+ * the ops pointer and must be rejected.
-  */
- SEC("socket")
- __description("bpf_map_ptr: read non-existent field rejected")
- __failure
--__msg("cannot access ptr member ops with moff 32 in struct bpf_map with off 33 size 4")
-+__msg("cannot access ptr member ops with moff 40 in struct bpf_map with off 41 size 4")
- __failure_unpriv
- __msg_unpriv("access is allowed only to CAP_PERFMON and CAP_SYS_ADMIN")
- __flag(BPF_F_ANY_ALIGNMENT)
-@@ -85,7 +87,7 @@ __naked void read_non_existent_field_rejected(void)
- 	asm volatile ("					\
- 	r6 = 0;						\
- 	r1 = %[map_array_48b] ll;			\
--	r6 = *(u32*)(r1 + 33);				\
-+	r6 = *(u32*)(r1 + 41);				\
- 	r0 = 1;						\
- 	exit;						\
- "	:
--- 
-2.53.0
+unwind_user/sframe: Add prctl() interface for registering .sframe sections
 
+The kernel doesn't have direct visibility to the ELF contents of shared
+libraries. This commit adds prctl() interfaces to allow glibc to tell the
+kernel where to find .sframe sections for unwinding.
+
+> [
+>   This adds an interface for prctl() for testing loading of sframes for
+>   libraries. But this interface should really be a system call. This patch
+>   is for testing purposes only and should not be applied to mainline.
+> ]
+
+[Severity: High]
+Since this is explicitly marked as a temporary test patch, should it be
+redesigned as a proper system call or removed before being merged?
+
+Adding temporary or experimental prctl() interfaces exposes a temporary ABI=
+ to
+userspace which must be maintained indefinitely, polluting the UAPI.
+
+> diff --git a/kernel/sys.c b/kernel/sys.c
+> index 62e842055cc9c..b0a9b1e3ccd7c 100644
+> --- a/kernel/sys.c
+> +++ b/kernel/sys.c
+
+[ ... ]
+
+> @@ -2907,6 +2908,14 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long,=
+ arg2, unsigned long, arg3,
+>  		if (arg3 & PR_CFI_LOCK && !(arg3 & PR_CFI_DISABLE))
+>  			error =3D arch_prctl_lock_branch_landing_pad_state(me);
+>  		break;
+> +	case PR_ADD_SFRAME:
+> +		error =3D sframe_add_section(arg2, arg3, arg4, arg5);
+
+[Severity: High]
+Could this allow a local Denial of Service via memory exhaustion?
+
+A user process can repeatedly call prctl(PR_ADD_SFRAME) with valid, small
+ranges. If each call allocates a new struct sframe_section and inserts it
+into the mm->sframe_mt maple tree using GFP_KERNEL_ACCOUNT, an unprivileged
+user might exhaust kernel memory since there is no upper limit on the total
+number of sections a process can register.
+
+[Severity: Low]
+Is it intentional that the fallback stub for sframe_add_section() returns
+-ENOSYS when SFrame support is disabled?
+
+include/linux/sframe.h:sframe_add_section() {
+    ...
+    return -ENOSYS;
+}
+
+Standard kernel conventions dictate that unsupported or disabled prctl opti=
+ons
+should return -EINVAL. Returning -ENOSYS incorrectly indicates to userspace
+that the entire prctl syscall is unimplemented.
+
+[Severity: High]
+This is a pre-existing issue, but is there a risk of a softlockup Denial of
+Service during section validation?
+
+When registering a new .sframe section via PR_ADD_SFRAME, the kernel
+synchronously validates all FDE and FRE entries in sframe_validate_section(=
+).
+Because the number of FDEs is read from user-space memory and can be extrem=
+ely
+large, an attacker could provide a massive amount of FDEs/FREs.
+
+Since the validation loop does not contain cond_resched(), the kernel could
+spin here for seconds without yielding, triggering the softlockup detector.
+
+> +		break;
+> +	case PR_REMOVE_SFRAME:
+> +		if (arg3 || arg4 || arg5)
+> +			return -EINVAL;
+> +		error =3D sframe_remove_section(arg2);
+
+[Severity: Critical]
+This is a pre-existing issue, but does handling -EFAULT in sframe_find() ri=
+sk
+a severe NMI deadlock and premature deletion of valid metadata?
+
+If unsafe_get_user() cleanly faults because the memory is temporarily paged
+out, it sets ret =3D -EFAULT. The cleanup block then calls
+WARN_ON_ONCE(sframe_remove_section(sec->sframe_start)).
+
+Because sframe_find() is used by stack unwinders (like perf) that execute
+in NMI context, triggering sframe_remove_section() inside an NMI attempts
+to acquire the maple tree's internal spinlock (mt_lock). If the NMI
+interrupted a thread already holding mt_lock, this could result in a hard
+deadlock. Furthermore, this permanently destroys perfectly valid unwinding
+metadata simply because a page was not resident.
+
+[Severity: High]
+This is a pre-existing issue, but might a malicious application reliably
+trigger the WARN_ON_ONCE in sframe_find(), potentially panicking the system?
+
+If an .sframe section returns -EFAULT because it is paged out, the error
+path calls WARN_ON_ONCE(sframe_remove_section(sec->sframe_start)).
+If sframe_remove_section() fails to find the section, it returns -EINVAL,
+causing the warning to fire.
+
+This condition could be reliably triggered if multiple threads concurrently
+unwind through the same paged-out section, or if one thread unwinds while
+another explicitly removes the section using the newly added
+prctl(PR_REMOVE_SFRAME). If panic_on_warn is enabled, this might allow
+unprivileged users to reliably crash the system.
+
+> +		break;
+>  	default:
+>  		trace_task_prctl_unknown(option, arg2, arg3, arg4, arg5);
+>  		error =3D -EINVAL;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260521142546.3908=
+498-1-jremus@linux.ibm.com?part=3D20
