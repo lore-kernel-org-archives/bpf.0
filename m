@@ -1,57 +1,57 @@
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A6093DA5D9;
-	Thu, 21 May 2026 14:26:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9620B3DE451;
+	Thu, 21 May 2026 14:26:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779373582; cv=none; b=UD8bTi0sUC7fD/+uzcPYjPtlhkvJOvlqNUir5V8SIKBKzC/8ASEZi+2iMH6+dx191q/Tt9q6gc3xqC00FZbU1tB36UJbrMVpdpBnWxQWMHSHy3oP4HtnBML+HgU9LLMiq1T9v2j5wktP0F2oYXgt9Qp9IxJ6G3EchlKuqcRIw5w=
+	t=1779373584; cv=none; b=r8RqMWGqk94v1CVje9jWYdJsBE+4xO3/RfbBcPmt2FL+mcM/AW+UL392APJrXW3guWlsQ8SZ2JvMSfErgMCk05BiGOBz8e0cjAnCO+LFA6gSmA6C7dwuG1KsOTKbIfcExqjg9gTmzBf7cGbc+tJa4/+yne1khsxM5BOijL7jryU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779373582; c=relaxed/simple;
-	bh=Coil9KclyKK7MQZtjsj+zggHftTuc+AXqbu8taw5uMo=;
+	s=arc-20240116; t=1779373584; c=relaxed/simple;
+	bh=VglWC5QjBmwSCIAAVXJjNHx/C67wfgsvPJQGG5CiALo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OZguUjW/GSsp7y3S/gFsmYpYpV1qKsfMajCRK/kMBJmLHd7waYRSwDluss/2zSHbKkIqm+NEeweZYeWMRk6Au23d6zv5EQToIfy7TH2+4YXm6o/IUlRpeaM2EM0rDuc3Y+rPxbSDZZ/Iv1xdzAKJbX8oMoxrJnnb3QPKG/d1NDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=e1zg6m/i; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=tXLagwUWInezU/45q9U5Z8ZeG2MyNmgpprkwPUbbv0FLMzDAi36Su6A8TtmJx/0M+dNk5B9MDiFw9B1DLeYMWpa7MPPeJc9P98Q36QclufhkT1ViSHpBQm22l4a0C7TL9BVKj5gOscEH8z/5em31IXd1tpf1YOy5Pil8PzCEwTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PzSTxvG+; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="e1zg6m/i"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PzSTxvG+"
 Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64L6fYnI3442044;
-	Thu, 21 May 2026 14:25:55 GMT
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64L1b1mX3214577;
+	Thu, 21 May 2026 14:25:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=odsVNex6R2VPSghnY
-	Dx1oLCB8plgZo4cXgSkUOTP2c4=; b=e1zg6m/iYlHhgLyx+hMuwAkAWk3ZzVC1B
-	hLKRgi6y0zliDHyYukEbJqLRNpPszE9O/rfoK8J3C7hMt1oga5Fm9FVt+X7cao9L
-	us8eq7TOGDSj32NBzHQKXhc1WzF6AeqvUF6v8JWaEjQdaFa56wbnLFbYRl3toqUe
-	Wl13zVt8ztKByTSVIww/k3jD/1Jj3q64FYbZmQ6rstbre1B46cCmveWkWenD+2Pe
-	XiyJ4WiE1ygNtxMutpqhNJYW3CF3IW9X88XTKDbrlx+DBRI4Taxn6zJ0lsoZ7JPE
-	G6O6oIUzg7Ff/qdRvtnNsO9qBSLjkIWIPt6q8+ZgAbARWnnhDtmug==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6hawe81w-1
+	:mime-version:references:subject:to; s=pp1; bh=FvnhYyrYWxk5OBPJw
+	rKrmJeEttrxtHxGpLoGH3hJxZs=; b=PzSTxvG+zUJDfQtYO+5eJd2RxQRLxrGHk
+	aCqFN8j4BX82bfbkRYglMyk+YSagOt60WoqzGUC+R7JP+3Pf8U8bqc9QadYo8sAJ
+	mW3Q8HrDn5VzZHj9THwNzllG5dykmHxRLClGb/k55A4e+CW1SKVNtUX6i5VpSx+8
+	6lbuI78S7S1v4/btgl41KYl1WXlWEheHcuZ464UaIY/JHsLdWLFTDhfmE7qMFcKA
+	rqkZF7i20Y96TTrB3GNhyDj8RTDRSwSEVRdSymkm/bZZ2G4wlouoOmVQoxQuHoHn
+	M4DH5GU2JMbt3bd9w6nY1NrxQ75hyCKlNgXOSV/86slYpxj6+cs3A==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6hawe824-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 May 2026 14:25:54 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64LEO56O027486;
-	Thu, 21 May 2026 14:25:53 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e739w4pek-1
+	Thu, 21 May 2026 14:25:56 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64LEO6Om017119;
+	Thu, 21 May 2026 14:25:55 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e73wkcjcs-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 May 2026 14:25:53 +0000 (GMT)
+	Thu, 21 May 2026 14:25:55 +0000 (GMT)
 Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64LEPn8I55575022
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64LEPqUR50856384
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 21 May 2026 14:25:49 GMT
+	Thu, 21 May 2026 14:25:52 GMT
 Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7B9DA20040;
-	Thu, 21 May 2026 14:25:49 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id EEDAA20040;
+	Thu, 21 May 2026 14:25:51 +0000 (GMT)
 Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 218CC2004B;
-	Thu, 21 May 2026 14:25:49 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 978382004B;
+	Thu, 21 May 2026 14:25:51 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
 	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 21 May 2026 14:25:49 +0000 (GMT)
+	Thu, 21 May 2026 14:25:51 +0000 (GMT)
 From: Jens Remus <jremus@linux.ibm.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         x86@kernel.org, Steven Rostedt <rostedt@kernel.org>,
@@ -80,10 +80,11 @@ Cc: Jens Remus <jremus@linux.ibm.com>, bpf@vger.kernel.org, linux-mm@kvack.org,
         Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
         Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
         Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH v16 01/20] unwind_user: Add generic and arch-specific headers to MAINTAINERS
-Date: Thu, 21 May 2026 16:25:27 +0200
-Message-ID: <20260521142546.3908498-2-jremus@linux.ibm.com>
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH v16 07/20] unwind_user/sframe: Wire up unwind_user to sframe
+Date: Thu, 21 May 2026 16:25:33 +0200
+Message-ID: <20260521142546.3908498-8-jremus@linux.ibm.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260521142546.3908498-1-jremus@linux.ibm.com>
 References: <20260521142546.3908498-1-jremus@linux.ibm.com>
@@ -96,21 +97,21 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIxMDE0MiBTYWx0ZWRfX92eZC6wen46x
- kxu8UG75ZEncSDV0735GvcPY4I9+w6aQWteAEM1zFldIBHPS/H1A/3mQy2tXIb3CqRS/sZrSXu+
- p7Jn0pLoFFuz9VcjINWcX4wSq+vUpbqFY6sHmwcHfC4+IpJAZ648LqiyDsA095TX3DEW8OAR3CO
- nQlPqPBE/0KI/ZcbvOvVglCSuokU6mVPIG/xi4FzOF6yGvNl8FtdC20wlYd7KJPWF73RyTGVJmt
- 3XEP9iiTe3HuPvIHZmkEJCQ6dqbOx7FcjiYqZkPdkhuRfq8hryu9GkpFn1CaT6MTwi3QC/YafZA
- Q0R7/Gr3fIKpUWEUFED1xx7V8WD34A4rEFGnp64nZEA4qpmztglb3KFYZx96RVidb3QFQEGxxiA
- c5ADZ3Ek2IlvJBPVlc/g9EpNxjJSg1Y96QOtQ2BjlPtJi4NwRNGm2pIiHN9rwngS7f6BmHA3J3t
- Znr01a7wks369aWhEFA==
-X-Authority-Analysis: v=2.4 cv=Np/htcdJ c=1 sm=1 tr=0 ts=6a0f15f2 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIxMDE0MiBTYWx0ZWRfX5cPz7+SzHrWN
+ Nxa7dM704y2kOk5lq7rrcEsCKbESVqbyYtqZpBAu4I8a2PqfJ1uveZNer4IgFy3C0h+3zkBLic0
+ p8lh+krGSSDnDYHU59kuRFnpxLjCcrtNVInJYGDD3HEItNGdFjt4V5IO/4OtgnlNqlGiP3d1iID
+ WLspnHGIz7PMORn8F+9hLFHglqsBJOCN0qRSbmJjtjLQzL7Nbx+4B3YyqXqzUkFMmighMJU/POf
+ O2VGUukVwoWc3HYDQ26DzgKZewmQSoZGwwy4+8dGoP/4MRxfsgjHrMdbjJpMSz4GhHrQNZgmhgG
+ sMUT1k5lvwL+62YcMY1ocnxoQanzju/vhcqOghkGFythwnE/oWZV0YizMPWuY/u4qXaE4Afpn3b
+ ojK+Ib3/ZdicKajF5ipovweyCo/HgEiZEFikT5JelpoS6ECfcr5WzK5LePSTd75gswl2NMFblOa
+ FUxRXHu1nPSeb2Usj8w==
+X-Authority-Analysis: v=2.4 cv=Np/htcdJ c=1 sm=1 tr=0 ts=6a0f15f5 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
  a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=RzCfie-kr_QcCd8fBx8p:22 a=1XWaLZrsAAAA:8 a=VnNF1IyMAAAA:8 a=VwQbUJbxAAAA:8
- a=meVymXHHAAAA:8 a=HxY8WkbW6gBkmJkjgtEA:9 a=2JgSa4NbpEOStq-L5dxp:22
-X-Proofpoint-ORIG-GUID: E0A2RAdLlwCHEwSkTaCKzShIPO3jyXhx
-X-Proofpoint-GUID: WjzRShqmm6nzPcB1FGiCH2jEoUe8nwSr
+ a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=pGLkceISAAAA:8
+ a=VnNF1IyMAAAA:8 a=ItKwCHsCKAUqeRWvWoIA:9 a=2JgSa4NbpEOStq-L5dxp:22
+X-Proofpoint-ORIG-GUID: erpxgp4-yIAbyBSFs8dWTTSRpqokbHrh
+X-Proofpoint-GUID: y6XOmu7WISs7NQ9XdEa_-tlGoDw_v9-g
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-05-21_02,2026-05-18_01,2025-10-01_01
@@ -120,36 +121,112 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605210142
 
-Commit 71753c6ed2bf ("unwind_user: Add user space unwinding API with
-frame pointer support") introduced include/asm-generic/unwind_user.h
-without adding it to MAINTAINERS, as well as any future arch-specific
-versions such as the one added by commit 49cf34c0815f
-("unwind_user/x86: Enable frame pointer unwinding on x86") which
-introduced arch/x86/include/asm/unwind_user.h.
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Suggested-by: Dylan Hatch <dylanbhatch@google.com>
+Now that the sframe infrastructure is fully in place, make it work by
+hooking it up to the unwind_user interface.
+
+[ Jens Remus: Remove unused pt_regs from unwind_user_next_common() and
+its callers.  Simplify unwind_user_next_sframe(). ]
+
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Reviewed-by: Indu Bhagat <ibhagatgnu@gmail.com>
 Signed-off-by: Jens Remus <jremus@linux.ibm.com>
 ---
+ arch/Kconfig                      |  1 +
+ include/linux/unwind_user_types.h |  4 +++-
+ kernel/unwind/user.c              | 23 +++++++++++++++++++++++
+ 3 files changed, 27 insertions(+), 1 deletion(-)
 
-Notes (jremus):
-    Changes in v14:
-    - New patch.
-
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c2c6d79275c6..7434e9d7b33f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -27874,6 +27874,8 @@ USERSPACE STACK UNWINDING
- M:	Josh Poimboeuf <jpoimboe@kernel.org>
- M:	Steven Rostedt <rostedt@goodmis.org>
- S:	Maintained
-+F:	arch/*/include/asm/unwind_user.h
-+F:	include/asm-generic/unwind_user.h
- F:	include/linux/unwind*.h
- F:	kernel/unwind/
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 94b2d5e8e529..37549832bd1f 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -488,6 +488,7 @@ config HAVE_UNWIND_USER_FP
+ 
+ config HAVE_UNWIND_USER_SFRAME
+ 	bool
++	select UNWIND_USER
+ 
+ config HAVE_PERF_REGS
+ 	bool
+diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
+index 412729a269bc..43e4b160883f 100644
+--- a/include/linux/unwind_user_types.h
++++ b/include/linux/unwind_user_types.h
+@@ -9,7 +9,8 @@
+  * available.
+  */
+ enum unwind_user_type_bits {
+-	UNWIND_USER_TYPE_FP_BIT =		0,
++	UNWIND_USER_TYPE_SFRAME_BIT =		0,
++	UNWIND_USER_TYPE_FP_BIT =		1,
+ 
+ 	NR_UNWIND_USER_TYPE_BITS,
+ };
+@@ -17,6 +18,7 @@ enum unwind_user_type_bits {
+ enum unwind_user_type {
+ 	/* Type "none" for the start of stack walk iteration. */
+ 	UNWIND_USER_TYPE_NONE =			0,
++	UNWIND_USER_TYPE_SFRAME =		BIT(UNWIND_USER_TYPE_SFRAME_BIT),
+ 	UNWIND_USER_TYPE_FP =			BIT(UNWIND_USER_TYPE_FP_BIT),
+ };
+ 
+diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
+index 90ab3c1a205e..1fb272419733 100644
+--- a/kernel/unwind/user.c
++++ b/kernel/unwind/user.c
+@@ -7,6 +7,7 @@
+ #include <linux/sched/task_stack.h>
+ #include <linux/unwind_user.h>
+ #include <linux/uaccess.h>
++#include <linux/sframe.h>
+ 
+ #define for_each_user_frame(state) \
+ 	for (unwind_user_start(state); !(state)->done; unwind_user_next(state))
+@@ -82,6 +83,16 @@ static int unwind_user_next_fp(struct unwind_user_state *state)
+ 	return unwind_user_next_common(state, &fp_frame);
+ }
+ 
++static int unwind_user_next_sframe(struct unwind_user_state *state)
++{
++	struct unwind_user_frame frame;
++
++	/* sframe expects the frame to be local storage */
++	if (sframe_find(state->ip, &frame))
++		return -ENOENT;
++	return unwind_user_next_common(state, &frame);
++}
++
+ static int unwind_user_next(struct unwind_user_state *state)
+ {
+ 	unsigned long iter_mask = state->available_types;
+@@ -95,6 +106,16 @@ static int unwind_user_next(struct unwind_user_state *state)
+ 
+ 		state->current_type = type;
+ 		switch (type) {
++		case UNWIND_USER_TYPE_SFRAME:
++			switch (unwind_user_next_sframe(state)) {
++			case 0:
++				return 0;
++			case -ENOENT:
++				continue;	/* Try next method. */
++			default:
++				state->done = true;
++			}
++			break;
+ 		case UNWIND_USER_TYPE_FP:
+ 			if (!unwind_user_next_fp(state))
+ 				return 0;
+@@ -123,6 +144,8 @@ static int unwind_user_start(struct unwind_user_state *state)
+ 		return -EINVAL;
+ 	}
+ 
++	if (current_has_sframe())
++		state->available_types |= UNWIND_USER_TYPE_SFRAME;
+ 	if (IS_ENABLED(CONFIG_HAVE_UNWIND_USER_FP))
+ 		state->available_types |= UNWIND_USER_TYPE_FP;
  
 -- 
 2.51.0
