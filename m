@@ -1,105 +1,128 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22AE0349CF6
-	for <bpf@vger.kernel.org>; Thu, 21 May 2026 16:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B45030C15F
+	for <bpf@vger.kernel.org>; Thu, 21 May 2026 16:52:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779381035; cv=none; b=ASeSkC6GCPczRgbMP5Ghe8kyfEO7Bq0hBOh8lFPqjL6pg2ppfK0RZ135PkqBlj2ymBscWF2E4bbXdspWZlklRbeaJeQpFoTL3CJMDvrJs1lBza9k8jc42ieZNhQ7OGpvsT0PrKxIIqTi2OHyeELJV2bs1MpE4uifTYiYemWJtbg=
+	t=1779382362; cv=none; b=ZyAujV48m9ySqGKE9PruAcyqsBmQh1ZMHlV3ZfBK4NXjhvXLrUHxLPcZLwBs1vn3Gkht4+4xsw1YD8o20xcCZYso4vl/0QSNCBXh5NKE7GUM8PPMy5UoA30hT5isuce4AJgtyYL9yhIjKQ4m0CQ1FmbOCpc6FW+TUv9o/zxydHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779381035; c=relaxed/simple;
-	bh=xsFudY2ShHRnHzXTwA1/apj8bAL30/BHMx5NvtkvXGI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hqyvHgL+c8Iw9PZw34YSxX0TvYDuvFSo27ogGH5V6t4hXXRzVdAAbgVYCZHwtF7eqSR0gyFEfDRqfJ6wx4DHGz1KtTYJw//YU3Py8ov8q7g88/9Zb9edynH+Q4I6SRqMYSMPjolw8KC7QAYG0BJ+NTP3ZwRRylBemAVpeD4cdcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hJZBHNuD; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1779382362; c=relaxed/simple;
+	bh=kDA2VjByEpqgyctQ4qR4C2pSxnq0tKUmAdm3gvg0h0o=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=p7w6kLAO8ZASKpoS46jmOx1niyRLXRefsPWnSAC3beakQ7UyopkRuz9h8RGDRVJKfTlqBGN0uuthE1gJDZ4WXtCvKr4GGvj1L8L5M0jPQ9Dsi+b2qcmDL2obSivx9uzakMESfrmH9V65qzFIseFOQDcreW77RdQOWKUci5MU/d8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oKPB0V1+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hJZBHNuD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1779381033;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=C97nRy1hinTdJXTrPM4ee4OamiN4XZkMfci9rA8ZvWo=;
-	b=hJZBHNuDd2wfuFRDt2ywCiAqYLOq4aq8UGR7NevxIkg6lS5Fe5Pmf3dFvWzwElZ78S9JOZ
-	mCXEMLfm0VlIN93LljPX+nuhkgbYoaQTyAeJQuaxKi/dui2JXfaUgc/VhwrzybJOe7LNi+
-	Xm6B97e+qKq7r56+tuN1y0OwSSGlnT8=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-662-hOzfOOEqMY6Uuj2zcwBX8w-1; Thu,
- 21 May 2026 12:30:29 -0400
-X-MC-Unique: hOzfOOEqMY6Uuj2zcwBX8w-1
-X-Mimecast-MFC-AGG-ID: hOzfOOEqMY6Uuj2zcwBX8w_1779381026
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 69A811800617;
-	Thu, 21 May 2026 16:30:25 +0000 (UTC)
-Received: from thinkpad (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 84702180075D;
-	Thu, 21 May 2026 16:30:19 +0000 (UTC)
-Date: Thu, 21 May 2026 18:30:16 +0200
-From: Felix Maurer <fmaurer@redhat.com>
-To: Daniel Hodges <git@danielhodges.dev>
-Cc: bpf@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-	vadim.fedorenko@linux.dev, song@kernel.org, yatsenko@meta.com,
-	martin.lau@linux.dev, eddyz87@gmail.com, haoluo@google.com,
-	jolsa@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
-	sdf@fomichev.me, yonghong.song@linux.dev,
-	herbert@gondor.apana.org.au, davem@davemloft.net
-Subject: Re: [PATCH bpf-next v8 0/4] Add cryptographic hash and signature
- verification kfuncs to BPF
-Message-ID: <ag8zGP5azt743BWc@thinkpad>
-References: <20260225202935.31986-1-git@danielhodges.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oKPB0V1+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D95EA1F000E9;
+	Thu, 21 May 2026 16:52:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779382361;
+	bh=djz0vs+NlcsZ/dyKfqWbhNrVLlqWadcl/zqfMlE7kT4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=oKPB0V1+7rbudv/8ZqMBDofKSNrMg9aJqAv/oDKMA7PzrRAuE7lqAYTrb9t1lxGR4
+	 lPs8QVd7NUrmhkC5D144G7RM+tIpYKoQ4TADtEu5WcXUU4IYwXaZyglqCY0Zk0jR35
+	 zZRJXM1mcEOZ7TzXTbvcK9LGOuUaosg9K7gpCjcJQDlCVav1PK4jZcHPA/vdyPFO7i
+	 51l6fRzdqMgjf495EqcsZu1xgFidljxRJWdRedGUn5rI2pAMxECf2WZ2F0Skb6MY+u
+	 Se6qj3MZob6fEqqs7mrFy35X6zjDuWfijzpfPgLnrC0NaDM6MUTN38l19JhCkgU8J/
+	 tGhDTpmdj5upw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 2/2] bpf, libbpf: reject non-exclusive metadata maps
+ in the signed loader
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "KP Singh" <kpsingh@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260521152217.2345235-3-kpsingh@kernel.org>
+References: <20260521152217.2345235-3-kpsingh@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 21 May 2026 16:52:40 +0000
+Message-Id: <20260521165240.D95EA1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260225202935.31986-1-git@danielhodges.dev>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Wed, Feb 25, 2026 at 03:29:31PM -0500, Daniel Hodges wrote:
-> This patch series enhances BPF's cryptographic functionality by introducing
-> kernel functions for SHA hashing and ECDSA signature verification. The changes
-> enable BPF programs to verify data integrity and authenticity across
-> networking, security, and observability use cases.
->
-> The series addresses two gaps in BPF's cryptographic toolkit:
->
-> 1. Cryptographic hashing - supports content verification and message digest
->    preparation
-> 2. Asymmetric signature verification - allows validation of signed data
->    without requiring private keys in the datapath
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] The BPF verifier will reject the `gen_loader` program on 32-bit ar=
+chitectures because it accesses a 4-byte pointer using an 8-byte read.
+- [Low] Multi-line comments do not follow the mandatory BPF subsystem stand=
+ard.
+--
 
-Hi Daniel,
+commit 878a81f0d9571d5734eccfbe01c3dfe58050f954
+Author: KP Singh <kpsingh@kernel.org>
 
-I found your series because I was about to implement something similar
-like your hashing implementation. In other words, I'd be very happy to
-see this patchset move forward.
+bpf, libbpf: reject non-exclusive metadata maps in the signed loader
 
-Taking an initial look at your hashing patches, I'm wondering: the usual
-interface to hash/digest algorithms is to have three functions: an
-init() function to set up state, an update() function that can be called
-multiple times to hash new bytes, and a finalize() function that creates
-the actual hash. Depending on the algorithm, some of them (esp.
-finalize) may be no-ops. Often, a fourth function, like hash(), is
-provided as convenience, doing one init/update/finalize cycle when all
-data to be hashed is already available.
+The loader verifies map->sha against the metadata hash in its
+instructions. map->sha is calculated when BPF_OBJ_GET_INFO_BY_FD is called
+on the frozen map.
 
-I think we should provide the same init/update/finalize interface in bpf
-as well to make the API more flexible. That would require splitting out
-the shash_desc from the (mostly static) context. But doing so would also
-address the review comment from bpf-ci bot to patch 1. WDYT?
+> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+> index 9478b8f78f260..fee35c26deb87 100644
+> --- a/tools/lib/bpf/gen_loader.c
+> +++ b/tools/lib/bpf/gen_loader.c
+[ ... ]
+> @@ -600,6 +600,22 @@ static void emit_signature_match(struct bpf_gen *gen)
+>  			gen->error =3D -ERANGE;
+>  		}
+>  	}
+> +
+> +	/* Reject if the metadata map is not exclusive. Without exclusivity
+> +	 * the cached map->sha[] verified above can be stale: another BPF
+> +	 * program with map access could have mutated the contents between
+> +	 * BPF_OBJ_GET_INFO_BY_FD and loader execution.
+> +	 */
 
-Thanks,
-   Felix
+[Severity: Low]
+This isn't a bug, but does this multi-line comment follow the BPF
+subsystem style guidelines? It looks like the opening /* should be on its
+own line.
 
+> +	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX,
+> +					 0, 0, 0, 0));
+> +	emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, SHA256_DWORD_SIZE *=
+ sizeof(__u64)));
+
+[Severity: High]
+Will this 8-byte read pass the verifier on 32-bit architectures?
+
+While __bpf_md_ptr pads the C struct field to 8 bytes, unnamed bitfields
+are not emitted in BTF. The kernel's BTF will represent the pointer member
+with a size of 4 bytes on 32-bit systems.=20
+
+Since btf_struct_walk() enforces that the memory access size exactly matches
+the BTF pointer size, it seems the verifier will reject this BPF_DW access
+with a cannot access ptr member error on 32-bit architectures.
+
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c b/tools=
+/testing/selftests/bpf/progs/verifier_map_ptr.c
+> index e2767d27d8aaf..baef2e93cb414 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_map_ptr.c
+[ ... ]
+> @@ -70,13 +70,15 @@ __naked void bpf_map_ptr_write_rejected(void)
+>  	: __clobber_all);
+>  }
+> =20
+> -/* The first element of struct bpf_map is a SHA256 hash of 32 bytes, acc=
+essing
+> - * into this array is valid. The opts field is now at offset 33.
+> +/* The first 32 bytes of struct bpf_map are the SHA256 hash; accessing i=
+nto
+> + * this array is valid. excl_prog_sha follows at offset 32 (8 bytes via
+> + * __bpf_md_ptr), then ops at offset 40. Reading at offset 41 crosses in=
+to
+> + * the ops pointer and must be rejected.
+>   */
+
+[Severity: Low]
+This isn't a bug, but should this multi-line comment also have the
+opening /* on a standalone line according to the BPF style guidelines?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260521152217.2345=
+235-1-kpsingh@kernel.org?part=3D2
