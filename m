@@ -1,119 +1,129 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E39140E5F;
-	Thu, 21 May 2026 11:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45A7F3C3C07
+	for <bpf@vger.kernel.org>; Thu, 21 May 2026 11:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779363237; cv=none; b=c5zzSdVH1JUT347kyT7atMxYDWlzulR9RM2WqvN/LMJSObZWznn6+ja0lWmxntpBTU9gvjQB7hmspsD+dBSxnJQGpeq4uterv5EsnQF3Y1vlHFVuHX1UT+z+5viFbtXIyG4GnyCDAP9QZ9eOMWnq34ZNGa7Tv6vBn8r8BNA/e+Q=
+	t=1779363607; cv=none; b=mGP2/ZL6zUK6gkA1CABE46HrAyywMsfPhemCHY88wocRSPnTve8g9N3ZR8k1NbJoUJ9midpFWCjrjEanuMnmKDrmtsNHW7XAw9HK985qZNBu6TkUMYcV+tW/FqVyKYf1Q/ypwIkkrrCw2xLOhU93l4V49elBy2zwwDJe4h/1WHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779363237; c=relaxed/simple;
-	bh=48JF2fZtX1JLHpCnnCYajcAB5bnNal9lyACIeZvE3Rg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XLsz9QYFtZlsJa+70dkk/dPqkOl6Xc4nl+BQpLeUs2BgSSDlyCfXvGsq4SQ+G9yokHxxWz+n0/KLepfyZkMgSXvowBytECu9+Y5Wd/zj/rqSuXi41YQ/hRVfu6okuFgbuyj0cXO9RQRT0D6GriwsuCteZojpuCzJ7cN8injZtmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=JeOOeaWm; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="JeOOeaWm"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64L9Zfri3760653;
-	Thu, 21 May 2026 11:33:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=TVVKao
-	RoJBgPObwfjapvq0qUVWZrGuMlrckqzLhj51o=; b=JeOOeaWmaO+WQaWJTtPV4K
-	7KutqY/2QOMAyk5fmQz5+A1kABpyjN7AuGRsPCX9wnUvBpO5mFfTSUdO2NYIu+Ts
-	+iGZBCXis7zzW1oQhPnaymy5bR/u/ij1XH11MMb9+Dcbh16YwdpL6HqXKq0wOQ5G
-	xHj/tpvumefA3FgCFtAXFS1hgTcEHxBlDx8JLh0hyibW06BpY1F4H0fuQy9+EKxf
-	9FsB8szW5oqOv6uHwZ9qIGAOvzbG2vHVnACj2VToSV16KwTEBHBxMVoTQf/71SV9
-	m300gadtGrcqiE/fn/fTp4lLmbcUCR0J0nJ9SMXd+NkTFaJsfAfiBQmIPklfpNSQ
-	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h756jrx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 May 2026 11:33:52 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64LBODIa024476;
-	Thu, 21 May 2026 11:33:51 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e72wqc22y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 May 2026 11:33:51 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64LBXoRp14614948
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 21 May 2026 11:33:50 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 40A9220043;
-	Thu, 21 May 2026 11:33:50 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2C4EE20040;
-	Thu, 21 May 2026 11:33:50 +0000 (GMT)
-Received: from [9.52.200.195] (unknown [9.52.200.195])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 21 May 2026 11:33:50 +0000 (GMT)
-Message-ID: <841e2917-dc41-4397-8bc8-04468f7a06f5@linux.ibm.com>
-Date: Thu, 21 May 2026 13:33:48 +0200
+	s=arc-20240116; t=1779363607; c=relaxed/simple;
+	bh=4XhC/zvHXU/cXg/PTJkovdG5QCBCacxU2LkJHH9Ymv8=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=tyRJJmvUrhxUNoepTw2m2FfRcbvSZqqL0WsS1nbZCDNGv/pWSH9jgTk87JLwqmiW3XEpShdzJ+os62FNR+3fHOjoBq+K1GyaiAPW7boJa6+SLrJ96y1kpETNVR7qd3xbKFrDgY7sETjkSeFtrhGLbsjQS146BI1wBZWYtpKZ+io=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8BxDuoP7w5qv_kLAA--.34295S3;
+	Thu, 21 May 2026 19:40:00 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJDxjcIO7w5qWwSLAA--.64865S3;
+	Thu, 21 May 2026 19:39:58 +0800 (CST)
+Subject: Re: [PATCH v1 1/3] LoongArch: BPF: Fix tail call prologue alignment
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260521070128.28086-2-yangtiezhu@loongson.cn>
+ <20260521080021.AD9EE1F000E9@smtp.kernel.org>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <202feb71-403f-2e09-c3cd-c933754b8ea9@loongson.cn>
+Date: Thu, 21 May 2026 19:39:57 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 15/20] unwind_user: Flexible CFA recovery rules
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260520154004.3845823-16-jremus@linux.ibm.com>
- <20260520162249.1E65E1F000E9@smtp.kernel.org>
+In-Reply-To: <20260521080021.AD9EE1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20260520162249.1E65E1F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=ffCdDUQF c=1 sm=1 tr=0 ts=6a0eeda0 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8
- a=VwQbUJbxAAAA:8 a=Zg_fgM-7fzLk7_7bOdYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: MQy98QgSc5DZ9KYvRAz6DKXyHlLdYXGu
-X-Proofpoint-GUID: MQy98QgSc5DZ9KYvRAz6DKXyHlLdYXGu
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIxMDExMSBTYWx0ZWRfX1hPUIcBM0Bwa
- n9K74Zl+qixX7yfkKfGgQIFiBh1vKlJ1UtFd6N8aVeCM+7Q7WdGUzgv6g85b8mQVUbYmm/xJqoT
- AeFyiOmPYI2KkCt7Miwlryh0g04He16EQRSK0JZ8XWUPQH8WKoKYP4X+U6H1JinN6bdj8p94orQ
- kbjlwa9MSuuR1wBokVIc9rOex6jInJgK5Txo/z75lUzDhaUmj4h1Rf82KosnkoEHwv6nIsqh0rT
- WGtzSSic6JWkpZ1sDPqqLuA14rDawS3Uq9ucUX8SlNXAsfyzpKyOS7bXDuemuLA628+EExf0iIC
- 4tz+swRU4H1S81kFWB9LD5Srt/ZlqITqMhZsbtJYqaoZz0yIiezU/qIcE37Giv9RjeXB1AOJ1sr
- KzfPhvGRRrwvjyR5WJs29PBG8lV1q5VliX/OwgiPtOM3LfO0rJ3p7ozr9Z7eyFxXBJiZAOzYJp2
- 9jkajMiunp8EjJuy+rQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-21_01,2026-05-18_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 spamscore=0 phishscore=0 suspectscore=0 adultscore=0
- clxscore=1015 impostorscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605210111
+X-CM-TRANSID:qMiowJDxjcIO7w5qWwSLAA--.64865S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxurykCrWkGF4fZw1xWF4kGrX_yoW5AFWxpF
+	Wxu3yrCFWkXrn2kFs7Kay8u39IvFZ5Gry7Jr1Yqry5Aw43urn3KF1fKrWfuas8Ar48Gr10
+	qrs0vwn8Jan8ArXCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
+	67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+	AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
+	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jrv_JF
+	1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+	4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07Ui
+	iSdUUUUU=
 
-On 5/20/2026 6:22 PM, sashiko-bot@kernel.org wrote:
+On 2026/5/21 下午4:00, sashiko-bot@kernel.org wrote:
 > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Low] The patch adds a `nop` to the subprogram prologue to fix a non-existent tail call jump offset issue, as BPF tail calls can never target subprograms.
+> --
 > 
-> Pre-existing issues:
-> - [High] The size of an SFrame Frame Row Entry (FRE) is incorrectly calculated because the `dataword_count` variable is decremented to zero before the size calculation is performed.
+> commit d9b7854227e065cad33918647040161cb3ceac6c
+> Author: Tiezhu Yang <yangtiezhu@loongson.cn>
+> 
+> LoongArch: BPF: Fix tail call prologue alignment
+> 
+> This commit adds a NOP instruction to the subprogram prologue in the LoongArch
+> BPF JIT. The goal is to align the prologue size between main programs and
+> subprograms so that tail calls skip the correct number of instructions.
+> 
+>> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+>> index 24913dc7f4e83..aefe5fa1c5840 100644
+>> --- a/arch/loongarch/net/bpf_jit.c
+>> +++ b/arch/loongarch/net/bpf_jit.c
+>> @@ -149,12 +149,15 @@ static void build_prologue(struct jit_ctx *ctx)
+>>   		emit_insn(ctx, nop);
+>>   
+>>   	/*
+>> -	 * First instruction initializes the tail call count (TCC)
+>> -	 * register to zero. On tail call we skip this instruction,
+>> -	 * and the TCC is passed in REG_TCC from the caller.
+>> +	 * Initialize or align the TCC register slot.
+>> +	 * For main programs, TCC is zeroed. For subprograms, a nop is emitted
+>> +	 * to keep the prologue size consistent, ensuring tail calls skip the
+>> +	 * correct number of instructions.
+>>   	 */
+>>   	if (is_main_prog)
+>>   		emit_insn(ctx, addid, REG_TCC, LOONGARCH_GPR_ZERO, 0);
+>> +	else
+>> +		emit_insn(ctx, nop);
+> 
+> [Severity: Low]
+> Is this nop instruction and alignment actually necessary for tail calls?
+> 
+> BPF tail calls resolve their target programs exclusively from a
+> BPF_MAP_TYPE_PROG_ARRAY map. Because subprograms do not have file descriptors,
+> the verifier ensures that only main programs can be inserted into program
+> array maps.
+> 
+> Since a tail call can never target a subprogram, it seems it will always
+> unconditionally target a main program (which includes the TCC initialization
+> instruction). Does this mean the existing JIT implementation already safely
+> skips the main program's prologue, and this added nop provides no functional
+> benefit?
 
-Fixed in next version of "[PATCH v15 05/20] unwind_user/sframe: Add
-support for reading .sframe contents".
+Hi,
 
-Regards,
-Jens
--- 
-Jens Remus
-Linux on Z Development (D3303)
-jremus@de.ibm.com / jremus@linux.ibm.com
+Thanks for the question. While it is true that a subprogram can never
+be the destination (target) of a tail call, a subprogram can indeed
+act as the originator (caller) of a tail call in combined bpf2bpf and
+tail call scenarios.
 
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
+In such complex mixed hierarchies, maintaining a strictly consistent
+prologue structure and size between main programs and subprograms is
+crucial. It ensures that the JIT compiler can deterministically
+calculate stack frame offsets, TCC slot distances, and relative
+entry-point jumps without generating misaligned or broken code
+across different function frames.
+
+Therefore, emitting this NOP is necessary to preserve text symmetry
+and layout consistency in mixed call chains.
+
+Thanks,
+Tiezhu
 
