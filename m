@@ -1,112 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B813CB8E6
-	for <bpf@vger.kernel.org>; Thu, 21 May 2026 13:21:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09EA6211A28;
+	Thu, 21 May 2026 13:26:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779369683; cv=none; b=MIhopZzTWAiwsgPEuRp2iZCn0OGzyChcEfRlXDO6GoYbySdWni46m7jmL0BsD+ydBGti87TeEEv/zBKkOjVtOrirx8GQoNdsg3qLLPEqEiSu9PRfkvfEp6TwNPffF0PqcDTwf9/wIhQMDI7Bthmzee6kr/U+kedHHqxTU9CBI9U=
+	t=1779369963; cv=none; b=u9hJrh2uwHw39Ax9OxADRg1WbjPtAcdDTP9qmgWhEFZtgTIvL1sORaM4OhOyu7WN45IkT1sGHHVv0eDDZV5bFvPMS58ySpEZ96R5+W3PgKbaAJaLdhsuLaX754UpT2YjpLDQ1QFAZ91U0WLQkH3xLWQ3lUV8eS/iGIa2qfqkCRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779369683; c=relaxed/simple;
-	bh=/KxY14YEYRjc4HzFMWiE15gGMXdFnnqluz/OXKFdIB0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uPVxkw2yEsOEuV0POe6Pk83CHAeqIQ9w1TBp0OMqXfLE8t9kWz1+vxkYGHHC3DX5YWcDBiyNssvQNSnanyeyGeHHP+pT1xP0ROQ8s8tpnnNI9FUIcQczjczwyClX1JTo1Ti5k/Pou0H7oaH0TX7rcdxe2Xfqjw3TKwJ+3gjcSnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d0rkyi0f; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779369963; c=relaxed/simple;
+	bh=qJE96cj3vN7uTJYT6K1TacTXmymIk0z4VB8/y6H9RIs=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=WWYgTEuDu6Kh4pcWAz7NfoRJlJjx759TwoR3vtCmt8UYGFL3EaQU7nA8Q5YoMjbZkNwDpem70FWWkpOa8zse0/Org7RRv5wQGC/UjM9f1HyWh9CawxweaJIyONzmlb88TRtG3msG88ftfiOeu82WSyErCB/q7qNd4gYb0oKSYkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FZu+YWUT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d0rkyi0f"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEB4E1F000E9;
-	Thu, 21 May 2026 13:21:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FZu+YWUT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 802BD1F000E9;
+	Thu, 21 May 2026 13:26:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779369682;
-	bh=MIl0ZSZQXuPSuF0oi1Wq3pspuYqRJroLcSQNmSnqhd4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=d0rkyi0fCwUcjKaRct6KbEDQRyo5J8tp8PHfdyBMCwrB7Js1yL1IPLfB8at9AutMa
-	 znaAz+lPKxhIyCSd7iIEQZTaIg5f5xU62ZaV1mBgsi9Ti5zrzvQ/QmYGBJVGF/sTby
-	 Um6xFfokl+3/+xLpCJqeKZ2DvYFaWMz01IkxR/Dscf7bjEpaK+vGV9jFUG2Axa6UJP
-	 UUkKDwOivRIR5oWgvHdqHlKVrSPmUeZSnR2I7mrR7UgPn3MezIs8uXFX8tRE8p5LWD
-	 iKZd4iJcSKnOEGaQd16Ptk+4ypU559Kc3qsIy3EzK19DrxBjy7Oj0hNFzcDa+Oarl/
-	 HauVWEdccmQ2g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv3 07/12] selftests/bpf: Emit nop,nop10 instructions
- combo for x86_64 arch
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiri Olsa" <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260521124411.31133-8-jolsa@kernel.org>
-References: <20260521124411.31133-8-jolsa@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 21 May 2026 13:21:21 +0000
-Message-Id: <20260521132121.EEB4E1F000E9@smtp.kernel.org>
+	s=k20260515; t=1779369961;
+	bh=lUh2hLJrJ9LiSIImxUrxQdXxZoykOEujYGNMMpyflbU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=FZu+YWUTrggkju81+sJ9agF8gbs9FZP7Q2yPnuMbZYDpGnoigIWg4I3SW1Z6W8xIt
+	 50AHOGPU6oXhsKq+VQvuigUxPNnhMIdt5hW3EqMbkBQh+EyANRqvBr+Me/w2cPeZ14
+	 U2QiZQBIyIrPOc2q+Myp+PRu6dEji1ZckC2mNCDVUaPDES2dpVo0+jhdDJaJdMVuT5
+	 hsLH7jF6JXbOJGUxpBT2H4b3NIL9n2U5+3Z+TMohYwiuUTuMul3ulTULdSy4zMt+5E
+	 ePx7fafZ8Dpuakthf+w1GDE6M2o7wOBmQgucIFip6LDZcuOiwG12Bs2RTemtZoiuFy
+	 aLba05/pdpW+A==
+Content-Type: multipart/mixed; boundary="===============5374997729471278115=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <6a28fe5baa4a8735ac0e1e4fc2075563d9918e94597d06ea7bb3d3ab86482253@mail.kernel.org>
+In-Reply-To: <20260521124411.31133-8-jolsa@kernel.org>
+References: <20260521124411.31133-8-jolsa@kernel.org>
+Subject: Re: [PATCHv3 07/12] selftests/bpf: Emit nop,nop10 instructions combo for x86_64 arch
+From: bot+bpf-ci@kernel.org
+To: jolsa@kernel.org,oleg@redhat.com,peterz@infradead.org,mingo@kernel.org,mhiramat@kernel.org,andrii@kernel.org
+Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 21 May 2026 13:26:01 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Changing the USDT_NOP macro to emit a 10-byte NOP breaks libbpf =
-discovery, disables kernel uprobe optimizations, and relies on an architect=
-urally unsafe patching concept.
---
+--===============5374997729471278115==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 963f950434fd00b2b52a00da58d5968fea9d4ebc
-Author: Jiri Olsa <jolsa@kernel.org>
-
-selftests/bpf: Emit nop,nop10 instructions combo for x86_64 arch
-
-This commit updates the USDT_NOP macro for x86_64 to emit a 1-byte nop
-followed by a 10-byte nop. This is intended to test new uprobe
-optimization support in the kernel.
-
-> diff --git a/tools/testing/selftests/bpf/usdt.h b/tools/testing/selftests=
-/bpf/usdt.h
+> diff --git a/tools/testing/selftests/bpf/usdt.h b/tools/testing/selftests/bpf/usdt.h
+> index c71e21df38b3..75687f50f4e2 100644
 > --- a/tools/testing/selftests/bpf/usdt.h
 > +++ b/tools/testing/selftests/bpf/usdt.h
-[ ... ]
 > @@ -313,7 +313,7 @@ struct usdt_sema { volatile unsigned short active; };
 >  #if defined(__ia64__) || defined(__s390__) || defined(__s390x__)
 >  #define USDT_NOP			nop 0
 >  #elif defined(__x86_64__)
-> -#define USDT_NOP                       .byte 0x90, 0x0f, 0x1f, 0x44, 0x0=
-0, 0x0 /* nop, nop5 */
-> +#define USDT_NOP                       .byte 0x90, 0x66, 0x2e, 0x0f, 0x1=
-f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 /* nop, nop10 */
-
-[Severity: Medium]
-Does this change to a 10-byte nop break the libbpf discovery logic?
-
-Looking at has_nop_combo() in tools/lib/bpf/usdt.c, it seems to
-explicitly check for the 6-byte sequence (0x90, 0x0f, 0x1f, 0x44, 0x00, 0x0=
-0).
-
-If has_nop_combo() returns false, the target IP won't advance to the
-multi-byte nop, leaving the probe at the 1-byte instruction.
-
-Since the kernel's can_optimize() in arch/x86/kernel/uprobes.c requires
-an instruction length of 5, does this cause the selftest to silently
-degrade to the slower int3 breakpoint path rather than testing the
-intended optimization?
-
-Additionally, is it safe to replace a 10-byte nop with a 5-byte call on
-x86_64?
-
-The 5-byte call pushes IP + 5 to the stack. When the uprobe trampoline
-returns, execution would resume at IP + 5, which lands exactly in the
-middle of the 10-byte nop sequence.
-
-Could those remaining 5 bytes (0x00, 0x00, 0x00, 0x00, 0x00) be
-incorrectly decoded, leading to unexpected behavior like memory
-corruption or application crashes?
-
-Would using two consecutive 5-byte nops instead of a single 10-byte
-nop safely provide the padding needed for a 5-byte patch?
-
+> -#define USDT_NOP                       .byte 0x90, 0x0f, 0x1f, 0x44, 0x00, 0x0 /* nop, nop5 */
+> +#define USDT_NOP                       .byte 0x90, 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00 /* nop, nop10 */
 >  #else
 >  #define USDT_NOP			nop
 >  #endif
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260521124411.3113=
-3-8-jolsa@kernel.org?part=3D1
+Does changing this instruction sequence from 6 bytes to 11 bytes break
+prog_tests/usdt.c? The test in subtest_optimized_attach() searches for the
+old 6-byte nop1_nop5_combo sequence:
+
+tools/testing/selftests/bpf/prog_tests/usdt.c:
+    /* usdt_2 USDT probe has nop,nop5 instructions combo */
+    addr_2 = find_instr(usdt_2, nop1_nop5_combo, 6);
+    if (!ASSERT_OK_PTR(addr_2, "usdt_2_find_nop1_nop5_combo"))
+        goto cleanup;
+
+Because the old sequence is no longer emitted by USDT_NOP, find_instr() will
+return NULL, causing the ASSERT_OK_PTR assertion to fail. Should the test
+update be squashed into this commit to avoid breaking git bisect?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26227520868
+--===============5374997729471278115==--
