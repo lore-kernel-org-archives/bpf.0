@@ -1,60 +1,60 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D1F36F8F3;
-	Thu, 21 May 2026 12:06:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FAAD3A6416;
+	Thu, 21 May 2026 12:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779365168; cv=none; b=lW6Pa/tF3kYaNXeRgHBxRm0LYudGz4AUr3/tuXuzXoIlOG74SAdCOkS7wFoZbfa2UI4YSLJPmLkwtWU5huFAEokjk6cSgJ/CXNxMQQUl6LFaqwHaZIabmq6vjXixhvhPD4gmKL0PV4F1Hj+jFVcEuctGP4x6YU0zNMEd3nbqpxc=
+	t=1779365344; cv=none; b=IJ+0LA3yJiu59Kv3YF8xjo4COlxFm3Bhzg6EJ1g5Fmps00Y7VZvEs4f18BbWTXBTSY3Z/O+aB7wllzeqlWMqpGouCtdOE8rBoqE8bMYJgjYJW3uQ+SL8CmXZsC2uscajcLVjv+1Ewe2OYwWe55Pyp7s8nEEVvRQRDTnrsUUedy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779365168; c=relaxed/simple;
-	bh=o3UeE0B1gQsdaujAM6JHX3XjO0D2yR+ppFJvBvhj2wQ=;
+	s=arc-20240116; t=1779365344; c=relaxed/simple;
+	bh=sJrrMr094xvZyddho70+YKweYqzL5J8iDOb5AzyHuag=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h9DGrwcNb4jjevNVbE37DJMWSt0OxtdI9rQE9bH/Pev8FlXGCYrmV7HRaz/vq48Pl3gQUcyxIzaVBaN19KzqwkLQ6ntCTBqlMNHh7XQVTsBI/Z8uRtL0QwIz/xthrQQgVaqAE5DG1mukYOTPsnayTVezYApY0P/btGMgg8sxmHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aEhWrGvU; arc=none smtp.client-ip=148.163.158.5
+	 In-Reply-To:Content-Type; b=UpUROMlS5SjQsyFbdQVPG3Ge3fcxMmPoQlRi6e950YM+B63Weowfvd0PMyT13XQjW9/qO5ED/BbFYUPT4JggGYCwm0tTrHB4z9lvN1wpd8LbKukoGSqtv/PcHnFwv4RZ8jrKBxA9kGyQktNKVbGSRRwkE8NWB73uhuDKOqoTjP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=dviSgMU/; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aEhWrGvU"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64L67aSf441640;
-	Thu, 21 May 2026 12:06:04 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="dviSgMU/"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64L9ZfuT3760653;
+	Thu, 21 May 2026 12:09:00 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=YGlv5i
-	A8YcXVb4xuyVsf4pRMy3TV3Cu0ZNMWpvskLcM=; b=aEhWrGvUDctqj4qiYnwos5
-	0L2dWutds6Cd3Kejy7YVJqKDTw75Zkh6aTrzmgSIIVZJ9ymElFnhTlxIy6yONp0o
-	IRBvYYptwZwWabJIBwJrHewb6+7KrpXITPNxxKSFSY3lZ2whMhywQJgDVLSQU1nr
-	cxXKqER+npJxR0NlwZ7qRfMaPRwgFg5rAJjKDads0S7aGoon0TJ/x931aUFNzOiy
-	0GXy8VGrQV9N9IucBzxAepFJ7NklysBwBX5UyTvcpisnEFYUcygRipVt7ThDrFUO
-	r2KhKryIGyo7YBixDlcwxZPACG7dvGxnBmEDcue15i44SuTqfHTlnNIrMV/rg8ZQ
+	:message-id:mime-version:references:subject:to; s=pp1; bh=o816kP
+	xjhdv4aBZwN0YA8yZrhVXNlyIVyYeZtdEI1AM=; b=dviSgMU/rtmOfFNQYPI2Zm
+	mnrg1pFEFZdE86PiGSnC67XC6CwLiq7P9u/uOukY6adDvT4FP9CoKPGQ4qAI0w4e
+	CyMZy8xlhcpZCroHaCJ6xn5xXpQh9JOxQ2aKVf936NxzwEmtCaHTglcJITR03Hit
+	rldDBxx4CwxP0cv3wywVGLJFDDjszgCg8cj3AA0Sslp+eYgszyZVcADKmbGO/vXB
+	vWc96P7i78t/p7Egw16hrCojV+Jz7NwwV7liWHwY1slJn50l25oFc84sWJjH1OZt
+	ukY+F603W10jXr5vrLqiu/Hzyw7wB/C6PBKYSE8QCxDyiVMfyyt6c05gBYjCOuSQ
 	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6hb8nfvb-1
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h756q8p-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 May 2026 12:06:04 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64LBs6I3021027;
-	Thu, 21 May 2026 12:06:03 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e74dhuv5c-1
+	Thu, 21 May 2026 12:09:00 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64LBsP02023510;
+	Thu, 21 May 2026 12:08:59 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e72wqc69h-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 May 2026 12:06:03 +0000 (GMT)
+	Thu, 21 May 2026 12:08:59 +0000 (GMT)
 Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64LC61r547382788
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64LC8viq13304280
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 21 May 2026 12:06:01 GMT
+	Thu, 21 May 2026 12:08:57 GMT
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 717432004B;
-	Thu, 21 May 2026 12:06:01 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id BF6722004E;
+	Thu, 21 May 2026 12:08:57 +0000 (GMT)
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 501A620043;
-	Thu, 21 May 2026 12:06:01 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id A7B7E2004D;
+	Thu, 21 May 2026 12:08:57 +0000 (GMT)
 Received: from [9.52.200.195] (unknown [9.52.200.195])
 	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 21 May 2026 12:06:01 +0000 (GMT)
-Message-ID: <f746df8e-0fb7-4e0b-be46-2fa9c1e21a04@linux.ibm.com>
-Date: Thu, 21 May 2026 14:05:59 +0200
+	Thu, 21 May 2026 12:08:57 +0000 (GMT)
+Message-ID: <5729ca9e-1255-4dd9-a38d-182125207015@linux.ibm.com>
+Date: Thu, 21 May 2026 14:08:56 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -62,158 +62,109 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 18/20] unwind_user/sframe: Duplicate registered
- .sframe section data on clone/fork
-To: sashiko-reviews@lists.linux.dev, Steven Rostedt <rostedt@kernel.org>
-Cc: bpf@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
-        Indu Bhagat <ibhagatgnu@gmail.com>
-References: <20260520154004.3845823-19-jremus@linux.ibm.com>
- <20260520170112.A8AA41F00893@smtp.kernel.org>
+Subject: Re: [PATCH v15 20/20] unwind_user/sframe: Add prctl() interface for
+ registering .sframe sections
+To: Steven Rostedt <rostedt@kernel.org>
+Cc: bpf@vger.kernel.org, sashiko-reviews@lists.linux.dev
+References: <20260520154004.3845823-21-jremus@linux.ibm.com>
+ <20260520165255.A69B71F00893@smtp.kernel.org>
 Content-Language: en-US
 From: Jens Remus <jremus@linux.ibm.com>
 Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20260520170112.A8AA41F00893@smtp.kernel.org>
+In-Reply-To: <20260520165255.A69B71F00893@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIxMDEyMSBTYWx0ZWRfX9Dh0nif3dal0
- aQrl+QVIABSem0B68jYUv/tNQP1N2fTRlQtJvCZT4zCgrcC7YC76jWNnigXhCcXHoUvSoysDvnl
- HR6tSX9vnieVfAwb4SUbjOyrnsswJxO8pfsON7yMZj7PgDEQyJJXMcGAr5iAGJMOXC9GLkEqkWd
- nbj5CKAkRBSCTbt0uC24Y4BFosXmMB16rH03QBXVkgbhTaNEXD8Z2LBi7vdOEu065dM/mWAuMEs
- jxyeFO+cXrVKa0WEH0goLY0OlmiLSxrphtYiyvpBoeYRB7jbnQd40Sut5bhXFBpE+nn5C7TBgT3
- rZBhyfIt84z7CQEtHta1WBWNHs3CXDe6TqBGCWou/fM3DUYhCTlcBYtkZvHp415TI5hTseR/gqQ
- PWhsKJoI/AHC8siX6KCNTkG4cb7oaijmg5YN8zM28V0e0SLM4AeO1PqeU6IMczB+LGiJGKn+ObI
- gzYDJxr7LWG/xW7dJ8w==
-X-Proofpoint-GUID: iLkTU3lhzcFHpEiSiRuE-QTg1cDx_H9s
-X-Proofpoint-ORIG-GUID: rNSJJtBAR-bJt7rr0sXvuVFcYJJVXuVA
-X-Authority-Analysis: v=2.4 cv=aYBRWxot c=1 sm=1 tr=0 ts=6a0ef52c cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+X-Authority-Analysis: v=2.4 cv=ffCdDUQF c=1 sm=1 tr=0 ts=6a0ef5dc cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
  a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VnNF1IyMAAAA:8
- a=VwQbUJbxAAAA:8 a=ijAAiHPv0kBOpVhWHt0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8
+ a=VwQbUJbxAAAA:8 a=zW97R7vGGso92DYXnRsA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: Q2cwWq3tSJTp66zDKeH7I1D1pFt7R1SM
+X-Proofpoint-GUID: Q2cwWq3tSJTp66zDKeH7I1D1pFt7R1SM
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIxMDEyMSBTYWx0ZWRfXyoQxKBdw4mt4
+ rBg5fadSR/ylGtXj9u8aAE9P8NcRCYqcnlyoDsLrIKSV88frZOM8TTH33XyD1FunA07iA7sF3AK
+ d34N1j02vPCEIMYnfO8rrfoRjuJFPUriYq6Z6cyMz1FVXP6h3i5Abz01QZGdqR5CqjBhGPsIZr5
+ CW2OiO2u8QLZhD51jbIGM4oDl3PgLshR5GaRBtksg9/8+ktW75Ai8uB8vElG3Tb1/21F5jY4IwC
+ Xr84XJX20Zp3xbKk+5vudz1D93QMnSVjtBdUIzayYEUFE2g08lwcpEQV7w2bTp6r7exJsP+c6vi
+ OVG10iY2bniI1aSNkOA0KVM2cJQ/HVU9MaVyQ297Mz7HBFgHGJj26V+AH8Gx8mMycqAYezZ0a6J
+ Y1bK1q89JixXu7ze8h5qbo3pEQC0oAL/+jWB/jFiloc4EV3x6Bz0RNgS1do1DFNWrz5GjAmYjnb
+ WddZR5UB/kmZFm7aL+w==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-05-21_02,2026-05-18_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 adultscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
- clxscore=1015 spamscore=0 phishscore=0 priorityscore=1501 malwarescore=0
+ priorityscore=1501 spamscore=0 phishscore=0 suspectscore=0 adultscore=0
+ clxscore=1015 impostorscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605210121
 
-On 5/20/2026 7:01 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [Medium] Mixing goto-based error handling with guard() scope-based cleanup in sframe_dup_mm().
-> - [Low] Redundant #ifdef blocks around sframe functions in dup_mmap().
-> --
-> 
-> commit 06e12a491c0dc4cc93fac24f7de9fe0b02b9a9e0
-> Author: Jens Remus <jremus@linux.ibm.com>
-> Subject: unwind_user/sframe: Duplicate registered .sframe section data on clone/fork
-> 
-> When duplicating a process' virtual memory mappings also duplicate all
-> of its registered .sframe sections stored in the per-mm maple tree to
-> enable stacktracing using sframe of the child process.
-> 
->> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
->> index ec8318977a2ef..0661090dd5bcd 100644
->> --- a/kernel/unwind/sframe.c
->> +++ b/kernel/unwind/sframe.c
+On 5/20/2026 6:52 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
+> - [High] The patch introduces a temporary testing UAPI into `prctl` which is explicitly noted by the author as not intended for mainline.
+
+Ignore, as this is for testing only.
+
+> - [High] Concurrent prctl(PR_ADD_SFRAME) and prctl(PR_REMOVE_SFRAME) calls lack synchronization, leading to use-after-free, double-free, and memory leaks.
+> - [Medium] Unsupported prctl options PR_ADD_SFRAME and PR_REMOVE_SFRAME incorrectly return -ENOSYS instead of -EINVAL when the sframe feature is disabled.
+
+Steven, something to consider for your upcoming syscall that is supposed
+to replace these temporary prctls?
+
+
+>> diff --git a/kernel/sys.c b/kernel/sys.c
+>> index 62e842055cc9c..b0a9b1e3ccd7c 100644
+>> --- a/kernel/sys.c
+>> +++ b/kernel/sys.c
 > [ ... ]
->> @@ -886,6 +886,54 @@ int sframe_remove_section(unsigned long sframe_start)
-> [ ... ]
->> +int sframe_dup_mm(struct mm_struct *mm, struct mm_struct *oldmm)
->> +{
->> +	struct sframe_section *sec, *oldsec;
->> +	unsigned long index = 0;
->> +	int ret;
->> +
->> +	guard(srcu)(&sframe_srcu);
->> +
->> +	mt_for_each(&oldmm->sframe_mt, oldsec, index, ULONG_MAX) {
->> +		sec = kzalloc(sizeof(*sec), GFP_KERNEL_ACCOUNT);
->> +		if (!sec)
->> +			return -ENOMEM;
->> +
->> +		__sframe_dup_section(sec, oldsec);
->> +
->> +		ret = mtree_insert_range(&mm->sframe_mt,
->> +					 sec->text_start,
->> +					 sec->text_end - 1,
->> +					 sec, GFP_KERNEL_ACCOUNT);
->> +		if (ret)
->> +			goto err_free;
+>> @@ -2907,6 +2908,14 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+>>  		if (arg3 & PR_CFI_LOCK && !(arg3 & PR_CFI_DISABLE))
+>>  			error = arch_prctl_lock_branch_landing_pad_state(me);
+>>  		break;
+>> +	case PR_ADD_SFRAME:
+>> +		error = sframe_add_section(arg2, arg3, arg4, arg5);
+>> +		break;
+>> +	case PR_REMOVE_SFRAME:
+>> +		if (arg3 || arg4 || arg5)
+>> +			return -EINVAL;
+>> +		error = sframe_remove_section(arg2);
+>> +		break;
+> 
+> [Severity: High]
+> Are concurrent calls to PR_ADD_SFRAME and PR_REMOVE_SFRAME properly
+> synchronized to prevent double-free or memory leaks?
+> 
+> If sframe_remove_section() only holds an SRCU read lock and
+> sframe_add_section() only holds mmap_read_lock(), could Thread A and Thread
+> B concurrently executing PR_REMOVE_SFRAME both find the same section and
+> erase it?
+> 
+> If Thread A calls mtree_erase() and queues the section for freeing via
+> call_srcu(), and Thread C concurrently inserts a new section at the same
+> text_start via PR_ADD_SFRAME:
+> 
+> Thread B might then erase the new section but queue the old section's RCU
+> callback a second time. Could this sequence lead to a double-free of the
+> old section and a memory leak of the newly inserted section?
 > 
 > [Severity: Medium]
-> Is it intentional to mix goto-based error handling with scope-based cleanup
-> in the same function?
+> When the sframe feature is disabled in the kernel configuration, will these
+> calls return -ENOSYS instead of -EINVAL?
 > 
-> The cleanup subsystem guidelines recommend against mixing goto labels and
-> guard declarations to prevent confusing ownership semantics and lifecycle
-> bugs. Would it be better to drop the err_free label entirely and explicitly
-> call free_section(sec) followed by returning ret directly inside this block?
-
-No.  sec must not be unconditionally free'd if it got successfully
-inserted into the maple tree.
-
+> The dummy functions defined in include/linux/sframe.h return -ENOSYS:
 > 
->> +	}
->> +
->> +	return 0;
->> +
->> +err_free:
->> +	free_section(sec);
->> +	return ret;
->> +}
-> [ ... ]
->> diff --git a/mm/mmap.c b/mm/mmap.c
->> index 2311ae7c2ff45..d5aa8c54f8c1c 100644
->> --- a/mm/mmap.c
->> +++ b/mm/mmap.c
-> [ ... ]
->> @@ -1846,6 +1847,11 @@ __latent_entropy int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
->>  	}
->>  	/* a new mm has just been created */
->>  	retval = arch_dup_mmap(oldmm, mm);
->> +#ifdef CONFIG_HAVE_UNWIND_USER_SFRAME
->> +	if (!retval) {
->> +		retval = sframe_dup_mm(mm, oldmm);
->> +	}
->> +#endif
-
-Will swap the order, so that arch_dup_mmap() is last.
-
+> static inline int sframe_add_section(unsigned long sframe_start,
+>                                      unsigned long sframe_end,
+>                                      unsigned long text_start,
+>                                      unsigned long text_end)
+> {
+>         return -ENOSYS;
+> }
 > 
-> [Severity: Low]
-> This isn't a bug, but are these preprocessor guards necessary?
-> 
-> Since include/linux/sframe.h already provides static inline dummy versions
-> of sframe_dup_mm() and sframe_free_mm() when CONFIG_HAVE_UNWIND_USER_SFRAME
-> is disabled, these conditional blocks could potentially be removed to keep
-> the C source code cleaner.
-
-Valid.  Will drop the unnecessary #ifdef.
-
-> 
->>  loop_out:
->>  	vma_iter_free(&vmi);
->>  	if (!retval) {
-> [ ... ]
->> @@ -1893,6 +1899,9 @@ __latent_entropy int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
->>  			vm_unacct_memory(charge);
->>  		}
->>  		__mt_destroy(&mm->mm_mt);
->> +#ifdef CONFIG_HAVE_UNWIND_USER_SFRAME
->> +		sframe_free_mm(mm);
->> +#endif
-> 
-> [Severity: Low]
-> This isn't a bug, but similarly, could this block be dropped since the dummy
-> stub handles the disabled case without needing explicit conditionals?
-> 
->>  		/*
->>  		 * The mm_struct is going to exit, but the locks will be dropped
->>  		 * first.  Set the mm_struct as unstable is advisable as it is
+> According to the prctl ABI convention, unsupported options typically fall
+> through to the default case and return -EINVAL. Could returning -ENOSYS
+> cause unexpected errors for userspace applications probing for this feature's
+> availability?
 > 
 
 Regards,
