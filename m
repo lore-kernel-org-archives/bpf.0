@@ -1,82 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29ABA32B136;
-	Thu, 21 May 2026 13:26:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8C13D567B
+	for <bpf@vger.kernel.org>; Thu, 21 May 2026 13:29:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779369971; cv=none; b=j1LUER196LW8+Qz1W8O4b3ttABJUx87enapfZo3Ez9fXyI8bOSQmizEa28gRVGAPbttB+qyfnfNQb5rLy66lEZMZ0hvR+wOri3MfGufYxsqhhi0DmY4ULwvhEZIfaB4TOxepGyvkfFJVSYGmxIyaa4i6vQZG00J10r1JefdYzh0=
+	t=1779370155; cv=none; b=JOU7Ae1IC6rgXMWTzxj0e8N0K+LjiQ9Nf7NzJ3VO+Jwmh29Zw4eEBqCCAhEHI3QAdcn+q/k+F2V9RAMcwP/vDFQjMyn4dGX12FyrRG+7vV90IniU7x4KnXC9uyOVR9V7gtB64L1vyb3RH4VbuUzOkA6jIYppoFdMZBy4IHiDSzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779369971; c=relaxed/simple;
-	bh=boWHHDNZrzUt9/YvRFT/htO+rg96jFT3QLLH7stV8rA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=LJPPHxbGp2Dp9t52K+/UGJzNGzSEuxStKtasMd0gUDe3GPlly6upezjHSR/vcHw0cWr0Kj/UsyHDudvm7hHmCF2S3JD3fxoKUDT8S2BJ2717jhSDYSAeG6vAUyuA4Rf7JfWSiBdheJLyKIdaK0kD2Aeq+YriNsqBfkFBTtlu22Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hgvp3Whs; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779370155; c=relaxed/simple;
+	bh=p7PF1+Ak8Iybl1uC9834+fGeYsrgAbgggOaxN16RawU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=W4fMP1Fy8hqdWs+bPhDA+u9kVpnyDQyjBtItBNbtsfMdN6U4IUeGhU1JaPv2pWYCgmNPN/fSr5ThB1hjQtkfKExCoA80PbpOezS1JIUdA9fpswqv7JaWkEap8TNn+34ei746qj/3tNq8wB1nZ0B88EgATpCpXRAOkgYpaFPB3bI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SYbFa1+P; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hgvp3Whs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ECB61F00A3B;
-	Thu, 21 May 2026 13:26:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SYbFa1+P"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAC621F00A3B;
+	Thu, 21 May 2026 13:29:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779369969;
-	bh=OrSTfPrupUXd4HlQE+e05hsT65BiURAkoptdwWKbr1Q=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=hgvp3Whsrb06bkicRClq2+hZ2PejetG4ur+dmEfBxTKAYj/ftVLg+ojjIKVT5QFDT
-	 DOI2/xgSMhfeAq8lJjZt+zdoUt5HiGWcSZcWtJfbyZANC3Gw1MmrmfxPK19XDhQnbo
-	 GiYCsaFn+QRMeGDRaUpz9DGzeuusod/LiJ0B9i1BeWHMLGAdG/uKpbw+7zyrmuxItb
-	 7All4Ka8K09pTiGYAaeBdH6K8XVgQ8IGY09jHQwJRSok/MhrKYdb7Etdf9j+LXSalI
-	 V1oqihslaqCydNhDePFwXOCEitjTkOkD4hTojlb4bQoFvWNC6Q64uyzzXsWDD+FT75
-	 2+/wUVwMJTNug==
-Content-Type: multipart/mixed; boundary="===============5276235093912153004=="
+	s=k20260515; t=1779370154;
+	bh=GLT8DV20jiyyay1hjKcM6XdDN+QqqxDcxHpXd03g+XA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=SYbFa1+P2h0kppsHARqxDSxrc0c8Tt8BKT6IrgTtiArU1wFIOxXHnvHtAZkbiwHT0
+	 GvYxO8UZEKRqTtds8dft5WINrqpBE7XpUL3vGFKFqwrMoCOAoUuicJq3JNIksS7SUX
+	 ApOFxdyaU6Pfqq8goMogo1rimR8ftvxunN2hPlUUd8imDv96LAASA+H6/ch/QSh6IB
+	 0/Q9ag9W6+ZRvy/uY+3A5gWnyACSD6gxXoQdHVgc2ucofAM/6KHlQ3Ibahw5KlEvJ8
+	 PEFBW2CNL0Qubb7KP2uDI0xhhWipMDpLaPn3AzbpWpltkPU/MXSETOP9cjXgFvN0x7
+	 akED4mNV2DxMA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v11 7/8] bpf: add bpf_list_is_first/last/empty
+ kfuncs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kaitao Cheng" <kaitao.cheng@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260521032306.97118-8-kaitao.cheng@linux.dev>
+References: <20260521032306.97118-8-kaitao.cheng@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 21 May 2026 13:29:13 +0000
+Message-Id: <20260521132913.EAC621F00A3B@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <8861cc7af8e0dfff2674ca4ae6381ea2d82c242dec115774e8e11048bde358c4@mail.kernel.org>
-In-Reply-To: <20260521124411.31133-3-jolsa@kernel.org>
-References: <20260521124411.31133-3-jolsa@kernel.org>
-Subject: Re: [PATCHv3 02/12] uprobes/x86: Remove struct uprobe_trampoline object
-From: bot+bpf-ci@kernel.org
-To: jolsa@kernel.org,oleg@redhat.com,peterz@infradead.org,mingo@kernel.org,mhiramat@kernel.org,andrii@kernel.org
-Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 21 May 2026 13:26:09 +0000 (UTC)
 
---===============5276235093912153004==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Multi-line comment uses deprecated style in `bpf_list_empty`.
+--
 
-> commit 35d93b034b144060a547b507cfb4268692c328c2
-> Author: Jiri Olsa <jolsa@kernel.org>
-> Date:   Thu May 21 14:44:01 2026 +0200
->
->     uprobes/x86: Remove struct uprobe_trampoline object
->
->     Removing struct uprobe_trampoline object and it's tracking code,
->     because it's not needed. We can do same thing directly on top of
->     struct vm_area_struct objects.
->
->     This makes the code simpler and allows easy propagation of the
->     trampoline vma object into child process in following change.
->
->     Note the original code called destroy_uprobe_trampoline if the
->     optimiation failed, but it only freed the struct uprobe_trampoline
->     object, not the vma.
->
->     Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+commit 22a1ce2a5267998c134b07d40be7e92224236cc6
+Author: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-This looks like a bug fix for a VMA resource leak. The commit message
-notes that when uprobe optimization failed, the original code only freed
-the struct uprobe_trampoline object but leaked the VMA created by
-_install_special_mapping. Should this include:
+bpf: add bpf_list_is_first/last/empty kfuncs
 
-  Fixes: ba2bfc97b462 ("uprobes/x86: Add support to optimize uprobes")
+This commit adds three new kfuncs to allow BPF programs to directly query
+whether a node is the first or last in a linked list, or if the list is
+empty. This avoids the inefficiency of having to pop and push nodes just
+to check these properties.
 
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 89579165ef4dc..b6c3d02d5593c 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+[ ... ]
+> @@ -2656,6 +2656,43 @@ __bpf_kfunc struct bpf_list_node *bpf_list_back(st=
+ruct bpf_list_head *head)
+[ ... ]
+> +__bpf_kfunc bool bpf_list_empty(struct bpf_list_head *head)
+> +{
+> +	struct list_head *h =3D (struct list_head *)head;
+> +
+> +	/* If list_head was 0-initialized by map, bpf_obj_init_field wasn't
+> +	 * called on its fields, so init here
+> +	 */
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+[Severity: Low]
+This isn't a bug, but the multi-line comment uses a deprecated style.
+According to BPF subsystem guidelines, multi-line comments should have the
+opening /* on its own line.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26227520868
---===============5276235093912153004==--
+> +	if (unlikely(!h->next))
+> +		INIT_LIST_HEAD(h);
+> +
+> +	return list_empty(h);
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260521032306.9711=
+8-1-kaitao.cheng@linux.dev?part=3D7
