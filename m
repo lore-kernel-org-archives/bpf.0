@@ -1,78 +1,92 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90FE335F8D1;
-	Thu, 21 May 2026 23:33:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B6C31F98E
+	for <bpf@vger.kernel.org>; Thu, 21 May 2026 23:42:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779406417; cv=none; b=QYUxLwb9gmtjssxVegO04o/20T2duiCbvGfdn7JRWIuGP7QxkK16yP1SndNnvX7+Uyb7ppoVCRg8bb29ri7Qjs/VzLV5FztywuxMLfRsgmSdgXz95Jhe0Mz5r+BfDUgFSERbhp6QMr44VB7UitoJjdXl0PRHIWZGWlOeCA2pT1M=
+	t=1779406925; cv=none; b=NKoQI9/JMQMO6HR35NWMksY6eoAJS0I4AZQcvA5wL5pOHxfsKyxK2s5UGY0c3Ksi9bh4Iun3zR4eSH0BaW91SlfZutiOtVAcm1k6LPZ/BjDqVIjeOhrVK3Ja1Vw47CpLLCu7opoctF2hdkaopsYtTmlMskzWnvq76+GYA/Gqc+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779406417; c=relaxed/simple;
-	bh=1Lu3JaCJ8DZOkGazIvCtxJABfEBxv+B0qL47yUHKzY8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=q2GYJyH1NBmi88vKCa3NK+MIC428W+Z1O51WCmgkH2jlXo5grdRihUJT7x2iao64oOT8C217ItXh4rMGovvpbuYi89+wX7DP2apoTq8dkRTGsCjaKO2RFwtEu5yu+eqq5IYHoTrkoeAuZST0KY4oMta9aE20yLkMCRvr8YNZuZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IWARJBcO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779406925; c=relaxed/simple;
+	bh=safALfY9fftVVm5srsoWwQmQJ4DdcBqFLAo9s/+0TKA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=SJeowFbBmPIg5UiA/1cwTuCIrK+UcH1ABJvew7mdJQiS3Q5ALlCm+oJdGnMyk6nHupwzIEjHeNph0Y6yPexKyIQrHVq8iBYZ1+izkbRWCRbBubeQAkoDaUNGNc8GJjrPdyeLRabBOJz+KwZMp0OrUmizp2SAnC3fXYjPigKhz1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ksx8G5pT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IWARJBcO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F3C61F00A3B;
-	Thu, 21 May 2026 23:33:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ksx8G5pT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9431E1F00A3B;
+	Thu, 21 May 2026 23:42:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779406415;
-	bh=mvIQNCtFQBUYRf613I/JdmATsMN+FnR5gdEuCLKs3Vg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=IWARJBcOdEjLxfmzOp7Q+RWYHjBuJbF+ceVqAUJrIAc8Too+icb4JyeP/HdY2Af1X
-	 vqdVvIC/nJQxwqSg+9LMSxh0RHRezTdHecogSrXYZW4cxthKt+xNNZo0OpXaBjlnBm
-	 w6Q1oj37OWHgsEz2sIx9vE6o59sD9tYk//h+a85oPQbokU+USD+fcxtpAp0nHHicKz
-	 keUHfdrq2uAuxliQtQUWBnI6iVT5d/EvPRXncOHdFnHEZ530Cc52Dd9HQc5ogCN3+v
-	 6Nvtsz9DyJpS2ZVapF17lb18pjy3jx+QLFmXUh4ARf9m2SwJW48kAhtetlMjzLG8bn
-	 lCSfqrBsJQWRQ==
-Content-Type: multipart/mixed; boundary="===============6549390519885862936=="
+	s=k20260515; t=1779406920;
+	bh=jgW6evO69ovwWsz9q4BQEWdaRsLqhPLrqecKt5NidZw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Ksx8G5pTfCI58HJAf5ZQdPZxLkTmknNHS6/CSyukXjHDnZNKn0ipwaBjjxdN89koH
+	 /LgpR+FLzu1aSrZBPxM5XshMC9mK5u4NGnMlcp4VSwr2+7PzmMsnPDRZzQBAx6WqnN
+	 /V9twlG3KtjYZI9ASitwUnz4v0y5L70G+T51GCS+1iwDRa96M6DOXad9RWcTn6rAGz
+	 EyUdOEYLpzkzwtGgjAEpJhFPltGlCREtH7979TAM2S/5yPDbS6aokMASzmHdG2oGWS
+	 8sdRXhtpqKh8GdE2V8mhByddelsmI9enKgBo5xk+A3XRBODMWoiJSTMNOidZ3KSq8G
+	 fDxKWzQaUd2qg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v6 2/3] bpf: Avoid faultable build ID reads
+ under mm locks
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260521225022.2695755-3-ihor.solodrai@linux.dev>
+References: <20260521225022.2695755-3-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 21 May 2026 23:41:59 +0000
+Message-Id: <20260521234200.9431E1F00A3B@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <226398c1ff3f2b686c0aeb010408d85fb15df13f9ff60a045bee31e79b9e41e9@mail.kernel.org>
-In-Reply-To: <20260521225022.2695755-3-ihor.solodrai@linux.dev>
-References: <20260521225022.2695755-3-ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v6 2/3] bpf: Avoid faultable build ID reads under mm locks
-From: bot+bpf-ci@kernel.org
-To: ihor.solodrai@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com
-Cc: puranjay@kernel.org,shakeel.butt@linux.dev,mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 21 May 2026 23:33:35 +0000 (UTC)
 
---===============6549390519885862936==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] The lock fallback path unconditionally fails when CONFIG_PER_VMA_L=
+OCK is not set, silently breaking build ID parsing in sleepable BPF program=
+s.
+- [Medium] Incorrect check for file-backed VMAs using `vma->vm_file` instea=
+d of `!vma_is_anonymous(vma)`.
+--
+
+commit 84d83effb87030cad9aaab2d51c0df334f8c48df
+Author: Ihor Solodrai <ihor.solodrai@linux.dev>
+
+bpf: Avoid faultable build ID reads under mm locks
+
+This commit avoids calling sleepable build ID parsing while holding mmap_lo=
+ck
+or a per-VMA read lock to prevent blocking. It introduces a new function to
+resolve VMAs and acquire references, dropping the VMA lock before parsing.
+
+Link: https://lore.kernel.org/all/20251218005818.614819-1-shakeel.butt@linu=
+x.dev/
+Link: https://lore.kernel.org/all/20260128183232.2854138-1-andrii@kernel.or=
+g/
+Link: https://lore.kernel.org/bpf/2895ecd8-df1e-4cc0-b9f9-aef893dc2360@linu=
+x.dev/
 
 > diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index 4c753e02c415..95336c0e8b56 100644
 > --- a/kernel/bpf/stackmap.c
 > +++ b/kernel/bpf/stackmap.c
-
 [ ... ]
-
-> @@ -174,6 +175,107 @@ static inline void stack_map_build_id_set_valid(struct bpf_stack_build_id *id,
->  		memcpy(id->build_id, build_id, BUILD_ID_SIZE_MAX);
->  }
->
-> +struct stack_map_vma_lock {
-> +	bool vma_locked;
-> +	struct vm_area_struct *vma;
-> +	struct mm_struct *mm;
-> +};
-> +
-> +static struct vm_area_struct *stack_map_lock_vma(struct stack_map_vma_lock *lock, unsigned long ip)
+> @@ -174,6 +175,107 @@ static inline void stack_map_build_id_set_valid(str=
+uct bpf_stack_build_id *id,
+[ ... ]
+> +static struct vm_area_struct *stack_map_lock_vma(struct stack_map_vma_lo=
+ck *lock, unsigned long ip)
 > +{
-> +	struct mm_struct *mm = lock->mm;
+> +	struct mm_struct *mm =3D lock->mm;
 > +	struct vm_area_struct *vma;
 > +
 > +	if (WARN_ON_ONCE(!mm))
 > +		return NULL;
 > +
-> +	vma = lock_vma_under_rcu(mm, ip);
+> +	vma =3D lock_vma_under_rcu(mm, ip);
 > +	if (vma)
 > +		goto vma_locked;
 > +
@@ -83,7 +97,7 @@ Content-Transfer-Encoding: 7bit
 > +	if (!mmap_read_trylock(mm))
 > +		return NULL;
 > +
-> +	vma = vma_lookup(mm, ip);
+> +	vma =3D vma_lookup(mm, ip);
 > +	if (!vma) {
 > +		mmap_read_unlock(mm);
 > +		return NULL;
@@ -100,101 +114,68 @@ Content-Transfer-Encoding: 7bit
 > +	return NULL;
 > +#endif
 
-Does the fallback for kernels built without CONFIG_PER_VMA_LOCK completely
-disable build ID parsing?
+[Severity: High]
+Does this unconditionally break sleepable build ID parsing when
+CONFIG_PER_VMA_LOCK is not enabled?
 
-Looking at the #else branch, it unconditionally drops mmap_read_lock and
-returns NULL. This causes the caller to receive a NULL VMA for every IP,
-which skips parsing and falls back to returning IP-only traces.
+Because lock_vma_under_rcu() returns NULL without per-VMA locks, the code
+falls back to mmap_read_trylock() and vma_lookup(). However, when it reaches
+the #else block here, it always unlocks and returns NULL, causing the
+sleepable path to fail and degrade to raw IPs.
 
-Could this instead keep mmap_read_lock held, return the VMA, and allow the
-caller to extract the file reference, vm_pgoff, and vm_start before safely
-dropping the lock?
-
-This was raised by sashiko-bot@kernel.org in v4 and v5 at:
-https://lore.kernel.org/bpf/20260515012547.EFF40C2BCB3@smtp.kernel.org/
+Prior to this patch, mmap_read_trylock() was used successfully regardless
+of CONFIG_PER_VMA_LOCK. Could we retain the mmap_read_lock protected fallba=
+ck
+for kernels without per-VMA locks, or is there another way to keep this
+feature working?
 
 > +vma_locked:
-> +	lock->vma_locked = true;
-> +	lock->vma = vma;
+> +	lock->vma_locked =3D true;
+> +	lock->vma =3D vma;
 > +	return vma;
 > +}
-> +
-> +static void stack_map_unlock_vma(struct stack_map_vma_lock *lock)
-> +{
-> +	struct vm_area_struct *vma = lock->vma;
-> +
-> +	if (lock->vma_locked) {
-> +		if (WARN_ON_ONCE(!vma))
-> +			goto out;
-> +		vma_end_read(vma);
-> +	}
-> +out:
-> +	lock->vma_locked = false;
-> +	lock->vma = NULL;
-> +}
-> +
-> +static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *id_offs,
+[ ... ]
+> +static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_bui=
+ld_id *id_offs,
 > +						    u32 trace_nr)
 > +{
-> +	struct mm_struct *mm = current->mm;
-> +	struct stack_map_vma_lock lock = {
-> +		.vma_locked = false,
-> +		.vma = NULL,
-> +		.mm = mm,
+> +	struct mm_struct *mm =3D current->mm;
+> +	struct stack_map_vma_lock lock =3D {
+> +		.vma_locked =3D false,
+> +		.vma =3D NULL,
+> +		.mm =3D mm,
 > +	};
 > +	struct vm_area_struct *vma;
 > +	struct file *file;
 > +	u64 offset;
 > +	u64 ip;
 > +
-> +	for (u32 i = 0; i < trace_nr; i++) {
-> +		ip = READ_ONCE(id_offs[i].ip);
+> +	for (u32 i =3D 0; i < trace_nr; i++) {
+> +		ip =3D READ_ONCE(id_offs[i].ip);
 > +
-> +		vma = stack_map_lock_vma(&lock, ip);
+> +		vma =3D stack_map_lock_vma(&lock, ip);
 > +		if (!vma || !vma->vm_file) {
+
+[Severity: Medium]
+Is it possible for anonymous VMAs (such as private mappings of /dev/zero) to
+bypass this check?
+
+According to the MM guidelines, vma->vm_file can be non-NULL even for
+anonymous VMAs, which might lead to taking unnecessary file references and
+calling build_id_parse_file() on them.
+
+Should this use !vma_is_anonymous(vma) instead of checking vma->vm_file
+directly to ensure we only process properly file-backed VMAs?
+
 > +			stack_map_build_id_set_ip(&id_offs[i]);
 > +			stack_map_unlock_vma(&lock);
 > +			continue;
 > +		}
-
-Is using !vma->vm_file to classify anonymous VMAs fully correct?
-
-Per mm-vma.md's VMA classification rules, the canonical test for anonymous
-VMAs is vma_is_anonymous() (i.e. !vma->vm_ops). Some anonymous VMAs carry a
-vm_file reference. For example, private mappings of /dev/zero set via
-vma_set_anonymous() leave vm_file populated while clearing vm_ops.
-
-While this won't cause a crash (build_id_parse_file would fail gracefully),
-it causes unnecessary sleepable read attempts on pseudo-files.
-
-This was raised by bot+bpf-ci@kernel.org and sashiko-bot@kernel.org across
-v3, v4, and v5 at:
-https://lore.kernel.org/bpf/0e2084173f17252ff227aba064e534682b52a7a451280c0df4041825ebae30b6@mail.kernel.org/
-
 > +
-> +		file = get_file(vma->vm_file);
-> +		offset = stack_map_build_id_offset(vma->vm_pgoff, vma->vm_start, ip);
+> +		file =3D get_file(vma->vm_file);
+> +		offset =3D stack_map_build_id_offset(vma->vm_pgoff, vma->vm_start, ip);
 > +		stack_map_unlock_vma(&lock);
-> +
-> +		/* build_id_parse_file() may block on filesystem reads */
-> +		if (build_id_parse_file(file, id_offs[i].build_id, NULL)) {
-> +			stack_map_build_id_set_ip(&id_offs[i]);
-> +			fput(file);
-> +			continue;
-> +		}
-> +		fput(file);
-> +
-> +		stack_map_build_id_set_valid(&id_offs[i], offset, id_offs[i].build_id);
-> +	}
-> +}
 
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26258400944
---===============6549390519885862936==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260521225022.2695=
+755-1-ihor.solodrai@linux.dev?part=3D2
