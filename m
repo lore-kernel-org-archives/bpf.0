@@ -1,86 +1,161 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A9E135AC1B
-	for <bpf@vger.kernel.org>; Thu, 21 May 2026 22:44:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CCE734F46D
+	for <bpf@vger.kernel.org>; Thu, 21 May 2026 22:51:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779403466; cv=none; b=asLo9fUujnYeh6Gp6weO4yKqzB3hi8kx6rpDLhoPFt355Zyq07HbEW3MJrkZBbv6m70yMt/463LUMqR0bFr6Z5j4RqgrzDTnW8GCsIXxRbwXFDQqmR87Fb3Y6tBOl2+gtX1sm3xkPivJxlHlG1ZwymhsJcg25kzLnlKFULJCjj0=
+	t=1779403861; cv=none; b=Nihfcd5u0STO6+yazU+vDC/QOZ1p0wsptVU0Qyw6p9pVC1+MtrQlHsLpFPlua+nJoNH68I5G1lxLnm1vHlOYFgTCQURl3RIuo2ichHD3+9fZX8AKbwY9U7MoC5VZQI09zSPlrp5un/DuARhAEpngp7/rnL3Mq47sSLCGx5knFXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779403466; c=relaxed/simple;
-	bh=WhT6RtrQwyJ4T6yzTPkt6k1pwlx4Q2w+Q+qcXmkvTcI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UWoMSbXpml1ScTZYelzSA2AA3TcZuuXnuTre08KZ9lLaChmMxJtpEN+CwX7zhfQJAXXI6w67c70ZXCU9unntHTUdrmcdhas3Yfl3SH0gUMYfhuarwuzubyHAd2CUo4UEBpFtfSpi6RxsgGg1HXKO6RdaaGsoiy9GSsk5StvZlOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C2OC90nw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779403861; c=relaxed/simple;
+	bh=2l1/L1N2BsBa6UDCrcEyhM5/RBwZisw1PiRzwSFdwtA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hdm2Wh00ThpRwRvp3bEOkoI7uuPw5xfH7Tv57vPF7TZp4HIGufJGKRDk4tMfL6lV42wj/5lTOZs2R8Bl3tvLitmQKkrzma0h0t9n+AWitY6VkjNFstlq33bH2SRjPrDQSqNYVfDrJp8I2WPuiyk9GseDaYWx3BPToj2WO4lO4QE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Kb6oHEl4; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C2OC90nw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B411F000E9;
-	Thu, 21 May 2026 22:44:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779403464;
-	bh=WhT6RtrQwyJ4T6yzTPkt6k1pwlx4Q2w+Q+qcXmkvTcI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=C2OC90nwNW8Y1fzUPZcn22BRNK3qx1PdEzF4KCvO7Sc0w93HyLUSUkmUXol57/52i
-	 Yt7J0er8AmgAIpL/A9MaFbGL/nugy9mlnhnN5WlJMeCrcRNh8fjXVGld61XwcIBjcw
-	 yc5LwVDZuchIreIM3H0WV0h/lX6HkZ3hjA3gvC6LWy6+A3K7jfKwKf7IKdGth3kjWx
-	 uEdkXY8nru74PHOFb2phKv9BWMkiYmjs5QxDYfWE2BQ2vda9Sp9Kq07mbNA7r3ob59
-	 1OubqGdAlSHeQ9qk2Kwd2gRf+913q6N1+1sy/f2Xir4JhSJWrcONCNPK8UiEhvW5Kr
-	 rvLtzXmdfN9XQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] libbpf: bound /proc/<pid>/maps scansets in
- parse_vma_segs()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Michael Bommarito" <michael.bommarito@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260521221712.3077276-1-michael.bommarito@gmail.com>
-References: <20260521221712.3077276-1-michael.bommarito@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 21 May 2026 22:44:24 +0000
-Message-Id: <20260521224424.C1B411F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Kb6oHEl4"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779403858;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=39Oy0nfDjc6LjnlHZaW6NwycZGuFEV9tuMsdrt9m9AE=;
+	b=Kb6oHEl4EyP+rYiJHJCZcVbUiYEOeww79bMjcBj+1pV2UgQ+Sjs9PEdOAqVJsDbumGJBq3
+	Bu8B+eATxYoVC9x7QNGnqJRaOvbpf5cGRcgBHhAEMb+EI9G4C3Z9s/6xPQtplUP2dD9ij6
+	4TkYCPWM9r2OIZC6CaS6GgKpj38lKFY=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v6 1/3] bpf: Factor out stack_map build ID helpers
+Date: Thu, 21 May 2026 15:50:20 -0700
+Message-ID: <20260521225022.2695755-2-ihor.solodrai@linux.dev>
+In-Reply-To: <20260521225022.2695755-1-ihor.solodrai@linux.dev>
+References: <20260521225022.2695755-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+Factor out helpers from stack_map_get_build_id_offset() in
+preparation for adding a sleepable build ID resolution path.
 
-Pre-existing issues:
-- [Critical] Unbounded `%s` format specifier in `sscanf` allows stack buffe=
-r overflow and truncates paths with spaces.
---
+No functional changes.
 
-Note: The format of this report is altered due to recitation restrictions.
-I am providing a free-form summary of the findings without quoting the
-original patch code.
+Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+---
+ kernel/bpf/stackmap.c | 51 ++++++++++++++++++++++++++++++-------------
+ 1 file changed, 36 insertions(+), 15 deletions(-)
 
-commit 4f7490fd6defafa70e5f169165e4d30d7e6cabcd
-Author: Michael Bommarito <michael.bommarito@gmail.com>
-Subject: libbpf: bound /proc/<pid>/maps scansets in parse_vma_segs()
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index da3d328f5c15..4c753e02c415 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -152,6 +152,28 @@ static int fetch_build_id(struct vm_area_struct *vma, unsigned char *build_id, b
+ 			 : build_id_parse_nofault(vma, build_id, NULL);
+ }
+ 
++static inline void stack_map_build_id_set_ip(struct bpf_stack_build_id *id)
++{
++	id->status = BPF_STACK_BUILD_ID_IP;
++	memset(id->build_id, 0, BUILD_ID_SIZE_MAX);
++}
++
++static inline u64 stack_map_build_id_offset(unsigned long vm_pgoff,
++					    unsigned long vm_start, u64 ip)
++{
++	return (vm_pgoff << PAGE_SHIFT) + ip - vm_start;
++}
++
++static inline void stack_map_build_id_set_valid(struct bpf_stack_build_id *id,
++						u64 offset,
++						const unsigned char *build_id)
++{
++	id->status = BPF_STACK_BUILD_ID_VALID;
++	id->offset = offset;
++	if (id->build_id != build_id)
++		memcpy(id->build_id, build_id, BUILD_ID_SIZE_MAX);
++}
++
+ /*
+  * Expects all id_offs[i].ip values to be set to correct initial IPs.
+  * They will be subsequently:
+@@ -165,44 +187,43 @@ static int fetch_build_id(struct vm_area_struct *vma, unsigned char *build_id, b
+ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+ 					  u32 trace_nr, bool user, bool may_fault)
+ {
+-	int i;
+ 	struct mmap_unlock_irq_work *work = NULL;
+ 	bool irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
++	bool has_user_ctx = user && current && current->mm;
+ 	struct vm_area_struct *vma, *prev_vma = NULL;
+-	const char *prev_build_id;
++	const unsigned char *prev_build_id;
++	int i;
+ 
+ 	/* If the irq_work is in use, fall back to report ips. Same
+ 	 * fallback is used for kernel stack (!user) on a stackmap with
+ 	 * build_id.
+ 	 */
+-	if (!user || !current || !current->mm || irq_work_busy ||
+-	    !mmap_read_trylock(current->mm)) {
++	if (!has_user_ctx || irq_work_busy || !mmap_read_trylock(current->mm)) {
+ 		/* cannot access current->mm, fall back to ips */
+-		for (i = 0; i < trace_nr; i++) {
+-			id_offs[i].status = BPF_STACK_BUILD_ID_IP;
+-			memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX);
+-		}
++		for (i = 0; i < trace_nr; i++)
++			stack_map_build_id_set_ip(&id_offs[i]);
+ 		return;
+ 	}
+ 
+ 	for (i = 0; i < trace_nr; i++) {
+ 		u64 ip = READ_ONCE(id_offs[i].ip);
++		u64 offset;
+ 
+ 		if (range_in_vma(prev_vma, ip, ip)) {
+ 			vma = prev_vma;
+-			memcpy(id_offs[i].build_id, prev_build_id, BUILD_ID_SIZE_MAX);
+-			goto build_id_valid;
++			offset = stack_map_build_id_offset(vma->vm_pgoff, vma->vm_start, ip);
++			stack_map_build_id_set_valid(&id_offs[i], offset, prev_build_id);
++			prev_build_id = id_offs[i].build_id;
++			continue;
+ 		}
+ 		vma = find_vma(current->mm, ip);
+ 		if (!vma || fetch_build_id(vma, id_offs[i].build_id, may_fault)) {
+ 			/* per entry fall back to ips */
+-			id_offs[i].status = BPF_STACK_BUILD_ID_IP;
+-			memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX);
++			stack_map_build_id_set_ip(&id_offs[i]);
+ 			continue;
+ 		}
+-build_id_valid:
+-		id_offs[i].offset = (vma->vm_pgoff << PAGE_SHIFT) + ip - vma->vm_start;
+-		id_offs[i].status = BPF_STACK_BUILD_ID_VALID;
++		offset = stack_map_build_id_offset(vma->vm_pgoff, vma->vm_start, ip);
++		stack_map_build_id_set_valid(&id_offs[i], offset, id_offs[i].build_id);
+ 		prev_vma = vma;
+ 		prev_build_id = id_offs[i].build_id;
+ 	}
+-- 
+2.54.0
 
-This commit addresses a stack buffer overflow in parse_vma_segs() by adding
-bounds to the fscanf calls used to parse /proc/<pid>/maps. It ensures that
-deeply nested directory trees do not overflow the path and mode buffers.
-
-[Severity: Critical]
-This is a pre-existing issue, but while this patch successfully adds bounds
-to the fscanf call reading maps entries, is it possible that the earlier
-sscanf call in parse_vma_segs() still has an unbounded width issue?
-
-The function uses sscanf on lib_path with the format string
-"/proc/%d/root%s" to extract the remainder into a local stack buffer sized
-to PATH_MAX. If a tracing tool accepts an untrusted lib_path longer than
-PATH_MAX that starts with the root prefix, won't this sscanf write out of
-bounds and overflow the stack buffer?
-
-Additionally, since the %s format specifier stops at the first whitespace,
-wouldn't any valid paths containing spaces be truncated here? If so, this
-might cause the later strcmp against the maps file to fail silently,
-potentially breaking USDT attachment for libraries residing in directories
-with spaces.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260521221712.3077=
-276-1-michael.bommarito@gmail.com?part=3D1
