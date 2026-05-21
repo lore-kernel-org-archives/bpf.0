@@ -1,175 +1,129 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1509B3D4120;
-	Thu, 21 May 2026 12:46:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A023D8902
+	for <bpf@vger.kernel.org>; Thu, 21 May 2026 12:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779367573; cv=none; b=PcImgMCOJj0/3RWePXHnlv8WnSyX1XVbU0fRdVTnjf3/WvPFnKdkgme6KfvfdoyNuNyk3V3iWfntceQ79YLGlae5k+dKnLZlxZ5faFePQenCrgWrewCrOMbLX5MoxeEcc0wUCkMGZlUFDmdHBO3H4AH/mynuNSXsKT2/brQdkkY=
+	t=1779367770; cv=none; b=i6ggtYsdNNwnjYvlRVsVOD16d+e5k6TMhEvAypdA9apTPnVRxYZih3pd6LMZrkohDkrlCu4IzMy6aJS149NLFY4Iyp4DgVo3yLVXS+GlyyGWBxiVxBdA25Od6flO2AoQZqZQMqET6SmuIlB9iHnNGRK67+MuLRibf75v1x78jUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779367573; c=relaxed/simple;
-	bh=pOCNzkNfb9lBEcv6/1q7ko9lR987x7/YdbV39QvD1OU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CVosTd4AiagIXsy5gjBS61Q6n8G/KB1XfYbn/pdCnjMxJ9XttFFR1BoIaHGLThe+j3GcQYLmHl+C5AKIvISMSKrhHKWkjRVMRRNXzvgagZxrkLeLZ4Va6Fp1oXhOh+MlfujfVFvbXa0TI+AxBb0yBfK4d2fKNgeSp8EAhMO/Cck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VX3oRtnK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779367770; c=relaxed/simple;
+	bh=3K4jO5o9L2B3k9admS9Q0eIBCTGk9WQaYPSzSl/rGKE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=joCpa5P5hKAaQ5BCAtJZk96bwDAM3Zz5h4Ofmh3y8SrAVoP3CdZ0qk6V/W2X0l/o4DqDrbeBbSd74E1DUFlUo0/0onyqnG5JJZCi3ECrSIh6wJ6jBcwEPvNLM1+sn/5I8CIBQbBsliIjsGA+9rrStZJ29I/Tfsi/9SQPSHDNomU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HzdcinlM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VX3oRtnK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E18F1F000E9;
-	Thu, 21 May 2026 12:46:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HzdcinlM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14BAE1F000E9;
+	Thu, 21 May 2026 12:49:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779367571;
-	bh=nq3VsRC1ZV7N4OSkkDlTSU8O0ZMbw+He/KvDiFNIvi0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=VX3oRtnKWuvWP/EvH2dgL7XrVTZ6MQucFtl2Tt3PppAlmuttlgCmZ3obdk8Xb0Ptn
-	 R/zrhBUbQOFhbVUqhd23ib/1949b4fVdJQZO7cwKEqKOESKOabTXxWxEvi6KKiM8zv
-	 pxOxWzQKOJ0rxPM2LV3XgMMzsxTCIt0jiWUnoaGhqxOTxKxe/Mdl/d+ZUSDzvC+SsR
-	 7K530dHYYo7frR7p0mpJXYevnTXfhGynsPTLgtEbSzzeZ4D3Gg80T3076QDBcgbIIO
-	 nf4APgHGmQMdy/ieasNyE0kkVSXTu+2oqPWXDKM76fxdgmyzqAsDjQGaF6sRqD1Bll
-	 G9qoMJF1iQo6Q==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Oleg Nesterov <oleg@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: [PATCHv3 12/12] selftests/bpf: Add tests for forked/cloned optimized uprobes
-Date: Thu, 21 May 2026 14:44:11 +0200
-Message-ID: <20260521124411.31133-13-jolsa@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260521124411.31133-1-jolsa@kernel.org>
-References: <20260521124411.31133-1-jolsa@kernel.org>
+	s=k20260515; t=1779367768;
+	bh=iuJD4uwd+YjO32okP2wzNJATEb6xCXs3qwcZtxC4EqY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=HzdcinlMAbFdfrhXorMXYu5RFvDyTHklSHNpT/lUk9HVFqZT3ce8Ne9VGXhiadecd
+	 e8JEHOaoul5vXgwhGXzoLwl+5+S5n6HdxNBDPf9DUgP0OfzdwUA1bAM/Qw4RkKfyZE
+	 +wuiZbi/+jL+W8rKM0fRAIOTrK6VbGQ7KZmCUKW2qKId7tp86EyeLNJ2Dv3i2EwpMe
+	 o5OMmFveUJbHEdikzipA8rNLZloO9DiUcmegk41Arvl6s7wZgDgpjLaNWKpOJvgFYv
+	 NgX3I2qNXEVRcKmsE7hEJ+Bnph7EAlHwNOi+3fJUC1Aj+TQImvoW+5tyiNr2loD9rS
+	 NvpoD6AzIVZOw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v11 6/8] bpf: Add bpf_list_add to insert node
+ after a given list node
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kaitao Cheng" <kaitao.cheng@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260521032306.97118-7-kaitao.cheng@linux.dev>
+References: <20260521032306.97118-7-kaitao.cheng@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 21 May 2026 12:49:27 +0000
+Message-Id: <20260521124928.14BAE1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Adding tests for forked/cloned optimized uprobes and make
-sure the child can properly execute optimized probe for
-both fork (dups mm) and clone with CLONE_VM.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Critical] The `bpf_list_add` kfunc frees the inserted node on runtime fa=
+ilure, but the BPF verifier unconditionally converts it to a non-owning ref=
+erence, leading to a Use-After-Free (UAF) vulnerability.
+- [High] The `bpf_list_add` kfunc is registered with `KF_IMPLICIT_ARGS` but=
+ lacks the required `_impl` function and BTF ID, causing the verifier to re=
+ject all programs attempting to call it.
+--
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- .../selftests/bpf/prog_tests/uprobe_syscall.c | 88 +++++++++++++++++++
- 1 file changed, 88 insertions(+)
+commit 41c84b8182697296804a152b66297f50e3a604cb
+Author: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-index efff0c515184..033d32b4cc27 100644
---- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-+++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-@@ -4,6 +4,8 @@
- 
- #ifdef __x86_64__
- 
-+#define _GNU_SOURCE
-+#include <sched.h>
- #include <unistd.h>
- #include <asm/ptrace.h>
- #include <linux/compiler.h>
-@@ -936,6 +938,88 @@ static void test_uprobe_error(void)
- 	ASSERT_EQ(errno, EPROTO, "errno");
- }
- 
-+__attribute__((aligned(16)))
-+__nocf_check __weak __naked void uprobe_fork_test(void)
-+{
-+	asm volatile (
-+		".byte 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00\n" /* nop10 */
-+		"ret\n"
-+	);
-+}
-+
-+static int child_func(void *arg)
-+{
-+	struct uprobe_syscall_executed *skel = arg;
-+
-+	/* Make sure the child's probe is still there and optimized.. */
-+	if (memcmp(uprobe_fork_test, lea_rsp, sizeof(lea_rsp)))
-+		_exit(1);
-+
-+	skel->bss->pid = getpid();
-+
-+	/* .. and it executes properly. */
-+	uprobe_fork_test();
-+
-+	if (skel->bss->executed != 3)
-+		_exit(2);
-+
-+	_exit(0);
-+}
-+
-+static void test_uprobe_fork_optimized(bool clone_vm)
-+{
-+	struct uprobe_syscall_executed *skel = NULL;
-+	struct bpf_link *link = NULL;
-+	unsigned long offset;
-+	int pid, status, err;
-+	char stack[65535];
-+
-+	offset = get_uprobe_offset(&uprobe_fork_test);
-+	if (!ASSERT_GE(offset, 0, "get_uprobe_offset"))
-+		return;
-+
-+	skel = uprobe_syscall_executed__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		goto cleanup;
-+
-+	link = bpf_program__attach_uprobe_opts(skel->progs.test_uprobe,
-+				-1, "/proc/self/exe", offset, NULL);
-+	if (!ASSERT_OK_PTR(link, "attach_uprobe"))
-+		goto cleanup;
-+
-+	skel->bss->pid = getpid();
-+
-+	/* Trigger optimization of uprobe in uprobe_fork_test.  */
-+	uprobe_fork_test();
-+	uprobe_fork_test();
-+
-+	/* Make sure it got optimied. */
-+	if (!ASSERT_OK(memcmp(uprobe_fork_test, lea_rsp, sizeof(lea_rsp)), "optimized"))
-+		goto cleanup;
-+
-+	if (clone_vm) {
-+		pid = clone(child_func, stack + sizeof(stack), CLONE_VM|SIGCHLD, skel);
-+		if (!ASSERT_GT(pid, 0, "clone"))
-+			goto cleanup;
-+	} else {
-+		pid = fork();
-+		if (!ASSERT_GE(pid, 0, "fork"))
-+			goto cleanup;
-+		if (pid == 0)
-+			child_func(skel);
-+	}
-+
-+	/* Wait for the child and verify it exited properly with 0. */
-+	err = waitpid(pid, &status, 0);
-+	if (ASSERT_EQ(err, pid, "waitpid")) {
-+		ASSERT_EQ(WIFEXITED(status), 1, "child_exited");
-+		ASSERT_EQ(WEXITSTATUS(status), 0, "child_exit_code");
-+	}
-+
-+cleanup:
-+	uprobe_syscall_executed__destroy(skel);
-+}
-+
- static void __test_uprobe_syscall(void)
- {
- 	if (test__start_subtest("uretprobe_regs_equal"))
-@@ -956,6 +1040,10 @@ static void __test_uprobe_syscall(void)
- 		test_uprobe_race();
- 	if (test__start_subtest("uprobe_red_zone"))
- 		test_uprobe_red_zone();
-+	if (test__start_subtest("uprobe_optimized_fork"))
-+		test_uprobe_fork_optimized(false);
-+	if (test__start_subtest("uprobe_optimized_clone_vm"))
-+		test_uprobe_fork_optimized(true);
- 	if (test__start_subtest("uprobe_error"))
- 		test_uprobe_error();
- 	if (test__start_subtest("uprobe_regs_equal"))
--- 
-2.53.0
+    bpf: Add bpf_list_add to insert node after a given list node
 
+This commit adds a new kfunc bpf_list_add() that inserts 'new' after 'prev'
+in a BPF linked list. The new node must be an owning reference, which the
+kfunc consumes and converts to a non-owning reference upon insertion.
+
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 1c69476c8a094..89579165ef4dc 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+[ ... ]
+> @@ -2577,6 +2577,16 @@ __bpf_kfunc int bpf_list_push_back_impl(struct bpf=
+_list_head *head,
+>  	return bpf_list_push_back(head, node, meta__ign, off);
+>  }
+> =20
+> +__bpf_kfunc int bpf_list_add(struct bpf_list_head *head, struct bpf_list=
+_node *new,
+> +			     struct bpf_list_node *prev__nonown_allowed,
+> +			     struct btf_struct_meta *meta, u64 off)
+> +{
+> +	struct bpf_list_node_kern *n =3D (void *)new, *p =3D (void *)prev__nono=
+wn_allowed;
+> +	struct list_head *prev_ptr =3D &p->list_head;
+> +
+> +	return __bpf_list_add(n, head, &prev_ptr, meta ? meta->record : NULL, o=
+ff);
+> +}
+
+[Severity: Critical]
+Is it possible for this to result in a use-after-free if __bpf_list_add() f=
+ails?
+
+Looking at __bpf_list_add(), it introduces a runtime check that fails if the
+prev node doesn't belong to the target list. When it fails, the function
+calls __bpf_obj_drop_impl() to free the new node and returns -EINVAL.
+
+However, the BPF verifier treats bpf_list_add() as a list push operation.
+During check_kfunc_call(), it unconditionally consumes the owning reference=
+ to
+the new node and converts it to a non-owning reference, assuming static
+success.
+
+If the runtime check fails, the BPF program would be granted a valid
+non-owning reference to the freed new node inside the spinlock critical
+section, potentially leading to memory corruption.
+
+[ ... ]
+> @@ -4756,6 +4766,7 @@ BTF_ID_FLAGS(func, bpf_list_push_front, KF_IMPLICIT=
+_ARGS)
+>  BTF_ID_FLAGS(func, bpf_list_push_front_impl)
+>  BTF_ID_FLAGS(func, bpf_list_push_back, KF_IMPLICIT_ARGS)
+>  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
+> +BTF_ID_FLAGS(func, bpf_list_add, KF_IMPLICIT_ARGS)
+
+[Severity: High]
+Does this kfunc lack a required _impl function?
+
+When a kfunc is marked with KF_IMPLICIT_ARGS, the verifier's
+find_kfunc_impl_proto() explicitly requires a corresponding _impl function
+to resolve the full prototype.
+
+Since there is no bpf_list_add_impl() defined in kernel/bpf/helpers.c and
+registered with BTF, fetch_kfunc_meta() will return -EINVAL. Will this cause
+the verifier to unconditionally reject any BPF program attempting to use
+this kfunc?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260521032306.9711=
+8-1-kaitao.cheng@linux.dev?part=3D6
