@@ -1,137 +1,120 @@
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96733806A6
-	for <bpf@vger.kernel.org>; Thu, 21 May 2026 10:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA1723A6400;
+	Thu, 21 May 2026 10:44:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779358628; cv=none; b=JNwGb+YB7XZJ9HvsBUzk+o5hZaW0SzRy+Ocm6ZgM1TSYvxUALTh/m5CTc05kRcF+9EqYSDdybVuURvP06y6C16VNWSZnxJPZSOcoY1OhmIYbzYPRoKRMSNEDYGm4TmHTTE1X88rMIkYf69r1zEzNwCeg+f+yTrMFSyQjOia1FKk=
+	t=1779360247; cv=none; b=lhVd0R0OKfTcJlGRqSPeEXwTj0X34/CX4VAdRHABUcHjG5IMayyz5aoG2ltX/p5ODK3PPpaoCQKeUbwmpt4z/g4/4bSqf0dguNfLKymOxvfadZ511yFDR3lo9pNo73RwwOpjRYYPvcXUlJWd5GHgi8IhYkftbVWYqUaRhIE1QHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779358628; c=relaxed/simple;
-	bh=gTVwqpZagZa5mCYibePx2zbeiV2CRsJsiELTP61LUSM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=OaI2ggKJNsyE9dq7rAi7FBzF4Ayfo8AS6bOBO2ZsmiVZSoYvkDp6fG3w5EecfKG8B5NHCO01DWW7A40kmjnRyvBu6cmveknSTv8tBTKF9XbDn53VQEc3lGdh7ZVxTzQLApHpMt76uhc7CCSptc40PIzPz0BLwPtt8QrHir9bOMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hYEvHsJ+; arc=none smtp.client-ip=209.85.167.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779360247; c=relaxed/simple;
+	bh=RqNDtK2HZUbaVX0H9gAZGEMe8F1uRt7cXQW3woaDx7c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LKeGZNyF1agupDGwhAl5LkwKVLJuj9BDJmhj1MWqEiuLsW+I7sjV18Mu87vX+YV6P9Ez36npKVDudhOOV4gE7WCUnFTZZ/UssId1PrCdTS516JFLd4UGxKt5AQ6b3AoPBSBiRMLKyauAg1P9Tig0C85v4hDKG1CVVBV8w94I8EU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Zl105t8f; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hYEvHsJ+"
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-479d85152c9so2232818b6e.2
-        for <bpf@vger.kernel.org>; Thu, 21 May 2026 03:17:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779358626; x=1779963426; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=76R8gX0FEqbjjjAZsnw+EspUsb2+PAhzM0rQupZXg5c=;
-        b=hYEvHsJ+hyncey9tzMORTVIdoB1lepxigBGmRmgs5B3sYgAhtnYy131lzckUQqzFVd
-         USGGcITj7EibIApOg9ZyqNyyJAz5aopDC5l2TB2RqqXK6NtYsr4lOJx4fTKQO2vjC62h
-         FrkgjlWwbURaXY8pShK+Nf+FTB1ryqKEoFCdw5BEXgFIOmfzL3ooMBkCt2Fd9DK3nVH3
-         QJA1AKxeUuOdAb/WdKfGyZNPPyUrzbfT5qtmQ59dufUtuiGUj6uozMbSCTBWJw53lRU9
-         dPuLjYkZWAYdDjgFtdJDx31E/28pT7x3kzEa35GTrG7xv3bOPDchbFjKGsoFedX7LAmh
-         b+OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779358626; x=1779963426;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=76R8gX0FEqbjjjAZsnw+EspUsb2+PAhzM0rQupZXg5c=;
-        b=Dd7ypcjFK+v0exd/vEZLEz6BzStKrXrLAAK08o5/MapT7OTUZKwK0HMI1XfktbpbKF
-         W+4b+GrP3bAZ8DP1qEkevgcEaUQwkAgrKhZBKKb3s8Rwmdd7WuAmmUGUDBglAy7mhYjE
-         S25Et9CkbO0vyhRHZ90YMQB+OGkPrIRBFR9L5absPHL2u/iqnM9w15g+gXhV/sxotJZh
-         EVCoLRs6ubu9gjvcn13iCN2AQA+Aix5aIkuiY0Ek3VqSK58pURgUR7Q90aKgH08FXTmB
-         8Nx5jaBgnj/qz0wN+P4t8J06Ysf+hVxUYci+8B1R5c+MQUtqylHYnXZPtNmVB6TP07HR
-         P21A==
-X-Gm-Message-State: AOJu0YyhsgZ4YYELxRZmo7gU3pt8k/w18YcyJFQv9XuyHkJANCwGKVOg
-	003HtjVxgw71pbeprTr8EXxiEtJ/0Qp1tMJGAcLFuaCEIxH1sl7WONCjGGP+Bkko
-X-Gm-Gg: Acq92OGcB0BSPEaM5dKH8XhcdK0HrGvPOJ/FCQsSRNt649+l1e3KyFKsGCGU2pkjBXr
-	PH/D1SyBTIqLkWg+yRCs5yv+aEgV8iWV1Dx7Ibg2VFCxDIbwTF3mjllaEas0FS85J4LzXlT6ZZ6
-	V8pGSzDHUjBGB7tX1M3jQNmkdVx2TsunpEWCVRPBcaypGJ9FFZb2om8YUGmsaY9ie+ssOpDFV+v
-	3qeMInhLjLCPrwPvEWH603L2vG6QJ0Ei2Xqh1v0t9Sxx7hx4TR4S8NO13wbIg9vhYwsBQq6kGeJ
-	eWuEv3LkPjLjOQGmtCrY9i/JH5uneae8CpypqKsR2PEts2dWASKShYT/TJzAo7I3LQJsl54Ivyi
-	eJ7zQ/pzdHJKqHUtLMAwvvutEur382669HDomk6mPoQmSP2Df3q4+bKtSGZyWc5H7GS2RtAsiDs
-	R2otUuZbOqXDQLCGRasfs3+DlO8Z11RB7ZFkyRm/sJ14NQ0gIGRtNRsf7znzKU1dPaBDmDIFsX9
-	O4+5OqUxpbXcA76NA==
-X-Received: by 2002:a05:6820:6ac6:b0:694:914a:ebe1 with SMTP id 006d021491bc7-69d6ef1f6efmr792231eaf.47.1779358625454;
-        Thu, 21 May 2026 03:17:05 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:4e::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69d771c3801sm252630eaf.7.2026.05.21.03.17.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 May 2026 03:17:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Zl105t8f"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64L5oYe33690499;
+	Thu, 21 May 2026 10:44:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=gQKAQo
+	vVj5KvebYkeyee2JaZmc1n25RbL8Ihz6ExJ1s=; b=Zl105t8fUfpJWPgPuqT5jv
+	sAxQ+WPTV1uUx8x1nZEp7llcHOlxjZsjCYPlmpN0JTI0kRs0ffiUy2y3/C3Xqfp1
+	a5JW3U33VbywZ8vC4wAcC4XUPWePi1s64hDAIMYlxz4Bu4Zscedenk25dS9u9zKY
+	QpmdGQFeqnePfjo9Ak3ouXFJcPAOuT/OeMSV3cIbTJQRS6Gr+KTntxz6hgLnyfDB
+	YhndmEmP7UMhKuVYuh/soApcxg1k7SLyp9xiexxNfV0nOnjQ5RSsuih55xCpjWHW
+	8Hr8q0EZyZWZ+nUTfKtvp1RI2d/W3itw7FyGfbDF3XoU1eANFFzD6bMIh9+qQIIg
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6hawd8ds-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 May 2026 10:44:04 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64LAdBvx012570;
+	Thu, 21 May 2026 10:44:03 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e75kybcht-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 May 2026 10:44:03 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64LAi1h914025166
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 21 May 2026 10:44:01 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id AE83220043;
+	Thu, 21 May 2026 10:44:01 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9B12120040;
+	Thu, 21 May 2026 10:44:01 +0000 (GMT)
+Received: from [9.52.200.195] (unknown [9.52.200.195])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 21 May 2026 10:44:01 +0000 (GMT)
+Message-ID: <cab20a39-6102-4e4d-b9d8-2daa79740f4c@linux.ibm.com>
+Date: Thu, 21 May 2026 12:44:00 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v15 07/20] unwind_user/sframe: Wire up unwind_user to
+ sframe
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260520154004.3845823-8-jremus@linux.ibm.com>
+ <20260520162345.F13D61F000E9@smtp.kernel.org>
+Content-Language: en-US
+From: Jens Remus <jremus@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20260520162345.F13D61F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 21 May 2026 03:17:03 -0700
-Message-Id: <DIO9ZMXP4AP8.2U06P4YWLPFV@gmail.com>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH] bpf, libbpf: reject non-exclusive metadata maps in the
- signed loader
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "KP Singh" <kpsingh@kernel.org>, <sashiko-reviews@lists.linux.dev>
-X-Mailer: aerc
-References: <20260519215358.126364-1-kpsingh@kernel.org>
- <20260519231709.3D4561F000E9@smtp.kernel.org>
- <CACYkzJ6rxGSrixr9sChFyXyu3JcjG3JmZGR5YgA0vV0WNJPs0g@mail.gmail.com>
-In-Reply-To: <CACYkzJ6rxGSrixr9sChFyXyu3JcjG3JmZGR5YgA0vV0WNJPs0g@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIxMDEwNSBTYWx0ZWRfX0jRx3K49UQ5+
+ 4fH21LO94AxV3oqjL06bU41zaPOkaXI16aJ4mq6iNYmwe3DOZOIvNMKCq5jdYI2ogdBExvRiMQC
+ /Inea1zPnKGuLMCXFxK2DBr1fZYsuF3DCyz9OtzWaZ+LrGbnBMiMtRMZb3Kp3N5BqGon4MpH6Zp
+ Dv/smxc0n53yI0/2alkeRIPqMyBBtgsoYAdWmL3MVxxNOmmj11hv947TcFQml/xG2vPBOQ1uiFI
+ IOVpPLnTjQ/fg/mmVPjuOCFA4ISgYVLGp74f2rvRHEm7UZNOPLSNrnEunvA/XAQEOPXO67e/JM8
+ yjv9VLkNSC5k5ZKUUQNzFcpuz2s3b0d6L2GlsAdWZ5KlyOfRtzS/z2laUjk44iVCRccXfHfZArS
+ 4yvV1Kt0/2sB5WeFUxlTbG6ahpNFsA5D8kFpN87KKbTdSJ07Vwjxw4471iQ+HHk9y7r5dXoYKty
+ Xw3fJU3idxS4j2+XUvA==
+X-Authority-Analysis: v=2.4 cv=Np/htcdJ c=1 sm=1 tr=0 ts=6a0ee1f4 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8
+ a=VwQbUJbxAAAA:8 a=Zg_fgM-7fzLk7_7bOdYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: qs5oOQeeBM0gd5hmpCAwXu4HbvN_lzLs
+X-Proofpoint-GUID: qs5oOQeeBM0gd5hmpCAwXu4HbvN_lzLs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-21_01,2026-05-18_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 spamscore=0 clxscore=1015 priorityscore=1501 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 adultscore=0 phishscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605210105
 
-On Tue May 19, 2026 at 8:00 PM PDT, KP Singh wrote:
-> On Wed, May 20, 2026 at 1:17=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
->>
->> Thank you for your contribution! Sashiko AI review found 2 potential iss=
-ue(s) to consider:
->> - [High] The generated BPF loader program uses a hardcoded 8-byte read (=
-BPF_DW) to access the `excl_prog_sha` pointer field, which causes the BPF v=
-erifier to reject the loader on 32-bit architectures and silently bypasses =
-the exclusivity check.
->
-> I plan to move this to the kernel with a kfunc anyways. Any
-> suggestions for the 32 bit fix (apart from an ugly union in bpf_map).
+On 5/20/2026 6:23 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> 
+> Pre-existing issues:
+> - [High] Incorrect FRE size calculation completely breaks SFrame parsing for functions with multiple FREs.
 
-Use _bpf_md_ptr(). It's a normal pattern.
+Fixed in next version of "[PATCH v15 05/20] unwind_user/sframe: Add
+support for reading .sframe contents".
 
->> - [High] Branch target offset calculation is off-by-one, causing the jum=
-p target to land past the beginning of the cleanup block.
->> --
->
-> Yeah this is valid:
->
->  Compute the cleanup-label offset after emitting the MOV that sets the
->   error code in R7. Otherwise the JMP lands one insn past cleanup_label
->   and skips the first FD-close, matching the emit_check_err() pattern.
->
-> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-> index becfda5b9025..6950443ba698 100644
-> --- a/tools/lib/bpf/gen_loader.c
-> +++ b/tools/lib/bpf/gen_loader.c
-> @@ -592,9 +592,9 @@ static void emit_signature_match(struct bpf_gen *gen)
->                 gen->hash_insn_offset[i] =3D gen->insn_cur - gen->insn_st=
-art;
->                 emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_3, 0, 0, 0, 0, 0=
-));
->
-> -               off =3D  -(gen->insn_cur - gen->insn_start -
-> gen->cleanup_label) / 8 - 1;
-> +               emit(gen, BPF_MOV64_IMM(BPF_REG_7, -EINVAL));
-> +               off =3D -(gen->insn_cur - gen->insn_start -
-> gen->cleanup_label) / 8 - 1;
->                 if (is_simm16(off)) {
-> -                       emit(gen, BPF_MOV64_IMM(BPF_REG_7, -EINVAL));
+Regards,
+Jens
+-- 
+Jens Remus
+Linux on Z Development (D3303)
+jremus@de.ibm.com / jremus@linux.ibm.com
 
-maybe fix the math instead of moving this emit ?
-Also split the fix into pre-patch.
-
->                         emit(gen, BPF_JMP_REG(BPF_JNE, BPF_REG_2,
-> BPF_REG_3, off));
->                 } else {
->                         gen->error =3D -ERANGE;
-
-and while at it remove redundant 'emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, -1));=
-'
-
-pw-bot: cr
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
 
