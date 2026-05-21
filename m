@@ -1,136 +1,150 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CAE6364EA5;
-	Thu, 21 May 2026 15:31:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9BD36920F
+	for <bpf@vger.kernel.org>; Thu, 21 May 2026 15:37:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779377467; cv=none; b=tomhQHluBQ57FE/OC7eEfQDFUCwQdAFSb6MyTv2BLPZp2lHge4AWCy8aDZZ4MPIN1D/a8kQhyEV1/pxmcfIAvknxvPFiNJrI+GwR2c1AEpEYhoV7cwudIDyyXxq3N9mm+i2OYGPZBWIIcjrQupTt/4Du6h6phUfLujntI4V/iHg=
+	t=1779377825; cv=none; b=Gp91sp+vkYuVpWK5Cfyx2ZJmaAK/YUC6cRVv3sIwn7RbZx5Y0aUnPXKm9IjzW/dCN7Auir5ASHBs/h3nTMHq60RM/3Ujm0nF60yqmtwe/hvgNdgZfPjCzAR5HREnNmVKbzIFFD0nUCT6ZaL4cIIVaMcii39RMtR/FjWpgkgUUE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779377467; c=relaxed/simple;
-	bh=H6ijgxk2s1Fo45SirC0V9snxZFD/I0UxNcyKfJ3EVJY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BfXXEdniE+kFYfR/A9Fp+SzQhnjMO8kcD+SLnlRSpU4OnaCip558fONRH/upuitIzmM764Oq8n/ZAsIvgpLm/dymOzqWMeZ6ij0BNWURSGx6V+Iu8BXql/6GAQGLdsMd4EYPoTSFZe56InIMnERlYg8c2obhx7tEfckEg35VoFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SkKyGWpi; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779377825; c=relaxed/simple;
+	bh=fR3XdXcHsdRbeY1C7lahAmITmKRnxghqIa5ok/ggsYA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=QjPAGIblU/qhr6dtCC09yeq6tUZqspHVXsL/lxTqUfkA9v3UtHrdtdd5NvVQfzlgaWvjAqgXaTGQo1nOnWO1YhLwU+QkTs/6Gl+sT7wsHMwd4xO1/Gm71zMdcYww1bv75znBkfl1PpSHzJNC/ocDT+CPnksq0QzXTBWu48Yt+ts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nc2F3Yng; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SkKyGWpi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4676B1F000E9;
-	Thu, 21 May 2026 15:31:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nc2F3Yng"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 457091F0155A;
+	Thu, 21 May 2026 15:37:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779377466;
-	bh=SzgQopk+OJbawn6MS3++ZN/v/mlrkfJHDvOTVpisjLg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=SkKyGWpiSdHqwlEW5hRU8HF957D2LfgRuejLdlkS3dkYVnNKoDiFha3xy5VruV5pQ
-	 teYXwsQBQSLpCH8VREZqyFENDwEo2GGr6hi6pHEIUAmJu+7aF4BMNAJzRn80ujIEwX
-	 ZDtFWCyjrTMifEUvFbND7kRHRpsHQBznZZBRf6rTRCX6couB9xqSb1FZ9IgkHwdfN3
-	 OUk1MZnJH3l58EQVdpEw0MAGLpTBOaJTMf6q8mhNj+7MpDIgNxTfiFYxcwv+6QcWTh
-	 TsuvaKWkGvB4YEZg98ftRP4ds4WvuqpuO+aMVWSFNgEb5mYYrwJ7AuMbu21ag/JM4c
-	 idE8BbkP3uUKw==
-Date: Thu, 21 May 2026 11:31:05 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org, live-patching@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Joshua Peisach <jpeisach@ubuntu.com>,
-	Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>,
-	Anthony Iliopoulos <ailiop@suse.com>,
-	Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Christian Brauner <brauner@kernel.org>,
-	KP Singh <kpsingh@kernel.org>
-Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation
- primitive
-Message-ID: <ag8lOe6dAOgnWmsQ@laps>
-References: <20260508195749.1885522-1-sashal@kernel.org>
- <20260517134858.146569-1-sashal@kernel.org>
- <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
- <agsVDqdALBoHEHlv@laps>
- <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
- <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net>
- <agzAwjKhOhuANz_P@laps>
- <3dd6d852-18fb-4c64-a1ae-0d79ef7c061f@iogearbox.net>
+	s=k20260515; t=1779377824;
+	bh=Nac0m+wwbCJsQvTZ8aBB/72T9c4o0mlSCwNP3f3DOLw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=nc2F3YngCl42YVu12OrOaqUJRPOa2WXo62izFjjCr3V8KYJowg22HtpVFFQsfXVtw
+	 aH/Ted967tQUNxFcSzP4uJzrzOOOijcLYaNz8N7XJ/IcecFddMFeuZlwcCf50pmpVV
+	 xKUSQbtnx/6mvaO3nrEDPAExAxcWXGbUkQCGFU37JSzPYs0jKjPGf/rNAmsGDu5w24
+	 73SmuvxeMhHQne3jpHlMJCt9n928AUiDipz1nobBdFIHJmfWAeboDdYu0cOSNz9Pzm
+	 FmkDMZCBurdd3CpWpaP0k7BMO/BjoNfM+k6IRvMMtrO23bLbQG5y7ezoYf8yfd4JG/
+	 G9nDcRj9zjiDQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v16 18/20] unwind_user/sframe: Duplicate registered
+ .sframe section data on clone/fork
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jens Remus" <jremus@linux.ibm.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260521142546.3908498-19-jremus@linux.ibm.com>
+References: <20260521142546.3908498-19-jremus@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 21 May 2026 15:37:03 +0000
+Message-Id: <20260521153704.457091F0155A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <3dd6d852-18fb-4c64-a1ae-0d79ef7c061f@iogearbox.net>
 
-On Thu, May 21, 2026 at 11:11:16AM +0200, Daniel Borkmann wrote:
->On 5/19/26 9:57 PM, Sasha Levin wrote:
->>Sure, this would also work. How do you see this happening? Can we let a certain
->>user/pid/etc disable the allowlist if they choose to?
->
->I don't think we should, given then we're back to square one where root
->or some other user would be able to just override/bypass an LSM.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-killswitch already disables itself when lockdown is active. We can easily
-disable it too when one of the LSMs that cares about this is active.
+New issues:
+- [Critical] Use-After-Free of maple tree nodes due to lockless traversal w=
+ithout RCU protection.
+- [Medium] Mixing goto-based error handling with guard() in the same functi=
+on.
 
->[...]
->>How do you see this working with the allowlist?
->
->We should look at the underlying areas where most of the CVE-like fixes
->took place (these days should be more easily doable given Claude and friends)
->and based on that either extend ALLOW_ERROR_INJECTION() or (better) create
->new hooks which BPF LSM can consume where you can then have a policy to reject
->requests and tighten the attack surface. For example, the AF_ALG stuff you
+Pre-existing issues:
+- [High] Spinlock deadlock due to calling `mtree_erase` from NMI/interrupt =
+context.
+--
 
-So we could grow the LSM tentacles deeper into the kernel, and we can see where
-current CVEs are happening, which I suspect is the darker corners of the kernel
-(old unmaintained, rarely used code), but this definitely won't stay the case,
-right? Newer and better LLMs will discover issues elsewhere, and once the low
-hanging fruits are picked off of the current target subsystems, researchers
-will move elsewhere. We will be dooming ourselves to an endless cat and mouse
-game where we go add LSM hooks after some big security issue goes public.
+commit dd76a8e2b70424efa3c49c5cac126edfd3a77425
+Author: Jens Remus <jremus@linux.ibm.com>
 
-One question I had here: how would we tackle security issues with BPF itself?
+unwind_user/sframe: Duplicate registered .sframe section data on clone/fork
+   =20
+When duplicating a process' virtual memory mappings also duplicate all
+of its registered .sframe sections stored in the per-mm maple tree to
+enable stacktracing using sframe of the child process.
 
->can already easily cover today ...
->
->#include "vmlinux.h"
->#include <bpf/bpf_helpers.h>
->#include <bpf/bpf_tracing.h>
->
->#define AF_ALG	38
->#define EPERM	1
->
->char _license[] SEC("license") = "Dual BSD/GPL";
->
->SEC("lsm/socket_create")
->int BPF_PROG(block_af_alg, int family, int type, int protocol, int kern)
->{
->	if (family == AF_ALG)
->		return -EPERM;
->	return 0;
->}
->
->... the problem is that distros enable and pull in all sort of crap which
->then non-root could pull in via request_module() as an example; similarly
->for netlink we want to have a BPF LSM policy to parse into netlink requests
->and then reject based on certain attribute matching (both on our todo list)
->which would have helped in case of exotic tc cls/act/qdisc modules to prevent
->them to be pulled from userns. I bet there are a ton more examples once we
->look further into the data.
+> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+> index 7f439600b0f0a..db88d993dff1f 100644
+> --- a/kernel/unwind/sframe.c
+> +++ b/kernel/unwind/sframe.c
 
-I definitely agree that BPF is a much nicer hammer than the simple killswitch
-implementation. I've actually been (privately) playing with an out of tree
-killswitch that also supports BPF. I've pushed the (hacky) code I have to
-https://github.com/sashalevin/killswitch , and you can see an example of a BPF
-mitigation similar to the one you have above:
+[ ... ]
 
-https://github.com/sashalevin/killswitch/blob/master/mitigations/cve-2025-21703.sh
+> @@ -875,6 +875,54 @@ int sframe_remove_section(unsigned long sframe_start)
+> +int sframe_dup_mm(struct mm_struct *mm, struct mm_struct *oldmm)
+> +{
+> +	struct sframe_section *sec, *oldsec;
+> +	unsigned long index =3D 0;
+> +	int ret;
+> +
+> +	guard(srcu)(&sframe_srcu);
+> +
+> +	mt_for_each(&oldmm->sframe_mt, oldsec, index, ULONG_MAX) {
 
-My concern is mostly with the whitelist approach.
+[Severity: Critical]
+Does this lockless iteration risk a use-after-free on maple tree nodes?
 
--- 
-Thanks,
-Sasha
+The maple tree is initialized via INIT_MM_SFRAME as MTREE_INIT(sframe_mt,
+0), which omits the MT_FLAGS_USE_RCU flag. Without this flag, tree
+modifications free internal tree nodes synchronously via kfree() instead
+of call_rcu().
+
+If sframe_remove_section() modifies the tree concurrently, could this
+lockless mt_for_each() access freed maple tree nodes?
+
+[Severity: High]
+This isn't a bug introduced by this patch, but looking at how the maple
+tree is used here and in sframe_remove_section(), is there a deadlock
+risk if sframe_remove_section() is called from NMI/interrupt context?
+
+Since stack unwinding can occur asynchronously in NMI or hardirq context
+(e.g., via perf_callchain_user), if it detects a corrupted section and
+triggers sframe_remove_section() which ultimately calls mtree_erase(),
+that will take a non-IRQ-safe spin_lock via mtree_lock(mt).
+
+If an NMI interrupts a thread that is already holding the mtree_lock
+(for instance, during sframe_add_section), could this instantly
+hard-deadlock?
+
+> +		sec =3D kzalloc(sizeof(*sec), GFP_KERNEL_ACCOUNT);
+> +		if (!sec)
+> +			return -ENOMEM;
+> +
+> +		__sframe_dup_section(sec, oldsec);
+> +
+> +		ret =3D mtree_insert_range(&mm->sframe_mt,
+> +					 sec->text_start,
+> +					 sec->text_end - 1,
+> +					 sec, GFP_KERNEL_ACCOUNT);
+> +		if (ret)
+> +			goto err_free;
+> +	}
+> +
+> +	return 0;
+> +
+> +err_free:
+
+[Severity: Medium]
+Are we mixing goto-based error handling and scope-based cleanups in the
+same function?
+
+This function declares guard(srcu)(&sframe_srcu) at the top, but then
+uses a goto-based cleanup label here. According to the cleanup subsystem
+guidelines in include/linux/cleanup.h, mixing goto and scope-based
+cleanup helpers in the same function creates confusing ownership
+semantics.
+
+Should this function either convert all resources to scope-based cleanup,
+or convert none of them?
+
+> +	free_section(sec);
+> +	return ret;
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260521142546.3908=
+498-1-jremus@linux.ibm.com?part=3D18
