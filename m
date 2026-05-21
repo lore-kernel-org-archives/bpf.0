@@ -1,99 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6425340A62;
-	Thu, 21 May 2026 10:00:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96733806A6
+	for <bpf@vger.kernel.org>; Thu, 21 May 2026 10:17:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779357608; cv=none; b=OlaXV6WKiUENkI1hZpxhetR0PdpaydiqhreC9EVfLo61J7JlQw3VrjcJ4Gbo7SOup9nLo1lLd/UYiLee2/tj/oAOlsiKKQR7HcmxqHgd3MXNuz5D4J2TN3QOaHN6GgEi6gRtCSawyN7OsvyOubWKY4kiPgGPkXXh1PpXr7doaBs=
+	t=1779358628; cv=none; b=JNwGb+YB7XZJ9HvsBUzk+o5hZaW0SzRy+Ocm6ZgM1TSYvxUALTh/m5CTc05kRcF+9EqYSDdybVuURvP06y6C16VNWSZnxJPZSOcoY1OhmIYbzYPRoKRMSNEDYGm4TmHTTE1X88rMIkYf69r1zEzNwCeg+f+yTrMFSyQjOia1FKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779357608; c=relaxed/simple;
-	bh=jdY9hs85Twhae/3vlnByBxA+RRCbVKD6yusjjOcEM1k=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=SXzN5ehucGPgcrRqq4x6E5jj+spt+Vc5w+WWQHyNtZ4IKolOitQ6MwsXLFXuckMF6q8MzVBx273uK7whAuQmoDmOgohu53AwkszTT1yFrPxULK/sgO7lWTpvd6mCYLn/u+VqysEbJOtgNqvErwB0EjYC3Zk/Hlq7CtHBac9mvkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jzDxdjYW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779358628; c=relaxed/simple;
+	bh=gTVwqpZagZa5mCYibePx2zbeiV2CRsJsiELTP61LUSM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=OaI2ggKJNsyE9dq7rAi7FBzF4Ayfo8AS6bOBO2ZsmiVZSoYvkDp6fG3w5EecfKG8B5NHCO01DWW7A40kmjnRyvBu6cmveknSTv8tBTKF9XbDn53VQEc3lGdh7ZVxTzQLApHpMt76uhc7CCSptc40PIzPz0BLwPtt8QrHir9bOMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hYEvHsJ+; arc=none smtp.client-ip=209.85.167.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jzDxdjYW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 604721F000E9;
-	Thu, 21 May 2026 10:00:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779357607;
-	bh=EYCTLIm2++uhi2F9BBgSIQc+tlzAzzrgP0ECrTYgJQw=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=jzDxdjYWPqbUrRXYT2TuhXROt13p+lP3+YTyKEJzxdxu2Ira4qmbq+KacOFWjbIeu
-	 yQUZn0pFrCwUIqzgVfcIbmULLX+VGVncJCckevSCetqyasqx8ryUWXCTHOS7jMlR8y
-	 5HnUghIcVkqll0lnsRjMaHoQg8XFWFsq1u0cRNlW3QofWkH30SY2umnfXfiFb5J+jp
-	 hcQBvqjaaUFbqH7vrkjDMQNPo59LJvekMiXAnvoU35A57nGj+C9MVZ1rcJiiKoX7eM
-	 12/z2RMISlrXaXV0oQxqtm5NCTVsflRDG0ctgIfDXRIn1CVBUxjwHtbb0meTKwkMGa
-	 jWLVlkFeqJLeg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 939213930D21;
-	Thu, 21 May 2026 10:00:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hYEvHsJ+"
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-479d85152c9so2232818b6e.2
+        for <bpf@vger.kernel.org>; Thu, 21 May 2026 03:17:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779358626; x=1779963426; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=76R8gX0FEqbjjjAZsnw+EspUsb2+PAhzM0rQupZXg5c=;
+        b=hYEvHsJ+hyncey9tzMORTVIdoB1lepxigBGmRmgs5B3sYgAhtnYy131lzckUQqzFVd
+         USGGcITj7EibIApOg9ZyqNyyJAz5aopDC5l2TB2RqqXK6NtYsr4lOJx4fTKQO2vjC62h
+         FrkgjlWwbURaXY8pShK+Nf+FTB1ryqKEoFCdw5BEXgFIOmfzL3ooMBkCt2Fd9DK3nVH3
+         QJA1AKxeUuOdAb/WdKfGyZNPPyUrzbfT5qtmQ59dufUtuiGUj6uozMbSCTBWJw53lRU9
+         dPuLjYkZWAYdDjgFtdJDx31E/28pT7x3kzEa35GTrG7xv3bOPDchbFjKGsoFedX7LAmh
+         b+OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779358626; x=1779963426;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=76R8gX0FEqbjjjAZsnw+EspUsb2+PAhzM0rQupZXg5c=;
+        b=Dd7ypcjFK+v0exd/vEZLEz6BzStKrXrLAAK08o5/MapT7OTUZKwK0HMI1XfktbpbKF
+         W+4b+GrP3bAZ8DP1qEkevgcEaUQwkAgrKhZBKKb3s8Rwmdd7WuAmmUGUDBglAy7mhYjE
+         S25Et9CkbO0vyhRHZ90YMQB+OGkPrIRBFR9L5absPHL2u/iqnM9w15g+gXhV/sxotJZh
+         EVCoLRs6ubu9gjvcn13iCN2AQA+Aix5aIkuiY0Ek3VqSK58pURgUR7Q90aKgH08FXTmB
+         8Nx5jaBgnj/qz0wN+P4t8J06Ysf+hVxUYci+8B1R5c+MQUtqylHYnXZPtNmVB6TP07HR
+         P21A==
+X-Gm-Message-State: AOJu0YyhsgZ4YYELxRZmo7gU3pt8k/w18YcyJFQv9XuyHkJANCwGKVOg
+	003HtjVxgw71pbeprTr8EXxiEtJ/0Qp1tMJGAcLFuaCEIxH1sl7WONCjGGP+Bkko
+X-Gm-Gg: Acq92OGcB0BSPEaM5dKH8XhcdK0HrGvPOJ/FCQsSRNt649+l1e3KyFKsGCGU2pkjBXr
+	PH/D1SyBTIqLkWg+yRCs5yv+aEgV8iWV1Dx7Ibg2VFCxDIbwTF3mjllaEas0FS85J4LzXlT6ZZ6
+	V8pGSzDHUjBGB7tX1M3jQNmkdVx2TsunpEWCVRPBcaypGJ9FFZb2om8YUGmsaY9ie+ssOpDFV+v
+	3qeMInhLjLCPrwPvEWH603L2vG6QJ0Ei2Xqh1v0t9Sxx7hx4TR4S8NO13wbIg9vhYwsBQq6kGeJ
+	eWuEv3LkPjLjOQGmtCrY9i/JH5uneae8CpypqKsR2PEts2dWASKShYT/TJzAo7I3LQJsl54Ivyi
+	eJ7zQ/pzdHJKqHUtLMAwvvutEur382669HDomk6mPoQmSP2Df3q4+bKtSGZyWc5H7GS2RtAsiDs
+	R2otUuZbOqXDQLCGRasfs3+DlO8Z11RB7ZFkyRm/sJ14NQ0gIGRtNRsf7znzKU1dPaBDmDIFsX9
+	O4+5OqUxpbXcA76NA==
+X-Received: by 2002:a05:6820:6ac6:b0:694:914a:ebe1 with SMTP id 006d021491bc7-69d6ef1f6efmr792231eaf.47.1779358625454;
+        Thu, 21 May 2026 03:17:05 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:4e::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69d771c3801sm252630eaf.7.2026.05.21.03.17.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 May 2026 03:17:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v11 0/8] bpf: Extend the bpf_list family of APIs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177935761713.4009125.10546736561517078452.git-patchwork-notify@kernel.org>
-Date: Thu, 21 May 2026 10:00:17 +0000
-References: <20260521032306.97118-1-kaitao.cheng@linux.dev>
-In-Reply-To: <20260521032306.97118-1-kaitao.cheng@linux.dev>
-To: Kaitao Cheng <kaitao.cheng@linux.dev>
-Cc: ast@kernel.org, corbet@lwn.net, martin.lau@linux.dev,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- chengkaitao@kylinos.cn, skhan@linuxfoundation.org, memxor@gmail.com,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- vmalik@redhat.com, linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 21 May 2026 03:17:03 -0700
+Message-Id: <DIO9ZMXP4AP8.2U06P4YWLPFV@gmail.com>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: [PATCH] bpf, libbpf: reject non-exclusive metadata maps in the
+ signed loader
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "KP Singh" <kpsingh@kernel.org>, <sashiko-reviews@lists.linux.dev>
+X-Mailer: aerc
+References: <20260519215358.126364-1-kpsingh@kernel.org>
+ <20260519231709.3D4561F000E9@smtp.kernel.org>
+ <CACYkzJ6rxGSrixr9sChFyXyu3JcjG3JmZGR5YgA0vV0WNJPs0g@mail.gmail.com>
+In-Reply-To: <CACYkzJ6rxGSrixr9sChFyXyu3JcjG3JmZGR5YgA0vV0WNJPs0g@mail.gmail.com>
 
-Hello:
+On Tue May 19, 2026 at 8:00 PM PDT, KP Singh wrote:
+> On Wed, May 20, 2026 at 1:17=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
+>>
+>> Thank you for your contribution! Sashiko AI review found 2 potential iss=
+ue(s) to consider:
+>> - [High] The generated BPF loader program uses a hardcoded 8-byte read (=
+BPF_DW) to access the `excl_prog_sha` pointer field, which causes the BPF v=
+erifier to reject the loader on 32-bit architectures and silently bypasses =
+the exclusivity check.
+>
+> I plan to move this to the kernel with a kfunc anyways. Any
+> suggestions for the 32 bit fix (apart from an ugly union in bpf_map).
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Use _bpf_md_ptr(). It's a normal pattern.
 
-On Thu, 21 May 2026 11:22:58 +0800 you wrote:
-> In BPF, a list can only be used to implement a stack structure.
-> Due to an incomplete API set, only FIFO or LIFO operations are
-> supported. The patches enhance the BPF list API, making it more
-> list-like.
-> 
-> Five new kfuncs have been added:
-> bpf_list_del: remove a node from the list
-> bpf_list_add_impl: insert a node after a given list node
-> bpf_list_is_first: check if a node is the first in the list
-> bpf_list_is_last: check if a node is the last in the list
-> bpf_list_empty: check if the list is empty
-> 
-> [...]
+>> - [High] Branch target offset calculation is off-by-one, causing the jum=
+p target to land past the beginning of the cleanup block.
+>> --
+>
+> Yeah this is valid:
+>
+>  Compute the cleanup-label offset after emitting the MOV that sets the
+>   error code in R7. Otherwise the JMP lands one insn past cleanup_label
+>   and skips the first FD-close, matching the emit_check_err() pattern.
+>
+> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+> index becfda5b9025..6950443ba698 100644
+> --- a/tools/lib/bpf/gen_loader.c
+> +++ b/tools/lib/bpf/gen_loader.c
+> @@ -592,9 +592,9 @@ static void emit_signature_match(struct bpf_gen *gen)
+>                 gen->hash_insn_offset[i] =3D gen->insn_cur - gen->insn_st=
+art;
+>                 emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_3, 0, 0, 0, 0, 0=
+));
+>
+> -               off =3D  -(gen->insn_cur - gen->insn_start -
+> gen->cleanup_label) / 8 - 1;
+> +               emit(gen, BPF_MOV64_IMM(BPF_REG_7, -EINVAL));
+> +               off =3D -(gen->insn_cur - gen->insn_start -
+> gen->cleanup_label) / 8 - 1;
+>                 if (is_simm16(off)) {
+> -                       emit(gen, BPF_MOV64_IMM(BPF_REG_7, -EINVAL));
 
-Here is the summary with links:
-  - [bpf-next,v11,1/8] bpf: refactor __bpf_list_del to take list node pointer
-    https://git.kernel.org/bpf/bpf-next/c/cb339ac61d72
-  - [bpf-next,v11,2/8] bpf: clear list node owner and unlink before drop
-    https://git.kernel.org/bpf/bpf-next/c/cfa6afa4b931
-  - [bpf-next,v11,3/8] bpf: allow non-owning list-node args via __nonown_allowed
-    https://git.kernel.org/bpf/bpf-next/c/7c8c71591b76
-  - [bpf-next,v11,4/8] bpf: Introduce the bpf_list_del kfunc.
-    https://git.kernel.org/bpf/bpf-next/c/187baa10963a
-  - [bpf-next,v11,5/8] bpf: refactor __bpf_list_add to take insertion point via **prev_ptr
-    https://git.kernel.org/bpf/bpf-next/c/e6919ff67c1e
-  - [bpf-next,v11,6/8] bpf: Add bpf_list_add to insert node after a given list node
-    https://git.kernel.org/bpf/bpf-next/c/a3493ca504f1
-  - [bpf-next,v11,7/8] bpf: add bpf_list_is_first/last/empty kfuncs
-    https://git.kernel.org/bpf/bpf-next/c/745515d386eb
-  - [bpf-next,v11,8/8] selftests/bpf: Add test cases for bpf_list_del/add/is_first/is_last/empty
-    https://git.kernel.org/bpf/bpf-next/c/ba3dc064f406
+maybe fix the math instead of moving this emit ?
+Also split the fix into pre-patch.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+>                         emit(gen, BPF_JMP_REG(BPF_JNE, BPF_REG_2,
+> BPF_REG_3, off));
+>                 } else {
+>                         gen->error =3D -ERANGE;
 
+and while at it remove redundant 'emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, -1));=
+'
+
+pw-bot: cr
 
