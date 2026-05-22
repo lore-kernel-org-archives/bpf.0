@@ -1,163 +1,188 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD5D86329
-	for <bpf@vger.kernel.org>; Fri, 22 May 2026 21:28:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67BED38C2B8;
+	Fri, 22 May 2026 21:44:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779485295; cv=none; b=TW6PxXB0ReBYUiZmepNhzoKTWSLKPvYil/GszrS1hJUcy9LAc08Lnu8mItwVmiyvIU35Hmjl2v+LEgQaGLJtMAjaVVE8LAg+O9serzVTbrJJgWlvgvQIv3qnYWhAclPcCvGmcRWA6gInTNWLEiAqdUdHjUpIj95wW3IXgi8Nd+g=
+	t=1779486277; cv=none; b=XyKJ6LgsC2UUyWAdqi0UBneuQ3Syzb+Ds1pWfC9/rU8t1pOwYeDsrMqfxbEssdgklmSMiN8jG8HE/Xs2EacuKNXVY39W84i7Kt4l9sRl6IxBCPoJm+t2UZYhGE0uVfEzwE9zfwhJoCCkIh39RxYUwVdrjrZAFjp9VdefYNESFYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779485295; c=relaxed/simple;
-	bh=/3mYuMpih6h7o89GWFuy3MkfmF1FF388AVeQ64/C8gc=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lLwZSX5Z7l3DArIc9a8mieJFOrKKnhNXw8pOzHY+0Hgrl2RljMWaj0MF0gP8BPqc15ONvc0MIbSKfoOK6q76Zfl77IeuOhXm+ryL4BOTN7xxRnC+NNh3eucc3gJsf/FCjyIbGFdP9uquOdIZCU3h1s5VpCIMbQHrWAxhNQ6NhsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mjGwgKTT; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779486277; c=relaxed/simple;
+	bh=6B49KJeSmyDlaJsaYT7PxMnukkQ2VTElGL9lgXPtWnc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qmfGUs0AxRWBqFQmg4UipeiuKgc035iaZj9gLDP0ytLGefCl/bpXUGmk1YJ1KKTNhf7B/AnfNy1dh3F/8ASXyTvlucamvbgsbubA0Eghe1aGTcgDI+ZBXVBKsr0/BcGHR91pwcqfYAE55oAUGoGncdccCX+Ct/GxrtlYQHfHjTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=N81vJOAn; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mjGwgKTT"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4903fd19957so17798635e9.1
-        for <bpf@vger.kernel.org>; Fri, 22 May 2026 14:28:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779485292; x=1780090092; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=kDZsLCYDn+uHPa1sJ7xx5w7pXVEbnPStdK+Lr9CPDE0=;
-        b=mjGwgKTTuLsa+XKqQr8gSFyBcVSm0LNwsgrJR27WrgdhM/AHkdBfOS0Iz5mxNKqLLn
-         ZPmVMkGKhj5XE82//xFMEi+FIkK9OSdMq3OlX/jefxhU23kC1k0ZWfXnW0l3MLzmCzUd
-         Ue7ZLyCOfOBpUoGzHISxUFVbB5QIgI9Xom1wvlpntFv3JbAv9qbNZp0C3Zj9q2Gb6qjj
-         x8XD44kBdSojwKoCQiFJ4dWbeDc2L0pP28t8vxtCBdFsBOcLKEpeOTW0uEevIfkM5LNF
-         4/kE1SWcpmjaVJkapCDYiuCCW8MIjfVIsLO7OCZXqNpU8Jb87G3JydXLxFuhnVPiKCJV
-         T2gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779485292; x=1780090092;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kDZsLCYDn+uHPa1sJ7xx5w7pXVEbnPStdK+Lr9CPDE0=;
-        b=bry3UCpk0CKstzHbKXv69yX6YA0E1OVQnfaCHlD4oJ3fk34N6jlgpZtqMgIKRUDktu
-         1SqWZykjvfVaBpelCVDwvOsSY0fpgKRS9WdbHKx+H7kIViCCRBV4ddq7824376CJ6rfy
-         K3hbwxf3Ypjsi0cX6lSYVoR5eSALXP3RfES+n4hUnO66yqpV3pgw4uvjsTlwPPW7MtCs
-         m5suLaMjHmbSur0MwBA1zm1Eq2vTb1wyyRl0hN71QoTKPmAB96CMujRx8CgrMbhBNSpJ
-         6IV0PS98e9Jna6LhZ/T3ry/cLuYb/3jn/0ikHOhf+yvJ9dj/5I+t801+nxS2JOduY2a9
-         NmCA==
-X-Forwarded-Encrypted: i=1; AFNElJ/cKAVl4OKKvKx3I0olFD4HfaLXWfn1IlDhqYfkYtNrBN+8sgvl/Vcm65MDWGPChqH35lg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhKwBf/iYzFQ9XT/JcO0IvcF/f8Xzgno3kA4aeIk6tIP97Xuqf
-	4Ybudm3rfy0yjgCaB1c8S/lrARZ0ga8z4FcDn2bjkcrAIisHhOSSnhCN
-X-Gm-Gg: Acq92OHPWyBLhOeJ6gpD8KpLeM6Tzh5ndc9NZ+4F/ZHUi1IMuaT1/5eBbsdIUVu2W3t
-	myrjSQxyPbtGsbHOjA1Y++P6Iv/73GVN4BptkbJ6bZiVDFQEa8+0Mk+Z/KeQxP6/ckQFTzGdGFP
-	+Uk6PTQEP+icno19KYILtxuJqecCd8ZMrKJ4xhJD1gV2mUe9WCGwu3pbDn/1NU+HDjOC/Q+GR60
-	5P69vOS+bq6oWNDpFlGqVQjPkrZ8aNZZ9x53Hzp2N4ozWA+8NBzvdHkeaiEeC7S3UKKcORZVgjB
-	v13TxryXV/mFiou9+IhOCQG1MpKcuPY5XBqkPxGDcYMZjTms9t1q2hiPK7puvBnBM6jwL6T5nwR
-	SufczOzILuEUCtuJvLUp36wCLYTJ67uko2E75zVROJ5u9Rm+WHV/lqn9YoYPJp9oUJyiGgaF9h7
-	ej39e+mtyq0WxgkXN9nJEdX/t+oNjGTDw3
-X-Received: by 2002:a05:600c:35cf:b0:48a:5c23:cab with SMTP id 5b1f17b1804b1-490426bc737mr85243735e9.19.1779485292233;
-        Fri, 22 May 2026 14:28:12 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490454db285sm58807585e9.5.2026.05.22.14.28.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 May 2026 14:28:11 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 22 May 2026 23:28:10 +0200
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Jakub Sitnicki <jakub@cloudflare.com>, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCHv3 05/12] libbpf: Change has_nop_combo to work on top of
- nop10
-Message-ID: <ahDKatbb_ixUY_XF@krava>
-References: <20260521124411.31133-1-jolsa@kernel.org>
- <20260521124411.31133-6-jolsa@kernel.org>
- <CAEf4BzY3bV+gkA4fRm=jzaTowG1QtXogLDOKkG3CrR5EWzDPcg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="N81vJOAn"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=gzMDsSQkmv9gwI+vWdybfZph3FTIubmd34fX4WDQhgU=; b=N81vJOAnhY3CINF65PRXIN/l+u
+	DoTtDYa9hN5q10bPZMr1dkEqkTnpa4K1JTWojkYWrVL8Zo84A6SESptx1xC5g+jybrz6L5WjbhfNb
+	H7mwLzi506lVax+eNPCii2HcdFU3kSEclH+BEqRkcBJmX9hBXiGEMTC9dJktcuTWGBwtd3X97eomB
+	20+SsLrg/d+urmHG1z14QLDHulMOouxUjBCHXyDu+2TCJhuY61twKBUetWoyav4M5OWG9+lJxrp8z
+	a66SZpiSHlqz7y0HHNLyLXSlNiZ2EcVaWfqBkXkxduiDpVwU8Nops2GbxDXspWpEAdFDgWkExUDZs
+	uzV+XVfw==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wQXfV-000Mtj-0E;
+	Fri, 22 May 2026 23:44:33 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wQXfU-0009aR-0O;
+	Fri, 22 May 2026 23:44:32 +0200
+Message-ID: <dcc02e2d-58dd-46eb-9b72-54cd8465fb64@iogearbox.net>
+Date: Fri, 22 May 2026 23:44:32 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzY3bV+gkA4fRm=jzaTowG1QtXogLDOKkG3CrR5EWzDPcg@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] bpf, libbpf: reject non-exclusive metadata maps in
+ the signed loader
+To: KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
+ linux-security-module@vger.kernel.org
+Cc: ast@kernel.org, memxor@gmail.com
+References: <20260521152217.2345235-1-kpsingh@kernel.org>
+ <20260521152217.2345235-3-kpsingh@kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ xsFNBGNAkI0BEADiPFmKwpD3+vG5nsOznvJgrxUPJhFE46hARXWYbCxLxpbf2nehmtgnYpAN
+ 2HY+OJmdspBntWzGX8lnXF6eFUYLOoQpugoJHbehn9c0Dcictj8tc28MGMzxh4aK02H99KA8
+ VaRBIDhmR7NJxLWAg9PgneTFzl2lRnycv8vSzj35L+W6XT7wDKoV4KtMr3Szu3g68OBbp1TV
+ HbJH8qe2rl2QKOkysTFRXgpu/haWGs1BPpzKH/ua59+lVQt3ZupePpmzBEkevJK3iwR95TYF
+ 06Ltpw9ArW/g3KF0kFUQkGXYXe/icyzHrH1Yxqar/hsJhYImqoGRSKs1VLA5WkRI6KebfpJ+
+ RK7Jxrt02AxZkivjAdIifFvarPPu0ydxxDAmgCq5mYJ5I/+BY0DdCAaZezKQvKw+RUEvXmbL
+ 94IfAwTFA1RAAuZw3Rz5SNVz7p4FzD54G4pWr3mUv7l6dV7W5DnnuohG1x6qCp+/3O619R26
+ 1a7Zh2HlrcNZfUmUUcpaRPP7sPkBBLhJfqjUzc2oHRNpK/1mQ/+mD9CjVFNz9OAGD0xFzNUo
+ yOFu/N8EQfYD9lwntxM0dl+QPjYsH81H6zw6ofq+jVKcEMI/JAgFMU0EnxrtQKH7WXxhO4hx
+ 3DFM7Ui90hbExlFrXELyl/ahlll8gfrXY2cevtQsoJDvQLbv7QARAQABzSZEYW5pZWwgQm9y
+ a21hbm4gPGRhbmllbEBpb2dlYXJib3gubmV0PsLBkQQTAQoAOxYhBCrUdtCTcZyapV2h+93z
+ cY/jfzlXBQJjQJCNAhsDBQkHhM4ACAsJCAcNDAsKBRUKCQgLAh4BAheAAAoJEN3zcY/jfzlX
+ dkUQAIFayRgjML1jnwKs7kvfbRxf11VI57EAG8a0IvxDlNKDcz74mH66HMyhMhPqCPBqphB5
+ ZUjN4N5I7iMYB/oWUeohbuudH4+v6ebzzmgx/EO+jWksP3gBPmBeeaPv7xOvN/pPDSe/0Ywp
+ dHpl3Np2dS6uVOMnyIsvmUGyclqWpJgPoVaXrVGgyuer5RpE/a3HJWlCBvFUnk19pwDMMZ8t
+ 0fk9O47HmGh9Ts3O8pGibfdREcPYeGGqRKRbaXvcRO1g5n5x8cmTm0sQYr2xhB01RJqWrgcj
+ ve1TxcBG/eVMmBJefgCCkSs1suriihfjjLmJDCp9XI/FpXGiVoDS54TTQiKQinqtzP0jv+TH
+ 1Ku+6x7EjLoLH24ISGyHRmtXJrR/1Ou22t0qhCbtcT1gKmDbTj5TcqbnNMGWhRRTxgOCYvG0
+ 0P2U6+wNj3HFZ7DePRNQ08bM38t8MUpQw4Z2SkM+jdqrPC4f/5S8JzodCu4x80YHfcYSt+Jj
+ ipu1Ve5/ftGlrSECvy80ZTKinwxj6lC3tei1bkI8RgWZClRnr06pirlvimJ4R0IghnvifGQb
+ M1HwVbht8oyUEkOtUR0i0DMjk3M2NoZ0A3tTWAlAH8Y3y2H8yzRrKOsIuiyKye9pWZQbCDu4
+ ZDKELR2+8LUh+ja1RVLMvtFxfh07w9Ha46LmRhpCzsFNBGNAkI0BEADJh65bNBGNPLM7cFVS
+ nYG8tqT+hIxtR4Z8HQEGseAbqNDjCpKA8wsxQIp0dpaLyvrx4TAb/vWIlLCxNu8Wv4W1JOST
+ wI+PIUCbO/UFxRy3hTNlb3zzmeKpd0detH49bP/Ag6F7iHTwQQRwEOECKKaOH52tiJeNvvyJ
+ pPKSKRhmUuFKMhyRVK57ryUDgowlG/SPgxK9/Jto1SHS1VfQYKhzMn4pWFu0ILEQ5x8a0RoX
+ k9p9XkwmXRYcENhC1P3nW4q1xHHlCkiqvrjmWSbSVFYRHHkbeUbh6GYuCuhqLe6SEJtqJW2l
+ EVhf5AOp7eguba23h82M8PC4cYFl5moLAaNcPHsdBaQZznZ6NndTtmUENPiQc2EHjHrrZI5l
+ kRx9hvDcV3Xnk7ie0eAZDmDEbMLvI13AvjqoabONZxra5YcPqxV2Biv0OYp+OiqavBwmk48Z
+ P63kTxLddd7qSWbAArBoOd0wxZGZ6mV8Ci/ob8tV4rLSR/UOUi+9QnkxnJor14OfYkJKxot5
+ hWdJ3MYXjmcHjImBWplOyRiB81JbVf567MQlanforHd1r0ITzMHYONmRghrQvzlaMQrs0V0H
+ 5/sIufaiDh7rLeZSimeVyoFvwvQPx5sXhjViaHa+zHZExP9jhS/WWfFE881fNK9qqV8pi+li
+ 2uov8g5yD6hh+EPH6wARAQABwsF8BBgBCgAmFiEEKtR20JNxnJqlXaH73fNxj+N/OVcFAmNA
+ kI0CGwwFCQeEzgAACgkQ3fNxj+N/OVfFMhAA2zXBUzMLWgTm6iHKAPfz3xEmjtwCF2Qv/TT3
+ KqNUfU3/0VN2HjMABNZR+q3apm+jq76y0iWroTun8Lxo7g89/VDPLSCT0Nb7+VSuVR/nXfk8
+ R+OoXQgXFRimYMqtP+LmyYM5V0VsuSsJTSnLbJTyCJVu8lvk3T9B0BywVmSFddumv3/pLZGn
+ 17EoKEWg4lraXjPXnV/zaaLdV5c3Olmnj8vh+14HnU5Cnw/dLS8/e8DHozkhcEftOf+puCIl
+ Awo8txxtLq3H7KtA0c9kbSDpS+z/oT2S+WtRfucI+WN9XhvKmHkDV6+zNSH1FrZbP9FbLtoE
+ T8qBdyk//d0GrGnOrPA3Yyka8epd/bXA0js9EuNknyNsHwaFrW4jpGAaIl62iYgb0jCtmoK/
+ rCsv2dqS6Hi8w0s23IGjz51cdhdHzkFwuc8/WxI1ewacNNtfGnorXMh6N0g7E/r21pPeMDFs
+ rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
+ DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
+ owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
+In-Reply-To: <20260521152217.2345235-3-kpsingh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28008/Fri May 22 08:24:46 2026)
 
-On Fri, May 22, 2026 at 11:52:56AM -0700, Andrii Nakryiko wrote:
-> On Thu, May 21, 2026 at 5:45 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > We now expect nop combo with 10 bytes nop instead of 5 bytes nop,
-> > fixing has_nop_combo to reflect that.
-> >
-> > Fixes: 41a5c7df4466 ("libbpf: Add support to detect nop,nop5 instructions combo for usdt probe")
-> > Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  tools/lib/bpf/usdt.c | 16 ++++++++--------
-> >  1 file changed, 8 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-> > index e3710933fd52..484a4354e82b 100644
-> > --- a/tools/lib/bpf/usdt.c
-> > +++ b/tools/lib/bpf/usdt.c
-> > @@ -305,7 +305,7 @@ struct usdt_manager *usdt_manager_new(struct bpf_object *obj)
-> >
-> >         /*
-> >          * Detect kernel support for uprobe() syscall, it's presence means we can
-> > -        * take advantage of faster nop5 uprobe handling.
-> > +        * take advantage of faster nop10 uprobe handling.
-> >          * Added in: 56101b69c919 ("uprobes/x86: Add uprobe syscall to speed up uprobe")
+On 5/21/26 5:22 PM, KP Singh wrote:
+> The loader verifies map->sha against the metadata hash in its
+> instructions. map->sha is calculated when BPF_OBJ_GET_INFO_BY_FD is called
+> on the frozen map.
 > 
-> Would be nice to add commit that switches nop5 to nop10 (but until it
-> lands hash is not stable, so, hmmm, maybe we'll land this patch
-> separately? send it a bit later to bpf-next?)
+> While the map is frozen, the loader must also ensure the map is
+> exclusive, as, without exclusivity, another BPF program with map access
+> can mutate the contents afterwards, so the check passes on stale data.
+> 
+> Place excl_prog_sha right after sha[] in struct bpf_map and have
+> gen_loader bail with -EINVAL when it is NULL, via BPF_PSEUDO_MAP_IDX at
+> fixed offset 32. Declare excl_prog_sha with __bpf_md_ptr so the
+> 8-byte BPF_LDX_MEM read works on 32-bit kernels.
+> 
+> Fixes: fb2b0e290147 ("libbpf: Update light skeleton for signing")
+> Signed-off-by: KP Singh <kpsingh@kernel.org>
+> ---
+>   include/linux/bpf.h                              |  2 +-
+>   tools/lib/bpf/gen_loader.c                       | 16 ++++++++++++++++
+>   .../selftests/bpf/progs/verifier_map_ptr.c       | 10 ++++++----
+>   3 files changed, 23 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index cd191c5fdb0a..ea9bd24f82c0 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -295,6 +295,7 @@ struct bpf_map_owner {
+>   
+>   struct bpf_map {
+>   	u8 sha[SHA256_DIGEST_SIZE];
+> +	__bpf_md_ptr(char *, excl_prog_sha);
+>   	const struct bpf_map_ops *ops;
+>   	struct bpf_map *inner_map_meta;
+>   #ifdef CONFIG_SECURITY
+> @@ -335,7 +336,6 @@ struct bpf_map {
+>   	atomic64_t sleepable_refcnt;
+>   	s64 __percpu *elem_count;
+>   	u64 cookie; /* write-once */
+> -	char *excl_prog_sha;
+>   };
+>   
+>   static inline const char *btf_field_type_name(enum btf_field_type type)
+> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+> index 9478b8f78f26..fee35c26deb8 100644
+> --- a/tools/lib/bpf/gen_loader.c
+> +++ b/tools/lib/bpf/gen_loader.c
+> @@ -600,6 +600,22 @@ static void emit_signature_match(struct bpf_gen *gen)
+>   			gen->error = -ERANGE;
+>   		}
+>   	}
+> +
+> +	/* Reject if the metadata map is not exclusive. Without exclusivity
+> +	 * the cached map->sha[] verified above can be stale: another BPF
+> +	 * program with map access could have mutated the contents between
+> +	 * BPF_OBJ_GET_INFO_BY_FD and loader execution.
+> +	 */
 
-hm, I think that would affect the subtest_optimized_attach usdt test
-which depend on this behaviour, will check
+We could probably add sth like this somewhere in the bpf kernel side :
 
-jirka
+         /* See: emit_signature_match() in tools/lib/bpf/gen_loader.c */
+         BUILD_BUG_ON(offsetof(struct bpf_map, sha) != 0);
+         BUILD_BUG_ON(offsetof(struct bpf_map, excl_prog_sha) != SHA256_DIGEST_SIZE);
+         BUILD_BUG_ON(sizeof_field(struct bpf_map, excl_prog_sha) != sizeof(__u64));
 
-> 
-> 
-> but otherwise lgtm
-> 
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> 
-> >          */
-> >         man->has_uprobe_syscall = kernel_supports(obj, FEAT_UPROBE_SYSCALL);
-> > @@ -596,14 +596,14 @@ static int parse_usdt_spec(struct usdt_spec *spec, const struct usdt_note *note,
-> >  #if defined(__x86_64__)
-> >  static bool has_nop_combo(int fd, long off)
-> >  {
-> > -       unsigned char nop_combo[6] = {
-> > -               0x90, 0x0f, 0x1f, 0x44, 0x00, 0x00 /* nop,nop5 */
-> > +       unsigned char nop_combo[11] = {
-> > +               0x90, 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x00, 0x00,
-> >         };
-> > -       unsigned char buf[6];
-> > +       unsigned char buf[11];
-> >
-> > -       if (pread(fd, buf, 6, off) != 6)
-> > +       if (pread(fd, buf, 11, off) != 11)
-> >                 return false;
-> > -       return memcmp(buf, nop_combo, 6) == 0;
-> > +       return memcmp(buf, nop_combo, 11) == 0;
-> >  }
-> >  #else
-> >  static bool has_nop_combo(int fd, long off)
-> > @@ -814,8 +814,8 @@ static int collect_usdt_targets(struct usdt_manager *man, struct elf_fd *elf_fd,
-> >                 memset(target, 0, sizeof(*target));
-> >
-> >                 /*
-> > -                * We have uprobe syscall and usdt with nop,nop5 instructions combo,
-> > -                * so we can place the uprobe directly on nop5 (+1) and get this probe
-> > +                * We have uprobe syscall and usdt with nop,nop10 instructions combo,
-> > +                * so we can place the uprobe directly on nop10 (+1) and get this probe
-> >                  * optimized.
-> >                  */
-> >                 if (man->has_uprobe_syscall && has_nop_combo(elf_fd->fd, usdt_rel_ip)) {
-> > --
-> > 2.53.0
-> >
+> +	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX,
+> +					 0, 0, 0, 0));
+> +	emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, SHA256_DWORD_SIZE * sizeof(__u64)));
+
+nit: SHA256_DWORD_SIZE is SHA256_DIGEST_LENGTH / sizeof(__u64), can we just use
+      SHA256_DIGEST_LENGTH ?
+
+> +	off = -(gen->insn_cur - gen->insn_start - gen->cleanup_label) / 8 - 2;
+> +	if (is_simm16(off)) {
+> +		emit(gen, BPF_MOV64_IMM(BPF_REG_7, -EINVAL));
+> +		emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_2, 0, off));
+> +	} else {
+> +		gen->error = -ERANGE;
+> +	}
+>   }
+>   
+>   void bpf_gen__record_attach_target(struct bpf_gen *gen, const char *attach_name,
