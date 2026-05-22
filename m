@@ -1,136 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0B55385D8A
-	for <bpf@vger.kernel.org>; Fri, 22 May 2026 23:08:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDBFA349CE0;
+	Fri, 22 May 2026 23:16:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779491329; cv=none; b=pDY5F56dvaSMdKNO0Z5IWJZ4u2PqysqJ47N3UdnMZ9kT7G6+NCEr7K9hUbalqDYlIUIRiR5+BTYUKnoMbdYcEjc+PJj/JDkV4HW9aMydWzG+qgK1roleeM1IgygY2jsPFYrlBNTq83Y9g4LCE51BwfxKF2BeIucZTKgjS7P+bqA=
+	t=1779491806; cv=none; b=ux/hzjsDiLIg8R3ifLHoMUO71ssdDa8cLYI0E1Cj/m7wXupujbduCForTZvku4MhKw1eF5jM8Fep65T1Av9OJiGMKCUPPOGaB0Fso6dYwB7eQBapi4ULD7s4BGi/4/D5yXZ3D4egNsV5pVa4W3jrAcpfQ0e8ak2lC3fUlFmCI2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779491329; c=relaxed/simple;
-	bh=bSl3wL03ppKM7BOZ77tVceqREjU0jsd/V+sdo5sNMgI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=QW6t7cwG7Jao0z9aQeexmGBjp7Xdd9vdHB/rRkOE0w/xwAWu2p4i5lL8CU4V51wgjsZ6cFZkE6fQWmirbZEp/xpkNJfuAy78u9uE9UREPyHL1PJ7Eh0WEd5kQK0eTrzh6i25Gcxv1RDZ5BBSI/7cl21EdfAcIKZ/T8VrwRrSCzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m/AeuhLt; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779491806; c=relaxed/simple;
+	bh=StHrlVUUmzb+0tfAA8jqXT51fFPejI83n3WwwobANrk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qB9cO5smyBmbvzQ6FLS+VZ+LUYYZZ/QDmx5HynAMB+hwcsc2jV2o6UH11ntzGah3cF3wjcM7pKdUZ+zz7/s8czmvPL1qp/XtmfHN+LnfHoOh3p9gDCBD4Lfj8PqYPUZNAwcAHaGw5cRHZAkz52V7vs++6UbHuBVROXEbzXm5uIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=cQgaLdXI; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m/AeuhLt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 014831F000E9;
-	Fri, 22 May 2026 23:08:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779491328;
-	bh=UWmonR8tEoSa+UmT3zZNPyKcVcBB1HW6rr2VRxgZAiA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=m/AeuhLtQO6PYJwzvuN0Aiia3aVtKA/DcNq+dY8FHdBRNh6K0D0wxll5IicbQ04+l
-	 +AmG61Sripp2fcThS+lgOwMcv+XBCIe309XddzmPqOpujA/aDYoRvb9/BEm07k4Kgv
-	 cygDya1HujzWGEMefMWSjoPFnXaow3+SB/q8A1Bj1SpyMj5c/yg99jQInBWz4oap5d
-	 W/J/6jnJfhsF413rEtkjYcNoSBsp72rlKlgsYMvUtULHnWQVkHJXVmpkZct9pC3xqo
-	 8x2KxJddlJQU217/AxQBIKaXHmpJyhaMq58aqJYETNbB9tlPU7eeXFghyJMzCdOuw+
-	 dG5lAxxtO5xmw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v3 2/2] bpf, libbpf: reject non-exclusive metadata
- maps in the signed loader
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "KP Singh" <kpsingh@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260522215337.662271-3-kpsingh@kernel.org>
-References: <20260522215337.662271-3-kpsingh@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 22 May 2026 23:08:47 +0000
-Message-Id: <20260522230848.014831F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="cQgaLdXI"
+Received: by linux.microsoft.com (Postfix, from userid 1204)
+	id 86F2520B7167; Fri, 22 May 2026 16:16:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 86F2520B7167
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1779491790;
+	bh=y1lc4L9BFBDBlfLkybR1gQIiJ0WLDpMWxH052ZQxeiM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cQgaLdXIsOnU/PkHFd4EeXtvQ/avsIF6H39eMhb3kkiGz0w7/GDTmNu97uFcmc8tZ
+	 hQrLZVVYA+PYF9xpwrE/WfG8d0zRXtkaNnbf94K6gjTyDtPftA9JvW5wcsl2ydmNVU
+	 RZ/VAieUBalnH+z+T5riH3i2hexQ63JHzlSBv0kg=
+Date: Fri, 22 May 2026 16:16:30 -0700
+From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@google.com, pabeni@redhat.com, leon@kernel.org,
+	longli@microsoft.com, kotaranov@microsoft.com, horms@kernel.org,
+	shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
+	ernis@linux.microsoft.com, shirazsaleem@microsoft.com,
+	linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+	stephen@networkplumber.org, jacob.e.keller@intel.com,
+	dipayanroy@microsoft.com, leitao@debian.org, kees@kernel.org,
+	john.fastabend@gmail.com, hawk@kernel.org, bpf@vger.kernel.org,
+	daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me,
+	yury.norov@gmail.com
+Subject: Re: [PATCH net 2/2] net: mana: Skip redundant detach in queue reset
+ handler if already detached
+Message-ID: <ahDjzv9gXR2xiRBW@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20260518194654.735580-1-dipayanroy@linux.microsoft.com>
+ <20260518194654.735580-3-dipayanroy@linux.microsoft.com>
+ <20260520171703.689c5462@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260520171703.689c5462@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Critical] Hardcoded fixed offsets for kernel-internal `struct bpf_map` i=
-n userspace-generated BPF code without CO-RE relocations.
-- [High] The loader program unconditionally emits an 8-byte read for the `e=
-xcl_prog_sha` pointer field, causing a guaranteed verifier rejection on 32-=
-bit kernels.
-- [High] The metadata map exclusivity check can be bypassed via map-in-map,=
- reintroducing the TOCTOU vulnerability.
---
+On Wed, May 20, 2026 at 05:17:03PM -0700, Jakub Kicinski wrote:
+> On Mon, 18 May 2026 12:43:51 -0700 Dipayaan Roy wrote:
+> > +	/* If already detached (indicates detach succeeded but attach failed
+> > +	 * previously). Now skip mana detach and just retry mana_attach.
+> > +	 */
+> > +	if (!netif_device_present(ndev))
+> > +		goto attach;
+> > +
+> >  	err = mana_detach(ndev, false);
+> >  	if (err) {
+> >  		netdev_err(ndev, "mana_detach failed: %d\n", err);
+> >  		goto dealloc_pre_rxbufs;
+> >  	}
+> >  
+> > +attach:
+> 
+> goto's are acceptable for error unwinding, not to jump around 
+> a function seemingly to avoid indenting something. Please use
+> normal constructs or perhaps move the netif_device_present()
+> into mana_detach() as an early exit condition? 
+>
 
-commit afb36fdfc7cc8ff5eb04ebacf8fda203221aa679
-Author: KP Singh <kpsingh@kernel.org>
+Hi Jakub,
 
-bpf, libbpf: reject non-exclusive metadata maps in the signed loader
+Thanks for the suggestions, Moving netif_device_present() into mana_detach
+as an early exit, is a better option and will cover all cases. I will send
+v2 with the suggestion.
 
-This commit adds a check in the gen_loader to verify that the metadata map
-is exclusive before allowing it to be used. It places excl_prog_sha right
-after the sha field in struct bpf_map and reads it at a fixed offset to
-ensure another program cannot mutate the contents after signature validatio=
-n.
-
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index cd191c5fdb0a5..11bec73db1994 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -295,6 +295,7 @@ struct bpf_map_owner {
-> =20
->  struct bpf_map {
->  	u8 sha[SHA256_DIGEST_SIZE];
-> +	char *excl_prog_sha;
->  	const struct bpf_map_ops *ops;
->  	struct bpf_map *inner_map_meta;
-
-[Severity: High]
-Does this exclusivity check handle map-in-map scenarios correctly? Since
-bpf_map_meta_alloc() does not copy excl_prog_sha into the inner_map_meta,
-could an attacker load a program against an inner_map_meta (which has a
-NULL excl_prog_sha), and then insert the exclusive frozen map into the
-map-in-map at runtime? It appears this might allow a malicious program to
-dynamically look up the inner map and mutate the frozen map using
-bpf_map_update_elem(), bypassing the intended security guarantee.
-
-[ ... ]
-
-> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-> index 9478b8f78f260..5077472b9fd25 100644
-> --- a/tools/lib/bpf/gen_loader.c
-> +++ b/tools/lib/bpf/gen_loader.c
-
-[ ... ]
-
-> @@ -600,6 +600,23 @@ static void emit_signature_match(struct bpf_gen *gen)
->  			gen->error =3D -ERANGE;
->  		}
->  	}
-> +
-> +	/*
-> +	 * Reject if the metadata map is not exclusive. Without exclusivity
-> +	 * the cached map->sha[] verified above can be stale: another BPF
-> +	 * program with map access could have mutated the contents between
-> +	 * BPF_OBJ_GET_INFO_BY_FD and loader execution.
-> +	 */
-> +	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX,
-> +					 0, 0, 0, 0));
-> +	emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, SHA256_DWORD_SIZE *=
- sizeof(__u64)));
-
-[Severity: Critical]
-Does this hardcode a fixed offset (32) for a kernel-internal structure
-without using CO-RE? Since light skeleton headers are distributed in
-userspace, if struct bpf_map changes in future kernel releases, won't
-these older generated skeletons be rejected by the verifier or silently
-read incorrect data? This seems to unintentionally freeze the internal
-ABI of struct bpf_map for light skeletons.
-
-[Severity: High]
-Will this unconditionally emit an 8-byte read for the excl_prog_sha
-pointer field, even on 32-bit systems? Since pointers are 4 bytes on
-32-bit architectures, won't the BPF verifier strictly reject this 8-byte
-read against a 4-byte BTF pointer field due to the size mismatch? The commit
-message mentions target pointer size tracking is needed as a follow-up,
-but does this mean 32-bit skeletons will be guaranteed to fail loading
-until that follow-up is merged?
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260522215337.6622=
-71-1-kpsingh@kernel.org?part=3D2
+Regards
+Dipayaan Roy
+ 
+> >  	err = mana_attach(ndev);
