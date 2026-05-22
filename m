@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B6036495F;
-	Fri, 22 May 2026 17:22:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E6F36402D;
+	Fri, 22 May 2026 17:22:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779470547; cv=none; b=m+exxoU1P+bl0ogHzOYTmCHHm8MAyTntQim8jk1zj9yLmEd+kT7ZeUdv6etoya/9PDsLihjpFVkgtta2IjI9uaqCB4PfjWBwbwF+bwP+ODPeETqE27xGZTN3lUZRRxLaEz5728+T63aDiRpnrsiKNhbt+Bdh1y38PF/mZEb27EM=
+	t=1779470547; cv=none; b=Nxt/2345HyhJHpVIcCaIdThFb27z5z4SJlg2B7qbfRsug0wRpFOsJaTK/3zdX+sk8ZM3wSw0NtnY0g2moc2H1iDf3kjrYiqU0M69+bMLkgeLvPGsK83ppNYd7Z0mR4gEwGQ7mB0uyjHYcpPcXT2UwrnR4252vfaOBCvuLhQePJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779470547; c=relaxed/simple;
-	bh=7AsSlnqBlMgPdDmzRhcy2OJ0r6Ra/a7/tZSraBS7Qvg=;
+	bh=WWiEIEIACG8ay7a2564Y/A9KnugfWYXmGYT9W641kKI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kQXRc4mWCJI75xkYM+ij0GMQpuTzPe9+QuYDHD2lLHbWq5FxfKQflItogFZxTxSxOj0brYru6shsG3LuenaRb0HVlMcq5glLv7nR17Ni9NjSUODuN2/A6U1ZV3Ke8FoC29tv3WSvd3xz79lzhETgypAMAKXd0DC8Ubc646+Krjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X8XKFMuw; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=A1hG4KEuO5v6UiXETlF0i72fr/tlKr1tyvH4VlD32bUf0oueNBpWaz2fBYRqsh2m548HNrmFTHoP5N18ZbGD94nPj0NcgB94RLdIZXo0aUBpYllj9q9IcG/CAZnEagTe0pXDjF8xJFB86oeX8EcKXxTunH2R4ZD31XUXUGtPF7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hJA3AxsK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X8XKFMuw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19CB61F00A3F;
-	Fri, 22 May 2026 17:22:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hJA3AxsK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03A401F000E9;
+	Fri, 22 May 2026 17:22:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779470543;
-	bh=VYTgH2xtVYKFN0341M351MazQSuqnbXnfu3i4Yl+9Pw=;
+	s=k20260515; t=1779470544;
+	bh=zY4ndTv1c/ZirDGFOJhNBk3gBdwkbYwzNTCen30BgG8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=X8XKFMuwjEr4wId3sNSvzIMlmB6jWIHHlCuAdoSuTyQ7faKiaUWIVv9wkDoKCvn2l
-	 i+p/yJC3VT96PiU4F1h7mS9Yrrj05R3SgmfwqK4h28RW+5boMfKiFf0HV8q7KJML4+
-	 4cFjQcBw9Iqrbp2WdNGYNDi6TyzspRrUvroNGH6jodxa99h1O5JouDL2VZB6mJaT6y
-	 7AhmoezrI2Ss07m+XtqFePlNk+tXJXgqRceRdUW+NStFczPoN/FzKJv1/hvskf5mIs
-	 N1gSiWUbsG2JdifBzUcnX2lGtFuAXkzrv+7uGTDTgpoIsugAocGreRP1Pfoj2aJG6c
-	 Q2DlK/UjH9hIg==
+	b=hJA3AxsKt5vguBDGX9K7MIPGuu6SdGytFc3+3mRtIJSZaC0iflWEZMUYifhPEinA+
+	 k2L3ChKbEJfdVs4PX/54/LxfS0fcDnorfR0PgdCuhmw6EfqOFVIQ7Lv0s2DPGzZ1K9
+	 exLNC31Bs8egNfzQuiFyMQhIhXPHq7oKaFRL1p6XhHLzRyixitlCbGSknGCQbvT+9u
+	 Pi5GiuRIEPIMzsDOHP7leaZFfZLU0/x/gchgF/VZtway62LW5UM2jlFIMkoQAvbZHc
+	 I5kYDS96HN0rG0eRx1NdNmfJL4aS4Yhs2jV3bsX5Jsor/9kkYYjIVhFphgAlpd+JJS
+	 gmbcVFlVFkbKQ==
 From: Tejun Heo <tj@kernel.org>
 To: David Vernet <void@manifault.com>,
 	Andrea Righi <arighi@nvidia.com>,
@@ -53,9 +53,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-mm@kvack.org,
 	linux-kernel@vger.kernel.org,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH 3/8] bpf: Add sleepable variant of bpf_arena_alloc_pages for kernel callers
-Date: Fri, 22 May 2026 07:22:14 -1000
-Message-ID: <20260522172219.1423324-4-tj@kernel.org>
+Subject: [PATCH 4/8] bpf: Add bpf_struct_ops_for_each_prog()
+Date: Fri, 22 May 2026 07:22:15 -1000
+Message-ID: <20260522172219.1423324-5-tj@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260522172219.1423324-1-tj@kernel.org>
 References: <20260522172219.1423324-1-tj@kernel.org>
@@ -67,72 +67,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The existing kernel-side export of bpf_arena_alloc_pages is _non_sleepable
-only - it's used by the verifier to inline the kfunc when the call site is
-non-sleepable. There is no sleepable equivalent for kernel callers. The
-kfunc bpf_arena_alloc_pages itself is BPF-only.
+Add a helper that walks the member progs of the struct_ops map
+containing a given @kdata vmtable. struct_ops ->reg() callbacks (and
+similar) sometimes need to inspect the loaded BPF programs, e.g. to
+discover maps they reference via prog->aux->used_maps.
 
-sched_ext needs sleepable kernel-side allocs for its arena pool init/grow
-paths. Add bpf_arena_alloc_pages_sleepable() mirroring the _non_sleepable
-wrapper but passing sleepable=true to arena_alloc_pages().
+The implementation mirrors bpf_struct_ops_id(): container_of @kdata
+to recover the bpf_struct_ops_map, then iterate st_map->links[i]->prog
+for i in [0, funcs_cnt). Same access pattern, no new locking - by the
+time ->reg() fires st_map is fully populated and stable.
+
+A sched_ext follow-up walks the member progs of a cid-form scheduler's
+struct_ops map, reads prog->aux->arena directly, and requires all member
+progs to reference exactly one arena, without requiring the BPF program
+to call a registration kfunc.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- include/linux/bpf.h |  8 ++++++++
- kernel/bpf/arena.c  | 13 +++++++++++++
- 2 files changed, 21 insertions(+)
+ include/linux/bpf.h         |  3 +++
+ kernel/bpf/bpf_struct_ops.c | 36 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 39 insertions(+)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 831996c411cf..64968ca6db51 100644
+index 64968ca6db51..5b99d786e98c 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -679,6 +679,8 @@ int bpf_dynptr_from_file_sleepable(struct file *file, u32 flags,
- void *bpf_arena_alloc_pages_non_sleepable(void *p__map, void *addr__ign, u32 page_cnt, int node_id,
- 					  u64 flags);
- void bpf_arena_free_pages_non_sleepable(void *p__map, void *ptr__ign, u32 page_cnt);
-+void *bpf_arena_alloc_pages_sleepable(void *p__map, void *addr__ign, u32 page_cnt, int node_id,
-+				      u64 flags);
- #else
- static inline void *bpf_arena_alloc_pages_non_sleepable(void *p__map, void *addr__ign, u32 page_cnt,
- 							int node_id, u64 flags)
-@@ -689,6 +691,12 @@ static inline void *bpf_arena_alloc_pages_non_sleepable(void *p__map, void *addr
- static inline void bpf_arena_free_pages_non_sleepable(void *p__map, void *ptr__ign, u32 page_cnt)
- {
- }
-+
-+static inline void *bpf_arena_alloc_pages_sleepable(void *p__map, void *addr__ign, u32 page_cnt,
-+						    int node_id, u64 flags)
-+{
-+	return NULL;
-+}
- #endif
+@@ -2129,6 +2129,9 @@ int bpf_prog_assoc_struct_ops(struct bpf_prog *prog, struct bpf_map *map);
+ void bpf_prog_disassoc_struct_ops(struct bpf_prog *prog);
+ void *bpf_prog_get_assoc_struct_ops(const struct bpf_prog_aux *aux);
+ u32 bpf_struct_ops_id(const void *kdata);
++int bpf_struct_ops_for_each_prog(const void *kdata,
++				 int (*cb)(struct bpf_prog *prog, void *data),
++				 void *data);
  
- extern const struct bpf_map_ops bpf_map_offload_ops;
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 1c0b87ecc817..a811cf6170fa 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -934,6 +934,19 @@ void *bpf_arena_alloc_pages_non_sleepable(void *p__map, void *addr__ign, u32 pag
- 
- 	return (void *)arena_alloc_pages(arena, (long)addr__ign, page_cnt, node_id, false);
+ #ifdef CONFIG_NET
+ /* Define it here to avoid the use of forward declaration */
+diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+index 05b366b821c3..16aec18ed31b 100644
+--- a/kernel/bpf/bpf_struct_ops.c
++++ b/kernel/bpf/bpf_struct_ops.c
+@@ -1203,6 +1203,42 @@ u32 bpf_struct_ops_id(const void *kdata)
  }
-+
-+void *bpf_arena_alloc_pages_sleepable(void *p__map, void *addr__ign, u32 page_cnt,
-+				      int node_id, u64 flags)
+ EXPORT_SYMBOL_GPL(bpf_struct_ops_id);
+ 
++/**
++ * bpf_struct_ops_for_each_prog - Invoke @cb for each member prog
++ * @kdata: kernel-side struct_ops vmtable (the @kdata arg to ->reg/->update/->unreg)
++ * @cb: callback invoked once per member prog; non-zero return stops iteration
++ * @data: opaque argument passed to @cb
++ *
++ * Walks the struct_ops member progs registered on the map containing @kdata.
++ * Intended for use from struct_ops ->reg() callbacks (and similar) that need to
++ * inspect the loaded BPF programs (for example to discover maps they reference
++ * via @prog->aux->used_maps).
++ *
++ * Return 0 if iteration completed, otherwise the first non-zero @cb return.
++ */
++int bpf_struct_ops_for_each_prog(const void *kdata,
++				 int (*cb)(struct bpf_prog *prog, void *data),
++				 void *data)
 +{
-+	struct bpf_map *map = p__map;
-+	struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
++	struct bpf_struct_ops_value *kvalue;
++	struct bpf_struct_ops_map *st_map;
++	u32 i;
++	int ret;
 +
-+	if (map->map_type != BPF_MAP_TYPE_ARENA || flags || !page_cnt)
-+		return NULL;
++	kvalue = container_of(kdata, struct bpf_struct_ops_value, data);
++	st_map = container_of(kvalue, struct bpf_struct_ops_map, kvalue);
 +
-+	return (void *)arena_alloc_pages(arena, (long)addr__ign, page_cnt, node_id, true);
++	for (i = 0; i < st_map->funcs_cnt; i++) {
++		if (!st_map->links[i])
++			continue;
++		ret = cb(st_map->links[i]->prog, data);
++		if (ret)
++			return ret;
++	}
++	return 0;
 +}
++EXPORT_SYMBOL_GPL(bpf_struct_ops_for_each_prog);
 +
- __bpf_kfunc void bpf_arena_free_pages(void *p__map, void *ptr__ign, u32 page_cnt)
+ static bool bpf_struct_ops_valid_to_reg(struct bpf_map *map)
  {
- 	struct bpf_map *map = p__map;
+ 	struct bpf_struct_ops_map *st_map = (struct bpf_struct_ops_map *)map;
 -- 
 2.54.0
 
