@@ -1,104 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3ED43A6F0C;
-	Fri, 22 May 2026 08:22:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB7E3A783D;
+	Fri, 22 May 2026 08:22:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779438143; cv=none; b=TfnqK+9AjWuiRltsIVYGCNF6KhRMKBjQ4lZLxa7FK8HhRdqt1mESB2VdEPo/NZNs4ZHFB6ECumT7mW2wyQmZWufpVyO7J7vJC9uLn+CtaydXeNC3+7EhD9HzDmgvQq9I4ELWzJSrcilcUvc/6kG61G2nX+TOKMrlx7wrGacUZ1Q=
+	t=1779438144; cv=none; b=GxW2CJ7wJYBd763MFRupmsFDeERqEicrco67N2gkvXR6MKK/6VQfxwIjUjVDetyF/JX6a2xdBm0B8XMgIp1ymUBg/d7523uK0pc3bAz+iSRbYedX5wgwVb02lUUBMbMHAcaV2TdJ/2dRntvI++F4zbuuR0+U9BSGYSdfKn5szfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779438143; c=relaxed/simple;
-	bh=Gaiiz+IZDH5noZ4hjHUdHGUKZSATfQw00+iuBYAzzRU=;
+	s=arc-20240116; t=1779438144; c=relaxed/simple;
+	bh=YNMgYaWmuKhZktoTfR8VA5YeAlNIBLuoSvjsQJbcAEY=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Odby/kNlJvSEKKYYOdFo20pWelfD/rsWzjxU8rMMc7CpL5UAmcp8HCO4kgZ4R06rFbAWdXTdxywBGP0nxjlrpA4DL0pfVRoOZI/9u968vYcLW37P/2DbBDCY0jz+FIkzbPTMdHbbxsJFDGmKcpAPrQ1AjC3/xe42iiclNow2DJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h+yijezQ; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=LK4OAF2TWT9VQQ+iPhoeXHOC4uQe+YklVDdh2elePCHFajR0uyt3ndI9m5ONlQhWyrbgfuDQfhjInWIko4jFZLzggZZsk5egkFR2nnLt6lZM/6BPHOcGGPM6tb8rYMHDDPB1aosdjKsJXWQAMrLXw2nOhymcbCbhUpFAnKVMxpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BKVXbQH1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h+yijezQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 401C41F000E9;
-	Fri, 22 May 2026 08:22:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BKVXbQH1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C1671F00A3D;
+	Fri, 22 May 2026 08:22:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779438141;
-	bh=uglbIFHHQy2ryBVfyMo/CXYPOKjc5dRxb8rx3hfcCdQ=;
+	s=k20260515; t=1779438143;
+	bh=YNMgYaWmuKhZktoTfR8VA5YeAlNIBLuoSvjsQJbcAEY=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=h+yijezQDhv5zpXErW9JxB4WEhkYiCx8N06OBbtLFvH+GE86VX8qQ2LZmFxTHKz7J
-	 OvCYduZEVQZzsTrIYJmuxasbM3xUQ21d1nGNRX3zKwzT//WWpiDGepyPg5iTF70YF0
-	 WcgTWU44rOn3++CDgoZ/4iYPZ5kUZVyOcKsi5ajMYRFFv1K9bJee+g5AWQ2bpdBxTN
-	 Fi9Wski0Xaa+zi8bfOj3IG0hTUdX/7wSaSbX4885aaIaQ+cH5Hu8AkLeYma6Ffw9c1
-	 xJ6mOgt7AMwkYpAV/5bPWGRhwS7YDmeI6sHanZiTHcbFJQVB3/Y9xDwp3VDuj9WMgQ
-	 L4I63CcTeJpCA==
-Content-Type: multipart/mixed; boundary="===============8360733971623066269=="
+	b=BKVXbQH1qXCtOFy7SpntmxQSwJoWTlhJRo6RB78aCe3fr9OXEnsMEBuuTA557cW7I
+	 X2LsT49stZynNrvVU1gghJcZ9ZbinsUDcEtQw11p01pOdD4LF1qU/JtbddS1FU/2sI
+	 RoVoEn7C4aU7wETZITdvO/q7OLRjhLwJvgiZvNh+D89xOShzQZir4Hzss0FtiMEHiw
+	 HGN0l/d3hJnwkqNn/2XidLVSIdlbac8auwEzV1W+iojXjaED608X86ZTb5kyq8ErFG
+	 LzQ4M2hEC1lK5GCBBCeeX1NwQRfmRo0nO9D+r0L25fcFFSwsVE0czu8brtkwnLQm2/
+	 Fhl85SUPSXNuA==
+Content-Type: multipart/mixed; boundary="===============2178938720958764145=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6c6b45f7ff66adefe9d470c2f2c9f0f3664877afc3f019249d1a92e8bd9125c8@mail.kernel.org>
-In-Reply-To: <20260522074601.1658705-2-kuniyu@google.com>
-References: <20260522074601.1658705-2-kuniyu@google.com>
-Subject: Re: [PATCH v2 bpf-next 01/11] selftest: bpf: Use BPF_SOCK_OPS_ALL_CB_FLAGS + 1 for bad_cb_test_rv.
+Message-Id: <b5c171e50d47d65d8bd9edc67d002f02f9843a5ab2677183f57756ff25c8a2f3@mail.kernel.org>
+In-Reply-To: <20260522074601.1658705-6-kuniyu@google.com>
+References: <20260522074601.1658705-6-kuniyu@google.com>
+Subject: Re: [PATCH v2 bpf-next 05/11] bpf: tcp: Add kfunc to adjust sk->sk_rcvlowat.
 From: bot+bpf-ci@kernel.org
 To: kuniyu@google.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com
 Cc: yonghong.song@linux.dev,john.fastabend@gmail.com,sdf@fomichev.me,edumazet@google.com,ncardwell@google.com,willemb@google.com,ukyab@berkeley.edu,kuniyu@google.com,kuni1840@gmail.com,bpf@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 22 May 2026 08:22:21 +0000 (UTC)
+Date: Fri, 22 May 2026 08:22:23 +0000 (UTC)
 
---===============8360733971623066269==
-Content-Type: text/plain; charset="us-ascii"
+--===============2178938720958764145==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c b/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
-> index 7e8fe1bad03f..e4849d2a2956 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
-> @@ -26,7 +26,8 @@ static void verify_result(struct tcpbpf_globals *result)
->  	ASSERT_EQ(result->bytes_acked, 1002, "bytes_acked");
->  	ASSERT_EQ(result->data_segs_in, 1, "data_segs_in");
->  	ASSERT_EQ(result->data_segs_out, 1, "data_segs_out");
-> -	ASSERT_EQ(result->bad_cb_test_rv, 0x80, "bad_cb_test_rv");
-> +	ASSERT_EQ(result->bad_cb_test_rv, BPF_SOCK_OPS_ALL_CB_FLAGS + 1,
-> +		  "bad_cb_test_rv");
->  	ASSERT_EQ(result->good_cb_test_rv, 0, "good_cb_test_rv");
->  	ASSERT_EQ(result->num_listen, 1, "num_listen");
->
+PiBkaWZmIC0tZ2l0IGEvbmV0L2NvcmUvZmlsdGVyLmMgYi9uZXQvY29yZS9maWx0ZXIuYwo+IGlu
+ZGV4IGZhOGE3YzdkODZlYi4uMzYwODAzNjYzMmE4IDEwMDY0NAo+IC0tLSBhL25ldC9jb3JlL2Zp
+bHRlci5jCj4gKysrIGIvbmV0L2NvcmUvZmlsdGVyLmMKPiBAQCAtMTIzODgsNiArMTIzODgsMjIg
+QEAgX19icGZfa2Z1bmMgaW50IGJwZl9za19hc3NpZ25fdGNwX3JlcXNrKHN0cnVjdCBfX3NrX2J1
+ZmYgKnMsIHN0cnVjdCBzb2NrICpzaywKPiAgI2VuZGlmCj4gIH0KPgo+ICtfX2JwZl9rZnVuYyBp
+bnQgYnBmX3NvY2tfb3BzX3RjcF9zZXRfcmN2bG93YXQoc3RydWN0IGJwZl9zb2NrX29wc19rZXJu
+ICpza29wcywKPiArCQkJCQkgICAgICBpbnQgcmN2bG93YXQpCj4gK3sKPiArI2lmZGVmIENPTkZJ
+R19JTkVUCj4gKwlpZiAoc2tvcHMtPm9wICE9IEJQRl9TT0NLX09QU19SQ1ZRX0NCKQo+ICsJCXJl
+dHVybiAtRU9QTk9UU1VQUDsKPiArCj4gKwlpZiAocmN2bG93YXQgPCAwKQo+ICsJCXJjdmxvd2F0
+ID0gSU5UX01BWDsKPiArCj4gKwlyZXR1cm4gX190Y3Bfc2V0X3Jjdmxvd2F0KHNrb3BzLT5zaywg
+cmN2bG93YXQsICFza29wcy0+c2tiKTsKCkNvdWxkIHRoaXMgcmVwcm9kdWNlIHRoZSBNUFRDUCBz
+dWJmbG93IGlzc3VlIGZyb20gY29tbWl0IGZjZjQ2OTJmYTM5ZQooIm1wdGNwOiBwcmV2ZW50IEJQ
+RiBhY2Nlc3NpbmcgbG93YXQgZnJvbSBhIHN1YmZsb3cgc29ja2V0LiIpPwoKSW4gdGhlIHYxIHJl
+dmlldywgQmrDtnJuIFTDtnBlbCBhc2tlZCB3aGV0aGVyIEJQRiBwcm9ncmFtcyBjb3VsZCBjYWxs
+IHRoaXMKa2Z1bmMgb24gTVBUQ1Agc3ViZmxvdyBzb2NrZXRzLiBUaGUgcmVzcG9uc2Ugd2FzICJJ
+J2xsIHJhdGhlciBkcm9wIHN1cHBvcnQKZm9yIE1QVENQIGZvciBub3csIiBidXQgdGhlcmUncyBu
+byBjaGVjayBoZXJlIHRvIHByZXZlbnQgdGhpcyBrZnVuYyBmcm9tCmJlaW5nIGNhbGxlZCBvbiBN
+UFRDUCBzdWJmbG93cy4KCldpdGhvdXQgYSBjaGVjayBsaWtlOgoKICAgIGlmIChza19pc19tcHRj
+cChza29wcy0+c2spKQogICAgICAgIHJldHVybiAtRU9QTk9UU1VQUDsKCm9yIGEgcHJvdG9jb2wg
+Y2hlY2ssIHRoaXMgY29kZSBjb3VsZCB0cmlnZ2VyIHRoZSBzYW1lIHdhcm5pbmcgdGhhdApmY2Y0
+NjkyZmEzOWUgd2FzIGRlc2lnbmVkIHRvIHByZXZlbnQuCgo+ICsjZWxzZQo+ICsJcmV0dXJuIC1F
+T1BOT1RTVVBQOwo+ICsjZW5kaWYKPiArfQo+ICsKPiAgX19icGZfa2Z1bmMgaW50IGJwZl9zb2Nr
+X29wc19lbmFibGVfdHhfdHN0YW1wKHN0cnVjdCBicGZfc29ja19vcHNfa2VybiAqc2tvcHMsCj4g
+IAkJCQkJICAgICAgdTY0IGZsYWdzKQo+ICB7CgpbIC4uLiBdCgoKLS0tCkFJIHJldmlld2VkIHlv
+dXIgcGF0Y2guIFBsZWFzZSBmaXggdGhlIGJ1ZyBvciBlbWFpbCByZXBseSB3aHkgaXQncyBub3Qg
+YSBidWcuClNlZTogaHR0cHM6Ly9naXRodWIuY29tL2tlcm5lbC1wYXRjaGVzL3ZtdGVzdC9ibG9i
+L21hc3Rlci9jaS9jbGF1ZGUvUkVBRE1FLm1kCgpDSSBydW4gc3VtbWFyeTogaHR0cHM6Ly9naXRo
+dWIuY29tL2tlcm5lbC1wYXRjaGVzL2JwZi9hY3Rpb25zL3J1bnMvMjYyNzU2NzQ1NzI=
 
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c b/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
-> index 6935f32eeb8f..e30cb1fab079 100644
-> --- a/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
-> +++ b/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
-> @@ -92,7 +92,8 @@ int bpf_testcb(struct bpf_sock_ops *skops)
->  		break;
->  	case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
->  		/* Test failure to set largest cb flag (assumes not defined) */
-> -		global.bad_cb_test_rv = bpf_sock_ops_cb_flags_set(skops, 0x80);
-> +		global.bad_cb_test_rv = bpf_sock_ops_cb_flags_set(skops,
-> +								  BPF_SOCK_OPS_ALL_CB_FLAGS + 1);
-
-Could BPF_SOCK_OPS_ALL_CB_FLAGS + 1 break on future kernels?
-
-When this test is compiled, BPF_SOCK_OPS_ALL_CB_FLAGS + 1 evaluates to a
-hardcoded value. If the compiled test runs on a future kernel where this
-value is supported, the helper will successfully set the flag and return 0,
-causing the test to fail.
-
-The test also assumes contiguous bitmasks. If a flag is ever deprecated or
-skipped, adding 1 could overlap with valid bits.
-
-Would a safely distant bit like 1 << 30 be more robust for forward
-compatibility?
-
-(Reference: https://lore.kernel.org/bpf/20260508190227.AFAE9C2BD00@smtp.kernel.org/)
-
->  		/* Set callback */
->  		global.good_cb_test_rv = bpf_sock_ops_cb_flags_set(skops,
->  						 BPF_SOCK_OPS_STATE_CB_FLAG);
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26275674572
---===============8360733971623066269==--
+--===============2178938720958764145==--
