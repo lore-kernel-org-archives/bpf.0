@@ -1,159 +1,203 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D6393C2BB9
-	for <bpf@vger.kernel.org>; Fri, 22 May 2026 17:13:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779470022; cv=none; b=ZCHkVNVQhel6C5CXCDmkn0BLcjGIg+XSavId5CbwS+BXg/P5izNxSnvRGvlvE43i047wATDYjHx45Eb2YXpfh0G3tBwwaRzaNqMnEA3CEqRShzSFSSIIr8DuVCzWWZ+9JqhavpJaxcRHzuSwRUZmZ7w5sGjoqYY0/rzP+kkuAjM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779470022; c=relaxed/simple;
-	bh=a+CInxeSB1Zqe7+X7tbNilMFXAdB47JkuFSLHzgtQp0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=Kd7YUuAdSc3qgRtOFrsg+RFI2LBpkPXaAK2Q5Y20FkGL3eVufk3NjX3Gt61/ztrpfcZXXjw0FL7Z6dNSttSVnynw10f29mf+v+EwUjhhYioS8CejtUWFQj6Olj7AkXSTP3Jaq3EE0NFE46yAiKd9m7CRbSu+/Z7q2AI55phus64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=mb5avOus; arc=none smtp.client-ip=74.125.82.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B6135AC33
+	for <bpf@vger.kernel.org>; Fri, 22 May 2026 17:16:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779470217; cv=pass; b=oPARswMN/GrLvFOdDhQ6DpUiu55zbUEAYsA8b639x9uoGcshnBQhK3TEhwcVwPAPC6hQS8vPm58S1PCV3S1O3+6HIVLBXxjIC/vA494gZ5rsilpwLza78yrP6dow/QUeD0kULopPHFZEo0Q3iqmfay7UR/yF0bCfoVokYvfWKxM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779470217; c=relaxed/simple;
+	bh=efVJkG0eJpwvXyufDhH2CmXyJXUPv6D9+b+1uZgEJVg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MBQnEQOz2H+7MypnebETkQIxCS0z+MjFIzk4dN8XdHto1ux26zT8+XoRdwwcrVdHZkwibJ73GMpq+3HIqTU0hZ63V4PBLyzdvqFJ8IIadCWVRmlKnMBPPCHYklbarxzNhc+y1bOfMmHzFqSvtHHr/6NE+UgOovmmSluUWE7ueYw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hRBI8+m9; arc=pass smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="mb5avOus"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-3042dffd80bso3546655eec.0
-        for <bpf@vger.kernel.org>; Fri, 22 May 2026 10:13:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hRBI8+m9"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c7980c060cfso3346842a12.2
+        for <bpf@vger.kernel.org>; Fri, 22 May 2026 10:16:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779470215; cv=none;
+        d=google.com; s=arc-20240605;
+        b=SQ5knWPhjaqpMmKgQjKidffmfT47hxmbimjTE4eofT8uARZ9r6mfoKSOFaQEwNC3z/
+         qXWobFEj1M3pY5OGMILqvYzTZ6s29jSVKqyMnzKu03nBj7uCZFXnSFiou5Wos2YNFYnO
+         KE7Z/+UNFe27266xTgZudJU3QauXnqaOlHpEAnH2mrumgTsAuPV8wPzmCl09Ml2ehgcF
+         n7Uzj7vamHPFMqRuwGKsC/pmNl47Q1Ylno93NqwowkM2tRSddJeYR3MD2xxHIqxpqiEg
+         KEbSqPN/CSEQzHgljvbvsGtNOfjruzTSdlSgRCxQo5+J9mINenCcSqIfcbp8KsF7aOUO
+         Q5ww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=qLYY/rmi2IfqTQDB11qxbSq01DzC4y6qzC8T5Xy0XHU=;
+        fh=gnvcvEDDq5p0J6o2sbOJxeHeidTk47RGrkLMTeRqQOk=;
+        b=g5ukNlLAvbwwinInAYH5Oh5BGk4jULMwsZT1KRAhvyYnX//EveZguw87wXec7Sko/4
+         3jg4CMqhvlEuJLoHSo4afb4zQ/FD0U1yVUKDYski8qdfAoizXYG9w8RcXzQDDWHtWPbL
+         Vkcd4/w6f4kuPjGAEywMdGCYJyGtxnxthsQpvNv87Bay+34PQIQvS4Pm476ku/75shCi
+         2InJrzSRw7f0jMuDljozF//tuGH28FIEZutOKYHovy+bgqzJHirAQS41UP7we19Vs7fX
+         yW7KxrmjUbv93FtVhHmT2ZEvHV4Ie/ByDu+IdCDTXBPxqNgs99NclF3hr/bF6LElv+1T
+         sCGg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1779470020; x=1780074820; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1779470215; x=1780075015; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wY4I8lMoFI92sp/KvSm+KBFNyjnf2+5FqBSVyBYIdTY=;
-        b=mb5avOusvH++FgQcBBfSDMOsB1NyLQKilnVtcHQxyJBsnXRzm8q4NnE7ilDv/f/pnL
-         h7SgTyEQyWIQknSdq+vG2gLE0yQyhn5Hdk4du3LBRrVNfY5p4c095DyH2/28wqcdxVgj
-         KABArBH7YfUiM7LF7AAroA/UIdMn5oSDk4+13FWGXmk0UdrpNQzkB6l4idqTrTh8YCIN
-         2i592+RByhRugCuxZ2YQuWOjRnKhZMPwKQwZFZm2mhXu2/4XITbQS7bEl9bi5oaNd+HL
-         XOIKThbxeedA0VS0iGfhfz80NsrYsQ9xnAvCi0uBKHRCGPvAnsbXzZflULPXAKGgYrGM
-         jb9g==
+        bh=qLYY/rmi2IfqTQDB11qxbSq01DzC4y6qzC8T5Xy0XHU=;
+        b=hRBI8+m9A6j7jX1Kooljp3QN/qb6e7Mz0e5ovnsaqD3OcO4VfM73jCsM+f4ucccBZw
+         v/saHfL3tyV8gqL4UDA0mVx2AVEKun1h/3Z/PSAxc+yfHrpivIZPSID3PYDQFEB9sRgT
+         OH5SdDxVDgejA/foqMBabHQTHacpuq+axP86r1YNKBqkC8tBJIQkSPI9CcFCRbB+p5Zm
+         n7uj9Hg4DU46ZLG288omdzbpyoi9KMW20WEzjQ5i1PmVvvwdca3sMvFhwg5yalEE2B6d
+         LUXNNHn8amB8p1vd/HTh5SfBx+VWC6kQ9jXN/DTeKOwM+gWZn7HNW8iPRCsP4ijREKw3
+         Ucbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779470020; x=1780074820;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wY4I8lMoFI92sp/KvSm+KBFNyjnf2+5FqBSVyBYIdTY=;
-        b=prqDFRMQtjAPB+6c672Il5VK22fZ20E1dGGVlBPS111IYC80aHlCkt1nzaYtv8F7iC
-         1AfdryXdBX25G4dKE0VkkbfeZE10B7dhcRLSQsBQQaHxcD9GRg7eKb/6R5lnNHycNQfk
-         OcCQMK+wv+LVm+aYlMZhzpK8G+tNompSlzCxcI2alHpJOh1rrHgLR/raGdOLmPaaLr9S
-         2myLdBD+Nbv01vHZxQoQ024uBNPEFj3i6jcCsJuYLXVkyv2GyWMSeiH3+urUz0DRk+GN
-         w2kgAAhrvZLvxhEbCKpwVdRXKtU6pt0+rynVwv0W5aT8Lm5PJlAUxaoD2BttY3z9U5hE
-         +HQg==
-X-Forwarded-Encrypted: i=1; AFNElJ+nUmNCEZ9Uxo0GTMubTDFW/P3RtR5Wmu26/u5ZBUlr/MY78KmdLXmkF27MNsM0Lt75744=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHRZn0ew/b/Nv011xiy5JpLEc+166veieupFn6xwlulovgfpYM
-	g7gOA5bEEBeA8BX9uNufV98/HtaBYiBdIZGNm72+lSqr4TxOtBka+MZIYWT30uSlwLI=
-X-Gm-Gg: Acq92OFxcAERy1R18bRyI+Evqn5kQAEeLRQlpiVoUvIL71e6NPiBdr8BAYi3xGKcyK5
-	ehktXOeGw0UtYO7sEVmfDyoO8woUmsG6Pcjih6cYhVepkujM2Vz1o+nVeuQiduBn4XlBFOB6YGj
-	++FhvBpg2kDAf4d/krknDdIhH/umeuvOueaEia8dKavKSpn2mRZcBAeWLKjUYOqvQcHMXNZVPQl
-	wiOf1KG7zeHLg+jcuQl5gvac1xwVrZ9k9HGgBkYbQCafnq0n09gD+eZIJc15mIXKZIC4j6VHi+E
-	NsQNQGfdNWrHwgbmbc8pu36Ku2lfk4YwvtdXHdujTh2lYTUPbzFarCA8u7i0yrI7zdCT7if7JT2
-	shDU3C/VY3lnqw2IJ0u169xXH0cpTkHeHehSBRyz7pFO8WdAnlN6+l9jOs6YwLqZH7ckxxj/ChQ
-	xThxfvJ+T9Ja/WWPI=
-X-Received: by 2002:a05:7301:168b:b0:2be:833c:149d with SMTP id 5a478bee46e88-304491e11fcmr2091389eec.28.1779470020197;
-        Fri, 22 May 2026 10:13:40 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::69da])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30451f3feadsm1872911eec.13.2026.05.22.10.13.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 May 2026 10:13:39 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779470215; x=1780075015;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qLYY/rmi2IfqTQDB11qxbSq01DzC4y6qzC8T5Xy0XHU=;
+        b=lm4LkCP7RZrMkdzQtq+3Nbs9KxHtnf2bajic7wtrRQyp5TikM/e00UwtP1ouu/Q9b+
+         eJ3dSneb4MXKPyHVc21gLN8BKiGAN+7pjvolG+jKhflQQwXPbHq7eOqbwIT4YONEMIkt
+         1RLdb23pxUpJMfXOAGSk4ju2KhTt3IRErwKlKqI+o7oAEeK/U+vrmTQ9UBS9vpPKrQQx
+         clxvR8fqCklb0HwUvPUJoqEWyXNqO861Tst061ZCg4lr1BBZpyU07+CL7enwqhx2XLv8
+         QzYjnAqUHxPlgkMBPTmwPUjxqUQd/9q97IcEqas1GsPUar4yMiRSTLzCONxi9GKTwBEb
+         OtKA==
+X-Forwarded-Encrypted: i=1; AFNElJ90uVhI6p+pm5+UhUL0fvdxHXgH+7hbimx2mqPJcHkttOuPuLOvYqeqfC39RLft5uj/Z4w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8ZLpKZdMYQ+SH8Wx3Zri1Q1RjBQk8klF4ZS9K4lBErV2eWx3j
+	WrEHafE+wWJs90a0M8yxgOe+QTU1kKs8JbpS0hm4HMQV9gu2s4xscpz/jMth4bdnsE0Tn6A2LSS
+	S5LgtsKMvQ+wa/c7KYA4D6KznbyKxGZ4=
+X-Gm-Gg: Acq92OGZeC9zy/4JmpPKt8s9ZYvgiHiExpjRJolTDlWnB9GQHYmGSNAbKnmRQ/Ifsjo
+	S/E/z+vkit7gOazmjO8q4cEuSAjNZKOOM3te1xcZbha67C9/WiQxn6yoQpwWAddLG2nfzzgUAK4
+	9Ry5eOI+pp2SZmmz503lOAYqRAa4QjQXrbXc/JCueEkbcmYtH6BXeQHh7uVXz+gvFtMmN7kXlcu
+	NiZkJvU2ztD4xlGQjLEpMfiK1ov434vfDttLzWHDVUEAAHiN3+fFzZqTfHoJYbyP0I8CeGbMA21
+	y1pnRSO8694c3+iC2jBGnu2MYovoyQ9OnA==
+X-Received: by 2002:a17:90b:3511:b0:369:e1fa:962b with SMTP id
+ 98e67ed59e1d1-36a67896c7emr4444742a91.26.1779470214949; Fri, 22 May 2026
+ 10:16:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260521225022.2695755-1-ihor.solodrai@linux.dev> <20260521225022.2695755-2-ihor.solodrai@linux.dev>
+In-Reply-To: <20260521225022.2695755-2-ihor.solodrai@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 22 May 2026 10:16:40 -0700
+X-Gm-Features: AVHnY4Jbua4gGnP_0ncnvO0QtXuEP4byVVWn4-w5s4tvVi8lvfZZHKIembiep0I
+Message-ID: <CAEf4BzbjpeQd3A4CHSPO3o8PB2koGsUa2+ggWPjQqd8Ra+F2Bw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 1/3] bpf: Factor out stack_map build ID helpers
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Puranjay Mohan <puranjay@kernel.org>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 22 May 2026 13:13:35 -0400
-Message-Id: <DIPDH3PCUDDG.EGYL0SYSG1IO@etsalapatis.com>
-Cc: "Andrey Konovalov" <andreyknvl@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, "David
- Ahern" <dsahern@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>, "Ingo
- Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, "X86 ML" <x86@kernel.org>, "H. Peter Anvin"
- <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime Coquelin"
- <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
- <alexandre.torgue@foss.st.com>, "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
- "Alexander Potapenko" <glider@google.com>, "Dmitry Vyukov"
- <dvyukov@google.com>, "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
- "Andrew Morton" <akpm@linux-foundation.org>, <ebpf@linuxfoundation.org>,
- "Bastien Curutchet" <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>, "bpf"
- <bpf@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>, "Network
- Development" <netdev@vger.kernel.org>, "open list:KERNEL SELFTEST
- FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- <linux-stm32@st-md-mailman.stormreply.com>, "linux-arm-kernel"
- <linux-arm-kernel@lists.infradead.org>, "kasan-dev"
- <kasan-dev@googlegroups.com>, "linux-mm" <linux-mm@kvack.org>
-Subject: Re: [PATCH RFC bpf-next 3/8] bpf: add BPF_JIT_KASAN for KASAN
- instrumentation of JITed programs
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, "Alexei
- Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
- <20260413-kasan-v1-3-1a5831230821@bootlin.com>
- <CA+fCnZf-o8tiv_tX9YB5eBUGx17OpztKZsEB6Awjw3WAqBAiUw@mail.gmail.com>
- <DHSWSSYRPUVC.2W3G3OU27L3HG@bootlin.com>
- <CAADnVQLj=UosnsC-4V2+mN92Fe0-kW++U+m-O9c93kk6BwiXgw@mail.gmail.com>
- <DIP9O3BEWG3C.2BAHKYUIA4H4E@bootlin.com>
-In-Reply-To: <DIP9O3BEWG3C.2BAHKYUIA4H4E@bootlin.com>
 
-On Fri May 22, 2026 at 10:14 AM EDT, Alexis Lothor=C3=A9 wrote:
-> On Tue Apr 14, 2026 at 4:38 PM CEST, Alexei Starovoitov wrote:
->> On Tue, Apr 14, 2026 at 6:24=E2=80=AFAM Alexis Lothor=C3=A9
->> <alexis.lothore@bootlin.com> wrote:
->>>
->>> On Tue Apr 14, 2026 at 12:20 AM CEST, Andrey Konovalov wrote:
->>> > On Mon, Apr 13, 2026 at 8:29=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Fou=
-ndation)
->>> > <alexis.lothore@bootlin.com> wrote:
+On Thu, May 21, 2026 at 3:51=E2=80=AFPM Ihor Solodrai <ihor.solodrai@linux.=
+dev> wrote:
 >
-> [...]
+> Factor out helpers from stack_map_get_build_id_offset() in
+> preparation for adding a sleepable build ID resolution path.
 >
->>> >> +config BPF_JIT_KASAN
->>> >> +       bool
->>> >> +       depends on HAVE_EBPF_JIT_KASAN
->>> >> +       default y if BPF_JIT && KASAN_GENERIC
->>> >
->>> > Should this be "depends on KASAN && KASAN_GENERIC"?
->>>
->>> Meaning, making it an explicit user-selectable option ?
->>>
->>> If so, the current design choice is voluntary and based on the feedback
->>> received on the original RFC, where I have been suggested to
->>> automatically enable the KASAN instrumentation in BPF programs if KASAN
->>> support is enabled in the kernel ([1]). But if a user-selectable toggle
->>> is eventually a better solution, I'm fine with changing it.
->>
->> Let's not add more config knobs.
->> Even this patch looks redundant.
->> Inside JIT do instrumentation when KASAN_GENERIC is set.
+> No functional changes.
 >
-> (with quite some delay) I think it would be better to keep this new
-> BPF_JIT_KASAN, because aside from the possibility to use it in
-> bpf_jit_comp.c, it allows to update tests affected by KASAN
-> instrumentation in a nicer way. For example, the test_loader subtests
-> that monitor JITted instructions are confused by KASAN. I can either
-> skip them or make them smarter when KASAN is enabled for BPF, but in
-> both cases, it would be nicer to just adapt the behavior based on a
-> generic CONFIG_BPF_JIT_KASAN, rather than sprinkling some "if
-> jit_enabled AND CONFIG_KASAN_GENERIC AND ARCH_X86" in selftests. That
-> still does not make it a config knob, that just creates an internal
-> Kconfig option that is automatically turned on when KASAN and JIT are
-> enabled at build time.
+> Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> ---
+>  kernel/bpf/stackmap.c | 51 ++++++++++++++++++++++++++++++-------------
+>  1 file changed, 36 insertions(+), 15 deletions(-)
+>
 
-Having a togglable config knob gives us the option to set up KASAN for
-the kernel but not for BPF, and I don't see why we'd want that. Imo we are
-already paying the cost of KASAN for the rest of the kernel, there is no
-incentive to not run it for the BPF JIT. Having to eat the complexity cost
-in the selftests seems reasonable if the alternative means a cleaner
-interface for the user (preventing them from choosing an unreasonable
-combination of options).
+[...]
+
+>  /*
+>   * Expects all id_offs[i].ip values to be set to correct initial IPs.
+>   * They will be subsequently:
+> @@ -165,44 +187,43 @@ static int fetch_build_id(struct vm_area_struct *vm=
+a, unsigned char *build_id, b
+>  static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_=
+offs,
+>                                           u32 trace_nr, bool user, bool m=
+ay_fault)
+>  {
+> -       int i;
+>         struct mmap_unlock_irq_work *work =3D NULL;
+>         bool irq_work_busy =3D bpf_mmap_unlock_get_irq_work(&work);
+> +       bool has_user_ctx =3D user && current && current->mm;
+>         struct vm_area_struct *vma, *prev_vma =3D NULL;
+> -       const char *prev_build_id;
+> +       const unsigned char *prev_build_id;
+
+=3D NULL ?
+
+> +       int i;
+>
+>         /* If the irq_work is in use, fall back to report ips. Same
+>          * fallback is used for kernel stack (!user) on a stackmap with
+>          * build_id.
+>          */
+> -       if (!user || !current || !current->mm || irq_work_busy ||
+> -           !mmap_read_trylock(current->mm)) {
+> +       if (!has_user_ctx || irq_work_busy || !mmap_read_trylock(current-=
+>mm)) {
+>                 /* cannot access current->mm, fall back to ips */
+> -               for (i =3D 0; i < trace_nr; i++) {
+> -                       id_offs[i].status =3D BPF_STACK_BUILD_ID_IP;
+> -                       memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX)=
+;
+> -               }
+> +               for (i =3D 0; i < trace_nr; i++)
+> +                       stack_map_build_id_set_ip(&id_offs[i]);
+>                 return;
+>         }
+>
+>         for (i =3D 0; i < trace_nr; i++) {
+>                 u64 ip =3D READ_ONCE(id_offs[i].ip);
+> +               u64 offset;
+>
+>                 if (range_in_vma(prev_vma, ip, ip)) {
+>                         vma =3D prev_vma;
+> -                       memcpy(id_offs[i].build_id, prev_build_id, BUILD_=
+ID_SIZE_MAX);
+> -                       goto build_id_valid;
+> +                       offset =3D stack_map_build_id_offset(vma->vm_pgof=
+f, vma->vm_start, ip);
+> +                       stack_map_build_id_set_valid(&id_offs[i], offset,=
+ prev_build_id);
+> +                       prev_build_id =3D id_offs[i].build_id;
+
+you are not updating prev_vma, so why updating prev_build_id... it's
+confusing because this serves no purpose, yet the code is there, so
+whoever is reading this should be asking the question of "what am I
+missing". Am I missing something?
+
+> +                       continue;
+>                 }
+>                 vma =3D find_vma(current->mm, ip);
+>                 if (!vma || fetch_build_id(vma, id_offs[i].build_id, may_=
+fault)) {
+>                         /* per entry fall back to ips */
+> -                       id_offs[i].status =3D BPF_STACK_BUILD_ID_IP;
+> -                       memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX)=
+;
+> +                       stack_map_build_id_set_ip(&id_offs[i]);
+>                         continue;
+>                 }
+> -build_id_valid:
+> -               id_offs[i].offset =3D (vma->vm_pgoff << PAGE_SHIFT) + ip =
+- vma->vm_start;
+> -               id_offs[i].status =3D BPF_STACK_BUILD_ID_VALID;
+> +               offset =3D stack_map_build_id_offset(vma->vm_pgoff, vma->=
+vm_start, ip);
+> +               stack_map_build_id_set_valid(&id_offs[i], offset, id_offs=
+[i].build_id);
+>                 prev_vma =3D vma;
+>                 prev_build_id =3D id_offs[i].build_id;
+>         }
+> --
+> 2.54.0
+>
