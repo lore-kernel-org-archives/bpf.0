@@ -1,79 +1,80 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7708430E821
-	for <bpf@vger.kernel.org>; Fri, 22 May 2026 08:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9602C3B8955
+	for <bpf@vger.kernel.org>; Fri, 22 May 2026 09:06:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.170
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779440193; cv=pass; b=jCp/tmK+x+gH7V+Ni0OrUxvhCxevZtfSbJs2PWGUOXDnFhYa8Lkd5OoMCgzzRZ/2oaFZUC4av2tA0y/AIBt+8nX6HGOviHRlAwYlC3fby0Y0XdWmcp/8UlDRmQdv6MGs05EExVd5BX5h6sQ8QT0CXBJV3P8w1fuaQQlzBidGP5w=
+	t=1779440782; cv=pass; b=BIpSU4/8tA6u9w6qMIaF2YiBvzTPm6fS5wWMGnvkOu0RZ6tn+qzamzTYIOgYjpOGl8iRHp+rl32ABze9RH6U+ceK2MWLoFsk6639Rv18jCm/IOJFUTyfQGG+7axyH6fw+plHxiOqQMhAYEeJJI9t/DxkfbubUXBvfyMFL9ogUlk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779440193; c=relaxed/simple;
-	bh=4rrMUbEJIIgM9povErBphB6bszN6Fu8IR043oLR2Pro=;
+	s=arc-20240116; t=1779440782; c=relaxed/simple;
+	bh=R+S7aw8jm/S0niR/bgF2z9EKXggL1ReO5jO3N/+1zP4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A72MD6DKM0c0xTHQpLYgtlEdI5wYzvuDnTyVGhtRr5IcpZiafzpAEy+l7pZeXIkQupMjcfCzX2Bc+MleLfK3J9CVAWTFVm0LiOKoCCnFWWgk8CGHRGPIPjdYLHopk0umZnVuyaav9twAaP59OkWEYT27SbwDZg2YKhAfzur2mkg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NX34oLgK; arc=pass smtp.client-ip=209.85.167.41
+	 To:Cc:Content-Type; b=jdStv3tLVlYE/jJjWKwyfNnym+VAqEh9rTQo2cFkM2aRI/Qk1J7uf9qrV+D2bfx8OzWK0oxta6ILu66RgV1wtPsHBvaGNgLwxAECP3uTxnQnXTPrcpHXR+tudWTe/EUKDYUvMX25ibcXCyfaZJ+JsMURgJK9biIDOaEmzJmGKaI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nBsgu/lO; arc=pass smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NX34oLgK"
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5a8c94cefcdso5769320e87.0
-        for <bpf@vger.kernel.org>; Fri, 22 May 2026 01:56:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779440190; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nBsgu/lO"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2baef9f5ecdso57175705ad.1
+        for <bpf@vger.kernel.org>; Fri, 22 May 2026 02:06:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779440780; cv=none;
         d=google.com; s=arc-20240605;
-        b=jI+Tz+8D8v6CRlsHN/tqB6VNAgJWbISxPBfgRyWkZXzys2DEMTFqu38GEZ135agppz
-         KRv6oNyiGMTi4fqG+b9vHw475imLL8ShW8MGv+p4oUprtTIgcpY5VgtsgbfHTqsk9Q6d
-         rgmwlpW8E8lEkPP6OymhliEmhDH8l6Z/kvCSKuTNT1pbzTumLkvGSRkyyVb9zVGrvCZR
-         EqYZXS6K6kU5szmX7e2TiXSXhDKBQf1dSY61kWmA54ZTS0roMgf4mJEyKYWfYbIHLSr6
-         2caebInZ8e1ZHYIoEGZ9xRv3XDza/R7Y84fY1hVF8rwCTZ8xsocOQ1UCL2FHTlbAoB4b
-         6tww==
+        b=UQbifWCXsq8q088KiD1NsAdR/wRcF21o1Vinw0/iiEJYW6mXLq/kvdUJrGnmRPoGZS
+         W+M1dd34A5Q75XWSk71c4nht+ogO3+og9n1YEkJ5JykckCBQUT8B+wCtPj+FkbIFxolE
+         AQO9b2802MfQBauiKCz8/IHmNZvw7lSjBL0G4Uoe1MeeshHVebjSDB38Us8u6mGb5Yu2
+         Rc369i6HgoapofrYAYlu7iSoyDevPc/bv9gDeWRxXjW4GLC4Gu2w1k4DL7sW+lCkx1Rz
+         ZsOniCX5BedewXaya9Cj/vBZwNMdpUrsVmcN+TFfLTi0NBcvm33Hh0O3wDNkjFlsoDD9
+         51RA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=yaFACCq8ZE1W2u6S3A9eiVCMv+PJt7R0BZzbYwKupQ0=;
-        fh=rBFFoQt2/KrE2t/ic2xD9uvKv9ONWPLK3V67fslzQoM=;
-        b=T5nOG4Tppm2Iy3fjzW5TQo02ekFA4RiZp3uRDJndgNaABdY5O6/49r4Qo0vaFsnHeQ
-         pnVbVtUiyBtx67pKH4nrpXWEYOp/P3a9oGzaHF2d4SM9JqI+76yMAikOYhchLNcIglgI
-         9S6g7RU7kjKqdNUYH3gsQMzL5BzK8o/eMOvg5HFIWiHNniU4XJQaZAvtLGKFgHHgHS1G
-         74qQ/avwdXVU8LzsNOLWfhHd1JuEuEvJWWjv71XEmlqrUJ7bkugpHGlzfCGUoR/0KncD
-         ++kGcQUqggzQ/4wLXJXtIogg6M0dhUQ+pg1LZucSGa8cBNs4oz/lv2x5x6/nrGibRv59
-         eqaA==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=/0g2cVKUQEj9Q4kYnLCnoahgGlOqxaRvFqX0zcp0b8M=;
+        fh=4vnddbiLEm0/heK7J+1kvJ8QA6p898RxEFNZxZqM4dg=;
+        b=Bh06os/lkQ5KfRRLEKiLMZsZ/y0dC9H/09jQNsBEUjg1J1tbuhWrOKyRGeGWuDGx+B
+         sx03xWEmHv3/RpJwYTR2K2efzhhuIm9MVOCutzFNnsB5X1Zsyot/jd0K/AXXDHfLRH0G
+         UHNYHEpNcg8pD1zDMug4hP2hxMIPZZt68x4J558XhJK5E2MbHZLL27Xmg+cw+hzQDOfh
+         6A5u/uA0zjd3Fix91BRsxffkZZbEz0cIP7EAneh1aS9fCTAue0UHNjmabvBVpztBhnqW
+         oWF1dEyht2gfw0OqY3cBIJctOjJ/hA9//AmAc7SuAyJuCGqqoGjNkscxSX+F6IBwntfs
+         2IRA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779440190; x=1780044990; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yaFACCq8ZE1W2u6S3A9eiVCMv+PJt7R0BZzbYwKupQ0=;
-        b=NX34oLgKjprIH4I4VA0PZ7xAibN9XNPkVV2lq4SUn4BbV5zlKPYweCCnchvEYmug/v
-         Y/MwlDRGbNODArWGBP4OUjVCKqol3WeJasVol7rifdNG3FhBio+//E02yheOAtlBt+nI
-         RS4UQfU/sr6jM32fofx3+pLLGV1aDFgtCfRCX+mOvVFCc33e3drPpVg4V59nUgOB7wCC
-         P/gi40SEA7WbMhIZBoRz1tbeypeEPXNve3fEz1eAeEOsC89Uv5/XuNwTw5MKuUnl+oyG
-         pwOQuMuFn6yYBQ2Dbzj1n9e5DkWXtKQDu1V9QtBsQnFjs9/eUovayhei4CSazQsVZpwo
-         tNPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779440190; x=1780044990;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1779440780; x=1780045580; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yaFACCq8ZE1W2u6S3A9eiVCMv+PJt7R0BZzbYwKupQ0=;
-        b=dWwQXlXizhUvEBqYVsHFXtpUYQuroQjXrlTI8WavcJucGcZsnuYMIwifD8+2iUQwZ8
-         +rS1TYFH2XrNDYGTN1J+Gjx8jxBOmgC6ccEiKg9U2EzCyE+lc1UTOMeaIaPteobV71oM
-         WBXpnxksoi+QUYUnAHfjS44Uibji12O9Br1v1QJaeBkphNZD+kgxS+mrSDquRdsOXJ4O
-         ryXcOTHp58HK+Q5MWGdz44BHFlmvuXpt9nOdywtrSCdcwr/OmpI4zX+0KBybWZfAW+Eg
-         /Ia6tg1VdPWNrs4HvwA0g35kPdXaKuOONQ9mLkvqUZr0HMnWEIO9274SAnuBROmnSdIp
-         0mDA==
-X-Forwarded-Encrypted: i=1; AFNElJ/WLFTNM9n1T4nj1oPseMHo37//i6bqLjWlEmm4B03I1ue18V57RbFrtY7uPW2M+A9vsJc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8U7kyK3C14IpBFPLobS5IenZwP7uJY8lDYQgdPWXDAw7vCmhF
-	xwG7Yg/TvnoJ48iJKTV5NTQanVASWheIRD+WSnblW/6ODGdhR9jN1CxMSmyQVfNNjLWqx3anBEP
-	2bWrSul0Zwy2A2oA9zdBh3EZhT+DF/Nw=
-X-Gm-Gg: Acq92OGrwt9lXf1qczcW6RkjJ72qi+sO/kXaK/9zA9vU32ypgr4p2CAbx7Fj7XF0jKN
-	oIn3nxsvpEIIE8wFJ1oUwzvmhndjAABp4d8+Jwpp6miVLAJQr6ilfr+OzMKKCTbkSx5NYlgr+Wu
-	3mUyXUxaB8LsBz3b8zzpGhp5K3xQdDBZIaJvUTIUzaX0osi1Zs70yGVWqgtEv8JSoTvDwZho/S6
-	hjkzsk677w1Da5egg2JoahiHqCwcyDFPw22xTpdR5PuNgDsal4cPFlPGtEY6mccyUFOnly0LfrD
-	14TROeiMxxNeyKsNv/QhfAasLGRbO5Sax3KKpvQuKPqmkh9UI34Me9pMQTL3oQ==
-X-Received: by 2002:a05:6512:230d:b0:5a4:6f5:6c2d with SMTP id
- 2adb3069b0e04-5aa323b28d0mr931877e87.31.1779440189321; Fri, 22 May 2026
- 01:56:29 -0700 (PDT)
+        bh=/0g2cVKUQEj9Q4kYnLCnoahgGlOqxaRvFqX0zcp0b8M=;
+        b=nBsgu/lOM+L+g0xYW7sSm1uAkRersmD/hxD/ZkWGl8cY5lLvFHF84A2QchoMD18tfv
+         XCjNxC7pH8ja59asDOz8aVZywmwHkTDJMBUPEMYq8kU/ECIPh3eUNHEVXbhm8kQ2oKTI
+         OxISYWit8y2OYLK2LcqDai2lXxyzIgZuisXCAdMIj3YcwuBwdDetDCkOIUmIWSMLE17U
+         tCeI3gdhgaiG1MggcFTBD5n7760fh9oKDaAt0dsO2hjkA7BUGsYMsPHgQSFrT4AJlyjb
+         FOLH0VgvqIy4Gg1QyWsOn2KuUD1BGHP+Me+lq6I+ydLiHmdpE+yTguyktz3Bl74a3spw
+         KQbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779440780; x=1780045580;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/0g2cVKUQEj9Q4kYnLCnoahgGlOqxaRvFqX0zcp0b8M=;
+        b=BduRYFhQVk+TAJ+L2KuUrDn9WKq0dx3YSCHeLusf6ZZRcl4xwNSfJjXFwj3Km+LxDn
+         bQrSsWQWkqrqHxn19pjtlpzahJzt5ZRfcGd5hCYaCCz1aWQ4XASjLXfn5FvKTSPEMwRa
+         hfZUngm/as8JKuQBlj3Vcgv168H9InENd56rgS1PcvGlNa/UnWT1/nzp4HoeKEJKd8ug
+         w3K5aczvenwlAabHWbCP8U4soVXbNJ2nUDplpQVeEWmFbc2tu/+M7WbJn/t33i8sUrXS
+         LSRZkGI6EcmG5GG5JDxAQNq1rlRtMDP11USrVLpq7Ryylf3A7tHuhFaExhGmLqQKR4UO
+         lO8g==
+X-Forwarded-Encrypted: i=1; AFNElJ9Mz0DTitDTzBhCTRjiyrNPF/Fzrx1Fqxl18LXe/biALKzAJ1SFZHT5i6SCBlNzMb9C4us=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxquZGKSCQPRZ/mb9+VYo4cYAcMuf5ClIcVhd4lg1Qpo8JlAHuc
+	zpc0emorFOYrQqVR537ZX7d/dXftRk9e76kUTyu9naAo5xDdYFg5bqlrkle5vNxEs7PVT3oifww
+	9rU+eQOVdI+AEdBTrVG8OipmVHA9Wh2M=
+X-Gm-Gg: Acq92OE5jI89MB/WVOZBvxOylAOF0TTMWIgPU7AiEAZuvDKDennmHareRjfmv6raHF/
+	ITxVT3cTFGbMTEHw7gYWVK84XoCuhJiyA6EA2juFglJ660jK5WpjYokSiZ2vdE2HNk1ekfwiVlF
+	FphHB75N3t2bMxCtpXChXiQTSj8P78i4hc4FNo6dmJSSemqn2h+ReUEXVGNqzqpUEmzKLlXYSs4
+	+0IqjNf0MVUWGUMjbSD/FSiPms8EGfLRifJw2ftS622mGBALt2arxpLOIm39ks7D2wL2We5czfv
+	3GudI8kOJg==
+X-Received: by 2002:a17:903:234e:b0:2b4:5931:bc4c with SMTP id
+ d9443c01a7336-2beb069806dmr27409495ad.15.1779440779790; Fri, 22 May 2026
+ 02:06:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,353 +82,195 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260520004244.55663-1-kerneljasonxing@gmail.com>
- <ag75Xicuk6JwkTkC@boxer> <CAL+tcoAJ3i-WGnVx-9ASF29gPNAaP2ucw76x3ftLog-b1TPf_w@mail.gmail.com>
- <ag8ByhbrNNJaESYi@boxer> <CAL+tcoA8BkJc5jy3de3cBE69UboR66SCbLVD6B-0ffHGhXp_gw@mail.gmail.com>
- <ag8VgX2TxYIMJZB/@boxer>
-In-Reply-To: <ag8VgX2TxYIMJZB/@boxer>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Fri, 22 May 2026 16:55:50 +0800
-X-Gm-Features: AVHnY4JL4e7IMmtzqtx8iskPvHmzBHYpcYZL5sXLnGdy2P0JBtjNFLQxw_-vWZY
-Message-ID: <CAL+tcoBy5bb2iqOfYw1Ayr85WBRRDmsPqxmquSojNgM1U21UXg@mail.gmail.com>
-Subject: Re: [PATCH net v4 0/5] xsk: fix meta and publish of cq issues
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
-	jonathan.lemon@gmail.com, sdf@fomichev.me, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, 
-	horms@kernel.org, andrew+netdev@lunn.ch, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: multipart/mixed; boundary="000000000000624e6406526434ef"
-
---000000000000624e6406526434ef
+ <20260520004244.55663-4-kerneljasonxing@gmail.com> <ag3c9/EF4h7DLQu3@boxer>
+ <CAL+tcoAvbEZ7U2oXBWwLAKeuC==gAHi=GXLZcrEPxbb4mQ9sfA@mail.gmail.com>
+ <ag70RrU4nGy0Nlna@boxer> <CAL+tcoAHnVDOFgmUvi1jfTdTHchxdUrRYppenQ6Ubiwyv8jmUg@mail.gmail.com>
+In-Reply-To: <CAL+tcoAHnVDOFgmUvi1jfTdTHchxdUrRYppenQ6Ubiwyv8jmUg@mail.gmail.com>
+From: Magnus Karlsson <magnus.karlsson@gmail.com>
+Date: Fri, 22 May 2026 11:06:05 +0200
+X-Gm-Features: AVHnY4KiTvx6DrhHqiVR7wrSm7hruax0kEs4hqu-if92Ny5qh6-NW-NaDOy7_Ko
+Message-ID: <CAJ8uoz0bKHSiHjRvNmvVs_z3cWg58U=6wGKKs9_n65yCCcYbEw@mail.gmail.com>
+Subject: Re: [PATCH net v4 3/5] xsk: drain continuation descs after overflow
+ in xsk_build_skb()
+To: Jason Xing <kerneljasonxing@gmail.com>
+Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, bjorn@kernel.org, 
+	magnus.karlsson@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, 
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
+	john.fastabend@gmail.com, horms@kernel.org, andrew+netdev@lunn.ch, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Jason Xing <kernelxing@tencent.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 21, 2026 at 10:24=E2=80=AFPM Maciej Fijalkowski
-<maciej.fijalkowski@intel.com> wrote:
+On Thu, 21 May 2026 at 15:42, Jason Xing <kerneljasonxing@gmail.com> wrote:
 >
-> On Thu, May 21, 2026 at 09:07:30PM +0800, Jason Xing wrote:
-> > On Thu, May 21, 2026 at 9:00=E2=80=AFPM Maciej Fijalkowski
-> > <maciej.fijalkowski@intel.com> wrote:
-> > >
-> > > On Thu, May 21, 2026 at 08:41:08PM +0800, Jason Xing wrote:
-> > > > On Thu, May 21, 2026 at 8:24=E2=80=AFPM Maciej Fijalkowski
-> > > > <maciej.fijalkowski@intel.com> wrote:
-> > > > >
-> > > > > On Wed, May 20, 2026 at 08:42:39AM +0800, Jason Xing wrote:
-> > > > > > From: Jason Xing <kernelxing@tencent.com>
-> > > > > >
-> > > > > > The series is the product of previous review from sashiko[1].
-> > > > > >
-> > > > > > 1) META
-> > > > > > patch 1: address TOCTOU around metadata.
-> > > > > >
-> > > > > > 2) PUBLISH of CQ
-> > > > > > patch 2: make sure xsk_addr->addrs[] can be published to cq whe=
-n
-> > > > > >          overflow occurs.
-> > > > > > patch 3: keep cleaning up the continuation descs (more than 17)=
- and
-> > > > > >          publish its address when overflow occurs.
-> > > > > > patch 4: like patch 3, but only handles the invalid descs cases=
-.
-> > > > > >
-> > > > > > [1]: https://lore.kernel.org/all/20260502200722.53960-1-kernelj=
-asonxing@gmail.com/
-> > > > > >
-> > > > > > ---
-> > > > > > V4
-> > > > > > Link: https://lore.kernel.org/all/20260517063311.28921-1-kernel=
-jasonxing@gmail.com/
-> > > > > > 1. correct the description of xmit path in patch 3 (sashiko)
-> > > > > > 2. move set logic into xmit path in patch 3 (Stan)
-> > > > > >
-> > > > > > V3
-> > > > > > Link: https://lore.kernel.org/all/20260515123018.80147-1-kernel=
-jasonxing@gmail.com/
-> > > > > > 1. avoid breaking previous usage of sendto, and siliently handl=
-e
-> > > > > > overflow case (Stan, sashiko)
-> > > > > > 2. add one particular exception process in patch 4 (sashiko)
-> > > > > > 3. adjust the selftest to make sure it passes in either virutal=
- or
-> > > > > > physical machines, which includes add usleep to support physica=
-l machine.
-> > > > > >
-> > > > > > V2
-> > > > > > Link: https://lore.kernel.org/all/20260510012310.88570-1-kernel=
-jasonxing@gmail.com/
-> > > > > > 1. adjust selftests (Jakub)
-> > > > > > 2. add READ_ONCE in patch 1 (Stan)
-> > > > >
-> > > > > FWIW I still get test failures (yes with patch 5 applied). PTAL.
+> On Thu, May 21, 2026 at 8:02=E2=80=AFPM Maciej Fijalkowski
+> <maciej.fijalkowski@intel.com> wrote:
+> >
+> > On Thu, May 21, 2026 at 07:53:27AM +0800, Jason Xing wrote:
+> > > On Thu, May 21, 2026 at 12:10=E2=80=AFAM Maciej Fijalkowski
+> > > <maciej.fijalkowski@intel.com> wrote:
 > > > >
-> > > > Thanks for the test. But I've tried with ixgbe driver...
+> > > > On Wed, May 20, 2026 at 08:42:42AM +0800, Jason Xing wrote:
+> > > > > From: Jason Xing <kernelxing@tencent.com>
+> > > > >
+> > > > > When a multi-buffer packet exceeds MAX_SKB_FRAGS and triggers -EO=
+VERFLOW,
+> > > > > only the current descriptor is released from the TX ring. The rem=
+aining
+> > > > > continuation descriptors of the same packet stay in the ring. Sin=
+ce
+> > > > > xs->skb is set to NULL after the drop, the TX loop picks up these
+> > > > > leftover frags and misinterprets each one as the beginning of a n=
+ew
+> > > > > packet, corrupting the packet stream.
+> > > > >
+> > > > > Fix this by adding a drain_cont flag to xdp_sock. When overflow o=
+ccurs
+> > > > > and the dropped descriptor has XDP_PKT_CONTD set, the flag is rai=
+sed,
+> > > > > so we have a chance to examine and handle the potential remaining=
+ descs
+> > > > > of this big overflow'ed skb.
+> > > > >
+> > > > > When the last fragment (without XDP_PKT_CONTD) is processed, the =
+flag
+> > > > > is cleared and the loop continues to process subsequent descripto=
+rs
+> > > > > with the remaining budget. This behavior follows how previous xmi=
+t path
+> > > > > treats overflow packets.
+> > > > >
+> > > > > Closes: https://lore.kernel.org/all/20260425041726.85FB3C2BCB2@sm=
+tp.kernel.org/
+> > > > > Fixes: cf24f5a5feea ("xsk: add support for AF_XDP multi-buffer on=
+ Tx path")
+> > > > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> > > > > ---
+> > > > >  include/net/xdp_sock.h |  1 +
+> > > > >  net/xdp/xsk.c          | 19 +++++++++++++++++++
+> > > > >  2 files changed, 20 insertions(+)
+> > > > >
+> > > > > diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
+> > > > > index ebac60a3d8a1..8b51876efbed 100644
+> > > > > --- a/include/net/xdp_sock.h
+> > > > > +++ b/include/net/xdp_sock.h
+> > > > > @@ -80,6 +80,7 @@ struct xdp_sock {
+> > > > >        * call of __xsk_generic_xmit().
+> > > > >        */
+> > > > >       struct sk_buff *skb;
+> > > > > +     bool drain_cont;
+> > > > >
+> > > > >       struct list_head map_list;
+> > > > >       /* Protects map_list */
+> > > > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > > > > index 0a6203c42576..f4add7be8c93 100644
+> > > > > --- a/net/xdp/xsk.c
+> > > > > +++ b/net/xdp/xsk.c
+> > > > > @@ -1062,11 +1062,30 @@ static int __xsk_generic_xmit(struct sock=
+ *sk)
+> > > > >                       goto out;
+> > > > >               }
+> > > > >
+> > > > > +             if (unlikely(xs->drain_cont)) {
 > > > >
-> > > > I noticed there are some flaky tests which have nothing to do with =
-the
-> > > > series. Can you confirm that it's not caused because of the series?
+> > > > Hi Jason,
+> > > >
+> > > > could we get away from introducing dedicated boolean to xdp_sock fo=
+r
+> > > > handling this rare case?
 > > >
-> > > That explains the different results as i am using i40e/ice which have
-> > > multi-buffer support whereas ixgbe does not even support mbuf at XDP.
-> > > Broken tests are from mbuf cases.
+> > > I've tried several ways, but they didn't work. Please see the short
+> > > conversation with Stan:
+> > > https://lore.kernel.org/all/CAL+tcoA6Cu3P-y2wYjJ_R9cSeRkW2tswY1LveqH=
+=3Duxd2McuR-w@mail.gmail.com/
+> > >
+> > > That means we always rely on a flag (that is either static or like
+> > > this patch) to recognize how we treat this abnormal descs.
+> > >
+> > > >
+> > > > > +                     unsigned long flags;
+> > > > > +                     u32 idx;
+> > > > > +
+> > > > > +                     spin_lock_irqsave(&xs->pool->cq_prod_lock, =
+flags);
+> > > > > +                     idx =3D xskq_get_prod(xs->pool->cq);
+> > > > > +                     xskq_prod_write_addr(xs->pool->cq, idx, des=
+c.addr);
+> > > > > +                     xskq_prod_submit_n(xs->pool->cq, 1);
+> > > > > +                     spin_unlock_irqrestore(&xs->pool->cq_prod_l=
+ock, flags);
+> > > >
+> > > > It feels a bit off to do this cleanup one-by-one.
+> > >
+> > > Actually no, it adheres to the basic send logic in copy mode.
 > >
-> > That's weird. I never expected the failed tests to be about multi-buffe=
-r.
+> > Not really. Here you are producer to cq which we have batched variants =
+for
+> > usage.
 > >
-> > Are they the same as the output you attached last time? Or something
-> > new? Could you please share it so that I can investigate the root
-> > cause?
+> > But after second thoughts I don't think it would be worth to put any
+> > further effort onto optimizations here. Anyways, even though generic xm=
+it
+> > is a whole bunch of mess, maybe you could pull this out onto a helper
+> > function?
 >
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 21 FAIL: SKB ALIGNED_INV_DESC_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 33 FAIL: SKB UNALIGNED_INV_DESC_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 57 FAIL: DRV ALIGNED_INV_DESC_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 69 FAIL: DRV UNALIGNED_INV_DESC_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 93 FAIL: ZC ALIGNED_INV_DESC_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [11], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> ---------------------------------------
-> not ok 94 FAIL: ZC TOO_MANY_FRAGS
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 105 FAIL: ZC UNALIGNED_INV_DESC_MULTI_BUFF
+> Sure thing. My takeaway is that it will be refactored once as the
+> batch xmit feature lands in the tree.
+
+I agree that the code has become really messy since I get a headache
+when looking at it ;-). Do you want me to take a stab at simplifying
+it?
+
+> Thanks,
+> Jason
 >
-> # 4 skipped test(s) detected. Consider enabling relevant config options t=
-o improve coverage.
-> # Totals: pass:96 fail:8 xfail:0 xpass:0 skip:4 error:0
-> XSK_SELFTESTS_ens259f1np1_SOFTIRQ: [ FAIL ]
-> 1..108
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 21 FAIL: SKB BUSY-POLL ALIGNED_INV_DESC_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 33 FAIL: SKB BUSY-POLL UNALIGNED_INV_DESC_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 57 FAIL: DRV BUSY-POLL ALIGNED_INV_DESC_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 69 FAIL: DRV BUSY-POLL UNALIGNED_INV_DESC_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 93 FAIL: ZC BUSY-POLL ALIGNED_INV_DESC_MULTI_BUFF
-> # [is_frag_valid] expected pkt_nb [11], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> ---------------------------------------
-> # [is_frag_valid] expected pkt_nb [10], got pkt_nb [0]
-> # DEBUG>> L2: dst mac: # 55# 44# 33# 22# 11# 01#
-> DEBUG>> L2: src mac: # 55# 44# 33# 22# 11# 00#
-> DEBUG>> L5: seqnum: # 0:0 # 0:1 # 0:2 # 0:3 # 0:4 # 0:5 # 0:6 # 0:7 # 0:8=
- # 0:9 # 0:10 # 0:11 # 0:0 # 0:0 # 0:0 # 0:0 # ....#
-> .... # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # 0:0 # =
-0:0 # 0:0 # 0:0 # 0:0 # 0:0 #
-> ---------------------------------------
-> not ok 105 FAIL: ZC BUSY-POLL UNALIGNED_INV_DESC_MULTI_BUFF
->
-> # 4 skipped test(s) detected. Consider enabling relevant config options t=
-o improve coverage.
-> # Totals: pass:96 fail:8 xfail:0 xpass:0 skip:4 error:0
-> XSK_SELFTESTS_ens259f1np1_BUSY_POLL: [ FAIL ]
->
-> Summary:
-> XSK_SELFTESTS_ens259f1np1_SOFTIRQ: [ FAIL ]
-> XSK_SELFTESTS_ens259f1np1_BUSY_POLL: [ FAIL ]
-
-Sorry, Maciej. I managed to get one server with i40e nic but still
-couldn't reproduce it. Can you try the attachment (that is the
-replacement for v4-0005) instead? I removed those nasty CONT test
-cases...
-
-Really I don't think I have much time to spend on these tests which
-makes me feel extremely annoyed... It's not easy to analyze the code
-without a reproducer. The good news is that now I highly suspect that
-this kind of CONT test cases pollute the whole cq which affects other
-tests. Before I give up on the 0003/0004 patches, I'd like to hear
-some advice from you. Thank you.
-
-My original intention was to push batch xmit forward but at that time
-sashiko pointed out some unrelated bugs accidentally.
-
-Thanks,
-Jason
-
->
-> >
-> > Thanks,
-> > Jason
 > >
 > > >
 > > > >
-> > > > Thanks,
-> > > > Jason
+> > > > I wonder if it could be covered by xsk_drop_skb() where you would w=
+alk the
+> > > > tx ring and store addrs at xsk_addrs and then use xsk_cq_submit_add=
+r_locked() ?
 > > > >
+> > > > OTOH, in theory the amount of frags after we hit the overflow case =
+could
+> > > > be well over MAX_SKB_FRAGS again so xsk_addrs wouldn't be able to c=
+over
+> > > > them.
+> > >
+> > > Right, this is why we now put the logic into the xmit path just like
+> > > other kinds of descriptors. We need to check and send it under a
+> > > series of protections like the check of cq pressure and budget. I
+> > > don't think it's an exception to escape the check logic. The whole
+> > > process should be fast as there is no need to build skb and send it t=
+o
+> > > the driver as long as this case is recognized.
+> > >
+> > > Thanks,
+> > > Jason
+> > >
 > > > >
+> > > > > +
+> > > > > +                     xs->tx->invalid_descs++;
+> > > > > +                     xskq_cons_release(xs->tx);
+> > > > > +                     if (!xp_mb_desc(&desc))
+> > > > > +                             xs->drain_cont =3D false;
+> > > > > +                     continue;
+> > > > > +             }
+> > > > > +
+> > > > >               skb =3D xsk_build_skb(xs, &desc);
+> > > > >               if (IS_ERR(skb)) {
+> > > > >                       err =3D PTR_ERR(skb);
+> > > > >                       if (err !=3D -EOVERFLOW)
+> > > > >                               goto out;
+> > > > > +                     if (xp_mb_desc(&desc))
+> > > > > +                             xs->drain_cont =3D true;
+> > > > >                       err =3D 0;
+> > > > >                       continue;
+> > > > >               }
+> > > > > --
+> > > > > 2.43.7
 > > > > >
-> > > > > >
-> > > > > >
-> > > > > > Jason Xing (5):
-> > > > > >   xsk: cache csum_start/csum_offset to fix TOCTOU in xsk_skb_me=
-tadata()
-> > > > > >   xsk: fix buffer leak in xsk_drop_skb() for AF_XDP multi-buffe=
-r Tx
-> > > > > >   xsk: drain continuation descs after overflow in xsk_build_skb=
-()
-> > > > > >   xsk: drain continuation descs on invalid descriptor in
-> > > > > >     __xsk_generic_xmit()
-> > > > > >   selftests/xsk: drain CQ to wait for TX completion
-> > > > > >
-> > > > > >  include/net/xdp_sock.h                        |  1 +
-> > > > > >  net/xdp/xsk.c                                 | 44 +++++++++++=
-++----
-> > > > > >  .../selftests/bpf/prog_tests/test_xsk.c       | 48 +++++++++++=
---------
-> > > > > >  3 files changed, 63 insertions(+), 30 deletions(-)
-> > > > > >
-> > > > > > --
-> > > > > > 2.43.7
-> > > > > >
-
---000000000000624e6406526434ef
-Content-Type: application/octet-stream; name="test.patch.1"
-Content-Disposition: attachment; filename="test.patch.1"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mpgoomwv0>
-X-Attachment-Id: f_mpgoomwv0
-
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3Rlc3Rf
-eHNrLmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy90ZXN0X3hzay5j
-CmluZGV4IDc5NTBjNTA0ZWQyOC4uNGViODM1NjUyM2FhIDEwMDY0NAotLS0gYS90b29scy90ZXN0
-aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy90ZXN0X3hzay5jCisrKyBiL3Rvb2xzL3Rlc3Rp
-bmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3Rlc3RfeHNrLmMKQEAgLTIwNzAsMzEgKzIwNzAs
-MjUgQEAgaW50IHRlc3RhcHBfaW52YWxpZF9kZXNjX21iKHN0cnVjdCB0ZXN0X3NwZWMgKnRlc3Qp
-CiAJCS8qIFZhbGlkIHBhY2tldCBmb3Igc3luY2ggdG8gc3RhcnQgd2l0aCAqLwogCQl7MCwgTUlO
-X1BLVF9TSVpFLCAwLCB0cnVlLCAwfSwKIAkJLyogWmVybyBmcmFtZSBsZW4gaXMgbm90IGxlZ2Fs
-ICovCi0JCXswLCBYU0tfVU1FTV9fTEFSR0VfRlJBTUVfU0laRSwgMCwgZmFsc2UsIFhEUF9QS1Rf
-Q09OVER9LAotCQl7MCwgWFNLX1VNRU1fX0xBUkdFX0ZSQU1FX1NJWkUsIDAsIGZhbHNlLCBYRFBf
-UEtUX0NPTlREfSwKIAkJezAsIDAsIDAsIGZhbHNlLCAwfSwKLQkJLyogSW52YWxpZCBhZGRyZXNz
-IGluIHRoZSBzZWNvbmQgZnJhbWUgKi8KLQkJezAsIFhTS19VTUVNX19MQVJHRV9GUkFNRV9TSVpF
-LCAwLCBmYWxzZSwgWERQX1BLVF9DT05URH0sCi0JCXt1bWVtX3NpemUsIFhTS19VTUVNX19MQVJH
-RV9GUkFNRV9TSVpFLCAwLCBmYWxzZSwgWERQX1BLVF9DT05URH0sCi0JCS8qIEludmFsaWQgbGVu
-IGluIHRoZSBtaWRkbGUgKi8KLQkJezAsIFhTS19VTUVNX19MQVJHRV9GUkFNRV9TSVpFLCAwLCBm
-YWxzZSwgWERQX1BLVF9DT05URH0sCi0JCXswLCBYU0tfVU1FTV9fSU5WQUxJRF9GUkFNRV9TSVpF
-LCAwLCBmYWxzZSwgWERQX1BLVF9DT05URH0sCi0JCS8qIEludmFsaWQgb3B0aW9ucyBpbiB0aGUg
-bWlkZGxlICovCi0JCXswLCBYU0tfVU1FTV9fTEFSR0VfRlJBTUVfU0laRSwgMCwgZmFsc2UsIFhE
-UF9QS1RfQ09OVER9LAotCQl7MCwgWFNLX1VNRU1fX0xBUkdFX0ZSQU1FX1NJWkUsIDAsIGZhbHNl
-LCBYU0tfREVTQ19fSU5WQUxJRF9PUFRJT059LAorCQkvKiBJbnZhbGlkIGFkZHJlc3MgKi8KKwkJ
-e3VtZW1fc2l6ZSwgWFNLX1VNRU1fX0xBUkdFX0ZSQU1FX1NJWkUsIDAsIGZhbHNlLCAwfSwKKwkJ
-LyogSW52YWxpZCBsZW4gKi8KKwkJezAsIFhTS19VTUVNX19JTlZBTElEX0ZSQU1FX1NJWkUsIDAs
-IGZhbHNlLCAwfSwKKwkJLyogSW52YWxpZCBvcHRpb25zICovCisJCXswLCBYU0tfVU1FTV9fTEFS
-R0VfRlJBTUVfU0laRSwgMCwgZmFsc2UsCisJCSBYU0tfREVTQ19fSU5WQUxJRF9PUFRJT04gJiB+
-WERQX1BLVF9DT05URH0sCiAJCS8qIFRyYW5zbWl0IDIgZnJhZ3MsIHJlY2VpdmUgMyAqLwogCQl7
-MCwgWFNLX1VNRU1fX01BWF9GUkFNRV9TSVpFLCAwLCB0cnVlLCBYRFBfUEtUX0NPTlREfSwKIAkJ
-ezAsIFhTS19VTUVNX19NQVhfRlJBTUVfU0laRSwgMCwgdHJ1ZSwgMH0sCiAJCS8qIE1pZGRsZSBm
-cmFtZSBjcm9zc2VzIGNodW5rIGJvdW5kYXJ5IHdpdGggc21hbGwgbGVuZ3RoICovCi0JCXswLCBY
-U0tfVU1FTV9fTEFSR0VfRlJBTUVfU0laRSwgMCwgZmFsc2UsIFhEUF9QS1RfQ09OVER9LAogCQl7
-LU1JTl9QS1RfU0laRSAvIDIsIE1JTl9QS1RfU0laRSwgMCwgZmFsc2UsIDB9LAogCQkvKiBWYWxp
-ZCBwYWNrZXQgZm9yIHN5bmNoIHNvIHRoYXQgc29tZXRoaW5nIGlzIHJlY2VpdmVkICovCiAJCXsw
-LCBNSU5fUEtUX1NJWkUsIDAsIHRydWUsIDB9fTsKIAogCWlmICh1bWVtLT51bmFsaWduZWRfbW9k
-ZSkgewogCQkvKiBDcm9zc2luZyBhIGNodW5rIGJvdW5kYXJ5IGFsbG93ZWQgKi8KLQkJcGt0c1sx
-Ml0udmFsaWQgPSB0cnVlOwotCQlwa3RzWzEzXS52YWxpZCA9IHRydWU7CisJCXBrdHNbN10udmFs
-aWQgPSB0cnVlOwogCX0KIAogCXRlc3QtPm10dSA9IE1BWF9FVEhfSlVNQk9fU0laRTsKQEAgLTIy
-MjksNyArMjIyMyw3IEBAIGludCB0ZXN0YXBwX3Rvb19tYW55X2ZyYWdzKHN0cnVjdCB0ZXN0X3Nw
-ZWMgKnRlc3QpCiAJCW1heF9mcmFncyArPSAxOwogCX0KIAotCXBrdHMgPSBjYWxsb2MoMiAqIG1h
-eF9mcmFncyArIDIsIHNpemVvZihzdHJ1Y3QgcGt0KSk7CisJcGt0cyA9IGNhbGxvYyhtYXhfZnJh
-Z3MgKyAyLCBzaXplb2Yoc3RydWN0IHBrdCkpOwogCWlmICghcGt0cykKIAkJcmV0dXJuIFRFU1Rf
-RkFJTFVSRTsKIApAQCAtMjI0NywyMCArMjI0MSwxMSBAQCBpbnQgdGVzdGFwcF90b29fbWFueV9m
-cmFncyhzdHJ1Y3QgdGVzdF9zcGVjICp0ZXN0KQogCX0KIAlwa3RzW21heF9mcmFnc10ub3B0aW9u
-cyA9IDA7CiAKLQkvKiBBbiBpbnZhbGlkIHBhY2tldCB3aXRoIHRoZSBtYXggYW1vdW50IG9mIGZy
-YWdzIGJ1dCBzaWduYWxzIHBhY2tldAotCSAqIGNvbnRpbnVlcyBvbiB0aGUgbGFzdCBmcmFnCi0J
-ICovCi0JZm9yIChpID0gbWF4X2ZyYWdzICsgMTsgaSA8IDIgKiBtYXhfZnJhZ3MgKyAxOyBpKysp
-IHsKLQkJcGt0c1tpXS5sZW4gPSBNSU5fUEtUX1NJWkU7Ci0JCXBrdHNbaV0ub3B0aW9ucyA9IFhE
-UF9QS1RfQ09OVEQ7Ci0JCXBrdHNbaV0udmFsaWQgPSBmYWxzZTsKLQl9Ci0KIAkvKiBWYWxpZCBw
-YWNrZXQgZm9yIHN5bmNoICovCi0JcGt0c1syICogbWF4X2ZyYWdzICsgMV0ubGVuID0gTUlOX1BL
-VF9TSVpFOwotCXBrdHNbMiAqIG1heF9mcmFncyArIDFdLnZhbGlkID0gdHJ1ZTsKKwlwa3RzW21h
-eF9mcmFncyArIDFdLmxlbiA9IE1JTl9QS1RfU0laRTsKKwlwa3RzW21heF9mcmFncyArIDFdLnZh
-bGlkID0gdHJ1ZTsKIAotCWlmIChwa3Rfc3RyZWFtX2dlbmVyYXRlX2N1c3RvbSh0ZXN0LCBwa3Rz
-LCAyICogbWF4X2ZyYWdzICsgMikpIHsKKwlpZiAocGt0X3N0cmVhbV9nZW5lcmF0ZV9jdXN0b20o
-dGVzdCwgcGt0cywgbWF4X2ZyYWdzICsgMikpIHsKIAkJZnJlZShwa3RzKTsKIAkJcmV0dXJuIFRF
-U1RfRkFJTFVSRTsKIAl9Cg==
---000000000000624e6406526434ef--
+>
