@@ -1,190 +1,212 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D80C37F8B8;
-	Fri, 22 May 2026 15:01:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E2337F736;
+	Fri, 22 May 2026 15:09:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779462063; cv=none; b=cR13DJtU2ZVaHCxjeUF0OYXZHPegv9MLpZxnmTHCvt05fk3KV7iFeev7IfeMwN8p4zvg6OKGRMY/eSqcaRTgZF6tTpJeXe4CkRc5j1bcN6GT9J5ngGNEfn/P+dhL8FLUf9Tq0UOAM5BJh0l0S/UOyPrtwmFbAsSoWrHf5MN+oFo=
+	t=1779462552; cv=none; b=R/tfloTJR6jBV5CWldKNHySci01T+MC8oVVe6S55VUE/T8i0UmsPkyQU24KjUO90wOlTvkcdgC5k/J6r+4xSydsM+FIf08keEa/wrHRp/CMQddhs56OvCxMQdIlKl6kUdBb6tDQXrc4SNyx3mJXSRt9CgwyD9mGeAoPlQODOiRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779462063; c=relaxed/simple;
-	bh=hP7zG0jjuVhwnl0z2gVnSp0KsWsgvAMKNkhd5AhIQAo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KWF0SBFqjk4XNuiIC7R1pGEMmcugH63EDTVnqY6dDC1pIpMJsBEkUXxuZN5Mt4YjwtzZh++bxy37f+bGgmVPPIwtyTq9tz8vYDwAdKU6GEYcxDXmocyWifCFWb+88l9qTuyINFDnYJc+ONRFX1Gsa6QYgNSlpxA14neG3KsVoxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BLWi9T7/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779462552; c=relaxed/simple;
+	bh=1Gi+X3nKQB7uXZwsvfUnK3q8KPcY4vrJ9t/1Eql0DJY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BuSj/YAidhiME/pdGiRL1F7Bg1t4/J9gkkENkRSNG3ma/DglY18norxLdjesCVeM+s1m2zc7nsqsAKDTNscbi+wHRg6ZfNQxdEp+fmKXKiubij/3QTbEPcRLsMlFueivUeclkoJ5wuLaYokL36J18GDFv32z9M5AYbIsP+/c9CY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=QURClF8+; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BLWi9T7/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 429F11F000E9;
-	Fri, 22 May 2026 15:00:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779462062;
-	bh=NIjEohfSDtw1Ut++P3AmpDRpqgKOz0KLQwiNAYD/Wy4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=BLWi9T7/FIVG5ZaqnphodPR6YtEN7tIf5QYaF/lrP41tiveqzIWs9bxAu8sj41087
-	 VreeKUxFCqZUX6xOWe9Kgb7Wq/NCs5GJS0uziQFQIzz0h1MdQY5fhU7aBhe+YmrGeA
-	 HBpKWF+pqk5IeEya3HhzgiHC36G2hG9UA3EIilaTnh+Yxqz6vFETn+TEZ8H1ilVnl/
-	 QaQt8Hg0d5d+yMVBxlP9w+sH/nP+/QVcFSHcEzPCruKQd0Ts8ueQ5FpceiIkh7EXRB
-	 DX80iEb6KEPXBR3GGEuHi7aAGtpIigOkgIo4vNNsflHB14P5htzkBK1J+Wn7MPVY6U
-	 qvuJLJPzANBpg==
-Date: Fri, 22 May 2026 11:01:21 -0400
-From: Steven Rostedt <rostedt@kernel.org>
-To: Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <thomas@t-8ch.de>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>, bpf@vger.kernel.org, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jens Remus <jremus@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, Jiri
- Olsa <jolsa@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Andrii Nakryiko <andrii@kernel.org>, Indu Bhagat <indu.bhagat@oracle.com>,
- "Jose E. Marchesi" <jemarch@gnu.org>, Beau Belgrave
- <beaub@linux.microsoft.com>, Linus Torvalds
- <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>,
- Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>, Carlos
- O'Donell <codonell@redhat.com>, Sam James <sam@gentoo.org>, Dylan Hatch
- <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, David Hildenbrand <david@redhat.com>, "H.
- Peter Anvin" <hpa@zytor.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Michal Hocko
- <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
- <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens
- <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>
-Subject: Re: [PATCH] unwind: Add sframe_(un)register() system calls
-Message-ID: <20260522110121.660c5016@gandalf.local.home>
-In-Reply-To: <7923f815-a8ce-4b64-8cbf-2b90e57cbd24@t-8ch.de>
-References: <20260521183532.7a145c8a@gandalf.local.home>
-	<7923f815-a8ce-4b64-8cbf-2b90e57cbd24@t-8ch.de>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="QURClF8+"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=YNX0HLhlWV61z0zqHSdioFpQe9lQsX0gcyT2y1GLi8g=; b=QURClF8+nZC5YtOzXgxwjqusUd
+	6zorQWNzYhfF/LQVyPzsvzXvVxc955IxFnt2dhORxVzGkptZ3D3MPm3ni+IilrWCiHhwiWjTPdd7D
+	nWtZz7M7Vpd5TyE43yWl6WjsuLy3q7X7IsSsb9wqRah2BME5OZTkOmtStIizCAivCgwWacfkvkR/F
+	rDVDBQfQs3O3yUdu/e9mIgG2SdYhjYuIeoZYeOO39SDEYZDFbW6d9d90+2bATb2bIl0JuNDVd9b9m
+	LKM6r+wqJ/n5lOqQ1EY0/BZR0497JA4giQpuSMh7eykNoFglChvnGVSh3ncng/TDwW9H3Iis+5kgK
+	0ckJwFww==;
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wQRUp-00040S-0a;
+	Fri, 22 May 2026 17:09:07 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wQRUq-000Osy-2D;
+	Fri, 22 May 2026 17:09:08 +0200
+Message-ID: <3cc241a3-eaac-4395-a9a2-2b405eb0ca42@iogearbox.net>
+Date: Fri, 22 May 2026 17:09:06 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/3] bpf: Add simple xattr support to bpffs
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260522135626.120732-1-daniel@iogearbox.net>
+ <20260522144818.DD7EB1F000E9@smtp.kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260522144818.DD7EB1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28008/Fri May 22 08:24:46 2026)
 
-On Fri, 22 May 2026 16:36:56 +0200
-Thomas Wei=C3=9Fschuh <thomas@t-8ch.de> wrote:
+On 5/22/26 4:48 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [High] Unprivileged users can exhaust kernel memory via unbounded user.* extended attributes on bpffs.
+> - [High] NULL pointer dereference in bpf_fs_initxattrs() if an LSM returns a NULL xattr value.
+> --
+> 
+> commit 57543eec66ace3d4d002256a01cff4f1797f61e2
+> Author: Daniel Borkmann <daniel@iogearbox.net>
+> 
+> bpf: Add simple xattr support to bpffs
+> 
+> This commit adds support for extended attributes on bpffs inodes, allowing user
+> space and BPF LSM programs to attach metadata to pinned objects or directories.
+> The xattr store is in-memory and lives only for the lifetime of the mount.
+> 
+>> diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+>> index 25c06a0118258..638aa996cbaf4 100644
+>> --- a/kernel/bpf/inode.c
+>> +++ b/kernel/bpf/inode.c
+> 
+> [ ... ]
+> 
+>> @@ -762,22 +821,151 @@ static int bpf_show_options(struct seq_file *m, struct dentry *root)
+>>   	return 0;
+>>   }
+> 
+> [ ... ]
+> 
+>> +static int bpf_fs_xattr_set(const struct xattr_handler *handler,
+>> +			    struct mnt_idmap *idmap, struct dentry *unused,
+>> +			    struct inode *inode, const char *name,
+>> +			    const void *value, size_t size, int flags)
+>> +{
+>> +	struct bpf_fs_inode *bi = BPF_FS_I(inode);
+>> +	struct simple_xattrs *xattrs;
+>> +	struct simple_xattr *old;
+>> +
+>> +	name = xattr_full_name(handler, name);
+>> +	xattrs = simple_xattrs_lazy_alloc(&bi->xattrs, value, flags);
+>> +	if (IS_ERR_OR_NULL(xattrs))
+>> +		return PTR_ERR(xattrs);
+>> +	old = simple_xattr_set(xattrs, name, value, size, flags);
+> 
+> [Severity: High]
+> Does this code allow an unprivileged user to exhaust kernel memory?
+> 
+> Because bpffs can be mounted in an unprivileged user namespace
+> (FS_USERNS_MOUNT), a user could create directories and repeatedly set user.*
+> extended attributes.
+> 
+> Since simple_xattr_set() does not enforce per-inode limits like
+> simple_xattr_set_limited() does, couldn't this lead to an unbounded memory
+> allocation and soft lockups during rhashtable traversals?
 
-> On 2026-05-21 18:35:32-0400, Steven Rostedt wrote:
-> > From: Steven Rostedt <rostedt@goodmis.org>
-> >=20
-> > Add system calls to register and unregister sframes that can be used by
-> > dynamic linkers to tell the kernel where the sframe section is in memory
-> > for libraries it loads. =20
->=20
-> How is this system call related to the prctl() with the same
-> functionality from Jens' series? I guess it will replace it,
-> but some explanation would be nice.
+Ok, for user.* simple_xattr_set_limited should be the choice then, will
+fix in a v2.
 
-I thought the patch with the prctl() stated it was for debug purposes only.
-=46rom the change log:
+>> +	if (IS_ERR(old))
+>> +		return PTR_ERR(old);
+>> +	simple_xattr_free_rcu(old);
+>> +	inode_set_ctime_current(inode);
+>> +	return 0;
+>> +}
+> 
+> [ ... ]
+> 
+>> +static int bpf_fs_initxattrs(struct inode *inode,
+>> +			     const struct xattr *xattr_array, void *fs_info)
+>> +{
+>> +	struct bpf_fs_inode *bi = BPF_FS_I(inode);
+>> +	const struct xattr *xattr;
+>> +	size_t len;
+>> +
+>> +	CLASS(simple_xattrs, xattrs)();
+>> +	if (IS_ERR(xattrs))
+>> +		return PTR_ERR(xattrs);
+>> +
+>> +	for (xattr = xattr_array; xattr->name != NULL; xattr++) {
+>> +		CLASS(simple_xattr, new_xattr)(xattr->value, xattr->value_len);
+>> +		if (IS_ERR(new_xattr))
+>> +			break;
+>> +
+>> +		len = strlen(xattr->name) + 1;
+>> +		new_xattr->name = kmalloc(XATTR_SECURITY_PREFIX_LEN + len,
+> 
+> [Severity: High]
+> Can this cause a NULL pointer dereference?
+> 
+> If an LSM program returns a NULL xattr value, the simple_xattr class
+> constructor will call simple_xattr_alloc() which can return NULL.
+> 
+> The IS_ERR(new_xattr) check evaluates to false for a NULL pointer, leading
+> to a NULL pointer dereference when accessing new_xattr->name here.
 
-[
-  This adds an interface for prctl() for testing loading of sframes for
-  libraries. But this interface should really be a system call. This patch
-  is for testing purposes only and should not be applied to mainline.
-]
+(false positive: security_inode_init_security() array always have non-NULL
+value paired with non-NULL name.. also in line with shmem_initxattrs)
 
-Hence I didn't think there needs to be any explanation. The prctl() patch
-should never be applied upstream.
-
->=20
-> (...)
->=20
-> > diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> > index f5639d5ac331..992ccc401c5e 100644
-> > --- a/include/linux/syscalls.h
-> > +++ b/include/linux/syscalls.h
-> > @@ -999,6 +999,8 @@ asmlinkage long sys_lsm_get_self_attr(unsigned int =
-attr, struct lsm_ctx __user *
-> >  asmlinkage long sys_lsm_set_self_attr(unsigned int attr, struct lsm_ct=
-x __user *ctx,
-> >  				      u32 size, u32 flags);
-> >  asmlinkage long sys_lsm_list_modules(u64 __user *ids, u32 __user *size=
-, u32 flags);
-> > +asmlinkage long sys_sframe_register(void *data, unsigned int size);
-> > +asmlinkage long sys_sframe_unregister(void *data, unsigned int size); =
-=20
->=20
-> Why not use the actual structure here?
-
-Yeah, I was somewhat lazy here to make sure that this was the direction we
-want to go. I just need to add a structure pointer reference at the top of
-that file.
-
-Will update in v2.
-
->=20
-> >  /*
-> >   * Architecture-specific system calls =20
->=20
-> (...)
->=20
-> > diff --git a/include/uapi/linux/sframe.h b/include/uapi/linux/sframe.h
-> > new file mode 100644
-> > index 000000000000..137a2ebf91f4
-> > --- /dev/null
-> > +++ b/include/uapi/linux/sframe.h
-> > @@ -0,0 +1,12 @@
-> > +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
-> > +#ifndef _UAPI_LINUX_SFRAME_H
-> > +#define _UAPI_LINUX_SFRAME_H
-> > +
-> > +struct sframe_setup {
-> > +	unsigned long		sframe_start;
-> > +	unsigned long		sframe_size;
-> > +	unsigned long		text_start;
-> > +	unsigned long		text_size;
-> > +}; =20
->=20
-> This will break for compat processes, as they use a different 'unsigned
-> long' than the host kernel. Maybe just use __u64.
-
-I'll update it. I was thinking we wouldn't support compat, but in case we
-decide we should forcing the size is better than being architecture
-specific.
-
->=20
-> > +
-> > +#endif /* _UAPI_LINUX_SFRAME_H */ =20
->=20
-> (...)
->=20
-> > +/**
-> > + * sys_sframe_register - register an address for user space stacktrace=
- walking.
-> > + * @data: Structure of sframe data used to register the sframe section
-> > + * @size: The size of the given structure.
-> > + *
-> > + * This system call is used by dynamic library utilities to inform the=
- kernel
-> > + * of meta data that it loaded that can be used by the kernel to know =
-how
-> > + * to stack walk the given text locations.
-> > + *
-> > + * Return: 0 if successful, otherwise a negative error.
-> > + */
-> > +SYSCALL_DEFINE2(sframe_register, __user struct sframe_setup *, data, u=
-nsigned int, size) =20
->=20
-> AFAIK the normal place for the '__user' is right before '*':
->=20
-> 	struct sframe_setup __user *, data,
-
-Will update.
-
->=20
-> Use __kernel_size_t for 'size'?
-
-Looking at the history of the accept() system call that started with int
-and then wanted size_t, then changed to socklen_t, I guess there's
-precedence to use __kernel_size_t.
-
-Will update.
-
-Thanks!
-
--- Steve
+>> +					  GFP_KERNEL_ACCOUNT);
+>> +		if (!new_xattr->name)
+>> +			break;
+>> +
+>> +		memcpy(new_xattr->name, XATTR_SECURITY_PREFIX,
+>> +		       XATTR_SECURITY_PREFIX_LEN);
+> 
+> [ ... ]
+> 
 
