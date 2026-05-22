@@ -1,46 +1,49 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0863D45EA
-	for <bpf@vger.kernel.org>; Fri, 22 May 2026 13:56:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 412974028D8
+	for <bpf@vger.kernel.org>; Fri, 22 May 2026 13:56:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779458199; cv=none; b=cQP0Tck/lzCFS16hc6NXTDeSCCkErVi1JGrKNKlqF5HKVb933Ejjo6SyspLz2i1uRssLfAbEE9OMVHpj8NA0Swzc/9VncjDVUZEn+94Kh7BCpn3qu9dvYIp51TZ+DKQ7OYXoTUu2MaGmGJ2rNyyPSmchb3aHkOwZGEYYkF9hTaE=
+	t=1779458199; cv=none; b=hIGAOHGXzMrNArSxtE0ZW0XgFl9Idu9NYJOQMpcuaCAuCBypC5uHGJy4oSWmwwwGY0p0qaY5eqeFdaRUbM4rS+zzy4io3iJiZp8RmxFnoKq0+53n7UyiygXkpkXMmcbDwTrxOZ1fpmbzCEj0WvM3pxyNWziqCxEnHFgtUK87jZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779458199; c=relaxed/simple;
-	bh=JfrGNq+sZdQVni5MokCa8d8ipt8RccktaDzMp8X45ag=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L5gejXnV1kASyJzivkoibknOJk1fDW4gfodXshzsO8BGVhUn9HLqaydkt0iZ3TLL8AzMLjcQO1wmL/ZIwKuMoIHuW7nDh8iZVea6NcveWcANfHWGDyskuNumTjoYeFHYy461sTC2o54YgQD2v1i8NPvztsSBBvwuHVni65ZtMLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=ars/4iG5; arc=none smtp.client-ip=213.133.104.62
+	bh=bH2F7tUGtbIG6ara1Nlmtvpqvw7TiPb98KnJT/TbdwM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gluvlGa2s6Jq/tsCOlovPepdaTHn7UmvKvnoWtPXplahhUk/K3MUI02fQFlh8aiqmkmDWRDORU516XGSEPd0lqDCIdrIo63xhQO0frvZ/jOMyQZXoNawUSoCYOwQ/ARJEEKf+bQ5Exc5ek+pmh+anNf5TcfySnTdtqZDqFRhh7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=oRFqL3Uq; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="ars/4iG5"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="oRFqL3Uq"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=grNXCpaGn0nQ4hNaLa7AmgLaT385Oz3y5Xxcw3GhuOo=; b=ars/4iG5JDgCI5byLecgoGlQ8g
-	I+yKw7facs+Sh5i8MNL5x3lhuVXp5TN0oNTr7JvNzYwIZHQH6RpRrlXsO4n2P7skCqJhv+SH4nbcB
-	Q1wStKKrwngwObQIHm5opZJZv92d2Plc5ZISqWulTsuRM+NHJwdHVmnyUD6PUCDj3nI1jyZprZSBV
-	ls4cJT3V+/UVxZY8qC4rh+7QoP6xMomJEfMWB+CCmumo1ec02CX3e4CtiMBUdepE2wakmc63BNfWM
-	ZhNNB2mjRDP32ObE+L9uLzwFuQ+dVtyqplolLkwG884fl2fGzyMouoqc+5x/DbK7a6nOfmNppj+d2
-	gD4v13Ig==;
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=QuZAUYE6HKm9ymB8bDXOq95Gmol4QKSvAPCHk2Tcj20=; b=oRFqL3UqyOHAxpFz6QtZObG9xw
+	YGG9PORaJsM+8zFqiTUrxbkJahUj1yddvVM0uziNNQn248DnwUisv5Ol9SSt5xD3y2Y5JflsEPLZc
+	SxgukyGUdJlncWLDhYt9dZF5xMgYOoLJSiKSrHr17wfQVXxKhdPJe0URCQWu3HhVY5fvwQ4ROdlZm
+	0/BU9I/+l/t2bWUoD6Ul/rPW3BFQW9FV0PpWTZkvkieIcVk2Quzlixw5W22eh4XdH/9y9TRqsPpYK
+	7wWc7t6lckPYnZIlbrODYEjy299bTTlEuxVAZPv632zt4JEp8jyPwN/b5hWpEnPUYwMnGJTvmzNTh
+	JU/I8frw==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wQQMV-000Lvv-1X;
-	Fri, 22 May 2026 15:56:27 +0200
+	id 1wQQMW-000Lw2-0d;
+	Fri, 22 May 2026 15:56:28 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: bpf@vger.kernel.org
 Cc: brauner@kernel.org,
 	kpsingh@kernel.org,
 	john.fastabend@gmail.com
-Subject: [PATCH bpf-next 1/3] bpf: Add simple xattr support to bpffs
-Date: Fri, 22 May 2026 15:56:24 +0200
-Message-ID: <20260522135626.120732-1-daniel@iogearbox.net>
+Subject: [PATCH bpf-next 2/3] selftests/bpf: Add bpffs xattr API coverage test
+Date: Fri, 22 May 2026 15:56:25 +0200
+Message-ID: <20260522135626.120732-2-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260522135626.120732-1-daniel@iogearbox.net>
+References: <20260522135626.120732-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,419 +53,367 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28008/Fri May 22 08:24:46 2026)
 
-Add support for extended attributes on bpffs inodes so that user space
-and BPF LSM programs can attach metadata, for example, a content hash
-or a security label - to a pinned object or directory. BPF LSM or user
-space tooling can then uniformly look at this (e.g. security.bpf.*) in
-similar way to other fs'es. The store is in-memory and non-persistent:
-it lives only for the lifetime of the mount, like everything else in
-bpffs. The modelling is similar to tmpfs.
+Add basic bpffs xattr API coverage tests:
 
-bpf_fill_super() is open-coded instead of using simple_fill_super(),
-because the root inode must now be allocated through bpf_fs_alloc_inode()
-i.e. carry the bpf_fs_inode wrapper and come from the right cache -
-which requires s_op (and s_xattr) to be installed before the first
-inode is created.
+  - all three supported namespaces (user.*, trusted.*, security.*) on a
+    single inode, plus listxattr enumerating them and removexattr,
+  - rejection of an unsupported namespace (bogus.*),
+  - flag and error semantics: XATTR_CREATE on an existing key (EEXIST),
+    XATTR_REPLACE on a missing key (ENODATA), removexattr of a missing
+    key (ENODATA), zero-length value round-trip, undersized getxattr
+    buffer (ERANGE) and the size-query form,
+  - every bpffs inode type: the mount root, a directory, and pinned map,
+    prog, link and symlink inodes (listxattr on each),
+  - that a child does not inherit the parent's xattrs (bpffs has no
+    propagation; an LSM-driven security_inode_init_security() is the only
+    path that seeds child xattrs),
+  - that re-pinning at a path that previously held a labeled object
+    yields a fresh, xattr-less inode,
+  - that the store is mount-scoped: after umount + fresh mount the pin
+    and its xattrs are gone.
 
-bpf_fs_listxattr() is only reachable through the filesystem via
-i_op->listxattr, so the BPF token inode is left untouched. Name-based
-fsetxattr()/fgetxattr() on a token fd still work since the get/set
-handlers are installed at the superblock.
+Note that the security_inode_init_security() -> bpf_fs_initxattrs() path
+is not covered here. BPF LSM today does not yet reserve LSM xattr slots
+and the slot populate API is not exposed as a kfunc (on todo, but also
+independent of this set).
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Christian Brauner <brauner@kernel.org>
 ---
- kernel/bpf/inode.c | 254 ++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 237 insertions(+), 17 deletions(-)
+ .../selftests/bpf/prog_tests/bpffs_xattr.c    | 325 ++++++++++++++++++
+ 1 file changed, 325 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpffs_xattr.c
 
-diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-index 25c06a011825..638aa996cbaf 100644
---- a/kernel/bpf/inode.c
-+++ b/kernel/bpf/inode.c
-@@ -21,6 +21,9 @@
- #include <linux/bpf.h>
- #include <linux/bpf_trace.h>
- #include <linux/kstrtox.h>
-+#include <linux/xattr.h>
-+#include <linux/security.h>
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpffs_xattr.c b/tools/testing/selftests/bpf/prog_tests/bpffs_xattr.c
+new file mode 100644
+index 000000000000..3d02e30da338
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/bpffs_xattr.c
+@@ -0,0 +1,325 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Isovalent */
 +
- #include "preload/bpf_preload.h"
- 
- enum bpf_type {
-@@ -30,6 +33,22 @@ enum bpf_type {
- 	BPF_TYPE_LINK,
- };
- 
-+struct bpf_fs_inode {
-+	struct simple_xattrs	*xattrs;
-+	struct inode		vfs_inode;
-+};
++#define _GNU_SOURCE
++#include <sys/mount.h>
++#include <sys/stat.h>
++#include <sys/xattr.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <unistd.h>
++#include <test_progs.h>
 +
-+static inline struct bpf_fs_inode *BPF_FS_I(struct inode *inode)
++#include "test_link_pinning.skel.h"
++
++static const char val_a[] = "value-a";
++static const char val_b[] = "value-b-different-length-than-a";
++
++static int mount_bpffs(char dir[64])
 +{
-+	return container_of(inode, struct bpf_fs_inode, vfs_inode);
-+}
++	int err;
 +
-+static struct kmem_cache *bpf_fs_inode_cachep __ro_after_init;
-+
-+static int bpf_fs_initxattrs(struct inode *inode,
-+			     const struct xattr *xattr_array, void *fs_info);
-+static ssize_t bpf_fs_listxattr(struct dentry *dentry, char *buf, size_t size);
-+
- static void *bpf_any_get(void *raw, enum bpf_type type)
- {
- 	switch (type) {
-@@ -94,10 +113,17 @@ static void *bpf_fd_probe_obj(u32 ufd, enum bpf_type *type)
- }
- 
- static const struct inode_operations bpf_dir_iops;
-+static const struct inode_operations bpf_symlink_iops;
- 
--static const struct inode_operations bpf_prog_iops = { };
--static const struct inode_operations bpf_map_iops  = { };
--static const struct inode_operations bpf_link_iops  = { };
-+static const struct inode_operations bpf_prog_iops = {
-+	.listxattr	= bpf_fs_listxattr,
-+};
-+static const struct inode_operations bpf_map_iops  = {
-+	.listxattr	= bpf_fs_listxattr,
-+};
-+static const struct inode_operations bpf_link_iops  = {
-+	.listxattr	= bpf_fs_listxattr,
-+};
- 
- struct inode *bpf_get_inode(struct super_block *sb,
- 			    const struct inode *dir,
-@@ -153,11 +179,19 @@ static struct dentry *bpf_mkdir(struct mnt_idmap *idmap, struct inode *dir,
- 				struct dentry *dentry, umode_t mode)
- {
- 	struct inode *inode;
-+	int ret;
- 
- 	inode = bpf_get_inode(dir->i_sb, dir, mode | S_IFDIR);
- 	if (IS_ERR(inode))
- 		return ERR_CAST(inode);
- 
-+	ret = security_inode_init_security(inode, dir, &dentry->d_name,
-+					   bpf_fs_initxattrs, NULL);
-+	if (ret && ret != -EOPNOTSUPP) {
-+		iput(inode);
-+		return ERR_PTR(ret);
++	strcpy(dir, "/tmp/bpffs_xattr.XXXXXX");
++	if (!mkdtemp(dir))
++		return -errno;
++	err = mount("bpf", dir, "bpf", 0, NULL);
++	if (err) {
++		err = -errno;
++		rmdir(dir);
 +	}
++	return err;
++}
 +
- 	inode->i_op = &bpf_dir_iops;
- 	inode->i_fop = &simple_dir_operations;
- 
-@@ -330,10 +364,20 @@ static int bpf_mkobj_ops(struct dentry *dentry, umode_t mode, void *raw,
- 			 const struct file_operations *fops)
- {
- 	struct inode *dir = dentry->d_parent->d_inode;
--	struct inode *inode = bpf_get_inode(dir->i_sb, dir, mode);
-+	struct inode *inode;
-+	int ret;
++static void umount_bpffs(const char *dir)
++{
++	umount(dir);
++	rmdir(dir);
++}
 +
-+	inode = bpf_get_inode(dir->i_sb, dir, mode);
- 	if (IS_ERR(inode))
- 		return PTR_ERR(inode);
- 
-+	ret = security_inode_init_security(inode, dir, &dentry->d_name,
-+					   bpf_fs_initxattrs, NULL);
-+	if (ret && ret != -EOPNOTSUPP) {
-+		iput(inode);
-+		return ret;
++static bool list_contains(const char *list, ssize_t list_len, const char *name)
++{
++	const char *p = list;
++
++	while (p < list + list_len) {
++		if (!strcmp(p, name))
++			return true;
++		p += strlen(p) + 1;
 +	}
-+
- 	inode->i_op = iops;
- 	inode->i_fop = fops;
- 	inode->i_private = raw;
-@@ -382,9 +426,11 @@ bpf_lookup(struct inode *dir, struct dentry *dentry, unsigned flags)
- static int bpf_symlink(struct mnt_idmap *idmap, struct inode *dir,
- 		       struct dentry *dentry, const char *target)
- {
--	char *link = kstrdup(target, GFP_USER | __GFP_NOWARN);
- 	struct inode *inode;
-+	char *link;
-+	int ret;
- 
-+	link = kstrdup(target, GFP_USER | __GFP_NOWARN);
- 	if (!link)
- 		return -ENOMEM;
- 
-@@ -394,13 +440,25 @@ static int bpf_symlink(struct mnt_idmap *idmap, struct inode *dir,
- 		return PTR_ERR(inode);
- 	}
- 
--	inode->i_op = &simple_symlink_inode_operations;
-+	inode->i_op = &bpf_symlink_iops;
- 	inode->i_link = link;
- 
-+	ret = security_inode_init_security(inode, dir, &dentry->d_name,
-+					   bpf_fs_initxattrs, NULL);
-+	if (ret && ret != -EOPNOTSUPP) {
-+		iput(inode);
-+		return ret;
-+	}
-+
- 	bpf_dentry_finalize(dentry, inode, dir);
- 	return 0;
- }
- 
-+static const struct inode_operations bpf_symlink_iops = {
-+	.get_link	= simple_get_link,
-+	.listxattr	= bpf_fs_listxattr,
-+};
-+
- static const struct inode_operations bpf_dir_iops = {
- 	.lookup		= bpf_lookup,
- 	.mkdir		= bpf_mkdir,
-@@ -409,6 +467,7 @@ static const struct inode_operations bpf_dir_iops = {
- 	.rename		= simple_rename,
- 	.link		= simple_link,
- 	.unlink		= simple_unlink,
-+	.listxattr	= bpf_fs_listxattr,
- };
- 
- /* pin iterator link into bpffs */
-@@ -762,22 +821,151 @@ static int bpf_show_options(struct seq_file *m, struct dentry *root)
- 	return 0;
- }
- 
-+static struct inode *bpf_fs_alloc_inode(struct super_block *sb)
-+{
-+	struct bpf_fs_inode *bi;
-+
-+	bi = alloc_inode_sb(sb, bpf_fs_inode_cachep, GFP_KERNEL);
-+	if (!bi)
-+		return NULL;
-+	bi->xattrs = NULL;
-+	return &bi->vfs_inode;
++	return false;
 +}
 +
- static void bpf_destroy_inode(struct inode *inode)
- {
-+	struct bpf_fs_inode *bi = BPF_FS_I(inode);
- 	enum bpf_type type;
- 
- 	if (S_ISLNK(inode->i_mode))
- 		kfree(inode->i_link);
- 	if (!bpf_inode_type(inode, &type))
- 		bpf_any_put(inode->i_private, type);
--	free_inode_nonrcu(inode);
-+	if (bi->xattrs) {
-+		simple_xattrs_free(bi->xattrs, NULL);
-+		kfree(bi->xattrs);
-+	}
++static void test_prefixes(void)
++{
++	char dir[64], list[256], buf[64];
++	ssize_t n;
++	int err;
++
++	if (!ASSERT_OK(mount_bpffs(dir), "mount"))
++		return;
++
++	if (!ASSERT_OK(setxattr(dir, "user.foo", val_a, sizeof(val_a),
++				XATTR_CREATE), "set_user"))
++		goto out;
++	if (!ASSERT_OK(setxattr(dir, "trusted.bar", val_a, sizeof(val_a),
++				XATTR_CREATE), "set_trusted"))
++		goto out;
++	if (!ASSERT_OK(setxattr(dir, "security.baz", val_a, sizeof(val_a),
++				XATTR_CREATE), "set_security"))
++		goto out;
++
++	err = getxattr(dir, "user.foo", buf, sizeof(buf));
++	ASSERT_EQ(err, sizeof(val_a), "get_user_len");
++	ASSERT_MEMEQ(buf, val_a, sizeof(val_a), "get_user_val");
++
++	err = getxattr(dir, "trusted.bar", buf, sizeof(buf));
++	ASSERT_EQ(err, sizeof(val_a), "get_trusted_len");
++	ASSERT_MEMEQ(buf, val_a, sizeof(val_a), "get_trusted_val");
++
++	err = getxattr(dir, "security.baz", buf, sizeof(buf));
++	ASSERT_EQ(err, sizeof(val_a), "get_security_len");
++	ASSERT_MEMEQ(buf, val_a, sizeof(val_a), "get_security_val");
++
++	n = listxattr(dir, list, sizeof(list));
++	if (!ASSERT_GT(n, 0, "listxattr"))
++		goto out;
++	ASSERT_TRUE(list_contains(list, n, "user.foo"), "list_user");
++	ASSERT_TRUE(list_contains(list, n, "trusted.bar"), "list_trusted");
++	ASSERT_TRUE(list_contains(list, n, "security.baz"), "list_security");
++
++	ASSERT_OK(removexattr(dir, "trusted.bar"), "remove_trusted");
++	err = getxattr(dir, "trusted.bar", buf, sizeof(buf));
++	ASSERT_EQ(err, -1, "get_after_remove");
++	ASSERT_EQ(errno, ENODATA, "get_after_remove_errno");
++
++	err = getxattr(dir, "user.foo", buf, sizeof(buf));
++	ASSERT_EQ(err, sizeof(val_a), "user_survives_remove");
++out:
++	umount_bpffs(dir);
 +}
 +
-+static void bpf_free_inode(struct inode *inode)
++static void test_unsupported_prefix(void)
 +{
-+	kmem_cache_free(bpf_fs_inode_cachep, BPF_FS_I(inode));
++	char dir[64];
++	int err;
++
++	if (!ASSERT_OK(mount_bpffs(dir), "mount"))
++		return;
++
++	err = setxattr(dir, "bogus.foo", val_a, sizeof(val_a), XATTR_CREATE);
++	ASSERT_EQ(err, -1, "set_bogus_ret");
++	ASSERT_EQ(errno, EOPNOTSUPP, "set_bogus_errno");
++
++	err = setxattr(dir, "system.posix_acl_default", val_a, sizeof(val_a),
++		       XATTR_CREATE);
++	ASSERT_EQ(err, -1, "set_system_ret");
++
++	umount_bpffs(dir);
 +}
 +
-+static int bpf_fs_xattr_get(const struct xattr_handler *handler,
-+			    struct dentry *unused, struct inode *inode,
-+			    const char *name, void *value, size_t size)
++static void test_flags(void)
 +{
-+	struct simple_xattrs *xattrs;
++	char dir[64], buf[8];
++	int err;
 +
-+	name = xattr_full_name(handler, name);
-+	xattrs = READ_ONCE(BPF_FS_I(inode)->xattrs);
-+	if (!xattrs)
-+		return -ENODATA;
-+	return simple_xattr_get(xattrs, name, value, size);
++	if (!ASSERT_OK(mount_bpffs(dir), "mount"))
++		return;
++
++	err = setxattr(dir, "user.x", val_a, sizeof(val_a), XATTR_REPLACE);
++	ASSERT_EQ(err, -1, "replace_missing_ret");
++	ASSERT_EQ(errno, ENODATA, "replace_missing_errno");
++
++	err = removexattr(dir, "user.x");
++	ASSERT_EQ(err, -1, "remove_missing_ret");
++	ASSERT_EQ(errno, ENODATA, "remove_missing_errno");
++
++	ASSERT_OK(setxattr(dir, "user.empty", "", 0, XATTR_CREATE), "set_empty");
++	err = getxattr(dir, "user.empty", buf, sizeof(buf));
++	ASSERT_EQ(err, 0, "get_empty_len");
++
++	ASSERT_OK(setxattr(dir, "user.x", val_a, sizeof(val_a), XATTR_CREATE),
++		  "create_x");
++	err = setxattr(dir, "user.x", val_b, sizeof(val_b), XATTR_CREATE);
++	ASSERT_EQ(err, -1, "create_existing_ret");
++	ASSERT_EQ(errno, EEXIST, "create_existing_errno");
++
++	ASSERT_OK(setxattr(dir, "user.x", val_b, sizeof(val_b), XATTR_REPLACE),
++		  "replace_existing");
++
++	err = getxattr(dir, "user.x", buf, sizeof(buf));
++	ASSERT_EQ(err, -1, "get_too_small_ret");
++	ASSERT_EQ(errno, ERANGE, "get_too_small_errno");
++
++	err = getxattr(dir, "user.x", NULL, 0);
++	ASSERT_EQ(err, sizeof(val_b), "get_query_len");
++
++	umount_bpffs(dir);
 +}
 +
-+static int bpf_fs_xattr_set(const struct xattr_handler *handler,
-+			    struct mnt_idmap *idmap, struct dentry *unused,
-+			    struct inode *inode, const char *name,
-+			    const void *value, size_t size, int flags)
++static void test_inode_types(void)
 +{
-+	struct bpf_fs_inode *bi = BPF_FS_I(inode);
-+	struct simple_xattrs *xattrs;
-+	struct simple_xattr *old;
++	char dir[64], child[128], map_path[128], prog_path[128];
++	char link_path[128], sym_path[128];
++	struct test_link_pinning *skel = NULL;
++	int map_fd = -1, err;
++	char list[128], buf[64];
 +
-+	name = xattr_full_name(handler, name);
-+	xattrs = simple_xattrs_lazy_alloc(&bi->xattrs, value, flags);
-+	if (IS_ERR_OR_NULL(xattrs))
-+		return PTR_ERR(xattrs);
-+	old = simple_xattr_set(xattrs, name, value, size, flags);
-+	if (IS_ERR(old))
-+		return PTR_ERR(old);
-+	simple_xattr_free_rcu(old);
-+	inode_set_ctime_current(inode);
-+	return 0;
++	if (!ASSERT_OK(mount_bpffs(dir), "mount"))
++		return;
++
++	/* mount root inode */
++	ASSERT_OK(setxattr(dir, "user.root", val_a, sizeof(val_a), XATTR_CREATE),
++		  "root_set");
++	err = getxattr(dir, "user.root", buf, sizeof(buf));
++	ASSERT_EQ(err, sizeof(val_a), "root_get");
++	ASSERT_GT(listxattr(dir, list, sizeof(list)), 0, "root_list");
++
++	/* directory: confirm no inheritance from parent */
++	snprintf(child, sizeof(child), "%s/d", dir);
++	if (!ASSERT_OK(mkdir(child, 0755), "mkdir"))
++		goto out;
++	err = getxattr(child, "user.root", buf, sizeof(buf));
++	ASSERT_EQ(err, -1, "no_inherit_ret");
++	ASSERT_EQ(errno, ENODATA, "no_inherit_errno");
++	ASSERT_OK(setxattr(child, "user.dir", val_a, sizeof(val_a), XATTR_CREATE),
++		  "dir_set");
++	ASSERT_GT(listxattr(child, list, sizeof(list)), 0, "dir_list");
++
++	/* map pin */
++	snprintf(map_path, sizeof(map_path), "%s/m", dir);
++	map_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "x", 4, 4, 1, NULL);
++	if (!ASSERT_GE(map_fd, 0, "map_create"))
++		goto out;
++	if (!ASSERT_OK(bpf_obj_pin(map_fd, map_path), "map_pin"))
++		goto out;
++	ASSERT_OK(setxattr(map_path, "user.map", val_a, sizeof(val_a),
++			   XATTR_CREATE), "map_set");
++	ASSERT_GT(listxattr(map_path, list, sizeof(list)), 0, "map_list");
++
++	/* prog pin + link pin via a noop raw_tp prog */
++	skel = test_link_pinning__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel"))
++		goto out;
++
++	snprintf(prog_path, sizeof(prog_path), "%s/p", dir);
++	if (!ASSERT_OK(bpf_obj_pin(bpf_program__fd(skel->progs.raw_tp_prog),
++				   prog_path), "prog_pin"))
++		goto out;
++	ASSERT_OK(setxattr(prog_path, "user.prog", val_a, sizeof(val_a),
++			   XATTR_CREATE), "prog_set");
++	ASSERT_GT(listxattr(prog_path, list, sizeof(list)), 0, "prog_list");
++
++	if (!ASSERT_OK(test_link_pinning__attach(skel), "skel_attach"))
++		goto out;
++
++	snprintf(link_path, sizeof(link_path), "%s/l", dir);
++	if (!ASSERT_OK(bpf_obj_pin(bpf_link__fd(skel->links.raw_tp_prog),
++				   link_path), "link_pin"))
++		goto out;
++	ASSERT_OK(setxattr(link_path, "user.link", val_a, sizeof(val_a),
++			   XATTR_CREATE), "link_set");
++	ASSERT_GT(listxattr(link_path, list, sizeof(list)), 0, "link_list");
++
++	/* symlink: user.* is rejected by VFS on S_IFLNK; trusted.* works */
++	snprintf(sym_path, sizeof(sym_path), "%s/s", dir);
++	if (!ASSERT_OK(symlink("m", sym_path), "symlink_create"))
++		goto out;
++	ASSERT_OK(lsetxattr(sym_path, "trusted.sym", val_a, sizeof(val_a),
++			    XATTR_CREATE), "sym_set");
++	ASSERT_GT(llistxattr(sym_path, list, sizeof(list)), 0, "sym_list");
++out:
++	test_link_pinning__destroy(skel);
++	if (map_fd >= 0)
++		close(map_fd);
++	umount_bpffs(dir);
 +}
 +
-+static const struct xattr_handler bpf_fs_trusted_xattr_handler = {
-+	.prefix	= XATTR_TRUSTED_PREFIX,
-+	.get	= bpf_fs_xattr_get,
-+	.set	= bpf_fs_xattr_set,
-+};
-+
-+static const struct xattr_handler bpf_fs_security_xattr_handler = {
-+	.prefix	= XATTR_SECURITY_PREFIX,
-+	.get	= bpf_fs_xattr_get,
-+	.set	= bpf_fs_xattr_set,
-+};
-+
-+static const struct xattr_handler bpf_fs_user_xattr_handler = {
-+	.prefix	= XATTR_USER_PREFIX,
-+	.get	= bpf_fs_xattr_get,
-+	.set	= bpf_fs_xattr_set,
-+};
-+
-+static const struct xattr_handler * const bpf_fs_xattr_handlers[] = {
-+	&bpf_fs_trusted_xattr_handler,
-+	&bpf_fs_security_xattr_handler,
-+	&bpf_fs_user_xattr_handler,
-+	NULL,
-+};
-+
-+static ssize_t bpf_fs_listxattr(struct dentry *dentry, char *buf, size_t size)
++static void test_repin_same_path(void)
 +{
-+	struct inode *inode = d_inode(dentry);
++	int map_a = -1, map_b = -1, err;
++	char dir[64], path[128], buf[16];
 +
-+	return simple_xattr_list(inode, READ_ONCE(BPF_FS_I(inode)->xattrs),
-+				 buf, size);
++	if (!ASSERT_OK(mount_bpffs(dir), "mount"))
++		return;
++	snprintf(path, sizeof(path), "%s/m", dir);
++
++	map_a = bpf_map_create(BPF_MAP_TYPE_ARRAY, "a", 4, 4, 1, NULL);
++	if (!ASSERT_GE(map_a, 0, "map_a"))
++		goto out;
++	if (!ASSERT_OK(bpf_obj_pin(map_a, path), "pin_a"))
++		goto out;
++	ASSERT_OK(setxattr(path, "user.k", val_a, sizeof(val_a), XATTR_CREATE),
++		  "set_a");
++	if (!ASSERT_OK(unlink(path), "unlink_a"))
++		goto out;
++
++	map_b = bpf_map_create(BPF_MAP_TYPE_ARRAY, "b", 4, 4, 1, NULL);
++	if (!ASSERT_GE(map_b, 0, "map_b"))
++		goto out;
++	if (!ASSERT_OK(bpf_obj_pin(map_b, path), "pin_b"))
++		goto out;
++
++	err = getxattr(path, "user.k", buf, sizeof(buf));
++	ASSERT_EQ(err, -1, "fresh_inode_ret");
++	ASSERT_EQ(errno, ENODATA, "fresh_inode_errno");
++out:
++	if (map_a >= 0)
++		close(map_a);
++	if (map_b >= 0)
++		close(map_b);
++	umount_bpffs(dir);
 +}
 +
-+static int bpf_fs_initxattrs(struct inode *inode,
-+			     const struct xattr *xattr_array, void *fs_info)
++static void test_umount_lifetime(void)
 +{
-+	struct bpf_fs_inode *bi = BPF_FS_I(inode);
-+	const struct xattr *xattr;
-+	size_t len;
++	char dir[64], path[128], buf[16];
++	int map_fd = -1, err;
 +
-+	CLASS(simple_xattrs, xattrs)();
-+	if (IS_ERR(xattrs))
-+		return PTR_ERR(xattrs);
++	if (!ASSERT_OK(mount_bpffs(dir), "mount"))
++		return;
++	snprintf(path, sizeof(path), "%s/m", dir);
 +
-+	for (xattr = xattr_array; xattr->name != NULL; xattr++) {
-+		CLASS(simple_xattr, new_xattr)(xattr->value, xattr->value_len);
-+		if (IS_ERR(new_xattr))
-+			break;
++	map_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "x", 4, 4, 1, NULL);
++	if (!ASSERT_GE(map_fd, 0, "map_create"))
++		goto out;
++	if (!ASSERT_OK(bpf_obj_pin(map_fd, path), "pin"))
++		goto out;
++	ASSERT_OK(setxattr(path, "user.k", val_a, sizeof(val_a), XATTR_CREATE),
++		  "set");
 +
-+		len = strlen(xattr->name) + 1;
-+		new_xattr->name = kmalloc(XATTR_SECURITY_PREFIX_LEN + len,
-+					  GFP_KERNEL_ACCOUNT);
-+		if (!new_xattr->name)
-+			break;
++	close(map_fd);
++	map_fd = -1;
 +
-+		memcpy(new_xattr->name, XATTR_SECURITY_PREFIX,
-+		       XATTR_SECURITY_PREFIX_LEN);
-+		memcpy(new_xattr->name + XATTR_SECURITY_PREFIX_LEN,
-+		       xattr->name, len);
++	if (!ASSERT_OK(umount(dir), "umount"))
++		goto out;
++	if (!ASSERT_OK(mount("bpf", dir, "bpf", 0, NULL), "mount_fresh"))
++		goto out;
 +
-+		if (simple_xattr_add(xattrs, new_xattr))
-+			break;
-+		retain_and_null_ptr(new_xattr);
-+	}
++	err = access(path, F_OK);
++	ASSERT_EQ(err, -1, "path_gone_ret");
++	ASSERT_EQ(errno, ENOENT, "path_gone_errno");
 +
-+	if (xattr->name != NULL)
-+		return -ENOMEM;
-+
-+	/* Paired with: READ_ONCE() on ->xattrs, release/dependency pair. */
-+	smp_store_release(&bi->xattrs, no_free_ptr(xattrs));
-+	return 0;
- }
- 
- const struct super_operations bpf_super_ops = {
- 	.statfs		= simple_statfs,
- 	.drop_inode	= inode_just_drop,
- 	.show_options	= bpf_show_options,
-+	.alloc_inode	= bpf_fs_alloc_inode,
- 	.destroy_inode	= bpf_destroy_inode,
-+	.free_inode	= bpf_free_inode,
- };
- 
- enum {
-@@ -996,25 +1184,38 @@ static int populate_bpffs(struct dentry *parent)
- 
- static int bpf_fill_super(struct super_block *sb, struct fs_context *fc)
- {
--	static const struct tree_descr bpf_rfiles[] = { { "" } };
- 	struct bpf_mount_opts *opts = sb->s_fs_info;
- 	struct inode *inode;
--	int ret;
- 
- 	/* Mounting an instance of BPF FS requires privileges */
- 	if (fc->user_ns != &init_user_ns && !capable(CAP_SYS_ADMIN))
- 		return -EPERM;
- 
--	ret = simple_fill_super(sb, BPF_FS_MAGIC, bpf_rfiles);
--	if (ret)
--		return ret;
--
-+	sb->s_blocksize = PAGE_SIZE;
-+	sb->s_blocksize_bits = PAGE_SHIFT;
-+	sb->s_magic = BPF_FS_MAGIC;
- 	sb->s_op = &bpf_super_ops;
-+	sb->s_xattr = bpf_fs_xattr_handlers;
-+	sb->s_iflags |= SB_I_NOEXEC;
-+	sb->s_iflags |= SB_I_NODEV;
-+	sb->s_time_gran = 1;
-+
-+	inode = bpf_get_inode(sb, NULL, S_IFDIR | 0777);
-+	if (IS_ERR(inode))
-+		return PTR_ERR(inode);
-+
-+	inode->i_ino = 1;
-+	inode->i_op = &bpf_dir_iops;
-+	inode->i_fop = &simple_dir_operations;
-+	set_nlink(inode, 2);
-+
-+	sb->s_root = d_make_root(inode);
-+	if (!sb->s_root)
-+		return -ENOMEM;
- 
--	inode = sb->s_root->d_inode;
-+	inode = d_inode(sb->s_root);
- 	inode->i_uid = opts->uid;
- 	inode->i_gid = opts->gid;
--	inode->i_op = &bpf_dir_iops;
- 	inode->i_mode &= ~S_IALLUGO;
- 	populate_bpffs(sb->s_root);
- 	inode->i_mode |= S_ISVTX | opts->mode;
-@@ -1080,18 +1281,37 @@ static struct file_system_type bpf_fs_type = {
- 	.fs_flags	= FS_USERNS_MOUNT,
- };
- 
-+static void bpf_fs_inode_init_once(void *foo)
-+{
-+	struct bpf_fs_inode *bi = foo;
-+
-+	inode_init_once(&bi->vfs_inode);
++	err = getxattr(dir, "user.k", buf, sizeof(buf));
++	ASSERT_EQ(err, -1, "root_xattr_gone_ret");
++	ASSERT_EQ(errno, ENODATA, "root_xattr_gone_errno");
++out:
++	if (map_fd >= 0)
++		close(map_fd);
++	umount(dir);
++	rmdir(dir);
 +}
 +
- static int __init bpf_init(void)
- {
- 	int ret;
- 
-+	bpf_fs_inode_cachep = kmem_cache_create("bpf_fs_inode_cache",
-+						sizeof(struct bpf_fs_inode), 0,
-+						SLAB_RECLAIM_ACCOUNT | SLAB_ACCOUNT,
-+						bpf_fs_inode_init_once);
-+	if (!bpf_fs_inode_cachep)
-+		return -ENOMEM;
-+
- 	ret = sysfs_create_mount_point(fs_kobj, "bpf");
- 	if (ret)
--		return ret;
-+		goto out_cache;
- 
- 	ret = register_filesystem(&bpf_fs_type);
--	if (ret)
-+	if (ret) {
- 		sysfs_remove_mount_point(fs_kobj, "bpf");
-+		goto out_cache;
-+	}
- 
-+	return 0;
-+out_cache:
-+	kmem_cache_destroy(bpf_fs_inode_cachep);
- 	return ret;
- }
- fs_initcall(bpf_init);
++void test_bpffs_xattr(void)
++{
++	if (test__start_subtest("prefixes"))
++		test_prefixes();
++	if (test__start_subtest("unsupported_prefix"))
++		test_unsupported_prefix();
++	if (test__start_subtest("flags"))
++		test_flags();
++	if (test__start_subtest("inode_types"))
++		test_inode_types();
++	if (test__start_subtest("repin_same_path"))
++		test_repin_same_path();
++	if (test__start_subtest("umount_lifetime"))
++		test_umount_lifetime();
++}
 -- 
 2.43.0
 
