@@ -1,132 +1,136 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7CA421EED;
-	Fri, 22 May 2026 14:15:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDE23630AD;
+	Fri, 22 May 2026 14:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779459311; cv=none; b=Jf7Ik2QeHcPAtbT1KFHcMs7Wg6NLzePzvYpz6afIUT7fgE8wD77z9S4NQFmvrEZieKcBo+KfohJ1e8MZxjiLfwHg6bBNv5uMgd6qBbNcTkFcULlkbTZnyyDnZLXhppXIzhGJgF1xBeMGGuun9/i5FlQhpKo8tSX0TMjhooLqtCk=
+	t=1779460622; cv=none; b=OG5GmD/63BI4WzpISXFWN9R+/F/diX6G/J1N3+iCdH71foo5ijWu42I4NcLLcrb/LUSuuK2e2t4U1EzQXmyDJzhscCqCtipefxP6Dlrgzs+Y6wgE+WEIPLg5ZI7GMID84TsZmzNJUVIYYXHyAsdPf7QvcaR8sz1s9ynzqo8kLk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779459311; c=relaxed/simple;
-	bh=iUfrRNrL8o05DROqoAZ/tpBV/SaDUV4QX0kt8nQ2MpI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:From:To:Subject:
-	 References:In-Reply-To; b=R81hoIC7HhoyKBWiv9Dq6nu+uULrKjesPn3Mn5vK2ZSILG2gr9mSJg063mNCFGq3UjnQrxZ/UK06ZuMOkKWVZ0nQyOyykCCh+01BFIupvqwYyfZbyVJYDDwLhfdUnHZdxxDeggI0MBeamBqw6drAjSn1Sc/vV91mgGMNLi88wN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=y5oLDx4M; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1779460622; c=relaxed/simple;
+	bh=FXCPyGLE1CeqNu190mNEcpSSRAcm9KEMFVeAYQWV9hU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sDgdbxYmXeA6RThsRZ0aY/hs5uwueSdSCNQZFufPMoKmjF98ygAwXZU1VZoBm67avDxnyO/dSFzTIJ/H6nUWfs3lsRACRu+e7jdkhBd06SZnoqNdbfimWb9CLzY8l+aDRkC8q0yzDcKKKe1/EQr2H32w7mWF3/gSwhHNiPVsa74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=t-8ch.de; spf=pass smtp.mailfrom=t-8ch.de; dkim=pass (1024-bit key) header.d=t-8ch.de header.i=@t-8ch.de header.b=DC/A+e67; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=t-8ch.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=t-8ch.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="y5oLDx4M"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id AB689C2C65D;
-	Fri, 22 May 2026 14:15:51 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 02B006003C;
-	Fri, 22 May 2026 14:14:57 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5BB6F108114CA;
-	Fri, 22 May 2026 16:14:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1779459294; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=MCr0vkGm9xcy3EIrUUYMtpoAG6We8dBTUowneJJEzqk=;
-	b=y5oLDx4MGy2qc7YsUG7iHN1xn8YtdnwJTaS+MweXzZYeTNKztTrSK6FkTS5hegoJZRjtx/
-	+KPJ88pozLnoBFId69yh0BFSmYr2Oid0fQhr2rdZXSEViLMGh37HZ3wFYq3sXIwaltcL4H
-	Ru8nuWXTFrJ7XB1LT7TKvjf55JQe+Wwr57sEwswqTCVrHvSyCZl6RSGSFe4rzRp/5LcBlt
-	U9OC+4uUcAsfHb7a6LexLMZh7y7JlLFFF5SVyh2/PQsumMTUzuN7QBIlOn2LRCblqP/6xx
-	dRGN6BEjblEu7ydOpdyrpOiH0emrXZ12KjrfkRuxO1yuH60EFy2zP3F5X5BPHQ==
+	dkim=pass (1024-bit key) header.d=t-8ch.de header.i=@t-8ch.de header.b="DC/A+e67"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+	t=1779460616; bh=FXCPyGLE1CeqNu190mNEcpSSRAcm9KEMFVeAYQWV9hU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DC/A+e67LHSQkJkagoTuL5Xa/HLBYp4Qm0GxjJMsE6LV1B539/rSSnrCbpMR7QJD0
+	 Dw2R8XToKMPWRRvNdrVJj/EZGPZZu9gC9zINu198J9hb7uRv9G+fkp7uQKOYmkYNvR
+	 VXtqd+vK68wKbA1wt+rTlGXy+b2hDlMGD0Dw60/k=
+Date: Fri, 22 May 2026 16:36:56 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To: Steven Rostedt <rostedt@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, 
+	Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>, bpf@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Jens Remus <jremus@linux.ibm.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Andrii Nakryiko <andrii@kernel.org>, 
+	Indu Bhagat <indu.bhagat@oracle.com>, "Jose E. Marchesi" <jemarch@gnu.org>, 
+	Beau Belgrave <beaub@linux.microsoft.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>, 
+	Carlos O'Donell <codonell@redhat.com>, Sam James <sam@gentoo.org>, Dylan Hatch <dylanbhatch@google.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	David Hildenbrand <david@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>
+Subject: Re: [PATCH] unwind: Add sframe_(un)register() system calls
+Message-ID: <7923f815-a8ce-4b64-8cbf-2b90e57cbd24@t-8ch.de>
+References: <20260521183532.7a145c8a@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 22 May 2026 16:14:38 +0200
-Message-Id: <DIP9O3BEWG3C.2BAHKYUIA4H4E@bootlin.com>
-Cc: "Andrey Konovalov" <andreyknvl@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, "David
- Ahern" <dsahern@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>, "Ingo
- Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, "X86 ML" <x86@kernel.org>, "H. Peter Anvin"
- <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime Coquelin"
- <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
- <alexandre.torgue@foss.st.com>, "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
- "Alexander Potapenko" <glider@google.com>, "Dmitry Vyukov"
- <dvyukov@google.com>, "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
- "Andrew Morton" <akpm@linux-foundation.org>, <ebpf@linuxfoundation.org>,
- "Bastien Curutchet" <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>, "bpf"
- <bpf@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>, "Network
- Development" <netdev@vger.kernel.org>, "open list:KERNEL SELFTEST
- FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- <linux-stm32@st-md-mailman.stormreply.com>, "linux-arm-kernel"
- <linux-arm-kernel@lists.infradead.org>, "kasan-dev"
- <kasan-dev@googlegroups.com>, "linux-mm" <linux-mm@kvack.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Subject: Re: [PATCH RFC bpf-next 3/8] bpf: add BPF_JIT_KASAN for KASAN
- instrumentation of JITed programs
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
- <20260413-kasan-v1-3-1a5831230821@bootlin.com>
- <CA+fCnZf-o8tiv_tX9YB5eBUGx17OpztKZsEB6Awjw3WAqBAiUw@mail.gmail.com>
- <DHSWSSYRPUVC.2W3G3OU27L3HG@bootlin.com>
- <CAADnVQLj=UosnsC-4V2+mN92Fe0-kW++U+m-O9c93kk6BwiXgw@mail.gmail.com>
-In-Reply-To: <CAADnVQLj=UosnsC-4V2+mN92Fe0-kW++U+m-O9c93kk6BwiXgw@mail.gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260521183532.7a145c8a@gandalf.local.home>
 
-On Tue Apr 14, 2026 at 4:38 PM CEST, Alexei Starovoitov wrote:
-> On Tue, Apr 14, 2026 at 6:24=E2=80=AFAM Alexis Lothor=C3=A9
-> <alexis.lothore@bootlin.com> wrote:
->>
->> On Tue Apr 14, 2026 at 12:20 AM CEST, Andrey Konovalov wrote:
->> > On Mon, Apr 13, 2026 at 8:29=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Foun=
-dation)
->> > <alexis.lothore@bootlin.com> wrote:
+On 2026-05-21 18:35:32-0400, Steven Rostedt wrote:
+> From: Steven Rostedt <rostedt@goodmis.org>
+> 
+> Add system calls to register and unregister sframes that can be used by
+> dynamic linkers to tell the kernel where the sframe section is in memory
+> for libraries it loads.
 
-[...]
+How is this system call related to the prctl() with the same
+functionality from Jens' series? I guess it will replace it,
+but some explanation would be nice.
 
->> >> +config BPF_JIT_KASAN
->> >> +       bool
->> >> +       depends on HAVE_EBPF_JIT_KASAN
->> >> +       default y if BPF_JIT && KASAN_GENERIC
->> >
->> > Should this be "depends on KASAN && KASAN_GENERIC"?
->>
->> Meaning, making it an explicit user-selectable option ?
->>
->> If so, the current design choice is voluntary and based on the feedback
->> received on the original RFC, where I have been suggested to
->> automatically enable the KASAN instrumentation in BPF programs if KASAN
->> support is enabled in the kernel ([1]). But if a user-selectable toggle
->> is eventually a better solution, I'm fine with changing it.
->
-> Let's not add more config knobs.
-> Even this patch looks redundant.
-> Inside JIT do instrumentation when KASAN_GENERIC is set.
+(...)
 
-(with quite some delay) I think it would be better to keep this new
-BPF_JIT_KASAN, because aside from the possibility to use it in
-bpf_jit_comp.c, it allows to update tests affected by KASAN
-instrumentation in a nicer way. For example, the test_loader subtests
-that monitor JITted instructions are confused by KASAN. I can either
-skip them or make them smarter when KASAN is enabled for BPF, but in
-both cases, it would be nicer to just adapt the behavior based on a
-generic CONFIG_BPF_JIT_KASAN, rather than sprinkling some "if
-jit_enabled AND CONFIG_KASAN_GENERIC AND ARCH_X86" in selftests. That
-still does not make it a config knob, that just creates an internal
-Kconfig option that is automatically turned on when KASAN and JIT are
-enabled at build time.
+> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+> index f5639d5ac331..992ccc401c5e 100644
+> --- a/include/linux/syscalls.h
+> +++ b/include/linux/syscalls.h
+> @@ -999,6 +999,8 @@ asmlinkage long sys_lsm_get_self_attr(unsigned int attr, struct lsm_ctx __user *
+>  asmlinkage long sys_lsm_set_self_attr(unsigned int attr, struct lsm_ctx __user *ctx,
+>  				      u32 size, u32 flags);
+>  asmlinkage long sys_lsm_list_modules(u64 __user *ids, u32 __user *size, u32 flags);
+> +asmlinkage long sys_sframe_register(void *data, unsigned int size);
+> +asmlinkage long sys_sframe_unregister(void *data, unsigned int size);
 
+Why not use the actual structure here?
 
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>  /*
+>   * Architecture-specific system calls
 
+(...)
+
+> diff --git a/include/uapi/linux/sframe.h b/include/uapi/linux/sframe.h
+> new file mode 100644
+> index 000000000000..137a2ebf91f4
+> --- /dev/null
+> +++ b/include/uapi/linux/sframe.h
+> @@ -0,0 +1,12 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+> +#ifndef _UAPI_LINUX_SFRAME_H
+> +#define _UAPI_LINUX_SFRAME_H
+> +
+> +struct sframe_setup {
+> +	unsigned long		sframe_start;
+> +	unsigned long		sframe_size;
+> +	unsigned long		text_start;
+> +	unsigned long		text_size;
+> +};
+
+This will break for compat processes, as they use a different 'unsigned
+long' than the host kernel. Maybe just use __u64.
+
+> +
+> +#endif /* _UAPI_LINUX_SFRAME_H */
+
+(...)
+
+> +/**
+> + * sys_sframe_register - register an address for user space stacktrace walking.
+> + * @data: Structure of sframe data used to register the sframe section
+> + * @size: The size of the given structure.
+> + *
+> + * This system call is used by dynamic library utilities to inform the kernel
+> + * of meta data that it loaded that can be used by the kernel to know how
+> + * to stack walk the given text locations.
+> + *
+> + * Return: 0 if successful, otherwise a negative error.
+> + */
+> +SYSCALL_DEFINE2(sframe_register, __user struct sframe_setup *, data, unsigned int, size)
+
+AFAIK the normal place for the '__user' is right before '*':
+
+	struct sframe_setup __user *, data,
+
+Use __kernel_size_t for 'size'?
+
+> +{
+> +	struct sframe_setup sframe;
+
+(...)
