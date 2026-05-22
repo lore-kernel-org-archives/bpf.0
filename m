@@ -1,268 +1,332 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABBD34388F
-	for <bpf@vger.kernel.org>; Fri, 22 May 2026 18:34:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03032357CF4
+	for <bpf@vger.kernel.org>; Fri, 22 May 2026 18:36:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.169
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779474883; cv=pass; b=MhbRjs6hKMdwVyghBqrp+45ljqwytVHUbqTza6dDgD6qtxJHeIL/EYw5sE2FZ1ppefPwf0zPWN7oCMWha5QS6cYXRDIEtQ4mCWf38w7PV5h6rWbsRgxrK1HCmqsIxbTkFMHh5y7IjAoDSdR3BR5RCRSfMWMpya/Oritm0Pu7wv8=
+	t=1779474975; cv=pass; b=TWUHlg3r1qE7sg3DVUKUjZpnKE+JWGrSnxD311ocCu8gEr7JSsgi+dEyv+6ReWNpOTJD6OTMMj7eNji4INzs/taKsR/1sUvHI9r6ISOVxZyJZhhuwTan5Jz+d4rk6zhjnXX8RF8iZd+DRN6Z79voaugziHQeGZUaShm1wwAi9OQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779474883; c=relaxed/simple;
-	bh=Sy7iHC43dqOUvOqOXnQpn94I0stJf8jK+dwPg8++a+E=;
+	s=arc-20240116; t=1779474975; c=relaxed/simple;
+	bh=fzH1J04ldqf4K8SXJQHcDLKABFWaiwDdDhIZnkwLx2M=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cop2I9aDIr7kbvtXSugsR0exNct3Z5I/f+A2VlxvDrPWVzefDoSDZuBIWmeUfiuvH5u58GWAtGESm+wik1Z0sgjCA6zpiLLmq7lVsWFOPYe+Jh6/5+r8SMEj4oEAgHig6Qb4V9/048IsCsY7cY0Z4IWHIcGZKh6AStwMb+Tz8YY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bnAKtyRl; arc=pass smtp.client-ip=209.85.215.181
+	 To:Cc:Content-Type; b=iEtWrxzg6YJJ1GGw/KdQFdHAzwo7WpzWlqZN7ZhwiM48rOdD39dm89tq5schcdB+he+czNiSe7U/wHETAl9gqwAvQ8dBFRr5TqjSCTn47hd41Jo+Yu7fKQeNm+9TfYWhFMiVyIvfr0+hMGSRce/msHbq7K2yf1s9WDkl9MpZ3rE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qpigDfcS; arc=pass smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bnAKtyRl"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c798fc1a28cso3430473a12.3
-        for <bpf@vger.kernel.org>; Fri, 22 May 2026 11:34:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779474881; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qpigDfcS"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c796163fac5so6385794a12.1
+        for <bpf@vger.kernel.org>; Fri, 22 May 2026 11:36:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779474973; cv=none;
         d=google.com; s=arc-20240605;
-        b=MkUOMMTYiZ9Ots4Qb2dJlE1n8jZUqHX3AbwUs7IuD9AHHev82BxQ0SyUC7zSVL9mfO
-         rkKlWLTZ7aQX1oLyaFGms30qbI9W/b5G5VD5i83Qe3/xKh9H2aSK9YK2SUjswWI1J9vN
-         cajWbaW0EHHLboc7Wk/kpnCM6mZ19oowJnmtvtL+FG9djb7bIxIKo/IKZVvMymo7KEf0
-         HL7b9ZVPohMdYDknhV51re9o7iMi7T3wwL9IZp+SDg0wt3uSPGhZgX9sDjD7xceuP6Nd
-         atfGvNdVf50GLX6RjkYIKvp4ifzRtULH0h7O3J++iitqWsJ/Tbpn7rhKGsMn0gfgofpm
-         DlPg==
+        b=Gc9hSXAtPRsrengfYFL3Dwp93xty1hsa3N7AHANweAMxwC0uBqcHwtRfidHipot1Ds
+         iMmhshQDoAfS47mPWPqw9ADL3y1pwI+SF4aR8mQKXO0RA4PXHMz1fXm2nEDbN2VlCPrE
+         1YaGE/XfG6RN1cPbRNN4KpEM/eBNlftmqX5N9idMrDsUBUVkMFBHUbWo9DU7N8kzLJEs
+         wKlLH3LJyl+xOBBkaGbr325yqbblwbvgfo/5gDIkt1G+q5QIP12JVlblJ3YREh1vazQw
+         NZzkVdhYqzsCs2d5Z/e8GX9PzKHy+Q3RUwJFiEtaE+/fG5iYDdSOG4bBPN82v1sfCn7r
+         kfrA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=UPIIKZSuMDYHMAWcwom+NGDo9HPoParcv3S6Ulj/Jq4=;
-        fh=rnpm9eY/wL9D+DaDljY0PDPmeZOPze768yiADm1Tq4U=;
-        b=fsv+eyvaFE6Zr8VhM3SV1N4PQixf3DVcYVNRR+HlA0zqN6kuBxVt+3L05oGGU3QWxO
-         bXgOombzQd4dUyGFrXdG3OOU/ti7TKG6TmcAxznTCGisivI40ktlwQDHrPmHG1eJopi4
-         S7KKQz/63nMygU5dthIa5l+8BBnxVsVXvatjIk9lrFLTbm3NuwiQZYx+O6qac/3RUYqR
-         J77FsCzdybrE/zisPYM51uDm1fojJSSd13ZCL3BzobMuiTzaLB//1QRNyFW64tHFeOx1
-         mg1jHPg8w7VPNe/TOgR2l3dVCZ3gSm137l15NFxMzHR1YxxjyFBhPhfZYAV7BGbottav
-         B4JA==;
+        bh=mli6lapcTBe3woCKrxD/RvBcxQ+AVxfJ+HebBTph08w=;
+        fh=4FK9IgpwgowAU5KUGScV7U7SOkBne+CxHSC5rdTP/Sk=;
+        b=Rg1U1mKJ+Y1tsJ7UscZMfCDHkcC4NUVTu+7wSF7qCR5rpwo79DZnBgWvVv9P0FUyr4
+         BJvMSbvaARgpUXZr/TwXekuco8YNF0QclHLC9CzpzF+LHMIIMGqX0JOGWGYi3uKr2txb
+         RSFH6zlioNPm0cyqZxXIHc36wz5TCNK9FkdXCsQ0WmmfKSsBhEx7qmnIhE2NtswjISJ6
+         0Xd6FvHmw4dR2bvKbF9chGv8MzYV60CD1WB8FnNkpBfrLTxE148Mp5mcIeXOZViV/W4p
+         sG3Y4dGCR9Ih+1Z6/WsH9CwMDZIDWdnpoSVIRPKbbDiOIdgxNOyv5KkqiqjMMIZWvE6n
+         +X+A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779474881; x=1780079681; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779474973; x=1780079773; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UPIIKZSuMDYHMAWcwom+NGDo9HPoParcv3S6Ulj/Jq4=;
-        b=bnAKtyRlHAVcmfuYlffMFe3p/GMePDl0FHZOQcrj8a4RjzQExyNIkkX5BEn4ABSsye
-         IKufywJdCP29Ux1B5NvxwlnN/xKqne0OB5Y7O6JH4Op9SqdS4/Vt/pHAsysVbXwC/4g1
-         TbeXsBFv2n6FZFAKP7AAyl/VpGsujWc1okXzTtiYyMjGQN/pePLRokxWaKy0nwr10+Pc
-         g1kkeIBgbAH6Uqn5Ln5AQtvArjnR8KXYi+as/0R84xcTN+KIBsrKw3cOSnTkRHlrGPpt
-         H0Lbe2v2pZrRZ1IOXdGv329fueaQ2+NmXWoNlGW2oTybTiBjHE6J1dsLrNmFgm3bcbia
-         D5Bw==
+        bh=mli6lapcTBe3woCKrxD/RvBcxQ+AVxfJ+HebBTph08w=;
+        b=qpigDfcSR4XsyWhq55dkigD7xaKgHC6DUxICA8kWvXlOdYdYcL2YkaecQwHTCgPx4z
+         uzY2fKW+RWPfj0Y0QK6nOhvVfUumiS7E3wRRKJ4EccRfazvnVJO+J1rMiYvK20+AhFQE
+         QUF6hWITMkSlhlRyqTVjixb/P/oUNl9AI+FHNS9MkjBgO4z3Q1dL3bOxQNgjaEozoU1Y
+         nTZc7yjTNgSplpg3UJYz+Kybw+5yoRYks5Bht0pjoSrlbZVUKlROisne+dDm8Rt0DTuo
+         FZ4uWVkkJyBxGzW/dIYqKAiwZ8CYMSL3xRzI6WLxLmkpcamdOhAGZdEAO3jKRxdAIBe5
+         A5Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779474881; x=1780079681;
+        d=1e100.net; s=20251104; t=1779474973; x=1780079773;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=UPIIKZSuMDYHMAWcwom+NGDo9HPoParcv3S6Ulj/Jq4=;
-        b=BlDn0paefBa0wHOdoTtaxgZ6sBa2lEGaAn9u6V/JHvRf8T0FKO4ERUs6417no1EQNW
-         O78bzOU4FLASklO4yxzfr7dDbRUX+5iksrdS55J2N/r6tTc+nOSqMwtLaT1ORE0qWKZl
-         yNKUOCWztS2Hap8Ij9NHZ2kMaZgAutLEcdeZLhkgrTUEON0CuYePvqUAS1hLO4DwAUcL
-         ceF/MKkmdqQF1vn7OiDTf35XjPThqzKlvLgY8u7g3IgGq4eTJmA4VfTAk+FNvmBjwMoy
-         ID2W/UnkSBGcpM0+vHEGCbDLFw5E/DWsTPhZoQa0+BfZldTyDl6WBCHe46pewNtgH/YK
-         VrOQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+i90CqhfRKQcl8NyFGlBCicZHEvJ1DvMgfCR52PglcrPvy9iXKI2qMQqnPkVB2wqTLoQs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFs4sQsKf4921tqC8fJNSlU5VKKvisjjw4aM9/boS5UQvgDGKZ
-	BPFWA+C8hJ2sxUDhK+YTSF3FmNqD5gaFW8Cs5Vc/i/JHHLKKusnUPEQh6Ja9Ik58otjcALdSEhg
-	D2ukXRpqepL4HIA4Av0rf5ch0TqTacJk=
-X-Gm-Gg: Acq92OF4shVMQSTHxC/vt318hyFPXlRoApnYsFKjqAuBHoZvQW3QRmRf3Y/O8Z2RE7+
-	xNuRK8lk63adAD9KmwLCn+GYLDlqXaV7KimImTSKwGX4II1EPhb6DW6wNf9SHULKORnNlKvF73j
-	kTcV8//MLda+M437/Ox4h1uqfV+V0+m8ZqCg8hN6jCMJqMpaINS1YZT1SlKr7hGCCLL1/YKT1if
-	ex5Hfv8gDGeVLLYiwfrV30ZQZZvvbOmCF7K2BuC6s75h9v2WB/htxfQhhzv24U9nIezrOyI3BAW
-	11fGHP3iPVogjKH/FBOG4BI=
-X-Received: by 2002:a05:6a20:a122:b0:3b3:2703:12b with SMTP id
- adf61e73a8af0-3b328c700aemr5116344637.3.1779474881107; Fri, 22 May 2026
- 11:34:41 -0700 (PDT)
+        bh=mli6lapcTBe3woCKrxD/RvBcxQ+AVxfJ+HebBTph08w=;
+        b=JI5dzjHtwVaVSh51NwC90S8Cd2g2/ZNMH5MFMZd4CaCLrg+yj4keqvaT5ryOn2F66C
+         fKOF2F5WLKoE8SSbe/Acb5TlPcIjQ51YAfBMlATXU1mXOORg+KwOHO8R4vVbsjy5XByS
+         X8IKqttjbb39HdkCp66PYJhrUW+YP+Qk9NDutymzsOV8Y89B6tt2zNIJOuZJoeYV9hWm
+         jwFixxvN330YPUZpPT946dH4xwlpTN4BCWycBfhVIEqlnGJrYJO3KxDzBv7UrNoFdqGY
+         BUQjBJX2e22jXshQmT33E+X+al2YcQscyUDllCrz0X0Tv7+W1jIVVMVVhJS4mRdGFYmh
+         A1jA==
+X-Forwarded-Encrypted: i=1; AFNElJ8CR8yfEg+Usk5KQEhy/OB2zlOAcyHvXTbTOjWt1BkoXNh0tUcdaFIpYrlActM4He92eGE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQ7DdKU0YUgSoGBbR9rkCH6OEW8o+AK6WEGex1DnXQuOGjNIsk
+	vMJW+h7WEOHMOuN/Tyrorf2bKo9UbvoLegExsAcXhxDeEsWDtVypyz9MyFhfP7JTNZmmD9IQ6Ap
+	AIHpjcrEN2THoelhgm1yRgf41T7OE2EU=
+X-Gm-Gg: Acq92OHvoZfpZmn9LkZuU6V5HZJqV1fJAbwCSeenixU8MB9+2rTxSYHp17MH1UZNx7C
+	K/yr73mEWwuaUVQlTSJfeiZUiRQI9CIKFS6l6x17E6Gu0x2uYYln/TPSIQZJ5SBwXBhOiDNT8tu
+	rZvrslY3NaRpS3Vd2mJ8cfhGsrN0M2w9S+n8t5/ouoSIyrmWG3zkceqNir/DKErLq8J9nProGD/
+	CbK5VAKti/TzmOppJAguR/UF/Nvrc20w3GU8h6RM2T6rPZlTjGXeFFl3JlD05O9alN+dNScdw+2
+	3T4fPGD3MSEzR7IeswH8Y6w=
+X-Received: by 2002:a05:6a20:9396:b0:39b:e6af:2d8 with SMTP id
+ adf61e73a8af0-3b328cba260mr5340061637.4.1779474973017; Fri, 22 May 2026
+ 11:36:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260522125657.328840-1-michael.bommarito@gmail.com>
-In-Reply-To: <20260522125657.328840-1-michael.bommarito@gmail.com>
+References: <CAEf4BzZMoWdgYFGXwT9kkZ1TKbe9ZB=XKJCuKy0+2uqzSMDMUw@mail.gmail.com>
+ <20260518050550.2600101-1-cmllamas@google.com> <CAEf4BzbM7G8nVqtrW+fs5J9Hm4cqszA9CTETBCHLP7T8GPMs3Q@mail.gmail.com>
+In-Reply-To: <CAEf4BzbM7G8nVqtrW+fs5J9Hm4cqszA9CTETBCHLP7T8GPMs3Q@mail.gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 22 May 2026 11:34:27 -0700
-X-Gm-Features: AVHnY4KTOowvuD6XjQwRG69Vc_jNPi7Gp_JoUyDHDPgT7OHkgSNeSdfoQyIrlk0
-Message-ID: <CAEf4Bzb2SJc4G9ah4R0gHYqHgRzED9+Ua+eLG=bG6Unn7f0Waw@mail.gmail.com>
-Subject: Re: [PATCH v3] libbpf: harden parse_vma_segs() path parsing
-To: Michael Bommarito <michael.bommarito@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Fri, 22 May 2026 11:35:58 -0700
+X-Gm-Features: AVHnY4InGPJjEN2sRS5KjdNXngvVxT7pWkze0EA8-LHK7libjX_WoefO_xjnX3k
+Message-ID: <CAEf4BzbX6DSD5Erd2wb2wE+=MFTfqgvVrpkysqrCKT0W7-n29g@mail.gmail.com>
+Subject: Re: [PATCH v3] libbpf: fix UAF in strset__add_str()
+To: Carlos Llamas <cmllamas@google.com>
+Cc: mykyta.yatsenko5@gmail.com, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, Mykyta Yatsenko <yatsenko@meta.com>, 
+	"open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 22, 2026 at 5:57=E2=80=AFAM Michael Bommarito
-<michael.bommarito@gmail.com> wrote:
+On Mon, May 18, 2026 at 10:36=E2=80=AFAM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> parse_vma_segs() in tools/lib/bpf/usdt.c parses /proc/<pid>/maps
-> with two widthless scansets, "%s" into mode[16] and "%[^\n]"
-> into line[PATH_MAX]. Both assume the kernel caps maps records to
-> PATH_MAX; it does not.
+> On Sun, May 17, 2026 at 10:05=E2=80=AFPM Carlos Llamas <cmllamas@google.c=
+om> wrote:
+> >
+> > strset_add_str_mem() might reallocate the strset data buffer in order t=
+o
+> > accommodate the provided string 's'. However, if 's' points to a string
+> > already present in the buffer, it becomes dangling after the realloc.
+> > This leads to a use-after-free when attempting to memcpy() the string
+> > into the new buffer.
+> >
+> > One scenario that triggers this problematic path is when resolve_btfids
+> > attempts to patch kfunc prototypes using existing BTF parameter names:
+> >
+> >  | resolve_btfids: function bpf_list_push_back_impl already exists in B=
+TF
+> >  | Segmentation fault (core dumped)
+> >
+> > Compiling resolve_btfids with fsanitize=3Daddress generates a detailed
+> > report of the UAF:
+> >
+> >  | =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >  | ERROR: AddressSanitizer: heap-use-after-free on address 0x7f4c4a500b=
+d4
+> >  | =3D=3D1507892=3D=3DERROR: AddressSanitizer: heap-use-after-free on a=
+ddress 0x7f4c4a500bd4 at pc 0x55d25155a2a8 bp 0x7ffcef879060 sp 0x7ffcef878=
+818
+> >  | READ of size 5 at 0x7f4c4a500bd4 thread T0
+> >  |     #0 0x55d25155a2a7 in memcpy (tools/bpf/resolve_btfids/resolve_bt=
+fids+0xcf2a7)
+> >  |     #1 0x55d2515d708e in strset__add_str tools/lib/bpf/strset.c:162:=
+2
+> >  |     #2 0x55d2515c730b in btf__add_str tools/lib/bpf/btf.c:2109:8
+> >  |     #3 0x55d2515c9020 in btf__add_func_param tools/lib/bpf/btf.c:310=
+8:14
+> >  |     #4 0x55d25159f0b5 in process_kfunc_with_implicit_args tools/bpf/=
+resolve_btfids/main.c:1196:9
+> >  |     #5 0x55d25159e004 in btf2btf tools/bpf/resolve_btfids/main.c:122=
+9:9
+> >  |     #6 0x55d25159cee7 in main tools/bpf/resolve_btfids/main.c:1535:6
+> >  |     #7 0x7f4c78e29f76 in __libc_start_call_main csu/../sysdeps/nptl/=
+libc_start_call_main.h:58:16
+> >  |     #8 0x7f4c78e2a026 in __libc_start_main csu/../csu/libc-start.c:3=
+60:3
+> >  |     #9 0x55d2514bb860 in _start (tools/bpf/resolve_btfids/resolve_bt=
+fids+0x30860)
+> >  |
+> >  | 0x7f4c4a500bd4 is located 13268 bytes inside of 2829000-byte region =
+[0x7f4c4a4fd800,0x7f4c4a7b02c8)
+> >  | freed by thread T0 here:
+> >  |     #0 0x55d25155b700 in realloc (tools/bpf/resolve_btfids/resolve_b=
+tfids+0xd0700)
+> >  |     #1 0x55d2515c426c in libbpf_reallocarray tools/lib/bpf/./libbpf_=
+internal.h:220:9
+> >  |     #2 0x55d2515c426c in libbpf_add_mem tools/lib/bpf/btf.c:224:13
+> >  |
+> >  | previously allocated by thread T0 here:
+> >  |     #0 0x55d25155b2e3 in malloc (tools/bpf/resolve_btfids/resolve_bt=
+fids+0xd02e3)
+> >  |     #1 0x55d2515d6e7d in strset__new tools/lib/bpf/strset.c:58:20
+> >
+> > While resolve_btfids could be refactored to avoid this call path, let's
+> > instead fix this issue at the source in strset__add_str() and avoid
+> > similar scenarios.
+> >
+> > Let's check if set->strs_data was reallocated and whether 's' points to
+> > an internal string within the old strset buffer. In such case, 's' is
+> > reconstructed to point to the new buffer.
+> >
+> > While already here, also fix strset__find_str() which suffers from the
+> > same problem by factoring out the common operations into a new helper
+> > function strset_str_append().
+> >
+> > Fixes: 90d76d3ececc ("libbpf: Extract internal set-of-strings datastruc=
+ture APIs")
+> > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> > Suggested-by: Mykyta Yatsenko <yatsenko@meta.com>
+> > Signed-off-by: Carlos Llamas <cmllamas@google.com>
+> > ---
+> > v3:
+> >   Switch to 's' reconstruction approach suggested by Andrii.
+> >   Adjusted names and commit log accordingly.
+> >
+> > v2:
+> >   Implemented the fix in strset__offset() helper as suggested by Mykyta=
+.
+> >   Added support to handle "substrings" of existing ones.
+> >   Used 90d76d3ececc as Fixes tag as suggested by Sashiko.
+> >   https://lore.kernel.org/all/20260515044759.2863546-1-cmllamas@google.=
+com/
+> >
+> > v1:
+> >   https://lore.kernel.org/all/20260513232055.1681859-1-cmllamas@google.=
+com/
+> >  tools/lib/bpf/strset.c | 58 +++++++++++++++++++++++++++---------------
+> >  1 file changed, 37 insertions(+), 21 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/strset.c b/tools/lib/bpf/strset.c
+> > index 2464bcbd04e0..d229961ff2fc 100644
+> > --- a/tools/lib/bpf/strset.c
+> > +++ b/tools/lib/bpf/strset.c
+> > @@ -107,6 +107,37 @@ static void *strset_add_str_mem(struct strset *set=
+, size_t add_sz)
+> >                               set->strs_data_len, set->strs_data_max_le=
+n, add_sz);
+> >  }
+> >
+> > +static long strset_str_append(struct strset *set, const char *s)
+> > +{
+> > +       const char *old_data =3D strset__data(set);
 >
-> show_map_vma() emits the path via seq_path() against the seq buffer,
-> which doubles on overflow (m->size <<=3D 1 in fs/seq_file.c), so a VMA
-> whose backing path is a deeply nested directory tree produces a single
-> maps record longer than PATH_MAX. scanf "%s" / "%[^\n]" without a
-> width writes until the field terminator regardless of destination size,
-> so a bpf_program__attach_usdt() consumer attaching against an
-> attacker-controlled PID overflows its own stack inside parse_vma_segs().
+> sashiko suggests to use uintptr_t for this detection to avoid
+> undefined behavior, let's do that then)?
 >
-> Bound both scansets to the declared buffer sizes ("%15s" for mode[16]
-> and "%4095[^\n]" for line[PATH_MAX]) and drain any residue past
-> line[4094] with "%*[^\n]" before the trailing "\n", matching the
-> libbpf-local fscanf style. Without the drain the residue of an
-> over-long record would stay in the stream and break the next "%zx-%zx"
-> parse, so the loop would exit early and any maps records after the
-> over-long entry would be silently skipped.
+> but other than that and a nit below, looks good, thanks!
 >
-> Also stop using sscanf(..., "%s") to peel the /proc/<pid>/root prefix
-> from lib_path. Build the exact prefix for the requested PID with
-> snprintf(), check it directly, and copy the remainder with
-> libbpf_strlcpy(). That removes a second unbounded stack write and
-> preserves paths containing spaces.
->
-> Fixes: 74cc6311cec9 ("libbpf: Add USDT notes parsing and resolution logic=
-")
-> Cc: stable@vger.kernel.org
-> Assisted-by: Claude:claude-opus-4-7
-> Signed-off-by: Michael Bommarito <michael.bommarito@gmail.com>
-> ---
-> v3:
-> - Correct Fixes tag to the initial USDT implementation commit,
->   per BPF CI review after adding second site.
->
-> v2:
-> - Replace the unbounded /proc/<pid>/root sscanf() path peeling with
->   snprintf() + prefix check + libbpf_strlcpy(), addressing review
->   feedback on v1 and preserving paths containing spaces.
-> - Keep the v1 maps parser fix using bounded fscanf() scansets and a
->   suppressed scanset drain for over-long records.
-> - Re-ran real parse_vma_segs() ASAN harnesses for the original maps
->   overflow, the proc-root overflow, proc-root paths with spaces, and
->   adjacent successful parses after an over-long maps record.
->
-> Reproduced with Debian 12 on rootless podman: an unprivileged
-> container process mkdirs 50 nested 200-char directories and mmaps
-> a file at the bottom, producing a 10403-byte /proc/<host-pid>/maps
-> line.  A harness on the host then calls the real parse_vma_segs()
-> against the container's PID; libbpf is built with
-> -fsanitize=3Daddress and the only local source change is dropping
-> the "static" keyword on parse_vma_segs so the symbol is linkable
-> from the harness.
->
-> Stock libbpf reports:
->
->   =3D=3DERROR: AddressSanitizer: stack-buffer-overflow
->   WRITE of size 10349 at <line> thread T0
->     #0 scanf_common -> #1 __isoc99_fscanf
->     #3 parse_vma_segs tools/lib/bpf/usdt.c:509
->   Address ... in frame parse_vma_segs at offset 8512, just past
->   line[PATH_MAX].
->
-> Patched libbpf parses the same maps cleanly.  Follow-up calls
-> return 0 with seg_cnt > 0 for libc.so.6 and for
-> ld-linux-x86-64.so.2 (format drain), which appears in maps
-> after the over-long entry.
->
-> On normal hardened builds the stack canary aborts the consumer;
-> on builds without stack protector the bytes past line[] are
-> attacker-influenced path bytes.
->
-> Selftest gate
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> tools/testing/selftests/bpf/test_progs -t usdt under QEMU x86_64
-> (KVM) on the patched kernel: all 6 subtests pass (usdt/basic,
-> basic_optimized, optimized_attach, multispec, urand_auto_attach,
-> urand_pid_attach) on both stock and patched libbpf, diff-clean.
-> The in-tree selftest does not itself exercise long maps records.
->
->  tools/lib/bpf/usdt.c | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-> index e3710933fd52a..2ed792cf11438 100644
-> --- a/tools/lib/bpf/usdt.c
-> +++ b/tools/lib/bpf/usdt.c
-> @@ -471,7 +471,7 @@ static int parse_vma_segs(int pid, const char *lib_pa=
-th, struct elf_seg **segs,
->         char path[PATH_MAX], line[PATH_MAX], mode[16];
->         size_t seg_start, seg_end, seg_off;
->         struct elf_seg *seg;
-> -       int tmp_pid, i, err;
-> +       int n, i, err;
->         FILE *f;
->
->         *seg_cnt =3D 0;
-> @@ -480,8 +480,13 @@ static int parse_vma_segs(int pid, const char *lib_p=
-ath, struct elf_seg **segs,
->          * /proc/<pid>/root/<path>. They will be reported as just /<path>=
- in
->          * /proc/<pid>/maps.
->          */
-> -       if (sscanf(lib_path, "/proc/%d/root%s", &tmp_pid, path) =3D=3D 2 =
-&& pid =3D=3D tmp_pid)
-> +       n =3D snprintf(line, sizeof(line), "/proc/%d/root", pid);
-> +       if (n < 0 || n >=3D (int)sizeof(line))
-> +               return -ENAMETOOLONG;
+> pw-bot: cr
 
-this can never happen, no matter the pid value
+Ping. Carlos, are you planning to send a follow up?
 
-> +       if (str_has_pfx(lib_path, line) && lib_path[n] =3D=3D '/') {
-
-seems like an overkill, I get the point of not using unbounded %s, but
-we can do the same trick you are doing with %* below, so
-
-if (sscanf(lib_path, "/proc/%d/root%n%*[^/n]", &n, &pid) =3D=3D 1 && pid
-=3D=3D tmp_pid) {
-    libbpf_strlcpy(path, lib_path + n, sizeof(path));
-    goto proceed;
-}
-
-or something along those lines?
-
-> +               libbpf_strlcpy(path, lib_path + n, sizeof(path));
->                 goto proceed;
-> +       }
 >
->         if (!realpath(lib_path, path)) {
->                 pr_warn("usdt: failed to get absolute path of '%s' (err %=
-s), using path as is...\n",
-> @@ -504,8 +509,11 @@ static int parse_vma_segs(int pid, const char *lib_p=
-ath, struct elf_seg **segs,
->          * 7f5c6f5d1000-7f5c6f5d3000 rw-p 001c7000 08:04 21238613      /u=
-sr/lib64/libc-2.17.so
->          * 7f5c6f5d3000-7f5c6f5d8000 rw-p 00000000 00:00 0
->          * 7f5c6f5d8000-7f5c6f5d9000 r-xp 00000000 103:01 362990598    /d=
-ata/users/andriin/linux/tools/bpf/usdt/libhello_usdt.so
-> +        *
-> +        * Bound the writes and drain residue: maps lines can exceed
-> +        * PATH_MAX when seq_path() uses a larger seq buffer.
-
-Claudespeak. Just say in human language that in some weird cases VMA
-name/path can be longer than PATH_MAX, so we protect from that but
-need make sure we consume the entire line with $* argument. Who cares
-about seq_path() internals and its buffer usages?..
-
->          */
-> -       while (fscanf(f, "%zx-%zx %s %zx %*s %*d%[^\n]\n",
-> +       while (fscanf(f, "%zx-%zx %15s %zx %*s %*d%4095[^\n]%*[^\n]\n",
->                       &seg_start, &seg_end, mode, &seg_off, line) =3D=3D =
-5) {
-
-given you hard-coded 4095 in sscanf format string, let's use 4096 in
-line declaration instead of PATH_MAX, ok?
-
-pw-bot: cr
-
-
->                 void *tmp;
+> > +       long len =3D strlen(s) + 1;
+> > +       void *p;
+> > +
+> > +       /* Hashmap keys are always offsets within set->strs_data, so to=
+ even
+> > +        * look up some string from the "outside", we need to first app=
+end it
+> > +        * at the end, so that it can be addressed with an offset. Luck=
+ily,
+> > +        * until set->strs_data_len is incremented, that string is just=
+ a piece
+> > +        * of garbage for the rest of the code, so no harm, no foul. On=
+ the
+> > +        * other hand, if the string is unique, it's already appended a=
+nd
+> > +        * ready to be used, only a simple set->strs_data_len increment=
+ away.
+> > +        */
+> > +       p =3D strset_add_str_mem(set, len);
+> > +       if (!p)
+> > +               return -ENOMEM;
+> > +
+> > +       /* The set->strs_data might have reallocated and if 's' pointed
+> > +        * to an internal string within the old buffer, then it became
+> > +        * dangling and needs to be reconstructed before the copy.
+> > +        */
+> > +       if (old_data && old_data !=3D strset__data(set) &&
+> > +           s >=3D old_data && s < old_data + set->strs_data_len)
+> > +               s =3D strset__data(set) + (s - old_data);
 >
-> --
-> 2.53.0
+> nit: strset__data() is more of an "external api", note how we access
+> strs_data_len directly through field. So let's use s->strs_data access
+> consistently.
+>
+> > +
+> > +       memcpy(p, s, len);
+> > +
+> > +       return len;
+> > +}
+> > +
+> >  /* Find string offset that corresponds to a given string *s*.
+> >   * Returns:
+> >   *   - >0 offset into string data, if string is found;
+> > @@ -116,16 +147,12 @@ static void *strset_add_str_mem(struct strset *se=
+t, size_t add_sz)
+> >  int strset__find_str(struct strset *set, const char *s)
+> >  {
+> >         long old_off, new_off, len;
+> > -       void *p;
+> >
+> > -       /* see strset__add_str() for why we do this */
+> > -       len =3D strlen(s) + 1;
+> > -       p =3D strset_add_str_mem(set, len);
+> > -       if (!p)
+> > -               return -ENOMEM;
+> > +       len =3D strset_str_append(set, s);
+> > +       if (len < 0)
+> > +               return len;
+> >
+> >         new_off =3D set->strs_data_len;
+> > -       memcpy(p, s, len);
+> >
+> >         if (hashmap__find(set->strs_hash, new_off, &old_off))
+> >                 return old_off;
+> > @@ -142,24 +169,13 @@ int strset__find_str(struct strset *set, const ch=
+ar *s)
+> >  int strset__add_str(struct strset *set, const char *s)
+> >  {
+> >         long old_off, new_off, len;
+> > -       void *p;
+> >         int err;
+> >
+> > -       /* Hashmap keys are always offsets within set->strs_data, so to=
+ even
+> > -        * look up some string from the "outside", we need to first app=
+end it
+> > -        * at the end, so that it can be addressed with an offset. Luck=
+ily,
+> > -        * until set->strs_data_len is incremented, that string is just=
+ a piece
+> > -        * of garbage for the rest of the code, so no harm, no foul. On=
+ the
+> > -        * other hand, if the string is unique, it's already appended a=
+nd
+> > -        * ready to be used, only a simple set->strs_data_len increment=
+ away.
+> > -        */
+> > -       len =3D strlen(s) + 1;
+> > -       p =3D strset_add_str_mem(set, len);
+> > -       if (!p)
+> > -               return -ENOMEM;
+> > +       len =3D strset_str_append(set, s);
+> > +       if (len < 0)
+> > +               return len;
+> >
+> >         new_off =3D set->strs_data_len;
+> > -       memcpy(p, s, len);
+> >
+> >         /* Now attempt to add the string, but only if the string with t=
+he same
+> >          * contents doesn't exist already (HASHMAP_ADD strategy). If su=
+ch
+> > --
+> > 2.54.0.563.g4f69b47b94-goog
+> >
