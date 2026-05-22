@@ -1,219 +1,221 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB2B23D811E;
-	Fri, 22 May 2026 11:05:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA74389DEC;
+	Fri, 22 May 2026 11:18:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779447936; cv=none; b=Ov6rPojkZYKMoz0AoaK2rPO8xhHlw7YgbF1MizDfe6iMbWZNE4MD6r7ECstHRpztqbBubb34jx3efzbKyIq5BVqD6te4Y6ZZIcqfVvNZLybuhJVCWi0F/07ctmmGiLKY6Y5A73jfCUjhJtX1fjkjUFMgiQGSzVui2Ce3Qk1cME8=
+	t=1779448714; cv=none; b=db8+xwI9QboAN201UKy+YesSX0kbm6LYIxWISa0eHVoc0/nZMbOlFxLZmYGM2dXOIMII6r/Z47rN6aTcO3KfFm7TUPCQD8l2rX+RzLsRe3p/XuUyjYiepY3C2qVfLy1CZgjHjvTb1gDlEjQo3PqKp4nCGc6IOdWVH8yTYlYUfNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779447936; c=relaxed/simple;
-	bh=JX5DB7kuIFLTsjbACmu21PvGbIRTip8UGIdm1g5XdgQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uH5rkfShb3TCABwZjGL9vrEq6P2FmaTJeo/ZyHwbzYChugHLq+3hPeYO3xiU2XsXXsoWx+a+lGI+POG3dhJMc0w/d1l9a51a5I/qnRZbg5MFZkgSyYE778sWWZQCe/AhQHFWO7FVd6/1VX4wZU8p8AJ8LJf/U+ys5t+7VX1/eeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=i5P5Zhkz; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1779448714; c=relaxed/simple;
+	bh=ZvyUF/msBmFYhJSPVEJvo3csGbH17ivxprq74R09usc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=inOB6RmNJ0bic0oKbVi8z/8BUGXTg+x4hVbf/AdLgD8ldmm7/BRu2oZUDW/Wbv9sNvwba2XsfjPy2GF1P0fyACFohgYBu8iTNiZwAMO0x9SLMBOtqd6//l78nrliCZT6h2idANHS2ia0z1EVxX49MUwoEj0SDsozMeU8gATS5DA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JfOFPCIy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="i5P5Zhkz"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64M7SMQn069628;
-	Fri, 22 May 2026 11:04:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=cSiBsMiyvS7cygGX5
-	2RlC3XdEyvxbuMMGQjKtYeDTPg=; b=i5P5ZhkzaeywfvOUr1t35AoN22Fxd568w
-	n4QyfqFAsluWrvOlT6veZwv0e+zIP28DHeYH2wArTFIYIRGcXrRmLO7Mfum8P136
-	r1fMFhIe8mO2eI1mK5LDx3ns3be/mnOOBh6nZMQNlJLHLCjh5/8rqumn1FYyI7cs
-	dCfNCGsczFOohXjTAPprI8nCHYZAuV9n+sIE9m7N4OqSX0RMhT+THOe62CIBDBYy
-	bjvZtpVbccta9RTi1KOLPURSqVt1wfbeDZjJDdqJy2KtiSN1EPTHtobZui6TzN7v
-	LzOZTWZN2g/cV7vtviGHwtckaZSvTQEIBH1AQd6SuLZXyM9YUvkHQ==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h8n3jar-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 May 2026 11:04:35 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64MAs6ov022842;
-	Fri, 22 May 2026 11:04:34 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e74dj0grh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 May 2026 11:04:34 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64MB4Uvs35717462
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 22 May 2026 11:04:30 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 951F82004B;
-	Fri, 22 May 2026 11:04:30 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 204E620043;
-	Fri, 22 May 2026 11:04:30 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 22 May 2026 11:04:30 +0000 (GMT)
-From: Jens Remus <jremus@linux.ibm.com>
-To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        x86@kernel.org, Steven Rostedt <rostedt@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Indu Bhagat <ibhagatgnu@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dylan Hatch <dylanbhatch@google.com>,
-        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Kees Cook <kees@kernel.org>, Sam James <sam@gentoo.org>,
-        Andy Lutomirski <luto@kernel.org>
-Cc: Jens Remus <jremus@linux.ibm.com>, bpf@vger.kernel.org, linux-mm@kvack.org,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Jose E. Marchesi" <jemarch@gnu.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "Carlos O'Donell" <codonell@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
-        "Liam R. Howlett" <liam@infradead.org>,
-        Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
-        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH v11 2/6] x86/asm: Avoid emitting DWARF CFI for non-VDSO
-Date: Fri, 22 May 2026 13:04:23 +0200
-Message-ID: <20260522110427.2816637-3-jremus@linux.ibm.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260522110427.2816637-1-jremus@linux.ibm.com>
-References: <20260522110427.2816637-1-jremus@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JfOFPCIy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED50F1F000E9;
+	Fri, 22 May 2026 11:18:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779448712;
+	bh=r9fETLkcgjj3y2NVaHNr533D3/dfvmWbfEYNBFzpUA8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=JfOFPCIy9Hkc2JJ8UhDQafPqjwM3L0SleEStz+2XWsV41n4Ir6qe480iWPTSIzJYc
+	 RpjXwQUX2SLjfOAihhkmV3Ojhk2I8drlzUQ/JY+bI6fBsV1HCrciWi/1LgqkE8CBfa
+	 tIQYeExxNus9Pot/RWUpgTv6n+5Y1R0jYLmiv1QYX8XaGhdoHnobWURxQuGZG2oPWZ
+	 F9OcMv2rtj81Q1JLXf6jtigh7Fp2MWr3PKBRkRjm7pXdWsirHOnJ085v/aIJdz8tvP
+	 Xzf5O8KELy5IAxhozTZfg/Zzy6YYiQ9jJvkbEk0/TqbglXs5cFi0NlquFyn5gbGepE
+	 sAUNHIfu2WJpg==
+Date: Fri, 22 May 2026 07:18:51 -0400
+From: Steven Rostedt <rostedt@kernel.org>
+To: Jens Remus <jremus@linux.ibm.com>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
+ <linux-trace-kernel@vger.kernel.org>, bpf@vger.kernel.org, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra
+ <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, Jiri Olsa
+ <jolsa@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung
+ Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Andrii
+ Nakryiko <andrii@kernel.org>, Indu Bhagat <indu.bhagat@oracle.com>, "Jose
+ E. Marchesi" <jemarch@gnu.org>, Beau Belgrave <beaub@linux.microsoft.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Florian Weimer <fweimer@redhat.com>, Kees Cook
+ <kees@kernel.org>, "Carlos O'Donell" <codonell@redhat.com>, Sam James
+ <sam@gentoo.org>, Dylan Hatch <dylanbhatch@google.com>, Borislav Petkov
+ <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, David
+ Hildenbrand <david@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, "Liam R.
+ Howlett" <Liam.Howlett@oracle.com>, Lorenzo Stoakes
+ <lorenzo.stoakes@oracle.com>, Michal Hocko <mhocko@suse.com>, Mike Rapoport
+ <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik
+ <gor@linux.ibm.com>
+Subject: Re: [PATCH] unwind: Add sframe_(un)register() system calls
+Message-ID: <20260522071851.6a121c00@gandalf.local.home>
+In-Reply-To: <d82ea328-758e-4e41-a58e-46f3137feca7@linux.ibm.com>
+References: <20260521183532.7a145c8a@gandalf.local.home>
+	<d82ea328-758e-4e41-a58e-46f3137feca7@linux.ibm.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: ZddEMLOQrfvITJNkqALVMGRlJxt2TLYE
-X-Authority-Analysis: v=2.4 cv=GYMnWwXL c=1 sm=1 tr=0 ts=6a103844 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=oGMlB6cnAAAA:8
- a=VnNF1IyMAAAA:8 a=zOOTxvlrTZNIKiBVQswA:9 a=2JgSa4NbpEOStq-L5dxp:22
- a=NdAtdrkLVvyUPsUoGJp4:22
-X-Proofpoint-ORIG-GUID: rvJDq_F-CyNalpWNGqTe6-A1u88MGFUr
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIyMDEwNiBTYWx0ZWRfXxDY83bHMAKkS
- /y076Q7Y1FPHjMslUIPL3wlRp7WPy+UBH49MkIB7tUH7yqqCRXnB0sq2/OZNU9LnlY67OYKn7IU
- m5Q2QWddtd8/ZfrVIXsC6NH7fvZNEnY2v4Nb8BYEnMBKuEXr7aFvt5ZLchkM3QSygYeBlgPZe+k
- QdSslQ1LgFFZA7yug/Pvrep8McDwJBS+xhG8CWrMWanGluw3JZKOs018dtBtM7KWX1+fKrtnrcz
- XDmqzoBX8t2XPTuLDyqcTK1CnoNzvFPop6dO8GW3tZdtvaMjxHoM/z7FVOlH/ZA9UC9cEjCUaOS
- nvSgTJTWpepW48m3spbJlNau/zU1Neeo6q0aDRchUPO7tPOs4/K7gDp8FE5cwdM+/UIaLIiJvt9
- ce+Tk4E1I/firvQzn90K4h8DF/BVBc52sAwNxTL76W+3nRJXLNqjAB9rXw27JY9DSlpNTDBiXPv
- p7Z4m5ZqmVSo5KYiLRw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-22_02,2026-05-18_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
- adultscore=0 suspectscore=0 spamscore=0 clxscore=1015 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605220106
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+On Fri, 22 May 2026 11:43:06 +0200
+Jens Remus <jremus@linux.ibm.com> wrote:
 
-It was decided years ago that .cfi_* annotations aren't maintainable in
-the kernel.  They were replaced by objtool unwind hints.  For the kernel
-proper, ensure the CFI_* macros don't do anything.
+> On 5/22/2026 12:35 AM, Steven Rostedt wrote:
+> > From: Steven Rostedt <rostedt@goodmis.org>
+> > 
+> > Add system calls to register and unregister sframes that can be used by
+> > dynamic linkers to tell the kernel where the sframe section is in memory
+> > for libraries it loads.  
+> 
+> Why two separate system calls?  Can't that be one single stacktracectl?
+> Could they at least be non-sframe specific, e.g. stracktrace_register
+> and stracktrace_unregister, so that if one would implement e.g. unwind
+> user dwarf/eh_frame in the future one could pass ehframe_start and
+> ehframe_end in addition to sframe_start and sframe_end?
 
-On the other hand the VDSO library *does* use them, so user space can
-unwind through it.
+Talking with everyone at LSF/MM/BPF the consensus was to avoid an ioctl
+like system call. Everyone hates them. They told me that a system call
+should do one thing. They wanted a separate system call to register and to
+unregister.
 
-Make sure these macros only work for VDSO.  They aren't actually being
-used outside of VDSO anyway, so there's no functional change.
+Note this also helps to see what the user is doing via monitoring via
+ftrace, strace, and security wise via LSMs and seccomp.
 
-[ Jens Remus: Define CFI_SIGNAL_FRAME for !BUILD_VDSO. ]
+> 
+> > 
+> > Both system calls take a pointer to a new structure:
+> > 
+> >   struct sframe_setup {
+> > 	unsigned long		sframe_start;
+> > 	unsigned long		sframe_size;
+> > 	unsigned long		text_start;
+> > 	unsigned long		text_size;
+> >   };
+> > 
+> > and a size of the passed in structure. If the system call needs to be
+> > extended, then the structure could be changed and the size of that
+> > structure will tell the kernel that it is the new version. If the kernel
+> > does not recognize the structure size, it will return -EINVAL.
+> > 
+> >   sframe_start - The virtual address of the sframe section
+> >   sframe_size  - The length of the sframe section
+> >   text_start   - the text section the sframe represents
+> >   test_size    - the length of the section
+> > 
+> > If other stack tracing functionality is added, it will require a new
+> > system call.
+> > 
+> > The unregister only needs the sframe_start and requires all the rest of
+> > the fields to be 0. In the future, if more can be done, then user space
+> > can update the other values and check the return code to see if the kernel
+> > supports it.
+> > 
+> > Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+> > ---
+> > 
+> > Based on top of Jens patches here:
+> > 
+> >   https://lore.kernel.org/linux-trace-kernel/20260520154004.3845823-1-jremus@linux.ibm.com/
+> > 
+> > [ Note, I tested this with the same program from the RFC patch ]
+> > 
+> > Changes from RFC: https://patch.msgid.link/20260429114355.6c712e6a@gandalf.local.home
+> > 
+> > - Remove the ioctl() like system call for a unique system call for each
+> >   functionality. Right now there's two functionalities:
+> >    1. register sframe section
+> >    2. unregister sframe sections
+> > 
+> > - Added taking a lock around the mtree logic in __sframe_remove_section()
+> >   as Sashiko mentioned that there could be races from user space
+> >   registering and unregistering sframe sections at the same time.  
+> 
+> Doesn't sframe_add_section() then also need likewise?
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Acked-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-Signed-off-by: Jens Remus <jremus@linux.ibm.com>
----
- arch/x86/include/asm/dwarf2.h | 52 ++++++++++++++++++++++++-----------
- 1 file changed, 36 insertions(+), 16 deletions(-)
+Ah, I saw the lock grabbed on the vma lookup. It should also be done for the
+mtree_insert_range(). Thanks, will fix.
 
-diff --git a/arch/x86/include/asm/dwarf2.h b/arch/x86/include/asm/dwarf2.h
-index 09c9684d3ad6..13e2e64ef265 100644
---- a/arch/x86/include/asm/dwarf2.h
-+++ b/arch/x86/include/asm/dwarf2.h
-@@ -6,6 +6,15 @@
- #warning "asm/dwarf2.h should be only included in pure assembly files"
- #endif
- 
-+#ifdef BUILD_VDSO
-+
-+	/*
-+	 * For the vDSO, emit both runtime unwind information and debug
-+	 * symbols for the .dbg file.
-+	 */
-+
-+	.cfi_sections .eh_frame, .debug_frame
-+
- #define CFI_STARTPROC		.cfi_startproc
- #define CFI_ENDPROC		.cfi_endproc
- #define CFI_DEF_CFA		.cfi_def_cfa
-@@ -22,21 +31,32 @@
- #define CFI_ESCAPE		.cfi_escape
- #define CFI_SIGNAL_FRAME	.cfi_signal_frame
- 
--#ifndef BUILD_VDSO
--	/*
--	 * Emit CFI data in .debug_frame sections, not .eh_frame sections.
--	 * The latter we currently just discard since we don't do DWARF
--	 * unwinding at runtime.  So only the offline DWARF information is
--	 * useful to anyone.  Note we should not use this directive if we
--	 * ever decide to enable DWARF unwinding at runtime.
--	 */
--	.cfi_sections .debug_frame
--#else
--	 /*
--	  * For the vDSO, emit both runtime unwind information and debug
--	  * symbols for the .dbg file.
--	  */
--	.cfi_sections .eh_frame, .debug_frame
--#endif
-+#else /* !BUILD_VDSO */
-+
-+/*
-+ * On x86, these macros aren't used outside VDSO.  As well they shouldn't be:
-+ * they're fragile and very difficult to maintain.
-+ */
-+
-+.macro nocfi args:vararg
-+.endm
-+
-+#define CFI_STARTPROC		nocfi
-+#define CFI_ENDPROC		nocfi
-+#define CFI_DEF_CFA		nocfi
-+#define CFI_DEF_CFA_REGISTER	nocfi
-+#define CFI_DEF_CFA_OFFSET	nocfi
-+#define CFI_ADJUST_CFA_OFFSET	nocfi
-+#define CFI_OFFSET		nocfi
-+#define CFI_REL_OFFSET		nocfi
-+#define CFI_REGISTER		nocfi
-+#define CFI_RESTORE		nocfi
-+#define CFI_REMEMBER_STATE	nocfi
-+#define CFI_RESTORE_STATE	nocfi
-+#define CFI_UNDEFINED		nocfi
-+#define CFI_ESCAPE		nocfi
-+#define CFI_SIGNAL_FRAME	nocfi
-+
-+#endif /* !BUILD_VDSO */
- 
- #endif /* _ASM_X86_DWARF2_H */
--- 
-2.51.0
+> 
+> > 
+> > - Removed [RFC] from subject as I believe this is more likely the way
+> >   this system call will be done.  
+> 
+> > diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h  
+> 
+> > @@ -999,6 +999,8 @@ asmlinkage long sys_lsm_get_self_attr(unsigned int attr, struct lsm_ctx __user *
+> >  asmlinkage long sys_lsm_set_self_attr(unsigned int attr, struct lsm_ctx __user *ctx,
+> >  				      u32 size, u32 flags);
+> >  asmlinkage long sys_lsm_list_modules(u64 __user *ids, u32 __user *size, u32 flags);
+> > +asmlinkage long sys_sframe_register(void *data, unsigned int size);
+> > +asmlinkage long sys_sframe_unregister(void *data, unsigned int size);
+> >  
+> >  /*
+> >   * Architecture-specific system calls  
+> 
+> 
+> > diff --git a/include/uapi/linux/sframe.h b/include/uapi/linux/sframe.h  
+> 
+> > @@ -0,0 +1,12 @@
+> > +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+> > +#ifndef _UAPI_LINUX_SFRAME_H
+> > +#define _UAPI_LINUX_SFRAME_H
+> > +
+> > +struct sframe_setup {
+> > +	unsigned long		sframe_start;
+> > +	unsigned long		sframe_size;
+> > +	unsigned long		text_start;
+> > +	unsigned long		text_size;
+> > +};
+> > +
+> > +#endif /* _UAPI_LINUX_SFRAME_H */  
+> 
+> > diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c  
+> 
+> > @@ -842,9 +844,11 @@ static void sframe_free_srcu(struct rcu_head *rcu)
+> >  static int __sframe_remove_section(struct mm_struct *mm,
+> >  				   struct sframe_section *sec)
+> >  {
+> > -	if (!mtree_erase(&mm->sframe_mt, sec->text_start)) {
+> > -		dbg_sec("mtree_erase failed: text=%lx\n", sec->text_start);
+> > -		return -EINVAL;
+> > +	scoped_guard(mmap_read_lock, mm) {  
+> 
+> Why is a read lock sufficient? Doesn't that allow multiple readers?
+> How does that prevent a concurrent modification of the mm->sframe_mt?
 
+That was a cut and paste error. I meant to change it to a write lock, but
+got distracted :-p Thanks, will fix.
+
+> 
+> > +		if (!mtree_erase(&mm->sframe_mt, sec->text_start)) {
+> > +			dbg_sec("mtree_erase failed: text=%lx\n", sec->text_start);
+> > +			return -EINVAL;
+> > +		}  
+> 
+> Is (or why not) likewise required in sframe_add_section() for the
+> mtree_insert_range()?
+> 
+> Wasn't the reported issue that while mt_for_each() in
+> sframe_remove_section() there could be concurrent mtree_erase() in
+> __sframe_remove_section() followed by mtree_insert_range() in
+> sframe_add_section(), so that the mt_for_each() could get confused?
+
+I'll take a closer look. But let me fix the obvious bugs first.
+
+-- Steve
+
+> 
+> >  	}
+> >  
+> >  	call_srcu(&sframe_srcu, &sec->rcu, sframe_free_srcu);
+> > @@ -936,3 +940,56 @@ void sframe_free_mm(struct mm_struct *mm)
+> >  
+> >  	mtree_destroy(&mm->sframe_mt);
+> >  }
