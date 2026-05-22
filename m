@@ -1,64 +1,63 @@
-Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
+Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2064282F2E
-	for <bpf@vger.kernel.org>; Fri, 22 May 2026 17:00:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D6393C2BB9
+	for <bpf@vger.kernel.org>; Fri, 22 May 2026 17:13:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779469217; cv=none; b=sALhtDJ/C+xGRLwlK3H9TeFtr1rgdUp3+ois4KsXwQwvbCQvNJ4hHKw9VgHVxltEdIHwjOVEua1Xeby+v59Xj0uLTnB5sZ277bqBEtUQvLsUZHCfaDVoKHQaCdLpkXkdk9jXmrejNa/+k1KaSrZerJmfCWUgBX3bfg47Qp15IAU=
+	t=1779470022; cv=none; b=ZCHkVNVQhel6C5CXCDmkn0BLcjGIg+XSavId5CbwS+BXg/P5izNxSnvRGvlvE43i047wATDYjHx45Eb2YXpfh0G3tBwwaRzaNqMnEA3CEqRShzSFSSIIr8DuVCzWWZ+9JqhavpJaxcRHzuSwRUZmZ7w5sGjoqYY0/rzP+kkuAjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779469217; c=relaxed/simple;
-	bh=FyUqZomlR+UwcWtG4PMmycpRcPIRvuK5GCfw0pHmIrg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=l7hOKiOg7IY9HP5wDAlRcDp0XI1KGkp2b5m3052GXt1gxTpIorZcfFYzka/SffcXsi+XDzkUqADnb9jToYpLkrnWXM8H76ikdTtcU/HH780K+A0hx16svxDiA5v+Xl7yZ7Qn3n9SLUzF9NQ9NpkONVzKYtO9mLXZU+xqG+Juc/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=0IpdoHVU; arc=none smtp.client-ip=74.125.82.171
+	s=arc-20240116; t=1779470022; c=relaxed/simple;
+	bh=a+CInxeSB1Zqe7+X7tbNilMFXAdB47JkuFSLHzgtQp0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Kd7YUuAdSc3qgRtOFrsg+RFI2LBpkPXaAK2Q5Y20FkGL3eVufk3NjX3Gt61/ztrpfcZXXjw0FL7Z6dNSttSVnynw10f29mf+v+EwUjhhYioS8CejtUWFQj6Olj7AkXSTP3Jaq3EE0NFE46yAiKd9m7CRbSu+/Z7q2AI55phus64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=mb5avOus; arc=none smtp.client-ip=74.125.82.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="0IpdoHVU"
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2f7020a928eso11020713eec.1
-        for <bpf@vger.kernel.org>; Fri, 22 May 2026 10:00:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="mb5avOus"
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-3042dffd80bso3546655eec.0
+        for <bpf@vger.kernel.org>; Fri, 22 May 2026 10:13:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1779469213; x=1780074013; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1779470020; x=1780074820; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7OoZvY44wHe6OYlEQEn3JZzrKroiLSSjFFEEqP+ezzg=;
-        b=0IpdoHVUMLtE5abyzM1gvO2sNCZhdjIVRgKeGTB07J17zBVz5Z9zkRcB6Yc3ZSH72E
-         W4rymoXmvrV+MKQLHZzB2i7zqFtg+BiChKX3dGTHQ8mr719cmgJ5cqU8DRIbfEzyFRX4
-         3Qv9sZ+kTScQib3QuXcXNdhviBZHMUPT1YE+DD2kd461CQvHwe1eRToePTaCUdbcBVpF
-         SNyVnphPsyyAYTFdxVI6O3EfDj/h2daOs25hVgnPzZrmX6rGCRUiQDSZ4R2WhLiH3/+N
-         3xiPew8WZKOkijqntai7IcymvfeZKD+3KS7nWsFJ01EMzMNgvdEiFopM0a8q/R6yRTki
-         MNXA==
+        bh=wY4I8lMoFI92sp/KvSm+KBFNyjnf2+5FqBSVyBYIdTY=;
+        b=mb5avOusvH++FgQcBBfSDMOsB1NyLQKilnVtcHQxyJBsnXRzm8q4NnE7ilDv/f/pnL
+         h7SgTyEQyWIQknSdq+vG2gLE0yQyhn5Hdk4du3LBRrVNfY5p4c095DyH2/28wqcdxVgj
+         KABArBH7YfUiM7LF7AAroA/UIdMn5oSDk4+13FWGXmk0UdrpNQzkB6l4idqTrTh8YCIN
+         2i592+RByhRugCuxZ2YQuWOjRnKhZMPwKQwZFZm2mhXu2/4XITbQS7bEl9bi5oaNd+HL
+         XOIKThbxeedA0VS0iGfhfz80NsrYsQ9xnAvCi0uBKHRCGPvAnsbXzZflULPXAKGgYrGM
+         jb9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779469213; x=1780074013;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=1e100.net; s=20251104; t=1779470020; x=1780074820;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7OoZvY44wHe6OYlEQEn3JZzrKroiLSSjFFEEqP+ezzg=;
-        b=snemCqQIfbFxHuZMFOEbm3qdM5RZ2C4G0Hvwqa6qG6PzPN4mwZqgG4ZzofFM8k2aCJ
-         aOyx7RIMoTfruWdo12VyPdi/UgBrkjVvlt1HUV7zKr5UJ4AIdr0Q6p9qaEDsqvMQvdHe
-         vCRn3HhjpJsgNgyAfhhxIjYwL7PnoMHnFGXGu1UC9FE2zN6bSz+ivan5eQKr1YsAqrZK
-         rj8jhWxbBoq8pEXyE+nom0n5olTp1bFBN2wMoxXj4pnIFYbV378sJ0OUmqvWxGURI7Mx
-         L1qEVS6BiheTKrqZOI5IoETEi4lbydXtZZr8J6AdVxZFw6y6zgTW1yJ3OjSXX2lw88xL
-         AdYw==
-X-Forwarded-Encrypted: i=1; AFNElJ9Bv5OT/rQqE1PLbXXV3rCQxcU8B5zz9BCPy2a38h12jpD/aNzzDzCuLd1KampOysu1U2w=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5xaxdij4qx4fHt6Ks1VMDgLvrCAqQLGIJq4B9oxwPOECVDRIT
-	NQ6Gq8jbYSOIy0ZDYsbC2ety2WH14t9omtNkkmlKhZQ+Jldq70EOe82K1DVa7oNatXd2YjMfgpz
-	SdoUpLcPpvQ==
-X-Gm-Gg: Acq92OHY/HAZzh+z8F+UOjwYF2cP/78RpPtlOU3RzGmq9W/x4N/TyuPy1S/DDXheDH7
-	RMq0+khowM9v3bNuUtqCFoYi87MEkj5ZdJyKBNssBefvrRZgi2NfDaDE+N9MbdR31SiibGCip7g
-	4Zhfc1/ulphDZOqePnRngeHRvYJny6OAgLp00J9OSOrpC0ZOhvtLkYfG8wh73/Mtc1DrPlwpu7P
-	pnLc4LNqqVjY6xtmej3GCndUZFgSh3JgSofMqESC6MnqzKt4WP1JR8S03+kmnQuPa+1XwUgFgQz
-	5Lyd0ckFy+Y25YpEA2KAMEdDgGqh0/V5nToTo/7ssI7eMRpC8J3YTMjWF2ZZY5AE4wHdpYWeO7H
-	l9jj3DU7SKU7fYYYQqcOaiZfZyoFbeRqoblZ3U/vaolIXrjyk0II6WoUSZadA4DGfGr4klXBmNA
-	cml6DL
-X-Received: by 2002:a05:7300:bc0b:b0:304:2c71:3f61 with SMTP id 5a478bee46e88-304491d4a5amr2172454eec.28.1779469212087;
-        Fri, 22 May 2026 10:00:12 -0700 (PDT)
+        bh=wY4I8lMoFI92sp/KvSm+KBFNyjnf2+5FqBSVyBYIdTY=;
+        b=prqDFRMQtjAPB+6c672Il5VK22fZ20E1dGGVlBPS111IYC80aHlCkt1nzaYtv8F7iC
+         1AfdryXdBX25G4dKE0VkkbfeZE10B7dhcRLSQsBQQaHxcD9GRg7eKb/6R5lnNHycNQfk
+         OcCQMK+wv+LVm+aYlMZhzpK8G+tNompSlzCxcI2alHpJOh1rrHgLR/raGdOLmPaaLr9S
+         2myLdBD+Nbv01vHZxQoQ024uBNPEFj3i6jcCsJuYLXVkyv2GyWMSeiH3+urUz0DRk+GN
+         w2kgAAhrvZLvxhEbCKpwVdRXKtU6pt0+rynVwv0W5aT8Lm5PJlAUxaoD2BttY3z9U5hE
+         +HQg==
+X-Forwarded-Encrypted: i=1; AFNElJ+nUmNCEZ9Uxo0GTMubTDFW/P3RtR5Wmu26/u5ZBUlr/MY78KmdLXmkF27MNsM0Lt75744=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHRZn0ew/b/Nv011xiy5JpLEc+166veieupFn6xwlulovgfpYM
+	g7gOA5bEEBeA8BX9uNufV98/HtaBYiBdIZGNm72+lSqr4TxOtBka+MZIYWT30uSlwLI=
+X-Gm-Gg: Acq92OFxcAERy1R18bRyI+Evqn5kQAEeLRQlpiVoUvIL71e6NPiBdr8BAYi3xGKcyK5
+	ehktXOeGw0UtYO7sEVmfDyoO8woUmsG6Pcjih6cYhVepkujM2Vz1o+nVeuQiduBn4XlBFOB6YGj
+	++FhvBpg2kDAf4d/krknDdIhH/umeuvOueaEia8dKavKSpn2mRZcBAeWLKjUYOqvQcHMXNZVPQl
+	wiOf1KG7zeHLg+jcuQl5gvac1xwVrZ9k9HGgBkYbQCafnq0n09gD+eZIJc15mIXKZIC4j6VHi+E
+	NsQNQGfdNWrHwgbmbc8pu36Ku2lfk4YwvtdXHdujTh2lYTUPbzFarCA8u7i0yrI7zdCT7if7JT2
+	shDU3C/VY3lnqw2IJ0u169xXH0cpTkHeHehSBRyz7pFO8WdAnlN6+l9jOs6YwLqZH7ckxxj/ChQ
+	xThxfvJ+T9Ja/WWPI=
+X-Received: by 2002:a05:7301:168b:b0:2be:833c:149d with SMTP id 5a478bee46e88-304491e11fcmr2091389eec.28.1779470020197;
+        Fri, 22 May 2026 10:13:40 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:600::69da])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304535ae870sm1305837eec.19.2026.05.22.10.00.10
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30451f3feadsm1872911eec.13.2026.05.22.10.13.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 May 2026 10:00:11 -0700 (PDT)
+        Fri, 22 May 2026 10:13:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,166 +66,94 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 22 May 2026 13:00:09 -0400
-Message-Id: <DIPD6TO2VNF2.2N8KKUWX68UUG@etsalapatis.com>
-To: "Himanshu Anand" <anand.himanshu17@gmail.com>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>
-Cc: <yonghong.song@linux.dev>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] bpf: Fix preorder-unaware index in
- replace_effective_prog and purge_effective_progs replace_effective_prog()
- and purge_effective_progs() compute the target index in the effective
- program array by sequentially walking the hlist (pos++).  However, since
- commit 4b82b181a26c ("bpf: Allow pre-ordering for bpf cgroup progs"),
- compute_effective_progs() partitions the effective array: preorder programs
- occupy indices 0..preorder_cnt-1 and normal programs occupy indices
- preorder_cnt..end.  The sequential hlist walk does not account for this
- partitioning, so when BPF_F_PREORDER programs coexist with normal programs
- the computed index diverges from the actual position in the effective
- array. In replace_effective_prog() this causes BPF_LINK_UPDATE to overwrite
- the wrong slot: the freed program [snip]
+Date: Fri, 22 May 2026 13:13:35 -0400
+Message-Id: <DIPDH3PCUDDG.EGYL0SYSG1IO@etsalapatis.com>
+Cc: "Andrey Konovalov" <andreyknvl@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
+ <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, "David
+ Ahern" <dsahern@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>, "Ingo
+ Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
+ <dave.hansen@linux.intel.com>, "X86 ML" <x86@kernel.org>, "H. Peter Anvin"
+ <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime Coquelin"
+ <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
+ <alexandre.torgue@foss.st.com>, "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
+ "Alexander Potapenko" <glider@google.com>, "Dmitry Vyukov"
+ <dvyukov@google.com>, "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>, <ebpf@linuxfoundation.org>,
+ "Bastien Curutchet" <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>, "bpf"
+ <bpf@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>, "Network
+ Development" <netdev@vger.kernel.org>, "open list:KERNEL SELFTEST
+ FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>, "linux-arm-kernel"
+ <linux-arm-kernel@lists.infradead.org>, "kasan-dev"
+ <kasan-dev@googlegroups.com>, "linux-mm" <linux-mm@kvack.org>
+Subject: Re: [PATCH RFC bpf-next 3/8] bpf: add BPF_JIT_KASAN for KASAN
+ instrumentation of JITed programs
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, "Alexei
+ Starovoitov" <alexei.starovoitov@gmail.com>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260522162248.55586-1-anand.himanshu17@gmail.com>
-In-Reply-To: <20260522162248.55586-1-anand.himanshu17@gmail.com>
+References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
+ <20260413-kasan-v1-3-1a5831230821@bootlin.com>
+ <CA+fCnZf-o8tiv_tX9YB5eBUGx17OpztKZsEB6Awjw3WAqBAiUw@mail.gmail.com>
+ <DHSWSSYRPUVC.2W3G3OU27L3HG@bootlin.com>
+ <CAADnVQLj=UosnsC-4V2+mN92Fe0-kW++U+m-O9c93kk6BwiXgw@mail.gmail.com>
+ <DIP9O3BEWG3C.2BAHKYUIA4H4E@bootlin.com>
+In-Reply-To: <DIP9O3BEWG3C.2BAHKYUIA4H4E@bootlin.com>
 
-On Fri May 22, 2026 at 12:22 PM EDT, Himanshu Anand wrote:
-> Signed-off-by: Himanshu Anand <anand.himanshu17@gmail.com>
-
-Something is misconfigured on your end and your're sending the patch
-description in the commit message, both for this and the other patch.
-
-> ---
->  kernel/bpf/cgroup.c | 74 ++++++++++++++++++---------------------------
->  1 file changed, 29 insertions(+), 45 deletions(-)
+On Fri May 22, 2026 at 10:14 AM EDT, Alexis Lothor=C3=A9 wrote:
+> On Tue Apr 14, 2026 at 4:38 PM CEST, Alexei Starovoitov wrote:
+>> On Tue, Apr 14, 2026 at 6:24=E2=80=AFAM Alexis Lothor=C3=A9
+>> <alexis.lothore@bootlin.com> wrote:
+>>>
+>>> On Tue Apr 14, 2026 at 12:20 AM CEST, Andrey Konovalov wrote:
+>>> > On Mon, Apr 13, 2026 at 8:29=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Fou=
+ndation)
+>>> > <alexis.lothore@bootlin.com> wrote:
 >
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 876f6a81a9b6..437e1e873bf8 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -923,15 +923,12 @@ static int cgroup_bpf_attach(struct cgroup *cgrp,
->   */
->  static void replace_effective_prog(struct cgroup *cgrp,
->  				   enum cgroup_bpf_attach_type atype,
-> -				   struct bpf_cgroup_link *link)
-> +				   struct bpf_cgroup_link *link,
-> +				   struct bpf_prog *old_prog)
->  {
->  	struct bpf_prog_array_item *item;
->  	struct cgroup_subsys_state *css;
->  	struct bpf_prog_array *progs;
-> -	struct bpf_prog_list *pl;
-> -	struct hlist_head *head;
-> -	struct cgroup *cg;
-> -	int pos;
-> =20
->  	css_for_each_descendant_pre(css, &cgrp->self) {
->  		struct cgroup *desc =3D container_of(css, struct cgroup, self);
-> @@ -939,27 +936,20 @@ static void replace_effective_prog(struct cgroup *c=
-grp,
->  		if (percpu_ref_is_zero(&desc->bpf.refcnt))
->  			continue;
-> =20
-> -		/* find position of link in effective progs array */
-> -		for (pos =3D 0, cg =3D desc; cg; cg =3D cgroup_parent(cg)) {
-> -			if (pos && !(cg->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
-> -				continue;
-> -
-> -			head =3D &cg->bpf.progs[atype];
-> -			hlist_for_each_entry(pl, head, node) {
-> -				if (!prog_list_prog(pl))
-> -					continue;
-> -				if (pl->link =3D=3D link)
-> -					goto found;
-> -				pos++;
-> -			}
-> -		}
-> -found:
-> -		BUG_ON(!cg);
-> +		/* find the old prog in effective array by direct pointer
-> +		 * comparison, since compute_effective_progs() partitions
-> +		 * the array (preorder progs first) and the hlist walk
-> +		 * order does not match the effective array order.
-> +		 */
->  		progs =3D rcu_dereference_protected(
->  				desc->bpf.effective[atype],
->  				lockdep_is_held(&cgroup_mutex));
-> -		item =3D &progs->items[pos];
-> -		WRITE_ONCE(item->prog, link->link.prog);
-> +		for (item =3D &progs->items[0]; item->prog; item++) {
-> +			if (item->prog =3D=3D old_prog) {
-> +				WRITE_ONCE(item->prog, link->link.prog);
-> +				break;
-> +			}
-> +		}
->  	}
->  }
-> =20
-> @@ -1003,7 +993,7 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
-> =20
->  	cgrp->bpf.revisions[atype] +=3D 1;
->  	old_prog =3D xchg(&link->link.prog, new_prog);
-> -	replace_effective_prog(cgrp, atype, link);
-> +	replace_effective_prog(cgrp, atype, link, old_prog);
->  	bpf_prog_put(old_prog);
->  	return 0;
->  }
-> @@ -1078,11 +1068,9 @@ static void purge_effective_progs(struct cgroup *c=
-grp, struct bpf_prog *prog,
->  				  struct bpf_cgroup_link *link,
->  				  enum cgroup_bpf_attach_type atype)
->  {
-> +	struct bpf_prog *target_prog =3D prog ? : link->link.prog;
->  	struct cgroup_subsys_state *css;
->  	struct bpf_prog_array *progs;
-> -	struct bpf_prog_list *pl;
-> -	struct hlist_head *head;
-> -	struct cgroup *cg;
->  	int pos;
-> =20
->  	/* recompute effective prog array in place */
-> @@ -1092,28 +1080,24 @@ static void purge_effective_progs(struct cgroup *=
-cgrp, struct bpf_prog *prog,
->  		if (percpu_ref_is_zero(&desc->bpf.refcnt))
->  			continue;
-> =20
-> -		/* find position of link or prog in effective progs array */
-> -		for (pos =3D 0, cg =3D desc; cg; cg =3D cgroup_parent(cg)) {
-> -			if (pos && !(cg->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
-> -				continue;
-> -
-> -			head =3D &cg->bpf.progs[atype];
-> -			hlist_for_each_entry(pl, head, node) {
-> -				if (!prog_list_prog(pl))
-> -					continue;
-> -				if (pl->prog =3D=3D prog && pl->link =3D=3D link)
-> -					goto found;
-> -				pos++;
-> -			}
-> -		}
-> -
-> -		/* no link or prog match, skip the cgroup of this layer */
-> -		continue;
-> -found:
-> +		/* find the prog in the effective array by direct pointer
-> +		 * comparison instead of computing index from hlist walk,
-> +		 * since compute_effective_progs() partitions the array.
-> +		 * Use target_prog which resolves link->link.prog for
-> +		 * link-based entries where prog is NULL.
-> +		 */
->  		progs =3D rcu_dereference_protected(
->  				desc->bpf.effective[atype],
->  				lockdep_is_held(&cgroup_mutex));
-> =20
-> +		for (pos =3D 0; progs->items[pos].prog; pos++) {
-> +			if (progs->items[pos].prog =3D=3D target_prog)
-> +				break;
-> +		}
-> +
-> +		if (!progs->items[pos].prog)
-> +			continue;
-> +
->  		/* Remove the program from the array */
->  		WARN_ONCE(bpf_prog_array_delete_safe_at(progs, pos),
->  			  "Failed to purge a prog from array at index %d", pos);
+> [...]
+>
+>>> >> +config BPF_JIT_KASAN
+>>> >> +       bool
+>>> >> +       depends on HAVE_EBPF_JIT_KASAN
+>>> >> +       default y if BPF_JIT && KASAN_GENERIC
+>>> >
+>>> > Should this be "depends on KASAN && KASAN_GENERIC"?
+>>>
+>>> Meaning, making it an explicit user-selectable option ?
+>>>
+>>> If so, the current design choice is voluntary and based on the feedback
+>>> received on the original RFC, where I have been suggested to
+>>> automatically enable the KASAN instrumentation in BPF programs if KASAN
+>>> support is enabled in the kernel ([1]). But if a user-selectable toggle
+>>> is eventually a better solution, I'm fine with changing it.
+>>
+>> Let's not add more config knobs.
+>> Even this patch looks redundant.
+>> Inside JIT do instrumentation when KASAN_GENERIC is set.
+>
+> (with quite some delay) I think it would be better to keep this new
+> BPF_JIT_KASAN, because aside from the possibility to use it in
+> bpf_jit_comp.c, it allows to update tests affected by KASAN
+> instrumentation in a nicer way. For example, the test_loader subtests
+> that monitor JITted instructions are confused by KASAN. I can either
+> skip them or make them smarter when KASAN is enabled for BPF, but in
+> both cases, it would be nicer to just adapt the behavior based on a
+> generic CONFIG_BPF_JIT_KASAN, rather than sprinkling some "if
+> jit_enabled AND CONFIG_KASAN_GENERIC AND ARCH_X86" in selftests. That
+> still does not make it a config knob, that just creates an internal
+> Kconfig option that is automatically turned on when KASAN and JIT are
+> enabled at build time.
 
+Having a togglable config knob gives us the option to set up KASAN for
+the kernel but not for BPF, and I don't see why we'd want that. Imo we are
+already paying the cost of KASAN for the rest of the kernel, there is no
+incentive to not run it for the BPF JIT. Having to eat the complexity cost
+in the selftests seems reasonable if the alternative means a cleaner
+interface for the user (preventing them from choosing an unreasonable
+combination of options).
