@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E6F36402D;
-	Fri, 22 May 2026 17:22:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41BB37418C;
+	Fri, 22 May 2026 17:22:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779470547; cv=none; b=Nxt/2345HyhJHpVIcCaIdThFb27z5z4SJlg2B7qbfRsug0wRpFOsJaTK/3zdX+sk8ZM3wSw0NtnY0g2moc2H1iDf3kjrYiqU0M69+bMLkgeLvPGsK83ppNYd7Z0mR4gEwGQ7mB0uyjHYcpPcXT2UwrnR4252vfaOBCvuLhQePJ8=
+	t=1779470547; cv=none; b=YoMmNu4FzhVbFXAi6fetbOYbJn8aV4FQbT2olSoYxulQFLCBY0r8gVJqGo19mnAY0xO/a8LOhy549cUc5lbjdFtdRxc/Hgmh5sVQkYCXUSNtr1WFYQNiR13roPWpn0nIWE5dLyUNHX6SnWptFv6A1oC5uUgqj+yEienbjj3G5qY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779470547; c=relaxed/simple;
-	bh=WWiEIEIACG8ay7a2564Y/A9KnugfWYXmGYT9W641kKI=;
+	bh=xLMpuULhE50WLvYfq+YFqn7p7F8PYDLxPc64udyrmVY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A1hG4KEuO5v6UiXETlF0i72fr/tlKr1tyvH4VlD32bUf0oueNBpWaz2fBYRqsh2m548HNrmFTHoP5N18ZbGD94nPj0NcgB94RLdIZXo0aUBpYllj9q9IcG/CAZnEagTe0pXDjF8xJFB86oeX8EcKXxTunH2R4ZD31XUXUGtPF7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hJA3AxsK; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=Y6hIICaUtCcuD8VK1gLC/dL5hpkYhMsh6+R89WXMvuqzYcXHoIMmLfoBQlPIul33CkIGffzKzjEjSjyJqVGewX/gHNq2cOU3Wjh7GjBCA0Zp3WPTcnV/kuz7RKyXnkEMQSzQdhjliSiuq/FryBgQJBdrss16gXYO/8j40kqDIik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CHkuq/3z; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hJA3AxsK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03A401F000E9;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CHkuq/3z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0C931F00A3D;
 	Fri, 22 May 2026 17:22:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779470544;
-	bh=zY4ndTv1c/ZirDGFOJhNBk3gBdwkbYwzNTCen30BgG8=;
+	s=k20260515; t=1779470545;
+	bh=zm3BzxzciLeqiOYKZgLYww3y6avzhR84hmtwyjfLNMI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=hJA3AxsKt5vguBDGX9K7MIPGuu6SdGytFc3+3mRtIJSZaC0iflWEZMUYifhPEinA+
-	 k2L3ChKbEJfdVs4PX/54/LxfS0fcDnorfR0PgdCuhmw6EfqOFVIQ7Lv0s2DPGzZ1K9
-	 exLNC31Bs8egNfzQuiFyMQhIhXPHq7oKaFRL1p6XhHLzRyixitlCbGSknGCQbvT+9u
-	 Pi5GiuRIEPIMzsDOHP7leaZFfZLU0/x/gchgF/VZtway62LW5UM2jlFIMkoQAvbZHc
-	 I5kYDS96HN0rG0eRx1NdNmfJL4aS4Yhs2jV3bsX5Jsor/9kkYYjIVhFphgAlpd+JJS
-	 gmbcVFlVFkbKQ==
+	b=CHkuq/3zZYu/tRxaWyme0lClSoZ0f6h5jg484VOcpHXU30VoknM2GFr4KTyBJOCg0
+	 pODNVlk82hBzz+B/IkrEooAig0AaETfYG/V2xQXvehxL/amJMLboo4FRDSPj0s41Eo
+	 WYggiBT3FzncTdEWCwMeyjR/KkpllOwXPPldaepFhHrqWcprNjHxsH5/eYNQd7lNRc
+	 15oqbf0wLQ+y4HXrMQ0NcdN2Oy6zEZChEQqb9q2j0yUcK8LEeZD2KqJlkgW+/VmNvt
+	 ZGu/cIlP5U+auQscBl37W+uJpTUdDzGuiXjeBLc3n9CQFxLNcz6zzcrRJJNB8ui1PH
+	 93VAkSA7bstCw==
 From: Tejun Heo <tj@kernel.org>
 To: David Vernet <void@manifault.com>,
 	Andrea Righi <arighi@nvidia.com>,
@@ -53,9 +53,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-mm@kvack.org,
 	linux-kernel@vger.kernel.org,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH 4/8] bpf: Add bpf_struct_ops_for_each_prog()
-Date: Fri, 22 May 2026 07:22:15 -1000
-Message-ID: <20260522172219.1423324-5-tj@kernel.org>
+Subject: [PATCH 5/8] bpf/arena: Add bpf_arena_map_kern_vm_start() and bpf_prog_arena()
+Date: Fri, 22 May 2026 07:22:16 -1000
+Message-ID: <20260522172219.1423324-6-tj@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260522172219.1423324-1-tj@kernel.org>
 References: <20260522172219.1423324-1-tj@kernel.org>
@@ -67,89 +67,77 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a helper that walks the member progs of the struct_ops map
-containing a given @kdata vmtable. struct_ops ->reg() callbacks (and
-similar) sometimes need to inspect the loaded BPF programs, e.g. to
-discover maps they reference via prog->aux->used_maps.
+struct bpf_arena is opaque to callers outside arena.c. Add two helpers
+for struct_ops subsystems that need to reach into an arena:
 
-The implementation mirrors bpf_struct_ops_id(): container_of @kdata
-to recover the bpf_struct_ops_map, then iterate st_map->links[i]->prog
-for i in [0, funcs_cnt). Same access pattern, no new locking - by the
-time ->reg() fires st_map is fully populated and stable.
+  bpf_arena_map_kern_vm_start(struct bpf_map *map)
+    returns @map's kern_vm_start. A sched_ext follow-up needs this
+    to translate kern_va <-> uaddr.
 
-A sched_ext follow-up walks the member progs of a cid-form scheduler's
-struct_ops map, reads prog->aux->arena directly, and requires all member
-progs to reference exactly one arena, without requiring the BPF program
-to call a registration kfunc.
+  bpf_prog_arena(struct bpf_prog *prog)
+    returns the bpf_map of the arena referenced by @prog (NULL if
+    @prog references no arena). The verifier enforces at most one
+    arena per program. Used by struct_ops callers that auto-discover
+    an arena from a member prog and need to take a map reference.
 
+Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Tejun Heo <tj@kernel.org>
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- include/linux/bpf.h         |  3 +++
- kernel/bpf/bpf_struct_ops.c | 36 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 39 insertions(+)
+ include/linux/bpf.h |  2 ++
+ kernel/bpf/arena.c  | 26 ++++++++++++++++++++++++++
+ 2 files changed, 28 insertions(+)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 64968ca6db51..5b99d786e98c 100644
+index 5b99d786e98c..e1ba57c10aaa 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -2129,6 +2129,9 @@ int bpf_prog_assoc_struct_ops(struct bpf_prog *prog, struct bpf_map *map);
- void bpf_prog_disassoc_struct_ops(struct bpf_prog *prog);
- void *bpf_prog_get_assoc_struct_ops(const struct bpf_prog_aux *aux);
- u32 bpf_struct_ops_id(const void *kdata);
-+int bpf_struct_ops_for_each_prog(const void *kdata,
-+				 int (*cb)(struct bpf_prog *prog, void *data),
-+				 void *data);
+@@ -618,6 +618,8 @@ void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
+ 		      struct bpf_spin_lock *spin_lock);
+ u64 bpf_arena_get_kern_vm_start(struct bpf_arena *arena);
+ u64 bpf_arena_get_user_vm_start(struct bpf_arena *arena);
++u64 bpf_arena_map_kern_vm_start(struct bpf_map *map);
++struct bpf_map *bpf_prog_arena(struct bpf_prog *prog);
+ int bpf_obj_name_cpy(char *dst, const char *src, unsigned int size);
  
- #ifdef CONFIG_NET
- /* Define it here to avoid the use of forward declaration */
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index 05b366b821c3..16aec18ed31b 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -1203,6 +1203,42 @@ u32 bpf_struct_ops_id(const void *kdata)
+ struct bpf_offload_dev;
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index a811cf6170fa..51b9ae36feb6 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -84,6 +84,32 @@ u64 bpf_arena_get_user_vm_start(struct bpf_arena *arena)
+ 	return arena ? arena->user_vm_start : 0;
  }
- EXPORT_SYMBOL_GPL(bpf_struct_ops_id);
  
 +/**
-+ * bpf_struct_ops_for_each_prog - Invoke @cb for each member prog
-+ * @kdata: kernel-side struct_ops vmtable (the @kdata arg to ->reg/->update/->unreg)
-+ * @cb: callback invoked once per member prog; non-zero return stops iteration
-+ * @data: opaque argument passed to @cb
++ * bpf_arena_map_kern_vm_start - kern_vm_start lookup by struct bpf_map *
++ * @map: a BPF_MAP_TYPE_ARENA map
 + *
-+ * Walks the struct_ops member progs registered on the map containing @kdata.
-+ * Intended for use from struct_ops ->reg() callbacks (and similar) that need to
-+ * inspect the loaded BPF programs (for example to discover maps they reference
-+ * via @prog->aux->used_maps).
-+ *
-+ * Return 0 if iteration completed, otherwise the first non-zero @cb return.
++ * Return @map's kern_vm_start.
 + */
-+int bpf_struct_ops_for_each_prog(const void *kdata,
-+				 int (*cb)(struct bpf_prog *prog, void *data),
-+				 void *data)
++u64 bpf_arena_map_kern_vm_start(struct bpf_map *map)
 +{
-+	struct bpf_struct_ops_value *kvalue;
-+	struct bpf_struct_ops_map *st_map;
-+	u32 i;
-+	int ret;
-+
-+	kvalue = container_of(kdata, struct bpf_struct_ops_value, data);
-+	st_map = container_of(kvalue, struct bpf_struct_ops_map, kvalue);
-+
-+	for (i = 0; i < st_map->funcs_cnt; i++) {
-+		if (!st_map->links[i])
-+			continue;
-+		ret = cb(st_map->links[i]->prog, data);
-+		if (ret)
-+			return ret;
-+	}
-+	return 0;
++	return bpf_arena_get_kern_vm_start(container_of(map, struct bpf_arena, map));
 +}
-+EXPORT_SYMBOL_GPL(bpf_struct_ops_for_each_prog);
 +
- static bool bpf_struct_ops_valid_to_reg(struct bpf_map *map)
++/**
++ * bpf_prog_arena - return the bpf_map of the arena referenced by @prog
++ * @prog: a loaded BPF program
++ *
++ * The verifier enforces at most one arena per program and stores it in
++ * prog->aux->arena. Return that arena's underlying bpf_map, or NULL if
++ * @prog does not reference an arena.
++ */
++struct bpf_map *bpf_prog_arena(struct bpf_prog *prog)
++{
++	struct bpf_arena *arena = prog->aux->arena;
++
++	return arena ? &arena->map : NULL;
++}
++
+ static long arena_map_peek_elem(struct bpf_map *map, void *value)
  {
- 	struct bpf_struct_ops_map *st_map = (struct bpf_struct_ops_map *)map;
+ 	return -EOPNOTSUPP;
 -- 
 2.54.0
 
