@@ -1,46 +1,56 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4FD314A90;
-	Fri, 22 May 2026 02:33:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25D618E025
+	for <bpf@vger.kernel.org>; Fri, 22 May 2026 02:59:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779417184; cv=none; b=T1kBSL6qVyqEtI/ExD5X0XfYcqP+GWFn/2oHf50QSCeOn4DRlAIbWIbpyiMxPKw/JmaSi1qjjaiSLFR88ZGnvb57Dueg7mYS2ZxAmnAkBbKq4366VRQsIgofRwJgAkRdIIXA6SlYInPSJkEUMjgMGTdp9bLef7O+S1KkyqAg2i8=
+	t=1779418763; cv=none; b=Q5V+wVuGcQSCsM7i4P6lE0uOEgC1Zrs8ABbORYqYXP4/T6SAurOzMkJo5CJMV89u45ojFIj7cMBo0mMdYHaci0mR+SBmX8sor9s5V8n+PGFz2n//zvyE7kAKSTtzMUXKAsE1sSjCO9bF671lDoCAjyh3UwhHGvB+sU7tM4srPYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779417184; c=relaxed/simple;
-	bh=YpX0IuU6uad++fQtai4BUCTVNCZue4EbKyrGLOL+2gg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jnQa9kONbvHIDnQ1reoi1EsHIcirQul9iQbQ3IxhmDqwiOImkQfLBy08M/ka4++jht3n+uAERW1DuR2rCSajTt6S9VkGz/N60I1HpAIueuCdfmc6oF+UWXbHzJ4yNmz9i/8NWfP2Xt189F8Cbk4yC9UU7rN2FEZAnQLQfWzyZ+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QWqDWNW6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779418763; c=relaxed/simple;
+	bh=XcAeZ1xUWN5YbsF3zkXJL5jaBtdzE7hmE7JLhl4tByw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E9zqbBwsUnQVkvp7XP4jjCtgAHKqBFUsHg1j0cgxbD3lef0kB2rIdXlukI3HHkQxCSnt0tZ3z4KYG4vVEA1sRYJmWvg2B075c+8Ks/i0xu5IfkEH0HzFHYuE+NbzVdYYTaE0yOFlBmzb5PHSK8kR9u32Wcf4FNQSXDbVXRrXVXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QJN48+DS; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QWqDWNW6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D9011F00A3D;
-	Fri, 22 May 2026 02:33:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779417183;
-	bh=E3TmmLfniL0rHf0KLHL+HUN0NFX4Y12fyjg3C7NkEpg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=QWqDWNW62T8VQBlZWXGQpzzfU1dInbAlq1ZLjPfErRYlaB1z23F8IQViDKDJLEgbu
-	 duIC0oypZgmquAwK6q9ZjT4iMNe+AQxWuA5dZFko2saVG2N+3aKKNfaTK58qmDzAjU
-	 bgqC6+9qT4wV+vfyJ/WQFDtR1cBR80jVvkTyTUXbDrF1/FVqXHXH0jHmvm6wYotNc7
-	 +4Pe4YtMDWwlDAFrWtY/m1Uky4J0k1EvXPu131fCmbcHAc68tFUwjDLPMORz2GnRMb
-	 fktw3hODnj6OrWjv5Ogj/GLyF/oVDn037eo4dhIqC9zoKh1zjspMYv/1XmDcEOcM43
-	 tNwrj8kvCcrpw==
-From: KP Singh <kpsingh@kernel.org>
-To: linux-security-module@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: ast@kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QJN48+DS"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779418759;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZHMKu37bWNXYpVKFqT7lIbO39Wj8aWEiP+AeO+SmrKo=;
+	b=QJN48+DSEepn3oelHyzvw7UCKSV7jN5dVjgaZdQcOZ8b29fuFth4EtToxsGAhYhIgdFc5Q
+	RRLX+v9APcKfoEH0ZD0BdO8UJr5BrLzfBDB1DGltnSuJonIGvaEk+7f7om8ZyCu8n63/WY
+	mo793DftGfPcB5gTVf7LJ5rzo0sAYnE=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	kuba@kernel.org,
 	daniel@iogearbox.net,
-	memxor@gmail.com,
-	James.Bottomley@HansenPartnership.com,
-	paul@paul-moore.com,
-	KP Singh <kpsingh@kernel.org>
-Subject: [PATCH bpf-next 13/13] selftests/bpf: add IPE BPF policy integration tests
-Date: Fri, 22 May 2026 04:32:33 +0200
-Message-ID: <20260522023234.3778588-14-kpsingh@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260522023234.3778588-1-kpsingh@kernel.org>
-References: <20260522023234.3778588-1-kpsingh@kernel.org>
+	martin.lau@linux.dev
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf] net/sched: cls_bpf: prevent unbounded recursion in offload rollback
+Date: Fri, 22 May 2026 10:58:53 +0800
+Message-ID: <20260522025854.341647-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,206 +58,85 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Smoke test for the IPE BPF signing properties and ops added in the
-preceding patches. The test primes the kernel config with IPE
-knobs, writes a boot policy, and boots vmtest.sh to verify that
-signed lskels load, unsigned loads are denied, and the policy
-audit lines match.
+Quan Sun reported [1] a stack overflow in cls_bpf_offload_cmd().
 
-Manual only for now, not wired into the selftests Makefile.
+Reproducer on netdevsim: add a skip_sw cls_bpf filter, set the
+bpf_tc_accept debugfs knob to 0, then `tc filter replace`. The replace
+calls tc_setup_cb_replace() which fails. cls_bpf_offload_cmd() then
+swaps prog/oldprog and recursively calls itself to roll back. But
+bpf_tc_accept=0 makes the rollback fail too, which triggers yet another
+rollback frame with the same arguments, and so on until the stack is
+exhausted.
 
-Signed-off-by: KP Singh <kpsingh@kernel.org>
+bpf_tc_accept is just a convenient knob for the reproducer. Any driver
+whose tc_setup_cb_replace() fails twice in a row can hit the same loop,
+so this is not a netdevsim-only issue.
+
+Two ways to fix it:
+
+  1) Have the rollback call tc_setup_cb_add() on oldprog instead of
+     re-entering cls_bpf_offload_cmd().
+  2) Mark the rollback frame with a flag and skip a second-level
+     rollback from inside it.
+
+Go with (2). It is the smaller change and keeps the original behaviour:
+the rollback still goes through tc_setup_cb_replace(), so the driver
+gets one real chance to restore its state. If that attempt also fails,
+we just return the original error instead of recursing.
+
+[1]: https://lore.kernel.org/bpf/ce5a6005-3c5e-4696-9e05-eba9461dc860@std.uestc.edu.cn/T/#u
+
+Fixes: 102740bd9436 ("cls_bpf: fix offload assumptions after callback conversion")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- .../selftests/bpf/test_signed_bpf_ipe.sh      | 156 ++++++++++++++++++
- tools/testing/selftests/bpf/vmtest.sh         |   4 +-
- 2 files changed, 158 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/selftests/bpf/test_signed_bpf_ipe.sh
+ net/sched/cls_bpf.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_signed_bpf_ipe.sh b/tools/testing/selftests/bpf/test_signed_bpf_ipe.sh
-new file mode 100755
-index 000000000000..aaa259ddb917
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_signed_bpf_ipe.sh
-@@ -0,0 +1,156 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# IPE BPF policy integration tests.
-+
-+if [ "${1:-}" = "--in-vm" ]; then
-+	set -u
-+	fail=0
-+	record() {
-+		id=$1; verdict=$2; shift 2
-+		printf '%s %s %s\n' "$verdict" "$id" "$*"
-+		[ "$verdict" = FAIL ] && fail=$((fail + 1))
-+		return 0
-+	}
-+
-+	mountpoint -q /sys/kernel/security 2>/dev/null \
-+		|| mount -t securityfs none /sys/kernel/security 2>/dev/null || true
-+	if [ -d /sys/kernel/security/ipe ]; then
-+		record T0 PASS "securityfs/ipe present"
-+	elif grep -qw ipe /sys/kernel/security/lsm 2>/dev/null; then
-+		record T0 PASS "ipe in /sys/kernel/security/lsm"
-+	elif [ -r /sys/module/ipe/parameters/enforce ]; then
-+		record T0 PASS "ipe module parameters present"
-+	else
-+		record T0 FAIL "no sign that IPE LSM is loaded"
-+	fi
-+
-+	if ./test_progs -t atomics 2>&1 | grep -qE '^#[0-9]+[[:space:]]+atomics:OK$'; then
-+		record T1 PASS "atomics signed lskel loaded"
-+	else
-+		record T1 FAIL "atomics signed lskel did not load"
-+	fi
-+
-+	if dmesg | grep -q 'ipe_op=BPF_PROG_LOAD ipe_hook=BPF_PROG_LOAD'; then
-+		record T2 PASS "ipe_op=BPF_PROG_LOAD audit line found"
-+	else
-+		record T2 FAIL "no ipe_op=BPF_PROG_LOAD audit lines in dmesg"
-+	fi
-+
-+	if dmesg | grep 'ipe_op=BPF_PROG_LOAD' \
-+		| grep -q 'bpf_signature=UNSIGNED action=DENY'; then
-+		record T3 PASS "deny-UNSIGNED rule matched"
-+	else
-+		record T3 FAIL "deny-UNSIGNED rule never matched"
-+	fi
-+
-+	mountpoint -q /sys/kernel/security 2>/dev/null \
-+		|| mount -t securityfs none /sys/kernel/security 2>/dev/null || true
-+	content=
-+	for d in /sys/kernel/security/ipe/policies/*/; do
-+		[ -d "$d" ] || continue
-+		if [ -r "$d/policy" ]; then
-+			content=$(cat "$d/policy" 2>/dev/null || true)
-+			break
-+		fi
-+	done
-+	if [ -z "$content" ]; then
-+		record T5 SKIP "could not read /sys/kernel/security/ipe/policies/*/policy"
-+	elif echo "$content" | grep -q '^op=BPF_PROG_LOAD_POST_INTEGRITY'; then
-+		record T5 PASS "post-integrity rule present in active policy"
-+	else
-+		record T5 FAIL "active policy does not contain a BPF_PROG_LOAD_POST_INTEGRITY rule"
-+	fi
-+
-+	ENFORCE=/sys/kernel/security/ipe/enforce
-+	mountpoint -q /sys/kernel/security 2>/dev/null \
-+		|| mount -t securityfs none /sys/kernel/security 2>/dev/null || true
-+
-+	if [ ! -w "$ENFORCE" ]; then
-+		record T4 SKIP "$ENFORCE not writable"
-+	elif ! echo 1 > "$ENFORCE" 2>/dev/null; then
-+		record T4 SKIP "could not toggle IPE to enforce=1"
-+	else
-+		out=$(./test_progs -t bind_perm 2>&1 || true)
-+		if echo "$out" | grep -q -- '-EACCES\|errno 13'; then
-+			record T4 PASS "unsigned load denied with -EACCES under enforce=1"
-+		else
-+			record T4 FAIL "no -EACCES seen from unsigned load under enforce=1"
-+			echo "$out" | tail -10 | sed 's/^/  T4: /'
-+		fi
-+		echo 0 > "$ENFORCE" 2>/dev/null || true
-+	fi
-+
-+	if [ "$fail" -eq 0 ]; then
-+		echo ALL_TESTS_PASSED
-+	else
-+		echo FAIL_COUNT "$fail"
-+	fi
-+	exit 0
-+fi
-+
-+set -euo pipefail
-+
-+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-+KERNEL_DIR=$(cd "$SCRIPT_DIR/../../../.." && pwd)
-+VMTEST="$SCRIPT_DIR/vmtest.sh"
-+
-+POLICY_PATH=${IPE_TEST_POLICY:-/tmp/ipe_bpf_test_policy}
-+
-+red()   { printf '\033[31m%s\033[0m\n' "$*"; }
-+green() { printf '\033[32m%s\033[0m\n' "$*"; }
-+bold()  { printf '\033[1m%s\033[0m\n' "$*"; }
-+
-+bold "=== IPE BPF policy integration tests ==="
-+
-+tmpfile=$(mktemp -p "$(dirname "$POLICY_PATH")" \
-+		  ".$(basename "$POLICY_PATH").XXXXXX")
-+cat > "$tmpfile" <<EOF
-+policy_name="ipe_bpf_test" policy_version=0.0.1
-+op=BPF_PROG_LOAD bpf_signature=OK                action=ALLOW
-+op=BPF_PROG_LOAD bpf_signature=UNSIGNED          action=DENY
-+op=BPF_PROG_LOAD_POST_INTEGRITY                  action=ALLOW
-+DEFAULT op=BPF_PROG_LOAD                         action=ALLOW
-+DEFAULT op=BPF_PROG_LOAD_POST_INTEGRITY          action=ALLOW
-+DEFAULT action=ALLOW
-+EOF
-+mv "$tmpfile" "$POLICY_PATH"
-+echo "policy written to $POLICY_PATH"
-+
-+export OUTPUT_DIR=${OUTPUT_DIR:-$HOME/.bpf_selftests_ipe}
-+CFG="$OUTPUT_DIR/latest.config"
-+mkdir -p "$OUTPUT_DIR"
-+if [ ! -f "$CFG" ]; then
-+	PLATFORM=$(uname -m)
-+	for src in "$KERNEL_DIR/tools/testing/selftests/bpf/config" \
-+		   "$KERNEL_DIR/tools/testing/selftests/bpf/config.vm" \
-+		   "$KERNEL_DIR/tools/testing/selftests/bpf/config.$PLATFORM"; do
-+		[ -f "$src" ] && cat "$src" >> "$CFG"
-+	done
-+fi
-+"$KERNEL_DIR/scripts/config" --file "$CFG" \
-+	--enable SECURITY_IPE \
-+	--enable IPE_PROP_BPF_SIGNATURE \
-+	--set-str IPE_BOOT_POLICY "$POLICY_PATH"
-+lsm=$("$KERNEL_DIR/scripts/config" --file "$CFG" --state LSM 2>/dev/null)
-+if [ -z "$lsm" ] || [ "$lsm" = "undef" ]; then
-+	"$KERNEL_DIR/scripts/config" --file "$CFG" --set-str LSM "bpf,ipe"
-+elif ! echo ",${lsm}," | grep -q ',ipe,'; then
-+	"$KERNEL_DIR/scripts/config" --file "$CFG" --set-str LSM "${lsm},ipe"
-+fi
-+touch "$CFG"
-+
-+RUN_OUT=$(mktemp -t ipe_test_run.XXXXXX)
-+trap 'rm -f "$RUN_OUT"' EXIT
-+export VMTEST_EXTRA_CMDLINE="ipe.enforce=0 ipe.success_audit=1"
-+"$VMTEST" -- ./test_signed_bpf_ipe.sh --in-vm 2>&1 | tee "$RUN_OUT"
-+
-+if grep -q 'ALL_TESTS_PASSED' "$RUN_OUT"; then
-+	green "=== all IPE policy integration tests PASSED ==="
-+	grep -E '^(PASS|FAIL|SKIP) T[0-9]+' "$RUN_OUT" || true
-+	exit 0
-+else
-+	red "=== IPE policy integration tests FAILED ==="
-+	grep -E '^(PASS|FAIL|SKIP) T[0-9]+' "$RUN_OUT" || true
-+	exit 1
-+fi
-diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
-index 2f869daf8a06..b30e2b359413 100755
---- a/tools/testing/selftests/bpf/vmtest.sh
-+++ b/tools/testing/selftests/bpf/vmtest.sh
-@@ -61,7 +61,7 @@ DEFAULT_COMMAND="./test_progs"
- MOUNT_DIR="mnt"
- LOCAL_ROOTFS_IMAGE=""
- ROOTFS_IMAGE="root.img"
--OUTPUT_DIR="$HOME/.bpf_selftests"
-+OUTPUT_DIR="${OUTPUT_DIR:-$HOME/.bpf_selftests}"
- KCONFIG_REL_PATHS=("tools/testing/selftests/bpf/config"
- 	"tools/testing/selftests/bpf/config.vm"
- 	"tools/testing/selftests/bpf/config.${PLATFORM}")
-@@ -294,7 +294,7 @@ EOF
- 		-m 4G \
- 		-drive file="${rootfs_img}",format=raw,index=1,media=disk,if=virtio,cache=none \
- 		-kernel "${kernel_bzimage}" \
--		-append "root=/dev/vda rw console=${QEMU_CONSOLE}"
-+		-append "root=/dev/vda rw console=${QEMU_CONSOLE} ${VMTEST_EXTRA_CMDLINE:-}"
+diff --git a/net/sched/cls_bpf.c b/net/sched/cls_bpf.c
+index 9a346b6221b35..d71fbf7cb407e 100644
+--- a/net/sched/cls_bpf.c
++++ b/net/sched/cls_bpf.c
+@@ -142,7 +142,8 @@ static bool cls_bpf_is_ebpf(const struct cls_bpf_prog *prog)
+ 
+ static int cls_bpf_offload_cmd(struct tcf_proto *tp, struct cls_bpf_prog *prog,
+ 			       struct cls_bpf_prog *oldprog,
+-			       struct netlink_ext_ack *extack)
++			       struct netlink_ext_ack *extack,
++			       bool is_rollback)
+ {
+ 	struct tcf_block *block = tp->chain->block;
+ 	struct tc_cls_bpf_offload cls_bpf = {};
+@@ -176,8 +177,8 @@ static int cls_bpf_offload_cmd(struct tcf_proto *tp, struct cls_bpf_prog *prog,
+ 					  skip_sw, &oldprog->gen_flags,
+ 					  &oldprog->in_hw_count, true);
+ 
+-	if (prog && err) {
+-		cls_bpf_offload_cmd(tp, oldprog, prog, extack);
++	if (prog && err && !is_rollback) {
++		cls_bpf_offload_cmd(tp, oldprog, prog, extack, true);
+ 		return err;
+ 	}
+ 
+@@ -208,7 +209,7 @@ static int cls_bpf_offload(struct tcf_proto *tp, struct cls_bpf_prog *prog,
+ 	if (!prog && !oldprog)
+ 		return 0;
+ 
+-	return cls_bpf_offload_cmd(tp, prog, oldprog, extack);
++	return cls_bpf_offload_cmd(tp, prog, oldprog, extack, false);
  }
  
- copy_logs()
+ static void cls_bpf_stop_offload(struct tcf_proto *tp,
+@@ -217,7 +218,7 @@ static void cls_bpf_stop_offload(struct tcf_proto *tp,
+ {
+ 	int err;
+ 
+-	err = cls_bpf_offload_cmd(tp, NULL, prog, extack);
++	err = cls_bpf_offload_cmd(tp, NULL, prog, extack, false);
+ 	if (err)
+ 		pr_err("Stopping hardware offload failed: %d\n", err);
+ }
 -- 
-2.53.0
+2.43.0
 
