@@ -1,157 +1,219 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695193672B1
-	for <bpf@vger.kernel.org>; Fri, 22 May 2026 18:57:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779476242; cv=pass; b=JU0oDLzIhSYsF8L2BaAfHl6TB4EJ8ygc8k/RECw1lPe24hE50Th1QAeDYO5fvaz3VmzP7uQEZ3/hj/yQLZ/PzhKBy8oM84bf9mYCrcbf9cbSDPvLwGepTibriOpSVVK/9j2aJyH8tUkDHeYx2nqEZ87gl0chYg+3f7UmszD0mA4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779476242; c=relaxed/simple;
-	bh=KvnXkyyBCcToMR6RAkZ81a4j99YJk0Qbk/aUVQOKq6U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fE4BIET5Oyq+ItvI8FriYTOd/pHQr/IpJlHWYHPW8HggcrmPPqi5lQg/thABT2F6PTWo5dCRDhsu/eLh2hGlZoe1kw7GfD/+bD/k5rXnaYOJhyLgtsHeIk8vvHZ+VmKn7X3K/81YUUqaOAeagC0ZGYJlLrvXePrLR1RhQhDArno=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H8Kls30j; arc=pass smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F3D30EF90
+	for <bpf@vger.kernel.org>; Fri, 22 May 2026 20:14:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779480854; cv=none; b=E9hYRPTqrmTn73xwKp+qalSS+LETkFpeSyOsJ44OdUswO0w+3GwXH8scr/ZQG3T+TNEocptN7GPNFnkIAgoQixqJUhxINJgce/8ioLJGYoueyPgAdYeMFhxS8Mbnnipjax6MlR5+vpP25cRBKybs2+kfwyyn5vWPf9JpMZHA7DU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779480854; c=relaxed/simple;
+	bh=T+T8duR9CZjW08w8okteh8iEB6zt41jrJ2g1lgvOUxI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nNL8A7HVwhNe3o8TjtJyZV4j2zsFVXwBHismbxAmomKYFnmh6qQTvUkrOfgmTBUKS1YM8XXzbpQhR3Y3ni47rdwhMFFyVp2odzW8Au6LCKCd+4JSm8GazIVQ15q5nJ9R62hEc1gMzy+gztIA4Twp+sqp115BREYxHsDk98xClo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bTinLAoJ; arc=none smtp.client-ip=209.85.219.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H8Kls30j"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-367c26471f5so5014493a91.1
-        for <bpf@vger.kernel.org>; Fri, 22 May 2026 11:57:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779476239; cv=none;
-        d=google.com; s=arc-20240605;
-        b=IbAwGf6Fcte3/1YS0LOm80nOfnjxC5dbg3IJnqAkBtInxRKT+9M5Zd0DCUkdG6mKg8
-         X/TxZWgGP1EUSIzSuUkYGlsDk0CHwG8MU50TghgtiXef6mU64RAXEAg+O/GVCj8au57Z
-         U5JmbBazZhP538Y+G1xAsGWmbJb5Jf5AwahMH8A0rI0ALLXnqB3mQY9P8iBOAnDxda3b
-         WjgB95iN5UxAIjxJpoIAIuNT3v0/rcdaLjtFPt7dctw7DvTjeHqmMUYSCnbPtf8DTD/D
-         W18MIDOfFB8G3ZrDM5IHkACHfFYLk+2DpD5sitIW0eVcvdv1I3/qzEno3fbnIy4sXBKA
-         DiGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=XO+dDzVXtvu6vrmWqh59X/IvoZfOr95EfYx7Z0jp+Uo=;
-        fh=50Gy6Kpkuc8WtJLtnBzpVWx3xscacG6nKShuohmD1Gg=;
-        b=i6M4BjWPOi156KOYsFooGLiTgTYJz5ypYVralOG5xqpJTY166tTywYjiy40ZBHeVrL
-         1ysuNjXGx0M4Sc2/ej1/UBdeIM7QUqRvQQ9hOeFWzZiKwcbl3QtwllPzz+3NecMV1yLv
-         A8ZJoPGofOgnqTrKwArGNhylrCSfXZ9/qRhjiIWrIyNIpD0s1jtvdWxMjbrstAw1v1oK
-         CfHGqVDRg29nCvNoSSr7e6Z/DWqdLRwIEjK9DVF7nkfQY3PypxHWsQwSZuDsYZLp0IWJ
-         A+e4piFszog03uvXYiQgrzRvRJJ7Fhol3rNAcXEaxRzQ6N3VACoNvGZ+kVfMsshJP4J4
-         /QGQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bTinLAoJ"
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-8acae26e564so96544916d6.2
+        for <bpf@vger.kernel.org>; Fri, 22 May 2026 13:14:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779476239; x=1780081039; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XO+dDzVXtvu6vrmWqh59X/IvoZfOr95EfYx7Z0jp+Uo=;
-        b=H8Kls30jVAr2evcdTOhs6zs5/C5qW87tlzKfqfb5AZSH77YVHynGm1igHGlXjomiEX
-         7UOXTEDsG1GS79L5k4w96RMP74wG7Uh5HSfi4nid5XNuM81I73qcvKNsmANtBZ5NKMHt
-         mNR9+BCrlTtA3ZM42ht4Yk/zwJWPzHAoDj0CbZp7lndgpgcGFM5I7z+c6Qe6OwcLVzlY
-         G05GGPD9hKRNxTGpC4sP1b3zX6Oo9HrAJgOF5WhIuZBhb0oM90TUTjD2g/7+ZuSWNb5L
-         QjAMNaqieYC7oI5i6vlXkv6F7BFAbwrDp83RahqBLNSWQWsobX9YeEy+WMkWcsV3rUVh
-         dLsg==
+        d=gmail.com; s=20251104; t=1779480850; x=1780085650; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vy69sv1RlbQPcrl5t6Uo1NfBAD3NLb/c+Z2AAhcBMw8=;
+        b=bTinLAoJb4yMuTDJ6HSGwAxUJClaJtAe6blKxubk81soh+eR6PQjqJlLgbbnkHr6r9
+         rBH0lCNcxWCfLWsuhHVaLohIB028YqTKrizmvoocA6MUO72VE3+Ej6MrpIayw/kLcKk6
+         N8bGrPSGjpyZZR2+jW7jkwRV/i/IvQ0u4wLVlMUU6FEMN2S2GXwgyvfrdenO3HLtrzX8
+         EOHbaOohGTP5Z9zOfgbyGR5/RLTlN3kGDqPtDQcEz3T77jj2My0e2EJcijgsoWTfInFJ
+         aHN5JvP8vvcOpGM4izCBGrHpThyyJ0H6BDLFjKC6P+3fvWFelZwA2SzZMPChUvIH6rnz
+         QsXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779476239; x=1780081039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=XO+dDzVXtvu6vrmWqh59X/IvoZfOr95EfYx7Z0jp+Uo=;
-        b=QgwsGDw00tx4XiZEWUXaBHALkcyoUTYdszsqebH3+Rx7qbYmVokc88U4wekiFM4+sP
-         MTMABHxIvVyjALceAp9HwRaQ9WM6iQHZ8EwjsG+A9KWgPtl+yRgm7inxLBE7bqTwHMG/
-         HVa0js74Nb3C+ysujt0WW9ojoP3GId4F1sQSbr9sVhTW+idmoP0UPBVt+eK4Rcni9QkA
-         uDLVOVMQARjmlGyO0684vkyiift13bEfBw0+QA2c+VVhRKeVgoe7nFmdWBzlWKpZNZI7
-         mN3nR2GrdefFg5C8yqWOdS0noq4/oq+jXZY0o2V2Fw4tmLRFc7lLxr6V01nAm1s7R44e
-         D/Lg==
-X-Forwarded-Encrypted: i=1; AFNElJ9Zac42MnjhZQ4U9s0ECSmJ8BYfUB6RvT6wekQr12np3AUQUsnn5UuwUnDPCY1aOj6pIbQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0yza1ioQ1cXBucCAxrMWoC+yL1tnfNy/7aIT0c8LsnnmJsvW3
-	FNlmf7hGlRJ0+MG3s6tCFQP3QZn8YG/uuCmEgQAbjTvvyco5o+0Q0TZAKhy0Ol8LJQBujULhvQr
-	O4Ypc8bwQi4CHuNiDyr3LypwTsk3udFw=
-X-Gm-Gg: Acq92OFF7TczK+RTYTLDue1CMFqN33/4+TIefuI/OILTqNHEQgdaR5BAc7r9YaAllh0
-	n3niK6evyOy/e6B8oHO1VMTDW9l983eT8q49obVqz5I82zhuUKLj0u19YJVM1gyJ3yO7jcwnTyI
-	2GwsZHsAJPinFb8UefC43kYiv0JnsV2lrSUyml+sUMDWhNjg3Yj+qbqvtobdLZi2Up8tcqIbrT/
-	VeOovjLyNVKviaKwSZurvFRpPEjZsqrE324iC99isrDeUfBo0ffReFZTRIMb3palk052Hp6/yS4
-	Nz1Nj7ClaldBjlI9j2air/A=
-X-Received: by 2002:a17:90b:33c1:b0:366:decb:d119 with SMTP id
- 98e67ed59e1d1-36a677303ccmr4500182a91.11.1779476239508; Fri, 22 May 2026
- 11:57:19 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779480850; x=1780085650;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vy69sv1RlbQPcrl5t6Uo1NfBAD3NLb/c+Z2AAhcBMw8=;
+        b=cD5QrAvFxTPs05uySOAMcCCLwinZPskNZZ9Bejx30t8Au9/9kh8JE+bWkZHxsaPLtI
+         +pIze3AF6QhN5oEPO//PN5Z019PN0cg4JD525Oj0dsdJ6KTv+Lk86zp0cxmYLYAG7NpI
+         9QnsKjtbaVVejg3+UwUr+Jn7FPQ6IYXKg632xLtN70bcAECOgqgRU36TpJzLm+AYzCk+
+         eju9Qx/bMHTobhjw/8JVufmPWVoWrE6PWWkbVuvCE7JmJjD4D8Gjfaq2jn5+B3RAf1CS
+         a9CVvvEOv1YXE9k63CsSR0QNj0Bx87KtBdYRhrGLppfMZvjSfsY8wRfAzYGg+0xAwwRF
+         St4A==
+X-Forwarded-Encrypted: i=1; AFNElJ+RnsuwbUA0WN7zlI4pOvjfP1ZiK1vRArs3peZjRnGXcT+IYySwVfCj+/R+qIliRIMc1Fs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwT1nPe3RsRHtfQMzgX6j1weE3IFLnhpWU44CAxL+0SqIe+jog4
+	iQEuLN9xzMSPKm+GMiIj33lLY07Rt3vbnJh8OZtYqupssXNLK09joOBu
+X-Gm-Gg: Acq92OGI6xo+pqUfWjj7x1MowOI+zNQs2cu9EZ9k++uWIaaaPTRDUuniBEOPWCtpqpT
+	lK/DFtaxV1ZQEmf3G0/N74S2qEv8UZ9iX1kFgQyFPabvtWicD2Ut4NZZylYyDTzHLzsnAllsr8D
+	R5tlOQsjWKEqc6Xisnol+ib3Xse1O6Zp5JLcVgdw6so4ZZZULsNdvQk8HOMERkNAtv3k/npWnnb
+	b+4z/FXi8MzsOyFioQ+vvJhF7wWyyrEZA53WPpTAonPdc04dkAPZb2cgJ5IYoSVXljR2YxINt88
+	TNbOr9mbqckcs05bNjt/C5jJ9orpwiAFZpnt9R9dfhtiT+xvL2te3ItOscJNRvWgzEy3634d/4W
+	NImgzFJ4MHI/FkjvS7esu2qEGQSh2ONy2xL7KhOZkyoGhwlvxTSarROBCiXqzQNU60IP1TPhm9X
+	DJTChs/h7x7X6PWhPZIUzcVgdjkwmgsZp3jABN5cX9m6+8d28SUQsu8bkrO3ZdHMUlM+obIXJfx
+	oiqHAdR4bbnVBIkBaDT
+X-Received: by 2002:a05:6214:d6f:b0:89f:9bc2:20d1 with SMTP id 6a1803df08f44-8cc7b6048aamr91125386d6.7.1779480849610;
+        Fri, 22 May 2026 13:14:09 -0700 (PDT)
+Received: from server0 (c-68-48-65-54.hsd1.mi.comcast.net. [68.48.65.54])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cc812e60ffsm30543336d6.23.2026.05.22.13.14.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 May 2026 13:14:09 -0700 (PDT)
+From: Michael Bommarito <michael.bommarito@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4] libbpf: harden parse_vma_segs() path parsing
+Date: Fri, 22 May 2026 16:13:53 -0400
+Message-ID: <20260522201353.1454653-1-michael.bommarito@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260521124411.31133-1-jolsa@kernel.org> <20260521124411.31133-9-jolsa@kernel.org>
-In-Reply-To: <20260521124411.31133-9-jolsa@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 22 May 2026 11:57:04 -0700
-X-Gm-Features: AVHnY4K6VCnW74mH-qu0lu-YDdA-o94r4C-kRqw70HIPj74Zva_JJdNwjmZtqSY
-Message-ID: <CAEf4BzZn0NvNwuPdh10z+MAdw-9K6CgZ0XnAL0J4XRpQHhFv2w@mail.gmail.com>
-Subject: Re: [PATCHv3 08/12] selftests/bpf: Change uprobe syscall tests to use nop10
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 21, 2026 at 5:45=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> Optimized uprobes are now on top of 10-bytes nop instructions,
-> reflect that in existing tests.
->
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  .../selftests/bpf/benchs/bench_trigger.c      |  2 +-
->  .../selftests/bpf/prog_tests/uprobe_syscall.c | 28 ++++++++++---------
->  tools/testing/selftests/bpf/prog_tests/usdt.c | 25 ++++++++++-------
->  tools/testing/selftests/bpf/usdt_2.c          |  2 +-
->  4 files changed, 32 insertions(+), 25 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/t=
-esting/selftests/bpf/benchs/bench_trigger.c
-> index 2f22ec61667b..a60b8173cdc4 100644
-> --- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
-> +++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-> @@ -398,7 +398,7 @@ static void *uprobe_producer_ret(void *input)
->  #ifdef __x86_64__
->  __nocf_check __weak void uprobe_target_nop5(void)
+parse_vma_segs() in tools/lib/bpf/usdt.c parses /proc/<pid>/maps
+with two widthless scansets, "%s" into mode[16] and "%[^\n]"
+into line[4096]. A VMA name in maps is not limited to that local
+buffer; a deeply nested backing path can produce a maps record long
+enough to overflow the stack buffer.
 
-heh, nop5 -> nop_a_lot ;)
+Bound both scansets to the declared buffer sizes ("%15s" for mode[16]
+and "%4095[^\n]" for line[4096]) and drain any residue past line[4094]
+with "%*[^\n]" before the trailing "\n". Without the drain, the residue
+of an over-long record would stay in the stream and break the next
+"%zx-%zx" parse, so the loop would exit early and silently skip later
+maps records.
 
+Also stop using sscanf(..., "%s") to peel the /proc/<pid>/root prefix
+from lib_path. Parse the pid and prefix length with "%n", check for the
+following slash, and copy the remainder with libbpf_strlcpy(). That
+removes a second unbounded stack write and preserves paths containing
+spaces.
 
->  {
-> -       asm volatile (".byte 0x0f, 0x1f, 0x44, 0x00, 0x00");
-> +       asm volatile (".byte 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x=
-00, 0x00, 0x00");
->  }
->
+Fixes: 74cc6311cec9 ("libbpf: Add USDT notes parsing and resolution logic")
+Cc: stable@vger.kernel.org
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Assisted-by: Claude:claude-opus-4-7
+Signed-off-by: Michael Bommarito <michael.bommarito@gmail.com>
+---
+v4:
+- Carry Emil's Reviewed-by.
+- Simplify the /proc/<pid>/root prefix handling with sscanf() %n,
+  removing the unreachable snprintf() length check.
+- Initialize and check the %n output before using it, so partial
+  literal matches after the pid cannot use an unassigned offset.
+- Add a short comment for the %n return-value rule.
+- Declare the maps-line buffer as line[4096] to match the %4095
+  scanset width.
+- Reword the maps-line comment without seq_file implementation detail.
 
-[...]
+v3:
+- Correct Fixes tag to the initial USDT implementation commit,
+  per BPF CI review after adding second site.
 
-> @@ -420,7 +421,8 @@ static void *check_attach(struct uprobe_syscall_execu=
-ted *skel, trigger_t trigge
->         ASSERT_EQ(skel->bss->executed, executed, "executed");
->
->         /* .. and check the trampoline is as expected. */
-> -       call =3D (struct __arch_relative_insn *) addr;
-> +       ASSERT_OK(memcmp(addr, lea_rsp, 5), "lea_rsp");
-> +       call =3D (struct __arch_relative_insn *)(addr + 5);
->         tramp =3D (void *) (call + 1) + call->raddr;
->         ASSERT_EQ(call->op, 0xe8, "call");
->         ASSERT_OK(find_uprobes_trampoline(tramp), "uprobes_trampoline");
-> @@ -432,7 +434,7 @@ static void check_detach(void *addr, void *tramp)
->  {
->         /* [uprobes_trampoline] stays after detach */
->         ASSERT_OK(find_uprobes_trampoline(tramp), "uprobes_trampoline");
-> -       ASSERT_OK(memcmp(addr, nop5, 5), "nop5");
-> +       ASSERT_OK(memcmp(addr, jmp2B, 2), "jmp2B");
+v2:
+- Replace the unbounded /proc/<pid>/root sscanf() path peeling with
+  bounded prefix handling, addressing review feedback on v1 and
+  preserving paths containing spaces.
+- Keep the v1 maps parser fix using bounded fscanf() scansets and a
+  suppressed scanset drain for over-long records.
+- Re-ran real parse_vma_segs() ASAN harnesses for the original maps
+  overflow, the proc-root overflow, proc-root paths with spaces, and
+  adjacent successful parses after an over-long maps record.
 
-yeah, not jump anymore?
+Reproduced with Debian 12 on rootless podman: an unprivileged
+container process mkdirs 50 nested 200-char directories and mmaps
+a file at the bottom, producing a >10KB /proc/<host-pid>/maps
+line.  A harness on the host then calls the real parse_vma_segs()
+against the container's PID; libbpf is built with
+-fsanitize=address and the only local source change is dropping
+the "static" keyword on parse_vma_segs so the symbol is linkable
+from the harness.
 
->  }
->
->  static void check(struct uprobe_syscall_executed *skel, struct bpf_link =
-*link,
+Stock libbpf reports:
 
-[...]
+  ==ERROR: AddressSanitizer: stack-buffer-overflow
+  WRITE of size >10KB at <line> thread T0
+    #0 scanf_common -> #1 __isoc99_fscanf
+    #3 parse_vma_segs tools/lib/bpf/usdt.c:509
+  Address ... in frame parse_vma_segs at offset 8512, just past
+  line[PATH_MAX].
+
+Patched libbpf parses the same maps cleanly.  Follow-up calls
+return 0 with seg_cnt > 0 for libc.so.6 and for
+ld-linux-x86-64.so.2 (format drain), which appears in maps
+after the over-long entry.
+
+On normal hardened builds the stack canary aborts the consumer;
+on builds without stack protector the bytes past line[] are
+attacker-influenced path bytes.
+
+Selftest gate
+=============
+
+tools/testing/selftests/bpf/test_progs -t usdt under QEMU x86_64
+(KVM) on the patched kernel: all 6 subtests pass (usdt/basic,
+basic_optimized, optimized_attach, multispec, urand_auto_attach,
+urand_pid_attach) on both stock and patched libbpf, diff-clean.
+The in-tree selftest does not itself exercise long maps records.
+
+ tools/lib/bpf/usdt.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+index e3710933fd52a..57fb82bb81b58 100644
+--- a/tools/lib/bpf/usdt.c
++++ b/tools/lib/bpf/usdt.c
+@@ -468,10 +468,10 @@ static int parse_elf_segs(Elf *elf, const char *path, struct elf_seg **segs, siz
+ 
+ static int parse_vma_segs(int pid, const char *lib_path, struct elf_seg **segs, size_t *seg_cnt)
+ {
+-	char path[PATH_MAX], line[PATH_MAX], mode[16];
++	char path[PATH_MAX], line[4096], mode[16];
+ 	size_t seg_start, seg_end, seg_off;
+ 	struct elf_seg *seg;
+-	int tmp_pid, i, err;
++	int tmp_pid, n, i, err;
+ 	FILE *f;
+ 
+ 	*seg_cnt = 0;
+@@ -480,8 +480,13 @@ static int parse_vma_segs(int pid, const char *lib_path, struct elf_seg **segs,
+ 	 * /proc/<pid>/root/<path>. They will be reported as just /<path> in
+ 	 * /proc/<pid>/maps.
+ 	 */
+-	if (sscanf(lib_path, "/proc/%d/root%s", &tmp_pid, path) == 2 && pid == tmp_pid)
++	/* %n is not counted in sscanf() return value, so initialize it. */
++	n = 0;
++	if (sscanf(lib_path, "/proc/%d/root%n", &tmp_pid, &n) == 1 &&
++	    n > 0 && pid == tmp_pid && lib_path[n] == '/') {
++		libbpf_strlcpy(path, lib_path + n, sizeof(path));
+ 		goto proceed;
++	}
+ 
+ 	if (!realpath(lib_path, path)) {
+ 		pr_warn("usdt: failed to get absolute path of '%s' (err %s), using path as is...\n",
+@@ -504,8 +509,11 @@ static int parse_vma_segs(int pid, const char *lib_path, struct elf_seg **segs,
+ 	 * 7f5c6f5d1000-7f5c6f5d3000 rw-p 001c7000 08:04 21238613      /usr/lib64/libc-2.17.so
+ 	 * 7f5c6f5d3000-7f5c6f5d8000 rw-p 00000000 00:00 0
+ 	 * 7f5c6f5d8000-7f5c6f5d9000 r-xp 00000000 103:01 362990598    /data/users/andriin/linux/tools/bpf/usdt/libhello_usdt.so
++	 *
++	 * Some VMA names can be longer than the local buffer. Bound the
++	 * writes, but still consume the rest of the line.
+ 	 */
+-	while (fscanf(f, "%zx-%zx %s %zx %*s %*d%[^\n]\n",
++	while (fscanf(f, "%zx-%zx %15s %zx %*s %*d%4095[^\n]%*[^\n]\n",
+ 		      &seg_start, &seg_end, mode, &seg_off, line) == 5) {
+ 		void *tmp;
+ 
+-- 
+2.53.0
