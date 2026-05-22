@@ -1,219 +1,210 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F3D30EF90
-	for <bpf@vger.kernel.org>; Fri, 22 May 2026 20:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0285F34CFAB
+	for <bpf@vger.kernel.org>; Fri, 22 May 2026 20:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779480854; cv=none; b=E9hYRPTqrmTn73xwKp+qalSS+LETkFpeSyOsJ44OdUswO0w+3GwXH8scr/ZQG3T+TNEocptN7GPNFnkIAgoQixqJUhxINJgce/8ioLJGYoueyPgAdYeMFhxS8Mbnnipjax6MlR5+vpP25cRBKybs2+kfwyyn5vWPf9JpMZHA7DU=
+	t=1779481313; cv=none; b=NonWOwKCplqBfXyR4bV2BleEG0kOSrNH20KnOxPL6hkK278LAuDfQQhTfcWu0uVyrTMG+YFbJql5ZS+Z+0/mwl36ob0QgQs4tuGJ0JMz4+S9YQw7sKVBq8YkSF7pPOEzUX+OkDFya0cXFQwDTZnrvK1r6AKc9UYXEuvBxsN+HXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779480854; c=relaxed/simple;
-	bh=T+T8duR9CZjW08w8okteh8iEB6zt41jrJ2g1lgvOUxI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nNL8A7HVwhNe3o8TjtJyZV4j2zsFVXwBHismbxAmomKYFnmh6qQTvUkrOfgmTBUKS1YM8XXzbpQhR3Y3ni47rdwhMFFyVp2odzW8Au6LCKCd+4JSm8GazIVQ15q5nJ9R62hEc1gMzy+gztIA4Twp+sqp115BREYxHsDk98xClo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bTinLAoJ; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779481313; c=relaxed/simple;
+	bh=3l5EwpAaP5ijubwHS/zXSrCjIUieF6tw/2tieWwRCxo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=D5Gih+8Hd/nywrdqWA1sDtfD57cZM1tXlIlUqIE6OS0Pb7hEPHtI86KXRihneO1JVv+OtHL9PtUcClyhTqTM/U/1g0XoStQxDthFw7Tj2YJC+E9Fd9vXp84L/F4q7nnzqCsM1DpNcpvoAPkg7wkNsJojVq15Du5X9AtNCQ3RiZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eocW+XPy; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bTinLAoJ"
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-8acae26e564so96544916d6.2
-        for <bpf@vger.kernel.org>; Fri, 22 May 2026 13:14:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779480850; x=1780085650; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vy69sv1RlbQPcrl5t6Uo1NfBAD3NLb/c+Z2AAhcBMw8=;
-        b=bTinLAoJb4yMuTDJ6HSGwAxUJClaJtAe6blKxubk81soh+eR6PQjqJlLgbbnkHr6r9
-         rBH0lCNcxWCfLWsuhHVaLohIB028YqTKrizmvoocA6MUO72VE3+Ej6MrpIayw/kLcKk6
-         N8bGrPSGjpyZZR2+jW7jkwRV/i/IvQ0u4wLVlMUU6FEMN2S2GXwgyvfrdenO3HLtrzX8
-         EOHbaOohGTP5Z9zOfgbyGR5/RLTlN3kGDqPtDQcEz3T77jj2My0e2EJcijgsoWTfInFJ
-         aHN5JvP8vvcOpGM4izCBGrHpThyyJ0H6BDLFjKC6P+3fvWFelZwA2SzZMPChUvIH6rnz
-         QsXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779480850; x=1780085650;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vy69sv1RlbQPcrl5t6Uo1NfBAD3NLb/c+Z2AAhcBMw8=;
-        b=cD5QrAvFxTPs05uySOAMcCCLwinZPskNZZ9Bejx30t8Au9/9kh8JE+bWkZHxsaPLtI
-         +pIze3AF6QhN5oEPO//PN5Z019PN0cg4JD525Oj0dsdJ6KTv+Lk86zp0cxmYLYAG7NpI
-         9QnsKjtbaVVejg3+UwUr+Jn7FPQ6IYXKg632xLtN70bcAECOgqgRU36TpJzLm+AYzCk+
-         eju9Qx/bMHTobhjw/8JVufmPWVoWrE6PWWkbVuvCE7JmJjD4D8Gjfaq2jn5+B3RAf1CS
-         a9CVvvEOv1YXE9k63CsSR0QNj0Bx87KtBdYRhrGLppfMZvjSfsY8wRfAzYGg+0xAwwRF
-         St4A==
-X-Forwarded-Encrypted: i=1; AFNElJ+RnsuwbUA0WN7zlI4pOvjfP1ZiK1vRArs3peZjRnGXcT+IYySwVfCj+/R+qIliRIMc1Fs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwT1nPe3RsRHtfQMzgX6j1weE3IFLnhpWU44CAxL+0SqIe+jog4
-	iQEuLN9xzMSPKm+GMiIj33lLY07Rt3vbnJh8OZtYqupssXNLK09joOBu
-X-Gm-Gg: Acq92OGI6xo+pqUfWjj7x1MowOI+zNQs2cu9EZ9k++uWIaaaPTRDUuniBEOPWCtpqpT
-	lK/DFtaxV1ZQEmf3G0/N74S2qEv8UZ9iX1kFgQyFPabvtWicD2Ut4NZZylYyDTzHLzsnAllsr8D
-	R5tlOQsjWKEqc6Xisnol+ib3Xse1O6Zp5JLcVgdw6so4ZZZULsNdvQk8HOMERkNAtv3k/npWnnb
-	b+4z/FXi8MzsOyFioQ+vvJhF7wWyyrEZA53WPpTAonPdc04dkAPZb2cgJ5IYoSVXljR2YxINt88
-	TNbOr9mbqckcs05bNjt/C5jJ9orpwiAFZpnt9R9dfhtiT+xvL2te3ItOscJNRvWgzEy3634d/4W
-	NImgzFJ4MHI/FkjvS7esu2qEGQSh2ONy2xL7KhOZkyoGhwlvxTSarROBCiXqzQNU60IP1TPhm9X
-	DJTChs/h7x7X6PWhPZIUzcVgdjkwmgsZp3jABN5cX9m6+8d28SUQsu8bkrO3ZdHMUlM+obIXJfx
-	oiqHAdR4bbnVBIkBaDT
-X-Received: by 2002:a05:6214:d6f:b0:89f:9bc2:20d1 with SMTP id 6a1803df08f44-8cc7b6048aamr91125386d6.7.1779480849610;
-        Fri, 22 May 2026 13:14:09 -0700 (PDT)
-Received: from server0 (c-68-48-65-54.hsd1.mi.comcast.net. [68.48.65.54])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8cc812e60ffsm30543336d6.23.2026.05.22.13.14.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 May 2026 13:14:09 -0700 (PDT)
-From: Michael Bommarito <michael.bommarito@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4] libbpf: harden parse_vma_segs() path parsing
-Date: Fri, 22 May 2026 16:13:53 -0400
-Message-ID: <20260522201353.1454653-1-michael.bommarito@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eocW+XPy"
+Message-ID: <9bd2942f-8e6e-4a6f-a300-d20d0f40ef3e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779481300;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z+ERplWDjzUkx+QPM+Sjzujvb4WulGw/uySZnR86p00=;
+	b=eocW+XPyitZiHEZBtWXEpyzMWrUTmImGJqbQFuufWpN0K1/Hj7ihl9lmoQqBJwMw63CFuP
+	VpnMBYn4t6LaYBzFlCoqpvAKXaEPvtgeWZpVk6U1veHf8L8ySv5a5L0gGvU8OCZ19RAF2z
+	HH+suq83x9b/ntrWsnuJ67/LQit7euQ=
+Date: Fri, 22 May 2026 13:21:35 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH] bpf: Fix preorder-unaware index in replace_effective_prog
+ and purge_effective_progs replace_effective_prog() and
+ purge_effective_progs() compute the target index in the effective program
+ array by sequentially walking the hlist (pos++). However, since commit
+ 4b82b181a26c ("bpf: Allow pre-ordering for bpf cgroup progs"),
+ compute_effective_progs() partitions the effective array: preorder programs
+ occupy indices 0..preorder_cnt-1 and normal programs occupy indices
+ preorder_cnt..end. The sequential hlist walk does not account for this
+ partitioning, so when BPF_F_PREORDER programs coexist with normal programs
+ the computed index diverges from the actual position in the effective array.
+ In replace_effective_prog() this causes BPF_LINK_UPDATE to overwrite the
+ wrong slot: the freed program pointer remains in the correct slot while an
+ unrelated neighbor is clobbered. Fix both functions by searching the
+ effective array directly for the target program pointer instead of computing
+ an index from the hlist. This is correct regardless of array layout since it
+ matches by pointer identity. For purge_effective_progs(), resolve the
+ effective prog from the link when the direct prog pointer is NULL (link-based
+ detach path). Fixes: 4b82b181a26c ("bpf: Allow pre-ordering for bpf cgroup
+ progs") Signed-off-by: Himanshu Anand <anand.himanshu17@gmail.com>
+Content-Language: en-GB
+To: Himanshu Anand <anand.himanshu17@gmail.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260522162248.55586-1-anand.himanshu17@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260522162248.55586-1-anand.himanshu17@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-parse_vma_segs() in tools/lib/bpf/usdt.c parses /proc/<pid>/maps
-with two widthless scansets, "%s" into mode[16] and "%[^\n]"
-into line[4096]. A VMA name in maps is not limited to that local
-buffer; a deeply nested backing path can produce a maps record long
-enough to overflow the stack buffer.
 
-Bound both scansets to the declared buffer sizes ("%15s" for mode[16]
-and "%4095[^\n]" for line[4096]) and drain any residue past line[4094]
-with "%*[^\n]" before the trailing "\n". Without the drain, the residue
-of an over-long record would stay in the stream and break the next
-"%zx-%zx" parse, so the loop would exit early and silently skip later
-maps records.
 
-Also stop using sscanf(..., "%s") to peel the /proc/<pid>/root prefix
-from lib_path. Parse the pid and prefix length with "%n", check for the
-following slash, and copy the remainder with libbpf_strlcpy(). That
-removes a second unbounded stack write and preserves paths containing
-spaces.
+On 5/22/26 9:22 AM, Himanshu Anand wrote:
+> Signed-off-by: Himanshu Anand <anand.himanshu17@gmail.com>
 
-Fixes: 74cc6311cec9 ("libbpf: Add USDT notes parsing and resolution logic")
-Cc: stable@vger.kernel.org
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Assisted-by: Claude:claude-opus-4-7
-Signed-off-by: Michael Bommarito <michael.bommarito@gmail.com>
----
-v4:
-- Carry Emil's Reviewed-by.
-- Simplify the /proc/<pid>/root prefix handling with sscanf() %n,
-  removing the unreachable snprintf() length check.
-- Initialize and check the %n output before using it, so partial
-  literal matches after the pid cannot use an unassigned offset.
-- Add a short comment for the %n return-value rule.
-- Declare the maps-line buffer as line[4096] to match the %4095
-  scanset width.
-- Reword the maps-line comment without seq_file implementation detail.
+Please have proper subject and commit message. Your probably
+messed up your patch.
 
-v3:
-- Correct Fixes tag to the initial USDT implementation commit,
-  per BPF CI review after adding second site.
+> ---
+>   kernel/bpf/cgroup.c | 74 ++++++++++++++++++---------------------------
+>   1 file changed, 29 insertions(+), 45 deletions(-)
+>
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index 876f6a81a9b6..437e1e873bf8 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+> @@ -923,15 +923,12 @@ static int cgroup_bpf_attach(struct cgroup *cgrp,
+>    */
+>   static void replace_effective_prog(struct cgroup *cgrp,
+>   				   enum cgroup_bpf_attach_type atype,
+> -				   struct bpf_cgroup_link *link)
+> +				   struct bpf_cgroup_link *link,
+> +				   struct bpf_prog *old_prog)
+>   {
+>   	struct bpf_prog_array_item *item;
+>   	struct cgroup_subsys_state *css;
+>   	struct bpf_prog_array *progs;
+> -	struct bpf_prog_list *pl;
+> -	struct hlist_head *head;
+> -	struct cgroup *cg;
+> -	int pos;
+>   
+>   	css_for_each_descendant_pre(css, &cgrp->self) {
+>   		struct cgroup *desc = container_of(css, struct cgroup, self);
+> @@ -939,27 +936,20 @@ static void replace_effective_prog(struct cgroup *cgrp,
+>   		if (percpu_ref_is_zero(&desc->bpf.refcnt))
+>   			continue;
+>   
+> -		/* find position of link in effective progs array */
+> -		for (pos = 0, cg = desc; cg; cg = cgroup_parent(cg)) {
+> -			if (pos && !(cg->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
+> -				continue;
+> -
+> -			head = &cg->bpf.progs[atype];
+> -			hlist_for_each_entry(pl, head, node) {
+> -				if (!prog_list_prog(pl))
+> -					continue;
+> -				if (pl->link == link)
+> -					goto found;
+> -				pos++;
+> -			}
+> -		}
+> -found:
+> -		BUG_ON(!cg);
+> +		/* find the old prog in effective array by direct pointer
+> +		 * comparison, since compute_effective_progs() partitions
+> +		 * the array (preorder progs first) and the hlist walk
+> +		 * order does not match the effective array order.
+> +		 */
+>   		progs = rcu_dereference_protected(
+>   				desc->bpf.effective[atype],
+>   				lockdep_is_held(&cgroup_mutex));
+> -		item = &progs->items[pos];
+> -		WRITE_ONCE(item->prog, link->link.prog);
+> +		for (item = &progs->items[0]; item->prog; item++) {
+> +			if (item->prog == old_prog) {
 
-v2:
-- Replace the unbounded /proc/<pid>/root sscanf() path peeling with
-  bounded prefix handling, addressing review feedback on v1 and
-  preserving paths containing spaces.
-- Keep the v1 maps parser fix using bounded fscanf() scansets and a
-  suppressed scanset drain for over-long records.
-- Re-ran real parse_vma_segs() ASAN harnesses for the original maps
-  overflow, the proc-root overflow, proc-root paths with spaces, and
-  adjacent successful parses after an over-long maps record.
+This probably not enough, BPF_F_PREORDER should be checked as well.
+The same for purge_effective_progs().
 
-Reproduced with Debian 12 on rootless podman: an unprivileged
-container process mkdirs 50 nested 200-char directories and mmaps
-a file at the bottom, producing a >10KB /proc/<host-pid>/maps
-line.  A harness on the host then calls the real parse_vma_segs()
-against the container's PID; libbpf is built with
--fsanitize=address and the only local source change is dropping
-the "static" keyword on parse_vma_segs so the symbol is linkable
-from the harness.
+> +				WRITE_ONCE(item->prog, link->link.prog);
+> +				break;
+> +			}
+> +		}
+>   	}
+>   }
+>   
+> @@ -1003,7 +993,7 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
+>   
+>   	cgrp->bpf.revisions[atype] += 1;
+>   	old_prog = xchg(&link->link.prog, new_prog);
+> -	replace_effective_prog(cgrp, atype, link);
+> +	replace_effective_prog(cgrp, atype, link, old_prog);
+>   	bpf_prog_put(old_prog);
+>   	return 0;
+>   }
+> @@ -1078,11 +1068,9 @@ static void purge_effective_progs(struct cgroup *cgrp, struct bpf_prog *prog,
+>   				  struct bpf_cgroup_link *link,
+>   				  enum cgroup_bpf_attach_type atype)
+>   {
+> +	struct bpf_prog *target_prog = prog ? : link->link.prog;
+>   	struct cgroup_subsys_state *css;
+>   	struct bpf_prog_array *progs;
+> -	struct bpf_prog_list *pl;
+> -	struct hlist_head *head;
+> -	struct cgroup *cg;
+>   	int pos;
+>   
+>   	/* recompute effective prog array in place */
+> @@ -1092,28 +1080,24 @@ static void purge_effective_progs(struct cgroup *cgrp, struct bpf_prog *prog,
+>   		if (percpu_ref_is_zero(&desc->bpf.refcnt))
+>   			continue;
+>   
+> -		/* find position of link or prog in effective progs array */
+> -		for (pos = 0, cg = desc; cg; cg = cgroup_parent(cg)) {
+> -			if (pos && !(cg->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
+> -				continue;
+> -
+> -			head = &cg->bpf.progs[atype];
+> -			hlist_for_each_entry(pl, head, node) {
+> -				if (!prog_list_prog(pl))
+> -					continue;
+> -				if (pl->prog == prog && pl->link == link)
+> -					goto found;
+> -				pos++;
+> -			}
+> -		}
+> -
+> -		/* no link or prog match, skip the cgroup of this layer */
+> -		continue;
+> -found:
+> +		/* find the prog in the effective array by direct pointer
+> +		 * comparison instead of computing index from hlist walk,
+> +		 * since compute_effective_progs() partitions the array.
+> +		 * Use target_prog which resolves link->link.prog for
+> +		 * link-based entries where prog is NULL.
+> +		 */
+>   		progs = rcu_dereference_protected(
+>   				desc->bpf.effective[atype],
+>   				lockdep_is_held(&cgroup_mutex));
+>   
+> +		for (pos = 0; progs->items[pos].prog; pos++) {
+> +			if (progs->items[pos].prog == target_prog)
+> +				break;
+> +		}
+> +
+> +		if (!progs->items[pos].prog)
+> +			continue;
+> +
+>   		/* Remove the program from the array */
+>   		WARN_ONCE(bpf_prog_array_delete_safe_at(progs, pos),
+>   			  "Failed to purge a prog from array at index %d", pos);
 
-Stock libbpf reports:
-
-  ==ERROR: AddressSanitizer: stack-buffer-overflow
-  WRITE of size >10KB at <line> thread T0
-    #0 scanf_common -> #1 __isoc99_fscanf
-    #3 parse_vma_segs tools/lib/bpf/usdt.c:509
-  Address ... in frame parse_vma_segs at offset 8512, just past
-  line[PATH_MAX].
-
-Patched libbpf parses the same maps cleanly.  Follow-up calls
-return 0 with seg_cnt > 0 for libc.so.6 and for
-ld-linux-x86-64.so.2 (format drain), which appears in maps
-after the over-long entry.
-
-On normal hardened builds the stack canary aborts the consumer;
-on builds without stack protector the bytes past line[] are
-attacker-influenced path bytes.
-
-Selftest gate
-=============
-
-tools/testing/selftests/bpf/test_progs -t usdt under QEMU x86_64
-(KVM) on the patched kernel: all 6 subtests pass (usdt/basic,
-basic_optimized, optimized_attach, multispec, urand_auto_attach,
-urand_pid_attach) on both stock and patched libbpf, diff-clean.
-The in-tree selftest does not itself exercise long maps records.
-
- tools/lib/bpf/usdt.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-index e3710933fd52a..57fb82bb81b58 100644
---- a/tools/lib/bpf/usdt.c
-+++ b/tools/lib/bpf/usdt.c
-@@ -468,10 +468,10 @@ static int parse_elf_segs(Elf *elf, const char *path, struct elf_seg **segs, siz
- 
- static int parse_vma_segs(int pid, const char *lib_path, struct elf_seg **segs, size_t *seg_cnt)
- {
--	char path[PATH_MAX], line[PATH_MAX], mode[16];
-+	char path[PATH_MAX], line[4096], mode[16];
- 	size_t seg_start, seg_end, seg_off;
- 	struct elf_seg *seg;
--	int tmp_pid, i, err;
-+	int tmp_pid, n, i, err;
- 	FILE *f;
- 
- 	*seg_cnt = 0;
-@@ -480,8 +480,13 @@ static int parse_vma_segs(int pid, const char *lib_path, struct elf_seg **segs,
- 	 * /proc/<pid>/root/<path>. They will be reported as just /<path> in
- 	 * /proc/<pid>/maps.
- 	 */
--	if (sscanf(lib_path, "/proc/%d/root%s", &tmp_pid, path) == 2 && pid == tmp_pid)
-+	/* %n is not counted in sscanf() return value, so initialize it. */
-+	n = 0;
-+	if (sscanf(lib_path, "/proc/%d/root%n", &tmp_pid, &n) == 1 &&
-+	    n > 0 && pid == tmp_pid && lib_path[n] == '/') {
-+		libbpf_strlcpy(path, lib_path + n, sizeof(path));
- 		goto proceed;
-+	}
- 
- 	if (!realpath(lib_path, path)) {
- 		pr_warn("usdt: failed to get absolute path of '%s' (err %s), using path as is...\n",
-@@ -504,8 +509,11 @@ static int parse_vma_segs(int pid, const char *lib_path, struct elf_seg **segs,
- 	 * 7f5c6f5d1000-7f5c6f5d3000 rw-p 001c7000 08:04 21238613      /usr/lib64/libc-2.17.so
- 	 * 7f5c6f5d3000-7f5c6f5d8000 rw-p 00000000 00:00 0
- 	 * 7f5c6f5d8000-7f5c6f5d9000 r-xp 00000000 103:01 362990598    /data/users/andriin/linux/tools/bpf/usdt/libhello_usdt.so
-+	 *
-+	 * Some VMA names can be longer than the local buffer. Bound the
-+	 * writes, but still consume the rest of the line.
- 	 */
--	while (fscanf(f, "%zx-%zx %s %zx %*s %*d%[^\n]\n",
-+	while (fscanf(f, "%zx-%zx %15s %zx %*s %*d%4095[^\n]%*[^\n]\n",
- 		      &seg_start, &seg_end, mode, &seg_off, line) == 5) {
- 		void *tmp;
- 
--- 
-2.53.0
