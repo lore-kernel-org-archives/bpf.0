@@ -1,54 +1,54 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B098D3911C9
-	for <bpf@vger.kernel.org>; Fri, 22 May 2026 07:46:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64F23A5E81
+	for <bpf@vger.kernel.org>; Fri, 22 May 2026 07:46:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779435971; cv=none; b=jbvAQbukgV9/cIArWr+GmPBvmb6d8GAjhQzq5E3/Td6HQwsQ1YRjNJJDrpQ3WdJFiLqNESUtjE/nwP+LR62kvMVqREJDzGTIx3n7c0QOr2+5/a+2M5RJlCX9KjOBGDoxyGJp4GVgWTsNZbEE+C+uKNmIgyT257hAYpFg+aeFko0=
+	t=1779435974; cv=none; b=oh/fxQDTEKiABUZNaBAL00zvPLAi7QqfGc6Mp1WpMzZtdfVu8wUVGlESP0++vJ8YTy1UD2K7BtKyZsz175nFx8eiH4oUU5iK+T7gt8uAoqNJa5pivvfznUaTM/PN7T/w1T8kTsbqO/aDdtmioa9j9NSMeulCjMmbCuTjED5mMgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779435971; c=relaxed/simple;
-	bh=kIv6gMdGhCbK7oa+mQvZvqU1S5H4TI4D7YmZRRwaok4=;
+	s=arc-20240116; t=1779435974; c=relaxed/simple;
+	bh=ZyD9AQscuylwqpRs04xemnKsI72mnSLQlWHwuv5SjUY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=dP36Cmv/+xeOu/sHVfa0KK8EyWJZ9hwNa3NUA45gbjY8IyMM3z0M25shlf2Mi4WlZjFUN3vmKASaRlxLEo/jdKo9uk/9R9p7Yceyg8nr4ylFwdS1sY8f+IG3BWkPSDu6cOi5DiImftx/TK9Wf+bMzlTmxK60CLXvX/2UBwbEJMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vYnV+H9d; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=MNxyseOFMH+S8kspCIqQDGRXiAznT03EhGEw2SGaXaj3K2yFSrklmCJk4i2/KKQzD1Uz7RO6bCyiupq/f6TWmQYUFE0XLo/3OzYO0oU1atwmABVTgx1lvT5G66/JOC5ZFAD9hl48DIUuu6gaMZjZI2Z2htUkVpbWJmgJ9P+EbB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Dl/2HTwM; arc=none smtp.client-ip=209.85.215.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vYnV+H9d"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-368b68a33adso10577196a91.1
-        for <bpf@vger.kernel.org>; Fri, 22 May 2026 00:46:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Dl/2HTwM"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c82751074c8so11199287a12.0
+        for <bpf@vger.kernel.org>; Fri, 22 May 2026 00:46:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779435969; x=1780040769; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1779435970; x=1780040770; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=owxhD9mQnHUJh1ExIyWD5qidKDlNDQsR0/L9BsuO+yM=;
-        b=vYnV+H9dayCKE7lgtqIHtm86FI/eZCG+5/9RJ1Et0eDSLChphFi/qjOFtgxoncN0sq
-         ZBA2tJfu8eg4Ydc3Pka/XZJHK3JcJbvuzWenj/xU9pg49f3xKuYfPgX5aB1M8XeOQfIE
-         0vlPhJffuMW8YYEXrfoEQZTdCHqCeB0k282mIt9zjS2Pj/EN4Jm6It4ItMp+xSdFk9ow
-         etOL2cPD3wDhVJ3kqBCxT3TTyO8d0BLACGkfvQljtuYljaX9H48UZTWg96MBxr0If+x1
-         Re4RJGGrrJY56yxJ+PaaYuvczISa+xU12GDHWv9HD7lA5ROpBmkj4Q7MEPlrNxmHdU/l
-         WfBw==
+        bh=qXW60/1sU7ehwE+s4YZIIMUDlvA6FNdHZ/Kq8opfaUQ=;
+        b=Dl/2HTwMPnUkG1rrt4Kc88/y0qFr9NeOLFKMRdm+m+mLr7qB8PhmoKpPwoaW/McPPY
+         jngdl/zKFppcdA6A/GfgboQpXYcpvKmCmIgdCVGXBSK86D1xbGeF+craYwx8AiZL3ls7
+         kF9vf+Y3kyQYlIOrwF/v0vMT/y55POO83lv4pC0/ZH/sdOLOeBvaCHtAM2zsvYm+Rb46
+         GXiXy+jBpDkVpZl9HHszG0ewZ6cyPgGcUWVSuscPfyRJIrrHETBYLJ0cZjqvgT/M2wiO
+         LeMwoYtgcVfaC4bCxEXSHrw0lKCMWcyhL2BbpS9bFq/Su6Axe7wSsFhevG2UySNwT6J1
+         C0Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779435969; x=1780040769;
+        d=1e100.net; s=20251104; t=1779435970; x=1780040770;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=owxhD9mQnHUJh1ExIyWD5qidKDlNDQsR0/L9BsuO+yM=;
-        b=GU6oBxkjZiNMH8J1HhYL3gG4iIwf3bxp7wWjKBUT2UVTmKOfyHh6CaREV4A9A7T/aC
-         6nJef4Lht4Aq6MblamLIMvB3dWNs9MMKTBU73wzGPnM9vyq5fApm54F+ld5zGb8SPeJM
-         i/WbA3DmuhnHsG1mbstw8/GBK5Cbhf5c3LMPU37deS52RwabzaS+wsC03z5pnpw5fzET
-         vQLHaENGQXzOLrKuIlOpnwyjc0XvStk4/IkHtsk9zJg79cEaNbnAHcn8UO2a1w8CQqxB
-         DQq9TTyE+ejGw6D6i6omXD9nH1aq84qRnRuFeBvHfzv45AwhEt62IVCR+vu4JyWy1vta
-         A2AA==
-X-Forwarded-Encrypted: i=1; AFNElJ/2K4liFljJvUIWq5GyGCZNpJ18FGMVbr4FPePqDuLhdHZfUWYvPcYtZzaDPEgQVT/EpFk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5JjuKQ3zIsB1fdss7LoqitTEiRL8lkWYCVr2PQhOivqka1XlW
-	gPrEqx6uW38rIpIdKcTuwezDDri9YdkiTB+8nh7Q04I+FckEPmC15n/fTjamRDJJEFo/+GiLaMS
-	mkxzvUg==
-X-Received: from pgmm20.prod.google.com ([2002:a05:6a02:5514:b0:c82:7c27:98c3])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:2983:b0:398:a060:a967
- with SMTP id adf61e73a8af0-3b328cb9b95mr2606936637.11.1779435968667; Fri, 22
- May 2026 00:46:08 -0700 (PDT)
-Date: Fri, 22 May 2026 07:44:55 +0000
+        bh=qXW60/1sU7ehwE+s4YZIIMUDlvA6FNdHZ/Kq8opfaUQ=;
+        b=QHmWGnj47YCR2U9/jZYdyPqWJl76TNBnkuMJNMu92KMlVfECDYW5SQ32rNTkAsaA3r
+         fhJ8GBBPeEXItWn51VCLHBsz9eC2z+9OcBKKHz9O0NF6Ezv8hw3igZ/EjUTxquv28/Ln
+         iP6WjtEbJ+3RP+tG0PUtq/5oqY5fIzkVQ4pmyHVyi+DG73YAORHn+xij6FMz2nS9L1Uo
+         tScEtKiPYUOVBnti0Qhyd7PPU2EW1gBbEfPwN4VEVhuWAgcbQYfi4YH983ChZ8DBCMko
+         OgeT7lsEolc5vlF2+ML7A8HrIeIPmQfdM1DKCxmG/TetifD+kyvcKbNRr7ZEUPWlkXx+
+         eF+g==
+X-Forwarded-Encrypted: i=1; AFNElJ+wHAmd7hJKJu/Ou7dyRvJBa+XI/GnKQxqyBpghR2AV5y5yIFUerKA/9gW660ThS+WnB0s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzjwr0ereaT5/b7puIPNgY78cafSxkJpkCAttXZlt8abqi8gKeN
+	Y8CWNARFaguCNPcGVVQVzgiONfrDtPOsKh0Wp+wg7R+Rncjln/0bHcZyo+r1N4yTc7r24BFyzDq
+	l2qZofA==
+X-Received: from pfbea10.prod.google.com ([2002:a05:6a00:4c0a:b0:82c:70d1:f303])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:391e:b0:837:27f4:ffe5
+ with SMTP id d2e1a72fcca58-8415f18266dmr2605287b3a.19.1779435969517; Fri, 22
+ May 2026 00:46:09 -0700 (PDT)
+Date: Fri, 22 May 2026 07:44:56 +0000
 In-Reply-To: <20260522074601.1658705-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260522074601.1658705-1-kuniyu@google.com>
 X-Mailer: git-send-email 2.54.0.746.g67dd491aae-goog
-Message-ID: <20260522074601.1658705-5-kuniyu@google.com>
-Subject: [PATCH v2 bpf-next 04/11] tcp: Split out __tcp_set_rcvlowat().
+Message-ID: <20260522074601.1658705-6-kuniyu@google.com>
+Subject: [PATCH v2 bpf-next 05/11] bpf: tcp: Add kfunc to adjust sk->sk_rcvlowat.
 From: Kuniyuki Iwashima <kuniyu@google.com>
 To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -71,79 +71,79 @@ Cc: Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmai
 	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-We will add a kfunc for BPF_SOCK_OPS_RCVQ_CB hooks to
-adjust sk->sk_rcvlowat.
-
-These hooks will be triggered when:
+We will invoke BPF SOCK_OPS prog with BPF_SOCK_OPS_RCVQ_CB
+to adjust sk->sk_rcvlowat when
 
   1. TCP stack enqueues skb to sk->sk_receive_queue
   2. TCP recvmsg() completes
 
-In the enqueue path, tcp_data_ready() is always called
-after the hooks in tcp_queue_rcv() and tcp_ofo_queue().
+Let's provide a kfunc to set sk->sk_rcvlowat.
 
-If tcp_set_rcvlowat() were used as is, tcp_data_ready()
-could be called twice for the same skb, which is redundant
-and also confusing.
+Negative values are clamped to INT_MAX, consistent with SO_RCVLOWAT.
 
-Let's split out __tcp_set_rcvlowat() and add a flag to
-control wakeup behaviour.
+The wakeup flag is determined based on bpf_sock_ops_kern.skb:
+
+  * For the enqueue hook, skb is always non-NULL, and wakeup is
+    set to false because
+
+    * tcp_data_ready() is always called after the hooks in
+       tcp_queue_rcv() and tcp_ofo_queue().
+
+    * when tcp_fastopen_add_skb() is called for TFO SYN,
+       the socket is not yet accept()ed, and when called
+       for TFO SYN+ACK, the socket is woken up by
+       sk->sk_state_change() anyway.
+
+  * For the recvmsg() hook, skb is always NULL, and wakeup is set
+    to true because tcp_data_ready() is not called in the path.
+
+An alternative would be to support bpf_setsockopt() by adding
+BPF_SOCK_OPS_RCVQ_CB to is_locked_tcp_sock_ops().
+
+However, that approach involves excessive conditionals and an
+unnecessary memcpy(), costs we do not want to pay for every skb
+in the TCP fast path.
 
 Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
 ---
- include/net/tcp.h |  1 +
- net/ipv4/tcp.c    | 12 +++++++++---
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ net/core/filter.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index ecbadcb3a744..c6a6853909c4 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -515,6 +515,7 @@ void tcp_set_keepalive(struct sock *sk, int val);
- void tcp_syn_ack_timeout(const struct request_sock *req);
- int tcp_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
- 		int flags);
-+int __tcp_set_rcvlowat(struct sock *sk, int val, bool wakeup);
- int tcp_set_rcvlowat(struct sock *sk, int val);
- void tcp_set_rcvbuf(struct sock *sk, int val);
- int tcp_set_window_clamp(struct sock *sk, int val);
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 432fa28e47d4..3afeb69a547a 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -1829,8 +1829,7 @@ int tcp_peek_len(struct socket *sock)
- 	return tcp_inq(sock->sk);
+diff --git a/net/core/filter.c b/net/core/filter.c
+index fa8a7c7d86eb..3608036632a8 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -12388,6 +12388,22 @@ __bpf_kfunc int bpf_sk_assign_tcp_reqsk(struct __sk_buff *s, struct sock *sk,
+ #endif
  }
  
--/* Make sure sk_rcvbuf is big enough to satisfy SO_RCVLOWAT hint */
--int tcp_set_rcvlowat(struct sock *sk, int val)
-+int __tcp_set_rcvlowat(struct sock *sk, int val, bool wakeup)
- {
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	int space, cap;
-@@ -1843,7 +1842,8 @@ int tcp_set_rcvlowat(struct sock *sk, int val)
- 	WRITE_ONCE(sk->sk_rcvlowat, val ? : 1);
- 
- 	/* Check if we need to signal EPOLLIN right now */
--	tcp_data_ready(sk);
-+	if (wakeup)
-+		tcp_data_ready(sk);
- 
- 	if (sk->sk_userlocks & SOCK_RCVBUF_LOCK)
- 		return 0;
-@@ -1858,6 +1858,12 @@ int tcp_set_rcvlowat(struct sock *sk, int val)
- 	return 0;
- }
- 
-+/* Make sure sk_rcvbuf is big enough to satisfy SO_RCVLOWAT hint */
-+int tcp_set_rcvlowat(struct sock *sk, int val)
++__bpf_kfunc int bpf_sock_ops_tcp_set_rcvlowat(struct bpf_sock_ops_kern *skops,
++					      int rcvlowat)
 +{
-+	return __tcp_set_rcvlowat(sk, val, true);
++#ifdef CONFIG_INET
++	if (skops->op != BPF_SOCK_OPS_RCVQ_CB)
++		return -EOPNOTSUPP;
++
++	if (rcvlowat < 0)
++		rcvlowat = INT_MAX;
++
++	return __tcp_set_rcvlowat(skops->sk, rcvlowat, !skops->skb);
++#else
++	return -EOPNOTSUPP;
++#endif
 +}
 +
- void tcp_set_rcvbuf(struct sock *sk, int val)
+ __bpf_kfunc int bpf_sock_ops_enable_tx_tstamp(struct bpf_sock_ops_kern *skops,
+ 					      u64 flags)
  {
- 	tcp_set_window_clamp(sk, tcp_win_from_space(sk, val));
+@@ -12539,6 +12555,7 @@ BTF_KFUNCS_END(bpf_kfunc_check_set_tcp_reqsk)
+ 
+ BTF_KFUNCS_START(bpf_kfunc_check_set_sock_ops)
+ BTF_ID_FLAGS(func, bpf_sock_ops_enable_tx_tstamp)
++BTF_ID_FLAGS(func, bpf_sock_ops_tcp_set_rcvlowat)
+ BTF_KFUNCS_END(bpf_kfunc_check_set_sock_ops)
+ 
+ static const struct btf_kfunc_id_set bpf_kfunc_set_skb = {
 -- 
 2.54.0.746.g67dd491aae-goog
 
