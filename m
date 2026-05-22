@@ -1,60 +1,60 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF3F3C4572;
-	Fri, 22 May 2026 09:58:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561DC3C585E;
+	Fri, 22 May 2026 10:04:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779443932; cv=none; b=NFuXkX75UlETRxA12uXX1FmKw08LEq3cMyRkg0LIW5VABz6fS73lbUicTMHLbVRGlsJtJjA70zwsfly2/15NzZxdau1AEi0BGRmx7xHyvWtMnA8n9iKPAHNFnaIqccbOKEvfgbXoImPyhnBAlsfMdGeOHqnCNp8d9Cfmf4wU0g8=
+	t=1779444244; cv=none; b=PfHXyR+zUyoWwo6GnazVH0jyGWxOVu1msUhzkb/Jgy/k5XZWa5Z5ZNeSojDK6HYfgnhlGrkNHEeSap5dKOmqT0PtD2h2ARFMMdwbSrIZAG/ZxejBimlvUNQHE13YGJHzCKCG9k7co9F1U+WQi1VFLXXJvJ5y/aFDyV9AHMIgVps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779443932; c=relaxed/simple;
-	bh=iLcTfo+0P+pqNpkFhMTeYkRe4bYcc9JG+2/4bFmrJwY=;
+	s=arc-20240116; t=1779444244; c=relaxed/simple;
+	bh=tn3/Gt4u0ELKPAkQwyUBAnAFtB3TMtR09k0nKQrSx1s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JnhdShbSscY9PPkV/Nkx20k/VYzDwUzsLKba9XtrUCVidE2dee6xKxNZWsP5TR7nEqxqcRHnYmL6dlL+2OsfDpRg9kp7tw+a4WhsS4TL2VnmuhkkUi25Cef0/lqhtZHiip3aEbx4ZPJrbLzpueUVSNV2m/UFDgtDVmPD2BPRKOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=YD8v0YS+; arc=none smtp.client-ip=148.163.156.1
+	 In-Reply-To:Content-Type; b=RFYIHAtxkvfvemaCoVAnElTQwXHlNmiKxrVqCktBPXX2QTicMLCTA9y9mHibn7DyvDrZsKOTlUHgYtJGx7xoVUrRZEUqIOYqYC6vqfkvt0L+i1cwKfKpXkf9zfvRljUTwWDsCXtw1lr2KKMviKPebN8GHVJXLfVktS7zc1ZmUPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ou4DO3vc; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="YD8v0YS+"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64M49qO92151966;
-	Fri, 22 May 2026 09:58:49 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ou4DO3vc"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64M1Z7mV790111;
+	Fri, 22 May 2026 10:04:00 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=dd4VCK
-	diNiOyuljBgGGsksXEXNsYlwho+WM2/XguiL4=; b=YD8v0YS+0+peA+tgKEil9F
-	RsaoOuzqQLgxnykQ0wl4hlIcWeyaFCKEtQqWInC384JgW06KXi1BMH8qEgAgKL8g
-	F9lhlVQYmRhNBEj0Yc1tlnN6jg2LM2Z2c+uLUGD9P+W3oc/eQNi59DPJhOspw5lo
-	SjtSwKCxUOo7UWGBIRzUkG9TPME7D4k5dMHJ8BCigupr4IdmgDeKf/JJ0Dk9oo7w
-	G/VZK6IY5RHtC0aLUeTKRcth/AXuqh3Ew0mPEddgh5Y/D7i/9AuKOs1YCkT6pH6b
-	Ezs/K5NMdTIq8ezO3aZPJlkHu1XJ61nNLdmgXhlXpXd+TjbOLE3S7miynI7eSiNw
+	:message-id:mime-version:references:subject:to; s=pp1; bh=AIh/31
+	+k2q201N+hv79/3la3AaA724ogqDUB+mTlvRI=; b=ou4DO3vcM/I576Ht8oye+I
+	nqxM2XBlJtTcvXD4KtkynBGC6t1SRkjcuDAVGJu0YGbY4Ymg5U7ggYJG7tvmj1oh
+	mNA7BiBvBrclLsX+WUVWPMUliYREAh0A/ga1EJZ6VSJP5UTCfxWqFxBG3rl5EGjI
+	pcwvstAL6NEUgRsnocno20wyoBaJuKEybNXPifwCuJIXv/yuiWynMoNKR9urlEbG
+	6MpWsXoNAWpDhz0JoE0K03hrdaoratzODXKgHRKcrxxrmvXjc4u1fByVxxz4mPXy
+	n94YrzTO1G7kV0CZXJCp5Sz7n27x4ONigHtGNmLEBCB+nYbPafxr1fJLbEpFTqkg
 	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h9ybfr6-1
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6hb8sw28-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 May 2026 09:58:48 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64M9s8AG018694;
-	Fri, 22 May 2026 09:58:47 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e739w8g7n-1
+	Fri, 22 May 2026 10:04:00 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64M9sBs9024142;
+	Fri, 22 May 2026 10:03:59 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e72wqgmvw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 May 2026 09:58:47 +0000 (GMT)
+	Fri, 22 May 2026 10:03:59 +0000 (GMT)
 Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64M9wj5p50725314
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64MA3wtK23265868
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 22 May 2026 09:58:45 GMT
+	Fri, 22 May 2026 10:03:58 GMT
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AE60820043;
-	Fri, 22 May 2026 09:58:45 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id E5CFB2004E;
+	Fri, 22 May 2026 10:03:57 +0000 (GMT)
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 55DF220040;
-	Fri, 22 May 2026 09:58:45 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 65F8A2004F;
+	Fri, 22 May 2026 10:03:57 +0000 (GMT)
 Received: from [9.111.153.207] (unknown [9.111.153.207])
 	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 22 May 2026 09:58:45 +0000 (GMT)
-Message-ID: <a8728c77-489b-4bf5-b0c7-3e25400d2330@linux.ibm.com>
-Date: Fri, 22 May 2026 11:58:44 +0200
+	Fri, 22 May 2026 10:03:57 +0000 (GMT)
+Message-ID: <a92ef01a-c69b-49e4-a166-5b8a3677c981@linux.ibm.com>
+Date: Fri, 22 May 2026 12:03:56 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -62,55 +62,118 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v16 11/20] unwind_user/sframe: Show file name in debug
- output
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, Steven Rostedt <rostedt@kernel.org>
-References: <20260521142546.3908498-12-jremus@linux.ibm.com>
- <20260521150507.1088A1F000E9@smtp.kernel.org>
+Subject: Re: [PATCH v16 10/20] unwind_user/sframe: Remove .sframe section on
+ detected corruption
+To: sashiko-reviews@lists.linux.dev, Steven Rostedt <rostedt@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: bpf@vger.kernel.org, Indu Bhagat <ibhagatgnu@gmail.com>
+References: <20260521142546.3908498-11-jremus@linux.ibm.com>
+ <20260521151911.55D4B1F000E9@smtp.kernel.org>
 Content-Language: en-US
 From: Jens Remus <jremus@linux.ibm.com>
 Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20260521150507.1088A1F000E9@smtp.kernel.org>
+In-Reply-To: <20260521151911.55D4B1F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIyMDA5NSBTYWx0ZWRfX1/mg8WCnM5Ye
- 3plejYBYhDpshRaAY0pTAAZrQX0v9D7PQeIWTvuKA+7/feLokxvWQ7Bo+UjwsauPRcpvpm6sSwO
- B8HXUZkY6ecDwRp/DnDRmEKb4nMdUKbhjueSNsk903g/3aiWGJZtBm0soG1S0/Ndq6Jtlmi3zEp
- 9QTJeN35TUygqxbEDMIfHTpHX2o+eVy0RsRa+Dq+cvPFnE1NE3pSallvcWKBUn4uUMoBeAzriSk
- UynXY59b/svffEOzKrzPDqLWMnRWMBHN/qm5CsUKxo+aVhbtXHJtJGD+AYbWzOA6xt6wvj1jw0g
- nyeCAdqoaajosE4Y19GZmCiiIbr1eWTsnmgO3pMoUa6WFw0kIsp9zKiV1aSyqm3PWm+xgBLnpS7
- B0pwz3mZR3H88O1okPv1Ch8TxMf6GYEYkTYyaEjaZaoYV4IGuCm1gPVLtZuBR8ImzgsWfK7Z6cT
- 4xZvrfZTy3vOXm2dQ8w==
-X-Authority-Analysis: v=2.4 cv=BNuDalQG c=1 sm=1 tr=0 ts=6a1028d9 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIyMDA5NSBTYWx0ZWRfX06u/EP9NO2zZ
+ KADNDXNh5bdEECJWjyI0/zzfaRZmIfJRZPJXzpJ8oDPy9S2yLoYG1TZRkisC2eb8S2G5DtlsRPu
+ iAs7Hoglt9nlyUTVhHgBarP92nHLAHcSKMuqCy1Obu9E+vQs+uHw3Fe62zR5E44WLkWbUaUX2N8
+ y8Y/zjUUeudqm2wN58YLecFcIewQDdsphOPhYgY6mzczVoDOH1IWmiTlWmUf5UWl/f3FK2I4qNE
+ AbYlTKAe9fj1zn8LhGOWIR3ixZunKCpwvHrS5IQTWceDwuAIzr4K0mEYg2Ifa9wBoVBa4qLO4nK
+ VuVeK2KlwnCiT6GfW+FIol7yIxhYn5RQzJjgyVaewyUnkWFqaqagd3otTqs79o2sFaXFv29bqix
+ OOYxVf9hNBOdnoam7dmW4/KU7QWjeuoLZUfqe1x/8zLZ3YeKQUunMuBtLfbcTFNAksXPVjDLiiz
+ IySeRzuFhTWlHq908Og==
+X-Proofpoint-GUID: akV9I3j1v9bfDOcOh4HtdGx2lcOE1Yot
+X-Proofpoint-ORIG-GUID: akV9I3j1v9bfDOcOh4HtdGx2lcOE1Yot
+X-Authority-Analysis: v=2.4 cv=aYBRWxot c=1 sm=1 tr=0 ts=6a102a10 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
  a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=Zg_fgM-7fzLk7_7bOdYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: 0h1wXm3nhgBnVC1u87MAK4afafSpfZ9m
-X-Proofpoint-GUID: 0h1wXm3nhgBnVC1u87MAK4afafSpfZ9m
+ a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VnNF1IyMAAAA:8
+ a=VwQbUJbxAAAA:8 a=dMhCc1OtdfcwexmOYjEA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-05-22_02,2026-05-18_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 malwarescore=0 impostorscore=0 suspectscore=0
- lowpriorityscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ impostorscore=0 adultscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
+ clxscore=1015 spamscore=0 phishscore=0 priorityscore=1501 malwarescore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605220095
 
-On 5/21/2026 5:05 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
+On 5/21/2026 5:19 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [High] Concurrent removal of a corrupted or unmapped .sframe section triggers a user-controllable WARN_ON_ONCE.
+> - [High] Valid but paged-out .sframe sections are permanently removed due to transient page faults.
+> --
 > 
-> New issues:
-> - [Low] VMA Classification Bug in `dbg_init()`
+> commit b574618cbc641ef52e2678be129e34a64bc4fb53
+> Author: Josh Poimboeuf <jpoimboe@kernel.org>
+> 
+> unwind_user/sframe: Remove .sframe section on detected corruption
+> 
+> To avoid continued attempted use of a bad .sframe section, this commit removes
+> it on demand when the first sign of corruption is detected.
+> 
+>> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+>> index 41ece3ca62a1f..e0eb2adf5a074 100644
+>> --- a/kernel/unwind/sframe.c
+>> +++ b/kernel/unwind/sframe.c
+> 
+> [ ... ]
+> 
+>> @@ -371,10 +371,15 @@ int sframe_find(unsigned long ip, struct unwind_user_frame *frame)
+>>  			ret = __find_fre(sec, &fde, ip, frame);
+>>  	}
+>>  
+>> +end:
+>> +	if (ret && ret != -ENOENT)
+>> +		WARN_ON_ONCE(sframe_remove_section(sec->sframe_start));
+> 
+> [Severity: High]
+> Can a concurrent unwind cause a user-controllable warning here?
+> 
+> If two threads concurrently fail to read a corrupted .sframe section, they 
+> could both reach this code. The first thread would successfully remove the 
+> section, but the second thread would fail to find it in the maple tree, 
+> causing sframe_remove_section() to return -EINVAL. 
+> 
+> This would trigger the WARN_ON_ONCE(), potentially allowing an unprivileged 
+> user to crash the system if panic_on_warn is enabled.
 
-Will be addressed in next version as suggested by Steven during v15
-review:
+This seems valid and therefore I think we should remove the WARN_ON_ONCE().
 
-https://lore.kernel.org/all/20260521122033.4648359e@gandalf.local.home/
+Any objections?
 
-Regards,
+> 
+>>  
+>>  	return ret;
+>>  
+>>  Efault:
+>> -	return -EFAULT;
+>> +	ret = -EFAULT;
+>> +	goto end;
+>>  }
+> 
+> [Severity: High]
+> Will this permanently remove perfectly valid .sframe sections if they happen 
+> to be paged out?
+> 
+> User space unwinding often happens in atomic contexts like perf NMIs where 
+> demand paging is not permitted. If a valid .sframe section is temporarily 
+> swapped out or hasn't been faulted in yet, the memory read operations will 
+> cleanly fail and jump here, setting ret to -EFAULT.
+> 
+> Since -EFAULT is not -ENOENT, the error handling logic jumps to the end label 
+> and treats this transient failure as permanent corruption, permanently removing 
+> the section from the maple tree. Applications might lose unwinding capabilities 
+> simply because their memory was temporarily paged out during a profiler sample.
+
+No.  IIUC the deferred stacktracing explicitly allows for page faults to
+be handled.  So any page faults during reading of .sframe section data
+from user space should not cause an -EFAULT and thus never erroneous
+removal of valid .sframe.
+
+Thanks and regards,
 Jens
 -- 
 Jens Remus
