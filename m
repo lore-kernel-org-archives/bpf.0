@@ -1,40 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B69221277
-	for <bpf@vger.kernel.org>; Fri, 22 May 2026 13:26:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75DD33AA1B8
+	for <bpf@vger.kernel.org>; Fri, 22 May 2026 13:31:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779456371; cv=none; b=iPtF3aAXltQoXCmSK/6ya6i9oXjWxXbjVcx992/TTl8eLjIa6ZZjj4RYbFLHEckH4CU0w98/7v52rbx67qHajYGf3vk85XGNoMD5JnOmPemvcURamyq+TWE8ArOffKoxGWyBcivBoD2JX4VywYN7Ag+wa6b4c3DIiODjfJqcDEs=
+	t=1779456718; cv=none; b=qThzDAeMgKn7rTCwP05M3CBgQSXcpDqbQcCEAjZQ3t97D9xI0XGVnR8z4Uip1uqR3czCZYzME7rOVnZWsPuEiZ63XPTmNcqTQyMj6ux++dBScvM0hZQdhv545Puwt5U15B3ERJmkGuzt5QznIZoTKfZedSjaFy4Qdhi0pTKbzVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779456371; c=relaxed/simple;
-	bh=FoPjOgdeLJRQWn7cNqY8f4gwEd4zWawMMEZJTmJsgd8=;
+	s=arc-20240116; t=1779456718; c=relaxed/simple;
+	bh=yfZuQfY+ugIeA6EcssHc5dZEJ3vWOTTNLQpj6E6unSM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rByo1HIPqCif+Gf4BNPrEPDR9GLF0cC2ETHxI8cz1LZDj7Fh+QpPvycUPoD74EjoRmz7lZXaIhjHXKNr16qADf4IJpjOWd8Pg01fLsX482yb9yFdM1tgeSnZzKF6MCpoJKO+xaTQ5ri00RBsEDSMCBYnQbG5G7SV6STd8tTTAFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FpI1Xg3P; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=E86zLxDp58m6PxkOhvLYFO2Fc5ISrxql75FUKgEYVTk64V6rd6jmkHunA391QVlrwEzoR2rI4vxXehnk8QH1dFVy/4Ih78xS8dSeZKXXkOnElmzuTkdz0q18tytl7j79aeJf8bhZO2xoEMWVP1RrTkNMdEDd9qcbhquupzm4ymE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j69kL6Za; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FpI1Xg3P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC4201F00A3D
-	for <bpf@vger.kernel.org>; Fri, 22 May 2026 13:26:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j69kL6Za"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F1941F00A3E
+	for <bpf@vger.kernel.org>; Fri, 22 May 2026 13:31:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779456370;
-	bh=Dl5aYYO+MEICvDDgZswbF89e5xJkomgQFY8vl/ls3oE=;
+	s=k20260515; t=1779456717;
+	bh=9H6UaDdlaI6ydIRIrgR/3TJ20CPLVbRSRwkleSG21xA=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=FpI1Xg3PTbBmgnHu+Mmix28sxAq78H6XriCsOFhNglUacQk2SgAFQJbj1O+/gOs7y
-	 QN4IL1/tlOiGD+61wdtdBAuQX5C22LEcxJMlo9pyNlzQWWkGjKcAkczgozyPOELEhP
-	 7oIoXgGgExitlX1Qb/0J6g/75UfZv0IOVkrlY2gGkXBB8HAq9Sj+ke7biN248OJtPZ
-	 3qgxaNc3hMmVWYsX2jO1jLnlmWsZZLr9oP8Ohd2TFfr5cu/Ivo7V54CBCK5ApEoTQO
-	 f0I+LR+u78XzL9zUXywxVXPUB89ySlU3Kocdd7CU2Vk121nFyrLJ/YGzdqTbuFmjVI
-	 a5b6bSVbQjVhA==
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-441209fb77eso4702803f8f.1
-        for <bpf@vger.kernel.org>; Fri, 22 May 2026 06:26:10 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ+ay1xo0EnNxwkaiAz8Zn5/BKcbhTjfOCKETPZimKk/Ruuv4jVD6QXbVJV4AdN6Rw6wUgc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWSptVk7Xidp1l+AdJWbKrW0wVCyJ5oH/Q9g3CxOdym95L5ZWa
-	jGr4sjPAhbnvR/icyW5xhPq072btvqCXtamyhEZhZmtQeNqOiNYGsWHBpkL6C9+ieMpGeJkCbbA
-	yWSKGt+bJIc9nNX48nAwGhAXi0QphKT+XkbQ4uHjQ
-X-Received: by 2002:a05:6000:4028:b0:450:ad00:86aa with SMTP id
- ffacd0b85a97d-45ea319685fmr11923877f8f.15.1779456369334; Fri, 22 May 2026
- 06:26:09 -0700 (PDT)
+	b=j69kL6ZaFhrr6MatRKHyUwv5ZE5dubwkqjtyde67+DPzeUTtHLvSTITgtzBP6ALvQ
+	 PbmzNFh6nj8YZEOdGEcrqovIBQ3tSFwXo1SIt+SfwntSmH8a8yESnNudqtUetbIKsO
+	 jSfA6twmupgBAlJLvhyOsLdhWrbwyEkcoizS19A/IQTQcdBBS+OfRCp3F2J5sxJENR
+	 s10NrZDTSPuWcoZxEtJNuGCG2i2vH830rf8qJi1rWeujr38BOuPz36expP6WRCZxw1
+	 RyGz/eTfjU0XvC04kQWECXnKQxmrYP4bKLu8bk9i8LRGbAYknFlNM8hjCquuJuV4w7
+	 nrNrikbyjVgTw==
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-490426d72f7so7798985e9.3
+        for <bpf@vger.kernel.org>; Fri, 22 May 2026 06:31:57 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ8KaLMhk3MJ3gSuCQcdTD4DvQmNTDs5/BUXcTSx8/FCsqO3FMMeXvJEPwTVi1p75u0b48U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4DKcIlUhf750NmWBqIGj1QGSygUOqwq2w7v38eQtxAjjAYBf+
+	du+bCNWSl+dap3DsMK0ptc6BOYg5JnZDlX/NpJ9euxKEvpvkaqroYmZUSRTN8BL/AG2xy8GYNaS
+	cxhl+eOBWu/3UZif0saK/dsQYAozrV8nN/pbhjawc
+X-Received: by 2002:a05:600c:1392:b0:490:46bf:17ab with SMTP id
+ 5b1f17b1804b1-49046ce6026mr33690465e9.29.1779456715810; Fri, 22 May 2026
+ 06:31:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,10 +46,10 @@ References: <20260521152217.2345235-3-kpsingh@kernel.org> <20260521165240.D95EA1
  <CAADnVQLJw=Dk=VjWmot4O1WLm2TxLH+-mX3G8AuPd9f_5rAJCA@mail.gmail.com> <CACYkzJ4LO2tAdarpKAO3Nz-XjCiJ3+tNkBp_kXEr-2YqOnCwMQ@mail.gmail.com>
 In-Reply-To: <CACYkzJ4LO2tAdarpKAO3Nz-XjCiJ3+tNkBp_kXEr-2YqOnCwMQ@mail.gmail.com>
 From: KP Singh <kpsingh@kernel.org>
-Date: Fri, 22 May 2026 15:25:57 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ62qYAqtjHjFqpCGRZJLQfLYQ2VWbetmZua6zWWMoxyMQ@mail.gmail.com>
-X-Gm-Features: AVHnY4KfzdxAObtxhvZXEDntDLm2CtNEQAl8ZMuHvDipwaK_7riABKD_ugxHUCk
-Message-ID: <CACYkzJ62qYAqtjHjFqpCGRZJLQfLYQ2VWbetmZua6zWWMoxyMQ@mail.gmail.com>
+Date: Fri, 22 May 2026 15:31:43 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ41oiLQSYPi+AguQz9eZVRjFxabsiWexwsZhAiTU4=t1A@mail.gmail.com>
+X-Gm-Features: AVHnY4K05dpbqXfwZEVZeAJi17_AtmIXGRs3eUlScWI2Z3O0C30Qob5QMeMnyvw
+Message-ID: <CACYkzJ41oiLQSYPi+AguQz9eZVRjFxabsiWexwsZhAiTU4=t1A@mail.gmail.com>
 Subject: Re: [PATCH v2 2/2] bpf, libbpf: reject non-exclusive metadata maps in
  the signed loader
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
@@ -65,49 +65,64 @@ On Fri, May 22, 2026 at 5:47=E2=80=AFAM KP Singh <kpsingh@kernel.org> wrote=
 > >
 > > On Thu, May 21, 2026 at 9:09=E2=80=AFPM KP Singh <kpsingh@kernel.org> w=
 rote:
-> > >
-> > > On Thu, May 21, 2026 at 6:52=E2=80=AFPM <sashiko-bot@kernel.org> wrot=
-e:
-> > > >
-> > > > Thank you for your contribution! Sashiko AI review found 2 potentia=
-l issue(s) to consider:
-> > > > - [High] The BPF verifier will reject the `gen_loader` program on 3=
-2-bit architectures because it accesses a 4-byte pointer using an 8-byte re=
-ad.
-> > > > - [Low] Multi-line comments do not follow the mandatory BPF subsyst=
-em standard.
-> > > > --
-> > > >
-> > > > commit 878a81f0d9571d5734eccfbe01c3dfe58050f954
-> > > > Author: KP Singh <kpsingh@kernel.org>
-> > > >
-> > > > bpf, libbpf: reject non-exclusive metadata maps in the signed loade=
-r
-> > >
-> > > [...]
-> > >
-> > > > > +     /* Reject if the metadata map is not exclusive. Without exc=
-lusivity
-> > > > > +      * the cached map->sha[] verified above can be stale: anoth=
-er BPF
-> > > > > +      * program with map access could have mutated the contents =
-between
-> > > > > +      * BPF_OBJ_GET_INFO_BY_FD and loader execution.
-> > > > > +      */
-> > > >
-> > > > [Severity: Low]
-> > > > This isn't a bug, but does this multi-line comment follow the BPF
-> > > > subsystem style guidelines? It looks like the opening /* should be =
-on its
-> > > > own line.
-> > >
-> > > Sashiko, this is how we comment in BPF.
-> >
-> > No. Sashiko is correct. bpf doesn't use the old networking style anymor=
-e.
 
-Okay. TIL, I will fix it.
-
-> >
 [...]
+
+>
+> https://raw.githubusercontent.com/sinkap/linux/bpf-md-ptr-32bit-test/test=
+_bpf_32bit.sh
+>
+> commit 13fa71a6e16b6f024da481bb7a733c312974ed32 (HEAD)
+> Author: KP Singh <kpsingh@kernel.org>
+> Date:   Fri May 22 05:18:32 2026 +0200
+>
+>     bpf: use __bpf_md_ptr for excl_prog_sha in struct bpf_map
+>
+>  include/linux/bpf.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> commit 13fa71a6e16b6f024da481bb7a733c312974ed32 (HEAD)
+> Author: KP Singh <kpsingh@kernel.org>
+> Date:   Fri May 22 05:18:32 2026 +0200
+>
+>     bpf: use __bpf_md_ptr for excl_prog_sha in struct bpf_map
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 11bec73db199..ea9bd24f82c0 100644
+
+[...]
+
+> =3D=3D=3D Boot 32-bit QEMU =3D=3D=3D
+> qemu-system-i386: terminating on signal 15 from pid 4116468 (/bin/bash)
+>
+> =3D=3D=3D QEMU serial output =3D=3D=3D
+> [    0.000000] Linux version 7.1.0-rc3-g13fa71a6e16b
+> (kpsingh@kpsingh-genoa) (gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0, GNU ld
+> (GNU Binutils for Ubuntu) 2.46) #3 SMP PREEMPT_DYNAMIC Fri May 22
+> 05:25:14 CEST 2026
+> [    0.000000] x86/CPU: Model not found in latest microcode list
+> [    0.000000] BIOS-provided physical RAM map:
+> [    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff]  Sy=
+s
+>
+> [...]
+>
+> =3D=3D=3D Running atomics signed lskel on 32-bit =3D=3D=3D
+> REJECTED: load: Permission denied (errno 13)
+> LOG: 0: R1=3Dctx() R10=3Dfp0
+
+[...]
+
+> R1=3Dmap_ptr(map=3D__loader.map,ks=3D4,vs=3D9976)
+> 78: (79) r2 =3D *(u64 *)(r1 +32)
+> cannot access ptr member excl_prog_sha with moff 0 in struct (anon)
+ I think we can address this as a follow-up and I'm sending v3.
+
+ We don't test it in the CI and I spent way too much time proving /
+debugging despite help from our AI friends.
+
+- KP
+
+> with off 0 size 8
+> processed 29 insns (limit 1000000) max_states_per_insn 0 total_states
 > 2 peak_states 2 mark_read 0
