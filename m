@@ -1,46 +1,33 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56659390209;
-	Fri, 22 May 2026 22:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52AD139281E;
+	Fri, 22 May 2026 22:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779487560; cv=none; b=uAr15uVS9aw8kGBhYfXPz0RnDcC6lr0Fs9G6uMftsMQ5IfMR6jC/ZRgsTgQxav+EaOWqwSJWdTG57+DLq0fnzUI6oypaMbz2eAwMvNnqeUNVuLNTYqGu7DfTm+h6VjgVzbsJhNbGLKqNJxhPfFh/0zKnQNVs0KnWpB6Jx2T5vZs=
+	t=1779487635; cv=none; b=EI+pyDMjOLT05Fd6KO9Al5Zuebuh9HHviloGwWH6rrtTL8sfmue7rPveuYJb2SBBr0XpjqWXLs80VABUINeu5oDVTI/lGBuiLsUE6odIX9CHwn7fU+y9ZLsxR+cHNJhZrgyozYpx8hlo1D0raDx6VnAnNHCXrddg3pqBFopagfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779487560; c=relaxed/simple;
-	bh=p9qtFXqLbBpQ5osYG2JdDirml2JFjFzGB11J5OyrXcs=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=U/Pdz27Dsc795gzuPgA1ijgz4VAdz0OJrACTOYw534bFtaBhoFuJ01rXcuibd2/zY+1m3aALmoSAv0yZXzpVRKDPZFz7jfjRKV+xdO38AvHhOTgh9UNqEQ0fYQshjbvRpn4/gljral4BVHkIU6lBIvT/aerxgVEscvE21WI9XXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=LMY4oSUs; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1779487635; c=relaxed/simple;
+	bh=tIYf3A9AqvOKNCI/EdIkGkQxklvEmWdqitjAs+28Oq4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bHtEn2nmqtjHpooWFjGgGTJE8qnCbzjGI6DFMPe1KqZ2QMd1JhQLgvBfWuPAj8ICUYvBfk+//q3hZ3qQqCYTMYBRzlYW3lnz0GaDOM+xzYm2vIRhgpLk8ORShtdQTRJXTeKt42kyYmW//63GdtpSZ9FuMJEOIBf1tUarQliBZM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mBZ0FtjM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="LMY4oSUs"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=ljbE8v8CKYRLbaCh7V8cBduGZpcILjAvzPvAwto3ErQ=; b=LMY4oSUslMwaqIiOcK0Dvg2Oit
-	2oyBgqNd8YTt4cF9UZGdkwm6sPN5KFjymY1lH2tishlEiRAenHC0AP5IqrHnygccqerKRxBfVHSgF
-	LChRtDBsbKM8iT/2c9E6l9fy/UGnC5ORyrabuxLl3sY9CeXKoF1FSNfCAd/Bnp9jv9cZTqQROr581
-	18o00lqvyslxwbVW3tQyXV/Y9fRvKDl7ohakp/OS+krGnamkt9YE2xfBNkkZ4ENp+/kh3bWbLUrnS
-	/VTL/dSb2viYqXDa4sSz+jBOuC2AOAlVPPRcbvWbrN6Bx05dwqVZljK+b38KDskzpk25QCNqgK9k9
-	brZ3qP+w==;
-Received: from sslproxy08.your-server.de ([78.47.166.52])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wQY0D-000Oz0-0M;
-	Sat, 23 May 2026 00:05:57 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wQY0B-000EKI-2u;
-	Sat, 23 May 2026 00:05:56 +0200
-Message-ID: <8f74fdf6-4ada-4d30-83bd-9170ff8a4f34@iogearbox.net>
-Date: Sat, 23 May 2026 00:05:56 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mBZ0FtjM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11FA61F000E9;
+	Fri, 22 May 2026 22:07:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779487633;
+	bh=2KV0AlTiyoa3jUtbm6oMwQjzHgrUrwa9er82zV7w0cM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=mBZ0FtjM0YSYlsflAtX0hKoQa1FUHh2NQBNtCjhqhMP2UCoyljHoGbkarKREmDZ/a
+	 xj7qQiC3jPcX24abrgzSDOdHGkbUvA7YRzJOD9gmW0YjtB3zJX4N4Fj2bIs6xeceeG
+	 q0l5f4ppgxbamtpvGTreTicD+MiXlj2FZUgCVwV4dIYC/++v7qO5cTfqR4k8Lkrws3
+	 AJhOPyjBhEP8j84OFrb3QItKGPFOhn2dv80xbwDLNuIoLe/78NfE9xVJveJChIkw3Q
+	 I4Rx03gPxCE67XC/EZTenFhnGmVil99p0Zs72XzxroY4uNQ7nCYKtX7j2InoHPeAIK
+	 qKH9zaFyJzKIA==
+Message-ID: <6ca116f4-b9e2-4ad3-a232-bc441f88bc82@kernel.org>
+Date: Sat, 23 May 2026 00:07:04 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,146 +35,106 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] bpf, libbpf: reject non-exclusive metadata maps in
- the signed loader
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
- linux-security-module@vger.kernel.org
-Cc: ast@kernel.org, memxor@gmail.com
-References: <20260521152217.2345235-1-kpsingh@kernel.org>
- <20260521152217.2345235-3-kpsingh@kernel.org>
- <dcc02e2d-58dd-46eb-9b72-54cd8465fb64@iogearbox.net>
+Subject: Re: [PATCH 1/8] mm: Add ptep_try_set() for lockless empty-slot
+ installs
+To: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+ Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, sched-ext@lists.linux.dev,
+ bpf@vger.kernel.org, x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20260522172219.1423324-1-tj@kernel.org>
+ <20260522172219.1423324-2-tj@kernel.org>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <dcc02e2d-58dd-46eb-9b72-54cd8465fb64@iogearbox.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28008/Fri May 22 08:24:46 2026)
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260522172219.1423324-2-tj@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 5/22/26 11:44 PM, Daniel Borkmann wrote:
-> On 5/21/26 5:22 PM, KP Singh wrote:
->> The loader verifies map->sha against the metadata hash in its
->> instructions. map->sha is calculated when BPF_OBJ_GET_INFO_BY_FD is called
->> on the frozen map.
->>
->> While the map is frozen, the loader must also ensure the map is
->> exclusive, as, without exclusivity, another BPF program with map access
->> can mutate the contents afterwards, so the check passes on stale data.
->>
->> Place excl_prog_sha right after sha[] in struct bpf_map and have
->> gen_loader bail with -EINVAL when it is NULL, via BPF_PSEUDO_MAP_IDX at
->> fixed offset 32. Declare excl_prog_sha with __bpf_md_ptr so the
->> 8-byte BPF_LDX_MEM read works on 32-bit kernels.
->>
->> Fixes: fb2b0e290147 ("libbpf: Update light skeleton for signing")
->> Signed-off-by: KP Singh <kpsingh@kernel.org>
->> ---
->>   include/linux/bpf.h                              |  2 +-
->>   tools/lib/bpf/gen_loader.c                       | 16 ++++++++++++++++
->>   .../selftests/bpf/progs/verifier_map_ptr.c       | 10 ++++++----
->>   3 files changed, 23 insertions(+), 5 deletions(-)
->>
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index cd191c5fdb0a..ea9bd24f82c0 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -295,6 +295,7 @@ struct bpf_map_owner {
->>   struct bpf_map {
->>       u8 sha[SHA256_DIGEST_SIZE];
->> +    __bpf_md_ptr(char *, excl_prog_sha);
->>       const struct bpf_map_ops *ops;
->>       struct bpf_map *inner_map_meta;
->>   #ifdef CONFIG_SECURITY
->> @@ -335,7 +336,6 @@ struct bpf_map {
->>       atomic64_t sleepable_refcnt;
->>       s64 __percpu *elem_count;
->>       u64 cookie; /* write-once */
->> -    char *excl_prog_sha;
->>   };
->>   static inline const char *btf_field_type_name(enum btf_field_type type)
->> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
->> index 9478b8f78f26..fee35c26deb8 100644
->> --- a/tools/lib/bpf/gen_loader.c
->> +++ b/tools/lib/bpf/gen_loader.c
->> @@ -600,6 +600,22 @@ static void emit_signature_match(struct bpf_gen *gen)
->>               gen->error = -ERANGE;
->>           }
->>       }
->> +
->> +    /* Reject if the metadata map is not exclusive. Without exclusivity
->> +     * the cached map->sha[] verified above can be stale: another BPF
->> +     * program with map access could have mutated the contents between
->> +     * BPF_OBJ_GET_INFO_BY_FD and loader execution.
->> +     */
 
-(One other small nit: it probably makes sense to first check the exclusivity
-before we compare the map->sha[], so this could be reordered inside the
-emit_signature_match.)
+>  
+> +#ifndef ptep_try_set
+> +/**
+> + * ptep_try_set - atomically set an empty kernel PTE
+> + * @ptep: page table entry
+> + * @new_pte: value to install
+> + *
+> + * Atomically set *@ptep to @new_pte iff *@ptep is pte_none(). Return true on
+> + * success, false if the slot was already populated or the arch has no
+> + * implementation.
+> + *
+> + * For special kernel page tables only - never user page tables. The caller must
+> + * prevent concurrent teardown of @ptep and must accept that other writers may
+> + * race. Concurrent clearers must use ptep_get_and_clear() so racing accesses
+> + * agree on the outcome.
+> + *
+> + * Architectures opt in by providing a cmpxchg-based override and defining
+> + * ptep_try_set as an identity macro. The generic stub returns false, which is
+> + * correct for callers that fall through to oops on failure.
+> + */
+> +static inline bool ptep_try_set(pte_t *ptep, pte_t new_pte)
 
-> We could probably add sth like this somewhere in the bpf kernel side :
-> 
->          /* See: emit_signature_match() in tools/lib/bpf/gen_loader.c */
->          BUILD_BUG_ON(offsetof(struct bpf_map, sha) != 0);
->          BUILD_BUG_ON(offsetof(struct bpf_map, excl_prog_sha) != SHA256_DIGEST_SIZE);
->          BUILD_BUG_ON(sizeof_field(struct bpf_map, excl_prog_sha) != sizeof(__u64));
-> 
->> +    emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX,
->> +                     0, 0, 0, 0));
->> +    emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, SHA256_DWORD_SIZE * sizeof(__u64)));
-> 
-> nit: SHA256_DWORD_SIZE is SHA256_DIGEST_LENGTH / sizeof(__u64), can we just use
->       SHA256_DIGEST_LENGTH ?
-> 
->> +    off = -(gen->insn_cur - gen->insn_start - gen->cleanup_label) / 8 - 2;
->> +    if (is_simm16(off)) {
->> +        emit(gen, BPF_MOV64_IMM(BPF_REG_7, -EINVAL));
->> +        emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_2, 0, off));
->> +    } else {
->> +        gen->error = -ERANGE;
->> +    }
->>   }
->>   void bpf_gen__record_attach_target(struct bpf_gen *gen, const char *attach_name,
-> 
+There are only a handful of valid use cases for this (and the "fall through to
+oops on failure") makes this very clear.
 
+So I'm fine with this, assuming there won't really be a lot of other users
+besides ebpf.
+
+Acked-by: David Hildenbrand (arm) <david@kernel.org>
+
+-- 
+Cheers,
+
+David
