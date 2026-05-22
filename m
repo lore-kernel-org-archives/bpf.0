@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 824D23655F5;
-	Fri, 22 May 2026 17:22:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB38C36DA08;
+	Fri, 22 May 2026 17:22:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779470548; cv=none; b=c90cOXhPDL9FXC+n2Yur7AaRT1qYyvsorwMDo6GpZKjkT4fRnPrbCWdMxfFaKMG447/sA7vOhpQcuAf0oqoQAcoq8ZJiyczdyUXRRWrA8aWJxqT/1sYjJ9GlDny95kaWjpITy9Wp3YkQ7Etzy3D8NEISHJIHeyN0SpsuFT48O68=
+	t=1779470550; cv=none; b=H3bPTf0twAr9+XAMpAsqKZsNMr0nqDKm7QcC70uU6dX0RBKvec/fcVUrE0aJ8/Pu/sj0Ka3TMfXW/JkeHV530V60CDRw0Ljzk9dkGaQ5XrMyTnTBikn6NHtUqkICBbqVj2/LKEn7y8KQa0K8tOJHQOnxjUELofxuhK3lm8CjoO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779470548; c=relaxed/simple;
-	bh=gAhSm/A7m/KGNOlWACJ+UAUs88/KJw2C2PierBx6oAU=;
+	s=arc-20240116; t=1779470550; c=relaxed/simple;
+	bh=wnTOe8sgVfkhfG37U5EJ2qNmpWnLGnjMsLHrSP5ig6E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jxdFTcPQFe4rRW1A9A7dDrzV9JQ+jsDlMpefsvKkk8Dxz4j0wzEShPt/wodQ06jtnuD6d5hLzOC3orxONFrvmxLHanxXwugJUQJCNiJ43oL69Xh02V+d5VqnH6n7u5Ot8lLs1iWCbg9ACVkRo32P3fUGLR4GPb8leaV97PxjgMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Noy22qBR; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=KtObqEWeb5bSlzi16kwFj21YoUJWKQ8EIIqgSdFGdOokp2n9uKtnTsyDQOd5NhVBB3GPuWwwYHtVeZT1YbzX0SAsARlMDQgXg7X0XR5yZ6lXwO5OYV5liYuiHOWCZkwbnTIgZx1fPXBFXJ9nv5humlwcSS853kcWhiiseZIe8Qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kQYQlIQu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Noy22qBR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB1311F00ADF;
-	Fri, 22 May 2026 17:22:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kQYQlIQu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B88491F00ADE;
+	Fri, 22 May 2026 17:22:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1779470546;
-	bh=sbJzbEe9LMJc1rQzaTZ5LdfH3ajTdvTiiElyoPzYFs0=;
+	bh=7ZXDn8MpH9/HpIVUjHY72x5LUNBUe8He3jOcFtO7Z0c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Noy22qBRuwgOPoBis6pZJq71bezmfcFnHJ1waPnM5o/5+yu29vQ15sFSJlUuGY6zW
-	 SNEX37J4SCtc0Rz/H75pyQanDxQr6FQY6fXaHr6JuZ1UgjSZd9bLFik749uwFZLDMu
-	 LMt6rMJZ6HVdfX40fGWUnrCWvg6YkD+lzfwBlFKF7YgJXMT3RFDniCElgjs/udj1EQ
-	 zjPedOPtedrXIFYufRWOqeWpuW5p0/ycBxsT/IffSil+iISaWLA7S3eWreZJcQkHEv
-	 YSgBttY3ucpTCQkACniFDjJv/Q7g7FlALyewNk/iZDW+4au4FLpeERqqU2cNnrw7mT
-	 XrL0kt1fsXbmA==
+	b=kQYQlIQu6NuivOFNBoazs2Vxq7ZoWKxca85YWbzKkU9ZD1lv1nGhdXuUV8+LqQerJ
+	 lbZ5bU2Z2zou+edRor/hlPPzJtIC0sd6FjQZfEsLDnuoH2GviUv4sLOVnkSCTPOE5o
+	 sHvVHDejusLzibKscozKUu7cVAyWypWC9s6gnT/pntd3aueFWXiGnmCpm5p7ZNpnG4
+	 XgsCuBDztvZo5hdLJb+7DJ4dUWBSG2CQ5pIYUnSgFdKOP6MiJsyalJIPGjoDfz54yx
+	 nLzWwIRIe7FA/uDMSfufgxqk99rnHd7vTRKKDgplpIEqTMn4SFr4fHimrmm29rZO57
+	 RJVcDarTYUgRQ==
 From: Tejun Heo <tj@kernel.org>
 To: David Vernet <void@manifault.com>,
 	Andrea Righi <arighi@nvidia.com>,
@@ -53,9 +53,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-mm@kvack.org,
 	linux-kernel@vger.kernel.org,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH 6/8] sched_ext: Require an arena for cid-form schedulers
-Date: Fri, 22 May 2026 07:22:17 -1000
-Message-ID: <20260522172219.1423324-7-tj@kernel.org>
+Subject: [PATCH 7/8] sched_ext: Sub-allocator over kernel-claimed BPF arena pages
+Date: Fri, 22 May 2026 07:22:18 -1000
+Message-ID: <20260522172219.1423324-8-tj@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260522172219.1423324-1-tj@kernel.org>
 References: <20260522172219.1423324-1-tj@kernel.org>
@@ -67,138 +67,272 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Upcoming patches will let the kernel place arena-resident scratch shared
-with the BPF program (e.g. per-CPU set_cmask cmask) so the BPF side can
-dereference it directly via __arena pointers, replacing the current
-cmask_copy_from_kernel() probe-read loop. That requires each cid-form
-scheduler to expose its arena to the kernel. Kernel- side accesses are
-recovered by the per-arena scratch-page mechanism.
+Build a per-scheduler sub-allocator on top of pages claimed from the BPF
+arena registered in the previous patch. Subsequent kernel-managed
+arena-resident structures (e.g. per-CPU set_cmask cmask) carve their storage
+from this pool.
 
-bpf_scx_reg_cid() walks the struct_ops member progs via
-bpf_struct_ops_for_each_prog() and reads each prog's arena via
-bpf_prog_arena(). The verifier enforces one arena per program, so each
-member prog contributes at most one arena. All non-NULL contributions must
-match and at least one member prog must use an arena. The map ref is held on
-scx_sched and dropped on sched destroy. cpu-form schedulers (bpf_scx_reg)
-are unchanged - no arena requirement.
+scx_arena_pool_init() creates a gen_pool. scx_arena_alloc() returns the
+kernel VA. On exhaustion, the pool grows by claiming more pages via
+bpf_arena_alloc_pages_sleepable(). Chunks are added at the kernel-side
+mapping address. Callers translate to the BPF-arena form themselves if
+needed.
+
+Allocations sleep (GFP_KERNEL) - they may grow the pool through vzalloc and
+arena page allocation. All current consumers run from the enable path (after
+ops.init() and the kernel-side arena auto-discovery, before validate_ops()),
+where sleeping is fine.
+
+scx_arena_pool_destroy() walks each chunk, returns outstanding ranges to the
+gen_pool with gen_pool_free() and then calls gen_pool_destroy(). The
+underlying arena pages are released when the arena map itself is torn down,
+so the pool destroy doesn't free them explicitly.
+
+v2: Switch scx_arena_alloc() to a loop. (Andrea)
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
+Reviewed-by: Andrea Righi <arighi@nvidia.com>
 ---
- kernel/sched/ext.c          | 56 ++++++++++++++++++++++++++++++++++++-
- kernel/sched/ext_internal.h |  8 ++++++
- 2 files changed, 63 insertions(+), 1 deletion(-)
+ kernel/sched/build_policy.c |   4 ++
+ kernel/sched/ext.c          |  11 ++++
+ kernel/sched/ext_arena.c    | 126 ++++++++++++++++++++++++++++++++++++
+ kernel/sched/ext_arena.h    |  18 ++++++
+ kernel/sched/ext_internal.h |   5 ++
+ 5 files changed, 164 insertions(+)
+ create mode 100644 kernel/sched/ext_arena.c
+ create mode 100644 kernel/sched/ext_arena.h
 
+diff --git a/kernel/sched/build_policy.c b/kernel/sched/build_policy.c
+index 5e76c9177d54..067979a7b69e 100644
+--- a/kernel/sched/build_policy.c
++++ b/kernel/sched/build_policy.c
+@@ -59,12 +59,16 @@
+ 
+ #ifdef CONFIG_SCHED_CLASS_EXT
+ # include <linux/btf_ids.h>
++# include <linux/find.h>
++# include <linux/genalloc.h>
+ # include "ext_types.h"
+ # include "ext_internal.h"
+ # include "ext_cid.h"
++# include "ext_arena.h"
+ # include "ext_idle.h"
+ # include "ext.c"
+ # include "ext_cid.c"
++# include "ext_arena.c"
+ # include "ext_idle.c"
+ #endif
+ 
 diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index 9c458552d14f..56f94ac32ba0 100644
+index 56f94ac32ba0..fb91079c1244 100644
 --- a/kernel/sched/ext.c
 +++ b/kernel/sched/ext.c
-@@ -5003,6 +5003,8 @@ static void scx_sched_free_rcu_work(struct work_struct *work)
+@@ -5003,6 +5003,7 @@ static void scx_sched_free_rcu_work(struct work_struct *work)
  
  	rhashtable_free_and_destroy(&sch->dsq_hash, NULL, NULL);
  	free_exit_info(sch->exit_info);
-+	if (sch->arena_map)
-+		bpf_map_put(sch->arena_map);
++	scx_arena_pool_destroy(sch);
+ 	if (sch->arena_map)
+ 		bpf_map_put(sch->arena_map);
  	kfree(sch);
- }
- 
-@@ -6746,6 +6748,7 @@ struct scx_enable_cmd {
- 		struct sched_ext_ops_cid	*ops_cid;
- 	};
- 	bool			is_cid_type;
-+	struct bpf_map		*arena_map;	/* arena ref to transfer to sch */
- 	int			ret;
- };
- 
-@@ -6913,6 +6916,15 @@ static struct scx_sched *scx_alloc_and_add_sched(struct scx_enable_cmd *cmd,
- 		return ERR_PTR(ret);
+@@ -7155,6 +7156,12 @@ static void scx_root_enable_workfn(struct kthread_work *work)
+ 		sch->exit_info->flags |= SCX_EFLAG_INITIALIZED;
  	}
- #endif	/* CONFIG_EXT_SUB_SCHED */
+ 
++	ret = scx_arena_pool_init(sch);
++	if (ret) {
++		cpus_read_unlock();
++		goto err_disable;
++	}
 +
-+	/*
-+	 * Consume the arena_map ref bpf_scx_reg_cid() took. Defer to here so
-+	 * earlier failure paths leave cmd->arena_map set and bpf_scx_reg_cid
-+	 * drops the ref. After this point, sch owns the ref and any cleanup
-+	 * runs through scx_sched_free_rcu_work() which puts it.
-+	 */
-+	sch->arena_map = cmd->arena_map;
-+	cmd->arena_map = NULL;
- 	return sch;
+ 	for (i = SCX_OPI_CPU_HOTPLUG_BEGIN; i < SCX_OPI_CPU_HOTPLUG_END; i++)
+ 		if (((void (**)(void))ops)[i])
+ 			set_bit(i, sch->has_op);
+@@ -7473,6 +7480,10 @@ static void scx_sub_enable_workfn(struct kthread_work *work)
+ 		sch->exit_info->flags |= SCX_EFLAG_INITIALIZED;
+ 	}
  
- #ifdef CONFIG_EXT_SUB_SCHED
-@@ -7898,11 +7910,53 @@ static int bpf_scx_reg(void *kdata, struct bpf_link *link)
- 	return scx_enable(&cmd, link);
- }
++	ret = scx_arena_pool_init(sch);
++	if (ret)
++		goto err_disable;
++
+ 	if (validate_ops(sch, ops))
+ 		goto err_disable;
  
-+struct scx_arena_scan {
-+	struct bpf_map	*arena;
-+	int		err;
+diff --git a/kernel/sched/ext_arena.c b/kernel/sched/ext_arena.c
+new file mode 100644
+index 000000000000..b413e155ba6b
+--- /dev/null
++++ b/kernel/sched/ext_arena.c
+@@ -0,0 +1,126 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * BPF extensible scheduler class: Documentation/scheduler/sched-ext.rst
++ *
++ * scx_arena_pool: kernel-side sub-allocator over BPF-arena pages.
++ *
++ * Each chunk added to @sch->arena_pool comes from one
++ * bpf_arena_alloc_pages_sleepable() call and is registered at the
++ * kernel-side mapping address. Callers translate to the BPF-arena form
++ * themselves if needed.
++ *
++ * Allocations grow the pool on demand. Underlying arena pages are released
++ * when the arena map itself is torn down.
++ *
++ * Copyright (c) 2026 Meta Platforms, Inc. and affiliates.
++ * Copyright (c) 2026 Tejun Heo <tj@kernel.org>
++ */
++
++enum scx_arena_consts {
++	SCX_ARENA_MIN_ORDER		= 3,	/* 8-byte minimum sub-allocation */
++	SCX_ARENA_GROW_PAGES		= 4,	/* per growth */
 +};
 +
-+/*
-+ * The verifier enforces one arena per BPF program, so each struct_ops
-+ * member prog contributes at most one arena via bpf_prog_arena().
-+ * Require all non-NULL contributions to match.
-+ */
-+static int scx_arena_scan_prog(struct bpf_prog *prog, void *data)
++s32 scx_arena_pool_init(struct scx_sched *sch)
 +{
-+	struct scx_arena_scan *s = data;
-+	struct bpf_map *arena = bpf_prog_arena(prog);
-+
-+	if (!arena)
++	if (!sch->arena_map)
 +		return 0;
-+	if (s->arena && s->arena != arena) {
-+		s->err = -EINVAL;
-+		return 1;
-+	}
-+	s->arena = arena;
++
++	sch->arena_pool = gen_pool_create(SCX_ARENA_MIN_ORDER, NUMA_NO_NODE);
++	if (!sch->arena_pool)
++		return -ENOMEM;
 +	return 0;
 +}
 +
- static int bpf_scx_reg_cid(void *kdata, struct bpf_link *link)
- {
- 	struct scx_enable_cmd cmd = { .ops_cid = kdata, .is_cid_type = true };
-+	struct scx_arena_scan scan = {};
++static void scx_arena_clear_chunk(struct gen_pool *pool, struct gen_pool_chunk *chunk,
++				  void *data)
++{
++	int order = pool->min_alloc_order;
++	size_t chunk_sz = chunk->end_addr - chunk->start_addr + 1;
++	unsigned long end_bit = chunk_sz >> order;
++	unsigned long b, e;
++
++	for_each_set_bitrange(b, e, chunk->bits, end_bit)
++		gen_pool_free(pool, chunk->start_addr + (b << order),
++			      (e - b) << order);
++}
++
++/*
++ * Tear down the pool. Outstanding gen_pool allocations are freed via
++ * scx_arena_clear_chunk() so gen_pool_destroy() doesn't BUG. The underlying
++ * arena pages are released when the arena map itself is torn down.
++ */
++void scx_arena_pool_destroy(struct scx_sched *sch)
++{
++	if (!sch->arena_pool)
++		return;
++	gen_pool_for_each_chunk(sch->arena_pool, scx_arena_clear_chunk, NULL);
++	gen_pool_destroy(sch->arena_pool);
++	sch->arena_pool = NULL;
++}
++
++/*
++ * Grow the pool by @page_cnt pages. bpf_arena_alloc_pages_sleepable() and
++ * gen_pool_add() (which calls vzalloc(GFP_KERNEL)) require a sleepable
++ * context.
++ */
++static int scx_arena_grow(struct scx_sched *sch, u32 page_cnt)
++{
++	u64 kern_vm_start;
++	u32 uaddr32;
++	void *p;
 +	int ret;
- 
--	return scx_enable(&cmd, link);
-+	bpf_struct_ops_for_each_prog(kdata, scx_arena_scan_prog, &scan);
-+	if (scan.err) {
-+		pr_err("sched_ext: cid-form scheduler uses multiple arena maps\n");
-+		return scan.err;
-+	}
-+	if (!scan.arena) {
-+		pr_err("sched_ext: cid-form scheduler must use a BPF arena map\n");
++
++	if (!sch->arena_map || !sch->arena_pool)
 +		return -EINVAL;
++
++	p = bpf_arena_alloc_pages_sleepable(sch->arena_map, NULL,
++					    page_cnt, NUMA_NO_NODE, 0);
++	if (!p)
++		return -ENOMEM;
++
++	uaddr32 = (u32)(unsigned long)p;
++	kern_vm_start = bpf_arena_map_kern_vm_start(sch->arena_map);
++
++	ret = gen_pool_add(sch->arena_pool, kern_vm_start + uaddr32,
++			   page_cnt * PAGE_SIZE, NUMA_NO_NODE);
++	if (ret) {
++		bpf_arena_free_pages_non_sleepable(sch->arena_map, p, page_cnt);
++		return ret;
++	}
++	return 0;
++}
++
++/*
++ * Allocate @size bytes from the arena pool. Returns kernel VA on success, NULL
++ * on failure. May grow the pool via scx_arena_grow() which sleeps. Caller must
++ * be in a GFP_KERNEL context.
++ */
++void *scx_arena_alloc(struct scx_sched *sch, size_t size)
++{
++	unsigned long kern_va;
++	u32 page_cnt;
++
++	might_sleep();
++
++	if (!sch->arena_pool)
++		return NULL;
++
++	while (true) {
++		kern_va = gen_pool_alloc(sch->arena_pool, size);
++		if (kern_va)
++			break;
++		page_cnt = max_t(u32, SCX_ARENA_GROW_PAGES,
++				 (size + PAGE_SIZE - 1) >> PAGE_SHIFT);
++		if (scx_arena_grow(sch, page_cnt))
++			return NULL;
 +	}
 +
-+	bpf_map_inc(scan.arena);
-+	cmd.arena_map = scan.arena;
-+	ret = scx_enable(&cmd, link);
-+	if (cmd.arena_map)		/* not consumed by scx_alloc_and_add_sched() */
-+		bpf_map_put(cmd.arena_map);
-+	return ret;
- }
- 
- static void bpf_scx_unreg(void *kdata, struct bpf_link *link)
++	return (void *)kern_va;
++}
++
++void scx_arena_free(struct scx_sched *sch, void *kern_va, size_t size)
++{
++	if (sch->arena_pool && kern_va)
++		gen_pool_free(sch->arena_pool, (unsigned long)kern_va, size);
++}
+diff --git a/kernel/sched/ext_arena.h b/kernel/sched/ext_arena.h
+new file mode 100644
+index 000000000000..4f3610160102
+--- /dev/null
++++ b/kernel/sched/ext_arena.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * BPF extensible scheduler class: Documentation/scheduler/sched-ext.rst
++ *
++ * Copyright (c) 2025 Meta Platforms, Inc. and affiliates.
++ * Copyright (c) 2025 Tejun Heo <tj@kernel.org>
++ */
++#ifndef _KERNEL_SCHED_EXT_ARENA_H
++#define _KERNEL_SCHED_EXT_ARENA_H
++
++struct scx_sched;
++
++s32 scx_arena_pool_init(struct scx_sched *sch);
++void scx_arena_pool_destroy(struct scx_sched *sch);
++void *scx_arena_alloc(struct scx_sched *sch, size_t size);
++void scx_arena_free(struct scx_sched *sch, void *kern_va, size_t size);
++
++#endif /* _KERNEL_SCHED_EXT_ARENA_H */
 diff --git a/kernel/sched/ext_internal.h b/kernel/sched/ext_internal.h
-index 7258aea94b9f..d40cfd29ddaa 100644
+index d40cfd29ddaa..ff7e882bd67a 100644
 --- a/kernel/sched/ext_internal.h
 +++ b/kernel/sched/ext_internal.h
-@@ -1111,6 +1111,14 @@ struct scx_sched {
- 		struct sched_ext_ops_cid	ops_cid;
- 	};
- 	bool			is_cid_type;	/* true if registered via bpf_sched_ext_ops_cid */
-+
-+	/*
-+	 * Arena map auto-discovered from member progs at struct_ops attach.
-+	 * cid-form schedulers must use exactly one arena across all member
-+	 * progs. NULL on cpu-form.
-+	 */
-+	struct bpf_map		*arena_map;
-+
+@@ -1116,8 +1116,13 @@ struct scx_sched {
+ 	 * Arena map auto-discovered from member progs at struct_ops attach.
+ 	 * cid-form schedulers must use exactly one arena across all member
+ 	 * progs. NULL on cpu-form.
++	 *
++	 * @arena_pool sub-allocates @arena_map. Each gen_pool chunk is added
++	 * at the kernel-side mapping address. Grows on demand and pages are
++	 * not released until sched destroy.
+ 	 */
+ 	struct bpf_map		*arena_map;
++	struct gen_pool		*arena_pool;
+ 
  	DECLARE_BITMAP(has_op, SCX_OPI_END);
  
- 	/*
 -- 
 2.54.0
 
