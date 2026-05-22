@@ -1,233 +1,154 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E4B379C23;
-	Fri, 22 May 2026 05:11:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779426674; cv=fail; b=RiqZ3j2sNxV0kuJE9R8ALGtlfo33p7dx/Zqx+GkhCC37+1E2rJoD2qztqVsdixFsKw0S02Aj9mi1f4KEnMw5B7xzORDxrcNcOwWT8BzAnZfCoCK1xOZtruCOp+HXptb9jK3b4aGLAx0v+0n213aVCMnfWFZYOtFvqivntmKph14=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779426674; c=relaxed/simple;
-	bh=VKP6KBB2tVhefzuShc2+c/YMBlzfq+L8C+97VO1QJ/Y=;
-	h=References:From:To:Cc:Subject:In-reply-to:Date:Message-ID:
-	 Content-Type:MIME-Version; b=GzpiRxYjyk6h4DIeVRGcgWTJYHIuB9hZ0mtb/UasSmU5JVguz1T26gfOc7raKUqi5ctJ9pqzGRXhbDn0xxMLGNOw1ZmDG5KQpB8p6Q15V+z2UIkX6LVXbH33hKnnrpZlZSjtwFHOYZ/z018U162EF0dN+QGJWORQIhkjtdhYLw8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=JAn5t7BU; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=nOjEdFIk; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F45425487C
+	for <bpf@vger.kernel.org>; Fri, 22 May 2026 05:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779428466; cv=none; b=AthXFvkZZZohGt5Q3ZC/BMSbebXPd+kU2yi6233UVysO1FHgmmr0oKQ+cx4KO0xMggSCYkvLfhhv97bNce1EO2mu41PON+E1xXaKCFP+wRYOpnbUXVYC7I2RP1ZwvUjIaZb2LWFgprrEcBndrkj40wTTg25/4x/ry7NzJcBWV8w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779428466; c=relaxed/simple;
+	bh=7BukE1lYqgUHUUwtz1gAmazYBI49l7hQ/livEgLx44Q=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=s5WdMceJFUpMxdy3B+resOmHRNgmnFSB3eG12qQLlmpu1ihDClqhgM6iWXKHiqUaIPioKaMy5YlTThC5odqZLE+WLqUUYCtyyZFWyp1LDPpUygouXddVFTi4L7OFNZLRuN01Ykp7TWVd+yHZ8II+mc8CAD9QKYi29iJoYS3lZ/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FoiqBeF9; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="JAn5t7BU";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="nOjEdFIk"
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64LJfjrN1583139;
-	Fri, 22 May 2026 05:10:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2025-04-25; bh=/H5yVewy3237AioTwB
-	hJLNHXOMZvCLCO/FBrGg0PqjY=; b=JAn5t7BUuxL8c37zGWQl1baz65F9ipxVu7
-	rH66vsnN2GKI/UVV89SdTr0xBZWVdET44iaaz9IPOr419NVzwKfV0fOvqr1MS0Ez
-	pe0plRycV9Gn+q9p2MJS7dpDfWXeveCHDjjPvqcBmS9OV0nixmX2tEl82om1ZXR4
-	0Ooq89g+3QoJKDGCRJin8bVqltrsBDfMkqbEfG2P4ok/PF8+UCWNG6rUbyN4tFbh
-	hQI0yGXv/WcEZF/BCGIDTdtze+mn/5iYGzr8qdJVHPvzeVMx7EvDgYKCNnkjY4p7
-	CEAzgNtrfjuj9XXtYlyfsswmE0lnQorPfOKbX5tdXrwiFAGIZREw==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4e6h4qam93-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 22 May 2026 05:10:29 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 64M550jw000439;
-	Fri, 22 May 2026 05:10:28 GMT
-Received: from sa9pr02cu001.outbound.protection.outlook.com (mail-southcentralusazon11013044.outbound.protection.outlook.com [40.93.196.44])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4e6f1kb2da-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 22 May 2026 05:10:28 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VuVzjJ55QC0+/84hIqSLDc9KPUS9TKNW8lnsTRNtzpMHCkM2EIO6Q5EGH4TeoT8ya1ZBuLtv83W/+GsMkcgU8gJLCNy8Rz3KPQH1ein8xZ+IeR3bLwroz1DWTidteyJFZVj6+Za5VWkUEupzsJNqR87EPSP9/S59XuhX0OE+vtccnnfdZGZGWnQOgVEE7TEciRh6kA+WQ8hvsEJ8/VIQIuCi4FPkaf8mFm/B551Ez3V9GbMhmpKIA4YjdvU8U8aaZgoNnil2hb0IsxBdNzspzlcmNZ68/XAeXh874ejfshvPjEiVKGb57/FEV725wQ4s506jKnUgu5+gEHE2lLrqYg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/H5yVewy3237AioTwBhJLNHXOMZvCLCO/FBrGg0PqjY=;
- b=D2JPqjrMD8Psq7pGtBy30PRbR1gG6S8hCiWsL4ipS/jOz0Ck2sx5rvAK6Z9bz9+/JcNsrbXbdr9JgJgERRz5llOV5bWrj4ZhhWEKTdlNCa8l0tc5XGLEQOL+B+m0hn/cyJK/D8vadvD7dwgdtO3RwybOO3PSWURHJu9ZH1gueEbyzUGfDfjX78GmWErbzLWBw2HqTvLU77/D2hILA31HBLXZe6Zik/d7UbSkA3l1N7nysuE11ZHQYoE8HXSuhpjHd24vt0Ig4/auPfW9xKRn9VhmnFawXgkcztVkTuAz9FhJRbcy2weNiCqrLT7qj+Em4GjHUq5ABuiwB3u2XqKxLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FoiqBeF9"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-365eecc5885so6371523a91.0
+        for <bpf@vger.kernel.org>; Thu, 21 May 2026 22:41:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/H5yVewy3237AioTwBhJLNHXOMZvCLCO/FBrGg0PqjY=;
- b=nOjEdFIkFTftl/GLeUoTuYZFq76d4XTlX9lVFv/83TRTSOCR93nWpNxe359V/ebb7cmr2fpbgiHMxzKotF1CZkGMqGiodH1LQPZS3Qf3kvCOQThhzEQe9wXIlv/DVN3q9NRNtefulzUBUBVMj3aIlJO0L68JFR4gcKkZljeJhlg=
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
- by MN2PR10MB4142.namprd10.prod.outlook.com (2603:10b6:208:1d2::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.23; Fri, 22 May
- 2026 05:10:24 +0000
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::3c92:21f3:96a:b574]) by CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::3c92:21f3:96a:b574%6]) with mapi id 15.21.0048.016; Fri, 22 May 2026
- 05:10:24 +0000
-References: <20260408122538.3610871-15-ankur.a.arora@oracle.com>
- <20260521083038.134260-1-ankur.a.arora@oracle.com>
- <20260521144629.11ee1e2ff88c5387a589f54a@linux-foundation.org>
-User-agent: mu4e 1.4.10; emacs 27.2
-From: Ankur Arora <ankur.a.arora@oracle.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Ankur Arora <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-next@vger.kernel.org,
-        bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
-        will@kernel.org, peterz@infradead.org, mark.rutland@arm.com,
-        harisokn@amazon.com, cl@gentwo.org, ast@kernel.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, memxor@gmail.com, zhenglifeng1@huawei.com,
-        xueshuai@linux.alibaba.com, rdunlap@infradead.org,
-        david.laight.linux@gmail.com, joao.m.martins@oracle.com,
-        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com, ashok.bhat@arm.com,
-        Boqun Feng <boqun.feng@gmail.com>, Boqun Feng <boqun@kernel.org>,
-        "Christoph
- Lameter" <cl@linux.com>, Ingo Molnar <mingo@kernel.org>,
-        Konrad Dybcio
- <konradybcio@kernel.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v11 1/2] kunit: add tests for smp_cond_load_*_timeout()
-In-reply-to: <20260521144629.11ee1e2ff88c5387a589f54a@linux-foundation.org>
-Date: Thu, 21 May 2026 22:10:20 -0700
-Message-ID: <87h5o0ni6b.fsf@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: YT3PR01CA0092.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:85::8) To CO6PR10MB5409.namprd10.prod.outlook.com
- (2603:10b6:5:357::14)
+        d=gmail.com; s=20251104; t=1779428465; x=1780033265; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=LAcpGt9A50v8TVjUmtkbhcVP3i52hTzkHXHZgVlleSQ=;
+        b=FoiqBeF9uJreE7bVec7zm9hGOTrUYdNQb0oWv01T1tgibxIBgI+HIUroG9lDU/7y8e
+         7A5vrwaeLf8rWbvzzoC378WJjdr/xXxy6w/iL31ct5xWR8S3cqfcXbvXl8AJWPv8id+z
+         XQ3TThjeH8HUbGRKw0yGsQdX48OegV7p27N3AKb57BVD0fStr8Tdqiks5Ioe4Xa6mjfZ
+         s6NYkUDCaWCoR/DfzZ5T3FN5n/8D+rrRz2ziauHbXhjROXmtCBwNfv4q7A8YKOnZATww
+         iMGQ+NuYRlH1SUODVgqYpHX1uhJG1WR8UaVeiYh3e6OKMLaaiw6XiTiBWfkOWJLoZ/K9
+         mBRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779428465; x=1780033265;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LAcpGt9A50v8TVjUmtkbhcVP3i52hTzkHXHZgVlleSQ=;
+        b=hzKNQQ9Lea4UPrEW3fMEy4/sZU+5afPfeScPLMqM4xzlk7KktuFPtqxiYyvUwSBRKB
+         JXba5zLVejSP3P1yXTEoJ7ttyUjw/X862sER73On8cUZBOoU5fm03ZJ4NmDDV2BqRrSg
+         f6Bdp0qqYdaRFpSi6u5wsXh6JT+XDwkNAaAdwfHU0jMaGRspfEcSliLmhoX9WrNy1+um
+         poyyNdMl0XmRMvzE83fWsDYXMVYlvHky5Wfq6PiuARrJhXOlQssw0fJdUFOwDvCh090c
+         lnKWYyKKvdUffSIxQ0ONsu9mi5ha8kiZOyUfBzdFmBmdOF/xIyz/CeoRjguKt5HnKJkp
+         ZrZg==
+X-Forwarded-Encrypted: i=1; AFNElJ9vEfJpK96EKAtgq2qBdhEojA3BvLE6EXuUe3cFFdpHTkv6M6Y6dKIDC+1HXC1lSHGhcgo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6lO3B5CjaJd15W06/fOUgeT9ayjTjsp+e5VD1Q18slpMznQyn
+	s3UFe2Av5E3pyaGqWQov2v63RO73SMqZrhw2F/cml2nq1ClImmM2c6Mx
+X-Gm-Gg: Acq92OFDgqqjwbVhymfmRP15sBEEFmuCqmaC150mVNA9gDTOQactwmksgaaw7kLG5Zi
+	pUtoFKkM+Drtd8upLY3b/UkByah9wAPb1RGIi/PWtLGNjCdCgBlCYo/P4BuJsbBjbL+IA28fFsc
+	VXWgcY50ZfTZGpPYa+tcvFAE/W9F9kpUP9W/QR8OHDYQs2piV+SON0zkUmSK0E/uhxjbHepoGew
+	RuBEpGB1wtofeCcaTVoxAnT8BCXzQNJJcqFHL0WDIZAEfS5Cj63kOlg+5q3bmgOYXQskUBUGnHI
+	rKgawwVcLP7ca/cuAJTKUVSw1flCWqxqQqSBOK2pUz6f4XQQBNpNoVtWvPEXCPpNEgzue4ZwvKg
+	gJC1u/imMU/2lEL2wGX8+O+IhS2vmf4dtSr2A9cTeq/8ONf3t9e2kli1zB01mAO0N2GTa33HWMM
+	rKDTCAkpZmwFOGue79Dgn00ihXAH6fTTdCO93Uyjue3bc50H01dV+y608+hYYGcxM=
+X-Received: by 2002:a17:902:c94a:b0:2bd:9728:5e42 with SMTP id d9443c01a7336-2beb074b967mr22794405ad.31.1779428464695;
+        Thu, 21 May 2026 22:41:04 -0700 (PDT)
+Received: from [10.188.79.203] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2beb58b3085sm3806315ad.53.2026.05.21.22.41.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 May 2026 22:41:03 -0700 (PDT)
+Message-ID: <ccd74b6e068e0ef02d429f3ede50afbdec516715.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v5 09/14] bpf: Fold ref_obj_id into id and
+ introduce virtual references
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
+ 	daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org, 
+	mykyta.yatsenko5@gmail.com, kernel-team@meta.com
+Date: Thu, 21 May 2026 22:40:59 -0700
+In-Reply-To: <20260519181314.2731658-10-ameryhung@gmail.com>
+References: <20260519181314.2731658-1-ameryhung@gmail.com>
+	 <20260519181314.2731658-10-ameryhung@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|MN2PR10MB4142:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9242980e-427b-4fa0-5acd-08deb7c06e34
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|366016|7416014|1800799024|56012099003|22082099003|18002099003|4143699003;
-X-Microsoft-Antispam-Message-Info:
-	wacHV/qgXo00u4F/kj9Z6F4kZ0B0fyROo8JmFUYP7Zf96WgZgfubDSLe7gOHnI90J6nHYJa0S5YvGhiASNahkMMXRPOiitb9lfknWon7x4cC41mBp9F08wSkLcW6RMlQP2AXLc073/xIJHRVpWB++D8B2tuoqyixIBde99hoaFu5qrJ+DVkn851bTXtYzBqRp9TGoC/ayrBafBqk4Ng2GI0PHqp2oVOjBAidg1G6D2oH8XQBspXkZ2/E2MNJQD4SXj4xohx0TjgciRNwOql5sBt1XGJsuSOVM/Fp67X5P1Rywf+pMlnMFsTSVrMuiDCwFjmrYOWYuLyxRi6g0JsIiI0nH9QjqOqTMm4TsvSFgqrZYwMYOONyH67gQWoj1JNGe+x1nhE9SQEv3ojYgxtbWOJsjr0aZD5q5DFkt4E8F280ScKxjuP0Yj6dCu0TL4q5GmYAYv0KAh78wNHIr5n1UEQazBDaPvxMRq4S15dxPtpyzISHzykK6BIYcVQ3EIIDycwA77VWO1dkMW4neWiMlkwxDbrxFaBXSZwtkNL+kQfbl2Dkh012PJ11CLsRgFy6bLGaj6T8/EdJtbJbyBFxJ9GNp0b5Ovvkd89+CWeWghx8bjOhu9qtkje4SmJYuusRMJxIMwhbihyY4nO/OAo8dPFdOdQHjZ1ZeGrWcQ/tx1McVXvdR6ZyIGIf3d63Aym9
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(7416014)(1800799024)(56012099003)(22082099003)(18002099003)(4143699003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?jgrZspIS+p4DLJRXmxF+cGP7ByN4i3VLtMjVgDgJTMbd8ZR+liy36sj5AzXp?=
- =?us-ascii?Q?4nzyXVYg81Pl1imy2mP+XZ34siBnnLMgHVNdf1YHX5HdO+YaJ56VoAV1fH3o?=
- =?us-ascii?Q?Mdr05ma52XSaOe80itHAiwibklJ+A952bdhjZQ+dq796VSBlJGGy5kbNYwna?=
- =?us-ascii?Q?83xH9DI84oqq3Qj+H4a6Qot3CgXYKeXghkyIqjhSrCj93ztPSMS8Yf+ekAoK?=
- =?us-ascii?Q?rCY1ffT17FVhUSrdnL5+miO2CbILauPzMBTEmxrKrGKfE0l7I4dR54Pgjg2z?=
- =?us-ascii?Q?OPcElVv6UipYeHhMvfNz35WUHdlp6d2/7ZS8yrf/s7ZQrUbDiiRmfFXrtZfd?=
- =?us-ascii?Q?7knJkMz+AgcgS304iiiNV/VejmKzr7AAVpp7LNgbsY1IZ1iC+5GelG8s0mYg?=
- =?us-ascii?Q?iNo00IDnMiN88E2UgSLwkZo+1AZQPaCqi1OoGAABjStG+f8qbDySyeSfTC9K?=
- =?us-ascii?Q?bthqXfOdKs1JV16JxnvAnYvrYhUlowLOV4xDLmbUiKqJ1J0EV3SnqoZYWGoD?=
- =?us-ascii?Q?sgnf0SNhFvYeZu3wpv1D/jZ61hrgDJaSiEAQjlIbH1aGBOVtRY5KUeAbU/H7?=
- =?us-ascii?Q?v9VLxOxexf8AcaL51/mCWQsWPuS+vFKasfMqI8hSKyT6u8eigW5wXuHryWck?=
- =?us-ascii?Q?aDTvA48ZYyNZBj44MNSNP6EtDYTd4jFt222tofecuibENLQ1uJrE1ZYiuWbM?=
- =?us-ascii?Q?q1W2/qW/BCyHIQ/mGrr7rO598z7DzWmcPKFRAjBMA6ANM97DanQcB8LsVpWk?=
- =?us-ascii?Q?ScMzvWxzIyLIh/xAxTYo0hAdvOYHf9lLFJySkmpC9/txNjuoZHsywt1wEiIf?=
- =?us-ascii?Q?8Zf3KjMWx/hQF7H2TzZJMrYuyMRztyyd31EDH4pQ3yivc7RtEnNBZp/hLGkP?=
- =?us-ascii?Q?7e0c3jHRjj3dY6Vr0xIO4dN9F29QMpgK69mRq+BSQ9NuU/7cRMr3HTzfz7Ep?=
- =?us-ascii?Q?Z+ynGJteq5UZwLda8No+21vv4zMD8loesPL8DETSCuJEnDuOd8EKlzkDfPcO?=
- =?us-ascii?Q?bg+dWXRBYg1Ug4tMOIW7yZTlNIMTTIuCyoOh+VUmLR2WOW8JMNVIxHb/hOxi?=
- =?us-ascii?Q?CG+kFVV/Gw2vYJ/8MJFdP9XHN4TeTV4mVNceYbQ2YG6FCUIrct6AF4LHwrCa?=
- =?us-ascii?Q?zeZUi9orMdKAi/u7eQhUrDvJizQz5TsWu7CPQZ08zu3uy3TVJ1u5dNJUEjw6?=
- =?us-ascii?Q?KWFE417GuycIR0C3fa5+SSiVp6+dsfyE+vPqSJttqjM8zsyAFkFNQl2WzIbc?=
- =?us-ascii?Q?0Ptk/UYNe5tBgFyA1Aq23GJRkOJ4hZboB1VtqpgziotNRdwPycsWoWWCqU83?=
- =?us-ascii?Q?rHqr643tjvpfkQJNXEZuFbS+ffScd+MblGjDZr7mngobSzi5bZs5UZYtcXmn?=
- =?us-ascii?Q?r1yTVL3rSPvYydxRbatGmngI2f1UkrCE8KM5OY7MephQLqOndRFRXAEx80Tm?=
- =?us-ascii?Q?3PPKomQeW2+igtfSxMWrN9YRxTcRWDFf8FBbAHY92W5bdKdhCQbz7ANThXhp?=
- =?us-ascii?Q?y7q9/2Kg3wwqgs8BgjkqI164TfCCRkWolxWNA4FNDD06j19+2TfREKFH0Ydz?=
- =?us-ascii?Q?NsqaC3zmclYlhfua6HXI9z5Hi5wuS/hKtnmI60prwdv9boNzEic6cASTXlhN?=
- =?us-ascii?Q?2Yo/bH1N48vplHxx05hyB+8+hD8ZH1aECubTuKkk4Z9zHQC/7CWizSjoFW98?=
- =?us-ascii?Q?i8l4QypTs+aDJqcqU1qQ+mmAy8jI5Afotmb+fypHBdV09o9BLPpPks4RflKd?=
- =?us-ascii?Q?purx1Av04pGv19ZNUm0FLeFju2C7Ex0=3D?=
-X-Exchange-RoutingPolicyChecked:
-	qMyIFOKhx0oZ3GZ8rr9idS8AyEH5Bm2QGtb7Uo9gZP3oh+ATgISd5DnFLsymXti3EHaOSV99JyqE1ll9zJIogQ5EM1q1HEy0pR9TRGz4JMNDzpJQsxUz0Q7QtZEOqYPo2WuD40EKVld3x72IZZD+LPt1onY1H0yWyzkP3heq/ugldI2LccAK90N8hTmOVisPQBuRQ2GjMkiKf8zBnLm+TMHiOl0QWMx27vhx6meSfWn9qaBNIF7H2iGxUKbctR7tZ3a+CK/lTTAsnMumraE2oxixJv5N0g5NSnnSgAk3U3qjEIflw0Ae29jzJW2QSbhNZkp+rWGRJQ7lHUM+UASV2g==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	1PH7W0Bg+fkQvB5KkFapNj4PDhksgyxn0T90Gq9MHSDvzjOpwYEPjsELJJ71k4y424BXtykhOZFgXvWA5YkO/pg1s3cHlxBpi6/01tIk5SB5+4H6CjChXWsoI7Tj3nq4awVVfsdmcVmurVGpX58uCNs1XBtYWeOYR+0YUD/Sx8A3Qvi71E4AJ4THZAvnMMjHxYGtxpnmOCQzusOGLFPsfMWmK9p3Uy/dCaifJYcizny7898dvG667MYfdxW0JEeDUeoP63lW/r+cK/QwDK6TcJXD34qczmWZ1vDyD+SfraGsgYxSRbuLipv3vRZqbOeEAd55Mx13oZiq45ia0n5MN87eYGocV0ArwFhWcUjfWiZs18w+HATppfC2OVcTCFRgSr47qCbrjJ08EwrleGUM+HQQj/QwOBNYhxcBOT4kpnwL9WvSazqMKSvOgxIk6CdaSfjiynIXpXcFbcs6IYxrzcexgz/csIt/drBp4npNK3fgBEIwb3Nsv05EwXTkle2T+/XjlnBA7CvLd6p6/uAbzlqcNSpovwyDYqbBM2D154djjXc6z/Zg6DUrKQB4ickDTyBL2fU94Wlqmlt7hcZFLoXanCSUMEl1Yu1exC1YzjM=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9242980e-427b-4fa0-5acd-08deb7c06e34
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2026 05:10:24.5597
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XMJXL5tzPY9RUjs22P2FoZYApcqWgIslAO9KloYeunFl1P9UL2IcROFntViimR9SJEFE49YIdie7eeLoHjf3GWsH63FGBFsEzc1VaOIXQIA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4142
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-22_01,2026-05-18_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
- bulkscore=0 phishscore=0 spamscore=0 suspectscore=0 mlxlogscore=999
- adultscore=0 lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.19.0-2605130000 definitions=main-2605220048
-X-Authority-Analysis: v=2.4 cv=NdnWEWD4 c=1 sm=1 tr=0 ts=6a0fe545 b=1 cx=c_pps
- a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=NGcC8JguVDcA:10
- a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=7Gl3-_t3PgB9XO-mQDs3:22 a=Z4Rwk6OoAAAA:8 a=yPCof4ZbAAAA:8
- a=0Wl35Ixz0fAfV_QcqfoA:9 a=HkZW87K1Qel5hWWM3VKY:22 a=5yU3S35YU4bGjq-dph-N:22
- a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12298
-X-Proofpoint-GUID: -tBC2nFyeUYxsI2P2I0SeuZ5yKwV6BE1
-X-Proofpoint-ORIG-GUID: -tBC2nFyeUYxsI2P2I0SeuZ5yKwV6BE1
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIyMDA0OCBTYWx0ZWRfX6Ch1Dx5L4qhK
- TNN46c3WbTLWz9Wz+uPa2iREy3LLXDjy3g/dP+KNx6IvSXAE5EoBoS97i5aPt6PnxZMxGY0fIbg
- yvMGDzr7ETHbqqq2DSbyMc2ABm8M4Mn/V0l+CT78ujkRCBU2xmvCj2u/RUl3w/kZuCNTNOrLc1T
- /N+qYVorV9OXwQtaG2A8OQ1xiBCMtxUyR2yQ38mC0qBPxujYyS9Vj6SjBijNy0vlt9bOROoUTgC
- zSXaKagq+WtG+Rz9qcufeIsFkA8ARm8dNzNuvrfPvhd+oMr3ZWjSG5jd+WoR2toz6D45WRwEuUs
- 4QJCLTn3E1rs1PUFtJF7JAvlJwDneMU2jbzYOnRaojDgdLOqaEWCXnctHpzH1lRBF2F0nWLyJke
- gY3V8noW3BocWV+4C/4EQyZM7/IYlCKq96x+BaeaZR1lOBGRFe8IL0iQJOR8ixOu+rNoKWlGWCP
- qFZMFDNcoiQ5pkRsGbCajEkqCZWAyZVw7v33lgOU=
 
-
-Andrew Morton <akpm@linux-foundation.org> writes:
-
-> On Thu, 21 May 2026 01:30:37 -0700 Ankur Arora <ankur.a.arora@oracle.com> wrote:
+On Tue, 2026-05-19 at 11:13 -0700, Amery Hung wrote:
+> Remove ref_obj_id from bpf_reg_state by folding its role into the
+> existing id field. Previously, id tracked pointer identity for null
+> checking while ref_obj_id tracked the owning reference for lifetime
+> management. These are now unified: acquire helpers and kfuncs set id
+> to the acquired reference id, and release paths use id directly.
 >
->> Add success and failure case tests for smp_cond_load_*_timeout().
->>
->> All of the test cases wait on some state in smp_cond_load_*_timeout().
->> In the success case we spawn a kthread that pokes the bit.
->>
->> Success or failure cases depend on the expected bit being set (or not).
->> Additionally in failure cases smp_cond_load_*_timeout() cannot return
->> before timeout.
+> To handle cases where objects share the same lifetime but need distinct
+> identities, pointer casting (bpf_sk_fullsock, bpf_tcp_sock) and
+> referenced dynptr clones, introduce virtual references. A virtual
+> reference is a bpf_reference_state entry with is_virtual=3Dtrue that
+> serves as a lifetime anchor. It has no backing register or stack slot
+> and exists only in acquired_refs.
 >
-> Your title "kunit: ..." implies that this is a kunit patchset.  ie, and
-> to my mind, this implies that the patchset makes changes to kunit
-> infrastructure.  This isn't the case, of course.
-
-Aah yes. I did miss that.
-
->> ...
->>
->> +config BARRIER_TIMEOUT_TEST
->> +	tristate "KUnit tests for smp_cond_load_relaxed_timeout()"
+> For pointer casting, the first cast from a referenced pointer creates a
+> virtual reference, converts the source to a non-referenced pointer with
+> parent_id pointing to the virtual ref, and gives the cast result its own
+> unique id with the same parent_id. Chained casts reuse the same virtual
+> ref. Each pointer retains a unique id for independent null checking via
+> mark_ptr_or_null_regs, while releasing any of them releases the shared
+> virtual ref and invalidates all siblings.
 >
-> The patchset which attempted to add smp_cond_load_relaxed_timeout() was
-> titled "barrier: ...", which is a more appropriate identifier for this
-> patchset.
+> For referenced dynptrs, the constructor creates a virtual reference
+> instead of a regular one. All clones share the same parent_id (the
+> virtual ref) but get unique ids for independent slice tracking.
+> Releasing a referenced dynptr releases the virtual reference, which in
+> turn invalidates all clones and their derived slices.
 >
-> Anyway, I removed the series "barrier: Add
-> smp_cond_load_{relaxed,acquire}_timeout()" from mm.git on May 19 for
-> forgotten reasons.  So I suggest that the series be respun and resent,
-> with these two test patches included.
-
-Will do.
-
-> Again, I'm really not the guy to be handling these patches.  But a 4-6%
-> performance improvement in real world workloads is not to be ignored.
+> The release_reference() DFS is extended to detect virtual refs whose
+> parent is being released and report them as leaked references, matching
+> the existing behavior for regular refs encountered during cascading.
 >
-> Not by me, anyway.
+> Also add reg_is_referenced() which checks if a register is referenced
+> either directly (id in the reference table) or indirectly (parent_id
+> points to a virtual ref). This replaces all former ref_obj_id checks.
+>
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> ---
 
-:).
+Consider two modifications:
+- A different approach for pointer cast helpers handling:
+  fork the verifier state at the cast call site:
+  - Push a NULL branch for later exploration.
+  - Continue with the non-NULL branch: strip PTR_MAYBE_NULL from r0
+    and set r0.id =3D source register's id.
+  - All cast results share the same id as the original acquired pointer.
+    No new reference entries, no parent_id on cast results.
+    Because reference_id is shared, release of any of the original or
+    cast pointers invalidates all other pointers.
+- unmark_stack_slots_dynptr() deciding which reference id to free
+  basing on the pointer type:
 
-Thanks
---
-ankur
+    release_reference(env, dynptr_type_referenced(reg->dynptr.type)
+                           ? reg->parent_id
+                           : reg->id);
+
+With these two modifications the following simplifications are possible:
+- `is_virtual` flag is no longer necessary.
+- `reg_is_referenced()` reduces to `find_reference_state(reg->id) !=3D NULL=
+`.
+- `acquire_virtual_reference()` merges into `acquire_reference()` with a
+  parent_id parameter.
+- `cast_from_ref_obj()` is no longer necessary.
+
+See the branch [1] for the complete implementation, with commits on
+top of this series (two fixups, two commits for the changes described above=
+).
+Existing selftests are passing with these changes.
+
+[1] https://github.com/eddyz87/bpf/tree/refobj-id-v5-suggestion
+
+Wdyt?
