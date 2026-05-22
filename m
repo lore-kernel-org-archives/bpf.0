@@ -1,102 +1,54 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8A33A6B9E
-	for <bpf@vger.kernel.org>; Fri, 22 May 2026 08:05:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3ED43A6F0C;
+	Fri, 22 May 2026 08:22:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779437146; cv=none; b=jzK1SIEjWw+VHx24WJwV2QwYydqnT8Rj7z5G3hcA+J+CBIUJYXpMjvAIdo6K7PNn+YQhJKMyj5oIz6lWGOZPGIEammm2BbIi3Sb8vqcyabY0uHTtrkWcRYsn/6QN8vaLlmCd7rmCAtPRap6xEUrOrX420TIGIaMyxmLqNPoDaqQ=
+	t=1779438143; cv=none; b=TfnqK+9AjWuiRltsIVYGCNF6KhRMKBjQ4lZLxa7FK8HhRdqt1mESB2VdEPo/NZNs4ZHFB6ECumT7mW2wyQmZWufpVyO7J7vJC9uLn+CtaydXeNC3+7EhD9HzDmgvQq9I4ELWzJSrcilcUvc/6kG61G2nX+TOKMrlx7wrGacUZ1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779437146; c=relaxed/simple;
-	bh=Za0UnAfhljyxTgaHkwBFPdTupiRi5wZYqL9Bg7XJf2E=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=XqP19CdBGmfzAeuL9vt0nkkeTazu1PXoKgyYaRRXRzxR1yib9x+Zpat0acGQ/FoGiHzG4npC9z9yc61nO5Bg7f4FsKdx5mwzzfcLqlDEINtOOpSCli/lwfMEoWgwYo40a+lPtbGgtVO1AB5/OJI9khAMt56Tpc3dSgZLM/OzUfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZoPsndTx; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779438143; c=relaxed/simple;
+	bh=Gaiiz+IZDH5noZ4hjHUdHGUKZSATfQw00+iuBYAzzRU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Odby/kNlJvSEKKYYOdFo20pWelfD/rsWzjxU8rMMc7CpL5UAmcp8HCO4kgZ4R06rFbAWdXTdxywBGP0nxjlrpA4DL0pfVRoOZI/9u968vYcLW37P/2DbBDCY0jz+FIkzbPTMdHbbxsJFDGmKcpAPrQ1AjC3/xe42iiclNow2DJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h+yijezQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZoPsndTx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B47801F000E9;
-	Fri, 22 May 2026 08:05:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h+yijezQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 401C41F000E9;
+	Fri, 22 May 2026 08:22:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779437144;
-	bh=XJq4fFitJjpZFILdTRp3fY0Wr3O6hJ6C3AEZwWWRsO8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZoPsndTxW2QzzNdqgNLEKewA47i8bzFswKtViygCIQq3G0xPzKkqy72MyYUrkicED
-	 E1lrCyzcwT0jws8hmmLYSmLQNQX2bMXI663FvF7k3MWEdvAo+zaJE80uDglHubMPhg
-	 B1APDWHcX8qQ0UVtyZrxnjoTTVBI7D81xg0cZMMqo5Z2Y901cX7o4BjxLRtK6NpM0/
-	 O4yWsV5BzpYUvnypR++o/hlB8q2T/m6WUym/0vQ43ACS/AE4blY3k9NBPDs1WuUBtB
-	 dc55+xAC4MNYG3Byxh+GrhnwOiHfiXSWUAPUygxJ7ktRs+1TNqBgRXmC8LCskLUDxw
-	 dZUZPOv3kaCsw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 bpf-next 01/11] selftest: bpf: Use
- BPF_SOCK_OPS_ALL_CB_FLAGS + 1 for bad_cb_test_rv.
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kuniyuki Iwashima" <kuniyu@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260522074601.1658705-2-kuniyu@google.com>
-References: <20260522074601.1658705-2-kuniyu@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 22 May 2026 08:05:44 +0000
-Message-Id: <20260522080544.B47801F000E9@smtp.kernel.org>
+	s=k20260515; t=1779438141;
+	bh=uglbIFHHQy2ryBVfyMo/CXYPOKjc5dRxb8rx3hfcCdQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=h+yijezQDhv5zpXErW9JxB4WEhkYiCx8N06OBbtLFvH+GE86VX8qQ2LZmFxTHKz7J
+	 OvCYduZEVQZzsTrIYJmuxasbM3xUQ21d1nGNRX3zKwzT//WWpiDGepyPg5iTF70YF0
+	 WcgTWU44rOn3++CDgoZ/4iYPZ5kUZVyOcKsi5ajMYRFFv1K9bJee+g5AWQ2bpdBxTN
+	 Fi9Wski0Xaa+zi8bfOj3IG0hTUdX/7wSaSbX4885aaIaQ+cH5Hu8AkLeYma6Ffw9c1
+	 xJ6mOgt7AMwkYpAV/5bPWGRhwS7YDmeI6sHanZiTHcbFJQVB3/Y9xDwp3VDuj9WMgQ
+	 L4I63CcTeJpCA==
+Content-Type: multipart/mixed; boundary="===============8360733971623066269=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <6c6b45f7ff66adefe9d470c2f2c9f0f3664877afc3f019249d1a92e8bd9125c8@mail.kernel.org>
+In-Reply-To: <20260522074601.1658705-2-kuniyu@google.com>
+References: <20260522074601.1658705-2-kuniyu@google.com>
+Subject: Re: [PATCH v2 bpf-next 01/11] selftest: bpf: Use BPF_SOCK_OPS_ALL_CB_FLAGS + 1 for bad_cb_test_rv.
+From: bot+bpf-ci@kernel.org
+To: kuniyu@google.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com
+Cc: yonghong.song@linux.dev,john.fastabend@gmail.com,sdf@fomichev.me,edumazet@google.com,ncardwell@google.com,willemb@google.com,ukyab@berkeley.edu,kuniyu@google.com,kuni1840@gmail.com,bpf@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 22 May 2026 08:22:21 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Deriving an invalid bitmask using `BPF_SOCK_OPS_ALL_CB_FLAGS + 1=
-` is mathematically brittle and breaks binary forward compatibility.
---
+--===============8360733971623066269==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit c1e093a27fd28a0f7083a5bd0002abbedd3222a2
-Author: Kuniyuki Iwashima <kuniyu@google.com>
-
-selftest: bpf: Use BPF_SOCK_OPS_ALL_CB_FLAGS + 1 for bad_cb_test_rv.
-
-This commit replaces a hard-coded 0x80 with BPF_SOCK_OPS_ALL_CB_FLAGS + 1
-to test the failure path of bpf_sock_ops_cb_flags_set() in BPF selftests.
-
-> diff --git a/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c b/tools=
-/testing/selftests/bpf/progs/test_tcpbpf_kern.c
-> --- a/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
-> +++ b/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
-> @@ -92,7 +92,8 @@ int bpf_testcb(struct bpf_sock_ops *skops)
->  		break;
->  	case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
->  		/* Test failure to set largest cb flag (assumes not defined) */
-> -		global.bad_cb_test_rv =3D bpf_sock_ops_cb_flags_set(skops, 0x80);
-> +		global.bad_cb_test_rv =3D bpf_sock_ops_cb_flags_set(skops,
-> +								  BPF_SOCK_OPS_ALL_CB_FLAGS + 1);
-
-[Severity: Medium]
-Is using BPF_SOCK_OPS_ALL_CB_FLAGS + 1 mathematically brittle here?
-
-If BPF_SOCK_OPS_ALL_CB_FLAGS is not a contiguous sequence of bits starting
-from bit 0 (for example, if a flag is ever skipped or deprecated), this
-addition might create a value that overlaps with valid bits. The helper
-would clear the overlapping valid bits and return a smaller value, which
-would falsely fail the test.
-
-Also, could this approach break BPF CO-RE binary forward compatibility?
-
-If a test compiled against older headers hardcodes the old
-BPF_SOCK_OPS_ALL_CB_FLAGS + 1 value into the BPF object, and runs on a newer
-kernel that implements that bit as a valid flag, the kernel will accept the
-flag and return 0 instead of the expected failure value.
-
-Would using a statically unassigned high-order bit (e.g., 1 << 30) be a
-more robust way to test this failure path?
-
->  		/* Set callback */
->  		global.good_cb_test_rv =3D bpf_sock_ops_cb_flags_set(skops,
->  						 BPF_SOCK_OPS_STATE_CB_FLAG);
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c b/tools=
-/testing/selftests/bpf/prog_tests/tcpbpf_user.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c b/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
+> index 7e8fe1bad03f..e4849d2a2956 100644
 > --- a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
 > +++ b/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
 > @@ -26,7 +26,8 @@ static void verify_result(struct tcpbpf_globals *result)
@@ -108,7 +60,45 @@ more robust way to test this failure path?
 > +		  "bad_cb_test_rv");
 >  	ASSERT_EQ(result->good_cb_test_rv, 0, "good_cb_test_rv");
 >  	ASSERT_EQ(result->num_listen, 1, "num_listen");
+>
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260522074601.1658=
-705-1-kuniyu@google.com?part=3D1
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c b/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
+> index 6935f32eeb8f..e30cb1fab079 100644
+> --- a/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
+> +++ b/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
+> @@ -92,7 +92,8 @@ int bpf_testcb(struct bpf_sock_ops *skops)
+>  		break;
+>  	case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
+>  		/* Test failure to set largest cb flag (assumes not defined) */
+> -		global.bad_cb_test_rv = bpf_sock_ops_cb_flags_set(skops, 0x80);
+> +		global.bad_cb_test_rv = bpf_sock_ops_cb_flags_set(skops,
+> +								  BPF_SOCK_OPS_ALL_CB_FLAGS + 1);
+
+Could BPF_SOCK_OPS_ALL_CB_FLAGS + 1 break on future kernels?
+
+When this test is compiled, BPF_SOCK_OPS_ALL_CB_FLAGS + 1 evaluates to a
+hardcoded value. If the compiled test runs on a future kernel where this
+value is supported, the helper will successfully set the flag and return 0,
+causing the test to fail.
+
+The test also assumes contiguous bitmasks. If a flag is ever deprecated or
+skipped, adding 1 could overlap with valid bits.
+
+Would a safely distant bit like 1 << 30 be more robust for forward
+compatibility?
+
+(Reference: https://lore.kernel.org/bpf/20260508190227.AFAE9C2BD00@smtp.kernel.org/)
+
+>  		/* Set callback */
+>  		global.good_cb_test_rv = bpf_sock_ops_cb_flags_set(skops,
+>  						 BPF_SOCK_OPS_STATE_CB_FLAG);
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26275674572
+--===============8360733971623066269==--
